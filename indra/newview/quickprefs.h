@@ -121,6 +121,26 @@ private:
 	LLCheckBoxCtrl*		mCtrlUseDoF;
 	LLComboBox*			mCtrlShadowDetail;
 	LLComboBox*			mCtrlReflectionDetail;
+	
+	// <FS:CR> FIRE-9630 Vignette UI controls
+	LLSpinCtrl*			mSpinnerVignetteX;
+	LLSpinCtrl*			mSpinnerVignetteY;
+	LLSpinCtrl*			mSpinnerVignetteZ;
+	LLSlider*			mSliderVignetteX;
+	LLSlider*			mSliderVignetteY;
+	LLSlider*			mSliderVignetteZ;
+	
+	// Vignette UI callbacks
+	void onChangeVignetteX();
+	void onChangeVignetteY();
+	void onChangeVignetteZ();
+	void onChangeVignetteSpinnerX();
+	void onChangeVignetteSpinnerY();
+	void onChangeVignetteSpinnerZ();
+	void onClickResetVignetteX();
+	void onClickResetVignetteY();
+	void onClickResetVignetteZ();
+	// </FS:CR>
 
 // <FS:Zi> Dynamic quick prefs
 public:

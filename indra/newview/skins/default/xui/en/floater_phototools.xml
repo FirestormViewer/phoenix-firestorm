@@ -2436,10 +2436,10 @@
 			 name="P_General_Settings"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="275"
+			 height="250"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -3013,58 +3013,6 @@
 					 function="ResetControl"
 					 parameter="WLSkyDetail"/>
 				</button>
-
-				<text
-				 name="T_Av_Floor_Offset"
-				 follows="left|top"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="Controls how far above or below the floor your avatar stands. Helpful if your find yourself above or below the floor."
-				 width="110">
-					Avatar Floor Offset
-				</text>
-				<slider_bar
-				 name="SB_Av_Floor_Offset"
-				 can_edit_text="true"
-				 control_name="AvatarZOffset"
-				 follows="left|top"
-				 height="16"
-				 increment=".001"
-				 layout="topleft"
-				 left_pad="0"
-				 min_val="-2"
-				 max_val="2"
-				 top_delta="-2"
-				 width="77"/>
-				<spinner
-				 name="S_Av_Floor_Offset"
-				 can_edit_text="true"
-				 control_name="AvatarZOffset"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="2"
-				 follows="left|top"
-				 max_val="2"
-				 min_val="-2"
-				 width="53"
-				 increment=".01"
-				 border_visible="false"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Av_Floor_Offset"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetPerAccountControl"
-					 parameter="AvatarZOffset"/>
-				</button>
 			</panel>
 
 			<!--view_border
@@ -3076,12 +3024,163 @@
 			 name="horiz_separator4"
 			 top_pad="5"
 			 width="260"/-->
+			
+			<panel
+			 name="P_Vignetting"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="3"
+			 left="4"
+			 width="275"
+			 height="70"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_VignetteX"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="10"
+				 tool_tip=""
+				 width="80">
+				 Vig. Amount
+				</text>
+				<slider_bar
+				 name="VignetteSliderX"
+				 can_edit_text="true"
+				 follows="left|top"
+				 height="16"
+				 increment="0.05"
+				 layout="topleft"
+				 left_pad="-10"
+				 min_val="0.0"
+				 max_val="1.0"
+				 initial_value="0"
+				 top_delta="-2"
+				 width="117"/>
+				<spinner
+				 name="VignetteSpinnerX"
+				 can_edit_text="true"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="left|top"
+				 max_val="1.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.05"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_VignetteX"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value." />
+				<text
+				 name="T_VignetteY"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip=""
+				 width="80">
+				 Vig. Power
+				</text>
+				<slider_bar
+				 name="VignetteSliderY"
+				 can_edit_text="true"
+				 follows="left|top"
+				 height="16"
+				 increment="0.1"
+				 layout="topleft"
+				 left_pad="-10"
+				 min_val="0.0"
+				 max_val="32.0"
+				 initial_value="1"
+				 top_delta="-2"
+				 width="117"/>
+				<spinner
+				 name="VignetteSpinnerY"
+				 can_edit_text="true"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="2"
+				 follows="left|top"
+				 max_val="32.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_VignetteY"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value." />
+				<text
+				 name="T_VignetteZ"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip=""
+				 width="80">
+				 Vig. Multiply
+				</text>
+				<slider_bar
+				 name="VignetteSliderZ"
+				 can_edit_text="true"
+				 follows="left|top"
+				 height="16"
+				 increment="0.1"
+				 layout="topleft"
+				 left_pad="-10"
+				 min_val="0.0"
+				 max_val="8.0"
+				 initial_value="1"
+				 top_delta="-2"
+				 width="117"/>
+				<spinner
+				 name="VignetteSpinnerZ"
+				 can_edit_text="true"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="left|top"
+				 max_val="8.0"
+				 min_val="0.0"
+				 width="53"
+				 increment="0.1"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_VignetteZ"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value." />
+			</panel>
 
 			<panel
 			 name="P_Render"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
 			 height="100"
@@ -3164,10 +3263,10 @@
 			 name="P_Anti-aliasing"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="5"
+			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="35"
+			 height="60"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3213,25 +3312,12 @@
 					 name="16x"
 					 value="16"/>
 				</combo_box>
-			</panel>
-
-			<panel
-			 name="P_Texture_Bumpiness"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="55"
-			 border_visible="true"
-			 border_thickness="1"
-			 background_visible="true">
 				<text
 				 name="T_Texture_Bumpiness"
 				 follows="left|top"
 				 height="15"
 				 left="10" 
-				 top_pad="25"
+				 top_pad="12"
 				 width="110"
 				 layout="topleft"
 				 tool_tip="Controls the strength and resolution of normal and bump maps.">
