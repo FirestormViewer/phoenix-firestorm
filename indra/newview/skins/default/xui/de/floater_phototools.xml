@@ -349,11 +349,23 @@
 					Him-Det.
 				</text>
 				<button name="Reset_Sky_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
 
-				<text name="T_Av_Floor_Offset" tool_tip="Legt fest, wie weit der eigene Avatar oberhalb des Bodens steht. Hilfreich, falls der Avatar über dem Boden schwebt oder in ihm steckt.">
-					Avat.-Höhenabstand
+			<panel name="P_Vignetting">
+				<text name="T_VignetteX" tool_tip="Legt die Höhe des Vignette-Effekts fest.">
+					Vig.-Höhe
 				</text>
-				<button name="Reset_Av_Floor_Offset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+				<button name="Reset_VignetteX" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_VignetteY" tool_tip="Legt die Stärke des Vignette-Effekts fest.">
+					Vig.-Stärke
+				</text>
+				<button name="Reset_VignetteY" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_VignetteZ" tool_tip="Legt den Multiplikator-Faktor des Vignette-Effekts fest.">
+					Vig.-Multipl.
+				</text>
+				<button name="Reset_VignetteZ" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 
 			<panel name="P_Render">
@@ -375,9 +387,6 @@
 					<combo_box.item label="8x (Noch weicher)" name="8x"/>
 					<combo_box.item label="16x (Am weichsten)" name="16x"/>
 				</combo_box>
-			</panel>
-
-			<panel name="P_Texture_Bumpiness">
 				<text name="T_Texture_Bumpiness" tool_tip="Legt die Stärke und Qualität von Normal- und Bump-Maps fest.">
 					Textur-Holprigkeit
 				</text>
