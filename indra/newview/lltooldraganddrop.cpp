@@ -66,6 +66,7 @@
 
 #include "llparcel.h"
 #include "llviewerparcelmgr.h"
+#include "fscommon.h"
 
 // syntactic sugar
 #define callMemberFunction(object,ptrToMember)  ((object).*(ptrToMember))
@@ -1362,6 +1363,11 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 		item->packMessage(msg);
 	}
 	msg->sendReliable(regionp->getHost());
+
+	// <FS:Techwolf Lupindo>
+	// Prevent default build parms from being applied due to lost packet.
+	FSCommon::sObjectAddMsg = 0;
+	
 	// back out the change. no actual internal changes take place.
 	item->setParent(folder_id); 
 

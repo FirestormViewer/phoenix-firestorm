@@ -267,16 +267,19 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 	{
 		// <FS:Techwolf Lupindo> import support
 		bool import_handled = false;
+		bool own_full_perm = (objectp->permYouOwner() && objectp->permModify() && objectp->permTransfer() && objectp->permCopy());
 		FSFloaterImport* floater_import = LLFloaterReg::getTypedInstance<FSFloaterImport>("fs_import");
-		if( floater_import )
+		if (floater_import && own_full_perm)
 		{
 			import_handled = floater_import->processPrimCreated(objectp);
 		}
 		if (!import_handled)
 		{
-			// apply new object created preferences
-			// TODO: Fix me!
-			//FSCommon::applyDefaultBuildPreferences(objectp);
+			if (own_full_perm && (FSCommon::sObjectAddMsg > 0))
+			{
+				FSCommon::sObjectAddMsg--;
+				FSCommon::applyDefaultBuildPreferences(objectp);
+			}
 
 			if ( LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance() )
 			{

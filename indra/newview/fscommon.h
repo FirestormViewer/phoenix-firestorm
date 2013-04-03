@@ -69,6 +69,16 @@ namespace FSCommon
 	
 	// apply default build preferences to the object
 	void applyDefaultBuildPreferences(LLViewerObject* object);
+	
+	/**
+	 * HACK
+	 * 
+	 * This is used to work around a LL design flaw of the similular returning the same object update packet
+	 * for _PREHASH_ObjectAdd, _PREHASH_RezObject, and _PREHASH_RezObjectFromNotecard.
+	 * 
+	 * keep track of ObjectAdd messages sent to the similular.
+	 */
+	extern S32 sObjectAddMsg;
 };
 
 #endif // FS_COMMON_H
