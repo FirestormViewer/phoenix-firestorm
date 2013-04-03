@@ -293,10 +293,20 @@
 					Det. nieba
 				</text>
 				<button name="Reset_Sky_Detail" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Av_Floor_Offset" tool_tip="Kontroluje jak bardzo nad lub pod podłogą stoi Twój awatar. Przydatne, gdy nagle znajdziesz się w niepasującej pozycji.">
-					Przesun. od podłogi
+			</panel>
+			<panel name="P_Vignetting">
+				<text name="T_VignetteX">
+					Vig. ilość
 				</text>
-				<button name="Reset_Av_Floor_Offset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
+				<button name="Reset_VignetteX" tool_tip="Kliknij tutaj, aby zresetować ustawienia Vignette do domyślnych."/>
+				<text name="T_VignetteY">
+					Vig. moc
+				</text>
+				<button name="Reset_VignetteY" tool_tip="Kliknij tutaj, aby zresetować ustawienia Vignette do domyślnych."/>
+				<text name="T_VignetteZ">
+					Vig. mnożnik
+				</text>
+				<button name="Reset_VignetteZ" tool_tip="Kliknij tutaj, aby zresetować ustawienia Vignette do domyślnych."/>
 			</panel>
 			<panel name="P_Render">
 				<check_box label="Renderuj poza polem widzenia" name="UseFarClip" tool_tip="Jeśli wyłączysz tą opcję przeglądarka będzie renderować obiekty poza ustawionym polem widzenia / zasięgiem rysowania."/>
@@ -316,8 +326,6 @@
 					<combo_box.item label="8x (jeszcze gładsze)" name="8x"/>
 					<combo_box.item label="16x (najgładsze)" name="16x"/>
 				</combo_box>
-			</panel>
-			<panel name="P_Texture_Bumpiness">	
 				<text name="T_Texture_Bumpiness" tool_tip="Mapowanie wypukłości tekstur: Kontroluje siłę i rozdzielczość normalnych oraz mapowanych wypukłościowo tekstur.">
 					Wypukłości tekstur
 				</text>
