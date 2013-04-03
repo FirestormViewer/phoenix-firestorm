@@ -634,13 +634,6 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		return false;
 	}
 
-	if (!object->permYouOwner())
-	{
-		// not our object
-		LL_DEBUGS("import") << "Not our prim." << LL_ENDL;
-		return false;
-	}
-
 	LLSelectMgr::getInstance()->selectObjectAndFamily(object, TRUE);
 
 	LLUUID prim_uuid = mFile["linkset"][mLinkset][mObject].asUUID();

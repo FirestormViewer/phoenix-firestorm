@@ -42,6 +42,8 @@
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 
+S32 FSCommon::sObjectAddMsg = 0;
+
 void reportToNearbyChat(const std::string& message)
 {
 	LLChat chat;
