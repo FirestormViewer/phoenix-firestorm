@@ -162,6 +162,17 @@ void FloaterQuickPrefs::initCallbacks()
 		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+// <FS:CR> FIRE-9630 - Vignette UI controls
+		getChild<LLSpinCtrl>("VignetteSpinnerX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerX, this));
+		getChild<LLSlider>("VignetteSliderX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteX, this));
+		getChild<LLButton>("Reset_VignetteX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteX, this));
+		getChild<LLSpinCtrl>("VignetteSpinnerY")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerY, this));
+		getChild<LLSlider>("VignetteSliderY")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteY, this));
+		getChild<LLButton>("Reset_VignetteY")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteY, this));
+		getChild<LLSpinCtrl>("VignetteSpinnerZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerZ, this));
+		getChild<LLSlider>("VignetteSliderZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteZ, this));
+		getChild<LLButton>("Reset_VignetteZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteZ, this));
+// </FS:CR>
 	}
 	else
 	{
@@ -293,6 +304,14 @@ BOOL FloaterQuickPrefs::postBuild()
 		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
 		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
+// <FS:CR> FIRE-9630 - Vignette UI controls
+		mSpinnerVignetteX = getChild<LLSpinCtrl>("VignetteSpinnerX");
+		mSpinnerVignetteY = getChild<LLSpinCtrl>("VignetteSpinnerY");
+		mSpinnerVignetteZ = getChild<LLSpinCtrl>("VignetteSpinnerZ");
+		mSliderVignetteX = getChild<LLSlider>("VignetteSliderX");
+		mSliderVignetteY = getChild<LLSlider>("VignetteSliderY");
+		mSliderVignetteZ = getChild<LLSlider>("VignetteSliderZ");
+// </FS:CR>
 		refreshSettings();
 	}
 
@@ -790,6 +809,19 @@ void FloaterQuickPrefs::refreshSettings()
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
 	}
+	
+	// <FS:CR> FIRE-9630 - Vignette UI controls
+	if (getIsPhototools())
+	{
+		LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+		mSpinnerVignetteX->setValue(vignette.mV[VX]);
+		mSpinnerVignetteY->setValue(vignette.mV[VY]);
+		mSpinnerVignetteZ->setValue(vignette.mV[VZ]);
+		mSliderVignetteX->setValue(vignette.mV[VX]);
+		mSliderVignetteY->setValue(vignette.mV[VY]);
+		mSliderVignetteZ->setValue(vignette.mV[VZ]);
+	}
+	// </FS:CR>
 }
 
 void FloaterQuickPrefs::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
@@ -1557,3 +1589,83 @@ void FloaterQuickPrefs::onClose(bool app_quitting)
 	gSavedSettings.setBOOL("QuickPrefsEditMode",FALSE);
 }
 // </FS:Zi>
+
+// <FS:CR> FIRE-9630 - Vignette UI callbacks
+void FloaterQuickPrefs::onChangeVignetteX()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	vignette.mV[VX] = mSliderVignetteX->getValueF32();
+	mSpinnerVignetteX->setValue(vignette.mV[VX]);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onChangeVignetteY()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	vignette.mV[VY] = mSliderVignetteY->getValueF32();
+	mSpinnerVignetteY->setValue(vignette.mV[VY]);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onChangeVignetteZ()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	vignette.mV[VZ] = mSliderVignetteZ->getValueF32();
+	mSpinnerVignetteZ->setValue(vignette.mV[VZ]);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onChangeVignetteSpinnerX()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	vignette.mV[VX] = mSpinnerVignetteX->getValueF32();
+	mSliderVignetteX->setValue(vignette.mV[VX]);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onChangeVignetteSpinnerY()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	vignette.mV[VY] = mSpinnerVignetteY->getValueF32();
+	mSliderVignetteY->setValue(vignette.mV[VY]);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onChangeVignetteSpinnerZ()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	vignette.mV[VZ] = mSpinnerVignetteZ->getValueF32();
+	mSliderVignetteZ->setValue(vignette.mV[VZ]);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onClickResetVignetteX()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	// FIXME: Don't use a hardcoded default value for resetting to default.
+	vignette.mV[VX] = 0.0;
+	mSliderVignetteX->setValue(0);
+	mSpinnerVignetteX->setValue(0);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onClickResetVignetteY()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	// FIXME: Don't use a hardcoded default value for resetting to default.
+	vignette.mV[VY] = 1.0;
+	mSliderVignetteY->setValue(1);
+	mSpinnerVignetteY->setValue(1);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+
+void FloaterQuickPrefs::onClickResetVignetteZ()
+{
+	LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+	// FIXME: Don't use a hardcoded default value for resetting to default.
+	vignette.mV[VZ] = 1.0;
+	mSliderVignetteZ->setValue(1);
+	mSpinnerVignetteZ->setValue(1);
+	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+// </FS:CR>
