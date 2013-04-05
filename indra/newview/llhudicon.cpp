@@ -417,8 +417,11 @@ S32 LLHUDIcon::getNumInstances()
 // <FS:Ansariel> Mark script error icons
 void LLHUDIcon::setScriptError()
 {
-	mScriptError = true;
-	sScriptErrorIconInstances.push_back(this);
+	if (std::find(sScriptErrorIconInstances.begin(), sScriptErrorIconInstances.end(), this) == sScriptErrorIconInstances.end())
+	{
+		mScriptError = true;
+		sScriptErrorIconInstances.push_back(this);
+	}
 }
 
 //static
