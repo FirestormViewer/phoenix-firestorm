@@ -68,8 +68,9 @@
 		<radio_item label="Pivoter (Ctrl)" name="radio rotate"/>
 		<radio_item label="Étirer (Ctrl+Maj)" name="radio stretch"/>
 		<radio_item label="Choisir une face" name="radio select face"/>
+		<radio_item label="Aligner" name="radio align"/>
 	</radio_group>
-	<check_box label="Modification liée" name="checkbox edit linked parts"/>
+	<check_box label="Modifier parties liées" name="checkbox edit linked parts"/>
 	<button label="Lien" name="link_btn"/>
 	<button label="Annuler le lien" name="unlink_btn"/>
 	<text name="RenderingCost" tool_tip="Affiche le coût du rendu calculé pour cet objet">
@@ -82,6 +83,7 @@
 	<check_box label="Étirer les deux côtés" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Étirer les textures" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Fixer" name="checkbox snap to grid"/>
+	<check_box initial_value="false" label="Axes de modification sur racine" name="checkbox actual root"/>
 	<combo_box name="combobox grid mode" tool_tip="Choisir le type d&apos;axe de grille pour le positionnement de l&apos;objet.">
 		<combo_box.item label="Monde" name="World"/>
 		<combo_box.item label="Local" name="Local"/>
