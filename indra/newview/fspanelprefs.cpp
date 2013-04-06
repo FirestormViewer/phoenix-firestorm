@@ -46,7 +46,9 @@ BOOL PanelPreferenceFirestorm::postBuild()
 
 	populateCloudCombo();
 	
-	getChild<LLTextureCtrl>("texture control")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onCommitTexture, this, _2));
+	LLTextureCtrl* tex_ctrl = getChild<LLTextureCtrl>("texture control");
+	tex_ctrl->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onCommitTexture, this, _2));
+	tex_ctrl->setDefaultImageAssetID(LLUUID("89556747-24cb-43ed-920b-47caed15465f")); // Plywood
 
 	return LLPanelPreference::postBuild();	
 }
