@@ -1828,7 +1828,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked">
-		Tus preferencias de contenido actuales te impiden visitar la región que has seleccionado.  Puedes cambiar las preferencias en Yo &gt; Preferencias &gt; General.
+		Tus preferencias de contenido actuales te impiden visitar la región que has seleccionado.  Puedes cambiar las preferencias en Avatar &gt; Preferencias &gt; General.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
@@ -1894,7 +1894,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
-		No recibirás más notificaciones cuando vayas a visitar una región con un contenido [RATING]. En el futuro, puedes cambiar tus preferencias de contenido en Yo &gt; Preferencias &gt; General en la barra de menús.
+		No recibirás más notificaciones cuando vayas a visitar una región con un contenido [RATING]. En el futuro, puedes cambiar tus preferencias de contenido en Avatar &gt; Preferencias &gt; General en la barra de menús.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="MaturityChangeError">
