@@ -153,7 +153,7 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	}
   
 	LLTextureEntry texture_entry;
-	texture_entry.setID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
+	texture_entry.setID(LLUUID(gSavedSettings.getString("FSDefaultObjectTexture")));
 	texture_entry.setColor(gSavedSettings.getColor4("FSBuildPrefs_Color"));
 	texture_entry.setAlpha((100.f - gSavedSettings.getF32("FSBuildPrefs_Alpha")) / 100.f);
 	texture_entry.setGlow(gSavedSettings.getF32("FSBuildPrefs_Glow"));
