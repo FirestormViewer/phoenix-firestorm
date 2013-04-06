@@ -1567,7 +1567,7 @@
          left="275"
          mouse_opaque="true"
          name="texture control"
-         control_name="DefaultObjectTexture"
+         control_name="FSDefaultObjectTexture"
          tool_tip="Click to choose a picture"
          width="64"/>
         <color_swatch

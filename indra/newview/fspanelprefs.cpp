@@ -48,7 +48,7 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	
 	LLTextureCtrl* tex_ctrl = getChild<LLTextureCtrl>("texture control");
 	tex_ctrl->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onCommitTexture, this, _2));
-	tex_ctrl->setDefaultImageAssetID(LL_DEFAULT_WOOD_UUID);
+	tex_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
 
 	return LLPanelPreference::postBuild();	
 }
@@ -290,7 +290,7 @@ void PanelPreferenceFirestorm::onCommitTexture(const LLSD& data)
 			return;
 		}
 
-		gSavedSettings.setString("DefaultObjectTexture", texture_ctrl->getImageAssetID().asString());
+		gSavedSettings.setString("FSDefaultObjectTexture", texture_ctrl->getImageAssetID().asString());
 	}
 }
 
