@@ -297,10 +297,20 @@
 					Det. cielo
 				</text>
 				<button name="Reset_Sky_Detail" label="R" tool_tip="Restablecer valor por defecto."/>
-				<text name="T_Av_Floor_Offset" tool_tip="Controla cuánto se alzará tu avatar sobre el suelo, o cuánto se hundirá en él. Útil para corregir desajustes en la altura de tu avatar sobre el suelo.">
-					Elevación avatar
+			</panel>
+			<panel name="P_Vignetting">
+				<text name="T_VignetteX">
+					Cant. esbozo
 				</text>
-				<button name="Reset_Av_Floor_Offset" label="R" tool_tip="Restablecer valor por defecto."/>
+				<button name="Reset_VignetteX" label="R" tool_tip="Restablecer valor por defecto."/>
+				<text name="T_VignetteY">
+					Fuerza esbozo
+				</text>
+				<button name="Reset_VignetteY" label="R" tool_tip="Restablecer valor por defecto."/>
+				<text name="T_VignetteZ">
+					Mult. esbozo
+				</text>
+				<button name="Reset_VignetteZ" label="R" tool_tip="Restablecer valor por defecto."/>
 			</panel>
 			<panel name="P_Render">
 				<check_box label="Activar distancia de dibujo" name="UseFarClip" tool_tip="Activa la distancia de dibujo. Si la desactivas, el visor dibujará más allá de la distancia de dibujo configurada."/>
@@ -320,8 +330,6 @@
 					<combo_box.item label="8x (Aún más suaves)" name="8x"/>
 					<combo_box.item label="16x (Los más suaves)" name="16x"/>
 				</combo_box>
-			</panel>
-			<panel name="P_Texture_Bumpiness">
 				<text name="T_Texture_Bumpiness" tool_tip="Controla la intensidad y la resolución de los mapas normales y los bump maps. Debes conmutar la casilla de abajo para que los cambios tengan efecto.">
 					Bacheado texturas
 				</text>
