@@ -1,4 +1,4 @@
-First, make sure gcc-4.4 ang g++-4.4 are installed.
+First, make sure gcc-4.4 and g++-4.4 are installed.
 
 32bit build platforms are better tested at this point and strongly recommended.
 
