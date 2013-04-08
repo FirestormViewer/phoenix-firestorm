@@ -648,6 +648,14 @@ BOOL LLTabContainer::handleMouseDown( S32 x, S32 y, MASK mask )
 			gFocusMgr.setMouseCapture(this);
 			tab_button->setFocus(TRUE);
 		}
+		//<FS:ND> Fire-865; Scroll next/prev was not handled in IM tabs
+		else if (mPrevArrowBtn && mPrevArrowBtn->getRect().pointInRect(x, y))
+		{
+			selectPrevTab();
+		}
+		else if (mNextArrowBtn && mNextArrowBtn->getRect().pointInRect(x, y))
+			selectNextTab();
+		//</FS:ND>
 	}
 	return handled;
 }
