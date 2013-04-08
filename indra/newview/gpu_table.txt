@@ -615,3 +615,5 @@ Apple Generic							Apple.*Generic.*						0	0	0	0
 Apple Software Renderer					Apple.*Software Renderer.*				0	0	0	0
 Humper									Humper.*								0	1	1	2.1
 PowerVR SGX545							.*PowerVR SGX.*							1	1	1	3
+//Below group added do to an a mac update in 10.8.3 -FS:TM
+NVIDIA GT 650							.*NVIDIA .*D14P2.*						3	1	0	0
