@@ -1756,49 +1756,40 @@ For now, just make the UI elements invisiable but still have the debug settings 
           Next Owner:
         </text>
         <check_box
+         control_name="NextOwnerModify"
          top_pad="10"
-         enabled="true"
          follows="left|top"
          font="SansSerifSmall"
          height="16"
-         initial_value="false"
-         label="Copy permission"
-         left_delta="-7"
-         mouse_opaque="true"
-         tool_tip="Copy permissions"
-         name="next_owner_copy"
-         control_name="NextOwnerCopy"
-         radio_style="false"
-         width="270"/>
-        <check_box
-         top_pad="0"
-         enabled="true"
-         follows="left|top"
-         font="SansSerifSmall"
-         height="16"
-         initial_value="false"
          label="Modify permission"
-         left_delta="0"
-         mouse_opaque="true"
+         left_delta="-7"
          tool_tip="Modify permissions"
          name="next_owner_modify"
-         control_name="NextOwnerModify"
-         radio_style="false"
          width="270"/>
         <check_box
+         control_name="NextOwnerCopy"
          top_pad="0"
-         enabled="true"
          follows="left|top"
          font="SansSerifSmall"
          height="16"
-         initial_value="true"
+         label="Copy permission"
+         left_delta="0"
+         tool_tip="Copy permissions"
+         name="next_owner_copy"
+         width="270">
+            <check_box.commit_callback
+			function="Perms.Copy" />
+        </check_box>
+        <check_box
+         control_name="NextOwnerTransfer"
+         top_pad="0"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="16"
          label="Transfer permission"
          left_delta="0"
-         mouse_opaque="true"
          tool_tip="Transfer permissions"
          name="next_owner_transfer"
-         control_name="NextOwnerTransfer"
-         radio_style="false"
          width="270"/>
         <text
          top_pad="5"

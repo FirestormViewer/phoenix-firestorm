@@ -20,6 +20,7 @@ static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_pr
 
 PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference()
 {
+	mCommitCallbackRegistrar.add("Perms.Copy",	boost::bind(&PanelPreferenceFirestorm::onCommitCopy, this));
 }
 
 BOOL PanelPreferenceFirestorm::postBuild()
@@ -294,3 +295,14 @@ void PanelPreferenceFirestorm::onCommitTexture(const LLSD& data)
 	}
 }
 
+void PanelPreferenceFirestorm::onCommitCopy()
+{
+	// Implements fair use
+	BOOL copyable = gSavedSettings.getBOOL("NextOwnerCopy");
+	if(!copyable)
+	{
+		gSavedSettings.setBOOL("NextOwnerTransfer", TRUE);
+	}
+	LLCheckBoxCtrl* xfer = getChild<LLCheckBoxCtrl>("next_owner_transfer");
+	xfer->setEnabled(copyable);
+}
