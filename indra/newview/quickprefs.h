@@ -252,5 +252,9 @@ protected:
 	// swaps two controls, used for move up and down
 	void swapControls(const std::string& control1,const std::string& control2);
 // </FS:Zi>
+
+	bool hasControl( std::string const &aName ) const
+	{ return mControlsList.end() != mControlsList.find( aName ); }
+
 };
 #endif
