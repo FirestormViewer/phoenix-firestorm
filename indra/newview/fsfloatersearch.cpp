@@ -940,6 +940,15 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
+	if (num_new_rows == 0)
+	{
+		LLStringUtil::format_map_t map;
+		map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("not_found", map));
+		self->setLoadingProgress(false);
+	}
+	
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	
@@ -1238,6 +1247,15 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocksFast(_PREHASH_QueryReplies);
+	if (num_new_rows == 0)
+	{
+		LLStringUtil::format_map_t map;
+		map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("not_found", map));
+		self->setLoadingProgress(false);
+	}
+	
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	
@@ -1567,6 +1585,15 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
+	if (num_new_rows == 0)
+	{
+		LLStringUtil::format_map_t map;
+		map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("not_found", map));
+		self->setLoadingProgress(false);
+	}
+	
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	
@@ -1886,6 +1913,14 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
+	if (num_new_rows == 0)
+	{
+		LLStringUtil::format_map_t map;
+		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("not_found", map));
+		self->setLoadingProgress(false);
+	}
 	self->mResultsReceived += num_new_rows;
 	
 	S32 not_auction = 0;
@@ -2257,6 +2292,14 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
+	if (num_new_rows == 0)
+	{
+		LLStringUtil::format_map_t map;
+		map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("not_found", map));
+		self->setLoadingProgress(false);
+	}
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	
@@ -2640,6 +2683,15 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	}
 	
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
+	if (num_new_rows == 0)
+	{
+		LLStringUtil::format_map_t map;
+		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("not_found", map));
+		self->setLoadingProgress(false);
+	}
+	
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	static LLUICachedControl<bool> inc_pg("ShowPGEvents", 1);
