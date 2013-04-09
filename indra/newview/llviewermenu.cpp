@@ -9855,7 +9855,11 @@ void toggleTeleportHistory()
 // <FS:Techwolf Lupindo> export
 BOOL enable_export_object()
 {
-	return LLSelectMgr::getInstance()->selectGetAllValid();
+    // <FS:CR> FIRE-9682 - Temporarily disable export by setting (default off)
+	//return LLSelectMgr::getInstance()->selectGetAllValid();
+    bool allow_export = (LLSelectMgr::getInstance()->selectGetAllValid() && gSavedSettings.getBOOL("FSEnableObjectExports"));
+    return allow_export;
+    // </FS:CR>
 }
 
 class FSObjectExport : public view_listener_t
