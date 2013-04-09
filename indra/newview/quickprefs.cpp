@@ -1143,7 +1143,7 @@ void FloaterQuickPrefs::removeControl(const std::string& controlName,BOOL remove
 void FloaterQuickPrefs::selectControl(std::string controlName)
 {
 	// remove previously selected marker, if any
-	if(!mSelectedControl.empty())
+	if(!mSelectedControl.empty() && hasControl( mSelectedControl ) )
 	{
 		mControlsList[mSelectedControl].panel->setBorderVisible(FALSE);
 	}
@@ -1152,6 +1152,12 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 	// enable/disable the editor widgets
 	mSelectedControl=controlName;
 	gSavedSettings.setString("QuickPrefsSelectedControl",controlName);
+
+	if( mSelectedControl.size() && !hasControl( mSelectedControl ) )
+	{
+		mSelectedControl = "";
+		return;
+	}
 
 	// if we are not in edit mode, we can stop here
 	if(!gSavedSettings.getBOOL("QuickPrefsEditMode"))
@@ -1190,7 +1196,7 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 				enable_floating_point=TRUE;
 
 				// assume we have floating point widgets
-				mControlIncrementSpinner->setIncrement(0.1);
+				mControlIncrementSpinner->setIncrement(0.1f);
 				// use 3 decimal places by default
 				S32 decimals=3;
 				// unless we have an integer control
@@ -1346,7 +1352,7 @@ void FloaterQuickPrefs::onValuesChanged()
 			var=gSavedPerAccountSettings.getControl(mSelectedControl);
 		}
 
-		if(var)
+		if(var && hasControl(mSelectedControl) )
 		{
 			// choose sane defaults for floating point controls, so the control value won't be destroyed
 			// start with these
@@ -1418,12 +1424,12 @@ void FloaterQuickPrefs::onValuesChanged()
 
 			// choose a sane increment
 			F32 increment=0.1f;
-			if(mControlsList[mSelectedControl].type==ControlTypeSlider)
+			if( mControlsList[mSelectedControl].type==ControlTypeSlider )
 			{
 				// fine grained control for sliders
 				increment=(max_value-min_value)/100.0f;
 			}
-			else if(mControlsList[mSelectedControl].type==ControlTypeSpinner)
+			else if( mControlsList[mSelectedControl].type==ControlTypeSpinner)
 			{
 				// not as fine grained for spinners
 				increment=(max_value-min_value)/20.0f;
@@ -1432,7 +1438,7 @@ void FloaterQuickPrefs::onValuesChanged()
 			// don't let values go too small
 			if(increment<0.1)
 			{
-				increment=0.1;
+				increment=0.1f;
 			}
 
 			// save calculated values to the edit widgets
@@ -1448,7 +1454,7 @@ void FloaterQuickPrefs::onValuesChanged()
 		updateControl(mSelectedControl,mControlsList[mSelectedControl]);
 	}
 	// the control's setting variable is still the same, so just update the values
-	else
+	else if( hasControl(mSelectedControl) )
 	{
 		mControlsList[mSelectedControl].label=mControlLabelEdit->getValue().asString();
 		mControlsList[mSelectedControl].type=(ControlType) mControlTypeCombo->getValue().asInteger();
@@ -1462,8 +1468,14 @@ void FloaterQuickPrefs::onValuesChanged()
 	// select the control
 	selectControl(mSelectedControl);
 
-	// sometimes we seem to lose focus, so make sure we keep it
-	setFocus(TRUE);
+	// <FS:ND>
+	// setting focus can lead to an endless loop of two floaters fighting for focus. See FIRE-9634
+	// so we rather deal with focus loss sometimes (how often?) than a nasty hang
+
+	// // sometimes we seem to lose focus, so make sure we keep it
+	// setFocus(TRUE);
+
+	// </FS:ND>
 }
 
 void FloaterQuickPrefs::onAddNewClicked()
