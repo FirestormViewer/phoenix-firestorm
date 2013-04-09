@@ -360,6 +360,7 @@
             </menu_item_call>
             <menu_item_call
              label="Import Linkset"
+             visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
                  function="Floater.Toggle"
@@ -1665,6 +1666,7 @@
             </menu_item_call>
 	    <menu_item_call
              label="Import Linkset"
+             visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
                  function="Floater.Toggle"
