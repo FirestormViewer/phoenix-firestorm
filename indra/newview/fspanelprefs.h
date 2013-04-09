@@ -28,6 +28,7 @@ public:
 	void populateCloudCombo();
 	
 	void onCommitTexture(const LLSD& data);
+	void onCommitCopy();
 
 protected:
 	LLComboBox* m_UseLegacyClienttags;
