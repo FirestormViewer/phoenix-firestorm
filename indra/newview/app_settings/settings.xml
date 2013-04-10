@@ -15107,17 +15107,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>12</integer>
     </map>
-    <key>UITabCntrTabPartialHeight</key>
-    <map>
-      <key>Comment</key>
-      <string>UI Tab Container Tab Partial Height</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>5</integer>
-    </map>
     <key>UITabCntrVertTabMinWidth</key>
     <map>
       <key>Comment</key>
@@ -15139,17 +15128,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>15</integer>
-    </map>
-    <key>UITabVPadding</key>
-    <map>
-      <key>Comment</key>
-      <string>UI Tab Padding</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>3</integer>
     </map>
     <key>UpdaterServiceSetting</key>
     <map>
