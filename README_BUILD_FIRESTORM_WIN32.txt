@@ -1,5 +1,5 @@
 Before you start configuring your Windows build system, be aware of our tested configurations:
-	Memory: You will need at least 2GB RAM, 4GB strongly recommendted.
+	Memory: You will need at least 2GB RAM, 4GB strongly recommended.
 	CPU: Multiple CPUs are strongly recommended. 
 	  A build can take over an hour.
 	Visual Studio 2010. 
