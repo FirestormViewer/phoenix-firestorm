@@ -221,10 +221,15 @@ elseif(DARWIN)
         libminizip.a
         libndofdev.dylib
         libhunspell-1.3.0.dylib
-        libexception_handler.dylib
+        # libexception_handler.dylib
         libcollada14dom.dylib
         #libgrowl.dylib # *TODO - test/fix/get mac growl working
        )
+
+    # <FS:ND> We only ever need google breakpad when crash reporting is used
+    if(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
+      set(release_files ${release_files} "libexception_handler.dylib")
+    endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
 
     # fmod is statically linked on darwin
     set(fmod_files "")
