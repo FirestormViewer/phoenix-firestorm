@@ -8561,23 +8561,6 @@ Do you wish to continue?
 
   <notification
    icon="alertmodal.tga"
-   name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume"
-   type="alertmodal">
-Some selected linksets will have the Phantom flag toggled.
-
-Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because the shape is non-convex.
-
-Do you wish to continue?
-    <tag>confirm</tag>
-    <usetemplate
-     ignoretext="Some selected linksets phantom flag will be toggled and others cannot be set because the shape is non-convex"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
    name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume"
    type="alertmodal">
 Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because of permission restrictions on the linkset.  These linksets will be set to be '[RESTRICTED_TYPE]' instead.
@@ -8588,25 +8571,6 @@ Do you wish to continue?
     <tag>confirm</tag>
     <usetemplate
      ignoretext="Some selected linksets cannot be set because of permission restrictions on the linkset and because the shape is non-convex."
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume"
-   type="alertmodal">
-Some selected linksets will have the Phantom flag toggled.
-
-Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because of permission restrictions on the linkset.  These linksets will be set to be '[RESTRICTED_TYPE]' instead.
-
-Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because the shape is non-convex. These linksets&apos; use types will not change.
-
-Do you wish to continue?
-    <tag>confirm</tag>
-    <usetemplate
-     ignoretext="Some selected linksets phantom flag will be toggled and others cannot be set because of permission restrictions on the linkset and because the shape is non-convex."
      name="okcancelignore"
      notext="Cancel"
      yestext="OK"/>
