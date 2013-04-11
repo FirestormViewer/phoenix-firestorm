@@ -954,6 +954,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="TeleportYourAgent">
 		Teleportarte
 	</string>
+	<string name="SilentEstateManagement">
+		Silenciar notificaciones sobre las modificaciones de acceso al Estado
+	</string>
+	<string name="OverrideAgentAnimations">
+		Ignorar las animaciones de tu avatar
+	</string>
 	<string name="NotConnected">
 		No conectado/a
 	</string>
