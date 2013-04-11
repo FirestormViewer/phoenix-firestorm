@@ -130,6 +130,9 @@ private:
 	LLSlider*			mSliderVignetteY;
 	LLSlider*			mSliderVignetteZ;
 	
+	// <FS:CR>
+	LLButton*			mBtnResetDefaults;
+	
 	// Vignette UI callbacks
 	void onChangeVignetteX();
 	void onChangeVignetteY();
@@ -140,6 +143,11 @@ private:
 	void onClickResetVignetteX();
 	void onClickResetVignetteY();
 	void onClickResetVignetteZ();
+	// </FS:CR>
+	// <FS:CR> FIRE-9407 - Restore Quickprefs Defaults
+	void onClickRestoreDefaults();
+	void loadSavedSettingsFromFile(const std::string& settings_path);
+	void callbackRestoreDefaults(const LLSD& notification, const LLSD& response);
 	// </FS:CR>
 
 // <FS:Zi> Dynamic quick prefs

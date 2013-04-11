@@ -4378,4 +4378,10 @@ Poprzedni symulator: [OLDVERSION]
 		Przywracanie zakończone! Proszę wyłączyć i włączyć ponownie swoją przeglądarkę.
 		<usetemplate name="okbutton" yestext="Wyłącz"/>
 	</notification>
+	<notification name="ConfirmRestoreQuickPrefsDefaults">
+Kontynuowanie spowoduje, że kontrolki Szybkiego Strojenia zostaną przywrócone do domyślnego ustawienia.
+		
+Nie można tego cofnąć.
+		<usetemplate ignoretext="Przywrócenie domyślnych kontrolek Szybkiego Strojenia" name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
 </notifications>
