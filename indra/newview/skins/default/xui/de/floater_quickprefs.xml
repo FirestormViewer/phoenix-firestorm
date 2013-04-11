@@ -54,6 +54,7 @@
 		<spinner name="control_min_edit" tool_tip="Der kleinste Wert, der ausgewählt werden kann" label="Min:"/>
 		<spinner name="control_max_edit" tool_tip="Der größte Wert, der ausgewählt werden kann" label="Max:"/>
 		<spinner name="control_increment_edit" tool_tip="Die Schrittweite, um die der Wert erhöht oder verringert wird, wenn der Hoch- bzw. Runter-Pfeil des Reglers angeklickt wird." label="Schritt:" label_width="40" width="90"/>
+		<button name="Restore_Btn" tool_tip="Standardeinstellungen wiederherstellen" label="Zurücksetzen" />
 		<button name="button_close" tool_tip="Bearbeiten-Modus beenden"/>
 	</panel>
 </floater>

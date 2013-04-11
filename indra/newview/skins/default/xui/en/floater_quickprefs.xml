@@ -508,7 +508,16 @@ Type:
  left_pad="4"
  width="81"
  height="22" />
-
+<button
+ layout="topleft"
+ follows="right_top"
+ name="Restore_Btn"
+ tool_tip="Restore the default settings"
+ label="Reset"
+ left="4"
+ width="120"
+ top_pad="4"
+ height="16" />
 <!-- reverse the image names here beause we have a toggle ON button -->
 <button
  layout="topleft"

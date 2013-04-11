@@ -8,6 +8,7 @@
  * Copyright (C) 2011, WoLf Loonie @ Second Life
  * Copyright (C) 2013, Zi Ree @ Second Life
  * Copyright (C) 2013, Ansariel Hiller @ Second Life
+ * Copyright (C) 2013, Cinder Biscuits @ Me too
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -56,10 +57,10 @@
 #include "lllayoutstack.h"
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
+#include "llnotificationsutil.h" // <FS:CR> For restore defaults confirmation
 
 #include <boost/foreach.hpp>
 #include <llui.h>
-
 
 static F32 sun_pos_to_time24(F32 sun_pos)
 {
@@ -176,6 +177,7 @@ void FloaterQuickPrefs::initCallbacks()
 	}
 	else
 	{
+		getChild<LLButton>("Restore_Btn")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickRestoreDefaults, this));
 		gSavedSettings.getControl("QuickPrefsEditMode")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::onEditModeChanged, this));	// <FS:Zi> Dynamic Quickprefs
 	}
 
@@ -314,6 +316,10 @@ BOOL FloaterQuickPrefs::postBuild()
 // </FS:CR>
 		refreshSettings();
 	}
+	else
+	{
+		mBtnResetDefaults = getChild<LLButton>("Restore_Btn");
+	}
 
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
@@ -342,58 +348,8 @@ BOOL FloaterQuickPrefs::postBuild()
 	mOptionsStack=getChild<LLLayoutStack>("options_stack");
 
 	// get the path to the user defined or default quick preferences settings
-	std::string settings_path=getSettingsPath(FALSE);
-
-	QuickPrefsXML xml;
-	LLXMLNodePtr root;
-
-	if(!LLXMLNode::parseFile(settings_path,root,NULL))
-	{
-		llwarns << "Unable to load quick preferences from file: " << settings_path << llendl;
-	}
-	else if(!root->hasName("quickprefs"))
-	{
-		llwarns << settings_path << " is not a valid quick preferences definition file" << llendl;
-	}
-	else
-	{
-		// Parse the quick preferences settings
-		LLXUIParser parser;
-		parser.readXUI(root,xml,settings_path);
-
-		if(!xml.validateBlock())
-		{
-			llwarns << "Unable to validate quick preferences from file: " << settings_path << llendl;
-		}
-		else
-		{
-			// add the elements from the XML file to the internal list of controls
-			BOOST_FOREACH(const QuickPrefsXMLEntry& xml_entry,xml.entries)
-			{
-				// get the label
-				std::string label=xml_entry.label;
-				// get the same as translated label
-				std::string translated_label=xml_entry.label;
-				// replace translated label with translated version, if available
-				LLTrans::findString(translated_label,"QP "+label);
-
-				U32 type=xml_entry.control_type;
-				addControl(
-					xml_entry.control_name,
-					translated_label,
-					NULL,
-					(ControlType) type,
-					xml_entry.integer,
-					xml_entry.min_value,
-					xml_entry.max_value,
-					xml_entry.increment
-				);
-				// put it at the bottom of the ordering stack
-				mControlsOrder.push_back(xml_entry.control_name);
-			}
-		}
-	}
-
+	loadSavedSettingsFromFile(getSettingsPath(FALSE));
+	
 	// get edit widget pointers
 	mControlLabelEdit=getChild<LLLineEditor>("label_edit");
 	mControlNameCombo=getChild<LLComboBox>("control_name_combo");
@@ -444,6 +400,60 @@ BOOL FloaterQuickPrefs::postBuild()
 
 	return LLDockableFloater::postBuild();
 }
+
+void FloaterQuickPrefs::loadSavedSettingsFromFile(const std::string& settings_path)
+{
+	QuickPrefsXML xml;
+	LLXMLNodePtr root;
+	
+	if(!LLXMLNode::parseFile(settings_path,root,NULL))
+	{
+		llwarns << "Unable to load quick preferences from file: " << settings_path << llendl;
+	}
+	else if(!root->hasName("quickprefs"))
+	{
+		llwarns << settings_path << " is not a valid quick preferences definition file" << llendl;
+	}
+	else
+	{
+		// Parse the quick preferences settings
+		LLXUIParser parser;
+		parser.readXUI(root,xml,settings_path);
+		
+		if(!xml.validateBlock())
+		{
+			llwarns << "Unable to validate quick preferences from file: " << settings_path << llendl;
+		}
+		else
+		{
+			// add the elements from the XML file to the internal list of controls
+			BOOST_FOREACH(const QuickPrefsXMLEntry& xml_entry,xml.entries)
+			{
+				// get the label
+				std::string label=xml_entry.label;
+				// get the same as translated label
+				std::string translated_label=xml_entry.label;
+				// replace translated label with translated version, if available
+				LLTrans::findString(translated_label,"QP "+label);
+				
+				U32 type=xml_entry.control_type;
+				addControl(
+						   xml_entry.control_name,
+						   translated_label,
+						   NULL,
+						   (ControlType) type,
+						   xml_entry.integer,
+						   xml_entry.min_value,
+						   xml_entry.max_value,
+						   xml_entry.increment
+						   );
+				// put it at the bottom of the ordering stack
+				mControlsOrder.push_back(xml_entry.control_name);
+			}
+		}
+	}
+}
+
 
 bool FloaterQuickPrefs::isValidPresetName(const std::string& preset_name)
 {
@@ -1679,5 +1689,34 @@ void FloaterQuickPrefs::onClickResetVignetteZ()
 	mSliderVignetteZ->setValue(1);
 	mSpinnerVignetteZ->setValue(1);
 	gSavedSettings.setVector3("FSRenderVignette", vignette);
+}
+// </FS:CR> FIRE-9630 - Vignette UI callbacks
+
+// <FS:CR> FIRE-9407 - Restore Quickprefs Defaults
+void FloaterQuickPrefs::callbackRestoreDefaults(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+		selectControl("");
+		BOOST_FOREACH(const std::string& control, mControlsOrder)
+		{
+			removeControl(control);
+		}
+		mControlsOrder.clear();
+		std::string settings_file = LLAppViewer::instance()->getSettingsFilename("Default", "QuickPreferences");
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, settings_file));
+		loadSavedSettingsFromFile(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, settings_file));
+		gSavedSettings.setBOOL("QuickPrefsEditMode", FALSE);
+	}
+	else
+	{
+		llinfos << "User cancelled the reset." << llendl;
+	}
+}
+
+void FloaterQuickPrefs::onClickRestoreDefaults()
+{
+	LLNotificationsUtil::add("ConfirmRestoreQuickPrefsDefaults", LLSD(), LLSD(), boost::bind(&FloaterQuickPrefs::callbackRestoreDefaults, this, _1, _2));
 }
 // </FS:CR>

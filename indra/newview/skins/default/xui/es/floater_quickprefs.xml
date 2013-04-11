@@ -47,6 +47,7 @@
 		<spinner name="control_min_edit" tool_tip="Valor mínimo que se podrá seleccionar" label="Mín:"/>
 		<spinner name="control_max_edit" tool_tip="Valor máximo que se podrá seleccionar" label="Máx:"/>
 		<spinner name="control_increment_edit" tool_tip="Incremento o decremento del valor cuando se pulsa la flecha arriba/abajo del número o se usan las teclas del cursor en el deslizador" label="Incr:"/>
+		<button name="Restore_Btn" tool_tip="Restablece a la configuración por defecto" label="Restablecer" />
 		<button name="button_close" tool_tip="Cierra el panel de edición"/>
 	</panel>
 </floater>

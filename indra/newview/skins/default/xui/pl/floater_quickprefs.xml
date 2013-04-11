@@ -46,6 +46,7 @@
 		<spinner name="control_min_edit" tool_tip="Najniższa wartość, jaką będzie można wybrać" label="Min:" />
 		<spinner name="control_max_edit" tool_tip="Najwyższa wartość, jaką będzie można wybrać" label="Maks:" />
 		<spinner name="control_increment_edit" tool_tip="Przyrost wartości, jaki nastąpi po kliknięciu na strzałkę w górę/dół przy polu z nimi lub po użyciu przycisków lewo/prawo na klawiaturze w przypadku suwaka" label="Pow:" />
+		<button name="Restore_Btn" tool_tip="Przywraca domyślne ustawienia" label="Resetuj" />
 		<button name="button_close" tool_tip="Zamknij panel edycji" />
 	</panel>
 </floater>
