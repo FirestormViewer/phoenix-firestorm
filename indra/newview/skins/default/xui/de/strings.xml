@@ -970,6 +970,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TeleportYourAgent">
 		Sie teleportieren
 	</string>
+	<string name="SilentEstateManagement">
+		Benachrichtigungen über Änderungen am Grundbesitzzugang stummschalten
+	</string>
+	<string name="OverrideAgentAnimations">
+		Ihre Avatar-Animationen übersteuern
+	</string>
 	<string name="NotConnected">
 		Nicht verbunden
 	</string>
