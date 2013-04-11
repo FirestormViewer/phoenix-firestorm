@@ -4527,7 +4527,7 @@ Simulador anterior: [OLDVERSION]
 		<usetemplate name="okbutton" yestext="Salir"/>
 	</notification>
 	<notification name="ConfirmRestoreQuickPrefsDefaults">
-Esta acción restaurará inmediatamente tus preferencias rapidas a su configuración por defecto.
+Esta acción restaurará inmediatamente tus preferencias rápidas a su configuración por defecto.
 		
 No se podrá deshacer.
 		<usetemplate ignoretext="Confirmar la restauración de la configuración por defecto de las preferencias rápidas" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
