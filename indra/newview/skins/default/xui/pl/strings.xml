@@ -952,6 +952,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TeleportYourAgent">
 		Teleportować Cię
 	</string>
+	<string name="SilentEstateManagement">
+		Wyciszyć powiadomienia o zmianach zezwoleń Majątku
+	</string>
+	<string name="OverrideAgentAnimations">
+		Zastąpić animacje Twojego awatara
+	</string>
 	<string name="NotConnected">
 		Brak połączenia
 	</string>
