@@ -10,7 +10,7 @@ output will only work on OSX 10.6 and higher unless you install the OS X
 directory /Developer/SDKs/MacOSX10.5.sdk and its contents. If you do this,
 then the output will work on 10.5.
 
-Insure you can build a stock viewer-development tree as described in the SL
+Ensure you can build a stock viewer-development tree as described in the SL
 wiki.  Before asking for any help compiling Firestorm, make sure you can
 build viewer-development first.  If you try and skip this step, you may
 receive much less help. 
