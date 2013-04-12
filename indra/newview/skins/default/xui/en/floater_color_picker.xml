@@ -226,7 +226,7 @@
      height="20"
      layout="topleft"
      left="10"
-     top_pad="0"
+     top_pad="3"
      mouse_opaque="false"
      name="h_val_text"
      width="413">
