@@ -5382,8 +5382,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
   <key>FirstLoginThisInstall</key>
   <map>
@@ -17346,8 +17344,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string></string>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>UserSessionSettingsFile</key>
     <map>
@@ -17359,8 +17355,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string />
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>OpenSidePanelsInFloaters</key>
     <map>
