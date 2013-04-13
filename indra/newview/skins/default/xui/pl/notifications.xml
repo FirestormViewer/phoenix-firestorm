@@ -4380,7 +4380,7 @@ Poprzedni symulator: [OLDVERSION]
 	</notification>
 	<notification name="ConfirmRestoreQuickPrefsDefaults">
 Kontynuowanie spowoduje, że kontrolki Szybkiego Strojenia zostaną przywrócone do domyślnego ustawienia.
-		
+
 Nie można tego cofnąć.
 		<usetemplate ignoretext="Przywrócenie domyślnych kontrolek Szybkiego Strojenia" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>

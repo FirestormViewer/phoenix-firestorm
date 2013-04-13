@@ -11146,7 +11146,7 @@ Restore complete! Please restart your viewer now.
    type="alertmodal">
     <tag>confirm</tag>
 This action will immediately restore your quick preferences to their default settings.
-        
+
 You cannot undo this action.
     <usetemplate
      ignoretext="Confirm restore quick prefs defaults"
