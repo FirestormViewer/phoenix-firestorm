@@ -1262,8 +1262,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
 
   <key>RenderVolumeSAThreshold</key>
