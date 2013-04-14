@@ -781,7 +781,7 @@ bool LLAppViewer::init()
 	// OK to write stuff to logs now, we've now crash reported if necessary
 	//
 	
-	
+// <FS>
 	// SJ/AO:  Reset Configuration here, if our marker file exists. Configuration needs to be reset before settings files 
 	// are read in to avoid file locks.
 
@@ -792,55 +792,65 @@ bool LLAppViewer::init()
 	{
 		mPurgeSettings = true;
 		llinfos << "Purging configuration..." << llendl;
-		//std::string delem = gDirUtilp->getDirDelimiter();
+		std::string delem = gDirUtilp->getDirDelimiter();
 
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR"));
 		
 		//[ADD - Clear Usersettings : SJ] - Delete directories beams, beamsColors, windlight in usersettings
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams") );
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors") );
-		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/water") );
-		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/days") );
-		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight/skies") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight" + delem + "water") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight" + delem + "days") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight" + delem + "skies") );
 		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight") );		
-	
-		std::string user_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "", "");
 
 		// We don't delete the entire folder to avoid data loss of config files unrelated to the current binary. -AO
 		//gDirUtilp->deleteFilesInDir(user_dir, "*.*");
 		
-		//The below line would delete the settings file assuming no channel overrides on the command line, which
-		//may be typical for some start scripts or launchers.  Rather than use this assumption, we'll do further config 
-		//file deletion later in initConfiguration() after parsing command line arguments.
-                //std::string sWorkingChannelName(LL_CHANNEL);
-                //LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_"+sWorkingChannelName+".xml"));
-
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.xml"));
-				LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.user.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml"));
-	            gDirUtilp->deleteFilesInDir(user_dir, "feature*.txt");
-	            gDirUtilp->deleteFilesInDir(user_dir, "gpu*.txt");
-
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_firestorm.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_phoenix.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_hybrid.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_v3.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "quick_preferences.xml"));
-		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_minimal.xml"));
+		// Alphabetised
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "account_settings_phoenix.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "bin_conf.dat"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "bin_conf.dat"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "ignorable_dialogs.xml"));
-		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.user.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "quick_preferences.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE));
+		
+		std::string user_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "", "");
+		gDirUtilp->deleteFilesInDir(user_dir, "feature*.txt");
+		gDirUtilp->deleteFilesInDir(user_dir, "gpu*.txt");
+		gDirUtilp->deleteFilesInDir(user_dir, "settings_*.xml");
 
+		// Remove misc OS user app dirs
+		std::string base_dir = gDirUtilp->getOSUserAppDir() + delem;
+		
+		LLFile::rmdir(base_dir + "browser_profile");
+		LLFile::rmdir(base_dir + "data");
+		
 		// Delete per-user files below
-		/* TODO: spider user folders for settings_per_account, notices, contactsets */
+		std::string per_user_dir_glob = base_dir + "*" + delem;
+		
+		LLFile::remove(per_user_dir_glob + "filters.xml");
+		LLFile::remove(per_user_dir_glob + "medialist.xml");
+		LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
+		LLFile::remove(per_user_dir_glob + "screen_last.bmp");
+		LLFile::remove(per_user_dir_glob + "search_history.xml");
+		LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
+		LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
+		LLFile::remove(per_user_dir_glob + "teleport_history.xml");
+		LLFile::remove(per_user_dir_glob + "texture_list_last.xml");
+		LLFile::remove(per_user_dir_glob + "toolbars.xml");
+		LLFile::remove(per_user_dir_glob + "typed_locations.xml");
+		LLFile::remove(per_user_dir_glob + "url_history.xml");
+		LLFile::remove(per_user_dir_glob + "volume_settings.xml");
+		LLFile::rmdir(per_user_dir_glob + "browser_profile");
 	}
-	
+// </FS>
 	
 	init_default_trans_args();
 	
