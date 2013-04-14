@@ -16368,8 +16368,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>renderhighlights</key>
     <map>
@@ -16381,8 +16379,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>scriptsbeacon</key>
     <map>
