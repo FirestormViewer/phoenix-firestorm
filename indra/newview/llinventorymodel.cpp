@@ -607,7 +607,10 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 			{
 				cats.put(cat);
 			}
-			collectDescendentsIf(cat->getUUID(), cats, items, include_trash, add);
+// [RLVa:KB] - Checked: 2013-04-15 (RLVa-1.4.8)
+			collectDescendentsIf(cat->getUUID(), cats, items, include_trash, add, follow_folder_links);
+// [/RLVa:KB]
+//			collectDescendentsIf(cat->getUUID(), cats, items, include_trash, add);
 		}
 	}
 
