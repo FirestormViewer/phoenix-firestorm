@@ -400,6 +400,54 @@
         <key>slurl_base</key>
             <string>hop://login.osgrid.org/</string>
         </map>
+    <key>login.ufsgrid.com:8002</key>
+        <map>
+        <key>CurrencySymbol</key>
+            <string>OMC$</string>
+        <key>DirectoryFee</key>
+            <string>0</string>
+        <key>LastModified</key>
+            <date>2013-04-15T13:34:58.59Z</date>
+        <key>MaxGroups</key>
+            <string>50</string>
+        <key>RealCurrencySymbol</key>
+            <string>$</string>
+        <key>SendGridInfoToViewerOnLogin</key>
+            <string>true</string>
+        <key>about</key>
+            <string>http://www.ufsgrid.com/</string>
+        <key>gridname</key>
+            <string>UFSGrid</string>
+        <key>gridnick</key>
+            <string>UFSGrid</string>
+        <key>help</key>
+            <string>http://www.ufsgrid.com/support</string>
+        <key>helperuri</key>
+            <string>http://gridserv.ufsgrid.com/helper/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://www.ufsgrid.com/app/loginscreen/screen.php</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://login.ufsgrid.com:8002/</string>
+            </array>
+        <key>name</key>
+            <string>login.ufsgrid.com:8002</string>
+        <key>password</key>
+            <string>http://www.ufsgrid.com/ufsgrid/lost-passwd</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://www.ufsgrid.com/register</string>
+        <key>search</key>
+            <string>http://www.ufsgrid.com/app/search/worldsearch.php?</string>
+        <key>slurl_base</key>
+            <string>hop://login.ufsgrid.com:8002/</string>
+        </map>
     <key>osgrid.kitely.com:8002</key>
         <map>
         <key>LastModified</key>
