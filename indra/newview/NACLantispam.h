@@ -3,8 +3,6 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
-#include "fscommon.h"
-#include "lluuid.h"
 #include "llsingleton.h"
 
 typedef enum e_antispam_queue
@@ -44,8 +42,8 @@ private:
 	bool	mBlocked;
 };
 
-typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDEntryHasher> t_spam_queue_entry_map;
-typedef boost::unordered_set<LLUUID, FSUUIDEntryHasher> t_collision_sound_set;
+typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDHash> t_spam_queue_entry_map;
+typedef boost::unordered_set<LLUUID, FSUUIDHash> t_collision_sound_set;
 
 class NACLAntiSpamQueue
 {

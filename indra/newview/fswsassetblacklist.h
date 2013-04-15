@@ -31,14 +31,12 @@
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 
-#include "fscommon.h"
 #include "llsingleton.h"
-#include "llfloater.h"
 #include "llassettype.h"
 
-typedef boost::unordered_set<LLUUID, FSUUIDEntryHasher> t_blacklisted_uuid_container;
+typedef boost::unordered_set<LLUUID, FSUUIDHash> t_blacklisted_uuid_container;
 typedef std::map<LLAssetType::EType, t_blacklisted_uuid_container> t_blacklist_type_map;
-typedef boost::unordered_map<LLUUID, LLSD, FSUUIDEntryHasher> t_blacklist_data;
+typedef boost::unordered_map<LLUUID, LLSD, FSUUIDHash> t_blacklist_data;
 
 class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
 {

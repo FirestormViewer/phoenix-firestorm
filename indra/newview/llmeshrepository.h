@@ -33,7 +33,6 @@
 #include "llviewertexture.h"
 #include "llvolume.h"
 
-#include "fscommon.h"
 #include <boost/unordered_map.hpp>
 
 #define LLCONVEXDECOMPINTER_STATIC 1
@@ -575,7 +574,7 @@ public:
 	
 	// <FS:Ansariel> Faster lookup
 	//typedef std::map<LLUUID, LLMeshSkinInfo> skin_map;
-	typedef boost::unordered_map<LLUUID, LLMeshSkinInfo, FSUUIDEntryHasher> skin_map;
+	typedef boost::unordered_map<LLUUID, LLMeshSkinInfo, FSUUIDHash> skin_map;
 	// </FS:Ansariel>
 	skin_map mSkinMap;
 

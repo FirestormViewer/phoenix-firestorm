@@ -160,6 +160,16 @@ public:
 	LLAssetID makeAssetID(const LLUUID& session) const;
 };
 
+// <FS:Ansariel> UUID hash calculation
+struct FSUUIDHash : public std::unary_function<LLUUID, size_t>
+{
+	inline size_t operator() (const LLUUID& id) const
+	{
+		return id.getCRC32();
+	}
+};
+// </FS:Ansariel> UUID hash calculation
+
 #endif
 
 
