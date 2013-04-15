@@ -633,7 +633,9 @@ bool rlvPredCanRemoveItem(const LLInventoryItem* pItem)
 				RLV_ASSERT(false);
 		}
 	}
-	return false;
+	// HACK-RLVa: Until LL supports temporary attachment detection assume that no inventory item means a temporary 
+	//            attachment which are always removeable
+	return true;
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
