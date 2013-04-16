@@ -35,6 +35,7 @@
 
 #include "aoengine.h"
 #include "fscommon.h"
+#include "fsradar.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llavatarlist.h"
@@ -47,7 +48,6 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
-#include "llpanelpeople.h"
 #include "llparcel.h"
 #include "lltooldraganddrop.h"
 #include "lltrans.h"
@@ -1169,11 +1169,11 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 	std::string av_name;
 	LLStringUtil::toLower(partial_name);
 
-	LLPanelPeople* panel_people = getPeoplePanel();
-	if (panel_people)
+	FSRadar* radar = FSRadar::getInstance();
+	if (radar)
 	{
 		std::vector<LLPanel*> items;
-		LLAvatarList* nearbyList = panel_people->getNearbyList();
+		LLAvatarList* nearbyList = radar->getNearbyList();
 		nearbyList->getItems(items);
 
 		for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
@@ -1195,10 +1195,10 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 void cmdline_tp2name(std::string target)
 {
 	LLUUID avkey = cmdline_partial_name2key(target);
-	LLPanelPeople* panel_people = getPeoplePanel();
-	if (avkey.notNull() && panel_people)
+	FSRadar* radar = FSRadar::getInstance();
+	if (avkey.notNull() && radar)
 	{
-		LLAvatarListItem* avatar_list_item = panel_people->getNearbyList()->getAvatarListItem(avkey);
+		LLAvatarListItem* avatar_list_item = radar->getNearbyList()->getAvatarListItem(avkey);
 		if (avatar_list_item)
 		{
 			LLVector3d pos = avatar_list_item->getPosition();

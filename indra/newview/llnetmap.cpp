@@ -77,17 +77,13 @@
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
 #include "rlvhandler.h"
 // [/RLVa:KB]
-#include "lltrans.h"
 #include "llmutelist.h"
 
 // Ansariel: For accessing the radar data
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
-#include "llpanelpeople.h"
-#include "llfloatersidepanelcontainer.h"
+#include "fsradar.h"
 #include "lggcontactsets.h"
-
-#include "llavataractions.h"
 #include "fscommon.h"
 
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
@@ -1018,10 +1014,10 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			//               aka radar when above 1020m.
 			if (isHigher1020mBug)
 			{
-				LLPanelPeople* panel_people = getPeoplePanel();
-				if (panel_people)
+				FSRadar* radar = FSRadar::getInstance();
+				if (radar)
 				{
-					LLAvatarListItem* avatar_list_item = panel_people->getNearbyList()->getAvatarListItem(avatar_id);
+					LLAvatarListItem* avatar_list_item = radar->getNearbyList()->getAvatarListItem(avatar_id);
 					if (avatar_list_item)
 					{
 						F32 radar_distance = avatar_list_item->getRange();
@@ -1710,10 +1706,10 @@ void LLNetMap::startTracking()
 {
 	if (mClosestAgentRightClick.notNull())
 	{
-		LLPanelPeople* panel_people = getPeoplePanel();
-		if (panel_people != NULL)
+		FSRadar* radar = FSRadar::getInstance();
+		if (radar)
 		{
-			panel_people->startTracking(mClosestAgentRightClick);
+			radar->startTracking(mClosestAgentRightClick);
 		}
 	}
 }

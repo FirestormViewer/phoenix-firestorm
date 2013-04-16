@@ -219,6 +219,7 @@
 #include "fsdata.h"
 #include "fsfloatersearch.h"
 #include "fslslbridge.h"
+#include "fsradar.h"
 #include "fswsassetblacklist.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
@@ -1680,12 +1681,15 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			llinfos << "Constructed " <<  pContacts->getTitle() << llendl;
 		// </FS:ND>
 
-		// <FS:Ansariel> FIRE-8560/FIRE-8592: We neet to create the instance of the people
-		//               floater for the radar functions and the V2 friendlist here.
+		// <FS:Ansariel> FIRE-8560/FIRE-8592: We neet to create the instance of the radar
+		//               for the radar functions and the V2 friendlist here.
 		//               This is because of the standalone group panels that will
 		//               prevent doing this at login when receiving the agent group
 		//               data update.
 		LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+		FSRadar::instance();
+		llinfos << "Radar initialized" << llendl;
+		// </FS:Ansariel>
 
 		//gCacheName is required for nearby chat history loading
 		//so I just moved nearby history loading a few states further

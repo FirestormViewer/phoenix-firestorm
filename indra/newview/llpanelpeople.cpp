@@ -30,20 +30,18 @@
 #include "llavatarname.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
+#include "llmenubutton.h"
 #include "llmenugl.h"
 #include "llnotificationsutil.h"
 #include "lleventtimer.h"
 #include "llfiltereditor.h"
 #include "lltabcontainer.h"
-#include "lluictrlfactory.h"
-#include "llmenubutton.h"
 #include "lltoggleablemenu.h"
-
+#include "lluictrlfactory.h"
 
 #include "llpanelpeople.h"
 
 // newview
-#include "llavatarpropertiesprocessor.h"
 #include "llaccordionctrl.h"
 #include "llaccordionctrltab.h"
 #include "llagent.h"
@@ -66,31 +64,16 @@
 #include "llvoiceclient.h"
 #include "llworld.h"
 #include "llspeakers.h"
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
+
+// Firestorm includes
 #include "fscontactsfloater.h"
+#include "fsradar.h"
 #include "fsradarlistctrl.h"
+#include "fsradarmenu.h"
 #include "llavatarconstants.h" // for range constants
-#include <map>
-#include "llvoavatar.h"
-#include <time.h>
-#include "llnotificationmanager.h"
 #include "lllayoutstack.h"
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
-#include <algorithm>
-#include <boost/algorithm/string.hpp>
-#include "llcontrol.h"
-#include "lggcontactsets.h"
-#include "fslslbridge.h"
-#include "fslslbridgerequest.h"
-#include "lltracker.h"
-#include "fscommon.h"
-
-using namespace std;
-using namespace boost;
-
-
+#include "llnotificationmanager.h"
+#include "rlvhandler.h"
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
 #define NEARBY_LIST_UPDATE_INTERVAL 1
@@ -531,16 +514,19 @@ LLPanelPeople::LLPanelPeople()
 		mNearbyList(NULL),
 		mRecentList(NULL),
 		mGroupList(NULL),
- 		mNearbyGearButton(NULL),
- 		mFriendsGearButton(NULL),
- 		mGroupsGearButton(NULL),
+		mNearbyGearButton(NULL),
+		mFriendsGearButton(NULL),
+		mGroupsGearButton(NULL),
 		mRecentGearButton(NULL),
+		// <FS:Ansariel> Firestorm radar
+		//mMiniMap(NULL)
 		mMiniMap(NULL),
-		mRadarList(NULL),
-		mRadarLastRequestTime(0.f)
+		mRadarList(NULL)
+		// </FS:Ansariel> Firestorm radar
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
-	mNearbyListUpdater = new LLNearbyListUpdater(boost::bind(&LLPanelPeople::updateNearbyList,	this));
+	// <FS:Ansariel> Firestorm radar
+	//mNearbyListUpdater = new LLNearbyListUpdater(boost::bind(&LLPanelPeople::updateNearbyList,	this));
 	mRecentListUpdater = new LLRecentListUpdater(boost::bind(&LLPanelPeople::updateRecentList,	this));
 	mButtonsUpdater = new LLButtonsUpdater(boost::bind(&LLPanelPeople::updateButtons, this));
 	mCommitCallbackRegistrar.add("People.addFriend", boost::bind(&LLPanelPeople::onAddFriendButtonClicked, this));
@@ -548,8 +534,12 @@ LLPanelPeople::LLPanelPeople()
 
 LLPanelPeople::~LLPanelPeople()
 {
+	// <FS:Ansariel> Firestorm radar
+	mNearbyUpdateSignalConnection.disconnect();
+
 	delete mButtonsUpdater;
-	delete mNearbyListUpdater;
+	// <FS:Ansariel> Firestorm radar
+	//delete mNearbyListUpdater;
 	delete mFriendListUpdater;
 	delete mRecentListUpdater;
 
@@ -598,39 +588,45 @@ BOOL LLPanelPeople::postBuild()
 	mAllFriendList = friends_tab->getChild<LLAvatarList>("avatars_all");
 	mOnlineFriendList->setNoItemsCommentText(getString("no_friends_online"));
 	mOnlineFriendList->setShowIcons("FriendsListShowIcons");
+	// <FS:Ansariel> Firestorm radar
+	//mOnlineFriendList->showPermissions("FriendsListShowPermissions");
 	mOnlineFriendList->showPermissions(true);
+	// </FS:Ansariel> Firestorm radar
 	mAllFriendList->setNoItemsCommentText(getString("no_friends"));
 	mAllFriendList->setShowIcons("FriendsListShowIcons");
+	// <FS:Ansariel> Firestorm radar
+	//mAllFriendList->showPermissions("FriendsListShowPermissions");
 	mAllFriendList->showPermissions(true);
-	
+	// </FS:Ansariel> Firestorm radar
+
 	LLPanel* nearby_tab = getChild<LLPanel>(NEARBY_TAB_NAME);
-	nearby_tab->getChildView("NearMeRange")->setVisible(gSavedSettings.getBOOL("LimitRadarByRange"));
-	
-	// AO: radarlist takes over for nearbylist for presentation.
-	mRadarList = nearby_tab->getChild<FSRadarListCtrl>("radar_list");
-	mRadarList->sortByColumn("range",TRUE); // sort by range
-	mRadarList->setFilterColumn(0);
-	mRadarFrameCount = 0;
-	mRadarAlertRequest = false;
-	mRadarLastBulkOffsetRequestTime = 0;
-	
-	// AO: mNearbyList is preserved as a data structure model for radar
-	mNearbyList = nearby_tab->getChild<LLAvatarList>("avatar_list");
-	mNearbyListUpdater->setActive(true); // AO: always keep radar active, for chat and channel integration
+	// <FS:Ansariel> Firestorm radar
 	//nearby_tab->setVisibleCallback(boost::bind(&Updater::setActive, mNearbyListUpdater, _2));
+	
+	// <FS:AO> Radarlist takes over for nearbylist for presentation.
+	mRadarList = nearby_tab->getChild<FSRadarListCtrl>("radar_list");
+	mRadarList->sortByColumn("range", TRUE); // sort by range
+	mRadarList->setFilterColumn(0);
+	// </FS:AO>
+
+	// <FS:Ansariel> Firestorm radar
+	//mNearbyList = nearby_tab->getChild<LLAvatarList>("avatar_list");
+	//mNearbyList->setNoItemsCommentText(getString("no_one_near"));
+	//mNearbyList->setNoItemsMsg(getString("no_one_near"));
+	//mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
+	//mNearbyList->setShowIcons("NearbyListShowIcons");
+	// </FS:Ansariel> Firestorm radar
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	mNearbyList->setRlvCheckShowNames(true);
+	// Externalized to FSRadar
+	//mNearbyList->setRlvCheckShowNames(true);
 // [/RLVa:KB]
 	
-	LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout",true);
-	minilayout->setMinDim(140);
 	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
 	// <FS:Ansariel> Synchronize tooltips throughout instances
 	//mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
 	//	getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
 	// <//FS:Ansariel> Synchronize tooltips throughout instances
-	gSavedSettings.getControl("LimitRadarByRange")->getCommitSignal()->connect(boost::bind(&LLPanelPeople::handleLimitRadarByRange, this,  _2));
-	
+
 	mRecentList = getChild<LLPanel>(RECENT_TAB_NAME)->getChild<LLAvatarList>("avatar_list");
 	mRecentList->setNoItemsCommentText(getString("no_recent_people"));
 	mRecentList->setNoItemsMsg(getString("no_recent_people"));
@@ -641,14 +637,18 @@ BOOL LLPanelPeople::postBuild()
 	mGroupList->setNoItemsMsg(getString("no_groups_msg"));
 	mGroupList->setNoFilteredItemsMsg(getString("no_filtered_groups_msg"));
 
-	mRadarList->setContextMenu(&LLPanelPeopleMenus::gNearbyMenu);
+	// <FS:Ansariel> Use Firestorm radar menu handler
+	//mNearbyList->setContextMenu(&LLPanelPeopleMenus::gNearbyMenu);
+	mRadarList->setContextMenu(&FSFloaterRadarMenu::gFSRadarMenu);
+	// </FS:Ansariel>
 	mRecentList->setContextMenu(&LLPanelPeopleMenus::gNearbyMenu);
 	mAllFriendList->setContextMenu(&LLPanelPeopleMenus::gNearbyMenu);
 	mOnlineFriendList->setContextMenu(&LLPanelPeopleMenus::gNearbyMenu);
 
 	setSortOrder(mRecentList,		(ESortOrder)gSavedSettings.getU32("RecentPeopleSortOrder"),	false);
 	setSortOrder(mAllFriendList,	(ESortOrder)gSavedSettings.getU32("FriendsSortOrder"),		false);
-	setSortOrder(mNearbyList,		(ESortOrder)gSavedSettings.getU32("NearbyPeopleSortOrder"),	false);
+	// <FS:Ansariel> Firestorm radar
+	//setSortOrder(mNearbyList,		(ESortOrder)gSavedSettings.getU32("NearbyPeopleSortOrder"),	false);
 
 	LLPanel* groups_panel = getChild<LLPanel>(GROUP_TAB_NAME);
 	groups_panel->childSetAction("activate_btn", boost::bind(&LLPanelPeople::onActivateButtonClicked,	this));
@@ -657,21 +657,29 @@ BOOL LLPanelPeople::postBuild()
 	LLPanel* friends_panel = getChild<LLPanel>(FRIENDS_TAB_NAME);
 	friends_panel->childSetAction("add_btn",	boost::bind(&LLPanelPeople::onAddFriendWizButtonClicked,	this));
 	friends_panel->childSetAction("del_btn",	boost::bind(&LLPanelPeople::onDeleteFriendButtonClicked,	this));
+	// <FS:Ansariel> Firestorm radar
 	friends_panel->childSetAction("GlobalOnlineStatusToggle", boost::bind(&LLPanelPeople::onGlobalVisToggleButtonClicked,	this));
 
 	mOnlineFriendList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 	mAllFriendList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
-	mRecentList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
+	// <FS:Ansariel> Firestorm radar
+	//mNearbyList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 	mRadarList->setDoubleClickCallback(boost::bind(&LLPanelPeople::onRadarListDoubleClicked, this));
+	// </FS:Ansariel> Firestorm radar
+	mRecentList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 
 	mOnlineFriendList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mOnlineFriendList));
 	mAllFriendList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mAllFriendList));
-	mNearbyList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mNearbyList));
+	// <FS:Ansariel> We only use mRadarList here
+	//mNearbyList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mNearbyList));
+	mRadarList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mNearbyList));
 	mRecentList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mRecentList));
 
 	// Set openning IM as default on return action for avatar lists
 	mOnlineFriendList->setReturnCallback(boost::bind(&LLPanelPeople::onImButtonClicked, this));
 	mAllFriendList->setReturnCallback(boost::bind(&LLPanelPeople::onImButtonClicked, this));
+	// <FS:Ansariel> Firestorm radar
+	//mNearbyList->setReturnCallback(boost::bind(&LLPanelPeople::onImButtonClicked, this));
 	mRecentList->setReturnCallback(boost::bind(&LLPanelPeople::onImButtonClicked, this));
 
 	mGroupList->setDoubleClickCallback(boost::bind(&LLPanelPeople::onChatButtonClicked, this));
@@ -702,21 +710,26 @@ BOOL LLPanelPeople::postBuild()
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	
-	registrar.add("People.Group.Plus.Action",		boost::bind(&LLPanelPeople::onGroupPlusMenuItemClicked,  this, _2));
-	registrar.add("People.Group.Minus.Action",		boost::bind(&LLPanelPeople::onGroupMinusButtonClicked,  this));
-	registrar.add("People.Friends.ViewSort.Action", boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemClicked,  this, _2));
+	registrar.add("People.Group.Plus.Action",  boost::bind(&LLPanelPeople::onGroupPlusMenuItemClicked,  this, _2));
+	registrar.add("People.Group.Minus.Action", boost::bind(&LLPanelPeople::onGroupMinusButtonClicked,  this));
+	registrar.add("People.Friends.ViewSort.Action",  boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Nearby.ViewSort.Action",  boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Groups.ViewSort.Action",  boost::bind(&LLPanelPeople::onGroupsViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Recent.ViewSort.Action",  boost::bind(&LLPanelPeople::onRecentViewSortMenuItemClicked,  this, _2));
-	registrar.add("Radar.NameFmt",					boost::bind(&LLPanelPeople::onRadarNameFmtClicked, this, _2));
-	registrar.add("Radar.ReportTo",					boost::bind(&LLPanelPeople::onRadarReportToClicked, this, _2));	// <FS:CR> Milkshake-style Radar Alerts
+	// <FS:Ansariel> Firestorm radar
+	registrar.add("Radar.Gear.Action",				boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemClicked,  this, _2));
 
-	enable_registrar.add("Radar.NameFmtCheck",					boost::bind(&LLPanelPeople::radarNameFmtCheck, this, _2));
-	enable_registrar.add("Radar.ReportToCheck",					boost::bind(&LLPanelPeople::radarReportToCheck, this, _2));	// <FS:CR> Milkshake-style Radar Alerts
-	enable_registrar.add("People.Group.Minus.Enable",			boost::bind(&LLPanelPeople::isRealGroup,	this));
+	enable_registrar.add("People.Group.Minus.Enable",	boost::bind(&LLPanelPeople::isRealGroup,	this));
 	enable_registrar.add("People.Friends.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemCheck,	this, _2));
 	enable_registrar.add("People.Recent.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onRecentViewSortMenuItemCheck,	this, _2));
 	enable_registrar.add("People.Nearby.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemCheck,	this, _2));
+
+	// <FS:Ansariel> Firestorm radar options
+	registrar.add("Radar.NameFmt",								boost::bind(&FSRadar::onRadarNameFmtClicked, _2));
+	registrar.add("Radar.ReportTo",								boost::bind(&FSRadar::onRadarReportToClicked, _2));	// <FS:CR> Milkshake-style Radar Alerts
+	enable_registrar.add("Radar.NameFmtCheck",					boost::bind(&FSRadar::radarNameFmtCheck, _2));
+	enable_registrar.add("Radar.ReportToCheck",					boost::bind(&FSRadar::radarReportToCheck, _2));	// <FS:CR> Milkshake-style Radar Alerts
+	// </FS:Ansariel>
 
 	mNearbyGearButton = getChild<LLMenuButton>("nearby_view_sort_btn");
 	mFriendsGearButton = getChild<LLMenuButton>("friends_viewsort_btn");
@@ -726,12 +739,16 @@ BOOL LLPanelPeople::postBuild()
 	LLMenuGL* plus_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_group_plus.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mGroupPlusMenuHandle  = plus_menu->getHandle();
 
-	LLToggleableMenu* nearby_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_nearby_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	// <FS:Ansariel> Use Firestorm gear menu
+	//LLToggleableMenu* nearby_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_nearby_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	LLToggleableMenu* nearby_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_radar_gear.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	// </FS:Ansariel>
 	if(nearby_view_sort)
 	{
 		mNearbyViewSortMenuHandle  = nearby_view_sort->getHandle();
 		mNearbyGearButton->setMenu(nearby_view_sort);
 	}
+
 	LLToggleableMenu* friend_view_sort  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_friends_view_sort.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if(friend_view_sort)
 	{
@@ -754,13 +771,16 @@ BOOL LLPanelPeople::postBuild()
 	}
 
 	LLVoiceClient::getInstance()->addObserver(this);
-	
+
 	// call this method in case some list is empty and buttons can be in inconsistent state
 	updateButtons();
 
 	mOnlineFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 	mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
-	
+
+	// <FS:Ansariel> Register for radar updates
+	mNearbyUpdateSignalConnection = FSRadar::getInstance()->setUpdateCallback(boost::bind(&LLPanelPeople::updateNearby, this, _1, _2));
+
 	return TRUE;
 }
 
@@ -773,55 +793,6 @@ void LLPanelPeople::onChange(EStatusType status, const std::string &channelURI, 
 	}
 	
 	updateButtons();
-}
-
-
-void LLPanelPeople::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,std::string postMsg)
-{
-	// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-	//LLStringUtil::format_map_t formatargs;
-	//formatargs["AVATARNAME"] = getRadarName(av_name);
-	//LLStringUtil::format(postMsg, formatargs);
-	
-// <FS:CR> Milkshake-style radar alerts
-	LLCachedControl<bool> milkshake_radar(gSavedSettings, "FSMilkshakeRadarToasts", false);
-	
-	if (milkshake_radar)
-	{
-		LLSD payload = agent_id;
-		LLSD args;
-		args["NAME"] = getRadarName(av_name);
-		args["MESSAGE"] = postMsg;
-		LLNotificationPtr notification;
-		notification = LLNotificationsUtil::add("RadarAlert",
-												args,
-												payload.with("respond_on_mousedown", TRUE),
-												boost::bind(&LLAvatarActions::zoomIn, agent_id));
-	}
-	else
-	{
-// </FS:CR>
-		LLChat chat;
-		chat.mText = postMsg;
-		chat.mSourceType = CHAT_SOURCE_SYSTEM;
-		chat.mFromName = getRadarName(av_name);
-		chat.mFromID = agent_id;
-		chat.mChatType = CHAT_TYPE_RADAR;
-		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-		LLSD args;
-		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
-	} // <FS:CR />
-}
-
-
-void LLPanelPeople::handleLimitRadarByRange(const LLSD& newvalue)
-{
-	LLPanel* cur_panel = mTabContainer->getCurrentPanel();
-	if (cur_panel)
-	{
-		cur_panel->getChildView("NearMeRange")->setVisible(newvalue.asBoolean());
-	}
 }
 
 void LLPanelPeople::updateFriendListHelpText()
@@ -847,7 +818,7 @@ void LLPanelPeople::updateFriendList()
 {
 	if (!mOnlineFriendList || !mAllFriendList)
 		return;
-	
+
 	// get all buddies we know about
 	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
 	LLAvatarTracker::buddy_map_t all_buddies;
@@ -876,7 +847,6 @@ void LLPanelPeople::updateFriendList()
 	}
 	else
 	{
-		llwarns << "Friends Cards failed to load" << llendl;
 		lldebugs << "No friends found" << llendl;
 	}
 
@@ -902,708 +872,16 @@ void LLPanelPeople::updateFriendList()
 
 void LLPanelPeople::updateNearbyList()
 {
-	//AO : Warning, reworked heavily for Firestorm. Do not merge into here without understanding what it's doing.
-	
 	if (!mNearbyList)
-	{
 		return;
-	}
-	
-	//Configuration
-	LLWorld* world = LLWorld::getInstance();
-	LLMuteList* mutelist = LLMuteList::getInstance();
 
-	static const F32 chat_range_say = world->getSayDistance();
-	static const F32 chat_range_shout = world->getShoutDistance();
-
-	static LLCachedControl<bool> RadarReportChatRangeEnter(gSavedSettings, "RadarReportChatRangeEnter");
-	static LLCachedControl<bool> RadarReportChatRangeLeave(gSavedSettings, "RadarReportChatRangeLeave");
-	static LLCachedControl<bool> RadarReportDrawRangeEnter(gSavedSettings, "RadarReportDrawRangeEnter");
-	static LLCachedControl<bool> RadarReportDrawRangeLeave(gSavedSettings, "RadarReportDrawRangeLeave");
-	static LLCachedControl<bool> RadarReportSimRangeEnter(gSavedSettings, "RadarReportSimRangeEnter");
-	static LLCachedControl<bool> RadarReportSimRangeLeave(gSavedSettings, "RadarReportSimRangeLeave");
-	static LLCachedControl<bool> RadarEnterChannelAlert(gSavedSettings, "RadarEnterChannelAlert");
-	static LLCachedControl<bool> RadarLeaveChannelAlert(gSavedSettings, "RadarLeaveChannelAlert");
-	static LLCachedControl<F32> nearMeRange(gSavedSettings, "NearMeRange");
-	static LLCachedControl<bool> limitRange(gSavedSettings, "LimitRadarByRange");
-	static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
-	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
-
-	F32 drawRadius = F32(RenderFarClip);
-	const LLVector3d& posSelf = gAgent.getPositionGlobal();
-	LLViewerRegion* reg = gAgent.getRegion();
-	LLUUID regionSelf;
-	if (reg)
-	{
-		regionSelf = reg->getRegionID();
-	}
-	bool alertScripts = mRadarAlertRequest; // save the current value, so it doesn't get changed out from under us by another thread
-	std::vector<LLPanel*> items;
-	time_t now = time(NULL);
-
-	//STEP 0: Clear model data, saving pieces as needed.
-	static S32 uuidColumnIndex = mRadarList->getColumn("uuid")->mIndex;
-	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
-	std::vector<LLUUID> selected_ids;
-	for (size_t i = 0; i < selected_items.size(); i++)
-	{
-		selected_ids.push_back(selected_items.at(i)->getColumn(uuidColumnIndex)->getValue().asUUID());
-	}
-	S32 lastScroll = mRadarList->getScrollPos();
-	mRadarList->clearRows();
-	mRadarEnterAlerts.clear();
-	mRadarLeaveAlerts.clear();
-	mRadarOffsetRequests.clear();
-	
-	
-	//STEP 1: Update our basic data model: detect Avatars & Positions in our defined range
 	std::vector<LLVector3d> positions;
-	std::vector<LLUUID> avatar_ids;
-	if (limitRange)
-	{
-		world->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), nearMeRange);
-	}
-	else
-	{
-		world->getAvatars(&avatar_ids, &positions);
-	}
-	mNearbyList->getIDs() = avatar_ids; // copy constructor, refreshing underlying mNearbyList
-	mNearbyList->setDirty(true, true); // AO: These optional arguements force updating even when we're not a visible window.
-	mNearbyList->getItems(items);
-	LLLocalSpeakerMgr::getInstance()->update(TRUE);
-	
-	//STEP 2: Transform detected model list data into more flexible multimap data structure;
-	//TS: Count avatars in chat range and in the same region
-	U32 inChatRange = 0;
-	U32 inSameRegion = 0;
-	std::vector<LLVector3d>::const_iterator
-		pos_it = positions.begin(),
-		pos_end = positions.end();	
-	std::vector<LLUUID>::const_iterator
-		item_it = avatar_ids.begin(),
-		item_end = avatar_ids.end();
-	for (;pos_it != pos_end && item_it != item_end; ++pos_it, ++item_it )
-	{
-		//
-		//2a. For each detected av, gather up all data we would want to display or use to drive alerts
-		//
-		
-		LLUUID avId          = static_cast<LLUUID>(*item_it);
-		LLAvatarListItem* av = mNearbyList->getAvatarListItem(avId);
-		LLVector3d avPos     = static_cast<LLVector3d>(*pos_it);
-		S32 seentime		 = 0;
-		LLUUID avRegion;
-		
-		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
-		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
-		if ((!reg) || (!av)) // don't update this radar listing if data is inaccessible
-		{
-			continue;
-		}
 
-		// Try to get the avatar's viewer object - we will need it anyway later
-		LLVOAvatar* avVo = (LLVOAvatar*)gObjectList.findObject(avId);
+	LLWorld::getInstance()->getAvatars(&mNearbyList->getIDs(), &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+	mNearbyList->setDirty();
 
-		static LLUICachedControl<bool> showdummyav("FSShowDummyAVsinRadar");
-		if (!showdummyav)
-		{
-			if (avVo && avVo->mIsDummy)
-			{
-				continue;
-			}
-		}
-
-		avRegion = reg->getRegionID();
-		if (lastRadarSweep.count(avId) > 1) // if we detect a multiple ID situation, get lastSeenTime from our cache instead
-		{
-			pair<multimap<LLUUID,radarFields>::iterator,multimap<LLUUID,radarFields>::iterator> dupeAvs;
-			dupeAvs = lastRadarSweep.equal_range(avId);
-			for (multimap<LLUUID,radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
-			{
-				if (it2->second.lastRegion == avRegion)
-				{
-					seentime = (S32)difftime(now, it2->second.firstSeen);
-				}
-			}
-		}
-		else
-		{
-			seentime = (S32)difftime(now,av->getFirstSeen());
-		}
-		//av->setFirstSeen(now - (time_t)seentime); // maintain compatibility with underlying list, deprecated
-		S32 hours = (S32)(seentime / 3600);
-		S32 mins = (S32)((seentime - hours * 3600) / 60);
-		S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
-		std::string avSeenStr = llformat("%d:%02d:%02d", hours, mins, secs);
-		S32 avStatusFlags     = av->getAvStatus();
-		std::string avFlagStr = "";
-		if (avStatusFlags & AVATAR_IDENTIFIED)
-		{
-			avFlagStr += "$";
-		}
-		std::string avAgeStr = av->getAvatarAge();
-		std::string avName   = getRadarName(avId);
-		av->setAvatarName(avName); // maintain compatibility with underlying list; used in other locations!
-		U32 lastZOffsetTime  = av->getLastZOffsetTime();
-		F32 avZOffset        = av->getZOffset();
-		if (avPos[VZ] == AVATAR_UNKNOWN_Z_OFFSET) // if our official z position is AVATAR_UNKNOWN_Z_OFFSET, we need a correction.
-		{
-			// set correction if we have it
-			if (avZOffset > 0.1)
-			{
-				avPos[VZ] = avZOffset;
-			}
-			
-			//schedule offset requests, if needed
-			if (sUseLSLBridge && (now > (mRadarLastBulkOffsetRequestTime + COARSE_OFFSET_INTERVAL)) && (now > lastZOffsetTime + COARSE_OFFSET_INTERVAL))
-			{
-				mRadarOffsetRequests.push_back(avId);
-				av->setLastZOffsetTime(now);
-			}
-		}	
-		F32 avRange = (avPos[VZ] != AVATAR_UNKNOWN_Z_OFFSET ? dist_vec(avPos, posSelf) : AVATAR_UNKNOWN_RANGE);
-		av->setRange(avRange); // maintain compatibility with underlying list; used in other locations!
-		av->setPosition(avPos); // maintain compatibility with underlying list; used in other locations!
-		
-		//
-		//2b. Process newly detected avatars
-		//
-		if (lastRadarSweep.count(avId) == 0)
-		{
-			// chat alerts
-			if (RadarReportChatRangeEnter && (avRange <= chat_range_say) && avRange > AVATAR_UNKNOWN_RANGE)
-			{
-				LLStringUtil::format_map_t args;
-				args["DISTANCE"] = llformat("%3.2f", avRange);
-				std::string message = getString("entering_chat_range", args);
-				make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-			}
-			if (RadarReportDrawRangeEnter && (avRange <= drawRadius) && avRange > AVATAR_UNKNOWN_RANGE)
-			{
-				LLStringUtil::format_map_t args;
-				args["DISTANCE"] = llformat("%3.2f", avRange);
-				std::string message = getString("entering_draw_distance", args);
-				make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-			}
-			if (RadarReportSimRangeEnter && (avRegion == regionSelf))
-			{
-				make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
-				{
-					LLStringUtil::format_map_t args;
-					args["DISTANCE"] = llformat("%3.2f", avRange);
-					std::string message = getString("entering_region_distance", args);
-					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-				}
-				else
-				{
-					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
-				}
-			}
-			if (RadarEnterChannelAlert || (alertScripts))
-			{
-				// Autodetect Phoenix chat UUID compatibility. 
-				// If Leave channel alerts are not set, restrict reports to same-sim only.
-				if (!RadarLeaveChannelAlert)
-				{
-					if (avRegion == regionSelf)
-					{
-						mRadarEnterAlerts.push_back(avId);
-					}
-				}
-				else
-				{
-					mRadarEnterAlerts.push_back(avId);
-				}
-			}
-		}
-		
-		//
-		// 2c. Process previously detected avatars
-		//
-		else 
-		{
-			radarFields rf; // will hold the newest version
-			// Check for range crossing alert threshholds, being careful to handle double-listings
-			if (lastRadarSweep.count(avId) == 1) // normal case, check from last position
-			{
-				rf = lastRadarSweep.find(avId)->second;
-				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave )
-				{
-					if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > chat_range_say || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
-					{
-						LLStringUtil::format_map_t args;
-						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = getString("entering_chat_range", args);
-						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-					}
-					else if (RadarReportChatRangeLeave && (avRange > chat_range_say || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= chat_range_say && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
-					{
-						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
-					}
-				}
-				if ( RadarReportDrawRangeEnter || RadarReportDrawRangeLeave )
-				{
-					if (RadarReportDrawRangeEnter && (avRange <= drawRadius && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > drawRadius || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
-					{
-						LLStringUtil::format_map_t args;
-						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = getString("entering_draw_distance", args);
-						make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-					}
-					else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= drawRadius && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
-					{
-						make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));		
-					}
-				}
-				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave )
-				{
-					if ( RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
-					{
-						make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
-						{
-							LLStringUtil::format_map_t args;
-							args["DISTANCE"] = llformat("%3.2f", avRange);
-							std::string message = getString("entering_region_distance", args);
-							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-						}
-						else
-						{
-							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
-						}
-					}
-					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
-					{
-						make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
-					}
-				}
-			}
-			else if (lastRadarSweep.count(avId) > 1) // handle duplicates, from sim crossing oddness
-			{
-				// iterate through all the duplicates found, searching for the newest.
-				rf.firstSeen=0;
-				pair<multimap<LLUUID,radarFields>::iterator,multimap<LLUUID,radarFields>::iterator> dupeAvs;
-				dupeAvs = lastRadarSweep.equal_range(avId);
-				for (multimap<LLUUID,radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
-				{
-					if (it2->second.firstSeen > rf.firstSeen)
-					{
-						rf = it2->second;
-					}
-				}
-				llinfos << "AO: Duplicates detected for " << avName <<" , most recent is " << rf.firstSeen << llendl;
-				
-				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
-				{
-					if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > chat_range_say || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
-					{
-						LLStringUtil::format_map_t args;
-						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = getString("entering_chat_range", args);
-						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-					}
-					else if (RadarReportChatRangeLeave && (avRange > chat_range_say || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= chat_range_say && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
-					{
-						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
-					}
-				}
-				if (RadarReportDrawRangeEnter || RadarReportDrawRangeLeave)
-				{
-					if (RadarReportDrawRangeEnter && (avRange <= drawRadius && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > drawRadius || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
-					{
-						LLStringUtil::format_map_t args;
-						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = getString("entering_draw_distance", args);
-						make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-					}
-					else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= drawRadius && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
-					{
-						make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));		
-					}
-				}
-				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
-				{
-					if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
-					{
-						make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
-						{
-							LLStringUtil::format_map_t args;
-							args["DISTANCE"] = llformat("%3.2f", avRange);
-							std::string message = getString("entering_region_distance", args);
-							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
-						}
-						else
-						{
-							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
-						}
-					}
-					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
-					{
-						make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
-					}
-				}
-			}
-			//If we were manually asked to update an external source for all existing avatars, add them to the queue.
-			if (alertScripts)
-			{
-				mRadarEnterAlerts.push_back(avId);
-			}
-		}
-		
-		//
-		//2d. Build out scrollist-style presentation view for this avatar row
-		//
-		LLSD row;
-		row["value"] = avId;
-		row["columns"][0]["column"] = "name";
-		row["columns"][0]["value"] = avName;
-		row["columns"][1]["column"] = "voice_level";
-		row["columns"][1]["type"] = "icon";
-		row["columns"][1]["value"] = "";
-		row["columns"][2]["column"] = "in_region";
-		row["columns"][2]["type"] = "icon";
-		row["columns"][2]["value"] = "";
-		if (regionSelf == avRegion)
-		{
-			row["columns"][2]["value"] = "avatar_in_region";
-			inSameRegion++;
-		}
-		row["columns"][3]["column"] = "flags";
-		row["columns"][3]["value"] = avFlagStr;
-		row["columns"][4]["column"] = "age";
-		row["columns"][4]["value"] = avAgeStr;
-		row["columns"][5]["column"] = "seen";
-		row["columns"][5]["value"] = avSeenStr;
-		row["columns"][6]["column"] = "range";
-		row["columns"][6]["value"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
-		row["columns"][7]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
-		row["columns"][7]["value"] = avId;
-		LLScrollListItem* radarRow = mRadarList->addElement(row);
-
-		//AO: Set any range colors / styles
-		static S32 rangeColumnIndex = mRadarList->getColumn("range")->mIndex;
-		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(rangeColumnIndex);
-		if (avRange > AVATAR_UNKNOWN_RANGE)
-		{
-			if (avRange <= chat_range_say)
-			{
-				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemChatRange", LLColor4::red));
-				inChatRange++;
-			}
-			else if (avRange <= chat_range_shout)
-			{
-				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemShoutRange", LLColor4::white));
-			}
-			else 
-			{
-				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange", LLColor4::white));
-			}
-		}
-		else 
-		{
-			radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemBeyondShoutRange", LLColor4::white));
-		}
-
-		// Check if avatar is in draw distance and a VOAvatar instance actually exists
-		if (avRange <= drawRadius && avRange > AVATAR_UNKNOWN_RANGE && avVo)
-		{
-			radarRangeCell->setFontStyle(LLFontGL::BOLD);
-		}
-		else
-		{
-			radarRangeCell->setFontStyle(LLFontGL::NORMAL);
-		}
-
-		// Set friends colors / styles
-		LLFontGL::StyleFlags nameCellStyle = LLFontGL::NORMAL;
-		static S32 nameColumnIndex = mRadarList->getColumn("name")->mIndex;
-		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(nameColumnIndex);
-		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
-		if (relation)
-		{
-			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::BOLD);
-		}
-		if (mutelist->isMuted(avId))
-		{
-			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::ITALIC);
-		}
-		radarNameCell->setFontStyle(nameCellStyle);
-
-		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR))
-		{
-			radarNameCell->setColor(LGGContactSets::getInstance()->getFriendColor(avId));
-		}
-
-		// Voice power level indicator
-		LLVoiceClient* voice_client = LLVoiceClient::getInstance();
-		if (voice_client->voiceEnabled() && voice_client->isVoiceWorking())
-		{
-			LLSpeaker* speaker = LLLocalSpeakerMgr::getInstance()->findSpeaker(avId);
-			if (speaker && speaker->isInVoiceChannel())
-			{
-				static S32 voiceLevelColumnIndex = mRadarList->getColumn("voice_level")->mIndex;
-				LLScrollListText* voiceLevelCell = (LLScrollListText*)radarRow->getColumn(voiceLevelColumnIndex);
-				EVoicePowerLevel power_level = voice_client->getPowerLevel(avId);
-				
-				switch (power_level)
-				{
-					case VPL_PTT_Off:
-						voiceLevelCell->setValue("VoicePTT_Off");
-						break;
-					case VPL_PTT_On:
-						voiceLevelCell->setValue("VoicePTT_On");
-						break;
-					case VPL_Level1:
-						voiceLevelCell->setValue("VoicePTT_Lvl1");
-						break;
-					case VPL_Level2:
-						voiceLevelCell->setValue("VoicePTT_Lvl2");
-						break;
-					case VPL_Level3:
-						voiceLevelCell->setValue("VoicePTT_Lvl3");
-						break;
-					default:
-						break;
-				}
-			}
-		}
-
-		//AO: Preserve selection
-		/*if (lastRadarSelectedItem)
-		{
-			if (avId == selected_id)
-			{
-				mRadarList->selectByID(avId);
-				updateButtons(); // TODO: only update on change, instead of every tick
-			}
-		}*/
-	} // End STEP 2, all model/presentation row processing complete.
-	//Reset scroll position
-	mRadarList->setScrollPos(lastScroll);
-
-	//Reset selection list
-	//AO: Preserve selection
-	if(!selected_ids.empty())
-	{
-		mRadarList->selectMultiple(selected_ids);
-	}
-	updateButtons();
-	
-	//
-	//STEP 3 , process any bulk actions that require the whole model to be known first
-	//
-	
-	//
-	//3a. dispatch requests for ZOffset updates, working around minimap's inaccurate height
-	//
-	if (mRadarOffsetRequests.size() > 0)
-	{
-		std::string prefix = "getZOffsets|";
-		std::string msg = "";
-		U32 updatesPerRequest=0;
-		while(mRadarOffsetRequests.size() > 0)
-		{
-			LLUUID avId = mRadarOffsetRequests.back();
-			mRadarOffsetRequests.pop_back();
-			msg = llformat("%s%s,",msg.c_str(),avId.asString().c_str());
-			if (++updatesPerRequest > MAX_OFFSET_REQUESTS)
-			{
-				msg = msg.substr(0,msg.size()-1);
-				FSLSLBridgeRequestResponder* responder = new FSLSLBridgeRequestRadarPosResponder();
-				FSLSLBridge::instance().viewerToLSL(prefix+msg,responder);
-				//llinfos << " OFFSET REQUEST SEGMENT"<< prefix << msg << llendl;
-				msg="";
-				updatesPerRequest = 0;
-			}
-		}
-		if (updatesPerRequest > 0)
-		{
-			msg = msg.substr(0,msg.size()-1);
-			FSLSLBridgeRequestResponder* responder = new FSLSLBridgeRequestRadarPosResponder();
-			FSLSLBridge::instance().viewerToLSL(prefix+msg,responder);
-			//llinfos << " OFFSET REQUEST FINAL " << prefix << msg << llendl;
-		}
-		
-		// clear out the dispatch queue
-		mRadarOffsetRequests.clear();
-		mRadarLastBulkOffsetRequestTime = now;
-	}
-	
-	//
-	//3b: process alerts for avatars that where here last frame, but gone this frame (ie, they left)
-	//    as well as dispatch all earlier detected alerts for crossing range thresholds.
-	//
-	
-	for (std::multimap <LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
-	{
-		LLUUID prevId = i->first;
-		if (!mNearbyList->contains(prevId))
-		{
-			radarFields rf = i->second;
-			if (RadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
-			{
-				make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
-			}
-			if (RadarReportDrawRangeLeave && (rf.lastDistance <= drawRadius) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
-			{
-				make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));
-			}
-			if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf))
-			{
-				make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
-			}
-				
-			if (RadarLeaveChannelAlert)
-			{
-				mRadarLeaveAlerts.push_back(prevId);
-			}
-		}
-	}
-
-	static LLCachedControl<S32> RadarAlertChannel(gSavedSettings, "RadarAlertChannel");
-	U32 num_entering = mRadarEnterAlerts.size();
-	if (num_entering > 0)
-	{
-		mRadarFrameCount++;
-		S32 chan = S32(RadarAlertChannel);
-		U32 num_this_pass = min(MAX_AVATARS_PER_ALERT,num_entering);
-		std::string msg = llformat("%d,%d",mRadarFrameCount,num_this_pass);
-		U32 loop = 0;
-		while (loop < num_entering)
-		{
-			for (int i = 0; i < num_this_pass; i++)
-			{
-				msg = llformat("%s,%s",msg.c_str(),mRadarEnterAlerts[loop + i].asString().c_str());
-			}
-			LLMessageSystem* msgs = gMessageSystem;
-			msgs->newMessage("ScriptDialogReply");
-			msgs->nextBlock("AgentData");
-			msgs->addUUID("AgentID", gAgent.getID());
-			msgs->addUUID("SessionID", gAgent.getSessionID());
-			msgs->nextBlock("Data");
-			msgs->addUUID("ObjectID", gAgent.getID());
-			msgs->addS32("ChatChannel", chan);
-			msgs->addS32("ButtonIndex", 1);
-			msgs->addString("ButtonLabel", msg.c_str());
-			gAgent.sendReliableMessage();
-			loop += num_this_pass;
-			num_this_pass = min(MAX_AVATARS_PER_ALERT,num_entering-loop);
-			msg = llformat("%d,%d",mRadarFrameCount,num_this_pass);
-		}
-	}
-	U32 num_leaving  = mRadarLeaveAlerts.size();
-	if (num_leaving > 0)
-	{
-		mRadarFrameCount++;
-		S32 chan = S32(RadarAlertChannel);
-		U32 num_this_pass = min(MAX_AVATARS_PER_ALERT,num_leaving);
-		std::string msg = llformat("%d,-%d",mRadarFrameCount,min(MAX_AVATARS_PER_ALERT,num_leaving));
-		U32 loop = 0;
-		while (loop < num_leaving)
-		{
-			for (int i = 0; i < num_this_pass; i++)
-			{
-				msg = llformat("%s,%s",msg.c_str(),mRadarLeaveAlerts[loop + i].asString().c_str());
-			}
-			LLMessageSystem* msgs = gMessageSystem;
-			msgs->newMessage("ScriptDialogReply");
-			msgs->nextBlock("AgentData");
-			msgs->addUUID("AgentID", gAgent.getID());
-			msgs->addUUID("SessionID", gAgent.getSessionID());
-			msgs->nextBlock("Data");
-			msgs->addUUID("ObjectID", gAgent.getID());
-			msgs->addS32("ChatChannel", chan);
-			msgs->addS32("ButtonIndex", 1);
-			msgs->addString("ButtonLabel", msg.c_str());
-			gAgent.sendReliableMessage();
-			loop += num_this_pass;
-			num_this_pass = min(MAX_AVATARS_PER_ALERT,num_leaving-loop);
-			msg = llformat("%d,-%d",mRadarFrameCount,num_this_pass);
-		}
-	}
-
-	// reset any active alert requests
-	if (alertScripts)
-	{
-		mRadarAlertRequest = false;
-	}
-
-	//
-	//STEP 4: Cache our current model data, so we can compare it with the next fresh group of model data for fast change detection.
-	//
-	
-	lastRadarSweep.clear();
-	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
-	{
-		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
-		radarFields rf;
-		rf.avName = av->getAvatarName();
-		rf.lastDistance = av->getRange();
-		rf.firstSeen = av->getFirstSeen();
-		rf.lastStatus = av->getAvStatus();
-		rf.ZOffset = av->getZOffset();
-		rf.lastGlobalPos = av->getPosition();
-		// Ansariel: This seems to be wrong and isn't needed anywhere
-		//if ((rf.ZOffset > 0) && (rf.lastGlobalPos[VZ] < 1024)) // if our position may need an offset correction, see if we have one to apply
-		//{
-		//	rf.lastGlobalPos[VZ] = rf.lastGlobalPos[VZ] + (1024 * rf.ZOffset);
-		//}
-		//rf.lastZOffsetTime = av->getLastZOffsetTime();
-		if (rf.lastGlobalPos != LLVector3d(0.0f,0.0f,0.0f))
-		{
-			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(rf.lastGlobalPos);
-			if (lastRegion)
-			{
-				rf.lastRegion = lastRegion->getRegionID();
-			}
-		}
-		else
-		{
-			rf.lastRegion = LLUUID(0);
-		}
-		
-		lastRadarSweep.insert(pair<LLUUID,radarFields>(av->getAvatarId(),rf));
-	}
-
-	//
-	//STEP 5: Final presentation updates
-	//
-	
-	// update header w/number of avs detected in this sweep
-	LLStringUtil::format_map_t name_count_args;
-	name_count_args["[TOTAL]"] = llformat("%d", lastRadarSweep.size());
-	name_count_args["[IN_REGION]"] = llformat("%d", inSameRegion);
-	name_count_args["[IN_CHAT_RANGE]"] = llformat("%d", inChatRange);
-	LLScrollListColumn* column = mRadarList->getColumn("name");
-	column->mHeader->setLabel(getString("avatar_name_count", name_count_args));
-	column->mHeader->setToolTipArgs(name_count_args);
-	// update minimap with selected avatars
-	uuid_vec_t selected_uuids;
-	LLUUID sVal = mRadarList->getSelectedValue().asUUID();
-	if (sVal != LLUUID::null)
-	{
-		selected_uuids.push_back(sVal);
-		mMiniMap->setSelected(selected_uuids);
-	}
-	
-	checkTracking();
+	DISTANCE_COMPARATOR.updateAvatarsPositions(positions, mNearbyList->getIDs());
+	LLActiveSpeakerMgr::instance().update(TRUE);
 }
 
 void LLPanelPeople::updateRecentList()
@@ -1642,13 +920,14 @@ void LLPanelPeople::updateButtons()
 	bool nearby_tab_active	= (cur_tab == NEARBY_TAB_NAME);
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
 	bool group_tab_active	= (cur_tab == GROUP_TAB_NAME);
+	//bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
+	// <FS:Ansariel> Firestorm changes
 	bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
-	LLPanel* cur_panel = mTabContainer->getCurrentPanel();
+	// </FS:Ansariel> Firestorm changes
 	LLUUID selected_id;
 
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
-	
 	bool item_selected = (selected_uuids.size() == 1);
 	bool multiple_selected = (selected_uuids.size() >= 1);
 
@@ -1658,9 +937,12 @@ void LLPanelPeople::updateButtons()
 	buttonSetVisible("im_btn",				!group_tab_active);
 	buttonSetVisible("call_btn",			!group_tab_active);
 	buttonSetVisible("group_call_btn",		group_tab_active);
+	// <FS:Ansariel> Firestorm changes
+	//buttonSetVisible("teleport_btn",		friends_tab_active);
 	buttonSetVisible("teleport_btn",		nearby_tab_active || friends_tab_active);
+	// </FS:Ansariel> Firestorm changes
 	buttonSetVisible("share_btn",			nearby_tab_active || friends_tab_active);
-		
+
 	if (group_tab_active)
 	{
 		bool cur_group_active = true;
@@ -1670,13 +952,14 @@ void LLPanelPeople::updateButtons()
 			selected_id = mGroupList->getSelectedUUID();
 			cur_group_active = (gAgent.getGroupID() == selected_id);
 		}
-		cur_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
-		cur_panel->getChildView("minus_btn")->setEnabled(item_selected && selected_id.notNull());
-//		cur_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
+
+		LLPanel* groups_panel = mTabContainer->getCurrentPanel();
+//		groups_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
 // [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
-		cur_panel->getChildView("activate_btn")->setEnabled(
+		groups_panel->getChildView("activate_btn")->setEnabled(
 			item_selected && !cur_group_active && !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)); // "none" or a non-active group selected
 // [/RLVa:KB]
+		groups_panel->getChildView("minus_btn")->setEnabled(item_selected && selected_id.notNull());
 	}
 	else
 	{
@@ -1689,16 +972,11 @@ void LLPanelPeople::updateButtons()
 			is_friend = LLAvatarTracker::instance().getBuddyInfo(selected_id) != NULL;
 		}
 
+		LLPanel* cur_panel = mTabContainer->getCurrentPanel();
 		if (cur_panel)
 		{
 //			cur_panel->getChildView("add_friend_btn")->setEnabled(!is_friend);
 // [RLVa:KB] - Checked: 2010-07-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0h
-			
-			// Ansariel: Changed after add_friend_btn buttons got renamed
-			//if (
-			//cur_panel->getChildView("add_friend_btn")->setEnabled(
-			//	!is_friend && ((!nearby_tab_active) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))));
-
 			if (nearby_tab_active)
 			{
 				cur_panel->getChildView("add_friend_btn_nearby")->setEnabled(!is_friend && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
@@ -1757,14 +1035,20 @@ LLUUID LLPanelPeople::getCurrentItemID() const
 	}
 
 	if (cur_tab == NEARBY_TAB_NAME)
+	// <FS:AO> Adapted for scrolllist
+		//return mNearbyList->getSelectedUUID();
 	{
 		LLScrollListItem* item = mRadarList->getFirstSelected();
 		if (item)
+		{
 			return item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
+		}
 		else 
+		{
 			return LLUUID::null;
-		//return mNearbyList->getSelectedUUID();
+		}
 	}
+	// </FS:AO>
 	
 	if (cur_tab == RECENT_TAB_NAME)
 		return mRecentList->getSelectedUUID();
@@ -1787,14 +1071,15 @@ void LLPanelPeople::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 		mAllFriendList->getSelectedUUIDs(selected_uuids);
 	}
 	else if (cur_tab == NEARBY_TAB_NAME)
-	{
-		// AO, adapted for scrolllist. No multiselect yet
+	// <FS:AO> Adapted for scrolllist
 		//mNearbyList->getSelectedUUIDs(selected_uuids);
-		for(size_t i=0;i<mRadarList->getAllSelected().size();i++)
+	{
+		for (size_t i = 0; i < mRadarList->getAllSelected().size(); ++i)
 		{
 			selected_uuids.push_back(mRadarList->getAllSelected().at(i)->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID());
 		}
 	}
+	// </FS:AO>
 	else if (cur_tab == RECENT_TAB_NAME)
 		mRecentList->getSelectedUUIDs(selected_uuids);
 	else if (cur_tab == GROUP_TAB_NAME)
@@ -1810,7 +1095,7 @@ void LLPanelPeople::showGroupMenu(LLMenuGL* menu)
 
 	// Calculate its coordinates.
 	// (assumes that groups panel is the current tab)
-	LLPanel* bottom_panel = mTabContainer->getCurrentPanel()->getChild<LLPanel>("bottom_panel"); 
+	LLPanel* bottom_panel = mTabContainer->getCurrentPanel()->getChild<LLPanel>("bottom_panel");
 	LLPanel* parent_panel = mTabContainer->getCurrentPanel();
 	menu->arrangeAndClear();
 	S32 menu_height = menu->getRect().getHeight();
@@ -1859,8 +1144,10 @@ void LLPanelPeople::setSortOrder(LLAvatarList* list, ESortOrder order, bool save
 			setting = "FriendsSortOrder";
 		else if (list == mRecentList)
 			setting = "RecentPeopleSortOrder";
-		else if (list == mNearbyList)
-			setting = "NearbyPeopleSortOrder";
+		// <FS:Ansariel> Not used in Firestorm radar
+		//else if (list == mNearbyList)
+		//	setting = "NearbyPeopleSortOrder";
+		// </FS:Ansariel>
 
 		if (!setting.empty())
 			gSavedSettings.setU32(setting, order);
@@ -1921,10 +1208,10 @@ void LLPanelPeople::onTabSelected(const LLSD& param)
 
 	showFriendsAccordionsIfNeeded();
 
-	// AO Layout panels will not initialize at a constant size, force it here.
+	// <FS:AO> Layout panels will not initialize at a constant size, force it here.
 	if (tab_name == NEARBY_TAB_NAME)
 	{
-		LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout",true);
+		LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout", true);
 		if (minilayout->getVisible())
 		{
 			LLRect rec = minilayout->getRect();
@@ -1933,6 +1220,7 @@ void LLPanelPeople::onTabSelected(const LLSD& param)
 			minilayout->setShape(rec,true);
 		}
 	}
+	// </FS:AO>
 	
 	if (GROUP_TAB_NAME == tab_name)
 		mFilterEditor->setLabel(getString("groups_filter_label"));
@@ -1949,65 +1237,30 @@ void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 	}
 
 	LLUUID clicked_id = item->getAvatarId();
-	LLAvatarActions::startIM(clicked_id);
-}
-
-// <FS:Ansariel> Not used; see LLPanelPeople::onRadarListDoubleClicked()
-#if 0
-void LLPanelPeople::onNearbyListDoubleClicked(LLUICtrl* ctrl)
-{
-	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
-	if(!item)
-	{
-		return;
-	}
 	
-	LLUUID clicked_id = item->getAvatarId();
-	LLAvatarActions::zoomIn(clicked_id);
-}
+#if 0 // SJB: Useful for testing, but not currently functional or to spec
+	LLAvatarActions::showProfile(clicked_id);
+#else // spec says open IM window
+	LLAvatarActions::startIM(clicked_id);
 #endif
-// </FS:Ansariel>
-
-void LLPanelPeople::onRadarListDoubleClicked()
-{
-	LLScrollListItem* item = mRadarList->getFirstSelected();
-	if (!item)
-	{
-		return;
-	}
-
-	LLUUID clicked_id = item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
-	LLAvatarListItem* avl_item = mNearbyList->getAvatarListItem(clicked_id);
-
-	if (!avl_item)
-	{
-		return;
-	}
-
-	if (avl_item->getRange() <= gSavedSettings.getF32("RenderFarClip"))
-	{
-		handle_zoom_to_object(clicked_id, avl_item->getPosition());
-	}
-	else
-	{
-		LLStringUtil::format_map_t args;
-		args["AVATARNAME"] = item->getColumn(mRadarList->getColumn("name")->mIndex)->getValue().asString();
-		reportToNearbyChat(getString("camera_no_focus", args));
-	}
 }
+
 
 void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
 {
 	if (getActiveTabName() == NEARBY_TAB_NAME)
 	{
 		uuid_vec_t selected_uuids;
+		// <FS:Ansariel> Firestorm radar
 		//getCurrentItemIDs(selected_uuids);
+		//mMiniMap->setSelected(selected_uuids)
 		LLUUID sVal = mRadarList->getSelectedValue().asUUID();
-		if (sVal != LLUUID::null) 
+		if (sVal.notNull()) 
 		{
 			selected_uuids.push_back(sVal);
 			mMiniMap->setSelected(selected_uuids);
 		}
+		// </FS:Ansariel> Firestorm radar
 	} else
 	// Make sure only one of the friends lists (online/all) has selection.
 	if (getActiveTabName() == FRIENDS_TAB_NAME)
@@ -2073,45 +1326,6 @@ void LLPanelPeople::onAddFriendWizButtonClicked()
 	}
 }
 
-void LLPanelPeople::onGlobalVisToggleButtonClicked()
-// Iterate through friends lists, toggling status permission on or off 
-{	
-	bool vis = getChild<LLUICtrl>("GlobalOnlineStatusToggle")->getValue().asBoolean();
-	gSavedSettings.setBOOL("GlobalOnlineStatusToggle", vis);
-	
-	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
-	LLAvatarTracker::buddy_map_t all_buddies;
-	av_tracker.copyBuddyList(all_buddies);
-	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
-	for (; buddy_it != all_buddies.end(); ++buddy_it)
-	{
-		LLUUID buddy_id = buddy_it->first;
-		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(buddy_id);
-		if (relation == NULL)
-		{
-			// Lets have a warning log message instead of having a crash. EXT-4947.
-			llwarns << "Trying to modify rights for non-friend avatar. Skipped." << llendl;
-			return;
-		}
-		
-		S32 cur_rights = relation->getRightsGrantedTo();
-		S32 new_rights = 0;
-		if (vis)
-			new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
-		else
-			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
-
-		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(buddy_id,new_rights);
-	}		
-	
-	mAllFriendList->showPermissions(true);
-	mOnlineFriendList->showPermissions(true);
-	
-	LLSD args;
-	args["MESSAGE"] = getString("high_server_load");
-	LLNotificationsUtil::add("GenericAlert", args);
-}
-
 void LLPanelPeople::onDeleteFriendButtonClicked()
 {
 	uuid_vec_t selected_uuids;
@@ -2137,40 +1351,6 @@ void LLPanelPeople::onChatButtonClicked()
 	LLUUID group_id = getCurrentItemID();
 	if (group_id.notNull())
 		LLGroupActions::startIM(group_id);
-}
-void LLPanelPeople::requestRadarChannelAlertSync()
-{
-	F32 timeNow = gFrameTimeSeconds;
-	if( (timeNow - RADAR_CHAT_MIN_SPACING)>mRadarLastRequestTime)
-	{
-		mRadarLastRequestTime=timeNow;
-		mRadarAlertRequest = true;
-	}
-}
-
-void LLPanelPeople::teleportToAvatar(LLUUID targetAv)
-// Teleports user to last scanned location of nearby avatar
-// Note: currently teleportViaLocation is disrupted by enforced landing points set on a parcel.
-{
-	std::vector<LLPanel*> items;
-	mNearbyList->getItems(items);
-	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
-	{
-		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
-		if (av->getAvatarId() == targetAv)
-		{
-			LLVector3d avpos = av->getPosition();
-			if (avpos.mdV[VZ] == -1)
-			{
-				LLNotificationsUtil::add("TeleportToAvatarNotPossible");
-			}
-			else
-			{
-				gAgent.teleportViaLocation(avpos);
-			}
-			return;
-		}
-	}
 }
 
 void LLPanelPeople::onImButtonClicked()
@@ -2288,23 +1468,26 @@ void LLPanelPeople::onNearbyViewSortMenuItemClicked(const LLSD& userdata)
 {
 	std::string chosen_item = userdata.asString();
 
-	if (chosen_item == "sort_by_recent_speakers")
-	{
-		setSortOrder(mNearbyList, E_SORT_BY_RECENT_SPEAKERS);
-	}
-	else if (chosen_item == "sort_name")
-	{
-		setSortOrder(mNearbyList, E_SORT_BY_NAME);
-	}
-	else if (chosen_item == "view_icons")
-	{
-		mNearbyList->toggleIcons();
-	}
-	else if (chosen_item == "sort_distance")
-	{
-		setSortOrder(mNearbyList, E_SORT_BY_DISTANCE);
-	}
-	else if (chosen_item == "panel_block_list_sidetray")
+	// <FS:Ansariel> Firestorm radar
+	//if (chosen_item == "sort_by_recent_speakers")
+	//{
+	//	setSortOrder(mNearbyList, E_SORT_BY_RECENT_SPEAKERS);
+	//}
+	//else if (chosen_item == "sort_name")
+	//{
+	//	setSortOrder(mNearbyList, E_SORT_BY_NAME);
+	//}
+	//else if (chosen_item == "view_icons")
+	//{
+	//	mNearbyList->toggleIcons();
+	//}
+	//else if (chosen_item == "sort_distance")
+	//{
+	//	setSortOrder(mNearbyList, E_SORT_BY_DISTANCE);
+	//}
+	//else if (chosen_item == "panel_block_list_sidetray")
+	if (chosen_item == "panel_block_list_sidetray")
+	// </FS:Ansariel> Firestorm radar
 	{
 		// <FS:Ansariel> Optional standalone blocklist floater
 		//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
@@ -2367,121 +1550,6 @@ void LLPanelPeople::onRecentViewSortMenuItemClicked(const LLSD& userdata)
 	}
 }
 
-void LLPanelPeople::onRadarNameFmtClicked(const LLSD& userdata)
-{
-	std::string chosen_item = userdata.asString();
-	if (chosen_item == "DN")
-		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_DISPLAYNAME);
-	else if (chosen_item == "UN")
-		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_USERNAME);
-	else if (chosen_item == "DNUN")
-		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_DISPLAYNAME_USERNAME);
-	else if (chosen_item == "UNDN")
-		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_USERNAME_DISPLAYNAME);
-}
-
-bool LLPanelPeople::radarNameFmtCheck(const LLSD& userdata)
-{
-	std::string menu_item = userdata.asString();
-	U32 name_format = gSavedSettings.getU32("RadarNameFormat");
-	switch (name_format)
-	{
-		case NAMEFORMAT_DISPLAYNAME:
-			return (menu_item == "DN");
-		case NAMEFORMAT_USERNAME:
-			return (menu_item == "UN");
-		case NAMEFORMAT_DISPLAYNAME_USERNAME:
-			return (menu_item == "DNUN");
-		case NAMEFORMAT_USERNAME_DISPLAYNAME:
-			return (menu_item == "UNDN");
-		default:
-			break;
-	}
-	return false;
-}
-
-// <FS:CR> Milkshake-style radar alerts
-void LLPanelPeople::onRadarReportToClicked(const LLSD& userdata)
-{
-	std::string chosen_item = userdata.asString();
-	if (chosen_item == "radar_toasts")
-		gSavedSettings.setBOOL("FSMilkshakeRadarToasts", TRUE);
-	else if (chosen_item == "radar_nearby_chat")
-		gSavedSettings.setBOOL("FSMilkshakeRadarToasts", FALSE);
-}
-
-bool LLPanelPeople::radarReportToCheck(const LLSD& userdata)
-{
-	std::string menu_item = userdata.asString();
-	bool report_to = gSavedSettings.getBOOL("FSMilkshakeRadarToasts");
-	if (report_to)
-		return (menu_item == "radar_toasts");
-	else
-		return (menu_item == "radar_nearby_chat");
-}
-// </FS:CR>
-
-std::string LLPanelPeople::getRadarName(LLAvatarName avname)
-{
-// [RLVa:KB-FS] - Checked: 2011-06-11 (RLVa-1.3.1) | Added: RLVa-1.3.1
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-	{
-		return RlvStrings::getAnonym(avname);
-	}
-// [/RLVa:KB-FS]
-
-	U32 fmt = gSavedSettings.getU32("RadarNameFormat");
-	// if display names are enabled, allow a variety of formatting options, depending on menu selection
-	if (gSavedSettings.getBOOL("UseDisplayNames"))
-	{	
-		if (fmt == NAMEFORMAT_DISPLAYNAME)
-		{
-			return avname.mDisplayName;
-		}
-		else if (fmt == NAMEFORMAT_USERNAME)
-		{
-			return avname.mUsername;
-		}
-		else if (fmt == NAMEFORMAT_DISPLAYNAME_USERNAME)
-		{
-			std::string s1 = avname.mDisplayName;
-			to_lower(s1);
-			std::string s2 = avname.mUsername;
-			replace_all(s2,"."," ");
-			if (s1.compare(s2) == 0)
-				return avname.mDisplayName;
-			else
-				return llformat("%s (%s)",avname.mDisplayName.c_str(),avname.mUsername.c_str());
-		}
-		else if (fmt == NAMEFORMAT_USERNAME_DISPLAYNAME)
-		{
-			std::string s1 = avname.mDisplayName;
-			to_lower(s1);
-			std::string s2 = avname.mUsername;
-			replace_all(s2,"."," ");
-			if (s1.compare(s2) == 0)
-				return avname.mDisplayName;
-			else
-				return llformat("%s (%s)",avname.mUsername.c_str(),avname.mDisplayName.c_str());
-		}
-	}
-	
-	// else use legacy name lookups
-	return avname.mDisplayName; // will be mapped to legacyname automatically by the name cache
-}
-
-std::string LLPanelPeople::getRadarName(LLUUID avId)
-{
-	LLAvatarName avname;
-
-	if (LLAvatarNameCache::get(avId,&avname)) // use the synchronous call. We poll every second so there's less value in using the callback form.
-		return getRadarName(avname);
-
-	// name not found. Temporarily fill in with the UUID. It's more distinguishable than (loading...)
-	return avId.asString();
-
-}
-
 bool LLPanelPeople::onFriendsViewSortMenuItemCheck(const LLSD& userdata) 
 {
 	std::string item = userdata.asString();
@@ -2534,7 +1602,10 @@ void LLPanelPeople::onTeleportButtonClicked()
 {
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
+	// <FS:Ansariel> Firestorm change
+	//LLAvatarActions::offerTeleport(selected_uuids);
 	LLAvatarActions::offerTeleport(LLAvatarActions::canOfferTeleport(selected_uuids));
+	// </FS:Ansariel> Firestorm change
 }
 
 void LLPanelPeople::onShareButtonClicked()
@@ -2545,38 +1616,6 @@ void LLPanelPeople::onShareButtonClicked()
 void LLPanelPeople::onMoreButtonClicked()
 {
 	// *TODO: not implemented yet
-}
-
-void LLPanelPeople::onFriendsViewSortButtonClicked()
-{
-	LLMenuGL* menu = (LLMenuGL*)mFriendsViewSortMenuHandle.get();
-	if (!menu)
-		return;
-	showGroupMenu(menu);
-}
-
-void LLPanelPeople::onGroupsViewSortButtonClicked()
-{
-	LLMenuGL* menu = (LLMenuGL*)mGroupsViewSortMenuHandle.get();
-	if (!menu)
-		return;
-	showGroupMenu(menu);
-}
-
-void LLPanelPeople::onRecentViewSortButtonClicked()
-{
-	LLMenuGL* menu = (LLMenuGL*)mRecentViewSortMenuHandle.get();
-	if (!menu)
-		return;
-	showGroupMenu(menu);
-}
-
-void LLPanelPeople::onNearbyViewSortButtonClicked()
-{
-	LLMenuGL* menu = (LLMenuGL*)mNearbyViewSortMenuHandle.get();
-	if (!menu)
-		return;
-	showGroupMenu(menu);
 }
 
 void	LLPanelPeople::onOpen(const LLSD& key)
@@ -2702,43 +1741,159 @@ bool LLPanelPeople::isAccordionCollapsedByUser(const std::string& name)
 	return isAccordionCollapsedByUser(getChild<LLUICtrl>(name));
 }
 
-// <Ansariel> Avatar tracking feature
-void LLPanelPeople::startTracking(const LLUUID& avatar_id)
+// <FS:Ansariel> Firestorm radar
+void LLPanelPeople::onRadarListDoubleClicked()
 {
-	mTrackedAvatarId = avatar_id;
-	updateTracking();
-}
-
-void LLPanelPeople::checkTracking()
-{
-	if (LLTracker::getTrackingStatus() == LLTracker::TRACKING_LOCATION
-		&& LLTracker::getTrackedLocationType() == LLTracker::LOCATION_AVATAR)
+	LLScrollListItem* item = mRadarList->getFirstSelected();
+	if (!item)
 	{
-		updateTracking();
+		return;
+	}
+
+	LLUUID clicked_id = item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
+	std::string name = item->getColumn(mRadarList->getColumn("name")->mIndex)->getValue().asString();
+
+	FSRadar* radar = FSRadar::getInstance();
+	if (radar)
+	{
+		radar->zoomAvatar(clicked_id, name);
 	}
 }
 
-void LLPanelPeople::updateTracking()
+void LLPanelPeople::updateNearby(const std::vector<LLSD>& entries, const LLSD& stats)
 {
-	std::multimap<LLUUID, radarFields>::const_iterator it;
-	it = lastRadarSweep.find(mTrackedAvatarId);
-	if (it != lastRadarSweep.end())
+	if (!LLFloaterReg::instanceVisible("people") || getActiveTabName() != NEARBY_TAB_NAME)
 	{
-		if (LLTracker::getTrackedPositionGlobal() != it->second.lastGlobalPos)
+		return;
+	}
+
+	if (!mRadarList)
+	{
+		return;
+	}
+
+	// Store current selection and scroll position
+	static S32 uuidColumnIndex = mRadarList->getColumn("uuid")->mIndex;
+	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
+	uuid_vec_t selected_ids;
+	for (size_t i = 0; i < selected_items.size(); i++)
+	{
+		selected_ids.push_back(selected_items.at(i)->getColumn(uuidColumnIndex)->getValue().asUUID());
+	}
+	S32 lastScroll = mRadarList->getScrollPos();
+
+	// Update list
+	mRadarList->clearRows();
+	const std::vector<LLSD>::const_iterator it_end = entries.end();
+	for (std::vector<LLSD>::const_iterator it = entries.begin(); it != it_end; ++it)
+	{
+		LLSD entry = (*it)["entry"];
+		LLSD options = (*it)["options"];
+
+		LLSD row_data;
+		row_data["value"] = entry["id"];
+		row_data["columns"][0]["column"] = "name";
+		row_data["columns"][0]["value"] = entry["name"];
+		row_data["columns"][1]["column"] = "voice_level";
+		row_data["columns"][1]["type"] = "icon";
+		row_data["columns"][1]["value"] = ""; // Need to set it after the row has been created because it's to big for the row
+		row_data["columns"][2]["column"] = "in_region";
+		row_data["columns"][2]["type"] = "icon";
+		row_data["columns"][2]["value"] = (entry["in_region"].asBoolean() ? "avatar_in_region" : "");
+		row_data["columns"][3]["column"] = "flags";
+		row_data["columns"][3]["value"] = entry["flags"];
+		row_data["columns"][4]["column"] = "age";
+		row_data["columns"][4]["value"] = entry["age"];
+		row_data["columns"][5]["column"] = "seen";
+		row_data["columns"][5]["value"] = entry["seen"];
+		row_data["columns"][6]["column"] = "range";
+		row_data["columns"][6]["value"] = entry["range"];
+		row_data["columns"][7]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
+		row_data["columns"][7]["value"] = entry["id"];
+
+		LLScrollListItem* row = mRadarList->addElement(row_data);
+
+		static S32 rangeColumnIndex = mRadarList->getColumn("range")->mIndex;
+		static S32 nameColumnIndex = mRadarList->getColumn("name")->mIndex;
+		static S32 voiceLevelColumnIndex = mRadarList->getColumn("voice_level")->mIndex;
+
+		LLScrollListText* radarRangeCell = (LLScrollListText*)row->getColumn(rangeColumnIndex);
+		radarRangeCell->setColor(LLColor4(options["range_color"]));
+		radarRangeCell->setFontStyle(options["range_style"].asInteger());
+
+		LLScrollListText* radarNameCell = (LLScrollListText*)row->getColumn(nameColumnIndex);
+		radarNameCell->setFontStyle(options["name_style"].asInteger());
+		if (options.has("name_color"))
 		{
-			std::string targetName(it->second.avName);
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				targetName = RlvStrings::getAnonym(targetName);
-			}
-			LLTracker::trackLocation(it->second.lastGlobalPos, targetName, "", LLTracker::LOCATION_AVATAR);
+			radarNameCell->setColor(LLColor4(options["name_color"]));
+		}
+
+		LLScrollListText* voiceLevelCell = (LLScrollListText*)row->getColumn(voiceLevelColumnIndex);
+		if (entry.has("voice_level_icon"))
+		{
+			voiceLevelCell->setValue(entry["voice_level_icon"].asString());
 		}
 	}
-	else
+
+	LLStringUtil::format_map_t name_count_args;
+	name_count_args["[TOTAL]"] = stats["total"].asString();
+	name_count_args["[IN_REGION]"] = stats["region"].asString();
+	name_count_args["[IN_CHAT_RANGE]"] = stats["chatrange"].asString();
+	LLScrollListColumn* column = mRadarList->getColumn("name");
+	column->mHeader->setLabel(getString("avatar_name_count", name_count_args));
+	column->mHeader->setToolTipArgs(name_count_args);
+
+	// Restore scroll position
+	mRadarList->setScrollPos(lastScroll);
+
+	// Restore selection list
+	if (!selected_ids.empty())
 	{
-		LLTracker::stopTracking(NULL);
+		mRadarList->selectMultiple(selected_ids);
 	}
+
+	updateButtons();
 }
-// </Ansariel> Avatar tracking feature
+
+
+void LLPanelPeople::onGlobalVisToggleButtonClicked()
+// Iterate through friends lists, toggling status permission on or off 
+{	
+	bool vis = getChild<LLUICtrl>("GlobalOnlineStatusToggle")->getValue().asBoolean();
+	gSavedSettings.setBOOL("GlobalOnlineStatusToggle", vis);
+	
+	const LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
+	LLAvatarTracker::buddy_map_t all_buddies;
+	av_tracker.copyBuddyList(all_buddies);
+	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
+	for (; buddy_it != all_buddies.end(); ++buddy_it)
+	{
+		LLUUID buddy_id = buddy_it->first;
+		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(buddy_id);
+		if (relation == NULL)
+		{
+			// Lets have a warning log message instead of having a crash. EXT-4947.
+			llwarns << "Trying to modify rights for non-friend avatar. Skipped." << llendl;
+			return;
+		}
+		
+		S32 cur_rights = relation->getRightsGrantedTo();
+		S32 new_rights = 0;
+		if (vis)
+			new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+		else
+			new_rights = (cur_rights &  LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(buddy_id,new_rights);
+	}		
+	
+	mAllFriendList->showPermissions(true);
+	mOnlineFriendList->showPermissions(true);
+	
+	LLSD args;
+	args["MESSAGE"] = getString("high_server_load");
+	LLNotificationsUtil::add("GenericAlert", args);
+}
+// </FS:Ansariel> Firestorm radar
 
 // EOF

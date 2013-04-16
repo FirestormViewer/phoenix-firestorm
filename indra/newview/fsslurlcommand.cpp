@@ -28,22 +28,21 @@
 #include "fsslurlcommand.h"
 
 #include "fscommon.h"
+#include "fsradar.h"
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
 #include "llcommandhandler.h"
-#include "llfloatersidepanelcontainer.h"
 #include "llnotificationsutil.h"
-#include "llpanelpeople.h"
 
 
 LLAvatarListItem* getAvatarListItem(const LLUUID& avatar_id)
 {
-	LLPanelPeople* panel_people = getPeoplePanel();
-	if (panel_people)
+	FSRadar* radar = FSRadar::getInstance();
+	if (radar)
 	{
-		return panel_people->getNearbyList()->getAvatarListItem(avatar_id);
+		return radar->getNearbyList()->getAvatarListItem(avatar_id);
 	}
 
 	return NULL;
@@ -118,11 +117,11 @@ public:
 		{
 			if (gAgentID != target_id)
 			{
-				LLPanelPeople* panel_people = getPeoplePanel();
+				FSRadar* radar = FSRadar::getInstance();
 				LLAvatarListItem* avatar_list_item = getAvatarListItem(target_id);
-				if (avatar_list_item && panel_people)
+				if (avatar_list_item && radar)
 				{
-					panel_people->startTracking(target_id);
+					radar->startTracking(target_id);
 					return true;
 				}
 

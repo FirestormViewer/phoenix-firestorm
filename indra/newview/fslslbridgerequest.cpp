@@ -33,7 +33,7 @@
 #include "fslslbridge.h"
 #include <string>
 #include <boost/tokenizer.hpp> // for radar 
-#include "llpanelpeople.h"
+#include "fsradar.h"
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
 
@@ -93,10 +93,10 @@ FSLSLBridgeRequestRadarPosResponder::FSLSLBridgeRequestRadarPosResponder()
 }
 void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 {
-	LLPanelPeople* panel_people = getPeoplePanel();
-	if (panel_people)
+	FSRadar* radar = FSRadar::getInstance();
+	if (radar)
 	{
-		LLAvatarList* nearbyList = panel_people->getNearbyList();
+		LLAvatarList* nearbyList = radar->getNearbyList();
 		
 		std::string strContent = content.asString();
 		//llinfos << "Got info: " << strContent << llendl;	

@@ -4863,6 +4863,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Teleport_History_Label">Teleport History</string>
   <string name="Command_Pose_Stand_Label">Pose Stand</string>
   <string name="Command_Snapshot_To_Disk_Label">Snapshot to Disk</string>
+  <string name="Command_Radar_Label">Radar</string>
   
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -4910,6 +4911,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Teleport_History_Tooltip">Opens Teleport History</string>
   <string name="Command_Pose_Stand_Tooltip">Avatar pose stand for adjusting attachments</string>
   <string name="Command_Snapshot_To_Disk_Tooltip">Takes a quick snapshot and saves it to harddisk</string>
+  <string name="Command_Radar_Tooltip">Opens the radar for nearby avatars</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
@@ -5082,4 +5084,14 @@ Try enclosing path to the editor with double quotes.
   <string name="QP_WL_None">None</string>
 
   <string name="GroupChatMuteNotice">Muting group chat from [NAME].</string>
+  
+  <!-- <FS:Ansariel> Radar notifications -->
+  <string name="camera_no_focus">The camera cannot focus user [AVATARNAME] because they are outside your draw distance.</string>
+  <string name="entering_draw_distance">entered draw distance ([DISTANCE] m).</string>
+  <string name="leaving_draw_distance">left draw distance.</string>
+  <string name="entering_chat_range">entered chat range ([DISTANCE] m).</string>
+  <string name="leaving_chat_range">left chat range.</string>
+  <string name="entering_region">entered the region.</string>
+  <string name="entering_region_distance">entered the region ([DISTANCE] m).</string>
+  <string name="leaving_region">left the region.</string>
 </strings>

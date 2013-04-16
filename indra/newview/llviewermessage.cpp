@@ -153,6 +153,7 @@ const static boost::regex NEWLINES("\\n{1}");
 #include "tea.h" // <FS:AW opensim currency support>
 #include "fscommon.h"
 #include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
+#include "fsradar.h"
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -5591,10 +5592,10 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	// sound assets as a request for a full radar update to a channel
 	if ((owner_id == gAgent.getID()) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
 	{
-		LLPanelPeople* pPeoplePanel = getPeoplePanel();
-		if (pPeoplePanel)
+		FSRadar* radar = FSRadar::getInstance();
+		if (radar)
 		{
-			pPeoplePanel->requestRadarChannelAlertSync();
+			radar->requestRadarChannelAlertSync();
 		}
 		return;
 	}

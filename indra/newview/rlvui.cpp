@@ -47,6 +47,8 @@
 #include "rlvhandler.h"
 #include "rlvextensions.h"
 
+#include "fsradar.h"
+
 // ============================================================================
 
 // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
@@ -364,10 +366,16 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 
 	// Refresh the nearby people list
-	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
-	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-		pPeoplePanel->getNearbyList()->updateAvatarNames();
+	// <FS:Ansariel> [Standalone radar]
+	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	//RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+	//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
+	//	pPeoplePanel->getNearbyList()->updateAvatarNames();
+	FSRadar* pRadar = FSRadar::getInstance();
+	RLV_ASSERT( (pRadar) && (pRadar->getNearbyList()) );
+	if ( (pRadar) && (pRadar->getNearbyList()) )
+		pRadar->getNearbyList()->updateAvatarNames();
+	// </FS:Ansariel> [Standalone radar]
 
 	// Refresh the speaker list
 	// <FS:Ansariel> [FS communication UI]
