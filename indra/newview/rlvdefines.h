@@ -295,7 +295,8 @@ enum ERlvAttachGroupType
 
 #define RLV_SETTING_MAIN				"RestrainedLove"
 #define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
-#define RLV_SETTING_AVATAROFFSET_Z		"AvatarZOffset"
+// <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
+//#define RLV_SETTING_AVATAROFFSET_Z		"AvatarZOffset"
 #define RLV_SETTING_CANOOC				"RestrainedLoveCanOOC"
 #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
 #define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
