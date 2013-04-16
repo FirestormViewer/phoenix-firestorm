@@ -27,8 +27,7 @@
 		<text name="Tag Offset" tool_tip="Consente di modificare l'altezza dell'avatar senza modificare la shape. Default 0">
 			Altezza Tag:
 		</text>
-		<slider name="FSNameTagZOffsetCorrection"/>
-		<slider name="AvatarZOffset"/>		
+		<slider name="FSNameTagZOffsetCorrection"/>		
 		<text name="name_tags_textbox">
 			Tag Nome:
 		</text>

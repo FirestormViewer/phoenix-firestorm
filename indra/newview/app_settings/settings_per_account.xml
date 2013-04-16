@@ -11,6 +11,7 @@
         <key>Value</key>
         <integer>1</integer>
       </map>
+    <!-- .:FS:CR:. FIRE-9759 - Temporarily remove setting AvatarZOffset
     <key>AvatarZOffset</key>
         <map>
         <key>Comment</key>
@@ -22,6 +23,7 @@
         <key>Value</key>
             <real>0.0</real>
         </map>
+    -->
       <key>BusyResponseChanged</key>
         <map>
         <key>Comment</key>

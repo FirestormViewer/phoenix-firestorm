@@ -27,8 +27,7 @@
         <slider left_delta="87" name="RenderAvatarMaxVisible"/>		
         <text name="Height Offset" width="105" tool_tip="Позволяет изменять расстояние по вертикали от аватара, не меняя самой фигуры.">
             Выс.вмещения:
-        </text>
-        <slider left_delta="87" name="AvatarZOffset"/>		
+        </text>		
 		<text name="name_tags_textbox">
             Имена аватаров:
         </text>
