@@ -128,10 +128,13 @@ void RlvSettings::initClass()
 	}
 #endif // RLV_EXTENSION_STARTLOCATION
 
-// Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+// Checked: 2013-04-17 (RLVa-1.4.8)
 bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
 {
-	gAgent.sendAgentSetAppearance();
+	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isUsingServerBakes()) )
+	{
+		gAgentAvatarp->computeBodySize();
+	}
 	return true;
 }
 
