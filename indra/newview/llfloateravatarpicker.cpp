@@ -37,9 +37,6 @@
 #include "llviewercontrol.h"
 #include "llviewerregion.h"		// getCapability()
 #include "llworld.h"
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 // Linden libraries
 #include "llavatarnamecache.h"	// IDEVO
@@ -760,7 +757,13 @@ bool LLFloaterAvatarPicker::isSelectBtnEnabled()
 			uuid_vec_t avatar_ids;
 			std::vector<LLAvatarName> avatar_names;
 			getSelectedAvatarData(list, avatar_ids, avatar_names);
-			return mOkButtonValidateSignal(avatar_ids);
+			//return mOkButtonValidateSignal(avatar_ids);
+// <FS:CR> FIRE-9799 - Check that we actually have an avatar selected
+			if (avatar_ids.size() >= 1)
+				return mOkButtonValidateSignal(avatar_ids);
+			else
+				return false;
+// </FS:CR>
 		}
 	}
 
