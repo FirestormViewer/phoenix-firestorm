@@ -1002,6 +1002,13 @@ WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$
 ;; to avoid parameter injection attacks.
 WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" "" '"$INSTDIR\$INSTEXE" $INSTFLAGS -url "%1"'
 
+; <FS:CR> Register hop:// protocol registry info
+WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
+WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
+WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$INSTEXE"'
+WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$INSTEXE" $INSTFLAGS -url "%1"
+; </FS:CR>
+
 ; write out uninstaller
 WriteUninstaller "$INSTDIR\uninst.exe"
 
