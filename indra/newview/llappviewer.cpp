@@ -2717,10 +2717,12 @@ bool LLAppViewer::initConfiguration()
 	// - load overrides from user_settings 
 	loadSettingsFromDirectory("User");
 
-	//Wolfspirit: Temporary fix for NOT loading settings_minimal.xml
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
-		gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
+		if (gSavedSettings.getString("SessionSettingsFile").empty())
+        {
+            gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
+        }
 		
 // <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
 #ifdef OPENSIM
@@ -2734,12 +2736,15 @@ bool LLAppViewer::initConfiguration()
 	}
 
 	//WS: Set the usersessionsettingsfile to the account_SessionSettingsFile file. This allows settings_per_accounts to be per session.
-	if(gSavedSettings.getString("SessionSettingsFile")!=""){
-		if(gSavedSettings.getString("UserSessionSettingsFile")=="")
-			gSavedSettings.setString("UserSessionSettingsFile","account_"+gSavedSettings.getString("SessionSettingsFile"));
+	if(!gSavedSettings.getString("SessionSettingsFile").empty())
+    {
+		if(gSavedSettings.getString("UserSessionSettingsFile").empty())
+			gSavedSettings.setString("UserSessionSettingsFile","account_" + gSavedSettings.getString("SessionSettingsFile"));
 	}
-	else gSavedSettings.setString("UserSessionSettingsFile","");
-
+	else
+    {
+        gSavedSettings.setString("UserSessionSettingsFile","");
+    }
 
 	if (clp.hasOption("sessionsettings"))
 	{
@@ -2754,9 +2759,7 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string user_session_settings_filename = clp.getOption("usersessionsettings")[0];		
 		gSavedSettings.setString("UserSessionSettingsFile", user_session_settings_filename);
-		llinfos	<< "Using user session settings filename: " 
-			<< user_session_settings_filename << llendl;
-
+		llinfos << "Using user session settings filename: " << user_session_settings_filename << llendl;
 	}
 
 	

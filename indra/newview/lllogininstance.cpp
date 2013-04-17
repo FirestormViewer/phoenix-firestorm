@@ -486,7 +486,6 @@ LLLoginInstance::LLLoginInstance() :
 	mDispatcher.add("connect",    "", boost::bind(&LLLoginInstance::handleLoginSuccess, this, _1));
 	mDispatcher.add("disconnect", "", boost::bind(&LLLoginInstance::handleDisconnect, this, _1));
 	mDispatcher.add("indeterminate", "", boost::bind(&LLLoginInstance::handleIndeterminate, this, _1));
-
 }
 
 LLLoginInstance::~LLLoginInstance()
@@ -562,16 +561,7 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 
 	//send this info to login.cgi for stats gathering 
 	//since viewerstats isn't reliable enough
-	if (gSavedSettings.getString("SessionSettingsFile").empty())
-	{
-		requested_options.append("advanced-mode");
-	}
-	else
-	{
-		requested_options.append("basic-mode");
-		//requested_options.append("inventory-basic");
-	}
-
+	requested_options.append("advanced-mode");
 #endif
 	requested_options.append("max-agent-groups");	
 	requested_options.append("map-server-url");	
