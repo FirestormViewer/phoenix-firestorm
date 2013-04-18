@@ -29,7 +29,6 @@
 #include "fsradar.h"
 
 // libs
-#include <boost/algorithm/string.hpp>
 #include "llavatarnamecache.h"
 #include "llcommonutils.h"
 #include "llnotificationsutil.h"
@@ -98,6 +97,10 @@ FSRadar::FSRadar() :
 		mRadarLastRequestTime(0.f)
 {
 	mRadarListUpdater = new FSRadarListUpdater(boost::bind(&FSRadar::updateRadarList, this));
+
+	// Use the callback from LLAvatarNameCache here or we might to update the names too early!
+	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
+	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
 }
 
 FSRadar::~FSRadar()
@@ -120,7 +123,7 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 	{
 		LLSD payload = agent_id;
 		LLSD args;
-		args["NAME"] = getRadarName(av_name);
+		args["NAME"] = FSRadarEntry::getRadarName(av_name);
 		args["MESSAGE"] = postMsg;
 		LLNotificationPtr notification;
 		notification = LLNotificationsUtil::add("RadarAlert",
@@ -134,7 +137,7 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 		LLChat chat;
 		chat.mText = postMsg;
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
-		chat.mFromName = getRadarName(av_name);
+		chat.mFromName = FSRadarEntry::getRadarName(av_name);
 		chat.mFromID = agent_id;
 		chat.mChatType = CHAT_TYPE_RADAR;
 		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
@@ -307,8 +310,7 @@ void FSRadar::updateRadarList()
 			avFlagStr += "$";
 		}
 		S32 avAge = ent->mAge;
-		std::string avName   = getRadarName(avId);
-		ent->mName = avName;
+		std::string avName = ent->mName;
 		U32 lastZOffsetTime  = ent->mLastZOffsetTime;
 		F32 avZOffset = ent->mZOffset;
 		if (avPos[VZ] == AVATAR_UNKNOWN_Z_OFFSET) // if our official z position is AVATAR_UNKNOWN_Z_OFFSET, we need a correction.
@@ -897,6 +899,12 @@ void FSRadar::onRadarNameFmtClicked(const LLSD& userdata)
 	{
 		gSavedSettings.setU32("RadarNameFormat", FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME);
 	}
+
+	FSRadar* instance = FSRadar::getInstance();
+	if (instance)
+	{
+		instance->updateNames();
+	}
 }
 
 //static
@@ -950,76 +958,6 @@ bool FSRadar::radarReportToCheck(const LLSD& userdata)
 	}
 }
 // </FS:CR>
-
-std::string FSRadar::getRadarName(const LLAvatarName& avname)
-{
-// [RLVa:KB-FS] - Checked: 2011-06-11 (RLVa-1.3.1) | Added: RLVa-1.3.1
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-	{
-		return RlvStrings::getAnonym(avname);
-	}
-// [/RLVa:KB-FS]
-
-	U32 fmt = gSavedSettings.getU32("RadarNameFormat");
-	// if display names are enabled, allow a variety of formatting options, depending on menu selection
-	if (gSavedSettings.getBOOL("UseDisplayNames"))
-	{	
-		if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME)
-		{
-			return avname.mDisplayName;
-		}
-		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME)
-		{
-			return avname.mUsername;
-		}
-		else if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME_USERNAME)
-		{
-			std::string s1 = avname.mDisplayName;
-			to_lower(s1);
-			std::string s2 = avname.mUsername;
-			replace_all(s2, ".", " ");
-			if (s1.compare(s2) == 0)
-			{
-				return avname.mDisplayName;
-			}
-			else
-			{
-				return llformat("%s (%s)", avname.mDisplayName.c_str(), avname.mUsername.c_str());
-			}
-		}
-		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME)
-		{
-			std::string s1 = avname.mDisplayName;
-			to_lower(s1);
-			std::string s2 = avname.mUsername;
-			replace_all(s2, ".", " ");
-			if (s1.compare(s2) == 0)
-			{
-				return avname.mDisplayName;
-			}
-			else
-			{
-				return llformat("%s (%s)", avname.mUsername.c_str(), avname.mDisplayName.c_str());
-			}
-		}
-	}
-	
-	// else use legacy name lookups
-	return avname.mDisplayName; // will be mapped to legacyname automatically by the name cache
-}
-
-std::string FSRadar::getRadarName(const LLUUID& avId)
-{
-	LLAvatarName avname;
-
-	if (LLAvatarNameCache::get(avId, &avname)) // use the synchronous call. We poll every second so there's less value in using the callback form.
-	{
-		return getRadarName(avname);
-	}
-
-	// name not found. Temporarily fill in with the UUID. It's more distinguishable than (loading...)
-	return avId.asString();
-}
 
 void FSRadar::startTracking(const LLUUID& avatar_id)
 {

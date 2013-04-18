@@ -107,9 +107,6 @@ private:
 	void					updateRadarList();
 	void					updateTracking();
 	void					checkTracking();
-
-	std::string				getRadarName(const LLUUID& avId);
-	std::string				getRadarName(const LLAvatarName& avName);
 	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& postMsg);
 
 	Updater*				mRadarListUpdater;

@@ -54,6 +54,8 @@ public:
 
 	void		setZOffset(F32 offset) { mZOffset = offset; }
 
+	static std::string getRadarName(const LLAvatarName& av_name);
+
 private:
 	void updateName();
 	void onAvatarNameCache(const LLAvatarName& av_name);

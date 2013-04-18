@@ -28,12 +28,16 @@
 
 #include "fsradarentry.h"
 
+#include <boost/algorithm/string.hpp>
+#include "fsradar.h"
 #include "llavatarnamecache.h"
 #include "rlvhandler.h"
 
+using namespace boost;
+
 FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	: mID(avid),
-	mName(LLStringUtil::null),
+	mName(avid.asString()),
 	mUserName(LLStringUtil::null),
 	mDisplayName(LLStringUtil::null),
 	mRange(0.f),
@@ -72,12 +76,14 @@ void FSRadarEntry::onAvatarNameCache(const LLAvatarName& av_name)
 	{
 		mUserName = av_name.mUsername;
 		mDisplayName = av_name.mDisplayName;
+		mName = getRadarName(av_name);
 	}
 	else
 	{
-		std::string name = RlvStrings::getAnonym(av_name);
+		std::string name = getRadarName(av_name);
 		mUserName = name;
 		mDisplayName = name;
+		mName = name;
 	}
 }
 
@@ -89,4 +95,62 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 		mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
 		mStatus = avatar_data->flags;		
 	}
+}
+
+// static
+std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
+{
+// [RLVa:KB-FS] - Checked: 2011-06-11 (RLVa-1.3.1) | Added: RLVa-1.3.1
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	{
+		return RlvStrings::getAnonym(av_name);
+	}
+// [/RLVa:KB-FS]
+
+	U32 fmt = gSavedSettings.getU32("RadarNameFormat");
+	// if display names are enabled, allow a variety of formatting options, depending on menu selection
+	if (gSavedSettings.getBOOL("UseDisplayNames"))
+	{	
+		if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME)
+		{
+			return av_name.mDisplayName;
+		}
+		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME)
+		{
+			return av_name.mUsername;
+		}
+		else if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME_USERNAME)
+		{
+			std::string s1 = av_name.mDisplayName;
+			to_lower(s1);
+			std::string s2 = av_name.mUsername;
+			replace_all(s2, ".", " ");
+			if (s1.compare(s2) == 0)
+			{
+				return av_name.mDisplayName;
+			}
+			else
+			{
+				return llformat("%s (%s)", av_name.mDisplayName.c_str(), av_name.mUsername.c_str());
+			}
+		}
+		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME)
+		{
+			std::string s1 = av_name.mDisplayName;
+			to_lower(s1);
+			std::string s2 = av_name.mUsername;
+			replace_all(s2, ".", " ");
+			if (s1.compare(s2) == 0)
+			{
+				return av_name.mDisplayName;
+			}
+			else
+			{
+				return llformat("%s (%s)", av_name.mUsername.c_str(), av_name.mDisplayName.c_str());
+			}
+		}
+	}
+	
+	// else use legacy name lookups
+	return av_name.mDisplayName; // will be mapped to legacyname automatically by the name cache
 }
