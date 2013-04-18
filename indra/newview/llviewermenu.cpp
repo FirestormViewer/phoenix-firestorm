@@ -738,7 +738,11 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		}
 		else if ("badge" == info_type)
 		{
-			reportToNearbyChat("hippos!");
+			reportToNearbyChat("Hippos!");
+		}
+		else if ("cookies" == info_type)
+		{
+			reportToNearbyChat("Cookies!");
 		}
 		return true;
 	}

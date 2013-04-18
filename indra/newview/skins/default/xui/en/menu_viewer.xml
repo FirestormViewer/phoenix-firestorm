@@ -3018,10 +3018,19 @@
             <menu_item_check
              label="Badge"
              name="Badge"
-			 shortcut="alt|control|shift|h">
+             shortcut="alt|control|shift|h">
                 <menu_item_check.on_click
                  function="Advanced.ToggleHUDInfo"
                  parameter="badge" />
+            </menu_item_check>
+            <menu_item_check
+             label="Cookies"
+             name="Cookies"
+             visible="false"
+             shortcut="alt|shift|c">
+                <menu_item_check.on_click
+                 function="Advanced.ToggleHUDInfo"
+                 parameter="cookies" />
             </menu_item_check>
         </menu>
         <menu
