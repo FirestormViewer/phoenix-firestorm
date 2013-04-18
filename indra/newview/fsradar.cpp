@@ -976,18 +976,12 @@ void FSRadar::checkTracking()
 
 void FSRadar::updateTracking()
 {
-	std::multimap<LLUUID, radarFields>::const_iterator it;
-	it = lastRadarSweep.find(mTrackedAvatarId);
-	if (it != lastRadarSweep.end())
+	FSRadarEntry* entry = getEntry(mTrackedAvatarId);
+	if (entry)
 	{
-		if (LLTracker::getTrackedPositionGlobal() != it->second.lastGlobalPos)
+		if (LLTracker::getTrackedPositionGlobal() != entry->mGlobalPos)
 		{
-			std::string targetName(it->second.avName);
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				targetName = RlvStrings::getAnonym(targetName);
-			}
-			LLTracker::trackLocation(it->second.lastGlobalPos, targetName, "", LLTracker::LOCATION_AVATAR);
+			LLTracker::trackLocation(entry->mGlobalPos, entry->mName, "", LLTracker::LOCATION_AVATAR);
 		}
 	}
 	else
