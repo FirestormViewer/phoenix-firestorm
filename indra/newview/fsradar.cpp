@@ -546,7 +546,7 @@ void FSRadar::updateRadarList()
 		entry["name"] = avName;
 		entry["in_region"] = (regionSelf == avRegion);
 		entry["flags"] = avFlagStr;
-		entry["age"] = avAge;
+		entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
 		entry["seen"] = avSeenStr;
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
 

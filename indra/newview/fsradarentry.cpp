@@ -46,7 +46,8 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mRegion(LLUUID::null),
 	mStatus(0),
 	mZOffset(0.f),
-	mLastZOffsetTime(time(NULL))
+	mLastZOffsetTime(time(NULL)),
+	mAge(-1)
 {
 	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
 	//This means updates to these properties won't typically be seen while target is in nearby range.
