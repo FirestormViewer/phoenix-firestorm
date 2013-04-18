@@ -37,52 +37,65 @@ class LGGContactSets : public LLSingleton<LGGContactSets>
 
 public:
 	static LLColor4 toneDownColor(const LLColor4& inColor, float strength, bool usedForBackground = false);
+
+	void setGroupColor(const std::string& groupName, const LLColor4& color);
 	LLColor4 getGroupColor(const std::string& groupName);
 	LLColor4 getFriendColor(const LLUUID& friend_id, const std::string& ignoredGroupName = "");
+
+	void setDefaultColor(const LLColor4& dColor);
 	LLColor4 getDefaultColor();
+
 	std::string getPseudonym(const LLUUID& friend_id);
 	BOOL hasPseudonym(const LLUUID& friend_id);
+	void clearPseudonym(const LLUUID& friend_id);
+
+	void removeDisplayName(const LLUUID& friend_id);
 	BOOL hasDisplayNameRemoved(const LLUUID& friend_id);
-	BOOL hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type);
-	void setDefaultColor(const LLColor4& dColor);
+
 	std::vector<std::string> getInnerGroups(const std::string& groupName);
 	std::vector<std::string> getFriendGroups(const LLUUID& friend_id);
 	std::vector<std::string> getAllGroups(BOOL extraGroups = TRUE);
-	BOOL isFriendInGroup(const LLUUID& friend_id, const std::string& groupName);
-	BOOL notifyForFriend(const LLUUID& friend_id);
+
 	void addFriendToGroup(const LLUUID& friend_id, const std::string& groupName);
+	void removeFriendFromGroup(const LLUUID& friend_id, const std::string& groupName);
+	void removeFriendFromAllGroups(const LLUUID& friend_id);
+	BOOL isFriendInGroup(const LLUUID& friend_id, const std::string& groupName);
+	BOOL hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type);
+
+	void addGroup(const std::string& groupName);
+	void deleteGroup(const std::string& groupName);
+	bool isAGroup(const std::string& groupName);
+
 	void addNonFriendToList(const LLUUID& non_friend_id);
 	void removeNonFriendFromList(const LLUUID& non_friend_id);
 	BOOL isNonFriend(const LLUUID& non_friend_id);
 	std::vector<LLUUID> getListOfNonFriends();
-	void clearPseudonym(const LLUUID& friend_id);
-	void removeFriendFromAllGroups(const LLUUID& friend_id);
-	void removeDisplayName(const LLUUID& friend_id);
-	void removeFriendFromGroup(const LLUUID& friend_id, const std::string& groupName);
-	void addGroup(const std::string& groupName);
-	void deleteGroup(const std::string& groupName);
-	bool isAGroup(const std::string& groupName);
+
+	BOOL notifyForFriend(const LLUUID& friend_id);
 	void setNotifyForGroup(const std::string& groupName, BOOL notify);
 	BOOL getNotifyForGroup(const std::string& groupName);
-	void setGroupColor(const std::string& groupName, const LLColor4& color);
+
 	bool callbackAliasReset(const LLSD& notification, const LLSD& response);
 
 private:
 	LGGContactSets();
 	~LGGContactSets();
 	
-	BOOL saveGroupToDisk(const std::string& groupName, const std::string& fileName);
-	LLSD exportGroup(const std::string& groupName);
 	LLSD getContactSets();
+
 	std::vector<LLUUID> getFriendsInGroup(const std::string& groupName);
 	BOOL isFriendInAnyGroup(const LLUUID& friend_id);
 	std::vector<LLUUID> getFriendsInAnyGroup();
+
 	void setPseudonym(const LLUUID& friend_id, const std::string& pseudonym);
 	std::vector<LLUUID> getListOfPseudonymAvs();
-	BOOL hasVisuallyDiferentPseudonym(const LLUUID& friend_id);
+	BOOL hasVisuallyDifferentPseudonym(const LLUUID& friend_id);
+
 	void loadFromDisk();
-	
+	LLSD exportGroup(const std::string& groupName);
 	void saveToDisk(const LLSD& newSettings);
+	BOOL saveGroupToDisk(const std::string& groupName, const std::string& fileName);
+
 	std::string getFileName();
 	std::string getDefaultFileName();
 	std::string getOldFileName();
