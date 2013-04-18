@@ -333,7 +333,8 @@
 			<menu_item_check label="Kamera" name="Camera"/>
 			<menu_item_check label="Wiatr" name="Wind"/>
 			<menu_item_check label="Pole widzenia" name="FOV"/>
-			<menu_item_check label="Znak" name="Badge"/>
+			<menu_item_check label="Hipcie!" name="Badge"/>
+			<menu_item_check label="Ciasteczka!" name="Cookies"/>
 		</menu>
 		<menu label="Pokaż informacje" name="Display Info">
 			<menu_item_check label="Pokaż czas" name="Show Time"/>

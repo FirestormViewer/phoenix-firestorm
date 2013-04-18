@@ -227,8 +227,8 @@
         <text name="text_box_permnextowner">
           Nast. właściciel:
         </text>
-        <check_box label="Kopiowanie" tool_tip="Zezwolenie na kopiowanie" name="next_owner_copy"/>
         <check_box label="Modyfikowanie" tool_tip="Zezwolenie na modyfikowanie" name="next_owner_modify"/>
+        <check_box label="Kopiowanie" tool_tip="Zezwolenie na kopiowanie" name="next_owner_copy"/>
         <check_box label="Transferowanie" tool_tip="Zezwolenie na transferowanie" name="next_owner_transfer"/>
         <text name="text_box_permnote1">
 		  To się także odnosi
