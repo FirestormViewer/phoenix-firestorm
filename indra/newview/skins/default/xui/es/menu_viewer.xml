@@ -339,7 +339,8 @@
 			<menu_item_check label="Cámara" name="Camera"/>
 			<menu_item_check label="Viento" name="Wind"/>
 			<menu_item_check label="Campo de visión (FOV)" name="FOV"/>
-			<menu_item_check label="Distintivo" name="Badge"/>
+			<menu_item_check label="¡Hipopótamos!" name="Badge"/>
+			<menu_item_check label="¡Galletas!" name="Cookies"/>
 		</menu>
 		<menu label="Mostrar información" name="Display Info">
 			<menu_item_check label="Tiempo" name="Show Time"/>
