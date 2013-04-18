@@ -80,8 +80,6 @@
 #include "llmutelist.h"
 
 // Ansariel: For accessing the radar data
-#include "llavatarlist.h"
-#include "llavatarlistitem.h"
 #include "fsradar.h"
 #include "lggcontactsets.h"
 #include "fscommon.h"
@@ -1017,10 +1015,10 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 				FSRadar* radar = FSRadar::getInstance();
 				if (radar)
 				{
-					LLAvatarListItem* avatar_list_item = radar->getNearbyList()->getAvatarListItem(avatar_id);
-					if (avatar_list_item)
+					FSRadarEntry* entry = radar->getEntry(avatar_id);
+					if (entry)
 					{
-						F32 radar_distance = avatar_list_item->getRange();
+						F32 radar_distance = entry->getRange();
 
 						if (radar_distance > AVATAR_UNKNOWN_RANGE)
 						{

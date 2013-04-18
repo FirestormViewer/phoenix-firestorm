@@ -29,7 +29,9 @@
 
 #include "llsingleton.h"
 
-class LLAvatarList;
+#include "fsradarentry.h"
+#include <boost/unordered_map.hpp>
+
 class LLAvatarName;
 
 const U32	FSRADAR_MAX_AVATARS_PER_ALERT = 6;	// maximum number of UUIDs we can cram into a single channel radar alert message
@@ -37,10 +39,13 @@ const U32	FSRADAR_COARSE_OFFSET_INTERVAL = 7;	// seconds after which we query th
 const U32	FSRADAR_MAX_OFFSET_REQUESTS = 60;	// 2048 / UUID size, leaving overhead space
 const U32	FSRADAR_CHAT_MIN_SPACING = 6;		// minimum delay between radar chat messages
 
-const U32	FSRADAR_NAMEFORMAT_DISPLAYNAME = 0;
-const U32	FSRADAR_NAMEFORMAT_USERNAME = 1;
-const U32	FSRADAR_NAMEFORMAT_DISPLAYNAME_USERNAME = 2;
-const U32	FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME = 3;
+typedef enum e_radar_name_format
+{
+	FSRADAR_NAMEFORMAT_DISPLAYNAME,
+	FSRADAR_NAMEFORMAT_USERNAME,
+	FSRADAR_NAMEFORMAT_DISPLAYNAME_USERNAME,
+	FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME
+} ERadarNameFormat;
 
 
 class FSRadar 
@@ -51,14 +56,14 @@ class FSRadar
 friend class LLSingleton<FSRadar>;
 
 public:
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	LLAvatarList* getNearbyList() { return mNearbyList; }
-// [/RLVa:KB]
+	typedef boost::unordered_map<const LLUUID, FSRadarEntry*, FSUUIDHash> entry_map_t;
+	entry_map_t getRadarList() { return mEntryList; }
 
 	void startTracking(const LLUUID& avatar_id);
 	void zoomAvatar(const LLUUID& avatar_id, const std::string& name);
 	void teleportToAvatar(const LLUUID& targetAv);
 	void requestRadarChannelAlertSync();
+	void updateNames();
 
 	static void	onRadarNameFmtClicked(const LLSD& userdata);
 	static bool	radarNameFmtCheck(const LLSD& userdata);
@@ -66,6 +71,7 @@ public:
 	static bool	radarReportToCheck(const LLSD& userdata);
 
 	void getCurrentData(std::vector<LLSD>& entries, LLSD& stats) const { entries = mRadarEntriesData; stats = mAvatarStats; }
+	FSRadarEntry* getEntry(const LLUUID& avatar_id);
 
 	// internals
 	class Updater
@@ -106,8 +112,6 @@ private:
 	std::string				getRadarName(const LLAvatarName& avName);
 	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& postMsg);
 
-	LLAvatarList*			mNearbyList;
-
 	Updater*				mRadarListUpdater;
 	
 	struct radarFields 
@@ -120,8 +124,9 @@ private:
 		S32			lastStatus;
 		U32			ZOffset;
 		time_t		lastZOffsetTime;
-		
 	};
+
+	entry_map_t				mEntryList;
 
 	std::multimap < LLUUID, radarFields > lastRadarSweep;
 	std::vector <LLUUID>	mRadarEnterAlerts;

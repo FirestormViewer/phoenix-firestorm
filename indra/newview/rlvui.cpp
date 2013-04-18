@@ -372,9 +372,9 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
 	//	pPeoplePanel->getNearbyList()->updateAvatarNames();
 	FSRadar* pRadar = FSRadar::getInstance();
-	RLV_ASSERT( (pRadar) && (pRadar->getNearbyList()) );
-	if ( (pRadar) && (pRadar->getNearbyList()) )
-		pRadar->getNearbyList()->updateAvatarNames();
+	RLV_ASSERT( (pRadar) );
+	if ( (pRadar) )
+		pRadar->updateNames();
 	// </FS:Ansariel> [Standalone radar]
 
 	// Refresh the speaker list

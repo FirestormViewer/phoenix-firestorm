@@ -34,8 +34,6 @@
 #include <string>
 #include <boost/tokenizer.hpp> // for radar 
 #include "fsradar.h"
-#include "llavatarlist.h"
-#include "llavatarlistitem.h"
 
 #ifdef LL_STANDALONE
 #include <expat.h>
@@ -96,8 +94,6 @@ void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 	FSRadar* radar = FSRadar::getInstance();
 	if (radar)
 	{
-		LLAvatarList* nearbyList = radar->getNearbyList();
-		
 		std::string strContent = content.asString();
 		//llinfos << "Got info: " << strContent << llendl;	
 		// AO: parse content into pairs of [agent UUID,agent zHeight] , update our peoplepanel radar for each one
@@ -113,10 +109,10 @@ void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 			targetAv = LLUUID(*(tok_iter++));
 			targetZ = (F32)::atof((*tok_iter).c_str());
 			
-			LLAvatarListItem* avListItem = nearbyList->getAvatarListItem(targetAv);
-			if (avListItem != NULL)
+			FSRadarEntry* entry = radar->getEntry(targetAv);
+			if (entry)
 			{
-				avListItem->setZOffset((F32)(targetZ));
+				entry->setZOffset((F32)(targetZ));
 				//llinfos << targetAv << " ::: " << targetZ << llendl;
 			}
 		}

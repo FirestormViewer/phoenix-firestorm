@@ -31,6 +31,7 @@
 // libs
 #include <boost/algorithm/string.hpp>
 #include "llavatarnamecache.h"
+#include "llcommonutils.h"
 #include "llnotificationsutil.h"
 #include "lleventtimer.h"
 
@@ -41,8 +42,8 @@
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llavatarconstants.h"		// for range constants
-#include "llavatarlist.h"
 #include "llgroupactions.h"
+#include "llmutelist.h"
 #include "llnotificationmanager.h"
 #include "lltracker.h"
 #include "llviewercontrol.h"		// for gSavedSettings
@@ -91,25 +92,23 @@ public:
 //=============================================================================
 
 FSRadar::FSRadar() :
-		mNearbyList(NULL),
 		mRadarAlertRequest(false),
 		mRadarFrameCount(0),
 		mRadarLastBulkOffsetRequestTime(0),
 		mRadarLastRequestTime(0.f)
 {
-	// TODO: Ewwww ugly! Need to get rid of LLAvatarList -Ansariel
-	mNearbyList = new LLAvatarList(LLAvatarList::Params::Params());
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	mNearbyList->setRlvCheckShowNames(true);
-// [/RLVa:KB]
-
 	mRadarListUpdater = new FSRadarListUpdater(boost::bind(&FSRadar::updateRadarList, this));
 }
 
 FSRadar::~FSRadar()
 {
 	delete mRadarListUpdater;
-	delete mNearbyList;
+
+	entry_map_t::iterator em_it_end = mEntryList.end();
+	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
+	{
+		delete em_it->second;
+	}
 }
 
 void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& postMsg)
@@ -147,12 +146,6 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 
 void FSRadar::updateRadarList()
 {
-	//AO : Warning, reworked heavily for Firestorm.
-	if (!mNearbyList)
-	{
-		return;
-	}
-
 	//Configuration
 	LLWorld* world = LLWorld::getInstance();
 	LLMuteList* mutelist = LLMuteList::getInstance();
@@ -211,9 +204,38 @@ void FSRadar::updateRadarList()
 	{
 		world->getAvatars(&avatar_ids, &positions);
 	}
-	mNearbyList->getIDs() = avatar_ids; // copy constructor, refreshing underlying mNearbyList
-	mNearbyList->setDirty(true, true); // AO: These optional arguements force updating even when we're not a visible window.
-	mNearbyList->getItems(items);
+
+	// Determine lists of new added and removed avatars
+	uuid_vec_t current_vec, added_vec, removed_vec;
+	uuid_vec_t::iterator vec_it_end;
+	entry_map_t::iterator em_it_end = mEntryList.end();
+	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
+	{
+		current_vec.push_back(em_it->first);
+	}
+	LLCommonUtils::computeDifference(avatar_ids, current_vec, added_vec, removed_vec);
+
+	// Remove old avatars from our list
+	vec_it_end = removed_vec.end();
+	for (uuid_vec_t::iterator it = removed_vec.begin(); it != vec_it_end; ++it)
+	{
+		LLUUID avid = *it;
+		entry_map_t::iterator found = mEntryList.find(avid);
+		if (found != mEntryList.end())
+		{
+			delete found->second;
+			mEntryList.erase(found);
+		}
+	}
+
+	// Add new avatars
+	vec_it_end = added_vec.end();
+	for (uuid_vec_t::iterator it = added_vec.begin(); it != vec_it_end; ++it)
+	{
+		LLUUID avid = *it;
+		mEntryList[avid] = new FSRadarEntry(avid);
+	}
+
 	LLLocalSpeakerMgr::getInstance()->update(TRUE);
 	
 	//STEP 2: Transform detected model list data into more flexible multimap data structure;
@@ -233,14 +255,14 @@ void FSRadar::updateRadarList()
 		//
 		
 		LLUUID avId          = static_cast<LLUUID>(*item_it);
-		LLAvatarListItem* av = mNearbyList->getAvatarListItem(avId);
 		LLVector3d avPos     = static_cast<LLVector3d>(*pos_it);
 		S32 seentime		 = 0;
 		LLUUID avRegion;
 		
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
+		FSRadarEntry* ent = getEntry(avId);
 		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
-		if (!reg || !av) // don't update this radar listing if data is inaccessible
+		if (!reg || !ent) // don't update this radar listing if data is inaccessible
 		{
 			continue;
 		}
@@ -272,24 +294,23 @@ void FSRadar::updateRadarList()
 		}
 		else
 		{
-			seentime = (S32)difftime(now, av->getFirstSeen());
+			seentime = (S32)difftime(now, ent->mFirstSeen);
 		}
-		//av->setFirstSeen(now - (time_t)seentime); // maintain compatibility with underlying list, deprecated
 		S32 hours = (S32)(seentime / 3600);
 		S32 mins = (S32)((seentime - hours * 3600) / 60);
 		S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
 		std::string avSeenStr = llformat("%d:%02d:%02d", hours, mins, secs);
-		S32 avStatusFlags     = av->getAvStatus();
+		S32 avStatusFlags     = ent->mStatus;
 		std::string avFlagStr = "";
 		if (avStatusFlags & AVATAR_IDENTIFIED)
 		{
 			avFlagStr += "$";
 		}
-		std::string avAgeStr = av->getAvatarAge();
+		S32 avAge = ent->mAge;
 		std::string avName   = getRadarName(avId);
-		av->setAvatarName(avName); // maintain compatibility with underlying list; used in other locations!
-		U32 lastZOffsetTime  = av->getLastZOffsetTime();
-		F32 avZOffset        = av->getZOffset();
+		ent->mName = avName;
+		U32 lastZOffsetTime  = ent->mLastZOffsetTime;
+		F32 avZOffset = ent->mZOffset;
 		if (avPos[VZ] == AVATAR_UNKNOWN_Z_OFFSET) // if our official z position is AVATAR_UNKNOWN_Z_OFFSET, we need a correction.
 		{
 			// set correction if we have it
@@ -302,12 +323,12 @@ void FSRadar::updateRadarList()
 			if (sUseLSLBridge && (now > (mRadarLastBulkOffsetRequestTime + FSRADAR_COARSE_OFFSET_INTERVAL)) && (now > lastZOffsetTime + FSRADAR_COARSE_OFFSET_INTERVAL))
 			{
 				mRadarOffsetRequests.push_back(avId);
-				av->setLastZOffsetTime(now);
+				ent->mLastZOffsetTime = now;
 			}
 		}	
 		F32 avRange = (avPos[VZ] != AVATAR_UNKNOWN_Z_OFFSET ? dist_vec(avPos, posSelf) : AVATAR_UNKNOWN_RANGE);
-		av->setRange(avRange); // maintain compatibility with underlying list; used in other locations!
-		av->setPosition(avPos); // maintain compatibility with underlying list; used in other locations!
+		ent->mRange = avRange;
+		ent->mGlobalPos = avPos;
 		
 		//
 		//2b. Process newly detected avatars
@@ -420,7 +441,7 @@ void FSRadar::updateRadarList()
 						}
 						else
 						{
-							LLAvatarNameCache::get(avId,boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
+							LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
 						}
 					}
 					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
@@ -523,7 +544,7 @@ void FSRadar::updateRadarList()
 		entry["name"] = avName;
 		entry["in_region"] = (regionSelf == avRegion);
 		entry["flags"] = avFlagStr;
-		entry["age"] = avAgeStr;
+		entry["age"] = avAge;
 		entry["seen"] = avSeenStr;
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
 
@@ -667,7 +688,7 @@ void FSRadar::updateRadarList()
 	for (std::multimap<LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
 	{
 		LLUUID prevId = i->first;
-		if (!mNearbyList->contains(prevId))
+		if (mEntryList.find(prevId) == mEntryList.end())
 		{
 			radarFields rf = i->second;
 			if (RadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
@@ -766,22 +787,23 @@ void FSRadar::updateRadarList()
 	//
 	
 	lastRadarSweep.clear();
-	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	em_it_end = mEntryList.end();
+	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
 	{
-		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
+		FSRadarEntry* ent = em_it->second;
 		radarFields rf;
-		rf.avName = av->getAvatarName();
-		rf.lastDistance = av->getRange();
-		rf.firstSeen = av->getFirstSeen();
-		rf.lastStatus = av->getAvStatus();
-		rf.ZOffset = av->getZOffset();
-		rf.lastGlobalPos = av->getPosition();
+		rf.avName = ent->mName;
+		rf.lastDistance = ent->mRange;
+		rf.firstSeen = ent->mFirstSeen;
+		rf.lastStatus = ent->mStatus;
+		rf.ZOffset = ent->mZOffset;
+		rf.lastGlobalPos = ent->mGlobalPos;
 		// Ansariel: This seems to be wrong and isn't needed anywhere
 		//if ((rf.ZOffset > 0) && (rf.lastGlobalPos[VZ] < 1024)) // if our position may need an offset correction, see if we have one to apply
 		//{
 		//	rf.lastGlobalPos[VZ] = rf.lastGlobalPos[VZ] + (1024 * rf.ZOffset);
 		//}
-		//rf.lastZOffsetTime = av->getLastZOffsetTime();
+		//rf.lastZOffsetTime = ent->mLastZOffsetTime;
 		if (rf.lastGlobalPos != LLVector3d(0.0f, 0.0f, 0.0f))
 		{
 			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(rf.lastGlobalPos);
@@ -795,7 +817,7 @@ void FSRadar::updateRadarList()
 			rf.lastRegion = LLUUID(0);
 		}
 		
-		lastRadarSweep.insert(std::pair<LLUUID, radarFields>(av->getAvatarId(), rf));
+		lastRadarSweep.insert(std::pair<LLUUID, radarFields>(ent->mID, rf));
 	}
 
 	//
@@ -825,28 +847,33 @@ void FSRadar::requestRadarChannelAlertSync()
 	}
 }
 
+FSRadarEntry* FSRadar::getEntry(const LLUUID& avatar_id)
+{
+	entry_map_t::iterator found = mEntryList.find(avatar_id);
+	if (found == mEntryList.end())
+	{
+		return NULL;
+	}
+	return found->second;
+}
+
 void FSRadar::teleportToAvatar(const LLUUID& targetAv)
 // Teleports user to last scanned location of nearby avatar
 // Note: currently teleportViaLocation is disrupted by enforced landing points set on a parcel.
 {
-	std::vector<LLPanel*> items;
-	mNearbyList->getItems(items);
-	for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	FSRadarEntry* entry = getEntry(targetAv);
+	if (entry)
 	{
-		LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
-		if (av->getAvatarId() == targetAv)
+		LLVector3d avpos = entry->mGlobalPos;
+		if (avpos.mdV[VZ] == AVATAR_UNKNOWN_Z_OFFSET)
 		{
-			LLVector3d avpos = av->getPosition();
-			if (avpos.mdV[VZ] == AVATAR_UNKNOWN_Z_OFFSET)
-			{
-				LLNotificationsUtil::add("TeleportToAvatarNotPossible");
-			}
-			else
-			{
-				gAgent.teleportViaLocation(avpos);
-			}
-			return;
+			LLNotificationsUtil::add("TeleportToAvatarNotPossible");
 		}
+		else
+		{
+			gAgent.teleportViaLocation(avpos);
+		}
+		return;
 	}
 }
 
@@ -1033,21 +1060,27 @@ void FSRadar::updateTracking()
 
 void FSRadar::zoomAvatar(const LLUUID& avatar_id, const std::string& name)
 {
-	LLAvatarListItem* avl_item = mNearbyList->getAvatarListItem(avatar_id);
-
-	if (!avl_item)
+	FSRadarEntry* entry = getEntry(avatar_id);
+	if (entry)
 	{
-		return;
+		if (entry->mRange <= gSavedSettings.getF32("RenderFarClip"))
+		{
+			handle_zoom_to_object(avatar_id, entry->mGlobalPos);
+		}
+		else
+		{
+			LLStringUtil::format_map_t args;
+			args["AVATARNAME"] = name.c_str();
+			reportToNearbyChat(LLTrans::getString("camera_no_focus", args));
+		}
 	}
+}
 
-	if (avl_item->getRange() <= gSavedSettings.getF32("RenderFarClip"))
+void FSRadar::updateNames()
+{
+	const entry_map_t::iterator it_end = mEntryList.end();
+	for (entry_map_t::iterator it = mEntryList.begin(); it != it_end; ++it)
 	{
-		handle_zoom_to_object(avatar_id, avl_item->getPosition());
-	}
-	else
-	{
-		LLStringUtil::format_map_t args;
-		args["AVATARNAME"] = name.c_str();
-		reportToNearbyChat(LLTrans::getString("camera_no_focus", args));
+		it->second->updateName();
 	}
 }
