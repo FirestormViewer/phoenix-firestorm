@@ -42,8 +42,8 @@ public:
     /*virtual*/ void onOpen(const LLSD& key);
     /*virtual*/ BOOL postBuild();
 
-	std::string TypeToString(S32 type);
-	void BuildBlacklist();
+	std::string getTypeString(S32 type);
+	void buildBlacklist();
 	void addElementToList(const LLUUID& id, const LLSD& data);
 	void removeElementFromList(const LLUUID& id);
 

@@ -34,9 +34,9 @@
 #include "llsingleton.h"
 #include "llassettype.h"
 
-typedef boost::unordered_set<LLUUID, FSUUIDHash> t_blacklisted_uuid_container;
-typedef std::map<LLAssetType::EType, t_blacklisted_uuid_container> t_blacklist_type_map;
-typedef boost::unordered_map<LLUUID, LLSD, FSUUIDHash> t_blacklist_data;
+typedef boost::unordered_set<LLUUID, FSUUIDHash> blacklisted_uuid_container_t;
+typedef std::map<LLAssetType::EType, blacklisted_uuid_container_t> blacklist_type_map_t;
+typedef boost::unordered_map<LLUUID, LLSD, FSUUIDHash> blacklist_data_t;
 
 class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
 {
@@ -47,7 +47,7 @@ public:
 	void addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save = true);
 	void removeItemFromBlacklist(const LLUUID& id);
 
-	t_blacklist_data getBlacklistData() const { return mBlacklistData; };
+	blacklist_data_t getBlacklistData() const { return mBlacklistData; };
 
 private:
 	void loadBlacklist();
@@ -55,8 +55,8 @@ private:
 	bool addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type);
 	
 	std::string				mBlacklistFileName;
-	t_blacklist_type_map	mBlacklistTypeContainer;
-	t_blacklist_data		mBlacklistData;
+	blacklist_type_map_t	mBlacklistTypeContainer;
+	blacklist_data_t		mBlacklistData;
 };
 
 #endif // FS_WSASSETBLACKLIST_H

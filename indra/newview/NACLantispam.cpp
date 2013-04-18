@@ -90,7 +90,7 @@ U32 NACLAntiSpamQueue::getAmount()
 
 void NACLAntiSpamQueue::clearEntries()
 {
-	for (t_spam_queue_entry_map::iterator it = mEntries.begin(); it != mEntries.end(); ++it)
+	for (spam_queue_entry_map_t::iterator it = mEntries.begin(); it != mEntries.end(); ++it)
 	{
 		//AO: Only clear entries that are not blocked.
 		if (!it->second->getBlocked())
@@ -102,7 +102,7 @@ void NACLAntiSpamQueue::clearEntries()
 
 void NACLAntiSpamQueue::purgeEntries()
 {
-	for (t_spam_queue_entry_map::iterator it = mEntries.begin(); it != mEntries.end(); ++it)
+	for (spam_queue_entry_map_t::iterator it = mEntries.begin(); it != mEntries.end(); ++it)
 	{
 		delete it->second;
 	}
@@ -111,7 +111,7 @@ void NACLAntiSpamQueue::purgeEntries()
 
 void NACLAntiSpamQueue::blockEntry(const LLUUID& source)
 {
-	t_spam_queue_entry_map::iterator it = mEntries.find(source);
+	spam_queue_entry_map_t::iterator it = mEntries.find(source);
 	if (it == mEntries.end())
 	{
 		mEntries[source] = new NACLAntiSpamQueueEntry();
@@ -123,7 +123,7 @@ void NACLAntiSpamQueue::blockEntry(const LLUUID& source)
 S32 NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multiplier)
 // Returns 0 if unblocked, 1 if check results in a new block, 2 if by an existing block
 {
-	t_spam_queue_entry_map::iterator it = mEntries.find(name);
+	spam_queue_entry_map_t::iterator it = mEntries.find(name);
 	if (it != mEntries.end())
 	{
 		if (it->second->getBlocked())
@@ -314,7 +314,7 @@ void NACLAntiSpamRegistry::blockOnQueue(EAntispamQueue queue, const LLUUID& sour
 
 void NACLAntiSpamRegistry::blockGlobalEntry(const LLUUID& source)
 {
-	t_spam_queue_entry_map::iterator it = mGlobalEntries.find(source);
+	spam_queue_entry_map_t::iterator it = mGlobalEntries.find(source);
 	if (it == mGlobalEntries.end())
 	{
 		mGlobalEntries[source] = new NACLAntiSpamQueueEntry();
@@ -442,7 +442,7 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 
 S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
 {
-	t_spam_queue_entry_map::iterator it = mGlobalEntries.find(source);
+	spam_queue_entry_map_t::iterator it = mGlobalEntries.find(source);
 	if (it != mGlobalEntries.end())
 	{
 		if (it->second->getBlocked())
@@ -485,7 +485,7 @@ S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
 
 void NACLAntiSpamRegistry::clearGlobalEntries()
 {
-	for (t_spam_queue_entry_map::iterator it = mGlobalEntries.begin(); it != mGlobalEntries.end(); ++it)
+	for (spam_queue_entry_map_t::iterator it = mGlobalEntries.begin(); it != mGlobalEntries.end(); ++it)
 	{
 		it->second->clearEntry();
 	}
@@ -493,7 +493,7 @@ void NACLAntiSpamRegistry::clearGlobalEntries()
 
 void NACLAntiSpamRegistry::purgeGlobalEntries()
 {
-	for (t_spam_queue_entry_map::iterator it = mGlobalEntries.begin(); it != mGlobalEntries.end(); ++it)
+	for (spam_queue_entry_map_t::iterator it = mGlobalEntries.begin(); it != mGlobalEntries.end(); ++it)
 	{
 		delete it->second;
 	}

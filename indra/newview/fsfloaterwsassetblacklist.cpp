@@ -30,7 +30,6 @@
 #include "fsfloaterwsassetblacklist.h"
 
 #include "fswsassetblacklist.h"
-#include "llfloater.h"
 #include "llscrolllistctrl.h"
 #include "llviewercontrol.h"
 
@@ -49,7 +48,7 @@ FSFloaterWSAssetBlacklist::~FSFloaterWSAssetBlacklist()
 	}
 }
 
-std::string FSFloaterWSAssetBlacklist::TypeToString(S32 type)
+std::string FSFloaterWSAssetBlacklist::getTypeString(S32 type)
 {
 	switch (type)
 	{
@@ -68,11 +67,11 @@ std::string FSFloaterWSAssetBlacklist::TypeToString(S32 type)
 	}
 }
 
-void FSFloaterWSAssetBlacklist::BuildBlacklist()
+void FSFloaterWSAssetBlacklist::buildBlacklist()
 {
-	t_blacklist_data data = FSWSAssetBlacklist::instance().getBlacklistData();
+	blacklist_data_t data = FSWSAssetBlacklist::instance().getBlacklistData();
 	
-	for (t_blacklist_data::const_iterator iterator = data.begin(); iterator != data.end(); ++iterator)
+	for (blacklist_data_t::const_iterator iterator = data.begin(); iterator != data.end(); ++iterator)
 	{
 		addElementToList(iterator->first, iterator->second);
 	}
@@ -90,7 +89,7 @@ void FSFloaterWSAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& d
 	element["columns"][1]["value"] = !data["asset_region"].asString().empty() ? data["asset_region"].asString() : getString("unknown_region");
 	element["columns"][2]["column"] = "type";
 	element["columns"][2]["type"] = "text";
-	element["columns"][2]["value"] = TypeToString(data["asset_type"].asInteger());
+	element["columns"][2]["value"] = getTypeString(data["asset_type"].asInteger());
 	element["columns"][3]["column"] = "date";
 	element["columns"][3]["type"] = "text";
 	element["columns"][3]["value"] = data["asset_date"].asString();
@@ -107,7 +106,7 @@ void FSFloaterWSAssetBlacklist::removeElementFromList(const LLUUID& id)
 void FSFloaterWSAssetBlacklist::onOpen(const LLSD& key)
 {	
 	mResultList->clearRows();
-	BuildBlacklist();
+	buildBlacklist();
 }
 
 BOOL FSFloaterWSAssetBlacklist::postBuild()

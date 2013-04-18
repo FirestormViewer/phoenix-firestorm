@@ -42,8 +42,8 @@ private:
 	bool	mBlocked;
 };
 
-typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDHash> t_spam_queue_entry_map;
-typedef boost::unordered_set<LLUUID, FSUUIDHash> t_collision_sound_set;
+typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDHash> spam_queue_entry_map_t;
+typedef boost::unordered_set<LLUUID, FSUUIDHash> collision_sound_set_t;
 
 class NACLAntiSpamQueue
 {
@@ -67,7 +67,7 @@ protected:
 	void purgeEntries();
 
 private:
-	t_spam_queue_entry_map	mEntries;
+	spam_queue_entry_map_t	mEntries;
 	U32						mQueueAmount;
 	U32						mQueueTime;
 };
@@ -108,10 +108,10 @@ private:
 	void purgeGlobalEntries();
 
 	NACLAntiSpamQueue*		mQueues[ANTISPAM_QUEUE_MAX];
-	t_spam_queue_entry_map	mGlobalEntries;
+	spam_queue_entry_map_t	mGlobalEntries;
 	U32						mGlobalTime;
 	U32						mGlobalAmount;
 	bool					mGlobalQueue;
-	t_collision_sound_set	mCollisionSounds;
+	collision_sound_set_t	mCollisionSounds;
 };
 #endif // NACL_ANTISPAM_H

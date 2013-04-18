@@ -71,7 +71,7 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 		return false;
 	}
 
-	t_blacklist_type_map::iterator it;
+	blacklist_type_map_t::iterator it;
 	it = mBlacklistTypeContainer.find(type);	
 	
 	if (it == mBlacklistTypeContainer.end())
@@ -79,7 +79,7 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 		return false;
 	}
 
-	t_blacklisted_uuid_container uuids = it->second;
+	blacklisted_uuid_container_t uuids = it->second;
 	return (uuids.find(id) != uuids.end());
 }
 
@@ -101,7 +101,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::stri
 
 void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 {
-	t_blacklist_data::iterator it;
+	blacklist_data_t::iterator it;
 	it = mBlacklistData.find(id);
 
 	if (it == mBlacklistData.end())
@@ -144,7 +144,7 @@ bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::E
 		return false;
 	}
 
-	t_blacklist_type_map::iterator it;
+	blacklist_type_map_t::iterator it;
 	it = mBlacklistTypeContainer.find(type);
 	
 	if (it != mBlacklistTypeContainer.end())
@@ -153,7 +153,7 @@ bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::E
 	}
 	else
 	{
-		t_blacklisted_uuid_container cont;
+		blacklisted_uuid_container_t cont;
 		cont.insert(id);
 		mBlacklistTypeContainer[type] = cont;
 	}
@@ -244,7 +244,7 @@ void FSWSAssetBlacklist::saveBlacklist()
 	llofstream save_file(mBlacklistFileName);
 	LLSD savedata;
 
-	for (t_blacklist_data::const_iterator itr = mBlacklistData.begin(); itr != mBlacklistData.end(); ++itr)
+	for (blacklist_data_t::const_iterator itr = mBlacklistData.begin(); itr != mBlacklistData.end(); ++itr)
 	{
 		// <FS:CR> Apply "cheesy encryption" to obfuscate these to the user.
 		LLUUID shadow_id(itr->first);
