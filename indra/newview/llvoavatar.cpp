@@ -7821,7 +7821,8 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
 	//outfile.open(fullpath, LL_APR_WB );
-	outfile.open(file_picker.getFirstFile(), LL_APR_WB);
+	std::string fullpath = file_picker.getFirstFile();
+	outfile.open(fullpath, LL_APR_WB);
 // </FS:CR>
 
 	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
@@ -7840,7 +7841,7 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	{
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 		//llinfos << "xmlfile write handle obtained : " << fullpath << llendl;
-		LL_INFOS("DumpArchetypeXML") << "xmlfile write handle obtained : " << file_picker.getFirstFile() << LL_ENDL;
+		LL_INFOS("DumpArchetypeXML") << "xmlfile write handle obtained : " << fullpath << LL_ENDL;
 // </FS:CR>
 
 	}
@@ -7919,7 +7920,7 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	LL_INFOS("DumpArchetypeXML") << "Archetype xml written successfully!" << LL_ENDL;
 	LLSD args;
-	args["FILENAME"] = outfilename;
+	args["FILENAME"] = fullpath;
 	LLNotificationsUtil::add("DumpArchetypeSuccess", args);
 // </FS:CR>
 }
