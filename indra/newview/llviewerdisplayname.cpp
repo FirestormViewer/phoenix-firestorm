@@ -39,6 +39,8 @@
 #include "llhttpnode.h"
 #include "llnotificationsutil.h"
 #include "llui.h"					// getLanguage()
+
+#include "fsradar.h"
 #include "lggcontactsets.h"
 #include "llviewercontrol.h"
 
@@ -215,6 +217,16 @@ class LLDisplayNameUpdate : public LLHTTPNode
 		{
 			LLViewerDisplayName::sNameChangedSignal();
 		}
+		// <FS:Ansariel> Update name in radar
+		else
+		{
+			FSRadar* radar = FSRadar::getInstance();
+			if (radar)
+			{
+				radar->updateName(agent_id);
+			}
+		}
+		// </FS:Ansariel>
 	}
 };
 

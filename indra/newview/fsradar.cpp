@@ -1016,3 +1016,12 @@ void FSRadar::updateNames()
 		it->second->updateName();
 	}
 }
+
+void FSRadar::updateName(const LLUUID& avatar_id)
+{
+	FSRadarEntry* entry = getEntry(avatar_id);
+	if (entry)
+	{
+		entry->updateName();
+	}
+}

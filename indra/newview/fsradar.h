@@ -64,6 +64,7 @@ public:
 	void teleportToAvatar(const LLUUID& targetAv);
 	void requestRadarChannelAlertSync();
 	void updateNames();
+	void updateName(const LLUUID& avatar_id);
 
 	static void	onRadarNameFmtClicked(const LLSD& userdata);
 	static bool	radarNameFmtCheck(const LLSD& userdata);
