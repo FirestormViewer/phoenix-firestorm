@@ -259,8 +259,6 @@ void FSRadar::updateRadarList()
 		
 		LLUUID avId          = static_cast<LLUUID>(*item_it);
 		LLVector3d avPos     = static_cast<LLVector3d>(*pos_it);
-		S32 seentime		 = 0;
-		LLUUID avRegion;
 		
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		FSRadarEntry* ent = getEntry(avId);
@@ -282,23 +280,8 @@ void FSRadar::updateRadarList()
 			}
 		}
 
-		avRegion = reg->getRegionID();
-		if (lastRadarSweep.count(avId) > 1) // if we detect a multiple ID situation, get lastSeenTime from our cache instead
-		{
-			std::pair<std::multimap<LLUUID, radarFields>::iterator, std::multimap<LLUUID, radarFields>::iterator> dupeAvs;
-			dupeAvs = lastRadarSweep.equal_range(avId);
-			for (std::multimap<LLUUID, radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
-			{
-				if (it2->second.lastRegion == avRegion)
-				{
-					seentime = (S32)difftime(now, it2->second.firstSeen);
-				}
-			}
-		}
-		else
-		{
-			seentime = (S32)difftime(now, ent->mFirstSeen);
-		}
+		LLUUID avRegion = reg->getRegionID();
+		S32 seentime = (S32)difftime(now, ent->mFirstSeen);
 		S32 hours = (S32)(seentime / 3600);
 		S32 mins = (S32)((seentime - hours * 3600) / 60);
 		S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
@@ -392,136 +375,60 @@ void FSRadar::updateRadarList()
 		//
 		else 
 		{
-			radarFields rf; // will hold the newest version
-			// Check for range crossing alert threshholds, being careful to handle double-listings
-			if (lastRadarSweep.count(avId) == 1) // normal case, check from last position
+			radarFields rf = lastRadarSweep.find(avId)->second;
+			if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
 			{
-				rf = lastRadarSweep.find(avId)->second;
-				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
+				if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > chat_range_say || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
 				{
-					if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > chat_range_say || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
-					{
-						LLStringUtil::format_map_t args;
-						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = formatString(str_chat_entering, args);
-						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
-					}
-					else if (RadarReportChatRangeLeave && (avRange > chat_range_say || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= chat_range_say && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
-					{
-						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_chat_leaving));
-					}
+					LLStringUtil::format_map_t args;
+					args["DISTANCE"] = llformat("%3.2f", avRange);
+					std::string message = formatString(str_chat_entering, args);
+					make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 				}
-				if (RadarReportDrawRangeEnter || RadarReportDrawRangeLeave)
+				else if (RadarReportChatRangeLeave && (avRange > chat_range_say || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= chat_range_say && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
 				{
-					if (RadarReportDrawRangeEnter && (avRange <= drawRadius && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > drawRadius || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
-					{
-						LLStringUtil::format_map_t args;
-						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = formatString(str_draw_distance_entering, args);
-						make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
-					}
-					else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= drawRadius && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
-					{
-						make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
-					}
-				}
-				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave )
-				{
-					if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
-					{
-						make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
-						{
-							LLStringUtil::format_map_t args;
-							args["DISTANCE"] = llformat("%3.2f", avRange);
-							std::string message = formatString(str_region_entering_distance, args);
-							LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
-						}
-						else
-						{
-							LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
-						}
-					}
-					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
-					{
-						make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
-					}
+					make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_chat_leaving));
 				}
 			}
-			else if (lastRadarSweep.count(avId) > 1) // handle duplicates, from sim crossing oddness
+			if (RadarReportDrawRangeEnter || RadarReportDrawRangeLeave)
 			{
-				// iterate through all the duplicates found, searching for the newest.
-				rf.firstSeen=0;
-				std::pair<std::multimap<LLUUID, radarFields>::iterator, std::multimap<LLUUID, radarFields>::iterator> dupeAvs;
-				dupeAvs = lastRadarSweep.equal_range(avId);
-				for (std::multimap<LLUUID, radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
+				if (RadarReportDrawRangeEnter && (avRange <= drawRadius && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > drawRadius || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
 				{
-					if (it2->second.firstSeen > rf.firstSeen)
-					{
-						rf = it2->second;
-					}
+					LLStringUtil::format_map_t args;
+					args["DISTANCE"] = llformat("%3.2f", avRange);
+					std::string message = formatString(str_draw_distance_entering, args);
+					make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 				}
-				lldebugs << "Duplicates detected for " << avName <<" , most recent is " << rf.firstSeen << llendl;
-				
-				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
+				else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= drawRadius && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
 				{
-					if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > chat_range_say || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
+					make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
+				}
+			}
+			if (RadarReportSimRangeEnter || RadarReportSimRangeLeave )
+			{
+				if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
+				{
+					make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = formatString(str_chat_entering, args);
-						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
+						std::string message = formatString(str_region_entering_distance, args);
 						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
 					}
-					else if (RadarReportChatRangeLeave && (avRange > chat_range_say || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= chat_range_say && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
+					else
 					{
-						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_chat_leaving));
+						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
 					}
 				}
-				if (RadarReportDrawRangeEnter || RadarReportDrawRangeLeave)
+				else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
 				{
-					if (RadarReportDrawRangeEnter && (avRange <= drawRadius && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > drawRadius || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
-					{
-						LLStringUtil::format_map_t args;
-						args["DISTANCE"] = llformat("%3.2f", avRange);
-						std::string message = formatString(str_draw_distance_entering, args);
-						make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
-					}
-					else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == AVATAR_UNKNOWN_RANGE) && (rf.lastDistance <= drawRadius && rf.lastDistance > AVATAR_UNKNOWN_RANGE))
-					{
-						make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
-					}
-				}
-				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
-				{
-					if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
-					{
-						make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
-						{
-							LLStringUtil::format_map_t args;
-							args["DISTANCE"] = llformat("%3.2f", avRange);
-							std::string message = formatString(str_region_entering_distance, args);
-							LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, message));
-						}
-						else
-						{
-							LLAvatarNameCache::get(avId,boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
-						}
-					}
-					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
-					{
-						make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
-						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
-					}
+					make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
+					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
 				}
 			}
 			//If we were manually asked to update an external source for all existing avatars, add them to the queue.
