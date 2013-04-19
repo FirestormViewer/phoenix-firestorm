@@ -1790,7 +1790,10 @@ For now, just make the UI elements invisiable but still have the debug settings 
          left_delta="0"
          tool_tip="Transfer permissions"
          name="next_owner_transfer"
-         width="270"/>
+         width="270">
+			<check_box.commit_callback
+			function="Perms.Trans" />
+		</check_box>
         <text
          top_pad="5"
          left_delta="5"
