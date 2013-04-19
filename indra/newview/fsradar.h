@@ -112,7 +112,7 @@ private:
 
 	Updater*				mRadarListUpdater;
 	
-	struct radarFields 
+	struct RadarFields 
 	{
 		std::string avName;
 		F32			lastDistance;
@@ -124,13 +124,14 @@ private:
 		time_t		lastZOffsetTime;
 	};
 
+	typedef boost::unordered_map<LLUUID, RadarFields, FSUUIDHash> radarfields_map_t;
+	radarfields_map_t		mLastRadarSweep;
 	entry_map_t				mEntryList;
 
-	std::multimap < LLUUID, radarFields > lastRadarSweep;
-	std::vector <LLUUID>	mRadarEnterAlerts;
-	std::vector <LLUUID>	mRadarLeaveAlerts;
-	std::vector <LLUUID>	mRadarOffsetRequests;
-	std::vector <LLSD>		mRadarEntriesData;
+	std::vector<LLUUID>		mRadarEnterAlerts;
+	std::vector<LLUUID>		mRadarLeaveAlerts;
+	std::vector<LLUUID>		mRadarOffsetRequests;
+	std::vector<LLSD>		mRadarEntriesData;
 	 	
 	S32						mRadarFrameCount;
 	bool					mRadarAlertRequest;

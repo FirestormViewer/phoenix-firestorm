@@ -251,7 +251,7 @@ void FSRadar::updateRadarList()
 	uuid_vec_t::const_iterator
 		item_it = avatar_ids.begin(),
 		item_end = avatar_ids.end();
-	for (;pos_it != pos_end && item_it != item_end; ++pos_it, ++item_it )
+	for (;pos_it != pos_end && item_it != item_end; ++pos_it, ++item_it)
 	{
 		//
 		//2a. For each detected av, gather up all data we would want to display or use to drive alerts
@@ -314,11 +314,13 @@ void FSRadar::updateRadarList()
 		F32 avRange = (avPos[VZ] != AVATAR_UNKNOWN_Z_OFFSET ? dist_vec(avPos, posSelf) : AVATAR_UNKNOWN_RANGE);
 		ent->mRange = avRange;
 		ent->mGlobalPos = avPos;
+		ent->mRegion = avRegion;
 		
 		//
 		//2b. Process newly detected avatars
 		//
-		if (lastRadarSweep.count(avId) == 0)
+		radarfields_map_t::iterator last_sweep_found_it = mLastRadarSweep.find(avId);
+		if (last_sweep_found_it == mLastRadarSweep.end())
 		{
 			// chat alerts
 			if (RadarReportChatRangeEnter && (avRange <= chat_range_say) && avRange > AVATAR_UNKNOWN_RANGE)
@@ -375,7 +377,7 @@ void FSRadar::updateRadarList()
 		//
 		else 
 		{
-			radarFields rf = lastRadarSweep.find(avId)->second;
+			RadarFields rf = last_sweep_found_it->second;
 			if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
 			{
 				if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > AVATAR_UNKNOWN_RANGE) && (rf.lastDistance > chat_range_say || rf.lastDistance == AVATAR_UNKNOWN_RANGE))
@@ -408,7 +410,7 @@ void FSRadar::updateRadarList()
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
 				}
 			}
-			if (RadarReportSimRangeEnter || RadarReportSimRangeLeave )
+			if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
 			{
 				if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
 				{
@@ -558,9 +560,9 @@ void FSRadar::updateRadarList()
 	//
 	if (mRadarOffsetRequests.size() > 0)
 	{
-		std::string prefix = "getZOffsets|";
+		static const std::string prefix = "getZOffsets|";
 		std::string msg = "";
-		U32 updatesPerRequest=0;
+		U32 updatesPerRequest = 0;
 		while (mRadarOffsetRequests.size() > 0)
 		{
 			LLUUID avId = mRadarOffsetRequests.back();
@@ -570,7 +572,7 @@ void FSRadar::updateRadarList()
 			{
 				msg = msg.substr(0, msg.size() - 1);
 				FSLSLBridgeRequestResponder* responder = new FSLSLBridgeRequestRadarPosResponder();
-				FSLSLBridge::instance().viewerToLSL(prefix  +msg, responder);
+				FSLSLBridge::instance().viewerToLSL(prefix + msg, responder);
 				//llinfos << " OFFSET REQUEST SEGMENT"<< prefix << msg << llendl;
 				msg = "";
 				updatesPerRequest = 0;
@@ -594,12 +596,13 @@ void FSRadar::updateRadarList()
 	//    as well as dispatch all earlier detected alerts for crossing range thresholds.
 	//
 	
-	for (std::multimap<LLUUID, radarFields>::const_iterator i = lastRadarSweep.begin(); i != lastRadarSweep.end(); ++i)
+	radarfields_map_t::iterator rf_it_end = mLastRadarSweep.end();
+	for (radarfields_map_t::iterator i = mLastRadarSweep.begin(); i != rf_it_end; ++i)
 	{
 		LLUUID prevId = i->first;
 		if (mEntryList.find(prevId) == mEntryList.end())
 		{
-			radarFields rf = i->second;
+			RadarFields rf = i->second;
 			if (RadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
 			{
 				make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
@@ -695,12 +698,12 @@ void FSRadar::updateRadarList()
 	//STEP 4: Cache our current model data, so we can compare it with the next fresh group of model data for fast change detection.
 	//
 	
-	lastRadarSweep.clear();
+	mLastRadarSweep.clear();
 	em_it_end = mEntryList.end();
 	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
 	{
 		FSRadarEntry* ent = em_it->second;
-		radarFields rf;
+		RadarFields rf;
 		rf.avName = ent->mName;
 		rf.lastDistance = ent->mRange;
 		rf.firstSeen = ent->mFirstSeen;
@@ -723,17 +726,17 @@ void FSRadar::updateRadarList()
 		}
 		else
 		{
-			rf.lastRegion = LLUUID(0);
+			rf.lastRegion = LLUUID::null;
 		}
 		
-		lastRadarSweep.insert(std::pair<LLUUID, radarFields>(ent->mID, rf));
+		mLastRadarSweep[ent->mID] = rf;
 	}
 
 	//
 	//STEP 5: Final data updates and notification of subscribers
 	//
 
-	mAvatarStats["total"] = llformat("%d", lastRadarSweep.size());
+	mAvatarStats["total"] = llformat("%d", mLastRadarSweep.size());
 	mAvatarStats["region"] = llformat("%d", inSameRegion);
 	mAvatarStats["chatrange"] = llformat("%d", inChatRange);
 
