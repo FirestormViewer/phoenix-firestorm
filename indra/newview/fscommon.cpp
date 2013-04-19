@@ -215,12 +215,12 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 	gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
-	gMessageSystem->addBOOLFast(_PREHASH_Set, gSavedSettings.getBOOL("NextOwnerCopy"));
+	gMessageSystem->addBOOLFast(_PREHASH_Set, gSavedSettings.getBOOL("NextOwnerModify"));
 	gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_MODIFY);
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 	gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
-	gMessageSystem->addBOOLFast(_PREHASH_Set, gSavedSettings.getBOOL("NextOwnerModify"));
+	gMessageSystem->addBOOLFast(_PREHASH_Set, gSavedSettings.getBOOL("NextOwnerCopy"));
 	gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_COPY);
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);

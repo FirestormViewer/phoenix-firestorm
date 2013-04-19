@@ -29,6 +29,7 @@ public:
 	
 	void onCommitTexture(const LLSD& data);
 	void onCommitCopy();
+	void onCommitTrans();
 
 protected:
 	LLComboBox* m_UseLegacyClienttags;
