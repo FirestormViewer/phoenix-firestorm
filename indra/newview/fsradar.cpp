@@ -98,7 +98,7 @@ FSRadar::FSRadar() :
 {
 	mRadarListUpdater = new FSRadarListUpdater(boost::bind(&FSRadar::updateRadarList, this));
 
-	// Use the callback from LLAvatarNameCache here or we might to update the names too early!
+	// Use the callback from LLAvatarNameCache here or we might update the names too early!
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
 	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
 }
@@ -186,7 +186,6 @@ void FSRadar::updateRadarList()
 		regionSelf = reg->getRegionID();
 	}
 	bool alertScripts = mRadarAlertRequest; // save the current value, so it doesn't get changed out from under us by another thread
-	std::vector<LLPanel*> items;
 	time_t now = time(NULL);
 
 	//STEP 0: Clear model data
@@ -212,6 +211,7 @@ void FSRadar::updateRadarList()
 	uuid_vec_t current_vec, added_vec, removed_vec;
 	uuid_vec_t::iterator vec_it_end;
 	entry_map_t::iterator em_it_end = mEntryList.end();
+	current_vec.reserve(mEntryList.size());
 	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
 	{
 		current_vec.push_back(em_it->first);
