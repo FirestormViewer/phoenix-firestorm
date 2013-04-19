@@ -39,6 +39,7 @@
 #include "llfocusmgr.h"
 #include "llimview.h"
 #include "llnotifications.h"
+#include "llscriptfloater.h"
 #include "llsd.h"
 #include "llsdserialize.h"
 #include "llstartup.h"
@@ -93,6 +94,10 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 
 	// Also hook into IM notifications.
 	LLIMModel::instance().mNewMsgSignal.connect(&GrowlManager::onInstantMessage);
+	
+	// Hook into script dialogs
+	LLScriptFloaterManager::instance().addNewObjectCallback(&GrowlManager::onScriptDialog);
+
 	this->loadConfig();
 }
 
@@ -254,6 +259,44 @@ void GrowlManager::onInstantMessage(const LLSD& im)
 	}
 }
 
+//static
+void GrowlManager::onScriptDialog(const LLSD& data)
+{
+	LLNotificationPtr notification = LLNotifications::instance().find(data["notification_id"].asUUID());
+	std::string name = notification->getName();
+	LLSD payload = notification->getPayload();
+	LLSD substitutions = notification->getSubstitutions();
+
+	//LL_INFOS("GrowlLLNotification") << "Script dialog: name=" << name << " - payload=" << payload << " subs=" << substitutions << LL_ENDL;
+	if (gGrowlManager->mNotifications.find(name) != gGrowlManager->mNotifications.end())
+	{
+		GrowlNotification* growl_notification = &gGrowlManager->mNotifications[name];
+
+		std::string body = "";
+		std::string title = "";
+		if (growl_notification->useDefaultTextForTitle)
+		{
+			title = notification->getMessage();
+		}
+		else if (growl_notification->growlTitle != "")
+		{
+			title = growl_notification->growlTitle;
+			LLStringUtil::format(title, substitutions);
+		}
+
+		if (growl_notification->useDefaultTextForBody)
+		{
+			body = notification->getMessage();
+		}
+		else if (growl_notification->growlBody != "")
+		{
+			body = growl_notification->growlBody;
+			LLStringUtil::format(body, substitutions);
+		}
+
+		gGrowlManager->notify(title, body, growl_notification->growlName);
+	}
+}
 
 bool GrowlManager::shouldNotify()
 {

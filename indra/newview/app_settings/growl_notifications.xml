@@ -182,5 +182,14 @@
       <key>GrowlBody</key>
       <string>[MESSAGE]</string>
     </map>
+    <key>ScriptDialog</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Script dialog</string>
+      <key>GrowlTitle</key>
+      <string>[TITLE]</string>
+      <key>GrowlBody</key>
+      <string>[MESSAGE]</string>
+    </map>
   </map>
 </llsd>

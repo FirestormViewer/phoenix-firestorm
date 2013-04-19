@@ -72,6 +72,7 @@ private:
 	static bool onLLNotification(const LLSD& notice);
 	static bool filterOldNotifications(LLNotificationPtr pNotification);
 	static void onInstantMessage(const LLSD& im);
+	static void onScriptDialog(const LLSD& data);
 	static inline bool shouldNotify();
 };
 
