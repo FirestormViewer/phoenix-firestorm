@@ -214,7 +214,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 		}
 		//TM:FS no need to log whats sent to growl
 		//LL_INFOS("GrowlLLNotification") << "Notice: " << title << ": " << body << LL_ENDL;
-		if(name == "ObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
+		if(name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
 		{
 			LLUrlMatch urlMatch;
 			LLWString newLine = utf8str_to_wstring(body);

@@ -98,6 +98,15 @@
       <key>UseDefaultTextForBody</key>
       <boolean>true</boolean>
     </map>
+    <key>OwnObjectGiveItem</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Inventory received from object</string>
+      <key>GrowlTitle</key>
+      <string>Inventory received</string>
+      <key>UseDefaultTextForBody</key>
+      <boolean>true</boolean>
+    </map>
     <key>ObjectGiveItemUnknownUser</key>
     <map>
       <key>GrowlName</key>
