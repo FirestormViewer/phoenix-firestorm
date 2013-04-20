@@ -90,7 +90,9 @@ LLPointer<LLViewerTexture> gDisconnectedImagep = NULL;
 // used to toggle renderer back on after teleport
 const F32 TELEPORT_RENDER_DELAY = 20.f; // Max time a teleport is allowed to take before we raise the curtain
 const F32 TELEPORT_ARRIVAL_DELAY = 2.f; // Time to preload the world before raising the curtain after we've actually already arrived.
-const F32 TELEPORT_LOCAL_DELAY = 1.0f;  // Delay to prevent teleports after starting an in-sim teleport.
+// <FS:CR> FIRE-8721 - Remove local teleport delay
+//const F32 TELEPORT_LOCAL_DELAY = 1.0f;  // Delay to prevent teleports after starting an in-sim teleport.
+// </FS:CR>
 BOOL		 gTeleportDisplay = FALSE;
 LLFrameTimer gTeleportDisplayTimer;
 LLFrameTimer gTeleportArrivalTimer;
@@ -494,7 +496,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			// Short delay when teleporting in the same sim (progress screen active but not shown - did not
 			// fall-through from TELEPORT_START)
 			{
-				if( gTeleportDisplayTimer.getElapsedTimeF32() > TELEPORT_LOCAL_DELAY )
+				// <FS:CR> FIRE-8721 - Remove local teleport delay
+				//if( gTeleportDisplayTimer.getElapsedTimeF32() > TELEPORT_LOCAL_DELAY )
+				// </FS:CR>
 				{
 					//LLFirstUse::useTeleport();
 					gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
