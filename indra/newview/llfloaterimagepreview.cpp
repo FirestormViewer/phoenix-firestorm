@@ -834,11 +834,11 @@ void LLImagePreviewSculpted::setPreviewTarget(LLImageRaw* imagep, F32 distance)
 	LLStrider<LLVector2> tc;
 	tc = (LLVector2*) vf.mTexCoords; tc.setStride(8);
 
-	// <FS:ND> protect against buffer overflows
+	#ifdef OPENSIM // <FS:ND> protect against buffer overflows
 	pos.setCount( vf.mNumVertices );
 	norm.setCount( vf.mNumVertices );
 	tc.setCount( vf.mNumVertices );
-	// </FS:ND>
+	#endif // </FS:ND>
 
 	for (U32 i = 0; i < num_vertices; i++)
 	{
