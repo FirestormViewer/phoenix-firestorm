@@ -30,7 +30,6 @@
 
 #include <boost/algorithm/string.hpp>
 #include "fsradar.h"
-#include "llavatarnamecache.h"
 #include "rlvhandler.h"
 
 using namespace boost;
@@ -47,7 +46,8 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mStatus(0),
 	mZOffset(0.f),
 	mLastZOffsetTime(time(NULL)),
-	mAge(-1)
+	mAge(-1),
+	mAvatarNameCallbackConnection()
 {
 	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
 	//This means updates to these properties won't typically be seen while target is in nearby range.
@@ -64,11 +64,19 @@ FSRadarEntry::~FSRadarEntry()
 	{
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(mID, this); // may try to remove null observer
 	}
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
 }
 
 void FSRadarEntry::updateName()
 {
-	LLAvatarNameCache::get(mID, boost::bind(&FSRadarEntry::onAvatarNameCache, this, _2));
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
+	mAvatarNameCallbackConnection = LLAvatarNameCache::get(mID, boost::bind(&FSRadarEntry::onAvatarNameCache, this, _2));
 }
 
 void FSRadarEntry::onAvatarNameCache(const LLAvatarName& av_name)

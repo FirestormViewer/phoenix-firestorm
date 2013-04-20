@@ -27,6 +27,7 @@
 #ifndef FS_RADARENTRY_H
 #define FS_RADARENTRY_H
 
+#include "llavatarnamecache.h"
 #include "llavatarpropertiesprocessor.h"
 
 class LLAvatarName;
@@ -74,6 +75,7 @@ private:
 	F32			mZOffset;
 	time_t		mLastZOffsetTime;
 
+	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 };
 
 #endif // FS_RADARENTRY_H
