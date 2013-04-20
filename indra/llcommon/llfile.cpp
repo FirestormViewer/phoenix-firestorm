@@ -853,7 +853,12 @@ llifstream::llifstream(const std::string& _Filename,
 #if LL_WINDOWS
 	std::istream(&_M_filebuf)
 {
-	if (_M_filebuf.open(_Filename.c_str(), _Mode | ios_base::in) == 0)
+	// <FS:ND> Need to convert to UTF16 for Win, Windows API does not use UTF8
+
+	// if (_M_filebuf.open(_Filename.c_str(), _Mode | ios_base::in) == 0)
+	llutf16string wideName = utf8str_to_utf16str( _Filename );
+	if (_M_filebuf.open(wideName.c_str(), _Mode | ios_base::in) == 0)
+	// </FS:ND>
 	{
 		_Myios::setstate(ios_base::failbit);
 	}
@@ -872,7 +877,12 @@ llifstream::llifstream(const char* _Filename,
 #if LL_WINDOWS
 	std::istream(&_M_filebuf)
 {
-	if (_M_filebuf.open(_Filename, _Mode | ios_base::in) == 0)
+	// <FS:ND> Need to convert to UTF16 for Win, Windows API does not use UTF8
+
+	// if (_M_filebuf.open(_Filename, _Mode | ios_base::in) == 0)
+	llutf16string wideName = utf8str_to_utf16str( _Filename );
+	if (_M_filebuf.open(wideName.c_str(), _Mode | ios_base::in) == 0)
+	// </FS:ND>
 	{
 		_Myios::setstate(ios_base::failbit);
 	}
@@ -917,8 +927,14 @@ bool llifstream::is_open() const
 
 void llifstream::open(const char* _Filename, ios_base::openmode _Mode)
 {	// open a C stream with specified mode
-	if (_M_filebuf.open(_Filename, _Mode | ios_base::in) == 0)
+
+	// <FS:ND> Need to convert to UTF16 for Win, Windows API does not use UTF8
+	// if (_M_filebuf.open(_Filename, _Mode | ios_base::in) == 0)
+    // </FS:ND>
+
 #if LL_WINDOWS
+	llutf16string wideName = utf8str_to_utf16str( _Filename );
+	if (_M_filebuf.open( wideName.c_str(), _Mode | ios_base::in) == 0)
 	{
 		_Myios::setstate(ios_base::failbit);
 	}
@@ -927,6 +943,7 @@ void llifstream::open(const char* _Filename, ios_base::openmode _Mode)
 		_Myios::clear();
 	}
 #else
+	if (_M_filebuf.open(_Filename, _Mode | ios_base::in) == 0)
 	{
 		this->setstate(ios_base::failbit);
 	}
@@ -969,7 +986,12 @@ llofstream::llofstream(const std::string& _Filename,
 #if LL_WINDOWS
 	std::ostream(&_M_filebuf)
 {
-	if (_M_filebuf.open(_Filename.c_str(), _Mode | ios_base::out) == 0)
+	// <FS:ND> Need to convert to UTF16 for Win, Windows API does not use UTF8
+
+	// if (_M_filebuf.open(_Filename.c_str(), _Mode | ios_base::out) == 0)
+	llutf16string wideName = utf8str_to_utf16str( _Filename );
+	if (_M_filebuf.open( wideName.c_str(), _Mode | ios_base::out) == 0)
+	// <FS:ND>
 	{
 		_Myios::setstate(ios_base::failbit);
 	}
@@ -988,7 +1010,12 @@ llofstream::llofstream(const char* _Filename,
 #if LL_WINDOWS
 	std::ostream(&_M_filebuf)
 {
-	if (_M_filebuf.open(_Filename, _Mode | ios_base::out) == 0)
+	// <FS:ND> Need to convert to UTF16 for Win, Windows API does not use UTF8
+
+	// if (_M_filebuf.open(_Filename, _Mode | ios_base::out) == 0)
+	llutf16string wideName = utf8str_to_utf16str( _Filename );
+	if (_M_filebuf.open( wideName.c_str(), _Mode | ios_base::out) == 0)
+	// </FS:ND>
 	{
 		_Myios::setstate(ios_base::failbit);
 	}
@@ -1032,8 +1059,14 @@ bool llofstream::is_open() const
 
 void llofstream::open(const char* _Filename, ios_base::openmode _Mode)
 {	// open a C stream with specified mode
-	if (_M_filebuf.open(_Filename, _Mode | ios_base::out) == 0)
+
+	// <FS:ND> Need to convert to UTF16 for Win, Windows API does not use UTF8
+	// if (_M_filebuf.open(_Filename, _Mode | ios_base::out) == 0)
+	// </FS:ND>
+	
 #if LL_WINDOWS
+	llutf16string wideName = utf8str_to_utf16str( _Filename );
+	if (_M_filebuf.open( wideName.c_str(), _Mode | ios_base::out) == 0)
 	{
 		_Myios::setstate(ios_base::failbit);
 	}
@@ -1042,6 +1075,7 @@ void llofstream::open(const char* _Filename, ios_base::openmode _Mode)
 		_Myios::clear();
 	}
 #else
+	if (_M_filebuf.open(_Filename, _Mode | ios_base::out) == 0)
 	{
 		this->setstate(ios_base::failbit);
 	}
