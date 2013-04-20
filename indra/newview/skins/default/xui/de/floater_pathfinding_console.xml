@@ -105,10 +105,10 @@
 			<check_box label="Mit Röntgenblick" name="show_xray"/>
 		</panel>
 		<panel label="Pfad testen" name="test_panel">
-			<text name="ctrl_click_label">
+			<text name="ctrl_click_label" height="28">
 				Bei gedrückter Strg-Taste klicken, um Anfangspunkt auszuwählen.
 			</text>
-			<text name="shift_click_label">
+			<text name="shift_click_label" height="28">
 				Bei gedrückter Umschalttaste klicken, um Endpunkt auszuwählen.
 			</text>
 			<text name="character_width_label">
