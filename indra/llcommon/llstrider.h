@@ -37,12 +37,35 @@ template <class Object> class LLStrider
 	};
 	U32     mSkip;
 public:
-
-	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); mBufferEnd = 0; } 
 	~LLStrider() { } 
 
-	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; mBufferEnd = 0; return *this;}
 	void setStride (S32 skipBytes)	{ mSkip = (skipBytes ? skipBytes : sizeof(Object));}
+
+    void skip(const U32 index)     { mBytep += mSkip*index;}
+    U32 getSkip() const            { return mSkip; }
+
+#ifndef OPENSIM // <FS:ND> protect against buffer overflows, but only for non HAvok builds. Otherwise changing the object size plays really foul when used in the binary Havok blob
+	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); } 
+	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; return *this;}
+
+	LLStrider<Object> operator+(const S32& index) 
+	{
+		LLStrider<Object> ret;
+		ret.mBytep = mBytep + mSkip*index;
+		ret.mSkip = mSkip;
+		return ret;
+	}
+
+	Object* get()                  { return mObjectp; }
+    Object* operator->()           { return mObjectp; }
+    Object& operator *()           { return *mObjectp; }
+    Object* operator ++(int)       { Object* old = mObjectp; mBytep += mSkip; return old; }
+    Object* operator +=(int i)     { mBytep += mSkip*i; return mObjectp; }
+
+    Object& operator[](U32 index)  { return *(Object*)(mBytep + (mSkip * index)); }
+#else
+	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); mBufferEnd = 0; } 
+	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; mBufferEnd = 0; return *this;}
 
 	LLStrider<Object> operator+(const S32& index) 
 	{
@@ -53,19 +76,6 @@ public:
 
 		return ret;
 	}
-
-    void skip(const U32 index)     { mBytep += mSkip*index;}
-    U32 getSkip() const            { return mSkip; }
-
-	// <FS:ND> protect against buffer overflows
-
-    // Object* get()                  { return mObjectp; }
-    // Object* operator->()           { return mObjectp; }
-    // Object& operator *()           { return *mObjectp; }
-    // Object* operator ++(int)       { Object* old = mObjectp; mBytep += mSkip; return old; }
-    // Object* operator +=(int i)     { mBytep += mSkip*i; return mObjectp; }
-
-    // Object& operator[](U32 index)  { return *(Object*)(mBytep + (mSkip * index)); }
 
 	Object* get()
 	{
@@ -144,7 +154,7 @@ private:
 #endif
 
 	Object mDummy;
-	// <FS:ND>
+#endif
 };
 
 #endif // LL_LLSTRIDER_H
