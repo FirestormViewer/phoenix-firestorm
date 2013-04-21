@@ -312,18 +312,6 @@ void LLFolderViewItem::refreshFromListener()
 void LLFolderViewItem::refresh()
 {
 	std::string oldLabel = mLabel;
-	std::string oldSearchable;
-	bool bFilter(false);
-
-	if( getRoot() && getRoot()->getFilter() && getRoot()->getFilter()->getFilterText().size() )
-	{
-		LLViewerInventoryItem *pItem( getInventoryItem() );
-		if( !pItem || LLInventoryType::IT_CALLINGCARD != pItem->getInventoryType() )
-		{
-			bFilter = true;
-			oldSearchable = getSearchableAll();
-		}
-	}
 
 	refreshFromListener();
 
@@ -352,7 +340,7 @@ void LLFolderViewItem::refresh()
 	 		mParentFolder->requestArrange();
 	 	}
 	}
-	else if( bFilter && oldSearchable.compare( getSearchableAll() ) )
+	else
 		dirtyFilter();
 
 	mLabelWidthDirty = true;
