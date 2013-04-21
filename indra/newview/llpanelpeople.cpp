@@ -1038,10 +1038,12 @@ LLUUID LLPanelPeople::getCurrentItemID() const
 	// <FS:AO> Adapted for scrolllist
 		//return mNearbyList->getSelectedUUID();
 	{
+		static S32 uuid_column_index = mRadarList->getColumn("uuid")->mIndex;
+
 		LLScrollListItem* item = mRadarList->getFirstSelected();
 		if (item)
 		{
-			return item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
+			return item->getColumn(uuid_column_index)->getValue().asUUID();
 		}
 		else 
 		{
@@ -1074,9 +1076,11 @@ void LLPanelPeople::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 	// <FS:AO> Adapted for scrolllist
 		//mNearbyList->getSelectedUUIDs(selected_uuids);
 	{
+		static S32 uuid_column_index = mRadarList->getColumn("uuid")->mIndex;
+
 		for (size_t i = 0; i < mRadarList->getAllSelected().size(); ++i)
 		{
-			selected_uuids.push_back(mRadarList->getAllSelected().at(i)->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID());
+			selected_uuids.push_back(mRadarList->getAllSelected().at(i)->getColumn(uuid_column_index)->getValue().asUUID());
 		}
 	}
 	// </FS:AO>
