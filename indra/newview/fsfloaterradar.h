@@ -29,13 +29,11 @@
 
 #include "llfloater.h"
 
+#include "fspanelradar.h"
 #include "fsradar.h"
-#include "fsradarlistctrl.h"
-#include "llcallingcard.h" // for avatar tracker
 #include "llvoiceclient.h"
 
 class LLFilterEditor;
-class LLMenuButton;
 
 class FSFloaterRadar 
 	: public LLFloater
@@ -53,17 +51,8 @@ public:
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
 
-	static void	onRadarNameFmtClicked(const LLSD& userdata);
-	static bool	radarNameFmtCheck(const LLSD& userdata);
-	static void	onRadarReportToClicked(const LLSD& userdata);
-	static bool	radarReportToCheck(const LLSD& userdata);
-
-	void updateNearby(const std::vector<LLSD>& entries, const LLSD& stats);
-
 private:
 	void					updateButtons();
-	LLUUID					getCurrentItemID() const;
-	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
 	void					buttonSetEnabled(const std::string& btn_name, bool enabled);
 	void					buttonSetAction(const std::string& btn_name, const commit_signal_t::slot_type& cb);
 
@@ -75,24 +64,14 @@ private:
 	void					onCallButtonClicked();
 	void					onTeleportButtonClicked();
 	void					onShareButtonClicked();
-	void					onRadarListCommitted();
-	void					onRadarListDoubleClicked();
-	void					onGearMenuItemClicked(const LLSD& userdata);
 
+	FSPanelRadar*			mRadarPanel;
 	LLFilterEditor*			mFilterEditor;
-	FSRadarListCtrl*		mRadarList;
-	LLNetMap*				mMiniMap;
-
-	LLHandle<LLView>		mRadarGearMenuHandle;
-
-	FSRadar::Updater*		mButtonsUpdater;
-
-	LLMenuButton*			mRadarGearButton;
 
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;
 
-	boost::signals2::connection mUpdateSignalConnection;
+	boost::signals2::connection mRadarChangeConnection;
 };
 
 #endif // FS_FLOATERRADAR_H
