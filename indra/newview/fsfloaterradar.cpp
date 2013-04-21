@@ -60,21 +60,27 @@ FSFloaterRadar::~FSFloaterRadar()
 
 BOOL FSFloaterRadar::postBuild()
 {
+	mFilterEditor = getChild<LLFilterEditor>("filter_input");
+	mFilterEditor->setCommitCallback(boost::bind(&FSFloaterRadar::onFilterEdit, this, _2));
+
+	mProfileButton = getChild<LLButton>("view_profile_btn");
+	mIMButton = getChild<LLButton>("im_btn");
+	mCallButton = getChild<LLButton>("call_btn");
+	mTeleportButton = getChild<LLButton>("teleport_btn");		
+	mShareButton = getChild<LLButton>("share_btn");
+
+	mProfileButton->setCommitCallback(boost::bind(&FSFloaterRadar::onViewProfileButtonClicked, this));
+	mIMButton->setCommitCallback(boost::bind(&FSFloaterRadar::onImButtonClicked, this));
+	mCallButton->setCommitCallback(boost::bind(&FSFloaterRadar::onCallButtonClicked, this));
+	mTeleportButton->setCommitCallback(boost::bind(&FSFloaterRadar::onTeleportButtonClicked, this));
+	mShareButton->setCommitCallback(boost::bind(&FSFloaterRadar::onShareButtonClicked, this));
+
 	mRadarPanel = findChild<FSPanelRadar>("panel_radar");
 	if (!mRadarPanel)
 	{
 		return FALSE;
 	}
 	mRadarChangeConnection = mRadarPanel->setChangeCallback(boost::bind(&FSFloaterRadar::updateButtons, this));
-
-	mFilterEditor = getChild<LLFilterEditor>("filter_input");
-	mFilterEditor->setCommitCallback(boost::bind(&FSFloaterRadar::onFilterEdit, this, _2));
-
-	buttonSetAction("view_profile_btn",	boost::bind(&FSFloaterRadar::onViewProfileButtonClicked,	this));
-	buttonSetAction("im_btn",			boost::bind(&FSFloaterRadar::onImButtonClicked,				this));
-	buttonSetAction("call_btn",			boost::bind(&FSFloaterRadar::onCallButtonClicked,			this));
-	buttonSetAction("teleport_btn",		boost::bind(&FSFloaterRadar::onTeleportButtonClicked,		this));
-	buttonSetAction("share_btn",		boost::bind(&FSFloaterRadar::onShareButtonClicked,			this));
 
 	LLVoiceClient::getInstance()->addObserver(this);
 	
@@ -103,20 +109,6 @@ void FSFloaterRadar::onChange(EStatusType status, const std::string &channelURI,
 	updateButtons();
 }
 
-void FSFloaterRadar::buttonSetEnabled(const std::string& btn_name, bool enabled)
-{
-	// To make sure we're referencing the right widget (a child of the button bar).
-	LLButton* button = getChild<LLView>("button_bar")->getChild<LLButton>(btn_name);
-	button->setEnabled(enabled);
-}
-
-void FSFloaterRadar::buttonSetAction(const std::string& btn_name, const commit_signal_t::slot_type& cb)
-{
-	// To make sure we're referencing the right widget (a child of the button bar).
-	LLButton* button = getChild<LLView>("button_bar")->getChild<LLButton>(btn_name);
-	button->setClickedCallback(cb);
-}
-
 void FSFloaterRadar::updateButtons()
 {
 	LLUUID selected_id;
@@ -135,11 +127,11 @@ void FSFloaterRadar::updateButtons()
 	}
 // [/RLBa:KB]
 
-	buttonSetEnabled("view_profile_btn",item_selected);
-	buttonSetEnabled("share_btn",		item_selected);
-	buttonSetEnabled("im_btn",			multiple_selected); // allow starting the friends conference for multiple selection
-	buttonSetEnabled("call_btn",		multiple_selected && enable_calls);
-	buttonSetEnabled("teleport_btn",	multiple_selected /* && LLAvatarActions::canOfferTeleport(selected_uuids) */ ); // LO - Dont block the TP button at all.
+	mProfileButton->setEnabled(item_selected);
+	mShareButton->setEnabled(item_selected);
+	mIMButton->setEnabled(multiple_selected); // allow starting the friends conference for multiple selection
+	mCallButton->setEnabled(multiple_selected && enable_calls);
+	mTeleportButton->setEnabled(multiple_selected /* && LLAvatarActions::canOfferTeleport(selected_uuids) */ ); // LO - Dont block the TP button at all.
 }
 
 void FSFloaterRadar::onFilterEdit(const std::string& search_string)

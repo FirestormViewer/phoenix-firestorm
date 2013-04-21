@@ -33,6 +33,7 @@
 #include "fsradar.h"
 #include "llvoiceclient.h"
 
+class LLButton;
 class LLFilterEditor;
 
 class FSFloaterRadar 
@@ -53,8 +54,6 @@ public:
 
 private:
 	void					updateButtons();
-	void					buttonSetEnabled(const std::string& btn_name, bool enabled);
-	void					buttonSetAction(const std::string& btn_name, const commit_signal_t::slot_type& cb);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
@@ -67,6 +66,12 @@ private:
 
 	FSPanelRadar*			mRadarPanel;
 	LLFilterEditor*			mFilterEditor;
+
+	LLButton*				mProfileButton;
+	LLButton*				mShareButton;
+	LLButton*				mIMButton;
+	LLButton*				mCallButton;
+	LLButton*				mTeleportButton;
 
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;
