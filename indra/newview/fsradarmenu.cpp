@@ -40,6 +40,7 @@
 #include "llavataractions.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llviewermenu.h"			// for gMenuHolder
+#include "rlvhandler.h"
 
 namespace FSFloaterRadarMenu
 {
@@ -203,6 +204,10 @@ bool FSRadarMenu::enableContextMenuItem(const LLSD& userdata)
 	//	return LLAvatarActions::canOfferTeleport(mUUIDs);
 	//}
 	// </FS>
+	else if (item == std::string("can_open_inventory"))
+	{
+		return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+	}
 	return false;
 }
 

@@ -38,6 +38,7 @@
 #include "llavataractions.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llviewermenu.h"			// for gMenuHolder
+#include "rlvhandler.h"
 
 namespace LLPanelPeopleMenus
 {
@@ -177,6 +178,12 @@ bool NearbyMenu::enableContextMenuItem(const LLSD& userdata)
 	//	return LLAvatarActions::canOfferTeleport(mUUIDs);
 	//}
 	// </FS>
+	// <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
+	else if (item == std::string("can_open_inventory"))
+	{
+		return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+	}
+	// </FS:Ansariel>
 	return false;
 }
 

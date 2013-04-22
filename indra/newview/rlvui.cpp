@@ -254,10 +254,17 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 	//
 	// Filter (or stop filtering) opening new inventory floaters
 	//
+	// <FS:Ansariel> Modified for FIRE-8804
 	if (!fEnable)
+	{
 		addGenericFloaterFilter("inventory");
+		addGenericFloaterFilter("secondary_inventory");
+	}
 	else
+	{
 		removeGenericFloaterFilter("inventory");
+		removeGenericFloaterFilter("secondary_inventory");
+	}
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
