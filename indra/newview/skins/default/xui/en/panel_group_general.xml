@@ -89,16 +89,25 @@ Hover your mouse over the options for more help.
     </text>
 
     <text
+     icon_positioning="left"
      name="founder_name"
      left_pad="4"
-     right="-1"
      height="20"
+     width="278"
      initial_value="(loading...)"
      type="string"
      use_ellipses="true"
      follows="top|left|right"
      layout="topleft" />
 
+    <button
+     name="copy_name"
+     left_pad="4"
+     right="-1"
+     height="20"
+     label="Copy Name"
+     follows="top|right" />
+	 
     <texture_picker
      name="insignia"
      tool_tip="Click to choose a picture"
