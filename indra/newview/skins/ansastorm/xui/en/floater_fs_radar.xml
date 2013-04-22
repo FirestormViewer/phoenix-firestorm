@@ -7,6 +7,8 @@
  height="415"
  min_width="250"
  min_height="150"
+ reuse_instance="true"
+ single_instance="true"
  save_rect="true"
  save_visibility="true"
  can_resize="true"

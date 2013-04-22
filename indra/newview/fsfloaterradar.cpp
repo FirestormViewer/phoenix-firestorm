@@ -80,6 +80,7 @@ BOOL FSFloaterRadar::postBuild()
 	{
 		return FALSE;
 	}
+	mRadarPanel->setVisibleCheckFunction(boost::bind(&FSFloaterRadar::getVisible, this));
 	mRadarChangeConnection = mRadarPanel->setChangeCallback(boost::bind(&FSFloaterRadar::updateButtons, this));
 
 	LLVoiceClient::getInstance()->addObserver(this);
