@@ -60,6 +60,7 @@
 			 auto_resize="true"
 			 width="72">
 				<button
+				 use_ellipses="true"
 				 follows="bottom|left|right"
 				 height="23"
 				 label="Profile"
@@ -81,6 +82,7 @@
 			 auto_resize="true"
 			 width="72">
 				<button
+				 use_ellipses="true"
 				 follows="bottom|left|right"
 				 left="1"
 				 height="23"
@@ -102,6 +104,7 @@
 			 auto_resize="true"
 			 width="72">
 				<button
+				 use_ellipses="true"
 				 follows="bottom|left|right"
 				 left="1"
 				 height="23"
@@ -123,6 +126,7 @@
 			 auto_resize="true"
 			 width="72">
 				<button
+				 use_ellipses="true"
 				 follows="bottom|left|right"
 				 left="1"
 				 height="23"
@@ -144,6 +148,7 @@
 			 auto_resize="true"
 			 width="72">
 				<button
+				 use_ellipses="true"
 				 follows="bottom|left|right"
 				 left="1"
 				 height="23"

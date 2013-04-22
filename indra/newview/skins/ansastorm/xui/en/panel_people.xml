@@ -691,6 +691,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="72">
                 <button
+                 use_ellipses="true"
                  follows="bottom|left|right"
                  height="23"
                  label="Profile"
@@ -712,6 +713,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="72">
                 <button
+                 use_ellipses="true"
                  follows="bottom|left|right"
                  left="1"
                  height="23"
@@ -733,6 +735,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="72">
                 <button
+                 use_ellipses="true"
                  follows="bottom|left|right"
                  left="1"
                  height="23"
@@ -754,6 +757,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="72">
                 <button
+                 use_ellipses="true"
                  follows="bottom|left|right"
                  left="1"
                  height="23"
@@ -775,6 +779,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="72">
                 <button
+                 use_ellipses="true"
                  follows="bottom|left|right"
                  left="1"
                  height="23"
@@ -810,6 +815,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="108">
                 <button
+                use_ellipses="true"
                 follows="bottom|left|right"
                 left="1"
                 height="23"
@@ -833,6 +839,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="108">
                 <button
+                use_ellipses="true"
                 follows="bottom|left|right"
                 left="1"
                 height="23"
@@ -856,6 +863,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             auto_resize="true"
             width="108">
                 <button
+                use_ellipses="true"
                 follows="bottom|left|right"
                 left="1"
                 height="23"
