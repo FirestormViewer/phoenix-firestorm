@@ -704,29 +704,15 @@ void FSRadar::updateRadarList()
 	{
 		FSRadarEntry* ent = em_it->second;
 		RadarFields rf;
-		rf.avName = ent->mName;
 		rf.lastDistance = ent->mRange;
-		rf.firstSeen = ent->mFirstSeen;
-		rf.lastStatus = ent->mStatus;
-		rf.ZOffset = ent->mZOffset;
-		rf.lastGlobalPos = ent->mGlobalPos;
-		// Ansariel: This seems to be wrong and isn't needed anywhere
-		//if ((rf.ZOffset > 0) && (rf.lastGlobalPos[VZ] < 1024)) // if our position may need an offset correction, see if we have one to apply
-		//{
-		//	rf.lastGlobalPos[VZ] = rf.lastGlobalPos[VZ] + (1024 * rf.ZOffset);
-		//}
-		//rf.lastZOffsetTime = ent->mLastZOffsetTime;
-		if (rf.lastGlobalPos != LLVector3d(0.0f, 0.0f, 0.0f))
+		rf.lastRegion = LLUUID::null;
+		if (ent->mGlobalPos != LLVector3d(0.0f, 0.0f, 0.0f))
 		{
-			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(rf.lastGlobalPos);
+			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(ent->mGlobalPos);
 			if (lastRegion)
 			{
 				rf.lastRegion = lastRegion->getRegionID();
 			}
-		}
-		else
-		{
-			rf.lastRegion = LLUUID::null;
 		}
 		
 		mLastRadarSweep[ent->mID] = rf;

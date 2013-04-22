@@ -114,14 +114,8 @@ private:
 	
 	struct RadarFields 
 	{
-		std::string avName;
 		F32			lastDistance;
-		LLVector3d	lastGlobalPos;
 		LLUUID		lastRegion;
-		time_t		firstSeen;
-		S32			lastStatus;
-		U32			ZOffset;
-		time_t		lastZOffsetTime;
 	};
 
 	typedef boost::unordered_map<LLUUID, RadarFields, FSUUIDHash> radarfields_map_t;
