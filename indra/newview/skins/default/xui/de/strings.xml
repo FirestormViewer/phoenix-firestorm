@@ -5671,7 +5671,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="leaving_chat_range">
 		hat die Chat-Reichweite verlassen.
 	</string>
-	<string nane="entering_region">
+	<string name="entering_region">
 		hat die Region betreten.
 	</string>
 	<string name="entering_region_distance">
