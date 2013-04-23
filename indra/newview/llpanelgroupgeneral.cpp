@@ -1014,7 +1014,7 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 
 	// activate copy name button
 	if (copyNameButton)
-		copyNameButton->setEnabled(FALSE);
+		copyNameButton->setEnabled(TRUE);
 	// </FS>
 
 	BOOL accept_notices = FALSE;
