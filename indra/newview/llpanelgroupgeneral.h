@@ -65,8 +65,11 @@ public:
 
 	void onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name);
 	
+// <FS> Copy button callbacks
 protected:
-    void onCopyURI();
+	void onCopyURI();
+	void onCopyName();
+// </FS>
 
 private:
 	void	reset();
@@ -117,6 +120,9 @@ private:
 
 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
 	LLUUID mIteratorGroup; // <FS:ND/> FIRE-6074; UUID of the group mMemberProgress belongs to.
+
+	// <FS:Ansariel> For storing group name for copy name button
+	std::string		mGroupName;
 };
 
 #endif

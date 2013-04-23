@@ -465,4 +465,14 @@
            tooltip_ref="Command_Snapshot_To_Disk_Tooltip"
            execute_function="File.TakeSnapshotToDisk"
            />
+  <command name="radar"
+           available_in_toybox="true"
+           icon="radar"
+           label_ref="Command_Radar_Label"
+           tooltip_ref="Command_Radar_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="fs_radar"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="fs_radar"
+           />
 </commands>

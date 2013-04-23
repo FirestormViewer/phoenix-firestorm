@@ -135,6 +135,7 @@ set(viewer_SOURCE_FILES
     fsfloaterplacedetails.cpp
     fsfloaterposestand.cpp
     fsfloaterprofile.cpp
+    fsfloaterradar.cpp
     fsfloatersearch.cpp
     fsfloaterteleporthistory.cpp
     fsfloatervoicecontrols.cpp
@@ -156,8 +157,12 @@ set(viewer_SOURCE_FILES
     fspanelprefs.cpp
     fspanelprofile.cpp
     fspanelprofileclassifieds.cpp
+    fspanelradar.cpp
     fspose.cpp
+    fsradar.cpp
+    fsradarentry.cpp
     fsradarlistctrl.cpp
+    fsradarmenu.cpp
     fsslurlcommand.cpp
     fswsassetblacklist.cpp
     groupchatlistener.cpp
@@ -796,6 +801,7 @@ set(viewer_HEADER_FILES
     fsfloaterplacedetails.h
     fsfloaterposestand.h
     fsfloaterprofile.h
+    fsfloaterradar.h
     fsfloatersearch.h
     fsfloaterteleporthistory.h
     fsfloatervoicecontrols.h
@@ -818,8 +824,12 @@ set(viewer_HEADER_FILES
     fspanelprefs.h
     fspanelprofile.h
     fspanelprofileclassifieds.h
+    fspanelradar.h
     fspose.h
+    fsradar.h
+    fsradarentry.h
     fsradarlistctrl.h
+    fsradarmenu.h
     fsslurl.h
     fsslurlcommand.h
     fswsassetblacklist.h

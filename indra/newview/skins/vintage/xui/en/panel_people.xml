@@ -13,30 +13,6 @@
 	<string
 		name="high_server_load"
 		value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
-	<string
-		name="camera_no_focus"
-		value="The camera cannot focus user [AVATARNAME] because they are outside your draw distance."/>
-	<string
-		name="entering_draw_distance"
-		value="entered draw distance ([DISTANCE] m)."/>
-	<string
-		name="leaving_draw_distance"
-		value="left draw distance."/>
-	<string
-		name="entering_chat_range"
-		value="entered chat range ([DISTANCE] m)."/>
-	<string
-		name="leaving_chat_range"
-		value="left chat range."/>
-	<string
-		name="entering_region"
-		value="entered the region."/>
-	<string
-		name="entering_region_distance"
-		value="entered the region ([DISTANCE] m)."/>
-	<string
-		name="leaving_region"
-		value="left the region."/>
     <string
 		name="no_recent_people"
 		value="No recent people. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
@@ -160,6 +136,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 							height="140"
 							width="313"
 							follows="all"
+							min_dim="140"
 							mouse_opaque="false"
 							visibility_control="ShowRadarMinimap"
 							name="minimaplayout"
@@ -362,6 +339,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 					layout="topleft"
 					follows="left|top" />
 				<slider
+					visibility_control="LimitRadarByRange"
 					enabled_control="LimitRadarByRange"
 					control_name="NearMeRange"
 					decimal_digits="0"

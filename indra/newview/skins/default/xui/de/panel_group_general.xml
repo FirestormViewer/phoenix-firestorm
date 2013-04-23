@@ -22,6 +22,7 @@ Bewegen Sie die Maus über die Optionen, um weitere Informationen anzuzeigen.
 			Gründer:
 		</text>
 		<name_box initial_value="(wird geladen...)" name="founder_name"/>
+		<button name="copy_name" label="Name kopieren"/>
 		<text_editor name="charter">
 			Gruppencharta
 		</text_editor>

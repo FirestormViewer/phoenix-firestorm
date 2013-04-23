@@ -31,29 +31,17 @@
 
 #include "llcallingcard.h" // for avatar tracker
 #include "llvoiceclient.h"
-#include "llavatarnamecache.h"
-#include "llscrolllistctrl.h"
-#include "fsradarlistctrl.h"
-#include <map>
-#include <time.h>
 
 class LLAvatarList;
 class LLAvatarName;
 class LLFilterEditor;
 class LLGroupList;
-class LLTabContainer;
 class LLMenuButton;
+class LLTabContainer;
+
+// Firestorm declarations
 class LLMenuGL;
-
-const U32	MAX_AVATARS_PER_ALERT = 6; // maximum number of UUIDs we can cram into a single channel radar alert message
-const U32	COARSE_OFFSET_INTERVAL = 7; // seconds after which we query the bridge for a coarse location adjustment
-const U32   MAX_OFFSET_REQUESTS = 60; // 2048 / UUID size, leaving overhead space
-const U32	NAMEFORMAT_DISPLAYNAME = 0;
-const U32	RADAR_CHAT_MIN_SPACING = 6; //minimum delay between radar chat messages
-
-const U32	NAMEFORMAT_USERNAME = 1;
-const U32	NAMEFORMAT_DISPLAYNAME_USERNAME = 2;
-const U32	NAMEFORMAT_USERNAME_DISPLAYNAME = 3;
+class FSRadarListCtrl;
 
 class LLPanelPeople 
 	: public LLPanel
@@ -67,17 +55,17 @@ public:
 	/*virtual*/ BOOL 	postBuild();
 	/*virtual*/ void	onOpen(const LLSD& key);
 	/*virtual*/ bool	notifyChildren(const LLSD& info);
-	void	teleportToAvatar(LLUUID targetAv);
-	void	requestRadarChannelAlertSync();
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
 
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	LLAvatarList* getNearbyList() { return mNearbyList; }
+	// Externalized to FSRadar
+	//LLAvatarList* getNearbyList() { return mNearbyList; }
 // [/RLVa:KB]
 
-	void	startTracking(const LLUUID& avatar_id);
+	// <FS:Ansariel> Firestorm radar
+	void updateNearby(const std::vector<LLSD>& entries, const LLSD& stats);
 
 	// internals
 	class Updater;
@@ -97,10 +85,7 @@ private:
 	void					updateFriendList();
 	void					updateNearbyList();
 	void					updateRecentList();
-	void					updateNearbyRange();
-	void					updateTracking();
-	void					checkTracking();
-	
+
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 
 	void					updateButtons();
@@ -112,10 +97,6 @@ private:
 	void					buttonSetAction(const std::string& btn_name, const commit_signal_t::slot_type& cb);
 	void					showGroupMenu(LLMenuGL* menu);
 	void					setSortOrder(LLAvatarList* list, ESortOrder order, bool save = true);
-	void					handleLimitRadarByRange(const LLSD& newalue);
-	std::string				getRadarName(LLUUID avId);
-	std::string				getRadarName(LLAvatarName avName);
-	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,std::string postMsg);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
@@ -123,7 +104,6 @@ private:
 	void					onViewProfileButtonClicked();
 	void					onAddFriendButtonClicked();
 	void					onAddFriendWizButtonClicked();
-	void					onGlobalVisToggleButtonClicked();
 	void					onDeleteFriendButtonClicked();
 	void					onGroupInfoButtonClicked();
 	void					onChatButtonClicked();
@@ -134,14 +114,8 @@ private:
 	void					onShareButtonClicked();
 	void					onMoreButtonClicked();
 	void					onActivateButtonClicked();
-	void					onRecentViewSortButtonClicked();
-	void					onNearbyViewSortButtonClicked();
-	void					onFriendsViewSortButtonClicked();
-	void					onGroupsViewSortButtonClicked();
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
-	void					onNearbyListDoubleClicked(LLUICtrl* ctrl);
 	void					onAvatarListCommitted(LLAvatarList* list);
-	void					onRadarListDoubleClicked();
 	void					onGroupPlusButtonClicked();
 	void					onGroupMinusButtonClicked();
 	void					onGroupPlusMenuItemClicked(const LLSD& userdata);
@@ -150,10 +124,6 @@ private:
 	void					onNearbyViewSortMenuItemClicked(const LLSD& userdata);
 	void					onGroupsViewSortMenuItemClicked(const LLSD& userdata);
 	void					onRecentViewSortMenuItemClicked(const LLSD& userdata);
-	void					onRadarNameFmtClicked(const LLSD& userdata);
-	bool					radarNameFmtCheck(const LLSD& userdata);
-	void					onRadarReportToClicked(const LLSD& userdata);	// <FS:CR> Milkshake-style Radar Alerts
-	bool					radarReportToCheck(const LLSD& userdata);	// <FS:CR> Milkshake-style Radar Alerts
 
 	//returns false only if group is "none"
 	bool					isRealGroup();
@@ -177,14 +147,21 @@ private:
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
 	bool					isAccordionCollapsedByUser(const std::string& name);
 
+	// <FS:Ansariel> Firestorm callback handler
+	void					onRadarListDoubleClicked();
+	void					onGlobalVisToggleButtonClicked();
+	// </FS:Ansariel> Firestorm callback handler
+
 	LLFilterEditor*			mFilterEditor;
 	LLTabContainer*			mTabContainer;
 	LLAvatarList*			mOnlineFriendList;
 	LLAvatarList*			mAllFriendList;
 	LLAvatarList*			mNearbyList;
+	// <FS:Ansariel> Firestorm radar
+	FSRadarListCtrl*		mRadarList;
+	// </FS:Ansariel> Firestorm radar
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
-	FSRadarListCtrl*		mRadarList;
 	LLNetMap*				mMiniMap;
 
 	LLHandle<LLView>		mGroupPlusMenuHandle;
@@ -194,7 +171,9 @@ private:
 	LLHandle<LLView>		mRecentViewSortMenuHandle;
 
 	Updater*				mFriendListUpdater;
-	Updater*				mNearbyListUpdater;
+	// <FS:Ansariel> Firestorm radar
+	//Updater*				mNearbyListUpdater;
+	// </FS:Ansariel> Firestorm radar
 	Updater*				mRecentListUpdater;
 	Updater*				mButtonsUpdater;
 
@@ -205,34 +184,9 @@ private:
 
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;
-	
-	LLUIColor			mChatRangeColor;
-	LLUIColor			mShoutRangeColor;
-	LLUIColor			mFarRangeColor;
-	
-	struct radarFields 
-	{
-		std::string avName;
-		F32			lastDistance;
-		LLVector3d	lastGlobalPos;
-		LLUUID		lastRegion;
-		time_t		firstSeen;
-		S32			lastStatus;
-		U32			ZOffset;
-		time_t		lastZOffsetTime;
-		
-	}; 
-	std::multimap < LLUUID, radarFields > lastRadarSweep;
-	std::vector <LLUUID>	mRadarEnterAlerts;
-	std::vector <LLUUID>	mRadarLeaveAlerts;
-	std::vector <LLUUID>	mRadarOffsetRequests;
-	 	
-	S32					mRadarFrameCount;
-	bool				mRadarAlertRequest;
-	F32					mRadarLastRequestTime;
-	U32					mRadarLastBulkOffsetRequestTime;
 
-	LLUUID				mTrackedAvatarId;
+	// <FS:Ansariel> Firestorm radar
+	boost::signals2::connection mNearbyUpdateSignalConnection;
 };
 
 #endif //LL_LLPANELPEOPLE_H

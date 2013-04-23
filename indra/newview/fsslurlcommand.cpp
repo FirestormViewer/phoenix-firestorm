@@ -28,26 +28,11 @@
 #include "fsslurlcommand.h"
 
 #include "fscommon.h"
+#include "fsradar.h"
 #include "llagent.h"
 #include "llavataractions.h"
-#include "llavatarlist.h"
-#include "llavatarlistitem.h"
 #include "llcommandhandler.h"
-#include "llfloatersidepanelcontainer.h"
 #include "llnotificationsutil.h"
-#include "llpanelpeople.h"
-
-
-LLAvatarListItem* getAvatarListItem(const LLUUID& avatar_id)
-{
-	LLPanelPeople* panel_people = getPeoplePanel();
-	if (panel_people)
-	{
-		return panel_people->getNearbyList()->getAvatarListItem(avatar_id);
-	}
-
-	return NULL;
-}
 
 
 class FSSlurlCommandHandler : public LLCommandHandler
@@ -99,13 +84,17 @@ public:
 		{
 			if (gAgentID != target_id)
 			{
-				LLAvatarListItem* avatar_list_item = getAvatarListItem(target_id);
-				if (avatar_list_item)
+				FSRadar* radar = FSRadar::getInstance();
+				if (radar)
 				{
-					LLVector3d pos = avatar_list_item->getPosition();
-					pos.mdV[VZ] += 2.0;
-					gAgent.teleportViaLocation(pos);
-					return true;
+					FSRadarEntry* entry = radar->getEntry(target_id);
+					if (entry)
+					{
+						LLVector3d pos = entry->getGlobalPos();
+						pos.mdV[VZ] += 2.0;
+						gAgent.teleportViaLocation(pos);
+						return true;
+					}
 				}
 
 				LLNotificationsUtil::add("TeleportToAvatarNotPossible");
@@ -118,13 +107,17 @@ public:
 		{
 			if (gAgentID != target_id)
 			{
-				LLPanelPeople* panel_people = getPeoplePanel();
-				LLAvatarListItem* avatar_list_item = getAvatarListItem(target_id);
-				if (avatar_list_item && panel_people)
+				FSRadar* radar = FSRadar::getInstance();
+				if (radar)
 				{
-					panel_people->startTracking(target_id);
-					return true;
+					FSRadarEntry* entry = radar->getEntry(target_id);
+					if (entry)
+					{
+						radar->startTracking(target_id);
+						return true;
+					}
 				}
+
 
 				LLNotificationsUtil::add("TrackAvatarNotPossible");
 			}

@@ -558,6 +558,13 @@ void LLAvatarActions::csr(const LLUUID& id, std::string name)
 //static 
 void LLAvatarActions::share(const LLUUID& id)
 {
+	// <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV))
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	LLSD key;
 	LLFloaterSidePanelContainer::showPanel("inventory", key);
 

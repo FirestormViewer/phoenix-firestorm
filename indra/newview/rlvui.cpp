@@ -47,6 +47,8 @@
 #include "rlvhandler.h"
 #include "rlvextensions.h"
 
+#include "fsradar.h"
+
 // ============================================================================
 
 // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
@@ -252,10 +254,17 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 	//
 	// Filter (or stop filtering) opening new inventory floaters
 	//
+	// <FS:Ansariel> Modified for FIRE-8804
 	if (!fEnable)
+	{
 		addGenericFloaterFilter("inventory");
+		addGenericFloaterFilter("secondary_inventory");
+	}
 	else
+	{
 		removeGenericFloaterFilter("inventory");
+		removeGenericFloaterFilter("secondary_inventory");
+	}
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
@@ -364,10 +373,16 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 
 	// Refresh the nearby people list
-	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
-	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
-	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
-		pPeoplePanel->getNearbyList()->updateAvatarNames();
+	// <FS:Ansariel> [Standalone radar]
+	//LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
+	//RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
+	//if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
+	//	pPeoplePanel->getNearbyList()->updateAvatarNames();
+	FSRadar* pRadar = FSRadar::getInstance();
+	RLV_ASSERT( (pRadar) );
+	if ( (pRadar) )
+		pRadar->updateNames();
+	// </FS:Ansariel> [Standalone radar]
 
 	// Refresh the speaker list
 	// <FS:Ansariel> [FS communication UI]

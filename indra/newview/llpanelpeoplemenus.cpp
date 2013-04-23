@@ -38,9 +38,7 @@
 #include "llavataractions.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llviewermenu.h"			// for gMenuHolder
-#include "llpanelpeople.h"
-
-#include "fscommon.h"
+#include "rlvhandler.h"
 
 namespace LLPanelPeopleMenus
 {
@@ -66,35 +64,13 @@ LLContextMenu* NearbyMenu::createMenu()
 		registrar.add("Avatar.IM",				boost::bind(&LLAvatarActions::startIM,					id));
 		registrar.add("Avatar.Call",			boost::bind(&LLAvatarActions::startCall,				id));
 		registrar.add("Avatar.OfferTeleport",	boost::bind(&NearbyMenu::offerTeleport,					this));
-		registrar.add("Avatar.GroupInvite",		boost::bind(&LLAvatarActions::inviteToGroup,			id));
-		registrar.add("Avatar.getScriptInfo",	boost::bind(&LLAvatarActions::getScriptInfo,			id));
 		registrar.add("Avatar.ShowOnMap",		boost::bind(&LLAvatarActions::showOnMap,				id));
 		registrar.add("Avatar.Share",			boost::bind(&LLAvatarActions::share,					id));
 		registrar.add("Avatar.Pay",				boost::bind(&LLAvatarActions::pay,						id));
 		registrar.add("Avatar.BlockUnblock",	boost::bind(&LLAvatarActions::toggleBlock,				id));
-		// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-03 (Catznip-2.4.0g) | Modified: Catznip-2.4.0g
-		registrar.add("Avatar.ZoomIn",							boost::bind(&LLAvatarActions::zoomIn,						id));
-		enable_registrar.add("Avatar.VisibleZoomIn",			boost::bind(&LLAvatarActions::canZoomIn,					id));
-		registrar.add("Avatar.Report",							boost::bind(&LLAvatarActions::report,						id));
-		registrar.add("Avatar.Eject",							boost::bind(&LLAvatarActions::landEject,					id));
-		registrar.add("Avatar.Freeze",							boost::bind(&LLAvatarActions::landFreeze,					id));
-		enable_registrar.add("Avatar.VisibleFreezeEject",		boost::bind(&LLAvatarActions::canLandFreezeOrEject,			id));
-		registrar.add("Avatar.Kick",							boost::bind(&LLAvatarActions::estateKick,					id));
-		registrar.add("Avatar.TeleportHome",					boost::bind(&LLAvatarActions::estateTeleportHome,			id));
-		enable_registrar.add("Avatar.VisibleKickTeleportHome",	boost::bind(&LLAvatarActions::canEstateKickOrTeleportHome,	id));
-		// [/SL:KB]
-		// <FS:Ansariel> Estate ban user
-		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBan,					id));
-		// <FS:Ansariel> Derender
-		registrar.add("Avatar.Derender",						boost::bind(&LLAvatarActions::derender,						id, false));
-		registrar.add("Avatar.DerenderPermanent",				boost::bind(&LLAvatarActions::derender,						id, true));
-		// </FS:Ansariel> Derender
-		
-		registrar.add("Nearby.People.TeleportToAvatar", boost::bind(&NearbyMenu::teleportToAvatar,	this));
-		registrar.add("Nearby.People.TrackAvatar", boost::bind(&NearbyMenu::onTrackAvatarMenuItemClick, this));
+		// <FS:Ansariel> Firestorm additions
+		registrar.add("Avatar.GroupInvite",		boost::bind(&LLAvatarActions::inviteToGroup,			id));
 
-		registrar.add("Avatar.ZoomIn",                        boost::bind(&LLAvatarActions::zoomIn,                id));
-                enable_registrar.add("Avatar.VisibleZoomIn",        boost::bind(&LLAvatarActions::canZoomIn,            id));
 		enable_registrar.add("Avatar.EnableItem", boost::bind(&NearbyMenu::enableContextMenuItem,	this, _2));
 		enable_registrar.add("Avatar.CheckItem",  boost::bind(&NearbyMenu::checkContextMenuItem,	this, _2));
 
@@ -113,21 +89,7 @@ LLContextMenu* NearbyMenu::createMenu()
 		// registrar.add("Avatar.Share",		boost::bind(&LLAvatarActions::startIM,					mUUIDs)); // *TODO: unimplemented
 		// registrar.add("Avatar.Pay",		boost::bind(&LLAvatarActions::pay,						mUUIDs)); // *TODO: unimplemented
 		enable_registrar.add("Avatar.EnableItem",	boost::bind(&NearbyMenu::enableContextMenuItem,	this, _2));
-		// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-11-05 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
-		registrar.add("Avatar.Eject",							boost::bind(&LLAvatarActions::landEjectMultiple,			mUUIDs));
-		registrar.add("Avatar.Freeze",							boost::bind(&LLAvatarActions::landFreezeMultiple,			mUUIDs));
-		enable_registrar.add("Avatar.VisibleFreezeEject",		boost::bind(&LLAvatarActions::canLandFreezeOrEjectMultiple,	mUUIDs, false));
-		registrar.add("Avatar.Kick",							boost::bind(&LLAvatarActions::estateKickMultiple,			mUUIDs));
-		registrar.add("Avatar.TeleportHome",					boost::bind(&LLAvatarActions::estateTeleportHomeMultiple,	mUUIDs));
-		enable_registrar.add("Avatar.VisibleKickTeleportHome",	boost::bind(&LLAvatarActions::canEstateKickOrTeleportHomeMultiple, mUUIDs, false));
-		// [/SL:KB]
-		// <FS:Ansariel> Estate ban user
-		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBanMultiple,			mUUIDs));
-		// <FS:Ansariel> Derender
-		registrar.add("Avatar.Derender",						boost::bind(&LLAvatarActions::derenderMultiple,				mUUIDs, false));
-		registrar.add("Avatar.DerenderPermanent",				boost::bind(&LLAvatarActions::derenderMultiple,				mUUIDs, true));
-		// </FS:Ansariel> Derender
-		
+
 		// create the context menu from the XUI
 		return createFromFile("menu_people_nearby_multiselect.xml");
 	}
@@ -216,6 +178,12 @@ bool NearbyMenu::enableContextMenuItem(const LLSD& userdata)
 	//	return LLAvatarActions::canOfferTeleport(mUUIDs);
 	//}
 	// </FS>
+	// <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
+	else if (item == std::string("can_open_inventory"))
+	{
+		return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+	}
+	// </FS:Ansariel>
 	return false;
 }
 
@@ -237,27 +205,6 @@ void NearbyMenu::offerTeleport()
 	// boost::bind cannot recognize overloaded method LLAvatarActions::offerTeleport(),
 	// so we have to use a wrapper.
 	LLAvatarActions::offerTeleport(mUUIDs);
-}
-	
-void NearbyMenu::teleportToAvatar()
-// AO: wrapper for functionality managed by LLPanelPeople, because it manages the nearby avatar list.
-// Will only work for avatars within radar range.
-{
-	LLPanelPeople* peoplePanel = getPeoplePanel();
-	if (peoplePanel)
-	{
-		peoplePanel->teleportToAvatar(mUUIDs.front());
-	}
-}
-
-// Ansariel: Avatar tracking feature
-void NearbyMenu::onTrackAvatarMenuItemClick()
-{
-	LLPanelPeople* peoplePanel = getPeoplePanel();
-	if (peoplePanel)
-	{
-		peoplePanel->startTracking(mUUIDs.front());
-	}
 }
 
 } // namespace LLPanelPeopleMenus

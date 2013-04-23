@@ -35,9 +35,9 @@
 
 #include "aoengine.h"
 #include "fscommon.h"
+#include "fsradar.h"
 #include "llagent.h"
 #include "llagentcamera.h"
-#include "llavatarlist.h"
 #include "llcalc.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaternearbychat.h"
@@ -47,7 +47,6 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
-#include "llpanelpeople.h"
 #include "llparcel.h"
 #include "lltooldraganddrop.h"
 #include "lltrans.h"
@@ -1169,23 +1168,20 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 	std::string av_name;
 	LLStringUtil::toLower(partial_name);
 
-	LLPanelPeople* panel_people = getPeoplePanel();
-	if (panel_people)
+	FSRadar* radar = FSRadar::getInstance();
+	if (radar)
 	{
-		std::vector<LLPanel*> items;
-		LLAvatarList* nearbyList = panel_people->getNearbyList();
-		nearbyList->getItems(items);
-
-		for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+		FSRadar::entry_map_t radar_list = radar->getRadarList();
+		FSRadar::entry_map_t::iterator it_end = radar_list.end();
+		for (FSRadar::entry_map_t::iterator it = radar_list.begin(); it != it_end; ++it)
 		{
-			LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
-
-			av_name = av->getUserName();
+			FSRadarEntry* entry = it->second;
+			av_name = entry->getUserName();
 
 			LLStringUtil::toLower(av_name);
 			if (strstr(av_name.c_str(), partial_name.c_str()))
 			{
-				return av->getAvatarId();
+				return entry->getId();
 			}
 		}
 	}
@@ -1195,13 +1191,13 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 void cmdline_tp2name(std::string target)
 {
 	LLUUID avkey = cmdline_partial_name2key(target);
-	LLPanelPeople* panel_people = getPeoplePanel();
-	if (avkey.notNull() && panel_people)
+	FSRadar* radar = FSRadar::getInstance();
+	if (avkey.notNull() && radar)
 	{
-		LLAvatarListItem* avatar_list_item = panel_people->getNearbyList()->getAvatarListItem(avkey);
-		if (avatar_list_item)
+		FSRadarEntry* entry = radar->getEntry(avkey);
+		if (entry)
 		{
-			LLVector3d pos = avatar_list_item->getPosition();
+			LLVector3d pos = entry->getGlobalPos();
 			pos.mdV[VZ] += 2.0;
 			gAgent.teleportViaLocation(pos);
 			return;

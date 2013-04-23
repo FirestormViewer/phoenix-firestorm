@@ -98,6 +98,15 @@
       <key>UseDefaultTextForBody</key>
       <boolean>true</boolean>
     </map>
+    <key>OwnObjectGiveItem</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Inventory received from object</string>
+      <key>GrowlTitle</key>
+      <string>Inventory received</string>
+      <key>UseDefaultTextForBody</key>
+      <boolean>true</boolean>
+    </map>
     <key>ObjectGiveItemUnknownUser</key>
     <map>
       <key>GrowlName</key>
@@ -179,6 +188,15 @@
       <string>You have been logged out</string>
       <key>GrowlTitle</key>
       <string>You have been logged out</string>
+      <key>GrowlBody</key>
+      <string>[MESSAGE]</string>
+    </map>
+    <key>ScriptDialog</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Script dialog</string>
+      <key>GrowlTitle</key>
+      <string>[TITLE]</string>
       <key>GrowlBody</key>
       <string>[MESSAGE]</string>
     </map>
