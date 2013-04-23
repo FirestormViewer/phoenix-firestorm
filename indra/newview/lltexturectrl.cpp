@@ -1102,6 +1102,9 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	mDefaultImageAssetID(p.default_image_id),
 	mDefaultImageName(p.default_image_name),
 	mFallbackImage(p.fallback_image),
+	// <FS:Ansariel> Mask texture if desired
+	mIsMasked(FALSE),
+	// </FS:Ansariel> Mask texture if desired
 	mPreviewMode(!p.enabled) // For texture preview mode
 {
 	setAllowNoTexture(p.allow_no_texture);
@@ -1535,6 +1538,13 @@ void LLTextureCtrl::draw()
 		
 		gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), mTexturep, UI_VERTEX_COLOR % alpha);
 		mTexturep->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
+		// <FS:Ansariel> Mask texture if desired
+		if (mIsMasked)
+		{
+			gl_rect_2d( interior, LLColor4(0.5, 0.5, 0.5, 0.44), TRUE);
+			gl_draw_x( interior, LLColor4::black );
+		}
+		// </FS:Ansariel> Mask texture if desired
 	}
 	else if (!mFallbackImage.isNull())
 	{
