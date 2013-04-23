@@ -470,10 +470,21 @@ void LLVOPartGroup::getGeometry(S32 idx,
 	verticesp->setAdd(ppamu, right);
 	(*verticesp++).getF32ptr()[3] = 0.f;
 
-	*colorsp++ = part.mColor;
-	*colorsp++ = part.mColor;
-	*colorsp++ = part.mColor;
-	*colorsp++ = part.mColor;
+	// <FS:ND> Only convert to LLColour4U once
+
+	// *colorsp++ = part.mColor;
+	// *colorsp++ = part.mColor;
+	// *colorsp++ = part.mColor;
+	// *colorsp++ = part.mColor;
+
+	LLColor4U color4u( part.mColor );
+	*colorsp++ = color4u;
+	*colorsp++ = color4u;
+	*colorsp++ = color4u;
+	*colorsp++ = color4u;
+
+	// </FS:ND>
+
 
 	if (!(part.mFlags & LLPartData::LL_PART_EMISSIVE_MASK))
 	{ //not fullbright, needs normal
