@@ -222,7 +222,9 @@ private:
 	BOOL					 	mShowLoadingPlaceholder;
 	std::string				 	mLoadingPlaceholderString;
 	S32						 	mLabelWidth;
-	BOOL						mPreviewMode; // If true open texture in preview floater
+
+	// <FS:Ansariel> Texture preview mode
+	BOOL						mPreviewMode;
 
 	// <FS:Ansariel> Mask texture if desired
 	BOOL						mIsMasked;

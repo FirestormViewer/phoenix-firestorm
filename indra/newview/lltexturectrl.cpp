@@ -1105,7 +1105,7 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	// <FS:Ansariel> Mask texture if desired
 	mIsMasked(FALSE),
 	// </FS:Ansariel> Mask texture if desired
-	mPreviewMode(!p.enabled) // For texture preview mode
+	mPreviewMode(!p.enabled) // <FS:Ansariel> For texture preview mode
 {
 	setAllowNoTexture(p.allow_no_texture);
 	setCanApplyImmediately(p.can_apply_immediately);
@@ -1216,9 +1216,11 @@ void LLTextureCtrl::setEnabled( BOOL enabled )
 
 	mCaption->setEnabled( enabled );
 
-	// Texture preview mode
+	// <FS:Ansariel> Texture preview mode
+	//LLView::setEnabled( enabled );
 	LLView::setEnabled( (enabled || getValue().asUUID().notNull()) );
 	mPreviewMode = !enabled;
+	// </FS:Ansariel>
 }
 
 void LLTextureCtrl::setValid(BOOL valid )
@@ -1328,6 +1330,12 @@ BOOL LLTextureCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
 
 	if (!handled && mBorder->parentPointInView(x, y))
 	{
+		// <FS:Ansariel> Texture preview mode
+		//showPicker(FALSE);
+		////grab textures first...
+		//LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
+		////...then start full inventory fetch.
+		//LLInventoryModelBackgroundFetch::instance().start();
 		if (!mPreviewMode)
 		{
 			showPicker(FALSE);
@@ -1344,6 +1352,7 @@ BOOL LLTextureCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
 			params["preview_only"] = TRUE;
 			LLFloaterReg::showInstance("preview_texture", params, TRUE);
 		}
+		// </FS:Ansariel>
 
 		handled = TRUE;
 	}
@@ -1671,10 +1680,12 @@ BOOL LLTextureCtrl::handleUnicodeCharHere(llwchar uni_char)
 
 void LLTextureCtrl::setValue( const LLSD& value )
 {
-	// Changed for texture preview mode
+	// <FS:Ansariel> Texture preview mode
+	//setImageAssetID(value.asUUID());
 	LLUUID uuid = value.asUUID();
 	setImageAssetID(uuid);
 	LLView::setEnabled( (!mPreviewMode || uuid.notNull()) );
+	// </FS:Ansariel>
 }
 
 LLSD LLTextureCtrl::getValue() const
