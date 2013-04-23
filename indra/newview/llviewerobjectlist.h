@@ -37,6 +37,8 @@
 // project includes
 #include "llviewerobject.h"
 
+#include <boost/unordered_map.hpp>
+
 class LLCamera;
 class LLNetMap;
 class LLDebugBeacon;
@@ -206,7 +208,12 @@ protected:
 
 	std::set<LLUUID> mDeadObjects;	
 
-	std::map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
+	// <FS:ND> mUUIDObjectMap is hit very frequently
+
+	// std::map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
+	boost::unordered_map<LLUUID, LLPointer<LLViewerObject>, FSUUIDHash> mUUIDObjectMap;
+
+	// </FS:ND>
 
 	//set of objects that need to update their cost
 	std::set<LLUUID> mStaleObjectCost;
@@ -262,7 +269,8 @@ extern LLViewerObjectList gObjectList;
  */
 inline LLViewerObject *LLViewerObjectList::findObject(const LLUUID &id)
 {
-	std::map<LLUUID, LLPointer<LLViewerObject> >::iterator iter = mUUIDObjectMap.find(id);
+	// std::map<LLUUID, LLPointer<LLViewerObject> >::iterator iter = mUUIDObjectMap.find(id);
+	boost::unordered_map<LLUUID, LLPointer<LLViewerObject>, FSUUIDHash>::iterator iter = mUUIDObjectMap.find( id );
 	if(iter != mUUIDObjectMap.end())
 	{
 		return iter->second;
