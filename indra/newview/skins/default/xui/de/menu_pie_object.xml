@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Object Pie">
-   <pie_slice label="Öffnen" name="Open"/>
-   <pie_slice label="Erstellen" name="Build"/>
-    <pie_slice label="Berühren" name="Pie Object Touch"/>
-    <pie_slice label="Hier sitzen" name="Pie Object Sit"/>
-    <pie_slice label="Aufstehen" name="Object Stand Up"/>
-    <pie_slice label="Kaufen" name="Buy..."/>
-    <pie_slice label="Nehmen" name="Pie Object Take"/>
-    <pie_slice label="Zahlen" name="Pay..."/>
-    <pie_menu label="Mehr >" name="Object Pie More 1">
+	<pie_slice label="Öffnen" name="Open"/>
+	<pie_slice label="Erstellen" name="Build"/>
+	<pie_slice label="Berühren" name="Pie Object Touch"/>
+	<pie_slice label="Hier sitzen" name="Pie Object Sit"/>
+	<pie_slice label="Aufstehen" name="Object Stand Up"/>
+	<pie_slice label="Kaufen" name="Buy..."/>
+	<pie_slice label="Nehmen" name="Pie Object Take"/>
+	<pie_slice label="Zahlen" name="Pay..."/>
+	<pie_menu label="Mehr >" name="Object Pie More 1">
 		<pie_slice label="Löschen" name="Delete"/>
 		<pie_slice label="Anziehen" name="Wear"/>
 		<pie_slice label="Kopie nehmen" name="Take Copy"/>
@@ -39,6 +39,6 @@
 			<pie_slice label="Untersuchen" name="Object Inspect"/>
 		</pie_menu>
 		<pie_slice label="Kaufen..." name="Buy..."/>
-    </pie_menu>
-    <pie_slice label="Bearbeiten" name="Edit..."/>
+	</pie_menu>
+	<pie_slice label="Bearbeiten" name="Edit..."/>
 </pie_menu>

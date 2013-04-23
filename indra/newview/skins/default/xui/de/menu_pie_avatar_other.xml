@@ -2,27 +2,27 @@
 <!-- *NOTE: See also menu_pie_attachment_other.xml -->
 
 <pie_menu name="Avatar Pie">
-    <pie_slice label="Profil..." name="Profile..."/>
-    <pie_slice label="Blockieren" name="Avatar Mute"/>
-    <pie_slice label="Gehe zu" name="Go to"/>
-    <pie_slice label="Melden..." name="abuse"/>
-    <pie_slice label="Freund hinzuf." name="Add Friend"/>
-    <pie_slice label="Zahlen..." name="Pay..."/>
-    <pie_menu name="Avatar Pie More 1" label="Mehr >">
-        <pie_slice label="Einfrieren" name="Freeze..."/>
-        <pie_slice label="Karte geben" name="Add Calling Card"/>
-        <pie_slice label="Gruppeneinl." name="Group Invite..."/>
-        <pie_slice label="Hinauswerfen" name="Eject..."/>
-        <pie_menu name="Avatar Pie More 2" label="Mehr >">
-            <pie_slice label="Texturen" name="Debug..."/>
-            <pie_slice label="Skript-Info" name="ScriptInfo"/>
-            <pie_slice label="Anrufen" name="Call"/>
-            <pie_slice label="Hineinzoomen" name="Zoom In"/>
-        </pie_menu>
+	<pie_slice label="Profil..." name="Profile..."/>
+	<pie_slice label="Blockieren" name="Avatar Mute"/>
+	<pie_slice label="Gehe zu" name="Go to"/>
+	<pie_slice label="Melden..." name="abuse"/>
+	<pie_slice label="Freund hinzuf." name="Add Friend"/>
+	<pie_slice label="Zahlen..." name="Pay..."/>
+	<pie_menu name="Avatar Pie More 1" label="Mehr >">
+		<pie_slice label="Einfrieren" name="Freeze..."/>
+		<pie_slice label="Karte geben" name="Add Calling Card"/>
+		<pie_slice label="Gruppeneinl." name="Group Invite..."/>
+		<pie_slice label="Hinauswerfen" name="Eject..."/>
+		<pie_menu name="Avatar Pie More 2" label="Mehr >">
+			<pie_slice label="Texturen" name="Debug..."/>
+			<pie_slice label="Skript-Info" name="ScriptInfo"/>
+			<pie_slice label="Anrufen" name="Call"/>
+			<pie_slice label="Hineinzoomen" name="Zoom In"/>
+		</pie_menu>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
 			<pie_slice label="Blacklist" name="DerenderPermanent"/>
 			<pie_slice label="Temporär" name="Derender"/>
 		</pie_menu>
-    </pie_menu>
-    <pie_slice label="IM" name="Send IM..."/>
+	</pie_menu>
+	<pie_slice label="IM" name="Send IM..."/>
 </pie_menu>

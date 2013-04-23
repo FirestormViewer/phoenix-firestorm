@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Attachment Pie">
-    <pie_slice label="Profil..." name="Profile..."/>
-    <pie_slice label="Fallen lassen" name="Drop"/>
-    <pie_menu name="Attachment Pie More" label="Mehr &gt;">
-        <pie_slice label="Skript-Info" name="ScriptInfo"/>
-        <pie_slice label="Berühren" name="Attachment Object Touch"/>
+	<pie_slice label="Profil..." name="Profile..."/>
+	<pie_slice label="Fallen lassen" name="Drop"/>
+	<pie_menu name="Attachment Pie More" label="Mehr &gt;">
+		<pie_slice label="Skript-Info" name="ScriptInfo"/>
+		<pie_slice label="Berühren" name="Attachment Object Touch"/>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
 			<pie_slice label="Temporär" name="Derender"/>
 			<pie_slice label="Blacklist" name="DerenderPermanent"/>
 		</pie_menu>
 		<pie_slice label="Exportieren" name="Export"/>
-        <pie_separator name="inspect_placeholder" />
+		<pie_separator name="inspect_placeholder" />
 		<pie_slice label="Texturen" name="Debug..."/>
-    </pie_menu>
-    <pie_slice label="Hinsetzen" name="Sit Down Here"/>
-    <pie_slice label="Aufstehen" name="Stand Up"/>
-    <pie_slice label="Abnehmen" name="Detach"/>
-    <pie_slice label="Gesten..." name="Gestures"/>
+	</pie_menu>
+	<pie_slice label="Hinsetzen" name="Sit Down Here"/>
+	<pie_slice label="Aufstehen" name="Stand Up"/>
+	<pie_slice label="Abnehmen" name="Detach"/>
+	<pie_slice label="Gesten..." name="Gestures"/>
 	<pie_menu label="Aussehen &gt;" name="Appearance &gt;">
 		<pie_slice label="Form bearbeiten" name="Edit My Shape"/>
 		<pie_slice label="Outfit bearbeiten" name="Edit My Outfit"/>
