@@ -1336,7 +1336,7 @@ BOOL LLTextureCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
 			//...then start full inventory fetch.
 			LLInventoryModelBackgroundFetch::instance().start();
 		}
-		else
+		else if (!mIsMasked)
 		{
 			// Open the preview floater for the texture
 			LLSD params;
