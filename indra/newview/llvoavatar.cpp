@@ -6204,8 +6204,16 @@ BOOL LLVOAvatar::isWearingWearableType(LLWearableType::EType type) const
 	/* switch(type)
 		case LLWearableType::WT_SHIRT:
 			indicator_te = TEX_UPPER_SHIRT; */
+
+	// <FS:ND> Gets called quite a lot from processObjectUpdates. Remove the frequent getInstance calls.
+
+	// for (LLAvatarAppearanceDictionary::Textures::const_iterator tex_iter = LLAvatarAppearanceDictionary::getInstance()->getTextures().begin();
+	// 	 tex_iter != LLAvatarAppearanceDictionary::getInstance()->getTextures().end();
+	// 	 ++tex_iter)
+
+	LLAvatarAppearanceDictionary::Textures::const_iterator itrEnd = LLAvatarAppearanceDictionary::getInstance()->getTextures().end();
 	for (LLAvatarAppearanceDictionary::Textures::const_iterator tex_iter = LLAvatarAppearanceDictionary::getInstance()->getTextures().begin();
-		 tex_iter != LLAvatarAppearanceDictionary::getInstance()->getTextures().end();
+		 tex_iter != itrEnd;
 		 ++tex_iter)
 	{
 		const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = tex_iter->second;
@@ -8424,16 +8432,23 @@ BOOL LLVOAvatar::isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex te, U
 		return FALSE;
 	}
 
-	// <FS:ND> getImage(te, index) can return 0 in some edge cases.
-	if( !getImage( te, index ) || !ndIsValidPtr( getImage( te, index) ) )
+	// <FS:ND> getImage(te, index) can return 0 in some edge cases. Plus make this faster as it gets called frequently.
+
+	// return (getImage(te, index)->getID() != IMG_DEFAULT_AVATAR && 
+	// 		getImage(te, index)->getID() != IMG_DEFAULT);
+
+
+	LLViewerTexture *pImage( getImage( te, index ) );
+
+	if( !pImage )
 	{
 		llwarns << "getImage( " << (S32)te << ", " << index << " ) returned invalid ptr" << llendl;
 		return FALSE;
 	}
 	// </FS:ND>
 
-	return (getImage(te, index)->getID() != IMG_DEFAULT_AVATAR && 
-			getImage(te, index)->getID() != IMG_DEFAULT);
+	LLUUID const &id = pImage->getID();
+	return id != IMG_DEFAULT_AVATAR && id != IMG_DEFAULT;
 }
 
 //virtual
