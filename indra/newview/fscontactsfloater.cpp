@@ -147,6 +147,7 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("remove_btn",			boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked,	this));
 	mFriendsTab->childSetAction("add_btn",				boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked,	this));
 	mFriendsTab->childSetAction("lgg_fg_openFG",		boost::bind(&FSFloaterContacts::onContactSetsButtonClicked,		this));
+	mFriendsTab->setDefaultBtn("im_btn");
 
 	mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
 	mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
@@ -165,6 +166,7 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupsTab->childSetAction("search_btn",	boost::bind(&FSFloaterContacts::onGroupSearchButtonClicked,		this));
 	mGroupsTab->childSetAction("titles_btn",	boost::bind(&FSFloaterContacts::onGroupTitlesButtonClicked,		this));
 	mGroupsTab->childSetAction("invite_btn",	boost::bind(&FSFloaterContacts::onGroupInviteButtonClicked,		this));
+	mGroupsTab->setDefaultBtn("chat_btn");
 	
 	return TRUE;
 }
