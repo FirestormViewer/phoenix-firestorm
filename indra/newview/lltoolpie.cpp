@@ -1204,7 +1204,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 							// us again after it received the name.
 							std::string l;
 							std::string m;
-							LLAvatarNameCache::get(owner, boost::bind(&LLToolPie::handleTooltipObject, this, hover_object, l, m));
+							mNamecacheConnections.push_back( LLAvatarNameCache::get(owner, boost::bind(&LLToolPie::handleTooltipObject, this, hover_object, l, m)) );
 						}
 
 						// Owner name
@@ -2253,3 +2253,17 @@ void LLToolPie::steerCameraWithMouse(S32 x, S32 y)
 	mMouseSteerX = x;
 	mMouseSteerY = y;
 }
+
+// <FS:ND> Keep track of name resolutions we made and delete them if needed to avoid crashing if this instance dies.
+LLToolPie::~LLToolPie()
+{
+	std::vector< tNamecacheConnection >::iterator itr = mNamecacheConnections.begin();
+	std::vector< tNamecacheConnection >::iterator itrEnd = mNamecacheConnections.end();
+
+	while( itr != itrEnd )
+	{
+		itr->disconnect();
+		++itr;
+	}
+}
+// </FS:ND>

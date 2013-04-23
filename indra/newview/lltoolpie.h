@@ -121,6 +121,15 @@ private:
 	LLSafeHandle<LLObjectSelection> mLeftClickSelection;
 	BOOL				mClickActionBuyEnabled;
 	BOOL				mClickActionPayEnabled;
+
+	// <FS:ND> Keep track of name resolutions we made and delete them if needed to avoid crashing if this instance dies.
+private:
+	typedef boost::signals2::connection tNamecacheConnection;
+	std::vector< tNamecacheConnection > mNamecacheConnections;
+
+public:
+	~LLToolPie();
+	// </FS:ND>
 };
 
 #endif
