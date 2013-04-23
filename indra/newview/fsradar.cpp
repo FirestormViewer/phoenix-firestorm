@@ -632,7 +632,7 @@ void FSRadar::updateRadarList()
 	{
 		mRadarFrameCount++;
 		S32 chan(RadarAlertChannel);
-		U32 num_this_pass = min(FSRADAR_MAX_AVATARS_PER_ALERT, num_entering);
+		U32 num_this_pass = llmin(FSRADAR_MAX_AVATARS_PER_ALERT, num_entering);
 		std::string msg = llformat("%d,%d", mRadarFrameCount, num_this_pass);
 		U32 loop = 0;
 		while (loop < num_entering)
@@ -653,7 +653,7 @@ void FSRadar::updateRadarList()
 			msgs->addString("ButtonLabel", msg.c_str());
 			gAgent.sendReliableMessage();
 			loop += num_this_pass;
-			num_this_pass = min(FSRADAR_MAX_AVATARS_PER_ALERT, num_entering - loop);
+			num_this_pass = llmin(FSRADAR_MAX_AVATARS_PER_ALERT, num_entering - loop);
 			msg = llformat("%d,%d", mRadarFrameCount, num_this_pass);
 		}
 	}
@@ -662,8 +662,8 @@ void FSRadar::updateRadarList()
 	{
 		mRadarFrameCount++;
 		S32 chan(RadarAlertChannel);
-		U32 num_this_pass = min(FSRADAR_MAX_AVATARS_PER_ALERT, num_leaving);
-		std::string msg = llformat("%d,-%d", mRadarFrameCount, min(FSRADAR_MAX_AVATARS_PER_ALERT, num_leaving));
+		U32 num_this_pass = llmin(FSRADAR_MAX_AVATARS_PER_ALERT, num_leaving);
+		std::string msg = llformat("%d,-%d", mRadarFrameCount, llmin(FSRADAR_MAX_AVATARS_PER_ALERT, num_leaving));
 		U32 loop = 0;
 		while (loop < num_leaving)
 		{
@@ -683,7 +683,7 @@ void FSRadar::updateRadarList()
 			msgs->addString("ButtonLabel", msg.c_str());
 			gAgent.sendReliableMessage();
 			loop += num_this_pass;
-			num_this_pass = min(FSRADAR_MAX_AVATARS_PER_ALERT, num_leaving - loop);
+			num_this_pass = llmin(FSRADAR_MAX_AVATARS_PER_ALERT, num_leaving - loop);
 			msg = llformat("%d,-%d", mRadarFrameCount, num_this_pass);
 		}
 	}
