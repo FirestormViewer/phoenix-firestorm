@@ -1894,6 +1894,8 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
 //return the fast cache location
 bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel)
 {
+	raw->freeze(); // <FS:ND/> Crash hunting: No other thread is allowd to change with this image right now
+
 	//rescale image if needed
 	S32 w, h, c;
 	w = raw->getWidth();
@@ -1914,12 +1916,19 @@ bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 dis
 		{
 			LLPointer<LLImageRaw> newraw = new LLImageRaw(raw->getData(), raw->getWidth(), raw->getHeight(), raw->getComponents());
 			newraw->scale(w, h) ;
+
+			raw->thaw(); // <FS:ND/> We're done with raw for now. It's more or less okay (depending if other threads still might hold a pointer) to change raw now.
 			raw = newraw;
 
+			// </FS:ND/> Freeze our new raw. This might seem strange in case newraw belongs to this thread/method only. But if we're never reqching this if, raw will still point to our 'old raw'  
+			// and might be used by the memcpy below. So we make sure the image is frozen upto after that point and we can safely call thaw in either case.
+
+			raw->freeze();
+			
 			discardlevel += i ;
 		}
 	}
-	
+
 	//copy data
 	memcpy(mFastCachePadBuffer, &w, sizeof(S32));
 	memcpy(mFastCachePadBuffer + sizeof(S32), &h, sizeof(S32));
@@ -1929,6 +1938,9 @@ bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 dis
 	{
 		memcpy(mFastCachePadBuffer + TEXTURE_FAST_CACHE_ENTRY_OVERHEAD, raw->getData(), w * h * c);
 	}
+
+	raw->thaw(); // <FS:ND/> We're done with raw for now. It's more or less okay (depending if other threads still might hold a pointer) to change raw now. This raw might either be a copy or the original object.
+
 	S32 offset = id * TEXTURE_FAST_CACHE_ENTRY_SIZE;
 
 	{
