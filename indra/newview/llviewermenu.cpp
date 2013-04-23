@@ -3686,10 +3686,12 @@ class LLAvatarDebug : public view_listener_t
 				((LLVOAvatarSelf *)avatar)->dumpLocalTextures();
 			}
 			llinfos << "Dumping temporary asset data to simulator logs for avatar " << avatar->getID() << llendl;
-			std::vector<std::string> strings;
-			strings.push_back(avatar->getID().asString());
-			LLUUID invoice;
-			send_generic_message("dumptempassetdata", strings, invoice);
+			// <FS:Ansariel> Disable message - spawns error "generic request failed"
+			//std::vector<std::string> strings;
+			//strings.push_back(avatar->getID().asString());
+			//LLUUID invoice;
+			//send_generic_message("dumptempassetdata", strings, invoice);
+			// </FS:Ansariel>
 			LLFloaterReg::showInstance( "avatar_textures", LLSD(avatar->getID()) );
 		}
 		return true;

@@ -103,14 +103,6 @@
     </menu_item_call>
    </context_menu>	
     <menu_item_call
-         label="Debug Textures"
-         name="Debug...">
-            <menu_item_call.on_click
-             function="Avatar.Debug" />
-            <menu_item_call.on_visible
-             function="IsGodCustomerService"/>
-    </menu_item_call>
-    <menu_item_call
 		 label="Dump XML"
          name="Dump XML">
             <menu_item_call.on_click
@@ -164,6 +156,12 @@
     <menu_item_call.on_click
       function="Object.DerenderPermanent" />
    </menu_item_call>
+    <menu_item_call
+         label="Show Textures"
+         name="Debug...">
+            <menu_item_call.on_click
+             function="Avatar.Debug" />
+    </menu_item_call>
     <menu_item_call 
     enabled="true"
     label="Texture Refresh"

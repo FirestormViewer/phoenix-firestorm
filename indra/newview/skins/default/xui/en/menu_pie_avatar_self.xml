@@ -290,12 +290,10 @@
 
     </pie_menu>
     <pie_slice
-        label="Debug Textures"
+        label="Textures"
         name="Debug...">
         <pie_slice.on_click
             function="Avatar.Debug" />
-        <pie_slice.on_visible
-            function="IsGodCustomerService"/>
     </pie_slice>
 
 </pie_menu>

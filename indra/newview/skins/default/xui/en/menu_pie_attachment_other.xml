@@ -98,12 +98,10 @@
 
             <!-- ## Zi: Is this the right thing to use for avatar textures? -->
             <pie_slice
-                label="Debug Textures"
+                label="Textures"
                 name="Debug...">
                 <pie_slice.on_click
                     function="Avatar.Debug" />
-                <pie_slice.on_visible
-                    function="IsGodCustomerService"/>
             </pie_slice>
             <pie_slice
 	            enabled="true"

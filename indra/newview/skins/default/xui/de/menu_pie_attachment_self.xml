@@ -11,6 +11,7 @@
 		</pie_menu>
 		<pie_slice label="Exportieren" name="Export"/>
         <pie_separator name="inspect_placeholder" />
+		<pie_slice label="Texturen" name="Debug..."/>
     </pie_menu>
     <pie_slice label="Hinsetzen" name="Sit Down Here"/>
     <pie_slice label="Aufstehen" name="Stand Up"/>

@@ -32,5 +32,5 @@
 		<pie_slice label="Form bearb." name="Edit My Shape"/>
 		<pie_slice label="Outfit bearb." name="Edit My Outfit"/>
 	</pie_menu>
-    <pie_slice label="Debug Texturen" name="Debug..."/>
+    <pie_slice label="Texturen" name="Debug..."/>
 </pie_menu>

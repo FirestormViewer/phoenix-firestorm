@@ -77,6 +77,13 @@
             function="Object.EnableExport" />
         </pie_slice>
         <pie_separator name="inspect_placeholder" />
+        <pie_separator/>
+            <pie_slice
+                label="Textures"
+                name="Debug...">
+                <pie_slice.on_click
+                    function="Avatar.Debug" />
+            </pie_slice>
 
     </pie_menu>
     <pie_slice
