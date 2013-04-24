@@ -113,7 +113,10 @@ static void update_texture_ctrl(LLVOAvatar* avatarp,
 	else
 	{
 		ctrl->setImageAssetID(id);
-		ctrl->setToolTip(tex_entry->mName + " : " + id.asString());
+		// <FS:Ansariel> Hide full texture uuid
+		//ctrl->setToolTip(tex_entry->mName + " : " + id.asString());
+		ctrl->setToolTip(tex_entry->mName + " : " + id.asString().substr(0,7));
+		// </FS:Ansariel>
 	}
 }
 
