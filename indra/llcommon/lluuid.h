@@ -161,11 +161,11 @@ public:
 };
 
 // <FS:Ansariel> UUID hash calculation
-struct FSUUIDHash : public std::unary_function<LLUUID, size_t>
+struct FSUUIDHash
 {
 	inline size_t operator() (const LLUUID& id) const
 	{
-		return id.getCRC32();
+		return *reinterpret_cast<const size_t*>(id.mData);
 	}
 };
 // </FS:Ansariel> UUID hash calculation
