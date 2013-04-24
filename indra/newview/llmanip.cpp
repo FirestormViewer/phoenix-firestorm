@@ -372,24 +372,26 @@ LLVector3 LLManip::getPivotPoint()
 	static LLCachedControl<F32> sPivotZ(gSavedSettings, "FSBuildPrefs_PivotZ");
 	
 	const BOOL children_ok = TRUE;
-	if (mObjectSelection->getFirstRootObject(children_ok) && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
+	LLViewerObject* root_object = mObjectSelection->getFirstRootObject(children_ok);
+	if (root_object && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
 	{
-		pos = mObjectSelection->getFirstRootObject(children_ok)->getPivotPositionAgent();
-		scale = mObjectSelection->getFirstRootObject(children_ok)->getScale();
-		rot = mObjectSelection->getFirstRootObject(children_ok)->getRotation();
+		pos = root_object->getPivotPositionAgent();
+		scale = root_object->getScale();
+		rot = root_object->getRotation();
 	}
 	else
 	{
-		pos = LLSelectMgr::getInstance()->getBBoxOfSelection().getCenterAgent();
-		scale = LLSelectMgr::getInstance()->getBBoxOfSelection().getExtentLocal();
-		rot = LLSelectMgr::getInstance()->getBBoxOfSelection().getRotation();
+		LLBBox bounding_box = LLSelectMgr::getInstance()->getBBoxOfSelection();
+		pos = bounding_box.getCenterAgent();
+		scale = bounding_box.getExtentLocal();
+		rot = bounding_box.getRotation();
 	}
-	if(sPivotPerc)
+	if (sPivotPerc)
 	{
 		LLVector3 add(
-			(-scale[VX]*0.5) + (scale[VX]*(sPivotX*0.01)),
-			(-scale[VY]*0.5) + (scale[VY]*(sPivotY*0.01)),
-			(-scale[VZ]*0.5) + (scale[VZ]*(sPivotZ*0.01)));
+			(-scale[VX] * 0.5) + (scale[VX] * (sPivotX * 0.01)),
+			(-scale[VY] * 0.5) + (scale[VY] * (sPivotY * 0.01)),
+			(-scale[VZ] * 0.5) + (scale[VZ] * (sPivotZ * 0.01)));
 		add = add * rot;
 		pos = pos + add;
 	}
