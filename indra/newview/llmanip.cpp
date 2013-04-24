@@ -355,6 +355,13 @@ LLVector3 LLManip::getSavedPivotPoint() const
 
 LLVector3 LLManip::getPivotPoint()
 {
+	// <FS:KC> Pivot point controls
+	//if (mObjectSelection->getFirstObject() && mObjectSelection->getObjectCount() == 1 && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
+	//{
+	//	return mObjectSelection->getFirstObject()->getPivotPositionAgent();
+	//}
+	//return LLSelectMgr::getInstance()->getBBoxOfSelection().getCenterAgent();
+
 	LLVector3 pos;
 	LLVector3 scale;
 	LLQuaternion rot;
@@ -393,6 +400,7 @@ LLVector3 LLManip::getPivotPoint()
 		pos = pos + add;
 	}
 	return pos;
+	// </FS:KC> Pivot point controls
 }
 
 
@@ -422,8 +430,10 @@ void LLManip::renderGuidelines(BOOL draw_x, BOOL draw_y, BOOL draw_z)
 		grid_rot.getAngleAxis(&angle_radians, &x, &y, &z);
 		gGL.rotatef(angle_radians * RAD_TO_DEG, x, y, z);
 
+		// <FS> OpenSim support
 		//F32 region_size = LLWorld::getInstance()->getRegionWidthInMeters();
 		F32 region_size = object->getRegion()->getWidth();
+		// </FS> OpenSim support
 
 		const F32 LINE_ALPHA = 0.33f;
 
