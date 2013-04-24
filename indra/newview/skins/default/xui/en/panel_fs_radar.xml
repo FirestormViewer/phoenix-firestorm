@@ -4,9 +4,6 @@
  width="327"
  height="333">
 	<string
-	 name="no_one_near"
-	 value="No one nearby. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests."/>
-	<string
 	 name="MiniMapToolTipMsg"
 	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
 	<string
