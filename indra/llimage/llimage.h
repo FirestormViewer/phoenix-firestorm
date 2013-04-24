@@ -276,18 +276,6 @@ public:
 	// <FS:Techwolf Lupindo> texture comment metadata reader
 	std::string mComment;
 	// </FS:Techwolf Lupindo>
-
-	// <FS:ND> Hunting a strange crashbug ... freeze an LLImageRaw to prevent modification
-	void freeze()
-	{ mFrozen = true; }
-	void thaw()
-	{ mFrozen = false; }
-
-	bool frozen() const
-	{ return mFrozen; }
-private:
-	bool mFrozen;
-	// </FS:ND>
 };
 
 // Compressed representation of image.

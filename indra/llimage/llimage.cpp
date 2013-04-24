@@ -293,14 +293,12 @@ S32 LLImageRaw::sRawImageCount = 0;
 LLImageRaw::LLImageRaw()
 	: LLImageBase()
 {
-	thaw(); // <FS:ND/> Crash hunting
 	++sRawImageCount;
 }
 
 LLImageRaw::LLImageRaw(U16 width, U16 height, S8 components)
 	: LLImageBase()
 {
-	thaw(); // <FS:ND/> Crash hunting
 	//llassert( S32(width) * S32(height) * S32(components) <= MAX_IMAGE_DATA_SIZE );
 	allocateDataSize(width, height, components);
 	++sRawImageCount;
@@ -309,7 +307,6 @@ LLImageRaw::LLImageRaw(U16 width, U16 height, S8 components)
 LLImageRaw::LLImageRaw(U8 *data, U16 width, U16 height, S8 components, bool no_copy)
 	: LLImageBase()
 {
-	thaw(); // <FS:ND/> Crash hunting
 
 	if(no_copy)
 	{
@@ -348,7 +345,6 @@ U8* LLImageRaw::allocateData(S32 size)
 U8* LLImageRaw::reallocateData(S32 size)
 {
 	sGlobalRawMemory -= getDataSize();
-	llassert_always( !frozen() ); // <FS:ND/> Crash hunting
 	U8* res = LLImageBase::reallocateData(size);
 	sGlobalRawMemory += getDataSize();
 	return res;
@@ -358,7 +354,6 @@ U8* LLImageRaw::reallocateData(S32 size)
 void LLImageRaw::deleteData()
 {
 	sGlobalRawMemory -= getDataSize();
-	llassert_always( !frozen() ); // <FS:ND/> Crash hunting
 	LLImageBase::deleteData();
 }
 
@@ -369,7 +364,6 @@ void LLImageRaw::setDataAndSize(U8 *data, S32 width, S32 height, S8 components)
 		return ;
 	}
 
-	llassert_always( !frozen() ); // <FS:ND/> Crash hunting
 	deleteData();
 
 	LLImageBase::setSize(width, height, components) ;
@@ -384,7 +378,6 @@ BOOL LLImageRaw::resize(U16 width, U16 height, S8 components)
 	{
 		return TRUE;
 	}
-	llassert_always( !frozen() ); // <FS:ND/> Crash hunting
 	// Reallocate the data buffer.
 	deleteData();
 
