@@ -12,7 +12,7 @@
   <string name="low">Niskie</string>
   <string name="lowest">Najniższe</string>
   <string name="mesh_status_good">Dostarcz!</string>
-  <string name="mesh_status_na">">???</string>
+  <string name="mesh_status_na">???</string>
   <string name="mesh_status_none">Brak</string>
   <string name="mesh_status_submesh_mismatch">Poziomy detali mają inną liczbę stron do teksturowania.</string>
   <string name="mesh_status_mesh_mismatch">Poziomy detali mają inną liczbę instancji meszy.</string>

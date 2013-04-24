@@ -13,7 +13,6 @@
 		<menu_item_call label="Unieruchom" name="Freeze..."/>
 		<menu_item_call label="Wyrzuć" name="Eject..."/>
 	</context_menu>
-	<menu_item_call label="Debugowanie tekstur" name="Debug..."/>
 	<menu_item_call label="Zrzuć XML" name="Dump XML"/>
 	<menu_item_call label="Przybliż" name="Zoom In"/>
 	<menu_item_call label="Zapłać" name="Pay..."/>
@@ -21,6 +20,7 @@
 	<menu_item_call label="O skryptach" name="ScriptInfo"/>
 	<menu_item_call label="Derenderuj" name="Derender"/>
 	<menu_item_call label="Derenderuj + czarna lista" name="DerenderPermanent"/>
+	<menu_item_call label="Pokaż tekstury" name="Debug..."/>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 	<menu_item_call label="Eksportuj" name="Export"/>
 </context_menu>

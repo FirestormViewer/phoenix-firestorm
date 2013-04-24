@@ -11,6 +11,7 @@
             <pie_slice label="Czarna lista" name="DerenderPermanent"/>
         </pie_menu>
         <pie_slice label="Eksportuj" name="Export"/>
+        <pie_slice label="Pokaż tekstury" name="Debug..."/>
     </pie_menu>
     <pie_slice label="Usiądź tu" name="Sit Down Here"/>
     <pie_slice label="Wstań" name="Stand Up"/>

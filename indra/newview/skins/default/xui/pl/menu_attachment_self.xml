@@ -12,11 +12,11 @@
 	<menu_item_call label="Moi znajomi" name="Friends..."/>
 	<menu_item_call label="Moje grupy" name="Groups..."/>
 	<menu_item_call label="Mój profil" name="Profile..."/>
-	<menu_item_call label="Debugowanie tekstur" name="Debug..."/>
 	<menu_item_call label="Zrzuć XML" name="Dump XML"/>
 	<menu_item_call label="O skryptach" name="ScriptInfo"/>
 	<menu_item_call label="Derenderuj" name="Derender"/>
 	<menu_item_call label="Derenderuj + czarna lista" name="DerenderPermanent"/>
+	<menu_item_call label="Pokaż tekstury" name="Debug..."/>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 	<menu_item_call label="Upuść" name="Drop"/>
 </context_menu>

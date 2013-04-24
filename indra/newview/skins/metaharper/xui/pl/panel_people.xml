@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ludzie" name="people_panel">
 	<string name="high_server_load" value="Ze względu na obciążenie serwera masowa zmiana widoczności może zająć trochę czasu. Prosimy o cierpliwość."/>
-	<string name="camera_no_focus" value="Kamera nie może skupić się na [AVATARNAME], ponieważ jest on/ona poza polem widzenia."/>
-	<string name="entering_draw_distance" value="pojawił/a się w polu widzenia ([DISTANCE] m)."/>
-	<string name="leaving_draw_distance" value="opuścił/a pole widzenia."/>
-	<string name="entering_chat_range" value="pojawił/a się w zasięgu czatu ([DISTANCE] m)."/>
-	<string name="leaving_chat_range" value="opuścił/a zasięgu czatu."/>
-	<string name="entering_region" value="pojawił/a się w regionie."/>
-	<string name="entering_region_distance" value="pojawił/a się w regionie ([DISTANCE] m)."/>
-	<string name="leaving_region" value="opuścił/a region."/>
 	<string name="no_recent_people" value="Brak ostatnich rozmówców. Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, która Cię interesuje i odwiedź wylistowane miejsca by spotkać osoby z podobnymi zainteresowaniami."/>
 	<string name="no_filtered_recent_people" value="Nie znaleziono tego czego szukasz? Spróbuj [secondlife:///app/search/groups/[SEARCH_TERM] Szukaj]."/>
 	<string name="no_one_near" value="Nie ma nikogo w pobliżu. Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, która Cię interesuje i odwiedź wylistowane miejsca by spotkać osoby z podobnymi zainteresowaniami."/>
@@ -40,15 +32,15 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 						<radar_list.columns name="in_region" tool_tip="Jest w tym samym regionie"/>
 						<radar_list.columns name="flags" tool_tip="Ma dane płatnicze na koncie"/>
 						<radar_list.columns label="Wiek" name="age"/>
-						<radar_list.columns label="Widziany" name="seen"/>
-						<radar_list.columns label="Odległość" name="range"/>
+						<radar_list.columns label="Widz." name="seen"/>
+						<radar_list.columns label="Odl." name="range"/>
 					</radar_list>
 				</layout_panel>
 			</layout_stack>
 			<panel name="bottom_panel_nearby">
 				<menu_button name="nearby_view_sort_btn" tool_tip="Opcje"/>
 				<button name="add_friend_btn_nearby" tool_tip="Dodaj wybranego Rezydenta do znajomych"/>
-				<slider label="Zasięg(m):" name="NearMeRange" />
+				<slider label="Dystans (m):" name="NearMeRange" />
 			</panel>
 		</panel>
 		<panel label="Znajomi" name="friends_panel">

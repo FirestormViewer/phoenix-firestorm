@@ -4676,6 +4676,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Snapshot_To_Disk_Label">
 		Zdjęcie na dysk
 	</string>
+	<string name="Command_Radar_Label">
+		Radar
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4807,6 +4810,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Snapshot_To_Disk_Tooltip">
 		Wykonuje szybko zdjęcie i zapisuje je na twardym dysku
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Otwiera radar z najbliższymi awatarami
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
@@ -5179,5 +5185,29 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="GroupChatMuteNotice">
 		Wyciszanie czatu grupowego [NAME].
+	</string>
+	<string name="camera_no_focus">
+		Kamera nie może skupić się na [AVATARNAME], ponieważ jest on/ona poza polem widzenia.
+	</string>
+	<string name="entering_draw_distance">
+		pojawił/a się w polu widzenia ([DISTANCE] m).
+	</string>
+	<string name="leaving_draw_distance">
+		opuścił/a pole widzenia.
+	</string>
+	<string name="entering_chat_range">
+		pojawił/a się w zasięgu czatu ([DISTANCE] m).
+	</string>
+	<string name="leaving_chat_range">
+		opuścił/a zasięgu czatu.
+	</string>
+	<string name="entering_region">
+		pojawił/a się w regionie.
+	</string>
+	<string name="entering_region_distance">
+		pojawił/a się w regionie ([DISTANCE] m).
+	</string>
+	<string name="leaving_region">
+		opuścił/a region.
 	</string>
 </strings>

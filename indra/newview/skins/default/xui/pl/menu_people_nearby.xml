@@ -6,21 +6,9 @@
 	<menu_item_call label="Wiadomość IM" name="IM"/>
 	<menu_item_call label="Zadzwoń" name="Call"/>
 	<menu_item_call label="Mapa" name="Map"/>
-	<menu_item_call label="Śledź" name="Track"/>
 	<menu_item_call label="Udostępnij" name="Share"/>
 	<menu_item_call label="Zapłać" name="Pay"/>
-	<menu_item_call label="Proponuj teleport" name="teleport"/>
-	<menu_item_call label="Teleportuj do" name="teleport_to"/>
-	<menu_item_call label="Przybliż" name="zoom_in"/>
-	<menu_item_call label="Zaproś do grupy" name="GroupInvite"/>
-	<menu_item_call label="Info o skryptach" name="ScriptInfo"/>
 	<menu_item_check label="Zablokuj/Odblokuj" name="Block/Unblock"/>
-	<menu_item_call label="Zgłoś" name="report"/>
-	<menu_item_call label="Unieruchom" name="freeze"/>
-	<menu_item_call label="Działka: Wydal z ziemi" name="eject"/>
-	<menu_item_call label="Majątek: Wyrzuć" name="kick"/>
-	<menu_item_call label="Majątek: Odeślij do domu" name="teleport_home"/>
-	<menu_item_call label="Majątek: Zbanuj" name="estate_ban"/>
-	<menu_item_call label="Derenderuj" name="derender"/>
-	<menu_item_call label="Derenderuj + czarna lista" name="derender_permanent"/>
+	<menu_item_call label="Proponuj teleport" name="teleport"/>
+	<menu_item_call label="Zaproś do grupy" name="GroupInvite"/>
 </context_menu>

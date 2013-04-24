@@ -8,14 +8,14 @@
 	<pie_slice label="Kup" name="Buy..."/>
 	<pie_slice label="Weź" name="Pie Object Take"/>
 	<pie_slice label="Zapłać" name="Pay..."/>
-	<pie_menu label="Więcej >" name="Object Pie More 1">
+	<pie_menu label="Więcej &gt;" name="Object Pie More 1">
 		<pie_slice label="Usuń" name="Delete"/>
 		<pie_slice label="Załóż" name="Wear"/>
 		<pie_slice label="Weź kopię" name="Take Copy"/>
-		<pie_menu label="Dołącz HUD >" name="Pie Object Attach HUD"/>
-		<pie_menu label="Dołącz >" name="Pie Object Attach"/>
+		<pie_menu label="Dołącz HUD &gt;" name="Pie Object Attach HUD"/>
+		<pie_menu label="Dołącz &gt;" name="Pie Object Attach"/>
 		<pie_slice label="Zwróć" name="Return..."/>
-		<pie_menu label="Więcej >" name="Object Pie More 2">
+		<pie_menu label="Więcej &gt;" name="Object Pie More 2">
 			<pie_slice label="Odśwież tekstury" name="Texture Refresh"/>
 			<pie_menu name="DerenderMenu" label="Derenderuj &gt;">
 				<pie_slice label="Czarna lista" name="DerenderPermanent"/>

@@ -70,6 +70,7 @@
 	<menu label="Świat" name="World">
 		<menu_item_call label="Synchronizuj animacje" name="Resync Animations"/>
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
+		<menu_item_check label="Radar" name="Radar"/>
 		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
 		<menu_item_check label="Miejsca" name="Places"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>

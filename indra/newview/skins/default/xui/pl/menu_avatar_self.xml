@@ -27,8 +27,8 @@
 	<menu_item_call label="Znajomi" name="Friends..."/>
 	<menu_item_call label="Grupy" name="Groups..."/>
 	<menu_item_call label="Profil" name="Profile..."/>
-	<menu_item_call label="Debugowanie tekstur" name="Debug..."/>
 	<menu_item_call label="Info o skryptach" name="ScriptInfo"/>
+	<menu_item_call label="Pokaż tekstury" name="Debug..."/>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 	<menu_item_call label="Zrzuć XML" name="Dump XML"/>
 </context_menu>
