@@ -254,6 +254,7 @@
 
 #include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 #include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "fsradar.h"
 
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
@@ -5470,6 +5471,13 @@ void LLAppViewer::disconnectViewer()
 	{
 		gFloaterView->restoreAll();
 	}
+
+	// <FS:Ansariel> Firestorm radar: Shutdown radar
+	if (FSRadar::instanceExists())
+	{
+		FSRadar::deleteSingleton();
+	}
+	// <FS:Ansariel>
 
 	if (LLSelectMgr::getInstance())
 	{
