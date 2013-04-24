@@ -50,6 +50,8 @@ LLToolGun::LLToolGun( LLToolComposite* composite )
 :	LLTool( std::string("gun"), composite ),
 		mIsSelected(FALSE)
 {
+	// <FS:Ansariel> Performance tweak
+	mCrosshairp = LLUI::getUIImage("crosshairs.tga");
 }
 
 void LLToolGun::handleSelect()
@@ -146,9 +148,14 @@ void LLToolGun::draw()
 	static LLCachedControl<bool> showCrosshairs(gSavedSettings, "ShowCrosshairs");
 	if (showCrosshairs)
 	{
-		LLUIImagePtr crosshair = LLUI::getUIImage("crosshairs.tga");
-		crosshair->draw(
-			( gViewerWindow->getWorldViewRectScaled().getWidth() - crosshair->getWidth() ) / 2,
-			( gViewerWindow->getWorldViewRectScaled().getHeight() - crosshair->getHeight() ) / 2);
+		// <FS:Ansariel> Performance tweak
+		//LLUIImagePtr crosshair = LLUI::getUIImage("crosshairs.tga");
+		//crosshair->draw(
+		//	( gViewerWindow->getWorldViewRectScaled().getWidth() - crosshair->getWidth() ) / 2,
+		//	( gViewerWindow->getWorldViewRectScaled().getHeight() - crosshair->getHeight() ) / 2);
+		mCrosshairp->draw(
+			( gViewerWindow->getWorldViewRectScaled().getWidth() - mCrosshairp->getWidth() ) / 2,
+			( gViewerWindow->getWorldViewRectScaled().getHeight() - mCrosshairp->getHeight() ) / 2);
+		// </FS:Ansariel> Performance tweak
 	}
 }
