@@ -223,6 +223,8 @@
 			<text name="textFSKeywordSound">
 				UUID del sonido:
 			</text>
+			<button name="Prev_UISndFSKeywordSound" label="P" tool_tip="Probar este sonido."/>
+			<button name="Def_UISndFSKeywordSound" label="R" tool_tip="Restablecer al UUID por defecto."/>
 		</panel>
 		<panel label="Entrada de texto" name="ChatTextInput">
 			<button name="autoreplace_showgui" label="Autoreemplazar..."/>
