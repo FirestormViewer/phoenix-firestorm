@@ -1789,10 +1789,12 @@ void LLManipTranslate::highlightIntersection(LLVector3 normal,
 		shader->bind();
 	}
 
-	if (shader)
-	{
-		shader->bind();
-	}
+	// <FS:Ansariel> Remove LL merge error
+	//if (shader)
+	//{
+	//	shader->bind();
+	//}
+	// </FS:Ansariel>
 
 	//draw volume/plane intersections
 	{
