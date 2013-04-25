@@ -216,6 +216,8 @@
 			<text name="textFSKeywordSound">
 				UUID dźwięku alertu:
 			</text>
+			<button name="Prev_UISndFSKeywordSound" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndFSKeywordSound" tool_tip="Resetuj do domyślnego UUID."/>
 		</panel>
 		<panel label="Wprowadzanie tekstu" name="ChatTextInput">
 			<button name="autoreplace_showgui" label="Autokorekta"/>

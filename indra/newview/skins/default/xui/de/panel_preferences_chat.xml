@@ -255,6 +255,8 @@
             <text name="textFSKeywordSound" width="200">
               UUID für Soundbenachrichtigung:
             </text>
+            <button label="V" name="Prev_UISndFSKeywordSound" tool_tip="Vorschau zu diesem Sound."/>
+            <button label="S" name="Def_UISndFSKeywordSound" tool_tip="Auf Standardwert zurücksetzen."/>
         </panel>
 
         <!-- Chat: Text Input -->

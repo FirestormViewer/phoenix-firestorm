@@ -512,7 +512,7 @@ void FSPanelProfile::fillCommonData(const LLAvatarData* avatar_data)
     mDescriptionEdit->setValue(avatar_data->about_text);
     // <FS:LO> Force profile picture boost level up so the full image loads
     LLViewerFetchedTexture* tx=LLViewerTextureManager::getFetchedTexture(avatar_data->image_id);
-    tx->setBoostLevel(LLViewerFetchedTexture::BOOST_UI);
+    tx->setBoostLevel(LLViewerFetchedTexture::BOOST_PREVIEW);
     tx->forceImmediateUpdate();
     // </FS:LO>
     mSecondLifePic->setValue(avatar_data->image_id);

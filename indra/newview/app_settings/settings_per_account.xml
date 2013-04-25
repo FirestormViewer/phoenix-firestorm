@@ -470,28 +470,6 @@
 		<key>Value</key>
 			<string></string>
 	</map>
-	<key>FSKeywordPlaySound</key>
-	<map>
-		<key>Comment</key>
-			<string>Play a sound when a keyword is found</string>
-		<key>Persist</key>
-			<integer>1</integer>
-		<key>Type</key>
-			<string>Boolean</string>
-		<key>Value</key>
-			<integer>0</integer>
-		</map>
-	<key>FSKeywordSound</key>
-	<map>
-		<key>Comment</key>
-			<string>UUID of sound to play</string>
-		<key>Persist</key>
-			<integer>1</integer>
-		<key>Type</key>
-			<string>String</string>
-		<key>Value</key>
-			<string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
-	</map>
 	<key>FSKeywordChangeColor</key>
 	<map>
 		<key>Comment</key>

@@ -1534,7 +1534,7 @@
              left="20"
              width="50"
              height="20"
-             control_name="FSKeywordPlaySound"
+             control_name="PlayModeUISndFSKeywordSound"
              name="FSKeywordPlaySound"
              label="Play alert sound"/>
 
@@ -1549,13 +1549,44 @@
               Alert Sound UUID:
             </text>
             <line_editor
+             enabled_control="PlayModeUISndFSKeywordSound"
              follows="left|top"
              left_pad="5"
              height="20"
              max_length_chars="256"
              name="FSKeywordSound"
-             control_name="FSKeywordSound"
+             control_name="UISndFSKeywordSound"
              width="250"/>
+            <button
+             enabled_control="PlayModeUISndFSKeywordSound"
+             follows="left|top"
+             name="Prev_UISndFSKeywordSound"
+             height="20"
+             label="P"
+             layout="topleft"
+             top_delta="-1"
+             left_pad="1"
+             width="17"
+             tool_tip="Preview this sound.">
+                 <button.commit_callback
+                  function="PreviewUISound"
+                  parameter="UISndFSKeywordSound"/>
+            </button>
+            <button
+             enabled_control="PlayModeUISndFSKeywordSound"
+             follows="left|top"
+             name="Def_UISndFSKeywordSound"
+             height="20"
+             label="D"
+             layout="topleft"
+             left_pad="1"
+             width="15"
+             tool_tip="Reset to the default UUID.">
+                 <button.commit_callback
+                  function="ResetControl"
+                  parameter="UISndFSKeywordSound"/>
+            </button>
+			 
         </panel>
 
         <!-- Chat: Text Input -->

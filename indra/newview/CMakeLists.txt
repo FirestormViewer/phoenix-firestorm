@@ -128,6 +128,7 @@ set(viewer_SOURCE_FILES
     fsexport.cpp
     fsfloaterblocklist.cpp
     fsfloatergroup.cpp
+    fsfloatergrouptitles.cpp
     fsfloaterimport.cpp
     fsfloaterim.cpp
     fsfloaterimcontainer.cpp
@@ -141,7 +142,6 @@ set(viewer_SOURCE_FILES
     fsfloatervoicecontrols.cpp
     fsfloatervolumecontrols.cpp
     fsfloaterwsassetblacklist.cpp
-    fsgrouptitles.cpp
     fskeywords.cpp
     fslightshare.cpp
     fslslbridge.cpp
@@ -794,6 +794,7 @@ set(viewer_HEADER_FILES
     fsexport.h
     fsfloaterblocklist.h
     fsfloatergroup.h
+    fsfloatergrouptitles.h
     fsfloaterimport.h
     fsfloaterim.h
     fsfloaterimcontainer.h
@@ -808,7 +809,6 @@ set(viewer_HEADER_FILES
     fsfloatervolumecontrols.h
     fsfloaterwsassetblacklist.h
     fsgridhandler.h
-    fsgrouptitles.h
     fskeywords.h
     fslightshare.h
     fslslbridge.h

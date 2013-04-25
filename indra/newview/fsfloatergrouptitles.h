@@ -1,5 +1,5 @@
 /**
- * @file fsgrouptitles.h
+ * @file fsfloatergrouptitles.h
  * @brief Group title overview and changer
  *
  * $LicenseInfo:firstyear=2012&license=viewerlgpl$
@@ -24,8 +24,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_GROUPTITLES_H
-#define FS_GROUPTITLES_H
+#ifndef FS_FLOATERGROUPTITLES_H
+#define FS_FLOATERGROUPTITLES_H
 
 #include "llsingleton.h"
 
@@ -35,14 +35,30 @@
 #include "llagent.h"
 #include "llgroupmgr.h"
 
-class FSGroupTitles : public LLSingleton<FSGroupTitles>, public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
+class FSFloaterGroupTitles;
+
+class FSGroupTitlesObserver : LLGroupMgrObserver
 {
+
 public:
-	FSGroupTitles(const LLSD &);
-	virtual ~FSGroupTitles();
+	FSGroupTitlesObserver(const LLGroupData& group_data, FSFloaterGroupTitles* parent);
+	virtual ~FSGroupTitlesObserver();
+
+	virtual void changed(LLGroupChange gc);
+
+protected:
+	FSFloaterGroupTitles*	mParent;
+	LLGroupData		mGroupData;
+};
+
+class FSFloaterGroupTitles : public LLSingleton<FSFloaterGroupTitles>, public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
+{
+
+public:
+	FSFloaterGroupTitles(const LLSD &);
+	virtual ~FSFloaterGroupTitles();
 
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void draw();
 
 	virtual void changed(LLGroupChange gc);
 	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
@@ -65,24 +81,8 @@ private:
 	LLButton*			mInfoButton;
 	LLScrollListCtrl*	mTitleList;
 
-	bool	mIsUpdated;
-	S32		mLastScrollPosition;
-
-	std::map<LLUUID, void*> mGroupTitleObserverMap;
+	typedef std::map<LLUUID, FSGroupTitlesObserver*> observer_map_t;
+	observer_map_t		mGroupTitleObserverMap;
 };
 
-
-class FSGroupTitlesObserver : LLGroupMgrObserver
-{
-public:
-	FSGroupTitlesObserver(const LLGroupData& group_data, FSGroupTitles* parent);
-	virtual ~FSGroupTitlesObserver();
-
-	virtual void changed(LLGroupChange gc);
-
-protected:
-	FSGroupTitles*	mParent;
-	LLGroupData		mGroupData;
-};
-
-#endif // FS_GROUPTITLES_H
+#endif // FS_FLOATERGROUPTITLES_H

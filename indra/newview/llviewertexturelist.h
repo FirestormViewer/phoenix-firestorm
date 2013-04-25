@@ -215,6 +215,9 @@ public:
 	static LLStat sRawMemStat;
 	static LLStat sFormattedMemStat;
 
+	// <FS:Ansariel> Fast cache stats
+	static U32 sNumFastCacheReads;
+
 private:
 	static S32 sNumImages;
 	static void (*sUUIDCallback)(void**, const LLUUID &);

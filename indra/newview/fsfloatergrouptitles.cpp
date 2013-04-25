@@ -1,5 +1,5 @@
 /**
- * @file fsgrouptitles.cpp
+ * @file fsfloatergrouptitles.cpp
  * @brief Group title overview and changer
  *
  * $LicenseInfo:firstyear=2012&license=viewerlgpl$
@@ -26,17 +26,16 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "fsgrouptitles.h"
+#include "fsfloatergrouptitles.h"
 #include "llgroupactions.h"
 #include "llscrolllistitem.h"
 #include "llviewermessage.h"
 #include "lltrans.h"
 
-
 /////////////////////////////////////////////////////
 // FSGroupTitlesObserver class
 //
-FSGroupTitlesObserver::FSGroupTitlesObserver(const LLGroupData& group_data, FSGroupTitles* parent) :
+FSGroupTitlesObserver::FSGroupTitlesObserver(const LLGroupData& group_data, FSFloaterGroupTitles* parent) :
 	LLGroupMgrObserver(group_data.mID),
 	mGroupData(group_data),
 	mParent(parent)
@@ -61,10 +60,8 @@ void FSGroupTitlesObserver::changed(LLGroupChange gc)
 /////////////////////////////////////////////////////
 // FSGroupTitles class
 //
-FSGroupTitles::FSGroupTitles(const LLSD& key) :  
-	LLFloater(key),
-	mIsUpdated(false),
-	mLastScrollPosition(0)
+FSFloaterGroupTitles::FSFloaterGroupTitles(const LLSD& key) :  
+	LLFloater(key)
 {
 	// Register observer and event listener
 	LLGroupMgr::getInstance()->addObserver(this);
@@ -74,7 +71,7 @@ FSGroupTitles::FSGroupTitles(const LLSD& key) :
 	gAgent.addListener(this, "update grouptitle list");
 }
 
-FSGroupTitles::~FSGroupTitles()
+FSFloaterGroupTitles::~FSFloaterGroupTitles()
 {
 	gAgent.removeListener(this);
 	LLGroupMgr::getInstance()->removeObserver(this);
@@ -83,18 +80,18 @@ FSGroupTitles::~FSGroupTitles()
 	clearObservers();
 }
 
-BOOL FSGroupTitles::postBuild()
+BOOL FSFloaterGroupTitles::postBuild()
 {
 	mActivateButton = getChild<LLButton>("btnActivate");
 	mRefreshButton = getChild<LLButton>("btnRefresh");
 	mInfoButton = getChild<LLButton>("btnInfo");
 	mTitleList = getChild<LLScrollListCtrl>("title_list");
 
-	mActivateButton->setCommitCallback(boost::bind(&FSGroupTitles::activateGroupTitle, this));
-	mRefreshButton->setCommitCallback(boost::bind(&FSGroupTitles::refreshGroupTitles, this));
-	mInfoButton->setCommitCallback(boost::bind(&FSGroupTitles::openGroupInfo, this));
-	mTitleList->setDoubleClickCallback(boost::bind(&FSGroupTitles::activateGroupTitle, this));
-	mTitleList->setCommitCallback(boost::bind(&FSGroupTitles::selectedTitleChanged, this));
+	mActivateButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
+	mRefreshButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::refreshGroupTitles, this));
+	mInfoButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::openGroupInfo, this));
+	mTitleList->setDoubleClickCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
+	mTitleList->setCommitCallback(boost::bind(&FSFloaterGroupTitles::selectedTitleChanged, this));
 
 	mTitleList->sortByColumn("grouptitle", TRUE);
 
@@ -103,24 +100,7 @@ BOOL FSGroupTitles::postBuild()
 	return TRUE;
 }
 
-void FSGroupTitles::draw()
-{
-	if (mIsUpdated && mGroupTitleObserverMap.size() == 0)
-	{
-		mIsUpdated = false;
-		mTitleList->updateSort();
-
-		// Add "no group"
-		bool is_active_group = (LLUUID::null == gAgent.getGroupID());
-		addListItem(LLUUID::null, LLUUID::null, getString("NoGroupTitle"), LLTrans::getString("GroupsNone"), is_active_group, ADD_TOP);
-
-		mTitleList->setScrollPos(mLastScrollPosition);
-	}
-
-	LLFloater::draw();
-}
-
-void FSGroupTitles::changed(LLGroupChange gc)
+void FSFloaterGroupTitles::changed(LLGroupChange gc)
 {
 	switch (gc)
 	{
@@ -134,7 +114,7 @@ void FSGroupTitles::changed(LLGroupChange gc)
 	}
 }
 
-bool FSGroupTitles::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSFloaterGroupTitles::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	if (event->desc() == "update grouptitle list")
 	{
@@ -145,27 +125,22 @@ bool FSGroupTitles::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLS
 }
 
 
-void FSGroupTitles::clearObservers()
+void FSFloaterGroupTitles::clearObservers()
 {
-	std::map<LLUUID, void*>::iterator it;
-	while (!mGroupTitleObserverMap.empty())
+	for (observer_map_t::iterator it = mGroupTitleObserverMap.begin(); it != mGroupTitleObserverMap.end(); ++it)
 	{
-		it = mGroupTitleObserverMap.begin();
-		FSGroupTitlesObserver* observer = (FSGroupTitlesObserver*)it->second;
-		delete observer;
-		observer = NULL;
-		mGroupTitleObserverMap.erase(it);
+		delete it->second;
 	}
 	mGroupTitleObserverMap.clear();
 }
 
-void FSGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& role_id, const std::string& title,
+void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& role_id, const std::string& title,
 	const std::string& group_name, bool is_active, EAddPosition position)
 {
 	std::string font_style = (is_active ? "BOLD" : "NORMAL");
 
 	LLSD item;
-	item["id"] = role_id;
+	item["id"] = group_id.asString() + role_id.asString(); // Only combination of group id and role id is unique!
 	item["columns"][0]["column"] = "grouptitle";
 	item["columns"][0]["type"] = "text";
 	item["columns"][0]["font"]["style"] = font_style;
@@ -181,15 +156,17 @@ void FSGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& role_id, c
 	item["columns"][3]["type"] = "text";
 	item["columns"][3]["value"] = group_id;
 
-	LLScrollListItem* list_item = mTitleList->addElement(item, position);
+	mTitleList->addElement(item, position);
 
+	// Need to do use the selectByValue method or there would be multiple
+	// selections on login.
 	if (is_active)
 	{
-		list_item->setSelected(TRUE);
+		mTitleList->selectByValue(group_id.asString() + role_id.asString());
 	}
 }
 
-void FSGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
+void FSFloaterGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
 {
 	// Save the group name
 	std::string group_name(group_data.mName);
@@ -198,25 +175,25 @@ void FSGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
 	const std::vector<LLGroupTitle> group_titles = gmgr_data->mTitles;
 
 	// Add group titles
-	for (std::vector<LLGroupTitle>::const_iterator it = group_titles.begin();
-		it != group_titles.end(); it++)
+	for (std::vector<LLGroupTitle>::const_iterator it = group_titles.begin(); it != group_titles.end(); ++it)
 	{
-		bool is_active_title = ((*it).mSelected && group_data.mID == gAgent.getGroupID());
-		addListItem(group_data.mID, (*it).mRoleID, (*it).mTitle, group_name, is_active_title);
+		LLGroupTitle group_title = *it;
+		bool is_active_title = (group_title.mSelected && group_data.mID == gAgent.getGroupID());
+		addListItem(group_data.mID, group_title.mRoleID, group_title.mTitle, group_name, is_active_title);
 	}
 
+	mTitleList->scrollToShowSelected();
+
 	// Remove observer
-	std::map<LLUUID, void*>::iterator it = mGroupTitleObserverMap.find(group_data.mID);
-	if (it != mGroupTitleObserverMap.end() && it->second != NULL)
+	observer_map_t::iterator found_it = mGroupTitleObserverMap.find(group_data.mID);
+	if (found_it != mGroupTitleObserverMap.end())
 	{
-		FSGroupTitlesObserver* observer = (FSGroupTitlesObserver*)it->second;
-		delete observer;
-		observer = NULL;
-		mGroupTitleObserverMap.erase(it);
+		delete found_it->second;
+		mGroupTitleObserverMap.erase(found_it);
 	}
 }
 
-void FSGroupTitles::activateGroupTitle()
+void FSFloaterGroupTitles::activateGroupTitle()
 {
 	LLScrollListItem* selected_item = mTitleList->getFirstSelected();
 	if (selected_item)
@@ -233,24 +210,18 @@ void FSGroupTitles::activateGroupTitle()
 		// Send activate group request only if group is different from current group
 		if (gAgent.getGroupID() != group_id)
 		{
-			// Copied from LLGroupActions::activate()
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessageFast(_PREHASH_ActivateGroup);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-			msg->addUUIDFast(_PREHASH_GroupID, group_id);
-			gAgent.sendReliableMessage();
+			LLGroupActions::activate(group_id);
 		}
 	}
 }
 
-void FSGroupTitles::refreshGroupTitles()
+void FSFloaterGroupTitles::refreshGroupTitles()
 {
-	mIsUpdated = false;
 	clearObservers();
-	mLastScrollPosition = mTitleList->getScrollPos();
 	mTitleList->clearRows();
+
+	// Add "no group"
+	addListItem(LLUUID::null, LLUUID::null, getString("NoGroupTitle"), LLTrans::getString("GroupsNone"), gAgent.getGroupID().isNull(), ADD_TOP);
 
 	for (S32 i = 0; i < gAgent.mGroups.count(); i++)
 	{
@@ -259,10 +230,9 @@ void FSGroupTitles::refreshGroupTitles()
 		mGroupTitleObserverMap[group_data.mID] = roleObserver;
 		LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_data.mID);
 	}
-	mIsUpdated = true;
 }
 
-void FSGroupTitles::selectedTitleChanged()
+void FSFloaterGroupTitles::selectedTitleChanged()
 {
 	LLScrollListItem* selected_item = mTitleList->getFirstSelected();
 	if (selected_item)
@@ -272,7 +242,7 @@ void FSGroupTitles::selectedTitleChanged()
 	}
 }
 
-void FSGroupTitles::openGroupInfo()
+void FSFloaterGroupTitles::openGroupInfo()
 {
 	LLScrollListItem* selected_item = mTitleList->getFirstSelected();
 	if (selected_item)

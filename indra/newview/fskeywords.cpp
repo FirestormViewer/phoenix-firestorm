@@ -49,8 +49,8 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 	{
 		if(source.find(mWordList[i]) != std::string::npos)
 		{
-			if(gSavedPerAccountSettings.getBOOL("FSKeywordPlaySound"))
-				LLUI::sAudioCallback(LLUUID(gSavedPerAccountSettings.getString("FSKeywordSound")));
+			if(gSavedSettings.getBOOL("PlayModeUISndFSKeywordSound"))
+				LLUI::sAudioCallback(LLUUID(gSavedSettings.getString("UISndFSKeywordSound")));
 
 			return true;
 		}
