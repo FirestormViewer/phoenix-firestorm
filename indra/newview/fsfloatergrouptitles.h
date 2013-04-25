@@ -1,5 +1,5 @@
 /**
- * @file fsgrouptitles.h
+ * @file fsfloatergrouptitles.h
  * @brief Group title overview and changer
  *
  * $LicenseInfo:firstyear=2012&license=viewerlgpl$
@@ -24,8 +24,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_GROUPTITLES_H
-#define FS_GROUPTITLES_H
+#ifndef FS_FLOATERGROUPTITLES_H
+#define FS_FLOATERGROUPTITLES_H
 
 #include "llsingleton.h"
 
@@ -35,28 +35,28 @@
 #include "llagent.h"
 #include "llgroupmgr.h"
 
-class FSGroupTitles;
+class FSFloaterGroupTitles;
 
 class FSGroupTitlesObserver : LLGroupMgrObserver
 {
 
 public:
-	FSGroupTitlesObserver(const LLGroupData& group_data, FSGroupTitles* parent);
+	FSGroupTitlesObserver(const LLGroupData& group_data, FSFloaterGroupTitles* parent);
 	virtual ~FSGroupTitlesObserver();
 
 	virtual void changed(LLGroupChange gc);
 
 protected:
-	FSGroupTitles*	mParent;
+	FSFloaterGroupTitles*	mParent;
 	LLGroupData		mGroupData;
 };
 
-class FSGroupTitles : public LLSingleton<FSGroupTitles>, public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
+class FSFloaterGroupTitles : public LLSingleton<FSFloaterGroupTitles>, public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
 {
 
 public:
-	FSGroupTitles(const LLSD &);
-	virtual ~FSGroupTitles();
+	FSFloaterGroupTitles(const LLSD &);
+	virtual ~FSFloaterGroupTitles();
 
 	/*virtual*/ BOOL postBuild();
 
@@ -85,4 +85,4 @@ private:
 	observer_map_t		mGroupTitleObserverMap;
 };
 
-#endif // FS_GROUPTITLES_H
+#endif // FS_FLOATERGROUPTITLES_H

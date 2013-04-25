@@ -422,7 +422,7 @@ void FSFloaterContacts::onGroupSearchButtonClicked()
 
 void FSFloaterContacts::onGroupTitlesButtonClicked()
 {
-	LLFloaterReg::toggleInstance("group_titles");
+	LLFloaterReg::toggleInstance("fs_group_titles");
 }
 
 void FSFloaterContacts::onGroupInviteButtonClicked()

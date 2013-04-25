@@ -1,5 +1,5 @@
 /**
- * @file fsgrouptitles.cpp
+ * @file fsfloatergrouptitles.cpp
  * @brief Group title overview and changer
  *
  * $LicenseInfo:firstyear=2012&license=viewerlgpl$
@@ -26,7 +26,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "fsgrouptitles.h"
+#include "fsfloatergrouptitles.h"
 #include "llgroupactions.h"
 #include "llscrolllistitem.h"
 #include "llviewermessage.h"
@@ -35,7 +35,7 @@
 /////////////////////////////////////////////////////
 // FSGroupTitlesObserver class
 //
-FSGroupTitlesObserver::FSGroupTitlesObserver(const LLGroupData& group_data, FSGroupTitles* parent) :
+FSGroupTitlesObserver::FSGroupTitlesObserver(const LLGroupData& group_data, FSFloaterGroupTitles* parent) :
 	LLGroupMgrObserver(group_data.mID),
 	mGroupData(group_data),
 	mParent(parent)
@@ -60,7 +60,7 @@ void FSGroupTitlesObserver::changed(LLGroupChange gc)
 /////////////////////////////////////////////////////
 // FSGroupTitles class
 //
-FSGroupTitles::FSGroupTitles(const LLSD& key) :  
+FSFloaterGroupTitles::FSFloaterGroupTitles(const LLSD& key) :  
 	LLFloater(key)
 {
 	// Register observer and event listener
@@ -71,7 +71,7 @@ FSGroupTitles::FSGroupTitles(const LLSD& key) :
 	gAgent.addListener(this, "update grouptitle list");
 }
 
-FSGroupTitles::~FSGroupTitles()
+FSFloaterGroupTitles::~FSFloaterGroupTitles()
 {
 	gAgent.removeListener(this);
 	LLGroupMgr::getInstance()->removeObserver(this);
@@ -80,18 +80,18 @@ FSGroupTitles::~FSGroupTitles()
 	clearObservers();
 }
 
-BOOL FSGroupTitles::postBuild()
+BOOL FSFloaterGroupTitles::postBuild()
 {
 	mActivateButton = getChild<LLButton>("btnActivate");
 	mRefreshButton = getChild<LLButton>("btnRefresh");
 	mInfoButton = getChild<LLButton>("btnInfo");
 	mTitleList = getChild<LLScrollListCtrl>("title_list");
 
-	mActivateButton->setCommitCallback(boost::bind(&FSGroupTitles::activateGroupTitle, this));
-	mRefreshButton->setCommitCallback(boost::bind(&FSGroupTitles::refreshGroupTitles, this));
-	mInfoButton->setCommitCallback(boost::bind(&FSGroupTitles::openGroupInfo, this));
-	mTitleList->setDoubleClickCallback(boost::bind(&FSGroupTitles::activateGroupTitle, this));
-	mTitleList->setCommitCallback(boost::bind(&FSGroupTitles::selectedTitleChanged, this));
+	mActivateButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
+	mRefreshButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::refreshGroupTitles, this));
+	mInfoButton->setCommitCallback(boost::bind(&FSFloaterGroupTitles::openGroupInfo, this));
+	mTitleList->setDoubleClickCallback(boost::bind(&FSFloaterGroupTitles::activateGroupTitle, this));
+	mTitleList->setCommitCallback(boost::bind(&FSFloaterGroupTitles::selectedTitleChanged, this));
 
 	mTitleList->sortByColumn("grouptitle", TRUE);
 
@@ -100,7 +100,7 @@ BOOL FSGroupTitles::postBuild()
 	return TRUE;
 }
 
-void FSGroupTitles::changed(LLGroupChange gc)
+void FSFloaterGroupTitles::changed(LLGroupChange gc)
 {
 	switch (gc)
 	{
@@ -114,7 +114,7 @@ void FSGroupTitles::changed(LLGroupChange gc)
 	}
 }
 
-bool FSGroupTitles::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
+bool FSFloaterGroupTitles::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata)
 {
 	if (event->desc() == "update grouptitle list")
 	{
@@ -125,7 +125,7 @@ bool FSGroupTitles::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLS
 }
 
 
-void FSGroupTitles::clearObservers()
+void FSFloaterGroupTitles::clearObservers()
 {
 	for (observer_map_t::iterator it = mGroupTitleObserverMap.begin(); it != mGroupTitleObserverMap.end(); ++it)
 	{
@@ -134,7 +134,7 @@ void FSGroupTitles::clearObservers()
 	mGroupTitleObserverMap.clear();
 }
 
-void FSGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& role_id, const std::string& title,
+void FSFloaterGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& role_id, const std::string& title,
 	const std::string& group_name, bool is_active, EAddPosition position)
 {
 	std::string font_style = (is_active ? "BOLD" : "NORMAL");
@@ -166,7 +166,7 @@ void FSGroupTitles::addListItem(const LLUUID& group_id, const LLUUID& role_id, c
 	}
 }
 
-void FSGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
+void FSFloaterGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
 {
 	// Save the group name
 	std::string group_name(group_data.mName);
@@ -193,7 +193,7 @@ void FSGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
 	}
 }
 
-void FSGroupTitles::activateGroupTitle()
+void FSFloaterGroupTitles::activateGroupTitle()
 {
 	LLScrollListItem* selected_item = mTitleList->getFirstSelected();
 	if (selected_item)
@@ -215,7 +215,7 @@ void FSGroupTitles::activateGroupTitle()
 	}
 }
 
-void FSGroupTitles::refreshGroupTitles()
+void FSFloaterGroupTitles::refreshGroupTitles()
 {
 	clearObservers();
 	mTitleList->clearRows();
@@ -232,7 +232,7 @@ void FSGroupTitles::refreshGroupTitles()
 	}
 }
 
-void FSGroupTitles::selectedTitleChanged()
+void FSFloaterGroupTitles::selectedTitleChanged()
 {
 	LLScrollListItem* selected_item = mTitleList->getFirstSelected();
 	if (selected_item)
@@ -242,7 +242,7 @@ void FSGroupTitles::selectedTitleChanged()
 	}
 }
 
-void FSGroupTitles::openGroupInfo()
+void FSFloaterGroupTitles::openGroupInfo()
 {
 	LLScrollListItem* selected_item = mTitleList->getFirstSelected();
 	if (selected_item)
