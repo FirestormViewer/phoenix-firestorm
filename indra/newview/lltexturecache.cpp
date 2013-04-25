@@ -569,7 +569,13 @@ bool LLTextureCacheRemoteWorker::doWrite()
 			if(idx >= 0)
 			{
 				//write to the fast cache.
-				llassert_always(mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel));
+
+				// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw from LTextureCacheRemoteWorker::doWrite. In that case it's okay to change raw directly as we paid the hit of copying it already.
+
+				// llassert_always(mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel));
+				llassert_always( mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel, true) );
+
+				// </FS:ND>
 			}
 		}
 		else
@@ -1828,6 +1834,13 @@ LLTextureCache::handle_t LLTextureCache::writeToCache(const LLUUID& id, U32 prio
 		mDoPurge = FALSE;
 	}
 	LLMutexLock lock(&mWorkersMutex);
+
+	// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw to LTextureCacheRemoteWorker.
+
+	rawimage =  new LLImageRaw( rawimage->getData(), rawimage->getWidth(), rawimage->getHeight(), rawimage->getComponents());
+
+	// </FS:ND>
+
 	LLTextureCacheWorker* worker = new LLTextureCacheRemoteWorker(this, priority, id,
 																  data, datasize, 0,
 																  imagesize, rawimage, discardlevel, responder);
@@ -1892,7 +1905,11 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
 }
 
 //return the fast cache location
-bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel)
+
+// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw from LTextureCacheRemoteWorker::doWrite. In that case it's okay to change raw directly as we paid the hit of copying it already.
+//bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel)
+bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel, bool canChangeRaw )
+// <FS:ND>
 {
 	//rescale image if needed
 	S32 w, h, c;
@@ -1912,9 +1929,21 @@ bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 dis
 		h >>= i;
 		if(w * h *c > 0) //valid
 		{
-			LLPointer<LLImageRaw> newraw = new LLImageRaw(raw->getData(), raw->getWidth(), raw->getHeight(), raw->getComponents());
-			newraw->scale(w, h) ;
-			raw = newraw;
+			// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw from LTextureCacheRemoteWorker::doWrite. In that case it's okay to change raw directly as we paid the hit of copying it already.
+
+			// LLPointer<LLImageRaw> newraw = new LLImageRaw(raw->getData(), raw->getWidth(), raw->getHeight(), raw->getComponents());
+			// newraw->scale(w, h) ;
+			// raw = newraw;
+
+			if( !canChangeRaw )
+			{
+				LLPointer<LLImageRaw> newraw = new LLImageRaw(raw->getData(), raw->getWidth(), raw->getHeight(), raw->getComponents());
+				raw = newraw;
+			}
+
+			raw->scale(w, h) ;
+
+			// </FS:ND>
 
 			discardlevel += i ;
 		}
