@@ -35,14 +35,30 @@
 #include "llagent.h"
 #include "llgroupmgr.h"
 
+class FSGroupTitles;
+
+class FSGroupTitlesObserver : LLGroupMgrObserver
+{
+
+public:
+	FSGroupTitlesObserver(const LLGroupData& group_data, FSGroupTitles* parent);
+	virtual ~FSGroupTitlesObserver();
+
+	virtual void changed(LLGroupChange gc);
+
+protected:
+	FSGroupTitles*	mParent;
+	LLGroupData		mGroupData;
+};
+
 class FSGroupTitles : public LLSingleton<FSGroupTitles>, public LLFloater, public LLGroupMgrObserver, public LLOldEvents::LLSimpleListener
 {
+
 public:
 	FSGroupTitles(const LLSD &);
 	virtual ~FSGroupTitles();
 
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void draw();
 
 	virtual void changed(LLGroupChange gc);
 	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
@@ -65,24 +81,8 @@ private:
 	LLButton*			mInfoButton;
 	LLScrollListCtrl*	mTitleList;
 
-	bool	mIsUpdated;
-	S32		mLastScrollPosition;
-
-	std::map<LLUUID, void*> mGroupTitleObserverMap;
-};
-
-
-class FSGroupTitlesObserver : LLGroupMgrObserver
-{
-public:
-	FSGroupTitlesObserver(const LLGroupData& group_data, FSGroupTitles* parent);
-	virtual ~FSGroupTitlesObserver();
-
-	virtual void changed(LLGroupChange gc);
-
-protected:
-	FSGroupTitles*	mParent;
-	LLGroupData		mGroupData;
+	typedef std::map<LLUUID, FSGroupTitlesObserver*> observer_map_t;
+	observer_map_t		mGroupTitleObserverMap;
 };
 
 #endif // FS_GROUPTITLES_H

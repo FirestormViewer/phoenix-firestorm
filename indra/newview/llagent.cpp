@@ -3857,9 +3857,6 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 				update_group_floaters(group.mID);
 			}
 		}
-
-		// <FS:Ansariel> Fire event for group title overview
-		gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), "");
 	}
 };
 
