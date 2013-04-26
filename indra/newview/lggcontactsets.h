@@ -30,6 +30,16 @@ typedef enum e_lgg_cs
 	LGG_CS_MINIMAP
 } ELGGCSType;
 
+const std::string CS_GROUP_ALL_GROUPS = "All Groups";
+const std::string CS_GROUP_ALL_SETS = "All Sets";
+const std::string CS_GROUP_NO_SETS = "No Sets";
+const std::string CS_GROUP_RENAMED = "ReNamed";
+const std::string CS_GROUP_NON_FRIENDS = "Non Friends";
+const std::string CS_GROUP_EXTRA_AVS = "extraAvs";
+const std::string CS_GROUP_PSEUDONYM = "pseudonym";
+const std::string CS_GLOBAL_SETTINGS = "globalSettings";
+const std::string CS_PSEUDONYM = "--- ---";
+
 class LGGContactSets : public LLSingleton<LGGContactSets>
 {
 	friend class LLSingleton<LGGContactSets>;
@@ -76,6 +86,8 @@ public:
 	BOOL getNotifyForGroup(const std::string& groupName);
 
 	bool callbackAliasReset(const LLSD& notification, const LLSD& response);
+
+	bool isInternalGroupName(const std::string& groupName);
 
 private:
 	LGGContactSets();

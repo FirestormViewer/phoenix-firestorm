@@ -71,10 +71,6 @@
 #include "llavatarpropertiesprocessor.h"
 
 
-// Ansariel: Evil, but still better than having the plain strings float around the code
-const std::string ALL_SETS("All Sets");
-const std::string NO_SETS("No Sets");
-
 lggContactSetsFloater* lggContactSetsFloater::sInstance;
 
 void lggContactSetsFloater::onClose(bool app_quitting)
@@ -366,7 +362,7 @@ void lggContactSetsFloater::drawRightClick()
 		}
 	}
 
-	if (currentGroup() != ALL_SETS && currentGroup() != NO_SETS && currentGroup() != "")
+	if (currentGroup() != CS_GROUP_ALL_SETS && currentGroup() != CS_GROUP_NO_SETS && currentGroup() != "")
 	{
 		drawRemove = TRUE;
 		extras += 2;
@@ -1351,7 +1347,7 @@ void lggContactSetsFloater::draw()
 
 			int xLoc = box.mLeft + roomForBar; //size;
 			LLUIImage* selectedImage = LLUI::getUIImage("TabIcon_Close_Off");
-			if (folder == ALL_SETS)
+			if (folder == CS_GROUP_ALL_SETS)
 			{
 				selectedImage = LLUI::getUIImage("TabIcon_Open_Off");
 			}
@@ -1441,7 +1437,7 @@ void lggContactSetsFloater::draw()
 			{
 				color = LGGContactSets::getInstance()->getDefaultColor();
 			}
-			if (showOtherGroups || (currentGroup() == ALL_SETS))
+			if (showOtherGroups || (currentGroup() == CS_GROUP_ALL_SETS))
 			{
 				color = LGGContactSets::getInstance()->getFriendColor(agent_id,currentGroup);
 			}
