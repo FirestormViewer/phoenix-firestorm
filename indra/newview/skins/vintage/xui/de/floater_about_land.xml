@@ -321,6 +321,12 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<panel.string name="push_restrict_region_text">
 				Kein Stoßen (regional)
 			</panel.string>
+			<panel.string name="DirectoryFree">
+				Ort in Suche anzeigen
+			</panel.string>
+			<panel.string name="DirectoryFee">
+				Ort in Suche anzeigen ([DIRECTORY_FEE] L$/Woche)
+			</panel.string>
 			<panel.string name="see_avs_text">
 				Avatare auf anderen Parzellen können
 			</panel.string>
