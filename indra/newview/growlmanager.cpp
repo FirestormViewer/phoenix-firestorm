@@ -80,12 +80,33 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 	LL_INFOS("GrowlManagerInit") << "Created generic GrowlNotifier." << LL_ENDL;
 #endif
 	
+#ifdef LL_WINDOWS
+	if (mNotifier)
+	{
+		// Need to call loadConfig for Windows first before we know if
+		// Growl is usable -Ansariel
+		loadConfig();
+		if (!mNotifier->isUsable())
+		{
+			LL_WARNS("GrowlManagerInit") << "Growl is unusable; bailing out." << LL_ENDL;
+			return;
+		}
+	}
+	else
+	{
+		LL_WARNS("GrowlManagerInit") << "Growl is unusable; bailing out." << LL_ENDL;
+		return;
+	}
+#else
 	// Don't do anything more if Growl isn't usable.
 	if( !mNotifier || !mNotifier->isUsable())
 	{
 		LL_WARNS("GrowlManagerInit") << "Growl is unusable; bailing out." << LL_ENDL;
 		return;
 	}
+
+	loadConfig();
+#endif
 
 	// Hook into LLNotifications...
 	// We hook into all of them, even though (at the time of writing) nothing uses "alert", so more notifications can be added easily.
@@ -97,8 +118,6 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 	
 	// Hook into script dialogs
 	LLScriptFloaterManager::instance().addNewObjectCallback(&GrowlManager::onScriptDialog);
-
-	this->loadConfig();
 }
 
 void GrowlManager::loadConfig()

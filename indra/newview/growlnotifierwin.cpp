@@ -37,7 +37,9 @@
 #include "growlnotifierwin.h"
 #include "llviewercontrol.h"
 
-GrowlNotifierWin::GrowlNotifierWin():applicationName("")
+GrowlNotifierWin::GrowlNotifierWin() :
+	applicationName(""),
+	growl(NULL)
 {
 	LL_INFOS("GrowlNotifierWin") << "Windows growl notifications initialised." << LL_ENDL;
 	
@@ -67,10 +69,13 @@ void GrowlNotifierWin::showNotification(const std::string& notification_title, c
 										 const std::string& notification_type)
 {
 	//LL_INFOS("GrowlNotifierWin") << std::string(gDirUtilp->getDefaultSkinDir()+gDirUtilp->getDirDelimiter()+"textures"+gDirUtilp->getDirDelimiter()+"phoenixicon.ico").c_str() << LL_ENDL;
-	growl->Notify(notification_type.c_str(),notification_title.c_str(),notification_message.c_str());
+	if (growl)
+	{
+		growl->Notify(notification_type.c_str(),notification_title.c_str(),notification_message.c_str());
+	}
 }
 
 bool GrowlNotifierWin::isUsable()
 {
-	return true;
+	return (growl && growl->isConnected());
 }
