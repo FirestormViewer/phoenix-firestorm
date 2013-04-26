@@ -21,6 +21,9 @@
 
 #include "v4color.h"
 #include "llsingleton.h"
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+
 
 typedef enum e_lgg_cs
 {
@@ -90,10 +93,26 @@ public:
 	bool isInternalGroupName(const std::string& groupName);
 
 private:
+	typedef boost::unordered_set<LLUUID, FSUUIDHash> uuid_set_t;
+	typedef boost::unordered_map<LLUUID, std::string, FSUUIDHash> uuid_map_t;
+
+	class ContactSetGroup
+	{
+	public:
+		bool hasFriend(const LLUUID& avatar_id)
+		{
+			return (mFriends.find(avatar_id) != mFriends.end());
+		}
+
+		std::string		mName;
+		uuid_set_t		mFriends;
+		bool			mNotify;
+		LLColor4		mColor;
+	};
+
+
 	LGGContactSets();
 	~LGGContactSets();
-	
-	LLSD getContactSets();
 
 	std::vector<LLUUID> getFriendsInGroup(const std::string& groupName);
 	BOOL isFriendInAnyGroup(const LLUUID& friend_id);
@@ -105,14 +124,25 @@ private:
 
 	void loadFromDisk();
 	LLSD exportGroup(const std::string& groupName);
-	void saveToDisk(const LLSD& newSettings);
 	BOOL saveGroupToDisk(const std::string& groupName, const std::string& fileName);
 
 	std::string getFileName();
 	std::string getDefaultFileName();
 	std::string getOldFileName();
 
-	LLSD mContactSets;
+
+	typedef std::map<std::string, ContactSetGroup*> group_map_t;
+	group_map_t mGroups;
+
+	ContactSetGroup* getGroup(const std::string& groupName);
+
+	void importFromLLSD(const LLSD& data);
+	LLSD exportToLLSD();
+	void saveToDisk();
+
+	LLColor4		mDefaultColor;
+	uuid_set_t		mExtraAvatars;
+	uuid_map_t		mPseudonyms;
 };
 
 #endif // LGG_CONTACTSETS_H
