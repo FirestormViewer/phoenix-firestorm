@@ -299,6 +299,12 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 			<panel.string name="push_restrict_region_text">
 				Zakaz popychania (cały Region)
 			</panel.string>
+			<panel.string name="DirectoryFree">
+				Wyświetlaj w wyszukiwarce
+			</panel.string>
+			<panel.string name="DirectoryFee">
+				Wyświetlaj w wyszukiwarce ([DIRECTORY_FEE]L$/tyg.)
+			</panel.string>
 			<text name="allow_label">
 				Udostępnij innym Rezydentom:
 			</text>
