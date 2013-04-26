@@ -59,6 +59,7 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_PROFILE_URI_VALUE "profileuri"
 #define GRID_SENDGRIDINFO "SendGridInfoToViewerOnLogin"
 #define GRID_DIRECTORY_FEE "DirectoryFee"
+#define GRID_CLASSIFIED_FEE "ClassifiedFee"
 #define GRID_CURRENCY_SYMBOL "CurrencySymbol"
 #define GRID_REAL_CURRENCY_SYMBOL "RealCurrencySymbol"
 #define GRID_MAXGROUPS "MaxGroups"
