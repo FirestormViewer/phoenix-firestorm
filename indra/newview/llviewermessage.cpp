@@ -6953,7 +6953,8 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 
 		std::string llsdRaw;
 		LLSD llsdBlock;
-		msgsystem->getStringFast(_PREHASH_AlertInfo, _PREHASH_Message, notificationID);
+		// <FS:Ansariel> Remove dupe call
+		//msgsystem->getStringFast(_PREHASH_AlertInfo, _PREHASH_Message, notificationID);
 		msgsystem->getStringFast(_PREHASH_AlertInfo, _PREHASH_ExtraParams, llsdRaw);
 		if (llsdRaw.length())
 		{
@@ -7000,6 +7001,13 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				return true;
 			}
 		}
+
+		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
+		if (notificationID == "AutopilotCanceled")
+		{
+			return true;
+		}
+		// </FS:Ansariel>
 		
 		LLNotificationsUtil::add(notificationID, llsdBlock);
 		return true;
