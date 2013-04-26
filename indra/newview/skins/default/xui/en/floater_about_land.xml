@@ -278,7 +278,7 @@
              width="100">
                 Group:
             </text>
-   <!--TODO: HOOK UP GROUP ICON-->
+
             <text
              follows="left|top"
              height="16"
@@ -1227,6 +1227,14 @@ Only large parcels can be listed in search.
             <panel.string
              name="push_restrict_region_text">
                 No Pushing (Region Override)
+            </panel.string>
+            <panel.string
+             name="DirectoryFree">
+                Show Place in Search
+            </panel.string>
+            <panel.string
+             name="DirectoryFee">
+                Show Place in Search (L$[DIRECTORY_FEE]/week)
             </panel.string>
             <text
              type="string"

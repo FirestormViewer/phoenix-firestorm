@@ -1179,6 +1179,14 @@ Only large parcels can be listed in search.
              name="push_restrict_region_text">
                 No Pushing (Region Override)
             </panel.string>
+            <panel.string
+             name="DirectoryFree">
+                Show Place in Search
+            </panel.string>
+            <panel.string
+             name="DirectoryFee">
+                Show Place in Search (L$[DIRECTORY_FEE]/week)
+            </panel.string>
             <text
              type="string"
              length="1"

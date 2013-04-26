@@ -81,6 +81,9 @@
 #include "llregionhandle.h"
 
 #include "llworld.h" // <FS:Ansariel> For FIRE-1292
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif // OPENSIM
 
 static std::string OWNER_ONLINE 	= "0";
 static std::string OWNER_OFFLINE	= "1";
@@ -2211,7 +2214,32 @@ void LLPanelLandOptions::refresh()
 				}
 			}
 		}
+		S32 fee = getDirectoryFee();
+		if (fee == 0)
+		{
+			mCheckShowDirectory->setLabel(getString("DirectoryFree"));
+		}
+		else
+		{
+			LLStringUtil::format_map_t map;
+			map["DIRECTORY_FEE"] = llformat("%d", fee);
+			mCheckShowDirectory->setLabel(getString("DirectoryFee", map));
+		}
 	}
+}
+
+S32 LLPanelLandOptions::getDirectoryFee()
+{
+	S32 fee = PARCEL_DIRECTORY_FEE;
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLSD grid_info;
+		LLGridManager::getInstance()->getGridData(grid_info);
+		fee = grid_info[GRID_DIRECTORY_FEE].asInteger();
+	}
+#endif // OPENSIM
+	return fee;
 }
 
 // virtual
