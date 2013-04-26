@@ -78,7 +78,7 @@ void agent_jump( EKeystate s )
 	// <FS:Ansariel> Chalice Yao's crouch toggle
 	if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
 	{
-		gSavedSettings.setBOOL("FSCrouchToggleStatus", false);
+		gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
 	}
 	// </FS:Ansariel>
 
@@ -105,11 +105,11 @@ void agent_push_down( EKeystate s )
 	{
 		if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
 		{
-			gSavedSettings.setBOOL("FSCrouchToggleStatus", false);
+			gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
 		}
 		else
 		{
-			gSavedSettings.setBOOL("FSCrouchToggleStatus", true);
+			gSavedSettings.setBOOL("FSCrouchToggleStatus", TRUE);
 			gAgent.moveUp(-1);
 		}
 	}
@@ -299,12 +299,6 @@ void agent_toggle_fly( EKeystate s )
 	if (KEYSTATE_DOWN == s )
 	{
 		LLAgent::toggleFlying();
-		// <FS:Ansariel> Chalice Yao's crouch toggle
-		if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
-		{
-			gSavedSettings.setBOOL("FSCrouchToggleStatus", false);
-		}
-		// </FS:Ansariel>
 	}
 }
 
