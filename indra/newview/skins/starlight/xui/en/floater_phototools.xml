@@ -3212,7 +3212,7 @@
 			 top_pad="0"
 			 left="4"
 			 width="275"
-			 height="98"
+			 height="92"
 			 border_visible="true"
 			 bevel_style="none"
 			 bg_alpha_color="DkGray_66"
@@ -3223,7 +3223,7 @@
 				 height="16"
 				 label="Enable Draw Distance"
 				 layout="topleft"
-				 top_pad="8" 
+				 top_pad="4" 
 				 left="5"
 				 name="UseFarClip"
 				 tool_tip="Enable Draw Distance, if you disable this feature the Viewer will render past your set draw distance."
@@ -3296,7 +3296,7 @@
 			 top_pad="0"
 			 left="4"
 			 width="275"
-			 height="60"
+			 height="48"
 			 border_visible="true"
 			 bevel_style="none"
 			 bg_alpha_color="DkGray_66"
@@ -3306,7 +3306,7 @@
 				 follows="left|top"
 				 height="18"
 				 left="10" 
-				 top_pad="11"
+				 top_pad="5"
 				 width="80"
 				 layout="topleft"
 				 tool_tip="Determines how sharp and smooth the edges of objects will be. On top level graphics cards, higher values have virtually NO performance impact. On lower graphics cards, higher values can slow performance.">
@@ -3314,13 +3314,13 @@
 				</text>
 				<combo_box
 				 control_name="RenderFSAASamples"
-				 height="22"						
+				 height="18"						
 				 label="Antialiasing"
 				 layout="topleft"
 				 follows="left|top"
 				 left_pad="0"
 				 name="fsaa"
-				 top_delta="-5"
+				 top_delta="-1"
 				 width="180">
 					<combo_box.item
 					 label="Disabled (Rougher Edges)"
@@ -3346,9 +3346,9 @@
 				<text
 				 name="T_Texture_Bumpiness"
 				 follows="left|top"
-				 height="15"
+				 height="18"
 				 left="10" 
-				 top_pad="11"
+				 top_pad="5"
 				 width="110"
 				 layout="topleft"
 				 tool_tip="Controls the strength and resolution of normal and bump maps.">
@@ -3356,11 +3356,11 @@
 				</text>
 				<combo_box
 				 control_name="RenderNormalMapScale"
-				 height="22"
+				 height="18"
 				 layout="topleft"
 				 left_pad="0"	
 				 follows="left|top"
-				 top_delta="-5"
+				 top_delta="-2"
 				 name="BumpStrengthSelection"
 				 width="150">
 					<combo_box.item

@@ -181,10 +181,8 @@
 	scale_image="false"
     />
      <text
-	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
-	   text_color="White"
-	   hover="true"
-	   hover_color="ParcelHoverColor"
+       tool_tip="Name of land parcel on which you are standing. Click for About Land."
+       text_color="ParcelNormalColor"
        follows="left|top|right"
        height="16"
        layout="topleft"

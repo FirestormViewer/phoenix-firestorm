@@ -780,8 +780,11 @@
      name="PanelNotificationBackground"
      value="1 0.3 0.3 0" />
     <color
+      name="ParcelNormalColor"
+      reference="White" />
+    <color
      name="ParcelHoverColor"
-     reference="White" />
+     reference="EmphasisColor" />
   <color
       name="PathfindingErrorColor"
       reference="LtRed" />

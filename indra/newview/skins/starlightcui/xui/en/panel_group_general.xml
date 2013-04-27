@@ -290,25 +290,33 @@ Hover your mouse over the options for more help.
 		 Group Key:
 		</text>
 
+      <button
+       name="copy_name"
+		 left_pad="104"
+		 right="-14"
+       height="20"
+       label="Copy Group Name"
+       follows="top|right" />
+
 		<text_editor
 		 name="group_key"
 		 label="Group Key:"
-         left="5"
-         top_pad="2"
-         right="-86"
-         height="20"
-         h_pad="0"
-         v_pad="4"
-         bg_visible="true"
-         enabled="false"
-         allow_scroll="false"
-         initial_value="(loading ...)"
-         follows="top|left|right"
-         layout="topleft" />
+       left="5"
+       top_pad="2"
+       right="-138"
+       height="20"
+       h_pad="0"
+       v_pad="4"
+       bg_visible="true"
+       enabled="false"
+       allow_scroll="false"
+       initial_value="(loading ...)"
+       follows="top|left|right"
+       layout="topleft" />
 
 		<button
 		 name="copy_uri"
-		 left_pad="4"
+		 left_pad="1"
 		 right="-14"
 		 height="20"
 		 label="Copy URI"

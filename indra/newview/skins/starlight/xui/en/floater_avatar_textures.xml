@@ -5,6 +5,7 @@
  layout="topleft"
  name="avatar_texture_debug"
  help_topic="avatar_texture_debug"
+ save_rect="true"
  title="Avatar Textures"
  width="940"
  can_resize="true">
