@@ -39,6 +39,10 @@
 	<floater.string name="TooltipIM" value="Instant message"/>
 	<floater.string name="TooltipProfile" value="Show profile"/>
 	<floater.string name="TooltipNameChanged" value="Name has been changed"/>
+	<floater.string name="AllSets" value="&lt;All Sets&gt;"/>
+	<floater.string name="NoSets" value="&lt;No Sets&gt;"/>
+	<floater.string name="Renamed" value="&lt;Renamed&gt;"/>
+	<floater.string name="NoFriend" value="&lt;Non Friends&gt;"/>
 
 	<check_box
 	 bottom_delta="-5000"

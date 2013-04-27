@@ -432,7 +432,6 @@ void LGGContactSets::setDefaultColor(const LLColor4& dColor)
 std::vector<std::string> LGGContactSets::getInnerGroups(const std::string& groupName)
 {
 	std::vector<std::string> toReturn;
-	toReturn.clear();
 	static LLCachedControl<bool> useFolders(gSavedSettings, "FSContactSetsShowFolders");
 	static LLCachedControl<bool> showOnline(gSavedSettings, "FSContactSetsShowOnline");
 	static LLCachedControl<bool> showOffline(gSavedSettings, "FSContactSetsShowOffline");
@@ -443,11 +442,6 @@ std::vector<std::string> LGGContactSets::getInnerGroups(const std::string& group
 	}
 
 	std::set<std::string> newGroups;
-
-	if (groupName != CS_GROUP_ALL_SETS && getAllGroups(FALSE).size() > 0)
-	{
-		newGroups.insert(CS_GROUP_ALL_SETS);
-	}
 
 	std::vector<LLUUID> freindsInGroup = getFriendsInGroup(groupName);
 	for (U32 fn = 0; fn < (U32)freindsInGroup.size(); fn++)
@@ -508,12 +502,12 @@ std::vector<LLUUID> LGGContactSets::getFriendsInGroup(const std::string& groupNa
 		return toReturn;
 	}
 
-	if (groupName == CS_GROUP_PSEUDONYM || groupName == CS_GROUP_RENAMED)
+	if (groupName == CS_GROUP_PSEUDONYM)
 	{
 		return getListOfPseudonymAvs();
 	}
 
-	if (groupName == CS_GROUP_NON_FRIENDS)
+	if (groupName == CS_GROUP_EXTRA_AVS)
 	{
 		return getListOfNonFriends();
 	}
@@ -527,28 +521,9 @@ std::vector<LLUUID> LGGContactSets::getFriendsInGroup(const std::string& groupNa
 	return toReturn;
 }
 
-std::vector<std::string> LGGContactSets::getAllGroups(BOOL extraGroups)
+std::vector<std::string> LGGContactSets::getAllGroups()
 {
 	std::vector<std::string> toReturn;
-
-	if (extraGroups)
-	{
-		if (getAllGroups(FALSE).size() > 0)
-		{
-			toReturn.push_back(CS_GROUP_ALL_SETS);
-			toReturn.push_back(CS_GROUP_NO_SETS);
-		}
-
-		if (getListOfPseudonymAvs().size() > 0)
-		{
-			toReturn.push_back(CS_GROUP_RENAMED);
-		}
-
-		if (getListOfNonFriends().size() > 0)
-		{
-			toReturn.push_back(CS_GROUP_NON_FRIENDS);
-		}
-	}
 
 	for (group_map_t::iterator it = mGroups.begin(); it != mGroups.end(); ++it)
 	{
@@ -600,12 +575,12 @@ BOOL LGGContactSets::isFriendInGroup(const LLUUID& friend_id, const std::string&
 		return !isFriendInAnyGroup(friend_id);
 	}
 
-	if (groupName == CS_GROUP_RENAMED)
+	if (groupName == CS_GROUP_PSEUDONYM)
 	{
 		return hasPseudonym(friend_id);
 	}
 
-	if (groupName == CS_GROUP_NON_FRIENDS)
+	if (groupName == CS_GROUP_EXTRA_AVS)
 	{
 		return isNonFriend(friend_id);
 	}
@@ -763,12 +738,12 @@ void LGGContactSets::removeDisplayName(const LLUUID& friend_id)
 
 void LGGContactSets::removeFriendFromGroup(const LLUUID& friend_id, const std::string& groupName)
 {
-	if (groupName == CS_GROUP_EXTRA_AVS || groupName == CS_GROUP_NON_FRIENDS)
+	if (groupName == CS_GROUP_EXTRA_AVS)
 	{
 		return removeNonFriendFromList(friend_id);
 	}
 
-	if (groupName == CS_GROUP_RENAMED || groupName == CS_GROUP_PSEUDONYM)
+	if (groupName == CS_GROUP_PSEUDONYM)
 	{
 		return clearPseudonym(friend_id);
 	}
@@ -806,6 +781,7 @@ void LGGContactSets::deleteGroup(const std::string& groupName)
 	{
 		delete found->second;
 		mGroups.erase(found);
+		saveToDisk();
 	}
 }
 
@@ -848,10 +824,7 @@ bool LGGContactSets::isInternalGroupName(const std::string& groupName)
 		groupName == CS_GROUP_PSEUDONYM ||
 		groupName == CS_GLOBAL_SETTINGS ||
 		groupName == CS_GROUP_NO_SETS ||
-		groupName == CS_GROUP_ALL_SETS ||
-		groupName == CS_GROUP_ALL_GROUPS ||
-		groupName == CS_GROUP_RENAMED ||
-		groupName == CS_GROUP_NON_FRIENDS
+		groupName == CS_GROUP_ALL_SETS
 		);
 }
 

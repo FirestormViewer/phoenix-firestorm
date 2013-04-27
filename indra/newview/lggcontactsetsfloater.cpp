@@ -238,25 +238,65 @@ void lggContactSetsFloater::onPickAvatar(const std::vector<LLUUID>& ids,
 
 void lggContactSetsFloater::updateGroupsList()
 {
-	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
+	static LLCachedControl<std::string> current_group(gSavedSettings, "FSContactSetsSelectedGroup");
+
 	LLComboBox* cb = groupsList;
 	cb->clear();
 	cb->removeall();
+	bool current_group_in_list = false;
 
 	std::vector<std::string> groups = LGGContactSets::getInstance()->getAllGroups();
-	for (int i = 0; i < (int)groups.size(); i++)
+	if (!groups.empty())
 	{
-		cb->add(groups[i], groups[i], ADD_BOTTOM, TRUE);
+		cb->add(getString("AllSets"), CS_GROUP_ALL_SETS);
+		if (!current_group_in_list && current_group() == CS_GROUP_ALL_SETS)
+		{
+			current_group_in_list = true;
+		}
+
+		cb->add(getString("NoSets"), CS_GROUP_NO_SETS);
+		if (!current_group_in_list && current_group() == CS_GROUP_NO_SETS)
+		{
+			current_group_in_list = true;
+		}
 	}
 
-	if (LGGContactSets::getInstance()->isAGroup(currentGroup))
+	if (!LGGContactSets::getInstance()->getListOfPseudonymAvs().empty())
 	{
-		cb->setSimple(LLStringExplicit(currentGroup));
+		cb->add(getString("Renamed"), CS_GROUP_PSEUDONYM);
+		if (!current_group_in_list && current_group() == CS_GROUP_PSEUDONYM)
+		{
+			current_group_in_list = true;
+		}
+	}
+
+	if (!LGGContactSets::getInstance()->getListOfNonFriends().empty())
+	{
+		cb->add(getString("NoFriend"), CS_GROUP_EXTRA_AVS);
+		if (!current_group_in_list && current_group() == CS_GROUP_EXTRA_AVS)
+		{
+			current_group_in_list = true;
+		}
+	}
+
+	for (std::vector<std::string>::iterator it = groups.begin(); it != groups.end(); ++it)
+	{
+		std::string group_name = *it;
+		cb->add(group_name, group_name, ADD_BOTTOM, TRUE);
+		if (!current_group_in_list && group_name == current_group())
+		{
+			current_group_in_list = true;
+		}
+	}
+
+	if (current_group_in_list)
+	{
+		cb->selectByValue(current_group());
 	}
 	else if (groups.size() > 0)
 	{
-		gSavedSettings.setString("FSContactSetsSelectedGroup", groups[0]);
-		cb->setSimple(groups[0]);
+		gSavedSettings.setString("FSContactSetsSelectedGroup", groups.front());
+		cb->selectFirstItem();
 		updateGroupGUIs();
 		generateCurrentList();
 	}
@@ -297,7 +337,7 @@ void lggContactSetsFloater::updateGroupGUIs()
 
 void lggContactSetsFloater::onSelectGroup()
 {
-	gSavedSettings.setString("FSContactSetsSelectedGroup", sInstance->groupsList->getSimple());
+	gSavedSettings.setString("FSContactSetsSelectedGroup", sInstance->groupsList->getSelectedValue());
 	sInstance->updateGroupGUIs();
 	sInstance->selected.clear();
 	sInstance->generateCurrentList();
@@ -368,7 +408,7 @@ void lggContactSetsFloater::drawRightClick()
 		extras += 2;
 	}
 	
-	std::vector<std::string> groups = LGGContactSets::getInstance()->getAllGroups(FALSE);
+	std::vector<std::string> groups = LGGContactSets::getInstance()->getAllGroups();
 	if (selected.size() == 0)
 	{
 		groups.clear();
@@ -1132,6 +1172,12 @@ void lggContactSetsFloater::draw()
 
 	// see if we are guna draw some folders
 	allFolders = LGGContactSets::getInstance()->getInnerGroups(currentGroup);
+
+	if (currentGroup() != CS_GROUP_ALL_SETS && LGGContactSets::getInstance()->hasGroups())
+	{
+		allFolders.insert(allFolders.begin(), CS_GROUP_ALL_SETS);
+	}
+
 	numberOfPanels += allFolders.size();
 
 	LLRect topScroll = getChild<LLPanel>("top_region")->getRect();
@@ -1368,6 +1414,12 @@ void lggContactSetsFloater::draw()
 			if (textNotBg)
 			{
 				groupTextColor = LGGContactSets::toneDownColor(color, 1.0f);
+			}
+
+			if (folder == CS_GROUP_ALL_SETS)
+			{
+				static const std::string ALL_SETS = getString("AllSets");
+				folder = ALL_SETS;
 			}
 
 			useFont->render(

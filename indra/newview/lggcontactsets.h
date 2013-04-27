@@ -33,11 +33,8 @@ typedef enum e_lgg_cs
 	LGG_CS_MINIMAP
 } ELGGCSType;
 
-const std::string CS_GROUP_ALL_GROUPS = "All Groups";
 const std::string CS_GROUP_ALL_SETS = "All Sets";
 const std::string CS_GROUP_NO_SETS = "No Sets";
-const std::string CS_GROUP_RENAMED = "ReNamed";
-const std::string CS_GROUP_NON_FRIENDS = "Non Friends";
 const std::string CS_GROUP_EXTRA_AVS = "extraAvs";
 const std::string CS_GROUP_PSEUDONYM = "pseudonym";
 const std::string CS_GLOBAL_SETTINGS = "globalSettings";
@@ -67,7 +64,7 @@ public:
 
 	std::vector<std::string> getInnerGroups(const std::string& groupName);
 	std::vector<std::string> getFriendGroups(const LLUUID& friend_id);
-	std::vector<std::string> getAllGroups(BOOL extraGroups = TRUE);
+	std::vector<std::string> getAllGroups();
 
 	void addFriendToGroup(const LLUUID& friend_id, const std::string& groupName);
 	void removeFriendFromGroup(const LLUUID& friend_id, const std::string& groupName);
@@ -83,6 +80,7 @@ public:
 	void removeNonFriendFromList(const LLUUID& non_friend_id);
 	BOOL isNonFriend(const LLUUID& non_friend_id);
 	std::vector<LLUUID> getListOfNonFriends();
+	std::vector<LLUUID> getListOfPseudonymAvs();
 
 	BOOL notifyForFriend(const LLUUID& friend_id);
 	void setNotifyForGroup(const std::string& groupName, BOOL notify);
@@ -91,6 +89,7 @@ public:
 	bool callbackAliasReset(const LLSD& notification, const LLSD& response);
 
 	bool isInternalGroupName(const std::string& groupName);
+	bool hasGroups() { return !mGroups.empty(); }
 
 private:
 	typedef boost::unordered_set<LLUUID, FSUUIDHash> uuid_set_t;
@@ -119,7 +118,6 @@ private:
 	std::vector<LLUUID> getFriendsInAnyGroup();
 
 	void setPseudonym(const LLUUID& friend_id, const std::string& pseudonym);
-	std::vector<LLUUID> getListOfPseudonymAvs();
 	BOOL hasVisuallyDifferentPseudonym(const LLUUID& friend_id);
 
 	void loadFromDisk();

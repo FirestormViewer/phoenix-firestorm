@@ -24,6 +24,10 @@
 	<floater.string name="TooltipIM" value="Instant Message"/>
 	<floater.string name="TooltipProfile" value="Profil anzeigen"/>
 	<floater.string name="TooltipNameChanged" value="Name wurde geändert"/>
+	<floater.string name="AllSets" value="&lt;Alle Sets&gt;"/>
+	<floater.string name="NoSets" value="&lt;Keine Sets&gt;"/>
+	<floater.string name="Renamed" value="&lt;Umbenannt&gt;"/>
+	<floater.string name="NoFriend" value="&lt;Nicht-Freunde&gt;"/>
 
 	<text name="lgg_fg_text1">
 		Set:
