@@ -8,7 +8,7 @@
  save_rect="true"
  title="Avatar Textures"
  width="940"
- can_resize="true">
+ can_resize="false">
     <floater.string
      name="InvalidAvatar">
         Invalid Avatar
