@@ -51,6 +51,8 @@ BOOL FSFloaterTeleportHistory::postBuild()
 
 	if (mHistoryPanel)
 	{
+		mHistoryPanel->setIsStandAlone(true);
+
 		mHistoryPanel->mTeleportBtn = getChild<LLButton>("teleport_btn");
 		mHistoryPanel->mShowOnMapBtn = getChild<LLButton>("map_btn");
 		mHistoryPanel->mShowProfile = getChild<LLButton>("profile_btn");
@@ -88,7 +90,7 @@ void FSFloaterTeleportHistory::onFilterEdit(const std::string& search_string, bo
 		return;
 	}
 
-	if (force_filter || mHistoryPanel->getFilterSubString() != search_string)
+	if (force_filter || mHistoryPanel->getFilterString() != search_string)
 	{
 		std::string string = search_string;
 

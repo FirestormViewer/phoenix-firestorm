@@ -464,7 +464,11 @@ LLTeleportHistoryPanel::LLTeleportHistoryPanel()
 		mHistoryAccordion(NULL),
 		mAccordionTabMenu(NULL),
 		mLastSelectedFlatlList(NULL),
-		mLastSelectedItemIndex(-1)
+		// <FS:Ansariel> Separate search filter for standalone TP history
+		//mLastSelectedItemIndex(-1)
+		mLastSelectedItemIndex(-1),
+		mIsStandAlone(false)
+		// </FS:Ansariel>
 {
 	buildFromFile( "panel_teleport_history.xml");
 }
@@ -563,7 +567,17 @@ void LLTeleportHistoryPanel::draw()
 // virtual
 void LLTeleportHistoryPanel::onSearchEdit(const std::string& string)
 {
-	sFilterSubString = string;
+	// <FS:Ansariel> Separate search filter for standalone TP history
+	//sFilterSubString = string;
+	if (mIsStandAlone)
+	{
+		mFilterString = string;
+	}
+	else
+	{
+		sFilterSubString = string;
+	}
+	// </FS:Ansariel>
 	showTeleportHistory();
 }
 
@@ -740,6 +754,13 @@ void LLTeleportHistoryPanel::refresh()
 
 	LLFlatListView* curr_flat_view = NULL;
 	std::string filter_string = sFilterSubString;
+	// <FS:Ansariel> Separate search filter for standalone TP history
+	if (mIsStandAlone)
+	{
+		filter_string = mFilterString;
+	}
+	// </FS:Ansariel>
+
 	LLStringUtil::toUpper(filter_string);
 
 	U32 added_items = 0;
@@ -774,7 +795,15 @@ void LLTeleportHistoryPanel::refresh()
 				tab->setVisible(true);
 
 				// Expand all accordion tabs when filtering
-				if(!sFilterSubString.empty())
+				// <FS:Ansariel> Separate search filter for standalone TP history
+				//if(!sFilterSubString.empty())
+				std::string str_filter = sFilterSubString;
+				if (mIsStandAlone)
+				{
+					str_filter = mFilterString;
+				}
+				if (!str_filter.empty())
+				// <FS:Ansariel>
 				{
 					//store accordion tab state when filter is not empty
 					tab->notifyChildren(LLSD().with("action","store_state"));
@@ -825,7 +854,17 @@ void LLTeleportHistoryPanel::refresh()
 		}
 	}
 
-	mHistoryAccordion->setFilterSubString(sFilterSubString);
+	// <FS:Ansariel> Separate search filter for standalone TP history
+	//mHistoryAccordion->setFilterSubString(sFilterSubString);
+	if (mIsStandAlone)
+	{
+		mHistoryAccordion->setFilterSubString(mFilterString);
+	}
+	else
+	{
+		mHistoryAccordion->setFilterSubString(sFilterSubString);
+	}
+	// <FS:Ansariel>
 
 	mHistoryAccordion->arrange();
 
@@ -871,7 +910,10 @@ void LLTeleportHistoryPanel::replaceItem(S32 removed_index)
 		.getFlatItemForPersistentItem(&mContextMenu,
 									  history_items[history_items.size() - 1], // Most recent item, it was added instead of removed
 									  history_items.size(), // index will be decremented inside loop below
-									  sFilterSubString);
+									  // <FS:Ansariel> Separate search filter for standalone TP history
+									  //sFilterSubString);
+									  (mIsStandAlone ? mFilterString : sFilterSubString));
+									  // </FS:Ansariel>
 
 	fv->addItem(item, LLUUID::null, ADD_TOP);
 

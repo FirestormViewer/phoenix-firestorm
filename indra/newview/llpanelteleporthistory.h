@@ -78,6 +78,11 @@ public:
 	/*virtual*/ void updateVerbs();
 	/*virtual*/ bool isSingleItemSelected();
 
+	// <FS:Ansariel> Separate search filter for standalone TP history
+	void setIsStandAlone(bool standalone) { mIsStandAlone = standalone; }
+	std::string getFilterString() { return mFilterString; }
+	// </FS:Ansariel>
+
 private:
 
 	void onDoubleClickItem();
@@ -123,6 +128,11 @@ private:
 	LLHandle<LLView>		mGearMenuHandle;
 
 	boost::signals2::connection mTeleportHistoryChangedConnection;
+
+	// </FS:Ansariel> Separate search filter for standalone TP history
+	bool		mIsStandAlone;
+	std::string	mFilterString;
+	// </FS:Ansariel>
 };
 
 
