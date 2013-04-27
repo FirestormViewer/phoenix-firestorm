@@ -12,7 +12,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		Wyszukiwanie informacji o członku
 	</panel.string>
 	<panel name="group_info_top">
-		<texture_picker name="insignia" tool_tip="Kliknij by wybrać obraz" />
+		<texture_picker name="insignia" tool_tip="Kliknij by powiększyć obraz" />
 		<text name="prepend_founded_by">
 			Założyciel:
 		</text>
@@ -57,6 +57,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		<text name="group_key_label">
 			Klucz:
 		</text>
+		<button name="copy_name" label="Kopiuj nazwę grupy" />
 		<text_editor name="group_key" label="Klucz grupy:" initial_value="(ładowanie...)"/>
 		<button name="copy_uri" label="Kopiuj URI"/>
 	</panel>
