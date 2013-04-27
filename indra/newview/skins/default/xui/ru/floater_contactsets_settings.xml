@@ -21,27 +21,15 @@
   <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Draw Profile Icons Next To Names" left="5" mouse_opaque="true" name="PhoenixContactSetsDrawProfileIcon" visible="true" radio_style="false" width="270" control_name="PhoenixContactSetsDrawProfileIcon"/>
   <text type="string" length="1" follows="left|top" height="10" layout="topleft" left="5" name="lgg_fg_text3" mouse_opaque="false" top_delta="27" width="90">формат:</text>
   <combo_box height="20" layout="topleft" left_delta="80" name="lgg_fg_dispName" control_name="PhoenixContactSetsNameFormat" top_delta="-4" width="150">
-  <combo_item name="Legacy Names" value="0">
-    Старые названия
-  </combo_item>
-  <combo_item name="Display Names (with Username)" value="1">
-    Отображаемые имена (с именем пользевателя)
-  </combo_item>
-  <combo_item name="Display Names only" value="2">
-    Только Отображаемые имена
-  </combo_item>
+  <combo_item name="Legacy Names" label="Старые названия"/>
+  <combo_item name="Display Names (with Username)" label="Отображаемые имена (с именем пользевателя)"/>
+  <combo_item name="Display Names only" label="Только Отображаемые имена"/>
   </combo_box>
   <text type="string" length="1" follows="left|top" height="10" layout="topleft" left_delta="160" name="lgg_fg_text4" mouse_opaque="false" top_delta="4" width="90">Сортиров.:</text>
   <combo_box height="20" layout="topleft" left_delta="68" name="lgg_fg_sortName" control_name="PhoenixContactSetSortNameFormat" top_delta="-4" width="150" >
-  <combo_item name="Legacy Names" value="Old Names">
-    Старые названия
-  </combo_item>
-  <combo_item name="Display Names (with Username)" value="Display Names (with Username)">
-    Отображаемые имена (с именем пользевателя)
-  </combo_item>
-  <combo_item name="Display Names only" value="Display Names only">
-    Только Отображаемые имена
-  </combo_item>
+  <combo_item name="Legacy Names" label="Старые названия"/>
+  <combo_item name="Display Names (with Username)" label="Отображаемые имена (с именем пользевателя)"/>
+  <combo_item name="Display Names only" label="Только Отображаемые имена"/>
   </combo_box>
   <button bottom_delta="40" follows="top|left" font="SansSerifSmall" height="20" label="Ok" name="lgg_fg_okButton" left="195" width="40"/>
 </floater>

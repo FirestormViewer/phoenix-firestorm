@@ -28,29 +28,17 @@
 		Formato de nombre:
 	</text>
 	<combo_box name="lgg_fg_dispName" left_delta="120" top_delta="-3">
-		<combo_item name="Legacy Names">
-			Nombres clásicos
-		</combo_item>
-		<combo_item name="Display Names (with Username)">
-			Displaynames (con nombre de usuario)
-		</combo_item>
-		<combo_item name="Display Names only">
-			Sólo displaynames
-		</combo_item>
+		<combo_item name="Legacy Names" label="Nombres clásicos"/>
+		<combo_item name="Display Names (with Username)" label="Displaynames (con nombre de usuario)"/>
+		<combo_item name="Display Names only" label="Sólo displaynames"/>
 	</combo_box>
 	<text name="lgg_fg_text4" width="120" top_delta="3">
 		Ordenar por:
 	</text>
 	<combo_box name="lgg_fg_sortName" left_delta="75" top_delta="-3">
-		<combo_item name="Legacy Names">
-			Nombre clásico
-		</combo_item>
-		<combo_item name="Display Names (with Username)">
-			Displayname + nombre de usuario
-		</combo_item>
-		<combo_item name="Display Names only">
-			Displayname
-		</combo_item>
+		<combo_item name="Legacy Names" label="Nombre clásico"/>
+		<combo_item name="Display Names (with Username)" label="Displayname + nombre de usuario"/>
+		<combo_item name="Display Names only" label="Displayname"/>
 	</combo_box>
 	<button label="Aceptar" name="lgg_fg_okButton" width="70"/>
 </floater>

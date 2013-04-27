@@ -39,8 +39,7 @@ public:
 	virtual void processProperties(void* data, EAvatarProcessorType type);
 
 	virtual void changed(U32 mask);
-	void onClose(bool app_quitting);
-	BOOL postBuild(void);
+	BOOL postBuild();
 	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	void update();
 	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
@@ -60,16 +59,14 @@ public:
 	BOOL toggleSelect(LLUUID whoToToggle);
 	static BOOL compareAv(LLUUID av1, LLUUID av2);
 
-	static void onClickSettings(void* data);
-	static void onClickNew(void* data);
-	static void onClickDelete(void* data);
-	static void onPickAvatar(const std::vector<LLUUID>& ids, const std::vector<LLAvatarName> names);
-
-
+	void onClickSettings();
+	void onClickNew();
+	void onClickDelete();
+	void onPickAvatar(const std::vector<LLUUID>& ids, const std::vector<LLAvatarName> names);
 	void onBackgroundChange();
-
 	void onNoticesChange();
 	void onCheckBoxChange();
+
 	void hitSpaceBar();
 
 	void updateGroupsList();
@@ -81,8 +78,6 @@ public:
 	LLColorSwatchCtrl * groupColorBox;
 	LLCheckBoxCtrl* noticeBox;
 	LLRect contextRect;
-
-	static lggContactSetsFloater* sInstance;
 
 private:
 	S32 mouse_x;
@@ -107,16 +102,11 @@ class lggContactSetsFloaterSettings : public LLFloater
 {
 public:
 	lggContactSetsFloaterSettings(const LLSD& seed);
-	virtual ~lggContactSetsFloaterSettings();
-	static lggContactSetsFloaterSettings* showFloater();
+	virtual ~lggContactSetsFloaterSettings() {}
 
-	void onClose(bool app_quitting);
 	BOOL postBuild(void);
-	static void onClickOk(void* data);
-	void onSelectNameFormat();
-	void onDefaultBackgroundChange();
-	static lggContactSetsFloaterSettings* sSettingsInstance;
-};
 
+	void onDefaultBackgroundChange();
+};
 
 #endif // LGG_CONTACTSETSFLOATER_H

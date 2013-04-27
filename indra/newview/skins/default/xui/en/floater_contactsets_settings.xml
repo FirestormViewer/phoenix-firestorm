@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ positioning="centered"
  border="true"
  can_close="true"
  can_minimize="true"
- bottom="400"
- left="300"
  can_resize="false"
  height="370"
  width="550"
+ save_rect="true"
  name="lgg_fg_floater_settings"
  title="Contact Set Settings"
  help_topic="fs_contact_sets">
@@ -21,8 +21,7 @@
 	 left_delta="5"
 	 name="colordefault"
 	 tool_tip="Default color for friends not in a group. Affects only the FriendGroups list display."
-	 width="65"
-	 control_name="lgg_fg_groupColor"/>
+	 width="65"/>
 	<text
 	 bottom_delta="-30"
 	 follows="left|top"
@@ -235,18 +234,18 @@
 	 width="150">
 		<combo_item
 		 name="Legacy Names"
-		 value="0">
-			Legacy Names
+		 value="0"
+		 label="Legacy Names">
 		</combo_item>
 		<combo_item
 		 name="Display Names (with Username)"
-		 value="1">
-			Display Names (with Username)
+		 value="1"
+		 label="Display Names (with Username)">
 		</combo_item>
 		<combo_item
 		 name="Display Names only"
-		 value="2">
-			Display Names only
+		 value="2"
+		 label="Display Names only">
 		</combo_item>
 	</combo_box>
 	<text
@@ -271,18 +270,18 @@
 	 width="150">
 		<combo_item
 		 name="Legacy Names"
-		 value="Old Names">
-			Legacy Names
+		 value="0"
+		 label="Legacy Names">
 		</combo_item>
 		<combo_item
 		 name="Display Names (with Username)"
-		 value="Display Names (with Username)">
-			Display Names (with Username)
+		 value="1"
+		 label="Display Names (with Username)">
 		</combo_item>
 		<combo_item
 		 name="Display Names only"
-		 value="Display Names only">
-			Display Names only
+		 value="2"
+		 label="Display Names only">
 		</combo_item>
 	</combo_box>
 	<button

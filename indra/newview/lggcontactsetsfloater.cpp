@@ -71,31 +71,43 @@
 #include "llavatarpropertiesprocessor.h"
 
 
-lggContactSetsFloater* lggContactSetsFloater::sInstance;
-
-void lggContactSetsFloater::onClose(bool app_quitting)
+lggContactSetsFloater::lggContactSetsFloater(const LLSD& seed)
+	: LLFloater(seed),
+	mouse_x(0),
+	mouse_y(900),
+	hovered(0.f),
+	justClicked(FALSE),
+	scrollLoc(0),
+	showRightClick(FALSE),
+	maxSize(0),
+	scrollStarted(0),
+	currentFilter(""),
+	currentRightClickText(""),
+	mouseInWindow(FALSE)
 {
-	LLAvatarTracker::instance().removeObserver(sInstance);
+	LLAvatarTracker::instance().addObserver(this);
+}
+
+lggContactSetsFloater::~lggContactSetsFloater()
+{
+	LLAvatarTracker::instance().removeObserver(this);
 
 	// <FS:ND> FIRE-3736; remove observers on all pending profile updates. Otherwise crash&burn when the update arrives but the floater is destroyed.
 	for (std::set<LLUUID>::iterator itr = profileImagePending.begin(); profileImagePending.end() != itr; ++itr)
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(*itr, this);
 	// </FS:ND>
-
-	sInstance = NULL;
-	destroy();
 }
 
-BOOL lggContactSetsFloater::postBuild(void)
+BOOL lggContactSetsFloater::postBuild()
 {
 	groupsList = getChild<LLComboBox>("lgg_fg_groupCombo");
 	groupsList->setCommitCallback(boost::bind(&lggContactSetsFloater::onSelectGroup, this));
 
 	groupColorBox = getChild<LLColorSwatchCtrl>("colorswatch");
 
-	childSetAction("lgg_fg_groupCreate", onClickNew, this);
-	childSetAction("lgg_fg_groupDelete", onClickDelete, this);
-	childSetAction("lgg_fg_openSettings", onClickSettings, this);
+	getChild<LLButton>("lgg_fg_groupCreate")->setClickedCallback(boost::bind(&lggContactSetsFloater::onClickNew, this));
+	getChild<LLButton>("lgg_fg_groupDelete")->setClickedCallback(boost::bind(&lggContactSetsFloater::onClickDelete, this));
+	getChild<LLButton>("lgg_fg_openSettings")->setClickedCallback(boost::bind(&lggContactSetsFloater::onClickSettings, this));
 
 	groupColorBox->setCommitCallback(boost::bind(&lggContactSetsFloater::onBackgroundChange, this));
 
@@ -115,44 +127,7 @@ BOOL lggContactSetsFloater::postBuild(void)
 
 	LLFirstUse::usePhoenixContactSet();
 
-	return true;
-}
-
-
-lggContactSetsFloater::~lggContactSetsFloater()
-{
-}
-
-lggContactSetsFloater::lggContactSetsFloater(const LLSD& seed)
-	:LLFloater(seed),
-	mouse_x(0),
-	mouse_y(900),
-	hovered(0.f),
-	justClicked(FALSE),
-	scrollLoc(0),
-	showRightClick(FALSE),
-	maxSize(0),
-	scrollStarted(0),
-	currentFilter(""),
-	currentRightClickText(""),
-	mouseInWindow(FALSE)
-{
-	if (sInstance)
-	{
-		delete sInstance;
-	}
-	sInstance = this;
-	selected.clear();
-	currentList.clear();
-	allFolders.clear();
-	openedFolders.clear();
-	profileImagePending.clear();
-	LLAvatarTracker::instance().addObserver(this);
-	
-	if (getRect().mLeft == 0 && getRect().mBottom == 0)
-	{
-		center();
-	}
+	return TRUE;
 }
 
 //virtual
@@ -187,7 +162,7 @@ void lggContactSetsFloater::changed(U32 mask)
 
 	if (mask & (LLFriendObserver::ADD | LLFriendObserver::REMOVE))
 	{
-		sInstance->generateCurrentList();
+		generateCurrentList();
 	}
 
 	if (mask & LLFriendObserver::ONLINE)
@@ -197,7 +172,7 @@ void lggContactSetsFloater::changed(U32 mask)
 		
 		if (!showOffline && showOnline)
 		{
-			sInstance->generateCurrentList();
+			generateCurrentList();
 		}
 	}
 }
@@ -205,18 +180,18 @@ void lggContactSetsFloater::changed(U32 mask)
 void lggContactSetsFloater::onBackgroundChange()
 {
 	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
-	LGGContactSets::getInstance()->setGroupColor(currentGroup, sInstance->groupColorBox->get());
+	LGGContactSets::getInstance()->setGroupColor(currentGroup, groupColorBox->get());
 }
 
 void lggContactSetsFloater::onNoticesChange()
 {
 	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
-	LGGContactSets::getInstance()->setNotifyForGroup(currentGroup, sInstance->noticeBox->getValue().asBoolean());
+	LGGContactSets::getInstance()->setNotifyForGroup(currentGroup, noticeBox->getValue().asBoolean());
 }
 
 void lggContactSetsFloater::onCheckBoxChange()
 {
-	sInstance->generateCurrentList();	
+	generateCurrentList();	
 }
 
 void lggContactSetsFloater::onPickAvatar(const std::vector<LLUUID>& ids,
@@ -232,7 +207,7 @@ void lggContactSetsFloater::onPickAvatar(const std::vector<LLUUID>& ids,
 		LGGContactSets::getInstance()->addNonFriendToList(ids[i]);
 	}
 
-	sInstance->updateGroupsList();
+	updateGroupsList();
 	LLFirstUse::usePhoenixFriendsNonFriend();
 }
 
@@ -308,21 +283,21 @@ void lggContactSetsFloater::updateGroupsList()
 
 void lggContactSetsFloater::hitSpaceBar()
 {
-	if ((sInstance->currentFilter == "" && !sInstance->showRightClick) ||
-		(sInstance->currentRightClickText == "" && sInstance->showRightClick))
+	if ((currentFilter.empty() && !showRightClick) ||
+		(currentRightClickText.empty() && showRightClick))
 	{
-		sInstance->justClicked=TRUE;
+		justClicked = TRUE;
 	}
 	else
 	{
-		if (!sInstance->showRightClick)
+		if (!showRightClick)
 		{
-			sInstance->currentFilter += ' ';
-			sInstance->generateCurrentList();
+			currentFilter += ' ';
+			generateCurrentList();
 		}
 		else
 		{
-			sInstance->currentRightClickText += ' ';
+			currentRightClickText += ' ';
 		}
 	}
 }
@@ -337,10 +312,10 @@ void lggContactSetsFloater::updateGroupGUIs()
 
 void lggContactSetsFloater::onSelectGroup()
 {
-	gSavedSettings.setString("FSContactSetsSelectedGroup", sInstance->groupsList->getSelectedValue());
-	sInstance->updateGroupGUIs();
-	sInstance->selected.clear();
-	sInstance->generateCurrentList();
+	gSavedSettings.setString("FSContactSetsSelectedGroup", groupsList->getSelectedValue());
+	updateGroupGUIs();
+	selected.clear();
+	generateCurrentList();
 }
 
 void lggContactSetsFloater::drawScrollBars()
@@ -351,7 +326,7 @@ void lggContactSetsFloater::drawRightClick()
 {
 	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 	
-	if (!sInstance->hasFocus())
+	if (!hasFocus())
 	{
 		showRightClick = FALSE;
 		return;
@@ -416,7 +391,7 @@ void lggContactSetsFloater::drawRightClick()
 	}
 	int height = heightPer * (extras + groups.size());
 
-	LLRect rec = sInstance->getChild<LLPanel>("draw_region")->getRect();
+	LLRect rec = getChild<LLPanel>("draw_region")->getRect();
 	gGL.color4fv(LLColor4(0, 0, 0, 0.5).mV);
 	gl_rect_2d(rec);
 	
@@ -502,7 +477,7 @@ void lggContactSetsFloater::drawRightClick()
 					LLUUID afriend = selected[v];
 					LGGContactSets::getInstance()->removeFriendFromGroup(afriend, currentGroup);
 
-					sInstance->generateCurrentList();
+					generateCurrentList();
 				}
 
 				selected.clear();
@@ -583,7 +558,7 @@ void lggContactSetsFloater::drawRightClick()
 
 		//draw text in black of rightclicktext
 		//if nothing set, give hints
-		std::string textToDrawInRightClickBox = sInstance->currentRightClickText;
+		std::string textToDrawInRightClickBox = currentRightClickText;
 		LLColor4 textColor = LLColor4::black;
 		if (textToDrawInRightClickBox == "")
 		{
@@ -614,11 +589,11 @@ void lggContactSetsFloater::drawRightClick()
 			if (justClicked)
 			{
 				//rename avatar (or remove display name)
-				if (TRUE) //sInstance->currentRightClickText != "")
+				if (TRUE) //currentRightClickText != "")
 				{
-					//LGGContactSets::getInstance()->setPseudonym(selected[0], sInstance->currentRightClickText);
+					//LGGContactSets::getInstance()->setPseudonym(selected[0], currentRightClickText);
 					LGGContactSets::getInstance()->removeDisplayName(selected[0]);
-					sInstance->updateGroupsList();
+					updateGroupsList();
 					LLFirstUse::usePhoenixContactSetRename();
 					LLVOAvatar::invalidateNameTag(selected[0]);
 				}
@@ -655,8 +630,8 @@ void lggContactSetsFloater::drawRightClick()
 					//cler avs rename
 					LGGContactSets::getInstance()->clearPseudonym(selected[0]);
 					LLVOAvatar::invalidateNameTag(selected[0]);
-					sInstance->generateCurrentList();
-					sInstance->updateGroupsList();
+					generateCurrentList();
+					updateGroupsList();
 				}
 			}
 
@@ -689,7 +664,7 @@ void lggContactSetsFloater::drawRightClick()
 				{
 					//cler avs rename
 					LGGContactSets::getInstance()->removeNonFriendFromList(selected[0]);
-					sInstance->generateCurrentList();
+					generateCurrentList();
 				}
 			}
 
@@ -1006,7 +981,7 @@ void lggContactSetsFloater::drawRightClick()
 			{
 				newSelected.push_back(currentList[pp]);
 			}*/
-			sInstance->selected = sInstance->currentList;
+			selected = currentList;
 		}
 	}
 
@@ -1040,8 +1015,8 @@ void lggContactSetsFloater::drawRightClick()
 		if (justClicked)
 		{
 			//add new av
-			LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&lggContactSetsFloater::onPickAvatar, _1, _2), TRUE, TRUE);
-			sInstance->addDependentFloater(picker);
+			LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&lggContactSetsFloater::onPickAvatar, this, _1, _2), TRUE, TRUE);
+			addDependentFloater(picker);
 		}
 	}
 
@@ -1072,13 +1047,13 @@ void lggContactSetsFloater::drawRightClick()
 
 void lggContactSetsFloater::drawFilter()
 {
-	if (sInstance->currentFilter == "")
+	if (currentFilter.empty())
 	{
 		return;
 	}
 
 	int mySize = 40;
-	LLRect rec = sInstance->getChild<LLPanel>("top_region")->getRect();
+	LLRect rec = getChild<LLPanel>("top_region")->getRect();
 
 	LLRect aboveThisMess;
 	aboveThisMess.setLeftTopAndSize(rec.mLeft, rec.mTop + mySize, rec.getWidth(), mySize);
@@ -1086,7 +1061,7 @@ void lggContactSetsFloater::drawFilter()
 	LLColor4 backGround(0, 0, 0, 1.0f);
 	LLColor4 foreGround(1, 1, 1, 1.0f);
 
-	if (aboveThisMess.pointInRect(sInstance->mouse_x, sInstance->mouse_y))
+	if (aboveThisMess.pointInRect(mouse_x, mouse_y))
 	{
 		backGround = LLColor4(0, 0, 0, 0.4f);
 		foreGround = LLColor4(1, 1, 1, 0.4f);
@@ -1101,7 +1076,7 @@ void lggContactSetsFloater::drawFilter()
 	std::string preText = getString("FilterLabel") + " ";
 
 	int width1 = LLFontGL::getFontSansSerif()->getWidth(preText) + 8;
-	int width2 = LLFontGL::getFontSansSerif()->getWidth(sInstance->currentFilter) + 8;
+	int width2 = LLFontGL::getFontSansSerif()->getWidth(currentFilter) + 8;
 	int tSize = 24;
 
 	LLRect fullTextBox;
@@ -1127,7 +1102,7 @@ void lggContactSetsFloater::drawFilter()
 		);
 
 	LLFontGL::getFontSansSerif()->render(
-		utf8str_to_wstring(sInstance->currentFilter),
+		utf8str_to_wstring(currentFilter),
 		0,
 		filterTextBox.mLeft + 4,
 		filterTextBox.mBottom + 4,
@@ -1142,7 +1117,7 @@ void lggContactSetsFloater::drawFilter()
 void lggContactSetsFloater::draw()
 {
 	LLFloater::draw();
-	if (sInstance->isMinimized())
+	if (isMinimized())
 	{
 		return;
 	}
@@ -1185,9 +1160,9 @@ void lggContactSetsFloater::draw()
 	LLPanel* mainPanel = getChild<LLPanel>("draw_region");
 	LLRect rec = mainPanel->getRect();
 
-	if (rec.pointInRect(mouse_x, mouse_y) && sInstance->hasFocus())
+	if (rec.pointInRect(mouse_x, mouse_y) && hasFocus())
 	{
-		sInstance->getChild<LLCheckBoxCtrl>("haxCheckbox")->setFocus(TRUE);
+		getChild<LLCheckBoxCtrl>("haxCheckbox")->setFocus(TRUE);
 	}
 
 	gGL.pushMatrix();
@@ -1360,9 +1335,9 @@ void lggContactSetsFloater::draw()
 				{
 					justClicked = FALSE;
 					gSavedSettings.setString("FSContactSetsSelectedGroup", folder);
-					sInstance->updateGroupGUIs();
-					sInstance->selected.clear();
-					sInstance->generateCurrentList();
+					updateGroupGUIs();
+					selected.clear();
+					generateCurrentList();
 				}
 			}
 
@@ -1606,9 +1581,9 @@ void lggContactSetsFloater::draw()
 						{
 							justClicked = FALSE;
 							gSavedSettings.setString("FSContactSetsSelectedGroup", oGroupName);
-							sInstance->updateGroupGUIs();
-							sInstance->selected.clear();
-							sInstance->generateCurrentList();
+							updateGroupGUIs();
+							selected.clear();
+							generateCurrentList();
 						}
 					}
 					w += sizePerOGroup + 5;
@@ -2014,7 +1989,7 @@ BOOL lggContactSetsFloater::toggleSelect(LLUUID whoToToggle)
 
 BOOL lggContactSetsFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	sInstance->justClicked = true;
+	justClicked = true;
 	return LLFloater::handleMouseDown(x, y, mask);
 }
 
@@ -2024,7 +1999,7 @@ BOOL lggContactSetsFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		contextRect.setLeftTopAndSize(x, y, 2, 2);
 		showRightClick = TRUE;
-		sInstance->currentRightClickText = "";
+		currentRightClickText = "";
 	}
 	else
 	{
@@ -2035,14 +2010,14 @@ BOOL lggContactSetsFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
 BOOL lggContactSetsFloater::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
-	LLRect rec = sInstance->getChild<LLPanel>("draw_region")->getRect();
+	LLRect rec = getChild<LLPanel>("draw_region")->getRect();
 
-	int maxS = (sInstance->currentList.size() + sInstance->allFolders.size()) * 11 + 200 - rec.getHeight();
+	int maxS = (currentList.size() + allFolders.size()) * 11 + 200 - rec.getHeight();
 	
 	static LLCachedControl<bool> doZoom(gSavedSettings, "FSContactSetsDoZoom");
 	if (!doZoom)
 	{
-		maxS = (sInstance->currentList.size() + sInstance->allFolders.size()) * 26 + 10 - rec.getHeight();
+		maxS = (currentList.size() + allFolders.size()) * 26 + 10 - rec.getHeight();
 	}
 
 	int moveAmt = 12;
@@ -2051,7 +2026,7 @@ BOOL lggContactSetsFloater::handleScrollWheel(S32 x, S32 y, S32 clicks)
 		moveAmt = 26;
 	}
 
-	sInstance->scrollLoc=llclamp(sInstance->scrollLoc + (clicks * moveAmt), 0, maxS);
+	scrollLoc = llclamp(scrollLoc + (clicks * moveAmt), 0, maxS);
 	return LLFloater::handleScrollWheel(x, y, clicks);
 }
 
@@ -2065,10 +2040,10 @@ BOOL lggContactSetsFloater::handleUnicodeCharHere(llwchar uni_char)
 	if(' ' == uni_char 
 		&& !gKeyboard->getKeyRepeated(' ')
 		&& 
-		((!sInstance->showRightClick && sInstance->currentFilter == "") || (sInstance->showRightClick && sInstance->currentRightClickText == ""))
+		((!showRightClick && currentFilter.empty()) || (showRightClick && currentRightClickText.empty()))
 		)
 	{
-		sInstance->justClicked = TRUE;
+		justClicked = TRUE;
 	}
 	else
 	{
@@ -2077,26 +2052,26 @@ BOOL lggContactSetsFloater::handleUnicodeCharHere(llwchar uni_char)
 			LLWString strW;
 			LLClipboard::instance().pasteFromClipboard( strW );
 			std::string toPaste = wstring_to_utf8str( strW );
-			if (sInstance->showRightClick)
+			if (showRightClick)
 			{
-				sInstance->currentRightClickText += toPaste;
+				currentRightClickText += toPaste;
 			}
 			else
 			{
-				sInstance->currentFilter += toPaste;
+				currentFilter += toPaste;
 			}
 		}
 		else if ((U32)uni_char != 27 && (U32)uni_char != 8)
 		{
-			//sInstance->getChild<LLCheckBoxCtrl>("haxCheckbox")->setFocus(TRUE);
-			if (!sInstance->showRightClick)
+			//getChild<LLCheckBoxCtrl>("haxCheckbox")->setFocus(TRUE);
+			if (!showRightClick)
 			{
-				sInstance->currentFilter += uni_char;
-				sInstance->generateCurrentList();
+				currentFilter += uni_char;
+				generateCurrentList();
 			}
 			else
 			{
-				sInstance->currentRightClickText += uni_char;
+				currentRightClickText += uni_char;
 			}
 			
 			return TRUE;
@@ -2108,24 +2083,24 @@ BOOL lggContactSetsFloater::handleUnicodeCharHere(llwchar uni_char)
 
 BOOL lggContactSetsFloater::handleKeyHere(KEY key, MASK mask)
 {
-	LLRect rec = sInstance->getChild<LLPanel>("draw_region")->getRect();
+	LLRect rec = getChild<LLPanel>("draw_region")->getRect();
 	
-	int maxS = (sInstance->currentList.size() + sInstance->allFolders.size()) * 11 + 200 - rec.getHeight();
+	int maxS = (currentList.size() + allFolders.size()) * 11 + 200 - rec.getHeight();
 
 	static LLCachedControl<bool> doZoom(gSavedSettings, "FSContactSetsDoZoom");
 	
 	if (!doZoom)
 	{
-		maxS = (sInstance->currentList.size() + sInstance->allFolders.size()) * 26 + 10 - rec.getHeight();
+		maxS = (currentList.size() + allFolders.size()) * 26 + 10 - rec.getHeight();
 	}
 
-	std::string localFilter = sInstance->currentFilter;
-	if (sInstance->showRightClick)
+	std::string localFilter = currentFilter;
+	if (showRightClick)
 	{
-		localFilter=sInstance->currentRightClickText;
+		localFilter = currentRightClickText;
 	}
 
-	int curLoc = sInstance->scrollLoc;
+	int curLoc = scrollLoc;
 	
 	if (key == KEY_PAGE_UP)
 	{
@@ -2160,22 +2135,22 @@ BOOL lggContactSetsFloater::handleKeyHere(KEY key, MASK mask)
 
 	if (key == KEY_ESCAPE)
 	{
-		if (localFilter != "")
+		if (!localFilter.empty())
 		{
-			sInstance->currentFilter = "";
-			sInstance->generateCurrentList();
+			currentFilter = "";
+			generateCurrentList();
 			return TRUE;
 		}
-		if (sInstance->showRightClick)
+		if (showRightClick)
 		{
-			sInstance->showRightClick = FALSE;
+			showRightClick = FALSE;
 			return TRUE;
 		}
 	}
 
-	if(key == KEY_RETURN)
+	if (key == KEY_RETURN)
 	{
-		sInstance->justClicked = TRUE;
+		justClicked = TRUE;
 	}
 
 	if (key == KEY_BACKSPACE)
@@ -2184,44 +2159,44 @@ BOOL lggContactSetsFloater::handleKeyHere(KEY key, MASK mask)
 		if (length > 0)
 		{
 			length--;
-			if (!sInstance->showRightClick)
+			if (!showRightClick)
 			{
-				sInstance->currentFilter = localFilter.substr(0, length);
-				sInstance->generateCurrentList();
+				currentFilter = localFilter.substr(0, length);
+				generateCurrentList();
 			}
 			else
 			{
-				sInstance->currentRightClickText = localFilter.substr(0, length);
+				currentRightClickText = localFilter.substr(0, length);
 			}
 		}
 	}
 
-	sInstance->scrollLoc=llclamp(curLoc, 0, maxS);
+	scrollLoc=llclamp(curLoc, 0, maxS);
 
 	return LLFloater::handleKeyHere(key, mask);
 }
 
 BOOL lggContactSetsFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-	LLRect rec = sInstance->getChild<LLPanel>("draw_region")->getRect();
-	LLRect topScroll = sInstance->getChild<LLPanel>("top_region")->getRect();
-	LLRect bottomScroll = sInstance->getChild<LLPanel>("bottom_region")->getRect();
+	LLRect rec = getChild<LLPanel>("draw_region")->getRect();
+	LLRect topScroll = getChild<LLPanel>("top_region")->getRect();
+	LLRect bottomScroll = getChild<LLPanel>("bottom_region")->getRect();
 
-	int maxS = (sInstance->currentList.size() + sInstance->allFolders.size()) * 11 + 200 - rec.getHeight();
+	int maxS = (currentList.size() + allFolders.size()) * 11 + 200 - rec.getHeight();
 	static LLCachedControl<bool> doZoom(gSavedSettings, "FSContactSetsDoZoom");
 	
 	if (!doZoom)
 	{
-		maxS = (sInstance->currentList.size() + sInstance->allFolders.size()) * 26 + 10 - rec.getHeight();
+		maxS = (currentList.size() + allFolders.size()) * 26 + 10 - rec.getHeight();
 	}
 	
 	if (bottomScroll.pointInRect(x, y))
 	{
-		sInstance->scrollLoc = maxS;
+		scrollLoc = maxS;
 	}
 	else if (topScroll.pointInRect(x, y))
 	{
-		sInstance->scrollLoc = 0;
+		scrollLoc = 0;
 	}
 
 	return LLFloater::handleDoubleClick(x, y, mask);
@@ -2229,7 +2204,7 @@ BOOL lggContactSetsFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 BOOL lggContactSetsFloater::handleHover(S32 x, S32 y, MASK mask)
 {
-	sInstance->mouseInWindow = TRUE;
+	mouseInWindow = TRUE;
 	mouse_x = x;
 	mouse_y = y;
 	hovered = gFrameTimeSeconds;
@@ -2238,12 +2213,12 @@ BOOL lggContactSetsFloater::handleHover(S32 x, S32 y, MASK mask)
 
 void lggContactSetsFloater::onMouseLeave(S32 x, S32 y, MASK mask)
 {
-	sInstance->mouseInWindow = FALSE;
+	mouseInWindow = FALSE;
 }
 
 void lggContactSetsFloater::onMouseEnter(S32 x, S32 y, MASK mask)
 {
-	sInstance->mouseInWindow = TRUE;
+	mouseInWindow = TRUE;
 }
 
 BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
@@ -2338,10 +2313,10 @@ BOOL lggContactSetsFloater::generateCurrentList()
 	}
 
 	//filter \o/
-	if (sInstance->currentFilter != "")
+	if (!currentFilter.empty())
 	{
 		std::vector<LLUUID> newList;
-		std::string workingFilter = sInstance->currentFilter;
+		std::string workingFilter = currentFilter;
 		LLStringUtil::toLower(workingFilter);
 		for (int itFilter = 0; itFilter < (int)currentList.size(); itFilter++)
 		{
@@ -2375,113 +2350,53 @@ BOOL lggContactSetsFloater::generateCurrentList()
 	return TRUE;
 }
 
-void lggContactSetsFloater::onClickDelete(void* data)
+void lggContactSetsFloater::onClickDelete()
 {
 	static LLCachedControl<std::string> currentGroup(gSavedSettings, "FSContactSetsSelectedGroup");
 
 	LGGContactSets::getInstance()->deleteGroup(currentGroup);
 	gSavedSettings.setString("FSContactSetsSelectedGroup", "");
-	sInstance->updateGroupsList();
+	updateGroupsList();
 }
 
-void lggContactSetsFloater::onClickNew(void* data)
+void lggContactSetsFloater::onClickNew()
 {
-	LLLineEditor* line =sInstance->getChild<LLLineEditor>("lgg_fg_groupNewName");
+	LLLineEditor* line = getChild<LLLineEditor>("lgg_fg_groupNewName");
 	std::string text = line->getText();
-	if (text != "")
+	if (!text.empty())
 	{
 		LGGContactSets::getInstance()->addGroup(text);
 		line->setText(LLStringExplicit(""));
 	}
 
-	sInstance->updateGroupsList();
+	updateGroupsList();
 }
 
-void lggContactSetsFloater::onClickSettings(void* data)
+void lggContactSetsFloater::onClickSettings()
 {
-	lggContactSetsFloaterSettings::showFloater();
+	LLFloaterReg::showInstance("contactsetsettings");
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 // Contact set settings floater
 /////////////////////////////////////////////////////////////////////////////
-lggContactSetsFloaterSettings* lggContactSetsFloaterSettings::sSettingsInstance;
-void lggContactSetsFloaterSettings::onClose(bool app_quitting)
-{
-	sSettingsInstance = NULL;
-	destroy();
-}
 
-lggContactSetsFloaterSettings* lggContactSetsFloaterSettings::showFloater()
-{
-	lggContactSetsFloaterSettings *floater = dynamic_cast<lggContactSetsFloaterSettings*>(LLFloaterReg::getInstance("contactsetsettings"));
-	if (floater)
-	{
-		floater->setVisible(true);
-		floater->setFrontmost(true);
-		floater->center();
-		return floater;
-	}
-	else
-	{
-		LL_WARNS("LGGContactSetS") << "Can't find floater!" << LL_ENDL;
-		return NULL;
-	}
-}
-
-lggContactSetsFloaterSettings::~lggContactSetsFloaterSettings()
-{
-	sSettingsInstance = NULL;
-}
 
 lggContactSetsFloaterSettings::lggContactSetsFloaterSettings(const LLSD& seed) : LLFloater(seed)
 {
-	if (sSettingsInstance)
-	{
-		delete sSettingsInstance;
-	}
-	sSettingsInstance= this;
-
-	if (getRect().mLeft == 0 && getRect().mBottom == 0)
-	{
-		center();
-	}
 }
 
 BOOL lggContactSetsFloaterSettings::postBuild(void)
 {
-	childSetAction("lgg_fg_okButton", onClickOk, this);
+	getChild<LLButton>("lgg_fg_okButton")->setClickedCallback(boost::bind(&lggContactSetsFloaterSettings::closeFloater, this, false));
 	getChild<LLColorSwatchCtrl>("colordefault")->setCommitCallback(boost::bind(&lggContactSetsFloaterSettings::onDefaultBackgroundChange, this));
 	getChild<LLColorSwatchCtrl>("colordefault")->set(LGGContactSets::getInstance()->getDefaultColor());
-
-	LLComboBox* dispName = getChild<LLComboBox>("lgg_fg_dispName");
-	dispName->setCommitCallback(boost::bind(&lggContactSetsFloaterSettings::onSelectNameFormat, this));
-	dispName->setCurrentByIndex(gSavedSettings.getS32("FSContactSetsNameFormat"));
-
-	LLComboBox* sortName = getChild<LLComboBox>("lgg_fg_sortName");
-	sortName->setCommitCallback(boost::bind(&lggContactSetsFloaterSettings::onSelectNameFormat, this));
-	sortName->setCurrentByIndex(gSavedSettings.getS32("FSContactSetSortNameFormat"));
 
 	return TRUE;
 }
 
 void lggContactSetsFloaterSettings::onDefaultBackgroundChange()
 {
-	LGGContactSets::getInstance()->setDefaultColor(
-		sSettingsInstance->getChild<LLColorSwatchCtrl>("colordefault")->get()
-		);
-}
-
-void lggContactSetsFloaterSettings::onClickOk(void* data)
-{
-	sSettingsInstance->closeFloater();
-}
-
-void lggContactSetsFloaterSettings::onSelectNameFormat()
-{
-	gSavedSettings.setS32("FSContactSetsNameFormat",
-		getChild<LLComboBox>("lgg_fg_dispName")->getCurrentIndex());	
-	gSavedSettings.setS32("FSContactSetSortNameFormat",
-		getChild<LLComboBox>("lgg_fg_sortName")->getCurrentIndex());
+	LGGContactSets::getInstance()->setDefaultColor(getChild<LLColorSwatchCtrl>("colordefault")->get());
 }

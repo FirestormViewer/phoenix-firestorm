@@ -28,28 +28,16 @@
     Format imion:
   </text>
   <combo_box name="lgg_fg_dispName">
-    <combo_item name="Legacy Names">
-      Starego typu
-    </combo_item>
-    <combo_item name="Display Names (with Username)">
-      Imiona Wyświetlane (z nazwą konta)
-    </combo_item>
-    <combo_item name="Display Names only">
-      Tylko Imiona Wyświetlane
-    </combo_item>
+    <combo_item name="Legacy Names" label="Starego typu"/>
+    <combo_item name="Display Names (with Username)" label="Imiona Wyświetlane (z nazwą konta)"/>
+    <combo_item name="Display Names only" label="Tylko Imiona Wyświetlane"/>
   </combo_box>
   <text name="lgg_fg_text4">
     Sortuj:
   </text>
   <combo_box name="lgg_fg_sortName">
-    <combo_item name="Legacy Names">
-      Po starym typie
-    </combo_item>
-    <combo_item name="Display Names (with Username)">
-      Po Imionach Wyświetlanych (z nazwą konta)
-    </combo_item>
-    <combo_item name="Display Names only">
-      Tylko po Imionach Wyświetlanych
-    </combo_item>
+    <combo_item name="Legacy Names" label="Po starym typie"/>
+    <combo_item name="Display Names (with Username)" label="Po Imionach Wyświetlanych (z nazwą konta)"/>
+    <combo_item name="Display Names only" label="Tylko po Imionach Wyświetlanych"/>
   </combo_box>
 </floater>
