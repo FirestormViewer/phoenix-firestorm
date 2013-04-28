@@ -633,6 +633,11 @@ public:
 				addText(xpos, ypos, llformat("%d/%d Mesh LOD Pending/Processing", LLMeshRepository::sLODPending, LLMeshRepository::sLODProcessing));
 				ypos += y_inc;
 
+				// <FS:Ansariel> Mesh debugging
+				addText(xpos, ypos, llformat("%d (%d) Mesh Active LOD Requests (max)", LLMeshRepoThread::sActiveLODRequests, LLMeshRepoThread::sMaxConcurrentRequests));
+				ypos += y_inc;
+				// </FS:Ansariel>
+
 				addText(xpos, ypos, llformat("%.3f/%.3f MB Mesh Cache Read/Write ", LLMeshRepository::sCacheBytesRead/(1024.f*1024.f), LLMeshRepository::sCacheBytesWritten/(1024.f*1024.f)));
 
 				ypos += y_inc;
