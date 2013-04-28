@@ -593,18 +593,20 @@ void LLPanelObject::getState( )
 	BOOL editable = root_objectp->permModify();
 
 	// Select Single Message
-	getChildView("select_single")->setVisible( FALSE);
-	getChildView("edit_object")->setVisible( FALSE);
-	if (!editable || single_volume || selected_count <= 1)
-	{
-		getChildView("edit_object")->setVisible( TRUE);
-		getChildView("edit_object")->setEnabled(TRUE);
-	}
-	else
-	{
-		getChildView("select_single")->setVisible( TRUE);
-		getChildView("select_single")->setEnabled(TRUE);
-	}
+	// <FS:Ansariel> We don't have those in FS (2013-04-28)
+	//getChildView("select_single")->setVisible( FALSE);
+	//getChildView("edit_object")->setVisible( FALSE);
+	//if (!editable || single_volume || selected_count <= 1)
+	//{
+	//	getChildView("edit_object")->setVisible( TRUE);
+	//	getChildView("edit_object")->setEnabled(TRUE);
+	//}
+	//else
+	//{
+	//	getChildView("select_single")->setVisible( TRUE);
+	//	getChildView("select_single")->setEnabled(TRUE);
+	//}
+	// </FS:Ansariel>
 
 	BOOL is_flexible = volobjp && volobjp->isFlexible();
 	BOOL is_permanent = root_objectp->flagObjectPermanent();
@@ -2258,9 +2260,11 @@ void LLPanelObject::clearCtrls()
 	mLabelRadiusOffset->setEnabled( FALSE );
 	mLabelRevolutions->setEnabled( FALSE );
 
-	getChildView("select_single")->setVisible( FALSE);
-	getChildView("edit_object")->setVisible( TRUE);	
-	getChildView("edit_object")->setEnabled(FALSE);
+	// <FS:Ansariel> We don't have those in Firestorm (2013-04-28)
+	//getChildView("select_single")->setVisible( FALSE);
+	//getChildView("edit_object")->setVisible( TRUE);	
+	//getChildView("edit_object")->setEnabled(FALSE);
+	// </FS:Ansariel>
 	
 	getChildView("scale_hole")->setEnabled(FALSE);
 	getChildView("scale_taper")->setEnabled(FALSE);
