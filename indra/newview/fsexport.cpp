@@ -43,6 +43,7 @@
 #include "llinventoryfunctions.h"
 #include "llmeshrepository.h"
 #include "llmultigesture.h"
+#include "llnotecard.h"
 #include "llsdserialize.h"
 #include "llsdutil_math.h"
 #include "llsdutil.h"
@@ -56,6 +57,7 @@
 #include "llviewerpartsource.h"
 #include "llworld.h"
 #include <boost/algorithm/string_regex.hpp>
+#include "apr_base64.h"
 
 const F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
 const F32 MAX_INVENTORY_WAIT_TIME = 30.0f;
@@ -734,11 +736,37 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 			continue;
 		}
 
-		if (item->getType() != LLAssetType::AT_NONE && item->getType() != LLAssetType::AT_OBJECT)
+		if (item->getType() == LLAssetType::AT_NONE || item->getType() == LLAssetType::AT_OBJECT)
 		{
-			prim["content"].append(item->getUUID());
-			mFile["inventory"][item->getUUID().asString()] = ll_create_sd_from_inventory_item(item);
+			// currentelly not exportable
+			LL_DEBUGS("export") << "Skipping " << LLAssetType::lookup(item->getType()) << " item " << item->getName() << LL_ENDL;
+			continue;
+		}
 
+		prim["content"].append(item->getUUID());
+		mFile["inventory"][item->getUUID().asString()] = ll_create_sd_from_inventory_item(item);
+		
+		if (item->getAssetUUID().isNull() && item->getType() == LLAssetType::AT_NOTECARD)
+		{
+			// FIRE-9655
+			// Blank Notecard item can have NULL asset ID.
+			// Generate a new UUID and save as an empty asset.
+			LLUUID asset_uuid = LLUUID::generateNewID();
+			mFile["inventory"][item->getUUID().asString()]["asset_id"] = asset_uuid;
+			
+			mFile["asset"][asset_uuid.asString()]["name"] = item->getName();
+			mFile["asset"][asset_uuid.asString()]["description"] = item->getDescription();
+			mFile["asset"][asset_uuid.asString()]["type"] = LLAssetType::lookup(item->getType());
+
+			LLNotecard nc(255); //don't need to allocate default size of 65536
+			std::stringstream out_stream;
+			nc.exportStream(out_stream);
+			std::string out_string = out_stream.str();
+			std::vector<U8> buffer(out_string.begin(), out_string.end());
+			mFile["asset"][asset_uuid.asString()]["data"] = buffer;
+		}
+		else
+		{
 			LL_DEBUGS("export") << "Requesting asset " << item->getAssetUUID() << " for item " << item->getUUID() << LL_ENDL;
 			mAssetRequests.push_back(item->getUUID());
 			FSAssetResourceData* data = new FSAssetResourceData;

@@ -411,7 +411,7 @@ void FSFloaterImport::onClickBtnImport()
 	getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(FALSE);
 	getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(FALSE);
 
-	if (((mTexturesTotal + mSoundsTotal + mAnimsTotal) != 0) && getChild<LLCheckBoxCtrl>("upload_asset")->get())
+	if (((mTexturesTotal + mSoundsTotal + mAnimsTotal + mAssetsTotal) != 0) && getChild<LLCheckBoxCtrl>("upload_asset")->get())
 	{
 		// do not pop up preview floaters when creating new inventory items.
 		gSavedSettings.setBOOL("ShowNewInventory", false);
@@ -758,7 +758,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 
 	if (prim.has("description"))
 	{
-		LL_DEBUGS("import") << "Setting name on " << prim_uuid.asString() << " to " << prim["description"].asString() << LL_ENDL;
+		LL_DEBUGS("import") << "Setting description on " << prim_uuid.asString() << " to " << prim["description"].asString() << LL_ENDL;
 		gMessageSystem->newMessageFast(_PREHASH_ObjectDescription);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
@@ -887,8 +887,16 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 				continue;
 			}
 
-			LLAssetType::EType asset_type = LLAssetType::lookup(mFile["inventory"][(*content_iter).asString()]["type"].asString().c_str());
-			LLUUID asset_id = mFile["inventory"][(*content_iter).asString()]["asset_id"].asUUID();
+			LLSD& item_sd = mFile["inventory"][(*content_iter).asString()];
+			LLAssetType::EType asset_type = LLAssetType::lookup(item_sd["type"].asString().c_str());
+			LLUUID asset_id = item_sd["asset_id"].asUUID();
+
+			if (asset_id.isNull())
+			{
+				LL_WARNS("import") << "Item  " << item_sd["desc"].asString() << " " << (*content_iter) << " had NULL asset ID." << LL_ENDL;
+				continue;
+			}
+
 			if (mAssetMap[asset_id].isNull())
 			{
 				// asset was not uploaded, search inventory using asset_id
@@ -913,9 +921,9 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 				continue;
 			}
 
+			LL_DEBUGS("import") << "Dropping " << item->getName() << " " << item->getUUID() << " into " << prim["name"].asString() << " " << object->getID() << LL_ENDL;
 			if (asset_type == LLAssetType::AT_LSL_TEXT)
 			{
-				
 				LLToolDragAndDrop::dropScript(object, item, TRUE,
 							      LLToolDragAndDrop::SOURCE_AGENT,
 							      gAgentID);
