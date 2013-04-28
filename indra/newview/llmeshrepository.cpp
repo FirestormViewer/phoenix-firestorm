@@ -617,6 +617,7 @@ void LLMeshRepoThread::run()
 						{
 							LL_WARNS("MeshRequestTimeout") << "Mesh LOD request timed out for SculptID=" << active_req.mMeshParams.getSculptID() << " and LOD=" << active_req.mLOD << LL_ENDL;
 							LODRequest req(active_req.mMeshParams, active_req.mLOD);
+							LLMeshRepository::sLODProcessing++;
 							mLODReqQ.push(req);
 							active_lod_clear_list.push_back(active_req);
 						}
