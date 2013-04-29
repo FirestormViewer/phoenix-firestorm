@@ -56,6 +56,7 @@
 #include "llvovolume.h"
 #include "llviewerpartsource.h"
 #include "llworld.h"
+#include "fscommon.h"
 #include <boost/algorithm/string_regex.hpp>
 #include "apr_base64.h"
 
@@ -198,8 +199,10 @@ void FSExport::exportSelection()
 	mRequestedTexture.clear();
 
 	mExported = false;
+	mAborted = false;
 	mInventoryRequests.clear();
 	mAssetRequests.clear();
+	mTextureChecked.clear();
 
 	mFile["format_version"] = 1;
 	mFile["client"] = LLAppViewer::instance()->getSecondLifeTitle() + LLVersionInfo::getChannel();
@@ -211,7 +214,7 @@ void FSExport::exportSelection()
 		mFile["linkset"].append(getLinkSet((*iter)));
 	}
 
-	if (mExported)
+	if (mExported && !mAborted)
 	{
 		mWaitTimer.start();
 		mLastRequest = mInventoryRequests.size();
@@ -338,18 +341,13 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 				{
 					if(volobjp->isMesh())
 					{
-						LLSD mesh_header = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
-						if (mesh_header["creator"].asUUID() == gAgentID)
+						if (!mAborted)
 						{
-							LL_DEBUGS("export") << "Mesh creater check passed." << LL_ENDL;
-							prim["sculpt"] = sculpt_params->asLLSD();
+							// not a floater, so no floater_export.xml for a proper translation.
+							reportToNearbyChat("Mesh is not supported. Export aborted.");
+							mAborted = true;
 						}
-						else
-						{
-							LL_DEBUGS("export") << "Using default mesh skulpt." << LL_ENDL;
-							LLSculptParams default_sculpt;
-							prim["sculpt"] = default_sculpt.asLLSD();
-						}
+						return;
 					}
 					else
 					{

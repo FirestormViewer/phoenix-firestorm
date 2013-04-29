@@ -92,6 +92,7 @@ private:
 	S32 mLastRequest;
 	std::map<LLUUID, bool> mTextureChecked;
 	bool mExported;
+	bool mAborted;
 
 	uuid_vec_t mInventoryRequests;
 	uuid_vec_t mAssetRequests;
