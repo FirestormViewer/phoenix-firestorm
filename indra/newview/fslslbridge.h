@@ -59,22 +59,22 @@ public:
 	~FSLSLBridge();
 
 	bool lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID);
-	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder = NULL);
+	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder* responder = NULL);
 
 	bool updateBoolSettingValue(std::string msgVal);
 	bool updateBoolSettingValue(std::string msgVal, bool contentVal);
 	
 	void initBridge();
 	void recreateBridge();
-	void processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
-	void processDetach(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+	void processAttach(LLViewerObject* object, const LLViewerJointAttachment* attachment);
+	void processDetach(LLViewerObject* object, const LLViewerJointAttachment* attachment);
 
-	bool getBridgeCreating() {return mBridgeCreating; };
+	bool getBridgeCreating() { return mBridgeCreating; };
 	void setBridgeCreating(bool status) { mBridgeCreating = status; };
 
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
-	bool isBridgeValid() const { return 0 != mpBridge; }
+	bool isBridgeValid() const { return NULL != mpBridge; }
 
 	void checkBridgeScriptName(std::string fileName);
 	std::string currentFullName() { return mCurrentFullName; }
@@ -108,10 +108,10 @@ protected:
 	bool isItemAttached(LLUUID iID);
 	void createNewBridge();
 	void create_script_inner(LLViewerObject* object);
-	bool isOldBridgeVersion(LLInventoryItem *item);
+	bool isOldBridgeVersion(LLInventoryItem* item);
 	void cleanUpBridgeFolder();
 	void cleanUpBridgeFolder(std::string nameToCleanUp);
-	void setupBridgePrim(LLViewerObject *object);
+	void setupBridgePrim(LLViewerObject* object);
 	void initCreationStep();
 	void cleanUpBridge();
 	void startCreation();

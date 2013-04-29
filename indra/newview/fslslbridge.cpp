@@ -84,7 +84,7 @@ public:
 	virtual bool operator()(LLInventoryCategory* cat,
 							LLInventoryItem* item)
 	{
-		if(item)
+		if (item)
 		{
 			return (item->getName() == sName);
 		}
@@ -98,7 +98,7 @@ private:
 //
 // Bridge functionality
 //
-FSLSLBridge :: FSLSLBridge():
+FSLSLBridge::FSLSLBridge():
 					mBridgeCreating(false),
 					mpBridge(NULL),
 					mIsFirstCallDone(false)
@@ -117,35 +117,44 @@ FSLSLBridge :: FSLSLBridge():
 	//mpBridge = NULL;
 }
 
-FSLSLBridge :: ~FSLSLBridge()
+FSLSLBridge::~FSLSLBridge()
 {
 }
 
-bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID)
+bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID)
 {
-	// <FS:PP> Attempt to speed up things a little
-	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
-	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
-	if (!UseLSLBridge)
-	// </FS:PP>
+	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	{
 		return false;
+	}
 
 	lldebugs << message << llendl;
 	
 	//<FS:TS> FIRE-962: Script controls for built-in AO
 	if ((message[0]) != '<')
+	{
 		return false; 		// quick exit if no leading <
+	}
 	S32 closebracket = message.find('>');
 	S32 firstblank = message.find(' ');
 	S32 tagend;
 	if (closebracket == std::string::npos)
+	{
 		tagend = firstblank;
+	}
 	else if (firstblank == std::string::npos)
+	{
 		tagend = closebracket;
-	else tagend = (closebracket < firstblank) ? closebracket : firstblank;
+	}
+	else
+	{
+		tagend = (closebracket < firstblank) ? closebracket : firstblank;
+	}
 	if (tagend == std::string::npos)
+	{
 		return false;
-	std::string tag = message.substr(0,tagend+1);
+	}
+	std::string tag = message.substr(0, tagend + 1);
 	std::string ourBridge = gSavedPerAccountSettings.getString("FSLSLBridgeUUID");
 	//</FS:TS> FIRE-962
 	
@@ -226,20 +235,22 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 	
 	//<FS:TS> FIRE-962: Script controls for built-in AO
 	if (fromID != mBridgeUUID)
+	{
 		return false;		// ignore if not from the bridge
+	}
 	if (tag == "<clientAO ")
 	{
 		status = true;
-		S32 valuepos = message.find("state=")+6;
+		S32 valuepos = message.find("state=") + 6;
 		if (valuepos != std::string::npos)
 		{
-			if (message.substr(valuepos,2) == "on")
+			if (message.substr(valuepos, 2) == "on")
 			{
-				gSavedPerAccountSettings.setBOOL("UseAO",TRUE);
+				gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
 			}
-			else if (message.substr(valuepos,3) == "off")
+			else if (message.substr(valuepos, 3) == "off")
 			{
-				gSavedPerAccountSettings.setBOOL("UseAO",FALSE);
+				gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
 			}
 		}
 	}
@@ -247,59 +258,57 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 	return status;
 }
 
-bool FSLSLBridge :: viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder)
+bool FSLSLBridge::viewerToLSL(std::string message, FSLSLBridgeRequestResponder* responder)
 {
-	// <FS:PP> Attempt to speed up things a little
-	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
-	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
-	if (!UseLSLBridge)
-	// </FS:PP>
+	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	{
 		return false;
+	}
 
 	if (responder == NULL)
+	{
 		responder = new FSLSLBridgeRequestResponder();
+	}
 	LLHTTPClient::post(mCurrentURL, LLSD(message), responder);
 
 	return true;
 }
 
-bool FSLSLBridge :: updateBoolSettingValue(std::string msgVal)
+bool FSLSLBridge::updateBoolSettingValue(std::string msgVal)
 {
 	std::string boolVal = "0";
 
 	if (gSavedSettings.getBOOL(msgVal))
+	{
 		boolVal = "1";
+	}
 
-	return viewerToLSL( msgVal+"|"+boolVal, new FSLSLBridgeRequestResponder());
+	return viewerToLSL(msgVal + "|" + boolVal, new FSLSLBridgeRequestResponder());
 }
 
-bool FSLSLBridge :: updateBoolSettingValue(std::string msgVal, bool contentVal)
+bool FSLSLBridge::updateBoolSettingValue(std::string msgVal, bool contentVal)
 {
 	std::string boolVal = "0";
 
 	if (contentVal)
+	{
 		boolVal = "1";
+	}
 
-	return viewerToLSL( msgVal+"|"+boolVal, new FSLSLBridgeRequestResponder());
+	return viewerToLSL(msgVal + "|" + boolVal, new FSLSLBridgeRequestResponder());
 }
 
 //
 //Bridge initialization
 //
-void FSLSLBridge :: recreateBridge()
+void FSLSLBridge::recreateBridge()
 {
-	// <FS:PP> Attempt to speed up things a little
-	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
-	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
-	if (!UseLSLBridge)
-	// </FS:PP>
+	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	{
 		return;
+	}
 
-	// <FS:PP> Attempt to speed up things a little
-	// if (gSavedSettings.getBOOL("NoInventoryLibrary"))
-	static LLCachedControl<bool> NoInventoryLibrary(gSavedSettings, "NoInventoryLibrary");
-	if (NoInventoryLibrary)
-	// </FS:PP>
+	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
 		reportToNearbyChat(LLTrans::getString("fsbridge_no_library"));
@@ -330,20 +339,14 @@ void FSLSLBridge :: recreateBridge()
 	initCreationStep();
 }
 
-void FSLSLBridge :: initBridge()
+void FSLSLBridge::initBridge()
 {
-	// <FS:PP> Attempt to speed up things a little
-	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
-	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
-	if (!UseLSLBridge)
-	// </FS:PP>
+	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	{
 		return;
+	}
 
-	// <FS:PP> Attempt to speed up things a little
-	// if (gSavedSettings.getBOOL("NoInventoryLibrary"))
-	static LLCachedControl<bool> NoInventoryLibrary(gSavedSettings, "NoInventoryLibrary");
-	if (NoInventoryLibrary)
-	// </FS:PP>
+	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
 		reportToNearbyChat(LLTrans::getString("fsbridge_no_library"));
@@ -367,9 +370,9 @@ void FSLSLBridge :: initBridge()
 
 
 // Gets called by the Init, when inventory loaded.
-void FSLSLBridge :: startCreation()
+void FSLSLBridge::startCreation()
 {
-	if( !isAgentAvatarValid() )
+	if (!isAgentAvatarValid())
 	{
 		llwarns << "AgentAvatar is not valid" << llendl;
 		return;
@@ -411,7 +414,7 @@ void FSLSLBridge :: startCreation()
 	}
 }
 
-void FSLSLBridge :: initCreationStep()
+void FSLSLBridge::initCreationStep()
 {
 	mBridgeCreating = true;
 	//announce yourself
@@ -420,7 +423,7 @@ void FSLSLBridge :: initCreationStep()
 	createNewBridge();
 }
 
-void FSLSLBridge :: createNewBridge() 
+void FSLSLBridge::createNewBridge()
 {
 	//check if user has a bridge
 	LLUUID catID = findFSCategory();
@@ -434,7 +437,7 @@ void FSLSLBridge :: createNewBridge()
 		//copy the library item to inventory and put it on 
 		LLPointer<LLInventoryCallback> cb = new FSLSLBridgeRezCallback();
 		llinfos << "Cloning a new Bridge container from the Library..." << llendl;
-		copy_inventory_item(gAgent.getID(),libRock->getPermissions().getOwner(),libRock->getUUID(),catID,mCurrentFullName,cb);
+		copy_inventory_item(gAgent.getID(), libRock->getPermissions().getOwner(), libRock->getUUID(), catID, mCurrentFullName, cb);
 	}
 	else
 	{
@@ -445,7 +448,7 @@ void FSLSLBridge :: createNewBridge()
 	}
 }
 
-void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
+void FSLSLBridge::processAttach(LLViewerObject* object, const LLViewerJointAttachment* attachment)
 {
 	llinfos << "Entering processAttach, checking the bridge container - gInventory.isInventoryUsable=" << gInventory.isInventoryUsable()<< llendl;
 
@@ -460,7 +463,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		return;
 	}
 
-	LLViewerInventoryItem *fsObject = gInventory.getItem(object->getAttachmentItemID());
+	LLViewerInventoryItem* fsObject = gInventory.getItem(object->getAttachmentItemID());
 	if (fsObject == NULL) //just in case
 	{
 		llwarns << "Bridge container is still NULL in inventory. Aborting." << llendl;
@@ -571,20 +574,28 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 
 			if (item->getType() == LLAssetType::AT_LSL_TEXT)
 			{
-				if (item->getCreatorUUID() == gAgent.getID()) 
+				if (item->getCreatorUUID() == gAgent.getID())
+				{
 					isOurScript = true;
+				}
 				else //problem, not our script
+				{
 					llwarns << "The bridge inventory contains a script not created by user." << llendl;
+				}
 			}
 		}
 		if (count == 1 && isOurScript) //We attached a valid bridge. Run along.
+		{
 			return;
+		}
 		else 
 		{
 			reportToNearbyChat(LLTrans::getString("fsbridge_warning_unexpected_items"));
 			llwarns << "The bridge inventory contains items other than bridge script." << llendl;
 			if (!isOurScript)	//some junk but no valid script? Unlikely to happen, but lets add script anyway.
+			{
 				mBridgeCreating = true;
+			}
 			else //Let the script disable competitors 
 			{
 				return;
@@ -592,9 +603,11 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 		}
 	}
 	else
+	{
 		llwarns << "Bridge not empty, but we're unable to retrieve contents." << llendl;
+	}
 
-		//modify the rock size and texture
+	//modify the rock size and texture
 	if (mBridgeCreating)
 	{
 		configureBridgePrim(object);
@@ -603,7 +616,7 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 
 void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 {
-	if( !isBridgeValid() )
+	if (!isBridgeValid())
 	{
 		llwarns << "Bridge not valid" << llendl;
 		return;
@@ -625,7 +638,7 @@ void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 	create_script_inner(object);
 }
 
-void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
+void FSLSLBridge::processDetach(LLViewerObject* object, const LLViewerJointAttachment* attachment)
 {
 	llinfos << "Entering processDetach" << llendl;
 
@@ -635,7 +648,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 		return;
 	}
 
-	LLViewerInventoryItem *fsObject = gInventory.getItem(object->getAttachmentItemID());
+	LLViewerInventoryItem* fsObject = gInventory.getItem(object->getAttachmentItemID());
 	if (fsObject == NULL) //just in case
 	{
 		llwarns << "Couldn't detach bridge. inventory object was NULL." << llendl;
@@ -664,7 +677,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 	llinfos << "processDetach Finished" << llendl;
 }
 
-void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
+void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 {
 	lldebugs << "Entering bridge container setup..." << llendl;
 
@@ -698,14 +711,13 @@ void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 	lldebugs << "End bridge container setup." << llendl;
 }
 
-void FSLSLBridge :: create_script_inner(LLViewerObject* object)
+void FSLSLBridge::create_script_inner(LLViewerObject* object)
 {
-	if( !isBridgeValid() )
+	if (!isBridgeValid())
 	{
 		llwarns << "Bridge no valid" << llendl;
 		return;
 	}
-
 
 	LLUUID catID = findFSCategory();
 
@@ -727,14 +739,14 @@ void FSLSLBridge :: create_script_inner(LLViewerObject* object)
 //
 // Bridge rez callback
 //
-FSLSLBridgeRezCallback :: FSLSLBridgeRezCallback()
+FSLSLBridgeRezCallback::FSLSLBridgeRezCallback()
 {
 }
-FSLSLBridgeRezCallback :: ~FSLSLBridgeRezCallback()
+FSLSLBridgeRezCallback::~FSLSLBridgeRezCallback()
 {
 }
 
-void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
+void FSLSLBridgeRezCallback::fire(const LLUUID& inv_item)
 {
 	// this is the first attach - librock got copied and worn on hand - but the ID is now real.
 	if ((FSLSLBridge::instance().getBridge() != NULL) || inv_item.isNull() || !FSLSLBridge::instance().getBridgeCreating())
@@ -743,7 +755,7 @@ void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 		return;
 	}
 
-	if( gAgentAvatarp.isNull() )
+	if (!isAgentAvatarValid())
 	{
 		llwarns << "Agent is 0, bailing out" << llendl;
 		return;
@@ -758,11 +770,13 @@ void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 		FSLSLBridge::instance().setupBridgePrim(obj);
 	}
 	else
+	{
 		llinfos << "Bridge object not found yet, keep going" << llendl;
+	}
 
 	//detach from default and put on the right point
 	LLVOAvatarSelf::detachAttachmentIntoInventory(inv_item);
-	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
+	LLViewerInventoryItem* item = gInventory.getItem(inv_item);
 
 	//from this point on, this is our bridge - accept no substitutes!
 	FSLSLBridge::instance().setBridge(item);
@@ -775,10 +789,10 @@ void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 //
 // Bridge script creation callback
 //
-FSLSLBridgeScriptCallback :: FSLSLBridgeScriptCallback()
+FSLSLBridgeScriptCallback::FSLSLBridgeScriptCallback()
 {
 }
-FSLSLBridgeScriptCallback :: ~FSLSLBridgeScriptCallback()
+FSLSLBridgeScriptCallback::~FSLSLBridgeScriptCallback()
 {
 }
 
@@ -797,28 +811,33 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		return;
 	}
 	
-	if( gAgentAvatarp.isNull() )
+	if (!isAgentAvatarValid())
 	{
 		llwarns << "Agent is 0, bailing out" << llendl;
 		return;
 	}
 
-
 	gInventory.updateItem(item);
 	gInventory.notifyObservers();
 
-	LLViewerObject* obj( 0 );
+	LLViewerObject* obj(NULL);
 
-	if( FSLSLBridge::instance().isBridgeValid() )
+	if (FSLSLBridge::instance().isBridgeValid())
+	{
 		obj = gAgentAvatarp->getWornAttachment(FSLSLBridge::instance().getBridge()->getUUID());
+	}
 	else
+	{
 		llwarns << "Bridge non valid" << llendl;
+	}
 
 	//caps import 
 	std::string url;
 	
-	if( gAgent.getRegion() )
+	if (gAgent.getRegion())
+	{
 		url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+	}
 
 	std::string isMono = "mono";  //could also be "lsl2"
 	if (!url.empty() && obj != NULL)  
@@ -833,8 +852,10 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	{
 		//can't complete bridge creation - detach and remove object, remove script
 		//try to clean up and go away. Fail.
-		if( FSLSLBridge::instance().isBridgeValid() )
+		if (FSLSLBridge::instance().isBridgeValid())
+		{
 			LLVOAvatarSelf::detachAttachmentIntoInventory(FSLSLBridge::instance().getBridge()->getUUID());
+		}
 	
 		FSLSLBridge::instance().cleanUpBridge();
 		//also clean up script remains
@@ -850,31 +871,34 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 	std::string fName = gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, UPLOAD_SCRIPT_CURRENT);
 	std::string fNew = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,UPLOAD_SCRIPT_CURRENT);
 
-	LLFILE *fpIn = LLFile::fopen( fName, "rt" );
-	fseek( fpIn, 0, SEEK_END );
-	long lSize = ftell( fpIn );
-	rewind( fpIn );
+	LLFILE* fpIn = LLFile::fopen(fName, "rt");
+	fseek(fpIn, 0, SEEK_END);
+	long lSize = ftell(fpIn);
+	rewind(fpIn);
 
 	std::vector< char > vctData;
-	vctData.resize( lSize+1, 0 );
-	if( lSize != fread( &vctData[0], 1, lSize, fpIn ) )
+	vctData.resize(lSize + 1, 0);
+	if (lSize != fread(&vctData[0], 1, lSize, fpIn))
+	{
 		llwarns << "Size mismatch during read" << llendl;
+	}
 
-	LLFile::close( fpIn );
+	LLFile::close(fpIn);
 
 	std::string bridgeScript( (char const*)&vctData[0] );
 
 	std::string bridgekey = "BRIDGEKEY";
 	std::string newauth = LLUUID::generateNewID().asString();
-	bridgeScript.replace(bridgeScript.find(bridgekey),bridgekey.length(),newauth);
-	gSavedPerAccountSettings.setString("FSLSLBridgeUUID",newauth);
+	bridgeScript.replace(bridgeScript.find(bridgekey), bridgekey.length(), newauth);
+	gSavedPerAccountSettings.setString("FSLSLBridgeUUID", newauth);
 
-	LLFILE *fpOut = LLFile::fopen( fNew, "wt" );
+	LLFILE *fpOut = LLFile::fopen(fNew, "wt");
 
-	if( bridgeScript.size() != fwrite( bridgeScript.c_str(), 1, bridgeScript.size(), fpOut ) )
+	if (bridgeScript.size() != fwrite(bridgeScript.c_str(), 1, bridgeScript.size(), fpOut))
+	{
 		llwarns << "Size mismatch during write" << llendl;
-	LLFile::close( fpOut );
-
+	}
+	LLFile::close(fpOut);
 
 	return fNew;
 }
@@ -887,7 +911,7 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 		return;
 	}
 
-	if( !isBridgeValid() )
+	if (!isBridgeValid())
 	{
 		llwarns << "Bridge not valid (anymore)" << llendl;
 		cleanUpBridge();
@@ -895,7 +919,7 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 	}
 
 	//need to parse out the last length of a GUID and compare to saved possible names.
-	std::string fileOnly = fileName.substr(fileName.length()-UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
+	std::string fileOnly = fileName.substr(fileName.length() - UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
 
 	if (fileOnly == UPLOAD_SCRIPT_CURRENT)
 	{
@@ -909,7 +933,7 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 		}
 		//registerVOInventoryListener(obj, NULL);
 		obj->saveScript(gInventory.getItem(mScriptItemID), TRUE, false);
-		FSLSLBridgeCleanupTimer *objTimer = new FSLSLBridgeCleanupTimer((F32)1.0);
+		FSLSLBridgeCleanupTimer* objTimer = new FSLSLBridgeCleanupTimer((F32)1.0);
 		objTimer->startTimer();
 		//obj->doInventoryCallback();
 		//requestVOInventory();
@@ -923,21 +947,23 @@ BOOL FSLSLBridgeCleanupTimer::tick()
 	return TRUE;
 }
 
-void FSLSLBridge :: cleanUpBridge()
+void FSLSLBridge::cleanUpBridge()
 {
 	//something unexpected went wrong. Try to clean up and not crash.
 	llwarns << "Bridge object not found. Can't proceed with creation, exiting." << llendl;
 	reportToNearbyChat(LLTrans::getString("fsbridge_failure_not_found"));
 
-	if( isBridgeValid() )
+	if (isBridgeValid())
+	{
 		gInventory.purgeObject(mpBridge->getUUID());
+	}
 
 	gInventory.notifyObservers();
 	mpBridge = NULL;
 	mBridgeCreating = false;
 }
 
-void FSLSLBridge :: finishBridge()
+void FSLSLBridge::finishBridge()
 {
 	//announce yourself
 	llinfos << "Bridge created." << llendl;
@@ -952,31 +978,33 @@ void FSLSLBridge :: finishBridge()
 //
 // Helper functions
 ///
-bool FSLSLBridge :: isItemAttached(LLUUID iID)
+bool FSLSLBridge::isItemAttached(LLUUID iID)
 {
 	return (isAgentAvatarValid() && gAgentAvatarp->isWearingAttachment(iID));
 }
 
-LLUUID FSLSLBridge :: findFSCategory()
+LLUUID FSLSLBridge::findFSCategory()
 {
 	if (!mBridgeFolderID.isNull())
+	{
 		return mBridgeFolderID;
+	}
 
 	LLUUID fsCatID;
 	LLUUID bridgeCatID;
 
 	fsCatID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
-	if(!fsCatID.isNull())
+	if (!fsCatID.isNull())
 	{
 		LLInventoryModel::item_array_t* items;
 		LLInventoryModel::cat_array_t* cats;
 		gInventory.getDirectDescendentsOf(fsCatID, cats, items);
-		if(cats)
+		if (cats)
 		{
 			S32 count = cats->count();
-			for(S32 i = 0; i < count; ++i)
+			for (S32 i = 0; i < count; ++i)
 			{
-				if(cats->get(i)->getName() == FS_BRIDGE_FOLDER)
+				if (cats->get(i)->getName() == FS_BRIDGE_FOLDER)
 				{
 					bridgeCatID = cats->get(i)->getUUID();
 				}
@@ -1016,7 +1044,7 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 		if (cats)
 		{
 			S32 count = cats->count();
-			for(S32 i = 0; i < count; ++i)
+			for (S32 i = 0; i < count; ++i)
 			{
 				if (cats->get(i)->getName() == "Objects")
 				{
@@ -1050,7 +1078,7 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 	return LLUUID();
 }
 
-LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type)
+LLViewerInventoryItem* FSLSLBridge::findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type)
 {
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
@@ -1059,12 +1087,12 @@ LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID
 	LLUUID itemID;
 	NameCollectFunctor namefunctor(obj_name);
 
-	gInventory.collectDescendentsIf(catID,cats,items,FALSE,namefunctor);
+	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
 	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
 	{
 		const LLViewerInventoryItem* itemp = items.get(iIndex);
-		if (!itemp->getIsLinkType()  && (itemp->getType() == LLAssetType::AT_OBJECT))
+		if (!itemp->getIsLinkType() && (itemp->getType() == LLAssetType::AT_OBJECT))
 		{
 			itemID = itemp->getUUID();
 			break;
@@ -1079,11 +1107,11 @@ LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID
 	return NULL;
 }
 
-void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
+void FSLSLBridge::cleanUpBridgeFolder(std::string nameToCleanUp)
 {
 	llinfos << "Cleaning leftover scripts and bridges for folder " << nameToCleanUp << llendl;
 	
-	if( !isBridgeValid() )
+	if (!isBridgeValid())
 	{
 		llwarns << "Bridge no valid" << llendl;
 		return;
@@ -1096,12 +1124,12 @@ void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 	//find all bridge and script duplicates and delete them
 	//NameCollectFunctor namefunctor(mCurrentFullName);
 	NameCollectFunctor namefunctor(nameToCleanUp);
-	gInventory.collectDescendentsIf(catID,cats,items,FALSE,namefunctor);
+	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
 	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
 	{
 		const LLViewerInventoryItem* itemp = items.get(iIndex);
-		if (!itemp->getIsLinkType()  && (itemp->getUUID() != mpBridge->getUUID()))
+		if (!itemp->getIsLinkType() && (itemp->getUUID() != mpBridge->getUUID()))
 		{
 			gInventory.purgeObject(itemp->getUUID());
 		}
@@ -1109,24 +1137,28 @@ void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 	gInventory.notifyObservers();
 }
 
-void FSLSLBridge :: cleanUpBridgeFolder()
+void FSLSLBridge::cleanUpBridgeFolder()
 {
 	cleanUpBridgeFolder(mCurrentFullName);
 }
 
-void FSLSLBridge :: cleanUpOldVersions()
+void FSLSLBridge::cleanUpOldVersions()
 {
 	std::string mProcessingName;
 
-	for(int i = 1; i <= FS_BRIDGE_MAJOR_VERSION; i++)
+	for (S32 i = 1; i <= FS_BRIDGE_MAJOR_VERSION; i++)
 	{
-		int minor_tip;
-		if (i < FS_BRIDGE_MAJOR_VERSION) 
+		S32 minor_tip;
+		if (i < FS_BRIDGE_MAJOR_VERSION)
+		{
 			minor_tip = FS_MAX_MINOR_VERSION;
+		}
 		else
+		{
 			minor_tip = FS_BRIDGE_MINOR_VERSION;
+		}
 
-		for (int j = 0; j < minor_tip; j++)
+		for (S32 j = 0; j < minor_tip; j++)
 		{
 			std::stringstream sstr;
 	
@@ -1141,7 +1173,7 @@ void FSLSLBridge :: cleanUpOldVersions()
 	}
 }
 
-bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)
+bool FSLSLBridge::isOldBridgeVersion(LLInventoryItem* item)
 {
 	//if (!item)
 	//	return false;
@@ -1166,7 +1198,7 @@ bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)
 	return false;
 }
 
-void FSLSLBridge :: detachOtherBridges()
+void FSLSLBridge::detachOtherBridges()
 {
 	LLUUID catID = findFSCategory();
 	LLViewerInventoryCategory::cat_array_t cats;
