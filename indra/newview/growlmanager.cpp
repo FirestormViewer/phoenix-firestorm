@@ -357,3 +357,8 @@ void GrowlManager::InitiateManager()
 {
 	gGrowlManager = new GrowlManager();
 }
+
+bool GrowlManager::isUsable()
+{
+	return (gGrowlManager && gGrowlManager->mNotifier && gGrowlManager->mNotifier->isUsable());
+}

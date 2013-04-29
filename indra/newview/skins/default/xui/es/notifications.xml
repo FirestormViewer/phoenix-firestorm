@@ -153,12 +153,6 @@ La inicialización del mercado ha fallado por un error del sistema o de la red. 
 		Nota: Al activar esta opción, cualquiera que utilice este ordenador podrá ver tu lista de lugares favoritos.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
-	<notification name="GrowlNotInstalled">
-		ATENCIÓN: Activar esta opción sin tener growl instalado puede dar lugar a pequeños congelamientos cuando alguien te envía un mensaje o se conecta/desconecta.
-Lee http://wiki.phoenixviewer.com/fs_growl para más información.
-¿Deseas activarlo de todas formas?
-		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
-	</notification>
 	<notification name="GrantModifyRights">
 		Al conceder permisos de modificación a otro Residente, le estás permitiendo cambiar, borrar o tomar CUALQUIER objeto que tengas en el mundo. Sé MUY cuidadoso al conceder este permiso.
 ¿Quieres conceder permisos de modificación a [NAME]?

@@ -63,6 +63,8 @@ public:
 	BOOL tick();
 
 	static void InitiateManager();
+	static bool isUsable();
+
 private:
 	GrowlNotifier *mNotifier;
 	std::map<std::string, GrowlNotification> mNotifications;

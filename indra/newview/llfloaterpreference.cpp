@@ -140,6 +140,7 @@
 #include "llwldaycycle.h"
 #include "llwlparammanager.h"
 // </FS:Zi>
+#include "growlmanager.h"
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
@@ -251,21 +252,6 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response)
 
 	return false;
 }
-
-// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
-#ifdef LL_WINDOWS
-bool callback_growl_not_installed(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if ( option == 1 ) // NO
-	{
-		gSavedSettings.setBOOL("FSEnableGrowl", FALSE);
-	}
-
-	return false;
-}
-#endif
-// </FS:LO>
 
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response)
 {
@@ -2317,14 +2303,16 @@ BOOL LLPanelPreference::postBuild()
 	{
 		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
 	}
-	// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
-#ifdef LL_WINDOWS
+
+	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 	if (hasChild("notify_growl_checkbox", TRUE))
 	{
-		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&showGrowlNotInstalledWarning, _1, _2));
+		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&LLPanelPreference::onEnableGrowlChanged, this));
+		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setEnabled(GrowlManager::isUsable());
+		getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
 	}
-#endif
-	// </FS:LO>
+	// </FS:Ansariel>
+
 #ifdef OPENSIM // <FS:AW optional opensim support/>
 // <FS:AW Disable LSL bridge on opensim>
 	if(LLGridManager::getInstance()->isInOpenSim() && !LLGridManager::getInstance()->isInAuroraSim() && hasChild("UseLSLBridge", TRUE))
@@ -2419,17 +2407,12 @@ void LLPanelPreference::showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LL
 	}
 }
 
-// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
-#ifdef LL_WINDOWS
-void LLPanelPreference::showGrowlNotInstalledWarning(LLUICtrl* checkbox, const LLSD& value)
+// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
+void LLPanelPreference::onEnableGrowlChanged()
 {
-	if (checkbox && checkbox->getValue())
-	{
-		LLNotificationsUtil::add("GrowlNotInstalled",LLSD(), LLSD(), callback_growl_not_installed);
-	}
+	getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
 }
-#endif
-// </FS:LO>
+// </FS:Ansariel>
 
 void LLPanelPreference::cancel()
 {

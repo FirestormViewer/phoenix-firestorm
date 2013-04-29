@@ -133,7 +133,6 @@ protected:
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
 	void saveSettings();
-		
 
 public:
 
@@ -261,11 +260,8 @@ private:
  	//for "Show my Favorite Landmarks at Login"
 	static void showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value);
 
-	// <FS:LO> FIRE-7050 - Add a warning to the Growl preference option because of FIRE-6868
-#ifdef LL_WINDOWS
-	static void showGrowlNotInstalledWarning(LLUICtrl* checkbox, const LLSD& value);
-#endif
-	// </FS:LO>
+	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
+	void onEnableGrowlChanged();
 
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;

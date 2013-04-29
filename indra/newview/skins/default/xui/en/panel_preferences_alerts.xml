@@ -130,9 +130,8 @@
       left="10"
       name="notify_growl_checkbox"
       top_pad="2"
-      width="160" />
+      width="160"/>
      <check_box
-      enabled_control="FSEnableGrowl"
       layout="topleft"
       follows="left|top"
       left="20"
