@@ -47,6 +47,7 @@
 #include "llsdserialize.h"
 #include "llsdutil_math.h"
 #include "llsdutil.h"
+#include "lltrans.h"
 #include "llversioninfo.h"
 #include "llvfile.h"
 #include "llviewerinventory.h"
@@ -343,7 +344,7 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 						if (!mAborted)
 						{
 							// not a floater, so no floater_export.xml for a proper translation.
-							reportToNearbyChat("Mesh is not supported. Export aborted.");
+							reportToNearbyChat(LLTrans::getString("export_fail_no_mesh"));
 							mAborted = true;
 						}
 						return;

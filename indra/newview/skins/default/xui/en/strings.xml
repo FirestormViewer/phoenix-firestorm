@@ -5094,4 +5094,6 @@ Try enclosing path to the editor with double quotes.
   <string name="entering_region">entered the region.</string>
   <string name="entering_region_distance">entered the region ([DISTANCE] m).</string>
   <string name="leaving_region">left the region.</string>
+
+  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
 </strings>
