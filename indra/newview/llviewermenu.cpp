@@ -2798,6 +2798,13 @@ class LLObjectDerender : public view_listener_t
 };
 // </FS:Ansariel>
 
+// <FS:CR> FIRE-10082 - Don't enable derendering own attachments when RLVa is enabled
+bool enable_derender_object()
+{
+	return (!rlv_handler_t::isEnabled());
+}
+// </FS:CR>
+
 class LLEnableEditParticleSource : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -10283,6 +10290,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLObjectMute(), "Object.Mute");
 	view_listener_t::addMenu(new LLObjectDerender(), "Object.Derender");
 	view_listener_t::addMenu(new LLObjectDerenderPermanent(), "Object.DerenderPermanent"); // <FS:Ansariel> Optional derender & blacklist
+	enable.add("Object.EnableDerender", boost::bind(&enable_derender_object));	// <FS:CR> FIRE-10082 - Don't enable derendering own attachments when RLVa is enabled as well
 	view_listener_t::addMenu(new LLObjectTexRefresh(), "Object.TexRefresh");	// ## Zi: Texture Refresh
 	view_listener_t::addMenu(new LLEditParticleSource(), "Object.EditParticles");
    	view_listener_t::addMenu(new LLEnableEditParticleSource(), "Object.EnableEditParticles");

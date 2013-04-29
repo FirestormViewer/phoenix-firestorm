@@ -58,6 +58,8 @@
 				name="Derender">
 				<pie_slice.on_click
 					function="Object.Derender" />
+				<pie_slice.on_enable
+					function="Object.EnableDerender" />
 			</pie_slice>
 			<pie_slice
 				enabled="true"
@@ -65,6 +67,8 @@
 				name="DerenderPermanent">
 				<pie_slice.on_click
 					function="Object.DerenderPermanent" />
+				<pie_slice.on_enable
+					function="Object.EnableDerender" />
 			</pie_slice>
         </pie_menu>
 	<pie_slice
