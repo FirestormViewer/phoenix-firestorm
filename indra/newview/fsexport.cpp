@@ -58,7 +58,6 @@
 #include "llworld.h"
 #include "fscommon.h"
 #include <boost/algorithm/string_regex.hpp>
-#include "apr_base64.h"
 
 const F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
 const F32 MAX_INVENTORY_WAIT_TIME = 30.0f;
