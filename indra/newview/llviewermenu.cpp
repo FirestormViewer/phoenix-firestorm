@@ -2776,6 +2776,11 @@ void derenderObject(bool permanent)
 			select_mgr->deselectObjectOnly(objp);
 			gObjectList.killObject(objp);
 		}
+		else if( (objp) && (gAgentID != objp->getID()) && ((rlv_handler_t::isEnabled()) || (objp->isAttachment()) || (objp->permYouOwner())) )
+		{
+			select_mgr->deselectObjectOnly(objp);
+			return;
+		}
 	}
 }
 
