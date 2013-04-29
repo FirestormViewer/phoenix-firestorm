@@ -284,6 +284,9 @@ void DesktopNotifierLinux::showNotification( const std::string& notification_tit
 	//LL_INFOS( "DesktopNotifierLinux" ) << "New notification message: " << notification_message << LL_ENDL;
 	//LL_INFOS( "DesktopNotifierLinux" ) << "New notification type: " << notification_type << LL_ENDL;
 
+	if( !isUsable() )
+		return;
+
 	m_pLibNotify->mNotificationUpdate( m_pNotification,(gchar*)notification_title.c_str(), (gchar*)notification_message.c_str(), m_strIcon.c_str() );
 
 	m_pLibNotify->mNotificationSetUrgency( m_pNotification, NOTIFY_URGENCY_LOW );
