@@ -36,6 +36,7 @@
 #include "llviewerassetstorage.h"
 #include "llsimplestat.h"
 #include "llsd.h"
+#include "llvoavatar.h"
 
 /**
  * @class LLViewerAssetStats
@@ -180,6 +181,9 @@ public:
 
 	// Frames-Per-Second Samples
 	void recordFPS(F32 fps);
+
+	// Avatar-related statistics
+	void recordAvatarStats();
 
 	// Merge a source instance into a destination instance.  This is
 	// conceptually an 'operator+=()' method:

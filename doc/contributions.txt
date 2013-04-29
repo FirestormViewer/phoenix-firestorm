@@ -299,6 +299,7 @@ ChickyBabes Zuzu
 Christopher  Organiser
 Ciaran Laval
 Cinder Roxley
+    BUG-2326
     STORM-1703
 Clara Young
 Coaldust Numbers
@@ -744,10 +745,12 @@ Marc Claridge
 Marc2 Sands
 Marianne McCann
 Marine Kelley
+    CHUIBUG-134
     STORM-281
 MartinRJ Fayray
     STORM-1844
     STORM-1845
+    STORM-1934
 Matthew Anthony
 Matthew Dowd
 	VWR-1344
@@ -896,6 +899,7 @@ NickyD
 Nicky Dasmijn
 	VWR-29228
 	MAINT-873
+	SUN-72
 Nicky Perian
 	OPEN-1
 	STORM-1087

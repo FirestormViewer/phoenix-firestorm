@@ -38,7 +38,7 @@
 #include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "llfloaterworldmap.h"
-#include "llfoldervieweventlistener.h"
+#include "llfolderviewmodel.h"
 #include "lloutfitobserver.h"
 #include "llpaneleditwearable.h"
 #include "llpaneloutfitsinventory.h"
@@ -264,11 +264,11 @@ void LLSidepanelAppearance::onOpenOutfitButtonClicked()
 		if (inventory_panel)
 		{
 			LLFolderView* root = inventory_panel->getRootFolder();
-			LLFolderViewItem *outfit_folder = root->getItemByID(outfit_link->getLinkedUUID());
+			LLFolderViewItem *outfit_folder =    inventory_panel->getItemByID(outfit_link->getLinkedUUID());
 			if (outfit_folder)
 			{
 				outfit_folder->setOpen(!outfit_folder->isOpen());
-				root->setSelectionFromRoot(outfit_folder,TRUE);
+				root->setSelection(outfit_folder,TRUE);
 				root->scrollToShowSelection();
 			}
 		}
@@ -375,7 +375,7 @@ void LLSidepanelAppearance::toggleOutfitEditPanel(BOOL visible, BOOL disable_cam
 		if (!disable_camera_switch)   // if we're just switching between outfit and wearable editing, don't end customization.
 		{
 			LLVOAvatarSelf::onCustomizeEnd(disable_camera_switch);
-			LLAppearanceMgr::getInstance()->setOutfitDirty( FALSE );
+			LLAppearanceMgr::getInstance()->updateIsDirty();
 		}
 	}
 }
@@ -410,7 +410,7 @@ void LLSidepanelAppearance::toggleWearableEditPanel(BOOL visible, LLViewerWearab
 	{
 		// Save changes if closing.
 		mEditWearable->saveChanges();
-		LLAppearanceMgr::getInstance()->setOutfitDirty( FALSE );
+		LLAppearanceMgr::getInstance()->updateIsDirty();
 		if (!disable_camera_switch)   // if we're just switching between outfit and wearable editing, don't end customization.
 		{
 			LLVOAvatarSelf::onCustomizeEnd(disable_camera_switch);
@@ -453,7 +453,6 @@ void LLSidepanelAppearance::editWearable(LLViewerWearable *wearable, LLView *dat
 	LLSidepanelAppearance *panel = dynamic_cast<LLSidepanelAppearance*>(data);
 	if (panel)
 	{
-		panel->showOutfitsInventoryPanel();
 		panel->showWearableEditPanel(wearable, disable_camera_switch);
 	}
 }
