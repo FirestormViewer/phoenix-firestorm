@@ -35,7 +35,7 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "growlnotifierwin.h"
-#include "llviewercontrol.h"
+//#include "llviewercontrol.h"
 
 GrowlNotifierWin::GrowlNotifierWin() :
 	applicationName(""),
@@ -44,34 +44,35 @@ GrowlNotifierWin::GrowlNotifierWin() :
 	LL_INFOS("GrowlNotifierWin") << "Windows growl notifications initialised." << LL_ENDL;
 	
 }
+
 void GrowlNotifierWin::registerApplication(const std::string& application, const std::set<std::string>& notificationTypes)
 {
-	applicationName=application;
+	applicationName = application;
 	
 	char **arr = (char**)malloc(sizeof(*arr) * notificationTypes.size());
 	int i = 0;
-	for(std::set<std::string>::const_iterator it = notificationTypes.begin(); it != notificationTypes.end(); ++it, ++i) {
+	for (std::set<std::string>::const_iterator it = notificationTypes.begin(); it != notificationTypes.end(); ++it, ++i)
+	{
 		char *string = (char*)malloc(it->size() + 1);
 		strcpy(string, it->c_str());
 		arr[i] = string;
 	}
-	growl = new Growl(GROWL_TCP,NULL,application.c_str(),(const char **const)arr,notificationTypes.size(),
-		std::string(gDirUtilp->getDefaultSkinDir()+gDirUtilp->getDirDelimiter()+
-		"textures"+gDirUtilp->getDirDelimiter()+"firestorm_icon.png").c_str());
-	//growl->setProtocol(GROWL_UDP);
+	growl = new Growl (GROWL_TCP, NULL, application.c_str(), (const char **const)arr, notificationTypes.size(),
+		std::string(gDirUtilp->getDefaultSkinDir() + gDirUtilp->getDirDelimiter() + "textures" + gDirUtilp->getDirDelimiter() + "firestorm_icon.png").c_str());
 
-	for(i = 0; i < (int)notificationTypes.size(); ++i) {
+	for (i = 0; i < (int)notificationTypes.size(); ++i)
+	{
 		free(arr[i]);
 	}
 	free(arr);
 }
+
 void GrowlNotifierWin::showNotification(const std::string& notification_title, const std::string& notification_message, 
 										 const std::string& notification_type)
 {
-	//LL_INFOS("GrowlNotifierWin") << std::string(gDirUtilp->getDefaultSkinDir()+gDirUtilp->getDirDelimiter()+"textures"+gDirUtilp->getDirDelimiter()+"phoenixicon.ico").c_str() << LL_ENDL;
 	if (growl)
 	{
-		growl->Notify(notification_type.c_str(),notification_title.c_str(),notification_message.c_str());
+		growl->Notify(notification_type.c_str(), notification_title.c_str(), notification_message.c_str());
 	}
 }
 

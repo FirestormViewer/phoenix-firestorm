@@ -34,22 +34,18 @@
 
 #include "llagentdata.h"
 #include "llappviewer.h"
-#include "lldir.h"
-#include "llfile.h"
-#include "llfocusmgr.h"
 #include "llimview.h"
 #include "llnotifications.h"
 #include "llscriptfloater.h"
-#include "llsd.h"
 #include "llsdserialize.h"
 #include "llstartup.h"
+#include "llurlregistry.h" // for SLURL parsing
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
 #include "llwindow.h"
 
 #include "growlmanager.h"
 #include "growlnotifier.h"
-#include "llurlregistry.h" // for SLURL parsing
 
 // Platform-specific includes
 #ifdef LL_DARWIN
@@ -123,43 +119,60 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 void GrowlManager::loadConfig()
 {
 	std::string config_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "growl_notifications.xml");
-	if(config_file == "")
+	if (config_file.empty())
 	{
 		LL_WARNS("GrowlConfig") << "Couldn't find growl_notifications.xml" << LL_ENDL;
 		return;
 	}
+
 	LL_INFOS("GrowlConfig") << "Loading growl notification config from " << config_file << LL_ENDL;
 	llifstream configs(config_file);
 	LLSD notificationLLSD;
 	std::set<std::string> notificationTypes;
 	notificationTypes.insert("Keyword Alert");
 	notificationTypes.insert(GROWL_IM_MESSAGE_TYPE);
-	if(configs.is_open())
+	if (configs.is_open())
 	{
 		LLSDSerialize::fromXML(notificationLLSD, configs);
-		for(LLSD::map_iterator itr = notificationLLSD.beginMap(); itr != notificationLLSD.endMap(); ++itr)
+		for (LLSD::map_iterator itr = notificationLLSD.beginMap(); itr != notificationLLSD.endMap(); ++itr)
 		{
 			GrowlNotification ntype;
 			ntype.growlName = itr->second.get("GrowlName").asString();
 			notificationTypes.insert(ntype.growlName);
 			
-			if(itr->second.has("GrowlTitle"))
-				ntype.growlTitle = itr->second.get("GrowlTitle").asString();			
-			if(itr->second.has("GrowlBody"))
+			if (itr->second.has("GrowlTitle"))
+			{
+				ntype.growlTitle = itr->second.get("GrowlTitle").asString();
+			}
+
+			if (itr->second.has("GrowlBody"))
+			{
 				ntype.growlBody = itr->second.get("GrowlBody").asString();
-			if(itr->second.has("UseDefaultTextForTitle"))
+			}
+
+			if (itr->second.has("UseDefaultTextForTitle"))
+			{
 				ntype.useDefaultTextForTitle = itr->second.get("UseDefaultTextForTitle").asBoolean();
+			}
 			else
+			{
 				ntype.useDefaultTextForTitle = false;
-			if(itr->second.has("UseDefaultTextForBody"))
+			}
+
+			if (itr->second.has("UseDefaultTextForBody"))
+			{
 				ntype.useDefaultTextForBody = itr->second.get("UseDefaultTextForBody").asBoolean();
+			}
 			else
+			{
 				ntype.useDefaultTextForBody = false;
-			if(ntype.useDefaultTextForBody == false && ntype.useDefaultTextForTitle == false && 
-			   ntype.growlBody == "" && ntype.growlTitle == "")
+			}
+
+			if (!ntype.useDefaultTextForBody && !ntype.useDefaultTextForTitle && ntype.growlBody.empty() && ntype.growlTitle.empty())
 			{
 				ntype.useDefaultTextForBody = true;
 			}
+
 			this->mNotifications[itr->first] = ntype;
 		}
 		configs.close();
@@ -176,18 +189,22 @@ void GrowlManager::loadConfig()
 void GrowlManager::notify(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type)
 {
 	static LLCachedControl<bool> enabled(gSavedSettings, "FSEnableGrowl");
-	if(!enabled)
+	if (!enabled)
+	{
 		return;
+	}
 	
-	if(!shouldNotify())
+	if (!shouldNotify())
+	{
 		return;
+	}
 	
-	if(this->mNotifier->needsThrottle())
+	if (mNotifier->needsThrottle())
 	{
 		U64 now = LLTimer::getTotalTime();
-		if(mTitleTimers.find(notification_title) != mTitleTimers.end())
+		if (mTitleTimers.find(notification_title) != mTitleTimers.end())
 		{
-			if(mTitleTimers[notification_title] > now - GROWL_THROTTLE_TIME)
+			if (mTitleTimers[notification_title] > now - GROWL_THROTTLE_TIME)
 			{
 				LL_WARNS("GrowlNotify") << "Discarded notification with title '" << notification_title << "' - spam ._." << LL_ENDL;
 				mTitleTimers[notification_title] = now;
@@ -196,7 +213,7 @@ void GrowlManager::notify(const std::string& notification_title, const std::stri
 		}
 		mTitleTimers[notification_title] = now;
 	}
-	this->mNotifier->showNotification(notification_title, notification_message.substr(0, GROWL_MAX_BODY_LENGTH), notification_type);
+	mNotifier->showNotification(notification_title, notification_message.substr(0, GROWL_MAX_BODY_LENGTH), notification_type);
 }
 
 BOOL GrowlManager::tick()
@@ -207,33 +224,39 @@ BOOL GrowlManager::tick()
 
 bool GrowlManager::onLLNotification(const LLSD& notice)
 {
-	if(notice["sigtype"].asString() != "add")
+	if (notice["sigtype"].asString() != "add")
+	{
 		return false;
+	}
 	LLNotificationPtr notification = LLNotifications::instance().find(notice["id"].asUUID());
 	std::string name = notification->getName();
 	LLSD substitutions = notification->getSubstitutions();
-	if(gGrowlManager->mNotifications.find(name) != gGrowlManager->mNotifications.end())
+	if (gGrowlManager->mNotifications.find(name) != gGrowlManager->mNotifications.end())
 	{
 		GrowlNotification* growl_notification = &gGrowlManager->mNotifications[name];
 		std::string body = "";
 		std::string title = "";
-		if(growl_notification->useDefaultTextForTitle)
+		if (growl_notification->useDefaultTextForTitle)
+		{
 			title = notification->getMessage();
-		else if(growl_notification->growlTitle != "")
+		}
+		else if (!growl_notification->growlTitle.empty())
 		{
 			title = growl_notification->growlTitle;
 			LLStringUtil::format(title, substitutions);
 		}
-		if(growl_notification->useDefaultTextForBody)
+		if (growl_notification->useDefaultTextForBody)
+		{
 			body = notification->getMessage();
-		else if(growl_notification->growlBody != "")
+		}
+		else if (!growl_notification->growlBody.empty())
 		{
 			body = growl_notification->growlBody;
 			LLStringUtil::format(body, substitutions);
 		}
 		//TM:FS no need to log whats sent to growl
 		//LL_INFOS("GrowlLLNotification") << "Notice: " << title << ": " << body << LL_ENDL;
-		if(name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
+		if (name == "ObjectGiveItem" || name == "OwnObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem" || name == "SystemMessageTip")
 		{
 			LLUrlMatch urlMatch;
 			LLWString newLine = utf8str_to_wstring(body);
@@ -262,15 +285,17 @@ return (pNotification->getDate().secondsSinceEpoch() >= LLDate::now().secondsSin
 void GrowlManager::onInstantMessage(const LLSD& im)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(im["session_id"]);
-	if(session->isP2PSessionType())
+	if (session->isP2PSessionType())
 	{
 		// Don't show messages from ourselves or the system.
 		LLUUID from_id = im["from_id"];
-		if(from_id == LLUUID::null || from_id == gAgentID)
+		if (from_id == LLUUID::null || from_id == gAgentID)
+		{
 			return;
+		}
 		std::string message = im["message"];
 		std::string prefix = message.substr(0, 4);
-		if(prefix == "/me " || prefix == "/me'")
+		if (prefix == "/me " || prefix == "/me'")
 		{
 			message = message.substr(3);
 		}
@@ -297,7 +322,7 @@ void GrowlManager::onScriptDialog(const LLSD& data)
 		{
 			title = notification->getMessage();
 		}
-		else if (growl_notification->growlTitle != "")
+		else if (!growl_notification->growlTitle.empty())
 		{
 			title = growl_notification->growlTitle;
 			LLStringUtil::format(title, substitutions);
@@ -307,7 +332,7 @@ void GrowlManager::onScriptDialog(const LLSD& data)
 		{
 			body = notification->getMessage();
 		}
-		else if (growl_notification->growlBody != "")
+		else if (!growl_notification->growlBody.empty())
 		{
 			body = growl_notification->growlBody;
 			LLStringUtil::format(body, substitutions);
@@ -321,15 +346,14 @@ bool GrowlManager::shouldNotify()
 {
 	// This magic stolen from llappviewer.cpp. LLViewerWindow::getActive lies.
 	static LLCachedControl<bool> activated(gSavedSettings, "FSGrowlWhenActive");
-	if(LLStartUp::getStartupState() < STATE_STARTED)
+	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
 		return false;
 	}
-	return (activated || (!gViewerWindow->getWindow()->getVisible()  || !gFocusMgr.getAppHasFocus()));
+	return (activated || (!gViewerWindow->getWindow()->getVisible() || !gFocusMgr.getAppHasFocus()));
 }
 
 void GrowlManager::InitiateManager()
 {
 	gGrowlManager = new GrowlManager();
 }
-
