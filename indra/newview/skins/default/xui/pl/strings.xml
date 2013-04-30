@@ -5210,4 +5210,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="leaving_region">
 		opuścił/a region.
 	</string>
+	<string name="export_fail_no_mesh">
+		Eksportowanie meszy jest obecnie nieobsługiwane. Anulowano.
+	</string>
 </strings>
