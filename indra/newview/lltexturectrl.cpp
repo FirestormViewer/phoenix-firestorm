@@ -1550,7 +1550,7 @@ void LLTextureCtrl::draw()
 		// <FS:Ansariel> Mask texture if desired
 		if (mIsMasked)
 		{
-			gl_rect_2d( interior, LLColor4(0.5, 0.5, 0.5, 0.44), TRUE);
+			gl_rect_2d( interior, LLColor4(0.5f, 0.5f, 0.5f, 0.44f), TRUE);
 			gl_draw_x( interior, LLColor4::black );
 		}
 		// </FS:Ansariel> Mask texture if desired
