@@ -65,6 +65,8 @@
 #include "llavataractions.h"
 #include "lllogininstance.h"
 
+#include "llviewernetwork.h"	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml - getGrid()
+
 // Two do-nothing ops for use in callbacks.
 void no_op_inventory_func(const LLUUID&) {} 
 void no_op() {}
@@ -1654,8 +1656,13 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 
 	LLAvatarName av_name;
 	LLAvatarNameCache::get( gAgentID, &av_name );
-	lldebugs << "Saved favorites for " << av_name.getLegacyName() << llendl;
-	fav_llsd[av_name.getLegacyName()] = user_llsd;
+// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//lldebugs << "Saved favorites for " << av_name.getLegacyName() << llendl;
+	//fav_llsd[av_name.getLegacyName()] = user_llsd;
+	std::string name = av_name.getLegacyName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	lldebugs << "Saved favorites for " << name << llendl;
+	fav_llsd[name] = user_llsd;
+// </FS:CR>
 
 	llofstream file;
 	file.open(filename);
@@ -1673,11 +1680,19 @@ void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
 
 	LLAvatarName av_name;
 	LLAvatarNameCache::get( gAgentID, &av_name );
-	lldebugs << "Removed favorites for " << av_name.getLegacyName() << llendl;
-	if (fav_llsd.has(av_name.getLegacyName()))
+// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//lldebugs << "Removed favorites for " << av_name.getLegacyName() << llendl;
+	//if (fav_llsd.has(av_name.getLegacyName()))
+	//{
+	//	fav_llsd.erase(av_name.getLegacyName());
+	//}
+	std::string name = av_name.getLegacyName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	lldebugs << "Removed favorites for " << name << llendl;
+	if (fav_llsd.has(name))
 	{
-		fav_llsd.erase(av_name.getLegacyName());
+		fav_llsd.erase(name);
 	}
+// </FS:CR>
 
 	llofstream out_file;
 	out_file.open(filename);
