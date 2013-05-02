@@ -5838,7 +5838,7 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 						LLStringUtil::format_map_t args;
 						args["NEW_VALUE"] = llformat("%d", new_val);
 						args["OLD_VALUE"] = llformat("%d", prev_total_scripts);
-						args["DIFFERENCE"] = llformat("%d", change_count);
+						args["DIFFERENCE"] = llformat("%+d", change_count);
 
 						if (change_count > 0)
 						{
