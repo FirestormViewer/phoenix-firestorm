@@ -5096,4 +5096,6 @@ Try enclosing path to the editor with double quotes.
   <string name="leaving_region">left the region.</string>
 
   <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
+  <string name="TotalScriptCountChangeIncrease">Total scripts in region jumped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
+  <string name="TotalScriptCountChangeDecrease">Total scripts in region dropped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
 </strings>

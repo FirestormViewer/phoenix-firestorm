@@ -5821,6 +5821,38 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 			break;
 		case LL_SIM_STAT_NUMSCRIPTSACTIVE:
 			LLViewerStats::getInstance()->mSimActiveScripts.addValue(stat_value);
+			// <FS:Ansariel> Report script count changes
+			{
+				static LLCachedControl<bool> fsReportTotalScriptCountChanges(gSavedSettings, "FSReportTotalScriptCountChanges");
+				static LLCachedControl<U32> fsReportTotalScriptCountChangesThreshold(gSavedSettings, "FSReportTotalScriptCountChangesThreshold");
+				static const std::string increase_message = LLTrans::getString("TotalScriptCountChangeIncrease");
+				static const std::string decrease_message = LLTrans::getString("TotalScriptCountChangeDecrease");
+				static S32 prev_total_scripts = -1;
+
+				if (fsReportTotalScriptCountChanges)
+				{
+					S32 new_val = (S32)stat_value;
+					S32 change_count = new_val - prev_total_scripts;
+					if (llabs(change_count) >= fsReportTotalScriptCountChangesThreshold && prev_total_scripts > -1)
+					{
+						LLStringUtil::format_map_t args;
+						args["NEW_VALUE"] = llformat("%d", new_val);
+						args["OLD_VALUE"] = llformat("%d", prev_total_scripts);
+						args["DIFFERENCE"] = llformat("%d", change_count);
+
+						if (change_count > 0)
+						{
+							reportToNearbyChat(formatString(increase_message, args));
+						}
+						else
+						{
+							reportToNearbyChat(formatString(decrease_message, args));
+						}
+					}
+				}
+				prev_total_scripts = (S32)stat_value;
+			}
+			// </FS:Ansariel>
 			break;
 		case LL_SIM_STAT_SCRIPT_EPS:
 			LLViewerStats::getInstance()->mSimScriptEPS.addValue(stat_value);
