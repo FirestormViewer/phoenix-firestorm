@@ -161,6 +161,7 @@
 	<spinner
 	 top_delta="-5"
 	 control_name="FSReportCollisionMessagesChannel"
+	 enabled_control="FSReportCollisionMessages"
 	 decimal_digits="0"
 	 layout="topleft"
 	 follows="left|top"
