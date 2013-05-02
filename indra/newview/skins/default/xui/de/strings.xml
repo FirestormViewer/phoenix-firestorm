@@ -5681,4 +5681,13 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		hat die Region verlassen.
 	</string>
 
+	<string name="export_fail_no_mesh">
+		Der Export von Mesh wird derzeit nicht unterstützt. Export abgebrochen.
+	</string>
+	<string name="TotalScriptCountChangeIncrease">
+		Anzahl an Skripten in der Region hat sich von [OLD_VALUE] auf [NEW_VALUE] erhöht ([DIFFERENCE]).
+	</string>
+	<string name="TotalScriptCountChangeDecrease">
+		Anzahl an Skripten in der Region hat sich von [OLD_VALUE] auf [NEW_VALUE] verringert ([DIFFERENCE]).
+	</string>
 </strings>

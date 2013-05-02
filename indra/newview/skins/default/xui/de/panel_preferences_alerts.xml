@@ -21,6 +21,8 @@
 	<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
 	<check_box label="Kollisionsmeldungen an Skripte senden. Kanal:" name="FSReportCollisionMessages"/>
 	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Der Kanal, der verwendet wird, um Kollisionsmeldungen an Skripte zu senden [Standard: -25000]"/>
+	<check_box label="Änderungen an Skriptanzahl in Region melden" name="FSReportTotalScriptCountChanges"/>
+	<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Der Schwellwert, ab dem Änderungen an der Skriptanzahl in der Region gemeldet werden [Standard: 100]"/>
 	<text name="friends_logon_label">
 		Anzeigen wenn meine Freunden sich an- oder abmelden:
 	</text>
