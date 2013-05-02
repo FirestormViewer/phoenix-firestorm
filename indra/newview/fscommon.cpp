@@ -120,6 +120,12 @@ std::string applyMuPose(const std::string& message)
 	return utf8_text;
 }
 
+std::string formatString(std::string text, const LLStringUtil::format_map_t& args)
+{
+	LLStringUtil::format(text, args);
+	return text;
+}
+
 LLPanelPeople* getPeoplePanel()
 {
 	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");

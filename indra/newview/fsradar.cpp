@@ -57,12 +57,6 @@ using namespace boost;
 
 #define FS_RADAR_LIST_UPDATE_INTERVAL 1
 
-std::string formatString(std::string text, const LLStringUtil::format_map_t& args)
-{
-	LLStringUtil::format(text, args);
-	return text;
-}
-
 /**
  * Periodically updates the nearby people list while the Nearby tab is active.
  * 
