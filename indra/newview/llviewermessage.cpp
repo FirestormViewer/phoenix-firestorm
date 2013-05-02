@@ -5844,7 +5844,7 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 						{
 							reportToNearbyChat(formatString(increase_message, args));
 						}
-						else
+						else if (change_count < 0)
 						{
 							reportToNearbyChat(formatString(decrease_message, args));
 						}
