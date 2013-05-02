@@ -680,7 +680,11 @@ void LLViewerTextureList::updateImages(F32 max_time)
 	{
 		//loading from fast cache 
 		LLFastTimer t(FTM_FAST_CACHE_IMAGE_FETCH);
-		max_time -= updateImagesLoadingFastCache(max_time);
+		// <FS:Ansariel> Don't let the fast cache choke image processing
+		//max_time -= updateImagesLoadingFastCache(max_time);
+		F32 fastcache_time = updateImagesLoadingFastCache(max_time / 3);
+		max_time = llmax(max_time * 2/3, max_time - fastcache_time); // at least 66% for update fetch & create
+		// </FS:Ansariel>
 	}
 
 	{
