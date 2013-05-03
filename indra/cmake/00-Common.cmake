@@ -83,7 +83,7 @@ if (WINDOWS)
         /DDOM_DYNAMIC
         /DUNICODE
         /D_UNICODE 
-#        /GS
+        /GS
         /TP
         /W3
         /c
@@ -100,7 +100,7 @@ if (WINDOWS)
         /DDOM_DYNAMIC
         /DUNICODE
         /D_UNICODE 
-#        /GS
+        /GS
         /TP
         /W3
         /c
@@ -113,13 +113,7 @@ if (WINDOWS)
         )
   endif (USE_AVX_OPTIMIZATION)
 # </FS:Ansariel> [AVX Optimization]	
- 
-  # <FS:ND> Only compile with /GS if requested. /GS can cause a penalty in often called functions
-  if( ND_USE_BUFFER_SECURITY_CHECKS )
-    add_definitions( /GS )
-  endif( ND_USE_BUFFER_SECURITY_CHECKS )
-  # </FS:ND>
-
+     
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)
     add_definitions(/WX)
