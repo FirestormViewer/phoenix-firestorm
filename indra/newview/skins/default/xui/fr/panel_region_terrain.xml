@@ -1,62 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba-->
 <panel label="Terrain" name="Terrain">
-	<text name="region_text_lbl">
-		Région :
-	</text>
-	<text name="region_text">
-		(inconnue)
-	</text>
-	<spinner label="Niveau de l&apos;eau" name="water_height_spin"/>
-	<spinner label="Limite d&apos;élévation du 
-terrain" name="terrain_raise_spin"/>
-	<spinner bottom_delta="-34" label="Limite d&apos;abaissement 
-du terrain" name="terrain_lower_spin"/>
-	<text name="detail_texture_text">
-		Textures du terrain (fichiers .tga 1024 x 1024, 24 bit requis)
-	</text>
-	<text name="height_text_lbl">
-		1 (Bas)
-	</text>
-	<text name="height_text_lbl2">
-		2
-	</text>
-	<text name="height_text_lbl3">
-		3
-	</text>
-	<text name="height_text_lbl4">
-		4 (Haut)
-	</text>
-	<text name="height_text_lbl5">
-		Limites d&apos;élévation de texture
-	</text>
-	<text name="height_text_lbl10">
-		Ces valeurs représentent les limites de mélange pour les textures ci-dessus.
-	</text>
-	<text name="height_text_lbl11">
-		En mètres, la valeur BAS correspond à la hauteur MAXIMUM de la texture n°1 et la valeur HAUT à la hauteur MINIMUM de la texture n°4.
-	</text>
-	<text name="height_text_lbl6">
-		Nord-ouest
-	</text>
-	<text name="height_text_lbl7">
-		Nord-est
-	</text>
-	<spinner label="Bas" name="height_start_spin_1"/>
-	<spinner label="Bas" name="height_start_spin_3"/>
-	<spinner label="Haut" name="height_range_spin_1"/>
-	<spinner label="Haut" name="height_range_spin_3"/>
-	<text name="height_text_lbl8">
-		Sud-ouest
-	</text>
-	<text name="height_text_lbl9">
-		Sud-est
-	</text>
-	<spinner label="Bas" name="height_start_spin_0"/>
-	<spinner label="Bas" name="height_start_spin_2"/>
-	<spinner label="Haut" name="height_range_spin_0"/>
-	<spinner label="Haut" name="height_range_spin_2"/>
-	<button label="Télécharger le terrain en RAW..." name="download_raw_btn" tool_tip="Réservé aux propriétaires de domaine, pas aux gérants" width="230"/>
-	<button label="Charger un terrain en RAW..." name="upload_raw_btn" tool_tip="Réservé aux propriétaires de domaine, pas aux gérants" width="230"/>
-	<button label="Figer le terrain" name="bake_terrain_btn" tool_tip="Définir le terrain actuel comme point central pour les limites d&apos;élévation/abaissement"/>
-	<button label="Appliquer" name="apply_btn"/>
+    <text name="region_text_lbl">
+        Région :
+    </text>
+    <text name="region_text">
+        (inconnue)
+    </text>
+    <spinner label="Niveau de l&apos;eau" name="water_height_spin"/>
+    <spinner label="Altitude maximum " name="terrain_raise_spin"/>
+    <spinner label="Altitude minimum" name="terrain_lower_spin"/>
+    <text name="detail_texture_text">
+        Textures du terrain (fichiers .tga 512 x 512, 24 bit requis)
+    </text>
+    <text name="height_text_lbl">
+        1 (Bas)
+    </text>
+    <text name="height_text_lbl2">
+        2
+    </text>
+    <text name="height_text_lbl3">
+        3
+    </text>
+    <text name="height_text_lbl4">
+        4 (Haut)
+    </text>
+    <text name="height_text_lbl5">
+        Limites d&apos;élévation de texture
+    </text>
+    <text name="height_text_lbl10">
+        Ces valeurs représentent les limites de mélange pour les textures ci-dessus.
+    </text>
+    <text name="height_text_lbl11">
+        En mètres, la valeur BAS correspond à la hauteur MAXIMUM de la texture n°1 et la valeur HAUT à la hauteur MINIMUM de la texture n°4.
+    </text>
+    <text name="height_text_lbl6">
+        Nord-ouest
+    </text>
+    <text name="height_text_lbl7">
+        Nord-est
+    </text>
+    <spinner label="Bas" name="height_start_spin_1"/>
+    <spinner label="Bas" name="height_start_spin_3"/>
+    <spinner label="Haut" name="height_range_spin_1"/>
+    <spinner label="Haut" name="height_range_spin_3"/>
+    <text name="height_text_lbl8">
+        Sud-ouest
+    </text>
+    <text name="height_text_lbl9">
+        Sud-est
+    </text>
+    <spinner label="Bas" name="height_start_spin_0"/>
+    <spinner label="Bas" name="height_start_spin_2"/>
+    <spinner label="Haut" name="height_range_spin_0"/>
+    <spinner label="Haut" name="height_range_spin_2"/>
+    <button label="Enreg. en RAW..." name="download_raw_btn" tool_tip="Enregisrter le terrain au format RAW. Réservé aux propriétaires de domaine, pas aux gérants"/>
+    <button label="Charger un RAW..." name="upload_raw_btn" tool_tip="Charger un terrain au format RAW. Réservé aux propriétaires de domaine, pas aux gérants"/>
+    <button label="Figer le terrain" name="bake_terrain_btn" tool_tip="Définir le terrain actuel comme point central pour les limites d&apos;altitude"/>
+    <button label="Appliquer" name="apply_btn"/>
 </panel>
