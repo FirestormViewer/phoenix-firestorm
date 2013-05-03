@@ -528,6 +528,12 @@ void LLWorldMapView::draw()
 					{
 						mesg += llformat(" (%s)", info->getAccessString().c_str());
 					}
+					// <FS:CR> Show the grid coordinates (in units of regions)
+					LLVector3d origin = info->getGlobalOrigin();
+					std::ostringstream coords;
+					coords << " (" << origin.mdV[VX] / REGION_WIDTH_METERS << "," << origin.mdV[VY] / REGION_WIDTH_METERS << ")";
+					mesg += coords.str();
+					// </FS:CR>
 				}
 			}
 //			if (!mesg.empty())
