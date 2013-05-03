@@ -19,6 +19,8 @@
 		<check_box label="Powiadomienia o kolizjach w czacie lokalnym" name="FSCollisionMessagesInChat"/>
 		<check_box label="Przesyłaj skryptom powiad. o kolizjach na kanał:" name="FSReportCollisionMessages"/>
 		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Kanał używany do przesyłania skryptom powiadomień o kolizjach [Domyślnie: -25000]"/>
+		<check_box label="Zgłaszaj zmiany liczby skryptów w regionie" name="FSReportTotalScriptCountChanges"/>
+		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Próg zmiany całkowitej ilości skryptów w regionie, od którego pokazana zostanie informacja [Domyślnie: 100]"/>
 		<text name="friends_logon_label">
 			Powiadom gdy znajomi się logują/wylogowywują:
 		</text>
