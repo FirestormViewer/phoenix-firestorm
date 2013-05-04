@@ -371,10 +371,6 @@ public:
 		EAcceptance* accept,
 		std::string& tooltip_msg);
 
-	// <FS:ND> JIT folders
-	virtual bool isPreCreatedFolder()
-	{ return false; }
-
 	// <ND/> Don't bother with unneeded tooltips in inventor
 	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
 
@@ -399,12 +395,6 @@ typedef bool (*sort_order_f)(LLFolderViewItem* a, LLFolderViewItem* b);
 
 class LLFolderViewFolder : public LLFolderViewItem
 {
-	// <FS:ND> JIT folders
-	LLUUID mFolderId;
-	class LLInventoryPanel *mParentPanel;
-	bool mIsPopulated;
-	// </FS:ND>
-
 protected:
 	LLFolderViewFolder( const LLFolderViewItem::Params& );
 	friend class LLUICtrlFactory;
@@ -418,17 +408,6 @@ public:
 	typedef std::list<LLFolderViewItem*> items_t;
 	typedef std::list<LLFolderViewFolder*> folders_t;
 
-
-	// <FS:ND> JIT Folders
-	void setPanel( LLInventoryPanel* aPanel )
-	{ mParentPanel = aPanel; }
-
-	void setFolderId( LLUUID const &aFolderId )
-	{ mFolderId = aFolderId; }
-
-	virtual bool isPreCreatedFolder()
-	{ return !mIsPopulated; }
-	// </FS:ND>
 protected:
 	items_t mItems;
 	folders_t mFolders;

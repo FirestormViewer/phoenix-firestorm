@@ -477,7 +477,7 @@ void LLInventoryPanel::modelChanged(U32 mask)
 			{
 				view_item->destroyView();
 			}
-			view_item = buildNewViews(item_id,0);
+			view_item = buildNewViews(item_id);
 			view_folder = dynamic_cast<LLFolderViewFolder *>(view_item);
 		}
 
@@ -518,7 +518,7 @@ void LLInventoryPanel::modelChanged(U32 mask)
 			if (model_item && !view_item)
 			{
 				// Add the UI element for this item.
-				buildNewViews(item_id,0);
+				buildNewViews(item_id);
 				// Select any newly created object that has the auto rename at top of folder root set.
 				if(mFolderRoot->getRoot()->needsAutoRename())
 				{
@@ -633,7 +633,7 @@ LLFolderViewItem* LLInventoryPanel::rebuildViewsFor(const LLUUID& id)
 		old_view->destroyView();
 	}
 
-	return buildNewViews(id,0);
+	return buildNewViews(id);
 }
 
 LLFolderView * LLInventoryPanel::createFolderView(LLInvFVBridge * bridge, bool useLabelSuffix)
@@ -701,14 +701,14 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 	return LLUICtrlFactory::create<LLFolderViewItem>(params);
 }
 
-LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id, long aRecursionCount )
+LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id )
 {
  	LLInventoryObject const* objectp = gInventory.getObject(id);
  	LLUUID root_id = mFolderRoot->getListener()->getUUID();
  	LLFolderViewFolder* parent_folder = NULL;
 	LLFolderViewItem* itemp = NULL;
 	
- 	if (id == root_id)
+	if (id == root_id)
  	{
  		parent_folder = mFolderRoot;
  	}
@@ -742,8 +742,6 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id, long aRecurs
 					LLFolderViewFolder* folderp = createFolderViewFolder(new_listener);
 					if (folderp)
 					{
-						folderp->setPanel(this);
-						folderp->setFolderId( id );
 						folderp->setItemSortOrder(mFolderRoot->getSortOrder());
 					}
   					itemp = folderp;
@@ -774,22 +772,6 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id, long aRecurs
 		}
 	}
 
-	//  <FS:ND> Subfolder JIT
- 	// FIRE-3615; FIRE-3616: For some panels we get a zero UUID for top level folders here. </FS:ND>
-	// FIRE-3615: Disable this for now. It needs some serious rework.
-	// 	if( (id == getRootFolderID() || getRootFolderID().isNull() || id.isNull()) /*<ND/>: FIRE-3725, breaks worn tab on deeper nesting levels, remove for now: && aRecursionCount < 1*/ )
-		addSubItems( id, 0 );
-	// </FS:ND>
-
-	return itemp;
-}
-
-// <FS:ND> JIT subfolder processing
-void LLInventoryPanel::addSubItems(const LLUUID& id, long aRecursionCount)
-{
- 	LLInventoryObject const* objectp = gInventory.getObject(id);
- 	LLUUID root_id = mFolderRoot->getListener()->getUUID();
-
 	// If this is a folder, add the children of the folder and recursively add any 
 	// child folders.
 	if (id.isNull()
@@ -799,13 +781,7 @@ void LLInventoryPanel::addSubItems(const LLUUID& id, long aRecursionCount)
 		LLViewerInventoryCategory::cat_array_t* categories;
 		LLViewerInventoryItem::item_array_t* items;
 		mInventory->lockDirectDescendentArrays(id, categories, items);
-		LLFolderViewFolder *parent_folder(0);
-
-	 	if (id == root_id)
-	 		parent_folder = mFolderRoot;
-		else if( items && objectp )
-			parent_folder = (LLFolderViewFolder*)mFolderRoot->getItemByID(objectp->getParentUUID());
-
+		
 		if(categories)
 		{
 			for (LLViewerInventoryCategory::cat_array_t::const_iterator cat_iter = categories->begin();
@@ -813,9 +789,7 @@ void LLInventoryPanel::addSubItems(const LLUUID& id, long aRecursionCount)
 				 ++cat_iter)
 			{
 				const LLViewerInventoryCategory* cat = (*cat_iter);
-				//buildNewViews(cat->getUUID());  
-				if( !mFolderRoot->getItemByID( cat->getUUID() ) ) //ND
-					buildNewViews(cat->getUUID(), aRecursionCount+1);
+				buildNewViews(cat->getUUID());
 			}
 		}
 		
@@ -826,27 +800,13 @@ void LLInventoryPanel::addSubItems(const LLUUID& id, long aRecursionCount)
 				 ++item_iter)
 			{
 				const LLViewerInventoryItem* item = (*item_iter);
-				//buildNewViews(cat->getUUID());
-				if( !mFolderRoot->getItemByID( item->getUUID() ) ) //ND
-					buildNewViews(item->getUUID(), aRecursionCount+1 );
+				buildNewViews(item->getUUID());
 			}
-		}
-		else if( items )
-		{
-			llwarns << "No parent folder for items; items:" << llendl;
-			for (LLViewerInventoryItem::item_array_t::const_iterator item_iter = items->begin();
-				 item_iter != items->end();
-				 ++item_iter)
-			{
-				const LLViewerInventoryItem* item = (*item_iter);
-				if( item )
-					llwarns << "    name: " << item->getName() << llendl;
-			}
-			llwarns << "end of item enumeratin" << llendl;
-
 		}
 		mInventory->unlockDirectDescendentArrays(id);
 	}
+	
+	return itemp;
 }
 
 // bit of a hack to make sure the inventory is open.

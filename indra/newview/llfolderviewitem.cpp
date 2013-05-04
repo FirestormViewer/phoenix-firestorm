@@ -1298,9 +1298,7 @@ LLFolderViewFolder::LLFolderViewFolder( const LLFolderViewItem::Params& p ):
 	mCompletedFilterGeneration(-1),
 	mMostFilteredDescendantGeneration(-1),
 	mNeedsSort(false),
-	mPassedFolderFilter(FALSE),
-	mIsPopulated( false ),
-	mParentPanel(0)
+	mPassedFolderFilter(FALSE)
 {
 }
 
@@ -2451,15 +2449,6 @@ void LLFolderViewFolder::setOpen(BOOL openitem)
 
 void LLFolderViewFolder::setOpenArrangeRecursively(BOOL openitem, ERecurseType recurse)
 {
-	// <FS:ND> JIT Folders
-	if( !mIsPopulated && mParentPanel )
-	{
-		lldebugs << "Lazy populating " << getName() << llendl;
-		mParentPanel->addSubItems( mFolderId, 0 );
-		mIsPopulated = true;
-	}
-	// </FS:ND>
-
 	BOOL was_open = mIsOpen;
 	mIsOpen = openitem;
 	if (mListener)
