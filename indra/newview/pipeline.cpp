@@ -7275,7 +7275,15 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 				else
 				{
 					//focus on alt-zoom target
-					focus_point = LLVector3(gAgentCamera.getFocusGlobal()-gAgent.getRegion()->getOriginGlobal());
+					
+					// <FS:ND> Guard against agent not having a valid region set.
+
+					// focus_point = LLVector3(gAgentCamera.getFocusGlobal()-gAgent.getRegion()->getOriginGlobal());
+
+					if( gAgent.getRegion() )
+						focus_point = LLVector3(gAgentCamera.getFocusGlobal()-gAgent.getRegion()->getOriginGlobal());
+
+					// </FS:ND>
 				}
 			}
 
