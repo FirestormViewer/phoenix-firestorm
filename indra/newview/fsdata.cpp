@@ -65,6 +65,13 @@ static const std::string legacy_client_list = "http://phoenixviewer.com/app/clie
 
 //static const std::string blacklist_url = "http://phoenixviewer.com/app/fsdata/blacklist.xml";
 
+#if LL_DARWIN
+size_t strnlen(const char *s, size_t n)
+{
+	const char *p = (const char *)memchr(s, 0, n);
+	return(p ? p-s : n);
+}
+#endif
 
 class FSDownloader : public LLHTTPClient::Responder
 {
@@ -320,139 +327,141 @@ void FSData::processClientTags(const LLSD& tags)
 	}
 }
 
-LLSD FSData::resolveClientTag(LLUUID id){
-	//WS: Some helper function to make the request for old tags easier (if someone needs it)
+//WS: Some helper function to make the request for old tags easier (if someone needs it)
+LLSD FSData::resolveClientTag(LLUUID id)
+{
 	return resolveClientTag(id, false, LLColor4::black);
 }
 
-LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
-	//WS: Create a new LLSD based on the data from the LegacyClientList if
+//WS: Create a new LLSD based on the data from the LegacyClientList if
+LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
+{	
 	LLSD curtag;
-	curtag["uuid"]=id.asString();
-	curtag["id_based"]=new_system;	
-	curtag["tex_color"]=color.getValue();	
+	curtag["uuid"] = id.asString();
+	curtag["id_based"] = new_system;
+	curtag["tex_color"] = color.getValue();
 	// If we don't want to display anything...return
-	if(gSavedSettings.getU32("FSClientTagsVisibility2") == 0)
+	if (gSavedSettings.getU32("FSClientTagsVisibility2") == 0)
 	{
 		return curtag;
 	}
 
 	//WS: Do we want to use Legacy Clienttags?
-	if(gSavedSettings.getU32("FSUseLegacyClienttags") > 0)
+	if (gSavedSettings.getU32("FSUseLegacyClienttags") > 0)
 	{
-		if(LegacyClientList.has(id.asString()))
+		if (LegacyClientList.has(id.asString()))
 		{
 			curtag=LegacyClientList[id.asString()];
 		}
 		else
 		{		
-			if(id == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
+			if (id == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
 			{
 				curtag["name"]="Phoenix";
 				curtag["color"] = LLColor4::green.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("e35f7d40-6071-4b29-9727-5647bdafb5d5"))//white
+			else if (id == LLUUID("e35f7d40-6071-4b29-9727-5647bdafb5d5"))//white
 			{
 				curtag["name"] = "Phoenix";			
 				curtag["color"] = LLColor4::white.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("ae4e92fb-023d-23ba-d060-3403f953ab1a"))//pink
+			else if (id == LLUUID("ae4e92fb-023d-23ba-d060-3403f953ab1a"))//pink
 			{
 				curtag["name"] = "Phoenix";
 				curtag["color"] = LLColor4::pink.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("e71b780e-1a57-400d-4649-959f69ec7d51"))//red
+			else if (id == LLUUID("e71b780e-1a57-400d-4649-959f69ec7d51"))//red
 			{
 				curtag["name"] = "Phoenix";
 				curtag["color"] = LLColor4::red.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("c1c189f5-6dab-fc03-ea5a-f9f68f90b018"))//orange
+			else if (id == LLUUID("c1c189f5-6dab-fc03-ea5a-f9f68f90b018"))//orange
 			{
 				curtag["name"] = "Phoenix";
 				curtag["color"] = LLColor4::orange.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("8cf0577c-22d3-6a73-523c-15c0a90d6c27")) //purple
+			else if (id == LLUUID("8cf0577c-22d3-6a73-523c-15c0a90d6c27")) //purple
 			{
 				curtag["name"] = "Phoenix";
 				curtag["color"] = LLColor4::purple.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("5f0e7c32-38c3-9214-01f0-fb16a5b40128"))//yellow
+			else if (id == LLUUID("5f0e7c32-38c3-9214-01f0-fb16a5b40128"))//yellow
 			{
 				curtag["name"] = "Phoenix";
 				curtag["color"] = LLColor4::yellow.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("5bb6e4a6-8e24-7c92-be2e-91419bb0ebcb"))//blue
+			else if (id == LLUUID("5bb6e4a6-8e24-7c92-be2e-91419bb0ebcb"))//blue
 			{
 				curtag["name"] = "Phoenix";
 				curtag["color"] = LLColor4::blue.getValue();
 				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
 			}
-			else if(id == LLUUID("ed63fbd0-589e-fe1d-a3d0-16905efaa96b"))//default (red)
+			else if (id == LLUUID("ed63fbd0-589e-fe1d-a3d0-16905efaa96b"))//default (red)
 			{
 				curtag["name"] = "Phoenix";
 				curtag["color"] = LLColor4::red.getValue();
 			}	
-			else if(id == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
+			else if (id == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
 			{
 				curtag["name"] = "LL Viewer";
 			}
-			else if(id == LLUUID("cc7a030f-282f-c165-44d2-b5ee572e72bf"))
+			else if (id == LLUUID("cc7a030f-282f-c165-44d2-b5ee572e72bf"))
 			{
 				curtag["name"] = "Imprudence";
 			}
-			else if(id == LLUUID("54d93609-1392-2a93-255c-a9dd429ecca5"))
+			else if (id == LLUUID("54d93609-1392-2a93-255c-a9dd429ecca5"))
 			{
 				curtag["name"] = "Emergence";
 			}
-			else if(id == LLUUID("8873757c-092a-98fb-1afd-ecd347566fcd"))
+			else if (id == LLUUID("8873757c-092a-98fb-1afd-ecd347566fcd"))
 			{
 				curtag["name"] = "Ascent";
 			}
-			else if(id == LLUUID("f25263b7-6167-4f34-a4ef-af65213b2e39"))
+			else if (id == LLUUID("f25263b7-6167-4f34-a4ef-af65213b2e39"))
 			{
 				curtag["name"] = "Singularity";
 			}
-			if(curtag.has("name")) curtag["tpvd"]=true;
+			if (curtag.has("name")) curtag["tpvd"] = true;
 		}
 	}
 	
 	
 	// Filtering starts here:
 	//WS: If the current tag has an "alt" definied and we don't want multiple colors. Resolve the alt.
-	if((gSavedSettings.getU32("FSColorClienttags") == 1) && curtag.has("alt"))
+	if ((gSavedSettings.getU32("FSColorClienttags") == 1) && curtag.has("alt"))
 	{
 		curtag = resolveClientTag(curtag["alt"], new_system, color);
 	}
 
 	//WS: If we have a tag using the new system, check if we want to display it's name and/or color
-	if(new_system)
+	if (new_system)
 	{
-		if(gSavedSettings.getU32("FSClientTagsVisibility2") >= 3)
+		if (gSavedSettings.getU32("FSClientTagsVisibility2") >= 3)
 		{
-			// strnlen() doesn't exist on OS X before 10.7. -- TS
-			char tag_temp[UUID_BYTES+1];
-			strncpy(tag_temp,(const char*)&id.mData[0], UUID_BYTES);
-			tag_temp[UUID_BYTES] = '\0';
-			U32 tag_len = strlen(tag_temp);
+			U32 tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
 			std::string clienttagname = std::string((const char*)&id.mData[0], tag_len);
 			LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
 			curtag["name"] = clienttagname;
 		}
-		if(gSavedSettings.getU32("FSColorClienttags") >= 3 || curtag["tpvd"].asBoolean())
+		if (gSavedSettings.getU32("FSColorClienttags") >= 3 || curtag["tpvd"].asBoolean())
 		{
-			if(curtag["tpvd"].asBoolean() && gSavedSettings.getU32("FSColorClienttags") < 3)
+			if (curtag["tpvd"].asBoolean() && gSavedSettings.getU32("FSColorClienttags") < 3)
 			{
-				if(color == LLColor4::blue || color == LLColor4::yellow ||
-				   color == LLColor4::purple || color == LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1) ||
-				   color == LLColor4::red || color == LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1) ||
-				   color == LLColor4::white || color == LLColor4::green)
+				if (color == LLColor4::blue ||
+					color == LLColor4::yellow ||
+					color == LLColor4::purple ||
+					color == LLColor4((F32)0.99,(F32)0.39,(F32)0.12,(F32)1) ||
+					color == LLColor4::red ||
+					color == LLColor4((F32)0.99,(F32)0.56,(F32)0.65,(F32)1) ||
+					color == LLColor4::white ||
+					color == LLColor4::green)
 				{
 					curtag["color"] = color.getValue();
 				}
