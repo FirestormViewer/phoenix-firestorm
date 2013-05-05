@@ -55,6 +55,14 @@ set_target_properties(SLPlugin
   MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/slplugin_info.plist
   )
 
+if(WINDOWS)
+  set_target_properties(SLPlugin
+   PROPERTIES
+   LINK_FLAGS "/debug"
+   )
+
+endif(WINDOWS)
+
 target_link_libraries(SLPlugin
   ${LLPLUGIN_LIBRARIES}
   ${LLMESSAGE_LIBRARIES}
