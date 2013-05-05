@@ -120,16 +120,6 @@ extern F32 ANIM_SPEED_MIN;
 
 using namespace LLAvatarAppearanceDefines;
 
-// for macs
-#if LL_DARWIN
-size_t strnlen(const char *s, size_t n)
-{
-  const char *p = (const char *)memchr(s, 0, n);
-  return(p ? p-s : n);
-}
-#endif
-
-
 //-----------------------------------------------------------------------------
 // Global constants
 //-----------------------------------------------------------------------------
@@ -2787,10 +2777,17 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	{
 
 		//WS: If we got a uuid and if we know if it's id_based or not, ask FSDATA for the other tagdata, before we display it.
-		if(mClientTagData.has("uuid") && mClientTagData.has("id_based")){			
+		if (mClientTagData.has("uuid") && mClientTagData.has("id_based"))
+		{
 			LLColor4 color;
-			if(mClientTagData.has("tex_color")) color.setValue(mClientTagData["tex_color"]);
-			else color = LLColor4::black;
+			if (mClientTagData.has("tex_color"))
+			{
+				color.setValue(mClientTagData["tex_color"]);
+			}
+			else
+			{
+				color = LLColor4::black;
+			}
 			mClientTagData = FSData::getInstance()->resolveClientTag(LLUUID(mClientTagData["uuid"].asString()), mClientTagData["id_based"].asBoolean(),color);
 		}
 
@@ -7418,23 +7415,24 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 
 	applyParsedTEMessage(contents.mTEContents);
 
-	// <clientTags>
+	// <FS:clientTags>
 	//Wolfspirit: Read the UUID, system and Texturecolor
-	LLTextureEntry* tex = getTE(0);
+	LLTextureEntry* tex = getTE(TEX_HEAD_BODYPAINT);
 	const LLUUID tag_uuid = tex->getID();
-	bool new_system=false;
-	if(tex->getGlow() > 0.0f){
+	bool new_system = false;
+	if (tex->getGlow() > 0.0f)
+	{
 		new_system=true;
 	}
 
 	//WS: Write them into an LLSD map
-	mClientTagData["uuid"]=tag_uuid.asString();
-	mClientTagData["id_based"]=new_system;
-	mClientTagData["tex_color"]=tex->getColor().getValue();
+	mClientTagData["uuid"] = tag_uuid.asString();
+	mClientTagData["id_based"] = new_system;
+	mClientTagData["tex_color"] = tex->getColor().getValue();
 
 	//WS: Clear mNameString to force a rebuild
 	mNameString.clear();
-	// </clientTags>
+	// </FS:clientTags>
 
 	// prevent the overwriting of valid baked textures with invalid baked textures
 	for (U8 baked_index = 0; baked_index < mBakedTextureDatas.size(); baked_index++)
