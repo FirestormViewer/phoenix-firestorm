@@ -112,9 +112,14 @@ namespace OSAllocator
 	
 		if( aPtr )
 		{
-			int nToCopy = nd_min( aSize, sizeFromAlloc( aPtr ) );
+			size_t oldSize = sizeFromAlloc( aPtr );
+			void *osBase = OSbaseFromAlloc( aPtr );
+
+			oldSize -= ( reinterpret_cast< uintptr_t >( aPtr ) - reinterpret_cast< uintptr_t >( osBase ) );
+			size_t nToCopy = nd_min( aSize, oldSize );
 			memcpy( pMem, aPtr, nToCopy );
-			::free( OSbaseFromAlloc( aPtr ) );
+
+			::free( osBase );
 		}
 
 		return pMem;
