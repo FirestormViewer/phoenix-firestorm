@@ -335,61 +335,61 @@ NVIDIA G 110M							.*NVIDIA .*110M.*						1	1	1	3.3
 NVIDIA G 120M							.*NVIDIA .*120M.*						1	1	1	3.3
 NVIDIA G 205M							.*NVIDIA .*205M.*						1	1	0	0
 NVIDIA G 410M							.*NVIDIA .*410M.*						3	1	1	4.2
-NVIDIA GT 120M							.*NVIDIA .*GT 12.M.*					3	1	1	3.3
-NVIDIA GT 130M							.*NVIDIA .*GT 13.M.*					3	1	1	3.3
-NVIDIA GT 140M							.*NVIDIA .*GT 14.M.*					3	1	1	3.3
-NVIDIA GT 150M							.*NVIDIA .*GTS 15.M.*					2	1	0	0
-NVIDIA GTS 160M							.*NVIDIA .*GTS 16.M.*					2	1	0	0
+NVIDIA GT 120M							.*NVIDIA .*GT *12.M.*					3	1	1	3.3
+NVIDIA GT 130M							.*NVIDIA .*GT *13.M.*					3	1	1	3.3
+NVIDIA GT 140M							.*NVIDIA .*GT *14.M.*					3	1	1	3.3
+NVIDIA GT 150M							.*NVIDIA .*GTS *15.M.*					2	1	0	0
+NVIDIA GTS 160M							.*NVIDIA .*GTS *16.M.*					2	1	0	0
 NVIDIA G210M							.*NVIDIA .*G21.M.*						3	1	0	0
-NVIDIA GT 220M							.*NVIDIA .*GT 22.M.*					3	1	1	3.3
-NVIDIA GT 230M							.*NVIDIA .*GT 23.M.*					3	1	1	3.3
-NVIDIA GT 240M							.*NVIDIA .*GT 24.M.*					3	1	1	3.3
-NVIDIA GTS 250M							.*NVIDIA .*GTS 25.M.*					3	1	0	0
-NVIDIA GTS 260M							.*NVIDIA .*GTS 26.M.*					3	1	0	0
-NVIDIA GTX 260M							.*NVIDIA .*GTX 26.M.*					3	1	0	0
-NVIDIA GTX 270M							.*NVIDIA .*GTX 27.M.*					3	1	0	0
-NVIDIA GTX 280M							.*NVIDIA .*GTX 28.M.*					3	1	0	0
+NVIDIA GT 220M							.*NVIDIA .*GT *22.M.*					3	1	1	3.3
+NVIDIA GT 230M							.*NVIDIA .*GT *23.M.*					3	1	1	3.3
+NVIDIA GT 240M							.*NVIDIA .*GT *24.M.*					3	1	1	3.3
+NVIDIA GTS 250M							.*NVIDIA .*GTS *25.M.*					3	1	0	0
+NVIDIA GTS 260M							.*NVIDIA .*GTS *26.M.*					3	1	0	0
+NVIDIA GTX 260M							.*NVIDIA .*GTX *26.M.*					3	1	0	0
+NVIDIA GTX 270M							.*NVIDIA .*GTX *27.M.*					3	1	0	0
+NVIDIA GTX 280M							.*NVIDIA .*GTX *28.M.*					3	1	0	0
 NVIDIA 300M								.*NVIDIA.* 30.M.*						3	1	1	4.2
-NVIDIA G 310M							.*NVIDIA .*G 31.M.*						2	1	0	0
-NVIDIA GT 320M							.*NVIDIA .*GT 32.M.*					3	1	0	0
-NVIDIA GT 325M							.*NVIDIA .*GT 32.M.*					3	1	1	3.3
-NVIDIA GT 330M							.*NVIDIA .*GT 33.M.*					3	1	1	3.3
-NVIDIA GT 340M							.*NVIDIA .*GT 34.M.*					4	1	1	3.3
-NVIDIA GTS 350M							.*NVIDIA .*GTS 35.M.*					4	1	1	3.3
-NVIDIA GTS 360M							.*NVIDIA .*GTS 36.M.*					5	1	1	3.3
+NVIDIA G 310M							.*NVIDIA .*G *31.M.*					2	1	0	0
+NVIDIA GT 320M							.*NVIDIA .*GT *32.M.*					3	1	0	0
+NVIDIA GT 325M							.*NVIDIA .*GT *32.M.*					3	1	1	3.3
+NVIDIA GT 330M							.*NVIDIA .*GT *33.M.*					3	1	1	3.3
+NVIDIA GT 340M							.*NVIDIA .*GT *34.M.*					4	1	1	3.3
+NVIDIA GTS 350M							.*NVIDIA .*GTS *35.M.*					4	1	1	3.3
+NVIDIA GTS 360M							.*NVIDIA .*GTS *36.M.*					5	1	1	3.3
 NVIDIA 405M								.*NVIDIA.* 40.M.*						2	1	0	4.2
 NVIDIA 410M								.*NVIDIA.* 41.M.*						3	1	0	0
-NVIDIA GT 415M							.*NVIDIA .*GT 41.M.*					3	1	1	4.2
-NVIDIA GT 420M							.*NVIDIA .*GT 42.M.*					3	1	1	4.2
-NVIDIA GT 430M							.*NVIDIA .*GT 43.M.*					3	1	1	4.2
-NVIDIA GT 440M							.*NVIDIA .*GT 44.M.*					3	1	1	4.2
-NVIDIA GT 450M							.*NVIDIA .*GT 45.M.*					3	1	0	0
-NVIDIA GTX 460M							.*NVIDIA .*GTX 46.M.*					4	1	1	4.2
-NVIDIA GTX 470M							.*NVIDIA .*GTX 47.M.*					3	1	0	0
-NVIDIA GTX 480M							.*NVIDIA .*GTX 48.M.*					3	1	1	4.2
-NVIDIA GT 520M							.*NVIDIA .*GT 52.M.*					3	1	1	4.2
-NVIDIA GT 530M							.*NVIDIA .*GT 53.M.*					3	1	1	4.2
-NVIDIA GT 540M							.*NVIDIA .*GT 54.M.*					3	1	1	4.2
-NVIDIA GT 550M							.*NVIDIA .*GT 55.M.*					3	1	1	4.2
-NVIDIA GTX 560M							.*NVIDIA .*GTX 56.M.*					3	1	0	0
-NVIDIA GTX 570M							.*NVIDIA .*GTX 57.M.*					5	1	0	0
-NVIDIA GTX 580M							.*NVIDIA .*GTX 58.M.*					5	1	1	4.2
+NVIDIA GT 415M							.*NVIDIA .*GT *41.M.*					3	1	1	4.2
+NVIDIA GT 420M							.*NVIDIA .*GT *42.M.*					3	1	1	4.2
+NVIDIA GT 430M							.*NVIDIA .*GT *43.M.*					3	1	1	4.2
+NVIDIA GT 440M							.*NVIDIA .*GT *44.M.*					3	1	1	4.2
+NVIDIA GT 450M							.*NVIDIA .*GT *45.M.*					3	1	0	0
+NVIDIA GTX 460M							.*NVIDIA .*GTX *46.M.*					4	1	1	4.2
+NVIDIA GTX 470M							.*NVIDIA .*GTX *47.M.*					3	1	0	0
+NVIDIA GTX 480M							.*NVIDIA .*GTX *48.M.*					3	1	1	4.2
+NVIDIA GT 520M							.*NVIDIA .*GT *52.M.*					3	1	1	4.2
+NVIDIA GT 530M							.*NVIDIA .*GT *53.M.*					3	1	1	4.2
+NVIDIA GT 540M							.*NVIDIA .*GT *54.M.*					3	1	1	4.2
+NVIDIA GT 550M							.*NVIDIA .*GT *55.M.*					3	1	1	4.2
+NVIDIA GTX 560M							.*NVIDIA .*GTX *56.M.*					3	1	0	0
+NVIDIA GTX 570M							.*NVIDIA .*GTX *57.M.*					5	1	0	0
+NVIDIA GTX 580M							.*NVIDIA .*GTX *58.M.*					5	1	1	4.2
 NVIDIA 610M								.*NVIDIA.* 61.M.*						3	1	1	4.2
-NVIDIA GT 620M							.*NVIDIA .*GT 62.M.*					3	1	0	0
-NVIDIA GT 630M							.*NVIDIA .*GT 63.M.*					3	1	0	0
-NVIDIA GT 640M							.*NVIDIA .*GT 64.M.*					3	1	0	0
-NVIDIA GT 650M							.*NVIDIA .*GT 65.M.*					3	1	0	0
-NVIDIA GTX 660M							.*NVIDIA .*GTX 66.M.*					5	1	0	0
-NVIDIA GTX 670M							.*NVIDIA .*GTX 67.M.*					5	1	1	4.2
-NVIDIA GTX 680M							.*NVIDIA .*GTX 68.M.*					5	1	0	0
-NVIDIA GTX 690M							.*NVIDIA .*GTX 69.M.*					5	1	0	0
+NVIDIA GT 620M							.*NVIDIA .*GT *62.M.*					3	1	0	0
+NVIDIA GT 630M							.*NVIDIA .*GT *63.M.*					3	1	0	0
+NVIDIA GT 640M							.*NVIDIA .*GT *64.M.*					3	1	0	0
+NVIDIA GT 650M							.*NVIDIA .*GT *65.M.*					3	1	0	0
+NVIDIA GTX 660M							.*NVIDIA .*GTX *66.M.*					5	1	0	0
+NVIDIA GTX 670M							.*NVIDIA .*GTX *67.M.*					5	1	1	4.2
+NVIDIA GTX 680M							.*NVIDIA .*GTX *68.M.*					5	1	0	0
+NVIDIA GTX 690M							.*NVIDIA .*GTX *69.M.*					5	1	0	0
 NVIDIA 710M								.*NVIDIA.* 71.M.*						3	1	0	0
-NVIDIA GT 720M							.*NVIDIA .*GT 72.M.*					3	1	0	0
-NVIDIA GT 730M							.*NVIDIA .*GT 73.M.*					3	1	0	0
-NVIDIA GT 740M							.*NVIDIA .*GT 74.M.*					3	1	0	0
-NVIDIA GT 750M							.*NVIDIA .*GT 75.M.*					3	1	0	0
-NVIDIA GTX 760M							.*NVIDIA .*GTX 76.M.*					5	1	0	0
-NVIDIA GTX 770M							.*NVIDIA .*GTX 77.M.*					5	1	0	0
+NVIDIA GT 720M							.*NVIDIA .*GT *72.M.*					3	1	0	0
+NVIDIA GT 730M							.*NVIDIA .*GT *73.M.*					3	1	0	0
+NVIDIA GT 740M							.*NVIDIA .*GT *74.M.*					3	1	0	0
+NVIDIA GT 750M							.*NVIDIA .*GT *75.M.*					3	1	0	0
+NVIDIA GTX 760M							.*NVIDIA .*GTX *76.M.*					5	1	0	0
+NVIDIA GTX 770M							.*NVIDIA .*GTX *77.M.*					5	1	0	0
 NVIDIA G100								.*NVIDIA .*G10.*						3	1	1	4.2
 NVIDIA GT 120							.*NVIDIA .*GT *12.*						2	1	0	3
 NVIDIA GT 130							.*NVIDIA .*GT *13.*						2	1	0	3.3
