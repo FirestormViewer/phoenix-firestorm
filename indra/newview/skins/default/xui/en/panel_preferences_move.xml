@@ -583,14 +583,27 @@
          width="350"
          control_name="FSAlwaysOpaqueCameraControls"/>
 
+        <text
+         top_pad="6"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="15"
+         name="minimap_options_label"
+         width="200">
+         Minimap options:
+        </text>
+        
         <check_box
-         top_pad="12"
+         top_pad="4"
          follows="left|top"
          height="16"
          initial_value="false"
          label="Enable Minimap rotation"
          layout="topleft"
-         left="15"
+         left="30"
          name="minimaprotate"
          width="350"
          control_name="MiniMapRotate"
@@ -639,22 +652,25 @@
              value="2"/>
         </combo_box>
 
-        <check_box top_pad="5"
+        <text
+         top_pad="6"
+         type="string"
+         length="1"
          follows="left|top"
-         height="16"
-         label="Turn avatar around when walking backwards"
+         height="15"
+         layout="topleft"
          left="15"
-         name="backwardsturnavatar"
-         width="270"
-         control_name="TurnAroundWhenWalkingBackwards"
-         tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
-
+         name="world_map_options_label"
+         width="200">
+         World map options:
+        </text>
+        
         <check_box top_pad="5"
          follows="left|top"
          height="16"
          initial_value="false"
          label="Filter duplicate Landmarks on World Map"
-         left="15"
+         left="30"
          name="WorldmapFilterDuplicateLandmarks"
          width="270"
          control_name="WorldmapFilterDuplicateLandmarks"
@@ -665,11 +681,20 @@
          height="16"
          initial_value="false"
          label="Show additional region information on World Map"
-         left="15"
          name="FSAdvancedWorldmapRegionInfo"
          width="270"
          control_name="FSAdvancedWorldmapRegionInfo"
          tool_tip="Shows additional region infos on the world map (avatar count and maturity level)."/>
+        
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Show grid coordinates on the world map."
+         name="FSShowRegionGridCoordinates"
+         width="270"
+         control_name="FSShowRegionGridCoordinates"
+         tool_tip="Shows the grid coordinates (in units of regions) on the world map."/>
 
         <check_box top_pad="5"
          follows="left|top"
@@ -687,11 +712,20 @@
          height="16"
          initial_value="false"
          label="Show simulator channel in status bar"
-         left="15"
          name="FSStatusbarShowSimulatorVersion"
          width="270"
          control_name="FSStatusbarShowSimulatorVersion"
          tool_tip="Shows the current simulator channel in the V1-like status bar."/>
+        
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Turn avatar around when walking backwards"
+         name="backwardsturnavatar"
+         width="270"
+         control_name="TurnAroundWhenWalkingBackwards"
+         tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
+        
 	 </panel>
 </tab_container>
 </panel>
