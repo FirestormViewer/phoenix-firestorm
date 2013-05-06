@@ -664,10 +664,6 @@ void LLPanelGroup::showNotice(const std::string& subject,
 		FSFloaterGroup* floater = FSFloaterGroup::findInstance(group_id);
 		if (!floater)
 		{
-			floater = FSFloaterGroup::openGroupFloater(group_id);
-		}
-		if (!floater)
-		{
 			return;
 		}
 

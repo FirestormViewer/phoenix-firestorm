@@ -112,13 +112,16 @@ FSFloaterGroup* FSFloaterGroup::openGroupFloater(const LLSD& params)
 	}
 
 	FSFloaterGroup* floater = LLFloaterReg::getTypedInstance<FSFloaterGroup>("fs_group", LLSD().with("group_id", params.get("group_id").asUUID()));
-	if (floater)
+	if (floater->getVisible())
+	{
+		floater->onOpen(params);
+	}
+	else
 	{
 		floater->openFloater(params);
-		return floater;
 	}
 
-	return NULL;
+	return floater;
 }
 
 // static
