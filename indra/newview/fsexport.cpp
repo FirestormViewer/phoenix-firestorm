@@ -343,7 +343,6 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 					{
 						if (!mAborted)
 						{
-							// not a floater, so no floater_export.xml for a proper translation.
 							reportToNearbyChat(LLTrans::getString("export_fail_no_mesh"));
 							mAborted = true;
 						}

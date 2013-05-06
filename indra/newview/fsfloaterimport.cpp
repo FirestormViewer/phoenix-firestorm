@@ -944,7 +944,6 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			}
 
 			LLSD& item_sd = mFile["inventory"][(*content_iter).asString()];
-			//LLAssetType::EType asset_type = LLAssetType::lookup(item_sd["type"].asString().c_str());
 			LLUUID asset_id = item_sd["asset_id"].asUUID();
 
 			if (asset_id.isNull())
