@@ -514,10 +514,13 @@ uuid_vec_t LGGContactSets::getFriendsInGroup(const std::string& groupName)
 		return getListOfNonFriends();
 	}
 
-	ContactSetGroup* group = mGroups[groupName];
-	for (uuid_set_t::iterator it = group->mFriends.begin(); it != group->mFriends.end(); ++it)
+	ContactSetGroup* group = getGroup(groupName);
+	if (group)
 	{
-		toReturn.push_back(*it);
+		for (uuid_set_t::iterator it = group->mFriends.begin(); it != group->mFriends.end(); ++it)
+		{
+			toReturn.push_back(*it);
+		}
 	}
 
 	return toReturn;
