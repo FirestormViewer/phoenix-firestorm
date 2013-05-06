@@ -65,6 +65,9 @@
 			<check_box label="Obracaj awatara w stronę patrzenia kamery podczas resetowania widoku" name="resetviewturnsavatar" tool_tip="Po zresetowaniu widoku (lub naciśnięciu klawisza ESC) kierunek patrzenia kamery zostaje zachowany, a awatar - obrócony w jego stronę."/>
 			<check_box label="Przenikanie kamery przez primy bez ograniczeń" name="ignorecameraconstraints" tool_tip="Ignoruje 'pchnięcie' stosowane przez symulator, aby utrzymać kamerę na zewnątrz obiektów."/>
 			<check_box label="Pokazuj standardowe, małe okienko sterowania kamerą zawsze jako nieprzezroczyste" name="FSAlwaysOpaqueCameraControls"/>
+			<text name="minimap_options_label">
+				Opcje minimapy:
+			</text>
 			<text name="ignorecameraconstraints_requires_restart">
 				(wymaga restartu)
 			</text>
@@ -78,11 +81,15 @@
 				<combo_box.item label="Otwórz mapę świata" name="1"/>
 				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
 			</combo_box>
-			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>
+			<text name="world_map_options_label">
+				Opcje mapy świata:
+			</text>
 			<check_box label="Filtruj powtarzające się landmarki na mapie świata" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtruj zduplikowane landmarki w liście landmarków na mapie świata."/>
 			<check_box label="Pokazuj dodatkowe informacje o regionie na mapie świata" name="FSAdvancedWorldmapRegionInfo" tool_tip="Pokazuj dodatkowe informacje o regionie na mapie świata (liczbę awatarów i poziom dojrzałości)."/>
+			<check_box label="Pokazuj koordynaty siatki na mapie świata" name="FSShowRegionGridCoordinates" tool_tip="Pokazuj koordynaty siatki (w jednostkach regionów) na mapie świata."/>
 			<check_box label="Powiadom, jeśli wersja symulatora ulegnie zmianie podczas zmiany regionu" name="FSShowServerVersionChangeNotice" tool_tip="Wyświetla powiadomienie, jeśli wersja symulatora ulegnie zmianie podczas teleportowania się lub przekraczania granicy regionu."/>
 			<check_box label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecny kanał symulatora na pasku statusu w stylu V1."/>
+			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>
 		</panel>
 	</tab_container>
 </panel>
