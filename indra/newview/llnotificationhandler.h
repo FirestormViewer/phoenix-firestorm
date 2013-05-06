@@ -356,6 +356,13 @@ public:
 	 */
 	static void decIMMesageCounter(const LLNotificationPtr& notification);
 
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	/**
+	 * Checks whether the user has opted to embed (certain) notifications in IM sessions
+	 */
+	static bool canEmbedNotificationInIM(const LLNotificationPtr& notification);
+// [/SL:KB]
+
 };
 
 }

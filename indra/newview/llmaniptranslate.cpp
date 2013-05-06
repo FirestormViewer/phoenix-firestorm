@@ -61,6 +61,9 @@
 #include "llui.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 const S32 NUM_AXES = 3;
 const S32 MOUSE_DRAG_SLOP = 2;       // pixels

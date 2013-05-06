@@ -43,6 +43,10 @@
 #include "lltoolgrab.h"
 #include "llhudeffectlookat.h"
 #include "llagentcamera.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "llvoavatarself.h"
+// [/RLVa:KB]
 
 LLAgentListener::LLAgentListener(LLAgent &agent)
   : LLEventAPI("LLAgent",
@@ -179,8 +183,28 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 		object = findObjectClosestTo(target_position);
 	}
 
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Modified: RLVa-1.1.0j
+	// TODO-RLVa: [RLVa-1.2.1] Figure out how to call this?
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canSit(object)) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
     if (object && object->getPCode() == LL_PCODE_VOLUME)
     {
+// [RLVa:KB] - Checked: 2010-08-29 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_STANDTP)) && (isAgentAvatarValid()) )
+		{
+			if (gAgentAvatarp->isSitting())
+			{
+				gAgent.standUp();
+				return;
+			}
+			gRlvHandler.setSitSource(gAgent.getPositionGlobal());
+		}
+// [/RLVa:KB]
+
         gMessageSystem->newMessageFast(_PREHASH_AgentRequestSit);
         gMessageSystem->nextBlockFast(_PREHASH_AgentData);
         gMessageSystem->addUUIDFast(_PREHASH_AgentID, mAgent.getID());
@@ -200,6 +224,14 @@ void LLAgentListener::requestSit(LLSD const & event_data) const
 
 void LLAgentListener::requestStand(LLSD const & event_data) const
 {
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	// TODO-RLVa: [RLVa-1.2.1] Figure out how to call this?
+	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStand()) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
     mAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 }
 
