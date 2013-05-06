@@ -112,6 +112,59 @@ void FSFloaterImport::onIdle()
 	{
 	case IDLE:
 		break;
+	case INVENTORY_TRANSFER:
+	{
+		if (mInventoryQueue.empty())
+		{
+			mImportState = IDLE;
+			mWaitTimer.stop();
+
+			if ((mObject + 1) >= mObjectSize)
+			{
+				if (mObjectSize > 1)
+				{
+					// should be allready selected
+					LL_DEBUGS("import") << "Linking " << mObjectSize << " objects. " << LLSelectMgr::getInstance()->getSelection()->getObjectCount() << " prims are selected" << LL_ENDL;
+					LLSelectMgr::getInstance()->sendLink();
+					mImportState = LINKING;
+				}
+				else
+				{
+					postLink();
+				}
+			}
+			else
+			{
+				mObject++;
+				createPrim();
+			}
+			
+			return;
+		}
+		
+		if (mWaitTimer.getElapsedTimeF32() < mThrottleTime)
+		{
+			return;
+		}
+
+		FSInventoryQueue item_queue = mInventoryQueue.back();
+		LL_DEBUGS("import") << "Dropping " << item_queue.item->getName() << " " << item_queue.item->getUUID() << " into " << item_queue.prim_name << " " << item_queue.object->getID() << LL_ENDL;
+		if (item_queue.item->getType() == LLAssetType::AT_LSL_TEXT)
+		{
+			LLToolDragAndDrop::dropScript(item_queue.object, item_queue.item, TRUE,
+						      LLToolDragAndDrop::SOURCE_AGENT,
+						      gAgentID);
+		}
+		else
+		{
+			LLToolDragAndDrop::dropInventory(item_queue.object, item_queue.item,
+							LLToolDragAndDrop::SOURCE_AGENT,
+							gAgentID);
+		}
+		mInventoryQueue.pop_back();
+		mWaitTimer.start();
+	}
+		break;
 	case LINKING:
 		if (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() < 2)
 		{
@@ -743,16 +796,18 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		gMessageSystem->sendReliable(object->getRegion()->getHost());
 	}
 
+	std::string prim_name;
 	if (prim.has("name"))
 	{
-		LL_DEBUGS("import") << "Setting name on " << prim_uuid.asString() << " to " << prim["name"].asString() << LL_ENDL;
+		prim_name = prim["name"].asString();
+		LL_DEBUGS("import") << "Setting name on " << prim_uuid.asString() << " to " << prim_name << LL_ENDL;
 		gMessageSystem->newMessageFast(_PREHASH_ObjectName);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_LocalID, object_local_id);
-		gMessageSystem->addStringFast(_PREHASH_Name, prim["name"].asString());
+		gMessageSystem->addStringFast(_PREHASH_Name, prim_name);
 		gMessageSystem->sendReliable(object->getRegion()->getHost());
 	}
 
@@ -874,6 +929,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		}
 	}
 
+	mInventoryQueue.clear();
 	if (prim.has("content"))
 	{
 		LLSD& contentsd = prim["content"];
@@ -888,7 +944,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			}
 
 			LLSD& item_sd = mFile["inventory"][(*content_iter).asString()];
-			LLAssetType::EType asset_type = LLAssetType::lookup(item_sd["type"].asString().c_str());
+			//LLAssetType::EType asset_type = LLAssetType::lookup(item_sd["type"].asString().c_str());
 			LLUUID asset_id = item_sd["asset_id"].asUUID();
 
 			if (asset_id.isNull())
@@ -900,15 +956,15 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			if (mAssetMap[asset_id].isNull())
 			{
 				// asset was not uploaded, search inventory using asset_id
-				searchInventory(asset_id, object, asset_type);
+				searchInventory(asset_id, object, prim_name);
 				continue;
 			}
 
 			LLUUID new_asset_id = mAssetMap[asset_id];
-			if (mAssetItemMap[new_asset_id].notNull())
+			if (mAssetItemMap[new_asset_id].isNull())
 			{
 				// no item was created for asset, search inventory using new_asset_id
-				searchInventory(new_asset_id, object, asset_type);
+				searchInventory(new_asset_id, object, prim_name);
 				continue;
 			}
 
@@ -917,50 +973,34 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			if (!item)
 			{
 				// else item was not found, search inventory using new_asset id 
-				searchInventory(new_asset_id, object, asset_type);
+				searchInventory(new_asset_id, object, prim_name);
 				continue;
 			}
-
-			LL_DEBUGS("import") << "Dropping " << item->getName() << " " << item->getUUID() << " into " << prim["name"].asString() << " " << object->getID() << LL_ENDL;
-			if (asset_type == LLAssetType::AT_LSL_TEXT)
-			{
-				LLToolDragAndDrop::dropScript(object, item, TRUE,
-							      LLToolDragAndDrop::SOURCE_AGENT,
-							      gAgentID);
-			}
-			else
-			{
-				LLToolDragAndDrop::dropInventory(object, item,
-								LLToolDragAndDrop::SOURCE_AGENT,
-								gAgentID);
-			}
+			
+			FSInventoryQueue item_queue;
+			item_queue.item = item;
+			item_queue.object = object;
+			item_queue.prim_name = prim_name;
+			mInventoryQueue.push_back(item_queue);
 		}
 	}
-
-	if ((mObject + 1) >= mObjectSize)
+	
+	if (mInventoryQueue.size() < 20)
 	{
-		if (mObjectSize > 1)
-		{
-			// should be allready selected
-			LL_DEBUGS("import") << "Linking " << mObjectSize << " objects. " << LLSelectMgr::getInstance()->getSelection()->getObjectCount() << " prims are selected" << LL_ENDL;
-			LLSelectMgr::getInstance()->sendLink();
-			mImportState = LINKING;
-		}
-		else
-		{
-			postLink();
-		}
+		mThrottleTime = 0.25f;
 	}
 	else
 	{
-		mObject++;
-		createPrim();
+		mThrottleTime = 0.5f;
 	}
+
+	mImportState = INVENTORY_TRANSFER;
+	mWaitTimer.start();
 
 	return true;
 }
 
-void FSFloaterImport::searchInventory(LLUUID asset_id, LLViewerObject* object, LLAssetType::EType asset_type)
+void FSFloaterImport::searchInventory(LLUUID asset_id, LLViewerObject* object, std::string prim_name)
 {
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
@@ -974,19 +1014,12 @@ void FSFloaterImport::searchInventory(LLUUID asset_id, LLViewerObject* object, L
 	if (items.count())
 	{
 		LLViewerInventoryItem* item = items.get(0);
-		if (asset_type == LLAssetType::AT_LSL_TEXT)
-		{
-			
-			LLToolDragAndDrop::dropScript(object, item, TRUE,
-						      LLToolDragAndDrop::SOURCE_AGENT,
-						      gAgentID);
-		}
-		else
-		{
-			LLToolDragAndDrop::dropInventory(object, item,
-							LLToolDragAndDrop::SOURCE_AGENT,
-							gAgentID);
-		}
+		
+		FSInventoryQueue item_queue;
+		item_queue.item = item;
+		item_queue.object = object;
+		item_queue.prim_name = prim_name;
+		mInventoryQueue.push_back(item_queue);
 	}
 	else
 	{

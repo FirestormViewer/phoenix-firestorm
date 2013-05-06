@@ -75,19 +75,18 @@ private:
 	typedef enum
 	{
 	  IDLE,
+	  INVENTORY_TRANSFER,
 	  LINKING
 	} FSImportState;
 	FSImportState mImportState;
 
-	// void importLinkset();
-	// void importObject(const LLSD object);
 	void createPrim();
 	void postLink();
 	void onIdle();
 	void setPrimPosition(U8 type, LLViewerObject* object, LLVector3 position, LLQuaternion rotation = LLQuaternion(), LLVector3 scale = LLVector3());
 	void addAsset(LLUUID texture, LLAssetType::EType asset_type);
 	void importPrims();
-	void searchInventory(LLUUID asset_id, LLViewerObject* object, LLAssetType::EType asset_type);
+	void searchInventory(LLUUID asset_id, LLViewerObject* object, std::string prim_name);
 	void processPrim(LLSD& prim);
 
 	LLSD mFile;
@@ -107,7 +106,6 @@ private:
 	S32 mLinksetSize;
 	S32 mObjectSize;
 	LLObjectSelectionHandle	mObjectSelection;
-	LLFrameTimer mLinkWaitTimer;
 	bool mFileReady;
 	uuid_vec_t mTextureQueue;
 	U32 mTexturesTotal;
@@ -120,6 +118,15 @@ private:
 	std::map<LLUUID,LLUUID> mAssetMap;
 	BOOL mSavedSettingShowNewInventory;
 	
+	struct FSInventoryQueue
+	{
+		LLViewerInventoryItem* item;
+		LLViewerObject* object;
+		std::string prim_name;
+	};
+	std::vector<FSInventoryQueue> mInventoryQueue;
+	LLFrameTimer mWaitTimer;
+	F32 mThrottleTime;
 };
 
 class FSAssetResponder : public LLAssetUploadResponder
