@@ -3,7 +3,7 @@
 	<menu_item_call label="穿上 － 取代目前裝扮" name="wear"/>
 	<menu_item_call label="穿上 － 添加到目前裝扮" name="wear_add"/>
 	<menu_item_call label="脫下 － 由目前裝扮移除" name="take_off"/>
-	<menu label="新衣服" name="New Clothes">
+	<context_menu label="新衣服" name="New Clothes">
 		<menu_item_call label="新襯衫" name="New Shirt"/>
 		<menu_item_call label="新褲子" name="New Pants"/>
 		<menu_item_call label="新鞋子" name="New Shoes"/>
@@ -16,13 +16,13 @@
 		<menu_item_call label="新半透明" name="New Alpha"/>
 		<menu_item_call label="新身體物理" name="New Physics"/>
 		<menu_item_call label="新刺青" name="New Tattoo"/>
-	</menu>
-	<menu label="新身體部位" name="New Body Parts">
+	</context_menu>
+	<context_menu label="新身體部位" name="New Body Parts">
 		<menu_item_call label="新體形" name="New Shape"/>
 		<menu_item_call label="新皮膚" name="New Skin"/>
 		<menu_item_call label="新頭髮" name="New Hair"/>
 		<menu_item_call label="新眼睛" name="New Eyes"/>
-	</menu>
+	</context_menu>
 	<menu_item_call label="裝扮更名" name="rename"/>
 	<menu_item_call label="刪除裝扮" name="delete_outfit"/>
 </toggleable_menu>

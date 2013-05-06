@@ -3,7 +3,7 @@
 	<menu_item_call label="Giysi - Mevcut Dış Görünümü Değiştir" name="wear"/>
 	<menu_item_call label="Giysi - Mevcut Dış Görünüme Ekle" name="wear_add"/>
 	<menu_item_call label="Çıkar - Mevcut Dış Görünümden Kaldır" name="take_off"/>
-	<menu label="Yeni Giysiler" name="New Clothes">
+	<context_menu label="Yeni Giysiler" name="New Clothes">
 		<menu_item_call label="Yeni Gömlek" name="New Shirt"/>
 		<menu_item_call label="Yeni Pantolon" name="New Pants"/>
 		<menu_item_call label="Yeni Ayakkabılar" name="New Shoes"/>
@@ -16,13 +16,13 @@
 		<menu_item_call label="Yeni Alfa" name="New Alpha"/>
 		<menu_item_call label="Yeni Fizik" name="New Physics"/>
 		<menu_item_call label="Yeni Dövme" name="New Tattoo"/>
-	</menu>
-	<menu label="Yeni Vücut Bölümleri" name="New Body Parts">
+	</context_menu>
+	<context_menu label="Yeni Vücut Bölümleri" name="New Body Parts">
 		<menu_item_call label="Yeni Şekil" name="New Shape"/>
 		<menu_item_call label="Yeni Dış Katman" name="New Skin"/>
 		<menu_item_call label="Yeni Saç" name="New Hair"/>
 		<menu_item_call label="Yeni Gözler" name="New Eyes"/>
-	</menu>
+	</context_menu>
 	<menu_item_call label="Dış Görünümü Yeniden Adlandır" name="rename"/>
 	<menu_item_call label="Dış Görünümü Sil" name="delete_outfit"/>
 </toggleable_menu>

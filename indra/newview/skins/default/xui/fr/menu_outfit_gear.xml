@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--alba: removed all 'new...' used for clothes (redundant)
 + added physics + changed 'pluriel' to 'singulier' (grammatical mistake)-->
-<menu name="Gear Outfit">
+<toggleable_menu name="Gear Outfit">
 	<menu_item_call label="Porter - Remplacer la tenue actuelle" name="wear"/>
 	<menu_item_call label="Porter - Ajouter à la tenue actuelle" name="wear_add"/>
 	<menu_item_call label="Enlever - Supprimer de la tenue actuelle" name="take_off"/>
-	<menu label="Nouvel habit" name="New Clothes">
+	<context_menu label="Nouvel habit" name="New Clothes">
 		<menu_item_call label="Chemise" name="New Shirt"/>
 		<menu_item_call label="Pantalon" name="New Pants"/>
 		<menu_item_call label="Chaussures" name="New Shoes"/>
@@ -18,13 +18,13 @@
 		<menu_item_call label="Alpha" name="New Alpha"/>
 		<menu_item_call label="Tatouage" name="New Tattoo"/>
 		<menu_item_call label="Physique" name="New Physics"/>
-	</menu>
-	<menu label="Nouvelle partie du corps" name="New Body Parts">
+	</context_menu>
+	<context_menu label="Nouvelle partie du corps" name="New Body Parts">
 		<menu_item_call label="Silhouette" name="New Shape"/>
 		<menu_item_call label="Peau" name="New Skin"/>
 		<menu_item_call label="Cheveux" name="New Hair"/>
 		<menu_item_call label="Yeux" name="New Eyes"/>
-	</menu>
+	</context_menu>
 	<menu_item_call label="Renommer la tenue" name="rename"/>
 	<menu_item_call label="Supprimer la tenue" name="delete_outfit"/>
-</menu>
+</toggleable_menu>

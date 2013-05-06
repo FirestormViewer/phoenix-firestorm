@@ -3,7 +3,7 @@
 	<menu_item_call label="Ponerme - Reemplazar el vestuario actual" name="wear"/>
 	<menu_item_call label="Ponerme - Añadir al vestuario actual" name="wear_add"/>
 	<menu_item_call label="Quitarme - Quitar del vestuario actual" name="take_off"/>
-	<menu label="Ropas nuevas" name="New Clothes">
+	<context_menu label="Ropas nuevas" name="New Clothes">
 		<menu_item_call label="Camisa nueva" name="New Shirt"/>
 		<menu_item_call label="Pantalón nuevo" name="New Pants"/>
 		<menu_item_call label="Zapatos nuevos" name="New Shoes"/>
@@ -16,13 +16,13 @@
 		<menu_item_call label="Nueva Alfa" name="New Alpha"/>
 		<menu_item_call label="Nueva física" name="New Physics"/>
 		<menu_item_call label="Tatuaje nuevo" name="New Tattoo"/>
-	</menu>
-	<menu label="Nuevas partes del cuerpo" name="New Body Parts">
+	</context_menu>
+	<context_menu label="Nuevas partes del cuerpo" name="New Body Parts">
 		<menu_item_call label="Anatomía nueva" name="New Shape"/>
 		<menu_item_call label="Piel nueva" name="New Skin"/>
 		<menu_item_call label="Pelo nuevo" name="New Hair"/>
 		<menu_item_call label="Ojos nuevos" name="New Eyes"/>
-	</menu>
+	</context_menu>
 	<menu_item_call label="Expandir todas las carpetas" name="expand"/>
 	<menu_item_call label="Colapsar todas las carpetas" name="collapse"/>
 	<menu_item_call label="Renombrar el vestuario" name="rename"/>
