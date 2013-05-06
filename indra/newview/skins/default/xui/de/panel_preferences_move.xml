@@ -73,6 +73,9 @@
 				(Erfordert Neustart)
 			</text>
 			<check_box label="Kamera-Kontrollen auf undurchsichtigem Hintergrund anzeigen" name="FSAlwaysOpaqueCameraControls"/>
+			<text name="minimap_options_label">
+			   Minikarte-Optionen:
+			</text>
 			<check_box label="Rotation der Minikarte aktivieren" name="minimaprotate" tool_tip="Aktiviert die Rotation der Minikarte bei Drehung des Avatars."/>
 			<check_box name="MiniMapChatRing" label="Chatreichweite auf der Minikarte anzeigen"/>
 			<text name="netmap_double_click_action_lbl">
@@ -83,11 +86,15 @@
 				<combo_box.item label="Weltkarte öffnen" name="1"/>
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
-			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
+			<text name="world_map_options_label">
+			   Weltkarte-Optionen:
+			</text>
 			<check_box label="Doppelte Landmarken auf der Weltkarte filtern" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtert doppelte (identische) Landmarken in der Übersicht der Landmarken auf der Weltkarte."/>
 			<check_box label="Erweiterte Regionsinformationen auf der Weltkarte anzeigen" name="FSAdvancedWorldmapRegionInfo" tool_tip="Zeigt erweiterte Regionsinformationen (Anzahl Avatare und Alterseinstufung) auf der Weltkarte an."/>
+			<check_box label="Grid-Koordinaten auf der Weltkarte anzeigen" name="FSShowRegionGridCoordinates" tool_tip="Zeigt die Gridkoordinaten (mit Region als Einheit) auf der Weltkarte an."/>
 			<check_box label="Info anzeigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
 			<check_box label="Simulator-Kanal in der Statusleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an, auf dem die aktuelle Region läuft."/>
+			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
 		</panel>
 	</tab_container>
 </panel>
