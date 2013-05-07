@@ -2746,7 +2746,7 @@ void derenderObject(bool permanent)
 		{
 			if (permanent)
 			{
-				std::string entry_name;
+				std::string entry_name = "";
 				std::string region_name;
 
 				if (objp->isAvatar())
@@ -2758,11 +2758,13 @@ void derenderObject(bool permanent)
 				else
 				{
 					LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
-					if (!nodep->mName.empty())
+					if (nodep)
 					{
-						entry_name = nodep->mName;
+						if (!nodep->mName.empty())
+						{
+							entry_name = nodep->mName;
+						}
 					}
-
 					LLViewerRegion* region = objp->getRegion();
 					if (region)
 					{
