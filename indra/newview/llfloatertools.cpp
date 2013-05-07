@@ -330,12 +330,14 @@ BOOL	LLFloaterTools::postBuild()
 	
 	// <FS:KC> Added back more/less button
 	LLButton* btnExpand = getChild<LLButton>("btnExpand");
-	if (btnExpand)
+	if (btnExpand && mTab)
 	{
 		mExpandedHeight = getRect().getHeight();
-		if (mTab) mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
+		mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
 		if(!gSavedSettings.getBOOL("FSToolboxExpanded"))
 		{
+			mTab->setVisible(FALSE);
+			reshape( getRect().getWidth(), mCollapsedHeight);
 			btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
 		}
 	}
