@@ -1853,7 +1853,7 @@ Only large parcels can be listed in search.
              max_chars="255"
              name="music_url"
              top_delta="0"
-             right="-54"
+             right="-76"
              allow_text_entry="true"
              allow_new_values="true"
              select_on_focus="true" />
@@ -1865,15 +1865,28 @@ Only large parcels can be listed in search.
              left_pad="0"
              top_delta="0"
              name="stream_add_btn"
+             tool_tip="Add Music Stream URL to saved stream list"
              width="23" />
             <button
              follows="left|top"
              height="23"
              image_overlay="MinusItem_Off"
              layout="topleft"
-             left_pad="4"
+             left_pad="2"
              top_delta="0"
              name="stream_delete_btn"
+             tool_tip="Remove Music Stream URL from saved stream list"
+             width="23" />
+            <button
+			 enabled="true"
+             follows="left|top"
+             height="23"
+             image_overlay="Copy"
+             layout="topleft"
+             left_pad="2"
+             top_delta="0"
+             name="stream_copy_btn"
+             tool_tip="Copy Music Stream URL to clipboard"
              width="23" />
             <text
              type="string"

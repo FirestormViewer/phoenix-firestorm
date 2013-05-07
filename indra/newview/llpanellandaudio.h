@@ -51,6 +51,7 @@ private:
 // <FS:CR> FIRE-593 - Add/remove streams from the list
 	static void onBtnStreamAdd(LLUICtrl* ctrl, void *userdata);
 	static void onBtnStreamDelete(LLUICtrl* ctrl, void *userdata);
+	static void onBtnCopyToClipboard(LLUICtrl* ctrl, void *userdata);
 // </FS:CR>
 
 private:
@@ -63,6 +64,7 @@ private:
 	LLComboBox*	mMusicURLEdit;
 	LLButton* mBtnStreamAdd;
 	LLButton* mBtnStreamDelete;
+	LLButton* mBtnStreamCopyToClipboard;
 // </FS:CR>
 	LLCheckBoxCtrl* mMusicUrlCheck;
 	LLCheckBoxCtrl* mCheckAVSoundAny;

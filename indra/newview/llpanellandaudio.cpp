@@ -50,7 +50,9 @@
 #include "roles_constants.h"
 #include "llscrolllistctrl.h"
 
+// Firestorm includes
 #include "llviewercontrol.h"	// <FS:CR> FIRE-593 - Needed for gSavedSettings where we store our media list
+#include "llclipboard.h"
 
 // Values for the parcel voice settings radio group
 enum
@@ -100,6 +102,9 @@ BOOL LLPanelLandAudio::postBuild()
 	
 	mBtnStreamDelete = getChild<LLButton>("stream_delete_btn");
 	childSetCommitCallback("stream_delete_btn", onBtnStreamDelete, this);
+	
+	mBtnStreamCopyToClipboard = getChild<LLButton>("stream_copy_btn");
+	childSetCommitCallback("stream_copy_btn", onBtnCopyToClipboard, this);
 // </FS:CR>
 
 	mCheckAVSoundAny = getChild<LLCheckBoxCtrl>("all av sound check");
@@ -177,6 +182,7 @@ void LLPanelLandAudio::refresh()
 		
 		mBtnStreamAdd->setEnabled( can_change_media );
 		mBtnStreamDelete->setEnabled( can_change_media );
+		mBtnStreamCopyToClipboard->setEnabled(TRUE);
 // </FS:CR>
 		mMusicURLEdit->setEnabled( can_change_media );
 
@@ -276,5 +282,18 @@ void LLPanelLandAudio::onBtnStreamDelete(LLUICtrl*, void *userdata)
 
 	gSavedSettings.setLLSD("FSStreamList", streamlist_new);
 	self->refresh();
+}
+
+//static
+void LLPanelLandAudio::onBtnCopyToClipboard(LLUICtrl*, void *userdata)
+{
+	LLPanelLandAudio *self = (LLPanelLandAudio *)userdata;
+	std::string music_url = self->mMusicURLEdit->getSimple();
+	LLStringUtil::trim(music_url);
+	
+	if (!music_url.empty())
+	{
+		LLClipboard::instance().copyToClipboard(utf8str_to_wstring(music_url), 0, music_url.size() );
+	}
 }
 // </FS:CR>
