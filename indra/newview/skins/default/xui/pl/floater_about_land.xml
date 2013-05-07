@@ -414,6 +414,9 @@ teksturę:
 			<text name="MusicURL:">
 				URL muzyki:
 			</text>
+			<button name="stream_add_btn" tool_tip="Dodaj URL muzyki strumieniowej do listy zapisanych URL"/>
+			<button name="stream_delete_btn" tool_tip="Usuń URL muzyki strumieniowej z listy zapisanych URL"/>
+			<button name="stream_copy_btn" tool_tip="Skopiuj URL muzyki strumieniowej do schowka"/>
 			<text name="Sound:">
 				Dźwięk:
 			</text>
