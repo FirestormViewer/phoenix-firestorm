@@ -438,6 +438,9 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<text name="MusicURL:">
 				Musik-URL:
 			</text>
+			<button name="stream_add_btn" tool_tip="Musik-URL zur Liste der gespeicherten Streams hinzufügen"/>
+			<button name="stream_delete_btn" tool_tip="Musik-URL von der Liste der gespeicherten Streams entfernen"/>
+			<button name="stream_copy_btn" tool_tip="Musik-URL in die Zwischenablage kopieren"/>
 			<text name="Sound:">
 				Sound:
 			</text>
