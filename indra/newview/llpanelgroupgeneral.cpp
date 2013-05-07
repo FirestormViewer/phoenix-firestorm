@@ -108,6 +108,7 @@ BOOL LLPanelGroupGeneral::postBuild()
 	// <FS> set up callbacks for copy URI and name buttons
 	childSetCommitCallback("copy_uri", boost::bind(&LLPanelGroupGeneral::onCopyURI, this), NULL);
 	childSetCommitCallback("copy_name", boost::bind(&LLPanelGroupGeneral::onCopyName, this), NULL);
+	childSetEnabled("copy_name", FALSE);
 	// </FS>
 
 
@@ -742,6 +743,11 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 		}
 	}
 
+	// <FS:Ansariel> Copy group name button
+	childSetEnabled("copy_name", !gdatap->mName.empty());
+	mGroupName = gdatap->mName;
+	// </FS:Ansariel>
+
 	resetDirty();
 }
 
@@ -1011,10 +1017,6 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 	// activate copy URI button
 	if (copyURIButton)
 		copyURIButton->setEnabled(TRUE);
-
-	// activate copy name button
-	if (copyNameButton)
-		copyNameButton->setEnabled(TRUE);
 	// </FS>
 
 	BOOL accept_notices = FALSE;
@@ -1050,9 +1052,6 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 		mCtrlReceiveGroupChat->setEnabled(data.mID.notNull());
 	}
 	// </exodus>
-
-	// <FS:Ansariel> Store group name for copy name button
-	mGroupName = data.mName;
 
 	mCtrlShowInGroupList->setEnabled(data.mID.notNull());
 
