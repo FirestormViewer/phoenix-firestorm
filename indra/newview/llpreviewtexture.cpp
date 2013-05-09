@@ -45,6 +45,7 @@
 #include "lltextbox.h"
 #include "lltextureview.h"
 #include "llui.h"
+#include "llviewercontrol.h" // <FS:PP> For user-defined default save format for textures
 #include "llviewerinventory.h"
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
@@ -183,7 +184,17 @@ void LLPreviewTexture::onSaveAsBtn(LLUICtrl* ctrl, void* data)
 	}
 	else
 	{
-		self->saveAs(LLPreviewTexture::FORMAT_TGA);
+		// <FS:PP> Allow to use user-defined default save format for textures
+		// self->saveAs(LLPreviewTexture::FORMAT_TGA);
+		if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+		{
+			self->saveAs(LLPreviewTexture::FORMAT_TGA);
+		}
+		else
+		{
+			self->saveAs(LLPreviewTexture::FORMAT_PNG);
+		}
+		// </FS:PP>
 	}
 }
 
@@ -302,7 +313,18 @@ BOOL LLPreviewTexture::canSaveAs() const
 // virtual
 void LLPreviewTexture::saveAs()
 {
-	saveAs(LLPreviewTexture::FORMAT_TGA);
+	// <FS:PP> Allow to use user-defined default save format for textures
+	// saveAs(LLPreviewTexture::FORMAT_TGA);
+	if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+	{
+		saveAs(LLPreviewTexture::FORMAT_TGA);
+	}
+	else
+	{
+		saveAs(LLPreviewTexture::FORMAT_PNG);
+	}
+	// </FS:PP>
+	
 }
 
 void LLPreviewTexture::saveAs(EFileformatType format)

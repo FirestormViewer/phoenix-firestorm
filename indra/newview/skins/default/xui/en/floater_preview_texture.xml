@@ -189,7 +189,7 @@
 		<flyout_button
 		 follows="left|bottom"
 		 height="22"
-		 label="Save As TGA"
+		 label="Save..."
 		 layout="topleft"
 		 left_pad="5"
 		 name="save_tex_btn"

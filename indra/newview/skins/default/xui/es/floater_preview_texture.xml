@@ -54,7 +54,7 @@
 	<panel name="button_panel">
 		<button label="Aceptar" name="Keep"/>
 		<button label="Descartar" name="Discard"/>
-		<flyout_button label="Cuardar como TGA" name="save_tex_btn" width="140">
+		<flyout_button label="Cuardar..." name="save_tex_btn" width="140">
 			<flyout_button.item label="Guardar como TGA" name="save_item_tga"/>
 			<flyout_button.item label="Guardar como PNG" name="save_item_png"/>
 		</flyout_button>

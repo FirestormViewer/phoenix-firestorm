@@ -1900,6 +1900,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          control_name="RenderHighlightSelections"/>
 
         <check_box
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Use old &quot;Set Object For Sale&quot; behavior"
@@ -1907,6 +1908,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          name="FSCommitForSaleOnChange_toggle"
          control_name="FSCommitForSaleOnChange"/>
         <check_box
+         top_pad="3"
          follows="left|top"
          height="16"
          label="Save scripts edited from inventory as Mono"
@@ -1914,6 +1916,15 @@ For now, just make the UI elements invisiable but still have the debug settings 
          name="FSSaveInventoryScriptsAsMono_toggle"
          control_name="FSSaveInventoryScriptsAsMono"/>
         <check_box
+         top_pad="0"
+         follows="left|top"
+         height="16"
+         label="Save textures from inventory to disk as PNG instead of TGA by default"
+         tool_tip="Used in the texture preview floater and context menu in inventory."
+         name="FSTextureDefaultSaveAsFormat"
+         control_name="FSTextureDefaultSaveAsFormat"/>
+        <check_box
+         top_pad="2"
          follows="left|top"
          height="16"
          label="Use Ctrl+mouse to grab and manipulate objects"
@@ -1921,6 +1932,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          name="FSEnableGrab"
          control_name="EnableGrab"/>
         <check_box
+         top_pad="0"
          follows="left|top"
          height="16"
 		 initial_value="false"
