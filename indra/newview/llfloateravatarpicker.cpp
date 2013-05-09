@@ -38,6 +38,7 @@
 #include "llviewerregion.h"		// getCapability()
 #include "llworld.h"
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
@@ -611,8 +612,8 @@ BOOL LLFloaterAvatarPicker::handleDragAndDrop(S32 x, S32 y, MASK mask,
 				if (dest_agent_id.notNull() && dest_agent_id != gAgentID)
 				{
 //					if (drop)
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-					if ( (drop) && ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStartIM(dest_agent_id)) ) )
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
+					if ( (drop) && (RlvActions::canStartIM(dest_agent_id)) )
 // [/RLVa:KB]
 					{
 						// Start up IM before give the item

@@ -50,6 +50,10 @@
 #include "llviewerattachmenu.h"
 #include "llviewerfoldertype.h"
 #include "llvoavatarself.h"
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+#include "rlvactions.h"
+#include "rlvcommon.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLInventoryPanel> r("inventory_panel");
 
@@ -1026,6 +1030,10 @@ bool LLInventoryPanel::beginIMSession()
 	LLDynamicArray<LLUUID> members;
 	EInstantMessage type = IM_SESSION_CONFERENCE_START;
 
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+	bool fRlvCanStartIM = true;
+// [/RLVa:KB]
+
 	std::set<LLFolderViewItem*>::const_iterator iter;
 	for (iter = selected_items.begin(); iter != selected_items.end(); iter++)
 	{
@@ -1065,6 +1073,9 @@ bool LLInventoryPanel::beginIMSession()
 						id = item_array.get(i)->getCreatorUUID();
 						if(at.isBuddyOnline(id))
 						{
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+							fRlvCanStartIM &= RlvActions::canStartIM(id);
+// [/RLVa:KB]
 							members.put(id);
 						}
 					}
@@ -1085,6 +1096,9 @@ bool LLInventoryPanel::beginIMSession()
 
 						if(at.isBuddyOnline(id))
 						{
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+							fRlvCanStartIM &= RlvActions::canStartIM(id);
+// [/RLVa:KB]
 							members.put(id);
 						}
 					}
@@ -1095,6 +1109,15 @@ bool LLInventoryPanel::beginIMSession()
 
 	// the session_id is randomly generated UUID which will be replaced later
 	// with a server side generated number
+
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+	if (!fRlvCanStartIM)
+	{
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+		return true;
+	}
+// [/RLVa:KB]
 
 	if (name.empty())
 	{

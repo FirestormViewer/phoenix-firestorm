@@ -664,6 +664,7 @@ set(viewer_SOURCE_FILES
     llxmlrpctransaction.cpp
     noise.cpp
     pipeline.cpp
+    rlvactions.cpp
     rlvhandler.cpp
     rlvhelper.cpp
     rlvcommon.cpp
@@ -1244,6 +1245,7 @@ set(viewer_HEADER_FILES
     macmain.h
     noise.h
     pipeline.h
+    rlvactions.h
     rlvdefines.h
     rlvhandler.h
     rlvhelper.h

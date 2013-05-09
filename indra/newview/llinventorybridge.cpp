@@ -75,6 +75,7 @@
 #include "llwearablelist.h"
 #include "lllandmarkactions.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
@@ -4781,6 +4782,16 @@ void LLCallingCardBridge::performAction(LLInventoryModel* model, std::string act
 			{
 				callingcard_name = av_name.getCompleteName();
 			}
+
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+			if ( (!RlvActions::canStartIM(item->getCreatorUUID())) && (!RlvActions::hasOpenP2PSession(item->getCreatorUUID())) )
+			{
+				make_ui_sound("UISndInvalidOp");
+				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", item->getCreatorUUID(), "completename").getSLURLString()));
+				return;
+			}
+// [/RLVa:KB]
+
 			LLUUID session_id = gIMMgr->addSession(callingcard_name, IM_NOTHING_SPECIAL, item->getCreatorUUID());
 			if (session_id != LLUUID::null)
 			{
