@@ -2031,6 +2031,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
 		HUD prawa dolna strona
 	</string>
+	<string name="ATTACH_NECK">
+		Szyja
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Środek awatara
+	</string>
 	<string name="ATTACH_BRIDGE">
 		Most
 	</string>
