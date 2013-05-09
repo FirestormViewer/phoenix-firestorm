@@ -2069,6 +2069,15 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
 		HUD unten rechts
 	</string>
+	<string name="ATTACH_NECK">
+		Hals
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Avatar-Mitte
+	</string>
+	<string name="ATTACH_BRIDGE">
+		Brücke
+	</string>
 	<string name="CursorPos">
 		Zeile [LINE], Spalte [COLUMN]
 	</string>

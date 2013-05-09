@@ -275,6 +275,7 @@
 		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche beim Bauen" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>
 		<check_box label="Altes Verhalten für &quot;Zum Verkauf:&quot; akt." tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
 		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+		<check_box label="Texturen standardmäßig im PNG-Format anstelle von TGA speichern" tool_tip="Falls aktiviert, werden Texturen in der Vorschau standardmäßig im PNG-Format gespeichert" name="FSTextureDefaultSaveAsFormat"/>
 		<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>
 		<check_box label="Skript-Optimierer" tool_tip="Optimiert den von Skripten benötigten Platz auf Kosten der Lesbarkeit." name="preprocoptimizer_checkbox"/>
 		<check_box label="switch()-Befehl" tool_tip="Stellt den switch()-Befehl zur Ablaufsteuerung bereit." name="preprocswitch_checkbox"/>
