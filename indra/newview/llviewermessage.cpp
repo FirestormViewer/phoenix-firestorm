@@ -260,7 +260,17 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 	    modified_form->setElementEnabled("Accept", false);
 	    modified_form->setElementEnabled("Decline", false);
 	    notification_ptr->updateForm(modified_form);
-	    notification_ptr->repost();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+		if ( (!pToast) || (!pToast->getCanBeStored()) )
+		{
+// [/SL:KB]
+			notification_ptr->repost();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+		}
+// [/SL:KB]
     }
 
 	return false;
@@ -2150,7 +2160,18 @@ bool lure_callback(const LLSD& notification, const LLSD& response)
 		modified_form->setElementEnabled("Teleport", false);
 		modified_form->setElementEnabled("Cancel", false);
 		notification_ptr->updateForm(modified_form);
-		notification_ptr->repost();
+
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+		if ( (!pToast) || (!pToast->getCanBeStored()) )
+		{
+// [/SL:KB]
+			notification_ptr->repost();
+// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+		}
+// [/SL:KB]
 	}
 
 	return false;
