@@ -201,9 +201,10 @@ const std::string SCRIPT_QUESTIONS[SCRIPT_PERMISSION_EOF] =
 		"TrackYourCamera",
 		"ControlYourCamera",
 		"TeleportYourAgent",
-		"Unused0x2000",
-		"SilentEstateManagement",
-		"OverrideAgentAnimations"
+		"JoinAnExperience",
+		"SilentlyManageEstateAccess",
+		"OverrideYourAnimations",
+		"ScriptReturnObjects"
 	};
 
 const BOOL SCRIPT_QUESTION_IS_CAUTION[SCRIPT_PERMISSION_EOF] = 
@@ -220,9 +221,10 @@ const BOOL SCRIPT_QUESTION_IS_CAUTION[SCRIPT_PERMISSION_EOF] =
 	FALSE,	// TrackYourCamera,
 	FALSE,	// ControlYourCamera
 	FALSE,	// TeleportYourAgent
-	FALSE,	// Unused0x2000
-	FALSE,	// SilentEstateManagement
-	FALSE	// OverrideAgentAnimations
+	FALSE,	// JoinAnExperience
+	FALSE,	// SilentlyManageEstateAccess
+	FALSE,	// OverrideYourAnimations
+	FALSE,	// ScriptReturnObjects
 };
 
 bool friendship_offer_callback(const LLSD& notification, const LLSD& response)

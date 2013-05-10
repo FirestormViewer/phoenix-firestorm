@@ -970,11 +970,17 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TeleportYourAgent">
 		Sie teleportieren
 	</string>
-	<string name="SilentEstateManagement">
+	<string name="JoinAnExperience">
+		Einem Erlebnis beiwohnen
+	</string>
+	<string name="SilentlyManageEstateAccess">
 		Benachrichtigungen über Änderungen am Grundbesitzzugang stummschalten
 	</string>
-	<string name="OverrideAgentAnimations">
+	<string name="OverrideYourAnimations">
 		Ihre Avatar-Animationen übersteuern
+	</string>
+	<string name="ScriptReturnObjects">
+		Objekte in deinem Auftrag zurückgeben
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden

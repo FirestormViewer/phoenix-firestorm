@@ -952,10 +952,10 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TeleportYourAgent">
 		Teleportować Cię
 	</string>
-	<string name="SilentEstateManagement">
+	<string name="SilentlyManageEstateAccess">
 		Wyciszyć powiadomienia o zmianach zezwoleń Majątku
 	</string>
-	<string name="OverrideAgentAnimations">
+	<string name="OverrideYourAnimations">
 		Zastąpić animacje Twojego awatara
 	</string>
 	<string name="NotConnected">
