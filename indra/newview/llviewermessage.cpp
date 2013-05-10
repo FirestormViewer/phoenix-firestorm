@@ -6141,7 +6141,7 @@ void process_avatar_sit_response(LLMessageSystem *mesgsys, void **user_data)
 	if (object)
 	{
 		LLVector3 sit_spot = object->getPositionAgent() + (sitPosition * object->getRotation());
-		if (!use_autopilot || isAgentAvatarValid() && gAgentAvatarp->isSitting() && gAgentAvatarp->getRoot() == object->getRoot())
+		if (!use_autopilot || (isAgentAvatarValid() && gAgentAvatarp->isSitting() && gAgentAvatarp->getRoot() == object->getRoot()))
 		{
 			//we're already sitting on this object, so don't autopilot
 		}
@@ -7040,6 +7040,23 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			return true;
 		}
 		// </FS:Ansariel>
+// <FS:CR> FIRE-9696 - Moved detection of HomePositionSet Alert hack to here where it's actually found now
+		if (notificationID == "HomePositionSet")
+		{
+			// save the home location image to disk
+			std::string snap_filename = gDirUtilp->getLindenUserDir();
+			snap_filename += gDirUtilp->getDirDelimiter();
+			snap_filename += SCREEN_HOME_FILENAME;
+			if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE))
+			{
+				llinfos << SCREEN_HOME_FILENAME << " saved successfully." << llendl;
+			}
+			else
+			{
+				llwarns << SCREEN_HOME_FILENAME << " could not be saved." << llendl;
+			}
+		}
+// </FS:CR>
 		
 		LLNotificationsUtil::add(notificationID, llsdBlock);
 		return true;
@@ -7115,14 +7132,16 @@ void process_alert_core(const std::string& message, BOOL modal)
 	{
 		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_KILLED_COUNT);
 	}
-	else if( message == "Home position set." )
-	{
+// <FS:CR> FIRE-9696 - The viewer isn't ever seeing the alert here moved below and detect by name
+	//else if( message == "Home Position Set." )
+	//{
 		// save the home location image to disk
-		std::string snap_filename = gDirUtilp->getLindenUserDir();
-		snap_filename += gDirUtilp->getDirDelimiter();
-		snap_filename += SCREEN_HOME_FILENAME;
-		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
-	}
+	//	std::string snap_filename = gDirUtilp->getLindenUserDir();
+	//	snap_filename += gDirUtilp->getDirDelimiter();
+	//	snap_filename += SCREEN_HOME_FILENAME;
+	//	gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
+	//}
+// </FS:CR>
 
 	std::string processed_message = message;
 	const std::string ALERT_PREFIX("ALERT: ");
