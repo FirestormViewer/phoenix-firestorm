@@ -84,6 +84,13 @@
           <key>folder</key>
           <string>appalachian_sky</string>
         </map>
+        <!-- Black Glass by Tommi Waydelich -->
+        <map>
+          <key>name</key>
+          <string>BlackGlass</string>
+          <key>folder</key>
+          <string>black_glass</string>
+        </map>
       </array>
     </map>
 
