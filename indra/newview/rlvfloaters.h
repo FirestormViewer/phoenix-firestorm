@@ -97,7 +97,7 @@ class RlvFloaterStrings : public LLFloater
 {
 	friend class LLFloaterReg;
 private:
-	RlvFloaterStrings(const LLSD& sdKey) : LLFloater(sdKey), m_fDirty(false), m_pStringList(NULL) {}
+	RlvFloaterStrings(const LLSD& sdKey);
 
 	// LLFloater overrides
 public:
@@ -107,7 +107,7 @@ public:
 	// Member functions
 protected:
 	void onStringRevertDefault();
-	void onStringSelect();
+	void checkDirty(bool fRefresh);
 	void refresh();
 
 	// Member variables

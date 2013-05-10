@@ -561,12 +561,20 @@ void RlvFloaterLocks::refreshAll()
 // RlvFloaterStrings member functions
 //
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
+RlvFloaterStrings::RlvFloaterStrings(const LLSD& sdKey)
+	: LLFloater(sdKey)
+	, m_fDirty(false)
+	, m_pStringList(NULL)
+{
+}
+
+// Checked: 2011-11-08 (RLVa-1.5.0)
 BOOL RlvFloaterStrings::postBuild()
 {
 	// Set up the UI controls
 	m_pStringList = findChild<LLComboBox>("string_list");
-	m_pStringList->setCommitCallback(boost::bind(&RlvFloaterStrings::onStringSelect, this));
+	m_pStringList->setCommitCallback(boost::bind(&RlvFloaterStrings::checkDirty, this, true));
 
 	LLUICtrl* pDefaultBtn = findChild<LLUICtrl>("default_btn");
 	pDefaultBtn->setCommitCallback(boost::bind(&RlvFloaterStrings::onStringRevertDefault, this));
@@ -593,9 +601,10 @@ BOOL RlvFloaterStrings::postBuild()
 	return TRUE;
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvFloaterStrings::onClose(bool fQuitting)
 {
+	checkDirty(false);
 	if (m_fDirty)
 	{
 		// Save the custom string overrides
@@ -606,7 +615,7 @@ void RlvFloaterStrings::onClose(bool fQuitting)
 	}
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvFloaterStrings::onStringRevertDefault()
 {
 	if (!m_strStringCurrent.empty())
@@ -617,8 +626,8 @@ void RlvFloaterStrings::onStringRevertDefault()
 	refresh();
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
-void RlvFloaterStrings::onStringSelect()
+// Checked: 2011-11-08 (RLVa-1.5.0)
+void RlvFloaterStrings::checkDirty(bool fRefresh)
 {
 	LLTextEditor* pStringValue = findChild<LLTextEditor>("string_value");
 	if (!pStringValue->isPristine())
@@ -626,10 +635,14 @@ void RlvFloaterStrings::onStringSelect()
 		RlvStrings::setCustomString(m_strStringCurrent, pStringValue->getText());
 		m_fDirty = true;
 	}
-	refresh();
+
+	if (fRefresh)
+	{
+		refresh();
+	}
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvFloaterStrings::refresh()
 {
 	m_strStringCurrent = (-1 != m_pStringList->getCurrentIndex()) ? m_pStringList->getSelectedValue().asString() : LLStringUtil::null;

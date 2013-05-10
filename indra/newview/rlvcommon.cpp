@@ -161,23 +161,24 @@ std::vector<std::string> RlvStrings::m_Anonyms;
 RlvStrings::string_map_t RlvStrings::m_StringMap;
 std::string RlvStrings::m_StringMapPath;
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Modified: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvStrings::initClass()
 {
 	static bool fInitialized = false;
 	if (!fInitialized)
 	{
 		// Load the default string values
-		std::string strFilePath = gDirUtilp->findSkinnedFilename(LLUI::getLocalizedSkinPath(), RLV_STRINGS_FILE);
-		if (strFilePath.empty())
-			strFilePath = gDirUtilp->findSkinnedFilename(LLUI::getSkinPath(), RLV_STRINGS_FILE);
-		if (!strFilePath.empty())
-			loadFromFile(strFilePath, true);
+		std::vector<std::string> files = gDirUtilp->findSkinnedFilenames(LLDir::XUI, RLV_STRINGS_FILE, LLDir::ALL_SKINS);
+		m_StringMapPath = (!files.empty()) ? files.front() : LLStringUtil::null;
+		for (auto itFile = files.cbegin(); itFile != files.cend(); ++itFile)
+		{
+			loadFromFile(*itFile, false);
+		}
 
 		// Load the custom string overrides
-		strFilePath = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE);
-		loadFromFile(strFilePath, false);
+		loadFromFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE), true);
 
+		// Sanity check
 		if ( (m_StringMap.empty()) || (m_Anonyms.empty()) )
 		{
 			RLV_ERRS << "Problem parsing RLVa string XML file" << RLV_ENDL;
@@ -188,14 +189,12 @@ void RlvStrings::initClass()
 	}
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Modified: RLVa-1.5.0
-void RlvStrings::loadFromFile(const std::string& strFilePath, bool fDefault)
+// Checked: 2011-11-08 (RLVa-1.5.0)
+void RlvStrings::loadFromFile(const std::string& strFilePath, bool fUserOverride)
 {
 	llifstream fileStream(strFilePath, std::ios::binary); LLSD sdFileData;
 	if ( (!fileStream.is_open()) || (!LLSDSerialize::fromXMLDocument(sdFileData, fileStream)) )
 		return;
-	if (fDefault)
-		m_StringMapPath = strFilePath;
 	fileStream.close();
 
 	if (sdFileData.has("strings"))
@@ -203,12 +202,22 @@ void RlvStrings::loadFromFile(const std::string& strFilePath, bool fDefault)
 		const LLSD& sdStrings = sdFileData["strings"];
 		for (LLSD::map_const_iterator itString = sdStrings.beginMap(); itString != sdStrings.endMap(); ++itString)
 		{
-			if ( (!itString->second.has("value")) || ((!fDefault) && (!hasString(itString->first))) )
+			if ( (!itString->second.has("value")) || ((fUserOverride) && (!hasString(itString->first))) )
 				continue;
+
 			std::list<std::string>& listValues = m_StringMap[itString->first];
-			while ( (!fDefault) && (listValues.size() > 1) )
-				listValues.pop_back();
-			listValues.push_back(itString->second["value"].asString());
+			if (!fUserOverride)
+			{
+				if (listValues.size() > 0)
+					listValues.pop_front();
+				listValues.push_front(itString->second["value"].asString());
+			}
+			else
+			{
+				while (listValues.size() > 1)
+					listValues.pop_back();
+				listValues.push_back(itString->second["value"].asString());
+			}
 		}
 	}
 	if (sdFileData.has("anonyms"))
@@ -221,7 +230,7 @@ void RlvStrings::loadFromFile(const std::string& strFilePath, bool fDefault)
 	}
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvStrings::saveToFile(const std::string& strFilePath)
 {
 	LLSD sdFileData;
@@ -254,7 +263,7 @@ const std::string& RlvStrings::getAnonym(const std::string& strName)
 	return m_Anonyms[nHash % m_Anonyms.size()];
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Modified: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 const std::string& RlvStrings::getString(const std::string& strStringName)
 {
 	static const std::string strMissing = "(Missing RLVa string)";
@@ -325,14 +334,14 @@ std::string RlvStrings::getVersionNum()
 	return llformat("%d%02d%02d%02d", RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH, RLV_VERSION_BUILD);
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Modified: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 bool RlvStrings::hasString(const std::string& strStringName, bool fCheckCustom)
 {
 	string_map_t::const_iterator itString = m_StringMap.find(strStringName);
 	return (itString != m_StringMap.end()) && ((!fCheckCustom) || (itString->second.size() > 0));
 }
 
-// Checked: 2011-11-08 (RLVa-1.5.0) | Added: RLVa-1.5.0
+// Checked: 2011-11-08 (RLVa-1.5.0)
 void RlvStrings::setCustomString(const std::string& strStringName, const std::string& strStringValue)
 {
 	if (!hasString(strStringName))
