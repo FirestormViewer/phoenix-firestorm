@@ -338,6 +338,7 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
 #define RLV_STRING_BLOCKED_TPLURE_REMOTE	"blocked_tplure_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
+#define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"
 
 // ============================================================================
 

@@ -81,6 +81,11 @@
 			<key>value</key>
 			<string>Unable to open [TYPE] due to RLV restrictions</string>
 		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>Unable to enable wireframe mode due to RLV restrictions</string>
+		</map>
 
 		<!-- Sent as "Busy" messages to the remote party -->
 		<key>blocked_recvim_remote</key>

@@ -1179,8 +1179,13 @@ class LLAdvancedToggleWireframe : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-		gUseWireframe = (!gUseWireframe) && (!gRlvAttachmentLocks.hasLockedHUD());
+// [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
+		bool fRlvBlockWireframe = gRlvAttachmentLocks.hasLockedHUD();
+		if ( (!gUseWireframe) && (fRlvBlockWireframe) )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_WIREFRAME);
+		}
+		gUseWireframe = (!gUseWireframe) && (!fRlvBlockWireframe);
 // [/RLVa:KB]
 //		gUseWireframe = !(gUseWireframe);
 		gWindowResized = TRUE;
