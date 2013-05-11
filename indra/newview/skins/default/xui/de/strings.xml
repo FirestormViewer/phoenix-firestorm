@@ -5700,9 +5700,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Der Export von Mesh wird derzeit nicht unterstützt. Export abgebrochen.
 	</string>
 	<string name="TotalScriptCountChangeIncrease">
-		Anzahl an Skripten in der Region hat sich von [OLD_VALUE] auf [NEW_VALUE] erhöht ([DIFFERENCE]).
+		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] erhöht ([DIFFERENCE]).
 	</string>
 	<string name="TotalScriptCountChangeDecrease">
-		Anzahl an Skripten in der Region hat sich von [OLD_VALUE] auf [NEW_VALUE] verringert ([DIFFERENCE]).
+		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] verringert ([DIFFERENCE]).
 	</string>
 </strings>
