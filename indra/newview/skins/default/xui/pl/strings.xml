@@ -952,11 +952,17 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TeleportYourAgent">
 		Teleportować Cię
 	</string>
+	<string name="JoinAnExperience">
+		Rozpocznij przygodę
+	</string>
 	<string name="SilentlyManageEstateAccess">
 		Wyciszyć powiadomienia o zmianach zezwoleń Majątku
 	</string>
 	<string name="OverrideYourAnimations">
 		Zastąpić animacje Twojego awatara
+	</string>
+	<string name="ScriptReturnObjects">
+		Zwróć przedmioty w swoim imieniu
 	</string>
 	<string name="NotConnected">
 		Brak połączenia
