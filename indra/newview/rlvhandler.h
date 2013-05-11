@@ -95,9 +95,7 @@ public:
 
 	// Command specific helper functions
 	bool canEdit(const LLViewerObject* pObj) const;												// @edit and @editobj
-	bool canReceiveIM(const LLUUID& idSender) const;											// @recvim and @recvimfrom
 	bool canShowHoverText(const LLViewerObject* pObj) const;									// @showhovertext* command family
-	bool canSendIM(const LLUUID& idRecipient) const;											// @sendim and @sendimto
 	bool canSit(LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero) const;
 	bool canStand() const;
 	bool canTeleportViaLure(const LLUUID& idAgent) const;
@@ -245,28 +243,6 @@ inline bool RlvHandler::canEdit(const LLViewerObject* pObj) const
 		(pObj) &&
 		((!hasBehaviour(RLV_BHVR_EDIT)) || (isException(RLV_BHVR_EDIT, pObj->getRootEdit()->getID()))) &&
 		((!hasBehaviour(RLV_BHVR_EDITOBJ)) || (!isException(RLV_BHVR_EDITOBJ, pObj->getRootEdit()->getID())));
-}
-
-// Checked: 2010-11-30 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
-inline bool RlvHandler::canReceiveIM(const LLUUID& idSender) const
-{
-	// User can receive an IM from "sender" (could be an agent or a group) if:
-	//   - not generally restricted from receiving IMs (or the sender is an exception)
-	//   - not specifically restricted from receiving an IM from the sender
-	return 
-		( (!hasBehaviour(RLV_BHVR_RECVIM)) || (isException(RLV_BHVR_RECVIM, idSender)) ) &&
-		( (!hasBehaviour(RLV_BHVR_RECVIMFROM)) || (!isException(RLV_BHVR_RECVIMFROM, idSender)) );
-}
-
-// Checked: 2010-11-30 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
-inline bool RlvHandler::canSendIM(const LLUUID& idRecipient) const
-{
-	// User can send an IM to "recipient" (could be an agent or a group) if:
-	//   - not generally restricted from sending IMs (or the recipient is an exception)
-	//   - not specifically restricted from sending an IM to the recipient
-	return 
-		( (!hasBehaviour(RLV_BHVR_SENDIM)) || (isException(RLV_BHVR_SENDIM, idRecipient)) ) &&
-		( (!hasBehaviour(RLV_BHVR_SENDIMTO)) || (!isException(RLV_BHVR_SENDIMTO, idRecipient)) );
 }
 
 // Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f

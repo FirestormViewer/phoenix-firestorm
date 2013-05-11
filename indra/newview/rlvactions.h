@@ -17,8 +17,10 @@
 #ifndef RLV_ACTIONS_H
 #define RLV_ACTIONS_H
 
+#include "rlvdefines.h"
+
 // ============================================================================
-// RlvActions class declaration
+// RlvActions class declaration - developer-friendly non-RLVa code facing class, use in lieu of RlvHandler whenever possible
 //
 
 class RlvActions
@@ -26,9 +28,25 @@ class RlvActions
 public:
 
 	/*
+	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
+	 */
+	static bool canReceiveIM(const LLUUID& idSender);
+
+	/*
+	 * Returns true if the user is allowed to send IMs to the specified recipient (can be an avatar or a group)
+	 */
+	static bool canSendIM(const LLUUID& idRecipient);
+
+	/*
 	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID.
 	 */
 	static bool canStartIM(const LLUUID& idRecipient);								// @startim and @startimto
+
+	/*
+	 * Convenience function to check for a behaviour without having to include rlvhandler.h. 
+	 * Do NOT call this function if speed is important (i.e. per-frame)
+	 */
+	static bool hasBehaviour(ERlvBehaviour eBhvr);
 
 	/*
 	 * Returns true if a - P2P or group - IM session is open with the specified UUID.

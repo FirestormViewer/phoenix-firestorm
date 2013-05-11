@@ -111,6 +111,7 @@
 #include "llpanelplaceprofile.h"
 #include "llviewerregion.h"
 // [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvinventory.h"
 #include "rlvui.h"
@@ -2521,7 +2522,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// do nothing -- don't distract newbies in
 			// Prelude with global IMs
 		}
-// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0)
 		else if ( (rlv_handler_t::isEnabled()) && (offline == IM_ONLINE) && ("@version" == message) && 
 		          (!is_muted) && ((!accept_im_from_only_friend) || (is_friend)) )
 		{
@@ -2532,12 +2533,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 //					&& is_do_not_disturb
 //					&& from_id.notNull() //not a system message
 //					&& to_id.notNull()) //not global message
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
 		else if (offline == IM_ONLINE 
 					&& is_do_not_disturb
 					&& from_id.notNull() //not a system message
 					&& to_id.notNull() //not global message
-					&& gRlvHandler.canReceiveIM(from_id))
+					&& RlvActions::canReceiveIM(from_id))
 // [/RLVa:KB]
 		{
 			// return a standard "do not disturb" message, but only do it to online IM 
@@ -2587,12 +2588,19 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			bool mute_im = is_muted;
 			if(accept_im_from_only_friend&&!is_friend)
 			{
+				if (!gIMMgr->isNonFriendSessionNotified(session_id))
+				{
+					std::string message = LLTrans::getString("IM_unblock_only_groups_friends");
+					gIMMgr->addMessage(session_id, from_id, name, message, IM_OFFLINE == offline);
+					gIMMgr->addNotifiedNonFriendSessionID(session_id);
+				}
+
 				mute_im = true;
 			}
 
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
 			// Don't block offline IMs, or IMs from Lindens
-			if ( (rlv_handler_t::isEnabled()) && (offline != IM_OFFLINE) && /*(!is_linden) &&*/ (!gRlvHandler.canReceiveIM(from_id)) )
+			if ( (rlv_handler_t::isEnabled()) && (offline != IM_OFFLINE) && (!RlvActions::canReceiveIM(from_id)) && (!LLMuteList::getInstance()->isLinden(original_name) ))
 			{
 				if (!mute_im)
 					RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM_REMOTE), session_id);
@@ -2611,20 +2619,18 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			LL_INFOS("Messaging") << "process_improved_im: session_id( " << session_id << " ), from_id( " << from_id << " )" << LL_ENDL;
 
-/*
-			bool mute_im = is_muted;
-			if(accept_im_from_only_friend&&!is_friend)
-			{
-				if (!gIMMgr->isNonFriendSessionNotified(session_id))
-				{
-					std::string message = LLTrans::getString("IM_unblock_only_groups_friends");
-					gIMMgr->addMessage(session_id, from_id, name, message, IM_OFFLINE == offline);
-					gIMMgr->addNotifiedNonFriendSessionID(session_id);
-				}
-
-				mute_im = true;
-			}
-*/
+//			bool mute_im = is_muted;
+//			if(accept_im_from_only_friend&&!is_friend)
+//			{
+//				if (!gIMMgr->isNonFriendSessionNotified(session_id))
+//				{
+//					std::string message = LLTrans::getString("IM_unblock_only_groups_friends");
+//					gIMMgr->addMessage(session_id, from_id, name, message, IM_OFFLINE == offline);
+//					gIMMgr->addNotifiedNonFriendSessionID(session_id);
+//				}
+//
+//				mute_im = true;
+//			}
 			if (!mute_im) 
 			{
 				gIMMgr->addMessage(
@@ -3258,7 +3264,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					}
 
 					// Censor lure message if: 1) restricted from receiving IMs from the sender, or 2) @showloc=n restricted
-					if ( (!gRlvHandler.canReceiveIM(from_id)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
+					if ( (!RlvActions::canReceiveIM(from_id)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
 					{
 						message = RlvStrings::getString(RLV_STRING_HIDDEN);
 					}
@@ -7348,14 +7354,14 @@ bool handle_lure_callback(const LLSD& notification, const LLSD& response)
 
 	if(0 == option)
 	{
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) )
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
+		if ( (RlvActions::hasBehaviour(RLV_BHVR_SENDIM)) || (RlvActions::hasBehaviour(RLV_BHVR_SENDIMTO)) )
 		{
 			// Filter the lure message if one of the recipients of the lure can't be sent an IM to
 			for (LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray(); 
 					it != notification["payload"]["ids"].endArray(); ++it)
 			{
-				if (!gRlvHandler.canSendIM(it->asUUID()))
+				if (!RlvActions::canSendIM(it->asUUID()))
 				{
 					text = RlvStrings::getString(RLV_STRING_HIDDEN);
 					break;
