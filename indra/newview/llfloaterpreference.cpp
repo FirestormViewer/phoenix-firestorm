@@ -655,9 +655,9 @@ BOOL LLFloaterPreference::postBuild()
 	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
 	// </FS:Zi>
 
-    // <Kadah> Load the list of font settings
-    populateFontSelectionCombo();
-    // </Kadah>
+	// <FS:Kadah> Load the list of font settings
+	populateFontSelectionCombo();
+	// </FS:Kadah>
     
 	return TRUE;
 }
@@ -3485,51 +3485,51 @@ void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
 }
 // </FS:Zi>
 
-// <Kadah>
+// <FS:Kadah>
 void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo)
 {
-    LLDirIterator dir_iter(dir, "*.xml");
-		while (1)
+	LLDirIterator dir_iter(dir, "*.xml");
+	while (1)
+	{
+		std::string file;
+		if (!dir_iter.next(file))
 		{
-			std::string file;
-			if (!dir_iter.next(file))
-			{
-				break; // no more files
-			}
-			
-            //hack to deal with "fonts.xml" 
-            if (file == "fonts.xml")
-            {
-                font_selection_combo->add("Deja Vu", file);
-            }
-            //hack to get "fonts_[name].xml" to "Name"
-            else
-            {
-                std::string fontpresetname = file.substr(6, file.length()-10);
-                LLStringUtil::replaceChar(fontpresetname, '_', ' ');
-                fontpresetname[0] = LLStringOps::toUpper(fontpresetname[0]);
-                
-                font_selection_combo->add(fontpresetname, file);
-            }
+			break; // no more files
 		}
+			
+		//hack to deal with "fonts.xml" 
+		if (file == "fonts.xml")
+		{
+			font_selection_combo->add("Deja Vu", file);
+		}
+		//hack to get "fonts_[name].xml" to "Name"
+		else
+		{
+			std::string fontpresetname = file.substr(6, file.length()-10);
+			LLStringUtil::replaceChar(fontpresetname, '_', ' ');
+			fontpresetname[0] = LLStringOps::toUpper(fontpresetname[0]);
+                
+			font_selection_combo->add(fontpresetname, file);
+		}
+	}
 }
 
 void LLFloaterPreference::populateFontSelectionCombo()
 {
-    LLComboBox* font_selection_combo = getChild<LLComboBox>("Fontsettingsfile");
+	LLComboBox* font_selection_combo = getChild<LLComboBox>("Fontsettingsfile");
 	if(font_selection_combo)
 	{
 		const std::string fontDir(gDirUtilp->getExpandedFilename(LL_PATH_FONTS, "", ""));
 		const std::string userfontDir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", ""));
 
-        // Load fonts.xmls from the install dir first then user_settings
+		// Load fonts.xmls from the install dir first then user_settings
 		loadFontPresetsFromDir(fontDir, font_selection_combo);
 		loadFontPresetsFromDir(userfontDir, font_selection_combo);
         
 		font_selection_combo->setValue(gSavedSettings.getString("FSFontSettingsFile"));
 	}
 }
-// </Kadah>
+// </FS:Kadah>
 
 // <FS:AW optional opensim support>
 #ifdef OPENSIM

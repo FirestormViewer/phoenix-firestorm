@@ -800,36 +800,36 @@ void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::st
 	{
 		sFontRegistry = new LLFontRegistry(create_gl_textures, size_mod);
         
-        // <Kadah> User selectable fonts
-        // load from install_dir/fonts
-        const std::string xml_pathfont(gDirUtilp->getExpandedFilename(LL_PATH_FONTS, "", fonts_file));
+		// <FS:Kadah> User selectable fonts
+		// load from install_dir/fonts
+		const std::string xml_pathfont(gDirUtilp->getExpandedFilename(LL_PATH_FONTS, "", fonts_file));
 		if (!sFontRegistry->parseFontInfo(xml_pathfont))
-        {
-            // attempt to load from user_settings/fonts
-            const std::string xml_pathusr(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", fonts_file));
-            if (!sFontRegistry->parseFontInfo(xml_pathusr))
-            {
-                // fall back to default if specifed font settings file is not found -KC
-                const string_vec_t xml_paths = gDirUtilp->findSkinnedFilenames(LLDir::XUI, "fonts.xml");
+		{
+			// attempt to load from user_settings/fonts
+			const std::string xml_pathusr(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", fonts_file));
+			if (!sFontRegistry->parseFontInfo(xml_pathusr))
+			{
+				// fall back to default if specifed font settings file is not found -KC
+				const string_vec_t xml_paths = gDirUtilp->findSkinnedFilenames(LLDir::XUI, "fonts.xml");
  
-                if (xml_paths.empty())
-                {
-                    // We didn't even find one single XUI file
-                    llerrs << "No fonts.xml found: " << llendl;
-                }
+				if (xml_paths.empty())
+				{
+					// We didn't even find one single XUI file
+					llerrs << "No fonts.xml found: " << llendl;
+				}
 
-                for (string_vec_t::const_iterator path_it = xml_paths.begin();
-                     path_it != xml_paths.end();
-                     ++path_it)
-                {
-                    if (!sFontRegistry->parseFontInfo(*path_it))
-                    {
-                        llwarns << "Bad font info file: " << *path_it << llendl;
-                    }
-                }
-            }
-        }
-        // </Kadah> 
+				for (string_vec_t::const_iterator path_it = xml_paths.begin();
+						path_it != xml_paths.end();
+						++path_it)
+				{
+					if (!sFontRegistry->parseFontInfo(*path_it))
+					{
+						llwarns << "Bad font info file: " << *path_it << llendl;
+					}
+				}
+			}
+		}
+		// </FS:Kadah> 
 	}
 	else
 	{
