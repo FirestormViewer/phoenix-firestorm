@@ -130,6 +130,11 @@ protected:
 	void onAppearanceCameraChanged();
 	// ## Zi: Optional Edit Appearance Lighting
 
+    //<Kadah> Font Selection
+    void populateFontSelectionCombo();
+    void loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo);
+    //</Kadah>
+    
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
 	void saveSettings();

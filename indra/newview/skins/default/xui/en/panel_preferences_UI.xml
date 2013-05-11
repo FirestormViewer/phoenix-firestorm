@@ -841,34 +841,7 @@
          left_pad="5"
          name="Fontsettingsfile"
          width="160">
-            <combo_box.item
-             label="Deja Vu"
-             name="tt_item1"
-             value="fonts.xml" />
-            <combo_box.item
-             label="Ubuntu Font Family"
-             name="tt_item2"
-             value="fonts_ubuntu.xml" />
-            <combo_box.item
-             label="Liberation"
-             name="tt_item3"
-             value="fonts_liberation.xml" />
-            <combo_box.item
-             label="Droid Sans"
-             name="tt_item4"
-             value="fonts_droid.xml" />
-            <combo_box.item
-             label="Mobi Sans"
-             name="tt_item5"
-             value="fonts_mobi.xml" />
-            <combo_box.item
-             label="Roboto"
-             name="tt_item6"
-             value="fonts_roboto.xml" />
-			<combo_box.item
-             label="OpenDyslexic"
-             name="tt_item6"
-             value="fonts_dyslexia.xml" />
+            <!-- KC: Dynamicly loaded now -->
         </combo_box>
         <text
          name="tooltip_textbox2"

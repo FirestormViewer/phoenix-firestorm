@@ -141,6 +141,7 @@
 #include "llwlparammanager.h"
 // </FS:Zi>
 #include "growlmanager.h"
+#include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
@@ -654,6 +655,10 @@ BOOL LLFloaterPreference::postBuild()
 	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
 	// </FS:Zi>
 
+    // <Kadah> Load the list of font settings
+    populateFontSelectionCombo();
+    // </Kadah>
+    
 	return TRUE;
 }
 
@@ -3480,6 +3485,52 @@ void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
 }
 // </FS:Zi>
 
+// <Kadah>
+void LLFloaterPreference::loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo)
+{
+    LLDirIterator dir_iter(dir, "*.xml");
+		while (1)
+		{
+			std::string file;
+			if (!dir_iter.next(file))
+			{
+				break; // no more files
+			}
+			
+            //hack to deal with "fonts.xml" 
+            if (file == "fonts.xml")
+            {
+                font_selection_combo->add("Deja Vu", file);
+            }
+            //hack to get "fonts_[name].xml" to "Name"
+            else
+            {
+                std::string fontpresetname = file.substr(6, file.length()-10);
+                LLStringUtil::replaceChar(fontpresetname, '_', ' ');
+                fontpresetname[0] = LLStringOps::toUpper(fontpresetname[0]);
+                
+                font_selection_combo->add(fontpresetname, file);
+            }
+		}
+}
+
+void LLFloaterPreference::populateFontSelectionCombo()
+{
+    LLComboBox* font_selection_combo = getChild<LLComboBox>("Fontsettingsfile");
+	if(font_selection_combo)
+	{
+		const std::string fontDir(gDirUtilp->getExpandedFilename(LL_PATH_FONTS, "", ""));
+		const std::string userfontDir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", ""));
+
+        // Load fonts.xmls from the install dir first then user_settings
+		loadFontPresetsFromDir(fontDir, font_selection_combo);
+		loadFontPresetsFromDir(userfontDir, font_selection_combo);
+        
+		font_selection_combo->setValue(gSavedSettings.getString("FSFontSettingsFile"));
+	}
+}
+// </Kadah>
+
 // <FS:AW optional opensim support>
 #ifdef OPENSIM
 static LLRegisterPanelClassWrapper<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
@@ -3693,3 +3744,4 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 
 #endif // OPENSIM
 // <FS:AW optional opensim support>
+

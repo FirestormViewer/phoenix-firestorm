@@ -179,7 +179,35 @@ LLFontRegistry::~LLFontRegistry()
 bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 {
 	bool success = false;  // Succeed if we find and read at least one XUI file
+    // <Kadah> User selectable fonts
+    // <Kadah> xml_filename is now passed as a full path to a single XUI
+    LLXMLNodePtr root;
+    bool parsed_file = LLXMLNode::parseFile(xml_filename, root, NULL);
+
+    if (!parsed_file)
+    {
+        return false;
+    }
+
+    if ( root.isNull() || ! root->hasName( "fonts" ) )
+    {
+        llwarns << "Bad font info file: " << xml_filename << llendl;
+        return false;
+    }
+
+    std::string root_name;
+    root->getAttributeString("name",root_name);
+    if (root->hasName("fonts"))
+    {
+        // Expect a collection of children consisting of "font" or "font_size" entries
+        bool init_succ = initFromXML(root);
+        success = success || init_succ;
+    }
+    
+    // <Kadah> Dont load from skins now
+#if 0
 	const string_vec_t xml_paths = gDirUtilp->findSkinnedFilenames(LLDir::XUI, xml_filename);
+ 
 	if (xml_paths.empty())
 	{
 		// We didn't even find one single XUI file
@@ -211,6 +239,8 @@ bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 			success = success || init_succ;
 		}
 	}
+#endif
+    // </Kadah>
 	//if (success)
 	//	dump();
 
@@ -426,6 +456,8 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 	
 	std::string local_path = LLFontGL::getFontPathLocal();
 	std::string sys_path = LLFontGL::getFontPathSystem();
+    // <Kadah> User fonts: Also load from user_settings/fonts
+    std::string usr_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", "");
 	
 	// The fontname string may contain multiple font file names separated by semicolons.
 	// Break it apart and try loading each one, in order.
@@ -442,6 +474,16 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 		if (!fontp->loadFace(font_path, extra_scale * point_size,
 							 LLFontGL::sVertDPI, LLFontGL::sHorizDPI, 2, is_fallback))
 		{
+			// <Kadah> User fonts: Also load from user_settings/fonts
+            std::string font_path = usr_path + *file_name_it;
+            // *HACK: Fallback fonts don't render, so we can use that to suppress
+            // creation of OpenGL textures for test apps. JC
+            BOOL is_fallback = !is_first_found || !mCreateGLTextures;
+            F32 extra_scale = (is_fallback)?fallback_scale:1.0;
+            if (!fontp->loadFace(font_path, extra_scale * point_size,
+                                 LLFontGL::sVertDPI, LLFontGL::sHorizDPI, 2, is_fallback))
+            {
+			// </Kadah>
 			font_path = sys_path + *file_name_it;
 
 			if (!fontp->loadFace(font_path, extra_scale * point_size,
@@ -451,6 +493,9 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 				delete fontp;
 				fontp = NULL;
 			}
+			// <Kadah> User fonts: Also load from user_settings/fonts
+            }
+			// </Kadah>
 		}
 		
 		if(fontp)
