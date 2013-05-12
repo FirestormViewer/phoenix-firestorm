@@ -9652,9 +9652,9 @@ Home position set.
   </notification>
 
   <notification
-   icon="alertmodal.tga"
+   icon="notifytip.tga"
    name="AvatarEjected"
-   type="notify">
+   type="notifytip">
    <tag>fail</tag>
 Avatar ejected.
   </notification>
