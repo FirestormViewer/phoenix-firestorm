@@ -18763,7 +18763,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
-  <key>FSChatBarNamePrediction</key>
+  <key>FSChatbarNamePrediction</key>
   <map>
     <key>Comment</key>
     <string>Toggles name prediction in nearby chat</string>

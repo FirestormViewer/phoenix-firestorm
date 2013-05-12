@@ -205,12 +205,11 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 		}
 	}
 // <FS:CR> FIRE-3192 - Predictive name completion, based on code by Satomi Ahn
-	static LLCachedControl<bool> sNameAutocomplete(gSavedSettings, "FSChatBarNamePrediction");
+	static LLCachedControl<bool> sNameAutocomplete(gSavedSettings, "FSChatbarNamePrediction");
 	if (length > NAME_PREDICTION_MINIMUM_LENGTH && sNameAutocomplete && key < KEY_SPECIAL)
 	{
-		std::string text = caller->getText();
 		S32 cur_pos = caller->getCursor();
-		if (cur_pos && (text.at(cur_pos - 1) != ' ' || caller->hasSelection()))
+		if (raw_text[cur_pos - 1] != ' ' || caller->hasSelection())
 		{
 			// Get a list of avatars within range
 			std::vector<LLUUID> avatar_ids;
@@ -220,8 +219,8 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 			if (avatar_ids.empty()) return; // Nobody's in range!
 			
 			// Parse text for a pattern to search
-			std::string prefix = text.substr(0, cur_pos); // Text before search string
-			std::string suffix = text.substr(cur_pos, text.length() - cur_pos); // Text after search string
+			std::string prefix = wstring_to_utf8str(raw_text.substr(0, cur_pos)); // Text before search string
+			std::string suffix = wstring_to_utf8str(raw_text.substr(cur_pos, raw_text.length() - cur_pos)); // Text after search string
 			U32 last_space = prefix.rfind(" ");
 			std::string pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1); // Search pattern
 			
@@ -232,6 +231,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 
 			match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space -1);
 			prefix = prefix.substr(0, last_space + 1);
+			std::string match = pattern;
 			LLStringUtil::toLower(pattern);
 			
 			std::string name;
@@ -244,9 +244,11 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 				last_space = prefix.substr(0, prefix.length() - 2).rfind(" ");
 				match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space -1);
 				prefix = prefix.substr(0, last_space + 1);
+				
 				// prepare search pattern
 				std::string full_pattern(match_pattern + pattern);
 				LLStringUtil::toLower(full_pattern);
+				
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
@@ -265,12 +267,14 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 			if (found)
 			{
 				full_name = true; // ignore OnlyFirstName in case we want to disambiguate
+				prefix += match_pattern;
 			}
 			else if (!pattern.empty()) // if first search did not work, try matching with last word before cursor only
 			{
 				prefix += match_pattern; // first part of the pattern wasn't a pattern, so keep it in prefix
 				LLStringUtil::toLower(pattern);
 				iter = avatar_ids.begin();
+				
 				// Look for a match
 				while (iter != avatar_ids.end() && !found)
 				{
@@ -289,22 +293,24 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 			// if we found something by either method, replace the pattern by the avatar name
 			if (found)
 			{
-				std::string name;
-				gCacheName->getFullName(*(iter - 1), name);
+				std::string first_name, last_name;
+				gCacheName->getFirstLastName(*(iter - 1), first_name, last_name);
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				{
-					prefix += RlvStrings::getAnonym(name) + " ";
+					prefix += RlvStrings::getAnonym(first_name + " " + last_name) + " ";
 				}
 				else
 				{
-					if (!full_name)
+					std::string rest_of_match;
+					if (full_name)
 					{
-						U32 space = name.find(" ");
-						if (space != std::string::npos)
-							name = name.substr(0, space);
+						rest_of_match = /*first_name + " " +*/ last_name.substr(pattern.size());
 					}
-						
-					prefix += name + " ";
+					else
+					{
+						rest_of_match = first_name.substr(pattern.size());
+					}
+					prefix += match + rest_of_match + " ";
 				}
 				caller->setText(prefix + suffix);
 				caller->setSelection(prefix.length(), cur_pos);

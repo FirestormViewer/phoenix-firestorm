@@ -203,6 +203,15 @@
              height="16"
              width="400" />
             <check_box
+             control_name="FSChatbarNamePrediction"
+             name="FSChatbarNamePrediction"
+             label="Enable automatic name prediction in nearby chat bar"
+             layout="topleft"
+             left_delta="0"
+             top_pad="5"
+             height="16"
+             width="400" />
+            <check_box
              enabled="false"
              height="16"
              label="Email me IMs when I'm offline ([EMAIL])"
@@ -429,20 +438,6 @@
 				 name="user_display_name"
 				 value="3" />
 			</combo_box>
-            
-            <button
-               follows="left|top"
-               height="23"
-               label="Translation..."
-               layout="topleft"
-               left="30"
-               name="translation_settings_btn"
-               top_pad="5"
-               width="170">
-               <button.commit_callback
-                function="Pref.TranslationSettings" />
-              </button>
-            
         </panel>
 
         <!-- Chat: Notifications -->
@@ -763,7 +758,7 @@
              height="18"
              control_name="FSNearbyChatbar"
              name="FSNearbyChatbar"
-             label="Add a chatbar in the Nearby Chat window"/>
+             label="Add a chat bar in the Nearby Chat window"/>
             <check_box
              layout="topleft"
              follows="left|top"
@@ -1604,8 +1599,8 @@
      follows="left|top"
      top="10"
      left="20"
-     width="150"
-     height="20"
+     width="160"
+     height="23"
      name="autoreplace_showgui"
      commit_callback.function="Pref.AutoReplace"
      label="Auto-Replace...">
@@ -1618,7 +1613,17 @@
      name="spellcheck_showgui"
      commit_callback.function="Pref.SpellChecker"
      label="Spell Checking..."
-     width="150">
+     width="160">
+    </button>
+    <button
+     follows="top|left"
+     height="23"
+     layout="topleft"
+     left_pad="5"
+     name="translation_settings_btn"
+     width="160"
+     commit_callback.function="Pref.TranslationSettings"
+     label="Translation...">
     </button>
   </panel>
 </tab_container>

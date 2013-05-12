@@ -72,6 +72,7 @@ public:
 	// If not available, copies the string "waiting".
 	// Returns TRUE iff available.
 	BOOL getFullName(const LLUUID& id, std::string& full_name);
+	BOOL getFirstLastName(const LLUUID& id, std::string& first, std::string& last);	// <FS:CR> returns first name, last name
 
 	// Reverse lookup of UUID from name
 	BOOL getUUID(const std::string& first, const std::string& last, LLUUID& id);

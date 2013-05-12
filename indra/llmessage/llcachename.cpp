@@ -453,7 +453,12 @@ BOOL LLCacheName::getFullName(const LLUUID& id, std::string& fullname)
 	return res;
 }
 
-
+// <FS:CR> Returns first name, last name
+BOOL LLCacheName::getFirstLastName(const LLUUID& id, std::string& first, std::string& last)
+{
+	return impl.getName(id, first, last);
+}
+// </FS:CR>
 
 BOOL LLCacheName::getGroupName(const LLUUID& id, std::string& group)
 {
