@@ -12,25 +12,25 @@
 	-->
 	<color
 	 name="AccentColor"
-	 value="0.75 0.92 0.49 1.0" />
+	 value="0.30 0.30 0.30 1.0" />
 	<color
 	 name="EmphasisColor"             
-	 value="0.56 0.36 0.25 1.0" />
+	 value="0.30 0.40 0.50 1.0" />
 	<color
 	 name="SchemeLightest"
-	 value="0.76 0.58 0.49 1.0" />
+	 value="0.30 0.30 0.30 1.0" />
 	<color
 	 name="SchemeLightest_35"
-	 value="0.76 0.58 0.49 0.35" />
+	 value="0.30 0.30 0.30 0.35" />
 	<color 
 	 name="SchemeDark"
-	 value="0.49 0.33 0.25 1.0" />
+	 value="0.35 0.35 0.35 1.0" />
 	<color
 	 name="EmphasisColor_13"
-	 value="0.950 0.412 0.173 0.13" />
+	 value="0.40 0.40 0.40 0.13" />
 	<color
 	 name="EmphasisColor_35"
-	 value="0.950 0.412 0.173 0.35" />
+	 value="0.40 0.40 0.40 0.35" />
 	<color
 	 name="White"
 	 value="1 1 1 1" />
@@ -69,7 +69,7 @@
 	 value="0.169 0.169 0.169 1" />
 	<color
 	 name="MouseGray"
-	 value="0.191 0.191 0.191 1" />
+	 value="0.5 0.5 0.5 1" />
 	<color
 	 name="Black"
 	 value="0 0 0 1" />
@@ -177,7 +177,7 @@
 	 value="0.3 0.6 0.9 1" />
 	<color
 	 name="Brown"
-	 value="0.225 0.100 0.05 1" />
+	 value="0.30 0.30 0.30 1" />
 	<color
 	 name="BrickBrown"
 	 value="0.6 0 0 1" />
