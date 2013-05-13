@@ -902,4 +902,18 @@ with the same filename but different name
 
 <texture name="Icon_Lightshare" file_name="icons/Icon_Lightshare.png" preload="false" />
 
+<!-- Higher Resolution 200px Loading Progress Indicator -->
+<texture name="ProgressLarge_1" file_name="icons/ProgressLarge_1.png" preload="true" />
+<texture name="ProgressLarge_2" file_name="icons/ProgressLarge_2.png" preload="true" />
+<texture name="ProgressLarge_3" file_name="icons/ProgressLarge_3.png" preload="true" />
+<texture name="ProgressLarge_4" file_name="icons/ProgressLarge_4.png" preload="true" />
+<texture name="ProgressLarge_5" file_name="icons/ProgressLarge_5.png" preload="true" />
+<texture name="ProgressLarge_6" file_name="icons/ProgressLarge_6.png" preload="true" />
+<texture name="ProgressLarge_7" file_name="icons/ProgressLarge_7.png" preload="true" />
+<texture name="ProgressLarge_8" file_name="icons/ProgressLarge_8.png" preload="true" />
+<texture name="ProgressLarge_9" file_name="icons/ProgressLarge_9.png" preload="true" />
+<texture name="ProgressLarge_10" file_name="icons/ProgressLarge_10.png" preload="true" />
+<texture name="ProgressLarge_11" file_name="icons/ProgressLarge_11.png" preload="true" />
+<texture name="ProgressLarge_12" file_name="icons/ProgressLarge_12.png" preload="true" />
+	
 </textures>
