@@ -4,7 +4,6 @@
 		<text name="search_text">
 			Suchbegriffe eingeben:
 		</text>
-		<button label="Suchen" name="people_find"/>
 	</panel>
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">

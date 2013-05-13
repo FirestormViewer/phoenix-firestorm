@@ -8,7 +8,6 @@
 			<radio_item label="Aktuell und demnächst" name="current"/>
 			<radio_item	label="Nach Datum" name="date"/>
 		</radio_group>
-		<button label="Suchen" name="events_find"/>
 		<combo_box name="events_category">
 			<combo_box.item label="Alle Kategorien" name="any"/>
 			<combo_box.item label="Diskussion" name="discussion"/>

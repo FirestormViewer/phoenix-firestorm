@@ -11,7 +11,6 @@
 		<text name="events_date">
 			4/20
 		</text>
-		<button label="Buscar" name="events_find"/>
 		<combo_box name="events_category">
 			<combo_box.item label="Cualquier categoría" name="any"/>
 			<combo_box.item label="Debates" name="discussion"/>

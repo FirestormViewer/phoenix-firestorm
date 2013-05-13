@@ -37,10 +37,24 @@
 #include "llgroupmgr.h"
 #include "llavatarnamecache.h"
 #include "llmediactrl.h"
+#include "llradiogroup.h"
+#include "llsearchcombobox.h"
+#include "llscrolllistctrl.h"
+#include "lltabcontainer.h"
 
 class LLRemoteParcelInfoObserver;
 class LLAvatarPropertiesObserver;
 class LLGroupMgrObserver;
+class LLSearchEditor;
+class LLSearchComboBox;
+
+typedef enum e_search_category
+{
+	SC_AVATAR,
+	SC_GROUP,
+	SC_PLACE,
+	SC_CLASSIFIED
+}	ESearchCategory;
 
 class FSFloaterSearch
 :	public LLFloater
@@ -69,7 +83,7 @@ public:
 	
 	void avatarNameUpdatedCallback(const LLUUID& id, const LLAvatarName& av_name);
 	void groupNameUpdatedCallback(const LLUUID& id, const std::string& name, bool is_group);
-	void onSelectedItem(const LLUUID& selected_item, int type);
+	void onSelectedItem(const LLUUID& selected_item, ESearchCategory type);
 	void onSelectedEvent(const S32 selected_event);
 	void displayParcelDetails(const LLParcelData& parcel_data);
 	void displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info);
@@ -120,6 +134,7 @@ private:
 	LLTextEditor*	mDetailLocation;
 	LLTextureCtrl*	mDetailSnapshot;
 	LLIconCtrl*		mDetailMaturity;
+	LLTabContainer*	mTabContainer;
 };
 
 ///////////////////////////////
@@ -146,10 +161,10 @@ private:
 	void onBtnBack();
 	
 	void find();
+	void fillSearchComboBox();
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
-	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	
@@ -158,7 +173,10 @@ private:
 	S32			mResultsReceived;
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
-	FSFloaterSearch* mParent;
+	
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
 };
 
 class FSPanelSearchGroups : public LLPanel
@@ -180,10 +198,10 @@ private:
 	void onBtnBack();
 	
 	void find();
+	void fillSearchComboBox();
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
-	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	
@@ -192,7 +210,10 @@ private:
 	S32			mResultsReceived;
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
-	FSFloaterSearch* mParent;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
 };
 
 class FSPanelSearchPlaces : public LLPanel
@@ -214,10 +235,10 @@ private:
 	void onBtnBack();
 	
 	void find();
+	void fillSearchComboBox();
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
-	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	
@@ -226,7 +247,11 @@ private:
 	S32			mResultsReceived;
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
-	FSFloaterSearch* mParent;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+	LLComboBox*			mPlacesCategory;
 };
 
 class FSPanelSearchLand : public LLPanel
@@ -259,7 +284,11 @@ private:
 	S32			mResultsReceived;
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
-	FSFloaterSearch* mParent;
+	
+	FSFloaterSearch*	mParent;
+	LLLineEditor*		mPriceEditor;
+	LLLineEditor*		mAreaEditor;
+	LLScrollListCtrl*	mSearchResults;
 };
 
 class FSPanelSearchClassifieds : public LLPanel
@@ -281,10 +310,10 @@ private:
 	void onBtnBack();
 	
 	void find();
+	void fillSearchComboBox();
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
-	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	
@@ -293,7 +322,11 @@ private:
 	S32			mResultsReceived;
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
-	FSFloaterSearch* mParent;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+	LLComboBox*			mClassifiedsCategory;
 };
 
 class FSPanelSearchEvents : public LLPanel
@@ -318,6 +351,7 @@ private:
 	void onBtnToday();
 	
 	void find();
+	void fillSearchComboBox();
 	void setDay(S32 day);
 	void onSearchModeChanged();
 	void resetSearch();
@@ -332,7 +366,11 @@ private:
 	S32			mDay;
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
-	FSFloaterSearch* mParent;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+	LLRadioGroup*		mEventsMode;
 };
 
 class FSPanelSearchWeb : public LLPanel, public LLViewerMediaObserver

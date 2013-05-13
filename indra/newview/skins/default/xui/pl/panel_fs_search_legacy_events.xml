@@ -8,7 +8,6 @@
 			<radio_item label="Bieżące i przyszłe" name="current" />
 			<radio_item label="Według daty" name="date" />
 		</radio_group>
-		<button label="Szukaj" name="events_find" />
 		<combo_box name="events_category">
 			<combo_box.item label="Wszystkie kategorie" name="any" />
 			<combo_box.item label="Dyskusje" name="discussion" />

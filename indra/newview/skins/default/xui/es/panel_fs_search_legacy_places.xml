@@ -4,7 +4,6 @@
 		<text name="search_text">
 			Términos de búsqueda:
 		</text>
-		<button label="Buscar" name="places_find"/>
 		<combo_box name="places_category"/>
 	</panel>
 	<panel name="panel_ls_scrolllist">

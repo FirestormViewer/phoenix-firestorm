@@ -29,7 +29,7 @@
 			width="156">
 			Enter search terms:
 		</text>
-		<line_editor
+		<search_combo_box
 		bevel_style="none"
 		border_style="line"
 		border.border_thickness="0"
@@ -40,16 +40,10 @@
 		left_delta="0"
 		name="groups_edit"
 		top="29"
-		width="670" />
-		<button
-		follows="top|right"
-		height="23"
-		label="Search"
-		layout="topleft"
-		left_pad="2"
-		name="groups_find"
-		width="100"
-		enabled="false" />
+		width="770">
+			<search_button
+			name="groups_find"/>
+		</search_combo_box>
 		<check_box
 		control_name="ShowPGGroups"
 		follows="right|top"

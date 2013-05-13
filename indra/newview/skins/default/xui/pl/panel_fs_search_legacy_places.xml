@@ -4,7 +4,6 @@
 		<text name="search_text">
 			Wpisz zapytanie:
 		</text>
-		<button label="Szukaj" name="places_find" />
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_places">

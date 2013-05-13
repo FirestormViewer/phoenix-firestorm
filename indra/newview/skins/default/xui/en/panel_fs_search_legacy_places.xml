@@ -29,7 +29,7 @@
 			width="156">
 			Enter search terms:
 		</text>
-		<line_editor
+		<search_combo_box
 		bevel_style="none"
 		border_style="line"
 		border.border_thickness="0"
@@ -40,16 +40,10 @@
 		left_delta="0"
 		name="places_edit"
 		top="29"
-		width="546" />
-		<button
-		follows="top|right"
-		height="23"
-		label="Search"
-		layout="topleft"
-		left_pad="2"
-		name="places_find"
-		width="100"
-		enabled="false" />
+		width="651">
+			<search_button
+			name="places_find"/>
+		</search_combo_box>
 		<combo_box
 		follows="right|top"
 		layout="topleft"

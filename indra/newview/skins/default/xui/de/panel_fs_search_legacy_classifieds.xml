@@ -5,7 +5,6 @@
 			Suchbegriffe eingeben:
 		</text>
 		<line_editor name="classifieds_edit" width="590"/>
-		<button label="Suchen" name="classifieds_find" width="55"/>
 	</panel>
 	<!-- Search Pane -->
 	<panel name="panel_ls_scrolllist">

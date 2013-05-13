@@ -29,7 +29,7 @@
 			width="156">
 			Enter search terms:
 		</text>
-		<line_editor
+		<search_combo_box
 		bevel_style="none"
 		border_style="line"
 		border.border_thickness="0"
@@ -40,16 +40,10 @@
 		left_delta="0"
 		name="people_edit"
 		top="29"
-		width="670" />
-		<button
-		follows="top|right"
-		height="23"
-		label="Search"
-		layout="topleft"
-		left_pad="2"
-		name="people_find"
-		width="100"
-		enabled="false" />
+		width="770">
+			<search_button
+			name="people_find"/>
+		</search_combo_box>
 	</panel>
 	<!-- Search Pane -->
 	<panel

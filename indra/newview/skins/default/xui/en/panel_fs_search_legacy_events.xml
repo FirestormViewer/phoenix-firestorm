@@ -65,7 +65,7 @@
 			width="80">
 			4/20
 		</text>
-		<line_editor
+		<search_combo_box
 		bevel_style="none"
 		border_style="line"
 		border.border_thickness="0"
@@ -76,15 +76,10 @@
 		left="6"
 		name="events_edit"
 		top="29"
-		width="546" />
-		<button
-		follows="top|right"
-		height="23"
-		label="Search"
-		layout="topleft"
-		left_pad="2"
-		name="events_find"
-		width="100" />
+		width="651">
+			<search_button
+			name="events_find"/>
+		</search_combo_box>
 		<combo_box
 		follows="right|top"
 		layout="topleft"

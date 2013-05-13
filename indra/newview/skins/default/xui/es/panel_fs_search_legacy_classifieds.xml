@@ -4,7 +4,6 @@
 		<text name="search_text">
 			Términos de búsqueda:
 		</text>
-		<button label="Buscar" name="classifieds_find"/>
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_classifieds">
