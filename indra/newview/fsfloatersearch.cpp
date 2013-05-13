@@ -397,6 +397,7 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 				gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
 				break;
 		}
+		setLoadingProgress(true);
 	}
 }
 
@@ -574,7 +575,7 @@ void FSFloaterSearch::avatarNameUpdatedCallback(const LLUUID& id, const LLAvatar
 	if (id == getSelectedID())
 	{
 		mDetailTitle->setValue(av_name.getCompleteName());
-		//setLoadingProgress(false);
+		setLoadingProgress(false);
 	}
 	// Otherwise possibly a request for an older selection, ignore it.
 }
@@ -584,7 +585,7 @@ void FSFloaterSearch::groupNameUpdatedCallback(const LLUUID& id, const std::stri
 	if (id == getSelectedID())
 	{
 		mDetailTitle->setValue( LLSD(name) );
-		//setLoadingProgress(false);
+		setLoadingProgress(false);
 	}
 	// Otherwise possibly a request for an older selection, ignore it.
 }
@@ -794,7 +795,6 @@ void FSPanelSearchPeople::find()
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
-	setLoadingProgress(true);
 	mNumResultsReturned = 0;
 }
 
@@ -842,18 +842,6 @@ void FSPanelSearchPeople::onBtnBack()
 	getChildView("people_back")->setEnabled(mStartSearch > 0);
 	
 	find();
-}
-
-void FSPanelSearchPeople::setLoadingProgress(bool started)
-{
-	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
-	
-    indicator->setVisible(started);
-	
-    if (started)
-        indicator->start();
-    else
-        indicator->stop();
 }
 
 void FSPanelSearchPeople::resetSearch()
@@ -926,28 +914,24 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 			map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_short"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
-			self->setLoadingProgress(false);
 			return;
 		}
 	}
@@ -960,7 +944,6 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
-		self->setLoadingProgress(false);
 	}
 	
 	self->mResultsReceived += num_new_rows;
@@ -1013,7 +996,6 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
-	self->setLoadingProgress(false);
 }
 
 ////////////////////////////////////////
@@ -1116,7 +1098,6 @@ void FSPanelSearchGroups::find()
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
-	setLoadingProgress(true);
 	mNumResultsReturned = 0;
 }
 
@@ -1165,18 +1146,6 @@ void FSPanelSearchGroups::onBtnBack()
 	find();
 }
 
-void FSPanelSearchGroups::setLoadingProgress(bool started)
-{
-	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
-	
-    indicator->setVisible(started);
-	
-    if (started)
-        indicator->start();
-    else
-        indicator->stop();
-}
-
 void FSPanelSearchGroups::resetSearch()
 {
 	mStartSearch = 0;
@@ -1187,7 +1156,7 @@ void FSPanelSearchGroups::resetSearch()
 S32 FSPanelSearchGroups::showNextButton(S32 rows)
 {
 	bool show_next_button = (mResultsReceived > 100);
-	getChildView("groups	_next")->setEnabled(show_next_button);
+	getChildView("groups_next")->setEnabled(show_next_button);
 	if (show_next_button)
 	{
 		rows -= (mResultsReceived - 100);
@@ -1247,28 +1216,24 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 			map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_short"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
-			self->setLoadingProgress(false);
 			return;
 		}
 	}
@@ -1281,7 +1246,6 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
-		self->setLoadingProgress(false);
 	}
 	
 	self->mResultsReceived += num_new_rows;
@@ -1336,7 +1300,6 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
-	self->setLoadingProgress(false);
 }
 
 ////////////////////////////////////////
@@ -1462,7 +1425,6 @@ void FSPanelSearchPlaces::find()
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
-	setLoadingProgress(true);
 	mNumResultsReturned = 0;
 }
 
@@ -1510,18 +1472,6 @@ void FSPanelSearchPlaces::onBtnBack()
 	getChildView("places_back")->setEnabled(mStartSearch > 0);
 	
 	find();
-}
-
-void FSPanelSearchPlaces::setLoadingProgress(bool started)
-{
-	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
-	
-    indicator->setVisible(started);
-	
-    if (started)
-        indicator->start();
-    else
-        indicator->stop();
 }
 
 void FSPanelSearchPlaces::resetSearch()
@@ -1595,35 +1545,30 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 			map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_short"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_ESTATEEMPTY)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
-			self->setLoadingProgress(false);
 			return;
 		}
 	}
@@ -1636,7 +1581,6 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
-		self->setLoadingProgress(false);
 	}
 	
 	self->mResultsReceived += num_new_rows;
@@ -1707,7 +1651,6 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
-	self->setLoadingProgress(false);
 }
 
 ////////////////////////////////////////
@@ -1850,7 +1793,6 @@ void FSPanelSearchLand::find()
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
-	setLoadingProgress(true);
 	mNumResultsReturned = 0;
 }
 
@@ -1873,18 +1815,6 @@ void FSPanelSearchLand::onBtnBack()
 	getChildView("land_back")->setEnabled(mStartSearch > 0);
 	
 	find();
-}
-
-void FSPanelSearchLand::setLoadingProgress(bool started)
-{
-	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
-	
-    indicator->setVisible(started);
-	
-    if (started)
-        indicator->start();
-    else
-        indicator->stop();
 }
 
 void FSPanelSearchLand::resetSearch()
@@ -1962,7 +1892,6 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
-		self->setLoadingProgress(false);
 	}
 	self->mResultsReceived += num_new_rows;
 	
@@ -2073,7 +2002,6 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
-	self->setLoadingProgress(false);
 }
 
 ////////////////////////////////////////
@@ -2182,7 +2110,6 @@ void FSPanelSearchClassifieds::find()
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
-	setLoadingProgress(true);
 	mNumResultsReturned = 0;
 }
 
@@ -2229,18 +2156,6 @@ void FSPanelSearchClassifieds::onBtnBack()
 	getChildView("classifieds_back")->setEnabled(mStartSearch > 0);
 	
 	find();
-}
-
-void FSPanelSearchClassifieds::setLoadingProgress(bool started)
-{
-	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
-	
-    indicator->setVisible(started);
-	
-    if (started)
-        indicator->start();
-    else
-        indicator->stop();
 }
 
 void FSPanelSearchClassifieds::resetSearch()
@@ -2324,28 +2239,24 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 			map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_short"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_CLASSIFIEDS_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
-			self->setLoadingProgress(false);
 			return;
 		}
 	}
@@ -2358,7 +2269,6 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 		map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
-		self->setLoadingProgress(false);
 	}
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
@@ -2412,8 +2322,6 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
-	self->setLoadingProgress(false);
-
 }
 
 ////////////////////////////////////////
@@ -2536,7 +2444,6 @@ void FSPanelSearchEvents::find()
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
-	setLoadingProgress(true);
 	mNumResultsReturned = 0;
 }
 
@@ -2608,18 +2515,6 @@ void FSPanelSearchEvents::onBtnToday()
 	setDay(0);
 	
 	find();
-}
-
-void FSPanelSearchEvents::setLoadingProgress(bool started)
-{
-	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
-	
-    indicator->setVisible(started);
-	
-    if (started)
-        indicator->start();
-    else
-        indicator->stop();
 }
 
 void FSPanelSearchEvents::resetSearch()
@@ -2718,29 +2613,24 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(LLTrans::getString("not_found", map));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_EVENTS_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_short"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
-			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_NODATEOFFSET)
@@ -2770,7 +2660,6 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
 		search_results->setEnabled(FALSE);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
-		self->setLoadingProgress(false);
 	}
 	
 	self->mResultsReceived += num_new_rows;
@@ -2863,7 +2752,6 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
-	self->setLoadingProgress(false);
 }
 
 ////////////////////////////////////////

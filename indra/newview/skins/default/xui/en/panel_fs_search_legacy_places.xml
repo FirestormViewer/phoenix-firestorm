@@ -41,8 +41,6 @@
 		name="places_edit"
 		top="29"
 		width="651">
-			<search_button
-			name="places_find"/>
 		</search_combo_box>
 		<combo_box
 		follows="right|top"
