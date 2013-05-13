@@ -450,6 +450,7 @@ void FSFloaterSearch::displayParcelDetails(const LLParcelData& parcel_data)
 	mDetailSnapshot->setValue(parcel_data.snapshot_id);
 	childSetVisible("teleport_btn", true);
 	childSetVisible("map_btn", true);
+	setLoadingProgress(false);
 }
 
 void FSFloaterSearch::displayAvatarDetails(LLAvatarData*& avatar_data)
@@ -530,6 +531,7 @@ void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 		mDetailLocation->setValue(getString("string.slurl", map));
 		childSetVisible("teleport_btn", true);
 		childSetVisible("map_btn", true);
+		setLoadingProgress(false);
 	}
 }
 
@@ -568,6 +570,7 @@ void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std
 	childSetVisible("teleport_btn", true);
 	childSetVisible("map_btn", true);
 	childSetVisible("event_reminder_btn", true);
+	setLoadingProgress(false);
 }
 
 void FSFloaterSearch::avatarNameUpdatedCallback(const LLUUID& id, const LLAvatarName& av_name)
