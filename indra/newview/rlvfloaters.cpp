@@ -593,7 +593,7 @@ BOOL RlvFloaterStrings::postBuild()
 		const LLSD& sdStringInfo = itString->second;
 		if ( (!sdStringInfo.has("customizable")) || (!sdStringInfo["customizable"].asBoolean()) )
 			continue;
-		m_pStringList->add( (sdStringInfo.has("label")) ? sdStringInfo["label"] : itString->first, itString->first);
+		m_pStringList->add( (sdStringInfo.has("label")) ? sdStringInfo["label"].asString() : itString->first, itString->first);
 	}
 	
 	refresh();
