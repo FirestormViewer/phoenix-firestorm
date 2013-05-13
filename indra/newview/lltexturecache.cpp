@@ -1833,6 +1833,16 @@ LLTextureCache::handle_t LLTextureCache::writeToCache(const LLUUID& id, U32 prio
 		purgeTextures(false);
 		mDoPurge = FALSE;
 	}
+
+	// <FS:ND> There seems to be an edge case of KDU failing to decode images and then we end with null data here.
+	// This should be bettered handled up where it fails, but at least this stops the crashes.
+	if( rawimage.isNull() || !rawimage->getData() )
+	{
+		delete responder;
+		return LLWorkerThread::nullHandle();
+	}
+	// </FS:ND>
+
 	LLMutexLock lock(&mWorkersMutex);
 
 	// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw to LTextureCacheRemoteWorker.
