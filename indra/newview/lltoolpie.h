@@ -96,6 +96,13 @@ private:
 	BOOL handleTooltipLand(std::string line, std::string tooltip_msg);
 	BOOL handleTooltipObject( LLViewerObject* hover_object, std::string line, std::string tooltip_msg);
 
+	// <FS:ND> FIRE-10276; handleTooltipObject can be called during name resolution (LLAvatarNameCache), then hover_object can lon gbe destroyed and the pointer invalid.
+	// To circumvent this just pass the id and try to fetch the object from gObjectList.
+
+	BOOL handleTooltipObjectById( LLUUID hoverObjectId, std::string line, std::string tooltip_msg);
+
+	// </FS:ND>
+
 	void steerCameraWithMouse(S32 x, S32 y);
 	void startCameraSteering();
 	void stopCameraSteering();
