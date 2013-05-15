@@ -560,7 +560,7 @@ void LLMeshRepoThread::run()
 	// <FS:Ansariel> Configurable request throttle
 	static LLCachedControl<U32> fsMaxMeshRequestsPerSecond(gSavedSettings, "FSMaxMeshRequestsPerSecond");
 	// <FS:Ansariel> Mesh header/LOD retry functionality
-	static LLCachedControl<F32> fsMeshRequestTimeout(gSavedSettings, "FSMeshRequestTimeout");
+	static LLCachedControl<S32> fsMeshRequestTimeout(gSavedSettings, "FSMeshRequestTimeout");
 
 	while (!LLApp::isQuitting())
 	{
@@ -580,7 +580,7 @@ void LLMeshRepoThread::run()
 				count = 0;	
 
 				// <FS:Ansariel> Mesh header/LOD retry functionality
-				F32 curl_timeout = (F32)fsMeshRequestTimeout;
+				F32 curl_timeout = llmax((F32)fsMeshRequestTimeout, 30.f) + 2.f; // 30 secs minimum timeout as defined in LLCurl.cpp
 
 				if (mMutex)
 				{
@@ -877,8 +877,12 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id)
 			std::string http_url = constructUrl(mesh_id);
 			if (!http_url.empty())
 			{				
+				// <FS:Ansariel> Customizable mesh request timeout
+				//ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
+				//								 new LLMeshSkinInfoResponder(mesh_id, offset, size));
 				ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
-												 new LLMeshSkinInfoResponder(mesh_id, offset, size));
+												 new LLMeshSkinInfoResponder(mesh_id, offset, size), gSavedSettings.getS32("FSMeshRequestTimeout"));
+				// </FS:Ansariel>
 				if(ret)
 				{
 					LLMeshRepository::sHTTPRequestCount++;
@@ -959,8 +963,12 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 			std::string http_url = constructUrl(mesh_id);
 			if (!http_url.empty())
 			{				
+				// <FS:Ansariel> Customizable mesh request timeout
+				//ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
+				//								 new LLMeshDecompositionResponder(mesh_id, offset, size));
 				ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
-												 new LLMeshDecompositionResponder(mesh_id, offset, size));
+												 new LLMeshDecompositionResponder(mesh_id, offset, size), gSavedSettings.getS32("FSMeshRequestTimeout"));
+				// </FS:Ansariel>
 				if(ret)
 				{
 					LLMeshRepository::sHTTPRequestCount++;
@@ -1040,8 +1048,12 @@ bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 			std::string http_url = constructUrl(mesh_id);
 			if (!http_url.empty())
 			{				
+				// <FS:Ansariel> Customizable mesh request timeout
+				//ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
+				//								 new LLMeshPhysicsShapeResponder(mesh_id, offset, size));
 				ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
-												 new LLMeshPhysicsShapeResponder(mesh_id, offset, size));
+												 new LLMeshPhysicsShapeResponder(mesh_id, offset, size), gSavedSettings.getS32("FSMeshRequestTimeout"));
+				// </FS:Ansariel>
 
 				if(ret)
 				{
@@ -1208,8 +1220,12 @@ bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod, 
 			std::string http_url = constructUrl(mesh_id);
 			if (!http_url.empty())
 			{				
+				// <FS:Ansariel> Customizable mesh request timeout
+				//retval = mCurlRequest->getByteRange(constructUrl(mesh_id), headers, offset, size,
+				//						   new LLMeshLODResponder(mesh_params, lod, offset, size));
 				retval = mCurlRequest->getByteRange(constructUrl(mesh_id), headers, offset, size,
-										   new LLMeshLODResponder(mesh_params, lod, offset, size));
+										   new LLMeshLODResponder(mesh_params, lod, offset, size), gSavedSettings.getS32("FSMeshRequestTimeout"));
+				// </FS:Ansariel>
 
 				if(retval)
 				{

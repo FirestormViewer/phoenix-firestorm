@@ -18903,13 +18903,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>FSMeshRequestTimeout</key>
   <map>
     <key>Comment</key>
-    <string>The timeout in seconds for a mesh header or LOD data request after that the request will be sent again.</string>
+    <string>The timeout in seconds for a mesh request to complete before it will be issued again.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
-    <string>F32</string>
+    <string>S32</string>
     <key>Value</key>
-    <real>35.0</real>
+    <real>60</real>
   </map>
     <key>ExodusFlickrLastTags</key>
     <map>
