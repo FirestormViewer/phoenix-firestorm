@@ -771,7 +771,7 @@ void LLPanelGroupGeneral::updateMembers()
 	// <FS:ND> FIRE-6074; If the group changes, mMemberPRogresss is invalid, as it belongs to a different LLGroupMgrGroupData. Reset it, start over.
 	if( mIteratorGroup != mGroupID )
 	{
-		mMemberProgress == gdatap->mMembers.begin();
+		mMemberProgress = gdatap->mMembers.begin();
 		mIteratorGroup = mGroupID;
 	}
 	// </FS:ND> FIRE-6074
