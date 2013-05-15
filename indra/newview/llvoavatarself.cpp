@@ -3320,10 +3320,7 @@ void LLVOAvatarSelf::onCustomizeEnd(bool disable_camera_switch)
 			gAgentCamera.resetView();
 		}
 
-		if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
-		{
-			LLAppearanceMgr::instance().requestServerAppearanceUpdate();
-		}
+		LLAppearanceMgr::instance().updateAppearanceFromCOF();
 	}
 }
 
