@@ -253,7 +253,7 @@ LLOSInfo::LLOSInfo() :
 				else if(osvi.dwMinorVersion == 3)
 				{
 					if(osvi.wProductType == VER_NT_WORKSTATION)
-						mOSStringSimple = "Microsoft Windows Blue ";
+						mOSStringSimple = "Microsoft Windows 8.1 ";
 				}
 
 				///get native system info if available..
