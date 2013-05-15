@@ -2328,7 +2328,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	BoolSetter setIsInUpdateAppearanceFromCOF(mIsInUpdateAppearanceFromCOF);
 	selfStartPhase("update_appearance_from_cof");
 
-	LL_DEBUGS("Avatar") << self_av_string() << "starting" << LL_ENDL;
+	LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
 
 	//checking integrity of the COF in terms of ordering of wearables, 
 	//checking and updating links' descriptions of wearables in the COF (before analyzed for "dirty" state)
@@ -4058,7 +4058,7 @@ LLAppearanceMgr::~LLAppearanceMgr()
 
 void LLAppearanceMgr::setAttachmentInvLinkEnable(bool val)
 {
-	LL_DEBUGS("Avatar") << "setAttachmentInvLinkEnable => " << (int) val << llendl;
+	llinfos << "setAttachmentInvLinkEnable => " << (int) val << llendl;
 	mAttachmentInvLinkEnabled = val;
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
 	if (mAttachmentInvLinkEnabled)

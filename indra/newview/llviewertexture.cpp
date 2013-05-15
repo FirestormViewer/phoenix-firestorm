@@ -917,15 +917,6 @@ LLViewerFetchedTexture::LLViewerFetchedTexture(const LLUUID& id, FTType f_type, 
 {
 	init(TRUE) ;
 	mFTType = f_type;
-	if (mFTType == FTT_HOST_BAKE)
-	{
-		// <FS:Ansariel> According to Monty Linden in BUG-871, baked textures can be fetched via HTTP, too!
-		//               According to Cinder it works also on OpenSim.
-		//mCanUseHTTP = false;
-		static LLCachedControl<bool> useHttpBakedTextureFetch(gSavedSettings, "UseHTTPBakedTextureFetch");
-		mCanUseHTTP = useHttpBakedTextureFetch;
-		// </FS:Ansariel>
-	}
 	generateGLTexture() ;
 }
 	

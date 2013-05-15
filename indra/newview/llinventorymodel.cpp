@@ -2057,9 +2057,8 @@ bool LLInventoryModel::loadSkeleton(
 		{
 			LLViewerInventoryCategory* cat = (*invalid_cat_it).get();
 			cat->setVersion(NO_VERSION);
-			LL_DEBUGS("Inventory") << "Invalidating category name: " << cat->getName() << " UUID: " << cat->getUUID() << " due to invalid descendents cache" << llendl;
+			llinfos << "Invalidating category name: " << cat->getName() << " UUID: " << cat->getUUID() << " due to invalid descendents cache" << llendl;
 		}
-		LL_INFOS("Inventory") << "Invalidated " << invalid_categories.size() << " categories due to invalid descendents cache" << llendl;
 
 		// At this point, we need to set the known descendents for each
 		// category which successfully cached so that we do not
