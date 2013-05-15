@@ -541,6 +541,13 @@ void LLScriptLibrary::init()
 	addFunction(0.f, 0.f, dummy_func, "llGetAnimationOverride", "s", "s");
 	addFunction(0.f, 0.f, dummy_func, "llResetAnimationOverride", NULL, "s");
 
+	// Server RC LeTigre/BlueSteel/Magnum 13.05.14.275813 new functions
+	addFunction(0.f, 0.f, dummy_func, "llJson2List", "l", "s");
+	addFunction(0.f, 0.f, dummy_func, "llList2Json", "s", "sl");
+	addFunction(0.f, 0.f, dummy_func, "llJsonGetValue", "s", "sl");
+	addFunction(0.f, 0.f, dummy_func, "llJsonSetValue", "s", "sls");
+	addFunction(0.f, 0.f, dummy_func, "llJsonValueType", "s", "sl");
+
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 	
 // <FS:CR> Opensim/Aurora scripting functions - Please add Second Life LSL functions above this line!

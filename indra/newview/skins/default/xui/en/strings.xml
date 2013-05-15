@@ -2177,6 +2177,26 @@ Returns a string that is the name of the animation that is being used for the sp
 llResetAnimationOverride(string anim_state)
 Resets the animation override of the specified animation state (anim_state) to the corresponding default value.
 </string>
+<string name="LSLTipText_llJson2List" translate="false">
+list llJson2List(string json)
+Converts the top level of the json string to a list.
+</string>
+<string name="LSLTipText_llList2Json" translate="false">
+string llList2Json(string type, list values)
+Converts either a strided list of key:value pairs to a JSON_OBJECT or a list of values to a JSON_ARRAY
+</string>
+<string name="LSLTipText_llJsonGetValue" translate="false">
+string llJsonGetValue(string json, list specifiers)
+Gets the value indicated by specifiers from the json string.
+</string>
+<string name="LSLTipText_llJsonSetValue" translate="false">
+string llJsonSetValue(string json, list specifiers, string value)
+Returns a new json string that is the json given with the value indicated by specifiers set to value.
+</string>
+<string name="LSLTipText_llJsonValueType" translate="false">
+string llJsonValueType(string json, list specifiers)
+Returns the type constant for the value in json indicated by specifiers.
+</string>
 <!-- END FS:Ansariel: LSL function tooltip help texts manually added -->
 	
     
