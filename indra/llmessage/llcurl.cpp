@@ -1130,7 +1130,11 @@ void LLCurlRequest::get(const std::string& url, LLCurl::ResponderPtr responder)
 bool LLCurlRequest::getByteRange(const std::string& url,
 								 const headers_t& headers,
 								 S32 offset, S32 length,
-								 LLCurl::ResponderPtr responder)
+								 // <FS:Ansariel> Expose time out param
+								 //LLCurl::ResponderPtr responder)
+								 LLCurl::ResponderPtr responder,
+								 S32 time_out)
+								 // </FS:Ansariel>
 {
 	llassert(LLCurl::sNotQuitting);
 	LLCurl::Easy* easy = allocEasy();
@@ -1138,7 +1142,10 @@ bool LLCurlRequest::getByteRange(const std::string& url,
 	{
 		return false;
 	}
-	easy->prepRequest(url, headers, responder);
+	// <FS:Ansariel> Expose time out param
+	//easy->prepRequest(url, headers, responder);
+	easy->prepRequest(url, headers, responder, time_out);
+	// </FS:Ansariel>
 	easy->setopt(CURLOPT_HTTPGET, 1);
 	if (length > 0)
 	{

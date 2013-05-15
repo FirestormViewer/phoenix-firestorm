@@ -387,7 +387,10 @@ public:
 	~LLCurlRequest();
 
 	void get(const std::string& url, LLCurl::ResponderPtr responder);
-	bool getByteRange(const std::string& url, const headers_t& headers, S32 offset, S32 length, LLCurl::ResponderPtr responder);
+	// <FS:Ansariel> Expose time out param
+	//bool getByteRange(const std::string& url, const headers_t& headers, S32 offset, S32 length, LLCurl::ResponderPtr responder);
+	bool getByteRange(const std::string& url, const headers_t& headers, S32 offset, S32 length, LLCurl::ResponderPtr responder, S32 time_out = 0);
+	// </FS:Ansariel>
 	bool post(const std::string& url, const headers_t& headers, const LLSD& data, LLCurl::ResponderPtr responder, S32 time_out = 0);
 	bool post(const std::string& url, const headers_t& headers, const std::string& data, LLCurl::ResponderPtr responder, S32 time_out = 0);
 	
