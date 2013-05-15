@@ -137,6 +137,7 @@ set(viewer_SOURCE_FILES
     fsfloaterposestand.cpp
     fsfloaterprofile.cpp
     fsfloaterradar.cpp
+    fsfloaterscripteditorprefs.cpp
     fsfloatersearch.cpp
     fsfloaterteleporthistory.cpp
     fsfloatervoicecontrols.cpp
@@ -803,6 +804,7 @@ set(viewer_HEADER_FILES
     fsfloaterposestand.h
     fsfloaterprofile.h
     fsfloaterradar.h
+    fsfloaterscripteditorprefs.h
     fsfloatersearch.h
     fsfloaterteleporthistory.h
     fsfloatervoicecontrols.h

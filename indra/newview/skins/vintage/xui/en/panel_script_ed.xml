@@ -54,22 +54,26 @@
              label="Save"
              layout="topleft"
              name="Save" />
-            <menu_item_separator
-             layout="topleft" />
-            <menu_item_call
-             label="Revert All Changes"
-             layout="topleft"
-             name="Revert All Changes" />
-            <menu_item_separator
-             layout="topleft" />
-            <menu_item_call
-             label="Load from file..."
-             layout="topleft"
-             name="LoadFromFile" />
-            <menu_item_call
-             label="Save to file..."
-             layout="topleft"
-             name="SaveToFile" />
+          <menu_item_separator
+           layout="topleft" />
+          <menu_item_call
+           label="Revert All Changes"
+           layout="topleft"
+           name="Revert All Changes" />
+          <menu_item_separator
+           layout="topleft" />
+          <menu_item_call
+           label="Load from file..."
+           layout="topleft"
+           name="LoadFromFile" />
+          <menu_item_call
+           label="Save to file..."
+           layout="topleft"
+           name="SaveToFile" />
+          <menu_item_call
+           label="Script Editor Preferences..."
+           layout="topleft"
+           name="ScriptPrefs" />
         </menu>
         <menu
          top="0"
@@ -142,10 +146,175 @@
              label="Keyword Help..."
              layout="topleft"
              name="Keyword Help..." />
+            <menu_item_call
+             label="Script Library..."
+             name="Script Library">
+             <menu_item_call.on_click
+              function="PromptShowURL"
+              name="script_library_url"
+              parameter="WebLaunchExternalTarget,http://wiki.secondlife.com/wiki/LSL_Library" />
+            </menu_item_call>
         </menu>
     </menu_bar>
+    <layout_stack
+        animate="false"
+        clip="false"
+        follows="left|top|right"
+        name="script_editor_button_bar"
+        layout="topleft"
+        orientation="vertical"
+        top_pad="0"
+        width="497"
+        left="0"
+        height="20">
+        <layout_panel
+         auto_resize="false"
+         follows="left|top"
+         name="script_editor_buttons_panel"
+         layout="topleft"
+         width="497"
+         height="20">
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Save"
+             image_selected="Script_Save"
+             image_pressed="Script_Save"
+             tool_tip="Save script"
+             label=""
+             layout="topleft"
+             name="save_btn"
+             left="7"
+             top="2"
+             width="18" />
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Editor"
+             image_selected="Script_Editor"
+             image_pressed="Script_Editor"
+             tool_tip="External Script_Editor"
+             label=""
+             layout="topleft"
+             name="Edit_btn"
+             left_pad="3"
+             width="18" />
+            
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Disk_Load"
+             image_selected="Script_Disk_Load"
+             image_pressed="Script_Disk_Load"
+             tool_tip="Load a Script from your Hard Disk"
+             label=""
+             layout="topleft"
+             name="load_disk_btn"
+             left_pad="14"
+             width="18" />
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Disk_Save"
+             image_selected="Script_Disk_Save"
+             image_pressed="Script_Disk_Save"
+             tool_tip="Save a Script to your Hard Disk"
+             label=""
+             layout="topleft"
+             name="save_disk_btn"
+             left_pad="3"
+             width="18" />
+            
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Cut"
+             image_selected="Script_Cut"
+             image_pressed="Script_Cut"
+             tool_tip="Cut"
+             label=""
+             layout="topleft"
+             name="cut_btn"
+             left_pad="14"
+             width="18" />
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Copy"
+             image_selected="Script_Copy"
+             image_pressed="Script_Copy"
+             tool_tip="Copy"
+             label=""
+             layout="topleft"
+             name="copy_btn"
+             left_pad="3"
+             width="18" />
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Paste"
+             image_selected="Script_Paste"
+             image_pressed="Script_Paste"
+             tool_tip="Paste"
+             label=""
+             layout="topleft"
+             name="paste_btn"
+             left_pad="3"
+             width="18" />
+            
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Undo"
+             image_selected="Script_Undo"
+             image_pressed="Script_Undo"
+             tool_tip="Undo"
+             label=""
+             layout="topleft"
+             name="undo_btn"
+             left_pad="14"
+             width="18" />
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Redo"
+             image_selected="Script_Redo"
+             image_pressed="Script_Redo"
+             tool_tip="Redo"
+             label=""
+             layout="topleft"
+             name="redo_btn"
+             left_pad="3"
+             width="18" />
+            
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Search"
+             image_selected="Script_Search"
+             image_pressed="Script_Search"
+             tool_tip="Search/Replace"
+             label=""
+             layout="topleft"
+             name="search_btn"
+             left_pad="14"
+             width="18" />
+            <button
+             follows="left|top"
+             height="18"
+             image_unselected="Script_Config"
+             image_selected="Script_Config"
+             image_pressed="Script_Config"
+             tool_tip="Script Editor Preferences"
+             label=""
+             layout="topleft"
+             name="prefs_btn"
+             left_pad="14"
+             width="18" />
+        </layout_panel>
+    </layout_stack>
     <text_editor
-    left="0"
+     left="0"
      type="string"
      length="1"
      follows="left|top|right|bottom"
@@ -157,6 +326,9 @@
      line_spacing.pixels="-1"
      max_length="65536"
      name="Script Editor"
+     text_color="ScriptText"
+     bg_writeable_color="ScriptBackground"
+	 bg_focus_color="ScriptBackground"
      text_readonly_color="DkGray"
      bg_readonly_color="TextBgWriteableColor"
      show_line_numbers="true"
@@ -182,40 +354,12 @@
      value="Line 29, Column 14"
      width="128" />
     <combo_box
-     follows="left|bottom"
+     follows="right|bottom"
      height="23"
      label="Insert..."
      layout="topleft"
      name="Insert..."
-     width="128" />
-    <button
-     follows="right|bottom"
-     height="23"
-     label="Save"
-     label_selected="Save"
-     layout="topleft"
-     top_pad="-35"
-     right="487"
-     name="Save_btn"
-     width="81" />
-    <button
-     enabled="false"
-     follows="right|bottom"
-     height="23"
-     label="Edit..."
-     layout="topleft"
-     top_pad="-23"
-     right="400"
-     name="Edit_btn"
-     width="81" />
-    <check_box
-     top_pad="4"
-     follows="right|bottom"
-     layout="topleft"
-     height="16"
-     width="100"
-     label="Convert Tabs to Spaces"
-     tool_tip="If enabled, the script sent to the viewer from an external editor will automatically have all tabs being replaced by the default number of spaces (usually 4)."
-     name="ExternalEditorConvertTabsToSpaces"
-     control_name="ExternalEditorConvertTabsToSpaces" />
+     width="158"
+     top_delta="0"
+     left_pad="200" />
 </panel>

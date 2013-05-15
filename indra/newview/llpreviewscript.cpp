@@ -267,7 +267,18 @@ LLScriptEdCore::~LLScriptEdCore()
 BOOL LLScriptEdCore::postBuild()
 {
 	mLineCol=getChild<LLTextBox>("line_col");
-	mSaveBtn=getChildView("Save_btn");
+// <FS:CR> Advanced Script Editor
+	//mSaveBtn=getChildView("Save_btn");
+	mSaveBtn =	getChild<LLButton>("save_btn");
+	mCutBtn =	getChild<LLButton>("cut_btn");
+	mCopyBtn =	getChild<LLButton>("copy_btn");
+	mPasteBtn =	getChild<LLButton>("paste_btn");
+	mUndoBtn =	getChild<LLButton>("undo_btn");
+	mRedoBtn =	getChild<LLButton>("redo_btn");
+	mSaveToDiskBtn = getChild<LLButton>("save_to_disk_btn");
+	mLoadFromDiskBtn = getChild<LLButton>("load_from_disk_btn");
+	mSearchBtn = getChild<LLButton>("search_btn");
+// </FS:CR>
 
 	mErrorList = getChild<LLScrollListCtrl>("lsl errors");
 
@@ -292,10 +303,14 @@ BOOL LLScriptEdCore::postBuild()
 	// NaCl End
 
 	childSetCommitCallback("lsl errors", &LLScriptEdCore::onErrorList, this);
-	childSetAction("Save_btn", boost::bind(&LLScriptEdCore::doSave,this,FALSE));
+// <FS:CR> Advanced Script Editor
+	//childSetAction("Save_btn", boost::bind(&LLScriptEdCore::doSave,this,FALSE));
+	childSetAction("prefs_btn", boost::bind(&LLScriptEdCore::onBtnPrefs, this));
+// </FS:CR>
 	childSetAction("Edit_btn", boost::bind(&LLScriptEdCore::openInExternalEditor, this));
 	
 	initMenu();
+	initButtonBar();	// <FS:CR> Advanced Script Editor
 
 
 	std::vector<std::string> funcs;
@@ -486,13 +501,49 @@ void LLScriptEdCore::initMenu()
 	menuItem = getChild<LLMenuItemCallGL>("SaveToFile");
 	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnSaveToFile, this));
 	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableSaveToFileMenu, this));
+
+// <FS:CR> Advanced Script Editor
+	menuItem = getChild<LLMenuItemCallGL>("ScriptPrefs");
+	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnPrefs, this));
 }
+
+void LLScriptEdCore::initButtonBar()
+{
+	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
+	mCutBtn->setClickedCallback(boost::bind(&LLTextEditor::cut, mEditor));
+	mCopyBtn->setClickedCallback(boost::bind(&LLTextEditor::copy, mEditor));
+	mPasteBtn->setClickedCallback(boost::bind(&LLTextEditor::paste, mEditor));
+	mUndoBtn->setClickedCallback(boost::bind(&LLTextEditor::undo, mEditor));
+	mRedoBtn->setClickedCallback(boost::bind(&LLTextEditor::redo, mEditor));
+	mSaveToDiskBtn->setClickedCallback(boost::bind(&LLScriptEdCore::onBtnSaveToFile, this));
+	mLoadFromDiskBtn->setClickedCallback(boost::bind(&LLScriptEdCore::onBtnLoadFromFile, this));
+	mSearchBtn->setClickedCallback(boost::bind(&LLFloaterSearchReplace::show, mEditor));
+}
+
+void LLScriptEdCore::updateButtonBar()
+{
+	mSaveBtn->setEnabled(hasChanged());
+	mCutBtn->setEnabled(mEditor->canCut());
+	mCopyBtn->setEnabled(mEditor->canCopy());
+	mPasteBtn->setEnabled(mEditor->canPaste());
+	mUndoBtn->setEnabled(mEditor->canUndo());
+	mRedoBtn->setEnabled(mEditor->canRedo());
+	mSaveToDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
+	mLoadFromDiskBtn->setEnabled(mEditor->canLoadOrSaveToFile());
+}
+
+//static
+void LLScriptEdCore::onBtnPrefs(void* userdata)
+{
+	LLFloaterReg::showInstance("fs_script_editor_prefs");
+}
+// </FS:CR>
 
 // NaCl - LSL Preprocessor
 void LLScriptEdCore::onToggleProc(void* userdata)
 {
 	LLScriptEdCore* corep = (LLScriptEdCore*)userdata;
-	corep->mErrorList->setCommentText(std::string("Toggling the preprocessor will not take full effect unless you close and reopen this editor."));
+	corep->mErrorList->setCommentText(LLTrans::getString("preproc_toggle_warning"));
 	corep->mErrorList->selectFirstItem();
 	gSavedSettings.setBOOL("_NACL_LSLPreprocessor",!gSavedSettings.getBOOL("_NACL_LSLPreprocessor"));
 }
@@ -629,8 +680,11 @@ bool LLScriptEdCore::hasChanged()
 
 void LLScriptEdCore::draw()
 {
-	BOOL script_changed	= hasChanged();
-	mSaveBtn->setEnabled(script_changed);
+// <FS:CR> Advanced Script Editor
+	//BOOL script_changed	= hasChanged();
+	//mSaveBtn->setEnabled(script_changed);
+	updateButtonBar();
+// </FS:CR>
 
 	if( mEditor->hasFocus() )
 	{

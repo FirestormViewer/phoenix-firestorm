@@ -185,6 +185,8 @@ with the same filename but different name
   <texture name="DropTarget" file_name="widgets/DropTarget.png" preload="false" />
 
   <texture name="ExternalBrowser_Off" file_name="icons/ExternalBrowser_Off.png" preload="false" />
+  <texture name="ExternalBrowser_Over" file_name="icons/ExternalBrowser_Over.png" preload="false" />
+  <texture name="ExternalBrowser_Press" file_name="icons/ExternalBrowser_Press.png" preload="false" />
   <texture name="Edit_Wrench" file_name="icons/Edit_Wrench.png" preload="false" />
 
   <texture name="Favorite_Star_Active" file_name="navbar/Favorite_Star_Active.png" preload="false" />
@@ -916,4 +918,15 @@ with the same filename but different name
 <texture name="ProgressLarge_11" file_name="icons/ProgressLarge_11.png" preload="true" />
 <texture name="ProgressLarge_12" file_name="icons/ProgressLarge_12.png" preload="true" />
 	
+<texture name="Script_Save" file_name="icons/script_save.png" preload="false" />
+<texture name="Script_Copy" file_name="icons/script_copy.png" preload="false" />
+<texture name="Script_Cut" file_name="icons/script_cut.png" preload="false" />
+<texture name="Script_Paste" file_name="icons/script_paste.png" preload="false" />
+<texture name="Script_Disk_Save" file_name="icons/script_disk_save.png" preload="false" />
+<texture name="Script_Disk_Load" file_name="icons/script_disk_load.png" preload="false" />
+<texture name="Script_Undo" file_name="icons/script_undo.png" preload="false" />
+<texture name="Script_Redo" file_name="icons/script_redo.png" preload="false" />
+<texture name="Script_Search" file_name="icons/script_search.png" preload="false" />
+<texture name="Script_Editor" file_name="icons/script_editor.png" preload="false" />
+<texture name="Script_Config" file_name="icons/script_config.png" preload="false" />
 </textures>

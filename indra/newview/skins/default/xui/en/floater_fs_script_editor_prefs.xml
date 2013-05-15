@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ legacy_header_height="18"
+ height="400"
+ layout="topleft"
+ name="floater_fs_script_editor_prefs"
+ help_topic="preview_lsl_text"
+ title="Script Editor Preferences"
+ single_instance="true"
+ can_resize="false"
+ width="300">
+	<text
+	 follows="left|top"
+	 height="15"
+	 layout="topleft"
+	 left="12"
+	 name="color_pickers_label"
+	 top="30"
+	 width="200">
+	Choose desired colors:
+    </text>
+	
+	<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="24"
+		label_height="0"
+		layout="topleft"
+		left="15"
+		name="user"
+		top_pad="10"
+		width="44" >
+        <color_swatch.init_callback
+		function="ScriptPref.getUIColor"
+		parameter="ScriptText" />
+        <color_swatch.commit_callback
+		function="ScriptPref.applyUIColor"
+		parameter="ScriptText" />
+    </color_swatch>
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left_pad="5"
+		mouse_opaque="false"
+		name="text"
+		top_delta="5"
+		width="85">
+        Text
+    </text>
+	<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="24"
+		label_height="0"
+		layout="topleft"
+		left="15"
+		name="user"
+		top_pad="10"
+		width="44" >
+        <color_swatch.init_callback
+		function="ScriptPref.getUIColor"
+		parameter="ScriptBackground" />
+        <color_swatch.commit_callback
+		function="ScriptPref.applyUIColor"
+		parameter="ScriptBackground" />
+    </color_swatch>
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left_pad="5"
+		mouse_opaque="false"
+		name="background"
+		top_delta="5"
+		width="85">
+        Background
+    </text>
+	
+	<text
+		follows="left|top"
+		height="15"
+		layout="topleft"
+		left="12"
+		name="prefs_label"
+		top="200"
+		width="200">
+		Script Editor Options:
+    </text>
+	<check_box
+		control_name="ExternalEditorConvertTabsToSpaces"
+		follows="left|top"
+		layout="topleft"
+		left_delta="5"
+		height="12"
+		name="convert_tabs_to_spaces_checkbox"
+		top_pad="6"
+		width="200"
+		label="Convert tabs to spaces" />
+	<check_box
+		control_name="_NACL_LSLPreprocessor"
+		follows="left|top"
+		height="16"
+		top_pad="2"
+		label="Enable LSL preprocessor"
+		tool_tip="When checked, the LSL preprocessor is enabled."
+		name="preproc_checkbox" />
+	<check_box
+		control_name="_NACL_PreProcLSLOptimizer"
+		enabled_control="_NACL_LSLPreprocessor"
+		follows="left|top"
+		height="16"
+		top_pad="2"
+		left_delta="16"
+		label="Script optimizer"
+		tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."
+		name="preprocoptimizer_checkbox" />
+	<check_box
+		control_name="_NACL_PreProcLSLSwitch"
+		enabled_control="_NACL_LSLPreprocessor"
+		follows="left|top"
+		height="16"
+		top_pad="2"
+		label="switch() statement"
+		tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."
+		name="preprocswitch_checkbox" />
+	<check_box
+		control_name="_NACL_PreProcLSLLazyLists"
+		enabled_control="_NACL_LSLPreprocessor"
+		follows="left|top"
+		height="16"
+		top_pad="2"
+		label="Lazy lists"
+		tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."
+		name="preproclazy_checkbox" />
+	<check_box
+		control_name="_NACL_PreProcEnableHDDInclude"
+		enabled_control="_NACL_LSLPreprocessor"
+		follows="left|top"
+		top_pad="2"
+		height="16"
+		label="#includes from local disk"
+		tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."
+		name="preprocinclude_checkbox" />
+	<text
+		follows="left|top"
+		height="16"
+		type="string"
+		length="1"
+		layout="topleft"
+		name="lslpreprocinclude_textbox"
+		top_pad="2"
+		width="256">
+		Preprocessor include path:
+	</text>
+	<line_editor
+		control_name="_NACL_PreProcHDDIncludeLocation"
+		border_style="line"
+		border_thickness="1"
+		follows="left|top"
+		height="23"
+		enabled_control="_NACL_PreProcEnableHDDInclude"
+		max_length_chars="4096"
+		name="preprocinclude_location"
+		top_pad="0"
+		width="200" />
+	<button
+		follows="left|top"
+		height="23"
+		enabled_control="_NACL_PreProcEnableHDDInclude"
+		label="..."
+		label_selected="Browse"
+		left_pad="5"
+		name="SetPreprocInclude"
+		top_delta="0"
+		width="30">
+		<button.commit_callback
+		function="NACL.SetPreprocInclude" />
+	</button>
+</floater>

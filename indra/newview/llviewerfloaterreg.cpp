@@ -164,6 +164,7 @@
 #include "fsfloaterposestand.h"
 #include "fsfloaterprofile.h"
 #include "fsfloaterradar.h"
+#include "fsfloaterscripteditorprefs.h"
 #include "fsfloatersearch.h"
 #include "fsfloaterteleporthistory.h"
 #include "fsfloatervolumecontrols.h"
@@ -398,6 +399,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_posestand", "floater_fs_posestand.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoseStand>);
 	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
 	LLFloaterReg::add("fs_radar", "floater_fs_radar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterRadar>);
+	LLFloaterReg::add("fs_script_editor_prefs", "floater_fs_script_editor_prefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterScriptEdPrefs>);
 	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
 	LLFloaterReg::add("fs_volume_controls", "floater_fs_volume_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVolumeControls>);
 	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);

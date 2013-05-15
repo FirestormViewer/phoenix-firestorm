@@ -114,6 +114,7 @@ public:
 	static void		onBtnInsertFunction(LLUICtrl*, void*);
 	static void		onBtnLoadFromFile(void*);
 	static void		onBtnSaveToFile(void*);
+	static void		onBtnPrefs(void*);	// <FS:CR> Advanced Script Editor
 
 	static bool		enableSaveToFileMenu(void* userdata);
 	static bool		enableLoadFromFileMenu(void* userdata);
@@ -135,6 +136,11 @@ private:
 	virtual BOOL handleKeyHere(KEY key, MASK mask);
 	
 	void enableSave(BOOL b) {mEnableSave = b;}
+	
+// <FS:CR> Advanced Script Editor
+	void	initButtonBar();
+	void	updateButtonBar();
+// </FS:CR>
 
 protected:
 	void deleteBridges();
@@ -163,7 +169,18 @@ private:
 	BOOL			mHasScriptData;
 	LLLiveLSLFile*	mLiveFile;
 	LLTextBox*		mLineCol;
-	LLView*			mSaveBtn;
+// <FS:CR> Advanced Script Editor
+	//LLView*			mSaveBtn;
+	LLButton*		mSaveBtn;
+	LLButton*		mCutBtn;
+	LLButton*		mCopyBtn;
+	LLButton*		mPasteBtn;
+	LLButton*		mUndoBtn;
+	LLButton*		mRedoBtn;
+	LLButton*		mSaveToDiskBtn;
+	LLButton*		mLoadFromDiskBtn;
+	LLButton*		mSearchBtn;
+// </FS:CR>
 	// NaCl - LSL Preprocessor
 	FSLSLPreprocessor* mLSLProc;
 	LLTextEditor*	mPostEditor;
