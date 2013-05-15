@@ -542,7 +542,7 @@ protected:
 	//--------------------------------------------------------------------
 protected:
 	virtual void	setLocalTexture(LLAvatarAppearanceDefines::ETextureIndex type, LLViewerTexture* tex, BOOL baked_version_exits, U32 index = 0);
-	virtual void	addLocalTextureStats(LLAvatarAppearanceDefines::ETextureIndex type, LLViewerFetchedTexture* imagep, F32 texel_area_ratio, BOOL rendered, BOOL covered_by_baked);
+	virtual void	addLocalTextureStats(LLAvatarAppearanceDefines::ETextureIndex type, LLViewerFetchedTexture* imagep, F32 texel_area_ratio, BOOL rendered, BOOL covered_by_baked, U32 index = 0);
 	// MULTI-WEARABLE: make self-only?
 	virtual void	setBakedReady(LLAvatarAppearanceDefines::ETextureIndex type, BOOL baked_version_exists, U32 index = 0);
 
@@ -977,17 +977,6 @@ public:
 protected:
 	LLFrameTimer	mRuthDebugTimer; // For tracking how long it takes for av to rez
 	LLFrameTimer	mDebugExistenceTimer; // Debugging for how long the avatar has been in memory.
-
-	//--------------------------------------------------------------------
-	// COF monitoring
-	//--------------------------------------------------------------------
-
-public:
-	// COF version of last viewer-initiated appearance update request. For non-self avs, this will remain at default.
-	S32 mLastUpdateRequestCOFVersion;
-
-	// COF version of last appearance message received for this av.
-	S32 mLastUpdateReceivedCOFVersion;
 
 /**                    Diagnostics
  **                                                                            **

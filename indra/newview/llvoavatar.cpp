@@ -649,9 +649,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mLastRezzedStatus(-1),
 	mIsEditingAppearance(FALSE),
 	mUseLocalAppearance(FALSE),
-	mUseServerBakes(FALSE), // FIXME DRANO consider using boost::optional, defaulting to unknown.
-	mLastUpdateRequestCOFVersion(-1),
-	mLastUpdateReceivedCOFVersion(-1)
+	mUseServerBakes(FALSE) // FIXME DRANO consider using boost::optional, defaulting to unknown.
 {
 	//VTResume();  // VTune
 	
@@ -3232,21 +3230,17 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 										  mUseServerBakes, central_bake_version);
 		std::string origin_string = bakedTextureOriginInfo();
 		debug_line += " [" + origin_string + "]";
-		S32 curr_cof_version = LLAppearanceMgr::instance().getCOFVersion();
-		S32 last_request_cof_version = mLastUpdateRequestCOFVersion;
-		S32 last_received_cof_version = mLastUpdateReceivedCOFVersion;
 		if (isSelf())
 		{
+			S32 curr_cof_version = LLAppearanceMgr::instance().getCOFVersion();
+			S32 last_request_cof_version = LLAppearanceMgr::instance().getLastUpdateRequestCOFVersion();
+			S32 last_received_cof_version = LLAppearanceMgr::instance().getLastAppearanceUpdateCOFVersion();
 			debug_line += llformat(" - cof: %d req: %d rcv:%d",
 								   curr_cof_version, last_request_cof_version, last_received_cof_version);
 			if (gSavedSettings.getBOOL("DebugForceAppearanceRequestFailure"))
 			{
 				debug_line += " FORCING ERRS";
 			}
-		}
-		else
-		{
-			debug_line += llformat(" - cof rcv:%d", last_received_cof_version);
 		}
 		addDebugText(debug_line);
 	}
@@ -4652,7 +4646,7 @@ void LLVOAvatar::updateTextures()
 				const EBakedTextureIndex baked_index = texture_dict->mBakedTextureIndex;
 				if (texture_dict->mIsLocalTexture)
 				{
-					addLocalTextureStats((ETextureIndex)texture_index, imagep, texel_area_ratio, render_avatar, mBakedTextureDatas[baked_index].mIsUsed);
+					addLocalTextureStats((ETextureIndex)texture_index, imagep, texel_area_ratio, render_avatar, layer_baked[baked_index]);
 				}
 			}
 		}
@@ -4685,7 +4679,7 @@ void LLVOAvatar::updateTextures()
 
 
 void LLVOAvatar::addLocalTextureStats( ETextureIndex idx, LLViewerFetchedTexture* imagep,
-									   F32 texel_area_ratio, BOOL render_avatar, BOOL covered_by_baked)
+									   F32 texel_area_ratio, BOOL render_avatar, BOOL covered_by_baked, U32 index )
 {
 	// No local texture stats for non-self avatars
 	return;
@@ -7366,7 +7360,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 		return;
 	}
 	S32 this_update_cof_version = contents.mCOFVersion;
-	S32 last_update_request_cof_version = mLastUpdateRequestCOFVersion;
+	S32 last_update_request_cof_version = LLAppearanceMgr::instance().mLastUpdateRequestCOFVersion;
 
 	// Only now that we have result of appearance_version can we decide whether to bail out.
 	if( isSelf() )
@@ -7375,6 +7369,8 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 				<< " last_update_request_cof_version " << last_update_request_cof_version
 				<<  " my_cof_version " << LLAppearanceMgr::instance().getCOFVersion() << llendl;
 
+		LLAppearanceMgr::instance().setLastAppearanceUpdateCOFVersion(this_update_cof_version);
+		
 		if (getRegion() && (getRegion()->getCentralBakeVersion()==0))
 		{
 			llwarns << avString() << "Received AvatarAppearance message for self in non-server-bake region" << llendl;
@@ -7415,8 +7411,6 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 		llinfos << "ignoring appearance message due to lack of params" << llendl;
 		return;
 	}
-
-	mLastUpdateReceivedCOFVersion = this_update_cof_version;
 
 	setIsUsingServerBakes(appearance_version > 0);
 
