@@ -36,9 +36,9 @@
 
 #include "lluicolortable.h"	// <FS:CR> Use color table so the user can define colors
 
-// <FS:CR> Bump this for Firestorm changes
+// <FS:CR> fskeywords reversioning
 //const U32 KEYWORD_FILE_CURRENT_VERSION = 2;
-const U32 KEYWORD_FILE_CURRENT_VERSION = 3;
+const U32 KEYWORD_FILE_CURRENT_VERSION = 1;
 // </FS:CR>
 
 inline BOOL LLKeywordToken::isHead(const llwchar* s) const
@@ -105,9 +105,12 @@ BOOL LLKeywords::loadFromFile( const std::string& filename )
 
 	// Identifying string
 	file >> buffer;
-	if( strcmp( buffer, "llkeywords" ) )
+	// <FS:CR> Firestorm fskeywords versioning
+	//if( strcmp( buffer, "llkeywords" ) )
+	if (strcmp(buffer, "fskeywords"))
+	// </FS:CR>
 	{
-		llinfos << filename << " does not appear to be a keyword file" << llendl;
+		llinfos << filename << " does not appear to be a Firestorm keyword file" << llendl;
 		return mLoaded;
 	}
 
