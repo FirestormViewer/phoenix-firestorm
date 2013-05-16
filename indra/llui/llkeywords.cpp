@@ -34,7 +34,10 @@
 #include "llstl.h"
 #include <boost/tokenizer.hpp>
 
-const U32 KEYWORD_FILE_CURRENT_VERSION = 2;
+// <FS:CR> Bump this for Firestorm changes
+//const U32 KEYWORD_FILE_CURRENT_VERSION = 2;
+const U32 KEYWORD_FILE_CURRENT_VERSION = 3;
+// </FS:CR>
 
 inline BOOL LLKeywordToken::isHead(const llwchar* s) const
 {
@@ -117,7 +120,10 @@ BOOL LLKeywords::loadFromFile( const std::string& filename )
 	}
 
 	// start of line (SOL)
-	std::string SOL_COMMENT("#");
+// <FS:CR> Use ; for comment, not # so we can add preprocessor directives to keywords.ini
+	//std::string SOL_COMMENT("#");
+	std::string SOL_COMMENT(";");
+// </FS:CR>
 	std::string SOL_WORD("[word ");
 	std::string SOL_LINE("[line ");
 	std::string SOL_ONE_SIDED_DELIMITER("[one_sided_delimiter ");

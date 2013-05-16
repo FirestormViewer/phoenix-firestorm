@@ -348,7 +348,12 @@ BOOL LLScriptEdCore::postBuild()
 	
 	LLColor3 color(0.5f, 0.0f, 0.15f);
 	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
-
+// <FS:CR> OSSL Keywords
+#ifdef OPENSIM
+	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+#endif // OPENSIM
+// </FS:CR>
+	
 	std::vector<std::string> primary_keywords;
 	std::vector<std::string> secondary_keywords;
 	LLKeywordToken *token;
@@ -371,47 +376,13 @@ BOOL LLScriptEdCore::postBuild()
 	if(mPostEditor)
 	{
 		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
-		mEditor->addToken(LLKeywordToken::WORD,"#assert",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#define",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#elif",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#else",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#endif",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#error",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#ident",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#sccs",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#if",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#ifdef",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#ifndef",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#import",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#include",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#include_next",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#line",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#pragma",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#unassert",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#undef",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#warning",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-		mEditor->addToken(LLKeywordToken::WORD,"#",LLColor3(0.0f,0.0f,0.8f),
-			std::string("Preprocessor command. See Advanced menu of the script editor."));
-
+		// <FS:CR> OSSL Keywords
+#ifdef OPENSIM
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+#endif // OPENSIM
+		// </FS:CR>
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
+		
 		if(gSavedSettings.getBOOL("_NACL_PreProcLSLSwitch"))
 		{
 			mEditor->addToken(LLKeywordToken::WORD,"switch",LLColor3(0.0f,0.0f,0.8f),
