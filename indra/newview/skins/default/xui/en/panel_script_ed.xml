@@ -193,7 +193,7 @@
              image_unselected="Script_Editor"
              image_selected="Script_Editor"
              image_pressed="Script_Editor"
-             tool_tip="External Script_Editor"
+             tool_tip="External Script Editor"
              label=""
              layout="topleft"
              name="Edit_btn"
