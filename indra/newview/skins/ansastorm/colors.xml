@@ -1172,4 +1172,15 @@
   <color
       name="Phototools_Header"
       reference="EmphasisColor" />
+  
+  <!-- <FS:CR> Script Editor Colors -->
+  <color
+      name="ScriptText"
+      reference="Black" />
+  <color
+      name="ScriptBackground"
+      reference="White" />
+  <color
+      name="ScriptPreprocessor"
+      value="0 0 0.8 1" />
 </colors>
