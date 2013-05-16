@@ -382,18 +382,6 @@ BOOL LLScriptEdCore::postBuild()
 #endif // OPENSIM
 		// </FS:CR>
 		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
-		
-		if(gSavedSettings.getBOOL("_NACL_PreProcLSLSwitch"))
-		{
-			mEditor->addToken(LLKeywordToken::WORD,"switch",LLColor3(0.0f,0.0f,0.8f),
-				std::string("Switch statement. See Advanced menu of the script editor."));
-			mEditor->addToken(LLKeywordToken::WORD,"case",LLColor3(0.0f,0.0f,0.8f),
-				std::string("Switch case. See Advanced menu of the script editor."));
-			mEditor->addToken(LLKeywordToken::WORD,"break",LLColor3(0.0f,0.0f,0.8f),
-				std::string("Switch break. See Advanced menu of the script editor."));
-		}
-
-		//couldn'tr define in file because # represented a comment
 	}
 	// NaCl End
 

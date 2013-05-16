@@ -29,7 +29,10 @@
 
 
 #include "llstring.h"
-#include "v3color.h"
+// <FS:CR> User defined syntax highlighting
+//#include "v3color.h"
+#include "v4color.h"
+// </FS:CR>
 #include <map>
 #include <list>
 #include <deque>
@@ -60,7 +63,10 @@ public:
 		DOUBLE_QUOTATION_MARKS
 	};
 
-	LLKeywordToken( TOKEN_TYPE type, const LLColor3& color, const LLWString& token, const LLWString& tool_tip, const LLWString& delimiter  ) 
+	// <FS:CR> User defined syntax highlighting
+	//LLKeywordToken( TOKEN_TYPE type, const LLColor3& color, const LLWString& token, const LLWString& tool_tip, const LLWString& delimiter  )
+	LLKeywordToken( TOKEN_TYPE type, const LLColor4& color, const LLWString& token, const LLWString& tool_tip, const LLWString& delimiter  )
+	// </FS:CR>
 		:
 		mType( type ),
 		mToken( token ),
@@ -75,7 +81,10 @@ public:
 	BOOL				isHead(const llwchar* s) const;
 	BOOL				isTail(const llwchar* s) const;
 	const LLWString&	getToken() const		{ return mToken; }
-	const LLColor3&		getColor() const		{ return mColor; }
+	// <FS:CR> User defined syntax highlighting
+	//const LLColor3&		getColor() const		{ return mColor; }
+	const LLColor4&		getColor() const		{ return mColor; }
+	// </FS:CR>
 	TOKEN_TYPE			getType()  const		{ return mType; }
 	const LLWString&	getToolTip() const		{ return mToolTip; }
 	const LLWString&	getDelimiter() const	{ return mDelimiter; }
@@ -87,7 +96,10 @@ public:
 private:
 	TOKEN_TYPE	mType;
 	LLWString	mToken;
-	LLColor3	mColor;
+	// <FS:CR> User defined syntax highlighting
+	//LLColor3	mColor;
+	// </FS:CR>
+	LLColor4	mColor;
 	LLWString	mToolTip;
 	LLWString	mDelimiter;
 };
@@ -106,7 +118,10 @@ public:
 	// Add the token as described
 	void addToken(LLKeywordToken::TOKEN_TYPE type,
 					const std::string& key,
-					const LLColor3& color,
+					// <FS:CR> User defined syntax highlighting
+					//const LLColor3& color,
+					const LLColor4& color,
+					// </FS:CR>
 					const std::string& tool_tip = LLStringUtil::null,
 					const std::string& delimiter = LLStringUtil::null);
 	
@@ -145,7 +160,8 @@ public:
 #endif
 
 private:
-	LLColor3	readColor(const std::string& s);
+	// <FS:CR> User defined syntax highlighting - Deprecated, unused function
+	//LLColor3	readColor(const std::string& s);
 	void		insertSegment(std::vector<LLTextSegmentPtr>& seg_list, LLTextSegmentPtr new_segment, S32 text_len, const LLColor4 &defaultColor, class LLTextEditor& editor);
 	void		insertSegments(const LLWString& wtext, std::vector<LLTextSegmentPtr>& seg_list, LLKeywordToken* token, S32 text_len, S32 seg_start, S32 seg_end, const LLColor4 &defaultColor, LLTextEditor& editor);
 
