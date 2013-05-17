@@ -5388,6 +5388,65 @@ LLInventoryObject* LLObjectBridge::getObject() const
 	return object;
 }
 
+// <FS:Ansariel> Touch worn objects
+bool is_attachment_touchable(const LLUUID& idItem)
+{
+	const LLInventoryItem* pItem = gInventory.getItem(idItem);
+	if ( (!isAgentAvatarValid()) || (!pItem) )
+		return false;
+
+	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
+	if (!pAttachObj)
+		return false;
+
+	return pAttachObj->flagHandleTouch();
+}
+
+void handle_attachment_touch(const LLUUID& idItem)
+{
+	const LLInventoryItem* pItem = gInventory.getItem(idItem);
+	if ( (!isAgentAvatarValid()) || (!pItem) )
+		return;
+
+	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
+	if (!pAttachObj)
+		return;
+
+	LLMessageSystem	*msg = gMessageSystem;
+
+	msg->newMessageFast(_PREHASH_ObjectGrab);
+	msg->nextBlockFast( _PREHASH_AgentData);
+	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	msg->nextBlockFast( _PREHASH_ObjectData);
+	msg->addU32Fast(    _PREHASH_LocalID, pAttachObj->mLocalID);
+	msg->addVector3Fast(_PREHASH_GrabOffset, LLVector3::zero);
+	msg->nextBlock("SurfaceInfo");
+	msg->addVector3("UVCoord", LLVector3::zero);
+	msg->addVector3("STCoord", LLVector3::zero);
+	msg->addS32Fast(_PREHASH_FaceIndex, 0);
+	msg->addVector3("Position", pAttachObj->getPosition());
+	msg->addVector3("Normal", LLVector3::zero);
+	msg->addVector3("Binormal", LLVector3::zero);
+	msg->sendMessage( pAttachObj->getRegion()->getHost());
+
+	msg->newMessageFast(_PREHASH_ObjectDeGrab);
+	msg->nextBlockFast(_PREHASH_AgentData);
+	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	msg->nextBlockFast(_PREHASH_ObjectData);
+	msg->addU32Fast(_PREHASH_LocalID, pAttachObj->mLocalID);
+	msg->nextBlock("SurfaceInfo");
+	msg->addVector3("UVCoord", LLVector3::zero);
+	msg->addVector3("STCoord", LLVector3::zero);
+	msg->addS32Fast(_PREHASH_FaceIndex, 0);
+	msg->addVector3("Position", pAttachObj->getPosition());
+	msg->addVector3("Normal", LLVector3::zero);
+	msg->addVector3("Binormal", LLVector3::zero);
+	msg->sendMessage(pAttachObj->getRegion()->getHost());
+}
+// </FS:Ansariel>
+
 // virtual
 void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 {
@@ -5428,6 +5487,12 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 		handle_attachment_edit(mUUID);
 	}
 // [/SL:KB]
+	// <FS:Ansariel> Touch worn objects
+	else if ("touch" == action)
+	{
+		handle_attachment_touch(mUUID);
+	}
+	// </FS:Ansariel>
 	else if (isRemoveAction(action))
 	{
 		LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
@@ -5625,6 +5690,13 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				// TOOD-Catznip: should really be "Wearable And Object Edit" if we ever plan on pushing this upstream
 				items.push_back(std::string("Wearable Edit"));
 // [/SL:KB]
+				// <FS:Ansariel> Touch worn objects
+				if (is_attachment_touchable(mUUID))
+				{
+					items.push_back(std::string("Touch Attachment"));
+				}
+				// </FS:Ansariel>
+
 				items.push_back(std::string("Detach From Yourself"));
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 				if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canDetach(item)) )
