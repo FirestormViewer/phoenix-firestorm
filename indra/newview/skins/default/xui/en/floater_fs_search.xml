@@ -296,16 +296,16 @@
 		width="120"
 		left_pad="1" />
 		<loading_indicator
-		left="32"
-		top="84"
+		left="134"
+		top="320"
 		follows="left|top|right"
 		mouse_opaque="false"
 		name="loading"
 		rotations_per_sec="1.0"
 		tab_stop="false"
-		height="300"
-		width="300"
-		visible="false">
+		height="100"
+		width="100"
+		visible="false" >
 			<images>
 				<image name="ProgressLarge_1"/>
 				<image name="ProgressLarge_2"/>
