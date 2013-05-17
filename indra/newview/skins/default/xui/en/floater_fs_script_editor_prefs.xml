@@ -47,7 +47,7 @@
 		mouse_opaque="false"
 		name="text_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Text
     </text>
 	<color_swatch
@@ -75,9 +75,9 @@
 		layout="topleft"
 		left_pad="5"
 		mouse_opaque="false"
-		name="background"
+		name="background_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Background
     </text>
 	<color_swatch
@@ -107,7 +107,7 @@
 		mouse_opaque="false"
 		name="section_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Sections
     </text>
 	<color_swatch
@@ -137,7 +137,7 @@
 		mouse_opaque="false"
 		name="datatype_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Data Types
     </text>
 	<color_swatch
@@ -167,7 +167,7 @@
 		mouse_opaque="false"
 		name="event_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Events
     </text>
 	<color_swatch
@@ -197,7 +197,7 @@
 		mouse_opaque="false"
 		name="string_literal_label"
 		top_delta="5"
-		width="85">
+		width="100">
         String Literals
     </text>
 	
@@ -228,7 +228,7 @@
 		mouse_opaque="false"
 		name="i_constant_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Integer Const
     </text>
 	<color_swatch
@@ -258,7 +258,7 @@
 		mouse_opaque="false"
 		name="s_constant_label"
 		top_delta="5"
-		width="85">
+		width="100">
         String Const
     </text>
 	<color_swatch
@@ -288,7 +288,7 @@
 		mouse_opaque="false"
 		name="f_constant_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Float Const
     </text>
 	<color_swatch
@@ -318,7 +318,7 @@
 		mouse_opaque="false"
 		name="c_constant_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Compound
     </text>
 	<color_swatch
@@ -348,7 +348,7 @@
 		mouse_opaque="false"
 		name="flow_control_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Flow Control
     </text>
 	<color_swatch
@@ -378,7 +378,7 @@
 		mouse_opaque="false"
 		name="comment_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Comment
     </text>
 	<color_swatch
@@ -408,7 +408,7 @@
 		mouse_opaque="false"
 		name="preprocessor_label"
 		top_delta="5"
-		width="85">
+		width="100">
         Preprocessor
     </text>
 	
