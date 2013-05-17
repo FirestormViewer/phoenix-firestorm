@@ -48,13 +48,13 @@ LLExternalEditor::EErrorCode LLExternalEditor::setCommand(const std::string& env
 // <FS:CR> FIRE-10320 If no editor is set, fallback on the system open handler
 		//return EC_NOT_SPECIFIED;
 		llwarns << "Falling back on generic open handler" << llendl;
-#ifdef WIN32
-		cmd = "%comspec% /C START \"%s\"";
-#endif
-#ifdef DARWIN
-		cmd = "/usr/bin/open \"%s\"";
-#endif
-#ifdef LINUX
+#if LL_WINDOWS
+		std::string comspec(getenv("COMSPEC"));
+		comspec.append(" /C START \"%s\"");
+		cmd = findCommand("", comspec);
+#elif LL_DARWIN
+		cmd = findCommand("", "/usr/bin/open \"%s\"");
+#elif LL_LINUX
 		// xdg-open might not actually be installed, but it's out best shot
 		cmd = findCommand("", "/usr/bin/xdg-open \"%s\"");
 #endif
