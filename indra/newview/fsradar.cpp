@@ -281,10 +281,14 @@ void FSRadar::updateRadarList()
 		S32 secs = (S32)((seentime - hours * 3600 - mins * 60));
 		std::string avSeenStr = llformat("%d:%02d:%02d", hours, mins, secs);
 		S32 avStatusFlags     = ent->mStatus;
-		std::string avFlagStr = "";
-		if (avStatusFlags & AVATAR_IDENTIFIED)
+		ERadarPaymentInfoFlag avFlag = FSRADAR_PAYMENT_INFO_NONE;
+		if (avStatusFlags & AVATAR_TRANSACTED)
 		{
-			avFlagStr += "$";
+			avFlag = FSRADAR_PAYMENT_INFO_USED;
+		}
+		else if (avStatusFlags & AVATAR_IDENTIFIED)
+		{
+			avFlag = FSRADAR_PAYMENT_INFO_FILLED;
 		}
 		S32 avAge = ent->mAge;
 		std::string avName = ent->mName;
@@ -448,7 +452,7 @@ void FSRadar::updateRadarList()
 		entry["id"] = avId;
 		entry["name"] = avName;
 		entry["in_region"] = (regionSelf == avRegion);
-		entry["flags"] = avFlagStr;
+		entry["flags"] = avFlag;
 		entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
 		entry["seen"] = avSeenStr;
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));

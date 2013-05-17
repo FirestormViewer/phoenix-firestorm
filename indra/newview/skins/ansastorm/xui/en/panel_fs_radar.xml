@@ -3,10 +3,10 @@
  name="panel_radar"
  width="327"
  height="333">
-	<string name="FlagsColumnType" value="text"/>
+	<string name="FlagsColumnType" value="icon"/>
 	<string name="FlagsColumnValue_0" value=""/>
-	<string name="FlagsColumnValue_1" value="$"/>
-	<string name="FlagsColumnValue_2" value="$$"/>
+	<string name="FlagsColumnValue_1" value="Payment_Info_Filled"/>
+	<string name="FlagsColumnValue_2" value="Payment_Info_Used"/>
 	<string
 	 name="MiniMapToolTipMsg"
 	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>

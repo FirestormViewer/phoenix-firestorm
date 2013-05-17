@@ -3,10 +3,10 @@
  name="panel_radar"
  width="327"
  height="333">
-	<string name="FlagsColumnType" value="text"/>
+	<string name="FlagsColumnType" value="icon"/>
 	<string name="FlagsColumnValue_0" value=""/>
-	<string name="FlagsColumnValue_1" value="$"/>
-	<string name="FlagsColumnValue_2" value="$$"/>
+	<string name="FlagsColumnValue_1" value="Payment_Info_Filled"/>
+	<string name="FlagsColumnValue_2" value="Payment_Info_Used"/>
 	<string
 	 name="MiniMapToolTipMsg"
 	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
@@ -91,12 +91,24 @@
 					 label="Name"
 					 name="name"
 					 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
-					 relative_width="0.34"/>
+					 relative_width="0.32"/>
 					<radar_list.columns
 					 label=""
 					 name="voice_level"
 					 tool_tip="Is talking on voice"
 					 relative_width="0.07"/>
+					<radar_list.columns
+					 label="Distance"
+					 name="range"
+					 relative_width="0.15"/>
+					<radar_list.columns
+					 label="Time"
+					 name="seen"
+					 relative_width="0.15"/>
+					<radar_list.columns
+					 label="Age"
+					 name="age"
+					 relative_width="0.1"/>
 					<radar_list.columns
 					 label=""
 					 name="in_region"
@@ -106,19 +118,7 @@
 					 label=""
 					 name="flags"
 					 tool_tip="Payment info status"
-					 relative_width="0.05"/>
-					<radar_list.columns
-					 label="Age"
-					 name="age"
-					 relative_width="0.1"/>
-					<radar_list.columns
-					 label="Seen"
-					 name="seen"
-					 relative_width="0.15"/>
-					<radar_list.columns
-					 label="Range"
-					 name="range"
-					 relative_width="0.16"/>
+					 relative_width="0.08"/>
 					<radar_list.columns
 					 label="av_id"
 					 name="uuid"
