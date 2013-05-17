@@ -3,16 +3,49 @@
 	<text name="color_pickers_label">
 		Gewünschte Farben auswählen:
 	</text>
-	<text name="text">
+	<text name="text_label">
 		Text
 	</text>
-	<text name="background">
+	<text name="background_label">
 		Hintergrund
+	</text>
+	<text name="section_label">
+		Bereich
+	</text>
+	<text name="datatype_label">
+		Datentyp
+	</text>
+	<text name="event_label">
+		Event
+	</text>
+	<text name="string_literal_label">
+		String-Literal
+	</text>
+	<text name="i_constant_label">
+		Integer-Konstante
+	</text>
+	<text name="s_constant_label">
+		String-Konstante
+	</text>
+	<text name="f_constant_label">
+		Float-Konstante
+	</text>
+	<text name="c_constant_label">
+		Compound-Konst.
+	</text>
+	<text name="flow_control_label">
+		Flusskontrolle
+	</text>
+	<text name="comment_label">
+		Kommentar
+	</text>
+	<text name="preprocessor_label">
+		Präprozessor
 	</text>
 	<text name="prefs_label">
 		Skript-Editor-Optionen:
 	</text>
-	<check_box name="convert_tabs_to_spaces_checkbox" label="Tabulatoren in Leerzeichen konvertieren" tool_tip="Falls aktiviert werden Tabs in Leerzeichen (üblicherweise 4) konvertiert, wenn ein Skript aus einem externen Editor eingefügt wird."/>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="Tabulatoren in Leerzeichen konvertieren" tool_tip="Falls aktiviert werden Tabulatoren in Leerzeichen (üblicherweise 4) konvertiert, wenn ein Skript aus einem externen Editor eingefügt wird."/>
 	<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>
 	<check_box label="Skript-Optimierer" tool_tip="Optimiert den von Skripten benötigten Platz auf Kosten der Lesbarkeit." name="preprocoptimizer_checkbox"/>
 	<check_box label="switch()-Befehl" tool_tip="Stellt den switch()-Befehl zur Ablaufsteuerung bereit." name="preprocswitch_checkbox"/>
