@@ -49,7 +49,7 @@ LLExternalEditor::EErrorCode LLExternalEditor::setCommand(const std::string& env
 		//return EC_NOT_SPECIFIED;
 		llwarns << "Falling back on generic open handler" << llendl;
 #ifdef WIN32
-		cmd = "C:\Windows\System32\cmd.exe /C START \"%s\""
+		cmd = findCommand("", "%comspec% /C START \"%s\"")
 #endif
 #ifdef DARWIN
 		cmd = findCommand("", "/usr/bin/open \"%s\"")
