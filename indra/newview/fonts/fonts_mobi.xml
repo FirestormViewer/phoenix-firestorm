@@ -64,7 +64,7 @@
 
   <font name="Script"
 	comment="Name of an optional font used for the script editor">
-    <file>DejaVuSansMono.ttf</file>
+    <file>SourceCodePro-Regular.ttf</file>
   </font>
 
   <font name="DejaVu"
