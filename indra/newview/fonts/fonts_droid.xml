@@ -62,11 +62,16 @@
     <file>DroidSansMono.ttf</file>
   </font>
 
-  <font name="Script"
+  <font name="Scripting"
 	comment="Name of an optional font used for the script editor">
     <file>SourceCodePro-Regular.ttf</file>
   </font>
 
+  <font name="OCRA"
+    comment="OCRA machine character recognition used in script editor compile errors">
+    <file>ocra.ttf</file>
+  </font>
+	
   <font name="DejaVu"
 	comment="Name of DejaVu font">
     <file>DroidSans.ttf</file>
@@ -143,7 +148,7 @@
     <file>DroidSans.ttf</file>
   </font>
 
-  <font_size name="Script"
+  <font_size name="Scripting"
 	     comment="Size of script editor font (points, or 1/72 of an inch)"
 	     size="9.6"
 	     />

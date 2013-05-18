@@ -179,6 +179,10 @@ public:
 	static LLFontGL* getFontSansSerifBig();
 	static LLFontGL* getFontSansSerifHuge();
 	static LLFontGL* getFontSansSerifBold();
+	// <FS:CR> Advanced script editor
+	static LLFontGL* getFontScripting();
+	static LLFontGL* getFontOCRA();
+	// </FS:CR>
 	static LLFontGL* getFontExtChar();
 	static LLFontGL* getFont(const LLFontDescriptor& desc);
 	// Use with legacy names like "SANSSERIF_SMALL" or "OCRA"
