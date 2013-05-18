@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_script_editor_prefs" title="Ustawienia edytora skryptów">
+	<text name="color_pickers_label">
+		Wybierz żądane kolory:
+	</text>
+	<text name="text_label">
+		Tekst
+	</text>
+	<text name="background_label">
+		Tło
+	</text>
+	<text name="section_label">
+		Sekcje
+	</text>
+	<text name="datatype_label">
+		Typy danych
+	</text>
+	<text name="event_label">
+		Zdarzenia
+	</text>
+	<text name="string_literal_label">
+		Łańcuchy znaków
+	</text>
+	<text name="i_constant_label">
+		Liczby całkowite
+	</text>
+	<text name="s_constant_label">
+		Ciągi (stringi)
+	</text>
+	<text name="f_constant_label">
+		Liczby zmiennop.
+	</text>
+	<text name="c_constant_label">
+		Struktury złożone
+	</text>
+	<text name="flow_control_label">
+		Przepływ sterow.
+	</text>
+	<text name="comment_label">
+		Komentarze
+	</text>
+	<text name="preprocessor_label">
+		Preprocesor
+	</text>
+	<text name="prefs_label">
+		Opcje edytora skryptów:
+	</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" label="Zamieniaj tabulatory na spacje" />
+	<check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
+	<check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty kosztem ich czytelności." name="preprocoptimizer_checkbox" />
+	<check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
+	<check_box label="Wolne listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
+	<check_box label="#includes z twardego dysku" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli odnosić się instrukcjom #include (dołączania) do plików na Twoim dysku twardym." name="preprocinclude_checkbox" />
+	<text name="lslpreprocinclude_textbox">
+		Ścieżka dołączania preprocesora:
+	</text>
+	<button label_selected="Przeglądaj" name="SetPreprocInclude" />
+</floater>
