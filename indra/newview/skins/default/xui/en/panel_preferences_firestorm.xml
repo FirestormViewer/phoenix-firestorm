@@ -295,7 +295,6 @@
          layout="topleft"
          control_name="FSRevokePerms"
          name="FSRevokePerms"
-         tool_tip="FSRevokePerms"
          width="331">
             <radio_item
              height="16"
