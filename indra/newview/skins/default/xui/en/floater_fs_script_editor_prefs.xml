@@ -57,6 +57,36 @@
 		label_height="0"
 		layout="topleft"
 		left="15"
+		name="cursor"
+		top_pad="10"
+		width="44" >
+        <color_swatch.init_callback
+		function="ScriptPref.getUIColor"
+		parameter="ScriptCursorColor" />
+        <color_swatch.commit_callback
+		function="ScriptPref.applyUIColor"
+		parameter="ScriptCursorColor" />
+    </color_swatch>
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left_pad="5"
+		mouse_opaque="false"
+		name="cursor_label"
+		top_delta="5"
+		width="100">
+        Cursor
+    </text>
+	<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="24"
+		label_height="0"
+		layout="topleft"
+		left="15"
 		name="background"
 		top_pad="10"
 		width="44" >
@@ -177,8 +207,38 @@
 		label_height="0"
 		layout="topleft"
 		left="15"
-		name="string_literal"
+		name="comment"
 		top_pad="10"
+		width="44" >
+        <color_swatch.init_callback
+		function="ScriptPref.getUIColor"
+		parameter="SyntaxComment" />
+        <color_swatch.commit_callback
+		function="ScriptPref.applyUIColor"
+		parameter="SyntaxComment" />
+    </color_swatch>
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left_pad="5"
+		mouse_opaque="false"
+		name="comment_label"
+		top_delta="5"
+		width="100">
+        Comment
+    </text>
+	<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="24"
+		label_height="0"
+		layout="topleft"
+		left="170"
+		name="string_literal"
+		top="45"
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
@@ -209,7 +269,7 @@
 		layout="topleft"
 		left="170"
 		name="i_constant"
-		top="45"
+		top_pad="10"
 		width="44" >
         <color_swatch.init_callback
 		function="ScriptPref.getUIColor"
@@ -350,36 +410,6 @@
 		top_delta="5"
 		width="100">
         Flow Control
-    </text>
-	<color_swatch
-		can_apply_immediately="true"
-		follows="left|top"
-		height="24"
-		label_height="0"
-		layout="topleft"
-		left="170"
-		name="comment"
-		top_pad="10"
-		width="44" >
-        <color_swatch.init_callback
-		function="ScriptPref.getUIColor"
-		parameter="SyntaxComment" />
-        <color_swatch.commit_callback
-		function="ScriptPref.applyUIColor"
-		parameter="SyntaxComment" />
-    </color_swatch>
-    <text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="10"
-		layout="topleft"
-		left_pad="5"
-		mouse_opaque="false"
-		name="comment_label"
-		top_delta="5"
-		width="100">
-        Comment
     </text>
 	<color_swatch
 		can_apply_immediately="true"
