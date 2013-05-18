@@ -6,6 +6,7 @@
  name="floater_fs_script_editor_prefs"
  help_topic="preview_lsl_text"
  title="Script Editor Preferences"
+ save_rect="true"
  single_instance="true"
  can_resize="false"
  width="325">
