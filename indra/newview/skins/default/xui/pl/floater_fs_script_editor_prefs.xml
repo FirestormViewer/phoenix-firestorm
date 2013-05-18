@@ -6,6 +6,9 @@
 	<text name="text_label">
 		Tekst
 	</text>
+	<text name="cursor_label">
+		Kursor
+	</text>
 	<text name="background_label">
 		Tło
 	</text>
@@ -17,6 +20,9 @@
 	</text>
 	<text name="event_label">
 		Zdarzenia
+	</text>
+	<text name="comment_label">
+		Komentarze
 	</text>
 	<text name="string_literal_label">
 		Łańcuchy znaków
@@ -35,9 +41,6 @@
 	</text>
 	<text name="flow_control_label">
 		Przepływ sterow.
-	</text>
-	<text name="comment_label">
-		Komentarze
 	</text>
 	<text name="preprocessor_label">
 		Preprocesor
