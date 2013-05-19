@@ -329,7 +329,7 @@
      left_pad="-50"
      name="FSSupportGroupChatPrefix_toggle"
      tab_group="5"
-     tool_tip="Add (FS) in front of your messages to help support staff understand whether your question pertains to Phoenix or Firestorm. Your help avoiding confusion is greatly appreciated!"
+     tool_tip="Adds your current viewer version and skin information to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions"
      width="150" />
     <!-- END: FS Prefix -->
   <!--button for sending sys info-->
