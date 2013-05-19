@@ -822,7 +822,7 @@
       reference="DkGray_86" />
   <color
       name="MenuBarGodBgColor"
-      reference="FrogGreen" />
+      reference="DkGray_86" />
   <color
       name="MenuDefaultBgColor"
       reference="DkGray_86" />
