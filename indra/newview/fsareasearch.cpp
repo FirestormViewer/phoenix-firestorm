@@ -889,62 +889,62 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	
 	details.listed = true;
 
-	LLScrollListCell::Params cellParams;
-	cellParams.font = LLFontGL::getFontSansSerif();
+	LLScrollListCell::Params cell_params;
+	cell_params.font = LLFontGL::getFontSansSerif();
 
-	LLScrollListItem::Params rowParams;
-	rowParams.value = object_id.asString();
+	LLScrollListItem::Params row_params;
+	row_params.value = object_id.asString();
 	
 	if (mColumnDistance)
 	{
-		cellParams.column = "distance";
-		cellParams.value = llformat("%1.0f m", dist_vec(mPanelList->getAgentLastPosition(), objectp->getPositionGlobal())); // used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
-		rowParams.columns.add(cellParams);
+		cell_params.column = "distance";
+		cell_params.value = llformat("%1.0f m", dist_vec(mPanelList->getAgentLastPosition(), objectp->getPositionGlobal())); // used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
+		row_params.columns.add(cell_params);
 	}
 	
 	if (mColumnName)
 	{
-		cellParams.column = "name";
-		cellParams.value = details.name;
-		rowParams.columns.add(cellParams);
+		cell_params.column = "name";
+		cell_params.value = details.name;
+		row_params.columns.add(cell_params);
 	}
 
 	if (mColumnDescription)
 	{
-		cellParams.column = "description";
-		cellParams.value = details.description;
-		rowParams.columns.add(cellParams);
+		cell_params.column = "description";
+		cell_params.value = details.description;
+		row_params.columns.add(cell_params);
 	}
 
 	if (mColumnOwner)
 	{
-		cellParams.column = "owner";
-		cellParams.value = owner_name;
-		rowParams.columns.add(cellParams);
+		cell_params.column = "owner";
+		cell_params.value = owner_name;
+		row_params.columns.add(cell_params);
 	}
 
 	if (mColumnGroup)
 	{
-		cellParams.column = "group";
-		cellParams.value = group_name;
-		rowParams.columns.add(cellParams);
+		cell_params.column = "group";
+		cell_params.value = group_name;
+		row_params.columns.add(cell_params);
 	}
 
 	if (mColumnCreator)
 	{
-		cellParams.column = "creator";
-		cellParams.value = creator_name;
-		rowParams.columns.add(cellParams);
+		cell_params.column = "creator";
+		cell_params.value = creator_name;
+		row_params.columns.add(cell_params);
 	}
 
 	if (mColumnLastOwner)
 	{
-		cellParams.column = "last_owner";
-		cellParams.value = last_owner_name;
-		rowParams.columns.add(cellParams);
+		cell_params.column = "last_owner";
+		cell_params.value = last_owner_name;
+		row_params.columns.add(cell_params);
 	}
 	
-	LLScrollListItem* list_row = mPanelList->getResultList()->addRow(rowParams);
+	LLScrollListItem* list_row = mPanelList->getResultList()->addRow(row_params);
 
 	if (objectp->flagTemporaryOnRez() || objectp->flagUsePhysics())
 	{
