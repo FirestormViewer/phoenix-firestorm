@@ -36,7 +36,7 @@
 		</layout_panel>
 	</layout_stack>
 
-	<check_box label="Viewer-Kennung senden" name="FSSupportGroupChatPrefix_toggle" tool_tip="Fügt ein (FS) am Anfang jeder Nachrichtig hinzu, damit die Support-Mitarbeiter wissen, ob sich eine Frage auf Phoenix oder Firestorm bezieht. Da hierdurch eine unnötige Konfusion vermieden wird, wäre nett, diese Option zu aktivieren!"/>
+	<check_box label="Viewer-Kennung senden" name="FSSupportGroupChatPrefix_toggle" tool_tip="Fügt die aktuelle Viewer-Version und Oberfläche am Anfang jeder Nachricht hinzu, die an diese Gruppe gesendet werden, um die Support-Mitarbeiter dabei zu unterstützen, ein mögliches Problem besser zu diagnostizieren und die Genauigkeit der Antworten auf deine Fragen zu verbessern."/>
 	<button name="send_sysinfo_btn" tool_tip="System-Informationen übermitteln"/>
 
 	<layout_stack name="im_panels">
