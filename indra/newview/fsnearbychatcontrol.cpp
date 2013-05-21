@@ -172,6 +172,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 	}
 	
 	KEY key = gKeyboard->currentKey();
+	MASK mask = gKeyboard->currentMask(FALSE);	// <FS:CR> FIRE-3192 - Predictive name completion
 	
 	// Ignore "special" keys, like backspace, arrows, etc.
 	if (length > 1 
@@ -206,7 +207,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 	}
 // <FS:CR> FIRE-3192 - Predictive name completion, based on code by Satomi Ahn
 	static LLCachedControl<bool> sNameAutocomplete(gSavedSettings, "FSChatbarNamePrediction");
-	if (length > NAME_PREDICTION_MINIMUM_LENGTH && sNameAutocomplete && key < KEY_SPECIAL)
+	if (length > NAME_PREDICTION_MINIMUM_LENGTH && sNameAutocomplete && key < KEY_SPECIAL && mask != MASK_CONTROL)
 	{
 		S32 cur_pos = caller->getCursor();
 		if (raw_text[cur_pos - 1] != ' ' || caller->hasSelection())
