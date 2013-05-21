@@ -275,8 +275,8 @@ BOOL LLScriptEdCore::postBuild()
 	mPasteBtn =	getChild<LLButton>("paste_btn");
 	mUndoBtn =	getChild<LLButton>("undo_btn");
 	mRedoBtn =	getChild<LLButton>("redo_btn");
-	mSaveToDiskBtn = getChild<LLButton>("save_to_disk_btn");
-	mLoadFromDiskBtn = getChild<LLButton>("load_from_disk_btn");
+	mSaveToDiskBtn = getChild<LLButton>("save_disk_btn");
+	mLoadFromDiskBtn = getChild<LLButton>("load_disk_btn");
 	mSearchBtn = getChild<LLButton>("search_btn");
 // </FS:CR>
 

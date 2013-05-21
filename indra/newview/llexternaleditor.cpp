@@ -60,6 +60,7 @@ LLExternalEditor::EErrorCode LLExternalEditor::setCommand(const std::string& env
 #endif
 		if (cmd.empty())
 		{
+			llwarns << "Failed to find generic open handler: " << cmd << llendl;
 			return EC_NOT_SPECIFIED;
 		}
 // </FS:CR>
