@@ -244,7 +244,7 @@
 			Gegenstand aus Inventar hier ablegen
 		</text>
 		<text name="build_item_add_disp_rect_txt">
-			Aktuell gesetzt: ITEM
+			Aktuell gesetzt: [ITEM]
         </text>
 		<text name="text_box_permissions">
 			Berechtigungen

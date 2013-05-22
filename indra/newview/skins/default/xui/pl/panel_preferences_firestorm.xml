@@ -219,7 +219,7 @@
          Upuść przedmiot w tym miejscu.
         </text>
         <text name="build_item_add_disp_rect_txt">
-         Obecnie ustawiono na: ITEM
+         Obecnie ustawiono na: [ITEM]
         </text>
         <text name="text_box_permissions">
           Zezwolenia

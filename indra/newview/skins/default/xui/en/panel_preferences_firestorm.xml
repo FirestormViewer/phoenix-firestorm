@@ -1725,7 +1725,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          tool_tip=""
          v_pad="2"
          width="220">
-         Currently set to: ITEM
+         Currently set to: [ITEM]
         </text>
 <!-- end drag and drop UI -->
         <text

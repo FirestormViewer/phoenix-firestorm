@@ -227,7 +227,7 @@
 				Arrastra aquí un ítem del inventario.
 			</text>
 			<text name="build_item_add_disp_rect_txt">
-				Actualmente establecido a: ITEM
+				Actualmente establecido a: [ITEM]
 			</text>
 			<text name="text_box_permissions">
 				Permisos
