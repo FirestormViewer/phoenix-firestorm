@@ -295,6 +295,7 @@
          layout="topleft"
          control_name="FSRevokePerms"
          name="FSRevokePerms"
+         tool_tip=""
          width="331">
             <radio_item
              height="16"
@@ -863,6 +864,7 @@
       left="5"
       name="chat_cmd_toggle"
       width="270"
+      tool_tip=""
       control_name="FSCmdLine"/>.
     <!--calc-->
     <text
@@ -1074,6 +1076,7 @@
       left="5"
       name="chat_cmd_toggle2"
       width="270"
+      tool_tip=""
       control_name="FSCmdLine"/>
     <!--gtp-->
     <text
@@ -1545,7 +1548,8 @@
          mouse_opaque="true"
          name="material"
          width="87"
-         control_name="FSBuildPrefs_Material">
+         control_name="FSBuildPrefs_Material"
+         tool_tip="">
              <combo_item name="Stone" value="Stone" label="Stone"/>
              <combo_item name="Metal" value="Metal" label="Metal"/>
              <combo_item name="Glass" value="Glass" label="Glass"/>
