@@ -838,8 +838,13 @@ void LLFloaterPreference::cancel()
 	// hide translation settings floater
 	LLFloaterReg::hideInstance("prefs_translation");
 	
-	// hide translation settings floater
+	// hide autoreplace settings floater
 	LLFloaterReg::hideInstance("prefs_autoreplace");
+	
+// <FS:CR> STORM-1888
+	// hide spellchecker settings floater
+	LLFloaterReg::hideInstance("prefs_spellchecker");
+// </FS:CR>
 	
 	// cancel hardware menu
 	LLFloaterHardwareSettings* hardware_settings = LLFloaterReg::getTypedInstance<LLFloaterHardwareSettings>("prefs_hardware_settings");
