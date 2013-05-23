@@ -1891,8 +1891,13 @@ bool LLAppViewer::cleanup()
 	// shut down mesh streamer
 	gMeshRepo.shutdown();
 
+	// <FS:ND> FIRE-8385 Crash on exit in Havok. It is hard to say why it happens, as we only have the binary Havok blob. This is a hack around it.
+	// Due to the fact the process is going to die anyway, the OS will clean up any reources left by not calling quitSystem.
+	// The OpenSim version does not use Havok, it is okay to call shutdown then.
+#ifdef OPENSIM
 	// shut down Havok
 	LLPhysicsExtensions::quitSystem();
+#endif // </FS:ND>
 
 	// Must clean up texture references before viewer window is destroyed.
 	if(LLHUDManager::instanceExists())
