@@ -210,7 +210,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 	if (length > NAME_PREDICTION_MINIMUM_LENGTH && sNameAutocomplete && key < KEY_SPECIAL && mask != MASK_CONTROL)
 	{
 		S32 cur_pos = caller->getCursor();
-		if (raw_text[cur_pos - 1] != ' ' || caller->hasSelection())
+		if (cur_pos && (raw_text[cur_pos - 1] != ' '))
 		{
 			// Get a list of avatars within range
 			std::vector<LLUUID> avatar_ids;
@@ -221,7 +221,11 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 			
 			// Parse text for a pattern to search
 			std::string prefix = wstring_to_utf8str(raw_text.substr(0, cur_pos)); // Text before search string
-			std::string suffix = wstring_to_utf8str(raw_text.substr(cur_pos, raw_text.length() - cur_pos)); // Text after search string
+			std::string suffix = "";
+			if (cur_pos <= raw_text.length()) // Is there anything after the cursor?
+			{
+				suffix = wstring_to_utf8str(raw_text.substr(cur_pos)); // Text after search string
+			}
 			U32 last_space = prefix.rfind(" ");
 			std::string pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1); // Search pattern
 			
@@ -230,7 +234,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 			
 			if (pattern.size() < NAME_PREDICTION_MINIMUM_LENGTH) return;
 
-			match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space -1);
+			match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1);
 			prefix = prefix.substr(0, last_space + 1);
 			std::string match = pattern;
 			LLStringUtil::toLower(pattern);
@@ -243,7 +247,7 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 			if (last_space != std::string::npos && !prefix.empty())
 			{
 				last_space = prefix.substr(0, prefix.length() - 2).rfind(" ");
-				match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space -1);
+				match_pattern = prefix.substr(last_space + 1, prefix.length() - last_space - 1);
 				prefix = prefix.substr(0, last_space + 1);
 				
 				// prepare search pattern
@@ -394,7 +398,6 @@ BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 	}
 	else if( KEY_RETURN == key )
 	{
-		llinfos << "Handling return key, mask=" << mask << llendl;
 		if (mask == MASK_CONTROL)
 		{
 			// shout
