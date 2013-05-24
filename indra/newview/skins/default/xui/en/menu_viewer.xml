@@ -1522,6 +1522,7 @@
 
                 <menu_item_check
                  label="Show Selection Outlines"
+				 shortcut="control|alt|H"
                  name="Show Selection Outlines">
                     <menu_item_check.on_check
                      function="CheckControl"
