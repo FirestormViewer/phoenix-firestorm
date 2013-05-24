@@ -847,6 +847,9 @@ BOOL FSFloaterIM::postBuild()
 void FSFloaterIM::updateSessionName(const std::string& ui_title,
 									const std::string& ui_label)
 {
+	// <FS:Ansariel> FIRE-7874: Name is missing on tab if announcing incoming IMs is enabled and sender's name is not in name cache
+	mSavedTitle = ui_title;
+
 	mInputEditor->setLabel(LLTrans::getString("IM_to_label") + " " + ui_label);
 	setTitle(ui_title);	
 }
