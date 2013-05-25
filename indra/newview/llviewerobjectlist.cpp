@@ -2188,9 +2188,8 @@ void LLViewerObjectList::findOrphans(LLViewerObject* objectp, U32 ip, U32 port)
 			if (childp->mDrawable.notNull())
 			{
 				// Make the drawable visible again and set the drawable parent
- 				childp->mDrawable->clearState(LLDrawable::FORCE_INVISIBLE);
+ 				childp->mDrawable->setState(LLDrawable::CLEAR_INVISIBLE);
 				childp->setDrawableParent(objectp->mDrawable); // LLViewerObjectList::findOrphans()
-				gPipeline.markRebuild( childp->mDrawable, LLDrawable::REBUILD_ALL, TRUE );
 			}
 
 			// Make certain particles, icon and HUD aren't hidden
