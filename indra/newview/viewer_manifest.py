@@ -468,6 +468,15 @@ class WindowsManifest(ViewerManifest):
             self.path("growl.dll")
             self.path("growl++.dll")
 
+            # <FS:ND> Copy symbols for breakpad
+            self.path("ssleay32.pdb")
+            self.path("libeay32.pdb")
+            self.path("growl.pdb")
+            self.path("growl++.pdb")
+            self.path('apr-1.pdb', 'libarp.pdb')
+            self.path('aprutil-1.pdb', 'libaprutil.pdb')
+            # </FS:ND>
+
             # For google-perftools tcmalloc allocator.
             try:
                 if self.args['configuration'].lower() == 'debug':
