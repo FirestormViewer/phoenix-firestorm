@@ -19,12 +19,15 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "lggcontactsets.h"
+#include "llagent.h"
+#include "llavatarnamecache.h"
+#include "llcallingcard.h"
+#include "lldir.h"
+#include "llmutelist.h"
+#include "llnotifications.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
-#include "llnotifications.h"
-#include "lldir.h"
-#include "llcallingcard.h"
-#include "llavatarnamecache.h"
+#include "fsdata.h"
 #include "rlvhandler.h"
 
 LGGContactSets::LGGContactSets() :
@@ -330,6 +333,43 @@ LLColor4 LGGContactSets::getGroupColor(const std::string& groupName)
 
 	return getDefaultColor();
 };
+
+LLColor4 LGGContactSets::getSpecialColor(const LLUUID& uuid, const LLColor4& cur_color)
+{
+	LLColor4 color = cur_color;
+	FSData* fs_data = FSData::getInstance();
+	std::string full_name;
+	static LLUICachedControl<bool> fs_colorize_self("FSColorizeSelf");
+	static LLUICachedControl<bool> fs_colorize_friends("FSColorizeFriends");
+	static LLUICachedControl<bool> fs_colorize_muted("FSColorizeMuted");
+	static LLUICachedControl<bool> fs_colorize_lindens("FSColorizeLindens");
+	static LLUICachedControl<bool> fs_colorize_firestorm("FSColorizeFirestorm");
+	static LLUIColor avatar_self_color = LLUIColorTable::instance().getColor("UserChatColor", LLColor4::yellow);
+	static LLUIColor avatar_friend_color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
+	static LLUIColor avatar_muted_color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3);
+	static LLUIColor avatar_linden_color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
+	static LLUIColor avatar_firestorm_color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red);
+
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		return color;
+	else if (fs_colorize_self && uuid == gAgent.getID())
+		color = avatar_self_color;
+	else if (fs_colorize_muted && LLMuteList::getInstance()->isMuted(uuid))
+		color = avatar_muted_color;
+	else if (fs_colorize_friends && (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL))
+		color = avatar_friend_color;
+	else if (fs_colorize_lindens && gCacheName->getFullName(uuid, full_name) && LLMuteList::getInstance()->isLinden(full_name))
+		color = avatar_linden_color;
+	else if (fs_colorize_firestorm && (fs_data->is_developer(uuid) || fs_data->is_support(uuid)))
+		color = avatar_firestorm_color;
+	
+	if (isNonFriend(uuid))
+	{
+		color = toneDownColor(color, 0.8f);
+	}
+	
+	return color;
+}
 
 LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::string& ignoredGroupName)
 {

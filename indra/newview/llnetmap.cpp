@@ -232,9 +232,6 @@ void LLNetMap::draw()
 
  	static LLFrameTimer map_timer;
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
-	static LLUIColor map_avatar_friend_color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
-	static LLUIColor map_avatar_linden_color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
-	static LLUIColor map_avatar_muted_color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3);
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	//static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	static LLUIColor map_frustum_color = LLUIColorTable::instance().getColor("MapFrustumColor", LLColor4::white);
@@ -561,14 +558,6 @@ void LLNetMap::draw()
 			pos_map = globalPosToView(positions[i]);
 			LLUUID uuid = avatar_ids[i];
 
-// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL) &&
-				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-// [/RLVa:KB]
-//			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL);
-
-			LLColor4 color = show_as_friend ? map_avatar_friend_color : map_avatar_color;
-
 			// <FS:Ansariel> Check for unknown Z-offset => AVATAR_UNKNOWN_Z_OFFSET
 			//unknown_relative_z = positions[i].mdV[VZ] == COARSEUPDATE_MAX_Z &&
 			//		camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z;
@@ -589,22 +578,23 @@ void LLNetMap::draw()
 					pos_map.mV[VZ] = F32_MAX;
 				}
 			}
-			// </FS:Ansariel>
-
-			// Colorize muted avatars and Lindens
-			std::string fullName;
-			LLMuteList* muteListInstance = LLMuteList::getInstance();
-
-			if (muteListInstance->isMuted(uuid)) color = map_avatar_muted_color;
-			else if (gCacheName->getFullName(uuid, fullName) && muteListInstance->isLinden(fullName)) color = map_avatar_linden_color;			
-
+			// </FS:Ansariel>	
+			
+			LLColor4 color = map_avatar_color;	// <FS:CR>
+			
 			// <FS:Ansariel> Mark Avatars with special colors
 			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
 			{
 				color = LLNetMap::sAvatarMarksMap[uuid];
 			}
 			// </FS:Ansariel> Mark Avatars with special colors
-					
+			
+			// <FS:CR> Color "special" avatars with special colors (Friends, muted, Lindens, etc)
+			static LLUICachedControl<bool> fs_colorize("FSColorizeMap");
+			if (fs_colorize)
+				color = LGGContactSets::getInstance()->getSpecialColor(uuid, color);
+			// </FS:CR>
+			
 			//color based on contact sets prefs
 			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(uuid, LGG_CS_MINIMAP))
 			{

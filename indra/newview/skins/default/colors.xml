@@ -738,9 +738,12 @@
   <color
      name="MapAvatarLindenColor"
      reference="Blue" />
-    <color
+  <color
      name="MapAvatarMutedColor"
      value="0.4 0.4 0.4 1" />
+  <color
+     name="MapAvatarFirestormColor"
+     reference="Red" />
   <color
       name="MapFrustumColor"
       reference="White_10" />

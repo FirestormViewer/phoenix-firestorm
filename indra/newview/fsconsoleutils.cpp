@@ -272,6 +272,12 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	}
 
 	LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
+	
+	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
+	static LLUICachedControl<bool> fs_colorize("FSColorizeChat");
+	if (fs_colorize)
+		textColor = LGGContactSets::getInstance()->getSpecialColor(agent_id, textColor);
+	// </FS:CR>
 
 	//color based on contact sets prefs
 	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id, LGG_CS_CHAT))
