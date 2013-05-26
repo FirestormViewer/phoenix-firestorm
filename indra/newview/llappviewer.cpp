@@ -1504,6 +1504,7 @@ bool LLAppViewer::mainLoop()
 					&& !gFocusMgr.focusLocked())
 				{
 					joystick->scanJoystick();
+					gKeyboard->scanKeyboard();
 					// <FS:Ansariel> Chalice Yao's crouch toggle
 					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
 					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");
@@ -1512,7 +1513,6 @@ bool LLAppViewer::mainLoop()
 						gAgent.moveUp(-1);
 					}
 					// </FS:Ansariel>
-					gKeyboard->scanKeyboard();
 				}
 
 				// Update state based on messages, user input, object idle.
