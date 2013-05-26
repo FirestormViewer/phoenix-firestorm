@@ -3619,7 +3619,15 @@ void LLAppViewer::writeSystemInfo()
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
 
-//	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
+
+	//	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
 
 	gDebugInfo["CPUInfo"]["CPUString"] = gSysCPU.getCPUString();
 	gDebugInfo["CPUInfo"]["CPUFamily"] = gSysCPU.getFamily();
@@ -3727,6 +3735,14 @@ void LLAppViewer::handleViewerCrash()
 	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
+
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
 
 /*
 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
@@ -5663,6 +5679,14 @@ void LLAppViewer::handleLoginComplete()
 	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
+
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
 
 /*
 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
