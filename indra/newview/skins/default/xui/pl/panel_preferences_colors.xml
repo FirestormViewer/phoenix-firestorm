@@ -49,16 +49,13 @@
 				Znajomi
 			</text>
 			<text name="lindens_text">
-				Pracownicy Linden Lab
+				Linden Lab
 			</text>
 			<text name="firestorm_text">
 				Firestorm
 			</text>
-			<text name="ScriptDialogBgLabel">
-				Tło skryptów
-			</text>
 			<text name="ScriptDialogFgLabel">
-				Kolor skryptów
+				Tło/klr skryptów
 			</text>
 			<text name="text_box10">
 				Bezpośrednie
