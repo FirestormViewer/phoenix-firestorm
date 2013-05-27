@@ -199,7 +199,7 @@
            parameter="FSColorizeMuted" />
         </menu_item_check>
         <menu_item_check
-         label="Lindens"
+         label="Linden Lab employees"
          name="Lindens"
          visibility_control="FSColorizeMap">
           <menu_item_check.on_check

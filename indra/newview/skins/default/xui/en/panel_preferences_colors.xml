@@ -494,7 +494,7 @@
 			name="lindens_text"
 			top_delta="5"
 			width="95">
-			Lindens
+			Linden Lab
 		</text>
 		<color_swatch
 			can_apply_immediately="true"
@@ -613,7 +613,7 @@
      left="30"
      height="12"
      name="override_pie_color_checkbox"
-     top_pad="5"
+     top_pad="15"
      width="450"
      label="Override pie menu background color and opacity:" />
     <color_swatch
@@ -813,7 +813,7 @@
 		  height="20"
 		  name="FSColorizeLindens"
 		  width="450"
-		  label="Colorize Lindens" />
+		  label="Colorize Lindens Lab employees" />
 		 <check_box
 		  control_name="FSColorizeFirestorm"
 		  follows="left|top"
