@@ -498,22 +498,22 @@
 		</text>
 		<color_swatch
 			can_apply_immediately="true"
-			color="MapAvatarFirestormColor"
+			color="MapAvatarMutedColor"
 			follows="left|top"
 			height="24"
 			label_height="0"
 			label_width="60"
 			layout="topleft"
 			left="360"
-			name="FirestormColor"
+			name="MutedColor"
 			top_pad="-15"
 			width="44">
 			<color_swatch.init_callback
 			function="Pref.getUIColor"
-			parameter="MapAvatarFirestormColor" />
+			parameter="MapAvatarMutedColor" />
 			<color_swatch.commit_callback
 			function="Pref.applyUIColor"
-			parameter="MapAvatarFirestormColor" />
+			parameter="MapAvatarMutedColor" />
 		</color_swatch>
 		<text
 			type="string"
@@ -523,43 +523,12 @@
 			layout="topleft"
 			left_pad="5"
 			mouse_opaque="false"
-			name="firestorm_text"
+			name="muted_text"
 			top_delta="5"
 			width="110">
-			Firestorm
+			Muted
 		</text>
 		
-    <color_swatch
-      can_apply_immediately="true"
-      color="MapAvatarMutedColor"
-      follows="left|top"
-      height="24"
-      label_height="0"
-      layout="topleft"
-      left="40"
-      name="MapAvatarMutedColor"
-      top_pad="19"
-      width="44" >
-      <color_swatch.init_callback
-       function="Pref.getUIColor"
-       parameter="MapAvatarMutedColor" />
-      <color_swatch.commit_callback
-       function="Pref.applyUIColor"
-       parameter="MapAvatarMutedColor" />
-    </color_swatch>
-    <text
-      type="string"
-      length="1"
-      follows="left|top"
-      height="10"
-      layout="topleft"
-      left_pad="5"
-      mouse_opaque="false"
-      name="MapAvatarMutedColorLabel"
-      top_delta="5"
-      width="95">
-      Muted
-    </text>
     <color_swatch
       can_apply_immediately="true"
       color="DirectChatColor"
@@ -567,9 +536,9 @@
       height="24"
       label_height="0"
       layout="topleft"
-      left="190"
-      name="direct"
-      top_pad="-15"
+      left="40"
+      name="DirectChatColor"
+      top_pad="19"
       width="44" >
       <color_swatch.init_callback
        function="Pref.getUIColor"
@@ -586,7 +555,7 @@
       layout="topleft"
       left_pad="5"
       mouse_opaque="false"
-      name="text_box10"
+      name="DirectChatColorLabel"
       top_delta="5"
       width="95">
       Direct
@@ -598,7 +567,7 @@
       height="24"
       label_height="0"
       layout="topleft"
-      left="360"
+      left="190"
       name="ScriptDialogFb"
       top_pad="-15"
       width="22" >
@@ -901,16 +870,6 @@
 		  width="450"
 		  label="Colorize Lindens Lab employees"
 		  tool_tip="Color Linden Lab employees based on preferences on the left" />
-		 <check_box
-		  control_name="FSColorizeFirestorm"
-		  follows="left|top"
-		  layout="topleft"
-		  top_pad="0"
-		  height="20"
-		  name="FSColorizeFirestorm"
-		  width="450"
-		  label="Colorize Firestorm team"
-		  tool_tip="Color Firestorm team members based on preferences on the left" />
 
 		 <check_box
 		  control_name="FSScriptDialogNoTransparency"

@@ -27,7 +27,7 @@
 #include "llnotifications.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
-#include "fsdata.h"
+//#include "fsdata.h"
 #include "rlvhandler.h"
 
 LGGContactSets::LGGContactSets() :
@@ -337,18 +337,18 @@ LLColor4 LGGContactSets::getGroupColor(const std::string& groupName)
 LLColor4 LGGContactSets::getSpecialColor(const LLUUID& uuid, const LLColor4& cur_color)
 {
 	LLColor4 color = cur_color;
-	FSData* fs_data = FSData::getInstance();
+	//FSData* fs_data = FSData::getInstance();
 	std::string full_name;
 	static LLUICachedControl<bool> fs_colorize_self("FSColorizeSelf");
 	static LLUICachedControl<bool> fs_colorize_friends("FSColorizeFriends");
 	static LLUICachedControl<bool> fs_colorize_muted("FSColorizeMuted");
 	static LLUICachedControl<bool> fs_colorize_lindens("FSColorizeLindens");
-	static LLUICachedControl<bool> fs_colorize_firestorm("FSColorizeFirestorm");
+	//static LLUICachedControl<bool> fs_colorize_firestorm("FSColorizeFirestorm");
 	static LLUIColor avatar_self_color = LLUIColorTable::instance().getColor("UserChatColor", LLColor4::yellow);
 	static LLUIColor avatar_friend_color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
 	static LLUIColor avatar_muted_color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3);
 	static LLUIColor avatar_linden_color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
-	static LLUIColor avatar_firestorm_color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red);
+	//static LLUIColor avatar_firestorm_color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red);
 
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		return color;
@@ -360,8 +360,8 @@ LLColor4 LGGContactSets::getSpecialColor(const LLUUID& uuid, const LLColor4& cur
 		color = avatar_friend_color;
 	else if (fs_colorize_lindens && gCacheName->getFullName(uuid, full_name) && LLMuteList::getInstance()->isLinden(full_name))
 		color = avatar_linden_color;
-	else if (fs_colorize_firestorm && (fs_data->is_developer(uuid) || fs_data->is_support(uuid)))
-		color = avatar_firestorm_color;
+	//else if (fs_colorize_firestorm && (fs_data->is_developer(uuid) || fs_data->is_support(uuid)))
+	//	color = avatar_firestorm_color;
 	
 	if (isNonFriend(uuid))
 	{
