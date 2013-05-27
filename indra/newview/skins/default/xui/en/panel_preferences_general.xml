@@ -7,8 +7,9 @@
  left="1"
  top="1"
  width="540"
- label="General"
- name="general_panel">
+ name="general_panel"
+ label="General">
+ <!--language-->
     <text
      type="string"
      length="1"
@@ -26,7 +27,7 @@
      follows="left|top"
      height="23"
      layout="topleft"
-     left="35"
+     left="30"
      max_chars="135"
      name="language_combobox"
      width="150">
@@ -97,19 +98,20 @@
          value="zh" />
     </combo_box>
     <text
+	 top_delta="4"
      font="SansSerifSmall"
      type="string"
      text_color="White_50"
      length="1"
      follows="left|top"
-     height="18"
+     height="15"
      layout="topleft"
-     left_pad="10"
+     left_pad="5"
      name="language_textbox2"
      width="130">
         (Requires restart)
     </text>
-
+<!--maturity-->
      <text
      type="string"
      length="1"
@@ -117,7 +119,7 @@
      height="15"
      layout="topleft"
      left="30"
-     top_pad="8"
+     top_pad="10"
      name="maturity_desired_prompt"
      width="200">
         I want to access content rated:
@@ -127,7 +129,7 @@
      follows="left|top"
      height="23"
      layout="topleft"
-     left="50"
+     left="30"
      name="maturity_desired_combobox"
      width="200">
         <combo_box.item
@@ -163,14 +165,14 @@
      layout="topleft"
      left_pad="5"
      name="rating_icon_general"
-     top_delta="3"
+     top_delta="-1"
      width="18"/>
     <icon
      follows="left|top"
      height="16"
      image_name="Parcel_M_Dark"
      layout="topleft"
-     left_pad="2"
+     left_pad="5"
      name="rating_icon_moderate"
      width="18"/>
     <icon
@@ -178,9 +180,10 @@
      height="16"
      image_name="Parcel_R_Dark"
      layout="topleft"
-     left_pad="2"
+     left_pad="5"
      name="rating_icon_adult"
      width="18"/>
+<!--start location-->
     <text
      type="string"
      length="1"
@@ -199,7 +202,7 @@
      height="23"
      layout="topleft"
      name="start_location_combo"
-     left="35"
+     left="30"
      width="150">
         <combo_box.item
          label="My Last Location"
@@ -216,11 +219,12 @@
      initial_value="true"
      label="Show on login"
      layout="topleft"
-     left_pad="20"
+     left_pad="5"
      name="show_location_checkbox"
      top_delta="5"
-     width="256" />
-
+     width="256"
+	 tool_tip="" />
+<!--name tags-->
     <text
      type="string"
      length="1"
@@ -238,7 +242,7 @@
      height="20"
      width="280"
      layout="topleft"
-     left="35"
+     left="30"
      top_pad="0"
      name="Name_Tag_Preference">
         <radio_item
@@ -249,7 +253,7 @@
          height="16"
          left="0"
          value="0"
-         width="75" />
+         width="95" />
         <radio_item
          label="On"
          left_pad="0"
@@ -258,7 +262,7 @@
          height="16"
          name="radio2"
          value="1"
-         width="75" />
+         width="95" />
         <radio_item
          label="Show briefly"
          left_pad="0"
@@ -267,7 +271,7 @@
          layout="topleft"
          top_delta="0"
          value="2"
-         width="160" />
+         width="120" />
     </radio_group>
     <text
      type="string"
@@ -275,7 +279,7 @@
      follows="left|top"
      height="15"
      layout="topleft"
-     left_pad="-25"
+     left_pad="100"
      name="RenderNameShowTime_LabelPrefix"
      top_delta="0"
      width="5">
@@ -313,10 +317,11 @@
      height="16"
      label="My name"
      layout="topleft"
-     left="35"
+     left="30"
      name="show_my_name_checkbox1"
-     top_pad="2"
-     width="100" />
+     top_pad="8"
+     width="140"
+	 tool_tip="" />
     <check_box
      control_name="NameTagShowUsernames"
      enabled_control="AvatarNameTagMode"
@@ -335,8 +340,8 @@
      height="16"
      label="Group titles"
      layout="topleft"
-     left="35"
-     width="100"
+     left="30"
+     width="140"
      name="show_all_title_checkbox1"
      tool_tip="Show group titles, like Officer or Member"
      top_pad="3" />
@@ -356,9 +361,9 @@
      height="16"
      label="View Display Names"
      layout="topleft"
-     left="35"
+     left="30"
      name="display_names_check"
-     width="100"
+     width="140"
      tool_tip="Check to use display names in chat, IM, name tags, etc."
      top_pad="3">
         <check_box.commit_callback
@@ -381,8 +386,8 @@
      height="16"
      label="Highlight friends"
      layout="topleft"
-     left="35"
-     width="100"
+     left="30"
+     width="140"
      top_pad="3"
      name="show_friends"
      tool_tip="Highlight the name tags of your friends."
@@ -414,7 +419,7 @@
      tool_tip="Enabling this will allow scripted HUDs to receive a tag named 'Firestorm' when displaying information about your avatar. This functionality enhances the functionality of some scripted radar HUDs, and uses the Firestorm LSL bridge."
      top_delta="0" />
      -->
-	 
+<!--away/logout-->
 	 <text
      type="string"
      length="1"
@@ -424,7 +429,7 @@
      left="30"
      top_pad="20"
      name="title_afk_text"
-     width="150">
+     width="260">
         Away timeout:
     </text>
 
@@ -434,10 +439,10 @@
      follows="left|top"
      height="13"
      layout="topleft"
-     left_pad="5"
+     left_pad="0"
      top_delta="0"
      name="title_afk_quit_text"
-     width="190">
+     width="200">
         Log out after being marked away:
     </text>
 
@@ -445,12 +450,13 @@
      height="23"
      layout="topleft"
      control_name="AFKTimeout"
-     left="25"
+     left="30"
      top_pad="5"
-     label="Away timeout:"
+	 label="Away timeout:"
      top_delta="0"
      name="afk"
-     width="120">
+     width="100"
+	 tool_tip="">
         <combo_box.item
          label="2 minutes"
          name="item0"
@@ -477,14 +483,27 @@
          value="0" />
     </combo_box>
 
+    <check_box
+     control_name="AvatarSitOnAway"
+     name="AvatarSitOnAway"
+     follows="top|left"
+     height="16"
+     label="Sit when away"
+     layout="topleft"
+     left_pad="5"
+     top_delta="4"
+     width="150"
+	 tool_tip=""/>
+
     <combo_box
      height="23"
      layout="topleft"
      control_name="QuitAfterSecondsOfAFK"
-     left_pad="40"
-     top_delta="0"
+     left_pad="5"
+     top_delta="-4"
      name="quitafk"
-     width="120">
+     width="100"
+	 tool_tip="">
         <combo_box.item
          label="2 minutes"
          name="item0"
@@ -507,17 +526,6 @@
 		 value="0" />
     </combo_box>
 
-    <check_box
-     control_name="AvatarSitOnAway"
-     name="AvatarSitOnAway"
-     follows="top|left"
-     height="16"
-     label="Sit when away"
-     layout="topleft"
-     left_pad="50"
-     top_delta="5"
-     width="50"/>
-
     <text
      type="string"
      length="1"
@@ -531,7 +539,7 @@
      width="500">
        Busy and Autoresponse messages can be found under Privacy / Autoresponse
     </text>
-
+<!--extras-->
     <panel
      border="true"
      bevel_style="none"
@@ -558,7 +566,7 @@
         </text>
         <check_box
          top_pad="5"
-         left="5"
+         left="2"
          control_name="FSUseWebProfiles"
          follows="left|top"
          layout="topleft"
@@ -586,7 +594,7 @@
          height="34"
          width="200"
          layout="topleft"
-         left="10"
+         left="2"
          top_pad="0"
          name="inworld_typing_preference">
             <radio_item

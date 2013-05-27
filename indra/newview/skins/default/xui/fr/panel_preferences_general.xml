@@ -1,83 +1,173 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Général" name="general_panel">
-	<text name="language_textbox">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba30130521-->
+<panel name="general_panel"
+	label="Général">
+<!--language-->
+    <text name="language_textbox">
 		Langue :
 	</text>
 	<combo_box name="language_combobox">
-		<combo_box.item label="Choix par défaut" name="System Default Language"/>
-		<combo_box.item label="English (Anglais)" name="English"/>
-		<combo_box.item label="Dansk (Danois) - Bêta" name="Danish"/>
-		<combo_box.item label="Deutsch (Allemand) - Bêta" name="Deutsch(German)"/>
-		<combo_box.item label="Español (Espagnol) - Bêta" name="Spanish"/>
-		<combo_box.item label="Français - Bêta" name="French"/>
-		<combo_box.item label="Italiano (Italien) - Bêta" name="Italian"/>
-		<combo_box.item label="Polski (Polonais) - Bêta" name="Polish"/>
-		<combo_box.item label="Português (Portugais) - Bêta" name="Portugese"/>
-		<combo_box.item label="Русский (Russe) - Bêta" name="Russian"/>
-		<combo_box.item label="Türkçe (Turc) - Bêta" name="Turkish"/>
-		<combo_box.item label="日本語 (Japonais) - Bêta" name="(Japanese)"/>
-		<combo_box.item label="正體中文 (Chinois traditionnel) - Bêta" name="Traditional Chinese"/>
+		<combo_box.item name="System Default Language"
+			label="Choix par défaut du système" />
+		<combo_box.item name="English"
+			label="English (Anglais)" />
+		<combo_box.item name="Danish"
+			label="Dansk (Danois) - Bêta" />
+		<combo_box.item name="Deutsch(German)"
+			label="Deutsch (Allemand) - Bêta" />
+		<combo_box.item name="Spanish"
+			label="Español (Espagnol) - Bêta" />
+		<combo_box.item name="French"
+			label="Français - Bêta" />
+		<combo_box.item name="Italian"
+			label="Italiano (Italien) - Bêta" />
+		<combo_box.item name="Polish"
+			label="Polski (Polonais) - Bêta" />
+		<combo_box.item name="Portugese"
+			label="Português (Portugais) - Bêta" />
+		<combo_box.item name="Russian"
+			label="Русский (Russe) - Bêta" />
+		<combo_box.item name="Turkish"
+			label="Türkçe (Turc) - Bêta" />
+		<combo_box.item name="(Japanese)"
+			label="日本語 (Japonais) - Bêta" />
+		<combo_box.item name="Traditional Chinese"
+			label="正體中文 (Chinois traditionnel) - Bêta" />
 	</combo_box>
 	<text name="language_textbox2">
-		(redémarrage requis)
+		(Redémarrage requis)
 	</text>
+<!--maturity-->
 	<text name="maturity_desired_prompt">
-		Je veux accéder au contenu classé :
+		Accéder au contenu classé :
 	</text>
-	<text name="maturity_desired_textbox"/>
 	<combo_box name="maturity_desired_combobox">
-		<combo_box.item label="Général, Modéré, Adulte" name="Desired_Adult"/>
-		<combo_box.item label="Général et Modéré" name="Desired_Mature"/>
-		<combo_box.item label="Général" name="Desired_PG"/>
+		<combo_box.item name="Desired_Adult"
+			label="Général, modéré et adulte" />
+		<combo_box.item name="Desired_Mature"
+			label="Général et modéré" />
+		<combo_box.item name="Desired_PG"
+			label="Général" />
 	</combo_box>
+<!--start location-->
 	<text name="start_location_textbox">
-		Lieu de départ :
+		Lieu d'arrivée :
 	</text>
 	<combo_box name="start_location_combo">
-		<combo_box.item label="Dernier emplacement" name="MyLastLocation" tool_tip="Par défaut, choisir mon dernier emplacement comme lieu de départ."/>
-		<combo_box.item label="Domicile" name="MyHome" tool_tip="Par défaut, choisir mon domicile comme lieu de départ."/>
+		<combo_box.item name="MyLastLocation"
+			label="Dernier emplacement"/>
+		<combo_box.item name="MyHome"
+			label="Domicile"/>
 	</combo_box>
-	<check_box initial_value="true" label="Afficher à la connexion" name="show_location_checkbox"/>
+	<check_box name="show_location_checkbox"
+		label="Afficher à la connexion"
+		tool_tip="Ajoute le sélecteur de destinations sur la fenêtre de connexion." />
+<!--name tag-->
 	<text name="name_tags_textbox">
-		Affichage des noms :
+		Label et contenu :
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Désactivé" name="radio"/>
-		<radio_item label="Activé" name="radio2"/>
-		<radio_item label="Afficher brièvement" name="radio3"/>
+		<radio_item name="radio"
+			label="Désactiver" />
+		<radio_item name="radio2"
+			label="Activer" />
+		<radio_item name="radio3"
+			label="Afficher brièvement" />
 	</radio_group>
-	<text left_pad="5" name="RenderNameShowTime_LabelPrefix">
+	<text name="RenderNameShowTime_LabelPrefix">
 		(
 	</text>
 	<text name="RenderNameShowTime_LabelSuffix">
-		seconds)
+		secondes)
 	</text>
-	<check_box label="Mon nom" name="show_my_name_checkbox1"/>
-	<check_box label="Noms d&apos;utilisateur" name="show_slids" tool_tip="Afficher le nom d&apos;utilisateur, comme bobsmith123."/>
-	<check_box label="Titres de groupe" name="show_all_title_checkbox1" tool_tip="Afficher les titres de groupe, comme Officier ou Membre."/>
-	<check_box label="Mettre mes amis en surbrillance" name="show_friends" tool_tip="Mettre en surbrillance l&apos;affichage des noms de vos amis."/>
-	<check_box label="Voir les noms d&apos;affichage" name="display_names_check" tool_tip="Cocher pour utiliser les noms d&apos;affichage dans les chats, les IM, l&apos;affichage des noms, etc."/>
-	<text name="inworld_typing_rg_label">
-		Appuyer sur les touches lettre :
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="Lance le chat local" name="radio_start_chat"/>
-		<radio_item label="Affecte le déplacement (ZQSD/WASD)" name="radio_move"/>
-	</radio_group>
+	<check_box name="show_my_name_checkbox1"
+		label="Mon nom"
+		tool_tip="Afficher votre nom." />
+	<check_box name="show_slids" 
+		label="Nom d&apos;utilisateur"
+		tool_tip="Afficher le nom d&apos;utilisateur, comme bobsmith123."/>
+	<check_box name="show_all_title_checkbox1"
+		label="Titre de groupe"
+		tool_tip="Afficher le titre de groupe, comme Officier ou Membre."/>
+	<check_box name="RenderHideGroupTitle"
+		label="Masquer mon titre de groupe"
+		tool_tip="Masquer / afficher votre titre de groupe à vous-même et à autrui."/>
+    <check_box name="display_names_check" 
+		label="Nom d&apos;affichage"
+		tool_tip="Voir le nom d&apos;affichage (display name) dans les chats, les IM, les labels, etc.">
+	</check_box>
+	<check_box name="FSshow_legacyun"
+		label="Nom hérité plutôt que nom d'utilisateur"
+		tool_tip="Afficher le nom hérité (Prénom Nom) plutôt que le nom d'utilisateur (prénom.nom)."/>
+	<check_box  name="show_friends"
+		label="Surbrillance"
+		tool_tip="Afficher en surbrillance les labels des personnes de votre liste de contacts. (N'est pas en relation avec l'onglet Firestorm → Label.)"/>
+	<check_box name="legacy_trim_check"
+		label="Afficher 'Resident'"
+		tool_tip="Ajouter 'Resident' au nom hérité.">
+	</check_box>
+	<!--FIRE-5505 (work in progress)-->
+	<check_box name="FSPublishRadarTag"
+		label="Publier le label du viewer"
+		tool_tip="Cette fonction permet aux HUDs de recevoir un label appelé 'Firestorm' lors de l'affichage d'informations sur votre avatar. Cette option améliore la fonctionnalité de certains HUDs radar, et utilise le pont (bridge) LSL Firestorm."/>
+<!--time/log out-->
 	<text name="title_afk_text">
-		Me montrer absent après :
+		Absent après :
 	</text>
-	<combo_box label="Me montrer absent après :" name="afk">
-		<combo_box.item label="2 minutes" name="item0"/>
-		<combo_box.item label="5 minutes" name="item1"/>
-		<combo_box.item label="10 minutes" name="item2"/>
-		<combo_box.item label="30 minutes" name="item3"/>
-		<combo_box.item label="Jamais" name="item4"/>
+	<text name="title_afk_quit_text">
+		Déconnecter après :
+    </text>
+    <combo_box name="afk"
+		tool_tip="Délai d'inactivité avant que le système ne montre votre avatar comme étant absent." >
+		<combo_box.item name="item0"
+			label="2 minutes" />
+		<combo_box.item name="item1"
+			label="5 minutes" />
+		<combo_box.item name="item2"
+			label="10 minutes" />
+		<combo_box.item name="item3"
+			label="30 minutes" />
+		<combo_box.item name="item4"
+			label="60 minutes" />
+		<combo_box.item name="item5"
+			label="Jamais"/>
 	</combo_box>
-	<text name="text_box3">
-		Réponse si occupé(e) :
-	</text>
-	<text_editor name="busy_response">
-		log_in_to_change
-	</text_editor>
+	<combo_box name="quitafk"
+		tool_tip="Délai d'attente, additionné au délai d'inactivité, avant que le système ne déconnecte votre avatar.">
+        <combo_box.item name="item0"
+			label="2 minutes"/>
+        <combo_box.item name="item1"
+			label="5 minutes"/>
+        <combo_box.item name="item2"
+			label="10 minutes"/>
+        <combo_box.item name="item3"
+			label="30 minutes"/>
+		<combo_box.item name="item4"
+			label="jamais"/>
+    </combo_box>
+    <check_box name="AvatarSitOnAway"
+		label="Asseoir si absent"
+		tool_tip="Asseoir automatiquement votre avatar en mode absent."/>
+    <text name="text_box3">
+		(Les réponses automatiques sont dans l'onglet Confidentialité → Auto-réponse)
+    </text>
+<!--extras-->
+	<panel name="general_extras" >
+        <text name="text_box3">
+			Options supplémentaires :
+        </text>
+        <check_box name="FSUseWebProfiles"
+			label="Utiliser le profil web par défaut"
+			tool_tip="Affiche les profils comme une page web plutôt que comme une fenêtre style v1"/>
+	<!-- This option is duplicated here for ease of locating and to replicate LLv3 -->
+		<text name="inworld_typing_rg_label">
+			Presser une touche du clavier :
+		</text>
+		<radio_group name="inworld_typing_preference">
+			<radio_item name="radio_start_chat"
+				label="Lance le chat local" />
+			<radio_item name="radio_move"
+				label="Affecte le déplacement (WASD)" />
+		</radio_group>
+	</panel>
 </panel>
