@@ -289,7 +289,7 @@ public:
 
 	~LLMeshSkinInfoResponder()
 	{
-		//llassert(mProcessed);
+		llassert(mProcessed);
 	}
 
 	virtual void completedRaw(U32 status, const std::string& reason,
@@ -314,7 +314,7 @@ public:
 
 	~LLMeshDecompositionResponder()
 	{
-		//llassert(mProcessed);
+		llassert(mProcessed);
 	}
 
 	virtual void completedRaw(U32 status, const std::string& reason,
@@ -339,7 +339,7 @@ public:
 
 	~LLMeshPhysicsShapeResponder()
 	{
-		//llassert(mProcessed);
+		llassert(mProcessed);
 	}
 
 	virtual void completedRaw(U32 status, const std::string& reason,
@@ -2046,7 +2046,7 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 		}
 		else
 		{
-			//llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
+			llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
 			llwarns << "Unhandled status " << status << llendl;
 		}
 		return;
@@ -2114,7 +2114,7 @@ void LLMeshSkinInfoResponder::completedRaw(U32 status, const std::string& reason
 		}
 		else
 		{
-			//llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
+			llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
 			llwarns << "Unhandled status " << status << llendl;
 		}
 		return;
@@ -2181,7 +2181,7 @@ void LLMeshDecompositionResponder::completedRaw(U32 status, const std::string& r
 		}
 		else
 		{
-			//llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
+			llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
 			llwarns << "Unhandled status " << status << llendl;
 		}
 		return;
@@ -2249,7 +2249,7 @@ void LLMeshPhysicsShapeResponder::completedRaw(U32 status, const std::string& re
 		}
 		else
 		{
-			//llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
+			llassert(status == 499 || status == 503); //intentionally trigger a breakpoint
 			llwarns << "Unhandled status " << status << llendl;
 		}
 		return;
@@ -2324,7 +2324,7 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 		//llassert(status == 503 || status == 499);
 		//if (status == 499 || status == 503)
 
-		//llassert(status == 408 || status == 499|| status == 503);
+		llassert(status == 408 || status == 499|| status == 503);
 		if (status == 408 || status == 499 || status == 503)
 		{ //retry
 			llwarns << "Timeout or service unavailable, retrying." << llendl;
