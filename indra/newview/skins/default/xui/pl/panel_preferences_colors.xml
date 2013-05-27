@@ -54,7 +54,13 @@
 			<text name="firestorm_text">
 				Firestorm
 			</text>
-			<text name="DirectChatColor">
+			<text name="ScriptDialogBgLabel">
+				Tło skryptów
+			</text>
+			<text name="ScriptDialogFgLabel">
+				Kolor skryptów
+			</text>
+			<text name="text_box10">
 				Bezpośrednie
 			</text>
 			<text name="bubble_chat">
@@ -77,14 +83,14 @@
 			<text name="colorize_options">
 				Opcje kolorowania awatarów:
 			</text>
-			<check_box name="FSColorizeChat" label="Koloruj w czacie, według imion"/>
-			<check_box name="FSColorizeTags" label="Używaj kolorowania w tagach imion"/>
-			<check_box name="FSColorizeMap" label="Używaj kolorowania na minimapie"/>
-			<check_box name="FSColorizeSelf" label="Koloruj siebie"/>
-			<check_box name="FSColorizeFriends" label="Koloruj znajomych"/>
-			<check_box name="FSColorizeMuted" label="Koloruj wyciszone awatary"/>
-			<check_box name="FSColorizeLindens" label="Koloruj pracowników Linden Lab"/>
-			<check_box name="FSColorizeFirestorm" label="Koloruj zespół Firestorma"/>
+			<check_box name="FSColorizeChat" label="Koloruj w czacie, według imion" tool_tip="Koloruj wiadomości czatu biorąc pod uwagę kryteria wybrane po prawej"/>
+			<check_box name="FSColorizeTags" label="Używaj kolorowania w tagach imion" tool_tip="Koloruj tagi imion biorąc pod uwagę kryteria wybrane po prawej"/>
+			<check_box name="FSColorizeMap" label="Używaj kolorowania na minimapie" tool_tip="Koloruj kropki na minimapie biorąc pod uwagę kryteria wybrane po prawej"/>
+			<check_box name="FSColorizeSelf" label="Koloruj siebie" tool_tip="Koloruj siebie biorąc pod uwagę preferencje wybrane po lewej"/>
+			<check_box name="FSColorizeFriends" label="Koloruj znajomych" tool_tip="Koloruj znajomych biorąc pod uwagę preferencje wybrane po lewej"/>
+			<check_box name="FSColorizeMuted" label="Koloruj wyciszone awatary" tool_tip="Koloruj wyciszone/zablokowane awatary biorąc pod uwagę preferencje wybrane po lewej"/>
+			<check_box name="FSColorizeLindens" label="Koloruj pracowników Linden Lab" tool_tip="Koloruj pracowników Linden Lab biorąc pod uwagę preferencje wybrane po lewej"/>
+			<check_box name="FSColorizeFirestorm" label="Koloruj zespół Firestorma" tool_tip="Koloruj członków zespołu Firestorma biorąc pod uwagę preferencje wybrane po lewej"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
 		</panel>
