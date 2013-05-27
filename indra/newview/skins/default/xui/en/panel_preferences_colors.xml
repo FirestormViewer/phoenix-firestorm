@@ -531,21 +531,21 @@
 		
     <color_swatch
       can_apply_immediately="true"
-      color="DialogColorBg"
+      color="MapAvatarMutedColor"
       follows="left|top"
       height="24"
       label_height="0"
       layout="topleft"
       left="40"
-      name="DialogColorBg"
+      name="MapAvatarMutedColor"
       top_pad="19"
       width="44" >
       <color_swatch.init_callback
        function="Pref.getUIColor"
-       parameter="ScriptDialog" />
+       parameter="MapAvatarMutedColor" />
       <color_swatch.commit_callback
        function="Pref.applyUIColor"
-       parameter="ScriptDialog" />
+       parameter="MapAvatarMutedColor" />
     </color_swatch>
     <text
       type="string"
@@ -555,41 +555,10 @@
       layout="topleft"
       left_pad="5"
       mouse_opaque="false"
-      name="ScriptDialogBgLabel"
+      name="MapAvatarMutedColorLabel"
       top_delta="5"
       width="95">
-      Script Dialog Bg
-    </text>
-    <color_swatch
-      can_apply_immediately="true"
-      color="DialogColorFg"
-      follows="left|top"
-      height="24"
-      label_height="0"
-      layout="topleft"
-      left="190"
-      name="ScriptDialogFb"
-      top_pad="-15"
-      width="44" >
-      <color_swatch.init_callback
-       function="Pref.getUIColor"
-       parameter="ScriptDialogFg" />
-      <color_swatch.commit_callback
-       function="Pref.applyUIColor"
-       parameter="ScriptDialogFg" />
-    </color_swatch>
-    <text
-      type="string"
-      length="1"
-      follows="left|top"
-      height="10"
-      layout="topleft"
-      left_pad="5"
-      mouse_opaque="false"
-      name="ScriptDialogFgLabel"
-      top_delta="5"
-      width="95">
-      Script Dialog Fg
+      Muted
     </text>
     <color_swatch
       can_apply_immediately="true"
@@ -598,7 +567,7 @@
       height="24"
       label_height="0"
       layout="topleft"
-      left="360"
+      left="190"
       name="direct"
       top_pad="-15"
       width="44" >
@@ -621,6 +590,55 @@
       top_delta="5"
       width="95">
       Direct
+    </text>
+    <color_swatch
+      can_apply_immediately="true"
+      color="DialogColorFg"
+      follows="left|top"
+      height="24"
+      label_height="0"
+      layout="topleft"
+      left="360"
+      name="ScriptDialogFb"
+      top_pad="-15"
+      width="22" >
+      <color_swatch.init_callback
+      function="Pref.getUIColor"
+      parameter="ScriptDialogFg" />
+      <color_swatch.commit_callback
+      function="Pref.applyUIColor"
+      parameter="ScriptDialogFg" />
+    </color_swatch>
+    <color_swatch
+      can_apply_immediately="true"
+      color="DialogColorBG"
+      follows="left|top"
+      height="24"
+      label_height="0"
+      layout="topleft"
+      left_pad="0"
+      name="ScriptDialogBg"
+      top_delta="0"
+      width="22" >
+      <color_swatch.init_callback
+      function="Pref.getUIColor"
+      parameter="ScriptDialogBg" />
+      <color_swatch.commit_callback
+      function="Pref.applyUIColor"
+      parameter="ScriptDialogBg" />
+    </color_swatch>
+    <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="10"
+      layout="topleft"
+      left_pad="5"
+      mouse_opaque="false"
+      name="ScriptDialogFgLabel"
+      top_delta="5"
+      width="95">
+      Script Dialog F/B
     </text>
     
     <text
@@ -819,7 +837,8 @@
 		  height="20"
 		  name="FSColorizeChat"
 		  width="450"
-		  label="Colorize chat based on avatar" />
+		  label="Colorize chat based on avatar"
+		  tool_tip="Colors chat based on categories chosen on the right" />
 		 <check_box
 		  control_name="FSColorizeTags"
 		  follows="left|top"
@@ -828,7 +847,8 @@
 		  height="20"
 		  name="FSColorizeTags"
 		  width="450"
-		 label="Colorize nametags based on avatar" />
+      label="Colorize nametags based on avatar"
+		  tool_tip="Colors name tags based on categories chosen on the right"/>
 		 <check_box
 		  control_name="FSColorizeMap"
 		  follows="left|top"
@@ -837,7 +857,8 @@
 		  height="20"
 		  name="FSColorizeMap"
 		  width="450"
-		  label="Colorize mini-map based on avatar" />
+		  label="Colorize mini-map based on avatar"
+		  tool_tip="Colors mini-map dots based on categories chosen on the right"/>
 		 
 		 <check_box
 		  control_name="FSColorizeSelf"
@@ -848,7 +869,8 @@
 		  height="20"
 		  name="FSColorizeSelf"
 		  width="450"
-		  label="Colorize self" />
+		  label="Colorize self"
+		  tool_tip="Color yourself based on preferences on the left"/>
 		 <check_box
 	 	  control_name="FSColorizeFriends"
       follows="left|top"
@@ -857,7 +879,8 @@
 		  height="20"
 		  name="FSColorizeFriends"
 		  width="450"
-		  label="Colorize friends" />
+		  label="Colorize friends"
+		  tool_tip="Color friends based on preferences on the left"/>
 		 <check_box
 		  control_name="FSColorizeMuted"
 		  follows="left|top"
@@ -866,7 +889,8 @@
 		  height="20"
 		  name="FSColorizeMuted"
 		  width="450"
-		  label="Colorize muted avatars" />
+		  label="Colorize muted avatars"
+		  tool_tip="Color muted avatars based on preferences on the left" />
 		 <check_box
       control_name="FSColorizeLindens"
 		  follows="left|top"
@@ -875,7 +899,8 @@
 		  height="20"
 		  name="FSColorizeLindens"
 		  width="450"
-		  label="Colorize Lindens Lab employees" />
+		  label="Colorize Lindens Lab employees"
+		  tool_tip="Color Linden Lab employees based on preferences on the left" />
 		 <check_box
 		  control_name="FSColorizeFirestorm"
 		  follows="left|top"
@@ -884,7 +909,8 @@
 		  height="20"
 		  name="FSColorizeFirestorm"
 		  width="450"
-		  label="Colorize Firestorm team" />
+		  label="Colorize Firestorm team"
+		  tool_tip="Color Firestorm team members based on preferences on the left" />
 
 		 <check_box
 		  control_name="FSScriptDialogNoTransparency"
