@@ -51,16 +51,13 @@
 			<text name="lindens_text">
 				Linden Lab
 			</text>
-			<text name="firestorm_text">
-				Firestorm
-			</text>
-			<text name="MapAvatarMutedColorLabel">
+			<text name="muted_text">
 				Wyciszeni
 			</text>
 			<text name="ScriptDialogFgLabel">
 				Tło/klr skryptów
 			</text>
-			<text name="text_box10">
+			<text name="DirectChatColorLabel">
 				Bezpośrednie
 			</text>
 			<text name="bubble_chat">
@@ -90,7 +87,6 @@
 			<check_box name="FSColorizeFriends" label="Koloruj znajomych" tool_tip="Koloruj znajomych biorąc pod uwagę preferencje wybrane po lewej"/>
 			<check_box name="FSColorizeMuted" label="Koloruj wyciszone awatary" tool_tip="Koloruj wyciszone/zablokowane awatary biorąc pod uwagę preferencje wybrane po lewej"/>
 			<check_box name="FSColorizeLindens" label="Koloruj pracowników Linden Lab" tool_tip="Koloruj pracowników Linden Lab biorąc pod uwagę preferencje wybrane po lewej"/>
-			<check_box name="FSColorizeFirestorm" label="Koloruj zespół Firestorma" tool_tip="Koloruj członków zespołu Firestorma biorąc pod uwagę preferencje wybrane po lewej"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
 		</panel>
