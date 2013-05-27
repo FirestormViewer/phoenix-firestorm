@@ -3167,7 +3167,10 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	}
 	
 	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
-	color = LGGContactSets::getInstance()->getSpecialColor(getID(), color);
+	static LLUICachedControl<bool> fs_colorize("FSColorizeTags");
+	if (fs_colorize)
+		color = LGGContactSets::getInstance()->getSpecialColor(getID(), color);
+	// </FS:CR>
 	
 	static LLUICachedControl<bool> fsShowOwnTagColor("FSShowOwnTagColor");
 	if (isSelf() && fsShowOwnTagColor)
