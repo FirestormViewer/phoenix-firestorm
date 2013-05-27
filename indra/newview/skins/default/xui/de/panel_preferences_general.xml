@@ -71,10 +71,10 @@
 		<radio_item label="Startet lokalen Chat" name="radio_start_chat"/>
 		<radio_item label="Beeinflusst Bewegung (z. B. WASD)" name="radio_move"/>
 	</radio_group>
-	<text name="title_afk_text">
+	<text name="title_afk_text" width="275">
 		Zeit bis zur Abwesenheit:
 	</text>
-	<text name="title_afk_quit_text" >
+	<text name="title_afk_quit_text">
 		Ausloggen im Abwesend-Modus nach:
 	</text> 
 	<combo_box label="Timeout für Abwesenheit:" name="afk">
@@ -85,7 +85,7 @@
 		<combo_box.item label="60 Minuten" name="item4"/>
 		<combo_box.item label="nie" name="item5"/>
 	</combo_box>
-	<combo_box  layout="topleft" left_pad="70" name="quitafk">
+	<combo_box  layout="topleft" left_pad="20" name="quitafk">
 		<combo_box.item label="2 Minuten" name="item0"/>
 		<combo_box.item label="5 Minuten" name="item1"/>
 		<combo_box.item label="10 Minuten" name="item2"/>
