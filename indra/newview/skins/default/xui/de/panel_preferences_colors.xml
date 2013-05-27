@@ -1,72 +1,98 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Farben" name="colors_panel">
-	<text name="effects_color_textbox">
-		Meine Effekte (Auswahlstrahl):
-	</text>
-	<text name="netmap_color_textbox">
-		Mini-Karte:
-	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
-	<text name="netmap_chatring_color_label">
-		Chat-Reichweite
-	</text>
-	<text name="netmap_shoutring_color_label">
-		Ruf-Reichweite
-	</text>
-	<text name="font_colors">
-		Schriftfarben für Chat:
-	</text>
-	<text name="text_box1">
-		Ich
-	</text>
-	<text name="text_box2">
-		Andere
-	</text>
-	<text name="text_box3">
-		Objekte
-	</text>
-	<text name="text_box4">
-		System
-	</text>
-	<text name="text_box5">
-		Fehler
-	</text>
-    <text name="text_box8">
-        Chat-Überschriften
-    </text>
-	<text name="text_box10">
-		Direkt
-	</text>
-    <text name="text_box6">
-        Objekt-IMs
-    </text>
-	<text name="text_box7">
-		Eigentümer
-	</text>
-	<text name="text_box9">
-		URLs
-	</text>
-    <text name="ScriptDialogBgLabel">
-        Skript-Dialog Hg
-    </text>
-    <text name="ScriptDialogFgLabel">
-        Skript-Dialog Vg
-    </text>
-	<text name="bubble_chat">
-		Hintergrundfarbe für Avatarnamen (wirkt sich auch auf Blasen-Chat aus):
-	</text>
-	<color_swatch name="background" tool_tip="Farbe für Avatarnamen auswählen"/>
-	<slider label="Deckkraft:" name="bubble_chat_opacity" tool_tip="Deckkraft für Avatarnamen auswählen"/>
-	<text name="floater_opacity">
-		Floater-Deckkraft:
-	</text>
-	<slider label="Aktiv:" name="active"/>
-	<slider label="Inaktiv:" name="inactive"/>
-	<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
-	<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
-	<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>
-	<color_swatch name="pie_bg_color_override" tool_tip="Wähle die Pie-Menü-Hintergrundfarbe"/>
-	<color_swatch name="pie_selected_color_override" tool_tip="Wähle die Pie-Menü-Farbe"/>
-	<slider label="Deckkraft:" name="pie_menu_opacity" tool_tip="Wähle die Deckkraft des Pie-Menüs"/>
-	<slider label="Ausblenden:" name="pie_menu_fade_out" tool_tip="Wähle die Höhe der Durchsichtigkeit des Pie-Menüs"/>
+	<tab_container name="tabs">
+		<panel label="Allgemein" name="tab-general">
+			<text name="effects_color_textbox">
+				Meine Effekte (Auswahlstrahl):
+			</text>
+			<text name="netmap_color_textbox">
+				Mini-Karte:
+			</text>
+			<text name="netmap_chatring_color_label">
+				Chat-Reichweite
+			</text>
+			<color_swatch name="netmap_shoutring_color_swatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
+			<text name="netmap_shoutring_color_label">
+				Ruf-Reichweite
+			</text>
+			<text name="font_colors">
+				Schriftfarben für Chat:
+			</text>
+			<text name="text_box1">
+				Ich
+			</text>
+			<text name="text_box2">
+				Andere
+			</text>
+			<text name="text_box3">
+				Objekte
+			</text>
+			<text name="text_box4">
+				System
+			</text>
+			<text name="text_box5">
+				Fehler
+			</text>
+			<text name="text_box6">
+				Objekt-IMs
+			</text>
+			<text name="text_box7">
+				Eigentümer
+			</text>
+			<text name="text_box9">
+				URLs
+			</text>
+			<text name="text_box8">
+				Chat-Überschriften
+			</text>
+			<text name="friends_text">
+				Freunde
+			</text>
+			<text name="lindens_text">
+				Linden Lab
+			</text>
+			<text name="firestorm_text">
+				Firestorm
+			</text>
+			<text name="DirectChatColor">
+				Direkt
+			</text>
+			<text name="bubble_chat">
+				Hintergrundfarbe für Avatarnamen (wirkt sich auch auf Blasen-Chat aus):
+			</text>
+			<color_swatch name="background" tool_tip="Farbe für Avatarnamen auswählen"/>
+			<slider label="Deckkraft:" name="bubble_chat_opacity" tool_tip="Deckkraft für Avatarnamen auswählen"/>
+			<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>
+			<color_swatch name="pie_bg_color_override" tool_tip="Wähle die Pie-Menü-Hintergrundfarbe"/>
+			<color_swatch name="pie_selected_color_override" tool_tip="Wähle die Pie-Menü-Farbe"/>
+			<slider label="Deckkraft:" name="pie_menu_opacity" tool_tip="Wähle die Deckkraft des Pie-Menüs"/>
+			<slider label="Ausblenden:" name="pie_menu_fade_out" tool_tip="Wähle die Höhe der Durchsichtigkeit des Pie-Menüs"/>
+		</panel>
+		<panel label="Sonstige" name="tab-misc">
+			<text name="floater_opacity">
+				Floater-Deckkraft:
+			</text>
+			<text name="colorize_options">
+				Avatar-Farben:
+			</text>
+			<check_box name="FSColorizeChat" label="Chatfarbe basierend auf Avatar wählen"/>
+			<check_box name="FSColorizeTags" label="Farbe für Avatarnamen verwenden"/>
+			<check_box name="FSColorizeMap" label="Farben auf Mini-Karte verwenden"/>
+			<check_box name="FSColorizeSelf" label="Eigenen Avatar farbig anzeigen"/>
+			<check_box name="FSColorizeFriends" label="Freunde farbig anzeigen"/>
+			<check_box name="FSColorizeMuted" label="Blockierte Avatare farbig anzeigen"/>
+			<check_box name="FSColorizeLindens" label="Linden-Lab-Mitarbeiter farbig anzeigen"/>
+			<check_box name="FSColorizeFirestorm" label="Firestorm-Teammitglieder farbig anzeigen"/>
+			<text name="ScriptDialogBgLabel">
+				Skript-Dialog Hg
+			</text>
+			<text name="ScriptDialogFgLabel">
+				Skript-Dialog Vg
+			</text>
+			<slider label="Aktiv:" name="active"/>
+			<slider label="Inaktiv:" name="inactive"/>
+			<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
+			<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
+		</panel>
+	</tab_container>
 </panel>
