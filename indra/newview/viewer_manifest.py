@@ -1109,7 +1109,7 @@ class DarwinManifest(ViewerManifest):
             os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),
                       "%s/Phoenix_%s_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),
                                                                       substitution_strings['channel_oneword'],
-                                                                      substitution_strings['version_dashes'].
+                                                                      substitution_strings['version_dashes'],
                                                                       self.args['viewer_flavor']))
 
 
