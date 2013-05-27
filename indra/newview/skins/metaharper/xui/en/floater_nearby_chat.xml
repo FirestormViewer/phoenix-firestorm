@@ -62,7 +62,6 @@
           layout="topleft"
           width="25"
           name="slide_right_btn" />
-<!-- FS:AO Translate chat generally not publically available. Enforce toggle through prefs to reduce confusion
           <button
           height="20"
           follows="left|top"
@@ -78,12 +77,10 @@
           image_selected="PushButton_Selected_Press"
           tool_tip="Use selected translation service"
           name="translate_btn"/>
--->
           <button
           height="20"
           follows="left|top"
-	  top_delta="0"
-          left="2"
+          left_pad="2"
           image_overlay="List_View_On"
           layout="topleft"
           width="25"
