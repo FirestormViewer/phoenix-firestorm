@@ -10,13 +10,13 @@
    var. 5 = #AB7B61 = rgb(171,123,97) 0.76 0.58 0.49
 
 	-->
-	<color
-        name="ScriptDialog"
-        value=".27 .66 1.0 1" />
-	<color 
-        name="ScriptDialogFg"
-        value=".05 .05 .05 1" />
-	<color
+  <color
+	 name="ScriptDialog"
+	 value=".27 .66 1.0 1" />
+  <color
+	 name="ScriptDialogFg"
+	 value=".05 .05 .05 1" />
+  <color
 	 name="AccentColor"
 	 value="0.75 0.92 0.49 1.0" />
   <color

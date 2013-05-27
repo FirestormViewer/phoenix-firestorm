@@ -580,21 +580,21 @@
     </color_swatch>
     <color_swatch
       can_apply_immediately="true"
-      color="DialogColorBG"
+      color="ScriptDialog"
       follows="left|top"
       height="24"
       label_height="0"
       layout="topleft"
       left_pad="0"
-      name="ScriptDialogBg"
+      name="ScriptDialog"
       top_delta="0"
       width="22" >
       <color_swatch.init_callback
       function="Pref.getUIColor"
-      parameter="ScriptDialogBg" />
+      parameter="ScriptDialog" />
       <color_swatch.commit_callback
       function="Pref.applyUIColor"
-      parameter="ScriptDialogBg" />
+      parameter="ScriptDialog" />
     </color_swatch>
     <text
       type="string"
