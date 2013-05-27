@@ -67,16 +67,16 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 				}
 				else
 				{
-					if(gAgentID == chat.mFromID)
-					{
-						r_color = LLUIColorTable::instance().getColor("UserChatColor");
-					}
-					else
-					{
-						r_color = LLUIColorTable::instance().getColor("AgentChatColor");
-					}
-					
 					// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
+					// Handle "UserChatColor" through the colorizer
+					//if(gAgentID == chat.mFromID)
+					//{
+					//	r_color = LLUIColorTable::instance().getColor("UserChatColor");
+					//}
+					//else
+					//{
+						r_color = LLUIColorTable::instance().getColor("AgentChatColor");
+					//}
 					static LLUICachedControl<bool> fs_colorize("FSColorizeChat");
 					if (fs_colorize)
 						r_color = LGGContactSets::getInstance()->getSpecialColor(chat.mFromID, r_color);
