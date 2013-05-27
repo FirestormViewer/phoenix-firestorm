@@ -2715,6 +2715,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	static LLUICachedControl<bool> colorize_tags("FSColorizeTags");
 	bool show_friends = (colorize_friends && colorize_tags);
 	// </FS:CR>
+	
 	static LLUICachedControl<U32> color_client_tags("FSColorClienttags");
 	if(mClientTagData.has("color") && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))) && color_client_tags > 0 && !this->isSelf())
 	{
@@ -2766,14 +2767,6 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		}
 	}
 	// </FS:Ansariel>
-	// <FS:CR> Colorize tags
-	static LLCachedControl<bool> fsShowOwnTagColor(gSavedSettings, "FSShowOwnTagColor");
-	if (isSelf() && fsShowOwnTagColor)
-	{
-		static LLCachedControl<LLColor4> firestormTagColor(gSavedPerAccountSettings, "FirestormTagColor");
-		name_tag_color = firestormTagColor;
-	}
-	// </FS:CR>
 
 	// Rebuild name tag if state change detected
 	if (mNameString.empty()
@@ -3175,6 +3168,14 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	
 	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
 	color = LGGContactSets::getInstance()->getSpecialColor(getID(), color);
+	
+	static LLUICachedControl<bool> fsShowOwnTagColor("FSShowOwnTagColor");
+	if (isSelf() && fsShowOwnTagColor)
+	{
+		static LLCachedControl<LLColor4> firestormTagColor(gSavedPerAccountSettings, "FirestormTagColor");
+		color = firestormTagColor;
+	}
+	// </FS:CR>
 	
 	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))
 	{
