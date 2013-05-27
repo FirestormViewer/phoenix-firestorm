@@ -16,7 +16,7 @@
 				Ruf-Reichweite
 			</text>
 			<text name="font_colors">
-				Schriftfarben für Chat:
+				Uers-Interface-Farben:
 			</text>
 			<text name="text_box1">
 				Ich
@@ -51,17 +51,20 @@
 			<text name="lindens_text">
 				Linden Lab
 			</text>
-			<text name="firestorm_text">
-				Firestorm
+			<text name="muted_text">
+				Blockiert
 			</text>
-			<text name="DirectChatColor">
+			<text name="DirectChatColorLabel">
 				Direkt
 			</text>
-			<text name="bubble_chat">
-				Hintergrundfarbe für Avatarnamen (wirkt sich auch auf Blasen-Chat aus):
+			<text name="ScriptDialogFgLabel" width="110">
+				Skript-Dialog Vg/Hg
 			</text>
-			<color_swatch name="background" tool_tip="Farbe für Avatarnamen auswählen"/>
-			<slider label="Deckkraft:" name="bubble_chat_opacity" tool_tip="Deckkraft für Avatarnamen auswählen"/>
+			<text name="bubble_chat">
+				Hintergrundfarbe für Namensschilder / Blasen-Chat / Konsole:
+			</text>
+			<color_swatch name="background" tool_tip="Farbe für Namensschilder auswählen"/>
+			<slider label="Deckkraft:" name="bubble_chat_opacity" tool_tip="Deckkraft für Namensschilder auswählen"/>
 			<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>
 			<color_swatch name="pie_bg_color_override" tool_tip="Wähle die Pie-Menü-Hintergrundfarbe"/>
 			<color_swatch name="pie_selected_color_override" tool_tip="Wähle die Pie-Menü-Farbe"/>
@@ -70,27 +73,26 @@
 		</panel>
 		<panel label="Sonstige" name="tab-misc">
 			<text name="floater_opacity">
-				Floater-Deckkraft:
+				Fenster-Deckkraft:
 			</text>
+			<slider label="Aktiv:" name="active"/>
+			<slider label="Inaktiv:" name="inactive"/>
 			<text name="colorize_options">
 				Avatar-Farben:
 			</text>
-			<check_box name="FSColorizeChat" label="Chatfarbe basierend auf Avatar wählen"/>
-			<check_box name="FSColorizeTags" label="Farbe für Avatarnamen verwenden"/>
-			<check_box name="FSColorizeMap" label="Farben auf Mini-Karte verwenden"/>
-			<check_box name="FSColorizeSelf" label="Eigenen Avatar farbig anzeigen"/>
-			<check_box name="FSColorizeFriends" label="Freunde farbig anzeigen"/>
-			<check_box name="FSColorizeMuted" label="Blockierte Avatare farbig anzeigen"/>
-			<check_box name="FSColorizeLindens" label="Linden-Lab-Mitarbeiter farbig anzeigen"/>
-			<check_box name="FSColorizeFirestorm" label="Firestorm-Teammitglieder farbig anzeigen"/>
+			<check_box name="FSColorizeChat" label="Chatfarbe basierend auf Avatar wählen" tool_tip="Färbt den Chat von Avataren basierend auf den Kategorien auf der rechten Seite ein."/>
+			<check_box name="FSColorizeTags" label="Farbe für Namensschilder verwenden" tool_tip="Färbt das Namesschild von Avataren basierend auf den Kategorien auf der rechten Seite ein."/>
+			<check_box name="FSColorizeMap" label="Farben auf Mini-Karte verwenden" tool_tip="Färbt Avatare auf der Mini-Karte basierend auf den Kategorien auf der rechten Seite ein."/>
+			<check_box name="FSColorizeSelf" label="Eigenen Avatar farbig markieren" tool_tip="Farbe für eigenen Avatar anhand der Einstellungne auf der linken Seite wählen."/>
+			<check_box name="FSColorizeFriends" label="Freunde farbig markieren" tool_tip="Farbe für Freunde anhand der Einstellungne auf der linken Seite wählen."/>
+			<check_box name="FSColorizeMuted" label="Blockierte Avatare farbig markieren" tool_tip="Farbe für blockierte Avatare anhand der Einstellungne auf der linken Seite wählen."/>
+			<check_box name="FSColorizeLindens" label="Linden-Lab-Mitarbeiter farbig markieren" tool_tip="Farbe für Linden-Lab-Mitarbeiten anhand der Einstellungne auf der linken Seite wählen."/>
 			<text name="ScriptDialogBgLabel">
 				Skript-Dialog Hg
 			</text>
 			<text name="ScriptDialogFgLabel">
 				Skript-Dialog Vg
 			</text>
-			<slider label="Aktiv:" name="active"/>
-			<slider label="Inaktiv:" name="inactive"/>
 			<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
 		</panel>
