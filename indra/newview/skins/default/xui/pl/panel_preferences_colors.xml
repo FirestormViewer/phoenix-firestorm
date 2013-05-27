@@ -1,72 +1,92 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Kolory" name="colors_panel">
-	<text name="effects_color_textbox">
-		Efekty wyboru (wiązka cząstek):
-	</text>
-	<text name="netmap_color_textbox">
-		Minimapa:
-	</text>
-	<text name="netmap_chatring_color_label">
-		Zasięg czatu
-	</text>
-	<color_swatch name="netmap_shoutring_color_swatch" tool_tip="Kliknij aby wybrać kolor"/>
-	<text name="netmap_shoutring_color_label">
-		Zasięg krzyku
-	</text>
-	<text name="font_colors">
-		Kolory napisów:
-	</text>
-	<text name="text_box1">
-		Ja
-	</text>
-	<text name="text_box2">
-		Inni
-	</text>
-	<text name="text_box3">
-		Obiekty
-	</text>
-	<text name="text_box4">
-		System
-	</text>
-	<text name="text_box5">
-		Błędy
-	</text>
-	<text name="text_box6">
-		IM obiektów
-	</text>
-	<text name="text_box7">
-		Właściciel
-	</text>
-	<text name="text_box8">
-		Nagłówki czatu
-	</text>
-	<text name="text_box9">
-		URLe
-	</text>
-	<text name="text_box10">
-		Bezpośrednie
-	</text>
-	<text name="ScriptDialogBgLabel">
-		Tło skryptów
-	</text>
-	<text name="ScriptDialogFgLabel">
-		Kolor skryptów
-	</text>
-	<text name="bubble_chat">
-		Tło imienia, czatu chmurkowego, konsoli:
-	</text>
-	<color_swatch name="background" tool_tip="Wybierz kolor tła imienia (taga)"/>
-	<slider label="Przezrocz.:" name="bubble_chat_opacity" tool_tip="Wybierz przezroczystość taga"/>
-	<text name="floater_opacity">
-		Przezroczystość pływającego okna:
-	</text>
-	<slider label="Aktywne:" name="active"/>
-	<slider label="Nieaktywne:" name="inactive"/>
-	<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
-	<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
-	<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>
-	<color_swatch name="pie_bg_color_override" tool_tip="Wybierz kolor tła menu kołowego"/>
-	<color_swatch name="pie_selected_color_override" tool_tip="Wybierz kolor selekcji menu kołowego"/>
-	<slider label="Przezrocz.:" name="pie_menu_opacity" tool_tip="Wybierz przezroczystość menu kołowego"/>
-	<slider label="Brzegi:" name="pie_menu_fade_out" tool_tip="Wybierz stopień wyciemnienia brzegów menu kołowego"/>
+	<tab_container label="Preferencje kolorów" name="tabs">
+		<panel label="Ogólne" name="tab-general">
+			<text name="effects_color_textbox">
+				Efekty wyboru (wiązka cząstek):
+			</text>
+			<text name="netmap_color_textbox">
+				Minimapa:
+			</text>
+			<text name="netmap_chatring_color_label">
+				Zasięg czatu
+			</text>
+			<color_swatch name="netmap_shoutring_color_swatch" tool_tip="Kliknij aby wybrać kolor"/>
+			<text name="netmap_shoutring_color_label">
+				Zasięg krzyku
+			</text>
+			<text name="font_colors">
+				Kolory napisów:
+			</text>
+			<text name="text_box1">
+				Ja
+			</text>
+			<text name="text_box2">
+				Inni
+			</text>
+			<text name="text_box3">
+				Obiekty
+			</text>
+			<text name="text_box4">
+				System
+			</text>
+			<text name="text_box5">
+				Błędy
+			</text>
+			<text name="text_box6">
+				IM obiektów
+			</text>
+			<text name="text_box7">
+				Właściciel
+			</text>
+			<text name="text_box9">
+				URLe
+			</text>
+			<text name="text_box8">
+				Nagłówki czatu
+			</text>
+			<text name="friends_text">
+				Znajomi
+			</text>
+			<text name="lindens_text">
+				Pracownicy Linden Lab
+			</text>
+			<text name="firestorm_text">
+				Firestorm
+			</text>
+			<text name="DirectChatColor">
+				Bezpośrednie
+			</text>
+			<text name="bubble_chat">
+				Tło imienia, czatu chmurkowego, konsoli:
+			</text>
+			<color_swatch name="background" tool_tip="Wybierz kolor tła imienia (taga)"/>
+			<slider label="Przezrocz.:" name="bubble_chat_opacity" tool_tip="Wybierz przezroczystość taga"/>
+			<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>
+			<color_swatch name="pie_bg_color_override" tool_tip="Wybierz kolor tła menu kołowego"/>
+			<color_swatch name="pie_selected_color_override" tool_tip="Wybierz kolor selekcji menu kołowego"/>
+			<slider label="Przezrocz.:" name="pie_menu_opacity" tool_tip="Wybierz przezroczystość menu kołowego"/>
+			<slider label="Brzegi:" name="pie_menu_fade_out" tool_tip="Wybierz stopień wyciemnienia brzegów menu kołowego"/>
+		</panel>
+		<panel label="Różne" name="tab-misc">
+			<text name="floater_opacity">
+				Przezroczystość pływającego okna:
+			</text>
+			<slider label="Aktywne:" name="active"/>
+			<slider label="Nieaktywne:" name="inactive"/>
+			<text name="colorize_options">
+				Opcje kolorowania awatarów:
+			</text>
+			<check_box name="FSColorizeChat" label="Koloruj w czacie, według imion"/>
+			<check_box name="FSColorizeTags" label="Używaj kolorowania w tagach imion"/>
+			<check_box name="FSColorizeMap" label="Używaj kolorowania na minimapie"/>
+			<check_box name="FSColorizeSelf" label="Koloruj siebie"/>
+			<check_box name="FSColorizeFriends" label="Koloruj znajomych"/>
+			<check_box name="FSColorizeMuted" label="Koloruj wyciszone awatary"/>
+			<check_box name="FSColorizeLindens" label="Koloruj pracowników Linden Lab"/>
+			<check_box name="FSColorizeFirestorm" label="Koloruj zespół Firestorma"/>
+			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
+			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
+		</panel>
+	</tab_container>
 </panel>

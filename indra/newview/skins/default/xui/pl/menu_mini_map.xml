@@ -23,6 +23,13 @@
 		<menu_item_check label="Obiekty fizyczne" name="Physical Objects"/>
 		<menu_item_check label="Obiekty oskryptowane" name="Scripted Objects"/>
 		<menu_item_check label="Obiekty zrezzowane tymczasowo" name="Temp On Rez Objects"/>
+		<menu_item_check label="Kolory awatarów" name="Colorized Avatars"/>
+		<!-- <menu label="Koloruj..." name="Colorize">
+			<menu_item_check label="Znajomych" name="Friends"/>
+			<menu_item_check label="Wyciszonych" name="Muted"/>
+			<menu_item_check label="Pracowników Linden Lab" name="Lindens"/>
+			<menu_item_check label="Zespół Firestorma" name="Firestorm"/>
+		</menu> -->
 		<menu_item_check label="Granice działek" name="Property Lines"/>
 		<menu_item_check label="Działki na sprzedaż" name="Parcels for Sale"/>
 		<menu_item_check label="Tekstury terenu" name="Terrain Textures"/>
