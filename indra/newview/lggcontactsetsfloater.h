@@ -102,10 +102,10 @@ class lggContactSetsFloaterSettings : public LLFloater
 {
 public:
 	lggContactSetsFloaterSettings(const LLSD& seed);
-	virtual ~lggContactSetsFloaterSettings() {}
-
 	BOOL postBuild(void);
-
+	
+private:
+	virtual ~lggContactSetsFloaterSettings() {}
 	void onDefaultBackgroundChange();
 };
 
