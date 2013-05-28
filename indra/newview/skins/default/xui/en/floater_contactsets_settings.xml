@@ -5,7 +5,7 @@
  can_close="true"
  can_minimize="true"
  can_resize="false"
- height="380"
+ height="423"
  width="550"
  save_rect="true"
  name="lgg_fg_floater_settings"
@@ -295,4 +295,13 @@
 		 label="Display Names only">
 		</combo_item>
 	</combo_box>
+	<button
+	 follows="top|right"
+	 height="23"
+	 layout="topleft"
+	 left="225"
+	 top_pad="6"
+	 name="close_btn"
+	 width="100"
+	 label="OK" />
 </floater>

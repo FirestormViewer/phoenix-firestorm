@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="400"
+ height="435"
  layout="topleft"
  name="floater_fs_script_editor_prefs"
  help_topic="preview_lsl_text"
@@ -543,4 +543,13 @@
 		<button.commit_callback
 		function="NACL.SetPreprocInclude" />
 	</button>
+	<button
+		follows="top|left"
+		height="23"
+		layout="topleft"
+		top_pad="6"
+		left="115"
+		name="close_btn"
+		width="100"
+		label="OK" />
 </floater>
