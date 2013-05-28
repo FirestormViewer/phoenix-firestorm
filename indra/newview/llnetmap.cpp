@@ -582,13 +582,6 @@ void LLNetMap::draw()
 			
 			LLColor4 color = map_avatar_color;	// <FS:CR>
 			
-			// <FS:Ansariel> Mark Avatars with special colors
-			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
-			{
-				color = LLNetMap::sAvatarMarksMap[uuid];
-			}
-			// </FS:Ansariel> Mark Avatars with special colors
-			
 			// <FS:CR> Color "special" avatars with special colors (Friends, muted, Lindens, etc)
 			static LLUICachedControl<bool> fs_colorize("FSColorizeMap");
 			if (fs_colorize)
@@ -600,6 +593,13 @@ void LLNetMap::draw()
 			{
 				color = LGGContactSets::getInstance()->getFriendColor(uuid);
 			}
+			
+			// <FS:Ansariel> Mark Avatars with special colors
+			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
+			{
+				color = LLNetMap::sAvatarMarksMap[uuid];
+			}
+			// </FS:Ansariel> Mark Avatars with special colors
 
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f | FS-Specific
 			LLWorldMapView::drawAvatar(
