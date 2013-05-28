@@ -145,7 +145,7 @@
 	 follows="left|top"
 	 height="16"
 	 left="15"
-	 name="label_colors"
+	 name="label_preferences"
 	 width="200">
 	Contact Sets Preferences:
 	</text>

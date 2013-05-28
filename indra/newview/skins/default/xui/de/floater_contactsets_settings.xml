@@ -8,15 +8,23 @@
 		Freunde in keinem Set
 	</text>
 	<slider name="FSContactSetsScrollSpeed" label="Scrollgeschwindigkeit" width="300" label_width="130" tool_tip="Geschwindigkeit, mit der durch die Liste gescrollt werden soll."/>
+	<text name="label_online">
+		Online-Benachrichtigungen:
+	</text>
 	<check_box label="Online-Meldungen für ALLE Freunde als Toasts anzeigen (Deaktivieren für einzelne Sets)" name="ChatOnlineNotification"/>
 	<check_box label="Online-Meldungen für ALLE Freunde im Chat in der Nähe anzeigen (Deakt. für einzelne Sets)" name="OnlineOfflinetoNearbyChat"/>
 	<check_box label="Online-Meldungen für bestimmte Sets als Toasts anzeigen" name="FSContactSetsNotificationToast"/>
 	<check_box label="Online-Meldungen für bestimmte Sets im Chat in der Nähe anzeigen" name="FSContactSetsNotificationNearbyChat"/>
+	<text name="label_colors">
+		Benutzerdefinierte Farben:
+	</text>
 	<check_box label="Farbe des Minimap-Icon eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeMiniMap"/>
 	<check_box label="Farbe des Namens-Tags eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeNameTag"/>
 	<check_box label="Farbe des Radarlisten-Eintrags eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeRadar"/>
 	<check_box label="Chatfarbe eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeChat"/>
-
+	<text name="label_preferences">
+		Kontakt-Sets-Einstellungen:
+	</text>
 	<check_box label="Nur kleinen Bereich des Kontakt-Set-Fensters colorieren" name="FSContactSetsColorizeBar"/>
 	<check_box label="Text anstelle des Hintergrunds im Kontakt-Set-Fenster colorieren" name="FSContactSetsColorizeText"/>
 	<check_box label="STRG-Taste für Mehrfachauswahl notwendig" name="FSContactSetsRequireCTRL"/>
@@ -42,5 +50,4 @@
 		<combo_item name="Display Names (with Username)" label="Anzeigename (Benutzername)"/>
 		<combo_item name="Display Names only" label="Anzeigename"/>
 	</combo_box>
-	<button label="OK" name="lgg_fg_okButton"/>
 </floater>
