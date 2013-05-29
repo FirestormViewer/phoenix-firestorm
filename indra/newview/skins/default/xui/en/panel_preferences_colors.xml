@@ -468,9 +468,9 @@
        layout="topleft"
        left="30"
        height="12"
-       name="font_colors"
+       name="nametag_colors"
        top_pad="15"
-       width="120">
+       width="400">
        Name tag Colors:
      </text>
      <color_swatch
@@ -597,7 +597,7 @@
        name="linden_tag_label"
        top_delta="5"
        width="95">
-       Linden
+       Linden Lab
      </text>
      <color_swatch
        color="NameTagMatch"
@@ -721,12 +721,14 @@
 		 control_name="FSNameTagZOffsetCorrection"
 		 follows="left|top"
 		 height="16"
-		 increment="0.05"
-		 initial_value="1"
+		 increment="1"
+		 initial_value="0"
 		 label="Name tag Z-Offset:"
 		 layout="topleft"
 		 left_delta="0"
-     top_pad="1"
+		 max_val="5"
+		 min_val="-5"
+		 top_pad="1"
 		 label_width="105"
 		 name="FSNameTagZOffsetCorrection"
 		 tool_tip="Changes the Z-offset for avatar name tags. Default 0"
@@ -889,9 +891,9 @@
         layout="topleft"
         left="4"
         height="12"
-        name="font_colors"
+        name="client_tags_colors"
         top_pad="4"
-        width="120">
+        width="400">
         Client tag Colors: (OpenSim/AuroraSim only)
       </text>
       <text
@@ -1035,7 +1037,6 @@
        left_delta="100"
        top_pad="-15"
        name="netmap_shoutring_color_swatch"
-       tool_tip="Click to open Color Picker"
        width="44">
        <color_swatch.init_callback
        function="Pref.getUIColor"
@@ -1068,7 +1069,7 @@
        top_pad="16"
        height="15"
        name="netmap_dots_textbox"
-       width="100">
+       width="400">
        Minimap dots:
      </text>
      <color_swatch
@@ -1196,7 +1197,7 @@
        name="MapAvatarLindenColor_label"
        top_delta="5"
        width="95">
-       Linden
+       Linden Lab
      </text>
      <color_swatch
        can_apply_immediately="true"
