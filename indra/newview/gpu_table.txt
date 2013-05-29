@@ -434,6 +434,7 @@ NVIDIA GT 620							.*NVIDIA .*GT *62.*						3	1	0	4.2
 NVIDIA GT 630							.*NVIDIA .*GT *63.*						3	1	0	4.2
 NVIDIA GT 640							.*NVIDIA .*GT *64.*						3	1	0	4.2
 NVIDIA GT 650							.*NVIDIA .*GT *65.*						3	1	1	4.2
+NVIDIA GTX 640							.*NVIDIA .*GTX *64.*					3	1	0	4.2
 NVIDIA GTX 650							.*NVIDIA .*GTX *65.*					3	1	1	4.2
 NVIDIA GTX 660							.*NVIDIA .*GTX *66.*					5	1	0	4.2
 NVIDIA GTX 670							.*NVIDIA .*GTX *67.*					5	1	1	4.2
