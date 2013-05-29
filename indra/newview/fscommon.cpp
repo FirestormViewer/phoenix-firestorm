@@ -42,6 +42,12 @@
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 
+static const std::string LL_LINDEN = "Linden";
+static const std::string LL_MOLE = "Mole";
+static const std::string LL_PRODUCTENGINE = "ProductEngine";
+static const std::string LL_SCOUT = "Scout";
+static const std::string LL_TESTER = "Tester";
+
 S32 FSCommon::sObjectAddMsg = 0;
 
 void reportToNearbyChat(const std::string& message)
@@ -247,3 +253,25 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	gMessageSystem->sendReliable(object->getRegion()->getHost());
 }
 
+bool FSCommon::isLinden(const LLUUID& av_id)
+{
+	std::string full_name;
+	gCacheName->getFullName(av_id, full_name);
+
+	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+	boost::char_separator<char> sep(" ");
+	tokenizer tokens(full_name, sep);
+	tokenizer::iterator token_iter = tokens.begin();
+	
+	if (token_iter == tokens.end()) return FALSE;
+	token_iter++;
+	if (token_iter == tokens.end()) return FALSE;
+	
+	std::string last_name = *token_iter;
+
+	return (last_name == LL_LINDEN ||
+			last_name == LL_MOLE ||
+			last_name == LL_PRODUCTENGINE ||
+			last_name == LL_SCOUT ||
+			last_name == LL_TESTER);
+}

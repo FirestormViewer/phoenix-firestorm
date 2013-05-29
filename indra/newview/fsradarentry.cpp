@@ -29,6 +29,7 @@
 #include "fsradarentry.h"
 
 #include <boost/algorithm/string.hpp>
+#include "fscommon.h"
 #include "fsradar.h"
 #include "rlvhandler.h"
 
@@ -47,6 +48,7 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mZOffset(0.f),
 	mLastZOffsetTime(time(NULL)),
 	mAge(-1),
+	mIsLinden(false),
 	mAvatarNameCallbackConnection()
 {
 	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
@@ -76,16 +78,17 @@ void FSRadarEntry::updateName()
 	{
 		mAvatarNameCallbackConnection.disconnect();
 	}
-	mAvatarNameCallbackConnection = LLAvatarNameCache::get(mID, boost::bind(&FSRadarEntry::onAvatarNameCache, this, _2));
+	mAvatarNameCallbackConnection = LLAvatarNameCache::get(mID, boost::bind(&FSRadarEntry::onAvatarNameCache, this, _1, _2));
 }
 
-void FSRadarEntry::onAvatarNameCache(const LLAvatarName& av_name)
+void FSRadarEntry::onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name)
 {
 	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
 		mUserName = av_name.mUsername;
 		mDisplayName = av_name.mDisplayName;
 		mName = getRadarName(av_name);
+		mIsLinden = FSCommon::isLinden(av_id);
 	}
 	else
 	{
@@ -93,6 +96,7 @@ void FSRadarEntry::onAvatarNameCache(const LLAvatarName& av_name)
 		mUserName = name;
 		mDisplayName = name;
 		mName = name;
+		mIsLinden = false;
 	}
 }
 

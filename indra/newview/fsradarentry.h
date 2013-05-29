@@ -52,6 +52,7 @@ public:
 	S32			getAge() const { return mAge; }
 	F32			getZOffset() const { return mZOffset; }
 	time_t		getLastZOffsetTime() const { return mLastZOffsetTime; }
+	bool		getIsLinden() const { return mIsLinden; }
 
 	void		setZOffset(F32 offset) { mZOffset = offset; }
 
@@ -59,7 +60,7 @@ public:
 
 private:
 	void updateName();
-	void onAvatarNameCache(const LLAvatarName& av_name);
+	void onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name);
 	void processProperties(void* data, EAvatarProcessorType type);
 
 	LLUUID		mID;
@@ -74,6 +75,7 @@ private:
 	S32			mAge;
 	F32			mZOffset;
 	time_t		mLastZOffsetTime;
+	bool		mIsLinden;
 
 	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 };

@@ -19,6 +19,9 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "lggcontactsets.h"
+
+#include "fscommon.h"
+#include "fsradar.h"
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llcallingcard.h"
@@ -337,7 +340,6 @@ LLColor4 LGGContactSets::getGroupColor(const std::string& groupName)
 LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color, ELGGCSType type)
 {
 	LLColor4 color = cur_color;
-	std::string full_name;
 
 	// Leave generic colors if RLV restricted
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
@@ -403,24 +405,28 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 				break;
 		}
 	}
-	else if (gCacheName->getFullName(uuid, full_name) && LLMuteList::getInstance()->isLinden(full_name))
+	else
 	{
-		//color = avatar_linden_color;
-		switch (type)
+		FSRadarEntry* entry = FSRadar::getInstance()->getEntry(uuid);
+		if ( (entry && entry->getIsLinden()) || (!entry && FSCommon::isLinden(uuid)) )
 		{
-			case LGG_CS_CHAT:
-				color = LLUIColorTable::instance().getColor("LindenChatColor", LLColor4::blue);
-				break;
-			case LGG_CS_TAG:
-				color = LLUIColorTable::instance().getColor("NameTagLinden", LLColor4::blue);
-				break;
-			case LGG_CS_MINIMAP:
-				color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
-				break;
-			case LGG_CS_RADAR:
-			default:
-				llwarns << "Unhandled colorize case!" << llendl;
-				break;
+			//color = avatar_linden_color;
+			switch (type)
+			{
+				case LGG_CS_CHAT:
+					color = LLUIColorTable::instance().getColor("LindenChatColor", LLColor4::blue);
+					break;
+				case LGG_CS_TAG:
+					color = LLUIColorTable::instance().getColor("NameTagLinden", LLColor4::blue);
+					break;
+				case LGG_CS_MINIMAP:
+					color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
+					break;
+				case LGG_CS_RADAR:
+				default:
+					llwarns << "Unhandled colorize case!" << llendl;
+					break;
+			}
 		}
 	}
 	
