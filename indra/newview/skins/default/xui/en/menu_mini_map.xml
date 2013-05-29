@@ -163,66 +163,6 @@
     </menu_item_check>
     <menu_item_separator />
     <menu_item_check
-     label="Colorized Avatars"
-     name="Colorized Avatars">
-       <menu_item_check.on_check
-        function="CheckControl"
-        parameter="FSColorizeMap" />
-       <menu_item_check.on_click
-        function="ToggleControl"
-        parameter="FSColorizeMap" />
-    </menu_item_check>
-    <!-- <menu
-     label="Colorize..."
-     name="Colorize"
-     visibility_control="FSColorizeMap">
-        <menu_item_check
-         label="Friends"
-         name="Friends"
-         visibility_control="FSColorizeMap">
-          <menu_item_check.on_check
-           function="CheckControl"
-           parameter="FSColorizeFriends" />
-          <menu_item_check.on_click
-           function="ToggleControl"
-           parameter="FSColorizeFriends" />
-        </menu_item_check>
-        <menu_item_check
-         label="Muted"
-         name="Muted"
-         visibility_control="FSColorizeMap">
-          <menu_item_check.on_check
-           function="CheckControl"
-           parameter="FSColorizeMuted" />
-          <menu_item_check.on_click
-           function="ToggleControl"
-           parameter="FSColorizeMuted" />
-        </menu_item_check>
-        <menu_item_check
-         label="Linden Lab employees"
-         name="Lindens"
-         visibility_control="FSColorizeMap">
-          <menu_item_check.on_check
-           function="CheckControl"
-           parameter="FSColorizeLindens" />
-          <menu_item_check.on_click
-           function="ToggleControl"
-           parameter="FSColorizeLindens" />
-        </menu_item_check>
-        <menu_item_check
-         label="Firestorm"
-         name="Firestorm"
-         visibility_control="FSColorizeMap">
-          <menu_item_check.on_check
-           function="CheckControl"
-           parameter="FSColorizeFirestorm" />
-          <menu_item_check.on_click
-           function="ToggleControl"
-           parameter="FSColorizeFirestorm" />
-        </menu_item_check>
-    </menu>-->
-    <menu_item_separator />
-    <menu_item_check
      label="Property Lines"
      name="Property Lines">
       <menu_item_check.on_click

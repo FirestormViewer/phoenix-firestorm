@@ -505,7 +505,7 @@ void FSRadar::updateRadarList()
 		entry_options["name_style"] = nameCellStyle;
 
 		// <FS:CR> TODO: Decide whether we want special colored names in the radar or let the current UI suffice
-		//LLColor4 name_color = LGGContactSets::getInstance()->getSpecialColor(avId, range_color);
+		//LLColor4 name_color = LGGContactSets::getInstance()->colorize(avId, range_color, LGG_CS_RADAR);
 		//entry_options["name_color"] = name_color.getValue();
 		
 		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR))

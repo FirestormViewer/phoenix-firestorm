@@ -583,9 +583,7 @@ void LLNetMap::draw()
 			LLColor4 color = map_avatar_color;	// <FS:CR>
 			
 			// <FS:CR> Color "special" avatars with special colors (Friends, muted, Lindens, etc)
-			static LLUICachedControl<bool> fs_colorize("FSColorizeMap");
-			if (fs_colorize)
-				color = LGGContactSets::getInstance()->getSpecialColor(uuid, color);
+			color = LGGContactSets::getInstance()->colorize(uuid, color, LGG_CS_MINIMAP);
 			// </FS:CR>
 			
 			//color based on contact sets prefs

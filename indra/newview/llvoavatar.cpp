@@ -2711,9 +2711,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// then use that color as name_tag_color
 	// <FS:CR> Colorize tags
 	//static LLUICachedControl<bool> show_friends("NameTagShowFriends");
-	static LLUICachedControl<bool> colorize_friends("FSColorizeFriends");
-	static LLUICachedControl<bool> colorize_tags("FSColorizeTags");
-	bool show_friends = (colorize_friends && colorize_tags);
+	bool show_friends = true;
 	// </FS:CR>
 	
 	static LLUICachedControl<U32> color_client_tags("FSColorClienttags");
@@ -2968,7 +2966,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		LLColor4 new_chat = LLUIColorTable::instance().getColor( isSelf() ? "UserChatColor" : "AgentChatColor" );
 		
 		// <FS:CR> Colorize tags
-		new_chat = LGGContactSets::getInstance()->getSpecialColor(getID(), new_chat);
+		new_chat = LGGContactSets::getInstance()->colorize(getID(), new_chat, LGG_CS_CHAT);
 		
 		//color based on contact sets prefs
 		if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT))
@@ -3167,9 +3165,7 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	}
 	
 	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
-	static LLUICachedControl<bool> fs_colorize("FSColorizeTags");
-	if (fs_colorize)
-		color = LGGContactSets::getInstance()->getSpecialColor(getID(), color);
+	color = LGGContactSets::getInstance()->colorize(getID(), color, LGG_CS_TAG);
 	// </FS:CR>
 	
 	static LLUICachedControl<bool> fsShowOwnTagColor("FSShowOwnTagColor");

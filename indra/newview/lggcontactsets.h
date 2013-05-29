@@ -53,7 +53,7 @@ public:
 	void setGroupColor(const std::string& groupName, const LLColor4& color);
 	LLColor4 getGroupColor(const std::string& groupName);
 	LLColor4 getFriendColor(const LLUUID& friend_id, const std::string& ignoredGroupName = "");
-	LLColor4 getSpecialColor(const LLUUID& uuid, const LLColor4& cur_color);
+	LLColor4 colorize(const LLUUID& uuid, const LLColor4& cur_color, ELGGCSType type);
 
 	void setDefaultColor(const LLColor4& dColor);
 	LLColor4 getDefaultColor();

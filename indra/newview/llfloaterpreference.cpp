@@ -494,8 +494,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
 	// <FS:CR>
 	//gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
-	gSavedSettings.getControl("FSColorizeTags")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
-	gSavedSettings.getControl("FSColorizeChat")->getCommitSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
 	// </FS:CR>
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
@@ -952,6 +950,15 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	
 	getChildView("plain_text_chat_history")->setEnabled(TRUE);
 	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
+	
+// <FS:CR> Show/hide Client Tag panel
+	bool show_client_tags = false;
+#ifdef OPENSIM
+	//Disabled for now because client tags don't currently work <FS:CR>
+	//show_client_tags = LLGridManager::getInstance()->isInOpenSim();
+#endif // OPENSIM
+	getChild<LLPanel>("client_tags_panel")->setVisible(show_client_tags);
+// </FS:CR>
 	
 	// Make sure the current state of prefs are saved away when
 	// when the floater is opened.  That will make cancel do its
