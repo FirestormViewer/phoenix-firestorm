@@ -262,7 +262,7 @@
      value="0.67 0.83 0.96 1" />
     <color
      name="MapAvatarSelfColor"
-     value="0.53125 0 0.498047 1" />
+     reference="Yellow" />
     <color
      name="MenuNonProductionGodBgColor"
      value="0.263 0.325 0.345 1" />
@@ -862,6 +862,9 @@
   <color
      name="NameTagMismatch"
      reference="LtGray" />
+  <color
+     name="NameTagUsername"
+     reference= "White" />
 <!-- Changed Color -->
   <color
      name="NetMapBackgroundColor"

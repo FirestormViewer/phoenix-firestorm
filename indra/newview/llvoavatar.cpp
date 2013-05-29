@@ -2709,13 +2709,11 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// Wolfspirit: If we don't need to display a friend,
 	// if we aren't self, if we use colored Clienttags and if we have a color
 	// then use that color as name_tag_color
-	// <FS:CR> Colorize tags
-	//static LLUICachedControl<bool> show_friends("NameTagShowFriends");
-	bool show_friends = true;
-	// </FS:CR>
-	
+	static LLUICachedControl<bool> show_friends("NameTagShowFriends");
 	static LLUICachedControl<U32> color_client_tags("FSColorClienttags");
-	if(mClientTagData.has("color") && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))) && color_client_tags > 0 && !this->isSelf())
+	if (mClientTagData.has("color") &&
+		!(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))) &&
+		color_client_tags > 0 && !this->isSelf())
 	{
 		name_tag_color = mClientTagData["color"]; 
 	}
@@ -2846,10 +2844,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		static LLUICachedControl<bool> show_display_names("NameTagShowDisplayNames");
 		static LLUICachedControl<bool> show_usernames("NameTagShowUsernames");
+		static LLUICachedControl<bool> colorize_username("FSColorUsername");	// <FS:CR> FIRE-1061
 		static LLUICachedControl<bool> show_legacynames("FSNameTagShowLegacyUsernames");
-		static LLUICachedControl<bool> FScolor_username("FSColorUsername");
-		static LLUICachedControl<LLColor4> FScolor_username_color("FSColorUsernameColor");
-		
 
 		if (LLAvatarNameCache::useDisplayNames())
 		{
@@ -2879,16 +2875,19 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 					}
 					
 				}
-					// Suppress SLID display if display name matches exactly (ugh)
-					if (show_usernames && !av_name.mIsDisplayNameDefault)
+				
+				// Suppress SLID display if display name matches exactly (ugh)
+				if (show_usernames && !av_name.mIsDisplayNameDefault)
 				{
 					// *HACK: Desaturate the color
+					// <FS:CR> FIRE-1061
 					LLColor4 username_color;
+					if (colorize_username)
+						username_color = LLUIColorTable::instance().getColor("NameTagUsername", LLColor4::white);
+					else
+						username_color = name_tag_color * 0.83f;
+					// </FS:CR>
 
-
-					// Wolfspirit: If we want to display the username as orange (like Phoenix).
-					if(!FScolor_username) username_color = name_tag_color * 0.83f;
-					else username_color = FScolor_username_color;
 					// Show user name as legacy name if selected -- TS
 					std::string username = av_name.mUsername;
 					if (show_legacynames)
@@ -3166,14 +3165,6 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	
 	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
 	color = LGGContactSets::getInstance()->colorize(getID(), color, LGG_CS_TAG);
-	// </FS:CR>
-	
-	static LLUICachedControl<bool> fsShowOwnTagColor("FSShowOwnTagColor");
-	if (isSelf() && fsShowOwnTagColor)
-	{
-		static LLCachedControl<LLColor4> firestormTagColor(gSavedPerAccountSettings, "FirestormTagColor");
-		color = firestormTagColor;
-	}
 	// </FS:CR>
 	
 	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))

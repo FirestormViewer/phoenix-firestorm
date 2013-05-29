@@ -689,6 +689,7 @@ void LLNetMap::draw()
 		}
 
 		// Draw dot for self avatar position
+		static LLUIColor self_tag_color = LLUIColorTable::instance().getColor("MapAvatarSelfColor", LLColor4::yellow); // <FS:CR> FIRE-1061
 		LLVector3d pos_global = gAgent.getPositionGlobal();
 		pos_map = globalPosToView(pos_global);
 		S32 dot_width = llround(mDotRadius * 2.f);
@@ -698,7 +699,8 @@ void LLNetMap::draw()
 			you->draw(llround(pos_map.mV[VX] - mDotRadius),
 					  llround(pos_map.mV[VY] - mDotRadius),
 					  dot_width,
-					  dot_width);
+					  dot_width,
+					  self_tag_color);	// <FS:CR> FIRE-1061
 
 			F32	dist_to_cursor_squared = dist_vec_squared(LLVector2(pos_map.mV[VX], pos_map.mV[VY]),
 										  LLVector2(local_mouse_x,local_mouse_y));
