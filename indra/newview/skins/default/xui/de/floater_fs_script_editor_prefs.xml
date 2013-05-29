@@ -58,4 +58,5 @@
 		Include-Verzeichnis für Präprozessor:
 	</text>
 	<button label="..." label_selected="Durchsuchen" name="SetPreprocInclude"/>
+	<button name="close_btn" label="OK"/>
 </floater>

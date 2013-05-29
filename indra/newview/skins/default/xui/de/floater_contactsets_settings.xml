@@ -50,4 +50,5 @@
 		<combo_item name="Display Names (with Username)" label="Anzeigename (Benutzername)"/>
 		<combo_item name="Display Names only" label="Anzeigename"/>
 	</combo_box>
+	<button name="close_btn" label="OK"/>
 </floater>
