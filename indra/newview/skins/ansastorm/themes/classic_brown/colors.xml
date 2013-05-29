@@ -234,6 +234,9 @@
   <color
       name="Blue_80"
       value="0 0 1 0.8" />
+  <color
+      name="LtBlue"
+      value="0 0.5 1 1" />
 
 	<!-- Added by Ansariel -->
 	<color
@@ -312,7 +315,7 @@
      value="0.67 0.83 0.96 1" />
     <color
      name="MapAvatarSelfColor"
-     value="0.53125 0 0.498047 1" />
+     value="0.969 0.646 0.031 1" />
     <color
      name="MenuNonProductionGodBgColor"
      value="0.263 0.325 0.345 1" />
@@ -798,9 +801,6 @@
      name="MapAvatarMutedColor"
      value="0.4 0.4 0.4 1" />
   <color
-     name="MapAvatarFirestormColor"
-     reference="Red" />
-  <color
       name="MapFrustumColor"
       reference="White_10" />
 <!-- Changed Color -->
@@ -877,41 +877,50 @@
       value="0.85 0.85 0.85 0.80" />
   -->
   <color
-      name="NameTagBackground"
-      value="0 0 0 1" />
+     name="NameTagBackground"
+     value="0 0 0 1" />
   <color
-      name="NameTagChat"
+     name="NameTagChat"
      reference="LtGray" />
-    <color
+   <color
      name="NameTagChatDistanceColor"
      reference="Green" />
-    <color
+   <color
      name="NameTagShoutDistanceColor"
      reference="Yellow" />
-    <color
+   <color
      name="NameTagBeyondShoutDistanceColor"
      reference="BrightRed" />
-    <color
-    name="NameTagWhisperDistanceColor"
-    reference="Green" />
   <color
-      name="NameTagFriend"
+     name="NameTagWhisperDistanceColor"
+     reference="Green" />
+  <color
+     name="NameTagFriend"
      value="0.75 0.92 0.49 1.0" />
   <color
-      name="NameTagLegacy"
-      reference="White" />
+     name="NameTagSelf"
+     reference="White" />
+  <color
+     name="NameTagMuted"
+     value="0.4 0.4 0.4 1" />
+  <color
+     name="NameTagLinden"
+     reference="LtBlue" />
+  <color
+     name="NameTagLegacy"
+     reference="White" />
   <color
      name="NameTagV1"
      value="0.98 0.69 0.36 1.0" />
-    <color
-      name="NameTagMatch"
-      reference="White" />
+   <color
+     name="NameTagMatch"
+     reference="White" />
   <color
-      name="NameTagMismatch"
+     name="NameTagMismatch"
      reference="LtGray" />
 <!-- Changed Color -->
   <color
-      name="NetMapBackgroundColor"
+     name="NetMapBackgroundColor"
      reference="Black_10" />
   <color
       name="NotifyBoxColor"
@@ -1094,6 +1103,15 @@
   <color
       name="llOwnerSayChatColor"
       reference="LtYellow" />
+  <color
+      name="FriendsChatColor"
+      reference="White" />
+  <color
+      name="LindenChatColor"
+      reference="LtBlue" />
+  <color
+      name="MutedChatColor"
+      value="0.4 0.4 0.4 1" />
 
   <!-- New Colors -->
   <color
