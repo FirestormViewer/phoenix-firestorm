@@ -14,7 +14,7 @@ IF("$ENV{PKG_CONFIG_LIBDIR}" STREQUAL "")
   else (WORD_SIZE EQUAL 32)
     SET(PKG_CONFIG_NO_MULTI_GUESS /usr/lib64 /usr/lib)
     SET(PKG_CONFIG_NO_MULTI_LOCAL_GUESS /usr/local/lib64 /usr/local/lib)
-    SET(PKG_CONFIG_MULTI_GUESS /usr/local/lib/x86_64-linux-gnu)
+    SET(PKG_CONFIG_MULTI_GUESS /usr/lib/x86_64-linux-gnu)
     SET(PKG_CONFIG_MULTI_LOCAL_GUESS /usr/local/lib/x86_64-linux-gnu)
   endif (WORD_SIZE EQUAL 32)
   
