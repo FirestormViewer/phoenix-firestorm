@@ -67,7 +67,11 @@
 			<text name="mismatch_tag_label">
 				Kein Treffer
 			</text>
-			<check_box label="Andere Farbe für Benutzernamen verwenden" name="FSColorUsername_toggle" tool_tip="Zeigt den Benutzernamen in einer anderen Farbe (übersteuert die Tag-Farbe für Benutzernamen)" width="270"/>
+			<check_box label="Andere Farbe für Benutzernamen verwenden" name="FSColorUsername" tool_tip="Zeigt den Benutzernamen in einer anderen Farbe" width="270"/>
+			<check_box label="Andere Farbe für Freunde verwenden" name="NameTagShowFriends" tool_tip="Aktivieren, um die Tag-Farbe eines Freundes in einer anderen Farbe darzustellen."/>
+			<text name="username_tag_label">
+				Benutzername
+			</text>
 			<text name="bubble_chat">
 				Hintergrundfarbe für Namensschilder / Blasen-Chat / Konsole:
 			</text>
