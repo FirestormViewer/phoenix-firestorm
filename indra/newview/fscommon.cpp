@@ -35,6 +35,7 @@
 #include "llpanel.h"
 #include "lltooldraganddrop.h"
 #include "llviewerinventory.h"
+#include "llviewernetwork.h"
 #include "llviewerregion.h"
 
 #include <boost/date_time/gregorian/gregorian.hpp>
@@ -255,6 +256,13 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 
 bool FSCommon::isLinden(const LLUUID& av_id)
 {
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		return false;
+	}
+#endif
+
 	std::string full_name;
 	gCacheName->getFullName(av_id, full_name);
 
