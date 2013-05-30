@@ -726,7 +726,7 @@
        name="bubble_chat"
        top_pad="16"
        width="450">
-       Name Tag / Bubble Chat / Console Opacity:
+       Name Tag / Bubble Chat:
      </text>
      <color_swatch
        can_apply_immediately="true"
@@ -778,19 +778,6 @@
 		 name="FSNameTagZOffsetCorrection"
 		 tool_tip="Changes the Z-offset for avatar name tags. Default 0"
 		 width="405" />
-   <slider
-     control_name="ConsoleBackgroundOpacity"
-     follows="left|top"
-     height="16"
-     increment="0.05"
-     initial_value="1"
-     label="Console Opacity:"
-     layout="topleft"
-     label_width="105"
-     name="console_background_opacity"
-     tool_tip="Choose console background opacity"
-     top_pad="0"
-     width="405" />
      
      <check_box
       control_name="FSTagShowDistance"
@@ -1436,6 +1423,24 @@
      show_text="true"
      top_pad="2"
      width="415" />
+     <slider
+     control_name="ConsoleBackgroundOpacity"
+     follows="left|top"
+     height="16"
+     increment="0.01"
+     initial_value="1"
+     max_val="1.00"
+     min_val="0.00"
+     decimal_digits="2"
+     label="Console Opacity:"
+     layout="topleft"
+     label_width="135"
+     name="console_background_opacity"
+     tool_tip="Choose console background opacity"
+     top_pad="0"
+     left="30"
+     width="435" />
+     
      <check_box
      control_name="FSScriptDialogNoTransparency"
      follows="left|top"
@@ -1446,7 +1451,6 @@
      top_pad="10"
      width="450"
      label="Always show script dialogs on an opaque background" />
-     
      <check_box
      control_name="FSGroupNotifyNoTransparency"
      follows="left|top"
