@@ -78,7 +78,8 @@
 			<color_swatch name="background" tool_tip="Farbe für Namensschilder auswählen"/>
 			<slider label="Deckkraft:" name="bubble_chat_opacity" tool_tip="Deckkraft für Namensschilder auswählen"/>
 			<slider name="FSNameTagZOffsetCorrection" label="Z-Offset-Korrektur:" tool_tip="Ändert den Z-Offset für Avatar-Namenstags. Standardwert ist 0."/>
-			<check_box label="Tag-Farbe basierend auf Entfernung" name="FSTagShowDistanceColors" tool_tip="Aktivieren, um die Tag-Farbe eines Avatars abhändig von der Entfernung (Chat-Reichweite, Ruf-Reichweite, außerhalb Ruf-Reichweite) zu setzen. Übersteuert Viewertag-Farben außer Hervorhebung von Freunden und Kontakt-Set-Farben."/>
+			<check_box label="Entfernung im Namensschild anzeigen" name="FSTagShowDistance" tool_tip="Aktivieren, um die Entfernung eines Avatars in den nachfolgenden Farben im Namensschild anzuzeigen."/>
+			<check_box label="Namensschildfarbe basierend auf Entfernung" name="FSTagShowDistanceColors" tool_tip="Aktivieren, um die Namensschildfarbe eines Avatars abhändig von der Entfernung (Chat-Reichweite, Ruf-Reichweite, außerhalb Ruf-Reichweite) zu setzen. Übersteuert Viewertag-Farben außer Hervorhebung von Freunden und Kontakt-Set-Farben."/>
 			<panel name="distance_panel">
 				<text name="chat_distance_tag_label">
 					Chat-Reichweite
