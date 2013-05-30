@@ -780,15 +780,25 @@
 		 width="405" />
      
      <check_box
-     control_name="FSTagShowDistanceColors"
-     follows="left|top"
-     layout="topleft"
-     left="30"
-     height="12"
-     name="FSTagShowDistanceColors"
-     top_pad="20"
-     width="450"
-     label="Color name tags based on distance:" />
+      control_name="FSTagShowDistance"
+      follows="left|top"
+      layout="topleft"
+      left="30"
+      height="12"
+      name="FSTagShowDistance"
+      top_pad="20"
+      width="450"
+      label="Show distance in name tag"
+      tool_tip="Show distance from an avatar in their name tag" />
+     <check_box
+      control_name="FSTagShowDistanceColors"
+      follows="left|top"
+      layout="topleft"
+      left="30"
+      height="12"
+      name="FSTagShowDistanceColors"
+      width="450"
+      label="Color name tags based on distance:" />
      <panel
        top_pad="2"
        height="75"
