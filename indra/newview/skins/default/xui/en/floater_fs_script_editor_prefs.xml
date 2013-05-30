@@ -4,7 +4,7 @@
  height="435"
  layout="topleft"
  name="floater_fs_script_editor_prefs"
- help_topic="preview_lsl_text"
+ help_topic="lsl_editor_preferences"
  title="Script Editor Preferences"
  save_rect="true"
  single_instance="true"
