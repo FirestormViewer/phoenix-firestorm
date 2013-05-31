@@ -73,11 +73,12 @@
 				Nazwa konta
 			</text>
 			<text name="bubble_chat">
-				Tło imienia, czatu chmurkowego, konsoli:
+				Tło tagów imion i czatu chmurkowego:
 			</text>
 			<color_swatch name="background" tool_tip="Wybierz kolor tła imienia (taga)"/>
-			<slider label="Przezrocz.:" name="bubble_chat_opacity" tool_tip="Wybierz przezroczystość taga"/>
+			<slider label="Przezrocz.:" name="bubble_chat_opacity" tool_tip="Wybierz przezroczystość tła tagów imion"/>
 			<slider name="FSNameTagZOffsetCorrection" label="Przesuń w pionie:" tool_tip="Zmienia przesunięcie w pionie dla tagów imion. Domyślnie 0" />
+			<check_box label="Pokazuj odległość w tagach imion" name="FSTagShowDistance" tool_tip="Pokazuj odległość od awatarów w ich tagach imion." />
 			<check_box label="Koloruj tagi na podstawie odległości" name="FSTagShowDistanceColors" tool_tip="Koloruje tagi w zależności od tego, czy awatary są w zasięgu czatu, krzyku lub poza zasięgiem krzyku. Zastępuje kolory tagów przeglądarek, ale nie znajomych lub z Zestawów Kontaktów." />
 			<panel name="distance_panel">
 				<text name="chat_distance_tag_label">
@@ -129,6 +130,7 @@
 			<text name="netmap_color_textbox">
 				Minimapa:
 			</text>
+			<check_box name="MiniMapChatRing" label="Pierścień na minimapie symbolizujący zasięg czatu lokalnego"/>
 			<text name="netmap_chatring_color_label">
 				Zasięg czatu
 			</text>
@@ -166,6 +168,7 @@
 			</text>
 			<slider label="Aktywne:" name="active"/>
 			<slider label="Nieaktywne:" name="inactive"/>
+			<slider label="Przezrocz. konsoli:" name="console_background_opacity" tool_tip="Wybierz przezroczystość tła konsoli"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
 			<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>
