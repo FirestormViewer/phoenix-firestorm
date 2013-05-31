@@ -263,19 +263,8 @@ bool FSCommon::isLinden(const LLUUID& av_id)
 	}
 #endif
 
-	std::string full_name;
-	gCacheName->getFullName(av_id, full_name);
-
-	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
-	boost::char_separator<char> sep(" ");
-	tokenizer tokens(full_name, sep);
-	tokenizer::iterator token_iter = tokens.begin();
-	
-	if (token_iter == tokens.end()) return FALSE;
-	token_iter++;
-	if (token_iter == tokens.end()) return FALSE;
-	
-	std::string last_name = *token_iter;
+	std::string first_name, last_name;
+	gCacheName->getFirstLastName(av_id, first_name, last_name);
 
 	return (last_name == LL_LINDEN ||
 			last_name == LL_MOLE ||

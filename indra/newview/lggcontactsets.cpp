@@ -347,7 +347,6 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 	
 	else if (uuid == gAgent.getID())
 	{
-		//color = avatar_self_color;
 		switch (type)
 		{
 			case LGG_CS_CHAT:
@@ -367,7 +366,6 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 	}
 	else if (LLMuteList::getInstance()->isMuted(uuid))
 	{
-		//color = avatar_muted_color;
 		switch (type)
 		{
 			case LGG_CS_CHAT:
@@ -387,14 +385,16 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 	}
 	else if (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL)
 	{
-		//color = avatar_friend_color;
 		switch (type)
 		{
 			case LGG_CS_CHAT:
 				color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white);
 				break;
 			case LGG_CS_TAG:
-				color = LLUIColorTable::instance().getColor("NameTagFriend", LLColor4::white);
+				// This is optional per prefs.
+				static LLUICachedControl<bool> color_friends("NameTagShowFriends");
+				if(color_friends)
+					color = LLUIColorTable::instance().getColor("NameTagFriend", LLColor4::white);
 				break;
 			case LGG_CS_MINIMAP:
 				color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
@@ -410,7 +410,6 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 		FSRadarEntry* entry = FSRadar::getInstance()->getEntry(uuid);
 		if ( (entry && entry->getIsLinden()) || (!entry && FSCommon::isLinden(uuid)) )
 		{
-			//color = avatar_linden_color;
 			switch (type)
 			{
 				case LGG_CS_CHAT:
