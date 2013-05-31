@@ -1044,83 +1044,6 @@
        follows="left|top"
        layout="topleft"
        left="30"
-       top_pad="15"
-       height="15"
-       name="netmap_color_textbox"
-       width="100">
-       Minimap Rings:
-     </text>
-     <color_swatch
-       color="MapChatRingColor"
-       can_apply_immediately="true"
-       follows="left|top"
-       height="24"
-       label_height="0"
-       layout="topleft"
-       left="40"
-       name="netmap_chatring_color_swatch"
-       width="44">
-       <color_swatch.init_callback
-       function="Pref.getUIColor"
-       parameter="MapChatRingColor" />
-       <color_swatch.commit_callback
-       function="Pref.applyUIColor"
-       parameter="MapChatRingColor" />
-       <color_swatch.caption_text
-       height="0" />
-     </color_swatch>
-     <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="10"
-       layout="topleft"
-       left_pad="5"
-       mouse_opaque="false"
-       name="netmap_chatring_color_label"
-       top_delta="5"
-       width="95">
-       Chat range
-     </text>
-     <color_swatch
-       color="MapShoutRingColor"
-       can_apply_immediately="true"
-       follows="left|top"
-       height="24"
-       label_height="0"
-       layout="topleft"
-       left_delta="100"
-       top_pad="-15"
-       name="netmap_shoutring_color_swatch"
-       width="44">
-       <color_swatch.init_callback
-       function="Pref.getUIColor"
-       parameter="MapShoutRingColor" />
-       <color_swatch.commit_callback
-       function="Pref.applyUIColor"
-       parameter="MapShoutRingColor" />
-       <color_swatch.caption_text
-       height="0" />
-     </color_swatch>
-     <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="10"
-       layout="topleft"
-       left_pad="5"
-       mouse_opaque="false"
-       name="netmap_shoutring_color_label"
-       top_delta="5"
-       width="95">
-       Shout range
-     </text>
-     <text
-       type="string"
-       length="1"
-       follows="left|top"
-       layout="topleft"
-       left="30"
        top_pad="16"
        height="15"
        name="netmap_dots_textbox"
@@ -1285,7 +1208,86 @@
        width="95">
        Muted
      </text>
-       
+     <check_box
+       control_name="MiniMapChatRing"
+       name="MiniMapChatRing"
+       label="Display a ring on the Minimap indicating local chat range:"
+       layout="topleft"
+       top_pad="16"
+       left="25"
+       height="20"
+       width="350" />
+     <color_swatch
+       visibility_control="MiniMapChatRing"
+       color="MapChatRingColor"
+       can_apply_immediately="true"
+       follows="left|top"
+       height="24"
+       label_height="0"
+       layout="topleft"
+       top_pad="8"
+       left="40"
+       name="netmap_chatring_color_swatch"
+       width="44">
+       <color_swatch.init_callback
+       function="Pref.getUIColor"
+       parameter="MapChatRingColor" />
+       <color_swatch.commit_callback
+       function="Pref.applyUIColor"
+       parameter="MapChatRingColor" />
+       <color_swatch.caption_text
+       height="0" />
+     </color_swatch>
+     <text
+       visibility_control="MiniMapChatRing"
+       type="string"
+       length="1"
+       follows="left|top"
+       height="10"
+       layout="topleft"
+       left_pad="5"
+       mouse_opaque="false"
+       name="netmap_chatring_color_label"
+       top_delta="5"
+       width="95">
+       Chat range
+     </text>
+     <color_swatch
+       visibility_control="MiniMapChatRing"
+       color="MapShoutRingColor"
+       can_apply_immediately="true"
+       follows="left|top"
+       height="24"
+       label_height="0"
+       layout="topleft"
+       left_delta="100"
+       top_pad="-15"
+       name="netmap_shoutring_color_swatch"
+       width="44">
+       <color_swatch.init_callback
+       function="Pref.getUIColor"
+       parameter="MapShoutRingColor" />
+       <color_swatch.commit_callback
+       function="Pref.applyUIColor"
+       parameter="MapShoutRingColor" />
+       <color_swatch.caption_text
+       height="0" />
+     </color_swatch>
+     <text
+       visibility_control="MiniMapChatRing"
+       type="string"
+       length="1"
+       follows="left|top"
+       height="10"
+       layout="topleft"
+       left_pad="5"
+       mouse_opaque="false"
+       name="netmap_shoutring_color_label"
+       top_delta="5"
+       width="95">
+       Shout range
+     </text>
+     
 	 </panel>
    <!-- Misc Panel -->
    <panel
