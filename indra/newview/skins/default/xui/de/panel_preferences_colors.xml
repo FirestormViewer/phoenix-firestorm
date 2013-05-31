@@ -130,12 +130,6 @@
 			<text name="netmap_color_textbox">
 				Mini-Karte:
 			</text>
-			<text name="netmap_chatring_color_label">
-				Chat-Reichweite
-			</text>
-			<text name="netmap_shoutring_color_label">
-				Ruf-Reichweite
-			</text>
 			<text name="netmap_dots_textbox">
 				Punkte auf Minikarte:
 			</text>
@@ -153,6 +147,13 @@
 			</text>
 			<text name="MapAvatarMutedColor_label">
 				Blockiert:
+			</text>
+			<check_box name="MiniMapChatRing" label="Chatreichweite auf der Minikarte anzeigen"/>
+			<text name="netmap_chatring_color_label">
+				Chat-Reichweite
+			</text>
+			<text name="netmap_shoutring_color_label">
+				Ruf-Reichweite
 			</text>
 		</panel>
 		<panel label="Sonstige" name="tab-misc">
