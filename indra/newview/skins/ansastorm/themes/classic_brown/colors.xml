@@ -315,7 +315,7 @@
      value="0.67 0.83 0.96 1" />
     <color
      name="MapAvatarSelfColor"
-     value="0.969 0.646 0.031" />
+     value="0.969 0.646 0.031 1" />
     <color
      name="MenuNonProductionGodBgColor"
      value="0.263 0.325 0.345 1" />
