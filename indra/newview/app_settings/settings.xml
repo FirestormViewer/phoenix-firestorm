@@ -18172,7 +18172,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>2</integer>
+    <integer>4</integer>
   </map>
   <key>_NACL_AntiSpamAmount</key>
   <map>
@@ -18205,7 +18205,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>4</integer>
+    <integer>6</integer>
   </map>
   <key>_NACL_AntiSpamSoundPreloadMulti</key>
   <map>
@@ -18216,7 +18216,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>4</integer>
+    <integer>6</integer>
   </map>
   <key>_NACL_LSLPreprocessor</key>
   <map>
