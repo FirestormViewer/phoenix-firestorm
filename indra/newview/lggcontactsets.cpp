@@ -391,10 +391,14 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 				color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white);
 				break;
 			case LGG_CS_TAG:
-				// This is optional per prefs.
-				static LLUICachedControl<bool> color_friends("NameTagShowFriends");
-				if(color_friends)
-					color = LLUIColorTable::instance().getColor("NameTagFriend", LLColor4::white);
+				{
+					// This is optional per prefs.
+					static LLUICachedControl<bool> color_friends("NameTagShowFriends");
+					if (color_friends)
+					{
+						color = LLUIColorTable::instance().getColor("NameTagFriend", LLColor4::white);
+					}
+				}
 				break;
 			case LGG_CS_MINIMAP:
 				color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
