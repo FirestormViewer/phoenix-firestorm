@@ -366,7 +366,7 @@
          height="16"
          width="230"
          tool_tip="This settings allows / disallows scripted prims from controlling your media connections"
-         label="Allow resident scripts to play media"
+         label="Allow inworld scripts to play media"
          top_pad="1"
          left="25"/>
         <check_box
@@ -560,8 +560,8 @@
          name="Media Rolloff"
          mouse_opaque="false"
          top_delta="18"
-         width="155">
-            Media audio rolloff distance:
+         width="250">
+            Sound source rolloff distance:
         </text>
         <slider
          can_edit_text="true"
@@ -573,7 +573,7 @@
          increment="1"
          initial_value="5"
          layout="topleft"
-         left="25"
+         left="45"
          max_val="512"
          min_val="1"
          name="MediaRollOffMin"
@@ -604,7 +604,7 @@
          increment="1"
          initial_value="30"
          layout="topleft"
-         left="25"
+         left="45"
          max_val="512"
          min_val="1"
          name="MediaRollOffMax"

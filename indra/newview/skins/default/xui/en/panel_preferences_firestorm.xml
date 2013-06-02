@@ -65,22 +65,11 @@
          width="270"
          control_name="FSWorldMapDoubleclickTeleport"
          tool_tip="Enables teleporting via double click to a destination on the world map."/>
-        <check_box
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Disable Teleport Screens"
-         left="15"
-         name="tp_screen_toggle"
-         width="270"
-         control_name="FSDisableTeleportScreens"
-         tool_tip="Disables the black teleport screen during all teleports."/>
-        <check_box
+		<check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Disable Teleport Beacons"
-         left="15"
          name="tp_beam_toggle"
          width="270"
          control_name="FSDisableBeaconAfterTeleport"
@@ -89,8 +78,16 @@
          top_pad="5"
          follows="left|top"
          height="16"
+         label="Disable Teleport Screens"
+         name="tp_screen_toggle"
+         width="270"
+         control_name="FSDisableTeleportScreens"
+         tool_tip="Disables the black teleport screen during all teleports."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
          label="Disable Login Progress Screen"
-         left_delta="0"
          name="login_screen_toggle"
          width="270"
          control_name="FSDisableLoginScreens"
@@ -100,7 +97,6 @@
          follows="left|top"
          height="16"
          label="Disable Logout Progress Screen"
-         left_delta="0"
          name="logout_screen_toggle"
          width="270"
          control_name="FSDisableLogoutScreens"
@@ -110,18 +106,15 @@
          follows="left|top"
          height="16"
          label="Always rez objects under the land group if possible"
-         left="15"
          name="grouplandrez"
          width="270"
          control_name="RezUnderLandGroup"
          tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Sort contact lists by username even when display names are shown"
-         left="15"
          name="sortcontactsbyun"
          width="270"
          control_name="FSSortContactsByUserName"
@@ -129,84 +122,70 @@
             <check_box.commit_callback
              function="FS.ToggleSortContacts" />
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Render blocked avatars as particle cloud"
-         left="15"
          name="ShowMutedAvatarsAsCloud"
          width="270"
          control_name="ShowMutedAvatarsAsCloud"
          tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Hide empty system folders from inventory"
-         left="15"
          name="DebugHideEmptySystemFolders"
          width="270"
          control_name="DebugHideEmptySystemFolders"
          tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Show the Received Items folder in normal inventory"
-         left="15"
          name="FSShowInboxFolder"
          width="270"
          control_name="FSShowInboxFolder"
          tool_tip="If enabled, the inventory windows will also show the Received Items folder">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Allow separate search terms on each tab in inventory"
-         left="15"
          name="FSSplitInventorySearchOverTabs"
          width="270"
          control_name="FSSplitInventorySearchOverTabs"
          tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Deactivate tracking beacon when reaching the targeted avatar (&lt;= 3m)"
-         left="15"
          name="FSDisableAvatarTrackerAtCloseIn"
          width="270"
          control_name="FSDisableAvatarTrackerAtCloseIn"
          tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
-
 		<check_box
 		 control_name="EffectScriptChatParticles"
 		 height="16"
 		 label="Create particle effects when scripts communicate"
 		 layout="topleft"
-		 left="15"
 		 name="EffectScriptChatParticles"
 		 tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
 		 initial_value="true"
 		 top_pad="5"
 		 width="350" />
-
 		<check_box
 		 control_name="FSRenderFarClipStepping"
 		 height="16"
 		 label="Enable progressive draw distance stepping"
 		 layout="topleft"
-		 left="15"
 		 name="FSRenderFarClipStepping"
 		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
 		 initial_value="true"
@@ -229,7 +208,7 @@
 		 tool_tip="Interval in seconds between each draw distance increment"/>
 
         <check_box
-         top_pad="15"
+         top_pad="5"
          control_name="UseLSLBridge"
          follows="left|top"
          height="16"
@@ -332,7 +311,7 @@
         </radio_group>
 
         <text
-         left="5"
+         left="10"
          top_pad="5"
          follows="left|top"
          height="12"

@@ -41,7 +41,7 @@
          name="UI Size:"
          top_pad="8"
          width="200">
-            UI Scaling (may have side effects):
+            UI Scaling (may cause side effects):
         </text>
         <slider
          control_name="UIScaleFactor"
@@ -60,7 +60,7 @@
 
         <text
          type="string"
-         left="5"
+         left="10"
          top_pad="5"
          length="1"
          follows="left|top"
@@ -70,7 +70,6 @@
          width="100">
             Hover Tips:
         </text>
-
         <check_box
          control_name="ShowHoverTips"
          height="16"
@@ -100,20 +99,36 @@
          label="on Land"
          tool_tip="Set this to show hover tips on land"
          layout="topleft"
-         left_delta="0"
          name="ShowLandHoverTips"
          top_pad="2"
          width="256" />
+		<check_box
+		control_name="FSAdvancedTooltips"
+		name="FSAdvancedTooltips"
+		label="Show extended information in hovertips (Phoenix style)"
+		layout="topleft"
+		top_pad="2"
+		left_delta="-10"
+		height="16"
+		width="350" />
+        <check_box
+		control_name="FSShowGroupTitleInTooltip"
+		name="FSShowGroupTitleInTooltip"
+		label="Show avatar group titles in hovertips"
+		layout="topleft"
+		top_pad="2"
+		height="16"
+		width="350" />
 
         <text
          type="string"
          length="1"
          follows="left|top"
-         height="16"
+         height="12"
          layout="topleft"
-         left="275"
+         left="265"
          name="tooltip_textbox"
-         top_pad="-70"
+         top="30"
          width="200">
            Hovertip Trigger Delays:
         </text>
@@ -128,12 +143,12 @@
          label="Tooltips:"
          label_width="50"
          layout="topleft"
-         left_pad="-200"
          max_val="6.0"
          min_val="0"
          name="ToolTipDelay_slider"
          tool_tip="Delay after that tooltips for user interface elements such as buttons are shown. (Default: 0.7)"
          top_pad="1"
+         left="275"
          width="200" />
         <text
          type="string"
@@ -141,7 +156,7 @@
          follows="left|top"
          height="16"
          layout="topleft"
-         left_delta="200"
+         left_pad="1"
          name="ToolTipDelay_text"
          top_delta="0"
          width="80">
@@ -158,7 +173,7 @@
          label="Avatars:"
          label_width="50"
          layout="topleft"
-         left_pad="-280"
+         left="275"
          max_val="6.0"
          min_val="0"
          name="AvatarInspectorTooltipDelay_slider"
@@ -171,7 +186,7 @@
          follows="left|top"
          height="16"
          layout="topleft"
-         left_delta="200"
+         left_pad="1"
          name="AvatarInspectorTooltipDelay_text"
          top_delta="0"
          width="80">
@@ -188,7 +203,7 @@
          label="Objects:"
          label_width="50"
          layout="topleft"
-         left_pad="-280"
+         left="275"
          max_val="6.0"
          min_val="0"
          name="ObjectInspectorTooltipDelay_slider"
@@ -201,31 +216,12 @@
          follows="left|top"
          height="16"
          layout="topleft"
-         left_delta="200"
+         left_pad="1"
          name="ObjectInspectorTooltipDelay_text"
          top_delta="0"
          width="80">
             seconds
         </text>
-		
-        <check_box
-         control_name="FSAdvancedTooltips"
-         name="FSAdvancedTooltips"
-         label="Show extended information in hovertips (classic Phoenix style)"
-         layout="topleft"
-         top_pad="5"
-         left="15"
-         height="16"
-         width="350" />
-
-        <check_box
-         control_name="FSShowGroupTitleInTooltip"
-         name="FSShowGroupTitleInTooltip"
-         label="Show avatar group titles in hovertips"
-         layout="topleft"
-         top_pad="2"
-         height="16"
-         width="350" />		
 
       <check_box
        control_name="UsePieMenu"
@@ -235,10 +231,10 @@
        layout="topleft"
        left="5"
        name="UsePieMenu"
-       tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-       top_pad="5"
+       tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."
+       top="140"
        width="256" />
-
+      
       <check_box
        top_pad="2"
        control_name="ShowNetStats"
@@ -247,7 +243,6 @@
        initial_value="false"
        name="ShowNetStats"
        label="Show lag meter"
-       left="5"
        width="110"
        tool_tip="Show lag meter in the Status Overlay"/>
 
@@ -256,53 +251,60 @@
        height="16"
        name="FSEnableVolumeControls"
        label="Show media controls in top menu"
-       left_pad="5"
        width="256"
        tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
 
+      <text
+        type="string"
+        length="1"
+        follows="left|top"
+        height="16"
+        layout="topleft"
+        name="tooltip_textbox"
+        left="5"
+        top_pad="2"
+        width="200">
+        Use stand-alone windows for:
+      </text>
+      
       <check_box
        top_pad="2"
        control_name="FSUseStandaloneGroupFloater"
        follows="left|top"
        height="16"
        name="FSUseStandaloneGroupFloater"
-       label="Use stand-alone windows for group profiles"
-       left="5"
-       width="270"
+       label="Group profiles"
+       left="15"
+       width="170"
        tool_tip="If enabled, group profiles will open in separate windows."/>
-
       <check_box
-       top_pad="2"
        control_name="FSUseStandaloneTeleportHistoryFloater"
        follows="left|top"
        height="16"
        name="FSUseStandaloneTeleportHistoryFloater"
-       label="Use stand-alone window for teleport history"
-       left="5"
-       width="270"
+       label="Teleport history"
+       left_pad="5"
+       width="170"
        tool_tip="If enabled, using the shortcut for teleport history will open the history in a separate window."/>
-
-      <check_box
-       top_pad="2"
-       control_name="FSUseStandalonePlaceDetailsFloater"
-       follows="left|top"
-       height="16"
-       name="FSUseStandalonePlaceDetailsFloater"
-       label="Use stand-alone windows for landmarks, place details and teleport history details"
-       left="5"
-       width="270"
-       tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
-
       <check_box
        top_pad="2"
        control_name="FSUseStandaloneBlocklistFloater"
        follows="left|top"
        height="16"
        name="FSUseStandaloneBlocklistFloater"
-       label="Use stand-alone window for the block/mute list"
-       left="5"
-       width="270"
+       label="Block/mute list"
+       left="15"
+       width="170"
        tool_tip="If enabled, the list of blocked/muted residents and objects will open in a separate window."/>
+      <check_box
+       control_name="FSUseStandalonePlaceDetailsFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandalonePlaceDetailsFloater"
+       label="Landmarks, place details and teleport history details"
+       left_pad="5"
+       width="170"
+       tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
 
       <text
        type="string"
@@ -323,7 +325,7 @@
        height="16"
        name="FSTeleportHistoryShowPosition"
        label="Position"
-       left_pad="5"
+       left_pad="15"
        width="75"
        tool_tip="If enabled, the local coordinates within the region will be shown in the teleport history."/>
 
@@ -341,7 +343,7 @@
       <text
        type="string"
        left="5"
-       top_pad="10"
+       top_pad="6"
        width="140"
        follows="left|top"
        height="16"
@@ -380,7 +382,7 @@
          left="5"
          name="ShowScriptDialogsTopRight"
          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
-         top_pad="4"
+         top_pad="2"
          width="256" />
         <check_box
          control_name="ShowGroupNoticesTopRight"
@@ -388,7 +390,6 @@
          initial_value="true"
          label="Group Notices and chiclets in Top Right"
          layout="topleft"
-         left_delta="0"
          name="ShowGroupNoticesTopRight"
          tool_tip="Set this to move group notifications and chiclet icons to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="2"
@@ -426,15 +427,14 @@
          layout="topleft"
          name="ButtonFlashing"
          width="128"
-         label="Global Flashing Buttons Override"/>
+         label="Flashing IM tabs override"/>
         <slider
          control_name="FSButtonFlashCount"
          decimal_digits="0"
          follows="left|top"
          height="16"
          increment="1"
-         label="Number of times buttons flash:"
-         tool_tip="Number of times buttons flash"
+         label="Number of times IM tabs flash:"
          label_width="300"
          layout="topleft"
          left="30"
@@ -449,8 +449,8 @@
          follows="left|top"
          height="16"
          increment="0.25"
-         label="Rate button flashes at:"
-         tool_tip="Rate buttons flash at (in Hz) - used for IM notifications"
+         label="IM tab flash rate:"
+         tool_tip="Rate at which tabs flash (in Hz) - used for IM notifications"
          label_width="300"
          layout="topleft"
          left="30"

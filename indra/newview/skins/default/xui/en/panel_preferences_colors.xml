@@ -1211,7 +1211,7 @@
      <check_box
        control_name="MiniMapChatRing"
        name="MiniMapChatRing"
-       label="Display a ring on the Minimap indicating local chat range:"
+       label="Display rings on the mini map indicating the say and shout chat ranges:"
        layout="topleft"
        top_pad="16"
        left="25"

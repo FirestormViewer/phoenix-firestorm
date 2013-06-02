@@ -260,21 +260,21 @@
          top="10"
          follows="left|top"
          height="16"
-         label="Show look at targets"
+         label="Show look at targets:"
          left="15"
          name="showlookat"
          width="270"
          control_name="DebugLookAt"
-         tool_tip="Enable crosshairs marking where people are looking."/>
+         tool_tip="The LookAt point is an animation hint, viewers use it to know which way to turn your eyes, head and torso. It can also be used to determine the anchor point of an avatar's camera."/>
         <text
          type="string"
          length="1"
          follows="left|top"
          height="15"
          layout="topleft"
-         left="30"
+         left="35"
          name="lookatshownames"
-		 tool_tip="Select whether to show avatar names on the LookAt crosshairs"
+         tool_tip="Name format to show avatar names on the look at targets"
          top_pad="5"
          width="200">
             Show names for look at targets:
@@ -314,59 +314,57 @@
              name="User_Name"
              value="4" />
         </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="15"
-         name="mylookat"
-         top_pad="25"
-         width="200">
-            My LookAt:
-        </text>
 		<check_box
-         control_name="DebugLookAtHideOwn"
-         height="16"
-		 initial_value="true"
-         label="Don't show me my lookat target"
-         layout="topleft"
-         left="20"
-         name="LookAtHideOwn"
-		 tool_tip="Don't show me my own camera crosshairs"
-         top_pad="4"
-         width="350" />
+		enabled_control="DebugLookAt"
+		control_name="DebugLookAtHideOwn"
+		height="16"
+		initial_value="true"
+		label="Don't show me my own lookat target"
+		layout="topleft"
+		left="30"
+		name="LookAtHideOwn"
+		tool_tip="Don't show me my own camera crosshairs"
+		top_pad="4"
+		width="350" />
 
+    <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="15"
+      layout="topleft"
+      left="15"
+      name="mylookat"
+      top_pad="25"
+      width="200">
+        My look at targets:
+      </text>
         <check_box
          control_name="PrivateLookAtTarget"
          height="16"
-         label="Don't send my actual camera target hints to others"
+         label="Don't send my look at targets to others"
          layout="topleft"
-         left="20"
+         left_delta="15"
          name="privatelookat"
-		 tool_tip="Prevents your camera focus point from showing to others"
+         tool_tip="Prevents your look at hints from being broadcast to others"
          top_pad="4"
          width="350" />
-
         <check_box
          control_name="PrivateLocalLookAtTarget"
          height="16"
-         label="Don't set any camera target hints even on my own screen."
+         label="Don't send any look at targets at all, not even to myself"
          layout="topleft"
          name="privateLocalLookat"
-		 tool_tip="Prevents your avatar's head from moving to face a point your camera is focused on in your own view. This head movement is not necessarily visible to others whether or not this option is enabled"
+         tool_tip="Prevents your avatar's head from moving to face a point your camera is focused on in your own view. This head movement is not necessarily visible to others whether or not this option is enabled"
          top_pad="4"
          width="400" />
-
         <check_box
          control_name="PrivatePointAtTarget"
          height="16"
          label="Don't send my selection target hints"
          layout="topleft"
          name="privatepointat"
-		 tool_tip="Prevents your selection point from showing to others"
+         tool_tip="Prevents your selection point from showing to others"
          top_pad="4"
          width="350" />
 
@@ -388,11 +386,11 @@
          follows="left|top"
          height="13"
          layout="topleft"
-         left="30"
+         left="15"
          mouse_opaque="false"
          name="text_box3"
-         top_pad="30"
-         width="400">
+         top="15"
+         width="450">
           Automatic response when in UNAVAILABLE (ie, BUSY)  mode:
         </text>
         <text_editor
@@ -402,10 +400,10 @@
          follows="left|top"
          height="42"
          layout="topleft"
-         left="50"
+         left="35"
          top_pad="10"
          name="busy_response"
-         width="450"
+         width="475"
          word_wrap="true">
          log_in_to_change
         </text_editor>
@@ -416,7 +414,7 @@
          follows="left|top"
          height="13"
          layout="topleft"
-         left="30"
+         left="15"
          mouse_opaque="false"
          name="autorespond_response_label"
          top_pad="10"
@@ -430,10 +428,10 @@
          follows="left|top"
          height="42"
          layout="topleft"
-         left="50"
+         left="35"
          top_pad="10"
          name="autorespond_response"
-         width="450"
+         width="475"
          word_wrap="true">
            log_in_to_change
         </text_editor>
@@ -444,7 +442,7 @@
          follows="left|top"
          height="13"
          layout="topleft"
-         left="30"
+         left="15"
          mouse_opaque="false"
          name="autorespond_nf_response_label"
          top_pad="10"
@@ -458,16 +456,16 @@
          follows="left|top"
          height="42"
          layout="topleft"
-         left="50"
+         left="35"
          top_pad="10"
          name="autorespond_nf_response"
-         width="450"
+         width="475"
          word_wrap="true">
            log_in_to_change
         </text_editor>
 
         <check_box
-         top_pad="20"
+         top_pad="10"
          follows="left|top"
          height="16"
          label="Send autoresponse to MUTED avatars"
@@ -476,19 +474,6 @@
          width="270"
          control_name="FSSendMutedAvatarResponse"
          tool_tip="Send the text below when someone you've muted sends you an IM."/>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="13"
-         layout="topleft"
-         left="30"
-         mouse_opaque="false"
-         name="muted_avatar_response_label"
-         top_pad="10"
-         width="400">
-           Automatic response sent to muted avatars:
-        </text>
         <text_editor
          control_name="FSMutedAvatarResponse"
          use_ellipses="false"
@@ -496,13 +481,39 @@
          follows="left|top"
          height="42"
          layout="topleft"
-         left="50"
+         left="35"
          top_pad="10"
          name="muted_avatar_response"
-         width="450"
+         width="475"
          word_wrap="true">
            log_in_to_change
         </text_editor>
+      
+      <!-- Reserved for future FIRE-10500 implementation
+       <check_box
+        top_pad="10"
+        follows="left|top"
+        height="16"
+        label="Send autoresponse when in AWAY mode:"
+        left="15"
+        name="send_away_av_response"
+        width="270"
+        control_name="FSSendAwayAvatarResponse"
+        tool_tip="Send the text below when someone sends you an IM while you're in away mode."/>
+      <text_editor
+        control_name="FSAwayAvatarResponse"
+        use_ellipses="false"
+        commit_on_focus_lost = "true"
+        follows="left|top"
+        height="42"
+        layout="topleft"
+        left="35"
+        top_pad="10"
+        name="away_avatar_response"
+        width="475"
+        word_wrap="true">
+        log_in_to_change
+      </text_editor>-->
     </panel>
 </tab_container>
 </panel>
