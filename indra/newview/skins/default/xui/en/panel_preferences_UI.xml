@@ -260,7 +260,7 @@
         follows="left|top"
         height="16"
         layout="topleft"
-        name="tooltip_textbox"
+        name="standalone_textbox"
         left="5"
         top_pad="2"
         width="200">
