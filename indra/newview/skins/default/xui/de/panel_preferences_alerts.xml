@@ -8,7 +8,7 @@
 		Anzeigen:
 	</text>
 	<check_box label="Wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox"/>
-	<check_box left_pad="5" name="FSPaymentInfoInChat" label="L$-Transaktionen im lokalen Chat anzeigen"/>
+	<check_box left_pad="5" name="FSPaymentInfoInChat" label="Bei L$-Transaktionen im lokalen Chat benachrichtigen"/>
 	<check_box label="Wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
 	<check_box label="Wenn jemand seinen Displaynamen ändert" name="FSShowDisplayNameUpdateNotification"/>
 	<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
@@ -16,15 +16,8 @@
 		<radio_item label="Lokaler Chat" name="script_0"/>
 		<radio_item label="Separates Fenster" name="script_1"/>
 	</radio_group>
-	<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
-	<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
-	<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
-	<check_box label="Kollisionsmeldungen an Skripte senden. Kanal:" name="FSReportCollisionMessages"/>
-	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Der Kanal, der verwendet wird, um Kollisionsmeldungen an Skripte zu senden [Standard: -25000]"/>
-	<check_box label="Änderungen an Skriptanzahl in Region melden" name="FSReportTotalScriptCountChanges"/>
-	<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Der Schwellwert, ab dem Änderungen an der Skriptanzahl in der Region gemeldet werden [Standard: 100]"/>
 	<text name="friends_logon_label">
-		Anzeigen wenn meine Freunden sich an- oder abmelden:
+		Wenn meine Freunden sich an- oder abmelden:
 	</text>
 	<check_box label="Als Toasts" name="friends_online_notify_checkbox"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Konsole"/>
@@ -34,6 +27,13 @@
 	</text>
 	<check_box label="Einloggen" name="friends_notify_online_sound"/>
 	<check_box label="Ausloggen" name="friends_notify_offline_sound"/>
+	<check_box label="Wenn sich die Skriptanzahl in der Region ändert" name="FSReportTotalScriptCountChanges"/>
+	<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Der Schwellwert, ab dem Änderungen an der Skriptanzahl in der Region gemeldet werden [Standard: 100]"/>
+	<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
+	<check_box label="Kollisionsmeldungen an Skripte senden. Kanal:" name="FSReportCollisionMessages"/>
+	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Der Kanal, der verwendet wird, um Kollisionsmeldungen an Skripte zu senden [Standard: -25000]"/>
+	<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
+	<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
     </panel>
 
     <!-- Alerts -->

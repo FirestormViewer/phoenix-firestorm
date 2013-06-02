@@ -13,6 +13,8 @@
 		<check_box label="Schwebe-Tipps anzeigen" name="ShowHoverTips" tool_tip="Aktivieren, um Schwebetipps für Avatare und andere Dinge anzuzeigen - diese Option zuerst aktivieren"/>
 		<check_box label="für alle Objekte" tool_tip="Aktivieren, um Schwebetipps für Inworld-Objekte anzuzeigen." name="ShowAllHoverTips"/>
 		<check_box label="für Land" tool_tip="Aktivieren, um Schwebetipps für Land anzuzeigen." name="ShowLandHoverTips"/>
+		<check_box name="FSAdvancedTooltips" label="Erweiterte Informationen in den Hovertips anzeigen (Phoenix-Stil)"/>
+		<check_box name="FSShowGroupTitleInTooltip" label="Gruppentitel von Avataren in Hovertips anzeigen"/>
 		<text name="tooltip_textbox">
 			Verzögerungen für Schwebe-Tipps:
 		</text>
@@ -28,15 +30,16 @@
 		<text name="ObjectInspectorTooltipDelay_text">
 			Sekunden
 		</text>
-		<check_box name="FSAdvancedTooltips" label="Erweiterte Informationen in den Hovertips anzeigen (klassischer Phoenix-Stil)"/>
-		<check_box name="FSShowGroupTitleInTooltip" label="Gruppentitel von Avataren in Hovertips anzeigen"/>
-		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1.x-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
+		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
 		<check_box name="ShowNetStats" label="Laganzeige aktivieren" width="145" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
 		<check_box label="Mediensteuerung in Menüleiste anzeigen" name="FSEnableVolumeControls" tool_tip="Falls aktiviert, werden in der oberen rechte Ecke des Bildschirms in der Menüleiste die Icons zur Mediensteuerung angezeigt. Nützlich, wenn das Oberflächendesign bereits eigene Icons zur Mediensteuerung besitzt."/>
-		<check_box name="FSUseStandaloneGroupFloater" label="Eigene Fenster für Gruppenprofile verwenden" tool_tip="Falls aktiviert, werden Gruppenprofile in eigenen Fenstern geöffnet."/>
-		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Eigenes Fenster für Teleport-Liste verwenden" tool_tip="Falls aktiviert, wird bei Verwendung des Shortcuts für die Teleport-Liste diese in einem eigenen Fenster geöffnet."/>
-		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Eigene Fenster für Landmarken, Ortsdetails und Teleport-Listen-Details verwenden" tool_tip="Falls aktiviert, werden Landmarken, Ortsdetails und Details zu Einträgen in der Teleport-Liste in eigenen Fenstern geöffnet."/>
-		<check_box name="FSUseStandaloneBlocklistFloater" label="Eigenes Fenster für die Liste ignorierter Einwohner &amp; Objekte verwenden" tool_tip="Falls aktiviert, wird die Liste der ignorierten Einwohner und Objekte in einem eigenen Fenster geöffnet."/>
+		<text name="standalone_textbox">
+			Eigene Fenster verwenden für:
+		</text>
+		<check_box name="FSUseStandaloneGroupFloater" label="Gruppenprofile" tool_tip="Falls aktiviert, werden Gruppenprofile in eigenen Fenstern geöffnet."/>
+		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Teleport-Liste" tool_tip="Falls aktiviert, wird bei Verwendung des Shortcuts für die Teleport-Liste diese in einem eigenen Fenster geöffnet."/>
+		<check_box name="FSUseStandaloneBlocklistFloater" label="Liste ignorierter Einwohner" tool_tip="Falls aktiviert, wird die Liste der ignorierten Einwohner und Objekte in einem eigenen Fenster geöffnet."/>
+		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarken, Ortsdetails und Teleport-Listen-Details" tool_tip="Falls aktiviert, werden Landmarken, Ortsdetails und Details zu Einträgen in der Teleport-Liste in eigenen Fenstern geöffnet."/>
 		<text name="ExtendedTeleportHistoryLabel" width="155">
 			Teleport-Liste erweitern um:
 		</text>
@@ -59,9 +62,9 @@
 		<text name="UsePieMenuLabel">
 			Pie-Menü:
 		</text>
-		<checkbox name="ButtonFlashing" label="Blinkrate für Buttons global übersteuern:"/>
-		<slider label="Wiederholungen blinkende Button:" tool_tip="Anzahl wie oft ein Button für Benachrichtungen blinkt" name="ButtonsFlashCount"/>
-		<slider label="Blinkrate:" tool_tip="Blinkrate in Hz, mit der Buttons blinken" name="ButtonFlashRate"/>
+		<checkbox name="ButtonFlashing" label="Blinkrate für IM-Reiter übersteuern:"/>
+		<slider label="Wiederholungen blinkende IM-Reiter:" name="ButtonsFlashCount"/>
+		<slider label="Blinkrate:" tool_tip="Blinkrate in Hz, mit der Reiter blinken - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">
 			Hz
 		</text>

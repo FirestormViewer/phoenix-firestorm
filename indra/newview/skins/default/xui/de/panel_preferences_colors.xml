@@ -148,7 +148,7 @@
 			<text name="MapAvatarMutedColor_label">
 				Blockiert:
 			</text>
-			<check_box name="MiniMapChatRing" label="Chatreichweite auf der Minikarte anzeigen"/>
+			<check_box name="MiniMapChatRing" label="Ringe auf der Minikarte für Darstellung der Sprech- und Rufreichweite anzeigen"/>
 			<text name="netmap_chatring_color_label">
 				Chat-Reichweite
 			</text>
