@@ -28,8 +28,8 @@
 			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
-			<check_box label="Usuń nagłówki czatów (powrót do stylu V1)" name="plain_text_chat_history"/>
-			<check_box label="Podczas używania nagłówków czatów pokazuj małe ikony" name="ShowChatMiniIcons"/>
+			<check_box label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history"/>
+			<check_box label="Podczas używania nagłówków w stylu V2/3 pokazuj małe ikony" name="ShowChatMiniIcons"/>
 			<check_box label="Pokaż czat w chmurkach ponad awatarami" name="bubble_text_chat"/>
 			<check_box label="Pokaż wskaźnik pisania w chmurkach ponad awatarami" name="bubble_text_typing"/>	 
 			<text name="inworld_typing_rg_label">

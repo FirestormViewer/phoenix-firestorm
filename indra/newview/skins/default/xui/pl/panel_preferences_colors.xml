@@ -130,7 +130,7 @@
 			<text name="netmap_color_textbox">
 				Minimapa:
 			</text>
-			<check_box name="MiniMapChatRing" label="Pierścień na minimapie symbolizujący zasięg czatu lokalnego"/>
+			<check_box name="MiniMapChatRing" label="Pierścienie na minimapie symbolizujące zasięg czatu i krzyku"/>
 			<text name="netmap_chatring_color_label">
 				Zasięg czatu
 			</text>
