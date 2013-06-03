@@ -116,7 +116,7 @@
          control_name="DisableCameraConstraints"
          height="16"
          initial_value="true"
-         label="Disable camera contraints"
+         label="Disable camera constraints"
          layout="topleft"
          left_delta="0"
          name="DisableCameraConstraints"
