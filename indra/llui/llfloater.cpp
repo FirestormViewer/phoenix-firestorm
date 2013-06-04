@@ -2680,6 +2680,56 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 	static LLUICachedControl<S32> minimized_width ("UIMinimizedWidth", 0);
 	LLRect snap_rect_local = getLocalSnapRect();
 	snap_rect_local.mTop += mMinimizePositionVOffset;
+	
+	// <FS:KC> Minimize floaters to bottom left
+	static LLUICachedControl<bool> legacy_minimize ("FSLegacyMinimize", false);
+	if (legacy_minimize)
+	{
+		//reverse column row so floaters tile across
+		S32 col = 0;
+		for(S32 row = snap_rect_local.mBottom;
+		row < snap_rect_local.getHeight() - floater_header_size;
+		row += floater_header_size ) //loop rows
+		{
+			for(col = snap_rect_local.mLeft;
+				col < snap_rect_local.getWidth() - minimized_width;
+				col += minimized_width)
+			{
+				bool foundGap = TRUE;
+				for(child_list_const_iter_t child_it = getChildList()->begin();
+					child_it != getChildList()->end();
+					++child_it) //loop floaters
+				{
+					// Examine minimized children.
+					LLFloater* floater = (LLFloater*)((LLView*)*child_it);
+					if(floater->isMinimized()) 
+					{
+						LLRect r = floater->getRect();
+						if((r.mBottom < (row + floater_header_size))
+						   && (r.mBottom > (row - floater_header_size))
+						   && (r.mLeft < (col + minimized_width))
+						   && (r.mLeft > (col - minimized_width)))
+						{
+							// needs the check for off grid. can't drag,
+							// but window resize makes them off
+							foundGap = FALSE;
+							break;
+						}
+					}
+				} //done floaters
+				if(foundGap)
+				{
+					*left = col;
+					*bottom = row;
+					return; //done
+				}
+			} //done this col
+		}
+	}
+	else
+	{
+	// </FS:KC> Minimize floaters to bottom left
+
 	for(S32 col = snap_rect_local.mLeft;
 		col < snap_rect_local.getWidth() - minimized_width;
 		col += minimized_width)
@@ -2730,6 +2780,8 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 			}
 		} //done this col
 	}
+
+	} // <FS:KC> Minimize floaters to bottom left
 
 	// crude - stack'em all at 0,0 when screen is full of minimized
 	// floaters.
