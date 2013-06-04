@@ -12,6 +12,9 @@
 	 name="EmphasisColor_35"
 	 value="1 1 1 0.35" />
 	<color
+	 name="BeaconColor"
+	 value="0.749 0.298 0 1" />
+	<color
 	 name="White"
 	 value="1 1 1 1" />
 	<color
@@ -205,9 +208,15 @@
 	<color
 	 name="NavyBlue_0"
 	 value="0 0.12 0.24 0" />
-      <color
-       name="MdBlue"
-       value=".07 .38 .51 1" />
+   <color
+    name="MdBlue"
+    value=".07 .38 .51 1" />
+  <color
+      name="DkBlue"
+      value=".06 .06 .3 1" />
+  <color
+      name="DkRed"
+      value="0.3 0.06 0.06 1" />
   <color
       name="LtRed"
       value="1 0.2 0.2 1" />
@@ -715,6 +724,9 @@
      name="MenuItemHighlightBgColor"
      reference="White_25" />
     <color
+     name="MenuItemFlashBgColor"
+     reference="BeaconColor" />
+    <color
      name="MenuItemHighlightFgColor"
      reference="EmphasisColor" />
     <color
@@ -799,11 +811,8 @@
      name="PanelNotificationBackground"
      value="1 0.3 0.3 0" />
     <color
-      name="ParcelNormalColor"
-      reference="White" />
-    <color
      name="ParcelHoverColor"
-     reference="White_70" />
+     reference="White" />
   <color
       name="PathfindingErrorColor"
       reference="LtRed" />
@@ -812,6 +821,15 @@
       reference="DrYellow" />
   <color
       name="PathfindingGoodColor"
+      reference="LtGreen" />
+  <color
+      name="MaterialErrorColor"
+      reference="LtRed" />
+  <color
+      name="MaterialWarningColor"
+      reference="DrYellow" />
+  <color
+      name="MaterialGoodColor"
       reference="LtGreen" />
   <color
       name="PathfindingDefaultBeaconColor"
@@ -932,7 +950,7 @@
      reference="LtGray" />
     <color
      name="UserChatColor"
-     reference="White" />
+     reference="Yellow" />
     <color
      name="llOwnerSayChatColor"
      reference="LtYellow" />
@@ -951,8 +969,14 @@
      name="ChatTimestampColor"
      reference="White" />
     <color
+      name="MenuBarBetaBgColor"
+      reference="DkBlue" />
+    <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+    <color
+      name="MenuBarTestBgColor"
+      reference="DkRed" />
     <color
       name="MeshImportTableNormalColor"
       reference="White"/>
@@ -1000,6 +1024,12 @@
 	<color
 	 name="AvatarListItemBeyondShoutRange"
 	 reference="LtYellow" />
+    <color
+     name="FriendsChatColor"
+     reference="White" />
+    <color
+     name="LindenChatColor"
+     reference="LtBlue" />
 	 
     <!-- Colours for Firestorm - same for all themes -->	 
     <color
@@ -1047,6 +1077,9 @@
     <color
      name="NameTagBeyondShoutDistanceColor"
      reference="BrightRed" />
+  <color
+      name="LtBlue"
+      value="0 0.5 1 1" />
 
     <!-- for FS legacy profiles -->
     <color
@@ -1063,7 +1096,7 @@
      value="0.6 0.2 0.8 0.3" />
 	 <color
      name="PieMenuTextColor"
-     value="1 1 1 0.85" />	
+     value="1 1 1 0.85" />
 	 
     <!-- Balance at the top -->
     <color
