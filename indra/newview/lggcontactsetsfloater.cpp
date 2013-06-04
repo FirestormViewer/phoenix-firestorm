@@ -2389,7 +2389,7 @@ lggContactSetsFloaterSettings::lggContactSetsFloaterSettings(const LLSD& seed) :
 
 BOOL lggContactSetsFloaterSettings::postBuild(void)
 {
-	getChild<LLButton>("lgg_fg_okButton")->setClickedCallback(boost::bind(&lggContactSetsFloaterSettings::closeFloater, this, false));
+	getChild<LLButton>("close_btn")->setClickedCallback(boost::bind(&lggContactSetsFloaterSettings::closeFloater, this, false));
 	getChild<LLColorSwatchCtrl>("colordefault")->setCommitCallback(boost::bind(&lggContactSetsFloaterSettings::onDefaultBackgroundChange, this));
 	getChild<LLColorSwatchCtrl>("colordefault")->set(LGGContactSets::getInstance()->getDefaultColor());
 

@@ -40,10 +40,11 @@
 
 class FSLSLPreprocessor
 {
+	LOG_CLASS(FSLSLPreprocessor);
 public:
 
 	FSLSLPreprocessor(LLScriptEdCore* corep)
-		: mCore(corep), waving(FALSE), mClose(FALSE)
+		: mCore(corep), mWaving(FALSE), mClose(FALSE)
 	{}
 
 	static bool mono_directive(std::string const& text, bool agent_inv = true);
@@ -81,7 +82,7 @@ public:
 	bool mDefinitionCaching;
 
 	LLScriptEdCore* mCore;
-	BOOL waving;
+	BOOL mWaving;
 	BOOL mClose;
 	BOOL mHDDInclude;
 	std::string mMainScriptName;

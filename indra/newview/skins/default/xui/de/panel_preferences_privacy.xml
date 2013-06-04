@@ -41,8 +41,8 @@
 
 		<!--LookAt-->
 		<panel label="Kamerafokus" name="tab-lookat">
-			<check_box label="Kamerafokus anzeigen" name="showlookat" tool_tip="Aktiviert Fadenkreuze, die die Kamerapositionen anderer Avatare markieren."/>
-			<text name="lookatshownames" tool_tip="Auswählen, ob Avatarnamen zusätzlich zum Fadenkreuz angezeigt werden soll.">
+			<check_box label="Kamerafokus anzeigen:" name="showlookat" tool_tip="Der Kamerafokus wird von Viewern dazu verwendet, die Rotation von Augen, Kopf und Torso zu bestimmen. Es kann auch dazu verwendet werden, den Kamerafokus anderer Avatare zu bestimmen."/>
+			<text name="lookatshownames" tool_tip="Namensformat auswählen, in dem Avatarnamen zusätzlich zum Fadenkreuz angezeigt werden.">
 				Namensanzeige für Kamerafokus:
 			</text>
 			<combo_box name="lookatshownames_combobox">
@@ -52,11 +52,11 @@
 				<combo_box.item label="Altes Namenssystem" name="Legacy_Name"/>
 				<combo_box.item label="Benutzername" name="User_Name"/>
 			</combo_box>
+			<check_box label="Eigenen Kamerafokus nicht anzeigen" name="LookAtHideOwn" tool_tip="Fadenkreuz für den eigenen Kamerafokus nicht anzeigen."/>
 
 			<text name="mylookat">
 				Eigener Kamerafokus:
 			</text>
-			<check_box label="Eigenen Kamerafokus nicht anzeigen" name="LookAtHideOwn" tool_tip="Fadenkreuz für den eigenen Kamerafokus nicht anzeigen."/>
 			<check_box label="Eigenen Kamerafokus nicht an andere senden" name="privatelookat" tool_tip="Verhindert, dass der eigene Kamerafokus an andere gesendet wird."/>
 			<check_box label="Eigenen Kamerafokus auch lokal nicht setzen" name="privateLocalLookat" tool_tip="Verhindert, dass der Kopf des eigenen Avatars sich zum fokussierten Punkt der Kamera dreht. Die Kopfbewegung muss zwangsläufig nicht nicht anderen sichtbar sein, unabhängig wie diese Option gesetzt ist!"/>
 			<check_box label="Eigene Bearbeitungsauswahl nicht an andere senden" name="privatepointat" tool_tip="Verhindert, dass die eigene Auswahl an andere gesendet wird."/>
@@ -74,9 +74,6 @@
 				Automatische Antwort für Onlinestatus "Automatische Antwort an Nicht-Freunde":
 			</text>
 			<check_box label="Automatische Antwort an geblockte Avatare senden" name="send_muted_av_response" tool_tip="Sendet den unten stehenden Text an die geblockte Person, wenn sie eine Instant Message schickt."/>
-			<text name="muted_avatar_response_label">
-				Automatische Antwort für geblockte Avatare:
-			</text>
 		</panel>
 	</tab_container>
 </panel>

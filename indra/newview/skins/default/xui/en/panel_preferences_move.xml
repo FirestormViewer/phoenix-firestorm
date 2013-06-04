@@ -116,7 +116,7 @@
          control_name="DisableCameraConstraints"
          height="16"
          initial_value="true"
-         label="Allow greater camera freedom"
+         label="Disable camera constraints"
          layout="topleft"
          left_delta="0"
          name="DisableCameraConstraints"
@@ -608,15 +608,6 @@
          width="350"
          control_name="MiniMapRotate"
          tool_tip="Rotate miniature world map to avatar direction."/>
-
-        <check_box
-         control_name="MiniMapChatRing"
-         name="MiniMapChatRing"
-         label="Display a ring on the Minimap indicating local chat range"
-         layout="topleft"
-         top_pad="0"
-         height="20"
-         width="350" />
 		 
         <text
          follows="left|top"
@@ -627,7 +618,7 @@
          left="35"
          name="netmap_double_click_action_lbl"
          width="150"
-         top_pad="10">
+         top_pad="4">
          Double click on Minimap:
         </text>
         <combo_box

@@ -48,8 +48,8 @@
         follows="left|bottom"
         name="login"
         layout="topleft"
-        width="310"
-        min_width="310"
+        width="335"
+        min_width="335"
         height="80">
       <text
           follows="left|bottom"
@@ -73,18 +73,31 @@
           width="150">
         Username:
       </text>
+      <button
+         follows="left|bottom"
+         height="18"
+         image_unselected="TrashItem_Off"
+         image_selected="TrashItem_Press"
+         image_pressed="TrashItem_Press"
+         tool_tip="Remove this username"
+         label=""
+         layout="topleft"
+         name="remove_user_btn"
+         left="195"
+         top_pad="0"
+         width="18" />
       <combo_box
           allow_text_entry="true"
           follows="left|bottom"
           height="22"
-          left_delta="0"
+          left="15"
           max_chars="128"
           commit_on_focus_lost="false"
           combo_editor.prevalidate_callback="ascii"
 tool_tip="The account name you chose when you registered, like bobsmith420 or Steller Sunshine"
-          top_pad="0"
+          top_delta="0"
           name="username_combo"
-          width="156">
+          width="178">
 <!-- empirically, displayed width is 150 anyway?!? -->
         <!--<combo_box.combo_button
             visible ="false"/>
@@ -92,26 +105,13 @@ tool_tip="The account name you chose when you registered, like bobsmith420 or St
             visible ="false"/>-->
       </combo_box>
 <!-- left="175" based on actual "username_combo" width of 150 vs. 178 -->
-      <button
-        follows="left|bottom"
-        height="18"
-        image_unselected="TrashItem_Off"
-        image_selected="TrashItem_Press"
-        image_pressed="TrashItem_Press"
-        tool_tip="Remove this username"
-        label=""
-        layout="topleft"
-        name="remove_user_btn"
-        left_pad="0"
-        top_delta="1"
-        width="18" />
       <text
           follows="left|bottom"
           font="SansSerifSmall"
           height="16"
           name="password_text"
           top="35"
-          left="192"
+          left="217"
           width="128">
         Password:
       </text>

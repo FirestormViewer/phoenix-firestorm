@@ -58,7 +58,6 @@ class FSPanelAreaSearchOptions;
 struct FSObjectProperties
 {
 	LLUUID id;
-	bool valid;
 	bool listed;
 	std::string name;
 	std::string description;
@@ -80,9 +79,19 @@ struct FSObjectProperties
 	LLPermissions permissions;
 	uuid_vec_t texture_ids;
 	bool name_requested;
+	U32 local_id;
+	
+	typedef enum e_object_properties_request
+	{
+		NEED,
+		SENT,
+		FINISHED,
+		FAILED
+	} EObjectPropertiesRequest;
+	EObjectPropertiesRequest request;
 	
 	FSObjectProperties() :
-		valid(false),
+		request(NEED),
 		listed(false),
 		name_requested(false)
 	{
@@ -144,6 +153,14 @@ public:
 	void setFilterDistance(bool b) { mFilterDistance = b; }
 	void setFilterDistanceMin(S32 s) { mFilterDistanceMin = s; }
 	void setFilterDistanceMax(S32 s) { mFilterDistanceMax = s; }
+	
+	void setColumnDistance(bool b) { mColumnDistance = b; }
+	void setColumnName(bool b) { mColumnName = b; }
+	void setColumnDescription(bool b) { mColumnDescription = b; }
+	void setColumnOwner(bool b) { mColumnOwner = b; }
+	void setColumnGroup(bool b) { mColumnGroup = b; }
+	void setColumnCreator(bool b) { mColumnCreator = b; }
+	void setColumnLastOwner(bool b) { mColumnLastOwner = b; }
 
 private:
 	void requestObjectProperties(const std::vector<U32>& request_list, bool select);
@@ -153,11 +170,15 @@ private:
 	void updateCounterText();
 	bool regexTest(std::string text);
 	void findObjects();
+	void processRequestQueue();
 
 	S32 mRequested;
 	bool mRefresh;
 	S32 mSearchableObjects;
 	bool mActive;
+	bool mRequestQueuePause;
+	bool mRequestNeedsSent;
+	S32 mOutstandingRequests;
 
 	std::string mSearchName;
 	std::string mSearchDescription;
@@ -175,6 +196,7 @@ private:
 	boost::regex mRegexSearchLastOwner;
 
 	LLFrameTimer mLastUpdateTimer;
+	LLFrameTimer mLastProptiesRecievedTimer;
 
 	std::vector<LLUUID> mNamesRequested;
 
@@ -221,6 +243,14 @@ private:
 
 	bool mFilterClickAction;
 	U8 mFilterClickActionType;
+	
+	bool mColumnDistance;
+	bool mColumnName;
+	bool mColumnDescription;
+	bool mColumnOwner;
+	bool mColumnGroup;
+	bool mColumnCreator;
+	bool mColumnLastOwner;
 
 protected:
 	static void* createPanelList(void* data);

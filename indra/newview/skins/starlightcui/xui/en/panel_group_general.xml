@@ -36,7 +36,7 @@ Hover your mouse over the options for more help.
      left="5"
      name="insignia"
      no_commit_on_selection="true"
-     tool_tip="Click to choose a picture"
+     tool_tip="Click to enlarge a picture"
      top="5"
      width="100" />
     <text

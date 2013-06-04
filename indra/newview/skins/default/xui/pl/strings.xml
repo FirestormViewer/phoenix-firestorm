@@ -5231,4 +5231,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="TotalScriptCountChangeDecrease">
 		Całkowita il. skryptów w regionie zmalała z [OLD_VALUE] do [NEW_VALUE] ([DIFFERENCE]).
 	</string>
+	<string name="preproc_toggle_warning">
+		Przełączenie trybu preprocesora odniesie pełny skutek dopiero po zamknięciu i ponownym otwarciu tego edytora.
+	</string>
 </strings>

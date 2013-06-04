@@ -800,8 +800,17 @@ void LLPipeline::resizeScreenTexture()
 			// disabled on future sessions
 			if (LLPipeline::sRenderDeferred)
 			{
-				gSavedSettings.setBOOL("RenderDeferred", FALSE);
-				LLPipeline::refreshCachedSettings();
+				// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
+				// Depending on 	the state of the pipeline. this can trigger illegal deletion of drawables.
+				// To work around that, resizeScreen	Texture will just set a flag, which then later does trigger the change
+				// in shaders.	
+
+				// gSavedSettings.setBOOL("RenderDeferred", FALSE);
+				// LLPipeline::refreshCachedSettings();
+
+				TriggeredDisabledDeferred = true;
+
+				// </FS:ND>
 			}
 		}
 	}
@@ -3351,11 +3360,6 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
 		if (!drawablep->isState(LLDrawable::INVISIBLE|LLDrawable::FORCE_INVISIBLE))
 		{
 			drawablep->setVisible(camera, NULL, FALSE);
-		}
-		else if (drawablep->isState(LLDrawable::CLEAR_INVISIBLE))
-		{
-			// clear invisible flag here to avoid single frame glitch
-			drawablep->clearState(LLDrawable::FORCE_INVISIBLE|LLDrawable::CLEAR_INVISIBLE);
 		}
 	}
 
@@ -10681,6 +10685,22 @@ void LLPipeline::restoreHiddenObject( const LLUUID& id )
 	}
 }
 
+// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
+// Depending on the state of the pipeline. this can trigger illegal deletion of drawables.
+// To work around that, resizeScreenTexture will just set a flag, which then later does trigger the change
+// in shaders.
+bool LLPipeline::TriggeredDisabledDeferred;
+
+void LLPipeline::disableDeferredOnLowMemory()
+{
+	if ( TriggeredDisabledDeferred )
+	{
+		TriggeredDisabledDeferred = false;
+		gSavedSettings.setBOOL("RenderDeferred", FALSE);
+		LLPipeline::refreshCachedSettings();
+	}
+}
+// </FS:ND>
 
 
 

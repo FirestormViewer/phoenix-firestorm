@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2012, Cinder Roxley <cinder@cinderblocks.biz>
+ * Copyright (C) 2012, Cinder Roxley <cinder.roxley@phoenixviewer.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

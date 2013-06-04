@@ -73,6 +73,11 @@ if(WINDOWS)
       set(release_files ${release_files} fmod.dll)
     endif (FMOD)
 
+# <FS:ND> Copy pdb files for symbol generation too
+    set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+    set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+# </FS:ND>
+
 #*******************************
 # Copy MS C runtime dlls, required for packaging.
 # *TODO - Adapt this to support VC9

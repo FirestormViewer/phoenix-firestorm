@@ -852,6 +852,10 @@ bool LLFontGL::loadDefaultFonts()
 	succ &= (NULL != getFontSansSerifBold());
 	succ &= (NULL != getFontMonospace());
 	succ &= (NULL != getFontExtChar());
+	// <FS:CR> Advanced script editor
+	succ &= (NULL != getFontScripting());
+	succ &= (NULL != getFontOCRA());
+	// </FS:CR>
 	return succ;
 }
 
@@ -1036,6 +1040,22 @@ LLFontGL* LLFontGL::getFontSansSerifBold()
 	return fontp;
 }
 
+// <FS:CR> Advanced Script Editor
+//static
+LLFontGL* LLFontGL::getFontScripting()
+{
+	static LLFontGL* fontp = getFont(LLFontDescriptor("Scripting","Monospace",0));
+	return fontp;
+}
+
+//static
+LLFontGL* LLFontGL::getFontOCRA()
+{
+	static LLFontGL* fontp = getFont(LLFontDescriptor("OCRA","Monospace",0));
+	return fontp;
+}
+// </FS:CR>
+
 //static
 LLFontGL* LLFontGL::getFontExtChar()
 {
@@ -1064,12 +1084,21 @@ LLFontGL* LLFontGL::getFontByName(const std::string& name)
 	{
 		return getFontSansSerifBig();
 	}
-	else if (name == "SMALL" || name == "OCRA")
+	// <FS:CR> Advanced script editor
+	//else if (name == "SMALL" || name == "OCRA")
+	else if (name == "SMALL")
+	// </FS:CR>
 	{
-		// *BUG: Should this be "MONOSPACE"?  Do we use "OCRA" anymore?
+		// *BUG: Should this be "MONOSPACE"?
 		// Does "SMALL" mean "SERIF"?
 		return getFontMonospace();
 	}
+	// <FS:CR> Advanced script editor
+	else if (name == "OCRA")
+	{
+		return getFontOCRA();
+	}
+	// </FS:CR>
 	else
 	{
 		return NULL;

@@ -24,6 +24,7 @@
 			<menu_item_call label="Alle Änderungen zurücksetzen" name="Revert All Changes"/>
 			<menu_item_call label="Aus Datei laden..." name="LoadFromFile"/>
 			<menu_item_call label="In Datei speichern..." name="SaveToFile"/>
+			<menu_item_call label="Einstellungen Skript-Editor" name="ScriptPrefs"/>
 		</menu>
 		<menu label="Bearbeiten" name="Edit">
 			<menu_item_call label="Rückgängig" name="Undo"/>
@@ -38,9 +39,25 @@
 		<menu label="Hilfe" name="Help">
 			<menu_item_call label="Hilfe..." name="Help..."/>
 			<menu_item_call label="Schlüsselwort-Hilfe" name="Keyword Help..."/>
+			<menu_item_call label="Skript-Datenbank" name="Script Library"/>
 		</menu>
 	</menu_bar>
-    <tab_container name="Tabset">
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Skript speichern" name="save_btn"/>
+			<button tool_tip="Externer Skript-Editor" name="Edit_btn"/>
+			<button tool_tip="Skript von der Festplatte laden"/>
+			<button tool_tip="Skript auf der Festplatte speichern" name="save_disk_btn"/>
+			<button tool_tip="Ausschneiden" name="cut_btn"/>
+			<button tool_tip="Kopieren" name="copy_btn"/>
+			<button tool_tip="Einfügen" name="paste_btn"/>
+			<button tool_tip="Rückgänging" name="undo_btn"/>
+			<button tool_tip="Wiederholen" name="redo_btn"/>
+			<button tool_tip="Suchen / Ersetzen" name="search_btn"/>
+			<button tool_tip="Einstellungen Skript-Editor" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<tab_container name="Tabset">
 		<panel name="Script" label="Skript">
 			<text_editor name="Script Editor">
 				Wird geladen...
@@ -53,7 +70,4 @@
 		</panel>
 	</tab_container>
 	<combo_box label="Einfügen..." name="Insert..."/>
-	<button label="Speichern" label_selected="Speichern" name="Save_btn"/>
-	<button label="Bearbeiten..." name="Edit_btn"/>
-	<check_box name="ExternalEditorConvertTabsToSpaces" label="Tabs in Leerzeichen konvert." tool_tip="Falls aktiviert werden Tabs in Leerzeichen (üblicherweise 4) konvertiert, wenn ein Skript aus einem externen Editor eingefügt wird."/>
 </panel>

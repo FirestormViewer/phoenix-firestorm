@@ -57,7 +57,7 @@
 
 
 // max number of objects that can be (de-)selected in a single packet.
-const S32 MAX_OBJECTS_PER_PACKET = 254;
+const S32 MAX_OBJECTS_PER_PACKET = 255;
 
 // time in seconds between refreshes when active
 const F32 REFRESH_INTERVAL = 1.0f;
@@ -67,6 +67,9 @@ const F32 MIN_REFRESH_INTERVAL = 0.25f;
 
 // how far the avatar needs to move to trigger a distance update
 const F32 MIN_DISTANCE_MOVED = 1.0f;
+
+// timeout to resend object properties request again
+const F32 REQUEST_TIMEOUT = 30.0f;
 
 
 class FSAreaSearch::FSParcelChangeObserver : public LLParcelObserver
@@ -108,7 +111,17 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mBeacons(false),
 	mExcludeAttachment(true),
 	mExcludeTempary(true),
-	mExcludePhysics(true)
+	mExcludePhysics(true),
+	mColumnDistance(true),
+	mColumnName(true),
+	mColumnDescription(true),
+	mColumnOwner(true),
+	mColumnGroup(true),
+	mColumnCreator(true),
+	mColumnLastOwner(true),
+	mRequestQueuePause(false),
+	mRequestNeedsSent(false),
+	mOutstandingRequests(0)
 {
 	//TODO: Multi-floater support and get rid of the singletin.
 	mInstance = this;
@@ -191,6 +204,7 @@ void FSAreaSearch::idle(void* user_data)
 {
 	FSAreaSearch* self = (FSAreaSearch*)user_data;
 	self->findObjects();
+	self->processRequestQueue();
 }
 
 // static
@@ -244,6 +258,8 @@ void FSAreaSearch::checkRegion()
 			mLastRegion = region;
 			mRequested = 0;
 			mObjectDetails.clear();
+			mOutstandingRequests = 0;
+			mLastProptiesRecievedTimer.start();
 			mPanelList->getResultList()->deleteAllItems();
 			mPanelList->setCounterText();
 			mPanelList->setAgentLastPosition(gAgent.getPositionGlobal());
@@ -260,6 +276,8 @@ void FSAreaSearch::refreshList(bool cache_clear)
 	{
 		mRequested = 0;
 		mObjectDetails.clear();
+		mOutstandingRequests = 0;
+		mLastProptiesRecievedTimer.start();
 	}
 	else
 	{
@@ -286,14 +304,15 @@ void FSAreaSearch::findObjects()
 		return;
 	}
 	
-	LL_DEBUGS("FSAreaSearch") << "Doing a FSAreaSearch::findObjects" << LL_ENDL;
+	LL_DEBUGS("FSAreaSearch_spammy") << "Doing a FSAreaSearch::findObjects" << LL_ENDL;
 	
 	mLastUpdateTimer.stop(); // stop sets getElapsedTimeF32() time to zero.
+	// Pause processing of requestqueue untill done adding new requests.
+	mRequestQueuePause = true;
 	checkRegion();
 	mRefresh = false;
 	mSearchableObjects = 0;
 	S32 object_count = gObjectList.getNumObjects();
-	std::vector<U32> request_list;
 	LLViewerRegion* our_region = gAgent.getRegion();
 
 	for (S32 i = 0; i < object_count; i++)
@@ -318,47 +337,62 @@ void FSAreaSearch::findObjects()
 		{
 			FSObjectProperties& details = mObjectDetails[object_id];
 			details.id = object_id;
-			request_list.push_back(objectp->getLocalID());
-
+			details.local_id = objectp->getLocalID();
+			mRequestNeedsSent = true;
 			mRequested++;
 		}
 		else
 		{
 			FSObjectProperties& details = mObjectDetails[object_id];
-			if (details.valid == true)
+			if (details.request == FSObjectProperties::FINISHED)
 			{
 				matchObject(details, objectp);
 			}
+
+			if (details.request == FSObjectProperties::FAILED)
+			{
+				// object came back into view
+				details.request = FSObjectProperties::NEED;
+				details.local_id = objectp->getLocalID();
+				mRequestNeedsSent = true;
+				mRequested++;
+			}
 		}
-
 	}
-
-	// Select then de-deslect the objects to get properties.
-	requestObjectProperties(request_list, true);
-	requestObjectProperties(request_list, false);
 
 	mPanelList->updateScrollList();
 
-	//TODO: make mRequested more accruate.
-	// requests for non-existent objects will never arrive,
-	// update mRequested counter to reflect that.
+	S32 request_count = 0;
+	// requests for non-existent objects will never arrive, check and update the queue.
 	for (std::map<LLUUID, FSObjectProperties>::iterator object_it = mObjectDetails.begin();
 		object_it != mObjectDetails.end();
 		++object_it)
 	{
-		if (!object_it->second.valid)
+		if (object_it->second.request == FSObjectProperties::NEED || object_it->second.request == FSObjectProperties::SENT)
 		{
 			LLUUID id = object_it->second.id;
 			LLViewerObject* objectp = gObjectList.findObject(id);
-			if (((!objectp) || (!isSearchableObject(objectp, our_region))) && (mRequested > 0))
+			if (!objectp)
 			{
+				object_it->second.request = FSObjectProperties::FAILED;
 				mRequested--;
 			}
+			else
+			{
+				request_count++;
+			}
 		}
+	}
+	
+	if (mRequested != request_count)
+	{
+	  	LL_DEBUGS("FSAreaSearch") << "Requested mismatch: " << request_count << " actual vs. " << mRequested << LL_ENDL;
+		mRequested = request_count;
 	}
 
 	updateCounterText();
 	mLastUpdateTimer.start(); // start also reset elapsed time to zero
+	mRequestQueuePause = false;
 }
 
 bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* our_region)
@@ -415,6 +449,87 @@ bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* o
 	return true;
 }
 
+void FSAreaSearch::processRequestQueue()
+{
+	if (!mActive || mRequestQueuePause)
+	{
+	      return;
+	}
+
+	if (mLastProptiesRecievedTimer.getElapsedTimeF32() > REQUEST_TIMEOUT)
+	{
+		LL_DEBUGS("FSAreaSearch") << "Timeout reached, resending requests."<< LL_ENDL;
+		S32 request_count = 0;
+		S32 failed_count = 0;
+		for (std::map<LLUUID, FSObjectProperties>::iterator object_it = mObjectDetails.begin();
+		      object_it != mObjectDetails.end();
+		      ++object_it)
+		{
+			if (object_it->second.request == FSObjectProperties::SENT)
+			{
+				object_it->second.request = FSObjectProperties::NEED;
+				mRequestNeedsSent = true;
+				request_count++;
+			}
+			
+			if (object_it->second.request == FSObjectProperties::FAILED)
+			{
+				failed_count++;
+			}
+		}
+		
+		mOutstandingRequests = 0;
+		mLastProptiesRecievedTimer.start();
+		if (!mRequestNeedsSent)
+		{
+			LL_DEBUGS("FSAreaSearch") << "No pending requests found."<< LL_ENDL;
+		}
+		else
+		{
+			LL_DEBUGS("FSAreaSearch") << request_count << " pending requests found."<< LL_ENDL;
+		}
+		
+		LL_DEBUGS("FSAreaSearch") << failed_count << " failed requests found."<< LL_ENDL;
+	}
+
+	if (!mRequestNeedsSent)
+	{
+	      return;
+	}
+	
+	if (mOutstandingRequests > (MAX_OBJECTS_PER_PACKET + 128))
+	{
+		return;
+	}
+
+	std::vector<U32> request_list;
+	
+	for (std::map<LLUUID, FSObjectProperties>::iterator object_it = mObjectDetails.begin();
+		object_it != mObjectDetails.end();
+		++object_it)
+	{
+		if (object_it->second.request == FSObjectProperties::NEED)
+		{
+			request_list.push_back(object_it->second.local_id);
+			object_it->second.request = FSObjectProperties::SENT;
+			mOutstandingRequests++;
+			if (mOutstandingRequests >= ((MAX_OBJECTS_PER_PACKET * 3) - 3))
+			{
+				requestObjectProperties(request_list, true);
+				requestObjectProperties(request_list, false);
+				return;
+			}
+		}
+	}
+
+	if (!request_list.empty())
+	{
+		requestObjectProperties(request_list, true);
+		requestObjectProperties(request_list, false);
+	}
+	mRequestNeedsSent = false;
+}
+
 void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list, bool select)
 {
 	bool start_new_message = true;
@@ -448,7 +563,7 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 		
 		if(msg->isSendFull(NULL) || select_count >= MAX_OBJECTS_PER_PACKET)
 		{
-			LL_DEBUGS("FSAreaSearch") << "Sent one" << (select ? "ObjectSelect" : "ObjectDeselect") << "message" << LL_ENDL;
+			LL_DEBUGS("FSAreaSearch") << "Sent one full " << (select ? "ObjectSelect" : "ObjectDeselect") << " message with " << select_count << " object data blocks." << LL_ENDL;
 			msg->sendReliable(regionp->getHost() );
 			select_count = 0;
 			start_new_message = true;
@@ -457,7 +572,7 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 
 	if (!start_new_message)
 	{
-		LL_DEBUGS("FSAreaSearch") << "Sent one" << (select ? "ObjectSelect" : "ObjectDeselect") << "message" << LL_ENDL;
+		LL_DEBUGS("FSAreaSearch") << "Sent one partcial " << (select ? "ObjectSelect" : "ObjectDeselect") << " message with " << select_count << " object data blocks." << LL_ENDL;
 		msg->sendReliable(regionp->getHost() );
 	}
 }
@@ -474,7 +589,7 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 	bool counter_text_update = false;
 
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_ObjectData);
-	LL_DEBUGS("FSAreaSearch")  << "Got processObjectProperties message with " << count << "object(s)" << LL_ENDL;
+	LL_DEBUGS("FSAreaSearch")  << "Got processObjectProperties message with " << count << " object(s)" << LL_ENDL;
 	for (S32 i = 0; i < count; i++)
 	{
 		LLUUID object_id;
@@ -486,18 +601,19 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 		}
 
 		LLViewerObject* objectp = gObjectList.findObject(object_id);
-		if (!(objectp && objectp->isRootEdit()))
+		if (!objectp)
 		{
 			continue;
 		}
 
 		FSObjectProperties& details = mObjectDetails[object_id];
-		if (!details.valid)
+		if (details.request != FSObjectProperties::FINISHED)
 		{
 			// We cache un-requested objects (to avoid having to request them later)
 			// and requested objects.
 
-			details.valid = true;
+			details.request = FSObjectProperties::FINISHED;
+			mLastProptiesRecievedTimer.start();
 
 			if (details.id.isNull())
 			{
@@ -510,6 +626,7 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 				{
 					mRequested--;
 				}
+				mOutstandingRequests--;
 				counter_text_update = true;
 			}
 
@@ -553,7 +670,7 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 			// Sets the group owned BOOL and real owner id, group or owner depending if object is group owned.
 			details.permissions.getOwnership(details.ownership_id, details.group_owned);
 			
-			LL_DEBUGS("FSAreaSearch") << "Got properties for object: " << object_id << LL_ENDL;
+			LL_DEBUGS("FSAreaSearch_spammy") << "Got properties for object: " << object_id << LL_ENDL;
 
 			if (isSearchableObject(objectp, our_region))
 			{
@@ -771,61 +888,63 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	//-----------------------------------------------------------------------
 	
 	details.listed = true;
+
+	LLScrollListCell::Params cell_params;
+	cell_params.font = LLFontGL::getFontSansSerif();
+
+	LLScrollListItem::Params row_params;
+	row_params.value = object_id.asString();
 	
-	LLScrollListColumn* column;
-	LLSD element;
-	element["id"] = object_id;
-
-	column = mPanelList->getResultList()->getColumn("distance");
-	if (column)
+	if (mColumnDistance)
 	{
-		element["columns"][column->mIndex]["column"] = "distance";
-		element["columns"][column->mIndex]["value"] = llformat("%1.0f m", dist_vec(mPanelList->getAgentLastPosition(), objectp->getPositionGlobal())); // used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
-	}
-	
-	column = mPanelList->getResultList()->getColumn("name");
-	if (column)
-	{
-		element["columns"][column->mIndex]["column"] = "name";
-		element["columns"][column->mIndex]["value"] = details.name;
-	}
-
-	column = mPanelList->getResultList()->getColumn("description");
-	if (column)
-	{
-		element["columns"][column->mIndex]["column"] = "description";
-		element["columns"][column->mIndex]["value"] = details.description;
-	}
-
-	column = mPanelList->getResultList()->getColumn("owner");
-	if (column)
-	{
-		element["columns"][column->mIndex]["column"] = "owner";
-		element["columns"][column->mIndex]["value"] = owner_name;
-	}
-
-	column = mPanelList->getResultList()->getColumn("group");
-	if (column)
-	{
-		element["columns"][column->mIndex]["column"] = "group";
-		element["columns"][column->mIndex]["value"] = group_name;
-	}
-
-	column = mPanelList->getResultList()->getColumn("creator");
-	if (column)
-	{
-		element["columns"][column->mIndex]["column"] = "creator";
-		element["columns"][column->mIndex]["value"] = creator_name;
-	}
-
-	column = mPanelList->getResultList()->getColumn("last_owner");
-	if (column)
-	{
-		element["columns"][column->mIndex]["column"] = "last_owner";
-		element["columns"][column->mIndex]["value"] = last_owner_name;
+		cell_params.column = "distance";
+		cell_params.value = llformat("%1.0f m", dist_vec(mPanelList->getAgentLastPosition(), objectp->getPositionGlobal())); // used mAgentLastPosition instead of gAgent->getPositionGlobal for performace
+		row_params.columns.add(cell_params);
 	}
 	
-	LLScrollListItem* list_row =  mPanelList->getResultList()->addElement(element);
+	if (mColumnName)
+	{
+		cell_params.column = "name";
+		cell_params.value = details.name;
+		row_params.columns.add(cell_params);
+	}
+
+	if (mColumnDescription)
+	{
+		cell_params.column = "description";
+		cell_params.value = details.description;
+		row_params.columns.add(cell_params);
+	}
+
+	if (mColumnOwner)
+	{
+		cell_params.column = "owner";
+		cell_params.value = owner_name;
+		row_params.columns.add(cell_params);
+	}
+
+	if (mColumnGroup)
+	{
+		cell_params.column = "group";
+		cell_params.value = group_name;
+		row_params.columns.add(cell_params);
+	}
+
+	if (mColumnCreator)
+	{
+		cell_params.column = "creator";
+		cell_params.value = creator_name;
+		row_params.columns.add(cell_params);
+	}
+
+	if (mColumnLastOwner)
+	{
+		cell_params.column = "last_owner";
+		cell_params.value = last_owner_name;
+		row_params.columns.add(cell_params);
+	}
+	
+	LLScrollListItem* list_row = mPanelList->getResultList()->addRow(row_params);
 
 	if (objectp->flagTemporaryOnRez() || objectp->flagUsePhysics())
 	{
@@ -1209,22 +1328,26 @@ void FSPanelAreaSearchList::updateName(LLUUID id, std::string name)
 
 		if (creator_column && (id == details.creator_id))
 		{
-			item->getColumn(creator_column->mIndex)->setValue(LLSD(name));
+			LLScrollListText* creator_text = (LLScrollListText*)item->getColumn(creator_column->mIndex);
+			creator_text->setText(name);
 		}
 
 		if (owner_column && (id == details.owner_id))
 		{
-			item->getColumn(owner_column->mIndex)->setValue(LLSD(name));
+			LLScrollListText* owner_text = (LLScrollListText*)item->getColumn(owner_column->mIndex);
+			owner_text->setText(name);
 		}
 
 		if (group_column && (id == details.group_id))
 		{
-			item->getColumn(group_column->mIndex)->setValue(LLSD(name));
+			LLScrollListText* group_text = (LLScrollListText*)item->getColumn(group_column->mIndex);
+			group_text->setText(name);
 		}
 
 		if (last_owner_column && (id == details.last_owner_id))
 		{
-			item->getColumn(last_owner_column->mIndex)->setValue(LLSD(name));
+			LLScrollListText* last_owner_text = (LLScrollListText*)item->getColumn(last_owner_column->mIndex);
+			last_owner_text->setText(name);
 		}
 	}
 }
@@ -1698,6 +1821,60 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 		{
 			mColumnParms[column_name] = result_list->delColumn(column_name);
 		}
+	}
+
+	// untill C++ supports variable withen a variablname, have to do this instead.
+	// used switch instead of a huge if then else if then else...
+	char c = column_name.at(0);
+	switch(c)
+	{
+	case 'd':
+	{
+		char d = column_name.at(1);
+		switch (d)
+		{
+		case 'i':
+		{
+			mFSAreaSearch->setColumnDistance(checkboxctrl->get());
+		}
+			break;
+		case 'e':
+		{
+			mFSAreaSearch->setColumnDescription(checkboxctrl->get());
+		}
+			break;
+		default:
+			break;
+		}
+	}
+		break;
+	case 'n':
+	{
+		mFSAreaSearch->setColumnName(checkboxctrl->get());
+	}
+		break;
+	case 'o':
+	{
+		mFSAreaSearch->setColumnOwner(checkboxctrl->get());
+	}
+		break;
+	case 'g':
+	{
+		mFSAreaSearch->setColumnGroup(checkboxctrl->get());
+	}
+		break;
+	case 'c':
+	{
+		mFSAreaSearch->setColumnCreator(checkboxctrl->get());
+	}
+		break;
+	case 'l':
+	{
+		mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
+	}
+		break;
+	default:
+		break;
 	}
 
 	result_list->updateLayout();

@@ -1813,6 +1813,12 @@ list(APPEND EVENT_HOST_SCRIPTS ${EVENT_HOST_SCRIPT_GLOB_LIST})
 set(PACKAGE ON CACHE BOOL
     "Add a package target that builds an installer package.")
 
+if ( OPENSIM )
+  set( ND_VIEWER_FLAVOR "oss" )
+else ( OPENSIM )
+  set( ND_VIEWER_FLAVOR "hvk" )
+endif ( OPENSIM )
+
 if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
@@ -2016,6 +2022,7 @@ if (WINDOWS)
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/touched.bat
           --version=${viewer_VERSION}
+          --viewer_flavor=${ND_VIEWER_FLAVOR}
         DEPENDS 
             ${VIEWER_BINARY_NAME} 
             ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2145,6 +2152,7 @@ if (LINUX)
         --source=${CMAKE_CURRENT_SOURCE_DIR}
         --version=${viewer_VERSION}
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
+        --viewer_flavor=${ND_VIEWER_FLAVOR}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         ${COPY_INPUT_DEPENDENCIES}
@@ -2244,6 +2252,7 @@ if (DARWIN)
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
           --version=${viewer_VERSION}
+          --viewer_flavor=${ND_VIEWER_FLAVOR}
           ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py

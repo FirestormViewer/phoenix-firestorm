@@ -491,8 +491,11 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&LLFloaterPreference::onClickDeselectAll, this));
 	// </FS:Zi>
 
-	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
-	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
+	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
+	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
+	// <FS:CR>
+	gSavedSettings.getControl("FSColorUsername")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
+	// </FS:CR>
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 	gSavedSettings.getControl("DontTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged,  _2));
@@ -838,8 +841,13 @@ void LLFloaterPreference::cancel()
 	// hide translation settings floater
 	LLFloaterReg::hideInstance("prefs_translation");
 	
-	// hide translation settings floater
+	// hide autoreplace settings floater
 	LLFloaterReg::hideInstance("prefs_autoreplace");
+	
+// <FS:CR> STORM-1888
+	// hide spellchecker settings floater
+	LLFloaterReg::hideInstance("prefs_spellchecker");
+// </FS:CR>
 	
 	// cancel hardware menu
 	LLFloaterHardwareSettings* hardware_settings = LLFloaterReg::getTypedInstance<LLFloaterHardwareSettings>("prefs_hardware_settings");
@@ -943,6 +951,15 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	
 	getChildView("plain_text_chat_history")->setEnabled(TRUE);
 	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
+	
+// <FS:CR> Show/hide Client Tag panel
+	bool show_client_tags = false;
+#ifdef OPENSIM
+	//Disabled for now because client tags don't currently work <FS:CR>
+	//show_client_tags = LLGridManager::getInstance()->isInOpenSim();
+#endif // OPENSIM
+	getChild<LLPanel>("client_tags_panel")->setVisible(show_client_tags);
+// </FS:CR>
 	
 	// Make sure the current state of prefs are saved away when
 	// when the floater is opened.  That will make cancel do its

@@ -291,40 +291,13 @@
   <key>FSColorUsername</key>
   <map>
     <key>Comment</key>
-    <string>If Username should be colored orange</string>
+    <string>Color username distinctly from the rest of the tag</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
     <integer>0</integer>
-  </map>
-  <key>FSColorUsernameColor</key>
-  <map>
-    <key>Comment</key>
-    <string>The color the Username should be colored.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Color4</string>
-    <key>Value</key>
-    <array>
-      <real>1</real>
-      <real>0.5</real>
-      <real>0</real>
-      <real>1.0</real>
-    </array>
-  </map>
-  <key>FSShowOwnTagColor</key>
-  <map>
-    <key>Comment</key>
-    <string>If you want to see your own color</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
   </map>
 	<key>FSResetCameraOnTP</key>
 	<map>
@@ -18199,7 +18172,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>2</integer>
+    <integer>4</integer>
   </map>
   <key>_NACL_AntiSpamAmount</key>
   <map>
@@ -18232,7 +18205,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>4</integer>
+    <integer>6</integer>
   </map>
   <key>_NACL_AntiSpamSoundPreloadMulti</key>
   <map>
@@ -18243,7 +18216,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>4</integer>
+    <integer>6</integer>
   </map>
   <key>_NACL_LSLPreprocessor</key>
   <map>

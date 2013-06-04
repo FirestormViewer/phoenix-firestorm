@@ -69,7 +69,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
         <loading_indicator
          top="4"
-         right="-10"
+         right="-30"
          height="23"
          width="23"
          layout="topleft"

@@ -26,9 +26,10 @@
 			<check_box label="Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym" name="play_typing_sound"/>
 			<check_box label="Powiadomienia o pisaniu do innych awatarów podczas sesji IM" name="FSSendTypingState"/>
 			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
-			<check_box label="Usuń nagłówki czatów (powrót do stylu V1)" name="plain_text_chat_history"/>
-			<check_box label="Podczas używania nagłówków czatów pokazuj małe ikony" name="ShowChatMiniIcons"/>
+			<check_box label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history"/>
+			<check_box label="Podczas używania nagłówków w stylu V2/3 pokazuj małe ikony" name="ShowChatMiniIcons"/>
 			<check_box label="Pokaż czat w chmurkach ponad awatarami" name="bubble_text_chat"/>
 			<check_box label="Pokaż wskaźnik pisania w chmurkach ponad awatarami" name="bubble_text_typing"/>	 
 			<text name="inworld_typing_rg_label">
@@ -67,7 +68,6 @@
 				<combo_box.item label="Wyświetlane (Nazwa konta)" name="display_user_name"/>
 				<combo_box.item label="Nazwa konta (Wyświetlane)" name="user_display_name"/>
 			</combo_box>
-			<button label="Tłumaczenie..." name="translation_settings_btn"/>
 		</panel>
 		<panel label="Powiadomienia" name="ChatNotifications">
 			<text name="disable_toast_label">
@@ -222,6 +222,7 @@
 		<panel label="Wprowadzanie tekstu" name="ChatTextInput">
 			<button name="autoreplace_showgui" label="Autokorekta"/>
 			<button name="spellcheck_showgui" label="Sprawdzanie pisowni"/>
+			<button label="Tłumaczenie..." name="translation_settings_btn"/>
 		</panel>
 	</tab_container>
 </panel>

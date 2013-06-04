@@ -2,16 +2,16 @@
 <notifications>
     <global name="skipnexttime">
 
-		Do not show me this again.
+		Do not show me this again
   </global>
 
   <global name="alwayschoose">
 
-		Always choose this option.
+		Always choose this option
   </global>
 
   <global name="implicitclosebutton">
-		Close.
+		Close
   </global>
 
   <template name="okbutton">

@@ -225,6 +225,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	childSetAction("connect_btn", onClickConnect, this);
 	
 	getChild<LLPanel>("login")->setDefaultBtn(findChild<LLButton>("connect_btn")); // <FS:LO> manualy find the button with findChild() as setDefaultButton() uses getChild(), which cant be used in a ctor as it makes a dummy instead
+	getChild<LLPanel>("start_location_panel")->setDefaultBtn(findChild<LLButton>("connect_btn")); // <FS:CR> Yeah, do that here too.
 
 	std::string channel = LLVersionInfo::getChannel();
 	std::string version = llformat("%s (%d)",

@@ -1262,7 +1262,7 @@
              function="Tools.LookAtSelection"
              parameter="focus" />
           <menu_item_call.on_enable
-             function="Tools.SomethingSelectedNoHUD" />
+             function="SomethingSelectedNoHUD" />
         </menu_item_call>
         <menu_item_call
            label="Zoom to Selection"
@@ -1272,7 +1272,7 @@
              function="Tools.LookAtSelection"
              parameter="zoom" />
           <menu_item_call.on_enable
-             function="Tools.SomethingSelectedNoHUD" />
+             function="SomethingSelectedNoHUD" />
         </menu_item_call>
 
         <menu_item_separator/>
@@ -1363,7 +1363,7 @@
             <menu_item_call.on_click
                function="Tools.ScriptInfo" />
             <menu_item_call.on_enable
-               function="EditableSelected" />
+               function="SomethingSelected" />
           </menu_item_call>
           <menu_item_call
              label="Recompile Scripts (Mono)"
@@ -1522,6 +1522,7 @@
 
                 <menu_item_check
                  label="Show Selection Outlines"
+				 shortcut="control|alt|H"
                  name="Show Selection Outlines">
                     <menu_item_check.on_check
                      function="CheckControl"

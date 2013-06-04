@@ -1,72 +1,183 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Farben" name="colors_panel">
-	<text name="effects_color_textbox">
-		Meine Effekte (Auswahlstrahl):
-	</text>
-	<text name="netmap_color_textbox">
-		Mini-Karte:
-	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
-	<text name="netmap_chatring_color_label">
-		Chat-Reichweite
-	</text>
-	<text name="netmap_shoutring_color_label">
-		Ruf-Reichweite
-	</text>
-	<text name="font_colors">
-		Schriftfarben für Chat:
-	</text>
-	<text name="text_box1">
-		Ich
-	</text>
-	<text name="text_box2">
-		Andere
-	</text>
-	<text name="text_box3">
-		Objekte
-	</text>
-	<text name="text_box4">
-		System
-	</text>
-	<text name="text_box5">
-		Fehler
-	</text>
-    <text name="text_box8">
-        Chat-Überschriften
-    </text>
-	<text name="text_box10">
-		Direkt
-	</text>
-    <text name="text_box6">
-        Objekt-IMs
-    </text>
-	<text name="text_box7">
-		Eigentümer
-	</text>
-	<text name="text_box9">
-		URLs
-	</text>
-    <text name="ScriptDialogBgLabel">
-        Skript-Dialog Hg
-    </text>
-    <text name="ScriptDialogFgLabel">
-        Skript-Dialog Vg
-    </text>
-	<text name="bubble_chat">
-		Hintergrundfarbe für Avatarnamen (wirkt sich auch auf Blasen-Chat aus):
-	</text>
-	<color_swatch name="background" tool_tip="Farbe für Avatarnamen auswählen"/>
-	<slider label="Deckkraft:" name="bubble_chat_opacity" tool_tip="Deckkraft für Avatarnamen auswählen"/>
-	<text name="floater_opacity">
-		Floater-Deckkraft:
-	</text>
-	<slider label="Aktiv:" name="active"/>
-	<slider label="Inaktiv:" name="inactive"/>
-	<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
-	<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
-	<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>
-	<color_swatch name="pie_bg_color_override" tool_tip="Wähle die Pie-Menü-Hintergrundfarbe"/>
-	<color_swatch name="pie_selected_color_override" tool_tip="Wähle die Pie-Menü-Farbe"/>
-	<slider label="Deckkraft:" name="pie_menu_opacity" tool_tip="Wähle die Deckkraft des Pie-Menüs"/>
-	<slider label="Ausblenden:" name="pie_menu_fade_out" tool_tip="Wähle die Höhe der Durchsichtigkeit des Pie-Menüs"/>
+	<tab_container name="color_tabs">
+		<panel label="Allgemein" name="tab-chat">
+			<text name="font_colors">
+				User-Interface-Farben:
+			</text>
+			<text name="user_label">
+				Eigener Text
+			</text>
+			<text name="others_label">
+				Andere
+			</text>
+			<text name="text_box3">
+				Objekte
+			</text>
+			<text name="friends_label">
+				Freunde
+			</text>
+			<text name="linden_label">
+				Linden Lab
+			</text>
+			<text name="muted_label">
+				Blockiert
+			</text>
+			<text name="system_label">
+				System
+			</text>
+			<text name="script_error_label">
+				Skript-Fehler
+			</text>
+			<text name="object_im_label">
+				Objekt-IMs
+			</text>
+			<text name="llownersay_label">
+				Eigentümer
+			</text>
+			<text name="htmllink_label">
+				URLs
+			</text>
+			<text name="chat_name_label">
+				Chat-Überschriften
+			</text>
+			<text name="direct_label">
+				Direkt
+			</text>
+		</panel>
+		<panel label="Namensschilder" name="tab-nametag">
+			<text name="nametag_colors">
+				Farben für Namensschilder:
+			</text>
+			<text name="self_tag_label">
+				Eigenes Schild
+			</text>
+			<text name="friend_tag_label">
+				Freunde
+			</text>
+			<text name="muted_tag_label">
+				Blockiert
+			</text>
+			<text name="linden_tag_label">
+				Linden Lab
+			</text>
+			<text name="match_tag_label">
+				Treffer
+			</text>
+			<text name="mismatch_tag_label">
+				Kein Treffer
+			</text>
+			<check_box label="Andere Farbe für Benutzernamen verwenden" name="FSColorUsername" tool_tip="Zeigt den Benutzernamen in einer anderen Farbe" width="270"/>
+			<check_box label="Andere Farbe für Freunde verwenden" name="NameTagShowFriends" tool_tip="Aktivieren, um die Tag-Farbe eines Freundes in einer anderen Farbe darzustellen."/>
+			<text name="username_tag_label">
+				Benutzername
+			</text>
+			<text name="bubble_chat">
+				Hintergrundfarbe für Namensschilder und Blasen-Chat:
+			</text>
+			<color_swatch name="background" tool_tip="Farbe für Namensschilder auswählen"/>
+			<slider name="bubble_chat_opacity" label="Deckkraft:" tool_tip="Deckkraft für Namensschilder auswählen"/>
+			<slider name="FSNameTagZOffsetCorrection" label="Z-Offset-Korrektur:" tool_tip="Ändert den Z-Offset für Avatar-Namenstags. Standardwert ist 0."/>
+			<check_box label="Entfernung im Namensschild anzeigen" name="FSTagShowDistance" tool_tip="Aktivieren, um die Entfernung eines Avatars in den nachfolgenden Farben im Namensschild anzuzeigen."/>
+			<check_box label="Namensschildfarbe basierend auf Entfernung" name="FSTagShowDistanceColors" tool_tip="Aktivieren, um die Namensschildfarbe eines Avatars abhändig von der Entfernung (Chat-Reichweite, Ruf-Reichweite, außerhalb Ruf-Reichweite) zu setzen. Übersteuert Viewertag-Farben außer Hervorhebung von Freunden und Kontakt-Set-Farben."/>
+			<panel name="distance_panel">
+				<text name="chat_distance_tag_label">
+					Chat-Reichweite
+				</text>
+				<text name="whisper_distance_tag_label">
+					Flüster-Reichweite
+				</text>
+				<text name="shout_tag_label">
+					Ruf-Reichweite
+				</text>
+				<text name="beyond_shout_distance_tag_label">
+					Außerhalb Ruf-Reichweite
+				</text>
+			</panel>
+			<panel name="client_tags_panel">
+				<text name="client_tags_colors">
+					Viewer-Tag-Farben: (nur OpenSim/AuroraSim)
+				</text>
+				<text name="whattagstoshow">
+					Tag-Anzeige:
+				</text>
+				<combo_box name="ClientTagsVisibility">
+					<combo_item name="No Viewertags">Keine Viewertags</combo_item>
+					<combo_item name="TPVD Viewer">TPVD-Viewer (anhand einer Liste)</combo_item>
+					<combo_item name="All known Viewers">Alle bekannten Viewer (anhand einer Liste)</combo_item>
+					<combo_item name="All Viewers">Alle Viewer</combo_item>
+				</combo_box>
+				<text name="colorbasedonviewer">
+					Tag-Farbe basierend auf Viewer:
+				</text>
+				<combo_box name="ColorClienttags">
+					<combo_item name="Color not based on Viewer">Farbe nicht basierend auf Viewer</combo_item>
+					<combo_item name="Single color per Viewer">Eine Farbe pro Viewer</combo_item>
+					<combo_item name="Multiple colors per Viewer">Mehrere Farben pro Viewer</combo_item>
+					<combo_item name="Userdefined color">Benutzerdefinierte Farbe</combo_item>
+				</combo_box>
+				<text name="listtodisplayviewertags_txt">
+					Liste zur Anzeige von Tags:
+				</text>
+				<combo_box name="UseLegacyClienttags">
+					<combo_item name="Don't use a list">Keine Liste verwenden</combo_item>
+					<combo_item name="Local Clienttags">Lokale Tag-Liste</combo_item>
+					<combo_item name="Download Clienttags">Tag-Liste beim Start downloaden</combo_item>
+				</combo_box>
+			</panel>
+		</panel>
+		<panel label="Mini-Karte" name="tab-minimap">
+			<text name="netmap_color_textbox">
+				Mini-Karte:
+			</text>
+			<text name="netmap_dots_textbox">
+				Punkte auf Minikarte:
+			</text>
+			<text name="MapAvatarSelfColor_label">
+				Ich:
+			</text>
+			<text name="MapAvatarColor_label">
+				Andere:
+			</text>
+			<text name="MapAvatarFriendColor_label">
+				Freunde:
+			</text>
+			<text name="MapAvatarLindenColor_label">
+				Linden Lab:
+			</text>
+			<text name="MapAvatarMutedColor_label">
+				Blockiert:
+			</text>
+			<check_box name="MiniMapChatRing" label="Ringe auf der Minikarte für Darstellung der Sprech- und Rufreichweite anzeigen"/>
+			<text name="netmap_chatring_color_label">
+				Chat-Reichweite
+			</text>
+			<text name="netmap_shoutring_color_label">
+				Ruf-Reichweite
+			</text>
+		</panel>
+		<panel label="Sonstige" name="tab-misc">
+			<text name="effects_color_textbox">
+				Meine Effekte (Auswahlstrahl):
+			</text>
+			<text name="ScriptDialogFgLabel" width="110">
+				Skript-Dialog Vg/Hg
+			</text>
+			<text name="floater_opacity">
+				Fenster-Deckkraft:
+			</text>
+			<slider label="Aktiv:" name="active"/>
+			<slider label="Inaktiv:" name="inactive"/>
+			<slider name="console_background_opacity" label="Konsolen-Deckkraft:" tool_tip="Deckkraft für Konsole auswählen"/>
+			<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
+			<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
+			<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>
+			<panel name="tab-colorize">
+				<color_swatch name="pie_bg_color_override" tool_tip="Wähle die Pie-Menü-Hintergrundfarbe"/>
+				<color_swatch name="pie_selected_color_override" tool_tip="Wähle die Pie-Menü-Farbe"/>
+				<slider label="Deckkraft:" name="pie_menu_opacity" tool_tip="Wähle die Deckkraft des Pie-Menüs"/>
+				<slider label="Ausblenden:" name="pie_menu_fade_out" tool_tip="Wähle die Höhe der Durchsichtigkeit des Pie-Menüs"/>
+			</panel>
+		</panel>
+	</tab_container>
 </panel>

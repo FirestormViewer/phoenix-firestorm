@@ -47,6 +47,12 @@ typedef enum e_radar_name_format
 	FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME
 } ERadarNameFormat;
 
+typedef enum e_radar_payment_info_flag
+{
+	FSRADAR_PAYMENT_INFO_NONE,
+	FSRADAR_PAYMENT_INFO_FILLED,
+	FSRADAR_PAYMENT_INFO_USED
+} ERadarPaymentInfoFlag;
 
 class FSRadar 
 	: public LLSingleton<FSRadar>

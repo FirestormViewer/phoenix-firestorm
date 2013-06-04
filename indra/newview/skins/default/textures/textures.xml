@@ -929,4 +929,7 @@ with the same filename but different name
 <texture name="Script_Search" file_name="icons/script_search.png" preload="false" />
 <texture name="Script_Editor" file_name="icons/script_editor.png" preload="false" />
 <texture name="Script_Config" file_name="icons/script_config.png" preload="false" />
+
+<texture name="Payment_Info_Filled" file_name="legacy/payment_info_filled.tga" preload="false" />
+<texture name="Payment_Info_Used" file_name="legacy/payment_info_used.tga" preload="false" />
 </textures>

@@ -262,6 +262,9 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		return;
 	}
 
+	static const std::string flagsColumnType = getString("FlagsColumnType");
+	static const std::string flagsColumnValues [3] = { getString("FlagsColumnValue_0"), getString("FlagsColumnValue_1"), getString("FlagsColumnValue_2") };
+
 	// Store current selection and scroll position
 	static S32 uuidColumnIndex = mRadarList->getColumn("uuid")->mIndex;
 	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
@@ -291,7 +294,7 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["columns"][2]["type"] = "icon";
 		row_data["columns"][2]["value"] = (entry["in_region"].asBoolean() ? "avatar_in_region" : "");
 		row_data["columns"][3]["column"] = "flags";
-		row_data["columns"][3]["value"] = entry["flags"];
+		row_data["columns"][3]["type"] = flagsColumnType;
 		row_data["columns"][4]["column"] = "age";
 		row_data["columns"][4]["value"] = entry["age"];
 		row_data["columns"][5]["column"] = "seen";
@@ -306,6 +309,7 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		static S32 rangeColumnIndex = mRadarList->getColumn("range")->mIndex;
 		static S32 nameColumnIndex = mRadarList->getColumn("name")->mIndex;
 		static S32 voiceLevelColumnIndex = mRadarList->getColumn("voice_level")->mIndex;
+		static S32 flagsColumnIndex = mRadarList->getColumn("flags")->mIndex;
 
 		LLScrollListText* radarRangeCell = (LLScrollListText*)row->getColumn(rangeColumnIndex);
 		radarRangeCell->setColor(LLColor4(options["range_color"]));
@@ -322,6 +326,12 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		if (entry.has("voice_level_icon"))
 		{
 			voiceLevelCell->setValue(entry["voice_level_icon"].asString());
+		}
+
+		LLScrollListText* flagsCell = (LLScrollListText*)row->getColumn(flagsColumnIndex);
+		if (entry.has("flags"))
+		{
+			flagsCell->setValue(flagsColumnValues[entry["flags"].asInteger()]);
 		}
 	}
 

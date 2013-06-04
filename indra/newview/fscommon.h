@@ -61,6 +61,8 @@ namespace FSCommon
 	
 	// apply default build preferences to the object
 	void applyDefaultBuildPreferences(LLViewerObject* object);
+
+	bool isLinden(const LLUUID& av_id);
 	
 	/**
 	 * HACK

@@ -32,7 +32,7 @@
 			<button name="im_history_btn" tool_tip="Otwórz historię konwersacji"/>
 		</layout_panel>
 	</layout_stack>
-	<check_box label="Dodawaj typ Przeglądarki" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje (FS) na początku Twoich wiadomości aby pomóc grupie wsparcia dowiedzieć się, czy Twój problem dotyczy Firestorma / Phoenixa. Twoja pomoc w unikaniu zamieszania jest mile widziana!"/>
+	<check_box label="Dodawaj typ Przeglądarki" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje aktualną wersję przeglądarki oraz informację o skórce przed wiadomościami wysyłanymi przez Ciebie w tej grupie, co będzie pomagać członkom załogi wsparcia w prawidłowym diagnozowaniu Twoich problemów i poprawi dokładność odpowiedzi na Twoje pytania"/>
 	<button tool_tip="Wyślij info systemowe" name="send_sysinfo_btn"/>
 	<layout_stack name="im_panels">
 		<layout_panel name="panel_im_control_lp">

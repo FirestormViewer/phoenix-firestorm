@@ -468,6 +468,15 @@ class WindowsManifest(ViewerManifest):
             self.path("growl.dll")
             self.path("growl++.dll")
 
+            # <FS:ND> Copy symbols for breakpad
+            self.path("ssleay32.pdb")
+            self.path("libeay32.pdb")
+            self.path("growl.pdb")
+            self.path("growl++.pdb")
+            self.path('apr-1.pdb', 'libarp.pdb')
+            self.path('aprutil-1.pdb', 'libaprutil.pdb')
+            # </FS:ND>
+
             # For google-perftools tcmalloc allocator.
             try:
                 if self.args['configuration'].lower() == 'debug':
@@ -730,7 +739,10 @@ class WindowsManifest(ViewerManifest):
         # New Method, for reading cross platform stack traces on a linux/mac host
         if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
-            sName = "%s/Phoenix_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes'])
+            sName = "%s/Phoenix_%s_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),
+                                                                     substitution_strings['channel_oneword'],
+                                                                     substitution_strings['version_dashes'],
+                                                                     self.args['viewer_flavor'])
 
             if os.path.exists( sName ):
                 os.unlink( sName )
@@ -1094,7 +1106,11 @@ class DarwinManifest(ViewerManifest):
         # New Method, for reading cross platform stack traces on a linux/mac host
         if (os.path.exists("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
-            os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+            os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),
+                      "%s/Phoenix_%s_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),
+                                                                      substitution_strings['channel_oneword'],
+                                                                      substitution_strings['version_dashes'],
+                                                                      self.args['viewer_flavor']))
 
 
 
@@ -1232,7 +1248,11 @@ class LinuxManifest(ViewerManifest):
         # New Method, for reading cross platform stack traces on a linux/mac host
         if (os.path.exists("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
-            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),self.channel_oneword(),'-'.join(self.args['version'])))
+            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),
+                      "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),
+                                                                     self.channel_oneword(),
+                                                                     '-'.join( self.args['version'] ),
+                                                                     self.args['viewer_flavor'] ) )
 
 
 class Linux_i686Manifest(LinuxManifest):

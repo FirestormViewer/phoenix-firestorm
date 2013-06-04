@@ -107,8 +107,50 @@ ERROR:
 // virtual
 U32 LLBlowfishCipher::decrypt(const U8* src, U32 src_len, U8* dst, U32 dst_len)
 {
-	llerrs << "LLBlowfishCipher decrypt unsupported" << llendl;
+	// <FS:CR> Blowfish decrypt
+	//llerrs << "LLBlowfishCipher decrypt unsupported" << llendl;
+	//return 0;
+	if (!src || !src_len || !dst || !dst_len) return 0;
+	
+	EVP_CIPHER_CTX context;
+    EVP_CIPHER_CTX_init(&context);
+	
+	EVP_DecryptInit_ex(&context, EVP_bf_cbc(), NULL, NULL, NULL);
+	EVP_CIPHER_CTX_set_key_length(&context, (int)mSecretSize);
+	
+	unsigned char initial_vector[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	EVP_DecryptInit_ex(&context, NULL, NULL, mSecret, initial_vector);
+	
+    int blocksize = EVP_CIPHER_CTX_block_size(&context);
+    int keylen = EVP_CIPHER_CTX_key_length(&context);
+    int iv_length = EVP_CIPHER_CTX_iv_length(&context);
+    lldebugs << "LLBlowfishCipher blocksize " << blocksize
+			 << " keylen " << keylen
+			 << " iv_len " << iv_length
+			 << llendl;
+	
+	int out_len = 0;
+	int tmp_len = 0;
+	if (!EVP_DecryptUpdate(&context, dst, &out_len, src, src_len))
+	{
+		llwarns << "LLBlowfishCipher::decrypt EVP_DecryptUpdate failure" << llendl;
+		goto ERROR;
+	}
+	if (!EVP_DecryptFinal_ex(&context, dst + out_len, &tmp_len))
+	{
+		llwarns << "LLBlowfishCipher::decrypt EVP_DecryptFinal failure" << llendl;
+		goto ERROR;
+	}
+		
+	out_len += tmp_len;
+	
+	EVP_CIPHER_CTX_cleanup(&context);
+	return out_len;
+	
+ERROR:
+	EVP_CIPHER_CTX_cleanup(&context);
 	return 0;
+	// </FS:CR>
 }
 
 // virtual

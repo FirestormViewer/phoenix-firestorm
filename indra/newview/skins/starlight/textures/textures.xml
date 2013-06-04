@@ -766,6 +766,7 @@ with the same filename but different name
   <texture name="default_land_picture.j2c" />
   <texture name="default_profile_picture.j2c" />
   <texture name="locked_image.j2c" />
+  <texture name="materials_ui_x_24.png" />
 
   <texture name="Progress_1" file_name="icons/Progress_1.png" preload="true" />
   <texture name="Progress_2" file_name="icons/Progress_2.png" preload="true" />
@@ -893,6 +894,37 @@ with the same filename but different name
   <texture name="Icon_Legacy_Event_Mature" file_name="icon_legacy_event_mature.tga" preload="false" />
   <texture name="Icon_Legacy_Event_Adult" file_name="icon_legacy_event_adult.tga" preload="false" />
   <texture name="Icon_Lightshare" file_name="icons/Icon_Lightshare.png" preload="false" />
+  <texture name="ExternalBrowser_Over" file_name="icons/ExternalBrowser_Over.png" preload="false" />
+  <texture name="ExternalBrowser_Press" file_name="icons/ExternalBrowser_Press.png" preload="false" />
+  <texture name="radar" file_name="toolbar_icons/radar.png" preload="true" />
+
+<texture name="ProgressLarge_1" file_name="icons/ProgressLarge_1.png" preload="true" />
+<texture name="ProgressLarge_2" file_name="icons/ProgressLarge_2.png" preload="true" />
+<texture name="ProgressLarge_3" file_name="icons/ProgressLarge_3.png" preload="true" />
+<texture name="ProgressLarge_4" file_name="icons/ProgressLarge_4.png" preload="true" />
+<texture name="ProgressLarge_5" file_name="icons/ProgressLarge_5.png" preload="true" />
+<texture name="ProgressLarge_6" file_name="icons/ProgressLarge_6.png" preload="true" />
+<texture name="ProgressLarge_7" file_name="icons/ProgressLarge_7.png" preload="true" />
+<texture name="ProgressLarge_8" file_name="icons/ProgressLarge_8.png" preload="true" />
+<texture name="ProgressLarge_9" file_name="icons/ProgressLarge_9.png" preload="true" />
+<texture name="ProgressLarge_10" file_name="icons/ProgressLarge_10.png" preload="true" />
+<texture name="ProgressLarge_11" file_name="icons/ProgressLarge_11.png" preload="true" />
+<texture name="ProgressLarge_12" file_name="icons/ProgressLarge_12.png" preload="true" />
+	
+<texture name="Script_Save" file_name="icons/script_save.png" preload="false" />
+<texture name="Script_Copy" file_name="icons/script_copy.png" preload="false" />
+<texture name="Script_Cut" file_name="icons/script_cut.png" preload="false" />
+<texture name="Script_Paste" file_name="icons/script_paste.png" preload="false" />
+<texture name="Script_Disk_Save" file_name="icons/script_disk_save.png" preload="false" />
+<texture name="Script_Disk_Load" file_name="icons/script_disk_load.png" preload="false" />
+<texture name="Script_Undo" file_name="icons/script_undo.png" preload="false" />
+<texture name="Script_Redo" file_name="icons/script_redo.png" preload="false" />
+<texture name="Script_Search" file_name="icons/script_search.png" preload="false" />
+<texture name="Script_Editor" file_name="icons/script_editor.png" preload="false" />
+<texture name="Script_Config" file_name="icons/script_config.png" preload="false" />
+
+<texture name="Payment_Info_Filled" file_name="legacy/payment_info_filled.tga" preload="false" />
+<texture name="Payment_Info_Used" file_name="legacy/payment_info_used.tga" preload="false" />
   
   <!-- <exodus> inc in FS -->
   <texture name="Snapshot_Exodus_Flickr" file_name="snapshot_flickr.png" preload="false" />
@@ -971,5 +1003,50 @@ with the same filename but different name
  
   <texture name="Icon_Collapse_Foreground" file_name="windows/Icon_Collapse_Foreground.png" preload="true" />
   <texture name="Icon_Collapse_Press" file_name="windows/Icon_Collapse_Press.png" preload="true" />
+  <texture name="Arrow_Small_Down" file_name="widgets/Arrow_Small_Down.png" preload="true" />
+  <texture name="Sort" file_name="icons/Sort.png" preload="false" />
+  <texture name="Inv_Collapse" file_name="icons/Inv_Collapse.png" preload="false" />
+  
+<!-- Exodus Textures -->
+
+  <texture name="Corner_Checkbox_Off" file_name="widgets/Corner_Checkbox_Off.png" preload="true" />
+  <texture name="Corner_Checkbox_On" file_name="widgets/Corner_Checkbox_On.png" preload="true" />
+  <texture name="Corner_Checkbox_Disabled" file_name="widgets/Corner_Checkbox_Disabled.png" preload="true" />
+
+  <texture name="Command_Exodus_Advanced_Graphics_Icon"		file_name="exo_toolbar_icons/visuals.png"		preload="true" />
+  <texture name="Command_Exodus_Animation_Overrider_Icon"	file_name="exo_toolbar_icons/animations.png"	preload="true" />
+  <texture name="Command_Exodus_Communicate_Icon"			file_name="exo_toolbar_icons/communicate.png"	preload="true" />
+  <texture name="Command_Exodus_Debug_Settings_Icon"		file_name="exo_toolbar_icons/debug.png"			preload="true" />
+  <texture name="Command_Exodus_Preferences_Icon"			file_name="exo_toolbar_icons/exodus.png"		preload="true" />
+  <texture name="Command_Exodus_Ground_Sit_Icon"			file_name="exo_toolbar_icons/groundsit.png"		preload="true" />
+  <texture name="Command_Exodus_Minimal_Radar_Icon"			file_name="exo_toolbar_icons/miniradar.png"		preload="true" />
+  <texture name="Command_Exodus_Minimal_Statistics_Icon"	file_name="exo_toolbar_icons/ministats.png"		preload="true" />
+  <texture name="Command_Exodus_Quick_Preferences_Icon"		file_name="exo_toolbar_icons/quicktools.png"	preload="true" />
+  <texture name="Command_Exodus_Raid_Advisor_Icon"			file_name="exo_toolbar_icons/raidadvisor.png"	preload="true" />
+  <texture name="Command_Exodus_Redraw_Icon"				file_name="exo_toolbar_icons/redraw.png"		preload="true" />
+  <texture name="Command_Exodus_Set_Home_Icon"				file_name="exo_toolbar_icons/sethome.png"		preload="true" />
+  <texture name="Command_Exodus_Statistics_Icon"			file_name="exo_toolbar_icons/stats.png"			preload="true" />
+  <texture name="Command_Exodus_Teleport_Home_Icon"         file_name="exo_toolbar_icons/teleporthome.png"  preload="true" />
+  <texture name="Command_Exodus_Panic_Icon"                 file_name="exo_toolbar_icons/panic.png"         preload="true" />
+  <texture name="Command_Exodus_Web_Icon"                   file_name="exo_toolbar_icons/web.png"           preload="true" />
+  
+  <texture name="Caret_Top_Icon"           file_name="toolbar_icons/caret_top.png"   preload="true" scale.left="1" scale.top="15" scale.right="23" scale.bottom="1" />
+  <texture name="ComboButton_Up_On_Selected" file_name="widgets/ComboButton_Up_On_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
+
+  <texture name="Icon_Left_Align_Foreground" file_name="windows/Icon_Left_Align_Foreground.png" preload="true" />
+  <texture name="Icon_Left_Align_Press" file_name="windows/Icon_Left_Align_Press.png" preload="true" />
+  <texture name="Icon_Center_Align_Foreground" file_name="windows/Icon_Center_Align_Foreground.png" preload="true" />
+  <texture name="Icon_Center_Align_Press" file_name="windows/Icon_Center_Align_Press.png" preload="true" />
+  <texture name="Icon_Right_Align_Foreground" file_name="windows/Icon_Right_Align_Foreground.png" preload="true" />
+  <texture name="Icon_Right_Align_Press" file_name="windows/Icon_Right_Align_Press.png" preload="true" />
+  
+  <texture name="Inv_FolderClosed_White" file_name="icons/Inv_FolderClosed_White.png" preload="false" />
+  <texture name="Inv_FolderOpen_White" file_name="icons/Inv_FolderOpen_White.png" preload="false" />
+  <texture name="Inv_Evon" file_name="icons/Inv_Evon.png" preload="false" />
+  
+  <texture name="Snapshot_Exodus_Flickr_Feature" file_name="snapshot_flickr_feature.png" preload="false" />
+  
+  <texture name="Inventory_Icons" file_name="inventory_icons.png" preload="false" />
+  <texture name="Script_Themes" file_name="script_themes.png" preload="false" />
   
 </textures>

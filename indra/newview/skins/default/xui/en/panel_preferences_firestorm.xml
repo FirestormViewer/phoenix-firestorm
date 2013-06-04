@@ -65,22 +65,11 @@
          width="270"
          control_name="FSWorldMapDoubleclickTeleport"
          tool_tip="Enables teleporting via double click to a destination on the world map."/>
-        <check_box
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Disable Teleport Screens"
-         left="15"
-         name="tp_screen_toggle"
-         width="270"
-         control_name="FSDisableTeleportScreens"
-         tool_tip="Disables the black teleport screen during all teleports."/>
-        <check_box
+		<check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Disable Teleport Beacons"
-         left="15"
          name="tp_beam_toggle"
          width="270"
          control_name="FSDisableBeaconAfterTeleport"
@@ -89,8 +78,16 @@
          top_pad="5"
          follows="left|top"
          height="16"
+         label="Disable Teleport Screens"
+         name="tp_screen_toggle"
+         width="270"
+         control_name="FSDisableTeleportScreens"
+         tool_tip="Disables the black teleport screen during all teleports."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
          label="Disable Login Progress Screen"
-         left_delta="0"
          name="login_screen_toggle"
          width="270"
          control_name="FSDisableLoginScreens"
@@ -100,7 +97,6 @@
          follows="left|top"
          height="16"
          label="Disable Logout Progress Screen"
-         left_delta="0"
          name="logout_screen_toggle"
          width="270"
          control_name="FSDisableLogoutScreens"
@@ -110,18 +106,15 @@
          follows="left|top"
          height="16"
          label="Always rez objects under the land group if possible"
-         left="15"
          name="grouplandrez"
          width="270"
          control_name="RezUnderLandGroup"
          tool_tip="Attempts to rez objects under the land group if you're in the land group regardless of which current group tag you're wearing."/>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Sort contact lists by username even when display names are shown"
-         left="15"
          name="sortcontactsbyun"
          width="270"
          control_name="FSSortContactsByUserName"
@@ -129,84 +122,70 @@
             <check_box.commit_callback
              function="FS.ToggleSortContacts" />
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Render blocked avatars as particle cloud"
-         left="15"
          name="ShowMutedAvatarsAsCloud"
          width="270"
          control_name="ShowMutedAvatarsAsCloud"
          tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Hide empty system folders from inventory"
-         left="15"
          name="DebugHideEmptySystemFolders"
          width="270"
          control_name="DebugHideEmptySystemFolders"
          tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Show the Received Items folder in normal inventory"
-         left="15"
          name="FSShowInboxFolder"
          width="270"
          control_name="FSShowInboxFolder"
          tool_tip="If enabled, the inventory windows will also show the Received Items folder">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Allow separate search terms on each tab in inventory"
-         left="15"
          name="FSSplitInventorySearchOverTabs"
          width="270"
          control_name="FSSplitInventorySearchOverTabs"
          tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory.">
         </check_box>
-
         <check_box
          top_pad="5"
          follows="left|top"
          height="16"
          label="Deactivate tracking beacon when reaching the targeted avatar (&lt;= 3m)"
-         left="15"
          name="FSDisableAvatarTrackerAtCloseIn"
          width="270"
          control_name="FSDisableAvatarTrackerAtCloseIn"
          tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
-
 		<check_box
 		 control_name="EffectScriptChatParticles"
 		 height="16"
 		 label="Create particle effects when scripts communicate"
 		 layout="topleft"
-		 left="15"
 		 name="EffectScriptChatParticles"
 		 tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
 		 initial_value="true"
 		 top_pad="5"
 		 width="350" />
-
 		<check_box
 		 control_name="FSRenderFarClipStepping"
 		 height="16"
 		 label="Enable progressive draw distance stepping"
 		 layout="topleft"
-		 left="15"
 		 name="FSRenderFarClipStepping"
 		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
 		 initial_value="true"
@@ -229,7 +208,7 @@
 		 tool_tip="Interval in seconds between each draw distance increment"/>
 
         <check_box
-         top_pad="15"
+         top_pad="5"
          control_name="UseLSLBridge"
          follows="left|top"
          height="16"
@@ -295,7 +274,7 @@
          layout="topleft"
          control_name="FSRevokePerms"
          name="FSRevokePerms"
-         tool_tip="FSRevokePerms"
+         tool_tip=""
          width="331">
             <radio_item
              height="16"
@@ -332,7 +311,7 @@
         </radio_group>
 
         <text
-         left="5"
+         left="10"
          top_pad="5"
          follows="left|top"
          height="12"
@@ -864,6 +843,7 @@
       left="5"
       name="chat_cmd_toggle"
       width="270"
+      tool_tip=""
       control_name="FSCmdLine"/>.
     <!--calc-->
     <text
@@ -1075,6 +1055,7 @@
       left="5"
       name="chat_cmd_toggle2"
       width="270"
+      tool_tip=""
       control_name="FSCmdLine"/>
     <!--gtp-->
     <text
@@ -1546,7 +1527,8 @@
          mouse_opaque="true"
          name="material"
          width="87"
-         control_name="FSBuildPrefs_Material">
+         control_name="FSBuildPrefs_Material"
+         tool_tip="">
              <combo_item name="Stone" value="Stone" label="Stone"/>
              <combo_item name="Metal" value="Metal" label="Metal"/>
              <combo_item name="Glass" value="Glass" label="Glass"/>
@@ -1726,7 +1708,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          tool_tip=""
          v_pad="2"
          width="220">
-         Currently set to: ITEM
+         Currently set to: [ITEM]
         </text>
 <!-- end drag and drop UI -->
         <text
@@ -2025,352 +2007,6 @@ For now, just make the UI elements invisiable but still have the debug settings 
          <button.commit_callback
           function="NACL.SetPreprocInclude" />
         </button>
-
   </panel>
-
-
-    <!--Tags-->
-    <panel
-     top_pad="5"
-     bottom="-1"
-     left="1"
-     right="-1"
-     follows="all"
-     label="Tags"
-     name="TagTab">
-
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="15"
-       layout="topleft"
-       left="5"
-       name="SL-Tags-Notice"
-       top_pad="10"
-       width="512">
-        Note: Due to changes Linden Lab has made, viewer tags will not work in Second Life.
-      </text>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="whattagstoshow"
-         top_pad="20"
-         width="220">
-          What tags do you want to see?
-        </text>
-
-        <combo_box
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="ClientTagsVisibility">
-          <combo_item name="No Viewertags" value="0">No Viewertags</combo_item>
-          <combo_item name="TPVD Viewer" value="1">TPVD Viewers (using a list)</combo_item>
-          <combo_item name="All known Viewers" value="2">All known Viewers (using a list)</combo_item>
-          <combo_item name="All Viewers" value="3">All Viewers</combo_item>
-        </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="colorbasedonviewer"
-         top_pad="10"
-         width="220">
-          Tag Color based on Viewer?
-        </text>
-
-        <combo_box
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="ColorClienttags">
-          <combo_item name="Color not based on Viewer" value="0">Color not based on Viewer</combo_item>
-          <combo_item name="Single color per Viewer" value="1">Single color per Viewer</combo_item>
-          <combo_item name="Multiple colors per Viewer" value="2">Multiple colors per Viewer</combo_item>
-          <combo_item name="Userdefined color" value="3">Userdefined Color</combo_item>
-        </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="listtodisplayviewertags_txt"
-         top_pad="10"
-         width="220">
-          Use a list to display Viewertags?
-        </text>
-
-        <combo_box
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="UseLegacyClienttags">
-          <combo_item name="Don't use a list" value="0">Don't use a list</combo_item>
-          <combo_item name="Local Clienttags" value="1">Local Tag List</combo_item>
-          <combo_item name="Download Clienttags" value="2">Download Tag List at Viewer Start</combo_item>
-        </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="15"
-         layout="topleft"
-         left="20"
-         name="chooseyourcolor_txt"
-         top_pad="10"
-         width="220">
-          Choose your color:
-        </text>
-
-        <combo_box
-         height="23"
-         layout="topleft"
-         follows="left|top"
-         left_pad="2"
-         max_chars="135"
-         width="220"
-         allow_text_entry="false"
-         name="ClientTagColor">
-          <combo_item name="red" value="red" label="Red"/>
-          <combo_item name="blue" value="blue" label="Blue"/>
-          <combo_item name="yellow" value="yellow" label="Yellow"/>
-          <combo_item name="purple" value="purple" label="Purple"/>
-          <combo_item name="pink" value="pink" label="Pink"/>
-          <combo_item name="white" value="white" label="White"/>
-          <combo_item name="orange" value="orange" label="Orange"/>
-          <combo_item name="green" value="green" label="Green"/>
-        </combo_box>
-
-        <check_box
-         left="20"
-         top_pad="10"
-         follows="left|top"
-         height="16"
-         width="220"
-         label="Show your own color"
-         name="FSShowOwnTagColor_toggle"
-         tool_tip="When checked, your Tag will be shown in the given color." />
-
-        <check_box
-         top_pad="10"
-         follows="left|top"
-         height="16"
-         width="220"
-         label="Color usernames differently"
-         name="FSColorUsername_toggle"
-         tool_tip="Displays usernames in a different color (this overrides client tag colors for usernames)" />
-
-        <color_swatch
-         border.border_thickness="0"
-         label_height="0"
-         layout="topleft"
-         follows="left|top"
-         top_delta="0"
-         left_pad="2"
-         height="15"
-         width="15"
-         name="usernamecolorswatch"
-         tool_tip="Click to open color picker"/>
-
-        <check_box
-         left="20"
-         top_pad="10"
-         follows="left|top"
-         height="16"
-         width="250"
-         label="Color nametags based on distance"
-         name="FSTagShowDistanceColors"
-		 control_name="FSTagShowDistanceColors"
-         tool_tip="When checked, the tag color of other avatars show if they are in chat range, shout range or beyond shout range. This overrides viewer tag colors, but not friend or contact set colors." />
-		 
-        <check_box
-         left="260"
-         top_delta="0"
-         follows="left|top"
-         height="16"
-         width="200"
-         label="Show distance in tag"
-         name="FSTagShowDistance"
-		 control_name="FSTagShowDistance"
-         tool_tip="When checked, the tag of other avatars shows their distance, using the colors set below." />
-
-        <color_swatch
-            can_apply_immediately="true"
-            follows="left|top"
-            height="15"
-            label_height="0"
-            layout="topleft"
-            top_pad="5"
-            left="40"
-            name="NameTagWhisperDistanceColor_Color_Swatch"
-            tool_tip="Click to open color picker"
-            width="15">
-            <color_swatch.init_callback
-            function="Pref.getUIColor"
-            parameter="NameTagWhisperDistanceColor" />
-            <color_swatch.commit_callback
-            function="Pref.applyUIColor"
-            parameter="NameTagWhisperDistanceColor" />
-            <color_swatch.caption_text
-            height="0" />
-        </color_swatch>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left_pad="5"
-            mouse_opaque="false"
-            name="NameTagWhisperDistanceColor_Label"
-            top_delta="3"
-            width="200">
-            Whisper range
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="15"
-         label_height="0"
-         layout="topleft"
-         top_delta="-3"
-         left="250"
-         name="NameTagChatDistanceColor_Color_Swatch"
-         tool_tip="Click to open color picker"
-         width="15">
-            <color_swatch.init_callback
-             function="Pref.getUIColor"
-             parameter="NameTagChatDistanceColor" />
-            <color_swatch.commit_callback
-             function="Pref.applyUIColor"
-             parameter="NameTagChatDistanceColor" />
-            <color_swatch.caption_text
-             height="0" />
-        </color_swatch>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_pad="5"
-         mouse_opaque="false"
-         name="NameTagChatDistanceColor_Label"
-         top_delta="3"
-         width="200">
-            Chat range
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="15"
-         label_height="0"
-         layout="topleft"
-         left="40"
-         name="NameTagShoutDistanceColor_Color_Swatch"
-         tool_tip="Click to open color picker"
-         width="15"
-		 top_pad="10">
-            <color_swatch.init_callback
-             function="Pref.getUIColor"
-             parameter="NameTagShoutDistanceColor" />
-            <color_swatch.commit_callback
-             function="Pref.applyUIColor"
-             parameter="NameTagShoutDistanceColor" />
-            <color_swatch.caption_text
-             height="0" />
-        </color_swatch>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_pad="5"
-         mouse_opaque="false"
-         name="NameTagShoutDistanceColor_Label"
-         top_delta="3"
-         width="200">
-            Shout range
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="15"
-         label_height="0"
-         layout="topleft"
-         left="250"
-         name="NameTagBeyondShoutDistanceColor_Color_Swatch"
-         tool_tip="Click to open color picker"
-         width="15"
-		 top_delta="-3">
-            <color_swatch.init_callback
-             function="Pref.getUIColor"
-             parameter="NameTagBeyondShoutDistanceColor" />
-            <color_swatch.commit_callback
-             function="Pref.applyUIColor"
-             parameter="NameTagBeyondShoutDistanceColor" />
-            <color_swatch.caption_text
-             height="0" />
-        </color_swatch>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="10"
-         layout="topleft"
-         left_pad="5"
-         mouse_opaque="false"
-         name="NameTagBeyondShoutDistanceColor_Label"
-         top_delta="3"
-         width="200">
-            Beyond Shout range
-        </text>
-		 
-        <slider
-         left="20"
-         top_pad="15"
-         name="FSNameTagZOffsetCorrection"
-         control_name="FSNameTagZOffsetCorrection"
-         decimal_digits="0"
-         enabled="true"
-         follows="left|top"
-         height="18"
-         increment="1"
-         initial_value="0"
-         label="Z-offset correction:"
-         label_width="110"
-         max_val="5"
-         min_val="-5"
-         show_text="true"
-         width="250"
-         tool_tip="Changes the Z-offset for avatar name tags. Default 0" />
-
-    </panel>
 </tab_container>
 </panel>

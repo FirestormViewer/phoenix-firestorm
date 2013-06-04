@@ -5705,4 +5705,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="TotalScriptCountChangeDecrease">
 		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] verringert ([DIFFERENCE]).
 	</string>
+	<string name="preproc_toggle_warning">
+		Umschalten des Präprozessors wird erst vollständig wirksam, nachdem der Editor geschlossen und neu geöffnet wurde.
+	</string>
 </strings>

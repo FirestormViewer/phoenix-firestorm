@@ -11,6 +11,10 @@
  name="people_panel"
  top="0"
  width="333">
+	<string name="FlagsColumnType" value="text"/>
+	<string name="FlagsColumnValue_0" value=""/>
+	<string name="FlagsColumnValue_1" value="$"/>
+	<string name="FlagsColumnValue_2" value="$$"/>
 	<string
 	  name="high_server_load"
 	  value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
@@ -160,7 +164,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		         label="Name"
 		         name="name"
 				 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
-		         relative_width="0.37" />
+		         relative_width="0.34" />
                 <radar_list.columns
                  label=""
                  name="voice_level"
@@ -174,8 +178,8 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		        <radar_list.columns
 		         label=""
 		         name="flags"
-				 tool_tip="Has payment info on file"
-		         relative_width="0.03" />
+				 tool_tip="Payment info status"
+		         relative_width="0.05" />
 		        <radar_list.columns
 		         label="Age"
 		         name="age"
@@ -187,7 +191,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		        <radar_list.columns
 		         label="Range"
 		         name="range"
-		         relative_width="0.15" />
+		         relative_width="0.16" />
 		        <radar_list.columns
 		         label="av_id"
 		         name="uuid"

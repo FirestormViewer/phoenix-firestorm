@@ -53,7 +53,7 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 						<radar_list.columns label="Name" tool_tip="[TOTAL] Avatare, [IN_REGION] in derselben Region, [IN_CHAT_RANGE] in Chat-Reichweite" name="name"/>
 						<radar_list.columns label="" tool_tip="Spricht via Voice" name="voice_level"/>
 						<radar_list.columns label="" tool_tip="Ist in derselben Region" name="in_region"/>
-						<radar_list.columns label="" tool_tip="Hat Zahlungsinformationen hinterlegt" name="flags"/>
+						<radar_list.columns label="" tool_tip="Status Zahlungsinformationen" name="flags"/>
 						<radar_list.columns label="Alt." name="age"/>
 						<radar_list.columns label="Zeit" name="seen"/>
 						<radar_list.columns label="Dist." name="range"/>

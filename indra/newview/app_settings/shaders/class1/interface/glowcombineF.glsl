@@ -46,8 +46,11 @@ float saturate(float val)
 void main() 
 {
 	vec4 diff = texture2DRect(screenMap, vary_texcoord1.xy) + texture2D(glowMap, vary_texcoord0.xy);
-	vec2 tc = vary_texcoord0.xy - 0.5f;
-	float vignette = 1 - dot(tc, tc);
-	diff.rgb *= saturate(pow(mix(1, vignette * vignette * vignette * vignette * exo_vignette.z, saturate(exo_vignette.x)), exo_vignette.y));
+	if (exo_vignette.x > 0)
+	{
+		vec2 tc = vary_texcoord0.xy - 0.5f;
+		float vignette = 1 - dot(tc, tc);
+		diff.rgb *= saturate(pow(mix(1, vignette * vignette * vignette * vignette * exo_vignette.z, saturate(exo_vignette.x)), exo_vignette.y));
+	}
 	frag_color = diff;
 }

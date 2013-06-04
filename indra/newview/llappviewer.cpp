@@ -1504,6 +1504,7 @@ bool LLAppViewer::mainLoop()
 					&& !gFocusMgr.focusLocked())
 				{
 					joystick->scanJoystick();
+					gKeyboard->scanKeyboard();
 					// <FS:Ansariel> Chalice Yao's crouch toggle
 					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
 					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");
@@ -1512,7 +1513,6 @@ bool LLAppViewer::mainLoop()
 						gAgent.moveUp(-1);
 					}
 					// </FS:Ansariel>
-					gKeyboard->scanKeyboard();
 				}
 
 				// Update state based on messages, user input, object idle.
@@ -1891,8 +1891,13 @@ bool LLAppViewer::cleanup()
 	// shut down mesh streamer
 	gMeshRepo.shutdown();
 
+	// <FS:ND> FIRE-8385 Crash on exit in Havok. It is hard to say why it happens, as we only have the binary Havok blob. This is a hack around it.
+	// Due to the fact the process is going to die anyway, the OS will clean up any reources left by not calling quitSystem.
+	// The OpenSim version does not use Havok, it is okay to call shutdown then.
+#ifdef OPENSIM
 	// shut down Havok
 	LLPhysicsExtensions::quitSystem();
+#endif // </FS:ND>
 
 	// Must clean up texture references before viewer window is destroyed.
 	if(LLHUDManager::instanceExists())
@@ -3614,7 +3619,15 @@ void LLAppViewer::writeSystemInfo()
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
 
-//	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
+
+	//	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
 
 	gDebugInfo["CPUInfo"]["CPUString"] = gSysCPU.getCPUString();
 	gDebugInfo["CPUInfo"]["CPUFamily"] = gSysCPU.getFamily();
@@ -3722,6 +3735,14 @@ void LLAppViewer::handleViewerCrash()
 	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
+
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
 
 /*
 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
@@ -5658,6 +5679,14 @@ void LLAppViewer::handleLoginComplete()
 	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
+
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
 
 /*
 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
