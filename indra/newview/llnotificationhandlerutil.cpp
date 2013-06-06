@@ -506,8 +506,26 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 	LLUUID sender_id;
 	gCacheName->getUUID(sender_name, sender_id);
 
+	// <FS:KC> Better group notices to IM log
+	if (gSavedSettings.getBOOL("FSBetterGroupNoticesToIMLog"))
+	{
+		std::string msg = llformat(
+			"%s %s: %s\n%s\n%s",
+			LLTrans::getString("GroupNotifyGroupNotice").c_str(),
+			LLTrans::getString("GroupNotifySentBy").c_str(),
+			sender_name.c_str(),
+			payload["subject"].asString().c_str(),
+			payload["message"].asString().c_str()
+		);
+		
+		logToIM(IM_SESSION_GROUP_START, group_name, sender_name, msg, payload["group_id"], sender_id);
+	}
+	else
+	{
+	// </FS:KC> Better group notices to IM log
 	logToIM(IM_SESSION_GROUP_START, group_name, sender_name, payload["message"],
 			payload["group_id"], sender_id);
+	}// <FS:KC> Better group notices to IM log
 }
 
 // static
