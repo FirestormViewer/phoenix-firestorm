@@ -35,6 +35,12 @@
 #include "llpanelsnapshot.h"
 #include "llviewercontrol.h" // gSavedSettings
 
+// <FS:CR> FIRE-10537 - Temp texture uploads aren't functional on SSB regions
+#include "llagent.h"
+#include "llviewerregion.h"
+#include "llcheckboxctrl.h"
+// </FS:CR>
+
 /**
  * The panel provides UI for saving snapshot as an inventory texture.
  */
@@ -86,6 +92,14 @@ BOOL LLPanelSnapshotInventory::postBuild()
 void LLPanelSnapshotInventory::onOpen(const LLSD& key)
 {
 	getChild<LLUICtrl>("hint_lbl")->setTextArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
+	// <FS:CR> FIRE-10537 - Temp texture uploads aren't functional on SSB regions
+	if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0
+		|| gAgent.getRegion()->getCentralBakeVersion() > 0)
+	{
+		gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+		getChild<LLCheckBoxCtrl>("inventory_temp_upload")->setVisible(FALSE);
+	}
+	// </FS:CR>
 	LLPanelSnapshot::onOpen(key);
 }
 
