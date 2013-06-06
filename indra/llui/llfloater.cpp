@@ -2357,6 +2357,8 @@ LLFloaterView::LLFloaterView (const Params& p)
 	mFocusCycleMode(FALSE),
 	mMinimizePositionVOffset(0),
 	mSnapOffsetBottom(0),
+	mSnapOffsetChatBar(0),
+	mSnapOffsetLeft(0),
 	mSnapOffsetRight(0)
 {
 	mSnapView = getHandle();
@@ -3012,11 +3014,23 @@ LLRect LLFloaterView::getSnapRect() const
 {
 	LLRect snap_rect = getLocalRect();
 
+	// <FS:KC> Fix for bad edge snapping
+	static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+	if (legacy_snap)
+	{
+		snap_rect.mBottom += (mSnapOffsetBottom + mSnapOffsetChatBar);
+		snap_rect.mLeft += mSnapOffsetLeft;
+		snap_rect.mRight -= mSnapOffsetRight;
+	}
+	else
+	{
+	// <\FS:KC> Fix for bad edge snapping
 	LLView* snap_view = mSnapView.get();
 	if (snap_view)
 	{
 		snap_view->localRectToOtherView(snap_view->getLocalRect(), &snap_rect, this);
 	}
+	}// <FS:KC> Fix for bad edge snapping
 
 	return snap_rect;
 }

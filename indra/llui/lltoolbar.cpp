@@ -919,6 +919,21 @@ void LLToolBar::updateLayoutAsNeeded()
 		mEndCenteringPanel->setVisible(FALSE);
 	}
 	// <FS:Zi>
+	
+	// <FS:KC> Fix for bad edge snapping
+	if (mSideType == SIDE_BOTTOM)
+	{
+		gFloaterView->setSnapOffsetBottom(mButtons.empty() ? 0 : getRect().getHeight());
+	}
+	else if (mSideType == SIDE_LEFT)
+	{
+		gFloaterView->setSnapOffsetLeft(mButtons.empty() ? 0 : getRect().getWidth());
+	}
+	else if (mSideType == SIDE_RIGHT)
+	{
+		gFloaterView->setSnapOffsetRight(mButtons.empty() ? 0 : getRect().getWidth());
+	}
+	// </FS:KC> Fix for bad edge snapping
 
 	if (!mButtons.empty())
 	{

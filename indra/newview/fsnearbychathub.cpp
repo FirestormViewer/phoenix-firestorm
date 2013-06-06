@@ -64,6 +64,11 @@
 // </FS:Zi>
 #include "fscommon.h"
 
+// <FS:KC> Fix for bad edge snapping
+// *HACK* chat bar cannot return its correct height for some reason
+static const S32 MAGIC_CHAT_BAR_PAD = 5;
+// </FS:KC> Fix for bad edge snapping
+
 //<FS:TS> FIRE-787: break up too long chat lines into multiple messages
 void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
 void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
@@ -504,6 +509,16 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 	mDefaultChatBar->setVisible(visible);
 	mDefaultChatBar->setFocus(visible);
 
+	// <FS:KC> Fix for bad edge snapping
+	if(visible)
+	{
+		gFloaterView->setSnapOffsetChatBar(mDefaultChatBar->getRect().getHeight() + MAGIC_CHAT_BAR_PAD);
+	}
+	else
+	{
+		gFloaterView->setSnapOffsetChatBar(0);
+	}
+
 	if(!text)
 		return;
 
@@ -512,6 +527,7 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 		mDefaultChatBar->setText(LLStringExplicit(text));
 		mDefaultChatBar->setCursorToEnd();
 	}
+	// </FS:KC> Fix for bad edge snapping
 }
 
 // We want to know which nearby chat editor (if any) currently has focus
