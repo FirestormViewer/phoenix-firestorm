@@ -1820,11 +1820,7 @@ void LLAvatarActions::onDerenderAvatarNameLookup(const LLUUID& agent_id, const L
 {
 	if (permanent)
 	{
-		FSWSAssetBlacklist* instance = FSWSAssetBlacklist::getInstance();
-		if (!instance->isBlacklisted(agent_id, LLAssetType::AT_OBJECT))
-		{
-			instance->addNewItemToBlacklist(agent_id, av_name.getLegacyName(), "", LLAssetType::AT_OBJECT);
-		}
+		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(agent_id, av_name.getLegacyName(), "", LLAssetType::AT_OBJECT);
 	}
 
 	LLViewerObject* av_obj = gObjectList.findObject(agent_id);
