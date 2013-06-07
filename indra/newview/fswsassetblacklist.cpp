@@ -85,6 +85,11 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 
 void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save)
 {
+	if (isBlacklisted(id, type))
+	{
+		return;
+	}
+
 	LLDate curdate = LLDate(time_corrected());
 	std::string input_date = curdate.asString();
 	input_date.replace(input_date.find("T"), 1, " ");
