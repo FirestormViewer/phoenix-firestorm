@@ -6,6 +6,7 @@
  layout="topleft"
  can_close="true"
  can_resize="true"
+ save_rect="true"
  name="avatarinfo"
  help_topic="panel_my_profile_tab"
  title="PROFILE" >
