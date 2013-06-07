@@ -180,6 +180,9 @@ public:
 
 	bool updateBufferForData(LLAudioData *adp, const LLUUID &audio_uuid = LLUUID::null);
 
+ 
+	// <FS:Ansariel> Asset blacklisting
+	void removeAudioData(const LLUUID& audio_uuid);
 
 	// Asset callback when we're retrieved a sound from the asset server.
 	void startNextTransfer();
