@@ -1927,3 +1927,63 @@ bool LLAudioEngine::isCorruptSound( LLUUID const &aId ) const
 	return itr->second == ND_MAX_SOUNDRETRIES;
 }
 // </FS:ND>
+
+// <FS:Ansariel> Asset blacklisting
+void LLAudioEngine::removeAudioData(const LLUUID& audio_uuid)
+{
+	if (audio_uuid.isNull())
+	{
+		return;
+	}
+
+	data_map::iterator iter = mAllData.find(audio_uuid);
+	if (iter != mAllData.end())
+	{
+		uuid_vec_t delete_list;
+		source_map::iterator iter2;
+		for (iter2 = mAllSources.begin(); iter2 != mAllSources.end(); ++iter2)
+		{
+			LLAudioSource* sourcep = iter2->second;
+			if (sourcep && sourcep->getCurrentData() && sourcep->getCurrentData()->getID() == audio_uuid)
+			{
+				delete_list.push_back(iter2->first);
+			}
+		}
+
+		uuid_vec_t::iterator delete_list_end = delete_list.end();
+		for (uuid_vec_t::iterator del_it = delete_list.begin(); del_it != delete_list_end; ++del_it)
+		{
+			LLUUID source_id = *del_it;
+			LLAudioSource* sourcep = mAllSources[source_id];
+			LLAudioChannel* chan = sourcep->getChannel();
+			delete sourcep;
+			mAllSources.erase(source_id);
+			if (chan)
+			{
+				chan->cleanup();
+			}
+		}
+		
+		LLAudioData* data = iter->second;
+		if (data)
+		{
+			LLAudioBuffer* buf = data->getBuffer();
+			if (buf)
+			{
+				S32 i;
+				for (i = 0; i < MAX_BUFFERS; ++i)
+				{
+					if (mBuffers[i] == buf)
+					{
+						mBuffers[i] = NULL;
+					}
+				}
+				delete buf;
+			}
+			delete data;
+		}
+
+		mAllData.erase(audio_uuid);
+	}
+}
+// </FS:Ansariel>
