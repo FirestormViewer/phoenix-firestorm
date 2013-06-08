@@ -750,7 +750,7 @@ class WindowsManifest(ViewerManifest):
             os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(), sName )
         
         # OLD METHOD, Still used for windows-based debugging
-        symbolZip = zipfile.ZipFile("Phoenix-%s_%s_SymbolsWin.zip" % (substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
+        symbolZip = zipfile.ZipFile("%s/phoenix-%s_%s_pdbsymbols-windows.zip" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
         symbolZip.write("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
         symbolZip.write("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
         # symbolZip.write("../sharedlibs/%s/llcommon.dll" % self.args['configuration'].lower(),"llcommon.dll")
