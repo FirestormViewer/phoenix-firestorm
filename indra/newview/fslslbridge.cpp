@@ -64,10 +64,10 @@
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
 #define FS_BRIDGE_CONTAINER_FOLDER "Landscaping"
 #define FS_BRIDGE_MAJOR_VERSION 2
-#define FS_BRIDGE_MINOR_VERSION 3
+#define FS_BRIDGE_MINOR_VERSION 4
 #define FS_MAX_MINOR_VERSION 99
 
-//current script version is 2.3
+//current script version is 2.4
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //

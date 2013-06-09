@@ -1,4 +1,4 @@
-//http bridge script v.2.3
+//http bridge script v.2.4
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -19,7 +19,7 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      //control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // filled in dynamically
-    string  bridgeVersion = "2.3";    //this should match fslslbridge.cpp
+    string  bridgeVersion = "2.4";    //this should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
     integer debug = FALSE;
@@ -214,6 +214,12 @@
             string params = "<" + llList2String(commandList,1) + ">";
             mttVector=(vector)params;
             //debugOutput("Parsing vector: " + (string)mttVector);
+            vector relpos = mttVector - llGetPos();
+            float groundLevel = llGround(relpos);
+            if (mttVector.z < groundLevel)  // Trying to go underground? I think not!
+            {
+                mttVector.z = groundLevel + 1;
+            } 
             startTPTimer = llGetUnixTime();
               
               // tp commands immediately configure a TP timer consumer
