@@ -673,6 +673,10 @@ void LLFloaterTools::refresh()
 	{
 		object_weights_floater->refresh();
 	}
+	
+	// <FS:CR> Only enable Copy Keys when we have something selected
+	getChild<LLButton>("btnCopyKeys")->setEnabled(have_selection);
+	// </FS:CR>
 }
 
 void LLFloaterTools::draw()
@@ -2171,8 +2175,14 @@ void LLFloaterTools::onClickBtnCopyKeys()
 {
 	std::string separator = gSavedSettings.getString("FSCopyObjKeySeparator");
 	std::string stringKeys;
+	MASK mask = gKeyboard->currentMask(FALSE);
 	LLFloaterToolsCopyKeysFunctor copy_keys(stringKeys, separator);
-	bool copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
+	bool copied = false;
+	if (mask == MASK_SHIFT)
+		copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
+	else
+		copied = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&copy_keys);
+	
 	if (copied)
 	{
 		LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringKeys));

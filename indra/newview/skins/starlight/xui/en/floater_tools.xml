@@ -1218,8 +1218,7 @@ even though the user gets a free copy.
 	 height="20"
 	 label="Copy Keys"
 	 name="btnCopyKeys"
-	 tool_tip="Copies the selected objects' keys to the clipboard."
-	 width="80">
+	 tool_tip="Copies the selected object's root key to the clipboard. Shift-click copies all of the selected objects' keys" width="80">
 		<button.commit_callback
 		function="BuildTool.CopyKeys"/>
 	</button>
