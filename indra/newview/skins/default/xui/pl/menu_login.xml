@@ -6,6 +6,7 @@
 	</menu>
 	<menu label="Pomoc" name="Help">
 		<menu_item_call label="Wiki Firestorma" name="Firestorm Wiki"/>
+		<menu_item_call label="Rozwiązywanie problemów" name="Troubleshooting"/>
 		<menu_item_call label="Informacje o [APP_NAME]" name="About Second Life"/>
 		<menu_item_call label="Pomoc dla [CURRENT_GRID]" name="current_grid_help_login"/>
 		<menu_item_call label="Informacje o [CURRENT_GRID]" name="current_grid_about_login"/>
