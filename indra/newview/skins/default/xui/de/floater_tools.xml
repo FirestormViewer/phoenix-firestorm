@@ -237,7 +237,7 @@
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
 			<button label="Anwenden" name="button mark for sale" tool_tip="Objekt(e) zum Verkauf anbieten/aktualisieren."/>
-			<button label="UUIDs kopieren" name="btnCopyKeys" tool_tip="Kopiert die Schüssel der ausgewählten Objekte in die Zwischenablage." width="110"/>
+			<button label="UUIDs kopieren" name="btnCopyKeys" tool_tip="Kopiert den Schüssel das Wurzelprims in die Zwischenablage. Klicken bei gedrückter Umschalttaste kopiert alle Schüssel des Objekts." width="110"/>
 			<check_box label="In Suche anzeigen" name="search_check" tool_tip="Dieses Objekt in Suchergebnissen anzeigen"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
