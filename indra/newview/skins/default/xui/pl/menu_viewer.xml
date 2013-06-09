@@ -208,6 +208,7 @@
 	<menu label="Pomoc" name="Help">
 		<menu_item_check label="Włącz podpowiedzi" name="Enable Hints"/>
 		<menu_item_call label="Wiki Firestorma" name="Firestorm Wiki"/>
+		<menu_item_call label="Rozwiązywanie problemów" name="Troubleshooting"/>
 		<menu_item_call label="Dołącz do Grupy Wsparcia Firestorma" name="firestorm_support_group"/>
 		<menu_item_call label="Na temat [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Sprawdź stan świata (Siatki)" name="Grid Status"/>
