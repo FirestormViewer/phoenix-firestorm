@@ -2180,6 +2180,8 @@ void LLFloaterTools::onClickBtnCopyKeys()
 	bool copied = false;
 	if (mask == MASK_SHIFT)
 		copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
+	else if (mCheckSelectIndividual && mCheckSelectIndividual->get())
+		copied = LLSelectMgr::getInstance()->getSelection()->applyToObjects(&copy_keys);
 	else
 		copied = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&copy_keys);
 	
