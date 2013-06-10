@@ -58,7 +58,7 @@ const std::string VERSION_ID = llformat("%s %d.%d.%d (%d)", LL_CHANNEL, LL_VERSI
 const std::string FSDATA_URL = "http://phoenixviewer.com/app/fsdatatest/data.xml";
 const std::string AGENTS_URL = "http://phoenixviewer.com/app/fsdatatest/agents.xml";
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
-const std::string ASSETS_URL = "http://phoenixviewer.com/app/fsdata/assets.xml";
+const std::string ASSETS_URL = "http://phoenixviewer.com/app/fsdatatest/assets.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 const F32 HTTP_TIMEOUT = 30.f;
 
