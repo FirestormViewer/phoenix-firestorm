@@ -1,69 +1,66 @@
-/* Copyright (c) 2010
+/**
+ * @file fsdata.cpp
+ * @brief Downloadable dymatic xml data for viewer features.
  *
- * Modular Systems All rights reserved.
+ * $LicenseInfo:firstyear=2013&license=viewerlgpl$
+ * Phoenix Firestorm Viewer Source Code
+ * Copyright (C) 2011-2013 Techwolf Lupindo
+ * Portions Copyright (C)
+ *   2011 Wolfspirit Magic
+ *   2012 Ansariel Hiller @ Second Life
  *
- * Redistribution and use in source and binary forms, with or
- * without modification, are permitted provided that the following
- * conditions are met:
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * version 2.1 of the License only.
  *
- *   1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
- *   2. Redistributions in binary form must reproduce the above
- *      copyright notice, this list of conditions and the following
- *      disclaimer in the documentation and/or other materials provided
- *      with the distribution.
- *   3. Neither the name Modular Systems nor the names of its contributors
- *      may be used to endorse or promote products derived from this
- *      software without specific prior written permission.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * THIS SOFTWARE IS PROVIDED BY MODULAR SYSTEMS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL MODULAR SYSTEMS OR CONTRIBUTORS
- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- * THE POSSIBILITY OF SUCH DAMAGE.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * http://www.firestormviewer.org
+ * $/LicenseInfo$
  */
 
 #include "llviewerprecompiledheaders.h"
 
 #include "fsdata.h"
+#include "fscommon.h"
+#include "fswsassetblacklist.h"
 
-#include "llbufferstream.h"
+/* boost: will not compile unless equivalent is undef'd, beware. */
+#include "fix_macros.h"
+#include <boost/filesystem.hpp>
 
 #include "llappviewer.h"
-
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-#include <boost/lexical_cast.hpp>
-
-#include "llsdserialize.h"
-
-#include "llversionviewer.h"
-#include "llprimitive.h"
 #include "llagent.h"
-#include "llnotifications.h"
-#include "llimview.h"
-#include "llfloaterabout.h"
-#include "llviewercontrol.h"
-//#include "floaterblacklist.h"
-#include "llsys.h"
-#include "llviewermedia.h"
 #include "llagentui.h"
+#include "llfloaterabout.h"
+#include "llimview.h"
+#include "llmutelist.h"
+#include "llnotifications.h"
+#include "llprimitive.h"
+#include "llsdserialize.h"
 #include "llversioninfo.h"
-#include "lltrans.h"
+#include "llversionviewer.h"
+#include "llviewercontrol.h"
+#include "llviewermedia.h"
+#include "llviewernetwork.h"
+#include "llxorcipher.h"
 
-static const std::string versionid = llformat("%s %d.%d.%d (%d)", LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, LL_VERSION_PATCH, LL_VERSION_BUILD);
-static const std::string fsdata_url = "http://phoenixviewer.com/app/fsdata/data.xml";
-static const std::string releases_url = "http://phoenixviewer.com/app/fsdata/releases.xml";
-static const std::string agents_url = "http://phoenixviewer.com/app/fsdata/agents.xml";
-static const std::string legacy_client_list = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
-
-//static const std::string blacklist_url = "http://phoenixviewer.com/app/fsdata/blacklist.xml";
+const std::string VERSION_ID = llformat("%s %d.%d.%d (%d)", LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, LL_VERSION_PATCH, LL_VERSION_BUILD);
+const std::string FSDATA_URL = "http://phoenixviewer.com/app/fsdatatest/data.xml";
+const std::string AGENTS_URL = "http://phoenixviewer.com/app/fsdatatest/agents.xml";
+const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
+const std::string ASSETS_URL = "http://phoenixviewer.com/app/fsdata/assets.xml";
+const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
+const F32 HTTP_TIMEOUT = 30.f;
 
 #if LL_DARWIN
 size_t strnlen(const char *s, size_t n)
@@ -79,155 +76,286 @@ class FSDownloader : public LLHTTPClient::Responder
 public:
 	FSDownloader(std::string url) :
 		mURL(url)
+	{}
+
+	void result(const LLSD& content)
 	{
+		FSData::getInstance()->processResponder(content, mURL, true, mLastModified);
 	}
 	
-	virtual void completedRaw(U32 status,
-				const std::string& reason,
-				const LLChannelDescriptors& channels,
-				const LLIOPipe::buffer_ptr_t& buffer)
+	void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
 	{
-		if (!isGoodStatus(status))
-		{
-			llinfos << mURL << " [" << status << "]: " << reason << llendl;
-			if (mURL == legacy_client_list)
-			{
-				LL_WARNS("ClientTags") << "client_list_v2.xml download failed with status of " << status << LL_ENDL;
-				// Wolfspirit: If something failes, try to use the local file
-				FSData::getInstance()->updateClientTagsLocal();
-			}
-			return;
-		}
-	  
-		LLSD content;
-		LLBufferStream istr(channels, buffer.get());
-		if (!LLSDSerialize::fromXML(content, istr))
-		{
-			llinfos << "Failed to deserialize LLSD. " << mURL << " [" << status << "]: " << reason << llendl;
-			if (mURL == legacy_client_list)
-			{
-				LL_WARNS("ClientTags") << "Downloaded client_list_v2.xml decode failed." << LL_ENDL;
-				// Wolfspirit: If something failes, try to use the local file
-				FSData::getInstance()->updateClientTagsLocal();
-			}
-			return;
-		}
-		
-		FSData::getInstance()->processResponder(content, mURL);
+		FSData::getInstance()->processResponder(content, mURL, false, mLastModified);
 	}
 	
+	void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	{
+		LL_DEBUGS("fsdata") << "Status: [" << status << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
+		if (content.has("last-modified"))
+		{
+			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
+		}
+		LL_DEBUGS("fsdata") << "Converted to: " << mLastModified.asString() << " and RFC1123: " << mLastModified.asRFC1123() << LL_ENDL;
+	}
+
 private:
 	std::string mURL;
+	LLDate mLastModified;
 };
 
-void FSData::processResponder(const LLSD& content, const std::string& url)
+
+FSData::FSData() :
+	mLegacySearch(true),
+	mFSDataDone(false),
+	mAgentsDone(false)
 {
-	if (url == fsdata_url)
+	mHeaders.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
+	mHeaders.insert("viewer-version", VERSION_ID);
+}
+
+void FSData::processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified)
+{
+	if (url == FSDATA_URL)
 	{
-		processData(content);
+		if (!save_to_file)
+		{
+			LLSD data;
+			LL_DEBUGS("fsdata") << "Loading fsdata.xml from  " << mFSdataFilename << LL_ENDL;
+			if (loadFromFile(data, mFSdataFilename))
+			{
+				processData(data);
+			}
+			else
+			{
+				LL_WARNS("fsdata") << "Unable to download or load fsdata.xml" << LL_ENDL;
+			}
+		}
+		else
+		{
+			processData(content);
+			saveLLSD(content , mFSdataFilename, last_modified);
+		}
+		mFSDataDone = true;
 	}
-	else if (url == releases_url)
+	else if (url == mAssetsURL)
 	{
-		processReleases(content);
+		if (!save_to_file)
+		{
+			LLSD data;
+			LL_DEBUGS("fsdata") << "Loading assets.xml from  " << mAssestsFilename << LL_ENDL;
+			if (loadFromFile(data, mAssestsFilename))
+			{
+				processAssets(data);
+			}
+			else
+			{
+				LL_WARNS("fsdata") << "Unable to download or load assets.xml" << LL_ENDL;
+			}
+		}
+		else
+		{
+			processAssets(content);
+			saveLLSD(content , mAssestsFilename, last_modified);
+		}
 	}
-	else if (url == agents_url)
+	else if (url == mAgentsURL)
 	{
-		processAgents(content);
+		if (!save_to_file)
+		{
+			LLSD data;
+			LL_DEBUGS("fsdata") << "Loading agents.xml from  " << mAgentsFilename << LL_ENDL;
+			if (loadFromFile(data, mAgentsFilename))
+			{
+				processAgents(data);
+			}
+			else
+			{
+				LL_WARNS("fsdata") << "Unable to download or load agents.xml" << LL_ENDL;
+			}
+		}
+		else
+		{
+			processAgents(content);
+			saveLLSD(content , mAgentsFilename, last_modified);
+		}
+		mAgentsDone = true;
+		addAgents();
 	}
-	else if (url == legacy_client_list)
+	else if (url == LEGACY_CLIENT_LIST_URL)
 	{
-		processClientTags(content);
+		if (!save_to_file)
+		{
+			updateClientTagsLocal();
+		}
+		else
+		{
+			processClientTags(content);
+			saveLLSD(content , mClientTagsFilename, last_modified);
+		}
 	}
 }
 
+bool FSData::loadFromFile(LLSD& data, std::string filename)
+{
+	llifstream file(filename);
+	if(file.is_open())
+	{
+		if(LLSDSerialize::fromXML(data, file) != LLSDParser::PARSE_FAILURE)
+		{
+			file.close();
+			return true;
+		}
+		else
+		{
+			// error reading file
+			file.close();
+			return false;
+		}
+	}
+	else
+	{
+		// file does not exist or other error
+		return false;
+	}
+}
+
+// call this just before the login screen and after the LLProxy has been setup.
 void FSData::startDownload()
 {
-	LLSD headers;
-	headers.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
-	headers.insert("viewer-version", versionid);
-	LL_INFOS("Data") << "Downloading data.xml" << LL_ENDL;
-	LLHTTPClient::get(fsdata_url,new FSDownloader(fsdata_url),headers);
+	mFSdataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata.xml");
+	mClientTagsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
+
+	// Stat the file to see if it exists and when it was last modified.
+	time_t last_modified = 0;
+	llstat stat_data;
+	if(!LLFile::stat(mFSdataFilename, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	LL_INFOS("fsdata") << "Downloading data.xml from " << FSDATA_URL << " with last modifed of " << last_modified << LL_ENDL;
+	LLHTTPClient::getIfModified(FSDATA_URL, new FSDownloader(FSDATA_URL), last_modified, mHeaders, HTTP_TIMEOUT);
 }
-	
-void FSData::processData(const LLSD& fsData)
+
+// call this _after_ the login screen to pick up grid data.
+void FSData::downloadAgents()
 {
-	// Set Message Of The Day if present
-	if(fsData.has("MOTD"))
-	{
-		gAgent.mMOTD.assign(fsData["MOTD"]);
-	}
+#ifdef OPENSIM
+	std::string filename_prefix = LLGridManager::getInstance()->getGridId();
+#else
+	std::string filename_prefix = "second_life";
+#endif
 
-	bool local_file = false;
-	if (!(fsData["Releases"].asInteger() == 0))
+#ifdef OPENSIM
+	if (!LLGridManager::getInstance()->isInSecondLife())
 	{
-		const std::string releases_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml");
-		llifstream releases_file(releases_filename);
-		LLSD releases;
-		if(releases_file.is_open())
+		// TODO: Let the opensim devs and opensim group figure out the best way
+		// to add "agents.xml" URL to the gridinfo protucule.
+		//getAgentsURL();
+		
+		// there is no need for assets.xml URL for opensim grids as the grid owner can just delete
+		// the bad asset itself.
+	}
+	else
+#endif
+	{
+		mAgentsURL = AGENTS_URL;
+		mAssetsURL = ASSETS_URL;
+	}
+	
+	if (mAgentsURL.empty())
+	{
+		// we can saftly presume if agents.xml URL is not present, assets.xml is not going to be present also
+		return;
+	}
+	
+	mAgentsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_agents.xml");
+	time_t last_modified = 0;
+	llstat stat_data;
+	if(!LLFile::stat(mAgentsFilename, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	LL_INFOS("fsdata") << "Downloading agents.xml from " << mAgentsURL << " with last modifed of " << last_modified << LL_ENDL;
+	LLHTTPClient::getIfModified(mAgentsURL, new FSDownloader(mAgentsURL), last_modified, mHeaders, HTTP_TIMEOUT);
+	
+	if (mAssetsURL.empty())
+	{
+		return;
+	}
+	
+	mAssestsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, filename_prefix + "_assets.xml");
+	last_modified = 0;
+	if(!LLFile::stat(mAssestsFilename, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	LL_INFOS("fsdata") << "Downloading assets.xml from " << mAssetsURL << " with last modifed of " << last_modified << LL_ENDL;
+	LLHTTPClient::getIfModified(mAssetsURL, new FSDownloader(mAssetsURL), last_modified, mHeaders, HTTP_TIMEOUT);
+}
+
+void FSData::processData(const LLSD& fs_data)
+{
+	// Set Message Of The Day if present 
+	if(fs_data.has("MOTD"))
+	{
+		gAgent.mMOTD.assign(fs_data["MOTD"]);
+	}
+	else if(fs_data.has("RandomMOTD")) // only used if MOTD is not presence in the xml file.
+	{
+		const LLSD& motd = fs_data["RandomMOTD"];
+		LLSD::array_const_iterator iter = motd.beginArray();
+		gAgent.mMOTD.assign((iter + (ll_rand((S32)motd.size())))->asString());
+	}
+	
+	// If the event falls withen the current date, use that for MOTD instead.
+	if (fs_data.has("EventsMOTD"))
+	{
+		const LLSD& events = fs_data["EventsMOTD"];
+		for(LLSD::map_const_iterator iter = events.beginMap(); iter != events.endMap(); ++iter)
 		{
-			if(LLSDSerialize::fromXML(releases, releases_file) >= 1)
+			std::string name = iter->first;
+			const LLSD& content = iter->second;
+			LL_DEBUGS("fsdata") << "Found event MOTD: " << name << LL_ENDL;
+			if (content["startDate"].asDate() < LLDate::now() && content["endDate"].asDate() > LLDate::now())
 			{
-				if(releases.has("ReleaseVersion"))
-				{
-					if (fsData["Releases"].asInteger() <= releases["ReleaseVersion"].asInteger())
-					{
-						processReleasesLLSD(releases);
-						local_file = true;
-					}
-				}
+				LL_INFOS("fsdata") << "Setting MOTD to " << name << LL_ENDL;
+				gAgent.mMOTD.assign(content["EventMOTD"]); // note singler instead of plural above
+				break; // Only use the first one found.
 			}
-			releases_file.close();
 		}
 	}
 
-	if (!local_file)
+	if(fs_data.has("OpensimMOTD"))
 	{
-		LL_INFOS("Data") << "Downloading " << releases_url << LL_ENDL;
-		LLHTTPClient::get(releases_url,new FSDownloader(releases_url));
+		mOpensimMOTD.assign(fs_data["OpensimMOTD"]);
 	}
 
-
-	local_file = false;
-	if (!(fsData["Agents"].asInteger() == 0))
+	if(fs_data.has("BlockedReleases"))
 	{
-		const std::string agents_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml");
-		llifstream agents_file(agents_filename);
-		LLSD agents;
-		if(agents_file.is_open())
+		const LLSD& blocked = fs_data["BlockedReleases"];
+		for (LLSD::map_const_iterator iter = blocked.beginMap(); iter != blocked.endMap(); ++iter)
 		{
-			if(LLSDSerialize::fromXML(agents, agents_file) >= 1)
-			{
-				if(agents.has("AgentsVersion"))
-				{
-					if (fsData["Agents"].asInteger() <= agents["AgentsVersion"].asInteger())
-					{
-						processAgentsLLSD(agents);
-						local_file = true;
-					}
-				}
-			}
-			agents_file.close();
+			std::string version = iter->first;
+			const LLSD& content = iter->second;
+			mBlockedVersions[version] = content;
+			LL_DEBUGS("fsdata") << "Added " << version << " to mBlockedVersions" << LL_ENDL;
 		}
 	}
 
-	if (!local_file)
-	{
-		LL_INFOS("Data") << "Downloading " << agents_url << LL_ENDL;
-		LLHTTPClient::get(agents_url,new FSDownloader(agents_url));
-	}
-
-	//TODO: add blacklist support
-// 	LL_INFOS("Blacklist") << "Downloading blacklist.xml" << LL_ENDL;
-// 	LLHTTPClient::get(url,new FSDownloader( FSData::msblacklist ),headers);
+	processAgents(fs_data);
+	processAssets(fs_data);
 
 	// FSUseLegacyClienttags: 0=Off, 1=Local Clienttags, 2=Download Clienttags
 	if(gSavedSettings.getU32("FSUseLegacyClienttags") > 1)
 	{
-		LLSD headers;
-		headers.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
-		headers.insert("viewer-version", versionid);
-		LLHTTPClient::get(legacy_client_list,new FSDownloader(legacy_client_list),headers);
-		LL_INFOS("CLIENTTAGS DOWNLOADER") << "Getting new tags" << LL_ENDL;
+		time_t last_modified = 0;
+		llstat stat_data;
+		if(!LLFile::stat(mClientTagsFilename, &stat_data))
+		{
+			last_modified = stat_data.st_mtime;
+		}
+		LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modifed of " << last_modified << LL_ENDL;
+		LLHTTPClient::getIfModified(LEGACY_CLIENT_LIST_URL, new FSDownloader(LEGACY_CLIENT_LIST_URL), last_modified, mHeaders, HTTP_TIMEOUT);
 	}
 	else if(gSavedSettings.getU32("FSUseLegacyClienttags") > 0)
 	{
@@ -235,84 +363,80 @@ void FSData::processData(const LLSD& fsData)
 	}
 }
 
-void FSData::processReleases(const LLSD& releases)
+void FSData::processAssets(const LLSD& assets)
 {
-	processReleasesLLSD(releases);
-	
-	// save the download to a file
-	const std::string releases_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml");
-	saveLLSD(releases, releases_filename);
-}
-
-void FSData::processReleasesLLSD(const LLSD& releases)
-{
-	const LLSD& fs_versions = releases["FirestormReleases"];
-	versions2.clear();
-	for(LLSD::map_const_iterator itr = fs_versions.beginMap(); itr != fs_versions.endMap(); ++itr)
+	if (!assets.has("assets"))
 	{
-		std::string key = (*itr).first;
-		key += "\n";
-		const LLSD& content = (*itr).second;
-		U8 val = 0;
-		if(content.has("beta"))val = val | PH_BETA;
-		if(content.has("release"))val = val | PH_RELEASE;
-		versions2[key] = val;
+		return;
 	}
-	
-	if(releases.has("BlockedReleases"))
+	const LLSD& asset = assets["assets"];
+	for (LLSD::map_const_iterator itr = asset.beginMap(); itr != asset.endMap(); ++itr)
 	{
-		const LLSD& blocked = releases["BlockedReleases"];
-		blocked_versions.clear();
-		for (LLSD::map_const_iterator itr = blocked.beginMap(); itr != blocked.endMap(); ++itr)
+		LLUUID uid = LLUUID(itr->first);
+		LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
+		cipher.decrypt(uid.mData, UUID_BYTES);
+		LLSD data = itr->second;
+		if (uid.isNull())
 		{
-			std::string vers = itr->first;
-			const LLSD& content = itr->second;
-			blocked_versions[vers] = content;
+			continue;
 		}
+		FSWSAssetBlacklist::instance().addNewItemToBlacklistData(uid, data, false);
+		LL_DEBUGS("fsdata") << "Added " << uid << " to assets list." << LL_ENDL;
 	}
 }
 
-void FSData::processAgents(const LLSD& agents)
+void FSData::processAgents(const LLSD& data)
 {
-	processAgentsLLSD(agents);
-	
-	// save the download to a file
-	const std::string agents_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml");
-	saveLLSD(agents, agents_filename);
-}
-
-void FSData::processAgentsLLSD(const LLSD& agents)
-{
-	const LLSD& support_agents = agents["SupportAgents"];
-	mSupportAgentList.clear();
-	for(LLSD::map_const_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
+	if (data.has("Agents"))
 	{
-		LLUUID key = LLUUID(iter->first);
-		const LLSD& content = iter->second;
-		if(content.has("support"))
+		const LLSD& agents = data["Agents"];
+		for(LLSD::map_const_iterator iter = agents.beginMap(); iter != agents.endMap(); ++iter)
 		{
-			mSupportAgentList[key].support = true;
+			LLUUID key = LLUUID(iter->first);
+			mSupportAgents[key] = iter->second.asInteger();
+			LL_DEBUGS("fsdata") << "Added " << key << " with " << mSupportAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
 		}
-		else
+	}
+	else if (data.has("SupportAgents")) // Legacy format
+	{
+		const LLSD& support_agents = data["SupportAgents"];
+		std::string newFormat;
+		for(LLSD::map_const_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
 		{
-			mSupportAgentList[key].support = false;
-		}
+			LLUUID key = LLUUID(iter->first);
+			mSupportAgents[key] = 0;
+			const LLSD& content = iter->second;
+			if(content.has("support"))
+			{
+				mSupportAgents[key] |= SUPPORT;
+			}
 
-		if(content.has("developer"))
-		{
-			mSupportAgentList[key].developer = true;
+			if(content.has("developer"))
+			{
+				mSupportAgents[key] |= DEVELOPER;
+			}
+			LL_DEBUGS("fsdata") << "Added Legacy " << key << " with " << mSupportAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
+			std::string text = llformat("<key>%s</key><!-- %s -->\n    <integer>%d</integer>\n", key.asString().c_str(), content["name"].asString().c_str(), mSupportAgents[key]);
+			newFormat.append(text);
 		}
-		else
+		LL_DEBUGS("fsdata") << "New format for copy paste:\n" << newFormat << LL_ENDL;
+	}
+
+	if (data.has("SupportGroups"))
+	{
+		const LLSD& support_groups = data["SupportGroups"];
+		for(LLSD::map_const_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
 		{
-			mSupportAgentList[key].developer = false;
+			mSupportGroup.insert(LLUUID(itr->first));
+			LL_DEBUGS("fsdata") << "Added " << itr->first << " to mSupportGroup" << LL_ENDL;
 		}
 	}
 	
-	const LLSD& support_groups = agents["SupportGroups"];
-	mSupportGroup.clear();
-	for(LLSD::map_const_iterator itr = support_groups.beginMap(); itr != support_groups.endMap(); ++itr)
+	// The presence of just the key is enough to determine that legacy search needs to be disabled on this grid.
+	if (data.has("DisableLegacySearch"))
 	{
-		mSupportGroup.insert(LLUUID(itr->first));
+		mLegacySearch = false;
+		LL_WARNS("fsdata") << "Legacy Search has been disabled." << LL_ENDL;
 	}
 }
 
@@ -320,10 +444,7 @@ void FSData::processClientTags(const LLSD& tags)
 {
 	if(tags.has("isComplete"))
 	{
-		LegacyClientList = tags;
-		// save the download to a file
-		const std::string tags_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
-		saveLLSD(tags, tags_filename);
+		mLegacyClientList = tags;
 	}
 }
 
@@ -333,7 +454,7 @@ LLSD FSData::resolveClientTag(LLUUID id)
 	return resolveClientTag(id, false, LLColor4::black);
 }
 
-//WS: Create a new LLSD based on the data from the LegacyClientList if
+//WS: Create a new LLSD based on the data from the mLegacyClientList if
 LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 {	
 	LLSD curtag;
@@ -349,9 +470,9 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 	//WS: Do we want to use Legacy Clienttags?
 	if (gSavedSettings.getU32("FSUseLegacyClienttags") > 0)
 	{
-		if (LegacyClientList.has(id.asString()))
+		if (mLegacyClientList.has(id.asString()))
 		{
-			curtag=LegacyClientList[id.asString()];
+			curtag=mLegacyClientList[id.asString()];
 		}
 		else
 		{		
@@ -489,126 +610,74 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 
 void FSData::updateClientTagsLocal()
 {
-	std::string client_list_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
-	llifstream xml_file(client_list_filename);
 	LLSD data;
-	if(!xml_file.is_open()) return;
-	if(LLSDSerialize::fromXML(data, xml_file) >= 1)
+	LL_DEBUGS("fsdata") << "Loading client_list_v2.xml from  " << mClientTagsFilename << LL_ENDL;
+	if (loadFromFile(data, mClientTagsFilename))
 	{
-		if(data.has("isComplete"))
-		{
-			LegacyClientList = data;
-		}
-
-		xml_file.close();
+		processClientTags(data);
+	}
+	else
+	{
+		LL_WARNS("fsdata") << "Unable to download or load client_list_v2.xml" << LL_ENDL;
 	}
 }
 
-void FSData::saveLLSD(const LLSD& data, const std::string& filename)
+void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDate& last_modified)
 {
-	LL_INFOS("Data") << "Saving " << filename << LL_ENDL;
+	LL_INFOS("fsdata") << "Saving " << filename << LL_ENDL;
 	llofstream file;
 	file.open(filename);
 	if(!file.is_open())
 	{
-		LL_WARNS("Data") << "Unable to open " << filename << LL_ENDL;
+		LL_WARNS("fsdata") << "Unable to open " << filename << LL_ENDL;
 		return;
 	}
 	if (!LLSDSerialize::toPrettyXML(data, file))
 	{
-		LL_WARNS("Data") << "Failed to save LLSD for " << filename << LL_ENDL;
+		LL_WARNS("fsdata") << "Failed to save LLSD for " << filename << LL_ENDL;
 	}
 	file.close();
+
+	const std::time_t new_time = last_modified.secondsSinceEpoch();
+	boost::filesystem::last_write_time(boost::filesystem::path(filename), new_time);
 }
 
-#if (0)
-void FSData::msblacklist(U32 status,std::string body)
+S32 FSData::getAgentFlags(LLUUID avatar_id)
 {
-	if(status != 200)
+	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(avatar_id);
+	if (iter == mSupportAgents.end())
 	{
-		LL_WARNS("Blacklist") << "Something went wrong with the blacklist download status code " << status << LL_ENDL;
+		return -1;
 	}
-
-	std::istringstream istr(body);
-	if (body.size() > 0)
-	{
-		LLSD data;
-		if(LLSDSerialize::fromXML(data,istr) >= 1)
-		{
-			LL_INFOS("Blacklist") << body.size() << " bytes received, updating local blacklist" << LL_ENDL;
-			for(LLSD::map_iterator itr = data.beginMap(); itr != data.endMap(); ++itr)
-			{
-				if(itr->second.has("name"))
-					LLFloaterBlacklist::addEntry(LLUUID(itr->first),itr->second);
-			}
-		}
-		else
-		{
-			LL_INFOS("Blacklist") << "Failed to parse blacklist.xml" << LL_ENDL;
-		}
-	}
-	else
-	{
-		LL_INFOS("Blacklist") << "Empty blacklist.xml" << LL_ENDL;
-	}
-}
-#endif
-
-FSDataAgent* FSData::getAgent(LLUUID avatar_id)
-{
-	std::map<LLUUID, FSDataAgent>::iterator iter = mSupportAgentList.find(avatar_id);
-	if (iter == mSupportAgentList.end())
-	{
-		return NULL;
-	}
-	return &iter->second;
+	return iter->second;
 }
 
-bool FSData::is_support(LLUUID avatar_id)
+bool FSData::isSupport(LLUUID avatar_id)
 {
-	std::map<LLUUID, FSDataAgent>::iterator iter = mSupportAgentList.find(avatar_id);
-	if (iter == mSupportAgentList.end())
+	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(avatar_id);
+	if (iter == mSupportAgents.end())
 	{
 		return false;
 	}
-	return iter->second.support;
+	return (iter->second & SUPPORT);
 }
 
-BOOL FSData::is_BetaVersion(std::string version)
+bool FSData::isDeveloper(LLUUID avatar_id)
 {
-	if(versions2.find(version) != versions2.end())
-	{
-		return ((versions2[version] & PH_BETA) != 0) ? TRUE : FALSE;
-	}
-	return FALSE;
-}
-
-BOOL FSData::is_ReleaseVersion(std::string version)
-{
-	if(versions2.find(version) != versions2.end())
-	{
-		return ((versions2[version] & PH_RELEASE) != 0) ? TRUE : FALSE;
-	}
-	return FALSE;
-}
-
-bool FSData::is_developer(LLUUID avatar_id)
-{
-	std::map<LLUUID, FSDataAgent>::iterator iter = mSupportAgentList.find(avatar_id);
-	if (iter == mSupportAgentList.end())
+	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(avatar_id);
+	if (iter == mSupportAgents.end())
 	{
 		return false;
 	}
-	return iter->second.developer;
+	return (iter->second & DEVELOPER);
 }
 
-LLSD FSData::allowed_login()
+LLSD FSData::allowedLogin()
 {
-	std::map<std::string, LLSD>::iterator iter = blocked_versions.find(versionid);
-	if (iter == blocked_versions.end())
+	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(VERSION_ID);
+	if (iter == mBlockedVersions.end())
 	{
-		LLSD empty;
-		return empty; 
+		return LLSD(); 
 	}
 	else
 	{
@@ -621,6 +690,37 @@ BOOL FSData::isSupportGroup(LLUUID id)
 	return (mSupportGroup.count(id));
 }
 
+bool FSData::isAgentFlag(const LLUUID& agent_id, flags_t flag)
+{
+	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(agent_id);
+	if (iter == mSupportAgents.end())
+	{
+		return false;
+	}
+	return (iter->second & flag);
+}
+
+// this is called in two different places due to can recieved .xml before gCacheName is created and vice versa.
+void FSData::addAgents()
+{
+	if (!gCacheName)
+	{
+	      return;
+	}
+  
+	for (std::map<LLUUID, S32>::iterator iter = mSupportAgents.begin(); iter != mSupportAgents.end(); ++iter)
+	{
+		if (iter->second & NO_SPAM)
+		{
+			LLUUID id = iter->first;
+			std::string name;
+			gCacheName->getFullName(id, name);
+			LLMute mute(id, name, LLMute::EXTERNAL);
+			LLMuteList::getInstance()->add(mute);
+		}
+	}
+}
+
 std::string FSData::processRequestForInfo(LLUUID requester, std::string message, std::string name, LLUUID sessionid)
 {
 	std::string detectstring = "/reqsysinfo";
@@ -629,7 +729,7 @@ std::string FSData::processRequestForInfo(LLUUID requester, std::string message,
 		return message;
 	}
 
-	if(!(is_support(requester)||is_developer(requester)))
+	if(!(isSupport(requester)||isDeveloper(requester)))
 	{
 		return message;
 	}

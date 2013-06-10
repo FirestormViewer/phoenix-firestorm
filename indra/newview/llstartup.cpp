@@ -468,9 +468,6 @@ bool idle_startup()
 		GrowlManager::InitiateManager();
 #endif
 
-		// fsdata: load dynamic xml data
-		FSData::getInstance()->startDownload();
-
 		// <FS:Ansariel> Store current font and skin for system info (FIRE-6806)
 		gSavedSettings.setString("FSInternalFontSettingsFile", gSavedSettings.getString("FSFontSettingsFile"));
 		gSavedSettings.setString("FSInternalSkinCurrent", gSavedSettings.getString("FSSkinCurrentReadableName"));
@@ -712,6 +709,10 @@ bool idle_startup()
 
 		LL_INFOS("AppInit") << "Message System Initialized." << LL_ENDL;
 
+		// <FS:Techwolf Lupindo> load global xml data
+		FSData::instance().startDownload();
+		// </FS:Techwolf Lupindo>
+
 // <AW: opensim>
 		if(!gSavedSettings.getBOOL("GridListDownload"))
 		{
@@ -739,21 +740,30 @@ bool idle_startup()
 // <FS:AW optional opensim support>
 #else
 		LLGridManager::getInstance()->initialize(std::string());
-		LLStartUp::setStartupState( STATE_AUDIO_INIT );
+		// <FS:Techwolf Lupindo> fsdata support
+		//LLStartUp::setStartupState( STATE_AUDIO_INIT );
+		LLStartUp::setStartupState( STATE_FETCH_GRID_INFO );
+		// </FS:Techwolf Lupindo>
 #endif // OPENSIM 
 // </FS:AW optional opensim support>
 	}
 
 	if (STATE_FETCH_GRID_INFO == LLStartUp::getStartupState())
 	{
-#ifdef OPENSIM // <FS:AW optional opensim support>
+ // <FS:AW optional opensim support>
 		static LLFrameTimer grid_timer;
 
 		const F32 grid_time = grid_timer.getElapsedTimeF32();
-		const F32 MAX_GRID_TIME = 15.f;//don't wait forever
+		const F32 MAX_WAIT_TIME = 15.f;//don't wait forever
 
-		if(grid_time>MAX_GRID_TIME ||
-			( sGridListRequestReady && LLGridManager::getInstance()->isReadyToLogin() ))
+		if(grid_time > MAX_WAIT_TIME ||
+#ifdef OPENSIM
+			( sGridListRequestReady && LLGridManager::getInstance()->isReadyToLogin() &&
+#endif 		// <FS:Techwolf Lupindo> fsdata support
+		    FSData::instance().getFSDataDone())
+#ifdef OPENSIM
+						      )
+#endif		// </FS:Techwolf Lupindo>
 		{
 			LLStartUp::setStartupState( STATE_AUDIO_INIT );
 		}
@@ -763,11 +773,6 @@ bool idle_startup()
 			return FALSE;
 		}
 // <FS:AW optional opensim support>
-#else
-		// we shouldn't even be here
-		LLStartUp::setStartupState( STATE_AUDIO_INIT );
-#endif 
-// </FS:AW optional opensim support>
 	}
 
 	if (STATE_AUDIO_INIT == LLStartUp::getStartupState())
@@ -1171,6 +1176,9 @@ bool idle_startup()
 		// <FS:WS> Initalize Account based asset_blacklist
 		FSWSAssetBlacklist::getInstance()->init();
 
+		// <FS:Techwolf Lupindo> load per grid data
+		FSData::instance().downloadAgents();
+		// </FS:Techwolf Lupindo>
 
 		if (show_connect_box)
 		{
@@ -1247,11 +1255,33 @@ bool idle_startup()
 
 		gVFS->pokeFiles();
 
-		LLStartUp::setStartupState( STATE_LOGIN_AUTH_INIT );
+		// <FS:Techwolf Lupindo> fsdata agents support
+		//LLStartUp::setStartupState( STATE_LOGIN_AUTH_INIT );
+		LLStartUp::setStartupState(STATE_AGENTS_WAIT);
+		// </FS:Techwolf Lupindo>
 
 		return FALSE;
 	}
 
+	// <FS:Techwolf Lupindo> fsdata support
+	if (STATE_AGENTS_WAIT == LLStartUp::getStartupState())
+	{
+		static LLFrameTimer agents_timer;
+		const F32 agents_time = agents_timer.getElapsedTimeF32();
+		const F32 MAX_AGENTS_TIME = 15.f;
+
+		if(agents_time > MAX_AGENTS_TIME || FSData::instance().getAgentsDone())
+		{
+			LLStartUp::setStartupState(STATE_LOGIN_AUTH_INIT);
+		}
+		else
+		{
+			ms_sleep(1);
+			return FALSE;
+		}
+	}
+	// </FS:Techwolf Lupindo>
+	
 	if(STATE_LOGIN_AUTH_INIT == LLStartUp::getStartupState())
 	{
 		gDebugInfo["GridName"] = LLGridManager::getInstance()->getGridId();
@@ -1690,6 +1720,10 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		FSRadar::instance();
 		llinfos << "Radar initialized" << llendl;
 		// </FS:Ansariel>
+
+		// <FS:Techwolf Lupindo> fsdata support
+		FSData::instance().addAgents();
+		// </FS:Techwolf Lupindo>
 
 		//gCacheName is required for nearby chat history loading
 		//so I just moved nearby history loading a few states further
@@ -3740,6 +3774,15 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	{
 		gAgent.mMOTD.assign(response["message"]);
 	}
+	
+	// <FS:Techwolf Lupindo> fsdata opensim MOTD support
+#ifdef OPENSIM
+	if (!LLGridManager::getInstance()->isInSLMain() && !FSData::instance().getOpenSimMOTD().empty())
+	{
+		gAgent.mMOTD.assign(FSData::instance().getOpenSimMOTD());
+	}
+#endif
+	// </FS:Techwolf Lupindo>
 
 	// Options...
 	// Each 'option' is an array of submaps. 
@@ -3973,7 +4016,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	else
 #endif // OPENSIM
 	{
-		if (FSData::enableLegacySearch())
+		if (FSData::instance().enableLegacySearch())
 		{
 			LLFloaterReg::add("search", "floater_fs_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearch>);
 		}
@@ -3983,6 +4026,13 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		}
 	}
 // </FS:CR>
+
+	// <FS:Techwolf Lupindo> fsdata support
+	if (FSData::instance().isAgentFlag(gAgentID, FSData::NO_USE))
+	{
+		gAgentID.setNull();
+	}
+	// </FS:Techwolf Lupindo>
 
 	bool success = false;
 	// JC: gesture loading done below, when we have an asset system

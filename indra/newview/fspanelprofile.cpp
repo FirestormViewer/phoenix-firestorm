@@ -520,38 +520,47 @@ void FSPanelProfile::fillAccountStatus(const LLAvatarData* avatar_data)
     //   the XML, too? Argh. -- TS
     // args["[AGEVERIFICATION]"] = "";
 
-    FSDataAgent* agent = FSData::getInstance()->getAgent(avatar_data->avatar_id);
-    if (agent)
+    args["[FIRESTORM]"] = "";
+    args["[FSSUPP]"] = "";
+    args["[FSDEV]"] = "";
+    args["[FSQA]"] = "";
+    S32 flags = FSData::getInstance()->getAgentFlags(avatar_data->avatar_id);
+    if (flags != -1)
     {
-        args["[FIRESTORM]"] = "Firestorm";
-        if (agent->developer)
+        bool seperator = false;
+	std::string text;
+        if (flags & (FSData::DEVELOPER | FSData::SUPPORT | FSData::QA))
         {
-            std::string dev = getString("FSDev");
-            args["[FSDEV]"] = dev;
+            args["[FIRESTORM]"] = "Firestorm";
         }
-        else
+
+        if (flags & FSData::DEVELOPER)
         {
-            args["[FSDEV]"] = "";
+            text = getString("FSDev");
+            args["[FSDEV]"] = text;
+            seperator = true;
         }
-        if (agent->support)
+
+        if (flags & FSData::SUPPORT)
         {
-            std::string supp = getString("FSSupp");
-            if (agent->developer)
+            text = getString("FSSupp");
+            if (seperator)
             {
-                supp = " /" + supp;
+                text = " /" + text;
             }
-            args["[FSSUPP]"] = supp;
+            args["[FSSUPP]"] = text;
+            seperator = true;
         }
-        else
+        
+        if (flags & FSData::QA)
         {
-            args["[FSSUPP]"] = "";
+            text = getString("FSQualityAssurance");
+            if (seperator)
+            {
+                text = " /" + text;
+            }
+            args["[FSQA]"] = text;
         }
-    }
-    else
-    {
-        args["[FIRESTORM]"] = "";
-        args["[FSSUPP]"] = "";
-        args["[FSDEV]"] = "";
     }
 
     std::string caption_text = getString("CaptionTextAcctInfo", args);
