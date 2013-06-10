@@ -4570,12 +4570,31 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 
 				if (gPipeline.allocateScreenBuffer(image_width, image_height))
 				{
-					window_width = image_width;
-					window_height = image_height;
-					snapshot_width = image_width;
-					snapshot_height = image_height;
+					// <FS:ND> FIRE-9097; Workaround against black borders/rectangles in huge snapshots.
+					// Not a pretty solution
+
+					// window_width = image_width;
+					// window_height = image_height;
+					// snapshot_width = image_width;
+					// snapshot_height = image_height;
+
+					window_width = llmin( image_width, 4096);
+					window_height = llmin( image_height, 4096);
+					snapshot_width = llmin( image_width, 4096);
+					snapshot_height = llmin( image_height, 4096);
+
+					// </FS:ND>
+
 					reset_deferred = true;
-					mWorldViewRectRaw.set(0, image_height, image_width, 0);
+
+					// <FS:ND> FIRE-9097; Workaround against black borders/rectangles in huge snapshots.
+					// Not a pretty solution
+
+					// mWorldViewRectRaw.set(0, image_height, image_width, 0);
+					mWorldViewRectRaw.set(0, llmin(image_height,4096), llmin(image_width,4096), 0);
+
+					// </FS:ND>
+
 					scratch_space.bindTarget();
 				}
 				else
