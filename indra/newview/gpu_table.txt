@@ -150,6 +150,7 @@ ATI Mobility Radeon HD 4300				.*ATI.*Mobility.*HD *43.*				1	1	1	4
 ATI Mobility Radeon HD 4500				.*ATI.*Mobility.*HD *45.*				1	1	1	4
 ATI Mobility Radeon HD 4600				.*ATI.*Mobility.*HD *46.*				2	1	1	3.3
 ATI Mobility Radeon HD 4800				.*ATI.*Mobility.*HD *48.*				3	1	1	3.3
+ATI Mobility Radeon HD 5000				.*ATI.*Mobility.*HD *50.*				3	1	1	3.2
 ATI Mobility Radeon HD 5100				.*ATI.*Mobility.*HD *51.*				3	1	1	3.2
 ATI Mobility Radeon HD 5300				.*ATI.*Mobility.*HD *53.*				3	1	0	0
 ATI Mobility Radeon HD 5400				.*ATI.*Mobility.*HD *54.*				2	1	1	4.2
