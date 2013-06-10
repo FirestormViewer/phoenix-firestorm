@@ -11,7 +11,7 @@
     <string
      name="CaptionTextAcctInfo">
 [ACCTTYPE]
-[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP]
+[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA]
     </string>
 <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
     sending the latter any more. ...TS -->
@@ -21,6 +21,9 @@
     <string
       name="FSSupp"
       value=" Support" />
+    <string
+      name="FSQualityAssurance"
+      value=" Bug Hunter" />
     <string
      name="payment_update_link_url">
         http://www.secondlife.com/account/billing.php?lang=en
@@ -50,12 +53,6 @@
       name="display_name_text_args">
       [DISPLAY_NAME]
     </string>
-   <string
-    name="FSDev"
-    value=" Developer" />
-   <string
-    name="FSSupp"
-    value=" Support" />
    <accordion
     left="0"
     top="0"

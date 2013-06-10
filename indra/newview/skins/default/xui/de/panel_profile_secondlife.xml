@@ -10,6 +10,7 @@
 	<string name="no_group_text" value="Keine"/>
 	<string name="FSDev" value="-Entwickler"/>
 	<string name="FSSupp" value="-Support"/>
+	<string name="FSQualityAssurance" value="-Bug Hunter"/>
 
 	<text name="Name:" value="Name:"/>
 	<text_editor name="complete_name" value="(laden)"/>
