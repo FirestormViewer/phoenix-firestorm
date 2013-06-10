@@ -10,6 +10,7 @@
     <string name="no_group_text" value="Brak" />
     <string name="FSDev" value=" Programista" />
     <string name="FSSupp" value=" Wsparcie" />
+    <string name="FSQualityAssurance" value=" Łowca błędów" />
         <text name="Key:" value="Klucz:" />
         <text_editor name="user_key" value="(ładowanie...)" />
 		<button name="copy_uri_button" label="Kopiuj URI" />

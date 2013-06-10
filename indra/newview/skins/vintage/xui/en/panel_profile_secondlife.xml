@@ -20,7 +20,7 @@ Currently Offline
      name="CaptionTextAcctInfo">
 [ACCTTYPE]
 [PAYMENTINFO]
-[FIRESTORM][FSDEV][FSSUPP]
+[FIRESTORM][FSDEV][FSSUPP][FSQA]
     </string>
     <!-- [AGEVERIFICATION] moved out of the above, since it's not set anyway. See
     LLPanelAvatarProfile::fillAccountStatus() ...TS -->
@@ -59,6 +59,9 @@ http://www.secondlife.com/account/partners.php?lang=en
     <string
      name="FSSupp"
      value=" Support" />
+    <string
+     name="FSQualityAssurance"
+     value=" Bug Hunter" />
 
 <!--
 

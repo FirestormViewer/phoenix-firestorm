@@ -4,6 +4,7 @@
     <string name="no_group_text" value="Brak" />
     <string name="FSDev" value=" Programista" />
     <string name="FSSupp" value=" Wsparcie" />
+    <string name="FSQualityAssurance" value=" Łowca błędów" />
         <text name="Name:" value="Imię:" />
         <text_editor name="complete_name" value="(ładowanie...)" />
         <button name="set_name" tool_tip="Ustaw Imię Wyświetlane" />
