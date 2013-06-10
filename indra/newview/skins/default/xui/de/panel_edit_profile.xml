@@ -14,7 +14,7 @@
       value="-Support" />
     <string
       name="FSQualityAssurance"
-      value="-Bug Hunter" />
+      value="-Bug-Hunter" />
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
 	</string>
