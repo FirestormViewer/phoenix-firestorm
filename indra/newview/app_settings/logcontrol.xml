@@ -44,8 +44,8 @@
 						<array>
 						<!-- sample entry for debugging specific items
 							 <string>Voice</string>
-							 <string>Avatar</string>							
 						-->
+						     <string>Avatar</string>							
 						     <string>parseFile</string>
 						     <string>import</string>
 						     <string>export</string>
