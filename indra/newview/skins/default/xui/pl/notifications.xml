@@ -4382,4 +4382,8 @@ Nie można tego cofnąć.
 		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
 		<usetemplate ignoretext="Potwierdź wyrzucenie członka z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
+	<notification name="EjectGroupMembersWarning">
+		Zamierzasz wyrzucić [COUNT] członków z grupy.
+		<usetemplate ignoretext="Potwierdź wyrzucenie kilku członków z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
+	</notification>
 </notifications>
