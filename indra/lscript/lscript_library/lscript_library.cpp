@@ -548,6 +548,9 @@ void LLScriptLibrary::init()
 	addFunction(0.f, 0.f, dummy_func, "llJsonSetValue", "s", "sls");
 	addFunction(0.f, 0.f, dummy_func, "llJsonValueType", "s", "sl");
 
+	// Server RC LeTigre/BlueSteel 13.06.06.277104 new functions
+	addFunction(0.f, 0.f, dummy_func, "llReturnObjectsByID", "i", "l");
+	addFunction(0.f, 0.f, dummy_func, "llReturnObjectsByOwner", "i", "ki");
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 	
 // <FS:CR> Opensim/Aurora scripting functions - Please add Second Life LSL functions above this line!
