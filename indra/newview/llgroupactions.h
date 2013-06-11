@@ -118,6 +118,7 @@ public:
 	static bool canEjectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent);
 	static void ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent);
 // [/SL:KB]
+	static bool callbackEject(const LLSD& notification, const LLSD& response);	// <FS:CR> FIRE-8499 - Eject from group confirmation
 
 private:
 	static bool onJoinGroup(const LLSD& notification, const LLSD& response);

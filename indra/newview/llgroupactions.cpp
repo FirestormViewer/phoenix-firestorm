@@ -602,12 +602,47 @@ bool LLGroupActions::canEjectFromGroup(const LLUUID& idGroup, const LLUUID& idAg
 
 void LLGroupActions::ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent)
 {
-	if (!canEjectFromGroup(idGroup, idAgent))
-		return;
+	// <FS:CR> FIRE-8499 - Eject from group confirmation 
+	//if (!canEjectFromGroup(idGroup, idAgent))
+	//	return;
 
-	uuid_vec_t idAgents;
-	idAgents.push_back(idAgent);
-	LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
+	//uuid_vec_t idAgents;
+	//idAgents.push_back(idAgent);
+	//LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
+	LLSD args;
+	LLSD payload;
+	payload["avatar_id"] = idAgent;
+	payload["group_id"] = idGroup;
+	std::string fullname;
+	gCacheName->getFullName(idAgent, fullname);
+	args["AVATAR_NAME"] = fullname;
+	LLNotificationsUtil::add("EjectGroupMemberWarning",
+							 args,
+							 payload,
+							 callbackEject);
+}
+
+bool LLGroupActions::callbackEject(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (2 == option) // Cancel button
+	{
+		return false;
+	}
+	if (0 == option) // Eject button
+	{
+		LLUUID idAgent = notification["payload"]["avatar_id"].asUUID();
+		LLUUID idGroup = notification["payload"]["group_id"].asUUID();
+		
+		if (!canEjectFromGroup(idGroup, idAgent))
+			return false;
+		
+		uuid_vec_t idAgents;
+		idAgents.push_back(idAgent);
+		LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
+	}
+	return false;
+	// </FS:CR>
 }
 // [/SL:KB]
 

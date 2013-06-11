@@ -11141,4 +11141,18 @@ You cannot undo this action.
      notext="Cancel"
      yestext="OK"/>
     </notification>
+    
+    <notification
+     icon="alertmodal.tga"
+     name="EjectGroupMemberWarning"
+     type="alertmodal">
+You are about to eject [AVATAR_NAME] from the group.
+      <tag>group</tag>
+      <tag>confirm</tag>
+      <usetemplate
+       ignoretext="Confirm ejecting a participant from group"
+       name="okcancelignore"
+       notext="Cancel"
+       yestext="Eject"/>
+    </notification>
 </notifications>
