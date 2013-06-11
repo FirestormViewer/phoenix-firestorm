@@ -535,6 +535,7 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 	fogged_color.mV[3] = llmax(0.2f, llmin(0.5f,(dist-FADE_DIST)/FADE_DIST));
 
 	LLVector3 pos_agent = gAgent.getPosAgentFromGlobal(pos_global);
+	LLVector3d pos_agent_3d = gAgent.getPositionGlobal();	// <FS:CR> FIRE-8234
 
 	LLGLSTracker gls_tracker; // default+ CULL_FACE + LIGHTING + GL_BLEND + GL_ALPHA_TEST
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -601,7 +602,11 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 	gGL.popMatrix();
 
 	std::string text;
-	text = llformat( "%.0f m", to_vec.magVec());
+	// <FS:CR> FIRE-8234 - Show distance from avatar rather than distance from camera.
+	// (Distance from camera is somewhat useless)
+	//text = llformat( "%.0f m", to_vec.magVec());
+	text = llformat("%.0f m", dist_vec(pos_global, pos_agent_3d));
+	// </FS:CR>
 
 	std::string str;
 	str += label;
