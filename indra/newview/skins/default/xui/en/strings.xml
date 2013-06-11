@@ -2197,6 +2197,14 @@ Returns a new json string that is the json given with the value indicated by spe
 string llJsonValueType(string json, list specifiers)
 Returns the type constant for the value in json indicated by specifiers.
 </string>
+<string name="LSLTipText_llReturnObjectsByID" translate="false">
+integer LSLTipText_llReturnObjectsByID(list objects)
+Returns a list of objects by their IDs.
+</string>
+<string name="LSLTipText_llReturnObjectsByOwner" translate="false">
+integer llReturnObjectsByOwner(key owner, integer scope)
+Returns all objects of a particular owner in the given scope.
+</string>
 <!-- END FS:Ansariel: LSL function tooltip help texts manually added -->
 	
     
