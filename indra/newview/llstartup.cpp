@@ -3873,9 +3873,18 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		gSavedSettings.setString("WebProfileURL", web_profile_url); 
 		LL_INFOS("LLStartup") << "web_profile_url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
 	}
-#endif // OPENSIM
-// </FS:CR> FIRE-8063: Read Aurora web profile url from login data
-
+// <FS:CR> FIRE-10567 - Set classified fee, if it's available.
+	if (response.has("classified_fee"))
+	{
+		S32 classified_fee = response["classified_fee"];
+		LLGridManager::getInstance()->setClassifiedFee(classified_fee);
+	}
+	else
+	{
+		LLGridManager::getInstance()->setClassifiedFee(0);	// Free is a sensible default
+	}
+	#endif // OPENSIM
+// </FS:CR>
 	// Default male and female avatars allowing the user to choose their avatar on first login.
 	// These may be passed up by SLE to allow choice of enterprise avatars instead of the standard
 	// "new ruth."  Not to be confused with 'initial-outfit' below 

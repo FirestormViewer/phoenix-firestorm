@@ -564,14 +564,6 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_DIRECTORY_FEE] << LL_ENDL;
 			continue;
 		}
-		/// <FS:CR> NOTE: As far as I can tell, this setting doesn't exist on any platform at present,
-		/// adding it for the future while fixing FIRE-9814
-		check = "ClassifiedFee";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_CLASSIFIED_FEE] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_CLASSIFIED_FEE] << LL_ENDL;
-		}
 		check = "CurrencySymbol";
 		if (node->hasName(check))
 		{
