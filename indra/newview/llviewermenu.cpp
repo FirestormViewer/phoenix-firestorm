@@ -4230,12 +4230,44 @@ class LLTogglePanelPeopleTab : public view_listener_t
 			}
 			else if(panel_name=="groups_panel")
 			{
-				FSFloaterContacts::getInstance()->openTab("groups");
+				if (gSavedSettings.getBOOL("ContactsTornOff"))
+				{
+					FSFloaterContacts* instance = FSFloaterContacts::getInstance();
+					std::string activetab = instance->getChild<LLTabContainer>("friends_and_groups")->getCurrentPanel()->getName();
+					if (instance->getVisible() && activetab == panel_name) 
+					{
+						instance->closeFloater();
+					}
+					else
+					{
+						instance->openTab("groups");
+					}
+				}
+				else
+				{
+					FSFloaterContacts::getInstance()->openTab("groups");
+				}
 				return true;
 			}
 			else if(panel_name=="friends_panel")
 			{
-				FSFloaterContacts::getInstance()->openTab("friends");
+				if (gSavedSettings.getBOOL("ContactsTornOff"))
+				{
+					FSFloaterContacts* instance = FSFloaterContacts::getInstance();
+					std::string activetab = instance->getChild<LLTabContainer>("friends_and_groups")->getCurrentPanel()->getName();
+					if (instance->getVisible() && activetab == panel_name) 
+					{
+						instance->closeFloater();
+					}
+					else
+					{
+						instance->openTab("friends");
+					}
+				}
+				else
+				{
+					FSFloaterContacts::getInstance()->openTab("friends");
+				}
 				return true;
 			}
 			else
