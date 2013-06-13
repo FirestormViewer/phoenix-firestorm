@@ -383,7 +383,7 @@ BOOL LLScriptEdCore::postBuild()
 		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
 		// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
 #endif // OPENSIM
 		// </FS:CR>
 	}
