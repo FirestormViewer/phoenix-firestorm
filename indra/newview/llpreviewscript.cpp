@@ -229,6 +229,10 @@ LLScriptEdCore::LLScriptEdCore(
 	mEnableSave(FALSE),
 	mLiveFile(NULL),
 	mContainer(container),
+	// <FS:CR> FIRE-10606, patch by Sei Lisa
+	mLSLProc(NULL),
+	mPostEditor(NULL),
+	// </FS:CR>
 	mHasScriptData(FALSE)
 {
 	setFollowsAll();
@@ -290,11 +294,10 @@ BOOL LLScriptEdCore::postBuild()
 
 	// NaCl - LSL Preprocessor
 	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
-	BOOL preproc = _NACL_LSLPreprocessor;
-	if(preproc)
+	if (_NACL_LSLPreprocessor)
 	{
 		mPostEditor = getChild<LLViewerTextEditor>("Post Editor");
-		if(mPostEditor)
+		if (mPostEditor)
 		{
 			mPostEditor->setFollowsAll();
 			mPostEditor->setEnabled(TRUE);
@@ -348,6 +351,8 @@ BOOL LLScriptEdCore::postBuild()
 	
 	LLColor3 color(0.5f, 0.0f, 0.15f);
 	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
+	if (_NACL_LSLPreprocessor)
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
 // <FS:CR> OSSL Keywords
 #ifdef OPENSIM
 	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
@@ -381,7 +386,6 @@ BOOL LLScriptEdCore::postBuild()
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
 #endif // OPENSIM
 		// </FS:CR>
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
 	}
 	// NaCl End
 
@@ -980,10 +984,10 @@ void LLScriptEdCore::onBtnInsertFunction(LLUICtrl *ui, void* userdata)
 void LLScriptEdCore::doSave( BOOL close_after_save )
 {
 	// NaCl - LSL Preprocessor
-	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+	if (mLSLProc && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
 		llinfos << "passing to preproc" << llendl;
-		this->mLSLProc->preprocess_script(close_after_save);
+		mLSLProc->preprocess_script(close_after_save);
 	}
 	else
 	{
