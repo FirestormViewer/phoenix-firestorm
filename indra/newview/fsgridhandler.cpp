@@ -1374,7 +1374,7 @@ void LLGridManager::updateIsInProductionGrid()
 // For any Second Life grid
 bool LLGridManager::isInSecondLife()
 {
-	return (EGridPlatform == GP_SLMAIN || GP_SLBETA);
+	return (EGridPlatform == GP_SLMAIN || EGridPlatform == GP_SLBETA);
 }
 
 // For Agni
