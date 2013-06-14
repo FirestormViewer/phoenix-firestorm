@@ -5234,7 +5234,7 @@
         <key>Type</key>
         <string>String</string>
         <key>Value</key>
-        <string>http://viewer-settings.secondlife.com</string>
+        <string>http://viewer-settings.firestormviewer.org</string>
         <key>Backup</key>
         <integer>0</integer>
     </map>
