@@ -871,7 +871,15 @@ std::set<LLUUID> LLFolderView::getSelectionList() const
 		 item_it != mSelectedItems.end(); 
 		 ++item_it)
 	{
-		selection.insert((*item_it)->getListener()->getUUID());
+		// <FS:ND> Crashfix
+
+		// selection.insert((*item_it)->getListener()->getUUID());
+
+		LLFolderViewItem *pItem( *item_it );
+		if( pItem && pItem->getListener() )
+			selection.insert( pItem->getListener()->getUUID() );
+
+		// </FS:ND>
 	}
 	return selection;
 }
