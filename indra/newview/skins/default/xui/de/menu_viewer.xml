@@ -369,7 +369,7 @@
 		</menu>
 		<menu label="Info anzeigen" name="Display Info">
 			<menu_item_check label="Zeit anzeigen" name="Show Time"/>
-			<menu_item_check label="Kosten für Hochladen anzeigen" name="Show Upload Cost"/>
+			<menu_item_check label="Transaktion beim Hochladen anzeigen" name="Show Upload Transaction"/>
 			<menu_item_check label="Render-Info anzeigen" name="Show Render Info"/>
 			<menu_item_check label="Texturinfos anzeigen" name="Show Texture Info"/>
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>
