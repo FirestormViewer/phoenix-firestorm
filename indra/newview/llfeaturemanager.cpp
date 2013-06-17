@@ -545,7 +545,11 @@ public:
 				out.close();
 				// <FS:Techwolf Lupindo> downloadable gpu table support
 				const std::time_t new_time = mLastModified.secondsSinceEpoch();
+#ifdef LL_WINDOWS
+				boost::filesystem::last_write_time(boost::filesystem::path( utf8str_to_utf16str(mFilename) ), new_time);
+#else
 				boost::filesystem::last_write_time(boost::filesystem::path(mFilename), new_time);
+#endif
 				// </FS:Techwolf Lupindo>
 			}
 		}
