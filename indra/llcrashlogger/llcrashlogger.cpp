@@ -159,7 +159,18 @@ void LLCrashLogger::gatherFiles()
 
 	// Figure out the filename of the debug log
 	std::string db_file_name = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"debug_info.log");
+	
+	// <FS:ND> Properly handle unicode path on Windows. Maybe could use a llifstream instead of ifdef?
+
+	// std::ifstream debug_log_file(db_file_name.c_str());
+	
+#ifdef LL_WINDOWS
+	std::ifstream debug_log_file( utf8str_to_utf16str( db_file_name ).c_str());
+#else
 	std::ifstream debug_log_file(db_file_name.c_str());
+#endif
+
+	// </FS:ND>
 
 	// Look for it in the debug_info.log file
 	if (debug_log_file.is_open())
@@ -498,7 +509,12 @@ bool LLCrashLogger::sendCrashLogs()
 // [/SL:KB]
 	std::string report_file = dump_path + ".log";
 
+#ifdef LL_WINDOWS
+	std::ofstream out_file( utf8str_to_utf16str(report_file).c_str() );
+#else
 	std::ofstream out_file(report_file.c_str());
+#endif
+
 	LLSDSerialize::toPrettyXML(post_data, out_file);
 	out_file.close();
 

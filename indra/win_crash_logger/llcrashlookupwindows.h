@@ -39,6 +39,7 @@ public:
 
 protected:
 	IDebugClient*	m_pDbgClient;
+	IDebugClient4*	m_pDbgClient4;
 	IDebugControl4*	m_pDbgControl;
 	IDebugSymbols2*	m_pDbgSymbols;
 };
