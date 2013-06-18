@@ -749,13 +749,17 @@ class WindowsManifest(ViewerManifest):
 
             os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(), sName )
         
-        # OLD METHOD, Still used for windows-based debugging
-        symbolZip = zipfile.ZipFile("%s/phoenix-%s_%s_%s_pdbsymbols-windows.zip" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes'],self.args['viewer_flavor']), 'w',zipfile.ZIP_DEFLATED)
-        symbolZip.write("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
-        symbolZip.write("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
-        # symbolZip.write("../sharedlibs/%s/llcommon.dll" % self.args['configuration'].lower(),"llcommon.dll")
-        # symbolZip.write("../sharedlibs/%s/llcommon.pdb" % self.args['configuration'].lower(),"llcommon.pdb")
-        symbolZip.close()
+        # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
+        # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
+        # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for nowo.
+        symbolTar = tarfile.TarFile("%s/Phoenix-%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
+                                                                                    substitution_strings['channel_oneword'],
+                                                                                    substitution_strings['version_dashes'],
+                                                                                    self.args['viewer_flavor']),
+                                                                                    'w')
+        symbolTar.add("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
+        symbolTar.add("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
+        symbolTar.close()
 
 
 
