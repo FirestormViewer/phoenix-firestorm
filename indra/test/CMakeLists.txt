@@ -26,7 +26,7 @@ include_directories(
     ${LLINVENTORY_INCLUDE_DIRS}
     ${LLVFS_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
-    ${LSCRIPT_INCLUDE_DIRS}
+    # <FS:CR> Removed -> ${LSCRIPT_INCLUDE_DIRS}
     ${GOOGLEMOCK_INCLUDE_DIRS}
     ${TUT_INCLUDE_DIR}
     )
@@ -49,7 +49,7 @@ set(test_SOURCE_FILES
     llpermissions_tut.cpp
     llpipeutil.cpp
     llsaleinfo_tut.cpp
-    llscriptresource_tut.cpp
+    # <FS:CR> Removed -> llscriptresource_tut.cpp
     llsdmessagebuilder_tut.cpp
     llsdmessagereader_tut.cpp
     llsd_new_tut.cpp
