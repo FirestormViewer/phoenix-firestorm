@@ -220,6 +220,7 @@
 #include "fsfloatersearch.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
+#include "fsscriptlibrary.h"
 #include "fswsassetblacklist.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
@@ -2354,6 +2355,18 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
         //DEV-17797.  get null folder.  Any items found here moved to Lost and Found
         LLInventoryModelBackgroundFetch::instance().findLostItems();
 		display_startup();
+		
+		// <FS:CR> Load dynamic script library from xml
+
+		gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_lsl.xml"));
+#if OPENSIM
+		if (LLGridManager::getInstance()->isInOpenSim())
+			gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"));
+		if (LLGridManager::getInstance()->isInAuroraSim())
+			gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"));
+#endif // OPENSIM
+		display_startup();
+		// </FS:CR>
 
 		LLStartUp::setStartupState( STATE_PRECACHE );
 		timeout.reset();
