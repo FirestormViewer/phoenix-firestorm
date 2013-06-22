@@ -286,6 +286,11 @@
 			<key>sleep</key>
 			<float>0</float>
 		</map>
+		<key>osGetThreatLevel</key>
+		<map>
+			<key>sleep</key>
+			<float>0</float>
+		</map>
 		<key>osParseJSON</key>
 		<map>
 			<key>sleep</key>

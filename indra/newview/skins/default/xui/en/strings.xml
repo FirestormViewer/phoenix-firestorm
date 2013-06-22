@@ -2784,6 +2784,10 @@ Adds an avatar to a group.  Where group_name = name of the target group, role_na
 osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer isRezAtRoot, integer doRecoil, integer SetDieAtEdge, integer CheckPos)
 Where inventory = object to rez.  Position = vector to rez object.  Velocity = initial velocity.  Rot = initial rotation.  Param = onrez event.  IzAtRoot = TRUE/FALSE flag changes llRezAtRoot to llRezObject.  doRecoil =TRUE/FALSE to push avatar.  SetDieAtEdge = TRUE/FALSE for rezzed object to die at edge of region.  CheckPos = TRUE/FALSE enable/disable 10m rez limit.
 </string>
+<string name="LSLTipText_osGetThreatLevel" translate="false">
+osGetThreatLevel(string key)
+Returns string
+</string>
 <string name="LSLTipText_lsSetWindlightScene" translate="false">
 lsSetWindlightScene(list rules)
 Set the current WindLight scene. Estate managers and owners only.
@@ -3042,6 +3046,11 @@ Where tag = tag string to match.  Return a list of bot UUID's in region with the
 botRemoveBotsWithTag(tag)
 Where tag = tag string to match.  Removes bot's matching the tag.
 </string>
+<string name="LSLTipText_botSetSpeed" translate="false">
+botSetSpeed(key, float)
+Sets the speed of a bot
+</string>
+	
 <!-- END FS:CR OSSL/AA function tooltip help texts -->
 
   <!-- Avatar busy/away mode -->

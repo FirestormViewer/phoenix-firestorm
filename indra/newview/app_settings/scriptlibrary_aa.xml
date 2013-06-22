@@ -271,5 +271,10 @@
 			<key>sleep</key>
 			<float>0</float>
 		</map>
+		<key>botSetSpeed</key>
+		<map>
+			<key>sleep</key>
+			<float>0</float>
+		</map>
 	</map>
 </llsd>
