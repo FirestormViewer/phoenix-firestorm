@@ -1969,7 +1969,7 @@ s2 repeats if it is shorter than s1.</string>
 		<key>llHTTPRequest</key>
 		<map>
 			<key>desc</key>
-			<string>llHTTPRequest(string url, list parameters, string body)
+			<string>key llHTTPRequest(string url, list parameters, string body)
 Sends an HTTP request to the specified url with the body of the request and parameters</string>
 		</map>
 		<key>llResetLandBanList</key>
