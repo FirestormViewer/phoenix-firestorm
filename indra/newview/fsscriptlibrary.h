@@ -31,10 +31,10 @@
 class LLScriptLibraryFunction
 {
 public:
-    LLScriptLibraryFunction(std::string name, F32 st, bool god_only = false);
+    LLScriptLibraryFunction(std::string name, std::string desc, bool god_only = false);
 	
     std::string mName;
-    F32  mSleepTime;
+	std::string mDesc;
     bool mGodOnly;
 };
 
@@ -47,7 +47,7 @@ public:
 	std::vector<LLScriptLibraryFunction> mFunctions;
 	
 private:
-    void addFunction(std::string name, F32 st, bool god_only = false);
+    void addFunction(std::string name, std::string desc, bool god_only = false);
 	
 };
 

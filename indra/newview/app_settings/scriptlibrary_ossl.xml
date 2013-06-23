@@ -1,700 +1,859 @@
-<!-- OSSL Script Library - Copyright 2013 cinder.roxley@phoenixviewer.com - Updated 20.6.2013 -->
+<!-- OSSL Script Library - Copyright 2013 cinder.roxley@phoenixviewer.com - Updated 22.6.2013 -->
 <llsd>
 	<map>
 		<key>osSetRegionWaterHeight</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetRegionWaterHeight(float height)
+Adjusts water height in current region</string>
 		</map>
 		<key>osSetRegionSunSettings</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetRegionSunSettings(integer useEstateSun, integer sunFixed, float sunHour)
+Set the current region's sun settings</string>
 		</map>
 		<key>osSetEstateSunSettings</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetEstateSunSettings(integer sunFixed, float sunHour)
+Set current estate's sun settings</string>
 		</map>
 		<key>osGetCurrentSunHour</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>float osGetCurrentSunHour()
+Returns the value of the current region's sun hour</string>
 		</map>
 		<key>osGetSunParam</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetSunParam(string param)
+Returns region's current sun parameters.
+Param are: day_length, year_length, day_night_offset, update_interval.</string>
 		</map>
 		<key>osSetSunParam</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetSunParam(string param, float value)
+Sets the current region's sun parameters.
+Param are: day_length, year_length, day_night_offset, update_interval.</string>
 		</map>
 		<key>osWindActiveModelPluginName</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osWindActiveModelPluginName()
+Returns active wind plugin name, specified by "wind_plugin" in OpenSim.ini</string>
 		</map>
 		<key>osSetWindParam</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetWindParam(string plugin, string param, float value)
+Sets value of param property for plugin module.
+SimpleRandomWind plugin param is: strength.
+ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange</string>
 		</map>
 		<key>osGetWindParam</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetWindParam(string plugin, string param)
+Gets the value of param property for plugin module.
+SimpleRandomWind plugin param is: strength.
+ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange.</string>
 		</map>
 		<key>osParcelJoin</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osParcelJoin(vector start, vector end)
+Joins two adjacent parcels within the same region</string>
 		</map>
 		<key>osParcelSubdivide</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osParcelSubdivide(vector start, vector end)
+Subdivides a parcel into two adjacent parcels within the same region</string>
 		</map>
 		<key>osSetParcelDetails</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetParcelDetails(vector pos, list parameters)
+Sets parcel details
+PARCEL_DETAILS_NAME, PARCEL_DETAILS_DESC, PARCEL_DETAILS_OWNER, PARCEL_DETAILS_GROUP, PARCEL_DETAILS_CLAIMDATE are implemented</string>
 		</map>
 		<key>osList2Double</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osList2Double(list src, integer index)
+This function converts a value in the specified index of the list src to the double data type. However, OSSL does not have a double data type. C# contains a double type, but the current LSL implementation does not.</string>
 		</map>
 		<key>osSetDynamicTextureURL</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
-		</map>
-		<key>osSetDynamicTextureURLBlend</key>
-		<map>
-			<key>sleep</key>
-			<float>0</float>
-		</map>
-		<key>osSetDynamicTextureDataBlendFace</key>
-		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osSetDynamicTextureURL(key dynamicID, string contentType, string url, string extraParams, integer timer)
+Renders a web texture on the prim containing the script and returns the UUID of the newly created texture</string>
 		</map>
 		<key>osSetDynamicTextureData</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetDynamicTextureData(key dynamicID, string contentType, string data, string extraParams, integer timer)
+Renders a dynamically created texture on the prim containing the script and returns the UUID of the newly created texture</string>
 		</map>
-		<key>osSetDynamicTextureDataBlend</key>
+		<key>osSetDynamicTextureURLBlend</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osSetDynamicTextureDataBlend(string dynamicID, string contentType, string data, string extraParams, integer timer, integer alpha)
+Allows for two dynamic textures to blend on the prim containing this script</string>
 		</map>
 		<key>osSetDynamicTextureDataBlendFace</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osSetDynamicTextureDataBlendFace(string dynamicID, string contentType, string data, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face)
+Returns UUID of the generated texture. Intended to be used with subsequent calls to osSetDynamicTexture* functions in order to modify the texture</string>
+		</map>
+		<key>osSetDynamicTextureURLBlend</key>
+		<map>
+			<key>desc</key>
+			<string>osSetDynamicTextureURLBlend(key dynamicID, string contentType, string url, string extraParams, integer timer, integer alpha)
+Allows for two dynamic textures to blend on the prim containing this script</string>
+		</map>
+		<key>osSetDynamicTextureURLBlendFace</key>
+		<map>
+			<key>desc</key>
+			<string>osSetDynamicTextureURLBlendFace(key dynamicID, string contentType, string url, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face)
+Allows for two dynamic textures to blend on the specified face of the prim containing this script</string>
 		</map>
 		<key>osGetTerrainHeight</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>integer osGetTerrainHeight(integer x, integer y)
+Returns the current region's terrain height as a float at the given coordinates</string>
 		</map>
 		<key>osSetTerrainHeight</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetTerrainHeight(integer x, integer y, float val)
+Sets the current region's terrain height at the given coordinates</string>
 		</map>
 		<key>osTerrainFlush</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osTerrainFlush()
+Updates terrain changes in the grid&apos;s database</string>
 		</map>
 		<key>osRegionRestart</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osRegionRestart(float seconds)
+Restarts the current region after a specified amount of time (in seconds)</string>
 		</map>
 		<key>osRegionNotice</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osRegionNotice(string msg)
+Sends a region notice throughout the current region</string>
 		</map>
 		<key>osConsoleCommand</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osConsoleCommand(string command)
+Sends a given console command to the region.
+NOTE: There are no security checks with this function. DO NOT USE THIS FUNCTION UNLESS YOU ARE ABSOLUTELY SURE YOU KNOW WHAT YOU ARE DOING.</string>
 		</map>
 		<key>osSetParcelMediaURL</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetParcelMediaURL(string url)
+Set parcel media to a given url</string>
 		</map>
 		<key>osSetParcelSIPaddress</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetParcelSIPAddress(string SIPAddress)
+Set parcel SIP Address for voice</string>
 		</map>
 		<key>osSetPrimFloatOnWater</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetPrimFloatOnWater(integer float)
+Set physical object to float at the given water level</string>
 		</map>
 		<key>osTeleportAgent</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osTeleportAgent(key agent, integer regionX, integer regionY, vector position, vector lookat);
+osTeleportAgent(key agent, string regionName, vector position, vector lookat);
+osTeleportAgent(key agent, vector position, vector lookat)
+Teleports an agent to the specified location</string>
 		</map>
 		<key>osTeleportOwner</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osTeleportOwner(integer regionX, integer regionY, vector position, vector lookat);
+osTeleportOwner(string regionName, vector position, vector lookat);
+osTeleportOwner(vector position, vector lookat)
+Teleports the owner of the object containing the script to the specified location</string>
 		</map>
 		<key>osGetAgentIP</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetAgentIP(key avatar)
+Returns the agent&apos;s IP Address</string>
 		</map>
 		<key>osGetAgents</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list osGetAgents()
+Returns a list of all avatars in the current region</string>
 		</map>
 		<key>osAvatarPlayAnimation</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osAvatarPlayAnimation(key avatar, string animation)
+Plays a given animation on a specified avatar.
+No PERMISSION_TRIGGER_ANIMATION check.</string>
 		</map>
 		<key>osAvatarStopAnimation</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osAvatarStopAnimation(key UUID, string animation)
+Stops playing an animation on a specified avatar</string>
 		</map>
 		<key>osForceAttachToAvatar</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osForceAttachToAvatar(integer attach_point)
+Attaches the object to the avatar.
+No PERMISSION_ATTACH check.</string>
 		</map>
 		<key>osForceAttachToAvatarFromInventory</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osForceAttachToAvatarFromInventory(string item, integer attach_point)
+Attaches given inventory item to the avatar.
+No PERMISSION_ATTACH check.</string>
 		</map>
 		<key>osForceAttachToOtherAvatarFromInventory</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osForceAttachToOtherAvatarFromInventory(key avatar, string item, integer attach_point)
+Attaches given inventory item to a specified avatar.
+No PERMISSION_ATTACH check.</string>
 		</map>
 		<key>osForceDetachFromAvatar</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osForceDetachFromAvatar()
+Detaches the object from the avatar.
+No PERMISSION_ATTACH check.</string>
 		</map>
 		<key>osGetNumberOfAttachments</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list osGetNumberOfAttachments(key avatar, list attach_point)
+Returns a strided list of the specified attachment points and the number of attachments on those points</string>
 		</map>
 		<key>osMessageAttachments</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osMessageAttachments(key avatar, string message, list attach_point, integer flags)
+Sends a given message to the specified avatar's attachments on the given attachment points</string>
 		</map>
 		<key>osMovePen</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osMovePen(string draw_list, integer x, integer y)
+Moves the pen's location to the coordinates specified by the x and y parameters, without drawing anything</string>
 		</map>
 		<key>osDrawLine</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawLine(string draw_list, integer start_x, integer start_y, integer end_x, integer end_y)
+osDrawLine(string draw_list, integer end_x, integer end_y)
+Draws a line on a dynamic texture</string>
 		</map>
 		<key>osDrawText</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawText(string draw_list, string text)
+Renders text on a dynamic texture</string>
 		</map>
 		<key>osDrawEllipse</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawEllipse(string draw_list, integer width, integer height)
+Draws an ellipse on a dynamic texture</string>
 		</map>
 		<key>osDrawRectangle</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawRectangle(string draw_list, integer width, integer height)
+Draws a rectangle on a dynamic texture</string>
 		</map>
 		<key>osDrawFilledRectangle</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawFilledRectangle(string draw_list, integer width, integer height)
+Draws a rectangle on a dynamic texture, and fills it with the current pen color</string>
 		</map>
 		<key>osDrawPolygon</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawPolygon (string draw_list, list x, list y)
+Draws a polygon on a dynamic texture</string>
 		</map>
 		<key>osDrawFilledPolygon</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawFilledPolygon (string draw_list, list x, list y)
+Draws a polygon on a dynamic texture, and fills it with the current pen color</string>
 		</map>
 		<key>osSetFontSize</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetFontSize(string draw_list, integer font_size)
+Sets the font size to be used in osDrawText</string>
 		</map>
 		<key>osSetFontName</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetFontName(string draw_list, string font_name)
+Sets the font to be used by osDrawText</string>
 		</map>
 		<key>osSetPenSize</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetPenSize(string draw_list, integer pen_size)
+Sets the line thickness to be used when drawing dynamic textures</string>
 		</map>
 		<key>osSetPenColor</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetPenColor(string draw_list, string color)
+Sets the pen color to be used when drawing dynamic textures</string>
 		</map>
 		<key>osSetPenCap</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetPenCap(string draw_list, string direction, string type)
+Apply a shape on the end of a line</string>
 		</map>
 		<key>osDrawImage</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDrawImage(string draw_list, integer width, integer height, string url)
+Retrieves a specified image and draws it at the specified height and width</string>
 		</map>
 		<key>osGetDrawStringSize</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osGetDrawStringSize(string contentType, string text, string fontName, integer fontSize)
+Returns a vector containing the horizontal and vertical dimensions in pixels of the specified text</string>
 		</map>
 		<key>osGetScriptEngineName</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetScriptEngineName()
+Returns the name of the script engine running on the current region</string>
 		</map>
 		<key>osGetSimulatorVersion</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetSimulatorVersion()
+Returns the current simulator version</string>
 		</map>
 		<key>osGetThreatLevel</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetThreatLevel()
+Returns the current scripting threat level</string>
 		</map>
 		<key>osParseJSON</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osParseJSON(string JSON)
+Returns a hashtable containing the structured JSON contents</string>
 		</map>
 		<key>osParseJSONNew</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osParseJSON(string JSON)
+Returns a hashtable containing the structured JSON contents</string>
 		</map>
 		<key>osMessageObject</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osMessageObject(key object, string msg)
+Sends a specified message to an object</string>
 		</map>
 		<key>osMakeNotecard</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osMakeNotecard(string notecard, list contents)
+Creates a notecard with contents of list</string>
 		</map>
 		<key>osGetNotecardLine</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetNotecardLine(string notecard, integer line)
+Returns a given line in a specified notecard contained in the object</string>
 		</map>
 		<key>osGetNotecard</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetNotecard(string notecard)
+Returns the full contents of a notecard</string>
 		</map>
 		<key>osGetNumberOfNotecardLines</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>integer osGetNumberOfNotecardLines(string notecard)
+Returns the number of lines in a notecard</string>
 		</map>
 		<key>osAvatarName2Key</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osAvatarName2Key(string firstname, string lastname)
+Returns the avatar&apos;s key from their first and last name</string>
 		</map>
 		<key>osKey2Name</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osKey2Name(key avatar)
+Returns the avatar&apos;s name from their key</string>
 		</map>
 		<key>osGetGridNick</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetGridNick()
+Returns the current grid&apos;s nickname</string>
 		</map>
 		<key>osGetGridName</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetGridName()
+Returns the current grid&apos;s name</string>
 		</map>
 		<key>osGetGridLoginURI</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetGridLoginURI()
+Returns the current grid&apos;s LoginURI</string>
 		</map>
 		<key>osGetGridHomeURI</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetGridHomeURI()
+Returns the current grid&apos;s HomeURI</string>
 		</map>
 		<key>osGetGridCustom</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetGridCustom()
+Returns the current grid&apos;s GridInfo key</string>
 		</map>
 		<key>osFormatString</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osFormatString(string to_format, list strings)
+Formats the given string using specified parameters</string>
 		</map>
 		<key>osMatchString</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list osMatchString(string to_match, string pattern, integer start)
+Returns a list containing the matches from the specified string</string>
 		</map>
 		<key>osReplaceString</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>				</string>
 		</map>
 		<key>osLoadedCreationDate</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osLoadedCreationDate()
+Returns the creation date of the current region</string>
 		</map>
 		<key>osLoadedCreationTime</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osLoadedCreationTime()
+Returns the creation time of the current region</string>
 		</map>
 		<key>osLoadedCreationID</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osLoadedCreationID()
+Returns the original UUID of the current region</string>
 		</map>
 		<key>osGetLinkPrimitiveParams</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list osGetLinkPrimitiveParams(integer link_num, list parameters)
+Returns prim params for the prim specified by link_num</string>
 		</map>
 		<key>osIsNpc</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>integer osIsNpc(key npc)
+Returns 1 if TRUE, 0 if FALSE</string>
 		</map>
 		<key>osNpcCreate</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osNpcCreate(string firstname, string lastname, vector position, string clone)
+key osNpcCreate(string firstname, string lastname, vector position, string clone, integer options)
+Creates an NPC</string>
 		</map>
 		<key>osNpcSaveAppearance</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcSaveAppearance(key npc, string notecard)
+Save the target NPC&apos;s current appearance to a notecard in the object's inventory</string>
 		</map>
 		<key>osNpcLoadAppearance</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcLoadAppearance(key npc, string notecard)
+Load the target NPC&apos;s appearance from a notecard</string>
 		</map>
 		<key>osNpcGetOwner</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osNpcGetOwner(key npc)
+Returns the avatar key for the target NPC&apos;s owner</string>
 		</map>
 		<key>osNpcGetPos</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>vector osNpcGetPos(key npc)
+Returns current position vector of the target NPC</string>
 		</map>
 		<key>osNpcGetRot</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>rotation osNpcGetRot(key npc)
+Returns the rotation of the the target NPC</string>
 		</map>
 		<key>osNpcSetRot</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcSetRot(key npc, rotation rot)
+Set the rotation of the target NPC</string>
 		</map>
 		<key>osNpcMoveTo</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcMoveTo(key npc, vector position)
+Moves the target NPC to a location within the region</string>
 		</map>
 		<key>osNpcMoveToTarget</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcMoveToTarget(key npc, vector target, integer options)
+Moves the target NPC to a specified location over a period of time</string>
 		</map>
 		<key>osNpcStopMoveToTarget</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcStopMoveToTarget(key npc)
+Stop the target NPC&apos;s movement</string>
 		</map>
 		<key>osNpcSay</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcSay(key npc, string message)
+Target NPC says message on the nearby chat channel</string>
 		</map>
 		<key>osNpcShout</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcShout(key npc, string message)
+Target NPC shouts message on the nearby chat channel</string>
 		</map>
 		<key>osNpcWhisper</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcWhisper(key npc, string message)
+Target NPC whispers message on the nearby chat channel</string>
 		</map>
 		<key>osNpcSit</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcSit(key npc, key object, integer options)
+Makes the target NPC sit on an object</string>
 		</map>
 		<key>osNpcStand</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcStand(key npc)
+Makes the target NPC stand up</string>
 		</map>
 		<key>osNpcTouch</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcTouch(key npcKey, key object_key, integer link_num)
+Makes the target NPC to touch the specified object</string>
 		</map>
 		<key>osNpcRemove</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osNpcRemove(key npc)
+Removes the NPC specified by key npc</string>
 		</map>
 		<key>osNpcPlayAnimation</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcPlayAnimation(key npc, string animation)
+Plays animation on the target NPC</string>
 		</map>
 		<key>osNpcStopAnimation</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osNpcStopAnimation(key npc, string animation)
+Stops animation being played by the NPC</string>
 		</map>
 		<key>osOwnerSaveAppearance</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osOwnerSaveAppearance(string notecard)
+Creates a notecard with the object owner&apos;s current appearance inside the object</string>
 		</map>
 		<key>osAgentSaveAppearance</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osAgentSaveAppearance(key avatar, string notecard)
+Creates a notecard with the specified avatar&apos;s current appearance inside the object</string>
 		</map>
 		<key>osGetMapTexture</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osGetMapTexture()
+Returns the map texture key for the current region</string>
 		</map>
 		<key>osGetRegionMapTexture</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osGetRegionMapTexture(string region)
+Returns the map texture key for a specified region</string>
 		</map>
 		<key>osGetRegionStats</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list osGetRegionStats()
+Returns the current region&apos; statistics</string>
 		</map>
 		<key>osGetSimulatorMemory</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>integer osGetSimulatorMemory()
+Returns the memory in use by the current region</string>
 		</map>
 		<key>osKickAvatar</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osKickAvatar(string FirstName, string LastName, string alert)
+Kicks specified avatar out of the current region</string>
 		</map>
 		<key>osSetSpeed</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetSpeed(key avatar, float modifier)
+Modify the speed of movement for the given avatar</string>
 		</map>
 		<key>osGetHealth</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osGetHealth(key avatar)
+Return the target avatar's health</string>
 		</map>
 		<key>osCauseDamage</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osCauseDamage(key avatar, float damage)
+Causes health damage to the specified avatar</string>
 		</map>
 		<key>osCauseHealing</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osCauseHealing(key avatar, float healing)
+Increase health to the specified avatar</string>
 		</map>
 		<key>osGetPrimitiveParams</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list osGetPrimitiveParams(key prim, list parameters)
+Returns the parameters of a primitive, specified by its key</string>
 		</map>
 		<key>osSetPrimitiveParams</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetPrimitiveParams(key prim, list parameters)
+Sets the primitive parameters for the given primitive
+		</string>
 		</map>
 		<key>osSetProjectionParams</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetProjectionParams(integer projection, key texture, float fov, float focus, float ambience);
+osSetProjectionParams(key prim, integer projection, key texture, float fov, float focus, float ambience)
+Sets the project parameters for the given primitive</string>
 		</map>
 		<key>osGetAvatarList</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list osGetAvatarList()
+Returns a list with the keys, position, and name of each avatar in the current region</string>
 		</map>
 		<key>osUnixTimeToTimestamp</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osUnixTimeToTimestamp(integer time)
+Returns unix time as a formatted timestamp</string>
 		</map>
 		<key>osGetInventoryDesc</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>string osGetInventoryDesc(string name)
+Returns the description of inventory item</string>
 		</map>
 		<key>osInviteToGroup</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>integer osInviteToGroup(key avatar)
+Invited the specified avatar to the object&apos;s current group</string>
 		</map>
 		<key>osEjectFromGroup</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>integer osEjectFromGroup(key avatar)
+Eject the specified avatar from the object&apos;s current group</string>
 		</map>
 		<key>osSetTerrainTexture</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetTerrainTexture(integer level, key texture)
+Set the terrain texture for the current region to a given texture</string>
 		</map>
 		<key>osSetTerrainTextureHeight</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetTerrainTextureHeight(integer corner, float low, float high)
+Set the terrain texture height for the current region</string>
 		</map>
 		<key>osIsUUID</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osIsUUID(string)
+Returns 1 if the given string is a valid UUID, 0 if not</string>
 		</map>
 		<key>osMin</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>float osMin(float x, float y)
+Returns the lesser of two numbers</string>
 		</map>
 		<key>osMax</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>float osMax(float x, float y)
+Returns the greater of two numbers</string>
 		</map>
 		<key>osGetRezzingObject</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>key osGetRezzingObject()
+Returns the key of the object&apos;s parent object</string>
 		</map>
 		<key>osSetContentType</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osSetContentType(key id, string type)
+Sets a content return type for a llRequestUrl()</string>
 		</map>
 		<key>osDropAttachment</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDropAttachment()
+Drops an attachment</string>
 		</map>
 		<key>osDropAttachmentAt</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osDropAttachmentAt(vector pos, rotation rot)
+Drops an attachment at a given position and rotation</string>
 		</map>
 		<key>osForceDropAttachment</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osForceDropAttachment()
+Drops an attachment without a PERMISSION_ATTACH check</string>
 		</map>
 		<key>osForceDropAttachmentAt</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osForceDropAttachmentAt(vector pos, rotation rot)
+Drops an attachment at a given position and rotation without a PERMISSION_ATTACH check</string>
 		</map>
 		<key>osListenRegex</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osListenRegex(integer channel, string name, string id, string msg, integer regex_bitfield)
+Filter listen events by regex</string>
 		</map>
 		<key>osRegexIsMatch</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osRegexIsMatch(string input, string pattern)
+Returns 1 if the input string matches the regular expression pattern, returns 0 if not</string>
 		</map>
 		<key>osReturnObject</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osReturnObject(key avatar)
+Returns object to a specified avatar</string>
 		</map>
 		<key>osReturnObjects</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osReturnObjects(integer param)
+Returns a group of objects</string>
 		</map>
 		<key>osShutDown</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osShutDown()
+Shuts down the current simulator</string>
 		</map>
 		<key>osAddAgentToGroup</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osAddAgentToGroup(key avatar, string group_name, string role_name)
+Adds the avatar to a group under a given role</string>
 		</map>
 		<key>osRezObject</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer rez_at_root_, integer do_recoil, integer set_die_at_edge, integer check_pos)
+Rez an object</string>
 		</map>
 		<key>lsGetWindlightScene</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>list lsGetWindlightScene(list rules)
+Return the current Lightshare settings</string>
 		</map>
 		<key>lsSetWindlightScene</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>lsSetWindlightScene(list parameters)
+Sets the Lightshare scene</string>
 		</map>
 		<key>lsSetWindlightSceneTargeted</key>
 		<map>
-			<key>sleep</key>
-			<float>0</float>
+			<key>desc</key>
+			<string>lsSetWindlightSceneTargeted(list parameters, key avatar)
+Sets the Lightshare scene for a given avatar</string>
 		</map>
 	</map>
 </llsd>

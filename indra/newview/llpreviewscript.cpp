@@ -333,23 +333,28 @@ BOOL LLScriptEdCore::postBuild()
 			std::string name = i->mName;
 			funcs.push_back(name);
 			
-			std::string desc_name = "LSLTipText_";
-			desc_name += name;
-			std::string desc = LLTrans::getString(desc_name);
+			// <FS:CR> Dynamically loaded script library 
+			//std::string desc_name = "LSLTipText_";
+			//desc_name += name;
+			//std::string desc = LLTrans::getString(desc_name);
 			
-			F32 sleep_time = i->mSleepTime;
-			if( sleep_time )
-			{
-				desc += "\n";
-				
-				LLStringUtil::format_map_t args;
-				args["[SLEEP_TIME]"] = llformat("%.1f", sleep_time );
-				desc += LLTrans::getString("LSLTipSleepTime", args);
-			}
+			//F32 sleep_time = i->mSleepTime;
+			//if( sleep_time )
+			//{
+			//	desc += "\n";
+			
+			//	LLStringUtil::format_map_t args;
+			//	args["[SLEEP_TIME]"] = llformat("%.1f", sleep_time );
+			//	desc += LLTrans::getString("LSLTipSleepTime", args);
+			//}
 			
 			// A \n linefeed is not part of xml. Let's add one to keep all
 			// the tips one-per-line in strings.xml
-			LLStringUtil::replaceString( desc, "\\n", "\n" );
+			//LLStringUtil::replaceString( desc, "\\n", "\n" );
+			std::string desc = i->mDesc;
+			
+			llinfos << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << llendl;
+			// </FS:CR>
 			
 			tooltips.push_back(desc);
 		}

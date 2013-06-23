@@ -52,7 +52,7 @@ void LLScriptLibrary::loadLibrary(const std::string& filename)
 					god_only = func_map["gods-only"].asBoolean();
 				}
 				addFunction(func_itr->first,
-							func_map["sleep"].asReal(),
+							func_map["desc"].asString(),
 							god_only);
 			}
 			file.close();
@@ -69,15 +69,15 @@ void LLScriptLibrary::loadLibrary(const std::string& filename)
 	}
 }
 
-void LLScriptLibrary::addFunction(std::string name, F32 st, bool god_only)
+void LLScriptLibrary::addFunction(std::string name, std::string desc, bool god_only)
 {
-    LLScriptLibraryFunction func(name, st, god_only);
+    LLScriptLibraryFunction func(name, desc, god_only);
     mFunctions.push_back(func);
 }
 
-LLScriptLibraryFunction::LLScriptLibraryFunction(std::string name, F32 st, bool god_only)
+LLScriptLibraryFunction::LLScriptLibraryFunction(std::string name, std::string desc, bool god_only)
 :	mName(name),
-mSleepTime(st),
+mDesc(desc),
 mGodOnly(god_only)
 {
 }
