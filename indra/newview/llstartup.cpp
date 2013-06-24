@@ -228,6 +228,7 @@
 #include "NACLantispam.h"
 #include "rlvhandler.h"
 #include "streamtitledisplay.h"
+#include "fscommon.h"
 #include "tea.h"
 
 //
@@ -1501,6 +1502,12 @@ bool idle_startup()
 	if (STATE_WORLD_INIT == LLStartUp::getStartupState())
 	{
 		set_startup_status(0.30f, LLTrans::getString("LoginInitializingWorld"), gAgent.mMOTD);
+		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
+		if(gSavedSettings.getBOOL("FSDisableLoginScreens"))
+		{
+			reportToNearbyChat(gAgent.mMOTD);
+		}
+		// </FS:Techwolf Lupindo>
 		display_startup();
 		// We should have an agent id by this point.
 		llassert(!(gAgentID == LLUUID::null));
