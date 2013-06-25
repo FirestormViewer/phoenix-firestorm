@@ -94,6 +94,7 @@ protected:
 	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
 	void		onLanguageChange();
 	void		onNameTagOpacityChange(const LLSD& newvalue);
+	void		onConsoleOpacityChange(const LLSD& newvalue);	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
 
 	// <FS:Zi> Pie menu
 	// make sure controls get greyed out or enabled when pie color override is toggled
