@@ -1963,8 +1963,15 @@ Returns the region flags (REGION_FLAG_*) for the region the object is in</string
 		<map>
 			<key>desc</key>
 			<string>string llXorBase64StringsCorrect(string s1, string s2)
-Correctly performs an exclusive or on two Base64 strings and returns a Base64 string.
+Correctly performs an exclusive or on two Base64 strings.
 s2 repeats if it is shorter than s1.</string>
+		</map>
+		<key>llXorBase64</key>
+		<map>
+			<key>desc</key>
+			<string>string llXorBase64(string s1, string s2)
+Correctly performs an exclusive or on two Base64 strings and returns a Base64 string.
+If the inputs are not Base64 strings the result will be erratic.</string>
 		</map>
 		<key>llHTTPRequest</key>
 		<map>
