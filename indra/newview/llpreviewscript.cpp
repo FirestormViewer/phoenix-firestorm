@@ -52,9 +52,12 @@
 #include "llscrolllistitem.h"
 #include "llscrolllistcell.h"
 #include "llslider.h"
-#include "lscript_rt_interface.h"
-#include "lscript_library.h"
-#include "lscript_export.h"
+// <FS:CR> Removed LSO Compiler
+//#include "lscript_rt_interface.h"
+//#include "lscript_library.h"
+//#include "lscript_export.h"
+#include "fsscriptlibrary.h"
+// </FS:CR>
 #include "lltextbox.h"
 #include "lltooldraganddrop.h"
 #include "llvfile.h"
@@ -95,6 +98,9 @@
 // NaCl - LSL Preprocessor
 #include "fslslpreproc.h"
 // NaCl End
+#if OPENSIM
+#include "llviewernetwork.h"	// for Grid manager
+#endif // OPENSIM
 
 const std::string HELLO_LSL =
 	"default\n"
@@ -235,6 +241,10 @@ LLScriptEdCore::LLScriptEdCore(
 	mEnableSave(FALSE),
 	mLiveFile(NULL),
 	mContainer(container),
+	// <FS:CR> FIRE-10606, patch by Sei Lisa
+	mLSLProc(NULL),
+	mPostEditor(NULL),
+	// </FS:CR>
 	mHasScriptData(FALSE)
 {
 	setFollowsAll();
@@ -296,11 +306,10 @@ BOOL LLScriptEdCore::postBuild()
 
 	// NaCl - LSL Preprocessor
 	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
-	BOOL preproc = _NACL_LSLPreprocessor;
-	if(preproc)
+	if (_NACL_LSLPreprocessor)
 	{
 		mPostEditor = getChild<LLViewerTextEditor>("Post Editor");
-		if(mPostEditor)
+		if (mPostEditor)
 		{
 			mPostEditor->setFollowsAll();
 			mPostEditor->setEnabled(TRUE);
@@ -330,23 +339,28 @@ BOOL LLScriptEdCore::postBuild()
 			std::string name = i->mName;
 			funcs.push_back(name);
 			
-			std::string desc_name = "LSLTipText_";
-			desc_name += name;
-			std::string desc = LLTrans::getString(desc_name);
+			// <FS:CR> Dynamically loaded script library 
+			//std::string desc_name = "LSLTipText_";
+			//desc_name += name;
+			//std::string desc = LLTrans::getString(desc_name);
 			
-			F32 sleep_time = i->mSleepTime;
-			if( sleep_time )
-			{
-				desc += "\n";
-				
-				LLStringUtil::format_map_t args;
-				args["[SLEEP_TIME]"] = llformat("%.1f", sleep_time );
-				desc += LLTrans::getString("LSLTipSleepTime", args);
-			}
+			//F32 sleep_time = i->mSleepTime;
+			//if( sleep_time )
+			//{
+			//	desc += "\n";
+			
+			//	LLStringUtil::format_map_t args;
+			//	args["[SLEEP_TIME]"] = llformat("%.1f", sleep_time );
+			//	desc += LLTrans::getString("LSLTipSleepTime", args);
+			//}
 			
 			// A \n linefeed is not part of xml. Let's add one to keep all
 			// the tips one-per-line in strings.xml
-			LLStringUtil::replaceString( desc, "\\n", "\n" );
+			//LLStringUtil::replaceString( desc, "\\n", "\n" );
+			std::string desc = i->mDesc;
+			
+			llinfos << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << llendl;
+			// </FS:CR>
 			
 			tooltips.push_back(desc);
 		}
@@ -354,9 +368,14 @@ BOOL LLScriptEdCore::postBuild()
 	
 	LLColor3 color(0.5f, 0.0f, 0.15f);
 	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
+	if (_NACL_LSLPreprocessor)
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
 // <FS:CR> OSSL Keywords
 #ifdef OPENSIM
-	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+	if (LLGridManager::getInstance()->isInOpenSim())
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+	if (LLGridManager::getInstance()->isInAuroraSim())
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_aa.ini"), funcs, tooltips, color);
 #endif // OPENSIM
 // </FS:CR>
 	
@@ -384,10 +403,9 @@ BOOL LLScriptEdCore::postBuild()
 		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
 		// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
 #endif // OPENSIM
 		// </FS:CR>
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
 	}
 	// NaCl End
 
@@ -986,10 +1004,10 @@ void LLScriptEdCore::onBtnInsertFunction(LLUICtrl *ui, void* userdata)
 void LLScriptEdCore::doSave( BOOL close_after_save )
 {
 	// NaCl - LSL Preprocessor
-	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+	if (mLSLProc && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	{
 		llinfos << "passing to preproc" << llendl;
-		this->mLSLProc->preprocess_script(close_after_save);
+		mLSLProc->preprocess_script(close_after_save);
 	}
 	else
 	{
@@ -1686,6 +1704,9 @@ void LLPreviewLSL::uploadAssetLegacy(const std::string& filename,
 									  const LLUUID& item_id,
 									  const LLTransactionID& tid)
 {
+	// <FS:CR> Remove LSO Compiler
+	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+#if 0
 	LLLineEditor* descEditor = getChild<LLLineEditor>("desc");
 	LLScriptSaveInfo* info = new LLScriptSaveInfo(item_id,
 								descEditor->getText(),
@@ -1764,6 +1785,8 @@ void LLPreviewLSL::uploadAssetLegacy(const std::string& filename,
 	LLFile::remove(filename);
 	LLFile::remove(err_filename);
 	LLFile::remove(dst_filename);
+#endif // 0
+	// </FS:CR>
 }
 
 
@@ -2473,6 +2496,9 @@ void LLLiveLSLEditor::uploadAssetLegacy(const std::string& filename,
 										const LLTransactionID& tid,
 										BOOL is_running)
 {
+	// <FS:CR> Remove LSO compiler
+	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+#if 0
 	LLLiveLSLSaveData* data = new LLLiveLSLSaveData(mObjectUUID,
 													mItem,
 													is_running);
@@ -2565,6 +2591,8 @@ void LLLiveLSLEditor::uploadAssetLegacy(const std::string& filename,
 	LLCheckBoxCtrl* runningCheckbox = getChild<LLCheckBoxCtrl>( "running");
 	runningCheckbox->setLabel(getString("script_running"));
 	runningCheckbox->setEnabled(TRUE);
+#endif // 0
+	// </FS:CR>
 }
 
 void LLLiveLSLEditor::onSaveTextComplete(const LLUUID& asset_uuid, void* user_data, S32 status, LLExtStat ext_status) // StoreAssetData callback (fixed)

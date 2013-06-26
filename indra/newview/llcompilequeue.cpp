@@ -45,7 +45,7 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
-#include "lscript_rt_interface.h"
+//#include "lscript_rt_interface.h"	// <FS:CR> Removed LSO Compiler
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "llviewerregion.h"
@@ -519,6 +519,9 @@ void LLFloaterCompileQueue::onSaveBytecodeComplete(const LLUUID& asset_id, void*
 void LLFloaterCompileQueue::compile(const std::string& filename,
 									const LLUUID& item_id)
 {
+	// <FS:CR> Remove LSO Compiler
+	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+#if 0
 	LLUUID new_asset_id;
 	LLTransactionID tid;
 	tid.generate();
@@ -554,6 +557,7 @@ void LLFloaterCompileQueue::compile(const std::string& filename,
 									&LLFloaterCompileQueue::onSaveBytecodeComplete,
 									(void*)data, FALSE);
 	}
+#endif // 0 // <FS:CR>
 }
 
 void LLFloaterCompileQueue::removeItemByItemID(const LLUUID& asset_id)

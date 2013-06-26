@@ -8,7 +8,7 @@
  layout="topleft"
  left="0"
  name="nearby_chat"
- title="NEARBY CHAT"
+ title="Nearby Chat"
  top="0"
  can_dock="false"
  can_close="true"

@@ -111,6 +111,7 @@ U32 LLBlowfishCipher::decrypt(const U8* src, U32 src_len, U8* dst, U32 dst_len)
 	//llerrs << "LLBlowfishCipher decrypt unsupported" << llendl;
 	//return 0;
 	if (!src || !src_len || !dst || !dst_len) return 0;
+	if (src_len > dst_len) return 0;
 	
 	EVP_CIPHER_CTX context;
     EVP_CIPHER_CTX_init(&context);

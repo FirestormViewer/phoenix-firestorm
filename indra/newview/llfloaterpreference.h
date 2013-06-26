@@ -103,6 +103,7 @@ protected:
 	void		onLanguageChange();
 	void		onNotificationsChange(const std::string& OptionName);
 	void		onNameTagOpacityChange(const LLSD& newvalue);
+	void		onConsoleOpacityChange(const LLSD& newvalue);	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
 
 	// set value of "DoNotDisturbResponseChanged" in account settings depending on whether do not disturb response
 	// <FS:Zi> Pie menu

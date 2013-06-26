@@ -4223,12 +4223,44 @@ class LLTogglePanelPeopleTab : public view_listener_t
 			}
 			else if(panel_name=="groups_panel")
 			{
-				FSFloaterContacts::getInstance()->openTab("groups");
+				if (gSavedSettings.getBOOL("ContactsTornOff"))
+				{
+					FSFloaterContacts* instance = FSFloaterContacts::getInstance();
+					std::string activetab = instance->getChild<LLTabContainer>("friends_and_groups")->getCurrentPanel()->getName();
+					if (instance->getVisible() && activetab == panel_name) 
+					{
+						instance->closeFloater();
+					}
+					else
+					{
+						instance->openTab("groups");
+					}
+				}
+				else
+				{
+					FSFloaterContacts::getInstance()->openTab("groups");
+				}
 				return true;
 			}
 			else if(panel_name=="friends_panel")
 			{
-				FSFloaterContacts::getInstance()->openTab("friends");
+				if (gSavedSettings.getBOOL("ContactsTornOff"))
+				{
+					FSFloaterContacts* instance = FSFloaterContacts::getInstance();
+					std::string activetab = instance->getChild<LLTabContainer>("friends_and_groups")->getCurrentPanel()->getName();
+					if (instance->getVisible() && activetab == panel_name) 
+					{
+						instance->closeFloater();
+					}
+					else
+					{
+						instance->openTab("friends");
+					}
+				}
+				else
+				{
+					FSFloaterContacts::getInstance()->openTab("friends");
+				}
 				return true;
 			}
 			else
@@ -7045,8 +7077,34 @@ class LLShowHelp : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string help_topic = userdata.asString();
+#ifndef OPENSIM // <FS:CR> FIRE-10641
 		LLViewerHelp* vhelp = LLViewerHelp::getInstance();
 		vhelp->showTopic(help_topic);
+		// <FS:CR> FIRE-10641
+#else // OPENSIM
+		std::string grid_help = help_topic;
+		
+		if (grid_help.find("grid_") !=  0)
+		{
+			return true;
+		}
+		grid_help.erase(0,5);
+		
+		std::string url;
+		LLSD grid_info;
+		LLGridManager::getInstance()->getGridData(grid_info);
+		if (grid_info.has(grid_help))
+		{
+			url = grid_info[grid_help].asString();
+		}
+		
+		if(!url.empty())
+		{
+			LLWeb::loadURLInternal(url);
+		}
+		lldebugs << "grid_help " <<  grid_help << " url " << url << llendl;
+#endif // OPENSIM
+		// </FS:CR>
 		return true;
 	}
 };

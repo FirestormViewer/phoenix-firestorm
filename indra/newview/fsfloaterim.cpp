@@ -242,6 +242,13 @@ void FSFloaterIM::sendMsg()
 		llinfos << "Cannot send IM to everyone unless you're a god." << llendl;
 		return;
 	}
+	
+	// <FS:Techwolf Lupindo> fsdata support
+	if(mDialog == IM_NOTHING_SPECIAL && FSData::instance().isSupport(mOtherParticipantUUID) && FSData::instance().isAgentFlag(gAgentID, FSData::NO_SUPPORT))
+	{
+		return;
+	}
+	// </FS:Techwolf Lupindo>
 
 	if (mInputEditor)
 	{
@@ -1371,7 +1378,10 @@ void FSFloaterIM::setTyping(bool typing)
 
 	// Don't want to send typing indicators to multiple people, potentially too
 	// much network traffic. Only send in person-to-person IMs.
-	if ( mShouldSendTypingState && mDialog == IM_NOTHING_SPECIAL )
+	// <FS:Techwolf Lupindo> fsdata support
+	//if ( mShouldSendTypingState && mDialog == IM_NOTHING_SPECIAL )
+	if ( mShouldSendTypingState && mDialog == IM_NOTHING_SPECIAL && !(FSData::instance().isSupport(mOtherParticipantUUID) && FSData::instance().isAgentFlag(gAgentID, FSData::NO_SUPPORT)))
+	// </FS:Techwolf Lupindo>
 	{
 		if ( mMeTyping )
 		{

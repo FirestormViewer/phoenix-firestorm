@@ -1061,14 +1061,14 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 	buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
 	if(buddy->isOnline() && buddy->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION))
 	{ 
-	//	// <FS:Ansariel> Friend names on worldmap should respect display name settings
-	//	//mMappable.insert(value);
-	//	
-	//	// <FS:PP> Attempt to speed up things a little
-	//	// if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
+		// <FS:Ansariel> Friend names on worldmap should respect display name settings
+		//mMappable.insert(value);
+	
+		// <FS:PP> Attempt to speed up things a little
+		// if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
 		static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
 		if (LLAvatarName::useDisplayNames() && NameTagShowUsernames) 
-	//	// </FS:PP>
+		// </FS:PP>
 		{
 			buddy_map_t::value_type value(av_name.getCompleteName(), buddy_id);
 			mMappable.insert(value);
@@ -1078,8 +1078,8 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 			buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
 			mMappable.insert(value);
 		}
-	//	// </FS:Ansariel>
-	//}
+	// </FS:Ansariel>
+	}
 	return true;
 }
 

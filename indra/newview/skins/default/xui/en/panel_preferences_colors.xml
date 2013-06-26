@@ -1425,6 +1425,35 @@
      show_text="true"
      top_pad="2"
      width="415" />
+     <text
+       follows="left|top"
+       layout="topleft"
+       left="30"
+       height="12"
+       name="console_opacity"
+       top_pad="15"
+       width="220">
+       Console Opacity:
+     </text>
+     <color_swatch
+     can_apply_immediately="true"
+     color="0 0 0 0.5"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="40"
+     top_pad="5"
+     name="console_background"
+     tool_tip="Choose console color"
+     width="44">
+        <color_swatch.init_callback
+        function="Pref.getUIColor"
+        parameter="ConsoleBackground" />
+        <color_swatch.commit_callback
+        function="Pref.applyUIColor"
+        parameter="ConsoleBackground" />
+     </color_swatch>
      <slider
      control_name="ConsoleBackgroundOpacity"
      follows="left|top"
@@ -1433,15 +1462,14 @@
      initial_value="1"
      max_val="1.00"
      min_val="0.00"
-     decimal_digits="2"
-     label="Console Opacity:"
+     decimal_digits="3"
+     label="Opacity:"
      layout="topleft"
-     label_width="135"
+     label_width="118"
      name="console_background_opacity"
      tool_tip="Choose console background opacity"
-     top_pad="0"
-     left="30"
-     width="435" />
+     left_pad="10"
+     width="378" />
      
      <check_box
      control_name="FSScriptDialogNoTransparency"

@@ -24,7 +24,6 @@
 
         <!-- Chat: General -->
         <panel
-         border="true"
          top_pad="1"
          bottom="-1"
          left="1"
@@ -443,7 +442,6 @@
         <!-- Chat: Notifications -->
         <!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
         <panel
-         border="true"
          top_pad="1"
          bottom="-1"
          left="1"
@@ -1060,7 +1058,6 @@
 
         <!-- Chat: Radar -->
         <panel
-         border="true"
          top_pad="5"
          bottom="-1"
          left="1"
@@ -1440,7 +1437,6 @@
 
         <!-- Chat: Keyword Alerts -->
         <panel
-         border="true"
          top_pad="5"
          bottom="-1"
          left="1"
@@ -1586,7 +1582,6 @@
 
         <!-- Chat: Text Input -->
   <panel
-   border="true"
    top_pad="1"
    bottom="-1"
    left="1"

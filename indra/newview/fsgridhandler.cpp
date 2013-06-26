@@ -564,35 +564,6 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_DIRECTORY_FEE] << LL_ENDL;
 			continue;
 		}
-		/// <FS:CR> NOTE: As far as I can tell, this setting doesn't exist on any platform at present,
-		/// adding it for the future while fixing FIRE-9814
-		check = "ClassifiedFee";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_CLASSIFIED_FEE] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_CLASSIFIED_FEE] << LL_ENDL;
-		}
-		check = "CurrencySymbol";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_CURRENCY_SYMBOL] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_CURRENCY_SYMBOL] << LL_ENDL;
-			continue;
-		}
-		check = "RealCurrencySymbol";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] << LL_ENDL;
-			continue;
-		}
-		check = "MaxGroups";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_MAXGROUPS] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_MAXGROUPS] << LL_ENDL;
-			continue;
-		}
 		check = "platform";
 		if (node->hasName(check))
 		{
@@ -1374,7 +1345,7 @@ void LLGridManager::updateIsInProductionGrid()
 // For any Second Life grid
 bool LLGridManager::isInSecondLife()
 {
-	return (EGridPlatform == GP_SLMAIN || GP_SLBETA);
+	return (EGridPlatform == GP_SLMAIN || EGridPlatform == GP_SLBETA);
 }
 
 // For Agni

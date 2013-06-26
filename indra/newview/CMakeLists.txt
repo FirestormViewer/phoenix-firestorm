@@ -32,7 +32,7 @@ include(LLUI)
 include(LLVFS)
 include(LLWindow)
 include(LLXML)
-include(LScript)
+# <FS:CR> Nope -> include(LScript)
 include(Linking)
 include(NDOF)
 include(NVAPI)
@@ -86,8 +86,8 @@ include_directories(
     ${LLVFS_INCLUDE_DIRS}
     ${LLWINDOW_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
-    ${LSCRIPT_INCLUDE_DIRS}
-    ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
+    # <FS:CR> ${LSCRIPT_INCLUDE_DIRS}
+    # <FS:CR> ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
     ${UPDATER_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada
@@ -164,6 +164,7 @@ set(viewer_SOURCE_FILES
     fsradarentry.cpp
     fsradarlistctrl.cpp
     fsradarmenu.cpp
+    fsscriptlibrary.cpp
     fsslurlcommand.cpp
     fswsassetblacklist.cpp
     groupchatlistener.cpp
@@ -845,6 +846,7 @@ set(viewer_HEADER_FILES
     fsradarentry.h
     fsradarlistctrl.h
     fsradarmenu.h
+    fsscriptlibrary.h
     fsslurl.h
     fsslurlcommand.h
     fswsassetblacklist.h
@@ -2098,7 +2100,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLVFS_LIBRARIES}
     ${LLWINDOW_LIBRARIES}
     ${LLXML_LIBRARIES}
-    ${LSCRIPT_LIBRARIES}
+    # <FS:CR> ${LSCRIPT_LIBRARIES}
     ${LLMATH_LIBRARIES}
     ${LLCOREHTTP_LIBRARIES}
     ${LLCOMMON_LIBRARIES}

@@ -30,6 +30,7 @@
 #include "fswsassetblacklist.h"
 
 #include "fsfloaterwsassetblacklist.h"
+#include "llaudioengine.h"
 #include "llfloaterreg.h"
 #include "llsdserialize.h"
 #include "llvfs.h"
@@ -85,6 +86,11 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 
 void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save)
 {
+	if (isBlacklisted(id, type))
+	{
+		return;
+	}
+
 	LLDate curdate = LLDate(time_corrected());
 	std::string input_date = curdate.asString();
 	input_date.replace(input_date.find("T"), 1, " ");
@@ -124,6 +130,17 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 
 	addEntryToBlacklistMap(id, type);
 	mBlacklistData[id] = data;
+
+	if (type == LLAssetType::AT_SOUND)
+	{
+		gVFS->removeFile(id, LLAssetType::AT_SOUND);
+		std::string wav_path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, id.asString()) + ".dsf";
+		if (gDirUtilp->fileExists(wav_path))
+		{
+			LLFile::remove(wav_path);
+		}
+		gAudiop->removeAudioData(id);
+	}
 
 	if (save)
 	{

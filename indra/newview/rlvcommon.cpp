@@ -33,7 +33,8 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 
-#include "lscript_byteformat.h"
+//#include "lscript_byteformat.h"
+#include "fsscriptlibrary.h"
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================

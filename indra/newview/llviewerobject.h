@@ -34,10 +34,10 @@
 #include "llhudicon.h"
 #include "llinventory.h"
 #include "llrefcount.h"
-#include "../llprimitive/llprimitive.h"
+#include "../llprimitive/llprimitive.h" //<FS:TM> CHUI Merge LL's can find this file w/o using ../llprimitive/
 #include "lluuid.h"
 #include "llvoinventorylistener.h"
-#include "object_flags.h"
+#include "../llprimitive/object_flags.h" //<FS:TM> CHUI Merge LL's can find this file w/o using ../llprimitive/
 #include "llquaternion.h"
 #include "v3dmath.h"
 #include "v3math.h"

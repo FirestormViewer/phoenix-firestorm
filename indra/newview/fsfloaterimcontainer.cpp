@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#include "llviewerprecompiledheaders.h"
+
 // Original file: llimfloatercontainer.cpp
 // <FS:TM> CHUI Merge below was from anserial's refactoring, seems based on old code
 //#if 0

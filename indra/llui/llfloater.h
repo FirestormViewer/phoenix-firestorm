@@ -571,6 +571,13 @@ public:
 	void setFloaterSnapView(LLHandle<LLView> snap_view) {mSnapView = snap_view; }
 	LLFloater* getFrontmostClosableFloater(); 
 
+	// <FS:KC> Fix for bad edge snapping
+	void setSnapOffsetBottom(S32 offset) { mSnapOffsetBottom = offset; }
+	void setSnapOffsetChatBar(S32 offset) { mSnapOffsetChatBar = offset; }
+	void setSnapOffsetRight(S32 offset) { mSnapOffsetRight = offset; }
+	void setSnapOffsetLeft(S32 offset) { mSnapOffsetLeft = offset; }
+	// </FS:KC> Fix for bad edge snapping
+
 private:
 	void hiddenFloaterClosed(LLFloater* floater);
 
@@ -578,6 +585,8 @@ private:
 	LLHandle<LLView>	mSnapView;
 	BOOL			mFocusCycleMode;
 	S32				mSnapOffsetBottom;
+	S32				mSnapOffsetChatBar; // <FS:KC> Fix for bad edge snapping
+	S32				mSnapOffsetLeft; // <FS:KC> Fix for bad edge snapping
 	S32				mSnapOffsetRight;
 	S32				mMinimizePositionVOffset;
 	typedef std::vector<std::pair<LLHandle<LLFloater>, boost::signals2::connection> > hidden_floaters_t;

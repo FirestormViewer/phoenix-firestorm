@@ -2616,6 +2616,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 			return;
 		}
 		else if(status & STATUS_SEARCH_EVENTS_SHORTSTRING)

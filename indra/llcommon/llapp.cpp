@@ -441,9 +441,15 @@ void LLApp::setMiniDumpDir(const std::string &path)
 {
 	if(mExceptionHandler == 0) return;
 #ifdef LL_WINDOWS
-	wchar_t buffer[MAX_MINDUMP_PATH_LENGTH];
-	mbstowcs(buffer, path.c_str(), MAX_MINDUMP_PATH_LENGTH);
-	mExceptionHandler->set_dump_path(std::wstring(buffer));
+	// <FS:ND> Make sure to pass a proper unicode string to breapad. path is UTF8, not MBCS
+
+	// wchar_t buffer[MAX_MINDUMP_PATH_LENGTH];
+	// mbstowcs(buffer, path.c_str(), MAX_MINDUMP_PATH_LENGTH);
+	// mExceptionHandler->set_dump_path(std::wstring(buffer));
+
+	mExceptionHandler->set_dump_path( utf8str_to_utf16str(path) );
+
+	// </FS:ND>
 #else
 	mExceptionHandler->set_dump_path(path);
 #endif
@@ -936,6 +942,41 @@ bool unix_post_minidump_callback(const char *dump_dir,
 #endif // !WINDOWS
 
 #ifdef LL_WINDOWS
+
+// <FS:ND> Helper function to convert a wchar_t string into an UTF8 buffer
+namespace nd
+{
+	namespace strings
+	{
+		inline bool convertString( wchar_t const *aIn, char *&aOut, S32 &aLen )
+		{
+			char tmpBuffer[8];
+			S32 i(0), j(0);
+			
+			while( *aIn )
+			{
+				i = wchar_to_utf8chars( *aIn++, tmpBuffer );
+				
+				if( i < aLen )
+				{
+					j = 0;
+					while( j < i )
+					{
+						*aOut++ = tmpBuffer[ j++ ];
+						--aLen;
+					}
+				}
+				else
+					return true;
+			}
+			
+			return false;
+		}
+	}
+}
+
+// </FS:ND>
+
 bool windows_post_minidump_callback(const wchar_t* dump_path,
 									const wchar_t* minidump_id,
 									void* context,
@@ -943,29 +984,61 @@ bool windows_post_minidump_callback(const wchar_t* dump_path,
 									MDRawAssertionInfo* assertion,
 									bool succeeded)
 {
-	char * path = LLApp::instance()->getMiniDumpFilename();
-	S32 remaining = LLApp::MAX_MINDUMP_PATH_LENGTH;
-	size_t bytesUsed;
+	MessageBox( NULL, L"", L"", MB_OK );
 
-	bytesUsed = wcstombs(path, dump_path, static_cast<size_t>(remaining));
-	remaining -= bytesUsed;
-	path += bytesUsed;
-	if(remaining > 0 && bytesUsed > 0 && path[-1] != '\\')
+	// <FS:ND> Convert all path to UTF8 and not MBCS. Having some path in MBCS and some in UTF8 is a source of great joy
+	// and bugs. Stick with one standard, that is UTF8.
+	
+	// char * path = LLApp::instance()->getMiniDumpFilename();
+	// S32 remaining = LLApp::MAX_MINDUMP_PATH_LENGTH;
+	// size_t bytesUsed;
+	// 
+	// bytesUsed = wcstombs(path, dump_path, static_cast<size_t>(remaining));
+	// remaining -= bytesUsed;
+	// path += bytesUsed;
+	// if(remaining > 0 && bytesUsed > 0 && path[-1] != '\\')
+	// {
+	// 	*path++ = '\\';
+	// 	--remaining;
+	// }
+	// if(remaining > 0)
+	// {
+	// 	bytesUsed = wcstombs(path, minidump_id, static_cast<size_t>(remaining));
+	// 	remaining -= bytesUsed;
+	// 	path += bytesUsed;
+	// }
+	// if(remaining > 0)
+	// {
+	// 	strncpy(path, ".dmp", remaining);
+	// }
+
+	char *pOut( LLApp::instance()->getMiniDumpFilename() );
+	bool hasOverflow(false);
+	S32 bufferLength( LLApp::MAX_MINDUMP_PATH_LENGTH );
+
+	hasOverflow = nd::strings::convertString( dump_path, pOut, bufferLength );
+	if( !hasOverflow && bufferLength < LLApp::MAX_MINDUMP_PATH_LENGTH && bufferLength > 1 && pOut[-1] != '\\' && pOut[-1] != '/' )
 	{
-		*path++ = '\\';
-		--remaining;
-	}
-	if(remaining > 0)
-	{
-		bytesUsed = wcstombs(path, minidump_id, static_cast<size_t>(remaining));
-		remaining -= bytesUsed;
-		path += bytesUsed;
-	}
-	if(remaining > 0)
-	{
-		strncpy(path, ".dmp", remaining);
+			*pOut++ = '\\';
+			--bufferLength;
 	}
 
+	if( !hasOverflow )
+		hasOverflow = nd::strings::convertString( minidump_id, pOut, bufferLength );
+
+	if( !hasOverflow && bufferLength >= 5 )
+	{
+		pOut[0] = '.';
+		pOut[1] = 'd';
+		pOut[2] = 'm';
+		pOut[3] = 'p';
+		pOut[4] = 0;
+	}
+	else if( hasOverflow )
+		LLApp::instance()->getMiniDumpFilename()[ 0 ] = 0;
+
+	// <FS:ND>
+	
 	llinfos << "generated minidump: " << LLApp::instance()->getMiniDumpFilename() << llendl;
     // *NOTE:Mani - this code is stolen from LLApp, where its never actually used.
 	//OSMessageBox("Attach Debugger Now", "Error", OSMB_OK);

@@ -631,7 +631,20 @@ void LLGrassPartition::addGeometryCount(LLSpatialGroup* group, U32& vertex_count
 			continue;
 		}
 
-		LLAlphaObject* obj = (LLAlphaObject*) drawablep->getVObj().get();
+		// <FS:ND> Crashfix
+
+		// LLAlphaObject* obj = (LLAlphaObject*) drawablep->getVObj().get();
+
+		LLAlphaObject* obj = dynamic_cast<LLAlphaObject*>( drawablep->getVObj().get() );
+
+		if( !obj )
+		{
+			llwarns << "Object is 0 (not an alpha maybe)" << llendl;
+			continue;
+		}
+
+		// </FS:ND>
+
 		obj->mDepth = 0.f;
 		
 		if (drawablep->isAnimating())
@@ -703,13 +716,35 @@ void LLGrassPartition::getGeometry(LLSpatialGroup* group)
 	for (std::vector<LLFace*>::iterator i = mFaceList.begin(); i != mFaceList.end(); ++i)
 	{
 		LLFace* facep = *i;
-		LLAlphaObject* object = (LLAlphaObject*) facep->getViewerObject();
+
+		// <FS:ND> Crashfix
+
+		// LLAlphaObject* object = (LLAlphaObject*) facep->getViewerObject();
+
+		LLAlphaObject* object = dynamic_cast<LLAlphaObject*>( facep->getViewerObject() );
+
+		// </FS:ND>
+
 		facep->setGeomIndex(vertex_count);
 		facep->setIndicesIndex(index_count);
 		facep->setVertexBuffer(buffer);
 		facep->setPoolType(LLDrawPool::POOL_ALPHA);
-		object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, indicesp);
+
+		// <FS:ND> Crashfix
+
+		// object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, indicesp);
+
+		if( object )
+			object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, indicesp);
+		else
+		{
+			llwarns << "Object is 0 (not an alpha maybe)" << llendl;
+			if( facep->getViewerObject()  )
+				llwarns << typeid( *facep->getViewerObject() ).name() << llendl;
+		}
 		
+		// </FS:ND>
+
 		vertex_count += facep->getGeomCount();
 		index_count += facep->getIndicesCount();
 

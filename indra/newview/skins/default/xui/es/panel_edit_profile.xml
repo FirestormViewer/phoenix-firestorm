@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Editar mi perfil" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE] [PAYMENTINFO] [FSDEV][FSSUPP][FIRESTORM]
+		[ACCTTYPE] [PAYMENTINFO] [FSDEV][FSSUPP][FSQA][FIRESTORM]
 	</string>
 	<string name="FSDev" value="Desarrollador "/>
 	<string name="FSSupp" value="Soporte " />
+	<string name="FSQualityAssurance" value="Bug Hunter " />
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
 	</string>

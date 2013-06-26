@@ -2,7 +2,7 @@
 <panel label="プロフィールの編集" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
 		[ACCTTYPE]
-[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP]
+[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA]
     </string>
 <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
     sending the latter any more. ...TS -->
@@ -12,6 +12,9 @@
     <string
       name="FSSupp"
       value=" Support" />
+    <string
+      name="FSQualityAssurance"
+      value=" Bug Hunter" />
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
 	</string>

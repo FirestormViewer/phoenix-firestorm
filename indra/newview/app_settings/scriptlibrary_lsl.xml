@@ -1,0 +1,2579 @@
+<!-- LSL Script Library - Copyright 2013 cinder.roxley@phoenixviewer.com - Updated 22.6.2013 -->
+<llsd>
+	<map>
+		<key>llSin</key>
+		<map>
+			<key>desc</key>
+			<string>float llSin(float theta)
+Returns the sine of theta (theta in radians)</string>
+		</map>
+		<key>llCos</key>
+		<map>
+			<key>desc</key>
+			<string>float llCos(float theta)
+Returns the cosine of theta (theta in radians)</string>
+		</map>
+		<key>llTan</key>
+		<map>
+			<key>desc</key>
+			<string>float llTan(float theta)
+Returns the tangent of theta (theta in radians)</string>
+		</map>
+		<key>llAtan2</key>
+		<map>
+			<key>desc</key>
+			<string>float llAtan2(float y, float x)
+Returns the arctangent2 of y, x</string>
+		</map>
+		<key>llSqrt</key>
+		<map>
+			<key>desc</key>
+			<string>float llSqrt(float val)
+Returns the square root of val, or returns 0 and triggers a Math Error for imaginary results</string>
+		</map>
+		<key>llPow</key>
+		<map>
+			<key>desc</key>
+			<string>float llPow(float base, float exponent)
+Returns the base raised to the power exponent, or returns 0 and triggers Math Error for imaginary results</string>
+		</map>
+		<key>llAbs</key>
+		<map>
+			<key>desc</key>
+			<string>integer llAbs(integer val)
+Returns the positive version of val</string>
+		</map>
+		<key>llFabs</key>
+		<map>
+			<key>desc</key>
+			<string>float llFabs(float val)
+Returns the positive version of val</string>
+		</map>
+		<key>llFrand</key>
+		<map>
+			<key>desc</key>
+			<string>float llFrand(float mag)
+Returns a pseudo random number in the range [0,mag) or (mag,0]</string>
+		</map>
+		<key>llFloor</key>
+		<map>
+			<key>desc</key>
+			<string>integer llFloor(float val)
+Returns largest integer value &lt;= val</string>
+		</map>
+		<key>llCeil</key>
+		<map>
+			<key>desc</key>
+			<string>integer llCeil(float val)
+Returns smallest integer value &gt;= val</string>
+		</map>
+		<key>llRound</key>
+		<map>
+			<key>desc</key>
+			<string>integer llRound(float val)
+Returns val rounded to the nearest integer</string>
+		</map>
+		<key>llVecMag</key>
+		<map>
+			<key>desc</key>
+			<string>float llVecMag(vector v)
+Returns the magnitude of v</string>
+		</map>
+		<key>llVecNorm</key>
+		<map>
+			<key>desc</key>
+			<string>vector llVecNorm(vector v)
+Returns the v normalized</string>
+		</map>
+		<key>llVecDist</key>
+		<map>
+			<key>desc</key>
+			<string>float llVecDist(vector v1, vector v2)
+Returns the 3D distance between v1 and v2</string>
+		</map>
+		<key>llRot2Euler</key>
+		<map>
+			<key>desc</key>
+			<string>vector llRot2Euler(rotation q)
+Returns the Euler representation (roll, pitch, yaw) of q</string>
+		</map>
+		<key>llEuler2Rot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llEuler2Rot(vector v)
+Returns the rotation representation of Euler Angles v</string>
+		</map>
+		<key>llAxes2Rot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llAxes2Rot(vector fwd, vector left, vector up)
+Returns the rotation defined by the coordinate axes</string>
+		</map>
+		<key>llRot2Fwd</key>
+		<map>
+			<key>desc</key>
+			<string>vector llRot2Fwd(rotation q)
+Returns the forward vector defined by q</string>
+		</map>
+		<key>llRot2Left</key>
+		<map>
+			<key>desc</key>
+			<string>vector llRot2Left(rotation q)
+Returns the left vector defined by q</string>
+		</map>
+		<key>llRot2Up</key>
+		<map>
+			<key>desc</key>
+			<string>vector llRot2Up(rotation q)
+Returns the up vector defined by q</string>
+		</map>
+		<key>llRotBetween</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llRotBetween(vector v1, vector v2)
+Returns the rotation to rotate v1 to v2</string>
+		</map>
+		<key>llWhisper</key>
+		<map>
+			<key>desc</key>
+			<string>llWhisper(integer channel, string message)
+Whispers the text of message on channel</string>
+		</map>
+		<key>llSay</key>
+		<map>
+			<key>desc</key>
+			<string>llSay(integer channel, string message)
+Says the text of message on channel</string>
+		</map>
+		<key>llShout</key>
+		<map>
+			<key>desc</key>
+			<string>llShout(integer channel, string message)
+Shouts the text of message on channel</string>
+		</map>
+		<key>llListen</key>
+		<map>
+			<key>desc</key>
+			<string>integer llListen(integer channel, string name, key id, string message)
+Sets a callback for message on channel from name and id (name, id, and/or message can be empty) and returns an identifier that can be used to deactivate or remove the listen</string>
+		</map>
+		<key>llListenControl</key>
+		<map>
+			<key>desc</key>
+			<string>llListenControl(integer number, integer active)
+Makes a listen event callback active or inactive</string>
+		</map>
+		<key>llListenRemove</key>
+		<map>
+			<key>desc</key>
+			<string>llListenRemove(integer number)
+Removes listen event callback number</string>
+		</map>
+		<key>llSensor</key>
+		<map>
+			<key>desc</key>
+			<string>llSensor(string name, key id, integer type, float range, float arc)
+Performs a single scan for name and id with type (AGENT, ACTIVE, PASSIVE, and/or SCRIPTED) within range meters and arc radians of forward vector (name, id, and/or keytype can be empty or 0)</string>
+		</map>
+		<key>llSensorRepeat</key>
+		<map>
+			<key>desc</key>
+			<string>llSensorRepeat(string name, key id, integer type, float range, float arc, float rate)
+Sets a callback for name and id with type (AGENT, ACTIVE, PASSIVE, and/or SCRIPTED) within range meters and arc radians of forward vector (name, id, and/or keytype can be empty or 0) and repeats every rate seconds</string>
+		</map>
+		<key>llSensorRemove</key>
+		<map>
+			<key>desc</key>
+			<string>llSensorRemove()
+Removes the sensor setup by llSensorRepeat</string>
+		</map>
+		<key>llDetectedName</key>
+		<map>
+			<key>desc</key>
+			<string>string llDetectedName(integer number)
+Returns the name of detected object number (returns empty string if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedKey</key>
+		<map>
+			<key>desc</key>
+			<string>key llDetectedKey(integer number)
+Returns the key of detected object number (returns empty key if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedOwner</key>
+		<map>
+			<key>desc</key>
+			<string>key llDetectedOwner(integer number)
+Returns the key of detected object&apos;s owner (returns empty key if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedType</key>
+		<map>
+			<key>desc</key>
+			<string>integer llDetectedType(integer number)
+Returns the type (AGENT, ACTIVE, PASSIVE, SCRIPTED) of detected object (returns 0 if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedPos</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedPos(integer number)
+Returns the position of detected object number (returns &lt;0,0,0&gt; if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedVel</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedVel(integer number)
+Returns the velocity of detected object number (returns &lt;0,0,0&gt; if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedGrab</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedGrab(integer number)
+Returns the grab offset of the user touching object (returns &lt;0,0,0&gt; if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedRot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llDetectedRot(integer number)
+Returns the rotation of detected object number (returns &lt;0,0,0,1&gt; if number is not a valid sensed object)</string>
+		</map>
+		<key>llDetectedGroup</key>
+		<map>
+			<key>desc</key>
+			<string>integer llDetectedGroup(integer number)
+Returns TRUE if detected object is part of same group as owner</string>
+		</map>
+		<key>llDetectedLinkNumber</key>
+		<map>
+			<key>desc</key>
+			<string>integer llDetectedLinkNumber(integer number)
+Returns the link position of the triggered event for touches and collisions only</string>
+		</map>
+		<key>llDie</key>
+		<map>
+			<key>desc</key>
+			<string>llDie()
+Deletes the object</string>
+		</map>
+		<key>llGround</key>
+		<map>
+			<key>desc</key>
+			<string>float llGround(vector offset)
+Returns the ground height below the object position + offset</string>
+		</map>
+		<key>llCloud</key>
+		<map>
+			<key>desc</key>
+			<string>float llCloud(vector offset)
+Returns the cloud density at the object position + offset</string>
+		</map>
+		<key>llWind</key>
+		<map>
+			<key>desc</key>
+			<string>vector llWind(vector offset)
+Returns the wind velocity at the object position + offset</string>
+		</map>
+		<key>llSetStatus</key>
+		<map>
+			<key>desc</key>
+			<string>llSetStatus(integer status, integer value)
+Sets status (STATUS_PHYSICS, STATUS_PHANTOM, STATUS_BLOCK_GRAB, STATUS_ROTATE_X, STATUS_ROTATE_Y, and/or STATUS_ROTATE_Z) to value</string>
+		</map>
+		<key>llGetStatus</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetStatus(integer status)
+Returns value of status (STATUS_PHYSICS, STATUS_PHANTOM, STATUS_BLOCK_GRAB, STATUS_ROTATE_X, STATUS_ROTATE_Y, and/or STATUS_ROTATE_Z)</string>
+		</map>
+		<key>llSetScale</key>
+		<map>
+			<key>desc</key>
+			<string>llSetScale(vector scale)
+Sets the scale of the prim</string>
+		</map>
+		<key>llGetScale</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetScale()
+Returns the scale of the prim</string>
+		</map>
+		<key>llSetColor</key>
+		<map>
+			<key>desc</key>
+			<string>llSetColor(vector color, integer face)
+Sets the color on face of the prim</string>
+		</map>
+		<key>llGetAlpha</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetAlpha(integer face)
+Returns the alpha of face</string>
+		</map>
+		<key>llSetAlpha</key>
+		<map>
+			<key>desc</key>
+			<string>llSetAlpha(float alpha, integer face)
+Sets the alpha on face</string>
+		</map>
+		<key>llGetColor</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetColor(integer face)
+Returns the color on face</string>
+		</map>
+		<key>llSetTexture</key>
+		<map>
+			<key>desc</key>
+			<string>llSetTexture(string texture, integer face)
+Sets the texture of face or ALL_SIDES</string>
+		</map>
+		<key>llScaleTexture</key>
+		<map>
+			<key>desc</key>
+			<string>llScaleTexture(float u, float v, integer face)
+Sets the texture u &amp; v scales for the chosen face or ALL_SIDES
+(Sleep: 0.2)</string>
+		</map>
+		<key>llOffsetTexture</key>
+		<map>
+			<key>desc</key>
+			<string>llOffsetTexture(float u, float v, integer face)
+Sets the texture u  &amp; v offsets for the chosen face or ALL_SIDES
+(Sleep: 0.2)</string>
+		</map>
+		<key>llRotateTexture</key>
+		<map>
+			<key>desc</key>
+			<string>llRotateTexture(float rotation, integer face)
+Sets the texture rotation for the chosen face
+(sleep: 0.2)</string>
+		</map>
+		<key>llGetTexture</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetTexture(integer face)
+Returns a string that is the texture on face (the inventory name if it is a texture in the prim&apos;s inventory, otherwise the key)</string>
+		</map>
+		<key>llSetPos</key>
+		<map>
+			<key>desc</key>
+			<string>llSetPos(vector pos)
+Moves the object or prim towards pos without using physics (if the script isn&apos;t physical)</string>
+		</map>
+		<key>llGetPos</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetPos()
+Returns the position of the task in region coordinates</string>
+		</map>
+		<key>llGetLocalPos</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetLocalPos()
+Returns the position relative to the root</string>
+		</map>
+		<key>llSetRot</key>
+		<map>
+			<key>desc</key>
+			<string>llSetRot(rotation rot)
+Sets the rotation
+(Sleep: 0.2)</string>
+		</map>
+		<key>llGetRot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llGetRot()
+Returns the rotation relative to the region&apos;s axes</string>
+		</map>
+		<key>llGetLocalRot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llGetLocalRot()
+Returns the rotation local to the root</string>
+		</map>
+		<key>llSetForce</key>
+		<map>
+			<key>desc</key>
+			<string>llSetForce(vector force, integer local)
+Applies force to the object (if the script is physical), in local coords if local == TRUE</string>
+		</map>
+		<key>llGetForce</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetForce()
+Returns the force (if the script is physical)</string>
+		</map>
+		<key>llTarget</key>
+		<map>
+			<key>desc</key>
+			<string>integer llTarget(vector position, float range)
+Sets positions within range of position as a target and return an ID for the target</string>
+		</map>
+		<key>llTargetRemove</key>
+		<map>
+			<key>desc</key>
+			<string>llTargetRemove(integer number)
+Removes positional target number registered with llTarget</string>
+		</map>
+		<key>llRotTarget</key>
+		<map>
+			<key>desc</key>
+			<string>integer llRotTarget(rotation rot, float error)
+Set rotations with error of rot as a rotational target and return an ID for the rotational target</string>
+		</map>
+		<key>llRotTargetRemove</key>
+		<map>
+			<key>desc</key>
+			<string>llRotTargetRemove(integer number)
+Removes rotational target number registered with llRotTarget</string>
+		</map>
+		<key>llMoveToTarget</key>
+		<map>
+			<key>desc</key>
+			<string>llMoveToTarget(vector target, float tau)
+Critically damps to target in tau seconds (if the script is physical)</string>
+		</map>
+		<key>llStopMoveToTarget</key>
+		<map>
+			<key>desc</key>
+			<string>llStopMoveToTarget()
+Stops critically damped motion</string>
+		</map>
+		<key>llApplyImpulse</key>
+		<map>
+			<key>desc</key>
+			<string>llApplyImpulse(vector force, integer local)
+Applies impulse to object (if the script is physical), in local coords if local == TRUE</string>
+		</map>
+		<key>llApplyRotationalImpulse</key>
+		<map>
+			<key>desc</key>
+			<string>llApplyRotationalImpulse(vector force, integer local)
+Applies rotational impulse to object (if the script is physical), in local coords if local == TRUE</string>
+		</map>
+		<key>llSetTorque</key>
+		<map>
+			<key>desc</key>
+			<string>llSetTorque(vector torque, integer local)
+Sets the torque of object (if the script is physical), in local coords if local == TRUE</string>
+		</map>
+		<key>llGetTorque</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetTorque()
+Returns the torque (if the script is physical)</string>
+		</map>
+		<key>llSetForceAndTorque</key>
+		<map>
+			<key>desc</key>
+			<string>llSetForceAndTorque(vector force, vector torque, integer local)
+Sets the force and torque of object (if the script is physical), in local coords if local == TRUE</string>
+		</map>
+		<key>llGetVel</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetVel()
+Returns the velocity of the object</string>
+		</map>
+		<key>llGetAccel</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetAccel()
+Returns the acceleration of the object relative to the region&apos;s axes</string>
+		</map>
+		<key>llGetOmega</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetOmega()
+Returns the rotation velocity in radians per second</string>
+		</map>
+		<key>llGetTimeOfDay</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetTimeOfDay()
+Returns the time in seconds since grid server midnight or since region up-time, whichever is smaller</string>
+		</map>
+		<key>llGetWallclock</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetWallclock()
+Returns the time in seconds since midnight California Pacific time (PST/PDT)</string>
+		</map>
+		<key>llGetTime</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetTime()
+Returns the time in seconds since the last region reset, script reset, or call to either llResetTime or llGetAndResetTime</string>
+		</map>
+		<key>llResetTime</key>
+		<map>
+			<key>desc</key>
+			<string>llResetTime()
+Sets the script timer to zero</string>
+		</map>
+		<key>llGetAndResetTime</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetAndResetTime()
+Returns the script time in seconds and then resets the script timer to zero</string>
+		</map>
+		<key>llSound</key>
+		<map>
+			<key>desc</key>
+			<string>llSound(string sound, float volume, integer queue, integer loop)
+Plays sound at volume and whether it should loop or not.</string>
+		</map>
+		<key>llPlaySound</key>
+		<map>
+			<key>desc</key>
+			<string>llPlaySound(string sound, float volume)
+Plays attached sound once at volume (0.0 - 1.0)</string>
+		</map>
+		<key>llLoopSound</key>
+		<map>
+			<key>desc</key>
+			<string>llLoopSound(string sound, float volume)
+Plays attached sound looping indefinitely at volume (0.0 - 1.0)</string>
+		</map>
+		<key>llLoopSoundMaster</key>
+		<map>
+			<key>desc</key>
+			<string>llLoopSoundMaster(string sound, float volume)
+Plays attached sound looping at volume (0.0 - 1.0), declares it a sync master</string>
+		</map>
+		<key>llLoopSoundSlave</key>
+		<map>
+			<key>desc</key>
+			<string>llLoopSoundSlave(string sound, float volume)
+Plays attached sound looping at volume (0.0 - 1.0), synced to most audible sync master</string>
+		</map>
+		<key>llPlaySoundSlave</key>
+		<map>
+			<key>desc</key>
+			<string>llPlaySoundSlave(string sound, float volume)
+Plays attached sound once at volume (0.0 - 1.0), synced to next loop of most audible sync master</string>
+		</map>
+		<key>llTriggerSound</key>
+		<map>
+			<key>desc</key>
+			<string>llTriggerSound(string sound, float volume)
+Plays sound at volume (0.0 - 1.0), centered at but not attached to object</string>
+		</map>
+		<key>llStopSound</key>
+		<map>
+			<key>desc</key>
+			<string>llStopSound()
+Stops currently attached sound</string>
+		</map>
+		<key>llPreloadSound</key>
+		<map>
+			<key>desc</key>
+			<string>llPreloadSound(string sound)
+Preloads a sound on viewers within range
+(Sleep: 1.0)</string>
+		</map>
+		<key>llGetSubString</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetSubString(string src, integer start, integer end)
+Returns the indicated substring</string>
+		</map>
+		<key>llDeleteSubString</key>
+		<map>
+			<key>desc</key>
+			<string>string llDeleteSubString(string src, integer start, integer end)
+Removes the indicated substring and returns the result</string>
+		</map>
+		<key>llInsertString</key>
+		<map>
+			<key>desc</key>
+			<string>string llInsertString(string dst, integer position, string src)
+Returns a destination string dst with the string src inserted starting at position pos</string>
+		</map>
+		<key>llToUpper</key>
+		<map>
+			<key>desc</key>
+			<string>string llToUpper(string src)
+Returns a string that is src with all upper-case characters</string>
+		</map>
+		<key>llToLower</key>
+		<map>
+			<key>desc</key>
+			<string>string llToLower(string src)
+Returns a string that is src with all lower-case characters</string>
+		</map>
+		<key>llGiveMoney</key>
+		<map>
+			<key>desc</key>
+			<string>llGiveMoney(key destination, integer amount)
+Transfers amount of L$ from script owner to destination</string>
+		</map>
+		<key>llMakeExplosion</key>
+		<map>
+			<key>desc</key>
+			<string>llMakeExplosion(integer particles, float scale, float vel, float lifetime, float arc, string texture, vector offset)
+Makes a round explosion of particles
+(Sleep: 0.1)</string>
+		</map>
+		<key>llMakeFountain</key>
+		<map>
+			<key>desc</key>
+			<string>llMakeFountain(integer particles, float scale, float vel, float lifetime, float arc, integer bounce, string texture, vector offset, float bounce_offset)
+Makes a fountain of particles
+(Sleep: 0.1)</string>
+		</map>
+		<key>llMakeSmoke</key>
+		<map>
+			<key>desc</key>
+			<string>llMakeSmoke(integer particles, float scale, float vel, float lifetime, float arc, string texture, vector offset)
+Makes smoke like particles
+(Sleep: 0.1)</string>
+		</map>
+		<key>llMakeFire</key>
+		<map>
+			<key>desc</key>
+			<string>llMakeFire(integer particles, float scale, float vel, float lifetime, float arc, string texture, vector offset)
+Makes fire like particles
+(Sleep: 0.1)</string>
+		</map>
+		<key>llRezObject</key>
+		<map>
+			<key>desc</key>
+			<string>llRezObject(string inventory, vector pos, vector vel, rotation rot, integer param)
+Instantiates owner&apos;s inventory object at pos with velocity vel and rotation rot with start parameter param
+(Sleep 0.1)</string>
+		</map>
+		<key>llLookAt</key>
+		<map>
+			<key>desc</key>
+			<string>llLookAt(vector target, float strength, float damping)
+Causes object to point its up axis (positive z) towards target, while keeping its forward axis (positive x) below the horizon</string>
+		</map>
+		<key>llStopLookAt</key>
+		<map>
+			<key>desc</key>
+			<string>llStopLookAt()
+Stops causing object to point at a target</string>
+		</map>
+		<key>llSetTimerEvent</key>
+		<map>
+			<key>desc</key>
+			<string>llSetTimerEvent(float sec)
+Causes the timer event to be triggered a maximum of once every sec seconds</string>
+		</map>
+		<key>llSleep</key>
+		<map>
+			<key>desc</key>
+			<string>llSleep(float sec)
+Puts the script to sleep for sec seconds</string>
+		</map>
+		<key>llGetMass</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetMass()
+Returns the mass of object that the script is attached to</string>
+		</map>
+		<key>llCollisionFilter</key>
+		<map>
+			<key>desc</key>
+			<string>llCollisionFilter(string name, key id, integer accept)
+Sets the collision filter, exclusively or inclusively. If accept == TRUE, only accept collisions with objects name and id (either is optional), otherwise with objects not name or id</string>
+		</map>
+		<key>llTakeControls</key>
+		<map>
+			<key>desc</key>
+			<string>llTakeControls(integer controls, integer accept, integer pass_on)
+Allows for intercepting keyboard and mouse clicks from the agent the script has permissions for</string>
+		</map>
+		<key>llReleaseControls</key>
+		<map>
+			<key>desc</key>
+			<string>llReleaseControls()
+Stops taking inputs that were taken with llTakeControls</string>
+		</map>
+		<key>llAttachToAvatar</key>
+		<map>
+			<key>desc</key>
+			<string>llAttachToAvatar(integer attach_point)
+Attaches the object to the avatar who has granted permission to the script</string>
+		</map>
+		<key>llDetachFromAvatar</key>
+		<map>
+			<key>desc</key>
+			<string>llDetachFromAvatar()
+Detaches object from avatar</string>
+		</map>
+		<key>llTakeCamera</key>
+		<map>
+			<key>desc</key>
+			<string>llTakeCamera(key avatar)
+Moves avatar&apos;s viewpoint to task</string>
+		</map>
+		<key>llReleaseCamera</key>
+		<map>
+			<key>desc</key>
+			<string>llReleaseCamera(key avatar)
+Returns camera to agent avatar</string>
+		</map>
+		<key>llGetOwner</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetOwner()
+Returns the object owner&apos;s UUID</string>
+		</map>
+		<key>llInstantMessage</key>
+		<map>
+			<key>desc</key>
+			<string>llInstantMessage(key user, string message)
+Sends the specified string as an Instant Message to the user
+(Sleep: 2.0)</string>
+		</map>
+		<key>llEmail</key>
+		<map>
+			<key>desc</key>
+			<string>llEmail(string address, string subject, string message)
+Sends an email to address with the subject and message
+(Sleep: 20.0)</string>
+		</map>
+		<key>llGetNextEmail</key>
+		<map>
+			<key>desc</key>
+			<string>llGetNextEmail(string address, string subject)
+Gets the next waiting email that comes from address, with specified subject</string>
+		</map>
+		<key>llGetKey</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetKey()
+Returns the key of the prim the script is attached to</string>
+		</map>
+		<key>llSetBuoyancy</key>
+		<map>
+			<key>desc</key>
+			<string>llSetBuoyancy(float buoyancy)
+Sets the buoyancy of the task or object (0 is disabled, &lt; 1.0 sinks, 1.0 floats, &gt; 1.0 rises)</string>
+		</map>
+		<key>llSetHoverHeight</key>
+		<map>
+			<key>desc</key>
+			<string>llSetHoverHeight(float height, integer water, float tau)
+Critically damps to a height above the ground (or water) in tau seconds</string>
+		</map>
+		<key>llStopHover</key>
+		<map>
+			<key>desc</key>
+			<string>llStopHover()
+Stops hovering to a height</string>
+		</map>
+		<key>llMinEventDelay</key>
+		<map>
+			<key>desc</key>
+			<string>llMinEventDelay(float delay)
+Sets the minimum time between events being handled</string>
+		</map>
+		<key>llSoundPreload</key>
+		<map>
+			<key>desc</key>
+			<string>llSoundPreload(string sound)
+Preloads a sound on viewers within range</string>
+		</map>
+		<key>llRotLookAt</key>
+		<map>
+			<key>desc</key>
+			<string>llRotLookAt(rotation target, float strength, float damping)
+Causes object to point its forward axis towards target</string>
+		</map>
+		<key>llStringLength</key>
+		<map>
+			<key>desc</key>
+			<string>integer llStringLength(string str)
+Returns the length of string</string>
+		</map>
+		<key>llStartAnimation</key>
+		<map>
+			<key>desc</key>
+			<string>llStartAnimation(string anim)
+Starts animation anim for agent that granted PERMISSION_TRIGGER_ANIMATION if the permission has not been revoked</string>
+		</map>
+		<key>llStopAnimation</key>
+		<map>
+			<key>desc</key>
+			<string>llStopAnimation(string anim)
+Stops animation anim for agent that granted permission</string>
+		</map>
+		<key>llPointAt</key>
+		<map>
+			<key>desc</key>
+			<string>llPointAt(vector pos)
+Makes agent that owns object point at pos</string>
+		</map>
+		<key>llStopPointAt</key>
+		<map>
+			<key>desc</key>
+			<string>llStopPointAt()
+Stops pointing agent that owns object</string>
+		</map>
+		<key>llTargetOmega</key>
+		<map>
+			<key>desc</key>
+			<string>llTargetOmega(vector axis, float spinrate, float gain)
+Rotates the object around axis at spinrate with strength gain</string>
+		</map>
+		<key>llGetStartParameter</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetStartParameter()
+Returns an integer that is the script start/rez parameter</string>
+		</map>
+		<key>llGodLikeRezObject</key>
+		<map>
+			<key>desc</key>
+			<string>llGodLikeRezObject(key inventory, vector pos)
+Rezzes directly off of UUID if owner is in God Mode</string>
+			<key>gods-only</key>
+			<boolean>true</boolean>
+		</map>
+		<key>llRequestPermissions</key>
+		<map>
+			<key>desc</key>
+			<string>llRequestPermissions(key agent, integer perm)
+Asks the agent for permission to run certain classes of functions</string>
+		</map>
+		<key>llGetPermissionsKey</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetPermissionsKey()
+Returns the key of the avatar that last granted permissions to the script</string>
+		</map>
+		<key>llGetPermissions</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetPermissions()
+Returns an integer bitfield with the permissions that have been granted</string>
+		</map>
+		<key>llGetLinkNumber</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetLinkNumber()
+Returns the link number of the prim containing the script (0 means not linked, 1 the prim is the root, 2 the prim is the first child, etc)</string>
+		</map>
+		<key>llSetLinkColor</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkColor(integer linknumber, vector color, integer face)
+Sets face to color if a task exists in the link chain at linknumber</string>
+		</map>
+		<key>llCreateLink</key>
+		<map>
+			<key>desc</key>
+			<string>llCreateLink(key target, integer parent)
+Attempts to link the script&apos;s object with the target (requires that PERMISSION_CHANGE_LINKS be granted). If parent == TRUE, then the script&apos;s object becomes the root</string>
+		</map>
+		<key>llBreakLink</key>
+		<map>
+			<key>desc</key>
+			<string>llBreakLink(integer linknum)
+Delinks the prim with the given link number in a linked object set (requires that PERMISSION_CHANGE_LINKS be granted)</string>
+		</map>
+		<key>llBreakAllLinks</key>
+		<map>
+			<key>desc</key>
+			<string>llBreakAllLinks()
+Delinks all prims in the link set (requires that PERMISSION_CHANGE_LINKS be granted)</string>
+		</map>
+		<key>llGetLinkKey</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetLinkKey(integer linknumber)
+Returns the key of the linked prim linknumber</string>
+		</map>
+		<key>llGetLinkName</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetLinkName(integer linknumber)
+Returns the name of linknumber in a link set</string>
+		</map>
+		<key>llGetInventoryNumber</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetInventoryNumber(integer type)
+Returns the number of items of a given type (INVENTORY_* flag) in the prim&apos;s inventory</string>
+		</map>
+		<key>llGetInventoryName</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetInventoryName(integer type, integer number)
+Returns the name of the inventory item number of a given type</string>
+		</map>
+		<key>llSetScriptState</key>
+		<map>
+			<key>desc</key>
+			<string>llSetScriptState(string name, integer run)
+Sets the running state of the specified script</string>
+		</map>
+		<key>llGetEnergy</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetEnergy()
+Returns how much energy is in the object as a percentage of maximum</string>
+		</map>
+		<key>llGiveInventory</key>
+		<map>
+			<key>desc</key>
+			<string>llGiveInventory(key destination, string inventory)
+Gives inventory to destination</string>
+		</map>
+		<key>llRemoveInventory</key>
+		<map>
+			<key>desc</key>
+			<string>llRemoveInventory(string item)
+Removes the named inventory item</string>
+		</map>
+		<key>llSetText</key>
+		<map>
+			<key>desc</key>
+			<string>llSetText(string text, vector color, float alpha)
+Displays text that hovers over the prim with specific color and translucency specified with alpha</string>
+		</map>
+		<key>llWater</key>
+		<map>
+			<key>desc</key>
+			<string>float llWater(vector offset)
+Returns the water height below the object position + offset</string>
+		</map>
+		<key>llPassTouches</key>
+		<map>
+			<key>desc</key>
+			<string>llPassTouches(integer pass)
+If pass == TRUE, touches are passed from children on to parents</string>
+		</map>
+		<key>llRequestAgentData</key>
+		<map>
+			<key>desc</key>
+			<string>key llRequestAgentData(key id, integer data)
+Requests data about agent id. When data is available the dataserver event will be raised.</string>
+		</map>
+		<key>llRequestInventoryData</key>
+		<map>
+			<key>desc</key>
+			<string>key llRequestInventoryData(string name)
+Requests data from object&apos;s inventory object. When data is available the dataserver event will be raised.</string>
+		</map>
+		<key>llSetDamage</key>
+		<map>
+			<key>desc</key>
+			<string>llSetDamage(float damage)
+Sets the amount of damage that will be done when this object hits an avatar.</string>
+		</map>
+		<key>llTeleportAgentHome</key>
+		<map>
+			<key>desc</key>
+			<string>llTeleportAgentHome(key id)
+Teleports avatar on the owner&apos;s land to their home location without any warning
+(Sleep: 5.0)</string>
+		</map>
+		<key>llModifyLand</key>
+		<map>
+			<key>desc</key>
+			<string>llModifyLand(integer action, integer brush)
+Modifies land using the specified action on the specified brush size of land</string>
+		</map>
+		<key>llCollisionSound</key>
+		<map>
+			<key>desc</key>
+			<string>llCollisionSound(string impact_sound, float impact_volume)
+Suppresses default collision sounds, replaces default impact sounds with impact_sound at the volume impact_volume</string>
+		</map>
+		<key>llCollisionSprite</key>
+		<map>
+			<key>desc</key>
+			<string>llCollisionSprite(string impact_sprite)
+Suppresses default collision sprites, replaces default impact sprite with impact_sprite (use an empty string to just suppress)</string>
+		</map>
+		<key>llGetAnimation</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetAnimation(key id)
+Returns the name of the currently playing locomotion animation for avatar id</string>
+		</map>
+		<key>llResetScript</key>
+		<map>
+			<key>desc</key>
+			<string>llResetScript()
+Resets the script</string>
+		</map>
+		<key>llMessageLinked</key>
+		<map>
+			<key>desc</key>
+			<string>llMessageLinked(integer linknum, integer num, string str, key id)
+Allows scripts in the same object to communicate. Triggers a link_message event with the same parameters num, str, and id in all scripts in the prim(s) described by linknum.</string>
+		</map>
+		<key>llPushObject</key>
+		<map>
+			<key>desc</key>
+			<string>llPushObject(key id, vector impulse, vector ang_impulse, integer local)
+Applies impulse and ang_impulse to object id</string>
+		</map>
+		<key>llPassCollisions</key>
+		<map>
+			<key>desc</key>
+			<string>llPassCollisions(integer pass)
+If pass == TRUE, collisions are passed from children on to parents (default is FALSE)</string>
+		</map>
+		<key>llGetScriptName</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetScriptName()
+Returns the name of the script that this function is used in</string>
+		</map>
+		<key>llGetNumberOfSides</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetNumberOfSides()
+Returns the number of faces (or sides) of the prim</string>
+		</map>
+		<key>llAxisAngle2Rot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llAxisAngle2Rot(vector axis, float angle)
+Returns the rotation that is a generated angle about axis</string>
+		</map>
+		<key>llRot2Axis</key>
+		<map>
+			<key>desc</key>
+			<string>vector llRot2Axis(rotation rot)
+Returns the rotation axis represented by rot</string>
+		</map>
+		<key>llRot2Angle</key>
+		<map>
+			<key>desc</key>
+			<string>float llRot2Angle(rotation rot)
+Returns the rotation angle represented by rot</string>
+		</map>
+		<key>llAcos</key>
+		<map>
+			<key>desc</key>
+			<string>float llAcos(float val)
+Returns the arccosine in radians of val</string>
+		</map>
+		<key>llAsin</key>
+		<map>
+			<key>desc</key>
+			<string>float llAsin(float val)
+Returns the arcsine in radians of val</string>
+		</map>
+		<key>llAngleBetween</key>
+		<map>
+			<key>desc</key>
+			<string>float llAngleBetween(rotation a, rotation b)
+Returns angle between rotation a and b</string>
+		</map>
+		<key>llGetInventoryKey</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetInventoryKey(string name)
+Returns the key that is the UUID of the inventory name</string>
+		</map>
+		<key>llAllowInventoryDrop</key>
+		<map>
+			<key>desc</key>
+			<string>llAllowInventoryDrop(integer add)
+If add == TRUE, users without modify permissions can still drop inventory items onto a prim</string>
+		</map>
+		<key>llGetSunDirection</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetSunDirection()
+Returns a normalized vector of the direction of the sun in the region</string>
+		</map>
+		<key>llGetTextureOffset</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetTextureOffset(integer face)
+Returns the texture offset of face in the x and y components of a vector</string>
+		</map>
+		<key>llGetTextureScale</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetTextureScale(integer side)
+Returns the texture scale of side in the x and y components of a vector</string>
+		</map>
+		<key>llGetTextureRot</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetTextureRot(integer side)
+Returns the texture rotation of side</string>
+		</map>
+		<key>llSubStringIndex</key>
+		<map>
+			<key>desc</key>
+			<string>integer llSubStringIndex(string source, string pattern)
+Returns an integer that is the index in source where pattern first appears.
+(Returns -1 if not found)</string>
+		</map>
+		<key>llGetOwnerKey</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetOwnerKey(key id)
+Returns the owner of object id</string>
+		</map>
+		<key>llGetCenterOfMass</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetCenterOfMass()
+Returns the prim&apos;s center of mass (unless called from the root prim, where it returns the object&apos;s center of mass)</string>
+		</map>
+		<key>llListSort</key>
+		<map>
+			<key>desc</key>
+			<string>list llListSort(list src, integer stride, integer ascending)
+Sorts the list into blocks of stride, in ascending order if ascending == TRUE.
+The sort order is affected by type.</string>
+		</map>
+		<key>llGetListLength</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetListLength(list src)
+Returns the number of elements in the list</string>
+		</map>
+		<key>llList2Integer</key>
+		<map>
+			<key>desc</key>
+			<string>integer llList2Integer(list src, integer index)
+Copies the integer at index in the list</string>
+		</map>
+		<key>llList2Float</key>
+		<map>
+			<key>desc</key>
+			<string>float llList2Float(list src, integer index)
+Copies the float at index in the list</string>
+		</map>
+		<key>llList2String</key>
+		<map>
+			<key>desc</key>
+			<string>string llList2String(list src, integer index)
+Copies the string at index in the list</string>
+		</map>
+		<key>llList2Key</key>
+		<map>
+			<key>desc</key>
+			<string>key llList2Key(list src, integer index)
+Copies the key at index in the list</string>
+		</map>
+		<key>llList2Vector</key>
+		<map>
+			<key>desc</key>
+			<string>vector llList2Vector(list src, integer index)
+Copies the vector at index in the list</string>
+		</map>
+		<key>llList2Rot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llList2Rot(list src, integer index)
+Copies the rotation at index in the list</string>
+		</map>
+		<key>llList2List</key>
+		<map>
+			<key>desc</key>
+			<string>list llList2List(list src, integer start, integer end)
+Copies the slice of the list from start to end</string>
+		</map>
+		<key>llDeleteSubList</key>
+		<map>
+			<key>desc</key>
+			<string>list llDeleteSubList(list src, integer start, integer end)
+Removes the slice from start to end and returns the remainder of the list</string>
+		</map>
+		<key>llGetListEntryType</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetListEntryType(list src, integer index)
+Returns the type of the index entry in the list
+(TYPE_INTEGER, TYPE_FLOAT, TYPE_STRING, TYPE_KEY, TYPE_VECTOR, TYPE_ROTATION, or TYPE_INVALID if index is off list)</string>
+		</map>
+		<key>llList2CSV</key>
+		<map>
+			<key>desc</key>
+			<string>string llList2CSV(list src)
+Creates a string of comma separated values from list</string>
+		</map>
+		<key>llCSV2List</key>
+		<map>
+			<key>desc</key>
+			<string>list llCSV2List(string src)
+Creates a list from a string of comma separated values</string>
+		</map>
+		<key>llListRandomize</key>
+		<map>
+			<key>desc</key>
+			<string>list llListRandomize(list src, integer stride)
+Returns a randomized list of blocks of size stride</string>
+		</map>
+		<key>llList2ListStrided</key>
+		<map>
+			<key>desc</key>
+			<string>list llList2ListStrided(list src, integer start, integer end, integer stride)
+Copies the strided slice of the list from start to end</string>
+		</map>
+		<key>llGetRegionCorner</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetRegionCorner()
+Returns a vector in meters that is the global location of the south-west corner of the region which the object is in</string>
+		</map>
+		<key>llListInsertList</key>
+		<map>
+			<key>desc</key>
+			<string>list llListInsertList(list dest, list src, integer start)
+Returns a list that contains all the elements from dest but with the elements from src inserted at position start</string>
+		</map>
+		<key>llListFindList</key>
+		<map>
+			<key>desc</key>
+			<string>integer llListFindList(list src, list test)
+Returns the index of the first instance of test in src</string>
+		</map>
+		<key>llGetObjectName</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetObjectName()
+Returns the name of the prim which the script is attached to</string>
+		</map>
+		<key>llSetObjectName</key>
+		<map>
+			<key>desc</key>
+			<string>llSetObjectName(string name)
+Sets the prim&apos;s name to the name parameter</string>
+		</map>
+		<key>llGetDate</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetDate()
+Returns the current date in the UTC time zone in the format YYYY-MM-DD</string>
+		</map>
+		<key>llEdgeOfWorld</key>
+		<map>
+			<key>desc</key>
+			<string>integer llEdgeOfWorld(vector pos, vector dir)
+Checks to see whether the border hit by dir from pos is the edge of the world (has no neighboring region)</string>
+		</map>
+		<key>llGetAgentInfo</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetAgentInfo(key id)
+Returns an integer bitfield containing the agent information about id.
+Returns AGENT_FLYING, AGENT_ATTACHMENTS, AGENT_SCRIPTED, AGENT_SITTING, AGENT_ON_OBJECT, AGENT_MOUSELOOK, AGENT_AWAY, AGENT_BUSY, AGENT_TYPING, AGENT_CROUCHING, AGENT_ALWAYS_RUN, AGENT_WALKING and/or AGENT_IN_AIR.</string>
+		</map>
+		<key>
+		<key>llAdjustSoundVolume</key>
+		<map>
+			<key>desc</key>
+			<string>llAdjustSoundVolume(float volume)
+Adjusts volume of attached sound (0.0 - 1.0)</string>
+		</map>
+		<key>llSetSoundQueueing</key>
+		<map>
+			<key>desc</key>
+			<string>llSetSoundQueueing(integer queue)
+Sets whether attached sounds wait for the current sound to finish (If queue == TRUE then queuing is enabled, if FALSE queuing is disabled [default])</string>
+		</map>
+		<key>llSetSoundRadius</key>
+		<map>
+			<key>desc</key>
+			<string>llSetSoundRadius(float radius)
+Establishes a hard cut-off radius for audibility of scripted sounds (both attached and triggered)</string>
+		</map>
+		<key>llKey2Name</key>
+		<map>
+			<key>desc</key>
+			<string>string llKey2Name(key id)
+Returns the name of the prim or avatar specified by id.
+(The id must be a valid rezzed prim or avatar key in the current simulator, otherwise an empty string is returned.)</string>
+		</map>
+		<key>llSetTextureAnim</key>
+		<map>
+			<key>desc</key>
+			<string>llSetTextureAnim(integer mode, integer face, integer sizex, integer sizey, float start, float length, float rate)
+Animates the texture on the specified face/faces</string>
+		</map>
+		<key>llTriggerSoundLimited</key>
+		<map>
+			<key>desc</key>
+			<string>llTriggerSoundLimited(string sound, float volume, vector top_north_east, vector bottom_south_west)
+Plays sound at volume (0.0 - 1.0), centered at but not attached to object, limited to the box defined by vectors top_north_east and bottom_south_west</string>
+		</map>
+		<key>llEjectFromLand</key>
+		<map>
+			<key>desc</key>
+			<string>llEjectFromLand(key avatar)
+Ejects avatar from the parcel</string>
+		</map>
+		<key>llParseString2List</key>
+		<map>
+			<key>desc</key>
+			<string>list llParseString2List(string src, list separators, list spacers)
+Breaks src into a list, discarding separators, keeping spacers
+(separators and spacers must be lists of strings, maximum of 8 each)</string>
+		</map>
+		<key>llOverMyLand</key>
+		<map>
+			<key>desc</key>
+			<string>integer llOverMyLand(key id)
+Returns TRUE if id is over land owned by the script owner, otherwise FALSE</string>
+		</map>
+		<key>llGetLandOwnerAt</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetLandOwnerAt(vector pos)
+Returns the key of the land owner, returns NULL_KEY if public</string>
+		</map>
+		<key>llGetNotecardLine</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetNotecardLine(string name, integer line)
+Returns line line of notecard name via the dataserver event</string>
+		</map>
+		<key>llGetAgentSize</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetAgentSize(key id)
+If the avatar is in the same region, returns the size of the bounding box of the requested avatar by id, otherwise returns ZERO_VECTOR</string>
+		</map>
+		<key>llSameGroup</key>
+		<map>
+			<key>desc</key>
+			<string>integer llSameGroup(key id)
+Returns TRUE if avatar id is in the same region and has the same active group, otherwise FALSE</string>
+		</map>
+		<key>llUnSit</key>
+		<map>
+			<key>desc</key>
+			<string>key llUnSit(key id)
+If avatar identified by id is sitting on the object the script is attached to or is over land owned by the object&apos;s owner, the avatar is forced to stand up</string>
+		</map>
+		<key>llGroundSlope</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGroundSlope(vector offset)
+Returns the ground slope below the object position + offset</string>
+		</map>
+		<key>llGroundNormal</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGroundNormal(vector offset)
+Returns the ground normal below the object position + offset</string>
+		</map>
+		<key>llGroundContour</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGroundCountour(vector offset)
+Returns the ground contour direction below the object position + offset</string>
+		</map>
+		<key>llGetAttached</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetAttached()
+Returns the object&apos;s attachment point, or 0 if not attached</string>
+		</map>
+		<key>llGetFreeMemory</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetFreeMemory()
+Returns the number of free bytes of memory the script can use</string>
+		</map>
+		<key>llGetRegionName</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetRegionName()
+Returns the current region name</string>
+		</map>
+		<key>llGetRegionTimeDilation</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetRegionTimeDilation()
+Returns the current time dilation as a float between 0.0 (full dilation) and 1.0 (no dilation)</string>
+		</map>
+		<key>llGetRegionFPS</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetRegionFPS()
+Returns the mean region frames per second</string>
+		</map>
+		<key>llParticleSystem</key>
+		<map>
+			<key>desc</key>
+			<string>llParticleSystem(list rules)
+Creates a particle system based on rules.  An empty list removes the particle system.
+List format is [ rule1, data1, rule2, data2 . . . rulen, datan ]</string>
+		</map>
+		<key>llGroundRepel</key>
+		<map>
+			<key>desc</key>
+			<string>llGroundRepel(float height, integer water, float tau)
+Critically damps to height if within height*0.5 of level (either above ground level, or above the higher of land and water if water == TRUE)</string>
+		</map>
+		<key>llGiveInventoryList</key>
+		<map>
+			<key>desc</key>
+			<string>llGiveInventoryList(key target, string folder, list inventory)
+Gives inventory items to target, creating a new folder to put them in</string>
+		</map>
+		<key>llSetVehicleType</key>
+		<map>
+			<key>desc</key>
+			<string>llSetVehicleType(integer type)
+Sets the vehicle to one of the default types</string>
+		</map>
+		<key>llSetVehicleFloatParam</key>
+		<map>
+			<key>desc</key>
+			<string>llSetVehicleFloatParam(integer param, float value)
+Sets the specified vehicle float parameter</string>
+		</map>
+		<key>llSetVehicleVectorParam</key>
+		<map>
+			<key>desc</key>
+			<string>llSetVehicleVectorParam(integer param, vector vec)
+Sets the specified vehicle vector parameter</string>
+		</map>
+		<key>llSetVehicleRotationParam</key>
+		<map>
+			<key>desc</key>
+			<string>llSetVehicleVectorParam(integer param, rotation rot)
+Sets the specified vehicle rotation parameter</string>
+		</map>
+		<key>llSetVehicleFlags</key>
+		<map>
+			<key>desc</key>
+			<string>llSetVehicleFlags(integer flags)
+Sets the enabled bits in &apos;flags&apos;</string>
+		</map>
+		<key>llRemoveVehicleFlags</key>
+		<map>
+			<key>desc</key>
+			<string>llRemoveVehicleFlags(integer flags)
+Removes the enabled bits in &apos;flags&apos;</string>
+		</map>
+		<key>llSitTarget</key>
+		<map>
+			<key>desc</key>
+			<string>llSitTarget(vector offset, rotation rot)
+Sets the sit location for the prim.  If offset == &lt;0,0,0&gt; then the sit target is removed.</string>
+		</map>
+		<key>llAvatarOnSitTarget</key>
+		<map>
+			<key>desc</key>
+			<string>key llAvatarOnSitTarget()
+If an avatar is seated on the sit target, returns the avatar&apos;s key, otherwise NULL_KEY</string>
+		</map>
+		<key>llAddToLandPassList</key>
+		<map>
+			<key>desc</key>
+			<string>llAddToLandPassList(key avatar, float hours)
+Adds avatar to the land pass list for hours, or indefinitely if hours is 0</string>
+		</map>
+		<key>llSetTouchText</key>
+		<map>
+			<key>desc</key>
+			<string>llSetTouchText(string text)
+Displays text rather than the default &apos;Touch&apos; in the pie menu</string>
+		</map>
+		<key>llSetSitText</key>
+		<map>
+			<key>desc</key>
+			<string>llSetSitText(string text)
+Displays text rather than the default &apos;Sit Here&apos; in the pie menu</string>
+		</map>
+		<key>llSetCameraEyeOffset</key>
+		<map>
+			<key>desc</key>
+			<string>llSetCameraEyeOffset(vector offset)
+Sets the camera eye offset for avatars that sit on the object</string>
+		</map>
+		<key>llSetCameraAtOffset</key>
+		<map>
+			<key>desc</key>
+			<string>llSetCameraAtOffset(vector offset)
+Sets the point the camera is looking at to offset for avatars that sit on the object</string>
+		</map>
+		<key>llDumpList2String</key>
+		<map>
+			<key>desc</key>
+			<string>string llDumpList2String(list src, string separator)
+Returns the list in a single string, using separator between the entries</string>
+		</map>
+		<key>llScriptDanger</key>
+		<map>
+			<key>desc</key>
+			<string>integer llScriptDanger(vector pos)
+Returns TRUE if pos is over public land, sandbox land, land that doesn&apos;t allow everyone to edit and build, or land that doesn&apos;t allow outside scripts</string>
+		</map>
+		<key>llDialog</key>
+		<map>
+			<key>desc</key>
+			<string>llDialog(key avatar, string message, list buttons, integer chat_channel)
+Shows a dialog box on the avatar&apos;s screen with a message and up to 12 buttons.
+If a button is pressed, the avatar says the text of the button label on chat_channel.</string>
+		</map>
+		<key>llVolumeDetect</key>
+		<map>
+			<key>desc</key>
+			<string>llVolumeDetect(integer detect)
+If detect = TRUE, object works much like Phantom, but triggers collision_start and collision_end events when other objects start and stop interpenetrating.
+Must be applied to the root prim.</string>
+		</map>
+		<key>llResetOtherScript</key>
+		<map>
+			<key>desc</key>
+			<string>llResetOtherScript(string name)
+Resets script name</string>
+		</map>
+		<key>llGetScriptState</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetScriptState(string name)
+Returns TRUE if the script name is running</string>
+		</map>
+		<key>llRemoteLoadScript</key>
+		<map>
+			<key>desc</key>
+			<string>DEPRECATED!  Please use llRemoteLoadScriptPin instead.	</string>
+		</map>
+		<key>llSetRemoteScriptAccessPin</key>
+		<map>
+			<key>desc</key>
+			<string>llSetRemoteScriptAccessPin(integer pin)
+If pin is set to a non-zero number, allows a prim to have scripts remotely loaded via llRemoteLoadScriptPin when it passes in the correct pin. Otherwise, llRemoteLoadScriptPin is ignored.</string>
+		</map>
+		<key>llRemoteLoadScriptPin</key>
+		<map>
+			<key>desc</key>
+			<string>llRemoteLoadScriptPin(key target, string name, integer pin, integer running, integer start_param)
+Copies script name onto target, if the owner of this scripted object can modify target and is in the same region, and the matching pin is used.
+If running == TRUE, starts the script with start_param</string>
+		</map>
+		<key>llOpenRemoteDataChannel</key>
+		<map>
+			<key>desc</key>
+			<string>llOpenRemoteDataChannel()
+Creates a channel to listen for XML-RPC calls, and will trigger a remote_data event with channel id once it is available
+(Sleep: 1.0)</string>
+		</map>
+		<key>llSendRemoteData</key>
+		<map>
+			<key>desc</key>
+			<string>key llSendRemoteData(key channel, string dest, integer idata, string sdata)
+Sends an XML-RPC request to dest through channel with payload of channel (in a string), integer idata and string sdata.
+Returns a key that is the message_id for the resulting remote_data events.
+(Sleep: 3.0)</string>
+		</map>
+		<key>llRemoteDataReply</key>
+		<map>
+			<key>desc</key>
+			<string>llRemoteDataReply(key channel, key message_id, string sdata, integer idata)
+Sends an XML-RPC reply to message_id on channel with payload of string sdata and integer idata
+(Sleep: 3.0)</string>
+		</map>
+		<key>llCloseRemoteDataChannel</key>
+		<map>
+			<key>desc</key>
+			<string>llCloseRemoteDataChannel(key channel)
+Closes XML-RPC channel
+(Sleep: 3.0)</string>
+		</map>
+		<key>llMD5String</key>
+		<map>
+			<key>desc</key>
+			<string>string llMD5String(string src, integer nonce)
+Returns a string of 32 hex characters that is a RSA Data Security, Inc. MD5 Message-Digest Algorithm of src with nonce</string>
+		</map>
+		<key>llSetPrimitiveParams</key>
+		<map>
+			<key>desc</key>
+			<string>llSetPrimitiveParams(list rules)
+Sets the prim&apos;s parameters according to rules
+(Sleep: 0.2)</string>
+		</map>
+		<key>llStringToBase64</key>
+		<map>
+			<key>desc</key>
+			<string>string llStringToBase64(string str)
+Converts a string to the Base64 representation of the string</string>
+		</map>
+		<key>llBase64ToString</key>
+		<map>
+			<key>desc</key>
+			<string>string llBase64ToString(string str)
+Converts a Base64 string to a conventional string.
+If the conversion creates any unprintable characters, they are converted to spaces</string>
+		</map>
+		<key>llRemoteDataSetRegion</key>
+		<map>
+			<key>desc</key>
+			<string>llRemoteDataSetRegion()
+DEPRECATED!  Please use llOpenRemoteDataChannel instead.
+If an object using remote data channels changes regions, you must call this function to reregister the remote data channels. This call is not needed if the prim does not change regions.</string>
+		</map>
+		<key>llLog10</key>
+		<map>
+			<key>desc</key>
+			<string>float llLog10(float val)
+Returns the base 10 logarithm of val.  Returns zero if val &lt;= 0.</string>
+		</map>
+		<key>llLog</key>
+		<map>
+			<key>desc</key>
+			<string>float llLog(float val)
+Returns the natural logarithm of val.  Returns zero if val &lt;= 0.</string>
+		</map>
+		<key>llGetAnimationList</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetAnimationList(key id)
+Returns a list of keys of playing animations for avatar described by id</string>
+		</map>
+		<key>llSetParcelMusicURL</key>
+		<map>
+			<key>desc</key>
+			<string>llSetParcelMusicURL(string url)
+Sets the streaming audio URL for the parcel which the object is on</string>
+		</map>
+		<key>llGetRootPosition</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetRootPosition()
+Returns the position (in region coordinates) of the root prim of the object which the script is attached to</string>
+		</map>
+		<key>llGetRootRotation</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llGetRootRotation()
+Returns the rotation (relative to the region) of the root prim of the object which the script is attached to</string>
+		</map>
+		<key>llGetObjectDesc</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetObjectDesc()
+Returns the description of the prim the script is attached to</string>
+		</map>
+		<key>llSetObjectDesc</key>
+		<map>
+			<key>desc</key>
+			<string>llSetObjectDesc(string name)
+Sets the prim&apos;s description</string>
+		</map>
+		<key>llGetCreator</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetCreator()
+Returns a key for the creator of the prim</string>
+		</map>
+		<key>llGetTimestamp</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetTimestamp()
+Returns the timestamp in the UTC time zone in the format: YYYY-MM-DDThh:mm:ss.ff..fZ</string>
+		</map>
+		<key>llSetLinkAlpha</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkAlpha(integer linknumber, float alpha, integer face)
+If a prim exists in the link chain at linknumber, sets face to alpha</string>
+		</map>
+		<key>llGetNumberOfPrims</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetNumberOfPrims()
+Returns the number of prims in a link set the script is attached to</string>
+		</map>
+		<key>llGetNumberOfNotecardLines</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetNumberOfNotecardLines(string name)
+Returns number of lines in notecard name via the dataserver event (cast return value to integer)</string>
+		</map>
+		<key>llGetBoundingBox</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetBoundingBox(key object)
+Returns the bounding box around the object (including any linked prims) relative to its root prim, in a list in the format [ (vector) min_corner, (vector) max_corner ]</string>
+		</map>
+		<key>llGetGeometricCenter</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetGeometricCenter()
+Returns the geometric center of the linked set the script is attached to.</string>
+		</map>
+		<key>llGetPrimitiveParams</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetPrimitiveParams(list params)
+Returns the primitive parameters specified in the params list.</string>
+		</map>
+		<key>llIntegerToBase64</key>
+		<map>
+			<key>desc</key>
+			<string>string llIntegerToBase64(integer number)
+Returns a string that is a Base64 big endian encode of number</string>
+		</map>
+		<key>llBase64ToInteger</key>
+		<map>
+			<key>desc</key>
+			<string>integer llBase64ToInteger(string str)
+Returns an integer that is the str Base64 decoded as a big endian integer</string>
+		</map>
+		<key>llGetGMTclock</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetGMTclock()
+Returns the time in seconds since midnight GMT</string>
+		</map>
+		<key>llGetSimulatorHostname</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetSimulatorHostname()
+Returns the hostname of the machine which the script is running on (same as string in viewer Help dialog)</string>
+		</map>
+		<key>llSetLocalRot</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLocalRot(rotation rot)
+Sets the rotation of a child prim relative to the root prim
+(Sleep: 0.2)</string>
+		</map>
+		<key>llParseStringKeepNulls</key>
+		<map>
+			<key>desc</key>
+			<string>list llParseStringKeepNulls(string src, list separators, list spacers)
+Breaks src into a list, discarding separators, keeping spacers, keeping any null values generated.
+(separators and spacers must be lists of strings, maximum of 8 each)</string>
+		</map>
+		<key>llRezAtRoot</key>
+		<map>
+			<key>desc</key>
+			<string>llRezAtRoot(string inventory, vector pos, vector vel, rotation rot, integer param)
+Instantiates owner&apos;s inventory object rotated to rot with its root at pos, moving at vel, using param as the start parameter
+(Sleep: 0.1)</string>
+		</map>
+		<key>llGetObjectPermMask</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetObjectPermMask(integer mask)
+Returns the requested permission mask for the root object the task is attached to</string>
+		</map>
+		<key>llSetObjectPermMask</key>
+		<map>
+			<key>desc</key>
+			<string>llSetObjectPermMask(integer mask, integer value)
+Sets the given permission mask to the new value on the root object the task is attached to (requires God Mode)</string>
+			<key>gods-only</key>
+			<boolean>true</boolean>
+		</map>
+		<key>llGetInventoryPermMask</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetInventoryPermMask(string item, integer mask)
+Returns the requested permission mask for the inventory item</string>
+		</map>
+		<key>llSetInventoryPermMask</key>
+		<map>
+			<key>desc</key>
+			<string>llSetInventoryPermMask(string item, integer mask, integer value)
+Sets the given permission mask to the new value on the inventory item (requires God Mode)</string>
+			<key>gods-only</key>
+			<boolean>true</boolean>
+		</map>
+		<key>llGetInventoryCreator</key>
+		<map>
+			<key>desc</key>
+			<string>key llGetInventoryCreator(string item)
+Returns a key for the creator of the inventory item</string>
+		</map>
+		<key>llOwnerSay</key>
+		<map>
+			<key>desc</key>
+			<string>llOwnerSay(string message)
+Says message to owner only.  (Owner must be in the same region.)</string>
+		</map>
+		<key>llRequestSimulatorData</key>
+		<map>
+			<key>desc</key>
+			<string>key llRequestSimulatorData(string simulator, integer data)
+Requests data about simulator.  When data is available the dataserver event will be raised.
+(sleep: 1.0)</string>
+		</map>
+		<key>llForceMouselook</key>
+		<map>
+			<key>desc</key>
+			<string>llForceMouselook(integer mouselook)
+If mouselook is TRUE, any avatar that sits upon the prim will be forced into mouselook mode</string>
+		</map>
+		<key>llGetObjectMass</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetObjectMass(key id)
+Returns the mass of the avatar or object in the region</string>
+		</map>
+		<key>llListReplaceList</key>
+		<map>
+			<key>desc</key>
+			<string>list llListReplaceList(list dest, list src, integer start, integer end)
+Returns a list that is dest with start through end removed and src inserted at start</string>
+		</map>
+		<key>llLoadURL</key>
+		<map>
+			<key>desc</key>
+			<string>llLoadURL(key avatar, string message, string url)
+Shows a dialog to avatar offering to load the web page at url with a message.
+If user clicks yes, launches the page in their web browser.
+(Sleep: 10.0)</string>
+		</map>
+		<key>llParcelMediaCommandList</key>
+		<map>
+			<key>desc</key>
+			<string>llParcelMediaCommandList(list command)
+Sends a list of commands, some with arguments, to a parcel to control the playback of movies and other media
+(Sleep: 2.0)</string>
+		</map>
+		<key>llParcelMediaQuery</key>
+		<map>
+			<key>desc</key>
+			<string>list llParcelMediaQuery(list query)
+Returns a list containing results of the sent query
+(Sleep: 2.0)</string>
+		</map>
+		<key>llModPow</key>
+		<map>
+			<key>desc</key>
+			<string>integer llModPow(integer a, integer b, integer c)
+Returns a raised to the b power, mod c. ( (a**b)%c )
+b is capped at 0xFFFF (16 bits).</string>
+		</map>
+		<key>llGetInventoryType</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetInventoryType(string name)
+Returns the type of the inventory item name</string>
+		</map>
+		<key>llSetPayPrice</key>
+		<map>
+			<key>desc</key>
+			<string>llSetPayPrice(integer price, list quick_pay_buttons)
+Sets the default amount on the dialog that appears when someone chooses to pay this prim</string>
+		</map>
+		<key>llGetCameraPos</key>
+		<map>
+			<key>desc</key>
+			<string>vector llGetCameraPos()
+Returns the current camera position for the agent the task has permissions for</string>
+		</map>
+		<key>llGetCameraRot</key>
+		<map>
+			<key>desc</key>
+			<string>rotation llGetCameraRot()
+Returns the current camera orientation for the agent the task has permissions for</string>
+		</map>
+		<key>llSetPrimURL</key>
+		<map>
+			<key>desc</key>
+			<string>llSetPrimURL(string url)
+Updates the URL for the web page shown on the sides of the object
+(Sleep: 20.0)</string>
+		</map>
+		<key>llRefreshPrimURL</key>
+		<map>
+			<key>desc</key>
+			<string>llRefreshPrimURL()
+Reloads the web page shown on the sides of the object
+(sleep: 20)</string>
+		</map>
+		<key>llEscapeURL</key>
+		<map>
+			<key>desc</key>
+			<string>string llEscapeURL(string url)
+Returns an escaped/encoded version of url, replacing spaces with %20 etc.</string>
+		</map>
+		<key>llUnescapeURL</key>
+		<map>
+			<key>desc</key>
+			<string>string llUnescapeURL(string url)
+Returns an unescaped/ unencoded version of url, replacing %20 with spaces etc.</string>
+		</map>
+		<key>llMapDestination</key>
+		<map>
+			<key>desc</key>
+			<string>llMapDestination(string simname, vector pos, vector look_at)
+Opens the World Map centered on the region simname with pos highlighted. (NOTE: look_at currently does nothing.)
+Only works for scripts attached to avatar, or during touch events.</string>
+		</map>
+		<key>llAddToLandBanList</key>
+		<map>
+			<key>desc</key>
+			<string>llAddToLandBanList(key avatar, float hours)
+Adds avatar to the land ban list for hours, or indefinitely if hours is 0</string>
+		</map>
+		<key>llRemoveFromLandPassList</key>
+		<map>
+			<key>desc</key>
+			<string>llRemoveFromLandPassList(key avatar)
+Removes avatar from the land pass list</string>
+		</map>
+		<key>llRemoveFromLandBanList</key>
+		<map>
+			<key>desc</key>
+			<string>llRemoveFromLandBanList(key avatar)
+Removes avatar from the land ban list</string>
+		</map>
+		<key>llSetCameraParams</key>
+		<map>
+			<key>desc</key>
+			<string>llSetCameraParams(list rules)
+Sets multiple camera parameters at once.
+List format is [ rule1, data1, rule2, data2 . . . rulen, datan ]</string>
+		</map>
+		<key>llClearCameraParams</key>
+		<map>
+			<key>desc</key>
+			<string>llClearCameraParams()
+Resets all camera parameters to default values and turns off scripted camera control</string>
+		</map>
+		<key>llListStatistics</key>
+		<map>
+			<key>desc</key>
+			<string>float llListStatistics(integer operation, list src)
+Performs statistical aggregate functions on list src using LIST_STAT_* operations</string>
+		</map>
+		<key>llGetUnixTime</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetUnixTime()
+Returns the number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC from the system clock</string>
+		</map>
+		<key>llGetParcelFlags</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetParcelFlags(vector pos)
+Returns a mask of the parcel flags (PARCEL_FLAG_*) for the parcel that includes the point pos</string>
+		</map>
+		<key>llGetRegionFlags</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetRegionFlags()
+Returns the region flags (REGION_FLAG_*) for the region the object is in</string>
+		</map>
+		<key>llXorBase64StringsCorrect</key>
+		<map>
+			<key>desc</key>
+			<string>string llXorBase64StringsCorrect(string s1, string s2)
+Correctly performs an exclusive or on two Base64 strings.
+s2 repeats if it is shorter than s1.</string>
+		</map>
+		<key>llXorBase64</key>
+		<map>
+			<key>desc</key>
+			<string>string llXorBase64(string s1, string s2)
+Correctly performs an exclusive or on two Base64 strings and returns a Base64 string.
+If the inputs are not Base64 strings the result will be erratic.</string>
+		</map>
+		<key>llHTTPRequest</key>
+		<map>
+			<key>desc</key>
+			<string>key llHTTPRequest(string url, list parameters, string body)
+Sends an HTTP request to the specified url with the body of the request and parameters</string>
+		</map>
+		<key>llResetLandBanList</key>
+		<map>
+			<key>desc</key>
+			<string>llResetLandBanList()
+Removes all Residents from the land ban list
+(sleep: 1.0)</string>
+		</map>
+		<key>llResetLandPassList</key>
+		<map>
+			<key>desc</key>
+			<string>llResetLandPassList()
+Removes all Residents from the land access/pass list</string>
+		</map>
+		<key>llGetObjectPrimCount</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetObjectPrimCount(key object_id)
+Returns the total number of prims for an object in the region</string>
+		</map>
+		<key>llGetParcelPrimOwners</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetParcelPrimOwners(vector pos)
+Returns a list of all Residents who own objects on the parcel at pos and with individual prim counts.
+Requires owner-like permissions for the parcel.
+(Sleep: 2.0)</string>
+		</map>
+		<key>llGetParcelPrimCount</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetParcelPrimCount(vector pos, integer category, integer sim_wide)
+Returns the number of prims on the parcel at pos of the given category.
+Categories: PARCEL_COUNT_TOTAL, _OWNER, _GROUP, _OTHER, _SELECTED, _TEMP</string>
+		</map>
+		<key>llGetParcelMaxPrims</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetParcelMaxPrims(vector pos, integer sim_wide)
+Returns the maximum number of prims allowed on the parcel at pos</string>
+		</map>
+		<key>llGetParcelDetails</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetParcelDetails(vector pos, list params)
+Returns the parcel details specified in params for the parcel at pos.
+Params is one or more of: PARCEL_DETAILS_NAME, _DESC, _OWNER, _GROUP, _AREA, _ID, _SEE_AVATARS</string>
+		</map>
+		<key>llSetLinkPrimitiveParams</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkPrimitiveParams(integer linknumber, list rules)
+Sets primitive parameters for linknumber based on rules
+(sleep: 0.2)</string>
+		</map>
+		<key>llSetLinkTexture</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkTexture(integer linknumber, string texture, integer face)
+Sets the texture of face for a task that exists in the link chain at linknumber
+(Sleep: 0.2)</string>
+		</map>
+		<key>llStringTrim</key>
+		<map>
+			<key>desc</key>
+			<string>string llStringTrim(string src, integer trim_type)
+Trims the leading and/or trailing white spaces from a string.
+trim_type can be STRING_TRIM, STRING_TRIM_HEAD or STRING_TRIM_TAIL.</string>
+		</map>
+		<key>llRegionSay</key>
+		<map>
+			<key>desc</key>
+			<string>llRegionSay(integer channel, string message)
+Broadcasts message on channel (not 0) that can be heard anywhere in the region by a script listening on channel</string>
+		</map>
+		<key>llGetObjectDetails</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetObjectDetails(key id, list params)
+Returns the object details specified in params for the object with key id.
+Params are OBJECT_NAME, _DESC, _POS, _ROT, _VELOCITY, _OWNER, _GROUP, _CREATOR</string>
+		</map>
+		<key>llSetClickAction</key>
+		<map>
+			<key>desc</key>
+			<string>llSetClickAction(integer action)
+Sets the action performed when a prim is clicked upon</string>
+		</map>
+		<key>llGetRegionAgentCount</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetRegionAgentCount()
+Returns the number of avatars in the region</string>
+		</map>
+		<key>llTextBox</key>
+		<map>
+			<key>desc</key>
+			<string>llTextBox(key avatar, string message, integer chat_channel)
+Shows a window on the avatar&apos;s screen with the message.
+It contains a text box for input, and if entered that text is chatted on chat_channel.
+(Sleep: 1.0)</string>
+		</map>
+		<key>llGetAgentLanguage</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetAgentLanguage(key avatar)
+Returns the language code of the preferred interface language of the avatar</string>
+		</map>
+		<key>llDetectedTouchUV</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedTouchUV(integer index)
+Returns the u and v coordinates in the first two components of a vector, for the texture coordinates where the prim was touched in a triggered touch event</string>
+		</map>
+		<key>llDetectedTouchFace</key>
+		<map>
+			<key>desc</key>
+			<string>integer llDetectedTouchFace(integer index)
+Returns the index of the face where the avatar clicked in a triggered touch event</string>
+		</map>
+		<key>llDetectedTouchPos</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedTouchPos(integer index)
+Returns the position where the object was touched in a triggered touch event</string>
+		</map>
+		<key>llDetectedTouchNormal</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedTouchNormal(integer index)
+Returns the surface normal for a triggered touch event</string>
+		</map>
+		<key>llDetectedTouchBinormal</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedTouchBinormal(integer index)
+Returns the surface binormal for a triggered touch event</string>
+		</map>
+		<key>llDetectedTouchST</key>
+		<map>
+			<key>desc</key>
+			<string>vector llDetectedTouchST(integer index)
+Returns the s and t coordinates in the first two components of a vector, for the surface coordinates where the prim was touched in a triggered touch event</string>
+		</map>
+		<key>llSHA1String</key>
+		<map>
+			<key>desc</key>
+			<string>string llSHA1String(string src)
+Returns a string of 40 hex characters that is the SHA1 security Hash of src</string>
+		</map>
+		<key>llGetFreeURLs</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetFreeURLs()
+Returns the number of available URLs for the current script</string>
+		</map>
+		<key>llRequestURL</key>
+		<map>
+			<key>desc</key>
+			<string>key llRequestURL()
+Requests one HTTP:// url for use by this object.
+An http_request event is triggered with the results.</string>
+		</map>
+		<key>llRequestSecureURL</key>
+		<map>
+			<key>desc</key>
+			<string>key llRequestSecureURL()
+Requests one HTTPS:// (SSL) url for use by this object.
+An http_request event is triggered with the results.</string>
+		</map>
+		<key>llReleaseURL</key>
+		<map>
+			<key>desc</key>
+			<string>llReleaseURL(string url)
+Releases the specified URL, it will no longer be usable</string>
+		</map>
+		<key>llHTTPResponse</key>
+		<map>
+			<key>desc</key>
+			<string>llHTTPResponse(key request_id, integer status, string body)
+Responds to request_id with status and body</string>
+		</map>
+		<key>llGetHTTPHeader</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetHTTPHeader(key request_id, string header)
+Returns the value for header for request_id</string>
+		</map>
+		<key>llSetPrimMediaParams</key>
+		<map>
+			<key>desc</key>
+			<string>llSetPrimMediaParams(integer face, list params)
+Sets the media params for a particular face on an object. If media is not already on this object, add it.
+List is a set of name/value pairs in no particular order.  Params not specified are unchanged, or if new media is added then set to the default specified.
+The possible names are below, along with the types of values and what they mean.
+(Sleep: 1.0)</string>
+
+		</map>
+		<key>llGetPrimMediaParams</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetPrimMediaParams(integer face, list params)
+Returns the media params for a particular face on an object, given the desired list of names, in the order requested.
+(Returns an empty list if no media exists on the face.)
+(Sleep: 1.0)</string>
+		</map>
+		<key>llClearPrimMedia</key>
+		<map>
+			<key>desc</key>
+			<string>llClearPrimMedia(integer face)
+Clears (deletes) the media and all params from the given face.
+(Sleep: 1.0)</string>
+		</map>
+		<key>llSetLinkPrimitiveParamsFast</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkPrimitiveParamsFast(integer linknumber,list rules)
+Set primitive parameters for linknumber based on rules.</string>
+		</map>
+		<key>llSetLinkPrimitiveParams</key>
+		<map>
+			<key>desc</key>
+			<string>llGetLinkPrimitiveParams(integer linknumber,list rules)
+Get primitive parameters for linknumber based on rules.</string>
+		</map>
+		<key>llLinkParticleSystem</key>
+		<map>
+			<key>desc</key>
+			<string>llLinkParticleSystem(integer linknumber,list rules)
+Creates a particle system based on rules.  Empty list removes particle system from object.
+List format is [ rule1, data1, rule2, data2 . . . rulen, datan ].</string>
+		</map>
+		<key>llSetLinkTextureAnim</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkTextureAnim(integer link, integer mode, integer face, integer sizex, integer sizey, float start, float length, float rate)
+Animate the texture on the specified prim&apos;s face/faces.</string>
+		</map>
+		<key>llGetLinkNumberOfSides</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetLinkNumberOfSides(integer link)
+Returns the number of sides of the specified linked prim.</string>
+		</map>
+		<key>llGetUsername</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetUsername(key id)
+Returns the single-word username of an avatar, iff the avatar is in the current region, otherwise the empty string.</string>
+		</map>
+		<key>llRequestUsername</key>
+		<map>
+			<key>desc</key>
+			<string>key llRequestUsername(key id)
+Requests single-word username of an avatar.  When data is available the dataserver event will be raised.</string>
+		</map>
+		<key>llGetDisplayName</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetDisplayName(key id)
+Returns the name of an avatar, iff the avatar is in the current simulator, and the name has been cached, otherwise the same as llGetUsername.  Use llRequestDisplayName if you absolutely must have the display name.</string>
+		</map>
+		<key>llRequestDisplayName</key>
+		<map>
+			<key>desc</key>
+			<string>key llRequestDisplayName(key id)
+Requests name of an avatar.  When data is available the dataserver event will be raised.</string>
+		</map>
+		<key>llGetEnv</key>
+		<map>
+			<key>desc</key>
+			<string>llGetEnv(string name)
+Returns a string with the requested data about the region</string>
+		</map>
+		<key>llCastRay</key>
+		<map>
+			<key>desc</key>
+			<string>llCastRay(vector start, vector end, list params)
+Casts a ray into the physics world from &apos;start&apos; to &apos;end&apos; and returns data according to details in params</string>
+		</map>
+		</key>
+		<key>llRegionSayTo</key>
+		<map>
+			<key>desc</key>
+			<string>llRegionSayTo(key target, integer channel, string message)
+Sends message on channel (not DEBUG_CHANNEL) directly to prim or avatar target anywhere within the region.</string>
+		</map>
+		<key>llGetSPMaxMemory</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetSPMaxMemory()
+Returns the maximum used memory for the current script. Only valid after using PROFILE_SCRIPT_MEMORY. Non-mono scripts always use 16k.</string>
+		</map>
+		<key>llGetUsedMemory</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetUsedMemory()
+Returns the current used memory for the current script. Non-mono scripts always use 16k.</string>
+		</map>
+		<key>llScriptProfiler</key>
+		<map>
+			<key>desc</key>
+			<string>llScriptProfiler(integer flags)
+Enabled or disables script profiling options. Currently only supports PROFILE_SCRIPT_MEMORY (mono only) and PROFILE_NONE.
+MAY SIGNIFICANTLY REDUCE SCRIPT PERFORMANCE!</string>
+		</map>
+		<key>llSetMemoryLimit</key>
+		<map>
+			<key>desc</key>
+			<string>integer llSetMemoryLimit(integer limit)
+Request limit bytes to be reserved for this script.
+Returns a success/failure flag (STATUS_OK when successful, another of the STATUS_* flags on failure) for whether the memory limit was set.
+Only relevant for Mono-compiled scripts.</string>
+		</map>
+		<key>llGetMemoryLimit</key>
+		<map>
+			<key>desc</key>
+			<string>integer llGetMemoryLimit()
+Get the maximum memory a script can use.
+Returns the integer amount of memory the script can use in bytes.</string>
+		</map>
+		<key>llSetLinkMedia</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkMedia(integer link, integer face, list params)
+Set the media params for a particular face on linked prim.  List is a set of name/value pairs (in no particular order). The possible names are below, along with the types of values and what they mean.  If media is not already on this object, add it. Params not specified are unchanged, or if new media is added set to the default specified.</string>
+		</map>
+		<key>llGetLinkMedia</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetLinkMedia(integer link, integer face, list params)
+Get the media params for a particular face on linked prim, given the desired list of names. Returns a list of values in the order requested.  Returns an empty list if no media exists on the face.</string>
+		</map>
+		<key>llClearLinkMedia</key>
+		<map>
+			<key>desc</key>
+			<string>llClearLinkMedia(integer link, integer face)
+Clears (deletes) the media and all params from the given face on linked prim.</string>
+		</map>
+		<key>llSetLinkCamera</key>
+		<map>
+			<key>desc</key>
+			<string>llSetLinkCamera(integer link, vector eye, vector at)
+Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.
+The two vector parameters are offsets relative to the object&apos;s center and expressed in local coordinates.</string>
+		</map>
+		<key>llSetContentType</key>
+		<map>
+			<key>desc</key>
+			<string>llSetContentType(key request_id, integer content_type)
+Set the Internet media type of an LSL HTTP server response.
+content_type may be one of CONTENT_TYPE_TEXT (default) "text/plain", or CONTENT_TYPE_HTML "text/html", only valid for embedded browsers on content owned by the person viewing. Falls back to "text/plain" otherwise.</string>
+		</map>
+		<key>llLinkSitTarget</key>
+		<map>
+			<key>desc</key>
+			<string>llLinkSitTarget(integer link, vector offset, rotation rot)
+Set the sit location for this object (if offset == &lt;0,0,0&gt; clear it)</string>
+		</map>
+		<key>llAvatarOnLinkSitTarget</key>
+		<map>
+			<key>desc</key>
+			<string>key llAvatarOnLinkSitTarget(integer link)
+If an avatar is sitting on the sit target, return the avatar&apos;s key, NULL_KEY otherwise</string>
+		</map>
+		<key>llSetVelocity</key>
+		<map>
+			<key>desc</key>
+			<string>llSetVelocity(vector velocity, integer local)
+Sets an objects velocity, in local coords if local == TRUE (if the script is physical)</string>
+		</map>
+		<key>llSetAngularVelocity</key>
+		<map>
+			<key>desc</key>
+			<string>llSetAngularVelocity(vector angular_velocity, integer local)
+Sets an objects angular velocity, in local coords if local == TRUE (if the script is physical)</string>
+		</map>
+		<key>llSetPhysicsMaterial</key>
+		<map>
+			<key>desc</key>
+			<string>llSetPhysicsMaterial(integer flags, float gravity_multiplier, float restitution, float friction, float density )
+Sets the requested attributes of the root object&apos;s physics material</string>
+		</map>
+		<key>llGetPhysicsMaterial</key>
+		<map>
+			<key>desc</key>
+			<string>llGetPhysicsMaterial()
+Returns the gravity multiplier, restitution, friction, and density of the linkset as a list in that order</string>
+		</map>
+		<key>llGetMassMKS</key>
+		<map>
+			<key>desc</key>
+			<string>llGetMassMKS()
+Returns the mass of the linkset in kilograms</string>
+		</map>
+		<key>llManageEstateAccess</key>
+		<map>
+			<key>desc</key>
+			<string>integer llManageEstateAccess(integer action, key id)
+To add or remove agents from the estate&apos;s agent access or ban lists or groups from the estate&apos;s group access list.
+Only works for objects owned by the Estate Owner or an Estate Manager.
+Returns TRUE if successful and FALSE if throttled, on invalid action, on invalid or null id, or if object owner is not allowed to manage the estate.
+action can be any of: ESTATE_ACCESS_ALLOWED_[AGENT/GROUP]_[ADD/REMOVE] or ESTATE_ACCESS_BANNED_AGENT_[ADD/REMOVE]</string>
+		</map>
+		<key>llSetKeyframedMotion</key>
+		<map>
+			<key>desc</key>
+			<string>llSetKeyframedMotion(list keyframes, list options)
+Requests that a nonphysical object be keyframed according to keyframe list.</string>
+		</map>
+		<key>llTransferLindenDollars</key>
+		<map>
+			<key>desc</key>
+			<string>key llTransferLindenDollars(key destination, integer amount)
+Transfer amount of linden dollars (L$) from script owner to destination. Returns a key to a corresponding transaction_result event for the success of the transfer.</string>
+		</map>
+		<key>llGetParcelMusicURL</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetParcelMusicURL()
+Returnss the streaming audio URL for the parcel of land on which the object is located.</string>
+		</map>
+		<key>llSetRegionPos</key>
+		<map>
+			<key>desc</key>
+			<string>integer llSetRegionPos(vector pos)
+Sets the position anywhere within the region (if the object isn&apos;t physical)</string>
+		</map>
+		<key>llGetAgentList</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetAgentList(integer scope, list options)
+Requests a list of agents currently in the region, limited by the scope parameter.</string>
+		</map>
+		<key>llAttachToAvatarTemp</key>
+		<map>
+			<key>desc</key>
+			<string>llAttachToAvatarTemp(integer attach_point)
+Attaches the object to the avatar who has granted permission to the script, with the exception that the object will not create new inventory for the user, and will disappear on detach or disconnect.</string>
+		</map>
+		<key>llTeleportAgent</key>
+		<map>
+			<key>desc</key>
+			<string>llTeleportAgent(key avatar, string landmark, vector position, vector look_at)
+Requests a teleport of avatar to a landmark stored in the object&apos;s inventory. If no landmark is provided (an empty string), the avatar is teleported to the location position in the current region. In either case, the avatar is turned to face the position given by look_at in local coordinates.</string>
+		</map>
+		<key>llTeleportAgentGlobalCoords</key>
+		<map>
+			<key>desc</key>
+			<string>llTeleportAgentGlobalCoords(key agent, vector global_coordinates, vector region_coordinates, vector look_at)
+Teleports an agent to set of a region_coordinates within a region at the specified global_coordinates. The agent lands facing the position defined by look_at local coordinates.
+A region&apos;s global coordinates can be retrieved using llRequestSimulatorData(region_name, DATA_SIM_POS)</string>
+		</map>
+		<key>llGenerateKey</key>
+		<map>
+			<key>desc</key>
+			<string>key llGenerateKey()
+Return a unique generated key</string>
+		</map>
+		<key>llNavigateTo</key>
+		<map>
+			<key>desc</key>
+			<string>llNavigateTo(vector point, list options)
+For AI Character: Navigate to destination.</string>
+		</map>
+		<key>llCreateCharacter</key>
+		<map>
+			<key>desc</key>
+			<string>llCreateCharacter(list options)
+Convert linkset to AI Character which can navigate the world.</string>
+		</map>
+		<key>llPursue</key>
+		<map>
+			<key>desc</key>
+			<string>llPursue(key target, list options)
+For AI Character: Chase after a target.</string>
+		</map>
+		<key>llWanderWithin</key>
+		<map>
+			<key>desc</key>
+			<string>llWanderWithin(vector center, float radius, list options)
+For AI Character: Wander within a specified volume.</string>
+		</map>
+		<key>llFleeFrom</key>
+		<map>
+			<key>desc</key>
+			<string>llFleeFrom(vector source, float radius, list options)
+For AI Character: Flee from a point.</string>
+		</map>
+		<key>llPatrolPoints</key>
+		<map>
+			<key>desc</key>
+			<string>llPatrolPoints(list points, list options)
+For AI Character: Patrol a list of points.</string>
+		</map>
+		<key>llExecCharacterCmd</key>
+		<map>
+			<key>desc</key>
+			<string>llExecCharacterCmd(integer cmd, list options)
+For AI Character: Execute a character command.</string>
+		</map>
+		<key>llDeleteCharacter</key>
+		<map>
+			<key>desc</key>
+			<string>llDeleteCharacter()
+Convert linkset from AI Character to Physics object.</string>
+		</map>
+		<key>llUpdateCharacter</key>
+		<map>
+			<key>desc</key>
+			<string>llUpdateCharacter(list options)
+Change the AI Character&apos;s settings.</string>
+		</map>
+		<key>llEvade</key>
+		<map>
+			<key>desc</key>
+			<string>llEvade(key target, list options)
+For AI Character: Evade a specified target.</string>
+		</map>
+		<key>llGetClosestNavPoint</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetClosestNavPoint(vector point, list options)
+For AI Character: Get the closest navigable point to the point provided.</string>
+		</map>
+		<key>llGetStaticPath</key>
+		<map>
+			<key>desc</key>
+			<string>list llGetStaticPath(vector start, vector end, float radius, list params)
+Returns a list of position vectors indicating pathfinding waypoints between positions at start and end, for a character of a given radius.</string>
+		</map>
+		<key>llGetSimStats</key>
+		<map>
+			<key>desc</key>
+			<string>float llGetSimStats(integer stat_type)
+Returns the value of a particular simulator statistic</string>
+		</map>
+		<key>llSetAnimationOverride</key>
+		<map>
+			<key>desc</key>
+			<string>llSetAnimationOverride(string anim_state, string anim)
+Set the animation (anim) that will play for the given animation state (anim_state)</string>
+		</map>
+		<key>llGetAnimationOverride</key>
+		<map>
+			<key>desc</key>
+			<string>string llGetAnimationOverride(string anim_state)
+Returns a string that is the name of the animation that is being used for the specified animation state (anim_state)</string>
+		</map>
+		<key>llResetAnimationOverride</key>
+		<map>
+			<key>desc</key>
+			<string>llResetAnimationOverride(string anim_state)
+Resets the animation override of the specified animation state (anim_state) to the corresponding default value</string>
+		</map>
+		<key>llJson2List</key>
+		<map>
+			<key>desc</key>
+			<string>list llJson2List(string json)
+Converts the top level of the json string to a list.</string>
+		</map>
+		<key>llList2Json</key>
+		<map>
+			<key>desc</key>
+			<string>string llList2Json(string type, list values)
+Converts either a strided list of key:value pairs to a JSON_OBJECT or a list of values to a JSON_ARRAY</string>
+		</map>
+		<key>llJsonGetValue</key>
+		<map>
+			<key>desc</key>
+			<string>string llJsonGetValue(string json, list specifiers)
+Returns the value indicated by specifiers from the json string</string>
+		</map>
+		<key>llJsonSetValue</key>
+		<map>
+			<key>desc</key>
+			<string>string llJsonSetValue(string json, list specifiers, string value)
+Returns a new json string that is the json given with the value indicated by specifiers set to value</string>
+		</map>
+		<key>llJsonValueType</key>
+		<map>
+			<key>desc</key>
+			<string>string llJsonValueType(string json, list specifiers)
+Returns the type constant for the value in json indicated by specifiers</string>
+		</map>
+		<key>llReturnObjectsByID</key>
+		<map>
+			<key>desc</key>
+			<string>integer LSLTipText_llReturnObjectsByID(list objects)
+Returns a list of objects by their IDs</string>
+		</map>
+		<key>llReturnObjectsByOwner</key>
+		<map>
+			<key>desc</key>
+			<string>integer llReturnObjectsByOwner(key owner, integer scope)
+Returns all objects of a particular owner in the given scope</string>
+		</map>
+	</map>
+</llsd>

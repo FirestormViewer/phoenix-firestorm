@@ -260,6 +260,7 @@ void LLLandmarksPanel::onSearchEdit(const std::string& string)
 	if (mLandmarksInventoryPanel && mLandmarksInventoryPanel->getFilter())
 	{
 		filter_list(mLandmarksInventoryPanel, string);
+	}
 	if (mMyInventoryPanel && mMyInventoryPanel->getFilter())
 	{
 		filter_list(mMyInventoryPanel, string);
@@ -1052,9 +1053,9 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
 
 			// Disable "Show on Map" if landmark loading is in progress.
 			return !gLandmarkList.isAssetInLoadedCallbackMap(asset_uuid);
-	}
-	else if ("rename" == command_name)
-	{
+		}
+		else if ("rename" == command_name)
+		{
 			LLFolderViewItem* selected_item = getCurSelectedItem();
 			if (!selected_item) return false;
 

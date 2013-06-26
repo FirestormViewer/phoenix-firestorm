@@ -59,10 +59,19 @@
      follows="left|top"
      left="20"
      top_pad="2"
-     height="18"
+     height="16"
      control_name="FSPaymentInfoInChat"
      name="FSPaymentInfoInChat"
      label="Report L$ transactions in nearby chat instead of toasts"/>
+    <check_box
+     layout="topleft"
+     follows="left|top"
+     top_pad="2"
+     height="16"
+     left="10"
+     control_name="FSShowUploadPaymentToast"
+     name="FSShowUploadPaymentToast"
+     label="When I am charged for an upload" />
 
     <check_box
      control_name="FSLandmarkCreatedNotification"

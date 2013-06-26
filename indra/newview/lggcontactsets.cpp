@@ -30,8 +30,9 @@
 #include "llnotifications.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
-//#include "fsdata.h"
+#include "fsdata.h"
 #include "rlvhandler.h"
+
 
 LGGContactSets::LGGContactSets() :
 	mDefaultColor(LLColor4::grey)
@@ -402,6 +403,25 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 				break;
 			case LGG_CS_MINIMAP:
 				color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
+				break;
+			case LGG_CS_RADAR:
+			default:
+				llwarns << "Unhandled colorize case!" << llendl;
+				break;
+		}
+	}
+	else if (FSData::instance().isAgentFlag(uuid, FSData::CHAT_COLOR))
+	{
+		switch (type)
+		{
+			case LGG_CS_CHAT:
+				color = LLUIColorTable::instance().getColor("FirestormChatColor", LLColor4::red);
+				break;
+			case LGG_CS_TAG:
+				color = LLUIColorTable::instance().getColor("NameTagFirestorm", LLColor4::red);
+				break;
+			case LGG_CS_MINIMAP:
+				color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red);
 				break;
 			case LGG_CS_RADAR:
 			default:

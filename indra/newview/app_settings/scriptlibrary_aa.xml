@@ -1,0 +1,343 @@
+<!-- AA Script Library - Copyright 2013 cinder.roxley@phoenixviewer.com - Updated 22.6.2013 -->
+<llsd>
+	<map>
+		<key>aaSetCloudDensity</key>
+		<map>
+			<key>desc</key>
+			<string>aaSetCloudDensity(float density)
+Sets region windlight cloud density</string>
+		</map>
+		<key>aaUpdateDatabase</key>
+		<map>
+			<key>desc</key>
+			<string>aaUpdateDatabase(key field, xmlData, string token)
+Update database</string>
+		</map>
+		<key>aaQueryDatabase</key>
+		<map>
+			<key>desc</key>
+			<string>list aaQueryDatabase(key token, string password)
+Returns a list with first value is the token, the second the Key, and the third the value</string>
+		</map>
+		<key>aaSerializeXML</key>
+		<map>
+			<key>desc</key>
+			<string>string aaSerializeXML(keys, values)
+Returns xml formatted string of the keys with their values</string>
+		</map>
+		<key>aaDeserializeXMLKeys</key>
+		<map>
+			<key>desc</key>
+			<string>list aaDeserializeXMLKeys(string xml)
+Returns a list of keys from XML data</string>
+		</map>
+		<key>aaDeserializeXMLValues</key>
+		<map>
+			<key>desc</key>
+			<string>list aaDeserializeXMLValues(string xml)
+Returns a list of values from XML data</string>
+		</map>
+		<key>aaSetConeOfSilence</key>
+		<map>
+			<key>desc</key>
+			<string>aaSetConeOfSilence(float radius)
+Sets cone of silence radius</string>
+		</map>
+		<key>aaJoinCombatTeam</key>
+		<map>
+			<key>desc</key>
+			<string>aaJoinCombatTeam(key avatar, string team)
+Adds the specified avatar to a given combat team</string>
+		</map>
+		<key>aaLeaveCombat</key>
+		<map>
+			<key>desc</key>
+			<string>aaLeaveCombat(key avatar)
+Removed the specified avatar from combat</string>
+		</map>
+		<key>aaJoinCombat</key>
+		<map>
+			<key>desc</key>
+			<string>aaJoinCombat(key avatar)
+Adds the specified avatar to combat</string>
+		</map>
+		<key>aaGetHealth</key>
+		<map>
+			<key>desc</key>
+			<string>float aaGetHealth(key avatar)
+Returns an avatar&apos;s health value</string>
+		</map>
+		<key>aaGetTeam</key>
+		<map>
+			<key>desc</key>
+			<string>string aaGetTeam(key avatar)
+Returns a given avatar&apos;s combat team</string>
+		</map>
+		<key>aaGetTeamMembers</key>
+		<map>
+			<key>desc</key>
+			<string>list aaGetTeamMembers(string team)
+Returns a list of avatar&apos; on a given team</string>
+		</map>
+		<key>aaGetLastOwner</key>
+		<map>
+			<key>desc</key>
+			<string>key aaGetLastOwner(key object)
+Returns a given object&apos;s last owner
+key aaGetLastOwner()
+Returns last owner of the object</string>
+		</map>
+		<key>aaSayDistance</key>
+		<map>
+			<key>desc</key>
+			<string>aaSayDistance(integer channel, float distance, string message)
+Make the object speak on a channel, but only to a specified distance</string>
+		</map>
+		<key>aaSayTo</key>
+		<map>
+			<key>desc</key>
+			<string>aaSayTo(key avatar, string msg)
+Send a direct im to a specified avatar
+(Similar to llOwnerSay)</string>
+		</map>
+		<key>aaGetText</key>
+		<map>
+			<key>desc</key>
+			<string>string aaGetText()
+Returns the current primitive&apos;s hovertext</string>
+		</map>
+		<key>aaGetTextColor</key>
+		<map>
+			<key>desc</key>
+			<string>rotation aaGetTextColor()
+Returns the current primitive hovertext&apos;s color</string>
+		</map>
+		<key>aaRaiseError</key>
+		<map>
+			<key>desc</key>
+			<string>aaRaiseError(string message)
+Raise an exception</string>
+		</map>
+		<key>aaFreezeAvatar</key>
+		<map>
+			<key>desc</key>
+			<string>aaFreezeAvatar(key avatar)
+Freeze the specified avatar</string>
+		</map>
+		<key>aaThawAvatar</key>
+		<map>
+			<key>desc</key>
+			<string>aaThawAvatar(key avatar)
+Un-freeze the specified avatar</string>
+		</map>
+		<key>aaRequestCombatPermission</key>
+		<map>
+			<key>desc</key>
+			<string>aaRequestCombatPermission(key avatar)
+Request PERMISSION_COMBAT for specified avatar</string>
+		</map>
+		<key>aaGetWalkDisabled</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaGetWalkDisabled(key avatar)
+Boolean return if walk is disabled for the specified avatar</string>
+		</map>
+		<key>aaSetWalkDisabled</key>
+		<map>
+			<key>desc</key>
+			<string>aaSetWalkDisabled(key avatar, bool value)
+Disable walk for selected avatar
+Forces fly only</string>
+		</map>
+		<key>aaGetFlyDisabled</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaGetFlyDisabled(key avatar)
+Boolean return if fly is disabled for the specified avatar</string>
+		</map>
+		<key>aaSetFlyDisabled</key>
+		<map>
+			<key>desc</key>
+			<string>aaSetFlyDisabled(key avatar, bool value)
+Disable fly for selected avatar</string>
+		</map>
+		<key>aaAvatarFullName2Key</key>
+		<map>
+			<key>desc</key>
+			<string>key aaAvatarFullName2Key(string fullname)
+Returns the key for the avatar name specified</string>
+		</map>
+		<key>aaSetEnv</key>
+		<map>
+			<key>desc</key>
+			<string>aaSetEnv(string name, list value)
+Set an enviroment variable</string>
+			<key>gods-only</key>
+			<boolean>true</boolean>
+		</map>
+		<key>aaGetIsInfiniteRegion</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaGetIsInfiniteRegion()
+Boolean return if current region is infinite</string>
+		</map>
+		<key>aaAllRegionInstanceSay</key>
+		<map>
+			<key>desc</key>
+			<string>aaAllRegionInstanceSay(integer channel, string message)
+Make object say over entire region</string>
+		</map>
+		<key>aaWindlightGetSceneIsStatic</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaWindlightGetSceneIsStatic()
+Boolean return if Windlight scene is static</string>
+		</map>
+		<key>aaWindlightGetSceneDayCycleKeyFrameCount</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaWindlightGetSceneDayCycleKeyFrameCount()
+Returns the scene day cycle keyframe count of the current region</string>
+		</map>
+		<key>aaWindlightGetDayCycle</key>
+		<map>
+			<key>desc</key>
+			<string>list aaWindlightGetDayCycle()
+Returns the Windlight day cycle</string>
+		</map>
+		<key>aaWindlightAddDayCycleFrame</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaWindlightAddDayCycleFrame(integer day_cycle_frame)
+Add the specified day cycle frame</string>
+		</map>
+		<key>aaWindlightRemoveDayCycleFrame</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaWindlightRemoveDayCycleFrame(integer day_cycle_frame)
+Remove the specified day cycle frame</string>
+		</map>
+		<key>aaWindlightGetScene</key>
+		<map>
+			<key>desc</key>
+			<string>list aaWindlightGetScene(list parameters)
+list aaWindlightGetScene(integer day_cycle_kf, list parameters)
+Returns a list of Windlight scene parameters</string>
+		</map>
+		<key>aaWindlightSetScene</key>
+		<map>
+			<key>desc</key>
+			<string>integer aaWindlightSetScene(list parameters)
+integer aaWindlightSetScene(integer day_cycle_index, list parameters)
+Boolean return success</string>
+		</map>
+		<key>botCreateBot</key>
+		<map>
+			<key>desc</key>
+			<string>string botCreateBot(string firstname, string lastname, key clone_appearance, vector pos)
+Creates a bot with the specified parameters</string>
+		</map>
+		<key>botRemoveBot</key>
+		<map>
+			<key>desc</key>
+			<string>botRemoveBot(key bot)
+Removes a specified bot</string>
+		</map>
+		<key>botGetWaitingTime</key>
+		<map>
+			<key>desc</key>
+			<string>vector botGetWaitingTime(integer wait_time)
+Make the bot wait</string>
+		</map>
+		<key>botPauseMovement</key>
+		<map>
+			<key>desc</key>
+			<string>botPauseMovement(key bot)
+Pause the specified bot</string>
+		</map>
+		<key>botResumeMovement</key>
+		<map>
+			<key>desc</key>
+			<string>botResumeMovement(key bot)
+Resume movement of the specified bot</string>
+		</map>
+		<key>botSetShouldFly</key>
+		<map>
+			<key>desc</key>
+			<string>botSetShouldFly(key bot, bool fly)
+Enables bot fly mode</string>
+		</map>
+		<key>botSetMap</key>
+		<map>
+			<key>desc</key>
+			<string>botSetMap(key bot, list positions, list movement_type, integer flags)
+Sets a path for the specified bot to travel</string>
+		</map>
+		<key>botFollowAvatar</key>
+		<map>
+			<key>desc</key>
+			<string>botFollowAvatar(key bot, key avatar, float follow_dist, float end_follow_dist)
+Make the bot follow the specified avatar</string>
+		</map>
+		<key>botStopFollowAvatar</key>
+		<map>
+			<key>desc</key>
+			<string>botStopFollowAvatar(key bot)
+Make the bot stop following avatars</string>
+		</map>
+		<key>botSendChatMessage</key>
+		<map>
+			<key>desc</key>
+			<string>botSendChatMessage(key bot, string message, integer channel, integer say_type)
+Makes the bot speak</string>
+		</map>
+		<key>botSendIM</key>
+		<map>
+			<key>desc</key>
+			<string>botSendIM(key bot, key avatar, string message)
+Makes the bot send a message to the specified avatar</string>
+		</map>
+		<key>botTouchObject</key>
+		<map>
+			<key>desc</key>
+			<string>botTouchObject(key bot, key object)
+Makes the bot touch the specified object</string>
+		</map>
+		<key>botSitObject</key>
+		<map>
+			<key>desc</key>
+			<string>botSitObject(key bot, key object, vector offset)
+Makes the bot sit on an object</string>
+		</map>
+		<key>botStandUp</key>
+		<map>
+			<key>desc</key>
+			<string>botStandUp(key bot)
+Makes the specified bot stand up</string>
+		</map>
+		<key>botAddTag</key>
+		<map>
+			<key>desc</key>
+			<string>botAddTag(key bot, string tag)
+Add a tag to a specified bot</string>
+		</map>
+		<key>botGetBotsWithTag</key>
+		<map>
+			<key>desc</key>
+			<string>list botGetBotsWithTag(string tag)
+Returns a list of bots with the specified tag</string>
+		</map>
+		<key>botRemoveBotsWithTag</key>
+		<map>
+			<key>desc</key>
+			<string>botRemoveBotsWithTag(string tag)
+Removes bots with the specified tag</string>
+		</map>
+		<key>botSetSpeed</key>
+		<map>
+			<key>desc</key>
+			<string>botSetSpeed(key bot, float speed_modifier)
+Change the movement speed of a specified bot</string>
+		</map>
+	</map>
+</llsd>

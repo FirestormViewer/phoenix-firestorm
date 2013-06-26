@@ -9,6 +9,7 @@
 	</text>
 	<check_box label="Wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox"/>
 	<check_box left_pad="5" name="FSPaymentInfoInChat" label="Bei L$-Transaktionen im lokalen Chat benachrichtigen"/>
+	<check_box label="Wenn ich beim Hochladen Geld bezahlen muss" name="FSShowUploadPaymentToast"/>
 	<check_box label="Wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox"/>
 	<check_box label="Wenn jemand seinen Displaynamen ändert" name="FSShowDisplayNameUpdateNotification"/>
 	<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>

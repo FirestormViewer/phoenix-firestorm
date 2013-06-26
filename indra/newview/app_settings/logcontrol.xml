@@ -50,6 +50,7 @@
 						     <string>parseFile</string>
 						     <string>import</string>
 						     <string>export</string>
+						     <string>fsdata</string>
 						</array>
 				</map>
       </array>

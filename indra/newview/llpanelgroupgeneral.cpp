@@ -793,20 +793,20 @@ void LLPanelGroupGeneral::updateMembers()
 			continue;
 		}
 
-		if (LLAvatarNameCache::get(mMemberProgress->first, &av_name))
+//		if (LLAvatarNameCache::get(mMemberProgress->first, &av_name))
 		{
 			addMember(mMemberProgress->second);
 		}
-		else
-		{
-			// If name is not cached, onNameCache() should be called when it is cached and add this member to list.
-			// *TODO : Use a callback per member, not for the panel group.
-			if (mAvatarNameCacheConnection.connected())
-			{
-				mAvatarNameCacheConnection.disconnect();
-			}
-			mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupGeneral::onNameCache, this, gdatap->getMemberVersion(), member, _2));
-		}
+//		else
+//		{
+//			// If name is not cached, onNameCache() should be called when it is cached and add this member to list. <FS:T> CHUI Merge check this
+//			// *TODO : Use a callback per member, not for the panel group.
+//			if (mAvatarNameCacheConnection.connected())
+//			{
+//				mAvatarNameCacheConnection.disconnect();
+//			}
+//			mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupGeneral::onNameCache, this, gdatap->getMemberVersion(), member, _2));
+//		}
 	}
 
 	if (mMemberProgress == gdatap->mMembers.end())

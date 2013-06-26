@@ -42,7 +42,6 @@
 
 class LLInvFVBridge;
 class LLInventoryFolderViewModelBuilder;
-class LLInventoryFVBridgeBuilder;
 class LLInvPanelComplObserver;
 class LLFolderViewModelInventory;
 

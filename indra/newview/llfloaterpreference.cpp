@@ -589,6 +589,7 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
 
 	gSavedSettings.getControl("ChatBubbleOpacity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onNameTagOpacityChange, this, _2));
+	gSavedSettings.getControl("ConsoleBackgroundOpacity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onConsoleOpacityChange, this, _2));	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
 
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 
@@ -1217,6 +1218,18 @@ void LLFloaterPreference::onNameTagOpacityChange(const LLSD& newvalue)
 		color_swatch->set( new_color.setAlpha(newvalue.asReal()) );
 	}
 }
+
+// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
+void LLFloaterPreference::onConsoleOpacityChange(const LLSD& newvalue)
+{
+	LLColorSwatchCtrl* color_swatch = findChild<LLColorSwatchCtrl>("console_background");
+	if (color_swatch)
+	{
+		LLColor4 new_color = color_swatch->get();
+		color_swatch->set( new_color.setAlpha(newvalue.asReal()) );
+	}
+}
+// </FS:CR>
 
 void LLFloaterPreference::onClickSetCache()
 {

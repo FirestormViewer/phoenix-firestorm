@@ -193,10 +193,7 @@ void LLConsole::draw()
 
 	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
 	F32 console_opacity = llclamp(LLUI::sSettingGroups["config"]->getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
-	//AO: Unify colors with the color preferences control for all onscreen overlay background
-	//    console/bubblechat/tag backgrounds. FIRE-969
-	//	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
-	LLColor4 color = LLUIColorTable::instance().getColor("NameTagBackground");
+	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
 	//</AO>
 	
 	color.mV[VALPHA] *= console_opacity;

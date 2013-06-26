@@ -33,7 +33,8 @@
 #include "llaudioengine.h" 
 #include "llavataractions.h"
 #include "llavatarnamecache.h"		// IDEVO HACK
-#include "lscript_byteformat.h"
+//#include "lscript_byteformat.h"
+#include "fsscriptlibrary.h"
 #include "lleconomy.h"
 #include "lleventtimer.h"
 #include "llfloaterreg.h"
@@ -5601,9 +5602,12 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 		return;
 	// </FS:ND>
 
-	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
+	// <FS> Asset blacklist
+	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+	{
 		return;
 	}
+	// </FS>
 
 	// NaCl - Antispam Registry
  	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
@@ -5698,10 +5702,12 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
+	// <FS> Asset blacklist
 	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
 	{
 		return;
 	}
+	// </FS>
 
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings, "_NACL_AntiSpamSoundPreloadMulti");
@@ -5762,9 +5768,12 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
 
-	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
+	// <FS> Asset blacklist
+	if (FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id, LLAssetType::AT_SOUND))
+	{
 		return;
 	}
+	// </FS>
 
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
