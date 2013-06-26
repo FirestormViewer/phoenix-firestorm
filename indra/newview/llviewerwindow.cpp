@@ -37,9 +37,11 @@
 
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llcommunicationchannel.h"
 #include "llfloaterreg.h"
 #include "lllogininstance.h" // <FS:AW  opensim destinations and avatar picker>
 #include "llmeshrepository.h"
+#include "llnotificationhandler.h"
 #include "llpanellogin.h"
 #include "llviewerkeyboard.h"
 #include "llviewermenu.h"
@@ -57,6 +59,7 @@
 
 // linden library includes
 #include "llaudioengine.h"		// mute on minimize
+#include "llchatentry.h"
 #include "indra_constants.h"
 #include "llassetstorage.h"
 #include "llerrorcontrol.h"
@@ -130,6 +133,7 @@
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h"
+#include "llnotificationhandler.h"
 #include "llpaneltopinfobar.h"
 #include "llpopupview.h"
 #include "llpreviewtexture.h"
@@ -190,7 +194,7 @@
 #include "llviewerjoystick.h"
 #include "llviewernetwork.h"
 #include "llpostprocess.h"
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
+#include "llfloaterimnearbychat.h"
 #include "llagentui.h"
 #include "llwearablelist.h"
 
@@ -200,10 +204,6 @@
 
 #include "llfloaternotificationsconsole.h"
 
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychat.h"
-#include "fsnearbychathub.h"
-// </FS:Zi>
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
 #include "llpaneltopinfobar.h"
@@ -774,7 +774,7 @@ public:
 		if(log_texture_traffic)
 		{	
 			U32 old_y = ypos ;
-			for(S32 i = LLGLTexture::BOOST_NONE; i < LLGLTexture::MAX_GL_IMAGE_CATEGORY; i++)
+			for(S32 i = LLViewerTexture::BOOST_NONE; i < LLViewerTexture::MAX_GL_IMAGE_CATEGORY; i++)
 			{
 				if(gTotalTextureBytesPerBoostLevel[i] > 0)
 				{
@@ -1441,6 +1441,43 @@ void LLViewerWindow::handleMenuSelect(LLWindow *window,  S32 menu_item)
 
 BOOL LLViewerWindow::handlePaint(LLWindow *window,  S32 x,  S32 y, S32 width,  S32 height)
 {
+	// *TODO: Enable similar information output for other platforms?  DK 2011-02-18
+#if LL_WINDOWS
+	if (gHeadlessClient)
+	{
+		HWND window_handle = (HWND)window->getPlatformWindow();
+		PAINTSTRUCT ps; 
+		HDC hdc; 
+ 
+		RECT wnd_rect;
+		wnd_rect.left = 0;
+		wnd_rect.top = 0;
+		wnd_rect.bottom = 200;
+		wnd_rect.right = 500;
+
+		hdc = BeginPaint(window_handle, &ps); 
+		//SetBKColor(hdc, RGB(255, 255, 255));
+		FillRect(hdc, &wnd_rect, CreateSolidBrush(RGB(255, 255, 255)));
+
+		std::string temp_str;
+		temp_str = llformat( "FPS %3.1f Phy FPS %2.1f Time Dil %1.3f",		/* Flawfinder: ignore */
+				LLViewerStats::getInstance()->mFPSStat.getMeanPerSec(),
+				LLViewerStats::getInstance()->mSimPhysicsFPS.getPrev(0),
+				LLViewerStats::getInstance()->mSimTimeDilation.getPrev(0));
+		S32 len = temp_str.length();
+		TextOutA(hdc, 0, 0, temp_str.c_str(), len); 
+
+
+		LLVector3d pos_global = gAgent.getPositionGlobal();
+		temp_str = llformat( "Avatar pos %6.1lf %6.1lf %6.1lf", pos_global.mdV[0], pos_global.mdV[1], pos_global.mdV[2]);
+		len = temp_str.length();
+		TextOutA(hdc, 0, 25, temp_str.c_str(), len); 
+
+		TextOutA(hdc, 0, 50, "Set \"HeadlessClient FALSE\" in settings.ini file to reenable", 61);
+		EndPaint(window_handle, &ps); 
+		return TRUE;
+	}
+#endif
 	return FALSE;
 }
 
@@ -1571,16 +1608,17 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	// boost::lambda::var() constructs such a functor on the fly.
 	mWindowListener.reset(new LLWindowListener(this, boost::lambda::var(gKeyboard)));
 	mViewerWindowListener.reset(new LLViewerWindowListener(this));
-	LLNotificationChannel::buildChannel("VW_alerts", "Visible", LLNotificationFilters::filterBy<std::string>(&LLNotification::getType, "alert"));
-	LLNotificationChannel::buildChannel("VW_alertmodal", "Visible", LLNotificationFilters::filterBy<std::string>(&LLNotification::getType, "alertmodal"));
 
-	LLNotifications::instance().getChannel("VW_alerts")->connectChanged(&LLViewerWindow::onAlert);
-	LLNotifications::instance().getChannel("VW_alertmodal")->connectChanged(&LLViewerWindow::onAlert);
+	mSystemChannel.reset(new LLNotificationChannel("System", "Visible", LLNotificationFilters::includeEverything));
+	mCommunicationChannel.reset(new LLCommunicationChannel("Communication", "Visible"));
+	mAlertsChannel.reset(new LLNotificationsUI::LLViewerAlertHandler("VW_alerts", "alert"));
+	mModalAlertsChannel.reset(new LLNotificationsUI::LLViewerAlertHandler("VW_alertmodal", "alertmodal"));
+
 	bool ignore = gSavedSettings.getBOOL("IgnoreAllNotifications");
 	LLNotifications::instance().setIgnoreAllNotifications(ignore);
 	if (ignore)
 	{
-		llinfos << "NOTE: ALL NOTIFICATIONS THAT OCCUR WILL GET ADDED TO IGNORE LIST FOR LATER RUNS." << llendl;
+	llinfos << "NOTE: ALL NOTIFICATIONS THAT OCCUR WILL GET ADDED TO IGNORE LIST FOR LATER RUNS." << llendl;
 	}
 
 	// Default to application directory.
@@ -1588,13 +1626,23 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLViewerWindow::sMovieBaseName = "SLmovie";
 	resetSnapshotLoc();
 
+
+	/*
+	LLWindowCallbacks* callbacks,
+	const std::string& title, const std::string& name, S32 x, S32 y, S32 width, S32 height, U32 flags,
+	BOOL fullscreen, 
+	BOOL clearBg,
+	BOOL disable_vsync,
+	BOOL ignore_pixel_depth,
+	U32 fsaa_samples)
+	*/
 	// create window
-	const BOOL clear_bg = FALSE;
 	mWindow = LLWindowManager::createWindow(this,
 		p.title, p.name, p.x, p.y, p.width, p.height, 0,
 		p.fullscreen, 
-		clear_bg,
+		gHeadlessClient,
 		gSavedSettings.getBOOL("DisableVerticalSync"),
+		!gHeadlessClient,
 		p.ignore_pixel_depth,
 		gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples")); //don't use window level anti-aliasing if FBOs are enabled
 
@@ -1701,8 +1749,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		
 	// Init the image list.  Must happen after GL is initialized and before the images that
 	// LLViewerWindow needs are requested.
-	const BOOL SKIP_ANALYZE_ALPHA=FALSE;
-	LLImageGL::initClass(LLGLTexture::MAX_GL_IMAGE_CATEGORY, SKIP_ANALYZE_ALPHA) ;
+	LLImageGL::initClass(LLViewerTexture::MAX_GL_IMAGE_CATEGORY) ;
 	gTextureList.init();
 	LLViewerTextureManager::init() ;
 	gBumpImageList.init();
@@ -1871,8 +1918,8 @@ void LLViewerWindow::initBase()
 	gDebugView->init();
 	gToolTipView = getRootView()->getChild<LLToolTipView>("tooltip view");
 
-	// Initialize busy response message when logged in
-	LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&LLFloaterPreference::initBusyResponse));
+	// Initialize do not disturb response message when logged in
+	LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&LLFloaterPreference::initDoNotDisturbResponse));
 
 	// Add the progress bar view (startup view), which overrides everything
 	mProgressView = getRootView()->findChild<LLProgressView>("progress_view");
@@ -2692,40 +2739,20 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		return TRUE;
 	}
 
-	// Traverses up the hierarchy
+	LLFloater* focused_floaterp = gFloaterView->getFocusedFloater();
+	std::string focusedFloaterName = (focused_floaterp ? focused_floaterp->getInstanceName() : "");
+
 	if( keyboard_focus )
 	{
-		static LLCachedControl<bool> ArrowKeysAlwaysMove(gSavedSettings, "ArrowKeysAlwaysMove"); // <FS:PP> Attempt to speed up things a little
-
-		// <FS:Zi> Remove floating chat bar
-		// LLNearbyChatBar* nearby_chat = LLFloaterReg::findTypedInstance<LLNearbyChatBar>("chat_bar");
-
-		// if (nearby_chat)
-		// {
-		//	LLLineEditor* chat_editor = nearby_chat->getChatBox();
-
-
-		// arrow keys move avatar while chatting hack
-		// if (chat_editor && chat_editor->hasFocus())
-		// {
-		//	// If text field is empty, there's no point in trying to move
-		//	// cursor with arrow keys, so allow movement
-		//	if (chat_editor->getText().empty() 
-		//		|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
-		if(FSNearbyChat::instance().defaultChatBarHasFocus() &&
-		   (FSNearbyChat::instance().defaultChatBarIsIdle() ||
-		   // <FS:PP> Attempt to speed up things a little
-		   // gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
-			ArrowKeysAlwaysMove))
-		   // </FS:PP>
-		// </FS:Zi>
+		if ((focusedFloaterName == "nearby_chat") || (focusedFloaterName == "im_container") || (focusedFloaterName == "impanel"))
+		{
+			if (gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
 			{
 				// let Control-Up and Control-Down through for chat line history,
-				//<FS:TS> Control-Right and Control-Left too for chat line editing
 				if (!(key == KEY_UP && mask == MASK_CONTROL)
 					&& !(key == KEY_DOWN && mask == MASK_CONTROL)
-					&& !(key == KEY_LEFT && mask == MASK_CONTROL)
-					&& !(key == KEY_RIGHT && mask == MASK_CONTROL))
+					&& !(key == KEY_UP && mask == MASK_ALT)
+					&& !(key == KEY_DOWN && mask == MASK_ALT))
 				{
 					switch(key)
 					{
@@ -2743,11 +2770,9 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 						break;
 					}
 				}
-		// <FS:Zi> Remove floating chat bar
-		// 	}
-		// }
-		// </FS:Zi>
 		}
+		}
+
 		if (keyboard_focus->handleKey(key, mask, FALSE))
 		{
 			return TRUE;
@@ -2783,18 +2808,21 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// </FS:PP>
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
-		// <FS:Zi> Remove floating chat bar
-		// LLLineEditor* chat_editor = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar")->getChatBox();
+		// Initialize nearby chat if it's missing
+		LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		if (!nearby_chat)
+		{	
+			LLSD name("im_container");
+			LLFloaterReg::toggleInstanceOrBringToFront(name);
+		}
 
-		// if (chat_editor)
-		// {
-		// 	// passing NULL here, character will be added later when it is handled by character handler.
-		// 	LLNearbyChatBar::getInstance()->startChat(NULL);
-		// 	return TRUE;
-		// }
-		FSNearbyChat::instance().showDefaultChatBar(TRUE);
-		return TRUE;
-		// </FS:Zi>
+		LLChatEntry* chat_editor = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->getChatBox();
+		if (chat_editor)
+		{
+			// passing NULL here, character will be added later when it is handled by character handler.
+			nearby_chat->startChat(NULL);
+			return TRUE;
+		}
 	}
 
 	// give menus a chance to handle unmodified accelerator keys
@@ -2821,7 +2849,10 @@ BOOL LLViewerWindow::handleUnicodeChar(llwchar uni_char, MASK mask)
 	if ((uni_char == 13 && mask != MASK_CONTROL)
 		|| (uni_char == 3 && mask == MASK_NONE))
 	{
-		return gViewerKeyboard.handleKey(KEY_RETURN, mask, gKeyboard->getKeyRepeated(KEY_RETURN));
+		if (mask != MASK_ALT)
+		{
+			return gViewerKeyboard.handleKey(KEY_RETURN, mask, gKeyboard->getKeyRepeated(KEY_RETURN));
+		}
 	}
 
 	// let menus handle navigation (jump) keys
@@ -5422,20 +5453,6 @@ LLRect LLViewerWindow::getChatConsoleRect()
 }
 //----------------------------------------------------------------------------
 
-
-//static 
-bool LLViewerWindow::onAlert(const LLSD& notify)
-{
-	LLNotificationPtr notification = LLNotifications::instance().find(notify["id"].asUUID());
-
-	// If we're in mouselook, the mouse is hidden and so the user can't click 
-	// the dialog buttons.  In that case, change to First Person instead.
-	if( gAgentCamera.cameraMouselook() )
-	{
-		gAgentCamera.changeCameraToDefault();
-	}
-	return false;
-}
 
 void LLViewerWindow::setUIVisibility(bool visible)
 {

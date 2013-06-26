@@ -54,6 +54,7 @@
 #include "llresmgr.h"
 #include "llslurl.h"
 #include "llimview.h"
+#include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewernetwork.h"
 #include "llviewerobjectlist.h"
@@ -62,15 +63,16 @@
 #include "llavataractions.h"
 
 #include "lggcontactsets.h"
+//<FS:TM> CHUI Merge varify if any of the below are still needed
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaternearbychat.h"
-#include "fsfloaternearbychat.h"
+#include "fsfloaternearbychat.h" //<FS:TM> CHUI Merge can we get rid if this? line 903
 // <FS:Ansariel> [FS communication UI]
 // </FS:Zi>
-#include "llfloaterreg.h"
-#include "llnotificationmanager.h"
+//#include "llfloaterreg.h"
+//#include "llnotificationmanager.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llimfloater.h"
 #include "fsfloaterim.h"
@@ -803,9 +805,7 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 		// </FS:PP>
 		{
 			// Look up the name of this agent for the notification
-			LLAvatarNameCache::get(agent_id,
-				boost::bind(&on_avatar_name_cache_notify,
-					_1, _2, online, payload));
+			LLAvatarNameCache::get(agent_id,boost::bind(&on_avatar_name_cache_notify,_1, _2, online, payload));
 		}
 
 		mModifyMask |= LLFriendObserver::ONLINE;
@@ -838,12 +838,14 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	else if (UseDisplayNames)
 	// </FS:PP>
 	{
-		args["NAME"] = av_name.mDisplayName;
+		args["NAME"] = av_name.getDisplayName();
 	}
 	else
 	{
 		args["NAME"] = av_name.getLegacyName();
 	}
+	
+	args["STATUS"] = online ? LLTrans::getString("OnlineStatus") : LLTrans::getString("OfflineStatus"); // <FS:TM> CHUI merge check location, is right under 'args["NAME"] = av_name.getDisplayName();' in LL
 
 	args["AGENT-ID"] = agent_id;
 
@@ -853,7 +855,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	if (online)
 	{
 		notification =
-			LLNotificationsUtil::add("FriendOnline",
+			LLNotificationsUtil::add("FriendOnlineOffline",
 									 args,
 									 payload.with("respond_on_mousedown", TRUE),
 									 boost::bind(&LLAvatarActions::startIM, agent_id));
@@ -861,7 +863,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	else
 	{
 		notification =
-			LLNotificationsUtil::add("FriendOffline", args, payload);
+			LLNotificationsUtil::add("FriendOnlineOffline", args, payload);
 	}
 
 	// If there's an open IM session with this agent, send a notification there too.
@@ -893,7 +895,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		LLChat chat;
 		chat.mText = notify_msg;
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
-		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		args["type"] = LLNotificationsUI::NT_NEARBYCHAT; //<FS:TM> CHUI Merge error- has no member NT_NEARBYCHAT
 		if (history_only)
 		{
 			// <FS:Ansariel> [FS communication UI]
@@ -1056,28 +1058,28 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 	LLAvatarName av_name;
 	LLAvatarNameCache::get( buddy_id, &av_name);
 	// <FS:Ansariel> Friend names on worldmap should respect display name settings
-	//buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
+	buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
 	if(buddy->isOnline() && buddy->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION))
-	{
-		// <FS:Ansariel> Friend names on worldmap should respect display name settings
-		//mMappable.insert(value);
-		
-		// <FS:PP> Attempt to speed up things a little
-		// if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
+	{ 
+	//	// <FS:Ansariel> Friend names on worldmap should respect display name settings
+	//	//mMappable.insert(value);
+	//	
+	//	// <FS:PP> Attempt to speed up things a little
+	//	// if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
 		static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
-		if (LLAvatarNameCache::useDisplayNames() && NameTagShowUsernames)
-		// </FS:PP>
+		if (LLAvatarName::useDisplayNames() && NameTagShowUsernames) 
+	//	// </FS:PP>
 		{
 			buddy_map_t::value_type value(av_name.getCompleteName(), buddy_id);
 			mMappable.insert(value);
 		}
 		else
 		{
-			buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
+			buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
 			mMappable.insert(value);
 		}
-		// </FS:Ansariel>
-	}
+	//	// </FS:Ansariel>
+	//}
 	return true;
 }
 
@@ -1096,7 +1098,7 @@ bool LLCollectAllBuddies::operator()(const LLUUID& buddy_id, LLRelationship* bud
 {
 	LLAvatarName av_name;
 	LLAvatarNameCache::get(buddy_id, &av_name);
-	mFullName = av_name.mDisplayName;
+	mFullName = av_name.getDisplayName();
 	buddy_map_t::value_type value(mFullName, buddy_id);
 	if(buddy->isOnline())
 	{

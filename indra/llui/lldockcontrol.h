@@ -63,15 +63,7 @@ public:
 	void setDock(LLView* dockWidget);
 	LLView* getDock()
 	{
-		// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
-
-		// return mDockWidget;
-
-		if( mDockWidget && !mDockHandle.isDead() )
-			return mDockWidget;
-		return 0;
-		
-		// </FS:ND>
+		return mDockWidgetHandle.get();
 	}
 	void repositionDockable();
 	void drawToungue();
@@ -91,7 +83,7 @@ private:
 	bool mRecalculateDockablePosition;
 	bool mDockWidgetVisible;
 	DocAt mDockAt;
-	LLView* mDockWidget;
+	LLHandle<LLView> mDockWidgetHandle;
 	LLRect mPrevDockRect;
 	LLRect mRootRect;
 	LLRect mFloaterRect;
@@ -101,7 +93,7 @@ private:
 	S32 mDockTongueY;
 
 	// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
-	LLHandle< LLView > mDockHandle;
+	// LLHandle< LLView > mDockHandle; <FS:TM> check CHUI merge
 	// </FS:ND>
 };
 

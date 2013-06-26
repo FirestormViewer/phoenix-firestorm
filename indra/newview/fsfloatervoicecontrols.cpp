@@ -526,7 +526,7 @@ void FSFloaterVoiceControls::initAgentData()
 		// Just use display name, because it's you
 		LLAvatarName av_name;
 		LLAvatarNameCache::get( gAgentID, &av_name );
-		mAgentPanel->getChild<LLUICtrl>("user_text")->setValue(av_name.mDisplayName);
+		mAgentPanel->getChild<LLUICtrl>("user_text")->setValue(av_name.getDisplayName());
 
 		mSpeakingIndicator = mAgentPanel->getChild<LLOutputMonitorCtrl>("speaking_indicator");
 		mSpeakingIndicator->setSpeakerId(gAgentID);
@@ -547,7 +547,7 @@ void FSFloaterVoiceControls::setModeratorMutedVoice(bool moderator_muted)
 void FSFloaterVoiceControls::onModeratorNameCache(const LLAvatarName& av_name)
 {
 	std::string name;
-	name = av_name.mDisplayName;
+	name = av_name.getDisplayName();
 
 	if(mSpeakerManager && gAgent.isInGroup(mSpeakerManager->getSessionID()))
 	{

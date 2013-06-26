@@ -421,14 +421,22 @@
          label="Online Status"
          name="Status"
          tear_off="true">
-          <menu_item_check
-           label="Away"
-             name="Set Away">
-                <menu_item_check.on_check
-                 function="World.GetAway" />
-                <menu_item_check.on_click
-                 function="World.SetAway" />
-            </menu_item_check>
+        <menu_item_check
+         name="Away"
+         label="Away">
+          <menu_item_check.on_check
+           function="View.Status.CheckAway" />
+          <menu_item_check.on_click
+           function="World.SetAway" />
+        </menu_item_check>
+        <menu_item_check
+         name="Do Not Disturb"
+         label="Do Not Disturb">
+          <menu_item_check.on_check
+           function="View.Status.CheckDoNotDisturb" />
+          <menu_item_check.on_click
+           function="World.SetDoNotDisturb"/>
+        </menu_item_check>
 			    <menu_item_check
              label="Autorespond"
              name="Set Autorespond">
@@ -444,14 +452,6 @@
                  function="World.GetAutorespondNonFriends"/>
                 <menu_item_check.on_click
                  function="World.SetAutorespondNonFriends"/>
-            </menu_item_check>
-          <menu_item_check
-              label="Unavailable"
-              name="Set Busy">
-                <menu_item_check.on_check
-                  function="World.GetBusy"/>
-                <menu_item_check.on_click
-                  function="World.SetBusy"/>
             </menu_item_check>
         
         </menu>
@@ -505,7 +505,7 @@
              function="Floater.Visible"
              parameter="fs_nearby_chat" />
             <menu_item_check.on_click
-             function="Floater.Toggle"
+             function="Floater.ToggleOrBringToFront"
              parameter="fs_nearby_chat" />
         </menu_item_check>
         <menu_item_check
@@ -544,29 +544,48 @@
              function="Floater.Toggle"
              parameter="gestures" />
         </menu_item_check>
-
-        <menu_item_check
-         label="Voice Filters"
-         name="ShowVoice"
+        <menu_item_separator/>
+        <menu
+         label="Voice morphing"
+         name="VoiceMorphing"
          visibility_control="VoiceMorphingEnabled">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="voice_effect" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="voice_effect" />
-        </menu_item_check>
-
-        <!-- DO NOT DELETE IN CHUI MERGE -->
+            <menu_item_check
+             label="No voice morphing"
+             name="NoVoiceMorphing">
+                <menu_item_check.on_check
+                 function="Communicate.VoiceMorphing.NoVoiceMorphing.Check" />
+                <menu_item_check.on_click
+                 function="Communicate.VoiceMorphing.NoVoiceMorphing.Click" />
+            </menu_item_check>
+            <menu_item_separator/>
+            <menu_item_check
+             label="Preview..."
+             name="Preview">
+                <menu_item_check.on_check
+                 function="Floater.Visible"
+                 parameter="voice_effect" />
+                <menu_item_check.on_click
+                 function="Floater.Toggle"
+                 parameter="voice_effect" />
+            </menu_item_check>
+            <menu_item_call
+             label="Subscribe..."
+             name="Subscribe">
+                <menu_item_call.on_click
+                 function="Communicate.VoiceMorphing.Subscribe" />
+            </menu_item_call>
+        </menu>
         <menu_item_check
-         label="Nearby Voice"
-         name="Nearby Voice">
+         name="Conversation Log..."
+         label="Conversation Log...">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="fs_voice_controls" />
+             parameter="conversation" />
+            <menu_item_check.on_enable
+             function="Conversation.IsConversationLoggingAllowed" />
             <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="fs_voice_controls" />
+             parameter="conversation" />
         </menu_item_check>
         <!--
         <menu_item_separator/>
@@ -608,8 +627,19 @@
          label="Block List"
          name="Block List">
             <menu_item_call.on_click
-              function="Communicate.BlockList" />
+              function="SideTray.PanelPeopleTab"
+              parameter="blocked_panel" />
         </menu_item_call>
+      <menu_item_separator/>
+      <menu_item_check
+       name="Do Not Disturb"
+       label="Do Not Disturb">
+        <menu_item_check.on_check
+         function="View.Status.CheckDoNotDisturb" />
+        <menu_item_check.on_click
+         function="World.SetDoNotDisturb"/>
+      </menu_item_check>
+
     </menu>
     
     <!-- World Menu -->
@@ -927,6 +957,17 @@
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="midnight" />
+                <menu_item_call.on_enable
+                 function="RLV.EnableIfNot"
+                 parameter="setenv" />
+            </menu_item_call>
+            <menu_item_separator/>
+            <menu_item_call
+             label="Estate Time"
+             name="Revert to Region Default">
+                <menu_item_call.on_click
+                 function="World.EnvSettings"
+                 parameter="default" />
                 <menu_item_call.on_enable
                  function="RLV.EnableIfNot"
                  parameter="setenv" />
@@ -1874,7 +1915,58 @@
              function="Floater.Show"
              parameter="hud" />
         </menu_item_call>-->
-
+		<menu_item_separator/>
+		
+		<menu_item_call
+             label="User’s guide"
+             name="User’s guide">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-User-s-Guide/ta-p/1244857"/>
+        </menu_item_call>
+        <menu_item_call
+             label="Knowledge Base"
+             name="Knowledge Base">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/tkb/communitypage"/>
+        </menu_item_call>
+        <menu_item_call
+             label="Wiki"
+             name="Wiki">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://wiki.secondlife.com"/>
+        </menu_item_call>
+        <menu_item_call
+             label="Community Forums"
+             name="Community Forums">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/Forums/ct-p/Forums"/>
+        </menu_item_call>         
+        <menu_item_call
+             label="Support portal"
+             name="Support portal">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="https://support.secondlife.com/"/>         
+        </menu_item_call>
+        <menu_item_separator/>
+        <menu_item_call
+             label="[SECOND_LIFE] News"
+             name="Second Life News">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/Featured-News/bg-p/blog_feature_news"/>  
+        </menu_item_call>
+        <menu_item_call
+             label="[SECOND_LIFE] Blogs"
+             name="Second Life Blogs">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/Blogs/ct-p/Blogs"/>
+        </menu_item_call>
         <menu_item_separator/>
 		<menu_item_call
              label="Check Grid status"
@@ -2112,6 +2204,184 @@
     </menu>
 
     <!-- Advanced Menu -->
+    <menu
+     create_jump_keys="true"
+     label="RLVa"
+     name="RLVa Main"
+     tear_off="true"
+     visible="true">
+      <menu
+       label="Debug"
+       name="Debug"
+       tear_off="true">
+        <menu_item_check
+         label="Show Top-level RLVa Menu"
+         name="Show Top-level RLVa Menu">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaTopLevelMenu" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaTopLevelMenu" />
+        </menu_item_check>
+      	<menu_item_separator/>
+      	<menu_item_check
+      	 label="Show Debug Messages"
+      	 name="Show Debug Messages">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RestrainedLoveDebug" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RestrainedLoveDebug" />
+      	</menu_item_check>
+      	<menu_item_check
+      	 label="Hide Unset or Duplicate Messages"
+      	 name="Hide Unset or Duplicate Messages">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaDebugHideUnsetDuplicate" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaDebugHideUnsetDuplicate" />
+      	</menu_item_check>
+      	<menu_item_check
+      	 label="Show Assertion Failures"
+      	 name="Show Assertion Failures">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaShowAssertionFailures" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaShowAssertionFailures" />
+      	</menu_item_check>
+      	<menu_item_separator/>
+        <menu_item_check
+         label="Hide Locked Layers"
+         name="Hide Locked Layers">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaHideLockedLayers" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaHideLockedLayers" />
+        </menu_item_check>
+        <menu_item_check
+         label="Hide Locked Attachments"
+         name="Hide Locked Attachments">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaHideLockedAttachments" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaHideLockedAttachments" />
+        </menu_item_check>
+        <menu_item_separator/>
+      	<menu_item_check
+      	 label="Enable Legacy Naming"
+      	 name="Enable Legacy Naming">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaEnableLegacyNaming" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaEnableLegacyNaming" />
+      	</menu_item_check>
+        <menu_item_check
+      	 label="Enable Shared Wear"
+      	 name="Enable Shared Wear">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaEnableSharedWear" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaEnableSharedWear" />
+        </menu_item_check>
+        <menu_item_check
+      	 label="Rename Shared Items on Wear"
+      	 name="Rename Shared Items on Wear">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaSharedInvAutoRename" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaSharedInvAutoRename" />
+      	</menu_item_check>
+      	<menu_item_separator/>
+      	<menu_item_check
+      	 label="Locks..."
+      	 name="Locks">
+          <menu_item_check.on_check
+           function="Floater.Visible"
+           parameter="rlv_locks" />
+          <menu_item_check.on_click
+           function="Floater.Toggle"
+           parameter="rlv_locks" />
+      	</menu_item_check>
+      </menu>
+      <menu_item_separator/>
+      <menu_item_check
+       label="Allow OOC Chat"
+       name="Allow OOC Chat">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RestrainedLoveCanOOC" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RestrainedLoveCanOOC" />
+      </menu_item_check>
+      <menu_item_check
+       label="Forbid Give to #RLV"
+       name="Forbid Give to #RLV">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RestrainedLoveForbidGiveToRLV" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RestrainedLoveForbidGiveToRLV" />
+      </menu_item_check>
+      <menu_item_check
+       label="Show Filtered Chat"
+       name="Show Filtered Chat">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RestrainedLoveShowEllipsis" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RestrainedLoveShowEllipsis" />
+      </menu_item_check>
+      <menu_item_check
+       label="Show Name Tags"
+       name="Show Name Tags">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaShowNameTags" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaShowNameTags" />
+      </menu_item_check>
+      <menu_item_check
+       label="Wear Replaces Unlocked"
+       name="Wear Replaces Unlocked">
+      	<menu_item_check.on_check
+      	 function="CheckControl"
+      	 parameter="RLVaWearReplaceUnlocked" />
+      	<menu_item_check.on_click
+      	 function="ToggleControl"
+      	 parameter="RLVaWearReplaceUnlocked" />
+      </menu_item_check>
+      <menu_item_separator />
+      <menu_item_check
+       label="Restrictions..."
+       name="Restrictions">
+      	<menu_item_check.on_check
+      	 function="Floater.Visible"
+      	 parameter="rlv_behaviours" />
+      	<menu_item_check.on_click
+      	 function="Floater.Toggle"
+      	 parameter="rlv_behaviours" />
+      </menu_item_check>
+    </menu>
     <menu
      create_jump_keys="true"
      label="Advanced"

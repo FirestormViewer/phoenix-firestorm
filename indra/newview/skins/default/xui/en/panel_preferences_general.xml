@@ -537,7 +537,7 @@
      name="text_box3"
      top_pad="40"
      width="500">
-       Busy and Autoresponse messages can be found under Privacy / Autoresponse
+       'Do Not Disturb' and Autoresponse messages can be found under Privacy / Autoresponse
     </text>
 <!--extras-->
     <panel

@@ -42,6 +42,7 @@
 #include "llagentcamera.h"
 #include "llagentlanguage.h"
 #include "llagentwearables.h"
+#include "llfloaterimcontainer.h"
 #include "llwindow.h"
 #include "llviewerstats.h"
 #include "llviewerstatsrecorder.h"
@@ -59,6 +60,7 @@
 #include "llares.h" 
 #include "llcurl.h"
 #include "llcalc.h"
+#include "llconversationlog.h"
 #include "lltexturestats.h"
 #include "lltexturestats.h"
 #include "llviewerwindow.h"
@@ -101,7 +103,6 @@
 #include "llsecondlifeurls.h"
 #include "llupdaterservice.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llcallfloater.h"
 #include "fsfloatervoicecontrols.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llfloatertexturefetchdebugger.h"
@@ -218,6 +219,7 @@
 #include "llviewercontrol.h"
 #include "lleventnotifier.h"
 #include "llcallbacklist.h"
+#include "lldeferredsounds.h"
 #include "pipeline.h"
 #include "llgesturemgr.h"
 #include "llsky.h"
@@ -236,7 +238,6 @@
 #include "llsecapi.h"
 #include "llmachineid.h"
 #include "llmainlooprepeater.h"
-
 
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
@@ -314,7 +315,9 @@ LLTimer gLogoutTimer;
 static const F32 LOGOUT_REQUEST_TIME = 6.f;  // this will be cut short by the LogoutReply msg.
 F32 gLogoutMaxTime = LOGOUT_REQUEST_TIME;
 
+
 S32 gPendingMetricsUploads = 0;
+
 
 BOOL				gDisconnected = FALSE;
 
@@ -512,7 +515,18 @@ static void ui_audio_callback(const LLUUID& uuid)
 {
 	if (gAudiop)
 	{
-		gAudiop->triggerSound(uuid, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+		SoundData soundData(uuid, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+		gAudiop->triggerSound(soundData);
+	}
+}
+
+// A callback set in LLAppViewer::init()
+static void deferred_ui_audio_callback(const LLUUID& uuid)
+{
+	if (gAudiop)
+	{
+		SoundData soundData(uuid, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+		LLDeferredSounds::instance().deferSound(soundData);
 	}
 }
 
@@ -583,9 +597,6 @@ static void settings_to_globals()
 	LLBUTTON_H_PAD		= gSavedSettings.getS32("ButtonHPad");
 	BTN_HEIGHT_SMALL	= gSavedSettings.getS32("ButtonHeightSmall");
 	BTN_HEIGHT			= gSavedSettings.getS32("ButtonHeight");
-// [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-	DELAY_DRAG_HOVER_COMMIT = gSavedSettings.getF32("DragAndDropCommitDelay");
-// [/SL:KB]
 
 	MENU_BAR_HEIGHT		= gSavedSettings.getS32("MenuBarHeight");
 	MENU_BAR_WIDTH		= gSavedSettings.getS32("MenuBarWidth");
@@ -693,6 +704,7 @@ LLAppViewer::LLAppViewer() :
 	mForceGraphicsDetail(false),
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
+	mYieldTime(-1),
 	mMainloopTimeout(NULL),
 	mAgentRegionLastAlive(false),
 	mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", FALSE)),
@@ -926,6 +938,7 @@ bool LLAppViewer::init()
 	LLUI::initClass(settings_map,
 		LLUIImageList::getInstance(),
 		ui_audio_callback,
+		deferred_ui_audio_callback,
 		&LLUI::getScaleFactor());
 	LL_INFOS("InitInfo") << "UI initialized." << LL_ENDL ;
 
@@ -1392,10 +1405,11 @@ bool LLAppViewer::mainLoop()
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
 	// <FS:Ansariel> [FS communication UI]
-	//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLCallFloater::sOnCurrentChannelChanged, _1), true);
-	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&FSFloaterVoiceControls::sOnCurrentChannelChanged, _1), true);
+	//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLCallFloater::sOnCurrentChannelChanged, _1), true); //<FS:TM> CHUI merge old
+	//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true); //<FS:TM> CHUI merge new
+	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&FSFloaterVoiceControls::sOnCurrentChannelChanged, _1), true); //<FS:TM> FS origonal
 	// </FS:Ansariel> [FS communication UI]
-	LLTimer frameTimer,idleTimer,periodicRenderingTimer;
+	LLTimer frameTimer,idleTimer;
 	LLTimer debugTime;
 	LLViewerJoystick* joystick(LLViewerJoystick::getInstance());
 	joystick->setNeedsReset(true);
@@ -1406,8 +1420,6 @@ bool LLAppViewer::mainLoop()
     // time. Obviously, if that changes, just instantiate the LLSD at the
     // point of posting.
     LLSD newFrame;
-
-	BOOL restore_rendering_masks = FALSE;
 
 	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
@@ -1427,28 +1439,6 @@ bool LLAppViewer::mainLoop()
 		
 		try
 		{
-			// Check if we need to restore rendering masks.
-			if (restore_rendering_masks)
-			{
-				gPipeline.popRenderDebugFeatureMask();
-				gPipeline.popRenderTypeMask();
-			}
-			// Check if we need to temporarily enable rendering.
-			F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
-			if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
-			{
-				periodicRenderingTimer.reset();
-				restore_rendering_masks = TRUE;
-				gPipeline.pushRenderTypeMask();
-				gPipeline.pushRenderDebugFeatureMask();
-				gPipeline.setAllRenderTypes();
-				gPipeline.setAllRenderDebugFeatures();
-			}
-			else
-			{
-				restore_rendering_masks = FALSE;
-			}
-
 			pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
 			if (gViewerWindow)
@@ -1496,11 +1486,11 @@ bool LLAppViewer::mainLoop()
 				// Scan keyboard for movement keys.  Command keys and typing
 				// are handled by windows callbacks.  Don't do this until we're
 				// done initializing.  JC
-				if (gViewerWindow->getWindow()->getVisible()
+				if ((gHeadlessClient || gViewerWindow->getWindow()->getVisible())
 					&& gViewerWindow->getActive()
 					&& !gViewerWindow->getWindow()->getMinimized()
 					&& LLStartUp::getStartupState() == STATE_STARTED
-					&& !gViewerWindow->getShowProgress()
+					&& (gHeadlessClient || !gViewerWindow->getShowProgress())
 					&& !gFocusMgr.focusLocked())
 				{
 					joystick->scanJoystick();
@@ -1554,7 +1544,8 @@ bool LLAppViewer::mainLoop()
 				}
 
 				// Render scene.
-				if (!LLApp::isExiting())
+				// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
+				if (!LLApp::isExiting() && !gHeadlessClient)
 				{
 					pingMainloopTimeout("Main:Display");
 					gGLActive = TRUE;
@@ -1575,11 +1566,10 @@ bool LLAppViewer::mainLoop()
 				LLFastTimer t2(FTM_SLEEP);
 				
 				// yield some time to the os based on command line option
-				S32 yield_time = gSavedSettings.getS32("YieldTime");
-				if(yield_time >= 0)
+				if(mYieldTime >= 0)
 				{
 					LLFastTimer t(FTM_YIELD);
-					ms_sleep(yield_time);
+					ms_sleep(mYieldTime);
 				}
 
 				// yield cooperatively when not running as foreground window
@@ -1691,26 +1681,6 @@ bool LLAppViewer::mainLoop()
 				{
 					gFrameStalls++;
 				}
-
-				// Limit FPS
-				F32 max_fps = gSavedSettings.getF32("MaxFPS");
-				// Only limit FPS when we are actually rendering something.  Otherwise
-				// logins, logouts and teleports take much longer to complete.
-				if (max_fps > F_APPROXIMATELY_ZERO && 
-					LLStartUp::getStartupState() == STATE_STARTED &&
-					!gTeleportDisplay &&
-					!logoutRequestSent())
-				{
-					// Sleep a while to limit frame rate.
-					F32 min_frame_time = 1.f / max_fps;
-					S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
-					if (milliseconds_to_sleep > 0)
-					{
-						LLFastTimer t(FTM_YIELD);
-						ms_sleep(milliseconds_to_sleep);
-					}
-				}
-
 				frameTimer.reset();
 
 				resumeMainloopTimeout();
@@ -2155,6 +2125,9 @@ bool LLAppViewer::cleanup()
 
 	// save mute list. gMuteList used to also be deleted here too.
 	LLMuteList::getInstance()->cache(gAgent.getID());
+
+	//save call log list
+	LLConversationLog::instance().cache();
 
 	if (mPurgeOnExit)
 	{
@@ -3010,6 +2983,8 @@ bool LLAppViewer::initConfiguration()
 		}
 	}
 
+    mYieldTime = gSavedSettings.getS32("YieldTime");
+
 	// Read skin/branding settings if specified.
 	//if (! gDirUtilp->getSkinDir().empty() )
 	//{
@@ -3441,6 +3416,9 @@ bool LLAppViewer::meetsRequirementsForMaximizedStart()
 bool LLAppViewer::initWindow()
 {
 	LL_INFOS("AppInit") << "Initializing window..." << LL_ENDL;
+
+	// store setting in a global for easy access and modification
+	gHeadlessClient = gSavedSettings.getBOOL("HeadlessClient");
 
 	// always start windowed
 	BOOL ignorePixelDepth = gSavedSettings.getBOOL("IgnorePixelDepth");
@@ -5519,6 +5497,11 @@ void LLAppViewer::disconnectViewer()
 
 	// close inventory interface, close all windows
 	LLFloaterInventory::cleanup();
+
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
+	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them
+	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(false);
+// [/SL:KB]
 
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them

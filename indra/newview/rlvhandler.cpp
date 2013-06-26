@@ -1612,7 +1612,10 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 					F32 nValue = (rlvCmdOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvCmdOption.m_nPelvisToFootDeltaMult;
 					nValue += rlvCmdOption.m_nPelvisToFootOffset;
 					// <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
-					//gSavedPerAccountSettings.setF32(RLV_SETTING_AVATAROFFSET_Z, llclamp<F32>(nValue, -1.0f, 1.0f));
+					//if (!gAgentAvatarp->isUsingServerBakes())
+					//	gSavedSettings.setF32(RLV_SETTING_AVATAROFFSET_Z, llclamp<F32>(nValue, -1.0f, 1.0f));
+					//else
+					//	eRet = RLV_RET_FAILED_DISABLED;
 				}
 			}
 			break;

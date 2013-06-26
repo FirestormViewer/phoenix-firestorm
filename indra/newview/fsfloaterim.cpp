@@ -370,13 +370,6 @@ void FSFloaterIM::sendMsg()
 
 			updateMessages();
 		}
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-02 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
-		else if (gSavedSettings.getBOOL("CloseIMOnEmptyReturn"))
-		{
-			// Close if we're the child of a floater
-			closeFloater();
-		}
-// [/SL:KB]
 	}
 }
 
@@ -861,21 +854,21 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 	// Use display name only for labels, as the extended name will be in the
 	// floater title
 	//std::string ui_title = av_name.getCompleteName();
-	//updateSessionName(ui_title, av_name.mDisplayName);
+	//updateSessionName(ui_title, av_name.getDisplayName());
 	//mTypingStart.setArg("[NAME]", ui_title);
 
 	std::string name = av_name.getCompleteName();
-	if (LLAvatarNameCache::useDisplayNames())
+	if (LLAvatarName::useDisplayNames())
 	{
 		switch (gSavedSettings.getS32("FSIMTabNameFormat"))
 		{
 			// Display name
 			case 0:
-				name = av_name.mDisplayName;
+				name = av_name.getDisplayName();
 				break;
 			// Username
 			case 1:
-				name = av_name.mUsername;
+				name = av_name.getUserName();
 				break;
 			// Display name (username)
 			case 2:
@@ -885,11 +878,11 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 			case 3:
 				if (av_name.mIsDisplayNameDefault)
 				{
-					name = av_name.mUsername;
+					name = av_name.getUserName();
 				}
 				else
 				{
-					name = av_name.mUsername + " (" + av_name.mDisplayName + ")";
+					name = av_name.getUserName() + " (" + av_name.getDisplayName() + ")";
 				}
 				break;
 			default:

@@ -42,7 +42,9 @@
 #include "llappviewer.h"		// for gLastVersionChannel
 #include "llcachename.h"
 #include "llcallingcard.h"		// for LLAvatarTracker
+#include "llconversationlog.h"
 #include "llfloateravatarpicker.h"	// for LLFloaterAvatarPicker
+#include "llfloaterconversationpreview.h"
 #include "llfloatergroupinvite.h"
 #include "llfloatergroups.h"
 #include "llfloaterreg.h"
@@ -55,6 +57,7 @@
 #include "llinventorybridge.h"
 #include "llinventorymodel.h"	// for gInventory.findCategoryUUIDForType
 #include "llinventorypanel.h"
+#include "llfloaterimcontainer.h"
 #include "llimview.h"			// for gIMMgr
 #include "llmutelist.h"
 #include "llnotificationsutil.h"	// for LLNotificationsUtil
@@ -62,32 +65,29 @@
 #include "llpanelprofile.h"
 #include "llrecentpeople.h"
 #include "lltrans.h"
-// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-09-08 (Catznip-2.1.2c) | Added: Catznip-2.1.2c
 #include "llviewercontrol.h"
-// [/SL:KB]
 #include "llviewerobjectlist.h"
 #include "llviewermessage.h"	// for handle_lure
 #include "llviewerregion.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h"
 #include "fsfloaterim.h"
+#include "fsfloaterimcontainer.h"
 // </FS:Ansariel> [FS communication UI]
 #include "lltrans.h"
 #include "llcallingcard.h"
 #include "llslurl.h"			// IDEVO
-#include "llviewercontrol.h"
-#include "llfloaterreporter.h"
-#include "llparcel.h"
-#include "llviewerparcelmgr.h"
-#include "llvoavatar.h"
-#include "llworld.h"
-#include "llviewermenu.h"
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-#include "rlvhandler.h"
-// [/RLVa:KB]
 #include "llsidepanelinventory.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
+#include "rlvactions.h"
+#include "rlvcommon.h"
+#include "rlvhandler.h" // <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
+// [/RLVa:KB]
 #include "fslslbridge.h"
 //<FS:KC legacy profiles>
+#include "llworld.h" //Added: Catznip-2.4.0g
+#include "llfloaterreporter.h" // [SL:KB] - Patch: UI-SidepanelPeople
+#include "llparcel.h" //Added: Catznip-2.4.0g
+#include "llviewerparcelmgr.h" //Added: Catznip-2.4.0g
 #include "fsfloaterprofile.h"
 #include "llfloaterregioninfo.h"
 #include "lltrans.h"
@@ -114,7 +114,7 @@ void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::strin
 	LLRecentPeople::instance().add(id);
 }
 
-void on_avatar_name_friendship(const LLUUID& id, const LLAvatarName av_name)
+static void on_avatar_name_friendship(const LLUUID& id, const LLAvatarName av_name)
 {
 	LLAvatarActions::requestFriendshipDialog(id, av_name.getCompleteName());
 }
@@ -155,7 +155,7 @@ void LLAvatarActions::removeFriendsDialog(const uuid_vec_t& ids)
 		LLAvatarName av_name;
 		if(LLAvatarNameCache::get(agent_id, &av_name))
 		{
-			args["NAME"] = av_name.mDisplayName;
+			args["NAME"] = av_name.getDisplayName();
 		}
 
 		msgType = "RemoveFromFriends";
@@ -200,13 +200,14 @@ void LLAvatarActions::offerTeleport(const uuid_vec_t& ids)
 static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
 										  const LLAvatarName& av_name)
 {
-	std::string name = av_name.getCompleteName();
+	std::string name = av_name.getDisplayName();
 	LLUUID session_id = gIMMgr->addSession(name, IM_NOTHING_SPECIAL, agent_id);
 	if (session_id != LLUUID::null)
 	{
 		// <FS:Ansariel> [FS communication UI]
-		//LLIMFloater::show(session_id);
-		FSFloaterIM::show(session_id);
+		//LLFloaterIMContainer::getInstance()->showConversation(session_id); <FS:TM> CHUI merge LL New
+		//LLIMFloater::show(session_id); <FS:TM> CHUI merge LL old
+		FSFloaterIM::show(session_id); //<FS:TM> FS orig
 		// </FS:Ansariel> [FS communication UI]
 	}
 	make_ui_sound("UISndStartIM");
@@ -215,24 +216,19 @@ static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
 // static
 void LLAvatarActions::startIM(const LLUUID& id)
 {
-	if (id.isNull())
+	if (id.isNull() || gAgent.getID() == id)
 		return;
 
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(id)) )
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+	if ( (!RlvActions::canStartIM(id)) && (!RlvActions::hasOpenP2PSession(id)) )
 	{
-		LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, id);
-		if ( (idSession.notNull()) && (!gIMMgr->hasSession(idSession)) )
-		{
-			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
-			return;
-		}
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		return;
 	}
 // [/RLVa:KB]
 
-	LLAvatarNameCache::get(id,
-		boost::bind(&on_avatar_name_cache_start_im, _1, _2));
+	LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_cache_start_im, _1, _2));
 }
 
 // static
@@ -251,7 +247,7 @@ void LLAvatarActions::endIM(const LLUUID& id)
 static void on_avatar_name_cache_start_call(const LLUUID& agent_id,
 											const LLAvatarName& av_name)
 {
-	std::string name = av_name.getCompleteName();
+	std::string name = av_name.getDisplayName();
 	LLUUID session_id = gIMMgr->addSession(name, IM_NOTHING_SPECIAL, agent_id, true);
 	if (session_id != LLUUID::null)
 	{
@@ -268,25 +264,20 @@ void LLAvatarActions::startCall(const LLUUID& id)
 		return;
 	}
 
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(id)) )
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+	if ( (!RlvActions::canStartIM(id)) && (!RlvActions::hasOpenP2PSession(id)) )
 	{
-		LLUUID idSession = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL, id);
-		if ( (idSession.notNull()) && (!gIMMgr->hasSession(idSession)) )
-		{
-			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
-			return;
-		}
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", id, "completename").getSLURLString()));
+		return;
 	}
 // [/RLVa:KB]
 
-	LLAvatarNameCache::get(id,
-		boost::bind(&on_avatar_name_cache_start_call, _1, _2));
+	LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_cache_start_call, _1, _2));
 }
 
 // static
-void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids)
+void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids, const LLUUID& floater_id)
 {
 	if (ids.size() == 0)
 	{
@@ -297,12 +288,12 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids)
 	LLDynamicArray<LLUUID> id_array;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
 		const LLUUID& idAgent = *it;
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(idAgent)) )
+		if (!RlvActions::canStartIM(idAgent))
 		{
 			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF, LLSD().with("RECIPIENT", LLSLURL("agent", idAgent, "completename").getSLURLString()));
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
 			return;
 		}
 		id_array.push_back(idAgent);
@@ -313,7 +304,7 @@ void LLAvatarActions::startAdhocCall(const uuid_vec_t& ids)
 	// create the new ad hoc voice session
 	const std::string title = LLTrans::getString("conference-title");
 	LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START,
-										   ids[0], id_array, true);
+										   ids[0], id_array, true, floater_id);
 	if (session_id == LLUUID::null)
 	{
 		return;
@@ -346,18 +337,18 @@ bool LLAvatarActions::canCall()
 }
 
 // static
-void LLAvatarActions::startConference(const uuid_vec_t& ids)
+void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& floater_id)
 {
 	// *HACK: Copy into dynamic array
 	LLDynamicArray<LLUUID> id_array;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
 		const LLUUID& idAgent = *it;
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(idAgent)) )
+		if (!RlvActions::canStartIM(idAgent))
 		{
 			make_ui_sound("UISndInvalidOp");
-			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF, LLSD().with("RECIPIENT", LLSLURL("agent", idAgent, "completename").getSLURLString()));
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
 			return;
 		}
 		id_array.push_back(idAgent);
@@ -365,14 +356,19 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids)
 //		id_array.push_back(*it);
 	}
 	const std::string title = LLTrans::getString("conference-title");
-	LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array);
-	if (session_id != LLUUID::null)
+	LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array, false, floater_id);
+
+	if (session_id == LLUUID::null)
 	{
 		// <FS:Ansariel> [FS communication UI]
-		//LLIMFloater::show(session_id);
-		FSFloaterIM::show(session_id);
+		// return; <FS:TM> CHUI merge LL new
+		//LLIMFloater::show(session_id); <FS:TM> CHUI merge LL old
+		FSFloaterIM::show(session_id); //<FS:TM> CHUI merge FS orig
 		// </FS:Ansariel> [FS communication UI]
 	}
+	
+	FSFloaterIMContainer::getInstance()->showConversation(session_id);
+	
 	make_ui_sound("UISndStartIM");
 }
 
@@ -384,19 +380,11 @@ static const char* get_profile_floater_name(const LLUUID& avatar_id)
 
 static void on_avatar_name_show_profile(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	std::string username = av_name.mUsername;
-	if (username.empty())
-	{
-		username = LLCacheName::buildUsername(av_name.mDisplayName);
-	}
-	
-	llinfos << "opening web profile for " << username << llendl;		
-	std::string url = getProfileURL(username);
+	std::string url = getProfileURL(av_name.getAccountName());
 
 	// PROFILES: open in webkit window
 	LLFloaterWebContent::Params p;
-	p.url(url).
-		id(agent_id.asString());
+	p.url(url).id(agent_id.asString());
 	LLFloaterReg::showInstance(get_profile_floater_name(agent_id), p);
 }
 
@@ -486,19 +474,19 @@ void LLAvatarActions::showOnMap(const LLUUID& id)
 		return;
 	}
 
-	gFloaterWorldMap->trackAvatar(id, av_name.mDisplayName);
+	gFloaterWorldMap->trackAvatar(id, av_name.getDisplayName());
 	LLFloaterReg::showInstance("world_map");
 }
 
 // static
 void LLAvatarActions::pay(const LLUUID& id)
 {
-	LLNotification::Params params("BusyModePay");
+	LLNotification::Params params("DoNotDisturbModePay");
 	params.functor.function(boost::bind(&LLAvatarActions::handlePay, _1, _2, id));
 
-	if (gAgent.getBusy())
+	if (gAgent.isDoNotDisturb())
 	{
-		// warn users of being in busy mode during a transaction
+		// warn users of being in do not disturb mode during a transaction
 		LLNotifications::instance().add(params);
 	}
 	else
@@ -567,6 +555,7 @@ void LLAvatarActions::share(const LLUUID& id)
 
 	LLSD key;
 	LLFloaterSidePanelContainer::showPanel("inventory", key);
+	LLFloaterReg::showInstance("im_container");
 
 	LLUUID session_id = gIMMgr->computeSessionID(IM_NOTHING_SPECIAL,id);
 
@@ -660,23 +649,6 @@ namespace action_give_inventory
                 return acceptable;
         }
 
-
-	static void build_residents_string(const std::vector<LLAvatarName> avatar_names, std::string& residents_string)
-	{
-		llassert(avatar_names.size() > 0);
-
-		const std::string& separator = LLTrans::getString("words_separator");
-		for (std::vector<LLAvatarName>::const_iterator it = avatar_names.begin(); ; )
-		{
-			LLAvatarName av_name = *it;
-			residents_string.append(av_name.mDisplayName);
-			if	(++it == avatar_names.end())
-			{
-				break;
-			}
-			residents_string.append(separator);
-		}
-	}
 
 	static void build_items_string(const std::set<LLUUID>& inventory_selected_uuids , std::string& items_string)
 	{
@@ -842,7 +814,7 @@ namespace action_give_inventory
 		}
 
 		std::string residents;
-		build_residents_string(avatar_names, residents);
+		LLAvatarActions::buildResidentsString(avatar_names, residents);
 
 		std::string items;
 		build_items_string(inventory_selected_uuids, items);
@@ -881,38 +853,85 @@ namespace action_give_inventory
 	}
 }
 
+// static
+void LLAvatarActions::buildResidentsString(std::vector<LLAvatarName> avatar_names, std::string& residents_string)
+{
+	llassert(avatar_names.size() > 0);
+	
+	std::sort(avatar_names.begin(), avatar_names.end());
+	const std::string& separator = LLTrans::getString("words_separator");
+	for (std::vector<LLAvatarName>::const_iterator it = avatar_names.begin(); ; )
+	{
+		residents_string.append((*it).getDisplayName());
+		if	(++it == avatar_names.end())
+		{
+			break;
+		}
+		residents_string.append(separator);
+	}
+}
 
+// static
+void LLAvatarActions::buildResidentsString(const uuid_vec_t& avatar_uuids, std::string& residents_string)
+{
+	std::vector<LLAvatarName> avatar_names;
+	uuid_vec_t::const_iterator it = avatar_uuids.begin();
+	for (; it != avatar_uuids.end(); ++it)
+	{
+		LLAvatarName av_name;
+		if (LLAvatarNameCache::get(*it, &av_name))
+		{
+			avatar_names.push_back(av_name);
+		}
+	}
+	
+	// We should check whether the vector is not empty to pass the assertion
+	// that avatar_names.size() > 0 in LLAvatarActions::buildResidentsString.
+	if (!avatar_names.empty())
+	{
+		LLAvatarActions::buildResidentsString(avatar_names, residents_string);
+	}
+}
 
 //static
 std::set<LLUUID> LLAvatarActions::getInventorySelectedUUIDs()
 {
-	std::set<LLUUID> inventory_selected_uuids;
+	std::set<LLFolderViewItem*> inventory_selected;
 
 	LLInventoryPanel* active_panel = action_give_inventory::get_active_inventory_panel();
 	if (active_panel)
 	{
-		inventory_selected_uuids = active_panel->getRootFolder()->getSelectionList();
+		inventory_selected= active_panel->getRootFolder()->getSelectionList();
 	}
 
-	if (inventory_selected_uuids.empty())
+	if (inventory_selected.empty())
 	{
 		LLSidepanelInventory *sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 		if (sidepanel_inventory)
 		{
-			inventory_selected_uuids = sidepanel_inventory->getInboxSelectionList();
+			inventory_selected= sidepanel_inventory->getInboxSelectionList();
 		}
 	}
 
+	std::set<LLUUID> inventory_selected_uuids;
+	for (std::set<LLFolderViewItem*>::iterator it = inventory_selected.begin(), end_it = inventory_selected.end();
+		it != end_it;
+		++it)
+	{
+		inventory_selected_uuids.insert(static_cast<LLFolderViewModelItemInventory*>((*it)->getViewModelItem())->getUUID());
+	}
 	return inventory_selected_uuids;
 }
 
 //static
-void LLAvatarActions::shareWithAvatars()
+void LLAvatarActions::shareWithAvatars(LLView * panel)
 {
 	using namespace action_give_inventory;
 
-//	LLFloaterAvatarPicker* picker =
-//		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE);
+    LLFloater* root_floater = gFloaterView->getParentFloater(panel); //<FS:TM> CHUI merge LL new
+//	LLFloaterAvatarPicker* picker = 
+//		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE); //<FS:TM> CHUI merge old
+//		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE, FALSE, root_floater->getName()); //<FS:TM> CHUI merge LL new
 //	if (!picker)
 //	{
 //		return;
@@ -925,6 +944,11 @@ void LLAvatarActions::shareWithAvatars()
 	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable, idItems));
 // [/SL:KB]
 	picker->openFriendsTab();
+    
+    if (root_floater)
+    {
+        root_floater->addDependentFloater(picker);
+    }
 	LLNotificationsUtil::add("ShareNotification");
 }
 
@@ -943,15 +967,15 @@ bool LLAvatarActions::canShareSelectedItems(LLInventoryPanel* inv_panel /* = NUL
 
 	// check selection in the panel
 	LLFolderView* root_folder = inv_panel->getRootFolder();
-	const std::set<LLUUID> inventory_selected_uuids = root_folder->getSelectionList();
-	if (inventory_selected_uuids.empty()) return false; // nothing selected
+	const std::set<LLFolderViewItem*> inventory_selected = root_folder->getSelectionList();
+	if (inventory_selected.empty()) return false; // nothing selected
 
 	bool can_share = true;
-	std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
-	const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
+	std::set<LLFolderViewItem*>::const_iterator it = inventory_selected.begin();
+	const std::set<LLFolderViewItem*>::const_iterator it_end = inventory_selected.end();
 	for (; it != it_end; ++it)
 	{
-		LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
+		LLViewerInventoryCategory* inv_cat = gInventory.getCategory(static_cast<LLFolderViewModelItemInventory*>((*it)->getViewModelItem())->getUUID());
 		// any category can be offered.
 		if (inv_cat)
 		{
@@ -959,9 +983,9 @@ bool LLAvatarActions::canShareSelectedItems(LLInventoryPanel* inv_panel /* = NUL
 		}
 
 		// check if inventory item can be given
-		LLFolderViewItem* item = root_folder->getItemByID(*it);
+		LLFolderViewItem* item = *it;
 		if (!item) return false;
-		LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(item->getListener());
+		LLInvFVBridge* bridge = dynamic_cast<LLInvFVBridge*>(item->getViewModelItem());
 		if (bridge && bridge->canShare())
 		{
 			continue;
@@ -990,6 +1014,26 @@ void LLAvatarActions::toggleBlock(const LLUUID& id)
 	else
 	{
 		LLMuteList::getInstance()->add(mute);
+	}
+}
+
+// static
+void LLAvatarActions::toggleMuteVoice(const LLUUID& id)
+{
+	std::string name;
+	gCacheName->getFullName(id, name); // needed for mute
+
+	LLMuteList* mute_list = LLMuteList::getInstance();
+	bool is_muted = mute_list->isMuted(id, LLMute::flagVoiceChat);
+
+	LLMute mute(id, name, LLMute::AGENT);
+	if (!is_muted)
+	{
+		mute_list->add(mute, LLMute::flagVoiceChat);
+	}
+	else
+	{
+		mute_list->remove(mute, LLMute::flagVoiceChat);
 	}
 }
 
@@ -1036,6 +1080,33 @@ void LLAvatarActions::inviteToGroup(const LLUUID& id)
 	}
 }
 
+// static
+void LLAvatarActions::viewChatHistory(const LLUUID& id)
+{
+	const std::vector<LLConversation>& conversations = LLConversationLog::instance().getConversations();
+	std::vector<LLConversation>::const_iterator iter = conversations.begin();
+
+	for (; iter != conversations.end(); ++iter)
+	{
+		if (iter->getParticipantID() == id)
+		{
+			LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
+			return;
+		}
+	}
+
+	if (LLLogChat::isTranscriptExist(id))
+	{
+		LLAvatarName avatar_name;
+		LLSD extended_id(id);
+
+		LLAvatarNameCache::get(id, &avatar_name);
+		extended_id[LL_FCP_COMPLETE_NAME] = avatar_name.getCompleteName();
+		extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
+		LLFloaterReg::showInstance("preview_conversation", extended_id, true);
+	}
+}
+
 //== private methods ========================================================================================
 
 // static
@@ -1078,7 +1149,7 @@ bool LLAvatarActions::handlePay(const LLSD& notification, const LLSD& response, 
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
-		gAgent.clearBusy();
+		gAgent.setDoNotDisturb(false);
 	}
 
 	LLFloaterPayUtil::payDirectly(&give_money, avatar_id, /*is_group=*/false);
@@ -1186,7 +1257,6 @@ void LLAvatarActions::requestFriendship(const LLUUID& target_id, const std::stri
 
 	LLSD payload;
 	payload["from_id"] = target_id;
-	payload["SUPPRESS_TOAST"] = true;
 	LLNotificationsUtil::add("FriendshipOffered", args, payload);
 }
 
@@ -1202,6 +1272,12 @@ bool LLAvatarActions::isBlocked(const LLUUID& id)
 	std::string name;
 	gCacheName->getFullName(id, name); // needed for mute
 	return LLMuteList::getInstance()->isMuted(id, name);
+}
+
+// static
+bool LLAvatarActions::isVoiceMuted(const LLUUID& id)
+{
+	return LLMuteList::getInstance()->isMuted(id, LLMute::flagVoiceChat);
 }
 
 // static

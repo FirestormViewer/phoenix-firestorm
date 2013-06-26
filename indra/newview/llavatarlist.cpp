@@ -46,6 +46,7 @@
 #include "lluuid.h"
 #include "llvoiceclient.h"
 #include "llviewercontrol.h"	// for gSavedSettings
+#include "lltooldraganddrop.h"
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -476,7 +477,7 @@ void LLAvatarList::refresh()
 		LLAvatarName av_name;
 		have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
 
-		if (!have_filter || findInsensitive(av_name.mDisplayName, mNameFilter))
+		if (!have_filter || findInsensitive(av_name.getDisplayName(), mNameFilter))
 		{
 			if (nadded >= ADD_LIMIT)
 			{
@@ -487,9 +488,22 @@ void LLAvatarList::refresh()
 			{
 				// *NOTE: If you change the UI to show a different string,
 				// be sure to change the filter code below.
+				
+				// <FS:TM> CHUI merge LL old begin v
+				//if (LLRecentPeople::instance().isAvalineCaller(buddy_id))
+				//{
+				//	const LLSD& call_data = LLRecentPeople::instance().getData(buddy_id);
+				//	addAvalineItem(buddy_id, call_data["session_id"].asUUID(), call_data["call_number"].asString());
+				//}
+				//else
+				//{
+				// <FS:TM CHUI merge old end ^
+				
+				//	std::string display_name = av_name.getDisplayName(); <FS:TM> CHUI merge new
 				addNewItem(buddy_id, 
-					       //av_name.mDisplayName.empty() ? waiting_str : av_name.mDisplayName,
-					       av_name.getCompleteName(),
+						//display_name.empty() ? waiting_str : display_name,  <FS:TM> CHUI merge new
+					       //av_name.mDisplayName.empty() ? waiting_str : av_name.mDisplayName, <FS:TM> CHUI merge old
+					       av_name.getCompleteName(), //<FS:TM> FS orig
 					       LLAvatarTracker::instance().isBuddyOnline(buddy_id));
 				modified = true;
 				nadded++;
@@ -515,7 +529,9 @@ void LLAvatarList::refresh()
 			const LLUUID& buddy_id = it->asUUID();
 			LLAvatarName av_name;
 			have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
-			if (!findInsensitive(av_name.getCompleteName(), mNameFilter))
+			//if (!findInsensitive(av_name.mDisplayName, mNameFilter)) <FS:TM> CHUI merge old
+			//if (!findInsensitive(av_name.getDisplayName(), mNameFilter)) <FS:TM> CHUI merge new
+			if (!findInsensitive(av_name.getCompleteName(), mNameFilter)) // <FS:TM> FS orig
 			{
 				removeItemByUUID(buddy_id);
 				modified = true;
@@ -588,7 +604,7 @@ bool LLAvatarList::filterHasMatches()
 		// If name has not been loaded yet we consider it as a match.
 		// When the name will be loaded the filter will be applied again(in refresh()).
 
-		if (have_name && !findInsensitive(av_name.mDisplayName, mNameFilter))
+		if (have_name && !findInsensitive(av_name.getDisplayName(), mNameFilter))
 		{
 			continue;
 		}
@@ -616,6 +632,7 @@ S32 LLAvatarList::notifyParent(const LLSD& info)
 		sort();
 		return 1;
 	}
+// <FS:TM> CHUI Merge check
 // [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	else if ( (info.has("select")) && (info["select"].isUUID()) )
 	{
@@ -696,6 +713,57 @@ BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		getSelectedUUIDs(selected_uuids);
 		mContextMenu->show(this, selected_uuids, x, y);
 	}
+	return handled;
+}
+
+BOOL LLAvatarList::handleMouseDown(S32 x, S32 y, MASK mask)
+{
+	gFocusMgr.setMouseCapture(this);
+
+	S32 screen_x;
+	S32 screen_y;
+	localPointToScreen(x, y, &screen_x, &screen_y);
+	LLToolDragAndDrop::getInstance()->setDragStart(screen_x, screen_y);
+
+	return LLFlatListViewEx::handleMouseDown(x, y, mask);
+}
+
+BOOL LLAvatarList::handleMouseUp( S32 x, S32 y, MASK mask )
+{
+	if(hasMouseCapture())
+	{
+		gFocusMgr.setMouseCapture(NULL);
+	}
+
+	return LLFlatListViewEx::handleMouseUp(x, y, mask);
+}
+
+BOOL LLAvatarList::handleHover(S32 x, S32 y, MASK mask)
+{
+	bool handled = hasMouseCapture();
+	if(handled)
+	{
+		S32 screen_x;
+		S32 screen_y;
+		localPointToScreen(x, y, &screen_x, &screen_y);
+
+		if(LLToolDragAndDrop::getInstance()->isOverThreshold(screen_x, screen_y))
+		{
+			// First, create the global drag and drop object
+			std::vector<EDragAndDropType> types;
+			uuid_vec_t cargo_ids;
+			getSelectedUUIDs(cargo_ids);
+			types.resize(cargo_ids.size(), DAD_PERSON);
+			LLToolDragAndDrop::ESource src = LLToolDragAndDrop::SOURCE_PEOPLE;
+			LLToolDragAndDrop::getInstance()->beginMultiDrag(types, cargo_ids, src);
+		}
+	}
+
+	if(!handled)
+	{
+		handled = LLFlatListViewEx::handleHover(x, y, mask);
+	}
+
 	return handled;
 }
 

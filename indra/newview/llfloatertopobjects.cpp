@@ -213,17 +213,9 @@ void LLFloaterTopObjects::handleReply(LLMessageSystem *msg, void** data)
 		// Owner names can have trailing spaces sent from server
 		LLStringUtil::trim(owner_buf);
 		
-		if (LLAvatarNameCache::useDisplayNames())
-		{
-			// ...convert hard-coded name from server to a username
-			// *TODO: Send owner_id from server and look up display name
-			owner_buf = LLCacheName::buildUsername(owner_buf);
-		}
-		else
-		{
-			// ...just strip out legacy "Resident" name
-			owner_buf = LLCacheName::cleanFullName(owner_buf);
-		}
+		// *TODO: Send owner_id from server and look up display name
+		owner_buf = LLCacheName::buildUsername(owner_buf);
+
 		columns[column_num]["column"] = "owner";
 		columns[column_num]["value"] = owner_buf;
 		columns[column_num++]["font"] = "SANSSERIF";
@@ -312,7 +304,7 @@ void LLFloaterTopObjects::updateSelectionInfo()
 	LLAvatarName av_name;
 	if (LLAvatarNameCache::get(object_id, &av_name))
 	{
-		bool isAvatar = (av_name.mDisplayName != OBJECT_NOT_AVATAR_NAME);
+		bool isAvatar = (av_name.getDisplayName() != OBJECT_NOT_AVATAR_NAME);
 		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
 		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar && object_id != gAgentID);
 	}
@@ -604,7 +596,7 @@ void LLFloaterTopObjects::onAvatarCheck(const LLUUID& avatar_id, LLAvatarName av
 
 	if (first_selected->getUUID() == avatar_id)
 	{
-		bool isAvatar = (av_name.mDisplayName != OBJECT_NOT_AVATAR_NAME);
+		bool isAvatar = (av_name.getDisplayName() != OBJECT_NOT_AVATAR_NAME);
 		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
 		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar && avatar_id != gAgentID);
 	}

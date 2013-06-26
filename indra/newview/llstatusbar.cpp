@@ -109,7 +109,6 @@
 #include "llviewernetwork.h"
 #endif // OPENSIM
 // </FS:CR>
-
 //
 // Globals
 //

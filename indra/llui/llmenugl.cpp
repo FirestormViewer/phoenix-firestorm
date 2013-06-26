@@ -589,48 +589,32 @@ void LLMenuItemSeparatorGL::draw( void )
 BOOL LLMenuItemSeparatorGL::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	LLMenuGL* parent_menu = getMenu();
-// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
-	LLMenuItemGL* menu_item = (parent_menu) ? parent_menu->getHighlightedItem() : NULL;
-	if ( (menu_item) && (this != menu_item) )
+	if (y > getRect().getHeight() / 2)
 	{
-		return menu_item->handleMouseDown(x, y, mask);
+		// the menu items are in the child list in bottom up order
+		LLView* prev_menu_item = parent_menu->findNextSibling(this);
+		return (prev_menu_item && prev_menu_item->getVisible() && prev_menu_item->getEnabled()) ? prev_menu_item->handleMouseDown(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
 	}
-	return LLMenuItemGL::handleMouseDown(x, y, mask);
-// [/SL:KB]
-//	if (y > getRect().getHeight() / 2)
-//	{
-//		// the menu items are in the child list in bottom up order
-//		LLView* prev_menu_item = parent_menu->findNextSibling(this);
-//		return prev_menu_item ? prev_menu_item->handleMouseDown(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
-//	}
-//	else
-//	{
-//		LLView* next_menu_item = parent_menu->findPrevSibling(this);
-//		return next_menu_item ? next_menu_item->handleMouseDown(x, 0, mask) : FALSE;
-//	}
+	else
+	{
+		LLView* next_menu_item = parent_menu->findPrevSibling(this);
+		return (next_menu_item && next_menu_item->getVisible() && next_menu_item->getEnabled()) ? next_menu_item->handleMouseDown(x, 0, mask) : FALSE;
+	}
 }
 
 BOOL LLMenuItemSeparatorGL::handleMouseUp(S32 x, S32 y, MASK mask) 
 {
 	LLMenuGL* parent_menu = getMenu();
-// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
-	LLMenuItemGL* menu_item = (parent_menu) ? parent_menu->getHighlightedItem() : NULL;
-	if ( (menu_item) && (this != menu_item) )
+	if (y > getRect().getHeight() / 2)
 	{
-		return menu_item->handleMouseUp(x, y, mask);
+		LLView* prev_menu_item = parent_menu->findNextSibling(this);
+		return (prev_menu_item && prev_menu_item->getVisible() && prev_menu_item->getEnabled()) ? prev_menu_item->handleMouseUp(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
 	}
-	return LLMenuItemGL::handleMouseUp(x, y, mask);
-// [/SL:KB]
-//	if (y > getRect().getHeight() / 2)
-//	{
-//		LLView* prev_menu_item = parent_menu->findNextSibling(this);
-//		return prev_menu_item ? prev_menu_item->handleMouseUp(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
-//	}
-//	else
-//	{
-//		LLView* next_menu_item = parent_menu->findPrevSibling(this);
-//		return next_menu_item ? next_menu_item->handleMouseUp(x, 0, mask) : FALSE;
-//	}
+	else
+	{
+		LLView* next_menu_item = parent_menu->findPrevSibling(this);
+		return (next_menu_item && next_menu_item->getVisible() && next_menu_item->getEnabled()) ? next_menu_item->handleMouseUp(x, 0, mask) : FALSE;
+	}
 }
 
 BOOL LLMenuItemSeparatorGL::handleHover(S32 x, S32 y, MASK mask) 
@@ -1767,35 +1751,50 @@ void LLMenuGL::setCanTearOff(BOOL tear_off)
 
 bool LLMenuGL::addChild(LLView* view, S32 tab_group)
 {
-	if (LLMenuGL* menup = dynamic_cast<LLMenuGL*>(view))
+	LLMenuGL* menup = dynamic_cast<LLMenuGL*>(view);
+	if (menup)
 	{
-		appendMenu(menup);
-		return true;
+		return appendMenu(menup);
 	}
-	else if (LLMenuItemGL* itemp = dynamic_cast<LLMenuItemGL*>(view))
+	
+	LLMenuItemGL* itemp = dynamic_cast<LLMenuItemGL*>(view);
+	if (itemp)
 	{
-		append(itemp);
-		return true;
+		return append(itemp);
 	}
+	
 	return false;
 }
 
 // Used in LLContextMenu and in LLTogleableMenu
-// to add an item of context menu branch
+
+// Add an item to the context menu branch
 bool LLMenuGL::addContextChild(LLView* view, S32 tab_group)
 {
 	LLContextMenu* context = dynamic_cast<LLContextMenu*>(view);
 	if (context)
+	{
 		return appendContextSubMenu(context);
+	}
 
 	LLMenuItemSeparatorGL* separator = dynamic_cast<LLMenuItemSeparatorGL*>(view);
 	if (separator)
+	{
 		return append(separator);
+	}
 
 	LLMenuItemGL* item = dynamic_cast<LLMenuItemGL*>(view);
 	if (item)
+	{
 		return append(item);
-
+	}
+	
+	LLMenuGL* menup = dynamic_cast<LLMenuGL*>(view);
+	if (menup)
+	{
+		return appendMenu(menup);
+	}
+	
 	return false;
 }
 
@@ -2465,6 +2464,56 @@ void LLMenuGL::empty( void )
 	deleteAllChildren();
 }
 
+// erase group of items from menu
+void LLMenuGL::erase( S32 begin, S32 end, bool arrange/* = true*/)
+{
+	S32 items = mItems.size();
+
+	if ( items == 0 || begin >= end || begin < 0 || end > items )
+	{
+		return;
+	}
+
+	item_list_t::iterator start_position = mItems.begin();
+	std::advance(start_position, begin);
+
+	item_list_t::iterator end_position = mItems.begin();
+	std::advance(end_position, end);
+
+	for (item_list_t::iterator position_iter = start_position; position_iter != end_position; position_iter++)
+	{
+		LLUICtrl::removeChild(*position_iter);
+	}
+
+	mItems.erase(start_position, end_position);
+
+	if (arrange)
+	{
+		needsArrange();
+	}
+}
+
+// add new item at position
+void LLMenuGL::insert( S32 position, LLView * ctrl, bool arrange /*= true*/ )
+{
+	LLMenuItemGL * item = dynamic_cast<LLMenuItemGL *>(ctrl);
+
+	if (NULL == item || position < 0 || position >= mItems.size())
+	{
+		return;
+	}
+
+	item_list_t::iterator position_iter = mItems.begin();
+	std::advance(position_iter, position);
+	mItems.insert(position_iter, item);
+	LLUICtrl::addChild(item);
+
+	if (arrange)
+	{
+		needsArrange();
+	}
+}
+
 // Adjust rectangle of the menu
 void LLMenuGL::setLeftAndBottom(S32 left, S32 bottom)
 {
@@ -2506,7 +2555,8 @@ BOOL LLMenuGL::append( LLMenuItemGL* item )
 // add a separator to this menu
 BOOL LLMenuGL::addSeparator()
 {
-	LLMenuItemGL* separator = new LLMenuItemSeparatorGL();
+	LLMenuItemSeparatorGL::Params p;
+	LLMenuItemGL* separator = LLUICtrlFactory::create<LLMenuItemSeparatorGL>(p);
 	return addChild(separator);
 }
 
@@ -2731,35 +2781,21 @@ LLMenuItemGL* LLMenuGL::highlightNextItem(LLMenuItemGL* cur_item, BOOL skip_disa
 	while(1)
 	{
 		// skip separators and disabled/invisible items
-// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
-		bool fCanHighlight = ((*next_item_iter)->getVisible()) && (!dynamic_cast<LLMenuItemSeparatorGL*>(*next_item_iter));
-		if ( (fCanHighlight) && ((*next_item_iter)->getEnabled()) )
+		if ((*next_item_iter)->getEnabled() && (*next_item_iter)->getVisible() && !dynamic_cast<LLMenuItemSeparatorGL*>(*next_item_iter))
 		{
+			if (cur_item)
+			{
+				cur_item->setHighlight(FALSE);
+			}
 			(*next_item_iter)->setHighlight(TRUE);
 			return (*next_item_iter);
 		}
 
-		// We always want to skip invisible items and separators so only break if it was actually disabled
-		if ( ((!skip_disabled) && (fCanHighlight)) || (next_item_iter == cur_item_iter) )
+
+		if (!skip_disabled || next_item_iter == cur_item_iter)
 		{
 			break;
 		}
-// [/SL:KB]
-//		if ((*next_item_iter)->getEnabled() && (*next_item_iter)->getVisible() && !dynamic_cast<LLMenuItemSeparatorGL*>(*next_item_iter))
-//		{
-//			if (cur_item)
-//			{
-//				cur_item->setHighlight(FALSE);
-//			}
-//			(*next_item_iter)->setHighlight(TRUE);
-//			return (*next_item_iter);
-//		}
-//
-//
-//		if (!skip_disabled || next_item_iter == cur_item_iter)
-//		{
-//			break;
-//		}
 
 		next_item_iter++;
 		if (next_item_iter == mItems.end())
@@ -2835,30 +2871,16 @@ LLMenuItemGL* LLMenuGL::highlightPrevItem(LLMenuItemGL* cur_item, BOOL skip_disa
 	while(1)
 	{
 		// skip separators and disabled/invisible items
-// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
-		bool fCanHighlight = ((*prev_item_iter)->getVisible()) && (!dynamic_cast<LLMenuItemSeparatorGL*>(*prev_item_iter));
-		if ( (fCanHighlight) && ((*prev_item_iter)->getEnabled()) )
+		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && (*prev_item_iter)->getName() != SEPARATOR_NAME)
 		{
 			(*prev_item_iter)->setHighlight(TRUE);
 			return (*prev_item_iter);
 		}
 
-		// We always want to skip invisible items and separators (unless the iterator round-tripped)
-		if ( ((!skip_disabled) && (fCanHighlight)) || (prev_item_iter == cur_item_iter) )
+		if (!skip_disabled || prev_item_iter == cur_item_iter)
 		{
 			break;
 		}
-// [/SL:KB]
-//		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && (*prev_item_iter)->getName() != SEPARATOR_NAME)
-//		{
-//			(*prev_item_iter)->setHighlight(TRUE);
-//			return (*prev_item_iter);
-//		}
-//
-//		if (!skip_disabled || prev_item_iter == cur_item_iter)
-//		{
-//			break;
-//		}
 
 		prev_item_iter++;
 		if (prev_item_iter == mItems.rend())
@@ -3127,7 +3149,17 @@ void LLMenuGL::showPopup(LLView* spawning_view, LLMenuGL* menu, S32 x, S32 y)
 	const S32 CURSOR_HEIGHT = 22;		// Approximate "normal" cursor size
 	const S32 CURSOR_WIDTH = 12;
 
-	if(menu->getChildList()->empty())
+	//Do not show menu if all menu items are disabled
+	BOOL item_enabled = false;
+	for (LLView::child_list_t::const_iterator itor = menu->getChildList()->begin();
+			 itor != menu->getChildList()->end();
+			 ++itor)
+	{
+		LLView *menu_item = (*itor);
+		item_enabled = item_enabled || menu_item->getEnabled();
+	}
+
+	if(menu->getChildList()->empty() || !item_enabled)
 	{
 		return;
 	}
@@ -4124,11 +4156,6 @@ BOOL LLContextMenu::handleRightMouseUp( S32 x, S32 y, MASK mask )
 	mHoveredAnyItem = FALSE;
 	
 	return result;
-}
-
-void LLContextMenu::draw()
-{
-	LLMenuGL::draw();
 }
 
 bool LLContextMenu::addChild(LLView* view, S32 tab_group)

@@ -69,8 +69,11 @@ class LLVoiceVisualizer;
 class LLHUDNameTag;
 class LLHUDEffectSpiral;
 class LLTexGlobalColor;
-class LLViewerJoint;
+struct LLVOAvatarBoneInfo;
+struct LLVOAvatarChildJoint;
+//class LLViewerJoint;
 struct LLAppearanceMessageContents;
+struct LLVOAvatarSkeletonInfo;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // LLVOAvatar
@@ -245,7 +248,7 @@ public:
 	void 			idleUpdateWindEffect();
 	void 			idleUpdateNameTag(const LLVector3& root_pos_last);
 	void			idleUpdateNameTagText(BOOL new_name);
-	LLVector3		idleUpdateNameTagPosition(const LLVector3& root_pos_last);
+	void			idleUpdateNameTagPosition(const LLVector3& root_pos_last);
 	void			idleUpdateNameTagAlpha(BOOL new_name, F32 alpha);
 	// <FS:CR> Colorize tags
 	//LLColor4		getNameTagColor(bool is_friend);
@@ -361,6 +364,8 @@ public:
 	F32					mLastPelvisToFoot;
 	F32					mPelvisFixup;
 	F32					mLastPelvisFixup;
+	LLVector3			mCurRootToHeadOffset;
+	LLVector3			mTargetRootToHeadOffset;
 
 	S32					mLastSkeletonSerialNum;
 
@@ -381,7 +386,6 @@ public:
 	U32 		renderRigid();
 	U32 		renderSkinned(EAvatarRenderPass pass);
 	F32			getLastSkinTime() { return mLastSkinTime; }
-	U32			renderSkinnedAttachments();
 	U32 		renderTransparent(BOOL first_pass);
 	void 		renderCollisionVolumes();
 	static void	deleteCachedImages(bool clearAll=true);
@@ -545,7 +549,7 @@ protected:
 	//--------------------------------------------------------------------
 protected:
 	virtual void	setLocalTexture(LLAvatarAppearanceDefines::ETextureIndex type, LLViewerTexture* tex, BOOL baked_version_exits, U32 index = 0);
-	virtual void	addLocalTextureStats(LLAvatarAppearanceDefines::ETextureIndex type, LLViewerFetchedTexture* imagep, F32 texel_area_ratio, BOOL rendered, BOOL covered_by_baked, U32 index = 0);
+	virtual void	addLocalTextureStats(LLAvatarAppearanceDefines::ETextureIndex type, LLViewerFetchedTexture* imagep, F32 texel_area_ratio, BOOL rendered, BOOL covered_by_baked);
 	// MULTI-WEARABLE: make self-only?
 	virtual void	setBakedReady(LLAvatarAppearanceDefines::ETextureIndex type, BOOL baked_version_exists, U32 index = 0);
 
@@ -726,7 +730,6 @@ public:
 public:
 	BOOL 				hasHUDAttachment() const;
 	LLBBox 				getHUDBBox() const;
-	void 				rebuildHUD();
 	void 				resetHUDAttachments();
 	BOOL				canAttachMoreObjects() const;
 	BOOL				canAttachMoreObjects(U32 n) const;
@@ -870,12 +873,12 @@ protected:
 	static void		getAnimLabels(LLDynamicArray<std::string>* labels);
 	static void		getAnimNames(LLDynamicArray<std::string>* names);	
 private:
-	std::string		mNameString;		// UTF-8 title + name + status
+    bool            mNameIsSet;
 	LLSD			mClientTagData;
 	bool			mHasClientTagColor;
 	std::string  	mTitle;
 	bool	  		mNameAway;
-	bool	  		mNameBusy;
+	bool	  		mNameDoNotDisturb;
 	bool	  		mNameMute;
 	bool      		mNameAppearance;
 	bool			mNameFriend;
@@ -980,6 +983,17 @@ public:
 protected:
 	LLFrameTimer	mRuthDebugTimer; // For tracking how long it takes for av to rez
 	LLFrameTimer	mDebugExistenceTimer; // Debugging for how long the avatar has been in memory.
+
+	//--------------------------------------------------------------------
+	// COF monitoring
+	//--------------------------------------------------------------------
+
+public:
+	// COF version of last viewer-initiated appearance update request. For non-self avs, this will remain at default.
+	S32 mLastUpdateRequestCOFVersion;
+
+	// COF version of last appearance message received for this av.
+	S32 mLastUpdateReceivedCOFVersion;
 
 /**                    Diagnostics
  **                                                                            **

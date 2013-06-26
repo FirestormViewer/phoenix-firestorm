@@ -1414,7 +1414,7 @@
      follows="left|top"
      height="16"
      increment="0.01"
-     initial_value="0.5"
+     initial_value="0.95"
      layout="topleft"
      label_width="115"
      label="Inactive:"

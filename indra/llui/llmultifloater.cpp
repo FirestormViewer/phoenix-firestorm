@@ -31,7 +31,7 @@
 
 #include "llmultifloater.h"
 #include "llresizehandle.h"
-#include "lldraghandle.h"
+//#include "lldraghandle.h" <FS:TM> CHUI Merge Check
 
 //
 // LLMultiFloater
@@ -42,8 +42,8 @@ LLMultiFloater::LLMultiFloater(const LLSD& key, const LLFloater::Params& params)
 	  mTabContainer(NULL),
 	  mTabPos(LLTabContainer::TOP),
 	  mAutoResize(TRUE),
-	  mOrigMinWidth(0),
-	  mOrigMinHeight(0)
+	  mOrigMinWidth(params.min_width),
+	  mOrigMinHeight(params.min_height)
 {
 }
 
@@ -55,20 +55,12 @@ void LLMultiFloater::buildTabContainer()
 	LLTabContainer::Params p;
 	p.name(std::string("Preview Tabs"));
 	p.rect(LLRect(LLPANEL_BORDER_WIDTH, getRect().getHeight() - floater_header_size, getRect().getWidth() - LLPANEL_BORDER_WIDTH, 0));
-	p.follows.flags(FOLLOWS_ALL);
-	// <FS> Update torn off status and add title bar
-	//p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
 	p.tab_position(mTabPos);
-	
-	// remove existing tab container
-	if (mTabContainer)
-	{
-		removeChild(mTabContainer);
-		delete mTabContainer;
-		mTabContainer = NULL;
-	}
-	
-	addChild(LLUICtrlFactory::create<LLTabContainer>(p));
+	p.follows.flags(FOLLOWS_ALL);
+	p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
+
+	mTabContainer = LLUICtrlFactory::create<LLTabContainer>(p);
+	addChild(mTabContainer);
 	
 	if (isResizable())
 	{
@@ -129,15 +121,8 @@ void LLMultiFloater::growToFit(S32 content_width, S32 content_height)
 	static LLUICachedControl<S32> tabcntr_close_btn_size ("UITabCntrCloseBtnSize", 0);
 	const LLFloater::Params& default_params = LLFloater::getDefaultParams();
 	S32 floater_header_size = default_params.header_height;
-	S32 tabcntr_header_height =
-		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
-		?0
-		:(LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size));
-	S32 tabcntr_header_width =
-		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
-		?mTabContainer->getMinTabWidth()
-		:0);
-	S32 new_width = llmax(getRect().getWidth(), content_width + LLPANEL_BORDER_WIDTH * 2 + tabcntr_header_width);
+	S32 tabcntr_header_height = LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size;
+	S32 new_width = llmax(getRect().getWidth(), content_width + LLPANEL_BORDER_WIDTH * 2);
 	S32 new_height = llmax(getRect().getHeight(), content_height + floater_header_size + tabcntr_header_height);
 
     if (isMinimized())
@@ -189,7 +174,7 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	else if (floaterp->getHost())
 	{
 		// floaterp is hosted by somebody else and
-		// this is adding it, so remove it from it's old host
+		// this is adding it, so remove it from its old host
 		floaterp->getHost()->removeFloater(floaterp);
 	}
 	else if (floaterp->getParent() == gFloaterView)
@@ -204,20 +189,14 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floater_data.mHeight = floaterp->getRect().getHeight();
 	floater_data.mCanMinimize = floaterp->isMinimizeable();
 	floater_data.mCanResize = floaterp->isResizable();
-
-	// <FS> Update torn off status and add title bar
-	floaterp->getDragHandle()->setTitleVisible(FALSE);
-	LLRect rect = floaterp->getRect();
-	rect.mTop -= floaterp->getHeaderHeight();
-	floaterp->setRect(rect);
-	// </FS>
+    floater_data.mSaveRect = floaterp->mSaveRect;
 
 	// remove minimize and close buttons
 	floaterp->setCanMinimize(FALSE);
 	floaterp->setCanResize(FALSE);
 	floaterp->setCanDrag(FALSE);
-	// <FS:Zi> Fixed edge case where hosted floates changed size on tear-off if user logged out inbetween
-	//floaterp->storeRectControl();
+	floaterp->mSaveRect = FALSE;
+	floaterp->storeRectControl();
 	// avoid double rendering of floater background (makes it more opaque)
 	floaterp->setBackgroundVisible(FALSE);
 
@@ -262,13 +241,6 @@ void LLMultiFloater::updateFloaterTitle(LLFloater* floaterp)
 	if (index != -1)
 	{
 		mTabContainer->setPanelTitle(index, floaterp->getShortTitle());
-		// If the tab we're updating is the current tab, then 
-		//  update the overall title too, since we're showing it
-		//  exclusively now. -- TS
-		if (floaterp == mTabContainer->getCurrentPanel())
-		{
-			mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
-		}
 	}
 }
 
@@ -317,18 +289,12 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	if (!floaterp || floaterp->getHost() != this )
 		return;
 
-	// <FS> Update torn off status and add title bar
-	floaterp->getDragHandle()->setTitleVisible(TRUE);
-	LLRect rect = floaterp->getRect();
-	rect.mTop += floaterp->getHeaderHeight();
-	floaterp->setRect(rect);
-	// </FS>
-	
 	floater_data_map_t::iterator found_data_it = mFloaterDataMap.find(floaterp->getHandle());
 	if (found_data_it != mFloaterDataMap.end())
 	{
 		LLFloaterData& floater_data = found_data_it->second;
 		floaterp->setCanMinimize(floater_data.mCanMinimize);
+		floaterp->mSaveRect = floater_data.mSaveRect;
 		if (!floater_data.mCanResize)
 		{
 			// restore original size
@@ -472,21 +438,8 @@ void LLMultiFloater::onTabSelected()
 	if (floaterp)
 	{
 		tabOpen(floaterp, true);
-		// <FS> Update torn off status and add title bar
-		mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
 	}
 }
-
-// <FS> Update torn off status and add title bar
-void LLMultiFloater::setTabContainer(LLTabContainer* tab_container)
-{
-	if (!mTabContainer)
-	{
-		mTabContainer = tab_container;
-		mTabContainer->setCommitCallback(boost::bind(&LLMultiFloater::onTabSelected, this));
-	}
-}
-// </FS>
 
 void LLMultiFloater::setCanResize(BOOL can_resize)
 {
@@ -514,9 +467,7 @@ BOOL LLMultiFloater::postBuild()
 		return TRUE;
 	}
 
-	// <FS> Update torn off status and add title bar
-	//mTabContainer = getChild<LLTabContainer>("Preview Tabs");
-	setTabContainer(getChild<LLTabContainer>("Preview Tabs"));
+	mTabContainer = getChild<LLTabContainer>("Preview Tabs");
 	
 	setCanResize(mResizable);
 	return TRUE;
@@ -524,30 +475,12 @@ BOOL LLMultiFloater::postBuild()
 
 void LLMultiFloater::updateResizeLimits()
 {
-	static LLUICachedControl<S32> tabcntr_close_btn_size ("UITabCntrCloseBtnSize", 0);
-	const LLFloater::Params& default_params = LLFloater::getDefaultParams();
-	S32 floater_header_size = default_params.header_height;
-	S32 tabcntr_header_height =
-		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
-		?0
-		:(LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size));
-	S32 tabcntr_header_width =
-		((mTabContainer->getTabPosition() == LLTabContainer::LEFT)
-		?mTabContainer->getMinTabWidth()
-		:0);
 	// initialize minimum size constraint to the original xml values.
 	S32 new_min_width = mOrigMinWidth;
 	S32 new_min_height = mOrigMinHeight;
-	// possibly increase minimum size constraint due to children's minimums.
-	for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
-	{
-		LLFloater* floaterp = (LLFloater*)mTabContainer->getPanelByIndex(tab_idx);
-		if (floaterp)
-		{
-			new_min_width = llmax(new_min_width, floaterp->getMinWidth() + tabcntr_header_width + LLPANEL_BORDER_WIDTH * 2);
-			new_min_height = llmax(new_min_height, floaterp->getMinHeight() + floater_header_size + tabcntr_header_height);
-		}
-	}
+
+	computeResizeLimits(new_min_width, new_min_height);
+
 	setResizeLimits(new_min_width, new_min_height);
 
 	S32 cur_height = getRect().getHeight();
@@ -571,5 +504,24 @@ void LLMultiFloater::updateResizeLimits()
 		// make sure this window is visible on screen when it has been modified
 		// (tab added, etc)
 		gFloaterView->adjustToFitScreen(this, TRUE);
+	}
+}
+
+void LLMultiFloater::computeResizeLimits(S32& new_min_width, S32& new_min_height)
+{
+	static LLUICachedControl<S32> tabcntr_close_btn_size ("UITabCntrCloseBtnSize", 0);
+	const LLFloater::Params& default_params = LLFloater::getDefaultParams();
+	S32 floater_header_size = default_params.header_height;
+	S32 tabcntr_header_height = LLPANEL_BORDER_WIDTH + tabcntr_close_btn_size;
+
+	// possibly increase minimum size constraint due to children's minimums.
+	for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+	{
+		LLFloater* floaterp = (LLFloater*)mTabContainer->getPanelByIndex(tab_idx);
+		if (floaterp)
+		{
+			new_min_width = llmax(new_min_width, floaterp->getMinWidth() + LLPANEL_BORDER_WIDTH * 2);
+			new_min_height = llmax(new_min_height, floaterp->getMinHeight() + floater_header_size + tabcntr_header_height);
+		}
 	}
 }

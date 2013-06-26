@@ -582,13 +582,13 @@ void LLHUDEffectLookAt::render()
 					name = nameBuffer.getCompleteName();
 					break;
 				case 2: // Display Name
-					name = nameBuffer.mDisplayName;
+					name = nameBuffer.getDisplayName();
 					break;
 				case 3: // First Last
 					name = nameBuffer.getLegacyName();
 					break;
 				default: //user.name
-					name = nameBuffer.mUsername;
+					name = nameBuffer.getUserName();
 					break;
 			}
 

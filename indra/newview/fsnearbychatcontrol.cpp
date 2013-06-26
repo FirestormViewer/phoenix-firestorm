@@ -47,7 +47,7 @@
 #include "llmenugl.h"
 #include "llviewermenu.h"//for gMenuHolder
 
-// #include "llnearbychathandler.h"
+#include "llfloaterimnearbychathandler.h"
 // #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 // #include "llchannelmanager.h"
 

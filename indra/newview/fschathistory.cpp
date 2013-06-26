@@ -542,8 +542,8 @@ public:
 	//void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type)
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type, std::string& group)
 	{
-		//mFrom = av_name.mDisplayName;
-		//mFrom = av_name.mDisplayName;
+		//mFrom = av_name.getDisplayName();
+		//mFrom = av_name.getDisplayName();
 		//if (chat_type == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
 		mFrom = "";
 		if (chat_type == CHAT_TYPE_IM || chat_type == CHAT_TYPE_IM_GROUP)
@@ -554,15 +554,15 @@ public:
 				mFrom += group;
 			}
 		}
-		mFrom += av_name.mDisplayName;
+		mFrom += av_name.getUserName();
 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 
 		LLTextBox* user_name = getChild<LLTextBox>("user_name");
 		user_name->setValue( LLSD(mFrom) );
-		user_name->setToolTip( av_name.mUsername );
+		user_name->setToolTip( av_name.getUserName() );
 
 		if (gSavedSettings.getBOOL("NameTagShowUsernames") && 
-			LLAvatarNameCache::useDisplayNames() ) //&&
+			LLAvatarName::useDisplayNames() ) //&&
 //			!av_name.mIsDisplayNameDefault)
 		{
 			LLStyle::Params style_params_name;
@@ -571,9 +571,9 @@ public:
 			style_params_name.font.name("SansSerifSmall");
 			style_params_name.font.style("NORMAL");
 			style_params_name.readonly_color(userNameColor);
-			user_name->appendText("  - " + av_name.mUsername, FALSE, style_params_name);
+			user_name->appendText("  - " + av_name.getUserName(), FALSE, style_params_name);
 		}
-		setToolTip( av_name.mUsername );
+		setToolTip( av_name.getUserName() );
 		// name might have changed, update width
 		updateMinUserNameWidth();
 	}
@@ -883,7 +883,7 @@ static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
 
 void FSChatHistory::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	mDisplayName = av_name.mDisplayName;
+	mDisplayName = av_name.getDisplayName();
 	mDisplayName_Username = av_name.getCompleteName();
 }
 

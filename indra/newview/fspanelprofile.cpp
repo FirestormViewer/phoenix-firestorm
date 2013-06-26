@@ -333,7 +333,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
         mGroupList->setShowNone(false);
         mGroupList->enableForAgent(false);
 
-        if (LLAvatarNameCache::useDisplayNames())
+        if (LLAvatarName::useDisplayNames())
         {
             mDisplayNameButton->setVisible( true );
             mDisplayNameButton->setEnabled( true );
@@ -771,7 +771,7 @@ void FSPanelProfile::onClickSetName()
 
 void FSPanelProfile::onAvatarNameCacheSetName(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	if (av_name.mDisplayName.empty())
+	if (av_name.getDisplayName().empty())
 	{
 		// something is wrong, tell user to try again later
 		LLNotificationsUtil::add("SetDisplayNameFailedGeneric");
@@ -858,10 +858,10 @@ void FSPanelProfileWeb::apply(LLAvatarData* data)
 void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     //[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
-    std::string username = av_name.mUsername;
+    std::string username = av_name.getUserName();
     if (username.empty())
     {
-        username = LLCacheName::buildUsername(av_name.mDisplayName);
+        username = LLCacheName::buildUsername(av_name.getDisplayName());
     }
 
     //[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser

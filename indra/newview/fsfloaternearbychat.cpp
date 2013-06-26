@@ -45,7 +45,6 @@
 #include "llmenugl.h"
 #include "llviewermenu.h"//for gMenuHolder
 
-#include "llnearbychathandler.h"
 // #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 #include "fsnearbychathub.h"
 #include "llchannelmanager.h"
@@ -535,12 +534,12 @@ void FSFloaterNearbyChat::loadHistory()
 		EIMType im_type = IM_TYPE_NONE; // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		const LLSD& msg = *it;
 
-		std::string from = msg[IM_FROM];
+		std::string from = msg[LL_IM_FROM];
 		std::string fromGroup = ""; // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		LLUUID from_id;
-		if (msg[IM_FROM_ID].isDefined())
+		if (msg[LL_IM_FROM_ID].isDefined())
 		{
-			from_id = msg[IM_FROM_ID].asUUID();
+			from_id = msg[LL_IM_FROM_ID].asUUID();
 		}
 		else
  		{
@@ -576,8 +575,8 @@ void FSFloaterNearbyChat::loadHistory()
 		LLChat chat;
 		chat.mFromName = from;
 		chat.mFromID = from_id;
-		chat.mText = msg[IM_TEXT].asString();
-		chat.mTimeStr = msg[IM_TIME].asString();
+		chat.mText = msg[LL_IM_TEXT].asString();
+		chat.mTimeStr = msg[LL_IM_TIME].asString();
 		chat.mChatStyle = CHAT_STYLE_HISTORY;
 
 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name

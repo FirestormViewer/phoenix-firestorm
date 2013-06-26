@@ -20,7 +20,6 @@
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
-#include "lltrans.h"
 #include "lluictrlfactory.h"
 #include "llversionviewer.h"
 #include "llviewerparcelmgr.h"
@@ -126,6 +125,15 @@ void RlvSettings::initClass()
 	}
 #endif // RLV_EXTENSION_STARTLOCATION
 
+// Checked: 2013-04-17 (RLVa-1.4.8)
+bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
+{
+	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isUsingServerBakes()) )
+	{
+		gAgentAvatarp->computeBodySize();
+	}
+	return true;
+}
 
 // Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
 bool RlvSettings::onChangedMenuLevel()
@@ -315,27 +323,21 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 		LLAvatarName avName;
 		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
 		{
-			const std::string& strAnonym = RlvStrings::getAnonym(avName.mDisplayName);
-
-			// NOTE: if the legacy first and last name are empty we get a legacy name of " " which would replace all spaces in the string
-			std::string strLegacyName;
-			if ( (fFilterLegacy) && (!avName.mLegacyFirstName.empty()) &&
-				 ((!avName.mIsDisplayNameDefault) || (LLCacheName::getDefaultLastName() == avName.mLegacyLastName)) )
-			{
-				strLegacyName = avName.getLegacyName();
-			}
+			const std::string& strDisplayName = avName.getDisplayName();
+			const std::string& strLegacyName = avName.getLegacyName();
+			const std::string& strAnonym = RlvStrings::getAnonym(avName);
 
 			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
-			if (boost::icontains(strLegacyName, avName.mDisplayName))
+			if (boost::icontains(strLegacyName, strDisplayName))
 			{
-				if (!strLegacyName.empty())
+				if (fFilterLegacy)
 					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
-				boost::ireplace_all(strUTF8Text, avName.mDisplayName, strAnonym);
+				boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
 			}
 			else
 			{
-				boost::ireplace_all(strUTF8Text, avName.mDisplayName, strAnonym);
-				if (!strLegacyName.empty())
+				boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
+				if (fFilterLegacy)
 					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
 			}
 		}
@@ -438,7 +440,7 @@ void RlvUtil::sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, con
 	LLAgentUI::buildFullname(strFullName);
 
 	pack_instant_message(gMessageSystem, gAgent.getID(), FALSE, gAgent.getSessionID(), idTo, strFullName,
-		strMsg, IM_ONLINE, IM_BUSY_AUTO_RESPONSE, idSession);
+		strMsg, IM_ONLINE, IM_DO_NOT_DISTURB_AUTO_RESPONSE, idSession);
 	gAgent.sendReliableMessage();
 }
 
@@ -479,7 +481,8 @@ bool rlvMenuToggleEnabled()
 	gSavedSettings.setBOOL(RLV_SETTING_MAIN, !rlv_handler_t::isEnabled());
 
 	LLSD args;
-	args["MESSAGE"] = (rlv_handler_t::isEnabled() ? LLTrans::getString("RlvDisabled") : LLTrans::getString("RlvEnabled"));
+	args["MESSAGE"] = 
+		llformat("RestrainedLove Support will be %s after you restart", (rlv_handler_t::isEnabled()) ? "disabled" : "enabled" );
 	LLNotificationsUtil::add("GenericAlert", args);
 	
 	return true;
@@ -624,7 +627,9 @@ bool rlvPredCanRemoveItem(const LLInventoryItem* pItem)
 				RLV_ASSERT(false);
 		}
 	}
-	return false;
+	// HACK-RLVa: Until LL supports temporary attachment detection assume that no inventory item means a temporary 
+	//            attachment which are always removeable
+	return true;
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a

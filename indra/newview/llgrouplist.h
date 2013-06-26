@@ -28,10 +28,13 @@
 #define LL_LLGROUPLIST_H
 
 #include "llevent.h"
+#include "llpointer.h"
+
 #include "llflatlistview.h"
 #include "llpanel.h"
-#include "llpointer.h"
 #include "llstyle.h"
+#include "lltoggleablemenu.h"
+
 #include "llgroupmgr.h"
 
 /**
@@ -47,8 +50,7 @@ class LLGroupList: public LLFlatListViewEx, public LLOldEvents::LLSimpleListener
 public:
 	struct Params : public LLInitParam::Block<Params, LLFlatListViewEx::Params>
 	{
-		Optional<bool>	for_agent;
-		Params();
+		Params(){};
 	};
 
 	LLGroupList(const Params& p);
@@ -67,6 +69,8 @@ public:
 	void setShowNone(bool show_none) { mShowNone = show_none; }
 	void setGroups(const std::map< std::string,LLUUID> group_list);
 
+	LLToggleableMenu* getContextMenu() const { return mContextMenuHandle.get(); }
+
 private:
 	void setDirty(bool val = true)		{ mDirty = val; }
 	void refresh();
@@ -78,7 +82,7 @@ private:
 	bool onContextMenuItemClick(const LLSD& userdata);
 	bool onContextMenuItemEnable(const LLSD& userdata);
 
-	LLHandle<LLView>	mContextMenuHandle;
+	LLHandle<LLToggleableMenu>	mContextMenuHandle;
 
 	bool mShowIcons;
 	bool mDirty;

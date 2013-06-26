@@ -107,17 +107,17 @@ void LLGroupList::enableForAgent(bool show_icons)
 	// Listen for agent group changes.
 	gAgent.addListener(this, "new group");
 
-    // Set up context menu.
-    LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-    LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+	// Set up context menu.
+	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 
-    registrar.add("People.Groups.Action",			boost::bind(&LLGroupList::onContextMenuItemClick,	this, _2));
-    enable_registrar.add("People.Groups.Enable",	boost::bind(&LLGroupList::onContextMenuItemEnable,	this, _2));
+	registrar.add("People.Groups.Action",			boost::bind(&LLGroupList::onContextMenuItemClick,	this, _2));
+	enable_registrar.add("People.Groups.Enable",	boost::bind(&LLGroupList::onContextMenuItemEnable,	this, _2));
 
-    LLMenuGL* context_menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_people_groups.xml",
-            gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-    if(context_menu)
-        mContextMenuHandle = context_menu->getHandle();
+	LLToggleableMenu* context_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_people_groups.xml",
+			gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	if(context_menu)
+		mContextMenuHandle = context_menu->getHandle();
 }
 
 // virtual
@@ -136,13 +136,13 @@ BOOL LLGroupList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
 	if (mForAgent)
 	{
-	LLMenuGL* context_menu = (LLMenuGL*)mContextMenuHandle.get();
-	if (context_menu && size() > 0)
-	{
-		context_menu->buildDrawLabels();
-		context_menu->updateParent(LLMenuGL::sMenuContainer);
-		LLMenuGL::showPopup(this, context_menu, x, y);
-	}
+		LLToggleableMenu* context_menu = mContextMenuHandle.get();
+		if (context_menu && size() > 0)
+		{
+			context_menu->buildDrawLabels();
+			context_menu->updateParent(LLMenuGL::sMenuContainer);
+			LLMenuGL::showPopup(this, context_menu, x, y);
+		}
 	}
 
 	return handled;
@@ -479,7 +479,7 @@ void LLGroupListItem::setActive(bool active)
 	// *BUG: setName() overrides the style params.
 
 	// Active group should be bold.
-	LLFontDescriptor new_desc(mGroupNameBox->getDefaultFont()->getFontDesc());
+	LLFontDescriptor new_desc(mGroupNameBox->getFont()->getFontDesc());
 
 	// *NOTE dzaporozhan
 	// On Windows LLFontGL::NORMAL will not remove LLFontGL::BOLD if font 

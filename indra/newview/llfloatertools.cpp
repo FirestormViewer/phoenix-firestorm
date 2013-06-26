@@ -797,7 +797,6 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	mRadioGroupEdit->setVisible( edit_visible );
 	//bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
 	static LLCachedControl<bool> linked_parts(gSavedSettings,  "EditLinkedParts");
-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
 	//getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
 
 	mBtnLink->setVisible(edit_visible);

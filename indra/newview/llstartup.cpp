@@ -55,7 +55,8 @@
 #include "llfocusmgr.h"
 #include "llhttpsender.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h"
+//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
+//#include "llimfloater.h" <FS:TM> CHUI Merge old
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
 #include "lllocationhistory.h"
@@ -66,13 +67,8 @@
 #include "llmemorystream.h"
 #include "llmessageconfig.h"
 #include "llmoveview.h"
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychat.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llfloaternearbychat.h"
-#include "fsfloaternearbychat.h"
-// </FS:Ansariel> [FS communication UI]
-// </FS:Zi>
+#include "llfloaterimcontainer.h"
+#include "llfloaterimnearbychat.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llteleporthistory.h"
@@ -103,6 +99,7 @@
 #include "llcallingcard.h"
 #include "llconsole.h"
 #include "llcontainerview.h"
+#include "llconversationlog.h"
 #include "lldebugview.h"
 #include "lldrawable.h"
 #include "lleventnotifier.h"
@@ -1122,6 +1119,13 @@ bool idle_startup()
 		// Overwrite default user settings with user settings								 
 		LLAppViewer::instance()->loadSettingsFromDirectory("Account");
 
+		// Convert 'LogInstantMessages' into 'KeepConversationLogTranscripts' for backward compatibility (CHUI-743).
+		LLControlVariablePtr logInstantMessagesControl = gSavedPerAccountSettings.getControl("LogInstantMessages");
+		if (logInstantMessagesControl.notNull())
+		{
+			gSavedPerAccountSettings.setS32("KeepConversationLogTranscripts", logInstantMessagesControl->getValue() ? 2 : 1);
+		}
+
 		// Need to set the LastLogoff time here if we don't have one.  LastLogoff is used for "Recent Items" calculation
 		// and startup time is close enough if we don't have a real value.
 		if (gSavedPerAccountSettings.getU32("LastLogoff") == 0)
@@ -1561,6 +1565,8 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		display_startup();
 		LLStartUp::setStartupState( STATE_MULTIMEDIA_INIT );
 		
+		LLConversationLog::getInstance();
+
 		return FALSE;
 	}
 
@@ -1671,6 +1677,10 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		LLVoiceClient::getInstance()->updateSettings();
 		display_startup();
 
+		// create a container's instance for start a controlling conversation windows
+		// by the voice's events
+		//LLFloaterIMContainer::getInstance(); <FS:TM> CHUI Merge new in LL, looks similer to below, check if needed
+		
 		// <FS:ND> FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
 		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
 		// Moved here from llfloaternearbyvchat.cpp by Zi, to make this work even if LogShowHistory is FALSE
@@ -1691,17 +1701,10 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		llinfos << "Radar initialized" << llendl;
 		// </FS:Ansariel>
 
-		//gCacheName is required for nearby chat history loading
-		//so I just moved nearby history loading a few states further
-		if (gSavedPerAccountSettings.getBOOL("LogShowHistory"))
-		{
 			// <FS:Ansariel> [FS communication UI]
 			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
-			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			//FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance(); <FSTM> CHUI Merge LL removed this, needs checking
 			// </FS:Ansariel> [FS communication UI]
-			if (nearby_chat) nearby_chat->loadHistory();
-		}
-		display_startup();
 
 		// *Note: this is where gWorldMap used to be initialized.
 
@@ -1812,7 +1815,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 	}
 
 	//---------------------------------------------------------------------
-	// Agent Send
+	// World Wait
 	//---------------------------------------------------------------------
 	if(STATE_WORLD_WAIT == LLStartUp::getStartupState())
 	{
@@ -2167,6 +2170,10 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			// Set the show start location to true, now that the user has logged
 			// on with this install.
 			gSavedSettings.setBOOL("ShowStartLocation", TRUE);
+
+			// Open Conversation floater on first login.
+			LLFloaterReg::toggleInstanceOrBringToFront("im_container");
+
 		}
 
 		display_startup();
@@ -2523,7 +2530,6 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		// </FS:Ansariel>
 
 		// Unmute audio if desired and setup volumes.
-		// Unmute audio if desired and setup volumes.
 		// This is a not-uncommon crash site, so surround it with
 		// llinfos output to aid diagnosis.
 		LL_INFOS("AppInit") << "Doing first audio_update_volume..." << LL_ENDL;
@@ -2546,7 +2552,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 
 		// <FS:Ansariel> [FS communication UI]
 		//LLIMFloater::initIMFloater();
-		FSFloaterIM::initIMFloater();
+		//FSFloaterIM::initIMFloater(); <FS:TM> CHUI Merge LL removed this, check if still needed
 		// </FS:Ansariel> [FS communication UI]
 		display_startup();
 
@@ -3196,7 +3202,7 @@ void LLStartUp::initNameCache()
 
 	// Start cache in not-running state until we figure out if we have
 	// capabilities for display name lookup
-	LLAvatarNameCache::initClass(false);
+	LLAvatarNameCache::initClass(false,gSavedSettings.getBOOL("UsePeopleAPI"));
 	LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 	LLCacheName::sDontTrimLegacyNames = gSavedSettings.getBOOL("DontTrimLegacyNames");

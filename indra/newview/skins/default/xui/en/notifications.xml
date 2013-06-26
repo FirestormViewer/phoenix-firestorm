@@ -3181,6 +3181,7 @@ Would you like to trust this authority?
    icon="alertmodal.tga"
    name="GrantedModifyRights"
    persist="true"
+   log_to_im="true"   
    type="notify">
 [NAME] has given you permission to edit their objects.
   </notification>
@@ -3189,6 +3190,7 @@ Would you like to trust this authority?
    icon="alertmodal.tga"
    name="RevokedModifyRights"
    persist="true"
+   log_to_im="true"   
    type="notify">
 Your privilege to modify [NAME]&apos;s objects has been revoked.
   </notification>
@@ -3823,12 +3825,15 @@ Cannot offer friendship at this time. Please try again in a moment.
 
   <notification
    icon="alert.tga"
-   name="BusyModeSet"
+   name="DoNotDisturbModeSet"
    type="alert">
-Unavailable mode is set.
-Chat and instant messages will be hidden. Instant messages will receive your configured autoresponse. All teleportation offers will be declined. All inventory offers will go to your Trash.
+Do Not Disturb is on.  You will not be notified of incoming communications.
+
+- Other residents will receive your Do Not Disturb response (set in Preferences &gt; General).
+- Teleportation offers will be declined.
+- Voice calls will be rejected.
     <usetemplate
-     ignoretext="I change my status to unavailable mode"
+     ignoretext="I change my status to Do Not Disturb mode"
      name="okignore"
      yestext="OK"/>
   </notification>
@@ -4486,6 +4491,8 @@ Are you sure you want to change the estate covenant?
   <notification
    icon="notifytip.tga"
    name="RegionEntryAccessBlocked_Notify"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
    <tag>fail</tag>
 The region you're trying to visit contains [REGIONMATURITY] content, but your current preferences are set to exclude [REGIONMATURITY] content.
@@ -4494,6 +4501,8 @@ The region you're trying to visit contains [REGIONMATURITY] content, but your cu
   <notification
    icon="notifytip.tga"
    name="RegionEntryAccessBlocked_NotifyAdultsOnly"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
     <tag>fail</tag>
     The region you're trying to visit contains [REGIONMATURITY] content, which is accessible to adults only.
@@ -4565,6 +4574,8 @@ The region you're trying to visit contains [REGIONMATURITY] content, but your cu
   <notification
    icon="notifytip.tga"
    name="TeleportEntryAccessBlocked_Notify"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
     <unique>
       <context>REGIONMATURITY</context>
@@ -4576,6 +4587,8 @@ The region you're trying to visit contains [REGIONMATURITY] content, but your cu
   <notification
    icon="notifytip.tga"
    name="TeleportEntryAccessBlocked_NotifyAdultsOnly"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
     <unique>
       <context>REGIONMATURITY</context>
@@ -4696,6 +4709,8 @@ You won't receive any more notifications that you're about to visit a region wit
   <notification
    icon="notifytip.tga"
    name="LandClaimAccessBlocked_Notify"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
     The land you're trying to claim contains [REGIONMATURITY] content, but your current preferences are set to exclude [REGIONMATURITY] content.
     <tag>fail</tag>
@@ -4704,6 +4719,8 @@ You won't receive any more notifications that you're about to visit a region wit
   <notification
    icon="notifytip.tga"
    name="LandClaimAccessBlocked_NotifyAdultsOnly"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
     <tag>fail</tag>
     The land you're trying to claim contains [REGIONMATURITY] content, which is accessible to adults only.
@@ -4761,6 +4778,8 @@ You won't receive any more notifications that you're about to visit a region wit
   <notification
    icon="notifytip.tga"
    name="LandBuyAccessBlocked_Notify"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
     The land you're trying to buy contains [REGIONMATURITY] content, but your current preferences are set to exclude [REGIONMATURITY] content.
     <tag>fail</tag>
@@ -4769,6 +4788,8 @@ You won't receive any more notifications that you're about to visit a region wit
   <notification
    icon="notifytip.tga"
    name="LandBuyAccessBlocked_NotifyAdultsOnly"
+   log_to_im="false"
+   log_to_chat="true"
    type="notifytip">
     <tag>fail</tag>
     The land you're trying to buy contains [REGIONMATURITY] content, which is accessible to adults only.
@@ -5215,6 +5236,20 @@ Go to your [http://secondlife.com/account/ Dashboard] to see your account histor
 
   <notification
    icon="alertmodal.tga"
+   name="ConfirmAddingChatParticipants"
+   type="alertmodal">
+    <unique/>
+When you add a person to an existing conversation, a new conversation will be created.  All participants will receive new conversation notifications.
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm adding chat paticipants"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Ok"/>
+  </notification>
+ 
+  <notification
+   icon="alertmodal.tga"
    name="ConfirmQuit"
    type="alertmodal">
     <unique/>
@@ -5382,25 +5417,25 @@ Do you want to replace it with the selected object?
 
   <notification
    icon="alert.tga"
-   label="Busy Mode Warning"
-   name="BusyModePay"
+   label="Do Not Disturb Mode Warning"
+   name="DoNotDisturbModePay"
    type="alert">
-You are in Busy Mode, which means you will not receive any items offered in exchange for this payment.
+You have turned on Do Not Disturb. You will not receive any items offered in exchange for this payment.
 
-Would you like to leave Busy Mode before completing this transaction?
+Would you like to turn off Do Not Disturb before completing this transaction?
     <tag>confirm</tag>
     <form name="form">
       <ignore name="ignore"
        save_option="true"
-       text="I am about to pay a person or object while I am in Busy mode"/>
+       text="I am about to pay a person or object while I am in Do Not Disturb mode"/>
       <button
        default="true"
-       ignore="Always leave Busy Mode"
+       ignore="Always leave Do Not Disturb Mode"
        index="0"
        name="Yes"
        text="OK"/>
       <button
-       ignore="Never leave Busy Mode"
+       ignore="Never leave Do Not Disturb Mode"
        index="1"
        name="No"
        text="Cancel"/>
@@ -5862,6 +5897,8 @@ URL: [MOAPURL]
   <notification
    icon="notifytip.tga"
    name="IMSystemMessageTip"
+   log_to_im="true"   
+   log_to_chat="false"   
    type="notifytip">
 [MESSAGE]
   </notification>
@@ -5870,21 +5907,21 @@ URL: [MOAPURL]
    icon="notifytip.tga"
    name="Cancelled"
    type="notifytip">
-Canceled.
+Cancelled.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="CancelledSit"
    type="notifytip">
-Canceled Sit.
+Cancelled Sit.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="CancelledAttach"
    type="notifytip">
-Canceled Attach.
+Cancelled Attach.
   </notification>
 
   <notification
@@ -5905,26 +5942,22 @@ Topic: [SUBJECT], Message: [MESSAGE]
 
   <notification
    icon="notifytip.tga"
-   name="FriendOnline"
+   name="FriendOnlineOffline"
+   log_to_chat="false"
    type="notifytip">
-[NAME] is online.
     <tag>friendship</tag>
-  </notification>
-
-  <notification
-   icon="notifytip.tga"
-   name="FriendOffline"
-   type="notifytip">
-[NAME] is offline.
-    <tag>friendship</tag>
+&lt;nolink&gt;[NAME]&lt;/nolink&gt; is [STATUS]
+    <unique combine="cancel_old">
+      <context>NAME</context>
+    </unique>
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="AddSelfFriend"
    type="notifytip">
-Although you&apos;re very nice, you can&apos;t add yourself as a friend.
     <tag>friendship</tag>
+Although you&apos;re very nice, you can&apos;t add yourself as a friend.
   </notification>
 
   <notification
@@ -6168,6 +6201,8 @@ You do not have permission to copy this.
   <notification
    icon="notifytip.tga"
    name="InventoryAccepted"
+   log_to_im="true"   
+   log_to_chat="false"
    type="notifytip">
 [NAME] received your inventory offer.
   </notification>
@@ -6175,6 +6210,8 @@ You do not have permission to copy this.
   <notification
    icon="notifytip.tga"
    name="InventoryDeclined"
+   log_to_im="true"   
+   log_to_chat="false"
    type="notifytip">
 [NAME] declined your inventory offer.
   </notification>
@@ -6256,6 +6293,7 @@ Please select at least one type of content to search (General, Moderate, or Adul
   <notification
    icon="notify.tga"
    name="PaymentReceived"
+   log_to_im="true"   
    persist="true"
    type="notify">
     <tag>funds</tag>
@@ -6265,6 +6303,7 @@ Please select at least one type of content to search (General, Moderate, or Adul
   <notification
    icon="notify.tga"
    name="PaymentSent"
+   log_to_im="true"   
    persist="true"
    type="notify">
     <tag>funds</tag>
@@ -6409,6 +6448,7 @@ The objects on the selected parcel that are *NOT* owned by you have been returne
   <notification
    icon="notify.tga"
    name="ServerObjectMessage"
+   log_to_im="true"   
    persist="true"
    type="notify">
 Message from [NAME]:
@@ -6812,7 +6852,9 @@ Your object named &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; has given you th
    icon="notify.tga"
    name="UserGiveItem"
    label="Inventory offer from [NAME_LABEL]"
-   type="offer">
+   log_to_im ="true"
+   type="offer"
+   sound="UISndNewIncomingIMSession">
 [NAME_SLURL] has given you this [OBJECTTYPE]:
 [ITEM_SLURL]
 Do you want to keep it? "Mute" will block all future offers or messages from [NAME_SLURL].
@@ -6869,7 +6911,10 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    icon="notify.tga"
    name="TeleportOffered"
    label="Teleport offer from [NAME_LABEL]"
-   type="offer">
+   log_to_im="true"
+   log_to_chat="false"
+   type="offer"
+   sound="UISndNewIncomingIMSession">
 [NAME_SLURL] has offered to teleport you to their location:
 
 “[MESSAGE]”
@@ -6890,6 +6935,8 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
   <notification
    icon="notify.tga"
    name="TeleportOffered_MaturityExceeded"
+   log_to_im="true"
+   log_to_chat="false"
    type="offer">
 [NAME_SLURL] has offered to teleport you to their location:
 
@@ -6913,6 +6960,8 @@ This region contains [REGION_CONTENT_MATURITY] content, but your current prefere
   <notification
    icon="notify.tga"
    name="TeleportOffered_MaturityBlocked"
+   log_to_im="true"
+   log_to_chat="false"
    type="notifytip">
 [NAME_SLURL] has offered to teleport you to their location:
 
@@ -6926,8 +6975,11 @@ However, this region contains content accessible to adults only.
   <notification
    icon="notify.tga"
    name="TeleportOfferSent"
-   type="offer">
-	Teleport offer sent to [TO_NAME].
+   log_to_im="true"
+   log_to_chat="false"
+   show_toast="false"
+   type="notify">
+	Teleport offer sent to [TO_NAME]
   </notification>
 
 
@@ -6954,6 +7006,7 @@ However, this region contains content accessible to adults only.
    icon="notify.tga"
    name="OfferFriendship"
    label="Friendship offer from [NAME_LABEL]"
+   log_to_im="true"
    type="offer">
     <tag>friendship</tag>
     <tag>confirm</tag>
@@ -6977,7 +7030,9 @@ However, this region contains content accessible to adults only.
   <notification
    icon="notify.tga"
    name="FriendshipOffered"
-   type="offer">
+   log_to_im="true"   
+   show_toast="false"   
+   type="notify">
     <tag>friendship</tag>
 	You have offered friendship to [TO_NAME]
   </notification>
@@ -7007,7 +7062,8 @@ However, this region contains content accessible to adults only.
   <notification
    icon="notify.tga"
    name="FriendshipAccepted"
-   type="offer">
+   log_to_im="true"   
+   type="notify">
     <tag>friendship</tag>
 &lt;nolink&gt;[NAME]&lt;/nolink&gt; accepted your friendship offer.
   </notification>
@@ -7015,6 +7071,7 @@ However, this region contains content accessible to adults only.
   <notification
    icon="notify.tga"
    name="FriendshipDeclined"
+   log_to_im="true"   
    persist="true"
    type="notify">
     <tag>friendship</tag>
@@ -7024,7 +7081,9 @@ However, this region contains content accessible to adults only.
     <notification
    icon="notify.tga"
    name="FriendshipAcceptedByMe"
-   type="offer">
+   log_to_im="true"   
+   show_toast="false"
+   type="notify">
     <tag>friendship</tag>
 Friendship offer accepted.
   </notification>
@@ -7032,7 +7091,9 @@ Friendship offer accepted.
   <notification
    icon="notify.tga"
    name="FriendshipDeclinedByMe"
-   type="offer">
+   log_to_im="true"   
+   show_toast="false"   
+   type="notify">
     <tag>friendship</tag>
 Friendship offer declined.
   </notification>
@@ -7079,6 +7140,7 @@ If you stay in this region when it shuts down, you will be logged out.
   <notification
    icon="notify.tga"
    name="LoadWebPage"
+   show_toast="false"
    type="notify">
 Load web page [URL] ?
 
@@ -7180,6 +7242,7 @@ Before allowing this access, make sure you know what the object is and why it is
   <notification
    icon="notify.tga"
    name="ScriptDialog"
+   show_toast="false"
    type="notify">
 [NAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
 [MESSAGE]
@@ -7198,6 +7261,7 @@ Before allowing this access, make sure you know what the object is and why it is
   <notification
    icon="notify.tga"
    name="ScriptDialogGroup"
+   show_toast="false"
    type="notify">
     <tag>group</tag>
 [GROUPNAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
@@ -10598,14 +10662,6 @@ No room to sit here, try another spot.
 
   <notification
    icon="alertmodal.tga"
-   name="AutopilotCanceled"
-   type="notify">
-   <tag>fail</tag>
-Autopilot canceled
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
    name="ClaimObjectFailedNoPermission"
    type="notify">
    <tag>fail</tag>
@@ -10892,6 +10948,43 @@ An internal error prevented us from properly updating your viewer.  The L$ balan
 Cannot create large prims that intersect other players.  Please re-try when other players have moved.
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="PreferenceChatClearLog"
+   type="alertmodal">
+    This will delete the logs of previous conversations, and any backups of that file.
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before I delete the log of previous conversations."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+    
+  <notification
+   icon="alertmodal.tga"
+   name="PreferenceChatDeleteTranscripts"
+   type="alertmodal">
+    This will delete the transcripts for all previous conversations. The list of past conversations will not be affected. All files with the suffixes .txt and txt.backup in the folder [FOLDER] will be deleted.
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before I delete transcripts."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   name="PreferenceChatPathChanged"
+   type="alert">
+   Unable to move files. Restored previous path.
+    <usetemplate
+     ignoretext="Unable to move files. Restored previous path."
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+  
 <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="notify.tga"

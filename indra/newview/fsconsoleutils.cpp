@@ -175,7 +175,7 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
 		}
 		else if (useDisplayNames)
 		{
-			senderName = av_name.mDisplayName;
+			senderName = av_name.getDisplayName();
 		}
 	}
 
@@ -253,7 +253,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	}
 	else if (useDisplayNames)
 	{
-		senderName = av_name.mDisplayName;
+		senderName = av_name.getDisplayName();
 	}
 	else
 	{

@@ -199,8 +199,8 @@
        name="Set Logging Level"
        tear_off="true">
         <menu_item_check
-		  name="Debug Level Debug"
-          label="Debug">
+         name="Debug"
+         label="Debug">
           <menu_item_check.on_check
             function="Develop.CheckLoggingLevel"
             parameter="0" />
@@ -209,8 +209,8 @@
            parameter="0" />
         </menu_item_check>
         <menu_item_check
-		  name="Debug Level Info"
-          label="Info">
+         name="Info"
+         label="Info">
           <menu_item_check.on_check
             function="Develop.CheckLoggingLevel"
             parameter="1" />
@@ -219,8 +219,8 @@
            parameter="1" />
         </menu_item_check>
         <menu_item_check
-		  name="Debug Level Warn"
-          label="Warning">
+         name="Warning"
+         label="Warning">
           <menu_item_check.on_check
             function="Develop.CheckLoggingLevel"
             parameter="2" />
@@ -229,8 +229,8 @@
            parameter="2" />
         </menu_item_check>
         <menu_item_check
-		  name="Debug Level Error"
-          label="Error">
+         name="Error"
+         label="Error">
           <menu_item_check.on_check
             function="Develop.CheckLoggingLevel"
             parameter="3" />
@@ -239,8 +239,8 @@
            parameter="3" />
         </menu_item_check>
         <menu_item_check
-		  name="Debug Level None"
-          label="None">
+         name="None"
+         label="None">
           <menu_item_check.on_check
             function="Develop.CheckLoggingLevel"
             parameter="4" />

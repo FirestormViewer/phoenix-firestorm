@@ -35,6 +35,7 @@
 // library
 #include "llaudioengine.h"
 #include "lldatapacker.h"
+#include "llfloaterreg.h"
 #include "llinventory.h"
 #include "llkeyframemotion.h"
 #include "llmultigesture.h"
@@ -51,10 +52,7 @@
 #include "llviewermessage.h"
 #include "llvoavatarself.h"
 #include "llviewerstats.h"
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychatbar.h"
-#include "fsnearbychathub.h"
-// </FS:Zi>
+#include "llfloaterimnearbychat.h"
 #include "llappearancemgr.h"
 #include "llgesturelistener.h"
 
@@ -1011,10 +1009,8 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
 			
 			const BOOL animate = FALSE;
 
-			// <FS:Zi> Remove floating chat bar
-			// LLNearbyChatBar::getInstance()->sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
-			FSNearbyChat::instance().sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
-			// </FS:Zi>
+			(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+					sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
 
 			gesture->mCurrentStep++;
 			break;

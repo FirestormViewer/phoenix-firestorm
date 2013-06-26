@@ -50,7 +50,9 @@
 
 LLFloaterInspect::LLFloaterInspect(const LLSD& key)
   : LLFloater(key),
-	mDirty(FALSE)
+	mDirty(FALSE),
+	mOwnerNameCacheConnection(),
+	mCreatorNameCacheConnection()
 {
 	mCommitCallbackRegistrar.add("Inspect.OwnerProfile",	boost::bind(&LLFloaterInspect::onClickOwnerProfile, this));
 	mCommitCallbackRegistrar.add("Inspect.CreatorProfile",	boost::bind(&LLFloaterInspect::onClickCreatorProfile, this));
@@ -71,6 +73,14 @@ BOOL LLFloaterInspect::postBuild()
 
 LLFloaterInspect::~LLFloaterInspect(void)
 {
+	if (mOwnerNameCacheConnection.connected())
+	{
+		mOwnerNameCacheConnection.disconnect();
+	}
+	if (mCreatorNameCacheConnection.connected())
+	{
+		mCreatorNameCacheConnection.disconnect();
+	}
 	if(!LLFloaterReg::instanceVisible("build"))
 	{
 		if(LLToolMgr::getInstance()->getBaseTool() == LLToolCompInspect::getInstance())
@@ -84,7 +94,6 @@ LLFloaterInspect::~LLFloaterInspect(void)
 	{
 		LLFloaterReg::showInstance("build", LLSD(), TRUE);
 	}
-	//sInstance = NULL;
 }
 
 void LLFloaterInspect::onOpen(const LLSD& key)
@@ -189,15 +198,6 @@ LLUUID LLFloaterInspect::getSelectedUUID()
 	return LLUUID::null;
 }
 
-void LLFloaterInspect::onGetAvNameCallback(const LLUUID& idCreator, const LLAvatarName& av_name, void* FloaterPtr)
-{
-	if (FloaterPtr)
-	{
-		LLFloaterInspect* floater = (LLFloaterInspect*)FloaterPtr;
-		floater->dirty();
-	}
-}
-
 void LLFloaterInspect::refresh()
 {
 	LLUUID creator_id;
@@ -256,7 +256,11 @@ void LLFloaterInspect::refresh()
 		else
 		{
 			owner_name = LLTrans::getString("RetrievingData");
-			LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
+			if (mOwnerNameCacheConnection.connected())
+			{
+				mOwnerNameCacheConnection.disconnect();
+			}
+			mOwnerNameCacheConnection = LLAvatarNameCache::get(idOwner, boost::bind(&LLFloaterInspect::onGetOwnerNameCallback, this));
 		}
 
 		if (LLAvatarNameCache::get(idCreator, &av_name))
@@ -273,7 +277,11 @@ void LLFloaterInspect::refresh()
 		else
 		{
 			creator_name = LLTrans::getString("RetrievingData");
-			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
+			if (mCreatorNameCacheConnection.connected())
+			{
+				mCreatorNameCacheConnection.disconnect();
+			}
+			mCreatorNameCacheConnection = LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetCreatorNameCallback, this));
 		}
 
 		row["id"] = obj->getObject()->getID();
@@ -320,6 +328,18 @@ void LLFloaterInspect::onFocusReceived()
 
 void LLFloaterInspect::dirty()
 {
+	setDirty();
+}
+
+void LLFloaterInspect::onGetOwnerNameCallback()
+{
+	mOwnerNameCacheConnection.disconnect();
+	setDirty();
+}
+
+void LLFloaterInspect::onGetCreatorNameCallback()
+{
+	mCreatorNameCacheConnection.disconnect();
 	setDirty();
 }
 

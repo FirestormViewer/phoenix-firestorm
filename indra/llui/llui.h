@@ -53,11 +53,11 @@ class LLWindow;
 class LLView;
 class LLHelp;
 
-
 // <FS:PP> UI Sounds preview
 // void make_ui_sound(const char* name);
-void make_ui_sound(const char* name, BOOL forceSound = FALSE);
+void make_ui_sound(const char* name, bool forcesound = false);
 // </FS:PP> UI Sounds preview
+void make_ui_sound_deferred(const char * name); //<FS:TM> CHUI Merge check
 
 class LLImageProviderInterface;
 
@@ -194,6 +194,7 @@ public:
 	static void initClass(const settings_map_t& settings,
 						  LLImageProviderInterface* image_provider,
 						  LLUIAudioCallback audio_callback = NULL,
+						  LLUIAudioCallback deferred_audio_callback = NULL,
 						  const LLVector2 *scale_factor = NULL,
 						  const std::string& language = LLStringUtil::null);
 	static void cleanupClass();
@@ -282,6 +283,7 @@ public:
 	//
 	static settings_map_t sSettingGroups;
 	static LLUIAudioCallback sAudioCallback;
+	static LLUIAudioCallback sDeferredAudioCallback;
 	static LLWindow*		sWindow;
 	static LLView*			sRootView;
 	static LLHelp*			sHelpImpl;
@@ -344,12 +346,11 @@ public:
 
 	// this avoids a MSVC bug where non-referenced static members are "optimized" away
 	// even if their constructors have side effects
-	void reference()
+	S32 reference()
 	{
-#ifdef LL_WINDOWS
 		S32 dummy;
 		dummy = 0;
-#endif /*LL_WINDOWS*/
+		return dummy;
 	}
 };
 
@@ -417,7 +418,7 @@ public:
 namespace LLInitParam
 {
 	template<>
-	class ParamValue<LLRect, TypeValues<LLRect> > 
+	class ParamValue<LLRect> 
 	:	public CustomParamValue<LLRect>
 	{
         typedef CustomParamValue<LLRect> super_t;
@@ -436,7 +437,7 @@ namespace LLInitParam
 	};
 
 	template<>
-	class ParamValue<LLUIColor, TypeValues<LLUIColor> > 
+	class ParamValue<LLUIColor> 
 	:	public CustomParamValue<LLUIColor>
 	{
         typedef CustomParamValue<LLUIColor> super_t;
@@ -454,7 +455,7 @@ namespace LLInitParam
 	};
 
 	template<>
-	class ParamValue<const LLFontGL*, TypeValues<const LLFontGL*> > 
+	class ParamValue<const LLFontGL*> 
 	:	public CustomParamValue<const LLFontGL* >
 	{
         typedef CustomParamValue<const LLFontGL*> super_t;
@@ -494,7 +495,7 @@ namespace LLInitParam
 
 
 	template<>
-	class ParamValue<LLCoordGL, TypeValues<LLCoordGL> >
+	class ParamValue<LLCoordGL>
 	:	public CustomParamValue<LLCoordGL>
 	{
 		typedef CustomParamValue<LLCoordGL> super_t;

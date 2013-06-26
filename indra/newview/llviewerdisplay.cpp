@@ -335,6 +335,24 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	// Logic for forcing window updates if we're in drone mode.
 	//
 
+	// *TODO: Investigate running display() during gHeadlessClient.  See if this early exit is needed DK 2011-02-18
+	if (gHeadlessClient) 
+	{
+#if LL_WINDOWS
+		static F32 last_update_time = 0.f;
+		if ((gFrameTimeSeconds - last_update_time) > 1.f)
+		{
+			InvalidateRect((HWND)gViewerWindow->getPlatformWindow(), NULL, FALSE);
+			last_update_time = gFrameTimeSeconds;
+		}
+#elif LL_DARWIN
+		// MBW -- Do something clever here.
+#endif
+		// Not actually rendering, don't bother.
+		return;
+	}
+
+
 	//
 	// Bail out if we're in the startup state and don't want to try to
 	// render the world.
@@ -1153,7 +1171,7 @@ void render_hud_attachments()
 		gPipeline.pushRenderTypeMask();
 		
 		// turn off everything
-		gPipeline.clearAllRenderTypes();
+		gPipeline.andRenderTypeMask(LLPipeline::END_RENDER_TYPES);
 		// turn on HUD
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_HUD);
 		// turn on HUD particles

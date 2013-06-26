@@ -586,7 +586,7 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	element["id"] = agent_id;
 	LLSD& username_column				= element["columns"][LIST_FRIEND_USER_NAME];
 	username_column["column"]			= "user_name";
-	username_column["value"]			= av_name.mUsername;
+	username_column["value"]			= av_name.getUserName();
 	
 	LLSD& friend_column					= element["columns"][LIST_FRIEND_NAME];
 	friend_column["column"]				= "full_name";
@@ -674,7 +674,7 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 
 	itemp->getColumn(LIST_ONLINE_STATUS)->setValue(statusIcon);
 
-	itemp->getColumn(LIST_FRIEND_USER_NAME)->setValue( av_name.mUsername );
+	itemp->getColumn(LIST_FRIEND_USER_NAME)->setValue( av_name.getUserName() );
 	itemp->getColumn(LIST_FRIEND_NAME)->setValue( av_name.getCompleteName() );
 
 	// render name of online friends in bold text

@@ -1051,9 +1051,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			|| !existing_inspector->getVisible()
 			|| existing_inspector->getKey()["avatar_id"].asUUID() != hover_object->getID())
 		{
-			// IDEVO: try to get display name + username
+			// Try to get display name + username
 			std::string final_name;
-			std::string full_name;
 
 			// Build group prefix -Zi
 			std::string group_title;
@@ -1068,36 +1067,17 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				}
 			}
 
-			if (!gCacheName->getFullName(hover_object->getID(), full_name))
-			{
-			LLNameValue* firstname = hover_object->getNVPair("FirstName");
-			LLNameValue* lastname =  hover_object->getNVPair("LastName");
-			if (firstname && lastname)
-			{
-					full_name = LLCacheName::buildFullName(
-						firstname->getString(), lastname->getString());
-				}
-				else
-				{
-					full_name = LLTrans::getString("TooltipPerson");
-				}
-			}
-
 			LLAvatarName av_name;
-			if (LLAvatarNameCache::useDisplayNames() && 
-				LLAvatarNameCache::get(hover_object->getID(), &av_name))
+			if (LLAvatarNameCache::get(hover_object->getID(), &av_name))
 			{
 //				final_name = av_name.getCompleteName();
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? group_title + av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
 			}
 			else
 			{
-//				final_name = full_name;
-// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? group_title + full_name : RlvStrings::getAnonym(full_name);
-// [/RLVa:KB]
+				final_name = LLTrans::getString("TooltipPerson");;
 			}
 
 			// *HACK: We may select this object, so pretend it was clicked

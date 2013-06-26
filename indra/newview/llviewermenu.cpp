@@ -59,6 +59,7 @@
 #include "llbuycurrencyhtml.h"
 #include "llfloatergodtools.h"
 #include "llfloaterinventory.h"
+#include "llfloaterimcontainer.h"
 #include "llfloaterland.h"
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloaterpathfindinglinksets.h"
@@ -107,6 +108,7 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerstats.h"
 #include "llvoavatarself.h"
+#include "llvoicevivox.h"
 #include "llworldmap.h"
 #include "pipeline.h"
 #include "llviewerjoystick.h"
@@ -122,6 +124,10 @@
 #include "llwindow.h"
 #include "llpathfindingmanager.h"
 #include "boost/unordered_map.hpp"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 // Firestorm includes
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
@@ -217,11 +223,8 @@ PieMenu* gPieDetachScreenMenu = NULL;
 PieMenu* gPieDetachBodyPartMenus[10];
 // ## Zi: Pie menu
 
-LLMenuItemCallGL* gAFKMenu = NULL;
-LLMenuItemCallGL* gBusyMenu = NULL;
 LLMenuItemCallGL* gAutorespondMenu = NULL;
 LLMenuItemCallGL* gAutorespondNonFriendsMenu = NULL;
-
 //
 // Local prototypes
 
@@ -582,8 +585,6 @@ void init_menus()
 	gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", upload_cost);
 	gMenuHolder->childSetLabelArg("Bulk Upload", "[COST]", upload_cost);
 	
-	gAFKMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Away", TRUE);
-	gBusyMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Busy", TRUE);
 	gAutorespondMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Autorespond", TRUE);
 	gAutorespondNonFriendsMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Autorespond to non-friends", TRUE);
 	gAttachSubMenu = gMenuBarView->findChildMenuByName("Attach Object", TRUE);
@@ -3900,15 +3901,6 @@ bool enable_freeze_eject(const LLSD& avatar_id)
 //	return new_value;
 }
 
-
-void login_done(S32 which, void *user)
-{
-	llinfos << "Login done " << which << llendl;
-
-	LLPanelLogin::closePanel();
-}
-
-
 bool callback_leave_group(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
@@ -4213,7 +4205,8 @@ class LLTogglePanelPeopleTab : public view_listener_t
 		{
 			if (   panel_name == "friends_panel"
 				|| panel_name == "groups_panel"
-				|| panel_name == "nearby_panel")
+				|| panel_name == "nearby_panel"
+				|| panel_name == "blocked_panel")
 			{
 				return togglePeoplePanel(panel_name, param);
 			}
@@ -6461,26 +6454,6 @@ void show_v1_menus()	// V1 menu system	-WoLf
 // 	gExportDialog = LLUploadDialog::modalUploadDialog("Exporting selected objects...");
 // }
 //
-
-class LLCommunicateBlockList : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		// <FS:Ansariel> Optional standalone blocklist floater
-		//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
-		if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-		{
-			LLFloaterReg::showInstance("fs_blocklist", LLSD());
-		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
-		}
-		// </FS:Ansariel>
-		return true;
-	}
-};
-
 class LLWorldSetHomeLocation : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -6563,18 +6536,18 @@ class LLWorldGetAway : public view_listener_t
 	}
 };
 
-class LLWorldSetBusy : public view_listener_t
+class LLWorldSetDoNotDisturb : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		if (gAgent.getBusy())
+		if (gAgent.isDoNotDisturb())
 		{
-			gAgent.clearBusy();
+			gAgent.setDoNotDisturb(false);
 		}
 		else
 		{
-			gAgent.setBusy();
-			LLNotificationsUtil::add("BusyModeSet");
+			gAgent.setDoNotDisturb(true);
+			LLNotificationsUtil::add("DoNotDisturbModeSet");
 		}
 		return true;
 	}
@@ -6875,7 +6848,7 @@ bool complete_give_money(const LLSD& notification, const LLSD& response, LLObjec
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
-		gAgent.clearBusy();
+		gAgent.setDoNotDisturb(false);
 	}
 
 	LLViewerObject* objectp = selection->getPrimaryObject();
@@ -6908,12 +6881,12 @@ bool complete_give_money(const LLSD& notification, const LLSD& response, LLObjec
 
 void handle_give_money_dialog()
 {
-	LLNotification::Params params("BusyModePay");
+	LLNotification::Params params("DoNotDisturbModePay");
 	params.functor.function(boost::bind(complete_give_money, _1, _2, LLSelectMgr::getInstance()->getSelection()));
 
-	if (gAgent.getBusy())
+	if (gAgent.isDoNotDisturb())
 	{
-		// warn users of being in busy mode during a transaction
+		// warn users of being in do not disturb mode during a transaction
 		LLNotifications::instance().add(params);
 	}
 	else
@@ -9135,6 +9108,20 @@ void handle_web_content_test(const LLSD& param)
 	LLWeb::loadURLInternal(url);
 }
 
+void handle_show_url(const LLSD& param)
+{
+	std::string url = param.asString();
+	if(gSavedSettings.getBOOL("UseExternalBrowser"))
+	{
+		LLWeb::loadURLExternal(url);
+	}
+	else
+	{
+		LLWeb::loadURLInternal(url);
+	}
+
+}
+
 void handle_buy_currency_test(void*)
 {
 	std::string url =
@@ -9393,6 +9380,22 @@ class LLViewCheckRenderType : public view_listener_t
 			new_value = LLPipeline::toggleRenderTypeControlNegated((void *)LLPipeline::RENDER_TYPE_PARTICLES);
 		}
 		return new_value;
+	}
+};
+
+class LLViewStatusAway : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		return (gAgent.isInitialized() && gAgent.getAFK());
+	}
+};
+
+class LLViewStatusDoNotDisturb : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		return (gAgent.isInitialized() && gAgent.isDoNotDisturb());
 	}
 };
 
@@ -9661,11 +9664,7 @@ class LLWorldPostProcess : public view_listener_t
 
 void handle_flush_name_caches()
 {
-	// Toggle display names on and off to flush
-	bool use_display_names = LLAvatarNameCache::useDisplayNames();
-	LLAvatarNameCache::setUseDisplayNames(!use_display_names);
-	LLAvatarNameCache::setUseDisplayNames(use_display_names);
-
+	LLAvatarNameCache::cleanupClass();
 	if (gCacheName) gCacheName->clear();
 }
 
@@ -9693,6 +9692,11 @@ public:
 // </FS:AW opensim currency support>
 	}
 };
+
+void handle_voice_morphing_subscribe()
+{
+	LLWeb::loadURLExternal(LLTrans::getString("voice_morphing_url"));
+}
 
 class LLToggleUIHints : public view_listener_t
 {
@@ -9911,8 +9915,7 @@ void initialize_menus()
 
 	view_listener_t::addEnable(new LLUploadCostCalculator(), "Upload.CalculateCosts");
 
-
-	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
+	enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
 
 	// Agent
 	commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
@@ -9961,17 +9964,24 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLViewCheckShowHoverTips(), "View.CheckShowHoverTips");
 	view_listener_t::addMenu(new LLViewCheckHighlightTransparent(), "View.CheckHighlightTransparent");
 	view_listener_t::addMenu(new LLViewCheckRenderType(), "View.CheckRenderType");
+	view_listener_t::addMenu(new LLViewStatusAway(), "View.Status.CheckAway");
+	view_listener_t::addMenu(new LLViewStatusDoNotDisturb(), "View.Status.CheckDoNotDisturb");
 	view_listener_t::addMenu(new LLViewCheckHUDAttachments(), "View.CheckHUDAttachments");
 	// <FS:Zi> Add reset camera angles menu
 	view_listener_t::addMenu(new LLViewResetCameraAngles(), "View.ResetCameraAngles");
 	// </FS:Zi>
-
+	
 	// Me > Movement
 	view_listener_t::addMenu(new LLAdvancedAgentFlyingInfo(), "Agent.getFlying");
-	
-	// Communicate
-	view_listener_t::addMenu(new LLCommunicateBlockList(), "Communicate.BlockList");
-	
+
+	// Communicate > Voice morphing > Subscribe...
+	commit.add("Communicate.VoiceMorphing.Subscribe", boost::bind(&handle_voice_morphing_subscribe));
+	LLVivoxVoiceClient * voice_clientp = LLVivoxVoiceClient::getInstance();
+	enable.add("Communicate.VoiceMorphing.NoVoiceMorphing.Check"
+		, boost::bind(&LLVivoxVoiceClient::onCheckVoiceEffect, voice_clientp, "NoVoiceMorphing"));
+	commit.add("Communicate.VoiceMorphing.NoVoiceMorphing.Click"
+		, boost::bind(&LLVivoxVoiceClient::onClickVoiceEffect, voice_clientp, "NoVoiceMorphing"));
+
 	// World menu
 	view_listener_t::addMenu(new LLWorldAlwaysRun(), "World.AlwaysRun");
 	view_listener_t::addMenu(new LLWorldCreateLandmark(), "World.CreateLandmark");
@@ -9979,14 +9989,14 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldSetHomeLocation(), "World.SetHomeLocation");
 	view_listener_t::addMenu(new LLWorldTeleportHome(), "World.TeleportHome");
 	view_listener_t::addMenu(new LLWorldSetAway(), "World.SetAway");
+	view_listener_t::addMenu(new LLWorldSetDoNotDisturb(), "World.SetDoNotDisturb");
 	view_listener_t::addMenu(new LLWorldGetAway(), "World.GetAway"); //[SJ FIRE-2177]
-	view_listener_t::addMenu(new LLWorldSetBusy(), "World.SetBusy");
 	view_listener_t::addMenu(new LLWorldGetBusy(), "World.GetBusy"); //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldSetAutorespond(), "World.SetAutorespond");
 	view_listener_t::addMenu(new LLWorldGetAutorespond(), "World.GetAutorespond");  //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
 	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]
-
+// <FS:TM> CHUI Merge check above
 	view_listener_t::addMenu(new LLWorldEnableCreateLandmark(), "World.EnableCreateLandmark");
 // [RLVa:KB]
 	enable.add("World.EnablePlaceProfile", boost::bind(&enable_place_profile));
@@ -10110,6 +10120,7 @@ void initialize_menus()
 	// Advanced > UI
 	commit.add("Advanced.WebBrowserTest", boost::bind(&handle_web_browser_test,	_2));	// sigh! this one opens the MEDIA browser
 	commit.add("Advanced.WebContentTest", boost::bind(&handle_web_content_test, _2));	// this one opens the Web Content floater
+	commit.add("Advanced.ShowURL", boost::bind(&handle_show_url, _2));
 	view_listener_t::addMenu(new LLAdvancedBuyCurrencyTest(), "Advanced.BuyCurrencyTest");
 	view_listener_t::addMenu(new LLAdvancedDumpSelectMgr(), "Advanced.DumpSelectMgr");
 	view_listener_t::addMenu(new LLAdvancedDumpInventory(), "Advanced.DumpInventory");

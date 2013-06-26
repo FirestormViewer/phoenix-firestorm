@@ -551,15 +551,6 @@ bool handleVelocityInterpolate(const LLSD& newvalue)
 	return true;
 }
 
-// [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-bool handleSettingF32Change(const LLSD& sdValue, F32* pValue)
-{
-	if (pValue)
-		*pValue = sdValue.asReal();
-	return true;
-}
-// [/SL:KB]
-
 // ## Zi: Moved Avatar Z offset from RLVa to here
 bool handleAvatarZOffsetChanged(const LLSD& sdValue)
 {
@@ -888,8 +879,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
-// [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
 	// <FS:CR> FIRE-9759 - Temporarily remove AvatarZOffset since it's broken
 	//gSavedPerAccountSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
 	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf

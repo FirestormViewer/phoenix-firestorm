@@ -34,7 +34,7 @@
 #include "llhudicon.h"
 #include "llinventory.h"
 #include "llrefcount.h"
-#include "llprimitive.h"
+#include "../llprimitive/llprimitive.h"
 #include "lluuid.h"
 #include "llvoinventorylistener.h"
 #include "object_flags.h"
@@ -673,7 +673,7 @@ protected:
 	//
 
 	static void processTaskInvFile(void** user_data, S32 error_code, LLExtStat ext_status);
-	void loadTaskInvFile(const std::string& filename);
+	BOOL loadTaskInvFile(const std::string& filename);
 	void doInventoryCallback();
 	
 	BOOL isOnMap();

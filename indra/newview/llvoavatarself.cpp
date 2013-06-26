@@ -2898,13 +2898,17 @@ BOOL LLVOAvatarSelf::canGrabBakedTexture(EBakedTextureIndex baked_index) const
 }
 
 void LLVOAvatarSelf::addLocalTextureStats( ETextureIndex type, LLViewerFetchedTexture* imagep,
-										   F32 texel_area_ratio, BOOL render_avatar, BOOL covered_by_baked, U32 index )
+										   F32 texel_area_ratio, BOOL render_avatar, BOOL covered_by_baked)
 {
 	if (!isIndexLocalTexture(type)) return;
 
-	if (!covered_by_baked)
+	// Sunshine - ignoring covered_by_baked will force local textures
+	// to always load.  Fix for SH-4001 and many related issues.  Do
+	// not restore this without some more targetted fix for the local
+	// textures failing to load issue.
+	//if (!covered_by_baked)
 	{
-		if (getLocalTextureID(type, index) != IMG_DEFAULT_AVATAR)
+		if (imagep->getID() != IMG_DEFAULT_AVATAR)
 		{
 			imagep->setNoDelete();
 			if (imagep->getDiscardLevel() != 0)
@@ -3101,7 +3105,7 @@ void LLVOAvatarSelf::outputRezDiagnostics() const
 
 void LLVOAvatarSelf::outputRezTiming(const std::string& msg) const
 {
-	LL_INFOS("Avatar")
+	LL_DEBUGS("Avatar")
 		<< avString()
 		<< llformat("%s. Time from avatar creation: %.2f", msg.c_str(), mDebugSelfLoadTimer.getElapsedTimeF32())
 		<< LL_ENDL;
@@ -3319,8 +3323,8 @@ void LLVOAvatarSelf::onCustomizeEnd(bool disable_camera_switch)
 			gAgentCamera.changeCameraToDefault();
 			gAgentCamera.resetView();
 		}
-
-		LLAppearanceMgr::instance().updateAppearanceFromCOF();
+	
+		LLAppearanceMgr::instance().updateAppearanceFromCOF();	
 	}
 }
 

@@ -62,6 +62,8 @@ class LLChatHistory : public LLUICtrl
 
 			Optional<LLTextBox::Params>	more_chat_text;
 
+			Optional<bool>			notify_unread_msg;
+
 			Params()
 			:	message_header("message_header"),
 				message_separator("message_separator"),
@@ -73,7 +75,8 @@ class LLChatHistory : public LLUICtrl
 				bottom_separator_pad("bottom_separator_pad"),
 				top_header_pad("top_header_pad"),
 				bottom_header_pad("bottom_header_pad"),
-				more_chat_text("more_chat_text")
+				more_chat_text("more_chat_text"),
+				notify_unread_msg("notify_unread_msg", true)
 			{}
 
 		};
@@ -102,7 +105,7 @@ class LLChatHistory : public LLUICtrl
 
 	public:
 		~LLChatHistory();
-
+		LLSD getValue() const;   
 		void initFromParams(const Params&);
 
 		/**
@@ -124,6 +127,7 @@ class LLChatHistory : public LLUICtrl
 		LLUUID mLastFromID;
 		LLDate mLastMessageTime;
 		bool mIsLastMessageFromLog;
+		bool mNotifyAboutUnreadMsg;
 		//std::string mLastMessageTimeStr;
 
 		std::string mMessageHeaderFilename;

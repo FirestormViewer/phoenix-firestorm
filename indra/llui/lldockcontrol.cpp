@@ -31,7 +31,6 @@
 
 LLDockControl::LLDockControl(LLView* dockWidget, LLFloater* dockableFloater,
 		const LLUIImagePtr& dockTongue, DocAt dockAt, get_allowed_rect_callback_t get_allowed_rect_callback) :
-		mDockWidget(dockWidget),
 		mDockableFloater(dockableFloater),
 		mDockTongue(dockTongue),
 		mDockTongueX(0),
@@ -39,10 +38,10 @@ LLDockControl::LLDockControl(LLView* dockWidget, LLFloater* dockableFloater,
 {
 	mDockAt = dockAt;
 
-	// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
-	if (mDockWidget != NULL)
-		mDockHandle = mDockWidget->getHandle();
-	// </FS:ND>
+	if (dockWidget != NULL)
+	{
+		mDockWidgetHandle = dockWidget->getHandle();
+	}
 
 	if (dockableFloater->isDocked())
 	{
@@ -67,7 +66,7 @@ LLDockControl::LLDockControl(LLView* dockWidget, LLFloater* dockableFloater,
 		repositionDockable();
 	}
 
-	if (mDockWidget != NULL)
+	if (getDock() != NULL)
 	{
 		mDockWidgetVisible = isDockVisible();
 	}
@@ -83,23 +82,15 @@ LLDockControl::~LLDockControl()
 
 void LLDockControl::setDock(LLView* dockWidget)
 {
-	mDockWidget = dockWidget;
-
-	// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
-	mDockHandle = LLHandle< LLView >();
-	// </FS:ND>
-
-	if (mDockWidget != NULL)
+	if (dockWidget != NULL)
 	{
-		// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
-		mDockHandle = mDockWidget->getHandle();
-		// <FS:ND>
-
+		mDockWidgetHandle = dockWidget->getHandle();
 		repositionDockable();
 		mDockWidgetVisible = isDockVisible();
 	}
 	else
 	{
+		mDockWidgetHandle = LLHandle<LLView>();
 		mDockWidgetVisible = false;
 	}
 }
@@ -112,8 +103,8 @@ void LLDockControl::getAllowedRect(LLRect& rect)
 
 void LLDockControl::repositionDockable()
 {
-	if (!mDockWidget) return;
-	LLRect dockRect = mDockWidget->calcScreenRect();
+	if (!getDock()) return;
+	LLRect dockRect = getDock()->calcScreenRect();
 	LLRect rootRect;
 	LLRect floater_rect = mDockableFloater->calcScreenRect();
 	mGetAllowedRectCallback(rootRect);
@@ -165,13 +156,13 @@ bool LLDockControl::isDockVisible()
 {
 	bool res = true;
 
-	if (mDockWidget != NULL)
+	if (getDock() != NULL)
 	{
 		//we should check all hierarchy
-		res = mDockWidget->isInVisibleChain();
+		res = getDock()->isInVisibleChain();
 		if (res)
 		{
-			LLRect dockRect = mDockWidget->calcScreenRect();
+			LLRect dockRect = getDock()->calcScreenRect();
 
 			switch (mDockAt)
 			{
@@ -184,7 +175,7 @@ bool LLDockControl::isDockVisible()
 				// assume that parent for all dockable floaters
 				// is the root view
 				LLRect dockParentRect =
-						mDockWidget->getRootView()->calcScreenRect();
+						getDock()->getRootView()->calcScreenRect();
 				if (dockRect.mRight <= dockParentRect.mLeft
 						|| dockRect.mLeft >= dockParentRect.mRight)
 				{
@@ -204,7 +195,7 @@ bool LLDockControl::isDockVisible()
 void LLDockControl::moveDockable()
 {
 	// calculate new dockable position
-	LLRect dockRect = mDockWidget->calcScreenRect();
+	LLRect dockRect = getDock()->calcScreenRect();
 	LLRect rootRect;
 	mGetAllowedRectCallback(rootRect);
 
@@ -278,7 +269,7 @@ void LLDockControl::moveDockable()
 
 
 		// calculate dock tongue position
-		dockParentRect = mDockWidget->getParent()->calcScreenRect();
+		dockParentRect = getDock()->getParent()->calcScreenRect();
 		if (dockRect.getCenterX() < dockParentRect.mLeft)
 		{
 			mDockTongueX = dockParentRect.mLeft - mDockTongue->getWidth() / 2;
@@ -314,7 +305,7 @@ void LLDockControl::moveDockable()
 		}
 
 		// calculate dock tongue position
-		dockParentRect = mDockWidget->getParent()->calcScreenRect();
+		dockParentRect = getDock()->getParent()->calcScreenRect();
 		if (dockRect.getCenterX() < dockParentRect.mLeft)
 		{
 			mDockTongueX = dockParentRect.mLeft - mDockTongue->getWidth() / 2;

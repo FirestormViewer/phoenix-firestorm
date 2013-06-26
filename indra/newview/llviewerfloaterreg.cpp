@@ -33,8 +33,8 @@
 #include "llfloaterautoreplacesettings.h"
 #include "llcompilequeue.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llcallfloater.h"
-#include "fsfloatervoicecontrols.h"
+//#include "llcallfloater.h" <FS:TM> CHUI Merge LL removed this
+//#include "fsfloatervoicecontrols.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llfasttimerview.h"
 #include "llfloaterabout.h"
@@ -53,6 +53,9 @@
 #include "llfloaterbump.h"
 #include "llfloaterbvhpreview.h"
 #include "llfloatercamera.h"
+#include "llfloaterchatvoicevolume.h"
+#include "llfloaterconversationlog.h"
+#include "llfloaterconversationpreview.h"
 #include "llfloaterdeleteenvpreset.h"
 #include "llfloaterdisplayname.h"
 #include "llfloatereditdaycycle.h"
@@ -72,7 +75,7 @@
 #include "llfloatermediasettings.h"
 #include "llfloaterhud.h"
 #include "llfloaterimagepreview.h"
-#include "llimfloater.h"
+#include "llfloaterimsession.h"
 #include "llfloaterinspect.h"
 #include "llfloaterinventory.h"
 #include "llfloaterjoystick.h"
@@ -117,23 +120,18 @@
 #include "llfloatertranslationsettings.h"
 #include "llfloateruipreview.h"
 #include "llfloatervoiceeffect.h"
+#include "llfloatervoicevolume.h"
 #include "llfloaterwhitelistentry.h"
 #include "llfloaterwindowsize.h"
 #include "llfloaterworldmap.h"
-#include "llimfloatercontainer.h"
+#include "llfloaterimcontainer.h"
 #include "llinspectavatar.h"
 #include "llinspectgroup.h"
 #include "llinspectobject.h"
 #include "llinspectremoteobject.h"
 #include "llinspecttoast.h"
 #include "llmoveview.h"
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychat.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llfloaternearbychat.h"
-#include "fsfloaternearbychat.h"
-// <FS:Ansariel> [FS communication UI]
-// <//FS:Zi>
+#include "llfloaterimnearbychat.h"
 #include "llpanelblockedlist.h"
 #include "llpanelclassified.h"
 #include "llpreviewanim.h"
@@ -146,7 +144,6 @@
 #include "llscriptfloater.h"
 #include "llfloatermodelpreview.h"
 #include "llcommandhandler.h"
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
 // ND: And for FS please put yours after this line, for easier merges too
@@ -180,8 +177,9 @@
 #include "NACLfloaterexploresounds.h"
 #include "particleeditor.h"
 #include "quickprefs.h"
+// [RLVa:KB] - Checked: 2010-03-11
 #include "rlvfloaters.h"
-
+// [/RLVa:KB]
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -232,15 +230,10 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("bumps", "floater_bumps.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBump>);
 
 	LLFloaterReg::add("camera", "floater_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
-	// <FS:Zi> Remove floating chat bar
-	// LLFloaterReg::add("chat_bar", "floater_chat_bar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChatBar>);
-	// <FS:Ansariel> [FS communication UI]
-	//LLFloaterReg::add("nearby_chat", "floater_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterNearbyChat>);
-	LLFloaterReg::add("fs_nearby_chat", "floater_fs_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterNearbyChat>);
-	// </FS:Ansariel> [FS communication UI]
-	// </FS:Zi>
-
+	LLFloaterReg::add("chat_voice", "floater_voice_chat_volume.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterChatVoiceVolume>);
+	LLFloaterReg::add("nearby_chat", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterIMNearbyChat::buildFloater);
 	LLFloaterReg::add("compile_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCompileQueue>);
+	LLFloaterReg::add("conversation", "floater_conversation_log.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterConversationLog>);
 
 	LLFloaterReg::add("destinations", "floater_destinations.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDestinations>);
 
@@ -262,12 +255,8 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("help_browser", "floater_help_browser.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHelpBrowser>);	
 	LLFloaterReg::add("hud", "floater_hud.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHUD>);
 
-	// <FS:Ansariel> [FS communication UI]
-	//LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloater>);
-	//LLFloaterReg::add("im_container", "floater_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloaterContainer>);
-	LLFloaterReg::add("fs_impanel", "floater_fs_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIM>);
-	LLFloaterReg::add("fs_im_container", "floater_fs_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIMContainer>);
-	// <FS:Ansariel> [FS communication UI]
+	LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMSession>);
+	LLFloaterReg::add("im_container", "floater_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMContainer>);
 	LLFloaterReg::add("im_well_window", "floater_sys_well.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMWellWindow>);
 	LLFloaterReg::add("incoming_call", "floater_incoming_call.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIncomingCallDialog>);
 	LLFloaterReg::add("inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
@@ -276,6 +265,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLInspectGroupUtil::registerFloater();
 	LLInspectObjectUtil::registerFloater();
 	LLInspectRemoteObjectUtil::registerFloater();
+	LLFloaterVoiceVolumeUtil::registerFloater();
 	LLNotificationsUI::registerFloater();
 	LLFloaterDisplayNameUtil::registerFloater();
 	
@@ -320,6 +310,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("picks", "floater_picks.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
 	LLFloaterReg::add("pref_joystick", "floater_joystick.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterJoystick>);
 	LLFloaterReg::add("preview_anim", "floater_preview_animation.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewAnim>, "preview");
+	LLFloaterReg::add("preview_conversation", "floater_conversation_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterConversationPreview>);
 	LLFloaterReg::add("preview_gesture", "floater_preview_gesture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewGesture>, "preview");
 	LLFloaterReg::add("preview_notecard", "floater_preview_notecard.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewNotecard>, "preview");
 	LLFloaterReg::add("preview_script", "floater_script_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewLSL>, "preview");
@@ -374,8 +365,8 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("upload_sound", "floater_sound_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSoundPreview>, "upload");
 
 	// <FS:Ansariel> [FS communication UI]
-	//LLFloaterReg::add("voice_controls", "floater_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLCallFloater>);
-	LLFloaterReg::add("fs_voice_controls", "floater_fs_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVoiceControls>);
+	//LLFloaterReg::add("voice_controls", "floater_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLCallFloater>); <FS:TM> CHUI Merge LL removed this
+	//LLFloaterReg::add("fs_voice_controls", "floater_fs_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVoiceControls>);
 	// </FS:Ansariel> [FS communication UI]
 	LLFloaterReg::add("voice_effect", "floater_voice_effect.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterVoiceEffect>);
 

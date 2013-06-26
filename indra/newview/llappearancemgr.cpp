@@ -1253,21 +1253,6 @@ S32 LLAppearanceMgr::getCOFVersion() const
 	}
 }
 
-S32 LLAppearanceMgr::getLastUpdateRequestCOFVersion() const
-{
-	return mLastUpdateRequestCOFVersion;
-}
-
-S32 LLAppearanceMgr::getLastAppearanceUpdateCOFVersion() const
-{
-	return mLastAppearanceUpdateCOFVersion;
-}
-
-void LLAppearanceMgr::setLastAppearanceUpdateCOFVersion(S32 new_val)
-{
-	mLastAppearanceUpdateCOFVersion = new_val;
-}
-
 const LLViewerInventoryItem* LLAppearanceMgr::getBaseOutfitLink()
 {
 	const LLUUID& current_outfit_cat = getCOF();
@@ -2229,8 +2214,6 @@ void LLAppearanceMgr::updateAgentWearables(LLWearableHoldingPattern* holder, boo
 	{
 		gAgentWearables.setWearableOutfit(items, wearables, !append);
 	}
-
-//	dec_busy_count();
 }
 
 static void remove_non_link_items(LLInventoryModel::item_array_t &items)
@@ -2343,7 +2326,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	BoolSetter setIsInUpdateAppearanceFromCOF(mIsInUpdateAppearanceFromCOF);
 	selfStartPhase("update_appearance_from_cof");
 
-	LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
+	LL_DEBUGS("Avatar") << self_av_string() << "starting" << LL_ENDL;
 
 	//checking integrity of the COF in terms of ordering of wearables, 
 	//checking and updating links' descriptions of wearables in the COF (before analyzed for "dirty" state)
@@ -2368,7 +2351,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	
 	//dumpCat(getCOF(),"COF, start");
 
-	bool follow_folder_links = true;
+	bool follow_folder_links = false;
 	LLUUID current_outfit_id = getCOF();
 
 	// Find all the wearables that are in the COF's subtree.
@@ -2736,7 +2719,6 @@ void LLAppearanceMgr::wearInventoryCategoryOnAvatar( LLInventoryCategory* catego
 void LLAppearanceMgr::wearOutfitByName(const std::string& name)
 {
 	LL_INFOS("Avatar") << self_av_string() << "Wearing category " << name << LL_ENDL;
-	//inc_busy_count();
 
 	LLInventoryModel::cat_array_t cat_array;
 	LLInventoryModel::item_array_t item_array;
@@ -2776,8 +2758,6 @@ void LLAppearanceMgr::wearOutfitByName(const std::string& name)
 		llwarns << "Couldn't find outfit " <<name<< " in wearOutfitByName()"
 				<< llendl;
 	}
-
-	//dec_busy_count();
 }
 
 bool areMatchingWearables(const LLViewerInventoryItem *a, const LLViewerInventoryItem *b)
@@ -3183,7 +3163,7 @@ void LLAppearanceMgr::copyLibraryGestures()
 
 	// Copy gestures
 	LLUUID lib_gesture_cat_id =
-		gInventory.findCategoryUUIDForType(LLFolderType::FT_GESTURE,false,true);
+		gInventory.findLibraryCategoryUUIDForType(LLFolderType::FT_GESTURE,false);
 	if (lib_gesture_cat_id.isNull())
 	{
 		llwarns << "Unable to copy gestures, source category not found" << llendl;
@@ -3748,8 +3728,8 @@ void LLAppearanceMgr::requestServerAppearanceUpdate(LLCurl::ResponderPtr respond
 		responder_ptr = new RequestAgentUpdateAppearanceResponder;
 	}
 	LLHTTPClient::post(url, body, responder_ptr);
-	llassert(cof_version >= mLastUpdateRequestCOFVersion);
-	mLastUpdateRequestCOFVersion = cof_version;
+	llassert(cof_version >= gAgentAvatarp->mLastUpdateRequestCOFVersion);
+	gAgentAvatarp->mLastUpdateRequestCOFVersion = cof_version;
 }
 
 class LLIncrementCofVersionResponder : public LLHTTPClient::Responder
@@ -3769,12 +3749,10 @@ public:
 		llinfos << "Successfully incremented agent's COF." << llendl;
 		S32 new_version = pContent["category"]["version"].asInteger();
 
-		LLAppearanceMgr* app_mgr = LLAppearanceMgr::getInstance();
-
 		// cof_version should have increased
-		llassert(new_version > app_mgr->mLastUpdateRequestCOFVersion);
+		llassert(new_version > gAgentAvatarp->mLastUpdateRequestCOFVersion);
 
-		app_mgr->mLastUpdateRequestCOFVersion = new_version;
+		gAgentAvatarp->mLastUpdateRequestCOFVersion = new_version;
 	}
 	virtual void errorWithContent(U32 pStatus, const std::string& pReason, const LLSD& content)
 	{
@@ -3909,14 +3887,14 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 	bool fUpdateAppearance = false;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
-		const LLInventoryItem* linked_item = gInventory.getLinkedItem(*it);
-		if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
+		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
+
+		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
 		{
 			continue;
 		}
 
 		fUpdateAppearance = true;
-		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
 		removeCOFItemLinks(linked_item_id);
 	}
 
@@ -3936,15 +3914,15 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 
 void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 {
-// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-	const LLInventoryItem* linked_item = gInventory.getLinkedItem(id_to_remove);
+	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 
-	if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
 	{
 		return;
 	}
 // [/RLVA:KB]
-	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+
 	removeCOFItemLinks(linked_item_id);
 	updateAppearanceFromCOF();
 }
@@ -4055,9 +4033,7 @@ LLAppearanceMgr::LLAppearanceMgr():
 	mAttachmentInvLinkEnabled(false),
 	mOutfitIsDirty(false),
 	mOutfitLocked(false),
-	mIsInUpdateAppearanceFromCOF(false),
-	mLastUpdateRequestCOFVersion(LLViewerInventoryCategory::VERSION_UNKNOWN),
-	mLastAppearanceUpdateCOFVersion(LLViewerInventoryCategory::VERSION_UNKNOWN)
+	mIsInUpdateAppearanceFromCOF(false)
 {
 	LLOutfitObserver& outfit_observer = LLOutfitObserver::instance();
 
@@ -4077,7 +4053,7 @@ LLAppearanceMgr::~LLAppearanceMgr()
 
 void LLAppearanceMgr::setAttachmentInvLinkEnable(bool val)
 {
-	llinfos << "setAttachmentInvLinkEnable => " << (int) val << llendl;
+	LL_DEBUGS("Avatar") << "setAttachmentInvLinkEnable => " << (int) val << llendl;
 	mAttachmentInvLinkEnabled = val;
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-10-05 (Catznip-2.2)
 	if (mAttachmentInvLinkEnabled)
@@ -4291,7 +4267,6 @@ public:
 		{
 			llwarns << "Nothing fetched in category " << mComplete.front()
 					<< llendl;
-			//dec_busy_count();
 			gInventory.removeObserver(this);
 			doOnIdleOneTime(mCallable);
 

@@ -30,6 +30,7 @@
 #include "llregionhandle.h"
 
 #include "stdtypes.h"
+#include "llvoavatar.h"
 
 /*
  * Classes and utility functions for per-thread and per-region
@@ -125,6 +126,8 @@ LLViewerAssetStats::PerRegionStats::merge(const LLViewerAssetStats::PerRegionSta
 	{
 		mFPS.merge(src.mFPS);
 	}
+
+	// Avatar stats - data all comes from main thread, so leave alone.
 
 	// Requests
 	for (int i = 0; i < LL_ARRAY_SIZE(mRequests); ++i)

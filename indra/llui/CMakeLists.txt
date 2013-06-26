@@ -43,6 +43,7 @@ set(llui_SOURCE_FILES
     llbadgeholder.cpp
     llbadgeowner.cpp
     llbutton.cpp
+    llchatentry.cpp
     llcheckboxctrl.cpp
     llclipboard.cpp
     llcombobox.cpp
@@ -56,12 +57,16 @@ set(llui_SOURCE_FILES
     lleditmenuhandler.cpp
     llf32uictrl.cpp
     llfiltereditor.cpp
+    llflashtimer.cpp
     llflatlistview.cpp
     llfloater.cpp
     llfloaterreg.cpp
     llfloaterreglistener.cpp
     llflyoutbutton.cpp 
     llfocusmgr.cpp
+    llfolderview.cpp
+    llfolderviewitem.cpp
+    llfolderviewmodel.cpp
     llfunctorregistry.cpp
     lliconctrl.cpp
     llkeywords.cpp
@@ -76,7 +81,6 @@ set(llui_SOURCE_FILES
     llmultislider.cpp
     llmultisliderctrl.cpp
     llnotifications.cpp
-    llnotificationslistener.cpp
     llnotificationsutil.cpp
     llpanel.cpp
     llprogressbar.cpp
@@ -144,6 +148,7 @@ set(llui_HEADER_FILES
     llbadgeowner.h
     llbutton.h
     llcallbackmap.h
+    llchatentry.h
     llcheckboxctrl.h
     llclipboard.h
     llcombobox.h
@@ -157,12 +162,16 @@ set(llui_HEADER_FILES
     lleditmenuhandler.h
     llf32uictrl.h
     llfiltereditor.h 
+    llflashtimer.h
     llflatlistview.h
     llfloater.h
     llfloaterreg.h
     llfloaterreglistener.h
     llflyoutbutton.h 
     llfocusmgr.h
+    llfolderview.h
+    llfolderviewitem.h
+    llfolderviewmodel.h
     llfunctorregistry.h
     llhelp.h
     lliconctrl.h
@@ -180,7 +189,6 @@ set(llui_HEADER_FILES
     llmultislider.h
     llnotificationptr.h
     llnotifications.h
-    llnotificationslistener.h
     llnotificationsutil.h
     llnotificationtemplate.h
     llnotificationvisibilityrule.h

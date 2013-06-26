@@ -29,7 +29,7 @@
 #include "llfloatertranslationsettings.h"
 
 // Viewer includes
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
+#include "llfloaterimnearbychat.h"
 #include "lltranslate.h"
 #include "llviewercontrol.h" // for gSavedSettings
 
@@ -225,11 +225,10 @@ void LLFloaterTranslationSettings::updateControlsEnabledState()
 	mGoogleVerifyBtn->setEnabled(on && google_selected &&
 		!mGoogleKeyVerified && !getEnteredGoogleKey().empty());
 
-	mOKBtn->setEnabled(
-		!on || (
-		(bing_selected && mBingKeyVerified) ||
-		(google_selected && mGoogleKeyVerified)
-	));
+	bool service_verified = (bing_selected && mBingKeyVerified) || (google_selected && mGoogleKeyVerified);
+	gSavedPerAccountSettings.setBOOL("TranslatingEnabled", service_verified);
+
+	mOKBtn->setEnabled(!on || service_verified);
 }
 
 void LLFloaterTranslationSettings::verifyKey(int service, const std::string& key, bool alert)
@@ -285,7 +284,16 @@ void LLFloaterTranslationSettings::onBtnGoogleVerify()
 		verifyKey(LLTranslate::SERVICE_GOOGLE, key);
 	}
 }
+void LLFloaterTranslationSettings::onClose(bool app_quitting)
+{
+	std::string service = gSavedSettings.getString("TranslationService");
+	bool bing_selected = service == "bing";
+	bool google_selected = service == "google";
 
+	bool service_verified = (bing_selected && mBingKeyVerified) || (google_selected && mGoogleKeyVerified);
+	gSavedPerAccountSettings.setBOOL("TranslatingEnabled", service_verified);
+
+}
 void LLFloaterTranslationSettings::onBtnOK()
 {
 	gSavedSettings.setBOOL("TranslateChat", mMachineTranslationCB->getValue().asBoolean());
@@ -293,9 +301,7 @@ void LLFloaterTranslationSettings::onBtnOK()
 	gSavedSettings.setString("TranslationService", getSelectedService());
 	gSavedSettings.setString("BingTranslateAPIKey", getEnteredBingKey());
 	gSavedSettings.setString("GoogleTranslateAPIKey", getEnteredGoogleKey());
-	// <FS:Zi> Remove floating chat bar
-	// LLNearbyChatBar::getInstance()->showTranslationCheckbox(LLTranslate::isTranslationConfigured());
-	// TODO: Add code to make this happen via control callback within LLNearbyChat
-	// </FS:Zi>
+	(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+			showTranslationCheckbox(LLTranslate::isTranslationConfigured());
 	closeFloater(false);
 }

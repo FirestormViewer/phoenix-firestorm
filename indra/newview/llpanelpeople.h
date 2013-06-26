@@ -80,6 +80,8 @@ private:
 		E_SORT_BY_RECENT_SPEAKERS = 4,
 	} ESortOrder;
 
+    void				    removePicker();
+
 	// methods indirectly called by the updaters
 	void					updateFriendListHelpText();
 	void					updateFriendList();
@@ -92,31 +94,22 @@ private:
 	std::string				getActiveTabName() const;
 	LLUUID					getCurrentItemID() const;
 	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
-	void					buttonSetVisible(std::string btn_name, BOOL visible);
-	void					buttonSetEnabled(const std::string& btn_name, bool enabled);
-	void					buttonSetAction(const std::string& btn_name, const commit_signal_t::slot_type& cb);
 	void					showGroupMenu(LLMenuGL* menu);
 	void					setSortOrder(LLAvatarList* list, ESortOrder order, bool save = true);
 
 	// UI callbacks
 	void					onFilterEdit(const std::string& search_string);
 	void					onTabSelected(const LLSD& param);
-	void					onViewProfileButtonClicked();
 	void					onAddFriendButtonClicked();
 	void					onAddFriendWizButtonClicked();
 	void					onDeleteFriendButtonClicked();
-	void					onGroupInfoButtonClicked();
 	void					onChatButtonClicked();
+	void					onGearButtonClicked(LLUICtrl* btn);
 	void					onImButtonClicked();
-	void					onCallButtonClicked();
-	void					onGroupCallButtonClicked();
-	void					onTeleportButtonClicked();
-	void					onShareButtonClicked();
 	void					onMoreButtonClicked();
-	void					onActivateButtonClicked();
 	void					onAvatarListDoubleClicked(LLUICtrl* ctrl);
 	void					onAvatarListCommitted(LLAvatarList* list);
-	void					onGroupPlusButtonClicked();
+	bool					onGroupPlusButtonValidate();
 	void					onGroupMinusButtonClicked();
 	void					onGroupPlusMenuItemClicked(const LLSD& userdata);
 
@@ -125,8 +118,6 @@ private:
 	void					onGroupsViewSortMenuItemClicked(const LLSD& userdata);
 	void					onRecentViewSortMenuItemClicked(const LLSD& userdata);
 
-	//returns false only if group is "none"
-	bool					isRealGroup();
 	bool					onFriendsViewSortMenuItemCheck(const LLSD& userdata);
 	bool					onRecentViewSortMenuItemCheck(const LLSD& userdata);
 	bool					onNearbyViewSortMenuItemCheck(const LLSD& userdata);
@@ -152,7 +143,6 @@ private:
 	void					onGlobalVisToggleButtonClicked();
 	// </FS:Ansariel> Firestorm callback handler
 
-	LLFilterEditor*			mFilterEditor;
 	LLTabContainer*			mTabContainer;
 	LLAvatarList*			mOnlineFriendList;
 	LLAvatarList*			mAllFriendList;
@@ -164,11 +154,8 @@ private:
 	LLGroupList*			mGroupList;
 	LLNetMap*				mMiniMap;
 
-	LLHandle<LLView>		mGroupPlusMenuHandle;
-	LLHandle<LLView>		mNearbyViewSortMenuHandle;
-	LLHandle<LLView>		mFriendsViewSortMenuHandle;
-	LLHandle<LLView>		mGroupsViewSortMenuHandle;
-	LLHandle<LLView>		mRecentViewSortMenuHandle;
+	std::vector<std::string> mSavedOriginalFilters;
+	std::vector<std::string> mSavedFilters;
 
 	Updater*				mFriendListUpdater;
 	// <FS:Ansariel> Firestorm radar
@@ -176,14 +163,7 @@ private:
 	// </FS:Ansariel> Firestorm radar
 	Updater*				mRecentListUpdater;
 	Updater*				mButtonsUpdater;
-
-	LLMenuButton*			mNearbyGearButton;
-	LLMenuButton*			mFriendsGearButton;
-	LLMenuButton*			mGroupsGearButton;
-	LLMenuButton*			mRecentGearButton;
-
-	std::string				mFilterSubString;
-	std::string				mFilterSubStringOrig;
+    LLHandle< LLFloater >	mPicker;
 
 	// <FS:Ansariel> Firestorm radar
 	boost::signals2::connection mNearbyUpdateSignalConnection;

@@ -401,14 +401,13 @@ public:
 	void			sitDown();
 
 	//--------------------------------------------------------------------
-	// Busy
+	// Do Not Disturb
 	//--------------------------------------------------------------------
 public:
-	void			setBusy();
-	void			clearBusy();
-	BOOL			getBusy() const;
+	void			setDoNotDisturb(bool pIsDoNotDisturb);
+	bool			isDoNotDisturb() const;
 private:
-	BOOL			mIsBusy;
+	bool			mIsDoNotDisturb;
 	//--------------------------------------------------------------------
 	// Autorespond
 	//--------------------------------------------------------------------
@@ -620,7 +619,6 @@ public:
 //-TT
 protected:
 	bool 			teleportCore(bool is_local = false); 					// Stuff for all teleports; returns true if the teleport can proceed
-
 
 	//--------------------------------------------------------------------
 	// Teleport State

@@ -55,11 +55,6 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::get(const LLUUID& ag
 	return connection;
 }
 
-bool LLAvatarNameCache::useDisplayNames()
-{
-	return false;
-}
-
 //
 // Stub implementation for LLCacheName
 //
@@ -115,14 +110,14 @@ LLStyle::Params::Params()
 
 namespace LLInitParam
 {
-	ParamValue<LLUIColor, TypeValues<LLUIColor> >::ParamValue(const LLUIColor& color)
+	ParamValue<LLUIColor>::ParamValue(const LLUIColor& color)
 	:	super_t(color)
 	{}
 
-	void ParamValue<LLUIColor, TypeValues<LLUIColor> >::updateValueFromBlock() 
+	void ParamValue<LLUIColor>::updateValueFromBlock() 
 	{}
 	
-	void ParamValue<LLUIColor, TypeValues<LLUIColor> >::updateBlockFromValue(bool)
+	void ParamValue<LLUIColor>::updateBlockFromValue(bool)
 	{}
 
 	bool ParamCompare<const LLFontGL*, false>::equals(const LLFontGL* a, const LLFontGL* b)
@@ -130,14 +125,14 @@ namespace LLInitParam
 		return false;
 	}
 
-	ParamValue<const LLFontGL*, TypeValues<const LLFontGL*> >::ParamValue(const LLFontGL* fontp)
+	ParamValue<const LLFontGL*>::ParamValue(const LLFontGL* fontp)
 	:	super_t(fontp)
 	{}
 
-	void ParamValue<const LLFontGL*, TypeValues<const LLFontGL*> >::updateValueFromBlock()
+	void ParamValue<const LLFontGL*>::updateValueFromBlock()
 	{}
 	
-	void ParamValue<const LLFontGL*, TypeValues<const LLFontGL*> >::updateBlockFromValue(bool)
+	void ParamValue<const LLFontGL*>::updateBlockFromValue(bool)
 	{}
 
 	void TypeValues<LLFontGL::HAlign>::declareValues()
@@ -149,10 +144,10 @@ namespace LLInitParam
 	void TypeValues<LLFontGL::ShadowType>::declareValues()
 	{}
 
-	void ParamValue<LLUIImage*, TypeValues<LLUIImage*> >::updateValueFromBlock()
+	void ParamValue<LLUIImage*>::updateValueFromBlock()
 	{}
 	
-	void ParamValue<LLUIImage*, TypeValues<LLUIImage*> >::updateBlockFromValue(bool)
+	void ParamValue<LLUIImage*>::updateBlockFromValue(bool)
 	{}
 
 	

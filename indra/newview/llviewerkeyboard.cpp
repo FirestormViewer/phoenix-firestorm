@@ -27,15 +27,12 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llappviewer.h"
+#include "llfloaterreg.h"
 #include "llviewerkeyboard.h"
 #include "llmath.h"
 #include "llagent.h"
 #include "llagentcamera.h"
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychatbar.h"
-#include "fsnearbychathub.h"
-#include "lllineeditor.h"
-// </FS:Zi>
+#include "llfloaterimnearbychat.h"
 #include "llviewercontrol.h"
 #include "llfocusmgr.h"
 #include "llmorphview.h"
@@ -574,10 +571,7 @@ void stop_moving( EKeystate s )
 void start_chat( EKeystate s )
 {
 	// start chat
-	// <FS:Zi> Remove floating chat bar
-	// LLNearbyChatBar::startChat(NULL);
-	FSNearbyChat::instance().showDefaultChatBar(TRUE);
-	// </FS:Zi>
+	LLFloaterIMNearbyChat::startChat(NULL);
 }
 
 void start_gesture( EKeystate s )
@@ -603,18 +597,18 @@ void start_gesture( EKeystate s )
 		! (focus_ctrlp && focus_ctrlp->acceptsTextInput()))
 	{
 		// <FS:Ansariel> Changed for new chatbar
- 		//if (LLNearbyChat::getInstance()->getCurrentChat().empty())
+ 		// ((LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->getCurrentChat().empty()) <FS:TM> CHUI Merge new
  		//{
  		//	// No existing chat in chat editor, insert '/'
- 		//	LLNearbyChat::startChat("/");
+ 		//	LLFloaterIMNearbyChat::startChat("/"); <FS:TM> CHUI Merge new
  		//}
  		//else
  		//{
  		//	// Don't overwrite existing text in chat editor
- 		//	LLNearbyChat::startChat(NULL);
+ 		//	LLFloaterIMNearbyChat::startChat(NULL); <FS:TM> CHUI Merge new
  		//}
 
-		FSNearbyChat::instance().showDefaultChatBar(TRUE,"/");
+		FSNearbyChat::instance().showDefaultChatBar(TRUE,"/"); // <FS:TM> CHUI Merge Check this
  		// </FS:Ansariel>
 	}
 }
