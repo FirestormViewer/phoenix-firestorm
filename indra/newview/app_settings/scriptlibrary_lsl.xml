@@ -2271,7 +2271,7 @@ Sends message on channel (not DEBUG_CHANNEL) directly to prim or avatar target a
 			<string>integer llGetSPMaxMemory()
 Returns the maximum used memory for the current script. Only valid after using PROFILE_SCRIPT_MEMORY. Non-mono scripts always use 16k.</string>
 		</map>
-		<key>llGetMemoryUsed</key>
+		<key>llGetUsedMemory</key>
 		<map>
 			<key>desc</key>
 			<string>integer llGetUsedMemory()
