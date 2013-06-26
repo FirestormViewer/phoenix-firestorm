@@ -1493,7 +1493,9 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 	else if ("cut" == action)
 	{
 		cutToClipboard();
-		gInventory.removeObject(mUUID);
+		// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
+		//gInventory.removeObject(mUUID);
+		// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
 		return;
 	}
 	else if ("copy" == action)
@@ -3082,7 +3084,9 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 	else if ("cut" == action)
 	{
 		cutToClipboard();
-		gInventory.removeObject(mUUID);
+		// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
+		//gInventory.removeObject(mUUID);
+		// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
 		return;
 	}
 	else if ("copy" == action)
