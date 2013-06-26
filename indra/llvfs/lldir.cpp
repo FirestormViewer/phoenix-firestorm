@@ -942,7 +942,7 @@ void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& the
 	mSkinDir = getSkinBaseDir();
 	append(mSkinDir, skin_folder);
 	// Next level of generality is a skin installed with the viewer.
-	addSearchSkinDir(mSkinDir);		mUserName = userlower;
+	addSearchSkinDir(mSkinDir);
 		updatePerAccountChatLogsDir();
 
 // [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
