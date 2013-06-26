@@ -864,16 +864,15 @@ void LLDir::setChatLogsDir(const std::string &path)
 	}
 }
 
-// <FS:CR> Seperate user directories per grid on OS build
-#ifdef OPENSIM
-void LLDir::setPerAccountChatLogsDir(const std::string &username, const std::string &gridname)
-#else
-
 void LLDir::updatePerAccountChatLogsDir()
 {
 	mPerAccountChatLogsDir = add(getChatLogsDir(), mUserName);
 }
 
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef OPENSIM
+void LLDir::setPerAccountChatLogsDir(const std::string &username, const std::string &gridname)
+#else
 void LLDir::setPerAccountChatLogsDir(const std::string &username)
 #endif // OPENSIM
 // <//FS:CR>
