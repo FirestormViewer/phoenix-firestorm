@@ -168,7 +168,11 @@
 			</text>
 			<slider label="Aktywne:" name="active"/>
 			<slider label="Nieaktywne:" name="inactive"/>
-			<slider label="Przezrocz. konsoli:" name="console_background_opacity" tool_tip="Wybierz przezroczystość tła konsoli"/>
+			<text name="console_opacity">
+				Przezrocz. konsoli:
+			</text>
+			<color_swatch name="console_background" tool_tip="Wybierz kolor konsoli"/>
+			<slider label="Przezrocz.:" name="console_background_opacity" tool_tip="Wybierz przezroczystość tła konsoli"/>
 			<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
 			<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>
