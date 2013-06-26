@@ -168,7 +168,11 @@
 			</text>
 			<slider label="Aktiv:" name="active"/>
 			<slider label="Inaktiv:" name="inactive"/>
-			<slider name="console_background_opacity" label="Konsolen-Deckkraft:" tool_tip="Deckkraft für Konsole auswählen"/>
+			<text name="console_opacity">
+				Konsolen-Deckkraft:
+			</text>
+			<color_swatch name="console_background" tool_tip="Hintergrundfarbe der Konsole auswählen"/>
+			<slider name="console_background_opacity" label="Deckkraft:" tool_tip="Deckkraft für Konsole auswählen"/>
 			<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
 			<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
 			<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>
