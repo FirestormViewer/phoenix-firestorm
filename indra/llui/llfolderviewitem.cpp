@@ -28,8 +28,6 @@
 #include "llflashtimer.h"
 
 #include "linden_common.h"
-#include "../newview/aoengine.h"			// ## Zi: Animation Overrider
-#include "../newview/fslslbridge.h"		//-TT Client LSL Bridge
 #include "llfolderviewitem.h"
 #include "llfolderview.h"
 #include "llfolderviewmodel.h"
@@ -39,8 +37,6 @@
 #include "llfocusmgr.h"		// gFocusMgr
 #include "lltrans.h"
 #include "llwindow.h"
-
-//#include "llinventorypanel.h" <FS:TM> CHUI merge check
 
 ///----------------------------------------------------------------------------
 /// Class LLFolderViewItem
@@ -118,11 +114,7 @@ LLFolderViewItem::Params::Params()
     text_pad_right("text_pad_right", 0),
     arrow_size("arrow_size", 0),
     max_folder_item_overlap("max_folder_item_overlap", 0)
-    
-{
-	static LLCachedControl<S32> FolderViewItemHeight(gSavedSettings, "FSFolderViewItemHeight");
-	item_height = (S32)FolderViewItemHeight;
-}
+{ }
 
 // Default constructor
 LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
@@ -867,23 +859,6 @@ void LLFolderViewItem::draw()
 	// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
     drawLabel(font, text_left, y, color, right_x);
 
-	// ## Zi: Animation Overrider
-	//--------------------------------------------------------------------------------//
-	// Draw "protected" indicator
-	//
-	if((mListener->getUUID()==AOEngine::instance().getAOFolder() && gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
-//-TT Client LSL Bridge
-		||(mListener->getUUID()==FSLSLBridge::instance().getBridgeFolder() && gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
-//-TT
-		)
-	{
-		std::string locked_string = " (" + LLTrans::getString("ProtectedFolder") + ") ";
-		font->renderUTF8(locked_string, 0, right_x, y, sProtectedColor,
-						 LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, 
-						 S32_MAX, S32_MAX, &right_x, FALSE);
-	}
-	// ## Zi: Animation Overrider
-
 	//--------------------------------------------------------------------------------//
 	// Draw label suffix
 	//
@@ -925,31 +900,6 @@ bool LLFolderViewItem::isInSelection() const
 {
 	return mIsSelected || (mParentFolder && mParentFolder->isInSelection());
 }
-// <FS:ND> Don't bother with unneeded tooltips in inventor
-
-BOOL LLFolderViewItem::handleToolTip(S32 x, S32 y, MASK mask)
-{
-	if( childrenHandleToolTip( x, y, mask ) )
-		return TRUE;
-
-	int nStart = ARROW_SIZE + TEXT_PAD + ICON_WIDTH + ICON_PAD + mIndentation;
-	int nWidth = getLabelFontForStyle(mLabelStyle)->getWidth(mLabel) + nStart;
-
-  	if( getRoot()->getParentPanel()->getRect().getWidth() < nWidth ) // Label is truncated, display tooltip
-	{
-		setToolTip( mLabel );
-		return LLView::handleToolTip( x, y, mask );
-	}
-	else
-		setToolTip( LLStringExplicit("") );
-
-	// In case of root we always want to return TRUE, otherwise tooltip handling gets propagated one level up and we end with a tooltip like 'All Items'.
-	if( this == getRoot() )
-		return TRUE;
-
-	return FALSE;
-}
-// </FS:ND>
 
 
 

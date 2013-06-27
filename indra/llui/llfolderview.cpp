@@ -238,18 +238,11 @@ LLFolderView::LLFolderView(const Params& p)
 	mPopupMenuHandle = menu->getHandle();
 
 	mViewModelItem->openItem();
-
-	mFolderviewProxy = 0; // <FS:ND> FIRE-4702;
 }
 
 // Destroys the object
 LLFolderView::~LLFolderView( void )
 {
-	// <FS:ND> FIRE-4702;
-	if( mFolderviewProxy )
-		mFolderviewProxy->mFolderview = 0;
-	// </FS:ND>
-
 	closeRenamer();
 
 	// The release focus call can potentially call the
@@ -368,7 +361,6 @@ void LLFolderView::addToSelectionList(LLFolderViewItem* item)
 	}
 	item->setIsCurSelection(TRUE);
 	mSelectedItems.push_back(item);
-	mSelectionChanged = true;
 }
 
 void LLFolderView::removeFromSelectionList(LLFolderViewItem* item)
@@ -384,7 +376,6 @@ void LLFolderView::removeFromSelectionList(LLFolderViewItem* item)
 		if (*item_iter == item)
 		{
 			item_iter = mSelectedItems.erase(item_iter);
-			mSelectionChanged = true;
 		}
 		else
 		{
@@ -494,13 +485,6 @@ BOOL LLFolderView::changeSelection(LLFolderViewItem* selection, BOOL selected)
 static LLFastTimer::DeclareTimer FTM_SANITIZE_SELECTION("Sanitize Selection");
 void LLFolderView::sanitizeSelection()
 {
-	// Nicky D.; Only run this if mSelectionChanged actually changed since our last run of sanitizeSelection.
-	// sanitizeSelection is a very expensive operation for many items (n^2 is n items are selected). In fact it
-	// is a good candidate for further optimizations.
-	if( !mSelectionChanged )
-		return;
-	mSelectionChanged = false;
-
 	LLFastTimer _(FTM_SANITIZE_SELECTION);
 	// store off current item in case it is automatically deselected
 	// and we want to preserve context
@@ -614,7 +598,6 @@ void LLFolderView::clearSelection()
 	}
 
 	mSelectedItems.clear();
-	mSelectionChanged = true;
 }
 
 std::set<LLFolderViewItem*> LLFolderView::getSelectionList() const
@@ -1982,16 +1965,3 @@ S32 LLFolderView::getItemHeight()
 }
 	return 0;
 }
-
-// <FS:ND> FIRE-4702;
-void LLFolderView::FolderviewProxy::onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response)
-{
-	if( mFolderview )
-	{
-		mFolderview->mFolderviewProxy = 0;
-		mFolderview->onItemsRemovalConfirmation( notification, response);
-	}
-	delete this;
-}
-// </FS:ND>
-

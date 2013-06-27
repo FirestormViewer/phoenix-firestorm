@@ -103,7 +103,7 @@ static LLDefaultChildRegistry::Register<LLToolBarVertical> register_toolbar_vert
 //
 
 //<FS:TM> CHUI merge check
-LLUUID find_ui_sound(const char * namep, BOOL forceSound) //LL post CHUI
+LLUUID find_ui_sound(const char * namep, bool force_sound) //LL post CHUI
 // <FS:PP> UI Sounds preview
 // void make_ui_sound(const char* namep) //LL pre CHUI, LL moved make_ui_sound below and renamed this segment
 // void make_ui_sound(const char* namep, BOOL forceSound) //Old
@@ -138,8 +138,8 @@ LLUUID find_ui_sound(const char * namep, BOOL forceSound) //LL post CHUI
 			// <FS:PP> Silencer for FIRE-7556: Configurable User Interface sounds
 			if (name != "UISndNewIncomingIMSession" && name != "UISndNewIncomingGroupIMSession") // There is no need to process these two, checks are in llimview.cpp already, in LLIMMgr::addMessage
 			{
-				if (!forceSound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
-					return;
+				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
+					return uuid;
 			}
 			// </FS:PP>
 			
@@ -153,18 +153,20 @@ LLUUID find_ui_sound(const char * namep, BOOL forceSound) //LL post CHUI
 	return uuid;
 }
 
-void make_ui_sound(const char* namep)
+//void make_ui_sound(const char* namep)
+void make_ui_sound(const char* namep, bool force_sound)
 {
-	LLUUID soundUUID = find_ui_sound(namep);
+	LLUUID soundUUID = find_ui_sound(namep, force_sound);
 	if(soundUUID.notNull())
 	{
 		LLUI::sAudioCallback(soundUUID);
 	}
 }
 
-void make_ui_sound_deferred(const char* namep)
+//void make_ui_sound_deferred(const char* namep)
+void mame_ui_sound_deferred(const char* namep, bool force_sound)
 {
-	LLUUID soundUUID = find_ui_sound(namep);
+	LLUUID soundUUID = find_ui_sound(namep, force_sound);
 	if(soundUUID.notNull())
 	{
 		LLUI::sDeferredAudioCallback(soundUUID);

@@ -83,7 +83,6 @@ protected:
 
 class LLFolderView : public LLFolderViewFolder, public LLEditMenuHandler
 {
-	bool mSelectionChanged;
 public:
 	struct Params : public LLInitParam::Block<Params, LLFolderViewFolder::Params>
 	{
@@ -316,27 +315,6 @@ protected:
 public:
 	static F32 sAutoOpenTime;
 	LLTextBox*						mStatusTextBox;
-
-
-	// <FS:ND> FIRE-4702; When displaying a confirmation dialog to delete items, don't pass
-	// this, but instead a new proxy objects. this can be destroyed if there is a
-	// race condition between displaying the confirmation dialog and this folderview
-	// being populated at the same time.
-private:
-	struct FolderviewProxy
-	{
-		void onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response);
-		LLFolderView *mFolderview;
-	};
-
-	friend struct FolderviewProxy;
-
-	FolderviewProxy *mFolderviewProxy;
-	// </FS:ND>
-
-#if !LL_RELEASE_WITH_DEBUG_INFO && !LL_DEBUG // <FS:ND> To reduce memory load for users with huge inventory this member is not defined in LLFolderViewItem for those targets
-	std::string	mStatusText;
-#endif	// </FS:ND>
 
 };
 

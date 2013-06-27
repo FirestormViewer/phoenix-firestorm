@@ -3107,7 +3107,7 @@ LLNormalTextSegment::LLNormalTextSegment( const LLColor4& color, S32 start, S32 
 	mToken(NULL),
 	mEditor(editor)
 {
-	mStyle = new LLStyle(LLStyle::Params().visible(is_visible).color(color).font(editor.getDefaultFont())); // [SL:KB] - Patch: Control-TextEditorFont
+	mStyle = new LLStyle(LLStyle::Params().visible(is_visible).color(color));
 
 	mFontHeight = mStyle->getFont()->getLineHeight();
 }
@@ -3550,12 +3550,6 @@ F32	LLLineBreakTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 se
 {
 	return  draw_rect.mLeft;
 }
-// [SL:KB] - Patch: Control-TextEditorFont | Checked: 2012-01-10 (Catznip-3.2.1) | Added: Catznip-3.2.1
-void LLLineBreakTextSegment::setStyle(LLStyleConstSP style)
-{
-	mFontHeight = llceil(style->getFont()->getLineHeight());
-}
-// [/SL:KB]
 
 LLImageTextSegment::LLImageTextSegment(LLStyleConstSP style,S32 pos,class LLTextBase& editor)
 :	LLTextSegment(pos,pos+1),
