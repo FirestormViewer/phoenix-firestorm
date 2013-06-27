@@ -37,6 +37,7 @@
 #include "llviewerinventory.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
+#include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -53,12 +54,11 @@ S32 FSCommon::sObjectAddMsg = 0;
 
 void reportToNearbyChat(const std::string& message)
 {
-	LLChat chat;
-    chat.mText = message;
-	chat.mSourceType = CHAT_SOURCE_SYSTEM;
+	// Generic report to chat convenience function
+	// TODO: This should be replaced with a proper report to chat notification method <FS:CR>
 	LLSD args;
-	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	args["message"] = message;
+	LLNotificationsUtil::add("ReportToNearbyChat", args);
 }
 
 std::string applyAutoCloseOoc(const std::string& message)

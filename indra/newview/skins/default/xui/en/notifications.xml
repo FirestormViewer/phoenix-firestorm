@@ -11262,4 +11262,15 @@ You are about to eject [COUNT] members from the group.
         notext="Cancel"
         yestext="Eject"/>
     </notification>
+	
+	<notification
+		icon="notify.tga"
+		name="ReportToNearbyChat"
+		log_to_im="false"
+		log_to_chat="true"
+		show_toast="false"
+		type="notify">
+[MESSAGE]
+	</notification>
+	
 </notifications>
