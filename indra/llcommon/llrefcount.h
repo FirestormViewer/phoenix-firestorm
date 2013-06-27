@@ -109,8 +109,12 @@ private:
  * intrusive pointer support
  * this allows you to use boost::intrusive_ptr with any LLRefCount-derived type
  */
-namespace boost
-{
+
+// <FS:ND> intrusive_ptr_add_ref/release are not supposed to be in namespace boost.
+// namespace boost
+// {
+// </FS:ND>
+
 	inline void intrusive_ptr_add_ref(LLRefCount* p)
 	{
 		p->ref();
@@ -120,7 +124,10 @@ namespace boost
 	{
 		p->unref();
 	}
-};
+
+// <FS:ND> intrusive_ptr_add_ref/release are not supposed to be in namespace boost.
+// };
+// </FS:ND>
 
 
 #endif
