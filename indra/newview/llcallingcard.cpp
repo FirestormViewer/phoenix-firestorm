@@ -71,8 +71,8 @@
 #include "fsfloaternearbychat.h" //<FS:TM> CHUI Merge can we get rid if this? line 903
 // <FS:Ansariel> [FS communication UI]
 // </FS:Zi>
-//#include "llfloaterreg.h"
-//#include "llnotificationmanager.h"
+#include "llfloaterreg.h"
+#include "llnotificationmanager.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llimfloater.h"
 #include "fsfloaterim.h"
@@ -895,7 +895,6 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		LLChat chat;
 		chat.mText = notify_msg;
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
-		args["type"] = LLNotificationsUI::NT_NEARBYCHAT; //<FS:TM> CHUI Merge error- has no member NT_NEARBYCHAT
 		if (history_only)
 		{
 			// <FS:Ansariel> [FS communication UI]

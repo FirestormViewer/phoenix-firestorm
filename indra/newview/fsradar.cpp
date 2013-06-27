@@ -136,7 +136,6 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 		chat.mChatType = CHAT_TYPE_RADAR;
 		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		LLSD args;
-		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 	} // <FS:CR />
 }

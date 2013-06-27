@@ -54,11 +54,12 @@ S32 FSCommon::sObjectAddMsg = 0;
 
 void reportToNearbyChat(const std::string& message)
 {
-	// Generic report to chat convenience function
-	// TODO: This should be replaced with a proper report to chat notification method <FS:CR>
+	LLChat chat;
+	chat.mText = message;
+	chat.mSourceType = CHAT_SOURCE_SYSTEM;
 	LLSD args;
-	args["message"] = message;
-	LLNotificationsUtil::add("ReportToNearbyChat", args);
+	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+
 }
 
 std::string applyAutoCloseOoc(const std::string& message)
