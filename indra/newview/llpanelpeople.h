@@ -32,6 +32,8 @@
 #include "llcallingcard.h" // for avatar tracker
 #include "llvoiceclient.h"
 
+#include "llfloater.h"
+
 class LLAvatarList;
 class LLAvatarName;
 class LLFilterEditor;
