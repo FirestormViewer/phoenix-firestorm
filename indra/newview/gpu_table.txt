@@ -103,18 +103,6 @@ ATI M56									.*ATI.*M56.*							1	1	0	0
 ATI M71									.*ATI.*M71.*							1	1	0	0
 ATI M72									.*ATI.*M72.*							1	1	0	0
 ATI M76									.*ATI.*M76.*							3	1	0	0
-ATI Radeon HD 64xx						.*ATI.*AMD Radeon.* HD [67]4..[MG]		2	1	1	4.2
-ATI Radeon HD 65xx						.*ATI.*AMD Radeon.* HD [67]5..[MG]		2	1	1	4.2
-ATI Radeon HD 66xx						.*ATI.*AMD Radeon.* HD [67]6..[MG]		3	1	1	4.2
-ATI Radeon HD 7100						.*ATI.*AMD Radeon.* HD 71.*				2	1	0	0
-ATI Radeon HD 7200						.*ATI.*AMD Radeon.* HD 72.*				2	1	0	0
-ATI Radeon HD 7300						.*ATI.*AMD Radeon.* HD 73.*				2	1	0	4.2
-ATI Radeon HD 7400						.*ATI.*AMD Radeon.* HD 74.*				2	1	0	4.2
-ATI Radeon HD 7500						.*ATI.*AMD Radeon.* HD 75.*				3	1	1	4.2
-ATI Radeon HD 7600						.*ATI.*AMD Radeon.* HD 76.*				3	1	0	4.2
-ATI Radeon HD 7700						.*ATI.*AMD Radeon.* HD 77.*				4	1	1	4.2
-ATI Radeon HD 7800						.*ATI.*AMD Radeon.* HD 78.*				5	1	1	4.2
-ATI Radeon HD 7900						.*ATI.*AMD Radeon.* HD 79.*				5	1	1	4.2
 ATI ASUS HD7100							.*ATI.*ASUS.* HD71.*					2	1	0	0
 ATI ASUS HD7200							.*ATI.*ASUS.* HD72.*					2	1	0	0
 ATI ASUS HD7300							.*ATI.*ASUS.* HD73.*					2	1	0	0
@@ -124,6 +112,8 @@ ATI ASUS HD7600							.*ATI.*ASUS.* HD76.*					3	1	0	0
 ATI ASUS HD7700							.*ATI.*ASUS.* HD77.*					4	1	1	4.2
 ATI ASUS HD7800							.*ATI.*ASUS.* HD78.*					5	1	1	4.2
 ATI ASUS HD7900							.*ATI.*ASUS.* HD79.*					5	1	1	4.2
+ATI ASUS EAH5400						.*ATI.*ASUS EAH54..						3	1	1	4.2
+ATI ASUS EAH5500						.*ATI.*ASUS EAH55..						3	1	1	4.2
 ATI Mobility Radeon 4100				.*ATI.*Mobility.*41..					1	1	1	3.3
 ATI Mobility Radeon 7xxx				.*ATI.*Mobility.*Radeon 7.*				0	1	1	1.3
 ATI Mobility Radeon 8xxx				.*ATI.*Mobility.*Radeon 8.*				0	1	0	0
@@ -203,10 +193,8 @@ ATI Radeon HD 4500						.*ATI.*Radeon HD *45..					2	1	1	3.3
 ATI Radeon HD 4600						.*ATI.*Radeon HD *46..					3	1	1	4
 ATI Radeon HD 4700						.*ATI.*Radeon HD *47..					3	1	1	3.3
 ATI Radeon HD 4800						.*ATI.*Radeon HD *48..					3	1	1	4
-ATI ASUS EAH5400						.*ATI.*ASUS EAH54..						3	1	1	4.2
 ATI Radeon HD 5400						.*ATI.*Radeon HD *54..					3	1	1	4.2
 ATI Radeon HD 5500						.*ATI.*Radeon HD *55..					3	1	1	4.2
-ATI ASUS EAH5500						.*ATI.*ASUS EAH55..						3	1	1	4.2
 ATI Radeon HD 5600						.*ATI.*Radeon HD *56..					3	1	1	4.2
 ATI Radeon HD 5700						.*ATI.*Radeon HD *57..					3	1	1	4.2
 ATI Radeon HD 5800						.*ATI.*Radeon HD *58..					4	1	1	4.2
@@ -219,6 +207,15 @@ ATI Radeon HD 6600						.*ATI.*Radeon HD *66..					3	1	1	4.2
 ATI Radeon HD 6700						.*ATI.*Radeon HD *67..					3	1	1	4.2
 ATI Radeon HD 6800						.*ATI.*Radeon HD *68..					4	1	1	4.2
 ATI Radeon HD 6900						.*ATI.*Radeon HD *69..					5	1	1	4.2
+ATI Radeon HD 7100						.*ATI.*Radeon HD 71.*				2	1	0	0
+ATI Radeon HD 7200						.*ATI.*Radeon HD 72.*				2	1	0	0
+ATI Radeon HD 7300						.*ATI.*Radeon HD 73.*				2	1	0	4.2
+ATI Radeon HD 7400						.*ATI.*Radeon HD 74.*				2	1	0	4.2
+ATI Radeon HD 7500						.*ATI.*Radeon HD 75.*				3	1	1	4.2
+ATI Radeon HD 7600						.*ATI.*Radeon HD 76.*				3	1	0	4.2
+ATI Radeon HD 7700						.*ATI.*Radeon HD 77.*				4	1	1	4.2
+ATI Radeon HD 7800						.*ATI.*Radeon HD 78.*				5	1	1	4.2
+ATI Radeon HD 7900						.*ATI.*Radeon HD 79.*				5	1	1	4.2
 ATI Radeon OpenGL						.*ATI.*Radeon OpenGL.*					0	0	0	0
 ATI Radeon 2100							.*ATI.*Radeon 21..						0	1	1	2.1
 ATI Radeon 3000							.*ATI.*Radeon 30..						1	1	1	4
