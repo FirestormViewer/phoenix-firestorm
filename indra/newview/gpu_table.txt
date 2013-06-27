@@ -157,15 +157,14 @@ ATI Mobility Radeon HD 5400				.*ATI.*Mobility.*HD *54.*				2	1	1	4.2
 ATI Mobility Radeon HD 5500				.*ATI.*Mobility.*HD *55.*				3	1	0	0
 ATI Mobility Radeon HD 5600				.*ATI.*Mobility.*HD *56.*				3	1	1	4.2
 ATI Mobility Radeon HD 5700				.*ATI.*Mobility.*HD *57.*				3	1	1	4.1
-ATI Mobility Radeon HD 6200M			.*ATI.*Mobility.*HD *62.*				3	1	0	0
-ATI Mobility Radeon HD 6300M			.*ATI.*Mobility.*HD *63.*				3	1	1	4.2
-ATI Mobility Radeon HD 6400M			.*ATI.*Mobility.*HD *64.*				3	1	0	0
-ATI Mobility Radeon HD 6500M			.*ATI.*Mobility.*HD *65.*				5	1	1	4.2
-ATI Mobility Radeon HD 6600M			.*ATI.*Mobility.*HD *66.*				5	1	0	0
-ATI Mobility Radeon HD 6700M			.*ATI.*Mobility.*HD *67.*				5	1	0	0
-//ATI Radeon HD 6700M						.*ATI.*Radeon.*HD *67..M.*				5	1	0	0 TM-testing
-ATI Mobility Radeon HD 6800M			.*ATI.*Mobility.*HD *68.*				5	1	0	0
-ATI Mobility Radeon HD 6900M			.*ATI.*Mobility.*HD *69.*				5	1	0	0
+ATI Radeon HD 6200M						.*ATI.*Radeon.*HD *62..M.*				3	1	0	0
+ATI Radeon HD 6300M						.*ATI.*Radeon.*HD *63..M.*				3	1	1	4.2
+ATI Radeon HD 6400M						.*ATI.*Radeon.*HD *64..M.*				3	1	0	0
+ATI Radeon HD 6500M						.*ATI.*Radeon.*HD *65..M.*				5	1	1	4.2
+ATI Radeon HD 6600M						.*ATI.*Radeon.*HD *66..M.*				5	1	0	0
+ATI Radeon HD 6700M						.*ATI.*Radeon.*HD *67..M.*				5	1	0	0
+ATI Radeon HD 6800M						.*ATI.*Radeon.*HD *68..M.*				5	1	0	0
+ATI Radeon HD 6900M						.*ATI.*Radeon.*HD *69..M.*				5	1	0	0
 ATI Radeon HD 7200M						.*ATI.*Radeon.*HD *72..M.*				3	1	0	0
 ATI Radeon HD 7300M						.*ATI.*Radeon.*HD *73..M.*				3	1	0	0
 ATI Radeon HD 7400M						.*ATI.*Radeon.*HD *74..M.*				3	1	0	0
