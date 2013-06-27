@@ -3695,9 +3695,9 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 // [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 	else if (isLostInventory())
 	{
-		mItems.push_back(std::string("Move to Lost And Found"));
+		items.push_back(std::string("Move to Lost And Found"));
 		if (0 == (flags & FIRST_SELECTED_ITEM))
-			mDisabledItems.push_back(std::string("Move to Lost And Found"));
+			disabled_items.push_back(std::string("Move to Lost And Found"));
 	}
 // [/SL:KB]
 
@@ -3811,7 +3811,7 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 			{
 				items.push_back(std::string("Add To Outfit"));
 				// <FS:TT> Patch: ReplaceWornItemsOnly
-				mItems.push_back(std::string("Wear Items"));
+				items.push_back(std::string("Wear Items"));
 				// </FS:TT>
 			}
 
@@ -6835,9 +6835,8 @@ LLInvFVBridge* LLRecentInventoryBridgeBuilder::createBridge(
 /************************************************************************/
 void LLWornItemsFolderBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 {
-	LLFolderBridge::buildContextMenu(menu, flags);
-
-	menuentry_vec_t disabled_items, items = getMenuItems();
+	menuentry_vec_t disabled_items, items;
+        buildContextMenuOptions(flags, items, disabled_items);
 
 	items.erase(std::remove(items.begin(), items.end(), std::string("New Body Parts")), items.end());
 	items.erase(std::remove(items.begin(), items.end(), std::string("New Clothes")), items.end());
@@ -6854,6 +6853,7 @@ LLInvFVBridge* LLWornInventoryBridgeBuilder::createBridge(
 	LLAssetType::EType actual_asset_type,
 	LLInventoryType::EType inv_type,
 	LLInventoryPanel* inventory,
+	LLFolderViewModelInventory* view_model,
 	LLFolderView* root,
 	const LLUUID& uuid,
 	U32 flags /*= 0x00*/ ) const
@@ -6865,11 +6865,12 @@ LLInvFVBridge* LLWornInventoryBridgeBuilder::createBridge(
 		if (actual_asset_type == LLAssetType::AT_LINK_FOLDER)
 		{
 			// *TODO: Create a link folder handler instead if it is necessary
-			new_listener = LLInventoryFVBridgeBuilder::createBridge(
+			new_listener = LLInventoryFolderViewModelBuilder::createBridge(
 				asset_type,
 				actual_asset_type,
 				inv_type,
 				inventory,
+																view_model,
 				root,
 				uuid,
 				flags);
@@ -6878,11 +6879,12 @@ LLInvFVBridge* LLWornInventoryBridgeBuilder::createBridge(
 		new_listener = new LLWornItemsFolderBridge(inv_type, inventory, root, uuid);
 		break;
 	default:
-		new_listener = LLInventoryFVBridgeBuilder::createBridge(
+		new_listener = LLInventoryFolderViewModelBuilder::createBridge(
 			asset_type,
 			actual_asset_type,
 			inv_type,
 			inventory,
+																view_model,
 			root,
 			uuid,
 			flags);

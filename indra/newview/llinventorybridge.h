@@ -658,6 +658,7 @@ public:
 		LLAssetType::EType actual_asset_type,
 		LLInventoryType::EType inv_type,
 		LLInventoryPanel* inventory,
+		LLFolderViewModelInventory* view_model,
 		LLFolderView* root,
 		const LLUUID& uuid,
 		U32 flags = 0x00) const;
@@ -685,7 +686,7 @@ public:
 };
 
 // Bridge builder to create Inventory-Folder-View-Bridge for Worn Inventory Panel
-class LLWornInventoryBridgeBuilder : public LLInventoryFVBridgeBuilder
+class LLWornInventoryBridgeBuilder : public LLInventoryFolderViewModelBuilder
 {
 public:
 	// Overrides FolderBridge for Worn Inventory Panel.
