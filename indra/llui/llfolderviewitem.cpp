@@ -114,7 +114,12 @@ LLFolderViewItem::Params::Params()
     text_pad_right("text_pad_right", 0),
     arrow_size("arrow_size", 0),
     max_folder_item_overlap("max_folder_item_overlap", 0)
-{ }
+{
+	// <FS:Ansariel> User-definable item height in folder views
+	static LLCachedControl<S32> FolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	item_height = (S32)FolderViewItemHeight;
+	// </FS:Ansariel>
+}
 
 // Default constructor
 LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
