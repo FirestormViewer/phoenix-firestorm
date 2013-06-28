@@ -2962,7 +2962,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 						my_name,
 						response,
 						IM_ONLINE,
-						IM_BUSY_AUTO_RESPONSE,
+						IM_DO_NOT_DISTURB_AUTO_RESPONSE,
 						session_id);
 					gAgent.sendReliableMessage();
 				}

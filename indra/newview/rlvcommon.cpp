@@ -127,14 +127,16 @@ void RlvSettings::initClass()
 #endif // RLV_EXTENSION_STARTLOCATION
 
 // Checked: 2013-04-17 (RLVa-1.4.8)
-bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
-{
-	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isUsingServerBakes()) )
-	{
-		gAgentAvatarp->computeBodySize();
-	}
-	return true;
-}
+// [CHUI Merge]
+//bool RlvSettings::onChangedAvatarOffset(const LLSD& sdValue)
+//{
+//	if ( (isAgentAvatarValid()) && (!gAgentAvatarp->isUsingServerBakes()) )
+//	{
+//		gAgentAvatarp->computeBodySize();
+//	}
+//	return true;
+//}
+// [CHUI Merge]
 
 // Checked: 2011-08-16 (RLVa-1.4.0b) | Added: RLVa-1.4.0b
 bool RlvSettings::onChangedMenuLevel()

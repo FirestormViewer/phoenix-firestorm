@@ -6590,7 +6590,7 @@ class LLWorldGetBusy : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value = gAgent.getBusy();
+		bool new_value = gAgent.isDoNotDisturb();
 		return new_value;
 	}
 };

@@ -40,7 +40,10 @@
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llimview.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
 // [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c

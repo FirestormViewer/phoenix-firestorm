@@ -61,7 +61,7 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 	// Don't write to console if avatar chat and user wants
 	// bubble chat or if the user is busy.
 	if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && useChatBubbles)
-		|| gAgent.getBusy() )
+		|| gAgent.isDoNotDisturb() )
 	{
 		return true;
 	}
@@ -108,8 +108,11 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 	}
 	else
 	{
-		if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM &&
-			args["type"].asInteger() == LLNotificationsUI::NT_MONEYCHAT)
+		// [CHUI Merge]
+		//if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM &&
+		//	args["type"].asInteger() == LLNotificationsUI::NT_MONEYCHAT)
+		if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM)
+		// [CHUI Merge]
 		{
 			consoleChat = args["console_message"].asString();
 		}

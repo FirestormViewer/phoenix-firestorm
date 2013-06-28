@@ -51,11 +51,9 @@
 #include "llcallingcard.h"
 #include "llchat.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h" <FS:TM> CHUI Merge removed by LL
 //#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
 //#include "llfloaterimcontainer.h" <FS:TM> CHUI Merge new
-#include "fsfloaterimcontainer.h" //<FS:TM> CHUI Merge fs new
-//#include "fsfloaterim.h"
+#include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llgroupiconctrl.h"
 #include "llmd5.h"
@@ -3692,6 +3690,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			SYSTEM_FROM,
 			//</FS:TS> FIRE-8601
 			LLTrans::getString("IM_announce_incoming", args),
+			false,
 			im_info->mName,
 			IM_NOTHING_SPECIAL,
 			im_info->mParentEstateID,
@@ -3705,7 +3704,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 		// later because a session has already been created by showing the
 		// incoming IM announcement.
 		// The logic is copied from process_improved_im() in llviewermessage.cpp
-		BOOL is_busy = gAgent.getBusy();
+		BOOL is_busy = gAgent.isDoNotDisturb();
 		BOOL is_autorespond = gAgent.getAutorespond();
 		BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
 		BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
@@ -3741,7 +3740,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				my_name,
 				response,
 				IM_ONLINE,
-				IM_BUSY_AUTO_RESPONSE,
+				IM_DO_NOT_DISTURB_AUTO_RESPONSE,
 				session_id);
 			gAgent.sendReliableMessage();
 			// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
@@ -3750,6 +3749,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				im_info->mFromID,
 				LLStringUtil::null, // Pass null value so no name gets prepended
 				LLTrans::getString("IM_autoresponse_sent"),
+				false,
 				im_info->mName,
 				IM_NOTHING_SPECIAL,
 				im_info->mParentEstateID,
@@ -3764,8 +3764,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 	// </Ansariel>
 
 	// <FS:Ansariel> [FS communication UI]
- 	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id); <FS:TM> CHUI Merge new
-	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id); <FS:TM> CHUI Merge old
+ 	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
 	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
 	// </FS:Ansariel> [FS communication UI]
 
