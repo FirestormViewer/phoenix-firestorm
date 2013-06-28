@@ -271,7 +271,7 @@ void	FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			LLAvatarName av_name;
 			LLAvatarNameCache::get(chat.mFromID, &av_name);
 
-			if (!av_name.mIsDisplayNameDefault)
+			if (!av_name.isDisplayNameDefault())
 			{
 				from_name = av_name.getCompleteName();
 			}
@@ -518,7 +518,7 @@ void FSFloaterNearbyChat::loadHistory()
 	do_not_log["do_not_log"] = true;
 
 	std::list<LLSD> history;
-	LLLogChat::loadAllHistory("chat", history);
+	LLLogChat::loadChatHistory("chat", history);
 
 	std::list<LLSD>::const_iterator it = history.begin();
 	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
