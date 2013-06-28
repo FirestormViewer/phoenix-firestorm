@@ -1865,7 +1865,7 @@ void lggContactSetsFloater::draw()
 					switch (sPhoenixNameSystem())
 					{
 						case 0 : fullname = avatar_name.getLegacyName(); break;
-						case 1 : fullname = (avatar_name.mIsDisplayNameDefault ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
+						case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
 						case 2 : fullname = avatar_name.getDisplayName(); break;
 						default : fullname = avatar_name.getCompleteName(); break;
 					}
@@ -2234,7 +2234,7 @@ BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 		switch (sPhoenixNameSystem())
 		{
 			case 0 : fullname = avatar_name.getLegacyName(); break;
-			case 1 : fullname = (avatar_name.mIsDisplayNameDefault ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
+			case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
 			case 2 : fullname = avatar_name.getDisplayName(); break;
 			default : fullname = avatar_name.getCompleteName(); break;
 		}
@@ -2247,7 +2247,7 @@ BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 		switch (sPhoenixNameSystem())
 		{
 			case 0 : fullname = avatar_name.getLegacyName(); break;
-			case 1 : fullname = (avatar_name.mIsDisplayNameDefault ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
+			case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
 			case 2 : fullname = avatar_name.getDisplayName(); break;
 			default : fullname = avatar_name.getCompleteName(); break;
 		}
@@ -2329,7 +2329,7 @@ BOOL lggContactSetsFloater::generateCurrentList()
 				switch (sPhoenixNameSystem())
 				{
 					case 0 : fullname = avatar_name.getLegacyName(); break;
-					case 1 : fullname = (avatar_name.mIsDisplayNameDefault ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
+					case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
 					case 2 : fullname = avatar_name.getDisplayName(); break;
 					default : fullname = avatar_name.getCompleteName(); break;
 				}

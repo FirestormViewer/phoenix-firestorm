@@ -40,7 +40,6 @@
 #include "llsingleton.h"
 #include "llregistry.h"
 #include "llviewermessage.h" 
-#include "llsyswellwindow.h"
 
 typedef boost::function<LLNotificationResponderInterface * (const LLSD& pParams)> responder_constructor_t;
 
@@ -105,8 +104,6 @@ bool LLNotificationStorage::writeNotifications(const LLSD& pNotificationData) co
 }
 
 bool LLNotificationStorage::readNotifications(LLSD& pNotificationData) const
-	LLNotificationWellWindow::getInstance()->lockWindowUpdate();
-
 {
 	LL_INFOS("LLNotificationStorage") << "starting read '" << mFileName << "'" << LL_ENDL;
 
@@ -129,8 +126,6 @@ bool LLNotificationStorage::readNotifications(LLSD& pNotificationData) const
 			LL_WARNS("LLNotificationStorage") << "Failed to parse open notifications from file '" << mFileName 
 				<< "'" << LL_ENDL;
 		}
-
-	LLNotificationWellWindow::getInstance()->unlockWindowUpdate();
 	}
 
 	LL_INFOS("LLNotificationStorage") << "ending read '" << mFileName << "'" << LL_ENDL;
