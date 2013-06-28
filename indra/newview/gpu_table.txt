@@ -20,12 +20,12 @@
 //	 <recognizer name>	<regular expression>	<class>		<supported>	<stats based> <expected OpenGL version>
 //
 // Class Numbers:
-//		0 - Defaults to low graphics settings.	No shaders on by default
-//		1 - Defaults to mid graphics settings.	Basic shaders on by default
-//		2 - Defaults to high graphics settings.	 Atmospherics on by default.
-//		3 - Same as 2, but with lighting and shadows enabled.
-//		4 - Same as 3, but with ambient occlusion enabled.
-//		5 - Same as 4, but with shadows set to "Sun/Moon+Projectors."
+//		0 - Defaults to low graphics settings.			No shaders on by default
+//		1 - Defaults to low-mid graphics settings.		Basic shaders on by default
+//		2 - Defaults to mid graphics settings.			Atmospherics on by default
+//		3 - Defaults to mid-high graphics settings.		Advanced Lighting Model on by default
+//		4 - Defaults to high graphics settings.			Ambient Occlusion on by default
+//		5 - Defaults to high-ultra graphics settings.	Shadows set to "Sun/Moon+Projectors."
 //
 // Supported Number:
 //		0 - We claim to not support this card.
@@ -147,75 +147,75 @@ ATI Mobility Radeon HD 5400				.*ATI.*Mobility.*HD *54.*				2	1	1	4.2
 ATI Mobility Radeon HD 5500				.*ATI.*Mobility.*HD *55.*				3	1	0	0
 ATI Mobility Radeon HD 5600				.*ATI.*Mobility.*HD *56.*				3	1	1	4.2
 ATI Mobility Radeon HD 5700				.*ATI.*Mobility.*HD *57.*				3	1	1	4.1
-ATI Radeon HD 6200M						.*ATI.*Radeon.*HD *62..M.*				3	1	0	0
-ATI Radeon HD 6300M						.*ATI.*Radeon.*HD *63..M.*				3	1	1	4.2
-ATI Radeon HD 6400M						.*ATI.*Radeon.*HD *64..M.*				3	1	0	0
-ATI Radeon HD 6500M						.*ATI.*Radeon.*HD *65..M.*				5	1	1	4.2
-ATI Radeon HD 6600M						.*ATI.*Radeon.*HD *66..M.*				5	1	0	0
-ATI Radeon HD 6700M						.*ATI.*Radeon.*HD *67..M.*				5	1	0	0
-ATI Radeon HD 6800M						.*ATI.*Radeon.*HD *68..M.*				5	1	0	0
-ATI Radeon HD 6900M						.*ATI.*Radeon.*HD *69..M.*				5	1	0	0
-ATI Radeon HD 7200M						.*ATI.*Radeon.*HD *72..M.*				3	1	0	0
-ATI Radeon HD 7300M						.*ATI.*Radeon.*HD *73..M.*				3	1	0	0
-ATI Radeon HD 7400M						.*ATI.*Radeon.*HD *74..M.*				3	1	0	0
-ATI Radeon HD 7500M						.*ATI.*Radeon.*HD *75..M.*				5	1	0	0
-ATI Radeon HD 7600M						.*ATI.*Radeon.*HD *76..M.*				5	1	0	0
-ATI Radeon HD 7700M						.*ATI.*Radeon.*HD *77..M.*				5	1	0	0
-ATI Radeon HD 7800M						.*ATI.*Radeon.*HD *78..M.*				5	1	0	0
-ATI Radeon HD 7900M						.*ATI.*Radeon.*HD *79..M.*				5	1	0	0
-ATI Radeon HD 8200M						.*ATI.*Radeon.*HD *82..M.*				3	1	0	0
-ATI Radeon HD 8300M						.*ATI.*Radeon.*HD *83..M.*				3	1	0	0
-ATI Radeon HD 8400M						.*ATI.*Radeon.*HD *84..M.*				5	1	0	0
-ATI Radeon HD 8500M						.*ATI.*Radeon.*HD *85..M.*				5	1	0	0
-ATI Radeon HD 8600M						.*ATI.*Radeon.*HD *86..M.*				5	1	0	0
-ATI Radeon HD 8700M						.*ATI.*Radeon.*HD *87..M.*				5	1	0	0
-ATI Radeon HD 8800M						.*ATI.*Radeon.*HD *88..M.*				5	1	0	0
-ATI Radeon HD 8900M						.*ATI.*Radeon.*HD *89..M.*				5	1	0	0
-ATI Radeon HD 2300						.*ATI.*Radeon HD *23..					0	1	1	3.3
-ATI Radeon HD 2400						.*ATI.*Radeon HD *24..					1	1	1	4
-ATI Radeon HD 2600						.*ATI.*Radeon HD *26..					2	1	1	3.3
-ATI Radeon HD 2900						.*ATI.*Radeon HD *29..					3	1	1	3.3
-ATI Radeon HD 3000						.*ATI.*Radeon HD *30..					0	1	0	0
-ATI Radeon HD 3100						.*ATI.*Radeon HD *31..					1	1	0	0
-ATI Radeon HD 3200						.*ATI.*Radeon HD *32..					1	1	1	4
-ATI Radeon HD 3300						.*ATI.*Radeon HD *33..					1	1	1	3.3
-ATI Radeon HD 3400						.*ATI.*Radeon HD *34..					1	1	1	4
-ATI Radeon HD 3500						.*ATI.*Radeon HD *35..					2	1	0	0
-ATI Radeon HD 3600						.*ATI.*Radeon HD *36..					3	1	1	3.3
-ATI Radeon HD 3700						.*ATI.*Radeon HD *37..					3	1	0	0
+ATI Radeon HD 6200M						.*ATI.*Radeon.*HD *62..[DGM].*			3	1	0	0
+ATI Radeon HD 6300M						.*ATI.*Radeon.*HD *63..[DGM].*			3	1	1	4.2
+ATI Radeon HD 6400M						.*ATI.*Radeon.*HD *64..[DGM].*			3	1	0	0
+ATI Radeon HD 6500M						.*ATI.*Radeon.*HD *65..[DGM].*			4	1	1	4.2
+ATI Radeon HD 6600M						.*ATI.*Radeon.*HD *66..[DGM].*			4	1	0	0
+ATI Radeon HD 6700M						.*ATI.*Radeon.*HD *67..[DGM].*			4	1	0	0
+ATI Radeon HD 6800M						.*ATI.*Radeon.*HD *68..[DGM].*			4	1	0	0
+ATI Radeon HD 6900M						.*ATI.*Radeon.*HD *69..[DGM].*			4	1	0	0
+ATI Radeon HD 7200M						.*ATI.*Radeon.*HD *72..[DGM].*			3	1	0	0
+ATI Radeon HD 7300M						.*ATI.*Radeon.*HD *73..[DGM].*			3	1	0	0
+ATI Radeon HD 7400M						.*ATI.*Radeon.*HD *74..[DGM].*			3	1	0	0
+ATI Radeon HD 7500M						.*ATI.*Radeon.*HD *75..[DGM].*			4	1	0	0
+ATI Radeon HD 7600M						.*ATI.*Radeon.*HD *76..[DGM].*			4	1	0	0
+ATI Radeon HD 7700M						.*ATI.*Radeon.*HD *77..[DGM].*			4	1	0	0
+ATI Radeon HD 7800M						.*ATI.*Radeon.*HD *78..[DGM].*			4	1	0	0
+ATI Radeon HD 7900M						.*ATI.*Radeon.*HD *79..[DGM].*			4	1	0	0
+ATI Radeon HD 8200M						.*ATI.*Radeon.*HD *82..[DGM].*			3	1	0	0
+ATI Radeon HD 8300M						.*ATI.*Radeon.*HD *83..[DGM].*			3	1	0	0
+ATI Radeon HD 8400M						.*ATI.*Radeon.*HD *84..[DGM].*			4	1	0	0
+ATI Radeon HD 8500M						.*ATI.*Radeon.*HD *85..[DGM].*			4	1	0	0
+ATI Radeon HD 8600M						.*ATI.*Radeon.*HD *86..[DGM].*			4	1	0	0
+ATI Radeon HD 8700M						.*ATI.*Radeon.*HD *87..[DGM].*			4	1	0	0
+ATI Radeon HD 8800M						.*ATI.*Radeon.*HD *88..[DGM].*			4	1	0	0
+ATI Radeon HD 8900M						.*ATI.*Radeon.*HD *89..[DGM].*			4	1	0	0
+ATI Radeon HD 2300						.*ATI.*Radeon HD *23.*					0	1	1	3.3
+ATI Radeon HD 2400						.*ATI.*Radeon HD *24.*					1	1	1	4
+ATI Radeon HD 2600						.*ATI.*Radeon HD *26.*					2	1	1	3.3
+ATI Radeon HD 2900						.*ATI.*Radeon HD *29.*					3	1	1	3.3
+ATI Radeon HD 3000						.*ATI.*Radeon HD *30.*					0	1	0	0
+ATI Radeon HD 3100						.*ATI.*Radeon HD *31.*					1	1	0	0
+ATI Radeon HD 3200						.*ATI.*Radeon HD *32.*					1	1	1	4
+ATI Radeon HD 3300						.*ATI.*Radeon HD *33.*					1	1	1	3.3
+ATI Radeon HD 3400						.*ATI.*Radeon HD *34.*					1	1	1	4
+ATI Radeon HD 3500						.*ATI.*Radeon HD *35.*					2	1	0	0
+ATI Radeon HD 3600						.*ATI.*Radeon HD *36.*					3	1	1	3.3
+ATI Radeon HD 3700						.*ATI.*Radeon HD *37.*					3	1	0	0
 ATI HD3700								.*ATI.* HD37..							3	1	0	3.3
-ATI Radeon HD 3800						.*ATI.*Radeon HD *38..					3	1	1	4
-ATI Radeon HD 4100						.*ATI.*Radeon HD *41..					1	1	0	0
-ATI Radeon HD 4200						.*ATI.*Radeon HD *42..					1	1	1	4
-ATI Radeon HD 4300						.*ATI.*Radeon HD *43..					2	1	1	4
-ATI Radeon HD 4400						.*ATI.*Radeon HD *44..					2	1	0	0
-ATI Radeon HD 4500						.*ATI.*Radeon HD *45..					2	1	1	3.3
-ATI Radeon HD 4600						.*ATI.*Radeon HD *46..					3	1	1	4
-ATI Radeon HD 4700						.*ATI.*Radeon HD *47..					3	1	1	3.3
-ATI Radeon HD 4800						.*ATI.*Radeon HD *48..					3	1	1	4
-ATI Radeon HD 5400						.*ATI.*Radeon HD *54..					3	1	1	4.2
-ATI Radeon HD 5500						.*ATI.*Radeon HD *55..					3	1	1	4.2
-ATI Radeon HD 5600						.*ATI.*Radeon HD *56..					3	1	1	4.2
-ATI Radeon HD 5700						.*ATI.*Radeon HD *57..					3	1	1	4.2
-ATI Radeon HD 5800						.*ATI.*Radeon HD *58..					4	1	1	4.2
-ATI Radeon HD 5900						.*ATI.*Radeon HD *59..					4	1	1	4.2
-ATI Radeon HD 6200						.*ATI.*Radeon HD *62..					0	1	1	4.2
-ATI Radeon HD 6300						.*ATI.*Radeon HD *63..					1	1	1	4.2
-ATI Radeon HD 6400						.*ATI.*Radeon HD *64..					3	1	1	4.2
-ATI Radeon HD 6500						.*ATI.*Radeon HD *65..					3	1	1	4.2
-ATI Radeon HD 6600						.*ATI.*Radeon HD *66..					3	1	1	4.2
-ATI Radeon HD 6700						.*ATI.*Radeon HD *67..					3	1	1	4.2
-ATI Radeon HD 6800						.*ATI.*Radeon HD *68..					4	1	1	4.2
-ATI Radeon HD 6900						.*ATI.*Radeon HD *69..					5	1	1	4.2
-ATI Radeon HD 7100						.*ATI.*Radeon HD 71.*				2	1	0	0
-ATI Radeon HD 7200						.*ATI.*Radeon HD 72.*				2	1	0	0
-ATI Radeon HD 7300						.*ATI.*Radeon HD 73.*				2	1	0	4.2
-ATI Radeon HD 7400						.*ATI.*Radeon HD 74.*				2	1	0	4.2
-ATI Radeon HD 7500						.*ATI.*Radeon HD 75.*				3	1	1	4.2
-ATI Radeon HD 7600						.*ATI.*Radeon HD 76.*				3	1	0	4.2
-ATI Radeon HD 7700						.*ATI.*Radeon HD 77.*				4	1	1	4.2
-ATI Radeon HD 7800						.*ATI.*Radeon HD 78.*				5	1	1	4.2
-ATI Radeon HD 7900						.*ATI.*Radeon HD 79.*				5	1	1	4.2
+ATI Radeon HD 3800						.*ATI.*Radeon HD *38.*					3	1	1	4
+ATI Radeon HD 4100						.*ATI.*Radeon HD *41.*					1	1	0	0
+ATI Radeon HD 4200						.*ATI.*Radeon HD *42.*					1	1	1	4
+ATI Radeon HD 4300						.*ATI.*Radeon HD *43.*					2	1	1	4
+ATI Radeon HD 4400						.*ATI.*Radeon HD *44.*					2	1	0	0
+ATI Radeon HD 4500						.*ATI.*Radeon HD *45.*					2	1	1	3.3
+ATI Radeon HD 4600						.*ATI.*Radeon HD *46.*					3	1	1	4
+ATI Radeon HD 4700						.*ATI.*Radeon HD *47.*					3	1	1	3.3
+ATI Radeon HD 4800						.*ATI.*Radeon HD *48.*					3	1	1	4
+ATI Radeon HD 5400						.*ATI.*Radeon HD *54.*					3	1	1	4.2
+ATI Radeon HD 5500						.*ATI.*Radeon HD *55.*					3	1	1	4.2
+ATI Radeon HD 5600						.*ATI.*Radeon HD *56.*					3	1	1	4.2
+ATI Radeon HD 5700						.*ATI.*Radeon HD *57.*					3	1	1	4.2
+ATI Radeon HD 5800						.*ATI.*Radeon HD *58.*					4	1	1	4.2
+ATI Radeon HD 5900						.*ATI.*Radeon HD *59.*					4	1	1	4.2
+ATI Radeon HD 6200						.*ATI.*Radeon HD *62.*					0	1	1	4.2
+ATI Radeon HD 6300						.*ATI.*Radeon HD *63.*					1	1	1	4.2
+ATI Radeon HD 6400						.*ATI.*Radeon HD *64.*					3	1	1	4.2
+ATI Radeon HD 6500						.*ATI.*Radeon HD *65.*					3	1	1	4.2
+ATI Radeon HD 6600						.*ATI.*Radeon HD *66.*					3	1	1	4.2
+ATI Radeon HD 6700						.*ATI.*Radeon HD *67.*					3	1	1	4.2
+ATI Radeon HD 6800						.*ATI.*Radeon HD *68.*					4	1	1	4.2
+ATI Radeon HD 6900						.*ATI.*Radeon HD *69.*					5	1	1	4.2
+ATI Radeon HD 7100						.*ATI.*Radeon HD *71.*					2	1	0	0
+ATI Radeon HD 7200						.*ATI.*Radeon HD *72.*					2	1	0	0
+ATI Radeon HD 7300						.*ATI.*Radeon HD *73.*					2	1	0	4.2
+ATI Radeon HD 7400						.*ATI.*Radeon HD *74.*					2	1	0	4.2
+ATI Radeon HD 7500						.*ATI.*Radeon HD *75.*					3	1	1	4.2
+ATI Radeon HD 7600						.*ATI.*Radeon HD *76.*					3	1	0	4.2
+ATI Radeon HD 7700						.*ATI.*Radeon HD *77.*					4	1	1	4.2
+ATI Radeon HD 7800						.*ATI.*Radeon HD *78.*					5	1	1	4.2
+ATI Radeon HD 7900						.*ATI.*Radeon HD *79.*					5	1	1	4.2
 ATI Radeon OpenGL						.*ATI.*Radeon OpenGL.*					0	0	0	0
 ATI Radeon 2100							.*ATI.*Radeon 21..						0	1	1	2.1
 ATI Radeon 3000							.*ATI.*Radeon 30..						1	1	1	4
