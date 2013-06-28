@@ -985,7 +985,7 @@ void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 void LLStatusBar::setParcelInfoText(const std::string& new_text)
 {
 	const S32 ParcelInfoSpacing = 5;
-	const LLFontGL* font = mParcelInfoText->getDefaultFont();
+	const LLFontGL* font = mParcelInfoText->getFont();
 	S32 new_text_width = font->getWidth(new_text);
 
 	mParcelInfoText->setText(new_text);
