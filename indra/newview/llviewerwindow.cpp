@@ -204,6 +204,9 @@
 
 #include "llfloaternotificationsconsole.h"
 
+// <FS:Ansariel> [FS communication UI]
+#include "fsnearbychathub.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
 #include "llpaneltopinfobar.h"
@@ -2744,18 +2747,47 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 
 	if( keyboard_focus )
 	{
-		if ((focusedFloaterName == "nearby_chat") || (focusedFloaterName == "im_container") || (focusedFloaterName == "impanel"))
+		// <FS:Ansariel> [FS Communication UI]
+		//if ((focusedFloaterName == "nearby_chat") || (focusedFloaterName == "im_container") || (focusedFloaterName == "impanel"))
+		//{
+		//	if (gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+		//	{
+		//		// let Control-Up and Control-Down through for chat line history,
+		//		if (!(key == KEY_UP && mask == MASK_CONTROL)
+		//			&& !(key == KEY_DOWN && mask == MASK_CONTROL)
+		//			&& !(key == KEY_UP && mask == MASK_ALT)
+		//			&& !(key == KEY_DOWN && mask == MASK_ALT))
+		//		{
+		//			switch(key)
+		//			{
+		//			case KEY_LEFT:
+		//			case KEY_RIGHT:
+		//			case KEY_UP:
+		//			case KEY_DOWN:
+		//			case KEY_PAGE_UP:
+		//			case KEY_PAGE_DOWN:
+		//			case KEY_HOME:
+		//				// when chatbar is empty or ArrowKeysAlwaysMove set,
+		//				// pass arrow keys on to avatar...
+		//				return FALSE;
+		//			default:
+		//				break;
+		//			}
+		//		}
+		//	}
+		if(FSNearbyChat::instance().defaultChatBarHasFocus() &&
+		   (FSNearbyChat::instance().defaultChatBarIsIdle() ||
+		    gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
 		{
-			if (gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+			// let Control-Up and Control-Down through for chat line history,
+			//<FS:TS> Control-Right and Control-Left too for chat line editing
+			if (!(key == KEY_UP && mask == MASK_CONTROL)
+				&& !(key == KEY_DOWN && mask == MASK_CONTROL)
+				&& !(key == KEY_LEFT && mask == MASK_CONTROL)
+				&& !(key == KEY_RIGHT && mask == MASK_CONTROL))
 			{
-				// let Control-Up and Control-Down through for chat line history,
-				if (!(key == KEY_UP && mask == MASK_CONTROL)
-					&& !(key == KEY_DOWN && mask == MASK_CONTROL)
-					&& !(key == KEY_UP && mask == MASK_ALT)
-					&& !(key == KEY_DOWN && mask == MASK_ALT))
+				switch (key)
 				{
-					switch(key)
-					{
 					case KEY_LEFT:
 					case KEY_RIGHT:
 					case KEY_UP:
@@ -2768,10 +2800,10 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 						return FALSE;
 					default:
 						break;
-					}
 				}
+			}
 		}
-		}
+		// </FS:Ansariel> [FS Communication UI]
 
 		if (keyboard_focus->handleKey(key, mask, FALSE))
 		{
