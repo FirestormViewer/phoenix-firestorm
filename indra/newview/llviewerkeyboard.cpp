@@ -32,7 +32,11 @@
 #include "llmath.h"
 #include "llagent.h"
 #include "llagentcamera.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS Communication UI]
+// #include "llfloaterimnearbychat.h"
+#include "fsnearbychathub.h"
+#include "lllineeditor.h"
+// </FS:Ansariel> [FS Communication UI]
 #include "llviewercontrol.h"
 #include "llfocusmgr.h"
 #include "llmorphview.h"
@@ -571,7 +575,10 @@ void stop_moving( EKeystate s )
 void start_chat( EKeystate s )
 {
 	// start chat
-	LLFloaterIMNearbyChat::startChat(NULL);
+	// <FS:Ansariel> [FS Communication UI]
+	//LLFloaterIMNearbyChat::startChat(NULL);
+	FSNearbyChat::instance().showDefaultChatBar(TRUE);
+	// </FS:Ansariel> [FS Communication UI]
 }
 
 void start_gesture( EKeystate s )

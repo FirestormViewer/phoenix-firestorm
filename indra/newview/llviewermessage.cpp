@@ -2829,6 +2829,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					from_id,
 					LLStringUtil::null, // Pass null value so no name gets prepended
 					LLTrans::getString("IM_autoresponse_sent"),
+					false,
 					name,
 					IM_NOTHING_SPECIAL,
 					parent_estate_id,
