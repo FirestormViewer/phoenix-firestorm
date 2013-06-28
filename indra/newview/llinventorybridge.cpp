@@ -5022,20 +5022,23 @@ void LLCallingCardBridge::performAction(LLInventoryModel* model, std::string act
 				callingcard_name = av_name.getCompleteName();
 			}
 
+			// <FS:Ansariel> [FS Communication UI]
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
-			if ( (!RlvActions::canStartIM(item->getCreatorUUID())) && (!RlvActions::hasOpenP2PSession(item->getCreatorUUID())) )
-			{
-				make_ui_sound("UISndInvalidOp");
-				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", item->getCreatorUUID(), "completename").getSLURLString()));
-				return;
-			}
+			//if ( (!RlvActions::canStartIM(item->getCreatorUUID())) && (!RlvActions::hasOpenP2PSession(item->getCreatorUUID())) )
+			//{
+			//	make_ui_sound("UISndInvalidOp");
+			//	RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("agent", item->getCreatorUUID(), "completename").getSLURLString()));
+			//	return;
+			//}
 // [/RLVa:KB]
 
-			LLUUID session_id = gIMMgr->addSession(callingcard_name, IM_NOTHING_SPECIAL, item->getCreatorUUID());
-			if (session_id != LLUUID::null)
-			{
-				LLFloaterIMContainer::getInstance()->showConversation(session_id);
-			}
+			//LLUUID session_id = gIMMgr->addSession(callingcard_name, IM_NOTHING_SPECIAL, item->getCreatorUUID());
+			//if (session_id != LLUUID::null)
+			//{
+			//	LLFloaterIMContainer::getInstance()->showConversation(session_id);
+			//}
+			LLAvatarActions::startIM(item->getCreatorUUID());
+			// </FS:Ansariel> [FS Communication UI]
 		}
 	}
 	else if ("lure" == action)
