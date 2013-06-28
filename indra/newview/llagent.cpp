@@ -1534,6 +1534,16 @@ void LLAgent::setAFK()
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_START);
 		setControlFlags(AGENT_CONTROL_AWAY | AGENT_CONTROL_STOP);
 		gAwayTimer.start();
+
+		// <FS:AO> Gsit on away, antigrief protection
+		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
+		{
+			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
+			{
+				gAgent.sitDown();
+			}
+		}
+		// </FS:AO>
 	}
 }
 
@@ -1552,6 +1562,16 @@ void LLAgent::clearAFK()
 	{
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_STOP);
 		clearControlFlags(AGENT_CONTROL_AWAY);
+
+		// <FS:AO> if we sat while away, stand back up on clear
+		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
+		{
+			if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+			{
+				gAgent.standUp();
+			}
+		}
+		// </FS:AO>
 	}
 }
 
