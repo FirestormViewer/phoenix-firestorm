@@ -56,6 +56,7 @@
 //#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
 //#include "llimfloater.h" <FS:TM> CHUI Merge old
 #include "fsfloaterim.h"
+#include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llkeyboard.h"
 #include "llmodaldialog.h"

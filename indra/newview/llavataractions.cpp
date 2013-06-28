@@ -92,6 +92,7 @@
 #include "llfloaterregioninfo.h"
 #include "lltrans.h"
 #include "fswsassetblacklist.h"
+#include "llviewermenu.h"
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -367,8 +368,10 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& float
 		// </FS:Ansariel> [FS communication UI]
 	}
 	
-	FSFloaterIMContainer::getInstance()->showConversation(session_id);
-	
+	// <FS:Ansariel> [FS communication UI]
+	//FSFloaterIMContainer::getInstance()->showConversation(session_id);
+	// </FS:Ansariel> [FS communication UI]
+
 	make_ui_sound("UISndStartIM");
 }
 

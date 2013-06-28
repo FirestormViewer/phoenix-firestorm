@@ -56,9 +56,11 @@
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h" // to show/hide navigation bar when changing mouse look state
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS Communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsnearbychathub.h"
+// </FS:Ansariel> [FS Communication UI]
 #include "llspeakers.h"
-// [/SL:KB]
 #include "llnotificationsutil.h"
 #include "llpaneltopinfobar.h"
 #include "llparcel.h"
@@ -2153,8 +2155,11 @@ void LLAgent::startTyping()
 	{
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_START);
 	}
-	(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
-			sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	// <FS:Ansariel> [FS Communication UI]
+	//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+	//		sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	// </FS:Ansariel> [FS Communication UI]
 }
 
 //-----------------------------------------------------------------------------
@@ -2166,8 +2171,11 @@ void LLAgent::stopTyping()
 	{
 		clearRenderState(AGENT_STATE_TYPING);
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_STOP);
-		(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
-				sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		// <FS:Ansariel> [FS Communication UI]
+		//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+		//		sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		// </FS:Ansariel> [FS Communication UI]
 	}
 }
 
