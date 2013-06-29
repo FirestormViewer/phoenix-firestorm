@@ -194,13 +194,6 @@ if (LINUX)
     set(CMAKE_CXX_FLAGS "-Wno-attributes ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 470)
   #</FS:ND>
-  #<FS:ND> GCC >= 4.6 has constexpr and c++11. Use it
-  if(${CXX_VERSION_NUMBER} GREATER 460)
-    add_definitions( -DND_USE_CONSTEXPR )
-    set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
-  endif (${CXX_VERSION_NUMBER} GREATER 460)
-  #</FS:ND>
-
 
   # End of hacks.
 
