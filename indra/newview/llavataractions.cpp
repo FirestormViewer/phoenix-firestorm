@@ -779,16 +779,6 @@ namespace action_give_inventory
 		}
 	}
 
-// [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	static const uuid_set_t get_inventory_selection()
-	{
-		LLInventoryPanel* pInvPanel = get_active_inventory_panel();
-		if (pInvPanel)
-			return pInvPanel->getRootFolder()->getSelectionList();
-		return std::set<LLUUID>();
-	}
-// [/SL:KB]
-
 	/**
 	 * Performs "give inventory" operations for provided avatars.
 	 *
@@ -942,7 +932,7 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
 //
 //	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable));
 // [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	const uuid_set_t idItems = get_inventory_selection();
+	const uuid_set_t idItems = getInventorySelectedUUIDs();
 	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, idItems), TRUE, FALSE);
 	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable, idItems));
 // [/SL:KB]
