@@ -673,8 +673,6 @@ BOOL LLPanelPeople::postBuild()
 	// <FS:Ansariel> Firestorm radar
 	//setSortOrder(mNearbyList,		(ESortOrder)gSavedSettings.getU32("NearbyPeopleSortOrder"),	false);
 
-	// <FS:Ansariel> Firestorm radar
-	friends_panel->childSetAction("GlobalOnlineStatusToggle", boost::bind(&LLPanelPeople::onGlobalVisToggleButtonClicked,	this));
 	mOnlineFriendList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 	mAllFriendList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 	// <FS:Ansariel> Firestorm radar
@@ -859,9 +857,6 @@ void LLPanelPeople::updateButtons()
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
 	bool group_tab_active	= (cur_tab == GROUP_TAB_NAME);
 	//bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
-	// <FS:Ansariel> Firestorm changes
-	bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
-	// </FS:Ansariel> Firestorm changes
 	LLUUID selected_id;
 
 	uuid_vec_t selected_uuids;
