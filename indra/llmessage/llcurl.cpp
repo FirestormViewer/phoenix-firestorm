@@ -401,7 +401,11 @@ void LLCurl::Easy::getTransferInfo(LLCurl::TransferInfo* info)
 
 U32 LLCurl::Easy::report(CURLcode code)
 {
-	U32 responseCode = 0;	
+	// <FS:ND> Curl wants a long, not a U32. This can be a difference.
+	// U32 responseCode = 0;	
+	long responseCode = 0;	
+	// <FS:ND>
+
 	std::string responseReason;
 	
 	if (code == CURLE_OK)
@@ -766,7 +770,11 @@ bool LLCurl::Multi::doPerform()
 	{		
 		setState(STATE_PERFORMING);
 
-		S32 q = 0;
+		// <FS:ND> Curl wants an int, not a S32.
+		// S32 q = 0;
+		int q = 0;
+		// </FS:ND>
+		
 		for (S32 call_count = 0;
 				call_count < MULTI_PERFORM_CALL_REPEAT;
 				call_count++)
