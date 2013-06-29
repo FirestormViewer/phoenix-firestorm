@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_LLCONVERSATIONMODEL_H
 #define LL_LLCONVERSATIONMODEL_H
 
@@ -312,3 +314,5 @@ void hide_context_entries(LLMenuGL& menu,
     const menuentry_vec_t &disabled_entries);
 
 #endif // LL_LLCONVERSATIONMODEL_H
+
+#endif
