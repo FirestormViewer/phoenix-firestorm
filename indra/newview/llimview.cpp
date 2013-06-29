@@ -63,7 +63,10 @@
 #include "llviewerwindow.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltextbox.h"
 #include "lltoolbarview.h"
@@ -142,12 +145,14 @@ void process_dnd_im(const LLSD& notification)
             false, 
             false); //will need slight refactor to retrieve whether offline message or not (assume online for now)
 
-		LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
-		
-		if (im_box)
-		{
-			im_box->flashConversationItemWidget(sessionID, true);
-		}
+		// [CHUI Merge] Do we need this?
+		//LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+		//
+		//if (im_box)
+		//{
+		//	im_box->flashConversationItemWidget(sessionID, true);
+		//}
+		// [CHUI Merge]
 
     }
 }
@@ -168,14 +173,15 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
 	args["SESSION_ID"] = msg["session_id"];
 	args["SESSION_TYPE"] = msg["session_type"];
 	// <FS:Ansariel> [FS communication UI]
-	//LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID())); <FS:TM> CHUI Merge new
-	//LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&LLIMFloater::show, msg["session_id"].asUUID())); <FS:TM CHUI MErge old
+	//LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
 	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
 	// </FS:Ansariel> [FS communication UI]
 }
 
 void on_new_message(const LLSD& msg)
 {
+	// [CHUI Merge] Commented out for now. Need to see if/how we can/want to wire it up
+#if 0
     std::string user_preferences;
     LLUUID participant_id = msg["from_id"].asUUID();
     LLUUID session_id = msg["session_id"].asUUID();
@@ -328,13 +334,14 @@ void on_new_message(const LLSD& msg)
             LLAvatarNameCache::get(participant_id, boost::bind(&on_avatar_name_cache_toast, _1, _2, msg));
         }
     }
+#endif
+	// [CHUI Merge]
 }
 
 LLIMModel::LLIMModel() 
 {
 	// <FS:Ansariel> [FS communication UI]
-	//addNewMsgCallback(boost::bind(&LLIMFloater::newIMCallback, _1)); <FS:TM> CHUI Merge old
-	//addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1)); <FS:TM> CHUI Merge new
+	//addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1));
 	addNewMsgCallback(boost::bind(&FSFloaterIM::newIMCallback, _1));
 	// </FS:Ansariel> [FS communication UI]
 	addNewMsgCallback(boost::bind(&on_new_message, _1));
@@ -895,8 +902,7 @@ void LLIMModel::processSessionInitializedReply(const LLUUID& old_session_id, con
 		}
 
 		// <FS:Ansariel> [FS communication UI]
-		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(old_session_id); <FS:TM> CHUI Merge new
-		//LLIMFloater* im_floater = LLIMFloater::findInstance(old_session_id); <FS:TM> CHUI Merge old
+		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(old_session_id);
 		FSFloaterIM* im_floater = FSFloaterIM::findInstance(old_session_id);
 		// </FS:Ansariel> [FS communication UI]
 		if (im_floater)
@@ -1095,7 +1101,7 @@ bool LLIMModel::buildIMP2PLogFilename(const LLUUID& idAgent, const std::string& 
 
 	// If we have the name cached then we can simply return the username
 	LLAvatarName avName;
-	if ( (LLAvatarNameCache::get(idAgent, &avName)) && (!avName.mIsTemporaryName) )
+	if ( (LLAvatarNameCache::get(idAgent, &avName)) && (avName.isValidName()) )
 	{
 		if (!fLegacyFilenames)
 		{
@@ -1105,7 +1111,7 @@ bool LLIMModel::buildIMP2PLogFilename(const LLUUID& idAgent, const std::string& 
 		else
 		{
 			// Use the legacy name to base the filename on
-			strFilename = LLCacheName::cleanFullName( (!avName.LegacyFirstName.empty()) ? avName.getLegacyName() : avName.getDisplayName() );
+			strFilename = LLCacheName::cleanFullName( (!avName.mLegacyFirstName.empty()) ? avName.getLegacyName() : avName.getDisplayName() );
 		}
 		return true;
 	}
@@ -1948,8 +1954,7 @@ LLIMMgr::onConfirmForceCloseError(
 	LLUUID session_id = notification["payload"]["session_id"];
 
 	// <FS:Ansariel> [FS communication UI]
-	//LLFloater* floater = LLFloaterIMSession::findInstance(session_id); <FS:TM> CHUI Merge new
-	//LLFloater* floater = LLIMFloater::findInstance(session_id); <FS:TM> CHUI Merge old
+	//LLFloater* floater = LLFloaterIMSession::findInstance(session_id);
 	LLFloater* floater = FSFloaterIM::findInstance(session_id);
 	// </FS:Ansariel> [FS communication UI]
 	if ( floater )
@@ -2812,8 +2817,7 @@ LLIMMgr::LLIMMgr()
 	mPendingAgentListUpdates = LLSD::emptyMap();
 
 	// <FS:Ansariel> [FS communication UI]
-	//LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLFloaterIMSession::sRemoveTypingIndicator, _1)); <FS:TM> CHUI Merge new
-	//LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLIMFloater::sRemoveTypingIndicator, _1)); <FS:TN> CHUI Merge old
+	//LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLFloaterIMSession::sRemoveTypingIndicator, _1));
 	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&FSFloaterIM::sRemoveTypingIndicator, _1));
 	// </FS:Ansariel> [FS communication UI]
 }
@@ -2864,7 +2868,6 @@ void LLIMMgr::addMessage(
 		{
 			fixed_session_name = av_name.getDisplayName();
 		}
-		LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id, false, is_offline_msg);
 
 		// <FS:Ansariel> Clear muted group chat early to prevent contacts floater
 		//               (re-)gaining focus; the server already knows the correct
@@ -2886,6 +2889,7 @@ void LLIMMgr::addMessage(
 		}
 		// </FS:Ansariel>
 
+		LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id, false, is_offline_msg);
 
 		// When we get a new IM, and if you are a god, display a bit
 		// of information about the source. This is to help liaisons
@@ -3001,12 +3005,14 @@ void LLIMMgr::addMessage(
 	}
 
 	// Open conversation floater if offline messages are present
-	if (is_offline_msg)
-    {
-        LLFloaterReg::showInstance("im_container");
-	    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
-	    		flashConversationItemWidget(new_session_id, true);
-    }
+	// [CHUI Merge]
+	//if (is_offline_msg)
+ //   {
+ //       LLFloaterReg::showInstance("im_container");
+	//    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
+	//    		flashConversationItemWidget(new_session_id, true);
+ //   }
+	// [CHUI Merge]
 }
 
 void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args)
@@ -3022,7 +3028,10 @@ void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& mess
 		LLChat chat(message);
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 
-		LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+		// </FS:Ansariel> [FS communication UI]
 		if (nearby_chat)
 		{
 			nearby_chat->addMessage(chat);
@@ -3152,19 +3161,21 @@ LLUUID LLIMMgr::addSession(
 
 	LLUUID session_id = computeSessionID(dialog,other_participant_id);
 
-	if (floater_id.notNull())
-	{
-		LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(floater_id);
+	// [CHUI Merge]
+	//if (floater_id.notNull())
+	//{
+	//	LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(floater_id);
 
-		if (im_floater)
-		{
-			// The IM floater should be initialized with a new session_id
-			// so that it is found by that id when creating a chiclet in LLFloaterIMSession::onIMChicletCreated,
-			// and a new floater is not created.
-			im_floater->initIMSession(session_id);
-            im_floater->reloadMessages();
-		}
-	}
+	//	if (im_floater)
+	//	{
+	//		// The IM floater should be initialized with a new session_id
+	//		// so that it is found by that id when creating a chiclet in LLFloaterIMSession::onIMChicletCreated,
+	//		// and a new floater is not created.
+	//		im_floater->initIMSession(session_id);
+ //           im_floater->reloadMessages();
+	//	}
+	//}
+	// [CHUI Merge]
 
 	bool new_session = (LLIMModel::getInstance()->findIMSession(session_id) == NULL);
 
@@ -3385,8 +3396,7 @@ void LLIMMgr::clearPendingInvitation(const LLUUID& session_id)
 void LLIMMgr::processAgentListUpdates(const LLUUID& session_id, const LLSD& body)
 {
 	// <FS:Ansariel> [FS communication UI]
-	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id); <FS:TM> CHUI Merge new
-	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id); <FS:TM> CHUI Merge old
+	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
 	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
 	// </FS:Ansariel> [FS communication UI]
 	if ( im_floater )
@@ -3813,8 +3823,7 @@ public:
 			}
 
 			// <FS:Ansariel> [FS communication UI]
-			//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id); <FS:TM> CHUI Merge new
-			//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id); <FS:TM> CHUI Merge old
+			//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
 			FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
 			// </FS:Ansariel> [FS communication UI]
 			if ( im_floater )
@@ -3911,8 +3920,7 @@ public:
 	{
 		LLUUID session_id = input["body"]["session_id"].asUUID();
 		// <FS:Ansariel> [FS communication UI]
-		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id); <FS:TM> CHUI Merge new
-		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id); <FS:TM> CHUI Merge old
+		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
 		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
 		// </FS:Ansariel> [FS communication UI]
 		if ( im_floater )
