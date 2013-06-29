@@ -27,7 +27,7 @@
 #ifndef LL_LLIMVIEW_H
 #define LL_LLIMVIEW_H
 
-#include "../llui/lldockablefloater.h"
+#include "lldockablefloater.h"
 #include "lleventtimer.h"
 #include "llinstantmessage.h"
 

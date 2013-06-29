@@ -29,7 +29,7 @@
 
 #include "llcontrol.h"
 #include "llfloater.h"
-#include "../llmath/llmath.h"
+#include "llmath.h"
 
 class LLTextEditor;
 class LLSpinCtrl;

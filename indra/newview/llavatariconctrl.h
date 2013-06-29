@@ -29,7 +29,7 @@
 
 #include <boost/signals2.hpp>
 
-#include "../llui/lliconctrl.h"
+#include "lliconctrl.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llviewermenu.h"
 

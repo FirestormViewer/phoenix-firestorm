@@ -34,11 +34,11 @@
 
 #include "llimview.h"
 #include "llevents.h"
-#include "../llui/llfloater.h"
-#include "../llui/llmultifloater.h"
+#include "llfloater.h"
+#include "llmultifloater.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llgroupmgr.h"
-#include "../llui/lltrans.h"
+#include "lltrans.h"
 #include "llconversationmodel.h"
 #include "llconversationview.h"
 
