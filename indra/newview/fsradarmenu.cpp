@@ -98,7 +98,12 @@ LLContextMenu* FSRadarMenu::createMenu()
 		// Set up for multi-selected People
 
 		// registrar.add("Avatar.AddFriend",					boost::bind(&LLAvatarActions::requestFriendshipDialog,				mUUIDs)); // *TODO: unimplemented
-		registrar.add("Avatar.IM",								boost::bind(&LLAvatarActions::startConference,						mUUIDs));
+
+		// <FS:ND> Explicit pass of LLUUID::null to make GCC happy
+		// registrar.add("Avatar.IM",								boost::bind(&LLAvatarActions::startConference,						mUUIDs));
+		registrar.add("Avatar.IM",								boost::bind(&LLAvatarActions::startConference,						mUUIDs, LLUUID::null));
+		// <FS:ND>
+
 		registrar.add("Avatar.Call",							boost::bind(&LLAvatarActions::startAdhocCall,						mUUIDs, LLUUID::null));
 		registrar.add("Avatar.OfferTeleport",					boost::bind(&FSRadarMenu::offerTeleport,							this));
 		registrar.add("Avatar.RemoveFriend",					boost::bind(&LLAvatarActions::removeFriendsDialog,					mUUIDs));
