@@ -770,9 +770,13 @@ BOOL FSFloaterIM::postBuild()
 	// enable line history support for instant message bar
 	mInputEditor->setEnableLineHistory(TRUE);
 	// *TODO Establish LineEditor with autoreplace callback
-	/// FIXME: Commenting out for now, will either rehook up autoreplace to LLLineEditor or
-	/// move to CHUI style expanding text editors <FS:CR>
+
+	/// FIXME: Either rehook up autoreplace to LLLineEditor or move to CHUI style expanding text editors <FS:CR> & <FS:ND>
 	//mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
+
+	LLTextEditor *pTextEdit = dynamic_cast< LLTextEditor* >( mInputEditor );
+	if( pTextEdit )
+		pTextEdit->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
 
 	LLFontGL* font = LLViewerChat::getChatFont();
 	mInputEditor->setFont(font);	
