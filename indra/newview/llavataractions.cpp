@@ -1086,28 +1086,31 @@ void LLAvatarActions::inviteToGroup(const LLUUID& id)
 // static
 void LLAvatarActions::viewChatHistory(const LLUUID& id)
 {
-	const std::vector<LLConversation>& conversations = LLConversationLog::instance().getConversations();
-	std::vector<LLConversation>::const_iterator iter = conversations.begin();
+	// FIXME: Commented this out until we readd the chat log floater <FS:CR>
+	llwarns << "FIXME! Removed chat history while merging CHUI" << llendl;
+	//const std::vector<LLConversation>& conversations = LLConversationLog::instance().getConversations();
+	//std::vector<LLConversation>::const_iterator iter = conversations.begin();
 
-	for (; iter != conversations.end(); ++iter)
-	{
-		if (iter->getParticipantID() == id)
-		{
-			LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
-			return;
-		}
-	}
+	//for (; iter != conversations.end(); ++iter)
+	//{
+	//	if (iter->getParticipantID() == id)
+	//	{
+	//		LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
+	//		return;
+	//	}
+	//}
 
-	if (LLLogChat::isTranscriptExist(id))
-	{
-		LLAvatarName avatar_name;
-		LLSD extended_id(id);
+	//if (LLLogChat::isTranscriptExist(id))
+	//{
+	//	LLAvatarName avatar_name;
+	//	LLSD extended_id(id);
 
-		LLAvatarNameCache::get(id, &avatar_name);
-		extended_id[LL_FCP_COMPLETE_NAME] = avatar_name.getCompleteName();
-		extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
-		LLFloaterReg::showInstance("preview_conversation", extended_id, true);
-	}
+	//	LLAvatarNameCache::get(id, &avatar_name);
+	//	extended_id[LL_FCP_COMPLETE_NAME] = avatar_name.getCompleteName();
+	//	extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
+	//	LLFloaterReg::showInstance("preview_conversation", extended_id, true);
+	//}
+	// </FS:CR>
 }
 
 //== private methods ========================================================================================

@@ -2127,7 +2127,8 @@ bool LLAppViewer::cleanup()
 	LLMuteList::getInstance()->cache(gAgent.getID());
 
 	//save call log list
-	LLConversationLog::instance().cache();
+	// FIXME: Remove conversation log until we readd it after CHUI merge <FS:CR>
+	//LLConversationLog::instance().cache();
 
 	if (mPurgeOnExit)
 	{
