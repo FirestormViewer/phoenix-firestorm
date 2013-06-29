@@ -62,6 +62,7 @@
 #include "llautoreplace.h"
 // [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
 #include "rlvhandler.h"
+#include "rlvactions.h"	// <FS:CR> CHUI merge
 // [/RLVa:KB]
 
 //AO: For moving callbacks from control panel into this class
@@ -324,10 +325,10 @@ void FSFloaterIM::sendMsg()
 					switch (pIMSession->mSessionType)
 					{
 						case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
-							fRlvFilter = !gRlvHandler.canSendIM(mOtherParticipantUUID);
+							fRlvFilter = !RlvActions::canSendIM(mOtherParticipantUUID);
 							break;
 						case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
-							fRlvFilter = !gRlvHandler.canSendIM(mSessionID);
+							fRlvFilter = !RlvActions::canSendIM(mSessionID);
 							break;
 						case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants can be sent an IM
 							{
@@ -343,7 +344,7 @@ void FSFloaterIM::sendMsg()
 										itSpeaker != speakers.end(); ++itSpeaker)
 								{
 									const LLSpeaker* pSpeaker = *itSpeaker;
-									if ( (gAgent.getID() != pSpeaker->mID) && (!gRlvHandler.canSendIM(pSpeaker->mID)) )
+									if ( (gAgent.getID() != pSpeaker->mID) && (!RlvActions::canSendIM(pSpeaker->mID)) )
 									{
 										fRlvFilter = true;
 										break;
