@@ -32,12 +32,11 @@
 
 #ifndef GROWLMANAGER_H
 #define GROWLMANAGER_H
-#include "llnotificationptr.h"
+
+#include "llnotifications.h"
 #include "growlnotifier.h"
 #include "lleventtimer.h"
 #include <map>
-
-class LLNotficationPtr;
 
 struct GrowlNotification
 {

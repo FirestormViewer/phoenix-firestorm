@@ -35,7 +35,6 @@
 #include "llagentdata.h"
 #include "llappviewer.h"
 #include "llimview.h"
-#include "llnotifications.h"
 #include "llscriptfloater.h"
 #include "llsdserialize.h"
 #include "llstartup.h"
