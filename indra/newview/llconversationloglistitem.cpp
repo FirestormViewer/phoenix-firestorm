@@ -25,6 +25,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 // llui
 #include "lliconctrl.h"
 #include "lltextbox.h"
@@ -182,3 +184,5 @@ void LLConversationLogListItem::onDoubleClick()
 		break;
 	}
 }
+
+#endif

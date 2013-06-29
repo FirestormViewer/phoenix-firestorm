@@ -25,6 +25,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_FLOATERIMSESSIONTAB_H
 #define LL_FLOATERIMSESSIONTAB_H
 
@@ -214,3 +216,5 @@ private:
 
 
 #endif /* LL_FLOATERIMSESSIONTAB_H */
+
+#endif

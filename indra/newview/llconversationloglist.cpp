@@ -25,6 +25,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llavataractions.h"
 #include "llagent.h"
 #include "llfloaterreg.h"
@@ -531,3 +533,5 @@ bool LLConversationLogListDateComparator::doCompare(const LLConversationLogListI
 
 	return date1 > date2;
 }
+
+#endif

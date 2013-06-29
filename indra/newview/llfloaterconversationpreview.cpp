@@ -25,6 +25,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llconversationlog.h"
 #include "llfloaterconversationpreview.h"
 #include "llimview.h"
@@ -184,3 +186,5 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 
 	showHistory();
 }
+
+#endif

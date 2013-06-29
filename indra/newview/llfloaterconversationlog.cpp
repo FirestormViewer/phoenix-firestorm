@@ -25,6 +25,8 @@
  */
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llconversationloglist.h"
 #include "llfiltereditor.h"
 #include "llfloaterconversationlog.h"
@@ -132,3 +134,4 @@ bool LLFloaterConversationLog::isActionChecked(const LLSD& userdata)
 	return false;
 }
 
+#endif

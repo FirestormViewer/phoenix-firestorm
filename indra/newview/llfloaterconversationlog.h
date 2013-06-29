@@ -23,6 +23,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_LLFLOATERCONVERSATIONLOG_H_
 #define LL_LLFLOATERCONVERSATIONLOG_H_
 
@@ -54,3 +56,5 @@ private:
 
 
 #endif /* LLFLOATERCONVERSATIONLOG_H_ */
+
+#endif

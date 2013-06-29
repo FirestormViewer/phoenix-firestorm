@@ -24,6 +24,8 @@
  */
 //<FS:TM> CHUI Merge this file doesnt exsist in LL's repo
 
+#if 0
+
 #ifndef LLFLOATERCONVERSATIONPREVIEW_H_
 #define LLFLOATERCONVERSATIONPREVIEW_H_
 
@@ -63,3 +65,5 @@ private:
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */
+
+#endif

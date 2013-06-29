@@ -25,6 +25,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llconversationlog.h"
@@ -613,3 +615,5 @@ void LLConversationLog::onClearLogResponse(const LLSD& notification, const LLSD&
 		deleteBackupLogs();
 	}
 }
+
+#endif

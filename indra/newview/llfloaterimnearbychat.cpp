@@ -26,7 +26,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
-//#if 0 <FS:TM> CHUI Merge unmask this for now
+#if 0
+
 #include "message.h"
 
 #include "lliconctrl.h"
@@ -939,4 +940,5 @@ public:
 
 // Creating the object registers with the dispatcher.
 LLChatCommandHandler gChatHandler;
-//#endif
+
+#endif

@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-//#if 0  <FS:TM> CHUI Merge unmask this for now
+#if 0
 
 #ifndef LL_LLFLOATERIMNEARBYCHAT_H
 #define LL_LLFLOATERIMNEARBYCHAT_H
@@ -120,4 +120,4 @@ private:
 
 #endif // LL_LLFLOATERIMNEARBYCHAT_H
 
-//#endif
+#endif

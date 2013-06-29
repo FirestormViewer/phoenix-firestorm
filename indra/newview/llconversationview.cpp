@@ -27,6 +27,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llconversationview.h"
 
 #include <boost/bind.hpp>
@@ -694,3 +696,4 @@ void LLConversationViewParticipant::hideSpeakingIndicator()
 
 // EOF
 
+#endif
