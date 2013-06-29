@@ -39,7 +39,7 @@
 #include "llbutton.h"
 #include "llgroupactions.h"
 #include "llavatarlist.h"
-#include "llparticipantlist.h"
+#include "fsparticipantlist.h"
 #include "llimview.h"
 #include "llvoicechannel.h"
 #include "llspeakers.h"

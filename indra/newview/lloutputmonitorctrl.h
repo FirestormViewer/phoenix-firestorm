@@ -28,10 +28,10 @@
 #define LL_LLOUTPUTMONITORCTRL_H
 
 #include "v4color.h"
-#include "../llui/llview.h"
+#include "llview.h"
 #include "llmutelist.h"
 #include "llspeakingindicatormanager.h"
-//#include "../llui/lluiimage.h"
+//#include "lluiimage.h"
 
 class LLTextBox;
 class LLUICtrlFactory;
@@ -72,6 +72,11 @@ public:
 
 	void			setPower(F32 val);
 	F32				getPower(F32 val) const { return mPower; }
+	
+	// <FS:CR> FS Communications UI
+	bool			getIsMuted() const { return mIsMuted; }
+	void			setIsMuted(bool val) { mIsMuted = val; }
+	// </FS:CR>
 	
 	// For the current user, need to know the PTT state to show
 	// correct button image.

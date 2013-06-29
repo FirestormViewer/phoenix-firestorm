@@ -194,6 +194,14 @@ public:
 	 */
 	bool clearSession(const LLUUID& session_id);
 
+	// <FS:CR> Make public for FS Communications UI
+	/**
+	 * Populate supplied std::list with messages starting from index specified by start_index without
+	 * emitting no unread messages signal.
+	 */
+	void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
+	// </FS:CR>
+	
 	/**
 	 * Sends no unread messages signal.
 	 */
@@ -293,12 +301,14 @@ public:
 
 private:
 	
+	// <FS:CR> Post CHUI - Move this public for FS Communications UI
 	/**
 	 * Populate supplied std::list with messages starting from index specified by start_index without
 	 * emitting no unread messages signal.
 	 */
-	void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
-
+	//void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
+	// </FS:CR>
+	
 	/**
 	 * Add message to a list of message associated with session specified by session_id
 	 */

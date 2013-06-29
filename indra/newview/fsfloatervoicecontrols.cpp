@@ -43,7 +43,7 @@
 #include "fsfloaterim.h"
 #include "llimview.h"
 #include "llfloaterreg.h"
-#include "llparticipantlist.h"
+#include "fsparticipantlist.h"
 #include "llspeakers.h"
 #include "lltextutil.h"
 #include "lltransientfloatermgr.h"

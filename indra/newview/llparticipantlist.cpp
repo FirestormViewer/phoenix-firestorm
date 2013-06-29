@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #include "llviewerprecompiledheaders.h"
 
 #include "llavatarnamecache.h"
@@ -469,5 +471,7 @@ bool LLParticipantList::SpeakerMuteListener::handleEvent(LLPointer<LLOldEvents::
 {
 	return mParent.onSpeakerMuteEvent(event, userdata);
 }
+
+#endif // 0
 
 //EOF

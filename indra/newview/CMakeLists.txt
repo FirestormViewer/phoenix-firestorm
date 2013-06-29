@@ -159,6 +159,7 @@ set(viewer_SOURCE_FILES
     fspanelprofile.cpp
     fspanelprofileclassifieds.cpp
     fspanelradar.cpp
+    fsparticipantlist.cpp
     fspose.cpp
     fsradar.cpp
     fsradarentry.cpp
@@ -841,6 +842,7 @@ set(viewer_HEADER_FILES
     fspanelprofile.h
     fspanelprofileclassifieds.h
     fspanelradar.h
+    fsparticipantlist.h
     fspose.h
     fsradar.h
     fsradarentry.h
