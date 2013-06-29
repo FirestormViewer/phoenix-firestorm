@@ -28,8 +28,10 @@
 #include "llviewerprecompiledheaders.h" // must be first include
 
 #include "llfloaterreg.h"
-#include "llfloaterimnearbychat.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
 #include "lltoastnotifypanel.h"
@@ -86,8 +88,12 @@ bool LLTipHandler::processNotification(const LLNotificationPtr& notification)
 		LLHandlerUtil::logToNearbyChat(notification, CHAT_SOURCE_SYSTEM);
 
 		// don't show toast if Nearby Chat is opened
-		LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
-		if (nearby_chat->isChatVisible())
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		//if (nearby_chat->isChatVisible())
+		FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+		// </FS:Ansariel> [FS communication UI]
+		if (nearby_chat->getVisible())
 		{
 			return false;
 		}
