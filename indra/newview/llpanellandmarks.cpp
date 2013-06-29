@@ -253,19 +253,19 @@ void LLLandmarksPanel::onSearchEdit(const std::string& string)
 	//	LLPlacesInventoryPanel* inventory_list = dynamic_cast<LLPlacesInventoryPanel*>(tab->getAccordionView());
 	//	if (NULL == inventory_list) continue;
 
-	if (mFavoritesInventoryPanel && mFavoritesInventoryPanel->getFilter())
+	if (mFavoritesInventoryPanel)
 	{
 		filter_list(mFavoritesInventoryPanel, string);
 	}
-	if (mLandmarksInventoryPanel && mLandmarksInventoryPanel->getFilter())
+	if (mLandmarksInventoryPanel)
 	{
 		filter_list(mLandmarksInventoryPanel, string);
 	}
-	if (mMyInventoryPanel && mMyInventoryPanel->getFilter())
+	if (mMyInventoryPanel)
 	{
 		filter_list(mMyInventoryPanel, string);
 	}
-	if (mLibraryInventoryPanel && mLibraryInventoryPanel->getFilter())
+	if (mLibraryInventoryPanel)
 	{
 		filter_list(mLibraryInventoryPanel, string);
 	}
