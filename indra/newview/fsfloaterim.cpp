@@ -770,7 +770,7 @@ BOOL FSFloaterIM::postBuild()
 	// enable line history support for instant message bar
 	mInputEditor->setEnableLineHistory(TRUE);
 	// *TODO Establish LineEditor with autoreplace callback
-	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2));
+	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
 
 	LLFontGL* font = LLViewerChat::getChatFont();
 	mInputEditor->setFont(font);	
@@ -1215,14 +1215,7 @@ void FSFloaterIM::updateMessages()
 	std::list<LLSD> messages;
 
 	// we shouldn't reset unread message counters if IM floater doesn't have focus
-	if (hasFocus())
-	{
-		LLIMModel::instance().getMessages(mSessionID, messages, mLastMessageIndex+1);
-	}
-	else
-	{
-		LLIMModel::instance().getMessagesSilently(mSessionID, messages, mLastMessageIndex+1);
-	}
+    LLIMModel::instance().getMessages(mSessionID, messages, mLastMessageIndex + 1, hasFocus());
 
 	if (messages.size())
 	{
