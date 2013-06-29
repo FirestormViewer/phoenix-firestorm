@@ -24,9 +24,9 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #include "llviewerprecompiledheaders.h"
+
+#if 0
 
 #include "llavatarnamecache.h"
 // [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1)
