@@ -28,8 +28,6 @@
 #define LL_LLFLOATERIMNEARBYCHATHANDLER_H
 
 #include "llnotificationhandler.h"
-#include "llavatarname.h"
-#include "llchat.h"
 
 class LLEventPump;
 

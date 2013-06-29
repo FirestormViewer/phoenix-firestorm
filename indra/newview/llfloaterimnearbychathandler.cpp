@@ -51,6 +51,7 @@
 // [/RLVa:KB]
 
 #include "fsconsoleutils.h"
+#include "fsfloaternearbychat.h"
 
 //add LLFloaterIMNearbyChatHandler to LLNotificationsUI namespace
 
@@ -77,7 +78,6 @@ public:
 	LLFloaterIMNearbyChatScreenChannel(const Params& p)
 		: LLScreenChannelBase(p)
 	{
-		mWorldViewRectConnection = gViewerWindow->setOnWorldViewRectUpdated(boost::bind(&LLNearbyChatScreenChannel::updateSize, this, _1, _2));
 		mStopProcessing = false;
 
 		LLControlVariable* ctrl = gSavedSettings.getControl("NearbyToastLifeTime").get();
@@ -95,7 +95,6 @@ public:
 
 	void addChat	(LLSD& chat);
 	void arrangeToasts		();
-	void showToastsTop		();
 	
 	typedef boost::function<LLFloaterIMNearbyChatToastPanel* (void )> create_toast_panel_callback_t;
 	void setCreatePanelCallback(create_toast_panel_callback_t value) { m_create_toast_panel_callback_t = value;}
@@ -154,11 +153,7 @@ protected:
 
 	void	updateToastFadingTime();
 
-	void	reshapePanel(LLToastPanelBase* panel);
-	virtual void		updateSize(LLRect old_world_rect, LLRect new_world_rect);
-
 	create_toast_panel_callback_t m_create_toast_panel_callback_t;
-	boost::signals2::connection mWorldViewRectConnection;
 
 	bool	createPoolToast();
 	
@@ -196,32 +191,6 @@ private:
 //-----------------------------------------------------------------------------------------------
 // LLFloaterIMNearbyChatScreenChannel
 //-----------------------------------------------------------------------------------------------
-// <FS:TM> CHUI Merge check if this is still needed
-//void LLFloaterIMNearbyChatScreenChannel::reshapePanel(LLToastPanelBase* panel)
-//{
-//	S32 percentage=gSavedSettings.getS32("NearbyToastWidth");
-//	panel->reshape(gViewerWindow->getWindowWidthRaw()*percentage/100,panel->getRect().getHeight(),TRUE);
-//}
-// <FS:TM> CHUI Merge check if this is still needed
-//void LLFloaterIMNearbyChatScreenChannel::updateSize(LLRect old_world_rect, LLRect new_world_rect)
-//{
-//	for(toast_vec_t::iterator it = m_active_toasts.begin(); it != m_active_toasts.end(); ++it)
-//	{
-//		LLToast* toast = it->get();
-//
-//		if (toast)
-//		{
-//			LLNearbyChatToastPanel* panel = dynamic_cast<LLNearbyChatToastPanel*>(toast->getPanel());
-//
-//			if(panel)
-//			{
-//				reshapePanel(panel);
-//				toast->reshapeToPanel();
-//			}
-//		}
-//	}
-//	arrangeToasts();
-//}
 
 void LLFloaterIMNearbyChatScreenChannel::deactivateToast(LLToast* toast)
 {
@@ -310,7 +279,7 @@ bool	LLFloaterIMNearbyChatScreenChannel::createPoolToast()
 	p.fading_time_secs = gSavedSettings.getS32("NearbyToastFadingTime");
 
 	LLToast* toast = new LLFloaterIMNearbyChatToast(p, this);
-	reshapePanel(panel);
+	
 	
 	toast->setOnFadeCallback(boost::bind(&LLFloaterIMNearbyChatScreenChannel::onToastFade, this, _1));
 
@@ -344,7 +313,6 @@ void LLFloaterIMNearbyChatScreenChannel::addChat(LLSD& chat)
 			if(panel && panel->messageID() == fromID && panel->getFromName() == from && panel->canAddText())
 			{
 				panel->addMessage(chat);
-				reshapePanel(panel);
 				toast->reshapeToPanel();
 				toast->startTimer();
 	  
@@ -390,7 +358,6 @@ void LLFloaterIMNearbyChatScreenChannel::addChat(LLSD& chat)
 		return;
 	panel->init(chat);
 
-	reshapePanel(panel);
 	toast->reshapeToPanel();
 	toast->startTimer();
 	
@@ -514,6 +481,7 @@ LLFloaterIMNearbyChatHandler::~LLFloaterIMNearbyChatHandler()
 {
 }
 
+
 void LLFloaterIMNearbyChatHandler::initChannel()
 {
 	//LLRect snap_rect = gFloaterView->getSnapRect();
@@ -529,9 +497,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	// <FS:Ansariel> Optional muted chat history
 		//return;
 	{
-		// <FS:Ansariel> [FS communication UI]
-		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
-		// <FS:Ansariel> [FS communication UI]
+		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
 		nearby_chat->addMessage(chat_msg, true, args);
 		return;
 	}
@@ -559,8 +525,11 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	}
 // [/RLVa:KB]
 
-    LLFloaterReg::getInstance("im_container");
-	LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	// <FS:Ansariel> [FS communication UI]
+    //LLFloaterReg::getInstance("im_container");
+	//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+	// </FS:Ansariel> [FS communication UI]
 
 	// Build notification data 
 	LLSD chat;
@@ -643,7 +612,10 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	// Send event on to LLEventStream
 	sChatWatcher->post(chat);
 
-    LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+	// <FS:Ansariel> [FS communication UI]
+    //LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+	// </FS:Ansariel> [FS communication UI]
+
 	// <FS:Ansariel> Nearby chat in console
 	if (FSConsoleUtils::ProcessChatMessage(chat_msg, args))
 	{
@@ -651,11 +623,17 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	}
 	// </FS:Ansariel>
 
-	if((  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
+	// <FS:Ansariel> [FS communication UI]
+	//if((  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+	if(  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+	// </FS:Ansariel> [FS communication UI]
 			&& useChatBubbles )
 		|| mChannel.isDead()
 		|| !mChannel.get()->getShowToasts() )
-		&& nearby_chat->isMessagePaneExpanded())
+	// <FS:Ansariel> [FS communication UI]
+	//	&& nearby_chat->isMessagePaneExpanded())
+	// </FS:Ansariel> [FS communication UI]
 		// to prevent toasts in Do Not Disturb mode
 		return;//no need in toast if chat is visible or if bubble chat is enabled
 
@@ -682,28 +660,38 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	if(channel)
 	{
 		// Handle IRC styled messages.
+		std::string toast_msg;
 		if (tmp_chat.mChatStyle == CHAT_STYLE_IRC)
 		{
-			if(!tmp_chat.mFromName.empty())
-				tmp_chat.mText = tmp_chat.mFromName + tmp_chat.mText.substr(3);
-			else
-				tmp_chat.mText = tmp_chat.mText.substr(3);
+			if (!tmp_chat.mFromName.empty())
+			{
+				toast_msg += tmp_chat.mFromName;
+			}
+			toast_msg += tmp_chat.mText.substr(3);
+		}
+		else
+		{
+			toast_msg = tmp_chat.mText;
 		}
 
 		//Don't show nearby toast, if conversation is visible and selected
-		if ((nearby_chat->hasFocus()) ||
-		    ((im_box->getSelectedSession().isNull() &&
-				((LLFloater::isVisible(im_box) && !im_box->isMinimized() && im_box->isFrontmost())
-						|| (LLFloater::isVisible(nearby_chat) && !nearby_chat->isMinimized() && nearby_chat->isFrontmost())))))
-		{
-			if(nearby_chat->isMessagePaneExpanded())
-			{
-				return;
-			}
-		}
+		// <FS:Ansariel> [FS communication UI]
+		//if ((nearby_chat->hasFocus()) ||
+		//    ((im_box->getSelectedSession().isNull() &&
+		//		((LLFloater::isVisible(im_box) && !im_box->isMinimized() && im_box->isFrontmost())
+		//				|| (LLFloater::isVisible(nearby_chat) && !nearby_chat->isMinimized() && nearby_chat->isFrontmost())))))
+		//{
+		//	if(nearby_chat->isMessagePaneExpanded())
+		//	{
+		//		return;
+		//	}
+		//}
+		// </FS:Ansariel> [FS communication UI]
 
         //Will show toast when chat preference is set        
-        if((gSavedSettings.getString("NotificationNearbyChatOptions") == "toast") || !nearby_chat->isMessagePaneExpanded())
+		// <FS:Ansariel> [FS communication UI] [CHUI Merge] Maybe need this later...
+        //if((gSavedSettings.getString("NotificationNearbyChatOptions") == "toast") || !nearby_chat->isMessagePaneExpanded())
+		// </FS:Ansariel> [FS communication UI]
         {
             // Add a nearby chat toast.
             LLUUID id;
