@@ -62,7 +62,7 @@ typedef enum
 
 
 // Floater to control preferences (display, audio, bandwidth, general.
-class LLFloaterPreference : public LLFloater, public LLAvatarPropertiesObserver, public LLConversationLogObserver
+class LLFloaterPreference : public LLFloater, public LLAvatarPropertiesObserver// <FS:CR> CHUI Merge TODO: Readd convo log - , public LLConversationLogObserver
 {
 public: 
 	LLFloaterPreference(const LLSD& key);

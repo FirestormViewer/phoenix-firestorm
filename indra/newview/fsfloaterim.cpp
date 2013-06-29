@@ -883,7 +883,7 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 				break;
 			// Username (display name)
 			case 3:
-				if (av_name.mIsDisplayNameDefault)
+				if (av_name.isDisplayNameDefault())
 				{
 					name = av_name.getUserName();
 				}
