@@ -106,7 +106,8 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 
 	// Hook into LLNotifications...
 	// We hook into all of them, even though (at the time of writing) nothing uses "alert", so more notifications can be added easily.
-	LLNotificationChannel::buildChannel("GrowlNotifications", "Visible", &filterOldNotifications);
+	// Ansa: Hope this works...
+	mGrowlNotificationsChannel = new LLNotificationChannel("GrowlNotifications", "Visible", &filterOldNotifications);
 	LLNotifications::instance().getChannel("GrowlNotifications")->connectChanged(&onLLNotification);
 
 	// Also hook into IM notifications.

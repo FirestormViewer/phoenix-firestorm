@@ -69,6 +69,7 @@ private:
 	GrowlNotifier *mNotifier;
 	std::map<std::string, GrowlNotification> mNotifications;
 	std::map<std::string, U64> mTitleTimers;
+	LLNotificationChannelPtr mGrowlNotificationsChannel;
 	
 	void loadConfig();
 	static bool onLLNotification(const LLSD& notice);
