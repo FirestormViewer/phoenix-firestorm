@@ -1146,7 +1146,8 @@ bool LLIMModel::logToFile(const std::string& file_name, const std::string& from,
 		}
 
 		LLLogChat::saveHistory(file_name, from_name, from_id, utf8_text);
-		LLConversationLog::instance().cache(); // update the conversation log too
+		// <FS:Ansariel> [FS communication UI] [CHUI Merge] Conversation log currently not used yet
+		// LLConversationLog::instance().cache(); // update the conversation log too
 		return true;
 	}
 	else
