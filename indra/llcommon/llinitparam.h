@@ -435,7 +435,8 @@ namespace LLInitParam
 		typedef self_t type_value_t;
 
 		TypeValuesHelper(const std::string& val)
-		:	TypeValuesHelper(val)
+			//		:	TypeValuesHelper(val) <FS:ND> Call base_t::ctor. Otherwise gcc can get confused.
+		:	base_t::TypeValuesHelper(val)
 		{}
 
 		void operator ()(const std::string& name)
