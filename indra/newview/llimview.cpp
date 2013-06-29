@@ -338,6 +338,20 @@ void on_new_message(const LLSD& msg)
 	// [CHUI Merge]
 }
 
+// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+void LLIMModel::setActiveSessionID(const LLUUID& session_id)
+{
+	// check if such an ID really exists
+	if (!findIMSession(session_id))
+	{
+		llwarns << "Trying to set as active a non-existent session!" << llendl;
+		return;
+	}
+
+	mActiveSessionID = session_id;
+}
+// </FS:Ansariel> [FS communication UI]
+
 LLIMModel::LLIMModel() 
 {
 	// <FS:Ansariel> [FS communication UI]

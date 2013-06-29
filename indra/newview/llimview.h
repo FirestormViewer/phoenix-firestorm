@@ -152,6 +152,14 @@ public:
 
 	LLIMModel();
 
+	// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+	//we should control the currently active session
+	LLUUID	mActiveSessionID;
+	void	setActiveSessionID(const LLUUID& session_id);
+	void	resetActiveSessionID() { mActiveSessionID.setNull(); }
+	LLUUID	getActiveSessionID() { return mActiveSessionID; }
+	// </FS:Ansariel> [FS communication UI]
+
 	/** Session id to session object */
 	std::map<LLUUID, LLIMSession*> mId2SessionMap;
 

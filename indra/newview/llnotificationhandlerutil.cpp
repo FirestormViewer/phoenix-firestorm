@@ -127,6 +127,15 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 	}
 	else
 	{
+		// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+		// store active session id
+		const LLUUID & active_session_id =
+				LLIMModel::instance().getActiveSessionID();
+
+		// set searched session as active to avoid IM toast popup
+		LLIMModel::instance().setActiveSessionID(session_id);
+		// </FS:Ansariel> [FS communication UI]
+
 		S32 unread = session->mNumUnread;
 		S32 participant_unread = session->mParticipantUnreadMessageCount;
 		LLIMModel::instance().addMessageSilently(session_id, from, from_id,
@@ -137,6 +146,18 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 
 		// update IM floater messages
 		updateIMFLoaterMesages(session_id);
+
+		// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+		// restore active session id
+		if (active_session_id.isNull())
+		{
+			LLIMModel::instance().resetActiveSessionID();
+		}
+		else
+		{
+			LLIMModel::instance().setActiveSessionID(active_session_id);
+		}
+		// </FS:Ansariel> [FS communication UI]
 	}
 }
 
