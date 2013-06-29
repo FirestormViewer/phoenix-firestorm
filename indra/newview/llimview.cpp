@@ -3722,7 +3722,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 		BOOL is_linden = LLMuteList::getInstance()->isLinden(im_info->mName);
 		BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
 
-		if (gRlvHandler.canReceiveIM(im_info->mFromID) && !is_linden &&
+		if (RlvActions::canReceiveIM(im_info->mFromID) && !is_linden &&
 			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
 			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) )
 		{

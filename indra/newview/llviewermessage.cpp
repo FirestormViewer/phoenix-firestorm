@@ -70,7 +70,10 @@
 #include "llinventoryfunctions.h"
 #include "llinventoryobserver.h"
 #include "llinventorypanel.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llpanelgrouplandmoney.h"
@@ -2580,7 +2583,10 @@ static void god_message_name_cb(const LLAvatarName& av_name, LLChat chat, std::s
 	// Treat like a system message and put in chat history.
 	chat.mText = av_name.getCompleteName() + ": " + message;
 
-	LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+	// </FS:Ansariel> [FS communication UI]
 	if (nearby_chat)
 	{
 		nearby_chat->addMessage(chat);
@@ -2737,18 +2743,18 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(), session_id);
 		}
 // [/RLVa:KB]
-//		else if (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM)
+//		else if (offline == IM_ONLINE && is_do_not_disturb && name != SYSTEM_FROM)
 // [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-		//else if ( (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
+		//else if ( (offline == IM_ONLINE && is_do_not_disturb && name != SYSTEM_FROM) && (RlvActions::canReceiveIM(from_id)) )
 		//AO Autorespond
 		//TS Autorespond to non-friends
 		// <FS:Ansariel> Only send the busy reponse if either the sender is not
 		//               muted OR the sender is muted and we explicitely want
 		//               to inform him about that fact.
-		else if ( (offline == IM_ONLINE && !is_linden &&
-			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+		else if ( (offline == IM_ONLINE &&
+			((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
 			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) && name != SYSTEM_FROM) &&
-			(gRlvHandler.canReceiveIM(from_id)) )
+			(RlvActions::canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
 			// <FS:Ansariel> Log autoresponse notification after initial message
@@ -3348,7 +3354,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
 			// IMs from obejcts don't open IM sessions.
-			LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			if(!chat_from_system && nearby_chat)
 			{
 				chat.mOwnerID = from_id;
@@ -6614,7 +6623,7 @@ static void money_balance_group_notify(const LLUUID& group_id,
 		chat.mText = args["SLURLMESSAGE"].asString();
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
+		//chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT; [CHUI Merge]
 		chat_args["console_message"] = llformat(args["MESSAGE"].asString().c_str(), name.c_str());
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
 	}
@@ -6641,7 +6650,7 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 		chat.mText = args["SLURLMESSAGE"].asString();
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
+		//chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT; [CHUI Merge]
 		chat_args["console_message"] = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
 	}
@@ -6663,7 +6672,7 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 		chat.mText = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT;
+		//chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT; [CHUI Merge]
 		tipTracker->addMessage(chat,false,chat_args);
 	}
 	//</AO>
@@ -7625,7 +7634,10 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (caution)
 		{
-			LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			if(nearby_chat)
 			{
 				LLChat chat_msg(notice.getString());

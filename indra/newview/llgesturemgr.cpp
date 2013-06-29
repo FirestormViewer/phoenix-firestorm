@@ -52,7 +52,10 @@
 #include "llviewermessage.h"
 #include "llvoavatarself.h"
 #include "llviewerstats.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS Communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsnearbychathub.h"
+// </FS:Ansariel> [FS Communication UI]
 #include "llappearancemgr.h"
 #include "llgesturelistener.h"
 
@@ -1009,8 +1012,11 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
 			
 			const BOOL animate = FALSE;
 
-			(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
-					sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+			// <FS:Ansariel> [FS Communication UI]
+			//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+			//		sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+			FSNearbyChat::instance().sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+			// </FS:Ansariel> [FS Communication UI]
 
 			gesture->mCurrentStep++;
 			break;

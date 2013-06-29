@@ -194,7 +194,9 @@
 #include "llviewerjoystick.h"
 #include "llviewernetwork.h"
 #include "llpostprocess.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llagentui.h"
 #include "llwearablelist.h"
 
@@ -210,6 +212,7 @@
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
 #include "llpaneltopinfobar.h"
+#include "llimview.h"
 
 // [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c)
 #include "rlvhandler.h"
@@ -2841,20 +2844,24 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
 		// Initialize nearby chat if it's missing
-		LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
-		if (!nearby_chat)
-		{	
-			LLSD name("im_container");
-			LLFloaterReg::toggleInstanceOrBringToFront(name);
-		}
+		// <FS:Ansariel> [FS Communication UI]
+		//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		//if (!nearby_chat)
+		//{	
+		//	LLSD name("im_container");
+		//	LLFloaterReg::toggleInstanceOrBringToFront(name);
+		//}
 
-		LLChatEntry* chat_editor = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->getChatBox();
-		if (chat_editor)
-		{
-			// passing NULL here, character will be added later when it is handled by character handler.
-			nearby_chat->startChat(NULL);
-			return TRUE;
-		}
+		//LLChatEntry* chat_editor = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->getChatBox();
+		//if (chat_editor)
+		//{
+		//	// passing NULL here, character will be added later when it is handled by character handler.
+		//	nearby_chat->startChat(NULL);
+		//	return TRUE;
+		//}
+		FSNearbyChat::instance().showDefaultChatBar(TRUE);
+		return TRUE;
+		// </FS:Ansariel> [FS Communication UI]
 	}
 
 	// give menus a chance to handle unmodified accelerator keys
