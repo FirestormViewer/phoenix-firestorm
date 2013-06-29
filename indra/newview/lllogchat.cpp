@@ -654,7 +654,8 @@ void LLLogChat::deleteTranscripts()
 		}
 	}
 
-	LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
+	// <FS:Ansariel> [FS communication UI] [CHUI Merge] Our floaters don't reload messages so far. We might want to do that eventually.
+	//LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
 }
 
 // static
