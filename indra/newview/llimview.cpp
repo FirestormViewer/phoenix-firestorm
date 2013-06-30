@@ -1125,7 +1125,7 @@ bool LLIMModel::buildIMP2PLogFilename(const LLUUID& idAgent, const std::string& 
 		else
 		{
 			// Use the legacy name to base the filename on
-			strFilename = LLCacheName::cleanFullName( (!avName.mLegacyFirstName.empty()) ? avName.getLegacyName() : avName.getDisplayName() );
+			strFilename = LLCacheName::cleanFullName( (!avName.getLegacyName().empty()) ? avName.getLegacyName() : avName.getDisplayName() );
 		}
 		return true;
 	}
