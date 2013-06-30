@@ -732,7 +732,7 @@ void FSRadar::updateRadarList()
 	//STEP 5: Final data updates and notification of subscribers
 	//
 
-	mAvatarStats["total"] = llformat("%d", mLastRadarSweep.size());
+	mAvatarStats["total"] = llformat("%d", mLastRadarSweep.size() - 1);
 	mAvatarStats["region"] = llformat("%d", inSameRegion);
 	mAvatarStats["chatrange"] = llformat("%d", inChatRange);
 
