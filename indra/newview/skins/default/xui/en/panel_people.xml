@@ -62,7 +62,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
      name="tabs"
      tab_group="1"
      tab_min_width="70"
-     tab_height="30"
+     tab_height="20"
      tab_position="top"
      top="0"
      halign="center"
