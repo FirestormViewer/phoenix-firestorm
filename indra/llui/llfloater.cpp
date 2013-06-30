@@ -926,14 +926,16 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
 {
 //	if (!applyDockState()) // <FS:Zi> Don't apply dock state and forget about the undocked values
 	{
-		// <FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
-		//applyPositioning(other); <FS:TM> CHUI Merge old
-		//if (!applyRectControl()) <FS:TM> CHUI Merge new
-		if ((strcmp(getName().c_str(), "panel_im") != 0)) // <FS:TM> CHUI Merge do we still want this?
+		if (!applyRectControl())
 		{
-		applyPositioning(other, true);
+			// <FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
+			//applyPositioning(other); <FS:TM> CHUI Merge old
+			if (getName() == "panel_im") // <FS:TM> CHUI Merge do we still want this?
+			{
+				applyPositioning(other, true);
+			}
+			// </FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
 		}
-		// </FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
 	}
 	applyDockState();	// <FS:Zi> Only now apply docked state so floaters don't forget their positions
 }
