@@ -77,7 +77,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          bg_opaque_color="DkGray"
          bottom="-1"
          follows="all"
-         label="NEARBY"
+         label="Nearby"
          layout="topleft"
          left="0"
          help_topic="people_nearby_tab"
@@ -168,6 +168,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                      function="People.DelFriend" />
                  </dnd_button>
             </panel>
+<!-- FS:Ansariel: Firestorm radar
          <layout_stack
            clip="false"
            follows="all"
@@ -219,6 +220,17 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                top="2" />
            </layout_panel>
          </layout_stack>
+-->
+            <panel
+             class="fs_panel_radar"
+             name="panel_radar"
+             filename="panel_fs_radar.xml"
+             follows="all"
+             height="408"
+             layout="topleft"
+             left="3"
+             top_pad="3"
+             width="319"/>
         </panel>
 
 <!-- ================================= FRIENDS tab ========================== -->
@@ -230,7 +242,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          bg_opaque_color="DkGray"
          bottom="-1"
          follows="all"
-         label="FRIENDS"
+         label="Friends"
          layout="topleft"
          left="0"
          help_topic="people_friends_tab"
@@ -386,7 +398,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          bg_opaque_color="DkGray"
          bottom="-1"
          follows="all"
-         label="GROUPS"
+         label="Groups"
          layout="topleft"
          left="0"
          help_topic="people_groups_tab"
@@ -501,7 +513,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          bg_opaque_color="DkGray"
          follows="all"
          height="383"
-         label="RECENT"
+         label="Recent"
          layout="topleft"
          left="0"
          help_topic="people_recent_tab"
@@ -614,7 +626,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          bg_opaque_color="DkGray"
          follows="all"
          height="383"
-         label="BLOCKED"
+         label="Blocked"
          layout="topleft"
          left="0"
          help_topic="people_blocked_tab"

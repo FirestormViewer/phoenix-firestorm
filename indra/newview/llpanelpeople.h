@@ -66,9 +66,6 @@ public:
 	//LLAvatarList* getNearbyList() { return mNearbyList; }
 // [/RLVa:KB]
 
-	// <FS:Ansariel> Firestorm radar
-	void updateNearby(const std::vector<LLSD>& entries, const LLSD& stats);
-
 	// internals
 	class Updater;
 
@@ -141,7 +138,6 @@ private:
 	bool					isAccordionCollapsedByUser(const std::string& name);
 
 	// <FS:Ansariel> Firestorm callback handler
-	void					onRadarListDoubleClicked();
 	void					onGlobalVisToggleButtonClicked();
 	// </FS:Ansariel> Firestorm callback handler
 
@@ -166,9 +162,6 @@ private:
 	Updater*				mRecentListUpdater;
 	Updater*				mButtonsUpdater;
     LLHandle< LLFloater >	mPicker;
-
-	// <FS:Ansariel> Firestorm radar
-	boost::signals2::connection mNearbyUpdateSignalConnection;
 };
 
 #endif //LL_LLPANELPEOPLE_H

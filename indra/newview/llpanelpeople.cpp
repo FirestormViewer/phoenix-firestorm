@@ -549,9 +549,6 @@ LLPanelPeople::LLPanelPeople()
 
 LLPanelPeople::~LLPanelPeople()
 {
-	// <FS:Ansariel> Firestorm radar
-	mNearbyUpdateSignalConnection.disconnect();
-
 	delete mButtonsUpdater;
 	// <FS:Ansariel> Firestorm radar
 	//delete mNearbyListUpdater;
@@ -627,8 +624,6 @@ BOOL LLPanelPeople::postBuild()
 	
 	// <FS:AO> Radarlist takes over for nearbylist for presentation.
 	mRadarList = nearby_tab->getChild<FSRadarListCtrl>("radar_list");
-	mRadarList->sortByColumn("range", TRUE); // sort by range
-	mRadarList->setFilterColumn(0);
 	// </FS:AO>
 
 	// <FS:Ansariel> Firestorm radar
@@ -660,10 +655,8 @@ BOOL LLPanelPeople::postBuild()
 	mGroupList->setNoFilteredItemsMsg(getString("no_filtered_groups_msg"));
 
 	// <FS:Ansariel> Use Firestorm radar menu handler
-	//mNearbyList->setContextMenu(&LLPanelPeopleMenus::gNearbyMenu);
-	mRadarList->setContextMenu(&FSFloaterRadarMenu::gFSRadarMenu);
+	//mNearbyList->setContextMenu(&LLPanelPeopleMenus::gNearbyPeopleContextMenu);
 	// </FS:Ansariel>
-	mNearbyList->setContextMenu(&LLPanelPeopleMenus::gNearbyPeopleContextMenu);
 	mRecentList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	mAllFriendList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	mOnlineFriendList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
@@ -677,7 +670,6 @@ BOOL LLPanelPeople::postBuild()
 	mAllFriendList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 	// <FS:Ansariel> Firestorm radar
 	//mNearbyList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
-	mRadarList->setDoubleClickCallback(boost::bind(&LLPanelPeople::onRadarListDoubleClicked, this));
 	// </FS:Ansariel> Firestorm radar
 	mRecentList->setItemDoubleClickCallback(boost::bind(&LLPanelPeople::onAvatarListDoubleClicked, this, _1));
 
@@ -685,7 +677,6 @@ BOOL LLPanelPeople::postBuild()
 	mAllFriendList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mAllFriendList));
 	// <FS:Ansariel> We only use mRadarList here
 	//mNearbyList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mNearbyList));
-	mRadarList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mNearbyList));
 	mRecentList->setCommitCallback(boost::bind(&LLPanelPeople::onAvatarListCommitted, this, mRecentList));
 
 	// Set openning IM as default on return action for avatar lists
@@ -730,9 +721,6 @@ BOOL LLPanelPeople::postBuild()
 
 	mOnlineFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 	mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
-
-	// <FS:Ansariel> Register for radar updates
-	mNearbyUpdateSignalConnection = FSRadar::getInstance()->setUpdateCallback(boost::bind(&LLPanelPeople::updateNearby, this, _1, _2));
 
 	return TRUE;
 }
@@ -1582,131 +1570,6 @@ bool LLPanelPeople::isAccordionCollapsedByUser(const std::string& name)
 {
 	return isAccordionCollapsedByUser(getChild<LLUICtrl>(name));
 }
-
-// <FS:Ansariel> Firestorm radar
-void LLPanelPeople::onRadarListDoubleClicked()
-{
-	LLScrollListItem* item = mRadarList->getFirstSelected();
-	if (!item)
-	{
-		return;
-	}
-
-	LLUUID clicked_id = item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
-	std::string name = item->getColumn(mRadarList->getColumn("name")->mIndex)->getValue().asString();
-
-	FSRadar* radar = FSRadar::getInstance();
-	if (radar)
-	{
-		radar->zoomAvatar(clicked_id, name);
-	}
-}
-
-void LLPanelPeople::updateNearby(const std::vector<LLSD>& entries, const LLSD& stats)
-{
-	if (!LLFloaterReg::instanceVisible("people") || getActiveTabName() != NEARBY_TAB_NAME)
-	{
-		return;
-	}
-
-	if (!mRadarList)
-	{
-		return;
-	}
-
-	static const std::string flagsColumnType = getString("FlagsColumnType");
-	static const std::string flagsColumnValues [3] = { getString("FlagsColumnValue_0"), getString("FlagsColumnValue_1"), getString("FlagsColumnValue_2") };
-
-	// Store current selection and scroll position
-	static S32 uuidColumnIndex = mRadarList->getColumn("uuid")->mIndex;
-	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
-	uuid_vec_t selected_ids;
-	for (size_t i = 0; i < selected_items.size(); i++)
-	{
-		selected_ids.push_back(selected_items.at(i)->getColumn(uuidColumnIndex)->getValue().asUUID());
-	}
-	S32 lastScroll = mRadarList->getScrollPos();
-
-	// Update list
-	mRadarList->clearRows();
-	const std::vector<LLSD>::const_iterator it_end = entries.end();
-	for (std::vector<LLSD>::const_iterator it = entries.begin(); it != it_end; ++it)
-	{
-		LLSD entry = (*it)["entry"];
-		LLSD options = (*it)["options"];
-
-		LLSD row_data;
-		row_data["value"] = entry["id"];
-		row_data["columns"][0]["column"] = "name";
-		row_data["columns"][0]["value"] = entry["name"];
-		row_data["columns"][1]["column"] = "voice_level";
-		row_data["columns"][1]["type"] = "icon";
-		row_data["columns"][1]["value"] = ""; // Need to set it after the row has been created because it's to big for the row
-		row_data["columns"][2]["column"] = "in_region";
-		row_data["columns"][2]["type"] = "icon";
-		row_data["columns"][2]["value"] = (entry["in_region"].asBoolean() ? "avatar_in_region" : "");
-		row_data["columns"][3]["column"] = "flags";
-		row_data["columns"][3]["type"] = flagsColumnType;
-		row_data["columns"][4]["column"] = "age";
-		row_data["columns"][4]["value"] = entry["age"];
-		row_data["columns"][5]["column"] = "seen";
-		row_data["columns"][5]["value"] = entry["seen"];
-		row_data["columns"][6]["column"] = "range";
-		row_data["columns"][6]["value"] = entry["range"];
-		row_data["columns"][7]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
-		row_data["columns"][7]["value"] = entry["id"];
-
-		LLScrollListItem* row = mRadarList->addElement(row_data);
-
-		static S32 rangeColumnIndex = mRadarList->getColumn("range")->mIndex;
-		static S32 nameColumnIndex = mRadarList->getColumn("name")->mIndex;
-		static S32 voiceLevelColumnIndex = mRadarList->getColumn("voice_level")->mIndex;
-		static S32 flagsColumnIndex = mRadarList->getColumn("flags")->mIndex;
-
-		LLScrollListText* radarRangeCell = (LLScrollListText*)row->getColumn(rangeColumnIndex);
-		radarRangeCell->setColor(LLColor4(options["range_color"]));
-		radarRangeCell->setFontStyle(options["range_style"].asInteger());
-
-		LLScrollListText* radarNameCell = (LLScrollListText*)row->getColumn(nameColumnIndex);
-		radarNameCell->setFontStyle(options["name_style"].asInteger());
-		if (options.has("name_color"))
-		{
-			radarNameCell->setColor(LLColor4(options["name_color"]));
-		}
-
-		LLScrollListText* voiceLevelCell = (LLScrollListText*)row->getColumn(voiceLevelColumnIndex);
-		if (entry.has("voice_level_icon"))
-		{
-			voiceLevelCell->setValue(entry["voice_level_icon"].asString());
-		}
-
-		LLScrollListText* flagsCell = (LLScrollListText*)row->getColumn(flagsColumnIndex);
-		if (entry.has("flags"))
-		{
-			flagsCell->setValue(flagsColumnValues[entry["flags"].asInteger()]);
-		}
-	}
-
-	LLStringUtil::format_map_t name_count_args;
-	name_count_args["[TOTAL]"] = stats["total"].asString();
-	name_count_args["[IN_REGION]"] = stats["region"].asString();
-	name_count_args["[IN_CHAT_RANGE]"] = stats["chatrange"].asString();
-	LLScrollListColumn* column = mRadarList->getColumn("name");
-	column->mHeader->setLabel(getString("avatar_name_count", name_count_args));
-	column->mHeader->setToolTipArgs(name_count_args);
-
-	// Restore scroll position
-	mRadarList->setScrollPos(lastScroll);
-
-	// Restore selection list
-	if (!selected_ids.empty())
-	{
-		mRadarList->selectMultiple(selected_ids);
-	}
-
-	updateButtons();
-}
-
 
 void LLPanelPeople::onGlobalVisToggleButtonClicked()
 // Iterate through friends lists, toggling status permission on or off 
