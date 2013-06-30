@@ -202,14 +202,11 @@ bool LLScriptRecoverQueue::recoverNext()
 	if (m_FileQueue.end() == itFile) 
 	{
 		LLInventoryPanel* pInvPanel = LLInventoryPanel::getActiveInventoryPanel(TRUE);
-		if (pInvPanel)
+		LLFolderViewFolder* pFVF = dynamic_cast<LLFolderViewFolder*>(pInvPanel ? pInvPanel->getItemByID(idFNF) : NULL);
+		if (pFVF)
 		{
-			LLFolderViewFolder* pFVF = dynamic_cast<LLFolderViewFolder*>(pInvPanel->getRootFolder()->getItemByID(idFNF));
-			if (pFVF)
-			{
-				pFVF->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_UP);
-				pInvPanel->setSelection(idFNF, TRUE);
-			}
+			pFVF->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_UP);
+			pInvPanel->setSelection(idFNF, TRUE);
 		}
 
 		delete this;
