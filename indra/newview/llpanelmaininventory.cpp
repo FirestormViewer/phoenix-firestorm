@@ -217,8 +217,8 @@ BOOL LLPanelMainInventory::postBuild()
 		worn_items_panel->setWorn(TRUE);
 		worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
 		worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-		//worn_items_panel->getFilter()->markDefault();
-		worn_items_panel->getFilter()->setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
+		//worn_items_panel->getFilter().markDefault();
+		worn_items_panel->getFilter().setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
 
 		// <FS:ND> Do not go all crazy and recurse through the whole inventory
 		//		worn_items_panel->openAllFolders();
@@ -1548,17 +1548,17 @@ BOOL LLPanelMainInventory::isFilterLinksChecked(const LLSD& userdata)
 	const std::string command_name = userdata.asString();
 	if (command_name == "show_links")
 	{
-		return (getActivePanel()->getFilter()->getFilterLinks()==LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+		return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
 	}
 
 	if (command_name == "only_links")
 	{
-		return (getActivePanel()->getFilter()->getFilterLinks()==LLInventoryFilter::FILTERLINK_ONLY_LINKS);
+		return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_ONLY_LINKS);
 	}
 
 	if (command_name == "hide_links")
 	{
-		return (getActivePanel()->getFilter()->getFilterLinks()==LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
+		return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
 	}
 
 	return FALSE;
