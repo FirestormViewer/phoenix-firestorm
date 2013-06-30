@@ -159,8 +159,7 @@ void process_dnd_im(const LLSD& notification)
 
 
 
-// [CHUI Merge] Commented out for now. Only used in on_new_message.
-/*static void on_avatar_name_cache_toast(const LLUUID& agent_id,
+static void on_avatar_name_cache_toast(const LLUUID& agent_id,
 									   const LLAvatarName& av_name,
 									   LLSD msg)
 {
@@ -176,7 +175,7 @@ void process_dnd_im(const LLSD& notification)
 	//LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
 	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
 	// </FS:Ansariel> [FS communication UI]
-}*/
+}
 
 void on_new_message(const LLSD& msg)
 {
@@ -336,6 +335,60 @@ void on_new_message(const LLSD& msg)
     }
 #endif
 	// [CHUI Merge]
+	// <FS:Ansariel> [FS communication UI] Use old toast handling code for now
+	// do not show toast in busy mode or it goes from agent
+	if (gAgent.isDoNotDisturb() || gAgent.getID() == msg["from_id"])
+	{
+		return;
+	}
+
+	// <FS:Ansariel> Don't toast if the message is an announcement
+	if (msg["is_announcement"].asBoolean())
+	{
+		return;
+	}
+	// </FS:Ansariel> Don't toast if the message is an announcement
+
+	// <FS:Ansariel> (Group-)IMs in chat console
+	if (FSConsoleUtils::ProcessInstantMessage(msg["session_id"], msg["from_id"], msg["message"]))
+	{
+		return;
+	}
+	// </FS:Ansariel> (Group-)IMs in chat console
+
+	// check whether incoming IM belongs to an active session or not
+	if (LLIMModel::getInstance()->getActiveSessionID().notNull()
+			&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"])
+	{
+		return;
+	}
+
+	// Skip toasting for system messages
+	if (msg["from_id"].asUUID() == LLUUID::null)
+	{
+		return;
+	}
+
+	// *NOTE Skip toasting if the user disable it in preferences/debug settings ~Alexandrea
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(msg["session_id"]);
+	if (!gSavedSettings.getBOOL("EnableGroupChatPopups") && session->isGroupSessionType())
+	{
+		return;
+	}
+	if (!gSavedSettings.getBOOL("EnableIMChatPopups") && !session->isGroupSessionType())
+	{
+		return;
+	}
+
+	// Skip toasting if we have open window of IM with this session id
+	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(msg["session_id"]);
+	if (open_im_floater && open_im_floater->getVisible())
+	{
+		return;
+	}
+
+	LLAvatarNameCache::get(msg["from_id"].asUUID(), boost::bind(&on_avatar_name_cache_toast, _1, _2, msg));
+	// </FS:Ansariel> [FS communication UI]
 }
 
 // <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
