@@ -262,11 +262,14 @@ BOOL LLPanelMainInventory::postBuild()
 		// <FS:ND> bring back worn items panel.
 		if(worn_items_panel)
 		{
-			if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
+			if(savedFilterState.has(worn_items_panel->getFilter().getName()))
 			{
 				LLSD worn_items = savedFilterState.get(
-													   worn_items_panel->getFilter()->getName());
-				worn_items_panel->getFilter()->fromLLSD(worn_items);
+					worn_items_panel->getFilter().getName());
+				LLInventoryFilter::Params p;
+				LLParamSDParser parser;
+				parser.readSD(worn_items, p);
+				recent_items_panel->getFilter().fromParams(p);
 			}
 		}
 		// </FS:ND>
@@ -351,17 +354,19 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 		}
 	}
 
-        LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
-        if (worn_items_panel)
-        {
-                LLInventoryFilter* filter = recent_items_panel->getFilter();
-                if (filter)
-                {
-                        LLSD filterState;
-                        filter->toLLSD(filterState);
-                        filterRoot[filter->getName()] = filterState;
-                }
-        }
+	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
+	if (worn_items_panel)
+	{
+		LLSD filterState;
+		LLInventoryPanel::InventoryState p;
+		worn_items_panel->getFilter().toParams(p.filter);
+		worn_items_panel->getRootViewModel().getSorter().toParams(p.sort);
+		if (p.validateBlock(false))
+		{
+			LLParamSDParser().writeSD(filterState, p);
+			filterRoot[worn_items_panel->getName()] = filterState;
+		}
+	}
 
 
 	std::ostringstream filterSaveName;
@@ -549,8 +554,8 @@ void LLPanelMainInventory::onClearSearch()
 		// We don't do this anymore, we have a menu option for it now. -Zi
 //		mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
 		// <FS:Zi> make sure the dropdown shows "All Types" once again
-		LLInventoryFilter* filter=mActivePanel->getFilter();
-		updateFilterDropdown(filter);
+		LLInventoryFilter &filter = mActivePanel->getFilter();
+		updateFilterDropdown(&filter);
 		// </FS:Zi>
 	}
 
@@ -762,9 +767,9 @@ void LLPanelMainInventory::onFilterSelected()
 	if (!gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
 	{
 		setFilterSubString(mFilterSubString);
-	LLInventoryFilter& filter = mActivePanel->getFilter(); // <FS:TM> CHUI Merge new, check location
 	}
 	// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+	LLInventoryFilter &filter = mActivePanel->getFilter();
 	LLFloaterInventoryFinder *finder = getFinder();
 	if (finder)
 	{
@@ -775,7 +780,7 @@ void LLPanelMainInventory::onFilterSelected()
 		// If our filter is active we may be the first thing requiring a fetch so we better start it here.
 		LLInventoryModelBackgroundFetch::instance().start();
 	}
-	updateFilterDropdown(filter);	// ## Zi: Filter dropdown
+	updateFilterDropdown(&filter);	// ## Zi: Filter dropdown
 	setFilterTextFromFilter();
 }
 
@@ -905,9 +910,9 @@ void LLPanelMainInventory::setFilterTextFromFilter()
 	//mFilterText = mActivePanel->getFilter().getFilterText(); <FS:TM> CHUI Merge new
 	// ## Zi: Filter dropdown
 	// this method gets called by the filter subwindow (once every frame), so we update our combo box here
-	LLInventoryFilter* filter=mActivePanel->getFilter();
-	updateFilterDropdown(filter);
-	mFilterText = filter->getFilterText(); 
+	LLInventoryFilter &filter = mActivePanel->getFilter();
+	updateFilterDropdown(&filter);
+	mFilterText = filter.getFilterText();
 	// ## Zi: Filter dropdown
 }
 
