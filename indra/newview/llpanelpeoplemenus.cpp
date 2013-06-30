@@ -29,6 +29,7 @@
 // libs
 #include "llmenugl.h"
 #include "lluictrlfactory.h"
+#include "llfolderview.h"	// <FS:CR> CHUI merge
 
 #include "llpanelpeoplemenus.h"
 
@@ -41,7 +42,10 @@
 #include "llviewermenu.h"			// for gMenuHolder
 #include "llconversationmodel.h"
 #include "llviewerobjectlist.h"
+#include "llinventorybridge.h"	// <FS:CR> CHUI merge
 #include "rlvhandler.h"
+
+typedef std::vector<std::string> menuentry_vec_t;	// <FS:CR> CHUI merge - Without LLConversationModel we need this
 
 namespace LLPanelPeopleMenus
 {
@@ -69,7 +73,10 @@ LLContextMenu* PeopleContextMenu::createMenu()
 		registrar.add("Avatar.IM",				boost::bind(&LLAvatarActions::startIM,					id));
 		registrar.add("Avatar.Call",			boost::bind(&LLAvatarActions::startCall,				id));
 		registrar.add("Avatar.OfferTeleport",	boost::bind(&PeopleContextMenu::offerTeleport,			this));
-		registrar.add("Avatar.ZoomIn",			boost::bind(&handle_zoom_to_object,						id));
+		// <FS:CR> CHUI merge - Make GCC happy
+		//registrar.add("Avatar.ZoomIn",			boost::bind(&handle_zoom_to_object,						id));
+		registrar.add("Avatar.ZoomIn",			boost::bind(&LLAvatarActions::zoomIn,						id));
+		// </FS:CR>
 		registrar.add("Avatar.ShowOnMap",		boost::bind(&LLAvatarActions::showOnMap,				id));
 		registrar.add("Avatar.Share",			boost::bind(&LLAvatarActions::share,					id));
 		registrar.add("Avatar.Pay",				boost::bind(&LLAvatarActions::pay,						id));
