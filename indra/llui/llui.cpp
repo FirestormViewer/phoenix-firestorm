@@ -164,7 +164,7 @@ void make_ui_sound(const char* namep, bool force_sound)
 }
 
 //void make_ui_sound_deferred(const char* namep)
-void mame_ui_sound_deferred(const char* namep, bool force_sound)
+void make_ui_sound_deferred(const char* namep, bool force_sound)
 {
 	LLUUID soundUUID = find_ui_sound(namep, force_sound);
 	if(soundUUID.notNull())

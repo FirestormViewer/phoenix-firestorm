@@ -222,7 +222,10 @@ void LLDoNotDisturbNotificationStorage::loadNotifications()
 
     if(imToastExists || group_ad_hoc_toast_exists || offerExists)
     {
-		make_ui_sound_deferred("UISndNewIncomingIMSession");
+		// <FS:CR> CHUI merge
+		//make_ui_sound_deferred("UISndNewIncomingIMSession");
+		make_ui_sound_deferred("UISndNewIncomingIMSession", false);
+		// </FS:CR>
     }
 
     //writes out empty .xml file (since LLCommunicationChannel::mHistory is empty)

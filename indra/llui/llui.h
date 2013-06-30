@@ -57,7 +57,9 @@ class LLHelp;
 // void make_ui_sound(const char* name);
 void make_ui_sound(const char* name, bool force_sound = false);
 // </FS:PP> UI Sounds preview
-void make_ui_sound_deferred(const char * name); //<FS:TM> CHUI Merge check
+// <FS:CR>
+//void make_ui_sound_deferred(const char * name);
+void make_ui_sound_deferred(const char* name, bool force_sound = false);
 
 class LLImageProviderInterface;
 
