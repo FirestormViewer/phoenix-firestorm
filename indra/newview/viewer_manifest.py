@@ -894,7 +894,6 @@ class DarwinManifest(ViewerManifest):
                 
                 # our apps
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
-                                         ("mac_updater", "mac-updater.app"),
                                          # plugin launcher
                                          (os.path.join("llplugin", "slplugin"), "SLPlugin.app"),
                                          ):
