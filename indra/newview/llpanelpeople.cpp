@@ -1080,7 +1080,10 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 	const std::string cur_tab = getActiveTabName();
 	if (cur_tab == NEARBY_TAB_NAME)
 	{
-		mNearbyList->setNameFilter(filter);
+		// <FS:Ansariel> Firestorm radar
+		//mNearbyList->setNameFilter(filter);
+		mRadarList->setFilterString(filter);
+		// </FS:Ansariel> Firestorm radar
 	}
 	else if (cur_tab == FRIENDS_TAB_NAME)
 	{
