@@ -111,23 +111,6 @@ LLInventoryFilter::EFilterSubstringTarget LLInventoryFilter::getFilterSubStringT
 	return mFilterSubStringTarget;
 }
 
-// returns one of the searchable strings, depending on the currently selected search type
-std::string LLInventoryFilter::getSearchableTarget(const LLFolderViewItem* item) const
-{
-	if(mFilterSubStringTarget==SUBST_TARGET_NAME)
-		return item->getSearchableLabel();
-	else if(mFilterSubStringTarget==SUBST_TARGET_CREATOR)
-		return item->getSearchableCreator();
-	else if(mFilterSubStringTarget==SUBST_TARGET_DESCRIPTION)
-		return item->getSearchableDescription();
-	else if(mFilterSubStringTarget==SUBST_TARGET_UUID)
-		return item->getSearchableUUID();
-	else if(mFilterSubStringTarget==SUBST_TARGET_ALL)
-		return item->getSearchableAll();
-
-	llwarns << "Unknown search substring target: " << mFilterSubStringTarget << llendl;
-	return item->getSearchableLabel();
-}
 // ## Zi: Extended Inventory Search
 
 bool LLInventoryFilter::check(const LLFolderViewModelItem* item) 
@@ -152,10 +135,33 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 	//mSubStringMatchOffset = mFilterSubString.size() ? item->getSearchableLabel().find(mFilterSubString) : std::string::npos; <FS:TM> CHUI Merge LL origonal removed in FS, replaced with enhanced search
 	//std::string::size_type string_offset = mFilterSubString.size() ? listener->getSearchableName().find(mFilterSubString) : std::string::npos; <FS:TM> CHUI Merge LL new line 
 	//	Begin Multi-substring inventory search
-	mSubStringMatchOffset = std::string::npos;
+	std::string::size_type string_offset = std::string::npos;
 	if (mFilterSubStrings.size())
 	{
-		const std::string& searchLabel=getSearchableTarget(item);		// ## Zi: Extended Inventory Search
+		//const std::string& searchLabel=getSearchableTarget(item);		// ## Zi: Extended Inventory Search
+		std::string searchLabel;
+		switch(mFilterSubStringTarget)
+		{
+			case SUBST_TARGET_NAME:
+				searchLabel = listener->getSearchableName();
+				break;
+			case SUBST_TARGET_CREATOR:
+				//searchLabel = listener->getSearchableCreator();
+				break;
+			case SUBST_TARGET_DESCRIPTION:
+				//searchLabel = listener->getSearchableDescription();
+				break;
+			case SUBST_TARGET_UUID:
+				//searchLabel = listener->getSearchableUUID();
+				break;
+			case SUBST_TARGET_ALL:
+				//searchLabel = listener->getSearchableAll();
+				break;
+			default:
+				llwarns << "Unknown search substring target: " << mFilterSubStringTarget << llendl;
+				searchLabel = listener->getSearchableName();
+				break;
+		}
 
 		U32 index = 0;
 		for (std::vector<std::string>::iterator it=mFilterSubStrings.begin();
@@ -167,7 +173,7 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 
 			if (sub_string_offset == std::string::npos)
 			{
-				mSubStringMatchOffset = std::string::npos;
+				string_offset = std::string::npos;
 				for (std::vector<std::string::size_type>::iterator it=mSubStringMatchOffsets.begin();
 					it<mSubStringMatchOffsets.end(); it++)
 				{
@@ -175,9 +181,9 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 				}
 				break;
 			}
-			else if (mSubStringMatchOffset == std::string::npos)
+			else if (string_offset == std::string::npos)
 			{
-				mSubStringMatchOffset = sub_string_offset;
+				string_offset = sub_string_offset;
 			}
 		}
 	}
@@ -816,7 +822,7 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 void LLInventoryFilter::setFilterLinks(U64 filter_links)
 {
 	// original LL code
-	/*
+	
 	mFilterOps.mFilterLinks = filter_links;
 	if (mFilterOps.mFilterLinks != filter_links)
 	{
@@ -826,8 +832,9 @@ void LLInventoryFilter::setFilterLinks(U64 filter_links)
 		else
 			setModified(FILTER_LESS_RESTRICTIVE);
 	}
-	*/
-
+	
+	// [CHUI Merge] FS Old Code
+	/*
 	if (mFilterOps.mFilterLinks != filter_links)
 	{
 		LLInventoryFilter::EFilterBehavior modifyMode=FILTER_RESTART;
@@ -844,7 +851,7 @@ void LLInventoryFilter::setFilterLinks(U64 filter_links)
 
 		mFilterOps.mFilterLinks = filter_links;
 		setModified(modifyMode);
-	}
+	}*/
 }
 // ## Zi: Filter Links Menu
 
