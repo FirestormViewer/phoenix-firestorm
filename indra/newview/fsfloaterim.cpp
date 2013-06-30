@@ -1764,7 +1764,7 @@ void FSFloaterIM::sRemoveTypingIndicator(const LLSD& data)
 	floater->removeTypingIndicator();
 }
 
-void FSFloaterIM::onIMChicletCreated( const LLUUID& session_id )
+void FSFloaterIM::onNewIMReceived( const LLUUID& session_id )
 {
 
 	if (isChatMultiTab())

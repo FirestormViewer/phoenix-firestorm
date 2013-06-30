@@ -37,10 +37,11 @@
 #include "llmultifloater.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llgroupmgr.h"
+#include "llimview.h"
 
 class LLTabContainer;
 
-class FSFloaterIMContainer : public LLMultiFloater
+class FSFloaterIMContainer : public LLMultiFloater, public LLIMSessionObserver
 {
 public:
 	FSFloaterIMContainer(const LLSD& seed);
@@ -66,6 +67,12 @@ public:
 	virtual void setMinimized(BOOL b);
 	
 	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
+
+	virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg);
+	virtual void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {};
+	virtual void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
+	virtual void sessionRemoved(const LLUUID& session_id);
+	virtual void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) {};
 
 private:
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;

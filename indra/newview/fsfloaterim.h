@@ -128,7 +128,7 @@ public:
 	//used as a callback on receiving new IM message
 	static void sRemoveTypingIndicator(const LLSD& data);
 
-	static void onIMChicletCreated(const LLUUID& session_id);
+	static void onNewIMReceived(const LLUUID& session_id);
 
 	virtual LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
 

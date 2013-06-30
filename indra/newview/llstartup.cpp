@@ -214,6 +214,7 @@
 
 #include "fscontactsfloater.h"
 #include "fsdata.h"
+#include "fsfloaterimcontainer.h"
 #include "fsfloatersearch.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
@@ -1718,8 +1719,10 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 
 		// create a container's instance for start a controlling conversation windows
 		// by the voice's events
-		//LLFloaterIMContainer::getInstance(); <FS:TM> CHUI Merge new in LL, looks similer to below, check if needed
-		
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterIMContainer::getInstance();
+		FSFloaterIMContainer::getInstance();
+
 		// <FS:ND> FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
 		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
 		// Moved here from llfloaternearbyvchat.cpp by Zi, to make this work even if LogShowHistory is FALSE
