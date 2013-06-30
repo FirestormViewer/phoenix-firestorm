@@ -54,7 +54,7 @@ LLFlashTimer::LLFlashTimer(callback_t cb, S32 count, F32 period)
 	if (mPeriod <= 0)
 	{
 		// <FS:CR>
-		static LLCachedControl<S32> flash_period(*LLUI::sSettingGroups["config"], "FlashPeriod");
+		static LLCachedControl<F32> flash_period(*LLUI::sSettingGroups["config"], "FlashPeriod");
 		mPeriod = flash_period;
 		//mPeriod = gSavedSettings.getF32("FlashPeriod");
 		// </FS:CR>
