@@ -104,7 +104,8 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  text_color="Black"
                  text_pad_left="10"
                  top="4"
-                 width="178" />
+                 right="-6" />
+<!-- FS:Ansariel: Firestorm radar
                 <button
                  commit_callback.function="People.Gear"
                  follows="right"
@@ -167,6 +168,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                     <commit_callback
                      function="People.DelFriend" />
                  </dnd_button>
+-->
             </panel>
 <!-- FS:Ansariel: Firestorm radar
          <layout_stack
