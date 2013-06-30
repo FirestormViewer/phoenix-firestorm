@@ -1451,6 +1451,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 		{
 			if( mCurrentHistoryLine > mLineHistory.begin() )
 			{
+				// <FS> FIRE-324. Nearby and IM chat bars forget what was written after browsing history
 				(*mCurrentHistoryLine).assign(getText());
 				mText.assign( *(--mCurrentHistoryLine) );
 				setCursorToEnd();

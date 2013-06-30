@@ -906,7 +906,7 @@ bool LLFolderViewItem::isInSelection() const
 	return mIsSelected || (mParentFolder && mParentFolder->isInSelection());
 }
 
-// <FS:ND> Don't bother with unneeded tooltips in inventor
+// <FS:ND> Don't bother with unneeded tooltips in inventory
 BOOL LLFolderViewItem::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	if( childrenHandleToolTip( x, y, mask ) )

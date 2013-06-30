@@ -879,7 +879,7 @@ LLView* LLView::childrenHandleHover(S32 x, S32 y, MASK mask)
 LLView*	LLView::childFromPoint(S32 x, S32 y, bool recur)
 {
 	if (!getVisible())
-		return 0;
+		return NULL;
 
 	BOOST_FOREACH(LLView* viewp, mChildList)
 	{

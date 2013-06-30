@@ -60,6 +60,7 @@
 #include "llsdutil.h"
 #include <boost/foreach.hpp>
 
+
 // use this to control "jumping" behavior when Ctrl-Tabbing
 const S32 TABBED_FLOATER_OFFSET = 0;
 
@@ -1294,7 +1295,6 @@ void LLFloater::setMinimized(BOOL minimize)
 		else
 		{
 			S32 left, bottom;
-			
 			gFloaterView->getMinimizePosition(&left, &bottom);
 			setOrigin( left, bottom );
 		}
@@ -2370,7 +2370,6 @@ void LLFloaterView::restoreAll()
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
 	{
 		LLFloater* floaterp = (LLFloater*)*child_it;
-
 		floaterp->setMinimized(FALSE);
 	}
 
@@ -2526,7 +2525,6 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus)
 	{
 		sendChildToFront(child);
 	}
-	
 	child->setMinimized(FALSE);
 	if (give_focus && !gFocusMgr.childHasKeyboardFocus(child))
 	{
@@ -3240,7 +3238,7 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	{
 		mDocStateControl = "t"; // flag to build mDocStateControl name once mInstanceName is set
 	}
-
+	
 	// open callback 
 	if (p.open_callback.isProvided())
 	{

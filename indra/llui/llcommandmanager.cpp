@@ -63,6 +63,7 @@ LLCommand::Params::Params()
 	, is_running_parameters("is_running_parameters")
 	, is_starting_function("is_starting_function")
 	, is_starting_parameters("is_starting_parameters")
+	, is_flashing_allowed("is_flashing_allowed", false)
 	, control_name("control_name")		// <FS:Zi> Add control_name to toolbar buttons
 	, checkbox_control("checkbox_control")		// <FS:Zi> Add checkbox control toggle
 {

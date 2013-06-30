@@ -786,6 +786,8 @@ void LLScrollListCtrl::updateColumns()
 	}
 
 	// expand last column header we encountered to full list width
+	// <FS:KC> Fixed last column on LLScrollListCtrl expanding on control resize when column width should be fixed or dynamic
+	//if (last_header)
 	if (last_header && last_header->canResize())
 	{
 		S32 new_width = llmax(0, mItemListRect.mRight - last_header->getRect().mLeft);
@@ -1492,6 +1494,8 @@ void LLScrollListCtrl::drawItems()
 	S32 y = mItemListRect.mTop - mLineHeight;
 
 	// allow for partial line at bottom
+	// <FS:KC> Show partial bottom lines on LLScrollListCtrl when list is >1 page long
+	//S32 num_page_lines = getLinesPerPage();
 	S32 num_page_lines = getLinesPerPage() + 1;
 
 	LLRect item_rect;
@@ -2082,6 +2086,8 @@ LLScrollListItem* LLScrollListCtrl::hitItem( S32 x, S32 y )
 		mLineHeight );
 
 	// allow for partial line at bottom
+	// <FS:KC> Show partial bottom lines on LLScrollListCtrl when list is >1 page long
+	//S32 num_page_lines = getLinesPerPage();
 	S32 num_page_lines = getLinesPerPage() + 1;
 
 	S32 line = 0;

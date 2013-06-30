@@ -42,7 +42,9 @@ LLIconCtrl::Params::Params()
 :	image("image_name"),
 	color("color"),
 	use_draw_context_alpha("use_draw_context_alpha", true),
-	scale_image("scale_image")
+	// <FS:KC> Scaled imaged
+	//scale_image("scale_image")
+	scale_image("scale_image", true)
 {}
 
 LLIconCtrl::LLIconCtrl(const LLIconCtrl::Params& p)
@@ -52,7 +54,8 @@ LLIconCtrl::LLIconCtrl(const LLIconCtrl::Params& p)
 	mUseDrawContextAlpha(p.use_draw_context_alpha),
 	mPriority(0),
 	mDrawWidth(0),
-	mDrawHeight(0)
+	mDrawHeight(0),
+	mScaleImage(p.scale_image) // <FS:KC> Scaled imaged
 {
 	if (mImagep.notNull())
 	{
@@ -71,7 +74,17 @@ void LLIconCtrl::draw()
 	if( mImagep.notNull() )
 	{
 		const F32 alpha = mUseDrawContextAlpha ? getDrawContext().mAlpha : getCurrentTransparency();
-		mImagep->draw(getLocalRect(), mColor.get() % alpha );
+		// <FS:KC> Scaled imaged
+		//mImagep->draw(getLocalRect(), mColor.get() % alpha );
+		if ( mScaleImage )
+		{
+			mImagep->draw(getLocalRect(), mColor.get() % alpha );
+		}
+		else
+		{
+			mImagep->draw(0, 0, mColor.get() % alpha );
+		}
+		// </FS:KC> Scaled imaged
 	}
 
 	LLUICtrl::draw();
