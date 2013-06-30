@@ -159,8 +159,8 @@ void process_dnd_im(const LLSD& notification)
 
 
 
-
-static void on_avatar_name_cache_toast(const LLUUID& agent_id,
+// [CHUI Merge] Commented out for now. Only used in on_new_message.
+/*static void on_avatar_name_cache_toast(const LLUUID& agent_id,
 									   const LLAvatarName& av_name,
 									   LLSD msg)
 {
@@ -176,7 +176,7 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
 	//LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
 	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
 	// </FS:Ansariel> [FS communication UI]
-}
+}*/
 
 void on_new_message(const LLSD& msg)
 {

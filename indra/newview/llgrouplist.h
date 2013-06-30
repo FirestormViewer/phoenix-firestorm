@@ -50,7 +50,8 @@ class LLGroupList: public LLFlatListViewEx, public LLOldEvents::LLSimpleListener
 public:
 	struct Params : public LLInitParam::Block<Params, LLFlatListViewEx::Params>
 	{
-		Params(){};
+		Optional<bool> for_agent;
+		Params();
 	};
 
 	LLGroupList(const Params& p);
