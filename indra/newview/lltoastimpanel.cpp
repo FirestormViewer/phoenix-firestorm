@@ -71,18 +71,16 @@ LLToastIMPanel::LLToastIMPanel(LLToastIMPanel::Params &p) :	LLToastPanel(p.notif
 		mMessage->clear();
 		
 		// italics for emotes -Zi
-		if(gSavedSettings.getBOOL("EmotesUseItalic"))
+		if (gSavedSettings.getBOOL("EmotesUseItalic"))
+		{
 			style_params.font.style ="ITALIC";
+		}
 		mMessage->appendText(p.from, FALSE, style_params);
-
-		// italics for emotes -Zi
-		if(gSavedSettings.getBOOL("EmotesUseItalic"))
-			style_params.font.style = "ITALIC";		//  why is this here twice? -Zi
 		mMessage->appendText(p.message.substr(3), FALSE, style_params);
 	}
 	else
 	{
-		style_params.font.style =  "NORMAL";
+		style_params.font.style = "NORMAL";
 		mMessage->setText(p.message, style_params);
 	}
 
