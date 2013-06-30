@@ -906,6 +906,30 @@ bool LLFolderViewItem::isInSelection() const
 	return mIsSelected || (mParentFolder && mParentFolder->isInSelection());
 }
 
+// <FS:ND> Don't bother with unneeded tooltips in inventor
+BOOL LLFolderViewItem::handleToolTip(S32 x, S32 y, MASK mask)
+{
+	if( childrenHandleToolTip( x, y, mask ) )
+		return TRUE;
+
+	int nStart = mArrowSize + mTextPad + mIconWidth + mIconPad + mIndentation;
+	int nWidth = getLabelFontForStyle(mLabelStyle)->getWidth(mLabel) + nStart;
+
+  	if( getRoot()->getParentPanel()->getRect().getWidth() < nWidth ) // Label is truncated, display tooltip
+	{
+		setToolTip( mLabel );
+		return LLView::handleToolTip( x, y, mask );
+	}
+	else
+		setToolTip( LLStringExplicit("") );
+
+	// In case of root we always want to return TRUE, otherwise tooltip handling gets propagated one level up and we end with a tooltip like 'All Items'.
+	if( this == getRoot() )
+		return TRUE;
+
+	return FALSE;
+}
+// </FS:ND>
 
 
 ///----------------------------------------------------------------------------
