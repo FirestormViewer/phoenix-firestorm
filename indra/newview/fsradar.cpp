@@ -252,6 +252,11 @@ void FSRadar::updateRadarList()
 		
 		LLUUID avId          = static_cast<LLUUID>(*item_it);
 		LLVector3d avPos     = static_cast<LLVector3d>(*pos_it);
+
+		if (avId == gAgentID)
+		{
+			continue;
+		}
 		
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		FSRadarEntry* ent = getEntry(avId);
