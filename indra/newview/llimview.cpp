@@ -336,8 +336,17 @@ void on_new_message(const LLSD& msg)
 #endif
 	// [CHUI Merge]
 	// <FS:Ansariel> [FS communication UI] Use old toast handling code for now
+	LLUUID participant_id = msg["from_id"].asUUID();
+	LLUUID session_id = msg["session_id"].asUUID();
+
+	// Ansa: CHUI routes nearby chat through here with session id = null uuid!
+	if (session_id.isNull())
+	{
+		return;
+	}
+
 	// do not show toast in busy mode or it goes from agent
-	if (gAgent.isDoNotDisturb() || gAgent.getID() == msg["from_id"])
+	if (gAgent.isDoNotDisturb() || gAgent.getID() == participant_id)
 	{
 		return;
 	}
@@ -350,7 +359,7 @@ void on_new_message(const LLSD& msg)
 	// </FS:Ansariel> Don't toast if the message is an announcement
 
 	// <FS:Ansariel> (Group-)IMs in chat console
-	if (FSConsoleUtils::ProcessInstantMessage(msg["session_id"], msg["from_id"], msg["message"]))
+	if (FSConsoleUtils::ProcessInstantMessage(session_id, participant_id, msg["message"].asString()))
 	{
 		return;
 	}
@@ -358,19 +367,19 @@ void on_new_message(const LLSD& msg)
 
 	// check whether incoming IM belongs to an active session or not
 	if (LLIMModel::getInstance()->getActiveSessionID().notNull()
-			&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"])
+			&& LLIMModel::getInstance()->getActiveSessionID() == session_id)
 	{
 		return;
 	}
 
 	// Skip toasting for system messages
-	if (msg["from_id"].asUUID() == LLUUID::null)
+	if (participant_id.isNull())
 	{
 		return;
 	}
 
 	// *NOTE Skip toasting if the user disable it in preferences/debug settings ~Alexandrea
-	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(msg["session_id"]);
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
 	if (!gSavedSettings.getBOOL("EnableGroupChatPopups") && session->isGroupSessionType())
 	{
 		return;
@@ -381,13 +390,13 @@ void on_new_message(const LLSD& msg)
 	}
 
 	// Skip toasting if we have open window of IM with this session id
-	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(msg["session_id"]);
+	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(session_id);
 	if (open_im_floater && open_im_floater->getVisible())
 	{
 		return;
 	}
 
-	LLAvatarNameCache::get(msg["from_id"].asUUID(), boost::bind(&on_avatar_name_cache_toast, _1, _2, msg));
+	LLAvatarNameCache::get(participant_id, boost::bind(&on_avatar_name_cache_toast, _1, _2, msg));
 	// </FS:Ansariel> [FS communication UI]
 }
 
