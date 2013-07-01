@@ -102,10 +102,6 @@ LLVoidListener<LISTENER> voidlistener(const LISTENER& listener)
 
 namespace LLEventDetail
 {
-    /// Implementation for listenerNameForCoro()
-    LL_COMMON_API std::string listenerNameForCoroImpl(const void* self_id);
-
-
     /**
      * waitForEventOn() permits a coroutine to temporarily listen on an
      * LLEventPump any number of times. We don't really want to have to ask
@@ -132,6 +128,9 @@ namespace LLEventDetail
     {
         return listenerNameForCoroImpl(self.get_id());
     }
+
+    /// Implementation for listenerNameForCoro()
+    LL_COMMON_API std::string listenerNameForCoroImpl(const void* self_id);
 
     /**
      * Implement behavior described for postAndWait()'s @a replyPumpNamePath

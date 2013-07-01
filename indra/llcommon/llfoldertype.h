@@ -87,12 +87,11 @@ public:
 
 		FT_BASIC_ROOT = 52,
 
-		// Ansariel: Folder types for our own virtual system folders
-		//-TT - adjusted for new LL types
+		// <FS:Ansariel> Folder types for our own virtual system folders
 		FT_FIRESTORM = 53,		
 		FT_PHOENIX = 54,
 		FT_RLV = 55,
-		// END Ansariel: Folder types for our own virtual system folders
+		// </FS:Ansariel> Folder types for our own virtual system folders
 
 		FT_COUNT,
 
