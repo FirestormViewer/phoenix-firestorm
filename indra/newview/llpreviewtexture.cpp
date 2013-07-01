@@ -788,6 +788,13 @@ void LLPreviewTexture::onButtonClickUUID()
 	std::string uuid = mImageID.asString();
 	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(uuid), 0, uuid.size());
 }
+
+/* static */
+void LLPreviewTexture::onTextureLoaded(BOOL success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata)
+{
+	LLPreviewTexture* self = (LLPreviewTexture*)userdata;
+	self->mUpdateDimensions = TRUE;
+}
 // </FS:Techwolf Lupindo> texture comment decoder
 
 // Return true if everything went fine, false if we somewhat modified the ratio as we bumped on border values
@@ -840,6 +847,9 @@ void LLPreviewTexture::loadAsset()
 	mImageOldBoostLevel = mImage->getBoostLevel();
 	mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
 	mImage->forceToSaveRawImage(0) ;
+	// <FS:Techwolf Lupindo> texture comment decoder
+	mImage->setLoadedCallback(LLPreviewTexture::onTextureLoaded, 0, TRUE, FALSE, this, NULL);
+	// </FS:Techwolf Lupindo>
 	mAssetStatus = PREVIEW_ASSET_LOADING;
 	mUpdateDimensions = TRUE;
 	updateDimensions();
