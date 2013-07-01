@@ -55,8 +55,7 @@
 #include "llfocusmgr.h"
 #include "llhttpsender.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
-//#include "llimfloater.h" <FS:TM> CHUI Merge old
+//#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
 #include "lllocationhistory.h"
@@ -215,6 +214,7 @@
 #include "fscontactsfloater.h"
 #include "fsdata.h"
 #include "fsfloaterimcontainer.h"
+#include "fsfloaternearbychat.h"
 #include "fsfloatersearch.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
@@ -1747,10 +1747,16 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		FSData::instance().addAgents();
 		// </FS:Techwolf Lupindo>
 
-			// <FS:Ansariel> [FS communication UI]
-			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
-			//FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance(); <FSTM> CHUI Merge LL removed this, needs checking
-			// </FS:Ansariel> [FS communication UI]
+		// <FS:Ansariel> [FS communication UI]
+		//gCacheName is required for nearby chat history loading
+		//so I just moved nearby history loading a few states further
+		if (gSavedPerAccountSettings.getBOOL("LogShowHistory"))
+		{
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			if (nearby_chat) nearby_chat->loadHistory();
+		}
+		display_startup();
+		// </FS:Ansariel> [FS communication UI]
 
 		// *Note: this is where gWorldMap used to be initialized.
 
