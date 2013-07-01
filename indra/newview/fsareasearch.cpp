@@ -54,6 +54,7 @@
 #include "llcombobox.h"
 #include "llnotificationsutil.h"
 #include "fswsassetblacklist.h"
+#include "llworld.h"
 
 
 // max number of objects that can be (de-)selected in a single packet.
@@ -112,6 +113,8 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mExcludeAttachment(true),
 	mExcludeTempary(true),
 	mExcludePhysics(true),
+	mExcludeChildPrims(true),
+	mExcludeNeighborRegines(true),
 	mColumnDistance(true),
 	mColumnName(true),
 	mColumnDescription(true),
@@ -120,8 +123,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mColumnCreator(true),
 	mColumnLastOwner(true),
 	mRequestQueuePause(false),
-	mRequestNeedsSent(false),
-	mOutstandingRequests(0)
+	mRequestNeedsSent(false)
 {
 	//TODO: Multi-floater support and get rid of the singletin.
 	mInstance = this;
@@ -252,13 +254,25 @@ void FSAreaSearch::checkRegion()
 	if (mInstance && mActive)
 	{
 		// Check if we changed region, and if we did, clear the object details cache.
-		LLViewerRegion* region = gAgent.getRegion();
-		if (region != mLastRegion)
+		LLViewerRegion* region = gAgent.getRegion(); // getRegion can return NULL if disconnected.
+		if (region && (region != mLastRegion))
 		{
+			if (!mExcludeNeighborRegines)
+			{
+				std::vector<LLViewerRegion*> uniqueRegions;
+				region->getNeighboringRegions(uniqueRegions);
+				if(std::find(uniqueRegions.begin(), uniqueRegions.end(), mLastRegion) != uniqueRegions.end())
+				{
+					// Crossed into a neighboring regine, no need to clear everything.
+					mLastRegion = region;
+					return;
+				}
+				// else teleported into a new regine
+			}
 			mLastRegion = region;
 			mRequested = 0;
 			mObjectDetails.clear();
-			mOutstandingRequests = 0;
+			mRegionRequests.clear();
 			mLastProptiesRecievedTimer.start();
 			mPanelList->getResultList()->deleteAllItems();
 			mPanelList->setCounterText();
@@ -276,7 +290,7 @@ void FSAreaSearch::refreshList(bool cache_clear)
 	{
 		mRequested = 0;
 		mObjectDetails.clear();
-		mOutstandingRequests = 0;
+		mRegionRequests.clear();
 		mLastProptiesRecievedTimer.start();
 	}
 	else
@@ -304,6 +318,13 @@ void FSAreaSearch::findObjects()
 		return;
 	}
 	
+	LLViewerRegion* our_region = gAgent.getRegion();
+	if (!our_region)
+	{
+		// Got disconnected or is in the middle of a teleport.
+		return;
+	}
+	
 	LL_DEBUGS("FSAreaSearch_spammy") << "Doing a FSAreaSearch::findObjects" << LL_ENDL;
 	
 	mLastUpdateTimer.stop(); // stop sets getElapsedTimeF32() time to zero.
@@ -313,7 +334,6 @@ void FSAreaSearch::findObjects()
 	mRefresh = false;
 	mSearchableObjects = 0;
 	S32 object_count = gObjectList.getNumObjects();
-	LLViewerRegion* our_region = gAgent.getRegion();
 
 	for (S32 i = 0; i < object_count; i++)
 	{
@@ -338,6 +358,7 @@ void FSAreaSearch::findObjects()
 			FSObjectProperties& details = mObjectDetails[object_id];
 			details.id = object_id;
 			details.local_id = objectp->getLocalID();
+			details.region_handle = objectp->getRegion()->getHandle();
 			mRequestNeedsSent = true;
 			mRequested++;
 		}
@@ -354,6 +375,7 @@ void FSAreaSearch::findObjects()
 				// object came back into view
 				details.request = FSObjectProperties::NEED;
 				details.local_id = objectp->getLocalID();
+				details.region_handle = objectp->getRegion()->getHandle();
 				mRequestNeedsSent = true;
 				mRequested++;
 			}
@@ -396,15 +418,9 @@ void FSAreaSearch::findObjects()
 }
 
 bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* our_region)
-{ 
-	//TODO: add child prim support
-	if (!(objectp->isRoot() || (objectp->isAttachment() && objectp->isRootEdit())))
-	{
-		return false;
-	}
-	
-	//TODO: add mult-region support
-	if (!(objectp->getRegion() == our_region))
+{
+	// need to be connected to regine object is in.
+	if (!objectp->getRegion())
 	{
 		return false;
 	}
@@ -430,6 +446,16 @@ bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* o
 	//-----------------------------------------------------------------------
 	// Excludes
 	//-----------------------------------------------------------------------
+
+	if (mExcludeChildPrims && !(objectp->isRoot() || (objectp->isAttachment() && objectp->isRootEdit())))
+	{
+		return false;
+	}
+
+	if (mExcludeNeighborRegines && !(objectp->getRegion() == our_region))
+	{
+		return false;
+	}
 
 	if (mExcludeAttachment && objectp->isAttachment())
 	{
@@ -477,9 +503,10 @@ void FSAreaSearch::processRequestQueue()
 				failed_count++;
 			}
 		}
-		
-		mOutstandingRequests = 0;
+
+		mRegionRequests.clear();
 		mLastProptiesRecievedTimer.start();
+
 		if (!mRequestNeedsSent)
 		{
 			LL_DEBUGS("FSAreaSearch") << "No pending requests found."<< LL_ENDL;
@@ -496,46 +523,60 @@ void FSAreaSearch::processRequestQueue()
 	{
 	      return;
 	}
+	mRequestNeedsSent = false;
 	
-	if (mOutstandingRequests > (MAX_OBJECTS_PER_PACKET + 128))
+	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
+		iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
 	{
-		return;
-	}
-
-	std::vector<U32> request_list;
-	
-	for (std::map<LLUUID, FSObjectProperties>::iterator object_it = mObjectDetails.begin();
-		object_it != mObjectDetails.end();
-		++object_it)
-	{
-		if (object_it->second.request == FSObjectProperties::NEED)
+		LLViewerRegion* regionp = *iter;
+		U64 region_handle = regionp->getHandle();
+		if (mRegionRequests[region_handle] > (MAX_OBJECTS_PER_PACKET + 128))
 		{
-			request_list.push_back(object_it->second.local_id);
-			object_it->second.request = FSObjectProperties::SENT;
-			mOutstandingRequests++;
-			if (mOutstandingRequests >= ((MAX_OBJECTS_PER_PACKET * 3) - 3))
+			mRequestNeedsSent = true;
+			return;
+		}
+		
+		std::vector<U32> request_list;
+		bool need_continue = false;
+	
+		for (std::map<LLUUID, FSObjectProperties>::iterator object_it = mObjectDetails.begin();
+			object_it != mObjectDetails.end();
+			++object_it)
+		{
+			if (object_it->second.request == FSObjectProperties::NEED && object_it->second.region_handle == region_handle)
 			{
-				requestObjectProperties(request_list, true);
-				requestObjectProperties(request_list, false);
-				return;
+				request_list.push_back(object_it->second.local_id);
+				object_it->second.request = FSObjectProperties::SENT;
+				mRegionRequests[region_handle]++;
+				if (mRegionRequests[region_handle] >= ((MAX_OBJECTS_PER_PACKET * 3) - 3))
+				{
+					requestObjectProperties(request_list, true, regionp);
+					requestObjectProperties(request_list, false, regionp);
+					mRequestNeedsSent = true;
+					need_continue = true;
+					break;
+				}
 			}
 		}
-	}
 
-	if (!request_list.empty())
-	{
-		requestObjectProperties(request_list, true);
-		requestObjectProperties(request_list, false);
+		if (need_continue)
+		{
+			continue;
+		}
+
+		if (!request_list.empty())
+		{
+			requestObjectProperties(request_list, true, regionp);
+			requestObjectProperties(request_list, false, regionp);
+		}
 	}
-	mRequestNeedsSent = false;
 }
 
-void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list, bool select)
+void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list, bool select, LLViewerRegion* regionp)
 {
 	bool start_new_message = true;
 	S32 select_count = 0;
 	LLMessageSystem* msg = gMessageSystem;
-	LLViewerRegion* regionp = gAgent.getRegion();
 	
 	for (std::vector<U32>::const_iterator iter = request_list.begin();
 			iter != request_list.end(); ++iter)
@@ -564,7 +605,7 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 		if(msg->isSendFull(NULL) || select_count >= MAX_OBJECTS_PER_PACKET)
 		{
 			LL_DEBUGS("FSAreaSearch") << "Sent one full " << (select ? "ObjectSelect" : "ObjectDeselect") << " message with " << select_count << " object data blocks." << LL_ENDL;
-			msg->sendReliable(regionp->getHost() );
+			msg->sendReliable(regionp->getHost());
 			select_count = 0;
 			start_new_message = true;
 		}
@@ -573,7 +614,7 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 	if (!start_new_message)
 	{
 		LL_DEBUGS("FSAreaSearch") << "Sent one partcial " << (select ? "ObjectSelect" : "ObjectDeselect") << " message with " << select_count << " object data blocks." << LL_ENDL;
-		msg->sendReliable(regionp->getHost() );
+		msg->sendReliable(regionp->getHost());
 	}
 }
 
@@ -626,7 +667,7 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 				{
 					mRequested--;
 				}
-				mOutstandingRequests--;
+				mRegionRequests[details.region_handle]--;
 				counter_text_update = true;
 			}
 
@@ -1687,6 +1728,14 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mCheckboxExcludeTempary->set(TRUE);
 	mCheckboxExcludeTempary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 	
+	mCheckboxExcludeChildPrim = getChild<LLCheckBoxCtrl>("exclude_childprim");
+	mCheckboxExcludeChildPrim->set(TRUE);
+	mCheckboxExcludeChildPrim->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	
+	mCheckboxExcludeNeighborRegines = getChild<LLCheckBoxCtrl>("exclude_neighbor_regine");
+	mCheckboxExcludeNeighborRegines->set(TRUE);
+	mCheckboxExcludeNeighborRegines->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+
 	mButtonApply = getChild<LLButton>("apply");
 	mButtonApply->setClickedCallback(boost::bind(&FSAreaSearch::onButtonClickedSearch, mFSAreaSearch));
 	
@@ -1758,6 +1807,10 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 		mFSAreaSearch->setExcludeAttachment(false);
 	}
 	mFSAreaSearch->setFilterAttachment(mCheckboxAttachment->get());
+
+	mFSAreaSearch->setExcludeChildPrims(mCheckboxExcludeChildPrim->get());
+
+	mFSAreaSearch->setExcludeNeighborRegines(mCheckboxExcludeNeighborRegines->get());
 }
 
 void FSPanelAreaSearchFilter::onCommitSpin()

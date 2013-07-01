@@ -100,6 +100,7 @@
 #include "llviewernetwork.h"
 #include "llworld.h"
 // </FS:CR> Aurora Sim
+#include "fsareasearch.h"
 
 #include "llglheaders.h"
 
@@ -5113,7 +5114,15 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 
 		if (!node)
 		{
+			// <FS:Techwolf Lupindo> area search
+			FSAreaSearch* area_search_floater = LLFloaterReg::getTypedInstance<FSAreaSearch>("area_search");
+			if(!(area_search_floater && area_search_floater->isActive())) // Don't spam the log when areasearch is active.
+			{
+			// </FS:Techwolf Lupindo>
 			llwarns << "Couldn't find object " << id << " selected." << llendl;
+			// <FS:Techwolf Lupindo> area search
+			}
+			// </FS:Techwolf Lupindo>
 		}
 		else
 		{
