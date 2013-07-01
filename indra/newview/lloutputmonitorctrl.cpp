@@ -410,6 +410,7 @@ void NearbyVoiceMonitor::draw()
 	}
 
 	setSpeakerId(id);
+	switchIndicator(true); // Ansa: Make sure the output monitor is visible at all times
 
 	if(!mAutoHide || draw)
 	{
