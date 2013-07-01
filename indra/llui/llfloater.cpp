@@ -722,15 +722,13 @@ void LLFloater::openFloater(const LLSD& key)
 		}
 		applyControlsAndPosition(floater_to_stack);
 
-		// AO: Always unminimize notecards *HACK*
-		// TS: scripts too
-
-//		setMinimized(FALSE);
-		if ((strcmp(getName().c_str(),"preview notecard") == 0) ||
-			(strcmp(getName().c_str(),"preview lsl text") == 0))
+		// <FS> Always unminimize notecards and scripts *HACK*
+		//setMinimized(FALSE);
+		if (getName() == "preview notecard" || getName() == "preview lsl text")
 		{
 			setMinimized(FALSE); 
 		}
+		// </FS>
 		
 		setVisibleAndFrontmost(mAutoFocus);
 	}
@@ -930,8 +928,8 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
 		if (!applyRectControl())
 		{
 			// <FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
-			//applyPositioning(other); <FS:TM> CHUI Merge old
-			if (getName() == "panel_im") // <FS:TM> CHUI Merge do we still want this?
+			//applyPositioning(other);
+			if (getName() != "panel_im")
 			{
 				applyPositioning(other, true);
 			}
