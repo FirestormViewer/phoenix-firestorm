@@ -50,10 +50,10 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
 	<string
 	 name="MiniMapToolTipMsg"
-	 value="[REGION](Double-click to open Map, shift-drag to pan)"/>
+	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
 	<string
 	 name="AltMiniMapToolTipMsg"
-	 value="[REGION](Double-click to teleport, shift-drag to pan)"/>
+	 value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
     <tab_container
      bottom="-10"
      follows="all"
