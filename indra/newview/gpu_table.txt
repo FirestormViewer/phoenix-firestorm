@@ -216,6 +216,13 @@ ATI Radeon HD 7600						.*ATI.*Radeon HD *76.*					3	1	0	4.2
 ATI Radeon HD 7700						.*ATI.*Radeon HD *77.*					4	1	1	4.2
 ATI Radeon HD 7800						.*ATI.*Radeon HD *78.*					5	1	1	4.2
 ATI Radeon HD 7900						.*ATI.*Radeon HD *79.*					5	1	1	4.2
+ATI Radeon HD 8300 (OEM)				.*ATI.*Radeon HD *83.*					2	1	0	4.2
+ATI Radeon HD 8400 (OEM)				.*ATI.*Radeon HD *84.*					2	1	0	4.2
+ATI Radeon HD 8500 (OEM)				.*ATI.*Radeon HD *85.*					3	1	1	4.2
+ATI Radeon HD 8600 (OEM)				.*ATI.*Radeon HD *86.*					3	1	0	4.2
+ATI Radeon HD 8700 (OEM)				.*ATI.*Radeon HD *87.*					4	1	1	4.2
+ATI Radeon HD 8800 (OEM)				.*ATI.*Radeon HD *88.*					5	1	1	4.2
+ATI Radeon HD 8900 (OEM)				.*ATI.*Radeon HD *89.*					5	1	1	4.2
 ATI Radeon OpenGL						.*ATI.*Radeon OpenGL.*					0	0	0	0
 ATI Radeon 2100							.*ATI.*Radeon 21..						0	1	1	2.1
 ATI Radeon 3000							.*ATI.*Radeon 30..						1	1	1	4
