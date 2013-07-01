@@ -264,7 +264,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mAutoFocus(TRUE), // automatically take focus when opened
 	mCanDock(false),
 	mDocked(false),
-	mTornOff(false),	// <FS:Zi> Start out as hosted, helps with fix for visibility
+	mTornOff(false),
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
@@ -557,8 +557,10 @@ LLFloater::~LLFloater()
 
 void LLFloater::storeRectControl()
 {
-	// do not store rect when attached to another floater -Zi
-	if( mTornOff &&!mRectControl.empty())
+	// <FS:Zi> Do not store rect when attached to another floater
+	//if (!mRectControl.empty())
+	if (mTornOff && !mRectControl.empty())
+	// </FS:Zi>
 	{
 		getControlGroup()->setRect( mRectControl, getRect() );
 	}
@@ -578,11 +580,14 @@ void LLFloater::storeVisibilityControl()
 	{
 		// <FS:Zi> Make sure that hosted floaters always save "not visible", so they won't
 		//         pull up their host on restart
-		BOOL visible=FALSE;
-		if(mTornOff)
-			visible=getVisible();
-		// </FS:Zi>
+		//getControlGroup()->setBOOL( mVisibilityControl, getVisible() );
+		BOOL visible = FALSE;
+		if (mTornOff)
+		{
+			visible = getVisible();
+		}
 		getControlGroup()->setBOOL( mVisibilityControl, visible );
+		// </FS:Zi>
 	}
 }
 
@@ -709,11 +714,13 @@ void LLFloater::openFloater(const LLSD& key)
 		getHost()->setMinimized(FALSE);
 		getHost()->setVisibleAndFrontmost(mAutoFocus);
 		getHost()->showFloater(this);
-		mTornOff=FALSE;	// <FS:Zi> Make sure the floater knows it's not torn off
+		// <FS:Zi> Make sure the floater knows it's not torn off
+		mTornOff = false;
 	}
 	else
 	{
-		mTornOff=TRUE;	// <FS:Zi> Make sure the floater knows it's torn off
+		// <FS:Zi> Make sure the floater knows it's torn off
+		mTornOff = true;
 
 		LLFloater* floater_to_stack = LLFloaterReg::getLastFloaterInGroup(mInstanceName);
 		if (!floater_to_stack)
