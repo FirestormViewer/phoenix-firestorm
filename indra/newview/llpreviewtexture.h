@@ -89,6 +89,7 @@ public:
 	void callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name);
 	void onButtonClickProfile();
 	void onButtonClickUUID();
+	static void onTextureLoaded(BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata);
 	// </FS:Techwolf Lupindo>
 	
 protected:

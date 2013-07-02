@@ -2197,7 +2197,7 @@ Clears (deletes) the media and all params from the given face.
 			<string>llSetLinkPrimitiveParamsFast(integer linknumber,list rules)
 Set primitive parameters for linknumber based on rules.</string>
 		</map>
-		<key>llSetLinkPrimitiveParams</key>
+		<key>llGetLinkPrimitiveParams</key>
 		<map>
 			<key>desc</key>
 			<string>llGetLinkPrimitiveParams(integer linknumber,list rules)

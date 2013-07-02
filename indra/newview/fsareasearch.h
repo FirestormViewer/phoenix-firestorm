@@ -80,6 +80,7 @@ struct FSObjectProperties
 	uuid_vec_t texture_ids;
 	bool name_requested;
 	U32 local_id;
+	U64 region_handle;
 	
 	typedef enum e_object_properties_request
 	{
@@ -143,6 +144,8 @@ public:
 	void setExcludeAttachment(bool b) { mExcludeAttachment = b; }
 	void setExcludeTempary(bool b) { mExcludeTempary = b; }
 	void setExcludePhysics(bool b) { mExcludePhysics = b; }
+	void setExcludeChildPrims(bool b) { mExcludeChildPrims = b; }
+	void setExcludeNeighborRegines(bool b) { mExcludeNeighborRegines = b; }
 	
 	void setFilterForSaleMin(S32 s) { mFilterForSaleMin = s; }
 	void setFilterForSaleMax(S32 s) { mFilterForSaleMax = s; }
@@ -161,9 +164,11 @@ public:
 	void setColumnGroup(bool b) { mColumnGroup = b; }
 	void setColumnCreator(bool b) { mColumnCreator = b; }
 	void setColumnLastOwner(bool b) { mColumnLastOwner = b; }
+	
+	bool isActive() { return mActive; }
 
 private:
-	void requestObjectProperties(const std::vector<U32>& request_list, bool select);
+	void requestObjectProperties(const std::vector< U32 >& request_list, bool select, LLViewerRegion* regionp);
 	void matchObject(FSObjectProperties& details, LLViewerObject* objectp);
 	void getNameFromUUID(LLUUID& id, std::string& name, BOOL group, bool& name_requested);
 
@@ -178,7 +183,7 @@ private:
 	bool mActive;
 	bool mRequestQueuePause;
 	bool mRequestNeedsSent;
-	S32 mOutstandingRequests;
+	std::map<U64,S32> mRegionRequests;
 
 	std::string mSearchName;
 	std::string mSearchDescription;
@@ -225,6 +230,8 @@ private:
 	bool mExcludeAttachment;
 	bool mExcludeTempary;
 	bool mExcludePhysics;
+	bool mExcludeChildPrims;
+	bool mExcludeNeighborRegines;
 
 	bool mFilterLocked;
 	bool mFilterPhysicial;
@@ -377,6 +384,8 @@ private:
 	LLCheckBoxCtrl* mCheckboxExcludeAttachment;
 	LLCheckBoxCtrl* mCheckboxExcludePhysics;
 	LLCheckBoxCtrl* mCheckboxExcludeTempary;
+	LLCheckBoxCtrl* mCheckboxExcludeChildPrim;
+	LLCheckBoxCtrl* mCheckboxExcludeNeighborRegines;
 };
 
 
