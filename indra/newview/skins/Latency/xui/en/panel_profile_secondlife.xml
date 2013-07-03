@@ -69,6 +69,16 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
 -->
 
+        <loading_indicator
+         top="4"
+         right="-10"
+         height="23"
+         width="23"
+         layout="topleft"
+         follows="top|right"
+         name="progress_indicator"
+         visible="false" />
+
         <text
          top="8"
          left="6"
@@ -308,20 +318,20 @@ KC: Use view_border's around text_editor's due to text render issues with border
          follows="left|top|right"
          name="partner_text"
          max_length="254" />
-<!--
+
         <button
-         top_pad="8"
-         left="6"
+         top_pad="-18"
+         left="30"
          height="18"
-         width="40"
+         width="30"
          layout="topleft"
          follows="left|top"
          name="bigimg"
          halign="center"
          label="&lt; &lt;"
-         label_selected="&gt; &gt;"
+         label_selected="&gt;&gt;"
          tool_tip="Open Full Size." />
--->
+
         <text
          top_pad="8"
          left="6"
@@ -441,7 +451,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
              height="42"
              follows="all"
              layout="topleft"
-             name="left_buttonstack"
+			 name="left_buttonstack"
              user_resize="false">
 
                 <button
@@ -471,7 +481,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
              right="-2"
              follows="all"
              layout="topleft"
-             name="middle_buttonstack"
+			 name="middle_buttonstack"
              user_resize="false">
 
                 <button
@@ -501,7 +511,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
              right="-2"
              follows="all"
              layout="topleft"
-             name="right_buttonstack"
+			 name="right_buttonstack"
              user_resize="false">
 
                 <button
@@ -517,6 +527,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
                 <button
                  top_pad="2"
+                 right="-40"
                  height="20"
                  layout="topleft"
                  follows="left|top|right"
@@ -526,12 +537,22 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
                 <button
                  top_delta="0"
+                 right="-40"
                  height="20"
                  layout="topleft"
                  follows="left|top|right"
                  name="unblock"
                  label="Unblock"
                  tool_tip="Unblock this Resident" />
+
+                <menu_button
+                 left_pad="4"
+                 height="20"
+                 width="36"
+                 layout="topleft"
+                 follows="top|right"
+                 name="overflow_btn"
+                 image_overlay="OptionsMenu_Off" />
 
             </layout_panel>
         </layout_stack>
@@ -557,29 +578,5 @@ KC: Use view_border's around text_editor's due to text render issues with border
          follows="all"
          name="drop_target"
          mouse_opaque="false" />
-
-        <!-- hiding this control, (loading ...) in the name field should be enough. -Zi -->
-        <loading_indicator
-         top="0"
-         right="0"
-         height="0"
-         width="0"
-         layout="topleft"
-         follows="top|right"
-         name="progress_indicator"
-         enabled="false"
-         visible="false" />
-
-        <!-- hiding the gear menu, all functions are accessible in other ways -->
-        <menu_button
-         top="0"
-         right="0"
-         height="0"
-         width="0"
-         layout="topleft"
-         follows="top|right"
-         name="overflow_btn"
-         enabled="false"
-         image_overlay="OptionsMenu_Off" />
 </panel>
 
