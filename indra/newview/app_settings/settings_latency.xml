@@ -662,6 +662,18 @@
 			<integer>0</integer>
 		</map>
 
+    <key>FSSortFSFoldersToTop</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>Sorts the #FS and #RLV folders to the top like system folders.</string>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+		</map>
+
 
 
 

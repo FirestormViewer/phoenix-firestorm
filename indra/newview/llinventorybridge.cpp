@@ -4028,6 +4028,22 @@ EInventorySortGroup LLFolderBridge::getSortGroup() const
 		return SG_TRASH_FOLDER;
 	}
 
+	//<FS:KC> Don't sort #FS folders to top
+	static LLCachedControl<bool> sFSSortFSFoldersToTopPt(gSavedSettings, "FSSortFSFoldersToTop");
+	if (!sFSSortFSFoldersToTopPt)
+	{
+		LLViewerInventoryCategory* cat = getCategory();
+		if(cat)
+		{
+			std::string catName(cat->getName());
+			if ((catName == ROOT_FIRESTORM_FOLDER) || (catName == RLV_ROOT_FOLDER) || (catName == "#Phoenix"))
+			{
+				return SG_NORMAL_FOLDER;
+			}
+		}
+	}
+	//</FS:KC>
+
 	if(LLFolderType::lookupIsProtectedType(preferred_type))
 	{
 		return SG_SYSTEM_FOLDER;
