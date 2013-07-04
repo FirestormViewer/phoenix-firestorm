@@ -70,4 +70,6 @@
 		</panel>
 	</tab_container>
 	<combo_box label="Wstaw..." name="Insert..."/>
+	<button label="Edytuj..." name="edit_btn_2"/>
+	<button label="Zapisz" label_selected="Zapisz" name="save_btn_2"/>
 </panel>
