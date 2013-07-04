@@ -172,6 +172,7 @@ private:
 // <FS:CR> Advanced Script Editor
 	//LLView*			mSaveBtn;
 	LLButton*		mSaveBtn;
+	LLButton*		mSaveBtn2;	// 	// <FS:Zi> support extra save button
 	LLButton*		mCutBtn;
 	LLButton*		mCopyBtn;
 	LLButton*		mPasteBtn;

@@ -280,6 +280,7 @@ BOOL LLScriptEdCore::postBuild()
 // <FS:CR> Advanced Script Editor
 	//mSaveBtn=getChildView("Save_btn");
 	mSaveBtn =	getChild<LLButton>("save_btn");
+	mSaveBtn2 =	getChild<LLButton>("save_btn_2");	// <FS:Zi> support extra save button
 	mCutBtn =	getChild<LLButton>("cut_btn");
 	mCopyBtn =	getChild<LLButton>("copy_btn");
 	mPasteBtn =	getChild<LLButton>("paste_btn");
@@ -317,6 +318,7 @@ BOOL LLScriptEdCore::postBuild()
 	childSetAction("prefs_btn", boost::bind(&LLScriptEdCore::onBtnPrefs, this));
 // </FS:CR>
 	childSetAction("Edit_btn", boost::bind(&LLScriptEdCore::openInExternalEditor, this));
+	childSetAction("edit_btn_2", boost::bind(&LLScriptEdCore::openInExternalEditor, this));	// <FS:Zi> support extra edit button
 	
 	initMenu();
 	initButtonBar();	// <FS:CR> Advanced Script Editor
@@ -487,6 +489,7 @@ void LLScriptEdCore::initMenu()
 void LLScriptEdCore::initButtonBar()
 {
 	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
+	mSaveBtn2->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));	// <FS:Zi> support extra save button
 	mCutBtn->setClickedCallback(boost::bind(&LLTextEditor::cut, mEditor));
 	mCopyBtn->setClickedCallback(boost::bind(&LLTextEditor::copy, mEditor));
 	mPasteBtn->setClickedCallback(boost::bind(&LLTextEditor::paste, mEditor));
@@ -500,6 +503,7 @@ void LLScriptEdCore::initButtonBar()
 void LLScriptEdCore::updateButtonBar()
 {
 	mSaveBtn->setEnabled(hasChanged());
+	mSaveBtn2->setEnabled(hasChanged());	// <FS:Zi> support extra save button
 	mCutBtn->setEnabled(mEditor->canCut());
 	mCopyBtn->setEnabled(mEditor->canCopy());
 	mPasteBtn->setEnabled(mEditor->canPaste());
@@ -831,6 +835,7 @@ void LLScriptEdCore::setEnableEditing(bool enable)
 {
 	mEditor->setEnabled(enable);
 	getChildView("Edit_btn")->setEnabled(enable);
+	getChildView("edit_btn_2")->setEnabled(enable);	// <FS:Zi> support extra edit button
 }
 
 bool LLScriptEdCore::handleSaveChangesDialog(const LLSD& notification, const LLSD& response )
