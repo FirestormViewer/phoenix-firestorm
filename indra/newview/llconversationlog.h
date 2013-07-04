@@ -23,8 +23,6 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #ifndef LLCONVERSATIONLOG_H_
 #define LLCONVERSATIONLOG_H_
 
@@ -216,5 +214,3 @@ public:
 };
 
 #endif /* LLCONVERSATIONLOG_H_ */
-
-#endif

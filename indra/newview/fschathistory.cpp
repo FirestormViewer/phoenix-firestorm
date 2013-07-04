@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-// Original file: FSChatHistory.cpp
+// Original file: LLChatHistory.cpp
 
 #include "llviewerprecompiledheaders.h"
 

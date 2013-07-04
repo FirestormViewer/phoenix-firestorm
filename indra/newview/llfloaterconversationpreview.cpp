@@ -25,15 +25,17 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llconversationlog.h"
 #include "llfloaterconversationpreview.h"
 #include "llimview.h"
 #include "lllineeditor.h"
-#include "llfloaterimnearbychat.h"
+// <FS:CR>
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:CR>
 #include "llspinctrl.h"
 #include "lltrans.h"
+#include "llviewercontrol.h"	// <FS:CR>
 
 const std::string LL_FCP_COMPLETE_NAME("complete_name");
 const std::string LL_FCP_ACCOUNT_NAME("user_name");
@@ -51,7 +53,10 @@ LLFloaterConversationPreview::LLFloaterConversationPreview(const LLSD& session_i
 
 BOOL LLFloaterConversationPreview::postBuild()
 {
-	mChatHistory = getChild<LLChatHistory>("chat_history");
+	// <FS:CR>
+	//mChatHistory = getChild<LLChatHistory>("chat_history");
+	mChatHistory = getChild<FSChatHistory>("chat_history");
+	// <FS:CR>
 
 	const LLConversation* conv = LLConversationLog::instance().getConversation(mSessionID);
 	std::string name;
@@ -162,7 +167,8 @@ void LLFloaterConversationPreview::showHistory()
 		}
 		else if (from_id.isNull())
 		{
-			chat.mSourceType = LLFloaterIMNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
+			// FIXME: Hook this up to our nearby chat <FS:CR>
+			//chat.mSourceType = LLFloaterIMNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
 		}
 
 		LLSD chat_args;
@@ -186,5 +192,3 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 
 	showHistory();
 }
-
-#endif

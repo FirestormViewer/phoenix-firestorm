@@ -25,8 +25,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llavataractions.h"
 #include "llagent.h"
 #include "llfloaterreg.h"
@@ -36,6 +34,7 @@
 #include "llconversationloglistitem.h"
 #include "llviewermenu.h"
 #include "lltrans.h"
+#include "llviewercontrol.h"	// <FS:CR>
 
 static LLDefaultChildRegistry::Register<LLConversationLogList> r("conversation_log_list");
 
@@ -533,5 +532,3 @@ bool LLConversationLogListDateComparator::doCompare(const LLConversationLogListI
 
 	return date1 > date2;
 }
-
-#endif

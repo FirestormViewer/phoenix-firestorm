@@ -25,13 +25,12 @@
  */
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llconversationloglist.h"
 #include "llfiltereditor.h"
 #include "llfloaterconversationlog.h"
 #include "llfloaterreg.h"
 #include "llmenubutton.h"
+#include "llviewercontrol.h"	// <FS:CR>
 
 LLFloaterConversationLog::LLFloaterConversationLog(const LLSD& key)
 :	LLFloater(key),
@@ -133,5 +132,3 @@ bool LLFloaterConversationLog::isActionChecked(const LLSD& userdata)
 
 	return false;
 }
-
-#endif

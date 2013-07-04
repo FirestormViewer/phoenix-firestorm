@@ -22,14 +22,14 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
-//<FS:TM> CHUI Merge this file doesnt exsist in LL's repo
-
-#if 0
 
 #ifndef LLFLOATERCONVERSATIONPREVIEW_H_
 #define LLFLOATERCONVERSATIONPREVIEW_H_
 
-#include "llchathistory.h"
+// <FS:CR>
+//#include "llchathistory.h"
+#include "fschathistory.h"
+// </FS:CR>
 #include "llfloater.h"
 
 extern const std::string LL_FCP_COMPLETE_NAME;	//"complete_name"
@@ -54,7 +54,10 @@ private:
 	void showHistory();
 
 	LLSpinCtrl*		mPageSpinner;
-	LLChatHistory*	mChatHistory;
+	// <FS:CR>
+	//LLChatHistory*	mChatHistory;
+	FSChatHistory*	mChatHistory;
+	// </FS:CR>
 	LLUUID			mSessionID;
 	int				mCurrentPage;
 	int				mPageSize;
@@ -65,5 +68,3 @@ private:
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */
-
-#endif

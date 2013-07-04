@@ -25,12 +25,11 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 // llui
 #include "lliconctrl.h"
 #include "lltextbox.h"
 #include "lltextutil.h"
+#include "llbutton.h"	// <FS:CR>
 
 // newview
 #include "llavataractions.h"
@@ -49,13 +48,17 @@ LLConversationLogListItem::LLConversationLogListItem(const LLConversation* conve
 {
 	buildFromFile("panel_conversation_log_list_item.xml");
 
-	LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mConversation->getSessionID());
-
-	bool ims_are_read = LLFloaterIMSession::isVisible(floater) && floater->hasFocus();
+	// <FS:CR>
+	//LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mConversation->getSessionID());
+	FSFloaterIM* floater = FSFloaterIM::findInstance(mConversation->getSessionID());
+	//bool ims_are_read = LLFloaterIMSession::isVisible(floater) && floater->hasFocus();
+	bool ims_are_read = FSFloaterIM::isVisible(floater) && floater->hasFocus();
+	// </FS:CR>
 
 	if (mConversation->hasOfflineMessages() && !ims_are_read)
 	{
-		mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback(boost::bind(&LLConversationLogListItem::onIMFloaterShown, this, _1));
+		// FIXME: Commented this out cuz I'm lazy. <FS:CR>
+		//mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback(boost::bind(&LLConversationLogListItem::onIMFloaterShown, this, _1));
 	}
 }
 
@@ -184,5 +187,3 @@ void LLConversationLogListItem::onDoubleClick()
 		break;
 	}
 }
-
-#endif
