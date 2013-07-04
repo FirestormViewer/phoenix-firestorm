@@ -123,14 +123,21 @@ namespace LLEventDetail
      * that's okay, since it won't collide with any listener name used by the
      * earlier coroutine since that earlier coroutine no longer exists.
      */
+    // <FS:Zi> Compiler fix for Linux gcc 4.7+
     /// Implementation for listenerNameForCoro()
     LL_COMMON_API std::string listenerNameForCoroImpl(const void* self_id);
+    // </FS:Zi>
 
     template <typename COROUTINE_SELF>
     std::string listenerNameForCoro(COROUTINE_SELF& self)
     {
         return listenerNameForCoroImpl(self.get_id());
     }
+
+    // <FS:Zi> Compiler fix for Linux gcc 4.7+
+    // /// Implementation for listenerNameForCoro()
+    // LL_COMMON_API std::string listenerNameForCoroImpl(const void* self_id);
+    // </FS:Zi>
 
     /**
      * Implement behavior described for postAndWait()'s @a replyPumpNamePath
