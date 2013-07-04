@@ -575,7 +575,7 @@
              height="15"
              left="50"
              name="FSIMChatHistoryFade_label"
-             width="280">
+             width="325">
                 Fade IM text into the background of the chat history window
             </text>
             <spinner
@@ -590,7 +590,7 @@
              max_val="1.0"
              min_val="0.25"
              name="FSIMChatHistoryFade"
-             width="45" />
+             width="47" />
 
             <check_box
              layout="topleft"
