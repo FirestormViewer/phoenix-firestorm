@@ -9,11 +9,11 @@
  min_height="243"
  min_width="234"
  name="preview_conversation"
- title="CONVERSATION:"
+ title="Conversation:"
  width="400">
     <floater.string
      name="Title">
-        CONVERSATION: [NAME]
+        Conversation: [NAME]
     </floater.string>
     <chat_history
      font="SansSerifSmall"
