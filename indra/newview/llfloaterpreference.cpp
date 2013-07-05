@@ -2175,17 +2175,16 @@ void LLFloaterPreference::onChangeMaturity()
 void LLFloaterPreference::onClickBlockList()
 {
 	// </FS:Ansariel> Optional standalone blocklist floater
-	//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD()); <FS:TM> CHUI Merge old
-	//LLFloaterSidePanelContainer::showPanel("people", "panel_people", <FS:TM> CHUI Merge new, used in else for now
-	//	LLSD().with("people_panel_tab_name", "blocked_panel")); <FS:TM> CHUI Merge new
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+	//	LLSD().with("people_panel_tab_name", "blocked_panel"));
 	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
 	{
 		LLFloaterReg::showInstance("fs_blocklist", LLSD());
 	}
 	else
 	{
-	LLFloaterSidePanelContainer::showPanel("people", "panel_people",
-		LLSD().with("people_panel_tab_name", "blocked_panel"));
+		LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+			LLSD().with("people_panel_tab_name", "blocked_panel"));
 	}
 	// </FS:Ansariel>
 }

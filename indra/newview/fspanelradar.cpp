@@ -238,7 +238,8 @@ void FSPanelRadar::onGearMenuItemClicked(const LLSD& userdata)
 		}
 		else
 		{
-			LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+			LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+				LLSD().with("people_panel_tab_name", "blocked_panel"));
 		}
 	}
 }

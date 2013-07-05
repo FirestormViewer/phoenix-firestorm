@@ -4199,6 +4199,21 @@ class LLTogglePanelPeopleTab : public view_listener_t
 		LLSD param;
 		param["people_panel_tab_name"] = panel_name;
 
+		// <FS:Ansariel> Handle blocklist separately because of standalone option
+		if (panel_name == "blocked_panel")
+		{
+			if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+			{
+				LLFloaterReg::showInstance("fs_blocklist");
+			}
+			else
+			{
+				togglePeoplePanel(panel_name, param);
+			}
+			return true;
+		}
+		// </FS:Ansariel>
+
 		// <FS:Zi> Open groups and friends lists in communicate floater
 		// <FS:Lo> Adding an option to still use v2 windows
 		if(gSavedSettings.getBOOL("FSUseV2Friends"))
