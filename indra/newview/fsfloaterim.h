@@ -43,6 +43,8 @@ class FSChatHistory;
 class LLInventoryItem;
 class LLInventoryCategory;
 
+typedef boost::signals2::signal<void(const LLUUID& session_id)> floater_showed_signal_t;
+
 /**
  * Individual IM window that appears at the bottom of the screen,
  * optionally "docked" to the bottom tray.
@@ -134,6 +136,9 @@ public:
 
 	// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
 	void setEnableAddFriendButton(BOOL enabled);
+	
+	static boost::signals2::connection setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb);
+	static floater_showed_signal_t sIMFloaterShowedSignal;
 
 protected:
 	/* virtual */
