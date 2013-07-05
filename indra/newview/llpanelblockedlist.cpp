@@ -108,6 +108,9 @@ BOOL LLPanelBlockedList::postBuild()
 	getChild<LLButton>("unblock_btn")->setCommitCallback(boost::bind(&LLPanelBlockedList::unblockItem, this));
 	getChild<LLFilterEditor>("blocked_filter_input")->setCommitCallback(boost::bind(&LLPanelBlockedList::onFilterEdit, this, _2));
 
+	// <FS:Ansariel> Performance tweak
+	onSelectionChanged();
+
 	return LLPanel::postBuild();
 }
 
