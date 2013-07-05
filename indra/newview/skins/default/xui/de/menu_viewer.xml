@@ -63,13 +63,17 @@
         <menu_item_check label="Gespräche" name="Conversations"/>
         <menu label="Online-Status" name="Status">
             <menu_item_check label="Abwesend" name="Set Away"/>
+            <menu_item_check label="Bitte nicht stören" name="Do Not Disturb"/>		
             <menu_item_check label="Automatische Antwort" name="Set Autorespond"/>
             <menu_item_check label="Automatische Antwort an Nicht-Freunde" name="Set Autorespond to non-friends"/>
-            <menu_item_check label="Beschäftigt" name="Set Busy"/>		
         </menu>
         <menu_item_check label="Gesten" name="Gestures"/>
-        <menu_item_check label="Sprachfilter" name="ShowVoice"/>
-		<menu_item_call label="Leute in der Nähe" name="Active Speakers"/>
+		<menu label="Voice-Morphing" name="VoiceMorphing">
+			<menu_item_check label="Kein Voice-Morphing" name="NoVoiceMorphing"/>
+			<menu_item_check label="Vorschau..." name="Preview"/>
+			<menu_item_call label="Abonnieren..." name="Subscribe"/>
+		</menu>
+		<menu_item_check label="Unterhaltungsprotokoll..." name="Conversation Log..."/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
 		<menu_item_check label="Blockierliste" name="Block List"/>
 	</menu>
