@@ -5946,7 +5946,7 @@ Topic: [SUBJECT], Message: [MESSAGE]
    log_to_chat="false"
    type="notifytip">
     <tag>friendship</tag>
-&lt;nolink&gt;[NAME]&lt;/nolink&gt; is [STATUS]
+[NAME] is [STATUS].
     <unique combine="cancel_old">
       <context>NAME</context>
     </unique>
