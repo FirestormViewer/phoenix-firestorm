@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
-	legacy_header_height="18"
-	can_resize="false"
-	can_dock="false"
-	can_close="true"
-	can_minimize="false"
-	height="170"
-	layout="topleft"
-	name="volume_controls"
-	save_rect="true"
-	save_visibility="false"
-	single_instance="true"
-	save_dock_state="false"
-	title="Volume Controls"
-	background_opaque="false"
-	width="225">
-
+ name="volume_controls"
+ height="170"
+ width="225"
+ layout="topleft"
+ background_opaque="false"
+ can_close="true"
+ can_dock="false"
+ can_minimize="false"
+ can_resize="false"
+ legacy_header_height="18"
+ save_dock_state="false"
+ save_rect="true"
+ save_visibility="false"
+ single_instance="true"
+ title="Volume Controls"
+>
 	<panel
-		name="global_volume_controls_panel"
-		filename="panel_volume_pulldown.xml"
-		left="0"
-		top="20"
-		width="225"
-		height="155"
-		follows="all"
-		layout="topleft">
+	 name="global_volume_controls_panel"
+	 top="20"
+	 left="0"
+	 height="155"
+	 width="225"
+	 follows="all"
+	 layout="topleft"
+	 filename="panel_volume_pulldown.xml"
+	>
 	</panel>
 </floater>
