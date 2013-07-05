@@ -4094,6 +4094,12 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="IM_autoresponse_sent">
 		Automatische Antwort gesendet.
 	</string>
+	<string name="OnlineStatus">
+		online
+	</string>
+	<string name="OfflineStatus">
+		offline
+	</string>
 	<string name="answered_call">
 		Ihr Anruf wurde entgegengenommen
 	</string>

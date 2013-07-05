@@ -2336,11 +2336,8 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 	<notification name="GroupNotice">
 		Betreff: [SUBJECT], Nachricht: [MESSAGE]
 	</notification>
-	<notification name="FriendOnline">
-		[NAME] ist online.
-	</notification>
-	<notification name="FriendOffline">
-		[NAME] ist offline.
+	<notification name="FriendOnlineOffline">
+		[NAME] ist [STATUS].
 	</notification>
 	<notification name="AddSelfFriend">
 		Obwohl Sie ein sehr netter Mensch sind, können Sie sich nicht selbst als Freund hinzufügen.
