@@ -86,6 +86,7 @@ public:
 	void reloadMessages();
 	static void onSendMsg( LLUICtrl*, void*);
 	void sendMsg();
+	void sendMsg(const std::string& msg);
 
 	// callback for LLIMModel on new messages
 	// route to specific floater if it is visible
@@ -203,6 +204,8 @@ private:
 	static void closeHiddenIMToasts();
 
 	static void confirmLeaveCallCallback(const LLSD& notification, const LLSD& response);
+	
+	void sendParticipantsAddedNotification(const uuid_vec_t& uuids);
 
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;

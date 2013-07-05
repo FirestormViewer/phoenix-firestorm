@@ -383,7 +383,75 @@ void FSFloaterIM::sendMsg()
 	}
 }
 
-
+void FSFloaterIM::sendMsg(const std::string& msg)
+{
+	//	const std::string utf8_text = utf8str_truncate(msg, MAX_MSG_BUF_SIZE - 1);
+	// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
+	std::string utf8_text = utf8str_truncate(msg, MAX_MSG_BUF_SIZE - 1);
+	
+	if ( (RlvActions::hasBehaviour(RLV_BHVR_SENDIM)) || (RlvActions::hasBehaviour(RLV_BHVR_SENDIMTO)) )
+	{
+		const LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+		RLV_ASSERT(pIMSession);
+		
+		bool fRlvFilter = !pIMSession;
+		if (pIMSession)
+		{
+			switch (pIMSession->mSessionType)
+			{
+				case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
+					fRlvFilter = !RlvActions::canSendIM(mOtherParticipantUUID);
+					break;
+				case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
+					fRlvFilter = !RlvActions::canSendIM(mSessionID);
+					break;
+				case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants can be sent an IM
+				{
+					if (!pIMSession->mSpeakers)
+					{
+						fRlvFilter = true;
+						break;
+					}
+					
+					LLSpeakerMgr::speaker_list_t speakers;
+					pIMSession->mSpeakers->getSpeakerList(&speakers, TRUE);
+					for (LLSpeakerMgr::speaker_list_t::const_iterator itSpeaker = speakers.begin();
+						 itSpeaker != speakers.end(); ++itSpeaker)
+					{
+						const LLSpeaker* pSpeaker = *itSpeaker;
+						if ( (gAgent.getID() != pSpeaker->mID) && (!RlvActions::canSendIM(pSpeaker->mID)) )
+						{
+							fRlvFilter = true;
+							break;
+						}
+					}
+				}
+					break;
+				default:
+					fRlvFilter = true;
+					break;
+			}
+		}
+		
+		if (fRlvFilter)
+		{
+			utf8_text = RlvStrings::getString(RLV_STRING_BLOCKED_SENDIM);
+		}
+	}
+	// [/RLVa:KB]
+	
+	if (mSessionInitialized)
+	{
+		LLIMModel::sendMessage(utf8_text, mSessionID, mOtherParticipantUUID, mDialog);
+	}
+	else
+	{
+		//queue up the message to send once the session is initialized
+		mQueuedMsgsForInit.append(utf8_text);
+	}
+	
+	updateMessages();
+}
 
 FSFloaterIM::~FSFloaterIM()
 {
@@ -1220,7 +1288,6 @@ void FSFloaterIM::sessionInitReplyReceived(const LLUUID& im_session_id)
 void FSFloaterIM::updateMessages()
 {
 	//<FS:HG> FS-1734 seperate name and text styles for moderator
-	//bool bold_mods_chat = gSavedSettings.getBOOL("FSBoldGroupMods");
 	bool highlight_mods_chat = gSavedSettings.getBOOL("FSHighlightGroupMods");
 
 
@@ -1458,6 +1525,16 @@ void FSFloaterIM::processAgentListUpdates(const LLSD& body)
 	}
 }
 
+void FSFloaterIM::sendParticipantsAddedNotification(const uuid_vec_t& uuids)
+{
+	std::string names_string;
+	LLAvatarActions::buildResidentsString(uuids, names_string);
+	LLStringUtil::format_map_t args;
+	args["[NAME]"] = names_string;
+	
+	sendMsg(getString(uuids.size() > 1 ? "multiple_participants_added" : "participant_added", args));
+}
+
 void FSFloaterIM::updateChatHistoryStyle()
 {
 	mChatHistory->clear();
@@ -1596,8 +1673,8 @@ BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
 BOOL FSFloaterIM::isInviteAllowed() const
 {
 
-	return ( (IM_SESSION_CONFERENCE_START == mDialog)
-			 || (IM_SESSION_INVITE == mDialog) );
+	return ((IM_SESSION_CONFERENCE_START == mDialog) ||
+			(IM_SESSION_INVITE == mDialog && !gAgent.isInGroup(mSessionID)));
 }
 
 class LLSessionInviteResponder : public LLHTTPClient::Responder
@@ -1612,7 +1689,7 @@ public:
 	{
 		llwarns << "Error inviting all agents to session [status:" 
 				<< statusNum << "]: " << content << llendl;
-		//throw something back to the viewer here?
+		//TODO: throw something back to the viewer here?
 	}
 
 private:
@@ -1622,45 +1699,39 @@ private:
 BOOL FSFloaterIM::inviteToSession(const uuid_vec_t& ids)
 {
 	LLViewerRegion* region = gAgent.getRegion();
-	if (!region)
+	bool is_region_exist = region != NULL;
+
+	if (is_region_exist)
 	{
-		return FALSE;
-	}
+		S32 count = ids.size();
 
-	S32 count = ids.size();
-
-	if( isInviteAllowed() && (count > 0) )
-	{
-		llinfos << "FSFloaterIM::inviteToSession() - inviting participants" << llendl;
-
-		std::string url = region->getCapability("ChatSessionRequest");
-
-		LLSD data;
-
-		data["params"] = LLSD::emptyArray();
-		for (int i = 0; i < count; i++)
+		if( isInviteAllowed() && (count > 0) )
 		{
-			data["params"].append(ids[i]);
+			llinfos << "FSFloaterIM::inviteToSession() - inviting participants" << llendl;
+
+			std::string url = region->getCapability("ChatSessionRequest");
+
+			LLSD data;
+			data["params"] = LLSD::emptyArray();
+			for (int i = 0; i < count; i++)
+			{
+				data["params"].append(ids[i]);
+			}
+			data["method"] = "invite";
+			data["session-id"] = mSessionID;
+			LLHTTPClient::post(url,	data,new LLSessionInviteResponder(mSessionID));
 		}
-
-		data["method"] = "invite";
-		data["session-id"] = mSessionID;
-		LLHTTPClient::post(
-			url,
-			data,
-			new LLSessionInviteResponder(
-					mSessionID));
-	}
-	else
-	{
-		llinfos << "FSFloaterIM::inviteToSession -"
-				<< " no need to invite agents for "
-				<< mDialog << llendl;
-		// successful add, because everyone that needed to get added
-		// was added.
+		else
+		{
+			llinfos << "LLFloaterIMSession::inviteToSession -"
+					<< " no need to invite agents for "
+					<< mDialog << llendl;
+			// successful add, because everyone that needed to get added
+			// was added.
+		}
 	}
 
-	return TRUE;
+	return is_region_exist;
 }
 
 void FSFloaterIM::addTypingIndicator(const LLIMInfo* im_info)

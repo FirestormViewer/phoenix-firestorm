@@ -923,13 +923,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	}
 
 	//<FS:HG> FS-1734 seperate name and text styles for moderator
-
-	// Bold group moderators' chat -KC 
-	//if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
-	//{
-	//	// italics for emotes -Zi
-	//	style_params.font.style = (irc_me && gSavedSettings.getBOOL("EmotesUseItalic")) ? "ITALICBOLD" : "BOLD";
-	//}
 	bool moderator_style_active = false;
 	std::string moderator_name_style = "";
 	std::string moderator_txt_style = "";
