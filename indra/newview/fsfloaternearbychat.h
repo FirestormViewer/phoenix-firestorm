@@ -96,6 +96,7 @@ public:
 	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 
 	void updateFSUseNearbyChatConsole(const LLSD &data);
+	static bool isWordsName(const std::string& name);
 
 private:
 	void	getAllowedRect		(LLRect& rect);

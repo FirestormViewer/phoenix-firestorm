@@ -493,7 +493,8 @@ void FSFloaterNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 		nearby_chat->updateChatHistoryStyle();
 }
 
-bool isWordsName(const std::string& name)
+//static
+bool FSFloaterNearbyChat::isWordsName(const std::string& name)
 {
 	// checking to see if it's display name plus username in parentheses 
 	S32 open_paren = name.find(" (", 0);

@@ -167,8 +167,10 @@ void LLFloaterConversationPreview::showHistory()
 		}
 		else if (from_id.isNull())
 		{
-			// FIXME: Hook this up to our nearby chat <FS:CR>
+			// <FS:CR> [Firestorm Communications UI ]
 			//chat.mSourceType = LLFloaterIMNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
+			chat.mSourceType = FSFloaterNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
+			// </FS:CR>
 		}
 
 		LLSD chat_args;
