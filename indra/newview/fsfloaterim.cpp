@@ -77,6 +77,8 @@
 #include "llnotificationtemplate.h"		// <FS:Zi> Viewer version popup
 #include "fscommon.h"
 
+floater_showed_signal_t FSFloaterIM::sIMFloaterShowedSignal;
+
 FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
   : LLTransientDockableFloater(NULL, true, session_id),
 	mControlPanel(NULL),
@@ -1114,6 +1116,11 @@ void FSFloaterIM::setVisible(BOOL visible)
 			chiclet->setToggleState(false);
 		}
 	}
+	
+	if (visible && isInVisibleChain())
+	{
+		sIMFloaterShowedSignal(mSessionID);
+	}
 }
 
 BOOL FSFloaterIM::getVisible()
@@ -1831,3 +1838,8 @@ void FSFloaterIM::setEnableAddFriendButton(BOOL enabled)
 	getChild<LLButton>("add_friend_btn")->setEnabled(enabled);
 }
 // </FS:Ansariel>
+
+boost::signals2::connection FSFloaterIM::setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb)
+{
+	return FSFloaterIM::sIMFloaterShowedSignal.connect(cb);
+}
