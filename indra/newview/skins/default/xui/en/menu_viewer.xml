@@ -630,16 +630,6 @@
               function="SideTray.PanelPeopleTab"
               parameter="blocked_panel" />
         </menu_item_call>
-      <menu_item_separator/>
-      <menu_item_check
-       name="Do Not Disturb"
-       label="Do Not Disturb">
-        <menu_item_check.on_check
-         function="View.Status.CheckDoNotDisturb" />
-        <menu_item_check.on_click
-         function="World.SetDoNotDisturb"/>
-      </menu_item_check>
-
     </menu>
     
     <!-- World Menu -->
