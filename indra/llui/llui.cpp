@@ -139,7 +139,7 @@ LLUUID find_ui_sound(const char * namep, bool force_sound) //LL post CHUI
 			if (name != "UISndNewIncomingIMSession" && name != "UISndNewIncomingGroupIMSession") // There is no need to process these two, checks are in llimview.cpp already, in LLIMMgr::addMessage
 			{
 				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
-					return uuid;
+					return LLUUID(NULL);
 			}
 			// </FS:PP>
 			
