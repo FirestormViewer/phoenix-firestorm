@@ -155,8 +155,12 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
 {
 	if (!sColorSetInitialized)
 	{
-		sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
-		sHighlightBgColor = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", DEFAULT_WHITE);
+		// <FS:Ansariel> Make inventory selection color independent from menu color
+		//sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
+		//sHighlightBgColor = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", DEFAULT_WHITE);
+		sFgColor = LLUIColorTable::instance().getColor("InventoryItemEnabledColor", DEFAULT_WHITE);
+		sHighlightBgColor = LLUIColorTable::instance().getColor("InventoryItemHighlightBgColor", DEFAULT_WHITE);
+		// </FS:Ansariel> Make inventory selection color independent from menu color
 		sFlashBgColor = LLUIColorTable::instance().getColor("MenuItemFlashBgColor", DEFAULT_WHITE);
 		sFocusOutlineColor = LLUIColorTable::instance().getColor("InventoryFocusOutlineColor", DEFAULT_WHITE);
 		sMouseOverColor = LLUIColorTable::instance().getColor("InventoryMouseOverColor", DEFAULT_WHITE);

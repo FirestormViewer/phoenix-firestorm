@@ -156,8 +156,12 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 
 	if (!sColorSetInitialized)
 	{
-		sDefaultColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
-		sDefaultHighlightColor = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor", DEFAULT_WHITE);
+		// <FS:Ansariel> Make inventory selection color independent from menu color
+		//sDefaultColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
+		//sDefaultHighlightColor = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor", DEFAULT_WHITE);
+		sDefaultColor = LLUIColorTable::instance().getColor("InventoryItemEnabledColor", DEFAULT_WHITE);
+		sDefaultHighlightColor = LLUIColorTable::instance().getColor("InventoryItemHighlightFgColor", DEFAULT_WHITE);
+		// </FS:Ansariel> Make inventory selection color independent from menu color
 		sLibraryColor = LLUIColorTable::instance().getColor("InventoryItemLibraryColor", DEFAULT_WHITE);
 		sLinkColor = LLUIColorTable::instance().getColor("InventoryItemLinkColor", DEFAULT_WHITE);
 		sColorSetInitialized = true;
