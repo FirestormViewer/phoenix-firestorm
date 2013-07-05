@@ -91,10 +91,6 @@ private:
 	LLUIImagePtr mDockTongue;
 	S32 mDockTongueX;
 	S32 mDockTongueY;
-
-	// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
-	// LLHandle< LLView > mDockHandle; <FS:TM> check CHUI merge
-	// </FS:ND>
 };
 
 #endif /* LL_DOCKCONTROL_H */
