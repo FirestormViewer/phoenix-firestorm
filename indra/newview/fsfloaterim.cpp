@@ -1219,11 +1219,10 @@ void FSFloaterIM::sessionInitReplyReceived(const LLUUID& im_session_id)
 
 void FSFloaterIM::updateMessages()
 {
-	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
 	//<FS:HG> FS-1734 seperate name and text styles for moderator
 	//bool bold_mods_chat = gSavedSettings.getBOOL("FSBoldGroupMods");
 	bool highlight_mods_chat = gSavedSettings.getBOOL("FSHighlightGroupMods");
-	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsIM");
+
 
 	std::list<LLSD> messages;
 
@@ -1233,8 +1232,11 @@ void FSFloaterIM::updateMessages()
 	if (messages.size())
 	{
 		LLSD chat_args;
-		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-		chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+		chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
+		chat_args["hide_timestamps_nearby_chat"] = gSavedSettings.getBOOL("FSHideTimestampsIM");
+		chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
+		chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+		// TODO: add "show_names_for_p2p_conv
 		
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 		RLV_ASSERT(pIMSession);

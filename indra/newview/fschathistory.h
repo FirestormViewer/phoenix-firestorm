@@ -32,7 +32,6 @@
 #include "lltexteditor.h"
 #include "lltextbox.h"
 #include "llviewerchat.h"
-#include "llavatarname.h"
 
 class LLLineEditor;	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 
@@ -66,6 +65,8 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 
 			// Optional<LLTextBox::Params>	more_chat_text;	// <FS:Zi> FIRE-8600: TAB out of chat history
 
+			Optional<bool>			notify_unread_msg;
+
 			Params()
 			:	message_header("message_header"),
 				message_separator("message_separator"),
@@ -76,8 +77,9 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 				top_separator_pad("top_separator_pad"),
 				bottom_separator_pad("bottom_separator_pad"),
 				top_header_pad("top_header_pad"),
-				bottom_header_pad("bottom_header_pad")	// <FS:Zi> FIRE-8600: TAB out of chat history
-				// more_chat_text("more_chat_text")	// <FS:Zi> FIRE-8600: TAB out of chat history
+				bottom_header_pad("bottom_header_pad"),
+				// more_chat_text("more_chat_text"),	// <FS:Zi> FIRE-8600: TAB out of chat history
+				notify_unread_msg("notify_unread_msg", true)
 			{}
 
 		};
@@ -100,15 +102,13 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		 * Builds a message header.
 		 * @return pointer to LLView header object.
 		 */
-
-		void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 		LLView* getHeader(const LLChat& chat,const LLStyle::Params& style_params, const LLSD& args);
 
 		// void onClickMoreText();	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 	public:
 		~FSChatHistory();
-
+		LLSD getValue() const;
 		void initFromParams(const Params&);
 
 		/**
@@ -130,6 +130,7 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		LLUUID mLastFromID;
 		LLDate mLastMessageTime;
 		bool mIsLastMessageFromLog;
+		bool mNotifyAboutUnreadMsg;
 		//std::string mLastMessageTimeStr;
 
 		std::string mMessageHeaderFilename;
