@@ -15,7 +15,7 @@
      name="Title">
         Conversation: [NAME]
     </floater.string>
-    <chat_history
+    <fs_chat_history
      font="SansSerifSmall"
      follows="all"
      visible="true"
@@ -27,7 +27,7 @@
      left="5"
      top_pad="25"
      width="390">
-    </chat_history>
+    </fs_chat_history>
     <text
      follows="bottom|right"
      font="SansSerif"
