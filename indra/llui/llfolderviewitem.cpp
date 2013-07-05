@@ -856,7 +856,7 @@ void LLFolderViewItem::draw()
     LLColor4 color = (mIsSelected && filled) ? mFontHighlightColor : mFontColor;
 	// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
 	// Don't hide cut items in inventory
-	if (!getRoot()->getFolderViewModel()->getFilter().check(getViewModelItem()))
+	if (!getRoot()->getFolderViewModel()->getFilter().checkClipboard(getViewModelItem()))
 	{
 		// Fade out item color to indicate it's being cut
 		color.mV[VALPHA] *= 0.5f;

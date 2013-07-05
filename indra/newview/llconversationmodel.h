@@ -242,6 +242,8 @@ public:
 		
 	bool 				check(const LLFolderViewModelItem* item) { return true; }
 	bool				checkFolder(const LLFolderViewModelItem* folder) const { return true; }
+	// <FS:Ansariel> For clipboard highlighting
+	bool				checkClipboard(const LLFolderViewModelItem* item) { return true; }
 	void 				setEmptyLookupMessage(const std::string& message) { }
 	std::string			getEmptyLookupMessage() const { return mEmpty; }
 	bool				showAllResults() const { return true; }

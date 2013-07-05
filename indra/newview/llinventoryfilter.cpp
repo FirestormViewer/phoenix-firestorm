@@ -448,6 +448,19 @@ bool LLInventoryFilter::checkAgainstClipboard(const LLUUID& object_id) const
 	return true;
 }
 
+// <FS:Ansariel> For clipboard highlighting
+bool LLInventoryFilter::checkClipboard(const LLFolderViewModelItem* item)
+{
+	const LLFolderViewModelItemInventory* listener = dynamic_cast<const LLFolderViewModelItemInventory*>(item);
+	if (!listener)
+	{
+		return true;
+	}
+
+	return checkAgainstClipboard(listener->getUUID());
+}
+// </FS:Ansariel>
+
 bool LLInventoryFilter::checkAgainstPermissions(const LLFolderViewModelItemInventory* listener) const
 {
 	if (!listener) return FALSE;
