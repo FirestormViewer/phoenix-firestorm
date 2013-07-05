@@ -1604,8 +1604,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		display_startup();
 		LLStartUp::setStartupState( STATE_MULTIMEDIA_INIT );
 		
-		// <FS:CR> [FS communication UI] [CHUI Merge] We don't have a conversation log yet
-		//LLConversationLog::getInstance();
+		LLConversationLog::getInstance();
 
 		return FALSE;
 	}

@@ -414,8 +414,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mAvatarDataInitialized(false),
 	mClickActionDirty(false)
 {
-	// <FS:Ansariel> [FS communication UI] [CHUI Merge] We don't have a conversation log yet
-	//LLConversationLog::instance().addObserver(this);
+	LLConversationLog::instance().addObserver(this);
 
 	//Build Floater is now Called from 	LLFloaterReg::add("preferences", "floater_preferences.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPreference>);
 	
@@ -502,8 +501,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	
 	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
 
-	// <FS:Ansariel> [FS communication UI] [CHUI Merge] We don't have a conversation log yet
-	//mCommitCallbackRegistrar.add("Pref.ClearLog",				boost::bind(&LLConversationLog::onClearLog, &LLConversationLog::instance()));
+	mCommitCallbackRegistrar.add("Pref.ClearLog",				boost::bind(&LLConversationLog::onClearLog, &LLConversationLog::instance()));
 	mCommitCallbackRegistrar.add("Pref.DeleteTranscripts",      boost::bind(&LLFloaterPreference::onDeleteTranscripts, this));
 }
 
@@ -729,10 +727,9 @@ LLFloaterPreference::~LLFloaterPreference()
 	for (S32 i = 0; i < ctrl_window_size->getItemCount(); i++)
 	{
 		ctrl_window_size->setCurrentByIndex(i);
-	}
+	}*/
 
-	LLConversationLog::instance().removeObserver(this); <FS:TM> CHUI Merge new. so maybe this is used?
-	*/
+	LLConversationLog::instance().removeObserver(this);
 }
 
 //void LLFloaterPreference::draw()
@@ -2015,20 +2012,18 @@ bool LLFloaterPreference::moveTranscriptsAndLog()
 		madeDirectory = true;
 	}
 	
-	// <FS:Ansariel> [FS communication UI] [CHUI Merge] We don't have a conversation log yet
-	//std::string originalConversationLogDir = LLConversationLog::instance().getFileName();
-	//std::string targetConversationLogDir = gDirUtilp->add(chatLogPath, "conversation.log");
-	////Try to move the conversation log
-	//if(!LLConversationLog::instance().moveLog(originalConversationLogDir, targetConversationLogDir))
-	//{
-	//	//Couldn't move the log and created a new directory so remove the new directory
-	//	if(madeDirectory)
-	//	{
-	//		LLFile::rmdir(chatLogPath);
-	//	}
-	//	return false;
-	//}
-	// </FS:Ansariel> [FS communication UI] [CHUI Merge] We don't have a conversation log yet
+	std::string originalConversationLogDir = LLConversationLog::instance().getFileName();
+	std::string targetConversationLogDir = gDirUtilp->add(chatLogPath, "conversation.log");
+	//Try to move the conversation log
+	if(!LLConversationLog::instance().moveLog(originalConversationLogDir, targetConversationLogDir))
+	{
+		//Couldn't move the log and created a new directory so remove the new directory
+		if(madeDirectory)
+		{
+			LLFile::rmdir(chatLogPath);
+		}
+		return false;
+	}
 
 	//Attempt to move transcripts
 	std::vector<std::string> listOfTranscripts;
@@ -2047,8 +2042,7 @@ bool LLFloaterPreference::moveTranscriptsAndLog()
 			listOfFilesMoved);
 
 		//Move the conversation log back
-		// <FS:Ansariel> [FS communication UI] [CHUI Merge] We don't have a conversation log yet
-		//LLConversationLog::instance().moveLog(targetConversationLogDir, originalConversationLogDir);
+		LLConversationLog::instance().moveLog(targetConversationLogDir, originalConversationLogDir);
 
 		if(madeDirectory)
 		{
@@ -2341,8 +2335,7 @@ void LLFloaterPreference::selectChatPanel()
 
 void LLFloaterPreference::changed()
 {
-	// <FS:Ansariel> [FS communication UI] [CHUI Merge] We don't have a conversation log yet
-	//getChild<LLButton>("clear_log")->setEnabled(LLConversationLog::instance().getConversations().size() > 0);
+	getChild<LLButton>("clear_log")->setEnabled(LLConversationLog::instance().getConversations().size() > 0);
 
 	// set 'enable' property for 'Delete transcripts...' button
 	updateDeleteTranscriptsButton();

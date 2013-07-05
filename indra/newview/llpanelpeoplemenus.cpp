@@ -45,8 +45,6 @@
 #include "llinventorybridge.h"	// <FS:CR> CHUI merge
 #include "rlvhandler.h"
 
-typedef std::vector<std::string> menuentry_vec_t;	// <FS:CR> CHUI merge - Without LLConversationModel we need this
-
 namespace LLPanelPeopleMenus
 {
 
