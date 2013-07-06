@@ -414,7 +414,7 @@ void FSRadar::updateRadarList()
 			}
 			if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
 			{
-				if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
+				if (RadarReportSimRangeEnter && avRegion == regionSelf && avRegion != rf.lastRegion && rf.lastRegion.notNull())
 				{
 					make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
@@ -429,7 +429,7 @@ void FSRadar::updateRadarList()
 						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
 					}
 				}
-				else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+				else if (RadarReportSimRangeLeave && rf.lastRegion == regionSelf && avRegion != regionSelf && avRegion.notNull())
 				{
 					make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
@@ -619,7 +619,7 @@ void FSRadar::updateRadarList()
 				make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
 			}
-			if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf))
+			if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf || rf.lastRegion.isNull()))
 			{
 				make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
