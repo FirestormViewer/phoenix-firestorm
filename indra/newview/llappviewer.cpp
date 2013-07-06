@@ -1405,9 +1405,8 @@ bool LLAppViewer::mainLoop()
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
 	// <FS:Ansariel> [FS communication UI]
-	//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLCallFloater::sOnCurrentChannelChanged, _1), true); //<FS:TM> CHUI merge old
-	//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true); //<FS:TM> CHUI merge new
-	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&FSFloaterVoiceControls::sOnCurrentChannelChanged, _1), true); //<FS:TM> FS origonal
+	//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
+	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&FSFloaterVoiceControls::sOnCurrentChannelChanged, _1), true);
 	// </FS:Ansariel> [FS communication UI]
 	LLTimer frameTimer,idleTimer;
 	LLTimer debugTime;
