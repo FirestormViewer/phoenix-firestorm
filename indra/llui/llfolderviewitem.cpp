@@ -59,6 +59,8 @@ LLUIColor LLFolderViewItem::sFilterBGColor;
 LLUIColor LLFolderViewItem::sFilterTextColor;
 LLUIColor LLFolderViewItem::sSuffixColor;
 LLUIColor LLFolderViewItem::sSearchStatusColor;
+// <FS:Ansariel> Special for protected items
+LLUIColor LLFolderViewItem::sProtectedColor;
 
 // only integers can be initialized in header
 const F32 LLFolderViewItem::FOLDER_CLOSE_TIME_CONSTANT = 0.02f;
@@ -170,6 +172,8 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
 		sFilterTextColor = LLUIColorTable::instance().getColor("FilterTextColor", DEFAULT_WHITE);
 		sSuffixColor = LLUIColorTable::instance().getColor("InventoryItemColor", DEFAULT_WHITE);
 		sSearchStatusColor = LLUIColorTable::instance().getColor("InventorySearchStatusColor", DEFAULT_WHITE);
+		// <FS:Ansariel> Special for protected items
+		sProtectedColor = LLUIColorTable::instance().getColor("InventoryProtectedColor", DEFAULT_WHITE);
 		sColorSetInitialized = true;
 	}
 
@@ -869,6 +873,16 @@ void LLFolderViewItem::draw()
 	}
 	// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
     drawLabel(font, text_left, y, color, right_x);
+
+	// <FS:Ansariel> Special for protected items
+	if (mViewModelItem->isProtected())
+	{
+		static const std::string protected_string = " (" + LLTrans::getString("ProtectedFolder") + ") ";
+		font->renderUTF8(protected_string, 0, right_x, y, sProtectedColor,
+						 LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, 
+						 S32_MAX, S32_MAX, &right_x, FALSE);
+	}
+	// </FS:Ansariel>
 
 	//--------------------------------------------------------------------------------//
 	// Draw label suffix

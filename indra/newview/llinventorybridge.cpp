@@ -4689,6 +4689,17 @@ bool check_item(const LLUUID& item_id,
 	return filter->check(fv_item->getViewModelItem());
 }
 
+// <FS:Ansariel> Special for protected folders
+bool LLFolderBridge::isProtected() const
+{
+	static LLCachedControl<bool> protectAOFolders(gSavedPerAccountSettings, "ProtectAOFolders");
+	static LLCachedControl<bool> protectBridgeFolder(gSavedPerAccountSettings, "ProtectBridgeFolder");
+
+	return ((mUUID == AOEngine::instance().getAOFolder() && protectAOFolders) ||
+		(mUUID == FSLSLBridge::instance().getBridgeFolder() && protectBridgeFolder));
+}
+// </FS:Ansariel>
+
 // +=================================================+
 // |        LLTextureBridge                          |
 // +=================================================+

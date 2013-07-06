@@ -135,6 +135,8 @@ protected:
 	static LLUIColor			sFilterTextColor;
 	static LLUIColor			sSuffixColor;
 	static LLUIColor			sSearchStatusColor;
+	// <FS:Ansariel> Special for protected items
+	static LLUIColor			sProtectedColor;
 
 	// this is an internal method used for adding items to folders. A
 	// no-op at this level, but reimplemented in derived classes.

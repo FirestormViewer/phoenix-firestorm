@@ -206,6 +206,9 @@ public:
 	virtual void setParent(LLFolderViewModelItem* parent) = 0;
 	virtual bool hasParent() = 0;
 
+	// <FS:Ansariel> Special for protected items
+	virtual bool isProtected() const { return false; }
+
 protected:
 
 	friend class LLFolderViewItem;

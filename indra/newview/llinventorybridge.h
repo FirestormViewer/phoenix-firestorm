@@ -313,6 +313,9 @@ public:
 
 	bool isLoading() { return mIsLoading; }
 
+	// <FS:Ansariel> Special for protected folders
+	virtual bool isProtected() const;
+
 protected:
 	void buildContextMenuOptions(U32 flags, menuentry_vec_t& items,   menuentry_vec_t& disabled_items);
 	void buildContextMenuFolderOptions(U32 flags, menuentry_vec_t& items,   menuentry_vec_t& disabled_items);
