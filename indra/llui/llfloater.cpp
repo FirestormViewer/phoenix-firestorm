@@ -2851,11 +2851,18 @@ void LLFloaterView::shiftFloaters(S32 x_offset, S32 y_offset)
 
 void LLFloaterView::refresh()
 {
-	LLRect snap_rect = getSnapRect();
-	if (snap_rect != mLastSnapRect)
+	// <FS:KC> Fix for bad edge snapping
+	// This will stop jumping floaters on chatbar show
+	// But will stop floaters from bumping out of the way of toolbars
+	static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+	if (!legacy_snap)
 	{
-		reshape(getRect().getWidth(), getRect().getHeight(), TRUE);
-	}
+		LLRect snap_rect = getSnapRect();
+		if (snap_rect != mLastSnapRect)
+		{
+			reshape(getRect().getWidth(), getRect().getHeight(), TRUE);
+		}
+	}// <FS:KC> Fix for bad edge snapping
 
 	// Constrain children to be entirely on the screen
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
