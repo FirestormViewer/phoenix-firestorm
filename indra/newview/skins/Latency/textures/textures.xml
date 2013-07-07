@@ -431,4 +431,8 @@
 	<texture name="Play_Off" file_name="icons/Play_Off.png" preload="true" />
 	<texture name="Stop_Off" file_name="icons/Stop_Off.png" preload="true" />
 
+	
+	<texture name="PushButton_Down" file_name="widgets/PushButton_Down.png"	preload="true" />
+	<texture name="PushButton_Up" file_name="widgets/PushButton_Up.png" preload="true" />
+	
 </textures>
