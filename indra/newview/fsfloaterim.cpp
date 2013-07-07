@@ -894,7 +894,15 @@ BOOL FSFloaterIM::postBuild()
 		mInputEditor->setEnabled(FALSE);
 		mInputEditor->setLabel(LLTrans::getString("IM_unavailable_text_label"));
 	}
-	else
+
+        if ( im_session && im_session->isP2PSessionType())
+        {
+                // look up display name for window title
+                LLAvatarNameCache::get(im_session->mOtherParticipantID,
+                                   boost::bind(&FSFloaterIM::onAvatarNameCache,
+                                                   this, _1, _2));
+        }
+        else
 	{
 		std::string session_name(LLIMModel::instance().getName(mSessionID));
 		updateSessionName(session_name, session_name);
