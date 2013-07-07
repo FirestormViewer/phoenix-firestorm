@@ -88,15 +88,12 @@ std::string prefixIM(std::string from, const LLChat& chat)
 {
 	if (chat.mChatType == CHAT_TYPE_IM)
 	{
-		llinfos << "IM TYPE" << llendl;
 		from = LLTrans::getString("IMPrefix") + " " + from;
 	}
 	else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
 	{
-		llinfos << "GROUP TYPE" << llendl;
 		from = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + from;
 	}
-	llinfos << "NOPE NOPE NOPE" << llendl;
 	
 	return from;
 }
