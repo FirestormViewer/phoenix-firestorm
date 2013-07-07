@@ -281,37 +281,6 @@
 		scale.right="144"
 		scale.bottom="3" />
 
-
-    <!-- Combo Boxes-->
-    <texture name="ComboButton_Selected"
-		file_name="widgets/ComboButton_Selected.png"
-		preload="true"
-		scale.left="2"
-		scale.top="14"
-		scale.right="14"
-		scale.bottom="2" />
-    <texture name="ComboButton_On"
-		file_name="widgets/ComboButton_On.png"
-		preload="true"
-		scale.left="2"
-		scale.top="14"
-		scale.right="14"
-		scale.bottom="2" />
-    <texture name="ComboButton_Off"
-		file_name="widgets/ComboButton_Off.png"
-		preload="true"
-		scale.left="2"
-		scale.top="14"
-		scale.right="14"
-		scale.bottom="2" />
-    <texture name="ComboButton_Press"
-		file_name="widgets/ComboButton_Press.png"
-		preload="true"
-		scale.left="2"
-		scale.top="14"
-		scale.right="14"
-		scale.bottom="2" />
-
 	<!-- Direct delivery icon for Received Items folder -->
 	<texture name="Inv_InboxOpen"   file_name="legacy/inv_folder_plain_open.tga" />
 	<texture name="Inv_InboxClosed"   file_name="legacy/inv_folder_plain_closed.tga" />

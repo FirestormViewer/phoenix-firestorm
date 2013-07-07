@@ -121,16 +121,16 @@
             <button
              name="remove_user_btn"
              label=""
-			 image_unselected="TrashItem_Off"
-			 image_selected="TrashItem_Press"
-			 image_pressed="TrashItem_Press"
-			 tool_tip="Remove this username"
-			 top="28"
+             tool_tip="Remove this username"
+             top="28"
              left_pad="4"
              height="18"
              width="18"
              follows="left|bottom"
              layout="topleft"
+             image_pressed="TrashItem_Press"
+             image_selected="TrashItem_Press"
+             image_unselected="TrashItem_Off"
             />
         </layout_panel>
         <layout_panel
