@@ -183,7 +183,7 @@ BOOL  LLAvatarListItem::postBuild()
 	mInfoBtn = getChild<LLButton>("info_btn");
 	mProfileBtn = getChild<LLButton>("profile_btn");
 	
-	mInfoBtn->setVisible(false); // AO: enable this by calling setShowInfoButton
+	mInfoBtn->setVisible(false); // <FS:AO> Enable this by calling setShowInfoButton
 	mInfoBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onInfoBtnClick, this));
 	
 	mVoiceSlider = getChild<LLUICtrl>("volume_slider");
@@ -250,17 +250,18 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
+	// <FS:AO>, removed on-hover visibility. Don't do this. instead flip info buttons on full-time in postbuild.
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	//mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	//mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 // [/RLVa:KB]
 
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
 
-//  AO don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
+//  <FS:AO> don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
 //  process takes n-seconds to complete. Hover-reprocessing can confuse the user if it takes place before the async permissions change
 //  goes through, appearing to mysteriously erase the user's choice.
 //	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
