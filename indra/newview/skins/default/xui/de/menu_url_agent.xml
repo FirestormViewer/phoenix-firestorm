@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Url Popup">
 	<menu_item_call label="Einwohnerprofil anzeigen" name="show_agent"/>
+	<menu_item_call label="IM senden" name="send_im"/>
+	<menu_item_call label="Als Freund hinzufügen" name="add_friend"/>
 	<menu_item_call label="Zoome auf Einwohner" name="zoom_agent"/>
 	<menu_item_call label="Zu Einwohner teleportieren" name="teleportto_agent"/>
 	<menu_item_call label="Einwohner Teleport anbieten" name="offer_teleport"/>
