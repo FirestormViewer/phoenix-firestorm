@@ -129,8 +129,8 @@ LLAvatarListItem::~LLAvatarListItem()
 	if (mAvatarId.notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
-		//LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this); //<FS:TM> CHUI Merge are these 2 lines needed? if so, comment
-		//LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId, this); // may try to remove null observer
+		LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this);
+		LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId, this); // may try to remove null observer
 	}
 
 	if (mAvatarNameCacheConnection.connected())
