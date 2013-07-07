@@ -1854,7 +1854,6 @@ void FSFloaterIM::onNewIMReceived( const LLUUID& session_id )
 
 void	FSFloaterIM::onClickCloseBtn()
 {
-
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(
 				mSessionID);
 
@@ -1902,6 +1901,21 @@ void FSFloaterIM::setEnableAddFriendButton(BOOL enabled)
 	getChild<LLButton>("add_friend_btn")->setEnabled(enabled);
 }
 // </FS:Ansariel>
+
+void FSFloaterIM::initIMSession(const LLUUID& session_id)
+{
+	// Change the floater key to bind it to a new session.
+	setKey(session_id);
+	
+	mSessionID = session_id;
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+	
+	if (session)
+	{
+		mSessionInitialized = session->mSessionInitialized;
+		mDialog = session->mType;
+	}
+}
 
 boost::signals2::connection FSFloaterIM::setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb)
 {

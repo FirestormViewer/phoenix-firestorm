@@ -3058,22 +3058,6 @@ void LLIMMgr::addMessage(
 		skip_message &= !(other_participant_id == gAgentID);	// You are your best friend... Don't skip yourself
 	}
 
-// <FS:TM> CHUI Merge LL seems to have fixed FIRE-6650 differently (above). below is our origonal fix
-	//<FS:TS> FIRE-6650: Group chat for non-friends mutes when disabling voice chat from non-friends
-	//bool skip_message = false;
-	//LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(new_session_id);
-	//if (session)
-	//{
-	//	if (session->isAdHoc())
-	//	{
-	//		skip_message = (other_participant_id != gAgentID && gSavedSettings.getBOOL("VoiceCallsFriendsOnly") &&
-	//			LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL);
-	//	}
-	//}
-	//bool skip_message = (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") &&
-	//	LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL);
-	//</FS:TS> FIRE-6650
-
 	if (!LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !skip_message)
 	{
 		//LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_announcement); <FS:TM> CHUI Merge this got clobbered above
@@ -3237,21 +3221,22 @@ LLUUID LLIMMgr::addSession(
 
 	LLUUID session_id = computeSessionID(dialog,other_participant_id);
 
-	// [CHUI Merge]
-	//if (floater_id.notNull())
-	//{
-	//	LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(floater_id);
+	if (floater_id.notNull())
+	{
+		// <FS:CR> [FS communications UI]
+		//	LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(floater_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:CR>
 
-	//	if (im_floater)
-	//	{
-	//		// The IM floater should be initialized with a new session_id
-	//		// so that it is found by that id when creating a chiclet in LLFloaterIMSession::onIMChicletCreated,
-	//		// and a new floater is not created.
-	//		im_floater->initIMSession(session_id);
- //           im_floater->reloadMessages();
-	//	}
-	//}
-	// [CHUI Merge]
+		if (im_floater)
+		{
+			// The IM floater should be initialized with a new session_id
+			// so that it is found by that id when creating a chiclet in LLFloaterIMSession::onIMChicletCreated,
+			// and a new floater is not created.
+			im_floater->initIMSession(session_id);
+            im_floater->reloadMessages();
+		}
+	}
 
 	bool new_session = (LLIMModel::getInstance()->findIMSession(session_id) == NULL);
 

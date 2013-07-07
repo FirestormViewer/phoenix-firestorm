@@ -126,6 +126,7 @@ public:
 	 */
 	static bool isChatMultiTab();
 
+	void initIMSession(const LLUUID& session_id);
 	static void initIMFloater();
 
 	//used as a callback on receiving new IM message
