@@ -1053,6 +1053,11 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
 				link_params.color = link_color;
 				link_params.readonly_color = link_color;
+				if (message_from_log)
+				{
+					link_params.color.alpha = FSIMChatHistoryFade;
+					link_params.readonly_color.alpha = FSIMChatHistoryFade;
+				}
 				link_params.is_link = true;
 				link_params.link_href = url;
 
