@@ -51,11 +51,15 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mIsLinden(false),
 	mAvatarNameCallbackConnection()
 {
-	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
-	//This means updates to these properties won't typically be seen while target is in nearby range.
-	LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
-	processor->addObserver(mID, this);
-	processor->sendAvatarPropertiesRequest(mID);
+	if (mID.notNull())
+	{
+		// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
+		//This means updates to these properties won't typically be seen while target is in nearby range.
+		LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
+
+		processor->addObserver(mID, this);
+		processor->sendAvatarPropertiesRequest(mID);
+	}
 
 	updateName();
 }
