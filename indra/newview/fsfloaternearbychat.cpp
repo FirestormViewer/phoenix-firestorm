@@ -221,6 +221,7 @@ void	FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	LLSD chat_args = args;
 	chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
 	chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+	chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
 	mChatHistoryMuted->appendMessage(chat, chat_args);
 	// </FS:Ansariel> Optional muted chat history
 	if (!chat.mMuted)

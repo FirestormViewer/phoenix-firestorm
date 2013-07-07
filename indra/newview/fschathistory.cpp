@@ -83,6 +83,25 @@ const static std::string NEW_LINE(rawstr_to_utf8("\n"));
 const static std::string SLURL_APP_AGENT = "secondlife:///app/agent/";
 const static std::string SLURL_ABOUT = "/about";
 
+// <FS:CR> Moved this to a small function
+std::string prefixIM(std::string from, const LLChat& chat)
+{
+	if (chat.mChatType == CHAT_TYPE_IM)
+	{
+		llinfos << "IM TYPE" << llendl;
+		from = LLTrans::getString("IMPrefix") + " " + from;
+	}
+	else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+	{
+		llinfos << "GROUP TYPE" << llendl;
+		from = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + from;
+	}
+	llinfos << "NOPE NOPE NOPE" << llendl;
+	
+	return from;
+}
+// </FS:CR>
+
 // support for secondlife:///app/objectim/{UUID}/ SLapps
 class LLObjectIMHandler : public LLCommandHandler
 {
@@ -356,18 +375,7 @@ public:
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
-				mFrom = chat.mFromName;
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-				//if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				if (chat.mChatType == CHAT_TYPE_IM)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				}
-				else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mFrom;
-				}
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				mFrom = prefixIM(chat.mFromName, chat);	// <FS:CR> Prefix im's and group chats for the console
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
@@ -392,17 +400,7 @@ public:
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-				//if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				if (chat.mChatType == CHAT_TYPE_IM)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				}
-				else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mFrom;
-				}
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				mFrom = prefixIM(mFrom, chat);
 				user_name->setValue(mFrom);
 				updateMinUserNameWidth();
 			}
@@ -808,41 +806,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	bool from_me = chat.mFromID == gAgent.getID();
 	setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
-	/* This system in incompatible with vertical tabs, the firestorm default.
-	 * disabling until we can find a way to make it work without overdrawing text
-	 * or requiring a large otherwised unused gap in the XUI.
-	 *
-	 
-	if (mNotifyAboutUnreadMsg && !mEditor->scrolledToEnd() && !from_me && !chat.mFromName.empty())
-	{
-		mUnreadChatSources.insert(chat.mFromName);
-		mMoreChatPanel->setVisible(TRUE);
-		std::string chatters;
-		for (unread_chat_source_t::iterator it = mUnreadChatSources.begin();
-			it != mUnreadChatSources.end();)
-		{
-			chatters += *it;
-			if (++it != mUnreadChatSources.end())
-			{
-				chatters += ", ";
-			}
-		}
-		LLStringUtil::format_map_t args;
-		args["SOURCES"] = chatters;
-
-		if (mUnreadChatSources.size() == 1)
-		{
-			mMoreChatText->setValue(LLTrans::getString("unread_chat_single", args));
-		}
-		else
-		{
-			mMoreChatText->setValue(LLTrans::getString("unread_chat_multiple", args));
-		}
-		S32 height = mMoreChatText->getTextPixelHeight() + 5;
-		mMoreChatPanel->reshape(mMoreChatPanel->getRect().getWidth(), height);
-	}
-	*/
-
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
 	LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
 	LLViewerChat::getChatColor(chat,txt_color);
@@ -904,11 +867,13 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	if(chat.mChatType == CHAT_TYPE_WHISPER)
 	{
-		body_message_params.font.style = "ITALIC";
+		if (gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
+			body_message_params.font.style = "ITALIC";
 	}
 	else if(chat.mChatType == CHAT_TYPE_SHOUT)
 	{
-		body_message_params.font.style = "BOLD";
+		if (gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
+			body_message_params.font.style = "BOLD";
 	}
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
@@ -1031,27 +996,29 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// compact mode: show a timestamp and name
 	if (use_plain_text_chat_history)
 	{
-		square_brackets = chat.mFromName == SYSTEM_FROM;
+		square_brackets = (chat.mFromName == SYSTEM_FROM && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
 
 		LLStyle::Params timestamp_style(body_message_params);
 
 		// out of the timestamp
 		if (args["show_time"].asBoolean())
 		{
-			if (!message_from_log)
+			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
+			timestamp_style.color(timestamp_color);
+			timestamp_style.readonly_color(timestamp_color);
+			if (message_from_log)
 			{
-				LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
-				timestamp_style.color(timestamp_color);
-				timestamp_style.readonly_color(timestamp_color);
-				//<FS:HG> FS-1734 seperate name and text styles for moderator
-				if ( moderator_style_active )
-				{
-					timestamp_style.font.style(moderator_name_style);
-				}
-				//</FS:HG> FS-1734 seperate name and text styles for moderator
-				appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
-				prependNewLineState = false;
+				timestamp_style.color.alpha = FSIMChatHistoryFade;
+				timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
 			}
+			//<FS:HG> FS-1734 seperate name and text styles for moderator
+			if ( moderator_style_active )
+			{
+				timestamp_style.font.style(moderator_name_style);
+			}
+			//</FS:HG> FS-1734 seperate name and text styles for moderator
+			appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
+			prependNewLineState = false;
 		}
 
         // out the opening square bracket (if need)
@@ -1139,19 +1106,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		LLDate new_message_time = LLDate::now();
 
 		std::string tmp_from_name(chat.mFromName);
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-		//if (chat.mChatType == CHAT_TYPE_IM) tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
-		if (chat.mChatType == CHAT_TYPE_IM)
-		{
-			tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
-		}
-		else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-		{
-			tmp_from_name = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + tmp_from_name;
-		}
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-
-		if (mLastFromName == chat.mFromName
+		tmp_from_name = prefixIM(tmp_from_name, chat);
+		if (mLastFromName == tmp_from_name 
 			&& mLastFromID == chat.mFromID
 			&& mLastMessageTime.notNull() 
 			&& (new_message_time.secondsSinceEpoch() - mLastMessageTime.secondsSinceEpoch()) < 60.0
@@ -1187,17 +1143,9 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 		mLastFromName = chat.mFromName;
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		
 		//if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
-		if (chat.mChatType == CHAT_TYPE_IM)
-		{
-			mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
-		}
-		else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-		{
-			mLastFromName = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mLastFromName;
-		}
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		mLastFromName = prefixIM(mLastFromName, chat);
 		mLastFromID = chat.mFromID;
 		mLastMessageTime = new_message_time;
 		mIsLastMessageFromLog = message_from_log;
@@ -1262,8 +1210,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 		// </FS:Ansariel> Optional muted chat history
 
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-		//if(chat.mChatType == CHAT_TYPE_IM)
 		if(chat.mSourceType != CHAT_SOURCE_OBJECT && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)) // FS::LO Fix for FIRE-6334; Fade IM Text into background of chat history default setting should not be 0.5; made object IM text not fade into the background as per phoenix behavior.
 		{
 			body_message_params.color.alpha = FSIMChatHistoryFade;

@@ -894,14 +894,6 @@ BOOL FSFloaterIM::postBuild()
 		mInputEditor->setEnabled(FALSE);
 		mInputEditor->setLabel(LLTrans::getString("IM_unavailable_text_label"));
 	}
-
-	if ( im_session && im_session->isP2PSessionType())
-	{
-		// look up display name for window title
-		LLAvatarNameCache::get(im_session->mOtherParticipantID,
-							   boost::bind(&FSFloaterIM::onAvatarNameCache,
-										   this, _1, _2));
-	}
 	else
 	{
 		std::string session_name(LLIMModel::instance().getName(mSessionID));
@@ -1301,7 +1293,6 @@ void FSFloaterIM::updateMessages()
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
 		chat_args["hide_timestamps_nearby_chat"] = gSavedSettings.getBOOL("FSHideTimestampsIM");
-		chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
 		chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
 		// TODO: add "show_names_for_p2p_conv
 		

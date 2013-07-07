@@ -35,8 +35,7 @@
 
 class LLLineEditor;	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 
-//Chat log widget allowing addition of a message as a widget 
-// class LLChatHistory : public LLUICtrl	// <FS:Zi> FIRE-8600: TAB out of chat history
+//Chat log widget allowing addition of a message as a widget
 class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat history
 {
 	public:
@@ -63,8 +62,6 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 			//Header bottom padding
 			Optional<S32>			bottom_header_pad;
 
-			// Optional<LLTextBox::Params>	more_chat_text;	// <FS:Zi> FIRE-8600: TAB out of chat history
-
 			Optional<bool>			notify_unread_msg;
 
 			Params()
@@ -87,7 +84,6 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		FSChatHistory(const Params&);
 		friend class LLUICtrlFactory;
 
-		// /*virtual*/ void draw();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		/**
 		 * Redefinition of LLTextEditor::updateTextRect() to considerate text
 		 * left/right padding params.
@@ -103,8 +99,6 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		 * @return pointer to LLView header object.
 		 */
 		LLView* getHeader(const LLChat& chat,const LLStyle::Params& style_params, const LLSD& args);
-
-		// void onClickMoreText();	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 	public:
 		~FSChatHistory();
@@ -149,14 +143,6 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 	
 		std::string mDisplayName;
 		std::string mDisplayName_Username;
-
-// <FS:Zi> FIRE-8600: TAB out of chat history
-// 		class LLLayoutPanel*	mMoreChatPanel;
-//		LLTextBox*		mMoreChatText;
-//		LLTextEditor*	mEditor;
-// 		typedef std::set<std::string> unread_chat_source_t;
-// 		unread_chat_source_t mUnreadChatSources;
-// </FS:Zi>
 
 	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	public:
