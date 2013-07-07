@@ -73,6 +73,10 @@ void LLSpeaker::lookupName()
 {
 	if (mDisplayName.empty())
 	{
+		// <FS:Zi> Crash fix on login
+		if(!gCacheName)
+			return;
+		// </FS:Zi>
 		gCacheName->get(mID, false, boost::bind(&LLSpeaker::onNameCache, this, _1, _2, _3));
 	}
 }
