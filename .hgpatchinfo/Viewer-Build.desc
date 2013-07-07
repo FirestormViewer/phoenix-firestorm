@@ -11,3 +11,5 @@
 - fixed   : libpng is built with "Whole Program Optimization" and causing slow linker performance
     -> "MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance"
     -> causes the linker to abort the current run and start over
+- fixed   : viewer fails to compile with only the Windows 8 SDK installed
+- fixed   : viewer won't compile when bison v2.7.1 is installed
