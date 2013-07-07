@@ -744,6 +744,7 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 	mIsLastMessageFromLog(false),
 	mNotifyAboutUnreadMsg(p.notify_unread_msg)
 {
+	mLineSpacingPixels=llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"),0,36);
 }
 
 LLSD FSChatHistory::getValue() const
