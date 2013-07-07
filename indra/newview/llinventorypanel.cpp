@@ -235,6 +235,10 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 	// Scroller
 		LLRect scroller_view_rect = getRect();
 		scroller_view_rect.translate(-scroller_view_rect.mLeft, -scroller_view_rect.mBottom);
+		// <FS:Ansariel> Pull this magic number here so inventory scroll panel
+		//               doesn't get cut off on the left side!
+		scroller_view_rect.mLeft += 2;
+		// </FS:Ansariel>
 	LLScrollContainer::Params scroller_params(mParams.scroll());
 		scroller_params.rect(scroller_view_rect);
 		mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
