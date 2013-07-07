@@ -1691,6 +1691,9 @@ void LLPanelObjectInventory::reset()
 	p.root = NULL;
     p.options_menu = "menu_inventory.xml";
 
+	// <FS:Ansariel> Inventory specials
+	p.for_inventory = true;
+
 	mFolders = LLUICtrlFactory::create<LLFolderView>(p);
 
 	mFolders->setCallbackRegistrar(&mCommitCallbackRegistrar);
@@ -1852,6 +1855,9 @@ void LLPanelObjectInventory::createFolderViews(LLInventoryObject* inventory_root
 		p.font_color = item_color;
 		p.font_highlight_color = item_color;
 
+		// <FS:Ansariel> Inventory specials
+		p.for_inventory = true;
+
 		LLFolderViewFolder* new_folder = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 		new_folder->addToFolder(mFolders);
 		new_folder->toggleOpen();
@@ -1898,6 +1904,10 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 				p.tool_tip = p.name;
 				p.font_color = item_color;
 				p.font_highlight_color = item_color;
+
+				// <FS:Ansariel> Inventory specials
+				p.for_inventory = true;
+
 				view = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 				child_categories.put(new obj_folder_pair(obj,
 														 (LLFolderViewFolder*)view));
@@ -1913,6 +1923,10 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 				params.tool_tip = params.name;
 				params.font_color = item_color;
 				params.font_highlight_color = item_color;
+
+				// <FS:Ansariel> Inventory specials
+				params.for_inventory = true;
+
 				view = LLUICtrlFactory::create<LLFolderViewItem> (params);
 			}
 			view->addToFolder(folder);

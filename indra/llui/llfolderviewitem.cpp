@@ -117,7 +117,9 @@ LLFolderViewItem::Params::Params()
     text_pad("text_pad", 0),
     text_pad_right("text_pad_right", 0),
     arrow_size("arrow_size", 0),
-    max_folder_item_overlap("max_folder_item_overlap", 0)
+    max_folder_item_overlap("max_folder_item_overlap", 0),
+	// <FS:Ansariel> Inventory specials
+	for_inventory("for_inventory", false)
 {
 	// <FS:Ansariel> User-definable item height in folder views
 	static LLCachedControl<S32> FolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
@@ -155,7 +157,9 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
     mTextPad(p.text_pad),
     mTextPadRight(p.text_pad_right),
     mArrowSize(p.arrow_size),
-    mMaxFolderItemOverlap(p.max_folder_item_overlap)
+    mMaxFolderItemOverlap(p.max_folder_item_overlap),
+	// <FS:Ansariel> Inventory specials
+	mForInventory(p.for_inventory)
 {
 	if (!sColorSetInitialized)
 	{
@@ -330,9 +334,27 @@ void LLFolderViewItem::addToFolder(LLFolderViewFolder* folder)
 S32 LLFolderViewItem::arrange( S32* width, S32* height )
 {
 	// Only indent deeper items in hierarchy
-	mIndentation = (getParentFolder())
-		? getParentFolder()->getIndentation() + mLocalIndentation
-		: 0;
+	
+	// <FS:Ansariel> Inventory specials
+	//mIndentation = (getParentFolder())
+	//	? getParentFolder()->getIndentation() + mLocalIndentation
+	//	: 0;
+
+	if (mForInventory)
+	{
+		mIndentation = (getParentFolder()
+						&& getParentFolder()->getParentFolder() )
+			? getParentFolder()->getIndentation() + mLocalIndentation
+			: 0;
+	}
+	else
+	{
+		mIndentation = (getParentFolder())
+			? getParentFolder()->getIndentation() + mLocalIndentation
+			: 0;
+	}
+	// </FS:Ansariel>
+
 	if (mLabelWidthDirty)
 	{
 		mLabelWidth = getLabelXPos() + getLabelFontForStyle(mLabelStyle)->getWidth(mLabel) + getLabelFontForStyle(mLabelStyle)->getWidth(mLabelSuffix) + mLabelPaddingRight; 

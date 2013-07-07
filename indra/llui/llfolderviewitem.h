@@ -71,6 +71,10 @@ public:
                                                     text_pad_right,
                                                     arrow_size,
                                                     max_folder_item_overlap;
+
+		// <FS:Ansariel> Inventory specials
+		Optional<bool>								for_inventory;
+
 		Params();
 	};
 
@@ -122,6 +126,9 @@ protected:
 	
 	LLUIColor                   mFontColor;
 	LLUIColor                   mFontHighlightColor;
+
+	// <FS:Ansariel> Inventory specials
+	bool						mForInventory;
 
 	// For now assuming all colors are the same in derived classes.
 	static bool                 sColorSetInitialized;

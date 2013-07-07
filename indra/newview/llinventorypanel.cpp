@@ -200,7 +200,10 @@ LLFolderView * LLInventoryPanel::createFolderRoot(LLUUID root_id )
     p.show_item_link_overlays = mShowItemLinkOverlays;
     p.root = NULL;
     p.options_menu = "menu_inventory.xml";
-	
+
+	// <FS:Ansariel> Inventory specials
+	p.for_inventory = true;
+
     return LLUICtrlFactory::create<LLFolderView>(p);
 }
 
@@ -756,7 +759,10 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 
 	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
 	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
-	
+
+	// <FS:Ansariel> Inventory specials
+	params.for_inventory = true;
+
 	return LLUICtrlFactory::create<LLFolderViewFolder>(params);
 }
 
@@ -773,6 +779,9 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 
 	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
 	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+
+	// <FS:Ansariel> Inventory specials
+	params.for_inventory = true;
 	
 	return LLUICtrlFactory::create<LLFolderViewItem>(params);
 }
