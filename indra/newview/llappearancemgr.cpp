@@ -3887,14 +3887,14 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 	bool fUpdateAppearance = false;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
-		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
-
-		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
+		const LLInventoryItem* linked_item = gInventory.getLinkedItem(*it);
+		if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
 		{
 			continue;
 		}
 
 		fUpdateAppearance = true;
+		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
 		removeCOFItemLinks(linked_item_id);
 	}
 
@@ -3914,15 +3914,15 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 
 void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 {
-	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
+	const LLInventoryItem* linked_item = gInventory.getLinkedItem(id_to_remove);
+
+	if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
 	{
 		return;
 	}
 // [/RLVA:KB]
-
+	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 	removeCOFItemLinks(linked_item_id);
 	updateAppearanceFromCOF();
 }
