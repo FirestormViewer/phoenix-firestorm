@@ -129,8 +129,10 @@ LLAvatarListItem::~LLAvatarListItem()
 	if (mAvatarId.notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
+		// <FS> Remove our own observers
 		LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this);
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId, this); // may try to remove null observer
+		// </FS>
 	}
 
 	if (mAvatarNameCacheConnection.connected())
