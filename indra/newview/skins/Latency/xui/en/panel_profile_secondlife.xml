@@ -319,19 +319,6 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="partner_text"
          max_length="254" />
 
-        <button
-         top_pad="-18"
-         left="30"
-         height="18"
-         width="30"
-         layout="topleft"
-         follows="left|top"
-         name="bigimg"
-         halign="center"
-         label="&lt; &lt;"
-         label_selected="&gt;&gt;"
-         tool_tip="Open Full Size." />
-
         <text
          top_pad="8"
          left="6"
