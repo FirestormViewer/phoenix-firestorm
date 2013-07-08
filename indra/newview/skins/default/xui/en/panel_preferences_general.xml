@@ -406,6 +406,19 @@
     <check_box.commit_callback
      function="FS.ToggleSortContacts" />
   </check_box>
+    
+   <check_box
+     control_name="FSLegacyNametagPosition"
+     enabled_control="AvatarNameTagMode"
+     height="16"
+     label="Legacy nametag positioning"
+     layout="topleft"
+     left="30"
+     width="140"
+     top_pad="3"
+     name="FSLegacyNametagPosition"
+     tool_tip="If enabled, the nametag will stay at fixed at the avatar position and not follow the avatar head if it moves because of animations."
+     top_delta="0" />
 
   <!--    FIRE-5505 Commented out "Publish radar tags to LSL" for now
   <check_box
@@ -427,7 +440,7 @@
      height="13"
      layout="topleft"
      left="30"
-     top_pad="20"
+     top_pad="15"
      name="title_afk_text"
      width="260">
         Away timeout:

@@ -3184,6 +3184,23 @@ void LLVOAvatar::idleUpdateNameTagPosition(const LLVector3& root_pos_last)
 	local_camera_up.normalize();
 	local_camera_up = local_camera_up * inv_root_rot;
 
+	// <FS:Ansariel> Optional legacy nametag position
+	LLVector3 name_position;
+	static LLCachedControl<bool> fsLegacyNametagPosition(gSavedSettings, "FSLegacyNametagPosition");
+	if (fsLegacyNametagPosition)
+	{
+		local_camera_up.scaleVec((mBodySize + mAvatarOffset) * 0.5f);
+		local_camera_at.scaleVec((mBodySize + mAvatarOffset) * 0.5f);
+
+		name_position = mRoot->getWorldPosition();
+		name_position[VZ] -= mPelvisToFoot;
+		name_position[VZ] += ((mBodySize[VZ] + mAvatarOffset[VZ])* 0.55f);
+		name_position += (local_camera_up * root_rot) - (projected_vec(local_camera_at * root_rot, camera_to_av));	
+		name_position += pixel_up_vec * 15.f;
+	}
+	else
+	{
+	// </FS:Ansariel>
 	LLVector3 avatar_ellipsoid(mBodySize.mV[VX] * 0.4f,
 								mBodySize.mV[VY] * 0.4f,
 								mBodySize.mV[VZ] * NAMETAG_VERT_OFFSET_WEIGHT);
@@ -3200,9 +3217,14 @@ void LLVOAvatar::idleUpdateNameTagPosition(const LLVector3& root_pos_last)
 	
 	mCurRootToHeadOffset = lerp(mCurRootToHeadOffset, mTargetRootToHeadOffset, LLCriticalDamp::getInterpolant(0.2f));
 
-	LLVector3 name_position = mRoot->getLastWorldPosition() + (mCurRootToHeadOffset * root_rot);
+	// <FS:Ansariel> Optional legacy nametag position
+	//LLVector3 name_position = mRoot->getLastWorldPosition() + (mCurRootToHeadOffset * root_rot);
+	name_position = mRoot->getLastWorldPosition() + (mCurRootToHeadOffset * root_rot);
 	name_position += (local_camera_up * root_rot) - (projected_vec(local_camera_at * root_rot, camera_to_av));	
 	name_position += pixel_up_vec * NAMETAG_VERTICAL_SCREEN_OFFSET;
+	// <FS:Ansariel> Optional legacy nametag position
+	}
+	// </FS:Ansariel>
 
 	// <FS:Ansariel> Optional Z-offset correction for name tags
 	static LLCachedControl<S32> fsNameTagOffset(gSavedSettings, "FSNameTagZOffsetCorrection");
