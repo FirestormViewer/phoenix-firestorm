@@ -69,30 +69,27 @@
 #include "llviewerobjectlist.h"
 #include "llviewermessage.h"	// for handle_lure
 #include "llviewerregion.h"
-// <FS:Ansariel> [FS communication UI]
-#include "fsfloaterim.h"
-#include "fsfloaterimcontainer.h"
-// </FS:Ansariel> [FS communication UI]
 #include "lltrans.h"
 #include "llcallingcard.h"
 #include "llslurl.h"			// IDEVO
 #include "llsidepanelinventory.h"
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
+
+// Firestorm includes
+#include "fsfloaterim.h"
+#include "fsfloaterimcontainer.h"
+#include "fsfloaterprofile.h"
+#include "fslslbridge.h"
+#include "fswsassetblacklist.h"
+#include "llfloaterregioninfo.h"
+#include "llfloaterreporter.h"
+#include "llparcel.h"
+#include "lltrans.h"
+#include "llviewermenu.h"
+#include "llviewerparcelmgr.h"
+#include "llworld.h"
 #include "rlvactions.h"
 #include "rlvcommon.h"
-#include "rlvhandler.h" // <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
-// [/RLVa:KB]
-#include "fslslbridge.h"
-//<FS:KC legacy profiles>
-#include "llworld.h" //Added: Catznip-2.4.0g
-#include "llfloaterreporter.h" // [SL:KB] - Patch: UI-SidepanelPeople
-#include "llparcel.h" //Added: Catznip-2.4.0g
-#include "llviewerparcelmgr.h" //Added: Catznip-2.4.0g
-#include "fsfloaterprofile.h"
-#include "llfloaterregioninfo.h"
-#include "lltrans.h"
-#include "fswsassetblacklist.h"
-#include "llviewermenu.h"
+#include "rlvhandler.h"
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -206,9 +203,8 @@ static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
 	if (session_id != LLUUID::null)
 	{
 		// <FS:Ansariel> [FS communication UI]
-		//LLFloaterIMContainer::getInstance()->showConversation(session_id); <FS:TM> CHUI merge LL New
-		//LLIMFloater::show(session_id); <FS:TM> CHUI merge LL old
-		FSFloaterIM::show(session_id); //<FS:TM> FS orig
+		//LLFloaterIMContainer::getInstance()->showConversation(session_id);
+		FSFloaterIM::show(session_id);
 		// </FS:Ansariel> [FS communication UI]
 	}
 	make_ui_sound("UISndStartIM");
@@ -361,15 +357,12 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUID& float
 
 	if (session_id == LLUUID::null)
 	{
-		// <FS:Ansariel> [FS communication UI]
-		// return; <FS:TM> CHUI merge LL new
-		//LLIMFloater::show(session_id); <FS:TM> CHUI merge LL old
-		FSFloaterIM::show(session_id); //<FS:TM> CHUI merge FS orig
-		// </FS:Ansariel> [FS communication UI]
+		return;
 	}
 	
 	// <FS:Ansariel> [FS communication UI]
 	//FSFloaterIMContainer::getInstance()->showConversation(session_id);
+	FSFloaterIM::show(session_id);
 	// </FS:Ansariel> [FS communication UI]
 
 	make_ui_sound("UISndStartIM");
