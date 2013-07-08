@@ -28,6 +28,22 @@
 #include "llfontgl.h"	// just for StyleFlags enum
 #include "llfolderview.h"
 
+// <FS:ND> Reintegrate search by uuid/creator/descripting from Zi Ree after CHUI Merge
+// Interface to query extended object attributes,
+class FSFolderViewModelItem
+{
+public:
+	virtual std::string getSearchableCreator( void ) const
+	{ return ""; }
+	virtual std::string getSearchableDescription( void ) const
+	{ return ""; }
+	virtual std::string getSearchableUUID( void ) const
+	{ return ""; }
+	virtual std::string getSearchableAll( void ) const
+	{ return ""; }
+};
+// </FS:ND>
+
 // These are grouping of inventory types.
 // Order matters when sorting system folders to the top.
 enum EInventorySortGroup
@@ -131,7 +147,7 @@ public:
 
 // This is an abstract base class that users of the folderview classes
 // would use to bridge the folder view with the underlying data
-class LLFolderViewModelItem : public LLRefCount
+class LLFolderViewModelItem : public LLRefCount, public FSFolderViewModelItem
 {
 public:
 	LLFolderViewModelItem() { }

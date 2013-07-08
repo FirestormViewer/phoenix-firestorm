@@ -190,6 +190,14 @@ protected:
 
 	void purgeItem(LLInventoryModel *model, const LLUUID &uuid);
 	virtual void buildDisplayName() const {}
+
+	// <FS:ND> Reintegrate search by uuid/creator/descripting from Zi Ree after CHUI Merge
+public:
+	virtual std::string getSearchableCreator( void ) const;
+	virtual std::string getSearchableDescription( void ) const;
+	virtual std::string getSearchableUUID( void ) const;
+	virtual std::string getSearchableAll( void ) const;
+	// </FS:ND>
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

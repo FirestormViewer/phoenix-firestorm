@@ -146,16 +146,16 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 				searchLabel = listener->getSearchableName();
 				break;
 			case SUBST_TARGET_CREATOR:
-				//searchLabel = listener->getSearchableCreator();
+				searchLabel = listener->getSearchableCreator();
 				break;
 			case SUBST_TARGET_DESCRIPTION:
-				//searchLabel = listener->getSearchableDescription();
+				searchLabel = listener->getSearchableDescription();
 				break;
 			case SUBST_TARGET_UUID:
-				//searchLabel = listener->getSearchableUUID();
+				searchLabel = listener->getSearchableUUID();
 				break;
 			case SUBST_TARGET_ALL:
-				//searchLabel = listener->getSearchableAll();
+				searchLabel = listener->getSearchableAll();
 				break;
 			default:
 				llwarns << "Unknown search substring target: " << mFilterSubStringTarget << llendl;
