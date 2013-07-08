@@ -362,7 +362,10 @@ BOOL LLScriptEdCore::postBuild()
 		}
 	}
 	
-	LLColor3 color(0.5f, 0.0f, 0.15f);
+	// <FS:CR> Customizable function color
+	//LLColor3 color(0.5f, 0.5f, 0.15f);
+	LLColor3 color(LLUIColorTable::instance().getColor("ScriptFunction"));
+	// </FS:CR>
 	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
 	if (_NACL_LSLPreprocessor)
 		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
