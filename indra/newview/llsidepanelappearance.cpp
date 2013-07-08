@@ -232,11 +232,6 @@ void LLSidepanelAppearance::updateToVisibility(const LLSD &new_visibility)
 			gAgentCamera.changeCameraToDefault();
 			gAgentCamera.resetView();
 		}	
-		
-		if ( mEditWearable->getVisible() )
-		{
-			mEditWearable->revertChanges();
-		}
 	}
 }
 
