@@ -613,8 +613,7 @@ void LLGroupActions::ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent
 	LLSD payload;
 	payload["avatar_id"] = idAgent;
 	payload["group_id"] = idGroup;
-	std::string fullname;
-	gCacheName->getFullName(idAgent, fullname);
+	std::string fullname = LLSLURL("agent", idAgent, "inspect").getSLURLString();
 	args["AVATAR_NAME"] = fullname;
 	LLNotificationsUtil::add("EjectGroupMemberWarning",
 							 args,
