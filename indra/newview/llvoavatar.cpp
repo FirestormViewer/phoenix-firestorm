@@ -2942,13 +2942,12 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 					if (mClientTagData.has("name") && !mClientTagData["name"].asString().empty())
 					{
-						addNameTagLine(av_name.getDisplayName()+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+						addNameTagLine(av_name.getDisplayName()+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), (!av_name.getDisplayName().empty()) );
 					}
 					else
 					{
-						addNameTagLine(av_name.getDisplayName(), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+						addNameTagLine(av_name.getDisplayName(), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), true);
 					}
-					
 				}
 				
 				// Suppress SLID display if display name matches exactly (ugh)
@@ -2958,9 +2957,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 					// <FS:CR> FIRE-1061
 					LLColor4 username_color;
 					if (colorize_username)
+					{
 						username_color = LLUIColorTable::instance().getColor("NameTagUsername", LLColor4::white);
+					}
 					else
+					{
 						username_color = name_tag_color * 0.83f;
+					}
 					// </FS:CR>
 
 					// Show user name as legacy name if selected -- TS
@@ -2969,14 +2972,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 					{
 						username = LLCacheName::buildFullName( firstname->getString(), lastname->getString() );
 					}
-					addNameTagLine(username, username_color, LLFontGL::NORMAL,
-					LLFontGL::getFontSansSerifSmall());
+					addNameTagLine(username, username_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 				}
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 			}
 			else
 			{
-				addNameTagLine(RlvStrings::getAnonym(av_name), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+				addNameTagLine(RlvStrings::getAnonym(av_name), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), (!av_name.getDisplayName().empty()) );
 			}
 // [/RLVa:KB]
 		}
@@ -2988,7 +2990,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			if ( (fRlvShowNames) && (!isSelf()) )
 			{
 				full_name = RlvStrings::getAnonym(full_name);
-				addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font);
+				addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font, true);
 			}
 // [/RLVa:KB]
 			else // Only check for client tags when not RLV anon -AO
@@ -2996,11 +2998,11 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				if (mClientTagData.has("name") && !mClientTagData["name"].asString().empty())
 				{
 					lldebugs << "ClientTag is set! mClientTag=" << mClientTagData["name"].asString() << llendl;
-					addNameTagLine(full_name+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif());
+					addNameTagLine(full_name+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), true);
 				}
 				else
 				{
-					addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font);
+					addNameTagLine(full_name, name_tag_color, LLFontGL::NORMAL, font, true);
 				}
 			}
 		}
@@ -3118,7 +3120,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	}
 }
 
-void LLVOAvatar::addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font)
+// <FS:Ansariel> Fix nametag not properly updating when display name arrives
+//void LLVOAvatar::addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font)
+void LLVOAvatar::addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, bool is_name /* = false */)
+// </FS:Ansariel>
 {
 	llassert(mNameText);
 	if (mVisibleChat || mVisibleTyping)
@@ -3129,7 +3134,13 @@ void LLVOAvatar::addNameTagLine(const std::string& line, const LLColor4& color, 
 	{
 		mNameText->addLine(line, color, (LLFontGL::StyleFlags)style, font);
 	}
-    mNameIsSet |= !line.empty();
+	// <FS:Ansariel> Fix nametag not properly updating when display name arrives
+    //mNameIsSet |= !line.empty();
+	if (is_name)
+	{
+		mNameIsSet |= !line.empty();
+	}
+	// </FS:Ansariel>
 }
 
 void LLVOAvatar::clearNameTag()
