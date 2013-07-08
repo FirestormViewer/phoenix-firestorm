@@ -63,20 +63,12 @@
 #include "llavataractions.h"
 
 #include "lggcontactsets.h"
-//<FS:TM> CHUI Merge varify if any of the below are still needed
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychat.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaternearbychat.h"
-#include "fsfloaternearbychat.h" //<FS:TM> CHUI Merge can we get rid if this? line 903
+#include "fsfloaterim.h"
+#include "fsfloaternearbychat.h"
 // <FS:Ansariel> [FS communication UI]
-// </FS:Zi>
 #include "llfloaterreg.h"
 #include "llnotificationmanager.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h"
-#include "fsfloaterim.h"
-// <FS:Ansariel>
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -356,8 +348,8 @@ void LLAvatarTracker::setBuddyOnline(const LLUUID& id, bool is_online)
 	}
 	else
 	{
-		//<FS:LO> Fix possable log spam with a large friendslist when SL messes up.
-		//lldebugs << "!! No buddy info found for " << id 
+		//<FS:LO> Fix possible log spam with a large friendslist when SL messes up.
+		//llwarns << "!! No buddy info found for " << id 
 		lldebugs << "!! No buddy info found for " << id 
 				<< ", setting to " << (is_online ? "Online" : "Offline") << llendl;
 		//</FS:LO>
@@ -928,7 +920,6 @@ void LLAvatarTracker::formFriendship(const LLUUID& id)
 			// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
 			LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
 			// <FS:Ansariel> [FS communication UI]
-			//LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
 			FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
 			// </FS:Ansariel> [FS communication UI]
 			if (im_floater)
@@ -957,7 +948,6 @@ void LLAvatarTracker::processTerminateFriendship(LLMessageSystem* msg, void**)
 		// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
 		LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
 		// <FS:Ansariel> [FS communication UI]
-		//LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
 		FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
 		// </FS:Ansariel> [FS communication UI]
 		if (im_floater)

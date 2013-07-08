@@ -29,10 +29,6 @@
 
 #include "llchiclet.h"
 #include "lllayoutstack.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h" // for LLIMFloater <FS:TM> CHUI Merge LL removed this line
-#include "fsfloaterim.h"
-// </FS:Ansariel> [FS communication UI]
 #include "llpaneltopinfobar.h"
 #include "llsyswellwindow.h"
 

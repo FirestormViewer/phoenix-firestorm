@@ -362,8 +362,7 @@ bool LLIMChiclet::getShowNewMessagesIcon()
 void LLIMChiclet::onMouseDown()
 {
 	// <FS:Ansariel> [FS communication UI]
-	//LLFloaterIMSession::toggle(getSessionId()); <FS:TM> CHUI merge new
-	//LLIMFloater::toggle(getSessionId()); <FS:TM> CHUI Merge old
+	//LLFloaterIMSession::toggle(getSessionId());
 	FSFloaterIM::toggle(getSessionId());
 	// </FS:Ansariel> [FS communication UI]
 }
@@ -517,8 +516,7 @@ void LLChicletPanel::onCurrentVoiceChannelChanged(const LLUUID& session_id)
 			if (gSavedSettings.getBOOL("OpenIMOnVoice"))
 			{
 				// <FS:Ansariel> [FS communication UI]
-				//LLFloaterIMContainer::getInstance()->showConversation(session_id); <FS:TM> CHUI Merge new
-				//LLIMFloater::show(chiclet->getSessionId()); <FS:TM> CHUI Merge old
+				//LLFloaterIMContainer::getInstance()->showConversation(session_id);
 				FSFloaterIM::show(chiclet->getSessionId());
 				// </FS:Ansariel> [FS communication UI]
 			}
@@ -998,8 +996,7 @@ bool LLChicletPanel::isAnyIMFloaterDoked()
 			!= mChicletList.end(); it++)
 	{
 		// <FS:Ansariel> [FS communication UI]
-		//LLFloaterIMSession* im_floater = LLFloaterReg::findTypedInstance<LLFloaterIMSession>( <FS:TM> CHUI Merge new
-		//LLIMFloater* im_floater = LLFloaterReg::findTypedInstance<LLIMFloater>( <FS:TM> CHUI Merge old
+		//LLFloaterIMSession* im_floater = LLFloaterReg::findTypedInstance<LLFloaterIMSession>(
 		//		"impanel", (*it)->getSessionId());
 		FSFloaterIM* im_floater = LLFloaterReg::findTypedInstance<FSFloaterIM>(
 				"fs_impanel", (*it)->getSessionId());

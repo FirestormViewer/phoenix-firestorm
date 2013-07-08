@@ -488,23 +488,23 @@ void LLAvatarList::refresh()
 			{
 				// *NOTE: If you change the UI to show a different string,
 				// be sure to change the filter code below.
-				
-				// <FS:TM> CHUI merge LL old begin v
-				//if (LLRecentPeople::instance().isAvalineCaller(buddy_id))
-				//{
-				//	const LLSD& call_data = LLRecentPeople::instance().getData(buddy_id);
-				//	addAvalineItem(buddy_id, call_data["session_id"].asUUID(), call_data["call_number"].asString());
-				//}
-				//else
-				//{
-				// <FS:TM CHUI merge old end ^
-				
-				//	std::string display_name = av_name.getDisplayName(); <FS:TM> CHUI merge new
-				addNewItem(buddy_id, 
-						//display_name.empty() ? waiting_str : display_name,  <FS:TM> CHUI merge new
-					       //av_name.mDisplayName.empty() ? waiting_str : av_name.mDisplayName, <FS:TM> CHUI merge old
-					       av_name.getCompleteName(), //<FS:TM> FS orig
-					       LLAvatarTracker::instance().isBuddyOnline(buddy_id));
+				if (LLRecentPeople::instance().isAvalineCaller(buddy_id))
+				{
+					const LLSD& call_data = LLRecentPeople::instance().getData(buddy_id);
+					addAvalineItem(buddy_id, call_data["session_id"].asUUID(), call_data["call_number"].asString());
+				}
+				else
+				{
+					// <FS:AO> Always show usernames on avatar lists
+					//std::string display_name = av_name.getDisplayName();
+					//addNewItem(buddy_id, 
+					//		display_name.empty() ? waiting_str : display_name,
+					//		   LLAvatarTracker::instance().isBuddyOnline(buddy_id));
+					addNewItem(buddy_id, 
+							   av_name.getCompleteName(),
+							   LLAvatarTracker::instance().isBuddyOnline(buddy_id));
+					// </FS:AO>
+				}
 				modified = true;
 				nadded++;
 			}
@@ -529,9 +529,10 @@ void LLAvatarList::refresh()
 			const LLUUID& buddy_id = it->asUUID();
 			LLAvatarName av_name;
 			have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
-			//if (!findInsensitive(av_name.mDisplayName, mNameFilter)) <FS:TM> CHUI merge old
-			//if (!findInsensitive(av_name.getDisplayName(), mNameFilter)) <FS:TM> CHUI merge new
-			if (!findInsensitive(av_name.getCompleteName(), mNameFilter)) // <FS:TM> FS orig
+			// <FS:AO> Always show usernames on avatar lists
+			//if (!findInsensitive(av_name.getDisplayName(), mNameFilter))
+			if (!findInsensitive(av_name.getCompleteName(), mNameFilter))
+			// </FS:AO>
 			{
 				removeItemByUUID(buddy_id);
 				modified = true;
