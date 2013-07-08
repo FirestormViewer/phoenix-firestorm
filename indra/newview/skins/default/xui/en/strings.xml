@@ -474,6 +474,7 @@ Please try logging in again in a minute.</string>
 	<string name="backup_files">Object Backups</string>
 
   <!-- LSL Usage Hover Tips -->
+	<string name="LSLTipSleepTime" translate="false">Sleeps script for [SLEEP_TIME] seconds.</string>
 	<!-- (FS:CR) LSL Hover Tips have been moved into scriptlibrary_*.xml so they can be dynamically updated -->
 
   <!-- Avatar busy/away mode -->

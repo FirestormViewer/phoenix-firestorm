@@ -339,21 +339,21 @@ BOOL LLScriptEdCore::postBuild()
 			//std::string desc_name = "LSLTipText_";
 			//desc_name += name;
 			//std::string desc = LLTrans::getString(desc_name);
+			std::string desc = i->mDesc;
 			
-			//F32 sleep_time = i->mSleepTime;
-			//if( sleep_time )
-			//{
-			//	desc += "\n";
+			F32 sleep_time = i->mSleepTime;
+			if( sleep_time )
+			{
+				desc += "\n";
 			
-			//	LLStringUtil::format_map_t args;
-			//	args["[SLEEP_TIME]"] = llformat("%.1f", sleep_time );
-			//	desc += LLTrans::getString("LSLTipSleepTime", args);
-			//}
+				LLStringUtil::format_map_t args;
+				args["[SLEEP_TIME]"] = llformat("%.1f", sleep_time );
+				desc += LLTrans::getString("LSLTipSleepTime", args);
+			}
 			
 			// A \n linefeed is not part of xml. Let's add one to keep all
 			// the tips one-per-line in strings.xml
-			//LLStringUtil::replaceString( desc, "\\n", "\n" );
-			std::string desc = i->mDesc;
+			LLStringUtil::replaceString( desc, ";", "\n" );
 			
 			llinfos << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << llendl;
 			// </FS:CR>
@@ -363,15 +363,15 @@ BOOL LLScriptEdCore::postBuild()
 	}
 	
 	LLColor3 color(0.5f, 0.0f, 0.15f);
-	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
+	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
 	if (_NACL_LSLPreprocessor)
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 // <FS:CR> OSSL Keywords
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
 	if (LLGridManager::getInstance()->isInAuroraSim())
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_aa.ini"), funcs, tooltips, color);
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
 // </FS:CR>
 	
@@ -396,10 +396,14 @@ BOOL LLScriptEdCore::postBuild()
 	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	if(mPostEditor)
 	{
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 		// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+		if (LLGridManager::getInstance()->isInOpenSim())
+			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
+		if (LLGridManager::getInstance()->isInAuroraSim())
+			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
 		// </FS:CR>
 	}

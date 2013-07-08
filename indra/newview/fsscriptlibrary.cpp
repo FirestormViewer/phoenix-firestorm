@@ -28,7 +28,8 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsscriptlibrary.h"
 
-#include "llsdserialize.h"
+#include "lluictrlfactory.h"
+#include "llxmlnode.h"
 
 LLScriptLibrary::LLScriptLibrary()
 {
@@ -36,48 +37,64 @@ LLScriptLibrary::LLScriptLibrary()
 
 void LLScriptLibrary::loadLibrary(const std::string& filename)
 {
-	llinfos << "Loading script library from " << filename << llendl;
-	llifstream file(filename);
-	LLSD func_list;
-	if (file.is_open())
+	LLXMLNodePtr xml_root;
+	if ( (!LLUICtrlFactory::getLayeredXMLNode(filename, xml_root)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
 	{
-		if(LLSDSerialize::fromXMLDocument(func_list, file) != LLSDParser::PARSE_FAILURE)
+		llwarns << "Could not read the script library (" << filename << ")" << llendl;
+		return;
+	}
+	llinfos << "Loading script library at: " << filename << llendl;
+	for (LLXMLNode* pNode = xml_root->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
+	{
+		if (pNode->hasName("functions"))
 		{
-			for(LLSD::map_iterator func_itr = func_list.beginMap(); func_itr != func_list.endMap(); ++func_itr)
+			std::string function;
+			for (LLXMLNode* pStringNode = pNode->getFirstChild(); pStringNode != NULL; pStringNode = pStringNode->getNextSibling())
 			{
-				LLSD const & func_map = func_itr->second;
-				bool god_only = false;
-				if (func_map.has("gods-only"))
+				if (!pStringNode->getAttributeString("name", function) ||
+					!pStringNode->hasName("function"))
 				{
-					god_only = func_map["gods-only"].asBoolean();
+					continue;
 				}
-				addFunction(func_itr->first,
-							func_map["desc"].asString(),
-							god_only);
+				bool god_only = false;
+				std::string tool_tip;
+				F32 sleep_time;
+				F32 energy;
+				if (!pStringNode->getAttribute_bool("god-only", god_only))
+				{
+					god_only = false;
+				}
+				if (!pStringNode->getAttributeString("desc", tool_tip))
+				{
+					// TODO: Should this be localized? Tooltips aren't translated. <FS:CR>
+					tool_tip = "No Description available";
+				}
+				if (!pStringNode->getAttributeF32("sleep", sleep_time))
+				{
+					sleep_time = 0;
+				}
+				if (!pStringNode->getAttributeF32("energy", energy))
+				{
+					energy = 10;
+				}
+				addFunction(function, tool_tip, sleep_time, energy, god_only);
 			}
-			file.close();
-		}
-		else
-		{
-			llwarns << "Failed to parse " << filename << llendl;
-			file.close();
 		}
 	}
-	else
-	{
-		llwarns << "Failed to open " << filename << llendl;
-	}
+
 }
 
-void LLScriptLibrary::addFunction(std::string name, std::string desc, bool god_only)
+void LLScriptLibrary::addFunction(std::string name, std::string desc, F32 sleep, F32 energy, bool god_only)
 {
-    LLScriptLibraryFunction func(name, desc, god_only);
+    LLScriptLibraryFunction func(name, desc, sleep, energy, god_only);
     mFunctions.push_back(func);
 }
 
-LLScriptLibraryFunction::LLScriptLibraryFunction(std::string name, std::string desc, bool god_only)
+LLScriptLibraryFunction::LLScriptLibraryFunction(std::string name, std::string desc, F32 sleep, F32 energy, bool god_only)
 :	mName(name),
 mDesc(desc),
+mSleepTime(sleep),
+mEnergy(energy),
 mGodOnly(god_only)
 {
 }
