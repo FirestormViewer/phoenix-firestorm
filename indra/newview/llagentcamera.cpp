@@ -2898,8 +2898,6 @@ S32 LLAgentCamera::directionToKey(S32 direction)
 }
 
 // <FS:Ansariel> FIRE-7758: Save/load camera position feature
-// Copyright (C) 2012, Ansariel Hiller @ Second Life for Phoenix Firestorm Viewer
-// This code is licensed unter the GNU Lesser General Public License version 2.1
 void LLAgentCamera::storeCameraPosition()
 {
 	mStoredCameraPos = getCameraPositionGlobal();
@@ -2935,4 +2933,3 @@ void LLAgentCamera::loadCameraPosition()
 // </FS:Ansariel> FIRE-7758: Save/load camera position feature
 
 // EOF
-

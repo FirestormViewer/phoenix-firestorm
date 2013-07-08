@@ -245,8 +245,10 @@ private:
 const F32 LLAgent::MIN_AFK_TIME = 10.0f;
 
 const F32 LLAgent::TYPING_TIMEOUT_SECS = 5.f;
-BOOL LLAgent::ignorePrejump = 0;
-BOOL LLAgent::PhoenixForceFly;
+// <FS> Ignore prejump and always fly
+BOOL LLAgent::ignorePrejump = FALSE;
+BOOL LLAgent::fsAlwaysFly;
+// </FS> Ignore prejump and always fly
 
 std::map<std::string, std::string> LLAgent::sTeleportErrorMessages;
 std::map<std::string, std::string> LLAgent::sTeleportProgressMessages;
@@ -461,24 +463,26 @@ LLAgent::LLAgent() :
 	mMoveTimer.stop();
 }
 
+// <FS> Ignore prejump and always fly
 void LLAgent::updateIgnorePrejump(const LLSD &data)
 {
 	ignorePrejump = data.asBoolean();
 }
 
-void LLAgent::updatePhoenixForceFly(const LLSD &data)
+void LLAgent::updateFSAlwaysFly(const LLSD &data)
 {
-	PhoenixForceFly = data.asBoolean();
-	if (PhoenixForceFly == TRUE) 
+	fsAlwaysFly = data.asBoolean();
+	if (fsAlwaysFly) 
 	{
 		llinfos << "Enabling Fly Override" << llendl;
-		if (gSavedSettings.getBOOL("FirstUseFlyOverride") == TRUE)
-   		{
-   			LLNotificationsUtil::add("FirstUseFlyOverride");
+		if (gSavedSettings.getBOOL("FirstUseFlyOverride"))
+		{
+			LLNotificationsUtil::add("FirstUseFlyOverride");
 			gSavedSettings.setBOOL("FirstUseFlyOverride", FALSE);
 		}
 	}
 }
+// </FS> Ignore prejump and always fly
 
 // Requires gSavedSettings to be initialized.
 //-----------------------------------------------------------------------------
@@ -504,8 +508,8 @@ void LLAgent::init()
 	mIsDoSendMaturityPreferenceToServer = true;
 	ignorePrejump = gSavedSettings.getBOOL("FSIgnoreFinishAnimation");
 	gSavedSettings.getControl("FSIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
-	PhoenixForceFly = gSavedSettings.getBOOL("FSAlwaysFly");
-	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updatePhoenixForceFly, this, _2));
+	fsAlwaysFly = gSavedSettings.getBOOL("FSAlwaysFly");
+	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updateFSAlwaysFly, this, _2));
 	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
 	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
 
@@ -786,8 +790,13 @@ BOOL LLAgent::canFly()
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) return FALSE;
 // [/RLVa:KB]
 	if (isGodlike()) return TRUE;
-	//LGG always fly code
-	if(PhoenixForceFly) return TRUE;
+	// <FS> Always fly
+	if (fsAlwaysFly)
+	{
+		return TRUE;
+	}
+	// </FS>
+
 	LLViewerRegion* regionp = getRegion();
 	if (regionp && regionp->getBlockFly()) return FALSE;
 	
@@ -2271,11 +2280,6 @@ void LLAgent::endAnimationUpdateUI()
 		gMenuBarView->setVisible(TRUE);
 		// <FS:Ansariel> Separate navigation and favorites panel
 		//LLNavigationBar::getInstance()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-		// <FS:Zi> Is done inside XUI now, using visibility_control
-		// LLNavigationBar::getInstance()->showNavigationPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-		// LLNavigationBar::getInstance()->showFavoritesPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-		// </FS:Zi>
-		// </FS:Ansariel> Separate navigation and favorites panel
 		gStatusBar->setVisibleForMouselook(true);
 
 		if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
@@ -2406,11 +2410,6 @@ void LLAgent::endAnimationUpdateUI()
 		gMenuBarView->setVisible(FALSE);
 		// <FS:Ansariel> Separate navigation and favorites panel
 		//LLNavigationBar::getInstance()->setVisible(FALSE);
-		// <FS:Zi> Is done inside XUI now, using visibility_control
-		// LLNavigationBar::getInstance()->showNavigationPanel(FALSE);
-		// LLNavigationBar::getInstance()->showFavoritesPanel(FALSE);
-		// </FS:Zi>
-		// </FS:Ansariel> Separate navigation and favorites panel
 		gStatusBar->setVisibleForMouselook(false);
 
 		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);
@@ -3105,6 +3104,7 @@ void LLAgent::sendMaturityPreferenceToServer(U8 pPreferredMaturity)
 		}
 	}
 }
+
 BOOL LLAgent::getAdminOverride() const	
 { 
 	return mAgentAccess->getAdminOverride(); 
@@ -3604,7 +3604,7 @@ void LLAgent::processAgentDropGroup(LLMessageSystem *msg, void **)
 		LLGroupMgr::getInstance()->clearGroupData(group_id);
 		// close the floater for this group, if any.
 		
-		// AO: Don't assume that because we drop a group, we want floaters to change.
+		// <FS:AO> Don't assume that because we drop a group, we want floaters to change.
 		//LLGroupActions::closeGroup(group_id);
 	}
 	else
@@ -3708,7 +3708,7 @@ LLHTTPRegistration<LLAgentDropGroupViewerNode>
 
 // static
 void LLAgent::processAgentGroupDataUpdate(LLMessageSystem *msg, void **)
-{	
+{
 	LLUUID	agent_id;
 
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id );
@@ -3764,7 +3764,7 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 		if(body.has("body"))
 			body = body["body"];
 		LLUUID agent_id = body["AgentData"][0]["AgentID"].asUUID();
-		
+
 		if (agent_id != gAgentID)
 		{
 			llwarns << "processAgentGroupDataUpdate for agent other than me" << llendl;
@@ -3807,7 +3807,7 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 				gAgent.mGroups.put(group);
 			}
 			if (need_floater_update)
-			{			
+			{
 				update_group_floaters(group.mID);
 			}
 		}
@@ -3847,6 +3847,7 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		gAgent.mGroupPowers = 0;
 		gAgent.mGroupName.clear();
 	}
+	// <FS> Restore to world
 	if (gAgent.restoreToWorld)
 	{
 		//This fires if we're trying to restore an item to world using the correct group.
@@ -3887,6 +3888,8 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		msg->addUUIDFast(_PREHASH_GroupID, gAgent.restoreToWorldGroup);
 		gAgent.sendReliableMessage();
 	}
+	// </FS>
+
 	update_group_floaters(active_id);
 
 	// <FS:Ansariel> Fire event for group title overview
@@ -4159,7 +4162,7 @@ void LLAgent::clearVisualParams(void *data)
 //---------------------------------------------------------------------------
 // Teleport
 //---------------------------------------------------------------------------
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 bool LLAgent::teleportBridgeLocal(LLVector3& pos_local)
 {
 	std::stringstream msgstream;
@@ -4175,9 +4178,8 @@ bool LLAgent::teleportBridgeGlobal(const LLVector3d& pos_global)
 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
 
 	return teleportBridgeLocal(pos_local);
-
 }
-//-TT Client LSL Bridge 
+// </FS:TT> Client LSL Bridge 
 
 // teleportCore() - stuff to do on any teleport
 // protected
@@ -4221,7 +4223,7 @@ bool LLAgent::teleportCore(bool is_local)
 	// hide the Region/Estate floater
 	LLFloaterReg::hideInstance("region_info");
 
-	// hide the Search floater (TS: FIRE-2886, backing out STORM-1474)
+	// minimize the Search floater (STORM-1474)
 	{
 		LLFloater* instance = LLFloaterReg::getInstance("search");
 
@@ -4269,7 +4271,7 @@ bool LLAgent::teleportCore(bool is_local)
 		// bit of a hack -KC
 		KCWindlightInterface::instance().setTPing(true);
 	}
-	make_ui_sound("UISndTeleportOut"); //AO
+	make_ui_sound("UISndTeleportOut");
 	
 	// MBW -- Let the voice client know a teleport has begun so it can leave the existing channel.
 	// This was breaking the case of teleporting within a single sim.  Backing it out for now.
@@ -4568,12 +4570,12 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		msg->addVector3Fast(_PREHASH_LookAt, pos);
 		sendReliableMessage();
 	}
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 	if (gSavedSettings.getBOOL("UseLSLBridge") && isLocal)
 	{
 		teleportBridgeGlobal(pos_global);
 	}
-//-TT 
+// </FS:TT>
 }
 
 // Teleport to global position, but keep facing in the same direction 
@@ -4600,19 +4602,23 @@ void LLAgent::doTeleportViaLocationLookAt(const LLVector3d& pos_global)
 	U64 region_handle = to_region_handle(pos_global);
 // <FS:CR> Aurora-sim var region teleports
 	LLSimInfo* simInfo = LLWorldMap::instance().simInfoFromHandle(region_handle);
-	if(simInfo)
+	if (simInfo)
+	{
 		region_handle = simInfo->getHandle();
+	}
 // </FS:CR>
 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
 	teleportRequest(region_handle, pos_local, getTeleportKeepsLookAt());
 
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 	if (gSavedSettings.getBOOL("UseLSLBridge"))
 	{
 		if (region_handle == to_region_handle(getPositionGlobal()))
+		{
 			teleportBridgeLocal(pos_local);
+		}
 	}
-//-TT 
+// </FS:TT>
 }
 
 void LLAgent::setTeleportState(ETeleportState state)
@@ -5106,21 +5112,25 @@ void LLAgent::renderAutoPilotTarget()
 	}
 }
 
-// Firestorm Phantom
+// <FS> Phantom mode
 void LLAgent::togglePhantom()
 {
 	mPhantom = !mPhantom;
-	if(mPhantom)
+	if (mPhantom)
+	{
 		LLNotificationsUtil::add("PhantomOn", LLSD());
+	}
 	else
+	{
 		LLNotificationsUtil::add("PhantomOff", LLSD());
+	}
 }
 
 bool LLAgent::getPhantom() const
 {
 	return mPhantom;
 }
-// Firestorm Phantom
+// </FS> Phantom mode
 
 /********************************************************************************/
 
