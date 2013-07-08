@@ -5438,12 +5438,22 @@ S32 LLViewerWindow::getChatConsoleBottomPad()
 
 	if(gToolBarView)
 	{
-		// FS:Ansariel This gets called every frame, so don't call getChild/findChild every time!
-		offset += gToolBarView->getBottomToolbar()->getRect().getHeight();
-		LLView* chat_stack = gToolBarView->getBottomChatStack();
-		if (chat_stack)
+		// <FS:KC> Tie console to legacy snap edge when possible
+		static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+		if (legacy_snap)
 		{
-			offset = chat_stack->getRect().getHeight();
+			LLRect snap_rect = gFloaterView->getSnapRect();
+			offset = snap_rect.mBottom;
+		}// </FS:KC> Tie console to legacy snap edge when possible
+		else
+		{
+			// FS:Ansariel This gets called every frame, so don't call getChild/findChild every time!
+			offset += gToolBarView->getBottomToolbar()->getRect().getHeight();
+			LLView* chat_stack = gToolBarView->getBottomChatStack();
+			if (chat_stack)
+			{
+				offset = chat_stack->getRect().getHeight();
+			}
 		}
 	}
 	// </FS:Ansariel>
@@ -5466,9 +5476,6 @@ LLRect LLViewerWindow::getChatConsoleRect()
 	console_rect.mLeft   += CONSOLE_PADDING_LEFT; 
 
 	// <FS:Ansariel> This also works without relog!
-	//static const BOOL CHAT_FULL_WIDTH = gSavedSettings.getBOOL("ChatFullWidth");
-
-	//if (CHAT_FULL_WIDTH)
 	static LLCachedControl<bool> chatFullWidth(gSavedSettings, "ChatFullWidth");
 	if (chatFullWidth)
 	// </FS:Ansariel>
@@ -5491,18 +5498,36 @@ LLRect LLViewerWindow::getChatConsoleRect()
 	// <FS:Ansariel> Push the chat console out of the way of the vertical toolbars
 	if (gToolBarView)
 	{
-		LLToolBar* toolbar_left = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_LEFT);
-		if (toolbar_left && toolbar_left->hasButtons())
+		// <FS:KC> Tie console to legacy snap edge when possible
+		static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+		if (legacy_snap)
 		{
-			console_rect.mLeft += toolbar_left->getRect().getWidth();
-		}
+			LLRect snap_rect = gFloaterView->getSnapRect();
+			if (console_rect.mRight > snap_rect.mRight)
+			{
+				console_rect.mRight = snap_rect.mRight;
+			}
 
-		LLToolBar* toolbar_right = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_RIGHT);
-		LLRect toolbar_right_screen_rect;
-		toolbar_right->localRectToScreen(toolbar_right->getRect(), &toolbar_right_screen_rect);
-		if (toolbar_right && toolbar_right->hasButtons() && console_rect.mRight >= toolbar_right_screen_rect.mLeft)
+			if (console_rect.mLeft < snap_rect.mLeft)
+			{
+				console_rect.mLeft = snap_rect.mLeft;
+			}
+		}// </FS:KC> Tie console to legacy snap edge when possible
+		else
 		{
-			console_rect.mRight -= toolbar_right->getRect().getWidth();
+			LLToolBar* toolbar_left = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_LEFT);
+			if (toolbar_left && toolbar_left->hasButtons())
+			{
+				console_rect.mLeft += toolbar_left->getRect().getWidth();
+			}
+
+			LLToolBar* toolbar_right = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_RIGHT);
+			LLRect toolbar_right_screen_rect;
+			toolbar_right->localRectToScreen(toolbar_right->getRect(), &toolbar_right_screen_rect);
+			if (toolbar_right && toolbar_right->hasButtons() && console_rect.mRight >= toolbar_right_screen_rect.mLeft)
+			{
+				console_rect.mRight -= toolbar_right->getRect().getWidth();
+			}
 		}
 	}
 	// </FS:Ansariel>
