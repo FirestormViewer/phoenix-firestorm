@@ -5922,17 +5922,6 @@
       <key>Value</key>
       <real>0.0</real>
     </map>
-    <key>ForceInitialCOFDelay</key>
-    <map>
-      <key>Comment</key>
-      <string>Number of seconds to delay initial processing of COF contents</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <integer>0.0</integer>
-    </map>
     <key>ForceShowGrid</key>
     <map>
       <key>Comment</key>
@@ -5969,17 +5958,6 @@
       <integer>255</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>ForceMissingType</key>
-    <map>
-      <key>Comment</key>
-      <string>Force this wearable type to be missing from COF</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>255</integer>
     </map>
     <key>FreezeTime</key>
     <map>
@@ -15891,17 +15869,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>VerifyInitialWearables</key>
-    <map>
-      <key>Comment</key>
-      <string>Compares the initial wearables to the COF contents to determine which one to use for the intial outfit</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <boolean>0</boolean>
     </map>
     <key>VertexShaderEnable</key>
     <map>
