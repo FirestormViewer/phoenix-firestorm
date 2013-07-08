@@ -35,8 +35,7 @@
 
 #include "llagent.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
-//#include "llimfloater.h" <FS:TM> CHUI Merge old
+//#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llimview.h"
@@ -119,7 +118,6 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 // [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
 		LLIMModel::instance().logToFile(file_name, from, from_id, message);
 // [/SL:KB]
-		//-TT 2.8.2 merge changes - left out for now
 		//// Build a new format username or firstname_lastname for legacy names
 		//// to use it for a history log filename.
 		//std::string user_name = LLCacheName::buildUsername(session_name);
@@ -256,8 +254,7 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChatSourceType type)
 {
 	// <FS:Ansariel> [FS communication UI]
-    //LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"); <FS:TM> CHUI Merge new (including odd white space)
-	//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance(); <FS:TM> CHUI Merge old 
+    //LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
 	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
 	// </FS:Ansariel> [FS communication UI]
 	if (nearby_chat)
@@ -349,8 +346,7 @@ void LLHandlerUtil::addNotifPanelToIM(const LLNotificationPtr& notification)
 void LLHandlerUtil::updateIMFLoaterMesages(const LLUUID& session_id)
 {
 	// <FS:Ansariel> [FS communication UI]
-	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id); <FS:TM> CHUI Merge new
-	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id); <FS:TM> CHUI Merge old
+	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
 	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
 	// </FS:Ansariel> [FS communication UI]
 	if (im_floater != NULL && im_floater->getVisible())

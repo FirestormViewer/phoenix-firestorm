@@ -40,10 +40,10 @@
 #include <set>
 #include <string>
 #include <vector>
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 #include "llviewerobjectlist.h"
 #include "llvoavatarself.h"
-//-TT
+// </FS:TT>
 
 class LLInventoryObserver;
 class LLInventoryObject;
@@ -134,11 +134,11 @@ private:
 	LLUUID mLibraryRootFolderID;
 	LLUUID mLibraryOwnerID;	
 
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 	item_array_t mItemArray;
 	item_array_t mObjArray;
 	LLDynamicArray<std::string> mAttPoints;
-//-TT
+// </FS:TT>
 	
 	//--------------------------------------------------------------------
 	// Structure
@@ -281,7 +281,7 @@ public:
 	const LLUUID& getLinkedItemID(const LLUUID& object_id) const;
 	LLViewerInventoryItem* getLinkedItem(const LLUUID& object_id) const;
 
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 	void wearItemsOnAvatar(LLInventoryCategory* category);
 	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
 
@@ -289,7 +289,7 @@ private:
 	void wearWearablesOnAvatar(LLUUID category_id);
 	void wearAttachmentsOnAvatar(LLUUID category_id);
 	void wearGesturesOnAvatar(LLUUID category_id);
-//-TT
+// </FS:TT>
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
 
@@ -477,8 +477,6 @@ public:
 	// notifyObservers() manually to update regardless of whether state change 
 	// has been indicated.
 	void idleNotifyObservers();
-	//-TT 2.6.9 - function deprecated
-	void notifyObservers(const std::string service_name);
 	// Call to explicitly update everyone on a new state.
 	void notifyObservers();
 

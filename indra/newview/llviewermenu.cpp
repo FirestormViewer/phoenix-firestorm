@@ -9988,7 +9988,7 @@ void initialize_menus()
 
 	view_listener_t::addEnable(new LLUploadCostCalculator(), "Upload.CalculateCosts");
 
-	// [CHUI Merge]
+	// <FS:Ansariel> [FS communication UI]
 	//enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
 
 	// Agent

@@ -1453,13 +1453,6 @@ void LLInventoryModel::idleNotifyObservers()
 	notifyObservers();
 }
 
-//-TT 2.6.9 - function deprecated
-void LLInventoryModel::notifyObservers(const std::string service_name)
-{
-	llinfos << "Calling deprecated function <notifyObservers(const std::string service_name)> with (" << service_name << ") parameter" << llendl;
-	notifyObservers();
-}
-
 // Call this method when it's time to update everyone on a new state.
 void LLInventoryModel::notifyObservers()
 {

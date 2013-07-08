@@ -906,8 +906,7 @@ void LLPanelMainInventory::onFocusReceived()
 
 void LLPanelMainInventory::setFilterTextFromFilter() 
 { 
-	//mFilterText = mActivePanel->getFilter()->getFilterText(); <FS:TM> CHUI Merge old
-	//mFilterText = mActivePanel->getFilter().getFilterText(); <FS:TM> CHUI Merge new
+	//mFilterText = mActivePanel->getFilter().getFilterText();
 	// ## Zi: Filter dropdown
 	// this method gets called by the filter subwindow (once every frame), so we update our combo box here
 	LLInventoryFilter &filter = mActivePanel->getFilter();

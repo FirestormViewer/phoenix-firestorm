@@ -4356,7 +4356,6 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		// Check whether the item being dragged from active inventory panel
 		// passes the filter of the destination panel.
 		// <FS:Ansariel> Allow drag and drop in inventory regardless of filter (e.g. Recent)
-		// <FS:TM> CHUI merge LL changed below, kept commented out
 		//if (accept && active_panel)
 		//{
 		//	LLFolderViewItem* fv_item =   active_panel->getItemByID(inv_item->getUUID());
@@ -5786,25 +5785,26 @@ bool confirm_attachment_rez(const LLSD& notification, const LLSD& response)
 
 		if (itemp)
 		{
-//			/*
-//			{
-//				U8 attachment_pt = notification["payload"]["attachment_point"].asInteger();
-//				LLMessageSystem* msg = gMessageSystem;
-//				msg->newMessageFast(_PREHASH_RezSingleAttachmentFromInv);
-//				msg->nextBlockFast(_PREHASH_AgentData);
-//				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-//				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-//				msg->nextBlockFast(_PREHASH_ObjectData);
-//				msg->addUUIDFast(_PREHASH_ItemID, itemp->getUUID());
-//				msg->addUUIDFast(_PREHASH_OwnerID, itemp->getPermissions().getOwner());
-//				msg->addU8Fast(_PREHASH_AttachmentPt, attachment_pt);
-//				pack_permissions_slam(msg, itemp->getFlags(), itemp->getPermissions());
-//				msg->addStringFast(_PREHASH_Name, itemp->getName());
-//				msg->addStringFast(_PREHASH_Description, itemp->getDescription());
-//				msg->sendReliable(gAgent.getRegion()->getHost());
-//				return false;
-//			}
-//			*/
+			/*
+			{
+				U8 attachment_pt = notification["payload"]["attachment_point"].asInteger();
+				
+				LLMessageSystem* msg = gMessageSystem;
+				msg->newMessageFast(_PREHASH_RezSingleAttachmentFromInv);
+				msg->nextBlockFast(_PREHASH_AgentData);
+				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+				msg->nextBlockFast(_PREHASH_ObjectData);
+				msg->addUUIDFast(_PREHASH_ItemID, itemp->getUUID());
+				msg->addUUIDFast(_PREHASH_OwnerID, itemp->getPermissions().getOwner());
+				msg->addU8Fast(_PREHASH_AttachmentPt, attachment_pt);
+				pack_permissions_slam(msg, itemp->getFlags(), itemp->getPermissions());
+				msg->addStringFast(_PREHASH_Name, itemp->getName());
+				msg->addStringFast(_PREHASH_Description, itemp->getDescription());
+				msg->sendReliable(gAgent.getRegion()->getHost());
+				return false;
+			}
+			*/
 
 			// Queue up attachments to be sent in next idle tick, this way the
 			// attachments are batched up all into one message versus each attachment

@@ -120,7 +120,6 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 	// Clipboard cut items are *always* filtered so we need this value upfront
 	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 	// Don't hide cut items in inventory
-	//const LLFolderViewEventListener* listener = item->getListener(); <FS:TM> CHUI merge LL removed thie line
 	//const BOOL passed_clipboard = (listener ? checkAgainstClipboard(listener->getUUID()) : TRUE);
 	const BOOL passed_clipboard = TRUE;
 	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste

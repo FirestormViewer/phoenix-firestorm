@@ -40,8 +40,7 @@
 #include "llavatarname.h"
 
 // <FS:Ansariel> [FS communication UI]
-//class LLIMFloater; <FS:TM> CHUI Merge old
-//class LLFloaterIMSession; <FS:TM> CHUI Merge new
+//class LLFloaterIMSession;
 class FSFloaterIM;
 // </FS:Ansariel> [FS communication UI]
 
@@ -368,7 +367,6 @@ private:
 	 * Find IM floater based on "from_id"
 	 */
 	// <FS:Ansariel> [FS communication UI]
-	//static LLIMFloater* findIMFloater(const LLNotificationPtr& notification);
 	static FSFloaterIM* findIMFloater(const LLNotificationPtr& notification);
 	// </FS:Ansariel> [FS communication UI]
 
