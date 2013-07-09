@@ -61,7 +61,7 @@
 			<menu_item_check label="Autorresponder a no-amigos" name="Set Autorespond to non-friends"/>
 			<menu_item_check label="Ocupado" name="Set Busy"/>
 		</menu>
-		<menu_item_call label="Amigos" name="My Friends"/>
+		<menu_item_check label="Amigos" name="My Friends"/>
 		<menu_item_check label="Contactos" name="Contacts"/>
 		<menu_item_check label="Grupos de contactos" name="Contact Sets"/>
 		<menu_item_call label="Grupos" name="My Groups"/>
@@ -153,7 +153,6 @@
 			<menu_item_call label="Tomar una copia" name="Take Copy"/>
 			<menu_item_call label="Duplicar" name="Duplicate"/>
 			<menu_item_call label="Editar partículas" name="Menu Object Edit Particles"/>
-			<menu_item_call label="Guardar una copia en mi inventario" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Guardar una copia en los contenidos del objeto del que salió" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Devolver objeto" name="Return Object back to Owner"/>
 		</menu>
@@ -171,7 +170,7 @@
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Personajes..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Ver/probar..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Actualizar región" name="pathfinding_rebake_navmesh_item"/>
+			<menu_item_call label="Recargar la región" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Opciones" name="Options">
 			<menu_item_check label="Mostrar los permisos avanzados" name="DebugPermissions"/>
@@ -496,6 +495,9 @@
 				<menu_item_call label="Todas un 10% más lento" name="All Animations 10 Slower"/>
 				<menu_item_call label="Restablecer la velocidad de todas" name="Reset All Animation Speed"/>
 				<menu_item_check label="Cámara lenta" name="Slow Motion Animations"/>
+			</menu>
+			<menu_item_call label="Force Params to Default" name="Force Params to Default"/>
+			<menu_item_check label="Animation Info" name="Animation Info"/>
 			</menu>
 			<menu_item_call label="Forzar parámetros por defecto" name="Force Params to Default"/>
 			<menu_item_check label="Información de animación" name="Animation Info"/>

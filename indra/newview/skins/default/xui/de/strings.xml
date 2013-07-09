@@ -128,7 +128,7 @@
 		Beenden
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/index.php?lang=de-DE&amp;sourceid=[sourceid]
+		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
@@ -655,8 +655,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="AvatarAway">
 		Abwesend
 	</string>
-	<string name="AvatarBusy">
-		Beschäftigt
+	<string name="AvatarDoNotDisturb">
+		Nicht stören
 	</string>
 	<string name="AvatarMuted">
 		Ignoriert
@@ -904,6 +904,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="no_name_object">
 		(namenlos)
 	</string>
+	<string name="NearbyChatTitle">
+		Chat in der Nähe
+	</string>
+	<string name="NearbyChatLabel">
+		(Chat in der Nähe)
+	</string>
 	<string name="whisper">
 		flüstert:
 	</string>
@@ -967,9 +973,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ControlYourCamera">
 		Kamerasteuerung übernehmen
 	</string>
-	<string name="TeleportYourAgent">
-		Sie teleportieren
-	</string>
 	<string name="JoinAnExperience">
 		Einem Erlebnis beiwohnen
 	</string>
@@ -984,6 +987,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden
+	</string>
+	<string name="AgentNameSubst">
+		(Sie)
+	</string>
+	<string name="TeleportYourAgent">
+		Sie teleportieren
 	</string>
 	<string name="SIM_ACCESS_PG">
 		Generell
@@ -1068,18 +1077,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="backup_files">
 		Objekt-Sicherungen
-	</string>
-	<string name="AvatarSetNotAway">
-		Nicht abwesend
-	</string>
-	<string name="AvatarSetAway">
-		Abwesend
-	</string>
-	<string name="AvatarSetNotBusy">
-		Nicht beschäftigt
-	</string>
-	<string name="AvatarSetBusy">
-		Beschäftigt
 	</string>
 	<string name="AvatarSetNotAutorespond">
 		Automatische Antwort AUS
@@ -2102,8 +2099,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="PanelContentsNewScript">
 		Neues Skript
 	</string>
-	<string name="BusyModeResponseDefault">
-		Der Einwohner/Die Einwohnerin ist „beschäftigt”, d.h. er/sie möchte im Moment nicht gestört werden.  Ihre Nachricht wird dem Einwohner/der Einwohnerin als IM angezeigt, und kann später beantwortet werden.
+	<string name="DoNotDisturbModeResponseDefault">
+		Dieser Einwohner hat den Nicht-stören-Modus aktiviert und wird Ihre Nachricht später sehen.
 	</string>
 	<string name="MuteByName">
 		(Nach Namen)
@@ -2227,9 +2224,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="GroupMoneyDate">
 		[weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc] [year,datetime,utc]
-	</string>
-	<string name="ViewerObjectContents">
-		Inhalte
 	</string>
 	<string name="AcquiredItems">
 		Erworbene Artikel
@@ -4109,6 +4103,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="you_joined_call">
 		Sie sind dem Gespräch beigetreten
 	</string>
+	<string name="you_auto_rejected_call-im">
+		Sie haben den Voice-Anruf automatisch abgelehnt, während der Nicht-stören-Modus aktiviert war.
+	</string>
 	<string name="name_started_call">
 		[NAME] hat einen Voice-Anruf begonnen
 	</string>
@@ -4125,7 +4122,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Wird verbunden...
 	</string>
 	<string name="conference-title">
-		Ad-hoc-Konferenz
+		Chat mit mehreren Personen
 	</string>
 	<string name="conference-title-incoming">
 		Konferenz mit [AGENT_NAME]
@@ -5010,6 +5007,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Chat_Label">
 		Chat
 	</string>
+	<string name="Command_Conversations_Label">
+		Unterhaltungen
+	</string>
 	<string name="Command_Compass_Label">
 		Kompass
 	</string>
@@ -5151,6 +5151,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Chat_Tooltip">
 		Mit Leuten in der Nähe chatten (Strg+T)
+	</string>
+	<string name="Command_Conversations_Tooltip">
+		Mit allen unterhalten
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Kompass

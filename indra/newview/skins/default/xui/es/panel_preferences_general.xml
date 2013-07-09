@@ -93,9 +93,8 @@ permanecer ausente:
 		<combo_box.item label="nunca" name="item4"/>
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Sentarme cuando estoy ausente" />
-	<text name="text_box3" height="25">
-		Los mensajes para los modos Ocupado y Autorrespuesta
-se encuentran en Privacidad / Autorrespuesta
+	<text name="text_box3">
+		Respuesta de No molestar:
 	</text>
 	<panel name="general_extras" >
         	<text name="text_box4">
@@ -105,6 +104,9 @@ se encuentran en Privacidad / Autorrespuesta
 		<text name="inworld_typing_rg_label">
 			Pulsar teclas alfanuméricas:
 		</text>
+	<text_editor name="do_not_disturb_response">
+		log_in_to_change
+	</text_editor>
 		<radio_group name="inworld_typing_preference">
 			<radio_item label="Inicia chat local" name="radio_start_chat"/>
 			<radio_item label="Afecta al movimiento" name="radio_move"/>

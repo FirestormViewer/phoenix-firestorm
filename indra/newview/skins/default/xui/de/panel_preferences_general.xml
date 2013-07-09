@@ -97,7 +97,7 @@
 		Beschäftigt- und Abwesenheitsnachrichten können unter
 Privatsphäre, Automatische Antwort konfiguriert werden.
 	</text>
-	<text_editor name="busy_response">
+	<text_editor name="do_not_disturb_response">
 		log_in_to_change
 	</text_editor>
 

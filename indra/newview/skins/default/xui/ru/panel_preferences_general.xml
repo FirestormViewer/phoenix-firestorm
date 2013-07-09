@@ -89,9 +89,9 @@
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Сесть, если статус 'Отошел'" />
 	<text name="text_box3">
-		Сообщение автоответчика (для "Занят" и для автоответчика):
+		Ответ в режиме «Не беспокоить»:
 	</text>
-	<text_editor name="busy_response">
+	<text_editor name="do_not_disturb_response">
 		log_in_to_change
 	</text_editor>
 

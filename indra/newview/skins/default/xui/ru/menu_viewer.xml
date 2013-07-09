@@ -47,7 +47,7 @@
 		<menu_item_check label="Показывать присоединения HUD" name="Show HUD Attachments"/>
 	</menu>
 	<menu label="Общение" name="Communicate">
-		<menu_item_call label="Друзья" name="My Friends"/>
+		<menu_item_check label="Друзья" name="My Friends"/>
 		<menu_item_check label="Контакты" name="Contacts"/>
 		<menu_item_check label="Контакт-сеты" name="Contact Sets"/>
 		<menu_item_call label="Группы" name="My Groups"/>
@@ -150,7 +150,6 @@
 			<menu_item_call label="Взять копию" name="Take Copy"/>
 			<menu_item_call label="Дублировать" name="Duplicate"/>
 			<menu_item_call label="редактировать частицы" name="Menu Object Edit Particles"/>
-			<menu_item_call label="Сохранить в моем инвентаре" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Сохранить в контенте объектов" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Вернуть объект" name="Return Object back to Owner"/>
 		</menu>
@@ -167,6 +166,7 @@
 			<menu_item_call label="Наборы связей..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Персонажи..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Просмотр/тестирование..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Восстановить регион" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Параметры" name="Options">
 			<menu_item_check label="Показать расширенные разрешения" name="DebugPermissions"/>
@@ -446,9 +446,14 @@
 				<menu_item_call label="Проверка женщины" name="Test Female"/>
 				<menu_item_check label="Разрешить выбор аватара" name="Allow Select Avatar"/>
 			</menu>
+			<menu label="Скорость анимации" name="Animation Speed">
+				<menu_item_call label="Ускорить все анимации на 10%" name="All Animations 10 Faster"/>
+				<menu_item_call label="Замедлить все анимации на 10%" name="All Animations 10 Slower"/>
+				<menu_item_call label="Восстановить скорость анимаций" name="Reset All Animation Speed"/>
+				<menu_item_check label="Анимация медленных движений" name="Slow Motion Animations"/>
+			</menu>
 			<menu_item_call label="Скинуть параметры" name="Force Params to Default"/>
 			<menu_item_check label="Данные об анимации" name="Animation Info"/>
-			<menu_item_check label="Анимация медленных движений" name="Slow Motion Animations"/>
 			<menu_item_check label="Показать взгляд" name="Show Look At"/>
 			<menu_item_check label="Показать указание" name="Show Point At"/>
 			<menu_item_check label="Отладка обновленных движений суставов" name="Debug Joint Updates"/>

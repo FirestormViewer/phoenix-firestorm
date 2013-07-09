@@ -81,9 +81,9 @@
 	</combo_box>
 	<check_box label="退席中は座る" name="AvatarSitOnAway"/>
 	<text name="text_box3">
-		取り込み中モード時の返事：
+		「通知を受けない」応答:
 	</text>
-	<text_editor name="busy_response">
+	<text_editor name="do_not_disturb_response">
 		log_in_to_change
 	</text_editor>
 	

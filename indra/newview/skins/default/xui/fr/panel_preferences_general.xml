@@ -149,8 +149,12 @@
 		label="Asseoir si absent"
 		tool_tip="Asseoir automatiquement votre avatar en mode absent."/>
     <text name="text_box3">
-		(Les réponses automatiques sont dans l'onglet Confidentialité → Auto-réponse)
+		Réponse Ne pas déranger
     </text>
+	<text_editor name="do_not_disturb_response">
+		log_in_to_change
+	</text_editor>
+
 <!--extras-->
 	<panel name="general_extras" >
         <text name="text_box3">

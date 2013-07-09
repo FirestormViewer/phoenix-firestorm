@@ -63,7 +63,7 @@
 			<menu_item_check label="フレンドでない人に自動応答" name="Set Autorespond to non-friends"/>
 			<menu_item_check label="取り込み中" name="Set Busy"/>
 		</menu>
-		<menu_item_call label="フレンド" name="My Friends"/>
+		<menu_item_check label="フレンド" name="My Friends"/>
 		<menu_item_check label="連絡先" name="Contacts"/>
 		<menu_item_check label="連絡先のセット" name="Contact Sets"/>
 		<menu_item_call label="リストをブロック" name="Block List"/>
@@ -178,7 +178,7 @@
 			<menu_item_call label="キャラクター..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="表示／テスト..." name="pathfinding_console_menu_item"/>
 			<menu_item_separator/>
-			<menu_item_call label="地域のナビメッシュを再構築" name="rebake_region_navmesh"/>
+			<menu_item_call label="地域の再構築" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 	  
 		<menu_item_separator/>
@@ -496,9 +496,14 @@
 				<menu_item_call label="女性アバターのテスト" name="Test Female"/>
 				<menu_item_check label="選択アバター許可" name="Allow Select Avatar"/>
 			</menu>
+			<menu label="アニメーションのスピード" name="Animation Speed">
+				<menu_item_call label="すべてのアニメーションのスピードを 10% アップ" name="All Animations 10 Faster"/>
+				<menu_item_call label="すべてのアニメーションのスピードを 10% ダウン" name="All Animations 10 Slower"/>
+				<menu_item_call label="すべてのアニメーションのスピードをリセット" name="Reset All Animation Speed"/>
+				<menu_item_check label="アニメーションをスローモーション" name="Slow Motion Animations"/>
+			</menu>
 			<menu_item_call label="パラメータを強制的にデフォルトにする" name="Force Params to Default"/>
 			<menu_item_check label="アニメーション情報" name="Animation Info"/>
-			<menu_item_check label="スローモーションのアニメーション" name="Slow Motion Animations"/>
 			<menu_item_check label="見ているものを表示する" name="Show Look At"/>
 			<menu_item_check label="クリックした場所を表示する" name="Show Point At"/>
 			<menu_item_check label="結合部のアップデートのデバッグ" name="Debug Joint Updates"/>

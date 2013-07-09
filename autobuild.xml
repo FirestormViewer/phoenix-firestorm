@@ -230,9 +230,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>da0f0847029af9628711831dcb35dec9</string>
+              <string>6ab1b8483f9cdfe53361d9751730a467</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.52.0-darwin-20121221.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.52.0-darwin-20130706.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -242,9 +242,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fa80edf4719453b16d4245e48472747a</string>
+              <string>562bf2c9b6b835b1f36caf96dca9f907</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.52.0-linux-20130109.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.52.0-linux-20130708.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -254,9 +254,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d2c8904513fb4745db136b01baa8af25</string>
+              <string>b530d85b175c26481c7b79d37b72cdec</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.52.0-windows-20121220.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.52.0-windows-20130707.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -527,14 +527,14 @@
           </map>
         </map>
       </map>
-      <key>fmod</key>
+      <key>fmodex</key>
       <map>
         <key>license</key>
-        <string>fmod</string>
+        <string>fmodex</string>
         <key>license_file</key>
-        <string>LICENSES/fmod.txt</string>
+        <string>LICENSES/fmodex.txt</string>
         <key>name</key>
-        <string>fmod</string>
+        <string>fmodex</string>
         <key>platforms</key>
         <map>
           <key>darwin</key>
@@ -542,9 +542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a3e8784c5640d3e3d7ff4db16c5bb0ae</string>
+              <string>94eb13ca19b6143a88470f650b1d2a82</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmod-3.75-darwin-20110620.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.12-darwin-20130420.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -554,9 +554,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>37e18bddbed033f9acb4a1268973890f</string>
+              <string>4b69a339255fa9c5452294ed295b7bab</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmod-3.75-linux-20110802.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.12-linux-20130420.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -566,9 +566,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ecf16c7d1b878a9733f4a85d28347948</string>
+              <string>1ba75c001b759e65e3cbad92cf5c4c70</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmod-3.75-windows-20110706.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.12-windows-20130420.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -650,9 +650,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ca95bbdabd2bed612af79a3704fdbe79</string>
+              <string>bd6f84f9fb3c2e68850676d06935373f</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-freetype/rev/265843/arch/Linux/installer/freetype-2.3.9-linux-20121013.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-freetype/rev/271684/arch/Linux/installer/freetype-2.4.4-linux-20130312.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -806,9 +806,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>25481e021761435cbd9c74c07507f0e3</string>
+	          <string>aff5566e04003de0383941981198e04e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/google_breakpad-0.0.0-rev599-darwin64-20110202.tar.bz2</string>
+              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-breakpad/rev/273073/arch/Darwin/installer/google_breakpad-0.0.0-rev1099-darwin-20130329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -817,10 +817,10 @@
           <map>
             <key>archive</key>
             <map>
-              <key>hash</key>
-              <string>204b02a9480c411232255798839431a2</string>
-              <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/google_breakpad-0.0.0-rev599-linux-20110311.tar.bz2</string>
+             <key>hash</key>
+	         <string>52257e5eb166a0b69c9c0c38f6e1920e</string>
+             <key>url</key>
+	         <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-breakpad/rev/273079/arch/Linux/installer/google_breakpad-0.0.0-rev1099-linux-20130329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -830,9 +830,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>627c51136e14e64c5d39933f3abd3bdf</string>
+	          <string>d812a6dfcabe6528198a3191068dac09</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/google_breakpad-0.0.0-rev599-windows-20110218.tar.bz2</string>
+             <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-breakpad/rev/273073/arch/CYGWIN/installer/google_breakpad-0.0.0-rev1099-windows-20130329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -878,9 +878,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>212701468920519f3989677cea9ca4f1</string>
+              <string>98994d5b0b4b3d43be22aa6a5c36e6fa</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/gmock-1.5.0-windows-20110224.tar.bz2</string>
+		      <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-google-mock-graham/rev/272961/arch/CYGWIN/installer/gmock-1.6.0-windows-20130327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2380,7 +2380,7 @@
                   <string>--package</string>
                   <string>--platform darwin</string>
                   <string>--btype RelWithDebInfo</string>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -2391,7 +2391,7 @@
                   <string>--platform darwin</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -2490,7 +2490,7 @@
                 <array>
                   <string>--build</string>
                   <string>--platform darwin</string>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -2498,8 +2498,8 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
                   <string>--kdu</string>
+                  <string>--fmodex</string>
                   <string>--platform darwin</string>
                 </array>
               </map>
@@ -2517,7 +2517,7 @@
                 <array>
                   <string>--build</string>
                   <string>--platform darwin</string>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--kdu</string>
                 </array>
               </map>
@@ -2525,8 +2525,8 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
                   <string>--kdu</string>
+                  <string>--fmodex</string>
                   <string>--platform darwin</string>
                 </array>
               </map>
@@ -2688,7 +2688,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--platform linux32</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
@@ -2788,7 +2788,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -2813,7 +2813,7 @@
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -2965,7 +2965,7 @@
                   <string>"Visual Studio 10"</string>
                   <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DFMOD=FALSE</string>
+                  <string>-DFMODEX:BOOL=OFF</string>
                 </array>
               </map>
               <key>name</key>
@@ -3039,7 +3039,7 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--btype RelWithDebInfo</string>
@@ -3126,7 +3126,7 @@
                   <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DFMOD=FALSE</string>
+                  <string>-DFMODEX:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
@@ -3199,7 +3199,7 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform win32</string>
@@ -3236,7 +3236,7 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--fmod</string>
+                  <string>--fmodex</string>
                   <string>--kdu</string>
                   <string>--version</string>
                   <string>--platform win32</string>
@@ -3322,7 +3322,7 @@
                   <string>-DUNATTENDED:BOOL=OFF</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DFMOD=TRUE</string>
+                  <string>-DFMODEX:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
