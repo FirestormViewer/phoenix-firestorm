@@ -1167,6 +1167,9 @@
       name="ScriptCursorColor"
       reference="Black" />
   <color
+      name="ScriptFunction"
+      value=".5 0 .15 1" />
+  <color
       name="SyntaxSection"
       value=".5 .1 .3 1" />
   <color

@@ -24,6 +24,9 @@
 	<text name="comment_label">
 		Kommentar
 	</text>
+	<text name="function_label">
+		Funktion
+	</text>
 	<text name="string_literal_label">
 		String-Literal
 	</text>

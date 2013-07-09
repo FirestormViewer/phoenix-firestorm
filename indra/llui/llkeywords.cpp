@@ -36,10 +36,8 @@
 
 #include "lluicolortable.h"	// <FS:CR> Use color table so the user can define colors
 
-// <FS:CR> fskeywords reversioning
+// <FS:CR> Use new scriptlibrary.xml format
 //const U32 KEYWORD_FILE_CURRENT_VERSION = 2;
-const U32 KEYWORD_FILE_CURRENT_VERSION = 1;
-// </FS:CR>
 
 inline BOOL LLKeywordToken::isHead(const llwchar* s) const
 {
@@ -88,7 +86,9 @@ LLKeywords::~LLKeywords()
 BOOL LLKeywords::loadFromFile( const std::string& filename )
 {
 	mLoaded = FALSE;
-
+/// <FS:CR> if 0 this out, because we don't use the old format anymore. We use
+/// scriptlibrary.xml format
+#if 0
 	////////////////////////////////////////////////////////////
 	// File header
 
@@ -105,12 +105,9 @@ BOOL LLKeywords::loadFromFile( const std::string& filename )
 
 	// Identifying string
 	file >> buffer;
-	// <FS:CR> Firestorm fskeywords versioning
-	//if( strcmp( buffer, "llkeywords" ) )
-	if (strcmp(buffer, "fskeywords"))
-	// </FS:CR>
+	if( strcmp( buffer, "llkeywords" ) )
 	{
-		llinfos << filename << " does not appear to be a Firestorm keyword file" << llendl;
+		llinfos << filename << " does not appear to be a keyword file" << llendl;
 		return mLoaded;
 	}
 
@@ -123,34 +120,16 @@ BOOL LLKeywords::loadFromFile( const std::string& filename )
 		llinfos << filename << " does not appear to be a version " << KEYWORD_FILE_CURRENT_VERSION << " keyword file" << llendl;
 		return mLoaded;
 	}
-	
-	////////////////////////////////////////////////////////////
-	// Start of line (SOL)
-	// <FS:CR> Use ; for comment, not # so we can add preprocessor directives to keywords.ini
-	//std::string SOL_COMMENT("#");
-	std::string SOL_INI_COMMENT(";");
-	//std::string SOL_WORD("[word ");
-	//std::string SOL_LINE("[line ");
-	//std::string SOL_ONE_SIDED_DELIMITER("[one_sided_delimiter ");
-	//std::string SOL_TWO_SIDED_DELIMITER("[two_sided_delimiter ");
-	//std::string SOL_DOUBLE_QUOTATION_MARKS("[double_quotation_marks ");
-	std::string SOL_SECTION("[SECTION]");
-	std::string SOL_DATATYPE("[DATATYPE]");
-	std::string SOL_EVENT("[EVENT]");
-	std::string SOL_I_CONSTANT("[I_CONSTANT]");
-	std::string SOL_S_CONSTANT("[S_CONSTANT]");
-	std::string SOL_F_CONSTANT("[F_CONSTANT]");
-	std::string SOL_C_CONSTANT("[C_CONSTANT]");
-	std::string SOL_FLOW_CONTROL("[FLOW CONTROL]");
-	std::string SOL_FLOW_CONTROL_LABEL("[FLOW CONTROL LABEL]");
-	std::string SOL_STRING_LITERAL("[STRING LITERAL]");
-	std::string SOL_CODE_COMMENT("[COMMENT]");
-	std::string SOL_BLOCK_COMMENT("[BLOCK COMMENT]");
-	std::string SOL_PREPROCESSOR("[PREPROCESSOR]");
-	
-	//LLColor3 cur_color( 1, 0, 0 );
-	LLColor4 cur_color(LLUIColorTable::instance().getColor("ScriptText"));
-	// </FS:CR>
+
+	// start of line (SOL)
+	std::string SOL_COMMENT("#");
+	std::string SOL_WORD("[word ");
+	std::string SOL_LINE("[line ");
+	std::string SOL_ONE_SIDED_DELIMITER("[one_sided_delimiter ");
+	std::string SOL_TWO_SIDED_DELIMITER("[two_sided_delimiter ");
+	std::string SOL_DOUBLE_QUOTATION_MARKS("[double_quotation_marks ");
+
+	LLColor3 cur_color( 1, 0, 0 );
 	LLKeywordToken::TOKEN_TYPE cur_type = LLKeywordToken::WORD;
 
 	while (!file.eof())
@@ -158,123 +137,40 @@ BOOL LLKeywords::loadFromFile( const std::string& filename )
 		buffer[0] = 0;
 		file.getline( buffer, BUFFER_SIZE );
 		std::string line(buffer);
-		// <FS:CR> User defined syntax highlighting
-		//if( line.find(SOL_COMMENT) == 0 )
-		if( line.find(SOL_INI_COMMENT) == 0 )
-		// </FS:CR>
+		if( line.find(SOL_COMMENT) == 0 )
 		{
 			continue;
 		}
-		// <FS:CR> User defined syntax highlighting
-		//else if( line.find(SOL_WORD) == 0 )
-		//{
-		//	cur_color = readColor( line.substr(SOL_WORD.size()) );
-		//	cur_type = LLKeywordToken::WORD;
-		//	continue;
-		//}
-		//else if( line.find(SOL_LINE) == 0 )
-		//{
-		//	cur_color = readColor( line.substr(SOL_LINE.size()) );
-		//	cur_type = LLKeywordToken::LINE;
-		//	continue;
-		//}
-		//else if( line.find(SOL_TWO_SIDED_DELIMITER) == 0 )
-		//{
-		//	cur_color = readColor( line.substr(SOL_TWO_SIDED_DELIMITER.size()) );
-		//	cur_type = LLKeywordToken::TWO_SIDED_DELIMITER;
-		//	continue;
-		//}
-		//else if( line.find(SOL_DOUBLE_QUOTATION_MARKS) == 0 )
-		//{
-		//	cur_color = readColor( line.substr(SOL_DOUBLE_QUOTATION_MARKS.size()) );
-		//	cur_type = LLKeywordToken::DOUBLE_QUOTATION_MARKS;
-		//	continue;
-		//}
-		//else if( line.find(SOL_ONE_SIDED_DELIMITER) == 0 )
-		//{
-		//	cur_color = readColor( line.substr(SOL_ONE_SIDED_DELIMITER.size()) );
-		//	cur_type = LLKeywordToken::ONE_SIDED_DELIMITER;
-		//	continue;
-		//}
-		else if (line.find(SOL_SECTION) == 0 )
+		else if( line.find(SOL_WORD) == 0 )
 		{
+			cur_color = readColor( line.substr(SOL_WORD.size()) );
 			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxSection");
 			continue;
 		}
-		else if (line.find(SOL_DATATYPE) == 0)
+		else if( line.find(SOL_LINE) == 0 )
 		{
-			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxDataType");
-			continue;
-		}
-		else if (line.find(SOL_EVENT) == 0)
-		{
-			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxEvent");
-			continue;
-		}
-		else if (line.find(SOL_I_CONSTANT) == 0)
-		{
-			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxIntegerConstant");
-			continue;
-		}
-		else if (line.find(SOL_S_CONSTANT) == 0)
-		{
-			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxStringConstant");
-			continue;
-		}
-		else if (line.find(SOL_F_CONSTANT) == 0)
-		{
-			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxFloatConstant");
-			continue;
-		}
-		else if (line.find(SOL_C_CONSTANT) == 0)
-		{
-			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxCompoundConstant");
-			continue;
-		}
-		else if (line.find(SOL_FLOW_CONTROL) == 0)
-		{
-			cur_type = LLKeywordToken::WORD;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxFlowControl");
-			continue;
-		}
-		else if (line.find(SOL_FLOW_CONTROL_LABEL) == 0)
-		{
+			cur_color = readColor( line.substr(SOL_LINE.size()) );
 			cur_type = LLKeywordToken::LINE;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxFlowControl");
 			continue;
 		}
-		else if (line.find(SOL_STRING_LITERAL) == 0)
+		else if( line.find(SOL_TWO_SIDED_DELIMITER) == 0 )
 		{
-			cur_type = LLKeywordToken::DOUBLE_QUOTATION_MARKS;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxStringLiteral");
-			continue;
-		}
-		else if (line.find(SOL_CODE_COMMENT) == 0)
-		{
-			cur_type = LLKeywordToken::ONE_SIDED_DELIMITER;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxComment");
-			continue;
-		}
-		else if (line.find(SOL_BLOCK_COMMENT) == 0)
-		{
+			cur_color = readColor( line.substr(SOL_TWO_SIDED_DELIMITER.size()) );
 			cur_type = LLKeywordToken::TWO_SIDED_DELIMITER;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxComment");
 			continue;
 		}
-		else if( line.find(SOL_PREPROCESSOR) == 0 )
+		else if( line.find(SOL_DOUBLE_QUOTATION_MARKS) == 0 )
 		{
-			cur_type = LLKeywordToken::ONE_SIDED_DELIMITER;
-			cur_color = LLUIColorTable::instance().getColor("SyntaxPreprocessor");
+			cur_color = readColor( line.substr(SOL_DOUBLE_QUOTATION_MARKS.size()) );
+			cur_type = LLKeywordToken::DOUBLE_QUOTATION_MARKS;
 			continue;
 		}
-		// </FS:CR>
+		else if( line.find(SOL_ONE_SIDED_DELIMITER) == 0 )	
+		{
+			cur_color = readColor( line.substr(SOL_ONE_SIDED_DELIMITER.size()) );
+			cur_type = LLKeywordToken::ONE_SIDED_DELIMITER;
+			continue;
+		}
 
 		std::string token_buffer( line );
 		LLStringUtil::trim(token_buffer);
@@ -328,6 +224,150 @@ BOOL LLKeywords::loadFromFile( const std::string& filename )
 	}
 
 	file.close();
+#endif // 0 // Don't use the old way, use this new way!
+	///////////////////////////////////////////
+	// Parse the script library xml
+	
+	LLXMLNodePtr xml_root;
+	if ( (!LLUICtrlFactory::getLayeredXMLNode(filename, xml_root)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
+	{
+		llwarns << "Could not read the script library (" << filename << ")" << llendl;
+		return FALSE;
+	}
+	for (LLXMLNode* pNode = xml_root->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
+	{
+		if (pNode->hasName("keywords"))
+		{
+			std::string keyword;
+			for (LLXMLNode* pStringNode = pNode->getFirstChild(); pStringNode != NULL; pStringNode = pStringNode->getNextSibling())
+			{
+				std::string tool_tip;
+				LLColor4 cur_color(LLUIColorTable::instance().getColor("ScriptText"));
+				LLKeywordToken::TOKEN_TYPE cur_type = LLKeywordToken::WORD;
+				if (!pStringNode->getAttributeString("name", keyword))
+					continue;
+				if (pStringNode->hasName("integer_constant"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxIntegerConstant");
+				}
+				else if (pStringNode->hasName("event"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxEvent");
+					
+				}
+				else if (pStringNode->hasName("section"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxSection");
+						
+				}
+				else if (pStringNode->hasName("data_type"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxDataType");
+						
+				}
+				else if (pStringNode->hasName("string_constant"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxStringConstant");
+				}
+				else if (pStringNode->hasName("float_constant"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxFloatConstant");
+				}
+				else if (pStringNode->hasName("compound_constant"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxCompoundConstant");
+				}
+				else if (pStringNode->hasName("flow_control_keyword"))
+				{
+					cur_type = LLKeywordToken::WORD;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxFlowControl");
+				}
+				else if (pStringNode->hasName("flow_control_label"))
+				{
+					cur_type = LLKeywordToken::LINE;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxFlowControl");
+				}
+				else if (pStringNode->hasName("comment"))
+				{
+					cur_type = LLKeywordToken::ONE_SIDED_DELIMITER;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxComment");
+				}
+				else if (pStringNode->hasName("block_comment"))
+				{
+					cur_type = LLKeywordToken::TWO_SIDED_DELIMITER;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxComment");
+				}
+				else if (pStringNode->hasName("string_literal"))
+				{
+					cur_type = LLKeywordToken::DOUBLE_QUOTATION_MARKS;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxStringLiteral");
+				}
+				else if (pStringNode->hasName("preprocessor"))
+				{
+					cur_type = LLKeywordToken::ONE_SIDED_DELIMITER;
+					cur_color = LLUIColorTable::instance().getColor("SyntaxPreprocessor");
+				}
+				if (!pStringNode->getAttributeString("desc", tool_tip))
+				{
+					tool_tip = "No Description available";
+				}
+				
+				std::string delimiter;
+				if (cur_type == LLKeywordToken::DOUBLE_QUOTATION_MARKS)
+				{
+					// Closing delimiter is identical to the opening one.
+					delimiter = keyword;
+				}
+				else if (cur_type == LLKeywordToken::TWO_SIDED_DELIMITER)
+				{
+					std::string token_buffer(keyword);
+					LLStringUtil::trim(token_buffer);
+					
+					typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+					boost::char_separator<char> sep_word(" ");
+					tokenizer word_tokens(token_buffer, sep_word);
+					tokenizer::iterator token_word_iter = word_tokens.begin();
+					
+					if( !token_buffer.empty() && token_word_iter != word_tokens.end() )
+					{
+						// first word is the keyword or a left delimiter
+						keyword = (*token_word_iter);
+						LLStringUtil::trim(keyword);
+						
+						// second word may be a right delimiter
+						while (delimiter.length() == 0 && ++token_word_iter != word_tokens.end())
+						{
+							delimiter = *token_word_iter;
+							LLStringUtil::trim(delimiter);
+						}
+					}
+				}
+				
+				if( !tool_tip.empty() )
+				{
+					// Replace ; with \n for multi-line tool tips.
+					LLStringUtil::replaceChar( tool_tip, ';', '\n' );
+					addToken(cur_type, keyword, cur_color, tool_tip, delimiter );
+				}
+				else
+				{
+					addToken(cur_type, keyword, cur_color, LLStringUtil::null, delimiter );
+				}
+			}
+		}
+		// TODO: Decide whether it's better to add functions here or at startup, or on entering a region <FS:CR>
+		//else if (pNode->hasName("functions"))
+		//{
+		//}
+	}
+// </FS:CR> scriptlibrary.xml parsing
 
 	mLoaded = TRUE;
 	return mLoaded;
