@@ -2913,6 +2913,7 @@ void LLIMMgr::addMessage(
 	// <FS:PP> Configurable IM sounds
 	static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
 	static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
+	BOOL do_not_disturb = gAgent.isDoNotDisturb();
 	// </FS:PP> Configurable IM sounds
 
 	bool new_session = !hasSession(new_session_id);
@@ -2982,26 +2983,26 @@ void LLIMMgr::addMessage(
 	// <FS:PP> Configurable IM sounds
 		// //Play sound for new conversations
 		// if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
-		if(!gAgent.isDoNotDisturb() && PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
+		if(!do_not_disturb && PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
-		else if(!gAgent.isDoNotDisturb() && PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL)
+		else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingGroupIMSession");
 		}
 	}
-	else if(!gAgent.isDoNotDisturb() && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingIMSession");
 	}
-	else if(!gAgent.isDoNotDisturb() && PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingGroupIMSession");
 	// </FS:PP>
 	}
 	// <FS:WoLf> IM Sounds only for sessions not in focus
-	else if(!gAgent.isDoNotDisturb() && PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
 	{
 		// <FS:Ansariel> [FS communication UI]
 		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
@@ -3012,7 +3013,7 @@ void LLIMMgr::addMessage(
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
 	}
-	else if(!gAgent.isDoNotDisturb() && PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL)
 	{
 		// <FS:Ansariel> [FS communication UI]
 		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
