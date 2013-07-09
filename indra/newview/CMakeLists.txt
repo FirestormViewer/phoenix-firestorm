@@ -2264,7 +2264,9 @@ if (DARWIN)
     )
 
   configure_file(
-     "${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
+     # <FS:CR> Use Firestorm plist
+     #"${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
+     "${CMAKE_CURRENT_SOURCE_DIR}/Info-Firestorm.plist"
      "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app/Contents/Info.plist"
                )
 
