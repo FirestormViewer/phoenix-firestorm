@@ -194,10 +194,6 @@
 #include "llvoicechannel.h"
 #include "llpathfindingmanager.h"
 
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-
 #include "lllogin.h"
 #include "llevents.h"
 #include "llstartuplistener.h"
@@ -2616,7 +2612,6 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		LLAgentPicksInfo::getInstance()->requestNumberOfPicks();
 
 		// <FS:Ansariel> [FS communication UI]
-		//LLIMFloater::initIMFloater();
 		//FSFloaterIM::initIMFloater(); <FS:TM> CHUI Merge LL removed this, check if still needed
 		// </FS:Ansariel> [FS communication UI]
 		display_startup();

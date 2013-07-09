@@ -1492,7 +1492,7 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 
 	gInventory.collectDescendentsIf(cat_id, cats, items, FALSE, collector);
 
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 	if (gSavedSettings.getBOOL("UseLSLBridge"))
 	{
 		//if replacing - make sure bridge stays.
@@ -1501,10 +1501,9 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 			llinfos << "reinserting bridge at outfit remove" << llendl;
 			//items.find(FSLSLBridge::instance().getBridge());
 			items.removeObj(FSLSLBridge::instance().getBridge());
-			llinfos << "reinserted bridge at outfit remove" << llendl;
 		}
 	}
-//-TT
+// </FS:TT>
 
 	LLInventoryModel::item_array_t::const_iterator it = items.begin();
 	const LLInventoryModel::item_array_t::const_iterator it_end = items.end();
@@ -2578,12 +2577,12 @@ void LLAppearanceMgr::getUserDescendents(const LLUUID& category,
 }
 
 void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append)
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 {
 	wearInventoryCategory(category, copy, append, false);
 }
 void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append, bool replace)
-//-TT
+// </FS:TT>
 {
 	if(!category) return;
 
@@ -2599,26 +2598,26 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 	callAfterCategoryFetch(category->getUUID(),boost::bind(&LLAppearanceMgr::wearCategoryFinal,
 														   &LLAppearanceMgr::instance(),
 														   category->getUUID(), copy, append));
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 														   //category->getUUID(), copy, append, replace));
-//-TT 
+// <FS:TT>
 }
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 void LLAppearanceMgr::replaceCategoryInCurrentOutfit(const LLUUID& cat_id)
 {
 	LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
 	wearInventoryCategory(cat, false, true);
 }
-//-TT
+// </FS:TT>
 
 void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append)
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 {
 	wearCategoryFinal(cat_id, copy_items, append, false);
 }
 
 void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append, bool replace)
-//-TT 
+// </FS:TT>
 {
 	LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
 
@@ -3109,7 +3108,7 @@ void LLAppearanceMgr::updateIsDirty()
 		gInventory.collectDescendentsIf(base_outfit, outfit_cats, outfit_items,
 									  LLInventoryModel::EXCLUDE_TRASH, collector);
 
-		// FIRE-3018: Ignore the bridge when checking for dirty. -- TS
+		// <FS:TS> FIRE-3018: Ignore the bridge when checking for dirty.
 		for (U32 i = 0; i < cof_items.size(); ++i)
 		{
 			LLViewerInventoryItem *item = cof_items.get(i);
@@ -3120,6 +3119,7 @@ void LLAppearanceMgr::updateIsDirty()
 				break;
 			}
 		}
+		// </FS:TS>
 
 		if(outfit_items.count() != cof_items.count())
 		{
@@ -3887,14 +3887,14 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 	bool fUpdateAppearance = false;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
-		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
-
-		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
+		const LLInventoryItem* linked_item = gInventory.getLinkedItem(*it);
+		if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
 		{
 			continue;
 		}
 
 		fUpdateAppearance = true;
+		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
 		removeCOFItemLinks(linked_item_id);
 	}
 
@@ -3914,15 +3914,15 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 
 void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 {
-	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(gInventory.getItem(linked_item_id))) )
+	const LLInventoryItem* linked_item = gInventory.getLinkedItem(id_to_remove);
+
+	if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
 	{
 		return;
 	}
 // [/RLVA:KB]
-
+	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
 	removeCOFItemLinks(linked_item_id);
 	updateAppearanceFromCOF();
 }

@@ -41,8 +41,7 @@
 #include "llnotificationsutil.h"
 #include "llviewermessage.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
-//#include "llimfloater.h" <FS:TM> CHUI Merge old
+//#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
 
@@ -199,9 +198,10 @@ void LLToastNotifyPanel::updateButtonsLayout(const std::vector<index_button_pair
 		mute_btn_rect.setOriginAndSize(mute_btn_left, BOTTOM_PAD,// always move mute button at the bottom
 				mute_btn_rect.getWidth(), mute_btn_rect.getHeight());
 		mute_btn->setRect(mute_btn_rect);
-		mControlPanel->addChild(mute_btn); 
+		mControlPanel->addChild(mute_btn);
 	}
 }
+
 void LLToastNotifyPanel::adjustPanelForScriptNotice(S32 button_panel_width, S32 button_panel_height)
 {
 	//adjust layout

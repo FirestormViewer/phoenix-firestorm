@@ -2769,35 +2769,36 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 				// if there is not a panel for this conversation (i.e. it is a new IM conversation
 				// initiated by the other party) then...
-				send_do_not_disturb_message(msg, from_id, session_id);
-				// <FS:TM> CHUI Merge LL changed this
-				//std::string response;
-				//LLAgentUI::buildFullname(my_name);
-				//if (is_busy)
-				//{
-				//	response = gSavedPerAccountSettings.getString("BusyModeResponse");
-				//}
-				//else if (is_autorespond_nonfriends && !is_friend)
-				//{
-				//	response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
-				//}
-				//else if (is_autorespond)
-				//{
-				//	response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
-				//}
-				//pack_instant_message( <FS:TM> CHUI Merge LL removed this and below, comented out above to be looked at later
-				//	gMessageSystem,
-				//	gAgent.getID(),
-				//	FALSE,
-				//	gAgent.getSessionID(),
-				//	from_id,
-				//	my_name,
-				//	response,
-				//	IM_ONLINE,
-				//	IM_BUSY_AUTO_RESPONSE,
-				//	session_id);
-				//gAgent.sendReliableMessage();
-				//<FS:TM> CHUI Merge End
+				// <FS:Ansariel> FS autoresponse feature
+				//send_do_not_disturb_message(msg, from_id, session_id);
+				std::string my_name;
+				std::string response;
+				LLAgentUI::buildFullname(my_name);
+				if (is_do_not_disturb)
+				{
+					response = gSavedPerAccountSettings.getString("DoNotDisturbModeResponse");
+				}
+				else if (is_autorespond_nonfriends && !is_friend)
+				{
+					response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
+				}
+				else if (is_autorespond)
+				{
+					response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
+				}
+				pack_instant_message(
+					gMessageSystem,
+					gAgent.getID(),
+					FALSE,
+					gAgent.getSessionID(),
+					from_id,
+					my_name,
+					response,
+					IM_ONLINE,
+					IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+					session_id);
+				gAgent.sendReliableMessage();
+				// </FS:Ansariel> FS autoresponse feature
 			}
 
 			// <FS:Ansariel> checkfor and process reqinfo
@@ -4571,7 +4572,7 @@ void process_teleport_start(LLMessageSystem *msg, void**)
 	{
 		gTeleportDisplay = TRUE;
 		gAgent.setTeleportState( LLAgent::TELEPORT_START );
-		make_ui_sound("UISndTeleportOut"); //AO
+		make_ui_sound("UISndTeleportOut");
 		
 		LL_INFOS("Messaging") << "Teleport initiated by remote TeleportStart message with TeleportFlags: " <<  teleport_flags << LL_ENDL;
 

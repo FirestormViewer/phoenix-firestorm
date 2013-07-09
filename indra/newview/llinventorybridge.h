@@ -160,9 +160,9 @@ protected:
 	BOOL isLostInventory() const;
 // [/SL:KB]
 	BOOL isCOFFolder() const; // true if COF or descendent of
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 	BOOL isProtectedFolder() const;
-//-TT
+// </FS:TT>
 	BOOL isInboxFolder() const; // true if COF or descendent of marketplace inbox
 	BOOL isOutboxFolder() const; // true if COF or descendent of marketplace outbox
 	BOOL isOutboxFolderDirectParent() const;
@@ -349,9 +349,9 @@ protected:
 	BOOL checkFolderForContentsOfType(LLInventoryModel* model, LLInventoryCollectFunctor& typeToCheck);
 
 	void modifyOutfit(BOOL append);
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 	void modifyOutfit(BOOL append, BOOL replace);
-//-TT 
+// </FS:TT>
 	void determineFolderType();
 
 	void dropToFavorites(LLInventoryItem* inv_item);

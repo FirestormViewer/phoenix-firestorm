@@ -51,8 +51,8 @@
 #include "llcallingcard.h"
 #include "llchat.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
-//#include "llfloaterimcontainer.h" <FS:TM> CHUI Merge new
+//#include "llfloaterimsession.h"
+//#include "llfloaterimcontainer.h"
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llgroupiconctrl.h"
@@ -145,14 +145,14 @@ void process_dnd_im(const LLSD& notification)
             false, 
             false); //will need slight refactor to retrieve whether offline message or not (assume online for now)
 
-		// [CHUI Merge] Do we need this?
+		// <FS:Ansariel> [FS communication UI]
 		//LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
 		//
 		//if (im_box)
 		//{
 		//	im_box->flashConversationItemWidget(sessionID, true);
 		//}
-		// [CHUI Merge]
+		// </FS:Ansariel> [FS communication UI]
 
     }
 }
@@ -908,30 +908,9 @@ void LLIMModel::LLIMSession::buildHistoryFileName()
 //		LLAvatarName av_name;
 //		// For outgoing sessions we already have a cached name
 //		// so no need for a callback in LLAvatarNameCache::get()
-//<FS:TM> CHUI Merge below is new if statement from LL
 //		if (LLAvatarNameCache::get(mOtherParticipantID, &av_name))
 //		{
 //			mHistoryFileName = LLCacheName::buildUsername(av_name.getUserName());
-//		}
-//		else
-//		{
-//			// Incoming P2P sessions include a name that we can use to build a history file name
-//			mHistoryFileName = LLCacheName::buildUsername(mName);
-//		}
-//	}
-//}
-//<FS:TM> CHUI Merge below is the old if statement from LL
-//		if (LLAvatarNameCache::get(mOtherParticipantID, &av_name))
-//		{
-//			if (av_name.mUsername.empty())
-//			{
-//				// Display names are off, use mDisplayName which will be the legacy name
-//				mHistoryFileName = LLCacheName::buildUsername(av_name.getDisplayName());
-//			}
-//			else
-//			{
-//				mHistoryFileName =  av_name.mUsername;
-//			}
 //		}
 //		else
 //		{
@@ -2934,6 +2913,7 @@ void LLIMMgr::addMessage(
 	// <FS:PP> Configurable IM sounds
 	static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
 	static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
+	BOOL do_not_disturb = gAgent.isDoNotDisturb();
 	// </FS:PP> Configurable IM sounds
 
 	bool new_session = !hasSession(new_session_id);
@@ -3001,29 +2981,28 @@ void LLIMMgr::addMessage(
 		}
 
 	// <FS:PP> Configurable IM sounds
-		if(PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
+		// //Play sound for new conversations
+		// if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
+		if(!do_not_disturb && PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
 		{
-        //Play sound for new conversations
-		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
-        {
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
-		else if(PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL)
+		else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingGroupIMSession");
 		}
 	}
-	else if(PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingIMSession");
 	}
-	else if(PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingGroupIMSession");
 	// </FS:PP>
 	}
 	// <FS:WoLf> IM Sounds only for sessions not in focus
-	else if(PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
 	{
 		// <FS:Ansariel> [FS communication UI]
 		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
@@ -3034,7 +3013,7 @@ void LLIMMgr::addMessage(
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
 	}
-	else if(PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL)
+	else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL)
 	{
 		// <FS:Ansariel> [FS communication UI]
 		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
@@ -3044,7 +3023,6 @@ void LLIMMgr::addMessage(
 		{
 			make_ui_sound("UISndNewIncomingGroupIMSession");
 		}
-	}
 	}
 	// </FS:WoLf>
 
@@ -3065,14 +3043,14 @@ void LLIMMgr::addMessage(
 	}
 
 	// Open conversation floater if offline messages are present
-	// [CHUI Merge]
+	// <FS:Ansariel> [FS communication UI]
 	//if (is_offline_msg)
  //   {
  //       LLFloaterReg::showInstance("im_container");
 	//    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
 	//    		flashConversationItemWidget(new_session_id, true);
  //   }
-	// [CHUI Merge]
+	// </FS:Ansariel> [FS communication UI]
 }
 
 void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args)

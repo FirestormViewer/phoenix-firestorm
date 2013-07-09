@@ -624,17 +624,6 @@
         <key>Value</key>
             <string></string>
         </map>
-    <key>ExodusFlickrUsername</key>
-        <map>
-        <key>Comment</key>
-            <string>Flickr Username</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>String</string>
-        <key>Value</key>
-            <string></string>
-        </map>
     <key>ExodusFlickrNSID</key>
         <map>
         <key>Comment</key>

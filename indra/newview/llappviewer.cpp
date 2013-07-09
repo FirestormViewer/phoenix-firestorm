@@ -1136,12 +1136,15 @@ bool LLAppViewer::init()
 	gGLManager.printGLInfoString();
 
 	// Load Default bindings
+	// <FS:Ansariel> Optional AZERTY keyboard layout
+	//std::string key_bindings_file = gDirUtilp->findFile("keys.xml",
 	std::string keyBindingFileName("keys.xml");
 	if (gSavedSettings.getBOOL("FSUseAzertyKeyboardLayout"))
 	{
 		keyBindingFileName = "keys_azerty.xml";
 	}
 	std::string key_bindings_file = gDirUtilp->findFile(keyBindingFileName,
+	// </FS:Ansariel>
 														gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
 														gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
 

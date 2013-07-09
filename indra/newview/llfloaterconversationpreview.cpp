@@ -29,10 +29,10 @@
 #include "llfloaterconversationpreview.h"
 #include "llimview.h"
 #include "lllineeditor.h"
-// <FS:CR>
+// <FS:CR> [FS communication UI]
 //#include "llfloaterimnearbychat.h"
 #include "fsfloaternearbychat.h"
-// </FS:CR>
+// </FS:CR> [FS communication UI]
 #include "llspinctrl.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"	// <FS:CR>
@@ -53,10 +53,10 @@ LLFloaterConversationPreview::LLFloaterConversationPreview(const LLSD& session_i
 
 BOOL LLFloaterConversationPreview::postBuild()
 {
-	// <FS:CR>
+	// <FS:CR> [FS communication UI]
 	//mChatHistory = getChild<LLChatHistory>("chat_history");
 	mChatHistory = getChild<FSChatHistory>("chat_history");
-	// <FS:CR>
+	// <FS:CR> [FS communication UI]
 
 	const LLConversation* conv = LLConversationLog::instance().getConversation(mSessionID);
 	std::string name;
@@ -167,10 +167,10 @@ void LLFloaterConversationPreview::showHistory()
 		}
 		else if (from_id.isNull())
 		{
-			// <FS:CR> [Firestorm Communications UI ]
+			// <FS:CR> [FS communication UI]
 			//chat.mSourceType = LLFloaterIMNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
 			chat.mSourceType = FSFloaterNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
-			// </FS:CR>
+			// </FS:CR> [FS communication UI]
 		}
 
 		LLSD chat_args;

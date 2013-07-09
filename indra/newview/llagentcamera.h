@@ -393,8 +393,6 @@ private:
  *******************************************************************************/
 
 // <FS:Ansariel> FIRE-7758: Save/load camera position feature
-// Copyright (C) 2012, Ansariel Hiller @ Second Life for Phoenix Firestorm Viewer
-// This code is licensed unter the GNU Lesser General Public License version 2.1
 public:
 	void			storeCameraPosition();
 	void			loadCameraPosition();

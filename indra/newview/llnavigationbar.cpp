@@ -320,20 +320,8 @@ BOOL LLNavigationBar::postBuild()
 		setTeleportFailedCallback(boost::bind(&LLNavigationBar::onTeleportFailed, this));
 	
 	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
-	// LLFavoritesBarCtrl* fp = getChild<LLFavoritesBarCtrl>("favorite");
-	// LLPanel* np = getChild<LLPanel>("navigation_panel");
-	// LLPanel* navFrame = getChild<LLPanel>("navigation_bar");
-	
-	// mDefaultNavContainerRect = getRect();
-	// mDefaultFpRect = fp->getRect();
-	// mDefaultNpRect = np->getRect();
-	// mDefaultFrameRect = navFrame->getRect();
-	
-	// mDefaultNavContainerRect.set(mDefaultNavContainerRect.mLeft, mDefaultNpRect.mTop,mDefaultNavContainerRect.mRight, mDefaultFpRect.mBottom);
-	// setRect(mDefaultNavContainerRect);
-	// navFrame->setRect(mDefaultFrameRect);
-	// np->setRect(mDefaultNpRect);
-	// fp->setRect(mDefaultFpRect);
+	//mDefaultNbRect = getRect();
+	//mDefaultFpRect = getChild<LLFavoritesBarCtrl>("favorite")->getRect();
 	// </FS:Zi>
 
 	// we'll be notified on teleport history changes
@@ -779,7 +767,7 @@ void LLNavigationBar::clearHistoryCache()
 // <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
 // int LLNavigationBar::getDefNavBarHeight()
 // {
-// 	return mDefaultNpRect.getHeight();
+// 	return mDefaultNbRect.getHeight();
 // }
 // int LLNavigationBar::getDefFavBarHeight()
 // {

@@ -40,24 +40,19 @@
 #include "llimview.h" // for gIMMgr
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"	// can_afford_transaction()
-// <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h" <FS:TM> CHU merge LL removed this
-#include "fsfloaterim.h"
-// </FS:Ansariel> [FS communication UI]
 #include "groupchatlistener.h"
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0)
+
+// Firestorm includes
+#include "exogroupmutelist.h"
+#include "fscontactsfloater.h"
+#include "fsdata.h"
+#include "fsfloatergroup.h"
+#include "fsfloaterim.h"
+#include "llpanelgroup.h"
 #include "llslurl.h"
 #include "rlvactions.h"
 #include "rlvcommon.h"
 #include "rlvhandler.h"
-// [/RLVa:KB]
-#include "exogroupmutelist.h"
-// <FS:Ansariel> Standalone group floater
-#include "fsfloatergroup.h"
-#include "llpanelgroup.h"
-// </FS:Ansariel>
-#include "fscontactsfloater.h"
-#include "fsdata.h"
 
 //
 // Globals
@@ -499,8 +494,7 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 		if (session_id != LLUUID::null)
 		{
 			// <FS:Ansariel> [FS communication UI]
-			//LLFloaterIMContainer::getInstance()->showConversation(session_id); <FS:TM> CHUI Merge LL new
-			//LLIMFloater::show(session_id); <FS:TM> CHUI Merge LL old
+			//LLFloaterIMContainer::getInstance()->showConversation(session_id);
 			FSFloaterIM::show(session_id);
 			// </FS:Ansariel> [FS communication UI]
 		}
