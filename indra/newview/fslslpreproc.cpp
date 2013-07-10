@@ -39,7 +39,6 @@
 #include "llviewertexteditor.h"
 #include "llinventorymodel.h"
 #include "llviewercontrol.h"
-#include "llversionviewer.h"
 #include <iostream>
 #include <fstream>
 #include <string>

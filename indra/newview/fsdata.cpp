@@ -48,13 +48,12 @@
 #include "llprimitive.h"
 #include "llsdserialize.h"
 #include "llversioninfo.h"
-#include "llversionviewer.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 
-const std::string VERSION_ID = llformat("%s %d.%d.%d (%d)", LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, LL_VERSION_PATCH, LL_VERSION_BUILD);
+const std::string VERSION_ID = llformat("%s %d.%d.%d (%d)", LLVersionInfo::getChannel(), LLVersionInfo::getMajor(), LLVersionInfo::getMinor(), LLVersionInfo::getPatch(), LLVersionInfo::getBuild());
 const std::string FSDATA_URL = "http://phoenixviewer.com/app/fsdatatest/data.xml";
 const std::string AGENTS_URL = "http://phoenixviewer.com/app/fsdatatest/agents.xml";
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
