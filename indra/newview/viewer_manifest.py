@@ -230,7 +230,7 @@ class ViewerManifest(LLManifest):
     def app_name(self):
         app_suffix='Test'
         channel_type=self.channel_lowerword()
-        if channel_type == 'release' :
+        if channel_type.startswith('release') :
             app_suffix='Viewer'
         elif re.match('^(beta|project).*',channel_type) :
             app_suffix=self.channel_unique()
@@ -239,10 +239,9 @@ class ViewerManifest(LLManifest):
     def icon_path(self):
         icon_path="icons/"
         channel_type=self.channel_lowerword()
-        #print "Icon channel type '%s'" % channel_type <FS:TM> F_EX merge LL new
-        print "DEBUG: channel_type= %s" % channel_type # AO, for further refining
-        if channel_type == 'release' :
-            icon_path += channel_type
+        print "Icon channel type '%s'" % channel_type
+        if channel_type.startswith('release') :
+            icon_path += 'release'
         elif re.match('^beta.*',channel_type) :
             icon_path += 'beta'
         elif re.match('^project.*',channel_type) :
@@ -301,7 +300,7 @@ class WindowsManifest(ViewerManifest):
     def final_exe(self):
         app_suffix="Test"
         channel_type=self.channel_lowerword()
-        if channel_type == 'release' :
+        if channel_type.startswith('release') :
             app_suffix=''
         elif re.match('^(beta|project).*',channel_type) :
             app_suffix=''.join(self.channel_unique().split())
@@ -611,9 +610,6 @@ class WindowsManifest(ViewerManifest):
             'channel_unique':self.channel_unique(),
             'subchannel_underscores':'_'.join(self.channel_unique().split())
             }
-            
-        print "DEBUG , version= %s" % self.args['version']
-        print substitution_strings
 
         version_vars = """
         !define INSTEXE  "%(final_exe)s"
@@ -760,11 +756,11 @@ class DarwinManifest(ViewerManifest):
 
         if self.prefix(src="", dst="Contents"):  # everything goes in Contents
             self.path("Info.plist", dst="Info.plist")
-            #self.path("Info-Firestorm.plist", dst="Info.plist") <FS:TM> F_EX merge - FS old, above is LL new
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path("../packages/lib/release/libndofdev.dylib", dst="Resources/libndofdev.dylib")
             self.path("../packages/lib/release/libhunspell-1.3.0.dylib", dst="Resources/libhunspell-1.3.0.dylib")
+
             if self.prefix(dst="MacOS"):
                 self.path2basename("../viewer_components/updater/scripts/darwin", "*.py")
                 self.end_prefix()
@@ -1029,18 +1025,6 @@ class DarwinManifest(ViewerManifest):
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
-            # Create the alias file (which is a resource file) from the .r
-            self.run_command('Rez %r -o %r' %
-                             (self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
-                              os.path.join(volpath, "Applications")))
-
-            # Set up the installer disk image: set icon positions, folder view
-            #  options, and icon label colors. This must be done before the
-            #  files are hidden.
-            self.run_command('osascript %r %r' % 
-                             (self.src_path_of("installers/darwin/installer-dmg.applescript"),
-                             volname))
-
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)
             for f in ".VolumeIcon.icns", "background.png", ".DS_Store":
                 pathname = os.path.join(volpath, f)
@@ -1061,12 +1045,23 @@ class DarwinManifest(ViewerManifest):
                 # the original problem manifest by executing the desired command.
                 self.run_command('SetFile -a V %r' % pathname)
 
+            # Create the alias file (which is a resource file) from the .r
+            self.run_command('Rez %r -o %r' %
+                             (self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
+                              os.path.join(volpath, "Applications")))
+
+            # Set up the installer disk image: set icon positions, folder view
+            #  options, and icon label colors. This must be done before the
+            #  files are hidden.
+            self.run_command('osascript %r %r' % 
+                             (self.src_path_of("installers/darwin/installer-dmg.applescript"),
+                             volname))
+
             # Set the alias file's alias and custom icon bits
             self.run_command('SetFile -a AC %r' % os.path.join(volpath, "Applications"))
 
             # Set the disk image root's custom icon bit
             self.run_command('SetFile -a C %r' % volpath)
-
         finally:
             # Unmount the image even if exceptions from any of the above 
             self.run_command('hdiutil detach -force %r' % devfile)

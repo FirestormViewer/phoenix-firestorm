@@ -319,7 +319,6 @@ if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
     patchVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 3`
     echo "Channel : Firestorm-${CHANNEL}"
     echo "Version : ${majorVer}.${minorVer}.${patchVer}.${buildVer}"
-    python ./scripts/update_version_files.py --channel="Firestorm-$CHANNEL" --version=${majorVer}.${minorVer}.${patchVer}.${buildVer}
     popd
 fi
 
