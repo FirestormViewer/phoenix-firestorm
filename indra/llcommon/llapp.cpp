@@ -81,15 +81,16 @@ bool windows_post_minidump_callback(const wchar_t* dump_path,
 void setup_signals();
 void default_unix_signal_handler(int signum, siginfo_t *info, void *);
 
-#if LL_LINUX
-#include "google_breakpad/minidump_descriptor.h"
-bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, void* context, bool succeeded);
-#else
+// <FS:TS> This doesn't build on Linux any more
+//#if LL_LINUX
+//#include "google_breakpad/minidump_descriptor.h"
+//bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, void* context, bool succeeded);
+//#else
 // Called by breakpad exception handler after the minidump has been generated.
 bool unix_post_minidump_callback(const char *dump_dir,
 					  const char *minidump_id,
 					  void *context, bool succeeded);
-#endif
+//#endif
 
 # if LL_DARWIN
 /* OSX doesn't support SIGRT* */
@@ -455,9 +456,10 @@ void LLApp::setMiniDumpDir(const std::string &path)
 
 	mExceptionHandler->set_dump_path( utf8str_to_utf16str(path) );
 	// </FS:ND>
-#elif LL_LINUX
-        google_breakpad::MinidumpDescriptor desc(path);
-	mExceptionHandler->set_minidump_descriptor(desc);
+// <FS:TS> This doesn't build on Linux any more
+//#elif LL_LINUX
+//        google_breakpad::MinidumpDescriptor desc(path);
+//	mExceptionHandler->set_minidump_descriptor(desc);
 
 #else
 	mExceptionHandler->set_dump_path(path);
@@ -906,7 +908,9 @@ void default_unix_signal_handler(int signum, siginfo_t *info, void *)
 	}
 }
 
-#if LL_LINUX
+// <FS:TS> This doesn't build on Linux any more
+//#if LL_LINUX
+#if 0
 bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, void* context, bool succeeded)
 {
 	// Copy minidump file path into fixed buffer in the app instance to avoid
