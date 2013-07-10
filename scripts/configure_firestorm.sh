@@ -265,7 +265,7 @@ if [ ! -d `dirname "$LOG"` ] ; then
 fi
 
 echo -e "configure_firestorm.py" > $LOG
-echo -e "       PLATFORM: '$PLATFORM'"       | tee -a $LOG
+echo -e "    PLATFORM: '$PLATFORM'"          | tee -a $LOG
 echo -e "         KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
 echo -e "      FMODEX: `b2a $WANTS_FMODEX`"  | tee -a $LOG
 echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`" | tee -a $LOG
