@@ -82,7 +82,17 @@ void setup_signals();
 void default_unix_signal_handler(int signum, siginfo_t *info, void *);
 
 #if LL_LINUX
-#include "google_breakpad/minidump_descriptor.h"
+
+// <FS:ND> Build without google breakpad if it's not available. That's fine to do.
+// Breakpad is only ever used to create minidumps. Those are important for official released, but if a selfcompiler wants to build without it, that's no problem.
+// #include "google_breakpad/minidump_descriptor.h"
+
+#ifndef ND_NO_BREAKPAD
+ #include "google_breakpad/minidump_descriptor.h"
+#endif
+
+// </FS:ND>
+
 bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, void* context, bool succeeded);
 #else
 // Called by breakpad exception handler after the minidump has been generated.
@@ -386,14 +396,21 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 		installHandler = true;
 	}
 	#endif
-#endif
+
 	if(installHandler && (mExceptionHandler == 0))
 	{
 		std::string dumpPath = "/tmp/";
-		mExceptionHandler = new google_breakpad::ExceptionHandler(dumpPath, 0, &unix_post_minidump_callback, 0, true);
+		mExceptionHandler = new google_breakpad::ExceptionHandler(dumpPath, 0, &unix_post_minidump_callback, 0, true, 0);
+	}
+#elif LL_LINUX
+	if(installHandler && (mExceptionHandler == 0))
+	{
+		google_breakpad::MinidumpDescriptor desc("/tmp");
+	        new google_breakpad::ExceptionHandler(desc, 0, &unix_minidump_callback, 0, true, 0);
 	}
 #endif
 
+#endif
 	startErrorThread();
 }
 
