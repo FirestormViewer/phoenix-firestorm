@@ -53,7 +53,7 @@
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 
-const std::string VERSION_ID = llformat("%s %d.%d.%d (%d)", LLVersionInfo::getChannel(), LLVersionInfo::getMajor(), LLVersionInfo::getMinor(), LLVersionInfo::getPatch(), LLVersionInfo::getBuild());
+const std::string VERSION_ID = LLVersionInfo::getChannelAndVersion();
 const std::string FSDATA_URL = "http://phoenixviewer.com/app/fsdatatest/data.xml";
 const std::string AGENTS_URL = "http://phoenixviewer.com/app/fsdatatest/agents.xml";
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
