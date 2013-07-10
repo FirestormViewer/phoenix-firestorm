@@ -46,19 +46,3 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
         "LL_VIEWER_VERSION_BUILD=${VIEWER_VERSION_REVISION}"
         )
 endif (NOT DEFINED VIEWER_SHORT_VERSION)
-
-#<FS:TM> below is FS spcific
-macro (build_channel _target)
-  execute_process(
-      COMMAND ${PYTHON_EXECUTABLE} ${SCRIPTS_DIR}/build_channel.py
-        llversion${_target}.h ${LLCOMMON_INCLUDE_DIRS}
-      OUTPUT_VARIABLE VIEWER_CHANNEL
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-      )
-      
-  if (VIEWER_CHANNEL)
-    message(STATUS "Channel is ${VIEWER_CHANNEL}")
-  else (VIEWER_CHANNEL)
-    message(SEND_ERROR "Could not determine channel")
-  endif (VIEWER_CHANNEL)
-endmacro (build_channel)
