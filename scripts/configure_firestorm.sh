@@ -62,7 +62,7 @@ showUsage()
     echo "  --package   : Build installer"
     echo "  --fmodex    : Build with FMOD Ex"
     echo "  --opensim   : Build with OpenSim support (Disables Havok features)"
-    echo "  --avx       : Build with Advanced Vector Extensions (Win"
+    echo "  --avx       : Build with Advanced Vector Extensions (Windows only)"
     echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
     echo "  --jobs <num>: Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
