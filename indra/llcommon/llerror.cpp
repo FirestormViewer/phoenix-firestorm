@@ -50,6 +50,8 @@
 #include "llstl.h"
 #include "lltimer.h"
 
+#include "nd/ndlogthrottle.h"
+
 namespace {
 #if !LL_WINDOWS
 	class RecordToSyslog : public LLError::Recorder
@@ -1069,6 +1071,9 @@ namespace LLError
 		
 		
 		std::ostringstream prefix;
+
+		if( nd::logging::throttle( site.mFile, site.mLine, &prefix ) )
+			return;
 
 		switch (site.mLevel)
 		{
