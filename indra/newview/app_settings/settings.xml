@@ -3604,6 +3604,7 @@
       <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
     <key>ClickOnAvatarKeepsCamera</key>
     <map>
       <key>Comment</key>
