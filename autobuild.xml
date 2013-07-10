@@ -2188,7 +2188,7 @@
                   <string>--btype RelWithDebInfo</string>
                   <string>--config</string>
                   <string>--version</string>
-                  <string>-DOPENSIM:BOOL=ON</string>
+                  <string>--opensim</string>
                 </array>
               </map>
               <key>name</key>
@@ -2245,7 +2245,7 @@
                 <array>
                   <string>--config</string>
                   <string>--version</string>
-                  <string>-DOPENSIM:BOOL=ON</string>
+                  <string>--opensim</string>
                 </array>
               </map>
               <key>name</key>
@@ -2262,8 +2262,8 @@
                 <array>
                   <string>--config</string>
                   <string>--version</string>
-                  <string>-DOPENSIM:BOOL=ON</string>
-                  <string>-DUSE_AVX_OPTIMIZATION:BOOL=ON</string>
+                  <string>--opensim</string>
+                  <string>--avx</string>
                 </array>
               </map>
               <key>name</key>
@@ -2280,7 +2280,7 @@
                 <array>
                   <string>--config</string>
                   <string>--version</string>
-                  <string>-DOPENSIM:BOOL=ON</string>
+                  <string>--opensim</string>
                 </array>
               </map>
               <key>name</key>

@@ -17,6 +17,8 @@ FALSE=1
 #                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
 #                  <string>-DUSE_KDU=TRUE</string>
 #                  <string>-DFMODEX:BOOL=ON</string>
+#                  <string>-DOPENSIM:BOOL=ON</string>
+#                  <string>-DUSE_AVX_OPTIMIZATION:BOOL=OFF</string>
 #                  <string>-DLL_TESTS:BOOL=OFF</string>
 #                  <string>-DPACKAGE:BOOL=OFF></string>
 
@@ -31,6 +33,8 @@ WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
 WANTS_KDU=$FALSE
 WANTS_FMODEX=$FALSE
+WANTS_OPENSIM=$TRUE
+WANTS_AVX=$FALSE
 WANTS_BUILD=$FALSE
 PLATFORM="darwin" # darwin, win32, win64, linux32, linux64
 BTYPE="Release"
@@ -56,7 +60,9 @@ showUsage()
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
     echo "  --kdu       : Build with KDU"
     echo "  --package   : Build installer"
-    echo "  --fmodex      : Build FmodEX"
+    echo "  --fmodex    : Build with FMOD Ex"
+    echo "  --opensim   : Build with OpenSim support (Disables Havok features)"
+    echo "  --avx       : Build with Advanced Vector Extensions (Win"
     echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
     echo "  --jobs <num>: Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
@@ -68,7 +74,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package fmodex jobs: platform: kdu help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package fmodex jobs: platform: kdu opensim avx help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -86,8 +92,10 @@ getArgs()
                     fi
                     ;;
           kdu)      WANTS_KDU=$TRUE;;
-          fmodex)    WANTS_FMODEX=$TRUE;;
-          package)    WANTS_PACKAGE=$TRUE;;
+          fmodex)   WANTS_FMODEX=$TRUE;;
+          opensim)  WANTS_OPENSIM=$TRUE;;
+          avx)      WANTS_AVX=$TRUE;;
+          package)  WANTS_PACKAGE=$TRUE;;
           build)    WANTS_BUILD=$TRUE;;
           platform)    PLATFORM="$OPTARG";;
           jobs)    JOBS="$OPTARG";;
@@ -260,6 +268,8 @@ echo -e "configure_firestorm.py" > $LOG
 echo -e "       PLATFORM: '$PLATFORM'"       | tee -a $LOG
 echo -e "         KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
 echo -e "      FMODEX: `b2a $WANTS_FMODEX`"  | tee -a $LOG
+echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`" | tee -a $LOG
+echo -e "         AVX: `b2a $WANTS_AVX` "    | tee -a $LOG
 echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`" | tee -a $LOG
 echo -e "       CLEAN: `b2a $WANTS_CLEAN`"   | tee -a $LOG
 echo -e "       BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
@@ -337,6 +347,16 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         FMODEX="-DFMODEX:BOOL=OFF"
     fi
+    if [ $WANTS_OPENSIM -eq $TRUE ] ; then
+        OPENSIM="-DOPENSIM:BOOL=ON"
+    else
+        OPENSIM="-DOPENSIM:BOOL=OFF"
+    fi
+    if [ $WANTS_AVX -eq $TRUE ] ; then
+        AVX_OPTIMIZATION="-DUSE_AVX_OPTIMIZATION:BOOL=ON"
+    else
+        AVX_OPTIMIZATION="-DUSE_AVX_OPTIMIZATION:BOOL=OFF"
+    fi
     if [ $WANTS_PACKAGE -eq $TRUE ] ; then
         PACKAGE="-DPACKAGE:BOOL=ON"
         # Also delete easy-to-copy resource files, insuring that we properly refresh resoures from the source tree
@@ -368,7 +388,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then
     ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
