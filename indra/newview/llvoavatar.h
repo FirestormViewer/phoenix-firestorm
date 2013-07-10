@@ -129,15 +129,15 @@ protected:
 public:
 	/*virtual*/ void			updateGL();
 	/*virtual*/ LLVOAvatar*		asAvatar();
-	virtual U32    	 	 		processUpdateMessage(LLMessageSystem *mesgsys,
+	virtual U32    	 	 	processUpdateMessage(LLMessageSystem *mesgsys,
 													 void **user_data,
 													 U32 block_num,
 													 const EObjectUpdateType update_type,
 													 LLDataPacker *dp);
-	virtual void   	 	 		idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+	virtual void   	 	 	idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
 	/*virtual*/ BOOL   	 	 	updateLOD();
-	BOOL  	 	 	 	 		updateJointLODs();
-	void						updateLODRiggedAttachments( void );
+	BOOL  	 	 	 	 	updateJointLODs();
+	void					updateLODRiggedAttachments( void );
 	/*virtual*/ BOOL   	 	 	isActive() const; // Whether this object needs to do an idleUpdate.
 	S32 						totalTextureMemForUUIDS(std::set<LLUUID>& ids);
 	bool 						allTexturesCompletelyDownloaded(std::set<LLUUID>& ids) const;
@@ -163,28 +163,28 @@ public:
 	/*virtual*/ void   	 	 	updateRegion(LLViewerRegion *regionp);
 	/*virtual*/ void   	 	 	updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax);
 	/*virtual*/ void   	 	 	getSpatialExtents(LLVector4a& newMin, LLVector4a& newMax);
-	/*virtual*/ BOOL   	 	 	lineSegmentIntersect(const LLVector3& start, const LLVector3& end,
+	/*virtual*/ BOOL   	 	 	lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 												 BOOL pick_rigged = FALSE,
 // [/SL:KB]
 												 S32* face_hit = NULL,             // which face was hit
-												 LLVector3* intersection = NULL,   // return the intersection point
+												 LLVector4a* intersection = NULL,   // return the intersection point
 												 LLVector2* tex_coord = NULL,      // return the texture coordinates of the intersection point
-												 LLVector3* normal = NULL,         // return the surface normal at the intersection point
-												 LLVector3* bi_normal = NULL);     // return the surface bi-normal at the intersection point
-	LLViewerObject*	lineSegmentIntersectRiggedAttachments(const LLVector3& start, const LLVector3& end,
+												 LLVector4a* normal = NULL,         // return the surface normal at the intersection point
+												 LLVector4a* tangent = NULL);     // return the surface tangent at the intersection point
+	LLViewerObject*	lineSegmentIntersectRiggedAttachments(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 												 BOOL pick_rigged = FALSE,
 // [/SL:KB]
 												 S32* face_hit = NULL,             // which face was hit
-												 LLVector3* intersection = NULL,   // return the intersection point
+												 LLVector4a* intersection = NULL,   // return the intersection point
 												 LLVector2* tex_coord = NULL,      // return the texture coordinates of the intersection point
-												 LLVector3* normal = NULL,         // return the surface normal at the intersection point
-												 LLVector3* bi_normal = NULL);     // return the surface bi-normal at the intersection point
+												 LLVector4a* normal = NULL,         // return the surface normal at the intersection point
+												 LLVector4a* tangent = NULL);     // return the surface tangent at the intersection point
 
 	//--------------------------------------------------------------------
 	// LLCharacter interface and related

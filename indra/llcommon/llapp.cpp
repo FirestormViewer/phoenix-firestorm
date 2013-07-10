@@ -81,10 +81,17 @@ bool windows_post_minidump_callback(const wchar_t* dump_path,
 void setup_signals();
 void default_unix_signal_handler(int signum, siginfo_t *info, void *);
 
+// <FS:TS> This doesn't build on Linux any more
+//#if LL_LINUX
+//#include "google_breakpad/minidump_descriptor.h"
+//bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, void* context, bool succeeded);
+//#else
 // Called by breakpad exception handler after the minidump has been generated.
 bool unix_post_minidump_callback(const char *dump_dir,
 					  const char *minidump_id,
 					  void *context, bool succeeded);
+//#endif
+
 # if LL_DARWIN
 /* OSX doesn't support SIGRT* */
 S32 LL_SMACKDOWN_SIGNAL = SIGUSR1;
@@ -347,7 +354,7 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 	
 	// Add google breakpad exception handler configured for Darwin/Linux.
 	bool installHandler = true;
-#ifdef LL_DARWIN
+#if LL_DARWIN
 	// For the special case of Darwin, we do not want to install the handler if
 	// the process is being debugged as the app will exit with value ABRT (6) if
 	// we do.  Unfortunately, the code below which performs that test relies on
@@ -448,8 +455,12 @@ void LLApp::setMiniDumpDir(const std::string &path)
 	// mExceptionHandler->set_dump_path(std::wstring(buffer));
 
 	mExceptionHandler->set_dump_path( utf8str_to_utf16str(path) );
-
 	// </FS:ND>
+// <FS:TS> This doesn't build on Linux any more
+//#elif LL_LINUX
+//        google_breakpad::MinidumpDescriptor desc(path);
+//	mExceptionHandler->set_minidump_descriptor(desc);
+
 #else
 	mExceptionHandler->set_dump_path(path);
 #endif
@@ -897,6 +908,45 @@ void default_unix_signal_handler(int signum, siginfo_t *info, void *)
 	}
 }
 
+// <FS:TS> This doesn't build on Linux any more
+//#if LL_LINUX
+#if 0
+bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, void* context, bool succeeded)
+{
+	// Copy minidump file path into fixed buffer in the app instance to avoid
+	// heap allocations in a crash handler.
+	
+	// path format: <dump_dir>/<minidump_id>.dmp
+	int dirPathLength = strlen(minidump_desc.path());
+	
+	// The path must not be truncated.
+	llassert((dirPathLength + 5) <= LLApp::MAX_MINDUMP_PATH_LENGTH);
+	
+	char * path = LLApp::instance()->getMiniDumpFilename();
+	S32 remaining = LLApp::MAX_MINDUMP_PATH_LENGTH;
+	strncpy(path, minidump_desc.path(), remaining);
+	remaining -= dirPathLength;
+	path += dirPathLength;
+	if (remaining > 0 && dirPathLength > 0 && path[-1] != '/')
+	{
+		*path++ = '/';
+		--remaining;
+	}
+	
+	llinfos << "generated minidump: " << LLApp::instance()->getMiniDumpFilename() << llendl;
+	LLApp::runErrorHandler();
+	
+#ifndef LL_RELEASE_FOR_DOWNLOAD
+	clear_signals();
+	return false;
+#else
+	return true;
+#endif
+
+}
+#endif
+
+
 bool unix_post_minidump_callback(const char *dump_dir,
 					  const char *minidump_id,
 					  void *context, bool succeeded)
@@ -1040,9 +1090,9 @@ bool windows_post_minidump_callback(const wchar_t* dump_path,
 	// <FS:ND>
 	
 	llinfos << "generated minidump: " << LLApp::instance()->getMiniDumpFilename() << llendl;
-    // *NOTE:Mani - this code is stolen from LLApp, where its never actually used.
+   // *NOTE:Mani - this code is stolen from LLApp, where its never actually used.
 	//OSMessageBox("Attach Debugger Now", "Error", OSMB_OK);
-    // *TODO: Translate the signals/exceptions into cross-platform stuff
+   // *TODO: Translate the signals/exceptions into cross-platform stuff
 	// Windows implementation
 	llinfos << "Entering Windows Exception Handler..." << llendl;
 

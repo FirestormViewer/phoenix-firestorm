@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="435"
+ height="455"
  layout="topleft"
  name="floater_fs_script_editor_prefs"
  help_topic="lsl_editor_preferences"
@@ -237,6 +237,36 @@
 		height="24"
 		label_height="0"
 		layout="topleft"
+		left="15"
+		name="function"
+		top_pad="10"
+		width="44" >
+        <color_swatch.init_callback
+		function="ScriptPref.getUIColor"
+		parameter="ScriptFunction" />
+        <color_swatch.commit_callback
+		function="ScriptPref.applyUIColor"
+		parameter="ScriptFunction" />
+    </color_swatch>
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="10"
+		layout="topleft"
+		left_pad="5"
+		mouse_opaque="false"
+		name="function_label"
+		top_delta="5"
+		width="100">
+        Function
+    </text>
+	<color_swatch
+		can_apply_immediately="true"
+		follows="left|top"
+		height="24"
+		label_height="0"
+		layout="topleft"
 		left="170"
 		name="string_literal"
 		top="45"
@@ -449,7 +479,7 @@
 		layout="topleft"
 		left="12"
 		name="prefs_label"
-		top="230"
+		top="255"
 		width="150">
 		Script Editor Options:
     </text>

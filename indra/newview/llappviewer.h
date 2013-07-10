@@ -197,7 +197,7 @@ public:
 	
 protected:
 	virtual bool initWindow(); // Initialize the viewer's window.
-	virtual bool initLogging(); // Initialize log files, logging system, return false on failure.
+	virtual void initLoggingAndGetLastDuration(); // Initialize log files, logging system
 	virtual void initConsole() {}; // Initialize OS level debugging console.
 	virtual bool initHardwareTest() { return true; } // A false result indicates the app should quit.
 	virtual bool initSLURLHandler();
@@ -229,9 +229,10 @@ private:
 
 	void writeSystemInfo(); // Write system info to "debug_info.log"
 
-	bool anotherInstanceRunning(); 
-	void initMarkerFile(); 
-    
+	void processMarkerFiles(); 
+	static void recordMarkerVersion(LLAPRFile& marker_file);
+	bool markerIsSameVersion(const std::string& marker_name) const;
+	
     void idle(); 
     void idleShutdown();
 	// update avatar SLID and display name caches
@@ -251,10 +252,11 @@ private:
 	LLAPRFile mMarkerFile; // A file created to indicate the app is running.
 
 	std::string mLogoutMarkerFileName;
+	LLAPRFile mLogoutMarkerFile; // A file created to indicate the app is running. //<FS:TM> F_EX merge LL new
 
 	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-	// apr_file_t* mLogoutMarkerFile; // A file created to indicate the app is running.
-	LLAPRFile::tFiletype* mLogoutMarkerFile; // A file created to indicate the app is running.
+	// apr_file_t* mLogoutMarkerFile; // A file created to indicate the app is running. <FS:TM> F_EX merge LL old
+	//LLAPRFile::tFiletype* mLogoutMarkerFile; // A file created to indicate the app is running. <FS:TM> F_EX merge FS orig
 	// </FS:ND>
 
 	//-TT The skin and theme we are using at startup. might want to make them static.
@@ -348,6 +350,9 @@ typedef enum
 } eLastExecEvent;
 
 extern eLastExecEvent gLastExecEvent; // llstartup
+extern S32 gLastExecDuration; ///< the duration of the previous run in seconds (<0 indicates unknown)
+
+extern const char* gPlatform;
 
 extern U32 gFrameCount;
 extern U32 gForegroundFrameCount;

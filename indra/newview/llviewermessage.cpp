@@ -7657,6 +7657,19 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 	}
 }
 
+void script_question_mute(const LLUUID& item_id, const std::string& object_name);
+
+bool unknown_script_question_cb(const LLSD& notification, const LLSD& response)
+{
+	// Only care if they muted the object here.
+	if ( response["Mute"] ) // mute
+	{
+		LLUUID task_id = notification["payload"]["task_id"].asUUID();
+		script_question_mute(task_id,notification["payload"]["object_name"].asString());
+	}
+	return false;
+}
+
 bool script_question_cb(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
@@ -7717,34 +7730,42 @@ bool script_question_cb(const LLSD& notification, const LLSD& response)
 
 	if ( response["Mute"] ) // mute
 	{
-		LLMuteList::getInstance()->add(LLMute(item_id, notification["payload"]["object_name"].asString(), LLMute::OBJECT));
-
-		// purge the message queue of any previously queued requests from the same source. DEV-4879
-		class OfferMatcher : public LLNotificationsUI::LLScreenChannel::Matcher
-		{
-		public:
-			OfferMatcher(const LLUUID& to_block) : blocked_id(to_block) {}
-			bool matches(const LLNotificationPtr notification) const
-			{
-				if (notification->getName() == "ScriptQuestionCaution"
-					|| notification->getName() == "ScriptQuestion")
-				{
-					return (notification->getPayload()["item_id"].asUUID() == blocked_id);
-				}
-				return false;
-			}
-		private:
-			const LLUUID& blocked_id;
-		};
-
-		LLNotificationsUI::LLChannelManager::getInstance()->killToastsFromChannel(LLUUID(
-				gSavedSettings.getString("NotificationChannelUUID")), OfferMatcher(item_id));
+		script_question_mute(task_id,notification["payload"]["object_name"].asString());
 	}
 
 	return false;
 }
+
+void script_question_mute(const LLUUID& task_id, const std::string& object_name)
+{
+	LLMuteList::getInstance()->add(LLMute(task_id, object_name, LLMute::OBJECT));
+
+    // purge the message queue of any previously queued requests from the same source. DEV-4879
+    class OfferMatcher : public LLNotificationsUI::LLScreenChannel::Matcher
+    {
+    public:
+    	OfferMatcher(const LLUUID& to_block) : blocked_id(to_block) {}
+      	bool matches(const LLNotificationPtr notification) const
+        {
+            if (notification->getName() == "ScriptQuestionCaution"
+                || notification->getName() == "ScriptQuestion"
+				|| notification->getName() == "UnknownScriptQuestion")
+            {
+                return (notification->getPayload()["task_id"].asUUID() == blocked_id);
+            }
+            return false;
+        }
+    private:
+        const LLUUID& blocked_id;
+    };
+
+    LLNotificationsUI::LLChannelManager::getInstance()->killToastsFromChannel(LLUUID(
+            gSavedSettings.getString("NotificationChannelUUID")), OfferMatcher(task_id));
+}
+
 static LLNotificationFunctorRegistration script_question_cb_reg_1("ScriptQuestion", script_question_cb);
 static LLNotificationFunctorRegistration script_question_cb_reg_2("ScriptQuestionCaution", script_question_cb);
+static LLNotificationFunctorRegistration unknown_script_question_cb_reg("UnknownScriptQuestion", unknown_script_question_cb);
 
 void process_script_question(LLMessageSystem *msg, void **user_data)
 {
@@ -7827,7 +7848,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 		LLSD args;
 		args["OBJECTNAME"] = object_name;
 		args["NAME"] = LLCacheName::cleanFullName(owner_name);
-
+		S32 known_questions = 0;
 		BOOL has_not_only_debit = questions ^ LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_DEBIT];
 		// check the received permission flags against each permission
 		for (S32 i = 0; i < SCRIPT_PERMISSION_EOF; i++)
@@ -7835,7 +7856,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			if (questions & LSCRIPTRunTimePermissionBits[i])
 			{
 				count++;
-
+				known_questions |= LSCRIPTRunTimePermissionBits[i];
 				// check whether permission question should cause special caution dialog
 				caution |= (SCRIPT_QUESTION_IS_CAUTION[i]);
 
@@ -7845,63 +7866,77 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 				script_question += "    " + LLTrans::getString(SCRIPT_QUESTIONS[i]) + "\n";
 			}
 		}
+	
 		args["QUESTIONS"] = script_question;
 
-		LLSD payload;
-		payload["task_id"] = taskid;
-		payload["item_id"] = itemid;
-		payload["sender"] = sender.getIPandPort();
-		payload["questions"] = questions;
-		payload["object_name"] = object_name;
-		payload["owner_name"] = owner_name;
+		if (known_questions != questions)
+		{	// This is in addition to the normal dialog.
+			LLSD payload;
+			payload["task_id"] = taskid;
+			payload["item_id"] = itemid;
+			payload["object_name"] = object_name;
+			
+			args["DOWNLOADURL"] = LLTrans::getString("ViewerDownloadURL");
+			LLNotificationsUtil::add("UnknownScriptQuestion",args,payload);
+		}
+		
+		if (known_questions)
+		{
+			LLSD payload;
+			payload["task_id"] = taskid;
+			payload["item_id"] = itemid;
+			payload["sender"] = sender.getIPandPort();
+			payload["questions"] = known_questions;
+			payload["object_name"] = object_name;
+			payload["owner_name"] = owner_name;
 
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (rlv_handler_t::isEnabled())
-		{
-			RlvUtil::filterScriptQuestions(questions, payload);
-
-			if ( (questions) && (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION)) )
 			{
-				const LLViewerObject* pObj = gObjectList.findObject(taskid);
-				if (pObj)
+				RlvUtil::filterScriptQuestions(questions, payload);
+
+				if ( (questions) && (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION)) )
 				{
-					if ( (pObj->permYouOwner()) && (!pObj->isAttachment()) )
+					const LLViewerObject* pObj = gObjectList.findObject(taskid);
+					if (pObj)
 					{
-						questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
-							LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH]);
+						if ( (pObj->permYouOwner()) && (!pObj->isAttachment()) )
+						{
+							questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
+								LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH]);
+						}
+						else
+						{
+							questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS]);
+						}
+						payload["rlv_notify"] = !pObj->permYouOwner();
 					}
-					else
-					{
-						questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS]);
-					}
-					payload["rlv_notify"] = !pObj->permYouOwner();
 				}
 			}
-		}
 
-		if ( (!caution) && (!questions) )
-		{
-			LLNotifications::instance().forceResponse(
-				LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
-		}
-		else if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
-// [/RLVa:KB]
-		// check whether cautions are even enabled or not
-//		if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
-		{
-			if (caution)
+			if ( (!caution) && (!questions) )
 			{
-				args["FOOTERTEXT"] = (count > 1) ? LLTrans::getString("AdditionalPermissionsRequestHeader") + "\n\n" + script_question : "";
+				LLNotifications::instance().forceResponse(
+					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
 			}
-			// display the caution permissions prompt
-			LLNotificationsUtil::add(caution ? "ScriptQuestionCaution" : "ScriptQuestion", args, payload);
+			else if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+// [/RLVa:KB]
+			// check whether cautions are even enabled or not
+//			if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+			{
+				if (caution)
+				{
+					args["FOOTERTEXT"] = (count > 1) ? LLTrans::getString("AdditionalPermissionsRequestHeader") + "\n\n" + script_question : "";
+				}
+				// display the caution permissions prompt
+				LLNotificationsUtil::add(caution ? "ScriptQuestionCaution" : "ScriptQuestion", args, payload);
+			}
+			else
+			{
+				// fall back to default behavior if cautions are entirely disabled
+				LLNotificationsUtil::add("ScriptQuestion", args, payload);
+			}
 		}
-		else
-		{
-			// fall back to default behavior if cautions are entirely disabled
-			LLNotificationsUtil::add("ScriptQuestion", args, payload);
-		}
-
 	}
 }
 

@@ -88,7 +88,6 @@ int yylex( void );
 int yyparse( void );
 int yyerror(const char *fmt, ...);
 
-
 %}
 
 %%

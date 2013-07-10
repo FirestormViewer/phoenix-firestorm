@@ -21,7 +21,6 @@
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "lluictrlfactory.h"
-#include "llversionviewer.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"

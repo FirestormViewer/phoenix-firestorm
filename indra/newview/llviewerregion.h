@@ -361,7 +361,7 @@ public:
 	void getNeighboringRegionsStatus( std::vector<S32>& regions );
 	const LLViewerRegionImpl * getRegionImpl() const { return mImpl; }
 	LLViewerRegionImpl * getRegionImplNC() { return mImpl; }
-
+	
 public:
 	struct CompareDistance
 	{
