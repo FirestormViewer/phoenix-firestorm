@@ -386,21 +386,14 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 		installHandler = true;
 	}
 	#endif
-
+#endif
 	if(installHandler && (mExceptionHandler == 0))
 	{
 		std::string dumpPath = "/tmp/";
-		mExceptionHandler = new google_breakpad::ExceptionHandler(dumpPath, 0, &unix_post_minidump_callback, 0, true, 0);
-	}
-#elif LL_LINUX
-	if(installHandler && (mExceptionHandler == 0))
-	{
-		google_breakpad::MinidumpDescriptor desc("/tmp");
-	        new google_breakpad::ExceptionHandler(desc, 0, &unix_minidump_callback, 0, true, 0);
+		mExceptionHandler = new google_breakpad::ExceptionHandler(dumpPath, 0, &unix_post_minidump_callback, 0, true);
 	}
 #endif
 
-#endif
 	startErrorThread();
 }
 

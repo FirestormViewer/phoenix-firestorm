@@ -380,15 +380,9 @@ std::string SafeFileName(std::string filename)
 	return filename;
 }
 // contruct unique filename prefix so we only report crashes for US and not other viewers.
-const std::string SAFE_FILE_NAME_PREFIX(SafeFileName(llformat("%s %d.%d.%d.%d",
-							      LL_CHANNEL,
-							      LL_VERSION_MAJOR,
-							      LL_VERSION_MINOR,
-							      LL_VERSION_PATCH,
-							      LL_VERSION_BUILD )));
-//<FS:TM> F_EX merge check this segment below
-static std::string gArgs; //missing in ours
-const int MAX_MARKER_LENGTH = 1024; //LL new
+const std::string SAFE_FILE_NAME_PREFIX(SafeFileName(LLVersionInfo::getChannelAndVersion()));	// <FS:CR>
+static std::string gArgs;
+const int MAX_MARKER_LENGTH = 1024;
 const std::string MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".exec_marker"); //FS orig modified LL
 const std::string START_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".start_marker"); //FS new modified LL new
 const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker"); //FS orig modified LL
@@ -3089,10 +3083,11 @@ bool LLAppViewer::initConfiguration()
 	//
 	// Set the name of the window
 	//
-	gWindowTitle = llformat("Phoenix %s v%d.%d.%d.%d",LL_CHANNEL, LL_VERSION_MAJOR, LL_VERSION_MINOR, 
-		LL_VERSION_PATCH, LL_VERSION_BUILD) ;
+	gWindowTitle = LLVersionInfo::getChannelAndVersion();	// <FS:CR>
 #if LL_DEBUG
-	gWindowTitle += std::string(" [DEBUG]");
+	gWindowTitle += std::string(" [DEBUG] ") + gArgs;
+#else
+	gWindowTitle += std::string(" ") + gArgs;
 #endif
 	LLStringUtil::truncate(gWindowTitle, 255);
 
