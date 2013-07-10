@@ -527,7 +527,7 @@ Weitere Informationen finden Sie auf [_URL].
 		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	<notification name="AMDOldDriver">
-		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip.  Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
+		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
 
     Unter [_URL] nach aktualisierten Treibern suchen?
 		<url name="url">
@@ -536,7 +536,7 @@ Weitere Informationen finden Sie auf [_URL].
 		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	<notification name="NVIDIAOldDriver">
-		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip.  Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
+		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
 
     Unter [_URL] nach aktualisierten Treibern suchen?
 		<url name="url">
@@ -2344,7 +2344,7 @@ Von einer Webseite zu diesem Formular linken, um anderen leichten Zugang zu dies
 		Betreff: [SUBJECT], Nachricht: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; ist [STATUS]
+		[NAME] ist [STATUS].
 	</notification>
 	<notification name="AddSelfFriend">
 		Obwohl Sie ein sehr netter Mensch sind, können Sie sich nicht selbst als Freund hinzufügen.

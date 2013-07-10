@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_voice_volume" title="VOICE-CHAT-LAUTSTÄRKE">
+<floater name="floater_voice_volume" title="Voice-Chat-Lautstärke">
 	<slider label="Voice-Chat" name="chat_voice_volume"/>
 </floater>
