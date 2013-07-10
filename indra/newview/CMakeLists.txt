@@ -1545,7 +1545,7 @@ endif (DARWIN)
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
-	LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
+    LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
     LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
 
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
@@ -2071,8 +2071,8 @@ if (WINDOWS)
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/touched.bat
           --viewer_flavor=${ND_VIEWER_FLAVOR}
-        DEPENDS 
-            ${VIEWER_BINARY_NAME} 
+        DEPENDS
+            ${VIEWER_BINARY_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
             ${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
             ${COPY_INPUT_DEPENDENCIES}
@@ -2225,6 +2225,7 @@ if (LINUX)
       --channel=${VIEWER_CHANNEL}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --source=${CMAKE_CURRENT_SOURCE_DIR}
+      --login_channel=${VIEWER_CHANNEL}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
       generate_viewer_version
@@ -2315,6 +2316,7 @@ if (DARWIN)
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
+          --viewer_flavor=${ND_VIEWER_FLAVOR}
           ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py

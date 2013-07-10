@@ -44,7 +44,7 @@ if(WINDOWS)
         ssleay32.dll
         libeay32.dll
         libcollada14dom22-d.dll
-        glod.dll	
+        glod.dll
         libhunspell.dll
         )
 
