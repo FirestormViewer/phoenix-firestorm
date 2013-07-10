@@ -755,7 +755,7 @@ class DarwinManifest(ViewerManifest):
         self.path(self.args['configuration'] + "/Firestorm.app", dst="")
 
         if self.prefix(src="", dst="Contents"):  # everything goes in Contents
-            self.path("Info-Firestorm.plist", dst="Info.plist")
+            self.path("Info.plist", dst="Info.plist")
 
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path("../packages/lib/release/libndofdev.dylib", dst="Resources/libndofdev.dylib")

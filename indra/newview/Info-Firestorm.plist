@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>phoenix_icon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.secondlife.indra.viewer</string>
+	<string>com.firestorm.indra.viewer</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
