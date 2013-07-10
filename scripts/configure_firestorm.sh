@@ -288,6 +288,7 @@ if [ -z $CHANNEL ] ; then
 else
     CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
 fi
+CHANNEL="Firestorm-$CHANNEL"
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     echo "Cleaning $PLATFORM...."
@@ -317,7 +318,7 @@ if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
     majorVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 1`
     minorVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 2`
     patchVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 3`
-    echo "Channel : Firestorm-${CHANNEL}"
+    echo "Channel : ${CHANNEL}"
     echo "Version : ${majorVer}.${minorVer}.${patchVer}.${buildVer}"
     popd
 fi
@@ -350,6 +351,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         PACKAGE="-DPACKAGE:BOOL=OFF"
     fi
+    CHANNEL="-DVIEWER_CHANNEL:STRING=$CHANNEL"
 
     #make sure log directory exists.
     if [ ! -d "logs" ] ; then
@@ -366,7 +368,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $FMODEX $KDU $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then
     ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
