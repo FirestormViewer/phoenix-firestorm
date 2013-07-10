@@ -333,9 +333,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         KDU="-DUSE_KDU:BOOL=OFF"
     fi
     if [ $WANTS_FMODEX -eq $TRUE ] ; then
-        FMOD="-DFMODEX:BOOL=ON"
+        FMODEX="-DFMODEX:BOOL=ON"
     else
-        FMOD="-DFMODEX:BOOL=OFF"
+        FMODEX="-DFMODEX:BOOL=OFF"
     fi
     if [ $WANTS_PACKAGE -eq $TRUE ] ; then
         PACKAGE="-DPACKAGE:BOOL=ON"
