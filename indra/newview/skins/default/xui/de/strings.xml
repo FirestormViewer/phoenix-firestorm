@@ -871,6 +871,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="multiple_textures">
 		Mehrfach
 	</string>
+	<string name="use_texture">
+		Textur benutzen
+	</string>
 	<string name="texture_loading">
 		Wird geladen...
 	</string>
