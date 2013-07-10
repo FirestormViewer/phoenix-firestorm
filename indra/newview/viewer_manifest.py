@@ -643,8 +643,8 @@ class WindowsManifest(ViewerManifest):
                 """
         else:
             # some other channel (grid name not used)
-            #staller_file = "Second_Life_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe #<FS:TM> F_EX merge LL new
-            installer_file = "Phoenix_%(channel_oneword)s_%(version_dashes)s_Setup.exe" #<FS:TM> F_EX merge FS old
+            #installer_file = "Second_Life_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe"
+            installer_file = "Phoenix_Firestorm_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe" #<FS:CR>
             grid_vars_template = """
             OutFile "%(installer_file)s"
             !define INSTFLAGS "%(flags)s"
