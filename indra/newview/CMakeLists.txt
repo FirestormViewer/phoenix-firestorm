@@ -2225,7 +2225,6 @@ if (LINUX)
       --channel=${VIEWER_CHANNEL}
       --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
       --source=${CMAKE_CURRENT_SOURCE_DIR}
-      --login_channel=${VIEWER_CHANNEL}
     DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
       generate_viewer_version
