@@ -46,7 +46,7 @@ namespace google_breakpad
 	class ExceptionHandler
 	{
 	public:
-		ExceptionHandler( std::string const&, int, tDumpFunc, int, bool )
+		ExceptionHandler( std::string const&, int, tDumpFunc, int, bool, int )
 		{ }
 		ExceptionHandler( MinidumpDescriptor const&, int, tDumpFunc2, int, bool, int )
 		{ }
