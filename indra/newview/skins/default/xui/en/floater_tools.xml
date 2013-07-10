@@ -2754,48 +2754,11 @@ even though the user gets a free copy.
              top_pad="8"
              width="132" />
         </panel>
-          <panel
+        <panel
          label="Texture"
          help_topic="toolbox_texture_tab"
          name="Texture"
          filename="panel_tools_texture.xml">
-             decimal_digits="5"
-             decimal_digits="5"
-            <text
-             type="string"
-             length="1"
-             follows="right|top"
-             height="10"
-             layout="topleft"
-             right="-10"
-			 top_delta="0"
-			 halign="right"
-             name="tex params"
-             width="100">
-                Texture Params
-            </text>
-             decimal_digits="5"
-            <button
-             follows="top|right"
-             height="19"
-             label="Copy"
-             layout="topleft"
-             left_pad="10"
-             name="copytextures"
-             tool_tip="Copy Parameters to Clipboard"
-             width="68">
-            </button>
-             decimal_digits="5"
-            <button
-             follows="top|right"
-             height="20"
-             label="Paste"
-             layout="topleft"
-             left_pad="10"
-             name="pastetextures"
-             tool_tip="Paste Parameters from Clipboard"
-             width="68">
-            </button>
 	   </panel>
        <panel
          border="false"
