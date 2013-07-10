@@ -53,7 +53,6 @@
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 
-const std::string VERSION_ID = LLVersionInfo::getChannelAndVersion();
 const std::string FSDATA_URL = "http://phoenixviewer.com/app/fsdatatest/data.xml";
 const std::string AGENTS_URL = "http://phoenixviewer.com/app/fsdatatest/agents.xml";
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
@@ -109,7 +108,7 @@ FSData::FSData() :
 	mAgentsDone(false)
 {
 	mHeaders.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
-	mHeaders.insert("viewer-version", VERSION_ID);
+	mHeaders.insert("viewer-version", LLVersionInfo::getChannelAndVersion());
 }
 
 void FSData::processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified)
@@ -678,7 +677,7 @@ bool FSData::isDeveloper(LLUUID avatar_id)
 
 LLSD FSData::allowedLogin()
 {
-	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(VERSION_ID);
+	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(LLVersionInfo::getChannelAndVersion());
 	if (iter == mBlockedVersions.end())
 	{
 		return LLSD(); 

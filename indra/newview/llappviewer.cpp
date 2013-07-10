@@ -382,8 +382,15 @@ std::string SafeFileName(std::string filename)
 	}
 	return filename;
 }
+// TODO: Readd SAFE_FILE_NAME_PREFIX stuff after FmodEx merge.... <FS:CR>
 // contruct unique filename prefix so we only report crashes for US and not other viewers.
-const std::string SAFE_FILE_NAME_PREFIX(SafeFileName(LLVersionInfo::getChannelAndVersion()));	// <FS:CR>
+//const std::string SAFE_FILE_NAME_PREFIX(SafeFileName(llformat("%s %d.%d.%d.%d",
+//															  LL_CHANNEL,
+//															  LL_VERSION_MAJOR,
+//															  LL_VERSION_MINOR,
+//															  LL_VERSION_PATCH,
+//															  LL_VERSION_BUILD )));
+const std::string SAFE_FILE_NAME_PREFIX(SafeFileName("Firestorm"));
 static std::string gArgs;
 const int MAX_MARKER_LENGTH = 1024;
 const std::string MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".exec_marker"); //FS orig modified LL
