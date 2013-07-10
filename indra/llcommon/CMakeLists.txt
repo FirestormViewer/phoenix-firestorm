@@ -277,14 +277,6 @@ list(APPEND llcommon_HEADER_FILES ${llcommon_ND_HEADER_FILES} )
 
 # </FS:ND>
 
-# <FS:CR> Add OSSL constants for OpenSim builds
-if (OPENSIM)
-    LIST(APPEND llcommon_HEADER_FILES
-    osslconstants.h
-    )
-endif (OPENSIM)
-# </FS:CR>
-
 set_source_files_properties(${llcommon_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 
