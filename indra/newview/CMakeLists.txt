@@ -4,6 +4,7 @@ project(viewer)
 
 include(00-Common)
 include(Boost)
+include(BuildVersion)
 include(DBusGlib)
 include(DirectX)
 include(OpenSSL)
