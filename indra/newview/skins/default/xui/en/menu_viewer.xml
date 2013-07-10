@@ -3345,6 +3345,12 @@
                 <menu_item_check.on_click
                  function="Advanced.ToggleFrameTest" />
             </menu_item_check>
+          <menu_item_call
+             label="Frame Profile"
+             name="Frame Profile">
+            <menu_item_call.on_click
+             function="Advanced.ClickRenderProfile" />
+          </menu_item_call>
         </menu>
       <menu
         create_jump_keys="true"
@@ -3650,6 +3656,13 @@
                 <menu_item_call.on_click
                  function="Advanced.SelectedTextureInfo" />
             </menu_item_call>
+            <menu_item_call
+             label="Selected Material Info"
+             name="Selected Material Info"
+             shortcut="control|alt|shift|M">
+                <menu_item_call.on_click
+                 function="Advanced.SelectedMaterialInfo" />
+            </menu_item_call>
             <menu_item_check
              label="Wireframe"
              name="Wireframe"
@@ -3677,7 +3690,7 @@
 
           <menu_item_check
                        label="Advanced Lighting Model"
-                       name="Lighting and Shadows">
+                       name="Advanced Lighting Model">
             <menu_item_check.on_check
              function="CheckControl"
              parameter="RenderDeferred" />
@@ -3784,16 +3797,6 @@
                  parameter="TextureLoadFullRes" />
             </menu_item_check>
             <menu_item_check
-             label="Texture Atlas (experimental)"
-             name="Texture Atlas">
-              <menu_item_check.on_check
-               function="CheckControl"
-               parameter="EnableTextureAtlas" />
-              <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="EnableTextureAtlas" />
-            </menu_item_check>
-              <menu_item_check
              label="Render Attached Lights"
              name="Render Attached Lights">
                 <menu_item_check.on_check

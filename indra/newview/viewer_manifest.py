@@ -857,7 +857,7 @@ class DarwinManifest(ViewerManifest):
                                 'SLVoice',
                                 ):
                      self.path2basename(libdir, libfile)
-
+                
                 # our apps
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
                                          # plugin launcher
@@ -1246,9 +1246,6 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libboost_chrono-mt.so.*") #<FS:TM> FS spcific
             self.path("libboost_date_time-mt.so.*") #<FS:TM> FS spcific
             self.path("libboost_wave-mt.so.*") #<FS:TM> FS spcific
-            self.path("libbreakpad_client.so.0.0.0")
-            self.path("libbreakpad_client.so.0")
-            self.path("libbreakpad_client.so")
             self.path("libcollada14dom.so")
             self.path("libdb*.so")
             self.path("libcrypto.so.*")

@@ -799,11 +799,11 @@ void LLVOGrass::updateDrawable(BOOL force_damped)
 }
 
 // virtual 
-//BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
-//									  LLVector3* intersection,LLVector2* tex_coord, LLVector3* normal, LLVector3* bi_normal)
+//BOOL LLVOGrass::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
-									  LLVector3* intersection,LLVector2* tex_coord, LLVector3* normal, LLVector3* bi_normal)
+BOOL LLVOGrass::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
+									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
 // [/SL:KB]
 {
 	BOOL ret = FALSE;
@@ -814,7 +814,8 @@ BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& en
 		return FALSE;
 	}
 
-	LLVector3 dir = end-start;
+	LLVector4a dir;
+	dir.setSub(end, start);
 
 	mPatch = mRegionp->getLand().resolvePatchRegion(getPositionRegion());
 	
@@ -882,23 +883,31 @@ BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& en
 
 		U32 idx0 = 0,idx1 = 0,idx2 = 0;
 
-		if (LLTriangleRayIntersect(v[0], v[1], v[2], start, dir, a, b, t, FALSE))
+		LLVector4a v0a,v1a,v2a,v3a;
+
+		v0a.load3(v[0].mV);
+		v1a.load3(v[1].mV);
+		v2a.load3(v[2].mV);
+		v3a.load3(v[3].mV);
+
+		
+		if (LLTriangleRayIntersect(v0a, v1a, v2a, start, dir, a, b, t))
 		{
 			hit = TRUE;
 			idx0 = 0; idx1 = 1; idx2 = 2;
 		}
-		else if (LLTriangleRayIntersect(v[1], v[3], v[2], start, dir, a, b, t, FALSE))
+		else if (LLTriangleRayIntersect(v1a, v3a, v2a, start, dir, a, b, t))
 		{
 			hit = TRUE;
 			idx0 = 1; idx1 = 3; idx2 = 2;
 		}
-		else if (LLTriangleRayIntersect(v[2], v[1], v[0], start, dir, a, b, t, FALSE))
+		else if (LLTriangleRayIntersect(v2a, v1a, v0a, start, dir, a, b, t))
 		{
 			normal1 = -normal1;
 			hit = TRUE;
 			idx0 = 2; idx1 = 1; idx2 = 0;
 		}
-		else if (LLTriangleRayIntersect(v[2], v[3], v[1], start, dir, a, b, t, FALSE))
+		else if (LLTriangleRayIntersect(v2a, v3a, v1a, start, dir, a, b, t))
 		{
 			normal1 = -normal1;
 			hit = TRUE;
@@ -921,7 +930,8 @@ BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& en
 					closest_t = t;
 					if (intersection != NULL)
 					{
-						*intersection = start+dir*closest_t;
+						dir.mul(closest_t);
+						intersection->setAdd(start, dir);
 					}
 
 					if (tex_coord != NULL)
@@ -931,7 +941,7 @@ BOOL LLVOGrass::lineSegmentIntersect(const LLVector3& start, const LLVector3& en
 
 					if (normal != NULL)
 					{
-						*normal    = normal1;
+						normal->load3(normal1.mV);
 					}
 					ret = TRUE;
 				}

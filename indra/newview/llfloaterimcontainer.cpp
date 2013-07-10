@@ -2022,7 +2022,7 @@ void LLFloaterIMContainer::closeFloater(bool app_quitting/* = false*/)
 	{
 		LLMultiFloater::setMinimized(FALSE);
 	}
-	
+
 	LLFloater::closeFloater(app_quitting);
 }
 
