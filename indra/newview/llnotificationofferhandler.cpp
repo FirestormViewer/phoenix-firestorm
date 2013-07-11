@@ -104,7 +104,10 @@ bool LLOfferHandler::processNotification(const LLNotificationPtr& notification)
 							  && ((notification->getName() == "UserGiveItem"
 			                  && gSavedSettings.getBOOL("PlaySoundInventoryOffer"))
 			                  || (notification->getName() == "TeleportOffered"
-			                  && gSavedSettings.getBOOL("PlaySoundTeleportOffer"))));
+			                  // <FS:PP> UI Sounds support
+			                  // && gSavedSettings.getBOOL("PlaySoundTeleportOffer"))));
+			                  && gSavedSettings.getBOOL("PlayModeUISndTeleportOffer"))));
+			                  // </FS:PP>
 
 			            if(playSound)
 			            {

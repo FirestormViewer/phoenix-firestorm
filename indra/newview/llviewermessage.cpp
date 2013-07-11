@@ -3614,7 +3614,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
 					send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 					send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
-					make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 				}
 				else if (doesUserRequireMaturityIncrease)
 				{
@@ -3622,7 +3621,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					params.substitutions = args;
 					params.payload = payload;
 					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
-					make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 				}
 				else
 				{
@@ -3641,7 +3639,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					else
 					{
 						LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
-						make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 					}
 // [/RLVa:KB]
 //					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
@@ -3725,7 +3722,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
 				send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 				send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
-				make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 			}
 			else if (doesUserRequireMaturityIncrease)
 			{
@@ -3733,7 +3729,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				params.substitutions = args;
 				params.payload = payload;
 				LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
-				make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 			}
 			else
 			{
