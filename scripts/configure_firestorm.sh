@@ -52,19 +52,20 @@ showUsage()
     echo "Usage: "
     echo "========================"
     echo
-    echo "  --clean     : Remove past builds & configuration"
-    echo "  --config    : General a new architecture-specific config"
-    echo "  --build    : build firestorm"
-    echo "  --version   : Update version number"
+    echo "  --clean      : Remove past builds & configuration"
+    echo "  --config     : General a new architecture-specific config"
+    echo "  --build      : build firestorm"
+    echo "  --version    : Update version number"
     echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
-    echo "  --kdu       : Build with KDU"
-    echo "  --package   : Build installer"
-    echo "  --fmodex    : Build with FMOD Ex"
-    echo "  --opensim   : Build with OpenSim support (Disables Havok features)"
-    echo "  --avx       : Build with Advanced Vector Extensions (Windows only)"
-    echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
-    echo "  --jobs <num>: Build with <num> jobs in parallel (Linux and Darwin only)"
+    echo "  --kdu        : Build with KDU"
+    echo "  --package    : Build installer"
+    echo "  --fmodex     : Build with FMOD Ex"
+    echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
+    echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
+    echo "  --avx        : Build with Advanced Vector Extensions (Windows only)"
+    echo "  --platform   : darwin | win32 | win64 | linux32 | linux64"
+    echo "  --jobs <num> : Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build"
     echo
@@ -74,7 +75,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package fmodex jobs: platform: kdu opensim avx help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -83,27 +84,28 @@ getArgs()
           fi
 
           case "$OPTOPT" in
-          clean)    WANTS_CLEAN=$TRUE;;
-          config)   WANTS_CONFIG=$TRUE;;
-          version)  WANTS_VERSION=$TRUE;;
-          chan)     CHANNEL="$OPTARG";;
-          btype)    if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) -o \( "$OPTARG" == "Debug" \) ] ; then
-                      BTYPE="$OPTARG"
-                    fi
-                    ;;
-          kdu)      WANTS_KDU=$TRUE;;
-          fmodex)   WANTS_FMODEX=$TRUE;;
-          opensim)  WANTS_OPENSIM=$TRUE;;
-          avx)      WANTS_AVX=$TRUE;;
-          package)  WANTS_PACKAGE=$TRUE;;
-          build)    WANTS_BUILD=$TRUE;;
-          platform)    PLATFORM="$OPTARG";;
-          jobs)    JOBS="$OPTARG";;
+          clean)      WANTS_CLEAN=$TRUE;;
+          config)     WANTS_CONFIG=$TRUE;;
+          version)    WANTS_VERSION=$TRUE;;
+          chan)       CHANNEL="$OPTARG";;
+          btype)      if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) -o \( "$OPTARG" == "Debug" \) ] ; then
+                        BTYPE="$OPTARG"
+                      fi
+                      ;;
+          kdu)        WANTS_KDU=$TRUE;;
+          fmodex)     WANTS_FMODEX=$TRUE;;
+          opensim)    WANTS_OPENSIM=$TRUE;;
+          no-opensim) WANTS_OPENSIM=$FALSE;;
+          avx)        WANTS_AVX=$TRUE;;
+          package)    WANTS_PACKAGE=$TRUE;;
+          build)      WANTS_BUILD=$TRUE;;
+          platform)   PLATFORM="$OPTARG";;
+          jobs)       JOBS="$OPTARG";;
 
-          help)     showUsage && exit 0;;
+          help)       showUsage && exit 0;;
 
-          -*)       showUsage && exit 1;;
-          *)        showUsage && exit 1;;
+          -*)         showUsage && exit 1;;
+          *)          showUsage && exit 1;;
           esac
 
       done
