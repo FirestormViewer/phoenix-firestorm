@@ -1023,7 +1023,7 @@ class DarwinManifest(ViewerManifest):
             # - Ambroff 2008-08-20
             # If the channel is "firestorm-private-"anything, then use the
             #  private folder for .DS_Store and the background image. -- TS
-            template_chan = self.app_name().lower()
+            template_chan = app_name.lower()
             if template_chan.startswith("firestorm-private"):
                 template_chan = "firestorm-private"
             elif template_chan.startswith("firestormos-private"):
