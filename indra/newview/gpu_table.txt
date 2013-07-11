@@ -381,7 +381,7 @@ NVIDIA GTX 280M							.*NVIDIA .*GTX *28.M.*					3	1	0	0
 NVIDIA 300M								.*NVIDIA.* 30.M.*						3	1	1	4.2
 NVIDIA G 310M							.*NVIDIA .*G *31.M.*					2	1	0	0
 NVIDIA GT 320M							.*NVIDIA .*GT *32.M.*					3	1	0	0
-NVIDIA GT 325M							.*NVIDIA .*GT *32.M.*					3	1	1	3.3
+NVIDIA GT 325M							.*NVIDIA .*GT *325M.*					3	1	1	3.3
 NVIDIA GT 330M							.*NVIDIA .*GT *33.M.*					3	1	1	3.3
 NVIDIA GT 340M							.*NVIDIA .*GT *34.M.*					4	1	1	3.3
 NVIDIA GTS 350M							.*NVIDIA .*GTS *35.M.*					4	1	1	3.3
