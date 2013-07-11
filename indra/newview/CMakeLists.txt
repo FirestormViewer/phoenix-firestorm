@@ -247,6 +247,7 @@ set(viewer_SOURCE_FILES
     lldaycyclemanager.cpp
     lldebugmessagebox.cpp
     lldebugview.cpp
+    lldeformerworker.cpp
     lldeferredsounds.cpp
     lldelayedgestureerror.cpp
     lldirpicker.cpp
@@ -450,6 +451,7 @@ set(viewer_SOURCE_FILES
     llmediadataclient.cpp
     llmenuoptionpathfindingrebakenavmesh.cpp
     llmeshrepository.cpp
+    llmeshsearch.cpp
     llmimetypes.cpp
     llmorphview.cpp
     llmoveview.cpp
@@ -935,6 +937,7 @@ set(viewer_HEADER_FILES
     lldaycyclemanager.h
     lldebugmessagebox.h
     lldebugview.h
+    lldeformerworker.h
     lldeferredsounds.h
     lldelayedgestureerror.h
     lldirpicker.h
@@ -1137,6 +1140,7 @@ set(viewer_HEADER_FILES
     llmediadataclient.h
     llmenuoptionpathfindingrebakenavmesh.h
     llmeshrepository.h
+    llmeshsearch.h
     llmimetypes.h
     llmorphview.h
     llmoveview.h

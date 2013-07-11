@@ -133,7 +133,8 @@ private:
 	BOOL loadMesh( const std::string& fileName );
 
 public:
-	void genIndices(S32 offset);
+	// <FS:CR> Comment out dead code
+	//void genIndices(S32 offset);
 
 	const LLVector2 &getUVs(U32 index);
 

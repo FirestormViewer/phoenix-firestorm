@@ -146,7 +146,10 @@ public:
 
 	LLFacePool*		getPool()			const	{ return mDrawPoolp; }
 	U32				getPoolType()		const	{ return mPoolType; }
-	LLDrawable*		getDrawable()		const	{ return mDrawablep; }
+	// <FS:CR> Qarl's mesh deformer
+	//LLDrawable*		getDrawable()		const	{ return mDrawablep; }
+	LLPointer<LLDrawable>		getDrawable()		const	{ return mDrawablep; }
+	// </FS:CR>
 	LLViewerObject*	getViewerObject()	const	{ return mVObjp; }
 	S32				getLOD()			const	{ return mVObjp.notNull() ? mVObjp->getLOD() : 0; }
 	void			setPoolType(U32 type)		{ mPoolType = type; }

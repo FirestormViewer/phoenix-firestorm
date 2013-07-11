@@ -2201,6 +2201,18 @@ void LLMeshSkinInfo::fromLLSD(LLSD& skin)
 	{
 		mPelvisOffset = skin["pelvis_offset"].asReal();
 	}
+	
+	// <FS:CR> Qarl's mesh deformer
+	if (skin.has("deform"))
+	{
+		mDeform = skin["deform"];
+	}
+	else 
+	{
+		mDeform = LLSD();
+	}
+	// <FS:CR> Qarl's mesh deformer
+
 }
 
 LLSD LLMeshSkinInfo::asLLSD(bool include_joints) const
@@ -2243,6 +2255,8 @@ LLSD LLMeshSkinInfo::asLLSD(bool include_joints) const
 
 		ret["pelvis_offset"] = mPelvisOffset;
 	}
+
+	ret["deform"] = mDeform;	// <FS:CR> Qarl's mesh deformer
 
 	return ret;
 }

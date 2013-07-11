@@ -314,6 +314,251 @@ BOOL LLTriangleRayIntersect(const LLVector3& vert0, const LLVector3& vert1, cons
 	}
 }
 
+
+// <FS:CR> Qarl's mesh deformer
+// find the point on a triangle closest to a given target point
+// algorithm derived from: www.geometrictools.com/Documentation/DistancePoint3Triangle3.pdf
+// (returns distance squared and barycentric coordinates)
+
+F32 LLTriangleClosestPoint(const LLVector3& vert0, const LLVector3& vert1, const LLVector3& vert2, const LLVector3& target,
+								 F32& closest_a, F32& closest_b)
+{
+	// edges of triangle
+	LLVector3 edge0 = vert1 - vert0;
+	LLVector3 edge1 = vert2 - vert0;
+	
+	LLVector3 delta = vert0 - target;
+	
+	// length of triangle edges
+	F32 a00 = edge0.lengthSquared();
+	F32 a01 = edge0 * edge1;
+	F32 a11 = edge1.lengthSquared();
+	
+	F32 b0 = delta * edge0;
+	F32 b1 = delta * edge1;
+	
+	F32 c = delta.lengthSquared();
+	
+	F32 det = fabs(a00*a11-a01*a01);
+	
+	F32 s = a01*b1-a11*b0;
+	F32 t = a01*b0-a00*b1;
+	
+	F32 dist_squared;
+	
+	if ( s + t <= det )
+	{
+		if ( s < 0.0f )
+		{
+			if ( t < 0.0f )  // region 4
+			{
+				if ( b0 < 0.0f )
+				{
+					t = 0.0f;
+					if ( -b0 >= a00 )
+					{
+						s = 1.0f;
+						dist_squared = a00+(2.0f)*b0+c;
+					}
+					else
+					{
+						s = -b0/a00;
+						dist_squared = b0*s+c;
+					}
+				}
+				else
+				{
+					s = 0.0f;
+					if ( b1 >= 0.0f )
+					{
+						t = 0.0f;
+						dist_squared = c;
+					}
+					else if ( -b1 >= a11 )
+					{
+						t = 1.0f;
+						dist_squared = a11+(2.0f)*b1+c;
+					}
+					else
+					{
+						t = -b1/a11;
+						dist_squared = b1*t+c;
+					}
+				}
+			}
+			else  // region 3
+			{
+				s = 0.0f;
+				if ( b1 >= 0.0f )
+				{
+					t = 0.0f;
+					dist_squared = c;
+				}
+				else if ( -b1 >= a11 )
+				{
+					t = 1.0f;
+					dist_squared = a11+(2.0f)*b1+c;
+				}
+				else
+				{
+					t = -b1/a11;
+					dist_squared = b1*t+c;
+				}
+			}
+		}
+		else if ( t < 0.0f )  // region 5
+		{
+			t = 0.0f;
+			if ( b0 >= 0.0f )
+			{
+				s = 0.0f;
+				dist_squared = c;
+			}
+			else if ( -b0 >= a00 )
+			{
+				s = 1.0f;
+				dist_squared = a00+(2.0f)*b0+c;
+			}
+			else
+			{
+				s = -b0/a00;
+				dist_squared = b0*s+c;
+			}
+		}
+		else  // region 0
+		{
+			// minimum at interior point
+			F32 det_inv = (1.0f)/det;
+			s *= det_inv;
+			t *= det_inv;
+			dist_squared = s*(a00*s+a01*t+(2.0f)*b0) +
+			t*(a01*s+a11*t+(2.0f)*b1)+c;
+		}
+	}
+	else
+	{
+		F32 tmp0, tmp1, numerator, denominator;
+		
+		if ( s < 0.0f )  // region 2
+		{
+			tmp0 = a01 + b0;
+			tmp1 = a11 + b1;
+			if ( tmp1 > tmp0 )
+			{
+				numerator = tmp1 - tmp0;
+				denominator = a00-2.0f*a01+a11;
+				if ( numerator >= denominator )
+				{
+					s = 1.0f;
+					t = 0.0f;
+					dist_squared = a00+(2.0f)*b0+c;
+				}
+				else
+				{
+					s = numerator/denominator;
+					t = 1.0f - s;
+					dist_squared = s*(a00*s+a01*t+2.0f*b0) +
+					t*(a01*s+a11*t+(2.0f)*b1)+c;
+				}
+			}
+			else
+			{
+				s = 0.0f;
+				if ( tmp1 <= 0.0f )
+				{
+					t = 1.0f;
+					dist_squared = a11+(2.0f)*b1+c;
+				}
+				else if ( b1 >= 0.0f )
+				{
+					t = 0.0f;
+					dist_squared = c;
+				}
+				else
+				{
+					t = -b1/a11;
+					dist_squared = b1*t+c;
+				}
+			}
+		}
+		else if ( t < 0.0f )  // region 6
+		{
+			tmp0 = a01 + b1;
+			tmp1 = a00 + b0;
+			if ( tmp1 > tmp0 )
+			{
+				numerator = tmp1 - tmp0;
+				denominator = a00-(2.0f)*a01+a11;
+				if ( numerator >= denominator )
+				{
+					t = 1.0f;
+					s = 0.0f;
+					dist_squared = a11+(2.0f)*b1+c;
+				}
+				else
+				{
+					t = numerator/denominator;
+					s = 1.0f - t;
+					dist_squared = s*(a00*s+a01*t+(2.0f)*b0) +
+					t*(a01*s+a11*t+(2.0f)*b1)+c;
+				}
+			}
+			else
+			{
+				t = 0.0f;
+				if ( tmp1 <= 0.0f )
+				{
+					s = 1.0f;
+					dist_squared = a00+(2.0f)*b0+c;
+				}
+				else if ( b0 >= 0.0f )
+				{
+					s = 0.0f;
+					dist_squared = c;
+				}
+				else
+				{
+					s = -b0/a00;
+					dist_squared = b0*s+c;
+				}
+			}
+		}
+		else  // region 1
+		{
+			numerator = a11 + b1 - a01 - b0;
+			if ( numerator <= 0.0f )
+			{
+				s = 0.0f;
+				t = 1.0f;
+				dist_squared = a11+(2.0f)*b1+c;
+			}
+			else
+			{
+				denominator = a00-2.0f*a01+a11;
+				if ( numerator >= denominator )
+				{
+					s = 1.0f;
+					t = 0.0f;
+					dist_squared = a00+(2.0f)*b0+c;
+				}
+				else
+				{
+					s = numerator/denominator;
+					t = 1.0f - s;
+					dist_squared = s*(a00*s+a01*t+(2.0f)*b0) +
+					t*(a01*s+a11*t+(2.0f)*b1)+c;
+				}
+			}
+		}
+	}
+	
+	closest_a = s;
+	closest_b = t;
+	
+	return fabs(dist_squared);
+}
+// </FS:CR>
+
 class LLVolumeOctreeRebound : public LLOctreeTravelerDepthFirst<LLVolumeTriangle>
 {
 public:
@@ -2084,7 +2329,7 @@ LLVolume::LLVolume(const LLVolumeParams &params, const F32 detail, const BOOL ge
 
 	generate();
 	
-	if (mParams.getSculptID().isNull() && mParams.getSculptType() == LL_SCULPT_TYPE_NONE || mParams.getSculptType() == LL_SCULPT_TYPE_MESH)
+	if ((mParams.getSculptID().isNull() && mParams.getSculptType() == LL_SCULPT_TYPE_NONE) || mParams.getSculptType() == LL_SCULPT_TYPE_MESH)
 	{
 		createVolumeFaces();
 	}

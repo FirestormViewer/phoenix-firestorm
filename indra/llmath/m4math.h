@@ -203,6 +203,9 @@ public:
 
 	const LLMatrix4& transpose();						// Transpose LLMatrix4
 	const LLMatrix4& invert();						// Invert LLMatrix4
+	// <FS:CR> Qarl's mesh deformer
+	const LLMatrix4& invert_real();					// Invert LLMatrix4 - works for all matrices
+	
 
 	// Rotate existing matrix
 	// These are really, really, inefficient as implemented! - djs
