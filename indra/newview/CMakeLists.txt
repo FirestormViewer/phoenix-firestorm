@@ -1520,7 +1520,7 @@ if (DARWIN)
 
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
-    phoenix_icon.icns
+    firestorm_icon.icns
     macview.r
     gpu_table.txt
     Info-Firestorm.plist
@@ -2249,8 +2249,8 @@ if (DARWIN)
     ${VIEWER_BINARY_NAME}
     PROPERTIES
     OUTPUT_NAME "${product}"
-    MACOSX_BUNDLE_INFO_STRING "Second Life Viewer"
-    MACOSX_BUNDLE_ICON_FILE "phoenix_icon.icns"
+    MACOSX_BUNDLE_INFO_STRING "Firestorm Viewer"
+    MACOSX_BUNDLE_ICON_FILE "firestorm_icon.icns"
     MACOSX_BUNDLE_GUI_IDENTIFIER "com.firestorm.indra.viewer" #<FS:TM>
     MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}"
     MACOSX_BUNDLE_BUNDLE_NAME "Firestorm"

@@ -801,7 +801,7 @@ class DarwinManifest(ViewerManifest):
 
                 icon_path = self.icon_path()
                 if self.prefix(src=icon_path, dst="") :
-                    self.path("phoenix_icon.icns")
+                    self.path("firestorm_icon.icns")
                     self.end_prefix(icon_path)
 
                 self.path("Firestorm.nib")
