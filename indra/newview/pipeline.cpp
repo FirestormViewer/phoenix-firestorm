@@ -8296,17 +8296,14 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, U32 light_index, U32 n
 	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR_INV, 1.0/ssao_factor);
 
 	LLVector3 ssao_effect = RenderSSAOEffect;
-	// <FS:Ansariel> Tofu's SSR
-	//F32 matrix_diag = (ssao_effect[0] + 2.0*ssao_effect[1])/3.0;
-	//F32 matrix_nondiag = (ssao_effect[0] - ssao_effect[1])/3.0;
-	//// This matrix scales (proj of color onto <1/rt(3),1/rt(3),1/rt(3)>) by
-	//// value factor, and scales remainder by saturation factor
-	//F32 ssao_effect_mat[] = {	matrix_diag, matrix_nondiag, matrix_nondiag,
-	//							matrix_nondiag, matrix_diag, matrix_nondiag,
-	//							matrix_nondiag, matrix_nondiag, matrix_diag};
-	//shader.uniformMatrix3fv(LLShaderMgr::DEFERRED_SSAO_EFFECT_MAT, 1, GL_FALSE, ssao_effect_mat);
-	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_EFFECT, ssao_effect[0]);
-	// </FS:Ansariel> Tofu's SSR
+	F32 matrix_diag = (ssao_effect[0] + 2.0*ssao_effect[1])/3.0;
+	F32 matrix_nondiag = (ssao_effect[0] - ssao_effect[1])/3.0;
+	// This matrix scales (proj of color onto <1/rt(3),1/rt(3),1/rt(3)>) by
+	// value factor, and scales remainder by saturation factor
+	F32 ssao_effect_mat[] = {	matrix_diag, matrix_nondiag, matrix_nondiag,
+								matrix_nondiag, matrix_diag, matrix_nondiag,
+								matrix_nondiag, matrix_nondiag, matrix_diag};
+	shader.uniformMatrix3fv(LLShaderMgr::DEFERRED_SSAO_EFFECT_MAT, 1, GL_FALSE, ssao_effect_mat);
 
 	//F32 shadow_offset_error = 1.f + RenderShadowOffsetError * fabsf(LLViewerCamera::getInstance()->getOrigin().mV[2]);
 	F32 shadow_bias_error = RenderShadowBiasError * fabsf(LLViewerCamera::getInstance()->getOrigin().mV[2])/3000.f;

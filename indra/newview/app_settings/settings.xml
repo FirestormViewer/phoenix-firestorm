@@ -10467,7 +10467,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>1500.0</real>
+    <real>500.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10480,7 +10480,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>250</integer>
+    <integer>200</integer>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10493,14 +10493,14 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>5.0</real>
+    <real>0.30</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
   <key>RenderSSAOEffect</key>
   <map>
     <key>Comment</key>
-    <string>Multiplier for (1) value for areas which are totally occluded.  Blends with original color for partly-occluded areas.  (Only first component is used.)</string>
+    <string>Multiplier for (1) value and (2) saturation (HSV definition), for areas which are totally occluded.  Blends with original color for partly-occluded areas.  (Third component is unused.)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -11185,7 +11185,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Vector3</string>
     <key>Value</key>
     <array>
-      <real>1.0</real>
+      <real>3.0</real>
       <real>2.0</real>
       <real>0.0</real>
     </array>
@@ -11202,7 +11202,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>3.0</real>
+    <real>1.4</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
