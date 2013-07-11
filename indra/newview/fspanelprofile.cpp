@@ -867,7 +867,7 @@ void FSPanelProfileWeb::apply(LLAvatarData* data)
 void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     //[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
-    std::string username = av_name.getUserName();
+    std::string username = av_name.getAccountName();
     if (username.empty())
     {
         username = LLCacheName::buildUsername(av_name.getDisplayName());
