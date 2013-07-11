@@ -114,6 +114,7 @@ ATI ASUS HD7800							.*ATI.*ASUS.* HD78.*					5	1	1	4.2
 ATI ASUS HD7900							.*ATI.*ASUS.* HD79.*					5	1	1	4.2
 ATI ASUS EAH5400						.*ATI.*ASUS EAH54..						3	1	1	4.2
 ATI ASUS EAH5500						.*ATI.*ASUS EAH55..						3	1	1	4.2
+ATI ASUS EAH5600						.*ATI.*ASUS EAH65..						3	1	1	4.2
 ATI Mobility Radeon 4100				.*ATI.*Mobility.*41..					1	1	1	3.3
 ATI Mobility Radeon 7xxx				.*ATI.*Mobility.*Radeon 7.*				0	1	1	1.3
 ATI Mobility Radeon 8xxx				.*ATI.*Mobility.*Radeon 8.*				0	1	0	0
