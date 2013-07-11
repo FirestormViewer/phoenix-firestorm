@@ -3190,6 +3190,62 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
+         tool_tip="Sound UUID played on incoming voice call."
+         name="textFSIncomingVoiceCall">
+            Voice call:
+        </text>
+        <line_editor
+         tool_tip="c80260ba-41fd-8a46-768a-6bf236360e3a"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndIncomingVoiceCall"
+         control_name="UISndIncomingVoiceCall"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndIncomingVoiceCall"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndIncomingVoiceCall"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndIncomingVoiceCall"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndIncomingVoiceCall"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndIncomingVoiceCall"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndIncomingVoiceCall"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
          tool_tip="Sound UUID played on default footsteps. Change requires restart to take effect."
          name="textFSFootsteps">
             Default footsteps:
