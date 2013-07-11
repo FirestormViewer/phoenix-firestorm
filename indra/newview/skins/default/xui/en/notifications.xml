@@ -6973,8 +6973,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    label="Teleport offer from [NAME_LABEL]"
    log_to_im="true"
    log_to_chat="false"
-   type="offer"
-   sound="UISndNewIncomingIMSession">
+   type="offer">
 [NAME_SLURL] has offered to teleport you to their location:
 
 “[MESSAGE]”
