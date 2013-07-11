@@ -3889,7 +3889,7 @@ Cannot offer friendship at this time. Please try again in a moment.
    type="alert">
 Do Not Disturb is on.  You will not be notified of incoming communications.
 
-- Other residents will receive your Do Not Disturb response (set in Preferences &gt; General).
+- Other residents will receive your Do Not Disturb response (set in Preferences &gt; Privacy &gt; Autoresponse).
 - Teleportation offers will be declined.
 - Voice calls will be rejected.
     <usetemplate
