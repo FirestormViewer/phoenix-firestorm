@@ -1026,6 +1026,8 @@ class DarwinManifest(ViewerManifest):
             template_chan = self.channel_lowerword()
             if template_chan.startswith("firestorm-private"):
                 template_chan = "firestorm-private"
+            elif template_chan.startswith("firestormos-private"):
+                template_chan = "firestormos-private"
             dmg_template = os.path.join(
                 'installers', 'darwin', '%s-dmg' % template_chan)
 
