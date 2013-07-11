@@ -53,6 +53,7 @@
 			<check_box label="Akceptuj ciasteczka" name="cookies_enabled"/>
 			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
+			<check_box label="Chcę aktualizować przeglądarkę do wersji testowych" name="update_willing_to_test"/>
 			<text name="Proxy Settings:">
 				Ustawienia proxy:
 			</text>
