@@ -520,7 +520,7 @@ void LLAvatarAppearance::computeBodySize()
 // [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
 F32 LLAvatarAppearance::getAvatarOffset() /*const*/
 {
-	return getVisualParamWeight(11001);
+	return getVisualParamWeight(AVATAR_HOVER);
 }
 // [/RLVa:KB]
 
