@@ -221,21 +221,30 @@ class ViewerManifest(LLManifest):
     def channel(self):
         return self.args['channel']
     def channel_unique(self):
-        return self.channel().replace("Second Life", "").strip()
+        return self.channel().replace("Firestorm", "").strip()
     def channel_oneword(self):
         return "".join(self.channel_unique().split())
     def channel_lowerword(self):
         return self.channel_oneword().lower()
+    def flavor(self):               # Viewer Flavor [FS:CR]
+        return self.args['viewer_flavor']  # [oss or hvk]
 
     def app_name(self):
-        app_suffix='Test'
-        channel_type=self.channel_lowerword()
-        if channel_type.startswith('release') :
-            app_suffix='Viewer'
-        elif re.match('^(beta|project).*',channel_type) :
-            app_suffix=self.channel_unique()
-        return "Second Life "+app_suffix
-        
+        # [FS:CR]
+        #app_suffix='Test'
+        #channel_type=self.channel_lowerword()
+        #if channel_type.startswith('release') :
+        #    app_suffix='Viewer'
+        #elif re.match('^(beta|project).*',channel_type) :
+        #    app_suffix=self.channel_unique()
+        #return "Second Life "+app_suffix
+        app = 'Firestorm'
+        if (self.flavor() == 'oss') :
+            app = 'FirestormOS'
+        app_suffix = ''.join(self.channel_unique().split())
+        return app + app_suffix
+        # [/FS:CR]
+
     def icon_path(self):
         icon_path="icons/"
         channel_type=self.channel_lowerword()
@@ -298,13 +307,20 @@ class ViewerManifest(LLManifest):
 
 class WindowsManifest(ViewerManifest):
     def final_exe(self):
-        app_suffix="Test"
-        channel_type=self.channel_lowerword()
-        if channel_type.startswith('release') :
-            app_suffix=''
-        elif re.match('^(beta|project).*',channel_type) :
-            app_suffix=''.join(self.channel_unique().split())
-        return "SecondLife"+app_suffix+".exe"
+        # [FS:CR]
+        #app_suffix="Test"
+        #channel_type=self.channel_lowerword()
+        #if channel_type.startswith('release') :
+        #    app_suffix=''
+        #elif re.match('^(beta|project).*',channel_type) :
+        #    app_suffix=''.join(self.channel_unique().split())
+        #return "SecondLife"+app_suffix+".exe"
+        app = 'Firestorm'
+        if (self.flavor() == 'oss') :
+            app = 'FirestormOS'
+        app_suffix = ''.join(self.channel_unique().split())
+        return app + app_suffix + ".exe"
+        # [/FS:CR]
 
     def test_msvcrt_and_copy_action(self, src, dst):
         # This is used to test a dll manifest.
@@ -608,7 +624,8 @@ class WindowsManifest(ViewerManifest):
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
-            'subchannel_underscores':'_'.join(self.channel_unique().split())
+            'subchannel_underscores':'_'.join(self.channel_unique().split()),
+            'app_name' : self.app_name()    #[FS:CR]
             }
 
         version_vars = """
@@ -620,39 +637,39 @@ class WindowsManifest(ViewerManifest):
         if self.default_channel():
             if self.default_grid():
                 # release viewer
-                installer_file = "Phoenix_Firestorm_%(version_dashes)s_Setup.exe"
+                installer_file = "Phoenix-%(app_name)s-%(channel_unique)s%(version_dashes)s_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
-                !define INSTNAME   "Firestorm"
-                !define SHORTCUT   "Firestorm"
+                !define INSTNAME   "%(app_name)s_%(channel_unique)s"
+                !define SHORTCUT   "%(app_name)s"
                 !define URLNAME   "secondlife"
-                Caption "Firestorm ${VERSION}"
+                Caption "%(app_name)s ${VERSION}"
                 """
             else:
                 # alternate grid viewer
-                installer_file = "Phoenix_Firestorm_%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
+                installer_file = "Phoenix-%(app_name)s-%(channel_unique)s%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
-                !define INSTNAME   "Firestorm%(grid_caps)s"
-                !define SHORTCUT   "Firestorm (%(grid_caps)s)"
+                !define INSTNAME   "%(app_name)s%(grid_caps)s"
+                !define SHORTCUT   "%(app_name)s (%(grid_caps)s)"
                 !define URLNAME   "secondlife%(grid)s"
                 !define UNINSTALL_SETTINGS 1
-                Caption "Firestorm %(grid)s ${VERSION}"
+                Caption "%(app_name)s %(grid)s ${VERSION}"
                 """
         else:
             # some other channel (grid name not used)
             #installer_file = "Second_Life_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe"
-            installer_file = "Phoenix_%(channel_oneword)s_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe" #<FS:CR>
+            installer_file = "Phoenix-%(app_name)s-%(channel_unique)s%(version_dashes)s_%(subchannel_underscores)s_Setup.exe" #<FS:CR>
             grid_vars_template = """
             OutFile "%(installer_file)s"
             !define INSTFLAGS "%(flags)s"
-            !define INSTNAME   "%(channel_oneword)s"
-            !define SHORTCUT   "%(channel)s"
+            !define INSTNAME   "%(app_name)s_%(channel_unique)s"
+            !define SHORTCUT   "%(app_name)s"
             !define URLNAME   "secondlife"
             !define UNINSTALL_SETTINGS 1
-            Caption "%(channel)s ${VERSION}"
+            Caption "%(app_name)s ${VERSION}"
             """
         if 'installer_name' in self.args:
             installer_file = self.args['installer_name']
@@ -917,11 +934,14 @@ class DarwinManifest(ViewerManifest):
             'version_dashes' : '-'.join(self.args['version']),
             'grid':self.args['grid'],
             'grid_caps':self.args['grid'].upper(),
+            # escape quotes becase NSIS doesn't handle them well
             'flags':self.flags_list().replace('"', '$\\"'),
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
-            }
+            'subchannel_underscores':'_'.join(self.channel_unique().split()),
+            'app_name' : self.app_name()    #[FS:CR]
+        }
 	# </FS:AO>
 
 #Comment out for now. FS:TM
@@ -954,7 +974,7 @@ class DarwinManifest(ViewerManifest):
         if not self.default_channel():
             channel_standin = self.channel()
 
-        imagename="Phoenix_" + self.channel_oneword() + '_' + '_'.join(self.args['version'])
+        imagename = ("Phoenix-" + self.app_name() + '-' + '-'.join(self.args['version']))
 
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
@@ -992,11 +1012,6 @@ class DarwinManifest(ViewerManifest):
             # Copy everything in to the mounted .dmg
 
             app_name = self.app_name()
-            #<FS:TM> F_EX merge - below was replaced by line above
-            #if self.default_channel() and not self.default_grid():
-            #    app_name = "Firestorm " + self.args['grid']
-            #else:
-            #    app_name = channel_standin.strip()
 
             # Hack:
             # Because there is no easy way to coerce the Finder into positioning
@@ -1152,7 +1167,8 @@ class LinuxManifest(ViewerManifest):
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
-        installer_name_components = ['Phoenix',self.channel_oneword(),self.args.get('arch'),'.'.join(self.args['version'])]
+        #installer_name_components = ['Phoenix',self.channel_oneword(),self.args.get('arch'),'.'.join(self.args['version'])]
+        installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
         installer_name = "_".join(installer_name_components)
 
 	# <FS:AO> Copied from windows manifest, since we're starting to use many of the same vars
@@ -1167,7 +1183,9 @@ class LinuxManifest(ViewerManifest):
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
-            }
+            'subchannel_underscores':'_'.join(self.channel_unique().split()),
+            'app_name' : self.app_name()    #[FS:CR]
+        }
 	# </FS:AO>
 
         #if self.default_channel():
