@@ -3134,6 +3134,62 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
+         tool_tip="Sound UUID played on inventory offer."
+         name="textFSInventoryOffer">
+            Inventory offer:
+        </text>
+        <line_editor
+         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndInventoryOffer"
+         control_name="UISndInventoryOffer"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndInventoryOffer"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndInventoryOffer"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndInventoryOffer"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndInventoryOffer"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndInventoryOffer"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndInventoryOffer"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
          tool_tip="Sound UUID played on default footsteps. Change requires restart to take effect."
          name="textFSFootsteps">
             Default footsteps:
