@@ -1097,6 +1097,8 @@ void LLIMModel::sendNoUnreadMessages(const LLUUID& session_id)
 	mNoUnreadMsgsSignal(arg);
 }
 
+// <FS:Ansariel> Added is_announcement parameter
+//bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text) {
 bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, BOOL is_announcement /* = FALSE */) {
 	
 	LLIMSession* session = findIMSession(session_id);
@@ -1107,7 +1109,7 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 		return false;
 	}
 	
-	// <Ansariel>  Forward IM to nearby chat if wanted
+	// <FS:Ansariel>  Forward IM to nearby chat if wanted
 	std::string timestr = LLLogChat::timestamp(false);
 	session->addMessage(from, from_id, utf8_text, timestr); //might want to add date separately
 
@@ -1144,7 +1146,7 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 		// </FS:Ansariel> [FS communication UI]
 		nearby_chat->addMessage(chat, true, LLSD());
 	}
-	// </Ansariel>
+	// </FS:Ansariel>
 
 	return true;
 }
@@ -1218,6 +1220,9 @@ bool LLIMModel::proccessOnlineOfflineNotification(
 	return addMessage(session_id, SYSTEM_FROM, LLUUID::null, utf8_text);
 }
 
+// <FS:Ansariel> Added is_announcement parameter
+//bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
+//						   const std::string& utf8_text, bool log2file /* = true */) { 
 bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 						   const std::string& utf8_text, bool log2file /* = true */, BOOL is_announcement /* = FALSE */) { 
 
@@ -1246,6 +1251,9 @@ bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, co
 	return true;
 }
 
+// <FS:Ansariel> Added is_announcement parameter
+//LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
+//													 const std::string& utf8_text, bool log2file /* = true */)
 LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 													 const std::string& utf8_text, bool log2file /* = true */, BOOL is_announcement /* = FALSE */)
 {
@@ -2890,7 +2898,7 @@ void LLIMMgr::addMessage(
 	const LLUUID& region_id,
 	const LLVector3& position,
 	bool link_name, // If this is true, then we insert the name and link it to a profile
-	BOOL is_announcement) // Ansariel: Special parameter indicating announcements
+	BOOL is_announcement) // <FS:Ansariel> Special parameter indicating announcements
 {
 	LLUUID other_participant_id = target_id;
 
@@ -3038,8 +3046,9 @@ void LLIMMgr::addMessage(
 
 	if (!LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !skip_message)
 	{
-		//LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_announcement); <FS:TM> CHUI Merge this got clobbered above
-		LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg);
+		// <FS:Ansariel> Added is_announcement parameter
+		//LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg);
+		LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_announcement);
 	}
 
 	// Open conversation floater if offline messages are present

@@ -225,13 +225,16 @@ public:
 	 * and also saved into a file if log2file is specified.
 	 * It sends new message signal for each added message.
 	 */
-	// Ansariel: Added is_announcement parameter
+	// <FS:Ansariel> Added is_announcement parameter
+	//bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true);
 	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
 	/**
 	 * Similar to addMessage(...) above but won't send a signal about a new message added
 	 */
-	// Ansariel: Added is_announcement parameter
+	// <FS:Ansariel> Added is_announcement parameter
+	//LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
+	//	const std::string& utf8_text, bool log2file = true);
 	LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 		const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
@@ -320,7 +323,8 @@ private:
 	/**
 	 * Add message to a list of message associated with session specified by session_id
 	 */
-	// Ansariel: Added is_announcement parameter
+	// <FS:Ansariel> Added is_announcement parameter
+	//bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
 	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, BOOL is_announcement = FALSE);
 };
 
@@ -364,7 +368,7 @@ public:
 					const LLUUID& region_id = LLUUID::null,
 					const LLVector3& position = LLVector3::zero,
 					bool link_name = false,
-					BOOL is_announcement = FALSE // Ansariel: Special parameter indicating announcement
+					BOOL is_announcement = FALSE // <FS:Ansariel> Special parameter indicating announcement
 					);
 
 	void addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args);
