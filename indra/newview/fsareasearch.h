@@ -145,7 +145,7 @@ public:
 	void setExcludeTempary(bool b) { mExcludeTempary = b; }
 	void setExcludePhysics(bool b) { mExcludePhysics = b; }
 	void setExcludeChildPrims(bool b) { mExcludeChildPrims = b; }
-	void setExcludeNeighborRegines(bool b) { mExcludeNeighborRegines = b; }
+	void setExcludeNeighborRegions(bool b) { mExcludeNeighborRegions = b; }
 	
 	void setFilterForSaleMin(S32 s) { mFilterForSaleMin = s; }
 	void setFilterForSaleMax(S32 s) { mFilterForSaleMax = s; }
@@ -231,7 +231,7 @@ private:
 	bool mExcludeTempary;
 	bool mExcludePhysics;
 	bool mExcludeChildPrims;
-	bool mExcludeNeighborRegines;
+	bool mExcludeNeighborRegions;
 
 	bool mFilterLocked;
 	bool mFilterPhysicial;
@@ -385,7 +385,7 @@ private:
 	LLCheckBoxCtrl* mCheckboxExcludePhysics;
 	LLCheckBoxCtrl* mCheckboxExcludeTempary;
 	LLCheckBoxCtrl* mCheckboxExcludeChildPrim;
-	LLCheckBoxCtrl* mCheckboxExcludeNeighborRegines;
+	LLCheckBoxCtrl* mCheckboxExcludeNeighborRegions;
 };
 
 
