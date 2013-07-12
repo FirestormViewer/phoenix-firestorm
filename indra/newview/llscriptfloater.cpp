@@ -308,7 +308,7 @@ void LLScriptFloater::restorePosition()
 	}
 }
 
-// Ansariel: Override base method so we have the option to ignore
+// <FS:Ansariel> Override base method so we have the option to ignore
 // the global transparency settings and show the script dialog
 // always on opaque background.
 F32 LLScriptFloater::getCurrentTransparency()
@@ -322,6 +322,7 @@ F32 LLScriptFloater::getCurrentTransparency()
 		return LLUICtrl::getCurrentTransparency();
 	}
 }
+// </FS:Ansariel>
 
 void LLScriptFloater::onFocusLost()
 {
@@ -368,20 +369,20 @@ void LLScriptFloater::dockToChiclet(bool dock)
 			bool save = getSavePosition();
 			setSavePosition(false);
 
-		// <FS:Ansariel> Group notices, IMs and chiclets position
-		//setDockControl(new LLDockControl(chiclet, this, getDockTongue(),
-		//	LLDockControl::BOTTOM));
-		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
-		{
-			setDockControl(new LLDockControl(chicletp, this, getDockTongue(), // <FS:TM> CHUI Merge LL changed chiclet to chicletp, check this is correct here
-				LLDockControl::BOTTOM));
-		}
-		else
-		{
-			setDockControl(new LLDockControl(chicletp, this, getDockTongue(), // <FS:TM> CHUI Merge LL changed chiclet to chicletp, check this is correct here
-				LLDockControl::TOP));
-		}
-		// </FS:Ansariel> Group notices, IMs and chiclets position
+			// <FS:Ansariel> Group notices, IMs and chiclets position
+			//setDockControl(new LLDockControl(chicletp, this, getDockTongue(),
+			//	LLDockControl::BOTTOM));
+			if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+			{
+				setDockControl(new LLDockControl(chicletp, this, getDockTongue(),
+					LLDockControl::BOTTOM));
+			}
+			else
+			{
+				setDockControl(new LLDockControl(chicletp, this, getDockTongue(),
+					LLDockControl::TOP));
+			}
+			// </FS:Ansariel> Group notices, IMs and chiclets position
 			setDocked(dock);
 
 			// Restore saving
