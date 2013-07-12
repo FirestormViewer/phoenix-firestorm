@@ -19,7 +19,6 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 	<string name="no_groups_msg" value="Suchen Sie nach Gruppen? Versuchen Sie es mit der [secondlife:///app/search/groups Suche]."/>
 	<string name="MiniMapToolTipMsg" value="[REGION] (Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Doppelklicken, um zu teleportieren; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
-	<string name="avatar_name_count" value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
 	<tab_container name="tabs">
 		<panel label="In der Nähe" name="nearby_panel">
 			<panel label="bottom_panel" name="nearby_buttons_panel">
@@ -40,6 +39,7 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<button name="gear_btn" tool_tip="Aktionen für ausgewählte Person"/>
 				<menu_button name="friends_view_btn" tool_tip="Anzeige-/Sortieroptionen"/>
 				<button name="friends_add_btn" tool_tip="Einem Einwohner die Freundschaft anbieten"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Sichtbarkeit des Onlinestatus global umschalten"/>
 				<dnd_button name="friends_del_btn" tool_tip="Ausgewählte Person als Freund entfernen"/>
 			</panel>
 		</panel>

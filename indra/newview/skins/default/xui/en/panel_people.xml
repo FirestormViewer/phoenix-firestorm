@@ -12,6 +12,9 @@
  top="0"
  width="333">
     <string
+     name="high_server_load"
+     value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
+    <string
      name="no_recent_people"
      value="No recent people. Looking for people to hang out with? Try [secondlife:///app/search/people Search] or the [secondlife:///app/worldmap World Map]." />
     <string
@@ -48,12 +51,12 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
     <string
      name="no_groups_msg"
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
-	<string
-	 name="MiniMapToolTipMsg"
-	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
-	<string
-	 name="AltMiniMapToolTipMsg"
-	 value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+    <string
+     name="MiniMapToolTipMsg"
+     value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
+    <string
+     name="AltMiniMapToolTipMsg"
+     value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
     <tab_container
      bottom="-10"
      follows="all"
@@ -267,7 +270,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  text_color="Black"
                  text_pad_left="10"
                  top="4"
-                 width="177" />
+                 width="144" />
                 <button
                  commit_callback.function="People.Gear"
                  follows="right"
@@ -313,6 +316,20 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                     <commit_callback
                      function="People.AddFriendWizard" />
                 </button>
+                <button
+                 follows="right"
+                 height="25"
+                 image_hover_unselected="Toolbar_Middle_Over"
+                 image_overlay="Permission_Visible_Online"
+                 image_selected="Toolbar_Middle_Selected"
+                 image_unselected="Toolbar_Middle_Off"
+                 control_name="GlobalOnlineStatusToggle"
+                 is_toggle="true"
+                 layout="topleft"
+                 left_pad="2"
+                 name="GlobalOnlineStatusToggle"
+                 tool_tip="Toggle Global Visibility"
+                 width="31" />
                 <dnd_button
                  follows="right"
                  height="25"
