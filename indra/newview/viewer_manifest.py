@@ -642,18 +642,18 @@ class WindowsManifest(ViewerManifest):
         if self.default_channel():
             if self.default_grid():
                 # release viewer
-                installer_file = "Phoenix-%(app_name)s-%(channel_unique)s%(version_dashes)s_Setup.exe"
+                installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
-                !define INSTNAME   "%(app_name)s_%(channel_unique)s"
+                !define INSTNAME   "%(app_name)s"
                 !define SHORTCUT   "%(app_name)s"
                 !define URLNAME   "secondlife"
                 Caption "%(app_name)s ${VERSION}"
                 """
             else:
                 # alternate grid viewer
-                installer_file = "Phoenix-%(app_name)s-%(channel_unique)s%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
+                installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
@@ -666,11 +666,11 @@ class WindowsManifest(ViewerManifest):
         else:
             # some other channel (grid name not used)
             #installer_file = "Second_Life_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe"
-            installer_file = "Phoenix-%(app_name)s-%(channel_unique)s%(version_dashes)s_%(subchannel_underscores)s_Setup.exe" #<FS:CR>
+            installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.exe" #<FS:CR>
             grid_vars_template = """
             OutFile "%(installer_file)s"
             !define INSTFLAGS "%(flags)s"
-            !define INSTNAME   "%(app_name)s_%(channel_unique)s"
+            !define INSTNAME   "%(app_name)s"
             !define SHORTCUT   "%(app_name)s"
             !define URLNAME   "secondlife"
             !define UNINSTALL_SETTINGS 1
