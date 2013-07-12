@@ -65,8 +65,11 @@ ATI ASUS EAH38xx						.*ATI.*ASUS.*EAH38.*					2	1	1	3.3
 ATI ASUS EAH43xx						.*ATI.*ASUS.*EAH43.*					2	1	1	3.3
 ATI ASUS EAH45xx						.*ATI.*ASUS.*EAH45.*					2	1	0	0
 ATI ASUS EAH48xx						.*ATI.*ASUS.*EAH48.*					3	1	1	3.3
-ATI ASUS EAH57xx						.*ATI.*ASUS.*EAH57.*					3	1	1	4.1
-ATI ASUS EAH58xx						.*ATI.*ASUS.*EAH58.*					5	1	1	4.1
+ATI ASUS EAH54xx						.*ATI.*ASUS.*EAH54.*					3	1	1	4.2
+ATI ASUS EAH55xx						.*ATI.*ASUS.*EAH55.*					3	1	1	4.2
+ATI ASUS EAH56xx						.*ATI.*ASUS.*EAH56.*					3	1	1	4.2
+ATI ASUS EAH57xx						.*ATI.*ASUS.*EAH57.*					3	1	1	4.2
+ATI ASUS EAH58xx						.*ATI.*ASUS.*EAH58.*					5	1	1	4.2
 ATI ASUS EAH62xx						.*ATI.*ASUS.*EAH62.*					2	1	0	0
 ATI ASUS EAH63xx						.*ATI.*ASUS.*EAH63.*					2	1	0	0
 ATI ASUS EAH64xx						.*ATI.*ASUS.*EAH64.*					2	1	0	0
@@ -75,6 +78,15 @@ ATI ASUS EAH66xx						.*ATI.*ASUS.*EAH66.*					3	1	0	4.1
 ATI ASUS EAH67xx						.*ATI.*ASUS.*EAH67.*					3	1	0	0
 ATI ASUS EAH68xx						.*ATI.*ASUS.*EAH68.*					5	1	0	4
 ATI ASUS EAH69xx						.*ATI.*ASUS.*EAH69.*					5	1	0	4.1
+ATI ASUS HD7100							.*ATI.*ASUS.* HD71.*					2	1	0	0
+ATI ASUS HD7200							.*ATI.*ASUS.* HD72.*					2	1	0	0
+ATI ASUS HD7300							.*ATI.*ASUS.* HD73.*					2	1	0	0
+ATI ASUS HD7400							.*ATI.*ASUS.* HD74.*					2	1	0	0
+ATI ASUS HD7500							.*ATI.*ASUS.* HD75.*					3	1	1	4.2
+ATI ASUS HD7600							.*ATI.*ASUS.* HD76.*					3	1	0	0
+ATI ASUS HD7700							.*ATI.*ASUS.* HD77.*					4	1	1	4.2
+ATI ASUS HD7800							.*ATI.*ASUS.* HD78.*					5	1	1	4.2
+ATI ASUS HD7900							.*ATI.*ASUS.* HD79.*					5	1	1	4.2
 ATI ASUS Radeon X1xxx					.*ATI.*ASUS.*X1.*						2	1	1	2.1
 ATI Radeon X7xx							.*ATI.*ASUS.*X7.*						1	1	0	0
 ATI Radeon X19xx						.*ATI.*(Radeon|Diamond) X19.* ?.*		2	1	1	2.1
@@ -103,18 +115,6 @@ ATI M56									.*ATI.*M56.*							1	1	0	0
 ATI M71									.*ATI.*M71.*							1	1	0	0
 ATI M72									.*ATI.*M72.*							1	1	0	0
 ATI M76									.*ATI.*M76.*							3	1	0	0
-ATI ASUS HD7100							.*ATI.*ASUS.* HD71.*					2	1	0	0
-ATI ASUS HD7200							.*ATI.*ASUS.* HD72.*					2	1	0	0
-ATI ASUS HD7300							.*ATI.*ASUS.* HD73.*					2	1	0	0
-ATI ASUS HD7400							.*ATI.*ASUS.* HD74.*					2	1	0	0
-ATI ASUS HD7500							.*ATI.*ASUS.* HD75.*					3	1	1	4.2
-ATI ASUS HD7600							.*ATI.*ASUS.* HD76.*					3	1	0	0
-ATI ASUS HD7700							.*ATI.*ASUS.* HD77.*					4	1	1	4.2
-ATI ASUS HD7800							.*ATI.*ASUS.* HD78.*					5	1	1	4.2
-ATI ASUS HD7900							.*ATI.*ASUS.* HD79.*					5	1	1	4.2
-ATI ASUS EAH5400						.*ATI.*ASUS EAH54..						3	1	1	4.2
-ATI ASUS EAH5500						.*ATI.*ASUS EAH55..						3	1	1	4.2
-ATI ASUS EAH5600						.*ATI.*ASUS EAH65..						3	1	1	4.2
 ATI Mobility Radeon 4100				.*ATI.*Mobility.*41..					1	1	1	3.3
 ATI Mobility Radeon 7xxx				.*ATI.*Mobility.*Radeon 7.*				0	1	1	1.3
 ATI Mobility Radeon 8xxx				.*ATI.*Mobility.*Radeon 8.*				0	1	0	0
@@ -148,30 +148,30 @@ ATI Mobility Radeon HD 5400				.*ATI.*Mobility.*HD *54.*				2	1	1	4.2
 ATI Mobility Radeon HD 5500				.*ATI.*Mobility.*HD *55.*				3	1	0	0
 ATI Mobility Radeon HD 5600				.*ATI.*Mobility.*HD *56.*				3	1	1	4.2
 ATI Mobility Radeon HD 5700				.*ATI.*Mobility.*HD *57.*				3	1	1	4.1
-ATI Radeon HD 6200M						.*ATI.*Radeon.*HD *62..[DGM].*			3	1	0	0
-ATI Radeon HD 6300M						.*ATI.*Radeon.*HD *63..[DGM].*			3	1	1	4.2
-ATI Radeon HD 6400M						.*ATI.*Radeon.*HD *64..[DGM].*			3	1	0	0
-ATI Radeon HD 6500M						.*ATI.*Radeon.*HD *65..[DGM].*			4	1	1	4.2
-ATI Radeon HD 6600M						.*ATI.*Radeon.*HD *66..[DGM].*			4	1	0	0
-ATI Radeon HD 6700M						.*ATI.*Radeon.*HD *67..[DGM].*			4	1	0	0
-ATI Radeon HD 6800M						.*ATI.*Radeon.*HD *68..[DGM].*			4	1	0	0
-ATI Radeon HD 6900M						.*ATI.*Radeon.*HD *69..[DGM].*			4	1	0	0
-ATI Radeon HD 7200M						.*ATI.*Radeon.*HD *72..[DGM].*			3	1	0	0
-ATI Radeon HD 7300M						.*ATI.*Radeon.*HD *73..[DGM].*			3	1	0	0
-ATI Radeon HD 7400M						.*ATI.*Radeon.*HD *74..[DGM].*			3	1	0	0
-ATI Radeon HD 7500M						.*ATI.*Radeon.*HD *75..[DGM].*			4	1	0	0
-ATI Radeon HD 7600M						.*ATI.*Radeon.*HD *76..[DGM].*			4	1	0	0
-ATI Radeon HD 7700M						.*ATI.*Radeon.*HD *77..[DGM].*			4	1	0	0
-ATI Radeon HD 7800M						.*ATI.*Radeon.*HD *78..[DGM].*			4	1	0	0
-ATI Radeon HD 7900M						.*ATI.*Radeon.*HD *79..[DGM].*			4	1	0	0
-ATI Radeon HD 8200M						.*ATI.*Radeon.*HD *82..[DGM].*			3	1	0	0
-ATI Radeon HD 8300M						.*ATI.*Radeon.*HD *83..[DGM].*			3	1	0	0
-ATI Radeon HD 8400M						.*ATI.*Radeon.*HD *84..[DGM].*			4	1	0	0
-ATI Radeon HD 8500M						.*ATI.*Radeon.*HD *85..[DGM].*			4	1	0	0
-ATI Radeon HD 8600M						.*ATI.*Radeon.*HD *86..[DGM].*			4	1	0	0
-ATI Radeon HD 8700M						.*ATI.*Radeon.*HD *87..[DGM].*			4	1	0	0
-ATI Radeon HD 8800M						.*ATI.*Radeon.*HD *88..[DGM].*			4	1	0	0
-ATI Radeon HD 8900M						.*ATI.*Radeon.*HD *89..[DGM].*			4	1	0	0
+ATI Radeon HD 6200 D\G\M					.*ATI.*Radeon.*HD *62..[DGM].*			3	1	0	0
+ATI Radeon HD 6300 D\G\M					.*ATI.*Radeon.*HD *63..[DGM].*			3	1	1	4.2
+ATI Radeon HD 6400 D\G\M					.*ATI.*Radeon.*HD *64..[DGM].*			3	1	0	0
+ATI Radeon HD 6500 D\G\M					.*ATI.*Radeon.*HD *65..[DGM].*			4	1	1	4.2
+ATI Radeon HD 6600 D\G\M					.*ATI.*Radeon.*HD *66..[DGM].*			4	1	0	0
+ATI Radeon HD 6700 D\G\M					.*ATI.*Radeon.*HD *67..[DGM].*			4	1	0	0
+ATI Radeon HD 6800 D\G\M					.*ATI.*Radeon.*HD *68..[DGM].*			4	1	0	0
+ATI Radeon HD 6900 D\G\M					.*ATI.*Radeon.*HD *69..[DGM].*			4	1	0	0
+ATI Radeon HD 7200 D\G\M					.*ATI.*Radeon.*HD *72..[DGM].*			3	1	0	0
+ATI Radeon HD 7300 D\G\M					.*ATI.*Radeon.*HD *73..[DGM].*			3	1	0	0
+ATI Radeon HD 7400 D\G\M					.*ATI.*Radeon.*HD *74..[DGM].*			3	1	0	0
+ATI Radeon HD 7500 D\G\M					.*ATI.*Radeon.*HD *75..[DGM].*			4	1	0	0
+ATI Radeon HD 7600 D\G\M					.*ATI.*Radeon.*HD *76..[DGM].*			4	1	0	0
+ATI Radeon HD 7700 D\G\M					.*ATI.*Radeon.*HD *77..[DGM].*			4	1	0	0
+ATI Radeon HD 7800 D\G\M					.*ATI.*Radeon.*HD *78..[DGM].*			4	1	0	0
+ATI Radeon HD 7900 D\G\M					.*ATI.*Radeon.*HD *79..[DGM].*			4	1	0	0
+ATI Radeon HD 8200 D\G\M					.*ATI.*Radeon.*HD *82..[DGM].*			3	1	0	0
+ATI Radeon HD 8300 D\G\M					.*ATI.*Radeon.*HD *83..[DGM].*			3	1	0	0
+ATI Radeon HD 8400 D\G\M					.*ATI.*Radeon.*HD *84..[DGM].*			4	1	0	0
+ATI Radeon HD 8500 D\G\M					.*ATI.*Radeon.*HD *85..[DGM].*			4	1	0	0
+ATI Radeon HD 8600 D\G\M					.*ATI.*Radeon.*HD *86..[DGM].*			4	1	0	0
+ATI Radeon HD 8700 D\G\M					.*ATI.*Radeon.*HD *87..[DGM].*			4	1	0	0
+ATI Radeon HD 8800 D\G\M					.*ATI.*Radeon.*HD *88..[DGM].*			4	1	0	0
+ATI Radeon HD 8900 D\G\M					.*ATI.*Radeon.*HD *89..[DGM].*			4	1	0	0
 ATI Radeon HD 2300						.*ATI.*Radeon HD *23.*					0	1	1	3.3
 ATI Radeon HD 2400						.*ATI.*Radeon HD *24.*					1	1	1	4
 ATI Radeon HD 2600						.*ATI.*Radeon HD *26.*					2	1	1	3.3
