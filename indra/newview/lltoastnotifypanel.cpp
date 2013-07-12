@@ -319,6 +319,15 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
     mTextBox->setPlainText(!show_images);
     mTextBox->setValue(mNotification->getMessage());
 
+	// <FS:Ansariel> Script dialog colors
+	if (mIsScriptDialog)
+	{
+		LLColor4 script_dialog_fg_color = LLUIColorTable::instance().getColor("ScriptDialogFg", LLColor4::white).get();
+		mTextBox->setColor(script_dialog_fg_color);
+		mTextBox->setReadOnlyColor(script_dialog_fg_color);
+	}
+	// </FS:Ansariel>
+
     // add buttons for a script notification
     if (mIsTip)
     {
