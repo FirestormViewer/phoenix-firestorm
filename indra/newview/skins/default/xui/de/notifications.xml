@@ -4051,6 +4051,7 @@ der Server voll ist.
 	<notification name="PreferenceChatPathChanged">
 		Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt.
 		<usetemplate ignoretext="Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt." name="okignore" yestext="OK"/>
+	</notification>
 
   <notification name="PhoenixWL">
 &apos;[PARCEL_NAME]&apos;, im Besitz von &apos;[OWNER_NAME]&apos;, möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
