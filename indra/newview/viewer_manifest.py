@@ -257,6 +257,10 @@ class ViewerManifest(LLManifest):
             icon_path += 'project'
         else :
             icon_path += 'private' # FS default
+        #[FS:CR] OpenSim app icons
+        if (self.flavor() == 'oss') :
+            icon_path += '-os'
+        # [/FS:CR]
         return icon_path
 
     def flags_list(self):
