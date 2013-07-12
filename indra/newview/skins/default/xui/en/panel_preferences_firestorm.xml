@@ -105,6 +105,15 @@
          top_pad="5"
          follows="left|top"
          height="16"
+         label="Disable automatic opening of block list"
+         name="FSDisableBlockListAutoOpen"
+         width="270"
+         control_name="FSDisableBlockListAutoOpen"
+         tool_tip="Disables the automatic opening of the bloc klist when blocking avatars or objects."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
          label="Always rez objects under the land group if possible"
          name="grouplandrez"
          width="270"

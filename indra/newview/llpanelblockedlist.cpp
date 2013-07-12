@@ -138,6 +138,12 @@ void LLPanelBlockedList::selectBlocked(const LLUUID& mute_id)
 
 void LLPanelBlockedList::showPanelAndSelect(const LLUUID& idToSelect)
 {
+	// <FS:Ansariel> FIRE-572: Disable auto-open of blocklist
+	if (gSavedSettings.getBOOL("FSDisableBlockListAutoOpen"))
+	{
+		return;
+	}
+
 	// <FS:Ansariel> Optional standalone blocklist floater
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
 	//	LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));

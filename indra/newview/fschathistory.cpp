@@ -192,15 +192,7 @@ public:
 		else if (level == "block")
 		{
 			LLMuteList::getInstance()->add(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
-
-			if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-			{
-				LLFloaterReg::showInstance("fs_blocklist", LLSD().with("blocked_to_select", getAvatarId()));
-			}
-			else
-			{
-				LLPanelBlockedList::showPanelAndSelect(getAvatarId());
-			}
+			LLPanelBlockedList::showPanelAndSelect(getAvatarId());
 		}
 		else if (level == "map")
 		{
