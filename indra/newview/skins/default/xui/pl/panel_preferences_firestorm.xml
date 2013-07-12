@@ -11,6 +11,7 @@
         <check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
         <check_box label="Wyłącz ekran postępu logowania się" name="login_screen_toggle" tool_tip="Wyłącza czarny ekran postępu logowania się" />
         <check_box label="Wyłącz ekran postępu wylogowywania się" name="logout_screen_toggle" tool_tip="Wyłącza czarny ekran postępu wylogowywania się." />
+        <check_box label="Wyłącz automatyczne otwieranie listy zablokowanych" name="FSDisableBlockListAutoOpen" tool_tip="Wyłącza automatyczne otwieranie listy zablokowanych podczas blokowania awatarów lub obiektów." />
         <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
         <check_box label="Porządkuj listę kontaktów ZAWSZE według nazw kont" name="sortcontactsbyun" tool_tip="Nie zwracaj uwagi na Imiona Wyświetlane" />
         <check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze." />
