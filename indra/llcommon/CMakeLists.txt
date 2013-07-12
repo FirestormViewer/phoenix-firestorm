@@ -246,8 +246,7 @@ set(llcommon_HEADER_FILES
     lluri.h
     lluuid.h
     lluuidhashmap.h
-# <FS:TS> This file is no longer used and has been deleted
-#    llversionserver.h
+    llversionserver.h
     llworkerthread.h
     ll_template_cast.h
     metaclass.h
