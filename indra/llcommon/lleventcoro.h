@@ -29,8 +29,16 @@
 #if ! defined(LL_LLEVENTCORO_H)
 #define LL_LLEVENTCORO_H
 
+// <FS:TS> This silliness is needed because LL renamed the Boost coroutines
+//         functions to dcoroutines.
+#if LL_STANDALONE
+#include <boost/coroutine/coroutine.hpp>
+#include <boost/coroutine/future.hpp>
+#define dcoroutines coroutines
+#else
 #include <boost/dcoroutine/coroutine.hpp>
 #include <boost/dcoroutine/future.hpp>
+#endif
 #include <boost/optional.hpp>
 #include <string>
 #include <stdexcept>
