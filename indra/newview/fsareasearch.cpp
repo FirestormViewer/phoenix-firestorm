@@ -114,7 +114,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mExcludeTempary(true),
 	mExcludePhysics(true),
 	mExcludeChildPrims(true),
-	mExcludeNeighborRegines(true),
+	mExcludeNeighborRegions(true),
 	mColumnDistance(true),
 	mColumnName(true),
 	mColumnDescription(true),
@@ -257,17 +257,17 @@ void FSAreaSearch::checkRegion()
 		LLViewerRegion* region = gAgent.getRegion(); // getRegion can return NULL if disconnected.
 		if (region && (region != mLastRegion))
 		{
-			if (!mExcludeNeighborRegines)
+			if (!mExcludeNeighborRegions)
 			{
 				std::vector<LLViewerRegion*> uniqueRegions;
 				region->getNeighboringRegions(uniqueRegions);
 				if(std::find(uniqueRegions.begin(), uniqueRegions.end(), mLastRegion) != uniqueRegions.end())
 				{
-					// Crossed into a neighboring regine, no need to clear everything.
+					// Crossed into a neighboring region, no need to clear everything.
 					mLastRegion = region;
 					return;
 				}
-				// else teleported into a new regine
+				// else teleported into a new region
 			}
 			mLastRegion = region;
 			mRequested = 0;
@@ -419,7 +419,7 @@ void FSAreaSearch::findObjects()
 
 bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* our_region)
 {
-	// need to be connected to regine object is in.
+	// need to be connected to region object is in.
 	if (!objectp->getRegion())
 	{
 		return false;
@@ -452,7 +452,7 @@ bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* o
 		return false;
 	}
 
-	if (mExcludeNeighborRegines && !(objectp->getRegion() == our_region))
+	if (mExcludeNeighborRegions && !(objectp->getRegion() == our_region))
 	{
 		return false;
 	}
@@ -1732,9 +1732,9 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mCheckboxExcludeChildPrim->set(TRUE);
 	mCheckboxExcludeChildPrim->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 	
-	mCheckboxExcludeNeighborRegines = getChild<LLCheckBoxCtrl>("exclude_neighbor_regine");
-	mCheckboxExcludeNeighborRegines->set(TRUE);
-	mCheckboxExcludeNeighborRegines->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	mCheckboxExcludeNeighborRegions = getChild<LLCheckBoxCtrl>("exclude_neighbor_region");
+	mCheckboxExcludeNeighborRegions->set(TRUE);
+	mCheckboxExcludeNeighborRegions->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mButtonApply = getChild<LLButton>("apply");
 	mButtonApply->setClickedCallback(boost::bind(&FSAreaSearch::onButtonClickedSearch, mFSAreaSearch));
@@ -1810,7 +1810,7 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 
 	mFSAreaSearch->setExcludeChildPrims(mCheckboxExcludeChildPrim->get());
 
-	mFSAreaSearch->setExcludeNeighborRegines(mCheckboxExcludeNeighborRegines->get());
+	mFSAreaSearch->setExcludeNeighborRegions(mCheckboxExcludeNeighborRegions->get());
 }
 
 void FSPanelAreaSearchFilter::onCommitSpin()

@@ -533,8 +533,8 @@
 			 top_pad="10"
 			 layout="topleft"
 			 left="10"
-			 name="exclude_neighbor_regine"
-			 label="Neighboring Regines"
+			 name="exclude_neighbor_region"
+			 label="Neighboring Regions"
 			 width="80"/>
 			<button
 			 name="apply"
