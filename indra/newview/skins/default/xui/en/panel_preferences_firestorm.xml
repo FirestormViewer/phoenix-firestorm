@@ -109,7 +109,7 @@
          name="FSDisableBlockListAutoOpen"
          width="270"
          control_name="FSDisableBlockListAutoOpen"
-         tool_tip="Disables the automatic opening of the bloc klist when blocking avatars or objects."/>
+         tool_tip="Disables the automatic opening of the block list when blocking avatars or objects."/>
         <check_box
          top_pad="5"
          follows="left|top"
