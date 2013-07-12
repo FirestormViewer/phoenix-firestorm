@@ -42,6 +42,12 @@ public:
 	bool stopStream(); // Returns true if the stream was successfully stopped.
 	bool ready();
 
+	// <FS:Ansariel> Streamtitle display
+	bool hasNewMetadata();
+	std::string getCurrentArtist();
+	std::string getCurrentTitle();
+	// </FS:Ansariel>
+
 	const std::string& getURL() 	{ return mInternetStreamURL; }
 
 	FMOD_OPENSTATE getOpenState(unsigned int* percentbuffered=NULL, bool* starving=NULL, bool* diskbusy=NULL);
@@ -52,6 +58,11 @@ protected:
 	bool mReady;
 
 	std::string mInternetStreamURL;
+
+	// <FS:Ansariel> Streamtitle display
+	char* mArtist;
+	char* mTitle;
+	// </FS:Ansariel>
 };
 
 
@@ -299,6 +310,38 @@ void LLStreamingAudio_FMODEX::setGain(F32 vol)
 	}
 }
 
+// <FS:Ansariel> Streamtitle display
+bool LLStreamingAudio_FMODEX::hasNewMetadata()
+{
+	if (mCurrentInternetStreamp)
+	{
+		return mCurrentInternetStreamp->hasNewMetadata();
+	}
+
+	return false;
+}
+
+std::string LLStreamingAudio_FMODEX::getCurrentTitle()
+{
+	if (mCurrentInternetStreamp)
+	{
+		return mCurrentInternetStreamp->getCurrentTitle();
+	}
+
+	return "";
+}
+
+std::string LLStreamingAudio_FMODEX::getCurrentArtist()
+{
+	if (mCurrentInternetStreamp)
+	{
+		return mCurrentInternetStreamp->getCurrentArtist();
+	}
+
+	return "";
+}
+// </FS:Ansariel>
+
 ///////////////////////////////////////////////////////
 // manager of possibly-multiple internet audio streams
 
@@ -390,3 +433,47 @@ void LLStreamingAudio_FMODEX::setBufferSizes(U32 streambuffertime, U32 decodebuf
 	settings.defaultDecodeBufferSize = decodebuffertime;//ms
 	mSystem->setAdvancedSettings(&settings);
 }
+
+// <FS:Ansariel> Streamtitle display
+bool LLAudioStreamManagerFMODEX::hasNewMetadata()
+{
+	bool ret = false;
+
+	FMOD_TAG tag;
+	FMOD_RESULT res;
+
+	res = mInternetStream->getTag("TITLE", 0, &tag);
+	if (res == FMOD_OK)
+	{
+		char* new_title = (char*)tag.data;
+		if (new_title != mTitle)
+		{
+			mTitle = new_title;
+			ret = true;
+		}
+	}
+
+	res = mInternetStream->getTag("ARTIST", 0, &tag);
+	if (res == FMOD_OK)
+	{
+		char* new_artist = (char*)tag.data;
+		if (new_artist != mArtist)
+		{
+			mArtist = new_artist;
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+std::string LLAudioStreamManagerFMODEX::getCurrentTitle()
+{
+	return std::string(mTitle);
+}
+
+std::string LLAudioStreamManagerFMODEX::getCurrentArtist()
+{
+	return std::string(mArtist);
+}
+// </FS:Ansariel>
