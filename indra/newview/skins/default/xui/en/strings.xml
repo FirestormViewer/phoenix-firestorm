@@ -314,7 +314,7 @@ Please try logging in again in a minute.</string>
 	<!-- llvoavatar. Displayed in the avatar chat bubble -->
 	<string name="AvatarEditingAppearance">(Editing Appearance)</string>
 	<string name="AvatarAway">Away</string>
-	<string name="AvatarDoNotDisturb">Do Not Disturb</string>
+	<string name="AvatarDoNotDisturb">Unavailable</string>
 	<string name="AvatarMuted">Blocked</string>
 
 	<!-- animations -->
@@ -951,7 +951,7 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="PanelContentsNewScript">New Script</string>
 
   <!-- panel preferences general -->
-  <string name="DoNotDisturbModeResponseDefault">This resident has turned on &apos;Do Not Disturb&apos; and will see your message later.</string>
+  <string name="DoNotDisturbModeResponseDefault">This resident has turned on Unavailable mode and will see your message later.</string>
 
 	<!-- Mute -->
 	<string name="MuteByName">(By name)</string>
@@ -1833,7 +1833,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 	<string name="answered_call">Your call has been answered</string>
 	<string name="you_started_call">You started a voice call</string>
 	<string name="you_joined_call">You joined the voice call</string>
-  <string name="you_auto_rejected_call-im">You automatically rejected the voice call while &apos;Do Not Disturb&apos; was on.</string>
+  <string name="you_auto_rejected_call-im">You automatically rejected the voice call while Unavailable mode was on.</string>
   <string name="name_started_call">[NAME] started a voice call</string>
 
   <string name="ringing-im">

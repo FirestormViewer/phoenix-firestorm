@@ -431,7 +431,7 @@
         </menu_item_check>
         <menu_item_check
          name="Do Not Disturb"
-         label="Do Not Disturb">
+         label="Unavailable">
           <menu_item_check.on_check
            function="View.Status.CheckDoNotDisturb" />
           <menu_item_check.on_click

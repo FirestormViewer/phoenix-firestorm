@@ -3887,13 +3887,13 @@ Cannot offer friendship at this time. Please try again in a moment.
    icon="alert.tga"
    name="DoNotDisturbModeSet"
    type="alert">
-Do Not Disturb is on.  You will not be notified of incoming communications.
+Unavailable mode is on.  You will not be notified of incoming communications.
 
-- Other residents will receive your Do Not Disturb response (set in Preferences &gt; Privacy &gt; Autoresponse).
+- Other residents will receive your Unavailable mode response (set in Preferences &gt; Privacy &gt; Autoresponse).
 - Teleportation offers will be declined.
 - Voice calls will be rejected.
     <usetemplate
-     ignoretext="I change my status to Do Not Disturb mode"
+     ignoretext="I change my status to unavailable"
      name="okignore"
      yestext="OK"/>
   </notification>
@@ -3902,7 +3902,7 @@ Do Not Disturb is on.  You will not be notified of incoming communications.
    icon="alert.tga"
    name="AutorespondModeSet"
    type="alert">
-Autorespond mode is set.
+Autorespond mode is on.
 Incoming instant messages will now receive your configured autoresponse.
     <usetemplate
      ignoretext="I change my status to autorespond mode"
@@ -3914,7 +3914,7 @@ Incoming instant messages will now receive your configured autoresponse.
    icon="alert.tga"
    name="AutorespondNonFriendsModeSet"
    type="alert">
-Autorespond mode for non-friends is set.
+Autorespond mode for non-friends is on.
 Incoming instant messages from anyone who is not your friend will now receive your configured autoresponse.
     <usetemplate
      ignoretext="I change my status to autorespond mode for non-friends"
@@ -5477,25 +5477,25 @@ Do you want to replace it with the selected object?
 
   <notification
    icon="alert.tga"
-   label="Do Not Disturb Mode Warning"
+   label="Unavailable Mode Warning"
    name="DoNotDisturbModePay"
    type="alert">
-You have turned on Do Not Disturb. You will not receive any items offered in exchange for this payment.
+You have turned on Unavailable mode. You will not receive any items offered in exchange for this payment.
 
-Would you like to turn off Do Not Disturb before completing this transaction?
+Would you like to turn off Unavailable mode before completing this transaction?
     <tag>confirm</tag>
     <form name="form">
       <ignore name="ignore"
        save_option="true"
-       text="I am about to pay a person or object while I am in Do Not Disturb mode"/>
+       text="I am about to pay a person or object while I am in Unavailable mode"/>
       <button
        default="true"
-       ignore="Always leave Do Not Disturb Mode"
+       ignore="Always leave Unavailable Mode"
        index="0"
        name="Yes"
        text="OK"/>
       <button
-       ignore="Never leave Do Not Disturb Mode"
+       ignore="Never leave Unavailable Mode"
        index="1"
        name="No"
        text="Cancel"/>
