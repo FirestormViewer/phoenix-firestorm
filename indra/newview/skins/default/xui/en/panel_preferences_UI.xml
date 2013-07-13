@@ -417,17 +417,6 @@
          top_pad="4"
          width="256" />
 
-        <check_box
-         control_name="FSGlobalButtonFlashOverride"
-         type="string"
-         left="5"
-         top_pad="6"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         name="ButtonFlashing"
-         width="128"
-         label="Flashing IM tabs override"/>
         <slider
          control_name="FSButtonFlashCount"
          decimal_digits="0"
@@ -441,7 +430,7 @@
          min_val="0"
          max_val="16"
          name="ButtonsFlashCount"
-         top_pad="2"
+         top_pad="6"
          width="471" />
         <slider
          control_name="FSButtonFlashRate"
