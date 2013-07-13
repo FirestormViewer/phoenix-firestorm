@@ -36,7 +36,7 @@
              top="15"
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              name="font_size"
              width="130">
@@ -90,7 +90,7 @@
             <text
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              name="console_font_size"
              width="150"
@@ -148,9 +148,9 @@
              height="16"
              label="Always display group chats, IM sessions and nearby chat in uppercase"
              layout="topleft"
-             left="30"
+             left="20"
              name="chat_always_in_uppercase"
-             top_pad="5"
+             top_pad="1"
              width="400" />
             <check_box
              control_name="PlayTypingAnim"
@@ -158,9 +158,8 @@
              initial_value="true"
              label="Play typing animation when chatting"
              layout="topleft"
-             left="30"
              name="play_typing_animation"
-             top_pad="5"
+             top_pad="1"
              width="400" />
             <check_box
              control_name="FSPlayChatAnimation"
@@ -168,8 +167,7 @@
              height="16"
              label="Play avatar animations (such as shouting)"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="play_avatar_animations"
              width="400" />
             <check_box
@@ -178,8 +176,7 @@
              height="16"
              label="Hear typing sound when people type in nearby chat"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="play_typing_sound"
              width="400" />
             <check_box
@@ -188,8 +185,7 @@
              height="16"
              label="Send typing notifications to other avatars during IM sessions"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="FSSendTypingState"
              width="400" />
             <check_box
@@ -197,8 +193,7 @@
              name="FSChatbarGestureAutoCompleteEnable"
              label="Enable auto-completion of gestures in nearby chat bar"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              height="16"
              width="400" />
             <check_box
@@ -206,8 +201,7 @@
              name="FSChatbarNamePrediction"
              label="Enable automatic name prediction in nearby chat bar"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              height="16"
              width="400" />
             <check_box
@@ -215,8 +209,31 @@
              name="FSIMSystemMessageBrackets"
              label="Wrap system chat messages in brackets"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
+             height="16"
+             width="400" />
+            <check_box
+             control_name="FSChatHistoryShowYou"
+             name="FSChatHistoryShowYou"
+             label="Show &quot;You&quot; in chat history instead of your name"
+             layout="topleft"
+             top_pad="1"
+             height="16"
+             width="400" />
+            <check_box
+             control_name="IMShowTime"
+             name="IMShowTime"
+             label="Show timestamps in chat history and IMs"
+             layout="topleft"
+             top_pad="1"
+             height="16"
+             width="400" />
+            <check_box
+             control_name="IMShowNamesForP2PConv"
+             name="IMShowNamesForP2PConv"
+             label="Show names in direct IMs"
+             layout="topleft"
+             top_pad="1"
              height="16"
              width="400" />
             <check_box
@@ -224,18 +241,16 @@
              height="16"
              label="Email me IMs when I'm offline ([EMAIL])"
              layout="topleft"
-             left_delta="0"
              name="send_im_to_email"
-             top_pad="5"
+             top_pad="1"
              width="400" />
             <check_box
              enabled="true"
              height="16"
              label="Use V1 style chat headers"
              layout="topleft"
-             left_delta="0"
              name="plain_text_chat_history"
-             top_pad="5"
+             top_pad="1"
              width="400" />
              <check_box
              control_name="ShowChatMiniIcons"
@@ -243,30 +258,25 @@
              initial_value="false"
              label="When using V2/3 style chat headers, show mini icons"
              layout="topleft"
-             left="30"
              name="ShowChatMiniIcons"
-             top_pad="5"
+             top_pad="1"
              width="400" />
-
             <check_box
              control_name="UseChatBubbles"
              follows="left|top"
              height="16"
              label="Show chat in bubbles above avatars"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="bubble_text_chat"
              width="150" />
-
             <check_box
              control_name="UseTypingBubbles"
              follows="left|top"
              height="16"
              label="Show typing indicator in bubbles above avatars"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="bubble_text_typing"
              width="150" />
 
@@ -276,7 +286,7 @@
              follows="left|top"
              height="12"
              layout="topleft"
-             left="30"
+             left="20"
              name="inworld_typing_rg_label"
              top_pad="8"
              width="110">
@@ -314,7 +324,7 @@
              name="show_ims_in_label"
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              width="110"
              top_pad="8">
@@ -363,7 +373,7 @@
             <text
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              name="tab_direction_label"
              width="150"
@@ -414,7 +424,7 @@
 			 name="FSIMTabNameFormat_label"
 			 follows="left|top"
 			 layout="topleft"
-			 left="30"
+			 left="20"
 			 height="12"
 			 width="150"
 			 top_pad="12">
