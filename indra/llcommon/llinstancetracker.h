@@ -37,6 +37,11 @@
 #include <boost/bind.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
+// <FS:CR>
+#ifdef LL_DEBUG
+#include "llerror.h"
+#endif
+// </FS:CR>
 
 /**
  * Base class manages "class-static" data that must actually have singleton
