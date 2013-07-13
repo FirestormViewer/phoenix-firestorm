@@ -27,6 +27,7 @@
 			<check_box label="Powiadomienia o pisaniu do innych awatarów podczas sesji IM" name="FSSendTypingState"/>
 			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
+			<check_box name="FSIMSystemMessageBrackets" label="Pokazuj systemowe wiadomości czatu w nawiasach"/>
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history"/>
 			<check_box label="Podczas używania nagłówków w stylu V2/3 pokazuj małe ikony" name="ShowChatMiniIcons"/>
@@ -120,6 +121,7 @@
 			<check_box name="AllowMUpose" label="&quot;:&quot; synonimem dla &quot;/me&quot;"/>
 			<check_box name="EmotesUseItalic" label="Emocje pisane pochyloną czcionką"/>
 			<check_box name="AutoCloseOOC" label="Automatycznie domykaj ((nawiasy)) dla pisania OOC"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Pogrubiaj krzyk, pochylaj szept"/>
 			<check_box name="FSNearbyChatbar" label="Dodaj pasek czatu do okna Czatu Lokalnego"/>
 			<check_box name="FSShowChatChannel" label="Oferuj ręczny wybór kanału w pasku czatu"/>
 			<check_box label="Autoukrywanie głównego paska czatu" name="AutohideChatBar" tool_tip="Ukryj pasek czatu na dolnej listwie przycisków i pokazuj go jako nakładkę tylko wtedy, gdy to potrzebne."/>

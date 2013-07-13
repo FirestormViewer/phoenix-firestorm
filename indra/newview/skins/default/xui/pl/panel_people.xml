@@ -22,10 +22,10 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 		<panel label="W pobliżu" name="nearby_panel">
 			<panel label="bottom_panel" name="nearby_buttons_panel">
 				<filter_editor label="Filtruj ludzi" name="nearby_filter_input" />
-				<!-- <button name="gear_btn" tool_tip="Akcje dotyczące wybranej osoby" />
+				<button name="gear_btn" tool_tip="Akcje dotyczące wybranej osoby" />
 				<menu_button name="nearby_view_btn" tool_tip="Opcje widoku/sortowania" />
 				<button name="add_friend_btn" tool_tip="Dodaj wybranego Rezydenta do znajomych" />
-				<dnd_button name="nearby_del_btn" tool_tip="Usuń zaznaczoną osobę ze swojej listy znajomych" /> -->
+				<dnd_button name="nearby_del_btn" tool_tip="Usuń zaznaczoną osobę ze swojej listy znajomych" />
 			</panel>
 		</panel>
 		<panel label="Znajomi" name="friends_panel">
