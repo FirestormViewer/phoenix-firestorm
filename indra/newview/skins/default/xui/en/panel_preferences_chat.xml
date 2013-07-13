@@ -733,7 +733,7 @@
              name="EmotesUseItalic"
              label="Emotes use italic font"
              layout="topleft"
-             left_delta="200"
+             left_delta="220"
              height="18"
              width="180" />
             <check_box
@@ -745,6 +745,14 @@
              left="30"
              height="18"
              width="400" />
+            <check_box
+             control_name="FSEmphasizeShoutWhisper"
+             name="FSEmphasizeShoutWhisper"
+             label="Bold shouting, Italicize whisering"
+             layout="topleft"
+             left_delta="220"
+             height="18"
+             width="180" />
 
             <!-- Localchat chat bar -->
             <check_box
