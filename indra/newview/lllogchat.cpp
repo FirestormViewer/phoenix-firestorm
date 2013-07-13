@@ -34,7 +34,10 @@
 #include "llviewercontrol.h"
 
 #include "lldiriterator.h"
-#include "llfloaterimsessiontab.h"
+// <FS:CR> Firectorm communications UI
+//#include "llfloaterimsessiontab.h"
+#include "fsfloaterim.h"
+// </FS:CR>
 #include "llinstantmessage.h"
 #include "llsingleton.h" // for LLSingleton
 
@@ -654,8 +657,10 @@ void LLLogChat::deleteTranscripts()
 		}
 	}
 
-	// <FS:Ansariel> [FS communication UI] [CHUI Merge] Our floaters don't reload messages so far. We might want to do that eventually.
+	// <FS:CR> Firestorm communications UI
 	//LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
+	FSFloaterIM::processChatHistoryStyleUpdate(true);
+	// </FS:CR>
 }
 
 // static
