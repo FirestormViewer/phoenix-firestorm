@@ -1036,13 +1036,13 @@ class DarwinManifest(ViewerManifest):
                 'installers', 'darwin', '%s-dmg' % template_chan)
 
             if not os.path.exists (self.src_path_of(dmg_template)):
-                dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
+                dmg_template = os.path.join ('installers', 'darwin', 'firestorm-release-dmg')
 
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
                         os.path.join(dmg_template, "background.png"): "background.png",
-						os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
-						os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
+                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
+                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
                         os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
@@ -1052,7 +1052,7 @@ class DarwinManifest(ViewerManifest):
             #         YOU HAVE BEEN WARNED. 
             # Create the alias file (which is a resource file) from the .r
             self.run_command('Rez %r -o %r' %
-                             (self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
+                             (self.src_path_of("installers/darwin/firestorm-release-dmg/Applications-alias.r"),
                               os.path.join(volpath, "Applications")))
 
             # Set up the installer disk image: set icon positions, folder view
