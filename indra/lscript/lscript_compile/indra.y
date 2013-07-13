@@ -2,10 +2,6 @@
 	#include "linden_common.h"
 	#include "lscript_tree.h"
 
-    #ifdef __cplusplus
-    extern "C" {
-    #endif
-
 	int yylex(void);
 	int yyparse( void );
 	int yyerror(const char *fmt, ...);
@@ -19,10 +15,6 @@
 	#pragma warning (disable : 4702) // warning C4702: unreachable code
 	#pragma warning( disable : 4065 )	// warning: switch statement contains 'default' but no 'case' labels
 	#endif
-
-    #ifdef __cplusplus
-    }
-    #endif
 %}
 
 %union
