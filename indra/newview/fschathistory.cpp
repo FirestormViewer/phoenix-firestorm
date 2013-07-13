@@ -855,14 +855,12 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			body_message_params.font.style = "ITALIC";
 	}
 
-	if(chat.mChatType == CHAT_TYPE_WHISPER)
+	if (chat.mChatType == CHAT_TYPE_WHISPER && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 	{
-		if (gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 			body_message_params.font.style = "ITALIC";
 	}
-	else if(chat.mChatType == CHAT_TYPE_SHOUT)
+	else if(chat.mChatType == CHAT_TYPE_SHOUT && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 	{
-		if (gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
 			body_message_params.font.style = "BOLD";
 	}
 
