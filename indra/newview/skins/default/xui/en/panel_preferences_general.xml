@@ -417,7 +417,7 @@
      width="140"
      top_pad="3"
      name="FSLegacyNametagPosition"
-     tool_tip="If enabled, the nametag will stay at fixed at the avatar position and not follow the avatar head if it moves because of animations."
+     tool_tip="If enabled, the nametag will stay fixed at the avatar position and not follow the avatar head if it moves because of animations."
      top_delta="0" />
 
   <!--    FIRE-5505 Commented out "Publish radar tags to LSL" for now
