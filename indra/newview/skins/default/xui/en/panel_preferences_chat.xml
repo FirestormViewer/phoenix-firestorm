@@ -757,7 +757,7 @@
             <check_box
              control_name="FSEmphasizeShoutWhisper"
              name="FSEmphasizeShoutWhisper"
-             label="Bold shouting, Italicize whisering"
+             label="Bold shouting, Italicize whispering"
              layout="topleft"
              left_delta="220"
              height="18"
