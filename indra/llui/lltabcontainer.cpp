@@ -1159,7 +1159,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
-		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FSButtonFlashCount"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
 		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
 		// </FS:Ansariel>
 		
@@ -1902,7 +1902,7 @@ void LLTabContainer::initButtons()
 
 		// <FS:Ansariel> Enable tab flashing
 		prev_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
-		prev_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FSButtonFlashCount"));
+		prev_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
 		prev_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
 		// </FS:Ansariel>
 
@@ -1918,7 +1918,7 @@ void LLTabContainer::initButtons()
 
 		// <FS:Ansariel> Enable tab flashing
 		next_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
-		next_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FSButtonFlashCount"));
+		next_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
 		next_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
 		// </FS:Ansariel>
 
@@ -1961,7 +1961,7 @@ void LLTabContainer::initButtons()
 
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
-		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FSButtonFlashCount"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
 		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
 		// </FS:Ansariel>
 
@@ -1978,7 +1978,7 @@ void LLTabContainer::initButtons()
 
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
-		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FSButtonFlashCount"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
 		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
 		// </FS:Ansariel>
 		
@@ -1994,7 +1994,7 @@ void LLTabContainer::initButtons()
 
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
-		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FSButtonFlashCount"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
 		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
 		// </FS:Ansariel>
 
@@ -2011,7 +2011,7 @@ void LLTabContainer::initButtons()
 
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
-		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FSButtonFlashCount"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
 		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
 		// </FS:Ansariel>
 

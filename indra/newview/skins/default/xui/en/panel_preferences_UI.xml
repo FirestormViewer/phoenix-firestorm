@@ -418,7 +418,7 @@
          width="256" />
 
         <slider
-         control_name="FSButtonFlashCount"
+         control_name="FlashCount"
          decimal_digits="0"
          follows="left|top"
          height="16"
