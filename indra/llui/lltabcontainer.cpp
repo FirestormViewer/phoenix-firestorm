@@ -1160,7 +1160,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
 		// </FS:Ansariel>
 		
 		// *TODO : It seems wrong not to use p in both cases considering the way p is initialized
@@ -1903,7 +1903,7 @@ void LLTabContainer::initButtons()
 		// <FS:Ansariel> Enable tab flashing
 		prev_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		prev_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-		prev_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
+		prev_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
 		// </FS:Ansariel>
 
 		mPrevArrowBtn = LLUICtrlFactory::create<LLButton>(prev_btn_params);
@@ -1919,7 +1919,7 @@ void LLTabContainer::initButtons()
 		// <FS:Ansariel> Enable tab flashing
 		next_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		next_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-		next_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
+		next_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
 		// </FS:Ansariel>
 
 		mNextArrowBtn = LLUICtrlFactory::create<LLButton>(next_btn_params);
@@ -1962,7 +1962,7 @@ void LLTabContainer::initButtons()
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
 		// </FS:Ansariel>
 
 		mJumpPrevArrowBtn = LLUICtrlFactory::create<LLButton>(p);
@@ -1979,7 +1979,7 @@ void LLTabContainer::initButtons()
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
 		// </FS:Ansariel>
 		
 		mPrevArrowBtn = LLUICtrlFactory::create<LLButton>(p);
@@ -1995,7 +1995,7 @@ void LLTabContainer::initButtons()
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
 		// </FS:Ansariel>
 
 		mJumpNextArrowBtn = LLUICtrlFactory::create<LLButton>(p);
@@ -2012,7 +2012,7 @@ void LLTabContainer::initButtons()
 		// <FS:Ansariel> Enable tab flashing
 		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
 		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
-		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FSButtonFlashRate"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
 		// </FS:Ansariel>
 
 		mNextArrowBtn = LLUICtrlFactory::create<LLButton>(p);

@@ -433,7 +433,7 @@
          top_pad="6"
          width="471" />
         <slider
-         control_name="FSButtonFlashRate"
+         control_name="FlashPeriod"
          decimal_digits="0"
          follows="left|top"
          height="16"
