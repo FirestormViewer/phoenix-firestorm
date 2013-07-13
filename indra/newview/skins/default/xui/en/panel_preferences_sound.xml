@@ -19,7 +19,7 @@
  layout="topleft"
  follows="all"
  top="5"
- bottom="-10"
+ bottom="-1"
  left="1"
  right="-1"
  name="tabs"
