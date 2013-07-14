@@ -693,18 +693,22 @@ void LLFloater::openFloater(const LLSD& key)
 	{
         //Don't play a sound for incoming voice call based upon chat preference setting
 
-        // </FS:PP> UI Sounds
+        // </FS:PP> UI Sounds connection
         // bool playSound = !(getName() == "incoming call" && gSavedSettings.getBOOL("PlaySoundIncomingVoiceCall") == FALSE);
-        bool playSound = !(getName() == "incoming call" && gSavedSettings.getBOOL("PlayModeUISndIncomingVoiceCall") == FALSE);
-        // </FS:PP>
-
-        if(playSound)
+        // 
+        // if(playSound)
+        // {
+        //    make_ui_sound("UISndWindowOpen");
+        // }
+        if(getName() == "incoming call")
         {
-            // </FS:PP> UI Sounds
-            // make_ui_sound("UISndWindowOpen");
             make_ui_sound("UISndIncomingVoiceCall");
-            // </FS:PP>
         }
+        else
+        {
+            make_ui_sound("UISndWindowOpen");
+        }
+        // </FS:PP>
 	}
 
 	//RN: for now, we don't allow rehosting from one multifloater to another
