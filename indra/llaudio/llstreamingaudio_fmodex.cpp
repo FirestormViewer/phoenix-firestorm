@@ -33,6 +33,18 @@
 
 #include "llstreamingaudio_fmodex.h"
 
+// <FS:CR> FmodEX Error checking
+bool fmod_error_check(FMOD_RESULT result)
+{
+    if (result != FMOD_OK)
+    {
+		LL_DEBUGS("FmodEX") << result << " " << FMOD_ErrorString(result) << llendl;
+        return false;
+    }
+	else
+		return true;
+}
+// </FS:CR>
 
 class LLAudioStreamManagerFMODEX
 {
@@ -176,16 +188,22 @@ void LLStreamingAudio_FMODEX::update()
 	{
 		FMOD::Sound *sound = NULL;
 
-		if(mFMODInternetStreamChannelp->getCurrentSound(&sound) == FMOD_OK && sound)
+		// <FS:CR> FmodEX Error checking
+		//if(mFMODInternetStreamChannelp->getCurrentSound(&sound) == FMOD_OK && sound)
+		if (fmod_error_check(mFMODInternetStreamChannelp->getCurrentSound(&sound)) && sound)
+		// </FS:CR>
 		{
 			FMOD_TAG tag;
 			S32 tagcount, dirtytagcount;
 
-			if(sound->getNumTags(&tagcount, &dirtytagcount) == FMOD_OK && dirtytagcount)
+			// <FS:CR> FmodEX Error checking
+			//if(sound->getNumTags(&tagcount, &dirtytagcount) == FMOD_OK && dirtytagcount)
+			if(fmod_error_check(sound->getNumTags(&tagcount, &dirtytagcount)) && dirtytagcount)
+			// </FS:CR>
 			{
 				for(S32 i = 0; i < tagcount; ++i)
 				{
-					if(sound->getTag(NULL, i, &tag)!=FMOD_OK)
+					if(sound->getTag(NULL, i, &tag) != FMOD_OK)
 						continue;
 
 					if (tag.type == FMOD_TAGTYPE_FMOD)
@@ -311,6 +329,7 @@ void LLStreamingAudio_FMODEX::setGain(F32 vol)
 }
 
 // <FS:Ansariel> Streamtitle display
+// virtual
 bool LLStreamingAudio_FMODEX::hasNewMetadata()
 {
 	if (mCurrentInternetStreamp)
@@ -321,6 +340,7 @@ bool LLStreamingAudio_FMODEX::hasNewMetadata()
 	return false;
 }
 
+// virtual
 std::string LLStreamingAudio_FMODEX::getCurrentTitle()
 {
 	if (mCurrentInternetStreamp)
@@ -331,6 +351,7 @@ std::string LLStreamingAudio_FMODEX::getCurrentTitle()
 	return "";
 }
 
+// virtual
 std::string LLStreamingAudio_FMODEX::getCurrentArtist()
 {
 	if (mCurrentInternetStreamp)
@@ -355,7 +376,7 @@ LLAudioStreamManagerFMODEX::LLAudioStreamManagerFMODEX(FMOD::System *system, con
 
 	FMOD_RESULT result = mSystem->createStream(url.c_str(), FMOD_2D | FMOD_NONBLOCKING | FMOD_IGNORETAGS, 0, &mInternetStream);
 
-	if (result!= FMOD_OK)
+	if (result != FMOD_OK)
 	{
 		llwarns << "Couldn't open fmod stream, error "
 			<< FMOD_ErrorString(result)
@@ -437,34 +458,35 @@ void LLStreamingAudio_FMODEX::setBufferSizes(U32 streambuffertime, U32 decodebuf
 // <FS:Ansariel> Streamtitle display
 bool LLAudioStreamManagerFMODEX::hasNewMetadata()
 {
-	bool ret = false;
-
+	bool changed = false;
+	
 	FMOD_TAG tag;
 	FMOD_RESULT res;
 
 	res = mInternetStream->getTag("TITLE", 0, &tag);
-	if (res == FMOD_OK)
+	if (fmod_error_check(res))
 	{
 		std::string new_title = std::string((char*)tag.data);
 		if (new_title != mTitle)
 		{
 			mTitle = new_title;
-			ret = true;
+			changed = true;
 		}
 	}
-
+	
 	res = mInternetStream->getTag("ARTIST", 0, &tag);
-	if (res == FMOD_OK)
+	if (fmod_error_check(res))
 	{
 		std::string new_artist = std::string((char*)tag.data);
 		if (new_artist != mArtist)
 		{
 			mArtist = new_artist;
-			ret = true;
+			changed = true;
 		}
+
 	}
 
-	return ret;
+	return changed;
 }
 
 std::string LLAudioStreamManagerFMODEX::getCurrentTitle()
