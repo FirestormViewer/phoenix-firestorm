@@ -51,7 +51,7 @@
 	<menu label="Komunikacja" name="Communicate">
 		<menu label="Status online" name="Status">
 			<menu_item_check label="Z dala od klawiatury (śpij)" name="Away"/>
-			<menu_item_check name="Zajęty lub Niedostępny" label="Do Not Disturb"/>
+			<menu_item_check label="Zajęty lub Niedostępny" name="Do Not Disturb" />
 			<menu_item_check label="Autoodpowiedź" name="Set Autorespond"/>
 			<menu_item_check label="Autoodpowiedź dla nieznajomych" name="Set Autorespond to non-friends"/>
 		</menu>
@@ -254,7 +254,7 @@
 		<menu_item_check label="Zezwól na czat OOC (Out Of Character)" name="Allow OOC Chat"/>
 		<menu_item_check label="Odmów innym osobom/obiektom dodawania rzeczy do mojego #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Pokaż filtrowany czat" name="Show Filtered Chat"/>
-		<menu_item_check label="Pokaż tag imion" name="Show Name Tags"/>
+		<menu_item_check label="Pokaż tagi imion" name="Show Name Tags"/>
 		<menu_item_check label="Zastępowanie odblokowane" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Ograniczenia..." name="Restrictions"/>
 	</menu>

@@ -3,5 +3,5 @@
 	<floater.string name="Title">
 		Rozmowa: [NAME]
 	</floater.string>
-	<text name="page_label" value="Strona" />
+	<text name="page_label" value="Str." />
 </floater>

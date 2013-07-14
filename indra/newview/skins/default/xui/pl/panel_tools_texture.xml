@@ -11,7 +11,7 @@
 	</text>
 	<color_swatch name="colorswatch" tool_tip="Kliknij, aby wybrać kolor" />
 	<text name="color trans">
-		Przezroczystość %
+		Przezroczystość
 	</text>
 	<text name="glow label">
 		Blask
