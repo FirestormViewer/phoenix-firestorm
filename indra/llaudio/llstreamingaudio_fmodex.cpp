@@ -59,10 +59,10 @@ protected:
 
 	std::string mInternetStreamURL;
 
-	// <FS:Ansariel> Streamtitle display
-	char* mArtist;
-	char* mTitle;
-	// </FS:Ansariel>
+	// <FS:Ansariel FS:CR> Streamtitle display
+	std::string mArtist;
+	std::string mTitle;
+	// </FS:Ansariel FS:CR>
 };
 
 
@@ -445,7 +445,7 @@ bool LLAudioStreamManagerFMODEX::hasNewMetadata()
 	res = mInternetStream->getTag("TITLE", 0, &tag);
 	if (res == FMOD_OK)
 	{
-		char* new_title = (char*)tag.data;
+		std::string new_title = std::string((char*)tag.data);
 		if (new_title != mTitle)
 		{
 			mTitle = new_title;
@@ -456,7 +456,7 @@ bool LLAudioStreamManagerFMODEX::hasNewMetadata()
 	res = mInternetStream->getTag("ARTIST", 0, &tag);
 	if (res == FMOD_OK)
 	{
-		char* new_artist = (char*)tag.data;
+		std::string new_artist = std::string((char*)tag.data);
 		if (new_artist != mArtist)
 		{
 			mArtist = new_artist;
@@ -469,11 +469,11 @@ bool LLAudioStreamManagerFMODEX::hasNewMetadata()
 
 std::string LLAudioStreamManagerFMODEX::getCurrentTitle()
 {
-	return std::string(mTitle);
+	return mTitle;
 }
 
 std::string LLAudioStreamManagerFMODEX::getCurrentArtist()
 {
-	return std::string(mArtist);
+	return mArtist;
 }
 // </FS:Ansariel>
