@@ -14,7 +14,7 @@
  label="Firestorm Prefs"
  layout="topleft"
  follows="all"
- top="0"
+ top="5"
  bottom="-1"
  left="1"
  right="-1"
