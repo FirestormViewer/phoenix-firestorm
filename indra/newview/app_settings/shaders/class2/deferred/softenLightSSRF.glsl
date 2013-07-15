@@ -383,7 +383,7 @@ void main()
 		col *= diffuse.rgb;
 	
 		vec3 refnormpersp = normalize(reflect(pos.xyz, norm.xyz));
-
+//spec.rgba = max(spec.rgba, vec4(1.0, 1.0, 1.0, 0.95));
 		if (spec.a > 0.0) // specular reflection
 		{
 		  			// the old infinite-sky shiny reflection
@@ -434,6 +434,7 @@ void main()
 			const float itsf = 26.0;
 			for (int guessnum = 1; guessnum <= its; ++guessnum)
 			{
+			float rnd2 = rand(vec2(guessnum+rnd, tc.x));
 			  //float rdpow2 = float(guessnum)/(26.0);
 			  float guessnumfp = float(guessnum);
 			  //guessnumfp -= rnd;
@@ -443,11 +444,12 @@ void main()
 			  //float rdpow2 = (guessnumfp)/(26.0);
 			  float rd = guessnumfp / itsf;
 			  float rdpow2 = rd * rd;
-			  float refdist = 0.5*(screen_res.y * (rd));// / (-depth) ;
+			  float refdist = (-2.5/(-1.0+pos.z))*(1.0-(norm.z*norm.z))*(screen_res.y * (rdpow2));// / (-depth) ;
 			  //float refdist = 0.25*(screen_res.y * (rdpow2)) ;
 			  //float refdist = (0.13* (screen_res.y) * ((1-abs(norm.z)) + ((1-depth)))) * (1.0*(guessnum+1)/161.0);
 			  //vec2 ref2d = mix(orig_ref2d, orig_ref2dpersp, 0*fract(orig_ref2d.y*12345.678)) * refdist;
-			  vec2 ref2d = (orig_ref2d + (1.0 - min(length(spec.rgb), 1.0))*0.13*vec2(rnd*2.0-1.0)) * refdist;
+			  //vec2 ref2d = (orig_ref2d + (1.0 - min(length(spec.rgb), 1.0))*90.913*vec2(rnd*2.0-1.0)) * refdist;
+			  vec2 ref2d = (orig_ref2d + (1.0 - spec.a)*0.25*vec2(rnd2*2.0-1.0)) * refdist;
 			
 			  //ref2d.x += checkerboard;
 
@@ -463,7 +465,7 @@ void main()
 			  ref2d += tc.xy; // use as offset from destination
 
 			  if (ref2d.y < 0.0 || ref2d.y > screen_res.y ||
-			      ref2d.x < 0.0 || ref2d.x > screen_res.x) break;
+			      ref2d.x < 0.0 || ref2d.x > screen_res.x) continue;
 
 			  // Get attributes from the 2D guess point.
 			  float refdepth = texture2DRect(depthMap, ref2d).r;
@@ -477,17 +479,21 @@ void main()
 			  // figure out how appropriate our guess actually was, directionwise
 			  //float refapprop=1;
 			  //float refapprop = max(0.0, dot(refnorm, normalize(refpos - pos)));
-			  float refapprop = 1.0 - rdpow2;
+			  float refposdistpow2 = dot(refpos - pos, refpos - pos);
+			  float refapprop = 1.0;
+			  //float refapprop = 1.0-rdpow2;
 			  if (refdepth < 1.0) { // non-sky
+			    //refapprop /= (1.0 + refposdistpow2);
 			    //refapprop *= step(0.0, dot(refnorm, (refpos - pos)));
-			    refapprop *= max(0.0, dot(refnorm, normalize(refpos - pos)));
+			    //refapprop = min(refapprop, max(0.0, dot(refnorm, normalize(refpos - pos))));
+			    refapprop = min(refapprop, sqrt(max(0.0, dot(refnorm, (refpos - pos)) / (1.0 + refposdistpow2 ))) );
 			    //refapprop *= (1.0 - sqrt(rdpow2));
 			    float refshad = texture2DRect(lightMap, ref2d).r;
 			    refshad = pow(refshad, light_gamma);
-			    vec3 refn = decode_normal(texture2DRect(normalMap, ref2d).xy);
+			    vec3 refn = /*normalize*/(decode_normal(texture2DRect(normalMap, ref2d).xy));
 			    // darken reflections from points which face away from the reflected ray - our guess was a back-face
-			    //refapprop *= step(dot(refnorm, refn), 0.0);
-			    refapprop = max(min(refapprop, -dot(refnorm, refn)), 0.0);
+			    refapprop = min(refapprop, step(dot(refnorm, refn), 0.001));
+			    //refapprop = max(min(refapprop, -dot(refnorm, refn)), 0.0);
 			    //refapprop = min(refapprop, max(0.0, -dot(refnorm, refn))); // more conservative variant
 			    // kill guesses which are 'behind' the reflector
 			    float ppdist = dot(norm.xyz, refpos.xyz - pos.xyz);
@@ -495,7 +501,7 @@ void main()
 			    //  refapprop = 0.0;
 			    //}
 
-			    refapprop *= step(0.0, ppdist);
+			    refapprop = min(refapprop, step(0.01, ppdist));
 			    //refapprop = min(refapprop, smoothstep(0.0, 0.05, ppdist));
 
 			    ////			refapprop = min(refapprop, 1.0-smoothstep(3.0, 5.0, ppdist));
@@ -510,6 +516,8 @@ void main()
 			    //refapprop *= 1.0/(1.0+distance(refpos.xyz,pos.xyz));
 
 			    //refapprop = /*magickybooster*/2.5*(refapprop);
+			    //refapprop = sqrt(refapprop); // we just plain like the appropriateness of non-sky reflections better where available
+			    refapprop *= 2.0; // we just plain like the appropriateness of non-sky reflections better where available
 			    total_refapprop += refapprop;
 			    best_refn += refn.xyz * refapprop;
 			    best_refshad += refshad * refapprop;
@@ -525,11 +533,14 @@ void main()
 			  }
 			  else  // sky
 			  {
+			    //refapprop *= 1.0 / itsf;
+			    //refapprop *= 1.0 - rdpow2;
+			    refapprop = min(refapprop, (1.0 - rdpow2));
 			    //refapprop = 0.0;
 
 			    // avoid forward-pointing reflections picking up sky
 			    //refapprop = max(min(refapprop, -dot(refnorm, vec3(0,0,1))), 0.0);
-			    refapprop *= max(-refnorm.z, 0.0);//dot(refnorm, vec3(0.0, 0.0, -1.0));
+			    refapprop = min(refapprop, max(-refnorm.z, 0.0));//dot(refnorm, vec3(0.0, 0.0, -1.0));
  
 			    //			    refapprop *= 0.5;
 			    total_refapprop += refapprop;
@@ -547,7 +558,8 @@ void main()
 			  bloomdamp /= total_refapprop;
 			}
 			//best_refapprop = min((total_refapprop / ((itsf+1.0) * 0.4)), 1.0);
-			best_refapprop = min((total_refapprop / ((itsf))), 1.0);
+			//best_refapprop = min((total_refapprop / ((itsf))), 1.0);
+			best_refapprop = min((1.0 * total_refapprop / ((itsf))), 1.0);
 			//best_refapprop = min(total_refapprop, 1.0);
 			// USE: refn, refshad, refapprop, refcol
 
