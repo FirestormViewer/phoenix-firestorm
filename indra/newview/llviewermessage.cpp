@@ -6619,7 +6619,7 @@ static void money_balance_group_notify(const LLUUID& group_id,
 		chat.mText = args["SLURLMESSAGE"].asString();
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		//chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT; [CHUI Merge]
+		chat_args["money_tracker"] = true;
 		chat_args["console_message"] = llformat(args["MESSAGE"].asString().c_str(), name.c_str());
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
 	}
@@ -6646,7 +6646,7 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 		chat.mText = args["SLURLMESSAGE"].asString();
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		//chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT; [CHUI Merge]
+		chat_args["money_tracker"] = true;
 		chat_args["console_message"] = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, chat_args);
 	}

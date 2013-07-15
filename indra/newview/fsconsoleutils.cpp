@@ -108,11 +108,8 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 	}
 	else
 	{
-		// [CHUI Merge]
-		//if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM &&
-		//	args["type"].asInteger() == LLNotificationsUI::NT_MONEYCHAT)
-		if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM)
-		// [CHUI Merge]
+		if (args.has("money_tracker") && args["money_tracker"].asBoolean() == true &&
+			chat_msg.mSourceType == CHAT_SOURCE_SYSTEM)
 		{
 			consoleChat = args["console_message"].asString();
 		}
