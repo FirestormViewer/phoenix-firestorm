@@ -6668,7 +6668,6 @@ static void money_balance_avatar_notify(const LLUUID& agent_id,
 		chat.mText = llformat(args["MESSAGE"].asString().c_str(), av_name.getCompleteName().c_str());
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD chat_args;
-		//chat_args["type"] = LLNotificationsUI::NT_MONEYCHAT; [CHUI Merge]
 		tipTracker->addMessage(chat,false,chat_args);
 	}
 	//</AO>
