@@ -101,8 +101,6 @@ public:
 		/** ad-hoc sessions involve sophisticated chat history file naming schemes */
 		void buildHistoryFileName();
 
-		void onAvatarNameCache(const LLUUID& avatar_id, const LLAvatarName& av_name);
-
 		void loadHistory();
 
 		LLUUID mSessionID;
@@ -297,13 +295,6 @@ public:
 	static void addSpeakersToRecent(const LLUUID& im_session_id);
 
 	void testMessages();
-
-// [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
-	/**
-	 * Attempts to build the correct IM P2P log filename for the specified agent UUID and agent name
-	 */
-	static bool buildIMP2PLogFilename(const LLUUID& idAgent, const std::string& strName, std::string& strFilename);
-// [/SL:KB]
 
 	/**
 	 * Saves an IM message into a file
