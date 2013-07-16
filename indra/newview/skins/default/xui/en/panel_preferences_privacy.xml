@@ -192,12 +192,15 @@
     name="conversation_log_combo"
     width="165">
      <item
+      name="log_and_transcripts"
       label="Log and transcripts"
       value="2"/>
      <item
+      name="log_only"
       label="Log only"
       value="1"/>
      <item
+      name="no_log_or_transcript"
       label="No log or transcripts"
       value="0"/>
    </combo_box>
@@ -228,13 +231,14 @@
       function="Pref.DeleteTranscripts" />
     </button>
     <text
+     name="log_location_label"
      layout="topleft"
      follows="left|top"
      left="30"
      text_color="White"
      height="12"
      top_pad="4"
-     width="55">
+     width="100">
      Location:
     </text>
     <line_editor
@@ -245,7 +249,7 @@
      font="SansSerif"
      height="23"
      layout="topleft"
-     left_pad="55"
+     left_pad="5"
      max_length="4096"
      name="log_path_string"
      top_delta="-5"
