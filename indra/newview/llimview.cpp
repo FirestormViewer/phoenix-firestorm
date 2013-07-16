@@ -54,6 +54,7 @@
 //#include "llfloaterimsession.h"
 //#include "llfloaterimcontainer.h"
 #include "fsfloaterim.h"
+#include "fsfloaterimcontainer.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llgroupiconctrl.h"
 #include "llmd5.h"
@@ -3052,14 +3053,16 @@ void LLIMMgr::addMessage(
 	}
 
 	// Open conversation floater if offline messages are present
-	// <FS:Ansariel> [FS communication UI]
+	// <FS:CR> Only open it when the user opts to do so...
 	//if (is_offline_msg)
- //   {
- //       LLFloaterReg::showInstance("im_container");
+	if (is_offline_msg && gSavedSettings.getBOOL("FSOpenIMContainerOnOfflineMessage"))
+    {
+    //    LLFloaterReg::showInstance("im_container");
 	//    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
 	//    		flashConversationItemWidget(new_session_id, true);
- //   }
-	// </FS:Ansariel> [FS communication UI]
+		LLFloaterReg::showInstance("fs_im_container");
+	// </FS:CR>
+    }
 }
 
 void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args)

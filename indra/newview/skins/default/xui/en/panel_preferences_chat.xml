@@ -555,6 +555,15 @@
              left="30"
              width="400"
              height="18"
+             name="FSOpenIMContainerOnOfflineMessage"
+             control_name="FSOpenIMContainerOnOfflineMessage"
+             label="Open Conversations when an offline message has been received"/>
+			<check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="1"
+             width="400"
+             height="18"
              name="FSShowIMInChatHistory"
              control_name="FSShowIMInChatHistory"
              label="Show IMs in nearby chat window"/>
