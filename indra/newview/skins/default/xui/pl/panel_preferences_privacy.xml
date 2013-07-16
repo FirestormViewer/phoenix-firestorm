@@ -18,6 +18,20 @@
 			<check_box label="Automatycznie pokazuj noty, tekstury i landmarki po zaakceptowaniu" name="Show_New_Inventory"/>
 			<check_box label="Twórz efekty cząsteczkowe, gdy dam jakiś przedmiot innej osobie" name="FSCreateGiveInventoryParticleEffect"/>
 			<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
+			<text name="logging_label">
+				Zapisywanie:
+			</text>
+			<check_box name="LogNearbyChat" label="Czat lokalny" tool_tip="Zapisuj wiadomości czatu lokalnego na twardym dysku swojego komputera"/>
+			<combo_box name="conversation_log_combo">
+				<item name="log_and_transcripts" label="Dziennik i logi rozmów"/>
+				<item name="log_only" label="Tylko dziennik"/>
+				<item name="no_log_or_transcript" label="Nie zapisuj dziennika ani logów rozmów"/>
+			</combo_box>
+			<button label="Wyczyść dziennik" name="clear_log"/>
+			<button label="Usuń logi rozmów" name="delete_transcripts"/>
+			<text name="log_location_label">
+				Miejsce zapisu:
+			</text>
 			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
 		</panel>
 		<panel label="Śledzenie spojrzeń" name="tab-lookat">

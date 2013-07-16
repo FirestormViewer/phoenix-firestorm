@@ -5022,10 +5022,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Rezydent nie może odwiedzić tego regionu.
 	</string>
 	<string name="logging_calls_disabled_log_empty">
-		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisz: tylko dziennik" lub "Zapisz: dziennik i transkrypcje" w Preferencje > Czat.
+		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		Rozmowy nie będą więcej zapisywane. Jeśli chcesz kontynuować ich logowanie wybierz "Zapisz: tylko dziennik" lub "Zapisz: dziennik i transkrypcje" w Preferencje > Czat.
+		Rozmowy nie będą więcej zapisywane. Jeśli chcesz kontynuować ich logowanie wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		Nie ma zapisanych rozmów. Jeśli skontaktujesz się z kimś, lub ktoś z Tobą, to wpis dziennika pojawi się tutaj.

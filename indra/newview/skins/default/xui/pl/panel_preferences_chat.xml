@@ -29,7 +29,6 @@
 			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
 			<check_box name="FSIMSystemMessageBrackets" label="Pokazuj systemowe wiadomości czatu w nawiasach"/>
 			<check_box name="FSChatHistoryShowYou" label="Pokazuj &quot;Ty&quot; w historii czatu zamiast swojego imienia" />
-			<check_box name="IMShowTime" label="Pokazuj znaczniki czasu w historii czatu oraz IM" />
 			<check_box name="IMShowNamesForP2PConv" label="Pokazuj imiona w bezpośrednich wiadomościach IM" />
 			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history"/>
@@ -86,11 +85,9 @@
 				Długość nazwy grupy wyświetlanej w historii czatu
 			</text>
 			<spinner tool_tip="-1 dla pełnej nazwy grupy, 0 aby wyłączyć" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Otwórz okno Rozmów, gdy pojawia się wiadomość offline"/>
 			<check_box name="FSShowIMInChatHistory" label="Pokazuj IM w oknie czatu lokalnego"/>
 			<check_box name="FSLogIMInChatHistory" label="Zapisuj IM w oknie czatu"/>
-			<text name="requires_save_chat_logs">
-				(wymaga zapisywania logów czatu)
-			</text>
 			<text name="FSIMChatHistoryFade_label">
 				Wygaszaj tekst IM w tło okna historii czatu
 			</text>
@@ -167,6 +164,7 @@
 			</text>
 			<check_box label="Wyłącz znaczniki czasu w Czacie Lokalnym" name="hide_timestamps_nearby_chat"/>
 			<check_box label="Wyłącz znaczniki czasu w IM" name="hide_timestamps_im"/>
+			<check_box name="IMShowTime" label="Pokazuj znaczniki czasu w historii czatu oraz IM" />
 			<text name="console_enhancements">
 				Konsola:
 			</text>
