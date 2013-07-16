@@ -221,14 +221,6 @@
              height="16"
              width="400" />
             <check_box
-             control_name="IMShowTime"
-             name="IMShowTime"
-             label="Show timestamps in chat history and IMs"
-             layout="topleft"
-             top_pad="1"
-             height="16"
-             width="400" />
-            <check_box
              control_name="IMShowNamesForP2PConv"
              name="IMShowNamesForP2PConv"
              label="Show names in direct IMs"
@@ -485,25 +477,24 @@
              label="Group Chats"
              layout="topleft"
              top_pad="1"
-             left="40"
+             left_delta="10"
              height="18"
              tool_tip="Check to see popups when a Group Chat message arrives"
-             width="400" />
+             width="200" />
             <check_box
              control_name="EnableIMChatPopups"
              name="EnableIMChatPopups"
              label="IM Chats"
              layout="topleft"
-             top_pad="0"
-             left="40"
+             left_pad="10"
              height="18"
              tool_tip="Check to see popups when an instant message arrives"
-             width="400" />
+             width="200" />
 
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="10"
+             top_pad="4"
              left="30"
              width="400"
              height="18"
@@ -516,7 +507,7 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="40"
+             left_delta="10"
              width="400"
              height="18"
              name="FSLogImToChatConsole"
@@ -528,7 +519,6 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="40"
              width="400"
              height="18"
              name="FSLogGroupImToChatConsole"
@@ -538,7 +528,8 @@
             <text
              follows="left|top"
              height="15"
-             left="50"
+             top_pad="3"
+             left_delta="4"
              name="FSShowGroupNameLength_label"
              width="275">
                 Length of group name to be printed in chat history
@@ -568,31 +559,21 @@
              control_name="FSShowIMInChatHistory"
              label="Show IMs in nearby chat window"/>
             <check_box
+             enabled_control="FSShowIMInChatHistory"
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="50"
+             left_delta="10"
              width="155"
              height="18"
              name="FSLogIMInChatHistory"
              control_name="FSLogIMInChatHistory"
              label="Save IMs in nearby chat"/>
-			 <text
-             top_delta="2"
-             name="requires_save_chat_logs"
-             follows="left|top"
-             layout="topleft"
-             left_pad="0"
-             height="18"
-             width="200"
-             text_color="White_25">
-              (requires saving nearby chat logs)
-            </text>
             <text
-             top_pad="10"
+             top_pad="1"
              follows="left|top"
              height="15"
-             left="50"
+             left="44"
              name="FSIMChatHistoryFade_label"
              width="325">
                 Fade IM text into the background of the chat history window
@@ -626,7 +607,6 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="30"
              width="400"
              height="18"
              name="FSIMChatFlashOnFriendStatusChange"
@@ -637,7 +617,6 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="30"
              width="400"
              height="18"
              name="FSReportMutedGroupChat"
@@ -969,7 +948,7 @@
              layout="topleft"
              follows="left|top"
              top_pad="0"
-             left="50"
+             left_delta="10"
              width="30"
              height="18"
              control_name="FSMuteGroupWhenNoticesDisabled"
@@ -989,7 +968,7 @@
             </text>
             <check_box
              control_name="FSHideTimestampsNearbyChat"
-             height="18"
+             height="16"
              label="Hide timestamp in Nearby Chat"
              layout="topleft"
              left="30"
@@ -998,12 +977,19 @@
              width="400" />
             <check_box
              control_name="FSHideTimestampsIM"
-             height="18"
+             height="16"
              label="Hide timestamp in IMs"
              layout="topleft"
-             left="30"
              name="hide_timestamps_im"
              top_pad="0"
+             width="400" />
+            <check_box
+             control_name="IMShowTime"
+             name="IMShowTime"
+             label="Show timestamps in chat history and IMs"
+             layout="topleft"
+             top_pad="0"
+             height="16"
              width="400" />
            <!-- Console -->
             <text

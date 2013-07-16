@@ -599,20 +599,21 @@ BOOL LLFloaterPreference::postBuild()
 		tabcontainer->selectFirstTab();
 	
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
-//	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path // was removed in prefs refactoring -Zi
+	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path
 	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
 
-	getChild<LLUICtrl>("log_path_string")->setEnabled(FALSE); // make it read-only but selectable
-
 	getChild<LLComboBox>("language_combobox")->setCommitCallback(boost::bind(&LLFloaterPreference::onLanguageChange, this));
-
-	getChild<LLComboBox>("FriendIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"FriendIMOptions"));
-	getChild<LLComboBox>("NonFriendIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NonFriendIMOptions"));
-	getChild<LLComboBox>("ConferenceIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ConferenceIMOptions"));
-	getChild<LLComboBox>("GroupChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"GroupChatOptions"));
-	getChild<LLComboBox>("NearbyChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NearbyChatOptions"));
+	
+	// <FS:CR> [CHUI MERGE]
+	// We don't use these in FS Communications UI, should we in the future? Disabling for now.
+	//getChild<LLComboBox>("FriendIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"FriendIMOptions"));
+	//getChild<LLComboBox>("NonFriendIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NonFriendIMOptions"));
+	//getChild<LLComboBox>("ConferenceIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ConferenceIMOptions"));
+	//getChild<LLComboBox>("GroupChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"GroupChatOptions"));
+	//getChild<LLComboBox>("NearbyChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NearbyChatOptions"));
+	// </FS:CR>
 	
 // ## Zi: Optional Edit Appearance Lighting
 	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAppearanceCameraChanged, this));
@@ -961,11 +962,14 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 
 
 	//get the options that were checked
-	onNotificationsChange("FriendIMOptions");
-	onNotificationsChange("NonFriendIMOptions");
-	onNotificationsChange("ConferenceIMOptions");
-	onNotificationsChange("GroupChatOptions");
-	onNotificationsChange("NearbyChatOptions");
+	// <FS:CR> [CHUI MERGE]
+	// We don't use these in FS Communications UI, should we in the future? Disabling for now.
+	//onNotificationsChange("FriendIMOptions");
+	//onNotificationsChange("NonFriendIMOptions");
+	//onNotificationsChange("ConferenceIMOptions");
+	//onNotificationsChange("GroupChatOptions");
+	//onNotificationsChange("NearbyChatOptions");
+	// </FS:CR>
 
 	LLPanelLogin::setAlwaysRefresh(true);
 	refresh();
@@ -1531,7 +1535,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 // [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 	if (rlv_handler_t::isEnabled())
-		childSetEnabled("busy_response", !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM));
+		childSetEnabled("do_not_disturb_response", !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM));
 // [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
@@ -2090,13 +2094,16 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	getChildView("send_im_to_email")->setEnabled(TRUE);
 	getChild<LLUICtrl>("send_im_to_email")->setValue(im_via_email);
 	getChildView("favorites_on_login_check")->setEnabled(TRUE);
-//	getChildView("log_path_string")->setEnabled(FALSE);// LineEditor becomes readonly in this case. || Moved to PostBuild to disable on not logged in state  -WoLf || <FS:TM> CHUI Merge removed by ll, check where this was moved to in FS and see if it needs updating
 	getChildView("log_path_button")->setEnabled(TRUE);
 	getChildView("chat_font_size")->setEnabled(TRUE);
 	getChildView("open_log_path_button")->setEnabled(TRUE);
 	getChildView("log_path_button-panelsetup")->setEnabled(TRUE);// second set of controls for panel_preferences_setup  -WoLf
 	getChildView("open_log_path_button-panelsetup")->setEnabled(TRUE);
 	std::string Chatlogsdir = gDirUtilp->getOSUserAppDir();
+	
+	getChildView("conversation_log_combo")->setEnabled(TRUE);	// <FS:CR>
+	getChildView("LogNearbyChat")->setEnabled(TRUE);	// <FS:CR>
+	getChildView("log_nearby_chat")->setEnabled(TRUE);	// <FS:CR> Readd after CHUI merge
 	//[FIX FIRE-2765 : SJ] Set Chatlog Reset Button on enabled when Chatlogpath isn't the default folder
 	if (gSavedPerAccountSettings.getString("InstantMessageLogPath") != gDirUtilp->getOSUserAppDir())
 	{
