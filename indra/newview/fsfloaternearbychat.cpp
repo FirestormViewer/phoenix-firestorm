@@ -87,6 +87,7 @@
 #include "llanimationstates.h"	// ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
 #include "llviewerstats.h"
 // </FS:Zi>
+#include "lltranslate.h"
 
 static const S32 RESIZE_BAR_THICKNESS = 3;
 
@@ -151,9 +152,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	onChatBarVisibilityChanged();
 	onChatChannelVisibilityChanged();
 
-	// extra icon controls -AO
-	LLButton* transl = getChild<LLButton>("translate_btn");
-	transl->setVisible(true);
+	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
 	childSetCommitCallback("chat_history_btn",onHistoryButtonClicked,this);
 
@@ -451,7 +450,7 @@ void	FSFloaterNearbyChat::onOpen(const LLSD& key )
 		}
 		setVisible(TRUE);
 	}
-	
+
 	LLDockableFloater::onOpen(key);
 }
 
@@ -649,4 +648,9 @@ BOOL FSFloaterNearbyChat::getVisible()
 	{
 		return LLDockableFloater::getVisible();
 	}
+}
+
+void FSFloaterNearbyChat::enableTranslationButton(bool enabled)
+{
+	getChildView("translate_btn")->setEnabled(enabled);
 }

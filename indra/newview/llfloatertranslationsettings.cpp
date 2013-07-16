@@ -29,7 +29,10 @@
 #include "llfloatertranslationsettings.h"
 
 // Viewer includes
+// <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "lltranslate.h"
 #include "llviewercontrol.h" // for gSavedSettings
 
@@ -301,9 +304,11 @@ void LLFloaterTranslationSettings::onBtnOK()
 	gSavedSettings.setString("TranslationService", getSelectedService());
 	gSavedSettings.setString("BingTranslateAPIKey", getEnteredBingKey());
 	gSavedSettings.setString("GoogleTranslateAPIKey", getEnteredGoogleKey());
-	// [CHUI Merge] Was commented out before; still needs fixing
+	// <FS:Ansariel> [FS communication UI]
 	//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
 	//		showTranslationCheckbox(LLTranslate::isTranslationConfigured());
-	// [CHUI Merge]
+	(LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat"))->
+			enableTranslationButton(LLTranslate::isTranslationConfigured());
+	// </FS:Ansariel> [FS communication UI]
 	closeFloater(false);
 }
