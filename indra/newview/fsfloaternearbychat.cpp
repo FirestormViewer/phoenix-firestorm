@@ -25,73 +25,50 @@
  * $/LicenseInfo$
  */
 
-// Original file: FSFloaterNearbyChat.cpp
+// Original file: LLFloaterNearbyChat.cpp
 
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloaternearbychat.h"
 
-#include "llviewercontrol.h"
-#include "llviewerwindow.h"
-#include "llrootview.h"
-//#include "llchatitemscontainerctrl.h"
-#include "lliconctrl.h"
-#include "llspinctrl.h"
-#include "llfloatersidepanelcontainer.h"
-#include "llfocusmgr.h"
-#include "lllogchat.h"
-#include "llresizebar.h"
-#include "llresizehandle.h"
-#include "llmenugl.h"
-#include "llviewermenu.h"//for gMenuHolder
-
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
-#include "fsnearbychathub.h"
-#include "llchannelmanager.h"
-
-#include "llagent.h" 			// gAgent
+#include "chatbar_as_cmdline.h"
 #include "fschathistory.h"
-#include "llstylemap.h"
-
-#include "llavatarnamecache.h"
-
-#include "lldraghandle.h"
-
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
-#include "llfloaterreg.h"
-#include "lltrans.h"
-
-// IM
-#include "llbutton.h"
-#include "lllayoutstack.h"
-
-// <FS:Ansariel> [FS communication UI]
-//#include "llimfloatercontainer.h"
-//#include "llimfloater.h"
 #include "fsfloaterim.h"
 #include "fsfloaterimcontainer.h"
-// </FS:Ansariel> [FS communication UI]
-#include "lllineeditor.h"
-
-//AO - includes for textentry
-#include "rlvhandler.h"
-#include "llcommandhandler.h"
-#include "llkeyboard.h"
-#include "llgesturemgr.h"
-#include "llmultigesture.h"
-
-#include "llconsole.h"
-
-// <FS:Zi> Moved nearby chat functionality here for now
-#include "chatbar_as_cmdline.h"
+#include "fsnearbychathub.h"
+#include "llagent.h" 			// gAgent
 #include "llanimationstates.h"	// ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
-#include "llviewerstats.h"
-// </FS:Zi>
+#include "llavatarnamecache.h"
+#include "llbutton.h"
+#include "llchannelmanager.h"
+#include "llcommandhandler.h"
+#include "llconsole.h"
+#include "lldraghandle.h"
+#include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llfocusmgr.h"
+#include "llgesturemgr.h"
+#include "lliconctrl.h"
+#include "llkeyboard.h"
+#include "lllayoutstack.h"
+#include "lllineeditor.h"
+#include "lllogchat.h"
+#include "llmenugl.h"
+#include "llmultigesture.h"
+#include "llresizebar.h"
+#include "llresizehandle.h"
+#include "llrootview.h"
+#include "llspinctrl.h"
+#include "llstylemap.h"
+#include "lltrans.h"
 #include "lltranslate.h"
+#include "llviewercontrol.h"
+#include "llviewermenu.h"//for gMenuHolder
+#include "llviewerstats.h"
+#include "llviewerwindow.h"
+#include "rlvhandler.h"
 
 static const S32 RESIZE_BAR_THICKNESS = 3;
-
-// ## Zi // static LLRegisterPanelClassWrapper<LLNearbyChat> t_panel_nearby_chat("panel_nearby_chat");
 
 FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key) 
 	: LLDockableFloater(NULL, false, false, key)
@@ -171,14 +148,9 @@ BOOL FSFloaterNearbyChat::postBuild()
 
 		FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
 		gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
-		
-		return LLDockableFloater::postBuild();
 	}
 	
-	if(!LLDockableFloater::postBuild())
-		return false;
-
-	return true;
+	return LLDockableFloater::postBuild();
 }
 
 std::string appendTime()
@@ -202,7 +174,7 @@ std::string appendTime()
 }
 
 
-void	FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
+void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
@@ -210,11 +182,12 @@ void	FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - only add Timestamp when hide_timestamps_nearby_chat is not TRUE
 	if (!hide_timestamps_nearby_chat)
 	{
-		if(tmp_chat.mTimeStr.empty())
+		if (tmp_chat.mTimeStr.empty())
+		{
 			tmp_chat.mTimeStr = appendTime();
+		}
 	}
 
-	
 	// <FS:Ansariel> Optional muted chat history
 	tmp_chat.mFromName = chat.mFromName;
 	LLSD chat_args = args;
@@ -234,11 +207,13 @@ void	FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 		mChatHistory->appendMessage(chat, chat_args);
 	}
 
-	if(archive)
+	if (archive)
 	{
 		mMessageArchive.push_back(chat);
-		if(mMessageArchive.size()>200)
+		if (mMessageArchive.size() > 200)
+		{
 			mMessageArchive.erase(mMessageArchive.begin());
+		}
 	}
 
 	// <FS:Ansariel> Optional muted chat history
@@ -250,7 +225,7 @@ void	FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	}
 	
 	// AO: IF tab mode active, flash our tab
-	if(isChatMultiTab())
+	if (isChatMultiTab())
 	{
 		LLMultiFloater* hostp = getHost();
         // KC: Don't flash tab on system messages
@@ -284,7 +259,7 @@ void	FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
 				{
 					//from_name = "IM: " + from_name;
-					if(chat.mChatType == CHAT_TYPE_IM_GROUP && chat.mFromNameGroup != "")
+					if (chat.mChatType == CHAT_TYPE_IM_GROUP && chat.mFromNameGroup != "")
 					{
 						from_name = "IM: " + chat.mFromNameGroup + from_name;
 					}
@@ -307,7 +282,7 @@ BOOL FSFloaterNearbyChat::focusFirstItem(BOOL prefer_text_fields, BOOL focus_fla
 {
 	mInputEditor->setFocus(TRUE);
 	onTabInto();
-	if(focus_flash)
+	if (focus_flash)
 	{
 		gFocusMgr.triggerFocusFlash();
 	}
@@ -327,15 +302,17 @@ void FSFloaterNearbyChat::onHistoryButtonClicked(LLUICtrl* ctrl, void* userdata)
 	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName("chat"));
 }
 
-void	FSFloaterNearbyChat::onNearbyChatContextMenuItemClicked(const LLSD& userdata)
+void FSFloaterNearbyChat::onNearbyChatContextMenuItemClicked(const LLSD& userdata)
 {
 }
 
-bool	FSFloaterNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
+bool FSFloaterNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
 {
 	std::string str = userdata.asString();
-	if(str == "nearby_people")
+	if (str == "nearby_people")
+	{
 		onNearbySpeakers();	
+	}
 	return false;
 }
 
@@ -349,10 +326,10 @@ void FSFloaterNearbyChat::onChatChannelVisibilityChanged()
 	getChild<LLLayoutPanel>("channel_spinner_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSShowChatChannel"));
 }
 
-void	FSFloaterNearbyChat::openFloater(const LLSD& key)
+void FSFloaterNearbyChat::openFloater(const LLSD& key)
 {
 	// We override this to put nearbychat in the IM floater. -AO
-	if(isChatMultiTab())
+	if (isChatMultiTab())
 	{
 		// <FS:Ansariel> [FS communication UI]
 		//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
@@ -371,15 +348,15 @@ void	FSFloaterNearbyChat::openFloater(const LLSD& key)
 void FSFloaterNearbyChat::removeScreenChat()
 {
 	LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
-	if(chat_channel)
+	if (chat_channel)
 	{
 		chat_channel->removeToastsFromChannel();
 	}
 }
 
-void	FSFloaterNearbyChat::setVisible(BOOL visible)
+void FSFloaterNearbyChat::setVisible(BOOL visible)
 {
-	if(visible)
+	if (visible)
 	{
 		removeScreenChat();
 	}
@@ -415,7 +392,7 @@ void FSFloaterNearbyChat::onFocusReceived()
 	mInputEditor->setFocus(TRUE);
 }
 
-void	FSFloaterNearbyChat::onOpen(const LLSD& key )
+void FSFloaterNearbyChat::onOpen(const LLSD& key )
 {
 	// <FS:Ansariel> [FS communication UI]
 	//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
@@ -454,7 +431,7 @@ void	FSFloaterNearbyChat::onOpen(const LLSD& key )
 	LLDockableFloater::onOpen(key);
 }
 
-void FSFloaterNearbyChat::setRect	(const LLRect &rect)
+void FSFloaterNearbyChat::setRect(const LLRect &rect)
 {
 	LLDockableFloater::setRect(rect);
 }
@@ -489,8 +466,10 @@ void FSFloaterNearbyChat::updateChatHistoryStyle()
 void FSFloaterNearbyChat::processChatHistoryStyleUpdate(const LLSD& newvalue)
 {
 	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
-	if(nearby_chat)
+	if (nearby_chat)
+	{
 		nearby_chat->updateChatHistoryStyle();
+	}
 }
 
 //static
@@ -501,7 +480,7 @@ bool FSFloaterNearbyChat::isWordsName(const std::string& name)
 	S32 close_paren = name.find(')', 0);
 
 	if (open_paren != std::string::npos &&
-		close_paren == name.length()-1)
+		close_paren == name.length() - 1)
 	{
 		return true;
 	}
@@ -625,7 +604,7 @@ bool FSFloaterNearbyChat::isChatMultiTab()
 
 BOOL FSFloaterNearbyChat::getVisible()
 {
-	if(isChatMultiTab())
+	if (isChatMultiTab())
 	{
 		// <FS:Ansariel> [FS communication UI]
 		//LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
