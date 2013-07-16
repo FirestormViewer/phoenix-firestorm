@@ -203,7 +203,7 @@ public:
 	/**
 	 * @return a list of avatars that can be teleported from the input list
 	 */
-	static uuid_vec_t canOfferTeleport(const uuid_vec_t& ids);
+	static bool canOfferTeleport(const uuid_vec_t& ids);
 
 	/**
 	 * Checks whether all items selected in the given inventory panel can be shared

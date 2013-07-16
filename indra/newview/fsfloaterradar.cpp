@@ -206,7 +206,7 @@ void FSFloaterRadar::onTeleportButtonClicked()
 {
 	uuid_vec_t selected_uuids;
 	mRadarPanel->getCurrentItemIDs(selected_uuids);
-	LLAvatarActions::offerTeleport(LLAvatarActions::canOfferTeleport(selected_uuids));
+	LLAvatarActions::offerTeleport(selected_uuids);
 }
 
 void FSFloaterRadar::onShareButtonClicked()

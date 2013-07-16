@@ -234,14 +234,10 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
 		return (LLAvatarTracker::instance().isBuddyOnline(id) && is_agent_mappable(id))
 					|| gAgent.isGodlike();
 	}
-	// <FS> Prevent teleport button from being disabled when someone on your
-	//      friends list logs out but is still in the region and you have
-	//      multiple people selected.
-	//else if(item == std::string("can_offer_teleport"))
-	//{
-	//	return LLAvatarActions::canOfferTeleport(mUUIDs);
-	//}
-	// </FS>
+	else if(item == std::string("can_offer_teleport"))
+	{
+		return LLAvatarActions::canOfferTeleport(mUUIDs);
+	}
 	// <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
 	else if (item == std::string("can_open_inventory"))
 	{

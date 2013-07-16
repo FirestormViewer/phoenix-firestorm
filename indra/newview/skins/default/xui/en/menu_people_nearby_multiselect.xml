@@ -62,5 +62,8 @@
     name="offer_teleport">
       <menu_item_call.on_click
        function="Avatar.OfferTeleport"/>
+      <menu_item_call.on_enable
+      function="Avatar.EnableItem"
+      parameter="can_offer_teleport"/>
     </menu_item_call>
 </context_menu>

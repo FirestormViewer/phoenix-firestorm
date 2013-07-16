@@ -192,7 +192,23 @@ void LLAvatarActions::offerTeleport(const uuid_vec_t& ids)
 	if (ids.size() == 0)
 		return;
 
-	handle_lure(ids);
+	// <FS:Ansariel> Fix edge case with multi-selection containing offlines
+	//handle_lure(ids);
+	uuid_vec_t result;
+	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+	{
+		if (canOfferTeleport(*it))
+		{
+			result.push_back(*it);
+			// Maximum 250 lures
+			if (result.size() == 250)
+			{
+				break;
+			}
+		}
+	}
+	handle_lure(result);
+	// </FS:Ansariel>
 }
 
 static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
@@ -1039,19 +1055,39 @@ bool LLAvatarActions::canOfferTeleport(const LLUUID& id)
 }
 
 // static
-uuid_vec_t LLAvatarActions::canOfferTeleport(const uuid_vec_t& ids)
+bool LLAvatarActions::canOfferTeleport(const uuid_vec_t& ids)
 {
-	uuid_vec_t result;
+	// We can't send more than 250 lures in a single message, so disable this
+	// button when there are too many id's selected.
+	// <FS:Ansariel> Fix edge case with multi-selection containing offlines
+	//if(ids.size() > 250) return false;
+	//
+	//bool result = true;
+	//for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+	//{
+	//	if(!canOfferTeleport(*it))
+	//	{
+	//		result = false;
+	//		break;
+	//	}
+	//}
+	//return result;
+
+	if (ids.size() == 1)
+	{
+		return canOfferTeleport(ids.front());
+	}
+
+	S32 valid_count = 0;
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
-		if(canOfferTeleport(*it))
+		if (canOfferTeleport(*it))
 		{
-			result.push_back(*it);
-			// We can't send more than 250 lures in a single message, so stop when we are full
-			if(result.size() == 250) break;
+			valid_count++;
 		}
 	}
-	return result;
+	return (valid_count > 0 && valid_count <= 250);
+	// </FS:Ansariel>
 }
 
 void LLAvatarActions::inviteToGroup(const LLUUID& id)
