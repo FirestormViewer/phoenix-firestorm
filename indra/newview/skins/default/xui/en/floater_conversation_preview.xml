@@ -9,6 +9,8 @@
  min_height="243"
  min_width="234"
  name="preview_conversation"
+ positioning="centered"
+ save_rect="true"
  title="Conversation:"
  width="400">
     <floater.string

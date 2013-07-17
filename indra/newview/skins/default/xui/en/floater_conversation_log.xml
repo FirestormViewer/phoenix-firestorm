@@ -2,7 +2,7 @@
 
 <floater
  can_resize="true"
- positioning="cascading"
+ positioning="centered"
  help_topic="conversation_log"
  height="200"
  min_height="100"
