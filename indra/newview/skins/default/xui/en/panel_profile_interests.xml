@@ -106,12 +106,12 @@
          label="Hire"
          enabled="false" />
         <line_editor
-         top_pad="1"
+         top_pad="6"
          left="76"
          height="16"
          width="330"
          layout="topleft"
-         follows="left|top"
+         follows="left|top|right"
          name="want_to_edit"
          is_unicode="false"
          max_length_bytes="254" />
@@ -186,12 +186,12 @@
          label="Custom Characters"
          enabled="false" />
         <line_editor
-         top_pad="1"
+         top_pad="6"
          left="76"
          height="16"
          width="330"
          layout="topleft"
-         follows="left|top"
+         follows="left|top|right"
          name="skills_edit"
          is_unicode="false"
          max_length_bytes="254" />
@@ -213,9 +213,9 @@
          height="16"
          width="330"
          layout="topleft"
-         follows="left|top"
+         follows="left|top|right"
          name="languages_edit"
          is_unicode="false"
-         max_length_bytes="254" />
+         max_length="254" />
 </panel>
 
