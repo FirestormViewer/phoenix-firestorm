@@ -36,7 +36,15 @@
 	<button tool_tip="Wyślij info systemowe" name="send_sysinfo_btn"/>
 	<layout_stack name="im_panels">
 		<layout_panel name="panel_im_control_lp">
-			<line_editor label="Do" name="chat_editor"/>
+			<layout_stack name="im_panels">
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<!-- <layout_panel name="input_button_layout_panel">
+							<button name="minz_btn" tool_tip="Pokaż/ukryj panel wiadomości"/>
+						</layout_panel> -->
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </floater>

@@ -32,6 +32,7 @@
 			<text name="log_location_label">
 				Miejsce zapisu:
 			</text>
+			<check_box label="Używaj starego formatu nazw plików dla logów rozmów" name="UseLegacyIMLogNames" tool_tip="Włączenie tej opcji spowoduje używanie starego formatu nazw plików dla logów rozmów (Nazwa Użytkownika) zamiast nowego (nazwa_użytkownika)."/>
 			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
 		</panel>
 		<panel label="Śledzenie spojrzeń" name="tab-lookat">
