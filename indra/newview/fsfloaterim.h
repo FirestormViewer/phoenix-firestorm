@@ -34,10 +34,12 @@
 #include "lltooldraganddrop.h"
 #include "lltransientdockablefloater.h"
 #include "llvoicechannel.h"
+#include "lllayoutstack.h"
 
 class LLAvatarName;
 class LLButton;		// support sysinfo button -Zi
-class LLLineEditor;
+class LLChatEntry;
+class LLTextEditor;
 class FSPanelChatControlPanel;
 class FSChatHistory;
 class LLInventoryItem;
@@ -85,7 +87,7 @@ public:
 	void updateMessages();
 	void reloadMessages();
 	static void onSendMsg( LLUICtrl*, void*);
-	void sendMsg();
+	void sendMsgFromInputEditor();
 	void sendMsg(const std::string& msg);
 
 	// callback for LLIMModel on new messages
@@ -152,6 +154,8 @@ protected:
 	// support sysinfo button -Zi
 
 	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
+	void reshapeFloater(bool collapse);
+	void reshapeChatLayoutPanel();
 private:
 	// process focus events to set a currently active session
 	/* virtual */ void onFocusLost();
@@ -171,7 +175,7 @@ private:
 	
 	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
 	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);
-	static void		onInputEditorKeystroke(LLLineEditor* caller, void* userdata);
+	static void		onInputEditorKeystroke(LLTextEditor* caller, void* userdata);
 	
 	// AO, originally from llpaneChatControlPanel trees
 	void onViewProfileButtonClicked();
@@ -215,7 +219,9 @@ private:
 	EInstantMessage mDialog;
 	LLUUID mOtherParticipantUUID;
 	FSChatHistory* mChatHistory;
-	LLLineEditor* mInputEditor;
+	LLChatEntry* mInputEditor;
+	LLLayoutPanel* mChatLayoutPanel;
+	LLLayoutStack* mInputPanels;
 	bool mPositioned;
 
 	std::string mSavedTitle;
@@ -228,6 +234,10 @@ private:
 
 	bool mSessionInitialized;
 	LLSD mQueuedMsgsForInit;
+	
+	S32 mInputEditorPad;
+	S32 mChatLayoutPanelHeight;
+	S32 mFloaterHeight;
 };
 
 

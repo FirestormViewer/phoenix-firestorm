@@ -44,7 +44,7 @@
 #include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
 #include "llinventoryfunctions.h"
 #include "lllayoutstack.h"
-#include "lllineeditor.h"
+#include "llchatentry.h"
 #include "lllogchat.h"
 #include "fspanelimcontrolpanel.h"
 #include "llscreenchannel.h"
@@ -95,7 +95,10 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mTypingTimer(),
 	mTypingTimeoutTimer(),
 	mPositioned(false),
-	mSessionInitialized(false)
+	mSessionInitialized(false),
+	mChatLayoutPanel(NULL),
+	mInputPanels(NULL),
+	mChatLayoutPanelHeight(0)
 {
 	LLIMModel::LLIMSession* im_session = LLIMModel::getInstance()->findIMSession(mSessionID);
 	if (im_session)
@@ -232,154 +235,91 @@ void FSFloaterIM::onVisibilityChange(const LLSD& new_visibility)
 void FSFloaterIM::onSendMsg( LLUICtrl* ctrl, void* userdata )
 {
 	FSFloaterIM* self = (FSFloaterIM*) userdata;
-	self->sendMsg();
+	self->sendMsgFromInputEditor();
 	self->setTyping(false);
 }
 
-void FSFloaterIM::sendMsg()
+void FSFloaterIM::sendMsgFromInputEditor()
 {
-	if (!gAgent.isGodlike() 
-		&& (mDialog == IM_NOTHING_SPECIAL)
-		&& mOtherParticipantUUID.isNull())
+	if (gAgent.isGodlike()
+		|| (mDialog != IM_NOTHING_SPECIAL)
+		|| !mOtherParticipantUUID.isNull())
 	{
-		llinfos << "Cannot send IM to everyone unless you're a god." << llendl;
-		return;
-	}
-	
-	// <FS:Techwolf Lupindo> fsdata support
-	if(mDialog == IM_NOTHING_SPECIAL && FSData::instance().isSupport(mOtherParticipantUUID) && FSData::instance().isAgentFlag(gAgentID, FSData::NO_SUPPORT))
-	{
-		return;
-	}
-	// </FS:Techwolf Lupindo>
-
-	if (mInputEditor)
-	{
-		LLWString text = mInputEditor->getConvertedText();
-		if(!text.empty())
+		// <FS:Techwolf Lupindo> fsdata support
+		if(mDialog == IM_NOTHING_SPECIAL && FSData::instance().isSupport(mOtherParticipantUUID) && FSData::instance().isAgentFlag(gAgentID, FSData::NO_SUPPORT))
 		{
-			// Convert to UTF8 for transport
-			std::string utf8_text = wstring_to_utf8str(text);
-
-			// Convert OOC and MU* style poses
-			utf8_text = applyAutoCloseOoc(utf8_text);
-			utf8_text = applyMuPose(utf8_text);
-
-			// <FS:Techwolf Lupindo> Support group chat prefix
-			static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
-			if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
+			return;
+		}
+		// </FS:Techwolf Lupindo>
+		
+		if (mInputEditor)
+		{
+			LLWString text = mInputEditor->getWText();
+			LLWStringUtil::trim(text);
+			LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
+			if(!text.empty())
 			{
-
-				// <FS:PP> FIRE-7075: Skin indicator
-				static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
-				std::string skinIndicator(FSInternalSkinCurrent);
-				LLStringUtil::toLower(skinIndicator);
-				if (skinIndicator == "starlight cui")
+				// Truncate and convert to UTF8 for transport
+				std::string utf8_text = wstring_to_utf8str(text);
+				
+				// Convert OOC and MU* style poses
+				utf8_text = applyAutoCloseOoc(utf8_text);
+				utf8_text = applyMuPose(utf8_text);
+				
+				// <FS:Techwolf Lupindo> Support group chat prefix
+				static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
+				if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
 				{
-					skinIndicator = "sc"; // Separate "s" (StarLight) from "sc" (StarLight CUI)
-				}
-				else
-				{
-					skinIndicator = skinIndicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
-				}
-				// </FS:PP>
-
-				if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
-				{
-					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
-#ifdef OPENSIM
-					" os" +
-#endif
-					") "));
-				}
-				else
-				{
-					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
-#ifdef OPENSIM
-					" os" +
-#endif
-					") "));
-				}
-			}
-
-			// <FS:Techwolf Lupindo> Allow user to send system info.
-			if(mDialog == IM_NOTHING_SPECIAL && utf8_text.find("/sysinfo") == 0)
-			{
-				LLSD system_info = FSData::getSystemInfo();
-				utf8_text = system_info["Part1"].asString() + system_info["Part2"].asString();
-			}
-			// </FS:Techwolf Lupindo> 
-
-			// Truncate for transport
-			//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
-			//utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
-			//</FS:TS> FIRE-787
-			
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) )
-			{
-				LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
-				RLV_ASSERT(pIMSession);
-
-				bool fRlvFilter = !pIMSession;
-				if (pIMSession)
-				{
-					switch (pIMSession->mSessionType)
+					
+					// <FS:PP> FIRE-7075: Skin indicator
+					static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
+					std::string skinIndicator(FSInternalSkinCurrent);
+					LLStringUtil::toLower(skinIndicator);
+					if (skinIndicator == "starlight cui")
 					{
-						case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
-							fRlvFilter = !RlvActions::canSendIM(mOtherParticipantUUID);
-							break;
-						case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
-							fRlvFilter = !RlvActions::canSendIM(mSessionID);
-							break;
-						case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants can be sent an IM
-							{
-								if (!pIMSession->mSpeakers)
-								{
-									fRlvFilter = true;
-									break;
-								}
-
-								LLSpeakerMgr::speaker_list_t speakers;
-								pIMSession->mSpeakers->getSpeakerList(&speakers, TRUE);
-								for (LLSpeakerMgr::speaker_list_t::const_iterator itSpeaker = speakers.begin(); 
-										itSpeaker != speakers.end(); ++itSpeaker)
-								{
-									const LLSpeaker* pSpeaker = *itSpeaker;
-									if ( (gAgent.getID() != pSpeaker->mID) && (!RlvActions::canSendIM(pSpeaker->mID)) )
-									{
-										fRlvFilter = true;
-										break;
-									}
-								}
-							}
-							break;
-						default:
-							fRlvFilter = true;
-							break;
+						skinIndicator = "sc"; // Separate "s" (StarLight) from "sc" (StarLight CUI)
+					}
+					else
+					{
+						skinIndicator = skinIndicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
+					}
+					// </FS:PP>
+					
+					if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
+					{
+						utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
+#ifdef OPENSIM
+											" os" +
+#endif
+											") "));
+					}
+					else
+					{
+						utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
+#ifdef OPENSIM
+											" os" +
+#endif
+											") "));
 					}
 				}
-
-				if (fRlvFilter)
-					utf8_text = RlvStrings::getString(RLV_STRING_BLOCKED_SENDIM);
+				
+				// <FS:Techwolf Lupindo> Allow user to send system info.
+				if (mDialog == IM_NOTHING_SPECIAL && utf8_text.find("/sysinfo") == 0)
+				{
+					LLSD system_info = FSData::getSystemInfo();
+					utf8_text = system_info["Part1"].asString() + system_info["Part2"].asString();
+				}
+				// </FS:Techwolf Lupindo>
+				
+				sendMsg(utf8_text);
+				
+				mInputEditor->setText(LLStringUtil::null);
 			}
-// [/RLVa:KB]
-
-			if (mSessionInitialized)
-			{
-				LLIMModel::sendMessage(utf8_text, mSessionID,
-					mOtherParticipantUUID,mDialog);
-			}
-			else
-			{
-				//queue up the message to send once the session is initialized
-				mQueuedMsgsForInit.append(utf8_text);
-			}
-
-			mInputEditor->setText(LLStringUtil::null);
-
-			updateMessages();
 		}
+	}
+	else
+	{
+		llinfos << "Cannot send IM to everyone unless you're a god." << llendl;
 	}
 }
 
@@ -832,36 +772,23 @@ BOOL FSFloaterIM::postBuild()
 	
 	// </AO>
 	
-
-	mInputEditor = getChild<LLLineEditor>("chat_editor");
-	//<FS:TS> FIRE-5770: input text buffer is too small
-	mInputEditor->setMaxTextLength(3000);
-	//</FS:TS> FIRE-5770
-	// enable line history support for instant message bar
-	mInputEditor->setEnableLineHistory(TRUE);
-	// *TODO Establish LineEditor with autoreplace callback
-
-	/// FIXME: Either rehook up autoreplace to LLLineEditor or move to CHUI style expanding text editors <FS:CR> & <FS:ND>
-	//mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
-
-	LLTextEditor *pTextEdit = dynamic_cast< LLTextEditor* >( mInputEditor );
-	if( pTextEdit )
-		pTextEdit->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
-
-	LLFontGL* font = LLViewerChat::getChatFont();
-	mInputEditor->setFont(font);	
+	mInputEditor = getChild<LLChatEntry>("chat_editor");
+	mChatHistory = getChild<FSChatHistory>("chat_history");
+	mChatLayoutPanel = getChild<LLLayoutPanel>("chat_layout_panel");
+	mInputPanels = getChild<LLLayoutStack>("input_panels");
+	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
+	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
 	
+	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));	
 	mInputEditor->setFocusReceivedCallback( boost::bind(onInputEditorFocusReceived, _1, this) );
 	mInputEditor->setFocusLostCallback( boost::bind(onInputEditorFocusLost, _1, this) );
-	mInputEditor->setKeystrokeCallback( onInputEditorKeystroke, this );
+	mInputEditor->setKeystrokeCallback( boost::bind(onInputEditorKeystroke, _1, this) );
+	mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterIM::reshapeChatLayoutPanel, this));
 	mInputEditor->setCommitOnFocusLost( FALSE );
-	mInputEditor->setRevertOnEsc( FALSE );
-	mInputEditor->setReplaceNewlinesWithSpaces( FALSE );
-	mInputEditor->setPassDelete( TRUE );
+	mInputEditor->setPassDelete(TRUE);
+	mInputEditor->setFont(LLViewerChat::getChatFont());
 
 	childSetCommitCallback("chat_editor", onSendMsg, this);
-	
-	mChatHistory = getChild<FSChatHistory>("chat_history");
 
 	LLCheckBoxCtrl* FSPrefixBox = getChild<LLCheckBoxCtrl>("FSSupportGroupChatPrefix_toggle");
 
@@ -1417,7 +1344,7 @@ void FSFloaterIM::onInputEditorFocusLost(LLFocusableElement* caller, void* userd
 }
 
 // static
-void FSFloaterIM::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
+void FSFloaterIM::onInputEditorKeystroke(LLTextEditor* caller, void* userdata)
 {
 	FSFloaterIM* self = (FSFloaterIM*)userdata;
 	std::string text = self->mInputEditor->getText();
@@ -1922,6 +1849,11 @@ void FSFloaterIM::initIMSession(const LLUUID& session_id)
 		mSessionInitialized = session->mSessionInitialized;
 		mDialog = session->mType;
 	}
+}
+
+void FSFloaterIM::reshapeChatLayoutPanel()
+{
+	mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, FALSE);
 }
 
 boost::signals2::connection FSFloaterIM::setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb)
