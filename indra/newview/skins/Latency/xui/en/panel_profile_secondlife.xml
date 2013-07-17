@@ -99,7 +99,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="info_border2"
          bevel_style="in" />
         <text_editor
-         bottom_delta="2"
+         top_delta="0"
          left_delta="3"
          right="-86"
          height="16"
@@ -115,7 +115,6 @@ KC: Use view_border's around text_editor's due to text render issues with border
          max_length="254"
          value="(loading...)" />
         <button
-         top_delta="-2"
          left_pad="4"
          right="-6"
          height="20"
@@ -125,7 +124,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          label="Copy URI" />
 
         <text
-         top_pad="2"
+         top_pad="4"
          left="6"
          height="16"
          width="55"
@@ -156,7 +155,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="info_border"
          bevel_style="in" />
         <text_editor
-         bottom_delta="2"
+         top_delta="0"
          left_delta="3"
          right="-86"
          height="16"
@@ -172,7 +171,6 @@ KC: Use view_border's around text_editor's due to text render issues with border
          max_length="254"
          value="(loading...)" />
         <button
-         top_delta="-2"
          left_pad="4"
          right="-6"
          height="20"
@@ -182,7 +180,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          label="Copy Name" />
 
         <text
-         top_pad="3"
+         top_pad="6"
          left="6"
          height="16"
          width="55"
@@ -206,23 +204,23 @@ KC: Use view_border's around text_editor's due to text render issues with border
          fallback_image="Generic_Person_Large" />
 
         <text
-         top_delta="0"
+         top_delta="1"
          left_pad="4"
          right="-6"
          height="16"
          layout="topleft"
-         follows="top|right|left"
+         follows="top|left"
          name="status"
          halign="center"
          text_color="LtGray_50"
          value="Status Unknown" />
 
         <text
-         top_pad="0"
+         top_pad="2"
          right="-6"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="label"
          value="Born:" />
 
@@ -232,15 +230,15 @@ KC: Use view_border's around text_editor's due to text render issues with border
          height="16"
          name="info_border3"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          bevel_style="in" />
         <text_editor
-         top_delta="2"
+         top_delta="0"
          left_delta="2"
          right="-6"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="register_date"
          value="(loading...)"
          max_length="254"
@@ -254,12 +252,12 @@ KC: Use view_border's around text_editor's due to text render issues with border
          word_wrap="true"/>
 
         <text
-         top_pad="2"
+         top_pad="6"
          left_delta="-2"
          right="-6"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="label2"
          value="Account:" />
 
@@ -269,16 +267,16 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="48"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="acct_border"
          bevel_style="in" />
         <text_editor
-         top_delta="2"
+         top_delta="0"
          left_delta="2"
          right="-6"
          height="44"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="acc_status_text"
          bg_visible="false"
          border_visible="false"
@@ -295,7 +293,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="partner_label"
          value="Partner:" />
 
@@ -305,7 +303,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="18"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="info_border4"
          bevel_style="in" />
         <text
@@ -315,7 +313,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left"
          name="partner_text"
          max_length="254" />
 
@@ -410,12 +408,10 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="drop_target_rect_vis"
          bevel_style="in" />
         <text
-         top_delta="2"
          left_delta="0"
          height="16"
-         right="-6"
          layout="topleft"
-         follows="left|right|bottom"
+         follows="all"
          name="Give inventory"
          halign="center"
          tool_tip="Drop inventory items here to give them to this person.">
@@ -564,6 +560,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="all"
          name="drop_target"
+         border_thickness="0"
          mouse_opaque="false" />
 </panel>
 

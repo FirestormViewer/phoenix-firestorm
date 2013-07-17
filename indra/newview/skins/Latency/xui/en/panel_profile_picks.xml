@@ -81,13 +81,12 @@
 
     <tab_container
      top="50"
-     bottom="-25"
-     left="6"
-     right="-6"
+     bottom="-5"
+     left="4"
+     right="-4"
      layout="topleft"
      follows="all"
      name="tab_picks"
-     label_pad_left="10"
      tab_position="left" />
 
     <text
@@ -96,7 +95,7 @@
      height="18"
      width="300"
      layout="topleft"
-     follows="left|top"
+     follows="all"
      name="picks_panel_text"
      mouse_opaque="false">
         Loading...
