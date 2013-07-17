@@ -435,7 +435,7 @@
               is_expandable="true"
               text_tentative_color="TextFgTentativeColor"
               name="chat_editor"
-              max_length="1023"
+              max_length="3070"
               spellcheck="true"
               tab_group="3"
               top="1"

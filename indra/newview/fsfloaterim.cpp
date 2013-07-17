@@ -327,7 +327,10 @@ void FSFloaterIM::sendMsg(const std::string& msg)
 {
 	//	const std::string utf8_text = utf8str_truncate(msg, MAX_MSG_BUF_SIZE - 1);
 	// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
-	std::string utf8_text = utf8str_truncate(msg, MAX_MSG_BUF_SIZE - 1);
+	// <FS:CR> Don't truncate our messages, they're broken up as part of FIRE-787
+	//std::string utf8_text = utf8str_truncate(msg, MAX_MSG_BUF_SIZE - 1);
+	std::string utf8_text = msg;
+	// </FS:CR>
 	
 	if ( (RlvActions::hasBehaviour(RLV_BHVR_SENDIM)) || (RlvActions::hasBehaviour(RLV_BHVR_SENDIMTO)) )
 	{
