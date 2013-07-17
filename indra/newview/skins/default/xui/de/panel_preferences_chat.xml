@@ -91,6 +91,7 @@
 				Länge des Gruppennamens, der in der Chathistorie angezeigt wird
 			</text>
 			<spinner tool_tip="-1 für kompletten Gruppennamen, 0 für deaktiviert" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Gespräche öffnen, wenn eine Offline-Nachricht empfangen wurde"/>
 			<check_box name="FSShowIMInChatHistory" label="Instant Messages im lokalem Chat anzeigen"/>
 			<check_box name="FSLogIMInChatHistory" label="IMs im lokalem Chat speichern" width="190"/>
 			<text name="FSIMChatHistoryFade_label" width="310">
