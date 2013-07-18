@@ -119,7 +119,7 @@ BOOL FSPanelRadar::postBuild()
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	
-	registrar.add("Radar.Option.Action",	boost::bind(&FSPanelRadar::onGearMenuItemClicked, this, _2));
+	registrar.add("Radar.Option.Action",	boost::bind(&FSPanelRadar::onOptionsMenuItemClicked, this, _2));
 	registrar.add("Radar.NameFmt",			boost::bind(&FSRadar::onRadarNameFmtClicked, _2));
 	registrar.add("Radar.ReportTo",			boost::bind(&FSRadar::onRadarReportToClicked, _2));
 
@@ -248,7 +248,7 @@ void FSPanelRadar::onAddFriendButtonClicked()
 	}
 }
 
-void FSPanelRadar::onGearMenuItemClicked(const LLSD& userdata)
+void FSPanelRadar::onOptionsMenuItemClicked(const LLSD& userdata)
 {
 	std::string chosen_item = userdata.asString();
 

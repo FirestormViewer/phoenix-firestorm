@@ -72,7 +72,7 @@ private:
 	void					onAddFriendButtonClicked();
 	void					onRadarListCommitted();
 	void					onRadarListDoubleClicked();
-	void					onGearMenuItemClicked(const LLSD& userdata);
+	void					onOptionsMenuItemClicked(const LLSD& userdata);
 	void					onFilterEdit(const std::string& search_string);
 	void					onGearButtonClicked(LLUICtrl* btn);
 
