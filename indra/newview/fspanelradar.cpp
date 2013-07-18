@@ -88,8 +88,8 @@ FSPanelRadar::FSPanelRadar()
 		mVisibleCheckFunction(NULL)
 {
 	mButtonsUpdater = new FSButtonsUpdater(boost::bind(&FSPanelRadar::updateButtons, this));
-	mCommitCallbackRegistrar.add("People.addFriend",	boost::bind(&FSPanelRadar::onAddFriendButtonClicked,	this));
-	mCommitCallbackRegistrar.add("Radar.Gear",			boost::bind(&FSPanelRadar::onGearButtonClicked,			this, _1));
+	mCommitCallbackRegistrar.add("Radar.AddFriend",	boost::bind(&FSPanelRadar::onAddFriendButtonClicked,	this));
+	mCommitCallbackRegistrar.add("Radar.Gear",		boost::bind(&FSPanelRadar::onGearButtonClicked,			this, _1));
 }
 
 FSPanelRadar::~FSPanelRadar()

@@ -88,7 +88,7 @@
 			 top_delta="0"
 			 width="31">
 				<commit_callback
-				 function="People.AddFriend" />
+				 function="Radar.AddFriend" />
 			</button>
 		</panel>
 			
