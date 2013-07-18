@@ -43,8 +43,6 @@
 			 label="Filter People"
 			 max_length_chars="300"
 			 name="nearby_filter_input"
-			 text_color="Black"
-			 text_pad_left="10"
 			 top="1"
 			 width="219" />
 			<button

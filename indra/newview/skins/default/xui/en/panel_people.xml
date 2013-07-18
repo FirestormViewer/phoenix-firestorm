@@ -103,8 +103,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter People"
                  max_length_chars="300"
                  name="nearby_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
                  right="-6" />
                 <button
@@ -265,8 +263,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter People"
                  max_length_chars="300"
                  name="friends_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
                  width="144" />
                 <button
@@ -439,8 +435,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter Groups"
                  max_length_chars="300"
                  name="groups_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
                  width="177" />
                 <menu_button
@@ -548,8 +542,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter People"
                  max_length_chars="300"
                  name="recent_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
                  width="177" />
                 <button
