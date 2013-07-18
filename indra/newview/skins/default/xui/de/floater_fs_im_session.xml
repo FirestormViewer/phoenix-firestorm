@@ -38,10 +38,4 @@
 
 	<check_box label="Viewer-Kennung senden" name="FSSupportGroupChatPrefix_toggle" tool_tip="Fügt die aktuelle Viewer-Version und Oberfläche am Anfang jeder Nachricht hinzu, die an diese Gruppe gesendet werden, um die Support-Mitarbeiter dabei zu unterstützen, ein mögliches Problem besser zu diagnostizieren und die Genauigkeit der Antworten auf deine Fragen zu verbessern."/>
 	<button name="send_sysinfo_btn" tool_tip="System-Informationen übermitteln"/>
-
-	<layout_stack name="im_panels">
-		<layout_panel name="panel_im_control_lp">
-			<line_editor label="An" name="chat_editor"/>
-		</layout_panel>
-	</layout_stack>
 </floater>
