@@ -31,14 +31,12 @@
 
 #include "fspanelradar.h"
 #include "fsradar.h"
-#include "llvoiceclient.h"
 
 class LLButton;
 class LLFilterEditor;
 
 class FSFloaterRadar 
 	: public LLFloater
-	, public LLVoiceClientStatusObserver
 {
 	LOG_CLASS(FSFloaterRadar);
 public:
@@ -48,35 +46,8 @@ public:
 	/*virtual*/ BOOL 	postBuild();
 	/*virtual*/ void	onOpen(const LLSD& key);
 
-	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
-	// when voice is available
-	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
-
 private:
-	void					updateButtons();
-
-	// UI callbacks
-	void					onFilterEdit(const std::string& search_string);
-	void					onViewProfileButtonClicked();
-	void					onAddFriendButtonClicked();
-	void					onImButtonClicked();
-	void					onCallButtonClicked();
-	void					onTeleportButtonClicked();
-	void					onShareButtonClicked();
-
 	FSPanelRadar*			mRadarPanel;
-	LLFilterEditor*			mFilterEditor;
-
-	LLButton*				mProfileButton;
-	LLButton*				mShareButton;
-	LLButton*				mIMButton;
-	LLButton*				mCallButton;
-	LLButton*				mTeleportButton;
-
-	std::string				mFilterSubString;
-	std::string				mFilterSubStringOrig;
-
-	boost::signals2::connection mRadarChangeConnection;
 };
 
 #endif // FS_FLOATERRADAR_H
