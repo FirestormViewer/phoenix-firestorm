@@ -99,10 +99,10 @@ include_directories(
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
-    ${CMAKE_BINARY_DIR}/newview #<FS:TS> Flickr upload
     ${COLLADA_INCLUDE_DIRS}
     ${LLAPPEARANCE_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
     )
 
 include_directories(SYSTEM
@@ -1476,6 +1476,15 @@ configure_file(
 list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
 # </exodus>
 
+# <FS:TS> Generate the version information header file.
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/fsversionvalues.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h
+    @ONLY
+)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h)
+# </FS:TS>
+
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 # the viewer_version.txt file created here is for passing to viewer_manifest
@@ -1491,7 +1500,11 @@ set_source_files_properties(
    llversioninfo.cpp tests/llversioninfo_test.cpp 
    PROPERTIES
    DEPENDS generate_viewer_version  # dummy dependency to force recompile every time
-   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
+# <FS:TS> The next line causes a full rebuild of the entire newview
+#         directory every time the Mercurial revision number changes.
+#         Instead of doing that, we use the configure tool to build
+#         fsversionstrings.h with the right numbers in it.
+#   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
    )
 
 if (DARWIN)
