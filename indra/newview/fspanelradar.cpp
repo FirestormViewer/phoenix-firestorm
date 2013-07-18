@@ -129,7 +129,7 @@ BOOL FSPanelRadar::postBuild()
 	mRadarGearButton = getChild<LLButton>("gear_btn");
 	mOptionsButton = getChild<LLMenuButton>("options_btn");
 
-	LLToggleableMenu* options_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_radar_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	LLToggleableMenu* options_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_radar_options.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (options_menu)
 	{
 		mÓptionsMenuHandle = options_menu->getHandle();
