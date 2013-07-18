@@ -82,7 +82,7 @@ private:
 	LLButton*				mAddFriendButton;
 	LLMenuButton*			mOptionsButton;
 
-	LLHandle<LLView>		m”ptionsMenuHandle;
+	LLHandle<LLView>		mOptionsMenuHandle;
 
 	FSRadar::Updater*		mButtonsUpdater;
 

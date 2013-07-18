@@ -97,7 +97,7 @@ FSPanelRadar::~FSPanelRadar()
 	mUpdateSignalConnection.disconnect();
 	delete mButtonsUpdater;
 
-	if (mÓptionsMenuHandle.get()) mÓptionsMenuHandle.get()->die();
+	if (mOptionsMenuHandle.get()) mOptionsMenuHandle.get()->die();
 }
 
 BOOL FSPanelRadar::postBuild()
@@ -132,7 +132,7 @@ BOOL FSPanelRadar::postBuild()
 	LLToggleableMenu* options_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_radar_options.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (options_menu)
 	{
-		mÓptionsMenuHandle = options_menu->getHandle();
+		mOptionsMenuHandle = options_menu->getHandle();
 		mOptionsButton->setMenu(options_menu, LLMenuButton::MP_BOTTOM_LEFT);
 	}
 
