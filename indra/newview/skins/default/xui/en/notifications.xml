@@ -11228,6 +11228,7 @@ Error in the regular expression:
     <notification
         icon="notifytip.tga"
         name="StreamMetadata"
+		log_to_chat="false"
         type="notifytip">
         <tag>StreamMetadata</tag>
         ♫ Now Playing:
@@ -11237,6 +11238,7 @@ Error in the regular expression:
     <notification
         icon="notifytip.tga"
         name="StreamMetadataNoArtist"
+		log_to_chat="false"
         type="notifytip">
         <tag>StreamMetadata</tag>
         ♫ Now Playing:
@@ -11246,6 +11248,7 @@ Error in the regular expression:
     <notification
         icon="notifytip.tga"
         name="RadarAlert"
+		log_to_chat="false"
         type="notifytip">
 		[NAME] [MESSAGE]
 	</notification>
