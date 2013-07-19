@@ -1273,7 +1273,8 @@ void FSFloaterIM::updateMessages()
 			chat.mSessionID = mSessionID;
 			chat.mFromName = from;
 			chat.mTimeStr = time;
-			chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;			
+			chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
+			chat.mChatType = pIMSession->isP2PSessionType() ? CHAT_TYPE_IM : CHAT_TYPE_NORMAL;
 			
 			// Bold group moderators' chat -KC
 			//<FS:HG> FS-1734 seperate name and text styles for moderator

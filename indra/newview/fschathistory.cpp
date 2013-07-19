@@ -1016,7 +1016,9 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 
 		// names showing
-		if (args["show_names_for_p2p_conv"].asBoolean() && utf8str_trim(chat.mFromName).size() != 0)
+		if ( ((chat.mChatType == CHAT_TYPE_IM && args["show_names_for_p2p_conv"].asBoolean()) ||
+			chat.mChatType != CHAT_TYPE_IM) &&
+			utf8str_trim(chat.mFromName).size() != 0)
 		{
 			// Don't hotlink any messages from the system (e.g. "Second Life:"), so just add those in plain text.
 			if ( chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mFromID.notNull())
