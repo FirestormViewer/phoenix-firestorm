@@ -488,16 +488,6 @@ void LLLayoutStack::updateLayout()
 		// <FS:Zi> Record new size for this panel
 		if(mSaveSizes)
 		{
-			S32 dim;
-			if(mOrientation==HORIZONTAL)
-			{
-				dim=panel_rect.getWidth();
-			}
-			else
-			{
-				dim=panel_rect.getHeight();
-			}
-
 			mSavedSizes[index]=panelp->mTargetDim;
 			index++;
 		}
