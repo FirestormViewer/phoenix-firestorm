@@ -1255,6 +1255,8 @@ void FSFloaterIM::updateMessages()
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 		RLV_ASSERT(pIMSession);
 
+		chat_args["is_p2p"] = pIMSession->isP2PSessionType();
+
 		std::ostringstream message;
 		std::list<LLSD>::const_reverse_iterator iter = messages.rbegin();
 		std::list<LLSD>::const_reverse_iterator iter_end = messages.rend();
@@ -1274,7 +1276,6 @@ void FSFloaterIM::updateMessages()
 			chat.mFromName = from;
 			chat.mTimeStr = time;
 			chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
-			chat.mChatType = pIMSession->isP2PSessionType() ? CHAT_TYPE_IM : CHAT_TYPE_NORMAL;
 			
 			// Bold group moderators' chat -KC
 			//<FS:HG> FS-1734 seperate name and text styles for moderator

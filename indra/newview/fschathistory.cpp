@@ -791,6 +791,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	LLFastTimer _(FTM_APPEND_MESSAGE);
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
 	bool square_brackets = false; // square brackets necessary for a system messages
+	bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
 
 	bool from_me = chat.mFromID == gAgent.getID();
 	setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
@@ -1016,8 +1017,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 
 		// names showing
-		if ( ((chat.mChatType == CHAT_TYPE_IM && args["show_names_for_p2p_conv"].asBoolean()) ||
-			chat.mChatType != CHAT_TYPE_IM) &&
+		if ( (!is_p2p || args["show_names_for_p2p_conv"].asBoolean()) &&
 			utf8str_trim(chat.mFromName).size() != 0)
 		{
 			// Don't hotlink any messages from the system (e.g. "Second Life:"), so just add those in plain text.
