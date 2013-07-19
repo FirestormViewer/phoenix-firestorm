@@ -2,14 +2,6 @@
 <!-- Side tray panel -->
 <panel label="Gente" name="people_panel">
 	<string name="high_server_load" value="Debido a la carga del servidor, la conmutación de tu visibilidad en masa puede tardar en ser efectuada. Por favor sé paciente."/>
-	<string name="camera_no_focus" value="La cámara no puede enfocar al avatar [AVATARNAME] porque está fuera de tu distancia de dibujo."/>
-	<string name="entering_draw_distance" value="ha entrado en tu distancia de dibujo ([DISTANCE] m)."/>
-	<string name="leaving_draw_distance" value="ha abandonado tu distancia de dibujo."/>
-	<string name="entering_chat_range" value="ha entrado en el alcance del chat ([DISTANCE] m)."/>
-	<string name="leaving_chat_range" value="ha salido del alcance del chat."/>
-	<string name="entering_region" value="ha entrado en la región."/>
-	<string name="entering_region_distance" value="ha entrado en la región ([DISTANCE] m)."/>
-	<string name="leaving_region" value="ha abandonado la región."/>
 	<string name="no_recent_people" value="No hay gente reciente. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
 	<string name="no_filtered_recent_people" value="¿No encuentras lo que buscas? Prueba la [secondlife:///app/search/people/[SEARCH_TERM] Búsqueda]."/>
 	<string name="no_one_near" value="No han nadie cerca. ¿Buscas gente con la que pasar el rato? Usa la búsqueda para encontrar temas o contenidos en los que puedas estar interesado, y visita los lugares para conocer gente con interesses similares."/>
@@ -39,7 +31,7 @@
 						<radar_list.columns label="Nombre" name="name" tool_tip="[TOTAL] avatares, [IN_REGION] en la misma región, [IN_CHAT_RANGE] dentro del alcnace del chat"/>
 						<radar_list.columns name="voice_level" tool_tip="Está hablando por voz"/>
 						<radar_list.columns name="in_region" tool_tip="Está en la misma región"/>
-						<radar_list.columns name="flags" tool_tip="Tiene información de pago"/>
+						<radar_list.columns name="flags" tool_tip="Estado de la información de pago"/>
 						<radar_list.columns label="Edad" name="age" relative_width="0.11"/>
 						<radar_list.columns label="Visto" name="seen" relative_width="0.14"/>
 						<radar_list.columns label="Dist." name="range"/>

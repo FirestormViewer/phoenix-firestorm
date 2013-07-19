@@ -8,14 +8,14 @@
 	<pie_slice label="Comprar" name="Buy..."/>
 	<pie_slice label="Tomar" name="Pie Object Take"/>
 	<pie_slice label="Pagar" name="Pay..."/>
-	<pie_menu label="Más >" name="Object Pie More 1">
+	<pie_menu label="Más &gt;" name="Object Pie More 1">
 		<pie_slice label="Eliminar" name="Delete"/>
 		<pie_slice label="Vestir" name="Wear"/>
 		<pie_slice label="Tomar una copia" name="Take Copy"/>
 		<pie_menu label="Anexar HUD >" name="Pie Object Attach HUD"/>
-		<pie_menu label="Anexar >" name="Pie Object Attach"/>
+		<pie_menu label="Anexar &gt;" name="Pie Object Attach"/>
 		<pie_slice label="Devolver" name="Return..."/>
-		<pie_menu label="Más >" name="Object Pie More 2">
+		<pie_menu label="Más &gt;" name="Object Pie More 2">
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 			<pie_menu name="DerenderMenu" label="Desdibujar &gt;">
 				<pie_slice label="Permanente" name="DerenderPermanent"/>
@@ -23,7 +23,7 @@
 			</pie_menu>
 			<pie_slice label="Denunciar..." name="Report Abuse..."/>
 			<pie_slice label="Exportar" name="Export"/>
-			<pie_menu label="Pathfinding >" name="Pathfinding">
+			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
 				<pie_slice label="Mostrar en linksets" name="show_in_linksets"/>
 				<pie_slice label="Mostrar en personajes" name="show_in_characters"/>
 			</pie_menu>

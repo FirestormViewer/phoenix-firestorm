@@ -24,6 +24,7 @@
 			<menu_item_call label="Deshacer todos los cambios" name="Revert All Changes"/>
 			<menu_item_call label="Cargar desde archivo..." name="LoadFromFile"/>
 			<menu_item_call label="Guardar en archivo..." name="SaveToFile"/>
+			<menu_item_call label="Preferencias..." name="ScriptPrefs"/>
 		</menu>
 		<menu label="Editar" name="Edit">
 			<menu_item_call label="Deshacer" name="Undo"/>
@@ -38,13 +39,29 @@
 		<menu label="Ayuda" name="Help">
 			<menu_item_call label="Ayuda..." name="Help..."/>
 			<menu_item_call label="Ayuda de palabras clave..." name="Keyword Help..."/>
+			<menu_item_call label="Librería de scripts..." name="Script Library"/>
 		</menu>
 	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Guardar script"  name="save_btn"/>
+			<button tool_tip="Editor externo de scripts" name="Edit_btn"/>
+			<button tool_tip="Cargar un script de tu disco duro" name="load_disk_btn"/>
+			<button tool_tip="Guardar un script en tu disco duro" name="save_disk_btn"/>
+			<button tool_tip="Cortar"/>
+			<button tool_tip="Copiar" name="copy_btn"/>
+			<button tool_tip="Pegar" name="paste_btn"/>
+			<button tool_tip="Deshacer" name="undo_btn"/>
+			<button tool_tip="Rehacer" name="redo_btn"/>
+			<button tool_tip="Buscar/Reemplazar" name="search_btn"/>
+			<button tool_tip="Preferencias" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
 	<text_editor name="Script Editor">
 		Cargando...
 	</text_editor>
 	<combo_box label="Insertar..." name="Insert..."/>
-	<button label="Guardar" label_selected="Guardar" name="Save_btn" width="100"/>
-	<button label="Editar..." name="Edit_btn" width="100" right="381"/>
-	<check_box label="Convertir tabuladores en espacios" tool_tip="Si lo activas, al script recibido por el visor desde un editor externo se le reemplazarán automáticamente todos los tabuladores por el número de espacios por defecto (4, por norma general)." name="ExternalEditorConvertTabsToSpaces"/>
+	<text name="line_col" value="Línea 0, Columna 0"/>
+	<button label="Editar..." name="edit_btn_2"/>
+	<button label="Guardar" label_selected="Guardar" name="save_btn_2"/>
 </panel>

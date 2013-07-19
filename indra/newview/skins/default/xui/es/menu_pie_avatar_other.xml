@@ -12,7 +12,7 @@
 		<pie_slice label="Invitar a grupo" name="Group Invite..."/>
 		<pie_slice label="Expulsar..." name="Eject..."/>
 		<pie_menu name="Avatar Pie More 2" label="Más >">
-            		<pie_slice label="Depurar texturas" name="Debug..."/>
+            		<pie_slice label="Texturas" name="Debug..."/>
 			<pie_slice label="Info scripts" name="ScriptInfo"/>
 			<pie_slice label="Llamar" name="Call"/>
 			<pie_slice label="Enfocar" name="Zoom In"/>

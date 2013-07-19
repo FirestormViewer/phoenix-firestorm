@@ -32,8 +32,8 @@
 			<button label="Administrar lista de bloqueados/silenciados" name="block_list"/>
 		</panel>
 		<panel label="Puntos de mira" name="tab-lookat">
-			<check_box label="Mostrar puntos de mira de foco" name="showlookat" tool_tip="Muestra puntos de mira que indican qué está mirando cada avatar."/>
-			<text name="lookatshownames" tool_tip="Muestra los nombres de avatar en sus puntos de mira" width="220">
+			<check_box label="Mostrar puntos de mira de foco:" name="showlookat" tool_tip="El punto de mira es una pista para la animación que los visores usan para saber hacia dónde mover tus ojos, cabeza y torso. También puede ser usado para determinar hacia dónde está enfoncando la cámara de un avatar."/>
+			<text name="lookatshownames" tool_tip="Formato de nombre a mostrar en los puntos de mira" width="220">
 				Mostrar nombres en los puntos de mira:
 			</text>
 			<combo_box name="lookatshownames_combobox">
@@ -43,13 +43,13 @@
 				<combo_box.item label="Nombre antiguo" name="Legacy_Name"/>
 				<combo_box.item label="Nombre de usuario" name="User_Name"/>
 			</combo_box>
+			<check_box label="No mostrarme mi punto de mira" name="LookAtHideOwn" tool_tip="No mostrarme los puntos de mira de mi propia cámara"/>
 			<text name="mylookat">
 				Mi punto de mira:
 			</text>
-			<check_box label="No mostrarme mi punto de mira" name="LookAtHideOwn" tool_tip="No mostrarme los puntos de mira de mi propia cámara"/>
-			<check_box label="No enviar pistas sobre mi punto de mira a otros" name="privatelookat" tool_tip="Evita que sea revelado a otros punto que enfocas"/>
-			<check_box label="No dar pistas sobre mis puntos de enfoque ni siquiera en mi propia pantalla" name="privateLocalLookat" tool_tip="Evita que la cabeza de tu avatar se mueva para mirar donde enfocas con la cámara en tu propia vista. Este movimiento no es necesariamente visible para otros, independientemente de que actives o no esta opción."/>
-			<check_box label="No envíes pistas sobre mi selección" name="privatepointat" tool_tip="Evita mostrar a los demás indicación alguna sobre el objeto que estás seleccionando"/>
+			<check_box label="No enviar mis puntos de mira a otros" name="privatelookat" tool_tip="Evita la difusión de los puntos a los que estás enfocando"/>
+			<check_box label="No difundir mis puntos de enfoque en absoluto, ni siquiera a mí mismo" name="privateLocalLookat" tool_tip="Evita que la cabeza de tu avatar se mueva para mirar donde enfocas en tu propia  pantalla. Este movimiento no es necesariamente visible para otros, independientemente de que actives o no esta opción."/>
+			<check_box label="No envíes pistas sobre mi selección" name="privatepointat" tool_tip="Evita mostrar a los demás los objetos que estás seleccionando"/>
 		</panel>
 		<panel label="Autorrespuesta" name="tab-autoresponse">
 			<text name="text_box3" width="425">
@@ -62,9 +62,9 @@
 				Respuesta automática (para el estado de Autorrespuesta para no-amigos):
 			</text>
 			<check_box label="Enviar autorrespuesta a avatares bloqueados" name="send_muted_av_response" tool_tip="Responde con el siguiente texto cuando alguien a quien has bloqueado te envía un MI."/>
-			<text name="muted_avatar_response_label">
-				Respuesta automática (para avatares bloqueados):
-			</text>
+			<!-- 
+			<check_box label="Enviar autorrespuesta para el estado de AUSENTE:" name="send_away_av_response" tool_tip="Responde con el siguiente texto cuando alguien te envía un MI mientras estás en modo ausente."/>
+			-->
 		</panel>
 	</tab_container>
 </panel>

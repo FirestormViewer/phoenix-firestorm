@@ -16,7 +16,7 @@
 			<slider label="Chat de voz" name="Voice Volume"/>
 			<check_box label="Activado" name="enable_voice_check"/>
 			<check_box name="media_auto_play_btn" tool_tip="Activa/desactiva la reproducción automática de medios cuando te conectas o cambias de región." label="Permitir reproducción automática de medios al entrar en una región"/>
-			<check_box name="media_allowscript_btn" tool_tip="Permite/impide que los scripts de los prims controlen tus conexiones de medios" label="Permitir que los scripts de residentes reproduzcan medios"/>
+			<check_box name="media_allowscript_btn" tool_tip="Permite/impide que los scripts de los prims controlen tus conexiones de medios" label="Permitir que los scripts prims reproduzcan medios"/>
 			<check_box name="media_show_on_others_btn" tool_tip="Desactiva para ocultar los medios anexados a avatares de tu entorno" label="Reproducir medios anexados a otros avatares"/>
 			<check_box name="media_filter" tool_tip="Activa/desactiva el filtro que te permite escoger a qué servidores permites la reproducción de medios" label="Activar filtro de medios (seguridad mejorada)"/>
 			<button label="Administrar servidores de medios" name="edit_media_lists_button" width="200" left_pad="50"/>
@@ -40,7 +40,7 @@
 				segundos
 			</text>
 			<text name="Media Rolloff" width="270">
-				Distancia de atenuación del audio de los medios:
+				Distancia de atenuación de la fuente del audio:
 			</text>
 			<slider label="Mín" name="MediaRollOffMin" tool_tip="Distancia mínima de la fuente de sonido para que la atenuación empiece a tener efecto."/>
 			<text name="MinMeters">

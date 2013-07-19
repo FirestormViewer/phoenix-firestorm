@@ -7,11 +7,4 @@
 	<menu_item_call label="Compartir" name="Share"/>
 	<menu_item_call label="Pagar" name="Pay"/>
 	<menu_item_call label="Ofrecer teleporte" name="teleport"/>
-	<menu_item_call label="Congelar" name="freeze"/>
-	<menu_item_call label="Expulsar" name="eject"/>
-	<menu_item_call label="Patear" name="kick"/>
-	<menu_item_call label="Enviar a su casa" name="teleport_home"/>
-	<menu_item_call label="Expulsar del estado" name="estate_ban"/>
-	<menu_item_call label="Desdibujar" name="derender"/>
-	<menu_item_call label="Desdibujar + lista negra" name="derender_permanent"/>
 </context_menu>

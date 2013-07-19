@@ -4,6 +4,8 @@
 		<text name="search_text">
 			Términos de búsqueda:
 		</text>
+		<search_combo_box name="classifieds_edit" width="626"/>
+		<combo_box name="classifieds_category" width="146"/>
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_classifieds">
