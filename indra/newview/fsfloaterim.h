@@ -166,6 +166,7 @@ private:
 	
 	// For display name lookups for IM window titles
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+	void fetchAvatarName(LLUUID& agent_id);
 	
 	BOOL dropCallingCard(LLInventoryItem* item, BOOL drop);
 	BOOL dropCategory(LLInventoryCategory* category, BOOL drop);
@@ -238,6 +239,8 @@ private:
 	S32 mInputEditorPad;
 	S32 mChatLayoutPanelHeight;
 	S32 mFloaterHeight;
+	
+	boost::signals2::connection mAvatarNameCacheConnection;
 };
 
 

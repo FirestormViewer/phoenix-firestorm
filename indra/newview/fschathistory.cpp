@@ -662,12 +662,12 @@ private:
 		if (chat_type == CHAT_TYPE_IM || chat_type == CHAT_TYPE_IM_GROUP)
 		{
 			mFrom = LLTrans::getString("IMPrefix") + " ";
-			if(group != "")
+			if(!group.empty())
 			{
-				mFrom += group;
+				mFrom.append(group);
 			}
 		}
-		mFrom += av_name.getDisplayName();
+		mFrom.append(av_name.getDisplayName());
 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		
 		LLTextBox* user_name = getChild<LLTextBox>("user_name");
@@ -691,7 +691,6 @@ private:
 		updateMinUserNameWidth();
 	}
 
-
 protected:
 	LLHandle<LLView>	mPopupMenuHandleAvatar;
 	LLHandle<LLView>	mPopupMenuHandleObject;
@@ -705,8 +704,8 @@ protected:
 	std::string			mFrom;
 	LLUUID				mSessionID;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-	bool                mShowContextMenu;
-	bool                mShowInfoCtrl;
+	bool			mShowContextMenu;
+	bool			mShowInfoCtrl;
 // [/RLVa:KB]
 
 	S32					mMinUserNameWidth;
@@ -1017,9 +1016,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 
 		// names showing
-		//TODO: Include show_names_for_p2p_conv, like below <FS:CR>
-		//if (args["show_names_for_p2p_conv"].asBoolean() && utf8str_trim(chat.mFromName).size() != 0)
-		if (utf8str_trim(chat.mFromName).size() != 0)
+		if (args["show_names_for_p2p_conv"].asBoolean() && utf8str_trim(chat.mFromName).size() != 0)
 		{
 			// Don't hotlink any messages from the system (e.g. "Second Life:"), so just add those in plain text.
 			if ( chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mFromID.notNull())

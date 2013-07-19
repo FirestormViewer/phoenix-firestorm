@@ -98,7 +98,8 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mSessionInitialized(false),
 	mChatLayoutPanel(NULL),
 	mInputPanels(NULL),
-	mChatLayoutPanelHeight(0)
+	mChatLayoutPanelHeight(0),
+	mAvatarNameCacheConnection()
 {
 	LLIMModel::LLIMSession* im_session = LLIMModel::getInstance()->findIMSession(mSessionID);
 	if (im_session)
@@ -411,6 +412,12 @@ FSFloaterIM::~FSFloaterIM()
 	{
 		llinfos << "AO: Cleaning up stray particularFriendObservers" << llendl;
 		LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
+	}
+	
+	// Clean up any stray name cache connections
+	if (mAvatarNameCacheConnection.connected())
+	{
+		mAvatarNameCacheConnection.disconnect();
 	}
 }
 
@@ -827,9 +834,7 @@ BOOL FSFloaterIM::postBuild()
 
 	if ( im_session && im_session->isP2PSessionType())
 	{
-		// look up display name for window title
-		LLAvatarNameCache::get(im_session->mOtherParticipantID,
-							   boost::bind(&FSFloaterIM::onAvatarNameCache, this, _1, _2));
+		fetchAvatarName(im_session->mOtherParticipantID);
 	}
 	else
 	{
@@ -860,9 +865,23 @@ void FSFloaterIM::updateSessionName(const std::string& ui_title,
 	setTitle(ui_title);	
 }
 
+void FSFloaterIM::fetchAvatarName(LLUUID& agent_id)
+{
+	if (agent_id.notNull())
+	{
+		if (mAvatarNameCacheConnection.connected())
+		{
+			mAvatarNameCacheConnection.disconnect();
+		}
+		mAvatarNameCacheConnection = LLAvatarNameCache::get(agent_id,
+															boost::bind(&FSFloaterIM::onAvatarNameCache, this, _1, _2));
+	}
+}
+
 void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 									const LLAvatarName& av_name)
 {
+	mAvatarNameCacheConnection.disconnect();
 	// <FS:Ansariel> FIRE-8658: Let the user decide how the name should be displayed
 	// Use display name only for labels, as the extended name will be in the
 	// floater title
@@ -1230,8 +1249,8 @@ void FSFloaterIM::updateMessages()
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
 		chat_args["hide_timestamps_nearby_chat"] = gSavedSettings.getBOOL("FSHideTimestampsIM");
+		chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
 		chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
-		// TODO: add "show_names_for_p2p_conv
 		
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 		RLV_ASSERT(pIMSession);
