@@ -41,6 +41,7 @@ class PieMenu;			// ## Zi: Pie Menu
 
 void initialize_edit_menu();
 void initialize_spellcheck_menu();
+void initialize_volume_controls_callbacks(); //<FS:KC> Centralize a some of these volume panel callbacks
 void init_menus();
 void cleanup_menus();
 

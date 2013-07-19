@@ -1872,6 +1872,10 @@ void LLViewerWindow::initBase()
 	initialize_edit_menu();
 	initialize_spellcheck_menu();
 	// </FS:Zi>
+	
+	//<FS:KC> Centralize a some of these volume panel callbacks
+	initialize_volume_controls_callbacks();
+	//</FS:KC>
 
 	// Create the floater view at the start so that other views can add children to it. 
 	// (But wait to add it as a child of the root view so that it will be in front of the 

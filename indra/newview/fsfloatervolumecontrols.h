@@ -41,7 +41,7 @@ private:
 	~FSFloaterVolumeControls();
 	
 	/*virtual*/ void handleVisibilityChange(BOOL new_visibility);
-	void onAudioPrefsButtonClicked();
+	// void onAudioPrefsButtonClicked();	//<FS:KC> Handled globally now
 	void setControlFalse(const LLSD& user_data);
 	void setSounds();
 };

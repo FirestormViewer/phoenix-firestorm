@@ -61,7 +61,7 @@
 	 scale_image="false"
 	>
 		<button.commit_callback
-		 function="Vol.GoAudioPrefs"
+		 function="MediaListCtrl.GoMediaPrefs"
 		/>
 	</button>
 	<slider

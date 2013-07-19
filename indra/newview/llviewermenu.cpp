@@ -147,6 +147,7 @@
 #include "llvovolume.h"
 #include "particleeditor.h"
 #include "piemenu.h"	// ## Zi: Pie Menu
+#include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 
 
 using namespace LLAvatarAppearanceDefines;
@@ -9989,6 +9990,25 @@ void initialize_spellcheck_menu()
 	commit.add("SpellCheck.AddToIgnore", boost::bind(&handle_spellcheck_add_to_ignore, _1));
 	enable.add("SpellCheck.EnableAddToIgnore", boost::bind(&enable_spellcheck_add_to_ignore, _1));
 }
+
+//<FS:KC> Centralize a some of these volume panel callbacks
+static void open_volume_prefs()
+{
+	// bring up the prefs floater
+	LLFloaterPreference* prefsfloater = LLFloaterReg::showTypedInstance<LLFloaterPreference>("preferences");
+	if (prefsfloater)
+	{
+		// grab the 'audio' panel from the preferences floater and bring it the front!
+		prefsfloater->selectPanel("audio");
+	}
+}
+
+void initialize_volume_controls_callbacks()
+{
+	LLUICtrl::CommitCallbackRegistry::Registrar& commit = LLUICtrl::CommitCallbackRegistry::currentRegistrar();
+	commit.add("MediaListCtrl.GoMediaPrefs", boost::bind(&open_volume_prefs));
+}
+//</FS:KC>
 
 void initialize_menus()
 {

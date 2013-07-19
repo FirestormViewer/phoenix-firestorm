@@ -41,7 +41,8 @@
 FSFloaterVolumeControls::FSFloaterVolumeControls(const LLSD& key)
 :	LLFloater(key)
 {
-	mCommitCallbackRegistrar.add("Vol.GoAudioPrefs", boost::bind(&FSFloaterVolumeControls::onAudioPrefsButtonClicked, this));
+	//<FS:KC> Handled globally now
+	// mCommitCallbackRegistrar.add("Vol.GoAudioPrefs", boost::bind(&FSFloaterVolumeControls::onAudioPrefsButtonClicked, this));
 	mCommitCallbackRegistrar.add("Vol.setControlFalse", boost::bind(&FSFloaterVolumeControls::setControlFalse, this, _2));
 	mCommitCallbackRegistrar.add("Vol.SetSounds", boost::bind(&FSFloaterVolumeControls::setSounds, this));
 }
@@ -62,6 +63,8 @@ void FSFloaterVolumeControls::handleVisibilityChange(BOOL new_visibility)
 	LLFloater::handleVisibilityChange(new_visibility);
 }
 
+//<FS:KC> Handled globally now
+/*
 void FSFloaterVolumeControls::onAudioPrefsButtonClicked()
 {
 	// bring up the prefs floater
@@ -78,6 +81,7 @@ void FSFloaterVolumeControls::onAudioPrefsButtonClicked()
 		}
 	}
 }
+*/
 
 void FSFloaterVolumeControls::setControlFalse(const LLSD& user_data)
 {
