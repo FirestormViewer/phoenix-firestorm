@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="lgg_fg_floater" title="GRUPOS DE CONTACTOS" width="670">
+<floater name="lgg_fg_floater" title="Grupos de contactos" width="670">
 	<floater.string name="AddToGroup" value="Añadir a: [GROUPNAME]"/>
 	<floater.string name="RemoveFromGroup" value="Eliminar de: [GROUPNAME]"/>
 	<floater.string name="RemoveDisplayName" value="Eliminar displayname"/>
@@ -24,6 +24,10 @@
 	<floater.string name="TooltipIM" value="Mensaje instantáneo"/>
 	<floater.string name="TooltipProfile" value="Mostrar perfil"/>
 	<floater.string name="TooltipNameChanged" value="El nombre ha cambiado"/>
+	<floater.string name="AllSets" value="&lt;Todos los grupos&gt;"/>
+	<floater.string name="NoSets" value="&lt;Ningún grupo&gt;"/>
+	<floater.string name="Renamed" value="&lt;Renombrados&gt;"/>
+	<floater.string name="NoFriend" value="&lt;No amigos&gt;"/>
 	<text name="lgg_fg_text1" bottom_delta="5021">
 		Grupo:
 	</text>

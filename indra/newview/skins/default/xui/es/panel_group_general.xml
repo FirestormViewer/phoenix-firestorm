@@ -21,6 +21,7 @@ Deja el cursor sobre las opciones para obtener más ayuda.
 			Fundador:
 		</text>
 		<text name="founder_name" initial_value="(obteniendo...)"/>
+		<button name="copy_name" label="Copiar nombre"/>
 		<texture_picker label="" name="insignia" tool_tip="Pulsa para elegir una imagen"/>
 		<text_editor name="charter">
 			Carta del grupo

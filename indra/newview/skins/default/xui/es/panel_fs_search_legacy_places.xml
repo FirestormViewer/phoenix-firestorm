@@ -4,7 +4,8 @@
 		<text name="search_text">
 			Términos de búsqueda:
 		</text>
-		<combo_box name="places_category"/>
+		<search_combo_box name="places_edit" width="626"/>
+		<combo_box name="places_category" width="146"/>
 	</panel>
 	<panel name="panel_ls_scrolllist">
 		<scroll_list name="search_results_places">

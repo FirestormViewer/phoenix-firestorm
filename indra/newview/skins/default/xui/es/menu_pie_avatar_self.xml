@@ -2,15 +2,15 @@
 <pie_menu name="Self Pie">
 	<pie_slice label="Perfil" name="Profile..."/>
 	<pie_slice label="Grupos" name="Groups..."/>
-	<pie_menu label="Quitarme >" name="Take Off &gt;">
-		<pie_menu label="Prendas >" name="Clothes &gt;">
+	<pie_menu label="Quitarme &gt;" name="Take Off &gt;">
+		<pie_menu label="Prendas &gt;" name="Clothes &gt;">
 			<pie_slice label="Camisa" name="Shirt"/>
 			<pie_slice label="Pantalón" name="Pants"/>
 			<pie_slice label="Zapatos" name="Shoes"/>
 			<pie_slice label="Calcetines" name="Socks"/>
 			<pie_slice label="Chaqueta" name="Jacket"/>
 			<pie_slice label="Guantes" name="Gloves"/>
-			<pie_menu label="Más >" name="Clothes More">
+			<pie_menu label="Más &gt;" name="Clothes More">
 				<pie_slice label="Camiseta" name="Self Undershirt"/>
 				<pie_slice label="Toda la ropa" name="All Clothes"/>
 				<pie_slice label="Ropa interior" name="Self Underpants"/>
@@ -28,10 +28,10 @@
 	<pie_slice label="Levantarme" name="Stand Up"/>
 	<pie_slice label="Info scripts" name="ScriptInfo"/>
 	<pie_slice label="Gestos..." name="Gestures"/>
-	<pie_menu label="Apariencia >" name="Appearance &gt;">
+	<pie_menu label="Apariencia &gt;" name="Appearance &gt;">
 		<pie_slice label="Anatomía" name="Edit My Shape"/>
 		<pie_slice label="Retexturizar" name="Texture Refresh"/>
 		<pie_slice label="Vestuario" name="Edit My Outfit"/>
 	</pie_menu>
-	<pie_slice label="Depurar texturas" name="Debug..."/>
+	<pie_slice label="Texturas" name="Debug..."/>
 </pie_menu>

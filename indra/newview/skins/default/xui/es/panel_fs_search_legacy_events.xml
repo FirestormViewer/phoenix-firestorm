@@ -11,7 +11,8 @@
 		<text name="events_date">
 			4/20
 		</text>
-		<combo_box name="events_category">
+		<search_combo_box name="events_edit" width="626"/>
+		<combo_box name="events_category" width="146">
 			<combo_box.item label="Cualquier categoría" name="any"/>
 			<combo_box.item label="Debates" name="discussion"/>
 			<combo_box.item label="Deportes" name="sports"/>

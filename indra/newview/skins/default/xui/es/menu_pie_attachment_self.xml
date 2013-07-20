@@ -2,7 +2,7 @@
 <pie_menu name="Attachment Pie">
 	<pie_slice label="Perfil..." name="Profile..."/>
 	<pie_slice label="Soltar" name="Drop"/>
-	<pie_menu name="Attachment Pie More" label="Más >">
+	<pie_menu name="Attachment Pie More" label="Más &gt;">
 		<pie_slice label="Retexturizar" name="Texture Refresh"/>
 		<pie_slice label="Info scripts" name="ScriptInfo"/>
 		<pie_slice label="Tocar" name="Attachment Object Touch"/>
@@ -11,6 +11,7 @@
 			<pie_slice label="Permanente" name="DerenderPermanent"/>
 		</pie_menu>
 		<pie_slice label="Exportar" name="Export"/>
+		<pie_slice label="Texturas" name="Debug..."/>
 	</pie_menu>
 	<pie_slice label="Sentarme" name="Sit Down Here"/>
 	<pie_slice label="Levantarme" name="Stand Up"/>

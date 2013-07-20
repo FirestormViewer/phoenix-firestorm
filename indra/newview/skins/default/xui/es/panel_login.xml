@@ -11,8 +11,8 @@
 			<text name="username_text">
 				Nombre de usuario:
 			</text>
-			<combo_box name="username_combo" tool_tip="El nombre de usuario que elegiste al registrarte, como bobsmith420 o Steller Sunshine"/>
 			<button tool_tip="Eliminar este usuario" name="remove_user_btn"/>
+			<combo_box name="username_combo" tool_tip="El nombre de usuario que elegiste al registrarte, como bobsmith420 o Steller Sunshine"/>
 			<text name="password_text">
 				Contraseña:
 			</text>

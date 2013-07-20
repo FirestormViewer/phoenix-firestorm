@@ -5151,5 +5151,12 @@ Esta acción restaurará inmediatamente tus preferencias rápidas a su configura
 No se podrá deshacer.
 		<usetemplate ignoretext="Confirmar la restauración de la configuración por defecto de las preferencias rápidas" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
-
+	<notification name="EjectGroupMemberWarning">
+		Vas a expulsar a [AVATAR_NAME] del grupo.
+		<usetemplate ignoretext="Confirmar la expulsión de un miembro de un grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
+	</notification>
+	<notification name="EjectGroupMembersWarning">
+		Vas a expulsar a [COUNT] miembros del grupo.
+		<usetemplate ignoretext="Confirmar la expulsión de múltiples miembros de un grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
+	</notification>
 </notifications>

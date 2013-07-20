@@ -960,20 +960,23 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="TeleportYourAgent">
 		Teleportarte
 	</string>
-	<string name="SilentEstateManagement">
+	<string name="JoinAnExperience">
+		Participar en una experiencia
+	</string>
+	<string name="SilentlyManageEstateAccess">
 		Silenciar notificaciones sobre las modificaciones de acceso al Estado
 	</string>
-	<string name="OverrideAgentAnimations">
-		Ignorar las animaciones de tu avatar
+	<string name="OverrideYourAnimations">
+		Reemplazar tus animaciones por defecto
+	</string>
+	<string name="ScriptReturnObjects">
+		Devolver objetos en tu nombre
 	</string>
 	<string name="NotConnected">
 		No conectado/a
 	</string>
 	<string name="AgentNameSubst">
 		(Tú)
-	</string>
-	<string name="TeleportYourAgent">
-		Teleportarte
 	</string>
 	<string name="SIM_ACCESS_PG">
 		General
@@ -1058,6 +1061,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="backup_files">
 		Respaldos de objetos
+	</string>
+	<string name="LSLTipSleepTime">
+		Duerme el script durante [SLEEP_TIME] segundos.
 	</string>
 	<string name="AvatarSetNotAutorespond">
 		Desactivar autorrespuesta
@@ -2091,6 +2097,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
 		HUD Inferior derecho
+	</string>
+	<string name="ATTACH_NECK">
+		Cuello
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Centro del avatar
 	</string>
 	<string name="ATTACH_BRIDGE">
 		Bridge
@@ -5082,26 +5094,69 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Voice_Label">
 		Configuración de voz
 	</string>
-	<string name="Command_Quickprefs_Label">Preferencias rápidas</string>
-	<string name="Command_AO_Label">Animation Overrider</string>
-	<string name="Command_Webbrowser_Label">Navegador web</string>
-	<string name="Command_Default_Chat_Bar_Label">Chat</string>
-	<string name="Command_Areasearch_Label">Buscar en el área</string>
-	<string name="Command_Settings_Debug_Label">Configuraciones del depurador</string>
-	<string name="Command_Statistics_Label">Estadísticas</string>
-	<string name="Command_Region_Label">Región/Estado</string>
-	<string name="Command_Fly_Label">Volar</string>
-	<string name="Command_Groundsit_Label">Sentarse en el suelo</string>
-	<string name="Command_Sound_Explorer_Label">Explorador de sonidos</string>
-	<string name="Command_Asset_Blacklist_Label">Lista negra</string>
-	<string name="Command_Phototools_Label">Phototools</string>
-	<string name="Command_Phototools_View_Label">Cameratools</string>
-	<string name="Command_Contact_Sets_Label">Contact sets</string>
-	<string name="Command_Mouselook_Label">Vista subjetiva</string>
-	<string name="Command_Landmark_Here_Label">Crear hito</string>
-	<string name="Command_Teleport_History_Label">Historial de teleportes</string>
-	<string name="Command_Pose_Stand_Label">Pose</string>
-	<string name="Command_Snapshot_To_Disk_Label">Foto a disco</string>
+	<string name="Command_Quickprefs_Label">
+		Preferencias rápidas
+	</string>
+	<string name="Command_AO_Label">
+		Animation Overrider
+	</string>
+	<string name="Command_Webbrowser_Label">
+		Navegador web
+	</string>
+	<string name="Command_Default_Chat_Bar_Label">
+		Chat
+	</string>
+	<string name="Command_Areasearch_Label">
+		Buscar en el área
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Configuraciones del depurador
+	</string>
+	<string name="Command_Statistics_Label">
+		Estadísticas
+	</string>
+	<string name="Command_Region_Label">
+		Región/Estado
+	</string>
+	<string name="Command_Fly_Label">
+		Volar
+	</string>
+	<string name="Command_Groundsit_Label">
+		Sentarse en el suelo
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Explorador de sonidos
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Lista negra
+	</string>
+	<string name="Command_Phototools_Label">
+		Phototools
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Cameratools
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Contact sets
+	</string>
+	<string name="Command_Mouselook_Label">
+		Vista subjetiva
+	</string>
+	<string name="Command_Landmark_Here_Label">
+		Crear hito
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Historial de teleportes
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Pose
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Foto a disco
+	</string>
+	<string name="Command_Radar_Label">
+		Radar
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5212,6 +5267,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Snapshot_To_Disk_Tooltip">
 		Toma una fotografía rápida y la guarda en disco
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Abre el radar de avatares cercanos
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
@@ -5414,4 +5472,16 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="QP_WL_Day_Cycle_Based">Basado en ciclo de día</string>
 	<string name="QP_WL_None">Ninguno</string>
 	<string name="GroupChatMuteNotice">Silenciando el chat de grupo de [NAME].</string>
+	<string name="camera_no_focus">La cámara no puede enfocar a [AVATARNAME] porque está fuera de tu distancia de dibujo.</string>
+	<string name="entering_draw_distance">ha entrado en tu distancia de dibujo ([DISTANCE] m).</string>
+	<string name="leaving_draw_distance">ha salido de tu distancia de dibujo.</string>
+	<string name="entering_chat_range">ha entrado en distancia de chat ([DISTANCE] m).</string>
+	<string name="leaving_chat_range">ha salido de la distancia de chat.</string>
+	<string name="entering_region">ha entrado en la región.</string>
+	<string name="entering_region_distance">ha entrado en la región ([DISTANCE] m).</string>
+	<string name="leaving_region">ha salido de la región.</string>
+	<string name="export_fail_no_mesh">La exportación de modelos mesh no está actualmente soportada. Exportación abortada.</string>
+	<string name="TotalScriptCountChangeIncrease">El total de scripts en la región ha subido de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
+	<string name="TotalScriptCountChangeDecrease">El total de scripts en la región ha bajado de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
+	<string name="preproc_toggle_warning">La conmutación del preprocesador no será efectiva hasta que no cierres y reabras este editor.</string>
 </strings>
