@@ -138,11 +138,7 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME_USERNAME)
 		{
-			std::string s1 = av_name.getDisplayName();
-			to_lower(s1);
-			std::string s2 = av_name.getUserName();
-			replace_all(s2, ".", " ");
-			if (s1.compare(s2) == 0)
+			if (av_name.isDisplayNameDefault())
 			{
 				return av_name.getDisplayName();
 			}
@@ -153,11 +149,7 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME)
 		{
-			std::string s1 = av_name.getDisplayName();
-			to_lower(s1);
-			std::string s2 = av_name.getUserName();
-			replace_all(s2, ".", " ");
-			if (s1.compare(s2) == 0)
+			if (av_name.isDisplayNameDefault())
 			{
 				return av_name.getDisplayName();
 			}
