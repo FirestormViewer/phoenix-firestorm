@@ -72,7 +72,7 @@
 // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 #include "llfocusmgr.h"
 #include "llkeyboard.h"
-#include "lllineeditor.h"
+#include "llchatentry.h"
 // </FS:Zi>
 #include "llpanelblockedlist.h"
 
@@ -704,8 +704,8 @@ protected:
 	std::string			mFrom;
 	LLUUID				mSessionID;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-	bool			mShowContextMenu;
-	bool			mShowInfoCtrl;
+	bool				mShowContextMenu;
+	bool				mShowInfoCtrl;
 // [/RLVa:KB]
 
 	S32					mMinUserNameWidth;
@@ -1256,7 +1256,7 @@ BOOL FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
 			// focus on the next item that is a text input control
 			focusRoot->focusNextItem(true);
 			// remember the control's pointer if it really is a LLLineEditor
-			mChatInputLine = dynamic_cast<LLLineEditor*>(gFocusMgr.getKeyboardFocus());
+			mChatInputLine = dynamic_cast<LLChatEntry*>(gFocusMgr.getKeyboardFocus());
 		}
 	}
 

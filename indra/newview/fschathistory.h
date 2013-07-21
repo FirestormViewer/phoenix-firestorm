@@ -33,7 +33,7 @@
 #include "lltextbox.h"
 #include "llviewerchat.h"
 
-class LLLineEditor;	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+class LLChatEntry;	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 
 //Chat log widget allowing addition of a message as a widget
 class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat history
@@ -148,7 +148,7 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 	public:
 		virtual BOOL	handleUnicodeCharHere(llwchar uni_char);
 
-		LLLineEditor* mChatInputLine;
+		LLChatEntry* mChatInputLine;
 	// </FS:Zi>
 };
 #endif // FS_CHATHISTORY_H
