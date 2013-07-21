@@ -64,6 +64,9 @@
 #include "llvoiceclient.h"
 #include "llworld.h"
 #include "llspeakers.h"
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
 #define NEARBY_LIST_UPDATE_INTERVAL 1
@@ -597,6 +600,9 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList->setNoItemsMsg(getString("no_one_near"));
 	mNearbyList->setNoFilteredItemsMsg(getString("no_one_filtered_near"));
 	mNearbyList->setShowIcons("NearbyListShowIcons");
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	mNearbyList->setRlvCheckShowNames(true);
+// [/RLVa:KB]
 	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
 	mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
 		getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
@@ -789,6 +795,9 @@ void LLPanelPeople::updateRecentList()
 void LLPanelPeople::updateButtons()
 {
 	std::string cur_tab		= getActiveTabName();
+// [RLVa:KB] - Checked: 2013-05-06 (RLVa-1.4.9)
+	bool nearby_tab_active = (cur_tab == NEARBY_TAB_NAME);
+// [/RLVa:KB]
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
 	bool group_tab_active	= (cur_tab == GROUP_TAB_NAME);
 	//bool recent_tab_active	= (cur_tab == RECENT_TAB_NAME);
@@ -808,6 +817,11 @@ void LLPanelPeople::updateButtons()
 
 		LLPanel* groups_panel = mTabContainer->getCurrentPanel();
 		groups_panel->getChildView("minus_btn")->setEnabled(item_selected && selected_id.notNull()); // a real group selected
+//		groups_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
+//		groups_panel->getChildView("activate_btn")->setEnabled(
+//			item_selected && !cur_group_active && !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)); // "none" or a non-active group selected
+// [/RLVa:KB]
 	}
 	else
 	{
@@ -827,6 +841,11 @@ void LLPanelPeople::updateButtons()
 			if (cur_panel->hasChild("add_friend_btn", TRUE))
 				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self);
 
+//			cur_panel->getChildView("add_friend_btn")->setEnabled(!is_friend);
+// [RLVa:KB] - Checked: 2010-07-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0h
+//			cur_panel->getChildView("add_friend_btn")->setEnabled(
+//				!is_friend && ((!nearby_tab_active) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))));
+// [/RLBa:KB]
 			if (friends_tab_active)
 			{
 				cur_panel->getChildView("friends_del_btn")->setEnabled(multiple_selected);
@@ -838,6 +857,13 @@ void LLPanelPeople::updateButtons()
 			}
 		}
 	}
+
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
+	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+	{
+		item_selected = multiple_selected = false;
+	}
+// [/RLBa:KB]
 }
 
 std::string LLPanelPeople::getActiveTabName() const

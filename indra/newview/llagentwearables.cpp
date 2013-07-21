@@ -49,6 +49,10 @@
 #include "llvoavatarself.h"
 #include "llviewerwearable.h"
 #include "llwearablelist.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 #include <boost/scoped_ptr.hpp>
 
@@ -771,6 +775,34 @@ const LLUUID LLAgentWearables::getWearableItemID(LLWearableType::EType type, U32
 		return LLUUID();
 }
 
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0)
+void LLAgentWearables::getWearableItemIDs(uuid_vec_t& idItems) const
+{
+	for (wearableentry_map_t::const_iterator itWearableType = mWearableDatas.begin(); 
+			itWearableType != mWearableDatas.end(); ++itWearableType)
+	{
+		getWearableItemIDs(itWearableType->first, idItems);
+	}
+}
+
+void LLAgentWearables::getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const
+{
+	wearableentry_map_t::const_iterator itWearableType = mWearableDatas.find(eType);
+	if (mWearableDatas.end() != itWearableType)
+	{
+		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin();
+				itWearable != itWearableType->second.end(); ++itWearable)
+		{
+			const LLViewerWearable* pWearable = dynamic_cast<LLViewerWearable*>(*itWearable);
+			if (pWearable)
+			{
+				idItems.push_back(pWearable->getItemID());
+			}
+		}
+	}
+}
+// [/RLVa:KB]
+
 const LLUUID LLAgentWearables::getWearableAssetID(LLWearableType::EType type, U32 index) const
 {
 	const LLViewerWearable *wearable = getViewerWearable(type,index);
@@ -1214,7 +1246,11 @@ void LLAgentWearables::removeWearableFinal(const LLWearableType::EType type, boo
 				old_wearable->removeFromAvatar(TRUE);
 			}
 		}
-		clearWearableType(type);
+//		clearWearableType(type);
+// [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0)
+		// The line above shouldn't be needed
+		RLV_VERIFY(0 == getWearableCount(type));
+// [/RLVa:KB]
 	}
 	else
 	{
@@ -1325,46 +1361,46 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 }
 
 
-// User has picked "wear on avatar" from a menu.
-void LLAgentWearables::setWearableItem(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append)
-{
-	//LLAgentDumper dumper("setWearableItem");
-	if (isWearingItem(new_item->getUUID()))
-	{
-		llwarns << "wearable " << new_item->getUUID() << " is already worn" << llendl;
-		return;
-	}
-	
-	const LLWearableType::EType type = new_wearable->getType();
-
-	if (!do_append)
-	{
-		// Remove old wearable, if any
-		// MULTI_WEARABLE: hardwired to 0
-		LLViewerWearable* old_wearable = getViewerWearable(type,0);
-		if (old_wearable)
-		{
-			const LLUUID& old_item_id = old_wearable->getItemID();
-			if ((old_wearable->getAssetID() == new_wearable->getAssetID()) &&
-				(old_item_id == new_item->getUUID()))
-			{
-				lldebugs << "No change to wearable asset and item: " << LLWearableType::getTypeName(type) << llendl;
-				return;
-			}
-			
-			if (old_wearable->isDirty())
-			{
-				// Bring up modal dialog: Save changes? Yes, No, Cancel
-				LLSD payload;
-				payload["item_id"] = new_item->getUUID();
-				LLNotificationsUtil::add("WearableSave", LLSD(), payload, boost::bind(onSetWearableDialog, _1, _2, new_wearable));
-				return;
-			}
-		}
-	}
-
-	setWearableFinal(new_item, new_wearable, do_append);
-}
+//// User has picked "wear on avatar" from a menu.
+//void LLAgentWearables::setWearableItem(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append)
+//{
+//	//LLAgentDumper dumper("setWearableItem");
+//	if (isWearingItem(new_item->getUUID()))
+//	{
+//		llwarns << "wearable " << new_item->getUUID() << " is already worn" << llendl;
+//		return;
+//	}
+//	
+//	const LLWearableType::EType type = new_wearable->getType();
+//
+//	if (!do_append)
+//	{
+//		// Remove old wearable, if any
+//		// MULTI_WEARABLE: hardwired to 0
+//		LLViewerWearable* old_wearable = getViewerWearable(type,0);
+//		if (old_wearable)
+//		{
+//			const LLUUID& old_item_id = old_wearable->getItemID();
+//			if ((old_wearable->getAssetID() == new_wearable->getAssetID()) &&
+//				(old_item_id == new_item->getUUID()))
+//			{
+//				lldebugs << "No change to wearable asset and item: " << LLWearableType::getTypeName(type) << llendl;
+//				return;
+//			}
+//			
+//			if (old_wearable->isDirty())
+//			{
+//				// Bring up modal dialog: Save changes? Yes, No, Cancel
+//				LLSD payload;
+//				payload["item_id"] = new_item->getUUID();
+//				LLNotificationsUtil::add("WearableSave", LLSD(), payload, boost::bind(onSetWearableDialog, _1, _2, new_wearable));
+//				return;
+//			}
+//		}
+//	}
+//
+//	setWearableFinal(new_item, new_wearable, do_append);
+//}
 
 // static 
 bool LLAgentWearables::onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable)
@@ -1515,24 +1551,24 @@ void LLAgentWearables::invalidateBakedTextureHash(LLMD5& hash) const
 
 // User has picked "remove from avatar" from a menu.
 // static
-void LLAgentWearables::userRemoveWearable(const LLWearableType::EType &type, const U32 &index)
-{
-	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
-		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
-	{
-		gAgentWearables.removeWearable(type,false,index);
-	}
-}
+//void LLAgentWearables::userRemoveWearable(const LLWearableType::EType &type, const U32 &index)
+//{
+//	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
+//		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
+//	{
+//		gAgentWearables.removeWearable(type,false,index);
+//	}
+//}
 
 //static 
-void LLAgentWearables::userRemoveWearablesOfType(const LLWearableType::EType &type)
-{
-	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
-		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
-	{
-		gAgentWearables.removeWearable(type,true,0);
-	}
-}
+//void LLAgentWearables::userRemoveWearablesOfType(const LLWearableType::EType &type)
+//{
+//	if (!(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES)) //&&
+//		//!((!gAgent.isTeen()) && (type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT)))
+//	{
+//		gAgentWearables.removeWearable(type,true,0);
+//	}
+//}
 
 // Combines userRemoveMulipleAttachments() and userAttachMultipleAttachments() logic to
 // get attachments into desired state with minimal number of adds/removes.
@@ -1620,6 +1656,34 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 {
 	if (!isAgentAvatarValid()) return;
 
+// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0)
+	// RELEASE-RLVa: [SL-3.4] Check our callers and verify that erasing elements from the passed vector won't break random things
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
+	{
+		llvo_vec_t::iterator itObj = objects_to_remove.begin();
+		while (objects_to_remove.end() != itObj)
+		{
+			const LLViewerObject* pAttachObj = *itObj;
+			if (gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
+			{
+				itObj = objects_to_remove.erase(itObj);
+
+				// Fall-back code: re-add the attachment if it got removed from COF somehow (compensates for possible bugs elsewhere)
+				bool fInCOF = LLAppearanceMgr::isLinkInCOF(pAttachObj->getAttachmentItemID());
+				RLV_ASSERT(fInCOF);
+				if (!fInCOF)
+				{
+					LLAppearanceMgr::instance().registerAttachment(pAttachObj->getAttachmentItemID());
+				}
+			}
+			else
+			{
+				++itObj;
+			}
+		}
+	}
+// [/RLVa:KB]
+
 	if (objects_to_remove.empty())
 		return;
 
@@ -1641,6 +1705,25 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 
 void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array)
 {
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+	static bool sInitialAttachmentsRequested = false;
+
+	// RELEASE-RLVa: [SL-3.4] Check our callers and verify that erasing elements from the passed vector won't break random things
+	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+	{
+		// Fall-back code: everything should really already have been pruned before we get this far
+		for (S32 idxItem = obj_item_array.count() - 1; idxItem >= 0; idxItem--)
+		{
+			const LLInventoryItem* pItem = obj_item_array.get(idxItem).get();
+			if (!gRlvAttachmentLocks.canAttach(pItem))
+			{
+				obj_item_array.remove(idxItem);
+				RLV_ASSERT(false);
+			}
+		}
+	}
+// [/RLVa:KB]
+
 	// Build a compound message to send all the objects that need to be rezzed.
 	S32 obj_count = obj_item_array.count();
 
@@ -1678,6 +1761,12 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		msg->addUUIDFast(_PREHASH_ItemID, item->getLinkedUUID());
 		msg->addUUIDFast(_PREHASH_OwnerID, item->getPermissions().getOwner());
 		msg->addU8Fast(_PREHASH_AttachmentPt, 0 | ATTACHMENT_ADD);	// Wear at the previous or default attachment point
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+		if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+		{
+			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, RLV_WEAR_ADD);
+		}
+// [/RLVa:KB]
 		pack_permissions_slam(msg, item->getFlags(), item->getPermissions());
 		msg->addStringFast(_PREHASH_Name, item->getName());
 		msg->addStringFast(_PREHASH_Description, item->getDescription());
@@ -1688,6 +1777,10 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 			msg->sendReliable( gAgent.getRegion()->getHost() );
 		}
 	}
+
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+	sInitialAttachmentsRequested = true;
+// [/RLVa:KB]
 }
 
 void LLAgentWearables::checkWearablesLoaded() const
