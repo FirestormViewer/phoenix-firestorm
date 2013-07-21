@@ -10082,6 +10082,13 @@ Cannot create large prims that intersect other players.  Please re-try when othe
 
   <notification
    icon="alertmodal.tga"
+   name="RLVChangeStrings"
+   type="alertmodal">
+Changes won't take effect until after you restart [APP_NAME].
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="PreferenceChatClearLog"
    type="alertmodal">
     This will delete the logs of previous conversations, and any backups of that file.
