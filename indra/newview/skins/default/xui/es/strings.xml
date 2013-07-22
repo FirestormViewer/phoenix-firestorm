@@ -637,7 +637,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Ausente
 	</string>
 	<string name="AvatarDoNotDisturb">
-		No molestar
+		No disponible
 	</string>
 	<string name="AvatarMuted">
 		Bloqueado/a
@@ -852,6 +852,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="multiple_textures">
 		Múltiple
 	</string>
+	<string name="use_texture">
+		Usar textura
+	</string>
 	<string name="texture_loading">
 		Cargando...
 	</string>
@@ -886,10 +889,10 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		(sin nombre)
 	</string>
 	<string name="NearbyChatTitle">
-		Chat
+		Chat local
 	</string>
 	<string name="NearbyChatLabel">
-		(Chat)
+		(Chat local)
 	</string>
 	<string name="whisper">
 		susurra:
@@ -957,9 +960,6 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="ControlYourCamera">
 		Controlar tu cámara
 	</string>
-	<string name="TeleportYourAgent">
-		Teleportarte
-	</string>
 	<string name="JoinAnExperience">
 		Participar en una experiencia
 	</string>
@@ -977,6 +977,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="AgentNameSubst">
 		(Tú)
+	</string>
+	<string name="TeleportYourAgent">
+		Teleportarte
+	</string>
+	<string name="UnknownScriptPermission">
+		(desconocido)!
 	</string>
 	<string name="SIM_ACCESS_PG">
 		General
@@ -1064,18 +1070,6 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="LSLTipSleepTime">
 		Duerme el script durante [SLEEP_TIME] segundos.
-	</string>
-	<string name="AvatarSetNotAutorespond">
-		Desactivar autorrespuesta
-	</string>
-	<string name="AvatarSetAutorespond">
-		Autorrespuesta
-	</string>
-	<string name="AvatarSetNotAutorespondNonFriends">
-		Desactivar autorrespuesta para no-amigos
-	</string>
-	<string name="AvatarSetAutorespondNonFriends">
-		Autorrespuesta para no-amigos
 	</string>
 	<string name="shape">
 		Anatomía
@@ -2126,7 +2120,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Script nuevo
 	</string>
 	<string name="DoNotDisturbModeResponseDefault">
-		Este residente tiene activado &apos;No molestar&apos; y verá tu mensaje más tarde.
+		Este residente tiene activado el modo &apos;No disponible&apos; y verá tu mensaje más tarde.
 	</string>
 	<string name="MuteByName">
 		(Por el nombre)
@@ -4111,7 +4105,7 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		Has entrado en la llamada de voz
 	</string>
 	<string name="you_auto_rejected_call-im">
-		Rechazaste la llamada de voz automáticamente porque estaba activado &apos;No molestar&apos;.
+		Rechazaste la llamada de voz automáticamente porque estaba activado el modo &apos;No disponible&apos;.
 	</string>
 	<string name="name_started_call">
 		[NAME] inició una llamada de voz
@@ -5206,7 +5200,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Transfiere objetos a tu mercado para venderlos
 	</string>
 	<string name="Command_People_Tooltip">
-		Amigos, grupos y personas próximas
+		Amigos, grupos y residentes próximos
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Lugares que se mostrarán como favoritos en tu perfil
@@ -5221,13 +5215,13 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Consulta o edita tu perfil
 	</string>
 	<string name="Command_Search_Tooltip">
-		Buscar lugares, eventos y personas
+		Buscar lugares, eventos y residentes
 	</string>
 	<string name="Command_Snapshot_Tooltip">
 		Tomar una fotografía
 	</string>
 	<string name="Command_Speak_Tooltip">
-		Utiliza el micrófono para hablar con las personas próximas
+		Utiliza el micrófono para hablar con la gente próxima
 	</string>
 	<string name="Command_View_Tooltip">
 		Cambiar el ángulo de la cámara
@@ -5342,13 +5336,13 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		[Usuario]
 	</string>
 	<string name="logging_calls_disabled_log_empty">
-		No se están registrando las conversaciones. Para empezar a grabar un registro, elige &quot;Guardar: Solo registro&quot; o &quot;Guardar: Registro y transcripciones&quot; en Preferencias &gt; Chat.
+		No se están registrando las conversaciones. Para empezar a grabar un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		No se registrarán más conversaciones. Para reanudar la grabación de un registro, elige &quot;Guardar: Solo registro&quot; o &quot;Guardar: Registro y transcripciones&quot; en Preferencias &gt; Chat.
+		No se registrarán más conversaciones. Para reanudar la grabación de un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
 	</string>
 	<string name="logging_calls_enabled_log_empty">
-		No hay conversaciones grabadas. Después de contactar con una persona, o de que alguien contacte contigo, aquí se mostrará una entrada de registro.
+		No hay conversaciones guardadas. Después de contactar con un residente o de que alguien contacte contigo, se mostrará aquí una entrada de registro.
 	</string>
 	<string name="IMPrefix">
 		MI:

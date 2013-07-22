@@ -1,24 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="radar">
-	<filter_editor label="Filtrar" name="filter_input"/>
-	<panel name="button_bar">
-		<layout_stack name="bottom_bar_ls">
-			<layout_panel name="view_profile_btn_lp">
-				<button label="Perfil" name="view_profile_btn" tool_tip="Muestra la foto, grupos, y otras informaciones de los residentes"/>
-			</layout_panel>
-			<layout_panel name="im_btn_lp" width="42">
-				<button label="MI" name="im_btn" tool_tip="Abre una sesión de mensajería instantánea" width="41"/>
-			</layout_panel>
-			<layout_panel name="call_btn_lp">
-				<button label="Llamar" name="call_btn"
-				 tool_tip="Llamar a este residente"/>
-			</layout_panel>
-			<layout_panel name="share_btn_lp" width="92">
-				<button label="Compartir" name="share_btn" tool_tip="Comparte un ítem del inventario" width="91"/>
-			</layout_panel>
-			<layout_panel name="tp_btn_lp" width="82">
-				<button label="Teleporte" name="teleport_btn" tool_tip="Ofrecer teleporte" width="81"/>
-			</layout_panel>
-		</layout_stack>
-	</panel>
-</floater>
+<floater name="radar" title="Radar"/>

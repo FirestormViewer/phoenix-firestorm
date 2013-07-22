@@ -1020,7 +1020,7 @@ no tienes permiso para comprar terreno para el grupo que tienes activado actualm
 			<input name="message">
 				¿Quieres formar parte de mis amigos?
 			</input>
-			<button name="Offer" text="OK"/>
+			<button name="Offer" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1065,7 +1065,7 @@ Consulta https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<input name="message">
 				[DESC] (nuevo)
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1075,7 +1075,7 @@ Consulta https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<input name="message">
 				[DESC] (nuevo)
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1085,7 +1085,7 @@ Consulta https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<input name="new_name">
 				[NAME]
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1270,7 +1270,7 @@ Puedes revisar tu conexión a Internet y volver a intentarlo en unos minutos, pu
 			http://es.secondlife.com/support/
 		</url>
 		<form name="form">
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Help" text="Ayuda"/>
 			<button name="Teleport" text="Teleporte"/>
 		</form>
@@ -1498,13 +1498,44 @@ Versión [VERSION] [[RELEASE_NOTES_FULL_URL]; información acerca de esta actual
 	</notification>
 	<notification name="RequiredUpdateDownloadedVerboseDialog">
 		Hemos descargado una actualización de software necesaria.
-Versión [VERSION]
+Versión [VERSION] [[INFO_URL] Información sobre esta actualización]
 
 Debemos reiniciar [APP_NAME] para instalar la actualización.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="RequiredUpdateDownloadedDialog">
 		Debemos reiniciar [APP_NAME] para instalar la actualización.
+[[INFO_URL] Información sobre esta actualización]
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="OtherChannelDownloadBackgroundTip">
+		Hemos descargado una actualización para tu instalación de [APP_NAME].
+Versión [VERSION] 
+Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
+visita [[INFO_URL] detalles sobre esta actualización]
+		<usetemplate name="okcancelbuttons" notext="Más tarde..." yestext="Instalar ahora y reiniciar [APP_NAME]"/>
+	</notification>
+	<notification name="OtherChannelDownloadBackgroundDialog">
+		Hemos descargado una actualización para tu instalación de [APP_NAME].
+Versión [VERSION]
+Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
+visita [[INFO_URL] detalles sobre esta actualización]
+		<usetemplate name="okcancelbuttons" notext="Más tarde..." yestext="Instalar ahora y reiniciar [APP_NAME]"/>
+	</notification>
+	<notification name="OtherChannelRequiredUpdateDownloadedVerboseDialog">
+		Hemos descargado una actualización de software necesaria.
+Versión [VERSION]
+Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
+visita [[INFO_URL] detalles sobre esta actualización]
+
+Debemos reiniciar [APP_NAME] para instalar la actualización.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="OtherChannelRequiredUpdateDownloadedDialog"
+ type="alertmodal">
+		Debemos reiniciar [APP_NAME] para instalar la actualización.
+Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
+visita [[INFO_URL] detalles sobre esta actualización]
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
@@ -1584,19 +1615,20 @@ Debemos reiniciar [APP_NAME] para instalar la actualización.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="DoNotDisturbModeSet">
-		Está activado No molestar. No obtendrás un aviso cuando recibas comunicaciones.
+		Se ha activado el modo No disponible. No obtendrás un aviso cuando recibas comunicaciones.
 
-- Los otros residentes recibirán tu respuesta de No molestar (se configura en Preferencias &gt; General).
+- Los otros residentes recibirán tu respuesta de No disponible (configurada en Preferencias &gt; Privacidad &gt; Autorrespuesta).
 - Se rehusarán los ofrecimientos de teleporte.
 - Se rechazarán las llamadas de voz.
-		<usetemplate ignoretext="Cambio mi estado al modo No molestar" name="okignore" yestext="Aceptar"/>
+		<usetemplate ignoretext="Cambio mi estado al modo No disponible" name="okignore" yestext="Aceptar"/>
+	</notification>
 	<notification name="AutorespondModeSet">
-		Se ha establecido el modo Autorrespuesta.
+		Se ha activado el modo Autorrespuesta.
 Si algún avatar te envía un mensaje instantáneo, recibirá automáticamente la respuesta configurada.
 		<usetemplate ignoretext="Cambio mi estado al modo Autorrespuesta" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="AutorespondNonFriendsModeSet">
-		Se ha establecido el modo Autorrespuesta para residentes que no están en tu lista de amigos.
+		Se ha activado el modo Autorrespuesta para residentes que no están en tu lista de amigos.
 Si algún avatar que no está en tu lista de amigos te envía un mensaje instantáneo, recibirá automáticamente la respuesta configurada.
 		<usetemplate ignoretext="Cambio mi estado al modo Autorrespuesta para avatares que no son mis amigos" name="okignore" yestext="Aceptar"/>
 	</notification>
@@ -1615,7 +1647,7 @@ Si algún avatar que no está en tu lista de amigos te envía un mensaje instant
 			<input name="message">
 				Un administrador te ha desconectado.
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1625,7 +1657,7 @@ Si algún avatar que no está en tu lista de amigos te envía un mensaje instant
 			<input name="message">
 				Un administrador te ha desconectado.
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1635,7 +1667,7 @@ Si algún avatar que no está en tu lista de amigos te envía un mensaje instant
 			<input name="message">
 				Has sido congelado. No puedes moverte o escribir en el chat. Un administrador se pondrá en contacto contigo a través de un mensaje instantáneo (MI).
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1645,7 +1677,7 @@ Si algún avatar que no está en tu lista de amigos te envía un mensaje instant
 			<input name="message">
 				Ya no estás congelado.
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1695,7 +1727,7 @@ Prueba con un nombre distinto.
 			<input name="message">
 				Ven conmigo a [REGION]
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1710,7 +1742,7 @@ excediendo el límite de [LIMIT].
 			<input name="message">
 				Ven conmigo a [REGION]
 			</input>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1734,7 +1766,7 @@ excediendo el límite de [LIMIT].
 		Escribe un anuncio breve que se enviará a todo el que esté en tu estado.
 		<form name="form">
 			<input name="message"/>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -1995,7 +2027,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		Escribe un anuncio breve que se enviará a todo el que esté en esta región.
 		<form name="form">
 			<input name="message"/>
-			<button name="OK" text="OK"/>
+			<button name="OK" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -2080,7 +2112,7 @@ Serán copiados a tu inventario.
 Por favor, vuelve a escribir tu contraseña y pulsa OK.
 		<form name="form">
 			<input name="message"/>
-			<button name="ConfirmPurchase" text="OK"/>
+			<button name="ConfirmPurchase" text="Aceptar"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -2116,7 +2148,7 @@ Dado que estos objetos tienen scripts, moverlos a tu inventario puede provocar u
 		<usetemplate ignoretext="Abrir mi navegador para ver el historial de mi cuenta" name="okcancelignore" notext="Cancelar" yestext="Ir a la página"/>
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
-		Si agregas una persona a una conversación en curso, se creará una conversación nueva. Todos los participantes recibirán notificaciones de la nueva conversación.
+		Si agregas a un residente a una conversación en curso, se creará una conversación nueva. Todos los participantes recibirán notificaciones de la nueva conversación.
 		<usetemplate ignoretext="Confirmar agregar participantes al chat" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmQuit">
@@ -2188,18 +2220,18 @@ Linden Lab
 		En ese punto de tu cuerpo ya hay un objeto anexado. ¿Quieres reemplazarlo por el objeto que has elegido?
 		<form name="form">
 			<ignore name="ignore" save_option="true" text="Reemplazar un añadido actual con el ítem seleccionado"/>
-			<button ignore="Reemplazar automaticamente" name="Yes" text="OK"/>
+			<button ignore="Reemplazar automaticamente" name="Yes" text="Aceptar"/>
 			<button ignore="Nunca reemplazar" name="No" text="Cancelar"/>
 		</form>
 	</notification>
-	<notification label="Advertencia del modo No molestar" name="DoNotDisturbModePay">
-		Tienes activado No molestar. No podrás recibir ningún objeto ofrecido a cambio de este pago.
+	<notification label="Advertencia del modo No disponible" name="DoNotDisturbModePay">
+		Tienes activado el modo No disponible. No podrás recibir ningún objeto ofrecido a cambio de este pago.
 
-¿Deseas desactivar No molestar antes de finalizar esta transacción?
+¿Deseas desactivar el modo No disponible antes de finalizar esta transacción?
 		<form name="form">
-			<ignore name="ignore" text="Voy a pagar a una persona u objeto mientras estoy en el modo No molestar"/>
-			<button ignore="Salir siempre del modo No molestar" name="Yes" text="OK"/>
-			<button ignore="No salir nunca del modo No molestar" name="No" text="Cancelar"/>
+			<ignore name="ignore" text="Voy a pagar a una persona u objeto mientras estoy en el modo No disponible"/>
+			<button ignore="Salir siempre del modo No disponible" name="Yes" text="Aceptar"/>
+			<button ignore="No salir nunca del modo No disponible" name="No" text="Cancelar"/>
 		</form>
 	</notification>
 	<notification name="ConfirmDeleteProtectedCategory">
@@ -2915,6 +2947,15 @@ No autorices el acceso a tu cuenta si no conoces cuál es la razón exacta.
 			<button name="Deny" text="Denegar"/>
 		</form>
 	</notification>
+	<notification name="UnknownScriptQuestion">
+		El permiso de script en tiempo de ejecución solicitado por &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, un objeto propiedad de &apos;[NAME]&apos;, no se reconoce por el visor y no puede ser concedido.
+
+Para conceder este permiso, por favor actualiza tu visor a la última versión desde [DOWNLOADURL].
+		<form name="form">
+			<button name="Deny" text="Aceptar"/>
+			<button name="Mute" text="Bloquear"/>
+		</form>
+	</notification>
 	<notification name="ScriptDialog">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; de [NAME]
 [MESSAGE]
@@ -3015,19 +3056,19 @@ Pulsa Aceptar o Rehusar para coger o no la llamada. Pulsa Bloquear para ignorar 
 		Estamos creando un canal de voz para ti. Se puede tardar hasta un minuto.
 	</notification>
 	<notification name="VoiceEffectsExpired">
-		Una o más de las transformaciones de voz a las que estás suscrito han caducado.
+		Uno o más filtros de voz a los que estás suscrito han caducado.
 [Pulsa aquí [URL]] para renovar la suscripción.
 	</notification>
 	<notification name="VoiceEffectsExpiredInUse">
-		La transformación de voz activa ha caducado y se ha aplicado tu configuración de voz normal.
+		El filtro de voz activo ha caducado y se ha aplicado tu configuración de voz normal.
 [Pulsa aquí [URL]] para renovar la suscripción.
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
-		Una o más de tus transformaciones de voz caducarán en menos de [INTERVAL] días.
+		Una o más filtros de voz caducarán en menos de [INTERVAL] días.
 [Pulsa aquí [URL]] para renovar la suscripción.
 	</notification>
 	<notification name="VoiceEffectsNew">
-		Están disponibles nuevas transformaciones de voz.
+		Están disponibles nuevos filtros de voz.
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Sólo los miembros de un grupo determinado pueden visitar esta zona.
@@ -3205,6 +3246,10 @@ Has actualizado una textura obtenida mediante bake de [RESOLUTION] para &apos;[B
 	<notification name="AvatarRezSelfBakedTextureUpdateNotification">
 		( [EXISTENCE] segundos vivo )
 Has actualizado de manera local una textura obtenida mediante bake de [RESOLUTION] para &apos;[BODYREGION]&apos; después de [TIME] segundos.
+	</notification>
+	<notification name="LivePreviewUnavailable">
+		No podemos mostrar una previsualización de esta textura porque no es copiable y/o no es transferible.
+		<usetemplate ignoretext="Adviérteme que la previsualización no está disponible para las texturas no copiables y/o no transferibles" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmLeaveCall">
 		¿Estás seguro de que deseas salir de esta multiconferencia?
@@ -3436,19 +3481,19 @@ Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' po
 		El indicador de inmaterial de algunos linksets seleccionados se conmutará.
 
 ¿Quieres continuar?
-		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted">
 		Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUESTED_TYPE]&apos; debido a restricciones de los permisos del linkset.  Estos linksets se configurarán como &apos;[RESTRICTED_TYPE]&apos;.
 
 ¿Quieres continuar?
-		<usetemplate ignoretext="Algunos de los linksets seleccionados no pueden configurarse debido a restricciones de los permisos del linkset." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="Algunos de los linksets seleccionados no pueden configurarse debido a restricciones de los permisos del linkset." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnVolume">
 		Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUESTED_TYPE]&apos; porque su forma no es convexa.
 
 ¿Quieres continuar?
-		<usetemplate ignoretext="Algunos de los linksets seleccionados no pueden configurarse porque su forma no es convexa." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="Algunos de los linksets seleccionados no pueden configurarse porque su forma no es convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
 		El indicador de inmaterial de algunos linksets seleccionados se conmutará.
@@ -3456,7 +3501,7 @@ Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' po
 Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUESTED_TYPE]&apos; debido a restricciones de los permisos del linkset.  Estos linksets se configurarán como &apos;[RESTRICTED_TYPE]&apos;.
 
 ¿Quieres continuar?
-		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará y otros no se podrán establecer debido a restricciones de los permisos del linkset." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará y otros no se podrán establecer debido a restricciones de los permisos del linkset." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
 		El indicador de inmaterial de algunos linksets seleccionados se conmutará.
@@ -3464,7 +3509,7 @@ Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUEST
 Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUESTED_TYPE]&apos; porque su forma no es convexa.
 
 ¿Quieres continuar?
-		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará y otros no se podrán establecer porque la forma no es convexa" name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará y otros no se podrán establecer porque la forma no es convexa" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
 		Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUESTED_TYPE]&apos; debido a restricciones de los permisos del linkset.  Estos linksets se configurarán como &apos;[RESTRICTED_TYPE]&apos;.
@@ -3472,7 +3517,7 @@ Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUEST
 Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUESTED_TYPE]&apos; porque su forma no es convexa. Los tipos de utilización de estos linksets no cambiarán.
 
 ¿Quieres continuar?
-		<usetemplate ignoretext="Algunos de los linksets seleccionados no pueden configurarse debido a restricciones de los permisos del linkset y porque su forma no es convexa." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="Algunos de los linksets seleccionados no pueden configurarse debido a restricciones de los permisos del linkset y porque su forma no es convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
 		El indicador de inmaterial de algunos linksets seleccionados se conmutará.
@@ -3482,7 +3527,7 @@ Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUEST
 Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUESTED_TYPE]&apos; porque su forma no es convexa. Los tipos de utilización de estos linksets no cambiarán.
 
 ¿Quieres continuar?
-		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará y otros no se podrán establecer debido a restricciones de los permisos del linkset y porque su forma no es convexa." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="El indicador de inmaterial de algunos linksets seleccionados se conmutará y otros no se podrán establecer debido a restricciones de los permisos del linkset y porque su forma no es convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
 		El objeto que has seleccionado afecta al navmesh. Al cambiarlo a una Ruta flexible se eliminará del navmesh.
@@ -4147,19 +4192,19 @@ el servidor está lleno.
 		Un error interno nos ha impedido actualizar tu visor correctamente. El saldo en L$ o las parcelas en propiedad presentadas en el visor podrían no coincidir con tu saldo real en los servidores.
 	</notification>
 	<notification name="LargePrimAgentIntersect">
-		No se pueden crear prims grandes que intersectan a otros jugadores. Reinténtalo cuando se hayan movido otros jugadores.
+		No se pueden crear prims grandes que intersecten con otros residentes. Reinténtalo cuando se hayan movido otros residentes.
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		Esto eliminará los registros de conversaciones anteriores y las copias de seguridad de ese archivo.
-		<usetemplate ignoretext="Confirmar antes de eliminar el registro de conversaciones anteriores." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="Confirmar antes de eliminar el registro de conversaciones anteriores." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
-		Esta acción eliminará las transcripciones de todas las conversaciones anteriores. La lista de conversaciones pasadas no resultará afectada. Se eliminarán de la carpeta [FOLDER] todos los archivos que tengan el sufijo .txt y txt.backup.
-		<usetemplate ignoretext="Confirmar antes de eliminar transcripciones." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		Esto eliminará las transcripciones de todas las conversaciones anteriores. La lista de conversaciones pasadas no resultará afectada. Se eliminarán de la carpeta [FOLDER] todos los archivos con extensión .txt y txt.backup.
+		<usetemplate ignoretext="Confirmar antes de eliminar transcripciones." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PreferenceChatPathChanged">
 		No se pueden mover los archivos. Ruta anterior restaurada.
-		<usetemplate ignoretext="No se pueden mover los archivos. Ruta anterior restaurada." name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="No se pueden mover los archivos. Ruta anterior restaurada." name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="AvatarFrozen">
 		[AV_FREEZER] te ha congelado. No puedes moverte ni interactuar con el mundo.
@@ -4664,9 +4709,6 @@ el servidor está lleno.
 	</notification>
 	<notification name="CantSitNoRoom">
 		No hay sitio para sentarte aquí, inténtalo en otro punto.
-	</notification>
-	<notification name="AutopilotCanceled">
-		Piloto automático cancelado
 	</notification>
 	<notification name="ClaimObjectFailedNoPermission">
 		Ha fallado la reclamación del objeto porque no tienes permiso

@@ -157,7 +157,7 @@
 				Efectos de selección (rayo de partículas):
 			</text>
 			<text name="ScriptDialogFgLabel" width="120">
-				Diálogo de script F/B:
+				Diálogo de script T/F:
 			</text>
 			<text name="floater_opacity">
 				Opacidad de ventana flotante:

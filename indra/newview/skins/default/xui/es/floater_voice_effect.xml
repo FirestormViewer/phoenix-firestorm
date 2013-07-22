@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater label="Lugares" name="voice_effects" title="PROBAR TRANSFORMACIÓN DE VOZ">
+<floater label="Lugares" name="voice_effects" title="Probar filtro de voz">
 	<string name="no_voice_effect">
-		(Sin transformación de voz)
+		(Sin filtro de voz)
 	</string>
 	<string name="active_voice_effect">
 		(Activo)

@@ -344,6 +344,18 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 				Aquí puedes cambiar (mediante UUIDs) los sonidos por defecto de la interfaz.
 Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por defecto.
 			</text>
+			<text tool_tip="Sonido a reproducir al recibir una oferta de inventario." name="textFSInventoryOffer">
+				Oferta inventario:
+			</text>
+			<button name="Prev_UISndInventoryOffer" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndInventoryOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndInventoryOffer"/>
+			<text tool_tip="Sonido a reproducir al recibir una llamada de voz." name="textFSIncomingVoiceCall">
+				Llamada de voz:
+			</text>
+			<button name="Prev_UISndIncomingVoiceCall" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndIncomingVoiceCall" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndIncomingVoiceCall"/>
 			<text tool_tip="Sonido a reproducir con las pisadas por defecto. Requiere reiniciar para aplicar los cambios." name="textFSFootsteps">
 				Sonido de pasos:
 			</text>
