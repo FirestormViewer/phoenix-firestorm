@@ -5345,7 +5345,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		No hay conversaciones guardadas. Después de contactar con un residente o de que alguien contacte contigo, se mostrará aquí una entrada de registro.
 	</string>
 	<string name="IMPrefix">
-		MI:
+		MI: 
 	</string>
 	<string name="SanityCheckEquals">
 		La configuración de &quot;[CONTROL_NAME]&quot; debería establecerse a [VALUE_1].

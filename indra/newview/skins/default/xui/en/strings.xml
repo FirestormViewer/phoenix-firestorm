@@ -2407,7 +2407,7 @@ Try enclosing path to the editor with double quotes.
   <string name="snapshot_quality_medium">Medium</string>
   <string name="snapshot_quality_high">High</string>
   <string name="snapshot_quality_very_high">Very High</string>
-  <string name="IMPrefix">IM:</string>
+  <string name="IMPrefix">IM: </string>
 
   <!-- Settings sanity checks -->
   <string name="SanityCheckEquals">The settings control &quot;[CONTROL_NAME]&quot; should be at [VALUE_1].</string>
