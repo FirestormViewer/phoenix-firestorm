@@ -739,15 +739,7 @@ void LLFloater::openFloater(const LLSD& key)
 			floater_to_stack = LLFloaterReg::getLastFloaterCascading();
 		}
 		applyControlsAndPosition(floater_to_stack);
-
-		// <FS> Always unminimize notecards and scripts *HACK*
-		//setMinimized(FALSE);
-		if (getName() == "preview notecard" || getName() == "preview lsl text")
-		{
-			setMinimized(FALSE); 
-		}
-		// </FS>
-		
+		setMinimized(FALSE);
 		setVisibleAndFrontmost(mAutoFocus);
 	}
 
