@@ -1073,8 +1073,14 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				else
 				{
 				// Add link to avatar's inspector and delimiter to message.
-					appendText(std::string(link_params.link_href) + delimiter,
-							prependNewLineState, link_params);
+					// <FS:Ansariel> Append delimiter with different style params or
+					//               it will be replaced with the avatar name once it's
+					//               returned from the server!
+					//appendText(std::string(link_params.link_href) + delimiter,
+					//		prependNewLineState, link_params);
+					appendText(std::string(link_params.link_href), prependNewLineState, link_params);
+					appendText(delimiter, prependNewLineState, body_message_params);
+					// </FS:Ansariel>
 					prependNewLineState = false;
 				}
 			}
