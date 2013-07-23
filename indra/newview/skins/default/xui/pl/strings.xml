@@ -877,6 +877,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="minimap_distance">
 		(Odległość: [DISTANCE] m)
 	</string>
+	<string name="minimap_no_focus">
+		Kamera nie może skupić się na użytkowniku, ponieważ jest poza polem widzenia.
+	</string>
 	<string name="Ok">
 		OK
 	</string>
@@ -2142,6 +2145,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InvOfferGaveYou">
 		dał Ci
 	</string>
+	<string name="InvOfferYouDecline">
+		Odrzucono
+	</string>
 	<string name="InvOfferDecline">
 		Odrzucono [DESC] od [NAME].
 	</string>
@@ -2391,7 +2397,7 @@ Jeżeli problem nadal występuje, proponujemy całkowite odinstalowanie aplikacj
 	<string name="MBFatalError">
 		Błąd krytyczny
 	</string>
-	<string name="MBFatalError">
+	<string name="MBApplicationError">
 		Błąd aplikacji - nie panikuj
 	</string>
 	<string name="MBApplicationErrorDetails">
