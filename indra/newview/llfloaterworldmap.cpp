@@ -489,7 +489,7 @@ void LLFloaterWorldMap::draw()
 	static LLUICtrl* landmark_icon = getChild<LLUICtrl>("landmark_icon");
 	static LLUICtrl* location_icon = getChild<LLUICtrl>("location_icon");
 	static LLView* teleport_btn = getChildView("Teleport");
-	static LLView* clear_btn = getChildView("Clear");
+	//static LLView* clear_btn = getChildView("Clear");
 	static LLView* show_destination_btn = getChildView("Show Destination");
 	static LLView* copy_slurl_btn = getChildView("copy_slurl");
 	static LLView* go_home_btn = getChildView("Go Home");
