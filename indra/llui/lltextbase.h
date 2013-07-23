@@ -116,10 +116,7 @@ public:
 	/*virtual*/ bool				canEdit() const { return true; }
 	/*virtual*/ const LLColor4&		getColor() const					{ return mStyle->getColor(); }
 	/*virtual*/ LLStyleConstSP		getStyle() const					{ return mStyle; }
-//	/*virtual*/ void 				setStyle(LLStyleConstSP style)	{ mStyle = style; }
-// [SL:KB] - Patch: Control-TextEditorFont | Checked: 2012-01-10 (Catznip-3.2.1) | Added: Catznip-3.2.1
-	/*virtual*/ void 				setStyle(LLStyleConstSP style)	{ mStyle = style; mFontHeight = llceil(style->getFont()->getLineHeight());}
-// [/SL:KB]
+	/*virtual*/ void 				setStyle(LLStyleConstSP style)	{ mStyle = style; }
 	/*virtual*/ void				setToken( LLKeywordToken* token )	{ mToken = token; }
 	/*virtual*/ LLKeywordToken*		getToken() const					{ return mToken; }
 	/*virtual*/ BOOL				getToolTip( std::string& msg ) const;
@@ -225,9 +222,6 @@ public:
 	bool		getDimensions(S32 first_char, S32 num_chars, S32& width, S32& height) const;
 	S32			getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offset, S32 max_chars) const;
 	F32			draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect);
-// [SL:KB] - Patch: Control-TextEditorFont | Checked: 2012-01-10 (Catznip-3.2.1) | Added: Catznip-3.2.1
-	void		setStyle(LLStyleConstSP style);
-// [/SL:KB]
 
 private:
 	S32			mFontHeight;

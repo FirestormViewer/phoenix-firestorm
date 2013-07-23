@@ -2221,26 +2221,6 @@ void LLTextBase::needsReflow(S32 index)
 	mReflowIndex = llmin(mReflowIndex, index);
 }
 
-//// [SL:KB] - Patch: Control-TextEditorFont | Checked: 2012-01-10 (Catznip-3.2.1) | Added: Catznip-3.2.1
-//void LLTextBase::setFont(const LLFontGL* pFont)
-//{
-//	for(segment_set_t::iterator itSegment = mSegments.begin(); itSegment != mSegments.end(); ++itSegment)
-//	{
-//		LLTextSegmentPtr segment = *itSegment;
-//
-//		LLStyleConstSP curStyle = segment->getStyle();
-//		if (curStyle->getFont() == mDefaultFont)
-//		{
-//			LLStyleSP newStyle(new LLStyle(*curStyle));
-//			newStyle->setFont(pFont);
-//			LLStyleConstSP newStyleConst(newStyle);
-//			segment->setStyle(newStyleConst);
-//		}
-//	}
-//	mDefaultFont = pFont;
-//}
-//// [/SL:KB]
-
 void LLTextBase::appendLineBreakSegment(const LLStyle::Params& style_params)
 {
 	segment_vec_t segments;
@@ -3108,7 +3088,7 @@ LLNormalTextSegment::LLNormalTextSegment( const LLColor4& color, S32 start, S32 
 	mToken(NULL),
 	mEditor(editor)
 {
-	mStyle = new LLStyle(LLStyle::Params().visible(is_visible).color(color).font(editor.getFont())); // [SL:KB] - Patch: Control-TextEditorFont
+	mStyle = new LLStyle(LLStyle::Params().visible(is_visible).color(color));
 
 	mFontHeight = mStyle->getFont()->getLineHeight();
 }
@@ -3551,13 +3531,6 @@ F32	LLLineBreakTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 se
 {
 	return  draw_rect.mLeft;
 }
-
-// [SL:KB] - Patch: Control-TextEditorFont | Checked: 2012-01-10 (Catznip-3.2.1) | Added: Catznip-3.2.1
-void LLLineBreakTextSegment::setStyle(LLStyleConstSP style)
-{
-	mFontHeight = llceil(style->getFont()->getLineHeight());
-}
-// [/SL:KB]
 
 LLImageTextSegment::LLImageTextSegment(LLStyleConstSP style,S32 pos,class LLTextBase& editor)
 :	LLTextSegment(pos,pos+1),
