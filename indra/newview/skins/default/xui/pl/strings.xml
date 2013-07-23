@@ -4892,9 +4892,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="snapshot_quality_very_high">
 		Bardzo wysoka
 	</string>
-	<string name="IMPrefix">
-		IM:
-	</string>
 	<string name="SanityCheckEquals">
 		Ustawienie &quot;[CONTROL_NAME]&quot; powinno mieć wartość [VALUE_1]
 	</string>
