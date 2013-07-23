@@ -592,7 +592,10 @@ void LLFloaterWorldMap::draw()
 // <FS:Ansariel> Parcel details on map
 void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const LLVector3d& pos_global)
 {
-	if (!mShowParcelInfo || LLTracker::getTrackedPositionGlobal() != pos_global || LLTracker::getTrackedLocationType() != LLTracker::LOCATION_NOTHING)
+	if (!mShowParcelInfo ||
+		LLTracker::getTrackedPositionGlobal() != pos_global ||
+		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_NOTHING ||
+		LLTracker::getTrackingStatus() != LLTracker::TRACKING_LOCATION)
 	{
 		return;
 	}
