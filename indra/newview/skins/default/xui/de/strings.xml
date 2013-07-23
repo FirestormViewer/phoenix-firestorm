@@ -997,6 +997,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TeleportYourAgent">
 		Sie teleportieren
 	</string>
+	<string name="UnknownScriptPermission">
+		(unbekannt)!
+	</string>
 	<string name="SIM_ACCESS_PG">
 		Generell
 	</string>
@@ -2192,6 +2195,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvOfferGaveYou">
 		hat Ihnen folgendes übergeben
 	</string>
+	<string name="InvOfferYouDecline">
+		Sie lehnen ab
+	</string>
 	<string name="InvOfferDecline">
 		Sie lehnen [DESC] von [NAME] ab.
 	</string>
@@ -2465,6 +2471,11 @@ Falls der Fehler dann weiterhin auftritt, müssen Sie [APP_NAME] von Ihrem Syste
 	</string>
 	<string name="MBFatalError">
 		Unbehebbarer Fehler
+	</string>
+	<string name="MBApplicationError">Anwendungsfehler - Keine Panik</string>
+	<string name="MBApplicationErrorDetails">Es tut uns leid, aber [APP_NAME] ist abgestürzt und wird deshalb beendet. Falls dieser Fehler wiederholt auftritt, konktaktieren Sie bitte unser Support-Team und informieren Sie es über folgende Fehlermeldung:
+
+[ERROR_DETAILS]
 	</string>
 	<string name="MBRequiresAltiVec">
 		[APP_NAME] erfordert einen Prozessor mit AltiVec (G4 oder später).

@@ -2844,6 +2844,15 @@ Bevor Sie den Zugriff erlauben, sollten Sie wissen, um was für ein Objekt es si
 			<button name="Deny" text="Verweigern"/>
 		</form>
 	</notification>
+	<notification name="UnknownScriptQuestion">
+Die angefordert Skript-Berechtigung von „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“, einem Objekt im Besitz von „[NAME]“, wurde vom Viewer nicht erkannt und kann daher nicht erteilt werden.
+
+Um diese Berechtigung zu erteilen, aktualisieren Sie Ihren Viewer auf die aktuellste Version, verfügbar unter [DOWNLOADURL].
+		<form name="form">
+			<button name="Deny" text="Ok"/>
+			<button name="Mute" text="Ignorieren"/>
+		</form>
+	</notification>
 	<notification name="ScriptDialog">
 		„&lt;nolink&gt;[TITLE]&lt;/nolink&gt;“ von [NAME]
 [MESSAGE]
