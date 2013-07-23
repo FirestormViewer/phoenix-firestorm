@@ -784,6 +784,52 @@ void FSChatHistory::clear()
 	mLastFromID = LLUUID::null;
 }
 
+enum e_moderation_options
+{
+	NORMAL = 0,
+	BOLD = 1,
+	ITALIC = 2,
+	BOLD_ITALIC = 3,
+	UNDERLINE = 4,
+	BOLD_UNDERLINE = 5,
+	ITALIC_UNDERLINE = 6,
+	BOLD_ITALIC_UNDERLINE = 7
+};
+
+std::string applyModeratorStyle(U32 moderator_style)
+{	
+	std::string style;
+	switch (moderator_style)
+	{
+		case BOLD:
+			style = "BOLD";
+			break;
+		case ITALIC:
+			style = "ITALIC";
+			break;
+		case BOLD_ITALIC:
+			style = "BOLDITALIC";
+			break;
+		case UNDERLINE:
+			style = "UNDERLINE";
+			break;
+		case BOLD_UNDERLINE:
+			style = "BOLDUNDERLINE";
+			break;
+		case ITALIC_UNDERLINE:
+			style = "ITALICUNDERLINE";
+			break;
+		case BOLD_ITALIC_UNDERLINE:
+			style = "BOLDITALICUNDERLINE";
+			break;
+		case NORMAL:
+		default:
+			style = "NORMAL";
+			break;
+	}
+	return style;
+}
+
 static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
 
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
@@ -877,90 +923,17 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	//<FS:HG> FS-1734 seperate name and text styles for moderator
 	bool moderator_style_active = false;
-	std::string moderator_name_style = "";
-	std::string moderator_txt_style = "";
 	U32 moderator_name_style_value = gSavedSettings.getU32("FSModNameStyle");
-	U32 moderator_txt_style_value = gSavedSettings.getU32("FSModTextStyle");
-
-	enum ModeratorOptions
-	{
-		NORMAL,
-		BOLD,
-		ITALIC,
-		BOLD_ITALIC,
-		UNDERLINE,
-		BOLD_UNDERLINE,
-		ITALIC_UNDERLINE,
-		BOLD_ITALIC_UNDERLINE
-	};
+	U32 moderator_body_style_value = gSavedSettings.getU32("FSModTextStyle");
+	std::string moderator_name_style = applyModeratorStyle(moderator_name_style_value);
+	std::string moderator_body_style = applyModeratorStyle(moderator_body_style_value);
 
 	if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
 	{
 		moderator_style_active = true;
 
-		switch (moderator_name_style_value)
-		{
-			case NORMAL:
-				moderator_name_style = "NORMAL";
-				break;
-			case BOLD:
-				moderator_name_style = "BOLD";
-				break;
-			case ITALIC:
-				moderator_name_style = "ITALIC";
-				break;
-			case BOLD_ITALIC:
-				moderator_name_style = "BOLDITALIC";
-				break;
-			case UNDERLINE:
-				moderator_name_style = "UNDERLINE";
-				break;
-			case BOLD_UNDERLINE:
-				moderator_name_style = "BOLDUNDERLINE";
-				break;
-			case ITALIC_UNDERLINE:
-				moderator_name_style = "ITALICUNDERLINE";
-				break;
-			case BOLD_ITALIC_UNDERLINE:
-				moderator_name_style = "BOLDITALICUNDERLINE";
-				break;
-			default:
-				moderator_name_style = "NORMAL";
-				break;
-		}
-		name_params.font.style(moderator_name_style);
-
-		switch (moderator_txt_style_value)
-		{
-			case NORMAL:
-				moderator_txt_style = "NORMAL";
-				break;
-			case BOLD:
-				moderator_txt_style = "BOLD";
-				break;
-			case ITALIC:
-				moderator_txt_style = "ITALIC";
-				break;
-			case BOLD_ITALIC:
-				moderator_txt_style = "BOLDITALIC";
-				break;
-			case UNDERLINE:
-				moderator_txt_style = "UNDERLINE";
-				break;
-			case BOLD_UNDERLINE:
-				moderator_txt_style = "BOLDUNDERLINE";
-				break;
-			case ITALIC_UNDERLINE:
-				moderator_txt_style = "ITALICUNDERLINE";
-				break;
-			case BOLD_ITALIC_UNDERLINE:
-				moderator_txt_style = "BOLDITALICUNDERLINE";
-				break;
-			default:
-				moderator_txt_style = "NORMAL";
-				break;
-		}
-		body_message_params.font.style(moderator_txt_style);
+		name_params.font.style(moderator_name_style);		
+		body_message_params.font.style(moderator_body_style);
 
 		if ( irc_me && gSavedSettings.getBOOL("EmotesUseItalic") )
 		{
@@ -969,12 +942,12 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				moderator_name_style += "ITALIC";
 				body_message_params.font.style(moderator_name_style);
 			}
-			if ( (ITALIC & moderator_txt_style_value) != ITALIC )
+			if ( (ITALIC & moderator_body_style_value) != ITALIC )
 			{
-				moderator_txt_style += "ITALIC";
-				body_message_params.font.style(moderator_txt_style);
+				moderator_body_style += "ITALIC";
+				body_message_params.font.style(moderator_body_style);
 			}
-			body_message_params.font.style(moderator_txt_style);
+			body_message_params.font.style(moderator_body_style);
 		}
 	}
 	//</FS:HG> FS-1734 seperate name and text styles for moderator
