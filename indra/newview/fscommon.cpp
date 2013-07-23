@@ -29,6 +29,7 @@
 
 #include "fscommon.h"
 #include "llagent.h"
+#include "llavatarnamecache.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
 #include "llinventorymodel.h"
@@ -265,7 +266,16 @@ bool FSCommon::isLinden(const LLUUID& av_id)
 #endif
 
 	std::string first_name, last_name;
-	gCacheName->getFirstLastName(av_id, first_name, last_name);
+	LLAvatarName av_name;
+	if (LLAvatarNameCache::get(av_id, &av_name))
+	{
+		std::istringstream full_name(av_name.getUserName());
+		full_name >> first_name >> last_name;
+	}
+	else
+	{
+		gCacheName->getFirstLastName(av_id, first_name, last_name);
+	}
 
 	return (last_name == LL_LINDEN ||
 			last_name == LL_MOLE ||
