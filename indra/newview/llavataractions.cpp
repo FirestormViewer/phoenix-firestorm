@@ -86,6 +86,7 @@
 #include "lltrans.h"
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
+#include "llviewerwindow.h"	// For opening logs externally
 #include "llworld.h"
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -1128,6 +1129,17 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 		LLFloaterReg::showInstance("preview_conversation", extended_id, true);
 	}
 }
+
+// <FS:CR> Open chat history externally
+// static
+void LLAvatarActions::viewChatHistoryExternally(const LLUUID& id)
+{
+	if (LLLogChat::isTranscriptExist(id))
+	{
+		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(LLIMModel::instance().getHistoryFileName(id)));
+	}
+}
+// </FS:CR>
 
 //== private methods ========================================================================================
 

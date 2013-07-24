@@ -234,6 +234,7 @@ public:
 	 * Opens the chat history for avatar
 	 */
 	static void viewChatHistory(const LLUUID& id);
+	static void viewChatHistoryExternally(const LLUUID& id);	// <FS:CR> Open chat history externally
 	
 	// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Modified: Catznip-2.4.0g
 	static void report(const LLUUID& idAgent);

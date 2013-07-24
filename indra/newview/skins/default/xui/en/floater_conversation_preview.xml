@@ -63,4 +63,16 @@
      top_delta="4"
      width="40">
     </text>
+	<button
+     follows="bottom|left"
+     height="22"
+     left="5"
+     image_pressed="PushButton_Press"
+     image_pressed_selected="PushButton_Selected_Press"
+     image_selected="PushButton_Selected_Press"
+     tool_tip="Open chat history externally"
+     image_overlay="List_View_On"
+     name="open_external_btn"
+     top_delta="-5"
+     width="25" />
 </floater>

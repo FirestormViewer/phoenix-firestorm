@@ -35,7 +35,10 @@
 // </FS:CR> [FS communication UI]
 #include "llspinctrl.h"
 #include "lltrans.h"
-#include "llviewercontrol.h"	// <FS:CR>
+// <FS:CR>
+#include "llviewercontrol.h"
+#include "llavataractions.h"
+// </FS:CR>
 
 const std::string LL_FCP_COMPLETE_NAME("complete_name");
 const std::string LL_FCP_ACCOUNT_NAME("user_name");
@@ -57,6 +60,8 @@ BOOL LLFloaterConversationPreview::postBuild()
 	//mChatHistory = getChild<LLChatHistory>("chat_history");
 	mChatHistory = getChild<FSChatHistory>("chat_history");
 	// <FS:CR> [FS communication UI]
+	
+	childSetAction("open_external_btn", boost::bind(&LLFloaterConversationPreview::onBtnOpenExternal, this));	//<FS:CR> Open chat history externally
 
 	const LLConversation* conv = LLConversationLog::instance().getConversation(mSessionID);
 	std::string name;
@@ -193,4 +198,10 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 	}
 
 	showHistory();
+}
+
+// <FS:CR> Open chat history externally
+void (LLFloaterConversationPreview::onBtnOpenExternal())
+{
+	LLAvatarActions::viewChatHistoryExternally(mSessionID);
 }

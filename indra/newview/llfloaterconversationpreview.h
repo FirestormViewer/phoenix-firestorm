@@ -52,6 +52,7 @@ public:
 private:
 	void onMoreHistoryBtnClick();
 	void showHistory();
+	void onBtnOpenExternal();	// <FS:CR> Open chat history externally
 
 	LLSpinCtrl*		mPageSpinner;
 	// <FS:CR> [FS communication UI]

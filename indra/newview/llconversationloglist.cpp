@@ -348,6 +348,12 @@ void LLConversationLogList::onCustomAction(const LLSD& userdata)
 	{
 		LLAvatarActions::toggleBlock(selected_conversation_participant_id);
 	}
+	// <FS:CR> Open conversation history externally
+	else if ("chat_history_external")
+	{
+		LLAvatarActions::viewChatHistoryExternally(selected_conversation_participant_id);
+	}
+	// </FS:CR>
 }
 
 bool LLConversationLogList::isActionEnabled(const LLSD& userdata)

@@ -440,47 +440,51 @@ void FSFloaterIM::onAddFriendButtonClicked()
 }
 void FSFloaterIM::onShareButtonClicked()
 {
-	llinfos << "FSFloaterIM::onShareButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onShareButtonClicked" << llendl;
 	LLAvatarActions::share(mOtherParticipantUUID);
 }
 void FSFloaterIM::onTeleportButtonClicked()
 {
-	llinfos << "FSFloaterIM::onTeleportButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onTeleportButtonClicked" << llendl;
 	LLAvatarActions::offerTeleport(mOtherParticipantUUID);
 }
 void FSFloaterIM::onPayButtonClicked()
 {
-	llinfos << "FSFloaterIM::onPayButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onPayButtonClicked" << llendl;
 	LLAvatarActions::pay(mOtherParticipantUUID);
 }
 void FSFloaterIM::onGroupInfoButtonClicked()
 {
-	llinfos << "FSFloaterIM::onGroupInfoButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onGroupInfoButtonClicked" << llendl;
 	LLGroupActions::show(mSessionID);
 }
 void FSFloaterIM::onCallButtonClicked()
 {
-	llinfos << "FSFloaterIM::onCallButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onCallButtonClicked" << llendl;
 	gIMMgr->startCall(mSessionID);
 }
 void FSFloaterIM::onEndCallButtonClicked()
 {
-	llinfos << "FSFloaterIM::onEndCallButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onEndCallButtonClicked" << llendl;
 	gIMMgr->endCall(mSessionID);
 }
 void FSFloaterIM::onOpenVoiceControlsClicked()
 {
-	llinfos << "FSFloaterIM::onOpenVoiceControlsClicked" << llendl;
+	lldebugs << "FSFloaterIM::onOpenVoiceControlsClicked" << llendl;
 	LLFloaterReg::showInstance("fs_voice_controls");
 }
 void FSFloaterIM::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
 {
-	llinfos << "FSFloaterIM::onVoiceChannelStateChanged" << llendl;
+	lldebugs << "FSFloaterIM::onVoiceChannelStateChanged" << llendl;
 	updateButtons(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
 }
 void FSFloaterIM::onHistoryButtonClicked()
 {
-	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(LLIMModel::instance().getHistoryFileName(mSessionID)));
+	lldebugs << "FSFloaterIM::onHistoryButtonClicked" << llendl;
+	if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
+		LLFloaterReg::showInstance("preview_conversation", mSessionID, true);
+	else
+		LLAvatarActions::viewChatHistoryExternally(mSessionID);
 }
 
 // support sysinfo button -Zi
