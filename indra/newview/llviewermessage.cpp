@@ -3236,12 +3236,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	case IM_INVENTORY_ACCEPTED:
 	{
-//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
 		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
-		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();;
+		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -3253,12 +3253,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	}
 	case IM_INVENTORY_DECLINED:
 	{
-//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
 		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
-		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();;
+		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -3767,7 +3767,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		{
 			LLSD payload;
 			payload["from_id"] = from_id;
-			payload["session_id"] = session_id;;
+			payload["session_id"] = session_id;
 			payload["online"] = (offline == IM_ONLINE);
 			payload["sender"] = msg->getSender().getIPandPort();
 
@@ -8345,7 +8345,7 @@ bool handle_lure_callback(const LLSD& notification, const LLSD& response)
 				std::string target_name;
 				gCacheName->getFullName(target_id, target_name);  // for im log filenames
 				LLSD args;
-				args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();;
+				args["TO_NAME"] = LLSLURL("agent", target_id, "displayname").getSLURLString();
 	
 				LLSD payload;
 				
@@ -8692,7 +8692,7 @@ void callback_load_url_name(const LLUUID& id, const std::string& full_name, bool
 			}
 			LLSD args;
 			args["URL"] = load_url_info["url"].asString();
-			args["MESSAGE"] = load_url_info["message"].asString();;
+			args["MESSAGE"] = load_url_info["message"].asString();
 			args["OBJECTNAME"] = load_url_info["object_name"].asString();
 			args["NAME"] = owner_name;
 

@@ -227,29 +227,25 @@ void LLNotificationChiclet::setCounter(S32 counter)
 
 bool LLNotificationChiclet::ChicletNotificationChannel::filterNotification( LLNotificationPtr notification )
 {
-	if (notification->getName() == "ScriptDialog")
+	bool display_notification;
+	if (   (notification->getName() == "ScriptDialog") // special case for scripts
+		// if there is no toast window for the notification, filter it
+		|| (!LLNotificationWellWindow::getInstance()->findItemByID(notification->getID()))
+		)
 	{
-		return false;
+		display_notification = false;
 	}
-
-	if( !(notification->canLogToIM() && notification->hasFormElements())
-		&& (!notification->getPayload().has("give_inventory_notification")
-			|| notification->getPayload()["give_inventory_notification"]))
+	else if( !(notification->canLogToIM() && notification->hasFormElements())
+			&& (!notification->getPayload().has("give_inventory_notification")
+				|| notification->getPayload()["give_inventory_notification"]))
 	{
-		return true;
+		display_notification = true;
 	}
-
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-	if ("offer" == notification->getType())
+	else
 	{
-		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
-		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
-		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification->getID()) : NULL;
-		return (pToast) && (pToast->getCanBeStored());
+		display_notification = false;
 	}
-// [/SL:KB]
-
-	return false;
+	return display_notification;
 }
 
 //////////////////////////////////////////////////////////////////////////
