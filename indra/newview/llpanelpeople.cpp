@@ -706,13 +706,15 @@ BOOL LLPanelPeople::postBuild()
 		llwarns << "People->Groups list menu not found" << llendl;
 	}
 
-	LLAccordionCtrlTab* accordion_tab = getChild<LLAccordionCtrlTab>("tab_all");
-	accordion_tab->setDropDownStateChangedCallback(
-		boost::bind(&LLPanelPeople::onFriendsAccordionExpandedCollapsed, this, _1, _2, mAllFriendList));
+	// <FS:Ansariel> Friend list accordion replacement
+	//LLAccordionCtrlTab* accordion_tab = getChild<LLAccordionCtrlTab>("tab_all");
+	//accordion_tab->setDropDownStateChangedCallback(
+	//	boost::bind(&LLPanelPeople::onFriendsAccordionExpandedCollapsed, this, _1, _2, mAllFriendList));
 
-	accordion_tab = getChild<LLAccordionCtrlTab>("tab_online");
-	accordion_tab->setDropDownStateChangedCallback(
-		boost::bind(&LLPanelPeople::onFriendsAccordionExpandedCollapsed, this, _1, _2, mOnlineFriendList));
+	//accordion_tab = getChild<LLAccordionCtrlTab>("tab_online");
+	//accordion_tab->setDropDownStateChangedCallback(
+	//	boost::bind(&LLPanelPeople::onFriendsAccordionExpandedCollapsed, this, _1, _2, mOnlineFriendList));
+	// </FS:Ansariel> Friend list accordion replacement
 
 	// Must go after setting commit callback and initializing all pointers to children.
 	mTabContainer->selectTabByName(NEARBY_TAB_NAME);
@@ -722,8 +724,10 @@ BOOL LLPanelPeople::postBuild()
 	// call this method in case some list is empty and buttons can be in inconsistent state
 	updateButtons();
 
-	mOnlineFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
-	mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
+	// <FS:Ansariel> Friend list accordion replacement
+	//mOnlineFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
+	//mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
+	// </FS:Ansariel> Friend list accordion replacement
 
 	return TRUE;
 }
@@ -1099,8 +1103,10 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 		mOnlineFriendList->setNameFilter(filter);
 		mAllFriendList->setNameFilter(filter);
 
-	setAccordionCollapsedByUser("tab_online", false);
-	setAccordionCollapsedByUser("tab_all", false);
+	// <FS:Ansariel> Friend list accordion replacement
+	//setAccordionCollapsedByUser("tab_online", false);
+	//setAccordionCollapsedByUser("tab_all", false);
+	// </FS:Ansariel> Friend list accordion replacement
 	showFriendsAccordionsIfNeeded();
 
 		// restore accordion tabs state _after_ all manipulations
@@ -1511,13 +1517,17 @@ void LLPanelPeople::showFriendsAccordionsIfNeeded()
 {
 	if(FRIENDS_TAB_NAME == getActiveTabName())
 	{
+		// <FS:Ansariel> Friend list accordion replacement
 		// Expand and show accordions if needed, else - hide them
-		showAccordion("tab_online", mOnlineFriendList->filterHasMatches());
-		showAccordion("tab_all", mAllFriendList->filterHasMatches());
+		//showAccordion("tab_online", mOnlineFriendList->filterHasMatches());
+		//showAccordion("tab_all", mAllFriendList->filterHasMatches());
 
-		// Rearrange accordions
-		LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("friends_accordion");
-		accordion->arrange();
+		//// Rearrange accordions
+		//LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("friends_accordion");
+		//accordion->arrange();
+
+		childSetVisible("friends_accordion", mAllFriendList->filterHasMatches());
+		// </FS:Ansariel> Friend list accordion replacement
 
 		// *TODO: new no_matched_tabs_text attribute was implemented in accordion (EXT-7368).
 		// this code should be refactored to use it
