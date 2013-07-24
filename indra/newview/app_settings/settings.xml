@@ -2954,8 +2954,6 @@
       <string>F32</string>
       <key>Value</key>
       <real>1.047197551</real>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>CameraOffset</key>
     <map>
@@ -2966,8 +2964,6 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>CameraOffsetBuild</key>
@@ -2984,8 +2980,6 @@
         <real>0.0</real>
         <real>6.0</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>CameraOffsetRearView</key>
     <map>
@@ -3001,8 +2995,6 @@
         <real>0.0</real>
         <real>0.75</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>CameraOffsetFrontView</key>
     <map>
@@ -3018,8 +3010,6 @@
         <real>0.0</real>
         <real>0.0</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>CameraOffsetGroupView</key>
     <map>
@@ -3035,8 +3025,6 @@
         <real>0.7</real>
         <real>0.5</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>CameraOffsetScale</key>
     <map>
@@ -3048,8 +3036,6 @@
       <string>F32</string>
       <key>Value</key>
       <real>1.0</real>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>CameraPosOnLogout</key>
     <map>
@@ -3065,8 +3051,6 @@
         <real>0.0</real>
         <real>0.0</real>
       </array>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>CameraPositionSmoothing</key>
     <map>
@@ -3088,8 +3072,6 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
 
