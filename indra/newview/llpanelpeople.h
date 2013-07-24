@@ -43,7 +43,7 @@ class LLTabContainer;
 
 // Firestorm declarations
 class LLMenuGL;
-class FSRadarListCtrl;
+class FSPanelRadar;
 
 class LLPanelPeople 
 	: public LLPanel
@@ -146,7 +146,7 @@ private:
 	LLAvatarList*			mAllFriendList;
 	LLAvatarList*			mNearbyList;
 	// <FS:Ansariel> Firestorm radar
-	FSRadarListCtrl*		mRadarList;
+	FSPanelRadar*			mRadarPanel;
 	// </FS:Ansariel> Firestorm radar
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;

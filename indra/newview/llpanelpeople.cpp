@@ -64,18 +64,10 @@
 #include "llvoiceclient.h"
 #include "llworld.h"
 #include "llspeakers.h"
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 // Firestorm includes
-#include "fscontactsfloater.h"
-#include "fsradar.h"
-#include "fsradarlistctrl.h"
-#include "fsradarmenu.h"
-#include "llavatarconstants.h" // for range constants
+#include "fspanelradar.h"
 #include "lllayoutstack.h"
-#include "llnotificationmanager.h"
 #include "rlvhandler.h"
 
 #define FRIEND_LIST_UPDATE_TIMEOUT	0.5
@@ -518,7 +510,7 @@ LLPanelPeople::LLPanelPeople()
 		// <FS:Ansariel> Firestorm radar
 		//mMiniMap(NULL)
 		mMiniMap(NULL),
-		mRadarList(NULL)
+		mRadarPanel(NULL)
 		// </FS:Ansariel> Firestorm radar
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
@@ -536,13 +528,15 @@ LLPanelPeople::LLPanelPeople()
 
 	mCommitCallbackRegistrar.add("People.Group.Plus.Action",  boost::bind(&LLPanelPeople::onGroupPlusMenuItemClicked,  this, _2));
 	mCommitCallbackRegistrar.add("People.Friends.ViewSort.Action",  boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemClicked,  this, _2));
-	mCommitCallbackRegistrar.add("People.Nearby.ViewSort.Action",  boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemClicked,  this, _2));
+	// <FS:Ansariel> Firestorm radar
+	//mCommitCallbackRegistrar.add("People.Nearby.ViewSort.Action",  boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemClicked,  this, _2));
 	mCommitCallbackRegistrar.add("People.Groups.ViewSort.Action",  boost::bind(&LLPanelPeople::onGroupsViewSortMenuItemClicked,  this, _2));
 	mCommitCallbackRegistrar.add("People.Recent.ViewSort.Action",  boost::bind(&LLPanelPeople::onRecentViewSortMenuItemClicked,  this, _2));
 
 	mEnableCallbackRegistrar.add("People.Friends.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemCheck,	this, _2));
 	mEnableCallbackRegistrar.add("People.Recent.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onRecentViewSortMenuItemCheck,	this, _2));
-	mEnableCallbackRegistrar.add("People.Nearby.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemCheck,	this, _2));
+	// <FS:Ansariel> Firestorm radar
+	//mEnableCallbackRegistrar.add("People.Nearby.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemCheck,	this, _2));
 
 	mEnableCallbackRegistrar.add("People.Group.Plus.Validate",	boost::bind(&LLPanelPeople::onGroupPlusButtonValidate,	this));
 }
@@ -626,7 +620,7 @@ BOOL LLPanelPeople::postBuild()
 	//nearby_tab->setVisibleCallback(boost::bind(&Updater::setActive, mNearbyListUpdater, _2));
 	
 	// <FS:AO> Radarlist takes over for nearbylist for presentation.
-	mRadarList = nearby_tab->getChild<FSRadarListCtrl>("radar_list");
+	mRadarPanel = nearby_tab->findChild<FSPanelRadar>("panel_radar");
 	// </FS:AO>
 
 	// <FS:Ansariel> Firestorm radar
@@ -847,7 +841,7 @@ void LLPanelPeople::updateButtons()
 {
 	std::string cur_tab		= getActiveTabName();
 // [RLVa:KB] - Checked: 2013-05-06 (RLVa-1.4.9)
-	bool nearby_tab_active = (cur_tab == NEARBY_TAB_NAME);
+	//bool nearby_tab_active = (cur_tab == NEARBY_TAB_NAME);
 // [/RLVa:KB]
 	bool friends_tab_active = (cur_tab == FRIENDS_TAB_NAME);
 	bool group_tab_active	= (cur_tab == GROUP_TAB_NAME);
@@ -908,13 +902,6 @@ void LLPanelPeople::updateButtons()
 			}
 		}
 	}
-
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
-	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
-	{
-		item_selected = multiple_selected = false;
-	}
-// [/RLBa:KB]
 }
 
 std::string LLPanelPeople::getActiveTabName() const
@@ -939,19 +926,7 @@ LLUUID LLPanelPeople::getCurrentItemID() const
 	if (cur_tab == NEARBY_TAB_NAME)
 	// <FS:AO> Adapted for scrolllist
 		//return mNearbyList->getSelectedUUID();
-	{
-		static S32 uuid_column_index = mRadarList->getColumn("uuid")->mIndex;
-
-		LLScrollListItem* item = mRadarList->getFirstSelected();
-		if (item)
-		{
-			return item->getColumn(uuid_column_index)->getValue().asUUID();
-		}
-		else 
-		{
-			return LLUUID::null;
-		}
-	}
+		return mRadarPanel->getCurrentItemID();
 	// </FS:AO>
 	
 	if (cur_tab == RECENT_TAB_NAME)
@@ -980,14 +955,7 @@ void LLPanelPeople::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 	else if (cur_tab == NEARBY_TAB_NAME)
 	// <FS:AO> Adapted for scrolllist
 		//mNearbyList->getSelectedUUIDs(selected_uuids);
-	{
-		static S32 uuid_column_index = mRadarList->getColumn("uuid")->mIndex;
-
-		for (size_t i = 0; i < mRadarList->getAllSelected().size(); ++i)
-		{
-			selected_uuids.push_back(mRadarList->getAllSelected().at(i)->getColumn(uuid_column_index)->getValue().asUUID());
-		}
-	}
+		mRadarPanel->getCurrentItemIDs(selected_uuids);
 	// </FS:AO>
 	else if (cur_tab == RECENT_TAB_NAME)
 		mRecentList->getSelectedUUIDs(selected_uuids);
@@ -1055,10 +1023,8 @@ void LLPanelPeople::setSortOrder(LLAvatarList* list, ESortOrder order, bool save
 			setting = "FriendsSortOrder";
 		else if (list == mRecentList)
 			setting = "RecentPeopleSortOrder";
-		// <FS:Ansariel> Not used in Firestorm radar
-		//else if (list == mNearbyList)
-		//	setting = "NearbyPeopleSortOrder";
-		// </FS:Ansariel>
+		else if (list == mNearbyList)
+			setting = "NearbyPeopleSortOrder";
 
 		if (!setting.empty())
 			gSavedSettings.setU32(setting, order);
@@ -1087,10 +1053,7 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 	const std::string cur_tab = getActiveTabName();
 	if (cur_tab == NEARBY_TAB_NAME)
 	{
-		// <FS:Ansariel> Firestorm radar
-		//mNearbyList->setNameFilter(filter);
-		mRadarList->setFilterString(filter);
-		// </FS:Ansariel> Firestorm radar
+		mNearbyList->setNameFilter(filter);
 	}
 	else if (cur_tab == FRIENDS_TAB_NAME)
 	{
@@ -1175,16 +1138,8 @@ void LLPanelPeople::onAvatarListCommitted(LLAvatarList* list)
 	if (getActiveTabName() == NEARBY_TAB_NAME)
 	{
 		uuid_vec_t selected_uuids;
-		// <FS:Ansariel> Firestorm radar
-		//getCurrentItemIDs(selected_uuids);
-		//mMiniMap->setSelected(selected_uuids)
-		LLUUID sVal = mRadarList->getSelectedValue().asUUID();
-		if (sVal.notNull()) 
-		{
-			selected_uuids.push_back(sVal);
-			mMiniMap->setSelected(selected_uuids);
-		}
-		// </FS:Ansariel> Firestorm radar
+		getCurrentItemIDs(selected_uuids);
+		mMiniMap->setSelected(selected_uuids);
 	} else
 	// Make sure only one of the friends lists (online/all) has selection.
 	if (getActiveTabName() == FRIENDS_TAB_NAME)
@@ -1375,25 +1330,22 @@ void LLPanelPeople::onNearbyViewSortMenuItemClicked(const LLSD& userdata)
 {
 	std::string chosen_item = userdata.asString();
 
-	// <FS:Ansariel> Firestorm radar
-	//if (chosen_item == "sort_by_recent_speakers")
-	//{
-	//	setSortOrder(mNearbyList, E_SORT_BY_RECENT_SPEAKERS);
-	//}
-	//else if (chosen_item == "sort_name")
-	//{
-	//	setSortOrder(mNearbyList, E_SORT_BY_NAME);
-	//}
-	//else if (chosen_item == "view_icons")
-	//{
-	//	mNearbyList->toggleIcons();
-	//}
-	//else if (chosen_item == "sort_distance")
-	//{
-	//	setSortOrder(mNearbyList, E_SORT_BY_DISTANCE);
-	//}
-	// </FS:Ansariel> Firestorm radar
-
+	if (chosen_item == "sort_by_recent_speakers")
+	{
+		setSortOrder(mNearbyList, E_SORT_BY_RECENT_SPEAKERS);
+	}
+	else if (chosen_item == "sort_name")
+	{
+		setSortOrder(mNearbyList, E_SORT_BY_NAME);
+	}
+	else if (chosen_item == "view_icons")
+	{
+		mNearbyList->toggleIcons();
+	}
+	else if (chosen_item == "sort_distance")
+	{
+		setSortOrder(mNearbyList, E_SORT_BY_DISTANCE);
+	}
 }
 
 bool LLPanelPeople::onNearbyViewSortMenuItemCheck(const LLSD& userdata)
@@ -1587,6 +1539,7 @@ bool LLPanelPeople::isAccordionCollapsedByUser(const std::string& name)
 	return isAccordionCollapsedByUser(getChild<LLUICtrl>(name));
 }
 
+// <FS:Ansariel> Firestorm radar
 void LLPanelPeople::onGlobalVisToggleButtonClicked()
 // Iterate through friends lists, toggling status permission on or off 
 {	
