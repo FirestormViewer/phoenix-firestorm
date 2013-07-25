@@ -93,8 +93,11 @@ public:
 	void selectPrivacyPanel();
 	void selectChatPanel();
 
-protected:	
+// <FS:CR> Make onBtnOk() public for settings backup panel
+//protected:
 	void		onBtnOK();
+protected:
+// </FS:CR>
 	void		onBtnCancel();
 	void		onBtnApply();
 
@@ -211,18 +214,6 @@ public:
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
 
-	// <FS:Zi> Backup settings
-	void onClickSetBackupSettingsPath();
-	void onClickSelectAll();
-	void onClickDeselectAll();
-	void onClickBackupSettings();
-	void onClickRestoreSettings();
-
-	void doSelect(BOOL all);		// calls applySelection for each list
-	void applySelection(LLScrollListCtrl* control,BOOL all);		// selects or deselects all items in a scroll list
-	void doRestoreSettings(const LLSD& notification,const LLSD& response);	// callback for restore dialog
-	void onQuitConfirmed(const LLSD& notification,const LLSD& response);	// callback for finished restore dialog
-// </FS:Zi>
 private:
 
 	void onDeleteTranscripts();
@@ -345,6 +336,28 @@ public:
 	void refresh();
 };
 // [/SL:KB]
+
+// <FS:CR> Settings Backup
+class FSPanelPreferenceBackup : public LLPanelPreference
+{
+public:
+	FSPanelPreferenceBackup();
+	/*virtual*/ BOOL postBuild();
+	
+protected:
+	// <FS:Zi> Backup settings
+	void onClickSetBackupSettingsPath();
+	void onClickSelectAll();
+	void onClickDeselectAll();
+	void onClickBackupSettings();
+	void onClickRestoreSettings();
+	
+	void doSelect(BOOL all);		// calls applySelection for each list
+	void applySelection(LLScrollListCtrl* control,BOOL all);		// selects or deselects all items in a scroll list
+	void doRestoreSettings(const LLSD& notification,const LLSD& response);	// callback for restore dialog
+	void onQuitConfirmed(const LLSD& notification,const LLSD& response);	// callback for finished restore dialog
+	// </FS:Zi>
+};
 
 #ifdef OPENSIM // <FS:AW optional opensim support>
 // <FS:AW  opensim preferences>
