@@ -968,7 +968,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
 			timestamp_style.color(timestamp_color);
 			timestamp_style.readonly_color(timestamp_color);
-			if (message_from_log && is_conversation_log)
+			if (message_from_log && !is_conversation_log)
 			{
 				timestamp_style.color.alpha = FSIMChatHistoryFade;
 				timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
@@ -1017,7 +1017,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
 				link_params.color = link_color;
 				link_params.readonly_color = link_color;
-				if (message_from_log && is_conversation_log)
+				if (message_from_log && !is_conversation_log)
 				{
 					link_params.color.alpha = FSIMChatHistoryFade;
 					link_params.readonly_color.alpha = FSIMChatHistoryFade;
