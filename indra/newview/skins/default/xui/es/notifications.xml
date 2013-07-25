@@ -416,8 +416,22 @@ No se reembolsarán las cuotas pagadas.
 	<notification name="SelectHistoryItemToView">
 		Por favor, selecciona un ítem del historial para verlo.
 	</notification>
+	<notification name="ResetShowNextTimeDialogs">
+		¿Quieres reactivar todas las notificaciones que a las que previemente indicaste que &apos;No mostrarme esto otra vez&apos;?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="SkipShowNextTimeDialogs">
+		¿Quieres desactivar todas las notificaciones que lo permitan?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
 	<notification name="CacheWillClear">
 		La caché se limpiará cuando reinicies [APP_NAME].
+	</notification>
+	<notification name="DisableCookiesBreaksSearch">
+		Si desactivas las cookies, la función de búsqueda no funcionará correctamente y no podrás usarla.
+	</notification>
+	<notification name="DisableJavascriptBreaksSearch">
+		Si desactivas Javascript, la función de búsqueda no funcionará correctamente y no podrás usarla.
 	</notification>
 	<notification name="CacheWillBeMoved">
 		La caché se moverá cuando reinicies [APP_NAME].
@@ -590,6 +604,14 @@ Temporalmente, será incapaz de moverse, usar el chat, o interactuar con el mund
 Temporalmente, será incapaz de moverse, usar el chat, o interactuar con el mundo.
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Descongelarlo" yestext="Congelarlo"/>
 	</notification>
+	<notification name="FreezeAvatarMultiple">
+		¿Congelar a los siguientes avatares?
+		
+[RESIDENTS]
+ 
+Se les impedirá temporalmente moverse comunicarse por cat o interactuar con el mundo.
+		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Descongelar" yestext="Congelar"/>
+	</notification>  
 	<notification name="EjectAvatarFullname">
 		¿Expulsar a [AVATAR_NAME] de tu terreno?
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Expulsar y Prohibir el acceso" yestext="Expulsar"/>
@@ -600,6 +622,18 @@ Temporalmente, será incapaz de moverse, usar el chat, o interactuar con el mund
 	</notification>
 	<notification name="EjectAvatarFullnameNoBan">
 		¿Expulsar a [AVATAR_NAME] de tu terreno?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Expulsar"/>
+	</notification>
+	<notification name="EjectAvatarMultiple">
+		¿Expulsar a los siguientes avatares de tu terreno?
+
+[RESIDENTS]
+		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Expulsar y prohibir entrada" yestext="Expulsar"/>
+	</notification>
+	<notification name="EjectAvatarMultipleNoBan">
+		¿Expulsar a los siguientes avatares de tu terreno?
+
+[RESIDENTS]
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Expulsar"/>
 	</notification>
 	<notification name="EjectAvatarFromGroup">
@@ -682,7 +716,11 @@ Se admiten [VALIDS]
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidHeader">
-		No se encontró el fragmento &apos;data&apos; en la cabecera del WAV:
+		No se encontró el fragmento &apos;data&apos; en la cabecera del archivo WAV:
+[FILE]
+	</notification>
+	<notification name="SoundFileInvalidChunkSize">
+		Tamaño de fragmento equivocado en el archivo WAV:
 [FILE]
 	</notification>
 	<notification name="SoundFileInvalidTooLong">
@@ -882,6 +920,17 @@ Ha sido imposible encontrar en qué región está.
 has seleccionado varias parcelas.
 
 Inténtalo seleccionando sólo una.
+	</notification>
+	<notification name="ParcelCanPlayMedia">
+		Este lugar proporciona flujos de medios, que pueden requerir más ancho de banda.
+		
+¿Quieres reproducir flujos de medios cuando estén disponibles?
+(Puedes cambiar esta opción más tarde en Preferencias &gt; Sonido y medios).
+		<form name="form">
+			<button name="Play Media Now" text="Reproducir ahora"/>
+			<button name="Always Play Media" text="Reproducir siempre"/>
+			<button name="Do Not Pley Media" text="No reproducir"/>
+		</form>
 	</notification>
 	<notification name="CannotDeedLandWaitingForServer">
 		No se ha podido ceder el terreno:
@@ -1721,6 +1770,15 @@ Prueba con un nombre distinto.
 	<notification name="DisplayNameUpdate">
 		A [OLD_NAME] ([SLID]) se le conoce ahora como [NEW_NAME].
 	</notification>
+	<notification name="DisplayNameUpdateRemoveAlias">
+		A [OLD_NAME] ([SLID]) se le conoce ahora como [NEW_NAME].
+Se ha establecido un alias para este residente que reemplazará a [NEW_NAME]
+¿Quieres eliminar ese alias?
+		<form name="form">
+			<button name="Yes" text="Sí"/>
+			<button name="No" text="No"/>
+		</form>
+	</notification>
 	<notification name="OfferTeleport">
 		¿Ofrecer teleporte a tu posición con este mensaje?
 		<form name="form">
@@ -2507,6 +2565,9 @@ Esto puede influir en tu contraseña.
 	<notification name="IncompleteInventory">
 		Los contenidos que estás ofreciendo aún no están disponibles. Por favor, vuelve a ofrecerlos en un minuto.
 	</notification>
+	<notification name="IncompleteInventoryItem">
+		El ítem al que estás accediendo todavía no está disponible localmente. Por favor, vuélvelo a intentar en un minuto.
+	</notification>
 	<notification name="CannotModifyProtectedCategories">
 		No puedes modificar categorías que están protegidas.
 	</notification>
@@ -2959,12 +3020,23 @@ Para conceder este permiso, por favor actualiza tu visor a la última versión d
 	<notification name="ScriptDialog">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; de [NAME]
 [MESSAGE]
-		<form name="form"/>
+		<form name="form">
+			<button name="Client_Side_Mute" text="Bloquear"/>
+			<button name="Client_Side_Ignore" text="Ignorar"/>
+		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; de [GROUPNAME]
 [MESSAGE]
 		<form name="form"/>
+	</notification>
+	<notification name="FirstBalanceIncrease">
+		Acabas de recibir [AMOUNT]L$.
+Tu nuevo saldo se muestra en la esquina superior derecha.
+	</notification>
+	<notification name="FirstBalanceDecrease">
+		Acabas de pagar [AMOUNT]L$.
+Tu nuevo saldo se muestra en la esquina superior derecha.
 	</notification>
 	<notification name="BuyLindenDollarSuccess">
 		¡Gracias por tu pago!
@@ -3187,6 +3259,19 @@ Con los siguientes Residentes:
 	</notification>
 	<notification name="DeedToGroupFail">
 		Error de transferencia a grupo.
+	</notification>
+	<notification name="ReleaseLandThrottled">
+		La parcela [PARCEL_NAME] no puede ser abandonada en este momento.
+	</notification>
+	<notification name="ReleasedLandWithReclaim">
+		La parcela de [AREA] m² &apos;[PARCEL_NAME]&apos; ha sido liberada.
+
+Dispones de [RECLAIM_PERIOD] horas para reclamarla por 0L$ antes de que sea puesta a la venta a cualquier residente.
+	</notification>
+	<notification name="ReleasedLandNoReclaim">
+		La parcela de [AREA] m² &apos;[PARCEL_NAME]&apos; ha sido liberada.
+
+Ahora está disponible para ser comprada por cualquier residente.
 	</notification>
 	<notification name="AvatarRezNotification">
 		( [EXISTENCE] segundos vivo )
@@ -3550,7 +3635,7 @@ Si los problemas persisten, por favor, acude a [SUPPORT_SITE].
 	<global name="UnsupportedRAM">
 		- La memoria de tu sistema no cumple los requerimientos mínimos.
 	</global>
-	<global name="You can only set your &apos;Home Location&apos; on your land or at a mainland Infohub.">
+	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
 		Si posees un terreno, puedes hacerlo tu Base.
 También puedes buscar en el Mapa lugares marcados como &quot;Puntos de Información&quot;.
 	</global>
@@ -5166,7 +5251,10 @@ Simulador anterior: [OLDVERSION]
 	<notification name="StreamMetadataNoArtist">
         ♫ Estás escuchando:
         [TITLE]♫
-	</notification>  
+	</notification>
+	<notification name="RadarAlert">
+		[NAME] [MESSAGE]
+	</notification>
 	<notification name="BackupFinished">
 		Tu configuración ha sido respaldada.
 	</notification>
