@@ -1125,7 +1125,18 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 
 		LLAvatarNameCache::get(id, &avatar_name);
 		extended_id[LL_FCP_COMPLETE_NAME] = avatar_name.getCompleteName();
-		extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
+		// <FS:Ansariel> [Legacy IM logfile names]
+		//extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
+		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+		{
+			std::string avatar_user_name = avatar_name.getUserName();
+			extended_id[LL_FCP_ACCOUNT_NAME] = avatar_user_name.substr(0, avatar_user_name.find(" Resident"));;
+		}
+		else
+		{
+			extended_id[LL_FCP_ACCOUNT_NAME] = avatar_name.getAccountName();
+		}
+		// </FS:Ansariel> [Legacy IM logfile names]
 		LLFloaterReg::showInstance("preview_conversation", extended_id, true);
 	}
 }
@@ -1136,7 +1147,22 @@ void LLAvatarActions::viewChatHistoryExternally(const LLUUID& id)
 {
 	if (LLLogChat::isTranscriptExist(id))
 	{
-		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(LLIMModel::instance().getHistoryFileName(id)));
+		LLAvatarName av_name;
+
+		if (LLAvatarNameCache::get(id, &av_name))
+		{
+			std::string history_filename;
+			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+			{
+				std::string user_name = av_name.getUserName();
+				history_filename = user_name.substr(0, user_name.find(" Resident"));;
+			}
+			else
+			{
+				history_filename = LLCacheName::buildUsername(av_name.getUserName());
+			}
+			gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(history_filename));
+		}
 	}
 }
 // </FS:CR>

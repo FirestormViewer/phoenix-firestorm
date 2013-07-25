@@ -482,9 +482,13 @@ void FSFloaterIM::onHistoryButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onHistoryButtonClicked" << llendl;
 	if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
+	{
 		LLFloaterReg::showInstance("preview_conversation", mSessionID, true);
+	}
 	else
-		LLAvatarActions::viewChatHistoryExternally(mSessionID);
+	{
+		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(LLIMModel::instance().getHistoryFileName(mSessionID)));
+	}
 }
 
 // support sysinfo button -Zi

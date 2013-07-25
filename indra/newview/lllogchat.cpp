@@ -673,8 +673,21 @@ bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id)
 	{
 		LLAvatarName avatar_name;
 		LLAvatarNameCache::get(avatar_id, &avatar_name);
-		std::string avatar_user_name = avatar_name.getAccountName();
-		std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+		// <FS:Ansariel> [Legacy IM logfile names]
+		//std::string avatar_user_name = avatar_name.getAccountName();
+		//std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+		std::string avatar_user_name;
+		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+		{
+			avatar_user_name = avatar_name.getUserName();
+			avatar_user_name = avatar_user_name.substr(0, avatar_user_name.find(" Resident"));;
+		}
+		else
+		{
+			avatar_user_name = avatar_name.getAccountName();
+			std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+		}
+		// <//FS:Ansariel> [Legacy IM logfile names]
 
 		BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
 		{

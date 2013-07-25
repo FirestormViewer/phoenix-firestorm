@@ -66,6 +66,9 @@ private:
 	std::list<LLSD> mMessages;
 	std::string		mAccountName;
 	std::string		mCompleteName;
+
+	// <FS:Ansariel> Remember used log file name
+	std::string		mFileName;
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */

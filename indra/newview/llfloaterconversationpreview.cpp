@@ -40,6 +40,7 @@
 #include "llavataractions.h"
 #include "llviewerwindow.h"
 #include "llwindow.h"
+#include "llconversationlog.h"
 // </FS:CR>
 
 const std::string LL_FCP_COMPLETE_NAME("complete_name");
@@ -84,6 +85,8 @@ BOOL LLFloaterConversationPreview::postBuild()
 		name = LLTrans::getString("NearbyChatTitle");
 		file = "chat";
 	}
+	// <FS:Ansariel> Remember used log file name
+	mFileName = file;
 
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
@@ -205,12 +208,5 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 // <FS:CR> Open chat history externally
 void (LLFloaterConversationPreview::onBtnOpenExternal())
 {
-	if (mSessionID.notNull())
-	{
-		LLAvatarActions::viewChatHistoryExternally(mSessionID);
-	}
-	else
-	{
-		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName("chat"));
-	}
+	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mFileName));
 }
