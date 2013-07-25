@@ -443,7 +443,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
-	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
+	//<FS:KC> Handled centrally now
+//	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
 	mCommitCallbackRegistrar.add("Pref.ClickDisablePopup",		boost::bind(&LLFloaterPreference::onClickDisablePopup, this));	
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
@@ -1881,6 +1882,8 @@ void LLFloaterPreference::onClickSetMiddleMouse()
 	p2t_line_editor->setValue(audioPanel->getString("middle_mouse"));
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLFloaterPreference::onClickSetSounds()
 {
 	// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
@@ -1888,6 +1891,7 @@ void LLFloaterPreference::onClickSetSounds()
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 }
+*/
 
 // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
@@ -2419,7 +2423,8 @@ LLPanelPreference::LLPanelPreference()
 //: LLPanel(),
   //mBandWidthUpdater(NULL)
 {
-	mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
+	//<FS:KC> Handled centrally now
+	// mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
 	mCommitCallbackRegistrar.add("Pref.updateMediaAutoPlayCheckbox",	boost::bind(&LLPanelPreference::updateMediaAutoPlayCheckbox, this, _1));
 }
 
@@ -2667,6 +2672,8 @@ void LLPanelPreference::cancel()
 	}
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLPanelPreference::setControlFalse(const LLSD& user_data)
 {
 	std::string control_name = user_data.asString();
@@ -2675,6 +2682,7 @@ void LLPanelPreference::setControlFalse(const LLSD& user_data)
 	if (control)
 		control->set(LLSD(FALSE));
 }
+*/
 
 void LLPanelPreference::updateMediaAutoPlayCheckbox(LLUICtrl* ctrl)
 {

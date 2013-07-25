@@ -120,7 +120,7 @@ private:
 	## Zi: Media/Stream separation
 	*/
 	void onCheckAutoPlay();
-	// void onAdvancedButtonClick();	//<FS:KC> Handled globally now
+	// void onAdvancedButtonClick();	//<FS:KC> Handled centrally now
 	void onMoreLess();	
 	
 	void onCheckItem(LLUICtrl* ctrl, const LLUUID &row_id);

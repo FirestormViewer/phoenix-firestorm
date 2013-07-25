@@ -31,7 +31,7 @@
 	 volume="true"
 	>
 		<slider.commit_callback
-		 function="Vol.setControlFalse"
+		 function="Pref.setControlFalse"
 		 parameter="MuteAudio"
 		/>
 	</slider>
@@ -82,7 +82,7 @@
 	 volume="true"
 	>
 		<slider.commit_callback
-		 function="Vol.setControlFalse"
+		 function="Pref.setControlFalse"
 		 parameter="MuteUI"
 		/>
 	</slider>
@@ -118,7 +118,7 @@
 	 volume="true"
 	>
 		<slider.commit_callback
-		 function="Vol.setControlFalse"
+		 function="Pref.setControlFalse"
 		 parameter="MuteAmbient"
 		/>
 	</slider>
@@ -164,7 +164,7 @@
 	 volume="true"
 	>
 		<slider.commit_callback
-		 function="Vol.setControlFalse"
+		 function="Pref.setControlFalse"
 		 parameter="MuteSounds"
 		/>
 	</slider>
@@ -183,7 +183,7 @@
 	 tab_stop="false"
 	>
 		<button.commit_callback
-		 function="Vol.SetSounds"
+		 function="Pref.SetSounds"
 		/>
 	</button>
 	<check_box
@@ -215,7 +215,7 @@
 	 volume="true"
 	>
 		<slider.commit_callback
-		 function="Vol.setControlFalse"
+		 function="Pref.setControlFalse"
 		 parameter="MuteMusic"
 		/>
 	</slider>
@@ -261,7 +261,7 @@
 	 volume="true"
 	>
 		<slider.commit_callback
-		 function="Vol.setControlFalse"
+		 function="Pref.setControlFalse"
 		 parameter="MuteMedia"
 		/>
 	</slider>
@@ -309,7 +309,7 @@
 	 volume="true"
 	>
 		<slider.commit_callback
-		 function="Vol.setControlFalse"
+		 function="Pref.setControlFalse"
 		 parameter="MuteVoice"
 		/>
 	</slider>

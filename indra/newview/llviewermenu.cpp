@@ -148,6 +148,7 @@
 #include "particleeditor.h"
 #include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
+#include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
 
 
 using namespace LLAvatarAppearanceDefines;
@@ -9992,7 +9993,7 @@ void initialize_spellcheck_menu()
 }
 
 //<FS:KC> Centralize a some of these volume panel callbacks
-static void open_volume_prefs()
+static void volume_controls_open_volume_prefs()
 {
 	// bring up the prefs floater
 	LLFloaterPreference* prefsfloater = LLFloaterReg::showTypedInstance<LLFloaterPreference>("preferences");
@@ -10003,10 +10004,37 @@ static void open_volume_prefs()
 	}
 }
 
+void volume_controls_on_click_set_sounds(const LLUICtrl* ctrl)
+{
+	const LLPanel* volume_control_panel = dynamic_cast<const LLPanel*>(ctrl->getParent());
+	if (volume_control_panel)
+	{
+		// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
+		// or if sound effects are disabled.
+		volume_control_panel->getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+		volume_control_panel->getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+	}
+}
+
+void volume_controls_set_control_false(const LLUICtrl* ctrl, const LLSD& user_data)
+{
+	LLPanel* volume_control_panel = dynamic_cast<LLPanel*>(ctrl->getParent());
+	if (volume_control_panel)
+	{
+		std::string control_name = user_data.asString();
+		LLControlVariable* control = volume_control_panel->findControl(control_name);
+		
+		if (control)
+			control->set(LLSD(FALSE));
+	}
+}
+
 void initialize_volume_controls_callbacks()
 {
 	LLUICtrl::CommitCallbackRegistry::Registrar& commit = LLUICtrl::CommitCallbackRegistry::currentRegistrar();
-	commit.add("MediaListCtrl.GoMediaPrefs", boost::bind(&open_volume_prefs));
+	commit.add("MediaListCtrl.GoMediaPrefs",	boost::bind(&volume_controls_open_volume_prefs));
+	commit.add("Pref.SetSounds",				boost::bind(&volume_controls_on_click_set_sounds, _1));
+	commit.add("Pref.setControlFalse",			boost::bind(&volume_controls_set_control_false, _1, _2));
 }
 //</FS:KC>
 

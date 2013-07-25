@@ -165,7 +165,7 @@ public:
 	void onClickSetKey();
 	void setKey(KEY key);
 	void onClickSetMiddleMouse();
-	void onClickSetSounds();
+	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	void setPreprocInclude();
 	void onClickEnablePopup();
@@ -254,7 +254,7 @@ public:
 
 	virtual void apply();
 	virtual void cancel();
-	void setControlFalse(const LLSD& user_data);
+	// void setControlFalse(const LLSD& user_data);	//<FS:KC> Handled centrally now
 	virtual void setHardwareDefaults(){};
 
 	// Disables "Allow Media to auto play" check box only when both
