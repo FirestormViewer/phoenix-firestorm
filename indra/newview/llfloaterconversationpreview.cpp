@@ -38,6 +38,8 @@
 // <FS:CR>
 #include "llviewercontrol.h"
 #include "llavataractions.h"
+#include "llviewerwindow.h"
+#include "llwindow.h"
 // </FS:CR>
 
 const std::string LL_FCP_COMPLETE_NAME("complete_name");
@@ -203,5 +205,12 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 // <FS:CR> Open chat history externally
 void (LLFloaterConversationPreview::onBtnOpenExternal())
 {
-	LLAvatarActions::viewChatHistoryExternally(mSessionID);
+	if (mSessionID.notNull())
+	{
+		LLAvatarActions::viewChatHistoryExternally(mSessionID);
+	}
+	else
+	{
+		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName("chat"));
+	}
 }
