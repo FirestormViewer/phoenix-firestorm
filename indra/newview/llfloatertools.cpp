@@ -464,6 +464,11 @@ LLFloaterTools::~LLFloaterTools()
 
 void LLFloaterTools::setStatusText(const std::string& text)
 {
+	// <FS:ND> Can be 0 during login
+	if( !mTextStatus )
+		return;
+	// </FS:ND>
+
 	std::map<std::string, std::string>::iterator iter = mStatusText.find(text);
 	if (iter != mStatusText.end())
 	{
