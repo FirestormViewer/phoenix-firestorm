@@ -351,7 +351,7 @@ void LLConversationLogList::onCustomAction(const LLSD& userdata)
 		LLAvatarActions::toggleBlock(selected_conversation_participant_id);
 	}
 	// <FS:CR> Open conversation history externally
-	else if ("chat_history_external")
+	else if ("chat_history_external" == command_name)
 	{
 		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(
 			LLConversationLog::getInstance()->getConversation(selected_conversation_session_id)->getHistoryFileName()));
