@@ -4,7 +4,7 @@
  can_resize="true"
  default_tab_group="1"
  help_topic="conversation_preview"
- height="391"
+ height="387"
  layout="topleft"
  min_height="243"
  min_width="234"
@@ -26,9 +26,9 @@
      notify_unread_msg="false"
      parse_highlights="true"
      parse_urls="true"
-     left="5"
+     left="0"
      top_pad="25"
-     width="390">
+     width="395">
     </fs_chat_history>
     <text
      follows="bottom|right"
@@ -63,7 +63,7 @@
      top_delta="4"
      width="40">
     </text>
-	<button
+    <button
      follows="bottom|left"
      height="22"
      left="5"
@@ -73,6 +73,6 @@
      tool_tip="Open chat history externally"
      image_overlay="List_View_On"
      name="open_external_btn"
-     top_delta="-5"
-     width="25" />
+     top_delta="-2"
+     width="25"/>
 </floater>

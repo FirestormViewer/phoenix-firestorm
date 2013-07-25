@@ -24,14 +24,12 @@
      follows="left|top|right"
      height="23"
      layout="topleft"
-     left="8"
+     left="4"
      label="Filter People"
      max_length_chars="300"
      name="people_filter_input"
-     text_color="Black"
-     text_pad_left="10"
      top="4"
-     width="204" />
+     width="218" />
     <menu_button
      follows="top|right"
      height="25"
@@ -55,7 +53,7 @@
      image_selected="Toolbar_Middle_Selected"
      image_unselected="Toolbar_Middle_Off"
      layout="topleft"
-     left_pad="8"
+     left_pad="2"
      name="conversations_gear_btn"
      tool_tip="Actions on selected person or group"
      top="3"
@@ -70,15 +68,15 @@
    top="32">
     <conversation_log_list
      allow_select="true"
-     bottom="-8"
+     bottom="-4"
      opaque="true"
      follows="all"
-     left="8"
+     left="4"
      keep_selection_visible_on_reshape="true"
      item_pad="2"
      multi_select="false"
      name="conversation_log_list"
-     right="-8"
+     right="-4"
      top="0" />
   </panel>
 </floater>
