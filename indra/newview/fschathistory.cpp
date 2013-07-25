@@ -838,6 +838,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
 	bool square_brackets = false; // square brackets necessary for a system messages
 	bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
+	bool is_conversation_log = args.has("conversation_log") && args["conversation_log"].asBoolean();	// <FS:CR> Don't dim chat in conversation log
 
 	bool from_me = chat.mFromID == gAgent.getID();
 	setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
@@ -912,7 +913,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
 	// We graying out chat history by graying out messages that contains full date in a time string
-	if (message_from_log)
+	if (message_from_log && !is_conversation_log)
 	{
 		txt_color = LLColor4::grey;
 		body_message_params.color(txt_color);
@@ -967,7 +968,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
 			timestamp_style.color(timestamp_color);
 			timestamp_style.readonly_color(timestamp_color);
-			if (message_from_log)
+			if (message_from_log && is_conversation_log)
 			{
 				timestamp_style.color.alpha = FSIMChatHistoryFade;
 				timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
@@ -1016,7 +1017,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
 				link_params.color = link_color;
 				link_params.readonly_color = link_color;
-				if (message_from_log)
+				if (message_from_log && is_conversation_log)
 				{
 					link_params.color.alpha = FSIMChatHistoryFade;
 					link_params.readonly_color.alpha = FSIMChatHistoryFade;
