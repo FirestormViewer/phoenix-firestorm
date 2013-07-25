@@ -169,9 +169,6 @@ void FSFloaterIM::onFocusReceived()
 	{
 		LLIMModel::instance().sendNoUnreadMessages(mSessionID);
 	}
-
-	// <FS:Ansariel> Give focus to input textbox
-	mInputEditor->setFocus(TRUE);
 }
 
 // virtual
