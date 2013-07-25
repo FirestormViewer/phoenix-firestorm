@@ -298,7 +298,14 @@ void FSFloaterNearbyChat::onNearbySpeakers()
 // static
 void FSFloaterNearbyChat::onHistoryButtonClicked(LLUICtrl* ctrl, void* userdata)
 {
-	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName("chat"));
+	if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
+	{
+		LLFloaterReg::showInstance("preview_conversation", LLSD(LLUUID::null), true);
+	}
+	else
+	{
+		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName("chat"));
+	}
 }
 
 void FSFloaterNearbyChat::onNearbyChatContextMenuItemClicked(const LLSD& userdata)
