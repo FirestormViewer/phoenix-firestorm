@@ -3046,7 +3046,9 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
 			{
 				params.styled_message.add()
 					.text("(" + panelp->getXMLFilename() + ")")
-					.style.color(LLColor4(0.7f, 0.7f, 1.f, 1.f));
+					//<FS:KC> Define in colors.xml instead
+//					 .style.color(LLColor4(0.7f, 0.7f, 1.f, 1.f));
+					.style.color(LLUIColorTable::instance().getColor("XUITooltipFileName"));
 			}
 			params.styled_message.add().text("/");
 		}
