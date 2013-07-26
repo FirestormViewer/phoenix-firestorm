@@ -4340,6 +4340,19 @@ URL: [MEDIAURL]
 		</form>
 	</notification>
 
+	<notification name="MediaAlertSingle"> 
+Diese Parzelle enthält Medien von:
+
+Domain: [MEDIADOMAIN]
+URL: [MEDIAURL]
+		<form name="form">
+			<button name="Allow" text="Erlauben"/>
+			<button name="Deny" text="Verbieten"/>
+			<button name="BlacklistDomain" text="Blacklist"/>
+			<button name="WhitelistDomain" text="Whitelist"/>
+		</form>
+	</notification>
+
 	<notification name="AudioAlert">
 Diese Parzelle enthält Musik von:
 
@@ -4360,6 +4373,19 @@ URL: [AUDIOURL]
 			<button name="Do Now" text="Jetzt [ACTION]"/>
 			<button name="RememberDomain" text="[CONDITION] diese Domain erlauben"/>
 			<button name="RememberURL" text="[CONDITION] diese URL erlauben"/>
+		</form>
+	</notification>
+
+	<notification name="AudioAlertSingle"> 
+Auswahl merken und [LCONDITION] Musik von dieser Quelle erlauben?
+
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Allow" text="Erlauben"/>
+			<button name="Deny" text="Verbieten"/>
+			<button name="BlacklistDomain" text="Blacklist"/>
+			<button name="WhitelistDomain" text="Whitelist"/>
 		</form>
 	</notification>
 
