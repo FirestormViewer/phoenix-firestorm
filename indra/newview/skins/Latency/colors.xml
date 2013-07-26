@@ -319,6 +319,9 @@
 		name="NameTagUsername"
 		value="0.996 0.396 0.121 1.0" />
 
+	<color
+		name="XUITooltipFileName"
+		value="0.4 0.4 .7 1" />
 
 
 

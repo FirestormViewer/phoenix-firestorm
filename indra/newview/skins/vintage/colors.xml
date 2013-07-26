@@ -271,4 +271,8 @@
   <color
       name="Phototools_Header"
       reference="EmphasisColor" />
+	
+	<color
+		name="XUITooltipFileName"
+		value="0.4 0.4 .7 1" />
 </colors>
