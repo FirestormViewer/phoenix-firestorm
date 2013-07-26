@@ -784,6 +784,9 @@ void FSPanelSearchPeople::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -808,6 +811,8 @@ void FSPanelSearchPeople::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
 	
 	find();
 }
@@ -1087,6 +1092,9 @@ void FSPanelSearchGroups::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -1111,6 +1119,9 @@ void FSPanelSearchGroups::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
+	
 	find();
 }
 
@@ -1411,6 +1422,9 @@ void FSPanelSearchPlaces::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirPlacesQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -1438,6 +1452,8 @@ void FSPanelSearchPlaces::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
 	
 	find();
 }
@@ -1780,6 +1796,9 @@ void FSPanelSearchLand::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirLandQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -1801,6 +1820,8 @@ void FSPanelSearchLand::find()
 
 void FSPanelSearchLand::onBtnFind()
 {
+	resetSearch();
+	
 	find();
 }
 
@@ -2098,6 +2119,9 @@ void FSPanelSearchClassifieds::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessageFast(_PREHASH_DirClassifiedQuery);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
@@ -2123,6 +2147,9 @@ void FSPanelSearchClassifieds::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
+	
 	find();
 }
 
@@ -2433,6 +2460,9 @@ void FSPanelSearchEvents::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -2457,6 +2487,8 @@ void FSPanelSearchEvents::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
 	
 	find();
 }
