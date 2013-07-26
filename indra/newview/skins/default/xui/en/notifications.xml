@@ -5861,6 +5861,34 @@ URL: [MEDIAURL]
 
   <notification
    icon="alert.tga"  
+   name="MediaAlertSingle"
+   type="alert"> 
+This parcel provides media from:
+
+Domain: [MEDIADOMAIN]
+URL: [MEDIAURL]
+   <form name="form">
+		<button
+         index="0"
+         name="Allow"
+         text="Allow"/>
+        <button
+         index="1"
+         name="Deny"
+         text="Deny"/>
+        <button
+         index="2"   
+         name="BlacklistDomain"
+         text="Blacklist"/>
+        <button
+         index="3"   
+         name="WhitelistDomain"
+         text="Whitelist"/>
+   </form>
+  </notification>
+
+  <notification
+   icon="alert.tga"  
    name="AudioAlert"
    type="alert"> 
 This parcel provides music from:
@@ -5900,6 +5928,34 @@ URL: [AUDIOURL]
          index="2"
          name="RememberURL"
          text="[CONDITION] Allow This URL"/>
+   </form>
+  </notification>
+  
+  <notification
+   icon="alert.tga"  
+   name="AudioAlertSingle"
+   type="alert"> 
+Do you want to remember your choice and [LCONDITION] allow music from this source?
+
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
+   <form name="form">
+		<button
+         index="0"
+         name="Allow"
+         text="Allow"/>
+        <button
+         index="1"
+         name="Deny"
+         text="Deny"/>
+        <button
+         index="2"   
+         name="BlacklistDomain"
+         text="Blacklist"/>
+        <button
+         index="3"
+         name="WhitelistDomain"
+         text="Whitelist"/>
    </form>
   </notification>
 
