@@ -287,10 +287,10 @@
 		value="0.447 0.784 0.663 1.0" />
 	<color
 		name="LindenChatColor"
-		value="0.6 0.733 0.0 1.0"  />
+		value="0.14 0.7 1 1.0"  />
 	<color
 		name="NameTagLinden"
-		value="0.6 0.733 0.0 1.0"  />
+		value="0.14 0.7 1 1.0"  />
     <color
 		name="ObjectChatColor"
 		value="0.7 0.9 0.7 1.0" />
