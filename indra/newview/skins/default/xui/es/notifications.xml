@@ -2414,7 +2414,7 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 		</form>
 	</notification>
 	<notification name="MediaAlert">
-		Esta parcela provee medios de:
+		Esta parcela proporciona medios de:
 		
 		Dominio: [MEDIADOMAIN]
 		URL: [MEDIAURL]
@@ -2434,8 +2434,20 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 			<button name="RememberURL" text="[CONDITION] Permitir Esta URL"/>
 		</form>
 	</notification>
+	<notification name="MediaAlertSingle">
+		Esta parcela proporciona medios de:
+
+Dominio: [MEDIADOMAIN]
+URL: [MEDIAURL]
+		<form name="form">
+			<button name="Allow" text="Permitir"/>
+			<button name="Deny" text="Denegar"/>
+			<button name="BlacklistDomain" text="Lista negra"/>
+			<button name="WhitelistDomain" text="Lista blanca"/>
+		</form>
+	</notification>
 	<notification name="AudioAlert"> 
-		Esta parcela provee música de:
+		Esta parcela proporciona música de:
 		
 		Dominio: [AUDIODOMAIN]
 		URL: [AUDIOURL]
@@ -2455,8 +2467,20 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 			<button name="RememberURL" text="[CONDITION] Permitir Esta URL"/>
 		</form>
 	</notification>
+	<notification name="AudioAlertSingle">
+		¿Quieres recordar tu decisión y [LCONDITION] permitir música de esta fuente?
+
+Dominio: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Allow" text="Permitir"/>
+			<button name="Deny" text="Denegar"/>
+			<button name="BlacklistDomain" text="Lista negra"/>
+			<button name="WhitelistDomain" text="Lista blanca"/>
+		</form>
+	</notification>
 	<notification name="MOAPAlert">
-		Un objeto provee medios compartidos de:
+		Un objeto proporciona medios compartidos de:
 		
 		Dominio: [MOAPDOMAIN]
 		URL: [MOAPURL]
