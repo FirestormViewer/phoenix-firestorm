@@ -66,6 +66,22 @@
 
     <map>
       <key>name</key>
+      <string>Latency</string>
+      <key>folder</key>
+      <string>latency</string>
+      <key>themes</key>
+      <array>
+        <map>
+          <key>name</key>
+          <string>Extra Plain</string>
+          <key>folder</key>
+          <string/>
+        </map>
+      </array>
+    </map>
+
+    <map>
+      <key>name</key>
       <string>MetaHarper Modern</string>
       <key>folder</key>
       <string>metaharper</string>
@@ -178,21 +194,5 @@
       </array>
     </map>
 
-    <map>
-      <key>name</key>
-      <string>Latency</string>
-      <key>folder</key>
-      <string>latency</string>
-      <key>themes</key>
-      <array>
-        <map>
-          <key>name</key>
-          <string>Extra Plain</string>
-          <key>folder</key>
-          <string/>
-        </map>
-      </array>
-    </map>
-	
   </array>
 </llsd>
