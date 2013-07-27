@@ -2328,6 +2328,18 @@ URL: [MEDIAURL]
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
 	</notification>
+	<notification name="MediaAlertSingle"> 
+		Ta działka dostarcza media z:
+
+Domena: [MEDIADOMAIN]
+URL: [MEDIAURL]
+		<form name="form">
+			<button name="Allow" text="Zezwól"/>
+			<button name="Deny" text="Odmów"/>
+			<button name="BlacklistDomain" text="Czarna lista"/>
+			<button name="WhitelistDomain" text="Biała lista"/>
+		</form>
+	</notification>
 	<notification name="AudioAlert">
 		Ta działka dostarcza muzykę z:
 
@@ -2347,6 +2359,18 @@ URL: [AUDIOURL]
 			<button name="Do Now" text="[ACTION] Teraz"/>
 			<button name="RememberDomain" text="[CONDITION] Zezwól tej domenie"/>
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
+		</form>
+	</notification>
+	<notification name="AudioAlertSingle"> 
+		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na muzykę z tego źródła?
+
+Domena: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Allow" text="Zezwól"/>
+			<button name="Deny" text="Odmów"/>
+			<button name="BlacklistDomain" text="Czarna lista"/>
+			<button name="WhitelistDomain" text="Biała lista"/>
 		</form>
 	</notification>
 	<notification name="MOAPAlert">
