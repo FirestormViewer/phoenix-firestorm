@@ -293,7 +293,7 @@ std::string LLAudioEngine_FMODEX::getDriverName(bool verbose)
 		U32 version;
 		if(!Check_FMOD_Error(mSystem->getVersion(&version), "FMOD::System::getVersion"))
 		{
-			return llformat("FMOD Ex %1x.%02x.%02x", version >> 16, version >> 8 & 0x000000FF, version & 0x000000FF);
+			return llformat("FMOD Ex %1x.%02x.%02x by Firelight Technologies", version >> 16, version >> 8 & 0x000000FF, version & 0x000000FF);
 		}
 	}
 	return "FMODEx";
