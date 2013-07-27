@@ -8487,7 +8487,10 @@ void process_user_info_reply(LLMessageSystem* msg, void**)
 	std::string dir_visibility;
 	msg->getString( "UserData", "DirectoryVisibility", dir_visibility);
 
-	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email);
+	LLFloaterPreference::updateUserInfo(dir_visibility, im_via_email, email);
+	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	LLFloaterSnapshot::setAgentEmail(email);
 }
 

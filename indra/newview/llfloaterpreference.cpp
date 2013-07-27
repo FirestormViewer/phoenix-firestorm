@@ -1137,12 +1137,16 @@ void LLFloaterPreference::onBtnCancel()
 }
 
 // static 
-void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email)
+// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+//void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email)
+void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email)
 {
 	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
 	if (instance)
 	{
-		instance->setPersonalInfo(visibility, im_via_email);	
+		// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+		//instance->setPersonalInfo(visibility, im_via_email);	
+		instance->setPersonalInfo(visibility, im_via_email, email);
 	}
 }
 
@@ -2056,7 +2060,10 @@ bool LLFloaterPreference::moveTranscriptsAndLog()
 	return true;
 }
 
-void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email)
+// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+//void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email)
+void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email)
+// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 {
 	mGotPersonalInfo = true;
 	mOriginalIMViaEmail = im_via_email;
@@ -2100,13 +2107,13 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 		getChildView("reset_logpath")->setEnabled(TRUE);
 	}
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//getChild<LLUICtrl>("email_address")->setValue(display_email); <FS:TM> CHUI Merge LL removed this line, commenting out rest fror now
-	//if(display_email.size() > 30)
-	//{
-	//	display_email.resize(30);
-	//	display_email += "...";
-	//}
-	//getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
+	std::string display_email(email);
+	if(display_email.size() > 30)
+	{
+		display_email.resize(30);
+		display_email += "...";
+	}
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 }
 

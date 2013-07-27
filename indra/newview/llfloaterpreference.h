@@ -78,7 +78,9 @@ public:
 	/*virtual*/ void changed(const LLUUID& session_id, U32 mask) {};
 
 	// static data update, called from message handler
-	static void updateUserInfo(const std::string& visibility, bool im_via_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//static void updateUserInfo(const std::string& visibility, bool im_via_email);
+	static void updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 
 	// refresh all the graphics preferences menus
 	static void refreshEnabledGraphics();
@@ -180,7 +182,10 @@ public:
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	void onClickResetLogPath();
 	void enableHistory();
-	void setPersonalInfo(const std::string& visibility, bool im_via_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//void setPersonalInfo(const std::string& visibility, bool im_via_email);
+	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
+	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	void refreshEnabledState();
 	void disableUnavailableSettings();
 	void onCommitWindowedMode();
