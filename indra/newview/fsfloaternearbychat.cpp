@@ -152,6 +152,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 		mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterNearbyChat::reshapeChatLayoutPanel, this));
 		mInputEditor->setPassDelete(TRUE);
 		mInputEditor->setFont(LLViewerChat::getChatFont());
+		mInputEditor->setLabel(getString("chatbox_label"));
 	}
 	mChatLayoutPanel = getChild<LLLayoutPanel>("chat_layout_panel");
 	mInputPanels = getChild<LLLayoutStack>("input_panels");

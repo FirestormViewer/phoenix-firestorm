@@ -23,7 +23,7 @@
   can_resize="true"
   min_width="250"
   min_height="150">
-  
+  <floater.string name="chatbox_label">To nearby chat</floater.string>
   <layout_stack
     border_size="0"
     animate="false"
