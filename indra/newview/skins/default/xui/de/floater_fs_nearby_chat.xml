@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="nearby_chat" title="Nearby Chat">
+<floater name="nearby_chat" title="Chat in der Nähe">
 	<floater.string name="chatbox_label">
 		An Chat in der Nähe
 	</floater.string>
