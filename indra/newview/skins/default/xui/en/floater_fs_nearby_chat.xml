@@ -38,6 +38,7 @@
     top="14"
     left="3">
     <layout_panel
+      name="lp_translate_btn"
       auto_resize="false"
       user_resize="false"
       top="0"
@@ -60,6 +61,7 @@
       name="translate_btn"/>
     </layout_panel>
      <layout_panel
+      name="lp_chat_history_btn"
       auto_resize="false"
       user_resize="false"
       layout="topleft"
@@ -79,6 +81,7 @@
        name="chat_history_btn"/>
      </layout_panel>
      <layout_panel
+      name="lp_chat_history_muted_btn"
       auto_resize="false"
       user_resize="false"
       top="0"
@@ -111,7 +114,7 @@
     width="394"
     layout="topleft"
     orientation="horizontal"
-    name="im_panels"
+    name="ls_chat"
     top="40"
     left="0">
     <layout_panel
@@ -188,8 +191,9 @@
                font="SansSerifSmall"
                height="20"
                is_expandable="true"
+               label="To nearby chat"
                text_tentative_color="TextFgTentativeColor"
-			   name="chat_box"
+               name="chat_box"
                max_length="3070"
                spellcheck="true"
                tab_group="3"
