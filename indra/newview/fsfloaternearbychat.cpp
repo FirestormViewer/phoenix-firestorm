@@ -313,6 +313,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 // virtual
 BOOL FSFloaterNearbyChat::focusFirstItem(BOOL prefer_text_fields, BOOL focus_flash)
 {
+	mInputEditor->setFocus(TRUE);
 	onTabInto();
 	if (focus_flash)
 	{
@@ -423,6 +424,24 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 		}
 	}
 	// </Ansariel> Support for chat console
+
+	BOOL is_minimized = visible && isChatMultiTab()
+		? FSFloaterIMContainer::getInstance()->isMinimized()
+		: !visible;
+
+	if (!is_minimized && mChatHistory && mInputEditor)
+	{
+		//only if floater was construced and initialized from xml
+		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+		
+		//prevent stealing focus when opening a background IM tab (EXT-5387, checking focus for EXT-6781)
+		// If this is docked, is the selected tab, and the im container has focus, put focus in the input ctrl -KC
+		bool is_active = im_container->getActiveFloater() == this && im_container->hasFocus();
+		if (!isChatMultiTab() || is_active || hasFocus())
+		{
+			mInputEditor->setFocus(TRUE);
+		}
+	}
 }
 
 void FSFloaterNearbyChat::onOpen(const LLSD& key )
