@@ -3019,16 +3019,6 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id)
 		const LLInventoryItem* item = item_array.get(i).get();
 		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
 		{
-// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-			// NOTE-RLVa: debug-only, can be removed down the line
-			if (rlv_handler_t::isEnabled())
-			{
-				RLV_ASSERT(rlvPredCanRemoveItem(item));
-			}
-#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-// [/RLVa:KB]
-
 			gInventory.purgeObject(item->getUUID());
 		}
 	}
@@ -3047,16 +3037,6 @@ void LLAppearanceMgr::removeCOFLinksOfType(LLWearableType::EType type)
 		const LLViewerInventoryItem* item = *it;
 		if (item->getIsLinkType()) // we must operate on links only
 		{
-// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-			// NOTE-RLVa: debug-only, can be removed down the line
-			if (rlv_handler_t::isEnabled())
-			{
-				RLV_ASSERT(rlvPredCanRemoveItem(item));
-			}
-#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-// [/RLVa:KB]
-
 			gInventory.purgeObject(item->getUUID());
 		}
 	}
