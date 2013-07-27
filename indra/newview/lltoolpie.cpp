@@ -355,7 +355,9 @@ BOOL LLToolPie::handleLeftClickPick()
 	}
 	
 	LLHUDIcon* last_hit_hud_icon = mPick.mHUDIcon;
-	if (!object && last_hit_hud_icon && last_hit_hud_icon->getSourceObject())
+	// <FS:Ansariel> FIRE-11024: Only open script debug floater if it's a script error
+	//if (!object && last_hit_hud_icon && last_hit_hud_icon->getSourceObject())
+	if (!object && last_hit_hud_icon && last_hit_hud_icon->getScriptError() && last_hit_hud_icon->getSourceObject())
 	{
 		LLFloaterScriptDebug::show(last_hit_hud_icon->getSourceObject()->getID());
 	}

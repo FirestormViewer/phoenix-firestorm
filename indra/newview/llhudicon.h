@@ -77,6 +77,7 @@ public:
 
 	// <FS:Ansariel> Mark script error icons
 	void setScriptError();
+	bool getScriptError() const { return mScriptError; }
 	static BOOL scriptIconsNearby();
 	// </FS:Ansariel> Mark script error icons
 
