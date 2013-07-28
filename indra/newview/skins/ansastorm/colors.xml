@@ -413,6 +413,9 @@
      name="AgentChatColor"
      reference="White" />
     <color
+     name="AgentIMColor"
+     reference="White" />
+    <color
      name="AlertBoxColor"
      reference="SL-DkTitanium" />
     <color
