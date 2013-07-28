@@ -2839,9 +2839,11 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// pressed except shift), then give focus to nearby chat (STORM-560)
 
 	// <FS:PP> Attempt to speed up things a little
+	// -- Also removed !gAgentCamera.cameraMouselook() because of FIRE-10906; Pressing letter keys SHOULD move focus to chat when this option is enabled, regardless of being in mouselook or not
+	// -- The need to press Enter key while being in mouselook mode every time to say a sentence is not too coherent with user's expectation, if he/she checked "starts local chat"
 	// if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
 	static LLCachedControl<S32> LetterKeysFocusChatBar(gSavedSettings, "LetterKeysFocusChatBar");
-	if ( LetterKeysFocusChatBar && !gAgentCamera.cameraMouselook() && 
+	if ( LetterKeysFocusChatBar && 
 	// </FS:PP>
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
@@ -3046,7 +3048,9 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
 			{
 				params.styled_message.add()
 					.text("(" + panelp->getXMLFilename() + ")")
-					.style.color(LLColor4(0.7f, 0.7f, 1.f, 1.f));
+					//<FS:KC> Define in colors.xml instead
+//					 .style.color(LLColor4(0.7f, 0.7f, 1.f, 1.f));
+					.style.color(LLUIColorTable::instance().getColor("XUITooltipFileName"));
 			}
 			params.styled_message.add().text("/");
 		}

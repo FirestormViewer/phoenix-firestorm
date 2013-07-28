@@ -36,11 +36,9 @@
 
 class LLResizeBar;
 class FSChatHistory;
-// <FS:Zi> Nearby chat bar class
-// class LLLineEditor;
-#include "lllineeditor.h"
-#include "llsingleton.h"
-// </FS:Zi>
+#include "llchatentry.h"
+//#include "llsingleton.h"
+#include "lllayoutstack.h"
 
 class FSFloaterNearbyChat: public LLDockableFloater
 {
@@ -58,16 +56,6 @@ public:
 	void	onChatBarVisibilityChanged();
 	void	onChatChannelVisibilityChanged();
 
-	// This doesn't seem to apply anymore? It makes the chat and spin box colors
-	// appear wrong when focused and unfocused, so disable this. -Zi
-#if 0
-	virtual BOOL	handleMouseDown(S32 x, S32 y, MASK mask);
-	virtual void	draw();
-
-	// focus overrides
-	/*virtual*/ void	onFocusLost();
-#endif	
-	/*virtual*/ void	onFocusReceived();
 	/*virtual*/ void	onOpen	(const LLSD& key);
 
 	/*virtual*/ void	setVisible(BOOL visible);
@@ -81,6 +69,7 @@ public:
 	static void processChatHistoryStyleUpdate(const LLSD& newvalue);
 
 	void loadHistory();
+	void reloadMessages(bool clean_messages = false);
 
 	static FSFloaterNearbyChat* getInstance();
 	
@@ -99,6 +88,31 @@ public:
 	static bool isWordsName(const std::string& name);
 
 	void enableTranslationButton(bool enabled);
+	LLChatEntry* getChatBox() { return mInputEditor; }
+	
+	virtual BOOL handleKeyHere( KEY key, MASK mask );
+	
+	static void startChat(const char* line);
+	static void stopChat();
+	
+	static void sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate);
+	static void sendChatFromViewer(const LLWString &wtext, EChatType type, BOOL animate);
+	
+protected:
+	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
+	void onChatBoxKeystroke();
+	void onChatBoxFocusLost();
+	void onChatBoxFocusReceived();
+	
+	void sendChat( EChatType type );
+	void onChatBoxCommit();
+	
+	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
+	EChatType processChatTypeTriggers(EChatType type, std::string &str);
+	void reshapeFloater(bool collapse);
+	void reshapeChatLayoutPanel();
+	
+	static S32 sLastSpecialChatChannel;
 
 private:
 	void	getAllowedRect		(LLRect& rect);
@@ -110,9 +124,15 @@ private:
 	FSChatHistory*		mChatHistory;
 	// <FS:Ansariel> Optional muted chat history
 	FSChatHistory*		mChatHistoryMuted;
+	LLChatEntry*		mInputEditor;
+	LLLayoutPanel*		mChatLayoutPanel;
+	LLLayoutStack*		mInputPanels;
+	
+	S32 mInputEditorPad;
+	S32 mChatLayoutPanelHeight;
+	S32 mFloaterHeight;
 
 	std::vector<LLChat> mMessageArchive;
-	LLLineEditor* mInputEditor;
 
 	BOOL FSUseNearbyChatConsole;
 };

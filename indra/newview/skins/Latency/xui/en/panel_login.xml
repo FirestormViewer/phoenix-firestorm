@@ -30,10 +30,9 @@
     <web_browser
      name="login_html"
      top="0"
-     bottom="600"
      left="0"
-     height="600"
-     width="996"
+     height="520"
+     width="1130"
      follows="all"
      bg_opaque_color="Black"
      border_visible="false"

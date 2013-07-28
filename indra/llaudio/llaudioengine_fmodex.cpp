@@ -321,6 +321,8 @@ void LLAudioEngine_FMODEX::shutdown()
 	if ( mSystem ) // speculative fix for MAINT-2657
 	{
 	mSystem->close();
+	// <FS:Ansariel> Additional debug message; viewer might hang somewhere in here
+	llinfos << "LLAudioEngine_FMODEX::shutdown() FMOD Ex system closed. Now releasing..." << llendl;
 	mSystem->release();
 	}
 	llinfos << "LLAudioEngine_FMODEX::shutdown() done closing FMOD Ex" << llendl;

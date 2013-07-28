@@ -23,7 +23,7 @@
     image_pressed="Icon_Gear_Press"
     scale_image="false">
     <button.commit_callback
-       function="Vol.GoAudioPrefs" />
+       function="MediaListCtrl.GoMediaPrefs" />
   </button> 
       <slider
      control_name="AudioLevelMaster"
@@ -42,7 +42,7 @@
      top="10"
      volume="true">
         <slider.commit_callback
-         function="Vol.setControlFalse"
+         function="Pref.setControlFalse"
          parameter="MuteAudio" />
     </slider>
     <button
@@ -74,7 +74,7 @@
         top_pad="4"
         volume="true">
     <slider.commit_callback
-        function="Vol.setControlFalse"
+        function="Pref.setControlFalse"
         parameter="MuteUI" />
     </slider>
     <button
@@ -107,7 +107,7 @@
      top_pad="4"
      volume="true">
         <slider.commit_callback
-         function="Vol.setControlFalse"
+         function="Pref.setControlFalse"
          parameter="MuteAmbient" />
     </slider>
     <button
@@ -150,7 +150,7 @@
      top_pad="4"
      volume="true">
         <slider.commit_callback
-         function="Vol.setControlFalse"
+         function="Pref.setControlFalse"
          parameter="MuteSounds" />
     </slider>
     <button
@@ -167,7 +167,7 @@
      tab_stop="false"
      width="16">
       <button.commit_callback
-      function="Vol.SetSounds"/>
+      function="Pref.SetSounds"/>
     </button>
   <check_box
     name="gesture_audio_play_btn"
@@ -196,7 +196,7 @@
      top_pad="4"
      volume="true">
         <slider.commit_callback
-         function="Vol.setControlFalse"
+         function="Pref.setControlFalse"
          parameter="MuteMusic" />
     </slider>
     <button
@@ -238,7 +238,7 @@
         top_pad="4"
         volume="true">
       <slider.commit_callback
-        function="Vol.setControlFalse"
+        function="Pref.setControlFalse"
         parameter="MuteMedia" />
     </slider>
     <button
@@ -282,7 +282,7 @@
         show_text="false"
         volume="true">
     <slider.commit_callback
-        function="Vol.setControlFalse"
+        function="Pref.setControlFalse"
         parameter="MuteVoice" />
     </slider>
     <button

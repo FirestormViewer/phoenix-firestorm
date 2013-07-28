@@ -443,7 +443,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
-	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
+	//<FS:KC> Handled centrally now
+//	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
 	mCommitCallbackRegistrar.add("Pref.ClickDisablePopup",		boost::bind(&LLFloaterPreference::onClickDisablePopup, this));	
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
@@ -478,14 +479,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
 	mCommitCallbackRegistrar.add("Pref.ClickActionChange",		boost::bind(&LLFloaterPreference::onClickActionChange, this));
-
-	// <FS:Zi> Backup settings
-	mCommitCallbackRegistrar.add("Pref.SetBackupSettingsPath",	boost::bind(&LLFloaterPreference::onClickSetBackupSettingsPath, this));
-	mCommitCallbackRegistrar.add("Pref.BackupSettings",			boost::bind(&LLFloaterPreference::onClickBackupSettings, this));
-	mCommitCallbackRegistrar.add("Pref.RestoreSettings",		boost::bind(&LLFloaterPreference::onClickRestoreSettings, this));
-	mCommitCallbackRegistrar.add("Pref.BackupSelectAll",		boost::bind(&LLFloaterPreference::onClickSelectAll, this));
-	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&LLFloaterPreference::onClickDeselectAll, this));
-	// </FS:Zi>
 
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
@@ -667,12 +660,6 @@ BOOL LLFloaterPreference::postBuild()
 
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
-
-	// <FS:Zi> Backup Settings
-	// Apparently, line editors don't update with their settings controls, so do that manually here
-	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
-	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
-	// </FS:Zi>
 
 	// <FS:Kadah> Load the list of font settings
 	populateFontSelectionCombo();
@@ -1097,7 +1084,7 @@ void LLFloaterPreference::onBtnOK()
 		if(mGotPersonalInfo)
 		{
 			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
-	}
+		}
 	}
 	else
 	{
@@ -1150,12 +1137,16 @@ void LLFloaterPreference::onBtnCancel()
 }
 
 // static 
-void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email)
+// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+//void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email)
+void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email)
 {
 	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
 	if (instance)
 	{
-		instance->setPersonalInfo(visibility, im_via_email);	
+		// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+		//instance->setPersonalInfo(visibility, im_via_email);	
+		instance->setPersonalInfo(visibility, im_via_email, email);
 	}
 }
 
@@ -1881,6 +1872,8 @@ void LLFloaterPreference::onClickSetMiddleMouse()
 	p2t_line_editor->setValue(audioPanel->getString("middle_mouse"));
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLFloaterPreference::onClickSetSounds()
 {
 	// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
@@ -1888,6 +1881,7 @@ void LLFloaterPreference::onClickSetSounds()
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 }
+*/
 
 // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
@@ -2066,7 +2060,10 @@ bool LLFloaterPreference::moveTranscriptsAndLog()
 	return true;
 }
 
-void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email)
+// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+//void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email)
+void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email)
+// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 {
 	mGotPersonalInfo = true;
 	mOriginalIMViaEmail = im_via_email;
@@ -2110,13 +2107,13 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 		getChildView("reset_logpath")->setEnabled(TRUE);
 	}
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//getChild<LLUICtrl>("email_address")->setValue(display_email); <FS:TM> CHUI Merge LL removed this line, commenting out rest fror now
-	//if(display_email.size() > 30)
-	//{
-	//	display_email.resize(30);
-	//	display_email += "...";
-	//}
-	//getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
+	std::string display_email(email);
+	if(display_email.size() > 30)
+	{
+		display_email.resize(30);
+		display_email += "...";
+	}
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 }
 
@@ -2419,7 +2416,8 @@ LLPanelPreference::LLPanelPreference()
 //: LLPanel(),
   //mBandWidthUpdater(NULL)
 {
-	mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
+	//<FS:KC> Handled centrally now
+	// mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
 	mCommitCallbackRegistrar.add("Pref.updateMediaAutoPlayCheckbox",	boost::bind(&LLPanelPreference::updateMediaAutoPlayCheckbox, this, _1));
 }
 
@@ -2667,6 +2665,8 @@ void LLPanelPreference::cancel()
 	}
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLPanelPreference::setControlFalse(const LLSD& user_data)
 {
 	std::string control_name = user_data.asString();
@@ -2675,6 +2675,7 @@ void LLPanelPreference::setControlFalse(const LLSD& user_data)
 	if (control)
 		control->set(LLSD(FALSE));
 }
+*/
 
 void LLPanelPreference::updateMediaAutoPlayCheckbox(LLUICtrl* ctrl)
 {
@@ -3252,16 +3253,38 @@ S32 copy_prefs_file(const std::string& from, const std::string& to)
 	const S32 COPY_BUFFER_SIZE = 16384;
 	U8 buffer[COPY_BUFFER_SIZE];
 	while(((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
-			&& (fwrite(buffer, 1, read, out) == (U32)read));		/* Flawfinder : ignore */
+		  && (fwrite(buffer, 1, read, out) == (U32)read));		/* Flawfinder : ignore */
 	if(ferror(in) || ferror(out)) rv = -2;
-
+	
 	if(in) fclose(in);
 	if(out) fclose(out);
-
+	
 	return rv;
 }
 
-void LLFloaterPreference::onClickSetBackupSettingsPath()
+static LLRegisterPanelClassWrapper<FSPanelPreferenceBackup> t_pref_backup("panel_preference_backup");
+
+FSPanelPreferenceBackup::FSPanelPreferenceBackup() : LLPanelPreference()
+{
+	mCommitCallbackRegistrar.add("Pref.SetBackupSettingsPath",	boost::bind(&FSPanelPreferenceBackup::onClickSetBackupSettingsPath, this));
+	mCommitCallbackRegistrar.add("Pref.BackupSettings",			boost::bind(&FSPanelPreferenceBackup::onClickBackupSettings, this));
+	mCommitCallbackRegistrar.add("Pref.RestoreSettings",		boost::bind(&FSPanelPreferenceBackup::onClickRestoreSettings, this));
+	mCommitCallbackRegistrar.add("Pref.BackupSelectAll",		boost::bind(&FSPanelPreferenceBackup::onClickSelectAll, this));
+	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&FSPanelPreferenceBackup::onClickDeselectAll, this));
+}
+
+BOOL FSPanelPreferenceBackup::postBuild()
+{
+	// <FS:Zi> Backup Settings
+	// Apparently, line editors don't update with their settings controls, so do that manually here
+	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
+	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
+	// </FS:Zi>
+	
+	return LLPanelPreference::postBuild();
+}
+
+void FSPanelPreferenceBackup::onClickSetBackupSettingsPath()
 {
 	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
 	LLDirPicker& picker=LLDirPicker::instance();
@@ -3276,7 +3299,7 @@ void LLFloaterPreference::onClickSetBackupSettingsPath()
 	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
 }
 
-void LLFloaterPreference::onClickBackupSettings()
+void FSPanelPreferenceBackup::onClickBackupSettings()
 {
 	llwarns << "entered" << llendl;
 	// Get settings backup path
@@ -3464,13 +3487,13 @@ void LLFloaterPreference::onClickBackupSettings()
 	LLNotificationsUtil::add("BackupFinished");
 }
 
-void LLFloaterPreference::onClickRestoreSettings()
+void FSPanelPreferenceBackup::onClickRestoreSettings()
 {
 	// ask the user if they really want to restore and restart
-	LLNotificationsUtil::add("SettingsRestoreNeedsLogout",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::doRestoreSettings,this,_1,_2));
+	LLNotificationsUtil::add("SettingsRestoreNeedsLogout",LLSD(),LLSD(),boost::bind(&FSPanelPreferenceBackup::doRestoreSettings,this,_1,_2));
 }
 
-void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD& response)
+void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification,const LLSD& response)
 {
 	llwarns << "entered" << llendl;
 	// Check the user's answer about restore and restart
@@ -3513,7 +3536,11 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 	}
 
 	// Close the window so the restored settings can't be destroyed by the user
-	onBtnOK();
+	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	if (instance)
+	{
+		instance->onBtnOK();
+	}
 
 	if(gSavedSettings.getBOOL("RestoreGlobalSettings"))
 	{
@@ -3653,11 +3680,11 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 		}
 	}
 	// Tell the user we have finished restoring settings and the viewer must shut down
-	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::onQuitConfirmed,this,_1,_2));
+	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&FSPanelPreferenceBackup::onQuitConfirmed,this,_1,_2));
 }
 
 // User confirmed the shutdown and we proceed
-void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& response)
+void FSPanelPreferenceBackup::onQuitConfirmed(const LLSD& notification,const LLSD& response)
 {
 	// Make sure the viewer will not save any settings on exit, so our copied files will survive
 	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
@@ -3666,17 +3693,17 @@ void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& r
 	LLAppViewer::instance()->requestQuit();
 }
 
-void LLFloaterPreference::onClickSelectAll()
+void FSPanelPreferenceBackup::onClickSelectAll()
 {
 	doSelect(TRUE);
 }
 
-void LLFloaterPreference::onClickDeselectAll()
+void FSPanelPreferenceBackup::onClickDeselectAll()
 {
 	doSelect(FALSE);
 }
 
-void LLFloaterPreference::doSelect(BOOL all)
+void FSPanelPreferenceBackup::doSelect(BOOL all)
 {
 	// Get scroll list control that holds the list of global files
 	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
@@ -3690,7 +3717,7 @@ void LLFloaterPreference::doSelect(BOOL all)
 	applySelection(globalFoldersScrollList,all);
 }
 
-void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
+void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control,BOOL all)
 {
 	// Pull out all data
 	std::vector<LLScrollListItem*> itemList=control->getAllData();

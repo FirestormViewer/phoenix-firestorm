@@ -78,7 +78,9 @@ public:
 	/*virtual*/ void changed(const LLUUID& session_id, U32 mask) {};
 
 	// static data update, called from message handler
-	static void updateUserInfo(const std::string& visibility, bool im_via_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//static void updateUserInfo(const std::string& visibility, bool im_via_email);
+	static void updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 
 	// refresh all the graphics preferences menus
 	static void refreshEnabledGraphics();
@@ -93,8 +95,11 @@ public:
 	void selectPrivacyPanel();
 	void selectChatPanel();
 
-protected:	
+// <FS:CR> Make onBtnOk() public for settings backup panel
+//protected:
 	void		onBtnOK();
+protected:
+// </FS:CR>
 	void		onBtnCancel();
 	void		onBtnApply();
 
@@ -165,7 +170,7 @@ public:
 	void onClickSetKey();
 	void setKey(KEY key);
 	void onClickSetMiddleMouse();
-	void onClickSetSounds();
+	// void onClickSetSounds();	//<FS:KC> Handled centrally now
 	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	void setPreprocInclude();
 	void onClickEnablePopup();
@@ -177,7 +182,10 @@ public:
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	void onClickResetLogPath();
 	void enableHistory();
-	void setPersonalInfo(const std::string& visibility, bool im_via_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//void setPersonalInfo(const std::string& visibility, bool im_via_email);
+	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
+	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	void refreshEnabledState();
 	void disableUnavailableSettings();
 	void onCommitWindowedMode();
@@ -211,18 +219,6 @@ public:
 	static void refreshSkin(void* data);
 	void selectPanel(const LLSD& name);
 
-	// <FS:Zi> Backup settings
-	void onClickSetBackupSettingsPath();
-	void onClickSelectAll();
-	void onClickDeselectAll();
-	void onClickBackupSettings();
-	void onClickRestoreSettings();
-
-	void doSelect(BOOL all);		// calls applySelection for each list
-	void applySelection(LLScrollListCtrl* control,BOOL all);		// selects or deselects all items in a scroll list
-	void doRestoreSettings(const LLSD& notification,const LLSD& response);	// callback for restore dialog
-	void onQuitConfirmed(const LLSD& notification,const LLSD& response);	// callback for finished restore dialog
-// </FS:Zi>
 private:
 
 	void onDeleteTranscripts();
@@ -254,7 +250,7 @@ public:
 
 	virtual void apply();
 	virtual void cancel();
-	void setControlFalse(const LLSD& user_data);
+	// void setControlFalse(const LLSD& user_data);	//<FS:KC> Handled centrally now
 	virtual void setHardwareDefaults(){};
 
 	// Disables "Allow Media to auto play" check box only when both
@@ -345,6 +341,28 @@ public:
 	void refresh();
 };
 // [/SL:KB]
+
+// <FS:CR> Settings Backup
+class FSPanelPreferenceBackup : public LLPanelPreference
+{
+public:
+	FSPanelPreferenceBackup();
+	/*virtual*/ BOOL postBuild();
+	
+protected:
+	// <FS:Zi> Backup settings
+	void onClickSetBackupSettingsPath();
+	void onClickSelectAll();
+	void onClickDeselectAll();
+	void onClickBackupSettings();
+	void onClickRestoreSettings();
+	
+	void doSelect(BOOL all);		// calls applySelection for each list
+	void applySelection(LLScrollListCtrl* control,BOOL all);		// selects or deselects all items in a scroll list
+	void doRestoreSettings(const LLSD& notification,const LLSD& response);	// callback for restore dialog
+	void onQuitConfirmed(const LLSD& notification,const LLSD& response);	// callback for finished restore dialog
+	// </FS:Zi>
+};
 
 #ifdef OPENSIM // <FS:AW optional opensim support>
 // <FS:AW  opensim preferences>

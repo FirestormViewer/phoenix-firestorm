@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="nearby_chat" title="Czat lokalny">
-	<layout_stack name="main_layout_stack">
-		<layout_panel name="chat_history_and_buttons_panel">
+	<floater.string name="chatbox_label">
+		Na czat lokalny
+	</floater.string>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="lp_translate_btn">
 			<button tool_tip="Użyj zdefiniowanej wcześniej usługi tłumaczącej" name="translate_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_btn">
 			<button tool_tip="Otwórz historię czatu lokalnego." name="chat_history_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_muted_btn">
 			<button tool_tip="Pokazuj wyciszone wiadomości w oknie historii czatu lokalnego." name="chat_history_muted_btn"/>
 		</layout_panel>
-		<layout_panel name="chat_bar_visibility_panel">
-			<layout_stack name="chat_bar_channel_spinner_layout_stack">
-				<layout_panel name="chat_bar_layout_panel">
-					<fs_nearby_chat_control label="Na czat lokalny" name="chat_box"/>
-				</layout_panel>
-				<layout_panel name="channel_spinner_visibility_panel">
-					<spinner label="Kan." name="ChatChannel" tool_tip="Kanał, na jaki wiadomość na zostać wysłana. Włączone w Ustawienia -> Czat -> Firestorm -> Oferuj ręczny wybór kanału w pasku czatu."/>
+	</layout_stack>
+	<layout_stack name="ls_chat">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<spinner name="ChatChannel" tool_tip="Kanał, na jaki wiadomość na zostać wysłana. Włączone w Ustawienia -> Czat -> Firestorm -> Oferuj ręczny wybór kanału w pasku czatu."/>
+						</layout_panel>
+					</layout_stack>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

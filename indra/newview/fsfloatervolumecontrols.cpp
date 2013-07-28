@@ -41,10 +41,12 @@
 FSFloaterVolumeControls::FSFloaterVolumeControls(const LLSD& key)
 :	LLFloater(key)
 {
-	//<FS:KC> Handled globally now
-	// mCommitCallbackRegistrar.add("Vol.GoAudioPrefs", boost::bind(&FSFloaterVolumeControls::onAudioPrefsButtonClicked, this));
+	//<FS:KC> Handled centrally now
+	/*
+	mCommitCallbackRegistrar.add("Vol.GoAudioPrefs", boost::bind(&FSFloaterVolumeControls::onAudioPrefsButtonClicked, this));
 	mCommitCallbackRegistrar.add("Vol.setControlFalse", boost::bind(&FSFloaterVolumeControls::setControlFalse, this, _2));
 	mCommitCallbackRegistrar.add("Vol.SetSounds", boost::bind(&FSFloaterVolumeControls::setSounds, this));
+	*/
 }
 
 FSFloaterVolumeControls::~FSFloaterVolumeControls()
@@ -63,7 +65,7 @@ void FSFloaterVolumeControls::handleVisibilityChange(BOOL new_visibility)
 	LLFloater::handleVisibilityChange(new_visibility);
 }
 
-//<FS:KC> Handled globally now
+//<FS:KC> Handled centrally now
 /*
 void FSFloaterVolumeControls::onAudioPrefsButtonClicked()
 {
@@ -81,7 +83,6 @@ void FSFloaterVolumeControls::onAudioPrefsButtonClicked()
 		}
 	}
 }
-*/
 
 void FSFloaterVolumeControls::setControlFalse(const LLSD& user_data)
 {
@@ -101,3 +102,4 @@ void FSFloaterVolumeControls::setSounds()
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 }
+*/

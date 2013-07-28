@@ -2,7 +2,7 @@
 <floater name="floater_conversation_log" title="Dziennik rozmów">
 	<panel name="buttons_panel">
 		<filter_editor label="Filtruj ludzi" name="people_filter_input" />
-		<menu_button name="conversation_view_btn" tool_tip="Opcje widoku/sortowania" />
 		<menu_button name="conversations_gear_btn" tool_tip="Akcje dotyczące wybranej osoby lub grupy" />
+		<menu_button name="conversation_view_btn" tool_tip="Opcje widoku/sortowania" />
 	</panel>
 </floater>

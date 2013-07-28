@@ -413,6 +413,9 @@
      name="AgentChatColor"
      reference="White" />
     <color
+     name="AgentIMColor"
+     reference="White" />
+    <color
      name="AlertBoxColor"
      reference="SL-DkTitanium" />
     <color
@@ -1269,4 +1272,8 @@
   <color
       name="SyntaxPreprocessor"
       value="0 0 .8 1" />
+	  
+  <color
+      name="XUITooltipFileName"
+      value="0.7 0.7 1 1" />
 </colors>
