@@ -3315,7 +3315,12 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 		: LLFontGL::ONLY_WORD_BOUNDARIES;
 	
 	
-	LLWString offsetString(text.c_str() + segment_offset + mStart);
+	// <FS:ND> Don't make excessive string copies.
+
+	// LLWString offsetString(text.c_str() + segment_offset + mStart);
+	S32 offsetLength = text.length() - (segment_offset + mStart);
+
+	// </FS:ND>
 
 	if(getLength() < segment_offset + mStart)
 	{ 
@@ -3323,16 +3328,32 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 						<< segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << "\tmax_chars\t" << max_chars << llendl;
 	}
 
-	if(offsetString.length() + 1 < max_chars)
+	// <FS:ND> Don't make excessive string copies.
+
+	// if(offsetString.length() + 1 < max_chars)
+	// {
+	// 	llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetString.length():\t" << offsetString.length() << " getLength() : "
+	// 		<< getLength() << "\tsegment_offset:\t" << segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << llendl;
+	// }
+	// 
+	// S32 num_chars = mStyle->getFont()->maxDrawableChars(offsetString.c_str(), 
+	// 											(F32)num_pixels,
+	// 											max_chars, 
+	// 											word_wrap_style);
+
+	if( offsetLength + 1 < max_chars)
 	{
-		llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetString.length():\t" << offsetString.length() << " getLength() : "
+		llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetString.length():\t" << offsetLength << " getLength() : "
 			<< getLength() << "\tsegment_offset:\t" << segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << llendl;
 	}
 	
-	S32 num_chars = mStyle->getFont()->maxDrawableChars(offsetString.c_str(), 
+	S32 num_chars = mStyle->getFont()->maxDrawableChars(text.c_str() + (segment_offset + mStart), 
 												(F32)num_pixels,
 												max_chars, 
 												word_wrap_style);
+
+
+	// </FS:ND>
 
 	if (num_chars == 0 
 		&& line_offset == 0 
