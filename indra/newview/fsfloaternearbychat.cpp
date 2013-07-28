@@ -554,6 +554,7 @@ void FSFloaterNearbyChat::reloadMessages(bool clean_messages/* = false*/)
 	}
 	
 	mChatHistory->clear();
+	mChatHistoryMuted->clear();
 	
 	LLSD do_not_log;
 	do_not_log["do_not_log"] = true;
