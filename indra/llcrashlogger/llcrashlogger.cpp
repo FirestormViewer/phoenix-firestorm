@@ -54,6 +54,12 @@ LLPumpIO* gServicePump;
 BOOL gBreak = false;
 BOOL gSent = false;
 
+// <FS:CR> Various missing prototypes
+void trimSLLog(std::string& sllog);
+std::string getFormDataField(const std::string& strFieldName, const std::string& strFieldValue, const std::string& strBoundary);
+std::string getStartupStateFromLog(std::string& sllog);
+// </FS:CR>
+
 class LLCrashLoggerResponder : public LLHTTPClient::Responder
 {
 public:

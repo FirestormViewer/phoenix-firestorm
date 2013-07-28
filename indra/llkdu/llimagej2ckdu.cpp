@@ -71,6 +71,12 @@ private:
 // Kakadu specific implementation
 //
 void set_default_colour_weights(kdu_params *siz);
+// <FS:CR> Various missing prototypes
+LLImageJ2CImpl* fallbackCreateLLImageJ2CImpl();
+void fallbackDestroyLLImageJ2CImpl(LLImageJ2CImpl* impl);
+const char* fallbackEngineInfoLLImageJ2CImpl();
+void ll_kdu_error(void);
+// </FS:CR>
 
 const char* engineInfoLLImageJ2CKDU()
 {

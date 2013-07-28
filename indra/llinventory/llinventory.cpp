@@ -591,6 +591,8 @@ BOOL LLInventoryItem::unpackMessage(LLMessageSystem* msg, const char* block, S32
 }
 
 // <FS:ND> Helper functions
+void splitCacheDescOrName(char *aBuffer, char *&aJunk, char *&aValue);	/// <FS:CR> Various Missing
+int splitCacheLine(char *aBuffer, char *&aKeyword, char *&aValue);		/// Prototypes
 inline bool isWS( char aVal )
 {
 	return aVal == ' ' || aVal == '\t' || aVal == '\r' || aVal == '\n';
