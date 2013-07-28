@@ -5151,6 +5151,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Radar_Label">
 		Radar
 	</string>
+	<string name="Command_Conversation_Log_Label">
+		Unterhaltungsprotokoll
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5291,6 +5294,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Radar_Tooltip">
 		Öffnet das Radar für Avatare in der Nähe
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Öffnet das Unterhaltungsprotokoll mit Chatverläufen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
