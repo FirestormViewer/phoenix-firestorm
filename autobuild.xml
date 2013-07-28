@@ -542,9 +542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fdbb3a9ffc946c5b58b8be348a74aac2</string>
+              <string>207d3b3c7037b72ce1bb27f54ee46f8e</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.17-darwin-20130721.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.18-darwin-20130728.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -554,9 +554,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e417d7015db2ecd9739c9d4d33036464</string>
+              <string>e670811aaf295c3841cd8f36fa892ced</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.17-linux-20130721.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.18-linux-20130728.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -566,9 +566,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8de835d1a2ed729ac4d97f863c7bb599</string>
+              <string>1043241b4a86ca9a7b3433eb87708e25</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.17-windows-20130721.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.18-windows-20130728.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
