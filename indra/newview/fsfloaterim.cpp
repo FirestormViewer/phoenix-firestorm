@@ -398,7 +398,6 @@ void FSFloaterIM::sendMsg(const std::string& msg)
 
 FSFloaterIM::~FSFloaterIM()
 {
-	llinfos << "~FSFloaterIM, instance exists is: " << ((LLTransientFloaterMgr::getInstance()) == NULL) << llendl; 
 	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, (LLView*)this);
 	mVoiceChannelStateChangeConnection.disconnect();
 	if(LLVoiceClient::instanceExists())
@@ -409,7 +408,6 @@ FSFloaterIM::~FSFloaterIM()
 	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 	if ((pIMSession) && (pIMSession->mSessionType == LLIMModel::LLIMSession::P2P_SESSION))
 	{
-		llinfos << "AO: Cleaning up stray particularFriendObservers" << llendl;
 		LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
 	}
 	
@@ -424,12 +422,12 @@ FSFloaterIM::~FSFloaterIM()
 
 void FSFloaterIM::onViewProfileButtonClicked()
 {
-	llinfos << "FSFloaterIM::onViewProfileButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onViewProfileButtonClicked" << llendl;
 	LLAvatarActions::showProfile(mOtherParticipantUUID);
 }
 void FSFloaterIM::onAddFriendButtonClicked()
 {
-	llinfos << "FSFloaterIM::onAddFriendButtonClicked" << llendl;
+	lldebugs << "FSFloaterIM::onAddFriendButtonClicked" << llendl;
 	//[FIX FIRE-2009: SJ] Offering friendship gives wrong status message. full_name was emtpy on call but was also obsolete
 	//                    
 	//LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
