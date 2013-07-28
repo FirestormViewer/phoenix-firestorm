@@ -73,7 +73,7 @@
        top="2"
        width="24"
        height="24"
-       image_overlay="List_View_On"
+       image_overlay="Chat_History"
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
        image_selected="PushButton_Selected_Press"

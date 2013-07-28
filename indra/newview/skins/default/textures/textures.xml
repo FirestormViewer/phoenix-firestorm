@@ -905,8 +905,9 @@ with the same filename but different name
 <texture name="icon_avatar_online"			file_name="legacy/icon_avatar_online.tga"		preload="false" />
 <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
 
-  <texture name="Console_Background" file_name="Console_Background.png"/>
-  <texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />
+<texture name="Console_Background" file_name="Console_Background.png"/>
+<texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />
+<texture name="Chat_History" file_name="icons/Chat_History.png" preload="false" />
 
 <texture name="Icon_Place" file_name="icon_place.tga" preload="false" />
 <texture name="Icon_Auction" file_name="icon_auction.tga" preload="false" />

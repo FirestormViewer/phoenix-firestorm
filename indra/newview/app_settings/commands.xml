@@ -476,4 +476,14 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="fs_radar"
            />
+  <command name="conversation_log"
+           available_in_toybox="true"
+           icon="Chat_History"
+           label_ref="Command_Conversation_Log_Label"
+           tooltip_ref="Command_Conversation_Log_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="conversation"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="conversation"
+           />
 </commands>
