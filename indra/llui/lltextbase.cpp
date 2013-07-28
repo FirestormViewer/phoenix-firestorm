@@ -3305,8 +3305,13 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 
 	S32 last_char = mEnd;
 
+	// <FS:Ansariel> Prevent unnecessary calculations
+	S32 start_offset = mStart + segment_offset;
+
 	// set max characters to length of segment, or to first newline
-	max_chars = llmin(max_chars, last_char - (mStart + segment_offset));
+	// <FS:Ansariel> Prevent unnecessary calculations
+	//max_chars = llmin(max_chars, last_char - (mStart + segment_offset));
+	max_chars = llmin(max_chars, last_char - start_offset);
 
 	// if no character yet displayed on this line, don't require word wrapping since
 	// we can just move to the next line, otherwise insist on it so we make forward progress
@@ -3318,11 +3323,13 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 	// <FS:ND> Don't make excessive string copies.
 
 	// LLWString offsetString(text.c_str() + segment_offset + mStart);
-	S32 offsetLength = text.length() - (segment_offset + mStart);
+	S32 offsetLength = text.length() - start_offset;
 
 	// </FS:ND>
 
-	if(getLength() < segment_offset + mStart)
+	// <FS:Ansariel> Prevent unnecessary calculations
+	//if(getLength() < segment_offset + mStart)
+	if(getLength() < start_offset)
 	{ 
 		llinfos << "getLength() < segment_offset + mStart\t getLength()\t" << getLength() << "\tsegment_offset:\t" 
 						<< segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << "\tmax_chars\t" << max_chars << llendl;
@@ -3347,7 +3354,7 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 			<< getLength() << "\tsegment_offset:\t" << segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << llendl;
 	}
 	
-	S32 num_chars = mStyle->getFont()->maxDrawableChars(text.c_str() + (segment_offset + mStart), 
+	S32 num_chars = mStyle->getFont()->maxDrawableChars(text.c_str() + start_offset, 
 												(F32)num_pixels,
 												max_chars, 
 												word_wrap_style);
@@ -3365,7 +3372,9 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 
 	// include *either* the EOF or newline character in this run of text
 	// but not both
-	S32 last_char_in_run = mStart + segment_offset + num_chars;
+	// <FS:Ansariel> Prevent unnecessary calculations
+	//S32 last_char_in_run = mStart + segment_offset + num_chars;
+	S32 last_char_in_run = start_offset + num_chars;
 	// check length first to avoid indexing off end of string
 	if (last_char_in_run < mEnd 
 		&& (last_char_in_run >= getLength()))
