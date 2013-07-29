@@ -64,8 +64,7 @@ LLConsole::LLConsole(const LLConsole::Params& p)
 	mFont(p.font),
 	mConsoleWidth(0),
 	mConsoleHeight(0),
-	mParseUrls(p.parse_urls), // Ansariel: If lines should be parsed for URLs
-	mBackgroundImage(p.background_image) // Ansariel: Configurable background for different console types
+	mParseUrls(p.parse_urls) // Ansariel: If lines should be parsed for URLs
 {
 	if (p.font_size_index.isProvided())
 	{
@@ -73,6 +72,8 @@ LLConsole::LLConsole(const LLConsole::Params& p)
 	}
 	mFadeTime = mLinePersistTime - FADE_DURATION;
 	setMaxLines(LLUI::sSettingGroups["config"]->getS32("ConsoleMaxLines"));
+	
+	mBackgroundImage = LLUI::getUIImage(p.background_image);
 }
 
 void LLConsole::setLinePersistTime(F32 seconds)
@@ -189,17 +190,14 @@ void LLConsole::draw()
 	//[FIX  FIRE-2822 SJ] Start a little bit higher with the Console not to let it blend with the stand button when Avatar is sitting
 	F32 y_pos = 10.f;
 
-	LLUIImagePtr imagep = LLUI::getUIImage(mBackgroundImage);
-
 	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
-	F32 console_opacity = llclamp(LLUI::sSettingGroups["config"]->getF32("ConsoleBackgroundOpacity"), 0.f, 1.f);
-	LLColor4 color = LLUIColorTable::instance().getColor("ConsoleBackground");
-	//</AO>
-	
-	color.mV[VALPHA] *= console_opacity;
+	static LLCachedControl<F32> consoleBackgroundOpacity(*LLUI::sSettingGroups["config"], "ConsoleBackgroundOpacity");
+	static LLUIColor cbcolor = LLUIColorTable::instance().getColor("ConsoleBackground");
+	LLColor4 color = cbcolor.get();
+	color.mV[VALPHA] *= llclamp(consoleBackgroundOpacity(), 0.f, 1.f);
 
 	F32 line_height = mFont->getLineHeight();
-	BOOL classic_draw_mode = LLUI::sSettingGroups["config"]->getBOOL("FSConsoleClassicDrawMode");
+	static LLCachedControl<bool> classic_draw_mode(*LLUI::sSettingGroups["config"], "FSConsoleClassicDrawMode");
 
 	// Ansariel: Classic draw mode for console (Single block over all lines and with width of the longest line)
 	if (classic_draw_mode)
@@ -208,14 +206,15 @@ void LLConsole::draw()
 		S32 total_width = 0;
 		S32 total_height = 0;
 
-		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
+		paragraph_t::reverse_iterator paragraphs_end = mParagraphs.rend();
+		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; ++paragraph_it)
 		{
 			total_height += llfloor( (*paragraph_it).mLines.size() * line_height + padding_vert);
 			total_width = llmax(total_width, llfloor( (*paragraph_it).mMaxWidth + padding_horizontal));
 		}
-		imagep->drawSolid(-14, (S32)(y_pos + line_height / 2), total_width, total_height + (line_height - padding_vert) / 2, color);
+		mBackgroundImage->drawSolid(-14, (S32)(y_pos + line_height / 2), total_width, total_height + (line_height - padding_vert) / 2, color);
 
-		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
+		for (paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; ++paragraph_it)
 		{
 			F32 y_off=0;
 			F32 alpha;
@@ -233,13 +232,15 @@ void LLConsole::draw()
 
 			if( alpha > 0.f )
 			{
+				LLConsole::lines_t::iterator lines_end_it = (*paragraph_it).mLines.end();
 				for (lines_t::iterator line_it=(*paragraph_it).mLines.begin(); 
-						line_it != (*paragraph_it).mLines.end();
-						line_it ++)
+						line_it != lines_end_it;
+						++line_it)
 				{
+					line_color_segments_t::iterator line_color_segement_end_it = (*line_it).mLineColorSegments.end();
 					for (line_color_segments_t::iterator seg_it = (*line_it).mLineColorSegments.begin();
-							seg_it != (*line_it).mLineColorSegments.end();
-							seg_it++)
+							seg_it != line_color_segement_end_it;
+							++seg_it)
 					{
 						mFont->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
 							LLColor4(
@@ -263,13 +264,14 @@ void LLConsole::draw()
 	}
 	else
 	{
-		for(paragraph_it = mParagraphs.rbegin(); paragraph_it != mParagraphs.rend(); paragraph_it++)
+		paragraph_t::reverse_iterator paragraphs_end = mParagraphs.rend();
+		for(paragraph_it = mParagraphs.rbegin(); paragraph_it != paragraphs_end; paragraph_it++)
 		{
 			S32 target_height = llfloor( (*paragraph_it).mLines.size() * line_height + padding_vertical);
 			S32 target_width =  llfloor( (*paragraph_it).mMaxWidth + padding_horizontal);
 
 			y_pos += ((*paragraph_it).mLines.size()) * line_height;
-			imagep->drawSolid(-14, (S32)(y_pos + line_height - target_height), target_width, target_height, color);
+			mBackgroundImage->drawSolid(-14, (S32)(y_pos + line_height - target_height), target_width, target_height, color);
 
 			F32 y_off=0;
 
@@ -286,13 +288,15 @@ void LLConsole::draw()
 
 			if( alpha > 0.f )
 			{
+				LLConsole::lines_t::iterator lines_end_it = (*paragraph_it).mLines.end();
 				for (lines_t::iterator line_it=(*paragraph_it).mLines.begin(); 
-						line_it != (*paragraph_it).mLines.end();
-						line_it ++)
+						line_it != lines_end_it;
+						++line_it)
 				{
+					line_color_segments_t::iterator line_color_segement_end_it = (*line_it).mLineColorSegments.end();
 					for (line_color_segments_t::iterator seg_it = (*line_it).mLineColorSegments.begin();
-							seg_it != (*line_it).mLineColorSegments.end();
-							seg_it++)
+							seg_it != line_color_segement_end_it;
+							++seg_it)
 					{
 						mFont->render((*seg_it).mText, 0, (*seg_it).mXPosition - 8, y_pos -  y_off,
 							LLColor4(

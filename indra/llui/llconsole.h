@@ -169,7 +169,7 @@ private:
 	S32			mConsoleWidth;
 	S32			mConsoleHeight;
 	bool		mParseUrls; // Ansariel: If lines should be parsed for URLs
-	std::string	mBackgroundImage; // Ansariel: Configurable background for different console types
+	LLUIImagePtr	mBackgroundImage; // Ansariel: Configurable background for different console types
 };
 
 extern LLConsole* gConsole;
