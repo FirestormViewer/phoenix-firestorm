@@ -3121,13 +3121,16 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		Pegada
 	</string>
 	<string name="Higher">
-		Arrriba
+		Más arriba
 	</string>
 	<string name="Hip Length">
 		Cadera: altura
 	</string>
 	<string name="Hip Width">
 		Cadera: ancho
+	</string>
+	<string name="Hover">
+		Flotar
 	</string>
 	<string name="In">
 		Pegadas
@@ -5154,6 +5157,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Radar_Label">
 		Radar
 	</string>
+	<string name="Command_Conversation_Log_Label">
+		Registro de chat
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5267,6 +5273,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Radar_Tooltip">
 		Abre el radar de avatares cercanos
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Abre el registro de conversaciones para ver las transcripciones de chats anteriores
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
