@@ -359,6 +359,13 @@ void on_new_message(const LLSD& msg)
 	}
 	// </FS:Ansariel> Don't toast if the message is an announcement
 
+	// <FS:Ansariel> (Group-)IMs in chat console
+	if (FSConsoleUtils::ProcessInstantMessage(session_id, participant_id, msg["message"].asString()))
+	{
+		return;
+	}
+	// </FS:Ansariel> (Group-)IMs in chat console
+
 	// check whether incoming IM belongs to an active session or not
 	if (LLIMModel::getInstance()->getActiveSessionID().notNull()
 			&& LLIMModel::getInstance()->getActiveSessionID() == session_id)
@@ -372,20 +379,6 @@ void on_new_message(const LLSD& msg)
 		return;
 	}
 
-	// Skip toasting if we have open window of IM with this session id
-	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(session_id);
-	if (open_im_floater && open_im_floater->getVisible())
-	{
-		return;
-	}
-	
-	// <FS:Ansariel> (Group-)IMs in chat console
-	if (FSConsoleUtils::ProcessInstantMessage(session_id, participant_id, msg["message"].asString()))
-	{
-		return;
-	}
-	// </FS:Ansariel> (Group-)IMs in chat console
-	
 	// *NOTE Skip toasting if the user disable it in preferences/debug settings ~Alexandrea
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
 	if (!gSavedSettings.getBOOL("EnableGroupChatPopups") && session->isGroupSessionType())
@@ -393,6 +386,13 @@ void on_new_message(const LLSD& msg)
 		return;
 	}
 	if (!gSavedSettings.getBOOL("EnableIMChatPopups") && !session->isGroupSessionType())
+	{
+		return;
+	}
+
+	// Skip toasting if we have open window of IM with this session id
+	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(session_id);
+	if (open_im_floater && open_im_floater->getVisible())
 	{
 		return;
 	}
