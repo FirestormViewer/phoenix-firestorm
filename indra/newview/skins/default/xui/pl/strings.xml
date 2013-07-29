@@ -4696,6 +4696,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Radar_Label">
 		Radar
 	</string>
+	<string name="Command_Conversation_Log_Label">
+		Dziennik rozmów
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4833,6 +4836,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Radar_Tooltip">
 		Otwiera radar z najbliższymi awatarami
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Otwiera dziennik rozmów, aby zobaczyć przeszłe logi
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
