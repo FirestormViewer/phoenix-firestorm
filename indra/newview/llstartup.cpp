@@ -2378,7 +2378,6 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		display_startup();
 		
 		// <FS:CR> Load dynamic script library from xml
-
 		gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_lsl.xml"));
 #if OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
@@ -2520,10 +2519,12 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 #endif // OPENSIM // <FS:AW optional opensim support/>
 // </FS:AW Disable LSL bridge on opensim>
 
-//-TT Client LSL Bridge
+		// <FS:TT> Client LSL Bridge
 		if (gSavedSettings.getBOOL("UseLSLBridge"))
+		{
 			FSLSLBridge::instance().initBridge();
-//-TT
+		}
+		// </FS:TT>
 
 		// Let the map know about the inventory.
 		LLFloaterWorldMap* floater_world_map = LLFloaterWorldMap::getInstance();
@@ -2612,7 +2613,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		LLAgentPicksInfo::getInstance()->requestNumberOfPicks();
 
 		// <FS:Ansariel> [FS communication UI]
-		//FSFloaterIM::initIMFloater(); <FS:TM> CHUI Merge LL removed this, check if still needed
+		FSFloaterIM::initIMFloater();
 		// </FS:Ansariel> [FS communication UI]
 		display_startup();
 
