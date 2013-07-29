@@ -236,11 +236,6 @@ void LLScrollColumnHeader::handleReshape(const LLRect& new_rect, bool by_user)
 		// tell scroll list to layout columns again
 		// do immediate update to get proper feedback to resize handle
 		// which needs to know how far the resize actually went
-		// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
-		//               Need to set mColumnsDirty via dirtyColumns() first
-		//               or nothing would happen at all!
-		mColumn->mParentCtrl->dirtyColumns();
-		// </FS:Ansariel>
 		mColumn->mParentCtrl->updateColumns();
 	}
 }
