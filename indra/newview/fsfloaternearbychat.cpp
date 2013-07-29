@@ -712,17 +712,26 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 	
-	if( KEY_RETURN == key && mask == MASK_CONTROL)
+	if (KEY_RETURN == key)
 	{
-		// shout
-		sendChat(CHAT_TYPE_SHOUT);
-		handled = TRUE;
-	}
-	else if (KEY_RETURN == key && mask == MASK_SHIFT)
-	{
-		// whisper
-		sendChat(CHAT_TYPE_WHISPER);
-		handled = TRUE;
+		if (mask == MASK_CONTROL)
+		{
+			// shout
+			sendChat(CHAT_TYPE_SHOUT);
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			sendChat(CHAT_TYPE_WHISPER);
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			sendChat(CHAT_TYPE_OOC);
+			handled = TRUE;
+		}
 	}
 	
 	return handled;
