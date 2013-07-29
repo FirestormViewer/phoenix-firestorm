@@ -697,11 +697,11 @@ bool LLScrollListCtrl::updateColumnWidths()
 		//               This apparently doesn't work as it should, preventing
 		//               a proper resize. Fall back to pre-3.4.3 behavior and
 		//               always assume a changed width.
-		if (column->getWidth() != new_width)
-		{
-			column->setWidth(new_width);
-			//width_changed = true;
-		}
+		//if (column->getWidth() != new_width)
+		//{
+		//	column->setWidth(new_width);
+		//	width_changed = true;
+		//}
 		width_changed = true;
 		// </FS:Ansariel>
 	}
