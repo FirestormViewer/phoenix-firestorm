@@ -40,6 +40,8 @@
 #include <set>
 #include <vector>
 
+#include "lluiimage.h"
+
 class LLDrawable;
 class LLHUDNameTag;
 
@@ -178,6 +180,11 @@ private:
 //	static std::vector<LLPointer<LLHUDNameTag> > sVisibleHUDTextObjects;
 	typedef std::set<LLPointer<LLHUDNameTag> >::iterator TextObjectIterator;
 	typedef std::vector<LLPointer<LLHUDNameTag> >::iterator VisibleTextObjectIterator;
+
+	// <FS:Ansariel> Performance improvement
+	LLUIImagePtr	mRoundedRectImg;
+	LLUIImagePtr	mRoundedRectTopImg;
+	// </FS:Ansariel>
 };
 
 #endif

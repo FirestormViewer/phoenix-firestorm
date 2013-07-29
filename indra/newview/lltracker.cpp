@@ -115,7 +115,11 @@ void LLTracker::stopTracking(void* userdata)
 // static virtual
 void LLTracker::drawHUDArrow()
 {
-	if (!gSavedSettings.getBOOL("RenderTrackerBeacon")) return;
+	// <FS:Ansariel> Performance improvement
+	//if (!gSavedSettings.getBOOL("RenderTrackerBeacon")) return;
+	static LLCachedControl<bool> renderTrackerBeacon(gSavedSettings, "RenderTrackerBeacon");
+	if (!renderTrackerBeacon) return;
+	// </FS:Ansariel>
 
 	if (gViewerWindow->getProgressView()->getVisible()) return;
 
