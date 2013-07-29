@@ -693,15 +693,15 @@ bool LLScrollListCtrl::updateColumnWidths()
 			new_width = (mItemListRect.getWidth() - mTotalStaticColumnWidth - mTotalColumnPadding) / mNumDynamicWidthColumns;
 		}
 
+		// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
+		//               This apparently doesn't work as it should, preventing
+		//               a proper resize. Fall back to pre-3.4.3 behavior and
+		//               always assume a changed width.
 		if (column->getWidth() != new_width)
 		{
 			column->setWidth(new_width);
-			width_changed = true;
+			//width_changed = true;
 		}
-		// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
-		//               Apparently columns don't resize properly if we
-		//               don't assume a width change. Fall back to pre-3.4.3
-		//               behavior and always assume a changed width.
 		width_changed = true;
 		// </FS:Ansariel>
 	}
