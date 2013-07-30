@@ -408,10 +408,12 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="drop_target_rect_vis"
          bevel_style="in" />
         <text
-         left_delta="0"
+         top_delta="0"
+         left="66"
+         right="-6"
          height="16"
          layout="topleft"
-         follows="all"
+         follows="left|bottom|right"
          name="Give inventory"
          halign="center"
          tool_tip="Drop inventory items here to give them to this person.">

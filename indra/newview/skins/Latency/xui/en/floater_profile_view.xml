@@ -9,6 +9,7 @@
  name="avatarinfo"
  title="Profile" >
 <panel
+ class="panel_profile"
  top="0"
  left="0"
  follows="all"
@@ -24,7 +25,7 @@
      height="500"
      halign="center"
      layout="topleft"
-     name="tabs"
+     name="panel_profile_tabs"
      tab_position="top"
      tab_min_width="45">
         <panel

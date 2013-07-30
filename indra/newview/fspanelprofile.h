@@ -46,6 +46,7 @@ class LLTextBase;
 class LLMenuButton;
 class LLLineEditor;
 class LLTextEditor;
+class FSPanelClassifieds;
 
 /**
 * Base class for any Profile View or My Profile Panel.
@@ -84,13 +85,17 @@ protected:
 
 	virtual void enableControls();
 
+	bool getIsLoading() { return mLoading; }
+	void setIsLoading() { mLoading = TRUE; }
 	bool getIsLoaded() { return mLoaded; }
+	void resetLoading() { mLoading = FALSE; mLoaded = FALSE; }
 
 	void setApplyProgress(bool started);
 
 private:
 
 	LLUUID  mAvatarId;
+	BOOL    mLoading;
 	BOOL    mLoaded;
 };
 
@@ -98,14 +103,14 @@ private:
 /**
 * Panel for displaying Avatar's second life related info.
 */
-class FSPanelProfile
+class FSPanelProfileSecondLife
 	: public FSPanelProfileTab
 	, public LLFriendObserver
 	, public LLVoiceClientStatusObserver
 {
 public:
-	FSPanelProfile();
-	/*virtual*/ ~FSPanelProfile();
+	FSPanelProfileSecondLife();
+	/*virtual*/ ~FSPanelProfileSecondLife();
 
 	/*virtual*/ void onOpen(const LLSD& key);
 
@@ -128,6 +133,8 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+	
+	void resetData();
 
 	/**
 	 * Sends update data request to server.
@@ -262,11 +269,18 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+	
+	void resetData();
 
 	/**
 	 * Saves changes.
 	 */
 	void apply(LLAvatarData* data);
+
+	/**
+	 * Loads web profile.
+	 */
+	void updateData();
 
 	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
 
@@ -312,6 +326,8 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+	
+	void resetData();
 
 	/**
 	 * Saves changes.
@@ -481,13 +497,14 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+	
+	void resetData();
 
 	/**
 	 * Saves changes.
 	 */
 	virtual void apply();
 
-protected:
 	/**
 	 * Sends update data request to server.
 	 */
@@ -521,6 +538,8 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+	
+	void resetData();
 
 	/**
 	 * Saves changes.
@@ -557,8 +576,10 @@ public:
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+	
+	void resetData();
 
-	/*virtual*/ void updateData();
+	void updateData();
 
 	/**
 	 * Saves changes.
@@ -582,6 +603,44 @@ protected:
 	LLCheckBoxCtrl*		mMapRights;
 	LLCheckBoxCtrl*		mEditObjectRights;
 	LLTextEditor*		mNotesEditor;
+};
+
+
+/*
+*
+* Container panel for the profile tabs
+*/
+class FSPanelProfile
+	: public FSPanelProfileTab
+{
+public:
+	FSPanelProfile();
+	/*virtual*/ ~FSPanelProfile();
+
+	/*virtual*/ BOOL postBuild();
+
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+	/*virtual*/ void onOpen(const LLSD& key);
+
+	/**
+	 * Saves changes.
+	 */
+	void apply();
+
+private:
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+	void onTabChange();
+	void updateData();
+	
+	FSPanelProfileSecondLife*	mPanelSecondlife;
+	FSPanelProfileWeb*			mPanelWeb;
+	FSPanelProfileInterests*	mPanelInterests;
+	FSPanelProfilePicks*		mPanelPicks;
+	FSPanelClassifieds*			mPanelClassifieds;
+	FSPanelProfileFirstLife*	mPanelFirstlife;
+	FSPanelAvatarNotes*			mPanelNotes;
+	LLTabContainer*				mTabContainer;
 };
 
 #endif // FS_PANELPROFILE_H
