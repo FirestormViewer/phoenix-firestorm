@@ -348,7 +348,7 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 
 		mExceptionHandler = new google_breakpad::ExceptionHandler(
 			L"C:\\Temp\\", 0, windows_post_minidump_callback, 0, google_breakpad::ExceptionHandler::HANDLER_ALL,
-			(MINIDUMP_TYPE)maskMiniDumpType, NULL, NULL);
+			(MINIDUMP_TYPE)maskMiniDumpType, (wchar_t const*)0, NULL);
 // [/SL:KB]
 	}
 #endif
