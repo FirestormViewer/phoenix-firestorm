@@ -44,9 +44,12 @@
 			<text name="direct_label">
 				Direkt
 			</text>
-			<text name="console_im_label">
-				IMs/Gruppenchat
-			</text>
+			<check_box name="FSColorIMsDistinctly" label="IM/Gruppenchat in Konsole unterschiedlich einfärben:"/>
+			<panel name="im_color_panel">
+				<text name="console_im_label">
+					IMs/Gruppenchat
+				</text>
+			</panel>
 		</panel>
 		<panel label="Namensschilder" name="tab-nametag">
 			<text name="nametag_colors">
