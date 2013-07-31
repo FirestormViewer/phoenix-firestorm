@@ -22,5 +22,5 @@
 			<panel label="Więcej" name="panel_profile_firstlife" />
 			<panel label="Notatki" name="panel_profile_notes" />
 		</tab_container>
-    </panel>
+	</panel>
 </panel>
