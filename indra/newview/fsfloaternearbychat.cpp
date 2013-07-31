@@ -1169,7 +1169,7 @@ void FSFloaterNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType t
 // static
 void FSFloaterNearbyChat::stopChat()
 {
-	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("nearby_chat");
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat");
 	if (nearby_chat)
 	{
 		nearby_chat->mInputEditor->setFocus(FALSE);
