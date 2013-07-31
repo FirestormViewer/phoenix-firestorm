@@ -283,6 +283,6 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 		textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
 	}
 
-	gConsole->addConsoleLine(LLTrans::getString("IMPrefix") + senderName + delimiter + message, textColor);
+	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
 	gConsole->setVisible(!isNearbyChatVisible());
 }

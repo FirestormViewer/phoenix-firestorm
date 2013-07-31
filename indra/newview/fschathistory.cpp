@@ -88,11 +88,11 @@ std::string prefixIM(std::string from, const LLChat& chat)
 {
 	if (chat.mChatType == CHAT_TYPE_IM)
 	{
-		from = LLTrans::getString("IMPrefix") + from;
+		from = LLTrans::getString("IMPrefix") + " " + from;
 	}
 	else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
 	{
-		from = LLTrans::getString("IMPrefix") + chat.mFromNameGroup + from;
+		from = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + from;
 	}
 	
 	return from;
@@ -661,7 +661,7 @@ private:
 		mFrom = "";
 		if (chat_type == CHAT_TYPE_IM || chat_type == CHAT_TYPE_IM_GROUP)
 		{
-			mFrom = LLTrans::getString("IMPrefix");
+			mFrom = LLTrans::getString("IMPrefix") + " ";
 			if(!group.empty())
 			{
 				mFrom.append(group);
@@ -1116,7 +1116,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		mLastFromName = chat.mFromName;
 		
-		//if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + mLastFromName;
+		//if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
 		mLastFromName = prefixIM(mLastFromName, chat);
 		mLastFromID = chat.mFromID;
 		mLastMessageTime = new_message_time;
