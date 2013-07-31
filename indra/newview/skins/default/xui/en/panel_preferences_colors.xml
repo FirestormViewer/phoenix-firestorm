@@ -454,38 +454,57 @@
        width="95">
        Direct
      </text>
-     <color_swatch
-       can_apply_immediately="true"
-       color="AgentIMColor"
+     <check_box
+       control_name="FSColorIMsDistinctly"
        follows="left|top"
-       height="24"
-       label_height="0"
        layout="topleft"
-       left="190"
-       name="console_im"
-       top_pad="-15"
-       width="44" >
-       <color_swatch.init_callback
-       function="Pref.getUIColor"
-       parameter="AgentIMColor" />
-       <color_swatch.commit_callback
-       function="Pref.applyUIColor"
-       parameter="AgentIMColor" />
-     </color_swatch>
-     <text
-       type="string"
-       length="1"
+       left="20"
+       top_pad="24"
+       height="12"
+       name="FSColorIMsDistinctly"
+       width="450"
+       label="Color IM/Group chat distinctly in console:" />
+     <panel
+       top_pad="2"
+       height="25"
+       width="505"
        follows="left|top"
-       height="10"
-       layout="topleft"
-       left_pad="5"
-       mouse_opaque="false"
-       name="console_im_label"
-       top_delta="5"
-       width="95">
-       IMs/Group
-     </text>
-	 </panel>
+       label=""
+       visibility_control="FSColorIMsDistinctly"
+       name="im_color_panel" >
+       <color_swatch
+         can_apply_immediately="true"
+         color="AgentIMColor"
+         follows="left|top"
+         height="24"
+         label_height="0"
+         layout="topleft"
+         left="20"
+         name="console_im"
+         top="0"
+         width="44" >
+         <color_swatch.init_callback
+          function="Pref.getUIColor"
+          parameter="AgentIMColor" />
+         <color_swatch.commit_callback
+          function="Pref.applyUIColor"
+          parameter="AgentIMColor" />
+       </color_swatch>
+       <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_pad="5"
+         mouse_opaque="false"
+         name="console_im_label"
+         top_delta="5"
+         width="95">
+         IMs/Group
+       </text>
+     </panel>
+   </panel>
 	 <panel
 	  top_pad="5"
 	  bottom="-1"
