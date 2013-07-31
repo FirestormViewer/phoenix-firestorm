@@ -44,9 +44,12 @@
 			<text name="direct_label">
 				Bezpośrednie
 			</text>
-			<text name="console_im_label">
-				IM/Grupy
-			</text>
+			<check_box name="FSColorIMsDistinctly" label="Koloruj czat IM/Grup oddzielnie w konsoli:" />
+			<panel name="im_color_panel">
+				<text name="console_im_label">
+					IM/Grupy
+				</text>
+			</panel>
 		</panel>
 		<panel label="Tagi imion" name="tab-nametag">
 			<text name="nametag_colors">
