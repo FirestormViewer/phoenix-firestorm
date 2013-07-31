@@ -258,13 +258,14 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			{
 				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
 				{
+					//from_name = "IM: " + from_name;
 					if (chat.mChatType == CHAT_TYPE_IM_GROUP && chat.mFromNameGroup != "")
 					{
-						from_name = LLTrans::getString("IMPrefix") + chat.mFromNameGroup + from_name;
+						from_name = "IM: " + chat.mFromNameGroup + from_name;
 					}
 					else
 					{
-						from_name = LLTrans::getString("IMPrefix") + from_name;
+						from_name = "IM: " + from_name;
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
@@ -525,7 +526,7 @@ void FSFloaterNearbyChat::loadHistory()
 			// Ansariel: Strip IM prefix so we can properly
 			//           retrieve the UUID in case we got a
 			//           saved IM in nearby chat history.
-			std::string im_prefix = LLTrans::getString("IMPrefix");
+			std::string im_prefix = "IM: ";
 			size_t im_prefix_found = from.find(im_prefix);
 			if (im_prefix_found != std::string::npos)
 			{
