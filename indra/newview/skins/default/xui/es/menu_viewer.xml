@@ -19,7 +19,6 @@
 			<menu_item_check label="Correr siempre" name="Always Run"/>
 			<menu_item_check label="Forzar sentarme en el suelo" name="Force Toggle Sitting"/>
 			<menu_item_check label="Modo fantasma" name="Avatar Phantom"/>
-			<menu_item_call label="Caminar / Correr / Volar..." name="Walk / run / fly"/>
 			<menu_item_check label="Salto rápido" name="Avatar Ignore Prejump"/>
 		</menu>
 		<menu_item_check label="Controles de cámara" name="Camera Controls"/>
@@ -44,15 +43,10 @@
 			<menu_item_call label="Configurar permisos de subida por defecto" name="perm prefs"/>
 			<menu_item_call label="Importar linkset" name="import linkset"/>
 		</menu>
-		<menu_item_call label="Comprar L$..." name="Buy and Sell L$"/>
-		<menu_item_call label="Panel de control de la cuenta..." name="Manage My Account">
-			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=es"/>
-		</menu_item_call>
-		<menu_item_call label="Preferencias..." name="Preferences"/>
-		<menu_item_call label="Botones de la barra de herramientas..." name="Toolbars"/>
-		<menu_item_call label="Ocultar todos los controles" name="Hide UI"/>
+		<menu_item_call label="Solicitar estatus de Administrador" name="Request Admin Options"/>
+		<menu_item_call label="Abandonar estatus de Administrador" name="Leave Admin Options"/>
 		<menu_item_check label="Mostrar los HUD anexados" name="Show HUD Attachments"/>
-		<menu_item_call label="Salir de [APP_NAME]" name="Quit"/>
+		<menu_item_call label="Salir de [APP_NAME]" name="Quit"/>		
 	</menu>
 	<menu label="Comunicarme" name="Communicate">
 		<menu label="Estado" name="Status">
@@ -203,7 +197,6 @@
 		</menu>
 		<menu_item_call label="Deshacer" name="Undo"/>
 		<menu_item_call label="Rehacer" name="Redo"/>
-		<menu_item_call label="Examinador de imágenes locales" name="Local Bitmap Browser"/>
 	</menu>
 	<menu label="Contenido" name="Content">
 		<menu_item_check label="Buscar" name="Search"/>
@@ -233,7 +226,7 @@
 		<menu_item_call label="Estado de la red" name="Grid Status"/>
 		<menu_item_call label="Denunciar una infracción" name="Report Abuse"/>
 		<menu_item_call label="Informar de un fallo" name="Report Bug"/>
-        <menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
+		<menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Activar botón de Información del Sistema" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Acerca de [APP_NAME]" name="About Second Life"/>
 	</menu>
@@ -299,7 +292,7 @@
 			<menu_item_check label="Efectos de relieve" name="Rendering Type Bump"/>
 		</menu>
 		<menu label="Rasgos renderizados" name="Rendering Features">
-			<menu_item_check label="Interfaz de usuario" name="ToggelUI"/>
+			<menu_item_check label="Interfaz de usuario" name="ToggleUI"/>
 			<menu_item_check label="Seleccionado" name="Selected"/>
 			<menu_item_check label="Realzados" name="Highlighted"/>
 			<menu_item_check label="Texturas dinámicas" name="Dynamic Textures"/>
@@ -428,7 +421,6 @@
 			<menu_item_check label="Modelo avanzado de iluminación" name="Advanced Lighting Model"/>
 			<menu_item_check label="Sombras del sol/la luna/proyectores" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO y suavizado de sombras" name="SSAO and Shadow Smoothing"/>
-			<menu_item_check label="Iluminación global (experimental)" name="Global Illumination"/>
 			<menu_item_check label="Depurar GL" name="Debug GL"/>
 			<menu_item_check label="Depurar conducto" name="Debug Pipeline"/>
 			<menu_item_check label="Capas alfa automáticas (diferidas)" name="Automatic Alpha Masks (deferred)"/>
@@ -455,7 +447,7 @@
 			<menu_item_call label="Detener greabación" name="Stop Record"/>
 		</menu>
 		<menu label="Mundo virtual" name="DevelopWorld">
-			<menu_item_check label="Anular el sol del Sim" name="Sim Sun Override"/>
+			<menu_item_check label="Anular el sol de la región" name="Sim Sun Override"/>
 			<menu_item_check label="Meteorología fija" name="Fixed Weather"/>
 			<menu_item_call label="Volcar la caché de objetos de la región" name="Dump Region Object Cache"/>
 		</menu>
@@ -506,7 +498,6 @@
 				<menu_item_call label="Conmutar geometría del personaje" name="Toggle Character Geometry"/>
 				<menu_item_call label="Probar varón" name="Test Male"/>
 				<menu_item_call label="Probar hembra" name="Test Female"/>
-				<menu_item_call label="Conmutar PG" name="Toggle PG"/>
 				<menu_item_check label="Permitir seleccionar avatar" name="Allow Select Avatar"/>
 			</menu>
 			<menu label="Velocidad de las animaciones" name="Animation Speed">
@@ -517,9 +508,6 @@
 			</menu>
 			<menu_item_call label="Force Params to Default" name="Force Params to Default"/>
 			<menu_item_check label="Animation Info" name="Animation Info"/>
-			</menu>
-			<menu_item_call label="Forzar parámetros por defecto" name="Force Params to Default"/>
-			<menu_item_check label="Información de animación" name="Animation Info"/>
 			<menu_item_check label="Mostrar puntos de mira de foco" name="Show Look At"/>
 			<menu_item_check label="Mostrar puntos de mira de ratón" name="Show Point At"/>
 			<menu_item_check label="Depurar actualizaciones de articulación" name="Debug Joint Updates"/>
