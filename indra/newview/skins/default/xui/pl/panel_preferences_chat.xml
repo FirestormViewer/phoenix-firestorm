@@ -162,9 +162,13 @@
 			<text name="logging_enhancements">
 				Znaczniki czasu:
 			</text>
-			<check_box label="Wyłącz znaczniki czasu w Czacie Lokalnym" name="hide_timestamps_nearby_chat"/>
-			<check_box label="Wyłącz znaczniki czasu w IM" name="hide_timestamps_im"/>
-			<check_box name="IMShowTime" label="Pokazuj znaczniki czasu w historii czatu oraz IM" />
+			<text name="show_timestamps_label">
+				Pokazuj znaczniki czasu w:
+			</text>
+			<check_box label="Czat Lokalny" name="show_timestamps_nearby_chat" width="95"/>
+			<check_box label="Wiadomości IM" name="show_timestamps_im" width="105"/>
+			<check_box label="Historia czatów i IM" name="show_timestamps_transcripts"/>
+			<check_box label="Pokazuj sekundy w logach [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
 			<text name="console_enhancements">
 				Konsola:
 			</text>
