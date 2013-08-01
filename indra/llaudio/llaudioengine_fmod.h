@@ -54,7 +54,7 @@ public:
 
 	/*virtual*/void updateWind(LLVector3 direction, F32 camera_height_above_water);
 
-#if LL_DARWIN
+#if LL_DARWIN || ( defined( LL_WINDOWS ) && defined( ND_BUILD64BIT_ARCH ) )
 	typedef S32 MIXBUFFERFORMAT;
 #else
 	typedef S16 MIXBUFFERFORMAT;
