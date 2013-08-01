@@ -24,7 +24,7 @@
 	<combo_box name="combobox mattype">
 		<combo_box.item label="Textura (difusa)" name="Texture (diffuse)"/>
 		<combo_box.item label="Bacheado (normal)" name="Bumpiness (normal)"/>
-		<combo_box.item label="Brillo (specular)" name="Shininess (specular)"/>
+		<combo_box.item label="Brillo (especular)" name="Shininess (specular)"/>
 	</combo_box>
 	<texture_picker label="Textura       " name="texture control" tool_tip="Pulsa para elegir una imagen"/>
 	<text name="label alphamode">
