@@ -30,6 +30,15 @@ if(WINDOWS)
         vivoxoal.dll
         )
 
+    if( NOT ND_BUILD64BIT_ARCH )
+      set(collada_debug_files libcollada14dom22-d.dll )
+      set(collada_release_files libcollada14dom22.dll )
+    else( NOT ND_BUILD64BIT_ARCH )
+      set(collada_debug_files collada14dom.dll )
+      set(collada_release_files collada14dom.dll )
+    endif( NOT ND_BUILD64BIT_ARCH )
+
+
     #*******************************
     # Misc shared libs 
 
@@ -39,11 +48,9 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
-        growl++.dll
-        growl.dll
         ssleay32.dll
         libeay32.dll
-        libcollada14dom22-d.dll
+        ${collada_debug_files}
         glod.dll	
         libhunspell.dll
         )
@@ -54,14 +61,15 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
-        growl++.dll
-        growl.dll
         ssleay32.dll
         libeay32.dll
-        libcollada14dom22.dll
+        ${collada_release_files}
         glod.dll
         libhunspell.dll
         )
+    
+    set(debug_files ${debug_files} growl++.dll growl.dll )
+    set(release_files ${release_files} growl++.dll growl.dll )
 
     if(USE_TCMALLOC)
       set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
@@ -69,8 +77,14 @@ if(WINDOWS)
     endif(USE_TCMALLOC)
 
     if (FMOD)
-      set(debug_files ${debug_files} fmod.dll)
-      set(release_files ${release_files} fmod.dll)
+      if( ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} fmod64.dll)
+        set(release_files ${release_files} fmod64.dll)
+      else( ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} fmod.dll)
+        set(release_files ${release_files} fmod.dll)
+      endif( ND_BUILD64BIT_ARCH )
+
     endif (FMOD)
 
 #*******************************
