@@ -176,9 +176,13 @@
 			<text name="logging_enhancements">
 				Zeitstempel:
 			</text>
-			<check_box label="Zeitstempel im lokalem Chat nicht anzeigen" name="hide_timestamps_nearby_chat"/>
-			<check_box label="Zeitstempel in Instant Messages nicht anzeigen" name="hide_timestamps_im"/>
-			<check_box label="Zeitstempel in Chat- und IM-Verlauf anzeigen" name="IMShowTime"/>
+			<text name="show_timestamps_label" width="75">
+				Anzeigen in:
+			</text>
+			<check_box label="Chat in der Nähe" name="show_timestamps_nearby_chat" width="120"/>
+			<check_box label="Instant Messages" name="show_timestamps_im" width="120"/>
+			<check_box label="Chat- und IM-Verlauf" name="show_timestamps_transcripts"/>
+			<check_box label="Sekunden in Zeitstempel anzeigen [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
 
 			<!-- Console -->
 			<text name="console_enhancements">
