@@ -173,7 +173,7 @@ std::string LLAvatarName::getCompleteName() const
 		{
 			// FIRE-6659
 			if ((sTrimResidentSurname && mLegacyLastName == "Resident") || mLegacyLastName.empty())
-				name = mDisplayName + " (" + mLegacyLastName + ")";
+				name = mDisplayName + " (" + mLegacyFirstName + ")";
 			else
 				name = mDisplayName + " (" + mLegacyFirstName + " " + mLegacyLastName + ")";
 		}
