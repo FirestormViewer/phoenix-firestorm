@@ -53,7 +53,13 @@ class ViewerManifest(LLManifest):
         # files during the build (see copy_w_viewer_manifest
         # and copy_l_viewer_manifest targets)
         return 'package' in self.args['actions']
-    
+
+    def do_copy_artwork( self ):
+        return self.args.has_key( 'copy_artwork' )
+
+    def is_64bit_build( self ):
+        return self.args.has_key( 'm64' )
+
     def construct(self):
         super(ViewerManifest, self).construct()
         self.exclude("*.svn*")
@@ -70,7 +76,7 @@ class ViewerManifest(LLManifest):
             self.end_prefix("app_settings")
         # </FS:LO>
 
-        if self.is_packaging_viewer():
+        if self.is_packaging_viewer() or self.do_copy_artwork():
             if self.prefix(src="app_settings"):
                 self.exclude("logcontrol.xml")
                 self.exclude("logcontrol-dev.xml")
@@ -426,10 +432,16 @@ class WindowsManifest(ViewerManifest):
                 print err.message
                 print "Skipping COLLADA and GLOD libraries (assumming linked statically)"
 
-
             # Get fmod dll, continue if missing
             if not self.path("fmod.dll"):
                 print "Skipping fmod.dll"
+
+            if self.is_64bit_build():
+              # Get fmod dll, continue if missing
+              if not self.path("fmod64.dll"):
+                print "Skipping fmod64.dll"
+              if not self.path("collada14dom.dll"):
+                print "Skipping collada14dom.dll"
 
             # For textures
             if self.args['configuration'].lower() == 'debug':
@@ -502,7 +514,7 @@ class WindowsManifest(ViewerManifest):
             self.end_prefix()
 
 
-        if self.args['configuration'].lower() == 'debug':
+        if self.args['configuration'].lower() == 'debug' and not self.is_64bit_build():
             if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'debug'),
                            dst="llplugin"):
                 self.path("libeay32.dll")
@@ -533,7 +545,7 @@ class WindowsManifest(ViewerManifest):
                     self.end_prefix()
 
                 self.end_prefix()
-        else:
+        elif not self.is_64bit_build():
             if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'),
                            dst="llplugin"):
                 self.path("libeay32.dll")
