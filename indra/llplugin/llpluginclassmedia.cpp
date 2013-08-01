@@ -32,7 +32,7 @@
 #include "llpluginclassmedia.h"
 #include "llpluginmessageclasses.h"
 
-#include "llqtwebkit.h"
+//#include "llqtwebkit.h"
 
 static int LOW_PRIORITY_TEXTURE_SIZE_DEFAULT = 256;
 
