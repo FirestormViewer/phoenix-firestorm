@@ -2215,8 +2215,7 @@ void LLFloaterPreference::onClickBlockList()
 
 void LLFloaterPreference::onClickSortContacts()
 {
-        FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
-        fs_contacts->sortFriendList();
+	FSFloaterContacts::getInstance()->sortFriendList();
 }
 
 void LLFloaterPreference::onClickProxySettings()
@@ -2527,8 +2526,7 @@ BOOL LLPanelPreference::postBuild()
 
 	//////////////////////PanelSetup ///////////////////
 	// <FS:Zi> Add warning on high bandwidth settings
-	//if (hasChild("max_bandwidth"), TRUE) <FS:TM> CHUI Merge new
-	// if (hasChild("max_bandwidth")) <FS:TM> CHUI Merge old
+	//if (hasChild("max_bandwidth"), TRUE)
 	// Look for the layout widget on top level of this panel
 	if (hasChild("max_bandwidth_layout"))
 	// </FS:Zi>
