@@ -622,12 +622,12 @@ std::string LLCacheName::buildLegacyName(const std::string& complete_name)
 					legacy_name = legacy_name + " " + cap_letter + last_name.substr(1);
 				}
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-				else if (!LLAvatarName::trimResidentSurname)
+				else if (!LLAvatarName::trimResidentSurname())
 				{
 					legacy_name.append(" Resident");
 				}
 			}
-			else if (!LLAvatarName::trimResidentSurname)
+			else if (!LLAvatarName::trimResidentSurname())
 			{
 				legacy_name.append(" Resident");
 // </FS:CR> FIRE-6659: Legacy "Resident" name toggle
@@ -1045,7 +1045,7 @@ void LLCacheName::Impl::processUUIDReply(LLMessageSystem* msg, bool isGroup)
 			if (entry->mLastName.empty())
 			{
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-				if (!LLAvatarName::trimResidentSurname)
+				if (!LLAvatarName::trimResidentSurname())
 				{
 // </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 					full_name = cleanFullName(entry->mFirstName);
