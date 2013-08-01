@@ -976,7 +976,7 @@
               Timestamps:
             </text>
             <text
-             name="logging_enhancements"
+             name="show_timestamps_label"
              follows="left|top"
              layout="topleft"
              top_pad="2"
