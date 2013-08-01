@@ -51,7 +51,7 @@ namespace nd
 
 		extern "C"
 		{
-#if defined( LL_WINDOWS )
+#if defined( LL_WINDOWS ) && !defined(ND_BUILD64BIT_ARCH)
 			__forceinline __declspec(naked) sEBP* getEBP()
 			{
 				__asm{
