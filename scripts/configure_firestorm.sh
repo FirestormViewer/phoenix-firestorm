@@ -104,6 +104,10 @@ getArgs()
           showUsage && exit 1
       fi
     fi
+        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        then
+          WANTS_PACKAGE=$FALSE
+        fi
 
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
            [ $WANTS_VERSION -ne $TRUE ] && [ $WANTS_BUILD -ne $TRUE ] && \
@@ -358,16 +362,27 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         mkdir -p "logs"
     fi
 
+    TARGET_ARCH="x86"
+    WORD_SIZE=32
+
     if [ $PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
     elif [ \( $PLATFORM == "linux32" \) -o \( $PLATFORM == "linux64" \) ] ; then
         TARGET="Unix Makefiles"
     elif [ \( $PLATFORM == "win32" \) ] ; then
-        TARGET="Visual Studio 10"
+        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        then
+          TARGET="Visual Studio 10 Win64"
+          TARGET_ARCH="x64"
+          WORD_SIZE=64
+        else
+          TARGET="Visual Studio 10"
+        fi
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+    cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE=${WORD_SIZE} -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+          -DNDTARGET_ARCH="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then
     ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
@@ -394,7 +409,15 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         fi
         make -j $JOBS | tee -a $LOG
     elif [ $PLATFORM == "win32" ] ; then
-        msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
+        SLN_PLATFORM="Win32"
+        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        then
+          SLN_PLATFORM="x64"
+        fi
+
+        msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err \
+                    /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=${SLN_PLATFORM} /t:Build /p:useenv=true \
+                    /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
     fi
 fi
 
