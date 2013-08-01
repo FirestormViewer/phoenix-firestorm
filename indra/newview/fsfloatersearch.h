@@ -150,6 +150,7 @@ public:
 	FSPanelSearchPeople();
 	void onSearchPanelOpen(FSFloaterSearch* parent);
 	static void processSearchReply(LLMessageSystem* msg, void**);
+	void setUseLegacyResultBehavior(BOOL use_legacy) { mUseLegacyResultBehavior = use_legacy; }
 protected:
 private:
 	/*virtual*/ BOOL postBuild();
@@ -169,12 +170,14 @@ private:
 	void setLoadingProgress(bool started);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
+	const BOOL getUseLegacyResultBehavior() const { return mUseLegacyResultBehavior; }
 	
 	int			mNumResultsReturned;
 	S32			mStartSearch;
 	S32			mResultsReceived;
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
+	BOOL		mUseLegacyResultBehavior;
 	
 	FSFloaterSearch*	mParent;
 	LLSearchComboBox*	mSearchComboBox;

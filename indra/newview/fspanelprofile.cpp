@@ -2118,6 +2118,12 @@ void FSPanelProfile::onTabChange()
 
 void FSPanelProfile::onOpen(const LLSD& key)
 {
+	// don't reload the same profile
+	if (getAvatarId() == key)
+	{
+		return;
+	}
+	
 	FSPanelProfileTab::onOpen(key);
 	
 	mPanelSecondlife	= findChild<FSPanelProfileSecondLife>(PANEL_SECONDLIFE);
@@ -2137,6 +2143,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
 	mPanelNotes->onOpen(getAvatarId());
 	
 	//always request the base profile info
+	resetLoading();
 	updateData();
 
 	if ( (false) && (getAvatarId() == gAgent.getID()))
