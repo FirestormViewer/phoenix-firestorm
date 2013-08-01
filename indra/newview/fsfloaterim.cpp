@@ -1253,9 +1253,8 @@ void FSFloaterIM::updateMessages()
 	{
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
-		chat_args["hide_timestamps_nearby_chat"] = gSavedSettings.getBOOL("FSHideTimestampsIM");
 		chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
-		chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+		chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimestampsIM");
 		
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 		RLV_ASSERT(pIMSession);

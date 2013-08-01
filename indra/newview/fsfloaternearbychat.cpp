@@ -213,9 +213,9 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 {
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
-	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsNearbyChat");
-	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - only add Timestamp when hide_timestamps_nearby_chat is not TRUE
-	if (!hide_timestamps_nearby_chat)
+	bool show_timestamps_nearby_chat = gSavedSettings.getBOOL("FSShowTimestampsNearbyChat");
+	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - add Timestamp when show_timestamps_nearby_chat is TRUE
+	if (show_timestamps_nearby_chat)
 	{
 		if (tmp_chat.mTimeStr.empty())
 		{
@@ -227,8 +227,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	tmp_chat.mFromName = chat.mFromName;
 	LLSD chat_args = args;
 	chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-	chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
-	chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+	chat_args["show_time"] = show_timestamps_nearby_chat;
 	mChatHistoryMuted->appendMessage(chat, chat_args);
 	// </FS:Ansariel> Optional muted chat history
 	if (!chat.mMuted)
@@ -237,7 +236,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 		//tmp_chat.mFromName = chat.mFromName;
 		//LLSD chat_args = args;
 		//chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-		//chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+		//chat_args["show_timestamps_nearby_chat"] = show_timestamps_nearby_chat;
 		// <(FS:Ansariel> Optional muted chat history
 		mChatHistory->appendMessage(chat, chat_args);
 	}
