@@ -85,10 +85,7 @@ public:
 	// Returns "James Linden" or "bobsmith123 Resident"
 	// Used where we explicitely prefer or need a non UTF-8 legacy (ASCII) name
 	// Also used for backwards compatibility with systems like voice and muting
-	// <FS:CR> Get the true username
-	// std::string getUserName() const;
-	std::string getUserName(bool true_username = false) const;
-	// </FS:CR>
+	std::string getUserName() const;
 	
 	// Returns "james.linden" or the legacy name for very old names
 	std::string getAccountName() const { return mUsername; }

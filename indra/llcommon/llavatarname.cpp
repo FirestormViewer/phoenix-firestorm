@@ -217,10 +217,7 @@ std::string LLAvatarName::getDisplayName() const
 	}
 }
 
-// <FS:CR> Get the true username
-//std::string LLAvatarName::getUserName() const
-std::string LLAvatarName::getUserName(bool true_username) const
-// </FS:CR>
+std::string LLAvatarName::getUserName() const
 {
 	std::string name;
 	if (mLegacyLastName.empty() || (mLegacyLastName == "Resident"))
@@ -236,12 +233,6 @@ std::string LLAvatarName::getUserName(bool true_username) const
 			name = mLegacyFirstName;
 		}
 	}
-	// <FS:CR> Get the true username
-	else if (true_username && !mUsername.empty())
-	{
-		name = mUsername;
-	}
-	// </FS:CR>
 	else
 	{
 		name = mLegacyFirstName + " " + mLegacyLastName;
