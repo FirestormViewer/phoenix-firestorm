@@ -276,7 +276,11 @@ void FSFloaterIM::sendMsg()
 
 				if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
 				{
+#ifdef ND_BUILD64BIT_ARCH
+					utf8_text.insert(4,("(FS64 " + LLVersionInfo::getShortVersion() + skinIndicator +
+#else
 					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
+#endif
 #ifdef OPENSIM
 					" os" +
 #endif
