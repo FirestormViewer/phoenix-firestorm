@@ -286,7 +286,6 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 		             height="25"
 		             name="look_item_filter"
 		             search_button_visible="true"
-		             text_color="black"
 		             visible="true"/>
                     
                 </layout_panel>

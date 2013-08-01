@@ -53,6 +53,10 @@ const S32	WHEEL_DELTA = 1;     /* Value for rolling one detent */
 const S32	BITS_PER_PIXEL = 32;
 const S32	MAX_NUM_RESOLUTIONS = 32;
 
+// <FS:CR> Various missing prototypes
+BOOL check_for_card(const char* RENDERER, const char* bad_card);
+const char* cursorIDToName(int id);
+// </FS:CR>
 
 //
 // LLWindowMacOSX
@@ -212,7 +216,7 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 							   const std::string& title, const std::string& name, S32 x, S32 y, S32 width,
 							   S32 height, U32 flags,
 							   BOOL fullscreen, BOOL clearBg,
-							   BOOL disable_vsync,
+							   BOOL disable_vsync, BOOL use_gl,
 							   BOOL ignore_pixel_depth,
 							   U32 fsaa_samples)
 	: LLWindow(NULL, fullscreen, flags)
@@ -230,6 +234,7 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 	gKeyboard = new LLKeyboardMacOSX();
 	gKeyboard->setCallbacks(callbacks);
 
+	// Ignore use_gl for now, only used for drones on PC
 	mWindow = NULL;
 	mContext = NULL;
 	mPixelFormat = NULL;

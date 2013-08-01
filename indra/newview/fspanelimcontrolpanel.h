@@ -24,7 +24,7 @@
  * $/LicenseInfo$
  */
 
-// Original file: // Original file: llpanelimcontrolpanel.h
+// Original file: llpanelimcontrolpanel.h
 
 #ifndef FS_PANELIMCONTROLPANEL_H
 #define FS_PANELIMCONTROLPANEL_H

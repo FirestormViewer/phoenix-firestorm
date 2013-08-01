@@ -7,7 +7,7 @@
 	help_topic="blocked_list"
 	width="304">
 
-	<scroll_list
+	<block_list
 		follows="all"
 		height="70"
 		layout="topleft"
@@ -16,13 +16,7 @@
 		multi_select="true"
 		tool_tip="List of currently blocked Residents"
 		top="0"
-		width="304">
-			<scroll_list.columns
-				name="item_name" />
-			<scroll_list.columns
-				name="item_type"
-				width="96" />
-	</scroll_list>
+		width="304" />
 
 	<layout_stack
 		name="block_list_sidetray_main"
@@ -37,13 +31,14 @@
 
 	<!-- will be shown or hidden in code, depending on whether this
 	     is a sub tab or standalone panel -Zi -->
+	<!-- probably unused now so set visible to false initially -->
 	<layout_panel
 		name="back_button_container"
 		auto_resize="false"
 		height="20"
 		width="30"
 		layout="topleft"
-		visible="true"
+		visible="false"
 		follows="all">
 
 	<button
@@ -79,48 +74,46 @@
 		orientation="horizontal">
 
 	<layout_panel
-		name="block_panels_btnperson"
+		name="block_panels_btnsort"
 		height="20"
-		width="90"
+		width="60"
 		layout="topleft"
 		follows="all">
 
-	<button
+	<menu_button
 		follows="all"
 		height="20"
-		label="Block person"
+		label="Sort ..."
 		left="0"
 		layout="topleft"
-		name="Block resident..."
-		tool_tip="Pick a Resident to block"
+		menu_filename="menu_people_blocked_view.xml"
+		menu_position="bottomleft"
+		name="view_btn"
+		tool_tip="Sort options"
 		top="0"
-		width="90">
-		<button.commit_callback
-			function="Block.ClickPick" />
-	</button>
+		width="60" />
 
 	</layout_panel>
 
 	<layout_panel
-		name="block_panels_btnobject"
+		name="block_panels_btnpersonobject"
 		height="20"
-		width="90"
+		width="120"
 		layout="topleft"
 		follows="all">
 
-	<button
+	<menu_button
 		follows="all"
 		height="20"
-		label="Block object"
+		label="Add Block ..."
 		layout="topleft"
 		left="0"
-		name="Block object by name..."
-		tool_tip="Pick an object to block by name"
+		menu_filename="menu_people_blocked_plus.xml"
+		menu_position="bottomleft"
+		name="plus_btn"
+		tool_tip="Pick a Resident or an object to block"
 		top="0"
-		width="90" >
-		<button.commit_callback
-			function="Block.ClickBlockByName" />
-	</button>
+		width="120" />
 
 	</layout_panel>
 
@@ -138,13 +131,10 @@
 		label="Unblock"
 		layout="topleft"
 		left="0"
-		name="Unblock"
+		name="unblock_btn"
 		tool_tip="Remove Resident or object from blocked list"
 		top="0"
-		width="90" >
-		<button.commit_callback
-			function="Block.ClickRemove" />
-	</button>
+		width="90" />
 
 	</layout_panel>
 
@@ -156,7 +146,11 @@
 
 <!-- keep these controls so the code doesn't complain about missing controls -Zi -->
 	<panel	name="hide_controls" enabled="false" visible="false" left="0" top="0">
-		<text	follows="top|left" height="0" layout="topleft" name="title_text"
-				left="0" top="0" width="0" />
+		<text			follows="top|left" height="0" layout="topleft" name="title_text"
+						left="0" top="0" width="0" />
+		<menu_button	follows="top|left" height="0" layout="topleft" name="blocked_gear_btn"
+						left="0" top="0" width="0" />
+		<filter_editor	follows="top|left" height="0" layout="topleft" name="blocked_filter_input"
+						left="0" top="0" width="0" />
 	</panel>
 </panel>

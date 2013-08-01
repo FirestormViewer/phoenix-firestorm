@@ -43,14 +43,6 @@
 const U8 IM_ONLINE = 0;
 const U8 IM_OFFLINE = 1;
 
-const S32 VOTE_YES = 1;
-const S32 VOTE_NO = 0;
-const S32 VOTE_ABSTAIN = -1;
-
-const S32 VOTE_MAJORITY = 0;
-const S32 VOTE_SUPER_MAJORITY = 1;
-const S32 VOTE_UNANIMOUS = 2;
-
 const char EMPTY_BINARY_BUCKET[] = "";
 const S32 EMPTY_BINARY_BUCKET_SIZE = 1;
 const U32 NO_TIMESTAMP = 0;
@@ -72,7 +64,6 @@ LLIMInfo::LLIMInfo() :
 	mViewerThinksToIsOnline(false),
 	mIMType(IM_NOTHING_SPECIAL),
 	mTimeStamp(0),
-	mSource(IM_FROM_SIM),
 	mTTL(IM_TTL)
 {
 }
@@ -91,7 +82,6 @@ LLIMInfo::LLIMInfo(
 	LLSD data,
 	U8 offline,
 	U32 timestamp,
-	EIMSource source,
 	S32 ttl) :
 	mFromID(from_id),
 	mFromGroup(from_group),
@@ -107,14 +97,12 @@ LLIMInfo::LLIMInfo(
 	mName(name),
 	mMessage(message),
 	mData(data),
-	mSource(source),
 	mTTL(ttl)
 {
 }
 
-LLIMInfo::LLIMInfo(LLMessageSystem* msg, EIMSource source, S32 ttl) :
+LLIMInfo::LLIMInfo(LLMessageSystem* msg, S32 ttl) :
 	mViewerThinksToIsOnline(false),
-	mSource(source),
 	mTTL(ttl)
 {
 	unpackMessageBlock(msg);
@@ -329,7 +317,6 @@ LLSD im_info_to_llsd(LLPointer<LLIMInfo> im_info)
 	param_message["region_id"] = im_info->mRegionID;
 	param_message["position"] = ll_sd_from_vector3(im_info->mPosition);
 	param_message["data"] = im_info->mData;
-	param_message["source"]= im_info->mSource;
 	param_message["ttl"] = im_info->mTTL;
 
 	LLSD param_agent;
@@ -362,7 +349,6 @@ LLPointer<LLIMInfo> llsd_to_im_info(const LLSD& im_info_sd)
 		param_message["data"],
 		(U8) param_message["offline"].asInteger(),
 		(U32) param_message["timestamp"].asInteger(),
-		(EIMSource)param_message["source"].asInteger(),
 		param_message["ttl"].asInteger());
 
 	return im_info;
@@ -384,7 +370,6 @@ LLPointer<LLIMInfo> LLIMInfo::clone()
 			mData,
 			mOffline,
 			mTimeStamp,
-			mSource,
 			mTTL);
 }
 

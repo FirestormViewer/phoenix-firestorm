@@ -9,7 +9,7 @@
  save_rect="true"
  save_visibility="true"
  title="Statistics"
- width="260">
+ width="261">
     <scroll_container
      follows="top|left|bottom|right"
      height="380"

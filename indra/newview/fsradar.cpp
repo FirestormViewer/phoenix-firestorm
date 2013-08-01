@@ -136,7 +136,6 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 		chat.mChatType = CHAT_TYPE_RADAR;
 		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		LLSD args;
-		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 	} // <FS:CR />
 }
@@ -253,6 +252,11 @@ void FSRadar::updateRadarList()
 		
 		LLUUID avId          = static_cast<LLUUID>(*item_it);
 		LLVector3d avPos     = static_cast<LLVector3d>(*pos_it);
+
+		if (avId == gAgentID)
+		{
+			continue;
+		}
 		
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		FSRadarEntry* ent = getEntry(avId);
@@ -414,7 +418,7 @@ void FSRadar::updateRadarList()
 			}
 			if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
 			{
-				if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
+				if (RadarReportSimRangeEnter && avRegion == regionSelf && avRegion != rf.lastRegion && rf.lastRegion.notNull())
 				{
 					make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					if (avRange != AVATAR_UNKNOWN_RANGE) // Don't report an inaccurate range in localchat, if the true range is not known.
@@ -429,7 +433,7 @@ void FSRadar::updateRadarList()
 						LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_entering));
 					}
 				}
-				else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+				else if (RadarReportSimRangeLeave && rf.lastRegion == regionSelf && avRegion != regionSelf && avRegion.notNull())
 				{
 					make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 					LLAvatarNameCache::get(avId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
@@ -619,7 +623,7 @@ void FSRadar::updateRadarList()
 				make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_draw_distance_leaving));
 			}
-			if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf))
+			if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf || rf.lastRegion.isNull()))
 			{
 				make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId, boost::bind(&FSRadar::radarAlertMsg, this, _1, _2, str_region_leaving));
@@ -728,7 +732,7 @@ void FSRadar::updateRadarList()
 	//STEP 5: Final data updates and notification of subscribers
 	//
 
-	mAvatarStats["total"] = llformat("%d", mLastRadarSweep.size());
+	mAvatarStats["total"] = llformat("%d", mLastRadarSweep.size() - 1);
 	mAvatarStats["region"] = llformat("%d", inSameRegion);
 	mAvatarStats["chatrange"] = llformat("%d", inChatRange);
 

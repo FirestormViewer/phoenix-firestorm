@@ -280,6 +280,12 @@
 				</text>
 				<check_box label="Skingewicht einschließen" name="upload_skin"/>
 				<check_box label="Gelenkpositionen einschließen" name="upload_joints"/>
+				<check_box label="An Avatarform anpassen" name="deform"/>
+				<radio_group name="deform_base">
+					<radio_item label="Mann" name="0"/>
+					<radio_item label="Frau" name="1"/>
+					<radio_item label="Mann (schlank)" name="2"/>
+				</radio_group>
 				<text name="pelvis_offset_label">
 					Z-Offset (Avatar anheben oder senken):
 				</text>

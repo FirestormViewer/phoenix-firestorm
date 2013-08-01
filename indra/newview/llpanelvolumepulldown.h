@@ -46,10 +46,12 @@ class LLPanelVolumePulldown : public LLPanel
 	/*virtual*/ BOOL postBuild();
 	
  private:
+	/*//<FS:KC> Handled centrally now
 	void setControlFalse(const LLSD& user_data);
 	void onAdvancedButtonClick(const LLSD& user_data);
 	// <FS:Ansariel> Missing callback function
 	void setSounds();
+	*/
 
 	LLFrameTimer mHoverTimer;
 	static const F32 sAutoCloseFadeStartTimeSec;

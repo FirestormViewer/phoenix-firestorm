@@ -78,6 +78,8 @@
 // [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "llsdutil.h"
+#include "llsdutil_math.h"
 
 //---------------------------------------------------------------------------
 // Constants
@@ -227,6 +229,46 @@ void LLMapFriendObserver::changed(U32 mask)
 	}
 }
 
+// <FS:Ansariel> Parcel details on map
+FSWorldMapParcelInfoObserver::FSWorldMapParcelInfoObserver(const LLVector3d& pos_global)
+	: LLRemoteParcelInfoObserver(),
+	mPosGlobal(pos_global),
+	mParcelID(LLUUID::null)
+{ }
+
+FSWorldMapParcelInfoObserver::~FSWorldMapParcelInfoObserver()
+{
+	if (mParcelID.notNull())
+	{
+		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelID, this);
+	}
+}
+
+void FSWorldMapParcelInfoObserver::processParcelInfo(const LLParcelData& parcel_data)
+{
+	LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelID, this);
+
+	if (gFloaterWorldMap)
+	{
+		gFloaterWorldMap->processParcelInfo(parcel_data, mPosGlobal);
+	}
+}
+
+// virtual
+void FSWorldMapParcelInfoObserver::setParcelID(const LLUUID& parcel_id)
+{
+	mParcelID = parcel_id;
+	LLRemoteParcelInfoProcessor::getInstance()->addObserver(mParcelID, this);
+	LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(mParcelID);
+}
+
+// virtual
+void FSWorldMapParcelInfoObserver::setErrorStatus(U32 status, const std::string& reason)
+{
+	llwarns << "Can't handle remote parcel request."<< " Http Status: "<< status << ". Reason : "<< reason<<llendl;
+}
+// </FS:Ansariel> Parcel details on map
+
 //---------------------------------------------------------------------------
 // Statics
 //---------------------------------------------------------------------------
@@ -253,7 +295,8 @@ LLFloaterWorldMap::LLFloaterWorldMap(const LLSD& key)
 	mTrackedStatus(LLTracker::TRACKING_NOTHING),
 	mListFriendCombo(NULL),
 	mListLandmarkCombo(NULL),
-	mListSearchResults(NULL)
+	mListSearchResults(NULL),
+	mParcelInfoObserver(NULL) // <FS:Ansariel> Parcel details on map
 {
 	gFloaterWorldMap = this;
 	
@@ -318,6 +361,13 @@ BOOL LLFloaterWorldMap::postBuild()
 // virtual
 LLFloaterWorldMap::~LLFloaterWorldMap()
 {
+	// <FS:Ansariel> Parcel details on map
+	if (mParcelInfoObserver)
+	{
+		delete mParcelInfoObserver;
+	}
+	// </FS:Ansariel> Parcel details on map
+
 	// All cleaned up by LLView destructor
 	mPanel = NULL;
 	
@@ -434,6 +484,25 @@ void LLFloaterWorldMap::reshape( S32 width, S32 height, BOOL called_from_parent 
 // virtual
 void LLFloaterWorldMap::draw()
 {
+	// <FS:Ansariel> Performance improvement
+	static LLUICtrl* avatar_icon = getChild<LLUICtrl>("avatar_icon");
+	static LLUICtrl* landmark_icon = getChild<LLUICtrl>("landmark_icon");
+	static LLUICtrl* location_icon = getChild<LLUICtrl>("location_icon");
+	static LLView* teleport_btn = getChildView("Teleport");
+	//static LLView* clear_btn = getChildView("Clear");
+	static LLView* show_destination_btn = getChildView("Show Destination");
+	static LLView* copy_slurl_btn = getChildView("copy_slurl");
+	static LLView* go_home_btn = getChildView("Go Home");
+	static LLUICtrl* zoom_slider = getChild<LLUICtrl>("zoom slider");
+	static LLView* people_chk = getChildView("people_chk");
+	static LLView* infohub_chk = getChildView("infohub_chk");
+	static LLView* telehub_chk = getChildView("telehub_chk");
+	static LLView* land_for_sale_chk = getChildView("land_for_sale_chk");
+	static LLView* event_chk = getChildView("event_chk");
+	static LLView* events_mature_chk = getChildView("events_mature_chk");
+	static LLView* events_adult_chk = getChildView("events_adult_chk");
+	// </FS:Ansariel> Performance improvement
+
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
 	
@@ -443,32 +512,50 @@ void LLFloaterWorldMap::draw()
 	LLViewerRegion* regionp = gAgent.getRegion();
 	bool agent_on_prelude = (regionp && regionp->isPrelude());
 	bool enable_go_home = gAgent.isGodlike() || !agent_on_prelude;
-	getChildView("Go Home")->setEnabled(enable_go_home);
-	
+	// <FS:Ansariel> Performance improvement
+	//getChildView("Go Home")->setEnabled(enable_go_home);
+	go_home_btn->setEnabled(enable_go_home);
+	// </FS:Ansariel> Performance improvement
+
 	updateLocation();
 	
 	LLTracker::ETrackingStatus tracking_status = LLTracker::getTrackingStatus(); 
 	if (LLTracker::TRACKING_AVATAR == tracking_status)
 	{
-		getChild<LLUICtrl>("avatar_icon")->setColor( map_track_color);
+		// <FS:Ansariel> Performance improvement
+		//getChild<LLUICtrl>("avatar_icon")->setColor( map_track_color);
+		avatar_icon->setColor( map_track_color);
+		// </FS:Ansariel> Performance improvement
 	}
 	else
 	{
-		getChild<LLUICtrl>("avatar_icon")->setColor( map_track_disabled_color);
+		// <FS:Ansariel> Performance improvement
+		//getChild<LLUICtrl>("avatar_icon")->setColor( map_track_disabled_color);
+		avatar_icon->setColor( map_track_disabled_color);
+		// </FS:Ansariel> Performance improvement
 	}
 	
 	if (LLTracker::TRACKING_LANDMARK == tracking_status)
 	{
-		getChild<LLUICtrl>("landmark_icon")->setColor( map_track_color);
+		// <FS:Ansariel> Performance improvement
+		//getChild<LLUICtrl>("landmark_icon")->setColor( map_track_color);
+		landmark_icon->setColor( map_track_color);
+		// </FS:Ansariel> Performance improvement
 	}
 	else
 	{
-		getChild<LLUICtrl>("landmark_icon")->setColor( map_track_disabled_color);
+		// <FS:Ansariel> Performance improvement
+		//getChild<LLUICtrl>("landmark_icon")->setColor( map_track_disabled_color);
+		landmark_icon->setColor( map_track_disabled_color);
+		// </FS:Ansariel> Performance improvement
 	}
 	
 	if (LLTracker::TRACKING_LOCATION == tracking_status)
 	{
-		getChild<LLUICtrl>("location_icon")->setColor( map_track_color);
+		// <FS:Ansariel> Performance improvement
+		//getChild<LLUICtrl>("location_icon")->setColor( map_track_color);
+		location_icon->setColor( map_track_color);
+		// </FS:Ansariel> Performance improvement
 	}
 	else
 	{
@@ -478,11 +565,17 @@ void LLFloaterWorldMap::draw()
 			double value = fmod(seconds, 2);
 			value = 0.5 + 0.5*cos(value * F_PI);
 			LLColor4 loading_color(0.0, F32(value/2), F32(value), 1.0);
-			getChild<LLUICtrl>("location_icon")->setColor( loading_color);
+			// <FS:Ansariel> Performance improvement
+			//getChild<LLUICtrl>("location_icon")->setColor( loading_color);
+			location_icon->setColor( loading_color);
+			// </FS:Ansariel> Performance improvement
 		}
 		else
 		{
-			getChild<LLUICtrl>("location_icon")->setColor( map_track_disabled_color);
+			// <FS:Ansariel> Performance improvement
+			//getChild<LLUICtrl>("location_icon")->setColor( map_track_disabled_color);
+			location_icon->setColor( map_track_disabled_color);
+			// </FS:Ansariel> Performance improvement
 		}
 	}
 	
@@ -492,20 +585,30 @@ void LLFloaterWorldMap::draw()
 		centerOnTarget(TRUE);
 	}
 	
-	getChildView("Teleport")->setEnabled((BOOL)tracking_status);
-	//	getChildView("Clear")->setEnabled((BOOL)tracking_status);
-	getChildView("Show Destination")->setEnabled((BOOL)tracking_status || LLWorldMap::getInstance()->isTracking());
-	getChildView("copy_slurl")->setEnabled((mSLURL.isValid()) );
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
-	childSetEnabled("Go Home", 
-		(!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
-// [/RLVa:KB]
-	
+	// <FS:Ansariel> Performance improvement
+//	getChildView("Teleport")->setEnabled((BOOL)tracking_status);
+//	//	getChildView("Clear")->setEnabled((BOOL)tracking_status);
+//	getChildView("Show Destination")->setEnabled((BOOL)tracking_status || LLWorldMap::getInstance()->isTracking());
+//	getChildView("copy_slurl")->setEnabled((mSLURL.isValid()) );
+//// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+//	childSetEnabled("Go Home", 
+//		(!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
+//// [/RLVa:KB]
+	teleport_btn->setEnabled((BOOL)tracking_status);
+	//clear_btn->setEnabled((BOOL)tracking_status);
+	show_destination_btn->setEnabled((BOOL)tracking_status || LLWorldMap::getInstance()->isTracking());
+	copy_slurl_btn->setEnabled((mSLURL.isValid()) );
+	go_home_btn->setEnabled((!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
+	// </FS:Ansariel> Performance improvement
+
 	setMouseOpaque(TRUE);
 	getDragHandle()->setMouseOpaque(TRUE);
 	
 	//RN: snaps to zoom value because interpolation caused jitter in the text rendering
-	if (!mZoomTimer.getStarted() && mCurZoomVal != (F32)getChild<LLUICtrl>("zoom slider")->getValue().asReal())
+	// <FS:Ansariel> Performance improvement
+	//if (!mZoomTimer.getStarted() && mCurZoomVal != (F32)getChild<LLUICtrl>("zoom slider")->getValue().asReal())
+	if (!mZoomTimer.getStarted() && mCurZoomVal != (F32)zoom_slider->getValue().asReal())
+	// </FS:Ansariel> Performance improvement
 	{
 		mZoomTimer.start();
 	}
@@ -515,7 +618,10 @@ void LLFloaterWorldMap::draw()
 		interp = 1.f;
 		mZoomTimer.stop();
 	}
-	mCurZoomVal = lerp(mCurZoomVal, (F32)getChild<LLUICtrl>("zoom slider")->getValue().asReal(), interp);
+	// <FS:Ansariel> Performance improvement
+	//mCurZoomVal = lerp(mCurZoomVal, (F32)getChild<LLUICtrl>("zoom slider")->getValue().asReal(), interp);
+	mCurZoomVal = lerp(mCurZoomVal, (F32)zoom_slider->getValue().asReal(), interp);
+	// </FS:Ansariel> Performance improvement
 	F32 map_scale = 256.f*pow(2.f, mCurZoomVal);
 	LLWorldMapView::setScale( map_scale );
 	
@@ -523,13 +629,22 @@ void LLFloaterWorldMap::draw()
 	// If above threshold level (i.e. low res) -> Disable all checkboxes
 	// If under threshold level (i.e. high res) -> Enable all checkboxes
 	bool enable = LLWorldMapView::showRegionInfo();
-	getChildView("people_chk")->setEnabled(enable);
-	getChildView("infohub_chk")->setEnabled(enable);
-	getChildView("telehub_chk")->setEnabled(enable);
-	getChildView("land_for_sale_chk")->setEnabled(enable);
-	getChildView("event_chk")->setEnabled(enable);
-	getChildView("events_mature_chk")->setEnabled(enable);
-	getChildView("events_adult_chk")->setEnabled(enable);
+	// <FS:Ansariel> Performance improvement
+	//getChildView("people_chk")->setEnabled(enable);
+	//getChildView("infohub_chk")->setEnabled(enable);
+	//getChildView("telehub_chk")->setEnabled(enable);
+	//getChildView("land_for_sale_chk")->setEnabled(enable);
+	//getChildView("event_chk")->setEnabled(enable);
+	//getChildView("events_mature_chk")->setEnabled(enable);
+	//getChildView("events_adult_chk")->setEnabled(enable);
+	people_chk->setEnabled(enable);
+	infohub_chk->setEnabled(enable);
+	telehub_chk->setEnabled(enable);
+	land_for_sale_chk->setEnabled(enable);
+	event_chk->setEnabled(enable);
+	events_mature_chk->setEnabled(enable);
+	events_adult_chk->setEnabled(enable);
+	// </FS:Ansariel> Performance improvement
 	
 	LLFloater::draw();
 }
@@ -539,9 +654,83 @@ void LLFloaterWorldMap::draw()
 // Internal utility functions
 //-------------------------------------------------------------------------
 
+// <FS:Ansariel> Parcel details on map
+void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const LLVector3d& pos_global)
+{
+	if (!mShowParcelInfo ||
+		LLTracker::getTrackedPositionGlobal() != pos_global ||
+		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_NOTHING ||
+		LLTracker::getTrackingStatus() != LLTracker::TRACKING_LOCATION)
+	{
+		return;
+	}
+
+	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
+	if (!sim_info)
+	{
+		return;
+	}
+
+	std::string sim_name = sim_info->getName();
+	U32 locX, locY;
+	from_region_handle(sim_info->getHandle(), &locX, &locY);
+	F32 region_x = pos_global.mdV[VX] - locX;
+	F32 region_y = pos_global.mdV[VY] - locY;
+	std::string full_name = llformat("%s (%d, %d, %d)", 
+									 sim_name.c_str(), 
+									 llround(region_x), 
+									 llround(region_y),
+									 llround((F32)pos_global.mdV[VZ]));
+
+	LLTracker::trackLocation(pos_global, parcel_data.name, full_name);
+}
+
+void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
+{
+	if (pos_global == mRequestedGlobalPos)
+	{
+		return;
+	}
+
+	LLViewerRegion* region = gAgent.getRegion();
+	if (!region)
+	{
+		return;
+	}
+
+	LLVector3 pos_region((F32)fmod(pos_global.mdV[VX], (F64)REGION_WIDTH_METERS),
+					  (F32)fmod(pos_global.mdV[VY], (F64)REGION_WIDTH_METERS),
+					  (F32)pos_global.mdV[VZ]);
+
+	LLSD body;
+	std::string url = region->getCapability("RemoteParcelRequest");
+	if (!url.empty())
+	{
+		body["location"] = ll_sd_from_vector3(pos_region);
+		if (!pos_global.isExactlyZero())
+		{
+			U64 region_handle = to_region_handle(pos_global);
+			body["region_handle"] = ll_sd_from_U64(region_handle);
+		}
+		mRequestedGlobalPos = pos_global;
+		if (mParcelInfoObserver)
+		{
+			delete mParcelInfoObserver;
+		}
+		mParcelInfoObserver = new FSWorldMapParcelInfoObserver(pos_global);
+		LLHTTPClient::post(url, body, new LLRemoteParcelRequestResponder(mParcelInfoObserver->getObserverHandle()));
+	}
+	else
+	{
+		llwarns << "Cannot request parcel details: Cap not found" << llendl;
+	}
+}
+// </FS:Ansariel> Parcel details on map
+
 
 void LLFloaterWorldMap::trackAvatar( const LLUUID& avatar_id, const std::string& name )
 {
+	mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
 	LLCtrlSelectionInterface *iface = childGetSelectionInterface("friend combo");
 	if (!iface) return;
 	
@@ -573,6 +762,7 @@ void LLFloaterWorldMap::trackAvatar( const LLUUID& avatar_id, const std::string&
 
 void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
 {
+	mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
 	LLCtrlSelectionInterface *iface = childGetSelectionInterface("landmark combo");
 	if (!iface) return;
 	
@@ -618,6 +808,7 @@ void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
 
 void LLFloaterWorldMap::trackEvent(const LLItemInfo &event_info)
 {
+	mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
 	mTrackedStatus = LLTracker::TRACKING_LOCATION;
 	LLTracker::trackLocation(event_info.getGlobalPosition(), event_info.getName(), event_info.getToolTip(), LLTracker::LOCATION_EVENT);
 	setDefaultBtn("Teleport");
@@ -625,6 +816,7 @@ void LLFloaterWorldMap::trackEvent(const LLItemInfo &event_info)
 
 void LLFloaterWorldMap::trackGenericItem(const LLItemInfo &item)
 {
+	mShowParcelInfo = false; // <FS:Ansariel> Parcel details on map
 	mTrackedStatus = LLTracker::TRACKING_LOCATION;
 	LLTracker::trackLocation(item.getGlobalPosition(), item.getName(), item.getToolTip(), LLTracker::LOCATION_ITEM);
 	setDefaultBtn("Teleport");
@@ -685,6 +877,18 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 // [/RLVa:KB]
 //	LLTracker::trackLocation(pos_global, full_name, tooltip);
 	LLWorldMap::getInstance()->cancelTracking();		// The floater is taking over the tracking
+
+	// <FS:Ansariel> Parcel details on map
+	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		mShowParcelInfo = true;
+		requestParcelInfo(pos_global);
+	}
+	else
+	{
+		mShowParcelInfo = false;
+	}
+	// </FS:Ansariel> Parcel details on map
 	
 	LLVector3d coord_pos = LLTracker::getTrackedPositionGlobal();
 	updateTeleportCoordsDisplay( coord_pos );

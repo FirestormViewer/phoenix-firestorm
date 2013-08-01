@@ -53,6 +53,7 @@
 #include "llresmgr.h"
 #include "pipeline.h"
 #include "llglheaders.h"
+#include "lluiimage.h"
 #include "llviewerregion.h"	// <FS:CR> Aurora Sim
 
 // Local constants...

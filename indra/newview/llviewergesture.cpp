@@ -33,6 +33,7 @@
 #include "llviewerinventory.h"
 #include "sound_ids.h"		// for testing
 
+#include "llfloaterreg.h"
 #include "llkeyboard.h"		// for key shortcuts for testing
 #include "llinventorymodel.h"
 #include "llvoavatar.h"
@@ -40,10 +41,10 @@
 #include "llviewermessage.h" // send_guid_sound_trigger
 #include "llviewernetwork.h"
 #include "llagent.h"
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychatbar.h"
+// <FS:Ansariel> [FS Communication UI]
+//#include "llfloaterimnearbychat.h"
 #include "fsnearbychathub.h"
-// </FS:Zi>
+// </FS:Ansariel> [FS Communication UI]
 
 // Globals
 LLViewerGestureList gGestureList;
@@ -133,9 +134,11 @@ void LLViewerGesture::doTrigger( BOOL send_chat )
 	{
 		// Don't play nodding animation, since that might not blend
 		// with the gesture animation.
-		// <FS:Zi> Remove floating chat bar
-		// LLNearbyChatBar::getInstance()->sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
+		// <FS:Ansariel> [FS Communication UI]
+		//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+		//		sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
 		FSNearbyChat::instance().sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
+		// </FS:Ansariel> [FS Communication UI]
 	}
 }
 

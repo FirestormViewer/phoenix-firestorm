@@ -71,6 +71,8 @@ public:
 
 	/*virtual*/ void onOpen(const LLSD& key);
 
+	void updateData();
+
 	/*virtual*/ BOOL postBuild();
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);

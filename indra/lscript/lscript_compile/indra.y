@@ -15,6 +15,7 @@
 	#pragma warning (disable : 4702) // warning C4702: unreachable code
 	#pragma warning( disable : 4065 )	// warning: switch statement contains 'default' but no 'case' labels
 	#endif
+
 %}
 
 %union

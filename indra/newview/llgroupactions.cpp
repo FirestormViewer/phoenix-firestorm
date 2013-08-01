@@ -36,30 +36,23 @@
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llgroupmgr.h"
+#include "llfloaterimcontainer.h"
 #include "llimview.h" // for gIMMgr
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"	// can_afford_transaction()
-// <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h"
-#include "fsfloaterim.h"
-// </FS:Ansariel> [FS communication UI]
 #include "groupchatlistener.h"
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f)
-#include "llslurl.h"
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f)
-#include "llslurl.h"
-#include "rlvhandler.h"
-// [/RLVa:KB]
+// Firestorm includes
 #include "exogroupmutelist.h"
-// <FS:Ansariel> Standalone group floater
-#include "fsfloatergroup.h"
-#include "llpanelgroup.h"
-// </FS:Ansariel>
 #include "fscontactsfloater.h"
 #include "fsdata.h"
+#include "fsfloatergroup.h"
+#include "fsfloaterim.h"
+#include "llpanelgroup.h"
+#include "llslurl.h"
+#include "rlvactions.h"
+#include "rlvcommon.h"
+#include "rlvhandler.h"
 
 //
 // Globals
@@ -165,8 +158,8 @@ void LLGroupActions::startCall(const LLUUID& group_id)
 		return;
 	}
 
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(group_id)) && (!gIMMgr->hasSession(group_id)) )
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+	if ( (!RlvActions::canStartIM(group_id)) && (!RlvActions::hasOpenGroupSession(group_id)) )
 	{
 		make_ui_sound("UISndInvalidOp");
 		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
@@ -478,8 +471,8 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 {
 	if (group_id.isNull()) return LLUUID::null;
 
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStartIM(group_id)) && (!gIMMgr->hasSession(group_id)) )
+// [RLVa:KB] - Checked: 2013-05-09 (RLVa-1.4.9)
+	if ( (!RlvActions::canStartIM(group_id)) && (!RlvActions::hasOpenGroupSession(group_id)) )
 	{
 		make_ui_sound("UISndInvalidOp");
 		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTIM, LLSD().with("RECIPIENT", LLSLURL("group", group_id, "about").getSLURLString()));
@@ -501,7 +494,7 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 		if (session_id != LLUUID::null)
 		{
 			// <FS:Ansariel> [FS communication UI]
-			//LLIMFloater::show(session_id);
+			//LLFloaterIMContainer::getInstance()->showConversation(session_id);
 			FSFloaterIM::show(session_id);
 			// </FS:Ansariel> [FS communication UI]
 		}
@@ -613,8 +606,7 @@ void LLGroupActions::ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent
 	LLSD payload;
 	payload["avatar_id"] = idAgent;
 	payload["group_id"] = idGroup;
-	std::string fullname;
-	gCacheName->getFullName(idAgent, fullname);
+	std::string fullname = LLSLURL("agent", idAgent, "inspect").getSLURLString();
 	args["AVATAR_NAME"] = fullname;
 	LLNotificationsUtil::add("EjectGroupMemberWarning",
 							 args,

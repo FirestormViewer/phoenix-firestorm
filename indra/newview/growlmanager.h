@@ -32,12 +32,11 @@
 
 #ifndef GROWLMANAGER_H
 #define GROWLMANAGER_H
-#include "llnotificationptr.h"
+
+#include "llnotifications.h"
 #include "growlnotifier.h"
 #include "lleventtimer.h"
 #include <map>
-
-class LLNotficationPtr;
 
 struct GrowlNotification
 {
@@ -69,6 +68,7 @@ private:
 	GrowlNotifier *mNotifier;
 	std::map<std::string, GrowlNotification> mNotifications;
 	std::map<std::string, U64> mTitleTimers;
+	LLNotificationChannelPtr mGrowlNotificationsChannel;
 	
 	void loadConfig();
 	static bool onLLNotification(const LLSD& notice);

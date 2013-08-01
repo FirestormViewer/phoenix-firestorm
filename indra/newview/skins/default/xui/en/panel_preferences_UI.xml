@@ -14,7 +14,7 @@
  layout="topleft"
  follows="all"
  top="5"
- bottom="-10"
+ bottom="-1"
  left="1"
  right="-1"
  name="tabs"
@@ -417,19 +417,8 @@
          top_pad="4"
          width="256" />
 
-        <check_box
-         control_name="FSGlobalButtonFlashOverride"
-         type="string"
-         left="5"
-         top_pad="6"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         name="ButtonFlashing"
-         width="128"
-         label="Flashing IM tabs override"/>
         <slider
-         control_name="FSButtonFlashCount"
+         control_name="FlashCount"
          decimal_digits="0"
          follows="left|top"
          height="16"
@@ -441,10 +430,10 @@
          min_val="0"
          max_val="16"
          name="ButtonsFlashCount"
-         top_pad="2"
+         top_pad="6"
          width="471" />
         <slider
-         control_name="FSButtonFlashRate"
+         control_name="FlashPeriod"
          decimal_digits="0"
          follows="left|top"
          height="16"

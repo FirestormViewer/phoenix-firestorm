@@ -98,6 +98,7 @@ public:
 	BOOL mHasFragmentShader;
 	S32  mNumTextureImageUnits;
 	BOOL mHasOcclusionQuery;
+	BOOL mHasTimerQuery;
 	BOOL mHasOcclusionQuery2;
 	BOOL mHasPointParameters;
 	BOOL mHasDrawBuffers;
@@ -115,6 +116,8 @@ public:
 	BOOL mHasARBEnvCombine;
 	BOOL mHasCubeMap;
 	BOOL mHasDebugOutput;
+	BOOL mHassRGBTexture;
+	BOOL mHassRGBFramebuffer;
 
 	// Vendor-specific extensions
 	BOOL mIsATI;
@@ -126,6 +129,11 @@ public:
 	BOOL mATIOffsetVerticalLines;
 	BOOL mATIOldDriver;
 
+#if LL_DARWIN
+	// Needed to distinguish problem cards on older Macs that break with Materials
+	BOOL mIsMobileGF;
+#endif
+	
 	// Whether this version of GL is good enough for SL to use
 	BOOL mHasRequirements;
 
@@ -457,6 +465,7 @@ void init_glstates();
 void parse_gl_version( S32* major, S32* minor, S32* release, std::string* vendor_specific, std::string* version_string );
 
 extern BOOL gClothRipple;
+extern BOOL gHeadlessClient;
 extern BOOL gGLActive;
 
 // Deal with changing glext.h definitions for newer SDK versions, specifically

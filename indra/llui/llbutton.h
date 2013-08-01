@@ -30,6 +30,7 @@
 #include "lluuid.h"
 #include "llbadgeowner.h"
 #include "llcontrol.h"
+#include "llflashtimer.h"
 #include "lluictrl.h"
 #include "v4color.h"
 #include "llframetimer.h"
@@ -46,9 +47,6 @@
 extern S32	LLBUTTON_H_PAD;
 extern S32	BTN_HEIGHT_SMALL;
 extern S32	BTN_HEIGHT;
-// [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-extern F32	DELAY_DRAG_HOVER_COMMIT;
-// [/SL:KB]
 
 //
 // Helpful functions
@@ -136,6 +134,7 @@ public:
 
 		Optional<bool>				handle_right_mouse;
 
+		Optional<bool>				button_flash_enable;
 		Optional<S32>				button_flash_count;
 		Optional<F32>				button_flash_rate;
 
@@ -204,8 +203,9 @@ public:
 	void			setToggleState(BOOL b);
 
 	void			setHighlight(bool b);
-	void			setFlashing( BOOL b );
+	void			setFlashing( bool b );
 	BOOL			getFlashing() const		{ return mFlashing; }
+    LLFlashTimer*   getFlashTimer() {return mFlashingTimer;}
 
 	void			setHAlign( LLFontGL::HAlign align )		{ mHAlign = align; }
 	LLFontGL::HAlign getHAlign() const						{ return mHAlign; }
@@ -378,7 +378,8 @@ protected:
 	bool						mForcePressedState;
 	bool						mDisplayPressedState;
 
-	LLFrameTimer				mFlashingTimer;
+	LLFrameTimer				mFrameTimer;
+	LLFlashTimer *				mFlashingTimer;
 
 	bool						mHandleRightMouse;
 

@@ -15,7 +15,7 @@
  layout="topleft"
  follows="all"
  top="5"
- bottom="-10"
+ bottom="-1"
  left="1"
  right="-1"
  name="tabs"
@@ -36,7 +36,7 @@
              top="15"
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              name="font_size"
              width="130">
@@ -90,7 +90,7 @@
             <text
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              name="console_font_size"
              width="150"
@@ -148,9 +148,9 @@
              height="16"
              label="Always display group chats, IM sessions and nearby chat in uppercase"
              layout="topleft"
-             left="30"
+             left="20"
              name="chat_always_in_uppercase"
-             top_pad="5"
+             top_pad="1"
              width="400" />
             <check_box
              control_name="PlayTypingAnim"
@@ -158,9 +158,8 @@
              initial_value="true"
              label="Play typing animation when chatting"
              layout="topleft"
-             left="30"
              name="play_typing_animation"
-             top_pad="5"
+             top_pad="1"
              width="400" />
             <check_box
              control_name="FSPlayChatAnimation"
@@ -168,8 +167,7 @@
              height="16"
              label="Play avatar animations (such as shouting)"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="play_avatar_animations"
              width="400" />
             <check_box
@@ -178,8 +176,7 @@
              height="16"
              label="Hear typing sound when people type in nearby chat"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="play_typing_sound"
              width="400" />
             <check_box
@@ -188,8 +185,7 @@
              height="16"
              label="Send typing notifications to other avatars during IM sessions"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="FSSendTypingState"
              width="400" />
             <check_box
@@ -197,8 +193,7 @@
              name="FSChatbarGestureAutoCompleteEnable"
              label="Enable auto-completion of gestures in nearby chat bar"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              height="16"
              width="400" />
             <check_box
@@ -206,8 +201,31 @@
              name="FSChatbarNamePrediction"
              label="Enable automatic name prediction in nearby chat bar"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
+             height="16"
+             width="400" />
+            <check_box
+             control_name="FSIMSystemMessageBrackets"
+             name="FSIMSystemMessageBrackets"
+             label="Wrap system chat messages in brackets"
+             layout="topleft"
+             top_pad="1"
+             height="16"
+             width="400" />
+            <check_box
+             control_name="FSChatHistoryShowYou"
+             name="FSChatHistoryShowYou"
+             label="Show &quot;You&quot; in chat history instead of your name"
+             layout="topleft"
+             top_pad="1"
+             height="16"
+             width="400" />
+            <check_box
+             control_name="IMShowNamesForP2PConv"
+             name="IMShowNamesForP2PConv"
+             label="Show names in direct IMs"
+             layout="topleft"
+             top_pad="1"
              height="16"
              width="400" />
             <check_box
@@ -215,18 +233,16 @@
              height="16"
              label="Email me IMs when I'm offline ([EMAIL])"
              layout="topleft"
-             left_delta="0"
              name="send_im_to_email"
-             top_pad="5"
+             top_pad="1"
              width="400" />
             <check_box
              enabled="true"
              height="16"
              label="Use V1 style chat headers"
              layout="topleft"
-             left_delta="0"
              name="plain_text_chat_history"
-             top_pad="5"
+             top_pad="1"
              width="400" />
              <check_box
              control_name="ShowChatMiniIcons"
@@ -234,30 +250,25 @@
              initial_value="false"
              label="When using V2/3 style chat headers, show mini icons"
              layout="topleft"
-             left="30"
              name="ShowChatMiniIcons"
-             top_pad="5"
+             top_pad="1"
              width="400" />
-
             <check_box
              control_name="UseChatBubbles"
              follows="left|top"
              height="16"
              label="Show chat in bubbles above avatars"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="bubble_text_chat"
              width="150" />
-
             <check_box
              control_name="UseTypingBubbles"
              follows="left|top"
              height="16"
              label="Show typing indicator in bubbles above avatars"
              layout="topleft"
-             left_delta="0"
-             top_pad="5"
+             top_pad="1"
              name="bubble_text_typing"
              width="150" />
 
@@ -267,7 +278,7 @@
              follows="left|top"
              height="12"
              layout="topleft"
-             left="30"
+             left="20"
              name="inworld_typing_rg_label"
              top_pad="8"
              width="110">
@@ -305,7 +316,7 @@
              name="show_ims_in_label"
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              width="110"
              top_pad="8">
@@ -354,7 +365,7 @@
             <text
              follows="left|top"
              layout="topleft"
-             left="30"
+             left="20"
              height="12"
              name="tab_direction_label"
              width="150"
@@ -405,7 +416,7 @@
 			 name="FSIMTabNameFormat_label"
 			 follows="left|top"
 			 layout="topleft"
-			 left="30"
+			 left="20"
 			 height="12"
 			 width="150"
 			 top_pad="12">
@@ -466,25 +477,24 @@
              label="Group Chats"
              layout="topleft"
              top_pad="1"
-             left="40"
+             left_delta="10"
              height="18"
              tool_tip="Check to see popups when a Group Chat message arrives"
-             width="400" />
+             width="200" />
             <check_box
              control_name="EnableIMChatPopups"
              name="EnableIMChatPopups"
              label="IM Chats"
              layout="topleft"
-             top_pad="0"
-             left="40"
+             left_pad="10"
              height="18"
              tool_tip="Check to see popups when an instant message arrives"
-             width="400" />
+             width="200" />
 
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="10"
+             top_pad="4"
              left="30"
              width="400"
              height="18"
@@ -497,7 +507,7 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="40"
+             left_delta="10"
              width="400"
              height="18"
              name="FSLogImToChatConsole"
@@ -509,7 +519,6 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="40"
              width="400"
              height="18"
              name="FSLogGroupImToChatConsole"
@@ -519,7 +528,8 @@
             <text
              follows="left|top"
              height="15"
-             left="50"
+             top_pad="3"
+             left_delta="4"
              name="FSShowGroupNameLength_label"
              width="275">
                 Length of group name to be printed in chat history
@@ -545,37 +555,36 @@
              left="30"
              width="400"
              height="18"
+             name="FSOpenIMContainerOnOfflineMessage"
+             control_name="FSOpenIMContainerOnOfflineMessage"
+             label="Open Conversations when an offline message has been received"/>
+			<check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="1"
+             width="400"
+             height="18"
              name="FSShowIMInChatHistory"
              control_name="FSShowIMInChatHistory"
              label="Show IMs in nearby chat window"/>
             <check_box
+             enabled_control="FSShowIMInChatHistory"
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="50"
+             left_delta="10"
              width="155"
              height="18"
              name="FSLogIMInChatHistory"
              control_name="FSLogIMInChatHistory"
              label="Save IMs in nearby chat"/>
-			 <text
-             top_delta="2"
-             name="requires_save_chat_logs"
-             follows="left|top"
-             layout="topleft"
-             left_pad="0"
-             height="18"
-             width="200"
-             text_color="White_25">
-              (requires saving nearby chat logs)
-            </text>
             <text
-             top_pad="10"
+             top_pad="1"
              follows="left|top"
              height="15"
-             left="50"
+             left="44"
              name="FSIMChatHistoryFade_label"
-             width="280">
+             width="325">
                 Fade IM text into the background of the chat history window
             </text>
             <spinner
@@ -590,7 +599,7 @@
              max_val="1.0"
              min_val="0.25"
              name="FSIMChatHistoryFade"
-             width="45" />
+             width="47" />
 
             <check_box
              layout="topleft"
@@ -607,7 +616,6 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="30"
              width="400"
              height="18"
              name="FSIMChatFlashOnFriendStatusChange"
@@ -618,7 +626,6 @@
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="30"
              width="400"
              height="18"
              name="FSReportMutedGroupChat"
@@ -733,7 +740,7 @@
              name="EmotesUseItalic"
              label="Emotes use italic font"
              layout="topleft"
-             left_delta="200"
+             left_delta="220"
              height="18"
              width="180" />
             <check_box
@@ -745,6 +752,14 @@
              left="30"
              height="18"
              width="400" />
+            <check_box
+             control_name="FSEmphasizeShoutWhisper"
+             name="FSEmphasizeShoutWhisper"
+             label="Bold shouting, Italicize whispering"
+             layout="topleft"
+             left_delta="220"
+             height="18"
+             width="180" />
 
             <!-- Localchat chat bar -->
             <check_box
@@ -942,7 +957,7 @@
              layout="topleft"
              follows="left|top"
              top_pad="0"
-             left="50"
+             left_delta="10"
              width="30"
              height="18"
              control_name="FSMuteGroupWhenNoticesDisabled"
@@ -962,7 +977,7 @@
             </text>
             <check_box
              control_name="FSHideTimestampsNearbyChat"
-             height="18"
+             height="16"
              label="Hide timestamp in Nearby Chat"
              layout="topleft"
              left="30"
@@ -971,12 +986,19 @@
              width="400" />
             <check_box
              control_name="FSHideTimestampsIM"
-             height="18"
+             height="16"
              label="Hide timestamp in IMs"
              layout="topleft"
-             left="30"
              name="hide_timestamps_im"
              top_pad="0"
+             width="400" />
+            <check_box
+             control_name="IMShowTime"
+             name="IMShowTime"
+             label="Show timestamps in chat history and IMs"
+             layout="topleft"
+             top_pad="0"
+             height="16"
              width="400" />
            <!-- Console -->
             <text

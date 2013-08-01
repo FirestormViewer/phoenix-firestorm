@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<multi_floater name="floater_im_box" title="CONVERSACIONES"/>
+<multi_floater name="floater_im_box" title="Conversaciones">
+	<layout_stack name="conversations_stack">
+		<layout_panel name="conversations_layout_panel">
+			<layout_stack name="conversations_pane_buttons_stack">
+				<layout_panel name="conversations_pane_buttons_expanded">
+					<menu_button name="sort_btn" tool_tip="Opciones de vista/orden"/>
+					<button name="add_btn" tool_tip="Iniciar una nueva conversación"/>
+					<button name="speak_btn" tool_tip="Utiliza el micrófono para hablar con otros residentes"/>
+				</layout_panel>
+				<layout_panel name="conversations_pane_buttons_collapsed">
+					<button name="expand_collapse_btn" tool_tip="Contraer/expandir esta lista"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="messages_layout_panel">
+			<panel_container name="im_box_tab_container">
+				<panel name="stub_panel">
+					<button name="stub_collapse_btn" tool_tip="Contraer este panel"/>
+					<text name="stub_textbox">
+						Esta conversación está en una ventana separada.   [secondlife:/// Traerla de vuelta.]
+					</text>
+				</panel>
+			</panel_container>
+		</layout_panel>
+	</layout_stack>
+</multi_floater>

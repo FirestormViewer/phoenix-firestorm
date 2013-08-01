@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="incoming call" title="Llamada entrante">
-	<floater.string name="lifetime">
-		5
-	</floater.string>
 	<floater.string name="localchat">
 		Chat de voz
 	</floater.string>
@@ -10,24 +7,24 @@
 		anónimo
 	</floater.string>
 	<floater.string name="VoiceInviteP2P">
-		está llamando.
+		te está llamando.
 	</floater.string>
 	<floater.string name="VoiceInviteAdHoc">
-		ha entrado en un chat de voz en multiconferencia.
+		ha entrado en un chat de voz en una multiconferencia.
 	</floater.string>
 	<floater.string name="VoiceInviteGroup">
-		acaba de entrar en el canal de voz &apos;[GROUP]&apos;.
+		acaba de entrar en el canal de voz de '[GROUP]'.
 	</floater.string>
 	<floater.string name="VoiceInviteQuestionGroup">
-		¿Quieres dejar [CURRENT_CHAT] e incorporarte a la llamada con &apos;[GROUP]&apos;?
+		¿Quieres dejar [CURRENT_CHAT] e incorporarte a la conferencia con '[GROUP]'?
 	</floater.string>
 	<floater.string name="VoiceInviteQuestionDefault">
 		¿Quieres dejar [CURRENT_CHAT] y entrar en este chat de voz?
 	</floater.string>
+	<button label="Contestar" label_selected="Contestar" name="Accept"/>
+	<button label="Rechazar" label_selected="Ignorar" name="Reject"/>
+	<button label="Abrir MI en su lugar" name="Start IM"/>
 	<text name="question">
-		¿Quieres dejar [CURRENT_CHAT] y entrar a este chat de voz?
+		Si respondes, te desconectarás de la conversación de voz actual.
 	</text>
-	<button label="Aceptar" label_selected="Aceptar" name="Accept"/>
-	<button label="Rechazar" label_selected="Rechazar" name="Reject"/>
-	<button label="Comenzar un MI" name="Start IM"/>
 </floater>

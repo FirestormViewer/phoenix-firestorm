@@ -8,7 +8,7 @@
 			<button name="view_profile_btn" tool_tip="Mostrar el perfil de este residente"/>
 		</layout_panel>
 		<layout_panel name="trans_panel">             
-			<button tool_tip="Usar el servicio de traducción de Google" name="translate_btn"/>       
+			<button tool_tip="Usar el servicio de traducción seleccionado" name="translate_btn"/>       
 		</layout_panel>      
 		<layout_panel name="friend_panel">
 			<button tool_tip="Ofrecer amistad a este residente" name="add_friend_btn"/>
@@ -35,11 +35,19 @@
 			<button tool_tip="Abre el historial de chat con este residente o grupo" name="im_history_btn"/>
 		</layout_panel>
 	</layout_stack>
-	<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" tool_tip="Añade (FS) al principio de tus mensajes para ayudar al equipo de soporte a determinar si tu pregunta se refiere a Phoenix o a Firestorm. ¡Se agradece tu ayuda para evitar confusiones!"/>
-	<button tool_tip="Enviar información de tu sistema" name="send_sysinfo_btn"/>	
+	<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" tool_tip="Añade tu versión actual de visor y la información de skin al principio de tus mensajes para ayudar al equipo de soporte a diagnosticar tus problemas correctamente y a mejorar la precisión en las respuestas a tus preguntas"/>
+	<button tool_tip="Enviar información de tu sistema" name="send_sysinfo_btn"/>
 	<layout_stack name="im_panels">
 		<layout_panel name="panel_im_control_lp">
-			<line_editor label="A" name="chat_editor"/>
+			<layout_stack name="im_panels">
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<button name="minz_btn" tool_tip="Muestra/oculta el panel de mensajes"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </floater>

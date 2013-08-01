@@ -46,6 +46,7 @@ public:
 	std::vector<LLMatrix4> mInvBindMatrix;
 	std::vector<LLMatrix4> mAlternateBindMatrix;
 	std::map<std::string, U32> mJointMap;
+	LLSD mDeform;	// <FS:CR> Qarl's mesh deformer
 
 	LLMeshSkinInfo() { }
 	LLMeshSkinInfo(LLSD& data);

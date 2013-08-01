@@ -79,8 +79,8 @@ static const S32		REGION_AGENT_COUNT_MIN = 1;
 static const S32		REGION_AGENT_COUNT_MAX = 200;			// Must fit in U8 for the moment (RegionInfo msg)
 static const S32		REGION_PRIM_COUNT_MIN = 0;
 static const S32		REGION_PRIM_COUNT_MAX = 40000;
-static const F32		REGION_PRIM_BONUS_MIN = 1.0;
-static const F32		REGION_PRIM_BONUS_MAX = 10.0;
+static const F32		REGION_PRIM_BONUS_MIN = 1.0f;
+static const F32		REGION_PRIM_BONUS_MAX = 10.0f;
 
 // Default maximum number of tasks/prims per region.
 const U32 DEFAULT_MAX_REGION_WIDE_PRIM_COUNT = 15000;

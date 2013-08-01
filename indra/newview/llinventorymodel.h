@@ -40,10 +40,10 @@
 #include <set>
 #include <string>
 #include <vector>
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 #include "llviewerobjectlist.h"
 #include "llvoavatarself.h"
-//-TT
+// </FS:TT>
 
 class LLInventoryObserver;
 class LLInventoryObject;
@@ -134,11 +134,11 @@ private:
 	LLUUID mLibraryRootFolderID;
 	LLUUID mLibraryOwnerID;	
 
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 	item_array_t mItemArray;
 	item_array_t mObjArray;
 	LLDynamicArray<std::string> mAttPoints;
-//-TT
+// </FS:TT>
 	
 	//--------------------------------------------------------------------
 	// Structure
@@ -251,8 +251,10 @@ public:
 	//    on the fly if one does not exist. *NOTE: if find_in_library is true it 
 	//    will search in the user's library folder instead of "My Inventory"
 	const LLUUID findCategoryUUIDForType(LLFolderType::EType preferred_type, 
-										 bool create_folder = true, 
-										 bool find_in_library = false);
+										 bool create_folder = true);
+	//    will search in the user's library folder instead of "My Inventory"
+	const LLUUID findLibraryCategoryUUIDForType(LLFolderType::EType preferred_type, 
+												bool create_folder = true);
 	
 	// Get whatever special folder this object is a child of, if any.
 	const LLViewerInventoryCategory *getFirstNondefaultParent(const LLUUID& obj_id) const;
@@ -279,7 +281,7 @@ public:
 	const LLUUID& getLinkedItemID(const LLUUID& object_id) const;
 	LLViewerInventoryItem* getLinkedItem(const LLUUID& object_id) const;
 
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 	void wearItemsOnAvatar(LLInventoryCategory* category);
 	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
 
@@ -287,7 +289,7 @@ private:
 	void wearWearablesOnAvatar(LLUUID category_id);
 	void wearAttachmentsOnAvatar(LLUUID category_id);
 	void wearGesturesOnAvatar(LLUUID category_id);
-//-TT
+// </FS:TT>
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
 
@@ -389,14 +391,11 @@ public:
 	// Returns end() of the vector if not found.
 	static LLInventoryModel::item_array_t::iterator findItemIterByUUID(LLInventoryModel::item_array_t& items, const LLUUID& id);
 
-	// Saves current order of the passed items using inventory item sort field.
-	// Resets 'items' sort fields and saves them on server.
-	// Is used to save order for Favorites folder.
-	void saveItemsOrder(const LLInventoryModel::item_array_t& items);
 
 	// Rearranges Landmarks inside Favorites folder.
 	// Moves source landmark before target one.
 	void rearrangeFavoriteLandmarks(const LLUUID& source_item_id, const LLUUID& target_item_id);
+	//void saveItemsOrder(const LLInventoryModel::item_array_t& items);
 
 	//--------------------------------------------------------------------
 	// Creation
@@ -478,8 +477,6 @@ public:
 	// notifyObservers() manually to update regardless of whether state change 
 	// has been indicated.
 	void idleNotifyObservers();
-	//-TT 2.6.9 - function deprecated
-	void notifyObservers(const std::string service_name);
 	// Call to explicitly update everyone on a new state.
 	void notifyObservers();
 

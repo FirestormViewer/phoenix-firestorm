@@ -28,5 +28,6 @@
 	<icon name="permission_map_btn" tool_tip="Dieser Freund kann Sie auf der Karte finden"/>
 	<icon name="permission_online_btn" tool_tip="Dieser Freund kann sehen, wenn Sie online sind"/>
 	<slider name="volume_slider" tool_tip="Voice-Lautstärke"/>
+	<button name="info_btn" tool_tip="Mehr Infos"/>
 	<button name="profile_btn" tool_tip="Profil anzeigen"/>
 </panel>

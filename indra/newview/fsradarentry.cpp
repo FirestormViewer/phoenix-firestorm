@@ -51,11 +51,15 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mIsLinden(false),
 	mAvatarNameCallbackConnection()
 {
-	// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
-	//This means updates to these properties won't typically be seen while target is in nearby range.
-	LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
-	processor->addObserver(mID, this);
-	processor->sendAvatarPropertiesRequest(mID);
+	if (mID.notNull())
+	{
+		// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
+		//This means updates to these properties won't typically be seen while target is in nearby range.
+		LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
+
+		processor->addObserver(mID, this);
+		processor->sendAvatarPropertiesRequest(mID);
+	}
 
 	updateName();
 }
@@ -85,8 +89,8 @@ void FSRadarEntry::onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av
 {
 	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
-		mUserName = av_name.mUsername;
-		mDisplayName = av_name.mDisplayName;
+		mUserName = av_name.getUserName();
+		mDisplayName = av_name.getDisplayName();
 		mName = getRadarName(av_name);
 		mIsLinden = FSCommon::isLinden(av_id);
 	}
@@ -126,44 +130,36 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 	{	
 		if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME)
 		{
-			return av_name.mDisplayName;
+			return av_name.getDisplayName();
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME)
 		{
-			return av_name.mUsername;
+			return av_name.getUserName();
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME_USERNAME)
 		{
-			std::string s1 = av_name.mDisplayName;
-			to_lower(s1);
-			std::string s2 = av_name.mUsername;
-			replace_all(s2, ".", " ");
-			if (s1.compare(s2) == 0)
+			if (av_name.isDisplayNameDefault())
 			{
-				return av_name.mDisplayName;
+				return av_name.getDisplayName();
 			}
 			else
 			{
-				return llformat("%s (%s)", av_name.mDisplayName.c_str(), av_name.mUsername.c_str());
+				return llformat("%s (%s)", av_name.getDisplayName().c_str(), av_name.getUserName().c_str());
 			}
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME)
 		{
-			std::string s1 = av_name.mDisplayName;
-			to_lower(s1);
-			std::string s2 = av_name.mUsername;
-			replace_all(s2, ".", " ");
-			if (s1.compare(s2) == 0)
+			if (av_name.isDisplayNameDefault())
 			{
-				return av_name.mDisplayName;
+				return av_name.getDisplayName();
 			}
 			else
 			{
-				return llformat("%s (%s)", av_name.mUsername.c_str(), av_name.mDisplayName.c_str());
+				return llformat("%s (%s)", av_name.getUserName().c_str(), av_name.getDisplayName().c_str());
 			}
 		}
 	}
 	
 	// else use legacy name lookups
-	return av_name.mDisplayName; // will be mapped to legacyname automatically by the name cache
+	return av_name.getDisplayName(); // will be mapped to legacyname automatically by the name cache
 }

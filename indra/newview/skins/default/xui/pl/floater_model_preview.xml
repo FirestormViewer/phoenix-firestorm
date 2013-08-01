@@ -171,6 +171,12 @@
            </text>
            <check_box label="Dołącz wagę skórki" name="upload_skin"/>
            <check_box label="Dołącz pozycje stawów" name="upload_joints"/>
+           <check_box label="Deformuj do kształtu awatara" name="deform"/>
+           <radio_group name="deform_base">
+             <radio_item label="Mężczyzna" name="0"/>
+             <radio_item label="Kobieta" name="1"/>
+             <radio_item label="Mężczyzna - chudy" name="2"/>
+           </radio_group>
            <text name="pelvis_offset_label">
              Przesunięcie Z (podnieś/obniż awatara):
            </text>

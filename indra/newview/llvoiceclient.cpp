@@ -546,6 +546,7 @@ void LLVoiceClient::setMuteMic(bool muted)
 {
 	mMuteMic = muted;
 	updateMicMuteLogic();
+	mMicroChangedSignal();
 }
 
 
@@ -556,6 +557,7 @@ void LLVoiceClient::setUserPTTState(bool ptt)
 {
 	mUserPTTState = ptt;
 	updateMicMuteLogic();
+	mMicroChangedSignal();
 }
 
 bool LLVoiceClient::getUserPTTState()

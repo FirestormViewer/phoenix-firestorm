@@ -24,6 +24,9 @@
 	<text name="comment_label">
 		Komentarze
 	</text>
+	<text name="function_label">
+		Funkcje
+	</text>
 	<text name="string_literal_label">
 		Łańcuchy znaków
 	</text>

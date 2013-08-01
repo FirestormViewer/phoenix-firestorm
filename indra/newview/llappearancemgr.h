@@ -61,17 +61,15 @@ public:
 				   bool append = false, const LLUUID& idOutfit = LLUUID::null);
 // [/RLVa:KB]
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append);
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 	void wearInventoryCategory(LLInventoryCategory* category, bool copy, bool append, bool items);
-//-TT 
+// </FS:TT>
 	void wearInventoryCategoryOnAvatar(LLInventoryCategory* category, bool append);
 	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append);
-//-TT Patch: ReplaceWornItemsOnly
+// <FS:TT> ReplaceWornItemsOnly
 	void wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append, bool items);
-//-TT 
-//-TT Patch: ReplaceWornItemsOnly
 	void replaceCategoryInCurrentOutfit(const LLUUID& cat_id);
-//-TT 
+// </FS:TT>
 	void wearOutfitByName(const std::string& name);
 	void changeOutfit(bool proceed, const LLUUID& category, bool append);
 	void replaceCurrentOutfit(const LLUUID& new_outfit);

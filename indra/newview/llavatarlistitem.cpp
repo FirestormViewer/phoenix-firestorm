@@ -27,6 +27,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include <boost/signals2.hpp>
+
 #include "llavataractions.h"
 #include "llavatarlistitem.h"
 
@@ -39,12 +41,10 @@
 #include "llavatarnamecache.h"
 #include "llavatariconctrl.h"
 #include "lloutputmonitorctrl.h"
+#include "lltooldraganddrop.h"
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
-// [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-#include "lltooldraganddrop.h"
-// [/SL:KB]
 #include  <time.h>
 #include "llavatarpropertiesprocessor.h"
 #include "lldateutil.h"
@@ -75,7 +75,8 @@ LLAvatarListItem::Params::Params()
 
 
 LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
-:	LLPanel(),
+	: LLPanel(),
+	LLFriendObserver(),
 	mAvatarIcon(NULL),
 	mAvatarName(NULL),
 	mLastInteractionTime(NULL),
@@ -94,6 +95,7 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 // [/RLVa:KB]
 	mShowPermissions(false),
 	mHovered(false),
+	mAvatarNameCacheConnection(),
 	mShowVoiceVolume(false),
 	mNearbyRange(0),
 	mShowDisplayName(true),
@@ -127,8 +129,15 @@ LLAvatarListItem::~LLAvatarListItem()
 	if (mAvatarId.notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
+		// <FS> Remove our own observers
 		LLAvatarTracker::instance().removeFriendPermissionObserver(mAvatarId, this);
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarId, this); // may try to remove null observer
+		// </FS>
+	}
+
+	if (mAvatarNameCacheConnection.connected())
+	{
+		mAvatarNameCacheConnection.disconnect();
 	}
 }
 
@@ -176,7 +185,7 @@ BOOL  LLAvatarListItem::postBuild()
 	mInfoBtn = getChild<LLButton>("info_btn");
 	mProfileBtn = getChild<LLButton>("profile_btn");
 	
-	mInfoBtn->setVisible(false); // AO: enable this by calling setShowInfoButton
+	mInfoBtn->setVisible(false); // <FS:AO> Enable this by calling setShowInfoButton
 	mInfoBtn->setClickedCallback(boost::bind(&LLAvatarListItem::onInfoBtnClick, this));
 	
 	mVoiceSlider = getChild<LLUICtrl>("volume_slider");
@@ -207,6 +216,29 @@ void LLAvatarListItem::onVolumeChange(const LLSD& data)
 	LLVoiceClient::getInstance()->setUserVolume(mAvatarId, volume);
 }
 
+void LLAvatarListItem::handleVisibilityChange ( BOOL new_visibility )
+{
+    //Adjust positions of icons (info button etc) when 
+    //speaking indicator visibility was changed/toggled while panel was closed (not visible)
+    if(new_visibility && mSpeakingIndicator->getIndicatorToggled())
+    {
+        updateChildren();
+        mSpeakingIndicator->setIndicatorToggled(false);
+    }
+}
+
+void LLAvatarListItem::fetchAvatarName()
+{
+	if (mAvatarId.notNull())
+	{
+		if (mAvatarNameCacheConnection.connected())
+		{
+			mAvatarNameCacheConnection.disconnect();
+		}
+		mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLAvatarListItem::onAvatarNameCache, this, _2));
+	}
+}
+
 S32 LLAvatarListItem::notifyParent(const LLSD& info)
 {
 	if (info.has("visibility_changed"))
@@ -220,7 +252,7 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
-	// AO, removed on-hover visibility. Don't do this. instead flip info buttons on full-time in postbuild.
+	// <FS:AO>, removed on-hover visibility. Don't do this. instead flip info buttons on full-time in postbuild.
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
@@ -231,7 +263,7 @@ void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 	mHovered = true;
 	LLPanel::onMouseEnter(x, y, mask);
 
-//  AO don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
+//  <FS:AO> don't update these on-hover, because we want to give users instant feedback when they change a permission state, even if the
 //  process takes n-seconds to complete. Hover-reprocessing can confuse the user if it takes place before the async permissions change
 //  goes through, appearing to mysteriously erase the user's choice.
 //	showPermissions(mShowPermissions && gSavedSettings.getBOOL("FriendsListShowPermissions"));
@@ -275,7 +307,7 @@ void LLAvatarListItem::setOnline(bool online)
 }
 
 void LLAvatarListItem::setAvatarName(const std::string& name)
-{	
+{
 	setNameInternal(name, mHighlihtSubstring);
 }
 
@@ -351,8 +383,7 @@ void LLAvatarListItem::setAvatarId(const LLUUID& id, const LLUUID& session_id, b
 		mAvatarIcon->setValue(id);
 
 		// Set avatar name.
-		LLAvatarNameCache::get(id,
-			boost::bind(&LLAvatarListItem::onAvatarNameCache, this, _2));
+		fetchAvatarName();
 	}
 	
 	// AO: Always show permissions icons, like in V1.
@@ -638,8 +669,7 @@ bool LLAvatarListItem::getShowingBothNames() const
 
 void LLAvatarListItem::updateAvatarName()
 {
-	LLAvatarNameCache::get(getAvatarId(),
-			boost::bind(&LLAvatarListItem::onAvatarNameCache, this, _2));
+	fetchAvatarName();
 }
 
 void LLAvatarListItem::showAvatarAge(bool display)
@@ -694,26 +724,26 @@ void LLAvatarListItem::setNameInternal(const std::string& name, const std::strin
 
 void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 {
-//	setAvatarName(av_name.mDisplayName);
-//	setAvatarToolTip(av_name.mUsername);
+//	setAvatarName(av_name.getDisplayName());
+//	setAvatarToolTip(av_name.getUserName());
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 	if (mShowDisplayName && !mShowUsername)
-		setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
+		setAvatarName( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
 	else if (!mShowDisplayName && mShowUsername)
-		setAvatarName( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
+		setAvatarName( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
 	else 
 		setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
 
 	// NOTE: If you change this, you will break sorting the contacts list
 	//  by username unless you go change the comparator too. -- TS	
-	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
+	setAvatarToolTip( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
 	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
 	mAvatarIcon->setDrawTooltip(!fRlvFilter);
 // [/RLVa:KB]
 
 	//KC - store the username for use in sorting
-	mUserName = av_name.mUsername;
+	mUserName = av_name.getUserName();
 	
 	//requesting the list to resort
 	notifyParent(LLSD().with("sort", LLSD()));

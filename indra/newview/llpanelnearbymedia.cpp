@@ -90,7 +90,8 @@ LLPanelNearByMedia::LLPanelNearByMedia()
 
 	mCommitCallbackRegistrar.add("MediaListCtrl.EnableAll",		boost::bind(&LLPanelNearByMedia::onClickEnableAll, this));
 	mCommitCallbackRegistrar.add("MediaListCtrl.DisableAll",		boost::bind(&LLPanelNearByMedia::onClickDisableAll, this));
-	mCommitCallbackRegistrar.add("MediaListCtrl.GoMediaPrefs", boost::bind(&LLPanelNearByMedia::onAdvancedButtonClick, this));
+	//<FS:KC> Handled centrally now
+	// mCommitCallbackRegistrar.add("MediaListCtrl.GoMediaPrefs", boost::bind(&LLPanelNearByMedia::onAdvancedButtonClick, this));
 	mCommitCallbackRegistrar.add("MediaListCtrl.MoreLess", boost::bind(&LLPanelNearByMedia::onMoreLess, this));
 	mCommitCallbackRegistrar.add("SelectedMediaCtrl.Stop",		boost::bind(&LLPanelNearByMedia::onClickSelectedMediaStop, this));	
 	mCommitCallbackRegistrar.add("SelectedMediaCtrl.Play",		boost::bind(&LLPanelNearByMedia::onClickSelectedMediaPlay, this));
@@ -988,6 +989,8 @@ bool LLPanelNearByMedia::shouldShow(LLViewerMediaImpl* impl)
 	return true;
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLPanelNearByMedia::onAdvancedButtonClick()
 {	
 	// bring up the prefs floater
@@ -1004,6 +1007,7 @@ void LLPanelNearByMedia::onAdvancedButtonClick()
 		}
 	}
 }
+*/
 
 void LLPanelNearByMedia::onMoreLess()
 {

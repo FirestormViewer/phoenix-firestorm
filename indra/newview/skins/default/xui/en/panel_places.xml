@@ -17,7 +17,6 @@
      name="teleport_history_tab_title"
      value="Teleport History" />
     <filter_editor
-     text_pad_left="10"
      follows="left|top|right"
      font="SansSerifSmall"
      height="23"

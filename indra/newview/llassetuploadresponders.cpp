@@ -51,9 +51,6 @@
 #include "llviewertexlayer.h"
 #include "llviewerwindow.h"
 #include "lltrans.h"
-//-TT Client LSL Bridge
-#include "fslslbridge.h"
-//-TT
 
 // library includes
 #include "lldir.h"
@@ -66,6 +63,8 @@
 #include "llsdutil.h"
 #include "llvfs.h"
 #include "tea.h" // <FS:AW opensim currency support>
+// <FS:TT> Client LSL Bridge
+#include "fslslbridge.h"
 
 // When uploading multiple files, don't display any of them when uploading more than this number.
 static const S32 FILE_COUNT_DISPLAY_THRESHOLD = 5;
@@ -610,10 +609,12 @@ void LLUpdateAgentInventoryResponder::uploadComplete(const LLSD& content)
 				  preview->callbackLSLCompileFailed(content["errors"]);
 			  }
 		  }
-//-TT Client LSL Bridge
+		// <FS:TT> Client LSL Bridge
 		if (gSavedSettings.getBOOL("UseLSLBridge"))
-			  FSLSLBridge::instance().checkBridgeScriptName(mFileName);
-//-TT
+		{
+			FSLSLBridge::instance().checkBridgeScriptName(mFileName);
+		}
+		// </FS:TT>
 		  break;
 	  }
 

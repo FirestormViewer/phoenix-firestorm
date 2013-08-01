@@ -34,6 +34,7 @@
 #include "lluistring.h"
 #include "llviewertexturelist.h"
 #include "lltrans.h"
+#include "llgltexture.h"
 
 // <FS:CR> Aurora Sim
 #include "llappviewer.h"

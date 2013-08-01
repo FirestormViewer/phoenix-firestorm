@@ -200,10 +200,11 @@ public:
 	void		selectFirstTab();
 	void		selectLastTab();
 	void		selectNextTab();
-	 void		selectPrevTab();
+	void		selectPrevTab();
 	BOOL 		selectTabPanel( LLPanel* child );
 	BOOL 		selectTab(S32 which);
 	BOOL 		selectTabByName(const std::string& title);
+    void        setCurrentPanelIndex(S32 index) { mCurrentTabIdx = index; }
 
 	BOOL        getTabPanelFlashing(LLPanel* child);
 	void		setTabPanelFlashing(LLPanel* child, BOOL state);
@@ -254,8 +255,6 @@ private:
 
 	void setTabsHidden(BOOL hidden)		{ mTabsHidden = hidden; }
 	BOOL getTabsHidden() const			{ return mTabsHidden; }
-	
-	void setCurrentPanelIndex(S32 index) { mCurrentTabIdx = index; }
 
 	void scrollPrev() { mScrollPos = llmax(0, mScrollPos-1); } // No wrap
 	void scrollNext() { mScrollPos = llmin(mScrollPos+1, mMaxScrollPos); } // No wrap

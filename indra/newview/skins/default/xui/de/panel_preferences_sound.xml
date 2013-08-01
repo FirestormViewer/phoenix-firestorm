@@ -387,6 +387,20 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		</text>
 
+		<text tool_tip="UUID des Klangs für Inventarangebote" name="textFSInventoryOffer">
+			Inventarangebote:
+		</text>
+		<button label="V" name="Prev_UISndInventoryOffer" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndInventoryOffer" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndInventoryOffer"/>
+
+		<text tool_tip="UUID des Klangs für eingehene Voice-Anrufe" name="textFSIncomingVoiceCall">
+			Eingehende Voice-Anrufe:
+		</text>
+		<button label="V" name="Prev_UISndIncomingVoiceCall" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndIncomingVoiceCall" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndIncomingVoiceCall"/>
+
 		<text tool_tip="UUID des Klangs für Schritte. Erfordert Neustart" name="textFSFootsteps">
 			Schritte:
 		</text>

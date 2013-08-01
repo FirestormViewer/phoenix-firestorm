@@ -34,33 +34,33 @@ class LLAvatarName;
 
 class FSFloaterProfile : public LLFloater
 {
-    LOG_CLASS(FSFloaterProfile);
+	LOG_CLASS(FSFloaterProfile);
 public:
-    FSFloaterProfile(const LLSD& key);
-    virtual ~FSFloaterProfile();
+	FSFloaterProfile(const LLSD& key);
+	virtual ~FSFloaterProfile();
 
-    /*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void onOpen(const LLSD& key);
 
-    /*virtual*/ BOOL postBuild();
+	/*virtual*/ BOOL postBuild();
 
-    /**
-     * Returns avatar ID.
-     */
-    const LLUUID& getAvatarId() const { return mAvatarId; }
+	/**
+	 * Returns avatar ID.
+	 */
+	const LLUUID& getAvatarId() const { return mAvatarId; }
 
 protected:
-    /**
-     * Sets avatar ID, sets panel as observer of avatar related info replies from server.
-     */
-    void setAvatarId(const LLUUID& avatar_id) { mAvatarId = avatar_id; }
+	/**
+	 * Sets avatar ID, sets panel as observer of avatar related info replies from server.
+	 */
+	void setAvatarId(const LLUUID& avatar_id) { mAvatarId = avatar_id; }
 
-    void onOKBtn();
-    void onCancelBtn();
+	void onOKBtn();
+	void onCancelBtn();
 
 private:
-    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
-    LLUUID mAvatarId;
+	LLUUID mAvatarId;
 };
 
 #endif // FS_FLOATERPROFILE_H

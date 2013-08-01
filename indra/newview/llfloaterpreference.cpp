@@ -53,19 +53,15 @@
 #include "llfloaterhardwaresettings.h"
 #include "llfloatersidepanelcontainer.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h"
+//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
+//#include "llimfloater.h" <FS:TM> CHUI Merge old
 #include "fsfloaterim.h"
+#include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
 #include "llkeyboard.h"
 #include "llmodaldialog.h"
 #include "llnavigationbar.h"
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychat.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llfloaternearbychat.h"
-#include "fsfloaternearbychat.h"
-// </FS:Ansariel> [FS communication UI]
-// </FS:Zi>
+#include "llfloaterimnearbychat.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llnotificationtemplate.h"
@@ -117,6 +113,7 @@
 #include "llteleporthistorystorage.h"
 #include "llproxy.h"
 // [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llsdserialize.h" // KB: SkinsSelector
@@ -417,7 +414,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mAvatarDataInitialized(false),
 	mClickActionDirty(false)
 {
-	
+	LLConversationLog::instance().addObserver(this);
+
 	//Build Floater is now Called from 	LLFloaterReg::add("preferences", "floater_preferences.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPreference>);
 	
 	static bool registered_dialog = false;
@@ -445,9 +443,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetMiddleMouse",	boost::bind(&LLFloaterPreference::onClickSetMiddleMouse, this));
-	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
-//	mCommitCallbackRegistrar.add("Pref.ClickSkipDialogs",		boost::bind(&LLFloaterPreference::onClickSkipDialogs, this));
-//	mCommitCallbackRegistrar.add("Pref.ClickResetDialogs",		boost::bind(&LLFloaterPreference::onClickResetDialogs, this));
+	//<FS:KC> Handled centrally now
+//	mCommitCallbackRegistrar.add("Pref.SetSounds",				boost::bind(&LLFloaterPreference::onClickSetSounds, this));
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
 	mCommitCallbackRegistrar.add("Pref.ClickDisablePopup",		boost::bind(&LLFloaterPreference::onClickDisablePopup, this));	
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
@@ -481,15 +478,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
-	mCommitCallbackRegistrar.add("Pref.ClickActionChange",				boost::bind(&LLFloaterPreference::onClickActionChange, this));
-
-	// <FS:Zi> Backup settings
-	mCommitCallbackRegistrar.add("Pref.SetBackupSettingsPath",	boost::bind(&LLFloaterPreference::onClickSetBackupSettingsPath, this));
-	mCommitCallbackRegistrar.add("Pref.BackupSettings",			boost::bind(&LLFloaterPreference::onClickBackupSettings, this));
-	mCommitCallbackRegistrar.add("Pref.RestoreSettings",		boost::bind(&LLFloaterPreference::onClickRestoreSettings, this));
-	mCommitCallbackRegistrar.add("Pref.BackupSelectAll",		boost::bind(&LLFloaterPreference::onClickSelectAll, this));
-	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&LLFloaterPreference::onClickDeselectAll, this));
-	// </FS:Zi>
+	mCommitCallbackRegistrar.add("Pref.ClickActionChange",		boost::bind(&LLFloaterPreference::onClickActionChange, this));
 
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
@@ -504,6 +493,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	
 	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
+
+	mCommitCallbackRegistrar.add("Pref.ClearLog",				boost::bind(&LLConversationLog::onClearLog, &LLConversationLog::instance()));
+	mCommitCallbackRegistrar.add("Pref.DeleteTranscripts",      boost::bind(&LLFloaterPreference::onDeleteTranscripts, this));
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -577,10 +569,11 @@ void LLFloaterPreference::saveAvatarProperties( void )
 BOOL LLFloaterPreference::postBuild()
 {
 	// <FS:Ansariel> [FS communication UI]
-	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
-	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
+	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
+	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterIMSessionTab::processChatHistoryStyleUpdate, false)); <FS:TM> CHUI Merge New
 	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
 	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
@@ -590,6 +583,7 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
 
 	gSavedSettings.getControl("ChatBubbleOpacity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onNameTagOpacityChange, this, _2));
+	gSavedSettings.getControl("ConsoleBackgroundOpacity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onConsoleOpacityChange, this, _2));	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
 
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 
@@ -598,23 +592,38 @@ BOOL LLFloaterPreference::postBuild()
 		tabcontainer->selectFirstTab();
 	
 	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
-//	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path // was removed in prefs refactoring -Zi
+	getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path
 	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
 
 	getChild<LLComboBox>("language_combobox")->setCommitCallback(boost::bind(&LLFloaterPreference::onLanguageChange, this));
-
+	
+	// <FS:CR> [CHUI MERGE]
+	// We don't use these in FS Communications UI, should we in the future? Disabling for now.
+	//getChild<LLComboBox>("FriendIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"FriendIMOptions"));
+	//getChild<LLComboBox>("NonFriendIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NonFriendIMOptions"));
+	//getChild<LLComboBox>("ConferenceIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ConferenceIMOptions"));
+	//getChild<LLComboBox>("GroupChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"GroupChatOptions"));
+	//getChild<LLComboBox>("NearbyChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NearbyChatOptions"));
+	// </FS:CR>
+	
 // ## Zi: Optional Edit Appearance Lighting
 	gSavedSettings.getControl("AppearanceCameraMovement")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAppearanceCameraChanged, this));
 	onAppearanceCameraChanged();
 // ## Zi: Optional Edit Appearance Lighting
 
-	// if floater is opened before login set default localized busy message
+
+	// if floater is opened before login set default localized do not disturb message
 	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
-		gSavedPerAccountSettings.setString("BusyModeResponse", LLTrans::getString("BusyModeResponseDefault"));
+		gSavedPerAccountSettings.setString("DoNotDisturbModeResponse", LLTrans::getString("DoNotDisturbModeResponseDefault"));
 	}
+
+	// set 'enable' property for 'Clear log...' button
+	changed();
+
+	LLLogChat::setSaveHistorySignal(boost::bind(&LLFloaterPreference::onLogChatHistorySaved, this));
 
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-06-11 (Catznip-2.6.c) | Added: Catznip-2.6.0c
 #ifndef LL_SEND_CRASH_REPORTS
@@ -652,12 +661,6 @@ BOOL LLFloaterPreference::postBuild()
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
 
-	// <FS:Zi> Backup Settings
-	// Apparently, line editors don't update with their settings controls, so do that manually here
-	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
-	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
-	// </FS:Zi>
-
 	// <FS:Kadah> Load the list of font settings
 	populateFontSelectionCombo();
 	// </FS:Kadah>
@@ -677,17 +680,21 @@ void LLFloaterPreference::onPieColorsOverrideChanged()
 }
 // ## Zi: Pie menu
 
-void LLFloaterPreference::onBusyResponseChanged()
+void LLFloaterPreference::updateDeleteTranscriptsButton()
 {
-	// set "BusyResponseChanged" TRUE if user edited message differs from default, FALSE otherwise
-	if (LLTrans::getString("BusyModeResponseDefault") != getChild<LLUICtrl>("busy_response")->getValue().asString())
-	{
-		gSavedPerAccountSettings.setBOOL("BusyResponseChanged", TRUE );
-	}
-	else
-	{
-		gSavedPerAccountSettings.setBOOL("BusyResponseChanged", FALSE );
-	}
+	std::vector<std::string> list_of_transcriptions_file_names;
+	LLLogChat::getListOfTranscriptFiles(list_of_transcriptions_file_names);
+	getChild<LLButton>("delete_transcripts")->setEnabled(list_of_transcriptions_file_names.size() > 0);
+}
+
+void LLFloaterPreference::onDoNotDisturbResponseChanged()
+{
+	// set "DoNotDisturbResponseChanged" TRUE if user edited message differs from default, FALSE otherwise
+	bool response_changed_flag =
+			LLTrans::getString("DoNotDisturbModeResponseDefault")
+					!= getChild<LLUICtrl>("do_not_disturb_response")->getValue().asString();
+
+	gSavedPerAccountSettings.setBOOL("DoNotDisturbResponseChanged", response_changed_flag );
 }
 
 // ## Zi: Optional Edit Appearance Lighting
@@ -708,8 +715,9 @@ LLFloaterPreference::~LLFloaterPreference()
 	for (S32 i = 0; i < ctrl_window_size->getItemCount(); i++)
 	{
 		ctrl_window_size->setCurrentByIndex(i);
-	}
-	*/
+	}*/
+
+	LLConversationLog::instance().removeObserver(this);
 }
 
 //void LLFloaterPreference::draw()
@@ -776,22 +784,19 @@ void LLFloaterPreference::apply()
 	
 	LLViewerMedia::setCookiesEnabled(getChild<LLUICtrl>("cookies_enabled")->getValue());
 	
-	if (hasChild("web_proxy_enabled") &&hasChild("web_proxy_editor") && hasChild("web_proxy_port"))
+	if (hasChild("web_proxy_enabled", TRUE) &&hasChild("web_proxy_editor", TRUE) && hasChild("web_proxy_port", TRUE))
 	{
 		bool proxy_enable = getChild<LLUICtrl>("web_proxy_enabled")->getValue();
 		std::string proxy_address = getChild<LLUICtrl>("web_proxy_editor")->getValue();
 		int proxy_port = getChild<LLUICtrl>("web_proxy_port")->getValue();
 		LLViewerMedia::setProxyConfig(proxy_enable, proxy_address, proxy_port);
 	}
-	
-//	LLWString busy_response = utf8str_to_wstring(getChild<LLUICtrl>("busy_response")->getValue().asString());
-//	LLWStringUtil::replaceTabsWithSpaces(busy_response, 4);
 
+	// <FS:Ansariel> [FS communication UI]
 	gSavedSettings.setBOOL("PlainTextChatHistory", getChild<LLUICtrl>("plain_text_chat_history")->getValue().asBoolean());
 	
 	if (mGotPersonalInfo)
 	{ 
-//		gSavedSettings.setString("BusyModeResponse2", std::string(wstring_to_utf8str(busy_response)));
 		bool new_im_via_email = getChild<LLUICtrl>("send_im_to_email")->getValue().asBoolean();
 		bool new_hide_online = getChild<LLUICtrl>("online_visibility")->getValue().asBoolean();		
 	
@@ -881,21 +886,21 @@ void LLFloaterPreference::cancel()
 
 void LLFloaterPreference::onOpen(const LLSD& key)
 {
-	// this variable and if that follows it are used to properly handle busy mode response message
+	// this variable and if that follows it are used to properly handle do not disturb mode response message
 	static bool initialized = FALSE;
-	// if user is logged in and we haven't initialized busy_response yet, do it
+	// if user is logged in and we haven't initialized do not disturb mode response yet, do it
 	if (!initialized && LLStartUp::getStartupState() == STATE_STARTED)
 	{
-		// Special approach is used for busy response localization, because "BusyModeResponse" is
+		// Special approach is used for do not disturb response localization, because "DoNotDisturbModeResponse" is
 		// in non-localizable xml, and also because it may be changed by user and in this case it shouldn't be localized.
-		// To keep track of whether busy response is default or changed by user additional setting BusyResponseChanged
+		// To keep track of whether do not disturb response is default or changed by user additional setting DoNotDisturbResponseChanged
 		// was added into per account settings.
 
 		// initialization should happen once,so setting variable to TRUE
 		initialized = TRUE;
-		// this connection is needed to properly set "BusyResponseChanged" setting when user makes changes in
-		// busy response message.
-		gSavedPerAccountSettings.getControl("BusyModeResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onBusyResponseChanged, this));
+		// this connection is needed to properly set "DoNotDisturbResponseChanged" setting when user makes changes in
+		// do not disturb response message.
+		gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
 	}
 	gAgent.sendAgentUserInfoRequest();
 
@@ -945,6 +950,17 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// while preferences floater was closed.
 	buildPopupLists();
 
+
+	//get the options that were checked
+	// <FS:CR> [CHUI MERGE]
+	// We don't use these in FS Communications UI, should we in the future? Disabling for now.
+	//onNotificationsChange("FriendIMOptions");
+	//onNotificationsChange("NonFriendIMOptions");
+	//onNotificationsChange("ConferenceIMOptions");
+	//onNotificationsChange("GroupChatOptions");
+	//onNotificationsChange("NearbyChatOptions");
+	// </FS:CR>
+
 	LLPanelLogin::setAlwaysRefresh(true);
 	refresh();
 
@@ -982,12 +998,12 @@ void LLFloaterPreference::onLocalLightsEnable()
 }
 
 //static
-void LLFloaterPreference::initBusyResponse()
+void LLFloaterPreference::initDoNotDisturbResponse()
 	{
-		if (!gSavedPerAccountSettings.getBOOL("BusyResponseChanged"))
+		if (!gSavedPerAccountSettings.getBOOL("DoNotDisturbResponseChanged"))
 		{
-			//LLTrans::getString("BusyModeResponseDefault") is used here for localization (EXT-5885)
-			gSavedPerAccountSettings.setString("BusyModeResponse", LLTrans::getString("BusyModeResponseDefault"));
+			//LLTrans::getString("DoNotDisturbModeResponseDefault") is used here for localization (EXT-5885)
+			gSavedPerAccountSettings.setString("DoNotDisturbModeResponse", LLTrans::getString("DoNotDisturbModeResponseDefault"));
 		}
 	}
 
@@ -1042,12 +1058,36 @@ void LLFloaterPreference::onBtnOK()
 		apply();
 		closeFloater(false);
 
+		//Conversation transcript and log path changed so reload conversations based on new location
+		if(mPriorInstantMessageLogPath.length())
+		{
+			if(moveTranscriptsAndLog())
+			{
+				//When floaters are empty but have a chat history files, reload chat history into them
+				// <FS:Ansariel> [FS communication UI] [CHUI Merge] FIXME: We can't reload stuff currently...
+				//LLFloaterIMSessionTab::reloadEmptyFloaters();
+			}
+			//Couldn't move files so restore the old path and show a notification
+			else
+			{
+				gSavedPerAccountSettings.setString("InstantMessageLogPath", mPriorInstantMessageLogPath);
+				LLNotificationsUtil::add("PreferenceChatPathChanged");
+			}
+			mPriorInstantMessageLogPath.clear();
+		}
+
 		LLUIColorTable::instance().saveUserSettings();
 		gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-10-02 (Catznip-2.8.0e) | Added: Catznip-2.8.0e
 		// We need to save all crash settings, even if they're defaults [see LLCrashLogger::loadCrashBehaviorSetting()]
 		gCrashSettings.saveToFile(gSavedSettings.getString("CrashSettingsFile"), FALSE);
 // [/SL:KB]
+		
+		//Only save once logged in and loaded per account settings
+		if(mGotPersonalInfo)
+		{
+			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
+		}
 	}
 	else
 	{
@@ -1100,12 +1140,16 @@ void LLFloaterPreference::onBtnCancel()
 }
 
 // static 
+// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+//void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email)
 void LLFloaterPreference::updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email)
 {
 	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
 	if (instance)
 	{
-		instance->setPersonalInfo(visibility, im_via_email, email);	
+		// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+		//instance->setPersonalInfo(visibility, im_via_email);	
+		instance->setPersonalInfo(visibility, im_via_email, email);
 	}
 }
 
@@ -1147,6 +1191,23 @@ void LLFloaterPreference::onLanguageChange()
 	}
 }
 
+void LLFloaterPreference::onNotificationsChange(const std::string& OptionName)
+{
+	mNotificationOptions[OptionName] = getChild<LLComboBox>(OptionName)->getSelectedItemLabel();
+
+	bool show_notifications_alert = true;
+	for (notifications_map::iterator it_notification = mNotificationOptions.begin(); it_notification != mNotificationOptions.end(); it_notification++)
+	{
+		if(it_notification->second != "None")
+		{
+			show_notifications_alert = false;
+			break;
+		}
+	}
+
+	getChild<LLTextBox>("notifications_alert")->setVisible(show_notifications_alert);
+}
+
 void LLFloaterPreference::onNameTagOpacityChange(const LLSD& newvalue)
 {
 	LLColorSwatchCtrl* color_swatch = findChild<LLColorSwatchCtrl>("background");
@@ -1156,6 +1217,18 @@ void LLFloaterPreference::onNameTagOpacityChange(const LLSD& newvalue)
 		color_swatch->set( new_color.setAlpha(newvalue.asReal()) );
 	}
 }
+
+// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
+void LLFloaterPreference::onConsoleOpacityChange(const LLSD& newvalue)
+{
+	LLColorSwatchCtrl* color_swatch = findChild<LLColorSwatchCtrl>("console_background");
+	if (color_swatch)
+	{
+		LLColor4 new_color = color_swatch->get();
+		color_swatch->set( new_color.setAlpha(newvalue.asReal()) );
+	}
+}
+// </FS:CR>
 
 void LLFloaterPreference::onClickSetCache()
 {
@@ -1456,7 +1529,14 @@ void LLFloaterPreference::refreshEnabledState()
 
 // [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
 	if (rlv_handler_t::isEnabled())
-		childSetEnabled("busy_response", !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM));
+		childSetEnabled("do_not_disturb_response", !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM));
+// [/RLVa:KB]
+
+// [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
+	if (rlv_handler_t::isEnabled())
+	{
+		getChild<LLUICtrl>("do_not_disturb_response")->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_SENDIM));
+	}
 // [/RLVa:KB]
 
 	// Reflections
@@ -1466,8 +1546,9 @@ void LLFloaterPreference::refreshEnabledState()
 	ctrl_reflections->setEnabled(reflections);
 	
 	// Bump & Shiny	
+	LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
-	getChild<LLCheckBoxCtrl>("BumpShiny")->setEnabled(bumpshiny ? TRUE : FALSE);
+	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
 	
 	// <FS:Ansariel> Radio group "ReflectionDetailRadio" doesn't exist as of 20/11/2012
 	//radio_reflection_detail->setEnabled(reflections);
@@ -1538,7 +1619,8 @@ void LLFloaterPreference::refreshEnabledState()
 	//Deferred/SSAO/Shadows
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") && 
+	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
+						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
 						shaders && 
 						gGLManager.mHasFramebufferObject &&
 						gSavedSettings.getBOOL("RenderAvatarVP") &&
@@ -1554,7 +1636,9 @@ void LLFloaterPreference::refreshEnabledState()
 	LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
 
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (ctrl_deferred->get() ? TRUE : FALSE);
-		
+	
+	ctrl_deferred->set(gSavedSettings.getBOOL("RenderDeferred"));
+
 	ctrl_ssao->setEnabled(enabled);
 	ctrl_dof->setEnabled(enabled);
 
@@ -1791,6 +1875,8 @@ void LLFloaterPreference::onClickSetMiddleMouse()
 	p2t_line_editor->setValue(audioPanel->getString("middle_mouse"));
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLFloaterPreference::onClickSetSounds()
 {
 	// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
@@ -1798,6 +1884,7 @@ void LLFloaterPreference::onClickSetSounds()
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 }
+*/
 
 // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
@@ -1880,14 +1967,27 @@ void LLFloaterPreference::setAllIgnored()
 void LLFloaterPreference::onClickLogPath()
 {
 	std::string proposed_name(gSavedPerAccountSettings.getString("InstantMessageLogPath"));	 
+	mPriorInstantMessageLogPath.clear();
 	
 	LLDirPicker& picker = LLDirPicker::instance();
+	//Launches a directory picker and waits for feedback
 	if (!picker.getDir(&proposed_name ) )
 	{
 		return; //Canceled!
 	}
 
-	gSavedPerAccountSettings.setString("InstantMessageLogPath", picker.getDirName());
+	//Gets the path from the directory picker
+	std::string dir_name = picker.getDirName();
+
+	//Path changed
+	if(proposed_name != dir_name)
+	{
+	gSavedPerAccountSettings.setString("InstantMessageLogPath", dir_name);
+		mPriorInstantMessageLogPath = proposed_name;
+	
+	// enable/disable 'Delete transcripts button
+	updateDeleteTranscriptsButton();
+}
 	//[FIX FIRE-2765 : SJ] Enable Reset button when own Chatlogdirectory is set
 	getChildView("reset_logpath")->setEnabled(TRUE);
 }
@@ -1899,7 +1999,74 @@ void LLFloaterPreference::onClickResetLogPath()
 	gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
 }
 
+bool LLFloaterPreference::moveTranscriptsAndLog()
+{
+	std::string instantMessageLogPath(gSavedPerAccountSettings.getString("InstantMessageLogPath"));
+	std::string chatLogPath = gDirUtilp->add(instantMessageLogPath, gDirUtilp->getUserName());
+
+	bool madeDirectory = false;
+
+	//Does the directory really exist, if not then make it
+	if(!LLFile::isdir(chatLogPath))
+	{
+		//mkdir success is defined as zero
+		if(LLFile::mkdir(chatLogPath) != 0)
+		{
+			return false;
+		}
+		madeDirectory = true;
+	}
+	
+	std::string originalConversationLogDir = LLConversationLog::instance().getFileName();
+	std::string targetConversationLogDir = gDirUtilp->add(chatLogPath, "conversation.log");
+	//Try to move the conversation log
+	if(!LLConversationLog::instance().moveLog(originalConversationLogDir, targetConversationLogDir))
+	{
+		//Couldn't move the log and created a new directory so remove the new directory
+		if(madeDirectory)
+		{
+			LLFile::rmdir(chatLogPath);
+		}
+		return false;
+	}
+
+	//Attempt to move transcripts
+	std::vector<std::string> listOfTranscripts;
+	std::vector<std::string> listOfFilesMoved;
+
+	LLLogChat::getListOfTranscriptFiles(listOfTranscripts);
+
+	if(!LLLogChat::moveTranscripts(gDirUtilp->getChatLogsDir(), 
+									instantMessageLogPath, 
+									listOfTranscripts,
+									listOfFilesMoved))
+	{
+		//Couldn't move all the transcripts so restore those that moved back to their old location
+		LLLogChat::moveTranscripts(instantMessageLogPath, 
+			gDirUtilp->getChatLogsDir(), 
+			listOfFilesMoved);
+
+		//Move the conversation log back
+		LLConversationLog::instance().moveLog(targetConversationLogDir, originalConversationLogDir);
+
+		if(madeDirectory)
+		{
+			LLFile::rmdir(chatLogPath);
+		}
+
+		return false;
+	}
+
+	gDirUtilp->setChatLogsDir(instantMessageLogPath);
+	gDirUtilp->updatePerAccountChatLogsDir();
+
+	return true;
+}
+
+// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+//void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email)
 void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email)
+// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 {
 	mGotPersonalInfo = true;
 	mOriginalIMViaEmail = im_via_email;
@@ -1921,44 +2088,29 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	}
 	
 	getChild<LLUICtrl>("online_searchresults")->setEnabled(TRUE);
-
-	getChildView("include_im_in_chat_history")->setEnabled(TRUE);
-	getChildView("show_timestamps_check_im")->setEnabled(TRUE);
 	getChildView("friends_online_notify_checkbox")->setEnabled(TRUE);
-	
 	getChild<LLUICtrl>("online_visibility")->setValue(mOriginalHideOnlineStatus); 	 
 	getChild<LLUICtrl>("online_visibility")->setLabelArg("[DIR_VIS]", mDirectoryVisibility);
 	getChildView("send_im_to_email")->setEnabled(TRUE);
 	getChild<LLUICtrl>("send_im_to_email")->setValue(im_via_email);
-	getChildView("log_instant_messages")->setEnabled(TRUE);
-//	getChildView("log_chat")->setEnabled(TRUE);
-//	getChildView("busy_response")->setEnabled(TRUE);
-//	getChildView("log_instant_messages_timestamp")->setEnabled(TRUE);
-//	getChildView("log_chat_timestamp")->setEnabled(TRUE);
-	getChildView("log_chat_IM")->setEnabled(TRUE);
-	getChildView("log_date_timestamp")->setEnabled(TRUE);
-	
-//	getChild<LLUICtrl>("busy_response")->setValue(gSavedSettings.getString("BusyModeResponse2"));
-	
 	getChildView("favorites_on_login_check")->setEnabled(TRUE);
-	getChildView("log_nearby_chat")->setEnabled(TRUE);
-	getChildView("log_instant_messages")->setEnabled(TRUE);
-	getChildView("show_timestamps_check_im")->setEnabled(TRUE);
-//	getChildView("log_path_string")->setEnabled(FALSE);// LineEditor becomes readonly in this case. || Moved to PostBuild to disable on not logged in state  -WoLf
 	getChildView("log_path_button")->setEnabled(TRUE);
+	getChildView("chat_font_size")->setEnabled(TRUE);
 	getChildView("open_log_path_button")->setEnabled(TRUE);
 	getChildView("log_path_button-panelsetup")->setEnabled(TRUE);// second set of controls for panel_preferences_setup  -WoLf
 	getChildView("open_log_path_button-panelsetup")->setEnabled(TRUE);
 	std::string Chatlogsdir = gDirUtilp->getOSUserAppDir();
+	
+	getChildView("conversation_log_combo")->setEnabled(TRUE);	// <FS:CR>
+	getChildView("LogNearbyChat")->setEnabled(TRUE);	// <FS:CR>
+	getChildView("log_nearby_chat")->setEnabled(TRUE);	// <FS:CR> Readd after CHUI merge
 	//[FIX FIRE-2765 : SJ] Set Chatlog Reset Button on enabled when Chatlogpath isn't the default folder
 	if (gSavedPerAccountSettings.getString("InstantMessageLogPath") != gDirUtilp->getOSUserAppDir())
 	{
 		getChildView("reset_logpath")->setEnabled(TRUE);
 	}
-	childEnable("logfile_name_datestamp");	
-	std::string display_email(email);
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	//getChild<LLUICtrl>("email_address")->setValue(display_email);
+	std::string display_email(email);
 	if(display_email.size() > 30)
 	{
 		display_email.resize(30);
@@ -1966,14 +2118,13 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	}
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
-
 }
 
 void LLFloaterPreference::onUpdateSliderText(LLUICtrl* ctrl, const LLSD& name)
 {
 	std::string ctrl_name = name.asString();
 	
-	if ((ctrl_name =="" )|| !hasChild(ctrl_name, true))
+	if ((ctrl_name =="" )|| !hasChild(ctrl_name, TRUE))
 		return;
 	
 	LLTextBox* text_box = getChild<LLTextBox>(name.asString());
@@ -2029,14 +2180,16 @@ void LLFloaterPreference::onChangeMaturity()
 void LLFloaterPreference::onClickBlockList()
 {
 	// </FS:Ansariel> Optional standalone blocklist floater
-	//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+	//	LLSD().with("people_panel_tab_name", "blocked_panel"));
 	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
 	{
 		LLFloaterReg::showInstance("fs_blocklist", LLSD());
 	}
 	else
 	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+		LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+			LLSD().with("people_panel_tab_name", "blocked_panel"));
 	}
 	// </FS:Ansariel>
 }
@@ -2070,6 +2223,33 @@ void LLFloaterPreference::onClickSpellChecker()
 void LLFloaterPreference::onClickActionChange()
 {
 	mClickActionDirty = true;
+}
+
+void LLFloaterPreference::onDeleteTranscripts()
+{
+	LLSD args;
+	args["FOLDER"] = gDirUtilp->getUserName();
+
+	LLNotificationsUtil::add("PreferenceChatDeleteTranscripts", args, LLSD(), boost::bind(&LLFloaterPreference::onDeleteTranscriptsResponse, this, _1, _2));
+}
+
+void LLFloaterPreference::onDeleteTranscriptsResponse(const LLSD& notification, const LLSD& response)
+{
+	if (0 == LLNotificationsUtil::getSelectedOption(notification, response))
+	{
+		LLLogChat::deleteTranscripts();
+		updateDeleteTranscriptsButton();
+	}
+}
+
+void LLFloaterPreference::onLogChatHistorySaved()
+{
+	LLButton * delete_transcripts_buttonp = getChild<LLButton>("delete_transcripts");
+
+	if (!delete_transcripts_buttonp->getEnabled())
+	{
+		delete_transcripts_buttonp->setEnabled(true);
+	}
 }
 
 void LLFloaterPreference::updateClickActionSettings()
@@ -2144,6 +2324,35 @@ void LLFloaterPreference::setCacheLocation(const LLStringExplicit& location)
 	cache_location_editor->setToolTip(location);
 }
 
+void LLFloaterPreference::selectPanel(const LLSD& name)
+{
+	LLTabContainer * tab_containerp = getChild<LLTabContainer>("pref core");
+	LLPanel * panel = tab_containerp->getPanelByName(name);
+	if (NULL != panel)
+	{
+		tab_containerp->selectTabPanel(panel);
+	}
+}
+
+void LLFloaterPreference::selectPrivacyPanel()
+{
+	selectPanel("im");
+}
+
+void LLFloaterPreference::selectChatPanel()
+{
+	selectPanel("chat");
+}
+
+void LLFloaterPreference::changed()
+{
+	getChild<LLButton>("clear_log")->setEnabled(LLConversationLog::instance().getConversations().size() > 0);
+
+	// set 'enable' property for 'Delete transcripts...' button
+	updateDeleteTranscriptsButton();
+
+}
+
 //------------------------------Updater---------------------------------------
 
 //<FS:TS> FIRE-6795: Remove repetitive warning at every login
@@ -2210,33 +2419,39 @@ LLPanelPreference::LLPanelPreference()
 //: LLPanel(),
   //mBandWidthUpdater(NULL)
 {
-	mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
+	//<FS:KC> Handled centrally now
+	// mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
 	mCommitCallbackRegistrar.add("Pref.updateMediaAutoPlayCheckbox",	boost::bind(&LLPanelPreference::updateMediaAutoPlayCheckbox, this, _1));
 }
 
 //virtual
 BOOL LLPanelPreference::postBuild()
 {
+	////////////////////// PanelGeneral ///////////////////
+	if (hasChild("display_names_check", TRUE))
+	{
+		BOOL use_people_api = gSavedSettings.getBOOL("UsePeopleAPI");
+		LLCheckBoxCtrl* ctrl_display_name = getChild<LLCheckBoxCtrl>("display_names_check");
+		ctrl_display_name->setEnabled(use_people_api);
+		if (!use_people_api)
+		{
+			ctrl_display_name->setValue(FALSE);
+		}
+	}
 
 	////////////////////// PanelVoice ///////////////////
-	if (hasChild("voice_unavailable"))
+	if (hasChild("voice_unavailable", TRUE))
 	{
 		BOOL voice_disabled = gSavedSettings.getBOOL("CmdLineDisableVoice");
 		getChildView("voice_unavailable")->setVisible( voice_disabled);
 		getChildView("enable_voice_check")->setVisible( !voice_disabled);
 	}
-
-	//////////////////////PanelGraphics (hardware) ///////////////////
-	if (gGLManager.mIsIntel || gGLManager.mGLVersion < 3.f)
-	{ //remove FSAA settings above "4x"
-		LLComboBox* combo = getChild<LLComboBox>("fsaa");
-		combo->remove("8x");
-		combo->remove("16x");
-	}
-
+	
 	//////////////////////PanelSkins ///////////////////
-	/*
-	if (hasChild("skin_selection"))
+	
+	/* <FS:TM> CHUI Merge no note given why this is comented out
+	if (hasChild("skin_selection", TRUE)) <FS:TM> CHUI Merge new
+	if (hasChild("skin_selection")) <FS:TM> CHUI Merge old
 	{
 		LLFloaterPreference::refreshSkin(this);
 
@@ -2250,21 +2465,15 @@ BOOL LLPanelPreference::postBuild()
 	}
 	 */
 
-	if (hasChild("online_visibility") && hasChild("send_im_to_email"))
-	{
-		getChild<LLUICtrl>("email_address")->setValue(getString("log_in_to_change") );
-//		getChild<LLUICtrl>("busy_response")->setValue(getString("log_in_to_change"));		
-	}
-	
 	//////////////////////PanelPrivacy ///////////////////
-	if (hasChild("media_enabled"))
+	if (hasChild("media_enabled", TRUE))
 	{
 		bool media_enabled = gSavedSettings.getBOOL("AudioStreamingMedia");
 		
 		getChild<LLCheckBoxCtrl>("media_enabled")->set(media_enabled);
 		getChild<LLCheckBoxCtrl>("autoplay_enabled")->setEnabled(media_enabled);
 	}
-	if (hasChild("music_enabled"))
+	if (hasChild("music_enabled", TRUE))
 	{
 		getChild<LLCheckBoxCtrl>("music_enabled")->set(gSavedSettings.getBOOL("AudioStreamingMusic"));
 	}
@@ -2272,17 +2481,17 @@ BOOL LLPanelPreference::postBuild()
 	{
 		getChild<LLCheckBoxCtrl>("media_filter")->set(gSavedSettings.getBOOL("MediaEnableFilter"));
 	}
-	if (hasChild("voice_call_friends_only_check"))
+	if (hasChild("voice_call_friends_only_check", TRUE))
 	{
 		getChild<LLCheckBoxCtrl>("voice_call_friends_only_check")->setCommitCallback(boost::bind(&showFriendsOnlyWarning, _1, _2));
 	}
-	if (hasChild("favorites_on_login_check"))
+	if (hasChild("favorites_on_login_check", TRUE))
 	{
 		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setCommitCallback(boost::bind(&showFavoritesOnLoginWarning, _1, _2));
 	}
 
-	// Panel Advanced
-	if (hasChild("modifier_combo"))
+	//////////////////////PanelAdvanced ///////////////////
+	if (hasChild("modifier_combo", TRUE))
 	{
 		//localizing if push2talk button is set to middle mouse
 		if (MIDDLE_MOUSE_CV == getChild<LLUICtrl>("modifier_combo")->getValue().asString())
@@ -2299,7 +2508,8 @@ BOOL LLPanelPreference::postBuild()
 
 	//////////////////////PanelSetup ///////////////////
 	// <FS:Zi> Add warning on high bandwidth settings
-	// if (hasChild("max_bandwidth"))
+	//if (hasChild("max_bandwidth"), TRUE) <FS:TM> CHUI Merge new
+	// if (hasChild("max_bandwidth")) <FS:TM> CHUI Merge old
 	// Look for the layout widget on top level of this panel
 	if (hasChild("max_bandwidth_layout"))
 	// </FS:Zi>
@@ -2458,6 +2668,8 @@ void LLPanelPreference::cancel()
 	}
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLPanelPreference::setControlFalse(const LLSD& user_data)
 {
 	std::string control_name = user_data.asString();
@@ -2466,6 +2678,7 @@ void LLPanelPreference::setControlFalse(const LLSD& user_data)
 	if (control)
 		control->set(LLSD(FALSE));
 }
+*/
 
 void LLPanelPreference::updateMediaAutoPlayCheckbox(LLUICtrl* ctrl)
 {
@@ -2503,7 +2716,7 @@ public:
 			for (control_values_map_t::iterator it = mSavedValues.begin(); it != mSavedValues.end(); )
 			{
 				const std::string setting = it->first->getName();
-				if (std::find(mAccountIndependentSettings.begin(),
+				if (find(mAccountIndependentSettings.begin(),
 					mAccountIndependentSettings.end(), setting) == mAccountIndependentSettings.end())
 				{
 					mSavedValues.erase(it++);
@@ -2792,7 +3005,7 @@ void LLFloaterPreferenceProxy::onChangeSocksSettings()
 		otherHttpProxy->selectFirstItem();
 	}
 
-};
+}
 
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b
 static LLRegisterPanelClassWrapper<LLPanelPreferenceCrashReports> t_pref_crashreports("panel_preference_crashreports");
@@ -3043,16 +3256,38 @@ S32 copy_prefs_file(const std::string& from, const std::string& to)
 	const S32 COPY_BUFFER_SIZE = 16384;
 	U8 buffer[COPY_BUFFER_SIZE];
 	while(((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
-			&& (fwrite(buffer, 1, read, out) == (U32)read));		/* Flawfinder : ignore */
+		  && (fwrite(buffer, 1, read, out) == (U32)read));		/* Flawfinder : ignore */
 	if(ferror(in) || ferror(out)) rv = -2;
-
+	
 	if(in) fclose(in);
 	if(out) fclose(out);
-
+	
 	return rv;
 }
 
-void LLFloaterPreference::onClickSetBackupSettingsPath()
+static LLRegisterPanelClassWrapper<FSPanelPreferenceBackup> t_pref_backup("panel_preference_backup");
+
+FSPanelPreferenceBackup::FSPanelPreferenceBackup() : LLPanelPreference()
+{
+	mCommitCallbackRegistrar.add("Pref.SetBackupSettingsPath",	boost::bind(&FSPanelPreferenceBackup::onClickSetBackupSettingsPath, this));
+	mCommitCallbackRegistrar.add("Pref.BackupSettings",			boost::bind(&FSPanelPreferenceBackup::onClickBackupSettings, this));
+	mCommitCallbackRegistrar.add("Pref.RestoreSettings",		boost::bind(&FSPanelPreferenceBackup::onClickRestoreSettings, this));
+	mCommitCallbackRegistrar.add("Pref.BackupSelectAll",		boost::bind(&FSPanelPreferenceBackup::onClickSelectAll, this));
+	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&FSPanelPreferenceBackup::onClickDeselectAll, this));
+}
+
+BOOL FSPanelPreferenceBackup::postBuild()
+{
+	// <FS:Zi> Backup Settings
+	// Apparently, line editors don't update with their settings controls, so do that manually here
+	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
+	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
+	// </FS:Zi>
+	
+	return LLPanelPreference::postBuild();
+}
+
+void FSPanelPreferenceBackup::onClickSetBackupSettingsPath()
 {
 	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
 	LLDirPicker& picker=LLDirPicker::instance();
@@ -3067,7 +3302,7 @@ void LLFloaterPreference::onClickSetBackupSettingsPath()
 	getChild<LLLineEditor>("settings_backup_path")->setValue(dir_name);
 }
 
-void LLFloaterPreference::onClickBackupSettings()
+void FSPanelPreferenceBackup::onClickBackupSettings()
 {
 	llwarns << "entered" << llendl;
 	// Get settings backup path
@@ -3255,13 +3490,13 @@ void LLFloaterPreference::onClickBackupSettings()
 	LLNotificationsUtil::add("BackupFinished");
 }
 
-void LLFloaterPreference::onClickRestoreSettings()
+void FSPanelPreferenceBackup::onClickRestoreSettings()
 {
 	// ask the user if they really want to restore and restart
-	LLNotificationsUtil::add("SettingsRestoreNeedsLogout",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::doRestoreSettings,this,_1,_2));
+	LLNotificationsUtil::add("SettingsRestoreNeedsLogout",LLSD(),LLSD(),boost::bind(&FSPanelPreferenceBackup::doRestoreSettings,this,_1,_2));
 }
 
-void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD& response)
+void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification,const LLSD& response)
 {
 	llwarns << "entered" << llendl;
 	// Check the user's answer about restore and restart
@@ -3304,7 +3539,11 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 	}
 
 	// Close the window so the restored settings can't be destroyed by the user
-	onBtnOK();
+	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
+	if (instance)
+	{
+		instance->onBtnOK();
+	}
 
 	if(gSavedSettings.getBOOL("RestoreGlobalSettings"))
 	{
@@ -3444,11 +3683,11 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 		}
 	}
 	// Tell the user we have finished restoring settings and the viewer must shut down
-	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::onQuitConfirmed,this,_1,_2));
+	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&FSPanelPreferenceBackup::onQuitConfirmed,this,_1,_2));
 }
 
 // User confirmed the shutdown and we proceed
-void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& response)
+void FSPanelPreferenceBackup::onQuitConfirmed(const LLSD& notification,const LLSD& response)
 {
 	// Make sure the viewer will not save any settings on exit, so our copied files will survive
 	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
@@ -3457,17 +3696,17 @@ void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& r
 	LLAppViewer::instance()->requestQuit();
 }
 
-void LLFloaterPreference::onClickSelectAll()
+void FSPanelPreferenceBackup::onClickSelectAll()
 {
 	doSelect(TRUE);
 }
 
-void LLFloaterPreference::onClickDeselectAll()
+void FSPanelPreferenceBackup::onClickDeselectAll()
 {
 	doSelect(FALSE);
 }
 
-void LLFloaterPreference::doSelect(BOOL all)
+void FSPanelPreferenceBackup::doSelect(BOOL all)
 {
 	// Get scroll list control that holds the list of global files
 	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
@@ -3481,7 +3720,7 @@ void LLFloaterPreference::doSelect(BOOL all)
 	applySelection(globalFoldersScrollList,all);
 }
 
-void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
+void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control,BOOL all)
 {
 	// Pull out all data
 	std::vector<LLScrollListItem*> itemList=control->getAllData();

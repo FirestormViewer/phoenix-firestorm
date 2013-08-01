@@ -55,10 +55,12 @@ LLPanelVolumePulldown::LLPanelVolumePulldown()
 {
 	mHoverTimer.stop();
 
+	/*//<FS:KC> Handled centrally now
     mCommitCallbackRegistrar.add("Vol.setControlFalse", boost::bind(&LLPanelVolumePulldown::setControlFalse, this, _2));
 	mCommitCallbackRegistrar.add("Vol.GoAudioPrefs", boost::bind(&LLPanelVolumePulldown::onAdvancedButtonClick, this, _2));
 	// <FS:Ansariel> Missing callback function
 	mCommitCallbackRegistrar.add("Vol.SetSounds", boost::bind(&LLPanelVolumePulldown::setSounds, this));
+	*/
 
 	buildFromFile( "panel_volume_pulldown.xml");
 }
@@ -108,6 +110,8 @@ void LLPanelVolumePulldown::handleVisibilityChange ( BOOL new_visibility )
 	}
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLPanelVolumePulldown::onAdvancedButtonClick(const LLSD& user_data)
 {
 	// close the global volume minicontrol, we're bringing up the big one
@@ -137,6 +141,7 @@ void LLPanelVolumePulldown::setControlFalse(const LLSD& user_data)
 	if (control)
 		control->set(LLSD(FALSE));
 }
+*/
 
 //virtual
 void LLPanelVolumePulldown::draw()
@@ -154,6 +159,8 @@ void LLPanelVolumePulldown::draw()
 	}
 }
 
+//<FS:KC> Handled centrally now
+/*
 // <FS:Ansariel> Missing callback function
 void LLPanelVolumePulldown::setSounds()
 {
@@ -163,3 +170,4 @@ void LLPanelVolumePulldown::setSounds()
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 }
 // </FS:Ansariel> Missing callback function
+*/

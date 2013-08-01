@@ -133,11 +133,11 @@
 		Salir
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/index.php?lang=es-ES&amp;sourceid=[sourceid]
+		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Ya no puedes acceder a Second Life con el visor que estás utilizando. Visita la siguiente página para descargar un nuevo visor:
-http://secondlife.com/download.
+http://firestormviewer.org/downloads
  
 Si deseas obtener más información, consulta las preguntas frecuentes que aparecen a continuación:
 http://secondlife.com/viewer-access-faq
@@ -636,8 +636,8 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="AvatarAway">
 		Ausente
 	</string>
-	<string name="AvatarBusy">
-		Ocupado/a
+	<string name="AvatarDoNotDisturb">
+		No disponible
 	</string>
 	<string name="AvatarMuted">
 		Bloqueado/a
@@ -852,6 +852,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="multiple_textures">
 		Múltiple
 	</string>
+	<string name="use_texture">
+		Usar textura
+	</string>
 	<string name="texture_loading">
 		Cargando...
 	</string>
@@ -884,6 +887,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="no_name_object">
 		(sin nombre)
+	</string>
+	<string name="NearbyChatTitle">
+		Chat local
+	</string>
+	<string name="NearbyChatLabel">
+		(Chat local)
 	</string>
 	<string name="whisper">
 		susurra:
@@ -951,20 +960,29 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="ControlYourCamera">
 		Controlar tu cámara
 	</string>
-	<string name="TeleportYourAgent">
-		Teleportarte
+	<string name="JoinAnExperience">
+		Participar en una experiencia
 	</string>
-	<string name="SilentEstateManagement">
+	<string name="SilentlyManageEstateAccess">
 		Silenciar notificaciones sobre las modificaciones de acceso al Estado
 	</string>
-	<string name="OverrideAgentAnimations">
-		Ignorar las animaciones de tu avatar
+	<string name="OverrideYourAnimations">
+		Reemplazar tus animaciones por defecto
+	</string>
+	<string name="ScriptReturnObjects">
+		Devolver objetos en tu nombre
 	</string>
 	<string name="NotConnected">
 		No conectado/a
 	</string>
+	<string name="AgentNameSubst">
+		(Tú)
+	</string>
 	<string name="TeleportYourAgent">
 		Teleportarte
+	</string>
+	<string name="UnknownScriptPermission">
+		(desconocido)!
 	</string>
 	<string name="SIM_ACCESS_PG">
 		General
@@ -1050,29 +1068,8 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="backup_files">
 		Respaldos de objetos
 	</string>
-	<string name="AvatarSetNotAway">
-		Salir del estado ausente
-	</string>
-	<string name="AvatarSetAway">
-		Pasar al estado ausente
-	</string>
-	<string name="AvatarSetNotBusy">
-		Salir del estado ocupado
-	</string>
-	<string name="AvatarSetBusy">
-		Pasar al estado ocupado
-	</string>
-	<string name="AvatarSetNotAutorespond">
-		Desactivar autorrespuesta
-	</string>
-	<string name="AvatarSetAutorespond">
-		Autorrespuesta
-	</string>
-	<string name="AvatarSetNotAutorespondNonFriends">
-		Desactivar autorrespuesta para no-amigos
-	</string>
-	<string name="AvatarSetAutorespondNonFriends">
-		Autorrespuesta para no-amigos
+	<string name="LSLTipSleepTime">
+		Duerme el script durante [SLEEP_TIME] segundos.
 	</string>
 	<string name="shape">
 		Anatomía
@@ -2095,6 +2092,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
 		HUD Inferior derecho
 	</string>
+	<string name="ATTACH_NECK">
+		Cuello
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Centro del avatar
+	</string>
 	<string name="ATTACH_BRIDGE">
 		Bridge
 	</string>
@@ -2116,8 +2119,8 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="PanelContentsNewScript">
 		Script nuevo
 	</string>
-	<string name="BusyModeResponseDefault">
-		El Residente al que has enviado un mensaje no desea ser molestado. Aún así, tu mensaje le será mostrado en el panel de mensajes de su Firestorm Viewer para ser revisado más tarde.
+	<string name="DoNotDisturbModeResponseDefault">
+		Este residente tiene activado el modo &apos;No disponible&apos; y verá tu mensaje más tarde.
 	</string>
 	<string name="MuteByName">
 		(Por el nombre)
@@ -2201,6 +2204,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="InvOfferGaveYou">
 		te ha dado
 	</string>
+	<string name="InvOfferYouDecline">
+		Rechazas
+	</string>
 	<string name="InvOfferDecline">
 		Has rechazado [DESC] de [NAME].
 	</string>
@@ -2239,9 +2245,6 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="GroupMoneyDate">
 		[weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc], [year,datetime,utc]
-	</string>
-	<string name="ViewerObjectContents">
-		Contenidos
 	</string>
 	<string name="AcquiredItems">
 		Artículos adquiridos
@@ -4080,6 +4083,12 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="Saved_message">
 		(Guardado [LONG_TIMESTAMP])
 	</string>
+	<string name="OnlineStatus">
+		Conectado/a
+	</string>
+	<string name="OfflineStatus">
+		Desconectado/a
+	</string>
 	<string name="IM_unblock_only_groups_friends">
 		Para ver este mensaje, debes desmarcar &apos;Sólo mis amigos y grupos pueden llamarme o enviarme MI&apos; en Preferencias/Privacidad.
 	</string>
@@ -4098,6 +4107,9 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="you_joined_call">
 		Has entrado en la llamada de voz
 	</string>
+	<string name="you_auto_rejected_call-im">
+		Rechazaste la llamada de voz automáticamente porque estaba activado el modo &apos;No disponible&apos;.
+	</string>
 	<string name="name_started_call">
 		[NAME] inició una llamada de voz
 	</string>
@@ -4109,6 +4121,9 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	</string>
 	<string name="hang_up-im">
 		Se colgó la llamada de voz
+	</string>
+	<string name="conference-title">
+		Chat multi-persona
 	</string>
 	<string name="answering-im">
 		Conectando...
@@ -5013,6 +5028,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Chat_Label">
 		Chat
 	</string>
+	<string name="Command_Conversations_Label">
+		Conversaciones
+	</string>
 	<string name="Command_Compass_Label">
 		Brújula
 	</string>
@@ -5073,26 +5091,69 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Voice_Label">
 		Configuración de voz
 	</string>
-	<string name="Command_Quickprefs_Label">Preferencias rápidas</string>
-	<string name="Command_AO_Label">Animation Overrider</string>
-	<string name="Command_Webbrowser_Label">Navegador web</string>
-	<string name="Command_Default_Chat_Bar_Label">Chat</string>
-	<string name="Command_Areasearch_Label">Buscar en el área</string>
-	<string name="Command_Settings_Debug_Label">Configuraciones del depurador</string>
-	<string name="Command_Statistics_Label">Estadísticas</string>
-	<string name="Command_Region_Label">Región/Estado</string>
-	<string name="Command_Fly_Label">Volar</string>
-	<string name="Command_Groundsit_Label">Sentarse en el suelo</string>
-	<string name="Command_Sound_Explorer_Label">Explorador de sonidos</string>
-	<string name="Command_Asset_Blacklist_Label">Lista negra</string>
-	<string name="Command_Phototools_Label">Phototools</string>
-	<string name="Command_Phototools_View_Label">Cameratools</string>
-	<string name="Command_Contact_Sets_Label">Contact sets</string>
-	<string name="Command_Mouselook_Label">Vista subjetiva</string>
-	<string name="Command_Landmark_Here_Label">Crear hito</string>
-	<string name="Command_Teleport_History_Label">Historial de teleportes</string>
-	<string name="Command_Pose_Stand_Label">Pose</string>
-	<string name="Command_Snapshot_To_Disk_Label">Foto a disco</string>
+	<string name="Command_Quickprefs_Label">
+		Preferencias rápidas
+	</string>
+	<string name="Command_AO_Label">
+		Animation Overrider
+	</string>
+	<string name="Command_Webbrowser_Label">
+		Navegador web
+	</string>
+	<string name="Command_Default_Chat_Bar_Label">
+		Chat
+	</string>
+	<string name="Command_Areasearch_Label">
+		Buscar en el área
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Configuraciones del depurador
+	</string>
+	<string name="Command_Statistics_Label">
+		Estadísticas
+	</string>
+	<string name="Command_Region_Label">
+		Región/Estado
+	</string>
+	<string name="Command_Fly_Label">
+		Volar
+	</string>
+	<string name="Command_Groundsit_Label">
+		Sentarse en el suelo
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Explorador de sonidos
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Lista negra
+	</string>
+	<string name="Command_Phototools_Label">
+		Phototools
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Cameratools
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Contact sets
+	</string>
+	<string name="Command_Mouselook_Label">
+		Vista subjetiva
+	</string>
+	<string name="Command_Landmark_Here_Label">
+		Crear hito
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Historial de teleportes
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Pose
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Foto a disco
+	</string>
+	<string name="Command_Radar_Label">
+		Radar
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5107,6 +5168,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Chat_Tooltip">
 		Habla por chat de texto con las personas próximas
+	</string>
+	<string name="Command_Conversations_Tooltip">
+		Conversar con todos
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Brújula
@@ -5139,7 +5203,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Transfiere objetos a tu mercado para venderlos
 	</string>
 	<string name="Command_People_Tooltip">
-		Amigos, grupos y personas próximas
+		Amigos, grupos y residentes próximos
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Lugares que se mostrarán como favoritos en tu perfil
@@ -5154,13 +5218,13 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Consulta o edita tu perfil
 	</string>
 	<string name="Command_Search_Tooltip">
-		Buscar lugares, eventos y personas
+		Buscar lugares, eventos y residentes
 	</string>
 	<string name="Command_Snapshot_Tooltip">
 		Tomar una fotografía
 	</string>
 	<string name="Command_Speak_Tooltip">
-		Utiliza el micrófono para hablar con las personas próximas
+		Utiliza el micrófono para hablar con la gente próxima
 	</string>
 	<string name="Command_View_Tooltip">
 		Cambiar el ángulo de la cámara
@@ -5200,6 +5264,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Snapshot_To_Disk_Tooltip">
 		Toma una fotografía rápida y la guarda en disco
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Abre el radar de avatares cercanos
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
@@ -5271,8 +5338,17 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="UserDictionary">
 		[Usuario]
 	</string>
+	<string name="logging_calls_disabled_log_empty">
+		No se están registrando las conversaciones. Para empezar a grabar un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
+	</string>
+	<string name="logging_calls_disabled_log_not_empty">
+		No se registrarán más conversaciones. Para reanudar la grabación de un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
+	</string>
+	<string name="logging_calls_enabled_log_empty">
+		No hay conversaciones guardadas. Después de contactar con un residente o de que alguien contacte contigo, se mostrará aquí una entrada de registro.
+	</string>
 	<string name="IMPrefix">
-		MI:
+		MI: 
 	</string>
 	<string name="SanityCheckEquals">
 		La configuración de &quot;[CONTROL_NAME]&quot; debería establecerse a [VALUE_1].
@@ -5393,4 +5469,16 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="QP_WL_Day_Cycle_Based">Basado en ciclo de día</string>
 	<string name="QP_WL_None">Ninguno</string>
 	<string name="GroupChatMuteNotice">Silenciando el chat de grupo de [NAME].</string>
+	<string name="camera_no_focus">La cámara no puede enfocar a [AVATARNAME] porque está fuera de tu distancia de dibujo.</string>
+	<string name="entering_draw_distance">ha entrado en tu distancia de dibujo ([DISTANCE] m).</string>
+	<string name="leaving_draw_distance">ha salido de tu distancia de dibujo.</string>
+	<string name="entering_chat_range">ha entrado en distancia de chat ([DISTANCE] m).</string>
+	<string name="leaving_chat_range">ha salido de la distancia de chat.</string>
+	<string name="entering_region">ha entrado en la región.</string>
+	<string name="entering_region_distance">ha entrado en la región ([DISTANCE] m).</string>
+	<string name="leaving_region">ha salido de la región.</string>
+	<string name="export_fail_no_mesh">La exportación de modelos mesh no está actualmente soportada. Exportación abortada.</string>
+	<string name="TotalScriptCountChangeIncrease">El total de scripts en la región ha subido de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
+	<string name="TotalScriptCountChangeDecrease">El total de scripts en la región ha bajado de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
+	<string name="preproc_toggle_warning">La conmutación del preprocesador no será efectiva hasta que no cierres y reabras este editor.</string>
 </strings>

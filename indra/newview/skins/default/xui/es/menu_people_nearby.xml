@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<context_menu name="Avatar Context Menu">
-	<menu_item_call label="Mostrar perfil" name="View Profile"/>
-	<menu_item_call label="Ofrecer amistad" name="Add Friend"/>
-	<menu_item_call label="Disolver amistad" name="Remove Friend"/>
-	<menu_item_call label="MI" name="IM"/>
-	<menu_item_call label="Llamar" name="Call"/>
-	<menu_item_call label="Mostrar en el mapa" name="Map"/>
-	<menu_item_call label="Iniciar seguimiento" name="Track"/>
-	<menu_item_call label="Compartir" name="Share"/>
-	<menu_item_call label="Pagar" name="Pay"/>
-	<menu_item_call label="Ofrecer teleporte" name="teleport"/>
-	<menu_item_call label="Teleportarme a su posición" name="teleport_to"/>
+<context_menu name="Nearby People Context Menu">
+	<menu_item_call label="Mostrar perfil" name="view_profile"/>
+	<menu_item_call label="MI" name="im"/>
+	<menu_item_call label="Ofrecer teleporte" name="offer_teleport"/>
+	<menu_item_call label="Llamar" name="voice_call"/>
+	<menu_item_call label="Mostrar historial de chat..." name="chat_history"/>
+	<menu_item_call label="Ofrecer amistad" name="add_friend"/>
+	<menu_item_call label="Disolver amistad" name="remove_friend"/>
+	<menu_item_call label="Invitar a un grupo" name="invite_to_group"/>
 	<menu_item_call label="Enfocar" name="zoom_in"/>
-	<menu_item_call label="Invitar a un grupo" name="GroupInvite"/>
-	<menu_item_call label="Información de scripts" name="ScriptInfo"/>
-	<menu_item_check label="Bloquear/desbloquear" name="Block/Unblock"/>
-	<menu_item_call label="Reportar" name="report"/>
-	<menu_item_call label="Congelar" name="freeze"/>
-	<menu_item_call label="Expulsar de la parcela y prohibir acceso" name="eject"/>
-	<menu_item_call label="Expulsar de la finca y prohibir acceso" name="kick"/>
-	<menu_item_call label="Enviar a su casa" name="teleport_home"/>
-	<menu_item_call label="Expulsar del estado" name="estate_ban"/>
-	<menu_item_call label="Desdibujar" name="derender"/>
-	<menu_item_call label="Desdibujar + lista negra" name="derender_permanent"/>
+	<menu_item_call label="Mostrar en el mapa" name="map"/>
+	<menu_item_call label="Compartir" name="share"/>
+	<menu_item_call label="Pagar" name="pay"/>
+	<menu_item_check label="Bloquear/desbloquear" name="block_unblock"/>
 </context_menu>

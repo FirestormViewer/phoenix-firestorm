@@ -532,8 +532,8 @@ void LLTabContainer::draw()
 		}
 	}
 
-	mPrevArrowBtn->setFlashing(FALSE);
-	mNextArrowBtn->setFlashing(FALSE);
+	mPrevArrowBtn->setFlashing(false);
+	mNextArrowBtn->setFlashing(false);
 }
 
 
@@ -891,86 +891,62 @@ BOOL LLTabContainer::handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,	EDrag
 {
 	BOOL has_scroll_arrows = (getMaxScrollPos() > 0);
 
-// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-	S32 curHoverIdx = -1;
-	if (mOpenTabsOnDragAndDrop && !getTabsHidden())
+	if(mOpenTabsOnDragAndDrop && !getTabsHidden())
 	{
-		for(tuple_list_t::const_iterator itTab = mTabList.begin(); itTab != mTabList.end(); ++itTab)
+		// In that case, we'll open the hovered tab while dragging and dropping items.
+		// This allows for drilling through tabs.
+		if (mDragAndDropDelayTimer.getStarted())
 		{
-			const LLTabTuple* pTuple = *itTab;
-			S32 local_x = x - pTuple->mButton->getRect().mLeft;
-			S32 local_y = y - pTuple->mButton->getRect().mBottom;
-			if ( (pTuple->mButton->getEnabled()) && (pTuple->mButton->pointInView(local_x, local_y)) )
-				curHoverIdx = itTab - mTabList.begin();
-		}
-	}
+			if (mDragAndDropDelayTimer.getElapsedTimeF32() > SCROLL_DELAY_TIME)
+			{
+				if (has_scroll_arrows)
+				{
+					if (mJumpPrevArrowBtn && mJumpPrevArrowBtn->getRect().pointInRect(x, y))
+					{
+						S32	local_x	= x	- mJumpPrevArrowBtn->getRect().mLeft;
+						S32	local_y	= y	- mJumpPrevArrowBtn->getRect().mBottom;
+						mJumpPrevArrowBtn->handleHover(local_x,	local_y, mask);
+					}
+					if (mJumpNextArrowBtn && mJumpNextArrowBtn->getRect().pointInRect(x, y))
+					{
+						S32	local_x	= x	- mJumpNextArrowBtn->getRect().mLeft;
+						S32	local_y	= y	- mJumpNextArrowBtn->getRect().mBottom;
+						mJumpNextArrowBtn->handleHover(local_x,	local_y, mask);
+					}
+					if (mPrevArrowBtn->getRect().pointInRect(x,	y))
+					{
+						S32	local_x	= x	- mPrevArrowBtn->getRect().mLeft;
+						S32	local_y	= y	- mPrevArrowBtn->getRect().mBottom;
+						mPrevArrowBtn->handleHover(local_x,	local_y, mask);
+					}
+					else if	(mNextArrowBtn->getRect().pointInRect(x, y))
+					{
+						S32	local_x	= x	- mNextArrowBtn->getRect().mLeft;
+						S32	local_y	= y	- mNextArrowBtn->getRect().mBottom;
+						mNextArrowBtn->handleHover(local_x, local_y, mask);
+					}
+				}
 
-	if (-1 == curHoverIdx)
-		mDragAndDropDelayTimer.stop();		// Mouse not hovering over a tab button
-	else if ( (mCurrentTabIdx != curHoverIdx) && (!mDragAndDropDelayTimer.getStarted()) )
-		mDragAndDropDelayTimer.start();		// Mouse hovering over a tab button
-	else if ( (mDragAndDropHoverIdx != curHoverIdx) && (mDragAndDropDelayTimer.getStarted()) )
-		mDragAndDropDelayTimer.reset();		// Mouse hovering over a different tab button
-
-	mDragAndDropHoverIdx = curHoverIdx;
-// [/SL:KB]
-
-//	if( mDragAndDropDelayTimer.getStarted() && mDragAndDropDelayTimer.getElapsedTimeF32() > SCROLL_DELAY_TIME )
-// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-	if ( (mDragAndDropHoverCommit) && (mDragAndDropDelayTimer.getStarted()) && (mDragAndDropDelayTimer.getElapsedTimeF32() > DELAY_DRAG_HOVER_COMMIT) )
-// [/SL:KB]
-	{
-		if (has_scroll_arrows)
-		{
-			if (mJumpPrevArrowBtn && mJumpPrevArrowBtn->getRect().pointInRect(x, y))
-			{
-				S32	local_x	= x	- mJumpPrevArrowBtn->getRect().mLeft;
-				S32	local_y	= y	- mJumpPrevArrowBtn->getRect().mBottom;
-				mJumpPrevArrowBtn->handleHover(local_x,	local_y, mask);
-			}
-			if (mJumpNextArrowBtn && mJumpNextArrowBtn->getRect().pointInRect(x, y))
-			{
-				S32	local_x	= x	- mJumpNextArrowBtn->getRect().mLeft;
-				S32	local_y	= y	- mJumpNextArrowBtn->getRect().mBottom;
-				mJumpNextArrowBtn->handleHover(local_x,	local_y, mask);
-			}
-			if (mPrevArrowBtn->getRect().pointInRect(x,	y))
-			{
-				S32	local_x	= x	- mPrevArrowBtn->getRect().mLeft;
-				S32	local_y	= y	- mPrevArrowBtn->getRect().mBottom;
-				mPrevArrowBtn->handleHover(local_x,	local_y, mask);
-			}
-			else if	(mNextArrowBtn->getRect().pointInRect(x, y))
-			{
-				S32	local_x	= x	- mNextArrowBtn->getRect().mLeft;
-				S32	local_y	= y	- mNextArrowBtn->getRect().mBottom;
-				mNextArrowBtn->handleHover(local_x, local_y, mask);
-			}
-		}
-
-// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-		if (-1 != mDragAndDropHoverIdx)
-		{
-			const LLTabTuple* pTuple = mTabList[mDragAndDropHoverIdx];
-			if (!pTuple->mTabPanel->getVisible())
-			{
-				pTuple->mButton->onCommit();
+				for(tuple_list_t::iterator iter	= mTabList.begin();	iter !=	 mTabList.end(); ++iter)
+				{
+					LLTabTuple*	tuple =	*iter;
+					tuple->mButton->setVisible(	TRUE );
+					S32	local_x	= x	- tuple->mButton->getRect().mLeft;
+					S32	local_y	= y	- tuple->mButton->getRect().mBottom;
+					if (tuple->mButton->pointInView(local_x, local_y) &&  tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
+					{
+						tuple->mButton->onCommit();
+					}
+				}
+				// Stop the timer whether successful or not. Don't let it run forever.
 				mDragAndDropDelayTimer.stop();
 			}
 		}
-// [/SL:KB]
-//		for(tuple_list_t::iterator iter	= mTabList.begin();	iter !=	 mTabList.end(); ++iter)
-//		{
-//			LLTabTuple*	tuple =	*iter;
-//			tuple->mButton->setVisible(	TRUE );
-//			S32	local_x	= x	- tuple->mButton->getRect().mLeft;
-//			S32	local_y	= y	- tuple->mButton->getRect().mBottom;
-//			if (tuple->mButton->pointInView(local_x, local_y) &&  tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
-//			{
-//				tuple->mButton->onCommit();
-//				mDragAndDropDelayTimer.stop();
-//			}
-//		}
+		else 
+		{
+			// Start a timer so we don't open tabs as soon as we hover on them
+			mDragAndDropDelayTimer.start();
+		}
 	}
 
 	return LLView::handleDragAndDrop(x,	y, mask, drop, type, cargo_data,  accept, tooltip);
@@ -1180,6 +1156,12 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 			p.pad_left( mLabelPadLeft );
 			p.pad_right(2);
 		}
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
 		
 		// *TODO : It seems wrong not to use p in both cases considering the way p is initialized
 		if (mCustomIconCtrlUsed)
@@ -1314,11 +1296,17 @@ void LLTabContainer::removeTabPanel(LLPanel* child)
 				update_images(mTabList[mTabList.size()-2], mLastTabParams, getTabPosition());
 			}
 
-			removeChild( tuple->mButton );
+			if (!getTabsHidden())
+			{
+				// We need to remove tab buttons only if the tabs are not hidden.
+				removeChild( tuple->mButton );
+			}
  			delete tuple->mButton;
+            tuple->mButton = NULL;
 
  			removeChild( tuple->mTabPanel );
 // 			delete tuple->mTabPanel;
+            tuple->mTabPanel = NULL;
 			
 			mTabList.erase( iter );
 			delete tuple;
@@ -1380,9 +1368,11 @@ void LLTabContainer::deleteAllTabs()
 
 		removeChild( tuple->mButton );
 		delete tuple->mButton;
+        tuple->mButton = NULL;
 
  		removeChild( tuple->mTabPanel );
 // 		delete tuple->mTabPanel;
+        tuple->mTabPanel = NULL;
 	}
 
 	// Actually delete the tuples themselves
@@ -1585,13 +1575,20 @@ BOOL LLTabContainer::setTab(S32 which)
 		{
 			LLTabTuple* tuple = *iter;
 			BOOL is_selected = ( tuple == selected_tuple );
-			tuple->mButton->setUseEllipses(mUseTabEllipses);
-			tuple->mButton->setHAlign(mFontHalign);
-			tuple->mTabPanel->setVisible( is_selected );
-// 			tuple->mTabPanel->setFocus(is_selected); // not clear that we want to do this here.
-			tuple->mButton->setToggleState( is_selected );
-			// RN: this limits tab-stops to active button only, which would require arrow keys to switch tabs
-			tuple->mButton->setTabStop( is_selected );
+            // Although the selected tab must be complete, we may have hollow LLTabTuple tucked in the list
+            if (tuple && tuple->mButton)
+            {
+                tuple->mButton->setUseEllipses(mUseTabEllipses);
+                tuple->mButton->setHAlign(mFontHalign);
+                tuple->mButton->setToggleState( is_selected );
+                // RN: this limits tab-stops to active button only, which would require arrow keys to switch tabs
+                tuple->mButton->setTabStop( is_selected );
+            }
+            if (tuple && tuple->mTabPanel)
+            {
+                tuple->mTabPanel->setVisible( is_selected );
+                //tuple->mTabPanel->setFocus(is_selected); // not clear that we want to do this here.
+            }
 			
 			if (is_selected)
 			{
@@ -1618,7 +1615,7 @@ BOOL LLTabContainer::setTab(S32 which)
 					else
 					{
 						S32 available_width_with_arrows = getRect().getWidth() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_arrow_btn_size  + tabcntr_arrow_btn_size + 1);
-						S32 running_tab_width = tuple->mButton->getRect().getWidth();
+						S32 running_tab_width = (tuple && tuple->mButton ? tuple->mButton->getRect().getWidth() : 0);
 						S32 j = i - 1;
 						S32 min_scroll_pos = i;
 						if (running_tab_width < available_width_with_arrows)
@@ -1626,7 +1623,7 @@ BOOL LLTabContainer::setTab(S32 which)
 							while (j >= 0)
 							{
 								LLTabTuple* other_tuple = getTab(j);
-								running_tab_width += other_tuple->mButton->getRect().getWidth();
+								running_tab_width += (other_tuple && other_tuple->mButton ? other_tuple->mButton->getRect().getWidth() : 0);
 								if (running_tab_width > available_width_with_arrows)
 								{
 									break;
@@ -1662,8 +1659,7 @@ BOOL LLTabContainer::selectTabByName(const std::string& name)
 	LLPanel* panel = getPanelByName(name);
 	if (!panel)
 	{
-		llwarns << "LLTabContainer::selectTabByName("
-			<< name << ") failed" << llendl;
+		llwarns << "LLTabContainer::selectTabByName(" << name << ") failed" << llendl;
 		return FALSE;
 	}
 
@@ -1903,6 +1899,13 @@ void LLTabContainer::initButtons()
 		prev_btn_params.image_unselected.name("scrollbutton_up_out_blue.tga");
 		prev_btn_params.image_selected.name("scrollbutton_up_in_blue.tga");
 		prev_btn_params.click_callback.function(boost::bind(&LLTabContainer::onPrevBtn, this, _2));
+
+		// <FS:Ansariel> Enable tab flashing
+		prev_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		prev_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		prev_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mPrevArrowBtn = LLUICtrlFactory::create<LLButton>(prev_btn_params);
 
 		LLButton::Params next_btn_params;
@@ -1912,6 +1915,13 @@ void LLTabContainer::initButtons()
 		next_btn_params.image_unselected.name("scrollbutton_down_out_blue.tga");
 		next_btn_params.image_selected.name("scrollbutton_down_in_blue.tga");
 		next_btn_params.click_callback.function(boost::bind(&LLTabContainer::onNextBtn, this, _2));
+
+		// <FS:Ansariel> Enable tab flashing
+		next_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		next_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		next_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mNextArrowBtn = LLUICtrlFactory::create<LLButton>(next_btn_params);
 	}
 	else // Horizontal
@@ -1948,7 +1958,13 @@ void LLTabContainer::initButtons()
 		p.click_callback.function(boost::bind(&LLTabContainer::onJumpFirstBtn, this, _2));
 		p.rect(jump_left_arrow_btn_rect);
 		p.follows.flags(FOLLOWS_LEFT);
-		
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mJumpPrevArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 
 		p = LLButton::Params();
@@ -1959,6 +1975,12 @@ void LLTabContainer::initButtons()
 		p.image_selected.name("scrollbutton_left_in_blue.tga");
 		p.click_callback.function(boost::bind(&LLTabContainer::onPrevBtn, this, _2));
 		p.mouse_held_callback.function(boost::bind(&LLTabContainer::onPrevBtnHeld, this, _2));
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
 		
 		mPrevArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 
@@ -1970,6 +1992,12 @@ void LLTabContainer::initButtons()
 		p.image_selected.name("jump_right_in.tga");
 		p.click_callback.function(boost::bind(&LLTabContainer::onJumpLastBtn, this, _2));
 
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mJumpNextArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 
 		p = LLButton::Params();
@@ -1980,6 +2008,12 @@ void LLTabContainer::initButtons()
 		p.image_selected.name("scrollbutton_right_in_blue.tga");
 		p.click_callback.function(boost::bind(&LLTabContainer::onNextBtn, this, _2));
 		p.mouse_held_callback.function(boost::bind(&LLTabContainer::onNextBtnHeld, this, _2));
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
 
 		mNextArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 

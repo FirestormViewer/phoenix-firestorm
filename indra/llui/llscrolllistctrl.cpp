@@ -647,12 +647,6 @@ S32 LLScrollListCtrl::calcMaxContentWidth()
 
 		if (mColumnWidthsDirty)
 		{
-			// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
-			//               This seems to be misplaced here as we would only
-			//               take the first column into account for max
-			//               content width calculation.
-			//mColumnWidthsDirty = false;
-			// </FS:Ansariel>
 			// update max content width for this column, by looking at all items
 			column->mMaxContentWidth = column->mHeader ? LLFontGL::getFontSansSerifSmall()->getWidth(column->mLabel) + mColumnPadding + HEADING_TEXT_PADDING : 0;
 			item_list::iterator iter;
@@ -666,9 +660,7 @@ S32 LLScrollListCtrl::calcMaxContentWidth()
 		}
 		max_item_width += column->mMaxContentWidth;
 	}
-	// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
 	mColumnWidthsDirty = false;
-	// </FS:Ansariel>
 
 	return max_item_width;
 }
@@ -683,7 +675,7 @@ bool LLScrollListCtrl::updateColumnWidths()
 		if (!column) continue;
 
 		// update column width
-		S32 new_width = column->getWidth();
+		S32 new_width = 0;
 		if (column->mRelWidth >= 0)
 		{
 			new_width = (S32)llround(column->mRelWidth*mItemListRect.getWidth());
@@ -692,18 +684,16 @@ bool LLScrollListCtrl::updateColumnWidths()
 		{
 			new_width = (mItemListRect.getWidth() - mTotalStaticColumnWidth - mTotalColumnPadding) / mNumDynamicWidthColumns;
 		}
+		else
+		{
+			new_width = column->getWidth();
+		}
 
 		if (column->getWidth() != new_width)
 		{
 			column->setWidth(new_width);
 			width_changed = true;
 		}
-		// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
-		//               Apparently columns don't resize properly if we
-		//               don't assume a width change. Fall back to pre-3.4.3
-		//               behavior and always assume a changed width.
-		width_changed = true;
-		// </FS:Ansariel>
 	}
 	return width_changed;
 }
@@ -739,9 +729,9 @@ void LLScrollListCtrl::updateLineHeightInsert(LLScrollListItem* itemp)
 }
 
 
-void LLScrollListCtrl::updateColumns()
+void LLScrollListCtrl::updateColumns(bool force_update)
 {
-	if (!mColumnsDirty)
+	if (!mColumnsDirty && !force_update)
 		return;
 
 	mColumnsDirty = false;
@@ -786,6 +776,8 @@ void LLScrollListCtrl::updateColumns()
 	}
 
 	// expand last column header we encountered to full list width
+	// <FS:KC> Fixed last column on LLScrollListCtrl expanding on control resize when column width should be fixed or dynamic
+	//if (last_header)
 	if (last_header && last_header->canResize())
 	{
 		S32 new_width = llmax(0, mItemListRect.mRight - last_header->getRect().mLeft);
@@ -795,7 +787,7 @@ void LLScrollListCtrl::updateColumns()
 	}
 
 	// propagate column widths to individual cells
-	if (columns_changed_width)
+	if (columns_changed_width || force_update)
 	{
 		item_list::iterator iter;
 		for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
@@ -1492,6 +1484,8 @@ void LLScrollListCtrl::drawItems()
 	S32 y = mItemListRect.mTop - mLineHeight;
 
 	// allow for partial line at bottom
+	// <FS:KC> Show partial bottom lines on LLScrollListCtrl when list is >1 page long
+	//S32 num_page_lines = getLinesPerPage();
 	S32 num_page_lines = getLinesPerPage() + 1;
 
 	LLRect item_rect;
@@ -1906,13 +1900,12 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			// (N.B. callbacks don't take const refs as id is local scope)
 			bool is_group = (mContextMenuType == MENU_GROUP);
 			LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+			registrar.add("Url.ShowProfile", boost::bind(&LLScrollListCtrl::showProfile, id, is_group));
+			registrar.add("Url.SendIM", boost::bind(&LLScrollListCtrl::sendIM, id));
+			registrar.add("Url.AddFriend", boost::bind(&LLScrollListCtrl::addFriend, id));
 			registrar.add("Url.Execute", boost::bind(&LLScrollListCtrl::showNameDetails, id, is_group));
 			registrar.add("Url.CopyLabel", boost::bind(&LLScrollListCtrl::copyNameToClipboard, id, is_group));
 			registrar.add("Url.CopyUrl", boost::bind(&LLScrollListCtrl::copySLURLToClipboard, id, is_group));
-			// <FS:Ansariel> FS-7263: Register Url.ShowProfile for menu_url_agent.xml
-			//               so we can properly open agent profile from contact
-			//               list and textareas (nearby chat) context menus as well.
-			registrar.add("Url.ShowProfile", boost::bind(&LLUrlAction::showProfile, "secondlife:///app/agent/" + id + "/about"));
 
 			// <FS:Ansariel> Additional convenience options
 			registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/zoom"));
@@ -1937,9 +1930,31 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	return FALSE;
 }
 
-void LLScrollListCtrl::showNameDetails(std::string id, bool is_group)
+void LLScrollListCtrl::showProfile(std::string id, bool is_group)
 {
 	// show the resident's profile or the group profile
+	std::string sltype = is_group ? "group" : "agent";
+	std::string slurl = "secondlife:///app/" + sltype + "/" + id + "/about";
+	LLUrlAction::showProfile(slurl);
+}
+
+void LLScrollListCtrl::sendIM(std::string id)
+{
+	// send im to the resident
+	std::string slurl = "secondlife:///app/agent/" + id + "/about";
+	LLUrlAction::sendIM(slurl);
+}
+
+void LLScrollListCtrl::addFriend(std::string id)
+{
+	// add resident to friends list
+	std::string slurl = "secondlife:///app/agent/" + id + "/about";
+	LLUrlAction::addFriend(slurl);
+}
+
+void LLScrollListCtrl::showNameDetails(std::string id, bool is_group)
+{
+	// open the resident's details or the group details
 	std::string sltype = is_group ? "group" : "agent";
 	std::string slurl = "secondlife:///app/" + sltype + "/" + id + "/about";
 	LLUrlAction::clickAction(slurl);
@@ -1957,7 +1972,7 @@ void LLScrollListCtrl::copyNameToClipboard(std::string id, bool is_group)
 	{
 		LLAvatarName av_name;
 		LLAvatarNameCache::get(LLUUID(id), &av_name);
-		name = av_name.getLegacyName();
+		name = av_name.getAccountName();
 	}
 	LLUrlAction::copyURLToClipboard(name);
 }
@@ -2061,6 +2076,8 @@ LLScrollListItem* LLScrollListCtrl::hitItem( S32 x, S32 y )
 		mLineHeight );
 
 	// allow for partial line at bottom
+	// <FS:KC> Show partial bottom lines on LLScrollListCtrl when list is >1 page long
+	//S32 num_page_lines = getLinesPerPage();
 	S32 num_page_lines = getLinesPerPage() + 1;
 
 	S32 line = 0;

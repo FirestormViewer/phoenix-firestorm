@@ -459,6 +459,10 @@ BOOL LLFloaterModelPreview::postBuild()
 
 	childSetCommitCallback("import_scale", onImportScaleCommit, this);
 	childSetCommitCallback("pelvis_offset", onPelvisOffsetCommit, this);
+	// <FS:CR> Qarl's mesh deformer
+	childSetCommitCallback("deform", onDeformCommit, this);
+	childSetCommitCallback("deform_base", onDeformCommit, this);
+	// </FS:CR>
 
 	getChild<LLCheckBoxCtrl>("show_edges")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
 	getChild<LLCheckBoxCtrl>("show_physics")->setCommitCallback(boost::bind(&LLFloaterModelPreview::onViewOptionChecked, this, _1));
@@ -468,6 +472,13 @@ BOOL LLFloaterModelPreview::postBuild()
 
 	childDisable("upload_skin");
 	childDisable("upload_joints");
+	// <FS:CR> Qarls' mesh deformer
+	childDisable("deform");
+	childDisable("deform_base");
+	
+	// initialize base radio buttons
+	getChild<LLUICtrl>("deform_base")->setValue(LLSD(0));
+	// </FS:CR>
 
 	initDecompControls();
 
@@ -695,6 +706,25 @@ void LLFloaterModelPreview::onPelvisOffsetCommit( LLUICtrl*, void* userdata )
 
 	fp->mModelPreview->refresh();
 }
+
+// <FS:CR> Qarl's mesh deformer
+//static
+void LLFloaterModelPreview::onDeformCommit( LLUICtrl*, void* userdata )
+{
+	LLFloaterModelPreview *fp =(LLFloaterModelPreview*)userdata;
+	
+	if (!fp->mModelPreview)
+	{
+		return;
+	}
+	
+	fp->mModelPreview->mDirty = true;
+	
+	fp->toggleCalculateButton(true);
+	
+	fp->mModelPreview->refresh();
+}
+// </FS:CR>
 
 //static
 void LLFloaterModelPreview::onUploadJointsCommit(LLUICtrl*,void* userdata)
@@ -3264,6 +3294,45 @@ LLModelPreview::~LLModelPreview()
 	//glodShutdown();
 }
 
+// <FS:CR> Qarl's mesh deformer
+// map the base deformation type to it's corresponding LLSD
+// if a person wanted to add standard sizing parameters, here
+// is where they'd do it.
+LLSD deformation_parameters(BOOL deform, S32 base_type)
+{
+	
+	if (!deform)
+		return LLSD();
+	
+	LLSD parameters;
+	
+	parameters = LLSD::emptyMap();
+	parameters["version"] = 1;
+	parameters["visual_params"] = LLSD::emptyMap();
+	
+	if (base_type == 0) // male
+	{
+		parameters["visual_params"]["male"] = 1.0f;
+	}
+	
+	if (base_type == 1) // female
+	{
+		// female base needs no modifications
+	}
+	
+	// example stub for how one might implement standard sizing parameters
+	if (base_type == 2) // male - scrawny
+	{
+		parameters["visual_params"]["male"] = 1.0f;
+		parameters["visual_params"]["Love_Handles"] = -1.0f;
+		parameters["visual_params"]["Leg Muscles"] = 0.0f;
+
+	}
+	
+	return parameters;
+}
+// </FS:CR>
+
 U32 LLModelPreview::calcResourceCost()
 {
 	assert_main_thread();
@@ -3286,6 +3355,7 @@ U32 LLModelPreview::calcResourceCost()
 
 	F32 debug_scale = mFMP ? mFMP->childGetValue("import_scale").asReal() : 1.f;
 	mPelvisZOffset = mFMP ? mFMP->childGetValue("pelvis_offset").asReal() : 3.0f;
+	BOOL deform = mFMP ? mFMP->childGetValue("deform").asBoolean() : FALSE;	// <FS:CR> Qarl's mesh deformer
 	
 	if ( mFMP && mFMP->childGetValue("upload_joints").asBoolean() )
 	{
@@ -3307,12 +3377,16 @@ U32 LLModelPreview::calcResourceCost()
 			instance.mLOD[LLModel::LOD_PHYSICS]->mPhysics :
 			instance.mModel->mPhysics;
 			
-			//update instance skin info for each lods pelvisZoffset 
+			//update instance skin info for each lods pelvisZoffset and deform
 			for ( int j=0; j<LLModel::NUM_LODS; ++j )
 			{	
 				if ( instance.mLOD[j] )
 				{
 					instance.mLOD[j]->mSkinInfo.mPelvisOffset = mPelvisZOffset;
+					// <FS:CR> Qarl's mesh deformer
+					instance.mLOD[j]->mSkinInfo.mDeform = 
+						deformation_parameters(deform, mFMP->childGetValue("deform_base").asInteger());
+					// </FS:CR>
 				}
 			}
 
@@ -5110,6 +5184,7 @@ BOOL LLModelPreview::render()
 	bool has_skin_weights = false;
 	bool upload_skin = mFMP->childGetValue("upload_skin").asBoolean();	
 	bool upload_joints = mFMP->childGetValue("upload_joints").asBoolean();
+	bool deform = mFMP->childGetValue("deform").asBoolean();	// <FS:CR> Qarl's mesh deformer
 
 	if ( upload_joints != mLastJointUpdate )
 	{
@@ -5137,11 +5212,21 @@ BOOL LLModelPreview::render()
 			fmp->enableViewOption("show_skin_weight");
 			fmp->setViewOptionEnabled("show_joint_positions", skin_weight);	
 			mFMP->childEnable("upload_skin");
+			// <FS:CR> Qarl's mesh deformer
+			mFMP->childEnable("deform");
+			mFMP->childEnable("deform_base");
+			// </FS:CR>
+			
 		}
 	}
 	else
 	{
 		mFMP->childDisable("upload_skin");
+		// <FS:CR> Qarl's mesh deformer
+		mFMP->childDisable("deform");
+		mFMP->childDisable("deform_base");
+		// </FS:CR>
+		
 		if (fmp)
 		{
 			mViewOption["show_skin_weight"] = false;
@@ -5163,11 +5248,25 @@ BOOL LLModelPreview::render()
 		upload_joints = false;		
 	}	
 		
+	// <FS:CR> Qarl's mesh deformer
+	if (!upload_skin && deform)
+	{ // can't deform if model has no skin weights
+		mFMP->childSetValue("deform", false);
+		deform = false;
+	}
+	// </FS:CR>
+		
 	//Only enable joint offsets if it passed the earlier critiquing
 	if ( isRigValidForJointPositionUpload() )  
 	{
 		mFMP->childSetEnabled("upload_joints", upload_skin);
 	}
+
+	// <FS:CR> Qarl's mesh deformer
+	// Only enable deform if skins are enabled
+	mFMP->childSetEnabled("deform", upload_skin);
+	mFMP->childSetEnabled("deform_base", upload_skin);
+	// </FS:CR>
 
 	F32 explode = mFMP->childGetValue("physics_explode").asReal();
 

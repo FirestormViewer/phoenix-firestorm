@@ -56,12 +56,12 @@
 	</menu>
 	<menu label="Comunicarme" name="Communicate">
 		<menu label="Estado" name="Status">
-			<menu_item_check label="Ausente" name="Set Away"/>
+			<menu_item_check label="Ausente" name="Away"/>
+			<menu_item_check label="No disponible" name="Do Not Disturb"/>
 			<menu_item_check label="Autorresponder" name="Set Autorespond"/>
 			<menu_item_check label="Autorresponder a no-amigos" name="Set Autorespond to non-friends"/>
-			<menu_item_check label="Ocupado" name="Set Busy"/>
 		</menu>
-		<menu_item_call label="Amigos" name="My Friends"/>
+		<menu_item_check label="Amigos" name="My Friends"/>
 		<menu_item_check label="Contactos" name="Contacts"/>
 		<menu_item_check label="Grupos de contactos" name="Contact Sets"/>
 		<menu_item_call label="Grupos" name="My Groups"/>
@@ -69,7 +69,12 @@
 		<menu_item_check label="Gente" name="People"/>
 		<menu_item_check label="Conversaciones" name="Conversations"/>
 		<menu_item_check label="Gestos" name="Gestures"/>
-		<menu_item_check label="Filtros de voz" name="ShowVoice"/>
+		<menu label="Filtro de voz" name="VoiceMorphing">
+			<menu_item_check label="Sin filtro de voz" name="NoVoiceMorphing"/>
+			<menu_item_check label="Probar..." name="Preview"/>
+			<menu_item_call label="Suscribir..." name="Subscribe"/>
+		</menu>
+		<menu_item_check name="Conversation Log..." label="Registro de conversaciones..."/>
 		<menu_item_check label="Chat de voz" name="Nearby Voice"/>
 		<menu_item_call label="Lista de bloqueados" name="Block List"/>
 	</menu>
@@ -153,7 +158,6 @@
 			<menu_item_call label="Tomar una copia" name="Take Copy"/>
 			<menu_item_call label="Duplicar" name="Duplicate"/>
 			<menu_item_call label="Editar partículas" name="Menu Object Edit Particles"/>
-			<menu_item_call label="Guardar una copia en mi inventario" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Guardar una copia en los contenidos del objeto del que salió" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Devolver objeto" name="Return Object back to Owner"/>
 		</menu>
@@ -171,7 +175,7 @@
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Personajes..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Ver/probar..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Actualizar región" name="pathfinding_rebake_navmesh_item"/>
+			<menu_item_call label="Recargar la región" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Opciones" name="Options">
 			<menu_item_check label="Mostrar los permisos avanzados" name="DebugPermissions"/>
@@ -210,9 +214,22 @@
 	<menu label="Ayuda" name="Help">
 		<menu_item_check label="Mostrar consejos" name="Enable Hints"/>
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Solución de problemas" name="Troubleshooting"/>
 		<menu_item_call label="Unirse al Grupo de Soporte de Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Ayuda de [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Acerca de [CURRENT_GRID]" name="current_grid_about"/>
+		<menu_item_call label="Tutorial" name="Tutorial"/>
+		<menu_item_call label="Guía de usuario" name="User’s guide"/>
+		<menu_item_call label="Base de conocimiento" name="Knowledge Base"/>
+		<menu_item_call label="Wiki" name="Wiki">
+			<menu_item_call.on_click  parameter="http://wiki.secondlife.com/wiki/Main_Page/es"/>
+		</menu_item_call>
+		<menu_item_call label="Foros de la Comunidad" name="Community Forums"/>
+		<menu_item_call label="Portal de soporte" name="Support portal">
+			<menu_item_call.on_click parameter="https://support.secondlife.com/?lang=es"/>
+		</menu_item_call>
+		<menu_item_call label="Noticias de [SECOND_LIFE]" name="Second Life News"/>
+		<menu_item_call label="Blogs de [SECOND_LIFE]" name="Second Life Blogs"/>
 		<menu_item_call label="Estado de la red" name="Grid Status"/>
 		<menu_item_call label="Denunciar una infracción" name="Report Abuse"/>
 		<menu_item_call label="Informar de un fallo" name="Report Bug"/>
@@ -343,8 +360,8 @@
 			<menu_item_check label="¡Galletas!" name="Cookies"/>
 		</menu>
 		<menu label="Mostrar información" name="Display Info">
-			<menu_item_check label="Tiempo" name="Show Time"/>
-			<menu_item_check label="Coste de subida" name="Show Upload Cost"/>
+			<menu_item_check label="Hora" name="Show Time"/>
+			<menu_item_check label="Transacción de subida" name="Show Upload Transaction"/>
 			<menu_item_check label="Información de textura" name="Show Texture Info"/>
 			<menu_item_check label="Información de dibujo" name="Show Render Info"/>
 			<menu_item_check label="Mostrar matrices" name="Show Matrices"/>
@@ -368,6 +385,7 @@
 			<menu_item_check label="Aleatorizar imágenes por segundo" name="Randomize Framerate"/>
 			<menu_item_check label="Imagen lenta periódica" name="Periodic Slow Frame"/>
 			<menu_item_check label="Test de imagen" name="Frame Test"/>
+			<menu_item_call label="Perfil de imagen" name="Frame Profile"/>
 		</menu>
 		<menu label="Metadatos de dibujo" name="Render Metadata">
 			<menu_item_check label="Cajas de dimensionado" name="Bounding Boxes"/>
@@ -404,9 +422,10 @@
 			<menu_item_check label="Ejes" name="Axes"/>
 			<menu_item_check label="Base tangente" name="Tangent Basis"/>
 			<menu_item_check label="Información base de textura de lo seleccionado" name="Selected Texture Info Basis"/>
+			<menu_item_call label="Información del material seleccionado" name="Selected Material Info"/>
 			<menu_item_check label="Wireframe" name="Wireframe"/>
 			<menu_item_check label="Oclusión objeto-objeto" name="Object-Object Occlusion"/>
-			<menu_item_check label="Modelo avanzado de iluminación" name="Lighting and Shadows"/>
+			<menu_item_check label="Modelo avanzado de iluminación" name="Advanced Lighting Model"/>
 			<menu_item_check label="Sombras del sol/la luna/proyectores" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO y suavizado de sombras" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Iluminación global (experimental)" name="Global Illumination"/>
@@ -417,7 +436,6 @@
 			<menu_item_check label="Texturas de animación" name="Animation Textures"/>
 			<menu_item_check label="Desactivar texturas" name="Disable Textures"/>
 			<menu_item_check label="Texturas a resolución completa (peligroso)" name="Full Res Textures"/>
-			<menu_item_check label="Atlas de texturas (experimental)" name="Texture Atlas"/>
 			<menu_item_check label="Representar luces anexadas" name="Render Attached Lights"/>
 			<menu_item_check label="Representar partículas anexadas" name="Render Attached Particles"/>
 			<menu_item_check label="Hover Glow Objects" name="Hover Glow Objects"/>
@@ -496,6 +514,9 @@
 				<menu_item_call label="Todas un 10% más lento" name="All Animations 10 Slower"/>
 				<menu_item_call label="Restablecer la velocidad de todas" name="Reset All Animation Speed"/>
 				<menu_item_check label="Cámara lenta" name="Slow Motion Animations"/>
+			</menu>
+			<menu_item_call label="Force Params to Default" name="Force Params to Default"/>
+			<menu_item_check label="Animation Info" name="Animation Info"/>
 			</menu>
 			<menu_item_call label="Forzar parámetros por defecto" name="Force Params to Default"/>
 			<menu_item_check label="Información de animación" name="Animation Info"/>

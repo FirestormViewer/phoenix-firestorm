@@ -24,11 +24,13 @@
  * $/LicenseInfo$
  */
 
-// Original file: FSChatHistory.cpp
+// Original file: LLChatHistory.cpp
 
 #include "llviewerprecompiledheaders.h"
 
 #include "fschathistory.h"
+
+#include <boost/signals2.hpp>
 
 #include "llavatarnamecache.h"
 #include "llinstantmessage.h"
@@ -58,6 +60,7 @@
 #include "llworld.h"
 #include "lluiconstants.h"
 #include "llstring.h"
+#include "llurlaction.h"
 #include "llviewercontrol.h"
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
 #include "rlvcommon.h"
@@ -69,8 +72,9 @@
 // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 #include "llfocusmgr.h"
 #include "llkeyboard.h"
-#include "lllineeditor.h"
+#include "llchatentry.h"
 // </FS:Zi>
+#include "llpanelblockedlist.h"
 
 static LLDefaultChildRegistry::Register<FSChatHistory> r("fs_chat_history");
 
@@ -78,6 +82,22 @@ const static std::string NEW_LINE(rawstr_to_utf8("\n"));
 
 const static std::string SLURL_APP_AGENT = "secondlife:///app/agent/";
 const static std::string SLURL_ABOUT = "/about";
+
+// <FS:CR> Moved this to a small function
+std::string prefixIM(std::string from, const LLChat& chat)
+{
+	if (chat.mChatType == CHAT_TYPE_IM)
+	{
+		from = LLTrans::getString("IMPrefix") + from;
+	}
+	else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+	{
+		from = LLTrans::getString("IMPrefix") + chat.mFromNameGroup + from;
+	}
+	
+	return from;
+}
+// </FS:CR>
 
 // support for secondlife:///app/objectim/{UUID}/ SLapps
 class LLObjectIMHandler : public LLCommandHandler
@@ -134,7 +154,8 @@ public:
 		mMinUserNameWidth(0),
 		mUserNameFont(NULL),
 		mUserNameTextBox(NULL),
-		mTimeBoxTextBox(NULL)
+		mTimeBoxTextBox(NULL),
+		mAvatarNameCacheConnection()
 	{}
 
 	static FSChatHistoryHeader* createInstance(const std::string& file_name)
@@ -148,6 +169,11 @@ public:
 	{
 		// Detach the info button so that it doesn't get destroyed (EXT-8463).
 		hideInfoCtrl();
+
+		if (mAvatarNameCacheConnection.connected())
+		{
+			mAvatarNameCacheConnection.disconnect();
+		}
 	}
 
 	BOOL handleMouseUp(S32 x, S32 y, MASK mask)
@@ -166,18 +192,17 @@ public:
 		else if (level == "block")
 		{
 			LLMuteList::getInstance()->add(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
-
-			// <FS:Ansariel> Optional standalone blocklist floater
-			//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with("blocked_to_select", getAvatarId()));
-			if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-			{
-				LLFloaterReg::showInstance("fs_blocklist", LLSD().with("blocked_to_select", getAvatarId()));
-			}
-			else
-			{
-				LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with("blocked_to_select", getAvatarId()));
-			}
-			// </FS:Ansariel>
+			LLPanelBlockedList::showPanelAndSelect(getAvatarId());
+		}
+		else if (level == "map")
+		{
+			std::string url = "secondlife://" + mObjectData["slurl"].asString();
+			LLUrlAction::showLocationOnMap(url);
+		}
+		else if (level == "teleport")
+		{
+			std::string url = "secondlife://" + mObjectData["slurl"].asString();
+			LLUrlAction::teleportToLocation(url);
 		}
 	}
 
@@ -268,7 +293,6 @@ public:
 		{
 			LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
 		}
-		//else if (mSourceType == CHAT_SOURCE_AGENT)
 		else if (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		{
 			LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", mAvatarID));
@@ -320,7 +344,7 @@ public:
 			updateMinUserNameWidth();
 		}
 		else if (mSourceType == CHAT_SOURCE_AGENT
-//				 && !mAvatarID.isNull()
+				 && !mAvatarID.isNull()
 				 && chat.mChatStyle != CHAT_STYLE_HISTORY)
 		{
 			// ...from a normal user, lookup the name and fill in later.
@@ -330,31 +354,17 @@ public:
 			// Start with blank so sample data from XUI XML doesn't
 			// flash on the screen
 //			user_name->setValue( LLSD() );
-//			LLAvatarNameCache::get(mAvatarID,
-//				boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+//			fetchAvatarName(chat);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 			if (!chat.mRlvNamesFiltered)
 			{
 				user_name->setValue( LLSD() );
-				LLAvatarNameCache::get(mAvatarID,
-					boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType, chat.mFromNameGroup)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-					//boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
+				fetchAvatarName(chat);
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
-				mFrom = chat.mFromName;
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-				//if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				if (chat.mChatType == CHAT_TYPE_IM)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				}
-				else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mFrom;
-				}
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				mFrom = prefixIM(chat.mFromName, chat);	// <FS:CR> Prefix im's and group chats for the console
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
@@ -374,43 +384,13 @@ public:
 			{
 				mFrom = chat.mFromName.substr(0, username_start);
 				user_name->setValue(mFrom);
-				
-				//-TT 2.6.9 - old style headers removed in FS?
-				/*
-				if (gSavedSettings.getBOOL("NameTagShowUsernames"))
-				{
-					std::string username = chat.mFromName.substr(username_start + 2);
-					username = username.substr(0, username.length() - 1);
-					LLStyle::Params style_params_name;
-					LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
-					style_params_name.color(userNameColor);
-					style_params_name.font.name("SansSerifSmall");
-					style_params_name.font.style("NORMAL");
-					style_params_name.readonly_color(userNameColor);
-					user_name->appendText("  - " + username, FALSE, style_params_name);
-				}
-				*/
-				//LLAvatarNameCache::get(mAvatarID, boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
-				LLAvatarNameCache::get(mAvatarID, boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType, chat.mFromNameGroup)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-				//if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				if (chat.mChatType == CHAT_TYPE_IM)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-				}
-				else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-				{
-					mFrom = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mFrom;
-				}
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				mFrom = prefixIM(mFrom, chat);
 				user_name->setValue(mFrom);
-				user_name->setToolTip(mFrom);
-				setToolTip(mFrom);
 				updateMinUserNameWidth();
 			}
 // [/RLVa:KB]
@@ -430,8 +410,7 @@ public:
 		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
 		
 		// Hacky preference to hide avatar icons for people who don't like them by overdrawing them. Will change to disable soon. -AO
-		bool display_mini_icon = gSavedSettings.getBOOL("ShowChatMiniIcons");
-		if (!display_mini_icon)
+		if (!gSavedSettings.getBOOL("ShowChatMiniIcons"))
 		{
 			icon->setColor(LLUIColorTable::instance().getColor("Transparent"));
 		}
@@ -507,16 +486,7 @@ public:
 		S32 user_name_width = user_name_rect.getWidth();
 		S32 time_box_width = time_box->getRect().getWidth();
 
-		if (time_box->getVisible() && user_name_width <= mMinUserNameWidth)
-		{
-			time_box->setVisible(FALSE);
-
-			user_name_rect.mRight += time_box_width;
-			user_name->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
-			user_name->setRect(user_name_rect);
-		}
-
-		if (!time_box->getVisible() && user_name_width > mMinUserNameWidth + time_box_width)
+		if (!time_box->getVisible() && user_name_width > mMinUserNameWidth)
 		{
 			user_name_rect.mRight -= time_box_width;
 			user_name->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
@@ -536,46 +506,6 @@ public:
 			const LLWString& text = user_name->getWText();
 			mMinUserNameWidth = mUserNameFont->getWidth(text.c_str()) + PADDING;
 		}
-	}
-
-// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-	//void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type)
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type, std::string& group)
-	{
-		//mFrom = av_name.mDisplayName;
-		//mFrom = av_name.mDisplayName;
-		//if (chat_type == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
-		mFrom = "";
-		if (chat_type == CHAT_TYPE_IM || chat_type == CHAT_TYPE_IM_GROUP)
-		{
-			mFrom = LLTrans::getString("IMPrefix") + " ";
-			if(group != "")
-			{
-				mFrom += group;
-			}
-		}
-		mFrom += av_name.mDisplayName;
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-
-		LLTextBox* user_name = getChild<LLTextBox>("user_name");
-		user_name->setValue( LLSD(mFrom) );
-		user_name->setToolTip( av_name.mUsername );
-
-		if (gSavedSettings.getBOOL("NameTagShowUsernames") && 
-			LLAvatarNameCache::useDisplayNames() ) //&&
-//			!av_name.mIsDisplayNameDefault)
-		{
-			LLStyle::Params style_params_name;
-			LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
-			style_params_name.color(userNameColor);
-			style_params_name.font.name("SansSerifSmall");
-			style_params_name.font.style("NORMAL");
-			style_params_name.readonly_color(userNameColor);
-			user_name->appendText("  - " + av_name.mUsername, FALSE, style_params_name);
-		}
-		setToolTip( av_name.mUsername );
-		// name might have changed, update width
-		updateMinUserNameWidth();
 	}
 
 protected:
@@ -712,6 +642,55 @@ private:
 		user_name->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
 	}
 
+	void fetchAvatarName(const LLChat& chat)
+	{
+		if (mAvatarID.notNull())
+		{
+			if (mAvatarNameCacheConnection.connected())
+			{
+				mAvatarNameCacheConnection.disconnect();
+			}
+			mAvatarNameCacheConnection = LLAvatarNameCache::get(mAvatarID,
+				boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType, chat.mFromNameGroup)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		}
+	}
+
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type, std::string& group)
+	{
+		mAvatarNameCacheConnection.disconnect();
+		mFrom = "";
+		if (chat_type == CHAT_TYPE_IM || chat_type == CHAT_TYPE_IM_GROUP)
+		{
+			mFrom = LLTrans::getString("IMPrefix");
+			if(!group.empty())
+			{
+				mFrom.append(group);
+			}
+		}
+		mFrom.append(av_name.getDisplayName());
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		
+		LLTextBox* user_name = getChild<LLTextBox>("user_name");
+		user_name->setValue( LLSD(mFrom) );
+		user_name->setToolTip( av_name.getUserName() );
+
+		if (gSavedSettings.getBOOL("NameTagShowUsernames") &&
+			av_name.useDisplayNames() &&
+			!av_name.isDisplayNameDefault())
+		{
+			LLStyle::Params style_params_name;
+			LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
+			style_params_name.color(userNameColor);
+			style_params_name.font.name("SansSerifSmall");
+			style_params_name.font.style("NORMAL");
+			style_params_name.readonly_color(userNameColor);
+			user_name->appendText("  - " + av_name.getUserName(), false, style_params_name);
+		}
+		setToolTip( av_name.getUserName() );
+		// name might have changed, update width
+		updateMinUserNameWidth();
+	}
+
 protected:
 	LLHandle<LLView>	mPopupMenuHandleAvatar;
 	LLHandle<LLView>	mPopupMenuHandleObject;
@@ -725,20 +704,22 @@ protected:
 	std::string			mFrom;
 	LLUUID				mSessionID;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-	bool                mShowContextMenu;
-	bool                mShowInfoCtrl;
+	bool				mShowContextMenu;
+	bool				mShowInfoCtrl;
 // [/RLVa:KB]
 
 	S32					mMinUserNameWidth;
 	const LLFontGL*		mUserNameFont;
 	LLTextBox*			mUserNameTextBox;
 	LLTextBox*			mTimeBoxTextBox; 
+
+private:
+	boost::signals2::connection mAvatarNameCacheConnection;
 };
 
 LLUICtrl* FSChatHistoryHeader::sInfoCtrl = NULL;
 
 FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
-// :	LLUICtrl(p),	// <FS:Zi> FIRE-8600: TAB out of chat history
 :	LLTextEditor(p),	// <FS:Zi> FIRE-8600: TAB out of chat history
 	mMessageHeaderFilename(p.message_header),
 	mMessageSeparatorFilename(p.message_separator),
@@ -751,18 +732,17 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 	mTopHeaderPad(p.top_header_pad),
 	mBottomHeaderPad(p.bottom_header_pad),
 	mChatInputLine(NULL),	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
-	mIsLastMessageFromLog(false)
+	mIsLastMessageFromLog(false),
+	mNotifyAboutUnreadMsg(p.notify_unread_msg)
 {
-	// <FS:Zi> FIRE-8600: TAB out of chat history
-	// LLTextEditor::Params editor_params(p);
-	// editor_params.line_spacing.pixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
-	// editor_params.rect = getLocalRect();
-	// editor_params.follows.flags = FOLLOWS_ALL;
-	// editor_params.enabled = false; // read only
-	// editor_params.show_context_menu = "true";
-	// mEditor = LLUICtrlFactory::create<LLTextEditor>(editor_params, this);
 	mLineSpacingPixels=llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"),0,36);
-	// </FS:Zi>
+}
+
+LLSD FSChatHistory::getValue() const
+{
+  LLSD* text=new LLSD(); 
+  text->assign(getText());
+  return *text;
 }
 
 FSChatHistory::~FSChatHistory()
@@ -772,80 +752,14 @@ FSChatHistory::~FSChatHistory()
 
 void FSChatHistory::initFromParams(const FSChatHistory::Params& p)
 {
-// <FS:Zi> FIRE-8600: TAB out of chat history
-// 	static LLUICachedControl<S32> scrollbar_size ("UIScrollbarSize", 0);
-// 
-// 	LLRect stack_rect = getLocalRect();
-// 	stack_rect.mRight -= scrollbar_size;
-// 	LLLayoutStack::Params layout_p;
-// 	layout_p.rect = stack_rect;
-// 	layout_p.follows.flags = FOLLOWS_ALL;
-// 	layout_p.orientation = LLLayoutStack::VERTICAL;
-// 	layout_p.mouse_opaque = false;
-// 	layout_p.tab_group = 1;
-// 	
-// 	LLLayoutStack* stackp = LLUICtrlFactory::create<LLLayoutStack>(layout_p, this);
-// 	
-// 	const S32 NEW_TEXT_NOTICE_HEIGHT = 20;
-// 	
-// 	LLLayoutPanel::Params panel_p;
-// 	panel_p.name = "spacer";
-// 	panel_p.background_visible = false;
-// 	panel_p.has_border = false;
-// 	panel_p.mouse_opaque = false;
-// 	panel_p.min_dim = 30;
-// 	panel_p.auto_resize = true;
-// 	panel_p.user_resize = false;
-// 	panel_p.tab_group = 1;
-// 	panel_p.tab_stop = true;
-// 
-// 	stackp->addPanel(LLUICtrlFactory::create<LLLayoutPanel>(panel_p), LLLayoutStack::ANIMATE);
-// 
-// 	panel_p.name = "new_text_notice_holder";
-// 	LLRect new_text_notice_rect = getLocalRect();
-// 	new_text_notice_rect.mTop = new_text_notice_rect.mBottom + NEW_TEXT_NOTICE_HEIGHT;
-// 	panel_p.rect = new_text_notice_rect;
-// 	panel_p.background_opaque = true;
-// 	panel_p.background_visible = true;
-// 	panel_p.visible = false;
-// 	panel_p.min_dim = 0;
-// 	panel_p.auto_resize = false;
-// 	panel_p.user_resize = false;
-// 	mMoreChatPanel = LLUICtrlFactory::create<LLLayoutPanel>(panel_p);
-// 	
-// 	LLTextBox::Params text_p(p.more_chat_text);
-// 	text_p.rect = mMoreChatPanel->getLocalRect();
-// 	text_p.follows.flags = FOLLOWS_ALL;
-// 	text_p.name = "more_chat_text";
-// 	mMoreChatText = LLUICtrlFactory::create<LLTextBox>(text_p, mMoreChatPanel);
-// 	mMoreChatText->setClickedCallback(boost::bind(&FSChatHistory::onClickMoreText, this));
-// 
-// 	stackp->addPanel(mMoreChatPanel, LLLayoutStack::ANIMATE);
-
 	// initialize the LLTextEditor base class first ... -Zi
 	LLTextEditor::initFromParams(p);
-	// then set up these properties, because otherwise they would get lost when we
-	// do this in the constructor only -Zi
+	/// then set up these properties, because otherwise they would get lost when we
+	/// do this in the constructor only -Zi
 	setEnabled(false);
 	setReadOnly(true);
 	setShowContextMenu(true);
 }
-// </FS:Zi>
-
-/*void FSChatHistory::updateTextRect()
-{
-	static LLUICachedControl<S32> texteditor_border ("UITextEditorBorder", 0);
-
-	LLRect old_text_rect = mVisibleTextRect;
-	mVisibleTextRect = mScroller->getContentWindowRect();
-	mVisibleTextRect.stretch(-texteditor_border);
-	mVisibleTextRect.mLeft += mLeftTextPad;
-	mVisibleTextRect.mRight -= mRightTextPad;
-	if (mVisibleTextRect != old_text_rect)
-	{
-		needsReflow();
-	}
-}*/
 
 LLView* FSChatHistory::getSeparator()
 {
@@ -860,111 +774,92 @@ LLView* FSChatHistory::getHeader(const LLChat& chat,const LLStyle::Params& style
 	return header;
 }
 
-// <FS:Zi> FIRE-8600: TAB out of chat history
-// void FSChatHistory::onClickMoreText()
-// {
-// 	mEditor->endOfDoc();
-// }
-// </FS:Zi>
-
 void FSChatHistory::clear()
 {
 	mLastFromName.clear();
 	// workaround: Setting the text to an empty line before clear() gets rid of
 	// the scrollbar, if present, which otherwise would get stuck until the next
 	// line was appended. -Zi
-	// mEditor->setText(std::string(" \n"));	// <FS:Zi> FIRE-8600: TAB out of chat history
 	setText(std::string(" \n"));	// <FS:Zi> FIRE-8600: TAB out of chat history
-	// mEditor->clear();	// <FS:Zi> FIRE-8600: TAB out of chat history
 	mLastFromID = LLUUID::null;
 }
 
-static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
-
-void FSChatHistory::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+enum e_moderation_options
 {
-	mDisplayName = av_name.mDisplayName;
-	mDisplayName_Username = av_name.getCompleteName();
+	NORMAL = 0,
+	BOLD = 1,
+	ITALIC = 2,
+	BOLD_ITALIC = 3,
+	UNDERLINE = 4,
+	BOLD_UNDERLINE = 5,
+	ITALIC_UNDERLINE = 6,
+	BOLD_ITALIC_UNDERLINE = 7
+};
+
+std::string applyModeratorStyle(U32 moderator_style)
+{	
+	std::string style;
+	switch (moderator_style)
+	{
+		case BOLD:
+			style = "BOLD";
+			break;
+		case ITALIC:
+			style = "ITALIC";
+			break;
+		case BOLD_ITALIC:
+			style = "BOLDITALIC";
+			break;
+		case UNDERLINE:
+			style = "UNDERLINE";
+			break;
+		case BOLD_UNDERLINE:
+			style = "BOLDUNDERLINE";
+			break;
+		case ITALIC_UNDERLINE:
+			style = "ITALICUNDERLINE";
+			break;
+		case BOLD_ITALIC_UNDERLINE:
+			style = "BOLDITALICUNDERLINE";
+			break;
+		case NORMAL:
+		default:
+			style = "NORMAL";
+			break;
+	}
+	return style;
 }
+
+static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
 
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
 	LLFastTimer _(FTM_APPEND_MESSAGE);
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
-	bool hide_timestamps_nearby_chat = args["hide_timestamps_nearby_chat"].asBoolean();
-	// AO: Do any display name lookups in plaintext chat headers as early as possible to give the cache maximal 
-	//time to get an answer back before it's needed.
-	if (use_plain_text_chat_history)
-	{
-		// make sure objects and agents always have at least something we can display as a name
-		mDisplayName=chat.mFromName;
-		mDisplayName_Username=chat.mFromName;
+	bool square_brackets = false; // square brackets necessary for a system messages
+	bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
+	bool is_conversation_log = args.has("conversation_log") && args["conversation_log"].asBoolean();	// <FS:CR> Don't dim chat in conversation log
 
-		// resolve display names if necessary		
-		if (chat.mSourceType == CHAT_SOURCE_AGENT && gSavedSettings.getBOOL("UseDisplayNames"))
-		{
-			LLAvatarNameCache::get(chat.mFromID,boost::bind(&FSChatHistory::onAvatarNameCache, this, _1, _2));
-		}
-	}
-	
-	// <FS:Zi> FIRE-8600: TAB out of chat history
-	// llassert(mEditor);
-	// if (!mEditor)
-	// {
-	// 	return;
-	// }
-	// </FS:Zi>
-
-	// mEditor->setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
+	bool from_me = chat.mFromID == gAgent.getID();
 	setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
-	/* This system in incompatible with vertical tabs, the firestorm default.
-	 * disabling until we can find a way to make it work without overdrawing text
-	 * or requiring a large otherwised unused gap in the XUI.
-	 *
-	 
-	if (!mEditor->scrolledToEnd() && chat.mFromID != gAgent.getID() && !chat.mFromName.empty())
-	{
-		mUnreadChatSources.insert(chat.mFromName);
-		mMoreChatPanel->setVisible(TRUE);
-		std::string chatters;
-		for (unread_chat_source_t::iterator it = mUnreadChatSources.begin();
-			it != mUnreadChatSources.end();)
-		{
-			chatters += *it;
-			if (++it != mUnreadChatSources.end())
-			{
-				chatters += ", ";
-			}
-		}
-		LLStringUtil::format_map_t args;
-		args["SOURCES"] = chatters;
-
-		if (mUnreadChatSources.size() == 1)
-		{
-			mMoreChatText->setValue(LLTrans::getString("unread_chat_single", args));
-		}
-		else
-		{
-			mMoreChatText->setValue(LLTrans::getString("unread_chat_multiple", args));
-		}
-		S32 height = mMoreChatText->getTextPixelHeight() + 5;
-		mMoreChatPanel->reshape(mMoreChatPanel->getRect().getWidth(), height);
-	}
-	*/
-
 	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
-	LLColor4 header_name_color = LLUIColorTable::instance().getColor("ChatNameColor");
-	LLViewerChat::getChatColor(chat,txt_color,false);
-	LLFontGL* fontp = LLViewerChat::getChatFont();	
+	LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
+	LLViewerChat::getChatColor(chat,txt_color);
+	LLFontGL* fontp = LLViewerChat::getChatFont();
 	std::string font_name = LLFontGL::nameFromFont(fontp);
-	std::string font_size = LLFontGL::sizeFromFont(fontp);	
-	LLStyle::Params style_params;
-	style_params.color(txt_color);
-	style_params.readonly_color(txt_color);
-	style_params.font.name(font_name);
-	style_params.font.size(font_size);	
-	style_params.font.style(input_append_params.font.style);
+	std::string font_size = LLFontGL::sizeFromFont(fontp);
+
+	LLStyle::Params body_message_params;
+	body_message_params.color(txt_color);
+	body_message_params.readonly_color(txt_color);
+	body_message_params.font.name(font_name);
+	body_message_params.font.size(font_size);
+	body_message_params.font.style(input_append_params.font.style);
+
+	LLStyle::Params name_params(body_message_params);
+	name_params.color(name_color);
+	name_params.readonly_color(name_color);
 
 	std::string prefix = chat.mText.substr(0, 4);
 
@@ -979,7 +874,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
 	//IRC styled /me messages.
-	bool irc_me = prefix == "/me " || prefix == "/me'" || prefix == "/ME " || prefix == "/ME'";
+	bool irc_me = (prefix == "/me " || prefix == "/me'"
+	 || prefix == "/ME " || prefix == "/ME'");	// <FS>
 
 	// Delimiter after a name in header copy/past and in plain text mode
 	std::string delimiter = ": ";
@@ -1003,157 +899,100 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		// italics for emotes -Zi
 		if(gSavedSettings.getBOOL("EmotesUseItalic"))
-			style_params.font.style = "ITALIC";
+			body_message_params.font.style = "ITALIC";
+	}
+
+	if (chat.mChatType == CHAT_TYPE_WHISPER && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
+	{
+			body_message_params.font.style = "ITALIC";
+	}
+	else if(chat.mChatType == CHAT_TYPE_SHOUT && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
+	{
+			body_message_params.font.style = "BOLD";
 	}
 
 	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
 	// We graying out chat history by graying out messages that contains full date in a time string
-	if (message_from_log)
+	if (message_from_log && !is_conversation_log)
 	{
-		style_params.color(LLColor4::grey);
-		style_params.readonly_color(LLColor4::grey);
+		txt_color = LLColor4::grey;
+		body_message_params.color(txt_color);
+		body_message_params.readonly_color(txt_color);
+		name_params.color(txt_color);
+		name_params.readonly_color(txt_color);
 	}
-	
+
 	//<FS:HG> FS-1734 seperate name and text styles for moderator
-
-	// Bold group moderators' chat -KC 
-	//if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
-	//{
-	//	// italics for emotes -Zi
-	//	style_params.font.style = (irc_me && gSavedSettings.getBOOL("EmotesUseItalic")) ? "ITALICBOLD" : "BOLD";
-	//}
 	bool moderator_style_active = false;
-	std::string moderator_name_style = "";
-	std::string moderator_txt_style = "";
 	U32 moderator_name_style_value = gSavedSettings.getU32("FSModNameStyle");
-	U32 moderator_txt_style_value = gSavedSettings.getU32("FSModTextStyle");
-
-	enum ModeratorOptions
-	{
-		NORMAL,
-		BOLD,
-		ITALIC,
-		BOLD_ITALIC,
-		UNDERLINE,
-		BOLD_UNDERLINE,
-		ITALIC_UNDERLINE,
-		BOLD_ITALIC_UNDERLINE
-	};
+	U32 moderator_body_style_value = gSavedSettings.getU32("FSModTextStyle");
+	std::string moderator_name_style = applyModeratorStyle(moderator_name_style_value);
+	std::string moderator_body_style = applyModeratorStyle(moderator_body_style_value);
 
 	if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
 	{
 		moderator_style_active = true;
 
-		switch (moderator_name_style_value)
-		{
-			case NORMAL:
-				moderator_name_style = "NORMAL";
-				break;
-			case BOLD:
-				moderator_name_style = "BOLD";
-				break;
-			case ITALIC:
-				moderator_name_style = "ITALIC";
-				break;
-			case BOLD_ITALIC:
-				moderator_name_style = "BOLDITALIC";
-				break;
-			case UNDERLINE:
-				moderator_name_style = "UNDERLINE";
-				break;
-			case BOLD_UNDERLINE:
-				moderator_name_style = "BOLDUNDERLINE";
-				break;
-			case ITALIC_UNDERLINE:
-				moderator_name_style = "ITALICUNDERLINE";
-				break;
-			case BOLD_ITALIC_UNDERLINE:
-				moderator_name_style = "BOLDITALICUNDERLINE";
-				break;
-			default:
-				moderator_name_style = "NORMAL";
-				break;
-		}
-		style_params.font.style(moderator_name_style);
-
-		switch (moderator_txt_style_value)
-		{
-			case NORMAL:
-				moderator_txt_style = "NORMAL";
-				break;
-			case BOLD:
-				moderator_txt_style = "BOLD";
-				break;
-			case ITALIC:
-				moderator_txt_style = "ITALIC";
-				break;
-			case BOLD_ITALIC:
-				moderator_txt_style = "BOLDITALIC";
-				break;
-			case UNDERLINE:
-				moderator_txt_style = "UNDERLINE";
-				break;
-			case BOLD_UNDERLINE:
-				moderator_txt_style = "BOLDUNDERLINE";
-				break;
-			case ITALIC_UNDERLINE:
-				moderator_txt_style = "ITALICUNDERLINE";
-				break;
-			case BOLD_ITALIC_UNDERLINE:
-				moderator_txt_style = "BOLDITALICUNDERLINE";
-				break;
-			default:
-				moderator_txt_style = "NORMAL";
-				break;
-		}
-		style_params.font.style(moderator_txt_style);
+		name_params.font.style(moderator_name_style);		
+		body_message_params.font.style(moderator_body_style);
 
 		if ( irc_me && gSavedSettings.getBOOL("EmotesUseItalic") )
 		{
 			if ( (ITALIC & moderator_name_style_value) != ITALIC )//HG: if ITALIC isn't one of the styles... add it
 			{
 				moderator_name_style += "ITALIC";
-				style_params.font.style(moderator_name_style);
+				body_message_params.font.style(moderator_name_style);
 			}
-			if ( (ITALIC & moderator_txt_style_value) != ITALIC )
+			if ( (ITALIC & moderator_body_style_value) != ITALIC )
 			{
-				moderator_txt_style += "ITALIC";
-				style_params.font.style(moderator_txt_style);
+				moderator_body_style += "ITALIC";
+				body_message_params.font.style(moderator_body_style);
 			}
-			style_params.font.style(moderator_txt_style);
+			body_message_params.font.style(moderator_body_style);
 		}
 	}
 	//</FS:HG> FS-1734 seperate name and text styles for moderator
 
+	bool prependNewLineState = getText().size() != 0;
+
+	// compact mode: show a timestamp and name
 	if (use_plain_text_chat_history)
 	{
-		LLStyle::Params timestamp_style(style_params);
-		if (!message_from_log)
+		square_brackets = (chat.mFromName == SYSTEM_FROM && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
+
+		LLStyle::Params timestamp_style(body_message_params);
+
+		// out of the timestamp
+		if (args["show_time"].asBoolean())
 		{
 			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
 			timestamp_style.color(timestamp_color);
 			timestamp_style.readonly_color(timestamp_color);
+			if (message_from_log && !is_conversation_log)
+			{
+				timestamp_style.color.alpha = FSIMChatHistoryFade;
+				timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
+			}
 			//<FS:HG> FS-1734 seperate name and text styles for moderator
 			if ( moderator_style_active )
 			{
 				timestamp_style.font.style(moderator_name_style);
 			}
 			//</FS:HG> FS-1734 seperate name and text styles for moderator
-		}
-        	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - only add timestamps when hide_timestamps_nearby_chat not TRUE
-		// mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getLength() != 0, timestamp_style);
-		if (!hide_timestamps_nearby_chat)
-		{
- 			// mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getLength() != 0, timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
-			appendText("[" + chat.mTimeStr + "] ", getLength() != 0, timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
-		}
-		else
-		{
- 			// mEditor->appendLineBreakSegment(timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
-			appendLineBreakSegment(timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
+			appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
+			prependNewLineState = false;
 		}
 
-		if (utf8str_trim(chat.mFromName).size() != 0)
+        // out the opening square bracket (if need)
+		if (square_brackets)
+		{
+			appendText("[", prependNewLineState, body_message_params);
+			prependNewLineState = false;
+		}
+
+		// names showing
+		if ( (!is_p2p || args["show_names_for_p2p_conv"].asBoolean()) &&
+			utf8str_trim(chat.mFromName).size() != 0)
 		{
 			// Don't hotlink any messages from the system (e.g. "Second Life:"), so just add those in plain text.
 			if ( chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mFromID.notNull())
@@ -1173,133 +1012,63 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 				// set the link for the object name to be the objectim SLapp
 				// (don't let object names with hyperlinks override our objectim Url)
-				LLStyle::Params link_params(style_params);
+				LLStyle::Params link_params(body_message_params);
 				link_params.color.control = "HTMLLinkColor";
 				LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
 				link_params.color = link_color;
 				link_params.readonly_color = link_color;
+				if (message_from_log && !is_conversation_log)
+				{
+					link_params.color.alpha = FSIMChatHistoryFade;
+					link_params.readonly_color.alpha = FSIMChatHistoryFade;
+				}
 				link_params.is_link = true;
 				link_params.link_href = url;
 
-				// mEditor->appendText(chat.mFromName +delimiter, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-				appendText(chat.mFromName +delimiter, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+				appendText(chat.mFromName + delimiter, prependNewLineState, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+				prependNewLineState = false;
 			}
 //			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log)
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && !chat.mRlvNamesFiltered)
 // [/RLVa:KB]
 			{
-				LLStyle::Params link_params(style_params);
+				LLStyle::Params link_params(body_message_params);
 				link_params.overwriteFrom(LLStyleMap::instance().lookupAgent(chat.mFromID));
 
-				// Add link to avatar's inspector and delimiter to message.
-				// reset the style parameter for the header only -AO
-				link_params.color(header_name_color);
-				link_params.readonly_color(header_name_color);
-
-				// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-				//if(chat.mChatType == CHAT_TYPE_IM)
-				if(chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
+				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))
 				{
-					link_params.color.alpha = FSIMChatHistoryFade;
-					link_params.readonly_color.alpha = FSIMChatHistoryFade;
-					// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
- 					// mEditor->appendText(LLTrans::getString("IMPrefix") + " ", false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					appendText(LLTrans::getString("IMPrefix") + " ", false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-				}
-
-				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
-				{
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-					//mEditor->appendText(mDisplayName_Username, false, link_params);
-					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-					{
-						// mEditor->appendText(chat.mFromNameGroup + mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-						appendText(chat.mFromNameGroup + mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					}
-					else
-					{
-						//<FS:HG> FS-1734 seperate name and text styles for moderator
-						if ( moderator_style_active )
-						{
-							link_params.font.style(moderator_name_style);
-						}
-						//</FS:HG> FS-1734 seperate name and text styles for moderator	
-						// mEditor->appendText(mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-						appendText(mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					}
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-				}
-				else if (gSavedSettings.getBOOL("UseDisplayNames"))
-				{
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-					//mEditor->appendText(mDisplayName, false, link_params);
-					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-					{
-						// mEditor->appendText(chat.mFromNameGroup + mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-						appendText(chat.mFromNameGroup + mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					}
-					else
-					{
-						//<FS:HG> FS-1734 seperate name and text styles for moderator
-						if ( moderator_style_active )
-						{
-							link_params.font.style(moderator_name_style);
-						}
-						//</FS:HG> FS-1734 seperate name and text styles for moderator
-						// mEditor->appendText(mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-						appendText(mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					}
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					std::string localized_name;
+					bool is_localized = LLTrans::findString(localized_name, "AgentNameSubst");
+					appendText((is_localized? localized_name:"(You)") + delimiter,
+							prependNewLineState, link_params);
+					prependNewLineState = false;
 				}
 				else
 				{
-					//mEditor->appendText(chat.mFromName, false, link_params);
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-					{
-						// mEditor->appendText(chat.mFromNameGroup + chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-						appendText(chat.mFromNameGroup + chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					}
-					else
-					{
-						//<FS:HG> FS-1734 seperate name and text styles for moderator
-						if ( moderator_style_active )
-						{
-							link_params.font.style(moderator_name_style);
-						}
-						//</FS:HG> FS-1734 seperate name and text styles for moderator
-						// mEditor->appendText(chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-						appendText(chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					}
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				// Add link to avatar's inspector and delimiter to message.
+					// <FS:Ansariel> Append delimiter with different style params or
+					//               it will be replaced with the avatar name once it's
+					//               returned from the server!
+					//appendText(std::string(link_params.link_href) + delimiter,
+					//		prependNewLineState, link_params);
+					appendText(std::string(link_params.link_href), prependNewLineState, link_params);
+					appendText(delimiter, prependNewLineState, body_message_params);
+					// </FS:Ansariel>
+					prependNewLineState = false;
 				}
-				link_params.color(txt_color);
-				link_params.readonly_color(txt_color);
-				// mEditor->appendText(delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-				appendText(delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-				//mEditor->appendText(std::string(link_params.link_href) + delimiter, false, link_params);
 			}
 			else
 			{
-				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-				//if (chat.mChatType == CHAT_TYPE_IM)
-				if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
-				{
-					// mEditor->appendText(LLTrans::getString("IMPrefix") + " " + chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					appendText(LLTrans::getString("IMPrefix") + " " + chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-				}
-				else
-				{
-					// mEditor->appendText(chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-					appendText(chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-				}
+				appendText("<nolink>" + chat.mFromName + "</nolink>" + delimiter,
+						prependNewLineState, body_message_params);
+				prependNewLineState = false;
 			}
 		}
 	}
-	else
+	else // showing timestamp and name in the expanded mode
 	{
+		prependNewLineState = false;
 		LLView* view = NULL;
 		LLInlineViewSegment::Params p;
 		p.force_newline = true;
@@ -1309,18 +1078,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		LLDate new_message_time = LLDate::now();
 
 		std::string tmp_from_name(chat.mFromName);
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-		//if (chat.mChatType == CHAT_TYPE_IM) tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
-		if (chat.mChatType == CHAT_TYPE_IM)
-		{
-			tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
-		}
-		else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-		{
-			tmp_from_name = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + tmp_from_name;
-		}
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-
+		tmp_from_name = prefixIM(tmp_from_name, chat);
 		if (mLastFromName == tmp_from_name 
 			&& mLastFromID == chat.mFromID
 			&& mLastMessageTime.notNull() 
@@ -1333,28 +1091,18 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 		else
 		{
-			// reset the style color parameter for the header only -AO
-			style_params.color(header_name_color);
-			style_params.readonly_color(header_name_color);
-			view = getHeader(chat, style_params, args);
-			style_params.color(txt_color);
-			style_params.readonly_color(txt_color);
-			
-			// if (mEditor->getLength() == 0)	// <FS:Zi> FIRE-8600: TAB out of chat history
-			if (getLength() == 0)	// <FS:Zi> FIRE-8600: TAB out of chat history
+			view = getHeader(chat, name_params, args);
+			if (getLength() == 0)
 				p.top_pad = 0;
 			else
 				p.top_pad = mTopHeaderPad;
 			p.bottom_pad = mBottomHeaderPad;
-			
 		}
 		p.view = view;
 
 		//Prepare the rect for the view
-		// LLRect target_rect = mEditor->getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		// squeeze down the widget by subtracting padding off left and right
-		// target_rect.mLeft += mLeftWidgetPad + mEditor->getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		target_rect.mLeft += mLeftWidgetPad + getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		target_rect.mRight -= mRightWidgetPad;
 		view->reshape(target_rect.getWidth(), view->getRect().getHeight());
@@ -1364,26 +1112,20 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		if (utf8str_trim(chat.mFromName).size() != 0 && chat.mFromName != SYSTEM_FROM)
 			widget_associated_text += chat.mFromName + delimiter;
 
-		// mEditor->appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 		appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 		mLastFromName = chat.mFromName;
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-		//if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
-		if (chat.mChatType == CHAT_TYPE_IM)
-		{
-			mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
-		}
-		else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-		{
-			mLastFromName = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mLastFromName;
-		}
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		
+		//if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + mLastFromName;
+		mLastFromName = prefixIM(mLastFromName, chat);
 		mLastFromID = chat.mFromID;
 		mLastMessageTime = new_message_time;
 		mIsLastMessageFromLog = message_from_log;
 	}
 
+	// body of the message processing
+
+	// notify processing
 	if (chat.mNotifId.notNull())
 	{
 		LLNotificationPtr notification = LLNotificationsUtil::find(chat.mNotifId);
@@ -1391,40 +1133,10 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		{
 			LLIMToastNotifyPanel* notify_box = new LLIMToastNotifyPanel(
 					notification, chat.mSessionID, LLRect::null, !use_plain_text_chat_history);
-			//we can't set follows in xml since it broke toasts behavior
-			notify_box->setFollowsLeft();
-			notify_box->setFollowsRight();
-			notify_box->setFollowsTop();
-
-			ctrl_list_t ctrls = notify_box->getControlPanel()->getCtrlList();
-			S32 offset = 0;
-			// Children were added by addChild() which uses push_front to insert them into list,
-			// so to get buttons in correct order reverse iterator is used (EXT-5906) 
-			for (ctrl_list_t::reverse_iterator it = ctrls.rbegin(); it != ctrls.rend(); it++)
-			{
-				LLButton * button = dynamic_cast<LLButton*> (*it);
-				if (button != NULL)
-				{
-					button->setOrigin( offset,
-							button->getRect().mBottom);
-					button->setLeftHPad(2 * HPAD);
-					button->setRightHPad(2 * HPAD);
-					// set zero width before perform autoResize()
-					button->setRect(LLRect(button->getRect().mLeft,
-							button->getRect().mTop, button->getRect().mLeft,
-							button->getRect().mBottom));
-					button->setAutoResize(true);
-					button->autoResize();
-					offset += HPAD + button->getRect().getWidth();
-					button->setFollowsNone();
-				}
-			}
 
 			//Prepare the rect for the view
-			// LLRect target_rect = mEditor->getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
 			LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
 			// squeeze down the widget by subtracting padding off left and right
-			// target_rect.mLeft += mLeftWidgetPad + mEditor->getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
 			target_rect.mLeft += mLeftWidgetPad + getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
 			target_rect.mRight -= mRightWidgetPad;
 			notify_box->reshape(target_rect.getWidth(),	notify_box->getRect().getHeight());
@@ -1434,18 +1146,18 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			params.view = notify_box;
 			params.left_pad = mLeftWidgetPad;
 			params.right_pad = mRightWidgetPad;
-			// mEditor->appendWidget(params, "\n", false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 			appendWidget(params, "\n", false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 		}
 	}
+
+	// usual messages showing
 	else
 	{
 		std::string message = irc_me ? chat.mText.substr(3) : chat.mText;
 
-
 		//MESSAGE TEXT PROCESSING
 		//*HACK getting rid of redundant sender names in system notifications sent using sender name (see EXT-5010)
-		if (use_plain_text_chat_history && gAgentID != chat.mFromID && chat.mFromID.notNull())
+		if (use_plain_text_chat_history && !from_me && chat.mFromID.notNull())
 		{
 			std::string slurl_about = SLURL_APP_AGENT + chat.mFromID.asString() + SLURL_ABOUT;
 			if (message.length() > slurl_about.length() && 
@@ -1464,20 +1176,17 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		if (chat.mMuted)
 		{
 			LLUIColor muted_text_color = LLUIColorTable::instance().getColor("ChatHistoryMutedTextColor");
-			style_params.color = muted_text_color;
-			style_params.readonly_color = muted_text_color;
-			style_params.selected_color = muted_text_color;
+			body_message_params.color = muted_text_color;
+			body_message_params.readonly_color = muted_text_color;
+			body_message_params.selected_color = muted_text_color;
 		}
 		// </FS:Ansariel> Optional muted chat history
 
-		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-		//if(chat.mChatType == CHAT_TYPE_IM)
 		if(chat.mSourceType != CHAT_SOURCE_OBJECT && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)) // FS::LO Fix for FIRE-6334; Fade IM Text into background of chat history default setting should not be 0.5; made object IM text not fade into the background as per phoenix behavior.
 		{
-			style_params.color.alpha = FSIMChatHistoryFade;
-			style_params.readonly_color.alpha = FSIMChatHistoryFade;
-			style_params.selected_color.alpha = FSIMChatHistoryFade;
+			body_message_params.color.alpha = FSIMChatHistoryFade;
+			body_message_params.readonly_color.alpha = FSIMChatHistoryFade;
+			body_message_params.selected_color.alpha = FSIMChatHistoryFade;
 		}
 		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
@@ -1489,34 +1198,23 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			LLStringUtil::toUpper(mLastFromName);
 		}
 		// </FS:PP>
+		if (square_brackets)
+		{
+			message += "]";
+		}
 
-		// mEditor->appendText(message, FALSE, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-		appendText(message, FALSE, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+		appendText(message, prependNewLineState, body_message_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+		prependNewLineState = false;
 	}
 
-	// mEditor->blockUndo();	// <FS:Zi> FIRE-8600: TAB out of chat history
 	blockUndo();	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 	// automatically scroll to end when receiving chat from myself
-	if (chat.mFromID == gAgentID)
+	if (from_me)
 	{
-		// mEditor->setCursorAndScrollToEnd();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		setCursorAndScrollToEnd();	// <FS:Zi> FIRE-8600: TAB out of chat history
 	}
 }
-
-// <FS:Zi> FIRE-8600: TAB out of chat history
-// void FSChatHistory::draw()
-// {
-// 	if (mEditor->scrolledToEnd())
-// 	{
-// 		mUnreadChatSources.clear();
-// 		mMoreChatPanel->setVisible(FALSE);
-// 	}
-// 
-// 	LLUICtrl::draw();
-// }
-// </FS:Zi>
 
 // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 BOOL FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
@@ -1538,7 +1236,7 @@ BOOL FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
 			// focus on the next item that is a text input control
 			focusRoot->focusNextItem(true);
 			// remember the control's pointer if it really is a LLLineEditor
-			mChatInputLine=dynamic_cast<LLLineEditor*>(gFocusMgr.getKeyboardFocus());
+			mChatInputLine = dynamic_cast<LLChatEntry*>(gFocusMgr.getKeyboardFocus());
 		}
 	}
 

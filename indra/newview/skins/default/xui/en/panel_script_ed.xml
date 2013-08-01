@@ -345,20 +345,39 @@
      layout="topleft"
      name="lsl errors"
      width="487" />
-    <text
-     follows="left|bottom"
-     height="12"
-     layout="topleft"
-     left="0"
-     name="line_col"
-     width="128" />
     <combo_box
-     follows="right|bottom"
+     follows="left|bottom"
      height="23"
      label="Insert..."
      layout="topleft"
      name="Insert..."
-     width="158"
-     top_delta="0"
-     left_pad="200" />
+     width="128" />
+    <text
+     follows="left|bottom"
+     height="23"
+     layout="topleft"
+     left_pad="8"
+     top_delta="4"
+     name="line_col"
+     value="Line 0, Column 0"
+     width="128" />
+    <button
+     enabled="false"
+     follows="right|bottom"
+     height="23"
+     label="Edit..."
+     layout="topleft"
+     top_delta="-4"
+     right="-95"
+     name="edit_btn_2"
+     width="81" />
+    <button
+     follows="right|bottom"
+     height="23"
+     label="Save"
+     label_selected="Save"
+     layout="topleft"
+     left_pad="4"
+     name="save_btn_2"
+     width="81" />
 </panel>

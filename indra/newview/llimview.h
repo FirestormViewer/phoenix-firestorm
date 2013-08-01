@@ -70,10 +70,11 @@ public:
 			GROUP_SESSION,
 			ADHOC_SESSION,
 			AVALINE_SESSION,
+			NONE_SESSION,
 		} SType;
 
 		LLIMSession(const LLUUID& session_id, const std::string& name, 
-			const EInstantMessage& type, const LLUUID& other_participant_id, const uuid_vec_t& ids, bool voice);
+			const EInstantMessage& type, const LLUUID& other_participant_id, const uuid_vec_t& ids, bool voice, bool has_offline_msg);
 		virtual ~LLIMSession();
 
 		void sessionInitReplyReceived(const LLUUID& new_session_id);
@@ -84,7 +85,7 @@ public:
 		/** @deprecated */
 		static void chatFromLogFile(LLLogChat::ELogLineType type, const LLSD& msg, void* userdata);
 
-		bool isOutgoingAdHoc();
+		bool isOutgoingAdHoc() const;
 		bool isAdHoc();
 		bool isP2P();
 		bool isOtherParticipantAvaline();
@@ -94,11 +95,13 @@ public:
 		bool isGroupSessionType() const { return mSessionType == GROUP_SESSION;}
 		bool isAvalineSessionType() const { return mSessionType == AVALINE_SESSION;}
 
+		LLUUID generateOutgouigAdHocHash() const;
+
 		//*TODO make private
 		/** ad-hoc sessions involve sophisticated chat history file naming schemes */
 		void buildHistoryFileName();
 
-		void onAvatarNameCache(const LLUUID& avatar_id, const LLAvatarName& av_name);
+		void loadHistory();
 
 		LLUUID mSessionID;
 		std::string mName;
@@ -135,21 +138,25 @@ public:
 		//if IM session is created for a voice call
 		bool mStartedAsIMCall;
 
+		bool mHasOfflineMessage;
+
 	private:
 		void onAdHocNameCache(const LLAvatarName& av_name);
 
-		static std::string generateHash(const std::set<LLUUID>& sorted_uuids);
+		static LLUUID generateHash(const std::set<LLUUID>& sorted_uuids);
+		boost::signals2::connection mAvatarNameCacheConnection;
 	};
 	
 
 	LLIMModel();
 
-
+	// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
 	//we should control the currently active session
 	LLUUID	mActiveSessionID;
 	void	setActiveSessionID(const LLUUID& session_id);
 	void	resetActiveSessionID() { mActiveSessionID.setNull(); }
 	LLUUID	getActiveSessionID() { return mActiveSessionID; }
+	// </FS:Ansariel> [FS communication UI]
 
 	/** Session id to session object */
 	std::map<LLUUID, LLIMSession*> mId2SessionMap;
@@ -183,22 +190,24 @@ public:
 	 * @param name session name should not be empty, will return false if empty
 	 */
 	bool newSession(const LLUUID& session_id, const std::string& name, const EInstantMessage& type, const LLUUID& other_participant_id, 
-		const uuid_vec_t& ids, bool voice = false);
+		const uuid_vec_t& ids, bool voice = false, bool has_offline_msg = false);
 
 	bool newSession(const LLUUID& session_id, const std::string& name, const EInstantMessage& type,
-		const LLUUID& other_participant_id, bool voice = false);
+		const LLUUID& other_participant_id, bool voice = false, bool has_offline_msg = false);
 
 	/**
 	 * Remove all session data associated with a session specified by session_id
 	 */
 	bool clearSession(const LLUUID& session_id);
 
+	// <FS:CR> Make public for FS Communications UI
 	/**
 	 * Populate supplied std::list with messages starting from index specified by start_index without
 	 * emitting no unread messages signal.
 	 */
 	void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
-
+	// </FS:CR>
+	
 	/**
 	 * Sends no unread messages signal.
 	 */
@@ -207,20 +216,23 @@ public:
 	/**
 	 * Populate supplied std::list with messages starting from index specified by start_index
 	 */
-	void getMessages(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
+	void getMessages(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0, const bool sendNoUnreadMsgs = true);
 
 	/**
 	 * Add a message to an IM Model - the message is saved in a message store associated with a session specified by session_id
 	 * and also saved into a file if log2file is specified.
 	 * It sends new message signal for each added message.
 	 */
-	// Ansariel: Added is_announcement parameter
+	// <FS:Ansariel> Added is_announcement parameter
+	//bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true);
 	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
 	/**
 	 * Similar to addMessage(...) above but won't send a signal about a new message added
 	 */
-	// Ansariel: Added is_announcement parameter
+	// <FS:Ansariel> Added is_announcement parameter
+	//LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
+	//	const std::string& utf8_text, bool log2file = true);
 	LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
 		const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
@@ -284,13 +296,6 @@ public:
 
 	void testMessages();
 
-// [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
-	/**
-	 * Attempts to build the correct IM P2P log filename for the specified agent UUID and agent name
-	 */
-	static bool buildIMP2PLogFilename(const LLUUID& idAgent, const std::string& strName, std::string& strFilename);
-// [/SL:KB]
-
 	/**
 	 * Saves an IM message into a file
 	 */
@@ -298,10 +303,19 @@ public:
 
 private:
 	
+	// <FS:CR> Post CHUI - Move this public for FS Communications UI
+	/**
+	 * Populate supplied std::list with messages starting from index specified by start_index without
+	 * emitting no unread messages signal.
+	 */
+	//void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
+	// </FS:CR>
+	
 	/**
 	 * Add message to a list of message associated with session specified by session_id
 	 */
-	// Ansariel: Added is_announcement parameter
+	// <FS:Ansariel> Added is_announcement parameter
+	//bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
 	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, BOOL is_announcement = FALSE);
 };
 
@@ -309,7 +323,9 @@ class LLIMSessionObserver
 {
 public:
 	virtual ~LLIMSessionObserver() {}
-	virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) = 0;
+	virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg) = 0;
+    virtual void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) = 0;
+	virtual void sessionVoiceOrIMStarted(const LLUUID& session_id) = 0;
 	virtual void sessionRemoved(const LLUUID& session_id) = 0;
 	virtual void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) = 0;
 };
@@ -336,13 +352,14 @@ public:
 					const LLUUID& target_id,
 					const std::string& from,
 					const std::string& msg,
+					bool  is_offline_msg = false,
 					const std::string& session_name = LLStringUtil::null,
 					EInstantMessage dialog = IM_NOTHING_SPECIAL,
 					U32 parent_estate_id = 0,
 					const LLUUID& region_id = LLUUID::null,
 					const LLVector3& position = LLVector3::zero,
 					bool link_name = false,
-					BOOL is_announcement = FALSE // Ansariel: Special parameter indicating announcement
+					BOOL is_announcement = FALSE // <FS:Ansariel> Special parameter indicating announcement
 					);
 
 	void addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args);
@@ -361,10 +378,12 @@ public:
 
 	// Adds a session using a specific group of starting agents
 	// the dialog type is assumed correct. Returns the uuid of the session.
+	// A session can be added to a floater specified by floater_id.
 	LLUUID addSession(const std::string& name,
 					  EInstantMessage dialog,
 					  const LLUUID& other_participant_id,
-					  const LLDynamicArray<LLUUID>& ids, bool voice = false);
+					  const LLDynamicArray<LLUUID>& ids, bool voice = false,
+					  const LLUUID& floater_id = LLUUID::null);
 
 	/**
 	 * Creates a P2P session with the requisite handle for responding to voice calls.
@@ -473,7 +492,10 @@ private:
 
 	static void onInviteNameLookup(LLSD payload, const LLUUID& id, const std::string& name, bool is_group);
 
-	void notifyObserverSessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id);
+	void notifyObserverSessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg);
+    //Triggers when a session has already been added
+    void notifyObserverSessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id);
+	void notifyObserverSessionVoiceOrIMStarted(const LLUUID& session_id);
 	void notifyObserverSessionRemoved(const LLUUID& session_id);
 	void notifyObserverSessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id);
 
@@ -555,7 +577,14 @@ class LLIncomingCallDialog : public LLCallDialog
 {
 public:
 	LLIncomingCallDialog(const LLSD& payload);
-
+	~LLIncomingCallDialog()
+	{
+		if (mAvatarNameCacheConnection.connected())
+		{
+			mAvatarNameCacheConnection.disconnect();
+		}
+	}
+	
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
@@ -571,6 +600,8 @@ private:
 	void onAvatarNameCache(const LLUUID& agent_id,
 		const LLAvatarName& av_name,
 		const std::string& call_type);
+
+	boost::signals2::connection mAvatarNameCacheConnection;
 
 	/*virtual*/ void onLifetimeExpired();
 };

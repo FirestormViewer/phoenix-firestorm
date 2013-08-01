@@ -51,7 +51,6 @@ public:
 	void					requestUpdate();
 	LLUUID					getCurrentItemID() const;
 	void					getCurrentItemIDs(uuid_vec_t& selected_uuids) const;
-	void					setFilter(const std::string& search_string);
 
 	typedef boost::signals2::signal<void()> change_callback_t;
 	boost::signals2::connection setChangeCallback(const change_callback_t::slot_type& cb)
@@ -73,16 +72,22 @@ private:
 	void					onAddFriendButtonClicked();
 	void					onRadarListCommitted();
 	void					onRadarListDoubleClicked();
-	void					onGearMenuItemClicked(const LLSD& userdata);
+	void					onOptionsMenuItemClicked(const LLSD& userdata);
+	void					onFilterEdit(const std::string& search_string);
+	void					onGearButtonClicked(LLUICtrl* btn);
 
 	FSRadarListCtrl*		mRadarList;
 	LLNetMap*				mMiniMap;
-	LLMenuButton*			mRadarGearButton;
+	LLButton*				mRadarGearButton;
 	LLButton*				mAddFriendButton;
+	LLMenuButton*			mOptionsButton;
 
-	LLHandle<LLView>		mRadarGearMenuHandle;
+	LLHandle<LLView>		mOptionsMenuHandle;
 
 	FSRadar::Updater*		mButtonsUpdater;
+
+	std::string				mFilterSubString;
+	std::string				mFilterSubStringOrig;
 
 	// Slot connection for FSRadar updates
 	boost::signals2::connection mUpdateSignalConnection;

@@ -81,7 +81,7 @@
           height="20"
           follows="left|top"
           left_pad="2"
-          image_overlay="List_View_On"
+          image_overlay="Chat_History"
           layout="topleft"
           width="25"
           image_pressed="PushButton_Press"

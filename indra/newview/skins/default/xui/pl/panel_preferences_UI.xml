@@ -57,7 +57,6 @@
             (wymaga restartu)
         </text>
         <check_box label="Ukryj ikony czatów IM oraz grup" name="FSDisableIMChiclets" tool_tip="Zaznacz, aby Firestorm ukrył ikony czatów IM oraz grup (koperta z powiadomieniami i suma wszystkich IM pozostaną na ekranie)" />
-        <check_box name="ButtonFlashing" label="Nadpisywanie mrugania kart IM:" />
         <slider label="Ile razy mrugają karty IM:" name="ButtonsFlashCount" />
         <slider label="Szybkość mrugania:" tool_tip="Szybkość mrugania (w Hercach) - używane przy powiadomieniach IM" name="ButtonFlashRate" />
     </panel>

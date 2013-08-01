@@ -28,5 +28,6 @@
 	<button name="permission_map_btn" tool_tip="Ten Znajomy może zlokalizować Cię na mapie"/>
 	<button name="permission_online_btn" tool_tip="Ten Znajomy widzi Ciebie kiedy jesteś obecny/a w SL"/>
 	<slider name="volume_slider" tool_tip="Siła głosu"/>
+	<button name="info_btn" tool_tip="Więcej informacji"/>
 	<button name="profile_btn" tool_tip="Zobacz profil"/>
 </panel>

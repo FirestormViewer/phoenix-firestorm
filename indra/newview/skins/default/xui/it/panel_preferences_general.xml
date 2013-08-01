@@ -95,7 +95,9 @@
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Siedimi quando sono assente"/>
 	<text name="text_box3">
-		Le risposte automatiche di busy e privacy si trovano in Riservatezza/Autorisposte
+		Risposta Non disturbare:
 	</text>
-
+	<text_editor name="do_not_disturb_response">
+		log_in_to_change
+	</text_editor>
 </panel>

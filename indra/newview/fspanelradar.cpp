@@ -29,6 +29,7 @@
 #include "fspanelradar.h"
 
 // libs
+#include "llfiltereditor.h"
 #include "llfloaterreg.h"
 #include "lllayoutstack.h"
 #include "llmenugl.h"
@@ -78,13 +79,17 @@ static LLRegisterPanelClassWrapper<FSPanelRadar> t_fs_panel_radar("fs_panel_rada
 
 FSPanelRadar::FSPanelRadar()
 	:	LLPanel(),
- 		mRadarGearButton(NULL),
+		mRadarGearButton(NULL),
+		mOptionsButton(NULL),
 		mMiniMap(NULL),
+		mFilterSubString(LLStringUtil::null),
+		mFilterSubStringOrig(LLStringUtil::null),
 		mRadarList(NULL),
 		mVisibleCheckFunction(NULL)
 {
 	mButtonsUpdater = new FSButtonsUpdater(boost::bind(&FSPanelRadar::updateButtons, this));
-	mCommitCallbackRegistrar.add("People.addFriend", boost::bind(&FSPanelRadar::onAddFriendButtonClicked, this));
+	mCommitCallbackRegistrar.add("Radar.AddFriend",	boost::bind(&FSPanelRadar::onAddFriendButtonClicked,	this));
+	mCommitCallbackRegistrar.add("Radar.Gear",		boost::bind(&FSPanelRadar::onGearButtonClicked,			this, _1));
 }
 
 FSPanelRadar::~FSPanelRadar()
@@ -92,7 +97,7 @@ FSPanelRadar::~FSPanelRadar()
 	mUpdateSignalConnection.disconnect();
 	delete mButtonsUpdater;
 
-	if (mRadarGearMenuHandle.get()) mRadarGearMenuHandle.get()->die();
+	if (mOptionsMenuHandle.get()) mOptionsMenuHandle.get()->die();
 }
 
 BOOL FSPanelRadar::postBuild()
@@ -106,26 +111,29 @@ BOOL FSPanelRadar::postBuild()
 	mRadarList->setCommitCallback(boost::bind(&FSPanelRadar::onRadarListCommitted, this));
 	
 	mMiniMap = getChild<LLNetMap>("Net Map");
-	mAddFriendButton = getChild<LLButton>("add_friend_btn_nearby");
+	mAddFriendButton = getChild<LLButton>("add_friend_btn");
+
+	getChild<LLFilterEditor>("nearby_filter_input")->setCommitCallback(boost::bind(&FSPanelRadar::onFilterEdit, this, _2));
 
 	// Create menus.
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	
-	registrar.add("Radar.Gear.Action",  boost::bind(&FSPanelRadar::onGearMenuItemClicked, this, _2));
-	registrar.add("Radar.NameFmt",		boost::bind(&FSRadar::onRadarNameFmtClicked, _2));
-	registrar.add("Radar.ReportTo",		boost::bind(&FSRadar::onRadarReportToClicked, _2));
+	registrar.add("Radar.Option.Action",	boost::bind(&FSPanelRadar::onOptionsMenuItemClicked, this, _2));
+	registrar.add("Radar.NameFmt",			boost::bind(&FSRadar::onRadarNameFmtClicked, _2));
+	registrar.add("Radar.ReportTo",			boost::bind(&FSRadar::onRadarReportToClicked, _2));
 
 	enable_registrar.add("Radar.NameFmtCheck",	boost::bind(&FSRadar::radarNameFmtCheck, _2));
 	enable_registrar.add("Radar.ReportToCheck",	boost::bind(&FSRadar::radarReportToCheck, _2));
+	
+	mRadarGearButton = getChild<LLButton>("gear_btn");
+	mOptionsButton = getChild<LLMenuButton>("options_btn");
 
-	mRadarGearButton = getChild<LLMenuButton>("nearby_view_sort_btn");
-
-	LLToggleableMenu* radar_gear  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_radar_gear.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	if (radar_gear)
+	LLToggleableMenu* options_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_radar_options.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	if (options_menu)
 	{
-		mRadarGearMenuHandle = radar_gear->getHandle();
-		mRadarGearButton->setMenu(radar_gear);
+		mOptionsMenuHandle = options_menu->getHandle();
+		mOptionsButton->setMenu(options_menu, LLMenuButton::MP_BOTTOM_LEFT);
 	}
 
 	// Register for radar updates
@@ -154,6 +162,7 @@ void FSPanelRadar::updateButtons()
 		is_friend = LLAvatarTracker::instance().getBuddyInfo(selected_id) != NULL;
 	}
 	mAddFriendButton->setEnabled(!is_friend && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	mRadarGearButton->setEnabled(selected_uuids.size() > 0);
 }
 
 LLUUID FSPanelRadar::getCurrentItemID() const
@@ -179,10 +188,23 @@ void FSPanelRadar::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 	}
 }
 
-void FSPanelRadar::setFilter(const std::string& search_string)
+void FSPanelRadar::onFilterEdit(const std::string& search_string)
 {
+	mFilterSubStringOrig = search_string;
+	LLStringUtil::trimHead(mFilterSubStringOrig);
+	// Searches are case-insensitive
+	std::string search_upper = mFilterSubStringOrig;
+	LLStringUtil::toUpper(search_upper);
+
+	if (mFilterSubString == search_upper)
+	{
+		return;
+	}
+
+	mFilterSubString = search_upper;
+
 	// Apply new filter.
-	mRadarList->setFilterString(search_string);
+	mRadarList->setFilterString(mFilterSubStringOrig);
 }
 
 void FSPanelRadar::onRadarListDoubleClicked()
@@ -226,7 +248,7 @@ void FSPanelRadar::onAddFriendButtonClicked()
 	}
 }
 
-void FSPanelRadar::onGearMenuItemClicked(const LLSD& userdata)
+void FSPanelRadar::onOptionsMenuItemClicked(const LLSD& userdata)
 {
 	std::string chosen_item = userdata.asString();
 
@@ -238,9 +260,18 @@ void FSPanelRadar::onGearMenuItemClicked(const LLSD& userdata)
 		}
 		else
 		{
-			LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+			LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+				LLSD().with("people_panel_tab_name", "blocked_panel"));
 		}
 	}
+}
+
+void FSPanelRadar::onGearButtonClicked(LLUICtrl* btn)
+{
+	uuid_vec_t selected_uuids;
+	getCurrentItemIDs(selected_uuids);
+	// Spawn at bottom left corner of the button.
+	FSFloaterRadarMenu::gFSRadarMenu.show(btn, selected_uuids, 0, 0);
 }
 
 void FSPanelRadar::requestUpdate()

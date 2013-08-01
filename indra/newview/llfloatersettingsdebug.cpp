@@ -350,6 +350,7 @@ void LLFloaterSettingsDebug::updateControl()
 // [/RLVa:KB]
 
 
+
 		mCopyButton->setEnabled(TRUE);
 		mSanityButton->setVisible(!mCurrentControlVariable->isSane());
 

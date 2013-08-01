@@ -69,8 +69,11 @@ class LLVoiceVisualizer;
 class LLHUDNameTag;
 class LLHUDEffectSpiral;
 class LLTexGlobalColor;
-class LLViewerJoint;
+struct LLVOAvatarBoneInfo;
+struct LLVOAvatarChildJoint;
+//class LLViewerJoint;
 struct LLAppearanceMessageContents;
+struct LLVOAvatarSkeletonInfo;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // LLVOAvatar
@@ -126,15 +129,15 @@ protected:
 public:
 	/*virtual*/ void			updateGL();
 	/*virtual*/ LLVOAvatar*		asAvatar();
-	virtual U32    	 	 		processUpdateMessage(LLMessageSystem *mesgsys,
+	virtual U32    	 	 	processUpdateMessage(LLMessageSystem *mesgsys,
 													 void **user_data,
 													 U32 block_num,
 													 const EObjectUpdateType update_type,
 													 LLDataPacker *dp);
-	virtual void   	 	 		idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
+	virtual void   	 	 	idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time);
 	/*virtual*/ BOOL   	 	 	updateLOD();
-	BOOL  	 	 	 	 		updateJointLODs();
-	void						updateLODRiggedAttachments( void );
+	BOOL  	 	 	 	 	updateJointLODs();
+	void					updateLODRiggedAttachments( void );
 	/*virtual*/ BOOL   	 	 	isActive() const; // Whether this object needs to do an idleUpdate.
 	S32 						totalTextureMemForUUIDS(std::set<LLUUID>& ids);
 	bool 						allTexturesCompletelyDownloaded(std::set<LLUUID>& ids) const;
@@ -160,28 +163,28 @@ public:
 	/*virtual*/ void   	 	 	updateRegion(LLViewerRegion *regionp);
 	/*virtual*/ void   	 	 	updateSpatialExtents(LLVector4a& newMin, LLVector4a &newMax);
 	/*virtual*/ void   	 	 	getSpatialExtents(LLVector4a& newMin, LLVector4a& newMax);
-	/*virtual*/ BOOL   	 	 	lineSegmentIntersect(const LLVector3& start, const LLVector3& end,
+	/*virtual*/ BOOL   	 	 	lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 												 BOOL pick_rigged = FALSE,
 // [/SL:KB]
 												 S32* face_hit = NULL,             // which face was hit
-												 LLVector3* intersection = NULL,   // return the intersection point
+												 LLVector4a* intersection = NULL,   // return the intersection point
 												 LLVector2* tex_coord = NULL,      // return the texture coordinates of the intersection point
-												 LLVector3* normal = NULL,         // return the surface normal at the intersection point
-												 LLVector3* bi_normal = NULL);     // return the surface bi-normal at the intersection point
-	LLViewerObject*	lineSegmentIntersectRiggedAttachments(const LLVector3& start, const LLVector3& end,
+												 LLVector4a* normal = NULL,         // return the surface normal at the intersection point
+												 LLVector4a* tangent = NULL);     // return the surface tangent at the intersection point
+	LLViewerObject*	lineSegmentIntersectRiggedAttachments(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 												 BOOL pick_rigged = FALSE,
 // [/SL:KB]
 												 S32* face_hit = NULL,             // which face was hit
-												 LLVector3* intersection = NULL,   // return the intersection point
+												 LLVector4a* intersection = NULL,   // return the intersection point
 												 LLVector2* tex_coord = NULL,      // return the texture coordinates of the intersection point
-												 LLVector3* normal = NULL,         // return the surface normal at the intersection point
-												 LLVector3* bi_normal = NULL);     // return the surface bi-normal at the intersection point
+												 LLVector4a* normal = NULL,         // return the surface normal at the intersection point
+												 LLVector4a* tangent = NULL);     // return the surface tangent at the intersection point
 
 	//--------------------------------------------------------------------
 	// LLCharacter interface and related
@@ -245,7 +248,7 @@ public:
 	void 			idleUpdateWindEffect();
 	void 			idleUpdateNameTag(const LLVector3& root_pos_last);
 	void			idleUpdateNameTagText(BOOL new_name);
-	LLVector3		idleUpdateNameTagPosition(const LLVector3& root_pos_last);
+	void			idleUpdateNameTagPosition(const LLVector3& root_pos_last);
 	void			idleUpdateNameTagAlpha(BOOL new_name, F32 alpha);
 	// <FS:CR> Colorize tags
 	//LLColor4		getNameTagColor(bool is_friend);
@@ -255,7 +258,10 @@ public:
 	static void		invalidateNameTag(const LLUUID& agent_id);
 	// force all name tags to rebuild, useful when display names turned on/off
 	static void		invalidateNameTags();
-	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font);
+	// <FS:Ansariel> Fix nametag not properly updating when display name arrives
+	//void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font);
+	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, bool is_name = false);
+	// </FS:Ansariel>
 	void 			idleUpdateRenderCost();
 	void 			idleUpdateBelowWater();
 
@@ -361,6 +367,8 @@ public:
 	F32					mLastPelvisToFoot;
 	F32					mPelvisFixup;
 	F32					mLastPelvisFixup;
+	LLVector3			mCurRootToHeadOffset;
+	LLVector3			mTargetRootToHeadOffset;
 
 	S32					mLastSkeletonSerialNum;
 
@@ -381,7 +389,6 @@ public:
 	U32 		renderRigid();
 	U32 		renderSkinned(EAvatarRenderPass pass);
 	F32			getLastSkinTime() { return mLastSkinTime; }
-	U32			renderSkinnedAttachments();
 	U32 		renderTransparent(BOOL first_pass);
 	void 		renderCollisionVolumes();
 	static void	deleteCachedImages(bool clearAll=true);
@@ -726,7 +733,6 @@ public:
 public:
 	BOOL 				hasHUDAttachment() const;
 	LLBBox 				getHUDBBox() const;
-	void 				rebuildHUD();
 	void 				resetHUDAttachments();
 	BOOL				canAttachMoreObjects() const;
 	BOOL				canAttachMoreObjects(U32 n) const;
@@ -870,12 +876,12 @@ protected:
 	static void		getAnimLabels(LLDynamicArray<std::string>* labels);
 	static void		getAnimNames(LLDynamicArray<std::string>* names);	
 private:
-	std::string		mNameString;		// UTF-8 title + name + status
+    bool            mNameIsSet;
 	LLSD			mClientTagData;
 	bool			mHasClientTagColor;
 	std::string  	mTitle;
 	bool	  		mNameAway;
-	bool	  		mNameBusy;
+	bool	  		mNameDoNotDisturb;
 	bool	  		mNameMute;
 	bool      		mNameAppearance;
 	bool			mNameFriend;

@@ -34,11 +34,6 @@
 #include "llviewerstats.h"
 #include "lldatapacker.h"
 
-//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
-#include "lltrans.h"
-#include "llnotificationsutil.h"
-//</FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
-
 using namespace LLOldEvents;
 
 // consts
@@ -152,20 +147,6 @@ LLViewerThrottleGroup LLViewerThrottleGroup::operator-(const LLViewerThrottleGro
 void LLViewerThrottleGroup::sendToSim() const
 {
 	llinfos << "Sending throttle settings, total BW " << mThrottleTotal << llendl;
-	//<FS:TS> FIRE-6795: Remove warning at every login
-	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	//static bool bandwidth_warning_latch = false;//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
-	//S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
-	//gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);	
-	//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
-	//if ( gSavedSettings.getBOOL("BandwidthSettingTooHigh") && !bandwidth_warning_latch )
-	//	{
-	//		LLNotificationsUtil::add("FSCmdLineBWTooHigh", LLSD());
-	//		bandwidth_warning_latch = true;
-	//	}
-	//</FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
-	//</FS:TS> FIRE-6795
 	LLMessageSystem* msg = gMessageSystem;
 
 	msg->newMessageFast(_PREHASH_AgentThrottle);

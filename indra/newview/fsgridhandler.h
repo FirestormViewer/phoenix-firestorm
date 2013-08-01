@@ -59,9 +59,6 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_PROFILE_URI_VALUE "profileuri"
 #define GRID_SENDGRIDINFO "SendGridInfoToViewerOnLogin"
 #define GRID_DIRECTORY_FEE "DirectoryFee"
-#define GRID_CURRENCY_SYMBOL "CurrencySymbol"
-#define GRID_REAL_CURRENCY_SYMBOL "RealCurrencySymbol"
-#define GRID_MAXGROUPS "MaxGroups"
 #define GRID_PLATFORM "platform"
 #define GRID_MESSAGE "message"
 // </FS:CR> Aurora Sim
@@ -261,6 +258,9 @@ public:
 	// <FS:CR> FIRE-10567 - Variable classified fee
 	void setClassifiedFee(const S32 classified_fee) { sClassifiedFee = classified_fee; }
 	S32 getClassifiedFee() { return sClassifiedFee; }
+	// <FS:CR> Variable parcel listing fee
+	void setDirectoryFee(const S32 directory_fee) { sDirectoryFee = directory_fee; }
+	S32 getDirectoryFee() { return sDirectoryFee; }
 	// </FS:CR>
 
 private:
@@ -271,6 +271,7 @@ private:
 
 	void setGridData(const LLSD &grid_info) { mGridList[mGrid]=grid_info; }
 	S32 sClassifiedFee;	// <FS:CR> FIRE-10567 - Variable classified fee
+	S32 sDirectoryFee; // <FS:CR> Variable directory listing fee
 
 protected:
 

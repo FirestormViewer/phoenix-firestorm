@@ -151,11 +151,18 @@ void LLHUDText::renderText()
 	mOffsetY = lltrunc(mHeight * ((mVertAlignment == ALIGN_VERT_CENTER) ? 0.5f : 1.f));
 
 	// *TODO: cache this image
-	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
+	// <FS:Ansariel> Performance improvement
+	//LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
 
 	// *TODO: make this a per-text setting
-	LLColor4 bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
-	bg_color.setAlpha(gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor);
+	// <FS:Ansariel> Performance improvement
+	//LLColor4 bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
+	//bg_color.setAlpha(gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor);
+	static LLUIColor s_bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
+	static LLCachedControl<F32> chatBubbleOpacity(gSavedSettings, "ChatBubbleOpacity");
+	LLColor4 bg_color = s_bg_color.get();
+	bg_color.setAlpha(chatBubbleOpacity * alpha_factor);
+	// </FS:Ansariel>
 
 	const S32 border_height = 16;
 	const S32 border_width = 16;

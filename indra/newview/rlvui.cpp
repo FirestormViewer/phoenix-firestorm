@@ -21,7 +21,7 @@
 #include "llavatarnamecache.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llcallfloater.h"
-#include "fsfloatervoicecontrols.h"
+//#include "fsfloatervoicecontrols.h" // <FS:TM> removed in CHUI
 // </FS:Ansariel> [FS communication UI]
 #include "llenvmanager.h"
 #include "llfloatersidepanelcontainer.h"
@@ -76,6 +76,7 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onToggleXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
+	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SENDIM, boost::bind(&RlvUIEnabler::onToggleSendIM, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETDEBUG, boost::bind(&RlvUIEnabler::onToggleSetDebug, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
@@ -154,6 +155,13 @@ void RlvUIEnabler::onToggleMovement()
 
 	// Force an update since the status only updates when the current parcel changes [see LLFloaterMove::postBuild()]
 	LLFloaterMove::sUpdateMovementStatus();
+}
+
+// Checked: 2013-05-11 (RLVa-1.4.9)
+void RlvUIEnabler::onToggleSendIM()
+{
+	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM);
+	gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->setHiddenFromSettingsEditor(!fEnable);
 }
 
 // Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
@@ -384,13 +392,13 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 		pRadar->updateNames();
 	// </FS:Ansariel> [Standalone radar]
 
-	// Refresh the speaker list
-	// <FS:Ansariel> [FS communication UI]
-	//LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
-	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
-	// </FS:Ansariel> [FS communication UI]
-	if (pCallFloater)
-		pCallFloater->getAvatarCallerList()->updateAvatarNames();
+//	// Refresh the speaker list
+//	// <FS:Ansariel> [FS communication UI] <FS:TM> removed in CHUI
+//	//LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
+//	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
+//	// </FS:Ansariel> [FS communication UI]
+//	if (pCallFloater)
+//		pCallFloater->getAvatarCallerList()->updateAvatarNames();
 
 	// Force the use of the "display name" cache so we can filter both display and legacy names (or return back to the user's preference)
 	if (!fEnable)

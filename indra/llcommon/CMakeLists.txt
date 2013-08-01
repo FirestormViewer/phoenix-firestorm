@@ -17,6 +17,7 @@ include_directories(
     ${EXPAT_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIRS}
+    ${BREAKPAD_INCLUDE_DIRECTORIES}
     )
 
 # add_executable(lltreeiterators lltreeiterators.cpp)
@@ -246,7 +247,6 @@ set(llcommon_HEADER_FILES
     lluuid.h
     lluuidhashmap.h
     llversionserver.h
-    llversionviewer.h
     llworkerthread.h
     ll_template_cast.h
     metaclass.h
@@ -277,14 +277,6 @@ list(APPEND llcommon_HEADER_FILES ${llcommon_ND_HEADER_FILES} )
 
 # </FS:ND>
 
-# <FS:CR> Add OSSL constants for OpenSim builds
-if (OPENSIM)
-    LIST(APPEND llcommon_HEADER_FILES
-    osslconstants.h
-    )
-endif (OPENSIM)
-# </FS:CR>
-
 set_source_files_properties(${llcommon_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 
@@ -301,6 +293,8 @@ else(LLCOMMON_LINK_SHARED)
     add_library (llcommon ${llcommon_SOURCE_FILES})
 endif(LLCOMMON_LINK_SHARED)
 
+# <FS:TS> This must be broken out because llcommon is always built as
+#         shared but LLCOMMON_LINK_SHARED is turned off explicitly
 if(NOT WORD_SIZE EQUAL 32)
   if(WINDOWS)
 #    add_definitions(/FIXED:NO)
@@ -358,6 +352,7 @@ if (LL_TESTS)
   LL_ADD_INTEGRATION_TEST(reflection "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(stringize "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(lleventdispatcher "" "${test_libs}")
+  LL_ADD_INTEGRATION_TEST(lleventcoro "" "${test_libs};${BOOST_CONTEXT_LIBRARY}")
   LL_ADD_INTEGRATION_TEST(llprocess "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llleap "" "${test_libs}")
   LL_ADD_INTEGRATION_TEST(llstreamqueue "" "${test_libs}")

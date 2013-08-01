@@ -10,7 +10,7 @@
 		<string name="blocked_permattach">El intento de anexar '[OBJECT]' fue denegado debido a restricciones RLV</string>
 		<string name="blocked_permteleport">Se le denegó el permiso a '[OBJECT]' para teleportarte debido a restricciones RLV</string>
 		<string name="blocked_startim">No es posible iniciar una sesión de MI con [RECIPIENT] debido a restricciones RLV</string>
-		<string name="blocked_startconf">No es posible iniciar una conferencia with [RECIPIENT] debido a restricciones RLV</string>
+		<string name="blocked_startconf">No es posible iniciar una conferencia debido a restricciones RLV</string>
 		<string name="blocked_teleport">No es posible iniciar un teleporte debido a restricciones RLV</string>
 		<string name="blocked_viewxxx">No es posible abrir [TYPE] debido a restricciones RLV</string>
 		<string name="blocked_recvim_remote">

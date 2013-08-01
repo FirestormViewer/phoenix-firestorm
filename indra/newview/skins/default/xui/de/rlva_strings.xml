@@ -15,7 +15,7 @@
     <string name="blocked_permattach">Der Versuch „[OBJECT]“ anzuhängen wurde aufgrund von RLV-Einschränkungen verweigert.</string>
     <string name="blocked_permteleport">„[OBJECT]“ wurde aufgrund von RLV-Einschränkungen verweigert, dich zu teleportieren.</string>
     <string name="blocked_startim">IM-Sitzung mit [RECIPIENT] konnte aufgrund von RLV-Einschränkungen nicht gestartet werden.</string>
-    <string name="blocked_startconf">Konferenz mit [RECIPIENT] konnte aufgrund von RLV-Einschränkungen nicht gestartet werden.</string>
+    <string name="blocked_startconf">Konferenz konnte aufgrund von RLV-Einschränkungen nicht gestartet werden.</string>
     <string name="blocked_teleport">Teleport konnte aufgrund von RLV-Einschränkungen nicht initialisiert werden.</string>
     <string name="blocked_viewxxx">[TYPE] konnte aufgrund von RLV-Einschränkungen nicht geöffnet werden.</string>
 

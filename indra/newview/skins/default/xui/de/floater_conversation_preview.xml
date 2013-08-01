@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_conversation" title="Unterhaltung:">
+	<floater.string name="Title">
+		Unterhaltung: [NAME]
+	</floater.string>
+	<text name="page_label" value="Seite"/>
+	<button name="open_external_btn" tool_tip="Chatverlauf in externem Fenster öffnen"/>
+</floater>

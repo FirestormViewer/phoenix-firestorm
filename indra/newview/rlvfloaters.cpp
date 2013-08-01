@@ -229,7 +229,7 @@ void RlvFloaterBehaviours::onBtnCopyToClipboard()
 				if (gObjectList.findObject(idOption))
 					strOption = rlvGetItemNameFromObjID(idOption, true);
 				else if (LLAvatarNameCache::get(idOption, &avName))
-					strOption = (!avName.mUsername.empty()) ? avName.mUsername : avName.mDisplayName;
+					strOption = (!avName.getAccountName().empty()) ? avName.getAccountName() : avName.getDisplayName();
 				else if (!gCacheName->getGroupName(idOption, strOption))
 					strOption = itCmd->getOption();
 			}
@@ -307,7 +307,7 @@ void RlvFloaterBehaviours::refreshAll()
 				}
 				else if (LLAvatarNameCache::get(idOption, &avName))
 				{
-					strOption = (!avName.mUsername.empty()) ? avName.mUsername : avName.mDisplayName;
+					strOption = (!avName.getAccountName().empty()) ? avName.getAccountName() : avName.getDisplayName();
 				}
 				else if (!gCacheName->getGroupName(idOption, strOption))
 				{

@@ -1,3 +1,4 @@
+
 /** 
  * @file llmeshrepository.cpp
  * @brief Mesh repository implementation.
@@ -1320,10 +1321,8 @@ bool LLMeshRepoThread::headerReceived(const LLVolumeParams& mesh_params, U8* dat
 				mLODReqQ.push(req);
 				LLMeshRepository::sLODProcessing++;
 			}
-
-			mPendingLOD.erase(iter); // <FS:ND/> FIRE-7182, only call erase if iter is really valid.
+			mPendingLOD.erase(iter);
 		}
-		//		mPendingLOD.erase(iter); // <FS:ND/> avoid crash by moving erase up.
 	}
 
 	return true;

@@ -421,14 +421,22 @@
          label="Online Status"
          name="Status"
          tear_off="true">
-          <menu_item_check
-           label="Away"
-             name="Set Away">
-                <menu_item_check.on_check
-                 function="World.GetAway" />
-                <menu_item_check.on_click
-                 function="World.SetAway" />
-            </menu_item_check>
+        <menu_item_check
+         name="Away"
+         label="Away">
+          <menu_item_check.on_check
+           function="View.Status.CheckAway" />
+          <menu_item_check.on_click
+           function="World.SetAway" />
+        </menu_item_check>
+        <menu_item_check
+         name="Do Not Disturb"
+         label="Unavailable">
+          <menu_item_check.on_check
+           function="View.Status.CheckDoNotDisturb" />
+          <menu_item_check.on_click
+           function="World.SetDoNotDisturb"/>
+        </menu_item_check>
 			    <menu_item_check
              label="Autorespond"
              name="Set Autorespond">
@@ -444,14 +452,6 @@
                  function="World.GetAutorespondNonFriends"/>
                 <menu_item_check.on_click
                  function="World.SetAutorespondNonFriends"/>
-            </menu_item_check>
-          <menu_item_check
-              label="Unavailable"
-              name="Set Busy">
-                <menu_item_check.on_check
-                  function="World.GetBusy"/>
-                <menu_item_check.on_click
-                  function="World.SetBusy"/>
             </menu_item_check>
         
         </menu>
@@ -505,7 +505,7 @@
              function="Floater.Visible"
              parameter="fs_nearby_chat" />
             <menu_item_check.on_click
-             function="Floater.Toggle"
+             function="Floater.ToggleOrBringToFront"
              parameter="fs_nearby_chat" />
         </menu_item_check>
         <menu_item_check
@@ -544,29 +544,48 @@
              function="Floater.Toggle"
              parameter="gestures" />
         </menu_item_check>
-
-        <menu_item_check
-         label="Voice Filters"
-         name="ShowVoice"
+        <menu_item_separator/>
+        <menu
+         label="Voice morphing"
+         name="VoiceMorphing"
          visibility_control="VoiceMorphingEnabled">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="voice_effect" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="voice_effect" />
-        </menu_item_check>
-
-        <!-- DO NOT DELETE IN CHUI MERGE -->
+            <menu_item_check
+             label="No voice morphing"
+             name="NoVoiceMorphing">
+                <menu_item_check.on_check
+                 function="Communicate.VoiceMorphing.NoVoiceMorphing.Check" />
+                <menu_item_check.on_click
+                 function="Communicate.VoiceMorphing.NoVoiceMorphing.Click" />
+            </menu_item_check>
+            <menu_item_separator/>
+            <menu_item_check
+             label="Preview..."
+             name="Preview">
+                <menu_item_check.on_check
+                 function="Floater.Visible"
+                 parameter="voice_effect" />
+                <menu_item_check.on_click
+                 function="Floater.Toggle"
+                 parameter="voice_effect" />
+            </menu_item_check>
+            <menu_item_call
+             label="Subscribe..."
+             name="Subscribe">
+                <menu_item_call.on_click
+                 function="Communicate.VoiceMorphing.Subscribe" />
+            </menu_item_call>
+        </menu>
         <menu_item_check
-         label="Nearby Voice"
-         name="Nearby Voice">
+         name="Conversation Log..."
+         label="Conversation Log...">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="fs_voice_controls" />
+             parameter="conversation" />
+            <menu_item_check.on_enable
+             function="Conversation.IsConversationLoggingAllowed" />
             <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="fs_voice_controls" />
+             parameter="conversation" />
         </menu_item_check>
         <!--
         <menu_item_separator/>
@@ -604,11 +623,22 @@
               parameter="nearby_panel" />
         </menu_item_check>
         -->
+        <menu_item_check
+         label="Nearby Voice"
+         name="Nearby Voice">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="fs_voice_controls" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="fs_voice_controls" />
+        </menu_item_check>
         <menu_item_call
          label="Block List"
          name="Block List">
             <menu_item_call.on_click
-              function="Communicate.BlockList" />
+              function="SideTray.PanelPeopleTab"
+              parameter="blocked_panel" />
         </menu_item_call>
     </menu>
     
@@ -1882,8 +1912,59 @@
             <menu_item_call.on_click
              function="Floater.Show"
              parameter="hud" />
+        </menu_item_call>
+		<menu_item_separator/>
+		
+		<menu_item_call
+             label="User’s guide"
+             name="User’s guide">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-User-s-Guide/ta-p/1244857"/>
+        </menu_item_call>
+        <menu_item_call
+             label="Knowledge Base"
+             name="Knowledge Base">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/tkb/communitypage"/>
+        </menu_item_call>
+        <menu_item_call
+             label="Wiki"
+             name="Wiki">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://wiki.secondlife.com"/>
+        </menu_item_call>
+        <menu_item_call
+             label="Community Forums"
+             name="Community Forums">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/Forums/ct-p/Forums"/>
+        </menu_item_call>         
+        <menu_item_call
+             label="Support portal"
+             name="Support portal">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="https://support.secondlife.com/"/>         
+        </menu_item_call>
+        <menu_item_separator/>
+        <menu_item_call
+             label="[SECOND_LIFE] News"
+             name="Second Life News">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/Featured-News/bg-p/blog_feature_news"/>  
+        </menu_item_call>
+        <menu_item_call
+             label="[SECOND_LIFE] Blogs"
+             name="Second Life Blogs">
+             <menu_item_call.on_click
+                 function="Advanced.ShowURL"
+                 parameter="http://community.secondlife.com/t5/Blogs/ct-p/Blogs"/>
         </menu_item_call>-->
-
         <menu_item_separator/>
 		<menu_item_call
              label="Check Grid status"
@@ -3253,6 +3334,12 @@
                 <menu_item_check.on_click
                  function="Advanced.ToggleFrameTest" />
             </menu_item_check>
+          <menu_item_call
+             label="Frame Profile"
+             name="Frame Profile">
+            <menu_item_call.on_click
+             function="Advanced.ClickRenderProfile" />
+          </menu_item_call>
         </menu>
       <menu
         create_jump_keys="true"
@@ -3558,6 +3645,13 @@
                 <menu_item_call.on_click
                  function="Advanced.SelectedTextureInfo" />
             </menu_item_call>
+            <menu_item_call
+             label="Selected Material Info"
+             name="Selected Material Info"
+             shortcut="control|alt|shift|M">
+                <menu_item_call.on_click
+                 function="Advanced.SelectedMaterialInfo" />
+            </menu_item_call>
             <menu_item_check
              label="Wireframe"
              name="Wireframe"
@@ -3585,7 +3679,7 @@
 
           <menu_item_check
                        label="Advanced Lighting Model"
-                       name="Lighting and Shadows">
+                       name="Advanced Lighting Model">
             <menu_item_check.on_check
              function="CheckControl"
              parameter="RenderDeferred" />
@@ -3692,16 +3786,6 @@
                  parameter="TextureLoadFullRes" />
             </menu_item_check>
             <menu_item_check
-             label="Texture Atlas (experimental)"
-             name="Texture Atlas">
-              <menu_item_check.on_check
-               function="CheckControl"
-               parameter="EnableTextureAtlas" />
-              <menu_item_check.on_click
-               function="ToggleControl"
-               parameter="EnableTextureAtlas" />
-            </menu_item_check>
-              <menu_item_check
              label="Render Attached Lights"
              name="Render Attached Lights">
                 <menu_item_check.on_check

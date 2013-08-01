@@ -119,6 +119,7 @@ private:
 	LLCheckBoxCtrl	*mCtrlReceiveGroupChat; // <exodus/>
 
 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
+	boost::signals2::connection mAvatarNameCacheConnection;
 	LLUUID mIteratorGroup; // <FS:ND/> FIRE-6074; UUID of the group mMemberProgress belongs to.
 
 	// <FS:Ansariel> For storing group name for copy name button

@@ -35,6 +35,7 @@ LLCrashLookupWindows::LLCrashLookupWindows()
 	, m_pDbgClient(NULL)
 	, m_pDbgControl(NULL)
 	, m_pDbgSymbols(NULL)
+	, m_pDbgClient4(0)
 {
 	CoInitialize(NULL);
 
@@ -48,6 +49,8 @@ LLCrashLookupWindows::LLCrashLookupWindows()
 		hRes = m_pDbgClient->QueryInterface(__uuidof(IDebugSymbols2), (void**)&m_pDbgSymbols);
 		if (FAILED(hRes))
 			return;
+
+		m_pDbgClient->QueryInterface( __uuidof(IDebugClient4), (void**)&m_pDbgClient4 );
 	}
 }
 
@@ -63,6 +66,10 @@ LLCrashLookupWindows::~LLCrashLookupWindows()
 		m_pDbgControl->Release();
 		m_pDbgControl = NULL;
 	}
+
+	if( m_pDbgClient4 )
+		m_pDbgClient4->Release();
+
 	if (m_pDbgClient)
 	{
 		m_pDbgClient->Release();
@@ -83,8 +90,15 @@ bool LLCrashLookupWindows::initFromDump(const std::string& strDumpPath)
 	if ( (!m_pDbgClient) || (!m_pDbgControl) || (!m_pDbgSymbols) )
 		return false;
 
+	std::wstring strDumpPathW = utf8str_to_utf16str( strDumpPath );
 	// Open the minidump and wait to finish processing
-	HRESULT hRes = m_pDbgClient->OpenDumpFile(strDumpPath.c_str());
+	HRESULT hRes(S_OK);
+
+	if( !m_pDbgClient4 )
+		hRes = m_pDbgClient->OpenDumpFile (strDumpPath.c_str());
+	else
+		hRes = m_pDbgClient4->OpenDumpFileWide (strDumpPathW.c_str(),0);
+
 	if (FAILED(hRes))
 		return false;
 	m_pDbgControl->WaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE);

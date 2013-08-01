@@ -14,6 +14,7 @@
 		<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>
 		<check_box label="Deaktiviere Fortschrittsanzeige während des Logins" name="login_screen_toggle" tool_tip="Deaktiviert die schwarze Fortschrittsanzeige während des Logins."/>
 		<check_box label="Deaktiviere Fortschrittsanzeige während des Logouts" name="logout_screen_toggle" tool_tip="Deaktiviert die schwarze Fortschrittsanzeige während des Logouts."/>
+		<check_box label="Deaktiviere automatisches Öffnen der Blockierliste" name="FSDisableBlockListAutoOpen" tool_tip="Deaktiviert das automatische Öffnen der Blockierliste, wenn Avatare oder Objekte geblockt werden."/>
 		<check_box label="Objekte immer mit der Landgruppe rezzen, falls möglich" name="grouplandrez" tool_tip="Versucht Objekte mit der Landgruppe zu rezzen, sofern du ein Mitglied der Gruppe bist, unabhängig davon, welche Gruppe gerade aktiv ist."/>
 		<check_box label="Kontaktliste immer nach Benutzername sortieren" name="sortcontactsbyun" tool_tip="Sortiert Kontaktlisten immer anhand des Benutzernamens, auch wenn Anzeigenamen aktiviert sind."/>
 		<check_box label="Blockierte Avatare als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>

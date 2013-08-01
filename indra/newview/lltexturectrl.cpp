@@ -39,7 +39,7 @@
 #include "llfocusmgr.h"
 #include "llviewertexture.h"
 #include "llfolderview.h"
-#include "llfoldervieweventlistener.h"
+#include "llfolderviewmodel.h"
 #include "llinventory.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodelbackgroundfetch.h"
@@ -58,6 +58,7 @@
 #include "lltoolmgr.h"
 #include "lltoolpipette.h"
 #include "llfiltereditor.h"
+#include "llwindow.h"
 
 #include "lltool.h"
 #include "llviewerwindow.h"
@@ -143,7 +144,7 @@ public:
 	static void		onBtnCancel( void* userdata );
 		   void		onBtnPipette( );
 	//static void		onBtnRevert( void* userdata );
-	static void		onBtnWhite( void* userdata );
+	static void		onBtnBlank( void* userdata );
 	static void		onBtnTransparent( void* userdata ); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	static void		onBtnNone( void* userdata );
 	static void		onBtnClear( void* userdata );
@@ -165,7 +166,6 @@ protected:
 	LLUUID				mImageAssetID; // Currently selected texture
 	LLUIImagePtr		mFallbackImage; // What to show if currently selected texture is null.
 
-	LLUUID				mWhiteImageAssetID;
 	LLUUID				mTransparentImageAssetID; // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	LLUUID				mSpecialCurrentImageAssetID;  // Used when the asset id has no corresponding texture in the user's inventory.
 	LLUUID				mOriginalImageAssetID;
@@ -188,7 +188,7 @@ protected:
 	F32					mContextConeOpacity;
 	LLSaveFolderState	mSavedFolderState;
 	BOOL				mSelectedItemPinned;
-	
+
 	LLRadioGroup*		mModeSelector;
 	LLScrollListCtrl*	mLocalScrollCtrl;
 
@@ -209,8 +209,7 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 :	LLFloater(LLSD()),
 	mOwner( owner ),
 	mImageAssetID( owner->getImageAssetID() ),
-	mFallbackImage( fallback_image ),
-	mWhiteImageAssetID( gSavedSettings.getString( "UIImgWhiteUUID" ) ),
+	mFallbackImage( fallback_image ),	
 	mTransparentImageAssetID( gSavedSettings.getString( "UIImgTransparentUUID" ) ), // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	mOriginalImageAssetID(owner->getImageAssetID()),
 	mLabel(label),
@@ -378,7 +377,7 @@ BOOL LLFloaterTexturePicker::handleKeyHere(KEY key, MASK mask)
 		{
 			if (!root_folder->getCurSelectedItem())
 			{
-				LLFolderViewItem* itemp = root_folder->getItemByID(gInventory.getRootFolderID());
+				LLFolderViewItem* itemp =    mInventoryPanel->getItemByID(gInventory.getRootFolderID());
 				if (itemp)
 				{
 					root_folder->setSelection(itemp, FALSE, FALSE);
@@ -431,7 +430,7 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 	childSetAction("Default",LLFloaterTexturePicker::onBtnSetToDefault,this);
 	childSetAction("None", LLFloaterTexturePicker::onBtnNone,this);
-	childSetAction("Blank", LLFloaterTexturePicker::onBtnWhite,this);
+	childSetAction("Blank", LLFloaterTexturePicker::onBtnBlank,this);
 	childSetAction("Transparent", LLFloaterTexturePicker::onBtnTransparent,this); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 
 
@@ -461,7 +460,7 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 		// Commented out to scroll to currently selected texture. See EXT-5403.
 		// // store this filter as the default one
-		// mInventoryPanel->getRootFolder()->getFilter()->markDefault();
+		// mInventoryPanel->getRootFolder()->getFilter().markDefault();
 
 		// Commented out to stop opening all folders with textures
 		// mInventoryPanel->openDefaultFolderForType(LLFolderType::FT_TEXTURE);
@@ -587,7 +586,7 @@ void LLFloaterTexturePicker::draw()
 		}
 
 		getChildView("Default")->setEnabled(mImageAssetID != mOwner->getDefaultImageAssetID());
-		getChildView("Blank")->setEnabled(mImageAssetID != mWhiteImageAssetID );
+		getChildView("Blank")->setEnabled(mImageAssetID != mOwner->getBlankImageAssetID());
 		getChildView("Transparent")->setEnabled(mImageAssetID != mTransparentImageAssetID ); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 		getChildView("None")->setEnabled(mOwner->getAllowNoTexture() && !mImageAssetID.isNull() );
 
@@ -645,11 +644,10 @@ void LLFloaterTexturePicker::draw()
 		LLFolderView* folder_view = mInventoryPanel->getRootFolder();
 		if (!folder_view) return;
 
-		LLInventoryFilter* filter = folder_view->getFilter();
-		if (!filter) return;
+		LLFolderViewFilter& filter = static_cast<LLFolderViewModelInventory*>(folder_view->getFolderViewModel())->getFilter();
 
-		bool is_filter_active = folder_view->getCompletedFilterGeneration() < filter->getCurrentGeneration() &&
-				filter->isNotDefault();
+		bool is_filter_active = folder_view->getViewModelItem()->getLastFilterGeneration() < filter.getCurrentGeneration() &&
+				filter.isNotDefault();
 
 		// After inventory panel filter is applied we have to update
 		// constraint rect for the selected item because of folder view
@@ -659,25 +657,11 @@ void LLFloaterTexturePicker::draw()
 		if (!is_filter_active && !mSelectedItemPinned)
 		{
 			folder_view->setPinningSelectedItem(mSelectedItemPinned);
-			folder_view->dirtyFilter();
-			folder_view->arrangeFromRoot();
-
+			folder_view->getViewModelItem()->dirtyFilter();
 			mSelectedItemPinned = TRUE;
 		}
 	}
 }
-
-// static
-/*
-void LLFloaterTexturePicker::onSaveAnotherCopyDialog( S32 option, void* userdata )
-{
-	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
-	if( 0 == option )
-	{
-		self->copyToInventoryFinal();
-	}
-}
-*/
 
 const LLUUID& LLFloaterTexturePicker::findItemID(const LLUUID& asset_id, BOOL copyable_only)
 {
@@ -746,11 +730,11 @@ void LLFloaterTexturePicker::onBtnSetToDefault(void* userdata)
 }
 
 // static
-void LLFloaterTexturePicker::onBtnWhite(void* userdata)
+void LLFloaterTexturePicker::onBtnBlank(void* userdata)
 {
 	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
 	self->setCanApply(true, true);
-	self->setImageID( self->mWhiteImageAssetID );
+	self->setImageID( self->mOwner->getBlankImageAssetID() );
 	self->commitIfImmediateSet();
 }
 
@@ -836,7 +820,7 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 	if (items.size())
 	{
 		LLFolderViewItem* first_item = items.front();
-		LLInventoryItem* itemp = gInventory.getItem(first_item->getListener()->getUUID());
+		LLInventoryItem* itemp = gInventory.getItem(static_cast<LLFolderViewModelItemInventory*>(first_item->getViewModelItem())->getUUID());
 		mNoCopyTextureSelected = FALSE;
 		if (itemp)
 		{
@@ -1041,7 +1025,7 @@ void LLFloaterTexturePicker::onFilterEdit(const std::string& search_string )
 	else if (mInventoryPanel->getFilterSubString().empty())
 	{
 		// first letter in search term, save existing folder open state
-		if (!mInventoryPanel->getRootFolder()->isFilterModified())
+		if (!mInventoryPanel->getFilter().isNotDefault())
 		{
 			mSavedFolderState.setApply(FALSE);
 			mInventoryPanel->getRootFolder()->applyFunctorRecursively(mSavedFolderState);
@@ -1089,6 +1073,7 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	mDragCallback(NULL),
 	mDropCallback(NULL),
 	mOnCancelCallback(NULL),
+	mOnCloseCallback(NULL),
 	mOnSelectCallback(NULL),
 	mBorderColor( p.border_color() ),
 	mAllowNoTexture( FALSE ),
@@ -1107,6 +1092,12 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	// </FS:Ansariel> Mask texture if desired
 	mPreviewMode(!p.enabled) // <FS:Ansariel> For texture preview mode
 {
+
+	// Default of defaults is white image for diff tex
+	//
+	LLUUID whiteImage( gSavedSettings.getString( "UIImgWhiteUUID" ) );
+	setBlankImageAssetID( whiteImage );
+
 	setAllowNoTexture(p.allow_no_texture);
 	setCanApplyImmediately(p.can_apply_immediately);
 	mCommitOnSelection = !p.no_commit_on_selection;
@@ -1366,6 +1357,10 @@ void LLTextureCtrl::onFloaterClose()
 
 	if (floaterp)
 	{
+		if (mOnCloseCallback)
+		{
+			mOnCloseCallback(this,LLSD());
+		}
 		floaterp->setOwner(NULL);
 	}
 
@@ -1385,7 +1380,7 @@ void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLUUID id)
 		// (i.e. op == TEXTURE_SELECT) or texture changes via DnD.
 		else if (mCommitOnSelection || op == TEXTURE_SELECT)
 			mViewModel->setDirty(); // *TODO: shouldn't we be using setValue() here?
-
+			
 		if(floaterp->isDirty() || id.notNull()) // mModelView->setDirty does not work.
 		{
 			setTentative( FALSE );
@@ -1397,10 +1392,10 @@ void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLUUID id)
 			}
 			else
 			{
-				mImageItemID = floaterp->findItemID(floaterp->getAssetID(), FALSE);
-				lldebugs << "mImageItemID: " << mImageItemID << llendl;
-				mImageAssetID = floaterp->getAssetID();
-				lldebugs << "mImageAssetID: " << mImageAssetID << llendl;
+			mImageItemID = floaterp->findItemID(floaterp->getAssetID(), FALSE);
+			lldebugs << "mImageItemID: " << mImageItemID << llendl;
+			mImageAssetID = floaterp->getAssetID();
+			lldebugs << "mImageAssetID: " << mImageAssetID << llendl;
 			}
 
 			if (op == TEXTURE_SELECT && mOnSelectCallback)

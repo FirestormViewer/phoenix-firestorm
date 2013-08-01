@@ -26,6 +26,10 @@
 			<check_box label="Reproducir sonido de tecleo cuando alguien escribe en el chat local" name="play_typing_sound"/>
 			<check_box label="Enviar notificación de escritura a otros avatares durante las sesiones de MI" name="FSSendTypingState"/>
 			<check_box name="FSChatbarGestureAutoCompleteEnable" label="Activar el autocompletado de los gestos en la barra de chat local"/>
+			<check_box name="FSChatbarNamePrediction" label="Activar la predicción automática de nombre en la barra de chat general"/>
+			<check_box name="FSIMSystemMessageBrackets" label="Encerrar los mensajes del sistema entre corchetes"/>
+			<check_box name="FSChatHistoryShowYou" label="Mostrar &quot;Tú&quot; en vez de tu nombre en el historial de chat"/>
+			<check_box name="IMShowNamesForP2PConv" label="Mostrar nombres en MIs directos"/>
 			<check_box label="Cuando estoy desconectado, recibir los MI por email ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="No usar cabeceras de chat (usar estilo V1)" name="plain_text_chat_history"/>
 			<check_box label="Al usar cabeceras de chat, mostrar mini-iconos" name="ShowChatMiniIcons"/>
@@ -85,11 +89,9 @@
 				Longitud del nombre del grupo a mostrar en el historial de chat
 			</text>
 			<spinner tool_tip="-1 para mostrar el nombre completo, 0 para no mostrar" name="FSShowGroupNameLength" width="45"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Abrir Conversaciones cuando se reciba un mensaje offline"/>
 			<check_box name="FSShowIMInChatHistory" label="Mostrar MIs en la ventana de chat local"/>
 			<check_box name="FSLogIMInChatHistory" label="Guardar MIs en el chat local" width="180"/>
-			<text name="requires_save_chat_logs" width="230" top_delta="1">
-				(requiere activar el registro de chat local)
-			</text>
 			<text name="FSIMChatHistoryFade_label" width="380">
 				Fundir el texto de MI con el fondo de la ventana de historial de chat
 			</text>
@@ -123,6 +125,7 @@
 			<check_box name="AllowMUpose" label="Usar &quot;:&quot; como sinónimo de &quot;/me&quot;"/>
 			<check_box name="EmotesUseItalic" label="Narraciones en cursiva" left_delta="210"/>
 			<check_box name="AutoCloseOOC" label="Auto-cerrar paréntesis ((OOC))"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Gritos en negrita, susurros en cursiva"/>
 			<check_box name="FSNearbyChatbar" label="Añadir una barra de chat a la ventana de chat local" width="310"/>
 			<check_box name="FSShowChatChannel" label="Mostrar selector de canal en la barra de chat"/>
 			<check_box label="Ocultar automáticamente la barra de chat principal" name="AutohideChatBar" tool_tip="Oculta la barra de chat de la barra de botones inferior y sólo la muestra superpuesta cuando es necesaria."/>
@@ -146,7 +149,7 @@
 				<combo_box.item label="Negrita, cursiva y subrayado" name="BOLDITALICUNDERLINE"/>
 			</combo_box>
 			<text name="Moderator Text Style">
-				Mensajes:
+				Estilo de texto:
 			</text>
 			<combo_box name="mod_text_style">
 				<combo_box.item label="Normal" name="normal"/>
@@ -161,10 +164,11 @@
 			<check_box name="FSMuteAllGroups" label="Desactivar TODOS los chats de grupo"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Al desactivar 'Recibir avisos del grupo', desactivar también el chat del mismo" left="30"/>
 			<text name="logging_enhancements">
-				Extras del registro de chat:
+				Marcas de tiempo:
 			</text>
 			<check_box label="Ocultar fecha y hora en el chat local" name="hide_timestamps_nearby_chat"/>
 			<check_box label="Ocultar fecha y hora en los MIs" name="hide_timestamps_im"/>
+			<check_box name="IMShowTime" label="Mostrar fecha y hora en el historial de chat y MIs"/>
 			<text name="console_enhancements">
 				Consola:
 			</text>
@@ -229,6 +233,7 @@
 		<panel label="Entrada de texto" name="ChatTextInput">
 			<button name="autoreplace_showgui" label="Autoreemplazar..."/>
 			<button name="spellcheck_showgui" label="Ortografía..."/>
+			<button name="translation_settings_btn" label="Traducción..."/>
 		</panel>
 	</tab_container>
 </panel>

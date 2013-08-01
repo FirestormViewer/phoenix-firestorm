@@ -64,6 +64,8 @@
 #include "llgroupactions.h"
 #include "llfloaterworldmap.h"
 #include "fspanelclassified.h"
+#include "fspanelprofile.h"
+#include "fspanelprofileclassifieds.h"
 
 #include <iostream>
 #include <string>
@@ -76,6 +78,14 @@
 LLRadioGroup*	mSearchRadio;
 LLComboBox*		mCategoryPlaces;
 LLComboBox*		mCategoryEvents;
+
+static const std::string PANEL_PROFILE		= "panel_profile_secondlife";
+static const std::string PANEL_WEB			= "panel_profile_web";
+static const std::string PANEL_INTERESTS	= "panel_profile_interests";
+static const std::string PANEL_PICKS		= "panel_profile_picks";
+static const std::string PANEL_CLASSIFIEDS	= "panel_profile_classified";
+static const std::string PANEL_FIRSTLIFE	= "panel_profile_firstlife";
+static const std::string PANEL_NOTES		= "panel_profile_notes";
 
 ////////////////////////////////////////
 //          Observer Classes          //
@@ -333,6 +343,15 @@ BOOL FSFloaterSearch::postBuild()
 	childSetAction("map_btn", boost::bind(&FSFloaterSearch::onBtnMap, this));
 	resetVerbs();
 	
+	// <KC> If skin has legacy full profile view, use it
+	LLPanel* panel_people = getChild<LLPanel>("panel_ls_people");
+	mPanelProfile = panel_people->findChild<FSPanelProfile>("panel_profile_view");
+	if (mPanelProfile)
+	{
+		mPanelProfile->setVisible(false);
+		panel_people->childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
+	}
+	
 	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
 	mDetailTitle =		getChild<LLTextEditor>("title");
 	mDetailDesc =		getChild<LLTextEditor>("desc");
@@ -361,10 +380,17 @@ void FSFloaterSearch::onTabChange()
 {
 	LLPanel* active_panel = mTabContainer->getCurrentPanel();
 	LLPanel* panel_web = getChild<LLPanel>("panel_ls_web");
+	LLPanel* panel_people = getChild<LLPanel>("panel_ls_people");
 	
 	if(active_panel == panel_web)
 	{
 		mDetailsPanel->setVisible(false);
+	}
+	else if (active_panel == panel_people)
+	{
+		mDetailsPanel->setVisible(false);
+		if (mPanelProfile)
+			mPanelProfile->setVisible(mHasSelection);
 	}
 	else
 	{
@@ -382,8 +408,19 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 		switch (type)
 		{
 			case SC_AVATAR:
-				LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
-				LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
+			{
+				// <KC> If skin has legacy full profile view, use it
+				if (mPanelProfile)
+				{
+					mPanelProfile->setVisible(true);
+					mPanelProfile->onOpen(selected_item);
+				}
+				else
+				{
+					LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
+					LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
+				}
+			}
 				break;
 			case SC_GROUP:
 				mGroupPropertiesRequest = new FSSearchGroupInfoObserver(selected_item, this);
@@ -579,6 +616,14 @@ void FSFloaterSearch::avatarNameUpdatedCallback(const LLUUID& id, const LLAvatar
 	{
 		mDetailTitle->setValue(av_name.getCompleteName());
 		setLoadingProgress(false);
+		
+		// FSPanelProfileSecondLife* panel_profile = findChild<FSPanelProfileSecondLife>(PANEL_PROFILE);
+		// if (panel_profile)
+		// {
+			// FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
+			// panel_profile->onAvatarNameCache(id, av_name);
+			// if (panel_web) panel_web->onAvatarNameCache(id, av_name);
+		// }
 	}
 	// Otherwise possibly a request for an older selection, ignore it.
 }
@@ -784,6 +829,9 @@ void FSPanelSearchPeople::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -808,6 +856,8 @@ void FSPanelSearchPeople::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
 	
 	find();
 }
@@ -1087,6 +1137,9 @@ void FSPanelSearchGroups::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -1111,6 +1164,9 @@ void FSPanelSearchGroups::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
+	
 	find();
 }
 
@@ -1411,6 +1467,9 @@ void FSPanelSearchPlaces::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirPlacesQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -1438,6 +1497,8 @@ void FSPanelSearchPlaces::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
 	
 	find();
 }
@@ -1780,6 +1841,9 @@ void FSPanelSearchLand::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirLandQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -1801,6 +1865,8 @@ void FSPanelSearchLand::find()
 
 void FSPanelSearchLand::onBtnFind()
 {
+	resetSearch();
+	
 	find();
 }
 
@@ -2098,6 +2164,9 @@ void FSPanelSearchClassifieds::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessageFast(_PREHASH_DirClassifiedQuery);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
@@ -2123,6 +2192,9 @@ void FSPanelSearchClassifieds::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
+	
 	find();
 }
 
@@ -2433,6 +2505,9 @@ void FSPanelSearchEvents::find()
 		mQueryID.setNull();
 	mQueryID.generate();
 	
+	if (mStartSearch < 0)
+		mStartSearch = 0;
+	
 	gMessageSystem->newMessage("DirFindQuery");
 	gMessageSystem->nextBlock("AgentData");
 	gMessageSystem->addUUID("AgentID", gAgent.getID());
@@ -2457,6 +2532,8 @@ void FSPanelSearchEvents::onBtnFind()
 	{
 		LLSearchHistory::getInstance()->addEntry(text);
 	}
+	
+	resetSearch();
 	
 	find();
 }
@@ -2616,6 +2693,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 			return;
 		}
 		else if(status & STATUS_SEARCH_EVENTS_SHORTSTRING)

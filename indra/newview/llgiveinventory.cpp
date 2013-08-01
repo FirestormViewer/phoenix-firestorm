@@ -346,22 +346,24 @@ void LLGiveInventory::logInventoryOffer(const LLUUID& to_agent, const LLUUID &im
 	// If this item was given by drag-and-drop on avatar while IM panel wasn't open, log this action to IM history.
 	else
 	{
-//		std::string full_name;
-//		if (gCacheName->getFullName(to_agent, full_name))
-//		{
-//			LLIMModel::instance().logToFile(full_name, LLTrans::getString("SECOND_LIFE"), im_session_id, LLTrans::getString("inventory_item_offered-im"));
-//		}
-// [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
-		std::string strFilename;
-		if (LLIMModel::buildIMP2PLogFilename(to_agent, LLStringUtil::null, strFilename))
+		std::string full_name;
+		if (gCacheName->getFullName(to_agent, full_name))
 		{
-			LLIMModel::instance().logToFile(strFilename, LLTrans::getString("SECOND_LIFE"), im_session_id, LLTrans::getString("inventory_item_offered-im"));
-			//// Build a new format username or firstname_lastname for legacy names
-			//// to use it for a history log filename.
+			// Build a new format username or firstname_lastname for legacy names
+			// to use it for a history log filename.
+			// <FS:Ansariel> [Legacy IM logfile names]
 			//full_name = LLCacheName::buildUsername(full_name);
-			//LLIMModel::instance().logToFile(full_name, LLTrans::getString("SECOND_LIFE"), im_session_id, LLTrans::getString("inventory_item_offered-im"));
+			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+			{
+				full_name = full_name.substr(0, full_name.find(" Resident"));;
+			}
+			else
+			{
+				full_name = LLCacheName::buildUsername(full_name);
+			}
+			// </FS:Ansariel> [Legacy IM logfile names]
+			LLIMModel::instance().logToFile(full_name, LLTrans::getString("SECOND_LIFE"), im_session_id, LLTrans::getString("inventory_item_offered-im"));
 		}
-// [/SL:KB]
 	}
 }
 

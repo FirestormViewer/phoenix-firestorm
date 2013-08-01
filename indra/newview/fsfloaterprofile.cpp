@@ -34,13 +34,7 @@
 #include "llavatarnamecache.h"
 #include "fspanelprofileclassifieds.h"
 
-static const std::string PANEL_PROFILE      = "panel_profile_secondlife";
-static const std::string PANEL_WEB          = "panel_profile_web";
-static const std::string PANEL_INTERESTS    = "panel_profile_interests";
-static const std::string PANEL_PICKS        = "panel_profile_picks";
-static const std::string PANEL_CLASSIFIEDS  = "panel_profile_classified";
-static const std::string PANEL_FIRSTLIFE    = "panel_profile_firstlife";
-static const std::string PANEL_NOTES        = "panel_profile_notes";
+static const std::string PANEL_PROFILE_VIEW = "panel_profile_view";
 
 FSFloaterProfile::FSFloaterProfile(const LLSD& key)
  : LLFloater(key)
@@ -54,93 +48,55 @@ FSFloaterProfile::~FSFloaterProfile()
 
 void FSFloaterProfile::onOpen(const LLSD& key)
 {
-    LLUUID id;
-    if(key.has("id"))
-    {
-        id = key["id"];
-    }
-    if(!id.notNull()) return;
+	LLUUID id;
+	if(key.has("id"))
+	{
+		id = key["id"];
+	}
+	if(!id.notNull()) return;
 
-    setAvatarId(id);
+	setAvatarId(id);
 
-    //HACK* fix this :(
-    FSPanelProfile* panel_profile               = findChild<FSPanelProfile>(PANEL_PROFILE);
-    FSPanelProfileWeb* panel_web                = findChild<FSPanelProfileWeb>(PANEL_WEB);
-    FSPanelProfileInterests* panel_interests    = findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
-    FSPanelProfilePicks* panel_picks            = findChild<FSPanelProfilePicks>(PANEL_PICKS);
-    FSPanelClassifieds* panel_classifieds       = findChild<FSPanelClassifieds>(PANEL_CLASSIFIEDS);
-    FSPanelProfileFirstLife* panel_firstlife    = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
-    FSPanelAvatarNotes* panel_notes             = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
+	FSPanelProfile* panel_profile		= findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
+	panel_profile->onOpen(getAvatarId());
 
-    panel_profile->onOpen(getAvatarId());
-    panel_web->onOpen(getAvatarId());
-    panel_interests->onOpen(getAvatarId());
-    panel_picks->onOpen(getAvatarId());
-    panel_classifieds->onOpen(getAvatarId());
-    panel_firstlife->onOpen(getAvatarId());
-    panel_notes->onOpen(getAvatarId());
+	if (getAvatarId() == gAgent.getID())
+	{
+		getChild<LLUICtrl>("ok_btn")->setVisible( true );
+		getChild<LLUICtrl>("cancel_btn")->setVisible( true );
+	}
 
-    if (getAvatarId() == gAgent.getID())
-    {
-        getChild<LLUICtrl>("ok_btn")->setVisible( true );
-        getChild<LLUICtrl>("cancel_btn")->setVisible( true );
-    }
-
-    // Update the avatar name.
-    LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
+	// Update the avatar name.
+	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
 }
 
 BOOL FSFloaterProfile::postBuild()
 {
-    childSetAction("ok_btn", boost::bind(&FSFloaterProfile::onOKBtn, this));
-    childSetAction("cancel_btn", boost::bind(&FSFloaterProfile::onCancelBtn, this));
+	childSetAction("ok_btn", boost::bind(&FSFloaterProfile::onOKBtn, this));
+	childSetAction("cancel_btn", boost::bind(&FSFloaterProfile::onCancelBtn, this));
 
-    return TRUE;
+	return TRUE;
 }
 
 void FSFloaterProfile::onOKBtn()
 {
-    if (getAvatarId() == gAgent.getID())
-    {
-        FSPanelProfile* panel_profile               = findChild<FSPanelProfile>(PANEL_PROFILE);
-        FSPanelProfileWeb* panel_web                = findChild<FSPanelProfileWeb>(PANEL_WEB);
-        FSPanelProfileInterests* panel_interests    = findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
-        FSPanelProfilePicks* panel_picks            = findChild<FSPanelProfilePicks>(PANEL_PICKS);
-        // FSPanelClassifieds* panel_classifieds            = findChild<FSPanelClassifieds>(PANEL_PICKS);
-        FSPanelProfileFirstLife* panel_firstlife    = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
-        FSPanelAvatarNotes* panel_notes             = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
+	if (getAvatarId() == gAgent.getID())
+	{
+		FSPanelProfile* panel_profile		= findChild<FSPanelProfile>(PANEL_PROFILE_VIEW);
+		panel_profile->apply();
+	}
 
-        //KC - Avatar data is spread over 3 different panels
-        // collect data from the last 2 and give to the first to save
-        LLAvatarData data = LLAvatarData();
-        data.avatar_id = gAgent.getID();
-        panel_firstlife->apply(&data);
-        panel_web->apply(&data);
-        panel_profile->apply(&data);
-
-        // panel_classifieds->apply();
-
-        panel_interests->apply();
-        panel_picks->apply();
-        panel_notes->apply();
-    }
-
-    closeFloater();
+	closeFloater();
 }
 
 void FSFloaterProfile::onCancelBtn()
 {
-    closeFloater();
+	closeFloater();
 }
 
 void FSFloaterProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-    setTitle(av_name.getCompleteName());
-
-    FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE);
-    panel_profile->onAvatarNameCache(agent_id, av_name);
-    FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
-    panel_web->onAvatarNameCache(agent_id, av_name);
+	setTitle(av_name.getCompleteName());
 }
 
 // eof

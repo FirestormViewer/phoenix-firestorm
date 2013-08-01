@@ -97,7 +97,7 @@ public:
 		Mandatory<std::string>	tooltip_ref;
 
 		// <FS:Zi> Add control_name to toolbar buttons
-		//         so we can have control_name instead of aall these functions.
+		//         so we can have control_name instead of all these functions.
 		// Mandatory<std::string>	execute_function;
 		Optional<std::string>	execute_function;
 		// </FS:Zi>
@@ -114,6 +114,8 @@ public:
 
 		Optional<std::string>	is_starting_function;
 		Optional<LLSD>			is_starting_parameters;
+
+		Optional<bool>			is_flashing_allowed;
 
 		Optional<std::string>	control_name;	// <FS:Zi> Add control_name to toolbar buttons
 		Optional<std::string>	checkbox_control;		// <FS:Zi> Add checkbox control toggle
@@ -145,6 +147,8 @@ public:
 	const std::string& isStartingFunctionName() const { return mIsStartingFunction; }
 	const LLSD& isStartingParameters() const { return mIsStartingParameters; }
 
+	bool isFlashingAllowed() const { return mIsFlashingAllowed; }
+
 private:
 	LLCommandId mIdentifier;
 
@@ -168,6 +172,8 @@ private:
 
 	std::string mIsStartingFunction;
 	LLSD        mIsStartingParameters;
+
+	bool		mIsFlashingAllowed;
 
 // <FS;Zi> Add control_variable ald checkbox_control to commands in toolbar
 	std::string mControlVariable;

@@ -157,8 +157,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mHighlightColor(p.highlight_color()),
 	mPreeditBgColor(p.preedit_bg_color()),
 	mGLFont(p.font),
-	mContextMenuHandle(),
-	mAutoreplaceCallback()
+	mContextMenuHandle()
 {
 	llassert( mMaxLengthBytes > 0 );
 
@@ -203,6 +202,14 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 LLLineEditor::~LLLineEditor()
 {
 	mCommitOnFocusLost = FALSE;
+    
+    // Make sure no context menu linger around once the widget is deleted
+	LLContextMenu* menu = static_cast<LLContextMenu*>(mContextMenuHandle.get());
+	if (menu)
+	{
+        menu->hide();
+    }
+	setContextMenu(NULL);
 
 	// calls onCommit() while LLLineEditor still valid
 	gFocusMgr.releaseFocusIfNeeded( this );
@@ -973,12 +980,6 @@ void LLLineEditor::addChar(const llwchar uni_char)
 		LLUI::reportBadKeystroke();
 	}
 
-	if (!mReadOnly && mAutoreplaceCallback != NULL)
-	{
-		// call callback
-		mAutoreplaceCallback(mText, mCursorPos);
-	}
-
 	getWindow()->hideCursorUntilMouseMove();
 }
 
@@ -1450,6 +1451,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 		{
 			if( mCurrentHistoryLine > mLineHistory.begin() )
 			{
+				// <FS> FIRE-324. Nearby and IM chat bars forget what was written after browsing history
 				(*mCurrentHistoryLine).assign(getText());
 				mText.assign( *(--mCurrentHistoryLine) );
 				setCursorToEnd();

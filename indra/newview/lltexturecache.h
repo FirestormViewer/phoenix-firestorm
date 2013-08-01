@@ -201,6 +201,8 @@ private:
 	responder_list_t mCompletedList;
 	
 	BOOL mReadOnly;
+
+	std::string mCacheParentDirName;
 	
 	// HEADERS (Include first mip)
 	std::string mHeaderEntriesFileName;

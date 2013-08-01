@@ -101,7 +101,7 @@
 			<button label="Deseleccionar todo" name="deselect_all_button"/>
 			<check_box label="Restaurar configuraciones globales" name="restore_global_settings_checkbox"/>
 			<check_box label="Restaurar configuraciones por avatar" name="restore_per_account_settings_checkbox"/>
-			<button label="Configuración del respaldo" name="backup_settings" width="160"/>
+			<button label="Respaldar configuración" name="backup_settings" width="160"/>
 			<button label="Restaurar configuración" name="restore_settings" width="160"/>
 		</layout_panel>
 	</layout_stack>

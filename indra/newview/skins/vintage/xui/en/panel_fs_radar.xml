@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- name="panel_radar"
- width="327"
- height="333">
+	name="panel_radar"
+	width="327"
+	height="333">
 	<string name="FlagsColumnType" value="icon"/>
 	<string name="FlagsColumnValue_0" value=""/>
 	<string name="FlagsColumnValue_1" value="Payment_Info_Filled"/>
@@ -33,7 +33,7 @@
 		 layout="topleft"
 		 top="0"
 		 left="0"
-		 height="306"
+		 height="330"
 		 width="327"
 		 mouse_opaque="false"
 		 name="radar_ls"
@@ -127,71 +127,22 @@
 			</layout_panel>
 		</layout_stack>
 
-<!--  Buttons -->
-		<panel
-		 background_visible="false"
-		 follows="left|right|bottom"
-		 height="27"
-		 label="bottom_panel"
-		 layout="topleft"
-		 left="0"
-		 name="bottom_panel_nearby"
-		 top_pad="0"
-		 width="327">
-			<menu_button
-			 follows="bottom|left"
-			 height="25"
-			 image_hover_unselected="Toolbar_Left_Over"
-			 image_overlay="OptionsMenu_Off"
-			 image_selected="Toolbar_Left_Selected"
-			 image_unselected="Toolbar_Left_Off"
-			 layout="topleft"
-			 left="0"
-			 name="nearby_view_sort_btn"
-			 tool_tip="Options"
-			 top="1"
-			 width="31"/>
-			<button
-			 follows="bottom|left"
-			 height="25"
-			 image_hover_unselected="Toolbar_Middle_Over"
-			 image_overlay="AddItem_Off"
-			 image_selected="Toolbar_Middle_Selected"
-			 image_unselected="Toolbar_Middle_Off"
-			 layout="topleft"
-			 left_pad="1"
-			 name="add_friend_btn_nearby"
-			 tool_tip="Add selected Resident to your friends List"
-			 width="31">
-				<commit_callback
-				 function="People.addFriend"/>
-			</button>
-			<icon
-			 follows="bottom|left|right"
-			 height="25"
-			 image_name="Toolbar_Right_Off"
-			 layout="topleft"
-			 left_pad="1"
-			 name="nearby_dummy_icon"
-			 width="263"/>
-			<slider
-			 visibility_control="LimitRadarByRange"
-			 control_name="NearMeRange"
-			 decimal_digits="0"
-			 follows="bottom|left"
-			 height="16"
-			 increment="2"
-			 initial_value="96"
-			 label="Range(m):"
-			 label_width="70"
-			 layout="topleft"
-			 max_val="4096"
-			 min_val="20"
-			 name="NearMeRange"
-			 visible="True"
-			 left_delta="10"
-			 top_delta="6"
-			 width="220"/>
+		<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
+		<panel name="hide_controls" enabled="false" visible="false" left="0" top="0">
+		<panel name="bottom_panel_nearby" enabled="false" visible="false" left="0" top="0">
+			<filter_editor	follows="top|left" height="0" layout="topleft" name="nearby_filter_input"
+							left="0" top="0" width="0" />
+			<menu_button	follows="top|left" height="0" layout="topleft" name="nearby_view_sort_btn"
+							left="0" top="0" width="0" />
+			<button			follows="top|left" height="0" layout="topleft" name="gear_btn"
+							left="0" top="0" width="0" />
+			<menu_button	follows="top|left" height="0" layout="topleft" name="options_btn"
+							left="0" top="0" width="0" />
+			<button			follows="top|left" height="0" layout="topleft" name="add_friend_btn"
+							left="0" top="0" width="0" />
+			<slider			follows="top|left" height="0" layout="topleft" name="NearMeRange"
+							left="0" top="0" width="0" />
+		</panel>
 		</panel>
 	</panel>
 </panel>

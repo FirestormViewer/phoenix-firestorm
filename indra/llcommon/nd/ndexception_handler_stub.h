@@ -28,17 +28,34 @@
 
 namespace google_breakpad
 {
+	class MinidumpDescriptor
+	{
+		std::string mPath;
+	public:
+		MinidumpDescriptor( std::string const & )
+		{ }
+
+		char const* path() const
+		{ return mPath.c_str(); }
+	};
+
 	typedef bool (*tDumpFunc)(const char*, const char*, void*, bool);
+	typedef bool (*tDumpFunc2)( MinidumpDescriptor const&, void*, bool );
+
 
 	class ExceptionHandler
 	{
 	public:
-		ExceptionHandler( std::string const&, int, tDumpFunc, int, bool )
+		ExceptionHandler( std::string const&, int, tDumpFunc, int, bool, int )
+		{ }
+		ExceptionHandler( MinidumpDescriptor const&, int, tDumpFunc2, int, bool, int )
 		{ }
 
 		void set_dump_path( std::string const& )
 		{ }
 		void set_dump_path( std::wstring const& )
+		{ }
+		void set_minidump_descriptor( MinidumpDescriptor const& )
 		{ }
 
 		void WriteMinidump()

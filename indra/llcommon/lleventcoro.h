@@ -29,8 +29,16 @@
 #if ! defined(LL_LLEVENTCORO_H)
 #define LL_LLEVENTCORO_H
 
+// <FS:TS> This silliness is needed because LL renamed the Boost coroutines
+//         functions to dcoroutines.
+#if LL_STANDALONE
 #include <boost/coroutine/coroutine.hpp>
 #include <boost/coroutine/future.hpp>
+#define dcoroutines coroutines
+#else
+#include <boost/dcoroutine/coroutine.hpp>
+#include <boost/dcoroutine/future.hpp>
+#endif
 #include <boost/optional.hpp>
 #include <string>
 #include <stdexcept>
@@ -102,10 +110,6 @@ LLVoidListener<LISTENER> voidlistener(const LISTENER& listener)
 
 namespace LLEventDetail
 {
-    /// Implementation for listenerNameForCoro()
-    LL_COMMON_API std::string listenerNameForCoroImpl(const void* self_id);
-
-
     /**
      * waitForEventOn() permits a coroutine to temporarily listen on an
      * LLEventPump any number of times. We don't really want to have to ask
@@ -127,11 +131,21 @@ namespace LLEventDetail
      * that's okay, since it won't collide with any listener name used by the
      * earlier coroutine since that earlier coroutine no longer exists.
      */
+    // <FS:Zi> Compiler fix for Linux gcc 4.7+
+    /// Implementation for listenerNameForCoro()
+    LL_COMMON_API std::string listenerNameForCoroImpl(const void* self_id);
+    // </FS:Zi>
+
     template <typename COROUTINE_SELF>
     std::string listenerNameForCoro(COROUTINE_SELF& self)
     {
         return listenerNameForCoroImpl(self.get_id());
     }
+
+    // <FS:Zi> Compiler fix for Linux gcc 4.7+
+    // /// Implementation for listenerNameForCoro()
+    // LL_COMMON_API std::string listenerNameForCoroImpl(const void* self_id);
+    // </FS:Zi>
 
     /**
      * Implement behavior described for postAndWait()'s @a replyPumpNamePath
@@ -207,13 +221,13 @@ LLSD postAndWait(SELF& self, const LLSD& event, const LLEventPumpOrPumpName& req
                  const LLEventPumpOrPumpName& replyPump, const LLSD& replyPumpNamePath=LLSD())
 {
     // declare the future
-    boost::coroutines::future<LLSD> future(self);
+    boost::dcoroutines::future<LLSD> future(self);
     // make a callback that will assign a value to the future, and listen on
     // the specified LLEventPump with that callback
     std::string listenerName(LLEventDetail::listenerNameForCoro(self));
     LLTempBoundListener connection(
         replyPump.getPump().listen(listenerName,
-                                   voidlistener(boost::coroutines::make_callback(future))));
+                                   voidlistener(boost::dcoroutines::make_callback(future))));
     // skip the "post" part if requestPump is default-constructed
     if (requestPump)
     {
@@ -258,7 +272,7 @@ namespace LLEventDetail
      * This helper is specifically for the two-pump version of waitForEventOn().
      * We use a single future object, but we want to listen on two pumps with it.
      * Since we must still adapt from (the callable constructed by)
-     * boost::coroutines::make_callback() (void return) to provide an event
+     * boost::dcoroutines::make_callback() (void return) to provide an event
      * listener (bool return), we've adapted LLVoidListener for the purpose. The
      * basic idea is that we construct a distinct instance of WaitForEventOnHelper
      * -- binding different instance data -- for each of the pumps. Then, when a
@@ -332,16 +346,16 @@ LLEventWithID postAndWait2(SELF& self, const LLSD& event,
                            const LLSD& replyPump1NamePath=LLSD())
 {
     // declare the future
-    boost::coroutines::future<LLEventWithID> future(self);
+    boost::dcoroutines::future<LLEventWithID> future(self);
     // either callback will assign a value to this future; listen on
     // each specified LLEventPump with a callback
     std::string name(LLEventDetail::listenerNameForCoro(self));
     LLTempBoundListener connection0(
         replyPump0.getPump().listen(name + "a",
-                               LLEventDetail::wfeoh(boost::coroutines::make_callback(future), 0)));
+                               LLEventDetail::wfeoh(boost::dcoroutines::make_callback(future), 0)));
     LLTempBoundListener connection1(
         replyPump1.getPump().listen(name + "b",
-                               LLEventDetail::wfeoh(boost::coroutines::make_callback(future), 1)));
+                               LLEventDetail::wfeoh(boost::dcoroutines::make_callback(future), 1)));
     // skip the "post" part if requestPump is default-constructed
     if (requestPump)
     {

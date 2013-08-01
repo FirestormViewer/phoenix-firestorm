@@ -61,7 +61,7 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 	// Don't write to console if avatar chat and user wants
 	// bubble chat or if the user is busy.
 	if ( (chat_msg.mSourceType == CHAT_SOURCE_AGENT && useChatBubbles)
-		|| gAgent.getBusy() )
+		|| gAgent.isDoNotDisturb() )
 	{
 		return true;
 	}
@@ -108,8 +108,8 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 	}
 	else
 	{
-		if (chat_msg.mSourceType == CHAT_SOURCE_SYSTEM &&
-			args["type"].asInteger() == LLNotificationsUI::NT_MONEYCHAT)
+		if (args.has("money_tracker") && args["money_tracker"].asBoolean() == true &&
+			chat_msg.mSourceType == CHAT_SOURCE_SYSTEM)
 		{
 			consoleChat = args["console_message"].asString();
 		}
@@ -175,7 +175,7 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
 		}
 		else if (useDisplayNames)
 		{
-			senderName = av_name.mDisplayName;
+			senderName = av_name.getDisplayName();
 		}
 	}
 
@@ -253,7 +253,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	}
 	else if (useDisplayNames)
 	{
-		senderName = av_name.mDisplayName;
+		senderName = av_name.getDisplayName();
 	}
 	else
 	{
@@ -271,7 +271,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 		senderName = "[" + group + "] " + senderName;
 	}
 
-	LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
+	LLColor4 textColor = LLUIColorTable::instance().getColor("AgentIMColor");
 	
 	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
 	textColor = LGGContactSets::getInstance()->colorize(agent_id, textColor, LGG_CS_CHAT);
@@ -283,6 +283,6 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 		textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
 	}
 
-	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
+	gConsole->addConsoleLine(LLTrans::getString("IMPrefix") + senderName + delimiter + message, textColor);
 	gConsole->setVisible(!isNearbyChatVisible());
 }

@@ -29,6 +29,7 @@
 
 #include "fscommon.h"
 #include "llagent.h"
+#include "llavatarnamecache.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
 #include "llinventorymodel.h"
@@ -37,6 +38,7 @@
 #include "llviewerinventory.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
+#include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -54,11 +56,11 @@ S32 FSCommon::sObjectAddMsg = 0;
 void reportToNearbyChat(const std::string& message)
 {
 	LLChat chat;
-    chat.mText = message;
+	chat.mText = message;
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
 	LLSD args;
-	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+
 }
 
 std::string applyAutoCloseOoc(const std::string& message)
@@ -264,7 +266,16 @@ bool FSCommon::isLinden(const LLUUID& av_id)
 #endif
 
 	std::string first_name, last_name;
-	gCacheName->getFirstLastName(av_id, first_name, last_name);
+	LLAvatarName av_name;
+	if (LLAvatarNameCache::get(av_id, &av_name))
+	{
+		std::istringstream full_name(av_name.getUserName());
+		full_name >> first_name >> last_name;
+	}
+	else
+	{
+		gCacheName->getFirstLastName(av_id, first_name, last_name);
+	}
 
 	return (last_name == LL_LINDEN ||
 			last_name == LL_MOLE ||

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="SUBIR MODELO">
+<floater name="Model Preview" title="Subir modelo">
 	<string name="no_havok">
 		subida mesh con física
 	</string>
-	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Error: Problema de análisis de DAE - consulta los datos en el registro.
 	</string>
@@ -14,7 +13,7 @@
 		Cargando...
 	</string>
 	<string name="status_generating_meshes">
-		Generando redes...
+		Generando mallas...
 	</string>
 	<string name="status_vertex_number_overflow">
 		Error: El número de intersección es superior a 65534. Cancelado.
@@ -35,31 +34,31 @@
 		Mínimo
 	</string>
 	<string name="mesh_status_good">
-		Factúralo.
+		Factúralo
 	</string>
 	<string name="mesh_status_na">
-		N/A
+		N/D
 	</string>
 	<string name="mesh_status_none">
 		Ninguno
 	</string>
 	<string name="mesh_status_submesh_mismatch">
-		Los niveles de detalle poseen un número distinto de caras a las que se pueden aplicar texturas.
+		Los niveles de detalle poseen un número distinto de caras texturizables.
 	</string>
 	<string name="mesh_status_mesh_mismatch">
-		Los niveles de detalle poseen un número distinto de ejemplos de red.
+		Los niveles de detalle poseen un número distinto de instancias de malla.
 	</string>
 	<string name="mesh_status_too_many_vertices">
-		El nivel de detalle posee demasiadas intersecciones.
+		El nivel de detalle posee demasiadas vértices.
 	</string>
 	<string name="mesh_status_missing_lod">
-		Falta un nivel de detalle requerido.
+		Falta el nivel de detalle requerido.
 	</string>
 	<string name="mesh_status_invalid_material_list">
 		Los materiales con niveles de detalle no son un subconjunto del modelo de referencia.
 	</string>
 	<string name="layer_all">
-		Todo
+		Todas
 	</string>
 	<string name="decomposing">
 		Analizando...
@@ -230,7 +229,7 @@
 			</panel>
 			<panel label="Opciones de subida" name="modifiers_panel">
 				<text name="scale_label" width="170">
-					Escala (1=sin ajuste de escala):
+					Escala (1=sin escalar):
 				</text>
 				<spinner name="import_scale" value="1.0"/>
 				<text name="dimensions_label">
@@ -240,11 +239,17 @@
 					[X] X [Y] X [Z]
 				</text>
 				<check_box label="Incluir texturas" name="upload_textures"/>
-				<text name="include_label">
-					Solo para modelos de avatar:
+				<text name="include_label" width="170">
+					Sólo para modelos de avatar:
 				</text>
 				<check_box label="Incluir el peso de la piel" name="upload_skin"/>
 				<check_box label="Incluir posturas de las articulaciones" name="upload_joints"/>
+				<check_box label="Adaptar a la forma del avatar" name="deform"/>
+				<radio_group name="deform_base">
+					<radio_item label="Masculino" name="0"/>
+					<radio_item label="Femenino" name="1"/>
+					<radio_item label="Masculino-delgado" name="2"/>
+				</radio_group>
 				<text name="pelvis_offset_label" left="270">
 					Desplazamiento Z (subir o bajar el avatar):
 				</text>

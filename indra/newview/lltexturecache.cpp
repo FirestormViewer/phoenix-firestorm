@@ -568,7 +568,9 @@ bool LLTextureCacheRemoteWorker::doWrite()
 			idx = mCache->setHeaderCacheEntry(mID, entry, mImageSize, mDataSize); // create the new entry.
 			if(idx >= 0)
 			{
-				//write to the fast cache.
+				// (almost always) write to the fast cache.
+				if (mRawImage->getDataSize())
+				{
 
 				// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw from LTextureCacheRemoteWorker::doWrite. In that case it's okay to change raw directly as we paid the hit of copying it already.
 
@@ -576,6 +578,7 @@ bool LLTextureCacheRemoteWorker::doWrite()
 				llassert_always( mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel, true) );
 
 				// </FS:ND>
+				}
 			}
 		}
 		else
@@ -919,6 +922,7 @@ void LLTextureCache::setDirNames(ELLPath location)
 {
 	std::string delem = gDirUtilp->getDirDelimiter();
 
+	mCacheParentDirName = gDirUtilp->getExpandedFilename(location,"");
 	mHeaderEntriesFileName = gDirUtilp->getExpandedFilename(location, textures_dirname, entries_filename);
 	mHeaderDataFileName = gDirUtilp->getExpandedFilename(location, textures_dirname, cache_filename);
 	mTexturesDirName = gDirUtilp->getExpandedFilename(location, textures_dirname);
@@ -995,6 +999,10 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, BOOL texture_cache
 	
 	if (!mReadOnly)
 	{
+	        if (!LLFile::isdir(mCacheParentDirName))
+	        {
+	                LLFile::mkdir(mCacheParentDirName);
+                }
 		LLFile::mkdir(mTexturesDirName);
 		
 		const char* subdirs = "0123456789abcdef";
@@ -1922,10 +1930,17 @@ bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 dis
 // <FS:ND>
 {
 	//rescale image if needed
+	if (raw.isNull() || !raw->getData())
+	{
+		llerrs << "Attempted to write NULL raw image to fastcache" << llendl;
+		return false;
+	}
+
 	S32 w, h, c;
 	w = raw->getWidth();
 	h = raw->getHeight();
 	c = raw->getComponents();
+
 	S32 i = 0 ;
 	
 	while(((w >> i) * (h >> i) * c) > TEXTURE_FAST_CACHE_ENTRY_SIZE - TEXTURE_FAST_CACHE_ENTRY_OVERHEAD)

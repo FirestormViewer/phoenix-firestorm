@@ -146,12 +146,10 @@ private:
 	LLButton*					mBtnHome;
 	LLSearchComboBox*			mSearchComboBox;
 	LLLocationInputCtrl*		mCmbLocation;
-// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
-// 	LLRect						mDefaultNpRect;
-// 	LLRect						mDefaultNavContainerRect;
-// 	LLRect						mDefaultFpRect;
-// 	LLRect						mDefaultFrameRect;
-// </FS:Zi>
+	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+	//LLRect						mDefaultNbRect;
+	//LLRect						mDefaultFpRect;
+	// <7FS:Zi>
 	boost::signals2::connection	mTeleportFailedConnection;
 	boost::signals2::connection	mTeleportFinishConnection;
 	boost::signals2::connection	mHistoryMenuConnection;

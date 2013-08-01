@@ -1461,13 +1461,44 @@ Wersja [VERSION] [[RELEASE_NOTES_FULL_URL] Informacja o aktualizacji]
 	</notification>
 	<notification name="RequiredUpdateDownloadedVerboseDialog">
 		Pobrano wymaganą aktualizację.
-Wersja [VERSION]
+Wersja [VERSION] [[INFO_URL] Informacje o tej aktualizacji]
 
-W celu instalacji aktualizacji musi zostać wykonany restart [APP_NAME].
+W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="RequiredUpdateDownloadedDialog">
-		W celu instalacji aktualizacji musi zostać wykonany restart [APP_NAME].
+		W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
+
+[[INFO_URL] Informacje o tej aktualizacji]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OtherChannelDownloadBackgroundTip">
+		Została pobrana aktualizacja dla Twojej instalacji [APP_NAME].
+Wersja [VERSION] 
+Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
+zobacz [[INFO_URL] aby uzyskać więcej informacji o tej aktualizacji]
+		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i zrestartuj [APP_NAME]"/>
+	</notification>
+	<notification name="OtherChannelDownloadBackgroundDialog">
+		Została pobrana aktualizacja dla Twojej instalacji [APP_NAME].
+Wersja [VERSION] 
+Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
+zobacz [[INFO_URL] aby uzyskać więcej informacji o tej aktualizacji]
+		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i zrestartuj [APP_NAME]"/>
+	</notification>
+	<notification name="OtherChannelRequiredUpdateDownloadedVerboseDialog">
+		Została pobrana wymagana aktualizacja.
+Wersja [VERSION] 
+Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
+zobacz [[INFO_URL] aby uzyskać więcej informacji o tej aktualizacji]
+
+W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OtherChannelRequiredUpdateDownloadedDialog">
+		W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
+Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
+zobacz [[INFO_URL] aby uzyskać więcej informacji o tej aktualizacji]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
@@ -1546,10 +1577,12 @@ Chcesz opuścić grupę?
 		Nie możesz zaoferować znajomości w tym momencie. Spróbuj jeszcze raz za chwilę.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="BusyModeSet">
-		Tryb Zajętości jest włączony.
-Czat i IM będą ukryte. Wysłane IM będą otrzymywały Twoją odpowiedź Trybu Zajętości. Propozycje teleportacji będą odrzucane.
-Dodatkowo, wszystkie podarowane Tobie obiekty będą automatycznie przenoszone do &quot;Kosza&quot; w Twojej szafie.
+	<notification name="DoNotDisturbModeSet">
+		Tryb Zajętości jest włączony. Nie będziesz powiadamiany/a o nadchodzących rozmowach.
+		
+- Inni Rezydenci będą otrzymywać Twoją wiadomość Trybu Zajętości (Ustawienia &gt; Prywatność &gt; Autoodpowiedzi).
+- Propozycje teleportacji będą odrzucane.
+- Propozycje rozmów głosowych będą odrzucane.
 		<usetemplate ignoretext="Status zmieniony na Tryb Zajętości" name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="AutorespondModeSet">
@@ -2065,6 +2098,10 @@ Przenieść obiekty szafy?
 		Przejść na stronę [http://secondlife.com/account/ Tablicy] żeby zobaczyć historię konta?
 		<usetemplate ignoretext="Uruchom przeglądarkę internetową by zobaczyć historię konta" name="okcancelignore" notext="Anuluj" yestext="Idź na stronę"/>
 	</notification>
+	<notification name="ConfirmAddingChatParticipants">
+		Po dodaniu osoby do istniejącej rozmowy - nowa rozmowa zostanie utworzona. Wszyscy uczestnicy otrzymają powiadomienie o nowej rozmowie.
+		<usetemplate ignoretext="Potwierdź dodanie uczestników rozmowy" name="okcancelignore" notext="Anuluj" yestext="Ok"/>
+	</notification>
 	<notification name="ConfirmQuit">
 		Na pewno chcesz zakończyć?
 		<usetemplate ignoretext="Na pewno chcesz zakończyć?" name="okcancelignore" notext="Nie kończ" yestext="Wyłącz" canceltext="Nie kończ"/>
@@ -2139,14 +2176,14 @@ Chcesz go zamienić na wybrany obiekt?
 			<button ignore="Nie zamieniaj" name="No" text="Anuluj"/>
 		</form>
 	</notification>
-	<notification label="Ostrzeżenie Trybu Zajętości" name="BusyModePay">
+	<notification label="Ostrzeżenie Trybu Zajętości" name="DoNotDisturbModePay">
 		Jesteś w Trybie Zajętości co oznacza, że nie dostaniesz żadnych obiektów w zamian za tą opłatę.
 
 Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		<form name="form">
 			<ignore name="ignore" text="Chcę zapłacić w Trybie Zajętości"/>
 			<button ignore="Zawsze wyłączaj tryb Zajętości" name="Yes" text="OK"/>
-			<button ignore="Nie wyłączaj trybu Zajętości" name="No" text="Anuluj"/>
+			<button ignore="Nigdy nie wyłączaj trybu Zajętości" name="No" text="Anuluj"/>
 		</form>
 	</notification>
 	<notification name="ConfirmDeleteProtectedCategory">
@@ -2291,6 +2328,18 @@ URL: [MEDIAURL]
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
 	</notification>
+	<notification name="MediaAlertSingle"> 
+		Ta działka dostarcza media z:
+
+Domena: [MEDIADOMAIN]
+URL: [MEDIAURL]
+		<form name="form">
+			<button name="Allow" text="Zezwól"/>
+			<button name="Deny" text="Odmów"/>
+			<button name="BlacklistDomain" text="Czarna lista"/>
+			<button name="WhitelistDomain" text="Biała lista"/>
+		</form>
+	</notification>
 	<notification name="AudioAlert">
 		Ta działka dostarcza muzykę z:
 
@@ -2310,6 +2359,18 @@ URL: [AUDIOURL]
 			<button name="Do Now" text="[ACTION] Teraz"/>
 			<button name="RememberDomain" text="[CONDITION] Zezwól tej domenie"/>
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
+		</form>
+	</notification>
+	<notification name="AudioAlertSingle"> 
+		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na muzykę z tego źródła?
+
+Domena: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Allow" text="Zezwól"/>
+			<button name="Deny" text="Odmów"/>
+			<button name="BlacklistDomain" text="Czarna lista"/>
+			<button name="WhitelistDomain" text="Biała lista"/>
 		</form>
 	</notification>
 	<notification name="MOAPAlert">
@@ -2348,11 +2409,8 @@ URL: [MOAPURL]
 	<notification name="GroupNotice">
 		Temat: [SUBJECT], Treść: [MESSAGE]
 	</notification>
-	<notification name="FriendOnline">
-		[NAME] jest w Second Life.
-	</notification>
-	<notification name="FriendOffline">
-		[NAME] opuszcza Second Life.
+	<notification name="FriendOnlineOffline">
+		[NAME] jest [STATUS].
 	</notification>
 	<notification name="AddSelfFriend">
 		Niewątpliwie znasz siebie najlepiej, ale nie możesz dodać swojej własnej osoby do listy znajomych.
@@ -2834,6 +2892,15 @@ Zanim zezwolisz na dostęp upewnij się, że wiesz jaki to obiekt i dlaczego pyt
 		<form name="form">
 			<button name="Grant" text="Zezwól na dostęp"/>
 			<button name="Deny" text="Odmów"/>
+		</form>
+	</notification>
+	<notification name="UnknownScriptQuestion">
+		Zezwolenia, o jakie prosi skrypt z &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, którego właścicielem jest &apos;[NAME]&apos;, nie są rozpoznawane przez przeglądarkę i nie mogą zostać udzielone.
+
+Aby ich udzielić prosimy zaktualizować przeglądarkę do najnowszej wersji z [DOWNLOADURL].
+		<form name="form">
+			<button name="Deny" text="Ok, odmów jednorazowo"/>
+			<button name="Mute" text="Zablokuj/Wycisz"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialog">
@@ -4169,9 +4236,6 @@ ponieważ serwer jest pełny.
 	<notification name="CantSitNoRoom">
 		Nie ma gdzie tutaj usiąść, spróbuj w innym miejscu.
 	</notification>
-	<notification name="AutopilotCanceled">
-		Autopilot anulowany
-	</notification>
 	<notification name="ClaimObjectFailedNoPermission">
 		Zażądanie obiektu nie powiodło się, ponieważ nie masz uprawnień
 	</notification>
@@ -4279,6 +4343,18 @@ ponieważ serwer jest pełny.
 	</notification>
 	<notification name="LargePrimAgentIntersect">
 		Nie można utworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy przesuną się oni.
+	</notification>
+	<notification name="PreferenceChatClearLog">
+		Ta opcja usunie dzienniki poprzednich rozmów i wszelkie kopie zapasowe tego pliku.
+		<usetemplate ignoretext="Potwierdź, zanim usunę dzienniki poprzednich rozmów." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PreferenceChatDeleteTranscripts">
+		Ta opcja usunie logi wszystkich poprzednich rozmów. Nie będzie to miało wpływu na listę przeszłych rozmów. Wszystkie pliki z przyrostkami .txt oraz txt.backup w folderze [FOLDER] zostaną usunięte.
+		<usetemplate ignoretext="Potwierdź, zanim usunę logi rozmów." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PreferenceChatPathChanged">
+		Nie można przenieść plików. Przywrócono poprzednią ścieżkę.
+		<usetemplate ignoretext="Nie można przenieść plików. Przywrócono poprzednią ścieżkę." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.

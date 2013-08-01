@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <floater name="avatarinfo" title="Profil">
 <panel name="panel_profile_view">
-    <tab_container name="tabs">
+    <tab_container name="panel_profile_tabs">
         <panel label="Rezydent" name="panel_profile_secondlife" />
         <panel label="Sieć" name="panel_profile_web" />
         <panel label="Zainteresowania" name="panel_profile_interests" />

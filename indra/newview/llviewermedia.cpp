@@ -2423,7 +2423,10 @@ void LLViewerMediaImpl::updateJavascriptObject()
 	if ( mMediaSource )
 	{
 		// flag to expose this information to internal browser or not.
-		bool enable = gSavedSettings.getBOOL("BrowserEnableJSObject");
+		// <FS:Ansariel> Performance improvement
+		//bool enable = gSavedSettings.getBOOL("BrowserEnableJSObject");
+		static LLCachedControl<bool> enable(gSavedSettings, "BrowserEnableJSObject");
+		// </FS:Ansariel>
 
 		if(!enable)
 		{

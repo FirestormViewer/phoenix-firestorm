@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="preview_conversation" title="Rozmowa:">
+	<floater.string name="Title">
+		Rozmowa: [NAME]
+	</floater.string>
+	<text name="page_label" value="Str." />
+	<button tool_tip="Otwórz historię czatu w zewnętrznym oknie" name="open_external_btn" />
+</floater>

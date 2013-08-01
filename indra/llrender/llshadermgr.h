@@ -109,6 +109,7 @@ public:
 		GLOW_DELTA,
 
 		MINIMUM_ALPHA,
+		EMISSIVE_BRIGHTNESS,
 
 		DEFERRED_SHADOW_MATRIX,
 		DEFERRED_ENV_MAT,
@@ -120,10 +121,7 @@ public:
 		DEFERRED_SSAO_MAX_RADIUS,
 		DEFERRED_SSAO_FACTOR,
 		DEFERRED_SSAO_FACTOR_INV,
-		// <FS:Ansariel> Tofu's SSR
-		//DEFERRED_SSAO_EFFECT_MAT,
-		DEFERRED_SSAO_EFFECT,
-		// </FS:Ansariel> Tofu's SSR
+		DEFERRED_SSAO_EFFECT_MAT,
 		DEFERRED_SCREEN_RES,
 		DEFERRED_NEAR_CLIP,
 		DEFERRED_SHADOW_OFFSET,
@@ -167,10 +165,17 @@ public:
 		DEFERRED_LIGHT,
 		DEFERRED_BLOOM,
 		DEFERRED_PROJECTION,
+		
+		GLOBAL_GAMMA,
+		TEXTURE_GAMMA,
+		
+		SPECULAR_COLOR,
+		ENVIRONMENT_INTENSITY,
 // <FS:CR> Import Vignette from Exodus
 		EXO_RENDER_VIGNETTE,
 		EXO_RENDER_SCREEN,
 // </FS:CR> Import Vignette from Exodus
+		
 		END_RESERVED_UNIFORMS
 	} eGLSLReservedUniforms;
 
@@ -183,7 +188,7 @@ public:
 	void dumpObjectLog(GLhandleARB ret, BOOL warns = TRUE);
 	BOOL	linkProgramObject(GLhandleARB obj, BOOL suppress_errors = FALSE);
 	BOOL	validateProgramObject(GLhandleARB obj);
-	GLhandleARB loadShaderFile(const std::string& filename, S32 & shader_level, GLenum type, S32 texture_index_channels = -1);
+	GLhandleARB loadShaderFile(const std::string& filename, S32 & shader_level, GLenum type, boost::unordered_map<std::string, std::string>* defines = NULL, S32 texture_index_channels = -1);
 
 	// Implemented in the application to actually point to the shader directory.
 	virtual std::string getShaderDirPrefix(void) = 0; // Pure Virtual

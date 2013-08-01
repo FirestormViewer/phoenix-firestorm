@@ -42,6 +42,7 @@
 #include "llchannelmanager.h"
 #include "llchicletbar.h"
 #include "llconsole.h"
+#include "lldonotdisturbnotificationstorage.h"
 #include "llenvmanager.h"
 #include "llfirstuse.h"
 #include "llfloatercamera.h"
@@ -55,12 +56,11 @@
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h" // to show/hide navigation bar when changing mouse look state
-// <FS:Zi> Remove floating chat bar
-//#include "llnearbychatbar.h"
+// <FS:Ansariel> [FS Communication UI]
+//#include "llfloaterimnearbychat.h"
 #include "fsnearbychathub.h"
-// </FS:Zi>
+// </FS:Ansariel> [FS Communication UI]
 #include "llspeakers.h"
-// [/SL:KB]
 #include "llnotificationsutil.h"
 #include "llpaneltopinfobar.h"
 #include "llparcel.h"
@@ -245,8 +245,10 @@ private:
 const F32 LLAgent::MIN_AFK_TIME = 10.0f;
 
 const F32 LLAgent::TYPING_TIMEOUT_SECS = 5.f;
-BOOL LLAgent::ignorePrejump = 0;
-BOOL LLAgent::PhoenixForceFly;
+// <FS> Ignore prejump and always fly
+BOOL LLAgent::ignorePrejump = FALSE;
+BOOL LLAgent::fsAlwaysFly;
+// </FS> Ignore prejump and always fly
 
 std::map<std::string, std::string> LLAgent::sTeleportErrorMessages;
 std::map<std::string, std::string> LLAgent::sTeleportProgressMessages;
@@ -408,7 +410,7 @@ LLAgent::LLAgent() :
 	mShowAvatar(TRUE),
 	mFrameAgent(),
 
-	mIsBusy(FALSE),
+	mIsDoNotDisturb(false),
 	mIsAutorespond(FALSE),
 	mIsAutorespondNonFriends(FALSE),
 
@@ -461,24 +463,26 @@ LLAgent::LLAgent() :
 	mMoveTimer.stop();
 }
 
+// <FS> Ignore prejump and always fly
 void LLAgent::updateIgnorePrejump(const LLSD &data)
 {
 	ignorePrejump = data.asBoolean();
 }
 
-void LLAgent::updatePhoenixForceFly(const LLSD &data)
+void LLAgent::updateFSAlwaysFly(const LLSD &data)
 {
-	PhoenixForceFly = data.asBoolean();
-	if (PhoenixForceFly == TRUE) 
+	fsAlwaysFly = data.asBoolean();
+	if (fsAlwaysFly) 
 	{
 		llinfos << "Enabling Fly Override" << llendl;
-		if (gSavedSettings.getBOOL("FirstUseFlyOverride") == TRUE)
-   		{
-   			LLNotificationsUtil::add("FirstUseFlyOverride");
+		if (gSavedSettings.getBOOL("FirstUseFlyOverride"))
+		{
+			LLNotificationsUtil::add("FirstUseFlyOverride");
 			gSavedSettings.setBOOL("FirstUseFlyOverride", FALSE);
 		}
 	}
 }
+// </FS> Ignore prejump and always fly
 
 // Requires gSavedSettings to be initialized.
 //-----------------------------------------------------------------------------
@@ -504,8 +508,8 @@ void LLAgent::init()
 	mIsDoSendMaturityPreferenceToServer = true;
 	ignorePrejump = gSavedSettings.getBOOL("FSIgnoreFinishAnimation");
 	gSavedSettings.getControl("FSIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
-	PhoenixForceFly = gSavedSettings.getBOOL("FSAlwaysFly");
-	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updatePhoenixForceFly, this, _2));
+	fsAlwaysFly = gSavedSettings.getBOOL("FSAlwaysFly");
+	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updateFSAlwaysFly, this, _2));
 	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
 	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
 
@@ -786,8 +790,13 @@ BOOL LLAgent::canFly()
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) return FALSE;
 // [/RLVa:KB]
 	if (isGodlike()) return TRUE;
-	//LGG always fly code
-	if(PhoenixForceFly) return TRUE;
+	// <FS> Always fly
+	if (fsAlwaysFly)
+	{
+		return TRUE;
+	}
+	// </FS>
+
 	LLViewerRegion* regionp = getRegion();
 	if (regionp && regionp->getBlockFly()) return FALSE;
 	
@@ -1531,24 +1540,19 @@ void LLAgent::setAFK()
 
 	if (!(mControlFlags & AGENT_CONTROL_AWAY))
 	{
-		llinfos << "Setting AFK" << llendl;
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_START);
 		setControlFlags(AGENT_CONTROL_AWAY | AGENT_CONTROL_STOP);
-		LL_INFOS("AFK") << "Setting Away" << LL_ENDL;
 		gAwayTimer.start();
-		// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
-		//if (gAFKMenu)
-		//{
-		//	gAFKMenu->setLabel(LLTrans::getString("AvatarSetNotAway"));
-		//}
 
-		// <AO> Gsit on away, antigrief protection
-		if (gSavedSettings.getBOOL("AvatarSitOnAway") == TRUE)
+		// <FS:AO> Gsit on away, antigrief protection
+		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
 		{
 			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
-    				gAgent.sitDown();
+			{
+				gAgent.sitDown();
+			}
 		}
-		// </AO>
+		// </FS:AO>
 	}
 }
 
@@ -1567,21 +1571,16 @@ void LLAgent::clearAFK()
 	{
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_STOP);
 		clearControlFlags(AGENT_CONTROL_AWAY);
-		LL_INFOS("AFK") << "Clearing Away" << LL_ENDL;
-		// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
-		//if (gAFKMenu)
-		//{
-		//	gAFKMenu->setLabel(LLTrans::getString("AvatarSetAway"));
-		//}
 
-                // <AO> if we sat while away, stand back up on clear
-                if (gSavedSettings.getBOOL("AvatarSitOnAway") == TRUE)
-                {
-                        if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
-                                gAgent.standUp();
-                }
-		// </AO>
-
+		// <FS:AO> if we sat while away, stand back up on clear
+		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
+		{
+			if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+			{
+				gAgent.standUp();
+			}
+		}
+		// </FS:AO>
 	}
 }
 
@@ -1594,41 +1593,26 @@ BOOL LLAgent::getAFK() const
 }
 
 //-----------------------------------------------------------------------------
-// setBusy()
+// setDoNotDisturb()
 //-----------------------------------------------------------------------------
-void LLAgent::setBusy()
+void LLAgent::setDoNotDisturb(bool pIsDoNotDisturb)
 {
-	sendAnimationRequest(ANIM_AGENT_BUSY, ANIM_REQUEST_START);
-	mIsBusy = TRUE;
-	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
-	//if (gBusyMenu)
-	//{
-	//	gBusyMenu->setLabel(LLTrans::getString("AvatarSetNotBusy"));
-	//}
-	LLNotificationsUI::LLChannelManager::getInstance()->muteAllChannels(true);
+	bool isDoNotDisturbSwitchedOff = (mIsDoNotDisturb && !pIsDoNotDisturb);
+	mIsDoNotDisturb = pIsDoNotDisturb;
+	sendAnimationRequest(ANIM_AGENT_DO_NOT_DISTURB, (pIsDoNotDisturb ? ANIM_REQUEST_START : ANIM_REQUEST_STOP));
+	LLNotificationsUI::LLChannelManager::getInstance()->muteAllChannels(pIsDoNotDisturb);
+	if (isDoNotDisturbSwitchedOff)
+	{
+		LLDoNotDisturbNotificationStorage::getInstance()->updateNotifications();
+	}
 }
 
 //-----------------------------------------------------------------------------
-// clearBusy()
+// isDoNotDisturb()
 //-----------------------------------------------------------------------------
-void LLAgent::clearBusy()
+bool LLAgent::isDoNotDisturb() const
 {
-	mIsBusy = FALSE;
-	sendAnimationRequest(ANIM_AGENT_BUSY, ANIM_REQUEST_STOP);
-	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
-	//if (gBusyMenu)
-	//{
-	//	gBusyMenu->setLabel(LLTrans::getString("AvatarSetBusy"));
-	//}
-	LLNotificationsUI::LLChannelManager::getInstance()->muteAllChannels(false);
-}
-
-//-----------------------------------------------------------------------------
-// getBusy()
-//-----------------------------------------------------------------------------
-BOOL LLAgent::getBusy() const
-{
-	return mIsBusy;
+	return mIsDoNotDisturb;
 }
 
 //-----------------------------------------------------------------------------
@@ -2200,10 +2184,11 @@ void LLAgent::startTyping()
 	{
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_START);
 	}
-	// <FS:Zi> Remove floating chat bar
-	// LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	// <FS:Ansariel> [FS Communication UI]
+	//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+	//		sendChatFromViewer("", CHAT_TYPE_START, FALSE);
 	FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_START, FALSE);
-	// </FS:Zi>
+	// </FS:Ansariel> [FS Communication UI]
 }
 
 //-----------------------------------------------------------------------------
@@ -2215,10 +2200,11 @@ void LLAgent::stopTyping()
 	{
 		clearRenderState(AGENT_STATE_TYPING);
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_STOP);
-	// <FS:Zi> Remove floating chat bar
-	// LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
-	FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
-	// </FS:Zi>
+		// <FS:Ansariel> [FS Communication UI]
+		//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+		//		sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		// </FS:Ansariel> [FS Communication UI]
 	}
 }
 
@@ -2294,11 +2280,6 @@ void LLAgent::endAnimationUpdateUI()
 		gMenuBarView->setVisible(TRUE);
 		// <FS:Ansariel> Separate navigation and favorites panel
 		//LLNavigationBar::getInstance()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-		// <FS:Zi> Is done inside XUI now, using visibility_control
-		// LLNavigationBar::getInstance()->showNavigationPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-		// LLNavigationBar::getInstance()->showFavoritesPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-		// </FS:Zi>
-		// </FS:Ansariel> Separate navigation and favorites panel
 		gStatusBar->setVisibleForMouselook(true);
 
 		if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
@@ -2429,11 +2410,6 @@ void LLAgent::endAnimationUpdateUI()
 		gMenuBarView->setVisible(FALSE);
 		// <FS:Ansariel> Separate navigation and favorites panel
 		//LLNavigationBar::getInstance()->setVisible(FALSE);
-		// <FS:Zi> Is done inside XUI now, using visibility_control
-		// LLNavigationBar::getInstance()->showNavigationPanel(FALSE);
-		// LLNavigationBar::getInstance()->showFavoritesPanel(FALSE);
-		// </FS:Zi>
-		// </FS:Ansariel> Separate navigation and favorites panel
 		gStatusBar->setVisibleForMouselook(false);
 
 		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);
@@ -2945,51 +2921,21 @@ void LLMaturityPreferencesResponder::errorWithContent(U32 pStatus, const std::st
 
 U8 LLMaturityPreferencesResponder::parseMaturityFromServerResponse(const LLSD &pContent)
 {
-	// stinson 05/24/2012 Pathfinding regions have re-defined the response behavior.  In the old server code,
-	// if you attempted to change the preferred maturity to the same value, the response content would be an
-	// undefined LLSD block.  In the new server code with pathfinding, the response content should always be
-	// defined.  Thus, the check for isUndefined() can be replaced with an assert after pathfinding is merged
-	// into server trunk and fully deployed.
 	U8 maturity = SIM_ACCESS_MIN;
-	if (pContent.isUndefined())
+
+	llassert(!pContent.isUndefined());
+	llassert(pContent.isMap());
+	llassert(pContent.has("access_prefs"));
+	llassert(pContent.get("access_prefs").isMap());
+	llassert(pContent.get("access_prefs").has("max"));
+	llassert(pContent.get("access_prefs").get("max").isString());
+	if (!pContent.isUndefined() && pContent.isMap() && pContent.has("access_prefs")
+		&& pContent.get("access_prefs").isMap() && pContent.get("access_prefs").has("max")
+		&& pContent.get("access_prefs").get("max").isString())
 	{
-		maturity = mPreferredMaturity;
-	}
-	else
-	{
-		llassert(!pContent.isUndefined());
-		llassert(pContent.isMap());
-	
-		if (!pContent.isUndefined() && pContent.isMap())
-		{
-			// stinson 05/24/2012 Pathfinding regions have re-defined the response syntax.  The if statement catches
-			// the new syntax, and the else statement catches the old syntax.  After pathfinding is merged into
-			// server trunk and fully deployed, we can remove the else statement.
-			if (pContent.has("access_prefs"))
-			{
-				llassert(pContent.has("access_prefs"));
-				llassert(pContent.get("access_prefs").isMap());
-				llassert(pContent.get("access_prefs").has("max"));
-				llassert(pContent.get("access_prefs").get("max").isString());
-				if (pContent.get("access_prefs").isMap() && pContent.get("access_prefs").has("max") &&
-					pContent.get("access_prefs").get("max").isString())
-				{
-					LLSD::String actualPreference = pContent.get("access_prefs").get("max").asString();
-					LLStringUtil::trim(actualPreference);
-					maturity = LLViewerRegion::shortStringToAccess(actualPreference);
-				}
-			}
-			else if (pContent.has("max"))
-			{
-				llassert(pContent.get("max").isString());
-				if (pContent.get("max").isString())
-				{
-					LLSD::String actualPreference = pContent.get("max").asString();
-					LLStringUtil::trim(actualPreference);
-					maturity = LLViewerRegion::shortStringToAccess(actualPreference);
-				}
-			}
-		}
+		LLSD::String actualPreference = pContent.get("access_prefs").get("max").asString();
+		LLStringUtil::trim(actualPreference);
+		maturity = LLViewerRegion::shortStringToAccess(actualPreference);
 	}
 
 	return maturity;
@@ -3158,6 +3104,7 @@ void LLAgent::sendMaturityPreferenceToServer(U8 pPreferredMaturity)
 		}
 	}
 }
+
 BOOL LLAgent::getAdminOverride() const	
 { 
 	return mAgentAccess->getAdminOverride(); 
@@ -3657,7 +3604,7 @@ void LLAgent::processAgentDropGroup(LLMessageSystem *msg, void **)
 		LLGroupMgr::getInstance()->clearGroupData(group_id);
 		// close the floater for this group, if any.
 		
-		// AO: Don't assume that because we drop a group, we want floaters to change.
+		// <FS:AO> Don't assume that because we drop a group, we want floaters to change.
 		//LLGroupActions::closeGroup(group_id);
 	}
 	else
@@ -3761,7 +3708,7 @@ LLHTTPRegistration<LLAgentDropGroupViewerNode>
 
 // static
 void LLAgent::processAgentGroupDataUpdate(LLMessageSystem *msg, void **)
-{	
+{
 	LLUUID	agent_id;
 
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id );
@@ -3817,7 +3764,7 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 		if(body.has("body"))
 			body = body["body"];
 		LLUUID agent_id = body["AgentData"][0]["AgentID"].asUUID();
-		
+
 		if (agent_id != gAgentID)
 		{
 			llwarns << "processAgentGroupDataUpdate for agent other than me" << llendl;
@@ -3860,7 +3807,7 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 				gAgent.mGroups.put(group);
 			}
 			if (need_floater_update)
-			{			
+			{
 				update_group_floaters(group.mID);
 			}
 		}
@@ -3900,6 +3847,7 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		gAgent.mGroupPowers = 0;
 		gAgent.mGroupName.clear();
 	}
+	// <FS> Restore to world
 	if (gAgent.restoreToWorld)
 	{
 		//This fires if we're trying to restore an item to world using the correct group.
@@ -3940,6 +3888,8 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		msg->addUUIDFast(_PREHASH_GroupID, gAgent.restoreToWorldGroup);
 		gAgent.sendReliableMessage();
 	}
+	// </FS>
+
 	update_group_floaters(active_id);
 
 	// <FS:Ansariel> Fire event for group title overview
@@ -4212,7 +4162,7 @@ void LLAgent::clearVisualParams(void *data)
 //---------------------------------------------------------------------------
 // Teleport
 //---------------------------------------------------------------------------
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 bool LLAgent::teleportBridgeLocal(LLVector3& pos_local)
 {
 	std::stringstream msgstream;
@@ -4228,9 +4178,8 @@ bool LLAgent::teleportBridgeGlobal(const LLVector3d& pos_global)
 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
 
 	return teleportBridgeLocal(pos_local);
-
 }
-//-TT Client LSL Bridge 
+// </FS:TT> Client LSL Bridge 
 
 // teleportCore() - stuff to do on any teleport
 // protected
@@ -4274,7 +4223,7 @@ bool LLAgent::teleportCore(bool is_local)
 	// hide the Region/Estate floater
 	LLFloaterReg::hideInstance("region_info");
 
-	// hide the Search floater (TS: FIRE-2886, backing out STORM-1474)
+	// minimize the Search floater (STORM-1474)
 	{
 		LLFloater* instance = LLFloaterReg::getInstance("search");
 
@@ -4322,7 +4271,7 @@ bool LLAgent::teleportCore(bool is_local)
 		// bit of a hack -KC
 		KCWindlightInterface::instance().setTPing(true);
 	}
-	make_ui_sound("UISndTeleportOut"); //AO
+	make_ui_sound("UISndTeleportOut");
 	
 	// MBW -- Let the voice client know a teleport has begun so it can leave the existing channel.
 	// This was breaking the case of teleporting within a single sim.  Backing it out for now.
@@ -4621,12 +4570,12 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		msg->addVector3Fast(_PREHASH_LookAt, pos);
 		sendReliableMessage();
 	}
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 	if (gSavedSettings.getBOOL("UseLSLBridge") && isLocal)
 	{
 		teleportBridgeGlobal(pos_global);
 	}
-//-TT 
+// </FS:TT>
 }
 
 // Teleport to global position, but keep facing in the same direction 
@@ -4653,19 +4602,23 @@ void LLAgent::doTeleportViaLocationLookAt(const LLVector3d& pos_global)
 	U64 region_handle = to_region_handle(pos_global);
 // <FS:CR> Aurora-sim var region teleports
 	LLSimInfo* simInfo = LLWorldMap::instance().simInfoFromHandle(region_handle);
-	if(simInfo)
+	if (simInfo)
+	{
 		region_handle = simInfo->getHandle();
+	}
 // </FS:CR>
 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
 	teleportRequest(region_handle, pos_local, getTeleportKeepsLookAt());
 
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 	if (gSavedSettings.getBOOL("UseLSLBridge"))
 	{
 		if (region_handle == to_region_handle(getPositionGlobal()))
+		{
 			teleportBridgeLocal(pos_local);
+		}
 	}
-//-TT 
+// </FS:TT>
 }
 
 void LLAgent::setTeleportState(ETeleportState state)
@@ -4902,7 +4855,7 @@ void LLAgent::sendAgentSetAppearance()
 		return;
 	}
 	
-
+	
 	LL_DEBUGS("Avatar") << gAgentAvatarp->avString() << "TAT: Sent AgentSetAppearance: " << gAgentAvatarp->getBakedStatusForPrintout() << LL_ENDL;
 	//dumpAvatarTEs( "sendAgentSetAppearance()" );
 
@@ -5015,7 +4968,7 @@ void LLAgent::sendAgentSetAppearance()
 		}
 	}
 
-	//llinfos << "Avatar XML num VisualParams transmitted = " << transmitted_params << llendl;
+//	llinfos << "Avatar XML num VisualParams transmitted = " << transmitted_params << llendl;
 	sendReliableMessage();
 }
 
@@ -5159,21 +5112,25 @@ void LLAgent::renderAutoPilotTarget()
 	}
 }
 
-// Firestorm Phantom
+// <FS> Phantom mode
 void LLAgent::togglePhantom()
 {
 	mPhantom = !mPhantom;
-	if(mPhantom)
+	if (mPhantom)
+	{
 		LLNotificationsUtil::add("PhantomOn", LLSD());
+	}
 	else
+	{
 		LLNotificationsUtil::add("PhantomOff", LLSD());
+	}
 }
 
 bool LLAgent::getPhantom() const
 {
 	return mPhantom;
 }
-// Firestorm Phantom
+// </FS> Phantom mode
 
 /********************************************************************************/
 

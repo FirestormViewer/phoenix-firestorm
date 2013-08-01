@@ -520,6 +520,22 @@
 			 name="exclude_temporary"
 			 label="Temporary"
 			 width="80"/>
+			<check_box
+			 follows="top|left"
+			 top_pad="10"
+			 layout="topleft"
+			 left="10"
+			 name="exclude_childprim"
+			 label="Child Prim"
+			 width="80"/>
+			<check_box
+			 follows="top|left"
+			 top_pad="10"
+			 layout="topleft"
+			 left="10"
+			 name="exclude_neighbor_region"
+			 label="Neighboring Regions"
+			 width="80"/>
 			<button
 			 name="apply"
 			 label="Apply"

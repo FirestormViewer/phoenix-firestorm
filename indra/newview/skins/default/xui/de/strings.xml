@@ -128,11 +128,11 @@
 		Beenden
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/index.php?lang=de-DE&amp;sourceid=[sourceid]
+		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
-http://secondlife.com/download
+http://firestormviewer.org/downloads
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
 http://secondlife.com/viewer-access-faq
@@ -655,8 +655,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="AvatarAway">
 		Abwesend
 	</string>
-	<string name="AvatarBusy">
-		Beschäftigt
+	<string name="AvatarDoNotDisturb">
+		Nicht stören
 	</string>
 	<string name="AvatarMuted">
 		Ignoriert
@@ -871,6 +871,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="multiple_textures">
 		Mehrfach
 	</string>
+	<string name="use_texture">
+		Textur benutzen
+	</string>
 	<string name="texture_loading">
 		Wird geladen...
 	</string>
@@ -903,6 +906,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="no_name_object">
 		(namenlos)
+	</string>
+	<string name="NearbyChatTitle">
+		Chat in der Nähe
+	</string>
+	<string name="NearbyChatLabel">
+		(Chat in der Nähe)
 	</string>
 	<string name="whisper">
 		flüstert:
@@ -967,9 +976,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ControlYourCamera">
 		Kamerasteuerung übernehmen
 	</string>
-	<string name="TeleportYourAgent">
-		Sie teleportieren
-	</string>
 	<string name="JoinAnExperience">
 		Einem Erlebnis beiwohnen
 	</string>
@@ -984,6 +990,15 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden
+	</string>
+	<string name="AgentNameSubst">
+		(Sie)
+	</string>
+	<string name="TeleportYourAgent">
+		Sie teleportieren
+	</string>
+	<string name="UnknownScriptPermission">
+		(unbekannt)!
 	</string>
 	<string name="SIM_ACCESS_PG">
 		Generell
@@ -1068,18 +1083,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="backup_files">
 		Objekt-Sicherungen
-	</string>
-	<string name="AvatarSetNotAway">
-		Nicht abwesend
-	</string>
-	<string name="AvatarSetAway">
-		Abwesend
-	</string>
-	<string name="AvatarSetNotBusy">
-		Nicht beschäftigt
-	</string>
-	<string name="AvatarSetBusy">
-		Beschäftigt
 	</string>
 	<string name="AvatarSetNotAutorespond">
 		Automatische Antwort AUS
@@ -2102,8 +2105,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="PanelContentsNewScript">
 		Neues Skript
 	</string>
-	<string name="BusyModeResponseDefault">
-		Der Einwohner/Die Einwohnerin ist „beschäftigt”, d.h. er/sie möchte im Moment nicht gestört werden.  Ihre Nachricht wird dem Einwohner/der Einwohnerin als IM angezeigt, und kann später beantwortet werden.
+	<string name="DoNotDisturbModeResponseDefault">
+		Dieser Einwohner hat den Nicht-stören-Modus aktiviert und wird Ihre Nachricht später sehen.
 	</string>
 	<string name="MuteByName">
 		(Nach Namen)
@@ -2192,6 +2195,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvOfferGaveYou">
 		hat Ihnen folgendes übergeben
 	</string>
+	<string name="InvOfferYouDecline">
+		Sie lehnen ab
+	</string>
 	<string name="InvOfferDecline">
 		Sie lehnen [DESC] von [NAME] ab.
 	</string>
@@ -2227,9 +2233,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="GroupMoneyDate">
 		[weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc] [year,datetime,utc]
-	</string>
-	<string name="ViewerObjectContents">
-		Inhalte
 	</string>
 	<string name="AcquiredItems">
 		Erworbene Artikel
@@ -2468,6 +2471,11 @@ Falls der Fehler dann weiterhin auftritt, müssen Sie [APP_NAME] von Ihrem Syste
 	</string>
 	<string name="MBFatalError">
 		Unbehebbarer Fehler
+	</string>
+	<string name="MBApplicationError">Anwendungsfehler - Keine Panik</string>
+	<string name="MBApplicationErrorDetails">Es tut uns leid, aber [APP_NAME] ist abgestürzt und wird deshalb beendet. Falls dieser Fehler wiederholt auftritt, konktaktieren Sie bitte unser Support-Team und informieren Sie es über folgende Fehlermeldung:
+
+[ERROR_DETAILS]
 	</string>
 	<string name="MBRequiresAltiVec">
 		[APP_NAME] erfordert einen Prozessor mit AltiVec (G4 oder später).
@@ -4094,6 +4102,12 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="IM_autoresponse_sent">
 		Automatische Antwort gesendet.
 	</string>
+	<string name="OnlineStatus">
+		online
+	</string>
+	<string name="OfflineStatus">
+		offline
+	</string>
 	<string name="answered_call">
 		Ihr Anruf wurde entgegengenommen
 	</string>
@@ -4102,6 +4116,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	</string>
 	<string name="you_joined_call">
 		Sie sind dem Gespräch beigetreten
+	</string>
+	<string name="you_auto_rejected_call-im">
+		Sie haben den Voice-Anruf automatisch abgelehnt, während der Nicht-stören-Modus aktiviert war.
 	</string>
 	<string name="name_started_call">
 		[NAME] hat einen Voice-Anruf begonnen
@@ -4119,7 +4136,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Wird verbunden...
 	</string>
 	<string name="conference-title">
-		Ad-hoc-Konferenz
+		Chat mit mehreren Personen
 	</string>
 	<string name="conference-title-incoming">
 		Konferenz mit [AGENT_NAME]
@@ -5004,6 +5021,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Chat_Label">
 		Chat
 	</string>
+	<string name="Command_Conversations_Label">
+		Unterhaltungen
+	</string>
 	<string name="Command_Compass_Label">
 		Kompass
 	</string>
@@ -5131,6 +5151,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Radar_Label">
 		Radar
 	</string>
+	<string name="Command_Conversation_Log_Label">
+		Unterhaltungsprotokoll
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5145,6 +5168,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Chat_Tooltip">
 		Mit Leuten in der Nähe chatten (Strg+T)
+	</string>
+	<string name="Command_Conversations_Tooltip">
+		Mit allen unterhalten
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Kompass
@@ -5269,6 +5295,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Radar_Tooltip">
 		Öffnet das Radar für Avatare in der Nähe
 	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Öffnet das Unterhaltungsprotokoll mit Chatverläufen
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
 	</string>
@@ -5337,6 +5366,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="UserDictionary">
 		[Benutzer]
+	</string>
+	<string name="logging_calls_disabled_log_empty">
+		Unterhaltungen werden nicht protokolliert. Um ein Protokoll zu starten, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Privatsphäre“.
+	</string>
+	<string name="logging_calls_disabled_log_not_empty">
+		Es werden keine Unterhaltungen mehr protokolliert. Um weiterhin ein Protokoll zu führen, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Privatsphäre“.
+	</string>
+	<string name="logging_calls_enabled_log_empty">
+		Keine protokollierten Unterhaltungen verfügbar. Hier erscheint ein Protokolleintrag, wenn Sie eine Person kontaktieren oder von einer Person kontaktiert werden.
 	</string>
 	
 <!-- Firestorm-specific translations -->

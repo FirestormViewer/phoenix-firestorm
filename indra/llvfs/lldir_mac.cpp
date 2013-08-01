@@ -63,21 +63,6 @@ static bool CreateDirectory(const std::string &parent,
 LLDir_Mac::LLDir_Mac()
 {
 	mDirDelimiter = "/";
-	mCurrentDirIndex = -1;
-	mCurrentDirCount = -1;
-	
-	//CFBundleRef		mainBundleRef = NULL;
-	//CFURLRef		executableURLRef = NULL;
-	//CFStringRef		stringRef = NULL;
-	//OSStatus		error = noErr;
-	//FSRef			fileRef;
-	//CFStringRef		secondLifeString = CFSTR("Firestorm");
-	
-	//mainBundleRef = CFBundleGetMainBundle();
-		
-	//executableURLRef = CFBundleCopyExecutableURL(mainBundleRef);
-	
-	//if (executableURLRef != NULL)
 
     const std::string     secondLifeString = "Firestorm";
     
@@ -148,33 +133,6 @@ LLDir_Mac::LLDir_Mac()
         if (cachedir)
 		
 		{
-#if 0 // <FS:TS> Merge testing
-			FSRef	newFileRef;
-			
-			// Create the directory
-			error = CFCreateDirectory(&fileRef, secondLifeString, &newFileRef);
-			if (error == noErr)
-			{
-				// Save the full path to the folder
-				FSRefToLLString(&newFileRef, mOSUserDir);
-				
-				// Create our sub-dirs
-				(void) CFCreateDirectory(&newFileRef, CFSTR("data"), NULL);
-				//(void) CFCreateDirectory(&newFileRef, CFSTR("cache"), NULL);
-				(void) CFCreateDirectory(&newFileRef, CFSTR("logs"), NULL);
-				(void) CFCreateDirectory(&newFileRef, CFSTR("user_settings"), NULL);
-				(void) CFCreateDirectory(&newFileRef, CFSTR("browser_profile"), NULL);
-			}
-		}
-		
-		//mOSCacheDir
-		FSRef cacheDirRef;
-		error = FSFindFolder(kUserDomain, kCachedDataFolderType, true, &cacheDirRef);
-		if (error == noErr)
-		{
-			FSRefToLLString(&cacheDirRef, mOSCacheDir);
-			(void)CFCreateDirectory(&cacheDirRef, CFSTR("Firestorm"),NULL);
-#endif
             mOSCacheDir = *cachedir;
             //SPATTERS TODO:  This changes from ~/Library/Cache/Secondlife to ~/Library/Cache/com.app.secondlife/Secondlife.  Last dir level could go away.
             CreateDirectory(mOSCacheDir, secondLifeString, NULL);

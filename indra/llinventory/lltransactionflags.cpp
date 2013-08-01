@@ -62,6 +62,7 @@ BOOL is_tf_owner_group(TransactionFlags flags)
 	return ((flags & TRANSACTION_FLAG_OWNER_GROUP) == TRANSACTION_FLAG_OWNER_GROUP);
 }
 
+void append_reason(std::ostream& ostr, S32 transaction_type, const std::string& description);	// <FS:CR>
 void append_reason(
 	std::ostream& ostr,
 	S32 transaction_type,

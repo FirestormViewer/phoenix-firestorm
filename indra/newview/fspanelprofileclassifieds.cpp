@@ -145,21 +145,21 @@ void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type
 		
 		mNoClassifieds = !mClassifiedsList->size();
 
-        bool no_data = mNoClassifieds;
-        mNoItemsLabel->setVisible(no_data);
-        if (no_data)
-        {
-            if(getAvatarId() == gAgentID)
-            {
-                mNoItemsLabel->setValue(LLTrans::getString("NoClassifiedsText"));
-            }
-            else
-            {
-                mNoItemsLabel->setValue(LLTrans::getString("NoAvatarClassifiedsText"));
-            }
-        }
+		bool no_data = mNoClassifieds;
+		mNoItemsLabel->setVisible(no_data);
+		if (no_data)
+		{
+			if(getAvatarId() == gAgentID)
+			{
+				mNoItemsLabel->setValue(LLTrans::getString("NoClassifiedsText"));
+			}
+			else
+			{
+				mNoItemsLabel->setValue(LLTrans::getString("NoAvatarClassifiedsText"));
+			}
+		}
 
-        enableControls();
+		enableControls();
 	}
 }
 

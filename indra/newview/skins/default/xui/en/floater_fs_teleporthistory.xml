@@ -14,7 +14,6 @@
  min_width="318"
  width="318">
 	<filter_editor
-	 text_pad_left="10"
 	 follows="left|top|right"
 	 font="SansSerifSmall"
 	 height="23"

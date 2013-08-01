@@ -1128,7 +1128,6 @@ bool LLTextureFetchWorker::doWork(S32 param)
 		{
 			llinfos << "Blacklisted texture asset blocked." << llendl; 
 			mState = DONE;
-			LL_DEBUGS("Texture") << mID << " DECODE_IMAGE abort: (mFormattedImage->getDataSize() <= 0)" << llendl;
 			return true;
 		}
 		//end asset blacklist
@@ -1909,9 +1908,9 @@ void LLTextureFetchWorker::onCompleted(LLCore::HttpHandle handle, LLCore::HttpRe
 	LLCore::HttpStatus status(response->getStatus());
 	
 	LL_DEBUGS("Texture") << "HTTP COMPLETE: " << mID
-						 << " status: " << status.toHex()
-						 << " '" << status.toString() << "'"
-						 << llendl;
+			 << " status: " << status.toHex()
+			 << " '" << status.toString() << "'"
+			 << llendl;
 //	unsigned int offset(0), length(0), full_length(0);
 //	response->getRange(&offset, &length, &full_length);
 // 	llwarns << "HTTP COMPLETE: " << mID << " handle: " << handle

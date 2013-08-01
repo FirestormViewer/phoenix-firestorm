@@ -52,19 +52,21 @@ void StreamTitleDisplay::checkMetadata()
 	static LLCachedControl<U32> ShowStreamMetadata(gSavedSettings, "ShowStreamMetadata");
 	static LLCachedControl<bool> StreamMetadataAnnounceToChat(gSavedSettings, "StreamMetadataAnnounceToChat");
 
-	if(!gAudiop)
+	if (!gAudiop)
+	{
 		return;
-	if(gAudiop->getStreamingAudioImpl()->hasNewMetadata() && (ShowStreamMetadata > 0 || StreamMetadataAnnounceToChat))
+	}
+	if ((ShowStreamMetadata > 0 || StreamMetadataAnnounceToChat) && gAudiop->getStreamingAudioImpl()->hasNewMetadata())
 	{
 		std::string chat = "";
 		std::string title = gAudiop->getStreamingAudioImpl()->getCurrentTitle();
 		std::string artist = gAudiop->getStreamingAudioImpl()->getCurrentArtist();
 
-		if(artist.length() > 0)
+		if (artist.length() > 0)
 		{
 			chat = artist;
 		}
-		if(title.length() > 0)
+		if (title.length() > 0)
 		{
 			if (chat.length() > 0)
 			{
@@ -88,7 +90,7 @@ void StreamTitleDisplay::checkMetadata()
 			{
 				LLSD args;
 				args["TITLE"] = title;
-				if(artist.length() > 0)
+				if (artist.length() > 0)
 				{
 					args["ARTIST"] = artist;
 					LLNotificationsUtil::add("StreamMetadata", args);

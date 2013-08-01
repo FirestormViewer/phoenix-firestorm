@@ -318,8 +318,11 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<panel.string name="push_restrict_region_text">
 				Sin &apos;empujones&apos; (prevalece lo configurado en la región)
 			</panel.string>
-			<panel.string name="see_avs_text">
-				Los avatares de otras parcelas pueden ver
+			<panel.string name="DirectoryFree">
+				Mostrar en la Búsqueda
+			</panel.string>
+			<panel.string name="DirectoryFee">
+				Mostrar en la Búsqueda ([DIRECTORY_FEE] L$/semana)
 			</panel.string>
 			<text name="allow_label">
 				Permitir a otros Residentes:
@@ -432,6 +435,9 @@ los medios:
 			<text name="MusicURL:">
 				URL de música:
 			</text>
+			<button name="stream_add_btn" tool_tip="Añade URL de flujo de música a la lista de flujos guardada"/>
+			<button name="stream_delete_btn" tool_tip="Elimina la URL de flujo de música de la lista de flujos guardada"/>
+			<button name="stream_copy_btn" tool_tip="Copiar la URL de flujo de música al portapapeles"/>
 			<text name="Sound:" width="110">
 				Sonido:
 			</text>

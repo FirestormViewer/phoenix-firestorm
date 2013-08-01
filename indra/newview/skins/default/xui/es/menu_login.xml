@@ -6,6 +6,7 @@
 	</menu>
 	<menu label="Ayuda" name="Help">
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Solución de problemas" name="Troubleshooting"/>
 		<menu_item_call label="Acerca de [APP_NAME]" name="About Second Life"/>
 		<menu_item_call label="Ayuda de [CURRENT_GRID]" name="current_grid_help_login"/>
 		<menu_item_call label="Acerca de [CURRENT_GRID]" name="current_grid_about_login"/>
@@ -26,11 +27,11 @@
 		<menu_item_call label="Mostrar mensaje crítico" name="Critical"/>
 		<menu_item_call label="Prueba de depuración de ventanas de contenido web" name="Web Content Floater Debug Test"/>
 		<menu label="Nivel de registro" name="Set Logging Level">
-			<menu_item_check name="Debug Level Debug" label="Depuración"/>
-			<menu_item_check name="Debug Level Info" label="Información"/>
-			<menu_item_check name="Debug Level Warn" label="Advertencias"/>
-			<menu_item_check name="Debug Level Error" label="Errores"/>
-			<menu_item_check name="Debug Level None" label="Ninguno"/>
+			<menu_item_check name="Debug" label="Depuración"/>
+			<menu_item_check name="Info" label="Información"/>
+			<menu_item_check name="Warning" label="Advertencias"/>
+			<menu_item_check name="Error" label="Errores"/>
+			<menu_item_check name="None" label="Ninguno"/>
 		</menu>
 		<menu_item_check label="Mostrar selector de red" name="Show Grid Picker"/>
 		<menu_item_call label="Mostrar la consola de notificaciones" name="Show Notifications Console"/>

@@ -81,6 +81,8 @@
 			<check_box name="exclude_attachment" label="Anhänge"/>
 			<check_box name="exclude_physical" label="Physikalisch"/>
 			<check_box name="exclude_temporary" label="Temporär"/>
+			<check_box name="exclude_childprim" label="Kind-Primitive"/>
+			<check_box name="exclude_neighbor_region" label="Nachbarregionen"/>
 			<button name="apply" label="Anwenden"/>
 		</panel>
 		<panel label="Optionen" name="area_search_options_panel">

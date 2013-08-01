@@ -24,12 +24,11 @@ set(cmake_SOURCE_FILES
     DragDrop.cmake
     EXPAT.cmake
     ExamplePlugin.cmake
-    FMOD.cmake
     FindAPR.cmake
     FindAutobuild.cmake
     FindBerkeleyDB.cmake
     FindCARes.cmake
-    FindFMOD.cmake
+    FindFMODEX.cmake
     FindGLH.cmake
     FindGoogleBreakpad.cmake
     FindGooglePerfTools.cmake
@@ -40,6 +39,7 @@ set(cmake_SOURCE_FILES
     FindSCP.cmake
     FindXmlRpcEpi.cmake
     FindZLIB.cmake
+    FMODEX.cmake
     FreeType.cmake
     GLEXT.cmake
     GLH.cmake
@@ -80,7 +80,7 @@ set(cmake_SOURCE_FILES
     LLVFS.cmake
     LLWindow.cmake
     LLXML.cmake
-    LScript.cmake
+    # <FS:CR> We'll be fine without you -> LScript.cmake
     Linking.cmake
     MediaPluginBase.cmake
     NDOF.cmake

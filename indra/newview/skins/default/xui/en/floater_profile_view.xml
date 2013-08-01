@@ -11,6 +11,7 @@
  title="Profile">
  <!-- FS:Ansariel: Help topic set above is a dummy only - real topics are set for the panels down below! -->
 <panel
+ class="panel_profile"
  top="0"
  left="0"
  follows="all"
@@ -26,7 +27,7 @@
      height="500"
      halign="center"
      layout="topleft"
-     name="tabs"
+     name="panel_profile_tabs"
      tab_position="top"
      tab_min_width="55">
         <panel

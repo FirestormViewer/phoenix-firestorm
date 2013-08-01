@@ -9,6 +9,7 @@
 	</text>
 	<check_box name="notify_money_change_checkbox" label="Cuando gaste o reciba L$" width="145"/>
 	<check_box name="FSPaymentInfoInChat" label="Transacciones de L$ en el chat local en vez de en tostadas"/>
+	<check_box name="FSShowUploadPaymentToast" label="Cuando se me cobra por una subida"/>
 	<check_box label="Cuando se cree un hito" name="landmark_created_checkbox" width="145"/>
 	<check_box label="Cuando alguien cambie su displayname" name="FSShowDisplayNameUpdateNotification" left_pad="30"/>
 	<check_box label="Cuando haya errores de script:" name="show_script_errors"/>
@@ -32,6 +33,7 @@
 	</text>
 	<check_box name="friends_notify_online_sound" label="Se conectan" width="95"/>
 	<check_box name="friends_notify_offline_sound" label="Se desconectan" width="95" />
+	<check_box label="Cuando el total de scripts de la región cambie:" name="FSReportTotalScriptCountChanges"/>
     </panel>
     <panel label="Alertas" name="tab-alerts">
 	<text name="show_label">

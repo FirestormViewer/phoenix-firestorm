@@ -47,6 +47,7 @@ class LLAvatarPropertiesObserver;
 class LLGroupMgrObserver;
 class LLSearchEditor;
 class LLSearchComboBox;
+class FSPanelProfile;
 
 typedef enum e_search_category
 {
@@ -135,6 +136,7 @@ private:
 	LLTextureCtrl*	mDetailSnapshot;
 	LLIconCtrl*		mDetailMaturity;
 	LLTabContainer*	mTabContainer;
+	FSPanelProfile*	mPanelProfile;
 };
 
 ///////////////////////////////

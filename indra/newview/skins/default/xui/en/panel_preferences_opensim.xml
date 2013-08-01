@@ -14,7 +14,7 @@
  layout="topleft"
  follows="all"
  top="5"
- bottom="-10"
+ bottom="-1"
  left="1"
  right="-1"
  name="tabs"
@@ -38,7 +38,7 @@
       layout="topleft"
       left="30"
       name="add_grid_text"
-      top="25"
+      top="12"
       width="400">
       Add new grid
     </text>
@@ -98,7 +98,7 @@
       left="50"
       name="grid_list"
       draw_heading="true"
-      top="122"
+      top="104"
       width="370">
         <scroll_list.columns
           label="Grid name"

@@ -176,8 +176,7 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # Default deploy grid
 set(GRID agni CACHE STRING "Target Grid")
 
-#set(VIEWER_CHANNEL "Firestorm-Private" CACHE STRING "Viewer Channel Name")
-#set(VIEWER_LOGIN_CHANNEL ${VIEWER_CHANNEL} CACHE STRING "Fake login channel for A/B Testing")
+#set(VIEWER_CHANNEL "Second Life Test" CACHE STRING "Viewer Channel Name") <FS:TM> F_EX merge LL new, we had commented out old
 
 # Flickr API keys.
 set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")

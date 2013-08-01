@@ -45,8 +45,8 @@ public:
 	
 	virtual BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ void draw();
-	/*virtual*/ void setVisible(BOOL visible);
+	virtual void draw();
+	virtual void setVisible(BOOL visible);
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool addChild(LLView* view, S32 tab_group = 0);
 
@@ -71,7 +71,7 @@ public:
 	virtual void setFloaterFlashing(LLFloater* floaterp, BOOL flashing);
 	virtual BOOL closeAllFloaters();	//Returns FALSE if the floater could not be closed due to pending confirmation dialogs
 	// <FS> Update torn off status and add title bar
-	//void setTabContainer(LLTabContainer* tab_container) { if (!mTabContainer) mTabContainer = tab_container; }
+	//void setTabContainer(LLTabContainer* tab_container) { if (!mTabContainer) mTabContainer = tab_container; } // LL Code
 	void setTabContainer(LLTabContainer* tab_container);
 	// </FS> Update torn off status and add title bar
 	void onTabSelected();
@@ -82,10 +82,11 @@ public:
 protected:
 	struct LLFloaterData
 	{
-		S32		mWidth;
-		S32		mHeight;
-		BOOL	mCanMinimize;
-		BOOL	mCanResize;
+		S32		    mWidth;
+		S32		    mHeight;
+		BOOL	    mCanMinimize;
+		BOOL	    mCanResize;
+		BOOL        mSaveRect;
 	};
 
 	LLTabContainer*		mTabContainer;
@@ -96,6 +97,9 @@ protected:
 	LLTabContainer::TabPosition mTabPos;
 	BOOL				mAutoResize;
 	S32					mOrigMinWidth, mOrigMinHeight;  // logically const but initialized late
+
+private:
+	virtual void computeResizeLimits(S32& new_min_width, S32& new_min_height);
 };
 
 #endif  // LL_MULTI_FLOATER_H

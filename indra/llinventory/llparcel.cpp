@@ -959,6 +959,7 @@ BOOL LLParcel::addToBanList(const LLUUID& agent_id, S32 time)
     return TRUE;
 }
 
+BOOL remove_from_access_array(std::map<LLUUID,LLAccessEntry>* list, const LLUUID& agent_id);	// <FS:CR> Various missing prototypes
 BOOL remove_from_access_array(std::map<LLUUID,LLAccessEntry>* list,
                               const LLUUID& agent_id)
 {
@@ -1041,7 +1042,7 @@ BOOL LLParcel::isSaleTimerExpired(const U64& time)
     {
         return FALSE;
     }
-    BOOL expired = mSaleTimerExpires.checkExpirationAndReset(0.0);
+    BOOL expired = mSaleTimerExpires.checkExpirationAndReset(0.0f);
     if (expired)
     {
         mSaleTimerExpires.stop();
@@ -1055,7 +1056,7 @@ BOOL LLParcel::isMediaResetTimerExpired(const U64& time)
     {
         return FALSE;
     }
-    BOOL expired = mMediaResetTimer.checkExpirationAndReset(0.0);
+    BOOL expired = mMediaResetTimer.checkExpirationAndReset(0.0f);
     if (expired)
     {
         mMediaResetTimer.stop();
@@ -1096,7 +1097,7 @@ void LLParcel::expireSale(
 	LLUUID& from_id,
 	LLUUID& to_id)
 {
-    mSaleTimerExpires.setTimerExpirySec(0.0);
+    mSaleTimerExpires.setTimerExpirySec(0.0f);
     mSaleTimerExpires.stop();
     setPreviousOwnerID(LLUUID::null);
     setPreviouslyGroupOwned(FALSE);
@@ -1115,7 +1116,7 @@ void LLParcel::completeSale(
 	U8& flags,
 	LLUUID& to_id)
 {
-	mSaleTimerExpires.setTimerExpirySec(0.0);
+	mSaleTimerExpires.setTimerExpirySec(0.0f);
 	mSaleTimerExpires.stop();
 	mStatus = OS_LEASED;
 	type = TRANS_LAND_SALE;
@@ -1139,7 +1140,7 @@ void LLParcel::completeSale(
 
 void LLParcel::clearSale()
 {
-	mSaleTimerExpires.setTimerExpirySec(0.0);
+	mSaleTimerExpires.setTimerExpirySec(0.0f);
 	mSaleTimerExpires.stop();
 	if(isPublic())
 	{

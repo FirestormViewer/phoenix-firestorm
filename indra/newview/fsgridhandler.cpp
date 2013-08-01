@@ -564,27 +564,6 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_DIRECTORY_FEE] << LL_ENDL;
 			continue;
 		}
-		check = "CurrencySymbol";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_CURRENCY_SYMBOL] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_CURRENCY_SYMBOL] << LL_ENDL;
-			continue;
-		}
-		check = "RealCurrencySymbol";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] << LL_ENDL;
-			continue;
-		}
-		check = "MaxGroups";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_MAXGROUPS] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_MAXGROUPS] << LL_ENDL;
-			continue;
-		}
 		check = "platform";
 		if (node->hasName(check))
 		{

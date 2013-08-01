@@ -2,7 +2,7 @@
 <panel
 	default_tab_group="1"
 	follows="all"
-	height="449"
+	height="423"
 	label="People"
 	layout="topleft"
 	left="0"
@@ -69,17 +69,6 @@ Looking for people to hang out with? Use the search box to find topics or conten
 	<string
 		name="avatar_name_count"
 		value="Name [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
-	<filter_editor
-		follows="left|top|right"
-		height="23"
-		layout="topleft"
-		left="2"
-		label="Filter"
-		max_length_chars="300"
-		name="filter_input"
-		text_pad_left="10"
-		top="2"
-		right="-2" />
 
 	<tab_container
 		follows="all"
@@ -90,14 +79,14 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		tab_drag_commit="true"
 		tab_group="1"
 		tab_position="top"
-		top_pad="4"
+		top="2"
 		halign="center"
 		right="-2">
 
 		<panel
 			background_visible="false"
 			follows="all"
-			height="400"
+			height="383"
 			label="Nearby"
 			layout="topleft"
 			left="0"
@@ -111,118 +100,19 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				layout="topleft"
 				follows="all"
 				tab_position="bottom"
-				height="400">
+				height="383">
 
 				<panel
-					name="radarmap_nearby_panel"
-					layout="topleft"
+					class="fs_panel_radar"
+					name="panel_radar"
+					filename="panel_fs_radar.xml"
 					follows="all"
+					height="383"
+					layout="topleft"
+					left="3"
+					top_pad="3"
 					label="List"
-					height="400">
-
-					<layout_stack
-						orientation="vertical"
-						clip="true"
-						follows="all"
-						layout="topleft"
-						top="0"
-						left="0"
-						height="400"
-						width="313"
-						mouse_opaque="false"
-						name="radar_ls"
-						border_size="0">
-
-						<layout_panel
-							layout="topleft"
-							top="0"
-							left="0"
-							height="140"
-							width="313"
-							follows="all"
-							min_dim="140"
-							mouse_opaque="false"
-							visibility_control="ShowRadarMinimap"
-							name="minimaplayout"
-							user_resize="true"
-							auto_resize="false">
-
-							<net_map
-								bg_color="NetMapBackgroundColor"
-								visibility_control="ShowRadarMinimap"
-								follows="all"
-								layout="topleft"
-								left="0"
-								mouse_opaque="false"
-								name="Net Map"
-								width="313"
-								height="140"
-								top="0"/>
-
-						</layout_panel>
-
-						<layout_panel
-							layout="topleft"
-							top="0"
-							left="0"
-							height="260"
-							width="313"
-							mouse_opaque="false"
-							follows="all"
-							name="radarlayout"
-							user_resize="true"
-							auto_resize="true">
-
-							<radar_list
-								draw_heading="true"
-								follows="all"
-								layout="topleft"
-								left="0"
-								top_pad="0"
-								height="255"
-								sort_column="0"
-								sort_ascending="true"
-								name="radar_list"
-								draw_stripes="true"
-								multi_select="true"
-								width="311">
-								<radar_list.columns
-									label="Name"
-									name="name"
-									relative_width="0.32" />
-								<radar_list.columns
-									label=""
-									name="voice_level"
-									relative_width="0.07" />
-								<radar_list.columns
-									label="Distance"
-									name="range"
-									relative_width="0.15" />
-								<radar_list.columns
-									label="Time"
-									name="seen"
-									relative_width="0.15" />
-								<radar_list.columns
-									label="Age"
-									name="age"
-									relative_width="0.1" />
-								<radar_list.columns
-									label=""
-									name="in_region"
-									relative_width="0.03" />
-								<radar_list.columns
-									label=""
-									name="flags"
-									relative_width="0.08" />
-								<radar_list.columns
-									label="av_id"
-									name="uuid"
-									relative_width="0" />
-							</radar_list>
-						</layout_panel>
-					</layout_stack>
-
-				</panel>
+					width="319"/>
 
 				<panel
 					name="radarmap_options_panel"
@@ -232,218 +122,220 @@ Looking for people to hang out with? Use the search box to find topics or conten
 					top="0"
 					height="383">
 
-				<check_box
-					label="Show Minimap above Radar"
-					left="0"
-					top="4"
-					name="ShowRadarMinimap"
-					control_name="ShowRadarMinimap"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Show Minimap above Radar"
+						left="0"
+						top="4"
+						name="ShowRadarMinimap"
+						control_name="ShowRadarMinimap"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-				<check_box
-					label="Report Entering Draw Range"
-					left="0"
-					top_pad="2"
-					name="RadarReportDrawRangeEnter"
-					control_name="RadarReportDrawRangeEnter"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Entering Draw Range"
+						left="0"
+						top_pad="2"
+						name="RadarReportDrawRangeEnter"
+						control_name="RadarReportDrawRangeEnter"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-          <check_box
-					label="Report Leaving Draw Range"
-					left="0"
-					top_pad="2"
-					name="RadarReportDrawRangeLeaving"
-					control_name="RadarReportDrawRangeLeaving"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Leaving Draw Range"
+						left="0"
+						top_pad="2"
+						name="RadarReportDrawRangeLeaving"
+						control_name="RadarReportDrawRangeLeaving"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-				<check_box
-					label="Report Entering Chat Range"
-					left="0"
-					top_pad="2"
-					name="RadarReportChatRangeEnter"
-					control_name="RadarReportChatRangeEnter"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Entering Chat Range"
+						left="0"
+						top_pad="2"
+						name="RadarReportChatRangeEnter"
+						control_name="RadarReportChatRangeEnter"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-          <check_box
-					label="Report Leaving Chat Range"
-					left="0"
-					top_pad="2"
-					name="RadarReportChatRangeLeave"
-					control_name="RadarReportChatRangeLeave"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Leaving Chat Range"
+						left="0"
+						top_pad="2"
+						name="RadarReportChatRangeLeave"
+						control_name="RadarReportChatRangeLeave"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-				<check_box
-					label="Report Entering your Region"
-					left="0"
-					top_pad="2"
-					name="RadarReportSimRangeEnter"
-					control_name="RadarReportSimRangeEnter"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Entering your Region"
+						left="0"
+						top_pad="2"
+						name="RadarReportSimRangeEnter"
+						control_name="RadarReportSimRangeEnter"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-          <check_box
-					label="Report Leaving your Region"
-					left="0"
-					top_pad="2"
-					name="RadarReportSimRangeLeave"
-					control_name="RadarReportSimRangeLeave"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Leaving your Region"
+						left="0"
+						top_pad="2"
+						name="RadarReportSimRangeLeave"
+						control_name="RadarReportSimRangeLeave"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-				<check_box
-					label="Report Enter Alerts to Scripts"
-					left="0"
-					top_pad="2"
-					name="RadarEnterChannelAlert"
-					control_name="RadarEnterChannelAlert"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Enter Alerts to Scripts"
+						left="0"
+						top_pad="2"
+						name="RadarEnterChannelAlert"
+						control_name="RadarEnterChannelAlert"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-				<check_box
-					label="Report Exit Alerts to Scripts"
-					left="0"
-					top_pad="2"
-					name="RadarLeaveChannelAlert"
-					control_name="RadarLeaveChannelAlert"
-					right="-1"
-					height="16"
-					layout="topleft"
-					follows="left|top"/>
+					<check_box
+						label="Report Exit Alerts to Scripts"
+						left="0"
+						top_pad="2"
+						name="RadarLeaveChannelAlert"
+						control_name="RadarLeaveChannelAlert"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
 
-				<check_box
-					label="Limit range to:"
-					tool_tip="Limit Results to specific Radius"
-					left="0"
-					top_pad="2"
-					name="LimitRadarByRange"
-					control_name="LimitRadarByRange"
-					width="100"
-					height="16"
-					layout="topleft"
-					follows="left|top" />
-				<slider
-					visibility_control="LimitRadarByRange"
-					enabled_control="LimitRadarByRange"
-					control_name="NearMeRange"
-					decimal_digits="0"
-					follows="top|left|right"
-					height="16"
-					increment="2"
-					initial_value="96"
-					layout="topleft"
-					max_val="4096"
-					min_val="20"
-					name="NearMeRangeVintage"
-					visible="true"
-					left_pad="4"
-					width="140" />
-				<text
-					value="m"
-					layout="topleft"
-					follows="top|left"
-					width="20"
-					left_pad="-6"
-					height="16"
-					wrap="false" />
+					<check_box
+						label="Limit range to:"
+						tool_tip="Limit Results to specific Radius"
+						left="0"
+						top_pad="2"
+						name="LimitRadarByRange"
+						control_name="LimitRadarByRange"
+						width="100"
+						height="16"
+						layout="topleft"
+						follows="left|top" />
+					<slider
+						visibility_control="LimitRadarByRange"
+						enabled_control="LimitRadarByRange"
+						control_name="NearMeRange"
+						decimal_digits="0"
+						follows="top|left|right"
+						height="16"
+						increment="2"
+						initial_value="96"
+						layout="topleft"
+						max_val="4096"
+						min_val="20"
+						name="NearMeRangeVintage"
+						visible="true"
+						left_pad="4"
+						width="140" />
+					<text
+						value="m"
+						layout="topleft"
+						follows="top|left"
+						width="20"
+						left_pad="-6"
+						height="16"
+						wrap="false" />
 
-				<text
-					name="radarmap_range_label"
-					layout="topleft"
-					follows="left|top"
-					value="Radar Name Format:"
-					left="3"
-					top_pad="4"
-					height="16"
-					width="120"/>
-				<combo_box
-					layout="topleft"
-					follows="left|top|right"
-					left_pad="2"
-					top_delta="-2"
-					height="20"
-					right="-1"
-					name="RadarNameFormat"
-					control_name="RadarNameFormat"
-					enabled_control="UseDisplayNames">
-					<combo_box.item name="RadarNameFormat_display" value="0" label="Display Name only" />
-					<combo_box.item name="RadarNameFormat_user" value="1" label="Username only" />
-					<combo_box.item name="RadarNameFormat_displayuser" value="2" label="Display Name (Username)" />
-					<combo_box.item name="RadarNameFormat_userdisplay" value="3" label="Username (Display Name)" />
-				</combo_box>
+					<text
+						name="radarmap_range_label"
+						layout="topleft"
+						follows="left|top"
+						value="Radar Name Format:"
+						left="3"
+						top_pad="4"
+						height="16"
+						width="120"/>
+					<combo_box
+						layout="topleft"
+						follows="left|top|right"
+						left_pad="2"
+						top_delta="-2"
+						height="20"
+						right="-1"
+						name="RadarNameFormat"
+						control_name="RadarNameFormat"
+						enabled_control="UseDisplayNames">
+						<combo_box.item name="RadarNameFormat_display" value="0" label="Display Name only" />
+						<combo_box.item name="RadarNameFormat_user" value="1" label="Username only" />
+						<combo_box.item name="RadarNameFormat_displayuser" value="2" label="Display Name (Username)" />
+						<combo_box.item name="RadarNameFormat_userdisplay" value="3" label="Username (Display Name)" />
+					</combo_box>
 
+				</panel>
+
+			</tab_container>
+
+			<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
+			<panel name="hide_controls" enabled="false" visible="false" left="0" top="0">
+				<view 			follows="top|left" height="0" layout="topleft" name="NearMeRange"
+								left="0" top="0" width="0" />
+				<view 			follows="top|left" height="0" layout="topleft" name="add_friend_btn_nearby"
+								left="0" top="0" width="0" />
+				<avatar_list	follows="top|left" height="0" layout="topleft" name="avatar_list"
+								left="0" top="0" width="0" />
 			</panel>
-			<panel
-				class="panel_block_list_sidetray"
-				name="panel_block_list_sidetray"
-				filename="panel_block_list_sidetray.xml"
-				label="Blocked" />
+			<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
 
-		</tab_container>
-
-		<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
-		<panel name="hide_controls" enabled="false" visible="false" left="0" top="0">
-			<view 			follows="top|left" height="0" layout="topleft" name="NearMeRange"
-							left="0" top="0" width="0" />
-			<view 			follows="top|left" height="0" layout="topleft" name="add_friend_btn_nearby"
-							left="0" top="0" width="0" />
-			<avatar_list	follows="top|left" height="0" layout="topleft" name="avatar_list"
-							left="0" top="0" width="0" />
 		</panel>
-		<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
 
-	</panel>
-
-	<panel
-		follows="all"
-		height="383"
-		label="Recent"
-		layout="topleft"
-		left="0"
-		help_topic="people_recent_tab"
-		name="recent_panel"
-		top="0"
-		width="313">
-		<avatar_list
-			allow_select="true"
+		<panel
 			follows="all"
 			height="383"
+			label="Recent"
 			layout="topleft"
-			left="3"
-			multi_select="true"
-			name="avatar_list"
-			show_last_interaction_time="true"
+			left="0"
+			help_topic="people_recent_tab"
+			name="recent_panel"
 			top="0"
-			width="307" />
+			width="313">
+			<avatar_list
+				allow_select="true"
+				follows="all"
+				height="383"
+				layout="topleft"
+				left="3"
+				multi_select="true"
+				name="avatar_list"
+				show_last_interaction_time="true"
+				top="0"
+				width="307" />
 
-	<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
-	<panel name="hide_controls" enabled="false" visible="false" left="0" top="0">
-		<menu_button	follows="top|left" height="0" layout="topleft" name="recent_viewsort_btn"
-						left="0" top="0" width="0" />
-		<button	follows="top|left" height="0" layout="topleft" name="add_friend_btn_recent"
-						left="0" top="0" width="0" />
+			<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
+			<panel name="hide_controls" enabled="false" visible="false" left="0" top="0">
+				<menu_button	follows="top|left" height="0" layout="topleft" name="recent_viewsort_btn"
+								left="0" top="0" width="0" />
+				<button	follows="top|left" height="0" layout="topleft" name="add_friend_btn_recent"
+								left="0" top="0" width="0" />
+			</panel>
+
 		</panel>
-	</panel>
+
+		<panel
+			class="panel_block_list_sidetray"
+			name="blocked_panel"
+			filename="panel_block_list_sidetray.xml"
+			label="Blocked" />
 
 	</tab_container>
 

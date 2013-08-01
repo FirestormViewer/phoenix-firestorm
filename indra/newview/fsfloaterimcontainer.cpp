@@ -40,6 +40,7 @@
 #include "fscontactsfloater.h"
 #include "llfloater.h"
 #include "llviewercontrol.h"
+#include "fsfloaterim.h"
 
 //
 // FSFloaterIMContainer
@@ -49,12 +50,20 @@ FSFloaterIMContainer::FSFloaterIMContainer(const LLSD& seed)
 {
 	mAutoResize = FALSE;
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
+
+	// Firstly add our self to IMSession observers, so we catch session events
+	LLIMMgr::getInstance()->addSessionObserver(this);
 }
 
 FSFloaterIMContainer::~FSFloaterIMContainer()
 {
 	mNewMessageConnection.disconnect();
 	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
+
+	if (!LLSingleton<LLIMMgr>::destroyed())
+	{
+		LLIMMgr::getInstance()->removeSessionObserver(this);
+	}
 }
 
 BOOL FSFloaterIMContainer::postBuild()
@@ -284,6 +293,29 @@ void FSFloaterIMContainer::setMinimized(BOOL b)
 	if (getActiveFloater())
 	{
 		getActiveFloater()->setVisible(TRUE);
+	}
+}
+
+
+//virtual
+void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg)
+{
+	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
+	if (!session) return;
+
+	// no need to spawn chiclets for participants in P2P calls called through Avaline
+	if (session->isP2P() && session->isOtherParticipantAvaline()) return;
+
+	FSFloaterIM::onNewIMReceived(session_id);
+}
+
+//virtual
+void FSFloaterIMContainer::sessionRemoved(const LLUUID& session_id)
+{
+	FSFloaterIM* iMfloater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
+	if (iMfloater != NULL)
+	{
+		iMfloater->closeFloater();
 	}
 }
 

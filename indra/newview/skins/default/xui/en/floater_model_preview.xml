@@ -1190,6 +1190,38 @@
              label_text.text_color="White"
              name="upload_joints"
              top_pad="15"/>
+           <check_box
+             follows="top|left"
+             height="15"
+             label="Deform to avatar shape"
+             label_text.text_color="White"
+             name="deform"
+             top_pad="15"/>
+		   <radio_group
+			  draw_border="false"
+			  follows="left|top"
+			  width="221"
+			  height="50"
+			  name="deform_base">
+			 <radio_item
+				height="15"
+				label="Male"
+				follows="left|top"
+				name="0"
+				width="200"/>
+			 <radio_item
+				height="15"
+				follows="left|top"
+				label="Female"
+				name="1"
+				width="200" />
+			 <radio_item
+				height="15"
+				label="Male - scrawny"
+				follows="left|top"
+				name="2"
+				width="200"/>
+		   </radio_group>
            <text
              follows="top|left"
              height="15"

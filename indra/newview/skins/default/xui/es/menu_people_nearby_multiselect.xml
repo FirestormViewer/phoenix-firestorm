@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Multi-Selected People Context Menu">
-	<menu_item_call label="Ofrecer amistad" name="Add Friends"/>
-	<menu_item_call label="Disolver amistad" name="Remove Friend"/>
-	<menu_item_call label="MI" name="IM"/>
-	<menu_item_call label="Llamar" name="Call"/>
-	<menu_item_call label="Compartir" name="Share"/>
-	<menu_item_call label="Pagar" name="Pay"/>
-	<menu_item_call label="Ofrecer teleporte" name="teleport"/>
-	<menu_item_call label="Congelar" name="freeze"/>
-	<menu_item_call label="Expulsar" name="eject"/>
-	<menu_item_call label="Patear" name="kick"/>
-	<menu_item_call label="Enviar a su casa" name="teleport_home"/>
-	<menu_item_call label="Expulsar del estado" name="estate_ban"/>
-	<menu_item_call label="Desdibujar" name="derender"/>
-	<menu_item_call label="Desdibujar + lista negra" name="derender_permanent"/>
+	<menu_item_call label="Ofrecer amistad" name="add_friends"/>
+	<menu_item_call label="Disolver amistad" name="remove_friends"/>
+	<menu_item_call label="MI" name="im"/>
+	<menu_item_call label="Llamar" name="call"/>
+	<menu_item_call label="Compartir" name="share"/>
+	<menu_item_call label="Pagar" name="pay"/>
+	<menu_item_call label="Ofrecer teleporte" name="offer_teleport"/>
 </context_menu>

@@ -464,6 +464,11 @@ LLFloaterTools::~LLFloaterTools()
 
 void LLFloaterTools::setStatusText(const std::string& text)
 {
+	// <FS:ND> Can be 0 during login
+	if( !mTextStatus )
+		return;
+	// </FS:ND>
+
 	std::map<std::string, std::string>::iterator iter = mStatusText.find(text);
 	if (iter != mStatusText.end())
 	{
@@ -801,7 +806,6 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	mRadioGroupEdit->setVisible( edit_visible );
 	//bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
 	static LLCachedControl<bool> linked_parts(gSavedSettings,  "EditLinkedParts");
-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
 	//getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
 
 	mBtnLink->setVisible(edit_visible);

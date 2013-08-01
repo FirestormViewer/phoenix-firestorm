@@ -70,4 +70,6 @@
 		</panel>
 	</tab_container>
 	<combo_box label="Einfügen..." name="Insert..."/>
+	<button label="Bearbeiten..." name="edit_btn_2"/>
+	<button label="Speichern" name="save_btn_2"/>
 </panel>

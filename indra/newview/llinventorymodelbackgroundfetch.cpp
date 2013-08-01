@@ -183,9 +183,8 @@ void LLInventoryModelBackgroundFetch::backgroundFetchCB(void *)
 
 void LLInventoryModelBackgroundFetch::backgroundFetch()
 {
-// <FS:TM> new:	if (mBackgroundFetchActive && gAgent.getRegion() && gAgent.getRegion()->capabilitiesReceived()) 
 // <FS:AW>
-// <FS:TM> old:	if (mBackgroundFetchActive && gAgent.getRegion())
+	//if (mBackgroundFetchActive && gAgent.getRegion() && gAgent.getRegion()->capabilitiesReceived())
 	LLViewerRegion* region = gAgent.getRegion();
 	if (!region || !region->capabilitiesReceived())
 	{

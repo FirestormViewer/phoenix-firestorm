@@ -172,6 +172,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				sim_access_string.empty() ? "" : " - ",
 				sim_access_string.c_str());
 			break;
+		// <FS:Ansariel> V1 format statusbar
 		case LOCATION_FORMAT_V1_STATUSBAR:
 			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
 			{
@@ -191,6 +192,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 					sim_access_string.c_str());
 			}
 			break;
+		// </FS:Ansariel> V1 format statusbar
 		}
 	}
 	else
@@ -225,6 +227,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				sim_access_string.empty() ? "" : " - ",
 				sim_access_string.c_str());
 			break;
+		// <FS:Ansariel> V1 format statusbar
 		case LOCATION_FORMAT_V1_STATUSBAR:
 			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
 			{
@@ -246,6 +249,7 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 					parcel_name.c_str());
 			}
 			break;
+		// </FS:Ansariel> V1 format statusbar
 		}
 	}
 	str = buffer;

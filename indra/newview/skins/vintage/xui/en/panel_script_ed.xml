@@ -320,7 +320,7 @@
      follows="left|top|right|bottom"
      font="Scripting"
      font.size="Scripting"
-     height="376"
+     height="353"
      ignore_tab="false"
      layout="topleft"
      line_spacing.pixels="-1"
@@ -333,35 +333,54 @@
      text_readonly_color="ScriptText"
      bg_readonly_color="ScriptBackground"
      cursor_color="ScriptCursorColor"
+     right="-1"
      show_line_numbers="true"
      enable_tooltip_paste="true"
-     width="487"
      word_wrap="true">
         Loading...
     </text_editor>
     <scroll_list
-    top_pad="10"
-    left="0"
+     top_pad="10"
+     left="0"
      follows="left|right|bottom"
      height="60"
      layout="topleft"
      name="lsl errors"
-     width="487" />
+     right="-1" />
     <text
      follows="left|bottom"
-     height="12"
+     height="23"
      layout="topleft"
-     left="0"
+     top_pad="4"
+     left="2"
      name="line_col"
-     value="Line 29, Column 14"
+     value="Line 0, Column 0"
      width="128" />
     <combo_box
-     follows="right|bottom"
+     follows="left|bottom"
      height="23"
      label="Insert..."
      layout="topleft"
      name="Insert..."
-     width="158"
-     top_delta="0"
-     left_pad="200" />
+     top_pad="0"
+     width="128" />
+    <button
+     enabled="false"
+     follows="right|bottom"
+     height="20"
+     label="Edit..."
+     layout="topleft"
+     top_delta="-23"
+     right="-5"
+     name="edit_btn_2"
+     width="100" />
+    <button
+     follows="right|bottom"
+     height="20"
+     label="Save"
+     label_selected="Save"
+     layout="topleft"
+     top_pad="3"
+     name="save_btn_2"
+     width="100" />
 </panel>

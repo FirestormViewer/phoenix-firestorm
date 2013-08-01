@@ -52,9 +52,12 @@
 #include "llscrolllistitem.h"
 #include "llscrolllistcell.h"
 #include "llslider.h"
-#include "lscript_rt_interface.h"
-#include "lscript_library.h"
-#include "lscript_export.h"
+// <FS:CR> Removed LSO Compiler
+//#include "lscript_rt_interface.h"
+//#include "lscript_library.h"
+//#include "lscript_export.h"
+#include "fsscriptlibrary.h"
+// </FS:CR>
 #include "lltextbox.h"
 #include "lltooldraganddrop.h"
 #include "llvfile.h"
@@ -95,6 +98,9 @@
 // NaCl - LSL Preprocessor
 #include "fslslpreproc.h"
 // NaCl End
+#if OPENSIM
+#include "llviewernetwork.h"	// for Grid manager
+#endif // OPENSIM
 
 const std::string HELLO_LSL =
 	"default\n"
@@ -195,6 +201,12 @@ bool LLLiveLSLFile::loadFile()
 }
 
 /// ---------------------------------------------------------------------------
+/// LLFloaterScriptSearch
+/// ---------------------------------------------------------------------------
+
+// <FS:TM> Removed from FS
+
+/// ---------------------------------------------------------------------------
 /// LLScriptEdCore
 /// ---------------------------------------------------------------------------
 
@@ -274,6 +286,7 @@ BOOL LLScriptEdCore::postBuild()
 // <FS:CR> Advanced Script Editor
 	//mSaveBtn=getChildView("Save_btn");
 	mSaveBtn =	getChild<LLButton>("save_btn");
+	mSaveBtn2 =	getChild<LLButton>("save_btn_2");	// <FS:Zi> support extra save button
 	mCutBtn =	getChild<LLButton>("cut_btn");
 	mCopyBtn =	getChild<LLButton>("copy_btn");
 	mPasteBtn =	getChild<LLButton>("paste_btn");
@@ -311,6 +324,7 @@ BOOL LLScriptEdCore::postBuild()
 	childSetAction("prefs_btn", boost::bind(&LLScriptEdCore::onBtnPrefs, this));
 // </FS:CR>
 	childSetAction("Edit_btn", boost::bind(&LLScriptEdCore::openInExternalEditor, this));
+	childSetAction("edit_btn_2", boost::bind(&LLScriptEdCore::openInExternalEditor, this));	// <FS:Zi> support extra edit button
 	
 	initMenu();
 	initButtonBar();	// <FS:CR> Advanced Script Editor
@@ -327,15 +341,17 @@ BOOL LLScriptEdCore::postBuild()
 			std::string name = i->mName;
 			funcs.push_back(name);
 			
-			std::string desc_name = "LSLTipText_";
-			desc_name += name;
-			std::string desc = LLTrans::getString(desc_name);
+			// <FS:CR> Dynamically loaded script library 
+			//std::string desc_name = "LSLTipText_";
+			//desc_name += name;
+			//std::string desc = LLTrans::getString(desc_name);
+			std::string desc = i->mDesc;
 			
 			F32 sleep_time = i->mSleepTime;
 			if( sleep_time )
 			{
 				desc += "\n";
-				
+			
 				LLStringUtil::format_map_t args;
 				args["[SLEEP_TIME]"] = llformat("%.1f", sleep_time );
 				desc += LLTrans::getString("LSLTipSleepTime", args);
@@ -343,19 +359,28 @@ BOOL LLScriptEdCore::postBuild()
 			
 			// A \n linefeed is not part of xml. Let's add one to keep all
 			// the tips one-per-line in strings.xml
-			LLStringUtil::replaceString( desc, "\\n", "\n" );
+			LLStringUtil::replaceString( desc, ";", "\n" );
+			
+			llinfos << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << llendl;
+			// </FS:CR>
 			
 			tooltips.push_back(desc);
 		}
 	}
 	
-	LLColor3 color(0.5f, 0.0f, 0.15f);
-	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
+	// <FS:CR> Customizable function color
+	//LLColor3 color(0.5f, 0.5f, 0.15f);
+	LLColor3 color(LLUIColorTable::instance().getColor("ScriptFunction"));
+	// </FS:CR>
+	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
 	if (_NACL_LSLPreprocessor)
-		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_preproc.ini"), funcs, tooltips, color);
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 // <FS:CR> OSSL Keywords
 #ifdef OPENSIM
-	mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+	if (LLGridManager::getInstance()->isInOpenSim())
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
+	if (LLGridManager::getInstance()->isInAuroraSim())
+		mEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
 // </FS:CR>
 	
@@ -380,10 +405,14 @@ BOOL LLScriptEdCore::postBuild()
 	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
 	if(mPostEditor)
 	{
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"scriptlibrary_lsl.xml"), funcs, tooltips, color);
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_preproc.xml"), funcs, tooltips, color);
 		// <FS:CR> OSSL Keywords
 #ifdef OPENSIM
-		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "keywords_ossl.ini"), funcs, tooltips, color);
+		if (LLGridManager::getInstance()->isInOpenSim())
+			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"), funcs, tooltips, color);
+		if (LLGridManager::getInstance()->isInAuroraSim())
+			mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_aa.xml"), funcs, tooltips, color);
 #endif // OPENSIM
 		// </FS:CR>
 	}
@@ -473,6 +502,7 @@ void LLScriptEdCore::initMenu()
 void LLScriptEdCore::initButtonBar()
 {
 	mSaveBtn->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));
+	mSaveBtn2->setClickedCallback(boost::bind(&LLScriptEdCore::doSave, this, FALSE));	// <FS:Zi> support extra save button
 	mCutBtn->setClickedCallback(boost::bind(&LLTextEditor::cut, mEditor));
 	mCopyBtn->setClickedCallback(boost::bind(&LLTextEditor::copy, mEditor));
 	mPasteBtn->setClickedCallback(boost::bind(&LLTextEditor::paste, mEditor));
@@ -486,6 +516,7 @@ void LLScriptEdCore::initButtonBar()
 void LLScriptEdCore::updateButtonBar()
 {
 	mSaveBtn->setEnabled(hasChanged());
+	mSaveBtn2->setEnabled(hasChanged());	// <FS:Zi> support extra save button
 	mCutBtn->setEnabled(mEditor->canCut());
 	mCopyBtn->setEnabled(mEditor->canCopy());
 	mPasteBtn->setEnabled(mEditor->canPaste());
@@ -817,6 +848,7 @@ void LLScriptEdCore::setEnableEditing(bool enable)
 {
 	mEditor->setEnabled(enable);
 	getChildView("Edit_btn")->setEnabled(enable);
+	getChildView("edit_btn_2")->setEnabled(enable);	// <FS:Zi> support extra edit button
 }
 
 bool LLScriptEdCore::handleSaveChangesDialog(const LLSD& notification, const LLSD& response )
@@ -1684,6 +1716,9 @@ void LLPreviewLSL::uploadAssetLegacy(const std::string& filename,
 									  const LLUUID& item_id,
 									  const LLTransactionID& tid)
 {
+	// <FS:CR> Remove LSO Compiler
+	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+#if 0
 	LLLineEditor* descEditor = getChild<LLLineEditor>("desc");
 	LLScriptSaveInfo* info = new LLScriptSaveInfo(item_id,
 								descEditor->getText(),
@@ -1762,6 +1797,8 @@ void LLPreviewLSL::uploadAssetLegacy(const std::string& filename,
 	LLFile::remove(filename);
 	LLFile::remove(err_filename);
 	LLFile::remove(dst_filename);
+#endif // 0
+	// </FS:CR>
 }
 
 
@@ -2471,6 +2508,9 @@ void LLLiveLSLEditor::uploadAssetLegacy(const std::string& filename,
 										const LLTransactionID& tid,
 										BOOL is_running)
 {
+	// <FS:CR> Remove LSO compiler
+	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+#if 0
 	LLLiveLSLSaveData* data = new LLLiveLSLSaveData(mObjectUUID,
 													mItem,
 													is_running);
@@ -2563,6 +2603,8 @@ void LLLiveLSLEditor::uploadAssetLegacy(const std::string& filename,
 	LLCheckBoxCtrl* runningCheckbox = getChild<LLCheckBoxCtrl>( "running");
 	runningCheckbox->setLabel(getString("script_running"));
 	runningCheckbox->setEnabled(TRUE);
+#endif // 0
+	// </FS:CR>
 }
 
 void LLLiveLSLEditor::onSaveTextComplete(const LLUUID& asset_uuid, void* user_data, S32 status, LLExtStat ext_status) // StoreAssetData callback (fixed)

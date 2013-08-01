@@ -94,10 +94,10 @@
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Sitzen wenn abwesend"/>
 	<text name="text_box3">
-		Beschäftigt- und Abwesenheitsnachrichten können unter
+		Nicht-Stören- und Abwesenheitsnachrichten können unter
 Privatsphäre, Automatische Antwort konfiguriert werden.
 	</text>
-	<text_editor name="busy_response">
+	<text_editor name="do_not_disturb_response">
 		log_in_to_change
 	</text_editor>
 

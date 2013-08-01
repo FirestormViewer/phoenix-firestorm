@@ -28,5 +28,6 @@
 	<button name="permission_map_btn" tool_tip="Este amigo puede encontrarte en el mapa"/>
 	<button name="permission_online_btn" tool_tip="Este amigo puede ver cuándo estás conectado"/>
 	<slider name="volume_slider" tool_tip="Volumen de la voz"/>
+	<button name="info_btn" tool_tip="Más información"/>
 	<button name="profile_btn" tool_tip="Ver el perfil"/>
 </panel>
