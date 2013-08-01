@@ -100,7 +100,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          background_visible="true"
          follows="all"
          height="383"
-         label="NEARBY"
+         label="Nearby"
          layout="topleft"
          left="0"
          help_topic="people_nearby_tab"
@@ -161,7 +161,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		     multi_select="true"
 		     width="326">
 		        <radar_list.columns
-		         label="NAME"
+		         label="Name"
 		         name="name"
 				 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
 		         relative_width="0.35" />
@@ -181,15 +181,15 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				 tool_tip="Payment into status"
 		         relative_width="0.05" />
 		        <radar_list.columns
-		         label="AGE"
+		         label="Age"
 		         name="age"
 		         relative_width="0.1" />
 		        <radar_list.columns
-		         label="SEEN"
+		         label="Seen"
 		         name="seen"
 		         relative_width="0.15" />
 		        <radar_list.columns
-		         label="RANGE"
+		         label="Range"
 		         name="range"
 		         relative_width="0.16" />
 		        <radar_list.columns
@@ -290,7 +290,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          background_visible="true"
          follows="all"
          height="383"
-         label="FRIENDS"
+         label="Friends"
          layout="topleft"
          help_topic="people_friends_tab"
          name="friends_panel"
@@ -508,7 +508,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          background_visible="true"
          follows="all"
          height="383"
-         label="GROUPS"
+         label="Groups"
          layout="topleft"
          help_topic="people_groups_tab"
          name="groups_panel"
@@ -586,7 +586,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          background_visible="true"
          follows="all"
          height="383"
-         label="RECENT"
+         label="Recent"
          layout="topleft"
          help_topic="people_recent_tab"
          name="recent_panel"

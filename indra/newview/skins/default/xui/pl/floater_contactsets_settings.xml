@@ -8,14 +8,23 @@
     znajomych poza zest.
   </text>
   <slider name="FSContactSetsScrollSpeed" label="Przewijanie" tool_tip="Określa jak szybko lista ma się przewijać."/>
+  <text name="label_online">
+    Powiadomienia online:
+  </text>
   <check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w tostach" name="ChatOnlineNotification"/>
   <check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w czacie lokalnym" name="OnlineOfflinetoNearbyChat"/>
   <check_box label="Powiadamiaj online dla danych zestawów w tostach" name="FSContactSetsNotificationToast"/>
   <check_box label="Powiadamiaj online dla danych zestawów w czacie lokalnym" name="FSContactSetsNotificationNearbyChat"/>
+  <text name="label_colors">
+    Własne kolory:
+  </text>
   <check_box label="Koloruj ikonę znajomego na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap"/>
   <check_box label="Koloruj tag imienia znajomego bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag"/>
   <check_box label="Koloruj wpis znajomego w radarze bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar"/>
   <check_box label="Koloruj czat znajomego bazując na zestawie kontaktów" name="FSContactSetsColorizeChat"/>
+  <text name="label_preferences">
+    Ustawienia Zestawów Kontaktów:
+  </text>
   <check_box label="Koloruj tylko małą przestrzeń tła w zestawach kontaktów" name="FSContactSetsColorizeBar"/>
   <check_box label="Koloruj tekst zamiast tła w zestawach kontaktów" name="FSContactSetsColorizeText"/>
   <check_box label="Wymagaj klawisza CTRL przy zaznaczaniu wielu pozycji" name="FSContactSetsRequireCTRL"/>

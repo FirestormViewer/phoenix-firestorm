@@ -9,7 +9,7 @@
 	<string name="CaptionTextAcctInfo">
 		[ACCTTYPE]
 [PAYMENTINFO]
-[FSDEV][FSSUPP][FIRESTORM]
+[FSDEV][FSSUPP][FSQA][FIRESTORM]
 	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=es
@@ -22,6 +22,7 @@
 	<string name="no_group_text" value="Ninguno"/>
 	<string name="FSDev" value="Desarrollador/a "/>
 	<string name="FSSupp" value="Soporte "/>
+	<string name="FSQualityAssurance" value="Bug Hunter "/>
 	<text name="Name:" value="Nombre:" width="50"/>
 	<view_border right="-126" name="info_border"/>
 	<text_editor name="complete_name" value="(cargando...)" right="-126"/>

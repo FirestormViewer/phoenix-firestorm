@@ -8,8 +8,8 @@
 			<text name="username_text">
 				Użytkownik:
 			</text>
-			<combo_box name="username_combo" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine"/>
 			<button tool_tip="Usuń tą nazwę użytkownika" name="remove_user_btn"/>
+			<combo_box name="username_combo" tool_tip="Nazwa użytkownika wybrana przy rejestracji, np. bobsmith12 lub Steller Sunshine"/>
 			<text name="password_text">
 				Hasło:
 			</text>

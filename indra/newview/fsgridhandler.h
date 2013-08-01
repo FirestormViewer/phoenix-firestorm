@@ -59,7 +59,6 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_PROFILE_URI_VALUE "profileuri"
 #define GRID_SENDGRIDINFO "SendGridInfoToViewerOnLogin"
 #define GRID_DIRECTORY_FEE "DirectoryFee"
-#define GRID_CLASSIFIED_FEE "ClassifiedFee"
 #define GRID_CURRENCY_SYMBOL "CurrencySymbol"
 #define GRID_REAL_CURRENCY_SYMBOL "RealCurrencySymbol"
 #define GRID_MAXGROUPS "MaxGroups"
@@ -258,6 +257,11 @@ public:
 // </AW opensim>
 	void clearFavorites();
 	void addGrid(GridEntry* grid_info, AddState state);
+	
+	// <FS:CR> FIRE-10567 - Variable classified fee
+	void setClassifiedFee(const S32 classified_fee) { sClassifiedFee = classified_fee; }
+	S32 getClassifiedFee() { return sClassifiedFee; }
+	// </FS:CR>
 
 private:
 	friend class GridInfoRequestResponder;
@@ -266,6 +270,7 @@ private:
 	void gridInfoResponderCB(GridEntry* grid_data);
 
 	void setGridData(const LLSD &grid_info) { mGridList[mGrid]=grid_info; }
+	S32 sClassifiedFee;	// <FS:CR> FIRE-10567 - Variable classified fee
 
 protected:
 

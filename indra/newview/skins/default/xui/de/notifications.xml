@@ -3918,4 +3918,13 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate ignoretext="Bestätigen, wenn Schnelleinstellungen zurückgesetzt werden sollen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 
+	<notification name="EjectGroupMemberWarning">
+		[AVATAR_NAME] aus Gruppe entfernen?
+		<usetemplate ignoretext="Bestätigen, wenn Mitglieder aus Gruppen entfernt werden" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
+	</notification>
+
+	<notification name="EjectGroupMembersWarning">
+		[COUNT] Mitglieder aus Gruppe entfernen?
+		<usetemplate ignoretext="Bestätigen, wenn mehrere Mitglieder aus Gruppen entfernt werden" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
+	</notification>
 </notifications>

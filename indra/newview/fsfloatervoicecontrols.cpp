@@ -111,6 +111,8 @@ FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 , mSpeakingIndicator(NULL)
 , mIsModeratorMutedVoice(false)
 , mInitParticipantsVoiceState(false)
+, mVolumeSlider(NULL)
+, mMuteButton(NULL)
 {
 	static LLUICachedControl<S32> voice_left_remove_delay ("VoiceParticipantLeftRemoveDelay", 10);
 	mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&FSFloaterVoiceControls::removeVoiceLeftParticipant, this, _1), voice_left_remove_delay);
@@ -149,21 +151,20 @@ BOOL FSFloaterVoiceControls::postBuild()
 	mAvatarList = getChild<LLAvatarList>("speakers_list");
 	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&FSFloaterVoiceControls::onAvatarListRefreshed, this));
 
-	// <FS:Ansariel> Disable obsolete V1 code
-	//mAvatarList->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onParticipantSelected,this));
-
 	childSetAction("leave_call_btn", boost::bind(&FSFloaterVoiceControls::leaveCall, this));
 
 	mNonAvatarCaller = findChild<LLNonAvatarCaller>("non_avatar_caller");
 	mNonAvatarCaller->setVisible(FALSE);
 
-	// <FS:Ansariel> Disable obsolete V1 code
-	//mVolumeSlider=getChild<LLSliderCtrl>("volume_slider");
-	//mVolumeSlider->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onVolumeChanged,this));
-	//
-	//mMuteButton=getChild<LLButton>("mute_btn");
-	//mMuteButton->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onMuteChanged,this));
-	// </FS:Ansariel>
+	mVolumeSlider = findChild<LLSliderCtrl>("volume_slider");
+	mMuteButton = findChild<LLButton>("mute_btn");
+
+	if (mVolumeSlider && mMuteButton)
+	{
+		mAvatarList->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onParticipantSelected, this));
+		mVolumeSlider->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onVolumeChanged, this));
+		mMuteButton->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onMuteChanged, this));
+	}
 
 	initAgentData();
 
@@ -385,60 +386,58 @@ void FSFloaterVoiceControls::onAvatarListRefreshed()
 	}
 }
 
-// <FS:Ansariel> Disable obsolete V1 code
-//void FSFloaterVoiceControls::onParticipantSelected()
-//{
-//	uuid_vec_t participants;
-//	mAvatarList->getSelectedUUIDs(participants);
-//
-//	mVolumeSlider->setEnabled(FALSE);
-//	mMuteButton->setEnabled(FALSE);
-//
-//	mSelectedParticipant=LLUUID::null;
-//
-//	if(participants.size()!=1)
-//		return;
-//
-//	mSelectedParticipant=participants[0];
-//
-//	if(mSelectedParticipant.isNull())
-//		return;
-//
-//	if(!LLVoiceClient::instance().getVoiceEnabled(mSelectedParticipant))
-//		return;
-//
-//	mVolumeSlider->setEnabled(TRUE);
-//	mMuteButton->setEnabled(TRUE);
-//
-//	mMuteButton->setToggleState(LLVoiceClient::instance().getOnMuteList(mSelectedParticipant));
-//	mVolumeSlider->setValue(LLVoiceClient::instance().getUserVolume(mSelectedParticipant));
-//}
-//
-//void FSFloaterVoiceControls::onVolumeChanged()
-//{
-//	if(mSelectedParticipant.isNull())
-//		return;
-//
-//	LLVoiceClient::instance().setUserVolume(mSelectedParticipant,mVolumeSlider->getValueF32());
-//}
-//
-//void FSFloaterVoiceControls::onMuteChanged()
-//{
-//	if(mSelectedParticipant.isNull())
-//		return;
-//
-//	LLAvatarListItem* item=dynamic_cast<LLAvatarListItem*>(mAvatarList->getItemByValue(mSelectedParticipant));
-//	if(!item)
-//		return;
-//
-//	LLMute mute(mSelectedParticipant,item->getAvatarName(),LLMute::AGENT);
-//
-//	if(mMuteButton->getValue().asBoolean())
-//		LLMuteList::instance().add(mute,LLMute::flagVoiceChat);
-//	else
-//		LLMuteList::instance().remove(mute,LLMute::flagVoiceChat);
-//}
-// </FS:Ansariel>
+void FSFloaterVoiceControls::onParticipantSelected()
+{
+	uuid_vec_t participants;
+	mAvatarList->getSelectedUUIDs(participants);
+
+	mVolumeSlider->setEnabled(FALSE);
+	mMuteButton->setEnabled(FALSE);
+
+	mSelectedParticipant=LLUUID::null;
+
+	if(participants.size()!=1)
+		return;
+
+	mSelectedParticipant=participants[0];
+
+	if(mSelectedParticipant.isNull())
+		return;
+
+	if(!LLVoiceClient::instance().getVoiceEnabled(mSelectedParticipant))
+		return;
+
+	mVolumeSlider->setEnabled(TRUE);
+	mMuteButton->setEnabled(TRUE);
+
+	mMuteButton->setToggleState(LLVoiceClient::instance().getOnMuteList(mSelectedParticipant));
+	mVolumeSlider->setValue(LLVoiceClient::instance().getUserVolume(mSelectedParticipant));
+}
+
+void FSFloaterVoiceControls::onVolumeChanged()
+{
+	if(mSelectedParticipant.isNull())
+		return;
+
+	LLVoiceClient::instance().setUserVolume(mSelectedParticipant,mVolumeSlider->getValueF32());
+}
+
+void FSFloaterVoiceControls::onMuteChanged()
+{
+	if(mSelectedParticipant.isNull())
+		return;
+
+	LLAvatarListItem* item=dynamic_cast<LLAvatarListItem*>(mAvatarList->getItemByValue(mSelectedParticipant));
+	if(!item)
+		return;
+
+	LLMute mute(mSelectedParticipant,item->getAvatarName(),LLMute::AGENT);
+
+	if(mMuteButton->getValue().asBoolean())
+		LLMuteList::instance().add(mute,LLMute::flagVoiceChat);
+	else
+		LLMuteList::instance().remove(mute,LLMute::flagVoiceChat);
+}
 
 // static
 void FSFloaterVoiceControls::sOnCurrentChannelChanged(const LLUUID& /*session_id*/)

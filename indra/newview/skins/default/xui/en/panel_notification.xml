@@ -53,7 +53,7 @@
       layout="topleft"
       left="10"
       name="caution_text_box"
-      text_color="LtOrange"
+      text_color="NotifyCautionBoxColor"
       top="10"
       visible="false"
       width="285"

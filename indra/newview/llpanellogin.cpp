@@ -930,7 +930,7 @@ void LLPanelLogin::onClickConnect(void *)
 		gSavedSettings.setString("UserLoginInfo", credentialName()); // <FS:CR>
 
 // <FS:CR> Block release
-		LLSD blocked = FSData::getInstance()->allowed_login();
+		LLSD blocked = FSData::instance().allowedLogin();
 		if (!blocked.isMap()) //hack for testing for an empty LLSD
 		{
 // </FS:CR>

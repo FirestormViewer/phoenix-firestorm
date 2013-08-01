@@ -57,25 +57,29 @@
 #include "lldxhardware.h"
 #endif
 
+// <FS:Techwolf Lupindo> downloadable gpu table support
+#include "fscommon.h"
+#include <boost/filesystem.hpp>
+// </FS:Techwolf Lupindo>
+
 #define LL_EXPORT_GPU_TABLE 0
-// FS:TM - FIX-FIRE-2209 Don't download feature_tables from LL 
+
 #if LL_DARWIN
 const char FEATURE_TABLE_FILENAME[] = "featuretable_mac.txt";
-//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";
+const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";
 #elif LL_LINUX
 const char FEATURE_TABLE_FILENAME[] = "featuretable_linux.txt";
-//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_linux.%s.txt";
+const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_linux.%s.txt";
 #elif LL_SOLARIS
 const char FEATURE_TABLE_FILENAME[] = "featuretable_solaris.txt";
-//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_solaris.%s.txt";
+const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_solaris.%s.txt";
 #else
 const char FEATURE_TABLE_FILENAME[] = "featuretable%s.txt";
-//const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
+const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
 #endif
 
-//  FS:TM - FIX-FIRE-2209 Don't download gpu_tables from LL 
 const char GPU_TABLE_FILENAME[] = "gpu_table.txt";
-//const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
+const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
 
 LLFeatureInfo::LLFeatureInfo(const std::string& name, const BOOL available, const F32 level)
 	: mValid(TRUE), mName(name), mAvailable(available), mRecommendedLevel(level)
@@ -224,45 +228,44 @@ BOOL LLFeatureManager::loadFeatureTables()
 	std::string app_path = gDirUtilp->getAppRODataDir();
 	app_path += gDirUtilp->getDirDelimiter();
 
-	// [FIX-FIRE-2209 Don't download feature_Tables from HTTP 
 	std::string filename;
-	// std::string http_filename; 
+	std::string http_filename; 
 #if LL_WINDOWS
 	std::string os_string = LLAppViewer::instance()->getOSInfo().getOSStringSimple();
 	if (os_string.find("Microsoft Windows XP") == 0)
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "_xp");
-		// http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getVersion().c_str());
+		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 	else
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "");
-		// http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getVersion().c_str());
+		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 #else
 	filename = FEATURE_TABLE_FILENAME;
-	//http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
+	http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 #endif
 
 	app_path += filename;
 
 	
 	// second table is downloaded with HTTP
-	//std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
+	std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
 
 	// use HTTP table if it exists
-	// std::string path;
-	// if (gDirUtilp->fileExists(http_path))
-	//{
-	//	path = http_path;
-	//}
-	//else
-	//{
-	//	path = app_path;
-	//}
+	std::string path;
+	if (gDirUtilp->fileExists(http_path))
+	{
+		path = http_path;
+	}
+	else
+	{
+		path = app_path;
+	}
 
 	
-	return parseFeatureTable(app_path);
+	return parseFeatureTable(path);
 }
 
 
@@ -351,24 +354,22 @@ void LLFeatureManager::loadGPUClass()
 	app_path += gDirUtilp->getDirDelimiter();
 	app_path += GPU_TABLE_FILENAME;
 	
-	// [FIX-FIRE-2209 Don't download GPU_Tables from HTTP 
 	// second table is downloaded with HTTP
-	//std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
-	//std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
+	std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
+	std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
 
 	// use HTTP table if it exists
-	//std::string path;
-	//if (gDirUtilp->fileExists(http_path))
-	//{
-	//	path = http_path;
-	//}
-	//else
-	//{
-	//	path = app_path;
-	//}
-    //
-	// parseGPUTable(path);
-	parseGPUTable(app_path);
+	std::string path;
+	if (gDirUtilp->fileExists(http_path))
+	{
+		path = http_path;
+	}
+	else
+	{
+		path = app_path;
+	}
+    
+	parseGPUTable(path);
 }
 
 	
@@ -542,13 +543,34 @@ public:
 				LLAPRFile out(mFilename, LL_APR_WB);
 				out.write(copy_buffer, file_size);
 				out.close();
+				// <FS:Techwolf Lupindo> downloadable gpu table support
+				const std::time_t new_time = mLastModified.secondsSinceEpoch();
+#ifdef LL_WINDOWS
+				boost::filesystem::last_write_time(boost::filesystem::path( utf8str_to_utf16str(mFilename) ), new_time);
+#else
+				boost::filesystem::last_write_time(boost::filesystem::path(mFilename), new_time);
+#endif
+				// </FS:Techwolf Lupindo>
 			}
 		}
 		
 	}
-	
+
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	{
+		if (content.has("last-modified"))
+		{
+			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
+		}
+	}
+	// </FS:Techwolf Lupindo>
+
 private:
 	std::string mFilename;
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	LLDate mLastModified;
+	// </FS:Techwolf Lupindo>
 };
 
 void fetch_feature_table(std::string table)
@@ -560,14 +582,14 @@ void fetch_feature_table(std::string table)
 	std::string filename;
 	if (os_string.find("Microsoft Windows XP") == 0)
 	{
-		filename = llformat(table.c_str(), "_xp", LLVersionInfo::getVersion().c_str());
+		filename = llformat(table.c_str(), "_xp", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 	else
 	{
-		filename = llformat(table.c_str(), "", LLVersionInfo::getVersion().c_str());
+		filename = llformat(table.c_str(), "", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 #else
-	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getVersion().c_str());
+	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 #endif
 
 	const std::string url        = base + "/" + filename;
@@ -576,14 +598,25 @@ void fetch_feature_table(std::string table)
 
 	llinfos << "LLFeatureManager fetching " << url << " into " << path << llendl;
 	
-	LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	LLSD headers;
+	headers.insert("User-Agent",  LLVersionInfo::getBuildPlatform() + " " + LLVersionInfo::getVersion());
+	time_t last_modified = 0;
+	llstat stat_data;
+	if(!LLFile::stat(path, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	//LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	LLHTTPClient::getIfModified(url, new LLHTTPFeatureTableResponder(path), last_modified, headers);
+	// </FS:Techwolf Lupindo>
 }
 
 void fetch_gpu_table(std::string table)
 {
 	const std::string base       = gSavedSettings.getString("FeatureManagerHTTPTable");
 
-	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getVersion().c_str());
+	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 
 	const std::string url        = base + "/" + filename;
 
@@ -591,14 +624,25 @@ void fetch_gpu_table(std::string table)
 
 	llinfos << "LLFeatureManager fetching " << url << " into " << path << llendl;
 	
-	LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	LLSD headers;
+	headers.insert("User-Agent",  LLVersionInfo::getBuildPlatform() + " " + LLVersionInfo::getVersion());
+	time_t last_modified = 0;
+	llstat stat_data;
+	if(!LLFile::stat(path, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	//LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	LLHTTPClient::getIfModified(url, new LLHTTPFeatureTableResponder(path), last_modified, headers);
+	// </FS:Techwolf Lupindo>
 }
 
 // fetch table(s) from a website (S3)
 void LLFeatureManager::fetchHTTPTables()
 {
-	//fetch_feature_table(FEATURE_TABLE_VER_FILENAME);
-	//fetch_gpu_table(GPU_TABLE_VER_FILENAME);
+	fetch_feature_table(FEATURE_TABLE_VER_FILENAME);
+	fetch_gpu_table(GPU_TABLE_VER_FILENAME);
 }
 
 

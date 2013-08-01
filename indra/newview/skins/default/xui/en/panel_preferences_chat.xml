@@ -24,7 +24,6 @@
 
         <!-- Chat: General -->
         <panel
-         border="true"
          top_pad="1"
          bottom="-1"
          left="1"
@@ -147,7 +146,7 @@
             <check_box
              control_name="FSChatsUppercase"
              height="16"
-             label="Display Group chats, IM sessions and nearby chat always in uppercase"
+             label="Always display group chats, IM sessions and nearby chat in uppercase"
              layout="topleft"
              left="30"
              name="chat_always_in_uppercase"
@@ -223,7 +222,7 @@
             <check_box
              enabled="true"
              height="16"
-             label="Remove chat headers (revert to V1 Style)"
+             label="Use V1 style chat headers"
              layout="topleft"
              left_delta="0"
              name="plain_text_chat_history"
@@ -233,7 +232,7 @@
              control_name="ShowChatMiniIcons"
              height="16"
              initial_value="false"
-             label="When using chat headers, show mini icons"
+             label="When using V2/3 style chat headers, show mini icons"
              layout="topleft"
              left="30"
              name="ShowChatMiniIcons"
@@ -443,7 +442,6 @@
         <!-- Chat: Notifications -->
         <!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
         <panel
-         border="true"
          top_pad="1"
          bottom="-1"
          left="1"
@@ -1060,7 +1058,6 @@
 
         <!-- Chat: Radar -->
         <panel
-         border="true"
          top_pad="5"
          bottom="-1"
          left="1"
@@ -1440,7 +1437,6 @@
 
         <!-- Chat: Keyword Alerts -->
         <panel
-         border="true"
          top_pad="5"
          bottom="-1"
          left="1"
@@ -1586,7 +1582,6 @@
 
         <!-- Chat: Text Input -->
   <panel
-   border="true"
    top_pad="1"
    bottom="-1"
    left="1"

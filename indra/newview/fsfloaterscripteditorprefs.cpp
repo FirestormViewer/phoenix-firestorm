@@ -28,6 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsfloaterscripteditorprefs.h"
 
+#include "llbutton.h"
 #include "llcolorswatch.h"
 #include "lldirpicker.h"
 #include "llviewercontrol.h"
@@ -44,10 +45,12 @@ FSFloaterScriptEdPrefs::~FSFloaterScriptEdPrefs()
 {
 }
 
-/*BOOL FSFloaterScriptEdPrefs::postBuild()
-{	
+BOOL FSFloaterScriptEdPrefs::postBuild()
+{
+	getChild<LLButton>("close_btn")->setClickedCallback(boost::bind(&FSFloaterScriptEdPrefs::closeFloater, this, false));
+
 	return TRUE;
-}*/
+}
 
 void FSFloaterScriptEdPrefs::applyUIColor(LLUICtrl* ctrl, const LLSD& param)
 {

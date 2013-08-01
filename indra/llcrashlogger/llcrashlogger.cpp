@@ -403,6 +403,10 @@ bool LLCrashLogger::runCrashLogPost(std::string host, LLSD data, std::string msg
 			body << getFormDataField("viewer_channel", mDebugLog["ClientInfo"]["Name"], BOUNDARY);
 			body << getFormDataField("viewer_version", mDebugLog["ClientInfo"]["Version"], BOUNDARY);
 			body << getFormDataField("viewer_platform", mDebugLog["ClientInfo"]["Platform"], BOUNDARY);
+
+// <FS:ND> Add which flavor of FS generated an error
+			body << getFormDataField("viewer_flavor", mDebugLog["ClientInfo"]["Flavor"], BOUNDARY );
+// </FS:ND>
 		}
 
 		/*

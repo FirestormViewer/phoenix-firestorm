@@ -871,7 +871,15 @@ std::set<LLUUID> LLFolderView::getSelectionList() const
 		 item_it != mSelectedItems.end(); 
 		 ++item_it)
 	{
-		selection.insert((*item_it)->getListener()->getUUID());
+		// <FS:ND> Crashfix
+
+		// selection.insert((*item_it)->getListener()->getUUID());
+
+		LLFolderViewItem *pItem( *item_it );
+		if( pItem && pItem->getListener() )
+			selection.insert( pItem->getListener()->getUUID() );
+
+		// </FS:ND>
 	}
 	return selection;
 }
@@ -2271,9 +2279,16 @@ void LLFolderView::doIdle()
 		mDebugFilters = debug_filters;
 		arrangeAll();
 	}
-	BOOL filter_modified_and_active = mFilter->isModified() && mFilter->isNotDefault();
-	mNeedsAutoSelect = filter_modified_and_active &&
-						!(gFocusMgr.childHasKeyboardFocus(this) || gFocusMgr.getMouseCapture());
+//	BOOL filter_modified_and_active = mFilter->isModified() && mFilter->isNotDefault();
+//	mNeedsAutoSelect = filter_modified_and_active &&
+//						!(gFocusMgr.childHasKeyboardFocus(this) || gFocusMgr.getMouseCapture());
+
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2013-05-02 (Catznip-3.4)
+	if (mFilter->isModified() && mFilter->isNotDefault())
+	{
+		mNeedsAutoSelect = TRUE;
+	}
+// [/SL:KB]
 	mFilter->clearModified();
 
 	// filter to determine visibility before arranging

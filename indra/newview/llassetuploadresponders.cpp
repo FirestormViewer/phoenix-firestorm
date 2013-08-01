@@ -89,10 +89,15 @@ void on_new_single_inventory_upload_complete(
 		// this upload costed us L$, update our balance
 		// and display something saying that it cost L$
 		LLStatusBar::sendMoneyBalanceRequest();
-
-		LLSD args;
-		args["AMOUNT"] = llformat("%d", upload_price);
-		LLNotificationsUtil::add("UploadPayment", args);
+		
+		// <FS:CR> FIRE-10628 - Option to supress upload cost notification
+		if (gSavedSettings.getBOOL("FSShowUploadPaymentToast"))
+		{
+			LLSD args;
+			args["AMOUNT"] = llformat("%d", upload_price);
+			LLNotificationsUtil::add("UploadPayment", args);
+		}
+		// </FS:CR>
 	}
 
 	if( item_folder_id.notNull() )

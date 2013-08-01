@@ -131,20 +131,17 @@ private:
 	 * This updates the slider and mute button at the lower edge, so the selected participant
 	 * becomes the target of this control.
 	 */
-	// <FS:Ansariel> Disable obsolete V1 code
-	//void onParticipantSelected();
+	void onParticipantSelected();
 
 	/**
 	 * Gets called whenever the volume on the optional single slider control gets changed
 	 */
-	// <FS:Ansariel> Disable obsolete V1 code
-	//void onVolumeChanged();
+	void onVolumeChanged();
 
 	/**
 	 * Gets called whenever the optional single mute button gets toggled
 	 */
-	// <FS:Ansariel> Disable obsolete V1 code
-	//void onMuteChanged();
+	void onMuteChanged();
 
 	/**
 	 * Updates window title with an avatar name
@@ -262,11 +259,9 @@ private:
 	LLOutputMonitorCtrl* mSpeakingIndicator;
 	bool mIsModeratorMutedVoice;
 
-	// <FS:Ansariel> Disable obsolete V1 code
-	//LLUUID mSelectedParticipant;
-	//LLSliderCtrl* mVolumeSlider;
-	//LLButton* mMuteButton;
-	// </FS:Ansariel>
+	LLUUID mSelectedParticipant;
+	LLSliderCtrl* mVolumeSlider;
+	LLButton* mMuteButton;
 
 	/**
 	 * Flag indicated that participants voice states should be initialized.

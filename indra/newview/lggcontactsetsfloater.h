@@ -34,12 +34,14 @@ class lggContactSetsFloater : public LLFloater, public LLFriendObserver, public 
 {
 public:
 	lggContactSetsFloater(const LLSD& seed);
-	virtual ~lggContactSetsFloater();
+	
+	BOOL postBuild();
 	// LLAvatarPropertiesProcessor observer trigger
 	virtual void processProperties(void* data, EAvatarProcessorType type);
 
+private:
+	virtual ~lggContactSetsFloater();
 	virtual void changed(U32 mask);
-	BOOL postBuild();
 	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	void update();
 	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
@@ -79,7 +81,6 @@ public:
 	LLCheckBoxCtrl* noticeBox;
 	LLRect contextRect;
 
-private:
 	S32 mouse_x;
 	S32 mouse_y;
 	F32 hovered;
@@ -102,10 +103,10 @@ class lggContactSetsFloaterSettings : public LLFloater
 {
 public:
 	lggContactSetsFloaterSettings(const LLSD& seed);
-	virtual ~lggContactSetsFloaterSettings() {}
-
 	BOOL postBuild(void);
-
+	
+private:
+	virtual ~lggContactSetsFloaterSettings() {}
 	void onDefaultBackgroundChange();
 };
 

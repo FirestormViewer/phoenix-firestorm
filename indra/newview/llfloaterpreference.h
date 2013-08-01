@@ -95,8 +95,6 @@ protected:
 	void		onLanguageChange();
 	void		onNameTagOpacityChange(const LLSD& newvalue);
 
-
-
 	// <FS:Zi> Pie menu
 	// make sure controls get greyed out or enabled when pie color override is toggled
 	void onPieColorsOverrideChanged();

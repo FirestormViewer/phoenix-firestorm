@@ -2,6 +2,7 @@
 <panel label="Edycja profilu" name="edit_profile_panel">
 	<string name="FSDev" value=" Programista"/>
 	<string name="FSSupp" value=" Wsparcie"/>
+	<string name="FSQualityAssurance" value=" Łowca błędów"/>
 	<string name="AcctTypeResident" value="Rezydent"/>
 	<string name="AcctTypeTrial" value="Próbne"/>
 	<string name="AcctTypeCharterMember" value="Członek-zalożyciel"/>

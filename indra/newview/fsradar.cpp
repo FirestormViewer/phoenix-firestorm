@@ -173,11 +173,11 @@ void FSRadar::updateRadarList()
 
 	F32 drawRadius(RenderFarClip);
 	const LLVector3d& posSelf = gAgent.getPositionGlobal();
-	LLViewerRegion* reg = gAgent.getRegion();
+	LLViewerRegion* own_reg = gAgent.getRegion();
 	LLUUID regionSelf;
-	if (reg)
+	if (own_reg)
 	{
-		regionSelf = reg->getRegionID();
+		regionSelf = own_reg->getRegionID();
 	}
 	bool alertScripts = mRadarAlertRequest; // save the current value, so it doesn't get changed out from under us by another thread
 	time_t now = time(NULL);
@@ -257,7 +257,7 @@ void FSRadar::updateRadarList()
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		FSRadarEntry* ent = getEntry(avId);
 		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
-		if (!reg || !ent) // don't update this radar listing if data is inaccessible
+		if (!ent) // don't update this radar listing if data is inaccessible
 		{
 			continue;
 		}
@@ -274,7 +274,11 @@ void FSRadar::updateRadarList()
 			}
 		}
 
-		LLUUID avRegion = reg->getRegionID();
+		LLUUID avRegion;
+		if (reg)
+		{
+			avRegion = reg->getRegionID();
+		}
 		S32 seentime = (S32)difftime(now, ent->mFirstSeen);
 		S32 hours = (S32)(seentime / 3600);
 		S32 mins = (S32)((seentime - hours * 3600) / 60);
@@ -504,6 +508,10 @@ void FSRadar::updateRadarList()
 		}
 		entry_options["name_style"] = nameCellStyle;
 
+		// <FS:CR> TODO: Decide whether we want special colored names in the radar or let the current UI suffice
+		//LLColor4 name_color = LGGContactSets::getInstance()->colorize(avId, range_color, LGG_CS_RADAR);
+		//entry_options["name_color"] = name_color.getValue();
+		
 		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR))
 		{
 			LLColor4 name_color = LGGContactSets::getInstance()->getFriendColor(avId);

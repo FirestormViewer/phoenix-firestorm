@@ -92,6 +92,7 @@ bool LLGroupHandler::processNotification(const LLSD& notify)
 		p.notification = notification;
 		p.panel = notify_box;
 		p.on_delete_toast = boost::bind(&LLGroupHandler::onDeleteToast, this, _1);
+		p.can_fade = gSavedSettings.getBOOL("FSFadeGroupNotices");// <FS:KC> Don't fade notices
 
 		LLScreenChannel* channel = dynamic_cast<LLScreenChannel*>(mChannel.get());
 		if(channel)

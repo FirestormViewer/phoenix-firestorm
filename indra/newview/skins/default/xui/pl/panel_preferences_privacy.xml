@@ -30,9 +30,9 @@
 			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
 		</panel>
 		<panel label="Śledzenie spojrzeń" name="tab-lookat">
-			<check_box label="Pokazuj na co patrzą inni" name="showlookat" tool_tip="Włącz celowniczki pokazujące, gdzie inni ludzie mają skierowany swój wzrok."/>
+			<check_box label="Pokazuj na co patrzą inni:" name="showlookat" tool_tip="To ustawienie pozwala włączyć wizualne pokazywanie wskaźnika animacji (punktu LookAt), którego używa przeglądarka do obracania oczami, głową oraz tułowiem. Może on także być używany do określenia punktu zaczepienia kamery awatara."/>
 			<text name="lookatshownames" tool_tip="Wybierz, czy przy celowniczkach mają być pokazywane imiona awatarów">
-				Pokazuj imiona przy celach spojrzeń:
+				Format imion przy celach spojrzeń
 			</text>
 			<combo_box name="lookatshownames_combobox">
 				<combo_box.item label="Nie pokazuj" name="None"/>
@@ -41,12 +41,12 @@
 				<combo_box.item label="Stare imię" name="Legacy_Name"/>
 				<combo_box.item label="Nazwa konta" name="User_Name"/>
 			</combo_box>
+			<check_box label="Nie pokazuj celu mojego własnego spojrzenia" name="LookAtHideOwn" tool_tip="Nie pokazuj mi mojego własnego celowniczka"/>
 			<text name="mylookat">
-				Moje spojrzenie:
+				Moje cele spojrzeń:
 			</text>
-			<check_box label="Nie pokazuj celu mojego spojrzenia" name="LookAtHideOwn" tool_tip="Nie pokazuj mi mojego własnego celowniczka"/>
 			<check_box label="Nie pokazuj innym, gdzie patrzę" name="privatelookat" tool_tip="Zapobiega wysyłaniu na serwer informacji o własnym celu spojrzenia"/>
-			<check_box label="Nie zmieniaj celu mojego spojrzenia nawet na moim własnym ekranie" name="privateLocalLookat" tool_tip="Zapobiega poruszaniu głową i skupianiu wzroku Twojego awatara na Twoim własnym ekranie. Ten ruch nie musi być widoczny dla innych nawet gdy ta opcja jest wyłączona."/>
+			<check_box label="Nie pokazuj celu mojego spojrzenia nawet na moim własnym ekranie" name="privateLocalLookat" tool_tip="Zapobiega poruszaniu głową i skupianiu wzroku Twojego awatara na Twoim własnym ekranie. Ten ruch nie musi być widoczny dla innych nawet gdy ta opcja jest wyłączona."/>
 			<check_box label="Nie pokazuj innym celów moich wskazań" name="privatepointat" tool_tip="Zapobiega wysyłaniu innym celów wskazanych myszką"/>
 		</panel>
 		<panel label="Autoodpowiedzi" name="tab-autoresponse">
@@ -60,9 +60,7 @@
 				Dla nieznajomych, gdy włączony jest tryb autoodpowiedzi do nieznajomych:
 			</text>
 			<check_box label="Wysyłaj autoodpowiedzi do WYCISZONYCH awatarów" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
-			<text name="muted_avatar_response_label">
-				Automatyczna odpowiedź wysyłana wyciszonym awatarom:
-			</text>
+			<!-- <check_box label="Wysyłaj autoodpowiedź, gdy mój awatar zaśnie:" name="send_away_av_response" tool_tip="Wysyłaj tekst poniżej, gdy ktoś wysyła Ci wiadomość IM, a Twój awatar w tym momencie akurat śpi (jest w trybie 'away')."/> -->
 		</panel>
 	</tab_container>
 </panel>

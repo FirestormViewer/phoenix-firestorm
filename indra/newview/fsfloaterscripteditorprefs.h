@@ -34,7 +34,7 @@ class FSFloaterScriptEdPrefs : public LLFloater
 {
 public:
 	FSFloaterScriptEdPrefs(const LLSD& key);
-	//BOOL postBuild();
+	BOOL postBuild();
 	
 private:
 	~FSFloaterScriptEdPrefs();

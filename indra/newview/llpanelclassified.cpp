@@ -862,9 +862,7 @@ S32 LLPanelClassifiedEdit::getClassifiedFee()
 #ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		LLSD grid_info;
-		LLGridManager::getInstance()->getGridData(grid_info);
-		fee = grid_info[GRID_CLASSIFIED_FEE].asInteger();
+		fee = LLGridManager::getInstance()->getClassifiedFee();
 	}
 #endif // OPENSIM
 	return fee;

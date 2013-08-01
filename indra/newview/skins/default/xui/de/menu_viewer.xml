@@ -213,7 +213,8 @@
 	</menu>
 	<menu label="Hilfe" name="Help">
 		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
-		<menu_item_check label="Firestorm-Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Firestorm-Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Fehlerbehebung" name="Troubleshooting"/>
 		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
         <menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
         <menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
@@ -368,7 +369,7 @@
 		</menu>
 		<menu label="Info anzeigen" name="Display Info">
 			<menu_item_check label="Zeit anzeigen" name="Show Time"/>
-			<menu_item_check label="Kosten für Hochladen anzeigen" name="Show Upload Cost"/>
+			<menu_item_check label="Transaktion beim Hochladen anzeigen" name="Show Upload Transaction"/>
 			<menu_item_check label="Render-Info anzeigen" name="Show Render Info"/>
 			<menu_item_check label="Texturinfos anzeigen" name="Show Texture Info"/>
 			<menu_item_check label="Matrizen anzeigen" name="Show Matrices"/>

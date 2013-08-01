@@ -224,7 +224,7 @@
 			</combo_box>
 			<spinner label="Cena: L$" name="Edit Cost"/>
 			<button label="Zastosuj" name="button mark for sale" tool_tip="Ustawia/aktualizuje obiekt(y) do sprzedaży."/>
-			<button label="Kopiuj klucze" name="btnCopyKeys" tool_tip="Kopiuje Klucze zaznaczonego obiektu do schowka."/>
+			<button label="Kopiuj UUIDy" name="btnCopyKeys" tool_tip="Kopiuje klucz główny zaznaczonego obiektu do schowka. Kliknięcie z przytrzymanym klawiszem Shift kopiuje klucze wszystkich zaznaczonych obiektów"/>
 			<check_box label="Pokaż w wyszukiwarce" name="search_check" tool_tip="Udostępnij wyświetlanie się tego przedmiotu w wynikach wyszukiwania"/>
 			<panel name="perms_build">
 				<text name="perm_modify">

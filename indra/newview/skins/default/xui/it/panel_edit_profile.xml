@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Modifica profilo" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
-		[ACCTTYPE] [PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP]
+		[ACCTTYPE] [PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA]
     </string>
 <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
     sending the latter any more. ...TS -->
@@ -11,6 +11,9 @@
     <string
       name="FSSupp"
       value=" Support" />
+    <string
+      name="FSQualityAssurance"
+      value=" Bug Hunter" />
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
 	</string>
