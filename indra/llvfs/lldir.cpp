@@ -295,7 +295,11 @@ std::string LLDir::buildSLOSCacheDir() const
 	}
 	else
 	{
+#ifdef ND_BUILD64BIT_ARCH
+		res = add(getOSCacheDir(), "Firestorm_x64");
+#else
 		res = add(getOSCacheDir(), "Firestorm");
+#endif
 	}
 	return res;
 }
