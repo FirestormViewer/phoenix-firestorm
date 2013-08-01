@@ -19837,7 +19837,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>DontTrimLegacyNames</key>
+    <key>FSTrimLegacyNames</key>
     <map>
       <key>Comment</key>
       <string>Don't trim "Resident" from Legacy Names.</string>

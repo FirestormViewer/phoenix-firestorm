@@ -303,7 +303,7 @@
     <integer>1</integer>
   </map>
 
-  <key>DontTrimLegacyNames</key>
+  <key>FSTrimLegacyNames</key>
   <map>
     <key>Comment</key>
     <string>Don&apos;t trim &quot;Resident&quot; from Legacy Names</string>

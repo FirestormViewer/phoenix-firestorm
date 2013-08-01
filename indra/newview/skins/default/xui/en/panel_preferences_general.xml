@@ -394,9 +394,10 @@
      top_delta="0" />
 
   <check_box
-   control_name="DontTrimLegacyNames"
+   enabled_control="FSNameTagShowLegacyUsernames"
+   control_name="FSTrimLegacyNames"
    height="16"
-   label="Don't trim 'Resident' from legacy names"
+   label="Trim 'Resident' from legacy names"
    layout="topleft"
    left_pad="50"
    name="legacy_trim_check"

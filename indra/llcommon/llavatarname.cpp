@@ -44,6 +44,8 @@ static const std::string DISPLAY_NAME_EXPIRES("display_name_expires");
 static const std::string DISPLAY_NAME_NEXT_UPDATE("display_name_next_update");
 
 bool LLAvatarName::sUseDisplayNames = true;
+bool LLAvatarName::sUseLegacyNameFormat = false;	// <FS:CR> Legacy name option
+bool LLAvatarName::sTrimResidentSurname = true;		// Trim "Resident" from legacy name
 
 // Minimum time-to-live (in seconds) for a name entry.
 // Avatar name should always guarantee to expire reasonably soon by default
@@ -166,6 +168,16 @@ std::string LLAvatarName::getCompleteName() const
 			// then display only the easier to read instance of the person's name.
 			name = mDisplayName;
 		}
+		// <FS:CR> Option to show legacy name format instead of username
+		else if (sUseLegacyNameFormat)
+		{
+			// FIRE-6659
+			if ((sTrimResidentSurname && mLegacyLastName == "Resident") || mLegacyLastName.empty())
+				name = mDisplayName + " (" + mLegacyLastName + ")";
+			else
+				name = mDisplayName + " (" + mLegacyFirstName + " " + mLegacyLastName + ")";
+		}
+		// </FS:CR>
 		else
 		{
 			name = mDisplayName + " (" + mUsername + ")";
@@ -205,7 +217,10 @@ std::string LLAvatarName::getDisplayName() const
 	}
 }
 
-std::string LLAvatarName::getUserName() const
+// <FS:CR> Get the true username
+//std::string LLAvatarName::getUserName() const
+std::string LLAvatarName::getUserName(bool true_username) const
+// </FS:CR>
 {
 	std::string name;
 	if (mLegacyLastName.empty() || (mLegacyLastName == "Resident"))
@@ -221,6 +236,12 @@ std::string LLAvatarName::getUserName() const
 			name = mLegacyFirstName;
 		}
 	}
+	// <FS:CR> Get the true username
+	else if (true_username && !mUsername.empty())
+	{
+		name = mUsername;
+	}
+	// </FS:CR>
 	else
 	{
 		name = mLegacyFirstName + " " + mLegacyLastName;

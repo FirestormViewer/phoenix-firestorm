@@ -2967,12 +2967,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 					}
 					// </FS:CR>
 
-					// Show user name as legacy name if selected -- TS
-					std::string username = av_name.getUserName();
-					if (show_legacynames)
-					{
-						username = LLCacheName::buildFullName( firstname->getString(), lastname->getString() );
-					}
+					// <FS:CR> Show user name as legacy name if selected
+					std::string username( show_legacynames ? av_name.getLegacyName() : av_name.getUserName(true) );
+
 					addNameTagLine(username, username_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 				}
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
