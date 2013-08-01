@@ -2053,11 +2053,11 @@
     <key>package_description</key>
     <map>
       <key>description</key>
-      <string>Spell checking dictionaries</string>
+      <string>Firestorm viewer</string>
       <key>license</key>
       <string>various open</string>
       <key>name</key>
-      <string>dictionaries</string>
+      <string>firestorm</string>
       <key>platforms</key>
       <map>
         <key>common</key>
