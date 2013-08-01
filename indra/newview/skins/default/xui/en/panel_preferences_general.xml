@@ -402,7 +402,7 @@
    left_pad="50"
    name="legacy_trim_check"
    width="100"
-   tool_tip="Don't trim 'Resident' from legacy names"
+   tool_tip="Trim 'Resident' from legacy names"
    top_delta="0">
     <check_box.commit_callback
      function="FS.ToggleSortContacts" />
