@@ -61,6 +61,13 @@
           <key>folder</key>
           <string>highcontrast</string>
         </map>
+        <!-- David Rowe's purple theme from CtrlAltStudio Viewer -->
+        <map>
+          <key>name</key>
+          <string>CtrlAltStudio</string>
+          <key>folder</key>
+          <string>ctrlaltstudio</string>
+        </map>
       </array>
     </map>
 
