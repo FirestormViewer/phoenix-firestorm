@@ -253,6 +253,16 @@
              name="ShowChatMiniIcons"
              top_pad="1"
              width="400" />
+             <check_box
+             enabled="false"
+             control_name="LogShowHistory"
+             height="16"
+             initial_value="true"
+             label="Show the end of last conversation"
+             layout="topleft"
+             name="LogShowHistory"
+             top_pad="1"
+             width="400" />
             <check_box
              control_name="UseChatBubbles"
              follows="left|top"

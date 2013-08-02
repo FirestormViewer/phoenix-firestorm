@@ -2137,6 +2137,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	}
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
+
+	// <FS:Ansariel> FIRE-420: Show end of last conversation in history
+	getChildView("LogShowHistory")->setEnabled(TRUE);
 }
 
 void LLFloaterPreference::onUpdateSliderText(LLUICtrl* ctrl, const LLSD& name)
