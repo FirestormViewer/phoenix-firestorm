@@ -53,9 +53,6 @@ public:
 	void	onNearbyChatContextMenuItemClicked(const LLSD& userdata);
 	bool	onNearbyChatCheckContextMenuItem(const LLSD& userdata);
 
-	void	onChatBarVisibilityChanged();
-	void	onChatChannelVisibilityChanged();
-
 	/*virtual*/ void	onOpen	(const LLSD& key);
 
 	/*virtual*/ void	setVisible(BOOL visible);

@@ -110,16 +110,12 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 
 	if (FSUseNearbyChatConsole)
 	{
-		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
-		if(chat_channel)
-		{
-			chat_channel->removeToastsFromChannel();
-		}
+		removeScreenChat();
 		gConsole->setVisible(!getVisible());
 	}
 	else
 	{
-		gConsole->setVisible(FALSE);		
+		gConsole->setVisible(FALSE);
 	}
 }
 
@@ -158,12 +154,6 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mInputPanels = getChild<LLLayoutStack>("input_panels");
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
-	
-	gSavedSettings.getControl("FSNearbyChatbar")->getCommitSignal()->connect(boost::bind(&FSFloaterNearbyChat::onChatBarVisibilityChanged, this));
-	gSavedSettings.getControl("FSShowChatChannel")->getCommitSignal()->connect(boost::bind(&FSFloaterNearbyChat::onChatChannelVisibilityChanged, this));
-
-	onChatBarVisibilityChanged();
-	onChatChannelVisibilityChanged();
 
 	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
@@ -174,17 +164,8 @@ BOOL FSFloaterNearbyChat::postBuild()
 	// <FS:Ansariel> Optional muted chat history
 	mChatHistoryMuted = getChild<FSChatHistory>("chat_history_muted");
 	
-	// <vertical tab docking> -AO
-	if(isChatMultiTab())
-	{
-		LLButton* slide_left = getChild<LLButton>("slide_left_btn");
-		slide_left->setVisible(false);
-		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
-		slide_right->setVisible(false);
-
-		FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
-		gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
-	}
+	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
+	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
 	
 	return LLDockableFloater::postBuild();
 }
@@ -352,19 +333,9 @@ bool FSFloaterNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
 	std::string str = userdata.asString();
 	if (str == "nearby_people")
 	{
-		onNearbySpeakers();	
+		onNearbySpeakers();
 	}
 	return false;
-}
-
-void FSFloaterNearbyChat::onChatBarVisibilityChanged()
-{
-	getChild<LLLayoutPanel>("chat_bar_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSNearbyChatbar"));
-}
-
-void FSFloaterNearbyChat::onChatChannelVisibilityChanged()
-{
-	getChild<LLLayoutPanel>("channel_spinner_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSShowChatChannel"));
 }
 
 void FSFloaterNearbyChat::openFloater(const LLSD& key)
