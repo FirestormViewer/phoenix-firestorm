@@ -483,5 +483,17 @@
     <integer>1</integer>
   </map>
 
+  <key>FSNameTagShowLegacyUsernames</key>
+  <map>
+    <key>Comment</key>
+    <string>Show legacy name (Firstname Lastname) in user tags instead of username</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
 </map>
 </llsd>
