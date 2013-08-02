@@ -70,7 +70,7 @@
 #include "llworld.h"
 #include "rlvhandler.h"
 
-#define NAME_PREDICTION_MINIMUM_LENGTH 3
+#define NAME_PREDICTION_MINIMUM_LENGTH 2
 S32 FSFloaterNearbyChat::sLastSpecialChatChannel = 0;
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-0.2.2)
@@ -943,8 +943,11 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 					}
 					prefix += match + rest_of_match + " ";
 				}
-				mInputEditor->setText(prefix + suffix);
-				mInputEditor->selectNext(rest_of_match, false);
+				if (!rest_of_match.empty())
+				{
+					mInputEditor->setText(prefix + suffix);
+					mInputEditor->selectNext((rest_of_match + " "), false);
+				}
 			}
 		}
 	}
