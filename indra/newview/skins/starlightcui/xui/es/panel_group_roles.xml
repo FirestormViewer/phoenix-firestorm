@@ -12,19 +12,15 @@
 				Puedes añadir o quitar los roles asignados a los miembros.
 Selecciona varios nombres manteniendo pulsada la tecla Ctrl y pulsando en cada uno de sus nombres.
 			</panel.string>
-			<panel.string name="donation_area">
-				[AREA] m²
-			</panel.string>
 			<filter_editor label="Filtrar" name="filter_input"/>
 			<name_list name="member_list">
 				<name_list.columns label="Miembro" name="name"/>
 				<name_list.columns label="Donaciones" name="donated"/>
-				<name_list.columns label="Estado" name="online"/>
 			</name_list>
 			<button label="Invitar" name="member_invite"/>
 			<button label="Expulsar" name="member_eject"/>
 		</panel>
-		<panel label="Roles" name="roles_sub_tab" tool_tip="Roles">
+		<panel label="Roles" name="roles_sub_tab">
 			<panel.string name="help_text">
 				Los roles tienen una etiqueta propia y unas capacidades que se
 permiten ejercer a sus miembros. Los miembros pueden
@@ -38,7 +34,6 @@ incluyendo el de Todos y el de Propietarios.
 			<scroll_list name="role_list">
 				<scroll_list.columns label="Rol" name="name"/>
 				<scroll_list.columns label="Etiqueta" name="title"/>
-				<scroll_list.columns label="#" name="members"/>
 			</scroll_list>
 			<button label="Añadir un rol" name="role_create"/>
 			<button label="Eliminar el rol" name="role_delete"/>
@@ -47,12 +42,12 @@ incluyendo el de Todos y el de Propietarios.
 			<panel.string name="help_text">
 				Las capacidades permiten a los miembros que tienen ese rol el hacer tareas específicas dentro de este grupo. Hay una gran variedad de capacidades.
 			</panel.string>
-			<filter_editor label="Filtrar las capacidades" name="filter_input"/>
+			<filter_editor label="Filtrar" name="filter_input"/>
 			<scroll_list name="action_list" tool_tip="Elige una capacidad para verla más en detalle"/>
 		</panel>
 	</tab_container>
 	<panel name="members_footer">
-		<text name="assigned_roles_label">
+		<text name="static">
 			Roles asignados
 		</text>
 		<text name="static2">
@@ -61,38 +56,32 @@ incluyendo el de Todos y el de Propietarios.
 		<scroll_list name="member_allowed_actions" tool_tip="Para más detalles de cada capacidad, ver la pestaña Capacidades"/>
 	</panel>
 	<panel name="roles_footer">
-		<text name="role_name_label" width="90">
+		<text name="static">
 			Nombre del rol:
 		</text>
-		<text name="role_title_label" width="90">
+		<text name="static3">
 			Etiqueta del rol:
 		</text>
-		<check_box label="Mostrar los miembros" name="role_visible_in_list" tool_tip="Establece si los miembros de este rol pueden ser vistos en la pestaña General por personas ajenas al grupo."/>
-		<text name="description_label">
+		<text name="static2">
 			Descripción
 		</text>
-		<panel name="group_roles_layout_panel">
-			<text name="assigned_members_label">
-				Miembros asignados
-			</text>
-		</panel>
-		<panel name="group_roles_layout_panel2">
-			<text name="allowed_abilities_label">
-				Capacidades permitidas
-			</text>
-			<scroll_list name="role_allowed_actions" tool_tip="Para más detalles de cada capacidad, ver la pestaña Capacidades"/>
-		</panel>
+		<text name="static4">
+			Miembros asignados
+		</text>
+		<check_box label="Mostrar los miembros" name="role_visible_in_list" tool_tip="Establece si los miembros de este rol pueden ser vistos en la pestaña General por personas ajenas al grupo."/>
+		<text name="static5">
+			Capacidades permitidas
+		</text>
+		<scroll_list name="role_allowed_actions" tool_tip="Para más detalles de cada capacidad, ver la pestaña Capacidades"/>
 	</panel>
 	<panel name="actions_footer">
-		<panel name="action_description_panel">
-			<text_editor name="action_description">
-				Esta capacidad es la de &apos;Expulsar miembros de este grupo&apos;. Sólo un propietario puede expulsar a otro.
-			</text_editor>
-		</panel>
-		<text name="action_roles_label">
+		<text_editor name="action_description">
+			Esta capacidad es la de &apos;Expulsar miembros de este grupo&apos;. Sólo un propietario puede expulsar a otro.
+		</text_editor>
+		<text name="static2">
 			Roles con esta capacidad
 		</text>
-		<text name="action_members_label">
+		<text name="static3">
 			Miembros con esta capacidad
 		</text>
 	</panel>
