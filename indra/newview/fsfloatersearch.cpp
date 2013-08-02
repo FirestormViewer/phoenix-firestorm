@@ -341,6 +341,7 @@ BOOL FSFloaterSearch::postBuild()
 	if (mPanelProfile)
 	{
 		mPanelProfile->setVisible(false);
+		mPanelProfile->setEmbedded(TRUE);
 		panel_people->childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
 		panel_people->setUseLegacyResultBehavior(TRUE);
 	}

@@ -79,6 +79,8 @@ public:
 
 	/*virtual*/ ~FSPanelProfileTab();
 
+	void setEmbedded(BOOL embedded) { mEmbedded = embedded; }
+
 protected:
 
 	FSPanelProfileTab();
@@ -93,6 +95,10 @@ protected:
 	void setIsLoading() { mLoading = TRUE; }
 	bool getIsLoaded() { return mLoaded; }
 	void resetLoading() { mLoading = FALSE; mLoaded = FALSE; }
+	
+	const BOOL getEmbedded() const { return mEmbedded; }
+	
+	const BOOL getSelfProfile() const { return mSelfProfile; }
 
 	void setApplyProgress(bool started);
 
@@ -101,6 +107,8 @@ private:
 	LLUUID  mAvatarId;
 	BOOL    mLoading;
 	BOOL    mLoaded;
+	BOOL	mEmbedded;
+	BOOL	mSelfProfile;
 };
 
 
