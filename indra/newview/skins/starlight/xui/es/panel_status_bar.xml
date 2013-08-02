@@ -19,7 +19,7 @@
 	</panel.string>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$"/>
-		<button label="COMPRAR L$" name="buyL" tool_tip="Pulsa para comprar más L$"/>
+		<button label="COMPRAR L$" name="buyL" tool_tip="Pulsa para comprar más L$" left_pad="-15"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<icon name="dd_icon" tool_tip="Distancia de dibujo"/>
