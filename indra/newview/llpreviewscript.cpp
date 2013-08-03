@@ -361,7 +361,7 @@ BOOL LLScriptEdCore::postBuild()
 			// the tips one-per-line in strings.xml
 			LLStringUtil::replaceString( desc, ";", "\n" );
 			
-			llinfos << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << llendl;
+			lldebugs << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << llendl;
 			// </FS:CR>
 			
 			tooltips.push_back(desc);
