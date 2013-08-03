@@ -47,7 +47,7 @@ LLMeshSearch::LLMeshSearch(std::vector<LLVector3>& positions, std::vector<S32>& 
     }
     
     // size of each voxel - emperically determined to give good performance
-    mVoxelSize = 0.05;
+    mVoxelSize = 0.05f;
     
     mWidth = (S32)ceil(mBBox.getExtent().mV[VX] / mVoxelSize);
     mHeight = (S32)ceil(mBBox.getExtent().mV[VY] / mVoxelSize);

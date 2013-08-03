@@ -7858,9 +7858,9 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 				
 				if (!LLViewerCamera::getInstance()->cameraUnderWater())
 				{
-					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2);
+					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2f);
 				} else {
-					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0);
+					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0f);
 				}
 
 				shader->uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
@@ -7906,9 +7906,9 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 			
 			if (!LLViewerCamera::getInstance()->cameraUnderWater())
 			{
-				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2);
+				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2f);
 			} else {
-				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0);
+				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0f);
 			}
 
 			gGL.begin(LLRender::TRIANGLE_STRIP);
@@ -8888,7 +8888,7 @@ void LLPipeline::renderDeferredLighting()
 		
 		gDeferredPostGammaCorrectProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, mScreen.getWidth(), mScreen.getHeight());
 		
-		F32 gamma = 1.0/2.2;
+		F32 gamma = (F32)(1.0/2.2);
 
 		gDeferredPostGammaCorrectProgram.uniform1f(LLShaderMgr::TEXTURE_GAMMA, gamma);
 		
