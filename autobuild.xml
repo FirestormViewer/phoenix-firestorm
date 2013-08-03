@@ -566,9 +566,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1043241b4a86ca9a7b3433eb87708e25</string>
+              <string>10a609bfa2cd3f784fe67125cb947caa</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.18-windows-20130728.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.18-windows-20130802.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
