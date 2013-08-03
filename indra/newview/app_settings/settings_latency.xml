@@ -131,6 +131,7 @@
     <integer>0</integer>
   </map>
 
+  <!--
   <key>FSChatWindow</key>
   <map>
     <key>Comment</key>
@@ -142,6 +143,7 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+  -->
 
   <key>FSUseWebProfiles</key>
   <map>
