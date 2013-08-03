@@ -642,7 +642,7 @@ FSFloaterNearbyChat* FSFloaterNearbyChat::getInstance()
 bool FSFloaterNearbyChat::isChatMultiTab()
 {
 	// Restart is required in order to change chat window type.
-	static bool is_single_window = gSavedSettings.getS32("ChatWindow") == 1;
+	static bool is_single_window = gSavedSettings.getS32("FSChatWindow") == 1;
 	return is_single_window;
 }
 

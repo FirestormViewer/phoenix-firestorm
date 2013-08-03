@@ -337,7 +337,7 @@
              layout="topleft"
              left_pad="10"
              top_delta="-3"
-             control_name="ChatWindow"
+             control_name="FSChatWindow"
              name="chat_window"
              tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
              width="190">
