@@ -112,6 +112,11 @@ namespace
 	// Storage for the "version and channel" string.
 	// This will get reset too.
 	std::string sVersionChannel("");
+
+	//<FS:TS> Same as above, with version number in Firestorm FSDATA
+	// format. Unlike the above, the channel name will always be the
+	// hardcoded version.
+	std::string sVersionChannelFS("");
 }
 
 //static
@@ -125,6 +130,26 @@ const std::string &LLVersionInfo::getChannelAndVersion()
 
 	return sVersionChannel;
 }
+
+//<FS:TS> Get version and channel in the format needed for FSDATA.
+//static
+const std::string &LLVersionInfo::getChannelAndVersionFS()
+{
+	if (sVersionChannelFS.empty())
+	{
+		// cache the version string
+		std::ostringstream stream;
+		stream << LL_VIEWER_CHANNEL << " "
+		       << LL_VIEWER_VERSION_MAJOR << "."
+		       << LL_VIEWER_VERSION_MINOR << "."
+		       << LL_VIEWER_VERSION_PATCH << " ("
+		       << LL_VIEWER_VERSION_BUILD << ")";
+		sVersionChannelFS = stream.str();
+	}
+
+	return sVersionChannelFS;
+}
+//</FS:TS>
 
 //static
 const std::string &LLVersionInfo::getChannel()
