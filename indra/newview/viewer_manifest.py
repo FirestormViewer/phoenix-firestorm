@@ -743,10 +743,11 @@ class WindowsManifest(ViewerManifest):
           installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.msi" % substitution_strings
           createMSI = "installers/windows_x64/build.bat"
           createMSI  = self.dst_path_of( "../../../indra/newview/" + createMSI)
+          settingsFile = "settings_%s_v4.xml" % self.app_name()
 
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
                            " " + substitution_strings[ 'channel' ] + " " + substitution_strings[ 'version' ] +
-                           "'" + self.flags_list() + "' " + installer_file )
+                           "'" + settingsFile + "' " + installer_file )
           
         #AO: Try to sign installer next, if we can, using "The Phoenix Firestorm Project" signing cert.
         try:
