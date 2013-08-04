@@ -114,11 +114,6 @@ getArgs()
           showUsage && exit 1
       fi
     fi
-        if [ "${AUTOBUILD_ARCH}" == "x64" ]
-        then
-          WANTS_PACKAGE=$FALSE
-        fi
-
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
            [ $WANTS_VERSION -ne $TRUE ] && [ $WANTS_BUILD -ne $TRUE ] && \
            [ $WANTS_PACKAGE -ne $TRUE ] ; then
