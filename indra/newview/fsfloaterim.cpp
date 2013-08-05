@@ -1339,8 +1339,18 @@ void FSFloaterIM::updateMessages()
 	}
 }
 
-void FSFloaterIM::reloadMessages()
+void FSFloaterIM::reloadMessages(bool clean_messages/* = false*/)
 {
+	if (clean_messages)
+	{
+		LLIMModel::LLIMSession * sessionp = LLIMModel::instance().findIMSession(mSessionID);
+
+		if (NULL != sessionp)
+		{
+			sessionp->loadHistory();
+		}
+	}
+
 	mChatHistory->clear();
 	mLastMessageIndex = -1;
 	updateMessages();

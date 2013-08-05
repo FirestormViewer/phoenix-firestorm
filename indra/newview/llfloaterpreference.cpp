@@ -117,6 +117,7 @@
 
 // Firestorm Includes
 #include "fscontactsfloater.h" // TS: sort contacts list
+#include "fsfloaterimcontainer.h"
 #include "fslslbridge.h"
 #include "growlmanager.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
@@ -1067,8 +1068,10 @@ void LLFloaterPreference::onBtnOK()
 			if(moveTranscriptsAndLog())
 			{
 				//When floaters are empty but have a chat history files, reload chat history into them
-				// <FS:Ansariel> [FS communication UI] [CHUI Merge] FIXME: We can't reload stuff currently...
+				// <FS:Ansariel> [FS communication UI]
 				//LLFloaterIMSessionTab::reloadEmptyFloaters();
+				FSFloaterIMContainer::reloadEmptyFloaters();
+				// </FS:Ansariel> [FS communication UI]
 			}
 			//Couldn't move files so restore the old path and show a notification
 			else

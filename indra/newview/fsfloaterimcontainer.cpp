@@ -319,4 +319,25 @@ void FSFloaterIMContainer::sessionRemoved(const LLUUID& session_id)
 	}
 }
 
+// static
+void FSFloaterIMContainer::reloadEmptyFloaters()
+{
+	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("fs_impanel");
+	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin();
+		iter != inst_list.end(); ++iter)
+	{
+		FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(*iter);
+		if (floater && floater->getLastChatMessageIndex() == -1)
+		{
+			floater->reloadMessages(true);
+		}
+	}
+
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat");
+	if (nearby_chat && nearby_chat->getMessageArchiveLength() == 0)
+	{
+		nearby_chat->reloadMessages(true);
+	}
+}
+
 // EOF

@@ -85,7 +85,7 @@ public:
 
 	// get new messages from LLIMModel
 	void updateMessages();
-	void reloadMessages();
+	void reloadMessages(bool clean_messages = false);
 	static void onSendMsg( LLUICtrl*, void*);
 	void sendMsgFromInputEditor();
 	void sendMsg(const std::string& msg);
@@ -143,6 +143,8 @@ public:
 	
 	static boost::signals2::connection setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb);
 	static floater_showed_signal_t sIMFloaterShowedSignal;
+
+	S32 getLastChatMessageIndex() {return mLastMessageIndex;}
 
 protected:
 	/* virtual */
