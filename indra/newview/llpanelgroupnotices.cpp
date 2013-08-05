@@ -57,6 +57,8 @@
 #include "llnotificationsutil.h"
 #include "llgiveinventory.h"
 
+#include "llviewercontrol.h"	// <FS:CR> FIRE-11247 - gSavedSettings
+
 static LLRegisterPanelClassWrapper<LLPanelGroupNotices> t_panel_group_notices("panel_group_notices");
 
 
@@ -547,7 +549,10 @@ void LLPanelGroupNotices::processNotices(LLMessageSystem* msg)
 		msg->getU32("Data","Timestamp",timestamp,i);
 
 		// we only have the legacy name here, convert it to a username
-		name = LLCacheName::buildUsername(name);
+		// <FS:CR> FIRE-11247 - Let the user decide how they want to see names
+		//name = LLCacheName::buildUsername(name);
+		name = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames") ? LLCacheName::buildLegacyName(name) : LLCacheName::buildUsername(name);
+		// </FS:CR>
 
 		LLSD row;
 		row["id"] = id;
