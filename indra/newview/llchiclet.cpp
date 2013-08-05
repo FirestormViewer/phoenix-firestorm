@@ -716,10 +716,7 @@ void LLIMP2PChiclet::updateMenuItems()
 	if(getSessionId().isNull())
 		return;
 
-	// <FS:Ansariel> [FS communication UI]
-	//LLIMFloater* open_im_floater = LLIMFloater::findInstance(getSessionId());
 	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(getSessionId());
-	// </FS:Ansariel> [FS communication UI]
 	bool open_window_exists = open_im_floater && open_im_floater->getVisible();
 	mPopupMenu->getChild<LLUICtrl>("Send IM")->setEnabled(!open_window_exists);
 	
@@ -995,10 +992,7 @@ void LLIMGroupChiclet::updateMenuItems()
 	if(getSessionId().isNull())
 		return;
 
-	// <FS:Ansariel> [FS communication UI]
-	//LLIMFloater* open_im_floater = LLIMFloater::findInstance(getSessionId());
 	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(getSessionId());
-	// </FS:Ansariel> [FS communication UI]
 	bool open_window_exists = open_im_floater && open_im_floater->getVisible();
 	mPopupMenu->getChild<LLUICtrl>("Chat")->setEnabled(!open_window_exists);
 }
