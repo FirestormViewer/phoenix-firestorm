@@ -26,7 +26,6 @@ PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference()
 
 BOOL PanelPreferenceFirestorm::postBuild()
 {
-	
 	// LGG's Color Beams
 	refreshBeamLists();
 
@@ -46,16 +45,18 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	tex_ctrl->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onCommitTexture, this, _2));
 	tex_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
 
-	return LLPanelPreference::postBuild();	
+	return LLPanelPreference::postBuild();
 }
 
 void PanelPreferenceFirestorm::apply()
 {
+	LLPanelPreference::apply();
 }
 
 
 void PanelPreferenceFirestorm::cancel()
 {
+	LLPanelPreference::cancel();
 }
 
 
