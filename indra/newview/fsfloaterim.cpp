@@ -154,16 +154,14 @@ void FSFloaterIM::onFocusLost()
 {
 	LLIMModel::getInstance()->resetActiveSessionID();
 	
-	// Chiclet bar doesn't show IM chiclets anymore -Ansa
-	//LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
+	LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
 }
 
 void FSFloaterIM::onFocusReceived()
 {
 	LLIMModel::getInstance()->setActiveSessionID(mSessionID);
 
-	// Chiclet bar doesn't show IM chiclets anymore -Ansa
-	//LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, true);
+	LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, true);
 
 	if (getVisible())
 	{
