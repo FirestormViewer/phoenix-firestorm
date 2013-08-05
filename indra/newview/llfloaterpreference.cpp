@@ -53,8 +53,7 @@
 #include "llfloaterhardwaresettings.h"
 #include "llfloatersidepanelcontainer.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
-//#include "llimfloater.h" <FS:TM> CHUI Merge old
+//#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 #include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
@@ -117,32 +116,23 @@
 #include "llsdserialize.h"
 
 // Firestorm Includes
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
-#include "rlvactions.h"
-#include "rlvhandler.h"
-// [/RLVa:KB]
-#include "llsdserialize.h" // KB: SkinsSelector
 #include "fscontactsfloater.h" // TS: sort contacts list
-
-//-TT Client LSL Bridge
 #include "fslslbridge.h"
-//-TT
-#include "NACLantispam.h"
-
-#include "llviewernetwork.h" // <FS:AW  opensim search support>
-
-// <FS:Zi> Backup Settings
+#include "growlmanager.h"
+#include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
+#include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
 #include "llscrolllistctrl.h"
 #include "llspellcheck.h"
+#include "llsdserialize.h" // KB: SkinsSelector
 #include "lltoolbarview.h"
+#include "llviewernetwork.h" // <FS:AW  opensim search support>
 #include "llwaterparammanager.h"
 #include "llwldaycycle.h"
 #include "llwlparammanager.h"
-// </FS:Zi>
-#include "growlmanager.h"
-#include "lldiriterator.h"	// <Kadah> for populating the fonts combo
-#include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
+#include "rlvactions.h"
+#include "rlvhandler.h"
+#include "NACLantispam.h"
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
@@ -275,7 +265,7 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 		LLNavigationBar::getInstance()->clearHistoryCache();
 		
 		// flag client texture cache for clearing next time the client runs
-		// AO: Don't clear main texture cache on browser cache clear - it's too expensive to be done except explicitly
+		// <FS:AO> Don't clear main texture cache on browser cache clear - it's too expensive to be done except explicitly
 		//gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
 		//LLNotificationsUtil::add("CacheWillClear");
 
@@ -308,7 +298,7 @@ bool callback_clear_debug_search(const LLSD& notification, const LLSD& response)
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if ( option == 0 ) // YES
 	{
-	        gSavedSettings.setString("SearchURLDebug","");
+		gSavedSettings.setString("SearchURLDebug","");
 	}
 
 	return false;
@@ -334,7 +324,7 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 			url = gSavedSettings.getString("SearchURL");
 		}
 
-	        gSavedSettings.setString("SearchURLDebug", url);
+		gSavedSettings.setString("SearchURLDebug", url);
 
 	}
 
@@ -360,12 +350,12 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 }
 // </FS:CR>
 
-//-TT Client LSL Bridge
+// <FS:TT> Client LSL Bridge
 void handleFlightAssistOptionChanged(const LLSD& newvalue)
 {
 	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
 }
-//-TT
+// </FS:TT>
 
 // <FS_AO: bridge-based radar tags>
 void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
@@ -532,14 +522,9 @@ void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType t
 
 void LLFloaterPreference::storeAvatarProperties( const LLAvatarData* pAvatarData )
 {
-	//-TT 2.6.9 - is this a different fix for same issue, or additional check? Keeping both
-	//if (LLStartUp::getStartupState() == STATE_STARTED)
-	//if (gAgent.isInitialized() && (gAgent.getID() != LLUUID::null))
-
 	if (gAgent.isInitialized() && (gAgent.getID() != LLUUID::null) && (LLStartUp::getStartupState() == STATE_STARTED))
 	{
-		//mAvatarProperties.avatar_id		= gAgent.getID();
-		mAvatarProperties.avatar_id		= pAvatarData->avatar_id; //-TT 2.6.9 - change in 2.6.9
+		mAvatarProperties.avatar_id		= pAvatarData->avatar_id;
 		mAvatarProperties.image_id		= pAvatarData->image_id;
 		mAvatarProperties.fl_image_id   = pAvatarData->fl_image_id;
 		mAvatarProperties.about_text	= pAvatarData->about_text;
@@ -588,11 +573,7 @@ void LLFloaterPreference::saveAvatarProperties( void )
 BOOL LLFloaterPreference::postBuild()
 {
 	// <FS:Ansariel> [FS communication UI]
-	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterIMSessionTab::processChatHistoryStyleUpdate, false)); <FS:TM> CHUI Merge New
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterIMSessionTab::processChatHistoryStyleUpdate, false));
 	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
 	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
@@ -687,17 +668,17 @@ BOOL LLFloaterPreference::postBuild()
 	return TRUE;
 }
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 void LLFloaterPreference::onPieColorsOverrideChanged()
 {
-	BOOL enable=gSavedSettings.getBOOL("OverridePieColors");
+	BOOL enable = gSavedSettings.getBOOL("OverridePieColors");
 
 	getChild<LLColorSwatchCtrl>("pie_bg_color_override")->setEnabled(enable);
 	getChild<LLColorSwatchCtrl>("pie_selected_color_override")->setEnabled(enable);
 	getChild<LLSliderCtrl>("pie_menu_opacity")->setEnabled(enable);
 	getChild<LLSliderCtrl>("pie_menu_fade_out")->setEnabled(enable);
 }
-// ## Zi: Pie menu
+// </FS:Zi> Pie menu
 
 void LLFloaterPreference::updateDeleteTranscriptsButton()
 {
@@ -716,13 +697,13 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 	gSavedPerAccountSettings.setBOOL("DoNotDisturbResponseChanged", response_changed_flag );
 }
 
-// ## Zi: Optional Edit Appearance Lighting
+// <FS:Zi> Optional Edit Appearance Lighting
 void LLFloaterPreference::onAppearanceCameraChanged()
 {
-	BOOL enable=gSavedSettings.getBOOL("AppearanceCameraMovement");
+	BOOL enable = gSavedSettings.getBOOL("AppearanceCameraMovement");
 	getChild<LLCheckBoxCtrl>("EditAppearanceLighting")->setEnabled(enable);
 }
-// ## Zi: Optional Edit Appearance Lighting
+// </FS:Zi> Optional Edit Appearance Lighting
 
 LLFloaterPreference::~LLFloaterPreference()
 {
@@ -1008,13 +989,16 @@ void LLFloaterPreference::onVertexShaderEnable()
 	refreshEnabledGraphics();
 }
 
-// AO: toggle lighting detail availability in response to local light rendering, to avoid confusion
+// <FS:AO> toggle lighting detail availability in response to local light rendering, to avoid confusion
 void LLFloaterPreference::onLocalLightsEnable()
 {
 	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-        if (instance)
+	if (instance)
+	{
 		getChildView("LocalLightsDetail")->setEnabled(gSavedSettings.getBOOL("RenderLocalLights"));
+	}
 }
+// </FS:AO>
 
 //static
 void LLFloaterPreference::initDoNotDisturbResponse()
