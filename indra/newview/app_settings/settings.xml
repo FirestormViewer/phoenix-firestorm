@@ -20866,16 +20866,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-	  <key>FSChatWindow</key>
-	  <map>
-	    <key>Comment</key>
-	    <string>Show chat in multiple windows(by default) or in one multi-tabbed window(requires restart)</string>
-  	  <key>Persist</key>
-	    <integer>0</integer>
-  	  <key>Type</key>
-	    <string>S32</string>
-	    <key>Value</key>
-	    <integer>1</integer>
+    <key>FSChatWindow</key>
+    <map>
+      <key>Comment</key>
+      <string>Show chat in multiple windows(by default) or in one multi-tabbed window(requires restart)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
 </map>
 </llsd>
