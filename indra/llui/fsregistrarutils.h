@@ -42,8 +42,8 @@ enum EFSRegistrarFunctionActionType
 class FSRegistrarUtils
 {
 public:
-	FSRegistrarUtils::FSRegistrarUtils();
-	FSRegistrarUtils::~FSRegistrarUtils() { };
+	FSRegistrarUtils();
+	~FSRegistrarUtils() { };
 
 	typedef boost::function<bool(const LLUUID&, EFSRegistrarFunctionActionType)> enable_check_function_t;
 	void setEnableCheckFunction(const enable_check_function_t& func)
