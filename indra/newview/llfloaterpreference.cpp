@@ -1496,14 +1496,17 @@ void LLFloaterPreference::refreshEnabledState()
 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
 	LLSpinCtrl* gamma_ctrl = getChild<LLSpinCtrl>("gamma");
 	gamma_ctrl->setEnabled(!gPipeline.canUseWindLightShaders());
-	getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());
+	// <FS:Ansariel> Does not exist on FS
+	//getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());
 	getChildView("fog")->setEnabled(!gPipeline.canUseWindLightShaders());
 
 	// anti-aliasing
 	{
 		LLUICtrl* fsaa_ctrl = getChild<LLUICtrl>("fsaa");
-		LLTextBox* fsaa_text = getChild<LLTextBox>("antialiasing label");
-		LLView* fsaa_restart = getChildView("antialiasing restart");
+		// <FS:Ansariel> Does not exist on FS
+		//LLTextBox* fsaa_text = getChild<LLTextBox>("antialiasing label");
+		//LLView* fsaa_restart = getChildView("antialiasing restart");
+		// </FS:Ansariel>
 		
 		// Enable or disable the control, the "Antialiasing:" label and the restart warning
 		// based on code support for the feature on the current hardware.
@@ -1513,9 +1516,11 @@ void LLFloaterPreference::refreshEnabledState()
 			fsaa_ctrl->setEnabled(TRUE);
 			
 			// borrow the text color from the gamma control for consistency
-			fsaa_text->setColor(gamma_ctrl->getEnabledTextColor());
+			// <FS:Ansariel> Does not exist on FS
+			//fsaa_text->setColor(gamma_ctrl->getEnabledTextColor());
 
-			fsaa_restart->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+			//fsaa_restart->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+			// </FS:Ansariel>
 		}
 		else
 		{
@@ -1523,9 +1528,11 @@ void LLFloaterPreference::refreshEnabledState()
 			fsaa_ctrl->setValue((LLSD::Integer) 0);
 			
 			// borrow the text color from the gamma control for consistency
-			fsaa_text->setColor(gamma_ctrl->getDisabledTextColor());
+			// <FS:Ansariel> Does not exist on FS
+			//fsaa_text->setColor(gamma_ctrl->getDisabledTextColor());
 			
-			fsaa_restart->setVisible(FALSE);
+			//fsaa_restart->setVisible(FALSE);
+			// </FS:Ansariel>
 		}
 	}
     
@@ -1828,14 +1835,16 @@ void LLFloaterPreference::refresh()
 	// sliders and their text boxes
 	//	mPostProcess = gSavedSettings.getS32("RenderGlowResolutionPow");
 	// slider text boxes
-	updateSliderText(getChild<LLSliderCtrl>("ObjectMeshDetail",		true), getChild<LLTextBox>("ObjectMeshDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("FlexibleMeshDetail",	true), getChild<LLTextBox>("FlexibleMeshDetailText",	true));
-	updateSliderText(getChild<LLSliderCtrl>("TreeMeshDetail",		true), getChild<LLTextBox>("TreeMeshDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("AvatarMeshDetail",		true), getChild<LLTextBox>("AvatarMeshDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("AvatarPhysicsDetail",	true), getChild<LLTextBox>("AvatarPhysicsDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("TerrainMeshDetail",	true), getChild<LLTextBox>("TerrainMeshDetailText",		true));
+	// <FS:Ansariel> Disable as we show the numeric value and we would create dummy controls
+	//updateSliderText(getChild<LLSliderCtrl>("ObjectMeshDetail",		true), getChild<LLTextBox>("ObjectMeshDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("FlexibleMeshDetail",	true), getChild<LLTextBox>("FlexibleMeshDetailText",	true));
+	//updateSliderText(getChild<LLSliderCtrl>("TreeMeshDetail",		true), getChild<LLTextBox>("TreeMeshDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("AvatarMeshDetail",		true), getChild<LLTextBox>("AvatarMeshDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("AvatarPhysicsDetail",	true), getChild<LLTextBox>("AvatarPhysicsDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("TerrainMeshDetail",	true), getChild<LLTextBox>("TerrainMeshDetailText",		true));
 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
-	updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
+	//updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
+	// </FS:Ansariel>
 		
 	refreshEnabledState();
 }
