@@ -61,6 +61,8 @@
 
 #include <boost/bind.hpp>
 
+#include "fsregistrarutils.h"
+
 static LLDefaultChildRegistry::Register<LLScrollListCtrl> r("scroll_list");
 
 // local structures & classes.
@@ -1913,6 +1915,17 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/offerteleport"));
 			registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track"));
 			// </FS:Ansariel> Additional convenience options
+
+			// <FS:Ansariel> Add enable checks for menu items
+			LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+			enable_registrar.add("Url.EnableShowProfile", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_SHOW_PROFILE));
+			enable_registrar.add("Url.EnableAddFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_ADD_FRIEND));
+			enable_registrar.add("Url.EnableSendIM", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_SEND_IM));
+			enable_registrar.add("FS.EnableZoomIn", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_ZOOM_IN));
+			enable_registrar.add("FS.EnableOfferTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_OFFER_TELEPORT));
+			enable_registrar.add("FS.EnableTrackAvatar", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_TRACK_AVATAR));
+			enable_registrar.add("FS.EnableTeleportToTarget", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_TELEPORT_TO));
+			// </FS:Ansariel>
 
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";

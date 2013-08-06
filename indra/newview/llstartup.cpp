@@ -225,6 +225,7 @@
 #include "streamtitledisplay.h"
 #include "fscommon.h"
 #include "tea.h"
+#include "fsregistrarutils.h"
 
 //
 // exported globals
@@ -1739,6 +1740,9 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		FSRadar::instance();
 		llinfos << "Radar initialized" << llendl;
 		// </FS:Ansariel>
+
+		// <FS:Ansariel> Register check function for registrar enable checks
+		gFSRegistrarUtils.setEnableCheckFunction(boost::bind(&FSCommon::checkIsActionEnabled, _1, _2));
 
 		// <FS:Techwolf Lupindo> fsdata support
 		FSData::instance().addAgents();
