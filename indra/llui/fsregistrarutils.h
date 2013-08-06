@@ -51,7 +51,7 @@ public:
 		mEnableCheckFunction = func;
 	}
 
-	bool checkIsEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType action);
+	bool checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action);
 
 private:
 	enable_check_function_t mEnableCheckFunction;

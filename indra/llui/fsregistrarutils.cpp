@@ -33,7 +33,7 @@ FSRegistrarUtils::FSRegistrarUtils() :
 {
 }
 
-bool FSRegistrarUtils::checkIsEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType action)
+bool FSRegistrarUtils::checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action)
 {
 	if (mEnableCheckFunction)
 	{
