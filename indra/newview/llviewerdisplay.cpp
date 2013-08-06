@@ -281,13 +281,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		return;
 	}
 
-	//<FS:TS> Don't fiddle with for_snapshot: causes crashes at shutdown
-	//        if rendering the UI runs out of memory
-	gSnapshot = for_snapshot;
 	if (LLPipeline::sRenderDeferred)
 	{ //hack to make sky show up in deferred snapshots
-		//for_snapshot = FALSE;
-		gSnapshot = FALSE;
+		for_snapshot = FALSE;
 	}
 
 	if (LLPipeline::sRenderFrameTest)
@@ -295,8 +291,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		send_agent_pause();
 	}
 
-	//<FS:TS> See fix above
-	//gSnapshot = for_snapshot;
+	gSnapshot = for_snapshot;
 
 	LLGLSDefault gls_default;
 	LLGLDepthTest gls_depth(GL_TRUE, GL_TRUE, GL_LEQUAL);
@@ -801,9 +796,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			LLGLState::checkTextureChannels();
 			LLGLState::checkClientArrays();
 
-			//<FS:TS> Shutdown crash fix
-			//if (!for_snapshot)
-			if (!gSnapshot)
+			if (!for_snapshot)
 			{
 				if (gFrameCount > 1)
 				{ //for some reason, ATI 4800 series will error out if you 
@@ -1123,8 +1116,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLPipeline::sUnderWaterRender = FALSE;
 
 		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderUI");
-		//<FS:TS> Shutdown crash fix: don't render the UI if not
-		//        actually called for
 		if (!for_snapshot)
 		{
 			LLFastTimer t(FTM_RENDER_UI);
