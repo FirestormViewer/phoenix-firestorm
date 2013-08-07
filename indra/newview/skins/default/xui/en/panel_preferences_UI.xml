@@ -385,11 +385,24 @@
          top_pad="2"
          width="256" />
         <check_box
+         control_name="FSAnimatedScriptDialogs"
+         enabled_control="ShowScriptDialogsTopRight"
+         height="16"
+         initial_value="true"
+         label="Animate Script Dialogs"
+         layout="topleft"
+         left="15"
+         name="FSAnimatedScriptDialogs"
+         tool_tip="Set this to make script dialogs animate when opening (Classic V1.x behavior)."
+         top_pad="2"
+         width="256" />
+        <check_box
          control_name="ShowGroupNoticesTopRight"
          height="16"
          initial_value="true"
          label="Group Notices and chiclets in Top Right"
          layout="topleft"
+         left="5"
          name="ShowGroupNoticesTopRight"
          tool_tip="Set this to move group notifications and chiclet icons to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="2"

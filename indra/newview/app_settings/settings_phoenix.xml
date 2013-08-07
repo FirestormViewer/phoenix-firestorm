@@ -497,5 +497,18 @@
     <integer>1</integer>
   </map>
 
+  <!-- <FS_Zi> Animated dialogs -->
+  <key>FSAnimatedScriptDialogs</key>
+  <map>
+    <key>Comment</key>
+    <string>Animates script dialogs V1 style. Only effective when dialogs in top right are activated.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <!-- <FS_Zi> Animated dialogs -->
 </map>
 </llsd>
