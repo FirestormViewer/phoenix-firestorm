@@ -121,7 +121,9 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	   floaterType==LLScriptFloaterManager::OBJ_SCRIPT)
 	{
 		floater->setSavePosition(true);
-		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight") ||
+		   gSavedSettings.getBOOL("FSDisableIMChiclets")
+		)
 		{
 			// undock the dialog
 			floater->setDocked(false,true);
