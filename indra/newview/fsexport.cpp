@@ -226,7 +226,7 @@ void FSExport::exportSelection()
 	mFile["client_version"] = LLVersionInfo::getVersion();
 	mFile["grid"] = LLGridManager::getInstance()->getGridLabel();
 	LLFloaterReg::showInstance("fs_export");
-	updateProgress("Beginning export...");
+	updateProgress(LLTrans::getString("export_started"));
 
 	for ( ; iter != selection->valid_root_end(); ++iter)
 	{

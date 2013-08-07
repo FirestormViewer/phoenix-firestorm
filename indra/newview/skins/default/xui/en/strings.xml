@@ -2578,6 +2578,7 @@ Try enclosing path to the editor with double quotes.
   <string name="preproc_toggle_warning">Toggling the preprocessor will not take full effect until you close and reopen this editor.</string>
 	
   <!-- <FS:CR> Exporter messages -->
+  <string name="export_started">Beginning export...</string>
   <string name="export_finished">Export finished.</string>
   <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
   <string name="export_nothing_exported">Nothing was exported. Backup not created.</string>
