@@ -1054,6 +1054,7 @@ BOOL FSFloaterObjectExport::postBuild()
 
 void FSFloaterObjectExport::onCloseBtn()
 {
+	mOutputList->deleteAllItems();
 	closeFloater();
 }
 
