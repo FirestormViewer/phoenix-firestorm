@@ -89,11 +89,6 @@ protected:
 	void onNameCache(const LLUUID& id, const std::string& full_name, bool is_group);
 
 private:
-	void onViewProfileButtonClicked();
-	void onAddFriendButtonClicked();
-	void onShareButtonClicked();
-	void onTeleportButtonClicked();
-	void onPayButtonClicked();
 	void onFocusReceived();
 
 	void onClickMuteVolume();
