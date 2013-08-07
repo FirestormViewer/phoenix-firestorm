@@ -688,18 +688,21 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 		if (mask == MASK_CONTROL)
 		{
 			// shout
+			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_SHOUT);
 			handled = TRUE;
 		}
 		else if (mask == MASK_SHIFT)
 		{
 			// whisper
+			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_WHISPER);
 			handled = TRUE;
 		}
 		else if (mask == MASK_ALT)
 		{
 			// OOC
+			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_OOC);
 			handled = TRUE;
 		}
