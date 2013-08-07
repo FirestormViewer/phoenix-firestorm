@@ -11403,5 +11403,13 @@ You are about to eject [COUNT] members from the group.
         notext="Cancel"
         yestext="Eject"/>
     </notification>
+    
+    <notification
+     icon="alertmodal.tga"
+     name="ExportFinished"
+     type="notify">
+      <tag>Export</tag>
+Export finished and saved to [FILENAME].
+    </notification>
 	
 </notifications>

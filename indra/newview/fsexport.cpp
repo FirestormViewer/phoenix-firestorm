@@ -44,6 +44,7 @@
 #include "llmeshrepository.h"
 #include "llmultigesture.h"
 #include "llnotecard.h"
+#include "llnotificationsutil.h"
 #include "llsdserialize.h"
 #include "llsdutil_math.h"
 #include "llsdutil.h"
@@ -58,11 +59,14 @@
 #include "llviewerpartsource.h"
 #include "llworld.h"
 #include "fscommon.h"
+#include "llfloaterreg.h"
 #include <boost/algorithm/string_regex.hpp>
 
 const F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
 const F32 MAX_INVENTORY_WAIT_TIME = 30.0f;
 const F32 MAX_ASSET_WAIT_TIME = 60.0f;
+
+static void updateProgress(const std::string message);
 
 // static
 void FSExport::onIdle(void* user_data)
@@ -102,6 +106,10 @@ void FSExport::onIdle()
 				LLViewerObject* object = gObjectList.findObject((*iter));
 				object->dirtyInventory();
 				object->requestInventory();
+				
+				LLStringUtil::format_map_t args;
+				args["ITEM"] = (*iter).asString();
+				updateProgress(formatString(LLTrans::getString("export_rerequesting_inventory"), args));
 				LL_DEBUGS("export") << "re-requested inventory of " << (*iter).asString() << LL_ENDL;
 			}
 		}
@@ -154,8 +162,12 @@ void FSExport::onIdle()
 			std::string zip_data = zip_llsd(mFile);
 			file.write(zip_data.data(), zip_data.size());
 			file.close();
-			
 			LL_DEBUGS("export") << "Export finished and written to " << mFileName << LL_ENDL;
+			
+			updateProgress(LLTrans::getString("export_finished"));
+			LLSD args;
+			args["FILENAME"] = mFileName;
+			LLNotificationsUtil::add("ExportFinished", args);
 		}
 		else if (mLastRequest != mRequestedTexture.size())
 		{
@@ -172,6 +184,10 @@ void FSExport::onIdle()
 				image->setBoostLevel(LLViewerTexture::BOOST_MAX_LEVEL);
 				image->forceToSaveRawImage(0);
 				image->setLoadedCallback(FSExport::onImageLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
+				
+				LLStringUtil::format_map_t args;
+				args["ITEM"] = texture_id.asString();
+				updateProgress(formatString(LLTrans::getString("export_rerequesting_texture"), args));
 				LL_DEBUGS("export") << "re-requested texture " << texture_id.asString() << LL_ENDL;
 			}
 		}
@@ -190,6 +206,7 @@ void FSExport::exportSelection()
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(node->mName + ".oxp")))
 	{
+		llinfos << "User closed the filepicker, aborting export!" << llendl;
 		return;
 	}
 	mFileName = file_picker.getFirstFile();
@@ -208,6 +225,8 @@ void FSExport::exportSelection()
 	mFile["client"] = LLAppViewer::instance()->getSecondLifeTitle() + LLVersionInfo::getChannel();
 	mFile["client_version"] = LLVersionInfo::getVersion();
 	mFile["grid"] = LLGridManager::getInstance()->getGridLabel();
+	LLFloaterReg::showInstance("fs_export");
+	updateProgress("Beginning export...");
 
 	for ( ; iter != selection->valid_root_end(); ++iter)
 	{
@@ -223,6 +242,7 @@ void FSExport::exportSelection()
 	}
 	else
 	{
+		updateProgress(LLTrans::getString("export_nothing_exported"));
 		LL_WARNS("export") << "Nothing was exported. File not created." << LL_ENDL;
 	}
 }
@@ -288,6 +308,9 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 	else
 	{
 		LL_WARNS("export") << "LLSelect node for " << object_id.asString() << " not found. Using default prim instead." << LL_ENDL;
+		LLStringUtil::format_map_t args;
+		args["OBJECT"] = object_id.asString();
+		updateProgress(formatString(LLTrans::getString("export_node_not_found"), args));
 		default_prim = true;
 	}
 
@@ -309,6 +332,10 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 
 	if (default_prim)
 	{
+		LLStringUtil::format_map_t args;
+		args["OBJECT"] = object_id.asString();
+		updateProgress(formatString(LLTrans::getString("export_failed_export_check"), args));
+		
 		LL_DEBUGS("export") << object_id.asString() << " failed export check. Using default prim" << LL_ENDL;
 		prim["flags"] = ll_sd_from_U32((U32)0);
 		prim["volume"]["path"] = LLPathParams().asLLSD();
@@ -343,7 +370,7 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 					{
 						if (!mAborted)
 						{
-							reportToNearbyChat(LLTrans::getString("export_fail_no_mesh"));
+							updateProgress(LLTrans::getString("export_fail_no_mesh"));
 							mAborted = true;
 						}
 						return;
@@ -489,6 +516,7 @@ bool FSExport::exportTexture(const LLUUID& texture_id)
 {
 	if(texture_id.isNull())
 	{
+		updateProgress(LLTrans::getString("export_failed_null_texture"));
 		LL_WARNS("export") << "Attempted to export NULL texture." << LL_ENDL;
 		return false;
 	}
@@ -536,13 +564,19 @@ bool FSExport::exportTexture(const LLUUID& texture_id)
 
 	mTextureChecked[texture_id] = texture_export;
 	
+	LLStringUtil::format_map_t args;
+	args["ITEM"] = name;
+	
 	if (!texture_export)
 	{
+		updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
+		
 		LL_DEBUGS("export") << "Texture " << texture_id << " failed export check." << LL_ENDL;
 		return false;
 	}
 
 	LL_DEBUGS("export") << "Loading image texture " << texture_id << LL_ENDL;
+	updateProgress(formatString(LLTrans::getString("export_loading_texture"), args));
 	mRequestedTexture[texture_id].name = name;
 	mRequestedTexture[texture_id].description = description;
 	LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture(texture_id, FTT_DEFAULT, MIPMAP_TRUE);
@@ -596,6 +630,8 @@ void FSExportCacheReadResponder::setData(U8* data, S32 datasize, S32 imagesize, 
 
 void FSExportCacheReadResponder::completed(bool success)
 {
+	LLStringUtil::format_map_t args;
+	args["TEXTURE"] = mID.asString();
 	if (success && mFormattedImage.notNull() && mImageSize > 0)
 	{
 		LL_DEBUGS("export") << "SUCCESS getting texture " << mID << LL_ENDL;
@@ -636,6 +672,10 @@ void FSExport::saveFormattedImage(LLPointer<LLImageFormatted> mFormattedImage, L
 	mFile["asset"][id.asString()]["type"] = LLAssetType::lookup(LLAssetType::AT_TEXTURE);
 	mFile["asset"][id.asString()]["data"] = LLSD::Binary(str.begin(),str.end());
 
+	LLStringUtil::format_map_t args;
+	args["TEXTURE"] = mRequestedTexture[id].name;
+	updateProgress(formatString(LLTrans::getString("export_saving_texture"), args));
+	
 	removeRequestedTexture(id);
 }
 
@@ -729,6 +769,9 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 
 		if (!exportable)
 		{
+			LLStringUtil::format_map_t args;
+			args["ITEM"] = item->getName();
+			updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
 			LL_DEBUGS("export") << "Item " << item->getName() << " failed export check." << LL_ENDL;
 			continue;
 		}
@@ -736,6 +779,9 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 		if (item->getType() == LLAssetType::AT_NONE || item->getType() == LLAssetType::AT_OBJECT)
 		{
 			// currentelly not exportable
+			LLStringUtil::format_map_t args;
+			args["ITEM"] = item->getName();
+			updateProgress(formatString(LLTrans::getString("export_item_not_exportable"), args));
 			LL_DEBUGS("export") << "Skipping " << LLAssetType::lookup(item->getType()) << " item " << item->getName() << LL_ENDL;
 			continue;
 		}
@@ -764,6 +810,9 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 		}
 		else
 		{
+			LLStringUtil::format_map_t args;
+			args["ITEM"] = item->getName();
+			updateProgress(formatString(LLTrans::getString("export_requesting_asset"), args));
 			LL_DEBUGS("export") << "Requesting asset " << item->getAssetUUID() << " for item " << item->getUUID() << LL_ENDL;
 			mAssetRequests.push_back(item->getUUID());
 			FSAssetResourceData* data = new FSAssetResourceData;
@@ -810,11 +859,19 @@ void FSExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid, LLAssetType:
 	
 	if (status != 0)
 	{
+		LLStringUtil::format_map_t args;
+		args["ITEM"] = asset_uuid.asString();
+		args["STATUS"] = llformat("%d",status);
+		args["EXT_STATUS"] = llformat("%d",ext_status);
+		updateProgress(formatString(LLTrans::getString("export_failed_fetch"), args));
 		LL_WARNS("export") << "Problem fetching asset: " << asset_uuid << " " << status << " " << ext_status << LL_ENDL;
 		delete data;
 		return;
 	}
 
+	LLStringUtil::format_map_t args;
+	args["ITEM"] = data->name;
+	updateProgress(formatString(LLTrans::getString("export_saving_asset"), args));
 	LL_DEBUGS("export") << "Saving asset " << asset_uuid.asString() << " of item " << item_uuid.asString() << LL_ENDL;
 	LLVFile file(vfs, asset_uuid, type);
 	S32 file_length = file.getSize();
@@ -852,7 +909,7 @@ void FSExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid, LLAssetType:
 			}
 			else
 			{
-				LL_DEBUGS("export") << "Invalied uuid: " << m1->str() << LL_ENDL;
+				LL_DEBUGS("export") << "Invalid uuid: " << m1->str() << LL_ENDL;
 			}
 		}
 	}
@@ -864,6 +921,9 @@ void FSExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid, LLAssetType:
 		LLDataPackerAsciiBuffer dp((char*)&buffer[0], file_length+1);
 		if (!gesture->deserialize(dp))
 		{
+			LLStringUtil::format_map_t args;
+			args["ITEM"] = asset_uuid.asString();
+			updateProgress(formatString(LLTrans::getString("export_failed_to_load"), args));
 			LL_WARNS("export") << "Unable to load gesture " << asset_uuid << LL_ENDL;
 			break;
 		}
@@ -882,6 +942,9 @@ void FSExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid, LLAssetType:
 				LLGestureStepAnimation* anim_step = (LLGestureStepAnimation*)step;
 				if (!self->assetCheck(anim_step->mAnimAssetID, name, description))
 				{
+					LLStringUtil::format_map_t args;
+					args["ITEM"] = data->name;
+					updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
 					LL_DEBUGS("export") << "Asset in gesture " << data->name << " failed export check." << LL_ENDL;
 					break;
 				}
@@ -890,6 +953,10 @@ void FSExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid, LLAssetType:
 				anim_data->name = anim_step->mAnimName;
 				anim_data->user_data = self;
 				anim_data->uuid = anim_step->mAnimAssetID;
+				
+				LLStringUtil::format_map_t args;
+				args["ITEM"] = anim_step->mAnimAssetID.asString();
+				updateProgress(formatString(LLTrans::getString("export_requesting_asset"), args));
 				LL_DEBUGS("export") << "Requesting animation asset " << anim_step->mAnimAssetID.asString() << LL_ENDL;
 				self->mAssetRequests.push_back(anim_step->mAnimAssetID);
 				gAssetStorage->getAssetData(anim_step->mAnimAssetID,
@@ -904,6 +971,9 @@ void FSExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid, LLAssetType:
 				LLGestureStepSound* sound_step = (LLGestureStepSound*)step;
 				if (!self->assetCheck(sound_step->mSoundAssetID, name, description))
 				{
+					LLStringUtil::format_map_t args;
+					args["ITEM"] = data->name;
+					updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
 					LL_DEBUGS("export") << "Asset in gesture " << data->name << " failed export check." << LL_ENDL;
 					break;
 				}
@@ -912,6 +982,10 @@ void FSExport::onLoadComplete(LLVFS* vfs, const LLUUID& asset_uuid, LLAssetType:
 				sound_data->name = sound_step->mSoundName;
 				sound_data->user_data = self;
 				sound_data->uuid = sound_step->mSoundAssetID;
+				
+				LLStringUtil::format_map_t args;
+				args["ITEM"] = sound_step->mSoundAssetID.asString();
+				updateProgress(formatString(LLTrans::getString("export_requesting_asset"), args));
 				LL_DEBUGS("export") << "Requesting sound asset " << sound_step->mSoundAssetID.asString() << LL_ENDL;
 				self->mAssetRequests.push_back(sound_step->mSoundAssetID);
 				gAssetStorage->getAssetData(sound_step->mSoundAssetID,
@@ -942,5 +1016,55 @@ void FSExport::removeRequestedAsset(LLUUID asset_uuid)
 	{
 		LL_DEBUGS("export") << "Erasing asset request " << asset_uuid.asString() << LL_ENDL;
 		mAssetRequests.erase(iter);
+	}
+}
+
+// static
+void updateProgress(const std::string message)
+{
+	FSFloaterObjectExport* export_floater = LLFloaterReg::findTypedInstance<FSFloaterObjectExport>("fs_export");
+	if (export_floater)
+		export_floater->updateProgress(message);
+}
+
+//-----------------------------------------------------
+// FSFloaterObjectExport
+//-----------------------------------------------------
+
+FSFloaterObjectExport::FSFloaterObjectExport(const LLSD& key)
+:	LLFloater(key),
+	mOutputList(NULL)
+{
+}
+
+// virtual
+FSFloaterObjectExport::~FSFloaterObjectExport()
+{
+}
+
+// virtual
+BOOL FSFloaterObjectExport::postBuild()
+{
+	mOutputList = getChild<LLScrollListCtrl>("export_output");
+	if (mOutputList)
+		mOutputList->deleteAllItems();
+	childSetAction("close_btn", boost::bind(&FSFloaterObjectExport::onCloseBtn, this));
+	return TRUE;
+}
+
+void FSFloaterObjectExport::onCloseBtn()
+{
+	closeFloater();
+}
+
+void FSFloaterObjectExport::updateProgress(const std::string message)
+{
+	if (mOutputList)
+	{
+		LLSD row;
+		row["columns"][0]["value"] = message;
+		mOutputList->addElement(row);
+		mOutputList->selectItemByLabel(message);
+		mOutputList->scrollToShowSelected();
 	}
 }
