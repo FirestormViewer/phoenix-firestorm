@@ -685,13 +685,6 @@ BOOL FSFloaterIM::postBuild()
 	// support sysinfo button -Zi
 	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
 	onSysinfoButtonVisibilityChanged(FALSE);
-
-	// extra icon controls -AO
-	LLButton* transl = getChild<LLButton>("translate_btn");
-//TT
-		llinfos << "transl" << (transl == NULL) << llendl;
-	if (transl != NULL)
-	transl->setVisible(true);
 	
 	// type-specfic controls
 	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
@@ -708,7 +701,7 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
 				getChild<LLLayoutStack>("ls_control_panel")->reshape(200,20,true);
 				
-				llinfos << "AO: adding FSFloaterIM removing/adding particularfriendobserver" << llendl;
+				llinfos << "adding FSFloaterIM removing/adding particularfriendobserver" << llendl;
 				LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
 				LLAvatarTracker::instance().addParticularFriendObserver(mOtherParticipantUUID, this);
 				
@@ -728,7 +721,7 @@ BOOL FSFloaterIM::postBuild()
 				// this needs to be extended to fsdata awareness, once we have it. -Zi
 				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
 				onSysinfoButtonVisibilityChanged(gSavedSettings.getBOOL("SysinfoButtonInIM"));
-				gSavedSettings.getControl("SysinfoButtonInIM")->getCommitSignal()->connect(boost::bind(&FSFloaterIM::onSysinfoButtonVisibilityChanged,this,_2));
+				gSavedSettings.getControl("SysinfoButtonInIM")->getCommitSignal()->connect(boost::bind(&FSFloaterIM::onSysinfoButtonVisibilityChanged, this, _2));
 				// support sysinfo button -Zi
 
 				break;
@@ -750,7 +743,7 @@ BOOL FSFloaterIM::postBuild()
 			}
 			case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
 			{
-	llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION  start" << llendl;
+				llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION  start" << llendl;
 				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
@@ -760,14 +753,14 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
 				getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
-	llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION end" << llendl;
+				llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION end" << llendl;
 				break;
 			}
 			default:
-	llinfos << "default buttons start" << llendl;
+				llinfos << "default buttons start" << llendl;
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);		
-	llinfos << "default buttons end" << llendl;
+				llinfos << "default buttons end" << llendl;
 				break;
 		}
 	}
