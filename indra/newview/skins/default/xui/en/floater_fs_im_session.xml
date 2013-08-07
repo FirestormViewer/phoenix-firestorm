@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+  positioning="centered"
   legacy_header_height="18"
   background_visible="true"
   show_title="true"
@@ -16,6 +17,7 @@
   width="394"
   can_resize="true"
   min_width="250"
+  save_rect="true"
   min_height="150">
   
   <layout_stack

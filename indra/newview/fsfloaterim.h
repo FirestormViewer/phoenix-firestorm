@@ -107,7 +107,7 @@ public:
 	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 
 	// called when docked floater's position has been set by chiclet
-	void setPositioned(bool b) { mPositioned = b; };
+	// void setPositioned(bool b) { mPositioned = b; };		// dead code -Zi
 
 	void onVisibilityChange(const LLSD& new_visibility);
 	void processIMTyping(const LLIMInfo* im_info, BOOL typing);
@@ -225,7 +225,7 @@ private:
 	LLChatEntry* mInputEditor;
 	LLLayoutPanel* mChatLayoutPanel;
 	LLLayoutStack* mInputPanels;
-	bool mPositioned;
+	// bool mPositioned;		// dead code -Zi
 
 	std::string mSavedTitle;
 	LLUIString mTypingStart;

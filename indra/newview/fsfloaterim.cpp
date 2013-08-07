@@ -94,7 +94,7 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mOtherTyping(false),
 	mTypingTimer(),
 	mTypingTimeoutTimer(),
-	mPositioned(false),
+//	mPositioned(false),			// dead code -Zi
 	mSessionInitialized(false),
 	mChatLayoutPanel(NULL),
 	mInputPanels(NULL),
@@ -135,7 +135,11 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
 
-	setDocked(true);
+	// only dock when chiclets are visible, or the floater will get stuck in the top left
+	// FIRE-9984 -Zi
+	setDocked(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
+	// make sure to save position and size with chiclets disabled (torn off floater does that)
+	setTornOff(gSavedSettings.getBOOL("FSDisableIMChiclets"));
 }
 
 // virtual
@@ -815,7 +819,9 @@ BOOL FSFloaterIM::postBuild()
 	}
 	// </FS:Zi> Viewer version popup
 
-	setDocked(true);
+	// only dock when chiclets are visible, or the floater will get stuck in the top left
+	// FIRE-9984 -Zi
+	setDocked(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
 
 	mTypingStart = LLTrans::getString("IM_typing_start_string");
 
@@ -841,7 +847,9 @@ BOOL FSFloaterIM::postBuild()
 	//*TODO if session is not initialized yet, add some sort of a warning message like "starting session...blablabla"
 	//see LLFloaterIMPanel for how it is done (IB)
 
-	if(isChatMultiTab())
+	// don't call dockable floater functions when chiclets are disabled, it will dock the floater
+	// FIRE-9984 -Zi
+	if(isChatMultiTab() || gSavedSettings.getBOOL("FSDisableIMChiclets"))
 	{
 		return LLFloater::postBuild();
 	}
@@ -1030,7 +1038,9 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 		// Docking may move chat window, hide it before moving, or user will see how window "jumps"
 		floater->setVisible(false);
 
-		if (floater->getDockControl() == NULL)
+		// only dock when chiclets are visible, or the floater will get stuck in the top left
+		// FIRE-9984 -Zi
+		if (floater->getDockControl() == NULL && !gSavedSettings.getBOOL("FSDisableIMChiclets"))
 		{
 			LLChiclet* chiclet =
 					LLChicletBar::getInstance()->getChicletPanel()->findChiclet<LLChiclet>(
