@@ -7075,34 +7075,31 @@ class LLShowHelp : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string help_topic = userdata.asString();
-#ifndef OPENSIM // <FS:CR> FIRE-10641
-		LLViewerHelp* vhelp = LLViewerHelp::getInstance();
-		vhelp->showTopic(help_topic);
-		// <FS:CR> FIRE-10641
-#else // OPENSIM
-		std::string grid_help = help_topic;
-		
-		if (grid_help.find("grid_") !=  0)
+#ifdef OPENSIM
+		if (help_topic.find("grid_") != std::string::npos)
 		{
+			help_topic.erase(0,5);
+			
+			std::string url;
+			LLSD grid_info;
+			LLGridManager::getInstance()->getGridData(grid_info);
+			if (grid_info.has(help_topic))
+			{
+				url = grid_info[help_topic].asString();
+			}
+			
+			if(!url.empty())
+			{
+				LLWeb::loadURLInternal(url);
+			}
+			lldebugs << "grid_help " <<  help_topic << " url " << url << llendl;
+
 			return true;
 		}
-		grid_help.erase(0,5);
-		
-		std::string url;
-		LLSD grid_info;
-		LLGridManager::getInstance()->getGridData(grid_info);
-		if (grid_info.has(grid_help))
-		{
-			url = grid_info[grid_help].asString();
-		}
-		
-		if(!url.empty())
-		{
-			LLWeb::loadURLInternal(url);
-		}
-		lldebugs << "grid_help " <<  grid_help << " url " << url << llendl;
 #endif // OPENSIM
-		// </FS:CR>
+		LLViewerHelp* vhelp = LLViewerHelp::getInstance();
+		vhelp->showTopic(help_topic);
+		
 		return true;
 	}
 };
