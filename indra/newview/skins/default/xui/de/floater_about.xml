@@ -79,25 +79,28 @@ Second Life wird präsentiert von den Lindens:
 			</text_editor>
 		</panel>
 <!-- Firestorm Credits -->
-      <panel label="Firestorm" name="fs_credits_panel">      
-<text name="firestorm_intro" height="100">
+		<panel label="Firestorm" name="fs_credits_panel" height="860">
+			<scroll_container name="fs_credits_scroll_container">
+				<panel name="fs_credits_scroll_container_content_panel">
+					<text name="firestorm_intro" height="120">
 Firestorm ist ein Community-Projekt, um das SecondLife(tm)-Viewer-Erlebnis zu verbessern. Wir verbinden Beiträge von Community-Entwicklern mit Code von Linden Lab sowie eigenen Erweiterungen, um ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Firestorm Project, Inc., einer gemeinnützigen Organisation.
 
 Das Firestorm Entwickler-Team:
-      </text>
-      <text name="fs_contrib_intro" >
+					</text>
+					<text name="fs_contrib_intro" >
 Zusätzlicher Programmcode von:
-      </text>
-      <text name="fs_support_intro" >
+					</text>
+					<text name="fs_support_intro" >
 Besonderer Dank gilt unserem Firestorm-Support-Team sowie den Wiki-Autoren, Schulungsleitern und Übersetzern:
-      </text>
-      <text name="fs_art_intro" >
+					</text>
+					<text name="fs_art_intro" >
 Firestorm enthält Starlight, modifiziert für Firestorm. Es ist von Einwohnern für Einwohner und hat das Ziel, eine alternative, freundlichere und hoffentlich einfacher zu bedienende Oberfläche bereitzustellen. Für weitere Details, siehe &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
 
 UI-Künstler und Designer:
-      </text>
-
-        </panel>
+					</text>
+				</panel>
+			</scroll_container>
+		</panel>
 		<panel label="Lizenzen" name="licenses_panel">
 			<text_editor name="credits_editor">
 				3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion.
