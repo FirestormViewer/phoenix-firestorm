@@ -4462,4 +4462,7 @@ Nie można tego cofnąć.
 		Zamierzasz wyrzucić [COUNT] członków z grupy.
 		<usetemplate ignoretext="Potwierdź wyrzucenie kilku członków z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
+	<notification name="ExportFinished">
+		Wyeksportowano i zapisano do [FILENAME].
+	</notification>
 </notifications>
