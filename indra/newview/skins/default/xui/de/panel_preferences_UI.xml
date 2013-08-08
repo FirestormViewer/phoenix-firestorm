@@ -54,6 +54,7 @@
 			<combo_box.item label="Unbeschränkt" name="ScriptDialogOption_2"/>
         </combo_box>
 		<check_box label="Skript-Dialoge oben rechts" name="ShowScriptDialogsTopRight" tool_tip="Aktivieren, um Skript-Dialoge in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<check_box label="Animierte Skript-Dialoge" name="FSAnimatedScriptDialogs" tool_tip="Aktivieren, um Skript-Dialoge animiert einzublenden (Klassisches V1.x-Verhalten)."/>
 		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
 			(Erfordert Neustart)

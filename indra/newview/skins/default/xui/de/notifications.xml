@@ -4594,6 +4594,9 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 	<notification name="EjectGroupMembersWarning">
 		[COUNT] Mitglieder aus Gruppe entfernen?
 		<usetemplate ignoretext="Bestätigen, wenn mehrere Mitglieder aus Gruppen entfernt werden" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
+	</notification>
 
+	<notification name="ExportFinished">
+Export nach [FILENAME] beendet.
 	</notification>
 </notifications>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="export_log" title="Objekt-Export">
+	<button label="OK" name="close_btn"/>
+</floater>

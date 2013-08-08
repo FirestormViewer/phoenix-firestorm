@@ -5734,9 +5734,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		hat die Region verlassen.
 	</string>
 
-	<string name="export_fail_no_mesh">
-		Der Export von Mesh wird derzeit nicht unterstützt. Export abgebrochen.
-	</string>
 	<string name="TotalScriptCountChangeIncrease">
 		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] erhöht ([DIFFERENCE]).
 	</string>
@@ -5745,5 +5742,60 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="preproc_toggle_warning">
 		Umschalten des Präprozessors wird erst vollständig wirksam, nachdem der Editor geschlossen und neu geöffnet wurde.
+	</string>
+
+	<string name="export_started">
+		Beginne Export...
+	</string>
+	<string name="export_finished">
+		Export beendet.
+	</string>
+	<string name="export_fail_no_mesh">
+		Der Export von Mesh wird derzeit nicht unterstützt. Export abgebrochen.
+	</string>
+	<string name="export_nothing_exported">
+		Kein Export durchgeführt. Backup wurde nicht erstellt.
+	</string>
+	<string name="export_node_not_found">
+		LLSelect-Knoten für [OBJECT] gefunden. Verwende Standard-Prim.
+	</string>
+	<string name="export_failed_export_check">
+		Berechtigungen für [OBJECT] unzureichend. Verwende Standard-Prim.
+	</string>
+	<string name="export_asset_failed_export_check">
+		Berechtigungen für [ITEM] unzureichend - übersprungen...
+	</string>
+	<string name="export_failed_export_null_texture">
+		Versuchter Export einer leeren Textur.
+	</string>
+	<string name="export_loading_texture">
+		Lade Textur [ITEM]...
+	</string>
+	<string name="export_saving_texture">
+		Textur [TEXTURE] erfolgreich gespeichert.
+	</string>
+	<string name="export_failed_to_receive_texture">
+		Fehler beim Laden von Textur [TEXTURE].
+	</string>
+	<string name="export_received_null_texture">
+		Leere Textur [TEXTURE] empfangen.
+	</string>
+	<string name="export_item_not_exportable">
+		[ITEM] wird aktuell nicht vom Exporter unterstützt - übersprungen...
+	</string>
+	<string name="export_failed_fetch">
+		[ITEM] konnte nicht geladen werden. (Status [STATUS] [EXT_STATUS])
+	</string>
+	<string name="export_requesting_asset">
+		Fordere Asset [ITEM] an...
+	</string>
+	<string name="export_rerequesting_inventory">
+		Fordere Inventar von [ITEM] erneut an.
+	</string>
+	<string name="export_rerequesting_texture">
+		Fordere Textur [ITEM] erneut an.
+	</string>
+	<string name="export_failed_to_load">
+		Asset [ITEM] konnte nicht geladen werden.
 	</string>
 </strings>
