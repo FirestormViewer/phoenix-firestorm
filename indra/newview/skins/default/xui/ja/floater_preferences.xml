@@ -14,13 +14,14 @@
 		<panel label="サウンドとメディア" name="audio"/>
 		<panel label="セットアップ" name="input"/>
 		<panel label="移動と表示" name="move"/>
-		<panel label="メッセージ" name="msgs"/>
+		<panel label="通知" name="msgs"/>
 		<panel label="プライバシー" name="im"/>
-		<panel label="詳細" name="advanced1"/>
+		<panel label="アドバンス" name="advanced1"/>
 		<panel label="UI" name="starlightUI1"/>
 		<panel label="スキン" name="skins"/>
 		<panel label="レポート" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
 		<panel label="Opensim" name="opensim" />
+		<panel label="バックアップ" name="backup" />
 	</tab_container>
 </floater>

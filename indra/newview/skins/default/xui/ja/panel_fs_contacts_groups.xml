@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- created Jun.30, 2013 based on English 4.4.2 version -->
+<panel name="groups">
+	<view_border name="info_border" />
+	<group_list name="group_list" />
+    <text name="groupcount">
+		あなたは[COUNT]グループに所属しています (最大[MAX])
+    </text>
+	<button label="IM/コール" name="chat_btn" tool_tip="インスタントメッセージ・セッションを開く" />
+	<button label="情報" name="info_btn" />
+	<button label="グループ肩書き" name="titles_btn" />
+	<button label="アクティブ" name="activate_btn" />
+	<button label="抜ける" name="leave_btn" />
+	<button label="作成..." name="create_btn" />
+	<button label="検索..." name="search_btn"  />
+	<button label="招待..." name="invite_btn" />
+</panel>

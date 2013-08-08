@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater" title="連絡先セット">
+	<floater.string name="AddToGroup" value="[GROUPNAME]に追加"/>
+	<floater.string name="RemoveFromGroup" value="[GROUPNAME]から削除"/>
+	<floater.string name="RemoveDisplayName" value="表示名を削除"/>
+	<floater.string name="ResetNameModification" value="名前の修正をリセット"/>
+	<floater.string name="RemoveFromList" value="リストから削除"/>
+	<floater.string name="ShowProfile" value="プロフィールを表示"/>
+	<floater.string name="ShowOnMap" value="地図上に表示"/>
+	<floater.string name="SendIM" value="IMを送る"/>
+	<floater.string name="OfferTP" value="テレポートを送る"/>
+	<floater.string name="AllSelected" value="[COUNT]人すべて選択"/>
+	<floater.string name="StartConferenceCall" value="カンファレンスを開始 ([COUNT]人)"/>
+	<floater.string name="SendMassTP" value="集団テレポートを送信 ([COUNT]人)"/>
+	<floater.string name="DeselectAll" value="すべて選択解除 ([COUNT]人)"/>
+	<floater.string name="SelectAll" value="すべて選択 ([COUNT]人)"/>
+	<floater.string name="AddNewAvatar" value="新しいアバターを追加"/>
+	<floater.string name="FilterLabel" value="現在使用中のフィルター:"/>
+	<floater.string name="TooltipFriendUnselected" value="このフレンドは選択されていません"/>
+	<floater.string name="TooltipFriendSelected" value="このフレンドは選択されています"/>
+	<floater.string name="TooltipFriendOnline" value="このフレンドはオンラインです"/>
+	<floater.string name="TooltipFriendOffline" value="このフレンドはオフラインです"/>
+	<floater.string name="TooltipNotOnFriendlist" value="フレンドリストにありません"/>
+	<floater.string name="TooltipIM" value="IM"/>
+	<floater.string name="TooltipProfile" value="プロフィールを表示します"/>
+	<floater.string name="TooltipNameChanged" value="名前が変更されました"/>
+	<floater.string name="AllSets" value="「すべてのセット」"/>
+	<floater.string name="NoSets" value="「セットなし」"/>
+	<floater.string name="Renamed" value="「名前変更済」"/>
+	<floater.string name="NoFriend" value="「フレンドではありません」"/>
+
+	<check_box label="0.0" name="haxCheckbox" />
+	<text name="lgg_fg_text1">
+		セット:
+	</text>
+	<combo_box name="lgg_fg_groupCombo" />
+	<check_box label="" name="lgg_fg_showNotices" />
+	<text name="lgg_fg_text2a">
+		このセットの
+	</text>
+	<text name="lgg_fg_text2b">
+		通知を表示
+	</text>
+	<button label="設定" name="lgg_fg_openSettings" />
+	<button label="セットを削除" name="lgg_fg_groupDelete" />
+	<color_swatch label="セットの色" name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。" />
+	<view_border name="lgg_fg_border1" />
+	<text name="lgg_fg_text3">
+		表示:
+	</text>
+	<check_box label="ｵﾝﾗｲﾝ" name="lgg_fg_showOnline" />
+	<check_box label="" name="lgg_fg_showOtherGroups" />
+	<text name="lgg_fg_text4a">
+		その他
+	</text>
+	<text name="lgg_fg_text4b">
+		セット
+	</text>
+	<check_box label="ｵﾌﾗｲﾝ" name="lgg_fg_showOffline" />
+	<check_box label="全選択" name="lgg_fg_showAllFriends"/>
+	<line_editor name="lgg_fg_groupNewName" label="新しいセットの名前"/>
+	<button label="セットを作成" name="lgg_fg_groupCreate" />
+	<panel name="draw_region">
+	</panel>
+	<panel name="bottom_region">
+	</panel>
+	<panel name="top_region">
+	</panel>
+</floater>

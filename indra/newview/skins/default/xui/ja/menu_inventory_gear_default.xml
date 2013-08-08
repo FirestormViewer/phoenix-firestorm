@@ -5,6 +5,23 @@
 	<menu_item_check label="新しい順に並べ替え" name="sort_by_recent"/>
 	<menu_item_check label="フォルダを常に名前順に並べる" name="sort_folders_by_name"/>
 	<menu_item_check label="システムフォルダを上にソートする" name="sort_system_folders_to_top"/>
+	
+	<menu_item_separator layout="topleft" />
+
+    <!-- ## Zi: Extended Inventory Search -->
+	<context_menu label="検索..." name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="名前" />
+		<menu_item_check name="inventory_search_by_creator" label="クリエイター" />
+		<menu_item_check name="inventory_search_by_description" label="説明" />
+		<menu_item_check name="inventory_search_by_uuid" label="UUID" />
+		<menu_item_separator />
+		<menu_item_check name="inventory_search_by_all" label="すべて含める" />
+	</context_menu>
+	<!-- ## Zi: Extended Inventory Search -->
+
+    <menu_item_separator />
+	
+	<menu_item_check label="ダブルクリックしてオブジェクトを追加装着" name="add_inv_toggle" />
 	<menu_item_call label="フィルターを表示" name="show_filters"/>
 	<menu_item_call label="フィルターをリセット" name="reset_filters"/>
 	<menu_item_call label="すべてのフォルダを閉じる" name="close_folders"/>
@@ -13,5 +30,13 @@
 	<menu_item_call label="共有" name="Share"/>
 	<menu_item_call label="オリジナルを表示" name="Find Original"/>
 	<menu_item_call label="すべてのリンクを表示" name="Find All Links"/>
+	
+	<!-- ## Zi: Filter Links Menu -->
+	<menu_item_check name="inventory_filter_show_links" label="リンクを表示" />
+	<menu_item_check name="inventory_filter_only_links" label="リンクのみ表示" />
+	<menu_item_check name="inventory_filter_hide_links" label="リンクを表示しない" />
+	<menu_item_separator />
+	<!-- ## Zi: Filter Links Menu -->
+	
 	<menu_item_call label="ごみ箱を空にする" name="empty_trash"/>
 </toggleable_menu>

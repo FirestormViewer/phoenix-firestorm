@@ -18,6 +18,7 @@
         <check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
         <check_box label="ログイン画面オフ" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
         <check_box label="ログアウト画面オフ" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
+		<check_box label="無視リストが自動的に開かないようにする" name="FSDisableBlockListAutoOpen" tool_tip="アバターやオブジェクトをブロックする時に、無視リストが自動的に開かないようにします。"/>
         <check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>
 
         <check_box label="表示名が表示されている場合でも、ユーザー名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザー名で並べ替わるようになります。" />
@@ -31,6 +32,9 @@
         <check_box label="持ち物のそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="ここにチェックを入れると、持ち物のそれぞれのタブに異なる検索キーワードを入力することが可能になります。" />
 
         <check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。"/>
+		<check_box label="スクリプトが通信を行う時パーティクルを発生" name="EffectScriptChatParticles" tool_tip="チェックを入れると、スクリプトの入ったオブジェクトに入っているスクリプトが通信を行う時に渦巻き状のパーティクルを発生するようにします。" />
+		<check_box label="プログレッシブ距離別段階描画を有効にする" name="FSRenderFarClipStepping" tool_tip="チェックを入れると、テレポートしたあとに描画距離に応じて段階的にレンダリングすることができます。" />
+		<slider name="progressive_draw_distance_interval" tool_tip="次の描画距離のものをレンダリングするまでの秒数です。"/>
 
         <check_box name="UseLSLBridge" label="LSLクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューワの機能を拡張できるようにします。"/>
         <check_box name="UseLSLFlightAssist" label="ブリッジ飛行支援機能を使用" tool_tip="飛行やホバリングが、標準で定められているよりも高い場所でできるようにするスクリプトを有効にします。"/>
@@ -75,10 +79,11 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Event multiplier for sound play requests [Default: 10]"/>
         <text name="AntiSpamText4" >
-           サウンド・プリロード・リクエストの許容回数：
+           サウンド・プリロード・リクエスト許容回数：
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
         <button name="AntiSpamUnblock" label="スパム・ソースは全て無視する" />
+		<check_box label="スクリプトダイアログから「無視」ボタンを外す" name="FSRemoveScriptBlockButton" />
 		 
         <check_box label="オブジェクトからアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpam" />
         <check_box label="他の住人からアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpamFrom" />
@@ -296,6 +301,14 @@
         <check_box label="グループの土地のWindlight設定を自動的に適用する" name="FSWLWhitelistGroups" />
         <check_box label="どんな土地区画のWindlight設定も自動的に適用する" name="FSWLWhitelistAll" />
         <check_box label="土地区画に設定された環境設定に現在の設定から徐々に変化させる" name="FSInterpolateParcelWL" tool_tip="上にある地域／不動産の場合と同じ効果ですが、こちらは土地区画に設定されたWindlightに対する効果となります。" />
+		<text name="wl_crossfade_label">
+           クロスフェードする時間 (秒):
+        </text>
+        <spinner name="FSWindlightInterpolateTime" tool_tip="別の事前設定へとクロスフェードしていく時間を設定します。（デフォルトでは3秒）"/>
+        <text name="could_texture_text">
+           雲のテクスチャ（再起動を推奨）:
+        </text>
+        <combo_box name="cloud_combo" tool_tip="使用したい雲のテクスチャを選択して下さい。"/>
 
     </panel>
 	
@@ -305,15 +318,23 @@
     <panel label="制作" name="BuildTab">
 
 		<text name="text_box_objprams">
-			デフォルトのオブジェクトパラメータ
+			デフォルトのサイズ
+        </text>
+		<text name="text_box_objprams2">
+			設定
+        </text>
+		<text name="text_box_objprams3">
+			テクスチャ
         </text>
         <view_border name="SizeBorder"/>
-        <spinner label="X方向の大きさ" name="X size" label_width="80" width="160"/>
-        <spinner label="Y方向の大きさ" name="Y size" label_width="80" width="160"/>
-        <spinner label="Z方向の大きさ" name="Z size" label_width="80" width="160"/>
-        <text name="text_box_objmaterial">
-			材質：
-        </text>
+		<view_border name="SettingBorder"/>
+        <view_border name="TextureBorder"/>
+        <spinner label="X方向" name="X size" label_width="40" width="120"/>
+        <spinner label="Y方向" name="Y size" label_width="40" width="120"/>
+        <spinner label="Z方向" name="Z size" label_width="40" width="120"/>
+		<check_box label="ファントム" name="FSBuildPrefs_PhantomToggle"/>
+        <check_box label="物理" name="FSBuildPrefs_PhysicalToggle"/>
+        <check_box label="臨時" name="FSBuildPrefs_TemporaryToggle"/>
         <combo_box name="material" left="180">
              <combo_item name="Stone" value="Stone" label="石"/>
              <combo_item name="Metal" value="Metal" label="金属"/>
@@ -323,22 +344,54 @@
              <combo_item name="Plastic" value="Plastic" label="プラスチック"/>
              <combo_item name="Rubber" value="Rubber" label="ゴム"/>
         </combo_box>
+		<texture_picker label="テクスチャ" name="texture control" tool_tip="クリックして画像を選択します。" />
+        <color_swatch label="色" name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます。" />
+        <spinner label="透明度" name="alpha" />
+        <spinner label="グロー" name="glow" />
+        <check_box label="明るさ全開" name="EmFBToggle" />
+        <combo_box name="combobox shininess" tool_tip="Set the amount of shine for the object" >
+          <combo_item name="None" value="None" label="なし"/>
+          <combo_item name="Low" value="Low" label="低"/>
+          <combo_item name="Medium" value="Medium" label="中"/>
+          <combo_item name="High" value="High" label="高"/>
+        </combo_box>
+		
+        <text name="text_box_permissions">
+          権限
+        </text>
+        <view_border name="PermissionsBorder"/>
+        <text name="text_box_permnextowner">
+          次のオーナー:
+        </text>
+        <check_box label="修正を許可" name="next_owner_modify" tool_tip="修正権限を付与します。" />
+        <check_box label="コピーを許可" tool_tip="コピー権限を付与します。" name="next_owner_copy" />
+        <check_box label="転送を許可" tool_tip="転送権限を付与します。" name="next_owner_transfer" />
+        <text name="text_box_permnote1">
+          この設定は新規アップ
+        </text>
+        <text name="text_box_permnote2">
+          ロードにも適用される
+		</text>
 
         <text name="text_box_pivotpoint">
 			回転の中心
         </text>
         <view_border name="PivotBorder"/>
+		<check_box label="ルートプリムに軸" tool_tip="デフォルトの設定では、軸はリンクセットの中央の数値が表示されます。ここにチェックを入れると、軸はルートプリムのものが表示されるようになります。" name="FSBuildPrefsActualRoot_toggle" />
         <check_box label="回転軸を表す矢印をルートプリムに表示" tool_tip="デフォルトでは、回転を表す矢印はリンクセットの中心に表示されます。ここにチェックを入れると、そのリンクセットのルートプリムに回転軸が表示されます。" name="EmBuildPrefsActualRoot_toggle"/>
-        <spinner label="X軸の位置" name="X pos" label_width="80" width="160"/>
-        <spinner label="Y軸の位置" name="Y pos" label_width="80" width="160"/>
-        <spinner label="Z軸の位置" name="Z pos" label_width="80" width="160"/>
-        <check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても50%、つまり中央に設定されています。" name="EmPivotPercToggle"/>
+        <spinner label="X軸" name="X pos" label_width="40" width="120"/>
+        <spinner label="Y軸" name="Y pos" label_width="40" width="120"/>
+        <spinner label="Z軸" name="Z pos" label_width="40" width="120"/>
+        <check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても50%、つまり中央に設定されています。" name="FSPivotPercToggle"/>
 
-        <check_box label="選択したプリムを強調表示" tool_tip="このチェックを外した場合、黄色や青のプリムの輪郭が表示されなくなります。これにより、選択しているプリム数が多い場合に処理性能を向上させることができます。" name="EmBuildPrefsRenderHighlight_toggle"/>
+        <check_box label="選択したプリムを強調表示" tool_tip="このチェックを外した場合、黄色や青のプリムの輪郭が表示されなくなります。これにより、選択しているプリム数が多い場合に処理性能を向上させることができます。" name="FSBuildPrefsRenderHighlight_toggle"/>
 
-        <check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
+		 <check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
 
         <check_box label="持ち物内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、持ち物内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
+		<check_box label="インベントリからディスクにテクスチャを保存する時、デフォルトでTGAでなくPNGで保存するようにする" tool_tip="テクスチャのプレビューウィンドウまたはインベントリのコンテキストメニューで使用する設定です。" name="FSTextureDefaultSaveAsFormat"/>
+        <check_box label="オブジェクトを掴んで移動するのにCtrl+マウスを使用" tool_tip="チェックを入れると、オブジェクトを掴んで移動するのに、Ctrlキーを押しながらマウスで操作できるようになります。" name="FSEnableGrab" />
+        <check_box label="制作モードにおいて、CAPSロックの状態でテクスチャの面をクリック-ドラッグまたはクリック-スケールする" tool_tip="チェックを入れると、制作モードでCAPSロックオンの状態で、テクスチャの面をクリック-ドラッグ、クリック-スケールできるようになります。この機能はまだ実験段階ですので、ご利用には十分な注意を払って下さい。" name="FSExperimentalDragTexture" />
 
 		<check_box label="LSLプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox" />
 		<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox" />

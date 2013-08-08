@@ -20,12 +20,17 @@
 			<radio_item label="中" name="consradio2" value="1"/>
 			<radio_item label="大" name="consradio3" value="2"/>
 		</radio_group>
-		
+
+		<check_box label="グループチャット、IM、周辺チャットを常に大文字で表示する" name="chat_always_in_uppercase" />		
 		<check_box initial_value="true" label="チャット中にタイピング動作のアニメーションを再生" name="play_typing_animation"/>
 		<check_box label="アバターのアニメを再生（叫ぶ時など）" name="play_avatar_animations"/>
 		<check_box label="人が会話している時にタイピング音が聞こえるようにする" name="play_typing_sound"/>
 		<check_box label="IM中に入力中であることを相手に通知する" name="FSSendTypingState"/>
 		<check_box name="FSChatbarGestureAutoCompleteEnable" label="チャットバーでジェスチャーのオートコンプリートを使う" />
+		<check_box name="FSChatbarNamePrediction" label="周辺チャットで周りにいる人の名前にオートコンプリートを使う" />
+		<check_box name="FSIMSystemMessageBrackets" label="システムからの通知は角かっこで囲む" />
+        <check_box name="FSChatHistoryShowYou" label="チャット履歴の中では自分の名前の代わりに「You」と表示する。" />
+        <check_box name="IMShowNamesForP2PConv" label="一対一のIMで名前を表示する" />
 		<check_box label="オフライン時に受け取った IM をメールで受信" name="send_im_to_email"/>
 		<check_box label="IM とチャット履歴に文字だけ表示する（V1形式）" name="plain_text_chat_history"/>
 		<check_box label="発言者のミニアイコンを表示" name="ShowChatMiniIcons"/>
@@ -60,8 +65,17 @@
 		<text name="req_restart_chattabs">
 			（再起動後に反映）
 		</text>
-	
-		<button label="チャット翻訳設定" name="translation_settings_btn"/>
+		
+		<text name="FSIMTabNameFormat_label">
+			IMタブの名前形式:
+		</text>
+		<combo_box name="FSIMTabNameFormat">
+			<combo_box.item label="表示名" name="display_name" value="0" />
+			<combo_box.item label="ユーザー名" name="user_name" value="1" />
+			<combo_box.item label="表示名 (ユーザー名)" name="display_user_name" value="2" />
+			<combo_box.item label="ユーザー名 (表示名)" name="user_display_name" value="3" />
+		</combo_box>
+
 	</panel>
 	
 	<!-- チャット：通知 -->
@@ -73,20 +87,38 @@
 		<check_box label="グループチャット" name="EnableGroupChatPopups" tool_tip="これを選択すると、グループチャットメッセージを受信した際にポップアップが表示されます"/>
 		<check_box label="IM チャット" name="EnableIMChatPopups" tool_tip="これを選択すると、インスタントメッセージを受信した際にポップアップが表示されます"/>
 		<check_box label="ポップアップを通知ウィンドウでなく、画面左下のチャットコンソールに表示（V1.x 形式）" name="FSUseNearbyChatConsole"/>
-		<check_box label="IMとグループチャットを画面左下のチャットコンソールに表示" name="FSLogImToChatConsole"/>
+		<check_box label="IMを画面左下のチャットコンソールに表示" name="FSLogImToChatConsole"/>
+		<check_box label="グループチャットを画面左下のチャットコンソールに表示" name="FSLogGroupImToChatConsole"/>
 		<text name="FSShowGroupNameLength_label">
 			グループ名の長さをチャット履歴に表示
         </text>
+		<check_box name="FSOpenIMContainerOnOfflineMessage" label="オフラインメッセージを受信したら会話ウィンドウを開く" />
 		<check_box name="FSShowIMInChatHistory" label="IMをチャット履歴に表示"/>
-		 <check_box name="FSLogIMInChatHistory" label="IMをチャットログに保存"/>
-		 <text name="requires_save_chat_logs">
-			（周辺チャットログの保存が必要）
-         </text>
-		 <text name="FSIMChatHistoryFade_label">
+		<check_box name="FSLogIMInChatHistory" label="IMをチャットログに保存"/>
+		<text name="FSIMChatHistoryFade_label">
 			チャット履歴ウィンドウでIMを薄く表示
-         </text>
+        </text>
 		<check_box label="相手が入力を始めたら、IMが来ることを事前に通知" name="FSAnnounceIncomingIM"/>
 		<check_box name="FSIMChatFlashOnFriendStatusChange" label="フレンドのオンラインステータスが変わったらIMタブを点滅"/>
+         <check_box name="FSReportMutedGroupChat" label="無視したグループチャットを周辺チャットウィンドウに表示"/>
+			<text name="WhenPlayIMLabel">
+				IMを受信した時:
+            </text>
+            <combo_box name="WhenPlayIM">
+                <combo_box.item label="新しいIMセッションの時だけ音を鳴らす" name="1" value="1"/>
+                <combo_box.item label="メッセージを受信する度に音を鳴らす" name="2" value="2"/>
+                <combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3" value="3"/>
+                <combo_box.item label="通知音は鳴らさない" name="0" value="0"/>
+            </combo_box>
+            <text name="WhenPlayGroupIMLabel">
+				グループIMを受信した時:
+            </text>
+            <combo_box name="WhenPlayGroupIM">
+                <combo_box.item label="新しいIMセッションの時だけ音を鳴らす" name="1" value="1"/>
+                <combo_box.item label="メッセージを受信する度に音を鳴らす" name="2" value="2"/>
+                <combo_box.item label="フォーカスが当たってなければ音を鳴らす" name="3" value="3"/>
+                <combo_box.item label="通知音は鳴らさない" name="0" value="0"/>
+            </combo_box>
 	</panel>
 	
 	<!-- チャット：Firestorm -->
@@ -97,6 +129,7 @@
 		<check_box label="&quot;:&quot;を&quot;/me&quot;の代わりに使う" name="AllowMUpose"/>
 		<check_box label="感情表現（叫び、囁きなど）は斜字体にする" name="EmotesUseItalic"/>
 		<check_box label="((OOC))のかっこを自動的に閉じる" name="AutoCloseOOC"/>
+		<check_box name="FSEmphasizeShoutWhisper" label="叫びは太字、ささやきは斜字体にする" />
 		
 		<!-- Localchat chat bar -->
 		<check_box label="チャット履歴にチャットバーを表示する" name="FSNearbyChatbar"/>
@@ -145,13 +178,8 @@
 		</text>
 		<check_box label="チャット履歴に時刻を表示しない" name="hide_timestamps_nearby_chat"/>
 		<check_box label="IMに時刻を表示しない" name="hide_timestamps_im"/>
-		<!-- Deleted Aug.21, 2012
-		<check_box label="IMをチャット履歴に表示" name="FSShowIMInChatHistory"/>
-		<check_box label="IMをチャットログに保存" name="FSLogIMInChatHistory"/>
-		<text name="requires_save_chat_logs">
-			周辺チャットのログの保存が必要
-		</text>
-		-->
+		<check_box name="IMShowTime" label="チャット履歴とIMに時刻を表示" />
+
 		<!-- Console -->
 		<text name="console_enhancements">
 			コンソール：
@@ -178,11 +206,35 @@
 	<panel label="レーダー" name="ChatRadar" >
 	
 		<check_box label="アバターがチャットレンジに入ってきたら通知" name="reportChatRangeEnter"/>
+		<check_box name="PlayModeUISndRadarChatEnter" label="音を鳴らす　UUID:"/>
+		<button name="Prev_UISndRadarChatEnter" label="P" tool_tip="この音のプレビューを聞きます。" />
+		<button name="Def_UISndRadarChatEnter" label="D" tool_tip="デフォルトのUUIDにもどします。" />
+		
 		<check_box label="アバターがチャットレンジから出て行ったら通知" name="reportChatRangeLeave"/>
+		<check_box name="PlayModeUISndRadarChatLeave" label="音を鳴らす　UUID::" />
+        <button name="Prev_UISndRadarChatLeave" label="P" tool_tip="この音のプレビューを聞きます。" />
+        <button name="Def_UISndRadarChatLeave" label="D" tool_tip="デフォルトのUUIDにもどします。" />
+
 		<check_box label="アバターが描画範囲に入ってきたら" name="reportDrawRangeEnter"/>
+		<check_box name="PlayModeUISndRadarDrawEnter" label="音を鳴らす　UUID:" />
+        <button name="Prev_UISndRadarDrawEnter" label="P" tool_tip="この音のプレビューを聞きます。" />
+        <button name="Def_UISndRadarDrawEnter" label="D" tool_tip="デフォルトのUUIDにもどします。" />
+
 		<check_box label="アバターが描画範囲から出て行ったら" name="reportDrawRangeLeaave"/>
+		<check_box name="PlayModeUISndRadarDrawLeave" label="音を鳴らす　UUID:"/>
+        <button name="Prev_UISndRadarDrawLeave" label="P" tool_tip="この音のプレビューを聞きます。" />
+        <button name="Def_UISndRadarDrawLeave" label="D" tool_tip="デフォルトのUUIDにもどします。" />
+
 		<check_box label="アバターが同じSIMに入ってきたら通知" name="RadarReportSimRangeEnter"/>
+		<check_box name="PlayModeUISndRadarSimEnter" label="音を鳴らす　UUID:" />
+        <button name="Prev_UISndRadarSimEnter" label="P" tool_tip="この音のプレビューを聞きます。" />
+        <button name="Def_UISndRadarSimEnter" label="D" tool_tip="デフォルトのUUIDにもどします。" />
+
 		<check_box label="アバターが同じSIMから出て行ったら通知" name="RadarReportSimRangeLeave"/>
+		<check_box name="PlayModeUISndRadarSimLeave" label="音を鳴らす　UUID:" />
+        <button name="Prev_UISndRadarSimLeave" label="P" tool_tip="この音のプレビューを聞きます。" />
+        <button name="Def_UISndRadarSimLeave" label="D" tool_tip="デフォルトのUUIDにもどします。" />
+
 		<check_box name="RadarEnterChannelAlert" label="SIMに人が来た情報をスクリプトに転送" />
 		<check_box name="RadarLeaveChannelAlert" label="SIMから人が出て行った情報をスクリプトに転送" />
 	</panel>
@@ -207,13 +259,10 @@
 	
 	<!-- チャット：入力支援 -->
 	<panel label="入力支援" name="ChatTextInput" >
-		
-		<check_box label="スペルチェックを利用" name="checkSpellCheck"/>
-		<text name="textDictionaryMain">
-			メインで使用する辞書:
-		</text>
-		<check_box label="自動修正を利用" name="lgg_ac_enable" tool_tip="以下の設定を使用する際は、このチェックボックスを有効にしておく必要があります。これは、入力したテキストを検索で該当した内容に置き換えるものです。"/>
-		<button label="自動修正の設定" name="lgg_ac_showgui"/>
+	
+	    <button name="autoreplace_showgui" label="自動置換..." />
+		<button name="spellcheck_showgui" label="スペルチェック..." />
+		<button name="translation_settings_btn" label="翻訳..." >
 	
 	</panel>
 	

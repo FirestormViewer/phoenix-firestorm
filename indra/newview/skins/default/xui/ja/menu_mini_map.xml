@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<menu name="Popup">
-	<menu_item_call label="ズーム（近）" name="Zoom Close"/>
-	<menu_item_call label="ズーム（中）" name="Zoom Medium"/>
-	<menu_item_call label="ズーム（遠）" name="Zoom Far"/>
-	<menu_item_call label="ズーム（デフォルト）" name="Zoom Default"/>
+<menu  label="ミニマップ" name="Popup">
+	<menu_item_call label="View Profile" name="View Profile" />
+	<menu label="プロフィールの表示" name="View Profiles" />
+	<menu_item_call label="カメラ" name="Cam" />
+	<menu name="MarkAvatar" label="マークする...">
+		<menu_item_call label="赤" name="MarkRed" />
+		<menu_item_call label="紫" name="MarkPurple" />
+		<menu_item_call label="緑" name="MarkGreen" />
+		<menu_item_call label="黄" name="MarkYellow" />
+		<menu_item_separator />
+		<menu_item_call label="マーク解除" name="Clear Marks" />
+	</menu>
+	<menu_item_separator name="Profile Separator" />
+	<menu_item_call label="追跡する" name="Start Tracking" />
+	<menu_item_call label="追跡をやめる" name="Stop Tracking" />
+	<menu_item_separator name="Stop Tracking Separator" />
+	<menu label="ズーム" name="Minimap Zoom">
+		<menu_item_call label="ズーム（近）" name="Zoom Close"/>
+		<menu_item_call label="ズーム（中）" name="Zoom Medium"/>
+		<menu_item_call label="ズーム（遠）" name="Zoom Far"/>
+		<menu_item_call label="ズーム（デフォルト）" name="Zoom Default"/>
+	</menu>
+	<menu label="表示" name="Minimap Show">
+		<menu_item_check label="オブジェクト" name="Objects" />
+		<menu_item_check label="物理オブジェクト" name="Physical Objects" />
+		<menu_item_check label="スクリプトオブジェクト" name="Scripted Objects" />
+		<menu_item_check label="テンプレズオブジェクト" name="Temp On Rez Objects" />
+		<menu_item_separator />
+		<menu_item_check label="境界線" name="Property Lines" />
+		<menu_item_check label="売り地" name="Parcels for Sale" />
+		<menu_item_separator />
+		<menu_item_check label="地面のテクスチャ" name="Terrain Textures" />
+		<menu_item_check label="世界地図のテクスチャ" name="World Map Textures" />
+	</menu>
 	<menu_item_check label="地図を回転" name="Rotate Map"/>
 	<menu_item_check label="中央へ自動移動" name="Auto Center"/>
-	<menu_item_call label="追跡をやめる" name="Stop Tracking"/>
+	<menu_item_check label="チャットレンジ" name="Chat Distance Ring" />
+    <menu_item_separator />
+    <menu_item_call label="土地のプロフィール" name="Place Profile" />
 	<menu_item_call label="世界地図" name="World Map"/>
 </menu>
+
