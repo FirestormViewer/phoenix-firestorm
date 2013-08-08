@@ -521,7 +521,9 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	
 	if (host)
 	{
-		if (host->isMinimized() || !host->isShown() || !host->isFrontmost())
+		//FS:LO from above: * Else if the target floater does not have focus, give it focus. * Also, if it is not on top, bring it forward when focus is given.
+		//if (host->isMinimized() || !host->isShown() || !host->isFrontmost())
+		if (host->isMinimized() || !host->isShown() || (!host->hasFocus() || !host->isFrontmost()))
 		{
 			host->setMinimized(FALSE);
 			instance->openFloater(key);
@@ -550,7 +552,9 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 			instance->openFloater(key);
 			instance->setVisibleAndFrontmost(true, key);
 		}
-		else if (!instance->isFrontmost())
+		//FS:LO from above: * Else if the target floater does not have focus, give it focus. * Also, if it is not on top, bring it forward when focus is given.
+		//else if (!instance->isFrontmost())
+		else if (!instance->hasFocus() || !instance->isFrontmost())
 		{
 			instance->setVisibleAndFrontmost(true, key);
 		}
