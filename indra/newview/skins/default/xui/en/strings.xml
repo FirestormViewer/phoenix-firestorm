@@ -2588,6 +2588,7 @@ Try enclosing path to the editor with double quotes.
   <string name="export_failed_export_null_texture">Attempted to export null texture.</string>
   <string name="export_loading_texture">Loading texture [ITEM]...</string>
   <string name="export_saving_texture">Successfully saved texture [TEXTURE].</string>
+  <string name="export_saving_asset">Saving [ITEM]...</string>
   <string name="export_failed_to_receive_texture">Failed to get texture [TEXTURE].</string>
   <string name="export_received_null_texture">Received null texture [TEXTURE].</string>
   <string name="export_item_not_exportable">[ITEM] is not an currently supported by the exporter. Skipping.</string>
