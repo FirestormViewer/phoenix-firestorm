@@ -217,7 +217,6 @@ protected:
 	
 	static void		onImportScaleCommit(LLUICtrl*, void*);
 	static void		onPelvisOffsetCommit(LLUICtrl*, void*);
-	static void		onDeformCommit(LLUICtrl*, void*);	// <FS:CR> Qarl's mesh deformer
 	static void		onUploadJointsCommit(LLUICtrl*,void*);
 	static void		onUploadSkinCommit(LLUICtrl*,void*);
 

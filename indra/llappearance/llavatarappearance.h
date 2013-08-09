@@ -95,7 +95,6 @@ public:
 	/*virtual*/ S32				getCollisionVolumeID(std::string &name);
 	/*virtual*/ LLPolyMesh*		getHeadMesh();
 	/*virtual*/ LLPolyMesh*		getUpperBodyMesh();
-	/*virtual*/ LLPolyMesh*		getMesh(S32 which);	// <FS:CR> Qarl's mesh deformer
 
 /**                    Inherited
  **                                                                            **

@@ -167,7 +167,6 @@ int compare_int(const void *a, const void *b);
 //-----------------------------------------------------------------------------
 // genIndices()
 //-----------------------------------------------------------------------------
-#if 0	// <FS:CR> Dead code
 void LLPolyMeshSharedData::genIndices(S32 index_offset)
 {
         if (index_offset == mLastIndexOffset)
@@ -191,7 +190,6 @@ void LLPolyMeshSharedData::genIndices(S32 index_offset)
 
         mLastIndexOffset = index_offset;
 }
-#endif //0 // </FS:CR>
 
 //--------------------------------------------------------------------
 // LLPolyMeshSharedData::getNumKB()

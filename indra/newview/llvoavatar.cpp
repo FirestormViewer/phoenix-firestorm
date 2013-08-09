@@ -5609,7 +5609,6 @@ void LLVOAvatar::updateVisualParams()
 
 	dirtyMesh();
 	updateHeadOffset();
-	rebuildRiggedAttachments();	// <FS:CR> Qarl's mesh deformer
 }
 
 //-----------------------------------------------------------------------------

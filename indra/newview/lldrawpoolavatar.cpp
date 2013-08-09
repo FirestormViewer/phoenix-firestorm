@@ -49,7 +49,6 @@
 #include "llappviewer.h"
 #include "llrendersphere.h"
 #include "llviewerpartsim.h"
-#include "llviewernetwork.h"	// <FS:CR> Qarl's mesh deformer - for hopefully temporary grid checks
 
 static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
 static U32 sBufferUsage = GL_STREAM_DRAW_ARB;
@@ -1445,12 +1444,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	}
 }
 
-// <FS:CR> Qarl's mesh deformer
-//void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* face, const LLMeshSkinInfo* skin, LLVolume* volume, const LLVolumeFace& vol_face)
-void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* face, 
-													const LLMeshSkinInfo* skin, LLVolume* volume, 
-													const LLVolumeFace& vol_face, LLVOVolume* vobj)
-// </FS:CR>
+void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* face, const LLMeshSkinInfo* skin, LLVolume* volume, const LLVolumeFace& vol_face)
 {
 	LLVector4a* weight = vol_face.mWeights;
 	if (!weight)
@@ -1459,17 +1453,7 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 	}
 
 	LLPointer<LLVertexBuffer> buffer = face->getVertexBuffer();
-	// <FS:CR> Qarl's mesh deformer
-	//LLDrawable* drawable = face->getDrawable();
-	LLPointer<LLDrawable> drawable = face->getDrawable();
-	
-	// NOTE: Remove this next bit as well as the rest of the grid checking if LL ever gets their act together
-	// and adds the deformer <FS:CR>
-	bool is_opensim = false;
-#if OPENSIM
-	is_opensim = LLGridManager::getInstance()->isInOpenSim();
-#endif // OPENSIM
-	// </FS:CR>
+	LLDrawable* drawable = face->getDrawable();
 
 	U32 data_mask = face->getRiggedVertexBufferDataMask();
 	
@@ -1530,21 +1514,7 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 			face->setPoolType(LLDrawPool::POOL_AVATAR);
 		}
 
-		// <FS:CR> Qarl's mesh deformer
-		//face->getGeometryVolume(*volume, face->getTEOffset(), mat_vert, mat_normal, offset, true);
-
-		// swap in deformed volume if conditions are met:
-		LLVolume* which_volume = volume;
-		if (skin->mDeform["version"].asInteger() != 0//)
-			&& is_opensim) // <FS:CR> Remove the grid check if LL ever gets it together
-		// </FS:CR>
-		{
-			LLDeformedVolume* deformed_volume = vobj->getDeformedVolume();
-			deformed_volume->deform(volume, avatar, skin, face->getTEOffset(), drawable);
-				which_volume = deformed_volume;
-			}
-
-		face->getGeometryVolume(*which_volume, face->getTEOffset(), mat_vert, mat_normal, offset, true);
+		face->getGeometryVolume(*volume, face->getTEOffset(), mat_vert, mat_normal, offset, true);
 
 		buffer->flush();
 	}
@@ -1583,19 +1553,6 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 		LLMatrix4a bind_shape_matrix;
 		bind_shape_matrix.loadu(skin->mBindShapeMatrix);
 
-		// <FS:CR> Qarl's mesh deformer
-		// swap in deformed volume if conditions are met:
-		LLVolume* which_volume = volume;
-		if (skin->mDeform["version"].asInteger() != 0//)
-			&& is_opensim)	// NOTE: Remove the grid check if LL ever gets it together
-		{			
-			which_volume = vobj->getDeformedVolume();
-		}
-		
-		LLVector4a* positions = which_volume->getVolumeFace(face->getTEOffset()).mPositions;
-		LLVector4a* normals = which_volume->getVolumeFace(face->getTEOffset()).mNormals;
-		// </FS:CR>
-
 		for (U32 j = 0; j < buffer->getNumVerts(); ++j)
 		{
 			LLMatrix4a final_mat;
@@ -1627,10 +1584,8 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 				final_mat.add(src);
 			}
 
-			// <FS:CR> Qarl's mesh deformer
-			//LLVector4a& v = vol_face.mPositions[j];
-			LLVector4a& v = positions[j];
-			// </FS:CR>
+			
+			LLVector4a& v = vol_face.mPositions[j];
 			LLVector4a t;
 			LLVector4a dst;
 			bind_shape_matrix.affineTransform(v, t);
@@ -1639,15 +1594,7 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 
 			if (norm)
 			{
-				// <FS:CR> Qarl's mesh deformer
-				//LLVector4a& n = vol_face.mNormals[j];
-				
-				// normals are not transformed by the same math as points.
-				// you need the inverse transpose.
-				// these matrices are non-uniformly scaled (by a lot) so this
-				// math is wrong.  (i think.)  -qarl
-				LLVector4a& n = normals[j];
-				// </FS:CR>
+				LLVector4a& n = vol_face.mNormals[j];
 				bind_shape_matrix.rotate(n, t);
 				final_mat.rotate(t, dst);
 				norm[j] = dst;
@@ -1895,10 +1842,7 @@ void LLDrawPoolAvatar::updateRiggedVertexBuffers(LLVOAvatar* avatar)
 			stop_glerror();
 
 			const LLVolumeFace& vol_face = volume->getVolumeFace(te);
-			// <FS:CR> Qarl's mesh deformer
-			//updateRiggedFaceVertexBuffer(avatar, face, skin, volume, vol_face);
-			updateRiggedFaceVertexBuffer(avatar, face, skin, volume, vol_face, vobj);
-			// </FS:CR>
+			updateRiggedFaceVertexBuffer(avatar, face, skin, volume, vol_face);
 		}
 	}
 }

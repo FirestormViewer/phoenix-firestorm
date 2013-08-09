@@ -1280,15 +1280,6 @@ LLPolyMesh*	LLAvatarAppearance::getHeadMesh()
 	return mMeshLOD[MESH_ID_HEAD]->mMeshParts[0]->getMesh();
 }
 
-// <FS:CR> Qarl's mesh deformer
-//-----------------------------------------------------------------------------
-// LLAvatarAppearance::getMesh()
-//-----------------------------------------------------------------------------
-LLPolyMesh* LLAvatarAppearance::getMesh(S32 which)
-{
-	return mMeshLOD[which]->mMeshParts[0]->getMesh();
-}
-// </FS:CR>
 
 //-----------------------------------------------------------------------------
 // LLAvatarAppearance::getUpperBodyMesh()

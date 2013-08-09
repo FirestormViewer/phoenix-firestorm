@@ -35,7 +35,6 @@
 #include "m3math.h"		// LLMatrix3
 #include "m4math.h"		// LLMatrix4
 #include <map>
-#include "lldeformerworker.h"	// <FS:CR> Qarl's mesh deformer
 
 class LLViewerTextureAnim;
 class LLDrawPool;
@@ -64,92 +63,6 @@ public:
 
 	void update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, const LLVolume* src_volume);
 };
-
-
-// <FS:CR> Qarl's mesh deformer
-const S32 LL_DEFORMER_WEIGHT_COUNT = 3;
-
-
-class LLDeformedVolume : public LLVolume
-{
-public:
-	LLDeformedVolume()
-	: LLVolume(LLVolumeParams(), 0.f)
-	{
-	}
-	
-	// used as a key for the deform table cache
-	class LLDeformTableCacheIndex
-	{
-	public:
-		LLDeformTableCacheIndex(const LLUUID& id, S32 face, S32 vertex_count) :
-		mID(id), mFace(face), mVertexCount(vertex_count) {}
-		
-		S32 mBaseShape;
-		LLUUID mID;
-		S32 mFace;
-		S32 mVertexCount;
-		
-		bool operator<(const LLDeformTableCacheIndex& lhs) const
-		{
-			if (mID < lhs.mID)
-				return TRUE;
-			if (mID > lhs.mID)
-				return FALSE;
-			if (mFace < lhs.mFace)
-				return TRUE;
-			if (mFace > lhs.mFace)
-				return FALSE;
-			if (mVertexCount < lhs.mVertexCount)
-				return TRUE;
-			
-			return FALSE;
-		}
-	};
-	
-	
-	// these are entries in the deformer table.
-	// they map vertices on the volume mesh to
-	// vertices on the avatar mesh(es).
-	struct LLDeformMap
-	{
-		U8 mMesh[LL_DEFORMER_WEIGHT_COUNT];
-		U16 mVertex[LL_DEFORMER_WEIGHT_COUNT];
-		F32 mWeight[LL_DEFORMER_WEIGHT_COUNT];
-	};
-	
-
-	// the deform table contains precomputed information
-	// necessary to perform deformation on a volume face in
-	// realtime.
-	
-	class LLDeformTable
-	{
-	public:
-		
-		std::vector<struct LLDeformMap> mMap;
-		std::vector<std::vector< LLVector3 > > mBasePositions;
-	};
-	
-
-	// the deform table cache holds tables for each face and mesh asset ID
-	typedef std::map<LLDeformTableCacheIndex, LLDeformTable> deform_cache_t;
-	deform_cache_t mDeformCache;
-	
-
-	// apply deformation to source volume and store it in this volume
-	BOOL deform(LLVolume* source, LLVOAvatar* avatar, const LLMeshSkinInfo* skin, S32 face, LLPointer<LLDrawable> drawable);
-	
-	// look-up the cached deform table
-	LLDeformTable* getDeformTable(LLVolume* source, LLVOAvatar* avatar, const LLMeshSkinInfo* skin,
-								   S32 face, LLPointer<LLDrawable> drawable);
-	
-	// compute the cached deform table
-	void computeDeformTable(LLPointer<LLDeformerWorker::Request> request);
-
-};
-// </FS:CR>
-
 
 // Base class for implementations of the volume - Primitive, Flexible Object, etc.
 class LLVolumeInterface
@@ -419,11 +332,6 @@ public:
 	//clear out rigged volume and revert back to non-rigged state for picking/LOD/distance updates
 	void clearRiggedVolume();
 
-	// <FS:CR> Qarl's mesh deformer
-	// deformed volume (rigged attachments follow avatar morph shape changes
-	LLDeformedVolume* getDeformedVolume();
-	// </FS:CR>
-
 protected:
 	S32	computeLODDetail(F32	distance, F32 radius);
 	BOOL calcLOD();
@@ -469,7 +377,6 @@ private:
 	S32 mMDCImplCount;
 
 	LLPointer<LLRiggedVolume> mRiggedVolume;
-	LLPointer<LLDeformedVolume> mDeformedVolume;	// <FS:CR> Qarl's mesh deformer
 
 	// statics
 public:
