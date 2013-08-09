@@ -86,6 +86,7 @@ private:
 	void removeRequestedAsset(LLUUID asset_uuid);
 	bool assetCheck(LLUUID asset_id, std::string& name, std::string& description);
 	bool megaPrimCheck(LLUUID creator, LLViewerObject* object);
+	bool defaultTextureCheck(const LLUUID asset_id);
 	
 	LLSD mFile;
 	std::map<LLUUID, FSAssetResourceData> mRequestedTexture;
