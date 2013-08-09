@@ -5774,6 +5774,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="export_saving_texture">
 		Textur [TEXTURE] erfolgreich gespeichert.
 	</string>
+	<string name="export_saving_asset">
+		Speichere [ITEM]...
+	</string>
 	<string name="export_failed_to_receive_texture">
 		Fehler beim Laden von Textur [TEXTURE].
 	</string>
