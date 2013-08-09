@@ -5281,6 +5281,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="export_saving_texture">
 		Pomyślnie zapisano teksturę [TEXTURE].
 	</string>
+	<string name="export_saving_asset">
+		Zapisywanie [ITEM]...
+	</string>
 	<string name="export_failed_to_receive_texture">
 		Nie powiodło się pobranie tekstury [TEXTURE].
 	</string>
