@@ -53,6 +53,7 @@
 				<combo_box.item name="ScriptDialogOption_2" label="Sin restricciones"/>
 			</combo_box>
 			<check_box label="Diálogos de scripts en esquina superior derecha" name="ShowScriptDialogsTopRight" tool_tip="Activa para mover las notificaciones a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
+			<check_box label="Diálogos de script animados" name="FSAnimatedScriptDialogs" tool_tip="Actívalo para que los diálogos de script se abran con animación (comportamiento clásico de v1.x)." width="256"/>
 			<check_box label="Avisos de grupo en esquina superior derecha" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)" width="256"/>
 			<text name="GroupTopRightRequiresRestart" left_delta="267" top_pad="-17">
 				(requiere reiniciar)
