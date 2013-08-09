@@ -318,6 +318,12 @@ public:
 	
 	bool dynamicPathfindingEnabled() const;
 
+// <FS:CR> Opensim Extras support
+#ifdef OPENSIM
+	std::string getHGMapServerURL() const; // HG Maps
+#endif // OPENSIM
+// </FS:CR>
+
 	typedef enum
 	{
 		CACHE_MISS_TYPE_FULL = 0,

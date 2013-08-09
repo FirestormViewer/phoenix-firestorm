@@ -2061,3 +2061,17 @@ bool LLViewerRegion::dynamicPathfindingEnabled() const
 			 mSimulatorFeatures["DynamicPathfindingEnabled"].asBoolean());
 }
 
+// <FS:CR> OpenSim Extras support
+#ifdef OPENSIM
+// HG Maps
+std::string LLViewerRegion::getHGMapServerURL() const
+{
+	std::string url = "";
+	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("mapServerURL"))
+	{
+		url = mSimulatorFeatures["OpenSimExtras"]["map-server-url"].asString();
+	}
+	return url;
+}
+#endif
+// </FS:CR>
