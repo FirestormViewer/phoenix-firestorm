@@ -206,9 +206,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1dcec6babd249a2597114d4ac226c461</string>
+              <string>a14053565077a154284f64918db89aae</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-ares/rev/220963/arch/CYGWIN/installer/ares-1.7.1-windows-20110211.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ares-1.10.0-windows-20130810.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -350,9 +350,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>aca0589e4faa7b93145ffabd3a244df2</string>
+              <string>b35cfa9a08fbeb78f5819d921a1cd5fb</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/curl-7.21.1-windows-20120824.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.24.0-windows-20130810.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1724,9 +1724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>36cac54d3490f9cf80b836473b7f7a42</string>
+              <string>38205bccb5dcedf73fded9f15cafd29e</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.0d-windows-20120823.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1e-windows-20130810.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
