@@ -319,6 +319,14 @@ public:
 	bool dynamicPathfindingEnabled() const;
 
 // <FS:CR> Opensim Extras support
+	typedef enum e_os_export_support
+	{
+		EXPORT_UNDEFINED = 0,
+		EXPORT_ALLOWED,
+		EXPORT_DENIED
+	} EOSExportSupport;
+	
+	EOSExportSupport regionSupportsExport() const;	// ExportSupports
 #ifdef OPENSIM
 	std::string getHGMapServerURL() const; // HG Maps
 #endif // OPENSIM

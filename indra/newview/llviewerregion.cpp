@@ -2062,7 +2062,28 @@ bool LLViewerRegion::dynamicPathfindingEnabled() const
 }
 
 // <FS:CR> OpenSim Extras support
-#ifdef OPENSIM
+LLViewerRegion::EOSExportSupport LLViewerRegion::regionSupportsExport() const
+{
+#ifndef OPENSIM
+	return EXPORT_UNDEFINED;	// Second Life regions never support export.
+}
+#else // OPENSIM
+	EOSExportSupport export_support = EXPORT_UNDEFINED;
+	if ((mSimulatorFeatures.has("OpenSimExtras"))
+		&& (mSimulatorFeatures["OpenSimExtras"].has("ExportSupported")))
+	{
+		if (mSimulatorFeatures["OpenSimExtras"]["ExportSupported"].asBoolean())
+		{
+			export_support = EXPORT_ALLOWED;
+		}
+		else
+		{
+			export_support = EXPORT_DENIED;
+		}
+	}
+	return export_support;
+}
+
 // HG Maps
 std::string LLViewerRegion::getHGMapServerURL() const
 {
@@ -2073,5 +2094,5 @@ std::string LLViewerRegion::getHGMapServerURL() const
 	}
 	return url;
 }
-#endif
+#endif // OPENSIM
 // </FS:CR>
