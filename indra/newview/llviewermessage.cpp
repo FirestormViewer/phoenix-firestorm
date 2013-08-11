@@ -703,7 +703,19 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		LLGroupActions::show(group_id);
 		LLSD args;
 		args["MESSAGE"] = message;
-		LLNotificationsUtil::add("JoinGroup", args, notification["payload"]);
+
+		// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
+		// LLNotificationsUtil::add("JoinGroup", args, notification["payload"]);
+		if(fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
+		{
+			LLNotificationsUtil::add("JoinGroupProtectionNotice", args, notification["payload"]);
+		}
+		else
+		{
+			LLNotificationsUtil::add("JoinGroup", args, notification["payload"]);
+		}
+		// </FS:PP>
+
 		return false;
 	}
 	if(option == 0 && !group_id.isNull())
@@ -811,6 +823,7 @@ static void highlight_inventory_objects_in_panel(const std::vector<LLUUID>& item
 static LLNotificationFunctorRegistration jgr_1("JoinGroup", join_group_response);
 static LLNotificationFunctorRegistration jgr_2("JoinedTooManyGroupsMember", join_group_response);
 static LLNotificationFunctorRegistration jgr_3("JoinGroupCanAfford", join_group_response);
+static LLNotificationFunctorRegistration jgr_4("JoinGroupProtectionNotice", join_group_response); // <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
 
 
 //-----------------------------------------------------------------------------
@@ -3156,8 +3169,21 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				LLSD args;
 				args["MESSAGE"] = message;
 				// we shouldn't pass callback functor since it is registered in LLFunctorRegistration
-				LLNotificationsUtil::add("JoinGroup", args, payload);
+
 				make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
+
+				// <FS:PP> FIRE-11181: Option to remove the "Join" button from group invites that include enrollment fees
+				// LLNotificationsUtil::add("JoinGroup", args, payload);
+				if(membership_fee > 0 && gSavedSettings.getBOOL("FSAllowGroupInvitationOnlyWithoutFee"))
+				{
+					LLNotificationsUtil::add("JoinGroupProtectionNotice", args, payload);
+				}
+				else
+				{
+					LLNotificationsUtil::add("JoinGroup", args, payload);
+				}
+				// </FS:PP>
+
 			}
 		}
 		break;

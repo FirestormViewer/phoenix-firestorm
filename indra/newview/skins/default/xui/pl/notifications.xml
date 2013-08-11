@@ -2762,6 +2762,14 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 			<button name="Info" text="Info"/>
 		</form>
 	</notification>
+	<notification name="JoinGroupProtectionNotice">
+		Ta grupa pobiera opłatę za dołączenie, nie można zaakceptować zaproszenia ze względu na Twoje ustawienia. Jeśli chcesz to zmienić, otwórz Preferencje -&gt; Firestorm -&gt; Ochrona.
+
+[MESSAGE]
+		<form name="form">
+			<button name="Info" text="Info"/>
+		</form>
+	</notification>
 	<notification name="TeleportOffered" label="Propozycja teleportacji od [NAME_LABEL]">
 		[NAME_SLURL] proponuje Ci teleportację do siebie:
 
