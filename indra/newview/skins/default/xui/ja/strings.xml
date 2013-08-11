@@ -1055,6 +1055,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="AvatarSetBusy">
 		取り込み中
 	</string>
+	
+	<!-- Wearable Types -->
 	<string name="shape">
 		シェイプ
 	</string>
@@ -1109,45 +1111,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="none">
 		なし
 	</string>
-	<string name="shirt_not_worn">
-		シャツ未着用
-	</string>
-	<string name="pants_not_worn">
-		パンツ未着用
-	</string>
-	<string name="shoes_not_worn">
-		靴未着用
-	</string>
-	<string name="socks_not_worn">
-		靴下未着用
-	</string>
-	<string name="jacket_not_worn">
-		ジャケット未着用
-	</string>
-	<string name="gloves_not_worn">
-		手袋未着用
-	</string>
-	<string name="undershirt_not_worn">
-		下着（上）未着用
-	</string>
-	<string name="underpants_not_worn">
-		下着（下）未着用
-	</string>
-	<string name="skirt_not_worn">
-		スカート未着用
-	</string>
-	<string name="alpha_not_worn">
-		アルファ未着用
-	</string>
-	<string name="tattoo_not_worn">
-		タトゥー未着用
-	</string>
-	<string name="physics_not_worn">
-		物理作用なし
-	</string>
-	<string name="invalid_not_worn">
-		無効
-	</string>
+	
+	<!-- Create new wearable of the specified type -->
 	<string name="create_new_shape">
 		新しいシェイプを作成
 	</string>
@@ -1238,6 +1203,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="OverflowInfoChannelString">
 		あなたにはさらに %d 通の通知があります
 	</string>
+	
+	<!-- body parts -->
 	<string name="BodyPartsRightArm">
 		右腕
 	</string>

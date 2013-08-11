@@ -2126,7 +2126,7 @@ L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開します�
 	<notification name="ConfirmAddingChatParticipants">
 		<unique/>
 現在進行中の会話に新しい人を追加すると、新しい会話が作成されます。会話の参加者全員に新しい会話の開始通知が送信されます。
-		<usetemplate ignoretext="会話への新しい人の追加を確認" name="okcancelignore" notext="キャンセル" yestext="Ok"/>
+		<usetemplate ignoretext="会話への新しい人の追加を確認" name="okcancelignore" notext="取り消し" yestext="Ok"/>
   </notification>
 	<notification name="ConfirmQuit">
 		終了しようとしています。続けますか？
@@ -3490,12 +3490,12 @@ M キーを押して変更します。
 	
 	<notification name="EjectGroupMemberWarning">
 [AVATAR_NAME] をこのグループから除名しようとしています。
-		<usetemplate ignoretext="参加者をこのグループから除名するか確認" name="okcancelignore" notext="キャンセル" yestext="除名"/>
+		<usetemplate ignoretext="参加者をこのグループから除名するか確認" name="okcancelignore" notext="取り消し" yestext="除名"/>
     </notification>
     
     <notification name="EjectGroupMembersWarning">
 [COUNT] 人のメンバーをこのグループから除名しようとしています。members from the group.
-		<usetemplate ignoretext="このグループから複数のメンバーを除名するか確認。" name="okcancelignore" notext="キャンセル" yestext="除名"/>
+		<usetemplate ignoretext="このグループから複数のメンバーを除名するか確認。" name="okcancelignore" notext="取り消し" yestext="除名"/>
     </notification>
 	
 </notifications>
