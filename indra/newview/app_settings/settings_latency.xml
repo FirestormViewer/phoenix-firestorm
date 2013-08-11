@@ -689,6 +689,30 @@
 			<integer>0</integer>
 		</map>
 
+    <key>FSLegacyRadarFriendColoring</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>Use old style for friends on the radar. Uses same color as minimap.</string>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>1</integer>
+		</map>
+
+    <key>FSLegacyRadarLindenColoring</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>Color Lindens on the radar the same as the minimap.</string>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>1</integer>
+		</map>
+
 
 
 
