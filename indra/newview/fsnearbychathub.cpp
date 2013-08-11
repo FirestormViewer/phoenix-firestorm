@@ -581,14 +581,14 @@ public:
 		}
 		else
 		{
-		S32 channel = tokens[0].asInteger();
+			S32 channel = tokens[0].asInteger();
 			// VWR-19499 Restrict function to chat channels greater than 0.
 			if ((channel > 0) && (channel < CHAT_CHANNEL_DEBUG))
 			{
 				retval = true;
-		// Send unescaped message, see EXT-6353.
-		std::string unescaped_mesg (LLURI::unescape(tokens[1].asString()));
-		send_chat_from_viewer(unescaped_mesg, CHAT_TYPE_NORMAL, channel);
+				// Send unescaped message, see EXT-6353.
+				std::string unescaped_mesg (LLURI::unescape(tokens[1].asString()));
+				send_chat_from_viewer(unescaped_mesg, CHAT_TYPE_NORMAL, channel);
 			}
 			else
 			{
