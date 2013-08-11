@@ -18,7 +18,6 @@ background_visible="true"
      name="teleport_history_tab_title"
      value="TELEPORT HISTORY" />
     <filter_editor
-     text_pad_left="10"
      follows="left|top|right"
      font="SansSerifSmall"
      height="23"

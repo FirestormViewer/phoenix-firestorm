@@ -95,9 +95,6 @@
 	 name="Green"
 	 value="0 1 0 1" />
 	<color
-	 name="LtGreen"
-	 value="0.79 1 0.79 1" />
-	<color
 	 name="Transparent"
 	 value="0 0 0 0" />
 	<color
@@ -991,7 +988,21 @@
   <color
     name="blue"
     value="0 0 1 1"/>
-		    
+    
+  <!--Resize bar colors -->
+
+  <color
+    name="ResizebarBorderLight"
+    value="0.231 0.231 0.231 0"/>
+
+  <color
+    name="ResizebarBorderDark"
+    value="0.133 0.133 0.133 0"/>
+
+  <color
+    name="ResizebarBody"
+    value="0.208 0.208 0.208 0"/>
+
    <!-- Colours for Firestorm - change for each theme as necessary -->	
 	<color
      name="ScriptDialog"
@@ -1020,6 +1031,9 @@
      reference="White_25" />
 
     <!-- Colours for Firestorm - same for all themes -->
+    <color
+     name="AgentIMColor"
+     reference="White" />
     <color
      name="InventoryItemEnabledColor"
      reference="LtGray" />
@@ -1071,9 +1085,12 @@
     <color
      name="PieMenuTextColor"
      value="1 1 1 0.85" />
-  <color
-      name="LtBlue"
-      value="0 0.5 1 1" />
+    <color
+     name="LtBlue"
+     value="0 0.5 1 1" />
+    <color
+     name="XUITooltipFileName"
+     value="0.7 0.7 1 1" />
 	
     <!-- for FS legacy profiles -->
     <color
