@@ -7030,7 +7030,7 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
    type="notify">
     <tag>group</tag>
     <tag>fail</tag>
-This group invitation requires a fee, and cannot be accepted because of your settings. If you want to change this, go to Preferences -&gt; Firestorm -&gt; Protection.
+Joining this group costs a fee and the invitation cannot be accepted because of your settings. If you want to change this, go to Preferences &gt; Firestorm &gt; Protection.
 
 [MESSAGE]
     <form name="form">
