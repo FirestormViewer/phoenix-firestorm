@@ -2327,6 +2327,12 @@ void LLAgent::endAnimationUpdateUI()
 			mViewsPushed = FALSE;
 			gFocusMgr.setKeyboardFocus(NULL);	// <FS:Zi> make sure no floater has focus  after restoring them
 		}
+		// <FS:PP> FIRE-11312: Exiting Mouselook puts keyboard focus on Nearby Chat bar
+		else if(gSavedSettings.getBOOL("FSShowInterfaceInMouselook"))
+		{
+			gFocusMgr.setKeyboardFocus(NULL);
+		}
+		// </FS:PP>
 
 		
 		gAgentCamera.setLookAt(LOOKAT_TARGET_CLEAR);
