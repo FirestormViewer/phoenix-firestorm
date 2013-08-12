@@ -60,6 +60,7 @@ showUsage()
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
     echo "  --kdu        : Build with KDU"
     echo "  --package    : Build installer"
+    echo "  --no-package : Build without installer (Overrides --package)"
     echo "  --fmodex     : Build with FMOD Ex"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
@@ -98,6 +99,7 @@ getArgs()
           no-opensim) WANTS_OPENSIM=$FALSE;;
           avx)        WANTS_AVX=$TRUE;;
           package)    WANTS_PACKAGE=$TRUE;;
+          no-package) WANTS_PACKAGE=$FALSE;;
           build)      WANTS_BUILD=$TRUE;;
           platform)   PLATFORM="$OPTARG";;
           jobs)       JOBS="$OPTARG";;
