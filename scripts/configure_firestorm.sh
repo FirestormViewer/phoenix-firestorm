@@ -76,7 +76,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
