@@ -329,6 +329,7 @@ public:
 	EOSExportSupport regionSupportsExport() const;	// ExportSupports
 #ifdef OPENSIM
 	std::string getHGMapServerURL() const; // HG Maps
+	std::string getSearchServerURL() const; // OS Search URL
 #endif // OPENSIM
 // </FS:CR>
 

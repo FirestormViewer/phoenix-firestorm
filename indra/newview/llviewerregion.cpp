@@ -2094,5 +2094,16 @@ std::string LLViewerRegion::getHGMapServerURL() const
 	}
 	return url;
 }
+
+// OS Search URL
+std::string LLViewerRegion::getSearchServerURL() const
+{
+	std::string url = "";
+	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("search-server-url"))
+	{
+		url = mSimulatorFeatures["OpenSimExtras"]["search-server-url"].asString();
+	}
+	return url;
+}
 #endif // OPENSIM
 // </FS:CR>
