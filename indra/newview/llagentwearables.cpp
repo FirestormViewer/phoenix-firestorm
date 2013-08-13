@@ -1786,8 +1786,7 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 void LLAgentWearables::checkWearablesLoaded() const
 {
 #ifdef SHOW_ASSERT
-	// <FS:CR> Unused variable 12-8-13
-	//U32 item_pend_count = itemUpdatePendingCount();
+	U32 item_pend_count = itemUpdatePendingCount();
 	if (mWearablesLoaded)
 	{
 		llassert(item_pend_count==0);
