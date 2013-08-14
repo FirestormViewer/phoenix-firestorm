@@ -11429,5 +11429,13 @@ You are about to eject [COUNT] members from the group.
       <tag>Export</tag>
 Export finished and saved to [FILENAME].
     </notification>
+    
+    <notification
+      icon="notifytip.tga"
+      name="AntiSpamBlocked"
+      log_to_chat="false"
+      type="notifytip">
+AntiSpam: Blocked ["SOURCE"] for spamming a ["QUEUE"] (["COUNT"]) times in [PERIOD] seconds.
+    </notification>
 	
 </notifications>

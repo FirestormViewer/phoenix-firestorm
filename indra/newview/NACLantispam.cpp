@@ -156,7 +156,7 @@ S32 NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multiplier)
 	}
 	else
 	{
-		lldebugs << "[antispam] New queue entry:" << name.asString() << llendl;
+		LL_DEBUGS("AntiSpam") << "New queue entry:" << name.asString() << LL_ENDL;
 		NACLAntiSpamQueueEntry* entry = new NACLAntiSpamQueueEntry();
 		entry->updateEntryAmount();
 		entry->updateEntryTime();
@@ -371,14 +371,16 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 	
 	if (result == 1) // newly blocked, result == 1
 	{
-		std::string msg = llformat("AntiSpam: Blocked %s for spamming a %s (%d) times in %d seconds.", source.asString().c_str(), getQueueName(queue), multiplier * mQueues[queue]->getAmount(), mQueues[queue]->getTime());
 		if (!silent)
 		{
 			LLSD args;
-			args["MESSAGE"] = msg;
-			LLNotificationsUtil::add("SystemMessageTip", args);
+			args["SOURCE"] = source.asString();
+			args["QUEUE"] = getQueueName(queue);
+			args["COUNT"] = llformat("%d", multiplier * mQueues[queue]->getAmount());
+			args["PERIOD"] = llformat("%d", mQueues[queue]->getTime());
+			LLNotificationsUtil::add("AntiSpamBlocked", args);
 		}
-		llinfos << "[antispam] " << msg << llendl;
+		LL_INFOS("AntiSpam") << "Blocked " << source.asString() << " for spamming a " << getQueueName(queue) << " (" << multiplier * mQueues[queue]->getAmount() << ") times in " << mQueues[queue]->getTime() << " seconds." << LL_ENDL;
 		return true;
 	}
 
@@ -437,7 +439,7 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 			}
 		}
 	}
-	llinfos << "AntiSpam Queues Purged" << llendl;
+	LL_INFOS("AntiSpam") << "AntiSpam Queues Purged" << LL_ENDL;
 }
 
 S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
