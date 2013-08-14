@@ -207,6 +207,7 @@ LLSD _basic_constraints_ext(X509* cert)
 			}
 		}
 
+		BASIC_CONSTRAINTS_free( bs );
 	}
 	return result;
 }
@@ -268,6 +269,8 @@ LLSD _ext_key_usage_ext(X509* cert)
 				ASN1_OBJECT_free(usage);
 			}
 		}
+
+		EXTENDED_KEY_USAGE_free( eku );
 	}
 	return result;
 }
@@ -280,6 +283,8 @@ LLSD _subject_key_identifier_ext(X509 *cert)
 	if(skeyid)
 	{
 		result = cert_string_from_octet_string(skeyid);
+
+		ASN1_OCTET_STRING_free( skeyid );
 	}
 	return result;
 }
@@ -300,6 +305,9 @@ LLSD _authority_key_identifier_ext(X509* cert)
 		{
 			result[CERT_AUTHORITY_KEY_IDENTIFIER_SERIAL] = cert_string_from_asn1_integer(akeyid->serial);
 		}	
+
+
+		AUTHORITY_KEYID_free( akeyid );
 	}
 	
 	// we ignore the issuer name in the authority key identifier, we check the issue name via
