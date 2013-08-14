@@ -210,8 +210,6 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 // 									  LLURLDispatcherImpl::regionNameCallback,
 // 									  slurl.getSLURLString(),
 	LLSLURL hyper = slurl;
-	std::string region = hyper.getRegion();
-	std::string dest = hyper.getSLURLString();
 #ifdef OPENSIM // <FS:AW optional opensim support>
 	std::string grid = slurl.getGrid();
 	std::string current_grid = LLGridManager::getInstance()->getGrid();
@@ -221,6 +219,7 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 	std::string current = LLGridManager::getInstance()->getGrid();
 	if((grid != current ) && (!LLGridManager::getInstance()->isInOpenSim() || (!slurl.getHypergrid() && gatekeeper.empty())))
 	{
+		std::string dest = hyper.getSLURLString();
 		if (!dest.empty())
 		{
 			LLSD args;
@@ -235,28 +234,11 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 	{
 		hyper = LLSLURL(gatekeeper + ":" + slurl.getRegion(), slurl.getPosition(), true);
 	}
-	
-	// Trim the grid uri if we're talking a local region here. <FS:CR>
-	if (grid == current)
-	{
-		std::size_t pos;
-		pos = region.find(current);
-		if (pos != std::string::npos)
-		{
-			region.erase(pos, pos + current.length() + 1);
-		}
-		
-		pos = dest.find(current);
-		if (pos != std::string::npos)
-		{
-			dest.erase(pos, pos + current.length() + 1);
-		}
-	}
 
 #endif //OPENSIM
-	// Request a region handle by name
-	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(region, LLURLDispatcherImpl::regionNameCallback, dest, LLUI::sSettingGroups["config"]->getBOOL("SLURLTeleportDirectly"));	// don't teleport
 // </FS:AW optional opensim support>
+	// Request a region handle by name
+	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(hyper.getRegion(), LLURLDispatcherImpl::regionNameCallback, hyper.getSLURLString(), LLUI::sSettingGroups["config"]->getBOOL("SLURLTeleportDirectly"));	// don't teleport
 	return true;
 }
 
