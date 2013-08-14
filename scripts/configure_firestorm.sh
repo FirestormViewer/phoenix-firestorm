@@ -60,6 +60,7 @@ showUsage()
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
     echo "  --kdu        : Build with KDU"
     echo "  --package    : Build installer"
+    echo "  --no-package : Build without installer (Overrides --package)"
     echo "  --fmodex     : Build with FMOD Ex"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
@@ -75,7 +76,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -98,6 +99,7 @@ getArgs()
           no-opensim) WANTS_OPENSIM=$FALSE;;
           avx)        WANTS_AVX=$TRUE;;
           package)    WANTS_PACKAGE=$TRUE;;
+          no-package) WANTS_PACKAGE=$FALSE;;
           build)      WANTS_BUILD=$TRUE;;
           platform)   PLATFORM="$OPTARG";;
           jobs)       JOBS="$OPTARG";;

@@ -2921,10 +2921,14 @@ void FSPanelSearchWeb::loadURL(const FSFloaterSearch::SearchQuery &p)
 		url = debug_url;
 	}
 	else if(LLGridManager::getInstance()->isInOpenSim())
-	{
-		url = LLLoginInstance::getInstance()->hasResponse("search")
-		? LLLoginInstance::getInstance()->getResponse("search").asString()
-		: gSavedSettings.getString("SearchURLOpenSim");
+	{		
+		std::string os_search_url = gAgent.getRegion()->getSearchServerURL();
+		if (!os_search_url.empty())
+			url = os_search_url;
+		else if (LLLoginInstance::getInstance()->hasResponse("search"))
+			url = LLLoginInstance::getInstance()->getResponse("search").asString();
+		else
+			url = gSavedSettings.getString("SearchURLOpenSim");
 	}
 	else
 #endif // OPENSIM

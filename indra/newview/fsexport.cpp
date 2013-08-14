@@ -295,13 +295,28 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 			default_prim = false;
 		}
 #if OPENSIM
-		if (LLGridManager::getInstance()->isInOpenSim()
-		      && object->permYouOwner()
-		      && object->permModify()
-		      && object->permCopy()
-		      && object->permTransfer())
+		if (LLGridManager::getInstance()->isInOpenSim())
 		{
-			default_prim = false;
+			LLViewerRegion* region = gAgent.getRegion();
+			if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+			{
+				default_prim = !node->mPermissions->allowExportBy(gAgent.getID());
+			}
+			else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+			{
+				// Only your own creations if this is explicitly set
+				default_prim = (!(object->permYouOwner()
+								  && gAgentID == node->mPermissions->getCreator()));
+			}
+			/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
+			/// on whether we should allow full perm exports anymore.
+			else	// LLViewerRegion::EXPORT_UNDEFINED
+			{
+				default_prim = (!(object->permYouOwner()
+								  && object->permModify()
+								  && object->permCopy()
+								  && object->permTransfer()));
+			}
 		}
 #endif
 	}
@@ -748,9 +763,23 @@ bool FSExport::assetCheck(LLUUID asset_id, std::string& name, std::string& descr
 			{
 				LLPermissions perms = items[i]->getPermissions();
 #if OPENSIM
-				if (LLGridManager::getInstance()->isInOpenSim() && ((perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED))
+				if (LLGridManager::getInstance()->isInOpenSim())
 				{
-					exportable = true;
+					LLViewerRegion* region = gAgent.getRegion();
+					if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+					{
+						exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
+					}
+					else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+					{
+						exportable = perms.getCreator() == gAgentID;
+					}
+					/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
+					/// on whether we should allow full perm exports anymore.
+					else
+					{
+						exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+					}
 				}
 #endif
 				if (LLGridManager::getInstance()->isInSecondLife() && (perms.getCreator() == gAgentID))
@@ -785,9 +814,23 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 		bool exportable = false;
 		LLPermissions perms = item->getPermissions();
 #if OPENSIM
-		if (LLGridManager::getInstance()->isInOpenSim() && ((perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED))
+		if (LLGridManager::getInstance()->isInOpenSim())
 		{
-			exportable = true;
+			LLViewerRegion* region = gAgent.getRegion();
+			if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+			{
+				exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
+			}
+			else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+			{
+				exportable = perms.getCreator() == gAgentID;
+			}
+			/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
+			/// on whether we should allow full perm exports anymore.
+			else
+			{
+				exportable = ((perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED);
+			}
 		}
 #endif
 		if (LLGridManager::getInstance()->isInSecondLife() && (perms.getCreator() == gAgentID))

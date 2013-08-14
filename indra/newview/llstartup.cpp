@@ -3903,14 +3903,14 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	{
 		// We got an answer from the grid -> use that for map for the current session
 		gSavedSettings.setString("WebProfileURL", web_profile_url); 
-		LL_INFOS("LLStartup") << "map-server-url : we got an answer from the grid : " << web_profile_url << LL_ENDL;
+		LL_INFOS("LLStartup") << "web-profile-url : we got an answer from the grid : " << web_profile_url << LL_ENDL;
 	}
 	else
 	{
 		// No answer from the grid -> use the default setting for current session 
 		web_profile_url = "https://my.secondlife.com/[AGENT_NAME]";
 		gSavedSettings.setString("WebProfileURL", web_profile_url); 
-		LL_INFOS("LLStartup") << "web_profile_url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
+		LL_INFOS("LLStartup") << "web-profile-url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
 	}
 // <FS:CR> FIRE-10567 - Set classified fee, if it's available.
 	if (response.has("classified_fee"))

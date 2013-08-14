@@ -170,7 +170,6 @@ void FSRadar::updateRadarList()
 	static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
 	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
 	static LLCachedControl<bool> sFSLegacyRadarFriendColoring(gSavedSettings, "FSLegacyRadarFriendColoring");
-	static LLCachedControl<bool> sFSLegacyRadarLindenColoring(gSavedSettings, "FSLegacyRadarLindenColoring");
 
 	F32 drawRadius(RenderFarClip);
 	const LLVector3d& posSelf = gAgent.getPositionGlobal();
@@ -514,21 +513,11 @@ void FSRadar::updateRadarList()
 		}
 		entry_options["name_style"] = nameCellStyle;
 
-		// <FS:CR> TODO: Decide whether we want special colored names in the radar or let the current UI suffice
-		//LLColor4 name_color = LGGContactSets::getInstance()->colorize(avId, range_color, LGG_CS_RADAR);
-		//entry_options["name_color"] = name_color.getValue();
-		LLColor4 name_color;
+		LLColor4 name_color = LGGContactSets::getInstance()->colorize(avId, range_color, LGG_CS_RADAR);
+
 		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR))
 		{
 			name_color = LGGContactSets::getInstance()->getFriendColor(avId);
-		}
-		else if (FSCommon::isLinden(avId) && sFSLegacyRadarLindenColoring)
-		{
-			name_color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::black);
-		}
-		else if (relation && sFSLegacyRadarFriendColoring)
-		{
-			name_color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::black);
 		}
 		entry_options["name_color"] = name_color.getValue();
 
