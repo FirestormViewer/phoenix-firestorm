@@ -213,18 +213,17 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 #ifdef OPENSIM // <FS:AW optional opensim support>
 	std::string grid = slurl.getGrid();
 	std::string current_grid = LLGridManager::getInstance()->getGrid();
-
 	std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
 
-	std::string current = LLGridManager::getInstance()->getGrid();
-	if((grid != current ) && (!LLGridManager::getInstance()->isInOpenSim() || (!slurl.getHypergrid() && gatekeeper.empty())))
+	if ((grid != current_grid)
+		&& (!LLGridManager::getInstance()->isInOpenSim() || (!slurl.getHypergrid() && gatekeeper.empty())))
 	{
 		std::string dest = hyper.getSLURLString();
 		if (!dest.empty())
 		{
 			LLSD args;
 			args["SLURL"] = dest;
-			args["GRID"] = slurl.getGrid();
+			args["GRID"] = grid;
 			args["CURRENT_GRID"] = current_grid;
 			LLNotificationsUtil::add("CantTeleportToGrid", args);
 			return true;
