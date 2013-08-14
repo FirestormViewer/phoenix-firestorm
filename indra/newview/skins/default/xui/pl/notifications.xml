@@ -4473,4 +4473,7 @@ Nie można tego cofnąć.
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].
 	</notification>
+	<notification name="AntiSpamBlocked">
+		Antyspam: Zablokowano ["SOURCE"] ze względu na spam ["QUEUE"] (["COUNT"]) razy podczas [PERIOD] sekund.
+	</notification>
 </notifications>
