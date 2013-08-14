@@ -298,11 +298,11 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
 			LLViewerRegion* region = gAgent.getRegion();
-			if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+			if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
 			{
 				default_prim = !node->mPermissions->allowExportBy(gAgent.getID());
 			}
-			else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+			else if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
 			{
 				// Only your own creations if this is explicitly set
 				default_prim = (!(object->permYouOwner()
@@ -766,6 +766,7 @@ bool FSExport::assetCheck(LLUUID asset_id, std::string& name, std::string& descr
 				if (LLGridManager::getInstance()->isInOpenSim())
 				{
 					LLViewerRegion* region = gAgent.getRegion();
+					if (!region) return false;
 					if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
 					{
 						exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
@@ -817,11 +818,11 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
 			LLViewerRegion* region = gAgent.getRegion();
-			if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+			if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
 			{
 				exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
 			}
-			else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+			else if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
 			{
 				exportable = perms.getCreator() == gAgentID;
 			}
