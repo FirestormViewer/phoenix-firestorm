@@ -126,6 +126,9 @@
 		<text name="FSCmdLineBandWidth_txt">
 			Max. Bandbreite (Befehl: cmd kbps)
 		</text>
+		<text name="FSCmdLineCopyCam_txt">
+			Kamerapos. in Zwischenablage kopieren
+		</text>
 		<text name="FSCmdLineRezPlatform_txt">
 			Plattform rezzen (Befehl: cmd 0 - 30)
 		</text>

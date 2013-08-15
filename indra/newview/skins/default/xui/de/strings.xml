@@ -5528,6 +5528,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSCmdLineDrawDistanceSet">
 		Draw Distance wurde auf [DISTANCE]m gesetzt.
 	</string>
+	<string name="FSCameraPositionCopied">
+		Kameraposition [POS] wurde in Zwischenablage kopiert.
+	</string>
 	
 	<string name="FSWithHavok">
 		mit Havok-Unterstützung
