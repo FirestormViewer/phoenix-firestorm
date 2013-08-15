@@ -1159,7 +1159,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				invrepair();
 			}
 			else if (command == std::string(sFSCmdLineCopyCam))
-            {
+			{
 				LLViewerRegion* agentRegionp = gAgent.getRegion();
 				if (agentRegionp)
 				{
@@ -1177,7 +1177,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					reportToNearbyChat("Could not get a valid region pointer.");
 				}
 				return false;
-            }
+			}
 		}
 	}
 	return true;
