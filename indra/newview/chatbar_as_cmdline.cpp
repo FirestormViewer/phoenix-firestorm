@@ -448,6 +448,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 	static LLCachedControl<std::string> sFSCmdLineClearChat(gSavedSettings,  "FSCmdLineClearChat");
 	static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings,  "FSCmdLineMedia");
 	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings,  "FSCmdLineMusic");
+	static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings,  "FSCmdLineCopyCam");
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings,  "FSCmdLineBandWidth");
 	
@@ -1157,6 +1158,26 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 			{
 				invrepair();
 			}
+			else if (command == std::string(sFSCmdLineCopyCam))
+            {
+				LLViewerRegion* agentRegionp = gAgent.getRegion();
+				if (agentRegionp)
+				{
+					LLVector3 cameraPosition = gAgentCamera.getCameraPositionAgent();
+					std::string cameraPositionString = llformat("<%.3f, %.3f, %.3f>",
+						cameraPosition.mV[VX], cameraPosition.mV[VY], cameraPosition.mV[VZ]);
+					LLUI::sWindow->copyTextToClipboard(utf8str_to_wstring(cameraPositionString));
+
+					LLStringUtil::format_map_t args;
+					args["[POS]"] = cameraPositionString;
+					reportToNearbyChat(LLTrans::getString("FSCameraPositionCopied", args));
+				}
+				else
+				{
+					reportToNearbyChat("Could not get a valid region pointer.");
+				}
+				return false;
+            }
 		}
 	}
 	return true;
