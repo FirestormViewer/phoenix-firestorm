@@ -33,6 +33,8 @@ include_directories(SYSTEM
     )
 
 set(llui_SOURCE_FILES
+    fsregistrarutils.cpp
+
     llaccordionctrl.cpp
     llaccordionctrltab.cpp
     llbadge.cpp
@@ -136,6 +138,8 @@ set(llui_SOURCE_FILES
     
 set(llui_HEADER_FILES
     CMakeLists.txt
+
+    fsregistrarutils.h
 
     llaccordionctrl.h
     llaccordionctrltab.h

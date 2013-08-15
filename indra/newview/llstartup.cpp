@@ -225,6 +225,7 @@
 #include "streamtitledisplay.h"
 #include "fscommon.h"
 #include "tea.h"
+#include "fsregistrarutils.h"
 
 //
 // exported globals
@@ -1739,6 +1740,9 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		FSRadar::instance();
 		llinfos << "Radar initialized" << llendl;
 		// </FS:Ansariel>
+
+		// <FS:Ansariel> Register check function for registrar enable checks
+		gFSRegistrarUtils.setEnableCheckFunction(boost::bind(&FSCommon::checkIsActionEnabled, _1, _2));
 
 		// <FS:Techwolf Lupindo> fsdata support
 		FSData::instance().addAgents();
@@ -3265,9 +3269,11 @@ void LLStartUp::initNameCache()
 	// capabilities for display name lookup
 	LLAvatarNameCache::initClass(false,gSavedSettings.getBOOL("UsePeopleAPI"));
 	LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
-// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-	LLCacheName::sDontTrimLegacyNames = gSavedSettings.getBOOL("DontTrimLegacyNames");
-// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
+
+	// <FS:CR> Legacy name/Username format
+	LLAvatarName::setUseLegacyFormat(gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames"));
+	// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+	LLAvatarName::setTrimResidentSurname(gSavedSettings.getBOOL("FSTrimLegacyNames"));
 }
 
 void LLStartUp::cleanupNameCache()
@@ -3897,14 +3903,14 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	{
 		// We got an answer from the grid -> use that for map for the current session
 		gSavedSettings.setString("WebProfileURL", web_profile_url); 
-		LL_INFOS("LLStartup") << "map-server-url : we got an answer from the grid : " << web_profile_url << LL_ENDL;
+		LL_INFOS("LLStartup") << "web-profile-url : we got an answer from the grid : " << web_profile_url << LL_ENDL;
 	}
 	else
 	{
 		// No answer from the grid -> use the default setting for current session 
 		web_profile_url = "https://my.secondlife.com/[AGENT_NAME]";
 		gSavedSettings.setString("WebProfileURL", web_profile_url); 
-		LL_INFOS("LLStartup") << "web_profile_url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
+		LL_INFOS("LLStartup") << "web-profile-url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
 	}
 // <FS:CR> FIRE-10567 - Set classified fee, if it's available.
 	if (response.has("classified_fee"))

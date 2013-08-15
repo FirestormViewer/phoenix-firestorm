@@ -56,12 +56,6 @@
 #include "llui.h"				// positionViewNearMouse()
 #include "lluictrl.h"
 
-
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
-#include "rlvhandler.h"
-#include "lltoolpie.h"
-// [/RLVa:KB]
-
 class LLViewerObject;
 
 //////////////////////////////////////////////////////////////////////////////

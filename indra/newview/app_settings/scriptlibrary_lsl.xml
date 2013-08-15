@@ -83,6 +83,7 @@
 		<event name="http_response" desc="http_response(key request_id, integer status, list metadata, string body);Triggered when task receives a response to one of its llHTTPRequests" />
 		<event name="http_request" desc="http_request(key id, string method, string body);Triggered when task receives an http request against a public URL" />
 		<event name="transaction_result" desc="transaction_result(key id, integer success, string data); Triggered when L$ is given to task" />
+		<event name="path_update" desc="Informs the script of events that happen within the pathfinding system" />
 
 		<integer_constant name="TRUE" desc="integer_constant for Boolean operations" />
 		<integer_constant name="FALSE" desc="integer_constant for Boolean operations" />
@@ -123,6 +124,7 @@
 		<integer_constant name="PERMISSION_SILENT_ESTATE_MANAGEMENT" desc="Passed to llRequestPermissions library function to request permission to silently modify estate access lists" />
 		<integer_constant name="PERMISSION_OVERRIDE_ANIMATIONS" desc="Passed to llRequestPermissions library function to request permission to override animations on agent" />
 		<integer_constant name="PERMISSION_RETURN_OBJECTS" desc="Passed to llRequestPermissions library function to request permission to return objects" />
+		<integer_constant name="PERMISSION_CHANGE_LINKS" desc="Passed to llRequestPermissions library function to request permission to change an objects links" />
 		
 		<integer_constant name="DEBUG_CHANNEL" desc="Chat channel reserved for debug and error messages from scripts" />
 		<integer_constant name="PUBLIC_CHANNEL" desc="Chat channel that broadcasts to all nearby users" />
@@ -540,11 +542,13 @@
 			
 		<integer_constant name="HTTP_METHOD" desc="Used with llHTTPRequest to specify the method, such as 'GET' or 'POST'" />
 		<integer_constant name="HTTP_MIMETYPE" desc="Used with llHTTPRequest to specify the MIME type, defaults to 'text/plain'" />
-		<integer_constant name="HTTP_BODY_MAXLENGTH" desc="Used with llHTTPRequest to specify the maximum response body to return" />
 		<integer_constant name="HTTP_VERIFY_CERT" desc="Used with llHTTPRequest to specify SSL certificate verification" />
 		<integer_constant name="HTTP_BODY_TRUNCATED" desc="Used with http_response to indicate truncation point in bytes" />
 		<integer_constant name="HTTP_BODY_MAXLENGTH" desc="Used with llHTTPRequest to specify the maximum body size for the date returned from the request. Mono scripts can request from 1byte to 16k, non-mono scripts can request from 1byte to 4k. The default is 2k." />
-			
+		<integer_constant name="HTTP_VERBOSE_THROTTLE" desc="The integer constant HTTP_VERBOSE_THROTTLE has the value 4" />
+		<integer_constant name="HTTP_CUSTOM_HEADER" desc="The integer constant HTTP_CUSTOM_HEADER has the value 5" />
+		<integer_constant name="HTTP_PRAGMA_NO_CACHE" desc="The integer constant HTTP_PRAGMA_NO_CACHE has the value 6" />
+		
 		<integer_constant name="PARCEL_COUNT_TOTAL" desc="Used with llGetParcelPrimCount to get the total number of prims on the parcel" />
 		<integer_constant name="PARCEL_COUNT_OWNER" desc="Used with llGetParcelPrimCount to get the number of prims on the parcel owned by the owner" />
 		<integer_constant name="PARCEL_COUNT_GROUP" desc="Used with llGetParcelPrimCount to get the number of prims on the parcel owned by the group" />
@@ -613,7 +617,7 @@
 		<integer_constant name="STATUS_MALFORMED_PARAMS" desc="Function was called with malformed params" />
 		<integer_constant name="STATUS_TYPE_MISMATCH" desc="Argument(s) passed to function had a type mismatch" />
 		<integer_constant name="STATUS_BOUNDS_ERROR" desc="Argument(s) passed to function had a bounds error" />
-		<integer_constant name="STATUS_NOT_FOUND " desc="Object or other item was not found" />
+		<integer_constant name="STATUS_NOT_FOUND" desc="Object or other item was not found" />
 		<integer_constant name="STATUS_NOT_SUPPORTED" desc="Feature not supported" />
 		<integer_constant name="STATUS_INTERNAL_ERROR" desc="An internal error occurred" />
 		<integer_constant name="STATUS_WHITELIST_FAILED" desc="URL failed to pass whitelist" />
@@ -700,9 +704,11 @@
 		<integer_constant name="CHARACTER_ACCOUNT_FOR_SKIPPED_FRAMES" desc="Defines if a character will attempt to catch up lost time if pathfinding performance is low." />
 		<integer_constant name="OBJECT_PATHFINDING_TYPE" desc="Used with llGetObjectDetails to get an object's pathfinding settings." />
 		<integer_constant name="OPT_UNKNOWN" desc="Returned object pathfinding type by llGetObjectDetails for attachments, Linden trees and grass." />
+		<integer_constant name="OPT_OTHER" desc="Returned for attachments, Linden trees and grass, was OPT_UNKOWN" />
 		<integer_constant name="OPT_LEGACY_LINKSET" desc="Returned object pathfinding type by llGetObjectDetails for movable obstacles, movable phantoms, physical, and volumedetect objects." />
 		<integer_constant name="OPT_AVATAR" desc="Returned object pathfinding type by llGetObjectDetails for avatars." />
 		<integer_constant name="OPT_PATHFINDING_CHARACTER" desc="Returned object pathfinding type by llGetObjectDetails for pathfinding characters." />
+		<integer_constant name="OOPT_CHARACTER" desc="Returned for pathfinding characters, was OPT_PATHFINDING_CHARACTER" />
 		<integer_constant name="OPT_WALKABLE" desc="Returned object pathfinding type by llGetObjectDetails for walkable objects." />
 		<integer_constant name="OPT_STATIC_OBSTACLE" desc="Returned object pathfinding type by llGetObjectDetails for static obstacles." />
 		<integer_constant name="OPT_MATERIAL_VOLUME" desc="Returned object pathfinding type by llGetObjectDetails for material volumes." />
@@ -769,6 +775,20 @@
 
 		<integer_constant name="PROFILE_NONE" desc="Disables profiling" />
 		<integer_constant name="PROFILE_SCRIPT_MEMORY" desc="Enables memory profiling" />
+		
+		<integer_constant name="PU_SLOWDOWN_DISTANCE_REACHED" desc="Character is near current goal" />
+		<integer_constant name="PU_GOAL_REACHED" desc="Character has reached the goal and will stop or choose a new goal (if wandering)" />
+		<integer_constant name="PU_FAILURE_INVALID_START" desc="Character cannot navigate from the current location - e.g., the character is off the navmesh or too high above it" />
+		<integer_constant name="PU_FAILURE_INVALID_GOAL" desc="Goal is not on the navmesh and cannot be reached" />
+		<integer_constant name="PU_FAILURE_UNREACHABLE" desc="Goal is no longer reachable for some reason - e.g., an obstacle blocks the path" />
+		<integer_constant name="PU_FAILURE_TARGET_GONE" desc="Target (for llPursue or llEvade) can no longer be tracked - e.g., it left the region or is an avatar that is now more than about 30m outside the region" />
+		<integer_constant name="PU_FAILURE_NO_VALID_DESTINATION" desc="There's no good place for the character to go - e.g., it is patrolling and all the patrol points are now unreachable" />
+		<integer_constant name="PU_EVADE_HIDDEN" desc="Triggered when an llEvade character thinks it has hidden from its pursuer" />
+		<integer_constant name="PU_EVADE_SPOTTED" desc="Triggered when an llEvade character switches from hiding to running" />
+		<integer_constant name="PU_FAILURE_NO_NAVMESH" desc="This is a fatal error reported to a character when there is no navmesh for the region. This usually indicates a server failure and users should file a bug report and include the time and region in which they received this message" />
+		<integer_constant name="PU_FAILURE_DYNAMIC_PATHFINDING_DISABLED" desc="Triggered when a character enters a region with dynamic pathfinding disabled. Dynamic pathfinding can be toggled by estate managers via the 'dynamic_pathfinding' option in the Region Debug Console" />
+		<integer_constant name="PU_FAILURE_PARCEL_UNREACHABLE" desc="Triggered when a character failed to enter a parcel because it is not allowed to enter, e.g. because the parcel is already full or because object entry was disabled after the navmesh was baked" />
+		<integer_constant name="PU_FAILURE_OTHER" desc="Other failure" />
 	</keywords>
 	<functions>
 		<function name="llSin" sleep="0.0" energy="10.0"
@@ -865,8 +885,8 @@
 			desc="rotation llDetectedRot(integer number);Returns the rotation of detected object number (returns &lt;0,0,0,1&gt; if number is not a valid sensed object)" />
 		<function name="llDetectedGroup" sleep="0.0" energy="10.0"
 			desc="integer llDetectedGroup(integer number);Returns TRUE if detected object is part of same group as owner" />
-		<function name="llDetectedLineNumber" sleep="0.0" energy="10.0"
-			desc="integer llDetectedLinkNumber(integer number);Returns the link position of the triggered event for touches and collisions only" />
+		<function name="llDetectedLinkNumber" sleep="0.0" energy="10.0"
+			desc="integer llDetectedLinkNumber(integer number);Returns the integer link number of the triggered event. If not supported, returns zero" />
 		<function name="llDie" sleep="0.0" energy="10.0"
 			desc="llDie();Deletes the object" />
 		<function name="llGround" sleep="0.0" energy="10.0"
@@ -1069,7 +1089,7 @@
 			desc="integer llGetPermissions();Returns an integer bitfield with the permissions that have been granted" />
 		<function name="llGetLinkNumber" sleep="0.0" energy="10.0"
 			desc="integer llGetLinkNumber();Returns the link number of the prim containing the script (0 means not linked, 1 the prim is the root, 2 the prim is the first child, etc)" />
-		<function name="llSetLinkNumber" sleep="0.0" energy="10.0"
+		<function name="llSetLinkColor" sleep="0.0" energy="10.0"
 			desc="llSetLinkColor(integer linknumber, vector color, integer face);Sets face to color if a task exists in the link chain at linknumber" />
 		<function name="llCreateLink" sleep="0.0" energy="10.0"
 			desc="llCreateLink(key target, integer parent);Attempts to link the script&apos;s object with the target (requires that PERMISSION_CHANGE_LINKS be granted). If parent == TRUE, then the script&apos;s object becomes the root" />
@@ -1257,7 +1277,7 @@
 			desc="key llAvatarOnSitTarget();If an avatar is seated on the sit target, returns the avatar&apos;s key, otherwise NULL_KEY" />
 		<function name="llAddToLandPassList" sleep="0.0" energy="10.0"
 			desc="llAddToLandPassList(key avatar, float hours);Adds avatar to the land pass list for hours, or indefinitely if hours is 0" />
-		<function name="llSetTouchNext" sleep="0.0" energy="10.0"
+		<function name="llSetTouchText" sleep="0.0" energy="10.0"
 			desc="llSetTouchText(string text);Displays text rather than the default &apos;Touch&apos; in the pie menu" />
 		<function name="llSetSitText" sleep="0.0" energy="10.0"
 			desc="llSetSitText(string text);Displays text rather than the default &apos;Sit Here&apos; in the pie menu" />
@@ -1279,7 +1299,7 @@
 			desc="integer llGetScriptState(string name);Returns TRUE if the script name is running" />
 		<function name="llRemoteLoadScript" sleep="0.0" energy="10.0"
 			desc="DEPRECATED!  Please use llRemoteLoadScriptPin instead" />
-		<function name="llSetRemoteAccessPin" sleep="0.0" energy="10.0"
+		<function name="llSetRemoteScriptAccessPin" sleep="0.0" energy="10.0"
 			desc="llSetRemoteScriptAccessPin(integer pin);If pin is set to a non-zero number, allows a prim to have scripts remotely loaded via llRemoteLoadScriptPin when it passes in the correct pin. Otherwise, llRemoteLoadScriptPin is ignored" />
 		<function name="llRemoteLoadScriptPin" sleep="0.0" energy="10.0"
 			desc="llRemoteLoadScriptPin(key target, string name, integer pin, integer running, integer start_param);Copies script name onto target, if the owner of this scripted object can modify target and is in the same region, and the matching pin is used.;If running == TRUE, starts the script with start_param" />
@@ -1392,8 +1412,8 @@
 			desc="string llUnescapeURL(string url);Returns an unescaped/ unencoded version of url, replacing %20 with spaces etc" />
 		<function name="llMapDestination" sleep="0.0" energy="10.0"
 			desc="llMapDestination(string simname, vector pos, vector look_at);Opens the World Map centered on the region simname with pos highlighted. (NOTE; look_at currently does nothing.);Only works for scripts attached to avatar, or during touch events" />
-		<function name="llAddToBanList" sleep="0.0" energy="10.0"
-			desc="llAddToLandBanList(key avatar, float hours);Adds avatar to the land ban list for hours, or indefinitely if hours is 0" />
+		<function name="llAddToLandBanList" sleep="0.1" energy="10.0"
+			desc="llAddToLandBanList( key avatar, float hours );Add avatar to the land ban list for hours, or indefinitely if hours is zero" />
 		<function name="llRemoveFromLandPassList" sleep="0.0" energy="10.0"
 			desc="llRemoveFromLandPassList(key avatar);Removes avatar from the land pass list" />
 		<function name="llRemoveFromLandBanList" sleep="0.0" energy="10.0"
@@ -1533,7 +1553,7 @@
 			desc="llSetAngularVelocity(vector angular_velocity, integer local);Sets an objects angular velocity, in local coords if local == TRUE (if the script is physical)" />
 		<function name="llSetPhysicsMaterial" sleep="0.0" energy="10.0"
 			desc="llSetPhysicsMaterial(integer flags, float gravity_multiplier, float restitution, float friction, float density );Sets the requested attributes of the root object&apos;s physics material" />
-		<function name="llGetPhysicalMaterial" sleep="0.0" energy="10.0"
+		<function name="llGetPhysicsMaterial" sleep="0.0" energy="10.0"
 			desc="llGetPhysicsMaterial();Returns the gravity multiplier, restitution, friction, and density of the linkset as a list in that order" />
 		<function name="llGetMassMKS" sleep="0.0" energy="10.0"
 			desc="llGetMassMKS();Returns the mass of the linkset in kilograms" />

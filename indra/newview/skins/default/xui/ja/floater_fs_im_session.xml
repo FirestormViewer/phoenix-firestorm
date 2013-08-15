@@ -1,8 +1,83 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
-	<layout_stack name="im_panels">
+	<layout_stack orientation="horizontal" name="ls_control_panel">
+		<layout_panel name="slide_panel">
+			<button name="slide_left_btn" />
+			<button name="slide_right_btn" />
+		</layout_panel>
+       
+       <layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="このグループのプロフィールを表示します。"/>
+       </layout_panel>
+       
+       <layout_panel name="profile_panel">	  
+       		<button name="view_profile_btn" tool_tip="この住人のプロフィールを表示します。" />
+       </layout_panel>
+
+       <layout_panel name="friend_panel">
+        	<button tool_tip="この住人にフレンドシップを申請します。" name="add_friend_btn" />
+       </layout_panel>
+       
+       <layout_panel name="tp_panel">
+			<button tool_tip="この住人にテレポートを送って呼びます。" name="teleport_btn" />
+       </layout_panel>
+       
+       <layout_panel name="share_panel">
+			<button tool_tip="この住人にアイテムを送ります。" name="share_btn" />
+       </layout_panel>
+       
+       <layout_panel name="pay_panel">
+        	<button tool_tip="この住人にリンデンドルを送金します。" name="pay_btn" />
+       </layout_panel>
+
+       <layout_panel name="call_btn_panel">              
+         	<button tool_tip="このチャットにボイスを追加します。" name="call_btn" />
+       </layout_panel> 
+       
+       <layout_panel name="end_call_btn_panel">       
+         	<button tool_tip="ボイスコールを終了します。" name="end_call_btn" />
+       </layout_panel>
+       
+       <layout_panel name="voice_ctrls_btn_panel">             
+			<button tool_tip="ボイスコントロール" name="voice_ctrls_btn" />
+       </layout_panel>
+      
+       <layout_panel name="im_history_btn_panel">             
+			<button tool_tip="このIMの会話履歴を開きます。" name="im_history_btn" />
+        </layout_panel>
+      
+	</layout_stack>
+
+    <!-- Checkbox for FS prefix on support groups -->
+    <check_box label="ビューワタイプを特定" name="FSSupportGroupChatPrefix_toggle" tool_tip="あなたが現在使用しているビューワのバージョンとスキンの情報をこのグループ宛のメッセージの先頭に追加します。そうすることで、サポートスタッフがあなたに生じている問題を正確に診断し、あなたの質問に対してより正確な回答ができるようになります。" />
+    <!-- END: FS Prefix -->
+	
+	<!--button for sending sys info-->
+	<button tool_tip="システム情報を送ります。" name="send_sysinfo_btn" />
+	<!--End sys info button-->
+
+	<layout_stack orientation="horizontal" name="im_panels">
+		<layout_panel name="im_control_panel_holder">
+			<panel name="panel_im_control_panel" />
+		</layout_panel>	
 		<layout_panel name="panel_im_control_lp">
-			<line_editor label="宛先" name="chat_editor"/>
+			<layout_stack name="im_panels">
+				<layout_panel name="chat_holder">
+					<fs_chat_history name="chat_history" />
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_editor_layout_panel">
+							<chat_editor name="chat_editor" />
+						</layout_panel>
+						<!-- Not added yet, if ever [FS:CR]
+						<layout_panel name="input_button_layout_panel">
+							<button name="minz_btn" tool_tip="メッセージパネルを表示または非表示にします。" />
+						</layout_panel>-->
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
+
 </floater>

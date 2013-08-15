@@ -44,6 +44,8 @@
 #include "llwindow.h"
 #include <boost/bind.hpp>
 
+#include "fsregistrarutils.h"
+
 const F32	CURSOR_FLASH_DELAY = 1.0f;  // in seconds
 const S32	CURSOR_THICKNESS = 2;
 const F32	TRIPLE_CLICK_INTERVAL = 0.3f;	// delay between double and triple click.
@@ -2010,11 +2012,23 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("Url.SendIM", boost::bind(&LLUrlAction::sendIM, url));	// <FS:CR>
 
 	// <FS:Ansariel> Additional convenience options
-	std::string target_id = LLUrlAction::extractUuidFromSlurl(url).asString();
-	registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id + "/zoom"));
-	registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id + "/teleportto"));
-	registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id + "/offerteleport"));
-	registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id + "/track"));
+	std::string target_id_str = LLUrlAction::extractUuidFromSlurl(url).asString();
+	registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/zoom"));
+	registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/teleportto"));
+	registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/offerteleport"));
+	registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/track"));
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Add enable checks for menu items
+	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+	LLUUID target_id(target_id_str);
+	enable_registrar.add("Url.EnableShowProfile", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SHOW_PROFILE));
+	enable_registrar.add("Url.EnableAddFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ADD_FRIEND));
+	enable_registrar.add("Url.EnableSendIM", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SEND_IM));
+	enable_registrar.add("FS.EnableZoomIn", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ZOOM_IN));
+	enable_registrar.add("FS.EnableOfferTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_OFFER_TELEPORT));
+	enable_registrar.add("FS.EnableTrackAvatar", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_TRACK_AVATAR));
+	enable_registrar.add("FS.EnableTeleportToTarget", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_TELEPORT_TO));
 	// </FS:Ansariel>
 
 	// create and return the context menu from the XUI file

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<floater name="nearby_chat" title="周辺チャット">
+<floater.string name="chatbox_label">周辺チャットに</floater.string>
+
+<layout_stack name="ls_control_panel">
+
+	<layout_panel name="lp_translate_btn">
+		<button tool_tip="選択した翻訳サービスを利用します。" name="translate_btn"/>
+	</layout_panel>
+    <layout_panel name="lp_chat_history_btn">
+		<button tool_tip="周辺チャット履歴を開きます。" name="chat_history_btn"/>
+	</layout_panel>
+    <layout_panel name="lp_chat_history_muted_btn">
+		<button tool_tip="周辺チャット履歴に無視した会話を表示します。" name="chat_history_muted_btn" />
+	</layout_panel>
+    
+</layout_stack>
+  
+<layout_stack name="ls_chat">
+
+	<layout_panel name="panel_im_control_lp">
+		<layout_stack name="im_panels">
+			<layout_panel name="chat_holder">
+				<fs_chat_history name="chat_history" />
+				<fs_chat_history name="chat_history_muted" />
+			</layout_panel>
+			<layout_panel name="chat_layout_panel">
+				<layout_stack name="input_panels">
+					<layout_panel name="input_editor_layout_panel">
+						<chat_editor name="chat_box" />
+					</layout_panel>
+					<layout_panel name="input_button_layout_panel">
+						<spinner label="" name="ChatChannel" tool_tip="チャットを表示するチャンネルを選択します。環境設定＞チャット＞Firestorm＞「チャットバーにチャンネル選択を表示」で設定します。" />
+					</layout_panel>
+				</layout_stack>
+
+			</layout_panel>
+		</layout_stack>
+	</layout_panel>
+	
+</layout_stack>
+
+</floater>

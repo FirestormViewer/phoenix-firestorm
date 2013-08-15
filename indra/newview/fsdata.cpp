@@ -108,7 +108,7 @@ FSData::FSData() :
 	mAgentsDone(false)
 {
 	mHeaders.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
-	mHeaders.insert("viewer-version", LLVersionInfo::getChannelAndVersion());
+	mHeaders.insert("viewer-version", LLVersionInfo::getChannelAndVersionFS());
 }
 
 void FSData::processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified)
@@ -677,7 +677,7 @@ bool FSData::isDeveloper(LLUUID avatar_id)
 
 LLSD FSData::allowedLogin()
 {
-	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(LLVersionInfo::getChannelAndVersion());
+	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(LLVersionInfo::getChannelAndVersionFS());
 	if (iter == mBlockedVersions.end())
 	{
 		return LLSD(); 

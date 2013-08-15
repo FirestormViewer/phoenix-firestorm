@@ -28,6 +28,7 @@
 #ifndef FS_COMMON_H
 #define FS_COMMON_H
 
+#include "fsregistrarutils.h"
 #include "llchat.h"
 #include "llpanelpeople.h"
 #include "llviewerobject.h"
@@ -73,6 +74,8 @@ namespace FSCommon
 	 * keep track of ObjectAdd messages sent to the similular.
 	 */
 	extern S32 sObjectAddMsg;
+
+	bool checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType);
 };
 
 #endif // FS_COMMON_H

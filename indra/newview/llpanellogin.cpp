@@ -352,12 +352,12 @@ void LLPanelLogin::addFavoritesToStartLocation()
 // </FS:CR>
 		if (res != 0)
 		{
-			lldebugs << "Skipping favorites for " << iter->first << llendl;
+			LL_DEBUGS("Favorites") << "Skipping favorites for " << iter->first << LL_ENDL;
 			continue;
 		}
 
 		combo->addSeparator();
-		lldebugs << "Loading favorites for " << iter->first << llendl;
+		LL_DEBUGS("Favorites") << "Loading favorites for " << iter->first << LL_ENDL;
 		LLSD user_llsd = iter->second;
 		for (LLSD::array_const_iterator iter1 = user_llsd.beginArray();
 			iter1 != user_llsd.endArray(); ++iter1)

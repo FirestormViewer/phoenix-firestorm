@@ -53,9 +53,6 @@ public:
 	void	onNearbyChatContextMenuItemClicked(const LLSD& userdata);
 	bool	onNearbyChatCheckContextMenuItem(const LLSD& userdata);
 
-	void	onChatBarVisibilityChanged();
-	void	onChatChannelVisibilityChanged();
-
 	/*virtual*/ void	onOpen	(const LLSD& key);
 
 	/*virtual*/ void	setVisible(BOOL visible);
@@ -89,7 +86,9 @@ public:
 
 	void enableTranslationButton(bool enabled);
 	LLChatEntry* getChatBox() { return mInputEditor; }
-	
+
+	S32 getMessageArchiveLength() {return mMessageArchive.size();}
+
 	virtual BOOL handleKeyHere( KEY key, MASK mask );
 	
 	static void startChat(const char* line);

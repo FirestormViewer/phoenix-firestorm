@@ -247,6 +247,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 
 	static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
 	static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
+	static LLCachedControl<bool> im_coloring(gSavedSettings, "FSColorIMsDistinctly");
 	if (nameTagShowUsernames && useDisplayNames)
 	{
 		senderName = av_name.getCompleteName();
@@ -271,7 +272,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 		senderName = "[" + group + "] " + senderName;
 	}
 
-	LLColor4 textColor = LLUIColorTable::instance().getColor("AgentIMColor");
+	LLColor4 textColor = LLUIColorTable::instance().getColor( im_coloring ? "AgentIMColor" : "AgentChatColor" );
 	
 	// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
 	textColor = LGGContactSets::getInstance()->colorize(agent_id, textColor, LGG_CS_CHAT);
@@ -283,6 +284,6 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 		textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
 	}
 
-	gConsole->addConsoleLine(LLTrans::getString("IMPrefix") + senderName + delimiter + message, textColor);
+	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
 	gConsole->setVisible(!isNearbyChatVisible());
 }

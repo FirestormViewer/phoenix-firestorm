@@ -44,6 +44,12 @@
 			<text name="direct_label">
 				Directo
 			</text>
+			<check_box name="FSColorIMsDistinctly" label="Colorear diferenciadamente los chats de grupo/MI en consola:"/>
+			<panel name="im_color_panel">
+				<text name="console_im_label">
+					MIs/Grupo
+				</text>
+			</panel>
 		</panel>
 		<panel label="Etiquetas de nombre" name="tab-nametag">
 			<text name="nametag_colors">

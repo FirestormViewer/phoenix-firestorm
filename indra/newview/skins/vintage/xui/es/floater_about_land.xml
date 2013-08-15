@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floaterland" title="ACERCA DEL TERRENO">
-	<floater.string name="maturity_icon_general">
-		&quot;Parcel_PG_Dark&quot;
-	</floater.string>
-	<floater.string name="maturity_icon_moderate">
-		&quot;Parcel_M_Dark&quot;
-	</floater.string>
-	<floater.string name="maturity_icon_adult">
-		&quot;Parcel_R_Dark&quot;
-	</floater.string>
 	<floater.string name="Minutes">
 		[MINUTES] minutos
 	</floater.string>
@@ -22,7 +13,7 @@
 		restantes
 	</floater.string>
 	<tab_container name="landtab">
-		<panel label="GENERAL" name="land_general_panel">
+		<panel label="General" name="land_general_panel">
 			<panel.string name="new users only">
 				Sólo nuevos residentes
 			</panel.string>
@@ -152,7 +143,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<button label="Abandonar el terreno" name="Abandon Land..."/>
 			<button label="Reclamar el terreno" name="Reclaim Land..."/>
 		</panel>
-		<panel label="CONTRATO" name="land_covenant_panel">
+		<panel label="Contrato" name="land_covenant_panel">
 			<panel.string name="can_resell">
 				El terreno comprado en esta región se podrá revender.
 			</panel.string>
@@ -214,7 +205,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				El terreno de esta región no se podrá unir/dividir.
 			</text>
 		</panel>
-		<panel label="OBJETOS" name="land_objects_panel">
+		<panel label="Objetos" name="land_objects_panel">
 			<panel.string name="objects_available_text">
 				[COUNT] de un máx. de [MAX] ([AVAILABLE] disponibles)
 			</panel.string>
@@ -272,11 +263,11 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<text name="selected_objects_text">
 				[COUNT]
 			</text>
-			<text name="Autoreturn">
+			<text name="Autoreturn" width="380">
 				Devolución automática de objetos de otros (en min., 0 la desactiva):
 			</text>
 			<line_editor name="clean other time"/>
-			<text name="Object Owners:" width="200">
+			<text name="Object Owners:" width="160">
 				Propietarios de los objetos:
 			</text>
 			<button label="Actualizar la lista" label_selected="Actualizar la lista" name="Refresh List" tool_tip="Refrescar la lista de objetos"/>
@@ -288,7 +279,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				<name_list.columns label="Más recientes" name="mostrecent"/>
 			</name_list>
 		</panel>
-		<panel label="OPCIONES" name="land_options_panel">
+		<panel label="Opciones" name="land_options_panel">
 			<panel.string name="search_enabled_tooltip">
 				Permitir que aparezca esta parcela en los resultados de la búsqueda
 			</panel.string>
@@ -354,7 +345,7 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<check_box label="El grupo" name="check group scripts"/>
 			<check_box label="Seguro (sin daño)" name="check safe" tool_tip="Si se marca, convierte el terreno en &apos;seguro&apos;, desactivando el daño en combate. Si no, se activa el daño en combate."/>
 			<check_box label="Sin &apos;empujones&apos;" name="PushRestrictCheck" tool_tip="Previene scripts que empujen. Marcando esta opción prevendrá que en su terreno haya comportamientos destructivos." left_pad="42"/>
-			<check_box label="Mostrar en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela paarezca en resultados de búsqueda"/>
+			<check_box label="Mostrar en la búsqueda (30 L$/semana) bajo:" name="ShowDirectoryCheck" tool_tip="Permite que la parcela aparezca en resultados de búsqueda bajo la categoría seleccionada" width="290"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Cualquier categoría" name="item0"/>
 				<combo_box.item label="Localización Linden" name="item1"/>
@@ -392,9 +383,9 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="Pulse para elegir una imagen"/>
 			<text name="allow_label5">
-				Los  avatares de otras parcelas pueden ver y chatear con los avatares de ésta
+				Los  avatares de otras parcelas pueden:
 			</text>
-			<check_box name="SeeAvatarsCheck" tool_tip="Permite que los avatares de otras parcelas vean a los avatares de ésta y chateen con ellos, y también que tú puedas verles y chatear con ellos."/>
+			<check_box label="Ver y chatear con avatares de esta parcela" name="SeeAvatarsCheck" tool_tip="Permite que los avatares de otras parcelas vean a los avatares de ésta y chateen con ellos, y también que tú puedas verles y chatear con ellos."/>
 			<text name="landing_point">
 				Punto de llegada: [LANDING]
 			</text>
@@ -409,44 +400,43 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 				<combo_box.item label="Cualquiera" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="MEDIOS" name="land_media_panel">
-			<text name="with media:" width="85">
-				Tipo de medio:
+		<panel label="Medios" name="land_media_panel">
+			<text name="with media:">
+				Tipo:
 			</text>
-			<combo_box left="97" name="media type" tool_tip="Especifique si la URL es una película, una web, u otro medio"/>
-			<text name="at URL:" width="85">
-				Página inicial:
+			<combo_box name="media type" tool_tip="Especifique si la URL es una película, una web, u otro medio"/>
+			<text name="at URL:">
+				Página:
 			</text>
-			<line_editor left="97" name="media_url"/>
+			<line_editor name="media_url"/>
 			<button label="Definir" name="set_media_url"/>
 			<text name="Description:">
 				Descripción:
 			</text>
-			<line_editor left="97" name="url_description" tool_tip="Texto a mostrar cerca del botón play/cargar"/>
+			<line_editor name="url_description" tool_tip="Texto a mostrar cerca del botón play/cargar"/>
 			<text name="Media texture:">
 				Cambiar
 la textura:
 			</text>
-			<texture_picker label="" left="97" name="media texture" tool_tip="Pulse para elegir una imagen"/>
-			<text name="replace_texture_help" width="285">
-				Cuando pulses la flecha &apos;play&apos;, los objetos que usen esta textura mostrarán la película o la página web. Selecciona la miniatura para elegir una textura distinta.
+			<texture_picker name="media texture" tool_tip="Pulse para elegir una imagen"/>
+			<text name="replace_texture_help">
+				Cuando pulses la flecha "play", los objetos que usen esta textura mostrarán la película o la página web. Pulsa en la miniatura para elegir una textura distinta.
 			</text>
-			<check_box label="Escala automática" left="97" name="media_auto_scale" tool_tip="Marcando esta opción, se ajustará el tamaño del contenido automáticamente. Puede ser ligeramente más lento y con menor calidad visual, pero no tendrá que ajustar ni alinear ninguna textura."/>
-			<text left="102" name="media_size" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto)." width="120">
-				Tamaño del medio:
+			<check_box label="Escalado automático" name="media_auto_scale" tool_tip="Marcando esta opción, se ajustará el tamaño del contenido automáticamente. Puede ser ligeramente más lento y con menor calidad visual, pero no tendrá que ajustar ni alinear ninguna textura."/>
+			<text name="media_size" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto).">
+				Tamaño:
 			</text>
-			<spinner left_delta="104" name="media_size_width" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto)."/>
+			<spinner name="media_size_width" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto)."/>
 			<spinner name="media_size_height" tool_tip="Tamaño en el que mostrar las webs (marque 0 para por defecto)."/>
 			<text name="pixels">
 				píxeles
 			</text>
 			<text name="Options:">
-				Opciones de
-los medios:
+				Opciones:
 			</text>
 			<check_box label="Reproducción en bucle" name="media_loop" tool_tip="Ejecuta el medio en bucle: cuando termina su ejecución, vuelve a empezar."/>
 		</panel>
-		<panel label="SONIDO" name="land_audio_panel">
+		<panel label="Sonido" name="land_audio_panel">
 			<text name="MusicURL:">
 				URL de música:
 			</text>
@@ -466,7 +456,7 @@ los medios:
 			<check_box label="Activar la voz (establecido por el Estado)" name="parcel_enable_voice_channel_is_estate_disabled" left="120"/>
 			<check_box label="Limitar la voz a esta parcela" name="parcel_enable_voice_channel_local" left="120"/>
 		</panel>
-		<panel label="ACCESO" name="land_access_panel">
+		<panel label="Acceso" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				(Definido por el Estado)
 			</panel.string>
@@ -476,9 +466,9 @@ los medios:
 			<text name="Limit access to this parcel to:">
 				Acceso a esta parcela
 			</text>
-			<check_box label="Permitir el acceso público (si no seleccionas esta opción, se crearán líneas de prohibición)" name="public_access"/>
+			<check_box label="Permitir el acceso público (si no se activa, se crearán líneas de prohibición)" name="public_access"/>
 			<text name="Only Allow">
-				Permitir únicamente el acceso a los Residentes que:
+				Permitir el acceso únicamente a los residentes que:
 			</text>
 			<check_box label="Han aportado información de pago [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Para poder acceder a esta parcela los Residentes deben haber aportado información de pago en su cuenta. Para más información, ver [SUPPORT_SITE]."/>
 			<check_box label="Han verificado su edad [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Para poder acceder a esta parcela los Residentes deben haber verificado su edad. Para más información, ver [SUPPORT_SITE]."/>

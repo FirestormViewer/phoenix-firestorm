@@ -719,14 +719,7 @@ BOOL LLVoiceClient::isParticipantAvatar(const LLUUID& id)
 
 BOOL LLVoiceClient::isOnlineSIP(const LLUUID& id)
 {
-	if (mVoiceModule) 
-	{
-		return mVoiceModule->isOnlineSIP(id);
-	}
-	else
-	{
 		return FALSE;
-	}
 }
 
 BOOL LLVoiceClient::getIsSpeaking(const LLUUID& id)

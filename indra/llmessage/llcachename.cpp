@@ -39,6 +39,8 @@
 
 #include <boost/regex.hpp>
 
+#include "llavatarname.h"	// <FS:CR> FIRE-6659
+
 // llsd serialization constants
 static const std::string AGENTS("agents");
 static const std::string GROUPS("groups");
@@ -281,10 +283,6 @@ LLCacheName::Impl::~Impl()
 	for_each(mReplyQueue.begin(), mReplyQueue.end(), DeletePointer());
 }
 
-// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-bool LLCacheName::sDontTrimLegacyNames = false;
-// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
-
 boost::signals2::connection LLCacheName::Impl::addPending(const LLUUID& id, const LLCacheNameCallback& callback)
 {
 	PendingReply* reply = new PendingReply(id, LLHost());
@@ -518,7 +516,7 @@ BOOL LLCacheName::getUUID(const std::string& full_name, LLUUID& id)
 std::string LLCacheName::buildFullName(const std::string& first, const std::string& last)
 {
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-	if (!sDontTrimLegacyNames)
+	if (LLAvatarName::trimResidentSurname())
 	{
 // </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 		std::string fullname = first;
@@ -544,7 +542,7 @@ std::string LLCacheName::buildFullName(const std::string& first, const std::stri
 		}
 		else if (fullname.find(" ") == std::string::npos)
 		{
-			fullname+=" Resident";
+			fullname.append(" Resident");
 		}
 		return fullname;
 	}
@@ -555,13 +553,7 @@ std::string LLCacheName::buildFullName(const std::string& first, const std::stri
 std::string LLCacheName::cleanFullName(const std::string& full_name)
 {
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-	if (!sDontTrimLegacyNames)
-	{
-// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
-		return full_name.substr(0, full_name.find(" Resident"));
-// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-	}
-	return full_name;
+	return (LLAvatarName::trimResidentSurname() ? full_name : full_name.substr(0, full_name.find(" Resident")));
 // </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 }
 
@@ -630,14 +622,14 @@ std::string LLCacheName::buildLegacyName(const std::string& complete_name)
 					legacy_name = legacy_name + " " + cap_letter + last_name.substr(1);
 				}
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-				else if (sDontTrimLegacyNames)
+				else if (!LLAvatarName::trimResidentSurname())
 				{
-					legacy_name = legacy_name + " Resident";
+					legacy_name.append(" Resident");
 				}
 			}
-			else if (sDontTrimLegacyNames)
+			else if (!LLAvatarName::trimResidentSurname())
 			{
-				legacy_name = legacy_name + " Resident";
+				legacy_name.append(" Resident");
 // </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 			}
 
@@ -1053,7 +1045,7 @@ void LLCacheName::Impl::processUUIDReply(LLMessageSystem* msg, bool isGroup)
 			if (entry->mLastName.empty())
 			{
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-				if (!sDontTrimLegacyNames)
+				if (!LLAvatarName::trimResidentSurname())
 				{
 // </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 					full_name = cleanFullName(entry->mFirstName);

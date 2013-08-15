@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="export_log"
+ title="Export Object"
+ width="250"
+ height="300"
+ min_width="104"
+ min_height="100"
+ save_rect="true"
+ can_resize="true"
+ can_minimize="true"
+ can_close="true"
+ can_drag_on_left="false">
+	<scroll_list
+	 enabled="true"
+	 follows="all"
+	 height="270"
+	 layout="topleft"
+	 left="4"
+	 name="export_output"
+	 top="4"
+	 width="242" />
+	<button
+	 layout="topleft"
+	 follows="right|bottom"
+	 height="23"
+	 label="OK"
+	 name="close_btn"
+	 top_pad="1"
+	 left="153"
+	 width="90" />
+</floater>

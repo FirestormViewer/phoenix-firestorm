@@ -2081,6 +2081,8 @@ void LLPipeline::updateMoveNormalAsync(LLDrawable* drawablep)
 
 void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 {
+	LLDrawable::drawable_vector_t newList; // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
+
 	for (LLDrawable::drawable_vector_t::iterator iter = moved_list.begin();
 		 iter != moved_list.end(); )
 	{
@@ -2109,9 +2111,15 @@ void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 					drawablep->getVObj()->dirtySpatialGroup(TRUE);
 				}
 			}
-			iter = moved_list.erase(curiter);
+		// <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
+			// iter = moved_list.erase(curiter); // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
 		}
+		else
+			newList.push_back( drawablep );
+		// </FS:ND>
 	}
+
+	moved_list.swap( newList ); // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
 }
 
 static LLFastTimer::DeclareTimer FTM_OCTREE_BALANCE("Balance Octree");

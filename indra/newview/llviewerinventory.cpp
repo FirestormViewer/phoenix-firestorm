@@ -66,8 +66,6 @@
 #include "lllogininstance.h"
 #include "llfavoritesbar.h"
 
-#include "llviewernetwork.h"	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml - getGrid()
-
 // Two do-nothing ops for use in callbacks.
 void no_op_inventory_func(const LLUUID&) {} 
 void no_op() {}

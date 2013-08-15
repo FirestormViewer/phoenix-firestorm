@@ -55,6 +55,8 @@
 #include "lltooldraganddrop.h"
 #include "llsdserialize.h"
 
+#include "llviewernetwork.h"	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml - getGrid()
+
 static LLDefaultChildRegistry::Register<LLFavoritesBarCtrl> r("favorites_bar");
 
 const S32 DROP_DOWN_MENU_WIDTH = 250;
@@ -1526,14 +1528,14 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	// Do not change the file if we are not logged in yet.
 	if (!LLLoginInstance::getInstance()->authSuccess())
 	{
-		llwarns << "Cannot save favorites: not logged in" << llendl;
+		LL_WARNS("Favorites") << "Cannot save favorites: not logged in" << LL_ENDL;
 		return;
 	}
 
 	std::string user_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "");
 	if (user_dir.empty())
 	{
-		llwarns << "Cannot save favorites: empty user dir name" << llendl;
+		LL_WARNS("Favorites") << "Cannot save favorites: empty user dir name" << LL_ENDL;
 		return;
 	}
 
@@ -1561,13 +1563,13 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 		slurls_map_t::iterator slurl_iter = mSLURLs.find(value["asset_id"]);
 		if (slurl_iter != mSLURLs.end())
 		{
-			lldebugs << "Saving favorite: idx=" << LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID()) << ", SLURL=" <<  slurl_iter->second << ", value=" << value << llendl;
+			LL_DEBUGS("Favorites") << "Saving favorite: idx=" << LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID()) << ", SLURL=" <<  slurl_iter->second << ", value=" << value << LL_ENDL;
 			value["slurl"] = slurl_iter->second;
 			user_llsd[LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID())] = value;
 		}
 		else
 		{
-			llwarns << "Not saving favorite " << value["name"] << ": no matching SLURL" << llendl;
+			LL_WARNS("Favorites") << "Not saving favorite " << value["name"] << ": no matching SLURL" << LL_ENDL;
 		}
 	}
 
@@ -1575,8 +1577,14 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	LLAvatarNameCache::get( gAgentID, &av_name );
 	// Note : use the "John Doe" and not the "john.doe" version of the name 
 	// as we'll compare it with the stored credentials in the login panel.
-	lldebugs << "Saved favorites for " << av_name.getUserName() << llendl;
-	fav_llsd[av_name.getUserName()] = user_llsd;
+	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//lldebugs << "Saved favorites for " << av_name.getUserName() << llendl;
+	//fav_llsd[av_name.getUserName()] = user_llsd;
+	std::string name = av_name.getLegacyName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	LL_DEBUGS("Favorites") << "Saved favorites for " << name << LL_ENDL;
+	fav_llsd[name] = user_llsd;
+	// </FS:CR>
+
 
 	llofstream file;
 	file.open(filename);
@@ -1596,11 +1604,19 @@ void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
 	LLAvatarNameCache::get( gAgentID, &av_name );
 	// Note : use the "John Doe" and not the "john.doe" version of the name.
 	// See saveFavoritesSLURLs() here above for the reason why.
-	lldebugs << "Removed favorites for " << av_name.getUserName() << llendl;
-	if (fav_llsd.has(av_name.getUserName()))
+	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//lldebugs << "Removed favorites for " << av_name.getUserName() << llendl;
+	//if (fav_llsd.has(av_name.getUserName()))
+	//{
+	//	fav_llsd.erase(av_name.getUserName());
+	//}
+	std::string name = av_name.getLegacyName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	LL_DEBUGS("Favorites") << "Removed favorites for " << name << LL_ENDL;
+	if (fav_llsd.has(name))
 	{
-		fav_llsd.erase(av_name.getUserName());
+		fav_llsd.erase(name);
 	}
+	// </FS:CR>
 
 	llofstream out_file;
 	out_file.open(filename);

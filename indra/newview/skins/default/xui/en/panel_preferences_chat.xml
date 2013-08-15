@@ -253,6 +253,16 @@
              name="ShowChatMiniIcons"
              top_pad="1"
              width="400" />
+             <check_box
+             enabled="false"
+             control_name="LogShowHistory"
+             height="16"
+             initial_value="true"
+             label="Show the end of last conversation"
+             layout="topleft"
+             name="LogShowHistory"
+             top_pad="1"
+             width="400" />
             <check_box
              control_name="UseChatBubbles"
              follows="left|top"
@@ -327,7 +337,7 @@
              layout="topleft"
              left_pad="10"
              top_delta="-3"
-             control_name="ChatWindow"
+             control_name="FSChatWindow"
              name="chat_window"
              tool_tip="Show your Instant Messages in separate floaters, or in one floater with many tabs (Requires restart)"
              width="190">
@@ -788,7 +798,7 @@
              control_name="AutohideChatBar"
              height="18"
              initial_value="false"
-             label="Autohide Main Chatbar"
+             label="Autohide main chatbar"
              layout="topleft"
              left="30"
              name="AutohideChatBar"
@@ -799,7 +809,7 @@
              control_name="CloseChatOnReturn"
              follows="left|top"
              height="18"
-             label="Deselect Chat after sending Messages"
+             label="Deselect chat after sending a message"
              layout="topleft"
              left="30"
              name="CloseChatOnReturn"
@@ -975,29 +985,50 @@
              width="400">
               Timestamps:
             </text>
-            <check_box
-             control_name="FSHideTimestampsNearbyChat"
+            <text
+             name="show_timestamps_label"
+             follows="left|top"
+             layout="topleft"
+             top_pad="2"
+             left="30"
              height="16"
-             label="Hide timestamp in Nearby Chat"
+             width="150">
+             Show timestamps in:
+            </text>
+            <check_box
+             control_name="FSShowTimestampsNearbyChat"
+             height="16"
+             label="Nearby Chat"
+             layout="topleft"
+             left_pad="4"
+             top_delta="0"
+             name="show_timestamps_nearby_chat"
+             width="100" />
+            <check_box
+             control_name="FSShowTimestampsIM"
+             height="16"
+             label="IMs"
+             layout="topleft"
+             name="show_timestamps_im"
+             top_delta="0"
+             left_pad="4"
+             width="100" />
+            <check_box
+             control_name="FSShowTimestampsTranscripts"
+             height="16"
+             label="History"
+             layout="topleft"
+             name="show_timestamps_transcripts"
+             top_delta="0"
+             left_pad="4"
+             width="100" />
+            <check_box
+             control_name="FSSecondsinChatTimestamps"
+             name="FSSecondsinChatTimestamps"
+             label="Show seconds in timestamps [HH:MM:SS]"
              layout="topleft"
              left="30"
-             name="hide_timestamps_nearby_chat"
-             top_pad="0"
-             width="400" />
-            <check_box
-             control_name="FSHideTimestampsIM"
-             height="16"
-             label="Hide timestamp in IMs"
-             layout="topleft"
-             name="hide_timestamps_im"
-             top_pad="0"
-             width="400" />
-            <check_box
-             control_name="IMShowTime"
-             name="IMShowTime"
-             label="Show timestamps in chat history and IMs"
-             layout="topleft"
-             top_pad="0"
+             top_pad="2"
              height="16"
              width="400" />
            <!-- Console -->

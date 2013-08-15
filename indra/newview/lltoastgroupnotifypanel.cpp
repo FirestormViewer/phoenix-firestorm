@@ -75,7 +75,10 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 
 	//header title
 	std::string from_name = payload["sender_name"].asString();
-	from_name = LLCacheName::buildUsername(from_name);
+	// <FS:CR> Let the user decide how they want to see names
+	//from_name = LLCacheName::buildUsername(from_name);
+	from_name = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames") ? LLCacheName::buildLegacyName(from_name) : LLCacheName::buildUsername(from_name);
+	// </FS:CR>
 
 	std::string from;
 	LLStringUtil::format_map_t args;

@@ -228,6 +228,8 @@ class ViewerManifest(LLManifest):
         return self.args['channel']
     def channel_unique(self):
         return self.channel().replace("Firestorm", "").strip()
+    def channel_legacy_oneword(self):
+        return "".join(self.channel().split())
     def channel_oneword(self):
         return "".join(self.channel_unique().split())
     def channel_lowerword(self):
@@ -450,12 +452,11 @@ class WindowsManifest(ViewerManifest):
             self.path("SLVoice.exe")
             self.path("vivoxsdk.dll")
             self.path("ortp.dll")
-            self.path("alut.dll")
-            self.path("wrap_oal.dll")
             self.path("libsndfile-1.dll")
             self.path("zlib1.dll")
             self.path("vivoxplatform.dll")
             self.path("vivoxoal.dll")
+            self.path("ca-bundle.crt")
             
             # Security
             self.path("ssleay32.dll")
@@ -761,7 +762,7 @@ class WindowsManifest(ViewerManifest):
         if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
             sName = "%s/Phoenix_%s_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),
-                                                                     substitution_strings['channel_oneword'],
+                                                                     self.channel_legacy_oneword(),
                                                                      substitution_strings['version_dashes'],
                                                                      self.args['viewer_flavor'])
 
@@ -774,7 +775,7 @@ class WindowsManifest(ViewerManifest):
         # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
         # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for nowo.
         symbolTar = tarfile.TarFile("%s/Phoenix-%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
-                                                                                    substitution_strings['channel_oneword'],
+                                                                                    self.channel_legacy_oneword(),
                                                                                     substitution_strings['version_dashes'],
                                                                                     self.args['viewer_flavor']),
                                                                                     'w')
@@ -913,6 +914,7 @@ class DarwinManifest(ViewerManifest):
                                 'libvivoxoal.dylib',
                                 'libvivoxsdk.dylib',
                                 'libvivoxplatform.dylib',
+                                'ca-bundle.crt',
                                 'SLVoice',
                                 ):
                      self.path2basename(libdir, libfile)
@@ -1140,7 +1142,7 @@ class DarwinManifest(ViewerManifest):
             # Rename to add version numbers
             os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),
                       "%s/Phoenix_%s_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),
-                                                                      substitution_strings['channel_oneword'],
+                                                                      self.channel_legacy_oneword(),
                                                                       substitution_strings['version_dashes'],
                                                                       self.args['viewer_flavor']))
 
@@ -1285,7 +1287,7 @@ class LinuxManifest(ViewerManifest):
             # Rename to add version numbers
             os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),
                       "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),
-                                                                     self.channel_oneword(),
+                                                                     self.channel_legacy_oneword(),
                                                                      '-'.join( self.args['version'] ),
                                                                      self.args['viewer_flavor'] ) )
 

@@ -169,6 +169,7 @@ void FSRadar::updateRadarList()
 	static LLCachedControl<bool> limitRange(gSavedSettings, "LimitRadarByRange");
 	static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
 	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
+	static LLCachedControl<bool> sFSLegacyRadarFriendColoring(gSavedSettings, "FSLegacyRadarFriendColoring");
 
 	F32 drawRadius(RenderFarClip);
 	const LLVector3d& posSelf = gAgent.getPositionGlobal();
@@ -502,7 +503,7 @@ void FSRadar::updateRadarList()
 		// Set friends colors / styles
 		LLFontGL::StyleFlags nameCellStyle = LLFontGL::NORMAL;
 		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
-		if (relation)
+		if (relation && !sFSLegacyRadarFriendColoring)
 		{
 			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::BOLD);
 		}
@@ -512,15 +513,13 @@ void FSRadar::updateRadarList()
 		}
 		entry_options["name_style"] = nameCellStyle;
 
-		// <FS:CR> TODO: Decide whether we want special colored names in the radar or let the current UI suffice
-		//LLColor4 name_color = LGGContactSets::getInstance()->colorize(avId, range_color, LGG_CS_RADAR);
-		//entry_options["name_color"] = name_color.getValue();
-		
+		LLColor4 name_color = LGGContactSets::getInstance()->colorize(avId, range_color, LGG_CS_RADAR);
+
 		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR))
 		{
-			LLColor4 name_color = LGGContactSets::getInstance()->getFriendColor(avId);
-			entry_options["name_color"] = name_color.getValue();
+			name_color = LGGContactSets::getInstance()->getFriendColor(avId);
 		}
+		entry_options["name_color"] = name_color.getValue();
 
 		// Voice power level indicator
 		LLVoiceClient* voice_client = LLVoiceClient::getInstance();

@@ -107,6 +107,26 @@
 		<icon name="male_icon" tool_tip="男性"/>
 		<icon name="female_icon" tool_tip="女性"/>
 	</panel>
+	<panel name="edit_subpanel_container">
+    <!-- the shape editing panel is taller than the others
+		      because it also displays avatar height -->
+        <panel name="edit_shape_panel" />
+        <panel name="edit_skin_panel" />
+        <panel name="edit_hair_panel" />
+        <panel name="edit_eyes_panel" />
+        <panel name="edit_shirt_panel" />
+        <panel name="edit_pants_panel" />
+        <panel name="edit_shoes_panel" />
+        <panel name="edit_socks_panel" />
+        <panel name="edit_jacket_panel" />
+        <panel name="edit_skirt_panel" />
+        <panel name="edit_gloves_panel" />
+        <panel name="edit_undershirt_panel" />
+        <panel name="edit_underpants_panel" />
+        <panel name="edit_alpha_panel" />
+        <panel name="edit_tattoo_panel" />
+        <panel name="edit_physics_panel" />
+    </panel>
 	<panel name="button_panel">
 		<layout_stack name="button_panel_ls">
 			<layout_panel name="save_as_btn_lp">

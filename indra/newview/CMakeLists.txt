@@ -247,7 +247,6 @@ set(viewer_SOURCE_FILES
     lldaycyclemanager.cpp
     lldebugmessagebox.cpp
     lldebugview.cpp
-    lldeformerworker.cpp
     lldeferredsounds.cpp
     lldelayedgestureerror.cpp
     lldirpicker.cpp
@@ -451,7 +450,6 @@ set(viewer_SOURCE_FILES
     llmediadataclient.cpp
     llmenuoptionpathfindingrebakenavmesh.cpp
     llmeshrepository.cpp
-    llmeshsearch.cpp
     llmimetypes.cpp
     llmorphview.cpp
     llmoveview.cpp
@@ -937,7 +935,6 @@ set(viewer_HEADER_FILES
     lldaycyclemanager.h
     lldebugmessagebox.h
     lldebugview.h
-    lldeformerworker.h
     lldeferredsounds.h
     lldelayedgestureerror.h
     lldirpicker.h
@@ -1140,7 +1137,6 @@ set(viewer_HEADER_FILES
     llmediadataclient.h
     llmenuoptionpathfindingrebakenavmesh.h
     llmeshrepository.h
-    llmeshsearch.h
     llmimetypes.h
     llmorphview.h
     llmoveview.h
@@ -1939,14 +1935,13 @@ if (WINDOWS)
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/Debug/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/SLVoice.exe
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/alut.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/wrap_oal.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxsdk.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/ortp.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libsndfile-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/zlib1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxplatform.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxoal.dll
+      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/ca-bundle.crt
       ${GOOGLE_PERF_TOOLS_SOURCE}
       ${CMAKE_CURRENT_SOURCE_DIR}/licenses-win32.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/featuretable.txt

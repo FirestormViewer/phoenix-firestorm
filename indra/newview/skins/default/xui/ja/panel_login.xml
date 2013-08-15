@@ -26,29 +26,34 @@
 				<combo_box.item label="ホーム" name="MyHome"/>
 				<combo_box.item label="＜地域名を入力＞" name="Typeregionname"/>
 			</combo_box>
-			<text name="grid_selection_text">
-				グリッド選択：
+		</layout_panel>
+		<layout_panel name="grid_panel">
+			<text name="grid_login_text">
+				グリッド選択:
 			</text>
 			<combo_box name="server_combo" />
-			<text name="grid_mgr_help_text">
-				グリッド選択ヘルプ
-			</text>
 		</layout_panel>
 		<layout_panel name="links_login_panel">
-			<text name="login_help">
-				ログインの方法
+			<text name="create_new_account_text">
+				アカウント作成
 			</text>
 			<text name="forgot_password_text">
 				ユーザー名またはパスワードをお忘れですか？
 			</text>
-			<button label="ログイン" left_pad="30" name="connect_btn" width="60"/>
-			<check_box label="パスワードを記憶" name="remember_check"/>
+			<button label="ログイン" name="connect_btn" />
+			<check_box label="パスワードを記憶" name="remember_check" />
 		</layout_panel>
-		<layout_panel name="links">
-			<text name="create_account_text">
-				アカウントを作成してください
+		<layout_panel name="mode_selection">
+			<text name="mode_selection_text">
+				モード選択
 			</text>
-			<button label="今すぐ開始" name="create_new_account_btn"/>
+			<combo_box tool_tip="基本設定を適切に行うために、一番慣れているビューワのタイプを選択して下さい。" name="mode_combo">
+				<combo_box.item label="Firestorm" name="Firestorm" value="settings_firestorm.xml" />
+				<combo_box.item label="Phoenix" name="Phoenix" value="settings_phoenix.xml" />
+				<combo_box.item label="Viewer 3" name="V3" value="settings_v3.xml" />
+				<combo_box.item label="Hybrid" name="Hybrid" value="settings_hybrid.xml" />
+				<combo_box.item label="Latency" name="Latency" value="settings_latency.xml" />
+			</combo_box>
 		</layout_panel>
 	</layout_stack>
 </panel>

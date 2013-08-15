@@ -168,6 +168,8 @@ FSPanelProfileTab::FSPanelProfileTab()
 , mAvatarId(LLUUID::null)
 , mLoading(FALSE)
 , mLoaded(FALSE)
+, mEmbedded(FALSE)
+, mSelfProfile(FALSE)
 {
 }
 
@@ -189,6 +191,8 @@ void FSPanelProfileTab::setAvatarId(const LLUUID& id)
 		}
 		mAvatarId = id;
 		LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(),this);
+		
+		mSelfProfile = (getAvatarId() == gAgent.getID());
 	}
 }
 
@@ -338,55 +342,53 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 	LLUUID avatar_id = getAvatarId();
 	LLAvatarPropertiesProcessor::getInstance()->addObserver(avatar_id,this);
 
-	if (avatar_id == gAgentID)
+	BOOL own_profile = getSelfProfile();
+	
+	mGroupInviteButton->setVisible( !own_profile );
+	mShowOnMapButton->setVisible( !own_profile );
+	mPayButton->setVisible( !own_profile );
+	mTeleportButton->setVisible( !own_profile );
+	mIMButton->setVisible( !own_profile );
+	mAddFriendButton->setVisible( !own_profile );
+	mBlockButton->setVisible( !own_profile );
+	mUnblockButton->setVisible( !own_profile );
+	mOverflowButton->setVisible( !own_profile );
+	mGroupList->setShowNone( !own_profile );
+		
+	if (own_profile && !getEmbedded())
 	{
-		mGroupInviteButton->setVisible( false );
-		mShowOnMapButton->setVisible( false );
-		mPayButton->setVisible( false );
-		mTeleportButton->setVisible( false );
-		mIMButton->setVisible( false );
-		mAddFriendButton->setVisible( false );
-		mBlockButton->setVisible( false );
-		mUnblockButton->setVisible( false );
-		mOverflowButton->setVisible( false );
-
-		mGroupList->setShowNone(false);
-		mGroupList->enableForAgent(false);
-
-		if (LLAvatarName::useDisplayNames())
-		{
-			mDisplayNameButton->setVisible( true );
-			mDisplayNameButton->setEnabled( true );
-		}
-
-		mDescriptionEdit->setParseHTML(false);
-
-		updateButtons();
-
-		FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
-		drop_target->setVisible( false );
-		drop_target->setEnabled( false );
+		// Group list control cannot toggle ForAgent loading
+		// Less than ideal, but viewing own profile via search is edge case
+		mGroupList->enableForAgent( false );
 	}
-	else
-	{
-		//Disable "Add Friend" button for friends.
-		mAddFriendButton->setEnabled(!LLAvatarActions::isFriend(avatar_id));
 
+	if (own_profile && LLAvatarName::useDisplayNames() && !getEmbedded() )
+	{
+		mDisplayNameButton->setVisible( true );
+		mDisplayNameButton->setEnabled( true );
+	}
+
+	mDescriptionEdit->setParseHTML( !own_profile && !getEmbedded() );
+
+	FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
+	drop_target->setVisible( !own_profile );
+	drop_target->setEnabled( !own_profile );
+	
+	if (!own_profile)
+	{
 		mVoiceStatus = LLAvatarActions::canCall();
-
-		updateOnlineStatus();
-		updateButtons();
-
-		FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
 		drop_target->setAgentID( avatar_id );
+		updateOnlineStatus();
 	}
+
+	updateButtons();
 
 	getChild<LLUICtrl>("user_key")->setValue( avatar_id.asString() );
 }
 
 void FSPanelProfileSecondLife::apply(LLAvatarData* data)
 {
-	if (getIsLoaded() && (getAvatarId() == gAgentID))
+	if (getIsLoaded() && getSelfProfile())
 	{
 		data->image_id = mSecondLifePic->getImageAssetID();
 		data->about_text = mDescriptionEdit->getValue().asString();
@@ -399,7 +401,7 @@ void FSPanelProfileSecondLife::apply(LLAvatarData* data)
 void FSPanelProfileSecondLife::updateData()
 {
 	LLUUID avatar_id = getAvatarId();
-	if (!getIsLoading() && (avatar_id.notNull()) && (avatar_id != gAgentID))
+	if (!getIsLoading() && avatar_id.notNull() && !(getSelfProfile() && !getEmbedded()))
 	{
 		setIsLoading();
 		LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
@@ -445,7 +447,7 @@ void FSPanelProfileSecondLife::resetData()
 void FSPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
 {
 	LLUUID avatar_id = getAvatarId();
-	if (!LLAvatarActions::isFriend(avatar_id) && (avatar_id != gAgentID))
+	if (!LLAvatarActions::isFriend(avatar_id) && !getSelfProfile())
 	{
 		// this is non-friend avatar. Status will be updated from LLAvatarPropertiesProcessor.
 		// in FSPanelProfileSecondLife::processOnlineStatus()
@@ -466,7 +468,7 @@ void FSPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
 void FSPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avatar_groups)
 {
 	//KC: the group_list ctrl can handle all this for us on our own profile
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile() && !getEmbedded())
 		return;
 
 	// *NOTE dzaporozhan
@@ -520,7 +522,7 @@ void FSPanelProfileSecondLife::fillCommonData(const LLAvatarData* avatar_data)
 	// </FS:LO>
 	mSecondLifePic->setValue(avatar_data->image_id);
 
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile())
 	{
 		mShowInSearchCheckbox->setValue((BOOL)(avatar_data->flags & AVATAR_ALLOW_PUBLISH));
 	}
@@ -767,7 +769,7 @@ void FSPanelProfileSecondLife::enableControls()
 {
 	FSPanelProfileTab::enableControls();
 
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile() && !getEmbedded())
 	{
 		mShowInSearchCheckbox->setVisible( TRUE );
 		mShowInSearchCheckbox->setEnabled( TRUE );
@@ -783,10 +785,13 @@ void FSPanelProfileSecondLife::updateButtons()
 	if(LLAvatarActions::isFriend(getAvatarId()))
 	{
 		mTeleportButton->setEnabled(is_buddy_online);
+		//Disable "Add Friend" button for friends.
+		mAddFriendButton->setEnabled(false);
 	}
 	else
 	{
 		mTeleportButton->setEnabled(true);
+		mAddFriendButton->setEnabled(true);
 	}
 
 	bool enable_map_btn = (is_buddy_online && is_agent_mappable(getAvatarId())) || gAgent.isGodlike();
@@ -1048,7 +1053,7 @@ void FSPanelProfileWeb::enableControls()
 {
 	FSPanelProfileTab::enableControls();
 
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile() && !getEmbedded())
 	{
 		mUrlEdit->setEnabled( TRUE );
 	}
@@ -1164,7 +1169,7 @@ void FSPanelProfileInterests::resetData()
 
 void FSPanelProfileInterests::apply()
 {
-	if (getIsLoaded() && (getAvatarId() == gAgentID))
+	if (getIsLoaded() && getSelfProfile())
 	{
 		FSInterestsData interests_data = FSInterestsData();
 
@@ -1199,7 +1204,7 @@ void FSPanelProfileInterests::enableControls()
 {
 	FSPanelProfileTab::enableControls();
 
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile() && !getEmbedded())
 	{
 		mWantToEditor->setEnabled(TRUE);
 		mSkillsEditor->setEnabled(TRUE);
@@ -1293,14 +1298,13 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
 	else
 	{
 		LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
-		// LLAvatarPropertiesProcessor::instance().sendPickInfoRequest(getAvatarId(), getPickId());
 
 		enableSaveButton(FALSE);
 	}
 
 	resetDirty();
 
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile() && !getEmbedded())
 	{
 		mPickName->setEnabled( TRUE );
 		mPickDescription->setEnabled( TRUE );
@@ -1354,7 +1358,7 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
 
 	mParcelId = pick_info->parcel_id;
 	setSnapshotId(pick_info->snapshot_id);
-	if (getAvatarId() != gAgentID)
+	if (!getSelfProfile() || getEmbedded())
 	{
 		mSnapshotCtrl->setEnabled(FALSE);
 	}
@@ -1610,7 +1614,7 @@ void FSPanelProfilePicks::onOpen(const LLSD& key)
 	
 	resetData();
 
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile() && !getEmbedded())
 	{
 		mNewButton->setVisible( TRUE );
 		mNewButton->setEnabled( TRUE );
@@ -1734,7 +1738,7 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 			mNoItemsLabel->setVisible(no_data);
 			if (no_data)
 			{
-				if(getAvatarId() == gAgentID)
+				if(getSelfProfile())
 				{
 					mNoItemsLabel->setValue(LLTrans::getString("NoPicksText"));
 				}
@@ -1845,7 +1849,7 @@ void FSPanelProfileFirstLife::enableControls()
 {
 	FSPanelProfileTab::enableControls();
 
-	if (getAvatarId() == gAgentID)
+	if (getSelfProfile() && !getEmbedded())
 	{
 		mDescriptionEdit->setEnabled( TRUE );
 		mPicture->setEnabled( TRUE );
@@ -2088,6 +2092,9 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
 	mTabContainer = getChild<LLTabContainer>("panel_profile_tabs");
 	if (mTabContainer)
 		mTabContainer->setCommitCallback(boost::bind(&FSPanelProfile::onTabChange, this));
+	
+	// Load data on currently opened tab as well
+	onTabChange();
 }
 
 void FSPanelProfile::onTabChange()
@@ -2118,6 +2125,12 @@ void FSPanelProfile::onTabChange()
 
 void FSPanelProfile::onOpen(const LLSD& key)
 {
+	// don't reload the same profile
+	if (getAvatarId() == key.asUUID())
+	{
+		return;
+	}
+	
 	FSPanelProfileTab::onOpen(key);
 	
 	mPanelSecondlife	= findChild<FSPanelProfileSecondLife>(PANEL_SECONDLIFE);
@@ -2136,10 +2149,20 @@ void FSPanelProfile::onOpen(const LLSD& key)
 	mPanelFirstlife->onOpen(getAvatarId());
 	mPanelNotes->onOpen(getAvatarId());
 	
-	//always request the base profile info
+	mPanelSecondlife->setEmbedded(getEmbedded());
+	mPanelWeb->setEmbedded(getEmbedded());
+	mPanelInterests->setEmbedded(getEmbedded());
+	mPanelPicks->setEmbedded(getEmbedded());
+	mPanelClassifieds->setEmbedded(getEmbedded());
+	mPanelFirstlife->setEmbedded(getEmbedded());
+	mPanelNotes->setEmbedded(getEmbedded());
+	
+	// Always request the base profile info
+	resetLoading();
 	updateData();
 
-	if ( (false) && (getAvatarId() == gAgent.getID()))
+	// Only show commit buttons on own profile on floater version
+	if (getSelfProfile() && !getEmbedded())
 	{
 		getChild<LLUICtrl>("ok_btn")->setVisible( true );
 		getChild<LLUICtrl>("cancel_btn")->setVisible( true );
@@ -2160,7 +2183,7 @@ void FSPanelProfile::updateData()
 
 void FSPanelProfile::apply()
 {
-	if (getAvatarId() == gAgent.getID())
+	if (getSelfProfile())
 	{
 		//KC - Avatar data is spread over 3 different panels
 		// collect data from the last 2 and give to the first to save

@@ -86,10 +86,10 @@
 	</combo_box>
 	<check_box label="Estirar ambos lados" name="checkbox uniform"/>
 	<check_box label="Estirar texturas" name="checkbox stretch textures"/>
-	<check_box label="Ajustar a la rejilla" name="checkbox snap to grid"/>
+	<check_box label="Ajustar" name="checkbox snap to grid"/>
         <check_box label="Eje en primitiva raíz" name="checkbox actual root"/>
 	<check_box label="Resaltar" name="checkbox show highlight"/>
-        <button name="Options..." tool_tip="Mostrar opciones de rejilla."/>
+        <button name="Options..." label="Opciones..." tool_tip="Mostrar opciones de rejilla"/>
 	<button name="ToolCube" tool_tip="Cubo"/>
 	<button name="ToolPrism" tool_tip="Prisma"/>
 	<button name="ToolPyramid" tool_tip="Pirámide"/>

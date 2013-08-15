@@ -4,9 +4,6 @@
 #define FS_PANELPREFS_H
 
 #include "llfloaterpreference.h"
-#include "lllineeditor.h"
-
-class LLLineEditor;
 
 class PanelPreferenceFirestorm : public LLPanelPreference
 {

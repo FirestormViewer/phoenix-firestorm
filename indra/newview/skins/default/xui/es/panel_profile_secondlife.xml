@@ -41,7 +41,7 @@
 	<group_list left_delta="47" name="group_list"/>
 	<text name="About:" value="Sobre mí:" width="50"/>
 	<text name="Give item:" value="Enviar:"/>
-	<text name="Give inventory" tool_tip="Arrastra aquí items de tu inventario para dárselas a este avatar.">
+	<text name="Give inventory" tool_tip="Arrastra aquí items de tu inventario para dárselos a este avatar.">
 		Arrastra aquí items de tu inventario.
         </text>
 	<layout_stack name="buttonstack">
@@ -55,7 +55,7 @@
 		</layout_panel>
 		<layout_panel name="right_buttonstack">
 			<button label="Ofrecer amistad" label_selected="Ofrecer amistad" name="add_friend" tool_tip="Ofrecer amistad a este residente"/>
-			<button label="Bloquear" name="block" tool_tip="Bloquear a este residente (su avatar no se dibujará en pantalla, se ignorarán sus MI y sus mensajes en el chat general y los de grupo y sus ofertas de inventario"/>
+			<button label="Bloquear" name="block" tool_tip="Bloquear a este residente (su avatar no se dibujará en pantalla, se ignorarán sus MI y sus mensajes en el chat general y los de grupo y sus ofertas de inventario)"/>
 			<button label="Desbloquear" name="unblock" tool_tip="Desbloquear a este residente"/>
 		</layout_panel>
 	</layout_stack>

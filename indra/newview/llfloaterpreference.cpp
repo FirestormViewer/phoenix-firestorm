@@ -53,8 +53,7 @@
 #include "llfloaterhardwaresettings.h"
 #include "llfloatersidepanelcontainer.h"
 // <FS:Ansariel> [FS communication UI]
-//#include "llfloaterimsession.h" <FS:TM> CHUI Merge new
-//#include "llimfloater.h" <FS:TM> CHUI Merge old
+//#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 #include "fsfloaternearbychat.h"
 // </FS:Ansariel> [FS communication UI]
@@ -112,33 +111,29 @@
 #include "llpluginclassmedia.h"
 #include "llteleporthistorystorage.h"
 #include "llproxy.h"
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
-#include "rlvactions.h"
-#include "rlvhandler.h"
-// [/RLVa:KB]
-#include "llsdserialize.h" // KB: SkinsSelector
-#include "fscontactsfloater.h" // TS: sort contacts list
 
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
-//-TT Client LSL Bridge
+
+// Firestorm Includes
+#include "fscontactsfloater.h" // TS: sort contacts list
+#include "fsfloaterimcontainer.h"
 #include "fslslbridge.h"
-//-TT
-#include "NACLantispam.h"
-
-#include "llviewernetwork.h" // <FS:AW  opensim search support>
-
-// <FS:Zi> Backup Settings
+#include "growlmanager.h"
+#include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
+#include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
 #include "llscrolllistctrl.h"
 #include "llspellcheck.h"
+#include "llsdserialize.h" // KB: SkinsSelector
 #include "lltoolbarview.h"
+#include "llviewernetwork.h" // <FS:AW  opensim search support>
 #include "llwaterparammanager.h"
 #include "llwldaycycle.h"
 #include "llwlparammanager.h"
-// </FS:Zi>
-#include "growlmanager.h"
-#include "lldiriterator.h"	// <Kadah> for populating the fonts combo
+#include "rlvactions.h"
+#include "rlvhandler.h"
+#include "NACLantispam.h"
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
@@ -218,9 +213,11 @@ void LLVoiceSetKeyDialog::onCancel(void* user_data)
 
 void handleNameTagOptionChanged(const LLSD& newvalue);	
 void handleDisplayNamesOptionChanged(const LLSD& newvalue);	
-void handleFlightAssistOptionChanged(const LLSD& newvalue);
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_cache(const LLSD& notification, const LLSD& response);
+
+// <Firestorm>
+void handleFlightAssistOptionChanged(const LLSD& newvalue);
 bool callback_clear_settings(const LLSD& notification, const LLSD& response);
 // <FS:AW  opensim search support>
 bool callback_clear_debug_search(const LLSD& notification, const LLSD& response);
@@ -232,6 +229,11 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response);
 bool callback_growl_not_installed(const LLSD& notification, const LLSD& response);
 #endif
 // </FS:LO>
+// <FS:CR>
+void handleLegacyTrimOptionChanged(const LLSD& newvalue);
+void handleUsernameFormatOptionChanged(const LLSD& newvalue);
+// </FS:CR>
+// </Firestorm>
 
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
@@ -264,7 +266,7 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 		LLNavigationBar::getInstance()->clearHistoryCache();
 		
 		// flag client texture cache for clearing next time the client runs
-		// AO: Don't clear main texture cache on browser cache clear - it's too expensive to be done except explicitly
+		// <FS:AO> Don't clear main texture cache on browser cache clear - it's too expensive to be done except explicitly
 		//gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
 		//LLNotificationsUtil::add("CacheWillClear");
 
@@ -280,13 +282,24 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 	return false;
 }
 
+void handleNameTagOptionChanged(const LLSD& newvalue)
+{
+	LLVOAvatar::invalidateNameTags();
+}
+
+void handleDisplayNamesOptionChanged(const LLSD& newvalue)
+{
+	LLAvatarNameCache::setUseDisplayNames(newvalue.asBoolean());
+	LLVOAvatar::invalidateNameTags();
+}
+
 // <FS:AW  opensim search support>
 bool callback_clear_debug_search(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if ( option == 0 ) // YES
 	{
-	        gSavedSettings.setString("SearchURLDebug","");
+		gSavedSettings.setString("SearchURLDebug","");
 	}
 
 	return false;
@@ -312,7 +325,7 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 			url = gSavedSettings.getString("SearchURL");
 		}
 
-	        gSavedSettings.setString("SearchURLDebug", url);
+		gSavedSettings.setString("SearchURLDebug", url);
 
 	}
 
@@ -320,33 +333,30 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 }
 // </FS:AW  opensim search support>
 
-void handleNameTagOptionChanged(const LLSD& newvalue)
-{
-	LLVOAvatar::invalidateNameTags();
-}
-
-void handleDisplayNamesOptionChanged(const LLSD& newvalue)
-{
-	LLAvatarNameCache::setUseDisplayNames(newvalue.asBoolean());
-	LLVOAvatar::invalidateNameTags();
-}
-
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 void handleLegacyTrimOptionChanged(const LLSD& newvalue)
 {
-	gSavedSettings.setBOOL("DontTrimLegacyNames",newvalue.asBoolean());
-	LLCacheName::sDontTrimLegacyNames = newvalue.asBoolean();
-	LLAvatarNameCache::clear();
+	gSavedSettings.setBOOL("FSTrimLegacyNames", newvalue.asBoolean());
+	LLAvatarName::setTrimResidentSurname(newvalue.asBoolean());
+	LLAvatarNameCache::cleanupClass();
 	LLVOAvatar::invalidateNameTags();
 }
-// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 
-//-TT Client LSL Bridge
+void handleUsernameFormatOptionChanged(const LLSD& newvalue)
+{
+	gSavedSettings.setBOOL("FSNameTagShowLegacyUsernames", newvalue.asBoolean());
+	LLAvatarName::setUseLegacyFormat(newvalue.asBoolean());
+	LLAvatarNameCache::cleanupClass();
+	LLVOAvatar::invalidateNameTags();
+}
+// </FS:CR>
+
+// <FS:TT> Client LSL Bridge
 void handleFlightAssistOptionChanged(const LLSD& newvalue)
 {
 	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
 }
-//-TT
+// </FS:TT>
 
 // <FS_AO: bridge-based radar tags>
 void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
@@ -433,12 +443,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.WebClearCache",			boost::bind(&LLFloaterPreference::onClickBrowserClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.SetCache",				boost::bind(&LLFloaterPreference::onClickSetCache, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
-	mCommitCallbackRegistrar.add("Pref.BrowseCache",			boost::bind(&LLFloaterPreference::onClickBrowseCache, this));
-	mCommitCallbackRegistrar.add("Pref.BrowseCrashLogs",		boost::bind(&LLFloaterPreference::onClickBrowseCrashLogs, this));
-	mCommitCallbackRegistrar.add("Pref.BrowseSettingsDir",		boost::bind(&LLFloaterPreference::onClickBrowseSettingsDir, this));
-	mCommitCallbackRegistrar.add("Pref.BrowseLogPath",			boost::bind(&LLFloaterPreference::onClickBrowseChatLogDir, this));
-	mCommitCallbackRegistrar.add("Pref.Cookies",	    		boost::bind(&LLFloaterPreference::onClickCookies, this));
-	mCommitCallbackRegistrar.add("Pref.Javascript",	        	boost::bind(&LLFloaterPreference::onClickJavascript, this));
 //	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
 //	mCommitCallbackRegistrar.add("Pref.SelectSkin",				boost::bind(&LLFloaterPreference::onSelectSkin, this));
 	mCommitCallbackRegistrar.add("Pref.VoiceSetKey",			boost::bind(&LLFloaterPreference::onClickSetKey, this));
@@ -448,8 +452,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ClickEnablePopup",		boost::bind(&LLFloaterPreference::onClickEnablePopup, this));
 	mCommitCallbackRegistrar.add("Pref.ClickDisablePopup",		boost::bind(&LLFloaterPreference::onClickDisablePopup, this));	
 	mCommitCallbackRegistrar.add("Pref.LogPath",				boost::bind(&LLFloaterPreference::onClickLogPath, this));
-	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
-	mCommitCallbackRegistrar.add("Pref.ResetLogPath",			boost::bind(&LLFloaterPreference::onClickResetLogPath, this));
 	mCommitCallbackRegistrar.add("Pref.HardwareSettings",		boost::bind(&LLFloaterPreference::onOpenHardwareSettings, this));
 	mCommitCallbackRegistrar.add("Pref.HardwareDefaults",		boost::bind(&LLFloaterPreference::setHardwareDefaults, this));
 	mCommitCallbackRegistrar.add("Pref.VertexShaderEnable",		boost::bind(&LLFloaterPreference::onVertexShaderEnable, this));
@@ -465,16 +467,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.TranslationSettings",	boost::bind(&LLFloaterPreference::onClickTranslationSettings, this));
 	mCommitCallbackRegistrar.add("Pref.AutoReplace",            boost::bind(&LLFloaterPreference::onClickAutoReplace, this));
 	mCommitCallbackRegistrar.add("Pref.SpellChecker",           boost::bind(&LLFloaterPreference::onClickSpellChecker, this));
-	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
-	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
-	mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",		boost::bind(&LLFloaterPreference::setPreprocInclude, this));
-	//[ADD - Clear Settings : SJ]
-	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
-	mCommitCallbackRegistrar.add("Pref.Online_Notices",			boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));
-	
-	// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
-	mCommitCallbackRegistrar.add("PreviewUISound",				boost::bind(&LLFloaterPreference::onClickPreviewUISound, this, _2));
-	// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -482,20 +474,38 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));
-	// <FS:CR>
-	gSavedSettings.getControl("FSColorUsername")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
-	// </FS:CR>
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
-// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
-	gSavedSettings.getControl("DontTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged,  _2));
-// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
-	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged,  _2));
-	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	
 	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
 
 	mCommitCallbackRegistrar.add("Pref.ClearLog",				boost::bind(&LLConversationLog::onClearLog, &LLConversationLog::instance()));
 	mCommitCallbackRegistrar.add("Pref.DeleteTranscripts",      boost::bind(&LLFloaterPreference::onDeleteTranscripts, this));
+
+	// <Firestorm Callbacks>
+	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
+	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
+	mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",		boost::bind(&LLFloaterPreference::setPreprocInclude, this));
+	//[ADD - Clear Settings : SJ]
+	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
+	mCommitCallbackRegistrar.add("Pref.Online_Notices",			boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));	
+	// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+	mCommitCallbackRegistrar.add("PreviewUISound",				boost::bind(&LLFloaterPreference::onClickPreviewUISound, this, _2));
+	mCommitCallbackRegistrar.add("Pref.BrowseCache",			boost::bind(&LLFloaterPreference::onClickBrowseCache, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseCrashLogs",		boost::bind(&LLFloaterPreference::onClickBrowseCrashLogs, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseSettingsDir",		boost::bind(&LLFloaterPreference::onClickBrowseSettingsDir, this));
+	mCommitCallbackRegistrar.add("Pref.BrowseLogPath",			boost::bind(&LLFloaterPreference::onClickBrowseChatLogDir, this));
+	mCommitCallbackRegistrar.add("Pref.Cookies",	    		boost::bind(&LLFloaterPreference::onClickCookies, this));
+	mCommitCallbackRegistrar.add("Pref.Javascript",	        	boost::bind(&LLFloaterPreference::onClickJavascript, this));
+	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
+	mCommitCallbackRegistrar.add("Pref.ResetLogPath",			boost::bind(&LLFloaterPreference::onClickResetLogPath, this));
+	// <FS:CR>
+	gSavedSettings.getControl("FSColorUsername")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
+	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
+	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
+	// </FS:CR>
+	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
+	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
+	// </Firestorm callbacks>
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -513,14 +523,9 @@ void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType t
 
 void LLFloaterPreference::storeAvatarProperties( const LLAvatarData* pAvatarData )
 {
-	//-TT 2.6.9 - is this a different fix for same issue, or additional check? Keeping both
-	//if (LLStartUp::getStartupState() == STATE_STARTED)
-	//if (gAgent.isInitialized() && (gAgent.getID() != LLUUID::null))
-
 	if (gAgent.isInitialized() && (gAgent.getID() != LLUUID::null) && (LLStartUp::getStartupState() == STATE_STARTED))
 	{
-		//mAvatarProperties.avatar_id		= gAgent.getID();
-		mAvatarProperties.avatar_id		= pAvatarData->avatar_id; //-TT 2.6.9 - change in 2.6.9
+		mAvatarProperties.avatar_id		= pAvatarData->avatar_id;
 		mAvatarProperties.image_id		= pAvatarData->image_id;
 		mAvatarProperties.fl_image_id   = pAvatarData->fl_image_id;
 		mAvatarProperties.about_text	= pAvatarData->about_text;
@@ -569,11 +574,7 @@ void LLFloaterPreference::saveAvatarProperties( void )
 BOOL LLFloaterPreference::postBuild()
 {
 	// <FS:Ansariel> [FS communication UI]
-	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2)); <FS:TM> CHUI Merge removed by LL
-	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterIMSessionTab::processChatHistoryStyleUpdate, false)); <FS:TM> CHUI Merge New
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterIMSessionTab::processChatHistoryStyleUpdate, false));
 	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
 	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
@@ -668,17 +669,17 @@ BOOL LLFloaterPreference::postBuild()
 	return TRUE;
 }
 
-// ## Zi: Pie menu
+// <FS:Zi> Pie menu
 void LLFloaterPreference::onPieColorsOverrideChanged()
 {
-	BOOL enable=gSavedSettings.getBOOL("OverridePieColors");
+	BOOL enable = gSavedSettings.getBOOL("OverridePieColors");
 
 	getChild<LLColorSwatchCtrl>("pie_bg_color_override")->setEnabled(enable);
 	getChild<LLColorSwatchCtrl>("pie_selected_color_override")->setEnabled(enable);
 	getChild<LLSliderCtrl>("pie_menu_opacity")->setEnabled(enable);
 	getChild<LLSliderCtrl>("pie_menu_fade_out")->setEnabled(enable);
 }
-// ## Zi: Pie menu
+// </FS:Zi> Pie menu
 
 void LLFloaterPreference::updateDeleteTranscriptsButton()
 {
@@ -697,13 +698,13 @@ void LLFloaterPreference::onDoNotDisturbResponseChanged()
 	gSavedPerAccountSettings.setBOOL("DoNotDisturbResponseChanged", response_changed_flag );
 }
 
-// ## Zi: Optional Edit Appearance Lighting
+// <FS:Zi> Optional Edit Appearance Lighting
 void LLFloaterPreference::onAppearanceCameraChanged()
 {
-	BOOL enable=gSavedSettings.getBOOL("AppearanceCameraMovement");
+	BOOL enable = gSavedSettings.getBOOL("AppearanceCameraMovement");
 	getChild<LLCheckBoxCtrl>("EditAppearanceLighting")->setEnabled(enable);
 }
-// ## Zi: Optional Edit Appearance Lighting
+// </FS:Zi> Optional Edit Appearance Lighting
 
 LLFloaterPreference::~LLFloaterPreference()
 {
@@ -989,13 +990,16 @@ void LLFloaterPreference::onVertexShaderEnable()
 	refreshEnabledGraphics();
 }
 
-// AO: toggle lighting detail availability in response to local light rendering, to avoid confusion
+// <FS:AO> toggle lighting detail availability in response to local light rendering, to avoid confusion
 void LLFloaterPreference::onLocalLightsEnable()
 {
 	LLFloaterPreference* instance = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
-        if (instance)
+	if (instance)
+	{
 		getChildView("LocalLightsDetail")->setEnabled(gSavedSettings.getBOOL("RenderLocalLights"));
+	}
 }
+// </FS:AO>
 
 //static
 void LLFloaterPreference::initDoNotDisturbResponse()
@@ -1064,8 +1068,10 @@ void LLFloaterPreference::onBtnOK()
 			if(moveTranscriptsAndLog())
 			{
 				//When floaters are empty but have a chat history files, reload chat history into them
-				// <FS:Ansariel> [FS communication UI] [CHUI Merge] FIXME: We can't reload stuff currently...
+				// <FS:Ansariel> [FS communication UI]
 				//LLFloaterIMSessionTab::reloadEmptyFloaters();
+				FSFloaterIMContainer::reloadEmptyFloaters();
+				// </FS:Ansariel> [FS communication UI]
 			}
 			//Couldn't move files so restore the old path and show a notification
 			else
@@ -1490,14 +1496,17 @@ void LLFloaterPreference::refreshEnabledState()
 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
 	LLSpinCtrl* gamma_ctrl = getChild<LLSpinCtrl>("gamma");
 	gamma_ctrl->setEnabled(!gPipeline.canUseWindLightShaders());
-	getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());
+	// <FS:Ansariel> Does not exist on FS
+	//getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());
 	getChildView("fog")->setEnabled(!gPipeline.canUseWindLightShaders());
 
 	// anti-aliasing
 	{
 		LLUICtrl* fsaa_ctrl = getChild<LLUICtrl>("fsaa");
-		LLTextBox* fsaa_text = getChild<LLTextBox>("antialiasing label");
-		LLView* fsaa_restart = getChildView("antialiasing restart");
+		// <FS:Ansariel> Does not exist on FS
+		//LLTextBox* fsaa_text = getChild<LLTextBox>("antialiasing label");
+		//LLView* fsaa_restart = getChildView("antialiasing restart");
+		// </FS:Ansariel>
 		
 		// Enable or disable the control, the "Antialiasing:" label and the restart warning
 		// based on code support for the feature on the current hardware.
@@ -1507,9 +1516,11 @@ void LLFloaterPreference::refreshEnabledState()
 			fsaa_ctrl->setEnabled(TRUE);
 			
 			// borrow the text color from the gamma control for consistency
-			fsaa_text->setColor(gamma_ctrl->getEnabledTextColor());
+			// <FS:Ansariel> Does not exist on FS
+			//fsaa_text->setColor(gamma_ctrl->getEnabledTextColor());
 
-			fsaa_restart->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+			//fsaa_restart->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+			// </FS:Ansariel>
 		}
 		else
 		{
@@ -1517,9 +1528,11 @@ void LLFloaterPreference::refreshEnabledState()
 			fsaa_ctrl->setValue((LLSD::Integer) 0);
 			
 			// borrow the text color from the gamma control for consistency
-			fsaa_text->setColor(gamma_ctrl->getDisabledTextColor());
+			// <FS:Ansariel> Does not exist on FS
+			//fsaa_text->setColor(gamma_ctrl->getDisabledTextColor());
 			
-			fsaa_restart->setVisible(FALSE);
+			//fsaa_restart->setVisible(FALSE);
+			// </FS:Ansariel>
 		}
 	}
     
@@ -1822,14 +1835,16 @@ void LLFloaterPreference::refresh()
 	// sliders and their text boxes
 	//	mPostProcess = gSavedSettings.getS32("RenderGlowResolutionPow");
 	// slider text boxes
-	updateSliderText(getChild<LLSliderCtrl>("ObjectMeshDetail",		true), getChild<LLTextBox>("ObjectMeshDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("FlexibleMeshDetail",	true), getChild<LLTextBox>("FlexibleMeshDetailText",	true));
-	updateSliderText(getChild<LLSliderCtrl>("TreeMeshDetail",		true), getChild<LLTextBox>("TreeMeshDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("AvatarMeshDetail",		true), getChild<LLTextBox>("AvatarMeshDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("AvatarPhysicsDetail",	true), getChild<LLTextBox>("AvatarPhysicsDetailText",		true));
-	updateSliderText(getChild<LLSliderCtrl>("TerrainMeshDetail",	true), getChild<LLTextBox>("TerrainMeshDetailText",		true));
+	// <FS:Ansariel> Disable as we show the numeric value and we would create dummy controls
+	//updateSliderText(getChild<LLSliderCtrl>("ObjectMeshDetail",		true), getChild<LLTextBox>("ObjectMeshDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("FlexibleMeshDetail",	true), getChild<LLTextBox>("FlexibleMeshDetailText",	true));
+	//updateSliderText(getChild<LLSliderCtrl>("TreeMeshDetail",		true), getChild<LLTextBox>("TreeMeshDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("AvatarMeshDetail",		true), getChild<LLTextBox>("AvatarMeshDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("AvatarPhysicsDetail",	true), getChild<LLTextBox>("AvatarPhysicsDetailText",		true));
+	//updateSliderText(getChild<LLSliderCtrl>("TerrainMeshDetail",	true), getChild<LLTextBox>("TerrainMeshDetailText",		true));
 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
-	updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
+	//updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
+	// </FS:Ansariel>
 		
 	refreshEnabledState();
 }
@@ -2118,6 +2133,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	}
 	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
 	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
+
+	// <FS:Ansariel> FIRE-420: Show end of last conversation in history
+	getChildView("LogShowHistory")->setEnabled(TRUE);
 }
 
 void LLFloaterPreference::onUpdateSliderText(LLUICtrl* ctrl, const LLSD& name)
@@ -2196,8 +2214,7 @@ void LLFloaterPreference::onClickBlockList()
 
 void LLFloaterPreference::onClickSortContacts()
 {
-        FSFloaterContacts* fs_contacts = FSFloaterContacts::getInstance();
-        fs_contacts->sortFriendList();
+	FSFloaterContacts::getInstance()->sortFriendList();
 }
 
 void LLFloaterPreference::onClickProxySettings()
@@ -2508,8 +2525,7 @@ BOOL LLPanelPreference::postBuild()
 
 	//////////////////////PanelSetup ///////////////////
 	// <FS:Zi> Add warning on high bandwidth settings
-	//if (hasChild("max_bandwidth"), TRUE) <FS:TM> CHUI Merge new
-	// if (hasChild("max_bandwidth")) <FS:TM> CHUI Merge old
+	//if (hasChild("max_bandwidth"), TRUE)
 	// Look for the layout widget on top level of this panel
 	if (hasChild("max_bandwidth_layout"))
 	// </FS:Zi>

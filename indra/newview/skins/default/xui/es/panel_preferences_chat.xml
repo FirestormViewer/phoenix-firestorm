@@ -33,6 +33,7 @@
 			<check_box label="Cuando estoy desconectado, recibir los MI por email ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="No usar cabeceras de chat (usar estilo V1)" name="plain_text_chat_history"/>
 			<check_box label="Al usar cabeceras de chat, mostrar mini-iconos" name="ShowChatMiniIcons"/>
+			<check_box label="Mostrar final de la última conversación" name="LogShowHistory"/>
 			<check_box label="Mostrar el chat en bocadillos sobre los avatares" name="bubble_text_chat"/>
 			<check_box label="Mostrar indicador de escritura en bocadillos sobre los avatares" name="bubble_text_typing"/>
 			<text name="inworld_typing_rg_label" width="157">
@@ -166,9 +167,13 @@
 			<text name="logging_enhancements">
 				Marcas de tiempo:
 			</text>
-			<check_box label="Ocultar fecha y hora en el chat local" name="hide_timestamps_nearby_chat"/>
-			<check_box label="Ocultar fecha y hora en los MIs" name="hide_timestamps_im"/>
-			<check_box name="IMShowTime" label="Mostrar fecha y hora en el historial de chat y MIs"/>
+			<text name="show_timestamps_label">
+				Mostrar fecha y hora en:
+			</text>
+			<check_box label="Chat local" name="show_timestamps_nearby_chat"/>
+			<check_box label="MIs" name="show_timestamps_im"/>
+			<check_box label="Registro" name="show_timestamps_transcripts"/>
+			<check_box name="FSSecondsinChatTimestamps" label="Mostrar segundos en las marcas de tiempo [HH:MM:SS]"/>
 			<text name="console_enhancements">
 				Consola:
 			</text>

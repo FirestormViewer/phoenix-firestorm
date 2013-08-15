@@ -35,7 +35,6 @@ class LLFace;
 class LLMeshSkinInfo;
 class LLVolume;
 class LLVolumeFace;
-class LLVOVolume;	// <FS:CR> Qarl's mesh deformer
 
 
 class LLDrawPoolAvatar : public LLFacePool
@@ -138,8 +137,7 @@ public:
 									  LLFace* facep, 
 									  const LLMeshSkinInfo* skin, 
 									  LLVolume* volume,
-									  const LLVolumeFace& vol_face,
-									  LLVOVolume* vobj);	// <FS:CR> Qarl's mesh deformer
+									  const LLVolumeFace& vol_face);
 	void updateRiggedVertexBuffers(LLVOAvatar* avatar);
 
 	void renderRigged(LLVOAvatar* avatar, U32 type, bool glow = false);

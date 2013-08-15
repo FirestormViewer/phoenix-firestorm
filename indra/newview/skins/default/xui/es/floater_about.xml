@@ -60,24 +60,60 @@ Los Linden son:
 				Y traducciones de:
 			</text>
 		</panel>
-		<panel label="Créditos de Firestorm" name="fs_credits_panel">
-			<text name="firestorm_intro" height="110">
-				Firestorm es un proyecto de desarrollo de la comunidad para mejorar la experiencia de uso del Visor de SecondLife(tm). Compilamos contribuciones de varios desarrolladores de la comunidad junto con el código de Linden lab y el nuestro propio para brindarte un visor de calidad, enriquecido con nuevas características y respaldado por un amplio equipo de voluntarios para darte soporte. Firestorm llega a ti a través de The Phoenix Firestorm Project, Inc., una organización sin ánimo de lucro.
+		<panel label="Créditos de Firestorm" name="fs_credits_panel" height="850">
+			<scroll_container name="fs_credits_scroll_container">
+				<panel name="fs_credits_scroll_container_content_panel">
+					<text name="firestorm_intro" height="110">
+						Firestorm es un proyecto de desarrollo de la comunidad para mejorar la experiencia de uso del Visor de SecondLife(tm). Compilamos contribuciones de varios desarrolladores de la comunidad junto con el código de Linden lab y el nuestro propio para brindarte un visor de calidad, enriquecido con nuevas características y respaldado por un amplio equipo de voluntarios para darte soporte. Firestorm llega a ti a través de The Phoenix Firestorm Project, Inc., una organización sin ánimo de lucro.
 
 Forman el Equipo de Desarrollo de Firestorm:
-			</text>
-			<text name="fs_contrib_intro" >
-				Han contribuído generosamente con código adicional:
-			</text>
-			<text name="fs_support_intro" >
-				Agradecimientos especiales para nuestro Equipo de Soporte de Firestorm, editores del wiki, educadores, y traductores:
-			</text>
-			<text name="fs_art_intro" >
-				Firestorm incluye Starlight, modificado por Firestorm. Proporcionado por residentes para los residentes, con la intención de proveer una interfaz de uso alternativa, más luminosa y esperamos que más fácil de usar. Para más detalles ver &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+					</text>
+					<text name="fs_contrib_intro" >
+						Han contribuído generosamente con código adicional:
+					</text>
+					<text name="fs_support_intro" >
+						Agradecimientos especiales para nuestro Equipo de Soporte de Firestorm, editores del wiki, educadores, y traductores:
+					</text>
+					<text name="fs_art_intro" >
+						Firestorm incluye Starlight, modificado por Firestorm. Proporcionado por residentes para los residentes, con la intención de proveer una interfaz de uso alternativa, más luminosa y esperamos que más fácil de usar. Para más detalles ver &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
 
 Artistas y Diseñadores de la interfaz:
-			</text>
+					</text>
+				</panel>
+			</scroll_container>
 		</panel>
-		<panel label="Licencias" name="licenses_panel"/>
+		<panel label="Licencias" name="licenses_panel">
+			 <text_editor name="credits_editor">
+3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
+APR Copyright (C) 2011 The Apache Software Foundation
+Collada DOM Copyright 2006 Sony Computer Entertainment Inc.
+cURL Copyright (C) 1996-2010, Daniel Stenberg, (daniel@haxx.se)
+DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
+expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
+FMOD Sound System, Copyright (C) Firelight Technologies Pty, Ltd., 1994-2013
+FreeType Copyright (C) 1996-2002, 2006 David Turner, Robert Wilhelm, y Werner Lemberg.
+GL Copyright (C) 1999-2004 Brian Paul.
+GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University and David Luebke, Brenden Schubert, University of Virginia.
+google-perftools Copyright (c) 2005, Google Inc.
+Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
+jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
+jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
+ogg/vorbis Copyright (C) 2002, Xiphophorus
+OpenSSL Copyright (C) 1998-2008 The OpenSSL Project.
+PCRE Copyright (c) 1997-2012 University of Cambridge
+SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
+SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
+zlib Copyright (C) 1995-2012 Jean-loup Gailly y Mark Adler.
+Algunos iconos por Joseph Wain / glyphish.com
+
+Second Life Viewer usa Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (y sus licenciadores). Todos los derechos reservados. Ver www.havok.com para más detalles.
+
+Este software contiene código fuente proporcionado por NVIDIA Corporation.
+
+Todos los derechos reservados. Ver licenses.txt para más detalles.
+
+Codificación de audio del chat de voz: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
+		</text_editor>
 	</tab_container>
 </floater>

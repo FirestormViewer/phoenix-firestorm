@@ -60,17 +60,17 @@ public:
 	/**
 	 * Sets avatar ID, sets panel as observer of avatar related info replies from server.
 	 */
-	virtual void setAvatarId(const LLUUID& id);
+	void setAvatarId(const LLUUID& id);
 
 	/**
 	 * Processes data received from server.
 	 */
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type) = 0;
+	virtual void processProperties(void* data, EAvatarProcessorType type) = 0;
 
 	/**
 	 * Returns avatar ID.
 	 */
-	virtual const LLUUID& getAvatarId() { return mAvatarId; }
+	const LLUUID& getAvatarId() { return mAvatarId; }
 
 	/**
 	 * Clears panel data if viewing avatar info for first time and sends update data request.
@@ -79,16 +79,26 @@ public:
 
 	/*virtual*/ ~FSPanelProfileTab();
 
+	void setEmbedded(BOOL embedded) { mEmbedded = embedded; }
+
 protected:
 
 	FSPanelProfileTab();
 
 	virtual void enableControls();
 
+	// mLoading: FALSE: Initial state, can request
+	//           TRUE:  Data requested, skip duplicate requests (happens due to LLUI's habit of repeated callbacks)
+	// mLoaded:  FALSE: Initial state, show loading indicator
+	//           TRUE:  Data recieved, which comes in a single message, hide indicator
 	bool getIsLoading() { return mLoading; }
 	void setIsLoading() { mLoading = TRUE; }
 	bool getIsLoaded() { return mLoaded; }
 	void resetLoading() { mLoading = FALSE; mLoaded = FALSE; }
+	
+	const BOOL getEmbedded() const { return mEmbedded; }
+	
+	const BOOL getSelfProfile() const { return mSelfProfile; }
 
 	void setApplyProgress(bool started);
 
@@ -97,6 +107,8 @@ private:
 	LLUUID  mAvatarId;
 	BOOL    mLoading;
 	BOOL    mLoaded;
+	BOOL	mEmbedded;
+	BOOL	mSelfProfile;
 };
 
 

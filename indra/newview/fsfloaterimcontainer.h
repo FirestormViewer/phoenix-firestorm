@@ -74,6 +74,8 @@ public:
 	virtual void sessionRemoved(const LLUUID& session_id);
 	virtual void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) {};
 
+	static void reloadEmptyFloaters();
+
 private:
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;

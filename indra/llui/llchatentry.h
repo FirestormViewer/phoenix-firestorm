@@ -68,6 +68,9 @@ public:
 	void enableSingleLineMode(bool single_line_mode);
 	boost::signals2::connection setTextExpandedCallback(const commit_signal_t::slot_type& cb);
 
+	// <FS:Ansariel> Changed to public so we can update history when using modifier keys
+	void	updateHistory();
+
 private:
 
 	/**
@@ -82,7 +85,8 @@ private:
 	/**
 	 * Implements line history so previous entries can be recalled by CTRL UP/DOWN
 	 */
-	void	updateHistory();
+	// <FS:Ansariel> Changed to public so we can update history when using modifier keys
+	//void	updateHistory();
 
 	BOOL	handleSpecialKey(const KEY key, const MASK mask);
 

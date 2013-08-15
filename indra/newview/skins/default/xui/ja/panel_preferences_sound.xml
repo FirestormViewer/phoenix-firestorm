@@ -20,6 +20,7 @@
 	
 		<slider label="ボタン" name="UI Volume"/>
 		<slider label="風" name="Wind Volume"/>
+		<check_box name="collisions_audio_play_btn" tool_tip="衝突した際のデフォルト音を聞くにはここにチェックを入れます。" label="衝突音を再生" />
 		<slider label="効果音" name="SFX Volume"/>
 		<check_box label="ジェスチャーの音を再生" name="gesture_audio_play_btn" tool_tip="ジェスチャーの音を聞くにはこれを選択" value="true"/>
 		<slider label="ストリーミング音楽" name="Music Volume"/>
@@ -32,10 +33,28 @@
 		<check_box label="他の住人のスクリプトがメディアを再生することを許可" name="media_allowscript_btn" tool_tip="他の住人がスクリプトの入ったオブジェクトを使って土地のメディアをコントロールすることを許可／禁止します"/>
 		<check_box label="他のアバターに取り付けられたメディアを再生する" name="media_show_on_others_btn" tool_tip="このチェックを外すと、近くにいる他のアバターに取り付けられたメディアを非表示にします" value="true"/>
 		<check_box label="メディアフィルターを有効にする（セキュリティレベルが上がります）" name="media_filter" tool_tip="このチェックを入れることで、特定のサイトのメディアを再生するかどうかフィルターをかけることができるようになります"/>
-		<button label="メディアフィルター編集" name="edit_media_lists_button" />
-		<check_box label="曲のタイトルをチャットに表示" name="ShowStreamMetadata"/>
+		<button label="メディアフィルター編集" name="edit_media_lists_button" left_pad="120"/>
+		<text name="show_stream_metadata_text">
+			曲のタイトルの通知方法:
+        </text>
+		<radio_group name="show_stream_metadata">
+            <radio_item label="通知しない" name="radio_off" value="0" />
+            <radio_item label="トースト" name="radio_toasts" value="1" />
+            <radio_item label="周辺チャット" name="radio_chat" value="2" />
+        </radio_group>
 		<check_box label="曲のタイトルを次のチャンネルに送る" name="StreamMetadataAnnounceToChat"/>
-		<text name="Media Rolloff">
+		<check_box name="FSFadeAudioStream" tool_tip="区画に流れている曲が変わる時にフェードイン／フェードアウトさせたい場合にここにチェックを入れて下さい。" label="区画音声のフェードを有効にする:" />
+        <slider label="フェードイン" name="FSAudioMusicFadeIn"          width="280"
+         label_width="80" tool_tip="区画に流れている音声のフェードインする時間を設定します。" />
+        <text name="FSAudioMusicFadeInSeconds" left_delta="285">
+            秒
+        </text>
+        <slider label="フェードアウト" name="FSAudioMusicFadeOut"          width="280"
+         label_width="80" tool_tip="区画に流れている音声のフェードアウトする時間を設定します。"/>
+        <text name="FSAudioMusicFadeOutSeconds" left_delta="285">
+            秒
+        </text>
+		<text name="Media Rolloff" width="400">
 			メディア音量のロールオフ距離（それ以上大きく或いは小さくならない距離）：
 		</text>
 		<slider label="最小距離" name="MediaRollOffMin" tool_tip="ここで設定した距離より音源から遠くに離れていくにつれて音量が次第に小さくなっていきます"/>
@@ -65,6 +84,7 @@
 			<radio_item label="アバターの位置から聞く" name="1"/>
 		</radio_group>
 		<check_box label="話すときにアバターの口を動かす" name="enable_lip_sync"/>
+        <check_box label="アバターの頭上にボイスビジュアライザーを表示" name="FSShowVoiceVisualizer" tool_tip="アバターの頭上にボイス・インジケータ（白い点）を表示します。" />
 		<check_box label="コールする時にボイスビジュアライザーを表示" name="Show_Voice_Visualizers_In_Calls" tool_tip="アバター間またはグループ内でコールする時にボイス・インジケータを表示し、インワールドで口を動かすようにします"/>
 		<check_box label="ボイスのオン・オフ切り替えに使用するトリガーキー：" name="push_to_talk_toggle_check" tool_tip="トグルモードの時にトリガーキーを一回押すごとにマイクのオン・オフ設定が切り替えられます。トグルモードではないときは、トリガーキーを押した状態の時のみあなたの声が相手に聞こえます。"/>
 		<line_editor label="プッシュ・トゥ・スピークのトリガー" name="modifier_combo"/>

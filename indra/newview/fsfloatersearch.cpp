@@ -79,14 +79,6 @@ LLRadioGroup*	mSearchRadio;
 LLComboBox*		mCategoryPlaces;
 LLComboBox*		mCategoryEvents;
 
-static const std::string PANEL_PROFILE		= "panel_profile_secondlife";
-static const std::string PANEL_WEB			= "panel_profile_web";
-static const std::string PANEL_INTERESTS	= "panel_profile_interests";
-static const std::string PANEL_PICKS		= "panel_profile_picks";
-static const std::string PANEL_CLASSIFIEDS	= "panel_profile_classified";
-static const std::string PANEL_FIRSTLIFE	= "panel_profile_firstlife";
-static const std::string PANEL_NOTES		= "panel_profile_notes";
-
 ////////////////////////////////////////
 //          Observer Classes          //
 ////////////////////////////////////////
@@ -344,12 +336,14 @@ BOOL FSFloaterSearch::postBuild()
 	resetVerbs();
 	
 	// <KC> If skin has legacy full profile view, use it
-	LLPanel* panel_people = getChild<LLPanel>("panel_ls_people");
+	FSPanelSearchPeople* panel_people = findChild<FSPanelSearchPeople>("panel_ls_people");
 	mPanelProfile = panel_people->findChild<FSPanelProfile>("panel_profile_view");
 	if (mPanelProfile)
 	{
 		mPanelProfile->setVisible(false);
+		mPanelProfile->setEmbedded(TRUE);
 		panel_people->childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
+		panel_people->setUseLegacyResultBehavior(TRUE);
 	}
 	
 	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
@@ -616,14 +610,6 @@ void FSFloaterSearch::avatarNameUpdatedCallback(const LLUUID& id, const LLAvatar
 	{
 		mDetailTitle->setValue(av_name.getCompleteName());
 		setLoadingProgress(false);
-		
-		// FSPanelProfileSecondLife* panel_profile = findChild<FSPanelProfileSecondLife>(PANEL_PROFILE);
-		// if (panel_profile)
-		// {
-			// FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
-			// panel_profile->onAvatarNameCache(id, av_name);
-			// if (panel_web) panel_web->onAvatarNameCache(id, av_name);
-		// }
 	}
 	// Otherwise possibly a request for an older selection, ignore it.
 }
@@ -1048,6 +1034,12 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
+		
+		//<FS:KC> Load the first result
+		if (self->getUseLegacyResultBehavior())
+		{
+			self->onSelectItem();
+		}
 	}
 }
 
@@ -2929,10 +2921,14 @@ void FSPanelSearchWeb::loadURL(const FSFloaterSearch::SearchQuery &p)
 		url = debug_url;
 	}
 	else if(LLGridManager::getInstance()->isInOpenSim())
-	{
-		url = LLLoginInstance::getInstance()->hasResponse("search")
-		? LLLoginInstance::getInstance()->getResponse("search").asString()
-		: gSavedSettings.getString("SearchURLOpenSim");
+	{		
+		std::string os_search_url = gAgent.getRegion()->getSearchServerURL();
+		if (!os_search_url.empty())
+			url = os_search_url;
+		else if (LLLoginInstance::getInstance()->hasResponse("search"))
+			url = LLLoginInstance::getInstance()->getResponse("search").asString();
+		else
+			url = gSavedSettings.getString("SearchURLOpenSim");
 	}
 	else
 #endif // OPENSIM

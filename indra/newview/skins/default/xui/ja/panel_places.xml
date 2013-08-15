@@ -3,9 +3,17 @@
 	<string name="landmarks_tab_title" value="マイ ランドマーク"/>
 	<string name="teleport_history_tab_title" value="テレポートの履歴"/>
 	<filter_editor label="場所をフィルター" name="Filter"/>
+	
+	<tab_container name="Places Tabs" />
+	<panel name="panel_place_profile" />
+	<panel name="panel_landmark_info" />
+	<panel name="button_panel">
 	<panel name="button_panel">
 		<layout_stack name="bottom_bar_ls0">
 			<layout_panel name="lp1">
+				
+			<!-- Teleport, Map buttons -->
+				
 				<layout_stack name="bottom_bar_ls1">
 					<layout_panel name="teleport_btn_lp">
 						<button label="テレポート" name="teleport_btn" tool_tip="該当するエリアにテレポートする"/>
@@ -15,7 +23,11 @@
 					</layout_panel>
 				</layout_stack>
 			</layout_panel>
+				
 			<layout_panel name="lp2">
+				
+			<!-- Edit, Options buttons -->
+				
 				<layout_stack name="bottom_bar_ls3">
 					<layout_panel name="edit_btn_lp">
 						<button label="編集" name="edit_btn" tool_tip="ランドマークの情報を編集します"/>
@@ -24,11 +36,17 @@
 						<menu_button label="▼" name="overflow_btn" tool_tip="オプションを表示します"/>
 					</layout_panel>
 				</layout_stack>
+							
+				<!-- Profile button -->
+					
 				<layout_stack name="bottom_bar_profile_ls">
 					<layout_panel name="profile_btn_lp">
 						<button label="プロフィール" name="profile_btn" tool_tip="場所のプロフィールを表示"/>
 					</layout_panel>
 				</layout_stack>
+		
+				<!-- Close button -->
+					
 				<layout_stack name="bottom_bar_close_ls3">
 					<layout_panel name="close_btn_lp">
 						<button label="閉じる" name="close_btn"/>
@@ -36,6 +54,9 @@
 				</layout_stack>
 			</layout_panel>
 		</layout_stack>
+
+		<!-- Save, Cancel buttons -->
+			
 		<layout_stack name="bottom_bar_ls2">
 			<layout_panel name="save_btn_lp">
 				<button label="保存" name="save_btn"/>
@@ -44,5 +65,6 @@
 				<button label="取り消し" name="cancel_btn"/>
 			</layout_panel>
 		</layout_stack>
+		
 	</panel>
 </panel>

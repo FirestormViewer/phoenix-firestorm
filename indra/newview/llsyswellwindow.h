@@ -33,6 +33,13 @@
 #include "llsyswellitem.h"
 #include "lltransientdockablefloater.h"
 
+// Firestorm includes
+#include "llbutton.h"
+#include "llscreenchannel.h"
+#include "llscrollcontainer.h"
+#include "llimview.h"
+#include "boost/shared_ptr.hpp"
+
 class LLAvatarName;
 class LLChiclet;
 class LLFlatListView;
@@ -157,7 +164,10 @@ private:
  * 
  * It contains a list list of all active IM sessions.
  */
-class LLIMWellWindow : public LLSysWellWindow, LLInitClass<LLIMWellWindow>
+// <FS:Ansariel> [FS communication UI]
+//class LLIMWellWindow : public LLSysWellWindow, LLInitClass<LLIMWellWindow>
+class LLIMWellWindow : public LLSysWellWindow, LLIMSessionObserver, LLInitClass<LLIMWellWindow>
+// </FS:Ansariel> [FS communication UI]
 {
 public:
 	LLIMWellWindow(const LLSD& key);
@@ -169,8 +179,21 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
+	// <FS:Ansariel> [FS communication UI]
+	// LLIMSessionObserver observe triggers
+	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg);
+	/*virtual*/ void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {}
+	/*virtual*/ void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
+	/*virtual*/ void sessionRemoved(const LLUUID& session_id);
+	/*virtual*/ void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id);
+
+	void addIMRow(const LLUUID& session_id);
+	bool hasIMRow(const LLUUID& session_id);
+	// </FS:Ansariel> [FS communication UI]
+
 	void addObjectRow(const LLUUID& notification_id, bool new_message = false);
 	void removeObjectRow(const LLUUID& notification_id);
+
 	void closeAll();
 
 protected:
@@ -181,6 +204,38 @@ private:
 
 	bool confirmCloseAll(const LLSD& notification, const LLSD& response);
 	void closeAllImpl();
+
+	// <FS:Ansariel> [FS communication UI]
+	LLChiclet * findIMChiclet(const LLUUID& sessionId);
+	void addIMRow(const LLUUID& sessionId, S32 chicletCounter, const std::string& name, const LLUUID& otherParticipantId);
+	void delIMRow(const LLUUID& sessionId);
+
+	/**
+	 * Scrolling row panel.
+	 */
+	class RowPanel: public LLPanel
+	{
+	public:
+		RowPanel(const LLSysWellWindow* parent, const LLUUID& sessionId, S32 chicletCounter,
+				const std::string& name, const LLUUID& otherParticipantId);
+		virtual ~RowPanel();
+		void onMouseEnter(S32 x, S32 y, MASK mask);
+		void onMouseLeave(S32 x, S32 y, MASK mask);
+		BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+		BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+
+	private:
+		static const S32 CHICLET_HPAD = 10;
+		void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+		void onChicletSizeChanged(LLChiclet* ctrl, const LLSD& param);
+		void onClosePanel();
+	public:
+		LLIMChiclet* mChiclet;
+	private:
+		LLButton*	mCloseBtn;
+		const LLSysWellWindow* mParent;
+	};
+	// </FS:Ansariel> [FS communication UI]
 
 	class ObjectRowPanel: public LLPanel
 	{

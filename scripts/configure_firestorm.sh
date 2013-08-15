@@ -60,6 +60,7 @@ showUsage()
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
     echo "  --kdu        : Build with KDU"
     echo "  --package    : Build installer"
+    echo "  --no-package : Build without installer (Overrides --package)"
     echo "  --fmodex     : Build with FMOD Ex"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
@@ -75,7 +76,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -98,6 +99,7 @@ getArgs()
           no-opensim) WANTS_OPENSIM=$FALSE;;
           avx)        WANTS_AVX=$TRUE;;
           package)    WANTS_PACKAGE=$TRUE;;
+          no-package) WANTS_PACKAGE=$FALSE;;
           build)      WANTS_BUILD=$TRUE;;
           platform)   PLATFORM="$OPTARG";;
           jobs)       JOBS="$OPTARG";;
@@ -416,10 +418,10 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         else
             JOBS="-jobs $JOBS"
         fi
-        if [ $OSTYPE == "darwin11" -o $OSTYPE == "darwin12" ] ; then
-            xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
-        else
+		if [ $OSTYPE == darwin10 ] ; then
             xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+        else
+			xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
         fi
     elif [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" ] ; then
         if [ $JOBS == "0" ] ; then

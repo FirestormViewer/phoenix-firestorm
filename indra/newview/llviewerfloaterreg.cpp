@@ -150,6 +150,7 @@
 #include "floatermedialists.h"
 #include "fsareasearch.h"
 #include "fscontactsfloater.h"
+#include "fsexport.h"
 #include "fsfloaterblocklist.h"
 #include "fsfloatergroup.h"
 #include "fsfloatergrouptitles.h"
@@ -390,6 +391,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
 	LLFloaterReg::add("fs_group", "floater_fs_group.xml",&LLFloaterReg::build<FSFloaterGroup>);
 	LLFloaterReg::add("fs_group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterGroupTitles>);
+	LLFloaterReg::add("fs_export", "floater_fs_export.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterObjectExport>);
 	LLFloaterReg::add("fs_import", "floater_fs_import.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterImport>);
 	LLFloaterReg::add("fs_posestand", "floater_fs_posestand.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoseStand>);
 	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);

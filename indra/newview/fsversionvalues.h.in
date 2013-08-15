@@ -32,6 +32,11 @@
 // <FS:TS> Define the version and channel substitution macros here instead
 //         of via cmake compile-time defines in order to not force a rebuild
 //         of the entire newview directory with every Mercurial pull
+// NOTE: This file should not be included anywhere in the main viewer code
+//         but llversioninfo.cpp. If you need the current viewer version in
+//         a different format than is already provided there, then add a
+//         function to that file and reference it, rather than building your
+//         own function elsewhere.
 #define LL_VIEWER_CHANNEL "@VIEWER_CHANNEL@"
 #define LL_VIEWER_VERSION_MAJOR @VIEWER_VERSION_MAJOR@
 #define LL_VIEWER_VERSION_MINOR @VIEWER_VERSION_MINOR@

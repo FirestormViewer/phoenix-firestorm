@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_interests" label="興味">
+
+    <loading_indicator name="progress_indicator" />
+    <text name="I Want To:">
+        したいこと:
+    </text>
+    <check_box name="chk0" label="制作" />
+    <check_box name="chk1" label="探検" />
+    <check_box name="chk2" label="出会い" />
+    <check_box name="chk6" label="就職" />
+    <check_box name="chk3" label="グループ" />
+    <check_box name="chk4" label="買い物" />
+    <check_box name="chk5" label="販売" />
+    <check_box name="chk7" label="雇用" />
+    <line_editor name="want_to_edit" />
+
+    <text name="Skills:">
+        スキル:
+    </text>
+    <check_box name="schk0" label="テクスチャー" />
+    <check_box name="schk1" label="建築" />
+<!-- The next two are out of order on purpose due to the odd layout used in v1.x -->
+    <check_box name="schk3" label="モデル" />
+    <check_box name="schk2" label="イベント企画" />
+    <check_box name="schk4" label="スクリプト" />
+    <check_box name="schk5" label="キャラクターのカスタマイズ" />
+    <line_editor name="skills_edit" />
+
+    <text name="Languages:">
+		言語:
+    </text>
+    <line_editor name="languages_edit" />
+	
+</panel>
+

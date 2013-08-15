@@ -1102,27 +1102,38 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-  <key>FSHideTimestampsIM</key>
+  <key>FSShowTimestampsIM</key>
     <map>
       <key>Comment</key>
-      <string>Hide timestamps in IM</string>
+      <string>Show timestamps in IM</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
-  <key>FSHideTimestampsNearbyChat</key>
+  <key>FSShowTimestampsNearbyChat</key>
     <map>
       <key>Comment</key>
-      <string>Hide timestamps in nearby chat</string>
+      <string>Show timestamps in nearby chat</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
+    </map>
+  <key>FSShowTimestampsTranscripts</key>
+    <map>
+      <key>Comment</key>
+      <string>Show timestamps in transcripts</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
   <key>FSSecondsinChatTimestamps</key>
     <map>
@@ -19826,16 +19837,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>DontTrimLegacyNames</key>
+    <key>FSTrimLegacyNames</key>
     <map>
       <key>Comment</key>
-      <string>Don't trim "Resident" from Legacy Names.</string>
+      <string>Trim "Resident" from Legacy Names.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
 
     <!-- Start: Sounds for Prefs > Chat > Radar -->
@@ -20844,5 +20855,73 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSColorIMsDistinctly</key>
+    <map>
+      <key>Comment</key>
+      <string>Color IM/Group messages distinctly in the console.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSChatWindow</key>
+    <map>
+      <key>Comment</key>
+      <string>Show chat in multiple windows(by default) or in one multi-tabbed window(requires restart)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <!-- <FS_Zi> Animated dialogs -->
+    <key>FSAnimatedScriptDialogs</key>
+    <map>
+      <key>Comment</key>
+      <string>Animates script dialogs V1 style. Only effective when dialogs in top right are activated.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <!-- <FS_Zi> Animated dialogs -->
+    <key>FSAllowGroupInvitationOnlyWithoutFee</key>
+    <map>
+      <key>Comment</key>
+      <string>If True, then group invitation notices that require a fee have the "Join" button removed and a little bit of information added.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSLegacyRadarFriendColoring</key>
+	<map>
+		<key>Comment</key>
+		<string>Use old style for friends on the radar. Uses same color as minimap.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
+    <key>FSLegacyRadarLindenColoring</key>
+	<map>
+		<key>Comment</key>
+		<string>Color Lindens on the radar the same as the minimap.</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>Boolean</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
 </map>
 </llsd>

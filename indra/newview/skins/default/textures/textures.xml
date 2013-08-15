@@ -758,6 +758,15 @@ with the same filename but different name
   <texture name="VoicePTT_Lvl3" file_name="bottomtray/VoicePTT_Lvl3.png" preload="false" />
   <texture name="VoicePTT_Off" file_name="bottomtray/VoicePTT_Off.png" preload="false" />
   <texture name="VoicePTT_On" file_name="bottomtray/VoicePTT_On.png" preload="false" />
+
+  <!-- FS:Ansariel [FS communication UI] -->  
+  <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />
+  <texture name="VoicePTT_Lvl1_Dark" file_name="bottomtray/VoicePTT_Lvl1_Dark.png" preload="false" />
+  <texture name="VoicePTT_Lvl2_Dark" file_name="bottomtray/VoicePTT_Lvl2_Dark.png" preload="false" />
+  <texture name="VoicePTT_Lvl3_Dark" file_name="bottomtray/VoicePTT_Lvl3_Dark.png" preload="false" />
+  <texture name="VoicePTT_Off_Dark" file_name="bottomtray/VoicePTT_Off_Dark.png" preload="false" />
+  <texture name="VoicePTT_On_Dark" file_name="bottomtray/VoicePTT_On_Dark.png" preload="false" />
+  <!-- END FS:Ansariel [FS communication UI] -->  
   
   <texture name="Wearables_Divider" file_name="windows/Wearables_Divider.png" preload="false" />
 

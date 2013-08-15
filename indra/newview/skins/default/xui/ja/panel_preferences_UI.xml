@@ -45,6 +45,22 @@
 		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
 
 		<check_box name="ShowNetStats" label="ラグメーターを表示" tool_tip="メニューバーの右上にラグメーターを表示します。"/>
+		
+		<check_box name="FSEnableVolumeControls" label="メディアコントロールをトップメニューに表示" tool_tip="ここにチェックを入れると、ファイアーストームの画面右上にメディアコントロール（音量、メディア、ストリーム）が表示されるようになります。既に独自の場所にコントロールが配置されている場合にこのチェックを外しておくと便利です。" />
+
+		<text name="standalone_textbox">
+			次の項目に独立したウィンドウを使用:
+		</text>
+		<check_box name="FSUseStandaloneGroupFloater" label="グループのプロフィール" tool_tip="チェックを入れるとグループのプロフィールは別のウィンドウで開くようになります。" />
+		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="テレポート履歴" tool_tip="チェックを入れると、ショートカットを使ってテレポート履歴が別ウィンドウで開くようになります。" />
+		<check_box name="FSUseStandaloneBlocklistFloater" label="無視リスト" tool_tip="チェックを入れると、ブロックしたりミュートしたレジデントやオブジェクトの一覧が別ウィンドウで開くようになります。"/>
+		<check_box name="FSUseStandalonePlaceDetailsFloater" label="ランドバーク、土地の詳細情報、テレポート履歴の詳細" tool_tip="チェックを入れると、ランドマーク、土地の詳細情報、テレポート履歴の詳細情報が別ウィンドウで開くようになります。"/>
+
+		<text name="ExtendedTeleportHistoryLabel">
+			テレポート履歴項目の拡張:
+		</text>	  
+		<check_box name="FSTeleportHistoryShowPosition" label="位置" tool_tip="チェックを入れると、テレポート履歴にその地域での座標が表示されるようになります。"/>
+		<check_box name="FSTeleportHistoryShowDate" label="日付" tool_tip="チェックを入れると、テレポート履歴にテレポートした日時が表示されるようになります。"/>
 
 		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
@@ -60,8 +76,10 @@
         <text name="GroupTopRightRequiresRestart">
             （再起動が必要）
         </text>
-
+		<check_box label="グループチャットとIMのミニアイコンを表示しない" name="FSDisableIMChiclets" tool_tip="チェックを入れるとファイアーストームは全てのグループチャットやIMのミニアイコンを表示しないようになります。（通知の封筒アイコンとIM数の合計は画面上に残ります。" />
+		<!-- Deleted Aug.02, 2013
         <check_box name="ButtonFlashing" label="ボタンの点滅設定"/>
+		-->
         <slider label="ボタンの点滅回数：" tool_tip="何回ボタンを点滅させるかを設定します。" name="ButtonsFlashCount" />
         <slider label="ボタン点滅の速さ：" tool_tip="ボタンが点滅する速さをHzで設定します。IMの通知に使用します。" name="ButtonFlashRate" />
         <text name="ButtonFlashRateText">

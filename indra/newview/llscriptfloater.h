@@ -211,6 +211,15 @@ private:
 	LLUUID mObjectId;
 	bool mSaveFloaterPosition;
 	bool mNoTransparency;
+
+// <FS:Zi> Animated menus
+public:
+	S32 mCurrentHeight;
+	S32 mDesiredHeight;
+	F64 mStartTime;
+
+	virtual void draw();
+// </FS:Zi>
 };
 
 #endif //LL_SCRIPTFLOATER_H

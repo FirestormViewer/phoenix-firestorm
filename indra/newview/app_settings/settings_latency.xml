@@ -131,7 +131,7 @@
     <integer>0</integer>
   </map>
 
-  <key>ChatWindow</key>
+  <key>FSChatWindow</key>
   <map>
     <key>Comment</key>
     <string>Show chat in multiple windows(by default) or in one multi-tabbed window(requires restart)</string>
@@ -203,16 +203,16 @@
     <integer>1</integer>
   </map>
 
-  <key>DontTrimLegacyNames</key>
+  <key>FSTrimLegacyNames</key>
   <map>
     <key>Comment</key>
-    <string>Don&apos;t trim &quot;Resident&quot; from Legacy Names</string>
+    <string>Trim &quot;Resident&quot; from Legacy Names</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
 
   <key>FSPaymentInfoInChat</key>
@@ -675,6 +675,41 @@
 			<integer>1</integer>
 		</map>
 
+    <key>FSEmphasizeShoutWhisper</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>Enables bolding shouted chat and italicizing whispered chat</string>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>0</integer>
+		</map>
+
+    <key>FSLegacyRadarFriendColoring</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>Use old style for friends on the radar. Uses same color as minimap.</string>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>1</integer>
+		</map>
+
+    <key>FSLegacyRadarLindenColoring</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>Color Lindens on the radar the same as the minimap.</string>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<integer>1</integer>
+		</map>
 
 
 

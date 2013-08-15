@@ -535,9 +535,11 @@
          show_text="true"
          top_pad="5"
          width="297">
+<!-- FS:Ansariel: We show the numeric value
           <slider.commit_callback
            function="Pref.UpdateSliderText"
            parameter="AvatarPhysicsDetailText" />
+-->
         </slider>
 
         <text
@@ -568,9 +570,11 @@
          show_text="true"
          top_pad="6"
          width="304">
+<!-- FS:Ansariel: We show the numeric value
           <slider.commit_callback
            function="Pref.UpdateSliderText"
            parameter="ObjectMeshDetailText" />
+-->
         </slider>
         <slider
         control_name="RenderFlexTimeFactor"
@@ -585,9 +589,11 @@
         show_text="true"
         top_pad="3"
         width="304">
+<!-- FS:Ansariel: We show the numeric value
           <slider.commit_callback
           function="Pref.UpdateSliderText"
           parameter="FlexibleMeshDetailText" />
+-->
         </slider>
         <slider
          control_name="RenderTreeLODFactor"
@@ -603,9 +609,11 @@
          show_text="true"
          top_pad="3"
          width="304">
+<!-- FS:Ansariel: We show the numeric value
           <slider.commit_callback
            function="Pref.UpdateSliderText"
            parameter="TreeMeshDetailText" />
+-->
         </slider>
         <slider
          control_name="RenderAvatarLODFactor"
@@ -621,9 +629,11 @@
          show_text="true"
          top_pad="3"
          width="304">
+<!-- FS:Ansariel: We show the numeric value
           <slider.commit_callback
            function="Pref.UpdateSliderText"
            parameter="AvatarMeshDetailText" />
+-->
         </slider>
         <slider
          control_name="RenderTerrainLODFactor"
@@ -641,9 +651,11 @@
          show_text="true"
          top_pad="3"
          width="304">
+<!-- FS:Ansariel: We show the numeric value
           <slider.commit_callback
            function="Pref.UpdateSliderText"
            parameter="TerrainMeshDetailText" />
+-->
         </slider>
         <slider
          control_name="WLSkyDetail"
@@ -663,9 +675,11 @@
          show_text="true"
          top_pad="3"
          width="315">
+<!-- FS:Ansariel: We show the numeric value
           <slider.commit_callback
            function="Pref.UpdateSliderText"
            parameter="SkyMeshDetailText" />
+-->
         </slider>
         <text
          type="string"

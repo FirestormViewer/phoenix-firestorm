@@ -28,17 +28,21 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fscommon.h"
+#include "fsradar.h"
 #include "llagent.h"
+#include "llavataractions.h"
 #include "llavatarnamecache.h"
 #include "llfloatersidepanelcontainer.h"
-#include "llnotificationmanager.h"
 #include "llinventorymodel.h"
+#include "llnotificationmanager.h"
+#include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
 #include "llpanel.h"
 #include "lltooldraganddrop.h"
 #include "llviewerinventory.h"
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
-#include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
+#include "rlvactions.h"
+#include "rlvhandler.h"
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -50,6 +54,7 @@ static const std::string LL_MOLE = "Mole";
 static const std::string LL_PRODUCTENGINE = "ProductEngine";
 static const std::string LL_SCOUT = "Scout";
 static const std::string LL_TESTER = "Tester";
+
 
 S32 FSCommon::sObjectAddMsg = 0;
 
@@ -283,3 +288,41 @@ bool FSCommon::isLinden(const LLUUID& av_id)
 			last_name == LL_SCOUT ||
 			last_name == LL_TESTER);
 }
+
+
+bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType action)
+{
+	bool isSelf = (av_id == gAgentID);
+
+	if (action == FS_RGSTR_ACT_ADD_FRIEND)
+	{
+		return (!isSelf && !LLAvatarActions::isFriend(av_id));
+	}
+	else if (action == FS_RGSTR_ACT_SEND_IM)
+	{
+		return (!isSelf && RlvActions::canStartIM(av_id));
+	}
+	else if (action == FS_RGSTR_ACT_ZOOM_IN)
+	{
+		return (!isSelf && LLAvatarActions::canZoomIn(av_id));
+	}
+	else if (action == FS_RGSTR_ACT_OFFER_TELEPORT)
+	{
+		return (!isSelf && LLAvatarActions::canOfferTeleport(av_id));
+	}
+	else if (action == FS_RGSTR_ACT_SHOW_PROFILE)
+	{
+		return (isSelf || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	}
+	else if (action == FS_RGSTR_ACT_TRACK_AVATAR)
+	{
+		return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != NULL);
+	}
+	else if (action == FS_RGSTR_ACT_TELEPORT_TO)
+	{
+		return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != NULL);
+	}
+
+	return false;
+}
+

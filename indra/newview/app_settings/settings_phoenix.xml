@@ -231,7 +231,7 @@
     <integer>0</integer>
   </map>
 
-  <key>ChatWindow</key>
+  <key>FSChatWindow</key>
   <map>
     <key>Comment</key>
     <string>Show chat in multiple windows(by default) or in one multi-tabbed window(requires restart)</string>
@@ -303,16 +303,16 @@
     <integer>1</integer>
   </map>
 
-  <key>DontTrimLegacyNames</key>
+  <key>FSTrimLegacyNames</key>
   <map>
     <key>Comment</key>
-    <string>Don&apos;t trim &quot;Resident&quot; from Legacy Names</string>
+    <string>Trim &quot;Resident&quot; from Legacy Names</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
 
   <key>FSPaymentInfoInChat</key>
@@ -483,5 +483,30 @@
     <integer>1</integer>
   </map>
 
+  <key>FSNameTagShowLegacyUsernames</key>
+  <map>
+    <key>Comment</key>
+    <string>Show legacy name (Firstname Lastname) in user tags instead of username</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <!-- <FS_Zi> Animated dialogs -->
+  <key>FSAnimatedScriptDialogs</key>
+  <map>
+    <key>Comment</key>
+    <string>Animates script dialogs V1 style. Only effective when dialogs in top right are activated.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <!-- <FS_Zi> Animated dialogs -->
 </map>
 </llsd>

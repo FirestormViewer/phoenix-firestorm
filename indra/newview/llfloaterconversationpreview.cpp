@@ -186,7 +186,10 @@ void LLFloaterConversationPreview::showHistory()
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] =
 						gSavedSettings.getBOOL("PlainTextChatHistory");
-		chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+		// <FS:CR>
+		//chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+		chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimeStampsTranscripts");
+		// </FS:CR>
 		chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
 		chat_args["conversation_log"] = true;	// <FS:CR> Don't dim the history in conversation log
 

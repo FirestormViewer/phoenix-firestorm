@@ -94,7 +94,7 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mOtherTyping(false),
 	mTypingTimer(),
 	mTypingTimeoutTimer(),
-	mPositioned(false),
+//	mPositioned(false),			// dead code -Zi
 	mSessionInitialized(false),
 	mChatLayoutPanel(NULL),
 	mInputPanels(NULL),
@@ -135,7 +135,11 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
 
-	setDocked(true);
+	// only dock when chiclets are visible, or the floater will get stuck in the top left
+	// FIRE-9984 -Zi
+	setDocked(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
+	// make sure to save position and size with chiclets disabled (torn off floater does that)
+	setTornOff(gSavedSettings.getBOOL("FSDisableIMChiclets"));
 }
 
 // virtual
@@ -154,16 +158,14 @@ void FSFloaterIM::onFocusLost()
 {
 	LLIMModel::getInstance()->resetActiveSessionID();
 	
-	// Chiclet bar doesn't show IM chiclets anymore -Ansa
-	//LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
+	LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, false);
 }
 
 void FSFloaterIM::onFocusReceived()
 {
 	LLIMModel::getInstance()->setActiveSessionID(mSessionID);
 
-	// Chiclet bar doesn't show IM chiclets anymore -Ansa
-	//LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, true);
+	LLChicletBar::getInstance()->getChicletPanel()->setChicletToggleState(mSessionID, true);
 
 	if (getVisible())
 	{
@@ -687,13 +689,6 @@ BOOL FSFloaterIM::postBuild()
 	// support sysinfo button -Zi
 	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
 	onSysinfoButtonVisibilityChanged(FALSE);
-
-	// extra icon controls -AO
-	LLButton* transl = getChild<LLButton>("translate_btn");
-//TT
-		llinfos << "transl" << (transl == NULL) << llendl;
-	if (transl != NULL)
-	transl->setVisible(true);
 	
 	// type-specfic controls
 	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
@@ -710,7 +705,7 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
 				getChild<LLLayoutStack>("ls_control_panel")->reshape(200,20,true);
 				
-				llinfos << "AO: adding FSFloaterIM removing/adding particularfriendobserver" << llendl;
+				llinfos << "adding FSFloaterIM removing/adding particularfriendobserver" << llendl;
 				LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
 				LLAvatarTracker::instance().addParticularFriendObserver(mOtherParticipantUUID, this);
 				
@@ -730,7 +725,7 @@ BOOL FSFloaterIM::postBuild()
 				// this needs to be extended to fsdata awareness, once we have it. -Zi
 				// mIsSupportIM=fsdata(partnerUUID).isSupport(); // pseudocode something like this
 				onSysinfoButtonVisibilityChanged(gSavedSettings.getBOOL("SysinfoButtonInIM"));
-				gSavedSettings.getControl("SysinfoButtonInIM")->getCommitSignal()->connect(boost::bind(&FSFloaterIM::onSysinfoButtonVisibilityChanged,this,_2));
+				gSavedSettings.getControl("SysinfoButtonInIM")->getCommitSignal()->connect(boost::bind(&FSFloaterIM::onSysinfoButtonVisibilityChanged, this, _2));
 				// support sysinfo button -Zi
 
 				break;
@@ -752,7 +747,7 @@ BOOL FSFloaterIM::postBuild()
 			}
 			case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
 			{
-	llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION  start" << llendl;
+				llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION  start" << llendl;
 				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
@@ -762,14 +757,14 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
 				getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
-	llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION end" << llendl;
+				llinfos << "LLIMModel::LLIMSession::ADHOC_SESSION end" << llendl;
 				break;
 			}
 			default:
-	llinfos << "default buttons start" << llendl;
+				llinfos << "default buttons start" << llendl;
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);		
-	llinfos << "default buttons end" << llendl;
+				llinfos << "default buttons end" << llendl;
 				break;
 		}
 	}
@@ -824,7 +819,9 @@ BOOL FSFloaterIM::postBuild()
 	}
 	// </FS:Zi> Viewer version popup
 
-	setDocked(true);
+	// only dock when chiclets are visible, or the floater will get stuck in the top left
+	// FIRE-9984 -Zi
+	setDocked(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
 
 	mTypingStart = LLTrans::getString("IM_typing_start_string");
 
@@ -850,7 +847,9 @@ BOOL FSFloaterIM::postBuild()
 	//*TODO if session is not initialized yet, add some sort of a warning message like "starting session...blablabla"
 	//see LLFloaterIMPanel for how it is done (IB)
 
-	if(isChatMultiTab())
+	// don't call dockable floater functions when chiclets are disabled, it will dock the floater
+	// FIRE-9984 -Zi
+	if(isChatMultiTab() || gSavedSettings.getBOOL("FSDisableIMChiclets"))
 	{
 		return LLFloater::postBuild();
 	}
@@ -1039,7 +1038,9 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 		// Docking may move chat window, hide it before moving, or user will see how window "jumps"
 		floater->setVisible(false);
 
-		if (floater->getDockControl() == NULL)
+		// only dock when chiclets are visible, or the floater will get stuck in the top left
+		// FIRE-9984 -Zi
+		if (floater->getDockControl() == NULL && !gSavedSettings.getBOOL("FSDisableIMChiclets"))
 		{
 			LLChiclet* chiclet =
 					LLChicletBar::getInstance()->getChicletPanel()->findChiclet<LLChiclet>(
@@ -1220,7 +1221,7 @@ void FSFloaterIM::sessionInitReplyReceived(const LLUUID& im_session_id)
 	// updating "Call" button from group control panel here to enable it without placing into draw() (EXT-4796)
 	if(gAgent.isInGroup(im_session_id))
 	{
-		mControlPanel->updateCallButton();
+		updateCallButton();
 	}
 	
 	//*TODO here we should remove "starting session..." warning message if we added it in postBuild() (IB)
@@ -1253,9 +1254,8 @@ void FSFloaterIM::updateMessages()
 	{
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
-		chat_args["hide_timestamps_nearby_chat"] = gSavedSettings.getBOOL("FSHideTimestampsIM");
 		chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
-		chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+		chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimestampsIM");
 		
 		LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
 		RLV_ASSERT(pIMSession);
@@ -1342,8 +1342,18 @@ void FSFloaterIM::updateMessages()
 	}
 }
 
-void FSFloaterIM::reloadMessages()
+void FSFloaterIM::reloadMessages(bool clean_messages/* = false*/)
 {
+	if (clean_messages)
+	{
+		LLIMModel::LLIMSession * sessionp = LLIMModel::instance().findIMSession(mSessionID);
+
+		if (NULL != sessionp)
+		{
+			sessionp->loadHistory();
+		}
+	}
+
 	mChatHistory->clear();
 	mLastMessageIndex = -1;
 	updateMessages();
@@ -1769,7 +1779,7 @@ void FSFloaterIM::confirmLeaveCallCallback(const LLSD& notification, const LLSD&
 bool FSFloaterIM::isChatMultiTab()
 {
 	// Restart is required in order to change chat window type.
-	static bool is_single_window = gSavedSettings.getS32("ChatWindow") == 1;
+	static bool is_single_window = gSavedSettings.getS32("FSChatWindow") == 1;
 	return is_single_window;
 }
 

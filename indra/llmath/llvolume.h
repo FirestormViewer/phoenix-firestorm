@@ -1100,11 +1100,7 @@ BOOL LLTriangleRayIntersect(const LLVector4a& vert0, const LLVector4a& vert1, co
 							F32& intersection_a, F32& intersection_b, F32& intersection_t);
 BOOL LLTriangleRayIntersectTwoSided(const LLVector4a& vert0, const LLVector4a& vert1, const LLVector4a& vert2, const LLVector4a& orig, const LLVector4a& dir,
 							F32& intersection_a, F32& intersection_b, F32& intersection_t);
-
-// <FS:CR> Qarl's mesh deformer
-F32 LLTriangleClosestPoint(const LLVector3& vert0, const LLVector3& vert1, const LLVector3& vert2, const LLVector3& target,
-						   F32& closest_a, F32& closest_b);
-// </FS:CR>
+	
 	
 
 #endif

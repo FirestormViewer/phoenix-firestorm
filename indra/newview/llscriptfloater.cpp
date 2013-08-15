@@ -121,7 +121,9 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	   floaterType==LLScriptFloaterManager::OBJ_SCRIPT)
 	{
 		floater->setSavePosition(true);
-		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight") ||
+		   gSavedSettings.getBOOL("FSDisableIMChiclets")
+		)
 		{
 			// undock the dialog
 			floater->setDocked(false,true);
@@ -209,7 +211,20 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 
 	// make floater size fit form size
 	LLRect panel_rect = mScriptForm->getRect();
-	toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
+	// <FS:Zi> Animated dialogs
+	// toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
+	mDesiredHeight=panel_rect.getHeight()+getHeaderHeight();
+	if(gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+	{
+		mCurrentHeight=0;
+		mStartTime=LLFrameTimer::getElapsedSeconds();
+	}
+	else
+	{
+		mCurrentHeight=mDesiredHeight;
+	}
+	toast_rect.setLeftTopAndSize(toast_rect.mLeft,toast_rect.mTop,panel_rect.getWidth(),mCurrentHeight);
+	// </FS:Zi>
 	setShape(toast_rect);
 }
 
@@ -743,5 +758,26 @@ bool LLScriptFloater::isScriptTextbox(LLNotificationPtr notification)
 
 	return false;
 }
+
+// <FS:Zi> Animated dialogs
+void LLScriptFloater::draw()
+{
+	if(mCurrentHeight<mDesiredHeight)
+	{
+		mCurrentHeight=(S32) ((LLFrameTimer::getElapsedSeconds()-mStartTime)*2.5*(F64) mDesiredHeight);
+
+		if(mCurrentHeight>mDesiredHeight)
+		{
+			mCurrentHeight=mDesiredHeight;
+		}
+
+		LLRect toast_rect=getRect();
+		toast_rect.setLeftTopAndSize(toast_rect.mLeft,toast_rect.mTop,toast_rect.getWidth(),mCurrentHeight);
+		setShape(toast_rect);
+	}
+
+	LLDockableFloater::draw();
+}
+// </FS:Zi>
 
 // EOF

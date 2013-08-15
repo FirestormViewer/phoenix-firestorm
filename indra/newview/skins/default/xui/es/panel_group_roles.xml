@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Miembros y Roles" name="roles_tab">
+<panel label="Miembros y roles" name="roles_tab">
 	<panel.string name="default_needs_apply_text">
 		Hay cambios sin guardar
 	</panel.string>
 	<panel.string name="want_apply_text">
-		¿Quieres guardar estos cambios?
+		¿Quieres guardar los cambios?
 	</panel.string>
 	<tab_container name="roles_tab_container">
 		<panel label="Miembros" name="members_sub_tab" tool_tip="Miembros">
 			<panel.string name="help_text">
-				Puede añadir o quitar los roles asignados a los miembros.
-Seleccione varios nombres manteniendo pulsada la tecla Ctrl y pulsando en cada uno de sus nombres.
+				Puedes añadir o quitar los roles asignados a los miembros.
+Selecciona varios nombres manteniendo pulsada la tecla Ctrl y pulsando en cada uno de sus nombres.
 			</panel.string>
 			<panel.string name="donation_area">
 				[AREA] m²
 			</panel.string>
-			<filter_editor label="Filtrar los miembros" name="filter_input"/>
+			<filter_editor label="Filtrar" name="filter_input"/>
 			<name_list name="member_list">
 				<name_list.columns label="Miembro" name="name"/>
 				<name_list.columns label="Donaciones" name="donated"/>
@@ -34,7 +34,7 @@ incluyendo el de Todos y el de Propietarios.
 			<panel.string name="cant_delete_role">
 				Los roles de &apos;Todos&apos; y &apos;Propietarios&apos; son especiales, y no pueden eliminarse.
 			</panel.string>
-			<filter_editor label="Filtrar los roles" name="filter_input"/>
+			<filter_editor label="Filtrar" name="filter_input"/>
 			<scroll_list name="role_list">
 				<scroll_list.columns label="Rol" name="name"/>
 				<scroll_list.columns label="Etiqueta" name="title"/>

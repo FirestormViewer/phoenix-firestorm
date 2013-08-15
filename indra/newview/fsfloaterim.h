@@ -85,7 +85,7 @@ public:
 
 	// get new messages from LLIMModel
 	void updateMessages();
-	void reloadMessages();
+	void reloadMessages(bool clean_messages = false);
 	static void onSendMsg( LLUICtrl*, void*);
 	void sendMsgFromInputEditor();
 	void sendMsg(const std::string& msg);
@@ -107,7 +107,7 @@ public:
 	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 
 	// called when docked floater's position has been set by chiclet
-	void setPositioned(bool b) { mPositioned = b; };
+	// void setPositioned(bool b) { mPositioned = b; };		// dead code -Zi
 
 	void onVisibilityChange(const LLSD& new_visibility);
 	void processIMTyping(const LLIMInfo* im_info, BOOL typing);
@@ -143,6 +143,8 @@ public:
 	
 	static boost::signals2::connection setIMFloaterShowedCallback(const floater_showed_signal_t::slot_type& cb);
 	static floater_showed_signal_t sIMFloaterShowedSignal;
+
+	S32 getLastChatMessageIndex() {return mLastMessageIndex;}
 
 protected:
 	/* virtual */
@@ -223,7 +225,7 @@ private:
 	LLChatEntry* mInputEditor;
 	LLLayoutPanel* mChatLayoutPanel;
 	LLLayoutStack* mInputPanels;
-	bool mPositioned;
+	// bool mPositioned;		// dead code -Zi
 
 	std::string mSavedTitle;
 	LLUIString mTypingStart;

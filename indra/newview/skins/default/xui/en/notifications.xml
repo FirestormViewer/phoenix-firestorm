@@ -7025,6 +7025,24 @@ Do you want to keep it? "Mute" will block all future offers or messages from [NA
 
   <notification
    icon="notify.tga"
+   name="JoinGroupProtectionNotice"
+   persist="true"
+   type="notify">
+    <tag>group</tag>
+    <tag>fail</tag>
+Joining this group costs a fee and the invitation cannot be accepted because of your settings. If you want to change this, go to Preferences &gt; Firestorm &gt; Protection.
+
+[MESSAGE]
+    <form name="form">
+      <button
+       index="2"
+       name="Info"
+       text="Info"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="notify.tga"
    name="TeleportOffered"
    label="Teleport offer from [NAME_LABEL]"
    log_to_im="true"
@@ -11402,6 +11420,22 @@ You are about to eject [COUNT] members from the group.
         name="okcancelignore"
         notext="Cancel"
         yestext="Eject"/>
+    </notification>
+    
+    <notification
+     icon="alertmodal.tga"
+     name="ExportFinished"
+     type="notify">
+      <tag>Export</tag>
+Export finished and saved to [FILENAME].
+    </notification>
+    
+    <notification
+      icon="notifytip.tga"
+      name="AntiSpamBlocked"
+      log_to_chat="false"
+      type="notifytip">
+AntiSpam: Blocked ["SOURCE"] for spamming a ["QUEUE"] (["COUNT"]) times in [PERIOD] seconds.
     </notification>
 	
 </notifications>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Profil" name="panel_profile">
+	<string name="status_online">
+		Conectado
+	</string>
+	<string name="status_offline">
+		Desconectado
+	</string>
+	<string name="no_partner_text" value="Ninguno/a"/>
+	<string name="no_group_text" value="Ninguno"/>
+	<string name="FSDev" value=" Desarrollador"/>
+	<string name="FSSupp" value=" Soporte"/>
+	<string name="FSQualityAssurance" value="Bug Hunter "/>
+	<text name="Key:" value="Clave:"/>
+	<text_editor name="user_key" value="(cargando...)"/>
+	<button name="copy_uri_button" label="Copiar"/>
+	<text name="Name:" value="Nombre:"/>
+	<button label="Displayname:" name="set_name" tool_tip="Establecer displayname"/>
+	<text_editor name="complete_name" value="(cargando...)"/>
+	<button name="copy_name_button" label="Copiar"/>
+	<text name="Photo:" value="Foto:"/>
+	<text name="status" value="Estado desconocido"/>
+	<text name="label" value="Fecha de nacimiento:"/>
+	<text_editor name="register_date" value="(cargando...)"/>
+	<text name="label2" value="Cuenta:"/>
+	<text name="partner_label" value="Pareja:"/>
+	<text name="Groups:" value="Grupos:"/>
+	<button name="group_invite" tool_tip="Invitar a un grupo"/>
+	<text name="About:" value="Sobre mí:"/>
+	<text name="Give item:" value="Enviar:"/>
+	<text name="Give inventory" tool_tip="Arrastra aquí items de tu inventario para dárselos a este avatar.">
+		Arrastra aquí items de tu inventario.
+	</text>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button label="Buscar en el mapa" label_selected="Buscar en el mapa" name="show_on_map_btn" tool_tip="Localizar a este residente en el mapa"/>
+			<button label="Pagar" label_selected="Pagar" name="pay" tool_tip="Enviar dinero a este residente"/>
+		</layout_panel>
+		<layout_panel name="middle_buttonstack">
+			<button label="Ofrecer teleporte" label_selected="Ofrecer teleporte" name="teleport" tool_tip="Ofrecer a este residente teleportarse a tu posición"/>
+			<button label="Mensaje Instantáneo" label_selected="Mensaje Instantáneo" name="im" tool_tip="Abrir una sesión de mensajería instantánea con este residente"/>
+		</layout_panel>
+		<layout_panel name="right_buttonstack">
+			<button label="Ofrecer amistad" label_selected="Ofrecer amistad" name="add_friend" tool_tip="Ofrecer amistad a este residente"/>
+			<button label="Bloquear" name="block" tool_tip="Bloquear a este residente (su avatar no se dibujará en pantalla, se ignorarán sus MI y sus mensajes en el chat general y los de grupo y sus ofertas de inventario)"/>
+			<button label="Desbloquear" name="unblock" tool_tip="Desbloquear a este residente"/>
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search_checkbox" label="Mostrar en la búsqueda"/>
+</panel>

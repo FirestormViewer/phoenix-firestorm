@@ -70,7 +70,7 @@
 #include "llworld.h"
 #include "rlvhandler.h"
 
-#define NAME_PREDICTION_MINIMUM_LENGTH 3
+#define NAME_PREDICTION_MINIMUM_LENGTH 2
 S32 FSFloaterNearbyChat::sLastSpecialChatChannel = 0;
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-0.2.2)
@@ -110,16 +110,12 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 
 	if (FSUseNearbyChatConsole)
 	{
-		LLNotificationsUI::LLScreenChannelBase* chat_channel = LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLUUID(gSavedSettings.getString("NearByChatChannelUUID")));
-		if(chat_channel)
-		{
-			chat_channel->removeToastsFromChannel();
-		}
+		removeScreenChat();
 		gConsole->setVisible(!getVisible());
 	}
 	else
 	{
-		gConsole->setVisible(FALSE);		
+		gConsole->setVisible(FALSE);
 	}
 }
 
@@ -158,12 +154,6 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mInputPanels = getChild<LLLayoutStack>("input_panels");
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
-	
-	gSavedSettings.getControl("FSNearbyChatbar")->getCommitSignal()->connect(boost::bind(&FSFloaterNearbyChat::onChatBarVisibilityChanged, this));
-	gSavedSettings.getControl("FSShowChatChannel")->getCommitSignal()->connect(boost::bind(&FSFloaterNearbyChat::onChatChannelVisibilityChanged, this));
-
-	onChatBarVisibilityChanged();
-	onChatChannelVisibilityChanged();
 
 	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
@@ -174,17 +164,8 @@ BOOL FSFloaterNearbyChat::postBuild()
 	// <FS:Ansariel> Optional muted chat history
 	mChatHistoryMuted = getChild<FSChatHistory>("chat_history_muted");
 	
-	// <vertical tab docking> -AO
-	if(isChatMultiTab())
-	{
-		LLButton* slide_left = getChild<LLButton>("slide_left_btn");
-		slide_left->setVisible(false);
-		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
-		slide_right->setVisible(false);
-
-		FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
-		gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
-	}
+	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
+	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
 	
 	return LLDockableFloater::postBuild();
 }
@@ -213,9 +194,9 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 {
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
-	bool hide_timestamps_nearby_chat = gSavedSettings.getBOOL("FSHideTimestampsNearbyChat");
-	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - only add Timestamp when hide_timestamps_nearby_chat is not TRUE
-	if (!hide_timestamps_nearby_chat)
+	bool show_timestamps_nearby_chat = gSavedSettings.getBOOL("FSShowTimestampsNearbyChat");
+	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - add Timestamp when show_timestamps_nearby_chat is TRUE
+	if (show_timestamps_nearby_chat)
 	{
 		if (tmp_chat.mTimeStr.empty())
 		{
@@ -227,8 +208,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	tmp_chat.mFromName = chat.mFromName;
 	LLSD chat_args = args;
 	chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-	chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
-	chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+	chat_args["show_time"] = show_timestamps_nearby_chat;
 	mChatHistoryMuted->appendMessage(chat, chat_args);
 	// </FS:Ansariel> Optional muted chat history
 	if (!chat.mMuted)
@@ -237,7 +217,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 		//tmp_chat.mFromName = chat.mFromName;
 		//LLSD chat_args = args;
 		//chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-		//chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+		//chat_args["show_timestamps_nearby_chat"] = show_timestamps_nearby_chat;
 		// <(FS:Ansariel> Optional muted chat history
 		mChatHistory->appendMessage(chat, chat_args);
 	}
@@ -293,13 +273,14 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			{
 				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
 				{
+					//from_name = "IM: " + from_name;
 					if (chat.mChatType == CHAT_TYPE_IM_GROUP && chat.mFromNameGroup != "")
 					{
-						from_name = LLTrans::getString("IMPrefix") + chat.mFromNameGroup + from_name;
+						from_name = "IM: " + chat.mFromNameGroup + from_name;
 					}
 					else
 					{
-						from_name = LLTrans::getString("IMPrefix") + from_name;
+						from_name = "IM: " + from_name;
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
@@ -352,19 +333,9 @@ bool FSFloaterNearbyChat::onNearbyChatCheckContextMenuItem(const LLSD& userdata)
 	std::string str = userdata.asString();
 	if (str == "nearby_people")
 	{
-		onNearbySpeakers();	
+		onNearbySpeakers();
 	}
 	return false;
-}
-
-void FSFloaterNearbyChat::onChatBarVisibilityChanged()
-{
-	getChild<LLLayoutPanel>("chat_bar_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSNearbyChatbar"));
-}
-
-void FSFloaterNearbyChat::onChatChannelVisibilityChanged()
-{
-	getChild<LLLayoutPanel>("channel_spinner_visibility_panel")->setVisible(gSavedSettings.getBOOL("FSShowChatChannel"));
 }
 
 void FSFloaterNearbyChat::openFloater(const LLSD& key)
@@ -599,7 +570,7 @@ void FSFloaterNearbyChat::loadHistory()
 			// Ansariel: Strip IM prefix so we can properly
 			//           retrieve the UUID in case we got a
 			//           saved IM in nearby chat history.
-			std::string im_prefix = LLTrans::getString("IMPrefix");
+			std::string im_prefix = "IM: ";
 			size_t im_prefix_found = from.find(im_prefix);
 			if (im_prefix_found != std::string::npos)
 			{
@@ -671,7 +642,7 @@ FSFloaterNearbyChat* FSFloaterNearbyChat::getInstance()
 bool FSFloaterNearbyChat::isChatMultiTab()
 {
 	// Restart is required in order to change chat window type.
-	static bool is_single_window = gSavedSettings.getS32("ChatWindow") == 1;
+	static bool is_single_window = gSavedSettings.getS32("FSChatWindow") == 1;
 	return is_single_window;
 }
 
@@ -717,18 +688,21 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 		if (mask == MASK_CONTROL)
 		{
 			// shout
+			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_SHOUT);
 			handled = TRUE;
 		}
 		else if (mask == MASK_SHIFT)
 		{
 			// whisper
+			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_WHISPER);
 			handled = TRUE;
 		}
 		else if (mask == MASK_ALT)
 		{
 			// OOC
+			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_OOC);
 			handled = TRUE;
 		}
@@ -943,8 +917,11 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 					}
 					prefix += match + rest_of_match + " ";
 				}
-				mInputEditor->setText(prefix + suffix);
-				mInputEditor->selectNext(rest_of_match, false);
+				if (!rest_of_match.empty())
+				{
+					mInputEditor->setText(prefix + suffix);
+					mInputEditor->selectNext((rest_of_match + " "), false);
+				}
 			}
 		}
 	}
@@ -1168,7 +1145,7 @@ void FSFloaterNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType t
 // static
 void FSFloaterNearbyChat::stopChat()
 {
-	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("nearby_chat");
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat");
 	if (nearby_chat)
 	{
 		nearby_chat->mInputEditor->setFocus(FALSE);
@@ -1376,40 +1353,3 @@ void really_send_chat_from_nearby_floater(std::string utf8_out_text, EChatType t
 	gAgent.sendReliableMessage();
 }
 //</FS:TS> FIRE-787
-
-class LLChatCommandHandler : public LLCommandHandler
-{
-public:
-	// not allowed from outside the app
-	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_BLOCK) { }
-	
-    // Your code here
-	bool handle(const LLSD& tokens, const LLSD& query_map,
-				LLMediaCtrl* web)
-	{
-		bool retval = false;
-		// Need at least 2 tokens to have a valid message.
-		if (tokens.size() < 2)
-		{
-			retval = false;
-		}
-		else
-		{
-			S32 channel = tokens[0].asInteger();
-			// VWR-19499 Restrict function to chat channels greater than 0.
-			if ((channel > 0) && (channel < CHAT_CHANNEL_DEBUG))
-			{
-				retval = true;
-				// Send unescaped message, see EXT-6353.
-				std::string unescaped_mesg (LLURI::unescape(tokens[1].asString()));
-				send_chat_from_nearby_floater(unescaped_mesg, CHAT_TYPE_NORMAL, channel);
-			}
-			else
-			{
-				retval = false;
-				// Tell us this is an unsupported SLurl.
-			}
-		}
-		return retval;
-	}
-};

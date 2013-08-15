@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="もの" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
 		[ITEM_COUNT] 個のアイテムを取得中です... [FILTER]
@@ -6,23 +6,53 @@
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] 個のアイテム　[FILTER]
 	</panel.string>
-	<text name="ItemcountText">
-		アイテム：
-	</text>
-	<filter_editor label="インベントリをフィルター" name="inventory search editor"/>
+
+	<filter_editor label="インベントリをフィルター" name="inventory search editor" tool_tip="１つ以上の単語を入力して検索します。２つ以上単語を入力する時は「+」でつなぎます。" />
+	<button name="collapse_btn" label="たたむ" />
+	<button name="expand_btn" label="広げる" />
+	<text name="filter_label" value="フィルター:" />
+	<combo_box name="filter_combo_box">
+		<combo_box.item value="filter_type_all" label="全種類" />
+		<combo_box.item value="filter_separator" label="------------" />
+		<combo_box.item value="filter_type_animations" label="アニメーション" />
+		<combo_box.item value="filter_type_calling_cards" label="コーリングカード" />
+		<combo_box.item value="filter_type_clothing" label="服装／身体部位" />
+		<combo_box.item value="filter_type_gestures" label="ジェスチャー" />
+		<combo_box.item value="filter_type_landmarks" label="ランドマーク" />
+		<combo_box.item value="filter_type_notecards" label="ノートカード" />
+		<combo_box.item value="filter_type_objects" label="オブジェクト" />
+		<combo_box.item value="filter_type_scripts" label="スクリプト" />
+		<combo_box.item value="filter_type_sounds" label="サウンド" />
+		<combo_box.item value="filter_type_textures" label="テクスチャ" />
+		<combo_box.item value="filter_type_snapshots" label="スナップショット" />
+		<combo_box.item value="filter_type_meshes" label="メッシュ" />
+		<combo_box.item value="filter_separator" label="------------" />
+		<combo_box.item value="filter_type_custom" label="カスタマイズ..." />
+	</combo_box>
 	<tab_container name="inventory filter tabs">
 		<inventory_panel label="インベントリ" name="All Items"/>
 		<recent_inventory_panel label="最新" name="Recent Items"/>
+	    <worn_inventory_panel label="装着中" name="Worn Items" />
 	</tab_container>
-	<layout_stack name="bottom_panel">
-		<layout_panel name="options_gear_btn_panel">
-			<button name="options_gear_btn" tool_tip="オプションを表示します"/>
-		</layout_panel>
-		<layout_panel name="add_btn_panel">
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="オプションを表示します"/>
+		</panel>
+		<panel name="add_btn_panel">
 			<button name="add_btn" tool_tip="新しいアイテムを追加します"/>
-		</layout_panel>
-		<layout_panel name="trash_btn_panel">
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="別のインベントリ・ウィンドウAdditional Inventory Window" />
+
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				アイテム
+			</text>
+			<icon name="dummy_icon" />
+		</panel>
+		<panel name="trash_btn_panel">
 			<dnd_button name="trash_btn" tool_tip="選択したアイテムを削除します"/>
-		</layout_panel>
-	</layout_stack>
+		</panel>
+	</panel>
 </panel>

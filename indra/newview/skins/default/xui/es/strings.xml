@@ -3121,13 +3121,16 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		Pegada
 	</string>
 	<string name="Higher">
-		Arrriba
+		Más arriba
 	</string>
 	<string name="Hip Length">
 		Cadera: altura
 	</string>
 	<string name="Hip Width">
 		Cadera: ancho
+	</string>
+	<string name="Hover">
+		Flotar
 	</string>
 	<string name="In">
 		Pegadas
@@ -5154,6 +5157,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Radar_Label">
 		Radar
 	</string>
+	<string name="Command_Conversation_Log_Label">
+		Registro de chat
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5268,6 +5274,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Radar_Tooltip">
 		Abre el radar de avatares cercanos
 	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Abre el registro de conversaciones para ver las transcripciones de chats anteriores
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>
@@ -5348,7 +5357,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		No hay conversaciones guardadas. Después de contactar con un residente o de que alguien contacte contigo, se mostrará aquí una entrada de registro.
 	</string>
 	<string name="IMPrefix">
-		MI: 
+		MI:
 	</string>
 	<string name="SanityCheckEquals">
 		La configuración de &quot;[CONTROL_NAME]&quot; debería establecerse a [VALUE_1].
@@ -5477,8 +5486,64 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="entering_region">ha entrado en la región.</string>
 	<string name="entering_region_distance">ha entrado en la región ([DISTANCE] m).</string>
 	<string name="leaving_region">ha salido de la región.</string>
-	<string name="export_fail_no_mesh">La exportación de modelos mesh no está actualmente soportada. Exportación abortada.</string>
 	<string name="TotalScriptCountChangeIncrease">El total de scripts en la región ha subido de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
 	<string name="TotalScriptCountChangeDecrease">El total de scripts en la región ha bajado de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
 	<string name="preproc_toggle_warning">La conmutación del preprocesador no será efectiva hasta que no cierres y reabras este editor.</string>
+	<string name="export_started">
+		Iniciando exportación...
+	</string>
+	<string name="export_finished">
+		Exportación finalizada.
+	</string>
+	<string name="export_fail_no_mesh">
+		La exportación de modelos mesh no está actualmente soportada. Exportación abortada.
+	</string>
+	<string name="export_nothing_exported">
+		No se ha exportado nada. Respaldo no creado.
+	</string>
+	<string name="export_node_not_found">
+		No se ha encontrado el nodo LLSelect de [OBJECT]. Utilizando primitiva por defecto en su lugar.
+	</string>
+	<string name="export_failed_export_check">
+		Ha fallado la comprobación de permisos de [OBJECT]. Usando primitiva por defecto.
+	</string>
+	<string name="export_asset_failed_export_check">
+		Ha fallado la comprobación de permisos de [ITEM]. Ignorando.
+	</string>
+	<string name="export_failed_export_null_texture">
+		Se ha intentado exportar una textura nula.
+	</string>
+	<string name="export_loading_texture">
+		Cargando textura [ITEM]...
+	</string>
+	<string name="export_saving_texture">
+		Textura [TEXTURE] guardada con éxito.
+	</string>
+	<string name="export_saving_asset">
+		Guardando [ITEM]...
+	</string>
+	<string name="export_failed_to_receive_texture">
+		Error al obtener la textura [TEXTURE].
+	</string>
+	<string name="export_received_null_texture">
+		Se ha recibido la textura nula [TEXTURE].
+	</string>
+	<string name="export_item_not_exportable">
+		[ITEM] no es actualmente soportado por la exportación. Ignorando.
+	</string>
+	<string name="export_failed_fetch">
+		No se ha podido obtener [ITEM]. (Estado [STATUS] [EXT_STATUS])
+	</string>
+	<string name="export_requesting_asset">
+		Solicitando activo [ITEM]...
+	</string>
+	<string name="export_rerequesting_inventory">
+		Volviendo a solicitar inventario para [ITEM].
+	</string>
+	<string name="export_rerequesting_texture">
+		Volviendo a solicitar textura [ITEM].
+	</string>
+	<string name="export_failed_to_load">
+		Error al cargar el activo [ITEM].
+	</string>
 </strings>

@@ -33,6 +33,10 @@
 #include "lltexturecache.h"
 #include "llviewertexture.h"
 
+// Floater includes
+#include "llfloater.h"
+#include "llscrolllistctrl.h"
+
 struct FSAssetResourceData
 {
 	std::string name;
@@ -82,6 +86,7 @@ private:
 	void removeRequestedAsset(LLUUID asset_uuid);
 	bool assetCheck(LLUUID asset_id, std::string& name, std::string& description);
 	bool megaPrimCheck(LLUUID creator, LLViewerObject* object);
+	bool defaultTextureCheck(const LLUUID asset_id);
 	
 	LLSD mFile;
 	std::map<LLUUID, FSAssetResourceData> mRequestedTexture;
@@ -93,6 +98,7 @@ private:
 	std::map<LLUUID, bool> mTextureChecked;
 	bool mExported;
 	bool mAborted;
+	bool mExportError;
 
 	uuid_vec_t mInventoryRequests;
 	uuid_vec_t mAssetRequests;
@@ -111,6 +117,20 @@ public:
 private:
 	LLPointer<LLImageFormatted> mFormattedImage;
 	LLUUID mID;
+};
+
+class FSFloaterObjectExport : public LLFloater
+{
+public:
+	FSFloaterObjectExport(const LLSD& key);
+	virtual ~FSFloaterObjectExport();
+	virtual BOOL postBuild();
+	
+	void onCloseBtn();
+	void updateProgress(const std::string message);
+	
+private:
+	LLScrollListCtrl* mOutputList;
 };
 
 #endif // FS_FSEXPORT_H
