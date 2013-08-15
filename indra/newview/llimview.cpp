@@ -1089,14 +1089,12 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 		chat.mChatType = CHAT_TYPE_IM;
 		chat.mFromID = from_id;
 		//chat.mFromName = from;
-		S32 groupNameLength = gSavedSettings.getS32("FSShowGroupNameLength");
-		if(groupNameLength != 0 && session->isGroupSessionType())
+		static LLCachedControl<S32> group_name_length(gSavedSettings, "FSShowGroupNameLength");
+		if(group_name_length != 0 && session->isGroupSessionType())
 		{
 			chat.mChatType = CHAT_TYPE_IM_GROUP;
-			chat.mFromNameGroup = "[";
-			chat.mFromNameGroup += session->mName.substr(0,groupNameLength);
-			chat.mFromNameGroup += "] ";
-			chat.mFromName=from;
+			chat.mFromNameGroup = "[" + session->mName.substr(0, group_name_length) + "] ";
+			chat.mFromName = from;
 		}
 		else
 		{

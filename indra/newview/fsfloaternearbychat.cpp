@@ -268,24 +268,18 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 
 			// Ansariel: Handle IMs in nearby chat
 			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-			//if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && chat.mChatType == CHAT_TYPE_IM)
-			if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP))
+			if (gSavedSettings.getBOOL("FSShowIMInChatHistory"))
 			{
-				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
+				if (chat.mChatType == CHAT_TYPE_IM_GROUP && !chat.mFromNameGroup.empty())
 				{
-					//from_name = "IM: " + from_name;
-					if (chat.mChatType == CHAT_TYPE_IM_GROUP && chat.mFromNameGroup != "")
-					{
-						from_name = "IM: " + chat.mFromNameGroup + from_name;
-					}
-					else
-					{
-						from_name = "IM: " + from_name;
-					}
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					from_name = "IM: " + chat.mFromNameGroup + from_name;
 				}
-				else return;
+				else if (chat.mChatType == CHAT_TYPE_IM)
+				{
+					from_name = "IM: " + from_name;
+				}
 			}
+			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		}
 
 		LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
