@@ -11435,7 +11435,7 @@ Export finished and saved to [FILENAME].
       name="AntiSpamBlocked"
       log_to_chat="false"
       type="notifytip">
-AntiSpam: Blocked ["SOURCE"] for spamming a ["QUEUE"] (["COUNT"]) times in [PERIOD] seconds.
+AntiSpam: Blocked [SOURCE] for spamming a [QUEUE] ([COUNT]) times in [PERIOD] seconds.
     </notification>
 	
 </notifications>

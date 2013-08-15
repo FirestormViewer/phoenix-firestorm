@@ -4474,6 +4474,6 @@ Nie można tego cofnąć.
 		Wyeksportowano i zapisano do [FILENAME].
 	</notification>
 	<notification name="AntiSpamBlocked">
-		Antyspam: Zablokowano ["SOURCE"] ze względu na spam ["QUEUE"] (["COUNT"]) razy podczas [PERIOD] sekund.
+		Antyspam: Zablokowano [SOURCE] ze względu na spam [QUEUE] ([COUNT]) razy podczas [PERIOD] sekund.
 	</notification>
 </notifications>
