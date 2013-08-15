@@ -5050,6 +5050,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FSCmdLineDrawDistanceSet">
 		Pole widzenia zostało ustawione na [DISTANCE]m.
 	</string>
+	<string name="FSCameraPositionCopied">
+		Pozycja kamery [POS] została skopiowana do schowka.
+	</string>
 	<string name="FSWithHavok">
 		ze wsparciem dla Havoka
 	</string>
