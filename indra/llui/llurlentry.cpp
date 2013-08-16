@@ -1233,7 +1233,7 @@ std::string LLUrlEntryIcon::getIcon(const std::string &url)
 //
 LLUrlEntryJira::LLUrlEntryJira()
 {
-	mPattern = boost::regex("((?:ARVD|BUG|CHOP|CTS|DOC|DN|ECC|EXP|FIRE|LEAP|LLSD|MAINT|MISC|OPEN|PATHBUG|PHOE|PLAT|PYO|SCR|SEC|SH|SINV|SNOW|SOCIAL|STORM|SUP|SVC|SPOT|VWR|WEB)-\\d+)",
+	mPattern = boost::regex("((?:ARVD|BUG|CHOP|CHUIBUG|DOC|DN|ECC|EXP|FIRE|LEAP|LLSD|MAINT|MATBUG|OPEN|PATHBUG|PHOE|PLAT|PYO|SCR|SEC|SH|SINV|SOCIAL|STORM|SUP|SVC|SPOT|VWR|WEB)-\\d+)",
 				// <FS:Ansariel> FIRE-917: Match case to reduce number of false positives
 				//boost::regex::perl|boost::regex::icase);
 				boost::regex::perl);
@@ -1255,7 +1255,7 @@ std::string LLUrlEntryJira::getUrl(const std::string &string) const
 {
 	if (boost::ifind_first(string, "PHOE") ||
 		boost::ifind_first(string, "FIRE") ||
-		boost::ifind_first(string, "SPOT") ||
+		boost::ifind_first(string, "SLS") ||
 		//<FS:TS> FIRE-8319: SUP JIRAs link to secondlife.com
 		boost::ifind_first(string, "SUP"))
 		//</FS:TS> FIRE-8319
