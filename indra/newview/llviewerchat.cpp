@@ -77,7 +77,10 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 					//{
 						r_color = LLUIColorTable::instance().getColor("AgentChatColor");
 					//}
-					r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_CHAT);
+					if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
+						r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_IM);
+					else
+						r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_CHAT);
 					// </FS:CR>
 
 					//color based on contact sets prefs

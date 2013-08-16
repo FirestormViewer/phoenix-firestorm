@@ -28,6 +28,7 @@
 typedef enum e_lgg_cs
 {
 	LGG_CS_CHAT,
+	LGG_CS_IM,
 	LGG_CS_TAG,
 	LGG_CS_RADAR,
 	LGG_CS_MINIMAP
