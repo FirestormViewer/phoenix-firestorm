@@ -5421,6 +5421,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="LoadCameraPositionOutsideDrawDistance">No se puede restaurar la vista de cámara porque su posición está más allá de tu distancia de dibujo.</string>
 	<string name="DrawDistanceSteppingGestureObsolete">Debido a cambios en el código, ya no es necesario usar este gesto. La distancia de dibujo progresiva ha sido activada.</string>
 	<string name="FSCmdLineDrawDistanceSet">Distancia de dibujo establecida en [DISTANCE]m.</string>
+	<string name="FSCameraPositionCopied">Posición de la cámara [POS] copiada al portapapeles.</string>
 	<string name="FSWithHavok">con soporte Havok</string>
 	<string name="FSWithOpensim">con soporte OpenSimulator</string>
 	<string name="not_found">&apos;[TEXT]&apos; no encontrado</string>
