@@ -23,7 +23,8 @@
 FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 :	LLFloater(key),
 	mComboPose(NULL),
-	mPoseStandLock(false)
+	mPoseStandLock(false),
+	mAOPaused(false)
 {
 }
 
@@ -45,6 +46,12 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 {
 	if (!isAgentAvatarValid())
 		return;
+	
+	if (gSavedPerAccountSettings.getBOOL("UseAO"))
+	{
+		gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+		mAOPaused = true;
+	}
 	
 	if (gSavedSettings.getBOOL("FSPoseStandLock") && !gAgentAvatarp->isSitting())
 	{
@@ -74,6 +81,11 @@ void FSFloaterPoseStand::onClose(bool app_quitting)
 	gAgent.setCustomAnim(FALSE);
 	FSPose::getInstance()->stopPose();
 	gAgent.stopCurrentAnimations();
+	if (mAOPaused && !gSavedPerAccountSettings.getBOOL("UseAO"))
+	{
+		gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+		mAOPaused = false;
+	}
 }
 
 void FSFloaterPoseStand::loadPoses()
