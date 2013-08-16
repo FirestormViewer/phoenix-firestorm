@@ -10529,8 +10529,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Reset to default control
 
-	// <FS:Ansariel> Commented out - already definied earlier in this method
-	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
+	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
 
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));
