@@ -864,6 +864,7 @@ class DarwinManifest(ViewerManifest):
                                 "libexpat.1.5.2.dylib",
                                 "libexception_handler.dylib",
                                 "libfmodex.dylib",
+                                "libfmodexL.dylib",
                                 "libGLOD.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(libdir, libfile), libfile)
