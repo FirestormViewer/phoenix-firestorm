@@ -409,7 +409,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 		{
 			case LGG_CS_CHAT:
 			case LGG_CS_IM:
-					color = LLUIColorTable::instance().getColor("MutedChatColor", LLColor4::grey3);
+				color = LLUIColorTable::instance().getColor("MutedChatColor", LLColor4::grey3);
 				break;
 			case LGG_CS_TAG:
 				color = LLUIColorTable::instance().getColor("NameTagMuted", LLColor4::grey3);
