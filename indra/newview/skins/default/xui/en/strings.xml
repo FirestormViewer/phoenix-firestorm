@@ -2581,7 +2581,7 @@ Try enclosing path to the editor with double quotes.
   <!-- <FS:CR> Exporter messages -->
   <string name="export_started">Beginning export...</string>
   <string name="export_finished">Export finished.</string>
-  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
+  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Aborting export.</string>
   <string name="export_nothing_exported">Nothing was exported. Backup not created.</string>
   <string name="export_node_not_found">LLSelect node for [OBJECT] not found. Using default prim instead.</string>
   <string name="export_failed_export_check">[OBJECT] failed permissions check. Using default prim.</string>
@@ -2592,7 +2592,7 @@ Try enclosing path to the editor with double quotes.
   <string name="export_saving_asset">Saving [ITEM]...</string>
   <string name="export_failed_to_receive_texture">Failed to get texture [TEXTURE].</string>
   <string name="export_received_null_texture">Received null texture [TEXTURE].</string>
-  <string name="export_item_not_exportable">[ITEM] is not an currently supported by the exporter. Skipping.</string>
+  <string name="export_item_not_exportable">[ITEM] is not currently supported by the exporter. Skipping.</string>
   <string name="export_failed_fetch">Could not retrieve [ITEM]. (Status [STATUS] [EXT_STATUS])</string>
   <string name="export_requesting_asset">Requesting asset [ITEM]...</string>
   <string name="export_rerequesting_inventory">Rerequesting inventory for [ITEM].</string>
