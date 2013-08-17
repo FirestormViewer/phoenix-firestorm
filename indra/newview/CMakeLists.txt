@@ -1566,6 +1566,17 @@ if (LINUX)
     set(viewer_LIBRARIES
         Xinerama
         )
+
+    # <FS:ND> Enable user to create a ctags database via using -DND_CTAGS=On
+    if( ND_CTAGS )
+      message( "Will generate ctags database during compilation" )
+      set_source_files_properties( TAGS PROPERTIES GENERATED true)
+      add_custom_command ( OUTPUT TAGS COMMAND ctags --extra=+q --fields=+aiS --c++-kinds=+p -e --recurse=yes .
+                           WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} )
+      list(APPEND viewer_SOURCE_FILES TAGS )
+    endif( ND_CTAGS )
+    # </FS:ND>
+
 endif (LINUX)
 
 if (WINDOWS)
