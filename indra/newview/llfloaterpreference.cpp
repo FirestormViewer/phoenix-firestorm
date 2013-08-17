@@ -3698,6 +3698,9 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification,const 
 			}
 		}
 	}
+	// <FS:CR> Set this true so we can update newer settings with their deprecated counterparts on next launch
+	gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", TRUE);
+	
 	// Tell the user we have finished restoring settings and the viewer must shut down
 	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&FSPanelPreferenceBackup::onQuitConfirmed,this,_1,_2));
 }

@@ -2778,6 +2778,15 @@ bool LLAppViewer::initConfiguration()
 		// Note that the "FirstRunThisInstall" settings is currently unused.
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
 	}
+	
+	// <FS:CR> Compatibility with old backups
+	// Put gSavedSettings here, gSavedPerAccountSettings in llstartup.cpp
+	// *TODO: Should we keep these around forever or just three release cycles?
+	if (gSavedSettings.getBOOL("FSFirstRunAfterSettingsRestore"))
+	{
+		// Nothing happened...
+	}
+	// </FS:CR>
 
 	//WS: Set the usersessionsettingsfile to the account_SessionSettingsFile file. This allows settings_per_accounts to be per session.
 	if(!gSavedSettings.getString("SessionSettingsFile").empty())

@@ -2228,8 +2228,25 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			LLFloaterReg::toggleInstanceOrBringToFront("im_container");
 
 		}
-
+		
 		display_startup();
+		
+		// <FS:CR> Compatibility with old backups
+		// Put gSavedPerAccountSettings here, put gSavedSettings in llappviewer.cpp
+		// *TODO: Should we keep these around forever or just three release cycles?
+		if (gSavedSettings.getBOOL("FSFirstRunAfterSettingsRestore"))
+		{
+			// Post-chui merge logging change
+			if (gSavedPerAccountSettings.getBOOL("LogInstantMessages"))
+				gSavedPerAccountSettings.setS32("KeepConversationLogTranscript", 2);
+			else
+				gSavedPerAccountSettings.setS32("KeepConversationLogTranscript", 0);
+			
+			//ok, we're done, set it back to false.
+			gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", FALSE);
+		}
+		display_startup();
+		// </FS:CR>
 
 		if (gSavedSettings.getBOOL("HelpFloaterOpen"))
 		{

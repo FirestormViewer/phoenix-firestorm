@@ -20944,6 +20944,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>String</string>
       <key>Value</key>
       <string />
-    </map>	
+    </map>
+    <key>FSFirstRunAfterSettingsRestore</key>
+    <map>
+      <key>Comment</key>
+      <string>Specifies that you have not run the viewer since you performed a settings restore</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
 </map>
 </llsd>
