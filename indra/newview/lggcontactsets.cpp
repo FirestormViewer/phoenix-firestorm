@@ -361,7 +361,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 				break;
 			case LGG_CS_RADAR:
 			default:
-				llwarns << "Unhandled colorize case!" << llendl;
+				lldebugs << "Unhandled colorize case!" << llendl;
 				break;
 		}
 	}
@@ -395,7 +395,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 					color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white);
 				break;
 			default:
-				llwarns << "Unhandled colorize case!" << llendl;
+				lldebugs << "Unhandled colorize case!" << llendl;
 				break;
 		}
 	}
@@ -419,7 +419,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 				break;
 			case LGG_CS_RADAR:
 			default:
-				llwarns << "Unhandled colorize case!" << llendl;
+				lldebugs << "Unhandled colorize case!" << llendl;
 				break;
 		}
 	}
@@ -439,7 +439,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 				break;
 			case LGG_CS_RADAR:
 			default:
-				llwarns << "Unhandled colorize case!" << llendl;
+				lldebugs << "Unhandled colorize case!" << llendl;
 				break;
 		}
 	}
@@ -465,7 +465,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 						color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue);
 					break;
 				default:
-					llwarns << "Unhandled colorize case!" << llendl;
+					lldebugs << "Unhandled colorize case!" << llendl;
 					break;
 			}
 		}
