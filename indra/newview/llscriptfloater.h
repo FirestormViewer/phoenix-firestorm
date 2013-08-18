@@ -220,6 +220,18 @@ public:
 
 	virtual void draw();
 // </FS:Zi>
+
+// <FS:Zi> script dialogs position
+	enum eDialogPosition
+	{
+		POS_LEGACY,			//	Use ShowScriptDialogsTopRight once and convert to one of these
+		POS_DOCKED,
+		POS_TOP_LEFT,
+		POS_TOP_RIGHT,
+		POS_BOTTOM_LEFT,
+		POS_BOTTOM_RIGHT
+	};
+// </FS:Zi>
 };
 
 #endif //LL_SCRIPTFLOATER_H

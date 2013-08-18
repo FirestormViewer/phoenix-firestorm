@@ -372,18 +372,55 @@
          name="ScriptDialogOption_2"
          value="2"/>
       </combo_box>
-      
-        <check_box
-         control_name="ShowScriptDialogsTopRight"
-         height="16"
-         initial_value="true"
-         label="Script Dialogs in Top Right"
+
+      <text
+       type="string"
+       left="5"
+       top_pad="6"
+       width="140"
+       follows="left|top"
+       height="16"
+       layout="topleft"
+       name="ScriptDialogsPositionLabel">
+        Script Dialogs Position:
+      </text>
+
+        <combo_box
+         control_name="ScriptDialogsPosition"
+         height="23"
          layout="topleft"
-         left="5"
-         name="ShowScriptDialogsTopRight"
-         tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
-         top_pad="2"
-         width="256" />
+         left_pad="10"
+         top_delta="-5"
+         name="ScriptDialogsPositionDropdown"
+         tool_tip="Choose where script dialogs (menus) come up on your screen."
+         width="180">
+
+        <combo_box.item
+         label="Importing old Value"
+         name="ScriptDialogPositionOption_0"
+         value="0"/>
+        <combo_box.item
+         label="Docked to Chiclet"
+         name="ScriptDialogPositionOption_1"
+         value="1"/>
+        <combo_box.item
+         label="Top Left"
+         name="ScriptDialogPositionOption_2"
+         value="2"/>
+        <combo_box.item
+         label="Top Right"
+         name="ScriptDialogPositionOption_3"
+         value="3"/>
+        <combo_box.item
+         label="Bottom Left"
+         name="ScriptDialogPositionOption_4"
+         value="4"/>
+        <combo_box.item
+         label="Bottom Right"
+         name="ScriptDialogPositionOption_5"
+         value="5"/>
+
+        </combo_box>
         <check_box
          control_name="FSAnimatedScriptDialogs"
          enabled_control="ShowScriptDialogsTopRight"
@@ -393,7 +430,7 @@
          layout="topleft"
          left="15"
          name="FSAnimatedScriptDialogs"
-         tool_tip="Set this to make script dialogs animate when opening (Classic V1.x behavior)."
+         tool_tip="Set this to make script dialogs animate when opening (Classic V1.x behavior). Only works when dialogs open from the top down."
          top_pad="2"
          width="256" />
         <check_box

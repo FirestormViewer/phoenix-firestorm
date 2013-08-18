@@ -43,6 +43,8 @@
 #include "llviewerwindow.h"
 #include "llfloaterimsession.h"
 
+#include "lltoolbarview.h"		// <FS:Zi> script dialogs position
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -104,6 +106,10 @@ bool LLScriptFloater::toggle(const LLUUID& notification_id)
 
 	return true;
 }
+
+/*
+// <FS:Zi> script dialogs position
+// Reimplemented the show() method at the end of this file
 
 LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 {
@@ -167,6 +173,8 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 	return floater;
 }
+// </FS:Zi>
+*/
 
 void LLScriptFloater::setNotificationId(const LLUUID& id)
 {
@@ -214,7 +222,9 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 	// <FS:Zi> Animated dialogs
 	// toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
 	mDesiredHeight=panel_rect.getHeight()+getHeaderHeight();
-	if(gSavedSettings.getBOOL("FSAnimatedScriptDialogs") && gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+	if(gSavedSettings.getBOOL("FSAnimatedScriptDialogs") &&
+		(gSavedSettings.getS32("ScriptDialogsPosition")==(eDialogPosition) POS_TOP_LEFT ||
+		gSavedSettings.getS32("ScriptDialogsPosition")==(eDialogPosition) POS_TOP_RIGHT))
 	{
 		mCurrentHeight=0;
 		mStartTime=LLFrameTimer::getElapsedSeconds();
@@ -777,6 +787,151 @@ void LLScriptFloater::draw()
 	}
 
 	LLDockableFloater::draw();
+}
+// </FS:Zi>
+
+// <FS:Zi> script dialogs position
+LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
+{
+	LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
+	floater->setNotificationId(notification_id);
+	floater->createForm(notification_id);
+
+	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
+	floater->setAutoFocus(FALSE);
+
+	LLScriptFloaterManager::e_object_type floaterType=LLScriptFloaterManager::getObjectType(notification_id);
+
+	BOOL chicletsDisabled=gSavedSettings.getBOOL("FSDisableIMChiclets");
+
+	if(floaterType==LLScriptFloaterManager::OBJ_SCRIPT)
+	{
+		eDialogPosition dialogPos=(eDialogPosition) gSavedSettings.getS32("ScriptDialogsPosition");
+
+		if(dialogPos==POS_LEGACY)
+		{
+			dialogPos=POS_TOP_RIGHT;
+			if(!gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+			{
+				dialogPos=POS_DOCKED;
+			}
+			gSavedSettings.setS32("ScriptDialogsPosition",(S32) dialogPos);
+		}
+
+		if(dialogPos==POS_DOCKED && chicletsDisabled)
+		{
+			dialogPos=POS_TOP_RIGHT;
+		}
+
+		if(dialogPos!=POS_DOCKED)
+		{
+			// undock the dialog
+			floater->setDocked(false,true);
+		}
+
+		S32 topPad=0;
+		if(gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+			topPad+=LLUI::getRootView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
+
+		if(gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
+			topPad+=LLUI::getRootView()->getChild<LLView>("favorite")->getRect().getHeight();
+
+		S32 bottomPad=0;
+		if(gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->hasButtons())
+			bottomPad=gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->getRect().getHeight();
+
+		S32 leftPad=0;
+		if(gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->hasButtons())
+			leftPad=gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->getRect().getWidth();
+
+		S32 rightPad=0;
+		if(gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->hasButtons())
+			rightPad=gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->getRect().getWidth();
+
+		LLRect pos=floater->getRect();
+
+		S32 width=pos.getWidth();
+		S32 height=pos.getHeight();
+
+		floater->setSavePosition(true);
+
+		switch(dialogPos)
+		{
+			case POS_DOCKED:
+			{
+				floater->dockToChiclet(true);
+				break;
+			}
+			case POS_TOP_LEFT:
+			{
+				pos.setOriginAndSize(leftPad,
+									gViewerWindow->getWorldViewHeightScaled()-height-topPad,
+									width,height);
+				break;
+			}
+			case POS_TOP_RIGHT:
+			{
+				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width-rightPad,
+									gViewerWindow->getWorldViewHeightScaled()-height-topPad,
+									width,height);
+				break;
+			}
+			case POS_BOTTOM_LEFT:
+			{
+				pos.setOriginAndSize(leftPad,
+									bottomPad,
+									width,height);
+				break;
+			}
+			case POS_BOTTOM_RIGHT:
+			{
+				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width-rightPad,
+									bottomPad,
+									width,height);
+				break;
+			}
+			default:
+			{
+				llwarns << "dialogPos value " << dialogPos << " not handled in switch() statement." << llendl;
+			}
+		}
+
+		if(dialogPos!=POS_DOCKED)
+		{
+			floater->setRect(pos);
+			floater->savePosition();
+			floater->restorePosition();
+		}
+	}
+	else
+	{
+		floater->setSavePosition(true);
+
+		if(chicletsDisabled)
+		{
+			LLRect pos=floater->getRect();
+
+			S32 width=pos.getWidth();
+			S32 height=pos.getHeight();
+
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
+								 gViewerWindow->getWorldViewHeightScaled()-height,
+								 width,height);
+
+			floater->setRect(pos);
+			floater->savePosition();
+			floater->restorePosition();
+		}
+		else
+		{
+			floater->dockToChiclet(true);
+		}
+	}
+
+	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
+	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, FALSE);
+
+	return floater;
 }
 // </FS:Zi>
 

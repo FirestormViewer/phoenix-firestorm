@@ -495,6 +495,18 @@
     <integer>1</integer>
   </map>
 
+  <key>ScriptDialogsPosition</key>
+  <map>
+    <key>Comment</key>
+    <string>Holds the position where script llDialog floaters will show up. 1 = docked to chiclet, 2 = top left, 3 = top right, 4 = bottom left, 5 = bottom right, 0 = follow legacy ShowScriptDialogsTopRight</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>3</integer>
+  </map>
+
   <!-- <FS_Zi> Animated dialogs -->
   <key>FSAnimatedScriptDialogs</key>
   <map>
