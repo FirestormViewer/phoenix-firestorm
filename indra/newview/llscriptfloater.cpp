@@ -221,19 +221,19 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 	LLRect panel_rect = mScriptForm->getRect();
 	// <FS:Zi> Animated dialogs
 	// toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
-	mDesiredHeight=panel_rect.getHeight()+getHeaderHeight();
-	if(gSavedSettings.getBOOL("FSAnimatedScriptDialogs") &&
-		(gSavedSettings.getS32("ScriptDialogsPosition")==(eDialogPosition) POS_TOP_LEFT ||
-		gSavedSettings.getS32("ScriptDialogsPosition")==(eDialogPosition) POS_TOP_RIGHT))
+	mDesiredHeight = panel_rect.getHeight() + getHeaderHeight();
+	if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") &&
+		(gSavedSettings.getS32("ScriptDialogsPosition") == (eDialogPosition)POS_TOP_LEFT ||
+		gSavedSettings.getS32("ScriptDialogsPosition") == (eDialogPosition)POS_TOP_RIGHT))
 	{
-		mCurrentHeight=0;
-		mStartTime=LLFrameTimer::getElapsedSeconds();
+		mCurrentHeight = 0;
+		mStartTime = LLFrameTimer::getElapsedSeconds();
 	}
 	else
 	{
-		mCurrentHeight=mDesiredHeight;
+		mCurrentHeight = mDesiredHeight;
 	}
-	toast_rect.setLeftTopAndSize(toast_rect.mLeft,toast_rect.mTop,panel_rect.getWidth(),mCurrentHeight);
+	toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), mCurrentHeight);
 	// </FS:Zi>
 	setShape(toast_rect);
 }
@@ -772,17 +772,17 @@ bool LLScriptFloater::isScriptTextbox(LLNotificationPtr notification)
 // <FS:Zi> Animated dialogs
 void LLScriptFloater::draw()
 {
-	if(mCurrentHeight<mDesiredHeight)
+	if (mCurrentHeight < mDesiredHeight)
 	{
-		mCurrentHeight=(S32) ((LLFrameTimer::getElapsedSeconds()-mStartTime)*2.5*(F64) mDesiredHeight);
+		mCurrentHeight = (S32)((LLFrameTimer::getElapsedSeconds() - mStartTime) * 2.5 * (F64)mDesiredHeight);
 
-		if(mCurrentHeight>mDesiredHeight)
+		if (mCurrentHeight > mDesiredHeight)
 		{
-			mCurrentHeight=mDesiredHeight;
+			mCurrentHeight = mDesiredHeight;
 		}
 
 		LLRect toast_rect=getRect();
-		toast_rect.setLeftTopAndSize(toast_rect.mLeft,toast_rect.mTop,toast_rect.getWidth(),mCurrentHeight);
+		toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, toast_rect.getWidth(), mCurrentHeight);
 		setShape(toast_rect);
 	}
 
@@ -802,60 +802,70 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 	LLScriptFloaterManager::e_object_type floaterType=LLScriptFloaterManager::getObjectType(notification_id);
 
-	BOOL chicletsDisabled=gSavedSettings.getBOOL("FSDisableIMChiclets");
+	BOOL chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
 
-	if(floaterType==LLScriptFloaterManager::OBJ_SCRIPT)
+	if (floaterType == LLScriptFloaterManager::OBJ_SCRIPT)
 	{
-		eDialogPosition dialogPos=(eDialogPosition) gSavedSettings.getS32("ScriptDialogsPosition");
+		eDialogPosition dialogPos = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 
-		if(dialogPos==POS_LEGACY)
+		if (dialogPos == POS_LEGACY)
 		{
-			dialogPos=POS_TOP_RIGHT;
-			if(!gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+			dialogPos = POS_TOP_RIGHT;
+			if (!gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
 			{
-				dialogPos=POS_DOCKED;
+				dialogPos = POS_DOCKED;
 			}
-			gSavedSettings.setS32("ScriptDialogsPosition",(S32) dialogPos);
+			gSavedSettings.setS32("ScriptDialogsPosition", (S32)dialogPos);
 		}
 
-		if(dialogPos==POS_DOCKED && chicletsDisabled)
+		if (dialogPos == POS_DOCKED && chicletsDisabled)
 		{
-			dialogPos=POS_TOP_RIGHT;
+			dialogPos = POS_TOP_RIGHT;
 		}
 
-		if(dialogPos!=POS_DOCKED)
+		if (dialogPos != POS_DOCKED)
 		{
 			// undock the dialog
-			floater->setDocked(false,true);
+			floater->setDocked(false, true);
 		}
 
-		S32 topPad=0;
-		if(gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
-			topPad+=LLUI::getRootView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
+		S32 topPad = 0;
+		if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+		{
+			topPad += LLUI::getRootView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
+		}
 
-		if(gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
-			topPad+=LLUI::getRootView()->getChild<LLView>("favorite")->getRect().getHeight();
+		if (gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
+		{
+			topPad += LLUI::getRootView()->getChild<LLView>("favorite")->getRect().getHeight();
+		}
 
-		S32 bottomPad=0;
-		if(gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->hasButtons())
-			bottomPad=gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->getRect().getHeight();
+		S32 bottomPad = 0;
+		if (gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->hasButtons())
+		{
+			bottomPad = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->getRect().getHeight();
+		}
 
-		S32 leftPad=0;
-		if(gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->hasButtons())
-			leftPad=gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->getRect().getWidth();
+		S32 leftPad = 0;
+		if (gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->hasButtons())
+		{
+			leftPad = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->getRect().getWidth();
+		}
 
-		S32 rightPad=0;
-		if(gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->hasButtons())
-			rightPad=gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->getRect().getWidth();
+		S32 rightPad = 0;
+		if (gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->hasButtons())
+		{
+			rightPad = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->getRect().getWidth();
+		}
 
-		LLRect pos=floater->getRect();
+		LLRect pos = floater->getRect();
 
-		S32 width=pos.getWidth();
-		S32 height=pos.getHeight();
+		S32 width = pos.getWidth();
+		S32 height = pos.getHeight();
 
 		floater->setSavePosition(true);
 
-		switch(dialogPos)
+		switch (dialogPos)
 		{
 			case POS_DOCKED:
 			{
@@ -865,29 +875,29 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			case POS_TOP_LEFT:
 			{
 				pos.setOriginAndSize(leftPad,
-									gViewerWindow->getWorldViewHeightScaled()-height-topPad,
-									width,height);
+									gViewerWindow->getWorldViewHeightScaled() - height - topPad,
+									width, height);
 				break;
 			}
 			case POS_TOP_RIGHT:
 			{
-				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width-rightPad,
-									gViewerWindow->getWorldViewHeightScaled()-height-topPad,
-									width,height);
+				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
+									gViewerWindow->getWorldViewHeightScaled() - height - topPad,
+									width, height);
 				break;
 			}
 			case POS_BOTTOM_LEFT:
 			{
 				pos.setOriginAndSize(leftPad,
 									bottomPad,
-									width,height);
+									width, height);
 				break;
 			}
 			case POS_BOTTOM_RIGHT:
 			{
-				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width-rightPad,
+				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
 									bottomPad,
-									width,height);
+									width, height);
 				break;
 			}
 			default:
@@ -896,7 +906,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			}
 		}
 
-		if(dialogPos!=POS_DOCKED)
+		if (dialogPos != POS_DOCKED)
 		{
 			floater->setRect(pos);
 			floater->savePosition();
@@ -907,16 +917,16 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	{
 		floater->setSavePosition(true);
 
-		if(chicletsDisabled)
+		if (chicletsDisabled)
 		{
-			LLRect pos=floater->getRect();
+			LLRect pos = floater->getRect();
 
-			S32 width=pos.getWidth();
-			S32 height=pos.getHeight();
+			S32 width = pos.getWidth();
+			S32 height = pos.getHeight();
 
-			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
-								 gViewerWindow->getWorldViewHeightScaled()-height,
-								 width,height);
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width,
+								 gViewerWindow->getWorldViewHeightScaled() - height,
+								 width, height);
 
 			floater->setRect(pos);
 			floater->savePosition();
