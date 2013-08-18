@@ -52,8 +52,18 @@
 			<combo_box.item label="Einer pro Objekt" name="ScriptDialogOption_0"/>
 			<combo_box.item label="Einer pro Objekt &amp; Kanal" name="ScriptDialogOption_1"/>
 			<combo_box.item label="Unbeschränkt" name="ScriptDialogOption_2"/>
-        </combo_box>
-		<check_box label="Skript-Dialoge oben rechts" name="ShowScriptDialogsTopRight" tool_tip="Aktivieren, um Skript-Dialoge in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		</combo_box>
+		<text name="ScriptDialogsPositionLabel">
+			Skriptdialog-Position:
+		</text>
+		<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Auswählen, wo Skriptdialoge (Menüs) auf dem Bildschirm erscheinen sollen.">
+			<combo_box.item label="Import alter Wert" name="ScriptDialogPositionOption_0"/>
+			<combo_box.item label="Am Chiclet angedockt" name="ScriptDialogPositionOption_1"/>
+			<combo_box.item label="Oben links" name="ScriptDialogPositionOption_2"/>
+			<combo_box.item label="Oben rechts" name="ScriptDialogPositionOption_3"/>
+			<combo_box.item label="Unten links" name="ScriptDialogPositionOption_4"/>
+			<combo_box.item label="Unten rechts" name="ScriptDialogPositionOption_5"/>
+		</combo_box>
 		<check_box label="Animierte Skript-Dialoge" name="FSAnimatedScriptDialogs" tool_tip="Aktivieren, um Skript-Dialoge animiert einzublenden (Klassisches V1.x-Verhalten)."/>
 		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
