@@ -804,6 +804,8 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 	BOOL chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
 
+	LLRect pos = floater->getRect();
+
 	if (floaterType == LLScriptFloaterManager::OBJ_SCRIPT)
 	{
 		eDialogPosition dialogPos = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
@@ -858,12 +860,8 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			rightPad = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->getRect().getWidth();
 		}
 
-		LLRect pos = floater->getRect();
-
 		S32 width = pos.getWidth();
 		S32 height = pos.getHeight();
-
-		floater->setSavePosition(true);
 
 		switch (dialogPos)
 		{
@@ -905,13 +903,6 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 				llwarns << "dialogPos value " << dialogPos << " not handled in switch() statement." << llendl;
 			}
 		}
-
-		if (dialogPos != POS_DOCKED)
-		{
-			floater->setRect(pos);
-			floater->savePosition();
-			floater->restorePosition();
-		}
 	}
 	else
 	{
@@ -919,18 +910,12 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 		if (chicletsDisabled)
 		{
-			LLRect pos = floater->getRect();
-
 			S32 width = pos.getWidth();
 			S32 height = pos.getHeight();
 
 			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width,
 								 gViewerWindow->getWorldViewHeightScaled() - height,
 								 width, height);
-
-			floater->setRect(pos);
-			floater->savePosition();
-			floater->restorePosition();
 		}
 		else
 		{
@@ -940,6 +925,12 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
 	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, FALSE);
+
+	if(!floater->isDocked())
+	{
+		// reposition the floater which might have been shifted to cascade
+		floater->setRect(pos);
+	}
 
 	return floater;
 }
