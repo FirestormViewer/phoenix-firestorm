@@ -1237,8 +1237,22 @@ void LLTextBase::draw()
 	}
 
 	bool should_clip = mClip || mScroller != NULL;
-	{ LLLocalClipRect clip(text_rect, should_clip);
- 
+	// <FS:Zi> Fix text bleeding at top edge of scrolling text editors
+	// { LLLocalClipRect clip(text_rect, should_clip);
+	{
+		// unsure why the rectangle is not properly calculated, but this fixes it.
+		// probably needs investigating the accuracy of:
+		// - LLScrollContainer::getContentWindowRect()
+		// - LLScrollContainer::localRectToOtherView()
+		// - LLRect::intersectWith()
+		if(text_rect.mTop>2)
+		{
+			text_rect.mTop-=2;
+		}
+		// push the modified text_rect as a GL clipping scissor on the stack
+		LLLocalClipRect clip(text_rect, should_clip);
+	// </FS:Zi>
+
 		// draw document view
 		if (mScroller)
 		{
