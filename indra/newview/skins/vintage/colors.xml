@@ -271,7 +271,12 @@
   <color
       name="Phototools_Header"
       reference="EmphasisColor" />
-	
+
+  <!-- Script Editor Colors -->
+  <color
+      name="ScriptBackground"
+      value="0.784314 0.819608 0.8 1.0" />
+
 	<color
 		name="XUITooltipFileName"
 		value="0.4 0.4 .7 1" />
