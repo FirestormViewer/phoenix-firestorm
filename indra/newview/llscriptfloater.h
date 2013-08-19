@@ -232,6 +232,8 @@ public:
 		POS_BOTTOM_RIGHT
 	};
 // </FS:Zi>
+
+	void onStackClicked();		// <FS:Zi> Dialog Stacking browser
 };
 
 #endif //LL_SCRIPTFLOATER_H

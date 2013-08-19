@@ -117,6 +117,7 @@ set(viewer_SOURCE_FILES
     aoengine.cpp
     aoset.cpp
     chatbar_as_cmdline.cpp
+    dialogstack.cpp
     exoflickr.cpp
     exoflickrauth.cpp
     exogroupmutelist.cpp
@@ -803,6 +804,7 @@ set(viewer_HEADER_FILES
     aoengine.h
     aoset.h
     chatbar_as_cmdline.h
+    dialogstack.h
     exoflickr.h
     exoflickrauth.h
     exogroupmutelist.h

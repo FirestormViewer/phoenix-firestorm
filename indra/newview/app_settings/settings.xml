@@ -875,6 +875,18 @@
       <integer>0</integer>
     </map>
 
+  <key>DialogStackIconVisible</key>
+    <map>
+      <key>Comment</key>
+      <string>Internal, volatile control that defines if the dialog stack browser icon is visible.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
   <!-- Legacy setting, can be removed when ScriptDialogsPosition was adopted -->
   <key>ShowScriptDialogsTopRight</key>
     <map>

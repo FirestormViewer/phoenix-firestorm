@@ -44,6 +44,10 @@
 #include "llfloaterimsession.h"
 
 #include "lltoolbarview.h"		// <FS:Zi> script dialogs position
+// <FS:Zi> Dialog Stacking browser
+#include "dialogstack.h"
+#include "llbutton.h"
+// </FS:Zi>
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -236,7 +240,29 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 	toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), mCurrentHeight);
 	// </FS:Zi>
 	setShape(toast_rect);
+
+	// <FS:Zi> Dialog Stacking browser
+	mScriptForm->getChild<LLButton>("DialogStackButton")->setCommitCallback(boost::bind(&LLScriptFloater::onStackClicked,this));
+
+	if(gSavedSettings.getS32("ScriptDialogsPosition")!=(eDialogPosition) POS_DOCKED)
+	{
+		DialogStack::instance().push(notification_id);
+	}
+	// </FS:Zi>
 }
+
+// <FS:Zi> Dialog Stacking browser
+void LLScriptFloater::onStackClicked()
+{
+	LLFloater* floater=LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater",getNotificationId());
+	if(floater->isFrontmost())
+	{
+		const LLUUID& nextNotification=DialogStack::instance().flip(getNotificationId());
+		floater=LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater",nextNotification);
+	}
+	gFloaterView->bringToFront(floater,TRUE);
+}
+// </FS:Zi>
 
 void LLScriptFloater::onClose(bool app_quitting)
 {
@@ -567,6 +593,8 @@ void LLScriptFloaterManager::onRemoveNotification(const LLUUID& notification_id)
 		llwarns << "Invalid notification ID" << llendl;
 		return;
 	}
+
+	DialogStack::instance().pop(notification_id);	// <FS:Zi> Dialog Stacking browser
 
 	// remove related chiclet
 	if (LLChicletBar::instanceExists())
