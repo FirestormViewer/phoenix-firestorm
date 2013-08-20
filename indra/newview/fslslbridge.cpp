@@ -64,10 +64,10 @@
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
 #define FS_BRIDGE_CONTAINER_FOLDER "Landscaping"
 #define FS_BRIDGE_MAJOR_VERSION 2
-#define FS_BRIDGE_MINOR_VERSION 4
+#define FS_BRIDGE_MINOR_VERSION 5
 #define FS_MAX_MINOR_VERSION 99
 
-//current script version is 2.4
+//current script version is 2.5
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -227,6 +227,7 @@ bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID
 			//on first call from bridge, confirm that we are here
 			//then check options use
 			updateBoolSettingValue("UseLSLFlightAssist");
+			updateBoolSettingValue("UseMoveLock");
 			updateBoolSettingValue("FSPublishRadarTag");
 			mIsFirstCallDone = true;
 		}

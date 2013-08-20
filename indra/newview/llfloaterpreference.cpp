@@ -218,6 +218,7 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 
 // <Firestorm>
 void handleFlightAssistOptionChanged(const LLSD& newvalue);
+void handleMovelockOptionChanged(const LLSD& newvalue);
 bool callback_clear_settings(const LLSD& notification, const LLSD& response);
 // <FS:AW  opensim search support>
 bool callback_clear_debug_search(const LLSD& notification, const LLSD& response);
@@ -365,6 +366,12 @@ void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
 }
 // </FS_AO>
 
+// <FS:PP> Movelock for Bridge
+void handleMovelockOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
+}
+// </FS:PP>
 
 /*bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
 {
@@ -504,6 +511,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
 	// </FS:CR>
 	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
+	gSavedSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
 	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	// </Firestorm callbacks>
 }

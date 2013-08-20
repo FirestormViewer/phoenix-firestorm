@@ -238,6 +238,18 @@
          label="Enable Bridge Flight Assist"
          width="270"
          tool_tip="Enables the script that assists flying and hovering at extended altitudes"/>
+        <check_box
+         top_pad="5"
+         control_name="UseMoveLock"
+         enabled_control="UseLSLBridge"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         name="UseMoveLock"
+         label="Enable movelock in Bridge and lock yourself in place"
+         left="15"
+         width="270"/>
+
     </panel>
 
 
