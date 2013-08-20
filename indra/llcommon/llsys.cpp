@@ -115,6 +115,9 @@ static const F32 MEM_INFO_THROTTLE = 20;
 static const F32 MEM_INFO_WINDOW = 10*60;
 
 #if LL_WINDOWS
+// We cannot trust GetVersionEx function on Win8.1 , we should check this value when creating OS string
+static const U32 WINNT_WINBLUE = 0x0603;
+
 #ifndef DLLVERSIONINFO
 typedef struct _DllVersionInfo
 {
@@ -215,6 +218,24 @@ static bool regex_search_no_exc(const S& string, M& match, const R& regex)
     }
 }
 
+// GetVersionEx should not works correct with Windows 8.1 and the later version. We need to check this case 
+static bool	check_for_version(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor)
+{
+    OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
+    DWORDLONG        const dwlConditionMask = VerSetConditionMask(
+        VerSetConditionMask(
+        VerSetConditionMask(
+            0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+               VER_MINORVERSION, VER_GREATER_EQUAL),
+               VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
+
+    osvi.dwMajorVersion = wMajorVersion;
+    osvi.dwMinorVersion = wMinorVersion;
+    osvi.wServicePackMajor = wServicePackMajor;
+
+    return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
+}
+
 
 LLOSInfo::LLOSInfo() :
 	mMajorVer(0), mMinorVer(0), mBuild(0), mOSVersionString("")	 
@@ -223,6 +244,7 @@ LLOSInfo::LLOSInfo() :
 #if LL_WINDOWS
 	OSVERSIONINFOEX osvi;
 	BOOL bOsVersionInfoEx;
+	BOOL bShouldUseShellVersion = false;
 
 	// Try calling GetVersionEx using the OSVERSIONINFOEX structure.
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -285,10 +307,18 @@ LLOSInfo::LLOSInfo() :
 				}
 				else if(osvi.dwMinorVersion == 2)
 				{
-					if(osvi.wProductType == VER_NT_WORKSTATION)
-						mOSStringSimple = "Microsoft Windows 8 ";
+					if (check_for_version(HIBYTE(WINNT_WINBLUE), LOBYTE(WINNT_WINBLUE), 0))
+					{
+						mOSStringSimple = "Microsoft Windows 8.1 ";
+						bShouldUseShellVersion = true; // GetVersionEx failed, going to use shell version
+					}
 					else
-						mOSStringSimple = "Windows Server 2012 ";
+					{
+						if(osvi.wProductType == VER_NT_WORKSTATION)
+							mOSStringSimple = "Microsoft Windows 8 ";
+						else
+							mOSStringSimple = "Windows Server 2012 ";
+					}
 				}
 				else if(osvi.dwMinorVersion == 3)
 				{
@@ -360,9 +390,8 @@ LLOSInfo::LLOSInfo() :
 			}
 			else
 			{
-				tmpstr = llformat("%s (Build %d)",
-								  csdversion.c_str(),
-								  (osvi.dwBuildNumber & 0xffff));
+				tmpstr = !bShouldUseShellVersion ?  llformat("%s (Build %d)", csdversion.c_str(), (osvi.dwBuildNumber & 0xffff)):
+					llformat("%s (Build %d)", csdversion.c_str(), shell32_build);
 			}
 
 			mOSString = mOSStringSimple + tmpstr;
@@ -400,7 +429,7 @@ LLOSInfo::LLOSInfo() :
 	{
 		if(shell32_build > 4000)
 		{
-			if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor )
+			if((osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor) && !bShouldUseShellVersion)
 			{
 				compatibility_mode = llformat(" compatibility mode. Real version: %d.%d (Build %d)", 
 												shell32_major,
