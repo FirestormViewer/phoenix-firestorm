@@ -1126,11 +1126,12 @@ bool idle_startup()
 		LLAppViewer::instance()->loadSettingsFromDirectory("Account");
 
 		// Convert 'LogInstantMessages' into 'KeepConversationLogTranscripts' for backward compatibility (CHUI-743).
-		LLControlVariablePtr logInstantMessagesControl = gSavedPerAccountSettings.getControl("LogInstantMessages");
-		if (logInstantMessagesControl.notNull())
-		{
-			gSavedPerAccountSettings.setS32("KeepConversationLogTranscripts", logInstantMessagesControl->getValue() ? 2 : 1);
-		}
+		// <FS:CR> FIRE-11410 - Don't do this, handle it in settings restore and first run
+		//LLControlVariablePtr logInstantMessagesControl = gSavedPerAccountSettings.getControl("LogInstantMessages");
+		//if (logInstantMessagesControl.notNull())
+		//{
+		//	gSavedPerAccountSettings.setS32("KeepConversationLogTranscripts", logInstantMessagesControl->getValue() ? 2 : 1);
+		//}
 
 		// Need to set the LastLogoff time here if we don't have one.  LastLogoff is used for "Recent Items" calculation
 		// and startup time is close enough if we don't have a real value.
