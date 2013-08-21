@@ -4122,7 +4122,16 @@ class FSSelfTogglePhantom : public view_listener_t
     {
         bool handleEvent(const LLSD& userdata)
         {
-			gAgent.togglePhantom();
+			if (LLGridManager::getInstance()->isInSecondLife())
+			{
+				gSavedSettings.setBOOL("UseMoveLock", !gSavedSettings.getBOOL("UseMoveLock"));
+			}
+#ifdef OPENSIM
+			else
+			{
+				gAgent.togglePhantom();
+			}
+#endif // OPENSIM
 			//TODO: feedback to local chat
             return true;
         }
@@ -4133,7 +4142,17 @@ class FSSelfCheckPhantom : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value = gAgent.getPhantom();
+		bool new_value;
+		if (LLGridManager::getInstance()->isInSecondLife())
+		{
+			new_value = gSavedSettings.getBOOL("UseMoveLock");
+		}
+#ifdef OPENSIM
+		else
+		{
+			new_value = gAgent.getPhantom();
+		}
+#endif // OPENSIM
 		return new_value;
 	}
 };
@@ -7175,8 +7194,6 @@ bool update_grid_help()
 // <FS:CR> Show/hide some menu items depending on if they're supported by the platform or not
 	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
 	bool opensim = LLGridManager::getInstance()->isInOpenSim();
-	gMenuHolder->childSetVisible("Avatar Phantom", opensim);
-	gMenuHolder->childSetEnabled("Avatar Phantom", opensim);
 	gMenuHolder->childSetVisible("Manage Account", !opensim);
 	gMenuHolder->childSetVisible("MerchantOutbox", !opensim);
 	// FIX ME: gMenuHolder->childSetVisible("Pathfinding", !opensim);
