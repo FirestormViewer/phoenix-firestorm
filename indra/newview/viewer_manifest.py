@@ -580,7 +580,7 @@ class WindowsManifest(ViewerManifest):
             return path
 
         result = ""
-        dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1])]
+        dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1]) and not pair[1].endswith(".pdb") ] #<FS:ND/> Don't include pdb files.
         # sort deepest hierarchy first
         dest_files.sort(lambda a,b: cmp(a.count(os.path.sep),b.count(os.path.sep)) or cmp(a,b))
         dest_files.reverse()
