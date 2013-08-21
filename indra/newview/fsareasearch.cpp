@@ -1537,7 +1537,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 					if( !node )
 						break;
 
-					if( !mFSAreaSearch || mFSAreaSearch->mObjectDetails.end() == mFSAreaSearch->mObjectDetails.find(object_id )
+					if( !mFSAreaSearch || mFSAreaSearch->mObjectDetails.end() == mFSAreaSearch->mObjectDetails.find(object_id ))
 						break;
 
 					FSObjectProperties& details = mFSAreaSearch->mObjectDetails[object_id];
