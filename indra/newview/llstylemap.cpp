@@ -42,8 +42,9 @@ const LLStyle::Params &LLStyleMap::lookupAgent(const LLUUID &source)
 		LLStyle::Params style_params;
 		if (source != LLUUID::null)
 		{
-			style_params.color.control = "HTMLLinkColor";
-			style_params.readonly_color.control = "HTMLLinkColor";
+			// <FS:CR> FIRE-11330 - Let chat history decide
+			//style_params.color.control = "HTMLLinkColor";
+			//style_params.readonly_color.control = "HTMLLinkColor";
 			style_params.link_href = LLSLURL("agent", source, "inspect").getSLURLString();
 		}
 		mMap[source] = style_params;

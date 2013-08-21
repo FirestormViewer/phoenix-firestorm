@@ -41,7 +41,8 @@ LLStyle::Params::Params()
 	font("font", LLFontGL::getFontMonospace()),
 	image("image"),
 	link_href("href"),
-	is_link("is_link")
+	is_link("is_link"),
+	is_name_slurl("is_name_slurl")	// <FS:CR> FIRE-11330
 {}
 
 

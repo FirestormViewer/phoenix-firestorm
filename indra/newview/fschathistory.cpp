@@ -1035,6 +1035,9 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			{
 				LLStyle::Params link_params(body_message_params);
 				link_params.overwriteFrom(LLStyleMap::instance().lookupAgent(chat.mFromID));
+				link_params.is_name_slurl = true;
+				link_params.color = name_color;
+				link_params.readonly_color = name_color;
 
 				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))
 				{

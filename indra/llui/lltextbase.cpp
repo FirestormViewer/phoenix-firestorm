@@ -2122,7 +2122,9 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			end = match.getEnd()+1;
 
 			LLStyle::Params link_params(style_params);
-			link_params.overwriteFrom(match.getStyle());
+			// <FS:CR> FIRE-11330 - if it's a name, don't stylize it like a url
+			if (!input_params.is_name_slurl)
+				link_params.overwriteFrom(match.getStyle());
 
 			// output the text before the Url
 			if (start > 0)
