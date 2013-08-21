@@ -387,9 +387,7 @@ Pamiętaj: Opcja ta wyczyszcza bufor danych.
 	</notification>
 	<notification name="ChangeSkin">
 		Nowa skórka pojawi się po restarcie aplikacji [APP_NAME].
-		<form name="form">
-			<ignore name="ignore" text="Nowa skórka została wybrana w ustawieniach."/>
-		</form>
+		<usetemplate ignoretext="Nowa skórka została wybrana w ustawieniach" name="okcancelignore" notext="Ok" yestext="Restartuj"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Zmiana języka zadziała po restarcie [APP_NAME].
