@@ -118,7 +118,6 @@
 // Firestorm Includes
 #include "fscontactsfloater.h" // TS: sort contacts list
 #include "fsfloaterimcontainer.h"
-#include "fslslbridge.h"
 #include "growlmanager.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -352,27 +351,6 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 }
 // </FS:CR>
 
-// <FS:TT> Client LSL Bridge
-void handleFlightAssistOptionChanged(const LLSD& newvalue)
-{
-	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
-}
-// </FS:TT>
-
-// <FS_AO: bridge-based radar tags>
-void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
-{
-	FSLSLBridge::instance().updateBoolSettingValue("FSPublishRadarTag", newvalue.asBoolean());
-}
-// </FS_AO>
-
-// <FS:PP> Movelock for Bridge
-void handleMovelockOptionChanged(const LLSD& newvalue)
-{
-	FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
-}
-// </FS:PP>
-
 /*bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
@@ -510,9 +488,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
 	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
 	// </FS:CR>
-	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
-	gSavedSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
-	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	// </Firestorm callbacks>
 }
 
