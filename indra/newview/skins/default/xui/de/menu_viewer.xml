@@ -20,7 +20,7 @@
 			<menu_item_check label="Fliegen" name="Fly"/>
 			<menu_item_check label="Immer rennen" name="Always Run"/>
             <menu_item_check label="Sitzen erzwingen" name="Force Toggle Sitting"/>
-		    <menu_item_check label="Phantom-Modus" name="Avatar Phantom"/>
+		    <menu_item_check label="Movelock" name="Move Lock"/>
 		</menu>
         <menu_item_check label="Kamerasteuerung" name="Camera Controls"/>
 		<menu label="Avatar-Befinden" name="avhealth">
