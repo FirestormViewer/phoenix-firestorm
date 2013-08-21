@@ -349,6 +349,18 @@ void LLXMLRPCTransaction::Impl::init(XMLRPC_REQUEST request, bool useGzip)
 		setStatus(StatusOtherError);
 	}
 
+
+	// <FS:ND> FIRE-11406
+	// Some server at LL don't like it at all when curl/openssl try to speak TLSv1.2 to them, instead
+	// of renegotiating to SSLv3 they clamp up and don't talk to us at all anywmore, not even dropping the connection.
+	// This then leads to unfun timeouts and failed transactions.
+
+#ifdef SSL_TXT_TLSV1_2
+	mCurlRequest->setopt( CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3 );
+#endif
+
+	// </FS:ND>
+
 	mCurlRequest->sendRequest(mURI);
 }
 
