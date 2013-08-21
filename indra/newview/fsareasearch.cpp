@@ -1534,6 +1534,12 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 				{
 					// need to set permissions for object return
 					LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->findNode(objectp);
+					if( !node )
+						break;
+
+					if( !mFSAreaSearch || mFSAreaSearch->mObjectDetails.end() == mFSAreaSearch->mObjectDetails.find(object_id )
+						break;
+
 					FSObjectProperties& details = mFSAreaSearch->mObjectDetails[object_id];
 					node->mValid = TRUE;
 					node->mPermissions->init(details.creator_id, details.owner_id, details.last_owner_id, details.group_id);
