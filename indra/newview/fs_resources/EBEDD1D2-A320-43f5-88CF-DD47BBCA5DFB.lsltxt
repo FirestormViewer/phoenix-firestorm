@@ -661,9 +661,9 @@ reportTag(key av, integer tagIdx)
 
     movelock_init()
     {
-        //debugOutput("movelock_init");    
+        //debugOutput("movelock_init");
         useMoveLock = TRUE;
-        llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.2);
+        llMoveToTarget(llGetPos() - <0, 0, 0.1>, 0.05);
     }
 
 //
