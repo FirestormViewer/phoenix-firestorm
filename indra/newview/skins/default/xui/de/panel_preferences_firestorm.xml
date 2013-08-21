@@ -27,7 +27,6 @@
 		<slider name="progressive_draw_distance_interval" tool_tip="Intervall in Sekunden zwischen den jeweiligen Erhöhungen der Draw Distance."/>
 		<check_box name="UseLSLBridge" label="LSL-Client-Brücke aktivieren" tool_tip="Erlaub dem Viewer die Nutzung eines geskripteten Objektes (Brücke), um weitergehende Funktionen anzubieten."/>
 		<check_box name="UseLSLFlightAssist" label="Flug-Assistent der Brücke aktivieren" tool_tip="Aktiviert ein Skript, dass Fliegen und Schweben in größeren Höhen ermöglicht."/>
-		<check_box name="UseMoveLock" label="Movelock-Funktion der Brücke aktivieren und Avatar an Position halten"/>
 	</panel>
 
 

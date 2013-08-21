@@ -491,7 +491,8 @@
            icon="move_lock"
            label_ref="Command_Move_Lock_Label"
            tooltip_ref="Command_Move_Lock_Tooltip"
-           execute_function="Self.togglePhantom"
-           is_running_function="Self.getPhantom"
+           execute_function="Self.ToggleMoveLock"
+           is_running_function="Self.GetMoveLock"
+           is_enabled_function="Self.EnableMoveLock"
            />
 </commands>

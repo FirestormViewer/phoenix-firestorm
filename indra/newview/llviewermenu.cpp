@@ -4117,8 +4117,8 @@ class FSSelfCheckForceSit : public view_listener_t
 	}
 };
 
-// Phantom mode -KC
-class FSSelfTogglePhantom : public view_listener_t
+// Phantom mode -KC & <FS:CR>
+class FSSelfToggleMoveLock : public view_listener_t
     {
         bool handleEvent(const LLSD& userdata)
         {
@@ -4138,7 +4138,7 @@ class FSSelfTogglePhantom : public view_listener_t
     };
 
 
-class FSSelfCheckPhantom : public view_listener_t
+class FSSelfCheckMoveLock : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
@@ -4156,6 +4156,17 @@ class FSSelfCheckPhantom : public view_listener_t
 		return new_value;
 	}
 };
+
+bool enable_move_lock()
+{
+#ifdef OPENSIM
+	// Phantom mode always works on opensim, at least right now.
+	if (LLGridManager::getInstance()->isInOpenSim())
+		return true;
+#endif // OPENSIM
+	return (gSavedSettings.getBOOL("UseLSLBridge") && FSLSLBridge::instance().isBridgeValid());
+}
+// </FS:CR>
 
 // [SJ - Adding IgnorePrejump in Menu ]
 class FSSelfToggleIgnorePreJump : public view_listener_t
@@ -10424,8 +10435,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSSelfForceSit(), "Self.ForceSit"); //KC
 	enable.add("Self.EnableForceSit", boost::bind(&enable_forcesit_self)); //KC
 	view_listener_t::addMenu(new FSSelfCheckForceSit(), "Self.getForceSit"); //KC
-	view_listener_t::addMenu(new FSSelfTogglePhantom(), "Self.togglePhantom"); //KC
-	view_listener_t::addMenu(new FSSelfCheckPhantom(), "Self.getPhantom"); //KC
+	view_listener_t::addMenu(new FSSelfToggleMoveLock(), "Self.ToggleMoveLock"); //KC
+	view_listener_t::addMenu(new FSSelfCheckMoveLock(), "Self.GetMoveLock"); //KC
+	enable.add("Self.EnableMoveLock", boost::bind(&enable_move_lock));	// <FS:CR>
 	view_listener_t::addMenu(new FSSelfToggleIgnorePreJump(), "Self.toggleIgnorePreJump"); //SJ
 	view_listener_t::addMenu(new FSSelfCheckIgnorePreJump(), "Self.getIgnorePreJump"); //SJ
 	view_listener_t::addMenu(new LLSelfRemoveAllAttachments(), "Self.RemoveAllAttachments");

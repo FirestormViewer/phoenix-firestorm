@@ -178,9 +178,11 @@
              shortcut="control|alt|P"
 			 name="Move Lock">
                 <menu_item_check.on_check
-                   function="Self.getPhantom" />
+                   function="Self.GetMoveLock" />
                 <menu_item_check.on_click
-                   function="Self.togglePhantom" />
+                   function="Self.ToggleMoveLock" />
+                <menu_item_check.on_enable
+                   function="Self.EnableMoveLock" />
 			</menu_item_check>
 			<menu_item_check
 			 label="Quickjump"
