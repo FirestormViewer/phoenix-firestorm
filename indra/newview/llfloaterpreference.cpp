@@ -3140,7 +3140,25 @@ void LLPanelPreferenceSkins::apply()
 		gSavedSettings.setString("FSSkinCurrentReadableName", m_SkinName);
 		gSavedSettings.setString("FSSkinCurrentThemeReadableName", m_SkinThemeName);
 
-		LLNotificationsUtil::add("ChangeSkin");
+		LLSD args, payload;
+		LLNotificationsUtil::add("ChangeSkin",
+								 args,
+								 payload,
+								 boost::bind(&LLPanelPreferenceSkins::callbackRestart, this, _1, _2));
+	}
+}
+
+void LLPanelPreferenceSkins::callbackRestart(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (2 == option) // Ok button
+	{
+		return;
+	}
+	if (0 == option) // Restart
+	{
+		llinfos << "User requested quit" << llendl;
+		LLAppViewer::instance()->requestQuit();
 	}
 }
 
