@@ -437,9 +437,7 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 	</notification>
 	<notification name="ChangeSkin">
 		Das neue Oberflächendesign wird nach einem Neustart von [APP_NAME] angezeigt.
-		<form name="form">
-			<ignore name="ignore" text="Ein anderes Oberflächendesign wurde ausgewählt."/>
-		</form>
+		<usetemplate name="okcancelignore" notext="OK" yestext="Neustart" ignoretext="Ein anderes Oberflächendesign wurde ausgewählt."/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Die Sprachänderung tritt nach Neustart von [APP_NAME] in Kraft.
