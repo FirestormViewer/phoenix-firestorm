@@ -2380,7 +2380,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Snapshot_To_Disk_Tooltip">Takes a quick snapshot and saves it to harddisk</string>
   <string name="Command_Radar_Tooltip">Opens the radar for nearby avatars</string>
   <string name="Command_Conversation_Log_Tooltip">Opens the conversation log to view past chat transcripts</string>
-  <string name="Command_Move_Lock_Tooltip">Locks your avatar in it's current position</string>'
+  <string name="Command_Move_Lock_Tooltip">Locks your avatar in it's current position</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
