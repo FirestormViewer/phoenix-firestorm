@@ -744,7 +744,7 @@ with the same filename but different name
   <texture name="pose_stand" file_name="toolbar_icons/posestand.png" preload="true" />
   <texture name="Command_Snapshot_2_Disk_Icon" file_name="toolbar_icons/snapshot_to_disk.png" preload="true" />
   <texture name="radar" file_name="toolbar_icons/radar.png" preload="true" />
-
+  <texture name="move_lock" file_name="toolbar_icons/movelock.png" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
 
