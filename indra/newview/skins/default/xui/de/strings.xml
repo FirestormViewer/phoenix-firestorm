@@ -5517,6 +5517,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		[NAME] hat eine Kollision unbekannten Typs verursacht.
 	</string>
 	
+	<string name="MovelockEnabled">
+		Movelock aktiviert.
+	</string>
+	<string name="MovelockDisabled">
+		Movelock deaktiviert.
+	</string>
 	<string name="BusyResponse">
 		Beschäftigt-Nachricht
 	</string>
