@@ -220,7 +220,11 @@
     
         else if (cmd == "llMoveToTarget")
         {
-            llStopMoveToTarget(); // Pause movelock for now, if present
+            // Pause movelock for now, if present
+            if(useMoveLock)
+            {
+                llStopMoveToTarget();
+            }
             // Get parameters
             string params = "<" + llList2String(commandList,1) + ">";
             mttVector=(vector)params;
