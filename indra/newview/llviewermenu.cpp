@@ -4142,7 +4142,7 @@ class FSSelfCheckMoveLock : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value;
+		bool new_value(false);
 		if (LLGridManager::getInstance()->isInSecondLife())
 		{
 			new_value = gSavedSettings.getBOOL("UseMoveLock");
