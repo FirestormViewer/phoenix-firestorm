@@ -5029,6 +5029,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Collision_UnknownType">
 		[NAME] spowodował/a nieznany typ kolizji.
 	</string>
+	<string name="MovelockEnabled">
+		Blokada pozycji została włączona
+	</string>
+	<string name="MovelockDisabled">
+		Blokada pozycji została wyłączona
+	</string>
 	<string name="BusyResponse">
 		Wiadomość zajętości
 	</string>
