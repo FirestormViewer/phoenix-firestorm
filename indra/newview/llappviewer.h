@@ -252,11 +252,10 @@ private:
 	LLAPRFile mMarkerFile; // A file created to indicate the app is running.
 
 	std::string mLogoutMarkerFileName;
-	LLAPRFile mLogoutMarkerFile; // A file created to indicate the app is running. //<FS:TM> F_EX merge LL new
+	LLAPRFile mLogoutMarkerFile; // A file created to indicate the app is running.
 
 	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
-	// apr_file_t* mLogoutMarkerFile; // A file created to indicate the app is running. <FS:TM> F_EX merge LL old
-	//LLAPRFile::tFiletype* mLogoutMarkerFile; // A file created to indicate the app is running. <FS:TM> F_EX merge FS orig
+	//LLAPRFile::tFiletype* mLogoutMarkerFile; // A file created to indicate the app is running.
 	// </FS:ND>
 
 	//-TT The skin and theme we are using at startup. might want to make them static.
@@ -275,7 +274,7 @@ private:
 
 	std::string mSerialNumber;
 	bool mPurgeCache;
-	bool mPurgeSettings;
+	bool mPurgeSettings;	// <FS>
     bool mPurgeOnExit;
 
 	bool mSavedFinalSnapshot;

@@ -2449,9 +2449,8 @@ BOOL LLPanelPreference::postBuild()
 	
 	//////////////////////PanelSkins ///////////////////
 	
-	/* <FS:TM> CHUI Merge no note given why this is comented out
-	if (hasChild("skin_selection", TRUE)) <FS:TM> CHUI Merge new
-	if (hasChild("skin_selection")) <FS:TM> CHUI Merge old
+	/* <FS:CR> Handled below
+	if (hasChild("skin_selection", TRUE))
 	{
 		LLFloaterPreference::refreshSkin(this);
 

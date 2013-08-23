@@ -102,12 +102,9 @@ static LLDefaultChildRegistry::Register<LLToolBarVertical> register_toolbar_vert
 // Functions
 //
 
-//<FS:TM> CHUI merge check
-LLUUID find_ui_sound(const char * namep, bool force_sound) //LL post CHUI
 // <FS:PP> UI Sounds preview
-// void make_ui_sound(const char* namep) //LL pre CHUI, LL moved make_ui_sound below and renamed this segment
-// void make_ui_sound(const char* namep, BOOL forceSound) //Old
-// LLUUID find_ui_sound(const char * namep, BOOL forceSound) //proposed
+//LLUUID find_ui_sound(const char * namep)
+LLUUID find_ui_sound(const char * namep, bool force_sound)
 // </FS:PP> UI Sounds preview
 {
 	std::string name = ll_safe_string(namep);

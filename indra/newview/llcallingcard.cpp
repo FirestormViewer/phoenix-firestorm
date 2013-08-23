@@ -837,12 +837,11 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		args["NAME"] = av_name.getLegacyName();
 	}
 	
-	args["STATUS"] = online ? LLTrans::getString("OnlineStatus") : LLTrans::getString("OfflineStatus"); // <FS:TM> CHUI merge check location, is right under 'args["NAME"] = av_name.getDisplayName();' in LL
+	args["STATUS"] = online ? LLTrans::getString("OnlineStatus") : LLTrans::getString("OfflineStatus");
 
 	args["AGENT-ID"] = agent_id;
 
 	LLNotificationPtr notification;
-
 
 	if (online)
 	{

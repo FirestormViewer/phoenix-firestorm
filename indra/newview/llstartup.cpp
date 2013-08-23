@@ -1317,7 +1317,7 @@ bool idle_startup()
 		login->setSerialNumber(LLAppViewer::instance()->getSerialNumber());
 // <AW: crash report grid correctness>
 //		login->setLastExecEvent(gLastExecEvent);
-		login->setLastExecDuration(gLastExecDuration); //<FS:TM> F_EX merge check this
+		login->setLastExecDuration(gLastExecDuration);
 		login->setLastExecEvent(last_exec_event);
 // </AW: crash report grid correctness>
 

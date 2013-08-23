@@ -931,10 +931,9 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
 {
 	using namespace action_give_inventory;
 
-    LLFloater* root_floater = gFloaterView->getParentFloater(panel); //<FS:TM> CHUI merge LL new
-//	LLFloaterAvatarPicker* picker = 
-//		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE); //<FS:TM> CHUI merge old
-//		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE, FALSE, root_floater->getName()); //<FS:TM> CHUI merge LL new
+    LLFloater* root_floater = gFloaterView->getParentFloater(panel);
+//	LLFloaterAvatarPicker* picker =
+//		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE, FALSE, root_floater->getName());
 //	if (!picker)
 //	{
 //		return;
