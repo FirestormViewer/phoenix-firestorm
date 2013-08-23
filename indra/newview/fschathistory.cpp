@@ -1034,8 +1034,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 // [/RLVa:KB]
 			{
 				LLStyle::Params link_params(body_message_params);
-				link_params.overwriteFrom(LLStyleMap::instance().lookupAgent(chat.mFromID));
 				link_params.is_name_slurl = true;
+				link_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
 				link_params.color = name_color;
 				link_params.readonly_color = name_color;
 
