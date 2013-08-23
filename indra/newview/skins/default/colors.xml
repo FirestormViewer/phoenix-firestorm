@@ -903,6 +903,9 @@
      name="ChatNameColor"
      reference="AccentColor" />
     <color
+     name="ChatNameObjectColor"
+     reference="AccentColor" />
+    <color
      name="ObjectChatColor"
      reference="EmphasisColor" />
     <color

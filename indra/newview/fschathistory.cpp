@@ -1013,8 +1013,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				// set the link for the object name to be the objectim SLapp
 				// (don't let object names with hyperlinks override our objectim Url)
 				LLStyle::Params link_params(body_message_params);
-				link_params.color.control = "HTMLLinkColor";
-				LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
+				link_params.color.control = "ChatNameObjectColor";
+				LLColor4 link_color = LLUIColorTable::instance().getColor("ChatNameObjectColor");
 				link_params.color = link_color;
 				link_params.readonly_color = link_color;
 				if (message_from_log && !is_conversation_log)
