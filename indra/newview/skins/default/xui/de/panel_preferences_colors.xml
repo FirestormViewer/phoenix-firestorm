@@ -3,7 +3,7 @@
 	<tab_container name="color_tabs">
 		<panel label="Allgemein" name="tab-chat">
 			<text name="font_colors">
-				User-Interface-Farben:
+				Chat-Quelle-Farben:
 			</text>
 			<text name="user_label">
 				Eigener Text
@@ -38,11 +38,17 @@
 			<text name="htmllink_label">
 				URLs
 			</text>
-			<text name="chat_name_label">
-				Chat-Überschriften
-			</text>
 			<text name="direct_label">
 				Direkt
+			</text>
+			<text name="header_colors">
+				Chatüberschriften:
+			</text>
+			<text name="chat_name_label">
+				Avatare
+			</text>
+			<text name="object_name_header_label">
+				Objekte
 			</text>
 			<check_box name="FSColorIMsDistinctly" label="IM/Gruppenchat in Konsole unterschiedlich einfärben:"/>
 			<panel name="im_color_panel">
