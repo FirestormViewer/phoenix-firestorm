@@ -959,6 +959,9 @@
      name="ChatNameColor"
      reference="AnsaStorm_HtmlLink" />
     <color
+     name="ChatNameObjectColor"
+     reference="AnsaStorm_HtmlLink" />
+    <color
      name="ObjectChatColor"
      value="0.699 0.899 0.699 1" />
     <color
