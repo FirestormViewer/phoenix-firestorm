@@ -279,6 +279,7 @@ LLSD LLFloaterAbout::getInfo()
 	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
 	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
 	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
+	else if (sessionSettingsFile == "settings_latency.xml") info["MODE"] = "Latency";
 
 	info["VIEWER_RELEASE_NOTES_URL"] = get_viewer_release_notes_url();
 
