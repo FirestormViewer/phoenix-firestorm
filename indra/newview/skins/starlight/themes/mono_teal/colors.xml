@@ -511,7 +511,7 @@
      reference="DkGray" />
     <color
      name="ConsoleBackground"
-     reference="SL-Black" />
+     reference="DkGray2" />
     <color
      name="ContextSilhouetteColor"
      reference="Yellow" />
@@ -1086,6 +1086,9 @@
     <color
      name="XUITooltipFileName"
      value="0.7 0.7 1 1" />
+    <color
+     name="LtGreen"
+     value="0.79 1 0.79 1" />
 	
     <!-- for FS legacy profiles -->
     <color
