@@ -268,7 +268,7 @@
                 tUUID = (key)llList2String(tUUIDs, i);
                 tPos = llList2Vector(llGetObjectDetails(tUUID, ([OBJECT_POS])), 0);
                 if (tPos.z > 1023) // We only care about results at higher altitudes.
-                    responses = (responses=[]) + responses + tUUID + tPos.z; //LSO memhack
+                    responses = [tUUID] + [tPos.z] + responses; // Optimized for Mono-LSL
             }
             tUUIDs = []; // Free memory
             string body = "<llsd><string>" +llList2CSV(responses) + "</string></llsd>";
