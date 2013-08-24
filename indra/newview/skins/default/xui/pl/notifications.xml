@@ -4474,4 +4474,7 @@ Nie można tego cofnąć.
 	<notification name="AntiSpamBlocked">
 		Antyspam: Zablokowano [SOURCE] ze względu na spam [QUEUE] ([COUNT]) razy podczas [PERIOD] sekund.
 	</notification>
+	<notification name="MeshMaxConcurrentReqTooHigh">
+		Wartość ustawienia dla liczby jednoczesnych żądań ładowania obiektów meszowych określona przez Ciebie, [VALUE], jest wyższa niż dopuszczalne [MAX]. Została ona zresetowana do domyślnej, [DEFAULT].
+	</notification>
 </notifications>
