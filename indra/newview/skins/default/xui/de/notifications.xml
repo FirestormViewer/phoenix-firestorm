@@ -4609,4 +4609,8 @@ Export nach [FILENAME] beendet.
 	<notification name="AntiSpamBlocked">
 AntiSpam: [SOURCE] wurde wegen Spam vom Typ [QUEUE] ([COUNT]) mal in [PERIOD] Sekunden blockiert.
 	</notification>
+
+	<notification name="MeshMaxConcurrentReqTooHigh">
+Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VALUE]), ist höher als das Maximum von [MAX]. Er wurde auf den Standardwert [DEFAULT] zurückgesetzt.
+	</notification>
 </notifications>
