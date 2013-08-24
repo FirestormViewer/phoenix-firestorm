@@ -11438,5 +11438,13 @@ Export finished and saved to [FILENAME].
       type="notifytip">
 AntiSpam: Blocked [SOURCE] for spamming a [QUEUE] ([COUNT]) times in [PERIOD] seconds.
     </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="MeshMaxConcurrentReqTooHigh"
+     type="alertmodal">
+The value you set for the number of concurrent requests to load mesh objects, [VALUE], is higher than the maximum of [MAX]. It has been reset to the default of [DEFAULT].
+    <tag>fail</tag>
+    </notification>
 	
 </notifications>
