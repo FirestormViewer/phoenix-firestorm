@@ -4915,7 +4915,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="SanityCheckNotEquals">
 		Ustawienie &quot;[CONTROL_NAME]&quot; nie powinno mieć wartości [VALUE_1]
 	</string>
-	<string name="SanityCheckLowerThan">
+	<string name="SanityCheckLessThan">
 		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być mniejsze niż [VALUE_1]
 	</string>
 	<string name="SanityCheckGreaterThan">

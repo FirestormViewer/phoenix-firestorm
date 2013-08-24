@@ -5461,7 +5461,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="SanityCheckNotEquals">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte nicht den Wert [VALUE_1] haben.
 	</string>
-	<string name="SanityCheckLowerThan">
+	<string name="SanityCheckLessThan">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert kleiner als [VALUE_1] haben.
 	</string>
 	<string name="SanityCheckGreaterThan">

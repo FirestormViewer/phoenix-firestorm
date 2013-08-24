@@ -5365,7 +5365,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="SanityCheckNotEquals">
 		La configuración de &quot;[CONTROL_NAME]&quot; no debería establecerse a [VALUE_1].
 	</string>
-	<string name="SanityCheckLowerThan">
+	<string name="SanityCheckLessThan">
 		La configuración de &quot;[CONTROL_NAME]&quot; debería ser inferior a [VALUE_1].
 	</string>
 	<string name="SanityCheckGreaterThan">
