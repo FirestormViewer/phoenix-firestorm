@@ -105,7 +105,15 @@ LLPreviewTexture::~LLPreviewTexture()
 	{
 		getWindow()->decBusyCount();
 	}
-	mImage->setBoostLevel(mImageOldBoostLevel);
+
+	// <FS:ND> mImage can be 0.
+	// mImage->setBoostLevel(mImageOldBoostLevel);
+
+	if( mImage )
+		mImage->setBoostLevel(mImageOldBoostLevel);
+
+	// <FS:ND>
+
 	mImage = NULL;
 }
 
@@ -848,7 +856,7 @@ void LLPreviewTexture::loadAsset()
 	mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
 	mImage->forceToSaveRawImage(0) ;
 	// <FS:Techwolf Lupindo> texture comment decoder
-	mImage->setLoadedCallback(LLPreviewTexture::onTextureLoaded, 0, TRUE, FALSE, this, NULL);
+	mImage->setLoadedCallback(LLPreviewTexture::onTextureLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
 	// </FS:Techwolf Lupindo>
 	mAssetStatus = PREVIEW_ASSET_LOADING;
 	mUpdateDimensions = TRUE;
