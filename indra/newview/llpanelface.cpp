@@ -144,7 +144,10 @@ BOOL	LLPanelFace::postBuild()
 	childSetCommitCallback("maskcutoff",&LLPanelFace::onCommitMaterialMaskCutoff, this);
 
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
+	
 	// <FS>
+	childSetCommitCallback("checkbox flip s",&LLPanelFace::onCommitTextureInfo, this);
+	childSetCommitCallback("checkbox flip t",&LLPanelFace::onCommitTextureInfo, this);
 	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
 	// </FS>
@@ -438,15 +441,28 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 		LLSpinCtrl*	ctrlTexOffsetT = mPanel->getChild<LLSpinCtrl>("TexOffsetV");
 		LLSpinCtrl*	ctrlTexRotation = mPanel->getChild<LLSpinCtrl>("TexRot");
 		LLComboBox*		comboTexGen = mPanel->getChild<LLComboBox>("combobox texgen");
+		// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+		LLCheckBoxCtrl*	checkFlipScaleS = mPanel->getChild<LLCheckBoxCtrl>("checkbox flip s");
+		LLCheckBoxCtrl*	checkFlipScaleT = mPanel->getChild<LLCheckBoxCtrl>("checkbox flip t");
+		// </FS:CR>
 		llassert(comboTexGen);
 		llassert(object);
 
 		if (ctrlTexScaleS)
 		{
-			valid = !ctrlTexScaleS->getTentative(); // || !checkFlipScaleS->getTentative();
+			// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+			//valid = !ctrlTexScaleS->getTentative(); // || !checkFlipScaleS->getTentative();
+			valid = !ctrlTexScaleS->getTentative() || !checkFlipScaleS->getTentative();
+			// </FS:CR>
 			if (valid)
 			{
 				value = ctrlTexScaleS->get();
+				// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+				if( checkFlipScaleS->get() )
+				{
+					value = -value;
+				}
+				// </FS:CR>
 				if (comboTexGen &&
 				    comboTexGen->getCurrentIndex() == 1)
 				{
@@ -458,14 +474,19 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
 		if (ctrlTexScaleT)
 		{
-			valid = !ctrlTexScaleT->getTentative(); // || !checkFlipScaleT->getTentative();
+			// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+			//valid = !ctrlTexScaleT->getTentative()" // || !checkFlipScaleT->getTentative();
+			valid = !ctrlTexScaleT->getTentative() || !checkFlipScaleT->getTentative();
+			// </FS:CR>
 			if (valid)
 			{
 				value = ctrlTexScaleT->get();
-				//if( checkFlipScaleT->get() )
-				//{
-				//	value = -value;
-				//}
+				// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+				if( checkFlipScaleT->get() )
+				{
+					value = -value;
+				}
+				// </FS:CR>
 				if (comboTexGen &&
 				    comboTexGen->getCurrentIndex() == 1)
 				{
@@ -655,6 +676,15 @@ void LLPanelFace::updateUI()
 		// only turn on auto-adjust button if there is a media renderer and the media is loaded
 		getChildView("button align")->setEnabled(editable);
 
+		// <FS>
+		S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+		BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
+		&& (selected_count == 1);
+		getChildView("copytextures")->setEnabled(single_volume && editable);
+		getChildView("pastetextures")->setEnabled(editable);
+		getChildView("text_params_label")->setEnabled(single_volume && editable);
+		// </FS>
+		
 		LLComboBox* combobox_matmedia = getChild<LLComboBox>("combobox matmedia");
 		if (combobox_matmedia)
 		{
@@ -663,14 +693,6 @@ void LLPanelFace::updateUI()
 				combobox_matmedia->selectNthItem(MATMEDIA_MATERIAL);
 			}
 		}
-		// <FS:TM> MAT merge this code was added by us, but LL refactored this section.  
-		//S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-		//BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
-		//				 && (selected_count == 1);
-		//getChildView("copytextures")->setEnabled(single_volume && editable);
-		//getChildView("pastetextures")->setEnabled(editable);
-		//getChildView("textbox params")->setEnabled(single_volume && editable);
-		// </FS>
 		else
 		{
 			llwarns << "failed getChild for 'combobox matmedia'" << llendl;
@@ -693,10 +715,10 @@ void LLPanelFace::updateUI()
 
 		updateVisibility();
 
-		bool identical				= true;	// true because it is anded below
-      bool identical_diffuse	= false;
-      bool identical_norm		= false;
-      bool identical_spec		= false;
+		bool identical			= true;	// true because it is anded below
+		bool identical_diffuse	= false;
+		bool identical_norm		= false;
+		bool identical_spec		= false;
         
 		LLTextureCtrl*	texture_ctrl		= getChild<LLTextureCtrl>("texture control");
 		LLTextureCtrl*	shinytexture_ctrl = getChild<LLTextureCtrl>("shinytexture control");
@@ -1023,6 +1045,12 @@ void LLPanelFace::updateUI()
 			getChild<LLUICtrl>("TexScaleU")->setTentative(  LLSD(diff_scale_tentative));			
 			getChild<LLUICtrl>("shinyScaleU")->setTentative(LLSD(spec_scale_tentative));			
 			getChild<LLUICtrl>("bumpyScaleU")->setTentative(LLSD(norm_scale_tentative));
+			
+			// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+			getChild<LLUICtrl>("checkbox flip s")->setValue(LLSD((BOOL)(diff_scale_tentative < 0 ? TRUE : FALSE )));
+			getChild<LLUICtrl>("checkbox flip s")->setTentative(LLSD((BOOL)((!identical) ? TRUE : FALSE )));
+			getChildView("checkbox flip s")->setEnabled(editable);
+			// </FS:CR>
 		}
 
 		{
@@ -1062,6 +1090,12 @@ void LLPanelFace::updateUI()
 			getChild<LLUICtrl>("TexScaleV")->setTentative(LLSD(diff_scale_tentative));
 			getChild<LLUICtrl>("shinyScaleV")->setTentative(LLSD(norm_scale_tentative));
 			getChild<LLUICtrl>("bumpyScaleV")->setTentative(LLSD(spec_scale_tentative));
+			
+			// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+			getChild<LLUICtrl>("checkbox flip t")->setValue(LLSD((BOOL)(diff_scale_tentative < 0 ? TRUE : FALSE )));
+			getChild<LLUICtrl>("checkbox flip t")->setTentative(LLSD((BOOL)((!identical) ? TRUE : FALSE )));
+			getChildView("checkbox flip t")->setEnabled(editable);
+			// </FS:CR>
 		}
 
 		// Texture offset
@@ -1514,7 +1548,10 @@ void LLPanelFace::updateVisibility()
 	bool show_bumpiness = (!show_media) && (material_type == MATTYPE_NORMAL) && combo_matmedia->getEnabled();
 	bool show_shininess = (!show_media) && (material_type == MATTYPE_SPECULAR) && combo_matmedia->getEnabled();
 	getChildView("combobox mattype")->setVisible(!show_media);
-	getChildView("rptctrl")->setVisible(true);
+	// <FS:CR> FIRE-11407 - Be consistant and hide this with the other controls
+	//getChildView("rptctrl")->setVisible(true);
+	getChildView("rptctrl")->setVisible(show_texture);
+	// </FS:CR>
 
 	// Media controls
 	getChildView("media_info")->setVisible(show_media);
@@ -1537,6 +1574,11 @@ void LLPanelFace::updateVisibility()
 	getChildView("TexRot")->setVisible(show_texture);
 	getChildView("TexOffsetU")->setVisible(show_texture);
 	getChildView("TexOffsetV")->setVisible(show_texture);
+	
+	// <FS:CR> FIRE-11407 - Restore missing flip checkbox
+	getChildView("checkbox flip s")->setVisible(show_texture);
+	getChildView("checkbox flip t")->setVisible(show_texture);
+	// </FS:CR>
 
 	// Specular map controls
 	getChildView("shinytexture control")->setVisible(show_shininess);
@@ -2404,6 +2446,8 @@ void LLPanelFace::LLSelectedTE::getMaxDiffuseRepeats(F32& repeats, bool& identic
 }
 static LLSD texture_clipboard;
 
+// <FS> Texture params/copy paste
+//static
 void LLPanelFace::onClickCopy(void* userdata)
 {
 	LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject();
@@ -2480,6 +2524,7 @@ struct LLPanelFacePasteTexFunctor : public LLSelectedTEFunctor
 	};
 };
 
+//static
 void LLPanelFace::onClickPaste(void* userdata)
 {
 	LLPanelFacePasteTexFunctor setfunc;

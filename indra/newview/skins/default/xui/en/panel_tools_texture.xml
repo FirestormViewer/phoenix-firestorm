@@ -142,7 +142,7 @@
              fallback_image="materials_ui_x_24.png"
              follows="left|top"
              height="80"
-             label="Texture       "
+             label="Texture"
              layout="topleft"
              left="10"
              name="texture control"
@@ -219,7 +219,7 @@
              fallback_image="materials_ui_x_24.png"
              follows="left|top"
              height="80"
-             label="Texture       "
+             label="Texture"
              layout="topleft"
              left="10"
              name="bumpytexture control"
@@ -333,7 +333,7 @@
              fallback_image="materials_ui_x_24.png"
              follows="left|top"
              height="80"
-             label="Texture       "
+             label="Texture"
              layout="topleft"
              left="10"
              name="shinytexture control"
@@ -552,6 +552,16 @@
              name="TexScaleU"
              top_pad="5"
              width="265" />
+            <check_box
+             follows="top|left"
+             height="16"
+             initial_value="false"
+             layout="topleft"
+             left_pad="0"
+             top_delta="0"
+             name="checkbox flip s"
+             tool_tip="Flip"
+             width="16" />
             <spinner
              follows="left|top"
              height="19"
@@ -564,6 +574,16 @@
              max_val="100"
              name="TexScaleV"
              width="265" />
+            <check_box
+             follows="top|left"
+             height="16"
+             initial_value="false"
+             layout="topleft"
+             left_pad="0"
+             top_delta="0"
+             name="checkbox flip t"
+             tool_tip="Flip"
+             width="16" />
             <spinner
              decimal_digits="1"
              follows="left|top"
@@ -751,6 +771,36 @@
              tool_tip="Align textures on all selected faces with the last selected face. Requires Planar texture mapping."
              top_delta="16"
              width="260" />
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="10"
+             top_pad="2"
+             left_delta="2"
+             layout="topleft"
+             name="text_params_label"
+             text_readonly_color="LabelDisabledColor"
+             width="115">
+            Texture Params
+            </text>
+            <button
+             layout="topleft"
+             follows="right|top"
+             height="18"
+             left_pad="2"
+             top_delta="0"
+             label="Copy"
+             name="copytextures"
+             width="75" />
+            <button
+             layout="topleft"
+             follows="right|top"
+             left_pad="2"
+             height="18"
+             label="Paste"
+             name="pastetextures"
+             width="75" />
             <web_browser
              visible="false"
              enabled="false"

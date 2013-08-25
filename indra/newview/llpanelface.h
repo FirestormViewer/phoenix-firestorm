@@ -178,8 +178,10 @@ protected:
 
 	static F32     valueGlow(LLViewerObject* object, S32 face);
 
+	// <FS> Texture params copy/paste
 	static void		onClickCopy(void*);
 	static void		onClickPaste(void*);
+	// </FS>
 
 private:
 
