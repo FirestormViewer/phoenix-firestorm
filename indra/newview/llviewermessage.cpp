@@ -2084,6 +2084,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 	// NaCl - Antispam Registry
 	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_INVENTORY, info->mFromID))
 	{
+		delete info;
 		return;
 	}
 	// NaCl End
