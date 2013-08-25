@@ -554,11 +554,10 @@
              width="265" />
             <check_box
              follows="top|left"
-             height="16"
+             height="19"
              initial_value="false"
              layout="topleft"
              left_pad="0"
-             top_delta="0"
              name="checkbox flip s"
              tool_tip="Flip"
              width="16" />
@@ -576,11 +575,10 @@
              width="265" />
             <check_box
              follows="top|left"
-             height="16"
+             height="19"
              initial_value="false"
              layout="topleft"
              left_pad="0"
-             top_delta="0"
              name="checkbox flip t"
              tool_tip="Flip"
              width="16" />
@@ -647,6 +645,15 @@
              name="bumpyScaleU"
              top_delta="-115"
              width="265" />
+            <check_box
+             follows="top|left"
+             height="19"
+             initial_value="false"
+             layout="topleft"
+             left_pad="0"
+             name="flipBumpyScaleU"
+             tool_tip="Flip"
+             width="16" />
             <spinner
              follows="left|top"
              height="19"
@@ -659,6 +666,15 @@
              max_val="100"
              name="bumpyScaleV"
              width="265" />
+            <check_box
+             follows="top|left"
+             height="16"
+             initial_value="false"
+    	     layout="topleft"
+	         left_pad="0"
+             name="flipBumpyScaleV"
+	         tool_tip="Flip"
+	         width="16" />
            <spinner
              decimal_digits="2"
              follows="left|top"
@@ -710,6 +726,15 @@
              name="shinyScaleU"
              top_delta="-115"
              width="265" />
+	        <check_box
+	         follows="top|left"
+	         height="16"
+	         initial_value="false"
+	         layout="topleft"
+	         left_pad="0"
+	         name="flipShinyScaleU"
+	         tool_tip="Flip"
+	         width="16" />
             <spinner
              follows="left|top"
              height="19"
@@ -722,6 +747,15 @@
              max_val="100"
              name="shinyScaleV"
              width="265" />
+	        <check_box
+             follows="top|left"
+	         height="16"
+  	         initial_value="false"
+	         layout="topleft"
+	         left_pad="0"
+	         name="flipShinyScaleV"
+	         tool_tip="Flip"
+	         width="16" />
            <spinner
              decimal_digits="2"
              follows="left|top"

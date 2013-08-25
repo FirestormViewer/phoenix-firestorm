@@ -146,8 +146,12 @@ BOOL	LLPanelFace::postBuild()
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
 	
 	// <FS>
-	childSetCommitCallback("checkbox flip s",&LLPanelFace::onCommitTextureInfo, this);
-	childSetCommitCallback("checkbox flip t",&LLPanelFace::onCommitTextureInfo, this);
+	childSetCommitCallback("checkbox flip s", &LLPanelFace::onCommitTextureInfo, this);
+	childSetCommitCallback("checkbox flip t", &LLPanelFace::onCommitTextureInfo, this);
+	childSetCommitCallback("flipShinyScaleU", &LLPanelFace::onCommitMaterialShinyScaleX, this);
+	childSetCommitCallback("flipShinyScaleV", &LLPanelFace::onCommitMaterialShinyScaleY, this);
+	childSetCommitCallback("flipBumpyScaleU", &LLPanelFace::onCommitMaterialBumpyScaleX, this);
+	childSetCommitCallback("flipBumpyScaleV", &LLPanelFace::onCommitMaterialBumpyScaleY, this);
 	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
 	// </FS>
@@ -1017,7 +1021,7 @@ void LLPanelFace::updateUI()
 			F32 spec_scale_s = 1.f;
 			F32 norm_scale_s = 1.f;
 
-			LLSelectedTE::getScaleS(						diff_scale_s, identical_diff_scale_s);			
+			LLSelectedTE::getScaleS( diff_scale_s, identical_diff_scale_s);			
 			LLSelectedTEMaterial::getSpecularRepeatX( spec_scale_s, identical_spec_scale_s);
 			LLSelectedTEMaterial::getNormalRepeatX(	norm_scale_s, identical_norm_scale_s);
 
@@ -1048,8 +1052,12 @@ void LLPanelFace::updateUI()
 			
 			// <FS:CR> FIRE-11407 - Restore missing flip checkbox
 			getChild<LLUICtrl>("checkbox flip s")->setValue(LLSD((BOOL)(diff_scale_tentative < 0 ? TRUE : FALSE )));
-			getChild<LLUICtrl>("checkbox flip s")->setTentative(LLSD((BOOL)((!identical) ? TRUE : FALSE )));
-			getChildView("checkbox flip s")->setEnabled(editable);
+			getChild<LLUICtrl>("checkbox flip s")->setTentative(LLSD((BOOL)((!identical) ? TRUE : FALSE )));			
+			getChildView("checkbox flip s")->setEnabled(editable);			
+			getChild<LLUICtrl>("flipShinyScaleU")->setValue(LLSD((BOOL)(spec_scale_tentative < 0 ? TRUE : FALSE )));
+			getChildView("flipShinyScaleU")->setEnabled(editable);
+			getChild<LLUICtrl>("flipBumpyScaleU")->setValue(LLSD((BOOL)(norm_scale_tentative < 0 ? TRUE : FALSE )));
+			getChildView("flipBumpyScaleU")->setEnabled(editable);
 			// </FS:CR>
 		}
 
@@ -1094,7 +1102,11 @@ void LLPanelFace::updateUI()
 			// <FS:CR> FIRE-11407 - Restore missing flip checkbox
 			getChild<LLUICtrl>("checkbox flip t")->setValue(LLSD((BOOL)(diff_scale_tentative < 0 ? TRUE : FALSE )));
 			getChild<LLUICtrl>("checkbox flip t")->setTentative(LLSD((BOOL)((!identical) ? TRUE : FALSE )));
-			getChildView("checkbox flip t")->setEnabled(editable);
+			getChildView("checkbox flip t")->setEnabled(editable);			
+			getChild<LLUICtrl>("flipShinyScaleV")->setValue(LLSD((BOOL)(spec_scale_tentative < 0 ? TRUE : FALSE )));
+			getChildView("flipShinyScaleV")->setEnabled(editable);
+			getChild<LLUICtrl>("flipBumpyScaleV")->setValue(LLSD((BOOL)(norm_scale_tentative < 0 ? TRUE : FALSE )));
+			getChildView("flipBumpyScaleV")->setEnabled(editable);
 			// </FS:CR>
 		}
 
@@ -1550,7 +1562,7 @@ void LLPanelFace::updateVisibility()
 	getChildView("combobox mattype")->setVisible(!show_media);
 	// <FS:CR> FIRE-11407 - Be consistant and hide this with the other controls
 	//getChildView("rptctrl")->setVisible(true);
-	getChildView("rptctrl")->setVisible(show_texture);
+	getChildView("rptctrl")->setVisible(combo_matmedia->getEnabled());
 	// </FS:CR>
 
 	// Media controls
@@ -1599,6 +1611,11 @@ void LLPanelFace::updateVisibility()
 	getChildView("shinyRot")->setVisible(show_shininess);
 	getChildView("shinyOffsetU")->setVisible(show_shininess);
 	getChildView("shinyOffsetV")->setVisible(show_shininess);
+	
+	// <FS:CR> FIRE-11407 - Add flip checkboxes to new controls
+	getChildView("flipShinyScaleU")->setVisible(show_shininess);
+	getChildView("flipShinyScaleV")->setVisible(show_shininess);
+	// </FS:CR>
 
 	// Normal map controls
 	if (show_bumpiness)
@@ -1614,7 +1631,11 @@ void LLPanelFace::updateVisibility()
 	getChildView("bumpyOffsetU")->setVisible(show_bumpiness);
 	getChildView("bumpyOffsetV")->setVisible(show_bumpiness);
 
-
+	// <FS:CR> FIRE-11407 - Add flip checkboxes to new controls
+	getChildView("flipBumpyScaleU")->setVisible(show_bumpiness);
+	getChildView("flipBumpyScaleV")->setVisible(show_bumpiness);
+	// </FS:CR>
+	
 }
 
 // static
@@ -1958,6 +1979,12 @@ void LLPanelFace::onCommitMaterialBumpyScaleX(LLUICtrl* ctrl, void* userdata)
 	LLPanelFace* self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	F32 bumpy_scale_u = self->getCurrentBumpyScaleU();
+	// <FS:CR> FIRE-11407 - Flip Checkboxes
+	if( self->getChild<LLCheckBoxCtrl>("flipBumpyScaleU")->get() )
+	{
+		bumpy_scale_u = -bumpy_scale_u;
+	}
+	// </FS:CR>
 	if (self->isIdenticalPlanarTexgen())
 	{
 		bumpy_scale_u *= 0.5f;
@@ -1971,6 +1998,12 @@ void LLPanelFace::onCommitMaterialBumpyScaleY(LLUICtrl* ctrl, void* userdata)
 	LLPanelFace* self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	F32 bumpy_scale_v = self->getCurrentBumpyScaleV();
+	// <FS:CR> FIRE-11407 - Flip Checkboxes
+	if( self->getChild<LLCheckBoxCtrl>("flipBumpyScaleV")->get() )
+	{
+		bumpy_scale_v = -bumpy_scale_v;
+	}
+	// </FS:CR>
 	if (self->isIdenticalPlanarTexgen())
 	{
 		bumpy_scale_v *= 0.5f;
@@ -1984,6 +2017,12 @@ void LLPanelFace::onCommitMaterialShinyScaleX(LLUICtrl* ctrl, void* userdata)
 	LLPanelFace* self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	F32 shiny_scale_u = self->getCurrentShinyScaleU();
+	// <FS:CR> FIRE-11407 - Flip Checkboxes
+	if( self->getChild<LLCheckBoxCtrl>("flipShinyScaleU")->get() )
+	{
+		shiny_scale_u = -shiny_scale_u;
+	}
+	// </FS:CR>
 	if (self->isIdenticalPlanarTexgen())
 	{
 		shiny_scale_u *= 0.5f;
@@ -1997,6 +2036,12 @@ void LLPanelFace::onCommitMaterialShinyScaleY(LLUICtrl* ctrl, void* userdata)
 	LLPanelFace* self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	F32 shiny_scale_v = self->getCurrentShinyScaleV();
+	// <FS:CR> FIRE-11407 - Flip Checkboxes
+	if( self->getChild<LLCheckBoxCtrl>("flipShinyScaleV")->get() )
+	{
+		shiny_scale_v = -shiny_scale_v;
+	}
+	// </FS:CR>
 	if (self->isIdenticalPlanarTexgen())
 	{
 		shiny_scale_v *= 0.5f;
@@ -2057,13 +2102,13 @@ void LLPanelFace::onCommitRepeatsPerMeter(LLUICtrl* ctrl, void* userdata)
 	LLPanelFace* self = (LLPanelFace*) userdata;
 	
 	LLUICtrl*	repeats_ctrl	= self->getChild<LLUICtrl>("rptctrl");
-	LLComboBox* combo_matmedia = self->getChild<LLComboBox>("combobox matmedia");
+	LLComboBox* combo_matmedia	= self->getChild<LLComboBox>("combobox matmedia");
 	LLComboBox* combo_mattype	= self->getChild<LLComboBox>("combobox mattype");
 	
 	U32 materials_media = combo_matmedia->getCurrentIndex();
 	
 
-	U32 material_type			= (materials_media == MATMEDIA_MATERIAL) ? combo_mattype->getCurrentIndex() : 0;
+	U32 material_type		= (materials_media == MATMEDIA_MATERIAL) ? combo_mattype->getCurrentIndex() : 0;
 	F32 repeats_per_meter	= repeats_ctrl->getValue().asReal();
 	
    F32 obj_scale_s = 1.0f;
