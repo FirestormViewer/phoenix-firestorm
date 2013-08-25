@@ -857,7 +857,17 @@ const std::string& LLTaskCategoryBridge::getDisplayName() const
 
 	if (cat)
 	{
-		mDisplayName.assign(cat->getName());
+		// <FS:Ansariel> Make object root folder name localizable again
+		//mDisplayName.assign(cat->getName());
+		if (cat->getParentUUID().isNull() && cat->getName() == "Contents")
+		{
+			mDisplayName.assign(LLTrans::getString("Contents"));
+		}
+		else
+		{
+			mDisplayName.assign(cat->getName());
+		}
+		// </FS:Ansariel>
 	}
 
 	return mDisplayName;
