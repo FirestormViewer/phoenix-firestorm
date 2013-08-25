@@ -99,7 +99,9 @@
 		<combo_box.item label="Planar" name="Planar"/>
 	</combo_box>
 	<spinner label="Skalierung Horizontal" name="TexScaleU"/>
+	<check_box name="checkbox flip s" tool_tip="Invertieren"/>
 	<spinner label="Skalierung Vertikal" name="TexScaleV"/>
+	<check_box name="checkbox flip t" tool_tip="Invertieren"/>
 	<spinner label="Wiederh. / Meter" name="rptctrl"/>
 	<spinner label="Rotation˚" name="TexRot"/>
 	<spinner label="Versatz Horizontal" name="TexOffsetU"/>
@@ -115,4 +117,9 @@
 	<spinner label="Versatz Horizontal" name="shinyOffsetU"/>
 	<spinner label="Versatz Vertikal" name="shinyOffsetV"/>
 	<check_box label="Planare Oberflächen ausrichten" name="checkbox planar align" tool_tip="Richtet Texturen auf allen ausgewählten Flächen wie die zuletzt ausgewählte Fläche aus. Erfordert planares Textur-Mapping."/>
+	<text name="text_params_label">
+		Textur-Parameter
+	</text>
+	<button name="copytextures" label="Kopieren"/>
+	<button name="pastetextures" label="Einfügen"/>
 </panel>
