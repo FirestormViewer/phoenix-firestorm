@@ -2016,14 +2016,7 @@ void LLVertexBuffer::unmapBuffer()
 				{
 					const MappedRegion& region = mMappedIndexRegions[i];
 					S32 offset = region.mIndex >= 0 ? sizeof(U16)*region.mIndex : 0;
-
-					// <FS:ND> If offset is greater zero, we cannot cannot copy all of region.mCount
-
-					// S32 length = sizeof(U16)*region.mCount;
-					S32 length = sizeof(U16)*region.mCount - offset;
-
-					// </FS:ND>
-
+					S32 length = sizeof(U16)*region.mCount;
 					glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, offset, length, (U8*) mMappedIndexData+offset);
 					stop_glerror();
 				}
