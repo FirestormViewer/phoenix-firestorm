@@ -74,6 +74,15 @@
         	parameter="UNDN"/>
     </menu_item_check>
    </context_menu>
+  <menu_item_check
+    label="Color names based on distance"
+    name="radarColorNamesBasedOnDistance">
+    <menu_item_check.on_check
+      control="FSRadarColorNamesByDistance" />
+    <menu_item_check.on_click
+      function="ToggleControl"
+      parameter="FSRadarColorNamesByDistance" />
+  </menu_item_check>
   
   <menu_item_separator layout="topleft" />
 
