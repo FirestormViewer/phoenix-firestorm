@@ -189,6 +189,12 @@ public:
 	virtual BOOL	setTextArg( const std::string& key, const LLStringExplicit& text );
 	virtual BOOL	setLabelArg( const std::string& key, const LLStringExplicit& text );
 
+	//<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
+	typedef boost::function<void(S32&, S32&, LLWString&, S32&, const LLWString&)> autoreplace_callback_t;
+	autoreplace_callback_t mAutoreplaceCallback;
+	void			setAutoreplaceCallback (autoreplace_callback_t cb) { mAutoreplaceCallback = cb; }
+	//</FS:TS> FIRE-11373
+
 	void			setLabel(const LLStringExplicit &new_label) { mLabel = new_label; }
 	const std::string& 	getLabel()	{ return mLabel.getString(); }
 

@@ -109,9 +109,8 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
 	LLLineEditor(p)
 {
-	/// FIXME: Commenting out for now, will either rehook up autoreplace to LLLineEditor or
-	/// move to CHUI style expanding text editors <FS:CR>
-	//setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2));
+	//<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
+	setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
 	setKeystrokeCallback(onKeystroke,this);
 	FSNearbyChat::instance().registerChatBar(this);
 
