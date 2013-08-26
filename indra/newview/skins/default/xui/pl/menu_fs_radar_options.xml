@@ -8,6 +8,7 @@
 		<menu_item_check label="Wyświetlane (Nazwa konta)" name="radarFmtDNUN"/>
 		<menu_item_check label="Wyświetlane (Wyświetlane)" name="radarFmtUNDN"/>
 	</context_menu>
+	<menu_item_check label="Koloruj imiona bazując na odległości" name="radarColorNamesBasedOnDistance"/>
 	<context_menu label="Zgłaszaj do" name="report_to_menu">
 		<menu_item_check label="Czatu lokalnego" name="radar_nearby_chat"/>
 		<menu_item_check label="Tostów powiadomień" name="radar_nearby_chat"/>
