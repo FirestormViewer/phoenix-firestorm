@@ -139,6 +139,10 @@
 	<color
 		name="InspectorTipTextColor"
 		reference="TextFgColor" />
+	<!-- General Avatar list color -->
+	<color
+		name="AvatarListItemIconDefaultColor"
+		reference="Black" />
 	<!-- Avatar list color for agents within chat range -->
 	<color
 		name="AvatarListItemChatRange"
