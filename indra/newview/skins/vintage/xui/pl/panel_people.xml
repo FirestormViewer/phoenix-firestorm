@@ -35,6 +35,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 					<check_box label="Zgłaszaj wyjście z przestrzeni regionu" name="RadarReportSimRangeLeave"/>
 					<check_box label="Zgłaszaj alerty wejść skryptom" name="RadarEnterChannelAlert"/>
 					<check_box label="Zgłaszaj alerty wyjść skryptom" name="RadarLeaveChannelAlert"/>
+					<check_box label="Koloruj imiona bazując na odległości" name="FSRadarColorNamesByDistance"/>
 					<check_box label="Ogranicz odl.:" tool_tip="Ogranicza wyniki do określonego dystansu" name="LimitRadarByRange" />
 					<text name="radarmap_range_label" value="Format imion radaru:"/>
 					<combo_box name="RadarNameFormat">
