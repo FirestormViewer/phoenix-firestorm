@@ -3,7 +3,7 @@
 
 <pie_menu name="Avatar Pie">
 	<pie_slice label="Profil..." name="Profile..."/>
-	<pie_menu name="mute_menu" label="Blockieren &gt;"/>
+	<pie_menu name="mute_menu" label="Blockieren &gt;">
 		<pie_slice label="Ignorieren" name="Avatar Mute"/>
 		<pie_slice label="Partikelbes." name="Mute Particle"/>
 	</pie_menu>
