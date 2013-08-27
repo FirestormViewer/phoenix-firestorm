@@ -7256,7 +7256,6 @@ This will add a bookmark in your inventory so you can quickly IM this resident.
    icon="notify.tga"
    name="RegionRestartMinutes"
    priority="high"
-   persist="true"
    type="notify">
 This region will restart in [MINUTES] minutes.
 If you stay in this region when it shuts down, you will be logged out.
@@ -7266,7 +7265,6 @@ If you stay in this region when it shuts down, you will be logged out.
    icon="notify.tga"
    name="RegionRestartSeconds"
    priority="high"
-   persist="true"
    type="notify">
 This region will restart in [SECONDS] seconds.
 If you stay in this region when it shuts down, you will be logged out.

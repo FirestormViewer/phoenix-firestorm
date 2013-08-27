@@ -195,6 +195,7 @@ LLContextMenu	*gMenuObject = NULL;
 LLContextMenu	*gMenuAttachmentSelf = NULL;
 LLContextMenu	*gMenuAttachmentOther = NULL;
 LLContextMenu	*gMenuLand	= NULL;
+LLContextMenu	*gMenuMuteParticle = NULL;
 
 // ## Zi: Pie menu
 // Pie menus
@@ -485,6 +486,9 @@ void init_menus()
 
 	gMenuLand = LLUICtrlFactory::createFromFile<LLContextMenu>(
 		"menu_land.xml", gMenuHolder, registry);
+
+	gMenuMuteParticle = LLUICtrlFactory::createFromFile<LLContextMenu>(
+		"menu_mute_particle.xml", gMenuHolder, registry);
 
 // ## Zi: Pie menu
 	gPieMenuAvatarSelf = LLUICtrlFactory::createFromFile<PieMenu>(
@@ -2700,6 +2704,9 @@ void cleanup_menus()
 	delete gMenuLand;
 	gMenuLand = NULL;
 
+	delete gMenuMuteParticle;
+	gMenuMuteParticle = NULL;
+
 	delete gMenuBarView;
 	gMenuBarView = NULL;
 
@@ -3305,6 +3312,13 @@ bool enable_object_edit()
 	}
 
 	return enable;
+}
+
+bool enable_mute_particle()
+{
+	const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
+
+	return pick.mParticleOwnerID != LLUUID::null && pick.mParticleOwnerID != gAgent.getID();
 }
 
 // mutually exclusive - show either edit option or build in menu
@@ -7443,6 +7457,33 @@ class LLLandEdit : public view_listener_t
 	}
 };
 
+class LLMuteParticle : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLUUID id = LLToolPie::getInstance()->getPick().mParticleOwnerID;
+		
+		if (id.notNull())
+		{
+			std::string name;
+			gCacheName->getFullName(id, name);
+
+			LLMute mute(id, name, LLMute::AGENT);
+			if (LLMuteList::getInstance()->isMuted(mute.mID))
+			{
+				LLMuteList::getInstance()->remove(mute);
+			}
+			else
+			{
+				LLMuteList::getInstance()->add(mute);
+				LLPanelBlockedList::showPanelAndSelect(mute.mID);
+			}
+		}
+
+		return true;
+	}
+};
+
 class LLWorldEnableBuyLand : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -10545,6 +10586,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLLandBuyPass(), "Land.BuyPass");
 	view_listener_t::addMenu(new LLLandEdit(), "Land.Edit");
 
+	// Particle muting
+	view_listener_t::addMenu(new LLMuteParticle(), "Particle.Mute");
+
 	view_listener_t::addMenu(new LLLandEnableBuyPass(), "Land.EnableBuyPass");
 	commit.add("Land.Buy", boost::bind(&handle_buy_land));
 
@@ -10572,6 +10616,7 @@ void initialize_menus()
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));
 	enable.add("EnableEdit", boost::bind(&enable_object_edit));
+	enable.add("EnableMuteParticle", boost::bind(&enable_mute_particle));
 	enable.add("VisibleBuild", boost::bind(&enable_object_build));
 	commit.add("Pathfinding.Linksets.Select", boost::bind(&LLFloaterPathfindingLinksets::openLinksetsWithSelectedObjects));
 	enable.add("EnableSelectInPathfindingLinksets", boost::bind(&enable_object_select_in_pathfinding_linksets));

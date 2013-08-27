@@ -82,7 +82,7 @@
        image_name="Rounded_Square"
        layout="topleft"
        left_pad="41"
-       name="LowMidraphicsDivet"
+       name="LowMidGraphicsDivet"
        top_delta="0"
        width="2" />
       <icon

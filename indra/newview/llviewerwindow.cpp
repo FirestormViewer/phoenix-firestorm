@@ -244,7 +244,9 @@ LLFrameTimer	gAwayTriggerTimer;
 BOOL			gShowOverlayTitle = FALSE;
 
 LLViewerObject*  gDebugRaycastObject = NULL;
+LLVOPartGroup* gDebugRaycastParticle = NULL;
 LLVector4a       gDebugRaycastIntersection;
+LLVector4a		gDebugRaycastParticleIntersection;
 LLVector2        gDebugRaycastTexCoord;
 LLVector4a       gDebugRaycastNormal;
 LLVector4a       gDebugRaycastTangent;
@@ -3117,6 +3119,7 @@ void LLViewerWindow::updateUI()
 //											  &gDebugRaycastBinormal,
 //											  &gDebugRaycastStart,
 //											  &gDebugRaycastEnd);
+		gDebugRaycastParticle = gPipeline.lineSegmentIntersectParticle(gDebugRaycastStart, gDebugRaycastEnd, &gDebugRaycastParticleIntersection, NULL);
 	}
 
 	updateMouseDelta();
@@ -3957,9 +3960,9 @@ void LLViewerWindow::pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback
 		pick_transparent = TRUE;
 	}
 
-//	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, TRUE, callback);
+//	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, FALSE, TRUE, callback);
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, pick_rigged, TRUE, callback);
+	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, FALSE, pick_rigged, TRUE, callback);
 // [/SL:KB]
 	schedulePick(pick_info);
 }
@@ -4016,9 +4019,9 @@ void LLViewerWindow::returnEmptyPicks()
 }
 
 // Performs the GL object/land pick.
-//LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_transparent)
+//LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_transparent, BOOL pick_particle)
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_transparent, BOOL pick_rigged)
+LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_transparent, BOOL pick_particle, BOOL pick_rigged)
 // [/SL:KB]
 {
 	BOOL in_build_mode = LLFloaterReg::instanceVisible("build");
@@ -4028,12 +4031,12 @@ LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_trans
 		// "Show Debug Alpha" means no object actually transparent
 		pick_transparent = TRUE;
 	}
-
+	
 	// shortcut queueing in mPicks and just update mLastPick in place
 	MASK	key_mask = gKeyboard->currentMask(TRUE);
-//	mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, TRUE, NULL);
+	mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_particle, TRUE, NULL);
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-	mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_rigged, TRUE, NULL);
+	mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_particle, pick_rigged, TRUE, NULL);
 // [/SL:KB]
 	mLastPick.fetchResults();
 
@@ -4652,7 +4655,8 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	F32 scale_factor = 1.0f ;
 	if (!keep_window_aspect || (image_width > window_width) || (image_height > window_height))
 	{	
-		if ((image_width > window_width || image_height > window_height) && LLPipeline::sRenderDeferred && !show_ui)
+		if ((image_width <= gGLManager.mGLMaxTextureSize && image_height <= gGLManager.mGLMaxTextureSize) && 
+			(image_width > window_width || image_height > window_height) && LLPipeline::sRenderDeferred && !show_ui)
 		{
 			if (scratch_space.allocate(image_width, image_height, GL_RGBA, true, true))
 			{
@@ -4661,31 +4665,14 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 
 				if (gPipeline.allocateScreenBuffer(image_width, image_height))
 				{
-					// <FS:ND> FIRE-9097; Workaround against black borders/rectangles in huge snapshots.
-					// Not a pretty solution
-
-					// window_width = image_width;
-					// window_height = image_height;
-					// snapshot_width = image_width;
-					// snapshot_height = image_height;
-
-					window_width = llmin( image_width, 4096);
-					window_height = llmin( image_height, 4096);
-					snapshot_width = llmin( image_width, 4096);
-					snapshot_height = llmin( image_height, 4096);
-
-					// </FS:ND>
-
+					window_width = image_width;
+					window_height = image_height;
+					snapshot_width = image_width;
+					snapshot_height = image_height;
 					reset_deferred = true;
-
-					// <FS:ND> FIRE-9097; Workaround against black borders/rectangles in huge snapshots.
-					// Not a pretty solution
-
-					// mWorldViewRectRaw.set(0, image_height, image_width, 0);
-					mWorldViewRectRaw.set(0, llmin(image_height,4096), llmin(image_width,4096), 0);
-
-					// </FS:ND>
-
+					mWorldViewRectRaw.set(0, image_height, image_width, 0);
+					LLViewerCamera::getInstance()->setViewHeightInPixels( mWorldViewRectRaw.getHeight() );
+					LLViewerCamera::getInstance()->setAspect( getWorldViewAspectRatio() );
 					scratch_space.bindTarget();
 				}
 				else
@@ -4895,6 +4882,8 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	if (reset_deferred)
 	{
 		mWorldViewRectRaw = window_rect;
+		LLViewerCamera::getInstance()->setViewHeightInPixels( mWorldViewRectRaw.getHeight() );
+		LLViewerCamera::getInstance()->setAspect( getWorldViewAspectRatio() );
 		scratch_space.flush();
 		scratch_space.release();
 		gPipeline.allocateScreenBuffer(original_width, original_height);
@@ -5606,17 +5595,19 @@ LLPickInfo::LLPickInfo()
 	  mTangent(),
 	  mBinormal(),
 	  mHUDIcon(NULL),
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	  mPickTransparent(FALSE),
+//	  mPickParticle(FALSE)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	  mPickParticle(FALSE),
 	  mPickRigged(FALSE)
 // [/SL:KB]
-//	  mPickTransparent(FALSE)
 {
 }
 
 LLPickInfo::LLPickInfo(const LLCoordGL& mouse_pos, 
 		       MASK keyboard_mask, 
 		       BOOL pick_transparent,
+			   BOOL pick_particle,
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 		       BOOL pick_rigged,
 // [/SL:KB]
@@ -5635,11 +5626,12 @@ LLPickInfo::LLPickInfo(const LLCoordGL& mouse_pos,
 	  mTangent(),
 	  mBinormal(),
 	  mHUDIcon(NULL),
-// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	  mPickTransparent(pick_transparent),
+//	  mPickParticle(pick_particle)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	  mPickParticle(pick_particle),
 	  mPickRigged(pick_rigged)
 // [/SL:KB]
-//	  mPickTransparent(pick_transparent)
 {
 }
 
@@ -5657,6 +5649,10 @@ void LLPickInfo::fetchResults()
 	LLVector4a origin;
 	origin.load3(LLViewerCamera::getInstance()->getOrigin().mV);
 	F32 icon_dist = 0.f;
+	LLVector4a start;
+	LLVector4a end;
+	LLVector4a particle_end;
+
 	if (hit_icon)
 	{
 		LLVector4a delta;
@@ -5669,15 +5665,25 @@ void LLPickInfo::fetchResults()
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	LLViewerObject* hit_object = gViewerWindow->cursorIntersect(mMousePt.mX, mMousePt.mY, 512.f,
 									NULL, -1, mPickTransparent, mPickRigged, &face_hit,
-									&intersection, &uv, &normal, &tangent);
+									&intersection, &uv, &normal, &tangent, &start, &end);
 // [/SL:KB]
 	
 	mPickPt = mMousePt;
 
 	U32 te_offset = face_hit > -1 ? face_hit : 0;
 
-	//unproject relative clicked coordinate from window coordinate using GL
-	
+	if (mPickParticle)
+	{ //get the end point of line segement to use for particle raycast
+		if (hit_object)
+		{
+			particle_end = intersection;
+		}
+		else
+		{
+			particle_end = end;
+		}
+	}
+
 	LLViewerObject* objectp = hit_object;
 
 
@@ -5692,6 +5698,7 @@ void LLPickInfo::fetchResults()
 		mHUDIcon = hit_icon;
 		mPickType = PICK_ICON;
 		mPosGlobal = mHUDIcon->getPositionGlobal();
+
 	}
 	else if (objectp)
 	{
@@ -5741,6 +5748,18 @@ void LLPickInfo::fetchResults()
 		}
 	}
 	
+	if (mPickParticle)
+	{ //search for closest particle to click origin out to intersection point
+		S32 part_face = -1;
+
+		LLVOPartGroup* group = gPipeline.lineSegmentIntersectParticle(start, particle_end, NULL, &part_face);
+		if (group)
+		{
+			mParticleOwnerID = group->getPartOwner(part_face);
+			mParticleSourceID = group->getPartSource(part_face);
+		}
+	}
+
 	if (mPickCallback)
 	{
 		mPickCallback(*this);
