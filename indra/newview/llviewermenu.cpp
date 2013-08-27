@@ -149,6 +149,7 @@
 #include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
+#include "daeexport.h"
 
 
 using namespace LLAvatarAppearanceDefines;
@@ -10027,6 +10028,15 @@ class FSObjectExport : public view_listener_t
 	}
 };
 // </FS:Techwolf Lupindo>
+// <FS:CR>
+class FSObjectExportCollada : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		DAEExportUtil::export_selection();
+		return true;
+	}
+};
 
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
@@ -10659,6 +10669,7 @@ void initialize_menus()
 
 	// <FS:Techwolf Lupindo> export
 	view_listener_t::addMenu(new FSObjectExport(), "Object.Export");
+	view_listener_t::addMenu(new FSObjectExportCollada(), "Object.ExportCollada");
 	enable.add("Object.EnableExport", boost::bind(&enable_export_object));
 	// </FS:Techwolf Lupindo>
 }

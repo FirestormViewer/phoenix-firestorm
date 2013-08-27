@@ -164,15 +164,28 @@
             <pie_slice.on_enable
                 function="Object.EnableReportAbuse" />
         </pie_slice>
-        <pie_slice
-         enabled="false"
-         label="Export"
-         name="Export">
-         <pie_slice.on_click
-            function="Object.Export" />
-         <pie_slice.on_enable
-            function="Object.EnableExport" />
-        </pie_slice>
+        <pie_menu
+            name="ExportMenu"
+            label="Save as &gt;">
+            <pie_slice
+                enabled="false"
+                label="Backup"
+                name="Backup">
+                <pie_slice.on_click
+                    function="Object.Export" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Collada"
+                name="Collada">
+                <pie_slice.on_click
+                    function="Object.ExportCollada" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+        </pie_menu>
 
 <!-- Phoenix has "Disable" here, which we haven't implemented yet.
      Might get interesting when we finally do ... -->
