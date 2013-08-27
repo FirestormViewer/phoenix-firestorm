@@ -1166,10 +1166,6 @@ void LLVOVolume::sculpt()
 			return; //we think data is not ready yet.
 		}
 
-		// <FS:ND> force discard level down to max MAX_DISCARD_LEVEL. There's a lot of log spam otherwise
-		discard_level = llmin( discard_level, MAX_DISCARD_LEVEL );
-		// </FS:ND>
-
 		S32 current_discard = getVolume()->getSculptLevel() ;
 		if(current_discard < -2)
 		{
