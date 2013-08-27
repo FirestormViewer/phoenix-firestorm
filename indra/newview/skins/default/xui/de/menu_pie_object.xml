@@ -26,7 +26,10 @@
 				<pie_slice label="In Linksets" name="show_in_linksets"/>
 				<pie_slice label="In Figuren" name="show_in_characters"/>
 			</pie_menu>
-			<pie_slice label="Blockieren" name="Object Mute"/>
+			<pie_menu name="mute_menu" label="Blockieren &gt;"/>
+				<pie_slice label="Ignorieren" name="Object Mute"/>
+				<pie_slice label="Partikelbes." name="Mute Particle"/>
+			</pie_menu>
 			<pie_menu label="Skripte &gt;" name="ScriptsMenu">
 				<pie_slice label="Kompilieren (Mono)" name="CompileMono"/>
 				<pie_slice label="Kompilieren (LSL)" name="CompileLSL"/>

@@ -18,4 +18,5 @@
 	<menu_item_call label="Texturen anzeigen" name="Debug..."/>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
 	<menu_item_call label="Fallen lassen" name="Drop"/>
+	<menu_item_call label="Partikeleigentümer blockieren" name="Mute Particle"/>
 </context_menu>
