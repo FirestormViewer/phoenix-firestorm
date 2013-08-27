@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Avatar Pie">
     <pie_slice label="Profil..." name="Profile..."/>
-    <pie_slice label="Wycisz" name="Avatar Mute"/>
+    <pie_slice label="Zablokuj" name="Avatar Mute"/>
     <pie_slice label="Idź do" name="Go to"/>
     <pie_slice label="Zgłoś..." name="abuse"/>
     <pie_slice label="Nowa znajomość..." name="Add Friend"/>
