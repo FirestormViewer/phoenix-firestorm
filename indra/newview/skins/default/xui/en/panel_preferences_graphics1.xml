@@ -1229,6 +1229,17 @@
          <check_box.commit_callback
         function="Pref.VertexShaderEnable" />
        </check_box>
+        <check_box
+         control_name="RenderDepthOfFieldInEditMode"
+         enabled_control="RenderDepthOfField"
+         height="16"
+         initial_value="false"
+         label="Enable while in edit mode"
+         layout="topleft"
+         left_delta="10"
+         name="RenderDepthOfFieldInEditMode"
+         top_pad="4"
+         width="256"/>
         <slider
          control_name="CameraFNumber"
          decimal_digits="2"
@@ -1239,7 +1250,7 @@
          label="Camera F Number:"
          label_width="160"
          layout="topleft"
-         left_delta="0"
+         left_delta="-10"
          max_val="64"
          min_val="1"
          name="CameraFNum"
