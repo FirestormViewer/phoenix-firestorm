@@ -208,7 +208,7 @@
         label="Mute &gt;">
         <pie_slice
             enabled="true"
-            label="Object"
+            label="Mute"
             name="Object Mute">
             <pie_slice.on_click
                 function="Object.Mute" />
