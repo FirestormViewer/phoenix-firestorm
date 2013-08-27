@@ -203,15 +203,28 @@
             <pie_separator name="autohide_end_crash_protection" />
         </pie_menu>
 
+    <pie_menu
+        name="mute_menu"
+        label="Mute &gt;">
         <pie_slice
             enabled="true"
-            label="Mute"
+            label="Object"
             name="Object Mute">
             <pie_slice.on_click
                 function="Object.Mute" />
 <!--            <pie_slice.on_enable
                     function="Object.EnableMute" /> -->
         </pie_slice>
+        <pie_slice
+            enabled="false"
+            label="Part. Owner"
+            name="Mute Particle">
+            <pie_slice.on_click
+                function="Particle.Mute" />
+            <pie_slice.on_enable
+                function="EnableMuteParticle" />
+        </pie_slice>
+    </pie_menu>
 		
 		<pie_menu
 			label="Scripts &gt;"
