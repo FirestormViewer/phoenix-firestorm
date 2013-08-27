@@ -52,8 +52,18 @@
 				<combo_box.item name="ScriptDialogOption_1" label="Uno por objeto y canal"/>
 				<combo_box.item name="ScriptDialogOption_2" label="Sin restricciones"/>
 			</combo_box>
-			<check_box label="Diálogos de scripts en esquina superior derecha" name="ShowScriptDialogsTopRight" tool_tip="Activa para mover las notificaciones a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
-			<check_box label="Diálogos de script animados" name="FSAnimatedScriptDialogs" tool_tip="Actívalo para que los diálogos de script se abran con animación (comportamiento clásico de v1.x)." width="256"/>
+			<text name="ScriptDialogsPositionLabel" width="180">
+				Posición de los diálogos de script:
+			</text>
+			<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Selecciona dónde deben aparecer los diálogos de script en tu pantalla.">
+				<combo_box.item label="Valor anterior" name="ScriptDialogPositionOption_0"/>
+				<combo_box.item label="Acoplado a los chiclets" name="ScriptDialogPositionOption_1"/>
+				<combo_box.item label="Arriba a la izquerda" name="ScriptDialogPositionOption_2"/>
+				<combo_box.item label="Arriba a la derecha" name="ScriptDialogPositionOption_3"/>
+				<combo_box.item label="Abajo a la izquerda" name="ScriptDialogPositionOption_4"/>
+				<combo_box.item label="Abajo a la derecha" name="ScriptDialogPositionOption_5"/>
+			</combo_box>
+			<check_box label="Diálogos de script animados" name="FSAnimatedScriptDialogs" tool_tip="Actívalo para que los diálogos de script se abran con animación (comportamiento clásico de v1.x). Sólo funciona si los diálogos se abren desde arriba hacia abajo." width="256"/>
 			<check_box label="Avisos de grupo en esquina superior derecha" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)" width="256"/>
 			<text name="GroupTopRightRequiresRestart" left_delta="267" top_pad="-17">
 				(requiere reiniciar)

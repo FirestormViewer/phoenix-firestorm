@@ -18,7 +18,7 @@
 			<menu_item_check label="Volar" name="Fly"/>
 			<menu_item_check label="Correr siempre" name="Always Run"/>
 			<menu_item_check label="Forzar sentarme en el suelo" name="Force Toggle Sitting"/>
-			<menu_item_check label="Modo fantasma" name="Avatar Phantom"/>
+			<menu_item_check label="Bloquear movimiento" name="Move Lock"/>
 			<menu_item_check label="Salto rápido" name="Avatar Ignore Prejump"/>
 		</menu>
 		<menu_item_check label="Controles de cámara" name="Camera Controls"/>

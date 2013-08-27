@@ -442,9 +442,7 @@ Nota: esto vaciará la caché.
 	</notification>
 	<notification name="ChangeSkin">
 		La nueva skin se aplicará tras reiniciar [APP_NAME].
-		<form name="form">
-			<ignore name="ignore" text="Se ha seleccionado una nueva skin en Preferencias."/>
-		</form>
+		<usetemplate ignoretext="Se ha seleccionado una nueva skin en Preferencias." name="okcancelignore" notext="Aceptar" yestext="Reiniciar"/>
 	</notification>
 	<notification name="ChangeSkin">
 		Verás la nueva apariencia cuando reinicies [APP_NAME].
@@ -5326,5 +5324,8 @@ No se podrá deshacer.
 	</notification>
 	<notification name="AntiSpamBlocked">
 		AntiSpam: Bloqueado [SOURCE] por enviar spam a [QUEUE] ([COUNT]) veces en [PERIOD] segundos.
+	</notification>
+	<notification name="MeshMaxConcurrentReqTooHigh">
+		El valor que has configurado como número de peticiones concurrentes para cargar objetos mesh, [VALUE], es mayor que el máximo de [MAX]. Se ha restablecido al valor por defecto, [DEFAULT].
 	</notification>
 </notifications>

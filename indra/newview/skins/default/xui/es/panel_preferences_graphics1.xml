@@ -174,6 +174,7 @@
 		</panel>
 		<panel label="Profundidad de campo" name="DOF panel">
 			<check_box label="Profundidad de campo (difumina la vista excepto en el punto de foco de la cámara)" name="UseDoF"/>
+			<check_box label="Activar durante el modo de edición" name="RenderDepthOfFieldInEditMode"/>
 			<slider label="Apertura de diafragma (F):" name="CameraFNum" tool_tip="Valor F de la cámara para el efecto PDC" width="389" label_width="171"/>
 			<slider label="Distancia focal (mm):" name="CameraFocal"
          tool_tip="Distancia focal de la cámara para el efecto PDC (en milímetros)" width="395" label_width="171"/>

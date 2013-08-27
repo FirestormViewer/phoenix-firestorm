@@ -8,6 +8,7 @@
 		<menu_item_check label="Displayname (nombre de usuario)" name="radarFmtDNUN"/>
 		<menu_item_check label="Nombre de usuario (displayname)" name="radarFmtUNDN"/>
 	</context_menu>
+	<menu_item_check label="Color de nombre basado en distancia" name="radarColorNamesBasedOnDistance"/>
 	<context_menu label="Reportar a" name="report_to_menu">
 		<menu_item_check label="Chat general" name="radar_nearby_chat"/>
 		<menu_item_check label="Tostadas de notificación" name="radar_nearby_chat"/>
