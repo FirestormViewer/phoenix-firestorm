@@ -568,17 +568,8 @@ bool LLTextureCacheRemoteWorker::doWrite()
 			idx = mCache->setHeaderCacheEntry(mID, entry, mImageSize, mDataSize); // create the new entry.
 			if(idx >= 0)
 			{
-				// (almost always) write to the fast cache.
-				if (mRawImage->getDataSize())
-				{
-
-				// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw from LTextureCacheRemoteWorker::doWrite. In that case it's okay to change raw directly as we paid the hit of copying it already.
-
-				// llassert_always(mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel));
-				llassert_always( mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel, true) );
-
-				// </FS:ND>
-				}
+				//write to the fast cache.
+				llassert_always(mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel));
 			}
 		}
 		else
@@ -1852,13 +1843,6 @@ LLTextureCache::handle_t LLTextureCache::writeToCache(const LLUUID& id, U32 prio
 	// </FS:ND>
 
 	LLMutexLock lock(&mWorkersMutex);
-
-	// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw to LTextureCacheRemoteWorker.
-
-	rawimage =  new LLImageRaw( rawimage->getData(), rawimage->getWidth(), rawimage->getHeight(), rawimage->getComponents());
-
-	// </FS:ND>
-
 	LLTextureCacheWorker* worker = new LLTextureCacheRemoteWorker(this, priority, id,
 																  data, datasize, 0,
 																  imagesize, rawimage, discardlevel, responder);
@@ -1923,11 +1907,7 @@ LLPointer<LLImageRaw> LLTextureCache::readFromFastCache(const LLUUID& id, S32& d
 }
 
 //return the fast cache location
-
-// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw from LTextureCacheRemoteWorker::doWrite. In that case it's okay to change raw directly as we paid the hit of copying it already.
-//bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel)
-bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel, bool canChangeRaw )
-// <FS:ND>
+bool LLTextureCache::writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel)
 {
 	//rescale image if needed
 	if (raw.isNull() || !raw->getData())

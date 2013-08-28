@@ -175,11 +175,7 @@ private:
 	
 	void openFastCache(bool first_time = false);
 	void closeFastCache(bool forced = false);
-
-	// <FS:ND> FIRE-9128; to prevent crashes we pass a copy of raw from LTextureCacheRemoteWorker::doWrite. In that case it's okay to change raw directly as we paid the hit of copying it already.
-	// bool writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel);
-	bool writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel, bool canChangeRaw );	
-	// </FS:ND>
+	bool writeToFastCache(S32 id, LLPointer<LLImageRaw> raw, S32 discardlevel);	
 
 private:
 	// Internal
