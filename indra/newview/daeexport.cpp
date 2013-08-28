@@ -62,6 +62,8 @@
 // newview includes
 #include "llagent.h"
 #include "llfilepicker.h"
+#include "llinventoryfunctions.h"
+#include "llinventorymodel.h"
 #include "llmeshrepository.h"
 #include "llnotificationsutil.h"
 #include "llselectmgr.h"
@@ -79,38 +81,10 @@ namespace DAEExportUtil
 	{
 		bool exportable = false;
 		LLViewerObject* object = node->getObject();
-		if ((LLGridManager::getInstance()->isInSecondLife())
-			&& object->permYouOwner()
-			&& (gAgentID == node->mPermissions->getCreator()))
+		if (LLGridManager::getInstance()->isInSecondLife())
 		{
-			LLVOVolume *volobjp = NULL;
-			if (object->getPCode() == LL_PCODE_VOLUME)
-			{
-				volobjp = (LLVOVolume *)object;
-			}
-			if (volobjp && volobjp->isSculpted())
-			{
-				const LLSculptParams *sculpt_params = (const LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-				if(volobjp->isMesh())
-				{
-					LLSD mesh_header = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
-					exportable = mesh_header["creator"].asUUID() == gAgentID;
-				}
-				else if (sculpt_params)
-				{
-					LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(sculpt_params->getSculptTexture());
-					exportable = (imagep->mComment.find("a") != imagep->mComment.end()
-								  && LLUUID(imagep->mComment["a"]) == gAgentID);
-					if (!exportable)
-						LL_INFOS("export") << "Sculpt map has failed permissions check." << LL_ENDL;
-				}
-				
-			}
-			else
-			{
-				exportable = true;
-			}
-
+			exportable = (object->permYouOwner()
+						  && gAgentID == node->mPermissions->getCreator());
 		}
 #if OPENSIM
 		else if (LLGridManager::getInstance()->isInOpenSim())
@@ -137,6 +111,81 @@ namespace DAEExportUtil
 			}
 		}
 #endif // OPENSIM
+		// We've got perms on the object itself, let's check for sculptmaps and meshes!
+		if (exportable)
+		{
+			LLVOVolume *volobjp = NULL;
+			if (object->getPCode() == LL_PCODE_VOLUME)
+			{
+				volobjp = (LLVOVolume *)object;
+			}
+			if (volobjp && volobjp->isSculpted())
+			{
+				const LLSculptParams *sculpt_params = (const LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+				if (LLGridManager::getInstance()->isInSecondLife())
+				{
+					if(volobjp->isMesh())
+					{
+						LLSD mesh_header = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
+						exportable = mesh_header["creator"].asUUID() == gAgentID;
+					}
+					else if (sculpt_params)
+					{
+						LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(sculpt_params->getSculptTexture());
+						exportable = (imagep->mComment.find("a") != imagep->mComment.end()
+									  && LLUUID(imagep->mComment["a"]) == gAgentID);
+						if (!exportable)
+							LL_INFOS("export") << "Sculpt map has failed permissions check." << LL_ENDL;
+					}
+				}
+#ifdef OPENSIM
+				else if (LLGridManager::getInstance()->isInOpenSim())
+				{
+					if (sculpt_params && !volobjp->isMesh())
+					{
+						LLUUID asset_id = sculpt_params->getSculptTexture();
+                        LLViewerInventoryCategory::cat_array_t cats;
+                        LLViewerInventoryItem::item_array_t items;
+                        LLAssetIDMatches asset_id_matches(asset_id);
+                        gInventory.collectDescendentsIf(LLUUID::null, cats, items,
+                                                        LLInventoryModel::INCLUDE_TRASH,
+                                                        asset_id_matches);
+						
+                        for (S32 i = 0; i < items.count(); ++i)
+						{
+							const LLPermissions perms = items[i]->getPermissions();
+							LLViewerRegion* region = gAgent.getRegion();
+							if (!region) return false;
+							if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+							{
+								exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
+							}
+							else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+							{
+								exportable = perms.getCreator() == gAgentID;
+							}
+							/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
+							/// on whether we should allow full perm exports anymore.
+							else
+							{
+								exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+							}
+							if (!exportable)
+								LL_INFOS("export") << "Sculpt map has failed permissions check." << LL_ENDL;
+                        }
+					}
+					else
+					{
+						exportable = true;
+					}
+				}
+#endif // OPENSIM
+			}
+			else
+			{
+				exportable = true;
+			}
+		}
 		return exportable;
 	}
 	
