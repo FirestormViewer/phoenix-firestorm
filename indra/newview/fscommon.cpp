@@ -306,6 +306,10 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	{
 		return (!isSelf && !LLAvatarActions::isFriend(av_id));
 	}
+	else if (action == FS_RGSTR_ACT_REMOVE_FRIEND)
+	{
+		return (!isSelf && LLAvatarActions::isFriend(av_id));
+	}
 	else if (action == FS_RGSTR_ACT_SEND_IM)
 	{
 		return (!isSelf && RlvActions::canStartIM(av_id));

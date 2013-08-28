@@ -2065,6 +2065,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	LLUUID target_id(target_id_str);
 	enable_registrar.add("Url.EnableShowProfile", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SHOW_PROFILE));
 	enable_registrar.add("Url.EnableAddFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ADD_FRIEND));
+	enable_registrar.add("Url.EnableRemoveFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_REMOVE_FRIEND));
 	enable_registrar.add("Url.EnableSendIM", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SEND_IM));
 	enable_registrar.add("FS.EnableZoomIn", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ZOOM_IN));
 	enable_registrar.add("FS.EnableOfferTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_OFFER_TELEPORT));
