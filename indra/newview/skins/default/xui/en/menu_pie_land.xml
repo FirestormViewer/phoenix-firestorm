@@ -30,7 +30,15 @@
         <pie_slice.on_click
             function="Land.Sit" />
     </pie_slice>
-    <pie_separator />
+    <pie_slice
+        enabled="false"
+        label="Mute Part. Own."
+        name="Mute Particle">
+        <pie_slice.on_click
+            function="Particle.Mute" />
+        <pie_slice.on_enable
+            function="EnableMuteParticle" />
+    </pie_slice>
     <pie_slice
         enabled="false"
         label="Buy Pass"

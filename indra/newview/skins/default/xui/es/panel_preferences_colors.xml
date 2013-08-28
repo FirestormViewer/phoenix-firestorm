@@ -3,7 +3,7 @@
 	<tab_container label="Color Prefs" name="color_tabs">
 		<panel label="Color del chat" name="tab-chat">
 			<text name="font_colors" width="240">
-				Colores del texto de la Interfaz de Usuario:
+				Colores de los mensajes de chat:
 			</text>
 			<text name="user_label">
 				Mi texto
@@ -38,11 +38,17 @@
 			<text name="htmllink_label">
 				URLs
 			</text>
-			<text name="chat_name_label">
-				Cabeceras de chat
-			</text>
 			<text name="direct_label">
 				Directo
+			</text>
+			<text name="header_colors">
+				Cabeceras de chat
+			</text>
+			<text name="chat_name_label">
+				Avatares
+			</text>
+			<text name="object_name_header_label">
+				Objetos
 			</text>
 			<check_box name="FSColorIMsDistinctly" label="Colorear diferenciadamente los chats de grupo/MI en consola:"/>
 			<panel name="im_color_panel">

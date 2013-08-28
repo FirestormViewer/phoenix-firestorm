@@ -6,4 +6,5 @@
 	<menu_item_call label="Kup przepustkę" name="Land Buy Pass"/>
 	<menu_item_call label="Buduj" name="Create"/>
 	<menu_item_call label="Edytuj teren" name="Edit Terrain"/>
+	<menu_item_call label="Blokuj właściciela cząsteczek" name="Mute Particle"/>
 </context_menu>

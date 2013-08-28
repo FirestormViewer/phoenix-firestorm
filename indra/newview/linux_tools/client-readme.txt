@@ -76,7 +76,7 @@ The Firestorm Linux client can entirely run from the directory you have
 unpacked it into - no installation step is required.  If you wish to
 perform a separate installation step anyway, you may run './install.sh'
 
-Run ./firestorm from the installation directory to start Firestorm.
+Run './firestorm' from the installation directory to start Firestorm.
 
 For in-world MOVIE and MUSIC PLAYBACK, you will need (32-bit) GStreamer 0.10
 installed on your system.  This is optional - it is not required for general
@@ -101,7 +101,7 @@ you wish.
 -=-=-=-=-=-=-=-=-=
 
 The client prints a lot of diagnostic information to the console it was
-run from.  Most of this is also replicated in ~/.secondlife/logs/SecondLife.log
+run from.  Most of this is also replicated in ~/.firestorm/logs/Firestorm.log
 - this is helpful to read when troubleshooting, especially 'WARNING' and
 'ERROR' lines.
 
@@ -126,8 +126,7 @@ SOLUTION:- Usually this indicates that your graphics card does not meet
    <https://help.ubuntu.com/community/BinaryDriverHowto>
  * If your distribution does not make it easy, then you can download the
    required Linux drivers straight from your graphics card manufacturer:
-   - nVidia cards: <http://www.nvidia.com/object/unix.html>
-   - ATI cards: <http://ati.amd.com/support/driver.html>
+   - <http://wiki.phoenixviewer.com/phoenix_downloads#video_drivers>
 
 PROBLEM 2:- My whole system seems to hang when running Firestorm.
 SOLUTION:- This is typically a hardware/driver issue.  The first thing to
@@ -137,7 +136,7 @@ SOLUTION:- Some residents with ATI cards have reported that running
    'sudo aticonfig --locked-userpages=off' before running Firestorm solves
    their stability issues.
 SOLUTION:- As a last resort, you can disable most of Firestorm's advanced
-   graphics features by editing the 'secondlife' script and removing the '#'
+   graphics features by editing the 'firestorm' script and removing the '#'
    from the line which reads '#export LL_GL_NOEXT=x'
 
 PROBLEM 3:- After I minimize the Firestorm window, it's just blank when
@@ -201,29 +200,30 @@ configuration options for advanced troubleshooters.
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 We're pleased to have released Firestorm client's source code under
-an Open Source license compatible with the 'LGPL'.  
+an Open Source license compatible with the 'LGPL'.
+<http://wiki.phoenixviewer.com/phoenix_downloads#source_code>
 
 
 8. GETTING MORE HELP AND REPORTING PROBLEMS
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 For general help and support with Firestorm:
-<http://www.phoenixviewer.com>
+<http://wiki.phoenixviewer.com>
 
 In-world discussion: 
 
-Main support: Join the "Phoenix Firestorm Viewer Support" group.
+Main support: Join one of our in-world support groups.
+<http://wiki.phoenixviewer.com/firestorm_in-world_groups>
 
 There is also a 'Linux Client Users' group inside Second Life which 
-is free to join.  You can find it by pressing
-the 'Search' button at the bottom of the window and then selecting the
-'Groups' tab and searching for 'Linux'.  This group is useful for discussing
-Linux issues with fellow Linux client users who are online.
+is free to join.  You can find it by pressing the 'Search' button at 
+the bottom of the window and then selecting the 'Groups' tab and 
+searching for 'Linux'.  This group is useful for discussing Linux 
+issues with fellow Linux client users who are online.
 
 The Firestorm Issue Tracker:
 <http://jira.phoenixviewer.com/>
 This is the right place for finding known issues and reporting new
 bugs in all Firestorm releases if you find that the Troubleshooting
-section in this file hasn't helped (please note, however, that this is
-not a support forum).
+section in this file hasn't helped.
 

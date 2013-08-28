@@ -20,7 +20,7 @@ Możesz wybrać wielu członków naciskając Ctrl i klikając na ich imionach.
 			<button label="Zaproś do grupy" name="member_invite"/>
 			<button label="Usuń z grupy" name="member_eject"/>
 		</panel>
-		<panel label="Funkcje" name="roles_sub_tab">
+		<panel label="Funkcje" name="roles_sub_tab" tool_tip="Funkcje">
 			<panel.string name="help_text">
 				Wszystkie funkcje mają tytuł oraz przypisane przywileje
 które umożliwiają wykonywanie danej funkcji. Każdy członek może pełnić

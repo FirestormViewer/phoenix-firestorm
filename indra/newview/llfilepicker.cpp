@@ -506,11 +506,11 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 	case FFSAVE_COLLADA:
 		if (filename.empty())
 		{
-			wcsncpy( mFilesW,L"untitled.collada", FILENAME_BUFFER_SIZE);	/*Flawfinder: ignore*/
+			wcsncpy( mFilesW,L"untitled.dae", FILENAME_BUFFER_SIZE);	/*Flawfinder: ignore*/
 		}
-		mOFN.lpstrDefExt = L"collada";
+		mOFN.lpstrDefExt = L"dae";
 		mOFN.lpstrFilter =
-			L"COLLADA File (*.collada)\0*.collada\0" \
+			L"COLLADA File (*.dae)\0*.dae\0" \
 			L"\0";
 		break;
 	case FFSAVE_RAW:
@@ -880,6 +880,10 @@ OSStatus	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& fi
 			creator = '\?\?\?\?';
 			extension = CFSTR(".oxp");
 			break;
+		case FFSAVE_COLLADA:
+			type = 'DAE ';
+			creator = '\?\?\?\?';
+			extension = CFSTR(".dae");
 // </FS:CR>
 		case FFSAVE_ALL:
 		default:
@@ -1439,6 +1443,10 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
 		case FFSAVE_EXPORT:
 			caption += add_export_filter_to_gtkchooser(picker);
 			suggest_ext = ".oxp";
+			break;
+		case FFSAVE_COLLADA:
+			caption += add_export_filter_to_gtkchooser(picker);
+			suggest_ext = ".dae";
 			break;
 // </FS:CR>
 		default:;

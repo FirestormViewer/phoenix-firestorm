@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Object Pie">
-	<menu_item_call label="Tocar" name="Object Touch">
-		<menu_item_call.on_enable function="Object.EnableTouch" name="EnableTouch" parameter="Tocar" />
-	</menu_item_call>
+	<menu_item_call label="Tocar" name="Object Touch"/>
 	<menu_item_call label="Editar" name="Edit..."/>
 	<menu_item_call label="Construir" name="Build"/>
 	<menu_item_call label="Abrir" name="Open"/>
@@ -11,6 +9,7 @@
 	<context_menu label="Objeto..." name="Object Features">
 		<menu_item_call label="Propiedades" name="Object Inspect"/>
 		<menu_item_call label="Inspeccionar" name="Object_Inspect_Floater"/>
+		<menu_item_call label="Información de scripts" name="ScriptInfo"/>
 		<menu_item_call label="Enlazar" name="Object Link"/>
 		<menu_item_call label="Desenlazar" name="Object Unlink"/>
 		<menu_item_check label="Editar partes enlazadas" name="Object Edit Linked"/>
@@ -45,4 +44,5 @@
 	<menu_item_call label="Comprar" name="Buy..."/>
 	<menu_item_call label="Exportar" name="Export"/>
 	<menu_item_call label="Eliminar" name="Delete"/>
+	<menu_item_call label="Bloquear propietario de las partículas" name="Mute Particle"/>
 </context_menu>

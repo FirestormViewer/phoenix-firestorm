@@ -327,8 +327,7 @@ things in this group. There&apos;s a broad variety of Abilities.
              width="20" />
             <scroll_list.columns
              label=""
-             name="action"
-             width="270" />
+             name="action"/>
 
         </scroll_list>
         </panel>
@@ -459,8 +458,7 @@ things in this group. There&apos;s a broad variety of Abilities.
              width="20" />
             <scroll_list.columns
              label=""
-             name="action"
-             width="270" />
+             name="action"/>
         </scroll_list>
 <!--
     </layout_panel>
@@ -671,8 +669,7 @@ things in this group. There&apos;s a broad variety of Abilities.
              width="20" />
             <scroll_list.columns
              label=""
-             name="action"
-             width="270" />
+             name="action"/>
         </scroll_list>
 <!--
     </layout_panel>

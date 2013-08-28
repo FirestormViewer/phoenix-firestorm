@@ -359,7 +359,7 @@
                  parameter="perm_prefs" />
             </menu_item_call>
             <menu_item_call
-             label="Import Linkset"
+             label="Import Linkset..."
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
@@ -1384,6 +1384,28 @@
 			<menu_item_call.on_enable
                function="Object.EnableReturn" />
           </menu_item_call>
+          <menu
+            create_jump_keys="true"
+            label="Save as"
+            name="Export Menu"
+            tear_off="true">
+            <menu_item_call
+              label="Backup"
+              name="Backup">
+              <menu_item_call.on_click
+              function="Object.Export" />
+              <menu_item_call.on_enable
+              function="Object.EnableExport" />
+            </menu_item_call>
+            <menu_item_call
+              label="Collada"
+              name="Collada">
+              <menu_item_call.on_click
+              function="Object.ExportCollada" />
+              <menu_item_call.on_enable
+              function="Object.EnableExport" />
+            </menu_item_call>
+          </menu>
 		</menu>
         <menu
            create_jump_keys="true"
@@ -1716,7 +1738,7 @@
                  parameter="perm_prefs" />
             </menu_item_call>
 	    <menu_item_call
-             label="Import Linkset"
+             label="Import Linkset..."
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click

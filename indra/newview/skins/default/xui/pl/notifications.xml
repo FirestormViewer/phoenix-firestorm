@@ -4471,6 +4471,15 @@ Nie można tego cofnąć.
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].
 	</notification>
+	<notification name="ExportColladaFailed">
+		Eksport nie powiódł się.
+	</notification>
+	<notification name="ExportColladaSuccess">
+		Eksport w formacie Collada DAE zakończony. Wyeksportowano [TOTAL] obiektów.
+	</notification>
+	<notification name="ExportColladaPartial">
+		Eksport w formacie Collada DAE zakończony. Nie udało się wyeksportować [FAILED] z [TOTAL] zaznaczonych obiektów ze względu na niewystarczające prawa.
+	</notification>
 	<notification name="AntiSpamBlocked">
 		Antyspam: Zablokowano [SOURCE] ze względu na spam [QUEUE] ([COUNT]) razy podczas [PERIOD] sekund.
 	</notification>

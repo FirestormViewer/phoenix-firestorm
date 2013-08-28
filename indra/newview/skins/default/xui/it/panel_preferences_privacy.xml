@@ -56,7 +56,7 @@
 			<text name="autorespond_nf_response_label">
 				Risposta automatica per tutti i residenti che non sono tuoi amici:
 			</text>
-			<check_box label="Abilita risposta automatica agli avatar MUTATI" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
+			<check_box label="Abilita risposta automatica agli avatar MUTATI" name="send_muted_av_response" tool_tip="Send the text below when someone you've muted sends you an IM."/>
 			<text name="muted_avatar_response_label">
 				Risposta automatica per gli avatar Mutati:
 			</text>

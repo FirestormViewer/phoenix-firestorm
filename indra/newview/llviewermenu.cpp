@@ -149,6 +149,7 @@
 #include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
+#include "daeexport.h"
 
 
 using namespace LLAvatarAppearanceDefines;
@@ -10011,10 +10012,16 @@ void toggleTeleportHistory()
 // <FS:Techwolf Lupindo> export
 BOOL enable_export_object()
 {
-    // <FS:CR> FIRE-9682 - Temporarily disable export by setting (default off)
-	//return LLSelectMgr::getInstance()->selectGetAllValid();
-    bool allow_export = (LLSelectMgr::getInstance()->selectGetAllValid() && gSavedSettings.getBOOL("FSEnableObjectExports"));
-    return allow_export;
+    // <FS:CR>
+	for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
+		 iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
+	{
+		LLSelectNode* node = *iter;
+		LLViewerObject* obj = node->getObject();
+		if (obj || node)
+			return gSavedSettings.getBOOL("FSEnableObjectExports");
+	}
+    return false;
     // </FS:CR>
 }
 
@@ -10027,6 +10034,15 @@ class FSObjectExport : public view_listener_t
 	}
 };
 // </FS:Techwolf Lupindo>
+// <FS:CR>
+class FSObjectExportCollada : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		DAEExportUtil::export_selection();
+		return true;
+	}
+};
 
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
@@ -10659,6 +10675,7 @@ void initialize_menus()
 
 	// <FS:Techwolf Lupindo> export
 	view_listener_t::addMenu(new FSObjectExport(), "Object.Export");
+	view_listener_t::addMenu(new FSObjectExportCollada(), "Object.ExportCollada");
 	enable.add("Object.EnableExport", boost::bind(&enable_export_object));
 	// </FS:Techwolf Lupindo>
 }

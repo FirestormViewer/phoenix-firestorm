@@ -5160,6 +5160,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Conversation_Log_Label">
 		Registro de chat
 	</string>
+	<string name="Command_Move_Lock_Label">
+		Bloqueo de movimiento
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5276,6 +5279,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Conversation_Log_Tooltip">
 		Abre el registro de conversaciones para ver las transcripciones de chats anteriores
+	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Bloquea tu avatar en la posición actual
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
@@ -5415,6 +5421,8 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Collision_ScriptedObject">[NAME] te ha golpeado con un objeto con scripts.</string>
 	<string name="Collision_PhysicalObject">[NAME] te ha golpeado con un objeto físico.</string>
 	<string name="Collision_UnknownType">[NAME] ha causado una colisión de tipo desconocido.</string>
+	<string name="MovelockEnabled">Bloqueo de movimiento activado</string>
+	<string name="MovelockDisabled">Bloqueo de movimiento desactivado</string>
 	<string name="BusyResponse">respuesta de ocupado</string>
 	<string name="TeleportMaturityExceeded">El residente no puede visitar esta región.</string>
 	<string name="LoadCameraPositionNoneSaved">Todavía no ha sido guardada ninguna vista de cámara.</string>
