@@ -135,7 +135,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	if(menu)
 		mPopupMenuHandle = menu->getHandle();
 
-	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings"); //<FS:TM> 3.6.4 check this, persist thing
+	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings");
 
 	mInputEditor = getChild<LLChatEntry>("chat_box");
 	if (mInputEditor)
