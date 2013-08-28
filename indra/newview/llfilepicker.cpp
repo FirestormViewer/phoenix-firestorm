@@ -1445,7 +1445,7 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
 			suggest_ext = ".oxp";
 			break;
 		case FFSAVE_COLLADA:
-			caption += add_export_finter_to_gtkchooser(picker);
+			caption += add_export_filter_to_gtkchooser(picker);
 			suggest_ext = ".dae";
 			break;
 // </FS:CR>
