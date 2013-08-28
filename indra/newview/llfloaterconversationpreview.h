@@ -68,7 +68,7 @@ private:
 	std::string		mAccountName;
 	std::string		mCompleteName;
 	std::string     mChatHistoryFileName;
-	bool			mChatHistoryLoaded; //<FS:TM> 3.6.4 check this, LL added this and line above, we added below
+	bool			mChatHistoryLoaded;
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */

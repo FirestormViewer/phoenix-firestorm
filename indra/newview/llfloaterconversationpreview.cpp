@@ -60,10 +60,10 @@ LLFloaterConversationPreview::LLFloaterConversationPreview(const LLSD& session_i
 BOOL LLFloaterConversationPreview::postBuild()
 {
 	// <FS:CR> [FS communication UI]
-	//mChatHistory = getChild<LLChatHistory>("chat_history"); 
-	//LLLoadHistoryThread::setLoadEndSignal(boost::bind(&LLFloaterConversationPreview::SetPages, this, _1, _2)); <FS:TM> 3.6.4 check this, LL added
+	//mChatHistory = getChild<LLChatHistory>("chat_history");
 	mChatHistory = getChild<FSChatHistory>("chat_history");
 	// <FS:CR> [FS communication UI]
+	LLLoadHistoryThread::setLoadEndSignal(boost::bind(&LLFloaterConversationPreview::SetPages, this, _1, _2));
 	
 	childSetAction("open_external_btn", boost::bind(&LLFloaterConversationPreview::onBtnOpenExternal, this));	//<FS:CR> Open chat history externally
 
