@@ -167,8 +167,7 @@ public:
 	static void onEjectMembers(void*);
 	void handleEjectMembers();
 	void sendEjectNotifications(const LLUUID& group_id, const uuid_vec_t& selected_members);
-	bool handleEjectCallback(const LLSD& notification, const LLSD& response); // <FS:TM> 3.6.4 check this, which line do we need?
-	bool callbackEject(const LLSD& notification, const LLSD& response);	// <FS:CR> FIRE-8499 - Eject from group confirmation
+	bool handleEjectCallback(const LLSD& notification, const LLSD& response);
 
 	static void onRoleCheck(LLUICtrl* check, void* user_data);
 	void handleRoleCheck(const LLUUID& role_id,

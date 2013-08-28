@@ -1100,7 +1100,7 @@ void LLPanelGroupMembersSubTab::onEjectMembers(void *userdata)
 	}
 }
 
-void LLPanelGroupMembersSubTab::handleEjectMembers() // <FS:TM> 3.6.4 check this, check below, changed a lot by LL
+void LLPanelGroupMembersSubTab::handleEjectMembers()
 {	
 	std::vector<LLScrollListItem*> selection = mMembersList->getAllSelected();
 	if (selection.empty()) return;
@@ -1157,7 +1157,7 @@ bool LLPanelGroupMembersSubTab::handleEjectCallback(const LLSD& notification, co
 	}
 	return false;
 }
-//<FS:TM> 3.6.4 check this, end check segment
+
 void LLPanelGroupMembersSubTab::sendEjectNotifications(const LLUUID& group_id, const uuid_vec_t& selected_members)
 {
 	LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(group_id);
