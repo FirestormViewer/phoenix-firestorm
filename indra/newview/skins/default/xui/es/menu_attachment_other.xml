@@ -21,7 +21,7 @@
 	<menu_item_call label="Información de scripts" name="ScriptInfo"/>
 	<menu_item_call label="Desdibujar temporalmente" name="Derender"/>
 	<menu_item_call  label="Desdibujar permanentemente" name="DerenderPermanent"/>
-	<menu_item_call label="Mostrar texturas" name="D	ebug..."/>
+	<menu_item_call label="Mostrar texturas" name="Debug..."/>
 	<menu_item_call label="Retexturizar" name="Texture Refresh"/>
 	<context_menu label="Guardar como" name="Export Menu">
 		<menu_item_call label="Respaldo" name="Backup"/>
