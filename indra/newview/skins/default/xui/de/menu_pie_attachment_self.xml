@@ -9,7 +9,10 @@
 			<pie_slice label="Temporär" name="Derender"/>
 			<pie_slice label="Blacklist" name="DerenderPermanent"/>
 		</pie_menu>
-		<pie_slice label="Exportieren" name="Export"/>
+		<pie_menu label="Speichern als &gt;" name="ExportMenu">
+			<pie_slice label="Backup" name="Backup"/>
+			<pie_slice label="Collada" name="Collada"/>
+		</pie_menu>
 		<pie_separator name="inspect_placeholder" />
 		<pie_slice label="Texturen" name="Debug..."/>
 	</pie_menu>

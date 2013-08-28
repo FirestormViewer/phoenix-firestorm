@@ -4606,6 +4606,18 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 Export nach [FILENAME] beendet.
 	</notification>
 
+	<notification name="ExportColladaFailed">
+Export fehlgeschlagen.
+	</notification>
+
+	<notification name="ExportColladaSuccess">
+Collada DAE-Export beendet. [TOTAL] Objekt(e) exportiert.
+	</notification>
+
+	<notification name="ExportColladaPartial">
+Collada DAE-Export beendet. [FAILED] von [TOTAL] Objekt(en) wurden aufgrund fehlender Berechtigungen nicht exportiert.
+	</notification>
+
 	<notification name="AntiSpamBlocked">
 AntiSpam: [SOURCE] wurde wegen Spam vom Typ [QUEUE] ([COUNT]) mal in [PERIOD] Sekunden blockiert.
 	</notification>

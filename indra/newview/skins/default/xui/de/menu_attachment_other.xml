@@ -23,5 +23,8 @@
 	<menu_item_call label="Nicht anzeigen + Blacklist" name="DerenderPermanent"/>
 	<menu_item_call label="Texturen anzeigen" name="Debug..."/>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
-	<menu_item_call label="Exportieren" name="Export"/>
+	<context_menu label="Speichern als" name="Export Menu">
+		<menu_item_call label="Backup" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 </context_menu>

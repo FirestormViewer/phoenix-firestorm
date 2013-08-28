@@ -42,7 +42,7 @@
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
-			<menu_item_call label="Linkset importieren" name="import linkset"/>
+			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
@@ -163,6 +163,10 @@
 			<menu_item_call label="Partikel editieren" name="Menu Object Edit Particles"/>
 			<menu_item_call label="Wieder in Objektinhalt speichern" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Objekt zurückgeben" name="Return Object back to Owner"/>
+			<menu label="Speichern als" name="Export Menu">
+				<menu_item_call label="Backup" name="Backup"/>
+				<menu_item_call label="Collada" name="Collada"/>
+			</menu>
 		</menu>
 		<menu label="Skripte" name="Scripts">
 			<menu_item_call label="Skriptwarnungen/Fehler anzeigen" name="Script Debug"/>
@@ -202,7 +206,7 @@
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload ([COST] pro Datei)..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
-			<menu_item_call label="Linkset importieren" name="import linkset"/>
+			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
