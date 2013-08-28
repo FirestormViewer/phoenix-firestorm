@@ -297,21 +297,26 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 		    // close button probably, possibly timed out
 		    break;
 	    }
+//<FS:TM> 3.6.4 check this, LL commented out lines below, commenting out RLVa segment as well
+		// TODO: this set of calls has undesirable behavior under Windows OS (CHUI-985):
+		// here appears three additional toasts instead one modified
+		// need investigation and fix
 
-	    LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
-	    modified_form->setElementEnabled("Accept", false);
-	    modified_form->setElementEnabled("Decline", false);
-	    notification_ptr->updateForm(modified_form);
+	    // LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
+	    // modified_form->setElementEnabled("Accept", false);
+	    // modified_form->setElementEnabled("Decline", false);
+	    // notification_ptr->updateForm(modified_form);
+	    // notification_ptr->repost();
 // [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
 		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
-		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
-		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
-		if ( (!pToast) || (!pToast->getCanBeStored()) )
-		{
+		//*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+		//*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+		//if ( (!pToast) || (!pToast->getCanBeStored()) )
+		//{
 // [/SL:KB]
-			notification_ptr->repost();
+		//	notification_ptr->repost();
 // [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		}
+		//}
 // [/SL:KB]
     }
 
@@ -3140,7 +3145,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				send_do_not_disturb_message(msg, from_id);
 			}
-			else
+			
+			if (!is_muted)
 			{
 				LL_INFOS("Messaging") << "Received IM_GROUP_INVITATION message." << LL_ENDL;
 				// Read the binary bucket for more information.
@@ -4552,6 +4558,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		LLSD msg_notify = LLSD(LLSD::emptyMap());
 		msg_notify["session_id"] = LLUUID();
         msg_notify["from_id"] = chat.mFromID;
+		msg_notify["source_type"] = chat.mSourceType;
         on_new_message(msg_notify);
 	}
 }
@@ -7135,6 +7142,15 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				return true;
 			}
 		}
+		// HACK -- handle callbacks for specific alerts.
+		if( notificationID == "HomePositionSet" )
+		{
+			// save the home location image to disk
+			std::string snap_filename = gDirUtilp->getLindenUserDir();
+			snap_filename += gDirUtilp->getDirDelimiter();
+			snap_filename += SCREEN_HOME_FILENAME;
+			gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
+		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
 		if (notificationID == "AutopilotCanceled")
@@ -7234,16 +7250,6 @@ void process_alert_core(const std::string& message, BOOL modal)
 	{
 		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_KILLED_COUNT);
 	}
-// <FS:CR> FIRE-9696 - The viewer isn't ever seeing the alert here moved below and detect by name
-	//else if( message == "Home Position Set." )
-	//{
-		// save the home location image to disk
-	//	std::string snap_filename = gDirUtilp->getLindenUserDir();
-	//	snap_filename += gDirUtilp->getDirDelimiter();
-	//	snap_filename += SCREEN_HOME_FILENAME;
-	//	gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
-	//}
-// </FS:CR>
 
 	std::string processed_message = message;
 	const std::string ALERT_PREFIX("ALERT: ");

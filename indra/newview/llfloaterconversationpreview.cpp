@@ -60,7 +60,8 @@ LLFloaterConversationPreview::LLFloaterConversationPreview(const LLSD& session_i
 BOOL LLFloaterConversationPreview::postBuild()
 {
 	// <FS:CR> [FS communication UI]
-	//mChatHistory = getChild<LLChatHistory>("chat_history");
+	//mChatHistory = getChild<LLChatHistory>("chat_history"); 
+	//LLLoadHistoryThread::setLoadEndSignal(boost::bind(&LLFloaterConversationPreview::SetPages, this, _1, _2)); <FS:TM> 3.6.4 check this, LL added
 	mChatHistory = getChild<FSChatHistory>("chat_history");
 	// <FS:CR> [FS communication UI]
 	
@@ -86,8 +87,8 @@ BOOL LLFloaterConversationPreview::postBuild()
 		file = "chat";
 	}
 	// <FS:Ansariel> Remember used log file name
+	//mChatHistoryFileName = file; <FS:TM> 3.6.4 check this, LL added this, we added below
 	mFileName = file;
-
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);
@@ -97,23 +98,46 @@ BOOL LLFloaterConversationPreview::postBuild()
 	load_params["load_all_history"] = true;
 	load_params["cut_off_todays_date"] = false;
 
-	LLLogChat::loadChatHistory(file, mMessages, load_params);
-	mCurrentPage = mMessages.size() / mPageSize;
 
+	LLSD loading;
+	loading[LL_IM_TEXT] = LLTrans::getString("loading_chat_logs");
+	mMessages.push_back(loading);
 	mPageSpinner = getChild<LLSpinCtrl>("history_page_spin");
 	mPageSpinner->setCommitCallback(boost::bind(&LLFloaterConversationPreview::onMoreHistoryBtnClick, this));
 	mPageSpinner->setMinValue(1);
-	mPageSpinner->setMaxValue(mCurrentPage + 1);
-	mPageSpinner->set(mCurrentPage + 1);
-
-	std::string total_page_num = llformat("/ %d", mCurrentPage + 1);
-	getChild<LLTextBox>("page_num_label")->setValue(total_page_num);
-
+	mPageSpinner->set(1);
+	mPageSpinner->setEnabled(false);
+	mChatHistoryLoaded = false;
+	LLLogChat::startChatHistoryThread(file, load_params);
 	return LLFloater::postBuild();
 }
 
+void LLFloaterConversationPreview::SetPages(std::list<LLSD>& messages, const std::string& file_name)
+{
+	if(file_name == mChatHistoryFileName)
+	{
+		mMessages = messages;
+
+
+		mCurrentPage = mMessages.size() / mPageSize;
+		mPageSpinner->setEnabled(true);
+		mPageSpinner->setMaxValue(mCurrentPage+1);
+		mPageSpinner->set(mCurrentPage+1);
+
+		std::string total_page_num = llformat("/ %d", mCurrentPage+1);
+		getChild<LLTextBox>("page_num_label")->setValue(total_page_num);
+		mChatHistoryLoaded = true;
+
+	}
+
+}
 void LLFloaterConversationPreview::draw()
 {
+	if(mChatHistoryLoaded)
+	{
+		showHistory();
+		mChatHistoryLoaded = false;
+	}
 	LLFloater::draw();
 }
 
@@ -145,6 +169,11 @@ void LLFloaterConversationPreview::showHistory()
 
 	for (int msg_num = 0; (iter != mMessages.end() && msg_num < mPageSize); ++iter, ++msg_num)
 	{
+		if (iter->size() == 0)
+		{
+			continue;
+		}
+
 		LLSD msg = *iter;
 
 		LLUUID from_id 		= LLUUID::null;

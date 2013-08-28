@@ -1915,7 +1915,7 @@ void LLViewerWindow::initBase()
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
 	gFloaterView->setFloaterSnapView(main_view->getChild<LLView>("floater_snap_region")->getHandle());
 	gSnapshotFloaterView = main_view->getChild<LLSnapshotFloaterView>("Snapshot Floater View");
-	
+
 	// optionally forward warnings to chat console/chat floater
 	// for qa runs and dev builds
 #if  !LL_RELEASE_FOR_DOWNLOAD

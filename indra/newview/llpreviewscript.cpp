@@ -90,6 +90,7 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llappviewer.h"
+#include "llfloatergotoline.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
@@ -479,6 +480,9 @@ void LLScriptEdCore::initMenu()
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	menuItem->setClickCallback(boost::bind(&LLFloaterSearchReplace::show, mEditor));
 // [/SL:KB]
+
+	menuItem = getChild<LLMenuItemCallGL>("Go to line...");
+	menuItem->setClickCallback(boost::bind(&LLFloaterGotoLine::show, this));
 
 	menuItem = getChild<LLMenuItemCallGL>("Help...");
 	menuItem->setClickCallback(boost::bind(&LLScriptEdCore::onBtnHelp, this));

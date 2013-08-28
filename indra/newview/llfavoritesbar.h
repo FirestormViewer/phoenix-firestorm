@@ -104,6 +104,7 @@ protected:
 	LLUUID mFavoriteFolderId;
 	const LLFontGL *mFont;
 	S32 mFirstDropDownItem;
+	S32 mDropDownItemsCount;
 	bool mUpdateDropDownItems;
 	bool mRestoreOverflowMenu;
 

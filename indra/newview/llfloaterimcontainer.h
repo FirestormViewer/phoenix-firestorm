@@ -65,6 +65,8 @@ public:
 	/*virtual*/ void setVisible(BOOL visible);
 	/*virtual*/ void setVisibleAndFrontmost(BOOL take_focus=TRUE, const LLSD& key = LLSD());
 	/*virtual*/ void updateResizeLimits();
+	/*virtual*/ void handleReshape(const LLRect& rect, bool by_user);
+
 	void onCloseFloater(LLUUID& id);
 
 	/*virtual*/ void addFloater(LLFloater* floaterp, 
@@ -107,8 +109,6 @@ public:
 	LLConversationItem* getSessionModel(const LLUUID& session_id) { return get_ptr_in_map(mConversationsItems,session_id); }
 	LLConversationSort& getSortOrder() { return mConversationViewModel.getSorter(); }
 
-	void onNearbyChatClosed();
-
 	// Handling of lists of participants is public so to be common with llfloatersessiontab
 	// *TODO : Find a better place for this.
     bool checkContextMenuItem(const std::string& item, uuid_vec_t& selectedIDS);
@@ -118,6 +118,10 @@ public:
 	void assignResizeLimits();
 	virtual BOOL handleKeyHere(KEY key, MASK mask );
 	/*virtual*/ void closeFloater(bool app_quitting = false);
+    void closeAllConversations();
+    void closeSelectedConversations(const uuid_vec_t& ids);
+	/*virtual*/ BOOL isFrontmost();
+
 
 private:
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
@@ -132,6 +136,8 @@ private:
 	void onStubCollapseButtonClicked();
 	void processParticipantsStyleUpdate();
 	void onSpeakButtonClicked();
+	/*virtual*/ void onClickCloseBtn();
+	/*virtual*/ void closeHostedFloater();
 
 	void collapseConversationsPane(bool collapse, bool save_is_allowed=true);
 
@@ -146,7 +152,7 @@ private:
 	void setSortOrderParticipants(const LLConversationFilter::ESortOrderType order);
 	void setSortOrder(const LLConversationSort& order);
 
-    void getSelectedUUIDs(uuid_vec_t& selected_uuids);
+    void getSelectedUUIDs(uuid_vec_t& selected_uuids, bool participant_uuids = true);
     const LLConversationItem * getCurSelectedViewModelItem();
     void getParticipantUUIDs(uuid_vec_t& selected_uuids);
     void doToSelected(const LLSD& userdata);
@@ -171,6 +177,7 @@ private:
 
 	LLButton* mExpandCollapseBtn;
 	LLButton* mStubCollapseBtn;
+    LLButton* mSpeakBtn;
 	LLPanel* mStubPanel;
 	LLTextBox* mStubTextBox;
 	LLLayoutPanel* mMessagesPane;
@@ -178,6 +185,7 @@ private:
 	LLLayoutStack* mConversationsStack;
 	
 	bool mInitialized;
+	bool mIsFirstLaunch;
 
 	LLUUID mSelectedSession;
 	std::string mGeneralTitle;
@@ -192,9 +200,12 @@ public:
 	void updateSpeakBtnState();
 	static bool isConversationLoggingAllowed();
 	void flashConversationItemWidget(const LLUUID& session_id, bool is_flashes);
+	void highlightConversationItemWidget(const LLUUID& session_id, bool is_highlighted);
 	bool isScrolledOutOfSight(LLConversationViewSession* conversation_item_widget);
 	boost::signals2::connection mMicroChangedSignal;
 	S32 getConversationListItemSize() { return mConversationsWidgets.size(); }
+	typedef std::list<LLFloater*> floater_list_t;
+	void getDetachedConversationFloaters(floater_list_t& floaters);
 
 private:
 	LLConversationViewSession* createConversationItemWidget(LLConversationItem* item);

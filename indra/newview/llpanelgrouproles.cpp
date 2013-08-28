@@ -1100,29 +1100,11 @@ void LLPanelGroupMembersSubTab::onEjectMembers(void *userdata)
 	}
 }
 
-void LLPanelGroupMembersSubTab::handleEjectMembers()
-{
-	//send down an eject message
-	//uuid_vec_t selected_members;	// <FS:CR> Nope
-
+void LLPanelGroupMembersSubTab::handleEjectMembers() // <FS:TM> 3.6.4 check this, check below, changed a lot by LL
+{	
 	std::vector<LLScrollListItem*> selection = mMembersList->getAllSelected();
 	if (selection.empty()) return;
-
-	// <FS:CR> Moved down to after confirmation.
-	//std::vector<LLScrollListItem*>::iterator itor;
-	//for (itor = selection.begin() ;
-	//	 itor != selection.end(); ++itor)
-	//{
-	//	LLUUID member_id = (*itor)->getUUID();
-	//	selected_members.push_back( member_id );
-	//}
-	// <FS:CR> FIRE-8499 - Eject from group confirmation
-	//mMembersList->deleteSelectedItems();
-
-	//sendEjectNotifications(mGroupID, selected_members);
-
-	//LLGroupMgr::getInstance()->sendGroupMemberEjects(mGroupID,
-	//								 selected_members);
+	
 	S32 selection_count = selection.size();
 	if (selection_count == 1)
 	{
@@ -1134,7 +1116,7 @@ void LLPanelGroupMembersSubTab::handleEjectMembers()
 		LLNotificationsUtil::add("EjectGroupMemberWarning",
 								 args,
 								 payload,
-								 boost::bind(&LLPanelGroupMembersSubTab::callbackEject, this, _1, _2));
+								 boost::bind(&LLPanelGroupMembersSubTab::handleEjectCallback, this, _1, _2));
 	}
 	else
 	{
@@ -1144,25 +1126,20 @@ void LLPanelGroupMembersSubTab::handleEjectMembers()
 		LLNotificationsUtil::add("EjectGroupMembersWarning",
 								 args,
 								 payload,
-								 boost::bind(&LLPanelGroupMembersSubTab::callbackEject, this, _1, _2));
+								 boost::bind(&LLPanelGroupMembersSubTab::handleEjectCallback, this, _1, _2));
 	}
 }
 
-bool LLPanelGroupMembersSubTab::callbackEject(const LLSD& notification, const LLSD& response)
+bool LLPanelGroupMembersSubTab::handleEjectCallback(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if (2 == option) // Cancel button
-	{
-		return false;
-	}
 	if (0 == option) // Eject button
 	{
 		//send down an eject message
 		uuid_vec_t selected_members;
 		
 		std::vector<LLScrollListItem*> selection = mMembersList->getAllSelected();
-		if (selection.empty())
-			return false;
+		if (selection.empty()) return false;
 		
 		std::vector<LLScrollListItem*>::iterator itor;
 		for (itor = selection.begin() ;
@@ -1179,9 +1156,8 @@ bool LLPanelGroupMembersSubTab::callbackEject(const LLSD& notification, const LL
 		LLGroupMgr::getInstance()->sendGroupMemberEjects(mGroupID, selected_members);
 	}
 	return false;
-	// </FS:CR>
 }
-
+//<FS:TM> 3.6.4 check this, end check segment
 void LLPanelGroupMembersSubTab::sendEjectNotifications(const LLUUID& group_id, const uuid_vec_t& selected_members)
 {
 	LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(group_id);

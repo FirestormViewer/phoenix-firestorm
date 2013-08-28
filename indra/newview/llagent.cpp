@@ -46,6 +46,7 @@
 #include "llenvmanager.h"
 #include "llfirstuse.h"
 #include "llfloatercamera.h"
+#include "llfloaterimcontainer.h"
 #include "llfloaterreg.h"
 #include "llfloatertools.h"
 #include "llgroupactions.h"
@@ -94,12 +95,13 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
+#include "stringize.h"
+#include "boost/foreach.hpp"
 
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
 #include "kcwlinterface.h"
-#include "stringize.h"
 // [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
 #include "rlvhandler.h"
 #include "rlvhelper.h"
@@ -492,7 +494,7 @@ void LLAgent::init()
 {
 	mMoveTimer.start();
 
-	gSavedSettings.declareBOOL("SlowMotionAnimation", FALSE, "Declared in code", FALSE);
+	gSavedSettings.declareBOOL("SlowMotionAnimation", FALSE, "Declared in code", LLControlVariable::PERSIST_NO);
 	gSavedSettings.getControl("SlowMotionAnimation")->getSignal()->connect(boost::bind(&handleSlowMotionAnimation, _2));
 	
 	// *Note: this is where LLViewerCamera::getInstance() used to be constructed.
@@ -2321,7 +2323,16 @@ void LLAgent::endAnimationUpdateUI()
 				skip_list.insert(tmp);
 			}
 			// </FS:LO>
-		
+//<FS:TM> 3.6.4 check this, commenting out to compile
+			//LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+			//LLFloaterIMContainer::floater_list_t conversations;
+			//im_box->getDetachedConversationFloaters(conversations);
+			//BOOST_FOREACH(LLFloater* conversation, conversations)
+			//{
+			//	llinfos << "skip_list.insert(session_floater): " << conversation->getTitle() << llendl;
+			//	skip_list.insert(conversation);
+			//}
+
 			gFloaterView->popVisibleAll(skip_list);
 #endif
 			mViewsPushed = FALSE;

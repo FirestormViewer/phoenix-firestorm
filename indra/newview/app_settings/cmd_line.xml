@@ -22,7 +22,8 @@
     <map>
       <key>count</key>
       <integer>1</integer>
-      <!-- Special case. Not mapped to a setting. -->
+      <key>map-to</key>
+      <string>CmdLineChannel</string>
     </map>
 
     <key>console</key>
@@ -96,6 +97,8 @@
 0 - low, 1 - medium, 2 - high, 3 - ultra</string>
       <key>count</key>
       <integer>1</integer>
+      <key>map-to</key>
+      <string>RenderQualityPerformance</string>
     </map>
 
     <key>grid</key>
@@ -106,6 +109,16 @@
       <integer>1</integer>
       <key>map-to</key>
       <string>CmdLineGridChoice</string>
+    </map>
+
+    <key>update-service</key>
+    <map>
+      <key>desc</key>
+      <string>Override the url base for the update query.</string>
+      <key>count</key>
+      <integer>1</integer>
+      <key>map-to</key>
+      <string>CmdLineUpdateService</string>
     </map>
 
     <key>help</key>
@@ -427,7 +440,8 @@
       <boolean>true</boolean>
       <key>last_option</key>
       <boolean>true</boolean>
-      <!-- Special case. Not mapped to a setting. -->
+      <key>map-to</key>
+      <string>CmdLineLoginLocation</string>
     </map>
 
     <key>url</key>
@@ -438,7 +452,8 @@
       <integer>1</integer>
       <key>last_option</key>
       <boolean>true</boolean>
-      <!-- Special case. Not mapped to a setting. -->
+      <key>map-to</key>
+      <string>CmdLineLoginLocation</string>
     </map>
 
     <key>usersessionsettings</key>
@@ -450,22 +465,22 @@
       <!-- Special case. Mapped to settings procedurally. -->
     </map>
 	
-    <!-- FS:CR - Workaround for Xcode IDE adding its own arguement -->
+    <!-- FS:CR - Workaround for Xcode IDE adding its own arguement >
     <key>NSDocumentRevisionsDebugMode</key>
     <map>
       <key>desc</key>
       <string>Does nothing... Workaround for command like arguement Xcode passes when running from the IDE</string>
       <key />
     </map>
-    <!-- FS:CR - Workaround for Xcode IDE adding its own arguement -->
+    <! FS:CR - Workaround for Xcode IDE adding its own arguement >
 
-    <!-- FS:Ansariel - Option to not auto-save passwords when using login option -->
+    <! FS:Ansariel - Option to not auto-save passwords when using login option >
     <key>logindontsavepassword</key>
     <map>
       <key>desc</key>
       <string>Specifies that the password should not be saved if the login parameter is used.</string>
-      <!-- Special case. Mapped to settings procedurally. -->
+      <! Special case. Mapped to settings procedurally. >
     </map>
-    <!-- FS:Ansariel - Option to not auto-save passwords when using login option -->
+    <! FS:Ansariel - Option to not auto-save passwords when using login option -->
   </map>
 </llsd>

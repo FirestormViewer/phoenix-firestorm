@@ -35,7 +35,7 @@
 
 #include "llagent.h"
 #include "llchat.h"
-
+#include "llviewercontrol.h"
 
 
 LLFloaterIMNearbyChatListener::LLFloaterIMNearbyChatListener(LLFloaterIMNearbyChat & chatbar)
@@ -97,7 +97,7 @@ void LLFloaterIMNearbyChatListener::sendChat(LLSD const & chat_data) const
 	}
 
 	// Send it as if it was typed in
-	mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
+	mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("PlayChatAnim"));
 }
 
 #endif

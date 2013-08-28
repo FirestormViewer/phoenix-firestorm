@@ -34,6 +34,7 @@
 #include "llcombobox.h"
 #include "lliconctrl.h"
 #include "llframetimer.h"
+#include "llfloatergotoline.h"
 
 class LLLiveLSLFile;
 class LLMessageSystem;
@@ -49,6 +50,7 @@ class LLKeywordToken;
 class LLVFS;
 class LLViewerInventoryItem;
 class LLScriptEdContainer;
+class LLFloaterGotoLine;
 // [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-23 (Catznip-3.2.0)
 class LLEventTimer;
 // [/SL:KB]
@@ -64,6 +66,7 @@ class LLScriptEdCore : public LLPanel
 	friend class LLLiveLSLEditor;
 //	friend class LLFloaterScriptSearch;
 	friend class LLScriptEdContainer;
+	friend class LLFloaterGotoLine;
 	// NaCl - LSL Preprocessor
 	friend class FSLSLPreprocessor;
 	// NaCl End

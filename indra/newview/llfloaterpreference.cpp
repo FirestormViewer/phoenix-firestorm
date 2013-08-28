@@ -590,6 +590,7 @@ BOOL LLFloaterPreference::postBuild()
 	//getChild<LLComboBox>("ConferenceIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ConferenceIMOptions"));
 	//getChild<LLComboBox>("GroupChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"GroupChatOptions"));
 	//getChild<LLComboBox>("NearbyChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NearbyChatOptions"));
+	//getChild<LLComboBox>("ObjectIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ObjectIMOptions"));
 	// </FS:CR>
 	
 // ## Zi: Optional Edit Appearance Lighting
@@ -943,6 +944,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	//onNotificationsChange("ConferenceIMOptions");
 	//onNotificationsChange("GroupChatOptions");
 	//onNotificationsChange("NearbyChatOptions");
+	//onNotificationsChange("ObjectIMOptions");
 	// </FS:CR>
 
 	LLPanelLogin::setAlwaysRefresh(true);
@@ -1187,7 +1189,7 @@ void LLFloaterPreference::onNotificationsChange(const std::string& OptionName)
 	bool show_notifications_alert = true;
 	for (notifications_map::iterator it_notification = mNotificationOptions.begin(); it_notification != mNotificationOptions.end(); it_notification++)
 	{
-		if(it_notification->second != "None")
+		if(it_notification->second != "No action")
 		{
 			show_notifications_alert = false;
 			break;
@@ -3382,8 +3384,8 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 					control->getComment(),
 					SANITY_TYPE_NONE,
 					LLSD(),
-					std::string(),
-					TRUE);	// need to set persisitent flag, or it won't be saved
+					std::string(), //<FS:TM> 3.6.4 check this, persist thing on line below
+					LLControlVariable::PERSIST_NONDFT);	// need to set persisitent flag, or it won't be saved
 			}
 		}
 	} func_global(&backup_global_controls), func_per_account(&backup_per_account_controls);

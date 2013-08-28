@@ -45,6 +45,7 @@ public:
 	virtual ~LLFloaterConversationPreview(){};
 
 	virtual BOOL postBuild();
+	void SetPages(std::list<LLSD>& messages,const std::string& file_name);
 
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
@@ -66,6 +67,8 @@ private:
 	std::list<LLSD> mMessages;
 	std::string		mAccountName;
 	std::string		mCompleteName;
+	std::string     mChatHistoryFileName;
+	bool			mChatHistoryLoaded; //<FS:TM> 3.6.4 check this, LL added this and line above, we added below
 
 	// <FS:Ansariel> Remember used log file name
 	std::string		mFileName;

@@ -1640,7 +1640,7 @@ LLQuaternion LLManipRotate::dragConstrained( S32 x, S32 y )
 				}
 				LLVector3 projected_camera_at = cam_at_axis - projected_vec(cam_at_axis, constraint_axis);
 				projected_mouse -= mouse_depth * projected_camera_at;
-
+	
 // <FS:CR> FIRE-8882
 				//if (!mInSnapRegime)
 				//{
