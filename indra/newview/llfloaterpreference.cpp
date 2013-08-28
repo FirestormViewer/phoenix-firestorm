@@ -3384,7 +3384,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 					control->getComment(),
 					SANITY_TYPE_NONE,
 					LLSD(),
-					std::string(), //<FS:TM> 3.6.4 check this, persist thing on line below
+					std::string(),
 					LLControlVariable::PERSIST_NONDFT);	// need to set persisitent flag, or it won't be saved
 			}
 		}

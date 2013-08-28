@@ -2323,7 +2323,10 @@ void LLAgent::endAnimationUpdateUI()
 				skip_list.insert(tmp);
 			}
 			// </FS:LO>
-//<FS:TM> 3.6.4 check this, commenting out to compile
+
+			// <FS:Ansariel> [FS communication UI] Commented out so far.
+			//               Maybe check if need it to close standalone IM floater
+			//               when going into mouselook
 			//LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
 			//LLFloaterIMContainer::floater_list_t conversations;
 			//im_box->getDetachedConversationFloaters(conversations);
@@ -2332,6 +2335,7 @@ void LLAgent::endAnimationUpdateUI()
 			//	llinfos << "skip_list.insert(session_floater): " << conversation->getTitle() << llendl;
 			//	skip_list.insert(conversation);
 			//}
+			// </FS:Ansariel> [FS communication UI]
 
 			gFloaterView->popVisibleAll(skip_list);
 #endif
