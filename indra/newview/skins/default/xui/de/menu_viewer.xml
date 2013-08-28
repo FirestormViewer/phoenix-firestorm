@@ -154,6 +154,7 @@
 			<menu_item_call label="Vorherige Teile mit einschließen" name="Include Previous Part"/>
 		</menu>
 		<menu_item_call label="Fokus auf Auswahl" name="Focus on Selection"/>
+		<menu_item_call label="Linksets..." name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="Auf Auswahl zoomen" name="Zoom to Selection"/>
 		<menu label="Objekt" name="Object">
 			<menu_item_call label="Kaufen" name="Menu Object Buy"/>

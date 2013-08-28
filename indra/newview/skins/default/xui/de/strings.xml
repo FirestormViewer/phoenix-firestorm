@@ -478,6 +478,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="SLappAgentRequestFriend">
 		Freundschaftsangebot
 	</string>
+	<string name="SLappAgentRequestFriend">
+		Freundschaftsauflösung
+	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Schließen (⌘W)
 	</string>
@@ -5381,6 +5384,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		Keine protokollierten Unterhaltungen verfügbar. Hier erscheint ein Protokolleintrag, wenn Sie eine Person kontaktieren oder von einer Person kontaktiert werden.
+	</string>
+	<string name="loading_chat_logs">
+		Wird geladen...
 	</string>
 	
 <!-- Firestorm-specific translations -->
