@@ -446,6 +446,9 @@ private:
 	static void		showProfile(std::string id, bool is_group);
 	static void		sendIM(std::string id);
 	static void		addFriend(std::string id);
+	// <FS:Ansariel> Add remove friend option
+	static void		removeFriend(std::string id);
+	// </FS:Ansariel>
 	static void		showNameDetails(std::string id, bool is_group);
 	static void		copyNameToClipboard(std::string id, bool is_group);
 	static void		copySLURLToClipboard(std::string id, bool is_group);
