@@ -5322,6 +5322,15 @@ No se podrá deshacer.
 	<notification name="ExportFinished">
 		Exportación finalizada y guardada en [FILENAME].
 	</notification>
+	<notification name="ExportColladaFailed">
+		La exportación ha fallado.
+	</notification>
+	<notification name="ExportColladaSuccess">
+		Exportación Collada DAE completada. [TOTAL] objeto(s) exportado(s).
+	</notification>
+	<notification name="ExportColladaPartial">
+		Exportación Collada DAE completada. [FAILED] fallido(s) de [TOTAL] objeto(s) seleccionado(s) debido a insuficiencia de permisos.
+	</notification>
 	<notification name="AntiSpamBlocked">
 		AntiSpam: Bloqueado [SOURCE] por enviar spam a [QUEUE] ([COUNT]) veces en [PERIOD] segundos.
 	</notification>

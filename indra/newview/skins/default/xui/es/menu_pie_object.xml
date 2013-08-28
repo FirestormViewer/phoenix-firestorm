@@ -22,7 +22,10 @@
 				<pie_slice label="Temporal" name="Derender"/>
 			</pie_menu>
 			<pie_slice label="Denunciar..." name="Report Abuse..."/>
-			<pie_slice label="Exportar" name="Export"/>
+			<pie_menu name="ExportMenu" label="Guardar como &gt;">
+				<pie_slice label="Respaldo" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
 			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
 				<pie_slice label="Mostrar en linksets" name="show_in_linksets"/>
 				<pie_slice label="Mostrar en personajes" name="show_in_characters"/>

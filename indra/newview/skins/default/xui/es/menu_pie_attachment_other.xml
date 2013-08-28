@@ -20,7 +20,10 @@
 			<pie_slice label="Llamar" name="Call"/>
 			<pie_slice label="Enfocar" name="Zoom In"/>
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
-			<pie_slice label="Exportar" name="Export"/>
+			<pie_menu name="ExportMenu" label="Guardar como &gt;">
+				<pie_slice label="Respaldo" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
++			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Inspeccionar" name="Avatar Inspect"/>
 		<pie_menu label="Desdibujar &gt;" name="DerenderMenu">
