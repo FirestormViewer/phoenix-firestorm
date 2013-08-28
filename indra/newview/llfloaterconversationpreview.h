@@ -69,9 +69,6 @@ private:
 	std::string		mCompleteName;
 	std::string     mChatHistoryFileName;
 	bool			mChatHistoryLoaded; //<FS:TM> 3.6.4 check this, LL added this and line above, we added below
-
-	// <FS:Ansariel> Remember used log file name
-	std::string		mFileName;
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */

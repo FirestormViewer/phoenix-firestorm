@@ -87,8 +87,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 		file = "chat";
 	}
 	// <FS:Ansariel> Remember used log file name
-	//mChatHistoryFileName = file; <FS:TM> 3.6.4 check this, LL added this, we added below
-	mFileName = file;
+	mChatHistoryFileName = file;
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);
@@ -241,5 +240,5 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 // <FS:CR> Open chat history externally
 void (LLFloaterConversationPreview::onBtnOpenExternal())
 {
-	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mFileName));
+	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mChatHistoryFileName));
 }
