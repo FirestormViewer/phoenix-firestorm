@@ -453,6 +453,9 @@ void init_default_trans_args()
 	default_trans_args.insert("CURRENT_GRID"); //<FS:AW make CURRENT_GRID a default substitution>
 	default_trans_args.insert("SECOND_LIFE_GRID");
 	default_trans_args.insert("SUPPORT_SITE");
+	// This URL shows up in a surprising number of places in various skin
+	// files. We really only want to have to maintain a single copy of it.
+	default_trans_args.insert("create_account_url");
 	default_trans_args.insert("DOWNLOAD_URL"); //<FS:CR> Viewer download url
 }
 
@@ -532,7 +535,6 @@ void idle_afk_check()
 		gAgent.setAFK();
 	}
 }
-
 
 // A callback set in LLAppViewer::init()
 static void ui_audio_callback(const LLUUID& uuid)
