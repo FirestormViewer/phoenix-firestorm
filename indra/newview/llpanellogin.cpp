@@ -84,6 +84,12 @@ const S32 MAX_PASSWORD = 16;
 LLPanelLogin *LLPanelLogin::sInstance = NULL;
 BOOL LLPanelLogin::sCapslockDidNotification = FALSE;
 
+// <FS:CR> We still use this in firestorm...
+// Helper for converting a user name into the canonical "Firstname Lastname" form.
+// For new accounts without a last name "Resident" is added as a last name.
+static std::string canonicalize_username(const std::string& name);
+// </FS:CR>
+
 class LLLoginRefreshHandler : public LLCommandHandler
 {
 public:
@@ -325,6 +331,11 @@ void LLPanelLogin::addFavoritesToStartLocation()
 
 	// Load favorites into the combo.
 	std::string user_defined_name = getChild<LLComboBox>("username_combo")->getSimple();
+// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//std::string canonical_user_name = canonicalize_username(user_defined_name);
+	std::string current_grid = getChild<LLComboBox>("server_combo")->getSimple();
+	std::string current_user = canonicalize_username(user_defined_name) + " @ " + current_grid;
+// </FS:CR>
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	LLSD fav_llsd;
 	llifstream file;
@@ -338,10 +349,8 @@ void LLPanelLogin::addFavoritesToStartLocation()
 		// a single word account name, so it can be compared case-insensitive with the
 		// user defined "firstname lastname".
 // <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-		//S32 res = LLStringUtil::compareInsensitive(user_defined_name, iter->first); <FS:TM> 3.6.4 check this new
-		//S32 res = LLStringUtil::compareInsensitive(canonical_user_name, iter->first); <TM> LL old
-		//S32 res = LLStringUtil::compareInsensitive(current_user, iter->first); <TM> FS
-		S32 res = LLStringUtil::compareInsensitive(user_defined_name, iter->first);
+		//S32 res = LLStringUtil::compareInsensitive(canonical_user_name, iter->first);
+		S32 res = LLStringUtil::compareInsensitive(current_user, iter->first);
 // </FS:CR>
 		if (res != 0)
 		{
@@ -579,12 +588,12 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 		// fill it with MAX_PASSWORD characters so we get a 
 		// nice row of asterixes.
 		const std::string filler("123456789!123456");
-		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string("123456789!123456"));
+		sInstance->getChild<LLUICtrl>("password_edit")->setValue(filler);
 		remember = true; // <FS:CR>
 	}
 	else
 	{
-		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string());		
+		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string());
 		remember = false; // <FS:CR>
 	}
 	sInstance->getChild<LLUICtrl>("remember_check")->setValue(remember);
@@ -1149,8 +1158,40 @@ void LLPanelLogin::onLocationSLURL()
 	LLStartUp::setStartSLURL(location); // calls onUpdateStartSLURL, above 
 }
 
+/////////////////////////////
+//   Firestorm functions   //
+/////////////////////////////
 
-// <FS:CR>
+std::string canonicalize_username(const std::string& name)
+{
+	std::string cname = name;
+	
+// <FS:CR> Strip off any grid appendage
+	U32 arobase = cname.find("@");
+	if(arobase > 0)
+		cname = cname.substr(0, arobase - 1);
+// </FS:CR>
+	
+	// determine if the username is a first/last form or not.
+	size_t separator_index = cname.find_first_of(" ._");
+	std::string first = cname.substr(0, separator_index);
+	std::string last;
+	if (separator_index != cname.npos)
+	{
+		last = cname.substr(separator_index + 1, cname.npos);
+		LLStringUtil::trim(last);
+	}
+	else
+	{
+		// ...on Linden grids, single username users as considered to have
+		// last name "Resident"
+		last = "Resident";
+	}
+
+	// Username in traditional "firstname lastname" form.
+	return first + ' ' + last;
+}
+
 void LLPanelLogin::addUsersToCombo(BOOL show_server)
 {
 	LLComboBox* combo = getChild<LLComboBox>("username_combo");
@@ -1160,7 +1201,7 @@ void LLPanelLogin::addUsersToCombo(BOOL show_server)
 	std::string current_creds=credentialName();
 	if(current_creds.find("@") < 1)
 	{
-		current_creds = gSavedSettings.getString("UserLoginInfo");
+		current_creds = gSavedSettings.getLLSD("UserLoginInfo").asString();
 	}
 	
 	std::vector<std::string> logins = gSecAPIHandler->listCredentials();
@@ -1224,7 +1265,7 @@ void LLPanelLogin::onClickRemove(void*)
 	{
 		LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
 		std::string credName = combo->getValue().asString();
-		if ( credName == gSavedSettings.getString("UserLoginInfo") )
+		if ( credName == gSavedSettings.getLLSD("UserLoginInfo").asString() )
 			gSavedSettings.getControl("UserLoginInfo")->resetToDefault();
 		LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
 		gSecAPIHandler->deleteCredential(credential);

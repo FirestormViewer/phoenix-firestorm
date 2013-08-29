@@ -177,8 +177,6 @@
       <string>UserLogFile</string>
     </map>
 
-<!-- FS:AW FIRE-6721 (merge regression: command line -login not working) -->
-<!--
     <key>login</key>
     <map>
       <key>desc</key>
@@ -188,17 +186,6 @@
       <key>map-to</key>
       <string>UserLoginInfo</string>
     </map>
--->
-    <key>login</key>
-    <map>
-      <key>desc</key>
-      <string>3 tokens: first, last and password</string>
-      <key>count</key>
-      <integer>3</integer>
-      <key>map-to</key>
-      <string>UserLoginInfo1</string>
-    </map>
-<!-- /FS:AW FIRE-6721 -->
 
     <key>loginpage</key>
     <map>
@@ -210,20 +197,6 @@
       <string>LoginPage</string>
     </map>
 
-<!-- FS:AW fix commandline loginuri (partial fix of FIRE-3448)-->
-<!--    <key>loginuri</key>
-    <map>
-      <key>desc</key>
-      <string>login server and CGI script to use</string>
-      <key>count</key>
-      <integer>1</integer>
-      <key>compose</key>
-      <boolean>true</boolean>
-      <key>map-to</key>
-      <string>CmdLineLoginURI</string>
-    </map>
--->
-
     <key>loginuri</key>
     <map>
       <key>desc</key>
@@ -231,9 +204,9 @@
       <key>count</key>
       <integer>1</integer>
       <key>map-to</key>
-      <string>CmdLineLoginURI1</string>
+      <string>CmdLineLoginURI</string>
     </map>
-<!-- /FS:AW  fix commandline loginuri (partial fix of FIRE-3448)-->
+
     <key>logmetrics</key>
     <map>
       <key>desc</key>
@@ -464,15 +437,6 @@
       <integer>1</integer>
       <!-- Special case. Mapped to settings procedurally. -->
     </map>
-	
-    <!-- FS:CR - Workaround for Xcode IDE adding its own arguement >
-    <key>NSDocumentRevisionsDebugMode</key>
-    <map>
-      <key>desc</key>
-      <string>Does nothing... Workaround for command like arguement Xcode passes when running from the IDE</string>
-      <key />
-    </map>
-    <! FS:CR - Workaround for Xcode IDE adding its own arguement >
 
     <! FS:Ansariel - Option to not auto-save passwords when using login option >
     <key>logindontsavepassword</key>
@@ -482,5 +446,6 @@
       <! Special case. Mapped to settings procedurally. >
     </map>
     <! FS:Ansariel - Option to not auto-save passwords when using login option -->
+
   </map>
 </llsd>
