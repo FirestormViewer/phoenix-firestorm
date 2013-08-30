@@ -167,7 +167,7 @@ void RlvStrings::initClass()
 		// Load the default string values
 		std::vector<std::string> files = gDirUtilp->findSkinnedFilenames(LLDir::XUI, RLV_STRINGS_FILE, LLDir::ALL_SKINS);
 		m_StringMapPath = (!files.empty()) ? files.front() : LLStringUtil::null;
-		for (auto itFile = files.cbegin(); itFile != files.cend(); ++itFile)
+		for (std::vector<std::string>::const_iterator itFile = files.begin(); itFile != files.end(); ++itFile)
 		{
 			loadFromFile(*itFile, false);
 		}
