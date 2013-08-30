@@ -891,6 +891,8 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 		S32 width = pos.getWidth();
 		S32 height = pos.getHeight();
 
+		floater->setOpenPositioning(LLFloaterEnums::POSITIONING_SPECIFIED);
+
 		switch (dialogPos)
 		{
 			case POS_DOCKED:
