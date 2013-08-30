@@ -588,7 +588,7 @@ void LLHUDEffectLookAt::render()
 					name = nameBuffer.getLegacyName();
 					break;
 				default: //user.name
-					name = nameBuffer.getUserName();
+					name = nameBuffer.getAccountName();
 					break;
 			}
 
