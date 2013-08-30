@@ -438,7 +438,7 @@
       <!-- Special case. Mapped to settings procedurally. -->
     </map>
 
-    <! FS:Ansariel - Option to not auto-save passwords when using login option >
+    <!-- FS:Ansariel - Option to not auto-save passwords when using login option >
     <key>logindontsavepassword</key>
     <map>
       <key>desc</key>
