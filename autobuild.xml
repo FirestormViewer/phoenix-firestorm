@@ -510,9 +510,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>10cb3ba22a1d3649ec9e5b3489dfe818</string>
+              <string>a2b2dacebabed0d45407413daa7e03f0</string>
               <key>url</key>
-              <string>http://viewer.catznip.com/downloads/packages/fmodex-4.44.12-linux-20130713.tar.bz2</string>
+	      <string>file:///opt/catznip/fmodex-4.44.12-linux-20130831.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
