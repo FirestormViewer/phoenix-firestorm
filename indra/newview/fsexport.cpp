@@ -200,8 +200,18 @@ void FSExport::onIdle()
 void FSExport::exportSelection()
 {
 	LLObjectSelectionHandle selection = LLSelectMgr::instance().getSelection();
+	if (!selection)
+	{
+		LL_WARNS("export") << "Nothing selected; Bailing!" << LL_ENDL;
+		return;
+	}
 	LLObjectSelection::valid_root_iterator iter = selection->valid_root_begin();
 	LLSelectNode* node = *iter;
+	if (!node)
+	{
+		LL_WARNS("export") << "No node selected; Bailing!" << LL_ENDL;
+		return;
+	}
 
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(node->mName + ".oxp")))
