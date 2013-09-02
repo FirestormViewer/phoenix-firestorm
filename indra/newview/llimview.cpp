@@ -3617,7 +3617,7 @@ void LLIMMgr::noteOfflineUsers(
 				}
 				else
 				{
-					offline.setArg("[NAME]", av_name.getLegacyName());
+					offline.setArg("[NAME]", av_name.getUserNameForDisplay());
 				}
 				im_model.proccessOnlineOfflineNotification(session_id, offline);
 			}

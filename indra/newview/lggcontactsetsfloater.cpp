@@ -512,7 +512,7 @@ void lggContactSetsFloater::drawRightClick()
 		LLAvatarName avatar_name;
 		if (LLAvatarNameCache::get(selected[0], &avatar_name))
 		{
-			avName=avatar_name.getLegacyName();
+			avName = avatar_name.getUserNameForDisplay();
 		}
 
 		LLColor4 friendColor = LGGContactSets::getInstance()->getFriendColor(selected[0], "");
@@ -1864,10 +1864,18 @@ void lggContactSetsFloater::draw()
 
 					switch (sPhoenixNameSystem())
 					{
-						case 0 : fullname = avatar_name.getLegacyName(); break;
-						case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
-						case 2 : fullname = avatar_name.getDisplayName(); break;
-						default : fullname = avatar_name.getCompleteName(); break;
+						case 0 :
+							fullname = avatar_name.getUserNameForDisplay();
+							break;
+						case 1 :
+							fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName());
+							break;
+						case 2 :
+							fullname = avatar_name.getDisplayName();
+							break;
+						default :
+							fullname = avatar_name.getCompleteName();
+							break;
 					}
 
 					text += fullname;
@@ -2233,10 +2241,18 @@ BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 		std::string fullname;
 		switch (sPhoenixNameSystem())
 		{
-			case 0 : fullname = avatar_name.getLegacyName(); break;
-			case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
-			case 2 : fullname = avatar_name.getDisplayName(); break;
-			default : fullname = avatar_name.getCompleteName(); break;
+			case 0 :
+				fullname = avatar_name.getUserNameForDisplay();
+				break;
+			case 1 :
+				fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName());
+				break;
+			case 2 :
+				fullname = avatar_name.getDisplayName();
+				break;
+			default :
+				fullname = avatar_name.getCompleteName();
+				break;
 		}
 
 		avN1 = fullname;
@@ -2246,10 +2262,18 @@ BOOL lggContactSetsFloater::compareAv(LLUUID av1, LLUUID av2)
 		std::string fullname;
 		switch (sPhoenixNameSystem())
 		{
-			case 0 : fullname = avatar_name.getLegacyName(); break;
-			case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
-			case 2 : fullname = avatar_name.getDisplayName(); break;
-			default : fullname = avatar_name.getCompleteName(); break;
+			case 0 :
+				fullname = avatar_name.getUserNameForDisplay();
+				break;
+			case 1 :
+				fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName());
+				break;
+			case 2 :
+				fullname = avatar_name.getDisplayName();
+				break;
+			default :
+				fullname = avatar_name.getCompleteName();
+				break;
 		}
 
 		avN2 = fullname;
@@ -2328,10 +2352,18 @@ BOOL lggContactSetsFloater::generateCurrentList()
 				static LLCachedControl<S32> sPhoenixNameSystem(gSavedSettings, "FSContactSetsNameFormat");
 				switch (sPhoenixNameSystem())
 				{
-					case 0 : fullname = avatar_name.getLegacyName(); break;
-					case 1 : fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName()); break;
-					case 2 : fullname = avatar_name.getDisplayName(); break;
-					default : fullname = avatar_name.getCompleteName(); break;
+					case 0 :
+						fullname = avatar_name.getUserNameForDisplay();
+						break;
+					case 1 :
+						fullname = (avatar_name.isDisplayNameDefault() ? avatar_name.getDisplayName() : avatar_name.getCompleteName());
+						break;
+					case 2 :
+						fullname = avatar_name.getDisplayName();
+						break;
+					default :
+						fullname = avatar_name.getCompleteName();
+						break;
 				}
 				avN = fullname;
 			}

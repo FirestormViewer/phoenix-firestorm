@@ -1580,7 +1580,7 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
 	//lldebugs << "Saved favorites for " << av_name.getUserName() << llendl;
 	//fav_llsd[av_name.getUserName()] = user_llsd;
-	std::string name = av_name.getLegacyName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	std::string name = av_name.getUserName() + " @ " + LLGridManager::getInstance()->getGridLabel();
 	LL_DEBUGS("Favorites") << "Saved favorites for " << name << LL_ENDL;
 	fav_llsd[name] = user_llsd;
 	// </FS:CR>
@@ -1610,7 +1610,7 @@ void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
 	//{
 	//	fav_llsd.erase(av_name.getUserName());
 	//}
-	std::string name = av_name.getLegacyName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	std::string name = av_name.getUserName() + " @ " + LLGridManager::getInstance()->getGridLabel();
 	LL_DEBUGS("Favorites") << "Removed favorites for " << name << LL_ENDL;
 	if (fav_llsd.has(name))
 	{
