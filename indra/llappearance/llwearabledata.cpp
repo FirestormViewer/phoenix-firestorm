@@ -102,16 +102,36 @@ U32 LLWearableData::pushWearable(const LLWearableType::EType type,
 		llwarns << "Null wearable sent for type " << type << llendl;
 		return MAX_CLOTHING_PER_TYPE;
 	}
-	if (type < LLWearableType::WT_COUNT || mWearableDatas[type].size() < MAX_CLOTHING_PER_TYPE)
+// [RLVa:KB] - Checked: 2010-06-08 (RLVa-1.2.0)
+	if ( (type < LLWearableType::WT_COUNT) && (mWearableDatas[type].size() < MAX_CLOTHING_PER_TYPE) )
 	{
-		mWearableDatas[type].push_back(wearable);
+		// Don't add the same wearable twice
+		U32 idxWearable = getWearableIndex(wearable);
+		llassert(MAX_CLOTHING_PER_TYPE == idxWearable); // pushWearable() on an already added wearable is a bug *somewhere*
+		if (MAX_CLOTHING_PER_TYPE == idxWearable)
+		{
+			mWearableDatas[type].push_back(wearable);
+			idxWearable = mWearableDatas[type].size() - 1;
+		}
+
 		if (trigger_updated)
 		{
 			const BOOL removed = FALSE;
 			wearableUpdated(wearable, removed);
 		}
-		return mWearableDatas[type].size()-1;
+		return idxWearable;
 	}
+// [/RLVa:KB]
+//	if (type < LLWearableType::WT_COUNT || mWearableDatas[type].size() < MAX_CLOTHING_PER_TYPE)
+//	{
+//		mWearableDatas[type].push_back(wearable);
+//		if (trigger_updated)
+//		{
+//			const BOOL removed = FALSE;
+//			wearableUpdated(wearable, removed);
+//		}
+//		return mWearableDatas[type].size()-1;
+//	}
 	return MAX_CLOTHING_PER_TYPE;
 }
 
@@ -160,16 +180,16 @@ void LLWearableData::popWearable(const LLWearableType::EType type, U32 index)
 	}
 }
 
-void LLWearableData::clearWearableType(const LLWearableType::EType type)
-{
-	wearableentry_map_t::iterator wearable_iter = mWearableDatas.find(type);
-	if (wearable_iter == mWearableDatas.end())
-	{
-		return;
-	}
-	wearableentry_vec_t& wearable_vec = wearable_iter->second;
-	wearable_vec.clear();
-}
+//void LLWearableData::clearWearableType(const LLWearableType::EType type)
+//{
+//	wearableentry_map_t::iterator wearable_iter = mWearableDatas.find(type);
+//	if (wearable_iter == mWearableDatas.end())
+//	{
+//		return;
+//	}
+//	wearableentry_vec_t& wearable_vec = wearable_iter->second;
+//	wearable_vec.clear();
+//}
 
 bool LLWearableData::swapWearables(const LLWearableType::EType type, U32 index_a, U32 index_b)
 {

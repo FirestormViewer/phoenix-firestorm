@@ -287,6 +287,10 @@ public:
 	/// @return user and system preset names as a single list
 	void getPresetNames(preset_name_list_t& region, preset_name_list_t& user, preset_name_list_t& sys) const;
 
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+	const std::string& findPreset(const std::string& strPresetName, LLEnvKey::EScope eScope);
+// [/RLVa:KB]
+
 	/// @return user preset names
 	void getUserPresetNames(preset_name_list_t& user) const;
 

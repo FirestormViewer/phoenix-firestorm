@@ -33,7 +33,9 @@
 #include "llinventoryfunctions.h"
 #include "llstartup.h"
 #include "llvoavatarself.h"
-
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c)
+#include "rlvhelper.h"
+// [/RLVa:KB]
 
 void order_my_outfits_cb()
 	{
@@ -96,7 +98,14 @@ void LLInitialWearablesFetch::done()
 	// gInventory.notifyObservers.  The results will be handled in the next
 	// idle tick instead.
 	gInventory.removeObserver(this);
-	doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+//	doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	F32 nDelay = gSavedSettings.getF32("ForceInitialCOFDelay");
+	if (0.0f == nDelay)
+		doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+	else
+		rlvCallbackTimerOnce(nDelay, boost::bind(&LLInitialWearablesFetch::processContents,this));
+// [/RLVa:KB]
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->stopPhase("initial_wearables_fetch");
