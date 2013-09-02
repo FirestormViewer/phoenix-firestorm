@@ -457,16 +457,22 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 		U8 texture_count = object->getNumTEs();
 		for(U8 i = 0; i < texture_count; ++i)
 		{
-			if (exportTexture(object->getTE(i)->getID()))
+			LLTextureEntry *checkTE = object->getTE(i);
+			LL_DEBUGS("export") << "Checking texture number " << (S32)i
+				<< ", ID " << checkTE->getID() << LL_ENDL;
+			if (defaultTextureCheck(checkTE->getID()))	// <FS:CR> Check against default textures
 			{
-				prim["texture"].append(object->getTE(i)->asLLSD());
+				LL_DEBUGS("export") << "...is a default texture." << LL_ENDL;
+				prim["texture"].append(checkTE->asLLSD());
 			}
-			else if (defaultTextureCheck(object->getTE(i)->getID()))	// <FS:CR> Check against default textures
+			else if (exportTexture(checkTE->getID()))
 			{
-				prim["texture"].append(object->getTE(i)->asLLSD());
+				LL_DEBUGS("export") << "...export check passed." << LL_ENDL;
+				prim["texture"].append(checkTE->asLLSD());
 			}
 			else
 			{
+				LL_DEBUGS("export") << "...export check failed." << LL_ENDL;
 				LLTextureEntry te(LL_DEFAULT_WOOD_UUID); // TODO: use user option of default texture.
 				prim["texture"].append(te.asLLSD());
 			}
@@ -851,10 +857,14 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 
 		if (!exportable)
 		{
-			LLStringUtil::format_map_t args;
-			args["ITEM"] = item->getName();
-			updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
-			LL_DEBUGS("export") << "Item " << item->getName() << " failed export check." << LL_ENDL;
+			//<FS:TS> Only complain if we're trying to export a non-NULL item and fail
+			if (!item->getUUID().isNull())
+			{
+				LLStringUtil::format_map_t args;
+				args["ITEM"] = item->getName();
+				updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
+				LL_DEBUGS("export") << "Item " << item->getName() << ", UUID " << item->getUUID() << " failed export check." << LL_ENDL;
+			}
 			continue;
 		}
 
