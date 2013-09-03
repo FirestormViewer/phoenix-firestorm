@@ -21026,7 +21026,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
     </map>
     <key>FSSyncronizeTextureMaps</key>
-	  <map>
+      <map>
       <key>Comment</key>
       <string>Align texture maps (texture, bumpy, shiny) across the faces of a prim</string>
       <key>Persist</key>
