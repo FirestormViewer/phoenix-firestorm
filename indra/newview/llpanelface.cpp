@@ -2517,9 +2517,10 @@ void LLPanelFace::LLSelectedTE::getMaxDiffuseRepeats(F32& repeats, bool& identic
 	} max_diff_repeats_func;
 	identical = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &max_diff_repeats_func, repeats );
 }
-static LLSD texture_clipboard;
 
 // <FS> Texture params/copy paste
+static LLSD texture_clipboard;
+
 //static
 void LLPanelFace::onClickCopy(void* userdata)
 {
@@ -2535,7 +2536,7 @@ void LLPanelFace::onClickCopy(void* userdata)
 
 	texture_clipboard.clear();
 
-	const BOOL is_fullperm = (gAgent.getID() == node->mPermissions->getOwner()) && (gAgent.getID() == node->mPermissions->getCreator());
+	const bool is_fullperm = (gAgent.getID() == node->mPermissions->getOwner()) && (gAgent.getID() == node->mPermissions->getCreator());
 
 	const S32 te_count = objectp->getNumFaces();
 	for (S32 i = 0; i < te_count; i++)
@@ -2626,44 +2627,33 @@ void LLPanelFace::alignMaterialsProperties(LLPanelFace* self)
 	//LLPanelFace *self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	
-	bool has_bumpy = (bool)self->getCurrentNormalMap().notNull();
-	bool has_shiny = (bool)self->getCurrentSpecularMap().notNull();
-	
-	// Nowhere to copy values to
-	if (!(has_shiny || has_bumpy)) return;
-	
 	F32 tex_scale_u =	self->getCurrentTextureScaleU();
 	F32 tex_scale_v =	self->getCurrentTextureScaleV();
 	F32 tex_offset_u =	self->getCurrentTextureOffsetU();
 	F32 tex_offset_v =	self->getCurrentTextureOffsetV();
 	F32 tex_rot =		self->getCurrentTextureRot();
-	
-	if (has_shiny)
-	{
-		self->childSetValue("shinyScaleU",	tex_scale_u);
-		self->childSetValue("shinyScaleV",	tex_scale_v);
-		self->childSetValue("shinyOffsetU",	tex_offset_u);
-		self->childSetValue("shinyOffsetV",	tex_offset_v);
-		self->childSetValue("shinyRot",		tex_rot);
+
+	self->childSetValue("shinyScaleU",	tex_scale_u);
+	self->childSetValue("shinyScaleV",	tex_scale_v);
+	self->childSetValue("shinyOffsetU",	tex_offset_u);
+	self->childSetValue("shinyOffsetV",	tex_offset_v);
+	self->childSetValue("shinyRot",		tex_rot);
 		
-		LLSelectedTEMaterial::setSpecularRepeatX(self, tex_scale_u);
-		LLSelectedTEMaterial::setSpecularRepeatY(self, tex_scale_v);
-		LLSelectedTEMaterial::setSpecularOffsetX(self, tex_offset_u);
-		LLSelectedTEMaterial::setSpecularOffsetY(self, tex_offset_v);
-		LLSelectedTEMaterial::setSpecularRotation(self, tex_rot * DEG_TO_RAD);
-	}
-	if (has_bumpy)
-	{
-		self->childSetValue("bumpyScaleU",	tex_scale_u);
-		self->childSetValue("bumpyScaleV",	tex_scale_v);
-		self->childSetValue("bumpyOffsetU",	tex_offset_u);
-		self->childSetValue("bumpyOffsetV",	tex_offset_v);
-		self->childSetValue("bumpyRot",		tex_rot);
+	LLSelectedTEMaterial::setSpecularRepeatX(self, tex_scale_u);
+	LLSelectedTEMaterial::setSpecularRepeatY(self, tex_scale_v);
+	LLSelectedTEMaterial::setSpecularOffsetX(self, tex_offset_u);
+	LLSelectedTEMaterial::setSpecularOffsetY(self, tex_offset_v);
+	LLSelectedTEMaterial::setSpecularRotation(self, tex_rot * DEG_TO_RAD);
+
+	self->childSetValue("bumpyScaleU",	tex_scale_u);
+	self->childSetValue("bumpyScaleV",	tex_scale_v);
+	self->childSetValue("bumpyOffsetU",	tex_offset_u);
+	self->childSetValue("bumpyOffsetV",	tex_offset_v);
+	self->childSetValue("bumpyRot",		tex_rot);
 		
-		LLSelectedTEMaterial::setNormalRepeatX(self, tex_scale_u);
-		LLSelectedTEMaterial::setNormalRepeatY(self, tex_scale_v);
-		LLSelectedTEMaterial::setNormalOffsetX(self, tex_offset_u);
-		LLSelectedTEMaterial::setNormalOffsetY(self, tex_offset_v);
-		LLSelectedTEMaterial::setNormalRotation(self, tex_rot * DEG_TO_RAD);
-	}
+	LLSelectedTEMaterial::setNormalRepeatX(self, tex_scale_u);
+	LLSelectedTEMaterial::setNormalRepeatY(self, tex_scale_v);
+	LLSelectedTEMaterial::setNormalOffsetX(self, tex_offset_u);
+	LLSelectedTEMaterial::setNormalOffsetY(self, tex_offset_v);
+	LLSelectedTEMaterial::setNormalRotation(self, tex_rot * DEG_TO_RAD);
 }
