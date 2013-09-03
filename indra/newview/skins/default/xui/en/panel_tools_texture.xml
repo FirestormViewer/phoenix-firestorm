@@ -552,15 +552,20 @@
              name="TexScaleU"
              top_pad="5"
              width="265" />
-            <check_box
+            <button
              follows="top|left"
              height="19"
-             initial_value="false"
              layout="topleft"
              left_pad="0"
-             name="checkbox flip s"
+             image_overlay="Edit_Flip_X"
+             name="flipTextureScaleU"
+             label=""
              tool_tip="Flip"
-             width="16" />
+             width="16">
+               <button.commit_callback
+				function="BuildTool.Flip"
+                parameter="U"/>
+            </button>
             <spinner
              follows="left|top"
              height="19"
@@ -573,15 +578,20 @@
              max_val="100"
              name="TexScaleV"
              width="265" />
-            <check_box
+            <button
              follows="top|left"
              height="19"
-             initial_value="false"
              layout="topleft"
              left_pad="0"
-             name="checkbox flip t"
+             image_overlay="Edit_Flip_X"
+             name="flipTextureScaleV"
+             label=""
              tool_tip="Flip"
-             width="16" />
+             width="16">
+               <button.commit_callback
+				function="BuildTool.Flip"
+                parameter="V"/>
+            </button>
             <spinner
              decimal_digits="1"
              follows="left|top"
@@ -645,15 +655,6 @@
              name="bumpyScaleU"
              top_delta="-115"
              width="265" />
-            <check_box
-             follows="top|left"
-             height="19"
-             initial_value="false"
-             layout="topleft"
-             left_pad="0"
-             name="flipBumpyScaleU"
-             tool_tip="Flip"
-             width="16" />
             <spinner
              follows="left|top"
              height="19"
@@ -666,15 +667,6 @@
              max_val="100"
              name="bumpyScaleV"
              width="265" />
-            <check_box
-             follows="top|left"
-             height="16"
-             initial_value="false"
-    	     layout="topleft"
-	         left_pad="0"
-             name="flipBumpyScaleV"
-	         tool_tip="Flip"
-	         width="16" />
            <spinner
              decimal_digits="2"
              follows="left|top"
@@ -726,15 +718,6 @@
              name="shinyScaleU"
              top_delta="-115"
              width="265" />
-	        <check_box
-	         follows="top|left"
-	         height="16"
-	         initial_value="false"
-	         layout="topleft"
-	         left_pad="0"
-	         name="flipShinyScaleU"
-	         tool_tip="Flip"
-	         width="16" />
             <spinner
              follows="left|top"
              height="19"
@@ -747,15 +730,6 @@
              max_val="100"
              name="shinyScaleV"
              width="265" />
-	        <check_box
-             follows="top|left"
-	         height="16"
-  	         initial_value="false"
-	         layout="topleft"
-	         left_pad="0"
-	         name="flipShinyScaleV"
-	         tool_tip="Flip"
-	         width="16" />
            <spinner
              decimal_digits="2"
              follows="left|top"
