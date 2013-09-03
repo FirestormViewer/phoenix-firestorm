@@ -803,35 +803,33 @@
              left="7"
              name="checkbox planar align"
              tool_tip="Align textures on all selected faces with the last selected face. Requires Planar texture mapping."
-             top_delta="16"
-             width="260" />
-            <text
-             type="string"
-             length="1"
-             follows="left|top"
-             height="10"
              top_pad="2"
-             left_delta="2"
+             width="203" />
+            <check_box
+             control_name="FSSyncronizeTextureMaps"
+             follows="top|left"
+             height="16"
+             label="Synchronize materials"
              layout="topleft"
-             name="text_params_label"
-             text_readonly_color="LabelDisabledColor"
-             width="115">
-            Texture Params
-            </text>
+             left="7"
+             top_pad="0"
+             name="checkbox maps sync"
+             tool_tip="Syncronize texture map parameters"
+             width="203" />
             <button
              layout="topleft"
              follows="right|top"
-             height="18"
+             height="14"
              left_pad="2"
-             top_delta="0"
+             top_delta="-15"
              label="Copy"
              name="copytextures"
              width="75" />
             <button
              layout="topleft"
              follows="right|top"
-             left_pad="2"
-             height="18"
+             top_pad="0"
+             height="14"
              label="Paste"
              name="pastetextures"
              width="75" />

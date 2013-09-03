@@ -112,6 +112,14 @@ F32		LLPanelFace::getCurrentShinyScaleV()		{ return getChild<LLUICtrl>("shinySca
 F32		LLPanelFace::getCurrentShinyOffsetU()		{ return getChild<LLUICtrl>("shinyOffsetU")->getValue().asReal();					}
 F32		LLPanelFace::getCurrentShinyOffsetV()		{ return getChild<LLUICtrl>("shinyOffsetV")->getValue().asReal();					}
 
+// <FS:CR> UI provided diffuse parameters
+F32		LLPanelFace::getCurrentTextureRot()			{ return getChild<LLUICtrl>("TexRot")->getValue().asReal();						}
+F32		LLPanelFace::getCurrentTextureScaleU()		{ return getChild<LLUICtrl>("TexScaleU")->getValue().asReal();					}
+F32		LLPanelFace::getCurrentTextureScaleV()		{ return getChild<LLUICtrl>("TexScaleV")->getValue().asReal();					}
+F32		LLPanelFace::getCurrentTextureOffsetU()		{ return getChild<LLUICtrl>("TexOffsetU")->getValue().asReal();					}
+F32		LLPanelFace::getCurrentTextureOffsetV()		{ return getChild<LLUICtrl>("TexOffsetV")->getValue().asReal();					}
+// </FS:CR>
+
 //
 // Methods
 //
@@ -146,6 +154,7 @@ BOOL	LLPanelFace::postBuild()
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
 	
 	// <FS>
+	childSetCommitCallback("checkbox maps sync", &LLPanelFace::onClickMapsSync, this);
 	childSetCommitCallback("checkbox flip s", &LLPanelFace::onCommitTextureInfo, this);
 	childSetCommitCallback("checkbox flip t", &LLPanelFace::onCommitTextureInfo, this);
 	childSetCommitCallback("flipShinyScaleU", &LLPanelFace::onCommitMaterialShinyScaleX, this);
@@ -647,7 +656,7 @@ void LLPanelFace::sendTextureInfo()
 	if ((bool)childGetValue("checkbox planar align").asBoolean())
 	{
 		LLFace* last_face = NULL;
-		bool identical_face =false;
+		bool identical_face = false;
 		LLSelectedTE::getFace(last_face, identical_face);		
 		LLPanelFaceSetAlignedTEFunctor setfunc(this, last_face);
 		LLSelectMgr::getInstance()->getSelection()->applyToTEs(&setfunc);
@@ -681,12 +690,12 @@ void LLPanelFace::updateUI()
 		getChildView("button align")->setEnabled(editable);
 
 		// <FS>
+		BOOL enable_material_controls = (!gSavedSettings.getBOOL("FSSyncronizeTextureMaps"));
 		S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-		BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
-		&& (selected_count == 1);
+		BOOL single_volume = ((LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
+							  && (selected_count == 1));
 		getChildView("copytextures")->setEnabled(single_volume && editable);
 		getChildView("pastetextures")->setEnabled(editable);
-		getChildView("text_params_label")->setEnabled(single_volume && editable);
 		// </FS>
 		
 		LLComboBox* combobox_matmedia = getChild<LLComboBox>("combobox matmedia");
@@ -928,30 +937,30 @@ void LLPanelFace::updateUI()
 				}
 			}
             
-         if (shinytexture_ctrl)
-         {
+			if (shinytexture_ctrl)
+			{
 				if (identical_spec && (shiny == SHINY_TEXTURE))
 				{
 					shinytexture_ctrl->setTentative( FALSE );
 					shinytexture_ctrl->setEnabled( editable );
 					shinytexture_ctrl->setImageAssetID( specmap_id );
-            }
-            else if (specmap_id.isNull())
+				}
+				else if (specmap_id.isNull())
 				{
-               shinytexture_ctrl->setTentative( FALSE );
-               shinytexture_ctrl->setEnabled( editable );
+					shinytexture_ctrl->setTentative( FALSE );
+					shinytexture_ctrl->setEnabled( editable );
 					shinytexture_ctrl->setImageAssetID( LLUUID::null );
-            }
-            else
-            {
+				}
+				else
+				{
 					shinytexture_ctrl->setTentative( TRUE );
 					shinytexture_ctrl->setEnabled( editable );
 					shinytexture_ctrl->setImageAssetID( specmap_id );
 				}
-         }
+			}
 
-         if (bumpytexture_ctrl)
-         {
+			if (bumpytexture_ctrl)
+			{
 				if (identical_norm && (bumpy == BUMPY_TEXTURE))
 				{
 					bumpytexture_ctrl->setTentative( FALSE );
@@ -964,8 +973,8 @@ void LLPanelFace::updateUI()
 					bumpytexture_ctrl->setEnabled( editable );
 					bumpytexture_ctrl->setImageAssetID( LLUUID::null );
 				}
-            else
-            {
+				else
+				{
 					bumpytexture_ctrl->setTentative( TRUE );
 					bumpytexture_ctrl->setEnabled( editable );
 					bumpytexture_ctrl->setImageAssetID( normmap_id );
@@ -1039,8 +1048,10 @@ void LLPanelFace::updateUI()
 			getChild<LLUICtrl>("bumpyScaleU")->setValue(norm_scale_s);
 
 			getChildView("TexScaleU")->setEnabled(editable);
-			getChildView("shinyScaleU")->setEnabled(editable && specmap_id.notNull());
-			getChildView("bumpyScaleU")->setEnabled(editable && normmap_id.notNull());
+			getChildView("shinyScaleU")->setEnabled(editable && specmap_id.notNull()
+													&& enable_material_controls); // <FS:CR> Materials alignment
+			getChildView("bumpyScaleU")->setEnabled(editable && normmap_id.notNull()
+													&& enable_material_controls); // <FS:CR> Materials alignment
 
 			BOOL diff_scale_tentative = !(identical && identical_diff_scale_s);
 			BOOL norm_scale_tentative = !(identical && identical_norm_scale_s);
@@ -1055,9 +1066,10 @@ void LLPanelFace::updateUI()
 			getChild<LLUICtrl>("checkbox flip s")->setTentative(LLSD((BOOL)((!identical) ? TRUE : FALSE )));			
 			getChildView("checkbox flip s")->setEnabled(editable);			
 			getChild<LLUICtrl>("flipShinyScaleU")->setValue(LLSD((BOOL)(spec_scale_tentative < 0 ? TRUE : FALSE )));
-			getChildView("flipShinyScaleU")->setEnabled(editable);
+			getChildView("flipShinyScaleU")->setEnabled(editable && enable_material_controls);
 			getChild<LLUICtrl>("flipBumpyScaleU")->setValue(LLSD((BOOL)(norm_scale_tentative < 0 ? TRUE : FALSE )));
-			getChildView("flipBumpyScaleU")->setEnabled(editable);
+			getChildView("flipBumpyScaleU")->setEnabled(editable && enable_material_controls);
+			getChildView("checkbox maps sync")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()));
 			// </FS:CR>
 		}
 
@@ -1088,8 +1100,10 @@ void LLPanelFace::updateUI()
 			BOOL spec_scale_tentative = !identical_spec_scale_t;
 
 			getChildView("TexScaleV")->setEnabled(editable);
-			getChildView("shinyScaleV")->setEnabled(editable && specmap_id.notNull());
-			getChildView("bumpyScaleV")->setEnabled(editable && normmap_id.notNull());
+			getChildView("shinyScaleV")->setEnabled(editable && specmap_id.notNull()
+													&& enable_material_controls); // <FS:CR> Materials alignment
+			getChildView("bumpyScaleV")->setEnabled(editable && normmap_id.notNull()
+													&& enable_material_controls); // <FS:CR> Materials alignment
 
 			getChild<LLUICtrl>("TexScaleV")->setValue(diff_scale_t);
 			getChild<LLUICtrl>("shinyScaleV")->setValue(norm_scale_t);
@@ -1104,9 +1118,9 @@ void LLPanelFace::updateUI()
 			getChild<LLUICtrl>("checkbox flip t")->setTentative(LLSD((BOOL)((!identical) ? TRUE : FALSE )));
 			getChildView("checkbox flip t")->setEnabled(editable);			
 			getChild<LLUICtrl>("flipShinyScaleV")->setValue(LLSD((BOOL)(spec_scale_tentative < 0 ? TRUE : FALSE )));
-			getChildView("flipShinyScaleV")->setEnabled(editable);
+			getChildView("flipShinyScaleV")->setEnabled(editable && enable_material_controls);
 			getChild<LLUICtrl>("flipBumpyScaleV")->setValue(LLSD((BOOL)(norm_scale_tentative < 0 ? TRUE : FALSE )));
-			getChildView("flipBumpyScaleV")->setEnabled(editable);
+			getChildView("flipBumpyScaleV")->setEnabled(editable && enable_material_controls);
 			// </FS:CR>
 		}
 
@@ -1137,8 +1151,10 @@ void LLPanelFace::updateUI()
 			getChild<LLUICtrl>("bumpyOffsetU")->setTentative(LLSD(spec_offset_u_tentative));
 
 			getChildView("TexOffsetU")->setEnabled(editable);
-			getChildView("shinyOffsetU")->setEnabled(editable && specmap_id.notNull());
-			getChildView("bumpyOffsetU")->setEnabled(editable && normmap_id.notNull());
+			getChildView("shinyOffsetU")->setEnabled(editable && specmap_id.notNull()
+													 && enable_material_controls); // <FS:CR> Materials alignment
+			getChildView("bumpyOffsetU")->setEnabled(editable && normmap_id.notNull()
+													 && enable_material_controls); // <FS:CR> Materials alignment
 		}
 
 		{
@@ -1167,8 +1183,10 @@ void LLPanelFace::updateUI()
 			getChild<LLUICtrl>("bumpyOffsetV")->setTentative(LLSD(spec_offset_v_tentative));
 
 			getChildView("TexOffsetV")->setEnabled(editable);
-			getChildView("shinyOffsetV")->setEnabled(editable && specmap_id.notNull());
-			getChildView("bumpyOffsetV")->setEnabled(editable && normmap_id.notNull());
+			getChildView("shinyOffsetV")->setEnabled(editable && specmap_id.notNull()
+													 && enable_material_controls); // <FS:CR> Materials alignment
+			getChildView("bumpyOffsetV")->setEnabled(editable && normmap_id.notNull()
+													 && enable_material_controls); // <FS:CR> Materials alignment
 		}
 
 		// Texture rotation
@@ -1194,8 +1212,10 @@ void LLPanelFace::updateUI()
 			F32 spec_rot_deg = spec_rotation * RAD_TO_DEG;
 
 			getChildView("TexRot")->setEnabled(editable);
-			getChildView("shinyRot")->setEnabled(editable && specmap_id.notNull());
-			getChildView("bumpyRot")->setEnabled(editable && normmap_id.notNull());
+			getChildView("shinyRot")->setEnabled(editable && specmap_id.notNull()
+												 && enable_material_controls); // <FS:CR> Materials alignment
+			getChildView("bumpyRot")->setEnabled(editable && normmap_id.notNull()
+												 && enable_material_controls); // <FS:CR> Materials alignment
 
 			getChild<LLUICtrl>("TexRot")->setTentative(diff_rot_tentative);
 			getChild<LLUICtrl>("shinyRot")->setTentative(LLSD(norm_rot_tentative));
@@ -1291,7 +1311,8 @@ void LLPanelFace::updateUI()
 
 					case MATTYPE_SPECULAR:
 					{
-						enabled = (editable && ((shiny == SHINY_TEXTURE) && !specmap_id.isNull()));
+						enabled = (editable && ((shiny == SHINY_TEXTURE) && !specmap_id.isNull())
+								   && enable_material_controls);	// <FS:CR> Materials Alignment
 						identical_repeats = identical_spec_repeats;
 						repeats = repeats_spec;
 					}
@@ -1299,7 +1320,8 @@ void LLPanelFace::updateUI()
 
 					case MATTYPE_NORMAL:
 					{
-						enabled = (editable && ((bumpy == BUMPY_TEXTURE) && !normmap_id.isNull()));
+						enabled = (editable && ((bumpy == BUMPY_TEXTURE) && !normmap_id.isNull())
+								   && enable_material_controls); // <FS:CR> Materials Alignment
 						identical_repeats = identical_norm_repeats;
 						repeats = repeats_norm;
 					}
@@ -2093,6 +2115,12 @@ void LLPanelFace::onCommitTextureInfo( LLUICtrl* ctrl, void* userdata )
 {
 	LLPanelFace* self = (LLPanelFace*) userdata;
 	self->sendTextureInfo();
+	// <FS:CR> Materials alignment
+	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	{
+		alignMaterialsProperties(self);
+	}
+	// </FS:CR>
 }
 
 // Commit the number of repeats per meter
@@ -2577,4 +2605,65 @@ void LLPanelFace::onClickPaste(void* userdata)
 
 	LLPanelFaceSendFunctor sendfunc;
 	LLSelectMgr::getInstance()->getSelection()->applyToObjects(&sendfunc);
+}
+
+// <FS:CR> Materials alignment
+//static
+void LLPanelFace::onClickMapsSync(LLUICtrl* ctrl, void *userdata)
+{
+	LLPanelFace *self = (LLPanelFace*) userdata;
+	llassert_always(self);
+	self->getState();
+	if (gSavedSettings.getBOOL("FSSyncronizeTextureMaps"))
+	{
+		alignMaterialsProperties(self);
+	}
+}
+
+//static
+void LLPanelFace::alignMaterialsProperties(LLPanelFace* self)
+{
+	//LLPanelFace *self = (LLPanelFace*) userdata;
+	llassert_always(self);
+	
+	bool has_bumpy = (bool)self->getCurrentNormalMap().notNull();
+	bool has_shiny = (bool)self->getCurrentSpecularMap().notNull();
+	
+	// Nowhere to copy values to
+	if (!(has_shiny || has_bumpy)) return;
+	
+	F32 tex_scale_u =	self->getCurrentTextureScaleU();
+	F32 tex_scale_v =	self->getCurrentTextureScaleV();
+	F32 tex_offset_u =	self->getCurrentTextureOffsetU();
+	F32 tex_offset_v =	self->getCurrentTextureOffsetV();
+	F32 tex_rot =		self->getCurrentTextureRot();
+	
+	if (has_shiny)
+	{
+		self->childSetValue("shinyScaleU",	tex_scale_u);
+		self->childSetValue("shinyScaleV",	tex_scale_v);
+		self->childSetValue("shinyOffsetU",	tex_offset_u);
+		self->childSetValue("shinyOffsetV",	tex_offset_v);
+		self->childSetValue("shinyRot",		tex_rot);
+		
+		LLSelectedTEMaterial::setSpecularRepeatX(self, tex_scale_u);
+		LLSelectedTEMaterial::setSpecularRepeatY(self, tex_scale_v);
+		LLSelectedTEMaterial::setSpecularOffsetX(self, tex_offset_u);
+		LLSelectedTEMaterial::setSpecularOffsetY(self, tex_offset_v);
+		LLSelectedTEMaterial::setSpecularRotation(self, tex_rot * DEG_TO_RAD);
+	}
+	if (has_bumpy)
+	{
+		self->childSetValue("bumpyScaleU",	tex_scale_u);
+		self->childSetValue("bumpyScaleV",	tex_scale_v);
+		self->childSetValue("bumpyOffsetU",	tex_offset_u);
+		self->childSetValue("bumpyOffsetV",	tex_offset_v);
+		self->childSetValue("bumpyRot",		tex_rot);
+		
+		LLSelectedTEMaterial::setNormalRepeatX(self, tex_scale_u);
+		LLSelectedTEMaterial::setNormalRepeatY(self, tex_scale_v);
+		LLSelectedTEMaterial::setNormalOffsetX(self, tex_offset_u);
+		LLSelectedTEMaterial::setNormalOffsetY(self, tex_offset_v);
+		LLSelectedTEMaterial::setNormalRotation(self, tex_rot * DEG_TO_RAD);
+	}
 }

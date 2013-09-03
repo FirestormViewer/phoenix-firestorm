@@ -179,6 +179,8 @@ protected:
 	static F32     valueGlow(LLViewerObject* object, S32 face);
 
 	// <FS> Texture params copy/paste
+	static void		onClickMapsSync(LLUICtrl* ctrl, void *userdata);
+	static void		alignMaterialsProperties(LLPanelFace* self);
 	static void		onClickCopy(void*);
 	static void		onClickPaste(void*);
 	// </FS>
@@ -207,6 +209,14 @@ private:
 	F32		getCurrentShinyScaleV();
 	F32		getCurrentShinyOffsetU();
 	F32		getCurrentShinyOffsetV();
+	
+	// <FS:CR> Convenience funcs for diffuse maps
+	F32		getCurrentTextureRot();
+	F32		getCurrentTextureScaleU();
+	F32		getCurrentTextureScaleV();
+	F32		getCurrentTextureOffsetU();
+	F32		getCurrentTextureOffsetV();
+	// </FS:CR>
 
 	// Update visibility of controls to match current UI mode
 	// (e.g. materials vs media editing)
