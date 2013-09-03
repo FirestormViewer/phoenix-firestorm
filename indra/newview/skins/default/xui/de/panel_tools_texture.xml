@@ -99,24 +99,20 @@
 		<combo_box.item label="Planar" name="Planar"/>
 	</combo_box>
 	<spinner label="Skalierung Horizontal" name="TexScaleU"/>
-	<check_box name="checkbox flip s" tool_tip="Invertieren"/>
+	<button name="flipTextureScaleU" tool_tip="Invertieren"/>
 	<spinner label="Skalierung Vertikal" name="TexScaleV"/>
-	<check_box name="checkbox flip t" tool_tip="Invertieren"/>
+	<button name="flipTextureScaleV" tool_tip="Invertieren"/>
 	<spinner label="Wiederh. / Meter" name="rptctrl"/>
 	<spinner label="Rotation˚" name="TexRot"/>
 	<spinner label="Versatz Horizontal" name="TexOffsetU"/>
 	<spinner label="Versatz Vertikal" name="TexOffsetV"/>
 	<spinner label="Skalierung Horizontal" name="bumpyScaleU"/>
-	<check_box name="flipBumpyScaleU" tool_tip="Invertieren"/>
 	<spinner label="Skalierung Vertikal" name="bumpyScaleV"/>
-	<check_box name="flipBumpyScaleV" tool_tip="Invertieren"/>
 	<spinner label="Rotation˚" name="bumpyRot"/>
 	<spinner label="Versatz Horizontal" name="bumpyOffsetU"/>
 	<spinner label="Versatz Vertikal" name="bumpyOffsetV"/>
 	<spinner label="Skalierung Horizontal" name="shinyScaleU"/>
-	<check_box name="flipShinyScaleU" tool_tip="Invertieren"/>
 	<spinner label="Skalierung Vertikal" name="shinyScaleV"/>
-	<check_box name="flipShinyScaleV" tool_tip="Invertieren"/>
 	<spinner label="Rotation˚" name="shinyRot"/>
 	<spinner label="Versatz Horizontal" name="shinyOffsetU"/>
 	<spinner label="Versatz Vertikal" name="shinyOffsetV"/>
