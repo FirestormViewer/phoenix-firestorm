@@ -99,24 +99,20 @@
 		<combo_box.item label="Planarne" name="Planar" />
 	</combo_box>
 	<spinner label="Rozmiar poziomy" name="TexScaleU" />
-	<check_box name="checkbox flip s" tool_tip="Odwróć" />
+	<button name="flipTextureScaleU" tool_tip="Odwróć" />
 	<spinner label="Rozmiar pionowy" name="TexScaleV" />
-	<check_box name="checkbox flip t" tool_tip="Odwróć" />
+	<button name="flipTextureScaleV" tool_tip="Odwróć" />
 	<spinner label="Powtórzenia na metr" name="rptctrl" />
 	<spinner label="Obrót w stopniach" name="TexRot" />
 	<spinner label="Wyrównanie poziome" name="TexOffsetU" />
 	<spinner label="Wyrównanie pionowe" name="TexOffsetV" />
 	<spinner label="Rozmiar poziomy" name="bumpyScaleU" />
-	<check_box name="flipBumpyScaleU" tool_tip="Odwróć" />
 	<spinner label="Rozmiar pionowy" name="bumpyScaleV" />
-	<check_box name="flipBumpyScaleV" tool_tip="Odwróć" />
 	<spinner label="Obrót w stopniach" name="bumpyRot" />
 	<spinner label="Wyrównanie poziome" name="bumpyOffsetU" />
 	<spinner label="Wyrównanie pionowe" name="bumpyOffsetV" />
 	<spinner label="Rozmiar poziomy" name="shinyScaleU" />
-	<check_box name="flipShinyScaleU" tool_tip="Odwróć" />
 	<spinner label="Rozmiar pionowy" name="shinyScaleV" />
-	<check_box name="flipShinyScaleV" tool_tip="Odwróć" />
 	<spinner label="Obrót w stopniach" name="shinyRot" />
 	<spinner label="Wyrównanie poziome" name="shinyOffsetU" />
 	<spinner label="Wyrównanie pionowe" name="shinyOffsetV" />
