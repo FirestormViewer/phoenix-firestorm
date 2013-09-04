@@ -154,6 +154,7 @@ const static boost::regex NEWLINES("\\n{1}");
 #include "fscommon.h"
 #include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
 #include "fsradar.h"
+#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -2828,6 +2829,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	
 			LL_INFOS("Messaging") << "process_improved_im: session_id( " << session_id << " ), from_id( " << from_id << " )" << LL_ENDL;
 
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+			chat.mText = buffer;
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// add to IM panel, but do not bother the user
 			gIMMgr->addMessage(
 				session_id,
@@ -2937,6 +2946,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				// checkfor and process reqinfo
 				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
+
+				// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+				chat.mText = message;
+				if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+				{
+					FSKeywords::notify(chat);
+				}
+				// </FS:PP>
+
 				buffer = saved + message;
 
 				gIMMgr->addMessage(
@@ -3380,6 +3398,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 // [/SL:KB]
 			chat.mText = message;
 
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of Task IM)
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
 			// IMs from obejcts don't open IM sessions.
 			// <FS:Ansariel> [FS communication UI]
@@ -3473,6 +3498,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		}
 		else
 		{
+
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+			chat.mText = message;
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// standard message, not from system
 			std::string saved;
 			if(offline == IM_OFFLINE)
@@ -4531,6 +4565,13 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		// object inspect for an object that is chatting with you
 		LLSD args;
 		chat.mOwnerID = owner_id;
+
+		// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of local chat)
+		if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+		{
+			FSKeywords::notify(chat);
+		}
+		// </FS:PP>
 
 		if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
 		{
