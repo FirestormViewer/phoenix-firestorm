@@ -1015,11 +1015,12 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					name_params.readonly_color.alpha = FSIMChatHistoryFade;
 					appendText(LLTrans::getString("IMPrefix") + " ", prependNewLineState, name_params);
 					prependNewLineState = false;
-				}
-				if (!chat.mFromNameGroup.empty())
-				{
-					appendText(chat.mFromNameGroup, prependNewLineState, name_params);
-					prependNewLineState = false;
+					
+					if (!chat.mFromNameGroup.empty())
+					{
+						appendText(chat.mFromNameGroup, prependNewLineState, name_params);
+						prependNewLineState = false;
+					}
 				}
 				
 				name_params.is_name_slurl = true;
