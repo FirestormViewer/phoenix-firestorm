@@ -966,7 +966,9 @@ class DarwinManifest(ViewerManifest):
             'grid':self.args['grid'],
             'grid_caps':self.args['grid'].upper(),
             # escape quotes becase NSIS doesn't handle them well
-            'flags':self.flags_list().replace('"', '$\\"'),
+            #<FS:TS> flags_list() now returns None, so just leave empty
+            # 'flags':self.flags_list().replace('"', '$\\"'),
+            'flags':'',
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
@@ -1205,7 +1207,9 @@ class LinuxManifest(ViewerManifest):
             'version_dashes' : '-'.join(self.args['version']),
             'grid':self.args['grid'],
             'grid_caps':self.args['grid'].upper(),
-            'flags':self.flags_list().replace('"', '$\\"'),
+            #<FS:TS> flags_list() now returns None, so just leave empty
+            # 'flags':self.flags_list().replace('"', '$\\"'),
+            'flags':'',
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
