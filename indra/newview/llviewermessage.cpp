@@ -4198,6 +4198,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	if (chatter)
 	{
 		chat.mPosAgent = chatter->getPositionAgent();
+		static LLCachedControl<bool> EffectScriptChatParticles(gSavedSettings, "EffectScriptChatParticles"); // <FS:PP> gSavedSettings to LLCachedControl
 
 		// Make swirly things only for talking objects. (not script debug messages, though)
 //		if (chat.mSourceType == CHAT_SOURCE_OBJECT 
@@ -4205,7 +4206,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 //			&& gSavedSettings.getBOOL("EffectScriptChatParticles") )
 // [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0b) | Modified: RLVa-1.0.0g
 		if ( ((chat.mSourceType == CHAT_SOURCE_OBJECT) && (chat.mChatType != CHAT_TYPE_DEBUG_MSG)) && 
-			 (gSavedSettings.getBOOL("EffectScriptChatParticles")) &&
+			 // <FS:PP> gSavedSettings to LLCachedControl
+			 // (gSavedSettings.getBOOL("EffectScriptChatParticles")) &&
+			 (EffectScriptChatParticles) &&
+			 // </FS:PP>
 			 ((!rlv_handler_t::isEnabled()) || (CHAT_TYPE_OWNER != chat.mChatType)) )
 // [/RLVa:KB]
 		{
@@ -4286,18 +4290,25 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				   (CHAT_TYPE_OWNER != chat.mChatType) ) )
 			{
 				bool fIsEmote = RlvUtil::isEmote(mesg);
+				static LLCachedControl<bool> RestrainedLoveShowEllipsis(gSavedSettings, "RestrainedLoveShowEllipsis"); // <FS:PP> gSavedSettings to LLCachedControl
 				if ((!fIsEmote) &&
 					(((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) ||
 					 ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) ))
 				{
-					if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+					if ( (gRlvHandler.filterChat(mesg, false)) && (!RestrainedLoveShowEllipsis) )
+					// </FS:PP>
 						return;
 				}
 				else if ((fIsEmote) &&
 					     (((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) ||
 					      ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) ))
  				{
-					if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+					if (!RestrainedLoveShowEllipsis)
+					// </FS:PP>
 						return;
 					mesg = "/me ...";
 				}
@@ -4585,7 +4596,11 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		}
 		// </FS:PP>
 
-		if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		// <FS:PP> gSavedSettings to LLCachedControl
+		// if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		static LLCachedControl<bool> TranslateChat(gSavedSettings, "TranslateChat");
+		if (TranslateChat && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		// </FS:PP>
 		{
 			if (chat.mChatStyle == CHAT_STYLE_IRC)
 			{
