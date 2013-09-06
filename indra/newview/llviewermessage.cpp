@@ -1182,7 +1182,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 	LLChat chat;
 	std::string log_message;
 
-	if (!gSavedSettings.getBOOL("ShowNewInventory"))
+	// <FS:PP> gSavedSettings to LLCachedControl
+	// if (!gSavedSettings.getBOOL("ShowNewInventory"))
+	static LLCachedControl<bool> showNewInventory(gSavedSettings, "ShowNewInventory");
+	if (!showNewInventory)
+	// </FS:PP>
 		return false;
 
 	if (check_only)
@@ -1225,7 +1229,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 
 				if (!from_name.empty())
 				{
-					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
+					static LLCachedControl<bool> fsNotifyIncomingObjectSpamFrom(gSavedSettings, "FSNotifyIncomingObjectSpamFrom");
+					if (fsNotifyIncomingObjectSpamFrom)
+					// </FS:PP>
 					{
 						arg["FROM_NAME"] = from_name;
 						log_msg = LLTrans::getString("ItemsComingInTooFastFrom", arg);
@@ -1233,7 +1241,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				}
 				else
 				{
-					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
+					static LLCachedControl<bool> fsNotifyIncomingObjectSpam(gSavedSettings, "FSNotifyIncomingObjectSpam");
+					if (fsNotifyIncomingObjectSpam)
+					// </FS:PP>
 					{
 						log_msg = LLTrans::getString("ItemsComingInTooFast", arg);
 					}
