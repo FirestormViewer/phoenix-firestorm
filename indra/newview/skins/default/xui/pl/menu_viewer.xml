@@ -148,6 +148,7 @@
 			<menu_item_call label="Uwzględnij następną część" name="Include Next Part"/>
 			<menu_item_call label="Uwzględnij poprzednią część" name="Include Previous Part"/>
 		</menu>
+		<menu_item_call label="Zbiory części..." name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="Wycentruj na selekcji" name="Focus on Selection"/>
 		<menu_item_call label="Przybliż do selekcji" name="Zoom to Selection"/>
 		<menu label="Obiekt" name="Object">

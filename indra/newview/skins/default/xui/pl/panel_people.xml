@@ -50,6 +50,9 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 				<menu_button name="plus_btn" tool_tip="Dołącz do grupy/Stwórz nową grupę" />
 				<dnd_button name="minus_btn" tool_tip="Opuść wybraną grupę" />
 			</panel>
+			<text name="groupcount">
+				Należysz do [COUNT] grup, możesz jeszcze dołączyć do [REMAINING].
+			</text>
 		</panel>
 		<panel label="Ostatnie" name="recent_panel">
 			<panel label="bottom_panel" name="recent_buttons_panel">

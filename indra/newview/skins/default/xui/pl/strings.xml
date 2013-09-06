@@ -465,6 +465,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="SLappAgentRequestFriend">
 		Oferta znajomości
 	</string>
+	<string name="SLappAgentRemoveFriend">
+		Usunięcie znajomego
+	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Zamknij (&#8984;W)
 	</string>
@@ -5049,6 +5052,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		Nie ma zapisanych rozmów. Jeśli skontaktujesz się z kimś, lub ktoś z Tobą, to wpis dziennika pojawi się tutaj.
+	</string>
+	<string name="loading_chat_logs">
+		Wczytywanie...
 	</string>
 	<string name="LoadCameraPositionNoneSaved">
 		Żadne ustawienie kamery nie zostało jeszcze zapisane.

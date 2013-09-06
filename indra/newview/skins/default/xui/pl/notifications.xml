@@ -167,6 +167,14 @@ Udzielaj tego przywileju z rozwagą.
 Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="EjectGroupMemberWarning">
+		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
+		<usetemplate ignoretext="Potwierdź wyrzucenie członka z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
+	</notification>
+	<notification name="EjectGroupMembersWarning">
+		Zamierzasz wyrzucić [COUNT] członków z grupy.
+		<usetemplate ignoretext="Potwierdź wyrzucenie kilku członków z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
+	</notification>
 	<notification name="AttachmentDrop">
 		Wybrałeś opcję upuszczenia swojego dodatku.
     Czy chcesz kontynuować?
@@ -1548,6 +1556,10 @@ Otwieranie stron internetowych z nieznanego źródła może narazić Twój kompu
 Chcesz opuścić grupę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
+	<notification name="OwnerCannotLeaveGroup">
+		Nie możesz opuścić tej grupy, ponieważ jesteś ostatnim z jej właścicieli. Przydziel najpierw innemu użytkownikowi rolę właściciela.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmKick">
 		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć Rezydentów"/>
@@ -2531,9 +2543,7 @@ by ją zaznaczyć, a potem wybierz &apos;Teleportuj&apos; na spodzie okna.
 dostępnego pod prawym przyciskiem myszy)
 	</notification>
 	<notification name="TeleportToPerson">
-		Możesz skontaktować się z Rezydentem &apos;[NAME]&apos; poprzez użycie przycisku &quot;Ludzie&quot;.
-Wybierz Rezydenta z listy, następnie kliknij &apos;IM&apos; na dole okna.
-(Możesz także kliknąć podwójnie na imię na liście, lub prawym przyciskiem i wybrać &apos;IM&apos;).
+		Aby rozpocząć z kimś prywatną rozmowę, kliknij prawym przyciskiem myszy na jego/jej awatarze i wybierz &apos;IM&apos; z menu.
 	</notification>
 	<notification name="CantSelectLandFromMultipleRegions">
 		Nie możesz przekraczać granic regionu wybierając obszar.
@@ -4459,14 +4469,6 @@ Kontynuowanie spowoduje, że kontrolki Szybkiego Strojenia zostaną przywrócone
 
 Nie można tego cofnąć.
 		<usetemplate ignoretext="Przywrócenie domyślnych kontrolek Szybkiego Strojenia" name="okcancelignore" notext="Anuluj" yestext="OK"/>
-	</notification>
-	<notification name="EjectGroupMemberWarning">
-		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
-		<usetemplate ignoretext="Potwierdź wyrzucenie członka z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
-	</notification>
-	<notification name="EjectGroupMembersWarning">
-		Zamierzasz wyrzucić [COUNT] członków z grupy.
-		<usetemplate ignoretext="Potwierdź wyrzucenie kilku członków z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].

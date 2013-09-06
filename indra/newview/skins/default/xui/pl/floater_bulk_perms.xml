@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterbulkperms" title="Wsadowa zmiana praw zawartości">
+<floater name="floaterbulkperms" title="Wsadowe regulowanie praw zawartości">
 	<floater.string name="nothing_to_modify_text">
 		Selekcja nie zawiera zawartości edytowalnej
 	</floater.string>
@@ -24,7 +24,7 @@
 	<button font="SansSerifSmall" label="√ Wszystkie" name="check_all"/>
 	<button font="SansSerifSmall" label="Żadne" label_selected="Żadne" name="check_none"/>
 	<text name="newperms">
-		Nowe prawa zawartości
+		Reguluj prawa zawartości na
 	</text>
 	<text name="GroupLabel">
 		Grupa:
@@ -40,6 +40,7 @@
 	<check_box label="Modyfikacja" name="next_owner_modify"/>
 	<check_box label="Kopiowanie" name="next_owner_copy"/>
 	<check_box label="Transferowanie" name="next_owner_transfer" tool_tip="Następny Właściciel może oddać lub sprzedać ten obiekt."/>
-	<button label="OK" name="apply"/>
+	<button label="OK" name="ok"/>
+	<button label="Zastosuj" name="apply"/>
 	<button label="Anuluj" name="close"/>
 </floater>

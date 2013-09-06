@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="script goto" title="Go to Line">
+	<button label="OK" label_selected="OK" name="goto_btn" />
+	<text name="txt">
+		Idź do linii
+	</text>
+</floater>
