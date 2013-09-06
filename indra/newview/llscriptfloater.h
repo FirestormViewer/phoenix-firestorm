@@ -123,6 +123,18 @@ private:
 	typedef std::map<LLUUID, FloaterPositionInfo> floater_position_map_t;
 
 	floater_position_map_t mFloaterPositions;
+
+// <FS:Zi> script dialogs position
+private:
+	LLScriptFloaterManager();
+	friend class LLSingleton<LLScriptFloaterManager>;
+
+public:
+	S32 mNavigationPanelPad;
+	S32 mFavoritesPanelPad;
+
+	S32 getTopPad();
+// </FS:Zi>
 };
 
 /**

@@ -258,7 +258,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	}
 	else
 	{
-		senderName = av_name.getLegacyName();
+		senderName = av_name.getUserNameForDisplay();
 	}
 
 	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))

@@ -89,7 +89,7 @@ void FSRadarEntry::onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av
 {
 	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
-		mUserName = av_name.getUserName();
+		mUserName = av_name.getUserNameForDisplay();
 		mDisplayName = av_name.getDisplayName();
 		mName = getRadarName(av_name);
 		mIsLinden = FSCommon::isLinden(av_id);
@@ -134,7 +134,7 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME)
 		{
-			return av_name.getUserName();
+			return av_name.getUserNameForDisplay();
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_DISPLAYNAME_USERNAME)
 		{
@@ -144,7 +144,7 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 			}
 			else
 			{
-				return llformat("%s (%s)", av_name.getDisplayName().c_str(), av_name.getUserName().c_str());
+				return llformat("%s (%s)", av_name.getDisplayName().c_str(), av_name.getUserNameForDisplay().c_str());
 			}
 		}
 		else if (fmt == FSRADAR_NAMEFORMAT_USERNAME_DISPLAYNAME)
@@ -155,7 +155,7 @@ std::string FSRadarEntry::getRadarName(const LLAvatarName& av_name)
 			}
 			else
 			{
-				return llformat("%s (%s)", av_name.getUserName().c_str(), av_name.getDisplayName().c_str());
+				return llformat("%s (%s)", av_name.getUserNameForDisplay().c_str(), av_name.getDisplayName().c_str());
 			}
 		}
 	}

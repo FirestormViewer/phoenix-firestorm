@@ -111,7 +111,7 @@ protected:
 	void			sendTexGen();				// applies and sends bump map
 	void			sendShiny(U32 shininess);			// applies and sends shininess
 	void			sendFullbright();		// applies and sends full bright
-	void        sendGlow();
+	void			sendGlow();
 	void			sendMedia();
 
 	// this function is to return TRUE if the drag should succeed.
@@ -171,7 +171,7 @@ protected:
 	static void		onCommitShiny(				LLUICtrl* ctrl, void* userdata);
 	static void		onCommitAlphaMode(		LLUICtrl* ctrl, void* userdata);
 	static void		onCommitFullbright(		LLUICtrl* ctrl, void* userdata);
-	static void    onCommitGlow(				LLUICtrl* ctrl, void *userdata);
+	static void		onCommitGlow(				LLUICtrl* ctrl, void *userdata);
 	static void		onCommitPlanarAlign(		LLUICtrl* ctrl, void* userdata);
 	static void		onCommitRepeatsPerMeter(	LLUICtrl* ctrl, void* userinfo);
 	static void		onClickAutoFix(void*);
@@ -181,6 +181,12 @@ protected:
 	// <FS> Texture params copy/paste
 	static void		onClickCopy(void*);
 	static void		onClickPaste(void*);
+	// <FS:CR> Build tool enhancements
+	static void		onClickMapsSync(LLUICtrl* ctrl, void *userdata);
+	static void		alignMaterialsProperties(LLPanelFace* self);
+	
+public:
+	static void		onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data);
 	// </FS>
 
 private:
@@ -207,6 +213,14 @@ private:
 	F32		getCurrentShinyScaleV();
 	F32		getCurrentShinyOffsetU();
 	F32		getCurrentShinyOffsetV();
+	
+	// <FS:CR> Convenience funcs for diffuse maps
+	F32		getCurrentTextureRot();
+	F32		getCurrentTextureScaleU();
+	F32		getCurrentTextureScaleV();
+	F32		getCurrentTextureOffsetU();
+	F32		getCurrentTextureOffsetV();
+	// </FS:CR>
 
 	// Update visibility of controls to match current UI mode
 	// (e.g. materials vs media editing)

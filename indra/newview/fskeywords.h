@@ -16,6 +16,7 @@ public:
 
 	void updateKeywords();
 	bool chatContainsKeyword(const LLChat& chat, bool is_local);
+	void static notify(const LLChat& chat); // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 private:
 	std::vector<std::string> mWordList;

@@ -1160,10 +1160,20 @@ LLWString FSFloaterNearbyChat::stripChannelNumber(const LLWString &mesg, S32* ch
 	}
 	else if (mesg[0] == '/'
 			 && mesg[1]
-			 && LLStringOps::isDigit(mesg[1]))
+	//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
+			 //&& LLStringOps::isDigit(mesg[1]))
+			 && (LLStringOps::isDigit(mesg[1])
+				|| (mesg[1] == '-'
+					&& mesg[2]
+					&& LLStringOps::isDigit(mesg[2]))))
+	//</FS:TS> FIRE-11412
 	{
 		// This a special "/20" speak on a channel
 		S32 pos = 0;
+		//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
+		if (mesg[1] == '-')
+			pos++;
+		//</FS:TS> FIRE-11412
 		
 		// Copy the channel number into a string
 		LLWString channel_string;
@@ -1186,6 +1196,10 @@ LLWString FSFloaterNearbyChat::stripChannelNumber(const LLWString &mesg, S32* ch
 		}
 		
 		sLastSpecialChatChannel = strtol(wstring_to_utf8str(channel_string).c_str(), NULL, 10);
+		//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
+		if (mesg[1] == '-')
+			sLastSpecialChatChannel = -sLastSpecialChatChannel;
+		//</FS:TS> FIRE-11412
 		*channel = sLastSpecialChatChannel;
 		return mesg.substr(pos, mesg.length() - pos);
 	}

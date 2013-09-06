@@ -154,6 +154,7 @@ const static boost::regex NEWLINES("\\n{1}");
 #include "fscommon.h"
 #include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
 #include "fsradar.h"
+#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -1186,7 +1187,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 	LLChat chat;
 	std::string log_message;
 
-	if (!gSavedSettings.getBOOL("ShowNewInventory"))
+	// <FS:PP> gSavedSettings to LLCachedControl
+	// if (!gSavedSettings.getBOOL("ShowNewInventory"))
+	static LLCachedControl<bool> showNewInventory(gSavedSettings, "ShowNewInventory");
+	if (!showNewInventory)
+	// </FS:PP>
 		return false;
 
 	if (check_only)
@@ -1229,7 +1234,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 
 				if (!from_name.empty())
 				{
-					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
+					static LLCachedControl<bool> fsNotifyIncomingObjectSpamFrom(gSavedSettings, "FSNotifyIncomingObjectSpamFrom");
+					if (fsNotifyIncomingObjectSpamFrom)
+					// </FS:PP>
 					{
 						arg["FROM_NAME"] = from_name;
 						log_msg = LLTrans::getString("ItemsComingInTooFastFrom", arg);
@@ -1237,7 +1246,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				}
 				else
 				{
-					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
+					static LLCachedControl<bool> fsNotifyIncomingObjectSpam(gSavedSettings, "FSNotifyIncomingObjectSpam");
+					if (fsNotifyIncomingObjectSpam)
+					// </FS:PP>
 					{
 						log_msg = LLTrans::getString("ItemsComingInTooFast", arg);
 					}
@@ -2833,6 +2846,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	
 			LL_INFOS("Messaging") << "process_improved_im: session_id( " << session_id << " ), from_id( " << from_id << " )" << LL_ENDL;
 
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+			chat.mText = buffer;
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// add to IM panel, but do not bother the user
 			gIMMgr->addMessage(
 				session_id,
@@ -2942,6 +2963,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				// checkfor and process reqinfo
 				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
+
+				// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+				chat.mText = message;
+				if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+				{
+					FSKeywords::notify(chat);
+				}
+				// </FS:PP>
+
 				buffer = saved + message;
 
 				gIMMgr->addMessage(
@@ -3386,6 +3416,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 // [/SL:KB]
 			chat.mText = message;
 
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of Task IM)
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
 			// IMs from obejcts don't open IM sessions.
 			// <FS:Ansariel> [FS communication UI]
@@ -3479,6 +3516,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		}
 		else
 		{
+
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+			chat.mText = message;
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// standard message, not from system
 			std::string saved;
 			if(offline == IM_OFFLINE)
@@ -4158,6 +4204,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	if (chatter)
 	{
 		chat.mPosAgent = chatter->getPositionAgent();
+		static LLCachedControl<bool> EffectScriptChatParticles(gSavedSettings, "EffectScriptChatParticles"); // <FS:PP> gSavedSettings to LLCachedControl
 
 		// Make swirly things only for talking objects. (not script debug messages, though)
 //		if (chat.mSourceType == CHAT_SOURCE_OBJECT 
@@ -4165,7 +4212,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 //			&& gSavedSettings.getBOOL("EffectScriptChatParticles") )
 // [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0b) | Modified: RLVa-1.0.0g
 		if ( ((chat.mSourceType == CHAT_SOURCE_OBJECT) && (chat.mChatType != CHAT_TYPE_DEBUG_MSG)) && 
-			 (gSavedSettings.getBOOL("EffectScriptChatParticles")) &&
+			 // <FS:PP> gSavedSettings to LLCachedControl
+			 // (gSavedSettings.getBOOL("EffectScriptChatParticles")) &&
+			 (EffectScriptChatParticles) &&
+			 // </FS:PP>
 			 ((!rlv_handler_t::isEnabled()) || (CHAT_TYPE_OWNER != chat.mChatType)) )
 // [/RLVa:KB]
 		{
@@ -4246,18 +4296,25 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				   (CHAT_TYPE_OWNER != chat.mChatType) ) )
 			{
 				bool fIsEmote = RlvUtil::isEmote(mesg);
+				static LLCachedControl<bool> RestrainedLoveShowEllipsis(gSavedSettings, "RestrainedLoveShowEllipsis"); // <FS:PP> gSavedSettings to LLCachedControl
 				if ((!fIsEmote) &&
 					(((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) ||
 					 ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) ))
 				{
-					if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+					if ( (gRlvHandler.filterChat(mesg, false)) && (!RestrainedLoveShowEllipsis) )
+					// </FS:PP>
 						return;
 				}
 				else if ((fIsEmote) &&
 					     (((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) ||
 					      ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) ))
  				{
-					if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+					if (!RestrainedLoveShowEllipsis)
+					// </FS:PP>
 						return;
 					mesg = "/me ...";
 				}
@@ -4538,7 +4595,18 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		LLSD args;
 		chat.mOwnerID = owner_id;
 
-		if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of local chat)
+		if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+		{
+			FSKeywords::notify(chat);
+		}
+		// </FS:PP>
+
+		// <FS:PP> gSavedSettings to LLCachedControl
+		// if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		static LLCachedControl<bool> TranslateChat(gSavedSettings, "TranslateChat");
+		if (TranslateChat && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		// </FS:PP>
 		{
 			if (chat.mChatStyle == CHAT_STYLE_IRC)
 			{

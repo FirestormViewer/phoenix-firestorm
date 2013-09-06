@@ -652,7 +652,8 @@
      visible="true">
         <menu_item_call
          label="Resync Animations"
-         name="Resync Animations">
+         name="Resync Animations"
+         shortcut="control|S">
             <menu_item_call.on_click
              function="Tools.ResyncAnimations" />
         </menu_item_call>

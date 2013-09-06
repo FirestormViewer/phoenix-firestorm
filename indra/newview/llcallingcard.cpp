@@ -834,7 +834,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	}
 	else
 	{
-		args["NAME"] = av_name.getLegacyName();
+		args["NAME"] = av_name.getUserNameForDisplay();
 	}
 	
 	args["STATUS"] = online ? LLTrans::getString("OnlineStatus") : LLTrans::getString("OfflineStatus");

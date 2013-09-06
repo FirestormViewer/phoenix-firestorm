@@ -960,4 +960,6 @@ with the same filename but different name
 
 <texture name="Payment_Info_Filled" file_name="legacy/payment_info_filled.tga" preload="false" />
 <texture name="Payment_Info_Used" file_name="legacy/payment_info_used.tga" preload="false" />
+	
+<texture name="Edit_Flip_X" file_name="icons/Edit_Flip_X.png" preload="false" />
 </textures>

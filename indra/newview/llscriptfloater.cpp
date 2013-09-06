@@ -769,6 +769,44 @@ void LLScriptFloaterManager::setFloaterVisible(const LLUUID& notification_id, bo
 	}
 }
 
+// <FS:Zi> script dialogs position
+// Since we can't initialize the member variables in the class itself,
+// we need to do that in the constructor -Zi
+LLScriptFloaterManager::LLScriptFloaterManager()
+:	mNavigationPanelPad(-1),	// The height of the favorite and navigation panels might not be known yet
+	mFavoritesPanelPad(-1)		// so don't fill the values in here yet, but remember to do it at first use
+{
+}
+
+S32 LLScriptFloaterManager::getTopPad()
+{
+	// initialize if needed
+	if(mNavigationPanelPad==-1)
+	{
+		mNavigationPanelPad=LLUI::getRootView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
+	}
+
+	// initialize if needed
+	if(mFavoritesPanelPad==-1)
+	{
+		mFavoritesPanelPad=LLUI::getRootView()->getChild<LLView>("favorite")->getRect().getHeight();
+	}
+
+	S32 pad=0;
+	if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+	{
+		pad=mNavigationPanelPad;
+	}
+
+	if (gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
+	{
+		pad+=mFavoritesPanelPad;
+	}
+
+	return pad;
+}
+// </FS:Zi>
+
 //////////////////////////////////////////////////////////////////
 
 bool LLScriptFloater::isScriptTextbox(LLNotificationPtr notification)
@@ -859,16 +897,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			floater->setDocked(false, true);
 		}
 
-		S32 topPad = 0;
-		if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
-		{
-			topPad += LLUI::getRootView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
-		}
-
-		if (gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
-		{
-			topPad += LLUI::getRootView()->getChild<LLView>("favorite")->getRect().getHeight();
-		}
+		S32 topPad=LLScriptFloaterManager::instance().getTopPad();
 
 		S32 bottomPad = 0;
 		if (gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->hasButtons())
@@ -890,6 +919,8 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 		S32 width = pos.getWidth();
 		S32 height = pos.getHeight();
+
+		floater->setOpenPositioning(LLFloaterEnums::POSITIONING_SPECIFIED);
 
 		switch (dialogPos)
 		{
