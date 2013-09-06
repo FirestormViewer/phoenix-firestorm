@@ -465,8 +465,8 @@ void audio_update_volume(bool force_update)
 		//	gAudiop->setRolloffFactor(gSavedSettings.getF32("AudioLevelUnderwaterRolloff"));
 
 		static LLCachedControl<F32> sAudioLevelDoppler(gSavedSettings, "AudioLevelDoppler");
-		static LLCachedControl<bool> sAudioLevelRolloff(gSavedSettings, "AudioLevelRolloff");
-		static LLCachedControl<bool> sAudioLevelUnderwaterRolloff(gSavedSettings, "AudioLevelUnderwaterRolloff");
+		static LLCachedControl<F32> sAudioLevelRolloff(gSavedSettings, "AudioLevelRolloff");
+		static LLCachedControl<F32> sAudioLevelUnderwaterRolloff(gSavedSettings, "AudioLevelUnderwaterRolloff");
 
 		gAudiop->setDopplerFactor(sAudioLevelDoppler);
 
