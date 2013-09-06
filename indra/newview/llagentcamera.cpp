@@ -1920,7 +1920,11 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 		camera_position_global = focusPosGlobal + mCameraFocusOffset;
 	}
 
-	if (!gSavedSettings.getBOOL("DisableCameraConstraints") && !gAgent.isGodlike())
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//if (!gSavedSettings.getBOOL("DisableCameraConstraints") && !gAgent.isGodlike())
+	static LLCachedControl<bool> sDisableCameraConstraints(gSavedSettings, "DisableCameraConstraints");
+	if (!sDisableCameraConstraints && !gAgent.isGodlike())
+	// </FS:Ansariel>
 	{
 		LLViewerRegion* regionp = LLWorld::getInstance()->getRegionFromPosGlobal(camera_position_global);
 		bool constrain = true;
@@ -2068,7 +2072,11 @@ F32 LLAgentCamera::getCameraMinOffGround()
 	}
 	else
 	{
-		if (gSavedSettings.getBOOL("DisableCameraConstraints"))
+		// <FS:Ansariel> Replace frequently called gSavedSettings
+		//if (gSavedSettings.getBOOL("DisableCameraConstraints"))
+		static LLCachedControl<bool> sDisableCameraConstraints(gSavedSettings, "DisableCameraConstraints");
+		if (sDisableCameraConstraints)
+		// </FS:Ansariel>
 		{
 			return -1000.f;
 		}

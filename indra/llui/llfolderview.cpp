@@ -325,7 +325,12 @@ void LLFolderView::filter( LLFolderViewFilter& filter )
 {
     // Entry point of inventory filtering (CHUI-849)
 	LLFastTimer t2(FTM_FILTER);
-    filter.resetTime(llclamp(LLUI::sSettingGroups["config"]->getS32(mParentPanel->getVisible() ? "FilterItemsMaxTimePerFrameVisible" : "FilterItemsMaxTimePerFrameUnvisible"), 1, 100));
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+    //filter.resetTime(llclamp(LLUI::sSettingGroups["config"]->getS32(mParentPanel->getVisible() ? "FilterItemsMaxTimePerFrameVisible" : "FilterItemsMaxTimePerFrameUnvisible"), 1, 100));
+	static LLCachedControl<S32> sFilterItemsMaxTimePerFrameVisible(*LLUI::sSettingGroups["config"], "FilterItemsMaxTimePerFrameVisible");
+	static LLCachedControl<S32> sFilterItemsMaxTimePerFrameUnvisible(*LLUI::sSettingGroups["config"], "FilterItemsMaxTimePerFrameUnvisible");
+	filter.resetTime(llclamp((mParentPanel->getVisible() ? sFilterItemsMaxTimePerFrameVisible() : sFilterItemsMaxTimePerFrameUnvisible()), 1, 100));
+	// </FS:Ansariel>
 
     // Note: we filter the model, not the view
 	getViewModelItem()->filter(filter);

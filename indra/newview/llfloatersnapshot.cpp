@@ -770,7 +770,11 @@ BOOL LLSnapshotLivePreview::onIdle( void* snapshot_preview )
 	// If we're in freeze-frame mode and camera has moved, update snapshot.
 	LLVector3 new_camera_pos = LLViewerCamera::getInstance()->getOrigin();
 	LLQuaternion new_camera_rot = LLViewerCamera::getInstance()->getQuaternion();
-	if (gSavedSettings.getBOOL("FreezeTime") && 
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//if (gSavedSettings.getBOOL("FreezeTime") && 
+	static LLCachedControl<bool> sFreezeTime(gSavedSettings, "FreezeTime");
+	if (sFreezeTime && 
+	// </FS:Ansariel>
 		(new_camera_pos != previewp->mCameraPos || dot(new_camera_rot, previewp->mCameraRot) < 0.995f))
 	{
 		previewp->mCameraPos = new_camera_pos;
@@ -2681,7 +2685,11 @@ BOOL LLSnapshotFloaterView::handleMouseUp(S32 x, S32 y, MASK mask)
 BOOL LLSnapshotFloaterView::handleHover(S32 x, S32 y, MASK mask)
 {
 	// use default handler when not in freeze-frame mode
-	if(!gSavedSettings.getBOOL("FreezeTime"))
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//if(!gSavedSettings.getBOOL("FreezeTime"))
+	static LLCachedControl<bool> sFreezeTime(gSavedSettings, "FreezeTime");
+	if(!sFreezeTime)
+	// </FS:Ansariel>
 	{
 		return LLFloaterView::handleHover(x, y, mask);
 	}	
