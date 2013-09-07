@@ -1425,7 +1425,7 @@
             <menu_item_call.on_click
                function="Tools.ScriptInfo" />
             <menu_item_call.on_enable
-               function="SomethingSelected" />
+               function="Object.EnableScriptInfo" />
           </menu_item_call>
           <menu_item_call
              label="Recompile Scripts (Mono)"

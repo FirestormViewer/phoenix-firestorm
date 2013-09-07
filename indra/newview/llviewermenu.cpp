@@ -4181,6 +4181,16 @@ class FSSelfCheckMoveLock : public view_listener_t
 	}
 };
 
+bool enable_bridge_function()
+{
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim() && !LLGridManager::getInstance()->isInAuroraSim())
+		// No bridge on OpenSim yet.
+		return false;
+#endif // OPENSIM
+	return (gSavedSettings.getBOOL("UseLSLBridge") && FSLSLBridge::instance().isBridgeValid());
+}
+
 bool enable_move_lock()
 {
 #ifdef OPENSIM
@@ -4188,7 +4198,13 @@ bool enable_move_lock()
 	if (LLGridManager::getInstance()->isInOpenSim())
 		return true;
 #endif // OPENSIM
-	return (gSavedSettings.getBOOL("UseLSLBridge") && FSLSLBridge::instance().isBridgeValid());
+	return enable_bridge_function();
+}
+
+bool enable_script_info()
+{
+	return (!LLSelectMgr::getInstance()->getSelection()->isEmpty()
+			&& enable_bridge_function());
 }
 // </FS:CR>
 
@@ -10586,6 +10602,7 @@ void initialize_menus()
 	enable.add("Object.EnableUnmute", boost::bind(&enable_object_unmute));
 	enable.add("Object.EnableBuy", boost::bind(&enable_buy_object));
 	commit.add("Object.ZoomIn", boost::bind(&handle_look_at_selection, "zoom"));
+	enable.add("Object.EnableScriptInfo", boost::bind(&enable_script_info));	// <FS:CR>
 
 	// Attachment pie menu
 	enable.add("Attachment.Label", boost::bind(&onEnableAttachmentLabel, _1, _2));
@@ -10638,6 +10655,7 @@ void initialize_menus()
 	enable.add("EnableSelectInPathfindingLinksets", boost::bind(&enable_object_select_in_pathfinding_linksets));
 	commit.add("Pathfinding.Characters.Select", boost::bind(&LLFloaterPathfindingCharacters::openCharactersWithSelectedObjects));
 	enable.add("EnableSelectInPathfindingCharacters", boost::bind(&enable_object_select_in_pathfinding_characters));
+	enable.add("EnableBridgeFunction", boost::bind(&enable_bridge_function));	// <FS:CR>
 
 	view_listener_t::addMenu(new LLFloaterVisible(), "FloaterVisible");
 	view_listener_t::addMenu(new LLSomethingSelected(), "SomethingSelected");

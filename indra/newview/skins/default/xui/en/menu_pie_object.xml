@@ -315,6 +315,8 @@
 				name="ScriptInfo">
 				<pie_slice.on_click
 					function="Tools.ScriptInfo" />
+                <pie_slice.on_enable
+                    function="Object.EnableScriptInfo" />
 			</pie_slice>
 		
 		</pie_menu>
@@ -326,7 +328,6 @@
                 function="Floater.Show"
                 parameter="inspect" />
         </pie_slice>
-
 
     </pie_menu>
 
