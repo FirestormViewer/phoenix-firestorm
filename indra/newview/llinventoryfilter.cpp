@@ -203,7 +203,7 @@ bool LLInventoryFilter::check(const LLInventoryItem* item)
 	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 	// Don't hide cut items in inventory
 	//const bool passed_clipboard = checkAgainstClipboard(item->getUUID());
-	const bool passed_clipboard = TRUE;
+	const bool passed_clipboard = true;
 	// </FS:Ansariel> Don't filter cut items
 
 	return passed_filtertype && passed_permissions && passed_clipboard && passed_string;
