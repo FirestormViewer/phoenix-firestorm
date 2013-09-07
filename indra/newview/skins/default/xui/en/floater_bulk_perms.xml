@@ -292,7 +292,7 @@
      height="23"
      label="OK"
      layout="topleft"
-     left="110"
+     left="6"
      name="ok"
      top_pad="5"
      width="90">
