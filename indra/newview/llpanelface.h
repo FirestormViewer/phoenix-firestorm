@@ -220,6 +220,25 @@ private:
 	F32		getCurrentTextureScaleV();
 	F32		getCurrentTextureOffsetU();
 	F32		getCurrentTextureOffsetV();
+	
+	// Build tool controls
+	LLTextureCtrl*	mTextureCtrl;
+	LLTextureCtrl*	mShinyTextureCtrl;
+	LLTextureCtrl*	mBumpyTextureCtrl;
+	LLColorSwatchCtrl*	mColorSwatch;
+	LLColorSwatchCtrl*	mShinyColorSwatch;
+	
+	LLComboBox*		mComboTexGen;
+	LLComboBox*		mComboMatMedia;
+	LLComboBox*		mComboMatType;
+	
+	LLCheckBoxCtrl	*mCheckFullbright;
+	
+	LLTextBox*		mLabelColorTransp;
+	LLSpinCtrl*		mCtrlColorTransp;		// transparency = 1 - alpha
+	
+	LLSpinCtrl*		mCtrlGlow;
+	LLSpinCtrl*		mCtrlRpt;
 	// </FS:CR>
 
 	// Update visibility of controls to match current UI mode
