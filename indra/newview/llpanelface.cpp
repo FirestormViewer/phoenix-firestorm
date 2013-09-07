@@ -1202,7 +1202,7 @@ void LLPanelFace::updateUI()
 			glow_ctrl->setValue(glow);
 			glow_ctrl->setTentative(!identical_glow);
 			glow_ctrl->setEnabled(editable);
-			glow_ctrl->setEnabled(editable);			
+			getChildView("glow label")->setEnabled(editable);		
 		}
 
 		{			
