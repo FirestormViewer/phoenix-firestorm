@@ -929,7 +929,7 @@ void LLPanelLogin::onClickConnect(void *)
 		// The start location SLURL has already been sent to LLStartUp::setStartSLURL
 
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
-		gSavedSettings.setString("UserLoginInfo", credentialName()); // <FS:CR>
+		gSavedSettings.setLLSD("UserLoginInfo", credentialName()); // <FS:CR>
 
 // <FS:CR> Block release
 		LLSD blocked = FSData::instance().allowedLogin();
