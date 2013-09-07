@@ -3388,6 +3388,18 @@
          function="Advanced.ToggleInfoDisplay"
          parameter="bboxes" />
         </menu_item_check>
+        <!-- <FS:Zi> Add avatar hitbox debug -->
+        <menu_item_check
+         label="Avatar Hitboxes"
+         name="Avatar Hitboxes">
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="DebugRenderHitboxes" />
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="DebugRenderHitboxes" />
+        </menu_item_check>
+        <!-- </FS:Zi> Add avatar hitbox debug -->
         <menu_item_check
          label="Normals"
          name="Normals">

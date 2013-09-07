@@ -50,6 +50,12 @@
 #include "llrendersphere.h"
 #include "llviewerpartsim.h"
 
+// <FS:Zi> Add avatar hitbox debug
+#include "llviewercontrol.h"
+// (See *NOTE: in renderAvatars why this forward declatation is commented out)
+// void drawBoxOutline(const LLVector3& pos,const LLVector3& size);	// llspatialpartition.cpp
+// </FS:Zi>
+
 static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
 static U32 sBufferUsage = GL_STREAM_DRAW_ARB;
 static U32 sShaderLevel = 0;
@@ -1200,6 +1206,96 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
+
+	// <FS:Zi> Add avatar hitbox debug
+	static LLCachedControl<bool> render_hitbox(gSavedSettings,"DebugRenderHitboxes",false);
+
+	if(render_hitbox && pass==1)
+	{
+		// load the debug output shader
+		if(LLGLSLShader::sNoFixedFunction)
+		{
+			gDebugProgram.bind();
+		}
+
+		// set up drawing mode and remove any textures used
+		LLGLEnable blend(GL_BLEND);
+		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+		// save current world matrix
+		gGL.matrixMode(LLRender::MM_MODELVIEW);
+		gGL.pushMatrix();
+
+		gGL.diffuseColor4f(0.7f,1.0f,0.0f,0.3f);
+		glLineWidth(2.0);
+
+		LLQuaternion rot=avatarp->getRotationRegion();
+		LLVector3 pos=avatarp->getPositionAgent();
+		LLVector3 size=avatarp->getScale();
+
+		// *NOTE: Tried this so I wouldn't have to duplcate code, but I didn't find a way to rotate
+		// the matrix by "rot" so the drawBoxOutline function would do the right thing. So
+		// I settled for copying the code and rotating the 4 corner points individually. -Zi
+		// gGL.translatef(pos.mV[VX],pos.mV[VY],pos.mV[VZ]);
+		// gGL.rotatef(rot.mQ[VS]*RAD_TO_DEG,rot.mQ[VX],rot.mQ[VY],rot.mQ[VZ]);
+		// drawBoxOutline(LLVector3::zero,size/2.0);
+		// // drawBoxOutline partly copied from llspatialpartition.cpp below
+
+		// set up and rotate hitbox to avatar orientation, half the avatar scale in either direction
+		LLVector3 v1=size.scaledVec(LLVector3( 0.5f, 0.5f, 0.5f))*rot;
+		LLVector3 v2=size.scaledVec(LLVector3(-0.5f, 0.5f, 0.5f))*rot;
+		LLVector3 v3=size.scaledVec(LLVector3(-0.5f,-0.5f, 0.5f))*rot;
+		LLVector3 v4=size.scaledVec(LLVector3( 0.5f,-0.5f, 0.5f))*rot;
+
+		// render the box
+		gGL.begin(LLRender::LINES);
+
+		//top
+		gGL.vertex3fv((pos+v1).mV);
+		gGL.vertex3fv((pos+v2).mV);
+		gGL.vertex3fv((pos+v2).mV);
+		gGL.vertex3fv((pos+v3).mV);
+		gGL.vertex3fv((pos+v3).mV);
+		gGL.vertex3fv((pos+v4).mV);
+		gGL.vertex3fv((pos+v4).mV);
+		gGL.vertex3fv((pos+v1).mV);
+		
+		//bottom
+		gGL.vertex3fv((pos-v1).mV);
+		gGL.vertex3fv((pos-v2).mV);
+		gGL.vertex3fv((pos-v2).mV);
+		gGL.vertex3fv((pos-v3).mV);
+		gGL.vertex3fv((pos-v3).mV);
+		gGL.vertex3fv((pos-v4).mV);
+		gGL.vertex3fv((pos-v4).mV);
+		gGL.vertex3fv((pos-v1).mV);
+		
+		//right
+		gGL.vertex3fv((pos+v1).mV);
+		gGL.vertex3fv((pos-v3).mV);
+				
+		gGL.vertex3fv((pos+v4).mV);
+		gGL.vertex3fv((pos-v2).mV);
+
+		//left
+		gGL.vertex3fv((pos+v2).mV);
+		gGL.vertex3fv((pos-v4).mV);
+
+		gGL.vertex3fv((pos+v3).mV);
+		gGL.vertex3fv((pos-v1).mV);
+
+		gGL.end();
+
+		// restore world matrix
+		gGL.popMatrix();
+
+		// unload debug shader
+		if(LLGLSLShader::sNoFixedFunction)
+		{
+			gDebugProgram.unbind();
+		}
+	}
+	// </FS:Zi>
 
 	if (!single_avatar && !avatarp->isFullyLoaded() )
 	{
