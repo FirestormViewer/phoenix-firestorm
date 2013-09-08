@@ -1623,5 +1623,7 @@
 			desc="integer llReturnObjectsByID(list objects);Returns a list of objects by their IDs" />
 		<function name="llReturnObjectsByOwner" sleep="0.0" energy="10.0"
 			desc="integer llReturnObjectsByOwner(key owner, integer scope);Returns all objects of a particular owner in the given scope" />
+		<function name="llForceMouselook" sleep="0.0" energy="10.0"
+			desc="llForceMouselook( integer mouselook );Sets if a sitting avatar should be forced into mouselook when they sit on this prim." />
 	</functions>
 </script_library>
