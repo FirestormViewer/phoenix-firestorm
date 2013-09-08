@@ -1382,7 +1382,7 @@
 			desc="llOwnerSay(string message);Says message to owner only.  (Owner must be in the same region.)" />
 		<function name="llRequestSimulatorData" sleep="1.0" energy="10.0"
 			desc="key llRequestSimulatorData(string simulator, integer data);Requests data about simulator.  When data is available the dataserver event will be raised" />
-		<function name="llForceMouseLook" sleep="0.0" energy="10.0"
+		<function name="llForceMouselook" sleep="0.0" energy="10.0"
 			desc="llForceMouselook(integer mouselook);If mouselook is TRUE, any avatar that sits upon the prim will be forced into mouselook mode" />
 		<function name="llGetObjectMass" sleep="0.0" energy="10.0"
 			desc="float llGetObjectMass(key id);Returns the mass of the avatar or object in the region" />
@@ -1623,7 +1623,5 @@
 			desc="integer llReturnObjectsByID(list objects);Returns a list of objects by their IDs" />
 		<function name="llReturnObjectsByOwner" sleep="0.0" energy="10.0"
 			desc="integer llReturnObjectsByOwner(key owner, integer scope);Returns all objects of a particular owner in the given scope" />
-		<function name="llForceMouselook" sleep="0.0" energy="10.0"
-			desc="llForceMouselook(integer mouselook);Sets if a sitting avatar should be forced into mouselook when they sit on this prim." />
 	</functions>
 </script_library>
