@@ -692,6 +692,13 @@ void LLStatusBar::setHealth(S32 health)
 	mHealth = health;
 }
 
+// <FS:CR> Hide currency balance in snapshots
+void LLStatusBar::showBalance(bool show)
+{
+	mBoxBalance->setVisible(show);
+}
+// </FS:CR>
+
 S32 LLStatusBar::getBalance() const
 {
 	return mBalance;

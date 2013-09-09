@@ -21287,5 +21287,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
     </map>
     <!-- <FS_Zi> Add avatar hitbox debug -->
+    <key>FSShowCurrencyBalanceInSnapshots</key>
+    <map>
+      <key>Comment</key>
+      <string>Show your currency balance in snapshots</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
 </map>
 </llsd>
