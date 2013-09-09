@@ -272,8 +272,11 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 
 		LLSearchHistory::getInstance()->clearHistory();
 		LLSearchHistory::getInstance()->save();
-		LLSearchComboBox* search_ctrl = LLNavigationBar::getInstance()->getChild<LLSearchComboBox>("search_combo_box");
-		search_ctrl->clearHistory();
+		// <FS:Zi> Make navigation bar part of the UI
+		// LLSearchComboBox* search_ctrl = LLNavigationBar::getInstance()->getChild<LLSearchComboBox>("search_combo_box");
+		// search_ctrl->clearHistory();
+		LLNavigationBar::instance().clearHistory();
+		// </FS:Zi>
 
 		LLTeleportHistoryStorage::getInstance()->purgeItems();
 		LLTeleportHistoryStorage::getInstance()->save();
