@@ -215,6 +215,10 @@ const U32 DEFERRED_VB_MASK = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TE
 // Max number of occluders to search for. JC
 const S32 MAX_OCCLUDER_COUNT = 2;
 
+//<FS:TS> FIRE-11593: Teleporting more than 4096 regions away clears screen
+const F32 MAX_SHIFT_DISTANCE = 256.f * 4095; 	//maximum distance to shift spatial partitions
+//</FS:TS> FIRE-11593
+
 extern S32 gBoxFrame;
 //extern BOOL gHideSelectedObjects;
 extern BOOL gDisplaySwapBuffers;
@@ -3243,6 +3247,17 @@ void LLPipeline::shiftObjects(const LLVector3 &offset)
 		mShiftList.resize(0);
 	}
 
+	//<FS:TS> FIRE-11593: Teleporting more than 4096 regions away clears screen
+	//        The spatial partition octree shift code has problems with
+	//        shifts of more than 4096 regions (1M meters). We shift just
+	//        less than that distance, and let later processing deal with
+	//        all the spatial partitions that are shifted far enough away
+	//        that we'll never see them anyway.
+	if (offset.length() > MAX_SHIFT_DISTANCE)
+	{
+		offseta.splat(MAX_SHIFT_DISTANCE);
+	}
+	//</FS:TS> FIRE-11593
 	
 	{
 		LLFastTimer t(FTM_SHIFT_OCTREE);
