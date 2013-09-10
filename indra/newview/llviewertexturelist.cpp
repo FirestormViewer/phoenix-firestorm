@@ -74,6 +74,9 @@ LLStat LLViewerTextureList::sGLBoundMemStat("GL Bound Mem", 32, TRUE);
 LLStat LLViewerTextureList::sRawMemStat("Raw Image Mem", 32, TRUE);
 LLStat LLViewerTextureList::sFormattedMemStat("Formatted Image Mem", 32, TRUE);
 
+// <FS:Ansariel> Fast cache stats
+U32 LLViewerTextureList::sNumFastCacheReads = 0;
+
 LLViewerTextureList gTextureList;
 static LLFastTimer::DeclareTimer FTM_PROCESS_IMAGES("Process Images");
 
@@ -680,7 +683,11 @@ void LLViewerTextureList::updateImages(F32 max_time)
 	{
 		//loading from fast cache 
 		LLFastTimer t(FTM_FAST_CACHE_IMAGE_FETCH);
-		max_time -= updateImagesLoadingFastCache(max_time);
+		// <FS:Ansariel> Don't let the fast cache choke image processing
+		//max_time -= updateImagesLoadingFastCache(max_time);
+		F32 fastcache_time = updateImagesLoadingFastCache(max_time / 3);
+		max_time = llmax(max_time * 2/3, max_time - fastcache_time); // at least 66% for update fetch & create
+		// </FS:Ansariel>
 	}
 
 	{
@@ -952,6 +959,9 @@ F32 LLViewerTextureList::updateImagesLoadingFastCache(F32 max_time)
 		enditer = iter;
 		LLViewerFetchedTexture *imagep = *curiter;
 		imagep->loadFromFastCache();
+		// <FS:Ansariel> Fast cache stats
+		sNumFastCacheReads++;
+		// </FS:Ansariel>
 		if (timer.getElapsedTimeF32() > max_time)
 		{
 			break;
