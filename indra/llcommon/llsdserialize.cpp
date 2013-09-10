@@ -2133,8 +2133,22 @@ bool unzip_llsd(LLSD& data, std::istream& is, S32 size)
 		}
 
 		U32 have = CHUNK-strm.avail_out;
+		
+		// <FS:ND> Make sure to properly handle out of memory situations
 
-		result = (U8*) realloc(result, cur_size + have);
+		// result = (U8*) realloc(result, cur_size + have);
+		U8 *pNew = (U8*) realloc(result, cur_size + have);
+		if( !pNew )
+		{
+			free( result );
+			llwarns << "Unzip error: out of memory, needed " << cur_size+have << " bytes" << llendl;
+			return  false;
+		}
+		
+		result = pNew;
+
+		// </FS:ND>
+
 		memcpy(result+cur_size, out, have);
 		cur_size += have;
 
