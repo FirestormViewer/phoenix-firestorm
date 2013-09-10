@@ -3164,15 +3164,33 @@ void LLPanelPreferenceSkins::onSkinChanged()
     // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
     // current skin would be carried over, leading to confusion and a first experience with
     // the skin that the designer didn't intend.
-	if  (m_Skin.compare("starlight") == 0)
+	if  (m_Skin.compare("starlight") == 0 ||
+	     m_Skin.compare("starlightcui") == 0)
 	{
-		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
-		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
-	}
-	else
-	{
-		gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
-		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+		std::string noteMessage;
+
+		if(gSavedSettings.getBOOL("ShowMenuBarLocation"))
+		{
+			noteMessage=LLTrans::getString("skin_defaults_starlight_location");
+			gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+		}
+
+		if(!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+		{
+			if(!noteMessage.empty())
+			{
+				noteMessage+="\n";
+			}
+			noteMessage+=LLTrans::getString("skin_defaults_starlight_navbar");
+			gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
+		}
+
+		if(!noteMessage.empty())
+		{
+			LLSD args;
+			args["MESSAGE"]=noteMessage;
+			LLNotificationsUtil::add("SkinDefaultsChangeSettings",args);
+		}
 	}
 
 	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))

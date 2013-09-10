@@ -11476,5 +11476,18 @@ AntiSpam: Blocked [SOURCE] for spamming a [QUEUE] ([COUNT]) times in [PERIOD] se
 The value you set for the number of concurrent requests to load mesh objects, [VALUE], is higher than the maximum of [MAX]. It has been reset to the default of [DEFAULT].
     <tag>fail</tag>
     </notification>
-	
+
+  <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
+  <!--         The actual texts for the messages are in strings.xml -->
+  <notification
+   icon="notify.tga"
+   name="SkinDefaultsChangeSettings"
+   type="alertmodal">
+[MESSAGE]
+   <form name="form">
+      <ignore name="ignore"
+       text="A preferences setting was changed to the skin's default value."/>
+    </form>
+  </notification>
+  <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
 </notifications>
