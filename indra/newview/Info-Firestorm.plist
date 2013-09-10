@@ -68,6 +68,7 @@
 			<array>
 				<string>secondlife</string>
 				<string>x-grid-location-info</string>
+				<string>hop</string>
 			</array>
 			<key>LSIsAppleDefaultForScheme</key>
 			<true/>
