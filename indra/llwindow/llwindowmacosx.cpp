@@ -1590,9 +1590,7 @@ void LLWindowMacOSX::hideCursorUntilMouseMove()
 
 void LLWindowMacOSX::setTitle(const std::string &title)
 {
-	// FIXME: 3.6.5 Merge <FS:CR>
-	//CFStringRef string = CFStringCreateWithCString(NULL, title.c_str(), kCFStringEncodingUTF8);
-	//SetWindowTitleWithCFString(mWindow, string);
+	setTitleCocoa(mWindow, title);
 }
 
 //
