@@ -61,10 +61,10 @@
 		<panel label="Inventar" name="panel_snapshot_inventory"/>
 		<panel label="Lokal" name="panel_snapshot_local"/>
 		<panel label="Flickr" name="panel_snapshot_flickr"/>
-    </tab_container>
+	</tab_container>
 	<panel name="advanced_options_panel">
 		<text name="advanced_options_label">
-			ERWEITERTE OPTIONEN
+			Erweiterte Optionen
 		</text>
 		<text name="layer_type_label">
 			Aufnahme:
@@ -74,6 +74,7 @@
 			<combo_box.item label="Tiefe" name="Depth"/>
 		</combo_box>
 		<check_box label="Schnittstelle" name="ui_check"/>
+		<check_box label="L$-Kontostand" name="currency_check"/>
 		<check_box label="HUDs" name="hud_check"/>
 		<check_box label="Standbild (Vollbild)" name="freeze_frame_check"/>
 		<check_box label="Automatisch aktualisieren" name="auto_snapshot_check"/>

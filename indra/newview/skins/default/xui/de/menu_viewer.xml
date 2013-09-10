@@ -405,6 +405,7 @@
 		</menu>
 		<menu label="Metadaten darstellen" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
+			<menu_item_check label="Avatar-Hitboxen" name="Avatar Hitboxes"/>
 			<menu_item_check label="Normalen" name="Normals"/>
 			<menu_item_check label="Octree" name="Octree"/>
 			<menu_item_check label="Shadow Frusta" name="Shadow Frusta"/>
