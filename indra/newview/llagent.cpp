@@ -2281,7 +2281,7 @@ void LLAgent::endAnimationUpdateUI()
 		// show menus
 		gMenuBarView->setVisible(TRUE);
 		// <FS:Ansariel> Separate navigation and favorites panel
-		LLNavigationBar::instance().getView()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+		LLNavigationBar::instance().getView()->setVisible(TRUE);
 		gStatusBar->setVisibleForMouselook(true);
 
 		if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
