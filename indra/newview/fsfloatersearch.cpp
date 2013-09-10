@@ -343,7 +343,6 @@ BOOL FSFloaterSearch::postBuild()
 		mPanelProfile->setVisible(false);
 		mPanelProfile->setEmbedded(TRUE);
 		panel_people->childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
-		panel_people->setUseLegacyResultBehavior(TRUE);
 	}
 	
 	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
@@ -1034,12 +1033,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
-		
-		//<FS:KC> Load the first result
-		if (self->getUseLegacyResultBehavior())
-		{
-			self->onSelectItem();
-		}
+		self->onSelectItem();
 	}
 }
 
