@@ -278,7 +278,11 @@ static LLAppViewerListener sAppViewerListener(LLAppViewer::instance);
 #if LL_DARWIN
 // <FS:CR>
 //const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.indra.viewer";
-const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer";
+#ifdef OPENSIM
+const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer-oss";
+#else // !OPENSIM
+const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer-hvk";
+#endif // OPENSIM
 // </FS:CR>
 extern void init_apple_menu(const char* product);
 #endif // LL_DARWIN
