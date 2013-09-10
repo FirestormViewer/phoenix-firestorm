@@ -42,6 +42,7 @@ class LLImageDecodeThread;
 class LLTextureFetch;
 class LLWatchdogTimeout;
 class LLUpdaterService;
+class LLViewerJoystick;
 
 extern LLFastTimer::DeclareTimer FTM_FRAME;
 
@@ -277,6 +278,8 @@ private:
 	bool mPurgeCache;
 	bool mPurgeSettings;	// <FS>
     bool mPurgeOnExit;
+	bool mMainLoopInitialized;
+	LLViewerJoystick* joystick;
 
 	bool mSavedFinalSnapshot;
 	bool mSavePerAccountSettings;		// only save per account settings if login succeeded

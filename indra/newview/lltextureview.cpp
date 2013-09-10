@@ -624,20 +624,13 @@ void LLGLTexMemBar::draw()
 	U32 cache_read(0U), cache_write(0U), res_wait(0U);
 	LLAppViewer::getTextureFetch()->getStateStats(&cache_read, &cache_write, &res_wait);
 	
-	// <FS:Ansariel> Fast cache stats
-	//text = llformat("Net Tot Tex: %.1f MB Tot Obj: %.1f MB Tot Htp: %d Cread: %u Cwrite: %u Rwait: %u",
-	text = llformat("Net Tot Tex: %.1f MB Tot Obj: %.1f MB Tot Htp: %d Cread: %u Cwrite: %u Rwait: %u FCread: %u",
-	// </FS:Ansariel>
+	text = llformat("Net Tot Tex: %.1f MB Tot Obj: %.1f MB Tot Htp: %d Cread: %u Cwrite: %u Rwait: %u",
 					total_texture_downloaded,
 					total_object_downloaded,
 					total_http_requests,
 					cache_read,
 					cache_write,
-					// <FS:Ansariel> Fast cache stats
-					//res_wait);
-					res_wait,
-					LLViewerTextureList::sNumFastCacheReads);
-					// </FS:Ansariel>
+					res_wait);
 
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*3,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
@@ -646,10 +639,7 @@ void LLGLTexMemBar::draw()
 	//S32 left = 0 ;
 	//----------------------------------------------------------------------------
 
-	// <FS:Ansariel> Fast cache stats
-	//text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d",
-	text = llformat("Tex: %d Fetch: %d(%d) Pkts:%d(%d) CAC R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d FCA:%d",
-	// </FS:Ansariel>
+	text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d",
 					gTextureList.getNumImages(),
 					LLAppViewer::getTextureFetch()->getNumRequests(), LLAppViewer::getTextureFetch()->getNumDeletes(),
 					LLAppViewer::getTextureFetch()->mPacketCount, LLAppViewer::getTextureFetch()->mBadPacketCount, 
@@ -658,11 +648,7 @@ void LLGLTexMemBar::draw()
 					LLImageRaw::sRawImageCount,
 					LLAppViewer::getTextureFetch()->getNumHTTPRequests(),
 					LLAppViewer::getImageDecodeThread()->getPending(), 
-					// <FS:Ansariel> Fast cache stats
-					//gTextureList.mCreateTextureList.size());
-					gTextureList.mCreateTextureList.size(),
-					gTextureList.mFastCacheList.size());
-					// </FS:Ansariel>
+					gTextureList.mCreateTextureList.size());
 
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*2,
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);

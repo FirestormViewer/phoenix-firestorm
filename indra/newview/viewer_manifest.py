@@ -827,7 +827,6 @@ class DarwinManifest(ViewerManifest):
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
-                self.path("Firestorm.nib")
                 self.path("VivoxAUP.txt")
 
                 icon_path = self.icon_path()

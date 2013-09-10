@@ -1510,8 +1510,15 @@ set_source_files_properties(
    )
 
 if (DARWIN)
+  LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
+  LIST(APPEND viewer_SOURCE_FILES llfilepicker_mac.mm)
+  LIST(APPEND viewer_HEADER_FILES llfilepicker_mac.h)
+
+  # This should be compiled with the viewer.
+  LIST(APPEND viewer_SOURCE_FILES llappdelegate-objc.mm)
+
+# [FS] Growl libs
   LIST(APPEND viewer_SOURCE_FILES
-        llappviewermacosx.cpp
         growlmanager.cpp
         growlnotifiermacosx.cpp
         growlnotifiermacosx-objc.mm
@@ -1522,7 +1529,7 @@ if (DARWIN)
          growlnotifiermacosx.h
          growlnotifiermacosx-objc.h
          )
-
+# [FS]
 
   find_library(AGL_LIBRARY AGL)
   find_library(APPKIT_LIBRARY AppKit)
@@ -1543,7 +1550,7 @@ if (DARWIN)
     macview.r
     gpu_table.txt
     Info-Firestorm.plist
-    Firestorm.nib/
+    Firestorm.xib/
     # CMake doesn't seem to support Xcode language variants well just yet
     English.lproj/InfoPlist.strings
     English.lproj/language.txt
@@ -1564,8 +1571,10 @@ endif (DARWIN)
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
+# [FS] Growl support
     LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
     LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
+# [FS] Growl support
 
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
@@ -1594,10 +1603,12 @@ if (WINDOWS)
          )
 
     list(APPEND viewer_HEADER_FILES
-         growlmanager.h
-         growlnotifierwin.h
          llappviewerwin32.h
          llwindebug.h
+# [FS] Growl libs
+         growlmanager.h
+         growlnotifierwin.h
+# [FS]
          )
 
     # precompiled header configuration
@@ -2272,20 +2283,27 @@ if (LINUX)
 endif (LINUX)
 
 if (DARWIN)
+ # These all get set with PROPERTIES
   set(product "Firestorm")
+  set(MACOSX_BUNDLE_INFO_STRING "Firestorm Viewer")
+  set(MACOSX_BUNDLE_ICON_FILE "firestorm_icon.icns")
+  set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.phoenixviewer.firestorm.viewer")
+  set(MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
+  set(MACOSX_BUNDLE_BUNDLE_NAME "Firestorm")
+  set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}")
+  set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright © The Phoenix Firestorm Project, Inc. 2010-2013")
+  set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
+  set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "NSApplication")
 
   set_target_properties(
     ${VIEWER_BINARY_NAME}
     PROPERTIES
     OUTPUT_NAME "${product}"
-    MACOSX_BUNDLE_INFO_STRING "Firestorm Viewer"
-    MACOSX_BUNDLE_ICON_FILE "firestorm_icon.icns"
-    MACOSX_BUNDLE_GUI_IDENTIFIER "com.firestorm.indra.viewer" #<FS:TM>
-    MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}"
-    MACOSX_BUNDLE_BUNDLE_NAME "Firestorm"
-    MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}"
-    MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}"
-    MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2013 The Phoenix Firestorm Project, Inc."
+    MACOSX_BUNDLE_INFO_PLIST
+    # <FS:CR> Use Firestorm plist
+    #"${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Info-Firestorm.plist"
     )
 
   configure_file(
