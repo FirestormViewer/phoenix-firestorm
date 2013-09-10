@@ -69,6 +69,8 @@
 #include "llstatusbar.h"
 #include "llnotificationsutil.h"// <FS:AW hypergrid support >
 
+#include "lluictrl.h"	// <FS:Zi> Make navigation bar part of the UI
+
 //-- LLTeleportHistoryMenuItem -----------------------------------------------
 
 /**
@@ -274,10 +276,11 @@ LLNavigationBar::LLNavigationBar()
 	mSearchComboBox(NULL),
 	mSaveToLocationHistory(false)
 {
-	buildFromFile( "panel_navigation_bar.xml");
+	// buildFromFile( "panel_navigation_bar.xml");	// <FS:Zi> Make navigation bar part of the UI
 
 	// set a listener function for LoginComplete event
 	LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&LLNavigationBar::handleLoginComplete, this));
+	setupPanel();	// <FS:Zi> Make navigation bar part of the UI
 }
 
 LLNavigationBar::~LLNavigationBar()
@@ -286,14 +289,31 @@ LLNavigationBar::~LLNavigationBar()
 	mTeleportFailedConnection.disconnect();
 }
 
-BOOL LLNavigationBar::postBuild()
+// <FS:Zi> Make navigation bar part of the UI
+// BOOL LLNavigationBar::postBuild()
+void LLNavigationBar::setupPanel()
+// </FS:Zi>
 {
-	mBtnBack	= getChild<LLPullButton>("back_btn");
-	mBtnForward	= getChild<LLPullButton>("forward_btn");
-	mBtnHome	= getChild<LLButton>("home_btn");
-	
-	mCmbLocation= getChild<LLLocationInputCtrl>("location_combo"); 
-	mSearchComboBox	= getChild<LLSearchComboBox>("search_combo_box");
+	// <FS:Zi> Make navigation bar part of the UI
+	// mBtnBack	= getChild<LLPullButton>("back_btn");
+	// mBtnForward	= getChild<LLPullButton>("forward_btn");
+	// mBtnHome	= getChild<LLButton>("home_btn");
+
+	// mCmbLocation= getChild<LLLocationInputCtrl>("location_combo"); 
+	// mSearchComboBox	= getChild<LLSearchComboBox>("search_combo_box");
+
+	mView=LLUI::getRootView()->getChild<LLView>("navigation_bar");
+
+	mBtnBack	= mView->getChild<LLPullButton>("back_btn");
+	mBtnForward	= mView->getChild<LLPullButton>("forward_btn");
+	mBtnHome	= mView->getChild<LLButton>("home_btn");
+
+	mCmbLocation= mView->getChild<LLLocationInputCtrl>("location_combo"); 
+	mSearchComboBox	= mView->getChild<LLSearchComboBox>("search_combo_box");
+
+	mView->getChild<LLUICtrl>("navigation_bar_context_menu_panel")->
+		setRightMouseDownCallback(boost::bind(&LLNavigationBar::onRightMouseDown, this, _2, _3, _4));
+	// </FS:Zi>
 
 	fillSearchComboBox();
 
@@ -328,9 +348,11 @@ BOOL LLNavigationBar::postBuild()
 	LLTeleportHistory::getInstance()->setHistoryChangedCallback(
 			boost::bind(&LLNavigationBar::onTeleportHistoryChanged, this));
 
-	LLHints::registerHintTarget("nav_bar", getHandle());
-
-	return TRUE;
+	// <FS:Zi> Make navigation bar part of the UI
+	// LLHints::registerHintTarget("nav_bar", getHandle());
+	// return TRUE;
+	LLHints::registerHintTarget("nav_bar",mView->getHandle());
+	// </FS:Zi>
 }
 
 // <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
@@ -369,30 +391,32 @@ void LLNavigationBar::fillSearchComboBox()
 	}
 }
 
-void LLNavigationBar::draw()
-{
-	if (isBackgroundVisible())
-	{
-		static LLUICachedControl<S32> drop_shadow_floater ("DropShadowFloater", 0);
-		static LLUIColor color_drop_shadow = LLUIColorTable::instance().getColor("ColorDropShadow");
-		gl_drop_shadow(0, getRect().getHeight(), getRect().getWidth(), 0,
-                           color_drop_shadow, drop_shadow_floater );
-	}
+// <FS:Zi> Make navigation bar part of the UI
+// void LLNavigationBar::draw()
+// {
+// 	if (isBackgroundVisible())
+// 	{
+// 		static LLUICachedControl<S32> drop_shadow_floater ("DropShadowFloater", 0);
+// 		static LLUIColor color_drop_shadow = LLUIColorTable::instance().getColor("ColorDropShadow");
+// 		gl_drop_shadow(0, getRect().getHeight(), getRect().getWidth(), 0,
+//                            color_drop_shadow, drop_shadow_floater );
+// 	}
+// 
+// 	LLPanel::draw();
+// }
 
-	LLPanel::draw();
-}
-
-BOOL LLNavigationBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
-{
-	BOOL handled = childrenHandleRightMouseDown( x, y, mask) != NULL;
-	if(!handled && !gMenuHolder->hasVisibleMenu())
-	{
-		show_navbar_context_menu(this,x,y);
-		handled = true;
-	}
-					
-	return handled;
-}
+// BOOL LLNavigationBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
+// {
+// 	BOOL handled = childrenHandleRightMouseDown( x, y, mask) != NULL;
+// 	if(!handled && !gMenuHolder->hasVisibleMenu())
+// 	{
+// 		show_navbar_context_menu(this,x,y);
+// 		handled = true;
+// 	}
+// 					
+// 	return handled;
+// }
+// </FS:Zi>
 
 void LLNavigationBar::onBackButtonClicked()
 {
@@ -638,7 +662,10 @@ void LLNavigationBar::rebuildTeleportHistoryMenu()
 		menu_p.scrollable(true);
 		mTeleportHistoryMenu = LLUICtrlFactory::create<LLMenuGL>(menu_p);
 		
-		addChild(mTeleportHistoryMenu);
+		// <FS:Zi> Make navigation bar part of the UI
+		// addChild(mTeleportHistoryMenu);
+		mView->addChild(mTeleportHistoryMenu);
+		// </FS:Zi>
 	}
 	
 	// Populate the menu with teleport history items.
@@ -773,4 +800,22 @@ void LLNavigationBar::clearHistoryCache()
 // {
 // 	return mDefaultFpRect.getHeight();
 // }
+// </FS:Zi>
+
+// <FS:Zi> Make navigation bar part of the UI
+void LLNavigationBar::clearHistory()
+{
+	mSearchComboBox->clearHistory();
+}
+
+LLView* LLNavigationBar::getView()
+{
+	return mView;
+}
+
+void LLNavigationBar::onRightMouseDown(S32 x,S32 y,MASK mask)
+{
+	// call LLViewerMenu function
+	show_navbar_context_menu(mView,x,y);
+}
 // </FS:Zi>

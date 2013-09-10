@@ -2281,7 +2281,7 @@ void LLAgent::endAnimationUpdateUI()
 		// show menus
 		gMenuBarView->setVisible(TRUE);
 		// <FS:Ansariel> Separate navigation and favorites panel
-		//LLNavigationBar::getInstance()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+		LLNavigationBar::instance().getView()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
 		gStatusBar->setVisibleForMouselook(true);
 
 		if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
@@ -2430,7 +2430,7 @@ void LLAgent::endAnimationUpdateUI()
 		gToolBarView->setToolBarsVisible(false);
 		gMenuBarView->setVisible(FALSE);
 		// <FS:Ansariel> Separate navigation and favorites panel
-		//LLNavigationBar::getInstance()->setVisible(FALSE);
+		LLNavigationBar::instance().getView()->setVisible(FALSE);
 		gStatusBar->setVisibleForMouselook(false);
 
 		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);

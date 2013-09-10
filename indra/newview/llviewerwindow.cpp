@@ -2013,24 +2013,26 @@ void LLViewerWindow::initWorldUI()
 	status_bar_container->addChildInBack(gStatusBar);
 	status_bar_container->setVisible(TRUE);
 
-	// Navigation bar
-	// <FS:Zi> Use nav_bar_container here, not topinfo_bar_container
+	// <FS:Zi> Make navigation bar part of the UI
+	// // Navigation bar
 	// LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
-	LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("nav_bar_container");
-	// </FS_Zi>
 
-	LLNavigationBar* navbar = LLNavigationBar::getInstance();
-	// navbar->setShape(nav_bar_container->getLocalRect());	// <FS:Zi> Moved lower so reshape works properly
-	navbar->setBackgroundColor(gMenuBarView->getBackgroundColor().get());
-	nav_bar_container->addChild(navbar);
-	nav_bar_container->setVisible(TRUE);
-	navbar->setShape(nav_bar_container->getLocalRect());	// <FS:Zi> Moved here so reshape works properly
-	
-	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// LLNavigationBar* navbar = LLNavigationBar::getInstance();
+	// navbar->setShape(nav_bar_container->getLocalRect());
+	// navbar->setBackgroundColor(gMenuBarView->getBackgroundColor().get());
+	// nav_bar_container->addChild(navbar);
+	// nav_bar_container->setVisible(TRUE);
+
 	// if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
 	// {
 	//		navbar->setVisible(FALSE);
 	// 	}
+
+	// Force navigation bar to initialize
+	LLNavigationBar::getInstance();
+	// set navbar container visible which is initially hidden on the login screen,
+	// the real visibility of navbar and favorites bar is done via visibility control -Zi
+	LLNavigationBar::instance().getView()->setVisible(TRUE);
 	// </FS:Zi>
 
 	if (!gSavedSettings.getBOOL("ShowMenuBarLocation"))
