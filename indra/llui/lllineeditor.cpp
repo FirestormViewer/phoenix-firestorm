@@ -193,11 +193,13 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	setPrevalidateInput(p.prevalidate_input_callback());
 	setPrevalidate(p.prevalidate_callback());
 
-	LLContextMenu* menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>
-		("menu_text_editor.xml",
-		 LLMenuGL::sMenuContainer,
-		 LLMenuHolderGL::child_registry_t::instance());
-	setContextMenu(menu);
+	// <FS:Zi> Only allocate a menu when it's called for the first time
+	// LLContextMenu* menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>
+	// 	("menu_text_editor.xml",
+	// 	 LLMenuGL::sMenuContainer,
+	// 	 LLMenuHolderGL::child_registry_t::instance());
+	// setContextMenu(menu);
+	// </FS:Zi>
 }
  
 LLLineEditor::~LLLineEditor()
@@ -2619,6 +2621,17 @@ LLWString LLLineEditor::getConvertedText() const
 void LLLineEditor::showContextMenu(S32 x, S32 y)
 {
 	LLContextMenu* menu = static_cast<LLContextMenu*>(mContextMenuHandle.get());
+
+	// <FS:Zi> Only allocate a menu when it's called for the first time
+	if(!menu)
+	{
+		menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>
+			("menu_text_editor.xml",
+			LLMenuGL::sMenuContainer,
+			LLMenuHolderGL::child_registry_t::instance());
+		setContextMenu(menu);
+	}
+	// </FS:Zi>
 
 	if (menu)
 	{
