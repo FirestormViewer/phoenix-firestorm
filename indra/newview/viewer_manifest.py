@@ -1060,9 +1060,9 @@ class DarwinManifest(ViewerManifest):
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
                         os.path.join(dmg_template, "background.png"): "background.png",
-                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
-                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
-                        os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
+                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox Acceptable Use Policy.txt",
+                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt"}.items():
+                        #os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 

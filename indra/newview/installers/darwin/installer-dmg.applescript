@@ -3,40 +3,90 @@
 -- Usage: osascript installer-dmg.applescript <volume-name>
 -- where <volume-name> is the volume name of the disk image.
 
-on run argv
+on run (volumeName)
 	tell application "Finder"
-		set diskname to item 1 of argv
-		tell disk diskname
+		tell disk (volumeName as string)
 			open
-			set bounds of container window to {400, 100, 900, 699}
-			-- bit of a hack, window size isn't written until there is some user interaction
-			-- double click the zoom button to trick Finder into saving it! [FS:CR]
-			tell application "System Events" to tell process "Finder" to click button 2 of window 1
-			tell application "System Events" to tell process "Finder" to click button 2 of window 1
-			set file_list to every file
-			repeat with i in file_list
-				if the name of i is "Applications" then
-					set the position of i to {391, 165}
-				else if the name of i ends with ".app" then
-					set the position of i to {121, 165}
-				else if the name of i is "LGPL-License.txt" then
-					set the position of i to {391, 265}
-				else if the name of i is "VivoxAUP.txt" then
-					set the position of i to {121, 265}
-				end if
-				-- Change the 7 to change the color: 0 is no label, then red,
-				-- orange, yellow, green, blue, purple, or gray.
-				set the label index of i to 7
-			end repeat
-			set theViewOptions to the icon view options of container window
-			set background picture of theViewOptions to file "background.png"
-			set arrangement of theViewOptions to not arranged
-			set icon size of theViewOptions to 100
-			set current view of container window to icon view
-			set toolbar visible of container window to false
-			set statusbar visible of container window to false
+
+			set theXOrigin to 400
+			set theYOrigin to 100
+			set theWidth to 500
+			set theHeight to 600
+			set iconSize to 100
+
+			set theBottomRightX to (theXOrigin + theWidth)
+			set theBottomRightY to (theYOrigin + theHeight)
+			set dsStore to "\"" & "/Volumes/" & volumeName & "/" & ".DS_STORE\""
+
+			tell container window
+				set current view to icon view
+				set toolbar visible to false
+				set statusbar visible to false
+				set the bounds to {theXOrigin, theYOrigin, theBottomRightX, theBottomRightY}
+				set statusbar visible to false
+
+				set file_list to every file
+				repeat with i in file_list
+					if the name of i is "Applications" then
+						set the position of i to {345, 125}
+					else if the name of i ends with ".app" then
+						set the position of i to {145, 125}
+					else if the name of i is "LGPL License.txt" then
+						set the position of i to {145, 225}
+					else if the name of i is "Vivox Acceptable Use Policy.txt" then
+						set the position of i to {345, 225}
+					end if
+					-- Change the 7 to change the color: 0 is no label, then red,
+					-- orange, yellow, green, blue, purple, or gray.
+					set the label index of i to 7
+				end repeat
+			-- This close-open hack is nessesary to save positions on 10.6 Snow Leopard
+			close
+			open
+			end tell
+
+			set opts to the icon view options of container window
+			tell opts
+				set icon size to iconSize
+				set arrangement to not arranged
+			end tell
+
+			set background picture of opts to file "background.png"
+
 			update without registering applications
-			delay 4
+			-- Force saving of the size
+			delay 1
+
+			tell container window
+				set statusbar visible to false
+				set the bounds to {theXOrigin, theYOrigin, theBottomRightX - 10, theBottomRightY - 10}
+			end tell
+
+			update without registering applications
 		end tell
+
+		delay 1
+
+		tell disk (volumeName as string)
+			tell container window
+				set statusbar visible to false
+				set the bounds to {theXOrigin, theYOrigin, theBottomRightX, theBottomRightY}
+			end tell
+
+			update without registering applications
+		end tell
+
+		--give the finder some time to write the .DS_Store file
+		delay 3
+
+		set waitTime to 0
+		set ejectMe to false
+		repeat while ejectMe is false
+			delay 1
+			set waitTime to waitTime + 1
+
+			if (do shell script "[ -f " & dsStore & " ]; echo $?") = "0" then set ejectMe to true
+		end repeat
+		log "waited " & waitTime & " seconds for .DS_STORE to be created."
 	end tell
 end run
