@@ -4488,4 +4488,10 @@ Nie można tego cofnąć.
 	<notification name="MeshMaxConcurrentReqTooHigh">
 		Wartość ustawienia dla liczby jednoczesnych żądań ładowania obiektów meszowych określona przez Ciebie, [VALUE], jest wyższa niż dopuszczalne [MAX]. Została ona zresetowana do domyślnej, [DEFAULT].
 	</notification>
+	<notification name="SkinDefaultsChangeSettings">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Ustawienie w preferencjach zostało zmienione do domyślnej wartości skórki."/>
+		</form>
+	</notification>
 </notifications>

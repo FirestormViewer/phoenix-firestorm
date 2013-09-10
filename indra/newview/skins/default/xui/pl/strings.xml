@@ -5329,4 +5329,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="export_failed_to_load">
 		Nie powiodło się pobranie danych [ITEM].
 	</string>
+	<string name="skin_defaults_starlight_location">
+		Pokazywanie Twojej obecnej lokalizacji w pasku menu zostało wyłączone, to domyślne zachowanie dla skórek linii StarLight.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Pokazywanie paska nawigacyjnego zostało włączone, to domyślne zachowanie dla skórek linii StarLight.
+	</string>
 </strings>
