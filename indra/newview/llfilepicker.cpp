@@ -882,12 +882,16 @@ BOOL LLFilePicker::getMultipleOpenFiles(ELoadFilter filter, bool blocking)
     mPickOptions |= F_FILE;
 
     mPickOptions |= F_MULTIPLE;
-	// Modal, so pause agent
-	send_agent_pause();
+	
+	// <FS:CR> Threaded Filepickers
+	if (blocking)
+	{
+		// Modal, so pause agent
+		send_agent_pause();
+	}
+	// </FS:CR>
     
 	success = doNavChooseDialog(filter);
-    
-    send_agent_resume();
     
 	if (success)
 	{
@@ -897,8 +901,15 @@ BOOL LLFilePicker::getMultipleOpenFiles(ELoadFilter filter, bool blocking)
 			mLocked = true;
 	}
 
-	// Account for the fact that the app has been stalled.
-	LLFrameTimer::updateFrameTime();
+	// <FS:CR> Threaded Filepickers
+	if (blocking)
+	{
+		send_agent_resume();
+		
+		// Account for the fact that the app has been stalled.
+		LLFrameTimer::updateFrameTime();
+	}
+	// </FS:CR>
 	return success;
 }
 
@@ -922,8 +933,13 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 	
     mPickOptions &= ~F_MULTIPLE;
 
-	// Modal, so pause agent
-	send_agent_pause();
+	// <FS:CR> Threaded filepickers
+	if (blocking)
+	{
+		// Modal, so pause agent
+		send_agent_pause();
+	}
+	// </FS:CR>
 
     success = doNavSaveDialog(filter, filename);
 
@@ -933,14 +949,15 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 			success = false;
 	}
 
-	// <FS:CR>
+	// <FS:CR> Threaded filepickers
 	if (blocking)
 	{
 		send_agent_resume();
-	// </FS:CR>
-	// Account for the fact that the app has been stalled.
-	LLFrameTimer::updateFrameTime();
+		// Account for the fact that the app has been stalled.
+		LLFrameTimer::updateFrameTime();
 	}
+	// </FS:CR>
+	
 	return success;
 }
 //END LL_DARWIN
