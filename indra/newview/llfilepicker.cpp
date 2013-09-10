@@ -933,8 +933,14 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 			success = false;
 	}
 
+	// <FS:CR>
+	if (blocking)
+	{
+		send_agent_resume();
+	// </FS:CR>
 	// Account for the fact that the app has been stalled.
 	LLFrameTimer::updateFrameTime();
+	}
 	return success;
 }
 //END LL_DARWIN
