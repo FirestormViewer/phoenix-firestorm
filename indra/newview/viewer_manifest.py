@@ -1003,7 +1003,9 @@ class DarwinManifest(ViewerManifest):
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
-        volname="Firestorm Installer"  # DO NOT CHANGE without understanding comment above
+        #volname="Firestorm Installer"  # DO NOT CHANGE without understanding comment above
+        #[FS:CR] Understood and disregarded!
+        volname = (self.app_name() + " " + '.'.join(self.args['version']) + " Installer")
 
         #if self.default_channel():
         #    if not self.default_grid():
