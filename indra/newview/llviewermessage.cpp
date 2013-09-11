@@ -7181,6 +7181,14 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			}
 		}
 		
+		// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+		// Also, FIRE-11550
+		if (notificationID == "RegionRestartSeconds" || notificationID == "RegionRestartMinutes")
+		{
+			make_ui_sound("UISndRegionRestart");
+		}
+		// </FS:PP>
+
 		if (
 			(notificationID == "RegionEntryAccessBlocked") ||
 			(notificationID == "LandClaimAccessBlocked") ||
@@ -7336,9 +7344,9 @@ void process_alert_core(const std::string& message, BOOL modal)
 		std::string alert_name(message.substr(ALERT_PREFIX.length()));
 		if (!handle_special_alerts(alert_name))
 		{
-		LLNotificationsUtil::add(alert_name);
+			LLNotificationsUtil::add(alert_name);
 			processed_message = alert_name; // <FS:PP> FIRE-317, region restart alert
-	}
+		}
 	}
 	else if (message.find(NOTIFY_PREFIX) == 0)
 	{
