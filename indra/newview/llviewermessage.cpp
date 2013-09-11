@@ -298,27 +298,30 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 		    // close button probably, possibly timed out
 		    break;
 	    }
-//<FS:TM> 3.6.4 check this, LL commented out lines below, commenting out RLVa segment as well
 		// TODO: this set of calls has undesirable behavior under Windows OS (CHUI-985):
 		// here appears three additional toasts instead one modified
 		// need investigation and fix
 
-	    // LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
-	    // modified_form->setElementEnabled("Accept", false);
-	    // modified_form->setElementEnabled("Decline", false);
-	    // notification_ptr->updateForm(modified_form);
-	    // notification_ptr->repost();
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
-		//*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
-		//*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
-		//if ( (!pToast) || (!pToast->getCanBeStored()) )
-		//{
-// [/SL:KB]
-		//	notification_ptr->repost();
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		//}
-// [/SL:KB]
+// <FS:Ansariel> [FS communication UI] Commenting out CHUI-112;
+//               Reposting the notification form will squeeze it somewhere
+//               within the IM floater and we don't need it for our comm. UI.
+//	    // LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
+//	    // modified_form->setElementEnabled("Accept", false);
+//	    // modified_form->setElementEnabled("Decline", false);
+//	    // notification_ptr->updateForm(modified_form);
+//	    // notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+//		//*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+//		//*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+//		//if ( (!pToast) || (!pToast->getCanBeStored()) )
+//		//{
+//// [/SL:KB]
+//		//	notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		//}
+//// [/SL:KB]
+// </FS:Ansariel>
     }
 
 	return false;
@@ -2349,27 +2352,31 @@ bool lure_callback(const LLSD& notification, const LLSD& response)
 		break;
 	}
 
-	LLNotificationPtr notification_ptr = LLNotifications::instance().find(notification["id"].asUUID());
-
-	if (notification_ptr)
-	{
-		LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
-		modified_form->setElementEnabled("Teleport", false);
-		modified_form->setElementEnabled("Cancel", false);
-		notification_ptr->updateForm(modified_form);
-
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
-		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
-		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
-		if ( (!pToast) || (!pToast->getCanBeStored()) )
-		{
-// [/SL:KB]
-			notification_ptr->repost();
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		}
-// [/SL:KB]
-	}
+// <FS:Ansariel> [FS communication UI] FIRE-11536: Commenting out CHUI-112;
+//               Reposting the notification form will squeeze it somewhere
+//               within the IM floater and we don't need it for our comm. UI.
+//	LLNotificationPtr notification_ptr = LLNotifications::instance().find(notification["id"].asUUID());
+//
+//	if (notification_ptr)
+//	{
+//		LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
+//		modified_form->setElementEnabled("Teleport", false);
+//		modified_form->setElementEnabled("Cancel", false);
+//		notification_ptr->updateForm(modified_form);
+//		//notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+//		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+//		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+//		if ( (!pToast) || (!pToast->getCanBeStored()) )
+//		{
+//// [/SL:KB]
+//			notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		}
+//// [/SL:KB]
+//	}
+// </FS:Ansariel>
 
 	return false;
 }
