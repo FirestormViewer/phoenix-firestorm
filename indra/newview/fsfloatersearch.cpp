@@ -124,7 +124,7 @@ public:
 	
 	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
 	{
-		llerrs << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << llendl;
+		LL_ERRS("Search") << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 	}
 private:
 	std::set<LLUUID>	mParcelIDs;
@@ -173,7 +173,7 @@ public:
 				std::string url = gAgent.getRegion()->getCapability("SearchStatRequest");
 				if (!url.empty())
 				{
-					llinfos << "Classified stat request via capability" << llendl;
+					LL_INFOS("Search") << "Classified stat request via capability" << LL_ENDL;
 					LLSD body;
 					body["classified_id"] = c_info->classified_id;
 					LLHTTPClient::post(url, body, new LLClassifiedStatsResponder(c_info->classified_id));
@@ -184,7 +184,7 @@ public:
 	
 	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
 	{
-		llerrs << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << llendl;
+		LL_ERRS("Search") << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 	}
 private:
 	std::set<LLUUID>	mAvatarIDs;
@@ -263,8 +263,8 @@ public:
 								  const std::string& reason,
 								  const LLSD& content)
 	{
-		llwarns << "Sending click message failed (" << status << "): [" << reason << "]" << llendl;
-		llwarns << "Content: [" << content << "]" << llendl;
+		LL_WARNS("Search") << "Sending click message failed (" << status << "): [" << reason << "]" << LL_ENDL;
+		LL_WARNS("Search") << "Content: [" << content << "]" << LL_ENDL;
 	}
 };
 
@@ -827,7 +827,7 @@ void FSPanelSearchPeople::find()
 	gMessageSystem->addU32("QueryFlags", DFQ_PEOPLE);
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
-	llinfos << "Firing off search request: " << getQueryID() << llendl;
+	LL_DEBUGS("Search") << "Firing off search request: " << getQueryID() << LL_ENDL;
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
@@ -924,7 +924,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// This result is not for us.
 	if (agent_id != gAgent.getID()) return;
-	lldebugs << "received search results - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	LL_DEBUGS("Search") << "received search results - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
 	
 	FSPanelSearchPeople* self = dynamic_cast<FSPanelSearchPeople*>(sInstance);
 	// floater is closed or these are not results from our last request
@@ -996,7 +996,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		
 		if (agent_id.isNull())
 		{
-			llinfos << "Null result returned for QueryID: " << query_id << llendl;
+			LL_INFOS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
@@ -1004,7 +1004,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		}
 		else
 		{
-			lldebugs << "Got: " << first_name << " " << last_name << " AgentID: " << agent_id << llendl;
+			LL_DEBUGS("Search") << "Got: " << first_name << " " << last_name << " AgentID: " << agent_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
 			
@@ -1136,7 +1136,7 @@ void FSPanelSearchGroups::find()
 	gMessageSystem->addU32("QueryFlags", scope);
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
-	llinfos << "Firing off search request: " << getQueryID() << llendl;
+	LL_DEBUGS("Search") << "Firing off search request: " << getQueryID() << LL_ENDL;
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
@@ -1233,7 +1233,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
 	
 	FSPanelSearchGroups* self = dynamic_cast<FSPanelSearchGroups*>(sInstance);
 	// floater is closed or these are not results from our last request
@@ -1304,7 +1304,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getF32Fast(	_PREHASH_QueryReplies,	_PREHASH_SearchOrder,	search_order,i);
 		if (group_id.isNull())
 		{
-			lldebugs << "No results returned for QueryID: " << query_id << llendl;
+			LL_DEBUGS("Search") << "No results returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
@@ -1312,7 +1312,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		}
 		else
 		{
-			lldebugs << "Got: " << group_name << " GroupID: " << group_id << llendl;
+			LL_DEBUGS("Search") << "Got: " << group_name << " GroupID: " << group_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
 			
@@ -1469,7 +1469,7 @@ void FSPanelSearchPlaces::find()
 	gMessageSystem->addString("SimName", "");
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
-	llinfos << "Firing off places search request: " << getQueryID() << llendl;
+	LL_DEBUGS("Search") << "Firing off places search request: " << getQueryID() << LL_ENDL;
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
@@ -1567,7 +1567,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
 	
 	FSPanelSearchPlaces* self = dynamic_cast<FSPanelSearchPlaces*>(sInstance);
 	// floater is closed or these are not results from our last request
@@ -1645,7 +1645,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getF32(	"QueryReplies",	"Dwell",	dwell,		i);
 		if (parcel_id.isNull())
 		{
-			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
+			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
@@ -1653,7 +1653,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		}
 		else
 		{
-			lldebugs << "Got: " << name << " ParcelID: " << parcel_id << llendl;
+			LL_DEBUGS("Search") << "Got: " << name << " ParcelID: " << parcel_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
 			
@@ -1842,7 +1842,7 @@ void FSPanelSearchLand::find()
 	gMessageSystem->addS32("Area", area);
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
-	llinfos << "Firing off places search request: " << getQueryID() << category << llendl;
+	LL_DEBUGS("Search") << "Firing off places search request: " << getQueryID() << category << LL_ENDL;
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
@@ -1918,7 +1918,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
 	
 	FSPanelSearchLand* self = dynamic_cast<FSPanelSearchLand*>(sInstance);
 	// floater is closed or these are not results from our last request
@@ -1961,13 +1961,13 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getS32(	"QueryReplies", "ActualArea",	area,		i);
 		if (parcel_id.isNull())
 		{
-			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
+			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("no_results"));
 		}
 		else
 		{
-			lldebugs << "Got: " << name << " ClassifiedID: " << parcel_id << llendl;
+			LL_DEBUGS("Search") << "Got: " << name << " ClassifiedID: " << parcel_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
 			if ( msg->getSizeFast(_PREHASH_QueryReplies, i, _PREHASH_ProductSKU) > 0 )
@@ -2164,7 +2164,7 @@ void FSPanelSearchClassifieds::find()
 	gMessageSystem->addU32Fast(_PREHASH_Category, category);
 	gMessageSystem->addS32Fast(_PREHASH_QueryStart, mStartSearch);
 	gAgent.sendReliableMessage();
-	llinfos << "Firing off classified ad search request: " << getQueryID() << llendl;
+	LL_DEBUGS("Search") << "Firing off classified ad search request: " << getQueryID() << LL_ENDL;
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
@@ -2262,7 +2262,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
 	
 	if (msg->getNumberOfBlocks("StatusData"))
 	{
@@ -2343,7 +2343,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getS32(	"QueryReplies", "PriceForListing",	price_for_listing,i);
 		if (classified_id.isNull())
 		{
-			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
+			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
@@ -2351,7 +2351,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 		}
 		else
 		{
-			lldebugs << "Got: " << name << " ClassifiedID: " << classified_id << llendl;
+			LL_DEBUGS("Search") << "Got: " << name << " ClassifiedID: " << classified_id << LL_ENDL;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
 			
@@ -2504,7 +2504,7 @@ void FSPanelSearchEvents::find()
 	gMessageSystem->addU32("QueryFlags", scope);
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
-	llinfos << "Firing off search request: " << getQueryID() << " Search Text: " << string.str() << llendl;
+	LL_DEBUGS("Search") << "Firing off search request: " << getQueryID() << " Search Text: " << string.str() << LL_ENDL;
 	
 	mSearchResults->deleteAllItems();
 	mSearchResults->setCommentText(LLTrans::getString("searching"));
@@ -2653,7 +2653,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	LL_DEBUGS("Search") << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << LL_ENDL;
 	
 	FSPanelSearchEvents* self = dynamic_cast<FSPanelSearchEvents*>(sInstance);
 	// floater is closed or these are not results from our last request
@@ -2703,19 +2703,19 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		else if (status & STATUS_SEARCH_EVENTS_NODATEOFFSET)
 		{
 			search_results->setEnabled(FALSE);
-			llwarns << "No date offset!" << llendl;
+			search_results->setCommentText(LLTrans::getString("search_no_date_offset"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_NOCATEGORY)
 		{
 			search_results->setEnabled(FALSE);
-			llwarns << "No category defined!" << llendl;
+			search_results->setCommentText(LLTrans::getString("search_no_events_category"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_NOQUERY)
 		{
 			search_results->setEnabled(FALSE);
-			llwarns << "No query defined!" << llendl;
+			search_results->setCommentText(LLTrans::getString("search_no_query"));
 			return;
 		}
 	}
@@ -2752,23 +2752,23 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		// Skip empty events...
 		if (owner_id.isNull())
 		{
-			llinfos << "Skipped " << event_id << " because of a NULL owner result" << llendl;
+			LL_INFOS("Search") << "Skipped " << event_id << " because of a NULL owner result" << LL_ENDL;
 			continue;
 		}
 		// Skips events that don't match our scope...
 		if (((event_flags & (EVENT_FLAG_ADULT | EVENT_FLAG_MATURE)) == EVENT_FLAG_NONE) && !inc_pg)
 		{
-			llinfos << "Skipped " << event_id << " because it was out of scope" << llendl;
+			LL_INFOS("Search") << "Skipped " << event_id << " because it was out of scope" << LL_ENDL;
 			continue;
 		}
 		if ((event_flags & EVENT_FLAG_MATURE) && !inc_mature)
 		{
-			llinfos << "Skipped " << event_id << " because it was out of scope" << llendl;
+			LL_INFOS("Search") << "Skipped " << event_id << " because it was out of scope" << LL_ENDL;
 			continue;
 		}
 		if ((event_flags & EVENT_FLAG_ADULT) && !inc_adult)
 		{
-			llinfos << "Skipped " << event_id << " because it was out of scope" << llendl;
+			LL_INFOS("Search") << "Skipped " << event_id << " because it was out of scope" << LL_ENDL;
 			continue;
 		}
 		search_results->setEnabled(TRUE);
