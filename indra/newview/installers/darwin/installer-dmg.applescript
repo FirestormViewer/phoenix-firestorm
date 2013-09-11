@@ -33,8 +33,10 @@ on run (volumeName)
 						set the position of i to {145, 125}
 					else if the name of i is "LGPL License.txt" then
 						set the position of i to {145, 225}
+						set the extension hidden of i to true
 					else if the name of i is "Vivox Acceptable Use Policy.txt" then
 						set the position of i to {345, 225}
+						set the extension hidden of i to true
 					end if
 					-- Change the 7 to change the color: 0 is no label, then red,
 					-- orange, yellow, green, blue, purple, or gray.
