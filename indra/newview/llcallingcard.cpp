@@ -69,6 +69,7 @@
 // <FS:Ansariel> [FS communication UI]
 #include "llfloaterreg.h"
 #include "llnotificationmanager.h"
+#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -675,7 +676,6 @@ void LLAvatarTracker::processOnlineNotification(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLAvatarTracker::processOnlineNotification()" << llendl;
 	instance().processNotify(msg, true);
-	make_ui_sound("UISndFriendOnline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 }
 
 // 	static
@@ -683,7 +683,6 @@ void LLAvatarTracker::processOfflineNotification(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLAvatarTracker::processOfflineNotification()" << llendl;
 	instance().processNotify(msg, false);
-	make_ui_sound("UISndFriendOffline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 }
 
 void LLAvatarTracker::processChange(LLMessageSystem* msg)
@@ -845,6 +844,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 
 	if (online)
 	{
+		make_ui_sound("UISndFriendOnline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 		notification =
 			LLNotificationsUtil::add("FriendOnlineOffline",
 									 args,
@@ -853,6 +853,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	}
 	else
 	{
+		make_ui_sound("UISndFriendOffline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 		notification =
 			LLNotificationsUtil::add("FriendOnlineOffline", args, payload);
 	}
@@ -898,6 +899,14 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		{
 			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		}
+
+		// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+		if (FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+		{
+			FSKeywords::notify(chat);
+		}
+		// </FS:PP>
+
 	}
 }
 
