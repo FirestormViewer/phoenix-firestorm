@@ -53,8 +53,8 @@ static PieChildRegistry::Register<PieSeparator> pie_r3("pie_separator");
 #define PIE_DRAW_BOUNDING_BOX 0		// debug
 
 // pie slice label text positioning
-S32 PIE_X[]={64,45, 0,-45,-63,-45,  0, 45};
-S32 PIE_Y[]={ 0,44,73, 44,  0,-44,-73,-44};
+const S32 PIE_X[] = {64,45, 0,-45,-63,-45,  0, 45};
+const S32 PIE_Y[] = { 0,44,73, 44,  0,-44,-73,-44};
 
 PieMenu::PieMenu(const LLContextMenu::Params& p) :
 	LLContextMenu(p)
@@ -245,7 +245,7 @@ void PieMenu::draw( void )
 
 #if PIE_DRAW_BOUNDING_BOX
 	// draw a bounding box around the menu for debugging purposes
-	gl_rect_2d(0,r.getHeight(),r.getWidth(),0,LLColor4(1,1,1,1),FALSE);
+	gl_rect_2d(0,r.getHeight(),r.getWidth(),0,LLColor4::white,FALSE);
 #endif
 
 	// set up pie menu colors
