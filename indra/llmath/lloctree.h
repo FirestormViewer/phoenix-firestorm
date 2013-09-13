@@ -396,6 +396,7 @@ public:
 				child->insert(data);
 			}
 		}
+#ifndef OPENSIM	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 		else 
 		{
 			//it's not in here, give it to the root
@@ -411,6 +412,7 @@ public:
 
 			node->insert(data);
 		}
+#endif	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 		return false;
 	}
@@ -734,7 +736,6 @@ public:
 			return false;
 		}
 		
-#ifndef OPENSIM // <FS:ND> FIRE-11593; Don't limit center of octree to 2^20, otherwise we end with the famous longjump bug (cannot TP further than 4095 regions [4096*256 = 2^20]
 		LLVector4a MAX_MAG;
 		MAX_MAG.splat(1024.f*1024.f);
 
@@ -750,7 +751,6 @@ public:
 			//OCT_ERRS << "!!! ELEMENT EXCEEDS RANGE OF SPATIAL PARTITION !!!" << llendl;
 			return false;
 		}
-#endif // <FS:ND> FIRE-11593
 
 		if (this->getSize()[0] > data->getBinRadius() && this->isInside(data->getPositionGroup()))
 		{
