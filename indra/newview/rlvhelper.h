@@ -378,7 +378,7 @@ private:
 class RlvGCTimer : public LLEventTimer
 {
 public:
-	RlvGCTimer() : LLEventTimer(30.0) {}
+	RlvGCTimer() : LLEventTimer(30.f) {}
 	virtual BOOL tick();
 };
 

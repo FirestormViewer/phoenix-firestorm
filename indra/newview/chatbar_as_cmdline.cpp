@@ -78,7 +78,7 @@ class JCZdrop : public LLEventTimer
 public:
 	BOOL mRunning;
 	
-	JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string sFolder, std::string sUUID, bool package = false) : LLEventTimer(1.0), mRunning(FALSE)
+	JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string sFolder, std::string sUUID, bool package = false) : LLEventTimer(1.f), mRunning(FALSE)
 	{
 		mPackage = package;
 		instack = stack;
