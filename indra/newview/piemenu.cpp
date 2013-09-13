@@ -259,7 +259,7 @@ void PieMenu::draw( void )
 	static LLCachedControl<bool> sOverridePieColors(gSavedSettings, "OverridePieColors", false);
 	if (sOverridePieColors)
 	{
-		static LLCachedControl<S32> sPieMenuOpacity(gSavedSettings, "PieMenuOpacity");
+		static LLCachedControl<F32> sPieMenuOpacity(gSavedSettings, "PieMenuOpacity");
 		static LLCachedControl<F32> sPieMenuFade(gSavedSettings, "PieMenuFade");
 		bgColor=LLUIColorTable::instance().getColor("PieMenuBgColorOverride") % sPieMenuOpacity;
 		borderColor=bgColor % (1.f - sPieMenuFade);
