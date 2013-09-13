@@ -2744,6 +2744,11 @@ static LLRegisterPanelClassWrapper<LLPanelPreferencePrivacy> t_pref_privacy("pan
 BOOL LLPanelPreferenceGraphics::postBuild()
 {
 	mButtonApply=findChild<LLButton>("Apply");
+// <FS:CR> Hide this until we have fullscreen mode functional on OSX again
+#ifdef LL_DARWIN
+	getChild<LLCheckBoxCtrl>("Fullscreen Mode")->setVisible(FALSE);
+#endif // LL_DARWIN
+// </FS:CR>
 
 	return LLPanelPreference::postBuild();
 }
