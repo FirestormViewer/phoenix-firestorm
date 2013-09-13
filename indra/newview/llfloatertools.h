@@ -113,6 +113,8 @@ public:
 
 	static void setGridMode(S32 mode);
 
+	LLPanelFace* getPanelFace() { return mPanelFace; }
+
 	void onClickBtnCopyKeys();
 	void onClickExpand();
 

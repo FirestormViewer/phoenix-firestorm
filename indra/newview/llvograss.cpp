@@ -476,6 +476,7 @@ void LLVOGrass::getGeometry(S32 idx,
 								LLStrider<LLVector3>& normalsp, 
 								LLStrider<LLVector2>& texcoordsp,
 								LLStrider<LLColor4U>& colorsp, 
+								LLStrider<LLColor4U>& emissivep,
 								LLStrider<U16>& indicesp)
 {
 	if(!mNumBlades)//stop rendering grass
@@ -730,12 +731,15 @@ void LLGrassPartition::getGeometry(LLSpatialGroup* group)
 		facep->setVertexBuffer(buffer);
 		facep->setPoolType(LLDrawPool::POOL_ALPHA);
 
+		//dummy parameter (unused by this implementation)
+		LLStrider<LLColor4U> emissivep;
+
 		// <FS:ND> Crashfix
 
-		// object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, indicesp);
+		// object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, emissivep, indicesp);
 
 		if( object )
-			object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, indicesp);
+			object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, emissivep, indicesp);
 		else
 		{
 			llwarns << "Object is 0 (not an alpha maybe)" << llendl;

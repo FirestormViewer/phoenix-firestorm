@@ -681,15 +681,8 @@ BOOL LLKeyframeMotion::onActivate()
 //-----------------------------------------------------------------------------
 BOOL LLKeyframeMotion::onUpdate(F32 time, U8* joint_mask)
 {
-	// <FS:ND> seems not be to uncommon to enter here with <0.
-	// forcing time up to zero instead of asserting seems to be
-	// better to not constantly crash in non release builds.
-	if(time < 0 )
-		time = 0;
-
-	// llassert(time >= 0.f);
-
-	// </FS:ND>
+	// llassert(time >= 0.f);		// This will fire
+	time = llmax(0.f, time);
 
 	if (mJointMotionList->mLoop)
 	{
@@ -2421,3 +2414,4 @@ LLKeyframeMotion::JointConstraint::~JointConstraint()
 }
 
 // End
+

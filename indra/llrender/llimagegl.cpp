@@ -718,9 +718,9 @@ void LLImageGL::setImage(const U8* data_in, BOOL data_hasmips)
 
 					mMipLevels = wpo2(llmax(w, h));
 
-					//use legacy mipmap generation mode
+					//use legacy mipmap generation mode (note: making this condional can cause rendering issues)
 					glTexParameteri(mTarget, GL_GENERATE_MIPMAP, GL_TRUE);
-					
+
 					LLImageGL::setManualImage(mTarget, 0, mFormatInternal,
 								 w, h, 
 								 mFormatPrimary, mFormatType,
@@ -1091,6 +1091,16 @@ void LLImageGL::generateTextures(LLTexUnit::eTextureType type, U32 format, S32 n
 {
 	LLFastTimer t(FTM_GENERATE_TEXTURES);
 	// <FS:ND> user-defined names was deprecated with OpenGL 3.1. Just generate/delete using OpenGL function.
+
+	if (LLRender::sGLCoreProfile)
+	{
+		switch (format)
+		{
+			case GL_LUMINANCE8: format = GL_RGB8; break;
+			case GL_LUMINANCE8_ALPHA8:
+			case GL_ALPHA8: format = GL_RGBA8; break;
+		}
+	}
 
 	// bool empty = true;
 	// 

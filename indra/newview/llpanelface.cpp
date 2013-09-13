@@ -66,7 +66,7 @@
 #include "llvovolume.h"
 #include "lluictrlfactory.h"
 #include "llpluginclassmedia.h"
-#include "llviewertexturelist.h"
+#include "llviewertexturelist.h"// Update sel manager as to which channel we're editing so it can reflect the correct overlay UI
 
 #include "llagent.h"
 
@@ -90,6 +90,19 @@ const S32 SHINY_TEXTURE = 4;		// use supplied specular map
 // Filled in at initialization from translated strings
 //
 std::string USE_TEXTURE;
+
+LLRender::eTexIndex LLPanelFace::getTextureChannelToEdit()
+{
+	LLComboBox* combobox_matmedia = getChild<LLComboBox>("combobox matmedia");
+	LLComboBox* combobox_mattype	= getChild<LLComboBox>("combobox mattype");
+
+	LLRender::eTexIndex channel_to_edit = (combobox_matmedia && combobox_matmedia->getCurrentIndex() == MATMEDIA_MATERIAL) ?
+													  (combobox_mattype ? (LLRender::eTexIndex)combobox_mattype->getCurrentIndex() : LLRender::DIFFUSE_MAP) : LLRender::DIFFUSE_MAP;
+
+	channel_to_edit = (channel_to_edit == LLRender::NORMAL_MAP)		? (getCurrentNormalMap().isNull()		? LLRender::DIFFUSE_MAP : channel_to_edit) : channel_to_edit;
+	channel_to_edit = (channel_to_edit == LLRender::SPECULAR_MAP)	? (getCurrentSpecularMap().isNull()		? LLRender::DIFFUSE_MAP : channel_to_edit) : channel_to_edit;
+	return channel_to_edit;
+}
 
 // Things the UI provides...
 //
@@ -1244,7 +1257,8 @@ void LLPanelFace::updateUI()
 			check_fullbright->setEnabled(editable);
 			check_fullbright->setTentative(!identical_fullbright);
 		}
-		
+
+
 		// Repeats per meter
 		{
 			F32 repeats_diff = 1.f;
@@ -1268,6 +1282,9 @@ void LLPanelFace::updateUI()
 				F32  repeats = 1.0f;
 
 				U32 material_type = (mComboMatMedia->getCurrentIndex() == MATMEDIA_MATERIAL) ? mComboMatType->getCurrentIndex() : MATTYPE_DIFFUSE;
+
+				LLSelectMgr::getInstance()->setTextureChannel(LLRender::eTexIndex(material_type));
+
 				switch (material_type)
 				{
 					default:
@@ -1385,18 +1402,6 @@ void LLPanelFace::updateUI()
 					getChild<LLColorSwatchCtrl>("shinycolorswatch")->set(material->getSpecularLightColor(),TRUE);
 				}
 
-				// Update sel manager as to which channel we're editing so it can reflect the correct overlay UI
-				// NORSPEC-103
-				LLRender::eTexIndex channel_to_edit = (mComboMatMedia->getCurrentIndex() == MATMEDIA_MATERIAL) ? (LLRender::eTexIndex)mComboMatType->getCurrentIndex() : LLRender::DIFFUSE_MAP;
-
-				if ( ((channel_to_edit == LLRender::NORMAL_MAP) && material->getNormalID().isNull())
-					||((channel_to_edit == LLRender::SPECULAR_MAP) && material->getSpecularID().isNull()))
-				{
-					channel_to_edit = LLRender::DIFFUSE_MAP;
-				}
-
-				LLSelectMgr::getInstance()->setTextureChannel(channel_to_edit);
-
 				// Bumpy (normal)
 				mBumpyTextureCtrl->setImageAssetID(material->getNormalID());
 
@@ -1420,10 +1425,6 @@ void LLPanelFace::updateUI()
 
 					updateBumpyControls(!material->getNormalID().isNull(), true);
 				}
-			}
-			else
-			{
-				LLSelectMgr::getInstance()->setTextureChannel(LLRender::DIFFUSE_MAP);
 			}
 		}
 

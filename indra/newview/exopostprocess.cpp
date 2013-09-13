@@ -25,6 +25,8 @@
 #include "pipeline.h"
 #include "llviewercontrol.h"
 
+static LLStaticHashedString sScreen_Res("screen_res");
+
 LLVector3	exoPostProcess::sExodusRenderVignette;
 
 exoPostProcess::exoPostProcess()
@@ -177,5 +179,5 @@ void exoShader::BindRenderTarget(LLRenderTarget* tgt, LLGLSLShader* shader, S32 
             gGL.getTexUnit(0)->activate();
         }
     }
-    shader->uniform2f("screen_res", tgt->getWidth(), tgt->getHeight());
+    shader->uniform2f(sScreen_Res, tgt->getWidth(), tgt->getHeight());
 }
