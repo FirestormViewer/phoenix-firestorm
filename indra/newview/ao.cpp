@@ -40,7 +40,7 @@
 #include <boost/graph/graph_concepts.hpp>
 
 FloaterAO::FloaterAO(const LLSD& key)
-:	LLTransientDockableFloater(NULL,true,key),LLEventTimer(10.0),
+:	LLTransientDockableFloater(NULL,true,key),LLEventTimer(10.f),
 	mSetList(0),
 	mSelectedSet(0),
 	mSelectedState(0),

@@ -401,6 +401,12 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 
 	// Create the object lists
 	initStats();
+// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+	initPartitions();
+}
+void LLViewerRegion::initPartitions()
+{
+// </FS:CR>
 
 	//create object partitions
 	//MUST MATCH declaration of eObjectPartitions
@@ -420,6 +426,14 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	setCapabilitiesReceivedCallback(boost::bind(&LLAvatarRenderInfoAccountant::expireRenderInfoReportTimer));
 }
 
+// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+void LLViewerRegion::reInitPartitions()
+{
+	std::for_each(mImpl->mObjectPartition.begin(), mImpl->mObjectPartition.end(), DeletePointer());
+	mImpl->mObjectPartition.clear();
+	initPartitions();
+}
+// </FS:CR>
 
 void LLViewerRegion::initStats()
 {

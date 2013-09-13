@@ -3556,7 +3556,15 @@ bool LLAppViewer::initWindow()
 		.height(gSavedSettings.getU32("WindowHeight"))
 		.min_width(gSavedSettings.getU32("MinWindowWidth"))
 		.min_height(gSavedSettings.getU32("MinWindowHeight"))
+/// <FS:CR> Since the 3.6.5 merge, setting fullscreen does terrible bad things on macs like opening
+/// all floaters and menus off the left side of the screen. Let's not do that right now...
+/// Hardcoding full screen OFF until it's fixed. On 10.7+ we have native full screen support anyway.
+#ifndef LL_DARWIN
 		.fullscreen(gSavedSettings.getBOOL("FullScreen"))
+#else // !LL_DARWIN
+		.fullscreen(false)
+#endif LL_DARWIN
+// </FS:CR>
 		.ignore_pixel_depth(ignorePixelDepth);
 
 	gViewerWindow = new LLViewerWindow(window_params);

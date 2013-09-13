@@ -388,10 +388,12 @@ public:
 	};
 
 	void showReleaseNotes();
+	void reInitPartitions();	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 protected:
 	void disconnectAllNeighbors();
 	void initStats();
+	void initPartitions();	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 public:
 	LLWind  mWind;
