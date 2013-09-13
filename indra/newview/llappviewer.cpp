@@ -3560,7 +3560,7 @@ bool LLAppViewer::initWindow()
 		.fullscreen(gSavedSettings.getBOOL("FullScreen"))
 #else // !LL_DARWIN
 		.fullscreen(false)
-#endif LL_DARWIN
+#endif // !LL_DARWIN
 // </FS:CR>
 		.ignore_pixel_depth(ignorePixelDepth);
 
