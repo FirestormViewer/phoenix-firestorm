@@ -723,7 +723,17 @@
 			<integer>1</integer>
 		</map>
 
-
+	<key>RadarNameFormat</key>
+		<map>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Comment</key>
+			<string>0=DisplayName,1=Username,2=Displayname/Username,3=Username/Displayname</string>
+		<key>Type</key>
+			<string>U32</string>
+		<key>Value</key>
+			<integer>2</integer>
+		</map>
 
 
 
