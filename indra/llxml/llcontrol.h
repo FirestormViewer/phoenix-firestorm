@@ -72,8 +72,6 @@ class LLVector3d;
 class LLColor4;
 class LLColor3;
 
-const BOOL NO_PERSIST = FALSE;
-
 typedef enum e_control_type
 {
 	TYPE_U32 = 0,
@@ -113,18 +111,25 @@ public:
 	typedef boost::signals2::signal<void(LLControlVariable* control, const LLSD&, const LLSD&)> commit_signal_t;
 	typedef boost::signals2::signal<void(LLControlVariable* control, const LLSD&)> sanity_signal_t;
 
+	enum ePersist
+	{
+		PERSIST_NO,                 // don't save this var
+		PERSIST_NONDFT,             // save this var if differs from default
+		PERSIST_ALWAYS              // save this var even if has default value
+	};
+
 private:
 	std::string		mName;
 	std::string		mComment;
-	eControlType	mType;
+	eControlType		mType;
 	eSanityType		mSanityType;
 	std::string		mSanityComment;
-	bool			mPersist;
+	ePersist		mPersist;
 	bool			mCanBackup;		// <FS:Zi> Backup Settings
 	bool			mHideFromSettingsEditor;
 	std::vector<LLSD> mValues;
 	std::vector<LLSD> mSanityValues;
-	
+
 	commit_signal_t mCommitSignal;
 	validate_signal_t mValidateSignal;
 	sanity_signal_t mSanitySignal;
@@ -136,8 +141,8 @@ public:
 		LLSD sanityValues,
 		const std::string& sanityComment,
 		// <FS:Zi> Backup Settings
-		// bool persist = true, bool hidefromsettingseditor = false
-		bool persist = true, bool can_backup = true, bool hidefromsettingseditor = false
+		// ePersist persist = PERSIST_NONDFT, bool hidefromsettingseditor = false
+		ePersist persist = PERSIST_NONDFT, bool can_backup = true, bool hidefromsettingseditor = false
 		// </FS:Zi>
 	);
 
@@ -161,8 +166,8 @@ public:
 
 	bool isDefault() { return (mValues.size() == 1); }
 	bool isSane();
-	bool isSaveValueDefault();
-	bool isPersisted() { return mPersist; }
+	bool shouldSave(bool nondefault_only);
+	bool isPersisted() { return mPersist != PERSIST_NO; }
 	bool isBackupable() { return mCanBackup; }		// <FS:Zi> Backup Settings
 	bool isHiddenFromSettingsEditor() { return mHideFromSettingsEditor; }
 	LLSD get()			const	{ return getValue(); }
@@ -173,7 +178,7 @@ public:
 	void set(const LLSD& val)	{ setValue(val); }
 	void setValue(const LLSD& value, bool saved_value = TRUE);
 	void setDefaultValue(const LLSD& value);
-	void setPersist(bool state);
+	void setPersist(ePersist);
 	void setBackupable(bool state);		// <FS:Zi> Backup Settings
 	void setHiddenFromSettingsEditor(bool hide);
 	void setComment(const std::string& comment);
@@ -244,21 +249,21 @@ public:
 	void applyToAll(ApplyFunctor* func);
 
 	// <FS:Zi> Backup Settings
-	// BOOL declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL hidefromsettingseditor = FALSE);
-	BOOL declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL can_backup = TRUE, BOOL hidefromsettingseditor = FALSE);
+	//LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, LLControlVariable::ePersist persist, BOOL hidefromsettingseditor = FALSE);
+	LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, LLControlVariable::ePersist persist, BOOL can_backup = TRUE, BOOL hidefromsettingseditor = FALSE);
 	// </FS:Zi>
 
-	BOOL declareU32(const std::string& name, U32 initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareS32(const std::string& name, S32 initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareF32(const std::string& name, F32 initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareBOOL(const std::string& name, BOOL initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareString(const std::string& name, const std::string &initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareVec3(const std::string& name, const LLVector3 &initial_val,const std::string& comment,  BOOL persist = TRUE);
-	BOOL declareVec3d(const std::string& name, const LLVector3d &initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareRect(const std::string& name, const LLRect &initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareColor4(const std::string& name, const LLColor4 &initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareColor3(const std::string& name, const LLColor3 &initial_val, const std::string& comment, BOOL persist = TRUE);
-	BOOL declareLLSD(const std::string& name, const LLSD &initial_val, const std::string& comment, BOOL persist = TRUE);
+	LLControlVariable* declareU32(const std::string& name, U32 initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareS32(const std::string& name, S32 initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareF32(const std::string& name, F32 initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareBOOL(const std::string& name, BOOL initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareString(const std::string& name, const std::string &initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareVec3(const std::string& name, const LLVector3 &initial_val,const std::string& comment,  LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareVec3d(const std::string& name, const LLVector3d &initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareRect(const std::string& name, const LLRect &initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareColor4(const std::string& name, const LLColor4 &initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareColor3(const std::string& name, const LLColor3 &initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
+	LLControlVariable* declareLLSD(const std::string& name, const LLSD &initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
 
 	std::string getString(const std::string& name);
 	std::string getText(const std::string& name);
@@ -408,8 +413,8 @@ private:
 		if(type < TYPE_COUNT)
 		{
 			// <FS:Zi> Backup Settings
-			// group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), FALSE);
-			group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), TRUE, FALSE);
+			// group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), LLControlVariable::PERSIST_NO);
+			group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), LLControlVariable::PERSIST_NO);
 			// </FS_Zi>
 			return true;
 		}

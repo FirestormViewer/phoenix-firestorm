@@ -41,9 +41,15 @@ import zipfile
 #/AO
 
 viewer_dir = os.path.dirname(__file__)
-# add llmanifest library to our path so we don't have to muck with PYTHONPATH
-sys.path.append(os.path.join(viewer_dir, '../lib/python/indra/util'))
-from llmanifest import LLManifest, main, proper_windows_path, path_ancestors
+# Add indra/lib/python to our path so we don't have to muck with PYTHONPATH.
+# Put it FIRST because some of our build hosts have an ancient install of
+# indra.util.llmanifest under their system Python!
+sys.path.insert(0, os.path.join(viewer_dir, os.pardir, "lib", "python"))
+from indra.util.llmanifest import LLManifest, main, proper_windows_path, path_ancestors
+try:
+    from llbase import llsd
+except ImportError:
+    from indra.base import llsd
 
 class ViewerManifest(LLManifest):
     def is_packaging_viewer(self):
@@ -88,13 +94,13 @@ class ViewerManifest(LLManifest):
                 # include the entire shaders directory recursively
                 self.path("shaders")
                 # include the extracted list of contributors
-                contributor_names = self.extract_names("../../doc/contributions.txt")
-                self.put_in_file(contributor_names, "contributors.txt")
-                self.file_list.append(["../../doc/contributions.txt",self.dst_path_of("contributors.txt")])
+                contributions_path = "../../doc/contributions.txt"
+                contributor_names = self.extract_names(contributions_path)
+                self.put_in_file(contributor_names, "contributors.txt", src=contributions_path)
                 # include the extracted list of translators
-                translator_names = self.extract_names("../../doc/translations.txt")
-                self.put_in_file(translator_names, "translators.txt")
-                self.file_list.append(["../../doc/translations.txt",self.dst_path_of("translators.txt")])
+                translations_path = "../../doc/translations.txt"
+                translator_names = self.extract_names(translations_path)
+                self.put_in_file(translator_names, "translators.txt", src=translations_path)
                 # include the list of Lindens (if any)
                 #   see https://wiki.lindenlab.com/wiki/Generated_Linden_Credits
                 linden_names_path = os.getenv("LINDEN_CREDITS")
@@ -108,10 +114,9 @@ class ViewerManifest(LLManifest):
                     else:
                          # all names should be one line, but the join below also converts to a string
                         linden_names = ', '.join(linden_file.readlines())
-                        self.put_in_file(linden_names, "lindens.txt")
+                        self.put_in_file(linden_names, "lindens.txt", src=linden_names_path)
                         linden_file.close()
                         print "Linden names extracted from '%s'" % linden_names_path
-                        self.file_list.append([linden_names_path,self.dst_path_of("lindens.txt")])
 
                 # ... and the entire windlight directory
                 self.path("windlight")
@@ -127,6 +132,27 @@ class ViewerManifest(LLManifest):
                 self.path("beams")
                 self.path("beamsColors")
 
+
+                # CHOP-955: If we have "sourceid" in the build process
+                # environment, generate it into settings_install.xml.
+                try:
+                    sourceid = os.environ["sourceid"]
+                except KeyError:
+                    # no sourceid, no settings_install.xml file
+                    pass
+                else:
+                    if sourceid:
+                        # Single-entry subset of the LLSD content of settings.xml
+                        content = dict(sourceid=dict(Comment='Identify referring agency to Linden web servers',
+                                                     Persist=1,
+                                                     Type='String',
+                                                     Value=sourceid))
+                        # put_in_file(src=) need not be an actual pathname; it
+                        # only needs to be non-empty
+                        settings_install = self.put_in_file(llsd.format_pretty_xml(content),
+                                                            "settings_install.xml",
+                                                            src="environment")
+                        print "Put sourceid '%s' in %s" % (sourceid, settings_install)
 
                 self.end_prefix("app_settings")
 
@@ -275,25 +301,26 @@ class ViewerManifest(LLManifest):
         """ Convenience function that returns the command-line flags
         for the grid"""
 
-        # Set command line flags relating to the target grid
-        grid_flags = ''
-        if not self.default_grid():
-            grid_flags = "--grid %(grid)s "\
-                         "--helperuri http://preview-%(grid)s.secondlife.com/helpers/" %\
-                           {'grid':self.grid()}
+        # The original role of this method seems to have been to build a
+        # grid-specific viewer: one that would, on launch, preselect a
+        # particular grid. (Apparently that dates back to when the protocol
+        # between viewer and simulator required them to be updated in
+        # lockstep, so that "the beta grid" required "a beta viewer.") But
+        # those viewer command-line switches no longer work without tweaking
+        # user_settings/grids.xml. In fact, going forward, it's unclear what
+        # use case that would address.
 
-        # Deal with settings 
-        setting_flags = ''
-        if not self.default_channel() or not self.default_grid():
-            lower_name = self.app_name().lower()
-            if self.default_grid():
-                setting_flags = '--settings settings_%s_v4.xml'\
-                                % lower_name
-            else:
-                setting_flags = '--settings settings_%s_%s_v4.xml'\
-                                % (self.grid(), lower_name)
-                                                
-        return " ".join((grid_flags, setting_flags)).strip()
+        # This method also set a channel-specific (or grid-and-channel-
+        # specific) user_settings/settings_something.xml file. It has become
+        # clear that saving user settings in a channel-specific file causes
+        # more problems (confusion) than it solves, so we've discontinued that.
+
+        # In fact we now avoid forcing viewer command-line switches at all,
+        # instead introducing a settings_install.xml file. Command-line
+        # switches don't aggregate well; for instance the generated --channel
+        # switch actually prevented the user specifying --channel on the
+        # command line. Settings files have well-defined override semantics.
+        return None
 
     def extract_names(self,src):
         try:
@@ -606,7 +633,7 @@ class WindowsManifest(ViewerManifest):
             return path
 
         result = ""
-        dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1])]
+        dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1]) and not pair[1].endswith(".pdb") ] #<FS:ND/> Don't include pdb files.
         # sort deepest hierarchy first
         dest_files.sort(lambda a,b: cmp(a.count(os.path.sep),b.count(os.path.sep)) or cmp(a,b))
         dest_files.reverse()
@@ -651,8 +678,7 @@ class WindowsManifest(ViewerManifest):
             'final_exe' : self.final_exe(),
             'grid':self.args['grid'],
             'grid_caps':self.args['grid'].upper(),
-            # escape quotes becase NSIS doesn't handle them well
-            'flags':self.flags_list().replace('"', '$\\"'),
+            'flags':'',
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
@@ -838,7 +864,6 @@ class DarwinManifest(ViewerManifest):
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
-                self.path("Firestorm.nib")
                 self.path("VivoxAUP.txt")
 
                 icon_path = self.icon_path()
@@ -901,6 +926,7 @@ class DarwinManifest(ViewerManifest):
                                 "libexpat.1.5.2.dylib",
                                 "libexception_handler.dylib",
                                 "libfmodex.dylib",
+                                "libfmodexL.dylib",
                                 "libGLOD.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(libdir, libfile), libfile)
@@ -946,9 +972,6 @@ class DarwinManifest(ViewerManifest):
 
                     self.end_prefix("llplugin")
 
-                # command line arguments for connecting to the proper grid
-                self.put_in_file(self.flags_list(), 'arguments.txt')
-
                 self.end_prefix("Resources")
 
             self.end_prefix("Contents")
@@ -978,8 +1001,6 @@ class DarwinManifest(ViewerManifest):
             'version_dashes' : '-'.join(self.args['version']),
             'grid':self.args['grid'],
             'grid_caps':self.args['grid'].upper(),
-            # escape quotes becase NSIS doesn't handle them well
-            'flags':self.flags_list().replace('"', '$\\"'),
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
@@ -1014,16 +1035,14 @@ class DarwinManifest(ViewerManifest):
 #                                 'bundle': self.get_dst_prefix()
 #                })
 
-        channel_standin = 'Firestorm'  # hah, our default channel is not usable on its own
-        if not self.default_channel():
-            channel_standin = self.channel()
-
         imagename = ("Phoenix-" + self.app_name() + '-' + '-'.join(self.args['version']))
 
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
-        volname="Firestorm Installer"  # DO NOT CHANGE without understanding comment above
+        #volname="Firestorm Installer"  # DO NOT CHANGE without understanding comment above
+        #[FS:CR] Understood and disregarded!
+        volname = (self.app_name() + " " + '.'.join(self.args['version']) + " Installer")
 
         #if self.default_channel():
         #    if not self.default_grid():
@@ -1080,9 +1099,9 @@ class DarwinManifest(ViewerManifest):
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
                         os.path.join(dmg_template, "background.png"): "background.png",
-                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox (Voice Services) Usage Policy.txt",
-                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt",
-                        os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
+                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox Acceptable Use Policy.txt",
+                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt"}.items():
+                        #os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
@@ -1170,9 +1189,6 @@ class LinuxManifest(ViewerManifest):
             self.path("install.sh")
             self.end_prefix("linux_tools")
 
-        # Create an appropriate gridargs.dat for this package, denoting required grid.
-        self.put_in_file(self.flags_list(), 'etc/gridargs.dat')
-
         if self.prefix(src="", dst="bin"):
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
@@ -1225,7 +1241,6 @@ class LinuxManifest(ViewerManifest):
             'version_dashes' : '-'.join(self.args['version']),
             'grid':self.args['grid'],
             'grid_caps':self.args['grid'].upper(),
-            'flags':self.flags_list().replace('"', '$\\"'),
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),

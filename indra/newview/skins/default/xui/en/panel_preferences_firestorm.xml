@@ -238,6 +238,7 @@
          label="Enable Bridge Flight Assist"
          width="270"
          tool_tip="Enables the script that assists flying and hovering at extended altitudes"/>
+
     </panel>
 
 
@@ -917,6 +918,24 @@
       name="FSCmdLineBandWidth"
       tool_tip=""
       control_name="FSCmdLineBandWidth"
+      width="200"/>
+    <!--cpcampos-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineCopyCam_txt"
+      width="250">
+      Copy camera position to clipboard
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length_chars="256"
+      name="FSCmdLineCopyCam"
+      tool_tip=""
+      control_name="FSCmdLineCopyCam"
       width="200"/>
     <!--rezplat-->
     <text

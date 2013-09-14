@@ -330,6 +330,7 @@ public:
 #ifdef OPENSIM
 	std::string getHGMapServerURL() const; // HG Maps
 	std::string getSearchServerURL() const; // OS Search URL
+	std::set<std::string> getGods() { return mGodNames; };	
 #endif // OPENSIM
 // </FS:CR>
 
@@ -387,10 +388,12 @@ public:
 	};
 
 	void showReleaseNotes();
+	void reInitPartitions();	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 protected:
 	void disconnectAllNeighbors();
 	void initStats();
+	void initPartitions();	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 public:
 	LLWind  mWind;
@@ -460,6 +463,12 @@ private:
 
 	LLDynamicArray<U32>						mCacheMissFull;
 	LLDynamicArray<U32>						mCacheMissCRC;
+			
+	// <FS:CR> Opensim region capabilities
+#ifdef OPENSIM
+	std::set<std::string> mGodNames;
+#endif
+	// </FS:CR>
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
 	mutable LLPointer<LLViewerTexture>		mWorldMapTile;

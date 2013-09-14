@@ -173,8 +173,7 @@ protected:
 	LLFolderView* mConversationsRoot;
 	LLScrollContainer* mScroller;
 
-    LLOutputMonitorCtrl* mSpeakingIndicator;
-	LLChatHistory* mChatHistory;
+    LLChatHistory* mChatHistory;
 	LLChatEntry* mInputEditor;
 	LLLayoutPanel * mChatLayoutPanel;
 	LLLayoutStack * mInputPanels;
@@ -184,6 +183,9 @@ protected:
 	LLButton* mTearOffBtn;
 	LLButton* mCloseBtn;
 	LLButton* mGearBtn;
+	LLButton* mAddBtn;
+    LLButton* mVoiceButton;
+    LLUICtrl* mTranslationCheckBox;
 
 private:
 	// Handling selection and contextual menu
@@ -202,6 +204,8 @@ private:
 	 * Implementation: chat history bottom "follows" top+top_pad of input chat field
 	 */
 	void reshapeChatLayoutPanel();
+
+	void onInputEditorClicked();
 
 	bool checkIfTornOff();
     bool mIsHostAttached;

@@ -108,6 +108,9 @@
         <text name="FSCmdLineBandWidth_txt">
             Maks. przepustow. (użycie: cmd kbps)
         </text>
+        <text name="FSCmdLineCopyCam_txt">
+            Kopiowanie pozycji kamery do schowka
+        </text>
         <text name="FSCmdLineRezPlatform_txt">
             Rezz platformy (użycie: cmd 0 - 30)
         </text>

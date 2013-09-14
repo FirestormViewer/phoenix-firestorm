@@ -29,7 +29,7 @@
 #ifndef FS_GRIDHANDLER_H
 #define FS_GRIDHANDLER_H
 
-#include "llxmlnode.h"
+#include "../llxml/llxmlnode.h"
 
 #include <boost/function.hpp>
 #include <boost/signals2.hpp>

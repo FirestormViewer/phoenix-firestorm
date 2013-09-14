@@ -83,22 +83,6 @@ const static std::string NEW_LINE(rawstr_to_utf8("\n"));
 const static std::string SLURL_APP_AGENT = "secondlife:///app/agent/";
 const static std::string SLURL_ABOUT = "/about";
 
-// <FS:CR> Moved this to a small function
-std::string prefixIM(std::string from, const LLChat& chat)
-{
-	if (chat.mChatType == CHAT_TYPE_IM)
-	{
-		from = LLTrans::getString("IMPrefix") + " " + from;
-	}
-	else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
-	{
-		from = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + from;
-	}
-	
-	return from;
-}
-// </FS:CR>
-
 // support for secondlife:///app/objectim/{UUID}/ SLapps
 class LLObjectIMHandler : public LLCommandHandler
 {
@@ -310,8 +294,7 @@ public:
 		header->showInspector();
 	}
 
-
-	const LLUUID&		getAvatarId () const { return mAvatarID;}
+	const LLUUID& getAvatarId () const { return mAvatarID;}
 
 	void setup(const LLChat& chat, const LLStyle::Params& style_params, const LLSD& args)
 	{
@@ -359,12 +342,12 @@ public:
 			if (!chat.mRlvNamesFiltered)
 			{
 				user_name->setValue( LLSD() );
-				fetchAvatarName(chat);
+				fetchAvatarName();
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
-				mFrom = prefixIM(chat.mFromName, chat);	// <FS:CR> Prefix im's and group chats for the console
+				mFrom = chat.mFromName;
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
@@ -389,7 +372,6 @@ public:
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				mFrom = prefixIM(mFrom, chat);
 				user_name->setValue(mFrom);
 				updateMinUserNameWidth();
 			}
@@ -642,7 +624,7 @@ private:
 		user_name->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
 	}
 
-	void fetchAvatarName(const LLChat& chat)
+	void fetchAvatarName()
 	{
 		if (mAvatarID.notNull())
 		{
@@ -651,25 +633,16 @@ private:
 				mAvatarNameCacheConnection.disconnect();
 			}
 			mAvatarNameCacheConnection = LLAvatarNameCache::get(mAvatarID,
-				boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType, chat.mFromNameGroup)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2));
 		}
 	}
 
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type, std::string& group)
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 	{
 		mAvatarNameCacheConnection.disconnect();
-		mFrom = "";
-		if (chat_type == CHAT_TYPE_IM || chat_type == CHAT_TYPE_IM_GROUP)
-		{
-			mFrom = LLTrans::getString("IMPrefix") + " ";
-			if(!group.empty())
-			{
-				mFrom.append(group);
-			}
-		}
-		mFrom.append(av_name.getDisplayName());
-		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-		
+
+		mFrom = av_name.getDisplayName();
+
 		LLTextBox* user_name = getChild<LLTextBox>("user_name");
 		user_name->setValue( LLSD(mFrom) );
 		user_name->setToolTip( av_name.getUserName() );
@@ -684,7 +657,7 @@ private:
 			style_params_name.font.name("SansSerifSmall");
 			style_params_name.font.style("NORMAL");
 			style_params_name.readonly_color(userNameColor);
-			user_name->appendText("  - " + av_name.getUserName(), false, style_params_name);
+			user_name->appendText("  - " + av_name.getUserNameForDisplay(), false, style_params_name);
 		}
 		setToolTip( av_name.getUserName() );
 		// name might have changed, update width
@@ -1013,8 +986,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				// set the link for the object name to be the objectim SLapp
 				// (don't let object names with hyperlinks override our objectim Url)
 				LLStyle::Params link_params(body_message_params);
-				link_params.color.control = "HTMLLinkColor";
-				LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
+				link_params.color.control = "ChatNameObjectColor";
+				LLColor4 link_color = LLUIColorTable::instance().getColor("ChatNameObjectColor");
 				link_params.color = link_color;
 				link_params.readonly_color = link_color;
 				if (message_from_log && !is_conversation_log)
@@ -1033,15 +1006,32 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && !chat.mRlvNamesFiltered)
 // [/RLVa:KB]
 			{
-				LLStyle::Params link_params(body_message_params);
-				link_params.overwriteFrom(LLStyleMap::instance().lookupAgent(chat.mFromID));
+				LLStyle::Params name_params(body_message_params);
+				name_params.color = name_color;
+				name_params.readonly_color = name_color;
+				if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
+				{
+					name_params.color.alpha = FSIMChatHistoryFade;
+					name_params.readonly_color.alpha = FSIMChatHistoryFade;
+					appendText(LLTrans::getString("IMPrefix") + " ", prependNewLineState, name_params);
+					prependNewLineState = false;
+					
+					if (!chat.mFromNameGroup.empty())
+					{
+						appendText(chat.mFromNameGroup, prependNewLineState, name_params);
+						prependNewLineState = false;
+					}
+				}
+				
+				name_params.is_name_slurl = true;
+				name_params.link_href = LLSLURL("agent", chat.mFromID, "inspect").getSLURLString();
 
 				if (from_me && gSavedSettings.getBOOL("FSChatHistoryShowYou"))
 				{
 					std::string localized_name;
 					bool is_localized = LLTrans::findString(localized_name, "AgentNameSubst");
 					appendText((is_localized? localized_name:"(You)") + delimiter,
-							prependNewLineState, link_params);
+							prependNewLineState, name_params);
 					prependNewLineState = false;
 				}
 				else
@@ -1052,7 +1042,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					//               returned from the server!
 					//appendText(std::string(link_params.link_href) + delimiter,
 					//		prependNewLineState, link_params);
-					appendText(std::string(link_params.link_href), prependNewLineState, link_params);
+					appendText(std::string(name_params.link_href), prependNewLineState, name_params);
 					appendText(delimiter, prependNewLineState, body_message_params);
 					// </FS:Ansariel>
 					prependNewLineState = false;
@@ -1077,9 +1067,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 		LLDate new_message_time = LLDate::now();
 
-		std::string tmp_from_name(chat.mFromName);
-		tmp_from_name = prefixIM(tmp_from_name, chat);
-		if (mLastFromName == tmp_from_name 
+		if (mLastFromName == chat.mFromName 
 			&& mLastFromID == chat.mFromID
 			&& mLastMessageTime.notNull() 
 			&& (new_message_time.secondsSinceEpoch() - mLastMessageTime.secondsSinceEpoch()) < 60.0
@@ -1115,9 +1103,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 		mLastFromName = chat.mFromName;
-		
-		//if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
-		mLastFromName = prefixIM(mLastFromName, chat);
 		mLastFromID = chat.mFromID;
 		mLastMessageTime = new_message_time;
 		mIsLastMessageFromLog = message_from_log;
@@ -1132,7 +1117,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		if (notification != NULL)
 		{
 			LLIMToastNotifyPanel* notify_box = new LLIMToastNotifyPanel(
-					notification, chat.mSessionID, LLRect::null, !use_plain_text_chat_history);
+					notification, chat.mSessionID, LLRect::null);
 
 			//Prepare the rect for the view
 			LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history

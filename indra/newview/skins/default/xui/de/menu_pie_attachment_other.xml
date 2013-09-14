@@ -3,7 +3,10 @@
 
 <pie_menu name="Avatar Pie">
 	<pie_slice label="Profil..." name="Profile..."/>
-	<pie_slice label="Blockieren" name="Avatar Mute"/>
+	<pie_menu name="mute_menu" label="Blockieren &gt;">
+		<pie_slice label="Ignorieren" name="Avatar Mute"/>
+		<pie_slice label="Partikelbes." name="Mute Particle"/>
+	</pie_menu>
 	<pie_slice label="Gehe zu" name="Go to"/>
 	<pie_slice label="Melden..." name="abuse"/>
 	<pie_slice label="Freund hinzuf." name="Add Friend"/>
@@ -19,7 +22,10 @@
 			<pie_slice label="Anrufen" name="Call"/>
 			<pie_slice label="Hineinzoomen" name="Zoom In"/>
 			<pie_slice label="Tex Refresh" name="Texture Refresh"/>
-			<pie_slice label="Exportieren" name="Export"/>
+			<pie_menu label="Speichern als &gt;" name="ExportMenu">
+				<pie_slice label="Backup" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Untersuchen" name="Avatar Inspect"/>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">

@@ -71,7 +71,12 @@
 #include "llviewercontrol.h"
 #include "llsdserialize.h"
 
-#include "llviewerparcelmgr.h"	// <FS:CR> Aurora Sim
+// <FS:CR> Opensim
+#include "llviewerparcelmgr.h"	//Aurora Sim
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif
+// </FS:CR>
 
 #ifdef LL_WINDOWS
 	#pragma warning(disable:4355)
@@ -391,6 +396,12 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 
 	// Create the object lists
 	initStats();
+// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+	initPartitions();
+}
+void LLViewerRegion::initPartitions()
+{
+// </FS:CR>
 
 	//create object partitions
 	//MUST MATCH declaration of eObjectPartitions
@@ -407,6 +418,14 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mImpl->mObjectPartition.push_back(NULL);						//PARTITION_NONE
 }
 
+// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+void LLViewerRegion::reInitPartitions()
+{
+	std::for_each(mImpl->mObjectPartition.begin(), mImpl->mObjectPartition.end(), DeletePointer());
+	mImpl->mObjectPartition.clear();
+	initPartitions();
+}
+// </FS:CR>
 
 void LLViewerRegion::initStats()
 {
@@ -1341,6 +1360,38 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
 	LLSDSerialize::toPrettyXML(sim_features, str);
 	llinfos << str.str() << llendl;
 	mSimulatorFeatures = sim_features;
+	
+// <FS:CR> Opensim god names
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		mGodNames.clear();
+		if (mSimulatorFeatures.has("god_names"))
+		{
+			if (mSimulatorFeatures["god_names"].has("full_names"))
+			{
+				LLSD god_names = mSimulatorFeatures["god_names"]["full_names"];
+				for (LLSD::array_iterator itr = god_names.beginArray();
+					 itr != god_names.endArray();
+					 itr++)
+				{
+					mGodNames.insert((*itr).asString());
+				}
+			}
+			if (mSimulatorFeatures["god_names"].has("last_names"))
+			{
+				LLSD god_names = mSimulatorFeatures["god_names"]["last_names"];
+				for (LLSD::array_iterator itr = god_names.beginArray();
+					 itr != god_names.endArray();
+					 itr++)
+				{
+					mGodNames.insert((*itr).asString());
+				}
+			}
+		}
+	}
+#endif // OPENSIM
+// </FS:CR>
 }
 
 LLViewerRegion::eCacheUpdateResult LLViewerRegion::cacheFullUpdate(LLViewerObject* objectp, LLDataPackerBinaryBuffer &dp)

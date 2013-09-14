@@ -246,7 +246,9 @@ public:
 		inline F32 getStdDev() const
 		{
 			const F32 mean = getMean();
-			return (mCount < 2) ? 0.f : sqrt(llmax(0.f,mSumOfSquares/mCount - (mean * mean)));
+			// <FS:CR> Fix implicit conversion double to float
+			//return (mCount < 2) ? 0.f : sqrt(llmax(0.f,mSumOfSquares/mCount - (mean * mean)));
+			return (mCount < 2) ? 0.f : sqrtf(llmax(0.f,mSumOfSquares/mCount - (mean * mean)));
 		}
 		
 		inline U32 getCount() const

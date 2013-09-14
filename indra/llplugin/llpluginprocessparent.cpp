@@ -1002,7 +1002,10 @@ std::string LLPluginProcessParent::addSharedMemory(size_t size)
 {
 	std::string name;
 	
-	LLPluginSharedMemory *region = new LLPluginSharedMemory;
+	// <FS:ND> Use smartptr
+	// LLPluginSharedMemory *region = new LLPluginSharedMemory;
+	LLPluginSharedMemoryPtr region( new LLPluginSharedMemory );
+	// </FS:ND>
 
 	// This is a new region
 	if(region->create(size))
@@ -1021,7 +1024,7 @@ std::string LLPluginProcessParent::addSharedMemory(size_t size)
 		LL_WARNS("Plugin") << "Couldn't create a shared memory segment!" << LL_ENDL;
 
 		// Don't leak
-		delete region;
+		// delete region; // <FS:ND/> Smartptr will autodelete.
 	}
 
 	return name;

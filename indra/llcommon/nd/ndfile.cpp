@@ -288,11 +288,10 @@ namespace nd
 			bool isBinary = (aFlags & APR_BINARY);
 			bool doCreate = (aFlags & APR_CREATE);
 			bool doTruncate = (aFlags & APR_TRUNCATE);
-			bool doesExist = LLFile::isfile( aFilename );
 
 			if( aFlags & APR_READ && aFlags & APR_WRITE )
 			{
-				if( doTruncate || !doesExist )
+				if( doTruncate || !LLFile::isfile( aFilename ) )
 				{
 					if( isBinary )
 						return openWBP;
@@ -318,7 +317,7 @@ namespace nd
 			
 			if( aFlags & APR_WRITE )
 			{
-				if( ( doesExist && !doTruncate ) || !doCreate )
+				if( ( !doTruncate && LLFile::isfile( aFilename ) ) || !doCreate )
 				{
 					if( isBinary )
 						return openRBP;

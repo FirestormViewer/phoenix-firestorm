@@ -3,7 +3,7 @@
 	<tab_container label="Preferencje kolorów" name="color_tabs">
 		<panel label="Kolory czatu" name="tab-chat">
 			<text name="font_colors">
-				Kolory napisów:
+				Wiadomości czatu:
 			</text>
 			<text name="user_label">
 				Mój tekst
@@ -38,11 +38,17 @@
 			<text name="htmllink_label">
 				URLe
 			</text>
-			<text name="chat_name_label">
-				Nagłówki czatów
-			</text>
 			<text name="direct_label">
 				Bezpośrednie
+			</text>
+			<text name="header_colors">
+				Nagłówki czatu:
+			</text>
+			<text name="chat_name_label">
+				Awatary
+			</text>
+			<text name="object_name_header_label">
+				Obiekty
 			</text>
 			<check_box name="FSColorIMsDistinctly" label="Koloruj czat IM/Grup oddzielnie w konsoli:" />
 			<panel name="im_color_panel">

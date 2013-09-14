@@ -791,7 +791,11 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 	LLFastTimer t1(FTM_MEDIA_UPDATE);
 	
 	// Enable/disable the plugin read thread
-	LLPluginProcessParent::setUseReadThread(gSavedSettings.getBOOL("PluginUseReadThread"));
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//LLPluginProcessParent::setUseReadThread(gSavedSettings.getBOOL("PluginUseReadThread"));
+	static LLCachedControl<bool> sPluginUseReadThread(gSavedSettings, "PluginUseReadThread");
+	LLPluginProcessParent::setUseReadThread(sPluginUseReadThread);
+	// </FS:Ansariel>
 	
 	// HACK: we always try to keep a spare running webkit plugin around to improve launch times.
 	createSpareBrowserMediaSource();
@@ -840,13 +844,29 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 	int impl_count_interest_normal = 0;
 	
 	std::vector<LLViewerMediaImpl*> proximity_order;
-	
-	bool inworld_media_enabled = gSavedSettings.getBOOL("AudioStreamingMedia");
-	bool inworld_audio_enabled = gSavedSettings.getBOOL("AudioStreamingMusic");
-	U32 max_instances = gSavedSettings.getU32("PluginInstancesTotal");
-	U32 max_normal = gSavedSettings.getU32("PluginInstancesNormal");
-	U32 max_low = gSavedSettings.getU32("PluginInstancesLow");
-	F32 max_cpu = gSavedSettings.getF32("PluginInstancesCPULimit");
+
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//bool inworld_media_enabled = gSavedSettings.getBOOL("AudioStreamingMedia");
+	//bool inworld_audio_enabled = gSavedSettings.getBOOL("AudioStreamingMusic");
+	//U32 max_instances = gSavedSettings.getU32("PluginInstancesTotal");
+	//U32 max_normal = gSavedSettings.getU32("PluginInstancesNormal");
+	//U32 max_low = gSavedSettings.getU32("PluginInstancesLow");
+	//F32 max_cpu = gSavedSettings.getF32("PluginInstancesCPULimit");
+
+	static LLCachedControl<bool> sAudioStreamingMedia(gSavedSettings, "AudioStreamingMedia");
+	static LLCachedControl<bool> sAudioStreamingMusic(gSavedSettings, "AudioStreamingMusic");
+	static LLCachedControl<U32> sPluginInstancesTotal(gSavedSettings, "PluginInstancesTotal");
+	static LLCachedControl<U32> sPluginInstancesNormal(gSavedSettings, "PluginInstancesNormal");
+	static LLCachedControl<U32> sPluginInstancesLow(gSavedSettings, "PluginInstancesLow");
+	static LLCachedControl<F32> sPluginInstancesCPULimit(gSavedSettings, "PluginInstancesCPULimit");
+
+	bool inworld_media_enabled = sAudioStreamingMedia;
+	bool inworld_audio_enabled = sAudioStreamingMusic;
+	U32 max_instances = sPluginInstancesTotal();
+	U32 max_normal = sPluginInstancesNormal();
+	U32 max_low = sPluginInstancesLow();
+	F32 max_cpu = sPluginInstancesCPULimit();
+	// </FS:Ansariel>
 	// Setting max_cpu to 0.0 disables CPU usage checking.
 	bool check_cpu_usage = (max_cpu != 0.0f);
 	
@@ -1018,7 +1038,11 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 		}
 	}
 	
-	if(gSavedSettings.getBOOL("MediaPerformanceManagerDebug"))
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//if(gSavedSettings.getBOOL("MediaPerformanceManagerDebug"))
+	static LLCachedControl<bool> sMediaPerformanceManagerDebug(gSavedSettings, "MediaPerformanceManagerDebug");
+	if(sMediaPerformanceManagerDebug)
+	// </FS:Ansariel>
 	{
 		// Give impls the same ordering as the priority list
 		// they're already in the right order for this.

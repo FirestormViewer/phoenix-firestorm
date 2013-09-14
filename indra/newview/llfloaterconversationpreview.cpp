@@ -63,6 +63,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 	//mChatHistory = getChild<LLChatHistory>("chat_history");
 	mChatHistory = getChild<FSChatHistory>("chat_history");
 	// <FS:CR> [FS communication UI]
+	LLLoadHistoryThread::setLoadEndSignal(boost::bind(&LLFloaterConversationPreview::SetPages, this, _1, _2));
 	
 	childSetAction("open_external_btn", boost::bind(&LLFloaterConversationPreview::onBtnOpenExternal, this));	//<FS:CR> Open chat history externally
 
@@ -86,8 +87,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 		file = "chat";
 	}
 	// <FS:Ansariel> Remember used log file name
-	mFileName = file;
-
+	mChatHistoryFileName = file;
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
 	std::string title = getString("Title", args);
@@ -97,23 +97,46 @@ BOOL LLFloaterConversationPreview::postBuild()
 	load_params["load_all_history"] = true;
 	load_params["cut_off_todays_date"] = false;
 
-	LLLogChat::loadChatHistory(file, mMessages, load_params);
-	mCurrentPage = mMessages.size() / mPageSize;
 
+	LLSD loading;
+	loading[LL_IM_TEXT] = LLTrans::getString("loading_chat_logs");
+	mMessages.push_back(loading);
 	mPageSpinner = getChild<LLSpinCtrl>("history_page_spin");
 	mPageSpinner->setCommitCallback(boost::bind(&LLFloaterConversationPreview::onMoreHistoryBtnClick, this));
 	mPageSpinner->setMinValue(1);
-	mPageSpinner->setMaxValue(mCurrentPage + 1);
-	mPageSpinner->set(mCurrentPage + 1);
-
-	std::string total_page_num = llformat("/ %d", mCurrentPage + 1);
-	getChild<LLTextBox>("page_num_label")->setValue(total_page_num);
-
+	mPageSpinner->set(1);
+	mPageSpinner->setEnabled(false);
+	mChatHistoryLoaded = false;
+	LLLogChat::startChatHistoryThread(file, load_params);
 	return LLFloater::postBuild();
 }
 
+void LLFloaterConversationPreview::SetPages(std::list<LLSD>& messages, const std::string& file_name)
+{
+	if(file_name == mChatHistoryFileName)
+	{
+		mMessages = messages;
+
+
+		mCurrentPage = mMessages.size() / mPageSize;
+		mPageSpinner->setEnabled(true);
+		mPageSpinner->setMaxValue(mCurrentPage+1);
+		mPageSpinner->set(mCurrentPage+1);
+
+		std::string total_page_num = llformat("/ %d", mCurrentPage+1);
+		getChild<LLTextBox>("page_num_label")->setValue(total_page_num);
+		mChatHistoryLoaded = true;
+
+	}
+
+}
 void LLFloaterConversationPreview::draw()
 {
+	if(mChatHistoryLoaded)
+	{
+		showHistory();
+		mChatHistoryLoaded = false;
+	}
 	LLFloater::draw();
 }
 
@@ -145,6 +168,11 @@ void LLFloaterConversationPreview::showHistory()
 
 	for (int msg_num = 0; (iter != mMessages.end() && msg_num < mPageSize); ++iter, ++msg_num)
 	{
+		if (iter->size() == 0)
+		{
+			continue;
+		}
+
 		LLSD msg = *iter;
 
 		LLUUID from_id 		= LLUUID::null;
@@ -188,7 +216,7 @@ void LLFloaterConversationPreview::showHistory()
 						gSavedSettings.getBOOL("PlainTextChatHistory");
 		// <FS:CR>
 		//chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
-		chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimeStampsTranscripts");
+		chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimestampsTranscripts");
 		// </FS:CR>
 		chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
 		chat_args["conversation_log"] = true;	// <FS:CR> Don't dim the history in conversation log
@@ -212,5 +240,5 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 // <FS:CR> Open chat history externally
 void (LLFloaterConversationPreview::onBtnOpenExternal())
 {
-	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mFileName));
+	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mChatHistoryFileName));
 }

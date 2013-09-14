@@ -3,7 +3,10 @@
 	<menu_item_call label="Dotknij" name="Attachment Object Touch"/>
 	<menu_item_call label="Edytuj" name="Edit..."/>
 	<menu_item_call label="Odłącz" name="Detach"/>
-	<menu_item_call label="Eksportuj" name="Export"/>
+	<context_menu label="Zapisz jako" name="Export Menu">
+		<menu_item_call label="Kopia zapasowa" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Usiądź tutaj" name="Sit Down Here"/>
 	<menu_item_call label="Wstań" name="Stand Up"/>
 	<menu_item_call label="Mój wygląd" name="Change Outfit"/>
@@ -19,4 +22,5 @@
 	<menu_item_call label="Pokaż tekstury" name="Debug..."/>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 	<menu_item_call label="Upuść" name="Drop"/>
+	<menu_item_call label="Blokuj właściciela cząsteczek" name="Mute Particle"/>
 </context_menu>

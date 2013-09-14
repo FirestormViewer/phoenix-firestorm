@@ -41,6 +41,14 @@
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Ventana de inventario adicional"/>
 		</panel>
+		<!-- Used by StarLight skins -->
+		<panel name="collapse_panel">
+			<button label="Contraer" name="collapse_btn" tool_tip="Contraer todas las carpetas"/>
+		</panel>
+		<panel name="expand_panel">
+			<button label="Expandir" name="expand_btn" tool_tip="Expandir todas las carpetas"/>
+		</panel>
+		<!-- / Used by StarLight skins -->
 		<panel name="dummy_panel">
 			<text name="ItemcountText">
 				Items

@@ -174,15 +174,15 @@
                  function="Self.EnableForceSit" />
            </menu_item_check>
 		   <menu_item_check
-             enabled="false"
-             visible="false"
-			 label="Phantom"
+			 label="Move Lock"
              shortcut="control|alt|P"
-			 name="Avatar Phantom">
+			 name="Move Lock">
                 <menu_item_check.on_check
-                   function="Self.getPhantom" />
+                   function="Self.GetMoveLock" />
                 <menu_item_check.on_click
-                   function="Self.togglePhantom" />
+                   function="Self.ToggleMoveLock" />
+                <menu_item_check.on_enable
+                   function="Self.EnableMoveLock" />
 			</menu_item_check>
 			<menu_item_check
 			 label="Quickjump"
@@ -359,7 +359,7 @@
                  parameter="perm_prefs" />
             </menu_item_call>
             <menu_item_call
-             label="Import Linkset"
+             label="Import Linkset..."
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
@@ -652,7 +652,8 @@
      visible="true">
         <menu_item_call
          label="Resync Animations"
-         name="Resync Animations">
+         name="Resync Animations"
+         shortcut="control|S">
             <menu_item_call.on_click
              function="Tools.ResyncAnimations" />
         </menu_item_call>
@@ -1282,6 +1283,15 @@
                  function="Tools.EnableSelectNextPart" />
             </menu_item_call>
         </menu>
+        <menu_item_call
+            label="Linksets..."
+            name="pathfinding_linkset_menu_item">
+          <menu_item_call.on_click
+              function="Floater.ToggleOrBringToFront"
+              parameter="pathfinding_linksets" />
+          <menu_item_call.on_enable
+              function="Tools.EnablePathfinding" />
+        </menu_item_call> 
         <menu_item_separator/>
 
         <menu_item_call
@@ -1304,7 +1314,7 @@
           <menu_item_call.on_enable
              function="SomethingSelectedNoHUD" />
         </menu_item_call>
-
+		 
         <menu_item_separator/>
 
         <menu
@@ -1375,6 +1385,28 @@
 			<menu_item_call.on_enable
                function="Object.EnableReturn" />
           </menu_item_call>
+          <menu
+            create_jump_keys="true"
+            label="Save as"
+            name="Export Menu"
+            tear_off="true">
+            <menu_item_call
+              label="Backup"
+              name="Backup">
+              <menu_item_call.on_click
+              function="Object.Export" />
+              <menu_item_call.on_enable
+              function="Object.EnableExport" />
+            </menu_item_call>
+            <menu_item_call
+              label="Collada"
+              name="Collada">
+              <menu_item_call.on_click
+              function="Object.ExportCollada" />
+              <menu_item_call.on_enable
+              function="Object.EnableExport" />
+            </menu_item_call>
+          </menu>
 		</menu>
         <menu
            create_jump_keys="true"
@@ -1393,7 +1425,7 @@
             <menu_item_call.on_click
                function="Tools.ScriptInfo" />
             <menu_item_call.on_enable
-               function="SomethingSelected" />
+               function="Object.EnableScriptInfo" />
           </menu_item_call>
           <menu_item_call
              label="Recompile Scripts (Mono)"
@@ -1707,7 +1739,7 @@
                  parameter="perm_prefs" />
             </menu_item_call>
 	    <menu_item_call
-             label="Import Linkset"
+             label="Import Linkset..."
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
@@ -3356,6 +3388,18 @@
          function="Advanced.ToggleInfoDisplay"
          parameter="bboxes" />
         </menu_item_check>
+        <!-- <FS:Zi> Add avatar hitbox debug -->
+        <menu_item_check
+         label="Avatar Hitboxes"
+         name="Avatar Hitboxes">
+        <menu_item_check.on_check
+         function="CheckControl"
+         parameter="DebugRenderHitboxes" />
+        <menu_item_check.on_click
+         function="ToggleControl"
+         parameter="DebugRenderHitboxes" />
+        </menu_item_check>
+        <!-- </FS:Zi> Add avatar hitbox debug -->
         <menu_item_check
          label="Normals"
          name="Normals">

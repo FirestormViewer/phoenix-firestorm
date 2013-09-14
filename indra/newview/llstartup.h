@@ -124,8 +124,7 @@ public:
 // </AW: opensim>
 
 	static void setStartSLURL(const LLSLURL& slurl);
-	//static LLSLURL& getStartSLURL();  //FS:TM link  fix: use what we had before 3.4.0 merge
-	static LLSLURL& getStartSLURL() { return sStartSLURL; } 
+	static LLSLURL& getStartSLURL();
 
 	static bool startLLProxy(); // Initialize the SOCKS 5 proxy
 

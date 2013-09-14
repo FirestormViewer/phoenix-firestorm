@@ -19,11 +19,13 @@
 #include "llsdserialize.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
+#include "rlvhandler.h"
 
 FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 :	LLFloater(key),
 	mComboPose(NULL),
-	mPoseStandLock(false)
+	mPoseStandLock(false),
+	mAOPaused(false)
 {
 }
 
@@ -36,7 +38,6 @@ BOOL FSFloaterPoseStand::postBuild()
 	mComboPose = getChild<LLComboBox>("pose_combo");
 	mComboPose->setCommitCallback(boost::bind(&FSFloaterPoseStand::onCommitCombo, this));
 	loadPoses();
-	onCommitCombo();
 
 	return TRUE;
 }
@@ -47,7 +48,15 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 	if (!isAgentAvatarValid())
 		return;
 	
-	if (gSavedSettings.getBOOL("FSPoseStandLock") && !gAgentAvatarp->isSitting())
+	if (gSavedPerAccountSettings.getBOOL("UseAO"))
+	{
+		gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+		mAOPaused = true;
+	}
+	
+	if (gSavedSettings.getBOOL("FSPoseStandLock")
+		&& !gAgentAvatarp->isSitting()
+		&& !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
 	{
 		setLock(true);
 	}
@@ -55,6 +64,9 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 	gAgent.setCustomAnim(TRUE);
 	gFocusMgr.setKeyboardFocus(NULL);
 	gFocusMgr.setMouseCapture(NULL);
+	std::string last_pose = gSavedSettings.getString("FSPoseStandLastSelectedPose");
+	if (!last_pose.empty())
+		mComboPose->setSelectedByValue(last_pose, TRUE);
 	onCommitCombo();
 }
 
@@ -72,6 +84,11 @@ void FSFloaterPoseStand::onClose(bool app_quitting)
 	gAgent.setCustomAnim(FALSE);
 	FSPose::getInstance()->stopPose();
 	gAgent.stopCurrentAnimations();
+	if (mAOPaused && !gSavedPerAccountSettings.getBOOL("UseAO"))
+	{
+		gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+		mAOPaused = false;
+	}
 }
 
 void FSFloaterPoseStand::loadPoses()
@@ -96,6 +113,7 @@ void FSFloaterPoseStand::loadPoses()
 void FSFloaterPoseStand::onCommitCombo()
 {
 	std::string selected_pose = mComboPose->getValue();
+	gSavedSettings.setString("FSPoseStandLastSelectedPose", selected_pose);
 	FSPose::getInstance()->setPose(selected_pose);
 }
 

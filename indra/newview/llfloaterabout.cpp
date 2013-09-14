@@ -33,8 +33,10 @@
 
 // Viewer includes
 #include "llagent.h"
+#include "llagentui.h"
 #include "llappviewer.h" 
 #include "llsecondlifeurls.h"
+#include "llslurl.h"
 #include "llvoiceclient.h"
 #include "lluictrlfactory.h"
 #include "llviewertexteditor.h"
@@ -279,6 +281,7 @@ LLSD LLFloaterAbout::getInfo()
 	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
 	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
 	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
+	else if (sessionSettingsFile == "settings_latency.xml") info["MODE"] = "Latency";
 
 	info["VIEWER_RELEASE_NOTES_URL"] = get_viewer_release_notes_url();
 
@@ -294,12 +297,16 @@ LLSD LLFloaterAbout::getInfo()
 	LLViewerRegion* region = gAgent.getRegion();
 	if (region)
 	{
-		const LLVector3d &pos = gAgent.getPositionGlobal();
+		LLVector3d pos = gAgent.getPositionGlobal();
 		info["POSITION"] = ll_sd_from_vector3d(pos);
+		info["POSITION_LOCAL"] = ll_sd_from_vector3(gAgent.getPosAgentFromGlobal(pos));
 		info["REGION"] = gAgent.getRegion()->getName();
 		info["HOSTNAME"] = gAgent.getRegion()->getHost().getHostName();
 		info["HOSTIP"] = gAgent.getRegion()->getHost().getString();
 		info["SERVER_VERSION"] = gLastVersionChannel;
+		LLSLURL slurl;
+		LLAgentUI::buildSLURL(slurl);
+		info["SLURL"] = slurl.getSLURLString();
 	}
 
 	// CPU
@@ -392,12 +399,12 @@ LLSD LLFloaterAbout::getInfo()
 static std::string get_viewer_release_notes_url()
 {
 	// return a URL to the release notes for this viewer, such as:
-	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0
+	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456
 	//std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
 	//if (! LLStringUtil::endsWith(url, "/"))
 	//	url += "/";
 	//url += LLVersionInfo::getChannel() + "/";
-	//url += LLVersionInfo::getShortVersion();
+	//url += LLVersionInfo::getVersion();
 	std::string url = "http://wiki.phoenixviewer.com/firestorm_change_log";
 	return LLWeb::escapeURL(url);
 }

@@ -6,7 +6,7 @@
  layout="topleft"
  name="floaterbulkperms"
  help_topic="floaterbulkperms"
- title="Edit Content Permissions"
+ title="Adjust Content Permissions"
  width="300">
     <floater.string
      name="nothing_to_modify_text">
@@ -191,8 +191,8 @@
      left="10"
      name="newperms"
      top="90"
-     width="250">
-        New Content Permissions
+     width="275">
+        Adjust Content Permissions To
     </text>
       <text
        type="string"
@@ -292,9 +292,20 @@
      height="23"
      label="OK"
      layout="topleft"
-     left="95"
-     name="apply"
+     left="6"
+     name="ok"
      top_pad="5"
+     width="90">
+      <button.commit_callback
+       function="BulkPermission.Ok"/>
+    </button>
+    <button
+     follows="left|top"
+     height="23"
+     label="Apply"
+     layout="topleft"
+     left_pad="5"
+     name="apply"
      width="90">
       <button.commit_callback
        function="BulkPermission.Apply"/>

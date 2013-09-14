@@ -37,7 +37,7 @@
        name="font_colors"
        top_pad="15"
        width="120">
-       UI Text Colors:
+       Chat Message Colors:
      </text>
      <color_swatch
        color="UserChatColor"
@@ -392,48 +392,16 @@
      </text>
      <color_swatch
        can_apply_immediately="true"
-       color="ChatNameColor"
+       color="DirectChatColor"
        follows="left|top"
        height="24"
        label_height="0"
        label_width="60"
        layout="topleft"
        left="360"
-       name="ChatNameColor"
+       name="direct"
        top_pad="-15"
        width="44">
-       <color_swatch.init_callback
-       function="Pref.getUIColor"
-       parameter="ChatNameColor" />
-       <color_swatch.commit_callback
-       function="Pref.applyUIColor"
-       parameter="ChatNameColor" />
-     </color_swatch>
-     <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="10"
-       layout="topleft"
-       left_pad="5"
-       mouse_opaque="false"
-       name="chat_name_label"
-       top_delta="5"
-       width="110">
-       Chat Headers
-     </text>
-     
-     <color_swatch
-       can_apply_immediately="true"
-       color="DirectChatColor"
-       follows="left|top"
-       height="24"
-       label_height="0"
-       layout="topleft"
-       left="40"
-       name="Direct"
-       top_pad="19"
-       width="44" >
        <color_swatch.init_callback
        function="Pref.getUIColor"
        parameter="DirectChatColor" />
@@ -454,6 +422,78 @@
        width="95">
        Direct
      </text>
+    <text
+     follows="left|top"
+     layout="topleft"
+     left="30"
+     height="12"
+     name="header_colors"
+     top_pad="15"
+     width="120">
+     Chat headers:
+    </text>
+     <color_swatch
+       can_apply_immediately="true"
+       color="ChatNameColor"
+       follows="left|top"
+       height="24"
+       label_height="0"
+       layout="topleft"
+       left="40"
+       name="chat_header"
+       top_pad="8"
+       width="44" >
+       <color_swatch.init_callback
+       function="Pref.getUIColor"
+       parameter="ChatNameColor" />
+       <color_swatch.commit_callback
+       function="Pref.applyUIColor"
+       parameter="ChatNameColor" />
+     </color_swatch>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="chat_name_label"
+     top_delta="5"
+     width="110">
+     Avatars
+    </text>
+    <color_swatch
+     can_apply_immediately="true"
+     color="ChatNameObjectColor"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="190"
+     name="object_name_header"
+     top_pad="-15"
+     width="44" >
+     <color_swatch.init_callback
+     function="Pref.getUIColor"
+     parameter="ChatNameObjectColor" />
+     <color_swatch.commit_callback
+     function="Pref.applyUIColor"
+     parameter="ChatNameObjectColor" />
+    </color_swatch>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="object_name_header_label"
+     top_delta="5"
+     width="95">
+     Objects
+    </text>
      <check_box
        control_name="FSColorIMsDistinctly"
        follows="left|top"

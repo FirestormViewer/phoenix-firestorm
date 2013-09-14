@@ -904,7 +904,7 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 				break;
 			// Username
 			case 1:
-				name = av_name.getUserName();
+				name = av_name.getUserNameForDisplay();
 				break;
 			// Display name (username)
 			case 2:
@@ -914,11 +914,11 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 			case 3:
 				if (av_name.isDisplayNameDefault())
 				{
-					name = av_name.getUserName();
+					name = av_name.getUserNameForDisplay();
 				}
 				else
 				{
-					name = av_name.getUserName() + " (" + av_name.getDisplayName() + ")";
+					name = av_name.getUserNameForDisplay() + " (" + av_name.getDisplayName() + ")";
 				}
 				break;
 			default:

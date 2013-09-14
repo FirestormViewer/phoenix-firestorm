@@ -478,6 +478,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="SLappAgentRequestFriend">
 		Freundschaftsangebot
 	</string>
+	<string name="SLappAgentRequestFriend">
+		Freundschaftsauflösung
+	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Schließen (⌘W)
 	</string>
@@ -5154,6 +5157,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Conversation_Log_Label">
 		Unterhaltungsprotokoll
 	</string>
+	<string name="Command_Move_Lock_Label">
+		Movelock
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5298,6 +5304,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Conversation_Log_Tooltip">
 		Öffnet das Unterhaltungsprotokoll mit Chatverläufen
 	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Aktiviert die Movelock-Funktion der Brücke und hält den Avatar an der aktuellen Position
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
 	</string>
@@ -5375,6 +5384,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		Keine protokollierten Unterhaltungen verfügbar. Hier erscheint ein Protokolleintrag, wenn Sie eine Person kontaktieren oder von einer Person kontaktiert werden.
+	</string>
+	<string name="loading_chat_logs">
+		Wird geladen...
 	</string>
 	
 <!-- Firestorm-specific translations -->
@@ -5455,7 +5467,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="SanityCheckNotEquals">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte nicht den Wert [VALUE_1] haben.
 	</string>
-	<string name="SanityCheckLowerThan">
+	<string name="SanityCheckLessThan">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert kleiner als [VALUE_1] haben.
 	</string>
 	<string name="SanityCheckGreaterThan">
@@ -5511,6 +5523,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		[NAME] hat eine Kollision unbekannten Typs verursacht.
 	</string>
 	
+	<string name="MovelockEnabled">
+		Movelock aktiviert.
+	</string>
+	<string name="MovelockDisabled">
+		Movelock deaktiviert.
+	</string>
 	<string name="BusyResponse">
 		Beschäftigt-Nachricht
 	</string>
@@ -5527,6 +5545,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Draw Distance wurde auf [DISTANCE]m gesetzt.
+	</string>
+	<string name="FSCameraPositionCopied">
+		Kameraposition [POS] wurde in Zwischenablage kopiert.
 	</string>
 	
 	<string name="FSWithHavok">
@@ -5800,5 +5821,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="export_failed_to_load">
 		Asset [ITEM] konnte nicht geladen werden.
+	</string>
+	<string name="skin_defaults_starlight_location">
+		Die Anzeige der aktuellen Position in der Menüleiste wurde als Standard für Starlight-Oberflächendesigns deaktiviert.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Die Anzeige der Navigationsleiste wurde als Standard für Starlight-Oberflächendesigns aktiviert.
 	</string>
 </strings>

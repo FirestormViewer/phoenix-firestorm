@@ -98,4 +98,18 @@
     This panel holds buttons of notification. Change of its size can affect the layout of buttons. 
      -->
   </panel>
+
+  <!-- <FS:Zi> Dialog Stacking browser -->
+  <button
+    layout="topleft"
+    follows="right|bottom"
+    name="DialogStackButton"
+    visibility_control="DialogStackIconVisible"
+    image_selected="Icon_DialogStack"
+    image_unselected="Icon_DialogStack"   
+    width="24"
+    height="14"
+    right="-2"
+    bottom="-2" />
+  <!-- <FS:Zi> Dialog Stacking browser -->
 </panel>

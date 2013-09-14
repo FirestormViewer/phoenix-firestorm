@@ -87,6 +87,9 @@ public:
 	// Also used for backwards compatibility with systems like voice and muting
 	std::string getUserName() const;
 	
+	// <FS:CR> FIRE-6659 - Returns the same as getUserName() but honors sTrimResidentSurname
+	std::string getUserNameForDisplay() const;
+	
 	// Returns "james.linden" or the legacy name for very old names
 	std::string getAccountName() const { return mUsername; }
 

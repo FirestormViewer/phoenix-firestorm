@@ -428,8 +428,14 @@ void init_audio()
 
 void audio_update_volume(bool force_update)
 {
-	F32 master_volume = gSavedSettings.getF32("AudioLevelMaster");
-	BOOL mute_audio = gSavedSettings.getBOOL("MuteAudio");
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//F32 master_volume = gSavedSettings.getF32("AudioLevelMaster");
+	//BOOL mute_audio = gSavedSettings.getBOOL("MuteAudio");
+	static LLCachedControl<F32> sAudioLevelMaster(gSavedSettings, "AudioLevelMaster");
+	static LLCachedControl<bool> sMuteAudio(gSavedSettings, "MuteAudio");
+	F32 master_volume = sAudioLevelMaster();
+	BOOL mute_audio = (BOOL)sMuteAudio;
+	// </FS:Ansariel>
 
 	LLProgressView* progress = gViewerWindow->getProgressView();
 	BOOL progress_view_visible = FALSE;
@@ -450,12 +456,25 @@ void audio_update_volume(bool force_update)
 	{
 		gAudiop->setMasterGain ( master_volume );
 
-		gAudiop->setDopplerFactor(gSavedSettings.getF32("AudioLevelDoppler"));
+		// <FS:Ansariel> Replace frequently called gSavedSettings
+		//gAudiop->setDopplerFactor(gSavedSettings.getF32("AudioLevelDoppler"));
+
+		//if(!LLViewerCamera::getInstance()->cameraUnderWater())
+		//gAudiop->setRolloffFactor(gSavedSettings.getF32("AudioLevelRolloff"));
+		//else
+		//	gAudiop->setRolloffFactor(gSavedSettings.getF32("AudioLevelUnderwaterRolloff"));
+
+		static LLCachedControl<F32> sAudioLevelDoppler(gSavedSettings, "AudioLevelDoppler");
+		static LLCachedControl<F32> sAudioLevelRolloff(gSavedSettings, "AudioLevelRolloff");
+		static LLCachedControl<F32> sAudioLevelUnderwaterRolloff(gSavedSettings, "AudioLevelUnderwaterRolloff");
+
+		gAudiop->setDopplerFactor(sAudioLevelDoppler);
 
 		if(!LLViewerCamera::getInstance()->cameraUnderWater())
-		gAudiop->setRolloffFactor(gSavedSettings.getF32("AudioLevelRolloff"));
+		gAudiop->setRolloffFactor(sAudioLevelRolloff);
 		else
-			gAudiop->setRolloffFactor(gSavedSettings.getF32("AudioLevelUnderwaterRolloff"));
+			gAudiop->setRolloffFactor(sAudioLevelUnderwaterRolloff);
+		// </FS:Ansariel>
 
 		gAudiop->setMuted(mute_audio || progress_view_visible);
 		

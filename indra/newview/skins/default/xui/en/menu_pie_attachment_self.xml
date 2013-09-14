@@ -35,6 +35,8 @@
             name="ScriptInfo">
             <pie_slice.on_click
                 function="Tools.ScriptInfo" />
+            <pie_slice.on_enable
+                function="Object.EnableScriptInfo" />
         </pie_slice>
         <pie_slice
             enabled="false"
@@ -71,15 +73,28 @@
 					function="Object.EnableDerender" />
 			</pie_slice>
         </pie_menu>
-	<pie_slice
-         enabled="false"
-         label="Export"
-         name="Export">
-         <pie_slice.on_click
-            function="Object.Export" />
-         <pie_slice.on_enable
-            function="Object.EnableExport" />
-        </pie_slice>
+        <pie_menu
+            name="ExportMenu"
+            label="Save as &gt;">
+            <pie_slice
+                enabled="false"
+                label="Backup"
+                name="Backup">
+                <pie_slice.on_click
+                    function="Object.Export" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Collada"
+                name="Collada">
+                <pie_slice.on_click
+                    function="Object.ExportCollada" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+        </pie_menu>
         <pie_separator name="inspect_placeholder" />
         <pie_separator/>
             <pie_slice

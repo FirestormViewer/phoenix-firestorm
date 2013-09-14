@@ -613,7 +613,7 @@ ERlvCmdRet RlvExtGetSet::onSetDebug(std::string strSetting, const std::string& s
 				}
 
 				// Default settings should persist if they were marked that way, but non-default settings should never persist
-				pSetting->setPersist( (pSetting->isDefault()) ? ((dbgFlags & DBG_PERSIST) == DBG_PERSIST) : false );
+				pSetting->setPersist( (pSetting->isDefault()) ? ( ((dbgFlags & DBG_PERSIST) == DBG_PERSIST) ? LLControlVariable::PERSIST_NONDFT : LLControlVariable::PERSIST_NO ) : LLControlVariable::PERSIST_NO );
 			}
 		}
 		else

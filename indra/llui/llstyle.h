@@ -48,6 +48,7 @@ public:
 		Optional<LLUIImage*>			image;
 		Optional<std::string>			link_href;
 		Optional<bool>					is_link;
+		Optional<bool>					is_name_slurl;	// <FS:CR> FIRE-11330
 		Params();
 	};
 	LLStyle(const Params& p = Params());

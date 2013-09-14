@@ -20,7 +20,7 @@
 			<menu_item_check label="Fliegen" name="Fly"/>
 			<menu_item_check label="Immer rennen" name="Always Run"/>
             <menu_item_check label="Sitzen erzwingen" name="Force Toggle Sitting"/>
-		    <menu_item_check label="Phantom-Modus" name="Avatar Phantom"/>
+		    <menu_item_check label="Movelock" name="Move Lock"/>
 		</menu>
         <menu_item_check label="Kamerasteuerung" name="Camera Controls"/>
 		<menu label="Avatar-Befinden" name="avhealth">
@@ -42,7 +42,7 @@
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
-			<menu_item_call label="Linkset importieren" name="import linkset"/>
+			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
@@ -154,6 +154,7 @@
 			<menu_item_call label="Vorherige Teile mit einschließen" name="Include Previous Part"/>
 		</menu>
 		<menu_item_call label="Fokus auf Auswahl" name="Focus on Selection"/>
+		<menu_item_call label="Linksets..." name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="Auf Auswahl zoomen" name="Zoom to Selection"/>
 		<menu label="Objekt" name="Object">
 			<menu_item_call label="Kaufen" name="Menu Object Buy"/>
@@ -163,6 +164,10 @@
 			<menu_item_call label="Partikel editieren" name="Menu Object Edit Particles"/>
 			<menu_item_call label="Wieder in Objektinhalt speichern" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Objekt zurückgeben" name="Return Object back to Owner"/>
+			<menu label="Speichern als" name="Export Menu">
+				<menu_item_call label="Backup" name="Backup"/>
+				<menu_item_call label="Collada" name="Collada"/>
+			</menu>
 		</menu>
 		<menu label="Skripte" name="Scripts">
 			<menu_item_call label="Skriptwarnungen/Fehler anzeigen" name="Script Debug"/>
@@ -202,7 +207,7 @@
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload ([COST] pro Datei)..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
-			<menu_item_call label="Linkset importieren" name="import linkset"/>
+			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
@@ -400,6 +405,7 @@
 		</menu>
 		<menu label="Metadaten darstellen" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
+			<menu_item_check label="Avatar-Hitboxen" name="Avatar Hitboxes"/>
 			<menu_item_check label="Normalen" name="Normals"/>
 			<menu_item_check label="Octree" name="Octree"/>
 			<menu_item_check label="Shadow Frusta" name="Shadow Frusta"/>

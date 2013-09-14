@@ -164,15 +164,28 @@
             <pie_slice.on_enable
                 function="Object.EnableReportAbuse" />
         </pie_slice>
-        <pie_slice
-         enabled="false"
-         label="Export"
-         name="Export">
-         <pie_slice.on_click
-            function="Object.Export" />
-         <pie_slice.on_enable
-            function="Object.EnableExport" />
-        </pie_slice>
+        <pie_menu
+            name="ExportMenu"
+            label="Save as &gt;">
+            <pie_slice
+                enabled="false"
+                label="Backup"
+                name="Backup">
+                <pie_slice.on_click
+                    function="Object.Export" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="Collada"
+                name="Collada">
+                <pie_slice.on_click
+                    function="Object.ExportCollada" />
+                <pie_slice.on_enable
+                    function="Object.EnableExport" />
+            </pie_slice>
+        </pie_menu>
 
 <!-- Phoenix has "Disable" here, which we haven't implemented yet.
      Might get interesting when we finally do ... -->
@@ -203,6 +216,9 @@
             <pie_separator name="autohide_end_crash_protection" />
         </pie_menu>
 
+    <pie_menu
+        name="mute_menu"
+        label="Mute &gt;">
         <pie_slice
             enabled="true"
             label="Mute"
@@ -212,6 +228,16 @@
 <!--            <pie_slice.on_enable
                     function="Object.EnableMute" /> -->
         </pie_slice>
+        <pie_slice
+            enabled="false"
+            label="Part. Owner"
+            name="Mute Particle">
+            <pie_slice.on_click
+                function="Particle.Mute" />
+            <pie_slice.on_enable
+                function="EnableMuteParticle" />
+        </pie_slice>
+    </pie_menu>
 		
 		<pie_menu
 			label="Scripts &gt;"
@@ -289,6 +315,8 @@
 				name="ScriptInfo">
 				<pie_slice.on_click
 					function="Tools.ScriptInfo" />
+                <pie_slice.on_enable
+                    function="Object.EnableScriptInfo" />
 			</pie_slice>
 		
 		</pie_menu>
@@ -300,7 +328,6 @@
                 function="Floater.Show"
                 parameter="inspect" />
         </pie_slice>
-
 
     </pie_menu>
 

@@ -442,9 +442,7 @@ Nota: esto vaciará la caché.
 	</notification>
 	<notification name="ChangeSkin">
 		La nueva skin se aplicará tras reiniciar [APP_NAME].
-		<form name="form">
-			<ignore name="ignore" text="Se ha seleccionado una nueva skin en Preferencias."/>
-		</form>
+		<usetemplate ignoretext="Se ha seleccionado una nueva skin en Preferencias." name="okcancelignore" notext="Aceptar" yestext="Reiniciar"/>
 	</notification>
 	<notification name="ChangeSkin">
 		Verás la nueva apariencia cuando reinicies [APP_NAME].
@@ -2900,6 +2898,14 @@ Por favor, vuelve a intentarlo en unos momentos.
 			<button name="Info" text="Información"/>
 		</form>
 	</notification>
+	<notification name="JoinGroupProtectionNotice">
+		Unirte a este grupo tiene un coste y la invitación no puede ser aceptada a cause de tu configuración. Si quieres cambiarla, hazlo en Preferencias &gt; Firestorm &gt; Protección.
+
+[MESSAGE]
+		<form name="form">
+			<button name="Info" text="Información"/>
+		</form>
+	</notification>
 	<notification name="TeleportOffered">
 		[NAME_SLURL] te ofrece teleportarte a su localización:
 
@@ -5315,5 +5321,20 @@ No se podrá deshacer.
 	</notification>
 	<notification name="ExportFinished">
 		Exportación finalizada y guardada en [FILENAME].
+	</notification>
+	<notification name="ExportColladaFailed">
+		La exportación ha fallado.
+	</notification>
+	<notification name="ExportColladaSuccess">
+		Exportación Collada DAE completada. [TOTAL] objeto(s) exportado(s).
+	</notification>
+	<notification name="ExportColladaPartial">
+		Exportación Collada DAE completada. [FAILED] fallido(s) de [TOTAL] objeto(s) seleccionado(s) debido a insuficiencia de permisos.
+	</notification>
+	<notification name="AntiSpamBlocked">
+		AntiSpam: Bloqueado [SOURCE] por enviar spam a [QUEUE] ([COUNT]) veces en [PERIOD] segundos.
+	</notification>
+	<notification name="MeshMaxConcurrentReqTooHigh">
+		El valor que has configurado como número de peticiones concurrentes para cargar objetos mesh, [VALUE], es mayor que el máximo de [MAX]. Se ha restablecido al valor por defecto, [DEFAULT].
 	</notification>
 </notifications>

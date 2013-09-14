@@ -39,8 +39,8 @@
 		<integer_constant name="STATS_PENDING_DOWNLOADS" desc="Pending Downloads, Value 17" />
 		<integer_constant name="STATS_PENDING_UPLOADS" desc="Pending Downloads, Value 18" />
 		<integer_constant name="STATS_ACTIVE_SCRIPTS" desc="Active Scripts, Value 19" />
-		<integer_constant name="STATS_SCRIPT_LPS" desc="Script Line Per Second, Value 20" />
-		
+		<integer_constant name="STATS_SCRIPT_LPS" desc="Script Line Per Second, Value 20" />		
+		<!-- NPC constants -->
 		<integer_constant name="OS_NPC" desc="Target is NPC. Use this instead of NPC, Value 0x01000000" />
 		<integer_constant name="OS_NPC_FLY" desc="Value 0" />
 		<integer_constant name="OS_NPC_NO_FLY" desc="Value 1" />
@@ -55,8 +55,8 @@
 		<integer_constant name="OS_LISTEN_REGEX_MESSAGE" desc="Process name parameter as regex, Value = 0x2" />
 		<integer_constant name="OS_PRIM_VELOCITY" desc="Value 65032" />
 		<integer_constant name="OS_PRIM_ACCELERATION" desc="Value 65033" />
-		<integer_constant name="OS_PRIM_PROJECTION" desc="Value 65036" />
-		
+		<integer_constant name="OS_PRIM_PROJECTION" desc="Value 65036" />		
+		<!-- Windlight constants -->
 		<integer_constant name="WL_WATER_COLOR" desc="Windlight Water Colour" />
 		<integer_constant name="WL_WATER_FOG_DENSITY_EXPONENT" desc="Windlight Water Fog Density Exponent" />
 		<integer_constant name="WL_UNDERWATER_FOG_MODIFIER" desc="Windlight Underwater Fog Modifier" />
@@ -94,6 +94,46 @@
 		<integer_constant name="WL_CLOUD_SCROLL_Y_LOCK" desc="Windlight Cloud Scroll Y Lock" />
 		<integer_constant name="WL_CLOUD_SCROLL_X_LOCK" desc="Windlight Cloud Scroll X Lock" />
 		<integer_constant name="WL_DRAW_CLASSIC_CLOUDS" desc="Windlight Draw Classic Clouds" />
+		<!-- Bulletsim specific constants -->
+		<integer_constant name="PHYS_LINKSET_TYPE_CONSTRAINT" desc="Bulletsim;Links are created with physics constraint objects. Used for flexible objects. Not a good default as it uses more CPU" value="0" />
+		<integer_constant name="PHYS_LINKSET_TYPE_COMPOUND" desc="Bulletsim;Linkset is constructed as a compound object made up of the shapes of all the children. The most efficient linkset implementation and the default" value="1" />
+		<integer_constant name="PHYS_LINKSET_TYPE_MANUAL" desc="Bulletsim;NOT IMPLEMENTED. Linkset is implemented by CPU code that moves each of the object in the linkset independently" value="2" />
+		<integer_constant name="PHYS_LINK_TYPE_FIXED" desc="Bulletsim;Link is fixed and unmovable. Default. Implemented as a 6 degree-of-freedom constraint with no motion in either the linear or angular directions" value="1234" />
+		<integer_constant name="PHYS_LINK_TYPE_HINGE" desc="Bulletsim;" value="4" />
+		<integer_constant name="PHYS_LINK_TYPE_SPRING" desc="Bulletsim;" value="9" />
+		<integer_constant name="PHYS_LINK_TYPE_6DOF" desc="Bulletsim;" value="6" />
+		<integer_constant name="PHYS_LINK_TYPE_SLIDER" desc="Bulletsim;" value="7" />
+		<!-- Axis specification -->
+		<integer_constant name="PHYS_AXIS_LINEAR_X" desc="Bulletsim;X linear axis" value="0" />
+		<integer_constant name="PHYS_AXIS_LINEAR_Y" desc="Bulletsim;Y linear axis" value="1" />
+		<integer_constant name="PHYS_AXIS_LINEAR_Z" desc="Bulletsim;Z linear axis" value="2" />
+		<integer_constant name="PHYS_AXIS_ANGULAR_X" desc="Bulletsim;X angular axis" value="3" />
+		<integer_constant name="PHYS_AXIS_ANGULAR_Y" desc="Bulletsim;Y angular axis" value="4" />
+		<integer_constant name="PHYS_AXIS_ANGULAR_Z" desc="Bulletsim;Z angular axis" value="5" />
+		<integer_constant name="PHYS_AXIS_ALL" desc="Bulletsim;(-1) make changes to all axis" value="-1" />
+		<integer_constant name="PHYS_AXIS_LINEAR_ALL" desc="Bulletsim;all linear axis (X, Y, Z)" value="-2" />
+		<integer_constant name="PHYS_AXIS_ANGULAR_ALL" desc="Bulletsim;all angular axis (X, Y, Z)" value="-3" />
+		<!-- Extended linksets -->
+		<integer_constant name="PHYS_PARAM_LINK_TYPE" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_FRAMEINA_LOC" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_FRAMEINA_ROT" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_FRAMEINB_LOC" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_FRAMEINB_ROT" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_LINEAR_LIMIT_LOW" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_LINEAR_LIMIT_HIGH" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_ANGULAR_LIMIT_LOW" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_ANGULAR_LIMIT_HIGH" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_USE_FRAME_OFFSET" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_ENABLE_TRANSMOTOR" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_TRANSMOTOR_MAXVEL" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_USE_LINEAR_FRAMEA" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_TRANSMOTOR_MAXFORCE" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_CFM" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_ERP" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_SOLVER_ITERATIONS" desc="Bulletsim;"/>
+		<integer_constant name="PHYS_PARAM_SPRING_AXIS_ENABLE" desc="Bulletsim;[PHYS_PARAM_SPRING_AXIS_ENABLE, int axisCode, bool flag]"/>
+		<integer_constant name="PHYS_PARAM_SPRING_DAMPING" desc="Bulletsim;[PHYS_PARAM_SPRING_DAMPING, int axisCode, float damping]"/>
+		<integer_constant name="PHYS_PARAM_SPRING_STIFFNESS" desc="Bulletsim;[PHYS_PARAM_SPRING_STIFFNESS, int axisCode, float stiffness]"/>
 	</keywords>
 	<functions>
 		<function name="osSetRegionWaterHeight" sleep="0.0" energy="10.0"
@@ -368,11 +408,25 @@
 			desc="osAddAgentToGroup(key avatar, string group_name, string role_name);Adds the avatar to a group under a given role" />
 		<function name="osRezObject" sleep="0.0" energy="10.0"
 			desc="osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer rez_at_root_, integer do_recoil, integer set_die_at_edge, integer check_pos);Rez an object" />
+		<!-- Windlight specific -->
 		<function name="lsGetWindlightScene" sleep="0.0" energy="10.0"
 			desc="list lsGetWindlightScene(list rules);Return the current Lightshare settings" />
 		<function name="lsSetWindlightScene" sleep="0.0" energy="10.0"
 			desc="lsSetWindlightScene(list parameters);Sets the Lightshare scene" />
 		<function name="lsSetWindlightSceneTargeted" sleep="0.0" energy="10.0"
 			desc="lsSetWindlightSceneTargeted(list parameters, key avatar);Sets the Lightshare scene for a given avatar" />
+		<!-- Bulletsim specific -->
+		<function name="physGetEngineType" sleep="0.0" energy="10.0"
+			desc="string physGetEngineType();Get physics engine type" />
+		<function name="physGetPhysicsParameter" sleep="0.0" energy="10.0"
+			desc="string physGetPhysicsParameter(string parameterName);Bulletsim: Returns physics parameter" />
+		<function name="physSetPhysicsParameter" sleep="0.0" energy="10.0"
+			desc="physSetPhysicsParameter(string parameterName, string value);Bulletsim: Set physics parameter" />
+		<function name="physSetLinksetType" sleep="0.0" energy="10.0"
+			desc="physSetLinksetType(integer linksetTypeCode):Bulletsim: Set linkset type" />
+		<function name="physSetCenterOfMass" sleep="0.0" energy="10.0"
+			desc="physSetCenterOfMass(vector centerOfMassDisplacement);Bulletsim: Set center of mass" />
+		<function name="physChangeLinkParams" sleep="0.0" energy="10.0"
+			desc="physChangeLinkParams(integer linkNum, list parms);Bulletsim: Change link params" />
 	</functions>
 </script_library>

@@ -35,6 +35,7 @@
 					<check_box label="Reportar los que salen de la región" name="RadarReportSimRangeLeave"/>
 					<check_box label="Reportar entradas a los scripts" name="RadarEnterChannelAlert"/>
 					<check_box label="Reportar salidas a los scripts" name="RadarLeaveChannelAlert"/>
+					<check_box label="Color de nombre basado en distancia" name="FSRadarColorNamesByDistance"/>
 					<check_box label="Limitar alcance a:" tool_tip="Limitar el resultado a un radio específico" name="LimitRadarByRange" width="130"/>
 					<text name="radarmap_range_label" value="Formato de nombres:"/>
 					<combo_box name="RadarNameFormat">

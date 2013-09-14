@@ -118,7 +118,6 @@
 // Firestorm Includes
 #include "fscontactsfloater.h" // TS: sort contacts list
 #include "fsfloaterimcontainer.h"
-#include "fslslbridge.h"
 #include "growlmanager.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
@@ -218,6 +217,7 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 
 // <Firestorm>
 void handleFlightAssistOptionChanged(const LLSD& newvalue);
+void handleMovelockOptionChanged(const LLSD& newvalue);
 bool callback_clear_settings(const LLSD& notification, const LLSD& response);
 // <FS:AW  opensim search support>
 bool callback_clear_debug_search(const LLSD& notification, const LLSD& response);
@@ -272,8 +272,11 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 
 		LLSearchHistory::getInstance()->clearHistory();
 		LLSearchHistory::getInstance()->save();
-		LLSearchComboBox* search_ctrl = LLNavigationBar::getInstance()->getChild<LLSearchComboBox>("search_combo_box");
-		search_ctrl->clearHistory();
+		// <FS:Zi> Make navigation bar part of the UI
+		// LLSearchComboBox* search_ctrl = LLNavigationBar::getInstance()->getChild<LLSearchComboBox>("search_combo_box");
+		// search_ctrl->clearHistory();
+		LLNavigationBar::instance().clearHistory();
+		// </FS:Zi>
 
 		LLTeleportHistoryStorage::getInstance()->purgeItems();
 		LLTeleportHistoryStorage::getInstance()->save();
@@ -350,21 +353,6 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 	LLVOAvatar::invalidateNameTags();
 }
 // </FS:CR>
-
-// <FS:TT> Client LSL Bridge
-void handleFlightAssistOptionChanged(const LLSD& newvalue)
-{
-	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
-}
-// </FS:TT>
-
-// <FS_AO: bridge-based radar tags>
-void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
-{
-	FSLSLBridge::instance().updateBoolSettingValue("FSPublishRadarTag", newvalue.asBoolean());
-}
-// </FS_AO>
-
 
 /*bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
 {
@@ -503,8 +491,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("FSNameTagShowLegacyUsernames")->getCommitSignal()->connect(boost::bind(&handleUsernameFormatOptionChanged, _2));
 	gSavedSettings.getControl("FSTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged, _2));
 	// </FS:CR>
-	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
-	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	// </Firestorm callbacks>
 }
 
@@ -607,6 +593,7 @@ BOOL LLFloaterPreference::postBuild()
 	//getChild<LLComboBox>("ConferenceIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ConferenceIMOptions"));
 	//getChild<LLComboBox>("GroupChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"GroupChatOptions"));
 	//getChild<LLComboBox>("NearbyChatOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"NearbyChatOptions"));
+	//getChild<LLComboBox>("ObjectIMOptions")->setCommitCallback(boost::bind(&LLFloaterPreference::onNotificationsChange, this,"ObjectIMOptions"));
 	// </FS:CR>
 	
 // ## Zi: Optional Edit Appearance Lighting
@@ -960,6 +947,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	//onNotificationsChange("ConferenceIMOptions");
 	//onNotificationsChange("GroupChatOptions");
 	//onNotificationsChange("NearbyChatOptions");
+	//onNotificationsChange("ObjectIMOptions");
 	// </FS:CR>
 
 	LLPanelLogin::setAlwaysRefresh(true);
@@ -1204,7 +1192,7 @@ void LLFloaterPreference::onNotificationsChange(const std::string& OptionName)
 	bool show_notifications_alert = true;
 	for (notifications_map::iterator it_notification = mNotificationOptions.begin(); it_notification != mNotificationOptions.end(); it_notification++)
 	{
-		if(it_notification->second != "None")
+		if(it_notification->second != "No action")
 		{
 			show_notifications_alert = false;
 			break;
@@ -1465,9 +1453,11 @@ void LLFloaterPreference::buildPopupLists()
 }
 
 void LLFloaterPreference::refreshEnabledState()
-{	
+{
+	F32 mem_multiplier = gSavedSettings.getF32("RenderTextureMemoryMultiple");
+	
 	S32 min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
-	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting();
+	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
 
@@ -2466,9 +2456,8 @@ BOOL LLPanelPreference::postBuild()
 	
 	//////////////////////PanelSkins ///////////////////
 	
-	/* <FS:TM> CHUI Merge no note given why this is comented out
-	if (hasChild("skin_selection", TRUE)) <FS:TM> CHUI Merge new
-	if (hasChild("skin_selection")) <FS:TM> CHUI Merge old
+	/* <FS:CR> Handled below
+	if (hasChild("skin_selection", TRUE))
 	{
 		LLFloaterPreference::refreshSkin(this);
 
@@ -2755,6 +2744,11 @@ static LLRegisterPanelClassWrapper<LLPanelPreferencePrivacy> t_pref_privacy("pan
 BOOL LLPanelPreferenceGraphics::postBuild()
 {
 	mButtonApply=findChild<LLButton>("Apply");
+// <FS:CR> Hide this until we have fullscreen mode functional on OSX again
+#ifdef LL_DARWIN
+	getChild<LLCheckBoxCtrl>("Fullscreen Mode")->setVisible(FALSE);
+#endif // LL_DARWIN
+// </FS:CR>
 
 	return LLPanelPreference::postBuild();
 }
@@ -3132,7 +3126,25 @@ void LLPanelPreferenceSkins::apply()
 		gSavedSettings.setString("FSSkinCurrentReadableName", m_SkinName);
 		gSavedSettings.setString("FSSkinCurrentThemeReadableName", m_SkinThemeName);
 
-		LLNotificationsUtil::add("ChangeSkin");
+		LLSD args, payload;
+		LLNotificationsUtil::add("ChangeSkin",
+								 args,
+								 payload,
+								 boost::bind(&LLPanelPreferenceSkins::callbackRestart, this, _1, _2));
+	}
+}
+
+void LLPanelPreferenceSkins::callbackRestart(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (2 == option) // Ok button
+	{
+		return;
+	}
+	if (0 == option) // Restart
+	{
+		llinfos << "User requested quit" << llendl;
+		LLAppViewer::instance()->requestQuit();
 	}
 }
 
@@ -3157,15 +3169,33 @@ void LLPanelPreferenceSkins::onSkinChanged()
     // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
     // current skin would be carried over, leading to confusion and a first experience with
     // the skin that the designer didn't intend.
-	if  (m_Skin.compare("starlight") == 0)
+	if  (m_Skin.compare("starlight") == 0 ||
+	     m_Skin.compare("starlightcui") == 0)
 	{
-		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
-		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
-	}
-	else
-	{
-		gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
-		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+		std::string noteMessage;
+
+		if(gSavedSettings.getBOOL("ShowMenuBarLocation"))
+		{
+			noteMessage=LLTrans::getString("skin_defaults_starlight_location");
+			gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+		}
+
+		if(!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+		{
+			if(!noteMessage.empty())
+			{
+				noteMessage+="\n";
+			}
+			noteMessage+=LLTrans::getString("skin_defaults_starlight_navbar");
+			gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
+		}
+
+		if(!noteMessage.empty())
+		{
+			LLSD args;
+			args["MESSAGE"]=noteMessage;
+			LLNotificationsUtil::add("SkinDefaultsChangeSettings",args);
+		}
 	}
 
 	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
@@ -3383,7 +3413,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 					SANITY_TYPE_NONE,
 					LLSD(),
 					std::string(),
-					TRUE);	// need to set persisitent flag, or it won't be saved
+					LLControlVariable::PERSIST_NONDFT);	// need to set persisitent flag, or it won't be saved
 			}
 		}
 	} func_global(&backup_global_controls), func_per_account(&backup_per_account_controls);
@@ -3698,6 +3728,9 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification,const 
 			}
 		}
 	}
+	// <FS:CR> Set this true so we can update newer settings with their deprecated counterparts on next launch
+	gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", TRUE);
+	
 	// Tell the user we have finished restoring settings and the viewer must shut down
 	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&FSPanelPreferenceBackup::onQuitConfirmed,this,_1,_2));
 }

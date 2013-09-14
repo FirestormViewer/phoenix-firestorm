@@ -396,6 +396,7 @@ public:
 				child->insert(data);
 			}
 		}
+#ifndef OPENSIM	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 		else 
 		{
 			//it's not in here, give it to the root
@@ -411,6 +412,7 @@ public:
 
 			node->insert(data);
 		}
+#endif	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 		return false;
 	}

@@ -34,6 +34,7 @@
 
 // <FS:CR> HG maps
 #ifdef OPENSIM
+#include "llviewernetwork.h"
 #include "llviewerregion.h"
 #include "llagent.h"
 #endif // OPENSIM
@@ -190,8 +191,15 @@ LLPointer<LLViewerFetchedTexture> LLWorldMipmap::loadObjectsTile(U32 grid_x, U32
 	// Get the grid coordinates
 // <FS:CR> HG Maps
 #ifdef OPENSIM
-	LLViewerRegion* region = gAgent.getRegion();
-	std::string hg_map = region->getHGMapServerURL();
+	std::string hg_map;
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLViewerRegion* region = gAgent.getRegion();
+		if (region)
+		{
+			hg_map = region->getHGMapServerURL();
+		}
+	}
 	std::string imageurl = hg_map.empty() ? gSavedSettings.getString("CurrentMapServerURL") : hg_map;
 	imageurl.append(llformat("map-%d-%d-%d-objects.jpg", level, grid_x, grid_y));
 #else // !OPENSIM

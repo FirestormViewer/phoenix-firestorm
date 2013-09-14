@@ -26,7 +26,7 @@
 		<combo_box.item label="Powierzchnia (normalny)" name="Bumpiness (normal)" />
 		<combo_box.item label="Lśnienie (odbicie)" name="Shininess (specular)" />
 	</combo_box>
-	<texture_picker label="Tekstura      " name="texture control" tool_tip="Kliknij, aby wybrać obraz" />
+	<texture_picker label="Tekstura" name="texture control" tool_tip="Kliknij, aby wybrać obraz" />
 	<text name="label alphamode">
 		Tryb alphy
 	</text>
@@ -39,7 +39,7 @@
 	<text name="label maskcutoff">
 		Odcięcie maski
 	</text>
-	<texture_picker label="Tekstura      " name="bumpytexture control" tool_tip="Kliknij, aby wybrać obraz" />
+	<texture_picker label="Tekstura" name="bumpytexture control" tool_tip="Kliknij, aby wybrać obraz" />
 	<text name="label bumpiness">
 		Powierzchnia
 	</text>
@@ -64,7 +64,7 @@
 		<combo_box.item label="Fale" name="weave" />
 		<!-- <combo_box.item label="Użyj tekstury" name="Use texture" /> -->
 	</combo_box>
-	<texture_picker label="Tekstura      " name="shinytexture control" tool_tip="Kliknij, aby wybrać obraz" />
+	<texture_picker label="Tekstura" name="shinytexture control" tool_tip="Kliknij, aby wybrać obraz" />
 	<text name="label shininess">
 		Połysk
 	</text>
@@ -99,7 +99,9 @@
 		<combo_box.item label="Planarne" name="Planar" />
 	</combo_box>
 	<spinner label="Rozmiar poziomy" name="TexScaleU" />
+	<button name="flipTextureScaleU" tool_tip="Odwróć" />
 	<spinner label="Rozmiar pionowy" name="TexScaleV" />
+	<button name="flipTextureScaleV" tool_tip="Odwróć" />
 	<spinner label="Powtórzenia na metr" name="rptctrl" />
 	<spinner label="Obrót w stopniach" name="TexRot" />
 	<spinner label="Wyrównanie poziome" name="TexOffsetU" />
@@ -115,4 +117,7 @@
 	<spinner label="Wyrównanie poziome" name="shinyOffsetU" />
 	<spinner label="Wyrównanie pionowe" name="shinyOffsetV" />
 	<check_box label="Wyrównuj powierzchnie planarne" name="checkbox planar align" tool_tip="Wyrównuj tekstury na wszystkich wybranych powierzchniach z powierzchnią wybraną jako ostatnia. Wymaga planarnego mapowania tekstur." />
+	<check_box label="Synchronizuj materiały" name="checkbox maps sync" tool_tip="Synchronizuj parametry map tekstur" />
+	<button label="Kopiuj" name="copytextures" />
+	<button label="Wklej" name="pastetextures" />
 </panel>

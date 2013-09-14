@@ -37,8 +37,8 @@
 
 // copied from LLMenuGL - Remove these lines over there when finished
 const S32 PIE_INNER_SIZE=20;		// radius of the inner pie circle
-const F32 PIE_POPUP_FACTOR=(F32)1.7;		// pie menu size factor on popup
-const F32 PIE_POPUP_TIME=(F32)0.25;		// time to shrink from popup size to regular size
+const F32 PIE_POPUP_FACTOR=(F32)1.7f;		// pie menu size factor on popup
+const F32 PIE_POPUP_TIME=(F32)0.25f;		// time to shrink from popup size to regular size
 const S32 PIE_OUTER_SIZE=96;		// radius of the outer pie circle
 
 // register the pie menu globally as child widget
@@ -53,8 +53,8 @@ static PieChildRegistry::Register<PieSeparator> pie_r3("pie_separator");
 #define PIE_DRAW_BOUNDING_BOX 0		// debug
 
 // pie slice label text positioning
-S32 PIE_X[]={64,45, 0,-45,-63,-45,  0, 45};
-S32 PIE_Y[]={ 0,44,73, 44,  0,-44,-73,-44};
+const S32 PIE_X[] = {64,45, 0,-45,-63,-45,  0, 45};
+const S32 PIE_Y[] = { 0,44,73, 44,  0,-44,-73,-44};
 
 PieMenu::PieMenu(const LLContextMenu::Params& p) :
 	LLContextMenu(p)
@@ -216,7 +216,7 @@ void PieMenu::draw( void )
 	LLRect r=getRect();
 
 	// initialize pie scale factor for popup effect
-	F32 factor=1.0;
+	F32 factor=1.f;
 
 #if PIE_POPUP_EFFECT
 	// set the popup size if this was the first click on the menu
@@ -231,13 +231,13 @@ void PieMenu::draw( void )
 		F32 elapsedTime=mPopupTimer.getElapsedTimeF32();
 		if(elapsedTime>PIE_POPUP_TIME)
 		{
-			factor=1.0;
+			factor=1.f;
 			mPopupTimer.stop();
 		}
 		// otherwise calculate the size factor to make the menu shrink over time
 		else
 		{
-			factor=PIE_POPUP_FACTOR-(PIE_POPUP_FACTOR-1.0)*elapsedTime/PIE_POPUP_TIME;
+			factor=PIE_POPUP_FACTOR-(PIE_POPUP_FACTOR-1.f)*elapsedTime/PIE_POPUP_TIME;
 		}
 //		setRect(r);  // obsolete?
 	}
@@ -245,7 +245,7 @@ void PieMenu::draw( void )
 
 #if PIE_DRAW_BOUNDING_BOX
 	// draw a bounding box around the menu for debugging purposes
-	gl_rect_2d(0,r.getHeight(),r.getWidth(),0,LLColor4(1,1,1,1),FALSE);
+	gl_rect_2d(0,r.getHeight(),r.getWidth(),0,LLColor4::white,FALSE);
 #endif
 
 	// set up pie menu colors
@@ -253,19 +253,22 @@ void PieMenu::draw( void )
 	LLColor4 selectedColor=LLUIColorTable::instance().getColor("PieMenuSelectedColor");
 	LLColor4 textColor=LLUIColorTable::instance().getColor("PieMenuTextColor");
 	LLColor4 bgColor=LLUIColorTable::instance().getColor("PieMenuBgColor");
-	LLColor4 borderColor=bgColor % (F32)0.3;
+	LLColor4 borderColor=bgColor % (F32)0.3f;
 
 	// if the user wants their own colors, apply them here
-	if(gSavedSettings.getBOOL("OverridePieColors"))
+	static LLCachedControl<bool> sOverridePieColors(gSavedSettings, "OverridePieColors", false);
+	if (sOverridePieColors)
 	{
-		bgColor=LLUIColorTable::instance().getColor("PieMenuBgColorOverride") % gSavedSettings.getF32("PieMenuOpacity");
-		borderColor=bgColor % (1.f-gSavedSettings.getF32("PieMenuFade"));
+		static LLCachedControl<F32> sPieMenuOpacity(gSavedSettings, "PieMenuOpacity");
+		static LLCachedControl<F32> sPieMenuFade(gSavedSettings, "PieMenuFade");
+		bgColor=LLUIColorTable::instance().getColor("PieMenuBgColorOverride") % sPieMenuOpacity;
+		borderColor=bgColor % (1.f - sPieMenuFade);
 		selectedColor=LLUIColorTable::instance().getColor("PieMenuSelectedColorOverride");
 	}
 
 	// on first click, make the menu fade out to indicate "borderless" operation
 	if(mFirstClick)
-		borderColor%=0.0;
+		borderColor%=0.f;
 
 	// initially, the current segment is marked as invalid
 	S32 currentSegment=-1;
@@ -292,11 +295,11 @@ void PieMenu::draw( void )
 		angle+=F_PI/8;
 
 		// calculate slice number from the angle
-		currentSegment=(S32) (8.0*angle/(F_PI*2.0)) % 8;
+		currentSegment=(S32) (8.f*angle/(F_PI*2.f)) % 8;
 	}
 
 	// move origin point to the center of our rectangle
-	gGL.translatef(r.getWidth()/2,r.getHeight()/2,0.0);
+	gGL.translatef(r.getWidth() / 2, r.getHeight() / 2, 0);
 
 	// draw the general pie background
 	gl_washer_2d(PIE_OUTER_SIZE*factor,PIE_INNER_SIZE,32,bgColor,borderColor);
@@ -317,7 +320,7 @@ void PieMenu::draw( void )
 
 		// clear the label and set up the starting angle to draw in
 		std::string label("");
-		F32 segmentStart=F_PI/4.0*(F32) num-F_PI/8.0;
+		F32 segmentStart = F_PI/4.f * (F32)num - F_PI / 8.f;
 
 		// iterate through the list of slices
 		if(cur_item_iter!=mSlices->end())
@@ -384,7 +387,7 @@ void PieMenu::draw( void )
 				{
 					lldebugs << label << " is disabled" << llendl;
 					// fade the item color alpha to mark the item as disabled
-					itemColor%=(F32)0.3;
+					itemColor%=(F32)0.3f;
 				}
 			}
 			// if it's a submenu just get the label
@@ -410,11 +413,11 @@ void PieMenu::draw( void )
 				}
 
 				// draw the currently highlighted pie slice
-				gl_washer_segment_2d(PIE_OUTER_SIZE*factor,PIE_INNER_SIZE,segmentStart+0.02,segmentStart+F_PI/4.0-0.02,4,selectedColor,borderColor);
+				gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart + 0.02f, segmentStart + F_PI / 4.f - 0.02f, 4, selectedColor, borderColor);
 			}
 		}
 		// draw the divider line for this slice
-		gl_washer_segment_2d(PIE_OUTER_SIZE*factor,PIE_INNER_SIZE,segmentStart-0.02,segmentStart+0.02,4,lineColor,borderColor);
+		gl_washer_segment_2d(PIE_OUTER_SIZE * factor, PIE_INNER_SIZE, segmentStart - 0.02f, segmentStart + 0.02f, 4, lineColor, borderColor);
 
 		// draw the slice labels around the center
 		mFont->renderUTF8(label,
@@ -433,7 +436,7 @@ void PieMenu::draw( void )
 
 	// draw inner and outer circle, outer only if it was not the first click
 	if(!mFirstClick)
-		gl_washer_2d(PIE_OUTER_SIZE*factor,PIE_OUTER_SIZE*factor-2,32,lineColor,borderColor);
+		gl_washer_2d(PIE_OUTER_SIZE * factor, PIE_OUTER_SIZE * factor - 2.f, 32, lineColor, borderColor);
 	gl_washer_2d(PIE_INNER_SIZE+1,PIE_INNER_SIZE-1,16,borderColor,lineColor);
 
 	// restore OpenGL drawing matrix

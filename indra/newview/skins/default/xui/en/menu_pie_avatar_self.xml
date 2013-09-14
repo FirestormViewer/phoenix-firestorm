@@ -244,6 +244,8 @@
         name="ScriptInfo">
         <pie_slice.on_click
             function="Tools.ScriptInfo" />
+        <pie_slice.on_enable
+            function="EnableBridgeFunction" />
     </pie_slice>
     <pie_slice
         label="Gestures..."

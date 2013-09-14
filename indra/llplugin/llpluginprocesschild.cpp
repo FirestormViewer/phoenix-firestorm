@@ -364,7 +364,12 @@ void LLPluginProcessChild::receiveMessageRaw(const std::string &message)
 				else
 				{
 					// This is a new region
-					LLPluginSharedMemory *region = new LLPluginSharedMemory;
+
+					// <FS:ND> use smartptr
+					// LLPluginSharedMemory *region = new LLPluginSharedMemory;
+					LLPluginSharedMemoryPtr region( new LLPluginSharedMemory );
+					// </FS:ND>
+
 					if(region->attach(name, size))
 					{
 						mSharedMemoryRegions.insert(sharedMemoryRegionsType::value_type(name, region));
@@ -387,7 +392,7 @@ void LLPluginProcessChild::receiveMessageRaw(const std::string &message)
 					else
 					{
 						LL_WARNS("Plugin") << "Couldn't create a shared memory segment!" << LL_ENDL;
-						delete region;
+						// delete region; // <FS:ND/> smartptr will delete automatically.
 					}
 				}
 				

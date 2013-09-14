@@ -44,6 +44,10 @@
 	<menu_item_call label="Kopie nehmen" name="Take Copy"/>
 	<menu_item_call label="Bezahlen" name="Pay..."/>
 	<menu_item_call label="Kaufen" name="Buy..."/>
-	<menu_item_call label="Exportieren" name="Export"/>
+	<context_menu label="Speichern als" name="Export Menu">
+		<menu_item_call label="Backup" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Löschen" name="Delete"/>
+	<menu_item_call label="Partikeleigentümer blockieren" name="Mute Particle"/>
 </context_menu>

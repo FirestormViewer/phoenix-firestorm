@@ -433,7 +433,10 @@ void RlvUIEnabler::onToggleShowWorldMap()
 void RlvUIEnabler::onToggleTp()
 {
 	// Disable the navigation bar "Home" button if both @tplm=n *and* @tploc=n restricted
-	LLButton* pNavBarHomeBtn = LLNavigationBar::getInstance()->findChild<LLButton>("home_btn");
+	// <FS:Zi> Make navigation bar part of the UI
+	// LLButton* pNavBarHomeBtn = LLNavigationBar::getInstance()->findChild<LLButton>("home_btn");
+	LLButton* pNavBarHomeBtn = LLNavigationBar::instance().getView()->findChild<LLButton>("home_btn");
+	// </FS:Zi>
 	RLV_ASSERT(pNavBarHomeBtn);
 	if (pNavBarHomeBtn)
 		pNavBarHomeBtn->setEnabled(!(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));

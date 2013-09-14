@@ -100,6 +100,11 @@ U32 LLMeshRepository::sPeakKbps = 0;
 
 const U32 MAX_TEXTURE_UPLOAD_RETRIES = 5;
 
+//<FS:TS> FIRE-11451: Cap concurrent mesh requests at a sane value
+const U32 MESH_CONCURRENT_REQUEST_LIMIT = 64;	// upper limit
+const U32 MESH_CONCURRENT_REQUEST_RESET = 16;	// reset to this if too high
+//</FS:TS> FIRE-11451
+
 static S32 dump_num = 0;
 std::string make_dump_name(std::string prefix, S32 num)
 {
@@ -581,7 +586,7 @@ void LLMeshRepoThread::run()
 				count = 0;	
 
 				// <FS:Ansariel> Mesh header/LOD retry functionality
-				F32 curl_timeout = llmax((F32)fsMeshRequestTimeout, 30.f) + 2.f; // 30 secs minimum timeout as defined in LLCurl.cpp
+				F32 curl_timeout = llmax((F32)fsMeshRequestTimeout, 150.f) + 2.f; // 150 secs minimum timeout as defined in LLCurl.cpp (30s connect, 120s operation)
 
 				if (mMutex)
 				{
@@ -2602,6 +2607,17 @@ void LLMeshRepository::notifyLoadedMeshes()
 	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
 	//LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("MeshMaxConcurrentRequests");
 	static LLCachedControl<U32> meshMaxConcurrentRequests(gSavedSettings, "MeshMaxConcurrentRequests");
+	//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value
+	if ((U32)meshMaxConcurrentRequests > MESH_CONCURRENT_REQUEST_LIMIT)
+	{
+		LLSD args;
+		args["VALUE"] = llformat("%d", (U32)meshMaxConcurrentRequests);
+		args["MAX"] = llformat("%d", MESH_CONCURRENT_REQUEST_LIMIT);
+		args["DEFAULT"] = llformat("%d", MESH_CONCURRENT_REQUEST_RESET);
+		LLNotificationsUtil::add("MeshMaxConcurrentReqTooHigh", args);
+		gSavedSettings.setU32("MeshMaxConcurrentRequests",MESH_CONCURRENT_REQUEST_RESET);
+	}
+	//</FS:TS> FIRE-11451
 	LLMeshRepoThread::sMaxConcurrentRequests = (U32)meshMaxConcurrentRequests;
 	// </FS:Ansariel>
 

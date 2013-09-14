@@ -263,13 +263,6 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 
 bool FSCommon::isLinden(const LLUUID& av_id)
 {
-#ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInOpenSim())
-	{
-		return false;
-	}
-#endif
-
 	std::string first_name, last_name;
 	LLAvatarName av_name;
 	if (LLAvatarNameCache::get(av_id, &av_name))
@@ -281,7 +274,22 @@ bool FSCommon::isLinden(const LLUUID& av_id)
 	{
 		gCacheName->getFirstLastName(av_id, first_name, last_name);
 	}
-
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLViewerRegion* region = gAgent.getRegion();
+		if (!region) return false;
+		bool is_god = false;
+		// <FS:CR> They may not be "Lindens" per se, but opensim has gods.
+		std::set<std::string> gods = region->getGods();
+		if (!gods.empty())
+		{
+			is_god = (gods.find(first_name + " " + last_name) != gods.end()
+					  || gods.find(last_name) != gods.end());
+		}
+		return is_god;
+	}
+#endif
 	return (last_name == LL_LINDEN ||
 			last_name == LL_MOLE ||
 			last_name == LL_PRODUCTENGINE ||
@@ -297,6 +305,10 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	if (action == FS_RGSTR_ACT_ADD_FRIEND)
 	{
 		return (!isSelf && !LLAvatarActions::isFriend(av_id));
+	}
+	else if (action == FS_RGSTR_ACT_REMOVE_FRIEND)
+	{
+		return (!isSelf && LLAvatarActions::isFriend(av_id));
 	}
 	else if (action == FS_RGSTR_ACT_SEND_IM)
 	{

@@ -196,6 +196,7 @@ LLTextBase::Params::Params()
 LLTextBase::LLTextBase(const LLTextBase::Params &p) 
 :	LLUICtrl(p, LLTextViewModelPtr(new LLTextViewModel)),
 	mURLClickSignal(NULL),
+	mIsFriendSignal(NULL),
 	mMaxTextByteLength( p.max_text_length ),
 	mFont(p.font),
 	mFontShadow(p.font_shadow),
@@ -673,6 +674,10 @@ void LLTextBase::drawText()
 			mSpellCheckStart = start;
 			mSpellCheckEnd = end;
 		}
+	}
+	else
+	{
+		mMisspellRanges.clear();
 	}
 
 	LLTextSegmentPtr cur_segment = *seg_iter;
@@ -1237,8 +1242,22 @@ void LLTextBase::draw()
 	}
 
 	bool should_clip = mClip || mScroller != NULL;
-	{ LLLocalClipRect clip(text_rect, should_clip);
- 
+	// <FS:Zi> Fix text bleeding at top edge of scrolling text editors
+	// { LLLocalClipRect clip(text_rect, should_clip);
+	{
+		// unsure why the rectangle is not properly calculated, but this fixes it.
+		// probably needs investigating the accuracy of:
+		// - LLScrollContainer::getContentWindowRect()
+		// - LLScrollContainer::localRectToOtherView()
+		// - LLRect::intersectWith()
+		if(text_rect.mTop>2)
+		{
+			text_rect.mTop-=2;
+		}
+		// push the modified text_rect as a GL clipping scissor on the stack
+		LLLocalClipRect clip(text_rect, should_clip);
+	// </FS:Zi>
+
 		// draw document view
 		if (mScroller)
 		{
@@ -1873,7 +1892,17 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index, 
 
 	static LLPointer<LLIndexSegment> index_segment = new LLIndexSegment();
 
-	if (index > getLength()) { return mSegments.end(); }
+	S32 text_len = 0;
+	if (!useLabel())
+	{
+		text_len = getLength();
+	}
+	else
+	{
+		text_len = mLabel.getWString().length();
+	}
+
+	if (index > text_len) { return mSegments.end(); }
 
 	// when there are no segments, we return the end iterator, which must be checked by caller
 	if (mSegments.size() <= 1) { return mSegments.begin(); }
@@ -1919,7 +1948,17 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 {
 	static LLPointer<LLIndexSegment> index_segment = new LLIndexSegment();
 
-	if (index > getLength()) { return mSegments.end(); }
+	S32 text_len = 0;
+	if (!useLabel())
+	{
+		text_len = getLength();
+	}
+	else
+	{
+		text_len = mLabel.getWString().length();
+	}
+
+	if (index > text_len) { return mSegments.end(); }
 
 	// when there are no segments, we return the end iterator, which must be checked by caller
 	if (mSegments.size() <= 1) { return mSegments.begin(); }
@@ -2003,13 +2042,15 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("Url.OpenInternal", boost::bind(&LLUrlAction::openURLInternal, url));
 	registrar.add("Url.OpenExternal", boost::bind(&LLUrlAction::openURLExternal, url));
 	registrar.add("Url.Execute", boost::bind(&LLUrlAction::executeSLURL, url));
+	registrar.add("Url.Block", boost::bind(&LLUrlAction::blockObject, url));
 	registrar.add("Url.Teleport", boost::bind(&LLUrlAction::teleportToLocation, url));
 	registrar.add("Url.ShowProfile", boost::bind(&LLUrlAction::showProfile, url));
 	registrar.add("Url.AddFriend", boost::bind(&LLUrlAction::addFriend, url));
+	registrar.add("Url.RemoveFriend", boost::bind(&LLUrlAction::removeFriend, url));
+	registrar.add("Url.SendIM", boost::bind(&LLUrlAction::sendIM, url));
 	registrar.add("Url.ShowOnMap", boost::bind(&LLUrlAction::showLocationOnMap, url));
 	registrar.add("Url.CopyLabel", boost::bind(&LLUrlAction::copyLabelToClipboard, url));
 	registrar.add("Url.CopyUrl", boost::bind(&LLUrlAction::copyURLToClipboard, url));
-	registrar.add("Url.SendIM", boost::bind(&LLUrlAction::sendIM, url));	// <FS:CR>
 
 	// <FS:Ansariel> Additional convenience options
 	std::string target_id_str = LLUrlAction::extractUuidFromSlurl(url).asString();
@@ -2024,6 +2065,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	LLUUID target_id(target_id_str);
 	enable_registrar.add("Url.EnableShowProfile", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SHOW_PROFILE));
 	enable_registrar.add("Url.EnableAddFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ADD_FRIEND));
+	enable_registrar.add("Url.EnableRemoveFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_REMOVE_FRIEND));
 	enable_registrar.add("Url.EnableSendIM", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SEND_IM));
 	enable_registrar.add("FS.EnableZoomIn", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ZOOM_IN));
 	enable_registrar.add("FS.EnableOfferTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_OFFER_TELEPORT));
@@ -2035,6 +2077,19 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	delete mPopupMenu;
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(xui_file, LLMenuGL::sMenuContainer,
 																		 LLMenuHolderGL::child_registry_t::instance());	
+	if (mIsFriendSignal)
+	{
+		bool isFriend = *(*mIsFriendSignal)(LLUUID(LLUrlAction::getUserID(url)));
+		LLView* addFriendButton = mPopupMenu->getChild<LLView>("add_friend");
+		LLView* removeFriendButton = mPopupMenu->getChild<LLView>("remove_friend");
+
+		if (addFriendButton && removeFriendButton)
+		{
+			addFriendButton->setEnabled(!isFriend);
+			removeFriendButton->setEnabled(isFriend);
+		}
+	}
+	
 	if (mPopupMenu)
 	{
 		mPopupMenu->show(x, y);
@@ -2108,7 +2163,9 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			end = match.getEnd()+1;
 
 			LLStyle::Params link_params(style_params);
-			link_params.overwriteFrom(match.getStyle());
+			// <FS:CR> FIRE-11330 - if it's a name, don't stylize it like a url
+			if (!input_params.is_name_slurl)
+				link_params.overwriteFrom(match.getStyle());
 
 			// output the text before the Url
 			if (start > 0)
@@ -2134,7 +2191,11 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			// </FS:Ansariel> Optional icon position
 
 			// output the styled Url
-			appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
+			// <FS:CR> FIRE-11437 - Don't supress font style for chat history name links
+			//appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
+			appendAndHighlightTextImpl(match.getLabel(), part, link_params,
+									   input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
+			// </FS:CR>
 			
 			// set the tooltip for the Url label
 			if (! match.getTooltip().empty())
@@ -2218,7 +2279,7 @@ void LLTextBase::resetLabel()
 	}
 }
 
-bool LLTextBase::useLabel()
+bool LLTextBase::useLabel() const
 {
     return !getLength() && !mLabel.empty() && !hasFocus();
 }
@@ -2726,21 +2787,18 @@ void LLTextBase::setCursorAtLocalPos( S32 local_x, S32 local_y, bool round, bool
 void LLTextBase::changeLine( S32 delta )
 {
 	S32 line = getLineNumFromDocIndex(mCursorPos);
+	S32 max_line_nb = getLineCount() - 1;
+	max_line_nb = (max_line_nb < 0 ? 0 : max_line_nb);
+    
+	S32 new_line = llclamp(line + delta, 0, max_line_nb);
 
-	S32 new_line = line;
-	if( (delta < 0) && (line > 0 ) )
-	{
-		new_line = line - 1;
-	}
-	else if( (delta > 0) && (line < (getLineCount() - 1)) )
-	{
-		new_line = line + 1;
-	}
-
-	LLRect visible_region = getVisibleDocumentRect();
-
-	S32 new_cursor_pos = getDocIndexFromLocalCoord(mDesiredXPixel, mLineInfoList[new_line].mRect.mBottom + mVisibleTextRect.mBottom - visible_region.mBottom, TRUE);
-	setCursorPos(new_cursor_pos, true);
+    if (new_line != line)
+    {
+        LLRect visible_region = getVisibleDocumentRect();
+        S32 new_cursor_pos = getDocIndexFromLocalCoord(mDesiredXPixel,
+                                                       mLineInfoList[new_line].mRect.mBottom + mVisibleTextRect.mBottom - visible_region.mBottom, TRUE);
+        setCursorPos(new_cursor_pos, true);
+    }
 }
 
 bool LLTextBase::scrolledToStart()
@@ -3034,6 +3092,15 @@ boost::signals2::connection LLTextBase::setURLClickedCallback(const commit_signa
 		mURLClickSignal = new commit_signal_t();
 	}
 	return mURLClickSignal->connect(cb);
+}
+
+boost::signals2::connection LLTextBase::setIsFriendCallback(const is_friend_signal_t::slot_type& cb)
+{
+	if (!mIsFriendSignal)
+	{
+		mIsFriendSignal = new is_friend_signal_t();
+	}
+	return mIsFriendSignal->connect(cb);
 }
 
 //
@@ -3334,14 +3401,11 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 		: LLFontGL::ONLY_WORD_BOUNDARIES;
 	
 	
-	// <FS:ND> Don't make excessive string copies.
-
-	// LLWString offsetString(text.c_str() + segment_offset + mStart);
-	S32 offsetLength = text.length() - start_offset;
-
-	// </FS:ND>
-
 	// <FS:Ansariel> Prevent unnecessary calculations
+
+	//S32 offsetLength = text.length() - (segment_offset + mStart);
+	S32 offsetLength = text.length() - start_offset;
+	
 	//if(getLength() < segment_offset + mStart)
 	if(getLength() < start_offset)
 	{ 
@@ -3349,32 +3413,20 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 						<< segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << "\tmax_chars\t" << max_chars << llendl;
 	}
 
-	// <FS:ND> Don't make excessive string copies.
-
-	// if(offsetString.length() + 1 < max_chars)
-	// {
-	// 	llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetString.length():\t" << offsetString.length() << " getLength() : "
-	// 		<< getLength() << "\tsegment_offset:\t" << segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << llendl;
-	// }
-	// 
-	// S32 num_chars = mStyle->getFont()->maxDrawableChars(offsetString.c_str(), 
-	// 											(F32)num_pixels,
-	// 											max_chars, 
-	// 											word_wrap_style);
-
-	if( offsetLength + 1 < max_chars)
+	if( (offsetLength + 1) < max_chars)
 	{
+	// <FS:Ansariel> Prevent unnecessary calculations
+		//llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetLength:\t" << offsetLength << " getLength() : "
 		llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetString.length():\t" << offsetLength << " getLength() : "
 			<< getLength() << "\tsegment_offset:\t" << segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << llendl;
 	}
 	
+	// <FS:Ansariel> Prevent unnecessary calculations
+	//S32 num_chars = mStyle->getFont()->maxDrawableChars( text.c_str() + (segment_offset + mStart),
 	S32 num_chars = mStyle->getFont()->maxDrawableChars(text.c_str() + start_offset, 
 												(F32)num_pixels,
 												max_chars, 
 												word_wrap_style);
-
-
-	// </FS:ND>
 
 	if (num_chars == 0 
 		&& line_offset == 0 

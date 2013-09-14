@@ -486,4 +486,13 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="conversation"
            />
+  <command name="move_lock"
+           available_in_toybox="true"
+           icon="move_lock"
+           label_ref="Command_Move_Lock_Label"
+           tooltip_ref="Command_Move_Lock_Tooltip"
+           execute_function="Self.ToggleMoveLock"
+           is_running_function="Self.GetMoveLock"
+           is_enabled_function="Self.EnableMoveLock"
+           />
 </commands>

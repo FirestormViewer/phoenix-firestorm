@@ -154,6 +154,7 @@ const static boost::regex NEWLINES("\\n{1}");
 #include "fscommon.h"
 #include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
 #include "fsradar.h"
+#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -297,22 +298,30 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 		    // close button probably, possibly timed out
 		    break;
 	    }
+		// TODO: this set of calls has undesirable behavior under Windows OS (CHUI-985):
+		// here appears three additional toasts instead one modified
+		// need investigation and fix
 
-	    LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
-	    modified_form->setElementEnabled("Accept", false);
-	    modified_form->setElementEnabled("Decline", false);
-	    notification_ptr->updateForm(modified_form);
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
-		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
-		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
-		if ( (!pToast) || (!pToast->getCanBeStored()) )
-		{
-// [/SL:KB]
-			notification_ptr->repost();
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		}
-// [/SL:KB]
+// <FS:Ansariel> [FS communication UI] Commenting out CHUI-112;
+//               Reposting the notification form will squeeze it somewhere
+//               within the IM floater and we don't need it for our comm. UI.
+//	    // LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
+//	    // modified_form->setElementEnabled("Accept", false);
+//	    // modified_form->setElementEnabled("Decline", false);
+//	    // notification_ptr->updateForm(modified_form);
+//	    // notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+//		//*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+//		//*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+//		//if ( (!pToast) || (!pToast->getCanBeStored()) )
+//		//{
+//// [/SL:KB]
+//		//	notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		//}
+//// [/SL:KB]
+// </FS:Ansariel>
     }
 
 	return false;
@@ -1181,7 +1190,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 	LLChat chat;
 	std::string log_message;
 
-	if (!gSavedSettings.getBOOL("ShowNewInventory"))
+	// <FS:PP> gSavedSettings to LLCachedControl
+	// if (!gSavedSettings.getBOOL("ShowNewInventory"))
+	static LLCachedControl<bool> showNewInventory(gSavedSettings, "ShowNewInventory");
+	if (!showNewInventory)
+	// </FS:PP>
 		return false;
 
 	if (check_only)
@@ -1224,7 +1237,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 
 				if (!from_name.empty())
 				{
-					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpamFrom"))
+					static LLCachedControl<bool> fsNotifyIncomingObjectSpamFrom(gSavedSettings, "FSNotifyIncomingObjectSpamFrom");
+					if (fsNotifyIncomingObjectSpamFrom)
+					// </FS:PP>
 					{
 						arg["FROM_NAME"] = from_name;
 						log_msg = LLTrans::getString("ItemsComingInTooFastFrom", arg);
@@ -1232,7 +1249,11 @@ bool check_offer_throttle(const std::string& from_name, bool check_only)
 				}
 				else
 				{
-					if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (gSavedSettings.getBOOL("FSNotifyIncomingObjectSpam"))
+					static LLCachedControl<bool> fsNotifyIncomingObjectSpam(gSavedSettings, "FSNotifyIncomingObjectSpam");
+					if (fsNotifyIncomingObjectSpam)
+					// </FS:PP>
 					{
 						log_msg = LLTrans::getString("ItemsComingInTooFast", arg);
 					}
@@ -2084,6 +2105,7 @@ void inventory_offer_handler(LLOfferInfo* info)
 	// NaCl - Antispam Registry
 	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_INVENTORY, info->mFromID))
 	{
+		delete info;
 		return;
 	}
 	// NaCl End
@@ -2330,27 +2352,31 @@ bool lure_callback(const LLSD& notification, const LLSD& response)
 		break;
 	}
 
-	LLNotificationPtr notification_ptr = LLNotifications::instance().find(notification["id"].asUUID());
-
-	if (notification_ptr)
-	{
-		LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
-		modified_form->setElementEnabled("Teleport", false);
-		modified_form->setElementEnabled("Cancel", false);
-		notification_ptr->updateForm(modified_form);
-
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
-		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
-		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
-		if ( (!pToast) || (!pToast->getCanBeStored()) )
-		{
-// [/SL:KB]
-			notification_ptr->repost();
-// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-		}
-// [/SL:KB]
-	}
+// <FS:Ansariel> [FS communication UI] FIRE-11536: Commenting out CHUI-112;
+//               Reposting the notification form will squeeze it somewhere
+//               within the IM floater and we don't need it for our comm. UI.
+//	LLNotificationPtr notification_ptr = LLNotifications::instance().find(notification["id"].asUUID());
+//
+//	if (notification_ptr)
+//	{
+//		LLNotificationFormPtr modified_form(new LLNotificationForm(*notification_ptr->getForm()));
+//		modified_form->setElementEnabled("Teleport", false);
+//		modified_form->setElementEnabled("Cancel", false);
+//		notification_ptr->updateForm(modified_form);
+//		//notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		// Assume that any offer notification with "getCanBeStored() == true" is the result of RLVa routing it to the notifcation syswell
+//		/*const*/ LLNotificationsUI::LLScreenChannel* pChannel = LLNotificationsUI::LLChannelManager::instance().getNotificationScreenChannel();
+//		/*const*/ LLNotificationsUI::LLToast* pToast = (pChannel) ? pChannel->getToastByNotificationID(notification["id"].asUUID()) : NULL;
+//		if ( (!pToast) || (!pToast->getCanBeStored()) )
+//		{
+//// [/SL:KB]
+//			notification_ptr->repost();
+//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
+//		}
+//// [/SL:KB]
+//	}
+// </FS:Ansariel>
 
 	return false;
 }
@@ -2827,6 +2853,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	
 			LL_INFOS("Messaging") << "process_improved_im: session_id( " << session_id << " ), from_id( " << from_id << " )" << LL_ENDL;
 
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+			chat.mText = buffer;
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// add to IM panel, but do not bother the user
 			gIMMgr->addMessage(
 				session_id,
@@ -2936,6 +2970,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				// checkfor and process reqinfo
 				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
+
+				// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+				chat.mText = message;
+				if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+				{
+					FSKeywords::notify(chat);
+				}
+				// </FS:PP>
+
 				buffer = saved + message;
 
 				gIMMgr->addMessage(
@@ -3139,7 +3182,8 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				send_do_not_disturb_message(msg, from_id);
 			}
-			else
+			
+			if (!is_muted)
 			{
 				LL_INFOS("Messaging") << "Received IM_GROUP_INVITATION message." << LL_ENDL;
 				// Read the binary bucket for more information.
@@ -3379,6 +3423,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 // [/SL:KB]
 			chat.mText = message;
 
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of Task IM)
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
 			// IMs from obejcts don't open IM sessions.
 			// <FS:Ansariel> [FS communication UI]
@@ -3472,6 +3523,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		}
 		else
 		{
+
+			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+			chat.mText = message;
+			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			{
+				FSKeywords::notify(chat);
+			}
+			// </FS:PP>
+
 			// standard message, not from system
 			std::string saved;
 			if(offline == IM_OFFLINE)
@@ -4151,6 +4211,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	if (chatter)
 	{
 		chat.mPosAgent = chatter->getPositionAgent();
+		static LLCachedControl<bool> EffectScriptChatParticles(gSavedSettings, "EffectScriptChatParticles"); // <FS:PP> gSavedSettings to LLCachedControl
 
 		// Make swirly things only for talking objects. (not script debug messages, though)
 //		if (chat.mSourceType == CHAT_SOURCE_OBJECT 
@@ -4158,7 +4219,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 //			&& gSavedSettings.getBOOL("EffectScriptChatParticles") )
 // [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0b) | Modified: RLVa-1.0.0g
 		if ( ((chat.mSourceType == CHAT_SOURCE_OBJECT) && (chat.mChatType != CHAT_TYPE_DEBUG_MSG)) && 
-			 (gSavedSettings.getBOOL("EffectScriptChatParticles")) &&
+			 // <FS:PP> gSavedSettings to LLCachedControl
+			 // (gSavedSettings.getBOOL("EffectScriptChatParticles")) &&
+			 (EffectScriptChatParticles) &&
+			 // </FS:PP>
 			 ((!rlv_handler_t::isEnabled()) || (CHAT_TYPE_OWNER != chat.mChatType)) )
 // [/RLVa:KB]
 		{
@@ -4239,18 +4303,25 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				   (CHAT_TYPE_OWNER != chat.mChatType) ) )
 			{
 				bool fIsEmote = RlvUtil::isEmote(mesg);
+				static LLCachedControl<bool> RestrainedLoveShowEllipsis(gSavedSettings, "RestrainedLoveShowEllipsis"); // <FS:PP> gSavedSettings to LLCachedControl
 				if ((!fIsEmote) &&
 					(((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) ||
 					 ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) ))
 				{
-					if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
+					if ( (gRlvHandler.filterChat(mesg, false)) && (!RestrainedLoveShowEllipsis) )
+					// </FS:PP>
 						return;
 				}
 				else if ((fIsEmote) &&
 					     (((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) ||
 					      ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) ))
  				{
-					if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+					// <FS:PP> gSavedSettings to LLCachedControl
+					// if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
+					if (!RestrainedLoveShowEllipsis)
+					// </FS:PP>
 						return;
 					mesg = "/me ...";
 				}
@@ -4531,7 +4602,18 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		LLSD args;
 		chat.mOwnerID = owner_id;
 
-		if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of local chat)
+		if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+		{
+			FSKeywords::notify(chat);
+		}
+		// </FS:PP>
+
+		// <FS:PP> gSavedSettings to LLCachedControl
+		// if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		static LLCachedControl<bool> TranslateChat(gSavedSettings, "TranslateChat");
+		if (TranslateChat && chat.mSourceType != CHAT_SOURCE_SYSTEM)
+		// </FS:PP>
 		{
 			if (chat.mChatStyle == CHAT_STYLE_IRC)
 			{
@@ -4551,6 +4633,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		LLSD msg_notify = LLSD(LLSD::emptyMap());
 		msg_notify["session_id"] = LLUUID();
         msg_notify["from_id"] = chat.mFromID;
+		msg_notify["source_type"] = chat.mSourceType;
         on_new_message(msg_notify);
 	}
 }
@@ -4983,6 +5066,25 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 		gAgent.getRegion()->getOriginGlobal());
 	gAgent.setRegion(regionp);
 	gObjectList.shiftObjects(shift_vector);
+// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+#ifdef OPENSIM
+	// Is this a really long jump?
+	if (shift_vector.length() > 2048.f * 256.f)
+	{
+		regionp->reInitPartitions();
+		gAgent.setRegion(regionp);
+		// Kill objects in the regions we left behind
+		for (LLWorld::region_list_t::const_iterator r = LLWorld::getInstance()->getRegionList().begin();
+			r != LLWorld::getInstance()->getRegionList().end(); ++r)
+		{
+			if (*r != regionp)
+			{
+				gObjectList.killObjects(*r);
+			}
+		}
+	}
+#endif
+// </FS:CR>
 	gAssetStorage->setUpstream(msg->getSender());
 	gCacheName->setUpstream(msg->getSender());
 	gViewerThrottle.sendToSim();
@@ -5528,7 +5630,6 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 		if (id == LLUUID::null)
 		{
 			LL_DEBUGS("Messaging") << "Unknown kill for local " << local_id << LL_ENDL;
-			gObjectList.mNumUnknownKills++;
 			continue;
 		}
 		else
@@ -5552,18 +5653,12 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 				// Do the kill
 				gObjectList.killObject(objectp);
 			}
-			else
-			{
-				LL_WARNS("Messaging") << "Object in UUID lookup, but not on object list in kill!" << LL_ENDL;
-				gObjectList.mNumUnknownKills++;
-			}
 		}
 
 		// We should remove the object from selection after it is marked dead by gObjectList to make LLToolGrab,
         // which is using the object, release the mouse capture correctly when the object dies.
         // See LLToolGrab::handleHoverActive() and LLToolGrab::handleHoverNonPhysical().
 		LLSelectMgr::getInstance()->removeObjectFromSelections(id);
-
 	}
 }
 
@@ -7105,6 +7200,14 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			}
 		}
 		
+		// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+		// Also, FIRE-11550
+		if (notificationID == "RegionRestartSeconds" || notificationID == "RegionRestartMinutes")
+		{
+			make_ui_sound("UISndRegionRestart");
+		}
+		// </FS:PP>
+
 		if (
 			(notificationID == "RegionEntryAccessBlocked") ||
 			(notificationID == "LandClaimAccessBlocked") ||
@@ -7140,6 +7243,15 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			{
 				return true;
 			}
+		}
+		// HACK -- handle callbacks for specific alerts.
+		if( notificationID == "HomePositionSet" )
+		{
+			// save the home location image to disk
+			std::string snap_filename = gDirUtilp->getLindenUserDir();
+			snap_filename += gDirUtilp->getDirDelimiter();
+			snap_filename += SCREEN_HOME_FILENAME;
+			gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -7240,16 +7352,6 @@ void process_alert_core(const std::string& message, BOOL modal)
 	{
 		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_KILLED_COUNT);
 	}
-// <FS:CR> FIRE-9696 - The viewer isn't ever seeing the alert here moved below and detect by name
-	//else if( message == "Home Position Set." )
-	//{
-		// save the home location image to disk
-	//	std::string snap_filename = gDirUtilp->getLindenUserDir();
-	//	snap_filename += gDirUtilp->getDirDelimiter();
-	//	snap_filename += SCREEN_HOME_FILENAME;
-	//	gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
-	//}
-// </FS:CR>
 
 	std::string processed_message = message;
 	const std::string ALERT_PREFIX("ALERT: ");
@@ -7261,9 +7363,9 @@ void process_alert_core(const std::string& message, BOOL modal)
 		std::string alert_name(message.substr(ALERT_PREFIX.length()));
 		if (!handle_special_alerts(alert_name))
 		{
-		LLNotificationsUtil::add(alert_name);
+			LLNotificationsUtil::add(alert_name);
 			processed_message = alert_name; // <FS:PP> FIRE-317, region restart alert
-	}
+		}
 	}
 	else if (message.find(NOTIFY_PREFIX) == 0)
 	{
@@ -8849,8 +8951,12 @@ void process_script_teleport_request(LLMessageSystem* msg, void**)
 	LLFloaterWorldMap* instance = LLFloaterWorldMap::getInstance();
 	if(instance)
 	{
-		instance->trackURL(
-						   sim_name, (S32)pos.mV[VX], (S32)pos.mV[VY], (S32)pos.mV[VZ]);
+		llinfos << "Object named " << object_name 
+			<< " is offering TP to region "
+			<< sim_name << " position " << pos
+			<< llendl;
+
+		instance->trackURL(sim_name, (S32)pos.mV[VX], (S32)pos.mV[VY], (S32)pos.mV[VZ]);
 		LLFloaterReg::showInstance("world_map", "center");
 	}
 	

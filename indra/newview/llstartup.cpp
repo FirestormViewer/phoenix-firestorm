@@ -51,6 +51,7 @@
 #include "lllandmark.h"
 #include "llcachename.h"
 #include "lldir.h"
+#include "lldonotdisturbnotificationstorage.h"
 #include "llerrorcontrol.h"
 #include "llfloaterreg.h"
 #include "llfocusmgr.h"
@@ -71,6 +72,7 @@
 #include "llfloaterimnearbychat.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
+#include "llpersistentnotificationstorage.h"
 #include "llteleporthistory.h"
 #include "llregionhandle.h"
 #include "llsd.h"
@@ -787,6 +789,7 @@ bool idle_startup()
 		}		
 // </AW: opensim>
 
+		//-------------------------------------------------
 		// Init audio, which may be needed for prefs dialog
 		// or audio cues in connection UI.
 		//-------------------------------------------------
@@ -914,12 +917,14 @@ bool idle_startup()
 
 	if (STATE_LOGIN_SHOW == LLStartUp::getStartupState())
 	{
-		LL_DEBUGS("AppInit") << "Initializing Window" << LL_ENDL;
+		LL_DEBUGS("AppInit") << "Initializing Window, show_connect_box = "
+							 << show_connect_box << LL_ENDL;
 
 		// if we've gone backwards in the login state machine, to this state where we show the UI
 		// AND the debug setting to exit in this case is true, then go ahead and bail quickly
 		if ( mLoginStatePastUI && gSavedSettings.getBOOL("QuitOnLoginActivated") )
 		{
+			LL_DEBUGS("AppInit") << "taking QuitOnLoginActivated exit" << LL_ENDL;
 			// no requirement for notification here - just exit
 			LLAppViewer::instance()->earlyExitNoNotify();
 		}
@@ -942,18 +947,20 @@ bool idle_startup()
 
 		if (show_connect_box)
 		{
+			LL_DEBUGS("AppInit") << "show_connect_box on" << LL_ENDL;
 			// Load all the name information out of the login view
 			// NOTE: Hits "Attempted getFields with no login view shown" warning, since we don't
 			// show the login view until login_show() is called below.  
 			if (gUserCredential.isNull())                                                                          
 			{                                                  
+				LL_DEBUGS("AppInit") << "loading credentials from gLoginHandler" << LL_ENDL;
 				display_startup();
-				gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getString("UserLoginInfo"));                       
+				gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getLLSD("UserLoginInfo").asString());
 				display_startup();
 			}     
 			// Make sure the process dialog doesn't hide things
 			display_startup();
-			gViewerWindow->setShowProgress(FALSE,FALSE);
+			gViewerWindow->setShowProgress(FALSE, FALSE);
 			display_startup();
 			// Show the login dialog
 			login_show();
@@ -969,10 +976,21 @@ bool idle_startup()
 			display_startup();
 			LLPanelLogin::giveFocus();
 
+			if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
+			{
+				LL_INFOS("AppInit") << "FirstLoginThisInstall, calling show_first_run_dialog()" << LL_ENDL;
+				show_first_run_dialog();
+			}
+			else
+			{
+				LL_DEBUGS("AppInit") << "FirstLoginThisInstall off" << LL_ENDL;
+			}
+
 			LLStartUp::setStartupState( STATE_LOGIN_WAIT );		// Wait for user input
 		}
 		else
 		{
+			LL_DEBUGS("AppInit") << "show_connect_box off, skipping to STATE_LOGIN_CLEANUP" << LL_ENDL;
 			// skip directly to message template verification
 			LLStartUp::setStartupState( STATE_LOGIN_CLEANUP );
 		}
@@ -1115,6 +1133,10 @@ bool idle_startup()
 // </FS:CR>
 		LLFile::mkdir(gDirUtilp->getLindenUserDir());
 
+		// As soon as directories are ready initialize notification storages
+		LLPersistentNotificationStorage::getInstance()->initialize();
+		LLDoNotDisturbNotificationStorage::getInstance()->initialize();
+
 		// Set PerAccountSettingsFile to the default value.
 		gSavedSettings.setString("PerAccountSettingsFile",
 			gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, 
@@ -1126,11 +1148,12 @@ bool idle_startup()
 		LLAppViewer::instance()->loadSettingsFromDirectory("Account");
 
 		// Convert 'LogInstantMessages' into 'KeepConversationLogTranscripts' for backward compatibility (CHUI-743).
-		LLControlVariablePtr logInstantMessagesControl = gSavedPerAccountSettings.getControl("LogInstantMessages");
-		if (logInstantMessagesControl.notNull())
-		{
-			gSavedPerAccountSettings.setS32("KeepConversationLogTranscripts", logInstantMessagesControl->getValue() ? 2 : 1);
-		}
+		// <FS:CR> FIRE-11410 - Don't do this, handle it in settings restore and first run
+		//LLControlVariablePtr logInstantMessagesControl = gSavedPerAccountSettings.getControl("LogInstantMessages");
+		//if (logInstantMessagesControl.notNull())
+		//{
+		//	gSavedPerAccountSettings.setS32("KeepConversationLogTranscripts", logInstantMessagesControl->getValue() ? 2 : 1);
+		//}
 
 		// Need to set the LastLogoff time here if we don't have one.  LastLogoff is used for "Recent Items" calculation
 		// and startup time is close enough if we don't have a real value.
@@ -1316,7 +1339,7 @@ bool idle_startup()
 		login->setSerialNumber(LLAppViewer::instance()->getSerialNumber());
 // <AW: crash report grid correctness>
 //		login->setLastExecEvent(gLastExecEvent);
-		login->setLastExecDuration(gLastExecDuration); //<FS:TM> F_EX merge check this
+		login->setLastExecDuration(gLastExecDuration);
 		login->setLastExecEvent(last_exec_event);
 // </AW: crash report grid correctness>
 
@@ -2228,8 +2251,25 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			LLFloaterReg::toggleInstanceOrBringToFront("im_container");
 
 		}
-
+		
 		display_startup();
+		
+		// <FS:CR> Compatibility with old backups
+		// Put gSavedPerAccountSettings here, put gSavedSettings in llappviewer.cpp
+		// *TODO: Should we keep these around forever or just three release cycles?
+		if (gSavedSettings.getBOOL("FSFirstRunAfterSettingsRestore"))
+		{
+			// Post-chui merge logging change
+			if (gSavedPerAccountSettings.getBOOL("LogInstantMessages"))
+				gSavedPerAccountSettings.setS32("KeepConversationLogTranscript", 2);
+			else
+				gSavedPerAccountSettings.setS32("KeepConversationLogTranscript", 0);
+			
+			//ok, we're done, set it back to false.
+			gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", FALSE);
+		}
+		display_startup();
+		// </FS:CR>
 
 		if (gSavedSettings.getBOOL("HelpFloaterOpen"))
 		{
@@ -3334,6 +3374,12 @@ void LLStartUp::setStartSLURL(const LLSLURL& slurl)
 			break;
     }
 }
+
+// static
+LLSLURL& LLStartUp::getStartSLURL()
+{
+	return sStartSLURL;
+} 
 
 /**
  * Read all proxy configuration settings and set up both the HTTP proxy and

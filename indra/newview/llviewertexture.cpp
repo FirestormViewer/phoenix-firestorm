@@ -1205,22 +1205,15 @@ void LLViewerFetchedTexture::dump()
 // ONLY called from LLViewerFetchedTextureList
 void LLViewerFetchedTexture::destroyTexture() 
 {
-	// <FS:Ansariel> This was commented out as part of MAINT-775 and is a REALLY bad idea!
-	//               It will dump textures off memory once you turn away and you
-	//               will end up with gray textures that need to be fetched again.
-	//               Let's do this smarter and drop textures off memory soon before
-	//               we reach the desired max texture memory!
-	//if(LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes)//not ready to release unused memory.
-	//{
-	//	return ;
-	//}
+	// <FS:Ansariel> 
+	//if(LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes * 0.95f)//not ready to release unused memory.
 	static LLCachedControl<bool> fsDestroyGLTexturesImmediately(gSavedSettings, "FSDestroyGLTexturesImmediately");
 	static LLCachedControl<F32> fsDestroyGLTexturesThreshold(gSavedSettings, "FSDestroyGLTexturesThreshold");
 	if (!fsDestroyGLTexturesImmediately && LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes * fsDestroyGLTexturesThreshold)//not ready to release unused memory.
+	// </FS:Ansariel>
 	{
 		return ;
 	}
-	// </FS:Ansariel>
 	if (mNeedsCreateTexture)//return if in the process of generating a new texture.
 	{
 		return ;
@@ -1308,7 +1301,12 @@ void LLViewerFetchedTexture::addToCreateTexture()
 							destroyRawImage();
 							return ;
 						}
-						mRawImage->scale(w >> i, h >> i) ;					
+
+						{
+							//make a duplicate in case somebody else is using this raw image
+							mRawImage = mRawImage->duplicate(); 
+							mRawImage->scale(w >> i, h >> i) ;					
+						}
 					}
 				}
 			}
@@ -1582,7 +1580,7 @@ F32 LLViewerFetchedTexture::calcDecodePriority()
 	else if (pixel_priority < 0.001f && !have_all_data)
 	{
 		// Not on screen but we might want some data
-		if (mBoostLevel > BOOST_HIGH)
+		if (mBoostLevel > BOOST_SELECTED)
 		{
 			// Always want high boosted images
 			priority = 1.f;
@@ -2051,7 +2049,11 @@ bool LLViewerFetchedTexture::updateFetch()
 			c = mComponents;
 		}
 
-		const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+		// <FS:Ansariel> Replace frequently called gSavedSettings
+		//const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+		static LLCachedControl<U32> sTextureDiscardLevel(gSavedSettings, "TextureDiscardLevel");
+		const U32 override_tex_discard_level = sTextureDiscardLevel();
+		// </FS:Ansariel>
 		if (override_tex_discard_level != 0)
 		{
 			desired_discard = override_tex_discard_level;
@@ -2753,7 +2755,11 @@ void LLViewerFetchedTexture::setCachedRawImage()
 				--i ;
 			}
 			
-			mRawImage->scale(w >> i, h >> i) ;
+			{
+				//make a duplicate in case somebody else is using this raw image
+				mRawImage = mRawImage->duplicate(); 
+				mRawImage->scale(w >> i, h >> i) ;
+			}
 		}
 		mCachedRawImage = mRawImage ;
 		mRawDiscardLevel += i ;

@@ -35,6 +35,7 @@
 				Ubicación:
 			</text>
 			<check_box label="Usar el formato clásico de nombre de archivo para las transcripciones" name="UseLegacyIMLogNames" tool_tip="Si lo activas, se usará el formato de nombre de archivo para las transcripciones (nombre de usuario) en vez del nuevo formato (nombre_de_usuario)."/>
+			<check_box label="Añadir marca horaria a los nombres de archivo de registro" name="LogFileNamewithDate" tool_tip="Añadir fecha y hora a los nombres de archivo de los registros de MI y chat, con formato chat-YYYY-MM-DD y 'nombre_MI'-YYYY-MM."/>
 			<button label="Administrar lista de bloqueados/silenciados" name="block_list"/>
 		</panel>
 		<panel label="Puntos de mira" name="tab-lookat">

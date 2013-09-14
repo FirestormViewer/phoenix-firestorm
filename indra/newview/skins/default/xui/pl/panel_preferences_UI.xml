@@ -51,8 +51,18 @@
             <combo_box.item label="Jeden na obiekt i kanał" name="ScriptDialogOption_1" />
             <combo_box.item label="Nieograniczone" name="ScriptDialogOption_2" />
         </combo_box>
-        <check_box label="Skrypty w prawym górnym rogu" name="ShowScriptDialogsTopRight" tool_tip="Zaznacz, aby przenieść komunikaty skryptów w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)." />
-        <check_box label="Animuj komunikaty skryptów" name="FSAnimatedScriptDialogs" tool_tip="Zaznacz, aby komunikaty skryptów animowały się przy otwieraniu (klasyczne zachowanie V1.x)." />
+        <text name="ScriptDialogsPositionLabel" width="185">
+            Pozycja komunikatów skryptów:
+        </text>
+        <combo_box name="ScriptDialogsPositionDropdown" tool_tip="Wybierz, w którym miejscu na ekranie mają się pojawiać komunikaty skryptów.">
+            <combo_box.item label="Importuj starą wartość" name="ScriptDialogPositionOption_0" />
+            <combo_box.item label="Przyczepione do ikonek powiadomień" name="ScriptDialogPositionOption_1" />
+            <combo_box.item label="Lewy górny róg ekranu" name="ScriptDialogPositionOption_2" />
+            <combo_box.item label="Prawy górny róg ekranu" name="ScriptDialogPositionOption_3" />
+            <combo_box.item label="Lewy dolny róg ekranu" name="ScriptDialogPositionOption_4" />
+            <combo_box.item label="Prawy dolny róg ekranu" name="ScriptDialogPositionOption_5" />
+        </combo_box>
+        <check_box label="Animuj komunikaty skryptów" name="FSAnimatedScriptDialogs" tool_tip="Zaznacz, aby komunikaty skryptów animowały się przy otwieraniu (klasyczne zachowanie V1.x). Działa tylko wtedy, gdy komunikaty skryptów otwierają się z góry na dół." />
         <check_box label="Ikony i ogł. grup w prawym górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
         <text name="GroupTopRightRequiresRestart">
             (wymaga restartu)

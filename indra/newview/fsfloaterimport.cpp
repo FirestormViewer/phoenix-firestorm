@@ -99,6 +99,18 @@ FSFloaterImport::~FSFloaterImport()
 	gSavedSettings.setBOOL("ShowNewInventory", mSavedSettingShowNewInventory);
 }
 
+BOOL FSFloaterImport::postBuild()
+{
+	if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0 
+		|| gAgent.getRegion()->getCentralBakeVersion() > 0)
+	{
+		getChild<LLCheckBoxCtrl>("temp_asset")->setVisible(FALSE);   
+		getChild<LLCheckBoxCtrl>("temp_asset")->set(FALSE);
+	}
+	
+	return TRUE;
+}
+
 // static
 void FSFloaterImport::onIdle(void* user_data)
 {

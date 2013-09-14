@@ -8,6 +8,21 @@
  tab_stop="false" 
  name="main_view"
  width="1024">
+
+  <!-- <FS:Zi> visible="false" to hide the panel on the login screen -->
+  <panel
+   mouse_opaque="false"
+   background_visible="false"
+   filename="panel_navigation_bar.xml"
+   top="19"
+   left="0"
+   follows="left|top|right"
+   height="40"
+   layout="topleft"
+   name="navigation_bar"
+   visible="false"
+   width="1024" />
+
   <layout_stack border_size="0"
                 follows="all"
                 mouse_opaque="false"
@@ -48,16 +63,6 @@
             mouse_opaque="false"
             name="world_view_rect"
             width="1024"/>
-      <panel follows="left|top|right"
-             top="0"
-             left="0"
-             height="40"
-             mouse_opaque="false"
-             name="nav_bar_container"
-             tab_stop="false"
-             width="1024"
-             invisibility_control="MouseLookEnabled"
-             visible="false"/>
       <!-- <FS:Zi> We don't have the mini location bar, so no topinfo_bar required
       <panel follows="left|top|right"
              height="42"

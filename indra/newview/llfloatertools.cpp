@@ -447,6 +447,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	// <FS>
 	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
 	mCommitCallbackRegistrar.add("BuildTool.Expand",			boost::bind(&LLFloaterTools::onClickExpand,this));
+	mCommitCallbackRegistrar.add("BuildTool.Flip",				boost::bind(&LLPanelFace::onCommitFlip, _1, _2));
 	// </FS>
 
 	mLandImpactsObserver = new LLLandImpactsObserver();

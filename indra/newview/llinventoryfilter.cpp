@@ -73,8 +73,7 @@ LLInventoryFilter::LLInventoryFilter(const Params& p)
 	mFilterSubString(p.substring),
 	mCurrentGeneration(0),
 	mFirstRequiredGeneration(0),
-	mFirstSuccessGeneration(0),
-	mFilterCount(0)
+	mFirstSuccessGeneration(0)
 {
 
 
@@ -83,8 +82,6 @@ LLInventoryFilter::LLInventoryFilter(const Params& p)
 	mFilterSubStrings.clear();
 	//	End Multi-substring inventory search
 
-	mNextFilterGeneration = mCurrentGeneration + 1;
-	
 	// copy mFilterOps into mDefaultFilterOps
 	markDefault();
 }
@@ -131,6 +128,7 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 		return passed_clipboard;
 	}
 	
+	//bool passed = (mFilterSubString.size() ? listener->getSearchableName().find(mFilterSubString) != std::string::npos : true); <FS:TM> 3.6.4 check this, ll repoaced the line in CHUI (2 down) with this
 	//mSubStringMatchOffset = mFilterSubString.size() ? item->getSearchableLabel().find(mFilterSubString) : std::string::npos; <FS:TM> CHUI Merge LL origonal removed in FS, replaced with enhanced search
 	//std::string::size_type string_offset = mFilterSubString.size() ? listener->getSearchableName().find(mFilterSubString) : std::string::npos; <FS:TM> CHUI Merge LL new line 
 	//	Begin Multi-substring inventory search
@@ -199,21 +197,16 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 
 bool LLInventoryFilter::check(const LLInventoryItem* item)
 {
-	std::string::size_type string_offset = mFilterSubString.size() ? item->getName().find(mFilterSubString) : std::string::npos;
-
+	const bool passed_string = (mFilterSubString.size() ? item->getName().find(mFilterSubString) != std::string::npos : true);
 	const bool passed_filtertype = checkAgainstFilterType(item);
 	const bool passed_permissions = checkAgainstPermissions(item);
 	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 	// Don't hide cut items in inventory
-	//const BOOL passed_clipboard = checkAgainstClipboard(item->getUUID());
-	const BOOL passed_clipboard = TRUE;
+	//const bool passed_clipboard = checkAgainstClipboard(item->getUUID());
+	const bool passed_clipboard = true;
 	// </FS:Ansariel> Don't filter cut items
-	const bool passed = (passed_filtertype 
-		&& passed_permissions
-		&& passed_clipboard 
-		&&	(mFilterSubString.size() == 0 || string_offset != std::string::npos));
 
-	return passed;
+	return passed_filtertype && passed_permissions && passed_clipboard && passed_string;
 }
 
 bool LLInventoryFilter::checkFolder(const LLFolderViewModelItem* item) const
@@ -567,7 +560,7 @@ void LLInventoryFilter::updateFilterTypes(U64 types, U64& current_types)
 		current_types = types;
 		if (more_bits_set && fewer_bits_set)
 		{
-			// neither less or more restrive, both simultaneously
+			// neither less or more restrictive, both simultaneously
 			// so we need to filter from scratch
 			setModified(FILTER_RESTART);
 		}
@@ -909,7 +902,7 @@ void LLInventoryFilter::resetDefault()
 void LLInventoryFilter::setModified(EFilterModified behavior)
 {
 	mFilterText.clear();
-	mCurrentGeneration = mNextFilterGeneration++;
+	mCurrentGeneration++;
 
 	if (mFilterModified == FILTER_NONE)
 	{
@@ -1216,21 +1209,19 @@ LLInventoryFilter::EFolderShow LLInventoryFilter::getShowFolderState() const
 	return mFilterOps.mShowFolderState; 
 }
 
-void LLInventoryFilter::setFilterCount(S32 count) 
-{ 
-	mFilterCount = count; 
-}
-S32 LLInventoryFilter::getFilterCount() const
+bool LLInventoryFilter::isTimedOut()
 {
-	return mFilterCount;
+	return mFilterTime.hasExpired();
 }
 
-void LLInventoryFilter::decrementFilterCount() 
-{ 
-	mFilterCount--; 
+void LLInventoryFilter::resetTime(S32 timeout)
+{
+	mFilterTime.reset();
+    F32 time_in_sec = (F32)(timeout)/1000.0;
+	mFilterTime.setTimerExpirySec(time_in_sec);
 }
 
-S32 LLInventoryFilter::getCurrentGeneration() const 
+S32 LLInventoryFilter::getCurrentGeneration() const
 { 
 	return mCurrentGeneration;
 }

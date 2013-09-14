@@ -46,6 +46,7 @@
 #include "llenvmanager.h"
 #include "llfirstuse.h"
 #include "llfloatercamera.h"
+#include "llfloaterimcontainer.h"
 #include "llfloaterreg.h"
 #include "llfloatertools.h"
 #include "llgroupactions.h"
@@ -94,12 +95,13 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
+#include "stringize.h"
+#include "boost/foreach.hpp"
 
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
 #include "kcwlinterface.h"
-#include "stringize.h"
 // [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
 #include "rlvhandler.h"
 #include "rlvhelper.h"
@@ -492,7 +494,7 @@ void LLAgent::init()
 {
 	mMoveTimer.start();
 
-	gSavedSettings.declareBOOL("SlowMotionAnimation", FALSE, "Declared in code", FALSE);
+	gSavedSettings.declareBOOL("SlowMotionAnimation", FALSE, "Declared in code", LLControlVariable::PERSIST_NO);
 	gSavedSettings.getControl("SlowMotionAnimation")->getSignal()->connect(boost::bind(&handleSlowMotionAnimation, _2));
 	
 	// *Note: this is where LLViewerCamera::getInstance() used to be constructed.
@@ -2279,7 +2281,7 @@ void LLAgent::endAnimationUpdateUI()
 		// show menus
 		gMenuBarView->setVisible(TRUE);
 		// <FS:Ansariel> Separate navigation and favorites panel
-		//LLNavigationBar::getInstance()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+		LLNavigationBar::instance().getView()->setVisible(TRUE);
 		gStatusBar->setVisibleForMouselook(true);
 
 		if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
@@ -2321,7 +2323,20 @@ void LLAgent::endAnimationUpdateUI()
 				skip_list.insert(tmp);
 			}
 			// </FS:LO>
-		
+
+			// <FS:Ansariel> [FS communication UI] Commented out so far.
+			//               Maybe check if need it to close standalone IM floater
+			//               when going into mouselook
+			//LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+			//LLFloaterIMContainer::floater_list_t conversations;
+			//im_box->getDetachedConversationFloaters(conversations);
+			//BOOST_FOREACH(LLFloater* conversation, conversations)
+			//{
+			//	llinfos << "skip_list.insert(session_floater): " << conversation->getTitle() << llendl;
+			//	skip_list.insert(conversation);
+			//}
+			// </FS:Ansariel> [FS communication UI]
+
 			gFloaterView->popVisibleAll(skip_list);
 #endif
 			mViewsPushed = FALSE;
@@ -2415,7 +2430,7 @@ void LLAgent::endAnimationUpdateUI()
 		gToolBarView->setToolBarsVisible(false);
 		gMenuBarView->setVisible(FALSE);
 		// <FS:Ansariel> Separate navigation and favorites panel
-		//LLNavigationBar::getInstance()->setVisible(FALSE);
+		LLNavigationBar::instance().getView()->setVisible(FALSE);
 		gStatusBar->setVisibleForMouselook(false);
 
 		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);

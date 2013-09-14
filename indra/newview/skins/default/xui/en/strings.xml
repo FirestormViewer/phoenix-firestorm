@@ -224,7 +224,8 @@ Please try logging in again in a minute.</string>
 	<string name="SLappAgentIM">IM</string>
 	<string name="SLappAgentPay">Pay</string>
 	<string name="SLappAgentOfferTeleport">Offer Teleport to </string>
-	<string name="SLappAgentRequestFriend">Friend Request </string>
+	<string name="SLappAgentRequestFriend">Friend Request</string>
+  <string name="SLappAgentRemoveFriend">Friend Removal</string>
 
 	<!-- ButtonToolTips, llfloater.cpp -->
 	<string name="BUTTON_CLOSE_DARWIN">Close (&#8984;W)</string>
@@ -2329,7 +2330,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Snapshot_To_Disk_Label">Snapshot to Disk</string>
   <string name="Command_Radar_Label">Radar</string>
   <string name="Command_Conversation_Log_Label">Conversation Log</string>
-  
+  <string name="Command_Move_Lock_Label">Move Lock</string>
+	
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -2379,6 +2381,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Snapshot_To_Disk_Tooltip">Takes a quick snapshot and saves it to harddisk</string>
   <string name="Command_Radar_Tooltip">Opens the radar for nearby avatars</string>
   <string name="Command_Conversation_Log_Tooltip">Opens the conversation log to view past chat transcripts</string>
+  <string name="Command_Move_Lock_Tooltip">Locks your avatar in its current position</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
@@ -2414,7 +2417,7 @@ Try enclosing path to the editor with double quotes.
   <!-- Settings sanity checks -->
   <string name="SanityCheckEquals">The settings control &quot;[CONTROL_NAME]&quot; should be at [VALUE_1].</string>
   <string name="SanityCheckNotEquals">The settings control&quot;[CONTROL_NAME]&quot; should not be set to [VALUE_1].</string>
-  <string name="SanityCheckLowerThan">The settings control &quot;[CONTROL_NAME]&quot; should be lower than [VALUE_1].</string>
+  <string name="SanityCheckLessThan">The settings control &quot;[CONTROL_NAME]&quot; should be lower than [VALUE_1].</string>
   <string name="SanityCheckGreaterThan">The settings control &quot;[CONTROL_NAME]&quot; should be higher than [VALUE_1].</string>
   <string name="SanityCheckBetween">The settings control &quot;[CONTROL_NAME]&quot; should be between [VALUE_1] and [VALUE_2].</string>
   <string name="SanityCheckNotBetween">The settings control &quot;[CONTROL_NAME]&quot; should not be between [VALUE_1] and [VALUE_2].</string>
@@ -2469,6 +2472,9 @@ Try enclosing path to the editor with double quotes.
   <string name="Collision_PhysicalObject">[NAME] hit you with a physical object.</string>
   <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
 
+  <string name="MovelockEnabled">Movelock enabled</string>
+  <string name="MovelockDisabled">Movelock disabled</string>
+
   <string name="BusyResponse">busy response</string>
   
   <string name="TeleportMaturityExceeded">The Resident cannot visit this region.</string>
@@ -2486,12 +2492,16 @@ Try enclosing path to the editor with double quotes.
   <string name="logging_calls_enabled_log_empty">
     There are no logged conversations. After you contact someone, or someone contacts you, a log entry will be shown here.
   </string>
+  <string name="loading_chat_logs">
+    Loading...
+  </string>
   
   <string name="LoadCameraPositionNoneSaved">No camera view has been saved yet.</string>
   <string name="LoadCameraPositionOutsideDrawDistance">Can't restore camera view because the camera position is beyond draw distance.</string>
 
   <string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
+  <string name="FSCameraPositionCopied">Camera position [POS] copied to clipboard.</string>
 
   <!-- Build types for about floater -->
   <string name="FSWithHavok">with Havok support</string>
@@ -2580,7 +2590,7 @@ Try enclosing path to the editor with double quotes.
   <!-- <FS:CR> Exporter messages -->
   <string name="export_started">Beginning export...</string>
   <string name="export_finished">Export finished.</string>
-  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
+  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Aborting export.</string>
   <string name="export_nothing_exported">Nothing was exported. Backup not created.</string>
   <string name="export_node_not_found">LLSelect node for [OBJECT] not found. Using default prim instead.</string>
   <string name="export_failed_export_check">[OBJECT] failed permissions check. Using default prim.</string>
@@ -2591,10 +2601,14 @@ Try enclosing path to the editor with double quotes.
   <string name="export_saving_asset">Saving [ITEM]...</string>
   <string name="export_failed_to_receive_texture">Failed to get texture [TEXTURE].</string>
   <string name="export_received_null_texture">Received null texture [TEXTURE].</string>
-  <string name="export_item_not_exportable">[ITEM] is not an currently supported by the exporter. Skipping.</string>
+  <string name="export_item_not_exportable">[ITEM] is not currently supported by the exporter. Skipping.</string>
   <string name="export_failed_fetch">Could not retrieve [ITEM]. (Status [STATUS] [EXT_STATUS])</string>
   <string name="export_requesting_asset">Requesting asset [ITEM]...</string>
   <string name="export_rerequesting_inventory">Rerequesting inventory for [ITEM].</string>
   <string name="export_rerequesting_texture">Rerequesting texture [ITEM].</string>
   <string name="export_failed_to_load">Failed to load asset [ITEM].</string>
+
+  <!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
+  <string name="skin_defaults_starlight_location">Showing your current location in the menu bar was disabled as a default for the Starlight skin series.</string>
+  <string name="skin_defaults_starlight_navbar">Showing the navigation bar was enabled as a default for the Starlight skin series.</string>
 </strings>

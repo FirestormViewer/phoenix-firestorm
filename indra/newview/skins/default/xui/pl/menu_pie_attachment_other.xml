@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Avatar Pie">
     <pie_slice label="Profil..." name="Profile..."/>
-    <pie_slice label="Wycisz" name="Avatar Mute"/>
+    <pie_menu name="mute_menu" label="Blokuj &gt;">
+        <pie_slice label="Blokuj" name="Avatar Mute"/>
+        <pie_slice label="Właśc. cząsteczek" name="Mute Particle"/>
+    </pie_menu>
     <pie_slice label="Idź do" name="Go to"/>
     <pie_slice label="Zgłoś..." name="abuse"/>
     <pie_slice label="Nowa znajomość..." name="Add Friend"/>
@@ -17,7 +20,10 @@
             <pie_slice label="Zadzwoń" name="Call"/>
             <pie_slice label="Przybliż" name="Zoom In"/>
             <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
-            <pie_slice label="Eksportuj" name="Export"/>
+            <pie_menu name="ExportMenu" label="Zapisz jako &gt;">
+                <pie_slice label="Kopia zapasowa" name="Backup"/>
+                <pie_slice label="Collada" name="Collada"/>
+            </pie_menu>
         </pie_menu>
         <pie_slice label="Inspekcja" name="Avatar Inspect"/>
         <pie_menu name="DerenderMenu" label="Derenderuj &gt;">

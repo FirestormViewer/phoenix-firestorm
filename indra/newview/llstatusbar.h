@@ -139,6 +139,8 @@ public:
 	void toggleMedia(bool enable);
 	void toggleStream(bool enable);
 	// </FS:Zi>
+	
+	void showBalance(bool show);	// <FS:CR> Hide currency balance in snapshots
 
 private:
 	

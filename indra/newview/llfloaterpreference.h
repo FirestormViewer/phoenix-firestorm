@@ -312,6 +312,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();
 	/*virtual*/ void cancel();
+	void callbackRestart(const LLSD& notification, const LLSD& response);	// <FS:CR> Callback for restart dialogs
 protected:
 	void onSkinChanged();
 	void onSkinThemeChanged();

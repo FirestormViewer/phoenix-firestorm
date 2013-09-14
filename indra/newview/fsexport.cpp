@@ -200,8 +200,18 @@ void FSExport::onIdle()
 void FSExport::exportSelection()
 {
 	LLObjectSelectionHandle selection = LLSelectMgr::instance().getSelection();
+	if (!selection)
+	{
+		LL_WARNS("export") << "Nothing selected; Bailing!" << LL_ENDL;
+		return;
+	}
 	LLObjectSelection::valid_root_iterator iter = selection->valid_root_begin();
 	LLSelectNode* node = *iter;
+	if (!node)
+	{
+		LL_WARNS("export") << "No node selected; Bailing!" << LL_ENDL;
+		return;
+	}
 
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(node->mName + ".oxp")))
@@ -298,11 +308,11 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
 			LLViewerRegion* region = gAgent.getRegion();
-			if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+			if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
 			{
 				default_prim = !node->mPermissions->allowExportBy(gAgent.getID());
 			}
-			else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+			else if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
 			{
 				// Only your own creations if this is explicitly set
 				default_prim = (!(object->permYouOwner()
@@ -447,16 +457,22 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 		U8 texture_count = object->getNumTEs();
 		for(U8 i = 0; i < texture_count; ++i)
 		{
-			if (exportTexture(object->getTE(i)->getID()))
+			LLTextureEntry *checkTE = object->getTE(i);
+			LL_DEBUGS("export") << "Checking texture number " << (S32)i
+				<< ", ID " << checkTE->getID() << LL_ENDL;
+			if (defaultTextureCheck(checkTE->getID()))	// <FS:CR> Check against default textures
 			{
-				prim["texture"].append(object->getTE(i)->asLLSD());
+				LL_DEBUGS("export") << "...is a default texture." << LL_ENDL;
+				prim["texture"].append(checkTE->asLLSD());
 			}
-			else if (defaultTextureCheck(object->getTE(i)->getID()))	// <FS:CR> Check against default textures
+			else if (exportTexture(checkTE->getID()))
 			{
-				prim["texture"].append(object->getTE(i)->asLLSD());
+				LL_DEBUGS("export") << "...export check passed." << LL_ENDL;
+				prim["texture"].append(checkTE->asLLSD());
 			}
 			else
 			{
+				LL_DEBUGS("export") << "...export check failed." << LL_ENDL;
 				LLTextureEntry te(LL_DEFAULT_WOOD_UUID); // TODO: use user option of default texture.
 				prim["texture"].append(te.asLLSD());
 			}
@@ -766,6 +782,7 @@ bool FSExport::assetCheck(LLUUID asset_id, std::string& name, std::string& descr
 				if (LLGridManager::getInstance()->isInOpenSim())
 				{
 					LLViewerRegion* region = gAgent.getRegion();
+					if (!region) return false;
 					if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
 					{
 						exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
@@ -817,11 +834,11 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
 			LLViewerRegion* region = gAgent.getRegion();
-			if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+			if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
 			{
 				exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
 			}
-			else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
+			else if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
 			{
 				exportable = perms.getCreator() == gAgentID;
 			}
@@ -840,10 +857,14 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 
 		if (!exportable)
 		{
-			LLStringUtil::format_map_t args;
-			args["ITEM"] = item->getName();
-			updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
-			LL_DEBUGS("export") << "Item " << item->getName() << " failed export check." << LL_ENDL;
+			//<FS:TS> Only complain if we're trying to export a non-NULL item and fail
+			if (!item->getUUID().isNull())
+			{
+				LLStringUtil::format_map_t args;
+				args["ITEM"] = item->getName();
+				updateProgress(formatString(LLTrans::getString("export_asset_failed_export_check"), args));
+				LL_DEBUGS("export") << "Item " << item->getName() << ", UUID " << item->getUUID() << " failed export check." << LL_ENDL;
+			}
 			continue;
 		}
 

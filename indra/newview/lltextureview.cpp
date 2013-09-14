@@ -448,8 +448,14 @@ void LLAvatarTexBar::draw()
 												 text_color, LLFontGL::LEFT, LLFontGL::TOP); //, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT);
 		line_num++;
 	}
-	const U32 texture_timeout = gSavedSettings.getU32("AvatarBakedTextureUploadTimeout");
-	const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//const U32 texture_timeout = gSavedSettings.getU32("AvatarBakedTextureUploadTimeout");
+	//const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+	static LLCachedControl<U32> sAvatarBakedTextureUploadTimeout(gSavedSettings, "AvatarBakedTextureUploadTimeout");
+	static LLCachedControl<U32> sTextureDiscardLevel(gSavedSettings, "TextureDiscardLevel");
+	const U32 texture_timeout = sAvatarBakedTextureUploadTimeout();
+	const U32 override_tex_discard_level = sTextureDiscardLevel();
+	// </FS:Ansariel>
 	
 	LLColor4 header_color(1.f, 1.f, 1.f, 0.9f);
 

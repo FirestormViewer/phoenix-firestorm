@@ -149,6 +149,7 @@
 #include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
+#include "daeexport.h"
 
 
 using namespace LLAvatarAppearanceDefines;
@@ -195,6 +196,7 @@ LLContextMenu	*gMenuObject = NULL;
 LLContextMenu	*gMenuAttachmentSelf = NULL;
 LLContextMenu	*gMenuAttachmentOther = NULL;
 LLContextMenu	*gMenuLand	= NULL;
+LLContextMenu	*gMenuMuteParticle = NULL;
 
 // ## Zi: Pie menu
 // Pie menus
@@ -485,6 +487,9 @@ void init_menus()
 
 	gMenuLand = LLUICtrlFactory::createFromFile<LLContextMenu>(
 		"menu_land.xml", gMenuHolder, registry);
+
+	gMenuMuteParticle = LLUICtrlFactory::createFromFile<LLContextMenu>(
+		"menu_mute_particle.xml", gMenuHolder, registry);
 
 // ## Zi: Pie menu
 	gPieMenuAvatarSelf = LLUICtrlFactory::createFromFile<PieMenu>(
@@ -2700,6 +2705,9 @@ void cleanup_menus()
 	delete gMenuLand;
 	gMenuLand = NULL;
 
+	delete gMenuMuteParticle;
+	gMenuMuteParticle = NULL;
+
 	delete gMenuBarView;
 	gMenuBarView = NULL;
 
@@ -3305,6 +3313,13 @@ bool enable_object_edit()
 	}
 
 	return enable;
+}
+
+bool enable_mute_particle()
+{
+	const LLPickInfo& pick = LLToolPie::getInstance()->getPick();
+
+	return pick.mParticleOwnerID != LLUUID::null && pick.mParticleOwnerID != gAgent.getID();
 }
 
 // mutually exclusive - show either edit option or build in menu
@@ -4117,26 +4132,81 @@ class FSSelfCheckForceSit : public view_listener_t
 	}
 };
 
-// Phantom mode -KC
-class FSSelfTogglePhantom : public view_listener_t
+// Phantom mode -KC & <FS:CR>
+class FSSelfToggleMoveLock : public view_listener_t
     {
         bool handleEvent(const LLSD& userdata)
         {
-			gAgent.togglePhantom();
+			if (LLGridManager::getInstance()->isInSecondLife())
+			{
+				bool new_value = !gSavedSettings.getBOOL("UseMoveLock");
+				gSavedSettings.setBOOL("UseMoveLock", new_value);
+				if (new_value)
+				{
+					reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
+				}
+				else
+				{
+					reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+				}
+			}
+#ifdef OPENSIM
+			else
+			{
+				gAgent.togglePhantom();
+			}
+#endif // OPENSIM
 			//TODO: feedback to local chat
             return true;
         }
     };
 
 
-class FSSelfCheckPhantom : public view_listener_t
+class FSSelfCheckMoveLock : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value = gAgent.getPhantom();
+		bool new_value(false);
+		if (LLGridManager::getInstance()->isInSecondLife())
+		{
+			new_value = gSavedSettings.getBOOL("UseMoveLock");
+		}
+#ifdef OPENSIM
+		else
+		{
+			new_value = gAgent.getPhantom();
+		}
+#endif // OPENSIM
 		return new_value;
 	}
 };
+
+bool enable_bridge_function()
+{
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim() && !LLGridManager::getInstance()->isInAuroraSim())
+		// No bridge on OpenSim yet.
+		return false;
+#endif // OPENSIM
+	return (gSavedSettings.getBOOL("UseLSLBridge") && FSLSLBridge::instance().isBridgeValid());
+}
+
+bool enable_move_lock()
+{
+#ifdef OPENSIM
+	// Phantom mode always works on opensim, at least right now.
+	if (LLGridManager::getInstance()->isInOpenSim())
+		return true;
+#endif // OPENSIM
+	return enable_bridge_function();
+}
+
+bool enable_script_info()
+{
+	return (!LLSelectMgr::getInstance()->getSelection()->isEmpty()
+			&& enable_bridge_function());
+}
+// </FS:CR>
 
 // [SJ - Adding IgnorePrejump in Menu ]
 class FSSelfToggleIgnorePreJump : public view_listener_t
@@ -7175,8 +7245,6 @@ bool update_grid_help()
 // <FS:CR> Show/hide some menu items depending on if they're supported by the platform or not
 	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
 	bool opensim = LLGridManager::getInstance()->isInOpenSim();
-	gMenuHolder->childSetVisible("Avatar Phantom", opensim);
-	gMenuHolder->childSetEnabled("Avatar Phantom", opensim);
 	gMenuHolder->childSetVisible("Manage Account", !opensim);
 	gMenuHolder->childSetVisible("MerchantOutbox", !opensim);
 	// FIX ME: gMenuHolder->childSetVisible("Pathfinding", !opensim);
@@ -7402,6 +7470,33 @@ class LLLandEdit : public view_listener_t
 
 		// Switch to land edit toolset
 		LLToolMgr::getInstance()->getCurrentToolset()->selectTool( LLToolSelectLand::getInstance() );
+		return true;
+	}
+};
+
+class LLMuteParticle : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLUUID id = LLToolPie::getInstance()->getPick().mParticleOwnerID;
+		
+		if (id.notNull())
+		{
+			std::string name;
+			gCacheName->getFullName(id, name);
+
+			LLMute mute(id, name, LLMute::AGENT);
+			if (LLMuteList::getInstance()->isMuted(mute.mID))
+			{
+				LLMuteList::getInstance()->remove(mute);
+			}
+			else
+			{
+				LLMuteList::getInstance()->add(mute);
+				LLPanelBlockedList::showPanelAndSelect(mute.mID);
+			}
+		}
+
 		return true;
 	}
 };
@@ -9933,10 +10028,16 @@ void toggleTeleportHistory()
 // <FS:Techwolf Lupindo> export
 BOOL enable_export_object()
 {
-    // <FS:CR> FIRE-9682 - Temporarily disable export by setting (default off)
-	//return LLSelectMgr::getInstance()->selectGetAllValid();
-    bool allow_export = (LLSelectMgr::getInstance()->selectGetAllValid() && gSavedSettings.getBOOL("FSEnableObjectExports"));
-    return allow_export;
+    // <FS:CR>
+	for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
+		 iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
+	{
+		LLSelectNode* node = *iter;
+		LLViewerObject* obj = node->getObject();
+		if (obj || node)
+			return gSavedSettings.getBOOL("FSEnableObjectExports");
+	}
+    return false;
     // </FS:CR>
 }
 
@@ -9949,6 +10050,15 @@ class FSObjectExport : public view_listener_t
 	}
 };
 // </FS:Techwolf Lupindo>
+// <FS:CR>
+class FSObjectExportCollada : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		DAEExportUtil::export_selection();
+		return true;
+	}
+};
 
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
@@ -10407,8 +10517,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSSelfForceSit(), "Self.ForceSit"); //KC
 	enable.add("Self.EnableForceSit", boost::bind(&enable_forcesit_self)); //KC
 	view_listener_t::addMenu(new FSSelfCheckForceSit(), "Self.getForceSit"); //KC
-	view_listener_t::addMenu(new FSSelfTogglePhantom(), "Self.togglePhantom"); //KC
-	view_listener_t::addMenu(new FSSelfCheckPhantom(), "Self.getPhantom"); //KC
+	view_listener_t::addMenu(new FSSelfToggleMoveLock(), "Self.ToggleMoveLock"); //KC
+	view_listener_t::addMenu(new FSSelfCheckMoveLock(), "Self.GetMoveLock"); //KC
+	enable.add("Self.EnableMoveLock", boost::bind(&enable_move_lock));	// <FS:CR>
 	view_listener_t::addMenu(new FSSelfToggleIgnorePreJump(), "Self.toggleIgnorePreJump"); //SJ
 	view_listener_t::addMenu(new FSSelfCheckIgnorePreJump(), "Self.getIgnorePreJump"); //SJ
 	view_listener_t::addMenu(new LLSelfRemoveAllAttachments(), "Self.RemoveAllAttachments");
@@ -10491,6 +10602,7 @@ void initialize_menus()
 	enable.add("Object.EnableUnmute", boost::bind(&enable_object_unmute));
 	enable.add("Object.EnableBuy", boost::bind(&enable_buy_object));
 	commit.add("Object.ZoomIn", boost::bind(&handle_look_at_selection, "zoom"));
+	enable.add("Object.EnableScriptInfo", boost::bind(&enable_script_info));	// <FS:CR>
 
 	// Attachment pie menu
 	enable.add("Attachment.Label", boost::bind(&onEnableAttachmentLabel, _1, _2));
@@ -10506,6 +10618,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLLandSit(), "Land.Sit");
 	view_listener_t::addMenu(new LLLandBuyPass(), "Land.BuyPass");
 	view_listener_t::addMenu(new LLLandEdit(), "Land.Edit");
+
+	// Particle muting
+	view_listener_t::addMenu(new LLMuteParticle(), "Particle.Mute");
 
 	view_listener_t::addMenu(new LLLandEnableBuyPass(), "Land.EnableBuyPass");
 	commit.add("Land.Buy", boost::bind(&handle_buy_land));
@@ -10529,17 +10644,18 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Reset to default control
 
-	// <FS:Ansariel> Commented out - already definied earlier in this method
-	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
+	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
 
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));
 	enable.add("EnableEdit", boost::bind(&enable_object_edit));
+	enable.add("EnableMuteParticle", boost::bind(&enable_mute_particle));
 	enable.add("VisibleBuild", boost::bind(&enable_object_build));
 	commit.add("Pathfinding.Linksets.Select", boost::bind(&LLFloaterPathfindingLinksets::openLinksetsWithSelectedObjects));
 	enable.add("EnableSelectInPathfindingLinksets", boost::bind(&enable_object_select_in_pathfinding_linksets));
 	commit.add("Pathfinding.Characters.Select", boost::bind(&LLFloaterPathfindingCharacters::openCharactersWithSelectedObjects));
 	enable.add("EnableSelectInPathfindingCharacters", boost::bind(&enable_object_select_in_pathfinding_characters));
+	enable.add("EnableBridgeFunction", boost::bind(&enable_bridge_function));	// <FS:CR>
 
 	view_listener_t::addMenu(new LLFloaterVisible(), "FloaterVisible");
 	view_listener_t::addMenu(new LLSomethingSelected(), "SomethingSelected");
@@ -10577,6 +10693,7 @@ void initialize_menus()
 
 	// <FS:Techwolf Lupindo> export
 	view_listener_t::addMenu(new FSObjectExport(), "Object.Export");
+	view_listener_t::addMenu(new FSObjectExportCollada(), "Object.ExportCollada");
 	enable.add("Object.EnableExport", boost::bind(&enable_export_object));
 	// </FS:Techwolf Lupindo>
 }

@@ -135,7 +135,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	if(menu)
 		mPopupMenuHandle = menu->getHandle();
 
-	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings",true);
+	gSavedSettings.declareS32("nearbychat_showicons_and_names",2,"NearByChat header settings");
 
 	mInputEditor = getChild<LLChatEntry>("chat_box");
 	if (mInputEditor)
@@ -268,24 +268,18 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 
 			// Ansariel: Handle IMs in nearby chat
 			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
-			//if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && chat.mChatType == CHAT_TYPE_IM)
-			if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP))
+			if (gSavedSettings.getBOOL("FSShowIMInChatHistory"))
 			{
-				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
+				if (chat.mChatType == CHAT_TYPE_IM_GROUP && !chat.mFromNameGroup.empty())
 				{
-					//from_name = "IM: " + from_name;
-					if (chat.mChatType == CHAT_TYPE_IM_GROUP && chat.mFromNameGroup != "")
-					{
-						from_name = "IM: " + chat.mFromNameGroup + from_name;
-					}
-					else
-					{
-						from_name = "IM: " + from_name;
-					}
-					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					from_name = "IM: " + chat.mFromNameGroup + from_name;
 				}
-				else return;
+				else if (chat.mChatType == CHAT_TYPE_IM)
+				{
+					from_name = "IM: " + from_name;
+				}
 			}
+			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		}
 
 		LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
@@ -1166,10 +1160,20 @@ LLWString FSFloaterNearbyChat::stripChannelNumber(const LLWString &mesg, S32* ch
 	}
 	else if (mesg[0] == '/'
 			 && mesg[1]
-			 && LLStringOps::isDigit(mesg[1]))
+	//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
+			 //&& LLStringOps::isDigit(mesg[1]))
+			 && (LLStringOps::isDigit(mesg[1])
+				|| (mesg[1] == '-'
+					&& mesg[2]
+					&& LLStringOps::isDigit(mesg[2]))))
+	//</FS:TS> FIRE-11412
 	{
 		// This a special "/20" speak on a channel
 		S32 pos = 0;
+		//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
+		if (mesg[1] == '-')
+			pos++;
+		//</FS:TS> FIRE-11412
 		
 		// Copy the channel number into a string
 		LLWString channel_string;
@@ -1192,6 +1196,10 @@ LLWString FSFloaterNearbyChat::stripChannelNumber(const LLWString &mesg, S32* ch
 		}
 		
 		sLastSpecialChatChannel = strtol(wstring_to_utf8str(channel_string).c_str(), NULL, 10);
+		//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
+		if (mesg[1] == '-')
+			sLastSpecialChatChannel = -sLastSpecialChatChannel;
+		//</FS:TS> FIRE-11412
 		*channel = sLastSpecialChatChannel;
 		return mesg.substr(pos, mesg.length() - pos);
 	}

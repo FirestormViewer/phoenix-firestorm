@@ -88,6 +88,14 @@ bool LLFlatListView::addItem(LLPanel * item, const LLSD& value /*= LLUUID::null*
 		mItemsPanel->addChild(item);
 		break;
 	default:
+		// <FS:ND> Reaching here means leaking  new_pair and item. It also means item is never added.
+		// pos can be ADD_TOP, ADD_BOTTOM and ADD_DEFAULT. So what's default?
+		// I rolled a dice and then put it into the bottom bucket, so at least something better than leaking
+		// and throwing items away does happen.
+		mItemPairs.push_back(new_pair);
+		mItemsPanel->addChild(item);
+		// </FS:ND>
+
 		break;
 	}
 	

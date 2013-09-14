@@ -140,15 +140,20 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     OUTPUT_VARIABLE XCODE_VERSION )
 
   # To support a different SDK update these Xcode settings:
+  if (XCODE_VERSION GREATER 4.5)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+    set(CMAKE_OSX_SYSROOT macosx10.8)
+  else (XCODE_VERSION GREATER 4.5)
   if (XCODE_VERSION GREATER 4.2)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
+    set(CMAKE_OSX_SYSROOT macosx10.7)
   else (XCODE_VERSION GREATER 4.2)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.5)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
+    set(CMAKE_OSX_SYSROOT macosx10.7)
   endif (XCODE_VERSION GREATER 4.2)
+  endif (XCODE_VERSION GREATER 4.5)
 
-  set(CMAKE_OSX_SYSROOT macosx10.6)
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
-      
   set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf-with-dsym)
 
   # NOTE: To attempt an i386/PPC Universal build, add this on the configure line:
@@ -176,7 +181,7 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # Default deploy grid
 set(GRID agni CACHE STRING "Target Grid")
 
-#set(VIEWER_CHANNEL "Second Life Test" CACHE STRING "Viewer Channel Name") <FS:TM> F_EX merge LL new, we had commented out old
+#set(VIEWER_CHANNEL "Second Life Test" CACHE STRING "Viewer Channel Name")
 
 # Flickr API keys.
 set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")

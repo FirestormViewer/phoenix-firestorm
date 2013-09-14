@@ -216,6 +216,14 @@ Der Rolle „[ROLE_NAME]“ diese Fähigkeit zuweisen?
 Der Rolle „[ROLE_NAME]“ diese Fähigkeit zuweisen?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
 	</notification>
+	<notification name="EjectGroupMemberWarning">
+		Sie sind im Begriff, [AVATAR_NAME] aus der Gruppe zu entfernen.
+		<usetemplate ignoretext="Bestätigen, wenn ein Mitglied aus einer Gruppe entfernt wird" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
+	</notification>
+	<notification name="EjectGroupMembersWarning">
+		Sie sind im Begriff, [COUNT] Mitglieder aus der Gruppe zu entfernen.
+		<usetemplate ignoretext="Bestätigen, wenn mehrere Mitglieder aus einer Gruppe entfernt werden" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
+	</notification>
 	<notification name="AttachmentDrop">
 		Sie möchten Ihren Anhang wirklich fallen lassen?
 Möchten Sie fortfahren?
@@ -437,9 +445,7 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 	</notification>
 	<notification name="ChangeSkin">
 		Das neue Oberflächendesign wird nach einem Neustart von [APP_NAME] angezeigt.
-		<form name="form">
-			<ignore name="ignore" text="Ein anderes Oberflächendesign wurde ausgewählt."/>
-		</form>
+		<usetemplate name="okcancelbuttons" notext="OK" yestext="Neustart"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Die Sprachänderung tritt nach Neustart von [APP_NAME] in Kraft.
@@ -1557,6 +1563,10 @@ Zur Installation des Updates muss [APP_NAME] neu gestartet werden.
 Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="OwnerCannotLeaveGroup">
+		Verlassen der Gruppe nicht möglich. Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Bitte weisen sie die Besitzer-Rolle zunächst einem anderen Mitglied zu.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmKick">
 		Möchten Sie WIRKLICH alle Benutzer aus dem Grid werfen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Alle Benutzer hinauswerfen"/>
@@ -2464,9 +2474,7 @@ Wählen Sie ein einzelnes Objekt aus.
     „Teleportieren“ wählen.)
 	</notification>
 	<notification name="TeleportToPerson">
-		Um Einwohner wie „[NAME]“ zu kontaktieren, klicken Sie auf die Schaltfläche „Leute“, wählen Sie eingeblendeten Fenster einen Einwohner aus
-    und klicken Sie unten im Fenster auf „IM“.
-    (Sie können auch auf den Namen doppelklicken bzw. ihn mit der rechten Maustaste anklicken und dann „IM“ wählen.)
+		Um eine private Konversation mit jemanden aufzunehmen, klicken Sie mit der rechten Maustaste auf dessen Avatar und wählen Sie „IM“ aus dem Menü.
 	</notification>
 	<notification name="CantSelectLandFromMultipleRegions">
 		Land kann nicht über Servergrenzen hinweg ausgewählt werden.
@@ -4594,17 +4602,34 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate ignoretext="Bestätigen, wenn Schnelleinstellungen zurückgesetzt werden sollen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 
-	<notification name="EjectGroupMemberWarning">
-		[AVATAR_NAME] aus Gruppe entfernen?
-		<usetemplate ignoretext="Bestätigen, wenn Mitglieder aus Gruppen entfernt werden" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
-	</notification>
-
-	<notification name="EjectGroupMembersWarning">
-		[COUNT] Mitglieder aus Gruppe entfernen?
-		<usetemplate ignoretext="Bestätigen, wenn mehrere Mitglieder aus Gruppen entfernt werden" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
-	</notification>
-
 	<notification name="ExportFinished">
 Export nach [FILENAME] beendet.
+	</notification>
+
+	<notification name="ExportColladaFailed">
+Export fehlgeschlagen.
+	</notification>
+
+	<notification name="ExportColladaSuccess">
+Collada DAE-Export beendet. [TOTAL] Objekt(e) exportiert.
+	</notification>
+
+	<notification name="ExportColladaPartial">
+Collada DAE-Export beendet. [FAILED] von [TOTAL] Objekt(en) wurden aufgrund fehlender Berechtigungen nicht exportiert.
+	</notification>
+
+	<notification name="AntiSpamBlocked">
+AntiSpam: [SOURCE] wurde wegen Spam vom Typ [QUEUE] ([COUNT]) mal in [PERIOD] Sekunden blockiert.
+	</notification>
+
+	<notification name="MeshMaxConcurrentReqTooHigh">
+Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VALUE]), ist höher als das Maximum von [MAX]. Er wurde auf den Standardwert [DEFAULT] zurückgesetzt.
+	</notification>
+
+	<notification name="SkinDefaultsChangeSettings">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Eine Einstellung wurde auf den Standardwert für das gewählte Oberflächendesign zurückgesetzt."/>
+		</form>
 	</notification>
 </notifications>

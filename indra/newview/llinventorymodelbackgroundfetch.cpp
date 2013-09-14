@@ -198,7 +198,8 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 // <FS:AW>
 //		if (gSavedSettings.getBOOL("UseHTTPInventory")) 
 		std::string url = region->getCapability("FetchInventory2");
-		if (gSavedSettings.getBOOL("UseHTTPInventory") && !url.empty()) 
+		static LLCachedControl<bool> sUseHTTPInventory(gSavedSettings, "UseHTTPInventory");
+		if (sUseHTTPInventory && !url.empty()) 
 // </FS:AW>
 		{
 			bulkFetch();

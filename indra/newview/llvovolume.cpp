@@ -1158,11 +1158,13 @@ void LLVOVolume::sculpt()
 		
 		S32 max_discard = mSculptTexture->getMaxDiscardLevel();
 		if (discard_level > max_discard)
-			discard_level = max_discard;    // clamp to the best we can do
-
-		// <FS:ND> force discard level down to max MAX_DISCARD_LEVEL. There's a lot of log spam otherwise
-		discard_level = llmin( discard_level, MAX_DISCARD_LEVEL );
-		// </FS:ND>
+		{
+			discard_level = max_discard;    // clamp to the best we can do			
+		}
+		if(discard_level > MAX_DISCARD_LEVEL)
+		{
+			return; //we think data is not ready yet.
+		}
 
 		S32 current_discard = getVolume()->getSculptLevel() ;
 		if(current_discard < -2)
@@ -1511,7 +1513,7 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global)
 			continue;
 		}
 		res &= face->genVolumeBBoxes(*volume, i,
-										mRelativeXform, mRelativeXformInvTrans,
+										mRelativeXform, 
 										(mVolumeImpl && mVolumeImpl->isVolumeGlobal()) || force_global);
 		
 		if (rebuild)
@@ -4977,7 +4979,14 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 			if (is_rigged)
 			{
-				drawablep->setState(LLDrawable::RIGGED);
+				if (!drawablep->isState(LLDrawable::RIGGED))
+				{
+					drawablep->setState(LLDrawable::RIGGED);
+
+					//first time this is drawable is being marked as rigged,
+					// do another LoD update to use avatar bounding box
+					vobj->updateLOD();
+				}
 			}
 			else
 			{

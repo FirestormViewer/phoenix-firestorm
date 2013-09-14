@@ -356,7 +356,7 @@
          height="23"
          label="Image Layers"
          layout="topleft"
-         left="30"
+         left="20"
          name="layer_types"
          right="-10">
             <combo_box.item
@@ -372,15 +372,23 @@
          control_name="RenderUIInSnapshot"
          label="Interface"
          layout="topleft"
-         left="30"
+         left="20"
          top_pad="10"
-         width="180"
+         width="130"
          name="ui_check" />
+        <check_box
+         enabled_control="RenderUIInSnapshot"
+         control_name="FSShowCurrencyBalanceInSnapshots"
+         label="L$ Balance"
+         layout="topleft"
+         left_pad="0"
+         width="180"
+         name="currency_check" />
         <check_box
          control_name="RenderHUDInSnapshot"
          label="HUDs"
          layout="topleft"
-         left="30"
+         left="20"
          top_pad="10"
          width="180"
          name="hud_check" />

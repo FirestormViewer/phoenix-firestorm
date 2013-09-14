@@ -901,6 +901,10 @@ with the same filename but different name
   <texture name="ExternalBrowser_Press" file_name="icons/ExternalBrowser_Press.png" preload="false" />
   <texture name="radar" file_name="toolbar_icons/radar.png" preload="true" />
   <texture name="Chat_History" file_name="icons/Chat_History.png" preload="false" />
+  <texture name="Icon_DialogStack" file_name="icons/Icon_DialogStack.png" preload="false" />
+  <texture name="move_lock" file_name="toolbar_icons/movelock.png" preload="true" />
+  <texture name="Edit_Flip_X" file_name="icons/Edit_Flip_X.png" preload="false" />
+
 
 <texture name="ProgressLarge_1" file_name="icons/ProgressLarge_1.png" preload="true" />
 <texture name="ProgressLarge_2" file_name="icons/ProgressLarge_2.png" preload="true" />

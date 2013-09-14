@@ -2282,7 +2282,7 @@ void LLPanelLandOptions::refreshSearch()
 
 	bool can_change =
 			LLViewerParcelMgr::isParcelModifiableByAgent(
-				parcel, GP_LAND_CHANGE_IDENTITY)
+				parcel, GP_LAND_FIND_PLACES)
 			&& region
 			&& !(region->getRegionFlag(REGION_FLAGS_BLOCK_PARCEL_SEARCH));
 
@@ -3013,6 +3013,11 @@ void LLPanelLandAccess::onClickRemoveBanned(void* data)
 //---------------------------------------------------------------------------
 LLPanelLandCovenant::LLPanelLandCovenant(LLParcelSelectionHandle& parcel)
 	: LLPanel(),
+	  // <FS:Zi> Fix covenant loading slowdowns
+	  mCovenantChanged(true),
+	  mCovenantRequested(false),
+	  mPreviousRegion(NULL),
+	  // <FS:Zi>
 	  mParcel(parcel)
 {	
 }
@@ -3027,6 +3032,20 @@ void LLPanelLandCovenant::refresh()
 	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 	if(!region) return;
 		
+	// <FS:Zi> Fix covenant loading slowdowns
+	// Only refresh the covenant panel when we are looking at a different region now
+	if(region==mPreviousRegion)
+	{
+		return;
+	}
+
+	// We save the region pointer only here so a NULL region does not update mPreviousRegion.
+	// This means we don't update the covenant even when the user right clicked somewhere that
+	// invalidated the About Land floater. The covenant page does not clean up its elements,
+	// so the last region's data is still showing. -Zi
+	mPreviousRegion=region;
+	// </FS:Zi>
+
 	LLTextBox* region_name = getChild<LLTextBox>("region_name_text");
 	if (region_name)
 	{
@@ -3068,6 +3087,15 @@ void LLPanelLandCovenant::refresh()
 		}
 	}
 	
+	// <FS:Zi> Fix covenant loading slowdowns
+	// only request a covenant when we are not already waiting for one
+	if(mCovenantRequested)
+	{
+		return;
+	}
+	mCovenantRequested=true;
+	// </FS:Zi>
+
 	// send EstateCovenantInfo message
 	LLMessageSystem *msg = gMessageSystem;
 	msg->newMessage("EstateCovenantRequest");
@@ -3081,7 +3109,16 @@ void LLPanelLandCovenant::refresh()
 void LLPanelLandCovenant::updateCovenantText(const std::string &string)
 {
 	LLPanelLandCovenant* self = LLFloaterLand::getCurrentPanelLandCovenant();
-	if (self)
+	// <FS:Zi> Fix covenant loading slowdowns
+	// if (self)
+	// covenant received, allow requesting another one next time
+	self->mCovenantRequested=false;
+
+	// Only update covenant when Last Modified was found to be different and
+	// we still have a parcel selected. "Last Modified" will always be set before
+	// the covenant (see llviewermessage.cpp, process_covenant_reply()) -Zi
+	if(self && self->mCovenantChanged && self->mParcel->getParcel())
+	// </FS:Zi>
 	{
 		LLViewerTextEditor* editor = self->getChild<LLViewerTextEditor>("covenant_editor");
 		editor->setText(string);
@@ -3103,10 +3140,32 @@ void LLPanelLandCovenant::updateEstateName(const std::string& name)
 void LLPanelLandCovenant::updateLastModified(const std::string& text)
 {
 	LLPanelLandCovenant* self = LLFloaterLand::getCurrentPanelLandCovenant();
-	if (self)
+	// <FS:Zi> Fix covenant loading slowdowns
+	// if (self)
+
+	// only update the last modified field when we still have no parcel selected
+	if(self && self->mParcel->getParcel())
 	{
+	// </FS:Zi>
 		LLTextBox* editor = self->getChild<LLTextBox>("covenant_timestamp_text");
-		if (editor) editor->setText(text);
+		// <FS:Zi> Fix covenant loading slowdowns
+		// if (editor) editor->setText(text);
+		if(editor)
+		{
+			// check if Last Modified is different from before
+			if(editor->getText()!=text)
+			{
+				// Update Last Modified field and remember to allow covenant to change
+				editor->setText(text);
+				self->mCovenantChanged=true;
+			}
+			else
+			{
+				// Last Modified was the same, so don't allow the covenant to change
+				self->mCovenantChanged=false;
+			}
+		}
+		// </FS:Zi>
 	}
 }
 

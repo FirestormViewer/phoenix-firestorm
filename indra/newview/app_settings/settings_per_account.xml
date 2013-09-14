@@ -213,19 +213,6 @@
         <key>Value</key>
             <integer>0</integer>
     </map>
-    <key>DisplayDestinationsOnInitialRun</key>
-        <map>
-        <key>Comment</key>
-          <string>Display the destinations guide when a user first launches Second Life.</string>
-        <key>Persist</key>
-          <integer>1</integer>
-        <key>Type</key>
-          <string>Boolean</string>
-        <key>Value</key>
-          <integer>1</integer>
-        <key>Backup</key>
-          <integer>0</integer>
-        </map>
     <key>LastInventoryInboxActivity</key>
         <map>
         <key>Comment</key>
@@ -317,7 +304,7 @@
     <key>LogFileNamewithDate</key>
       <map>
         <key>Comment</key>
-        <string>Add Date Stamp to chat and IM Logs with format chat-YYYY-MM-DD and 'IM file name'-YYYY-MM. To view old logs goto ..\Second Life\[login name]</string>
+        <string>Add Date Stamp to chat and IM Logs with format chat-YYYY-MM-DD and 'IM file name'-YYYY-MM.</string>
         <key>Persist</key>
         <integer>1</integer>
         <key>Type</key>
@@ -329,6 +316,22 @@
     They are not used in current viewer anymore. But they can't be removed to avoid
     influence on previous versions of the viewer in case of settings are not used or default value
     should be changed. See EXT-6661. -->
+		
+	<key>LogInstantMessages</key>
+        <map>
+		<key>Comment</key>
+            <string>(DEPRECATED) Only used for restoring settings!!! Use KeepConversationLogTranscripts</string>
+		<key>Persist</key>
+            <integer>1</integer>
+		<key>HideFromEditor</key>
+			<integer>1</integer>
+		<key>Type</key>
+            <string>Boolean</string>
+		<key>Value</key>
+            <integer>1</integer>
+		<key>Backup</key>
+			<integer>0</integer>
+        </map>
 
     <!-- 1.23 settings -->
     <key>LogChat</key>

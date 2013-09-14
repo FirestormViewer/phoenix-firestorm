@@ -135,12 +135,25 @@
          <menu_item_call.on_enable
           function="Object.EnableInspect" />
    </menu_item_call>
+  <menu_item_separator
+       layout="topleft" />
+  <menu_item_call
+     enabled="false"
+     label="Block Particle Owner"
+     name="Mute Particle">
+    <menu_item_call.on_click
+     function="Particle.Mute" />
+    <menu_item_call.on_enable
+     function="EnableMuteParticle" />
+  </menu_item_call>
   <menu_item_call 
       enabled="true"
       label="Script Info"
       name="ScriptInfo">
       <menu_item_call.on_click
        function="Tools.ScriptInfo" />
+      <menu_item_call.on_enable
+       function="Object.EnableScriptInfo" />
   </menu_item_call>
     <menu_item_call 
     enabled="true"
@@ -169,12 +182,24 @@
   <menu_item_call.on_click
        function="Object.TexRefresh" />
     </menu_item_call>
-    <menu_item_call
-     label="Export"
-     name="Export">
-        <menu_item_call.on_click
-         function="Object.Export" />
-        <menu_item_call.on_enable
-         function="Object.EnableExport" />
-    </menu_item_call>
+    <context_menu
+		label="Save as"
+		name="Export Menu">
+		<menu_item_call
+			label="Backup"
+			name="Backup">
+			<menu_item_call.on_click
+			function="Object.Export" />
+			<menu_item_call.on_enable
+			function="Object.EnableExport" />
+		</menu_item_call>
+		<menu_item_call
+			label="Collada"
+			name="Collada">
+			<menu_item_call.on_click
+			function="Object.ExportCollada" />
+			<menu_item_call.on_enable
+			function="Object.EnableExport" />
+		</menu_item_call>
+	</context_menu>
 </context_menu>

@@ -6,4 +6,5 @@
 	<menu_item_call label="Comprar pase" name="Land Buy Pass"/>
 	<menu_item_call label="Construir" name="Create"/>
 	<menu_item_call label="Modificar terreno" name="Edit Terrain"/>
+	<menu_item_call label="Bloquear propietario de las partículas" name="Mute Particle"/>
 </context_menu>

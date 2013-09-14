@@ -25,7 +25,7 @@ um mehrere Mitglieder auszuwählen.
 			<button label="Einladen" name="member_invite"/>
 			<button label="Hinauswerfen" name="member_eject"/>
 		</panel>
-		<panel label="Rollen" name="roles_sub_tab">
+		<panel label="Rollen" name="roles_sub_tab" tool_tip="Rollen">
 			<panel.string name="help_text">
 				Rollen haben einen Titel und umfassen bestimmte
 Fähigkeiten. Mitglieder können mehrere

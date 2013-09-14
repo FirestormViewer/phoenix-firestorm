@@ -2968,7 +2968,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 					// </FS:CR>
 
 					// <FS:CR> Show user name as legacy name if selected
-					std::string username( show_legacynames ? av_name.getLegacyName() : av_name.getAccountName() );
+					std::string username( show_legacynames ? av_name.getUserNameForDisplay() : av_name.getAccountName() );
 
 					addNameTagLine(username, username_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
 				}

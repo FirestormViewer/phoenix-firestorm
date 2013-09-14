@@ -87,17 +87,17 @@
 
 		<integer_constant name="TRUE" desc="integer_constant for Boolean operations" />
 		<integer_constant name="FALSE" desc="integer_constant for Boolean operations" />
-		<integer_constant name="STATUS_PHYSICS" desc="Passed in the llSetStatus library function.  If TRUE, object moves physically" />
-		<integer_constant name="STATUS_PHANTOM" desc="Passed in the llSetStatus library function.  If TRUE, object doesn't collide with other objects" />
-		<integer_constant name="STATUS_ROTATE_X" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local X axis" />
-		<integer_constant name="STATUS_ROTATE_Y" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local Y axis" />
-		<integer_constant name="STATUS_ROTATE_Z" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local Z axis" />
-		<integer_constant name="STATUS_SANDBOX" desc="Passed in the llSetStatus library function.  If TRUE, object can't cross region boundaries or move more than 10 meters from its start location" />
-		<integer_constant name="STATUS_BLOCK_GRAB" desc="Passed in the llSetStatus library function.  If TRUE, object can't be grabbed and physically dragged" />
-		<integer_constant name="STATUS_BLOCK_GRAB_OBJECT" desc="This status flag keeps the object from being moved by grabs. This flag applies to the entire linkset." />
-		<integer_constant name="STATUS_DIE_AT_EDGE" desc="Passed in the llSetStatus library function.  If TRUE, objects that reach the edge of the world just die;rather than teleporting back to the owner" />
-		<integer_constant name="STATUS_RETURN_AT_EDGE" desc=" Passed in the llSetStatus library function.  If TRUE, script rezzed objects that reach the edge of the world;are returned rather than killed;STATUS_RETURN_AT_EDGE trumps STATUS_DIE_AT_EDGE if both are set" />
-		<integer_constant name="STATUS_CAST_SHADOWS" desc="	Passed in the llSetStatus library function.  If TRUE, object casts shadows on other objects" />
+		<integer_constant name="STATUS_PHYSICS" desc="Passed in the llSetStatus library function.  If TRUE, object moves physically" value="0x001" />
+		<integer_constant name="STATUS_PHANTOM" desc="Passed in the llSetStatus library function.  If TRUE, object doesn't collide with other objects" value="0x010"/>
+		<integer_constant name="STATUS_ROTATE_X" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local X axis" value="0x002" />
+		<integer_constant name="STATUS_ROTATE_Y" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local Y axis" value="0x004" />
+		<integer_constant name="STATUS_ROTATE_Z" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local Z axis" value="0x008" />
+		<integer_constant name="STATUS_SANDBOX" desc="Passed in the llSetStatus library function.  If TRUE, object can't cross region boundaries or move more than 10 meters from its start location" value="0x020" />
+		<integer_constant name="STATUS_BLOCK_GRAB" desc="Passed in the llSetStatus library function.  If TRUE, root prim of linkset (or unlinked prim) can't be grabbed and physically dragged" value="0x040" />
+		<integer_constant name="STATUS_DIE_AT_EDGE" desc="Passed in the llSetStatus library function.  If TRUE, objects that reach the edge of the world just die;rather than teleporting back to the owner" value="0x080" />
+		<integer_constant name="STATUS_RETURN_AT_EDGE" desc=" Passed in the llSetStatus library function.  If TRUE, script rezzed objects that reach the edge of the world;are returned rather than killed;STATUS_RETURN_AT_EDGE trumps STATUS_DIE_AT_EDGE if both are set" value="0x100" />
+		<integer_constant name="STATUS_CAST_SHADOWS" desc="Passed in the llSetStatus library function.  If TRUE, object casts shadows on other objects" value="0x200" />
+		<integer_constant name="STATUS_BLOCK_GRAB_OBJECT" desc="This status flag keeps the object from being moved by grabs. This flag applies to the entire linkset." value="0x400" />
 		<integer_constant name="AGENT" desc="Passed in llSensor library function to look for other Agents" />
 		<integer_constant name="AGENT_BY_LEGACY_NAME" desc="This is used to find agents by legacy name" />
 		<integer_constant name="AGENT_BY_USERNAME" desc="This is used to find agents by username" />
@@ -157,6 +157,11 @@
 		<integer_constant name="PSYS_PART_END_SCALE" />
 		<integer_constant name="PSYS_PART_MAX_AGE" />
 		
+		<integer_constant name="PSYS_PART_BLEND_FUNC_SOURCE" />
+		<integer_constant name="PSYS_PART_BLEND_FUNC_DEST" />
+		<integer_constant name="PSYS_PART_START_GLOW" />
+		<integer_constant name="PSYS_PART_END_GLOW" />
+		
 		<integer_constant name="PSYS_PART_BOUNCE_MASK" />
 		<integer_constant name="PSYS_PART_WIND_MASK" />
 		<integer_constant name="PSYS_PART_INTERP_COLOR_MASK" />
@@ -166,6 +171,16 @@
 		<integer_constant name="PSYS_PART_TARGET_POS_MASK" />
 		<integer_constant name="PSYS_PART_EMISSIVE_MASK" />
 		<integer_constant name="PSYS_PART_TARGET_LINEAR_MASK" />
+		<integer_constant name="PSYS_PART_RIBBON_MASK" />
+		
+		<integer_constant name="PSYS_PART_BF_ONE" />
+		<integer_constant name="PSYS_PART_BF_ZERO" />
+		<integer_constant name="PSYS_PART_BF_DEST_COLOR" />
+		<integer_constant name="PSYS_PART_BF_SOURCE_COLOR" />
+		<integer_constant name="PSYS_PART_BF_ONE_MINUS_DEST_COLOR" />
+		<integer_constant name="PSYS_PART_BF_ONE_MINUS_SOURCE_COLOR" />
+		<integer_constant name="PSYS_PART_BF_SOURCE_ALPHA" />
+		<integer_constant name="PSYS_PART_BF_ONE_MINUS_SOURCE_ALPHA" />
 		
 		<integer_constant name="PSYS_SRC_PATTERN" />
 		<integer_constant name="PSYS_SRC_INNERANGLE	Deprecated -- Use PSYS_SRC_ANGLE_BEGIN" />
@@ -1382,7 +1397,7 @@
 			desc="llOwnerSay(string message);Says message to owner only.  (Owner must be in the same region.)" />
 		<function name="llRequestSimulatorData" sleep="1.0" energy="10.0"
 			desc="key llRequestSimulatorData(string simulator, integer data);Requests data about simulator.  When data is available the dataserver event will be raised" />
-		<function name="llForceMouseLook" sleep="0.0" energy="10.0"
+		<function name="llForceMouselook" sleep="0.0" energy="10.0"
 			desc="llForceMouselook(integer mouselook);If mouselook is TRUE, any avatar that sits upon the prim will be forced into mouselook mode" />
 		<function name="llGetObjectMass" sleep="0.0" energy="10.0"
 			desc="float llGetObjectMass(key id);Returns the mass of the avatar or object in the region" />

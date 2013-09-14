@@ -22,12 +22,18 @@
 				<pie_slice label="Temporal" name="Derender"/>
 			</pie_menu>
 			<pie_slice label="Denunciar..." name="Report Abuse..."/>
-			<pie_slice label="Exportar" name="Export"/>
+			<pie_menu name="ExportMenu" label="Guardar como &gt;">
+				<pie_slice label="Respaldo" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
 			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
 				<pie_slice label="Mostrar en linksets" name="show_in_linksets"/>
 				<pie_slice label="Mostrar en personajes" name="show_in_characters"/>
 			</pie_menu>
-			<pie_slice label="Bloquear" name="Object Mute"/>
+			<pie_menu name="mute_menu" label="Bloquear &gt;">
+				<pie_slice label="Bloquear" name="Object Mute"/>
+				<pie_slice label="Prop. partículas" name="Mute Particle"/>
+			</pie_menu>
 			<pie_menu label="Scripts &gt;" name="ScriptsMenu">
 				<pie_slice label="Compilar (Mono)" name="CompileMono"/>
 				<pie_slice label="Compilar (LSL)" name="CompileLSL"/>

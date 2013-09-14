@@ -346,7 +346,7 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 		else
 		{
 			// <FS:Ansariel> [FS communication UI]
-			//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->showHistory();
+			//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
 			FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
 
 			// <FS:Ansariel> If nearby chat history is docked, we also need
@@ -361,7 +361,7 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 	}
 
 	// <FS:Ansariel> [FS communication UI]
-	//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->showHistory();
+	//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
 	FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
 
 	// <FS:Ansariel> If nearby chat history is docked, we also need

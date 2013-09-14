@@ -22,7 +22,9 @@ Built with [COMPILER] version [COMPILER_VERSION]
 </floater.string>
   <floater.string
      name="AboutPosition">
-You are at [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1] in [REGION] located at &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+You are at [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] located at &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
+(global coordinates [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]
 
@@ -275,7 +277,7 @@ Additional code generously contributed to Firestorm by:
                  top_pad="4"
                  width="420"
                  wrap="true">
-Albatroz Hird, Alexie Birman, Andromeda Rage, Armin Weatherwax, Casper Warden, Chalice Yao, Cron Stardust, Damian Zhaoying, Dawa Gurbux, Felyza Wishbringer, f0rbidden, Fractured Crystal, Geenz Spad, Hitomi Tiponi, Katharine Berry, Kittin Ninetails, Kool Koolhoven, Lance Corrimal, Magne Metaverse LLC, Magus Freston, Manami Hokkigai, MartinRJ Fayray, Melancholy Lemon, Miguael Liamano, Mimika Oh, Mister Acacia, Mysty Saunders, Nagi Michinaga, Name Short, nhede Core, NiranV Dean, Nogardrevlis Lectar, paperwork, Peyton Menges, programmtest, Qwerty Venom, Revolution Smythe, Sahkolihaa Contepomi, sal Kaligawa, Satomi Ahn, Sei Lisa, Shin Wasp, Shyotl Kuhr, Sione Lomu, Skills Hak, StarlightShining, Sunset Faulkes, Thickbrick Sleaford, Vaalith Jinn, Whirly Fizzle, Zwagoth Klaar and others.
+Albatroz Hird, Alexie Birman, Andromeda Rage, Armin Weatherwax, Casper Warden, Chalice Yao, Cron Stardust, Damian Zhaoying, Dawa Gurbux, Felyza Wishbringer, f0rbidden, Fractured Crystal, Geenz Spad, Hitomi Tiponi, Katharine Berry, Kittin Ninetails, Kool Koolhoven, Lance Corrimal, Latif Khalifa, Magne Metaverse LLC, Magus Freston, Manami Hokkigai, MartinRJ Fayray, Melancholy Lemon, Miguael Liamano, Mimika Oh, Mister Acacia, Mysty Saunders, Nagi Michinaga, Name Short, nhede Core, NiranV Dean, Nogardrevlis Lectar, paperwork, Peyton Menges, programmtest, Qwerty Venom, Revolution Smythe, Sahkolihaa Contepomi, sal Kaligawa, Satomi Ahn, Sei Lisa, Shin Wasp, Shyotl Kuhr, Sione Lomu, Skills Hak, StarlightShining, Sunset Faulkes, Thickbrick Sleaford, Vaalith Jinn, Whirly Fizzle, Zwagoth Klaar and others.
                 </text>
                 <text
                  follows="top|left"

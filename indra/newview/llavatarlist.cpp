@@ -633,7 +633,6 @@ S32 LLAvatarList::notifyParent(const LLSD& info)
 		sort();
 		return 1;
 	}
-// <FS:TM> CHUI Merge check
 // [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	else if ( (info.has("select")) && (info["select"].isUUID()) )
 	{

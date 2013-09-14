@@ -31,6 +31,7 @@ private:
 	virtual void onClose(bool app_quitting);
 	void loadPoses();
 	
+	bool mAOPaused;
 	bool mPoseStandLock;
 	LLComboBox* mComboPose;
 };

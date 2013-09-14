@@ -550,10 +550,7 @@ void LLAvatarNameCache::idle()
 bool LLAvatarNameCache::isRequestPending(const LLUUID& agent_id)
 {
 	bool isPending = false;
-	
-	// AO SL timeout is too long
-	//const F64 PENDING_TIMEOUT_SECS = 5.0 * 60.0;
-	const F64 PENDING_TIMEOUT_SECS = 60.0;
+	const F64 PENDING_TIMEOUT_SECS = 5.0 * 60.0;
 
 	pending_queue_t::const_iterator it = sPendingQueue.find(agent_id);
 	if (it != sPendingQueue.end())
@@ -661,7 +658,6 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::get(const LLUUID& ag
 		{
 			LLAvatarName& av_name = it->second;
 			LLSD test = av_name.asLLSD();
-			LL_DEBUGS("AvNameCache") << "DN cache hit for :" << test["display_name"].asString()+" (" + test["legacy_first_name"].asString()+" "+test["legacy_last_name"].asString()+")"  << llendl;
 			
 			if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
 			{

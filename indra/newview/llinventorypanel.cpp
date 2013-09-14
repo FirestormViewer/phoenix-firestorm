@@ -440,6 +440,7 @@ LLInventoryFilter::EFolderShow LLInventoryPanel::getShowFolderState()
 	return getFilter().getShowFolderState();
 }
 
+// Called when something changed in the global model (new item, item coming through the wire, rename, move, etc...) (CHUI-849)
 void LLInventoryPanel::modelChanged(U32 mask)
 {
 	static LLFastTimer::DeclareTimer FTM_REFRESH("Inventory Refresh");

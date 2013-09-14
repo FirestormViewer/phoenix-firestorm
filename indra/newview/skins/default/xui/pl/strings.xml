@@ -465,6 +465,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="SLappAgentRequestFriend">
 		Oferta znajomości
 	</string>
+	<string name="SLappAgentRemoveFriend">
+		Usunięcie znajomego
+	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Zamknij (&#8984;W)
 	</string>
@@ -4699,6 +4702,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Conversation_Log_Label">
 		Dziennik rozmów
 	</string>
+	<string name="Command_Move_Lock_Label">
+		Unieruchom
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4840,6 +4846,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Conversation_Log_Tooltip">
 		Otwiera dziennik rozmów, aby zobaczyć przeszłe logi
 	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Blokuje Twojego awatara na obecnej pozycji
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
 	</string>
@@ -4909,7 +4918,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="SanityCheckNotEquals">
 		Ustawienie &quot;[CONTROL_NAME]&quot; nie powinno mieć wartości [VALUE_1]
 	</string>
-	<string name="SanityCheckLowerThan">
+	<string name="SanityCheckLessThan">
 		Ustawienie &quot;[CONTROL_NAME]&quot; powinno być mniejsze niż [VALUE_1]
 	</string>
 	<string name="SanityCheckGreaterThan">
@@ -5023,6 +5032,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Collision_UnknownType">
 		[NAME] spowodował/a nieznany typ kolizji.
 	</string>
+	<string name="MovelockEnabled">
+		Blokada pozycji została włączona
+	</string>
+	<string name="MovelockDisabled">
+		Blokada pozycji została wyłączona
+	</string>
 	<string name="BusyResponse">
 		Wiadomość zajętości
 	</string>
@@ -5038,6 +5053,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="logging_calls_enabled_log_empty">
 		Nie ma zapisanych rozmów. Jeśli skontaktujesz się z kimś, lub ktoś z Tobą, to wpis dziennika pojawi się tutaj.
 	</string>
+	<string name="loading_chat_logs">
+		Wczytywanie...
+	</string>
 	<string name="LoadCameraPositionNoneSaved">
 		Żadne ustawienie kamery nie zostało jeszcze zapisane.
 	</string>
@@ -5049,6 +5067,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="FSCmdLineDrawDistanceSet">
 		Pole widzenia zostało ustawione na [DISTANCE]m.
+	</string>
+	<string name="FSCameraPositionCopied">
+		Pozycja kamery [POS] została skopiowana do schowka.
 	</string>
 	<string name="FSWithHavok">
 		ze wsparciem dla Havoka
@@ -5307,5 +5328,11 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="export_failed_to_load">
 		Nie powiodło się pobranie danych [ITEM].
+	</string>
+	<string name="skin_defaults_starlight_location">
+		Pokazywanie Twojej obecnej lokalizacji w pasku menu zostało wyłączone, to domyślne zachowanie dla skórek linii StarLight.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Pokazywanie paska nawigacyjnego zostało włączone, to domyślne zachowanie dla skórek linii StarLight.
 	</string>
 </strings>

@@ -25,7 +25,7 @@
 	</action_set>
 	<action_set description="Przywileje pozwalające na zmianę nazwy działki, widoczności w wyszukiwarce, wyboru miejsca lądowania i zmianę ustawień teleportacji (TP)." name="Parcel Identity">
 		<action description="Selekcja opcji &apos;Pokazuj w szukaniu miejsc&apos; i wybór kategorii" longdescription="Selekcja opcji &apos;Pokazuj w szukaniu miejsc&apos; i wybór kategorii działek w O działce &gt; Opcje." name="land find places"/>
-		<action description="Zmiany nazwy działki, opisu i selekcja &apos;Widoczność w Wyszukiwarce&apos;" longdescription="Zmiany nazwy działki, opisu i selekcja &apos;Widoczność w Wyszukiwarce&apos;. Dostęp poprzez O działce &gt; Opcje." name="land change identity"/>
+		<action description="Zmiany nazwy działki, opisu i selekcja &apos;Treść Moderate&apos;" longdescription="Zmiany nazwy działki, opisu i selekcja &apos;Treść Moderate&apos;. Dostęp poprzez O działce &gt; Opcje." name="land change identity"/>
 		<action description="Wybór miejsca lądowania i ustawienia teleportacji (TP)" longdescription="Na działce Grupy członek w Funkcji z tym Przywilejem może wybrać miejsce, gdzie teleportujące się osoby będą ladować oraz może ustalić dodatkowe parametry teleportacji (TP). Dostęp poprzez O działce &gt; Opcje." name="land set landing point"/>
 	</action_set>
 	<action_set description="Przywileje pozwalające na zmianę opcji działek takich jak &apos;Tworzenie Obiektów&apos;, &apos;Edycja Terenu&apos; i zmianę ustawień muzyki oraz mediów." name="Parcel Settings">

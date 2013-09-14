@@ -744,7 +744,7 @@ with the same filename but different name
   <texture name="pose_stand" file_name="toolbar_icons/posestand.png" preload="true" />
   <texture name="Command_Snapshot_2_Disk_Icon" file_name="toolbar_icons/snapshot_to_disk.png" preload="true" />
   <texture name="radar" file_name="toolbar_icons/radar.png" preload="true" />
-
+  <texture name="move_lock" file_name="toolbar_icons/movelock.png" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
 
@@ -887,6 +887,9 @@ with the same filename but different name
   <texture name="Camera_Drag_Dot" file_name="world/CameraDragDot.png"/>
   <texture name="NavBar Separator" file_name="navbar/separator.png"/>
 
+  <texture name="Horizontal Drag Handle" file_name="widgets/horizontal_drag_handle.png"/>
+  <texture name="Vertical Drag Handle" file_name="widgets/vertical_drag_handle.png"/>
+  
 <!-- StarLight Textures -->
 
   <texture name="SpeakBtn_Left_Selected_Press" file_name="widgets/SpeakBtn_Left_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="22" scale.bottom="4" />
@@ -927,6 +930,8 @@ with the same filename but different name
 
 <texture name="Icon_Lightshare" file_name="icons/Icon_Lightshare.png" preload="false" />
 
+<texture name="Icon_DialogStack" file_name="icons/Icon_DialogStack.png" preload="false" />
+
 <!-- Higher Resolution 200px Loading Progress Indicator -->
 <texture name="ProgressLarge_1" file_name="icons/ProgressLarge_1.png" preload="true" />
 <texture name="ProgressLarge_2" file_name="icons/ProgressLarge_2.png" preload="true" />
@@ -955,4 +960,6 @@ with the same filename but different name
 
 <texture name="Payment_Info_Filled" file_name="legacy/payment_info_filled.tga" preload="false" />
 <texture name="Payment_Info_Used" file_name="legacy/payment_info_used.tga" preload="false" />
+	
+<texture name="Edit_Flip_X" file_name="icons/Edit_Flip_X.png" preload="false" />
 </textures>

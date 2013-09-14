@@ -211,10 +211,16 @@ void LLToolCamera::pickCallback(const LLPickInfo& pick_info)
 			gAgentCamera.setFocusGlobal(pick_info);
 		}
 
+		// <FS:Ansariel> Replace frequently called gSavedSettings
+		static LLCachedControl<bool> sFreezeTime(gSavedSettings, "FreezeTime");
+		// </FS:Ansariel>
 		if (!(pick_info.mKeyMask & MASK_ALT) &&
 			gAgentCamera.cameraThirdPerson() &&
 			gViewerWindow->getLeftMouseDown() && 
-			!gSavedSettings.getBOOL("FreezeTime") &&
+			// <FS:Ansariel> Replace frequently called gSavedSettings
+			//!gSavedSettings.getBOOL("FreezeTime") &&
+			!sFreezeTime &&
+			// </FS:Ansariel>
 			(hit_obj == gAgentAvatarp || 
 			 (hit_obj && hit_obj->isAttachment() && LLVOAvatar::findAvatarFromAttachment(hit_obj)->isSelf())))
 		{

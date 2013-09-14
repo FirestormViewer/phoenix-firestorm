@@ -421,12 +421,17 @@ bool LLToastAlertPanel::setCheckBox( const std::string& check_title, const std::
 void LLToastAlertPanel::setVisible( BOOL visible )
 {
 	// only make the "ding" sound if it's newly visible
-	if( visible && !LLToastPanel::getVisible() )
+	// <FS:PP> FIRE-4322: The "bing" system sound missing
+	// if( visible && !LLToastPanel::getVisible() )
+	LLToastPanel::setVisible( visible );
+	if( visible )
+	// </FS:PP>
 	{
 		make_ui_sound("UISndAlert");
 	}
 
-	LLToastPanel::setVisible( visible );
+	// <FS:PP> Commented out and moved up, for FIRE-4322 patch
+	// LLToastPanel::setVisible( visible );
 	
 }
 

@@ -18,16 +18,16 @@
  save_visibility="true"
  save_dock_state="false"
  single_instance="true"
- width="194">
+ width="188">
     <panel
      border="false"
      height="23"
      layout="topleft"
 	 follows="right|top|left"
-     left="60"
+     left="55"
      bottom_delta="18"
      name="buttons"
-     width="82">
+     width="78">
         <button
          height="23"
          label=""
@@ -105,14 +105,14 @@
      top="0"
      mouse_opaque="false"
      name="controls"
-     width="180">
+     width="184">
        <panel
          follows="all"
          height="102"
          layout="topleft"
          left="4"
          name="preset_views_list"
-         top="22"
+         top="24"
          width="170"
          visible="false">
         <panel_camera_item
@@ -131,7 +131,7 @@
         </panel_camera_item>
         <panel_camera_item
           name="group_view"
-          top_pad="4">
+          top_pad="2">
           <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="group_view" />
@@ -147,7 +147,7 @@
         <panel_camera_item
           name="rear_view"
           layout="topleft"
-          top_pad="4">
+          top_pad="2">
           <panel_camera_item.mousedown_callback
             function="CameraPresets.ChangeView"
             parameter="rear_view" />
@@ -212,7 +212,7 @@
          name="zoom"
          top="0"
          visible="true"
-         width="188">
+         width="184">
 
             <!-- Camera joystick controls layout starts here -->
             <layout_stack
@@ -223,7 +223,7 @@
              mouse_opaque="true"
              name="stack"
              orientation="horizontal"
-             width="186"
+             width="180"
              follows="all">
 
             <!-- Camera rotate layout panel -->

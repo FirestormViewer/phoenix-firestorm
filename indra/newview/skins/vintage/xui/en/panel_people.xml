@@ -222,6 +222,17 @@ Looking for people to hang out with? Use the search box to find topics or conten
 						follows="left|top"/>
 
 					<check_box
+						label="Color names based on distance"
+						left="0"
+						top_pad="2"
+						name="FSRadarColorNamesByDistance"
+						control_name="FSRadarColorNamesByDistance"
+						right="-1"
+						height="16"
+						layout="topleft"
+						follows="left|top"/>
+
+					<check_box
 						label="Limit range to:"
 						tool_tip="Limit Results to specific Radius"
 						left="0"

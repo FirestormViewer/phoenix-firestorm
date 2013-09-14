@@ -327,6 +327,15 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
 		mTextBox->setReadOnlyColor(script_dialog_fg_color);
 	}
 	// </FS:Ansariel>
+	// <FS:Zi> Dialog Stacking browser
+	// hide the stacking button for things that are not scripting dialogs etc.
+	else if(mNotification->getName()!="LoadWebPage")
+	{
+		// setting size to 0,0 becuase button visibility is dictated by a control variable,
+		// so we need a different way to hide this button.
+		getChild<LLButton>("DialogStackButton")->reshape(0,0,FALSE);
+	}
+	// </FS:Zi>
 
     // add buttons for a script notification
     if (mIsTip)

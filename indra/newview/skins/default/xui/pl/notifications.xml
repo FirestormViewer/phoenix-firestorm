@@ -167,6 +167,14 @@ Udzielaj tego przywileju z rozwagą.
 Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="EjectGroupMemberWarning">
+		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
+		<usetemplate ignoretext="Potwierdź wyrzucenie członka z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
+	</notification>
+	<notification name="EjectGroupMembersWarning">
+		Zamierzasz wyrzucić [COUNT] członków z grupy.
+		<usetemplate ignoretext="Potwierdź wyrzucenie kilku członków z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
+	</notification>
 	<notification name="AttachmentDrop">
 		Wybrałeś opcję upuszczenia swojego dodatku.
     Czy chcesz kontynuować?
@@ -387,9 +395,7 @@ Pamiętaj: Opcja ta wyczyszcza bufor danych.
 	</notification>
 	<notification name="ChangeSkin">
 		Nowa skórka pojawi się po restarcie aplikacji [APP_NAME].
-		<form name="form">
-			<ignore name="ignore" text="Nowa skórka została wybrana w ustawieniach."/>
-		</form>
+		<usetemplate name="okcancelbuttons" notext="Ok" yestext="Restartuj"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		Zmiana języka zadziała po restarcie [APP_NAME].
@@ -1550,6 +1556,10 @@ Otwieranie stron internetowych z nieznanego źródła może narazić Twój kompu
 Chcesz opuścić grupę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
+	<notification name="OwnerCannotLeaveGroup">
+		Nie możesz opuścić tej grupy, ponieważ jesteś ostatnim z jej właścicieli. Przydziel najpierw innemu użytkownikowi rolę właściciela.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmKick">
 		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć Rezydentów"/>
@@ -2533,9 +2543,7 @@ by ją zaznaczyć, a potem wybierz &apos;Teleportuj&apos; na spodzie okna.
 dostępnego pod prawym przyciskiem myszy)
 	</notification>
 	<notification name="TeleportToPerson">
-		Możesz skontaktować się z Rezydentem &apos;[NAME]&apos; poprzez użycie przycisku &quot;Ludzie&quot;.
-Wybierz Rezydenta z listy, następnie kliknij &apos;IM&apos; na dole okna.
-(Możesz także kliknąć podwójnie na imię na liście, lub prawym przyciskiem i wybrać &apos;IM&apos;).
+		Aby rozpocząć z kimś prywatną rozmowę, kliknij prawym przyciskiem myszy na jego/jej awatarze i wybierz &apos;IM&apos; z menu.
 	</notification>
 	<notification name="CantSelectLandFromMultipleRegions">
 		Nie możesz przekraczać granic regionu wybierając obszar.
@@ -4462,18 +4470,28 @@ Kontynuowanie spowoduje, że kontrolki Szybkiego Strojenia zostaną przywrócone
 Nie można tego cofnąć.
 		<usetemplate ignoretext="Przywrócenie domyślnych kontrolek Szybkiego Strojenia" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
-	<notification name="EjectGroupMemberWarning">
-		Zamierzasz wyrzucić [AVATAR_NAME] z grupy.
-		<usetemplate ignoretext="Potwierdź wyrzucenie członka z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
-	</notification>
-	<notification name="EjectGroupMembersWarning">
-		Zamierzasz wyrzucić [COUNT] członków z grupy.
-		<usetemplate ignoretext="Potwierdź wyrzucenie kilku członków z grupy" name="okcancelignore" notext="Anuluj" yestext="Wyrzuć"/>
-	</notification>
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].
 	</notification>
+	<notification name="ExportColladaFailed">
+		Eksport nie powiódł się.
+	</notification>
+	<notification name="ExportColladaSuccess">
+		Eksport w formacie Collada DAE zakończony. Wyeksportowano [TOTAL] obiektów.
+	</notification>
+	<notification name="ExportColladaPartial">
+		Eksport w formacie Collada DAE zakończony. Nie udało się wyeksportować [FAILED] z [TOTAL] zaznaczonych obiektów ze względu na niewystarczające prawa.
+	</notification>
 	<notification name="AntiSpamBlocked">
-		Antyspam: Zablokowano ["SOURCE"] ze względu na spam ["QUEUE"] (["COUNT"]) razy podczas [PERIOD] sekund.
+		Antyspam: Zablokowano [SOURCE] ze względu na spam [QUEUE] ([COUNT]) razy podczas [PERIOD] sekund.
+	</notification>
+	<notification name="MeshMaxConcurrentReqTooHigh">
+		Wartość ustawienia dla liczby jednoczesnych żądań ładowania obiektów meszowych określona przez Ciebie, [VALUE], jest wyższa niż dopuszczalne [MAX]. Została ona zresetowana do domyślnej, [DEFAULT].
+	</notification>
+	<notification name="SkinDefaultsChangeSettings">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Ustawienie w preferencjach zostało zmienione do domyślnej wartości skórki."/>
+		</form>
 	</notification>
 </notifications>

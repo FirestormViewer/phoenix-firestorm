@@ -7,7 +7,7 @@
 	<menu_item_call label="Zadzwoń" name="Call"/>
 	<menu_item_call label="Zaproś do grupy" name="Invite..."/>
 	<context_menu label="Irytacja?" name="Annoyance">
-		<menu_item_call label="Wycisz" name="Avatar Mute"/>
+		<menu_item_call label="Zablokuj" name="Avatar Mute"/>
 		<menu_item_call label="Odblokuj" name="Avatar Unmute"/>
 		<menu_item_call label="Zgłoś" name="abuse"/>
 		<menu_item_call label="Unieruchom" name="Freeze..."/>
@@ -17,10 +17,14 @@
 	<menu_item_call label="Przybliż" name="Zoom In"/>
 	<menu_item_call label="Zapłać" name="Pay..."/>
 	<menu_item_call label="Profil obiektu" name="Object Inspect"/>
+	<menu_item_call label="Blokuj właściciela cząsteczek" name="Mute Particle"/>
 	<menu_item_call label="O skryptach" name="ScriptInfo"/>
 	<menu_item_call label="Derenderuj" name="Derender"/>
 	<menu_item_call label="Derenderuj + czarna lista" name="DerenderPermanent"/>
 	<menu_item_call label="Pokaż tekstury" name="Debug..."/>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
-	<menu_item_call label="Eksportuj" name="Export"/>
+	<context_menu label="Zapisz jako" name="Export Menu">
+		<menu_item_call label="Kopia zapasowa" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 </context_menu>

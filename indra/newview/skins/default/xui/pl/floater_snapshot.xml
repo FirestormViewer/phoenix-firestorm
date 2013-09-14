@@ -80,6 +80,7 @@
 			<combo_box.item label="Głębia" name="Depth"/>
 		</combo_box>
 		<check_box label="Interfejs" name="ui_check"/>
+		<check_box label="Stan L$" name="currency_check"/>
 		<check_box label="Obiekty HUD" name="hud_check"/>
 		<check_box label="Pełne okno" name="freeze_frame_check"/>
 		<check_box label="Autoodświeżanie" name="auto_snapshot_check"/>

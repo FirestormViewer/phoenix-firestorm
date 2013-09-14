@@ -10,7 +10,10 @@
             <pie_slice label="Tymczasowo" name="Derender"/>
             <pie_slice label="Czarna lista" name="DerenderPermanent"/>
         </pie_menu>
-        <pie_slice label="Eksportuj" name="Export"/>
+        <pie_menu name="ExportMenu" label="Zapisz jako &gt;">
+            <pie_slice label="Kopia zapasowa" name="Backup"/>
+            <pie_slice label="Collada" name="Collada"/>
+        </pie_menu>
         <pie_slice label="Pokaż tekstury" name="Debug..."/>
     </pie_menu>
     <pie_slice label="Usiądź tu" name="Sit Down Here"/>

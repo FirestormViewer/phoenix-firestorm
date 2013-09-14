@@ -88,6 +88,7 @@
 #include "llpanelplaces.h"
 #include "fsfloaterposestand.h"
 #include "fsfloaterteleporthistory.h"
+#include "fslslbridge.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -96,7 +97,9 @@
 BOOL 				gHackGodmode = FALSE;
 #endif
 
-
+// Should you contemplate changing the name "Global", please first grep for
+// that string literal. There are at least a couple other places in the C++
+// code that assume the LLControlGroup named "Global" is gSavedSettings.
 LLControlGroup gSavedSettings("Global");	// saved at end of session
 LLControlGroup gSavedPerAccountSettings("PerAccount"); // saved at end of session
 LLControlGroup gCrashSettings("CrashSettings");	// saved at end of session
@@ -736,6 +739,27 @@ static void handleSetPoseStandLock(const LLSD& newvalue)
 }
 // </FS:CR> Posestand Ground Lock
 
+// <FS:TT> Client LSL Bridge
+static void handleFlightAssistOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
+}
+// </FS:TT>
+
+// <FS:AO> bridge-based radar tags
+static void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("FSPublishRadarTag", newvalue.asBoolean());
+}
+// </FS:AO>
+
+// <FS:PP> Movelock for Bridge
+static void handleMovelockOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
+}
+// </FS:PP>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -923,6 +947,11 @@ void settings_setup_listeners()
 	
 	// <FS:CR> Pose stand ground lock
 	gSavedSettings.getControl("FSPoseStandLock")->getSignal()->connect(boost::bind(&handleSetPoseStandLock, _2));
+
+	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
+	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
+	gSavedSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
+
 }
 
 #if TEST_CACHED_CONTROL

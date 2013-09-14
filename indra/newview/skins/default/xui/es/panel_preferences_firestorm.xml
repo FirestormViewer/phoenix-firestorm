@@ -43,7 +43,6 @@
 			<check_box label="Ocultar automáticamente objetos con grandes áreas de textura. Umbral:" name="RenderVolumeSAProtection" tool_tip="Te protege de objetos con grandes texturas sobre grandes superficies, a veces diseñados para provocar fallos del visor. El umbral por defecto es de 5.000 metros cuadrados, pero si crees que algunos objetos no se están dibujando y esta opción está activada, puedes necesitar aumentarlo." width="425"/>
 			<spinner left_pad="5" name="RenderVolumeSAFrameMax" width="60"/>
 			<check_box label="Activar protección contra spam" name="UseAntiSpam"/>
-			<check_box label="Quitar el botón &quot;Bloquear&quot; de los diálogos de script" name="FSRemoveScriptBlockButton"/>
 			<text name="AntiSpamText1" width="305">
 				Máximo de líneas en un solo mensaje:
 			</text>
@@ -61,6 +60,8 @@
 			</text>
 			<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Multiplicador de eventos para peticiones de precarga de sonido [Por defecto: 4]"/>
 			<button name="AntiSpamUnblock" label="Desbloquear todas las fuentes de spam" width="250"/>
+			<check_box label="Quitar el botón &quot;Bloquear&quot; de los diálogos de script" name="FSRemoveScriptBlockButton"/>
+			<check_box label="Eliminar el botón &quot;Entrar&quot; de las invitaciones de grupo cuando éstas tengan coste" name="FSAllowGroupInvitationOnlyWithoutFee"/>
 			<check_box label="Notificar cuando se reciben items demasiado rápido" name="FSNotifyIncomingObjectSpam"/>
 			<check_box label="Notificar cuando se reciben items de otros residentes demasiado rápido" name="FSNotifyIncomingObjectSpamFrom"/>
 			<slider name="FSOfferThrottleMaxCount" label="Umbral para acelerar la entrada de items:" tool_tip="Establece el umbral de ofertas de items entrantes en un intérvalo de 10 segundos para que se produzca la aceleración de la entrada. Por defecto, 5." label_width="235" width="360"/>
@@ -112,6 +113,9 @@
 			</text>
 			<text name="FSCmdLineBandWidth_txt">
 				Máx. ancho de banda (uso: cmd kbps)
+			</text>
+			<text name="FSCmdLineCopyCam_txt">
+				Copiar pos. de cámara a portapapeles
 			</text>
 			<text name="FSCmdLineRezPlatform_txt">
 				Crear plataforma (uso: cmd 0 - 30)

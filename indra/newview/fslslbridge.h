@@ -148,7 +148,7 @@ class FSLSLBridgeInventoryObserver : public LLInventoryFetchDescendentsObserver
 public:
 	FSLSLBridgeInventoryObserver(const LLUUID& cat_id = LLUUID::null):LLInventoryFetchDescendentsObserver(cat_id) {}
 	FSLSLBridgeInventoryObserver(const uuid_vec_t& cat_ids):LLInventoryFetchDescendentsObserver(cat_ids) {}
-	/*virtual*/ void done() { gInventory.removeObserver(this); FSLSLBridge::instance().startCreation(); }
+	/*virtual*/ void done() { gInventory.removeObserver(this); FSLSLBridge::instance().startCreation(); delete this; }
 
 protected:
 	~FSLSLBridgeInventoryObserver() {}
