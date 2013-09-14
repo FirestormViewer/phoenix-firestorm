@@ -1128,8 +1128,7 @@ Port settings take effect after restarting [APP_NAME].
    type="alertmodal">
 The new skin will appear after restarting [APP_NAME].
     <usetemplate
-     ignoretext="A new skin was chosen in preferences."
-     name="okcancelignore"
+     name="okcancelbuttons"
      notext="Ok"
      yestext="Restart"/>
   </notification>
