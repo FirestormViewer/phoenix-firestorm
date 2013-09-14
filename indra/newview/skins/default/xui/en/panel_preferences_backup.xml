@@ -223,7 +223,7 @@ Settings groups to be restored (backup will always save all):
         <row name="restore_per_account_row_tphistory">
             <column type="checkbox" name="restore_per_account_files_check" value="true" />
             <column name="restore_per_account_files_label">Teleport History</column>
-            <column name="value">teleport_history.xml</column>
+            <column name="value">teleport_history.txt</column>
         </row>
     </scroll_list>
     <!-- since enabled_control does not work properly on scroll list items and
