@@ -201,7 +201,7 @@ inline void ll_memcpy_nonaliased_aligned_16(char* __restrict dst, const char* __
 	ll_assert_aligned(src,16);
 	ll_assert_aligned(dst,16);
 	assert((src < dst) ? ((src + bytes) < dst) : ((dst + bytes) < src));
-	assert(bytes%16==0);
+	// assert(bytes%16==0);
 
 	char* end = dst + bytes;
 
@@ -250,14 +250,24 @@ inline void ll_memcpy_nonaliased_aligned_16(char* __restrict dst, const char* __
 		}
 	}
 
+
+	// <FS:ND> There is no guarantee that the remaining about of bytes left is a number of 16. If that's not the case using copy4a will overwrite and trash memory behind the end of dst
+
 	// Copy remainder 16b tail chunks (or ALL 16b chunks for sub-64b copies)
 	//
-	while (dst < end)
-	{
-		_mm_store_ps((F32*)dst, _mm_load_ps((F32*)src));
-		dst += 16;
-		src += 16;
-	}
+	// while (dst < end)
+	// {
+	// 	_mm_store_ps((F32*)dst, _mm_load_ps((F32*)src));
+	// 	dst += 16;
+	// 	src += 16;
+	// }
+
+	bytes = (U8*)end-(U8*)dst;
+	if( bytes > 0 )
+		memcpy( dst, src, bytes );
+
+	// </FS:ND>
+
 }
 
 #ifndef __DEBUG_PRIVATE_MEM__
