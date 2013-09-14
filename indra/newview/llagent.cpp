@@ -95,13 +95,14 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
-#include "../lscript/lscript_byteformat.h"
+//#include "lscript_byteformat.h" // <FS:CR> We don't have the bytecode compiler in fs
 #include "stringize.h"
 #include "boost/foreach.hpp"
 
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
+#include "fsscriptlibrary.h"	// <FS:CR>
 #include "kcwlinterface.h"
 // [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
 #include "rlvhandler.h"
