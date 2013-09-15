@@ -473,8 +473,8 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 			else
 			{
 				LL_DEBUGS("export") << "...export check failed." << LL_ENDL;
-				LLTextureEntry te(LL_DEFAULT_WOOD_UUID); // TODO: use user option of default texture.
-				prim["texture"].append(te.asLLSD());
+				checkTE->setID(LL_DEFAULT_WOOD_UUID); // TODO: use user option of default texture.
+				prim["texture"].append(checkTE->asLLSD());
 			}
 		}
 
