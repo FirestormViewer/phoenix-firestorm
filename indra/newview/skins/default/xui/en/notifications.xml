@@ -8944,7 +8944,7 @@ You can not remove [REMOVE_GRID] while being connected to it.
    icon="notify.tga"
    name="FSWL"
    type="notify">
-&apos;[PARCEL_NAME]&apos;, owned by &apos;[OWNER_NAME]&apos;, would like to change your Windlight visual environment settings.
+&apos;[PARCEL_NAME]&apos;, owned by [OWNER_NAME], would like to change your Windlight visual environment settings.
     <form name="form">
       <button
        index="0"
