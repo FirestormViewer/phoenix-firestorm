@@ -555,8 +555,9 @@ BOOL LLWindowMacOSX::createContext(int x, int y, int width, int height, int bits
 	if(mContext != NULL)
 	{
 		
-		
-		U32 err = CGLSetCurrentContext(mContext);
+		// <FS:CR> Mac OpenGL
+		//U32 err = CGLSetCurrentContext(mContext);
+		CGLError err = CGLSetCurrentContext(mContext);		
 		if (err != kCGLNoError)
 		{
 			setupFailure("Can't activate GL rendering context", "Error", OSMB_OK);
