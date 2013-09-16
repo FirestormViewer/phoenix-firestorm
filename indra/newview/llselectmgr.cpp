@@ -94,6 +94,7 @@
 #include "llvovolume.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
+#include "llpanelface.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -102,7 +103,6 @@
 #include "llworld.h"
 // </FS:CR> Aurora Sim
 #include "fsareasearch.h"
-
 #include "llglheaders.h"
 
 LLViewerObject* getSelectedParentObject(LLViewerObject *object) ;
@@ -2579,7 +2579,7 @@ void LLSelectMgr::adjustTexturesByScale(BOOL send_to_sim, BOOL stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
-						LLMaterialPtr p = new LLMaterial(orig->asLLSD());
+						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 
@@ -2605,8 +2605,8 @@ void LLSelectMgr::adjustTexturesByScale(BOOL send_to_sim, BOOL stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
+						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
 
-						LLMaterialPtr p = new LLMaterial(orig->asLLSD());
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 

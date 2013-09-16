@@ -167,8 +167,8 @@ public:
 		DEFERRED_PROJECTION,
 		
 		GLOBAL_GAMMA,
-		TEXTURE_GAMMA,
-		
+		TEXTURE_GAMMA,		
+
 		SPECULAR_COLOR,
 		ENVIRONMENT_INTENSITY,
 // <FS:CR> Import Vignette from Exodus
@@ -176,6 +176,8 @@ public:
 		EXO_RENDER_SCREEN,
 // </FS:CR> Import Vignette from Exodus
 		
+		DISPLAY_GAMMA,
+
 		END_RESERVED_UNIFORMS
 	} eGLSLReservedUniforms;
 
