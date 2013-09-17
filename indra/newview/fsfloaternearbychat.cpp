@@ -70,7 +70,7 @@
 #include "llworld.h"
 #include "rlvhandler.h"
 
-#define NAME_PREDICTION_MINIMUM_LENGTH 2
+static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
 S32 FSFloaterNearbyChat::sLastSpecialChatChannel = 0;
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-0.2.2)
