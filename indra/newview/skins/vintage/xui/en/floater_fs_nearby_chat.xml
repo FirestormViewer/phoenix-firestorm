@@ -268,20 +268,18 @@
                 value="shout"
                 label="Shout" />
             </combo_box>
-            <!-- pad_bottom used to move the button text away so it's invisible under the combo box -->
             <button
-              image_unselected="transparent.j2c"
-              image_selected="PushButton_Off"
-              image_pressed="PushButton_Off"
-              image_pressed_selected="transparent.j2c"
-              image_disabled="transparent.j2c"
+              image_unselected="SplitButtonLeft_Off"
+              image_selected="SplitButtonLeft_Selected"
+              image_pressed="SplitButtonLeft_Selected" 
+              image_pressed_selected="SplitButtonLeft_Press"
+              image_disabled="SplitButtonLeft_Disabled"
               layout="topleft"
               left_delta="0"
               right="-20"
               height="22"
               follows="top|left|right"
               label="Say"
-              pad_bottom="22"
               name="send_chat"
               tool_tip="Whisper=10m, Say=20m, Shout=100m" />
             <icon

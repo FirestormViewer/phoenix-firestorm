@@ -35,9 +35,9 @@
 #include "llviewerchat.h"
 
 class LLResizeBar;
+class LLComboBox;
 class FSChatHistory;
 #include "llchatentry.h"
-//#include "llsingleton.h"
 #include "lllayoutstack.h"
 
 class FSFloaterNearbyChat: public LLDockableFloater
@@ -105,6 +105,7 @@ protected:
 	
 	void sendChat( EChatType type );
 	void onChatBoxCommit();
+	void onChatTypeChanged();
 	
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);
@@ -124,6 +125,11 @@ private:
 	// <FS:Ansariel> Optional muted chat history
 	FSChatHistory*		mChatHistoryMuted;
 	LLChatEntry*		mInputEditor;
+
+	// chat type selector and send chat buttons
+	LLButton*			mSendChatButton;
+	LLComboBox*			mChatTypeCombo;
+
 	LLLayoutPanel*		mChatLayoutPanel;
 	LLLayoutStack*		mInputPanels;
 	

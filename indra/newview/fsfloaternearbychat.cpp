@@ -43,6 +43,7 @@
 #include "llbutton.h"
 #include "llchannelmanager.h"
 #include "llchatentry.h"
+#include "llcombobox.h"
 #include "llcommandhandler.h"
 #include "llconsole.h"
 #include "lldraghandle.h"
@@ -158,6 +159,14 @@ BOOL FSFloaterNearbyChat::postBuild()
 	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
 	childSetCommitCallback("chat_history_btn",onHistoryButtonClicked,this);
+
+	// chat type selector and send chat button
+	mChatTypeCombo=getChild<LLComboBox>("chat_type");
+	mChatTypeCombo->selectByValue("say");
+	mChatTypeCombo->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatTypeChanged,this));
+	mSendChatButton=getChild<LLButton>("send_chat");
+	mSendChatButton->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxCommit,this));
+	onChatTypeChanged();
 
 	mChatHistory = getChild<FSChatHistory>("chat_history");
 
@@ -1050,10 +1059,28 @@ void FSFloaterNearbyChat::onChatBoxCommit()
 {
 	if (mInputEditor->getText().length() > 0)
 	{
-		sendChat(CHAT_TYPE_NORMAL);
+		EChatType type=CHAT_TYPE_NORMAL;
+		if(gSavedSettings.getBOOL("FSShowChatType"))
+		{
+			std::string typeString=mChatTypeCombo->getValue();
+			if(typeString=="whisper")
+			{
+				type=CHAT_TYPE_WHISPER;
+			}
+			else if(typeString=="shout")
+			{
+				type=CHAT_TYPE_SHOUT;
+			}
+		}
+		sendChat(type);
 	}
 	
 	gAgent.stopTyping();
+}
+
+void FSFloaterNearbyChat::onChatTypeChanged()
+{
+	mSendChatButton->setLabel(mChatTypeCombo->getSelectedItemLabel());
 }
 
 void FSFloaterNearbyChat::sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate)
