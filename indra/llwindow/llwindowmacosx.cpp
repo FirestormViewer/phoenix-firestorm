@@ -1153,8 +1153,9 @@ BOOL LLWindowMacOSX::isClipboardTextAvailable()
 
 BOOL LLWindowMacOSX::pasteTextFromClipboard(LLWString &dst)
 {	
-	llutf16string str(copyFromPBoard());
-	dst = utf16str_to_wstring(str);
+	//llutf16string str(copyFromPBoard());
+	dst = utf16str_to_wstring(copyFromPBoard());
+	LLWStringUtil::removeCRLF(dst);	// <FS:CR>
 	if (dst != L"")
 	{
 		return true;
