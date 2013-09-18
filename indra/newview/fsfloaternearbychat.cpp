@@ -904,9 +904,10 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				std::string first_name, last_name;
 				gCacheName->getFirstLastName(*(iter - 1), first_name, last_name);
 				std::string rest_of_match;
+				std::string replaced_text;
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				{
-					prefix += RlvStrings::getAnonym(first_name + " " + last_name) + " ";
+					replaced_text += RlvStrings::getAnonym(first_name + " " + last_name) + " ";
 				}
 				else
 				{
@@ -918,11 +919,13 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 					{
 						rest_of_match = first_name.substr(pattern.size());
 					}
-					prefix += match + rest_of_match + " ";
+					replaced_text += match + rest_of_match + " ";
 				}
 				if (!rest_of_match.empty())
 				{
-					mInputEditor->setText(prefix + suffix);
+					mInputEditor->setText(prefix + replaced_text + suffix);
+					// *HACK: I don't know how to select text in a textbox. :(
+					mInputEditor->setCursorPos(prefix.size());
 					mInputEditor->selectNext((rest_of_match + " "), false);
 				}
 			}
