@@ -63,6 +63,9 @@
          path_index="10">
     <file name="Skinning"
           file_name="colors.xml"/>
+    <file name="Global"
+          file_name="settings.xml" 
+          persistent="false"/>
   </group>
   <group name="UserSkin"
          path_index="14">

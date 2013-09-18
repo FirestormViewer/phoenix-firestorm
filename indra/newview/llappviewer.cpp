@@ -2060,7 +2060,8 @@ bool LLAppViewer::cleanup()
 
 	LLAvatarAppearance::cleanupClass();
 	
-	LLAvatarAppearance::cleanupClass();
+	// <FS:Ansariel> Comment out duplicate clean up
+	//LLAvatarAppearance::cleanupClass();
 	
 	LLPostProcess::cleanupClass();
 
@@ -3037,6 +3038,7 @@ bool LLAppViewer::initConfiguration()
  		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
 								 gSavedSettings.getString("SkinCurrentTheme"),
  								 gSavedSettings.getString("Language"));
+		loadSettingsFromDirectory("CurrentSkin");
 // [/SL:KB]
 //		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
 //								 gSavedSettings.getString("Language"));

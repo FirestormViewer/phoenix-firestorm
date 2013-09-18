@@ -863,6 +863,18 @@
       <integer>0</integer>
     </map>  
 
+  <key>FSShowChatType</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows/Hides the chat type selector (Whisper, Say, Shout)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>  
+
   <key>ScriptDialogsPosition</key>
     <map>
       <key>Comment</key>
@@ -6408,6 +6420,16 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
+      <integer>0</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>0</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>This setting can lead to strange things happening in your conversations floater, personal IMs and group chats.</string>
+      <key>Backup</key>
       <integer>0</integer>
     </map>  
     <key>IgnorePixelDepth</key>
