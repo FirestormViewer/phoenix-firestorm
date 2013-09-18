@@ -8934,13 +8934,6 @@ You can not remove [REMOVE_GRID] while being connected to it.
 <!-- </FS:AW  grid management-->
 
   <notification
-     icon="notifytip.tga"
-     name="PhoenixAutoReplace"
-     type="notifytip">
-    &apos;[BEFORE]&apos; has been auto replaced by &apos;[REPLACEMENT]&apos;
-    based on your [LISTNAME] list.
-  </notification>
-  <notification
    icon="notify.tga"
    name="FSWL"
    type="notify">
