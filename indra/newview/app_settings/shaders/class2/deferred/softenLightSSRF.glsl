@@ -63,7 +63,7 @@ uniform float global_gamma;
 uniform float scene_light_strength;
 uniform mat3 env_mat;
 uniform vec4 shadow_clip;
-uniform float ssao_effect_mat;
+uniform mat3 ssao_effect_mat;
 
 uniform vec3 sun_dir;
 VARYING vec2 vary_fragcoord;
