@@ -217,12 +217,12 @@ Der Rolle „[ROLE_NAME]“ diese Fähigkeit zuweisen?
 		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
 	</notification>
 	<notification name="EjectGroupMemberWarning">
-		Sie sind im Begriff, [AVATAR_NAME] aus der Gruppe zu entfernen.
-		<usetemplate ignoretext="Bestätigen, wenn ein Mitglied aus einer Gruppe entfernt wird" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
+		Sie sind dabei, [AVATAR_NAME] aus der Gruppe hinauszuwerfen.
+		<usetemplate ignoretext="Hinauswerfen eines einzelnen Gruppenmitglieds bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Hinauswerfen"/>
 	</notification>
 	<notification name="EjectGroupMembersWarning">
-		Sie sind im Begriff, [COUNT] Mitglieder aus der Gruppe zu entfernen.
-		<usetemplate ignoretext="Bestätigen, wenn mehrere Mitglieder aus einer Gruppe entfernt werden" name="okcancelignore" notext="Abbrechen" yestext="Entfernen"/>
+		Sie sind dabei, [COUNT] Mitglieder aus der Gruppe hinauszuwerfen.
+		<usetemplate ignoretext="Hinauswerfen mehrerer Gruppenmitglieder bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Hinauswerfen"/>
 	</notification>
 	<notification name="AttachmentDrop">
 		Sie möchten Ihren Anhang wirklich fallen lassen?
@@ -1594,7 +1594,7 @@ Diese Gruppe verlassen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
-		Verlassen der Gruppe nicht möglich. Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Bitte weisen sie die Besitzer-Rolle zunächst einem anderen Mitglied zu.
+		Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Weisen Sie die Besitzerrolle zuerst einem anderen Mitglied zu.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
@@ -2504,7 +2504,7 @@ Wählen Sie ein einzelnes Objekt aus.
     „Teleportieren“ wählen.)
 	</notification>
 	<notification name="TeleportToPerson">
-		Um eine private Konversation mit jemanden aufzunehmen, klicken Sie mit der rechten Maustaste auf dessen Avatar und wählen Sie „IM“ aus dem Menü.
+		Um eine private Unterhaltung zu beginnen, klicken Sie mit der rechten Maustaste auf den gewünschten Avatar und wählen Sie im Menü „IM“ aus.
 	</notification>
 	<notification name="CantSelectLandFromMultipleRegions">
 		Land kann nicht über Servergrenzen hinweg ausgewählt werden.
@@ -2897,15 +2897,6 @@ Um diese Berechtigung zu gewähren, laden Sie die neueste Version des Viewers vo
 		<form name="form">
 			<button name="Deny" text="OK"/>
 			<button name="Mute" text="Blockieren"/>
-		</form>
-	</notification>
-	<notification name="UnknownScriptQuestion">
-Die angefordert Skript-Berechtigung von „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“, einem Objekt im Besitz von „[NAME]“, wurde vom Viewer nicht erkannt und kann daher nicht erteilt werden.
-
-Um diese Berechtigung zu erteilen, aktualisieren Sie Ihren Viewer auf die aktuellste Version, verfügbar unter [DOWNLOADURL].
-		<form name="form">
-			<button name="Deny" text="Ok"/>
-			<button name="Mute" text="Ignorieren"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialog">

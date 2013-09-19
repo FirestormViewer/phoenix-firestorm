@@ -484,9 +484,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="SLappAgentRemoveFriend">
 		Entfernen von Freunden
 	</string>
-	<string name="SLappAgentRequestFriend">
-		Freundschaftsauflösung
-	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Schließen (⌘W)
 	</string>
@@ -881,7 +878,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Mehrfach
 	</string>
 	<string name="use_texture">
-		Textur benutzen
+		Textur verwenden
 	</string>
 	<string name="texture_loading">
 		Wird geladen...
@@ -984,18 +981,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="ControlYourCamera">
 		Kamerasteuerung übernehmen
-	</string>
-	<string name="JoinAnExperience">
-		Einem Erlebnis beiwohnen
-	</string>
-	<string name="SilentlyManageEstateAccess">
-		Benachrichtigungen über Änderungen am Grundbesitzzugang stummschalten
-	</string>
-	<string name="OverrideYourAnimations">
-		Ihre Avatar-Animationen übersteuern
-	</string>
-	<string name="ScriptReturnObjects">
-		Objekte in deinem Auftrag zurückgeben
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden
@@ -5404,7 +5389,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Keine protokollierten Unterhaltungen verfügbar. Hier erscheint ein Protokolleintrag, wenn Sie eine Person kontaktieren oder von einer Person kontaktiert werden.
 	</string>
 	<string name="loading_chat_logs">
-		Wird geladen...
+		Laden...
 	</string>
 	
 <!-- Firestorm-specific translations -->
