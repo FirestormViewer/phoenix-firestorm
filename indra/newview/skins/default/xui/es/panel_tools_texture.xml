@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Textura" name="Texture">
 	<panel.string name="string repeats per meter">
 		Repeticiones por metro
@@ -9,7 +9,7 @@
 	<text name="color label">
 		Color
 	</text>
-	<color_swatch name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
+	<color_swatch label="" name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
 	<text name="color trans">
 		Transparencia
 	</text>
@@ -26,7 +26,7 @@
 		<combo_box.item label="Bacheado (normal)" name="Bumpiness (normal)"/>
 		<combo_box.item label="Brillo (especular)" name="Shininess (specular)"/>
 	</combo_box>
-	<texture_picker label="Textura       " name="texture control" tool_tip="Pulsa para elegir una imagen"/>
+	<texture_picker label="Textura" name="texture control" tool_tip="Pulsa para elegir una imagen"/>
 	<text name="label alphamode">
 		Modo alpha
 	</text>

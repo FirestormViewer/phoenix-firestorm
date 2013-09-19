@@ -130,6 +130,9 @@
 	<string name="create_account_url">
 		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
+	<string name="ViewerDownloadURL">
+		http://secondlife.com/download
+	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
 http://firestormviewer.org/downloads
@@ -477,6 +480,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="SLappAgentRequestFriend">
 		Freundschaftsangebot
+	</string>
+	<string name="SLappAgentRemoveFriend">
+		Entfernen von Freunden
 	</string>
 	<string name="SLappAgentRequestFriend">
 		Freundschaftsauflösung
@@ -999,6 +1005,18 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="TeleportYourAgent">
 		Sie teleportieren
+	</string>
+	<string name="JoinAnExperience">
+		Bei einem Erlebnis mitmachen
+	</string>
+	<string name="SilentlyManageEstateAccess">
+		Beim Verwalten von Grundbesitzzugangslisten Warnhinweise unterdrücken
+	</string>
+	<string name="OverrideYourAnimations">
+		Ihre Standardanimationen ersetzen
+	</string>
+	<string name="ScriptReturnObjects">
+		Objekte in Ihrem Namen zurückgeben
 	</string>
 	<string name="UnknownScriptPermission">
 		(unbekannt)!

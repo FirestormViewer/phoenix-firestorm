@@ -25,8 +25,8 @@
 						<layout_stack name="translate_and_chat_stack">
 							<layout_panel name="translate_chat_checkbox_lp">
 								<check_box label="Traducir chat" name="translate_chat_checkbox"/>
-								</layout_panel>
-							</layout_stack>
+							</layout_panel>
+						</layout_stack>
 						</layout_panel>
 					</layout_panel>
 				</layout_stack>

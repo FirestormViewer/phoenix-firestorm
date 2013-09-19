@@ -44,6 +44,10 @@
 			<menu_item_call label="ラグ計測器" name="Lag Meter"/>
 			<menu_item_call label="ブリッジを再作成" name="Recreate LSL Bridge"/>
 		</menu>
+		<menu label="ログイン" name="Status">
+			<menu_item_check label="一時退席中" name="Away"/>
+			<menu_item_check label="着信拒否" name="Do Not Disturb"/>
+		</menu>
 		<menu_item_call label="チップ受領記録" name="money_tracker"/>
 		
 		<!-- added Jun.30, 2013 -->
@@ -230,6 +234,7 @@
 			<menu_item_call label="次の部分を含める" name="Include Next Part"/>
 			<menu_item_call label="前回の部分を含める" name="Include Previous Part"/>
 		</menu>
+		<menu_item_call label="リンクセット..." name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="選択したものに焦点を合わせる" name="Focus on Selection"/>
 		<menu_item_call label="選択したものをズームする" name="Zoom to Selection"/>
 		<menu label="オブジェクト" name="Object">
@@ -537,11 +542,7 @@
 			<menu_item_call label="選択した材質の情報" name="Selected Material Info" />
 			<menu_item_check label="ワイヤーフレーム" name="Wireframe"/>
 			<menu_item_check label="オブジェクト間オクルージョン" name="Object-Object Occlusion"/>
-			
-			<!-- modified Jun.30, 2013 -->
-			<menu_item_check label="高度な照明モデル" name="Advanced Lighting Model"/>
-			<!-- modified Jun.30, 2013 -->
-			
+			<menu_item_check label="高度なライティングモデル" name="Advanced Lighting Model"/>
 			<menu_item_check label="太陽・月・プロジェクタからの影" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO と影の平滑化" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="GL デバッグ" name="Debug GL"/>

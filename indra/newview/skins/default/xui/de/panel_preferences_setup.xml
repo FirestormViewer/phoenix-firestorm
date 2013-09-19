@@ -66,6 +66,7 @@
 	<check_box initial_value="true" label="Cookies annehmen" name="cookies_enabled"/>
 	<check_box initial_value="true" label="Javascript aktivieren" name="browser_javascript_enabled"/>
 	<check_box initial_value="false" label="Medienbrowser-Popups aktivieren" name="media_popup_enabled"/>
+	<check_box label="Bereit, Release-Kandidaten zu verwenden" name="update_willing_to_test"/>
 	<text name="Proxy Settings:">
 		Proxy-Einstellungen:
 	</text>

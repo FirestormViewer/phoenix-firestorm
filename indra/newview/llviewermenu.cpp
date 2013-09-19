@@ -3474,7 +3474,7 @@ bool enable_object_unmute()
 
 
 // 0 = normal, 1 = always, 2 = never
-class LLAvatarCheckImposterMode : public view_listener_t
+class LLAvatarCheckImpostorMode : public view_listener_t
 {	
 	bool handleEvent(const LLSD& userdata)
 	{
@@ -3500,7 +3500,7 @@ class LLAvatarCheckImposterMode : public view_listener_t
 };
 
 // 0 = normal, 1 = always, 2 = never
-class LLAvatarSetImposterMode : public view_listener_t
+class LLAvatarSetImpostorMode : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
@@ -3515,16 +3515,20 @@ class LLAvatarSetImposterMode : public view_listener_t
 		{
 			case 0:
 				avatar->setVisualMuteSettings(LLVOAvatar::VISUAL_MUTE_NOT_SET);
-				return true;
+				break;
 			case 1:
 				avatar->setVisualMuteSettings(LLVOAvatar::ALWAYS_VISUAL_MUTE);
-				return true;
+				break;
 			case 2:
 				avatar->setVisualMuteSettings(LLVOAvatar::NEVER_VISUAL_MUTE);
-				return true;
+				break;
 			default:
 				return false;
 		}
+
+		avatar->forceUpdateVisualMuteSettings();
+		LLVOAvatar::cullAvatarsByPixelArea();
+		return true;
 	}	// handleEvent()
 };
 
@@ -10584,8 +10588,8 @@ void initialize_menus()
 	view_listener_t::addMenu( new LLCheckPanelPeopleTab(), "SideTray.CheckPanelPeopleTab");
 
 	 // Avatar pie menu
-	view_listener_t::addMenu(new LLAvatarCheckImposterMode(), "Avatar.CheckImposterMode");
-	view_listener_t::addMenu(new LLAvatarSetImposterMode(), "Avatar.SetImposterMode");
+	view_listener_t::addMenu(new LLAvatarCheckImpostorMode(), "Avatar.CheckImpostorMode");
+	view_listener_t::addMenu(new LLAvatarSetImpostorMode(), "Avatar.SetImpostorMode");
 	view_listener_t::addMenu(new LLObjectMute(), "Avatar.Mute");
 	view_listener_t::addMenu(new LLAvatarAddFriend(), "Avatar.AddFriend");
 	view_listener_t::addMenu(new LLAvatarAddContact(), "Avatar.AddContact");
