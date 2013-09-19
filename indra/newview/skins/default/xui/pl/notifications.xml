@@ -3490,10 +3490,6 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 		Nie możesz usunąć siatki [REMOVE_GRID], gdy jesteś z nią połączony/a.
 		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem siatki z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
-	<notification name="PhoenixAutoReplace">
-		&apos;[BEFORE]&apos; automatycznie zamieniony na &apos;[REPLACEMENT]&apos;
-bazując na liście [LISTNAME].
-	</notification>
 	<notification name="FSWL">
 		&apos;[PARCEL_NAME]&apos;, własność [OWNER_NAME], chce zmienić ustawienia otoczenia systemu Windlight.
 		<form name="form">

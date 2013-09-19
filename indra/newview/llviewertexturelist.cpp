@@ -1289,7 +1289,13 @@ S32 LLViewerTextureList::getMaxVideoRamSetting(bool get_recommended, float mem_m
 		if(gGLManager.mIsATI)
 		{
 			//shrink the availabe vram for ATI cards because some of them do not handel texture swapping well.
-			max_vram = (S32)(max_vram * 0.75f);  
+			//<FS:TS> Add debug to not shrink
+			//max_vram = (S32)(max_vram * 0.75f);
+			if (!gSavedSettings.getBOOL("FSATIFullTextureMem"))
+			{  
+				max_vram = (S32)(max_vram * 0.75f);  
+			}
+			//</FS:TS>
 		}
 
 		max_vram = llmax(max_vram, getMinVideoRamSetting());
@@ -1385,7 +1391,16 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32 mem)
 	// </FS:Ansariel>
 
 	S32 fb_mem = llmax(VIDEO_CARD_FRAMEBUFFER_MEM, vb_mem/4);
-	mMaxResidentTexMemInMegaBytes = (vb_mem - fb_mem) ; //in MB
+	//<FS:TS> The memory reported by ATI cards is actually the texture
+	//	memory in use, already corrected for the framebuffer and
+	//	VBO pools. Don't back it out a second time.
+	//mMaxResidentTexMemInMegaBytes = (vb_mem - fb_mem) ; //in MB
+	mMaxResidentTexMemInMegaBytes = vb_mem; //in MB
+	if(!gGLManager.mIsATI)
+	{
+		mMaxResidentTexMemInMegaBytes -= fb_mem; //in MB
+	}
+	//</FS:TS>
 	
 	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes * 2;
 	if (mMaxResidentTexMemInMegaBytes > 640)
@@ -1407,7 +1422,8 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32 mem)
 	}
 	
 	llinfos << "Total Video Memory set to: " << vb_mem << " MB" << llendl;
-	llinfos << "Available Texture Memory set to: " << (vb_mem - fb_mem) << " MB" << llendl;
+	//llinfos << "Available Texture Memory set to: " << (vb_mem - fb_mem) << " MB" << llendl;
+	llinfos << "Available Texture Memory set to: " << mMaxResidentTexMemInMegaBytes << " MB" << llendl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

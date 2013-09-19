@@ -4117,15 +4117,15 @@ der Server voll ist.
 		<usetemplate ignoretext="Dateien können nicht verschoben werden. Vorheriger Pfad wurde wiederhergestellt." name="okignore" yestext="OK"/>
 	</notification>
 
-  <notification name="PhoenixWL">
-&apos;[PARCEL_NAME]&apos;, im Besitz von &apos;[OWNER_NAME]&apos;, möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
+  <notification name="FSWL">
+&apos;[PARCEL_NAME]&apos;, im Besitz von [OWNER_NAME], möchte deine visuellen Windlight-Umgebungseinstellungen ändern.
     <form name="form">
       <button name="Allow" text="Zulassen"/>
       <button name="Ignore" text="Ignorieren"/>
     </form>
   </notification>
   
-  <notification name="PhoenixWLClear">
+  <notification name="FSWLClear">
 Windlight-Einstellungen für &apos;[PARCEL_NAME]&apos; auf Regionsstandard zurücksetzen?
     <usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>
   </notification>
