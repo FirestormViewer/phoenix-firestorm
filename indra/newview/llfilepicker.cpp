@@ -772,6 +772,7 @@ bool	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& filena
 			type = "DAE ";
 			creator = "\?\?\?\?";
 			extension = "dae";
+			break;
 		// </FS:CR>
 		case FFSAVE_ALL:
 		default:
