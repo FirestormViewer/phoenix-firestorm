@@ -304,7 +304,7 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 		{
 			default_prim = false;
 		}
-#if OPENSIM
+#ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
 			LLViewerRegion* region = gAgent.getRegion();
@@ -778,7 +778,7 @@ bool FSExport::assetCheck(LLUUID asset_id, std::string& name, std::string& descr
 			if (!exportable)
 			{
 				LLPermissions perms = items[i]->getPermissions();
-#if OPENSIM
+#ifdef OPENSIM
 				if (LLGridManager::getInstance()->isInOpenSim())
 				{
 					LLViewerRegion* region = gAgent.getRegion();
@@ -830,7 +830,7 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 
 		bool exportable = false;
 		LLPermissions perms = item->getPermissions();
-#if OPENSIM
+#ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
 			LLViewerRegion* region = gAgent.getRegion();

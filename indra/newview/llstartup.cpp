@@ -2423,7 +2423,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		
 		// <FS:CR> Load dynamic script library from xml
 		gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_lsl.xml"));
-#if OPENSIM
+#ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 			gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"));
 		if (LLGridManager::getInstance()->isInAuroraSim())
