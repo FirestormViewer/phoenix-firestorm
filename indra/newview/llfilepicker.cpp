@@ -611,6 +611,10 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("lsl");
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
+			// <FS:CR> Import filter
+			allowedv->push_back("oxp");
+            //allowedv->push_back("hpa");
+			// </FS:CR>
         case FFLOAD_IMAGE:
             allowedv->push_back("jpg");
             allowedv->push_back("jpeg");
@@ -1281,12 +1285,12 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
 			break;
 // <FS:CR> Export filter
 		case FFSAVE_EXPORT:
-			caption += add_export_filter_to_gtkchooser(picker);
-			suggest_ext = ".oxp";
+			caption += add_simple_pattern_filter_to_gtkchooser
+				(picker, "*.oxp", LLTrans::getString("backup_files") + " (*.oxp)");
 			break;
 		case FFSAVE_COLLADA:
-			caption += add_export_filter_to_gtkchooser(picker);
-			suggest_ext = ".dae";
+			caption += add_simple_pattern_filter_to_gtkchooser
+				(picker, "*.dae", LLTrans::getString("collada_files") + " (*.dae)");
 			break;
 // </FS:CR>
 		default:;
