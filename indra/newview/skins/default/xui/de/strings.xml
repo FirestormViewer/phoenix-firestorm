@@ -1087,6 +1087,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="backup_files">
 		Objekt-Sicherungen
 	</string>
+	<string name="collada_files">
+		COLLADA-Modelle
+	</string>
 	<string name="AvatarSetNotAutorespond">
 		Automatische Antwort AUS
 	</string>
