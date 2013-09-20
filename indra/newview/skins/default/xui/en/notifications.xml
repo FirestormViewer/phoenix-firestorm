@@ -9738,9 +9738,9 @@ Not enough script resources available to attach object!
   </notification>
 
   <notification
-   icon="alertmodal.tga"
+   icon="notifytip.tga"
    name="YouDiedAndGotTPHome"
-   type="notify">
+   type="notifytip">
    <tag>fail</tag>
 You died and have been teleported to your home location
   </notification>
