@@ -11442,15 +11442,7 @@ Export failed.
      name="ExportColladaSuccess"
      type="notify">
       <tag>Export</tag>
-Collada DAE export complete.  [TOTAL] object(s) exported.
-    </notification>
-    
-    <notification
-     icon="alertmodal.tga"
-     name="ExportColladaPartial"
-     type="notify">
-      <tag>Export</tag>
-Collada DAE export complete.  [FAILED] failure(s) out of [TOTAL] selected object(s) due to insufficient permissions.
+		Successfully saved [OBJECT] to [FILENAME].
     </notification>
     
     <notification
