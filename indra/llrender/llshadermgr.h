@@ -171,12 +171,12 @@ public:
 
 		SPECULAR_COLOR,
 		ENVIRONMENT_INTENSITY,
+		DISPLAY_GAMMA,
+		
 // <FS:CR> Import Vignette from Exodus
 		EXO_RENDER_VIGNETTE,
 		EXO_RENDER_SCREEN,
 // </FS:CR> Import Vignette from Exodus
-		
-		DISPLAY_GAMMA,
 
 		END_RESERVED_UNIFORMS
 	} eGLSLReservedUniforms;
