@@ -210,6 +210,7 @@ void LLLayoutPanel::handleReshape(const LLRect& new_rect, bool by_user)
 LLLayoutStack::Params::Params()
 :	orientation("orientation"),
 	animate("animate", true),
+	save_sizes("save_sizes", false),		// <FS:Zi> Save sizes to settings
 	clip("clip", true),
 	open_time_constant("open_time_constant", 0.02f),
 	close_time_constant("close_time_constant", 0.03f),
@@ -231,6 +232,7 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 	mAnimate(p.animate),
 	mAnimatedThisFrame(false),
 	mNeedsLayout(true),
+ 	mSaveSizes(p.save_sizes),		// <FS:Zi> Save sizes to settings
 	mClip(p.clip),
 	mOpenTimeConstant(p.open_time_constant),
 	mCloseTimeConstant(p.close_time_constant),
@@ -241,6 +243,28 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 	mDragHandleThickness(p.drag_handle_thickness),
 	mDragHandleShift(p.drag_handle_shift)
 {
+	// <FS:Zi> Set up settings control to save sizes if not already present
+	if(mSaveSizes)
+	{
+		std::string res=std::string("layout_size_")+getName();
+		LLStringUtil::replaceChar(res,' ','_');
+		mSizeControlName=res;
+		LLControlGroup* controlGroup=LLUI::sSettingGroups["config"];
+		if(!controlGroup->controlExists(mSizeControlName))
+		{
+			llwarns << "declaring control " << mSizeControlName << llendl;
+			controlGroup->declareLLSD(
+				mSizeControlName,
+				LLSD(),
+				llformat("Fractional size for layout panel %s", getName().c_str())
+				); //<FS:TM> 3.6.4 check this, persist thing
+		}
+		else
+		{
+			mSavedSizes=LLControlGroup::getInstance("Global")->getLLSD(mSizeControlName);
+		}
+	}
+	// </FS:Zi>
 }
 
 LLLayoutStack::~LLLayoutStack()
@@ -304,12 +328,21 @@ void LLLayoutStack::removeChild(LLView* view)
 	if (embedded_panelp)
 	{
 		mPanels.erase(std::find(mPanels.begin(), mPanels.end(), embedded_panelp));
-		delete embedded_panelp;
+		// delete embedded_panelp;	// <FS:Zi> Fix crash when removing layout panels from a stack
 		updateFractionalSizes();
 		mNeedsLayout = true;
 	}
 
 	LLView::removeChild(view);
+
+	// <FS:Zi> Fix crash when removing layout panels from a stack
+	if (embedded_panelp)
+	{
+		// only delete the panel after it was removed from LLView to prevent
+		// LLView::removeChild() to run into an already deleted pointer
+		delete embedded_panelp;
+	}
+	// </FS:Zi>
 }
 
 BOOL LLLayoutStack::postBuild()
@@ -323,6 +356,26 @@ bool LLLayoutStack::addChild(LLView* child, S32 tab_group)
 	LLLayoutPanel* panelp = dynamic_cast<LLLayoutPanel*>(child);
 	if (panelp)
 	{
+		// <FS:Zi> Restore previously saved sizes
+		if(mSaveSizes && mSavedSizes.size()!=0)
+		{
+			S32 width=panelp->getRect().getWidth();
+			S32 height=panelp->getRect().getHeight();
+
+			S32 dim=mSavedSizes[getChildCount()];
+
+			if(mOrientation==LLLayoutStack::HORIZONTAL)
+			{
+				width=dim;
+			}
+			else
+			{
+				height=dim;
+			}
+			panelp->reshape(width,height,TRUE);
+		}
+		// </FS:Zi>
+
 		panelp->setOrientation(mOrientation);
 		mPanels.push_back(panelp);
 		createResizeBar(panelp);
@@ -420,6 +473,7 @@ void LLLayoutStack::updateLayout()
 
 	F32 cur_pos = (mOrientation == HORIZONTAL) ? 0.f : (F32)getRect().getHeight();
 
+	S32 index=0;
 	BOOST_FOREACH(LLLayoutPanel* panelp, mPanels)
 	{
 		F32 panel_dim = llmax(panelp->getExpandedMinDim(), panelp->mTargetDim);
@@ -495,7 +549,22 @@ void LLLayoutStack::updateLayout()
 		panelp->setShape(panel_rect);
 		panelp->setIgnoreReshape(false);
 		panelp->mResizeBar->setShape(resize_bar_rect);
+
+		// <FS:Zi> Record new size for this panel
+		if(mSaveSizes)
+		{
+			mSavedSizes[index]=panelp->mTargetDim;
+			index++;
+		}
+		// </FS:Zi>
 	}
+
+	// <FS:Zi> Save new sizes for this layout stack's panels
+	if(mSaveSizes)
+	{
+		LLControlGroup::getInstance("Global")->setLLSD(mSizeControlName,mSavedSizes);
+	}
+	// </FS:Zi>
 
 	updateResizeBarLimits();
 
@@ -569,7 +638,15 @@ void LLLayoutStack::createResizeBar(LLLayoutPanel* panelp)
 //static 
 void LLLayoutStack::updateClass()
 {
-	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+	// <FS:ND> Minimize calls to getStatic
+
+	typedef LLInstanceTracker<LLLayoutStack, LLLayoutStack*> tBase;
+	static tBase::StaticData &sData = tBase::getStatic();
+
+	for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
+	//	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+
+	// </FS:ND>
 	{
 		it->updateLayout();
 		it->mAnimatedThisFrame = false;

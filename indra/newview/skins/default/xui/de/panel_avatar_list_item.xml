@@ -22,11 +22,12 @@
 		[COUNT]J
 	</string>
 	<text name="avatar_name" value="(laden)"/>
-	<text name="last_interaction" value="0s"/>
+	<icon name="payment_info" tool_tip="Zahlungsinfo vorhanden"/>
 	<icon name="permission_edit_theirs_icon" tool_tip="Sie können die Objekte dieses Freunds bearbeiten"/>
-	<icon name="permission_edit_mine_icon" tool_tip="Dieser Freund kann Ihre Objekte bearbeiten, löschen und an sich nehmen"/>
-	<icon name="permission_map_icon" tool_tip="Dieser Freund kann Sie auf der Karte finden"/>
-	<icon name="permission_online_icon" tool_tip="Dieser Freund kann sehen, wenn Sie online sind"/>
+	<icon name="permission_edit_mine_btn" tool_tip="Dieser Freund kann Ihre Objekte bearbeiten, löschen und an sich nehmen"/>
+	<icon name="permission_map_btn" tool_tip="Dieser Freund kann Sie auf der Karte finden"/>
+	<icon name="permission_online_btn" tool_tip="Dieser Freund kann sehen, wenn Sie online sind"/>
+	<slider name="volume_slider" tool_tip="Voice-Lautstärke"/>
 	<button name="info_btn" tool_tip="Mehr Infos"/>
 	<button name="profile_btn" tool_tip="Profil anzeigen"/>
 </panel>

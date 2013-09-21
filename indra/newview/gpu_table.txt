@@ -21,12 +21,12 @@
 //	 <recognizer name>	<regular expression>	<class>		<supported>	<stats based> <expected OpenGL version>
 //
 // Class Numbers:
-//		0 - Defaults to low graphics settings.	No shaders on by default
-//		1 - Defaults to mid graphics settings.	Basic shaders on by default
-//		2 - Defaults to high graphics settings.	 Atmospherics on by default.
-//		3 - Same as 2, but with lighting and shadows enabled.
-//		4 - Same as 3, but with ambient occlusion enabled.
-//		5 - Same as 4, but with shadows set to "Sun/Moon+Projectors."
+//		0 - Defaults to low graphics settings.			No shaders on by default
+//		1 - Defaults to low-mid graphics settings.		Basic shaders on by default
+//		2 - Defaults to mid graphics settings.			Atmospherics on by default
+//		3 - Defaults to mid-high graphics settings.		Advanced Lighting Model on by default
+//		4 - Defaults to high graphics settings.			Ambient Occlusion on by default
+//		5 - Defaults to high-ultra graphics settings.	Shadows set to "Sun/Moon+Projectors."
 //
 // Supported Number:
 //		0 - We claim to not support this card.
@@ -74,26 +74,6 @@ ATI M56									.*ATI.*M56.*										1	1	0	0
 ATI M71									.*ATI.*M71.*										1	1	0	0
 ATI M72									.*ATI.*M72.*										1	1	0	0
 ATI M76									.*ATI.*M76.*										3	1	0	0
-ATI Radeon HD 6300M						.*ATI.*AMD Radeon.* (HD|HD )63..M					2	1	1	4.2
-ATI Radeon HD 6400M						.*ATI.*AMD Radeon.* (HD|HD )64..M					2	1	1	4.2
-ATI Radeon HD 6500M						.*ATI.*AMD Radeon.* (HD|HD )65..M					2	1	1	4.2
-ATI Radeon HD 6600M						.*ATI.*AMD Radeon.* (HD 6|6)6..M					3	1	1	4.2
-ATI Radeon HD 6700M						.*ATI.*AMD Radeon.* (HD|HD )67..M					3	1	1	4.2
-ATI Radeon HD 6800M						.*ATI.*AMD Radeon.* (HD|HD )68..M					3	1	1	4.2
-ATI Radeon HD 6300G						.*ATI.*AMD Radeon.* (HD|HD )63..G					2	1	1	4.2
-ATI Radeon HD 6400G						.*ATI.*AMD Radeon.* (HD|HD )64..G					2	1	1	4.2
-ATI Radeon HD 6500G						.*ATI.*AMD Radeon.* (HD|HD )65..G					2	1	1	4.2
-ATI Radeon HD 6600G						.*ATI.*AMD Radeon.* (HD|HD )66..G					3	1	1	4.2
-ATI Radeon HD 7100						.*ATI.*(Radeon|ASUS).* (HD|HD )71.*					2	1	0	0
-ATI Radeon HD 7200						.*ATI.*(Radeon|ASUS).* (HD|HD )72.*					2	1	0	4.2
-ATI Radeon HD 7300						.*ATI.*(Radeon|ASUS).* (HD|HD )73.*					2	1	0	4.2
-ATI Radeon HD 7400						.*ATI.*(Radeon|ASUS).* (HD|HD )74.*					2	1	0	4.2
-ATI Radeon HD 7500						.*ATI.*(Radeon|ASUS).* (HD|HD )75.*					3	1	1	4.2
-ATI Radeon HD 7600						.*ATI.*(Radeon|ASUS).* (HD|HD )76.*					3	1	0	4.2
-ATI Radeon HD 7700						.*ATI.*(Radeon|ASUS).* (HD|HD )77.*					4	1	1	4.2
-ATI Radeon HD 7800						.*ATI.*(Radeon|ASUS).* (HD|HD )78.*					5	1	1	4.2
-ATI Radeon HD 7900						.*ATI.*(Radeon|ASUS).* (HD|HD )79.*					5	1	1	4.2
-ATI Radeon HD 7000 Series				.*ATI.*(Radeon|ASUS).* (HD|HD )7000 Series.*		3	1	1	4.2
 ATI Mobility Radeon 4100				.*ATI.*Mobility.* 41..								1	1	1	3.3
 ATI Mobility Radeon 5000				.*ATI.*Mobility.* 50..								1	1	1	4.2
 ATI Mobility Radeon 7xxx				.*ATI.*Mobility.*Radeon 7.*							0	1	1	1.3
@@ -128,15 +108,30 @@ ATI Mobility Radeon HD 5400				.*ATI.*Mobility.*HD 54.*							2	1	1	4.2
 ATI Mobility Radeon HD 5500				.*ATI.*Mobility.*HD 55.*							3	1	0	4.2
 ATI Mobility Radeon HD 5600				.*ATI.*Mobility.*HD 56.*							3	1	1	4.2
 ATI Mobility Radeon HD 5700				.*ATI.*Mobility.*HD 57.*							3	1	1	4.1
-ATI Mobility Radeon HD 6200				.*ATI.*Mobility.*HD 62.*							3	1	0	0
-ATI Mobility Radeon HD 6300				.*ATI.*Mobility.*HD 63.*							3	1	1	4.2
-ATI Mobility Radeon HD 6400M			.*ATI.*Mobility.*HD 64.*							3	1	0	0
-ATI Mobility Radeon HD 6500M			.*ATI.*Mobility.*HD 65.*							5	1	1	4.2
-ATI Mobility Radeon HD 6600M			.*ATI.*Mobility.*HD 66.*							5	1	0	0
-ATI Mobility Radeon HD 6700M			.*ATI.*Mobility.*HD 67.*							5	1	0	0
-ATI Mobility Radeon HD 6800M			.*ATI.*Mobility.*HD 68.*							5	1	0	0
-ATI Mobility Radeon HD 6900M			.*ATI.*Mobility.*HD 69.*							5	1	0	0
-ATI Mobility Radeon Graphics			.*ATI Mobility Radeon Graphics.*					1	1	0	4
+ATI Radeon HD 6200 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )62..[DGM].*				3	1	0	4.2
+ATI Radeon HD 6300 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )63..[DGM].*				3	1	1	4.2
+ATI Radeon HD 6400 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )64..[DGM].*				3	1	0	4.2
+ATI Radeon HD 6500 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )65..[DGM].*				4	1	1	4.2
+ATI Radeon HD 6600 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )66..[DGM].*				4	1	0	4.2
+ATI Radeon HD 6700 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )67..[DGM].*				4	1	0	4.2
+ATI Radeon HD 6800 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )68..[DGM].*				4	1	0	4.2
+ATI Radeon HD 6900 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )69..[DGM].*				4	1	0	4.2
+ATI Radeon HD 7200 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )72..[DGM].*				3	1	0	4.2
+ATI Radeon HD 7300 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )73..[DGM].*				3	1	0	4.2
+ATI Radeon HD 7400 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )74..[DGM].*				3	1	0	4.2
+ATI Radeon HD 7500 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )75..[DGM].*				4	1	0	4.2
+ATI Radeon HD 7600 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )76..[DGM].*				4	1	0	4.2
+ATI Radeon HD 7700 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )77..[DGM].*				4	1	0	4.2
+ATI Radeon HD 7800 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )78..[DGM].*				4	1	0	4.2
+ATI Radeon HD 7900 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )79..[DGM].*				4	1	0	4.2
+ATI Radeon HD 8200 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )82..[DGM].*				3	1	0	4.2
+ATI Radeon HD 8300 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )83..[DGM].*				3	1	0	4.2
+ATI Radeon HD 8400 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )84..[DGM].*				4	1	0	4.2
+ATI Radeon HD 8500 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )85..[DGM].*				4	1	0	4.2
+ATI Radeon HD 8600 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )86..[DGM].*				4	1	0	4.2
+ATI Radeon HD 8700 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )87..[DGM].*				4	1	0	4.2
+ATI Radeon HD 8800 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )88..[DGM].*				4	1	0	4.2
+ATI Radeon HD 8900 D\G\M				.*ATI.*AMD Radeon.* (HD|HD )89..[DGM].*				4	1	0	4.2
 ATI Radeon HD 2300						.*ATI.*Radeon.* (HD|HD )23..						0	1	1	3.3
 ATI Radeon HD 2400						.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)24..				1	1	1	4
 ATI Radeon HD 2600						.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)26..				2	1	1	4
@@ -173,11 +168,29 @@ ATI Radeon HD 6600						.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)66..				3	1	1	4.2
 ATI Radeon HD 6700						.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)67..				3	1	1	4.2
 ATI Radeon HD 6800						.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)68..				4	1	1	4.2
 ATI Radeon HD 6900						.*ATI.*(Radeon|ASUS).* (HD|HD |EAH)69..				5	1	1	4.2
+ATI Radeon HD 7100						.*ATI.*(Radeon|ASUS).* (HD|HD )71.*					2	1	0	0
+ATI Radeon HD 7200						.*ATI.*(Radeon|ASUS).* (HD|HD )72.*					2	1	0	4.2
+ATI Radeon HD 7300						.*ATI.*(Radeon|ASUS).* (HD|HD )73.*					2	1	0	4.2
+ATI Radeon HD 7400						.*ATI.*(Radeon|ASUS).* (HD|HD )74.*					2	1	0	4.2
+ATI Radeon HD 7500						.*ATI.*(Radeon|ASUS).* (HD|HD )75.*					3	1	1	4.2
+ATI Radeon HD 7600						.*ATI.*(Radeon|ASUS).* (HD|HD )76.*					3	1	0	4.2
+ATI Radeon HD 7700						.*ATI.*(Radeon|ASUS).* (HD|HD )77.*					4	1	1	4.2
+ATI Radeon HD 7800						.*ATI.*(Radeon|ASUS).* (HD|HD )78.*					5	1	1	4.2
+ATI Radeon HD 7900						.*ATI.*(Radeon|ASUS).* (HD|HD )79.*					5	1	1	4.2
+ATI Radeon HD 7000 Series				.*ATI.*(Radeon|ASUS).* (HD|HD )7000 Series.*		3	1	1	4.2
+ATI Radeon HD 8300 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD )83.*					2	1	0	4.2
+ATI Radeon HD 8400 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD )84.*					2	1	0	4.2
+ATI Radeon HD 8500 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD )85.*					3	1	1	4.2
+ATI Radeon HD 8600 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD )86.*					3	1	0	4.2
+ATI Radeon HD 8700 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD )87.*					4	1	1	4.2
+ATI Radeon HD 8800 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD )88.*					5	1	1	4.2
+ATI Radeon HD 8900 (OEM)				.*ATI.*(Radeon|ASUS).* (HD|HD )89.*					5	1	1	4.2
 ATI Radeon OpenGL						.*ATI.*Radeon OpenGL.*								0	0	0	0
 ATI Radeon 2100							.*ATI.*Radeon 21..									0	1	1	2.1
 ATI Radeon 3000							.*ATI.*Radeon 30..									1	1	1	4
 ATI Radeon 3100							.*ATI.*Radeon 31..									0	1	1	3.3
 ATI Radeon 5xxx							.*ATI.*Radeon 5...									3	1	0	0
+ATI Radeon 6xxx							.*ATI.*Radeon 6...									0	1	0	0
 ATI Radeon 7xxx							.*ATI.*Radeon 7...									0	1	1	2
 ATI Radeon 8xxx							.*ATI.*Radeon 8...									0	1	0	0
 ATI Radeon 9000							.*ATI.*Radeon 90..									0	1	1	1.3
@@ -206,6 +219,7 @@ ATI Radeon X1200						.*ATI.*Radeon ?X12.*								2	1	0	2.1
 ATI Radeon X1400						.*ATI.*Radeon ?X14.*								2	1	0	2.1
 ATI Radeon X2300						.*ATI.*Radeon ?X23.*								2	1	0	2.1
 ATI Radeon Xpress						.*ATI.*Radeon Xpress.*								0	1	1	2.1
+ATI Radeon								.*ATI.*Radeon$										3	1	0	0
 ATI Rage 128							.*ATI.*Rage 128.*									0	1	0	0
 ATI R300 (9700)							.*R300.*											0	1	1	2.1
 ATI R350 (9800)							.*R350.*											1	1	0	0
@@ -282,9 +296,17 @@ Intel Brookdale							.*Intel.*Brookdale.*								0	0	1	1.3
 Intel Cantiga							.*Intel.*Cantiga.*									0	0	1	2
 Intel Eaglelake							.*Intel.*Eaglelake.*								1	1	1	2
 Intel Graphics Media HD					.*Intel.*Graphics Media.*HD.*						1	1	1	2.1
-Intel HD Graphics 2000					.*Intel.*HD Graphics 2.*							2	1	0	4
+Intel HD Graphics 2500					.*Intel.*HD Graphics 25.*							2	1	0	4
+Intel HD Graphics 2000					.*Intel.*HD Graphics 2.*							2	1	0	3.1
 Intel HD Graphics 3000					.*Intel.*HD Graphics 3.*							3	1	1	3.1
+Intel HD Graphics 4200					.*Intel.*HD Graphics 42.*							3	1	0	4
+Intel HD Graphics 4400					.*Intel.*HD Graphics 44.*							3	1	0	4
+Intel HD Graphics 4600					.*Intel.*HD Graphics 46.*							3	1	0	4
 Intel HD Graphics 4000					.*Intel.*HD Graphics 4.*							3	1	1	4
+Intel Intel Iris Pro Graphics 5200		.*Intel.*Iris Pro Graphics 52.*						4	1	0	4
+Intel Intel Iris Graphics 5100			.*Intel.*Iris Graphics 51.*							4	1	0	4
+Intel HD Graphics 5000					.*Intel.*HD Graphics 5.*							4	1	0	4
+Intel HD2500							.*Intel.*HD2500.*									2	1	0	0
 Intel HD Graphics						.*Intel.*HD Graphics.*								2	1	1	4
 Intel Mobile 4 Series					.*Intel.*Mobile.* 4 Series.*						0	1	1	2.1
 Intel 4 Series Internal					.*Intel.* 4 Series Internal.*						1	1	1	2.1
@@ -349,6 +371,14 @@ NVIDIA GTX 660M							.*NVIDIA .*GTX 66[0-9]M.*							5	1	0	4.3
 NVIDIA GTX 670M							.*NVIDIA .*GTX 67[0-9]M.*							5	1	1	4.2
 NVIDIA GTX 680M							.*NVIDIA .*GTX 68[0-9]M.*							5	1	0	4.2
 NVIDIA GTX 690M							.*NVIDIA .*GTX 69[0-9]M.*							5	1	0	0
+NVIDIA 710M								.*NVIDIA.* 71[0-9]M.*								3	1	0	0
+NVIDIA GT 720M							.*NVIDIA .*GT *72[0-9]M.*							3	1	0	0
+NVIDIA GT 730M							.*NVIDIA .*GT *73[0-9]M.*							3	1	0	0
+NVIDIA GT 740M							.*NVIDIA .*GT *74[0-9]M.*							3	1	0	0
+NVIDIA GT 750M							.*NVIDIA .*GT *75[0-9]M.*							3	1	0	0
+NVIDIA GTX 760M							.*NVIDIA .*GTX *76[0-9]M.*							5	1	0	0
+NVIDIA GTX 770M							.*NVIDIA .*GTX *77[0-9]M.*							5	1	0	0
+NVIDIA GTX 780M							.*NVIDIA .*GTX *78[0-9]M.*							5	1	0	0
 NVIDIA G100								.*NVIDIA .*G10.*									3	1	1	4.2
 NVIDIA GT 120							.*NVIDIA .*GT 12.*									2	1	0	3.3
 NVIDIA GT 130							.*NVIDIA .*GT 13.*									2	1	0	3.3
@@ -400,6 +430,15 @@ NVIDIA GTX 660							.*NVIDIA .*GTX 66.*									5	1	0	4.3
 NVIDIA GTX 670							.*NVIDIA .*GTX 67.*									5	1	1	4.2
 NVIDIA GTX 680							.*NVIDIA .*GTX 68.*									5	1	1	4.2
 NVIDIA GTX 690							.*NVIDIA .*GTX 69.*									5	1	1	4.2
+NVIDIA GT 710							.*NVIDIA .*GT *71.*									3	1	0	0
+NVIDIA GT 720							.*NVIDIA .*GT *72.*									3	1	0	0
+NVIDIA GT 730							.*NVIDIA .*GT *73.*									3	1	0	0
+NVIDIA GT 740							.*NVIDIA .*GT *74.*									3	1	0	0
+NVIDIA GTX 750							.*NVIDIA .*GTX *75.*								3	1	0	0
+NVIDIA GTX 760							.*NVIDIA .*GTX *76.*								5	1	0	0
+NVIDIA GTX 770							.*NVIDIA .*GTX *77.*								5	1	0	0
+NVIDIA GTX 780							.*NVIDIA .*GTX *78.*								5	1	0	0
+NVIDIA GTX TITAN						.*NVIDIA .*GTX *TITAN.*								5	1	0	0
 NVIDIA C51								.*NVIDIA .*C51.*									0	1	1	2
 NVIDIA G72								.*NVIDIA .*G72.*									1	1	0	0
 NVIDIA G73								.*NVIDIA .*G73.*									1	1	0	0
@@ -561,3 +600,5 @@ Apple Generic							Apple.*Generic.*									0	0	0	0
 Apple Software Renderer					Apple.*Software Renderer.*							0	0	0	0
 Humper									Humper.*											0	1	1	2.1
 PowerVR SGX545							.*PowerVR SGX.*										1	1	1	3
+//Below group added do to a mac update in 10.8.2
+NVIDIA GT 650							.*NVIDIA .*D14P2.*						3	1	0	0

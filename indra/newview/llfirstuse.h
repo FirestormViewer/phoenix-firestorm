@@ -97,6 +97,9 @@ public:
 	static void receiveLindens(bool enable = true);
 	static void setDisplayName(bool enable = true);
 	static void useSandbox();
+	static void usePhoenixContactSet();
+	static void usePhoenixFriendsNonFriend();
+	static void usePhoenixContactSetRename();
 	
 protected:
 	static void firstUseNotification(const std::string& control_var, bool enable, const std::string& notification_name, LLSD args = LLSD(), LLSD payload = LLSD());

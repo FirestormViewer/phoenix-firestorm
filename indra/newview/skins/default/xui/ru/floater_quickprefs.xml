@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs" title="Быстрые настройки" width="280">
+<panel name="quickprefs" width="280">
+        <text name="Draw Distance" width="105" tool_tip="Устанавливает расстояние, в котором будут видны объекты.">
+            Расст. прогрузки:
+        </text>
+        <slider left_delta="101" name="DrawDistance"/>		
+        <text name="Maximum bandwidth" width="105" tool_tip="Устанавливает максимальную пропускную способность сети использования в Kbps (килобит в секунду).">
+            Max Bandwidth:
+        </text>
+        <slider left_delta="108" name="max_bandwidth"/>		
+        <text name="Particles" width="105" tool_tip="Максимальное число частиц, которое будет отображаться.">
+            Макс. частиц:
+        </text>
+        <slider left_delta="101" name="RenderMaxPartCount"/>
+		<text name="Avatar Physics LOD" width="105" tool_tip="Устанавливает уровень детализации физики  аватара.">
+            Физика-NOD
+        </text>
+        <slider left_delta="101" name="RenderAvatarPhysicsLOD"/>		
+        <text name="LOD Factor" width="105"  tool_tip="Устанавливает уровень детализации примитивов (множитель для текущей области экрана, для которого уровень детализации рассчитывается) [по умолчанию значение меняется в зависимости от системы]">
+            LOD Фактор:
+        </text>
+        <slider left_delta="90" name="RenderVolumeLODFactor"/>		
+        <text name="Max Avatars" width="105" tool_tip="Кол-во аватаров.Меньшее значение значительно повышает скорость на оживленных местах.[По умолчанию 12]">
+            Макс аватаров:
+        </text>
+        <slider left_delta="87" name="RenderAvatarMaxVisible"/>		
+        <text name="Height Offset" width="105" tool_tip="Позволяет изменять расстояние по вертикали от аватара, не меняя самой фигуры.">
+            Выс.вмещения:
+        </text>		
+		<text name="name_tags_textbox">
+            Имена аватаров:
+        </text>
+		<radio_group left="45" name="Name_Tag_Preference">
+			<radio_item label="Вкл." name="radio"/>
+			<radio_item label="Выкл." name="radio2"/>
+        </radio_group>
+        <text name="WL Sky" width="67" tool_tip="Настройки неба">
+            Небо:
+        </text>
+        <combo_box left_delta="77" name="WLPresetsCombo"/>
+        <text name="WL Water" width="67" tool_tip="Настройки воды.">
+            Вода:
+        </text>
+        <combo_box left_delta="77" name="WaterPresetsCombo"/>
+</panel>
+</floater>

@@ -36,12 +36,18 @@
 #include "llviewerregion.h"
 #include "llworld.h"
 #include "llinstantmessage.h" //SYSTEM_FROM
+#include "fskeywords.h"
+#include "lggcontactsets.h"
+#include "rlvhandler.h"
+
+#include "growlmanager.h" // <FS:LO> Growl include
+
 
 // LLViewerChat
 LLViewerChat::font_change_signal_t LLViewerChat::sChatFontChangedSignal;
 
 //static 
-void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
+void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_local)
 {
 	if(chat.mMuted)
 	{
@@ -61,13 +67,26 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
 				}
 				else
 				{
-					if(gAgentID == chat.mFromID)
-					{
-						r_color = LLUIColorTable::instance().getColor("UserChatColor");
-					}
-					else
-					{
+					// <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
+					// Handle "UserChatColor" through the colorizer
+					//if(gAgentID == chat.mFromID)
+					//{
+					//	r_color = LLUIColorTable::instance().getColor("UserChatColor");
+					//}
+					//else
+					//{
 						r_color = LLUIColorTable::instance().getColor("AgentChatColor");
+					//}
+					if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
+						r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_IM);
+					else
+						r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_CHAT);
+					// </FS:CR>
+
+					//color based on contact sets prefs
+					if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID, LGG_CS_CHAT))
+					{
+						r_color = LGGContactSets::getInstance()->getFriendColor(chat.mFromID);
 					}
 				}
 				break;
@@ -84,6 +103,23 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
 				{
 					r_color = LLUIColorTable::instance().getColor("DirectChatColor");
 				}
+				else if ( chat.mChatType == CHAT_TYPE_IM )
+				{
+					r_color = LLUIColorTable::instance().getColor("ObjectIMColor");
+					// <FS:LO> FIRE-5889: Object IM's Not Triggering Growl Notifications
+					std::string msg = chat.mFromName;
+					std::string prefix = chat.mText.substr(0, 4);
+					if(prefix == "/me " || prefix == "/me'")
+					{
+						msg = msg + chat.mText.substr(3);
+					}
+					else
+					{
+						msg = msg + ": " + chat.mText;
+					}
+					gGrowlManager->notify(chat.mFromName, msg, GROWL_IM_MESSAGE_TYPE);
+					// </FS:LO>
+				}
 				else
 				{
 					r_color = LLUIColorTable::instance().getColor("ObjectChatColor");
@@ -93,11 +129,26 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color)
 				r_color.setToWhite();
 		}
 		
+		//Keyword alerts -KC
+		if ((gAgentID != chat.mFromID || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
+		{
+			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
+			if (sFSKeywordChangeColor)
+			{
+				static LLCachedControl<LLColor4> sFSKeywordColor(gSavedPerAccountSettings, "FSKeywordColor");
+				r_color = sFSKeywordColor;
+			}
+		}
+		
 		if (!chat.mPosAgent.isExactlyZero())
 		{
 			LLVector3 pos_agent = gAgent.getPositionAgent();
 			F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
-			F32 dist_near_chat = gAgent.getNearChatRadius();
+// <FS:CR> Aurora Sim
+			//F32 dist_near_chat = gAgent.getNearChatRadius();
+			//if (!avatarp || dist_vec_squared(avatarp->getPositionAgent(), gAgent.getPositionAgent()) > say_distance_squared)
+			F32 dist_near_chat = LLWorld::getInstance()->getSayDistance();
+// </FS:CR> Aurora Sim
 			if (distance_squared > dist_near_chat * dist_near_chat)
 			{
 				// diminish far-off chat
@@ -154,6 +205,10 @@ void LLViewerChat::getChatColor(const LLChat& chat, std::string& r_color_name, F
 				{
 					r_color_name = "DirectChatColor";
 				}
+				else if ( chat.mChatType == CHAT_TYPE_IM )
+				{
+					r_color_name = "ObjectIMColor";
+				}
 				else
 				{
 					r_color_name = "ObjectChatColor";
@@ -167,7 +222,10 @@ void LLViewerChat::getChatColor(const LLChat& chat, std::string& r_color_name, F
 		{
 			LLVector3 pos_agent = gAgent.getPositionAgent();
 			F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
-			F32 dist_near_chat = gAgent.getNearChatRadius();
+// <FS:CR> Aurora som
+			//F32 dist_near_chat = gAgent.getNearChatRadius();
+			F32 dist_near_chat = LLWorld::getInstance()->getSayDistance();
+// </FS:CR> Aurora sim
 			if (distance_squared > dist_near_chat * dist_near_chat)
 			{
 				// diminish far-off chat
@@ -199,6 +257,9 @@ LLFontGL* LLViewerChat::getChatFont()
 			break;
 		case 2:
 			fontp = LLFontGL::getFontSansSerifBig();
+			break;
+		case 3:
+			fontp = LLFontGL::getFontSansSerifHuge();
 			break;
 	}
 	
@@ -239,6 +300,11 @@ std::string LLViewerChat::getSenderSLURL(const LLChat& chat, const LLSD& args)
 
 	case CHAT_SOURCE_OBJECT:
 		return getObjectImSLURL(chat, args);
+
+	// <FS:Ansariel> Stop spamming the log when processing system messages
+	case CHAT_SOURCE_SYSTEM:
+		return LLStringUtil::null;
+	// </FS:Ansariel>
 
 	default:
 		llwarns << "Getting SLURL for an unsupported sender type: " << chat.mSourceType << llendl;

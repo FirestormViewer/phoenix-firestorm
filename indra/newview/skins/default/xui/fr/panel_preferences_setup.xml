@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Configuration" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Network:">
 		Réseau :
 	</text>
@@ -9,14 +12,18 @@
 	<text name="text_box2">
 		kbps
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Port de connexion" name="connection_port_enabled"/>
 	<spinner label="Numéro :" name="connection_port"/>
 	<text name="Web:">
 		Web :
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="Utiliser mon navigateur (IE, Firefox, Safari)" name="external" tool_tip="Utiliser le navigateur web système par défaut pour l&apos;aide, les liens etc. Non recommandé en mode plein écran." value="true"/>
-		<radio_item label="Utiliser le navigateur intégré" name="internal" tool_tip="Utilisez le navigateur intégré pour obtenir de l&apos;aide, ouvrir des liens, etc. Ce navigateur s&apos;ouvre dans [APP_NAME]." value=""/>
+		<radio_item label="Utiliser mon navigateur (IE, Firefox, Safari)" name="external" tool_tip="Utiliser le navigateur web système par défaut pour l&apos;aide, les liens etc. Non recommandé en mode plein écran."/>
+		<radio_item label="Utiliser le navigateur intégré" name="internal" tool_tip="Utilisez le navigateur intégré pour obtenir de l&apos;aide, ouvrir des liens, etc. Ce navigateur s&apos;ouvre dans [APP_NAME]."/>
 	</radio_group>
 	<check_box initial_value="true" label="Activer les plugins" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Accepter les cookies" name="cookies_enabled"/>
@@ -34,4 +41,7 @@
 		Paramètres de proxy :
 	</text>
 	<button label="Définir" label_selected="Parcourir" name="set_proxy"/>
+
+		</layout_panel>
+	</layout_stack>
 </panel>

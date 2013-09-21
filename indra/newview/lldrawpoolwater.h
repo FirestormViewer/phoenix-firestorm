@@ -85,6 +85,14 @@ public:
 
 protected:
 	void renderOpaqueLegacyWater();
+
+	// <FS:Zi> Render speedup for water parameters
+	void onRenderTransparentWaterChanged();
+	void onRenderWaterMipNormalChanged();
+
+	BOOL mRenderTransparentWater;
+	BOOL mRenderWaterMipNormal;
+	// </FS:Zi>
 };
 
 void cgErrorCallback();

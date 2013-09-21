@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<script_library name="aa">
+	<keywords>
+		<integer_constant name="ENABLE_GRAVITY" desc="enable_gravity" />
+		<integer_constant name="GRAVITY_FORCE_X" desc="gravity_force_x" />
+		<integer_constant name="GRAVITY_FORCE_Y" desc="gravity_force_y" />
+		<integer_constant name="GRAVITY_FORCE_Z" desc="gravity_force_z" />
+		<integer_constant name="ADD_GRAVITY_POINT" desc="add_gravity_point" />
+		<integer_constant name="ADD_GRAVITY_FORCE" desc="add_gravity_force" />
+		<integer_constant name="START_TIME_REVERSAL_SAVING" desc="start_time_reversal_saving" />
+		<integer_constant name="STOP_TIME_REVERSAL_SAVING" desc="stop_time_reversal_saving" />
+		<integer_constant name="START_TIME_REVERSAL" desc="start_time_reversal" />
+		<integer_constant name="STOP_TIME_REVERSAL" desc="stop_time_reversal" />
+		<integer_constant name="WL_OK" desc="Value -1" />
+		<integer_constant name="WL_ERROR" desc="Value -2" />
+		<integer_constant name="WL_ERROR_NO_SCENE_SET" desc="Value -3" />
+		<integer_constant name="WL_ERROR_SCENE_MUST_BE_STATIC" desc="Value -4" />
+		<integer_constant name="WL_ERROR_SCENE_MUST_NOT_BE_STATIC" desc="Value -5" />
+		<integer_constant name="WL_ERROR_BAD_SETTING" desc="Value -6" />
+		<integer_constant name="WL_ERROR_NO_PRESET_FOUND" desc="Value -7" />
+		<integer_constant name="BOT_FOLLOW_FLAG_NONE" desc="value 0" />
+		<integer_constant name="BOT_FOLLOW_FLAG_INDEFINITELY" desc="value 1" />
+		<integer_constant name="BOT_TAG_FIND_ALL" desc="value AllBots" />
+		<integer_constant name="BOT_FOLLOW_WALK" desc="value 0" />
+		<integer_constant name="BOT_FOLLOW_RUN" desc="value 1" />
+		<integer_constant name="BOT_FOLLOW_FLY" desc="value 2" />
+		<integer_constant name="BOT_FOLLOW_TELEPORT" desc="value 3" />
+		<integer_constant name="BOT_FOLLOW_WAIT" desc="value 4" />
+		<integer_constant name="BOT_FOLLOW_TRIGGER_HERE_EVENT" desc="value 1" />
+		<integer_constant name="BOT_FOLLOW_FLAG_FORCEDIRECTPATH" desc="value 4" />
+	</keywords>
+	<functions>
+		<function name="aaSetCloudDensity" sleep="0.0" energy="10.0"
+			desc="aaSetCloudDensity(float density);Sets region windlight cloud density" />
+		<function name="aaUpdateDatabase" sleep="0.0" energy="10.0"
+			desc="aaUpdateDatabase(key field, xmlData, string token);Update database" />
+		<function name="aaQueryDatabase" sleep="0.0" energy="10.0"
+			desc="list aaQueryDatabase(key token, string password);Returns a list with first value is the token, the second the Key, and the third the value" />
+		<function name="aaSerializeXML" sleep="0.0" energy="10.0"
+			desc="string aaSerializeXML(keys, values);Returns xml formatted string of the keys with their values" />
+		<function name="aaDeserializeXMLKeys" sleep="0.0" energy="10.0"
+			desc="list aaDeserializeXMLKeys(string xml);Returns a list of keys from XML data" />
+		<function name="aaDeserializeXMLValues" sleep="0.0" energy="10.0"
+			desc="list aaDeserializeXMLValues(string xml);Returns a list of values from XML data" />
+		<function name="aaSetConeOfSilence" desc="aaSetConeOfSilence(float radius);Sets cone of silence radius" />
+		<function name="aaJoinCombatTeam" desc="aaJoinCombatTeam(key avatar, string team);Adds the specified avatar to a given combat team" />
+		<function name="aaLeaveCombat" sleep="0.0" energy="10.0"
+			desc="aaLeaveCombat(key avatar);Removed the specified avatar from combat" />
+		<function name="aaJoinCombat" sleep="0.0" energy="10.0"
+			desc="aaJoinCombat(key avatar);Adds the specified avatar to combat" />
+		<function name="aaGetHealth" sleep="0.0" energy="10.0"
+			desc="float aaGetHealth(key avatar);Returns an avatar&apos;s health value" />
+		<function name="aaGetTeam" sleep="0.0" energy="10.0"
+			desc="string aaGetTeam(key avatar);Returns a given avatar&apos;s combat team" />
+		<function name="aaGetTeamMembers" sleep="0.0" energy="10.0"
+			desc="list aaGetTeamMembers(string team);Returns a list of avatar&apos; on a given team" />
+		<function name="aaGetLastOwner" sleep="0.0" energy="10.0"
+			desc="key aaGetLastOwner(key object);Returns a given object&apos;s last owner;key aaGetLastOwner();Returns last owner of the object" />
+		<function name="aaSayDistance" sleep="0.0" energy="10.0"
+			desc="aaSayDistance(integer channel, float distance, string message);Make the object speak on a channel, but only to a specified distance" />
+		<function name="aaSayTo" sleep="0.0" energy="10.0"
+			desc="aaSayTo(key avatar, string msg);Send a direct im to a specified avatar;(Similar to llOwnerSay)" />
+		<function name="aaGetText" sleep="0.0" energy="10.0"
+			desc="string aaGetText();Returns the current primitive&apos;s hovertext" />
+		<function name="aaGetTextColor" sleep="0.0" energy="10.0"
+			desc="rotation aaGetTextColor();Returns the current primitive hovertext&apos;s color" />
+		<function name="aaRaiseError" sleep="0.0" energy="10.0"
+			desc="aaRaiseError(string message);Raise an exception" />
+		<function name="aaFreezeAvatar" sleep="0.0" energy="10.0"
+			desc="aaFreezeAvatar(key avatar);Freeze the specified avatar" />
+		<function name="aaThawAvatar" sleep="0.0" energy="10.0"
+			desc="aaThawAvatar(key avatar);Un-freeze the specified avatar" />
+		<function name="aaRequestCombatPermission" sleep="0.0" energy="10.0"
+			desc="aaRequestCombatPermission(key avatar);Request PERMISSION_COMBAT for specified avatar" />
+		<function name="aaGetWalkDisabled" sleep="0.0" energy="10.0"
+			desc="integer aaGetWalkDisabled(key avatar);Boolean return if walk is disabled for the specified avatar" />
+		<function name="aaSetWalkDisabled" sleep="0.0" energy="10.0"
+			desc="aaSetWalkDisabled(key avatar, bool value);Disable walk for selected avatar;Forces fly only" />
+		<function name="aaGetFlyDisabled" sleep="0.0" energy="10.0"
+			desc="integer aaGetFlyDisabled(key avatar);Boolean return if fly is disabled for the specified avatar" />
+		<function name="aaSetFlyDisabled" sleep="0.0" energy="10.0"
+			desc="aaSetFlyDisabled(key avatar, bool value);Disable fly for selected avatar" />
+		<function name="aaAvatarFullName2Key" sleep="0.0" energy="10.0"
+			desc="key aaAvatarFullName2Key(string fullname);Returns the key for the avatar name specified" />
+		<function name="aaSetEnv" sleep="0.0" energy="10.0" god-only="true"
+			desc="aaSetEnv(string name, list value);Set an enviroment variable" />
+		<function name="aaGetIsInfiniteRegion" sleep="0.0" energy="10.0"
+			desc="integer aaGetIsInfiniteRegion();Boolean return if current region is infinite" />
+		<function name="aaAllRegionInstanceSay" sleep="0.0" energy="10.0"
+			desc="aaAllRegionInstanceSay(integer channel, string message);Make object say over entire region" />
+		<function name="aaWindlightGetSceneIsStatic" sleep="0.0" energy="10.0"
+			desc="integer aaWindlightGetSceneIsStatic();Boolean return if Windlight scene is static" />
+		<function name="aaWindlightGetSceneDayCycleKeyFrameCount" sleep="0.0" energy="10.0"
+			desc="integer aaWindlightGetSceneDayCycleKeyFrameCount();Returns the scene day cycle keyframe count of the current region" />
+		<function name="aaWindlightGetDayCycle" sleep="0.0" energy="10.0"
+			desc="list aaWindlightGetDayCycle();Returns the Windlight day cycle" />
+		<function name="aaWindlightAddDayCycleFrame" sleep="0.0" energy="10.0"
+			desc="integer aaWindlightAddDayCycleFrame(integer day_cycle_frame);Add the specified day cycle frame" />
+		<function name="aaWindlightRemoveDayCycleFrame" sleep="0.0" energy="10.0"
+			desc="integer aaWindlightRemoveDayCycleFrame(integer day_cycle_frame);Remove the specified day cycle frame" />
+		<function name="aaWindlightGetScene" sleep="0.0" energy="10.0"
+			desc="list aaWindlightGetScene(list parameters);list aaWindlightGetScene(integer day_cycle_kf, list parameters);Returns a list of Windlight scene parameters" />
+		<function name="aaWindlightSetScene" sleep="0.0" energy="10.0"
+			desc="integer aaWindlightSetScene(list parameters);integer aaWindlightSetScene(integer day_cycle_index, list parameters);Boolean return success" />
+		<function name="botCreateBot" sleep="0.0" energy="10.0"
+			desc="string botCreateBot(string firstname, string lastname, key clone_appearance, vector pos);Creates a bot with the specified parameters" />
+		<function name="botRemoveBot" sleep="0.0" energy="10.0"
+			desc="botRemoveBot(key bot);Removes a specified bot" />
+		<function name="botGetWaitingTime" sleep="0.0" energy="10.0"
+			desc="vector botGetWaitingTime(integer wait_time);Make the bot wait" />
+		<function name="botPauseMovement" sleep="0.0" energy="10.0"
+			desc="botPauseMovement(key bot);Pause the specified bot" />
+		<function name="botResumeMovement" sleep="0.0" energy="10.0"
+			desc="botResumeMovement(key bot);Resume movement of the specified bot" />
+		<function name="botSetShouldFly"  sleep="0.0" energy="10.0"
+			desc="botSetShouldFly(key bot, bool fly);Enables bot fly mode" />
+		<function name="botSetMap" sleep="0.0" energy="10.0"
+			desc="botSetMap(key bot, list positions, list movement_type, integer flags);Sets a path for the specified bot to travel" />
+		<function name="botFollowAvatar" sleep="0.0" energy="10.0"
+			desc="botFollowAvatar(key bot, key avatar, float follow_dist, float end_follow_dist);Make the bot follow the specified avatar" />
+		<function name="botStopFollowAvatar" sleep="0.0" energy="10.0"
+			desc="botStopFollowAvatar(key bot);Make the bot stop following avatars" />
+		<function name="botSendChatMessage" sleep="0.0" energy="10.0"
+			desc="botSendChatMessage(key bot, string message, integer channel, integer say_type);Makes the bot speak" />
+		<function name="botSendIM" sleep="0.0" energy="10.0"
+			desc="botSendIM(key bot, key avatar, string message);Makes the bot send a message to the specified avatar" />
+		<function name="botTouchObject" sleep="0.0" energy="10.0"
+			desc="botTouchObject(key bot, key object);Makes the bot touch the specified object" />
+		<function name="botSitObject" sleep="0.0" energy="10.0"
+			desc="botSitObject(key bot, key object, vector offset);Makes the bot sit on an object" />
+		<function name="botStandUp" sleep="0.0" energy="10.0"
+			desc="botStandUp(key bot);Makes the specified bot stand up" />
+		<function name="botAddTag" sleep="0.0" energy="10.0"
+			desc="botAddTag(key bot, string tag);Add a tag to a specified bot" />
+		<function name="botGetBotsWithTag" sleep="0.0" energy="10.0"
+			desc="list botGetBotsWithTag(string tag);Returns a list of bots with the specified tag" />
+		<function name="botRemoveBotsWithTag" sleep="0.0" energy="10.0"
+			desc="botRemoveBotsWithTag(string tag);Removes bots with the specified tag" />
+		<function name="botSetSpeed" sleep="0.0" energy="10.0"
+			desc="botSetSpeed(key bot, float speed_modifier);Change the movement speed of a specified bot" />
+	</functions>
+</script_library>

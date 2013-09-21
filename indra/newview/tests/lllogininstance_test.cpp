@@ -149,10 +149,32 @@ void LLGridManager::setGridChoice(const std::string& grid_name)
 {
 }
 
-bool LLGridManager::isInProductionGrid()
+bool LLGridManager::isInSLMain()
 {
 	return false;
 }
+bool LLGridManager::isInSLBeta()
+{
+	return false;
+}
+
+// <FS:CR>
+bool LLGridManager::isInSecondlife()
+{
+	return false;
+}
+#ifdef OPENSIM
+bool LLGridManager::isInOpenSim()
+{
+	return false;
+}
+
+bool LLGridManager::isInAuroraSim()
+{
+	return false;
+}
+#endif // OPENSIM
+// </FS:CR>
 
 std::string LLGridManager::getSLURLBase(const std::string& grid_name)
 {

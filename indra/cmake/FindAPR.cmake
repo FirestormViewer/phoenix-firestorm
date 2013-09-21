@@ -11,7 +11,15 @@
 
 # APR first.
 
+# This version has been modified to search the OS X SDKs first. This file
+#  is included for both STANDALONE builds and OS X anything builds. We
+#  need to find the OS X SDK first, if it's present, to avoid conflicts
+#  between building on one release and pulling in a library that's
+#  incompatible with the target release. -- TS, 22 Nov 2011
+
 FIND_PATH(APR_INCLUDE_DIR apr.h
+/Developer/SDKs/MacOSX10.5.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.6.sdk/usr/include/apr-1
 /usr/local/include/apr-1
 /usr/local/include/apr-1.0
 /usr/include/apr-1
@@ -19,10 +27,23 @@ FIND_PATH(APR_INCLUDE_DIR apr.h
 )
 
 SET(APR_NAMES ${APR_NAMES} apr-1)
+# Gah, what a grody hack. We do this twice, the first time ignoring any system
+#  libraries to let the OS X SDK be found first, the second in case the first
+#  didn't turn up the libraries. The second search is not expected to be
+#  needed; it's a belt-and-suspenders check. -- TS, 22 Nov 2011
 FIND_LIBRARY(APR_LIBRARY
   NAMES ${APR_NAMES}
-  PATHS /usr/lib /usr/local/lib
+  PATHS /Developer/SDKs/MacOSX10.5.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.6.sdk/usr/lib
+        /usr/lib /usr/local/lib
+  NO_DEFAULT_PATH
   )
+IF (NOT APR_LIBRARY)
+  FIND_LIBRARY(APR_LIBRARY
+    NAMES ${APR_NAMES}
+    PATHS /usr/lib /usr/local/lib
+  )
+ENDIF (NOT APR_LIBRARY)
 
 IF (APR_LIBRARY AND APR_INCLUDE_DIR)
     SET(APR_LIBRARIES ${APR_LIBRARY})
@@ -54,6 +75,8 @@ MARK_AS_ADVANCED(
 # Next, APRUTIL.
 
 FIND_PATH(APRUTIL_INCLUDE_DIR apu.h
+/Developer/SDKs/MacOSX10.5.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.6.sdk/usr/include/apr-1
 /usr/local/include/apr-1
 /usr/local/include/apr-1.0
 /usr/include/apr-1
@@ -63,8 +86,17 @@ FIND_PATH(APRUTIL_INCLUDE_DIR apu.h
 SET(APRUTIL_NAMES ${APRUTIL_NAMES} aprutil-1)
 FIND_LIBRARY(APRUTIL_LIBRARY
   NAMES ${APRUTIL_NAMES}
-  PATHS /usr/lib /usr/local/lib
+  PATHS /Developer/SDKs/MacOSX10.5.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.6.sdk/usr/lib
+        /usr/lib /usr/local/lib
+  NO_DEFAULT_PATH
   )
+IF (NOT APRUTIL_LIBRARY)
+  FIND_LIBRARY(APRUTIL_LIBRARY
+    NAMES ${APRUTIL_NAMES}
+    PATHS /usr/lib /usr/local/lib
+  )
+ENDIF (NOT APRUTIL_LIBRARY)
 
 IF (APRUTIL_LIBRARY AND APRUTIL_INCLUDE_DIR)
     SET(APRUTIL_LIBRARIES ${APRUTIL_LIBRARY})

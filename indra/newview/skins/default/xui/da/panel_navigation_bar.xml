@@ -6,13 +6,13 @@
 		<button name="home_btn" tool_tip="Teleport til min hjemme lokation"/>
 		<location_input label="Lokation" name="location_combo"/>
 		<search_combo_box label="Søg" name="search_combo_box" tool_tip="Søg">
-			<combo_editor label="Søg [SECOND_LIFE]" name="search_combo_editor"/>
+			<combo_editor label="Søg [CURRENT_GRID]" name="search_combo_editor"/>
 		</search_combo_box>
 	</panel>
 	<favorites_bar name="favorite" tool_tip="Træk landemærker hertil for at få hurtig adgang til dine favoritsteder i Second Life!">
 		<label name="favorites_bar_label" tool_tip="Træk landemærker hertil for at få hurtig adgang til dine favoritsteder i Second Life!">
 			Favoritter
 		</label>
-		<chevron_button name="&gt;&gt;" tool_tip="Søg mere af mine favoritter"/>
+		<chevron_button name="more_btn" tool_tip="Søg mere af mine favoritter"/>
 	</favorites_bar>
 </panel>

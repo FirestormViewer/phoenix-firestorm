@@ -4,9 +4,6 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
-	<string name="CAPITALIZED_APP_NAME">
-		SECOND LIFE
-	</string>
 	<string name="SUPPORT_SITE">
 		Second Life Support Portal
 	</string>
@@ -791,6 +788,12 @@ Prøv venligst om lidt igen.
 	<string name="worldmap_results_none_found">
 		Ingen fundet.
 	</string>
+	<string name="worldmap_agent_position">
+		Du er her
+	</string>
+	<string name="minimap_distance">
+		(Afstand: [DISTANCE] m)
+	</string>
 	<string name="Ok">
 		OK
 	</string>
@@ -1269,7 +1272,7 @@ Prøv venligst om lidt igen.
 	<string name="InvFolder Gestures">
 		Bevægelser
 	</string>
-	<string name="InvFolder Favorite">
+	<string name="InvFolder Favorites">
 		Mine favoritter
 	</string>
 	<string name="InvFolder favorite">
@@ -1426,7 +1429,7 @@ Prøv venligst om lidt igen.
 		Ugyldig vedhæftningspunktt
 	</string>
 	<string name="YearsMonthsOld">
-		[AGEYEARS] [AGEMONTHS] gammel
+		[AGEYEARS] [AGEMONTHS]
 	</string>
 	<string name="YearsOld">
 		[AGEYEARS] gammel
@@ -1887,7 +1890,7 @@ Prøv venligst om lidt igen.
 		gav dig
 	</string>
 	<string name="InvOfferDecline">
-		Du afslår [DESC] fra &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Du afslår [DESC] fra [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Total
@@ -2055,7 +2058,8 @@ Forventet .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Kunst &amp; kultur
 	</string>
 	<string name="Business">
@@ -2073,7 +2077,8 @@ Forventet .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Newcomer Friendly">
 		Nybegynder venligt
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parker &amp; natur
 	</string>
 	<string name="Residential">

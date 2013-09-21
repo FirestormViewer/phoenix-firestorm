@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_FLOATERIMSESSION_H
 #define LL_FLOATERIMSESSION_H
 
@@ -199,3 +201,6 @@ private:
 };
 
 #endif  // LL_FLOATERIMSESSION_H
+
+#endif
+

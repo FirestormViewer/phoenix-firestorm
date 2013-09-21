@@ -45,6 +45,9 @@ public:
 	{
 		Optional<LLUIImage*> image_drag_indication;
 		Optional<LLTextBox::Params> more_button;
+		// <FS:Ansariel> Allow V3 and FS style favorites bar
+		Optional<LLButton::Params> chevron_button;
+		// </FS:Ansariel>
 		Optional<LLTextBox::Params> label;
 		Params();
 	};
@@ -151,7 +154,11 @@ private:
 	BOOL mShowDragMarker;
 	LLUICtrl* mLandingTab;
 	LLUICtrl* mLastTab;
-	LLTextBox* mMoreTextBox;
+	// <FS:Ansariel> Allow V3 and FS style favorites bar
+	//LLTextBox* mMoreTextBox;
+	//LLButton* mChevronButton;
+	LLUICtrl* mMoreCtrl;
+	// </FS:Ansariel>
 	LLTextBox* mBarLabel;
 
 	LLUUID mDragItemId;

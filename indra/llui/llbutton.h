@@ -138,6 +138,8 @@ public:
 		Optional<S32>				button_flash_count;
 		Optional<F32>				button_flash_rate;
 
+		Optional<std::string>		checkbox_control;		// <FS:Zi> Add checkbox control toggle
+
 		Params();
 	};
 	
@@ -380,6 +382,11 @@ protected:
 	LLFlashTimer *				mFlashingTimer;
 	bool                        mForceFlashing; // Stick flashing color even if button is pressed
 	bool						mHandleRightMouse;
+
+	// <FS:Zi> Add checkbox control toggle
+	std::string					mCheckboxControl;
+	LLPanel*					mCheckboxControlPanel;
+	// </FS:Zi>
 };
 
 // Build time optimization, generate once in .cpp file

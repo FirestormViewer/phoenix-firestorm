@@ -159,6 +159,7 @@ public:
 
 	// Call this method to set the selection.
 	void openAllFolders();
+	void closeAllFolders();
 	void setSelection(const LLUUID& obj_id, BOOL take_keyboard_focus);
 	void setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
 	void clearSelection();
@@ -172,10 +173,15 @@ public:
 	void setFilterWearableTypes(U64 filter);
 	void setFilterSubString(const std::string& string);
 	const std::string getFilterSubString();
+	// ## Zi: Extended Inventory Search
+	void setFilterSubStringTarget(const std::string& target);
+	LLInventoryFilter::EFilterSubstringTarget getFilterSubStringTarget() const;
+	// ## Zi: Extended Inventory Search
 	void setSinceLogoff(BOOL sl);
 	void setHoursAgo(U32 hours);
 	BOOL getSinceLogoff();
 	void setFilterLinks(U64 filter_links);
+	U64 getFilterLinks();		// ## Zi: Filter Links Menu
 
 	void setShowFolderState(LLInventoryFilter::EFolderShow show);
 	LLInventoryFilter::EFolderShow getShowFolderState();
@@ -195,6 +201,11 @@ public:
 	bool beginIMSession();
 	bool attachObject(const LLSD& userdata);
 	static void idle(void* user_data);
+
+	// <FS:Ansariel> Optional hiding of empty system folders
+	void updateHideEmptySystemFolders(const LLSD &data);
+	// <FS:Ansariel> Optional hiding of Inbox folder
+	void updateShowInboxFolder(const LLSD &data);
 
 	// DEBUG ONLY:
 	static void dumpSelectionInformation(void* user_data);
@@ -261,7 +272,7 @@ public:
 	void setSortOrder(U32 order);
 	U32 getSortOrder() const;
 
-private:
+// private:	// <FS:Zi> Make this available so we can save sort order based on sort_order_setting in XUI
 	std::string					mSortOrderSetting;
 	int							mClipboardState;
 
@@ -273,6 +284,7 @@ public:
 
 public:
 	BOOL getIsViewsInitialized() const { return mViewsInitialized; }
+
 protected:
 	// Builds the UI.  Call this once the inventory is usable.
 	void 				initializeViews();
@@ -284,7 +296,7 @@ protected:
 	static LLUIColor			sLibraryColor;
 	static LLUIColor			sLinkColor;
 	
-	LLFolderViewItem*	buildNewViews(const LLUUID& id);
+	LLFolderViewItem*	buildNewViews(const LLUUID& id );
 	BOOL				getIsHiddenFolderType(LLFolderType::EType folder_type) const;
 	
     virtual LLFolderView * createFolderRoot(LLUUID root_id );
@@ -293,6 +305,9 @@ protected:
 private:
 	bool				mBuildDefaultHierarchy; // default inventory hierarchy should be created in postBuild()
 	bool				mViewsInitialized; // Views have been generated
+
+public:
+	void setWorn(BOOL sl);
 };
 
 #endif // LL_LLINVENTORYPANEL_H

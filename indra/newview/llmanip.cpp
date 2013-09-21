@@ -54,6 +54,8 @@
 #include "pipeline.h"
 #include "llglheaders.h"
 #include "lluiimage.h"
+#include "llviewerregion.h"	// <FS:CR> Aurora Sim
+
 // Local constants...
 const S32 VERTICAL_OFFSET = 50;
 
@@ -354,11 +356,54 @@ LLVector3 LLManip::getSavedPivotPoint() const
 
 LLVector3 LLManip::getPivotPoint()
 {
-	if (mObjectSelection->getFirstObject() && mObjectSelection->getObjectCount() == 1 && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
+	// <FS:KC> Pivot point controls
+	//if (mObjectSelection->getFirstObject() && mObjectSelection->getObjectCount() == 1 && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
+	//{
+	//	return mObjectSelection->getFirstObject()->getPivotPositionAgent();
+	//}
+	//return LLSelectMgr::getInstance()->getBBoxOfSelection().getCenterAgent();
+
+	LLVector3 pos;
+	LLVector3 scale;
+	LLQuaternion rot;
+	static LLCachedControl<bool> sActualRoot(gSavedSettings, "FSBuildPrefs_ActualRoot", false);
+	static LLCachedControl<bool> sPivotPerc(gSavedSettings, "FSBuildPrefs_PivotIsPercent", false);
+	static LLCachedControl<F32> sPivotX(gSavedSettings, "FSBuildPrefs_PivotX");
+	static LLCachedControl<F32> sPivotY(gSavedSettings, "FSBuildPrefs_PivotY");
+	static LLCachedControl<F32> sPivotZ(gSavedSettings, "FSBuildPrefs_PivotZ");
+	
+	const BOOL children_ok = TRUE;
+	LLViewerObject* root_object = mObjectSelection->getFirstRootObject(children_ok);
+	if (root_object && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
 	{
-		return mObjectSelection->getFirstObject()->getPivotPositionAgent();
+		pos = root_object->getPivotPositionAgent();
+		scale = root_object->getScale();
+		rot = root_object->getRotation();
 	}
-	return LLSelectMgr::getInstance()->getBBoxOfSelection().getCenterAgent();
+	else
+	{
+		LLBBox bounding_box = LLSelectMgr::getInstance()->getBBoxOfSelection();
+		pos = bounding_box.getCenterAgent();
+		scale = bounding_box.getExtentLocal();
+		rot = bounding_box.getRotation();
+	}
+	if (sPivotPerc)
+	{
+		LLVector3 add(
+			(-scale[VX] * 0.5) + (scale[VX] * (sPivotX * 0.01)),
+			(-scale[VY] * 0.5) + (scale[VY] * (sPivotY * 0.01)),
+			(-scale[VZ] * 0.5) + (scale[VZ] * (sPivotZ * 0.01)));
+		add = add * rot;
+		pos = pos + add;
+	}
+	else
+	{
+		LLVector3 add(sPivotX, sPivotY, sPivotZ);
+		add = add * rot;
+		pos = pos + add;
+	}
+	return pos;
+	// </FS:KC> Pivot point controls
 }
 
 
@@ -388,7 +433,10 @@ void LLManip::renderGuidelines(BOOL draw_x, BOOL draw_y, BOOL draw_z)
 		grid_rot.getAngleAxis(&angle_radians, &x, &y, &z);
 		gGL.rotatef(angle_radians * RAD_TO_DEG, x, y, z);
 
-		F32 region_size = LLWorld::getInstance()->getRegionWidthInMeters();
+		// <FS> OpenSim support
+		//F32 region_size = LLWorld::getInstance()->getRegionWidthInMeters();
+		F32 region_size = object->getRegion()->getWidth();
+		// </FS> OpenSim support
 
 		const F32 LINE_ALPHA = 0.33f;
 

@@ -57,6 +57,8 @@
 #include "llsdutil.h"
 #include "llsdutil_math.h"
 #include "lltrans.h"
+#include "tea.h" // <FS:AW opensim currency support>
+#include "llviewernetwork.h" // <FS:Ansariel> For grid manager
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -190,7 +192,10 @@ void LLFloaterAuction::onClickSnapshot(void* data)
 		self->mTransactionID.generate();
 		self->mImageID = self->mTransactionID.makeAssetID(gAgent.getSecureSessionID());
 
-		if(!gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+		// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+		// if(!gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+		if(!gSavedSettings.getBOOL("PlayModeUISndSnapshot"))
+		// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 		{
 			gViewerWindow->playSnapshotAnimAndSound();
 		}
@@ -453,6 +458,8 @@ void LLFloaterAuction::onClickSellToAnyone(void* data)
 		args["LAND_SIZE"] = llformat("%d", area);
 		args["SALE_PRICE"] = llformat("%d", sale_price);
 		args["NAME"] = LLTrans::getString("Anyone");
+		// <FS:Ansariel> Fill [CURRENT_GRID] placeholder (FIRE-6777)
+		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 
 		LLNotification::Params params("ConfirmLandSaleChange");	// Re-use existing dialog
 		params.substitutions(args)
@@ -508,8 +515,10 @@ void LLFloaterAuction::doSellToAnyone()
 		
 		body["sale_price"] = parcelp->getArea();	// Sell for L$1 per square meter
 		body["auth_buyer_id"] = LLUUID::null;		// To anyone
-
-		llinfos << "Sending parcel update to sell to anyone for L$1 via capability to: "
+// <FS:AW opensim currency support>
+//		llinfos << "Sending parcel update to sell to anyone for L$1 via capability to: "
+		llinfos << Tea::wrapCurrency("Sending parcel update to sell to anyone for L$1 via capability to: ")
+// <FS:AW opensim currency support>
 			<< mParcelUpdateCapUrl << llendl;
 		LLHTTPClient::post(mParcelUpdateCapUrl, body, new LLHTTPClient::Responder());
 

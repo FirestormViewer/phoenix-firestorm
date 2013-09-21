@@ -42,6 +42,7 @@
 #include "lltoolmorph.h"
 #include "llviewercamera.h"
 #include "llvoavatarself.h"
+#include "llviewercontrol.h"		// ## Zi: Optional Edit Appearance Lighting
 #include "llviewerwindow.h"
 #include "pipeline.h"
 
@@ -87,12 +88,28 @@ void	LLMorphView::initialize()
 	}
 
 	gAgentAvatarp->stopMotion( ANIM_AGENT_BODY_NOISE );
-	gAgentAvatarp->mSpecialRenderMode = 3;
+
+	// ## Zi: Optional Edit Appearance Lighting
+//		gAgentAvatarp->mSpecialRenderMode = 3;
+	LLPointer<LLControlVariable> special_render_mode_control=gSavedSettings.getControl("EditAppearanceLighting");
+	special_render_mode_control->getCommitSignal()->connect(boost::bind(&LLMorphView::onSpecialRenderModeLightChanged, this));
+	onSpecialRenderModeLightChanged();
+	// ## Zi: Optional Edit Appearance Lighting
 	
 	// set up camera for close look at avatar
 	mOldCameraNearClip = LLViewerCamera::getInstance()->getNear();
 	LLViewerCamera::getInstance()->setNear(MORPH_NEAR_CLIP);	
 }
+
+// ## Zi: Optional Edit Appearance Lighting
+void LLMorphView::onSpecialRenderModeLightChanged()
+{
+	if(gSavedSettings.getBOOL("EditAppearanceLighting"))
+		gAgentAvatarp->mSpecialRenderMode = 3;
+	else
+		gAgentAvatarp->mSpecialRenderMode = 0;
+}
+// ## Zi: Optional Edit Appearance Lighting
 
 //-----------------------------------------------------------------------------
 // shutdown()

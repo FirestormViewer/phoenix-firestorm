@@ -102,6 +102,8 @@ LLDir::~LLDir()
 
 S32 LLDir::deleteFilesInDir(const std::string &dirname, const std::string &mask)
 {
+	if (!fileExists(dirname)) return 0;
+
 	S32 count = 0;
 	std::string filename; 
 	std::string fullpath;
@@ -294,7 +296,13 @@ std::string LLDir::buildSLOSCacheDir() const
 	}
 	else
 	{
-		res = add(getOSCacheDir(), "SecondLife");
+// <FS:CR> FIRE-8226 - Different flavoured cache directories.
+#ifdef OPENSIM
+		res = add(getOSCacheDir(), "FirestormOS");
+#else
+		res = add(getOSCacheDir(), "Firestorm");
+#endif // OPENSIM
+// </FS:CR>
 	}
 	return res;
 }
@@ -326,6 +334,13 @@ const std::string &LLDir::getSkinDir() const
 {
 	return mSkinDir;
 }
+
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2)
+const std::string& LLDir::getSkinThemeDir() const
+{
+	return mSkinThemeDir;
+}
+// [/SL:KB]
 
 const std::string &LLDir::getUserDefaultSkinDir() const
 {
@@ -375,6 +390,9 @@ static std::string ELLPathToString(ELLPath location)
 		ENT(LL_PATH_EXECUTABLE)
 		ENT(LL_PATH_DEFAULT_SKIN)
 		ENT(LL_PATH_FONTS)
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+		ENT(LL_PATH_TOP_SKINTHEME)
+// [/SL:KB]
 		ENT(LL_PATH_LAST)
 	;
 #undef ENT
@@ -410,6 +428,12 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 	
 	case LL_PATH_CHARACTER:
 		prefix = add(getAppRODataDir(), "character");
+		break;
+	
+	case LL_PATH_FS_RESOURCES:
+		prefix = getAppRODataDir();
+		prefix += mDirDelimiter;
+		prefix += "fs_resources";
 		break;
 		
 	case LL_PATH_HELP:
@@ -461,6 +485,12 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 		prefix = getSkinDir();
 		break;
 
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-19 (Catznip-2.4)
+	case LL_PATH_TOP_SKINTHEME:
+		prefix = getSkinThemeDir();
+		break;
+// [/SL:KB]
+			
 	case LL_PATH_DEFAULT_SKIN:
 		prefix = getDefaultSkinDir();
 		break;
@@ -787,8 +817,13 @@ std::string LLDir::getForbiddenFileChars()
 {
 	return "\\/:*?\"<>|";
 }
-
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef OPENSIM
+void LLDir::setLindenUserDir(const std::string &username, const std::string &gridname)
+#else
 void LLDir::setLindenUserDir(const std::string &username)
+#endif // OPENSIM
+// </FS:CR>
 {
 	// if the username isn't set, that's bad
 	if (!username.empty())
@@ -798,7 +833,22 @@ void LLDir::setLindenUserDir(const std::string &username)
 		std::string userlower(username);
 		LLStringUtil::toLower(userlower);
 		LLStringUtil::replaceChar(userlower, ' ', '_');
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef OPENSIM
+		std::string gridlower(gridname);
+		LLStringUtil::toLower(gridlower);
+		LLStringUtil::replaceChar(gridlower, ' ', '_');
+#endif // OPENSIM
+// </FS:CR>
 		mLindenUserDir = add(getOSUserAppDir(), userlower);
+// <FS:CR> Seperate user directories per grid on OS build		
+#ifdef OPENSIM
+		if (!gridname.empty() && gridlower != "second_life")
+		{
+			mLindenUserDir += "." + gridlower;
+		}
+#endif // OPENSIM
+// </FS:CR>
 	}
 	else
 	{
@@ -825,7 +875,13 @@ void LLDir::updatePerAccountChatLogsDir()
 	mPerAccountChatLogsDir = add(getChatLogsDir(), mUserName);
 }
 
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef OPENSIM
+void LLDir::setPerAccountChatLogsDir(const std::string &username, const std::string &gridname)
+#else
 void LLDir::setPerAccountChatLogsDir(const std::string &username)
+#endif // OPENSIM
+// <//FS:CR>
 {
 	// if both first and last aren't set, assume we're grabbing the cached dir
 	if (!username.empty())
@@ -835,9 +891,24 @@ void LLDir::setPerAccountChatLogsDir(const std::string &username)
 		std::string userlower(username);
 		LLStringUtil::toLower(userlower);
 		LLStringUtil::replaceChar(userlower, ' ', '_');
-
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef OPENSIM
+		std::string gridlower(gridname);
+		LLStringUtil::toLower(gridlower);
+		LLStringUtil::replaceChar(gridlower, ' ', '_');
+#endif // OPENSIM
+// </FS:CR>
 		mUserName = userlower;
 		updatePerAccountChatLogsDir();
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef OPENSIM
+		if (!gridname.empty() && gridlower != "second_life")
+		{
+			mPerAccountChatLogsDir += "." + gridlower;
+		}
+#endif // OPENSIM
+// </FS:CR>
+				
 	}
 	else
 	{
@@ -845,11 +916,21 @@ void LLDir::setPerAccountChatLogsDir(const std::string &username)
 	}
 }
 
-void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& language)
+//void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& language)
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& theme_folder, const std::string& language)
+// [/SL:KB]
 {
-	LL_DEBUGS("LLDir") << "Setting skin '" << skin_folder << "', language '" << language << "'"
-					   << LL_ENDL;
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	LL_DEBUGS("LLDir") << "Setting skin '" << skin_folder << "', theme '" << theme_folder << "', language '" << language << "'"
+ 					   << LL_ENDL;
+// [/SL:KB]
+//	LL_DEBUGS("LLDir") << "Setting skin '" << skin_folder << "', language '" << language << "'"
+//					   << LL_ENDL;
 	mSkinName = skin_folder;
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	mSkinThemeName = theme_folder;
+// [/SL:KB]
 	mLanguage = language;
 
 	// This method is called multiple times during viewer initialization. Each
@@ -867,6 +948,18 @@ void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& lan
 	append(mSkinDir, skin_folder);
 	// Next level of generality is a skin installed with the viewer.
 	addSearchSkinDir(mSkinDir);
+		updatePerAccountChatLogsDir();
+
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	if (!theme_folder.empty())
+	{
+		mSkinThemeDir = getSkinDir();
+		append(mSkinThemeDir, "themes");
+		append(mSkinThemeDir, theme_folder);
+		// Next level of generality is a specific theme for the current skin
+		addSearchSkinDir(mSkinThemeDir);
+	}
+// [/SL:KB]
 
 	// user modifications to skins, current and default
 	// e.g. c:\documents and settings\users\username\application data\second life\skins\dazzle
@@ -894,6 +987,13 @@ std::string LLDir::getSkinFolder() const
 {
 	return mSkinName;
 }
+
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+std::string LLDir::getSkinThemeFolder() const
+{
+	return mSkinThemeName;
+}
+// [/SL:KB]
 
 std::string LLDir::getLanguage() const
 {
@@ -942,6 +1042,9 @@ void LLDir::dumpCurrentDirectories()
 	LL_DEBUGS2("AppInit","Directories") << "  CAFile:				 " << getCAFile() << LL_ENDL;
 	LL_DEBUGS2("AppInit","Directories") << "  SkinBaseDir:           " << getSkinBaseDir() << LL_ENDL;
 	LL_DEBUGS2("AppInit","Directories") << "  SkinDir:               " << getSkinDir() << LL_ENDL;
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2011-02-14 (Catznip-2.5)
+	LL_DEBUGS2("AppInit","Directories") << "  SkinThemeDir:          " << getSkinThemeDir() << LL_ENDL;
+// [/SL:KB]
 }
 
 std::string LLDir::add(const std::string& path, const std::string& name) const

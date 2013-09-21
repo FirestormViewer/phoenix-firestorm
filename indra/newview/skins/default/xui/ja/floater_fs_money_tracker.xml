@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="money_tracker" title="チップトラッカー">
+    <fs_chat_history name="money_chat_history" />
+    <button name="Clear" label="クリア" />
+</floater>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="Importación de objetos">
+	<floater.string name="file_status">
+		[LINKSETS] linksets. [PRIMS] prims. [TEXTURES] texturas.
+		[SOUNDS] sonidos. [ANIMATIONS] animaciones.
+	</floater.string>
+	<floater.string name="file_status_error">
+		Error leyendo el archivo. Selecciona otro.
+	</floater.string>
+	<floater.string name="file_version_error">
+		Error analizando el archivo. Formato o versión incorrectos.
+	</floater.string>
+	<floater.string name="file_status_running">
+		Linkset [LINKSET] de [LINKSETS], prim [PRIM] de [PRIMS].
+	</floater.string>
+	<floater.string name="file_status_done">
+		Importación finalizada.
+	</floater.string>
+	<floater.string name="texture_uploading">
+		Subiendo textura [TEXTURE] de [TEXTURETOTAL].
+	</floater.string>
+	<floater.string name="sound_uploading">
+		Subiendo sonido [SOUND] de [SOUNDTOTAL].
+	</floater.string>
+	<floater.string name="animation_uploading">
+		Subiendo animación[ANIMATION] de [ANIMATIONTOTAL].
+	</floater.string>
+	<floater.string name="asset_uploading">
+		Subiendo activo [ASSET] de [ASSETTOTAL].
+	</floater.string>
+	<floater.string name="upload_cost">
+		Coste total de la subida: [COST] $L.
+	</floater.string>
+	<text name="file_status_text">
+		Selecciona un archivo.
+	</text>
+	<button name="pick_file" label="Seleccionar"/>
+	<button name="import_file" label="Importar"/>
+	<check_box name="do_not_attach" label="No anexar objeto"/>
+	<check_box name="region_position" label="Restaurar posición en la región"/>
+	<check_box name="upload_asset" label="Subir"/>
+	<check_box name="temp_asset" label="Temporal" left_delta="110"/>
+</floater>

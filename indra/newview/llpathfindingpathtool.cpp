@@ -378,12 +378,18 @@ bool LLPathfindingPathTool::hasFinalA() const
 	return mFinalPathData.mHasPointA;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalAStart() const
+// <FS:ND> Cannot return reference here, due to stub returning a temporary
+//const LLVector3 &LLPathfindingPathTool::getFinalAStart() const
+LLVector3 LLPathfindingPathTool::getFinalAStart() const
+//</FS:ND>
 {
 	return mFinalPathData.mStartPointA;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalAEnd() const
+// <FS:ND> Cannot return reference here, due to stub returning a temporary
+//const LLVector3 &LLPathfindingPathTool::getFinalAEnd() const
+LLVector3 LLPathfindingPathTool::getFinalAEnd() const
+//</FS:ND>
 {
 	return mFinalPathData.mEndPointA;
 }
@@ -412,12 +418,18 @@ bool LLPathfindingPathTool::hasFinalB() const
 	return mFinalPathData.mHasPointB;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalBStart() const
+// <FS:ND> Cannot return reference here, due to stub returning a temporary
+//const LLVector3 &LLPathfindingPathTool::getFinalBStart() const
+LLVector3 LLPathfindingPathTool::getFinalBStart() const
+// </FS:ND>
 {
 	return mFinalPathData.mStartPointB;
 }
 
-const LLVector3 &LLPathfindingPathTool::getFinalBEnd() const
+// <FS:ND> Cannot return reference here, due to stub returning a temporary
+//const LLVector3 &LLPathfindingPathTool::getFinalBEnd() const
+LLVector3 LLPathfindingPathTool::getFinalBEnd() const
+// </FS:ND>
 {
 	return mFinalPathData.mEndPointB;
 }

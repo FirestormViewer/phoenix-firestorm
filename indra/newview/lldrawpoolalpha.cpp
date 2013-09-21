@@ -73,11 +73,15 @@ void LLDrawPoolAlpha::prerender()
 
 S32 LLDrawPoolAlpha::getNumPostDeferredPasses() 
 { 
+	static LLCachedControl<bool> RenderDepthOfField(gSavedSettings, "RenderDepthOfField"); // <FS:PP> Attempt to speed up things a little
 	if (LLPipeline::sImpostorRender)
 	{ //skip depth buffer filling pass when rendering impostors
 		return 1;
 	}
-	else if (gSavedSettings.getBOOL("RenderDepthOfField"))
+	// <FS:PP> Attempt to speed up things a little
+	// else if (gSavedSettings.getBOOL("RenderDepthOfField"))
+	else if (RenderDepthOfField)
+	// </FS:PP>
 	{
 		return 2; 
 	}
@@ -383,6 +387,17 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 				// All particle systems seem to come off the wire with texture entries which claim that they glow.  This is probably a bug in the data.  Suppress.
 				group->mSpatialPartition->mPartitionType != LLViewerRegion::PARTITION_PARTICLE &&
 				group->mSpatialPartition->mPartitionType != LLViewerRegion::PARTITION_HUD_PARTICLE;
+
+			// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
+			if(!(gPipeline.sRenderParticles) && (
+				group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_PARTICLE ||
+				group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_HUD_PARTICLE))
+			{
+				continue;
+			}
+			// </FS:LO>
+
+
 
 			LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[LLRenderPass::PASS_ALPHA];
 

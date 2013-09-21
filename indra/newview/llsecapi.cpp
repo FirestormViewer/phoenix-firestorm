@@ -34,7 +34,7 @@
 #include <map>
 #include "llhttpclient.h"
 
-
+#include <openssl/engine.h> // <FS:ND> To enable rdrand engine if possible
 
 std::map<std::string, LLPointer<LLSecAPIHandler> > gHandlerMap;
 LLPointer<LLSecAPIHandler> gSecAPIHandler;
@@ -44,6 +44,24 @@ void initializeSecHandler()
 	ERR_load_crypto_strings();
 	OpenSSL_add_all_algorithms();
 
+	// <FS:ND If we can, enabled the rdrand engine. It is available as a CPU instruction on newer Intel CPUs
+	ENGINE_load_builtin_engines();
+	
+	ENGINE* engRdRand = ENGINE_by_id("rdrand");
+	if( engRdRand )
+		ENGINE_set_default(engRdRand, ENGINE_METHOD_RAND);
+	
+	unsigned long lErr ( ERR_get_error() );
+	while( lErr )
+	{
+		char aError[128];
+		ERR_error_string_n( lErr, aError, sizeof( aError ) );
+		llwarns << aError << llendl;
+
+		lErr = ERR_get_error();
+	}
+	// </FS:ND>
+		
 	gHandlerMap[BASIC_SECHANDLER] = new LLSecAPIBasicHandler();
 	
 	

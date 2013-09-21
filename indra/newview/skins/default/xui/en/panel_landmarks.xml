@@ -3,126 +3,137 @@
    name="Landmarks"
    top="0"
    height="400"
-   layout="topleft" 
+   layout="topleft"
    left="0"
    width="313"
    help_topic="panel_landmarks"
    border="false"
-   background_visible="true"
-   bg_alpha_color="DkGray"
    follows="all">
-    <accordion
-     background_visible="true"
-     bg_alpha_color="DkGray2"
-     bg_opaque_color="DkGray2"
-     follows="all"
-     height="373"
-     layout="topleft"
-     left="3"
+    <tab_container
      name="landmarks_accordion"
+     fit_parent="true"
+     layout="topleft"
+     follows="all"
+     halign="center"
+     tab_position="top"
+     tab_width="80"
+     left="3"
      top="0"
+     height="373"
      width="307">
-        <accordion_tab
+        <panel
+         follows="all"
          layout="topleft"
          name="tab_favorites"
-         title="Favorites bar">
+         title="Favorites"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="favorites_list"
-             scroll.hide_scrollbar="true"
+             scroll.hide_scrollbar="false"
              folder_view.use_ellipses="true"
              start_folder.name="Favorites"
+             top="0"
+             left="0"
+             height="373"
              width="307"/>
-        </accordion_tab>
-        <accordion_tab
+        </panel>
+        <panel
+         follows="all"
          layout="topleft"
          name="tab_landmarks"
-         title="My Landmarks">
+         title="Landmarks"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="landmarks_list"
-             scroll.hide_scrollbar="true"
+             scroll.hide_scrollbar="false"
              folder_view.use_ellipses="true"
              start_folder.name="Landmarks"
+             top="0"
+             left="0"
+             height="373"
              width="307"/>
-        </accordion_tab>
-        <accordion_tab
+        </panel>
+        <panel
+         follows="all"
          layout="topleft"
          name="tab_inventory"
-         title="My Inventory">
+         title="Inventory"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="my_inventory_list"
-             scroll.hide_scrollbar="true"
+             scroll.hide_scrollbar="false"
              folder_view.use_ellipses="true"
              start_folder.name="My Inventory"
+             top="0"
+             left="0"
+             height="373"
              width="307"/>
-          </accordion_tab>
-          <accordion_tab
-           layout="topleft"
-           name="tab_library"
-           title="Library">
+        </panel>
+        <panel
+         follows="all"
+         layout="topleft"
+         name="tab_library"
+         title="Library"
+         height="373"
+         width="307">
             <places_inventory_panel
              allow_multi_select="true"
              border="false"
-             bottom="0"
              follows="all"
-             height="126"
-             left="0"
              mouse_opaque="true"
              name="library_list"
-             scroll.hide_scrollbar="true"
+             scroll.hide_scrollbar="false"
              folder_view.use_ellipses="true"
              start_folder.name="LIBRARY"
-             width="313"/>
-        </accordion_tab>
-    </accordion>
-    <panel
-       background_visible="true"
+             top="0"
+             left="0"
+             height="373"
+             width="307"/>
+        </panel>
+    </tab_container>
+ <panel
      bevel_style="none"
-     bottom="0"
+     bottom="3"
      follows="left|right|bottom"
      height="27"
      layout="bottomleft"
+	 auto_resize="true"
      left="3"
      name="bottom_panel"
      width="313">
-     	
-     	  <layout_stack
-		   animate="false"
-		   border_size="0"
-		   follows="left|right|bottom"
+     	  <panel
+   		  border_size="0"
+		   follows="top|left|right"
 		   height="25"
 		   layout="topleft"
-		   orientation="horizontal"
-		   top_pad="1"
+		   top="0"
 		   left="0"
 		   name="bottom_panel"
 		   width="307">
-		      <layout_panel
+		      <panel
 		       auto_resize="false"
 		       height="25"
 		       layout="topleft"
+			   follows="top|left"
+			   left="0"
 		       name="options_gear_btn_panel"
-		       width="32">
+		       width="32"
+               user_resize="false">
 		          <menu_button
 		           follows="bottom|left"
 		           tool_tip="Show additional options"
@@ -136,12 +147,15 @@
 		           name="options_gear_btn"
 		           top="0"
 		           width="31" />
-		      </layout_panel>
-		      <layout_panel
+		      </panel>
+		      <panel
 		       auto_resize="false"
 		       height="25"
 		       layout="topleft"
+			   follows="top|left"
+			   left_pad="0"
 		       name="add_btn_panel"
+               user_resize="false"
 		       width="32">
 		          <button
 		           follows="bottom|left"
@@ -156,12 +170,16 @@
 		           tool_tip="Add new landmark"
 		           top="0"
 		           width="31" />
-		      </layout_panel>
-		      <layout_panel
+		      </panel>
+		      <panel
 		       auto_resize="true"
 		       height="25"
 		       layout="topleft"
+			   follows="top|left|right"
+			   left_pad="0"
 		       name="dummy_panel"
+               user_resize="false"
+			   min_width="1"
 		       width="212">
 		          <icon
 		           follows="bottom|left|right"
@@ -172,15 +190,18 @@
 		           top="0"
 		           name="dummy_icon"
 		           width="211" />
-		      </layout_panel>
-		      <layout_panel
+		      </panel>
+		      <panel
 		       auto_resize="false"
 		       height="25"
 		       layout="topleft"
 		       name="trash_btn_panel"
+			   follows="top|right"
+			   left_pad="0"
+               user_resize="false"
 		       width="31">
 		          <dnd_button
-		           follows="bottom|left"
+		           follows="bottom|right"
 		           height="25"
 		           image_hover_unselected="Toolbar_Right_Over"
 		           image_overlay="TrashItem_Off"
@@ -192,7 +213,9 @@
 		           tool_tip="Remove selected landmark"
 		           top="0"
 		           width="31"/>
-		      </layout_panel>
-  	</layout_stack>
+		      </panel>
+  	</panel>
    </panel>
 </panel>
+
+

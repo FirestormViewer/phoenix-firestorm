@@ -151,11 +151,25 @@ public:
 	// For thread debugging. 
 	// llstartup needs to control init.
 	// llworld, send_agent_pause() also controls pause/resume.
-	void initMainloopTimeout(const std::string& state, F32 secs = -1.0f);
+
+	// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
+
+	// void initMainloopTimeout(const std::string& state, F32 secs = -1.0f);
+	void initMainloopTimeout( char const *state, F32 secs = -1.0f);
+
+	// </FS:ND>
+
 	void destroyMainloopTimeout();
 	void pauseMainloopTimeout();
-	void resumeMainloopTimeout(const std::string& state = "", F32 secs = -1.0f);
-	void pingMainloopTimeout(const std::string& state, F32 secs = -1.0f);
+
+	// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
+
+	// void resumeMainloopTimeout(const std::string& state = "", F32 secs = -1.0f);
+	// void pingMainloopTimeout(const std::string& state, F32 secs = -1.0f);
+	void resumeMainloopTimeout( char const *state = "", F32 secs = -1.0f);
+	void pingMainloopTimeout( char const *state, F32 secs = -1.0f);
+
+	// </FS:ND>
 
 	// Handle the 'login completed' event.
 	// *NOTE:Mani Fix this for login abstraction!!
@@ -242,6 +256,13 @@ private:
 	std::string mLogoutMarkerFileName;
 	LLAPRFile mLogoutMarkerFile; // A file created to indicate the app is running.
 
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	//LLAPRFile::tFiletype* mLogoutMarkerFile; // A file created to indicate the app is running.
+	// </FS:ND>
+
+	//-TT The skin and theme we are using at startup. might want to make them static.
+	std::string mCurrentSkin;
+	std::string mCurrentSkinTheme;
 	
 	LLOSInfo mSysOSInfo; 
 	bool mReportedCrash;
@@ -255,6 +276,7 @@ private:
 
 	std::string mSerialNumber;
 	bool mPurgeCache;
+	bool mPurgeSettings;	// <FS>
     bool mPurgeOnExit;
 	bool mMainLoopInitialized;
 	LLViewerJoystick* joystick;
@@ -302,6 +324,11 @@ public:
 
 	void launchUpdater();
 	//---------------------------------------------
+
+	// <FS:Zi> Backup Settings
+	void setSaveSettingsOnExit(bool state) {mSaveSettingsOnExit = state; };
+	bool mSaveSettingsOnExit;
+	// </FS:Zi>
 };
 
 // consts from viewer.h

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+	follows="left|top|right|bottom"
+	height="100"
+	layout="topleft"
+	name="block_list_panel"
+	help_topic="blocked_list"
+	width="304">
+
+	<block_list
+		follows="all"
+		height="70"
+		layout="topleft"
+		left="0"
+		name="blocked"
+		multi_select="true"
+		tool_tip="List of currently blocked Residents"
+		top="0"
+		width="304" />
+
+	<layout_stack
+		name="block_list_sidetray_main"
+		layout="topleft"
+		follows="bottom|left|right"
+		top_pad="4"
+		left="0"
+		width="300"
+		height="20"
+		border_size="2"
+		orientation="horizontal">
+
+	<!-- will be shown or hidden in code, depending on whether this
+	     is a sub tab or standalone panel -Zi -->
+	<!-- probably unused now so set visible to false initially -->
+	<layout_panel
+		name="back_button_container"
+		auto_resize="false"
+		height="20"
+		width="30"
+		layout="topleft"
+		visible="false"
+		follows="all">
+
+	<button
+		tool_tip="Back to People"
+		follows="bottom|left"
+		height="20"
+		image_overlay="Arrow_Left_Off"
+		layout="topleft"
+		name="back"
+		left="0"
+		top="0"
+		width="30"/>
+
+	</layout_panel>
+
+	<layout_panel
+		name="block_list_blocklaypanels"
+		auto_resize="true"
+		height="20"
+		width="272"
+		layout="topleft"
+		follows="all">
+
+	<layout_stack
+		name="block_list_blocklaystack"
+		layout="topleft"
+		follows="bottom|left|right"
+		top="0"
+		left="0"
+		width="270"
+		height="20"
+		border_size="2"
+		orientation="horizontal">
+
+	<layout_panel
+		name="block_panels_btnsort"
+		height="20"
+		width="60"
+		layout="topleft"
+		follows="all">
+
+	<menu_button
+		follows="all"
+		height="20"
+		label="Sort ..."
+		left="0"
+		layout="topleft"
+		menu_filename="menu_people_blocked_view.xml"
+		menu_position="bottomleft"
+		name="view_btn"
+		tool_tip="Sort options"
+		top="0"
+		width="60" />
+
+	</layout_panel>
+
+	<layout_panel
+		name="block_panels_btnpersonobject"
+		height="20"
+		width="120"
+		layout="topleft"
+		follows="all">
+
+	<menu_button
+		follows="all"
+		height="20"
+		label="Add Block ..."
+		layout="topleft"
+		left="0"
+		menu_filename="menu_people_blocked_plus.xml"
+		menu_position="bottomleft"
+		name="plus_btn"
+		tool_tip="Pick a Resident or an object to block"
+		top="0"
+		width="120" />
+
+	</layout_panel>
+
+	<layout_panel
+		name="block_panels_btnunblock"
+		height="20"
+		width="90"
+		layout="topleft"
+		follows="all">
+
+	<button
+		enabled="false"
+		follows="all"
+		height="20"
+		label="Unblock"
+		layout="topleft"
+		left="0"
+		name="unblock_btn"
+		tool_tip="Remove Resident or object from blocked list"
+		top="0"
+		width="90" />
+
+	</layout_panel>
+
+	</layout_stack>
+
+	</layout_panel>
+
+	</layout_stack>
+
+<!-- keep these controls so the code doesn't complain about missing controls -Zi -->
+	<panel	name="hide_controls" enabled="false" visible="false" left="0" top="0">
+		<text			follows="top|left" height="0" layout="topleft" name="title_text"
+						left="0" top="0" width="0" />
+		<menu_button	follows="top|left" height="0" layout="topleft" name="blocked_gear_btn"
+						left="0" top="0" width="0" />
+		<filter_editor	follows="top|left" height="0" layout="topleft" name="blocked_filter_input"
+						left="0" top="0" width="0" />
+	</panel>
+</panel>

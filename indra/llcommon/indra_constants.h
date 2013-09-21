@@ -79,8 +79,8 @@ static const S32		REGION_AGENT_COUNT_MIN = 1;
 static const S32		REGION_AGENT_COUNT_MAX = 200;			// Must fit in U8 for the moment (RegionInfo msg)
 static const S32		REGION_PRIM_COUNT_MIN = 0;
 static const S32		REGION_PRIM_COUNT_MAX = 40000;
-static const F32		REGION_PRIM_BONUS_MIN = 1.0;
-static const F32		REGION_PRIM_BONUS_MAX = 10.0;
+static const F32		REGION_PRIM_BONUS_MIN = 1.0f;
+static const F32		REGION_PRIM_BONUS_MAX = 10.0f;
 
 // Default maximum number of tasks/prims per region.
 const U32 DEFAULT_MAX_REGION_WIDE_PRIM_COUNT = 15000;
@@ -147,6 +147,14 @@ const	char	LAND_LAYER_CODE					= 'L';
 const	char	WATER_LAYER_CODE				= 'W';
 const	char	WIND_LAYER_CODE					= '7';
 const	char	CLOUD_LAYER_CODE				= '8';
+
+// <FS:CR> Aurora Sim
+// Extended land layer for Aurora Sim
+const	char	AURORA_LAND_LAYER_CODE			= 'M';
+const	char	AURORA_WATER_LAYER_CODE			= 'X';
+const	char	AURORA_WIND_LAYER_CODE			= '9';
+const	char	AURORA_CLOUD_LAYER_CODE			= ':';
+// </FS:CR> Aurora Sim
 
 // keys
 // Bit masks for various keyboard modifier keys.
@@ -304,7 +312,7 @@ const U32 GROUP_MIN_SIZE = 2;
 // For now we need an old default value however,
 // so the viewer can be deployed ahead of login.cgi.
 //
-const S32 DEFAULT_MAX_AGENT_GROUPS = 25;
+const S32 DEFAULT_MAX_AGENT_GROUPS = 42;
 
 // radius within which a chat message is fully audible
 const F32 CHAT_WHISPER_RADIUS = 10.f;
@@ -388,6 +396,8 @@ const S32 MAP_SIM_RETURN_NULL_SIMS 	= 0x00010000;
 const S32 MAP_SIM_PRELUDE 			= 0x00020000;
 
 // Crash reporter behavior
+const char* const CRASH_SETTINGS_FILE = "settings_crash_behavior.xml";   // AO legacy from KB
+const char* const CRASH_BEHAVIOR_SETTING = "CrashSubmitBehavior";  // AO legacy from KB
 const S32 CRASH_BEHAVIOR_ASK = 0;
 const S32 CRASH_BEHAVIOR_ALWAYS_SEND = 1;
 const S32 CRASH_BEHAVIOR_NEVER_SEND = 2;

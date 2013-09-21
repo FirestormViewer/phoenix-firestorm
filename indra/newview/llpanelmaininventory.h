@@ -29,6 +29,7 @@
 #define LL_LLPANELMAININVENTORY_H
 
 #include "llpanel.h"
+#include "llinventoryfilter.h"
 #include "llinventoryobserver.h"
 #include "lldndbutton.h"
 
@@ -44,6 +45,7 @@ class LLMenuButton;
 class LLMenuGL;
 class LLToggleableMenu;
 class LLFloater;
+class LLComboBox;	// ## Zi: Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPanelMainInventory
@@ -82,6 +84,12 @@ public:
 	void setSelectCallback(const LLFolderView::signal_t::slot_type& cb);
 
 	void onFilterEdit(const std::string& search_string );
+
+	// ## Zi: Filter dropdown
+	void onFilterTypeSelected(const std::string& filter_type_name);
+	void updateFilterDropdown(const LLInventoryFilter* filter);
+	// ## Zi: Filter dropdown
+
 protected:
 	//
 	// Misc functions
@@ -109,11 +117,20 @@ protected:
 	void newWindow();
 	void doCreate(const LLSD& userdata);
 	void resetFilters();
+
+	// ## Zi: Sort By menu handlers
 	void setSortBy(const LLSD& userdata);
+	BOOL isSortByChecked(const LLSD& userdata);
+	// ## Zi: Sort By menu handlers
+
 	void saveTexture(const LLSD& userdata);
 	bool isSaveTextureEnabled(const LLSD& userdata);
 	void updateItemcountText();
 
+	// ## Zi: Inventory Collapse and Expand Buttons
+	void onCollapseButtonClicked();
+	void onExpandButtonClicked();
+	// ## Zi: Inventory Collapse and Expand Buttons
 	void onFocusReceived();
 
 private:
@@ -128,7 +145,13 @@ private:
 	LLSaveFolderState*			mSavedFolderState;
 	std::string					mFilterText;
 	std::string					mFilterSubString;
+	LLTextBox*					mItemcountText;
 
+	// ## Zi: Filter dropdown
+	LLComboBox*					mFilterComboBox;
+	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
+	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
+	// ## Zi: Filter dropdown
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //
@@ -142,6 +165,18 @@ protected:
 	BOOL isActionEnabled(const LLSD& command_name);
 	BOOL isActionChecked(const LLSD& userdata);
 	void onCustomAction(const LLSD& command_name);
+
+	// ## Zi: Filter Links Menu
+	BOOL isFilterLinksChecked(const LLSD& userdata);
+	void onFilterLinksChecked(const LLSD& userdata);
+	// ## Zi: Filter Links Menu
+
+	// ## Zi: Extended Inventory Search
+	BOOL isSearchTargetChecked(const LLSD& userdata);
+	void onSearchTargetChecked(const LLSD& userdata);
+	LLInventoryFilter::EFilterSubstringTarget getSearchTarget() const;
+	// ## Zi: Extended Inventory Search
+
 	bool handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept);
 	/**
 	 * Set upload cost in "Upload" sub menu.
@@ -152,6 +187,11 @@ private:
 	LLToggleableMenu*			mMenuGearDefault;
 	LLMenuGL*					mMenuAdd;
 	LLMenuButton*				mGearMenuButton;
+
+	// ## Zi: Inventory Collapse and Expand Buttons
+	LLButton*					mCollapseBtn;
+	LLButton*					mExpandBtn;
+	// ## Zi: Inventory Collapse and Expand Buttons
 
 	bool						mNeedUploadCost;
 	// List Commands                                                              //

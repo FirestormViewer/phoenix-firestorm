@@ -7,6 +7,9 @@
 				<pull_button name="forward_btn" tool_tip="Avançar uma região"/>
 				<button name="home_btn" tool_tip="Teletransportar para meu início"/>
 				<location_input label="Onde" name="location_combo"/>
+		<search_combo_box label="Busca" name="search_combo_box" tool_tip="Busca">
+			<combo_editor label="Buscar no [CURRENT_GRID]" name="search_combo_editor"/>
+		</search_combo_box>
 			</panel>
 		</layout_panel>
 		<layout_panel name="favorites_layout_panel">
@@ -14,7 +17,7 @@
 				<label name="favorites_bar_label" tool_tip="Arraste marcos para cá para acessar seus lugares preferidos do Second Life!">
 					Barra Destaques
 				</label>
-				<more_button name="&gt;&gt;" tool_tip="Mostrar mais favoritos">
+				<more_button name="more_btn" tool_tip="Mostrar mais favoritos">
 					Mais ▼
 				</more_button>
 			</favorites_bar>

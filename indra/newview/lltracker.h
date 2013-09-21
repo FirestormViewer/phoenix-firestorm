@@ -58,6 +58,7 @@ public:
 		LOCATION_NOTHING,
 		LOCATION_EVENT,
 		LOCATION_ITEM,
+		LOCATION_AVATAR // Ansariel: Added for avatar tracking feature
 	};
 
 	static LLTracker* instance() 

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    layout="topleft"
+    name="Self Pie">
+    <pie_slice
+        label="プロフィール..."
+        layout="topleft"
+        name="Profile...">
+        <pie_slice.on_click
+            function="ShowAgentProfile"
+            parameter="agent" />
+    </pie_slice>
+    <pie_slice
+        label="グループ..."
+        layout="topleft"
+        name="Groups...">
+        <pie_slice.on_click
+            function="SideTray.PanelPeopleTab"
+            parameter="groups_panel" />
+    </pie_slice>
+    <pie_menu
+        label="取り外す＞"
+        layout="topleft"
+        name="Take Off &gt;">
+        <pie_menu
+            label="服＞"
+            layout="topleft"
+            name="Clothes &gt;">
+            <pie_slice
+                enabled="false"
+                label="シャツ"
+                layout="topleft"
+                name="Shirt">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="shirt" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="shirt" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="ズボン"
+                layout="topleft"
+                name="Pants">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="pants" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="pants" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="靴"
+                layout="topleft"
+                name="Shoes">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="shoes" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="shoes" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="靴下"
+                layout="topleft"
+                name="Socks">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="socks" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="socks" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="ジャケット"
+                layout="topleft"
+                name="Jacket">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="jacket" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="jacket" />
+            </pie_slice>
+            <pie_slice
+                enabled="false"
+                label="手袋"
+                layout="topleft"
+                name="Gloves">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="gloves" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="gloves" />
+            </pie_slice>
+            <pie_menu
+                label="詳細"
+                name="Clothes More">
+                <pie_slice
+                    enabled="false"
+                    label="（下着の）シャツ"
+                    layout="topleft"
+                    name="Self Undershirt">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="undershirt" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="undershirt" />
+                </pie_slice>
+
+                <pie_separator />
+
+                <pie_slice
+                    label="すべての服"
+                    layout="topleft"
+                    name="All Clothes">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="all" />
+                </pie_slice>
+
+                <pie_separator />
+
+                <pie_slice
+                    enabled="false"
+                    label="（下着の）パンツ"
+                    layout="topleft"
+                    name="Self Underpants">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="underpants" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="underpants" />
+                </pie_slice>
+
+                <pie_slice
+                    enabled="false"
+                    label="タトゥー"
+                    layout="topleft"
+                    name="Self Tattoo">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="tattoo" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="tattoo" />
+                </pie_slice>
+
+                <pie_slice
+					enabled="false"
+					label="物理作用"
+					layout="topleft"
+					name="Self Physics">
+                    <pie_slice.on_click
+						function="Edit.TakeOff"
+						parameter="physics" />
+                    <pie_slice.on_enable
+						function="Edit.EnableTakeOff"
+						parameter="physics" />
+				</pie_slice>
+
+                <pie_slice
+                    enabled="false"
+                    label="アルファ"
+                    layout="topleft"
+                    name="Self Alpha">
+                    <pie_slice.on_click
+                        function="Edit.TakeOff"
+                        parameter="alpha" />
+                    <pie_slice.on_enable
+                        function="Edit.EnableTakeOff"
+                        parameter="alpha" />
+                </pie_slice>
+            </pie_menu>
+
+            <pie_slice
+                enabled="false"
+                label="スカート"
+                layout="topleft"
+                name="Skirt">
+                <pie_slice.on_click
+                    function="Edit.TakeOff"
+                    parameter="skirt" />
+                <pie_slice.on_enable
+                    function="Edit.EnableTakeOff"
+                    parameter="skirt" />
+            </pie_slice>
+        </pie_menu>
+
+        <pie_menu
+            label="HUD＞"
+            layout="topleft"
+            name="Pie Object Detach HUD" />
+
+        <pie_separator />
+
+        <pie_menu
+            label="取り外す"
+            layout="topleft"
+            name="Pie Object Detach" />
+
+        <pie_separator />
+
+        <pie_slice
+            label="すべて取り外す"
+            layout="topleft"
+            name="Detach All">
+            <pie_slice.on_click
+                function="Self.RemoveAllAttachments"
+                parameter="" />
+            <pie_slice.on_enable
+                function="Self.EnableRemoveAllAttachments" />
+        </pie_slice>
+    </pie_menu>
+
+    <pie_slice
+        label="ここに座る"
+        start_autohide="true"
+        name="Sit Down Here">
+        <pie_slice.on_click
+            function="Self.SitDown" />
+        <pie_slice.on_enable
+            function="Self.EnableSitDown" />
+    </pie_slice>
+    <pie_slice
+        label="立ち上がる"
+        autohide="true"
+        name="Stand Up">
+        <pie_slice.on_click
+            function="Self.StandUp" />
+        <pie_slice.on_enable
+            function="Self.EnableStandUp" />
+    </pie_slice>
+    <pie_slice
+        enabled="true"
+        label="スクリプト情報"
+        name="ScriptInfo">
+        <pie_slice.on_click
+            function="Tools.ScriptInfo" />
+    </pie_slice>
+    <pie_slice
+        label="ジェスチャー..."
+        name="Gestures">
+        <pie_slice.on_click
+            function="Floater.Toggle"
+            parameter="gestures" />
+    </pie_slice>
+
+    <pie_menu
+        label="容姿＞"
+        layout="topleft"
+        name="Appearance &gt;">
+
+        <pie_slice label="シェイプを編集"
+           layout="topleft"
+           name="Edit My Shape">
+           <pie_slice.on_click
+               function="EditShape" />
+           <pie_slice.on_enable
+               function="Edit.EnableEditShape" />
+        </pie_slice>
+
+        <pie_separator />
+
+        <pie_slice
+            enabled="true"
+            label="テクスチャ更新"
+            name="Texture Refresh">
+            <pie_slice.on_click
+                function="Avatar.TexRefresh" />
+        </pie_slice>
+
+        <pie_separator />
+
+        <pie_slice label="服装を編集"
+           layout="topleft"
+           name="Edit My Outfit">
+           <pie_slice.on_click
+               function="EditOutfit" />
+           <pie_slice.on_enable
+               function="Edit.EnableCustomizeAvatar" />
+        </pie_slice>
+
+    </pie_menu>
+    <pie_slice
+        label="デバッグ..."
+        name="Debug...">
+        <pie_slice.on_click
+            function="Avatar.Debug" />
+        <pie_slice.on_visible
+            function="IsGodCustomerService"/>
+    </pie_slice>
+
+</pie_menu>

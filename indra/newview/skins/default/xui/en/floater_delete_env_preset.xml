@@ -6,7 +6,7 @@
  layout="topleft"
  name="Delete Env Preset"
  save_rect="true"
- title="DELETE ENV PRESET"
+ title="Delete Env Preset"
  width="550">
 
     <string name="title_water">Delete Water Preset</string>

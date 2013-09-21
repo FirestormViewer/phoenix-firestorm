@@ -691,7 +691,7 @@ public:
 	virtual bool	addChild			(LLView* view, S32 tab_group = 0);
 
 			LLHandle<LLContextMenu> getHandle() { return getDerivedHandle<LLContextMenu>(); }
-
+			
 			LLView*	getSpawningView() const		{ return mSpawningViewHandle.get(); }
 			void	setSpawningView(LLHandle<LLView> spawning_view) { mSpawningViewHandle = spawning_view; }
 
@@ -700,6 +700,10 @@ protected:
 	LLMenuItemGL*				mHoverItem;
 	LLRootHandle<LLContextMenu>	mHandle;
 	LLHandle<LLView>			mSpawningViewHandle;
+
+	// <FS:ND>FIRE-9257; Hold a handle for mHoverItem so we can check if the item it already deleted. 
+	LLHandle<LLView>			mHoverItemHandle;
+	// </FS:ND>
 };
 
 //-----------------------------------------------------------------------------

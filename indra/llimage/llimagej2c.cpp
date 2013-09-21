@@ -360,7 +360,12 @@ BOOL LLImageJ2C::loadAndValidate(const std::string &filename)
 	S32 file_size = 0;
 	LLAPRFile infile ;
 	infile.open(filename, LL_APR_RB, NULL, &file_size);
-	apr_file_t* apr_file = infile.getFileHandle() ;
+
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	// apr_file_t* apr_file = infile.getFileHandle() ;
+	LLAPRFile::tFiletype* apr_file = infile.getFileHandle() ;
+	// </FS:ND>
+
 	if (!apr_file)
 	{
 		setLastError("Unable to open file for reading", filename);
@@ -374,6 +379,11 @@ BOOL LLImageJ2C::loadAndValidate(const std::string &filename)
 	else
 	{
 		U8 *data = (U8*)ALLOCATE_MEM(LLImageBase::getPrivatePool(), file_size);
+		if(!data)
+		{
+			llwarns << "couldn't allocate memory for loading file: " << filename << " size: " << file_size << llendl;
+			return FALSE;
+		}
 		apr_size_t bytes_read = file_size;
 		apr_status_t s = apr_file_read(apr_file, data, &bytes_read); // modifies bytes_read	
 		infile.close() ;

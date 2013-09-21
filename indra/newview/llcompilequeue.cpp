@@ -45,7 +45,7 @@
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
-#include "lscript_rt_interface.h"
+//#include "lscript_rt_interface.h"	// <FS:CR> Removed LSO Compiler
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
 #include "llviewerregion.h"
@@ -159,6 +159,29 @@ void LLFloaterScriptQueue::addObject(const LLUUID& id)
 
 BOOL LLFloaterScriptQueue::start()
 {
+	LLNotificationsUtil::add("ConfirmScriptModify", LLSD(), LLSD(), boost::bind(&LLFloaterScriptQueue::onScriptModifyConfirmation, this, _1, _2));
+	return true;
+	/*
+	//llinfos << "LLFloaterCompileQueue::start()" << llendl;
+	std::string buffer;
+
+	LLStringUtil::format_map_t args;
+	args["[START]"] = mStartString;
+	args["[COUNT]"] = llformat ("%d", mObjectIDs.count());
+	buffer = getString ("Starting", args);
+	
+	getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
+
+	return nextObject();*/
+}
+
+bool LLFloaterScriptQueue::onScriptModifyConfirmation(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option != 0)// canceled
+	{
+		return true;
+	}
 	std::string buffer;
 
 	LLStringUtil::format_map_t args;
@@ -496,6 +519,9 @@ void LLFloaterCompileQueue::onSaveBytecodeComplete(const LLUUID& asset_id, void*
 void LLFloaterCompileQueue::compile(const std::string& filename,
 									const LLUUID& item_id)
 {
+	// <FS:CR> Remove LSO Compiler
+	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+#if 0
 	LLUUID new_asset_id;
 	LLTransactionID tid;
 	tid.generate();
@@ -531,6 +557,7 @@ void LLFloaterCompileQueue::compile(const std::string& filename,
 									&LLFloaterCompileQueue::onSaveBytecodeComplete,
 									(void*)data, FALSE);
 	}
+#endif // 0 // <FS:CR>
 }
 
 void LLFloaterCompileQueue::removeItemByItemID(const LLUUID& asset_id)
@@ -751,6 +778,60 @@ void LLFloaterNotRunQueue::handleInventory(LLViewerObject* viewer_obj,
 
 	nextObject();	
 }
+
+// <FS> Delete scripts
+///----------------------------------------------------------------------------
+/// Class LLFloaterDeleteQueue 
+///----------------------------------------------------------------------------
+
+LLFloaterDeleteQueue::LLFloaterDeleteQueue(const LLSD& key)
+  : LLFloaterScriptQueue(key)
+{
+	setTitle(LLTrans::getString("DeleteQueueTitle"));
+	setStartString(LLTrans::getString("DeleteQueueStart"));
+}
+
+LLFloaterDeleteQueue::~LLFloaterDeleteQueue()
+{ 
+}
+
+void LLFloaterDeleteQueue::handleInventory(LLViewerObject* viewer_obj,
+										  LLInventoryObject::object_list_t* inv)
+{
+	// find all of the lsl, leaving off duplicates. We'll remove
+	// all matching asset uuids on compilation success.
+	LLDynamicArray<const char*> names;
+	
+	LLInventoryObject::object_list_t::const_iterator it = inv->begin();
+	LLInventoryObject::object_list_t::const_iterator end = inv->end();
+	for ( ; it != end; ++it)
+	{
+		if((*it)->getType() == LLAssetType::AT_LSL_TEXT)
+		{
+			LLViewerObject* object = gObjectList.findObject(viewer_obj->getID());
+
+			if (object)
+			{				
+				LLInventoryItem* item = (LLInventoryItem*)((LLInventoryObject*)(*it));
+				std::string buffer;
+				buffer = getString("Deleting") + (": ") + item->getName();
+				getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
+				LLMessageSystem* msg = gMessageSystem;
+				msg->newMessageFast(_PREHASH_RemoveTaskInventory);
+				msg->nextBlockFast(_PREHASH_AgentData);
+				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+				msg->nextBlockFast(_PREHASH_InventoryData);
+				msg->addU32Fast(_PREHASH_LocalID, viewer_obj->getLocalID());
+				msg->addUUIDFast(_PREHASH_ItemID, (*it)->getUUID());
+				msg->sendReliable(object->getRegion()->getHost());
+			}
+		}
+	}
+
+	nextObject();	
+}
+// </FS> Delete scripts
 
 ///----------------------------------------------------------------------------
 /// Local function definitions

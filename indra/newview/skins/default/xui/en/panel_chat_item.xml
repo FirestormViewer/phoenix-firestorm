@@ -20,7 +20,7 @@
       left="30"
       right="-10"
       height="120"
-      text_color="white"
+      text_color="White"
       word_wrap="true"
       mouse_opaque="true"
       valign="top"

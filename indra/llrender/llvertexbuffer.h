@@ -56,7 +56,7 @@ class LLVBOPool
 public:
 	static U32 sBytesPooled;
 	static U32 sIndexBytesPooled;
-	
+
 	static U32 sCurGLName;
 
 	LLVBOPool(U32 vboUsage, U32 vboType);
@@ -79,19 +79,24 @@ public:
 	U32 genBuffer();
 	void deleteBuffer(U32 name);
 
-	class Record
-	{
-	public:
-		U32 mGLName;
-		volatile U8* mClientData;
-	};
 
-	std::list<U32> mGLNamePool;
+	// <FS:ND> We're not using any of this
 
-	typedef std::list<Record> record_list_t;
-	std::vector<record_list_t> mFreeList;
-	std::vector<U32> mMissCount;
+	// class Record
+	// {
+	// public:
+	// 	U32 mGLName;
+	// 	volatile U8* mClientData;
+	// };
+	// 
+	// std::list<U32> mGLNamePool;
+	// 
+	// typedef std::list<Record> record_list_t;
+	// std::vector<record_list_t> mFreeList;
+	// std::vector<U32> mMissCount;
 
+
+	// </FS:ND>
 };
 
 

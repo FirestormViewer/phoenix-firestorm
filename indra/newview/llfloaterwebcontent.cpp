@@ -82,6 +82,7 @@ BOOL LLFloaterWebContent::postBuild()
 	mAddressCombo      = getChild< LLComboBox >( "address" );
 	mStatusBarText     = getChild< LLTextBox >( "statusbartext" );
 	mStatusBarProgress = getChild<LLProgressBar>("statusbarprogress" );
+	mPluginFailText    = getChild< LLTextBox >("plugin_fail_text");
 
 	mBtnBack           = getChildView( "back" );
 	mBtnForward        = getChildView( "forward" );
@@ -90,6 +91,11 @@ BOOL LLFloaterWebContent::postBuild()
 
 	// observe browser events
 	mWebBrowser->addObserver( this );
+
+	// Hide the web browser initially so the plugin fail text links can be clicked if needed.
+	// A navigationi begin event will swap these around.
+	mWebBrowser->setVisible( false );
+	mPluginFailText->setVisible( true );
 
 	// these buttons are always enabled
 	mBtnReload->setEnabled( true );
@@ -315,6 +321,9 @@ void LLFloaterWebContent::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent
 	}
 	else if(event == MEDIA_EVENT_NAVIGATE_BEGIN)
 	{
+		// hide the media fail text and bring the web browser to the front
+		mWebBrowser->setVisible( true );
+		mPluginFailText->setVisible( false );
 		// flags are sent with this event
 		mBtnBack->setEnabled( self->getHistoryBackAvailable() );
 		mBtnForward->setEnabled( self->getHistoryForwardAvailable() );

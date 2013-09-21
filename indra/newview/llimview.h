@@ -27,7 +27,7 @@
 #ifndef LL_LLIMVIEW_H
 #define LL_LLIMVIEW_H
 
-#include "../llui/lldockablefloater.h"
+#include "lldockablefloater.h"
 #include "lleventtimer.h"
 #include "llinstantmessage.h"
 
@@ -150,6 +150,14 @@ public:
 
 	LLIMModel();
 
+	// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+	//we should control the currently active session
+	LLUUID	mActiveSessionID;
+	void	setActiveSessionID(const LLUUID& session_id);
+	void	resetActiveSessionID() { mActiveSessionID.setNull(); }
+	LLUUID	getActiveSessionID() { return mActiveSessionID; }
+	// </FS:Ansariel> [FS communication UI]
+
 	/** Session id to session object */
 	std::map<LLUUID, LLIMSession*> mId2SessionMap;
 
@@ -192,6 +200,14 @@ public:
 	 */
 	bool clearSession(const LLUUID& session_id);
 
+	// <FS:CR> Make public for FS Communications UI
+	/**
+	 * Populate supplied std::list with messages starting from index specified by start_index without
+	 * emitting no unread messages signal.
+	 */
+	void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
+	// </FS:CR>
+	
 	/**
 	 * Sends no unread messages signal.
 	 */
@@ -207,13 +223,18 @@ public:
 	 * and also saved into a file if log2file is specified.
 	 * It sends new message signal for each added message.
 	 */
-	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true);
+	// <FS:Ansariel> Added is_announcement parameter
+	//bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true);
+	bool addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& other_participant_id, const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
 	/**
 	 * Similar to addMessage(...) above but won't send a signal about a new message added
 	 */
+	// <FS:Ansariel> Added is_announcement parameter
+	//LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
+	//	const std::string& utf8_text, bool log2file = true);
 	LLIMModel::LLIMSession* addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-		const std::string& utf8_text, bool log2file = true);
+		const std::string& utf8_text, bool log2file = true, BOOL is_announcement = FALSE);
 
 	/**
 	 * Add a system message to an IM Model
@@ -282,16 +303,20 @@ public:
 
 private:
 	
+	// <FS:CR> Post CHUI - Move this public for FS Communications UI
 	/**
 	 * Populate supplied std::list with messages starting from index specified by start_index without
 	 * emitting no unread messages signal.
 	 */
-	void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
-
+	//void getMessagesSilently(const LLUUID& session_id, std::list<LLSD>& messages, int start_index = 0);
+	// </FS:CR>
+	
 	/**
 	 * Add message to a list of message associated with session specified by session_id
 	 */
-	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
+	// <FS:Ansariel> Added is_announcement parameter
+	//bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text);
+	bool addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, BOOL is_announcement = FALSE);
 };
 
 class LLIMSessionObserver
@@ -333,7 +358,9 @@ public:
 					U32 parent_estate_id = 0,
 					const LLUUID& region_id = LLUUID::null,
 					const LLVector3& position = LLVector3::zero,
-					bool link_name = false);
+					bool link_name = false,
+					BOOL is_announcement = FALSE // <FS:Ansariel> Special parameter indicating announcement
+					);
 
 	void addSystemMessage(const LLUUID& session_id, const std::string& message_name, const LLSD& args);
 

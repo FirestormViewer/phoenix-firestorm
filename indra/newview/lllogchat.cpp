@@ -34,7 +34,10 @@
 #include "llviewercontrol.h"
 
 #include "lldiriterator.h"
-#include "llfloaterimsessiontab.h"
+// <FS:CR> Firectorm communications UI
+//#include "llfloaterimsessiontab.h"
+#include "fsfloaterim.h"
+// </FS:CR>
 #include "llinstantmessage.h"
 #include "llsingleton.h" // for LLSingleton
 
@@ -58,6 +61,7 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/local_time_adjustor.hpp>
+#include "llstartup.h"
 
 const S32 LOG_RECALL_SIZE = 2048;
 
@@ -89,6 +93,7 @@ const static std::string MULTI_LINE_PREFIX(" ");
  */
 const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
 const static boost::regex TIMESTAMP("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]|\\[\\d{1,2}:\\d{2}\\]).*");
+const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)?(.*)$");
 
 /**
  *  Regular expression suitable to match names like
@@ -112,6 +117,8 @@ const static std::string NAME_TEXT_DIVIDER(": ");
 // is used for timestamps adjusting
 const static char* DATE_FORMAT("%Y/%m/%d %H:%M");
 const static char* TIME_FORMAT("%H:%M");
+const static char* DATE_FORMAT_SEC("%Y/%m/%d %H:%M:%S");
+const static char* TIME_FORMAT_SEC("%H:%M:%S");
 
 const static int IDX_TIMESTAMP = 1;
 const static int IDX_STUFF = 2;
@@ -136,9 +143,18 @@ public:
 	LLLogChatTimeScanner()
 	{
 		// Note, date/time facets will be destroyed by string streams
-		mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
-		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
-		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT_SEC)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT_SEC)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT_SEC)));
+		}
+		else
+		{
+			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
+		}
 	}
 
 	date getTodayPacificDate()
@@ -267,11 +283,21 @@ std::string LLLogChat::timestamp(bool withdate)
 				  + LLTrans::getString ("TimeDay") + "] ["
 				  + LLTrans::getString ("TimeHour") + "]:["
 				  + LLTrans::getString ("TimeMin") + "]";
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			timeStr += ":["
+				  +LLTrans::getString ("TimeSec")+"]";
+		}
 	}
 	else
 	{
 		timeStr = "[" + LLTrans::getString("TimeHour") + "]:["
 				  + LLTrans::getString ("TimeMin")+"]";
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			timeStr += ":["
+				  +LLTrans::getString ("TimeSec")+"]";
+		}
 	}
 
 	LLSD substitution;
@@ -288,6 +314,10 @@ void LLLogChat::saveHistory(const std::string& filename,
 							const LLUUID& from_id,
 							const std::string& line)
 {
+	if(LLStartUp::getStartupState() <= STATE_LOGIN_CLEANUP)
+	{
+		return;
+	}
 	std::string tmp_filename = filename;
 	LLStringUtil::trim(tmp_filename);
 	if (tmp_filename.empty())
@@ -643,7 +673,10 @@ void LLLogChat::deleteTranscripts()
 		}
 	}
 
-	LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
+	// <FS:CR> Firestorm communications UI
+	//LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
+	FSFloaterIM::processChatHistoryStyleUpdate(true);
+	// </FS:CR>
 }
 
 // static
@@ -656,10 +689,23 @@ bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id, bool is_group)
 	{
 		LLAvatarName avatar_name;
 		LLAvatarNameCache::get(avatar_id, &avatar_name);
-		std::string avatar_user_name = avatar_name.getAccountName();
+		// <FS:Ansariel> [Legacy IM logfile names]
+		//std::string avatar_user_name = avatar_name.getAccountName();
+		std::string avatar_user_name;
+		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+		{
+			avatar_user_name = avatar_name.getUserName();
+			avatar_user_name = avatar_user_name.substr(0, avatar_user_name.find(" Resident"));;
+		}
+		else
+		{
+			avatar_user_name = avatar_name.getAccountName();
+			std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+		}
+		// <//FS:Ansariel> [Legacy IM logfile names]
 		if(!is_group)
 		{
-			std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+			//std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
 			BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
 			{
 				if (std::string::npos != transcript_file_name.find(avatar_user_name))
@@ -754,7 +800,14 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 
 	//matching a timestamp
 	boost::match_results<std::string::const_iterator> matches;
-	if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	{
+		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF_SEC)) return false;
+	}
+	else
+	{
+		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+	}
 	
 	bool has_timestamp = matches[IDX_TIMESTAMP].matched;
 	if (has_timestamp)
@@ -791,6 +844,18 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 	
 	bool has_name = name_and_text[IDX_NAME].matched;
 	std::string name = name_and_text[IDX_NAME];
+
+	// Ansariel: Handle the case an IM was stored in nearby chat history
+	if (name == "IM:")
+	{
+		U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER, 3);
+		if (divider_pos != std::string::npos && divider_pos < (stuff.length() - NAME_TEXT_DIVIDER.length()))
+		{
+			im[LL_IM_FROM] = stuff.substr(0, divider_pos);
+			im[LL_IM_TEXT] = stuff.substr(divider_pos + NAME_TEXT_DIVIDER.length());
+			return true;
+		}
+	}
 
 	//we don't need a name/text separator
 	if (has_name && name.length() && name[name.length()-1] == ':')

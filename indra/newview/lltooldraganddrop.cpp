@@ -59,6 +59,14 @@
 #include "llvoavatarself.h"
 #include "llworld.h"
 #include "llpanelface.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
+
+#include "llparcel.h"
+#include "llviewerparcelmgr.h"
+#include "fscommon.h"
 
 // syntactic sugar
 #define callMemberFunction(object,ptrToMember)  ((object).*(ptrToMember))
@@ -837,12 +845,18 @@ void LLToolDragAndDrop::dragOrDrop3D( S32 x, S32 y, MASK mask, BOOL drop, EAccep
 	if (mDrop)
 	{
 		// don't allow drag and drop onto transparent objects
-		pick(gViewerWindow->pickImmediate(x, y, FALSE));
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		pick(gViewerWindow->pickImmediate(x, y, FALSE, FALSE));
+// [/SL:KB]
+//		pick(gViewerWindow->pickImmediate(x, y, FALSE));
 	}
 	else
 	{
 		// don't allow drag and drop onto transparent objects
-		gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE, FALSE);
+// [/SL:KB]
+//		gViewerWindow->pickAsync(x, y, mask, pickCallback, FALSE);
 	}
 
 	*acceptance = mLastAccept;
@@ -1284,6 +1298,15 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 		return;
 	}
 
+
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.2.0a
+	// Fallback in case there's a new code path that leads here (see behaviour notes)
+	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	//llinfos << "Rezzing object" << llendl;
 	make_ui_sound("UISndObjectRezIn");
 	LLViewerInventoryItem* item;
@@ -1360,7 +1383,20 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 	msg->nextBlockFast(_PREHASH_AgentData);
 	msg->addUUIDFast(_PREHASH_AgentID,  gAgent.getID());
 	msg->addUUIDFast(_PREHASH_SessionID,  gAgent.getSessionID());
-	msg->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
+	LLUUID group_id = gAgent.getGroupID();
+	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+	{
+		LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+		if (gAgent.isInGroup(parcel->getGroupID()))
+		{
+			group_id = parcel->getGroupID();
+		}
+		else if (gAgent.isInGroup(parcel->getOwnerID()))
+		{
+			group_id = parcel->getOwnerID();
+		}
+	}
+	msg->addUUIDFast(_PREHASH_GroupID, group_id);
 
 	msg->nextBlock("RezData");
 	// if it's being rezzed from task inventory, we need to enable
@@ -1404,6 +1440,11 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 		item->packMessage(msg);
 	}
 	msg->sendReliable(regionp->getHost());
+
+	// <FS:Techwolf Lupindo>
+	// Prevent default build parms from being applied due to lost packet.
+	FSCommon::sObjectAddMsg = 0;
+	
 	// back out the change. no actual internal changes take place.
 	item->setParent(folder_id); 
 
@@ -1555,6 +1596,23 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
 	BOOL volume = (LL_PCODE_VOLUME == obj->getPCode());
 	BOOL attached = obj->isAttachment();
 	BOOL unrestricted = ((perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED) ? TRUE : FALSE;
+
+// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c) | Modified: RLVa-1.0.0c
+	if (rlv_handler_t::isEnabled())
+	{
+		const LLViewerObject* pObjRoot = obj->getRootEdit();
+		if (gRlvAttachmentLocks.isLockedAttachment(pObjRoot))
+		{
+			return ACCEPT_NO_LOCKED;		// Disallow inventory drops on a locked attachment
+		}
+		else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) )
+		{
+			if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == pObjRoot) )
+				return ACCEPT_NO_LOCKED;	// ... or on a linkset the avie is sitting on under @unsit=n/@sittp=n
+		}
+	}
+// [/RLVa:KB]
+
 	if(attached && !unrestricted)
 	{
 		return ACCEPT_NO_LOCKED;
@@ -1781,12 +1839,24 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		return ACCEPT_NO;
 	}
 
+// [RLVa:KB] - Checked: 2013-02-13 (RLVa-1.4.8)
+	bool fReplace = !(mask & MASK_CONTROL);
+	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanWearItem(item, (fReplace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
+
 
 	if( drop )
 	{
 		if(mSource == SOURCE_LIBRARY)
 		{
-			LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(rez_attachment_cb, _1, (LLViewerJointAttachment*)0));
+//			LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(rez_attachment_cb, _1, (LLViewerJointAttachment*)0));
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-2.2)
+			// Make this behave consistent with dad3dWearItem
+			LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(rez_attachment_cb, _1, (LLViewerJointAttachment*)0, fReplace));
+// [/SL:KB]
 			copy_inventory_item(
 				gAgent.getID(),
 				item->getPermissions().getOwner(),
@@ -1797,7 +1867,11 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 		}
 		else
 		{
-			rez_attachment(item, 0);
+//			rez_attachment(item, 0);
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-2.2)
+			// Make this behave consistent with dad3dWearItem
+			rez_attachment(item, 0, !(mask & MASK_CONTROL));
+// [/SL:KB]
 		}
 	}
 	return ACCEPT_YES_SINGLE;
@@ -1807,6 +1881,14 @@ EAcceptance LLToolDragAndDrop::dad3dRezAttachmentFromInv(
 EAcceptance LLToolDragAndDrop::dad3dRezObjectOnLand(
 	LLViewerObject* obj, S32 face, MASK mask, BOOL drop)
 {
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+	// RELEASE-RLVa: [SL-2.2.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnLand()
+	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
+
 	if (mSource == SOURCE_WORLD)
 	{
 		return dad3dRezFromObjectOnLand(obj, face, mask, drop);
@@ -1869,6 +1951,18 @@ EAcceptance LLToolDragAndDrop::dad3dRezObjectOnLand(
 EAcceptance LLToolDragAndDrop::dad3dRezObjectOnObject(
 	LLViewerObject* obj, S32 face, MASK mask, BOOL drop)
 {
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+	// NOTE: if (mask & MASK_CONTROL) then it's a drop rather than a rez, so we let that pass through when @rez=n restricted
+	// (but not when @interact=n restricted unless the drop target is a HUD attachment)
+	// RELEASE-RLVa: [SL-2.2.0] Make sure the code below is the only code path to LLToolDragAndDrop::dad3dRezFromObjectOnObject()
+	if ( (rlv_handler_t::isEnabled()) &&
+		 ( ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && ((mask & MASK_CONTROL) == 0) ) ||
+		   ( (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (((mask & MASK_CONTROL) == 0) || (!obj->isHUDAttachment())) ) ) )
+	{
+		return ACCEPT_NO_LOCKED;
+	}
+// [/RLVa:KB]
+
 	// handle objects coming from object inventory
 	if (mSource == SOURCE_WORLD)
 	{
@@ -2099,11 +2193,22 @@ EAcceptance LLToolDragAndDrop::dad3dWearItem(
 			return ACCEPT_NO;
 		}
 
+// [RLVa:KB] - Checked: 2013-02-13 (RLVa-1.4.8)
+		bool fReplace = (!(mask & MASK_CONTROL)) || (LLAssetType::AT_BODYPART == item->getType());	// Body parts should always replace
+		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanWearItem(item, (fReplace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
+		{
+			return ACCEPT_NO_LOCKED;
+		}
+// [/RLVa:KB]
+
 		if( drop )
 		{
 			// TODO: investigate wearables may not be loaded at this point EXT-8231
 
-			LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(),true, !(mask & MASK_CONTROL));
+// [RLVa:KB] - Checked: 2013-02-13 (RLVa-1.4.8)
+			LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, fReplace);
+// [/RLVa:KB]
+//			LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(),true, !(mask & MASK_CONTROL));
 		}
 		return ACCEPT_YES_MULTI;
 	}

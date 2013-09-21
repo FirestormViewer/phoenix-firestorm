@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<layout_stack name="block_list_sidetray_main">
+		<layout_panel name="back_button_container">
 	<text name="title_text">
 		Blokerede
 	</text>
+		</layout_panel>
+		<layout_panel name="block_list_blocklaypanels">
 	<scroll_list name="blocked" tool_tip="Liste med beboerer der p.t. er blokeret"/>
 	<button label="Blokér beboer..." label_selected="Blokér beboer..." name="Block resident..." tool_tip="Vælg en beboer der skal blokeres"/>
 	<button label="Blokér objekt via navn..." label_selected="Blokér objekt via navn..." name="Block object by name..."/>
 	<button label="Fjern blokering" label_selected="Fjern blokering" name="Unblock" tool_tip="Fjerm en beboer fra blokeringslisten"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

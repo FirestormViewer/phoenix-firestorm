@@ -58,7 +58,7 @@ public:
 	BOOL loadShadersInterface();
 	BOOL loadShadersWindLight();
 	BOOL loadTransformShaders();
-
+	
 	std::vector<S32> mVertexShaderLevel;
 	S32	mMaxAvatarShaderLevel;
 
@@ -330,6 +330,7 @@ extern LLGLSLShader			gDeferredFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightShinyProgram;
 extern LLGLSLShader			gDeferredSkinnedFullbrightProgram;
 extern LLGLSLShader			gNormalMapGenProgram;
+extern LLGLSLShader         gVignettePost;	// <FS:CR> Import Vignette from Exodus
 
 // Deferred materials shaders
 extern LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];

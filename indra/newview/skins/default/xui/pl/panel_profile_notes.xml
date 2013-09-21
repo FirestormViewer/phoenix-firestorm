@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_notes" label="Notatki i Prywatność">
+    <text name="status_message" value="Prywatne notatki o tym awatarze:" />
+    <text name="status_message2" value="Zezwól temu awatarowi:" />
+    <check_box name="status_check" label="Widzieć gdy jestem online" />
+    <check_box name="map_check" label="Znajdować mnie na mapie" />
+    <check_box name="objects_check" label="Edytować, usuwać lub zabierać moje obiekty"/>
+</panel>

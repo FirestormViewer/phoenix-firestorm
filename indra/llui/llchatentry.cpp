@@ -87,7 +87,11 @@ void LLChatEntry::expandText()
 {
 	S32 line_count = mSingleLineMode ? 1 : mExpandLinesCount;
 
-	int visible_lines_count = llabs(getVisibleLines(true).first - getVisibleLines(true).second);
+	// <FS:Ansariel> Store result of getVisibleLines - it calls reflow
+	//int visible_lines_count = llabs(getVisibleLines(true).first - getVisibleLines(true).second);
+	std::pair<BOOL, BOOL> visible_lines = getVisibleLines(true);
+	int visible_lines_count = llabs(visible_lines.first - visible_lines.second);
+	// </FS:Ansariel>
 	bool can_changed = getLineCount() <= line_count || line_count < mPrevExpandedLineCount ;
 	mPrevExpandedLineCount = line_count;
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Attachment Pie">
+    <pie_slice label="Profilo..." name="Profile..."/>
+    <pie_slice label="Lascia" name="Drop"/>
+    <pie_menu name="Attachment Pie More" label="Avanti &gt;">
+        <pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
+        <pie_slice label="N. Script" name="ScriptInfo"/>
+        <pie_slice label="Tocca" name="Attachment Object Touch"/>
+    </pie_menu>
+    <pie_slice label="Siediti" name="Sit Down Here"/>
+    <pie_slice label="Alzati" name="Stand Up"/>
+    <pie_slice label="Stacca" name="Detach"/>
+    <pie_menu name="Appearance &gt;">
+        <pie_slice label="Modifica Shape" name="Edit My Shape"/>
+        <pie_slice label="Modifica Outfit" name="Edit My Outfit"/>
+    </pie_menu>
+    <pie_slice label="Modifica" name="Edit..."/>
+</pie_menu>

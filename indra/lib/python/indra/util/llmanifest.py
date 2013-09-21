@@ -85,7 +85,7 @@ def get_default_platform(dummy):
             }[sys.platform]
 
 DEFAULT_SRCTREE = os.path.dirname(sys.argv[0])
-RELEASE_CHANNEL = 'Second Life Release'
+RELEASE_CHANNEL = 'Firestorm Development'
 
 ARGUMENTS=[
     dict(name='actions',
@@ -145,7 +145,8 @@ ARGUMENTS=[
          description="""This specifies an identity to sign the viewer with, if any.
         If no value is supplied, the default signature will be used, if any. Currently
         only used on Mac OS X.""",
-         default=None)
+         default=None),
+    dict(name='viewer_flavor', description='Type of viewer build. Can be oss or hvk.', default="oss"),
     ]
 
 def usage(srctree=""):

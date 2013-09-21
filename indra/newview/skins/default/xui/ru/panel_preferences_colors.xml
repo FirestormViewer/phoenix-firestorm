@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Цвета" name="colors_panel">
 	<text name="effects_color_textbox">
-		Мои эффекты (луч выбора):
+		Выбор эффектов (Частицы): 
 	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="Щелкните для выбора цвета"/>
+	<color_swatch name="effect_color_swatch" tool_tip="Нажмите, чтобы открыть палитру цветов"/>
 	<text name="font_colors">
-		Цвета шрифтов чата:
+		Цвет текста UI: 
 	</text>
 	<text name="text_box1">
-		Я
+		Мой текст 
 	</text>
 	<text name="text_box2">
-		Другие
+		Других 
 	</text>
 	<text name="text_box3">
-		Объекты
+		Объектов 
 	</text>
 	<text name="text_box4">
 		Система
 	</text>
 	<text name="text_box5">
-		Ошибки
+		Ошибки 
 	</text>
 	<text name="text_box10">
-		Прямо
+		Непосредственный
 	</text>
 	<text name="text_box7">
 		Владелец
 	</text>
 	<text name="text_box9">
-		URL-адреса
+		Ссылки
 	</text>
 	<text name="bubble_chat">
-		Цвет фона тегов имен (также для чата в пузырьках):
+		Статус / Чат пузырьками / Прозрачность консоли:
 	</text>
-	<color_swatch name="background" tool_tip="Выберите цвет для тегов имен"/>
-	<slider label="Видимость:" name="bubble_chat_opacity" tool_tip="Задайте непрозрачность тегов имен"/>
+	<text name="ScriptDialogFgLabel">
+		Скрипты перед
+	</text>
+	<text name="ScriptDialogBgLabel">
+		Скрипты задн
+	</text>
+	<check_box label="Показать диалоги скриптов всегда на непрозрачном фоне" name="FSScriptDialogNoTransparency"/>
+	<check_box label="Заменить задний фон и прозрачность круглого меню" name="override_pie_color_checkbox"/>
+	<color_swatch name="background" tool_tip="Цвет имени аватара"/>
+	<slider label="Прозрачность:" name="bubble_chat_opacity" tool_tip="Выберите приглушенность / прозрачность"/>
+	<slider label="Прозрачность:" name="pie_menu_opacity"/>
+	<slider label="Выведение:" name="pie_menu_fade_out"/>
 	<text name="floater_opacity">
-		Непрозрачность окон:
+		Прозрачность всплывающих окон: 
 	</text>
-	<slider label="Активные:" name="active"/>
-	<slider label="Неактивные:" name="inactive"/>
+	<slider label="Активное:" name="active"/>
+	<slider label="Не активное:" name="inactive"/>
 </panel>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Raportowanie błędów" name="crash_reports">
+    <check_box label="Wysyłaj raporty o błędach na firestormviewer.org" name="checkSendCrashReports" />
+    <text label="Logi:" name="textSaveMiniDumpType">
+        Typ zrzutu:
+    </text>
+    <combo_box name="comboSaveMiniDumpType">
+        <combo_box.item name="Minimal" label="Minimalny" />
+        <combo_box.item name="Default" label="Domyślny" />
+        <combo_box.item name="Extended" label="Rozszerzony" />
+    </combo_box>
+    <check_box label="Zawsze pytaj przed wysłaniem" name="checkSendCrashReportsAlwaysAsk" />
+    <check_box label="Dołącz dane konfiguracyjne Firestorma - plik settings.xml" name="checkSendSettings" />
+    <text name="textSendSettings">
+        (zawiera nazwę konta Second Life)
+    </text>
+    <check_box label="Dołącz nazwę konta Second Life" name="checkSendName" />
+    <text name="textSendName">
+        (aby zapytać o dodatkowe info w razie potrzeby)
+    </text>
+    <text name="textInformation1">
+        Dopóki nie określono inaczej, to raport zawiera tylko informacje związane z awarią.
+    </text>
+    <text name="textInformation2">
+        Logi Second Life nie są wysyłane, proszę przejrzeć zawartość i wysłać osobny e-mail
+    </text>
+    <text name="textInformation3">
+        jeśli uważasz, że mogą zawierać istotne informacje.
+    </text>
+    <text name="textInformation4">
+        Polityka prywatności: http://www.firestormviewer.org/privacy-policy
+    </text>
+</panel>

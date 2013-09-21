@@ -7,8 +7,8 @@
 		Ausgewählte Objekte tragen
 	</panel.string>
 	<tab_container name="appearance_tabs">
-		<panel label="MEINE OUTFITS" name="outfitslist_tab"/>
-		<panel label="AKTUELLES OUTFIT" name="cof_tab"/>
+		<panel label="Outfits" name="outfitslist_tab"/>
+		<panel label="Aktuelles Outfit" name="cof_tab"/>
 	</tab_container>
 	<panel name="bottom_panel">
 		<layout_stack name="bottom_panel_ls">

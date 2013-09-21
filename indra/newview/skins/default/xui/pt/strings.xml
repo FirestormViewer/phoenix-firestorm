@@ -4,9 +4,6 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
-	<string name="CAPITALIZED_APP_NAME">
-		SECOND LIFE
-	</string>
 	<string name="SUPPORT_SITE">
 		Portal de Supporte Second Life
 	</string>
@@ -808,6 +805,12 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	<string name="worldmap_results_none_found">
 		Nenhum encontrado.
 	</string>
+	<string name="worldmap_agent_position">
+		Você está aqui
+	</string>
+	<string name="minimap_distance">
+		(Distância: [DISTANCE] m)
+	</string>
 	<string name="Ok">
 		OK
 	</string>
@@ -1369,7 +1372,7 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 	<string name="InvFolder Gestures">
 		Gestos
 	</string>
-	<string name="InvFolder Favorite">
+	<string name="InvFolder Favorites">
 		Meus favoritos
 	</string>
 	<string name="InvFolder favorite">
@@ -1550,7 +1553,7 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 		Ponto de encaixe inválido
 	</string>
 	<string name="YearsMonthsOld">
-		[AGEYEARS] [AGEMONTHS] de idade
+		[AGEYEARS] [AGEMONTHS]
 	</string>
 	<string name="YearsOld">
 		[AGEYEARS] de idade
@@ -2029,7 +2032,7 @@ Pessoas com contas gratuitas não poderão acessar o Second Life no momento para
 		deu a você
 	</string>
 	<string name="InvOfferDecline">
-		Você recusou um(a) [DESC] de &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Você recusou um(a) [DESC] de [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Total
@@ -2197,7 +2200,8 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Adult">
 		Adulto
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Artes e Cultura
 	</string>
 	<string name="Business">
@@ -2215,7 +2219,8 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Newcomer Friendly">
 		Para recém-chegados
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parques &amp; Natureza
 	</string>
 	<string name="Residential">

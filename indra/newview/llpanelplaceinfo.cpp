@@ -103,7 +103,10 @@ void LLPanelPlaceInfo::resetLocation()
 	mRegionName->setText(loading);
 	mParcelName->setText(loading);
 	mDescEditor->setText(loading);
-	mMaturityRatingIcon->setValue(LLUUID::null);
+	// <FS:Ansariel> Fix loading icon
+	//mMaturityRatingIcon->setValue(LLUUID::null);
+	mMaturityRatingIcon->setValue(LLSD("Unknown_Icon"));
+	// </FS:Ansariel> Fix loading icon
 
 	mSnapshotCtrl->setImageAssetID(LLUUID::null);
 }
@@ -192,7 +195,10 @@ void LLPanelPlaceInfo::setErrorStatus(U32 status, const std::string& reason)
 	mMaturityRatingText->setValue(not_available);
 	mRegionName->setText(not_available);
 	mParcelName->setText(not_available);
-	mMaturityRatingIcon->setValue(LLUUID::null);
+	// <FS:Ansariel> Fix loading icon
+	//mMaturityRatingIcon->setValue(LLUUID::null);
+	mMaturityRatingIcon->setValue(LLSD("Unknown_Icon"));
+	// </FS:Ansariel> Fix loading icon
 
 	// Enable "Back" button that was disabled when parcel request was sent.
 	getChild<LLButton>("back_btn")->setEnabled(TRUE);
@@ -253,6 +259,13 @@ void LLPanelPlaceInfo::processParcelInfo(const LLParcelData& parcel_data)
 	{
 		mParcelName->setText(getString("not_available"));
 	}
+
+	// <FS:Ansariel> FIRE-817: Separate place details floater
+	if (!mParcelDetailLoadedSignal.empty())
+	{
+		mParcelDetailLoadedSignal(parcel_data);
+	}
+	// </FS:Ansariel>
 }
 
 // virtual
@@ -313,3 +326,11 @@ void LLPanelPlaceInfo::onAvatarNameCache(const LLUUID& agent_id,
 {
 	text->setText( av_name.getCompleteName() );
 }
+
+
+// <FS:Ansariel> FIRE-817: Separate place details floater
+void LLPanelPlaceInfo::setHeaderVisible(BOOL visible)
+{
+	getChildView("header_container")->setVisible(visible);
+}
+// </FS:Ansariel>

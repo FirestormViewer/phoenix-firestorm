@@ -92,7 +92,9 @@ private:
 	void			renderEdges( const LLBBox& local_bbox );
 	void			renderBoxHandle( F32 x, F32 y, F32 z );
 	void			renderAxisHandle( const LLVector3& start, const LLVector3& end );
-	void			renderGuidelinesPart( const LLBBox& local_bbox );
+// <FS:CR> FIRE-8882
+	//void			renderGuidelinesPart( const LLBBox& local_bbox );
+// </FS:CR>
 	void			renderSnapGuides( const LLBBox& local_bbox );
 
 	void			revert();
@@ -163,6 +165,15 @@ private:
 	F32				mScaleSnapValue;
 	BOOL			mInSnapRegime;
 	F32*			mManipulatorScales;
+
+// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+public:
+	virtual BOOL	handleMiddleMouseDown( S32 x, S32 y, MASK mask );
+	virtual BOOL	handleMiddleMouseUp( S32 x, S32 y, MASK mask );
+
+private:
+	static BOOL mInvertUniform;
+// </FS:Zi>
 };
 
 #endif  // LL_MANIPSCALE_H

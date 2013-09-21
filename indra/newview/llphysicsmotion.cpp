@@ -453,15 +453,25 @@ F32 LLPhysicsMotion::calculateAcceleration_local(const F32 velocity_local)
 BOOL LLPhysicsMotionController::onUpdate(F32 time, U8* joint_mask)
 {
         // Skip if disabled globally.
-        if (!gSavedSettings.getBOOL("AvatarPhysics"))
+		// <FS:Ansariel> Performance improvement
+        //if (!gSavedSettings.getBOOL("AvatarPhysics"))
+		static LLCachedControl<bool> avatar_physics(gSavedSettings, "AvatarPhysics");
+		if (!avatar_physics)
+		// </FS:Ansariel>
         {
                 return TRUE;
         }
         
         BOOL update_visuals = FALSE;
+		// <FS:Ansariel> Performance improvement
+        //for (motion_vec_t::iterator iter = mMotions.begin();
+        //     iter != mMotions.end();
+        //     ++iter)
+		motion_vec_t::iterator motions_end_it = mMotions.end();
         for (motion_vec_t::iterator iter = mMotions.begin();
-             iter != mMotions.end();
+             iter != motions_end_it;
              ++iter)
+		// </FS:Ansariel>
         {
                 LLPhysicsMotion *motion = (*iter);
                 update_visuals |= motion->onUpdate(time);

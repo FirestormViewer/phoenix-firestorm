@@ -2,28 +2,6 @@
 <context_menu
  layout="topleft"
  name="Participant List Context Menu">
-    <menu_item_check
-     label="Sort by Name"
-     layout="topleft"
-     name="SortByName">
-        <on_check
-         function="ParticipantList.CheckItem"
-         parameter="is_sorted_by_name" />
-        <on_click
-         function="ParticipantList.Sort"
-         parameter="sort_by_name" />
-    </menu_item_check>
-    <menu_item_check
-     label="Sort by Recent Speakers"
-     layout="topleft"
-     name="SortByRecentSpeakers">
-        <on_check
-         function="ParticipantList.CheckItem"
-         parameter="is_sorted_by_recent_speakers" />
-        <on_click
-         function="ParticipantList.Sort"
-         parameter="sort_by_recent_speakers" />
-    </menu_item_check>
     <menu_item_call
      label="View Profile"
      layout="topleft"
@@ -86,6 +64,31 @@
     </menu_item_call>
     <menu_item_separator
      layout="topleft"
+     name="Sort Separator" />
+    <menu_item_check
+     label="Sort by Name"
+     layout="topleft"
+     name="SortByName">
+        <on_check
+         function="ParticipantList.CheckItem"
+         parameter="is_sorted_by_name" />
+        <on_click
+         function="ParticipantList.Sort"
+         parameter="sort_by_name" />
+    </menu_item_check>
+    <menu_item_check
+     label="Sort by Recent Speakers"
+     layout="topleft"
+     name="SortByRecentSpeakers">
+        <on_check
+         function="ParticipantList.CheckItem"
+         parameter="is_sorted_by_recent_speakers" />
+        <on_click
+         function="ParticipantList.Sort"
+         parameter="sort_by_recent_speakers" />
+    </menu_item_check>
+    <menu_item_separator
+     layout="topleft"
      name="View Icons Separator" />
     <menu_item_check
      label="View People Icons"
@@ -133,6 +136,19 @@
      label="Moderator Options"
      layout="topleft"
      name="Moderator Options">
+        <menu_item_call
+         label="Eject from Group"
+         layout="topleft"
+         name="EjectSelected">
+            <on_click
+             function="ParticipantList.Eject" />
+            <on_enable
+             function="ParticipantList.EnableItem"
+             parameter="can_eject" />
+        </menu_item_call>
+        <menu_item_separator
+         layout="topleft"
+         name="moderate_voice_separator" />
         <menu_item_check
          label="Allow text chat"
          layout="topleft"
@@ -146,9 +162,6 @@
              function="ParticipantList.EnableItem"
              parameter="can_allow_text_chat" />
         </menu_item_check>
-        <menu_item_separator
-         layout="topleft"
-         name="moderate_voice_separator" />
         <menu_item_call
          label="Mute this participant"
          layout="topleft"

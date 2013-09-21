@@ -45,6 +45,8 @@
 
 #include <algorithm>
 
+#include "llrootview.h"
+
 using namespace LLNotificationsUI;
 
 bool LLScreenChannel::mWasStartUpToastShown = false;
@@ -61,7 +63,21 @@ LLRect LLScreenChannelBase::getChannelRect()
 	
 	if (mChicletRegion == NULL)
 	{
-		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		// <FS:Ansariel> Group notices, IMs and chiclets position:
+		//               Move the chiclet container to the bottom of its parent
+		//               and follow bottom instead of top
+		//mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+		{
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+			gViewerWindow->getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		}
+		else
+		{
+			gViewerWindow->getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container_bottom");
+		}
+		// </FS:Ansariel> Group notices, IMs and chiclets position
 	}
 	
 	LLRect channel_rect;
@@ -70,7 +86,18 @@ LLRect LLScreenChannelBase::getChannelRect()
 	mFloaterSnapRegion->localRectToScreen(mFloaterSnapRegion->getLocalRect(), &channel_rect);
 	mChicletRegion->localRectToScreen(mChicletRegion->getLocalRect(), &chiclet_rect);
 
-	channel_rect.mTop = chiclet_rect.mBottom;
+	// <FS:Ansariel> Group notices, IMs and chiclets position
+	//channel_rect.mTop = chiclet_rect.mBottom;
+	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+	{
+		channel_rect.mTop = chiclet_rect.mBottom;
+	}
+	else
+	{
+		// Apparently not needed at the moment - pushes the toasts up too high
+		//channel_rect.mBottom = chiclet_rect.mTop;
+	}
+	// </FS:Ansariel> Group notices, IMs and chiclets position
 	return channel_rect;
 }
 
@@ -109,7 +136,21 @@ BOOL LLScreenChannelBase::postBuild()
 	
 	if (mChicletRegion == NULL)
 	{
-		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		// <FS:Ansariel> Group notices, IMs and chiclets position - Apparently
+		//               this never gets called, instead see
+		//               LLScreenChannelBase::getChannelRect()
+		//mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+		{
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+			gViewerWindow->getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		}
+		else
+		{
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container_bottom");
+			gViewerWindow->getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+		}
+		// </FS:Ansariel>
 	}
 	
 	return TRUE;
@@ -588,6 +629,9 @@ void LLScreenChannel::showToastsBottom()
 
 	LLDockableFloater* floater = dynamic_cast<LLDockableFloater*>(LLDockableFloater::getInstanceHandle().get());
 
+	// <FS:Ansariel> Show toasts in front of other floaters
+	BOOL toasts_in_front = gSavedSettings.getBOOL("FSShowToastsInFront");
+
 	// Use a local variable instead of mToastList.
 	// mToastList can be modified during recursive calls and then all iteratos will be invalidated.
 	std::vector<ToastElem> vToastList( mToastList );
@@ -668,7 +712,10 @@ void LLScreenChannel::showToastsBottom()
 			// EXT-2653: it is necessary to prevent overlapping for secondary showed toasts
 			toast->setVisible(TRUE);
 		}		
-		if(!toast->hasFocus())
+		// <FS:Ansariel> Show toasts in front of other floaters
+		//if(!toast->hasFocus())
+		if(!toast->hasFocus() && !toasts_in_front)
+		// </FS:Ansariel> Show toasts in front of other floaters
 		{
 			// Fixing Z-order of toasts (EXT-4862)
 			// Next toast will be positioned under this one.
@@ -735,6 +782,9 @@ void LLScreenChannel::showToastsTop()
 	updateRect();
 
 	LLDockableFloater* floater = dynamic_cast<LLDockableFloater*>(LLDockableFloater::getInstanceHandle().get());
+
+	// <FS:Ansariel> Show toasts in front of other floaters
+	BOOL toasts_in_front = gSavedSettings.getBOOL("FSShowToastsInFront");
 
 	// Use a local variable instead of mToastList.
 	// mToastList can be modified during recursive calls and then all iteratos will be invalidated.
@@ -815,7 +865,10 @@ void LLScreenChannel::showToastsTop()
 			// EXT-2653: it is necessary to prevent overlapping for secondary showed toasts
 			toast->setVisible(TRUE);
 		}		
-		if (!toast->hasFocus())
+		// <FS:Ansariel> Show toasts in front of other floaters
+		//if (!toast->hasFocus())
+		if (!toast->hasFocus() && !toasts_in_front)
+		// </FS:Ansariel> Show toasts in front of other floaters
 		{
 			// Fixing Z-order of toasts (EXT-4862)
 			// Next toast will be positioned under this one.
@@ -1104,8 +1157,17 @@ LLToast* LLScreenChannel::getToastByNotificationID(LLUUID id)
 	std::vector<ToastElem>::iterator it = find(mStoredToastList.begin(),
 			mStoredToastList.end(), id);
 
+//	if (it == mStoredToastList.end())
+//		return NULL;
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
 	if (it == mStoredToastList.end())
-		return NULL;
+	{
+		// If we can't find it among the stored toasts then widen it to "all visible toasts"
+		it = find(mToastList.begin(), mToastList.end(), id);
+		if (it == mToastList.end())
+			return NULL;
+	}
+// [/SL:KB]
 
 	return it->getToast();
 }

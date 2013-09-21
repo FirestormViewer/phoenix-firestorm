@@ -70,6 +70,9 @@ private:
 	void blockObjectByName();
 	void onFilterEdit(const std::string& search_string);
 
+	// <FS:Ansariel> Performance tweak
+	void onSelectionChanged();
+
 	// List commnads
 	void onCustomAction(const LLSD& userdata);
 	BOOL isActionChecked(const LLSD& userdata);

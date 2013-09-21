@@ -32,6 +32,10 @@
 #include "llinventory.h"
 #include "llwearabletype.h"
 
+//-TT - Firestorm folder name for use by AO, bridge and possibly others
+#define ROOT_FIRESTORM_FOLDER 	"#Firestorm"
+//-TT
+
 /********************************************************************************
  **                                                                            **
  **                    MISCELLANEOUS GLOBAL FUNCTIONS

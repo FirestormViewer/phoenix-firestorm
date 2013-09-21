@@ -26,7 +26,12 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llavatarnamecache.h"
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1)
+#include "llgroupactions.h"
+// [/SL:KB]
 #include "llimview.h"
 #include "llfloaterimcontainer.h"
 #include "llparticipantlist.h"
@@ -231,12 +236,14 @@ LLParticipantList::LLParticipantList(LLSpeakerMgr* data_source, LLFolderViewMode
 		else if (im_session->isGroupSessionType())
 		{
 			mConvType = CONV_SESSION_GROUP;
+				item->setState(LLAvatarListItem::IS_ONLINE);
 		}
 	}
 	else 
 	{
 		// That's the only session that doesn't get listed in the LLIMModel as a session...
 		mConvType = CONV_SESSION_NEARBY;
+				item->setState(LLAvatarListItem::IS_GROUPMOD);
 	}
 }
 
@@ -464,5 +471,7 @@ bool LLParticipantList::SpeakerMuteListener::handleEvent(LLPointer<LLOldEvents::
 {
 	return mParent.onSpeakerMuteEvent(event, userdata);
 }
+
+#endif // 0
 
 //EOF

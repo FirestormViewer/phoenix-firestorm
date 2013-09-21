@@ -45,7 +45,8 @@ static std::string getMarketplaceDomain()
 {
 	std::string domain = "secondlife.com";
 	
-	if (!LLGridManager::getInstance()->isInProductionGrid())
+//	if (!LLGridManager::getInstance()->isInProductionGrid()) <FS:ND> For OpenSim
+	if (!LLGridManager::getInstance()->isInSLMain())
 	{
 		const std::string& grid_id = LLGridManager::getInstance()->getGridId();
 		const std::string& grid_id_lower = utf8str_tolower(grid_id);
@@ -260,7 +261,11 @@ namespace LLMarketplaceImport
 		}
 
 		slmGetTimer.start();
-		LLHTTPClient::get(url, new LLImportGetResponder(), LLViewerMedia::getHeaders());
+
+		// <FS:ND> Bump timeout to 2 minutes. Marketplace can be really slow ...
+		//		LLHTTPClient::get(url, new LLImportGetResponder(), LLViewerMedia::getHeaders());
+		LLHTTPClient::get(url, new LLImportGetResponder(), LLViewerMedia::getHeaders(), 2*60);
+		// </FS:ND>
 		
 		return true;
 	}

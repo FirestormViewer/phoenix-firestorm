@@ -45,12 +45,16 @@ typedef enum e_chat_type
 	CHAT_TYPE_WHISPER = 0,
 	CHAT_TYPE_NORMAL = 1,
 	CHAT_TYPE_SHOUT = 2,
+	CHAT_TYPE_OOC = 3,
 	CHAT_TYPE_START = 4,
 	CHAT_TYPE_STOP = 5,
 	CHAT_TYPE_DEBUG_MSG = 6,
 	CHAT_TYPE_REGION = 7,
 	CHAT_TYPE_OWNER = 8,
-	CHAT_TYPE_DIRECT = 9		// From llRegionSayTo()
+	CHAT_TYPE_DIRECT = 9,		// From llRegionSayTo()
+	CHAT_TYPE_IM = 10,			// Ansariel: Special type for IMs in nearby chat
+	CHAT_TYPE_IM_GROUP = 11,	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+	CHAT_TYPE_RADAR = 12		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 } EChatType;
 
 typedef enum e_chat_audible_level
@@ -64,7 +68,8 @@ typedef enum e_chat_style
 {
 	CHAT_STYLE_NORMAL,
 	CHAT_STYLE_IRC,
-	CHAT_STYLE_HISTORY
+	CHAT_STYLE_HISTORY,
+	CHAT_STYLE_MODERATOR
 }EChatStyle;
 
 // A piece of chat
@@ -81,6 +86,10 @@ public:
 		mChatType(CHAT_TYPE_NORMAL),
 		mAudible(CHAT_AUDIBLE_FULLY),
 		mMuted(FALSE),
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.0.0a
+		mRlvLocFiltered(FALSE),
+		mRlvNamesFiltered(FALSE),
+// [/RLVa:KB]
 		mTime(0.0),
 		mTimeStr(),
 		mPosAgent(),
@@ -91,6 +100,7 @@ public:
 	
 	std::string		mText;		// UTF-8 line of text
 	std::string		mFromName;	// agent or object name
+	std::string		mFromNameGroup;	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 	LLUUID			mFromID;	// agent id or object id
 	LLUUID			mNotifId;
 	LLUUID			mOwnerID;
@@ -98,6 +108,10 @@ public:
 	EChatType		mChatType;
 	EChatAudible	mAudible;
 	BOOL			mMuted;		// pass muted chat to maintain list of chatters
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.0.0a
+	BOOL			mRlvLocFiltered;
+	BOOL			mRlvNamesFiltered;
+// [/RLVa:KB]
 	F64				mTime;		// viewer only, seconds from viewer start
 	std::string		mTimeStr;
 	LLVector3		mPosAgent;

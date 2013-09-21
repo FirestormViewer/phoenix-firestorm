@@ -130,6 +130,7 @@ LLComboBox::LLComboBox(const LLComboBox::Params& p)
 	params.commit_callback.function(boost::bind(&LLComboBox::onItemSelected, this, _2));
 	params.visible(false);
 	params.commit_on_keyboard_movement(false);
+	params.draw_stripes(false);
 
 	mList = LLUICtrlFactory::create<LLScrollListCtrl>(params);
 	addChild(mList);

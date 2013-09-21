@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-background_visible="true"
+background_visible="false"
  follows="all"
  height="570"
  label="Group Profile"
@@ -9,7 +9,7 @@ background_visible="true"
  left="0"
  top="20"
  name="GroupInfo"
- width="313">
+ width="333">
     <panel.string
      name="default_needs_apply_text">
         There are unsaved changes
@@ -26,6 +26,26 @@ background_visible="true"
      name="group_join_free">
         Free
     </panel.string>
+
+	<layout_stack
+		name="group_info_sidetray_main"
+		layout="topleft"
+		follows="all"
+		top="0"
+		left="0"
+		width="331"
+		height="570"
+		border_size="0"
+		orientation="vertical">
+	<layout_panel
+		name="header_container"
+		auto_resize="false"
+		height="30"
+		width="331"
+		layout="topleft"
+		visible="true"
+		follows="top|left|right">
+
     <panel
       name="group_info_top"
       follows="top|left"
@@ -42,10 +62,10 @@ background_visible="true"
      image_unselected="BackButton_Off"
      layout="topleft"
      name="back"
-     left="7"
+     left="0"
      tab_stop="false"
      top="2"
-     width="30"
+     width="0"
      use_draw_context_alpha="false" />
     <text_editor
      allow_scroll="false"
@@ -79,6 +99,16 @@ background_visible="true"
      height="20"
      visible="false" />
     </panel>
+	
+	</layout_panel>
+	<layout_panel
+		name="group_info_content"
+		auto_resize="true"
+		height="540"
+		width="331"
+		layout="topleft"
+		follows="all">
+
    <layout_stack
      name="layout"
      orientation="vertical"
@@ -89,17 +119,17 @@ background_visible="true"
      width="292"
      border_size="0">
    <layout_panel
-       bg_alpha_color="DkGray2"
-       bg_opaque_color="DkGray2"
-       background_visible="true"
-       background_opaque="true"
+       bg_alpha_color="SL-Background_66"
+       bg_opaque_color="SL-Background_66"
+       background_visible="false"
+       background_opaque="false"
        name="group_accordions"
        follows="all"
        layout="topleft"
        auto_resize="true"
        user_resize="true"
        height="513"
-       width="313">
+       width="333">
    <accordion
      left="0"
      top="0"
@@ -109,7 +139,7 @@ background_visible="true"
      layout="topleft"
      name="groups_accordion"
      height="513"
-     width="313">
+     width="333">
          <accordion_tab
             expanded="true"
             layout="topleft"
@@ -277,5 +307,8 @@ background_visible="true"
                  	 width="90" />	
 				</layout_panel>
 		   </layout_stack>
-  
+
+	</layout_panel>
+	</layout_stack> 
+
 </panel>

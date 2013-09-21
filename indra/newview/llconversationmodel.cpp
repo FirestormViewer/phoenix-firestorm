@@ -27,6 +27,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llavataractions.h"
@@ -707,3 +709,5 @@ void LLConversationViewModel::sort(LLFolderViewFolder* folder)
 }
 
 // EOF
+
+#endif

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Side tray Outfit Edit panel -->
-<panel label="Edytuj strój" name="outfit_edit">
+<panel name="outfit_edit">
 	<string name="No Outfit" value="Brak stroju"/>
 	<string name="unsaved_changes" value="Zmiany niezachowane"/>
 	<string name="now_editing" value="Obecnie edytujesz"/>
-	<panel.string name="not_available">
-		(N\A)
-	</panel.string>
 	<panel.string name="unknown">
 		(nieznany)
 	</panel.string>
@@ -17,14 +13,13 @@
 	<string name="Filter.Bodyparts" value="Części ciała"/>
 	<string name="replace_body_part" value="Kliknij aby zastąpić Twój obecny ksztalt"/>
 	<text name="title" value="Edytuj strój"/>
-	<panel label="bottom_panel" name="header_panel">
-		<panel label="bottom_panel" name="outfit_name_and_status">
+	<panel name="header_panel">
+		<panel name="outfit_name_and_status">
 			<text name="status" value="Trwa edycja..."/>
-			<text name="curr_outfit_name" value="[Current Outfit]"/>
 		</panel>
 	</panel>
 	<layout_stack name="im_panels">
-		<layout_panel label="Panel kontrolny IM" name="outfit_wearables_panel">
+		<layout_panel name="outfit_wearables_panel">
 			<layout_stack name="filter_panels">
 				<layout_panel name="add_button_and_combobox">
 					<button label="Dodaj..." name="show_add_wearables_btn" tool_tip="Otwórz/Zamknij"/>

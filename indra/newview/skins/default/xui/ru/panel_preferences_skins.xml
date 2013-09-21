@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Стили" name="skin_panel">
+	<text name="skin_textbox">
+        Стиль :
+    </text>
+    <text name="skin_textbox1">
+        (Требуется перезагрузка)
+    </text>
+    <text name="theme_textbox">
+        Цветовая схема:
+    </text>
+    <text name="theme_textbox2">
+        (Требуется перезагрузка)
+    </text>
+    <check_box label="Использовать курсор стиля Viewer 1" name="use _legacy_cursors"/>
+    <text name="theme_textbox3">
+        (Требуется перезагрузка)
+    </text>
+</panel>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<floater name="BeamCreator"
+	title="Créateur de Forme de Faisceau">
+	<text name="beamcreator_text">
+Cliquer sur la cible pour dessiner, point à point,
+la forme voulue de la couleur sélectionnée.
+Faire un clic-dr sur un point pour le supprimer.
+Cliquer sur Enregistrer pour finaliser.
+	</text>
+	<color_swatch name="beam_color_swatch"
+		label="Couleur"
+		tool_tip="Cliquer pour ouvrir le séélecteur de couleur"/>
+	<button name="beamshape_save"
+		label="Enregistrer"/>
+	<button name="beamshape_load"
+		label="Charger"/>
+	<button name="beamshape_clear"
+		label="Effacer"/>
+</floater> 

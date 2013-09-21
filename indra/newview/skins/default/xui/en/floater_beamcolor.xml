@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ border="false"
+ can_close="true"
+ can_minimize="true"
+ bottom="400"
+ left="300"
+ can_resize="false"
+ height="250"
+ name="BeamColor"
+ title="Beam Color rotate"
+ width="410"
+ save_rect="true">
+    <panel
+	 name="BeamColor_Picker"
+	 left="5"
+	 width="400"
+	 height="80"
+	 bottom_delta="90"
+	 border="true"
+	 mouse_opaque="true"
+	 bevel_style="in"
+	 background_visible="false"
+	 background_opaque="true"
+	 follows="left|top"
+	 bg_opaque_color="1,1,1,0"
+	 bg_alpha_color="white"
+	 can_resize="false">
+    </panel>
+	<text
+	 font="SansSerifSmall"
+	 name="beamcolor_text"
+	 follows="left|top"
+	 left="15"
+	 bottom_delta="50"
+	 height="40">
+Please use the mouse to select the colors for which
+you wish your beam color to start and stop on.
+Left click changes start position.
+Right click changes end position.
+	</text>
+	<color_swatch
+	 border_color="0.45098, 0.517647, 0.607843, 1"
+	 bottom="-50"
+	 can_apply_immediately="true"
+	 color="1, 1, 1, 1"
+	 follows="left|top"
+	 height="100"
+	 label=""
+	 left="300"
+	 mouse_opaque="true"
+	 name="BeamColor_Preview"
+	 tool_tip="Click to open Color Picker"
+	 width="100" />
+	<text
+	 font="SansSerifSmall"
+	 name="beamcolor_text2"
+	 follows="left|top"
+	 left_delta="30"
+	 bottom_delta="0">
+		Preview
+	</text>
+	<slider
+	 bottom="-50"
+	 left="15"
+	 name="BeamColor_Speed"
+	 control_name="BeamColor_Speed"
+	 decimal_digits="0"
+	 enabled="true"
+	 follows="left|top"
+	 height="18"
+	 increment="1"
+	 initial_value="100"
+	 label="Rotation Speed:"
+	 label_width="85"
+	 max_val="300"
+	 min_val="0"
+	 mouse_opaque="true"
+	 show_text="true"
+	 width="280"
+	 auto_resize="false"
+	 tool_tip="Controls the speed of the color cycle"/>
+	<button
+	 bottom_delta="30"
+	 enabled="true"
+	 follows="left|top"
+	 halign="center"
+	 height="22"
+	 label="Save"
+	 left="70"
+	 mouse_opaque="true"
+	 name="BeamColor_Save"
+	 scale_image="true"
+	 width="85" />
+	<button
+	 bottom_delta="0"
+	 enabled="true"
+	 follows="left|top"
+	 halign="center"
+	 height="22"
+	 label="Load"
+	 left_delta="90"
+	 mouse_opaque="true"
+	 name="BeamColor_Load"
+	 scale_image="true"
+	 width="85" />
+	<button
+	 bottom_delta="0"
+	 enabled="true"
+	 follows="left|top"
+	 halign="center"
+	 height="22"
+	 label="Cancel"
+	 left_delta="100"
+	 mouse_opaque="true"
+	 name="BeamColor_Cancel"
+	 scale_image="true"
+	 width="85" />
+</floater> 

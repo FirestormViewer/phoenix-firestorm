@@ -52,6 +52,8 @@
 #include "lluictrlfactory.h"
 #include "llviewershadermgr.h"
 #include "llviewertexturelist.h"
+#include "llviewercontrol.h"
+#include "lleconomy.h"
 #include "llstring.h"
 
 #include "llendianswizzle.h"
@@ -59,6 +61,8 @@
 #include "llviewercontrol.h"
 #include "lltrans.h"
 #include "llimagedimensionsinfo.h"
+#include "llviewerregion.h" // <FS:CR> getCentralBakeVersion()
+#include "llcheckboxctrl.h"
 
 const S32 PREVIEW_BORDER_WIDTH = 2;
 const S32 PREVIEW_RESIZE_HANDLE_SIZE = S32(RESIZE_HANDLE_WIDTH * OO_SQRT2) + PREVIEW_BORDER_WIDTH;
@@ -117,6 +121,15 @@ BOOL LLFloaterImagePreview::postBuild()
 
 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
 			getChildView("lossless_check")->setEnabled(TRUE);
+		
+// <FS:CR> Temporary texture uploads
+		if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0
+			|| gAgent.getRegion()->getCentralBakeVersion() > 0)
+		{
+			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+			getChild<LLCheckBoxCtrl>("temp_check")->setVisible(FALSE);
+		}
+// </FS:CR>
 	}
 	else
 	{
@@ -820,6 +833,12 @@ void LLImagePreviewSculpted::setPreviewTarget(LLImageRaw* imagep, F32 distance)
 	norm = (LLVector3*) vf.mNormals; norm.setStride(16);
 	LLStrider<LLVector2> tc;
 	tc = (LLVector2*) vf.mTexCoords; tc.setStride(8);
+
+	#ifdef OPENSIM // <FS:ND> protect against buffer overflows
+	pos.setCount( vf.mNumVertices );
+	norm.setCount( vf.mNumVertices );
+	tc.setCount( vf.mNumVertices );
+	#endif // </FS:ND>
 
 	for (U32 i = 0; i < num_vertices; i++)
 	{

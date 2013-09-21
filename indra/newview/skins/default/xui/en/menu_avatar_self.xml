@@ -205,7 +205,7 @@
         </menu_item_call>
     </context_menu>
      <menu_item_call
-     label="My Appearance"
+     label="Change Outfit"
      layout="topleft"
      name="Chenge Outfit">
         <menu_item_call.on_click
@@ -213,7 +213,7 @@
         <menu_item_call.on_enable
          function="Edit.EnableCustomizeAvatar" />
     </menu_item_call>
-    <menu_item_call label="Edit My Outfit" 
+    <menu_item_call label="Edit Outfit" 
     layout="topleft"
     name="Edit Outfit">
        <menu_item_call.on_click
@@ -221,7 +221,7 @@
        <menu_item_call.on_enable
         function="Edit.EnableCustomizeAvatar" />
    </menu_item_call>
-    <menu_item_call label="Edit My Shape" 
+    <menu_item_call label="Edit Shape" 
     layout="topleft"
     name="Edit My Shape">
        <menu_item_call.on_click
@@ -230,7 +230,7 @@
         function="Edit.EnableEditShape" />
    </menu_item_call>
    <menu_item_call
-     label="My Friends"
+     label="Friends"
      layout="topleft"
      name="Friends...">
         <menu_item_call.on_click
@@ -238,7 +238,7 @@
          parameter="friends_panel" />
     </menu_item_call>
     <menu_item_call
-     label="My Groups"
+     label="Groups"
      layout="topleft"
      name="Groups...">
         <menu_item_call.on_click
@@ -246,20 +246,34 @@
          parameter="groups_panel" />
     </menu_item_call>
    <menu_item_call
-     label="My Profile"
+     label="Profile"
      layout="topleft"
      name="Profile...">
         <menu_item_call.on_click
          function="ShowAgentProfile"
          parameter="agent" />
     </menu_item_call>
+    <menu_item_call 
+      enabled="true"
+      label="Script Info"
+      name="ScriptInfo">
+      <menu_item_call.on_click
+       function="Tools.ScriptInfo" />
+     <menu_item_call.on_enable
+       function="EnableBridgeFunction" />
+    </menu_item_call>
     <menu_item_call
-		 label="Debug Textures"
+		 label="Show Textures"
          name="Debug...">
             <menu_item_call.on_click
              function="Avatar.Debug" />
-            <menu_item_call.on_visible
-             function="IsGodCustomerService"/>
+    </menu_item_call>
+	<menu_item_call 
+      enabled="true"
+      label="Texture Refresh"
+      name="Texture Refresh">
+      <menu_item_call.on_click
+       function="Avatar.TexRefresh" />
     </menu_item_call>
     <menu_item_call
 		 label="Dump XML"

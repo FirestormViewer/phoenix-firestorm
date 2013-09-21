@@ -43,6 +43,9 @@
 #include "llviewerwindow.h"
 #include "llworld.h"
 #include "llui.h"
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //Headers added for functions moved from viewer.cpp
 #include "llvograss.h"
@@ -63,6 +66,14 @@
 #include "llwindow.h"			// incBusyCount()
 #include "material_codes.h"
 
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+#include "llparcel.h"
+#include "llviewerparcelmgr.h"
+#include "fscommon.h"
+#include "roles_constants.h"
+
 const LLVector3 DEFAULT_OBJECT_SCALE(0.5f, 0.5f, 0.5f);
 
 //static 
@@ -76,11 +87,18 @@ LLToolPlacer::LLToolPlacer()
 BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, S32* hit_face, 
 							 BOOL* b_hit_land, LLVector3* ray_start_region, LLVector3* ray_end_region, LLViewerRegion** region )
 {
-	F32 max_dist_from_camera = gSavedSettings.getF32( "MaxSelectDistance" ) - 1.f;
+	// <FS:Ansariel> Performance tweak and selection fix
+	static LLCachedControl<bool> limitSelectDistance(gSavedSettings, "LimitSelectDistance");
+	static LLCachedControl<F32> max_dist_from_camera(gSavedSettings, "MaxSelectDistance");
+	//F32 max_dist_from_camera = gSavedSettings.getF32( "MaxSelectDistance" ) - 1.f;
+	// </FS:Ansariel>
 
 	// Viewer-side pick to find the right sim to create the object on.  
 	// First find the surface the object will be created on.
-	LLPickInfo pick = gViewerWindow->pickImmediate(x, y, FALSE);
+//	LLPickInfo pick = gViewerWindow->pickImmediate(x, y, FALSE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	LLPickInfo pick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+// [/SL:KB]
 	
 	// Note: use the frontmost non-flora version because (a) plants usually have lots of alpha and (b) pants' Havok
 	// representations (if any) are NOT the same as their viewer representation.
@@ -117,11 +135,23 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 
 	// Make sure the surface isn't too far away.
 	LLVector3d ray_start_global = gAgentCamera.getCameraPositionGlobal();
-	F32 dist_to_surface_sq = (F32)((surface_pos_global - ray_start_global).magVecSquared());
-	if( dist_to_surface_sq > (max_dist_from_camera * max_dist_from_camera) )
+	// <FS:Ansariel> Performance tweak and selection fix
+	//F32 dist_to_surface_sq = (F32)((surface_pos_global - ray_start_global).magVecSquared());
+	//if( dist_to_surface_sq > (max_dist_from_camera * max_dist_from_camera) )
+	F32 dist_to_surface_sq = (F32)((surface_pos_global - gAgent.getPositionGlobal()).magVecSquared());
+	if(limitSelectDistance && dist_to_surface_sq > (max_dist_from_camera * max_dist_from_camera) )
+	// </FS:Ansariel>
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
+	// NOTE: don't use surface_pos_global since for prims it will be the center of the prim while we need center + offset
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (dist_vec_squared(gAgent.getPositionGlobal(), pick.mPosGlobal) > 1.5f * 1.5f) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	// Find the sim where the surface lives.
 	LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromPosGlobal(surface_pos_global);
@@ -189,8 +219,21 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 
 	// Set params for new object based on its PCode.
 	LLQuaternion	rotation;
-	LLVector3		scale = DEFAULT_OBJECT_SCALE;
+	LLVector3		scale = LLVector3(
+		gSavedSettings.getF32("FSBuildPrefs_Xsize"),
+		gSavedSettings.getF32("FSBuildPrefs_Ysize"),
+		gSavedSettings.getF32("FSBuildPrefs_Zsize"));
+
 	U8				material = LL_MCODE_WOOD;
+	const std::string default_material = gSavedSettings.getString("FSBuildPrefs_Material");
+	if (default_material == "Wood")			material = LL_MCODE_WOOD;
+	else if (default_material == "Stone")	material = LL_MCODE_STONE;
+	else if (default_material == "Metal")	material = LL_MCODE_METAL;
+	else if (default_material == "Glass")	material = LL_MCODE_GLASS;
+	else if (default_material == "Flesh")	material = LL_MCODE_FLESH;
+	else if (default_material == "Rubber")	material = LL_MCODE_RUBBER;
+	else if (default_material == "Plastic")	material = LL_MCODE_PLASTIC;
+
 	BOOL			create_selected = FALSE;
 	LLVolumeParams	volume_params;
 	
@@ -221,17 +264,33 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	}
 
 	// Play creation sound
-	if (gAudiop)
+	// <FS:PP> Configurable UI sounds
+	//if (gAudiop)
+	if (gAudiop && gSavedSettings.getBOOL("PlayModeUISndObjectCreate"))
+	// </FS:PP>
 	{
 		gAudiop->triggerSound( LLUUID(gSavedSettings.getString("UISndObjectCreate")),
-							   gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+								gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
 	}
 
 	gMessageSystem->newMessageFast(_PREHASH_ObjectAdd);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	gMessageSystem->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID());
+	LLUUID group_id = gAgent.getGroupID();
+	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+	{
+		if (gAgent.isInGroup(parcel->getGroupID()))
+		{
+			group_id = parcel->getGroupID();
+		}
+		else if (gAgent.isInGroup(parcel->getOwnerID()))
+		{
+			group_id = parcel->getOwnerID();
+		}
+	}
+	gMessageSystem->addUUIDFast(_PREHASH_GroupID, group_id);
 	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 	gMessageSystem->addU8Fast(_PREHASH_Material,	material);
 
@@ -240,7 +299,10 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	{
 		flags |= FLAGS_USE_PHYSICS;
 	}
-	if (create_selected)
+//	if (create_selected)
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.0.0b
+	if ( (create_selected) && (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) )
+// [/RLVa:KB]
 	{
 		flags |= FLAGS_CREATE_SELECTED;
 	}
@@ -422,6 +484,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	// Spawns a message, so must be after above send
 	if (create_selected)
 	{
+		FSCommon::sObjectAddMsg++;
 		LLSelectMgr::getInstance()->deselectAll();
 		gViewerWindow->getWindow()->incBusyCount();
 	}
@@ -498,6 +561,13 @@ BOOL LLToolPlacer::placeObject(S32 x, S32 y, MASK mask)
 {
 	BOOL added = TRUE;
 	
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
+	{
+		return TRUE; // Callers seem to expect a "did you handle it?" so we return TRUE rather than FALSE
+	}
+// [/RLVa:KB]
+
 	if (gSavedSettings.getBOOL("CreateToolCopySelection"))
 	{
 		added = addDuplicate(x, y);

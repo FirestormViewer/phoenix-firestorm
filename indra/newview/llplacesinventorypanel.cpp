@@ -40,7 +40,8 @@
 
 static LLDefaultChildRegistry::Register<LLPlacesInventoryPanel> r("places_inventory_panel");
 
-static const LLPlacesInventoryBridgeBuilder PLACES_INVENTORY_BUILDER;
+//static const LLPlacesInventoryBridgeBuilder PLACES_INVENTORY_BUILDER;
+static LLPlacesInventoryBridgeBuilder PLACES_INVENTORY_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 
 LLPlacesInventoryPanel::LLPlacesInventoryPanel(const Params& p) : 
 	LLInventoryPanel(p),

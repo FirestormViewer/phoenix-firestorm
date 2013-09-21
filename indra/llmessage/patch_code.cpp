@@ -229,7 +229,10 @@ void	decode_patch_group_header(LLBitPack &bitpack, LLGroupHeader *gopp)
 	gPatchSize = gopp->patch_size; 
 }
 
-void	decode_patch_header(LLBitPack &bitpack, LLPatchHeader *ph)
+// <FS:CR> Aurora Sim
+//void	decode_patch_header(LLBitPack &bitpack, LLPatchHeader *ph)
+void	decode_patch_header(LLBitPack &bitpack, LLPatchHeader *ph, BOOL b_large_patch)
+// </FS:CR> Aurora Sim
 {
 	U8 retvalu8;
 
@@ -268,15 +271,41 @@ void	decode_patch_header(LLBitPack &bitpack, LLPatchHeader *ph)
 #endif
 	ph->range = retvalu16;
 
-	retvalu16 = 0;
+// <FS:CR> Aurora Sim
+	//retvalu16 = 0;
+	retvalu32 = 0;
 #ifdef LL_BIG_ENDIAN
-	ret = (U8 *)&retvalu16;
-	bitpack.bitUnpack(&(ret[1]), 8);
-	bitpack.bitUnpack(&(ret[0]), 2);
+// <FS:CR> Aurora Sim
+	//ret = (U8 *)&retvalu16;
+	if(b_large_patch)
+	{
+		//todo test
+		ret = (U8 *)&retvalu32;
+		bitpack.bitUnpack(&(ret[3]), 8);
+		bitpack.bitUnpack(&(ret[2]), 8);
+		bitpack.bitUnpack(&(ret[1]), 8);
+		bitpack.bitUnpack(&(ret[0]), 8);
+	}
+	else
+	{
+		ret = (U8 *)&retvalu32;
+		bitpack.bitUnpack(&(ret[1]), 8);
+		bitpack.bitUnpack(&(ret[0]), 2);
+	}
+	// </FS:CR> Aurora Sim
 #else
-	bitpack.bitUnpack((U8 *)&retvalu16, 10);
+// <FS:CR> Aurora Sim
+	//bitpack.bitUnpack((U8 *)&retvalu16, 10);
+	if(b_large_patch)
+		bitpack.bitUnpack((U8 *)&retvalu32, 32);
+	else
+		bitpack.bitUnpack((U8 *)&retvalu32, 10);
+// </FS:CR> Aurora Sim
 #endif
-	ph->patchids = retvalu16;
+// <FS:CR> Aurora Sim
+	//ph->patchids = retvalu16;
+	ph->patchids = retvalu32;
+// </FS:CR> Aurora Sim
 
 	gWordBits = (ph->quant_wbits & 0xf) + 2;
 }

@@ -24,8 +24,9 @@
  * $/LicenseInfo$
  */
 
-
 #include "llviewerprecompiledheaders.h"
+
+#if 0
 
 #include "llfloaterimsession.h"
 #include "llfloaterimcontainer.h"
@@ -2184,3 +2185,5 @@ void LLFloaterIMContainer::handleReshape(const LLRect& rect, bool by_user)
 }
 
 // EOF
+
+#endif

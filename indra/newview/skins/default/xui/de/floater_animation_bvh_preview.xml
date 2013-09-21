@@ -9,7 +9,7 @@
 Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 	</floater.string>
 	<floater.string name="failed_file_read">
-		Animationsdatei kann nicht gelesen werden.
+		Animationsdatei konnte nicht gelesen werden.
 
 [STATUS]
 	</floater.string>
@@ -17,16 +17,16 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 		OK
 	</floater.string>
 	<floater.string name="E_ST_EOF">
-		Vorzeitiges Dateiende.
+		Unvollständige Datei
 	</floater.string>
 	<floater.string name="E_ST_NO_CONSTRAINT">
 		Constraint-Definition kann nicht gelesen werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_FILE">
-		BVH-Datei kann nicht geöffnet werden.
+		BVH-Datei kann nicht geöffnet werden
 	</floater.string>
 	<floater.string name="E_ST_NO_HIER">
-		Ungültige HIERARCHY-Kopfzeile.
+		Ungültiger HIERARCHY-Titel.
 	</floater.string>
 	<floater.string name="E_ST_NO_JOINT">
 		ROOT oder JOINT nicht gefunden.
@@ -35,16 +35,16 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 		JOINT-Name nicht erfasst.
 	</floater.string>
 	<floater.string name="E_ST_NO_OFFSET">
-		OFFSET nicht gefunden.
+		VERSATZ nicht gefunden.
 	</floater.string>
 	<floater.string name="E_ST_NO_CHANNELS">
 		CHANNELS nicht gefunden.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROTATION">
-		Rotationsreihenfolge kann nicht erfasst werden.
+		Kann Rotations-Reihenfolge nicht erfassen.
 	</floater.string>
 	<floater.string name="E_ST_NO_AXIS">
-		Rotationsachse kann nicht erfasst werden.
+		Kann Rotations-Achse nicht erfassen.
 	</floater.string>
 	<floater.string name="E_ST_NO_MOTION">
 		MOTION nicht gefunden.
@@ -56,58 +56,58 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 		Bildzeit kann nicht erfasst werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_POS">
-		Positionswerte können nicht erfasst werden.
+		Positions-Werte können nicht erfasst werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROT">
-		Rotationswerte können nicht erfasst werden.
+		Kann Rotations-Werte nicht erfassen.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_FILE">
-		Transformationsdatei kann nicht geöffnet werden.
+		Datei kann nicht geöffnet werden
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_HEADER">
-		Transformationskopfzeile kann nicht gelesen werden.
+		Übersetzungstitel kann nicht gelesen werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_NAME">
-		Transformationsnamen können nicht gelesen werden.
+		Übersetzungsnamen können nicht geladen werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_IGNORE">
-		Ignorieren-Transformationswert kann nicht gelesen werden.
+		Ignorier-Wert kann nicht gelesen werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_RELATIVE">
-		Relativer Transformationswert kann nicht gelesen werden.
+		Übersetzungs-Wert kann nicht gelesen werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_OUTNAME">
-		Outname-Transformationswert kann nicht gelesen werden.
+		Outname-Wert kann nicht gelesen werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MATRIX">
-		Transformationsmatrix kann nicht gelesen werden.
+		Übersetzungsmatrix kann nicht geladen werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGECHILD">
-		Mergechild-Name kann nicht erfasst werden.
+		Mergechild-Name nicht erfasst.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGEPARENT">
-		Mergeparent-Name kann nicht erfasst werden.
+		Mergeparent-Name nicht erfasst.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_PRIORITY">
-		Priority-Wert kann nicht erfasst werden.
+		Prioritätswert kann nicht erfasst werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_LOOP">
 		Loop-Wert kann nicht erfasst werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEIN">
-		EaseIn-Werte können nicht erfasst werden.
+		Easeln-Wert kann nicht erfasst werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEOUT">
-		EaseOut-Werte können nicht erfasst werden.
+		easeOut-Wert kann nicht erfasst werden.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_HAND">
-		Hand-Morph-Wert kann nicht erfasst werden.
+		Hand-Morph-Wert nicht erfasst.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EMOTE">
 		Emote-Name kann nicht gelesen werden.
 	</floater.string>
 	<floater.string name="E_ST_BAD_ROOT">
-		Falscher Root-Joint-Name, „hip“ verwenden.
+		Falscher Root-Joint-Name, &quot;hip&quot; verwenden.
 	</floater.string>
 	<text name="name_label">
 		Name:
@@ -181,6 +181,7 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 
 Wir empfehlen exportierte BVH-Dateien aus Poser 4.
 	</text>
-	<button label="Hochladen (L$ [AMOUNT])" name="ok_btn"/>
+    <button label="Datei neu laden" name="reload_btn"/>
+	<button label="Hochladen (L$ [AMOUNT])" name="ok_btn"/>
 	<button label="Abbrechen" name="cancel_btn"/>
 </floater>

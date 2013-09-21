@@ -38,10 +38,12 @@ class LLTeleportHistoryStorage;
 class LLAccordionCtrl;
 class LLAccordionCtrlTab;
 class LLFlatListView;
-class LLMenuButton;
 
 class LLTeleportHistoryPanel : public LLPanelPlacesTab
 {
+	// <FS:Ansariel> FIRE-816: Separate teleport history floater
+	friend class FSFloaterTeleportHistory;
+
 public:
 	// *TODO: derive from LLListContextMenu?
 	class ContextMenu
@@ -76,6 +78,11 @@ public:
 	/*virtual*/ void updateVerbs();
 	/*virtual*/ bool isSingleItemSelected();
 
+	// <FS:Ansariel> Separate search filter for standalone TP history
+	void setIsStandAlone(bool standalone) { mIsStandAlone = standalone; }
+	std::string getFilterString() { return mFilterString; }
+	// </FS:Ansariel>
+
 private:
 
 	void onDoubleClickItem();
@@ -95,6 +102,7 @@ private:
 	void showTeleportHistory();
 	void handleItemSelect(LLFlatListView* );
 	LLFlatListView* getFlatListViewFromTab(LLAccordionCtrlTab *);
+	void onGearButtonClicked();
 	bool isActionEnabled(const LLSD& userdata) const;
 
 	void setAccordionCollapsedByUser(LLUICtrl* acc_tab, bool collapsed);
@@ -118,9 +126,13 @@ private:
 	ContextMenu mContextMenu;
 	LLContextMenu*			mAccordionTabMenu;
 	LLHandle<LLView>		mGearMenuHandle;
-	LLMenuButton*			mMenuGearButton;
 
 	boost::signals2::connection mTeleportHistoryChangedConnection;
+
+	// </FS:Ansariel> Separate search filter for standalone TP history
+	bool		mIsStandAlone;
+	std::string	mFilterString;
+	// </FS:Ansariel>
 };
 
 

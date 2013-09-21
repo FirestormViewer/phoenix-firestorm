@@ -489,7 +489,10 @@ void LLImageGL::setSize(S32 width, S32 height, S32 ncomponents, S32 discard_leve
 		// Check if dimensions are a power of two!
 		if (!checkSize(width,height))
 		{
-			llerrs << llformat("Texture has non power of two dimension: %dx%d",width,height) << llendl;
+			// <FS:CR> FIRE-8063: Don't error out if texture has non power of two dimensions, just warn us
+			//llerrs << llformat("Texture has non power of two dimension: %dx%d",width,height) << llendl;
+			llwarns << llformat("Texture has non power of two dimension: %dx%d",width,height) << llendl;
+			// </FS:CR>
 		}
 		
 		if (mTexName)
@@ -1087,7 +1090,7 @@ static LLFastTimer::DeclareTimer FTM_GENERATE_TEXTURES("generate textures");
 void LLImageGL::generateTextures(LLTexUnit::eTextureType type, U32 format, S32 numTextures, U32 *textures)
 {
 	LLFastTimer t(FTM_GENERATE_TEXTURES);
-	bool empty = true;
+	// <FS:ND> user-defined names was deprecated with OpenGL 3.1. Just generate/delete using OpenGL function.
 
 	if (LLRender::sGLCoreProfile)
 	{
@@ -1099,26 +1102,32 @@ void LLImageGL::generateTextures(LLTexUnit::eTextureType type, U32 format, S32 n
 		}
 	}
 
-	dead_texturelist_t::iterator iter = sDeadTextureList[type].find(format);
+	// bool empty = true;
+	// 
+	// dead_texturelist_t::iterator iter = sDeadTextureList[type].find(format);
+	// 
+	// if (iter != sDeadTextureList[type].end())
+	// {
+	// 	empty = iter->second.empty();
+	// }
+	// 
+	// for (S32 i = 0; i < numTextures; ++i)
+	// {
+	// 	if (!empty)
+	// 	{
+	// 		textures[i] = iter->second.front();
+	// 		iter->second.pop_front();
+	// 		empty = iter->second.empty();
+	// 	}
+	// 	else
+	// 	{
+	// 		textures[i] = sCurTexName++;
+	// 	}
+	// }
+
+	glGenTextures( numTextures, textures );
 	
-	if (iter != sDeadTextureList[type].end())
-	{
-		empty = iter->second.empty();
-	}
-	
-	for (S32 i = 0; i < numTextures; ++i)
-	{
-		if (!empty)
-		{
-			textures[i] = iter->second.front();
-			iter->second.pop_front();
-			empty = iter->second.empty();
-		}
-		else
-		{
-			textures[i] = sCurTexName++;
-		}
-	}
+	// </FS:ND>
 }
 
 // static
@@ -1126,47 +1135,54 @@ void LLImageGL::deleteTextures(LLTexUnit::eTextureType type, U32 format, S32 mip
 {
 	if (gGLManager.mInited)
 	{
-		switch (format)
-		{
-			case 0:
+		// <FS:ND> user-defined names was deprecated with OpenGL 3.1. Just generate/delete using OpenGL function.
 
-			// We get ARB errors in debug when attempting to use glTexImage2D with these deprecated pix formats
-			//
-			case GL_LUMINANCE8:
-			case GL_INTENSITY8:
-			case GL_ALPHA8:
-				glDeleteTextures(numTextures, textures);
-			break;
+		// switch (format)
+		// {
+		// 	case 0:
+		// 
+		// 	// We get ARB errors in debug when attempting to use glTexImage2D with these deprecated pix formats
+		// 	//
+		// 	case GL_LUMINANCE8:
+		// 	case GL_INTENSITY8:
+		// 	case GL_ALPHA8:
+		// 		glDeleteTextures(numTextures, textures);
+		// 	break;
+		// 
+		// 	default:
+		// 	{
+		// 		if (type == LLTexUnit::TT_CUBE_MAP || mip_levels == -1)
+		// { //unknown internal format or unknown number of mip levels, not safe to reuse
+		// 	glDeleteTextures(numTextures, textures);
+		// }
+		// else
+		// {
+		// 	for (S32 i = 0; i < numTextures; ++i)
+		// 	{ //remove texture from VRAM by setting its size to zero
+		// 
+		// 		for (S32 j = 0; j <= mip_levels; j++)
+		// 		{
+		// 			gGL.getTexUnit(0)->bindManual(type, textures[i]);
+		// 					U32 internal_type = LLTexUnit::getInternalType(type);
+		// 					glTexImage2D(internal_type, j, format, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		// 					stop_glerror();
+		// 		}
+		// 
+		// 		llassert(std::find(sDeadTextureList[type][format].begin(),
+		// 						   sDeadTextureList[type][format].end(), textures[i]) == 
+		// 						   sDeadTextureList[type][format].end());
+		// 
+		// 		sDeadTextureList[type][format].push_back(textures[i]);
+		// 	}  
+	// 	}
+	// }
+	// 		break;
+	// 	}
 
-			default:
-			{
-				if (type == LLTexUnit::TT_CUBE_MAP || mip_levels == -1)
-		{ //unknown internal format or unknown number of mip levels, not safe to reuse
-			glDeleteTextures(numTextures, textures);
-		}
-		else
-		{
-			for (S32 i = 0; i < numTextures; ++i)
-			{ //remove texture from VRAM by setting its size to zero
+		glDeleteTextures(numTextures, textures);
 
-				for (S32 j = 0; j <= mip_levels; j++)
-				{
-					gGL.getTexUnit(0)->bindManual(type, textures[i]);
-							U32 internal_type = LLTexUnit::getInternalType(type);
-							glTexImage2D(internal_type, j, format, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-							stop_glerror();
-				}
+		// </FS:ND>
 
-				llassert(std::find(sDeadTextureList[type][format].begin(),
-								   sDeadTextureList[type][format].end(), textures[i]) == 
-								   sDeadTextureList[type][format].end());
-
-				sDeadTextureList[type][format].push_back(textures[i]);
-			}	
-		}
-	}
-			break;
-		}
 	}
 	
 	/*if (immediate)

@@ -97,7 +97,11 @@ void LLDockControl::setDock(LLView* dockWidget)
 
 void LLDockControl::getAllowedRect(LLRect& rect)
 {
-	rect = mDockableFloater->getRootView()->getChild<LLView>("non_toolbar_panel")->getRect();
+	// <FS:Zi> Cache LLView pointer to non_toolbar_panel to speed up llDialog() instances and other dockable floaters
+	//rect = mDockableFloater->getRootView()->getChild<LLView>("non_toolbar_panel")->getRect();
+	static LLView* nonToolbarPanel=mDockableFloater->getRootView()->getChild<LLView>("non_toolbar_panel");
+	rect = nonToolbarPanel->getRect();
+	// </FS:Zi>
 }
 
 void LLDockControl::repositionDockable()

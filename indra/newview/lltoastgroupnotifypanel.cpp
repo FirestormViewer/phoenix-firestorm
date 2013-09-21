@@ -50,6 +50,9 @@
 #include "llfloaterinventory.h"
 #include "llinventorytype.h"
 
+#include "llgroupactions.h"
+#include "llslurl.h"
+
 const S32 LLToastGroupNotifyPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT	= 7;
 
 LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notification)
@@ -63,6 +66,8 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 	{
 		llwarns << "Group notice for unknown group: " << payload["group_id"].asUUID() << llendl;
 	}
+	
+	mGroupID = payload["group_id"].asUUID();
 
 	//group icon
 	LLIconCtrl* pGroupIcon = getChild<LLIconCtrl>("group_icon", TRUE);
@@ -70,27 +75,35 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 
 	//header title
 	std::string from_name = payload["sender_name"].asString();
-	from_name = LLCacheName::buildUsername(from_name);
+	// <FS:CR> Let the user decide how they want to see names
+	//from_name = LLCacheName::buildUsername(from_name);
+	from_name = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames") ? LLCacheName::buildLegacyName(from_name) : LLCacheName::buildUsername(from_name);
+	// </FS:CR>
 
-	std::stringstream from;
-	from << from_name << "/" << groupData.mName;
+	std::string from;
+	LLStringUtil::format_map_t args;
+	args["[SENDER]"] = from_name;
+	args["[GROUPNAME]"] = LLSLURL("group", groupData.mID, "inspect").getSLURLString();
+	from = LLTrans::getString("GroupNotifySender", args);
+	
 	LLTextBox* pTitleText = getChild<LLTextBox>("title");
-	pTitleText->setValue(from.str());
-	pTitleText->setToolTip(from.str());
+	pTitleText->setValue(from);
+	pTitleText->setToolTip(from);
 
 	//message subject
 	const std::string& subject = payload["subject"].asString();
 	//message body
 	const std::string& message = payload["message"].asString();
 
-	std::string timeStr = "["+LLTrans::getString("UTCTimeWeek")+"],["
-							+LLTrans::getString("UTCTimeDay")+"] ["
-							+LLTrans::getString("UTCTimeMth")+"] ["
-							+LLTrans::getString("UTCTimeYr")+"] ["
-							+LLTrans::getString("UTCTimeHr")+"]:["
-							+LLTrans::getString("UTCTimeMin")+"]:["
-							+LLTrans::getString("UTCTimeSec")+"] ["
-							+LLTrans::getString("UTCTimeTimezone")+"]";
+	std::string timeStr = "["+LLTrans::getString("TimeWeek")+"], ["
+							+LLTrans::getString("TimeMth")+"] ["
+							+LLTrans::getString("TimeDay")+"] ["
+							+LLTrans::getString("TimeYear")+"] ["
+							+LLTrans::getString("TimeHour12")+"]:["
+							+LLTrans::getString("TimeMin")+"]:["
+							+LLTrans::getString("TimeSec")+"] ["
+							+LLTrans::getString("TimeAMPM")+"] ["
+							+LLTrans::getString("TimeTimezone")+"]";
 	const LLDate timeStamp = notification->getDate();
 	LLDate notice_date = timeStamp.notNull() ? timeStamp : LLDate::now();
 	LLSD substitution;
@@ -117,12 +130,18 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 	//attachment
 	BOOL hasInventory = payload["inventory_offer"].isDefined();
 
+	// attachment container (if any)
+	LLPanel* pAttachContainer = getChild<LLPanel>("attachment_container");
+	// attachment container label (if any)
+	LLTextBox* pAttachContainerLabel = getChild<LLTextBox>("attachment_label");
 	//attachment text
 	LLTextBox * pAttachLink = getChild<LLTextBox>("attachment");
 	//attachment icon
 	LLIconCtrl* pAttachIcon = getChild<LLIconCtrl>("attachment_icon", TRUE);
 
 	//If attachment is empty let it be invisible and not take place at the panel
+	pAttachContainer->setVisible(hasInventory);
+	pAttachContainerLabel->setVisible(hasInventory);
 	pAttachLink->setVisible(hasInventory);
 	pAttachIcon->setVisible(hasInventory);
 	if (hasInventory) {
@@ -136,11 +155,23 @@ LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notifi
 												LLInventoryType::IT_TEXTURE);
 		pAttachIcon->setValue(attachIconImg->getName());
 	}
+	else
+	{
+		LLRect message_rect = pMessageText->getRect();
+		message_rect.mBottom -= 20;
+		pMessageText->reshape(message_rect.getWidth(), message_rect.getHeight());
+		pMessageText->setRect(message_rect);
+	}
 
 	//ok button
 	LLButton* pOkBtn = getChild<LLButton>("btn_ok");
 	pOkBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickOk, this)));
 	setDefaultBtn(pOkBtn);
+
+	//group notices button
+	LLButton* pOkNotices = getChild<LLButton>("btn_notices");
+	if (pOkNotices)
+		pOkNotices->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickGroupNotices, this)));
 
 	S32 maxLinesCount;
 	std::istringstream ss( getString("message_max_lines_count") );
@@ -175,6 +206,11 @@ void LLToastGroupNotifyPanel::onClickOk()
 	LLSD response = mNotification->getResponseTemplate();
 	mNotification->respond(response);
 	close();
+}
+
+void LLToastGroupNotifyPanel::onClickGroupNotices()
+{
+	LLGroupActions::show(mGroupID, "group_notices_tab_panel");
 }
 
 void LLToastGroupNotifyPanel::onClickAttachment()
@@ -217,3 +253,17 @@ bool LLToastGroupNotifyPanel::isAttachmentOpenable(LLAssetType::EType type)
 	}
 }
 
+// Copied from Ansariel: Override base method so we have the option to ignore
+// the global transparency settings and show the group notice always on
+// opaque background. -Zi
+F32 LLToastGroupNotifyPanel::getCurrentTransparency()
+{
+	if (gSavedSettings.getBOOL("FSGroupNotifyNoTransparency"))
+	{
+		return 1.0;
+	}
+	else
+	{
+		return LLUICtrl::getCurrentTransparency();
+	}
+}

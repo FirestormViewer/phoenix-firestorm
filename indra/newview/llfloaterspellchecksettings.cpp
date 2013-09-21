@@ -96,6 +96,8 @@ void LLFloaterSpellCheckerSettings::onBtnMove(const std::string& from, const std
 		to_ctrl->setSelectedByValue( (*sel_it)->getValue(), true );
 	}
 	from_ctrl->deleteSelectedItems();
+	
+	commitChanges();
 }
 
 void LLFloaterSpellCheckerSettings::onClose(bool app_quitting)
@@ -107,26 +109,7 @@ void LLFloaterSpellCheckerSettings::onClose(bool app_quitting)
 	}
 	LLFloaterReg::hideInstance("prefs_spellchecker_import");
 	
-	std::list<std::string> list_dict;
-
-	LLComboBox* dict_combo = findChild<LLComboBox>("spellcheck_main_combo");
-	const std::string dict_name = dict_combo->getSelectedItemLabel();
-	if (!dict_name.empty())
-	{
-		list_dict.push_back(dict_name);
-
-		LLScrollListCtrl* list_ctrl = findChild<LLScrollListCtrl>("spellcheck_active_list");
-		std::vector<LLScrollListItem*> list_items = list_ctrl->getAllData();
-		for (std::vector<LLScrollListItem*>::const_iterator item_it = list_items.begin(); item_it != list_items.end(); ++item_it)
-		{
-			const std::string language = (*item_it)->getValue().asString();
-			if (LLSpellChecker::hasDictionary(language, true))
-			{
-				list_dict.push_back(language);
-			}
-		}
-	}
-	gSavedSettings.setString("SpellCheckDictionary", boost::join(list_dict, ","));
+	commitChanges();
 }
 
 void LLFloaterSpellCheckerSettings::onOpen(const LLSD& key)
@@ -237,6 +220,31 @@ void LLFloaterSpellCheckerSettings::refreshDictionaries(bool from_settings)
 		}
 	}
 	avail_ctrl->sortByColumnIndex(0, true);
+	commitChanges();
+}
+
+void LLFloaterSpellCheckerSettings::commitChanges()
+{
+	std::list<std::string> list_dict;
+	
+	LLComboBox* dict_combo = findChild<LLComboBox>("spellcheck_main_combo");
+	const std::string dict_name = dict_combo->getSelectedItemLabel();
+	if (!dict_name.empty())
+	{
+		list_dict.push_back(dict_name);
+		
+		LLScrollListCtrl* list_ctrl = findChild<LLScrollListCtrl>("spellcheck_active_list");
+		std::vector<LLScrollListItem*> list_items = list_ctrl->getAllData();
+		for (std::vector<LLScrollListItem*>::const_iterator item_it = list_items.begin(); item_it != list_items.end(); ++item_it)
+		{
+			const std::string language = (*item_it)->getValue().asString();
+			if (LLSpellChecker::hasDictionary(language, true))
+			{
+				list_dict.push_back(language);
+			}
+		}
+	}
+	gSavedSettings.setString("SpellCheckDictionary", boost::join(list_dict, ","));
 }
 
 ///----------------------------------------------------------------------------

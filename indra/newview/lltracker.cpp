@@ -63,6 +63,10 @@
 #include "llworldmapview.h"
 #include "llviewercontrol.h"
 
+// [RLVa:KB]
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 const F32 DESTINATION_REACHED_RADIUS    = 3.0f;
 const F32 DESTINATION_VISITED_RADIUS    = 6.0f;
 
@@ -111,7 +115,11 @@ void LLTracker::stopTracking(void* userdata)
 // static virtual
 void LLTracker::drawHUDArrow()
 {
-	if (!gSavedSettings.getBOOL("RenderTrackerBeacon")) return;
+	// <FS:Ansariel> Performance improvement
+	//if (!gSavedSettings.getBOOL("RenderTrackerBeacon")) return;
+	static LLCachedControl<bool> renderTrackerBeacon(gSavedSettings, "RenderTrackerBeacon");
+	if (!renderTrackerBeacon) return;
+	// </FS:Ansariel>
 
 	if (gViewerWindow->getProgressView()->getVisible()) return;
 
@@ -161,13 +169,19 @@ void LLTracker::drawHUDArrow()
 // static 
 void LLTracker::render3D()
 {
-	if (!gFloaterWorldMap || !gSavedSettings.getBOOL("RenderTrackerBeacon"))
+	// Ansariel: Don't go through all this if we don't track anything at all
+	//           and also use LLCachedControl instead of the slow
+	//           gSavedSettings.getBOOL() call.
+	static LLCachedControl<bool> renderTrackerBeacon(gSavedSettings, "RenderTrackerBeacon");
+	if (!instance()->isTracking(NULL) || !gFloaterWorldMap || !renderTrackerBeacon)
 	{
 		return;
 	}
 	
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
-	
+	// <FS:Ansariel> Disable stop tracking when closing in
+	static LLCachedControl<bool> fsDisableTrackerAtCloseIn(gSavedSettings, "FSDisableAvatarTrackerAtCloseIn");
+
 	// Arbitary location beacon
 	if( instance()->mIsTrackingLocation )
  	{
@@ -183,7 +197,19 @@ void LLTracker::render3D()
 		F32 dist = gFloaterWorldMap->getDistanceToDestination(pos_global, 0.5f);
 		if (dist < DESTINATION_REACHED_RADIUS)
 		{
-			instance()->stopTrackingLocation();
+			// <FS:Ansariel> Disable stop tracking when closing in
+			//instance()->stopTrackingLocation();
+			// Always disable tracker if we're not using the avatar tracker of the radar
+			if (fsDisableTrackerAtCloseIn || instance()->mTrackingLocationType != LLTracker::LOCATION_AVATAR)
+			{
+				instance()->stopTrackingLocation();
+			}
+			else
+			{
+				renderBeacon( instance()->mTrackedPositionGlobal, map_track_color, 
+					  		instance()->mBeaconText, instance()->mTrackedLocationName );
+			}
+			// </FS:Ansariel> Disable stop tracking when closing in
 		}
 		else
 		{
@@ -254,7 +280,18 @@ void LLTracker::render3D()
 			F32 dist = gFloaterWorldMap->getDistanceToDestination(instance()->getTrackedPositionGlobal(), 0.0f);
 			if (dist < DESTINATION_REACHED_RADIUS)
 			{
-				instance()->stopTrackingAvatar();
+				// <FS:Ansariel> Disable stop tracking when closing in
+				//instance()->stopTrackingAvatar();
+				if (fsDisableTrackerAtCloseIn)
+				{
+					instance()->stopTrackingAvatar();
+				}
+				else
+				{
+					renderBeacon( av_tracker.getGlobalPos(), map_track_color, 
+						  		instance()->mBeaconText, av_tracker.getName() );
+				}
+				// </FS:Ansariel> Disable stop tracking when closing in
 			}
 			else
 			{
@@ -502,6 +539,7 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 	fogged_color.mV[3] = llmax(0.2f, llmin(0.5f,(dist-FADE_DIST)/FADE_DIST));
 
 	LLVector3 pos_agent = gAgent.getPosAgentFromGlobal(pos_global);
+	LLVector3d pos_agent_3d = gAgent.getPositionGlobal();	// <FS:CR> FIRE-8234
 
 	LLGLSTracker gls_tracker; // default+ CULL_FACE + LIGHTING + GL_BLEND + GL_ALPHA_TEST
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -568,7 +606,11 @@ void LLTracker::renderBeacon(LLVector3d pos_global,
 	gGL.popMatrix();
 
 	std::string text;
-	text = llformat( "%.0f m", to_vec.magVec());
+	// <FS:CR> FIRE-8234 - Show distance from avatar rather than distance from camera.
+	// (Distance from camera is somewhat useless)
+	//text = llformat( "%.0f m", to_vec.magVec());
+	text = llformat("%.0f m", dist_vec(pos_global, pos_agent_3d));
+	// </FS:CR>
 
 	std::string str;
 	str += label;

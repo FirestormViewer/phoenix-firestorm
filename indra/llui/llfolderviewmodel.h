@@ -28,6 +28,22 @@
 #include "llfontgl.h"	// just for StyleFlags enum
 #include "llfolderview.h"
 
+// <FS:ND> Reintegrate search by uuid/creator/descripting from Zi Ree after CHUI Merge
+// Interface to query extended object attributes,
+class FSFolderViewModelItem
+{
+public:
+	virtual std::string getSearchableCreator( void ) const
+	{ return ""; }
+	virtual std::string getSearchableDescription( void ) const
+	{ return ""; }
+	virtual std::string getSearchableUUID( void ) const
+	{ return ""; }
+	virtual std::string getSearchableAll( void ) const
+	{ return ""; }
+};
+// </FS:ND>
+
 // These are grouping of inventory types.
 // Order matters when sorting system folders to the top.
 enum EInventorySortGroup
@@ -67,6 +83,8 @@ public:
 	// +-------------------------------------------------------------------+
 	virtual bool 				check(const LLFolderViewModelItem* item) = 0;
 	virtual bool				checkFolder(const LLFolderViewModelItem* folder) const = 0;
+	// <FS:Ansariel> For clipboard highlighting
+	virtual bool				checkClipboard(const LLFolderViewModelItem* item) = 0;
 
 	virtual void 				setEmptyLookupMessage(const std::string& message) = 0;
 	virtual std::string			getEmptyLookupMessage() const = 0;
@@ -128,7 +146,7 @@ public:
 
 // This is an abstract base class that users of the folderview classes
 // would use to bridge the folder view with the underlying data
-class LLFolderViewModelItem : public LLRefCount
+class LLFolderViewModelItem : public LLRefCount, public FSFolderViewModelItem
 {
 public:
 	LLFolderViewModelItem() { }
@@ -202,6 +220,9 @@ public:
 	virtual void setSortVersion(S32 version) = 0;
 	virtual void setParent(LLFolderViewModelItem* parent) = 0;
 	virtual bool hasParent() = 0;
+
+	// <FS:Ansariel> Special for protected items
+	virtual bool isProtected() const { return false; }
 
 protected:
 

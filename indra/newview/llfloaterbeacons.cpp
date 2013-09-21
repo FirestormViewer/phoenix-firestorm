@@ -101,8 +101,9 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
 	else if(name == "highlights")
 	{
 		LLPipeline::toggleRenderHighlights(NULL);
+		// FS:LO Allow beacons to be turned off fully by unchecking both boxes
 		// Don't allow both to be OFF at the same time. Toggle the other one on if both now off.
-		if (
+		/*if (
 			!LLPipeline::getRenderBeacons(NULL) &&
 			!LLPipeline::getRenderHighlights(NULL) )
 		{
@@ -111,13 +112,14 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
 			getChild<LLCheckBoxCtrl>("beacons")->setValue(TRUE);
 			getChild<LLCheckBoxCtrl>("highlights")->setControlValue(LLSD(FALSE)); // just to be sure it's in sync with llpipeline
 			getChild<LLCheckBoxCtrl>("highlights")->setValue(FALSE); 
-		}
+		}*/
 	}
 	else if(name == "beacons")
 	{
 		LLPipeline::toggleRenderBeacons(NULL);
+		// FS:LO Allow beacons to be turned off fully by unchecking both boxes
 		// Don't allow both to be OFF at the same time. Toggle the other one on if both now off.
-		if (
+		/*if (
 			!LLPipeline::getRenderBeacons(NULL) &&
 			!LLPipeline::getRenderHighlights(NULL) )
 		{
@@ -126,6 +128,6 @@ void LLFloaterBeacons::onClickUICheck(LLUICtrl *ctrl)
 			getChild<LLCheckBoxCtrl>("highlights")->setValue(TRUE);
 			getChild<LLCheckBoxCtrl>("beacons")->setControlValue(LLSD(FALSE)); // just to be sure it's in sync with llpipeline
 			getChild<LLCheckBoxCtrl>("beacons")->setValue(FALSE); 
-		}
+		}*/
 	}
 }

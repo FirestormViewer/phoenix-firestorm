@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbar_view name="toolbar view">
+  <layout_stack name="bottom_toolbar_stack">
+  <layout_panel name="bottom_toolbar_panel">
+  <layout_stack name="chat_bar_stack">
+  <layout_panel name="chat_bar_stand_fly_container_panel">
+  <layout_stack name="chat_bar_stand_fly_stack">
+  <layout_panel name="chat_bar_layout_panel">
+  <button name="local_chat_button" tool_tip="Mostra/Nascondi finestra chat locale" label="Chat locale" />
+  <nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Canale audio attivo" />
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  </layout_stack>
+  </layout_panel>
+  </layout_stack>
+</toolbar_view>

@@ -55,6 +55,7 @@ class LLView;
 class LLViewerObject;
 class LLUUID;
 class LLProgressView;
+class LLProgressViewMini;
 class LLTool;
 class LLVelocityBar;
 class LLPanel;
@@ -90,6 +91,9 @@ public:
 		MASK keyboard_mask, 
 		BOOL pick_transparent,
 		BOOL pick_particle,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		BOOL pick_rigged,
+// [/SL:KB]
 		BOOL pick_surface_info,
 		void (*pick_callback)(const LLPickInfo& pick_info));
 
@@ -123,6 +127,9 @@ public:
 	LLVector3		mBinormal;
 	BOOL			mPickTransparent;
 	BOOL			mPickParticle;
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	BOOL			mPickRigged;
+// [/SL:KB]
 	void		    getSurfaceInfo();
 
 private:
@@ -290,7 +297,7 @@ public:
 	BOOL            getCursorHidden() { return mCursorHidden; }
 	void			moveCursorToCenter();								// move to center of window
 													
-	void			setShowProgress(const BOOL show);
+	void			setShowProgress(const BOOL show,BOOL fullscreen);
 	BOOL			getShowProgress() const;
 	void			setProgressString(const std::string& string);
 	void			setProgressPercent(const F32 percent);
@@ -360,8 +367,12 @@ public:
 	void			performPick();
 	void			returnEmptyPicks();
 
-	void			pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback)(const LLPickInfo& pick_info), BOOL pick_transparent = FALSE);
-	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_particle = FALSE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	void			pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback)(const LLPickInfo& pick_info), BOOL pick_transparent = FALSE, BOOL pick_rigged = FALSE);
+	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_particle, BOOL pick_rigged = FALSE);
+// [/SL:KB]
+//	void			pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback)(const LLPickInfo& pick_info), BOOL pick_transparent = FALSE);
+//	LLPickInfo		pickImmediate(S32 x, S32 y, BOOL pick_transparent, BOOL pick_particle = FALSE);
 	LLHUDIcon* cursorIntersectIcon(S32 mouse_x, S32 mouse_y, F32 depth,
 										   LLVector4a* intersection);
 
@@ -369,6 +380,9 @@ public:
 									LLViewerObject *this_object = NULL,
 									S32 this_face = -1,
 									BOOL pick_transparent = FALSE,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+									BOOL pick_rigged = FALSE,
+// [/SL:KB]
 									S32* face_hit = NULL,
 									LLVector4a *intersection = NULL,
 									LLVector2 *uv = NULL,
@@ -404,6 +418,9 @@ public:
 	const LLVector2& getDisplayScale() const { return mDisplayScale; }
 	void			calcDisplayScale();
 	static LLRect 	calcScaledRect(const LLRect & rect, const LLVector2& display_scale);
+//-TT Window Title Access
+	void			setTitle(const std::string& win_title);
+//-TT
 
 private:
 	bool                    shouldShowToolTipFor(LLMouseHandler *mh);
@@ -444,6 +461,7 @@ private:
 	BOOL			mRightMouseDown;
 
 	LLProgressView	*mProgressView;
+	LLProgressViewMini	*mProgressViewMini;
 
 	LLFrameTimer	mToolTipFadeTimer;
 	LLPanel*		mToolTip;

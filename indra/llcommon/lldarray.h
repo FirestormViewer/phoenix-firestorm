@@ -152,7 +152,9 @@ inline S32	LLDynamicArray<Type,BlockSize>::put(const Type &obj)
 template <typename Type,int BlockSize>
 inline void LLDynamicArray<Type,BlockSize>::operator+=(const LLDynamicArray<Type,BlockSize> &other)
 {
-	insert(this->end(), other.begin(), other.end());
+	// <FS:ND> Fix for GCC 4.7.1
+	//insert(this->end(), other.begin(), other.end());
+	this->insert(this->end(), other.begin(), other.end());
 }
 
 //--------------------------------------------------------

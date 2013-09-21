@@ -13,7 +13,7 @@
     reuse_instance="true"
     save_rect="false"
     single_instance="true"
-    title="Pathfinding linksets">
+    title="Pathfinding Linksets">
   <floater.string name="messaging_initial"></floater.string>
   <floater.string name="messaging_get_inprogress">Querying for pathfinding linksets ...</floater.string>
   <floater.string name="messaging_get_error">Error detected while querying for pathfinding linksets.</floater.string>
@@ -51,7 +51,8 @@
       follows="left|top|right|bottom"
       layout="topleft"
       height="226"
-      width="1059">
+      width="1059"
+      name="pathfinding_linksets_main">
     <text
         height="13"
         word_wrap="false"
@@ -63,7 +64,8 @@
         layout="topleft"
         left="20"
         top_pad="14"
-        width="67">
+        width="67"
+        name="linksets_filter_label">
       Filter by:
     </text>
     <text
@@ -76,7 +78,8 @@
         follows="left|top"
         layout="topleft"
         left_pad="0"
-        width="62">
+        width="62"
+        name="linksets_name_label">
       Name
     </text>
     <line_editor
@@ -101,7 +104,8 @@
         layout="topleft"
         left_pad="22"
         top_pad="-15"
-        width="88">
+        width="88"
+        name="linksets_desc_label">
       Description
     </text>
     <line_editor
@@ -285,7 +289,8 @@
       layout="topleft"
       left="0"
       height="67"
-      width="1010">
+      width="1060"
+      name="pathfinding_linksets_actions">
     <text
         height="13"
         word_wrap="false"
@@ -298,7 +303,8 @@
         follows="left|bottom|right"
         layout="topleft"
         top_pad="8"
-        width="580">
+        width="580"
+        name="linksets_actions_label">
       Actions on selected linksets (If a linkset is removed from the world, its attributes may be lost):
     </text>
     <check_box
@@ -372,7 +378,8 @@
       layout="topleft"
       left="0"
       height="75"
-      width="1010">
+      width="1010"
+      name="pathfinding_linksets_attributes">
     <text
         height="13"
         word_wrap="false"
@@ -384,7 +391,8 @@
         layout="topleft"
         left="18"
         top_pad="8"
-        width="972">
+        width="972"
+        name="linksets_attributes_label">
       Edit attributes of selected linksets and press the button to apply changes
     </text>
     <combo_box

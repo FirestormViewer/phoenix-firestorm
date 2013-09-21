@@ -230,3 +230,22 @@ void LLUrlAction::blockObject(std::string url)
 		executeSLURL("secondlife:///app/agent/" + object_id + "/block/" + object_name);
 	}
 }
+
+// <FS:Ansariel> FSSlurlCommand support
+LLUUID LLUrlAction::extractUuidFromSlurl(const std::string& url)
+{
+	// Get id from 'secondlife:///app/{cmd}/{id}/{action}'
+	LLURI uri(url);
+	LLSD path_array = uri.pathArray();
+	if (path_array.size() >= 3)
+	{
+		std::string id_str = path_array.get(2).asString();
+		if (LLUUID::validate(id_str))
+		{
+			return LLUUID(id_str);
+		}
+	}
+
+	return LLUUID::null;
+}
+// </FS:Ansariel> FSSlurlCommand support

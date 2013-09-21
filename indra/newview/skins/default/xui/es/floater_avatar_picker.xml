@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarpicker" title="ELEGIR A UN RESIDENTE">
+<floater name="avatarpicker" title="Elegir a un residente">
 	<floater.string name="not_found">
 		No se ha encontrado &apos;[TEXT]&apos;
 	</floater.string>
@@ -21,9 +21,9 @@
 	<tab_container name="ResidentChooserTabs">
 		<panel label="Buscar" name="SearchPanel">
 			<text name="InstructSearchResidentName">
-				Escribe parte del nombre de la persona:
+				Escribe parte del nombre del residente:
 			</text>
-			<button label="Ir" label_selected="Ir" name="Find"/>
+			<button label="Busca" label_selected="Busca" name="Find"/>
 			<scroll_list name="SearchResults">
 				<columns label="Nombre" name="name"/>
 				<columns label="Nombre de usuario" name="username"/>
@@ -31,7 +31,7 @@
 		</panel>
 		<panel label="Amigos" name="FriendsPanel">
 			<text name="InstructSelectFriend">
-				Elige a una persona:
+				Elige a un residente:
 			</text>
 		</panel>
 		<panel label="Cercanos" name="NearMePanel">
@@ -49,6 +49,6 @@
 			</scroll_list>
 		</panel>
 	</tab_container>
-	<button label="OK" label_selected="OK" name="ok_btn"/>
+	<button label="Aceptar" label_selected="Aceptar" name="ok_btn"/>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
 </floater>

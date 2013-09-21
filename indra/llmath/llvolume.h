@@ -158,6 +158,9 @@ const U8    LL_PCODE_PATH_IGNORE    = 0x00;
 const U8	LL_PCODE_PATH_MIN		= 0x01;		// min/max needs to be >> 4 of real min/max
 const U8    LL_PCODE_PATH_LINE      = 0x10;
 const U8    LL_PCODE_PATH_CIRCLE    = 0x20;
+//<-- Working33 by Gregory Maurer
+const U8    LL_PCODE_PATH_CIRCLE_33 = 0x21;
+//Working33 -->
 const U8    LL_PCODE_PATH_CIRCLE2   = 0x30;
 const U8    LL_PCODE_PATH_TEST      = 0x40;
 const U8    LL_PCODE_PATH_FLEXIBLE  = 0x80;
@@ -1009,7 +1012,11 @@ public:
 	void setSculptLevel(S32 level)							{ mSculptLevel = level; }
 
 	
-	static void getLoDTriangleCounts(const LLVolumeParams& params, S32* counts);
+
+	// <FS:ND> Cache LOD Triangle counts, it is expensive to calculate them each time.
+	//	static void getLoDTriangleCounts(const LLVolumeParams& params, S32* counts);
+	static void getLoDTriangleCounts(const LLVolumeParams& params, S32* counts, LLVolume*);
+	// </FS:ND>
 
 	S32 getNumTriangles(S32* vcount = NULL) const;
 
@@ -1045,6 +1052,11 @@ public:
 	LLVector3			mLODScaleBias;		// vector for biasing LOD based on scale
 	
 	void sculpt(U16 sculpt_width, U16 sculpt_height, S8 sculpt_components, const U8* sculpt_data, S32 sculpt_level);
+
+	// NaCl - Graphics crasher protection
+	void calcSurfaceArea(); // ZK LBG
+	// NaCl End
+
 	void copyVolumeFaces(const LLVolume* volume);
 	void cacheOptimize();
 
@@ -1086,6 +1098,9 @@ public:
 	U16* mHullIndices;
 	S32 mNumHullPoints;
 	S32 mNumHullIndices;
+
+private:
+	struct TrianglesPerLODCache *mTrianglesCache;
 };
 
 std::ostream& operator<<(std::ostream &s, const LLVolumeParams &volume_params);

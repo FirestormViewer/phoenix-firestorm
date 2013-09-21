@@ -1,28 +1,58 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Choses" name="main inventory panel">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<panel name="main inventory panel"
+	label="Items">
+<!--
+	<panel.string name="Itemcount">
+	</panel.string>
+-->
 	<panel.string name="ItemcountFetching">
 		[ITEM_COUNT] articles récupérés... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] articles [FILTER]
 	</panel.string>
-	<text name="ItemcountText">
-		Articles :
-	</text>
+<!--
+	<panel.string name="ItemcountUnknown">
+	</panel.string>
+-->
 	<filter_editor label="Filtrer l&apos;inventaire" name="inventory search editor"/>
+	
+	<button name="collapse_btn"
+		label="Réduire"/>
+	<button name="expand_btn"
+		label="Développer"/>
+
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="MON INVENTAIRE" name="All Items"/>
-		<recent_inventory_panel label="RÉCENT" name="Recent Items"/>
+		<inventory_panel name="All Items"
+			label="INVENTAIRE"/>
+		<recent_inventory_panel name="Recent Items"
+			label="RÉCENT"/>
+		<worn_inventory_panel name="Worn Items"
+			label="PORTÉ"/>
 	</tab_container>
-	<layout_stack name="bottom_panel">
-		<layout_panel name="options_gear_btn_panel">
-			<button name="options_gear_btn" tool_tip="Afficher d&apos;autres options"/>
-		</layout_panel>
-		<layout_panel name="add_btn_panel">
-			<button name="add_btn" tool_tip="Ajouter un nouvel article"/>
-		</layout_panel>
-		<layout_panel name="trash_btn_panel">
-			<dnd_button name="trash_btn" tool_tip="Supprimer l&apos;article sélectionné"/>
-		</layout_panel>
-	</layout_stack>
+	
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn"
+				tool_tip="Afficher d&apos;autres options"/>
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn"
+				tool_tip="Ajouter un nouvel item"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn"
+				tool_tip="Ouvrir une nouvelle fenêtre d'inventaire"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				items
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn"
+           tool_tip="Supprimer l&apos;item sélectionné"/>
+		</panel>
+	</panel>
 </panel>

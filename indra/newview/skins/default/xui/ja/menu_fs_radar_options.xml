@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_group_plus">
+  
+	<menu_item_check label="ミニマップをレーダーの上に表示" name="ShowRadarMinimap" />
+	<menu_item_check label="設定した範囲内の結果を表示" name="LimitRadarByRange" />
+	<context_menu label="名前の表示形式" name="radarNameFormat">
+		<menu_item_check label="表示名" name="radarFmtDN" />
+		<menu_item_check label="ユーザー名" name="radarFmtUN" />
+		<menu_item_check label="表示名 (ユーザー名)" name="radarFmtDNUN" />
+		<menu_item_check label="ユーザー名 (表示名)" name="radarFmtUNDN" />
+	</context_menu>
+  
+	<menu_item_separator layout="topleft" />
+
+	<context_menu label="通知方法" name="report_to_menu">
+		<menu_item_check label="周辺チャットで通知" name="radar_nearby_chat" />
+		<menu_item_check label="トーストで通知" name="radar_nearby_chat" />
+	</context_menu>
+    
+	<menu_item_check label="ミニマップにチャットレンジを表示" name="MiniMapChatRing" />
+	<menu_item_check label="描画範囲に入ってきたら通知" name="RadarReportDrawRangeEnter" />
+	<menu_item_check label="描画範囲から出て行ったら通知" name="RadarReportDrawRangeLeave" />
+	<menu_item_check label="チャットレンジに入ってきたら通知" name="RadarReportChatRangeEnter" />
+	<menu_item_check label="チャットレンジから出て行ったら通知" name="RadarReportChatRangeLeave" />
+	<menu_item_check label="同じSIMに入ってきたら通知" name="RadarReportSimRangeEnter" />
+	<menu_item_check label="同じSIMから出て行ったら通知" name="RadarReportSimRangeLeave" />
+	<menu_item_check label="入ってきた通知をスクリプトに表示" name="RadarEnterChannelAlert" />
+	<menu_item_check label="出て行った通知をスクリプトに表示" name="RadarLeaveChannelAlert" />
+
+	<menu_item_separator layout="topleft" />
+
+	<menu_item_call name="show_blocked_list" label="ブロックした人とオブジェクトを表示" />
+	
+</toggleable_menu>

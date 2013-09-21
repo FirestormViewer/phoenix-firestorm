@@ -1,0 +1,32 @@
+<llsd>
+    <array>
+        <array>
+            <real>0.003472220851108431816101074</real>
+            <string>[NB] P-Haze 0000</string>
+        </array>
+        <array>
+            <real>0.1840276867151260375976562</real>
+            <string>[NB] P-Haze 0430</string>
+        </array>
+        <array>
+            <real>0.333333194255828857421875</real>
+            <string>[NB] P-Haze 0800</string>
+        </array>
+        <array>
+            <real>0.4999997913837432861328125</real>
+            <string>[NB] P-Haze 1200</string>
+        </array>
+        <array>
+            <real>0.66666638851165771484375</real>
+            <string>[NB] P-Haze 1700</string>
+        </array>
+        <array>
+            <real>0.749999701976776123046875</real>
+            <string>[NB] P-Haze 1800</string>
+        </array>
+        <array>
+            <real>0.83333301544189453125</real>
+            <string>[NB] P-Haze 2000</string>
+        </array>
+    </array>
+</llsd>

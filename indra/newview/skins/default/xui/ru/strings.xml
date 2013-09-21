@@ -1426,7 +1426,7 @@ support@secondlife.com.
 	<string name="InvFolder Gestures">
 		Жесты
 	</string>
-	<string name="InvFolder Favorite">
+	<string name="InvFolder Favorites">
 		Мое избранное
 	</string>
 	<string name="InvFolder favorite">
@@ -2092,7 +2092,7 @@ support@secondlife.com.
 		дал(а) вам
 	</string>
 	<string name="InvOfferDecline">
-		Вы не приняли [DESC] от жителя &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Вы не приняли [DESC] от жителя [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Итого
@@ -2269,7 +2269,8 @@ support@secondlife.com.
 	<string name="Adult">
 		Для взрослых
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Искусство и культура
 	</string>
 	<string name="Business">
@@ -2287,7 +2288,8 @@ support@secondlife.com.
 	<string name="Newcomer Friendly">
 		Для новичков
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Парки и природа
 	</string>
 	<string name="Residential">

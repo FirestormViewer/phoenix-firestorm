@@ -26,7 +26,10 @@
 #ifndef LLFLOATERCONVERSATIONPREVIEW_H_
 #define LLFLOATERCONVERSATIONPREVIEW_H_
 
-#include "llchathistory.h"
+// <FS:CR> [FS communication UI]
+//#include "llchathistory.h"
+#include "fschathistory.h"
+// </FS:CR> [FS communication UI]
 #include "llfloater.h"
 
 extern const std::string LL_FCP_COMPLETE_NAME;	//"complete_name"
@@ -50,10 +53,14 @@ public:
 private:
 	void onMoreHistoryBtnClick();
 	void showHistory();
+	void onBtnOpenExternal();	// <FS:CR> Open chat history externally
 
 	LLMutex			mMutex;
 	LLSpinCtrl*		mPageSpinner;
-	LLChatHistory*	mChatHistory;
+	// <FS:CR> [FS communication UI]
+	//LLChatHistory*	mChatHistory;
+	FSChatHistory*	mChatHistory;
+	// </FS:CR> [FS communication UI]
 	LLUUID			mSessionID;
 	int				mCurrentPage;
 	int				mPageSize;

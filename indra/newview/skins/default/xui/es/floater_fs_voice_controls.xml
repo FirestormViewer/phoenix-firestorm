@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_voice_controls" title="Controles de voz">
+	<string name="title_nearby">
+		Voz cercana
+	</string>
+	<string name="title_group">
+		Conferencia de voz con [GROUP]
+	</string>
+	<string name="title_adhoc">
+		Conferencia de voz
+	</string>
+	<string name="title_peer_2_peer">
+		Conversación con [NAME]
+	</string>
+	<string name="no_one_near">
+		Nadie cercano tiene activada la voz
+	</string>
+	<layout_stack name="my_call_stack">
+		<layout_panel name="my_panel">
+			<text name="user_text" value="Mi avatar:"/>
+		</layout_panel>
+		<layout_panel name="leave_call_panel">
+			<layout_stack name="voice_effect_and_leave_call_stack">
+				<layout_panel name="voice_effect_lp" width="220"/>
+				<layout_panel name="leave_call_btn_panel" width="80">
+					<button label="Colgar" name="leave_call_btn" width="80"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+	<slider name="volume_slider" tool_tip="Volumen de la voz"/>
+</floater>

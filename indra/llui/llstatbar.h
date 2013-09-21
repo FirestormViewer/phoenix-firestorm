@@ -50,6 +50,7 @@ public:
 		Optional<bool> show_history;
 		Optional<bool> show_mean;
 		Optional<std::string> stat;
+		Optional<std::string> setting;
 		Params()
 			: label("label"),
 			  unit_label("unit_label"),
@@ -63,12 +64,15 @@ public:
 			  show_bar("show_bar", TRUE),
 			  show_history("show_history", FALSE),
 			  show_mean("show_mean", TRUE),
-			  stat("stat")
+			  stat("stat"),
+			  setting("setting")
 		{
 			changeDefault(follows.flags, FOLLOWS_TOP | FOLLOWS_LEFT);
 		}
 	};
 	LLStatBar(const Params&);
+
+	~LLStatBar();
 
 	virtual void draw();
 	virtual BOOL handleMouseDown(S32 x, S32 y, MASK mask);
@@ -97,6 +101,9 @@ private:
 	LLUIString mLabel;
 	std::string mUnitLabel;
 	F32 mValue;
+
+protected:
+	std::string mSetting;
 };
 
 #endif

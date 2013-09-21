@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Image Preview" title="">
+<floater name="Image Preview" title="" width="320">
 	<text name="name_label">
 		Nombre:
 	</text>
+	<line_editor name="name_form" width="300"/>
 	<text name="description_label">
 		Descripción:
 	</text>
+	<line_editor name="description_form" width="300"/>
 	<text name="preview_label">
-		Previsualizar la
-imagen como:
+		Previsualizar como:
 	</text>
-	<combo_box label="Tipo de ropa" left="100" name="clothing_type_combo" width="186">
+	<combo_box label="Tipo de ropa" left="100" name="clothing_type_combo" width="190">
 		<item label="Imagen" name="Image" value="Imagen"/>
 		<item label="Pelo" name="Hair" value="Pelo"/>
 		<item label="Mujer: cabeza" name="FemaleHead" value="Mujer: cabeza"/>
@@ -26,9 +27,10 @@ imagen como:
 		Imposible leer la imagen.
 
 Pruebe a guardar la imagen como Targa (.tga)
-de 24 bites.
+de 24 bits.
 	</text>
-	<check_box label="Usar compresión sin pérdida" name="lossless_check"/>
-	<button label="Cancelar" name="cancel_btn"/>
-	<button label="Subir ([AMOUNT]L$)" name="ok_btn"/>
+	<check_box label="Usar compresión sin pérdida" name="lossless_check" left_delta="-2"/>
+	<check_box name="temp_check" label="Temporal (Gratis)" tooltip="Configura el activo como temporal, haciendo gratuita la subida, pero a cambio sólo útil por un corto tiempo, tras el cuál deja de existir." left_delta="184"/>
+	<button label="Cancelar" name="cancel_btn" left="175"/>
+	<button label="Subir ([AMOUNT]L$)" name="ok_btn" left_delta="-155"/>
 </floater>

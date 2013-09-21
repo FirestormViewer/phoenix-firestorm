@@ -1654,7 +1654,10 @@ void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemb
 	}
 	
 	// trying to avoid unnecessary hash lookups
-	if (matchesSearchFilter(av_name.getAccountName()))
+	// <FS:CR> FIRE-11350
+	//if (matchesSearchFilter(av_name.getAccountName()))
+	if (matchesSearchFilter(av_name.getUserName()))
+	// </FS:CR>
 	{
 		addMemberToList(member);
 		if(!mMembersList->getEnabled())
@@ -1708,7 +1711,10 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get(mMemberProgress->first, &av_name))
 		{
-			if (matchesSearchFilter(av_name.getAccountName()))
+			// <FS:CR> FIRE-11350
+			//if (matchesSearchFilter(av_name.getAccountName()))
+			if (matchesSearchFilter(av_name.getUserName()))
+			// </FS:CR>
 			{
 				addMemberToList(mMemberProgress->second);
 			}

@@ -4,15 +4,6 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
-	<string name="SECOND_LIFE">
-		Second Life
-	</string>
-	<string name="APP_NAME">
-		Second Life
-	</string>
-	<string name="CAPITALIZED_APP_NAME">
-		SECOND LIFE
-	</string>
 	<string name="SECOND_LIFE_GRID">
 		Second Life Grid
 	</string>
@@ -137,14 +128,14 @@
 		終了
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/?sourceid=[sourceid]
+		http://join.secondlife.com/index.php?lang=ja-JP&amp;sourceid=[sourceid]
 	</string>
 	<string name="ViewerDownloadURL">
-		http://secondlife.com/download
+		http://www.firestormviewer.org/downloads/
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		お使いの古いビューワでは Second Life にアクセスできません。以下のページから新しいビューワをダウンロードしてください：
-http://secondlife.com/download
+http://firestormviewer.org/downloads
 
 詳細については、FAQ を参照してください：
 http://secondlife.com/viewer-access-faq
@@ -629,7 +620,7 @@ support@secondlife.com にお問い合わせください。
 		一時退席中
 	</string>
 	<string name="AvatarDoNotDisturb">
-		通知を受けない
+		取り込み中
 	</string>
 	<string name="AvatarMuted">
 		ブロック中
@@ -859,6 +850,12 @@ support@secondlife.com にお問い合わせください。
 	<string name="worldmap_results_none_found">
 		見つかりませんでした。
 	</string>
+	<string name="worldmap_agent_position">
+		あなたが現在いる場所
+	</string>
+	<string name="minimap_distance">
+		(距離: [DISTANCE] m)
+	</string>
 	<string name="Ok">
 		OK
 	</string>
@@ -868,11 +865,12 @@ support@secondlife.com にお問い合わせください。
 	<string name="ST_NO_JOINT">
 		ROOT または JOINT が見つかりません
 	</string>
+	
+	<!-- Chat -->
 	<string name="NearbyChatTitle">
-		近くのチャット
-	</string>
+		周辺チャット</string>
 	<string name="NearbyChatLabel">
-		(近くのチャット)
+		(周辺チャット)
 	</string>
 	<string name="whisper">
 		のささやき:
@@ -937,12 +935,25 @@ support@secondlife.com にお問い合わせください。
 	<string name="ControlYourCamera">
 		カメラのコントロール
 	</string>
+	
+	<!-- added Jun.30, 2013 -->
+	<string name="SilentlyManageEstateAccess">
+		不動産のアクセスリスト管理中は通知を抑止
+	</string>
+	<string name="OverrideYourAnimations">
+		デフォルトのアニメーションを置き換える
+	</string>
+	<string name="ScriptReturnObjects">
+		あなたに代わってオブジェクトを返却
+	</string>
+	<!-- added Jun.30, 2013 -->
+	
 	<string name="NotConnected">
 		接続されていません
 	</string>
 	<string name="AgentNameSubst">
 		(あなた)
-	</string>
+	</string> <!-- Substitution for agent name -->
 	<string name="TeleportYourAgent">
 		あなたをテレポート
 	</string>
@@ -1042,6 +1053,27 @@ support@secondlife.com にお問い合わせください。
 	<string name="dictionary_files">
 		辞書
 	</string>
+	
+	<!-- added Jun.30, 2013 -->
+	<string name="backup_files">
+		オブジェクトのバックアップ
+	</string>
+	<!-- added Jun.30, 2013 -->
+	
+	<string name="AvatarSetNotAway">
+		一時退席中解除
+	</string>
+	<string name="AvatarSetAway">
+		一時退席中
+	</string>
+	<string name="AvatarSetNotBusy">
+		取り込み中解除
+	</string>
+	<string name="AvatarSetBusy">
+		取り込み中
+	</string>
+	
+	<!-- Wearable Types -->
 	<string name="shape">
 		シェイプ
 	</string>
@@ -1096,45 +1128,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="none">
 		なし
 	</string>
-	<string name="shirt_not_worn">
-		シャツ未着用
-	</string>
-	<string name="pants_not_worn">
-		パンツ未着用
-	</string>
-	<string name="shoes_not_worn">
-		靴未着用
-	</string>
-	<string name="socks_not_worn">
-		靴下未着用
-	</string>
-	<string name="jacket_not_worn">
-		ジャケット未着用
-	</string>
-	<string name="gloves_not_worn">
-		手袋未着用
-	</string>
-	<string name="undershirt_not_worn">
-		下着（上）未着用
-	</string>
-	<string name="underpants_not_worn">
-		下着（下）未着用
-	</string>
-	<string name="skirt_not_worn">
-		スカート未着用
-	</string>
-	<string name="alpha_not_worn">
-		アルファ未着用
-	</string>
-	<string name="tattoo_not_worn">
-		タトゥー未着用
-	</string>
-	<string name="physics_not_worn">
-		物理作用なし
-	</string>
-	<string name="invalid_not_worn">
-		無効
-	</string>
+	
+	<!-- Create new wearable of the specified type -->
 	<string name="create_new_shape">
 		新しいシェイプを作成
 	</string>
@@ -1225,6 +1220,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="OverflowInfoChannelString">
 		あなたにはさらに %d 通の通知があります
 	</string>
+	
+	<!-- body parts -->
 	<string name="BodyPartsRightArm">
 		右腕
 	</string>
@@ -1429,7 +1426,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="InvFolder Gestures">
 		ジェスチャー
 	</string>
-	<string name="InvFolder Favorite">
+	<string name="InvFolder Favorites">
 		お気に入り
 	</string>
 	<string name="InvFolder favorite">
@@ -1998,6 +1995,13 @@ support@secondlife.com にお問い合わせください。
 	<string name="ATTACH_AVATAR_CENTER">
 		アバターの中央
 	</string>
+	
+	<!-- added Jun.30, 2013 -->
+	<string name="ATTACH_BRIDGE">
+		ブリッジ
+	</string>
+	<!-- added Jun.30, 2013 -->
+		
 	<string name="CursorPos">
 		[LINE] 行目、[COLUMN] 列目
 	</string>
@@ -2017,7 +2021,7 @@ support@secondlife.com にお問い合わせください。
 		新規スクリプト
 	</string>
 	<string name="DoNotDisturbModeResponseDefault">
-		この住民が「通知を受けない」をオンにすると、あなたのメッセージが後で表示されるようになります。
+		メッセージを送った住人は、誰にも邪魔をされたくないため現在「取り込み中」モードです。  あなたのメッセージは、あとで確認できるように IM パネルに表示されます。
 	</string>
 	<string name="MuteByName">
 		（名称別）
@@ -2055,12 +2059,16 @@ support@secondlife.com にお問い合わせください。
 	<string name="RegionSettings">
 		リージョン（地域）の設定
 	</string>
+	
+	<!-- panel classified -->
 	<string name="ClassifiedClicksTxt">
 		クリック数： [TELEPORT] テレポート、 [MAP] 地図、 [PROFILE] プロフィール
 	</string>
 	<string name="ClassifiedUpdateAfterPublish">
 		（掲載後更新）
 	</string>
+	
+	<!-- panel picks -->
 	<string name="NoPicksClassifiedsText">
 		ピックやクラシファイド広告を作成していません。 作成するには、下にある「プラス」ボタンをクリックします。
 	</string>
@@ -2070,6 +2078,14 @@ support@secondlife.com にお問い合わせください。
 	<string name="PicksClassifiedsLoadingText">
 		ローディング...
 	</string>
+	
+	<!-- FS:KC legacy profiles -->
+	<string name="NoPicksText">ピックを作成していません。</string>
+	<string name="NoAvatarPicksText">このユーザーにはピックがありません。</string>
+	<string name="NoClassifiedsText">クラシファイド広告を作成していません。作成するには、下にある「プラス」ボタンをクリックします。</string>
+	<string name="NoAvatarClassifiedsText">このユーザーにはクラシファイド広告がありません。</string>
+  
+	<!-- Multi Preview Floater -->
 	<string name="MultiPreviewTitle">
 		プレビュー
 	</string>
@@ -2095,7 +2111,7 @@ support@secondlife.com にお問い合わせください。
 		が渡しました
 	</string>
 	<string name="InvOfferDecline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; からの [DESC] を拒否しました。
+		[NAME] からの [DESC] を拒否しました。
 	</string>
 	<string name="GroupMoneyTotal">
 		合計
@@ -2129,6 +2145,9 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="GroupMoneyDate">
 		[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日[weekday,datetime,utc]
+	</string>
+	<string name="ViewerObjectContents">
+		内容
 	</string>
 	<string name="AcquiredItems">
 		取得アイテム
@@ -2272,7 +2291,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		アートとカルチャー
 	</string>
 	<string name="Business">
@@ -2290,7 +2310,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="Newcomer Friendly">
 		新住人に優しい
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		公園と自然
 	</string>
 	<string name="Residential">
@@ -3903,9 +3924,13 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="LocationCtrlGeneralIconTooltip">
 		General リージョン
 	</string>
+	
+	<!-- modified Jun.30, 2013 -->
 	<string name="LocationCtrlSeeAVsTooltip">
-		この区画内のアバターは、この区画の外にいるアバターからは見ることも聞くこともできません。
+		この区画外にいるアバターからは中にいるアバターが見えず、会話も聞こえないようにする
 	</string>
+	<!-- modified Jun.30, 2013 -->
+	
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		地域（リージョン）が再構築されるまで、移動するオブジェクトは正しく動作しない可能性があります。
 	</string>
@@ -3997,7 +4022,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		ボイスコールに参加しました
 	</string>
 	<string name="you_auto_rejected_call-im">
-		「通知を受けない」がオンのときに、自動的にボイスコールを拒否しました。
+		「取り込み中」モード中のボイスコールは自動的に拒否しました。
 	</string>
 	<string name="name_started_call">
 		[NAME] はボイスコールを開始します
@@ -4015,7 +4040,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		接続中...
 	</string>
 	<string name="conference-title">
-		複数人チャット
+		複数同時チャット
 	</string>
 	<string name="conference-title-incoming">
 		[AGENT_NAME] とコンファレンスする
@@ -4958,6 +4983,36 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Voice_Label">
 		ボイス設定
 	</string>
+	
+	<!-- Added Aug.25, 2012 -->
+	<string name="Command_Quickprefs_Label">クイック設定</string>
+	<string name="Command_AO_Label">AO</string>
+	<string name="Command_Webbrowser_Label">Webブラウザ</string>
+	<string name="Command_Default_Chat_Bar_Label">チャット</string>
+	<string name="Command_Areasearch_Label">エリアサーチ</string>
+	<string name="Command_Settings_Debug_Label">デバッグ設定</string>
+	<string name="Command_Statistics_Label">統計</string>
+	<string name="Command_Region_Label">地域／不動産</string>
+	<string name="Command_Fly_Label">飛行</string>
+	<!-- Added Aug.25, 2012 -->
+	
+	<!-- Added Jun.30, 2013 -->
+	<string name="Command_Groundsit_Label">地面に座る</string>
+	<string name="Command_Sound_Explorer_Label">サウンドエクスプローラ</string>
+	<string name="Command_Asset_Blacklist_Label">不動産のブロックリスト</string>
+	<string name="Command_Phototools_Label">フォトツール</string>
+	<string name="Command_Phototools_View_Label">フォトツールのカメラ設定</string>
+	<string name="Command_Contact_Sets_Label">連絡先のセット</string>
+	<string name="Command_Mouselook_Label">マウスルック</string>
+	<string name="Command_Landmark_Here_Label">ランドマークを作成</string>
+	<string name="Command_Teleport_History_Label">テレポート履歴</string>
+	<string name="Command_Pose_Stand_Label">ポーズスタンド</string>
+	<string name="Command_Snapshot_To_Disk_Label">スナップショットをディスクに保存</string>
+	<string name="Command_Radar_Label">レーダー</string>
+	<!-- Added Jun.30, 2013 -->
+	
+	<string name="Command_Conversation_Log_Label">会話ログ</string>
+	
 	<string name="Command_AboutLand_Tooltip">
 		訪問先に関する情報
 	</string>
@@ -4974,7 +5029,7 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		近くの人と文字チャットする
 	</string>
 	<string name="Command_Conversations_Tooltip">
-		全員との会話
+		みんなと会話する
 	</string>
 	<string name="Command_Compass_Tooltip">
 		コンパス
@@ -5036,7 +5091,75 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Voice_Tooltip">
 		インワールドでのコールや近くにいる人の音量調整
 	</string>
-	<string name="Toolbar_Bottom_Tooltip">
+	
+<!-- Firestorm commands added Jun.30, 2013 -->
+	<string name="Command_Quickprefs_Tooltip">
+		よく使う設定を変更する場合のクィック設定
+	</string>
+	<string name="Command_AO_Tooltip">
+		アニメーションのオーバーライド
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		内蔵ウェブブラウザを開く (CTRL+SHIFT+Z)
+	</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">
+		デフォルトでチャットバーを表示するまたは隠す
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		このエリアのオブジェクトを検索する
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		ビューワの基本設定を変更する (CTRL+ALT+SHIFT+S)
+		
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		ビューワの状態統計を表示する (CTRL+SHIFT+1)
+	</string>
+	<string name="Command_Region_Tooltip">
+		地域／不動産ツールを開く (ALT+R)
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		地面に座る、またはその状態から立ち上がる (CTRL+ALT+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		サウンドエクスプローラを開く
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		ブロックリストに入れた全ての項目を表示する</string>
+	<string name="Command_Phototools_Tooltip">
+		高機能画像処理ツール
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		フォトツール内の高度なカメラ設定
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		連絡先のセットを開く (CTRL+ALT+SHIFT+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		マウスルックモードにする (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		現在いる場所のランドマークを作成する
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		テレポート履歴を開く
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		装着物を調整するめのポーズスタンド
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		素早くスナップショットを撮ってハードディスクに保存する
+	</string>
+	<string name="Command_Radar_Tooltip">
+		レーダーを開いて近くにいるアバターを表示する
+	</string>
+<!-- Firestorm commands added Jun.30, 2013 -->
+
+	<string name="Command_Conversation_Log_Tooltip">
+		会話ログを開いて過去に交わしたチャットをテキストで確認します。
+	</string>
+
+ 	<string name="Toolbar_Bottom_Tooltip">
 		現在、下のツールバーにあります
 	</string>
 	<string name="Toolbar_Left_Tooltip">
@@ -5045,6 +5168,14 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Toolbar_Right_Tooltip">
 		現在、右のツールバーにあります
 	</string>
+	
+	<!-- added Jun.30, 2013 -->
+	<string name="Command_Fly_Tooltip">
+		飛行モードを開始、または停止する
+	</string>
+	<!-- added Jun.30, 2013 -->
+	
+ <!-- Mesh UI terms -->
 	<string name="Retain%">
 		維持率
 	</string>
@@ -5069,6 +5200,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Normal">
 		普通
 	</string>
+	
+	<!-- Pathfinding -->
 	<string name="Pathfinding_Wiki_URL">
 		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
@@ -5084,6 +5217,8 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Pathfinding_Object_Attr_MultiSelect">
 		（複数）
 	</string>
+	
+	<!-- Snapshot image quality levels -->
 	<string name="snapshot_quality_very_low">
 		非常に低い
 	</string>
@@ -5099,22 +5234,136 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="snapshot_quality_very_high">
 		非常に高い
 	</string>
+	<string name="IMPrefix">
+		IM: 
+	</string>
+	
+	<!-- Settings sanity checks -->
+	<!-- Media filter options -->
+	<!-- Replacement for hardcoded UI strings -->
+	<!-- CmdLine Response Strings-->
+	
+	<!-- NetMap double click action tooltip messages -->
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
+		[AGENT][REGION](ダブルクリックで世界地図を開きます。Shift‐ドラッグで水平・垂直移動します。)
+	</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">
+		[REGION](ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動します。)
+	</string>
+	<string name="NetMapDoubleClickNoActionToolTipMsg">
+		[REGION]
+	</string>
+	
+	<!-- Nearby Chat Collision Messages -->
+
+	<string name="BusyResponse">
+		取り込み時の自動応答
+	</string>
+	
 	<string name="TeleportMaturityExceeded">
 		住人はこの地域（リージョン）を訪問できません。
 	</string>
+	
+	<!-- Spell check settings floater -->
 	<string name="UserDictionary">
 		[User]
 	</string>
+	
+	<!-- Conversation log messages -->
 	<string name="logging_calls_disabled_log_empty">
-		会話はログに記録されていません。ログの記録を開始するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
+		会話のログは記録されていません。ログの記録を開始するには、「環境設定」＞「プライバシー」で「保存；ログのみ」または「保存：ログとテキスト」を選択して下さい。
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		これ以上の会話は記録されません。ログの記録を再開するには、「環境設定」&gt;「チャット」で「保存: ログのみ」または「保存: ログと会話のテキスト」を選択します。
+		会話のログは記録されなくなります。ログの記録を再開するには、「環境設定」＞「プライバシー」で「保存；ログのみ」または「保存：ログとテキスト」を選択して下さい。
 	</string>
 	<string name="logging_calls_enabled_log_empty">
-		ログイン時の会話はありません。誰かにご連絡した後、または誰かがあなたに連絡した後、ログエントリがここに表示されます。
+		ログが記録された会話はありません。あなたが誰かに話しかけるか、誰かがあなたに話しかけるとここにログが表示されるようになります。
 	</string>
 	<string name="loading_chat_logs">
 		ロード中...
 	</string>
+	
+	<!-- Build types for about floater -->
+	
+	<!-- added Jun.30, 2013 -->
+	<!-- Firestorm search -->
+  <string name="not_found">&apos;[TEXT]&apos; は見つかりません</string>
+  <string name="no_results">該当なし</string>
+  <string name="searching">検索中...</string>
+  <string name="all_categories">全てのカテゴリ</string>
+  <string name="search_banned">コミュニティ規則に明記されている制約により、あなたが検索に使用した言葉のいくつかは対象から除外されました。</string>
+  <string name="search_short">検索キーワードが短すぎたため、検索が実行されませんでした。</string>
+  <string name="search_disabled">この地域では旧タイプの検索は実行できないようになっています。</string>
+  
+  <string name="render_quality_low">Low (1/7)</string>
+  <string name="render_quality_mediumlow">Medium-Low (2/7)</string>
+  <string name="render_quality_medium">Medium (3/7)</string>
+  <string name="render_quality_mediumhigh">Medium-High (4/7)</string>
+  <string name="render_quality_high">High (5/7)</string>
+  <string name="render_quality_highultra">High-Ultra (6/7)</string>
+  <string name="render_quality_ultra">Ultra (7/7)</string>
+  <string name="render_quality_unknown">Unknown, beyond the normal range, check RenderQualityPerformance debug setting</string>
+
+  <string name="qtool_busy">Please wait, the align tool is busy working.</string>
+  <string name="qtool_still_busy">Please continue to wait, the align tool is still working.</string>
+  <string name="qtool_done">The align tool has finished.</string>
+
+  <string name="fsbridge_no_library">Firestorm could not create an LSL bridge. Please enable your library and relog.</string>
+  <string name="fsbridge_already_creating">Bridge creation in process, cannot start another. Please wait a few minutes before trying again.</string>
+  <string name="fsbridge_creating">Creating the bridge. This might take a moment, please wait.</string>
+  <string name="fsbridge_failure_creation_bad_name">Bridge not created. The bridge is named incorrectly. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_creation_null">Bridge not created. The bridge couldn't be found in inventory. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_wrong_object">Bridge failed to attach. This is not the current bridge version. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_wrong_location">Bridge failed to attach. The bridge wasn't found in the right inventory location. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_point_in_use">Bridge failed to attach. Something else was using the bridge attachment point. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
+  <string name="fsbridge_failure_not_found">The bridge object could not be found. Cannot proceed with its creation, exiting.</string>
+  <string name="fsbridge_warning_unexpected_items">The bridge inventory contains unexpected items.</string>
+  <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate it before using.</string>
+  <string name="fsbridge_detached">Bridge detached.</string>
+  <string name="fsbridge_created">Bridge created.</string>
+
+  <!-- <FS:Zi> Quick preferences default options -->
+  <string name="QP Draw Distance">描画距離</string>
+  <string name="QP Max Particles">最大パーティクル数</string>
+  <string name="QP Avatar Physics LOD">アバター物理強度</string>
+  <string name="QP LOD Factor">プリム詳細</string>
+  <string name="QP Max Avatars">最大アバター数</string>
+  <string name="QP Tags Offset">タグの高さ</string>
+  <string name="QP Name Tags">名前タグ</string>
+  <string name="QP LookAt Target">視線表示</string>
+  <string name="QP Color Under Cursor">カーソル位置の色情報</string>
+
+  <!-- <FS:Ansariel> Posestand animation names -->
+  <string name="PS_T_Pose">Tの字（腕を横に、足を揃える）</string>
+  <string name="PS_Arms_Down_Legs_together">腕を下に、足を揃える</string>
+  <string name="PS_Arms_down_sitting">腕を下にして座る</string>
+  <string name="PS_Arms_downward_Legs_together">腕を斜め下に、足を揃える</string>
+  <string name="PS_Arms_downward_Legs_apart">腕を斜め下に、足を開く</string>
+  <string name="PS_Arms_forward_Legs_apart">腕を前に、足を開く</string>
+  <string name="PS_Arms_forward_Legs_together">腕を前に、足を揃える</string>
+  <string name="PS_Arms_straight_Legs_apart">腕を横に、足を開く</string>
+  <string name="PS_Arms_straight_sitting">腕を横にして座る</string>
+  <string name="PS_Arms_upward_Legs_apart">腕を斜め上に、足を開く</string>
+  <string name="PS_Arms_upward_Legs_together">腕を斜め上に、足を揃える</string>
+  
+  <string name="QP_WL_Region_Default">地域デフォルト</string>
+  <string name="QP_WL_Day_Cycle_Based">デイサイクル</string>
+  <string name="QP_WL_None">なし</string>
+
+  <string name="GroupChatMuteNotice">Muting group chat from [NAME].</string>
+  
+  <!-- <FS:Ansariel> Radar notifications -->
+  <string name="camera_no_focus">The camera cannot focus user [AVATARNAME] because they are outside your draw distance.</string>
+  <string name="entering_draw_distance">entered draw distance ([DISTANCE] m).</string>
+  <string name="leaving_draw_distance">left draw distance.</string>
+  <string name="entering_chat_range">entered chat range ([DISTANCE] m).</string>
+  <string name="leaving_chat_range">left chat range.</string>
+  <string name="entering_region">entered the region.</string>
+  <string name="entering_region_distance">entered the region ([DISTANCE] m).</string>
+  <string name="leaving_region">left the region.</string>
+
+  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Export aborted.</string>
+  <string name="TotalScriptCountChangeIncrease">Total scripts in region jumped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
+  <string name="TotalScriptCountChangeDecrease">Total scripts in region dropped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
+  <string name="preproc_toggle_warning">Toggling the preprocessor will not take full effect until you close and reopen this editor.</string>
 </strings>

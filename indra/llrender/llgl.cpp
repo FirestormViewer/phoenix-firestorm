@@ -768,10 +768,12 @@ bool LLGLManager::initGL()
 	}
 
 
-	if (mIsIntel && mGLVersion <= 3.f)
-	{ //never try to use framebuffer objects on older intel drivers (crashy)
-		mHasFramebufferObject = FALSE;
-	}
+// <FS:CR> FIRE-7603: Revert MAINT-804 because FBO's and shadows appear to be working now!
+	//if (mIsIntel && mGLVersion <= 3.f)
+	//{ //never try to use framebuffer objects on older intel drivers (crashy)
+	//	mHasFramebufferObject = FALSE;
+	//}
+// </FS:CR>
 #endif
 
 	if (mHasFramebufferObject)

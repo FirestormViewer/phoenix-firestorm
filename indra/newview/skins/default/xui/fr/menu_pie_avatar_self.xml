@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<pie_menu name="Self Pie">
+    <pie_slice name="Gestures"
+        label="Gestes"/>
+    <pie_slice name="Sit Down Here"
+        label="S'asseoir ici"/>
+    <pie_slice name="Stand Up"
+        label="Se lever"/>
+    <pie_slice name="Groups..."
+        label="Groupes"/>
+    <pie_slice name="Profile..."
+        label="Profil"/>
+    <pie_slice name="Debug..."
+        label="Debog. textures"/>
+		
+    <pie_menu name="Appearance &gt;"
+        label="Apparence &gt;">
+        <pie_slice name="Edit My Shape"
+			label="&gt; Corps"/>
+        <pie_slice name="Edit My Outfit"
+			label="&gt; Tenue"/>
+    </pie_menu>
+		
+    <pie_menu name="Take Off &gt;"
+		label="Enlever &gt;">
+        <pie_slice name="Detach All"
+            label="Tout détacher"/>
+        <pie_menu name="Pie Object Detach"
+            label="Attachements &gt;"/>
+        <pie_menu name="Pie Object Detach HUD"
+            label="HUD &gt;"/>
+			
+        <pie_menu name="Clothes &gt;"
+            label="Habits &gt;">
+            <pie_slice name="Gloves"
+                label="Gants"/>
+            <pie_slice name="Jacket"
+                label="Veste"/>
+            <pie_slice name="Socks"
+                label="Chaussettes"/>
+            <pie_slice name="Shoes"
+                label="Chaussures"/>
+            <pie_slice name="Pants"
+                label="Pantalon"/>
+            <pie_slice name="Shirt"
+                label="Chemise"/>
+            <pie_slice name="Skirt"
+                label="Jupe"/>
+				
+            <pie_menu name="Clothes More"
+                label="Plus &gt;">
+                <pie_slice name="Self Undershirt"
+                    label="Débardeur"/>
+                <pie_slice name="All Clothes"
+                    label="Tous les habits"/>
+                <pie_slice name="Self Underpants"
+                    label="Caleçon"/>
+                <pie_slice name="Self Tattoo"
+                    label="Tatouage"/>
+                <pie_slice name="Self Physics"
+					label="Physique"/>
+                <pie_slice name="Self Alpha"
+                    label="Alpha"/>
+            </pie_menu>
+        </pie_menu>
+    </pie_menu>
+</pie_menu>

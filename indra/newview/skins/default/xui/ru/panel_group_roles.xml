@@ -82,13 +82,15 @@
 		<scroll_list name="role_allowed_actions" tool_tip="Данные о каждой доступной способности см. на вкладке «Способности»"/>
 	</panel>
 	<panel name="actions_footer">
-		<text_editor name="action_description">
-			Это способность «Исключать участников из группы». Владельца может исключить только другой владелец.
-		</text_editor>
-		<text name="static2">
+		<panel name="action_description_panel">
+			<text_editor name="action_description">
+				Это способность «Исключать участников из группы». Владельца может исключить только другой владелец.
+			</text_editor>
+		</panel>
+		<text name="action_roles_label">
 			Роли с этой способностью
 		</text>
-		<text name="static3">
+		<text name="action_members_label">
 			Участники с этой способностью
 		</text>
 	</panel>

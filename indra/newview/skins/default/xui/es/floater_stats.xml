@@ -21,9 +21,9 @@
 					<stat_bar label="Latencia de lectura de caché" name="texture_cache_read_latency"/>
 					<stat_bar label="Número" name="numimagesstat"/>
 					<stat_bar label="Raw: número" name="numrawimagesstat"/>
-					<stat_bar label="GL Mem" name="gltexmemstat"/>
-					<stat_bar label="Formatted Mem" name="formattedmemstat"/>
-					<stat_bar label="Raw Mem" name="rawmemstat"/>
+					<stat_bar label="Mem GL" name="gltexmemstat"/>
+					<stat_bar label="Mem Formateada" name="formattedmemstat"/>
+					<stat_bar label="Mem Raw" name="rawmemstat"/>
 					<stat_bar label="Bound Mem" name="glboundmemstat"/>
 				</stat_view>
 				<stat_view label="Red" name="network">
@@ -31,7 +31,7 @@
 					<stat_bar label="Paquetes entrantes" name="packetsoutstat"/>
 					<stat_bar label="Objetos" name="objectkbitstat"/>
 					<stat_bar label="Textura" name="texturekbitstat"/>
-					<stat_bar label="Asset" name="assetkbitstat"/>
+					<stat_bar label="Activos" name="assetkbitstat"/>
 					<stat_bar label="Capas" name="layerskbitstat"/>
 					<stat_bar label="Entrando ahora" name="actualinkbitstat"/>
 					<stat_bar label="Saliendo ahora" name="actualoutkbitstat"/>
@@ -41,22 +41,34 @@
 			<stat_view label="Simulador" name="sim">
 				<stat_bar label="Tiempo de dilación" name="simtimedilation"/>
 				<stat_bar label="FPS en el Sim" name="simfps"/>
-				<stat_bar label="Physics FPS" name="simphysicsfps"/>
-				<stat_view label="Physics Details" name="physicsdetail">
+				<stat_bar label="FPS Física" name="simphysicsfps"/>
+				<stat_view label="Detalles Física" name="physicsdetail">
 					<stat_bar label="Pin de objetos" name="physicspinnedtasks"/>
 					<stat_bar label="Objetos con bajo nivel de detalle" name="physicslodtasks"/>
 					<stat_bar label="Memoria asignada" name="physicsmemoryallocated"/>
 				</stat_view>
-				<stat_bar label="Scripts ejecutados" name="simpctscriptsrun"/>
-				<stat_view label="Pathfinding" name="simpathfinding">
-					<stat_bar label="Tiempo de paso de IA" name="simsimaistepmsec"/>
-					<stat_bar label="Pasos de silueta omitidos" name="simsimskippedsilhouettesteps"/>
-					<stat_bar label="Personajes actualizados" name="simsimpctsteppedcharacters"/>
+				<stat_bar name="simagentups" label="Actualiz. de agentes / s"/>
+				<stat_bar name="simmainagents" label="Agentes principales"/>
+				<stat_bar name="simchildagents" label="Agentes hijo"/>
+				<stat_bar name="simobjects" label="Objetos" stat="simobjects"/>
+				<stat_bar name="simactiveobjects" label="Objetos activos"/>
+				<stat_bar name="simactivescripts" label="Scripts activos"/>
+				<stat_bar name="simpctscriptsrun" label="Ejecuciones de script"/>
+				<stat_bar name="simscripteps" label="Eventos de script"/>
+				<stat_view name="simpathfinding" label="Pathfinding">
+					<stat_bar name="simsimaistepmsec" label="  Tiempo paso IA"/>
+					<stat_bar name="simsimskippedsilhouettesteps" label="  Pasos de silueta omitidos" unit_label="/s"/>
+					<stat_bar name="simsimpctsteppedcharacters" label="  Caracteres actualizados"/>
 				</stat_view>
+				<stat_bar name="siminpps" label="Entrada paquetes"/>
+				<stat_bar name="simoutpps" label="Salida paquetes"/>
+				<stat_bar name="simpendingdownloads" label="Descargas pendientes"/>
+				<stat_bar name="simpendinguploads" label="Subidas pendientes"/>
+				<stat_bar name="simtotalunackedbytes" label="Bytes no reconocidos"/>
 				<stat_view label="Tiempo (ms)" name="simperf">
 					<stat_bar label="Tiempo total de los frames" name="simframemsec"/>
 					<stat_bar label="Tiempo de red" name="simnetmsec"/>
-					<stat_bar label="Physics Time" name="simsimphysicsmsec"/>
+					<stat_bar label="Tiempo de Física" name="simsimphysicsmsec"/>
 					<stat_bar label="Tiempo de la simulación" name="simsimothermsec"/>
 					<stat_bar label="Tiempo de los agentes" name="simagentmsec"/>
 					<stat_bar label="Tiempo de las imágenes" name="simimagesmsec"/>
@@ -67,7 +79,7 @@
 						<stat_bar label="Actualizar formas físicas" name="simsimphysicsshapeupdatemsec"/>
 						<stat_bar label="Otros (Física)" name="simsimphysicsothermsec"/>
 						<stat_bar label="Tiempo de suspensión" name="simsleepmsec"/>
-						<stat_bar label="E/S bombeo" name="simpumpiomsec"/>
+						<stat_bar label="Bombeo E/S" name="simpumpiomsec"/>
 					</stat_view>
 				</stat_view>
 			</stat_view>

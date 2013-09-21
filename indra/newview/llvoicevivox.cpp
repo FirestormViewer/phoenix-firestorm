@@ -586,7 +586,7 @@ void LLVivoxVoiceClient::login(
 		// we have an empty account server name
 		// so we fall back to hardcoded defaults
 
-		if(LLGridManager::getInstance()->isInProductionGrid())
+		if(!LLGridManager::getInstance()->isInSLBeta())
 		{
 			// Use the release account server
 			mVoiceSIPURIHostName = "bhr.vivox.com";
@@ -4676,7 +4676,12 @@ void LLVivoxVoiceClient::setVoiceEnabled(bool enabled)
 
 bool LLVivoxVoiceClient::voiceEnabled()
 {
-	return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+	static LLCachedControl<bool> sEnableVoiceChat(gSavedSettings, "EnableVoiceChat");
+	static LLCachedControl<bool> sCmdLineDisableVoice(gSavedSettings, "CmdLineDisableVoice");
+	return sEnableVoiceChat && !sCmdLineDisableVoice;
+	// </FS:Ansariel>
 }
 
 void LLVivoxVoiceClient::setLipSyncEnabled(BOOL enabled)

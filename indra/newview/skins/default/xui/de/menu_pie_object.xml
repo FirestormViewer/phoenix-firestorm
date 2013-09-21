@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Object Pie">
+	<pie_slice label="Öffnen" name="Open"/>
+	<pie_slice label="Erstellen" name="Build"/>
+	<pie_slice label="Berühren" name="Pie Object Touch"/>
+	<pie_slice label="Hier sitzen" name="Pie Object Sit"/>
+	<pie_slice label="Aufstehen" name="Object Stand Up"/>
+	<pie_slice label="Kaufen" name="Buy..."/>
+	<pie_slice label="Nehmen" name="Pie Object Take"/>
+	<pie_slice label="Zahlen" name="Pay..."/>
+	<pie_menu label="Mehr >" name="Object Pie More 1">
+		<pie_slice label="Löschen" name="Delete"/>
+		<pie_slice label="Anziehen" name="Wear"/>
+		<pie_slice label="Kopie nehmen" name="Take Copy"/>
+		<pie_menu label="HUD anhängen >" name="Pie Object Attach HUD"/>
+		<pie_menu label="Anhängen >" name="Pie Object Attach"/>
+		<pie_slice label="Zurückgeben" name="Return..."/>
+		<pie_menu label="Mehr >" name="Object Pie More 2">
+			<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
+				<pie_slice label="Blacklist" name="DerenderPermanent"/>
+				<pie_slice label="Temporär" name="Derender"/>
+			</pie_menu>
+			<pie_slice label="Melden..." name="Report Abuse..."/>
+			<pie_menu name="ExportMenu" label="Speichern als &gt;">
+				<pie_slice label="Backup" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
+			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
+				<pie_slice label="In Linksets" name="show_in_linksets"/>
+				<pie_slice label="In Figuren" name="show_in_characters"/>
+			</pie_menu>
+			<pie_menu name="mute_menu" label="Blockieren &gt;">
+				<pie_slice label="Ignorieren" name="Object Mute"/>
+				<pie_slice label="Partikelbes." name="Mute Particle"/>
+			</pie_menu>
+			<pie_menu label="Skripte &gt;" name="ScriptsMenu">
+				<pie_slice label="Kompilieren (Mono)" name="CompileMono"/>
+				<pie_slice label="Kompilieren (LSL)" name="CompileLSL"/>
+				<pie_slice label="Skripte zurücks." name="Object Reset Scripts"/>
+				<pie_slice label="Skripte starten" name="Object Set Scripts to Running"/>
+				<pie_slice label="Skripte stoppen" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Skripte löschen" name="Remove Scripts From Selection"/>
+				<pie_slice label="Skript-Info" name="ScriptInfo"/>
+			</pie_menu>
+			<pie_slice label="Untersuchen" name="Object Inspect"/>
+		</pie_menu>
+		<pie_slice label="Kaufen..." name="Buy..."/>
+	</pie_menu>
+	<pie_slice label="Bearbeiten" name="Edit..."/>
+</pie_menu>

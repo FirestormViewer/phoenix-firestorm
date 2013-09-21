@@ -32,12 +32,18 @@
 #include "llcallingcard.h" // for avatar tracker
 #include "llvoiceclient.h"
 
+#include "llfloater.h"
+
 class LLAvatarList;
 class LLAvatarName;
 class LLFilterEditor;
 class LLGroupList;
 class LLMenuButton;
 class LLTabContainer;
+
+// Firestorm declarations
+class LLMenuGL;
+class FSPanelRadar;
 
 class LLPanelPeople 
 	: public LLPanel
@@ -54,6 +60,11 @@ public:
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
+
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	// Externalized to FSRadar
+	//LLAvatarList* getNearbyList() { return mNearbyList; }
+// [/RLVa:KB]
 
 	// internals
 	class Updater;
@@ -126,10 +137,17 @@ private:
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
 	bool					isAccordionCollapsedByUser(const std::string& name);
 
+	// <FS:Ansariel> Firestorm callback handler
+	void					onGlobalVisToggleButtonClicked();
+	// </FS:Ansariel> Firestorm callback handler
+
 	LLTabContainer*			mTabContainer;
 	LLAvatarList*			mOnlineFriendList;
 	LLAvatarList*			mAllFriendList;
 	LLAvatarList*			mNearbyList;
+	// <FS:Ansariel> Firestorm radar
+	FSPanelRadar*			mRadarPanel;
+	// </FS:Ansariel> Firestorm radar
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
 	LLNetMap*				mMiniMap;
@@ -138,7 +156,9 @@ private:
 	std::vector<std::string> mSavedFilters;
 
 	Updater*				mFriendListUpdater;
-	Updater*				mNearbyListUpdater;
+	// <FS:Ansariel> Firestorm radar
+	//Updater*				mNearbyListUpdater;
+	// </FS:Ansariel> Firestorm radar
 	Updater*				mRecentListUpdater;
 	Updater*				mButtonsUpdater;
     LLHandle< LLFloater >	mPicker;

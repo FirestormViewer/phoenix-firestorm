@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    layout="topleft"
+    name="Land Pie">
+    <pie_slice
+        label="土地情報..."
+        name="Place Information...">
+        <pie_slice.on_click
+            function="Floater.Show"
+            parameter="about_land" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="作成"
+        name="Create">
+        <pie_slice.on_click
+            function="Land.Build" />
+        <pie_slice.on_enable
+            function="EnableEdit" />
+    </pie_slice>
+    <pie_slice
+        label="ここに来る"
+        name="Go Here">
+        <pie_slice.on_click
+            function="GoToObject" />
+    </pie_slice>
+    <pie_slice
+        label="ここに座る"
+        name="Sit Here">
+        <pie_slice.on_click
+            function="Land.Sit" />
+    </pie_slice>
+    <pie_separator />
+    <pie_slice
+        enabled="false"
+        label="入場許可購入"
+        name="Land Buy Pass">
+        <pie_slice.on_click
+            function="Land.BuyPass" />
+        <pie_slice.on_enable
+            function="Land.EnableBuyPass" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="地形を編集"
+        name="Edit Terrain">
+        <pie_slice.on_click
+            function="Land.Edit" />
+        <pie_slice.on_enable
+            function="EnableEdit" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="土地を購入"
+        name="Land Buy">
+        <pie_slice.on_click
+            function="Land.Buy" />
+        <pie_slice.on_enable
+            function="World.EnableBuyLand" />
+    </pie_slice>
+</pie_menu>

@@ -31,6 +31,7 @@
 
 #include "llmultifloater.h"
 #include "llresizehandle.h"
+#include "lldraghandle.h"
 
 //
 // LLMultiFloater
@@ -56,7 +57,8 @@ void LLMultiFloater::buildTabContainer()
 	p.rect(LLRect(LLPANEL_BORDER_WIDTH, getRect().getHeight() - floater_header_size, getRect().getWidth() - LLPANEL_BORDER_WIDTH, 0));
 	p.tab_position(mTabPos);
 	p.follows.flags(FOLLOWS_ALL);
-	p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
+	// <FS> Update torn off status and add title bar
+	//p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
 
 	mTabContainer = LLUICtrlFactory::create<LLTabContainer>(p);
 	addChild(mTabContainer);
@@ -190,6 +192,13 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floater_data.mCanResize = floaterp->isResizable();
     floater_data.mSaveRect = floaterp->mSaveRect;
 
+	// <FS> Update torn off status and add title bar
+	floaterp->getDragHandle()->setTitleVisible(FALSE);
+	LLRect rect = floaterp->getRect();
+	rect.mTop -= floaterp->getHeaderHeight();
+	floaterp->setRect(rect);
+	// </FS>
+
 	// remove minimize and close buttons
 	floaterp->setCanMinimize(FALSE);
 	floaterp->setCanResize(FALSE);
@@ -240,6 +249,14 @@ void LLMultiFloater::updateFloaterTitle(LLFloater* floaterp)
 	if (index != -1)
 	{
 		mTabContainer->setPanelTitle(index, floaterp->getShortTitle());
+		// <FS:TS> If the tab we're updating is the current tab, then 
+		// update the overall title too, since we're showing it
+		// exclusively now.
+		if (floaterp == mTabContainer->getCurrentPanel())
+		{
+			mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
+		}
+		// </FS:TS>
 	}
 }
 
@@ -288,6 +305,13 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	if (!floaterp || floaterp->getHost() != this )
 		return;
 
+	// <FS> Update torn off status and add title bar
+	floaterp->getDragHandle()->setTitleVisible(TRUE);
+	LLRect rect = floaterp->getRect();
+	rect.mTop += floaterp->getHeaderHeight();
+	floaterp->setRect(rect);
+	// </FS>
+
 	floater_data_map_t::iterator found_data_it = mFloaterDataMap.find(floaterp->getHandle());
 	if (found_data_it != mFloaterDataMap.end())
 	{
@@ -307,6 +331,9 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	floaterp->setCanDrag(TRUE);
 	floaterp->setHost(NULL);
 	floaterp->applyRectControl();
+
+	// <FS:Zi> Make sure the floater doesn't resize with screen size changes
+	floaterp->setFollowsNone();		// <FS:Zi>
 
 	updateResizeLimits();
 
@@ -434,8 +461,21 @@ void LLMultiFloater::onTabSelected()
 	if (floaterp)
 	{
 		tabOpen(floaterp, true);
+		// <FS> Update torn off status and add title bar
+		mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
 	}
 }
+
+// <FS> Update torn off status and add title bar
+void LLMultiFloater::setTabContainer(LLTabContainer* tab_container)
+{
+	if (!mTabContainer)
+	{
+		mTabContainer = tab_container;
+		mTabContainer->setCommitCallback(boost::bind(&LLMultiFloater::onTabSelected, this));
+	}
+}
+// </FS>
 
 void LLMultiFloater::setCanResize(BOOL can_resize)
 {
@@ -463,7 +503,10 @@ BOOL LLMultiFloater::postBuild()
 		return TRUE;
 	}
 
-	mTabContainer = getChild<LLTabContainer>("Preview Tabs");
+	// <FS> Update torn off status and add title bar
+	//mTabContainer = getChild<LLTabContainer>("Preview Tabs");
+	setTabContainer(getChild<LLTabContainer>("Preview Tabs"));
+	// </FS>
 	
 	setCanResize(mResizable);
 	return TRUE;

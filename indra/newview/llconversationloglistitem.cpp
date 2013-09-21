@@ -29,6 +29,7 @@
 #include "lliconctrl.h"
 #include "lltextbox.h"
 #include "lltextutil.h"
+#include "llbutton.h"	// <FS:CR>
 
 // newview
 #include "llavataractions.h"
@@ -47,13 +48,17 @@ LLConversationLogListItem::LLConversationLogListItem(const LLConversation* conve
 {
 	buildFromFile("panel_conversation_log_list_item.xml");
 
-	LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mConversation->getSessionID());
-
-	bool ims_are_read = LLFloaterIMSession::isVisible(floater) && floater->hasFocus();
+	// <FS:CR> [Firestorm Communications UI]
+	//LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mConversation->getSessionID());
+	FSFloaterIM* floater = FSFloaterIM::findInstance(mConversation->getSessionID());
+	//bool ims_are_read = LLFloaterIMSession::isVisible(floater) && floater->hasFocus();
+	bool ims_are_read = FSFloaterIM::isVisible(floater) && floater->hasFocus();
 
 	if (mConversation->hasOfflineMessages() && !ims_are_read)
 	{
-		mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback(boost::bind(&LLConversationLogListItem::onIMFloaterShown, this, _1));
+		//mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback(boost::bind(&LLConversationLogListItem::onIMFloaterShown, this, _1));
+		mIMFloaterShowedConnection = FSFloaterIM::setIMFloaterShowedCallback(boost::bind(&LLConversationLogListItem::onIMFloaterShown, this, _1));
+		// </FS:CR>
 	}
 }
 

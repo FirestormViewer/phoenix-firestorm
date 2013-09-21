@@ -64,6 +64,13 @@ public:
 	virtual void setupCtrls	(LLPanel* parent);
 
 	void onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name);
+	
+// <FS> Copy button callbacks
+protected:
+	void onCopyURI();
+	void onCopyName();
+// </FS>
+
 private:
 	void	reset();
 
@@ -109,9 +116,14 @@ private:
 	LLTextBox       *mActiveTitleLabel;
 	LLComboBox		*mComboActiveTitle;
 	LLComboBox		*mComboMature;
+	LLCheckBoxCtrl	*mCtrlReceiveGroupChat; // <exodus/>
 
 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
 	boost::signals2::connection mAvatarNameCacheConnection;
+	LLUUID mIteratorGroup; // <FS:ND/> FIRE-6074; UUID of the group mMemberProgress belongs to.
+
+	// <FS:Ansariel> For storing group name for copy name button
+	std::string		mGroupName;
 };
 
 #endif

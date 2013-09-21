@@ -98,6 +98,30 @@ LLHUDEffectPointAt::~LLHUDEffectPointAt()
 //-----------------------------------------------------------------------------
 void LLHUDEffectPointAt::packData(LLMessageSystem *mesgsys)
 {
+	LLViewerObject* source_object = (LLViewerObject*)mSourceObject; 
+	if (!source_object)  
+	{ 
+		markDead(); 
+		return; 
+	} 
+	else if (!source_object->isAvatar()) 
+	{ 
+		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectPointAt message for ID: "  
+		<<  source_object->getID().asString()<< LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	else  
+	{ 
+		LLVOAvatar* source_avatar = (LLVOAvatar*)source_object; 
+		if (!source_avatar->isSelf()) 
+		{ 
+			LL_DEBUGS("HUDEffect")<<"Non-self HUDEffectPointAt message for ID: "  
+			<< source_avatar->getID().asString()<< LL_ENDL; 
+			markDead(); 
+			return; 
+		} 
+	}
 	// Pack the default data
 	LLHUDEffect::packData(mesgsys);
 

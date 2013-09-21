@@ -109,6 +109,11 @@ LLHUDNameTag::LLHUDNameTag(const U8 type)
 {
 	LLPointer<LLHUDNameTag> ptr(this);
 	sTextObjects.insert(ptr);
+
+	// <FS:Ansariel> Performance improvement
+	mRoundedRectImg = LLUI::getUIImage("Rounded_Rect");
+	mRoundedRectTopImg = LLUI::getUIImage("Rounded_Rect_Top");
+	// </FS:Ansariel>
 }
 
 LLHUDNameTag::~LLHUDNameTag()
@@ -278,11 +283,19 @@ void LLHUDNameTag::renderText(BOOL for_select)
 	mOffsetY = lltrunc(mHeight * ((mVertAlignment == ALIGN_VERT_CENTER) ? 0.5f : 1.f));
 
 	// *TODO: cache this image
-	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Rect");
+	// <FS:Ansariel> Performance improvement
+	//LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Rect");
 
 	// *TODO: make this a per-text setting
-	LLColor4 bg_color = LLUIColorTable::instance().getColor("NameTagBackground");
-	bg_color.setAlpha(gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor);
+	//LLColor4 bg_color = LLUIColorTable::instance().getColor("NameTagBackground");
+	//bg_color.setAlpha(gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor);
+
+	static LLUIColor s_bg_color = LLUIColorTable::instance().getColor("NameTagBackground");
+	static LLCachedControl<F32> chatBubbleOpacity(gSavedSettings, "ChatBubbleOpacity");
+	LLColor4 bg_color = s_bg_color.get();
+	F32 color_alpha = chatBubbleOpacity * alpha_factor;
+	bg_color.setAlpha(color_alpha);
+	// </FS:Ansariel>
 
 	// scale screen size of borders down
 	//RN: for now, text on hud objects is never occluded
@@ -309,17 +322,27 @@ void LLHUDNameTag::renderText(BOOL for_select)
 	LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
 	LLRect screen_rect;
 	screen_rect.setCenterAndSize(0, static_cast<S32>(lltrunc(-mHeight / 2 + mOffsetY)), static_cast<S32>(lltrunc(mWidth)), static_cast<S32>(lltrunc(mHeight)));
-	imagep->draw3D(render_position, x_pixel_vec, y_pixel_vec, screen_rect, bg_color);
+	// <FS:Ansariel> Performance improvement
+	//imagep->draw3D(render_position, x_pixel_vec, y_pixel_vec, screen_rect, bg_color);
+	mRoundedRectImg->draw3D(render_position, x_pixel_vec, y_pixel_vec, screen_rect, bg_color);
+	// </FS:Ansariel>
 	if (mLabelSegments.size())
 	{
-		LLUIImagePtr rect_top_image = LLUI::getUIImage("Rounded_Rect_Top");
+		// <FS:Ansariel> Performance improvement
+		//LLUIImagePtr rect_top_image = LLUI::getUIImage("Rounded_Rect_Top");
 		LLRect label_top_rect = screen_rect;
 		const S32 label_height = llround((mFontp->getLineHeight() * (F32)mLabelSegments.size() + (VERTICAL_PADDING / 3.f)));
 		label_top_rect.mBottom = label_top_rect.mTop - label_height;
 		LLColor4 label_top_color = text_color;
-		label_top_color.mV[VALPHA] = gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor;
+		// <FS:Ansariel> Performance improvement
+		//label_top_color.mV[VALPHA] = gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor;
+		label_top_color.mV[VALPHA] = color_alpha;
+		// </FS:Ansariel>
 
-		rect_top_image->draw3D(render_position, x_pixel_vec, y_pixel_vec, label_top_rect, label_top_color);
+		// <FS:Ansariel> Performance improvement
+		//rect_top_image->draw3D(render_position, x_pixel_vec, y_pixel_vec, label_top_rect, label_top_color);
+		mRoundedRectTopImg->draw3D(render_position, x_pixel_vec, y_pixel_vec, label_top_rect, label_top_color);
+		// </FS:Ansariel>
 	}
 
 	F32 y_offset = (F32)mOffsetY;

@@ -1,0 +1,6 @@
+[UI/Base]
+- added : static registration of an LLPanel derived class with a custom class creator
+    -> used in the UI-SidepanelOutfits patch branch
+- added : registration of an LLFloater derived class with a callback for the XML filename
+    -> used in the Chat-Misc patch branch
+    -> used in the Chat-NearbyChat patch branch

@@ -160,6 +160,7 @@ public:
 								can_close,
 								can_drag_on_left,
 								can_tear_off,
+								drop_shadow,		// ## Zi: Optional Drop Shadows
 								save_rect,
 								save_visibility,
 								save_dock_state,
@@ -169,6 +170,7 @@ public:
 		Optional<LLFloaterEnums::EOpenPositioning>	positioning;
 		
 		Optional<S32>			header_height,
+								label_v_padding,	// <FS:Zi> Make vertical label padding a per-skin option
 								legacy_header_height; // HACK see initFromXML()
 
 		// Images for top-right controls
@@ -457,6 +459,8 @@ private:
     bool            mIsReuseInitialized;  // true if mReuseInstance already set from parameters
 	std::string		mInstanceName;		  // Store the instance name so we can remove ourselves from the list
 	
+	BOOL			mDropShadow;		// ## Zi: Optional Drop Shadows
+	S32				mLabelVPadding;	// <FS:Zi> Make vertical label padding a per-skin option
 	BOOL			mCanTearOff;
 	BOOL			mCanMinimize;
 	BOOL			mCanClose;
@@ -571,6 +575,13 @@ public:
 	void setFloaterSnapView(LLHandle<LLView> snap_view) {mSnapView = snap_view; }
 	LLFloater* getFrontmostClosableFloater(); 
 
+	// <FS:KC> Fix for bad edge snapping
+	void setSnapOffsetBottom(S32 offset) { mSnapOffsetBottom = offset; }
+	void setSnapOffsetChatBar(S32 offset) { mSnapOffsetChatBar = offset; }
+	void setSnapOffsetRight(S32 offset) { mSnapOffsetRight = offset; }
+	void setSnapOffsetLeft(S32 offset) { mSnapOffsetLeft = offset; }
+	// </FS:KC> Fix for bad edge snapping
+
 private:
 	void hiddenFloaterClosed(LLFloater* floater);
 
@@ -578,6 +589,8 @@ private:
 	LLHandle<LLView>	mSnapView;
 	BOOL			mFocusCycleMode;
 	S32				mSnapOffsetBottom;
+	S32				mSnapOffsetChatBar; // <FS:KC> Fix for bad edge snapping
+	S32				mSnapOffsetLeft; // <FS:KC> Fix for bad edge snapping
 	S32				mSnapOffsetRight;
 	S32				mMinimizePositionVOffset;
 	typedef std::vector<std::pair<LLHandle<LLFloater>, boost::signals2::connection> > hidden_floaters_t;

@@ -59,6 +59,7 @@ public:
 	virtual BOOL postBuild();
 	virtual void done ();
 	void refreshAll();
+	void refreshForActiveSort(); // <FS:PP> FIRE-5646: Option to show only active gestures
 	/**
 	 * @brief Add new scrolllistitem into gesture_list.
 	 * @param  item_id inventory id of gesture
@@ -101,6 +102,11 @@ private:
 	LLScrollListCtrl* mGestureList;
 
 	LLFloaterGestureObserver* mObserver;
+
+	 // <FS:ND> Save items already created, then just change them if needed.
+	std::map< LLUUID, LLScrollListItem * > mItems;
+	bool updateItem( LLUUID const&, LLSD const& );
+	// </FS:ND>
 };
 
 

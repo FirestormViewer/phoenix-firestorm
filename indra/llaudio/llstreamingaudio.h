@@ -47,6 +47,11 @@ class LLStreamingAudioInterface
 	virtual std::string getURL() = 0;
 	virtual bool supportsAdjustableBufferSizes(){return false;}
 	virtual void setBufferSizes(U32 streambuffertime, U32 decodebuffertime){};
+
+        // These three are Firestorm additions and thus optional.
+	virtual bool hasNewMetadata() { return false; }
+	virtual std::string getCurrentArtist() { return ""; }
+	virtual std::string getCurrentTitle() { return ""; }
 };
 
 #endif // LL_STREAMINGAUDIO_H

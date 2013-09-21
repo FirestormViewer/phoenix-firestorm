@@ -83,10 +83,17 @@ public:
 		
 		EnableControls();
 	};	
-	struct ControlVisibility : public LLInitParam::ChoiceBlock<ControlVisibility>
+	// <FS:Zi> Decide if a control should be visible, according to ControlVisibility
+	// struct ControlVisibility : public LLInitParam::ChoiceBlock<ControlVisibility>
+	// </FS:Zi>
+	struct ControlVisibility : public LLInitParam::Block<ControlVisibility>
 	{
-		Alternative<std::string> visible;
-		Alternative<std::string> invisible;
+		// <FS:Zi> Decide if a control should be visible, according to ControlVisibility
+		// Alternative<std::string> visible;
+		// Alternative<std::string> invisible;
+		Optional<std::string> visible;
+		Optional<std::string> invisible;
+		// </FS:Zi>
 
 		ControlVisibility();
 	};	
@@ -127,6 +134,7 @@ public:
 		TT_ACTIVE,		// focused floater
 		TT_INACTIVE,	// other floaters
 		TT_FADING,		// fading toast
+		TT_FORCE_OPAQUE, // forced opaqueness (alpha = 1) for FIRE-5583, FIRE-5220 (option to show Camera Controls always opaque)
 	};
 	/*virtual*/ ~LLUICtrl();
 
@@ -212,14 +220,17 @@ public:
 
 	virtual void	setColor(const LLColor4& color);
 
-	F32 			getCurrentTransparency();
+	// Ansariel: Changed to virtual. We might want to change the transparency ourself!
+	virtual F32 	getCurrentTransparency();
 
 	void				setTransparencyType(ETypeTransparency type);
 	ETypeTransparency	getTransparencyType() const {return mTransparencyType;}
 
 	BOOL	focusNextItem(BOOL text_entry_only);
 	BOOL	focusPrevItem(BOOL text_entry_only);
-	BOOL 	focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
+
+	// ## Zi: Made this virtual to be able to override it, so we can fix the IM focus issue
+	virtual BOOL 	focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 	BOOL	focusLastItem(BOOL prefer_text_fields = FALSE);
 
 	// Non Virtuals
@@ -317,6 +328,9 @@ private:
 	ETypeTransparency mTransparencyType;
 
 	class DefaultTabGroupFirstSorter;
+
+	// <FS:Zi> Decides if this UI control should be visible according to ControlVisibility
+	void decideVisibility();
 };
 
 // Build time optimization, generate once in .cpp file

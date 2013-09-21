@@ -32,7 +32,11 @@
 #include "llmath.h"
 #include "llagent.h"
 #include "llagentcamera.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS Communication UI]
+// #include "llfloaterimnearbychat.h"
+#include "fsnearbychathub.h"
+#include "lllineeditor.h"
+// </FS:Ansariel> [FS Communication UI]
 #include "llviewercontrol.h"
 #include "llfocusmgr.h"
 #include "llmorphview.h"
@@ -42,6 +46,10 @@
 #include "llvoavatarself.h"
 #include "llfloatercamera.h"
 #include "llinitparam.h"
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+#include "rlvhandler.h"
+// [/RLVa:KB]
+#include "llfloaterwebcontent.h"
 
 //
 // Constants
@@ -68,6 +76,13 @@ void agent_jump( EKeystate s )
 	F32 time = gKeyboard->getCurKeyElapsedTime();
 	S32 frame_count = llround(gKeyboard->getCurKeyElapsedFrameCount());
 
+	// <FS:Ansariel> Chalice Yao's crouch toggle
+	if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
+	{
+		gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
+	}
+	// </FS:Ansariel>
+
 	if( time < FLY_TIME 
 		|| frame_count <= FLY_FRAMES 
 		|| gAgent.upGrabbed()
@@ -85,21 +100,43 @@ void agent_jump( EKeystate s )
 void agent_push_down( EKeystate s )
 {
 	if( KEYSTATE_UP == s  ) return;
-	gAgent.moveUp(-1);
+	// <FS:Ansariel> Chalice Yao's crouch toggle
+	//gAgent.moveUp(-1);
+	else if (KEYSTATE_DOWN == s && !gAgent.getFlying() && !gAgentAvatarp->isSitting() && gSavedSettings.getBOOL("FSCrouchToggle"))
+	{
+		if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
+		{
+			gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
+		}
+		else
+		{
+			gSavedSettings.setBOOL("FSCrouchToggleStatus", TRUE);
+			gAgent.moveUp(-1);
+		}
+	}
+	else
+	{
+		gAgent.moveUp(-1);
+	}
+	// </FS:Ansariel>
 }
 
 static void agent_handle_doubletap_run(EKeystate s, LLAgent::EDoubleTapRunMode mode)
 {
 	if (KEYSTATE_UP == s)
 	{
-		if (gAgent.mDoubleTapRunMode == mode &&
-		    gAgent.getRunning() &&
-		    !gAgent.getAlwaysRun())
-		{
-			// Turn off temporary running.
-			gAgent.clearRunning();
-			gAgent.sendWalkRun(gAgent.getRunning());
-		}
+//		if (gAgent.mDoubleTapRunMode == mode &&
+//		    gAgent.getRunning() &&
+//		    !gAgent.getAlwaysRun())
+//		{
+//			// Turn off temporary running.
+//			gAgent.clearRunning();
+//			gAgent.sendWalkRun(gAgent.getRunning());
+//		}
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+		if ( (gAgent.mDoubleTapRunMode == mode) && (gAgent.getTempRun()) )
+			gAgent.clearTempRun();
+// [/RLVa:KB]
 	}
 	else if (gSavedSettings.getBOOL("AllowTapTapHoldRun") &&
 		 KEYSTATE_DOWN == s &&
@@ -110,8 +147,11 @@ static void agent_handle_doubletap_run(EKeystate s, LLAgent::EDoubleTapRunMode m
 		{
 			// Same walk-key was pushed again quickly; this is a
 			// double-tap so engage temporary running.
-			gAgent.setRunning();
-			gAgent.sendWalkRun(gAgent.getRunning());
+//			gAgent.setRunning();
+//			gAgent.sendWalkRun(gAgent.getRunning());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+			gAgent.setTempRun();
+// [/RLVa:KB]
 		}
 
 		// Pressing any walk-key resets the double-tap timer
@@ -540,25 +580,48 @@ void start_chat( EKeystate s )
     }
     
 	// start chat
-	LLFloaterIMNearbyChat::startChat(NULL);
+	// <FS:Ansariel> [FS Communication UI]
+	//LLFloaterIMNearbyChat::startChat(NULL);
+	FSNearbyChat::instance().showDefaultChatBar(TRUE);
+	// </FS:Ansariel> [FS Communication UI]
 }
 
 void start_gesture( EKeystate s )
 {
+	// Ansariel: If avatar is pointing at something, don't start
+	//           gesture. This works around the bug with Shared
+	//           Media prims.
+	if (gAgentCamera.mPointAtObject)
+	{
+		return;
+	}
+
+	// Ansariel: FIRE-4167: Don't start gesture if a floater with
+	//           web content has focus
+	LLFloater* focused_floater = gFloaterView->getFocusedFloater();
+	if (focused_floater && dynamic_cast<LLFloaterWebContent*>(focused_floater))
+	{
+		return;
+	}
+
 	LLUICtrl* focus_ctrlp = dynamic_cast<LLUICtrl*>(gFocusMgr.getKeyboardFocus());
 	if (KEYSTATE_UP == s &&
 		! (focus_ctrlp && focus_ctrlp->acceptsTextInput()))
 	{
- 		if ((LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->getCurrentChat().empty())
- 		{
- 			// No existing chat in chat editor, insert '/'
- 			LLFloaterIMNearbyChat::startChat("/");
- 		}
- 		else
- 		{
- 			// Don't overwrite existing text in chat editor
- 			LLFloaterIMNearbyChat::startChat(NULL);
- 		}
+		// <FS:Ansariel> Changed for new chatbar
+ 		// ((LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->getCurrentChat().empty()) <FS:TM> CHUI Merge new
+ 		//{
+ 		//	// No existing chat in chat editor, insert '/'
+ 		//	LLFloaterIMNearbyChat::startChat("/"); <FS:TM> CHUI Merge new
+ 		//}
+ 		//else
+ 		//{
+ 		//	// Don't overwrite existing text in chat editor
+ 		//	LLFloaterIMNearbyChat::startChat(NULL); <FS:TM> CHUI Merge new
+ 		//}
+
+		FSNearbyChat::instance().showDefaultChatBar(TRUE,"/"); // <FS:TM> CHUI Merge Check this
+ 		// </FS:Ansariel>
 	}
 }
 

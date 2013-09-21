@@ -71,6 +71,12 @@ private:
 // Kakadu specific implementation
 //
 void set_default_colour_weights(kdu_params *siz);
+// <FS:CR> Various missing prototypes
+LLImageJ2CImpl* fallbackCreateLLImageJ2CImpl();
+void fallbackDestroyLLImageJ2CImpl(LLImageJ2CImpl* impl);
+const char* fallbackEngineInfoLLImageJ2CImpl();
+void ll_kdu_error(void);
+// </FS:CR>
 
 const char* engineInfoLLImageJ2CKDU()
 {
@@ -166,7 +172,8 @@ void LLKDUMessageWarning::put_text(const kdu_uint16 *s)
 
 void LLKDUMessageError::put_text(const char *s)
 {
-	llinfos << "KDU Error: " << s << llendl;
+	// <FS_AO: decrease performance-killing spam>
+	LL_INFOS_ONCE("LLImageJ2CKDU") << "KDU Error: " << s << llendl;
 }
 
 void LLKDUMessageError::put_text(const kdu_uint16 *s)
@@ -453,6 +460,15 @@ BOOL LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 			return TRUE; // done
 		}
 	}
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	// <FS:LO> get_text() will return a NULL pointer if no comment exists, but will return a proper null terminated string even if the comment is ""
+	if(mCodeStreamp->get_comment().get_text())
+	{
+		raw_image.mComment.assign(mCodeStreamp->get_comment().get_text());
+	}
+	// </FS:LO>
+	// </FS:Techwolf Lupindo>
 
 	// These can probably be grabbed from what's saved in the class.
 	kdu_dims dims;

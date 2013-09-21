@@ -5,7 +5,7 @@
  layout="topleft"
  name="Joystick"
  help_topic="joystick"
- title="JOYSTICK CONFIGURATION"
+ title="Joystick Configuration"
  width="569">
     <floater.string
      name="NoDevice">

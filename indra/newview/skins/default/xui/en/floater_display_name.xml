@@ -3,12 +3,12 @@
  legacy_header_height="18"
  can_minimize="false"
  can_close="false" 
- height="300"
+ height="200"
  layout="topleft"
  name="Display Name"
  help_topic="display_name"
  save_rect="false"
- title="CHANGE DISPLAY NAME" 
+ title="Change Display Name"
  width="445">
     <text
      type="string"
@@ -19,7 +19,7 @@
      layout="topleft"
      left="25"
      name="info_text"
-     top="40"
+     top="20"
      use_ellipses="true"
      width="380"
      wrap="true">
@@ -30,12 +30,12 @@
      length="1"
      follows="left|top"
      font="SansSerif"
-     height="25"
+     height="16"
      layout="topleft"
      left="25"
 	 text_color="EmphasisColor" 
      name="lockout_text"
-     top="80"
+     top="50"
      use_ellipses="true"
 	 visible="false" 
      width="410"
@@ -43,7 +43,7 @@
 		You cannot change your Display Name until: [TIME].
 	</text>
     <text
-      top_pad="10"
+      top_pad="0"
       width="150"
       height="20"
       font="SansSerif"
@@ -55,15 +55,15 @@
       name="display_name_editor"
       max_length_chars="31"
       height="20"
-      top_pad="5"
+      top_pad="0"
       left="50" />
 	<text
-       top_pad="15"
+       top_pad="8"
        left="25"
-       width="300"
+       width="380"
        height="20"
-      font="SansSerif"
-    name="name_confirm_label">
+       font="SansSerif"
+       name="name_confirm_label">
       Type your new name again to confirm:
     </text>
     <line_editor
@@ -71,7 +71,7 @@
       name="display_name_confirm"
       max_length_chars="31"
       height="20"
-      top_pad="5"
+      top_pad="0"
       left="50" />
     <button
      height="23"
@@ -81,7 +81,7 @@
      left="35"
      name="save_btn"
      tool_tip="Save your new Display Name" 
-     top_pad="40"
+     top_pad="10"
      width="120" />
     <button
      height="23"

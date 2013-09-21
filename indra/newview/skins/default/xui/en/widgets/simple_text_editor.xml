@@ -15,6 +15,7 @@
   default_color="TextDefaultColor"
   text_color="TextFgColor"
   text_readonly_color="TextFgReadOnlyColor"
+  text_label_color="TextFgTentativeColor"
   text_selected_color="White" 
   h_pad="6" 
   v_pad="4"

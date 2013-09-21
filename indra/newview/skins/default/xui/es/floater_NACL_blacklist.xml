@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="blacklist" title="Lista negra de Activos">
+	<floater.string name="Texture" value="Textura"/>
+	<floater.string name="Sound" value="Sonido"/>
+	<floater.string name="Animation" value="Animación"/>
+	<floater.string name="Object" value="Objeto"/>
+	<button name="add_btn" label="Añadir..."/>
+	<button name="remove_btn" label="Eliminar"/>
+	<combo_box name="asset_combo" label="Tipo de activo" width="110"/>
+	<line_editor name="id_edit" label="Aquí va el UUID del activo."/>
+	<line_editor name="name_edit" label="Aquí va el nombre de la entrada."/>
+	<scroll_list name="file_list">
+		<column name="entry_name" label="Nombre"/>
+		<column name="entry_type" label="Tipo"/>
+		<column name="entry_agent" label="Bloqueado por"/>
+		<column name="entry_date" label="Fecha"/>
+		<column name="asset_id" label="ID de activo"/>
+	</scroll_list>
+	<button name="save_btn" label="Guardar XML"/>
+	<button name="load_btn" label="Cargar XML"/>
+	<button name="clear_btn" label="Limpiar"/>
+	<button name="rerender_btn" label="Redibujar todos los Objetos"/>
+</floater>

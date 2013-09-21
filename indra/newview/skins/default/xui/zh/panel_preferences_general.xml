@@ -41,10 +41,16 @@
 		名稱標籤：
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="關閉" name="radio" value="0"/>
-		<radio_item label="啟動" name="radio2" value="1"/>
-		<radio_item label="簡短顯示" name="radio3" value="2"/>
+		<radio_item label="關閉" name="radio"/>
+		<radio_item label="啟動" name="radio2"/>
+		<radio_item label="簡短顯示" name="radio3"/>
 	</radio_group>
+	<text name="RenderNameShowTime_LabelPrefix">
+		(
+	</text>
+	<text name="RenderNameShowTime_LabelSuffix">
+		seconds)
+	</text>
 	<check_box label="我的名字" name="show_my_name_checkbox1"/>
 	<check_box label="使用者名稱" name="show_slids" tool_tip="顯示使用者名稱，就像 bobsmith123 這類的"/>
 	<check_box label="群組頭銜" name="show_all_title_checkbox1" tool_tip="顯示群組頭銜，如職員或成員"/>
@@ -54,8 +60,8 @@
 		按下字母鍵：
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="開始本地聊天" name="radio_start_chat" value="1"/>
-		<radio_item label="影響移動（例如 WASD鍵）" name="radio_move" value="0"/>
+		<radio_item label="開始本地聊天" name="radio_start_chat"/>
+		<radio_item label="影響移動（例如 WASD鍵）" name="radio_move"/>
 	</radio_group>
 	<text name="title_afk_text">
 		離開逾時設定：

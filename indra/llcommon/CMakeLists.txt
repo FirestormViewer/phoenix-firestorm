@@ -267,6 +267,18 @@ set(llcommon_HEADER_FILES
     u64.h
     )
 
+# <FS:ND> Add all nd* files. memory pool, intrinsics, ...
+
+FILE( GLOB llcommon_ND_SOURCE_FILES nd/nd*.cpp )
+FILE( GLOB llcommon_ND_HEADER_FILES nd/nd*.h )
+
+SOURCE_GROUP( nd FILES ${llcommon_ND_SOURCE_FILES} ${llcommon_ND_HEADER_FILES} )
+
+list(APPEND llcommon_SOURCE_FILES  ${llcommon_ND_SOURCE_FILES} )
+list(APPEND llcommon_HEADER_FILES ${llcommon_ND_HEADER_FILES} )
+
+# </FS:ND>
+
 set_source_files_properties(${llcommon_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 
@@ -274,13 +286,6 @@ list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 if(LLCOMMON_LINK_SHARED)
   add_library (llcommon SHARED ${llcommon_SOURCE_FILES})
-  if(NOT WORD_SIZE EQUAL 32)
-    if(WINDOWS)
-      add_definitions(/FIXED:NO)
-    else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
-      add_definitions(-fPIC)
-    endif(WINDOWS)
-  endif(NOT WORD_SIZE EQUAL 32)
   if(WINDOWS)
     # always generate llcommon.pdb, even for "Release" builds
     set_target_properties(llcommon PROPERTIES LINK_FLAGS "/DEBUG")
@@ -289,6 +294,16 @@ if(LLCOMMON_LINK_SHARED)
 else(LLCOMMON_LINK_SHARED)
     add_library (llcommon ${llcommon_SOURCE_FILES})
 endif(LLCOMMON_LINK_SHARED)
+
+# <FS:TS> This must be broken out because llcommon is always built as
+#         shared but LLCOMMON_LINK_SHARED is turned off explicitly
+if(NOT WORD_SIZE EQUAL 32)
+  if(WINDOWS)
+    add_definitions(/FIXED:NO)
+  else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
+    add_definitions(-fPIC)
+  endif(WINDOWS)
+endif(NOT WORD_SIZE EQUAL 32)
 
 target_link_libraries(
     llcommon

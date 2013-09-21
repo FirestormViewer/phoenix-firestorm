@@ -87,8 +87,14 @@ Vá para o menu Mundo &gt; Sobre o terreno ou selecione outro lote para mostrar 
 			<text name="Owner:">
 				Proprietário:
 			</text>
+			<text name="OwnerText">
+				Loading...
+			</text>
 			<text name="Group:">
 				Grupo:
+			</text>
+			<text name="GroupText">
+				Loading...
 			</text>
 			<button label="Ajustar" name="Set..."/>
 			<check_box label="Permitir doação para o grupo" name="check deed" tool_tip="Oficiais do grupo podem doar esse terreno ao grupo, passando a administração para o gestor da ilha"/>
@@ -450,9 +456,6 @@ Mídia:
 		<panel label="ACESSO" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				(Definições do terreno)
-			</panel.string>
-			<panel.string name="allow_public_access">
-				Acesso para público: [MATURITY]) (Desmarcar esse item cria limites)
 			</panel.string>
 			<panel.string name="estate_override">
 				Uma ou mais destas opções está definida no nível de propriedade.

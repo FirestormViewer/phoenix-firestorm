@@ -90,7 +90,16 @@
 	<floater.string name="linkset_choose_use">
 		Linkset-Nutzung auswählen...
 	</floater.string>
-	<panel>
+	<panel name="pathfinding_linksets_main">
+		<text name="linksets_filter_label" width="70">
+			Filtern nach:
+		</text>
+		<text name="linksets_name_label">
+			Name
+		</text>
+		<text name="linksets_desc_label">
+			Beschreibung
+		</text>
 		<combo_box name="filter_by_linkset_use">
 			<combo_box.item label="Nach Linkset-Nutzung filtern..." name="filter_by_linkset_use_none"/>
 			<combo_box.item label="Begehbar" name="filter_by_linkset_use_walkable"/>
@@ -122,7 +131,10 @@
 		<button label="Alle auswählen" name="select_all_objects"/>
 		<button label="Keine auswählen" name="select_none_objects"/>
 	</panel>
-	<panel>
+	<panel name="pathfinding_linksets_actions">
+		<text name="linksets_actions_label">
+			Aktionen auf ausgewählten Linksets (Falls ein Linkset entfernt wird, können seine Attribute verloren gehen);
+		</text>
 		<check_box label="Beacon anzeigen" name="show_beacon"/>
 		<button label="Nehmen" name="take_objects"/>
 		<button label="Kopie nehmen" name="take_copy_objects"/>
@@ -130,7 +142,10 @@
 		<button label="Zurückgeben" name="return_objects"/>
 		<button label="Löschen" name="delete_objects"/>
 	</panel>
-	<panel>
+	<panel name="pathfinding_linksets_attributes">
+		<text name="linksets_attributes_label">
+			Attribute ausgewählter Linksets bearbeiten; Den Übernehmen-Button drücken, um Änderungen anzuwenden
+		</text>
 		<text name="walkability_coefficients_label">
 			Begehbarkeit:
 		</text>
@@ -150,7 +165,7 @@
 			D
 		</text>
 		<line_editor name="edit_d_value" tool_tip="Begehbarkeit für Figuren vom Typ D. Ein Beispiel für diesen Typ wäre „Anderer“."/>
-		<button label="Änderungen übernehmen" name="apply_edit_values"/>
+		<button label="Änderungen übernehmen" name="apply_edit_values" width="160"/>
 		<text name="suggested_use_a_label">
 			(Humanoid)
 		</text>

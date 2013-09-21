@@ -53,6 +53,9 @@ public:
     virtual BOOL			handleHover(S32 x, S32 y, MASK mask)			{ return mCur->handleHover( x, y, mask ); }
 	virtual BOOL			handleScrollWheel(S32 x, S32 y, S32 clicks)		{ return mCur->handleScrollWheel( x, y, clicks ); }
 	virtual BOOL			handleRightMouseDown(S32 x, S32 y, MASK mask)	{ return mCur->handleRightMouseDown( x, y, mask ); }
+	// NaCl - Rightclick-mousewheel zoom
+	virtual BOOL			handleRightMouseUp(S32 x, S32 y, MASK mask)		{ return mCur->handleRightMouseUp( x, y, mask ); }
+	// NaCl End
 
 	virtual LLViewerObject*	getEditingObject()								{ return mCur->getEditingObject(); }
 	virtual LLVector3d		getEditingPointGlobal()							{ return mCur->getEditingPointGlobal(); }
@@ -153,6 +156,11 @@ public:
 	virtual LLTool*		getOverrideTool(MASK mask);
 	
 	static void pickCallback(const LLPickInfo& pick_info);
+
+	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+	virtual BOOL		handleMiddleMouseDown(S32 x, S32 y, MASK mask);
+	virtual BOOL		handleMiddleMouseUp(S32 x, S32 y, MASK mask);
+	// </FS:Zi>
 };
 
 
@@ -218,6 +226,9 @@ public:
 	virtual BOOL			handleMouseDown(S32 x, S32 y, MASK mask);
 	virtual BOOL			handleDoubleClick(S32 x, S32 y, MASK mask);
 	virtual BOOL			handleRightMouseDown(S32 x, S32 y, MASK mask);
+	// NaCl - Rightclick-mousewheel zoom
+	virtual BOOL			handleRightMouseUp(S32 x, S32 y, MASK mask);
+	// NaCl End
 	virtual BOOL			handleMouseUp(S32 x, S32 y, MASK mask);
 	virtual BOOL			handleScrollWheel(S32 x, S32 y, S32 clicks);
 	virtual void			onMouseCaptureLost();

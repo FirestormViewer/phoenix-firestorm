@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ bottom="-371"
+ height="300"
+ left="280"
+ mouse_opaque="true"
+ name="friends"
+ width="350">
+	<view_border
+	 top="-9"
+	 bottom="9"
+	 left="9"
+	 width="241"
+	 follows="left|top|right|bottom"
+	 bevel_style="in"
+	 name="info_border" />
+	<avatar_list
+	 allow_select="true"
+	 bottom="10"
+	 follows="left|top|right|bottom"
+	 left="10"
+	 multi_select="true"
+	 name="avatars_all"
+	 show_permissions_granted="true"
+	 top="-10"
+	 width="240" />
+	<button
+	 top="-10"
+	 follows="top|right"
+	 height="22"
+	 label="ЛС/Позвонить"
+	 right="-10"
+	 name="im_btn"
+	 tool_tip="Открыть сессию личных сообщений (ЛС)"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Профиль"
+	 left_delta="0"
+	 name="profile_btn"
+	 tool_tip="Показать изображения, группы и другую информацию"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Телепорт..."
+	 left_delta="0"
+	 name="offer_teleport_btn"
+	 tool_tip="Предложить телепорт другу к вашему текущему местоположению"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Заплатить..."
+	 left_delta="0"
+	 name="pay_btn"
+	 tool_tip="Дать (L$) этому другу"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Удалить..."
+	 left_delta="0"
+	 name="remove_btn"
+	 tool_tip="Убрать этого пользователя из списка друзей"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Добавить..."
+	 left_delta="0"
+	 name="add_btn"
+	 tool_tip="Отправить запрос стать другом"
+	 width="80" />
+</panel>

@@ -32,6 +32,7 @@
 #include "llparcelselection.h"
 
 class LLButton;
+class LLComboBox;
 class LLCheckBoxCtrl;
 class LLComboBox;
 class LLPanelPermissions;
@@ -64,6 +65,9 @@ public:
 	static	void*	createPanelContents(void*	vdata);
 	static	void*	createPanelLandInfo(void*	vdata);
 
+// <FS:CR> Aurora Sim
+	void updateToolsSizeLimits();
+// </FS:CR> Aurora Sim
 	LLFloaterTools(const LLSD& key);
 	virtual ~LLFloaterTools();
 
@@ -111,6 +115,9 @@ public:
 
 	LLPanelFace* getPanelFace() { return mPanelFace; }
 
+	void onClickBtnCopyKeys();
+	void onClickExpand();
+
 private:
 	void refresh();
 	void refreshMedia();
@@ -148,10 +155,13 @@ public:
 	LLComboBox*		mComboGridMode;
 	LLCheckBoxCtrl*	mCheckStretchUniform;
 	LLCheckBoxCtrl*	mCheckStretchTexture;
+	LLCheckBoxCtrl*	mCheckShowHighlight; //Phoenix:KC
+	LLCheckBoxCtrl*	mCheckActualRoot; //Phoenix:KC
 
+	// Ansariel: Reverted the hack because then when clicking the label it
+	//           doesn't check the checkbox anymore!
 	// !HACK! Replacement of mCheckStretchUniform label because LLCheckBoxCtrl
 	//  doesn't support word_wrap of its label. Need to fix truncation bug EXT-6658
-	LLTextBox*		mCheckStretchUniformLabel;
 
 	LLButton	*mBtnRotateLeft;
 	LLButton	*mBtnRotateReset;
@@ -198,7 +208,12 @@ public:
 
 private:
 	BOOL					mDirty;
+	BOOL					mOrginalShowHighlight; //Phoenix:KC
+	BOOL					mOpen; //Phoenix:KC
 
+	//Phoenix:KC
+	S32					mCollapsedHeight;
+	S32					mExpandedHeight;
 	std::map<std::string, std::string> mStatusText;
 
 protected:

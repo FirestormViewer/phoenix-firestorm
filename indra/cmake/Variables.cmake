@@ -1,6 +1,6 @@
 # -*- cmake -*-
 #
-# Definitions of variables used throughout the Second Life build
+# Definitions of variables used throughout the build
 # process.
 #
 # Platform variables:
@@ -24,7 +24,7 @@ set(LIBS_OPEN_PREFIX)
 set(SCRIPTS_PREFIX ../scripts)
 set(VIEWER_PREFIX)
 set(INTEGRATION_TESTS_PREFIX)
-set(LL_TESTS ON CACHE BOOL "Build and run unit and integration tests (disable for build timing runs to reduce variation")
+set(LL_TESTS OFF CACHE BOOL "Build and run unit and integration tests (disable for build timing runs to reduce variation")
 set(INCREMENTAL_LINK OFF CACHE BOOL "Use incremental linking on win32 builds (enable for faster links on some machines)")
 
 if(LIBS_CLOSED_DIR)
@@ -118,10 +118,10 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   if (INSTALL_PROPRIETARY)
     # Only turn on headless if we can find osmesa libraries.
     include(FindPkgConfig)
-    #pkg_check_modules(OSMESA osmesa)
-    #if (OSMESA_FOUND)
-    #  set(BUILD_HEADLESS ON CACHE BOOL "Build headless libraries.")
-    #endif (OSMESA_FOUND)
+    pkg_check_modules(OSMESA osmesa)
+    if (OSMESA_FOUND)
+      set(BUILD_HEADLESS ON CACHE BOOL "Build headless libraries.")
+    endif (OSMESA_FOUND)
   endif (INSTALL_PROPRIETARY)
 
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -135,7 +135,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
   # To support a different SDK update these Xcode settings:
   if (XCODE_VERSION GREATER 4.5)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.8)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
     set(CMAKE_OSX_SYSROOT macosx10.8)
   else (XCODE_VERSION GREATER 4.5)
   if (XCODE_VERSION GREATER 4.2)
@@ -175,7 +175,11 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # Default deploy grid
 set(GRID agni CACHE STRING "Target Grid")
 
-set(VIEWER_CHANNEL "Second Life Test" CACHE STRING "Viewer Channel Name")
+#set(VIEWER_CHANNEL "Second Life Test" CACHE STRING "Viewer Channel Name")
+
+# Flickr API keys.
+set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")
+set(FLICKR_API_SECRET "846f0958020b553e") 
 
 if (XCODE_VERSION GREATER 4.2)
   set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")
@@ -187,6 +191,15 @@ set(STANDALONE OFF CACHE BOOL "Do not use Linden-supplied prebuilt libraries.")
 set(UNATTENDED OFF CACHE BOOL "Should be set to ON for building with VC Express editions.")
 
 set(USE_PRECOMPILED_HEADERS ON CACHE BOOL "Enable use of precompiled header directives where supported.")
+# <FS:ND> When using Havok, we have to turn OpenSim support off
+if( HAVOK_TPV )
+ if( OPENSIM )
+  message( "Compiling with Havok libraries, disabling OpenSim support" )
+ endif( OPENSIM )
+  
+ set( OPENSIM OFF )
+endif( HAVOK_TPV )
+# </FS:ND>
 
 source_group("CMake Rules" FILES CMakeLists.txt)
 

@@ -292,7 +292,10 @@ LLLocalizationResetForcer::LLLocalizationResetForcer(LLFloaterUIPreview* floater
 	mSavedLocalization = LLUI::sSettingGroups["config"]->getString("Language");				// save current localization setting
 	LLUI::sSettingGroups["config"]->setString("Language", floater->getLocStr(ID));// hack language to be the one we want to preview floaters in
 	// forcibly reset XUI paths with this new language
-	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), floater->getLocStr(ID));
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), gDirUtilp->getSkinThemeFolder(), floater->getLocStr(ID));
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), floater->getLocStr(ID));
 }
 
 // Actually reset in destructor
@@ -301,7 +304,10 @@ LLLocalizationResetForcer::~LLLocalizationResetForcer()
 {
 	LLUI::sSettingGroups["config"]->setString("Language", mSavedLocalization);	// reset language to what it was before we changed it
 	// forcibly reset XUI paths with this new language
-	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), mSavedLocalization);
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), gDirUtilp->getSkinThemeFolder(), mSavedLocalization);
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), mSavedLocalization);
 }
 
 // Live file constructor
@@ -457,6 +463,7 @@ BOOL LLFloaterUIPreview::postBuild()
 	main_panel_tmp->getChild<LLButton>("save_floater")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickSaveFloater, this, PRIMARY_FLOATER));
 	main_panel_tmp->getChild<LLButton>("save_all_floaters")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickSaveAll, this, PRIMARY_FLOATER));
 
+	getChild<LLButton>("refresh_btn")->setClickedCallback(boost::bind(&LLFloaterUIPreview::refreshList, this)); // <FS:CR> Manual refresh
 	getChild<LLButton>("export_schema")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickExportSchema, this));
 	getChild<LLUICtrl>("show_rectangles")->setCommitCallback(
 		boost::bind(&LLFloaterUIPreview::onClickShowRectangles, this, _2));
@@ -641,6 +648,17 @@ void LLFloaterUIPreview::refreshList()
 	std::string name;
 	BOOL found = TRUE;
 
+	// <FS:Ansariel> Floaters from Exodus
+	while(found)				// for every firestorm custom file that matches the pattern
+	{
+		if((found = gDirUtilp->getNextFileInDir(getLocalizedDirectory(), "exo_*.xml", name)))	// get next file matching pattern
+		{
+			addFloaterEntry(name.c_str());	// and add it to the list (file name only; localization code takes care of rest of path)
+		}
+	}
+	found = TRUE;
+	// </FS:Ansariel> Floaters from Exodus
+
 	LLDirIterator floater_iter(getLocalizedDirectory(), "floater_*.xml");
 	while(found)				// for every floater file that matches the pattern
 	{
@@ -649,6 +667,16 @@ void LLFloaterUIPreview::refreshList()
 			addFloaterEntry(name.c_str());	// and add it to the list (file name only; localization code takes care of rest of path)
 		}
 	}
+	// ## Zi: Firestorm custom floaters
+	found = TRUE;
+	while(found)				// for every firestorm custom file that matches the pattern
+	{
+		if((found = gDirUtilp->getNextFileInDir(getLocalizedDirectory(), "fs_*.xml", name)))	// get next file matching pattern
+		{
+			addFloaterEntry(name.c_str());	// and add it to the list (file name only; localization code takes care of rest of path)
+		}
+	}
+	// ## Zi: Firestorm custom floaters
 	found = TRUE;
 
 	LLDirIterator inspect_iter(getLocalizedDirectory(), "inspect_*.xml");

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+    <panel name="bottom_panel">
+<layout_stack name="nearby_chat_bar_panels">
+  <layout_panel name="panel_nearby_chat_bar">
+      <line_editor label="Clicca qui per parlare" name="chat_box" tool_tip="Premi il tasto Invio per parlare, premi Ctrl+Invio per gridare" />
+  </layout_panel>
+  <layout_panel name="panel_nearby_chat_toggle">
+      <button name="show_nearby_chat" tool_tip="Mostra/Nascondi Chat locale" />
+  </layout_panel>
+  </layout_stack>
+</panel>

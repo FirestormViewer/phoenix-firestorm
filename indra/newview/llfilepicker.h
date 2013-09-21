@@ -86,7 +86,10 @@ public:
 		FFLOAD_COLLADA = 10,
 		FFLOAD_SCRIPT = 11,
 		FFLOAD_DICTIONARY = 12,
-        FFLOAD_DIRECTORY = 13   //To call from lldirpicker. 
+		FFLOAD_DIRECTORY = 13,   //To call from lldirpicker.
+		// <FS:CR> Export filter
+		FFLOAD_IMPORT = 14
+		// </FS:CR>
 	};
 
 	enum ESaveFilter
@@ -107,12 +110,20 @@ public:
 		FFSAVE_PNG = 13,
 		FFSAVE_JPEG = 14,
 		FFSAVE_SCRIPT = 15,
+		FFSAVE_BEAM = 16,
+// <FS:CR> Export filter
+		FFSAVE_EXPORT = 17
+// </FS:CR>
 	};
 
 	// open the dialog. This is a modal operation
-	BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null );
+// <FS:CR Threaded Filepickers>
+	//BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null );
+	BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null, bool blocking = true );
 	BOOL getOpenFile( ELoadFilter filter = FFLOAD_ALL, bool blocking = true  );
-	BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL );
+	//BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL );
+	BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL, bool blocking = true );
+// </FS:CR Threaded Filepickers>
 
 	// Get the filename(s) found. getFirstFile() sets the pointer to
 	// the start of the structure and allows the start of iteration.

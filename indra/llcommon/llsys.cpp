@@ -100,6 +100,7 @@ const char MEMINFO_FILE[] = "/proc/meminfo";
 extern int errno;
 #endif
 
+#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 
 static const S32 CPUINFO_BUFFER_SIZE = 16383;
 LLCPUInfo gSysCPU;
@@ -289,6 +290,11 @@ LLOSInfo::LLOSInfo() :
 					else
 						mOSStringSimple = "Windows Server 2012 ";
 				}
+				else if(osvi.dwMinorVersion == 3)
+				{
+					if(osvi.wProductType == VER_NT_WORKSTATION)
+						mOSStringSimple = "Microsoft Windows 8.1 ";
+				}
 
 				///get native system info if available..
 				typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO); ///function pointer for loading GetNativeSystemInfo
@@ -392,12 +398,15 @@ LLOSInfo::LLOSInfo() :
 	std::string compatibility_mode;
 	if(got_shell32_version)
 	{
-		if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor)
+		if(shell32_build > 4000)
 		{
-			compatibility_mode = llformat(" compatibility mode. real ver: %d.%d (Build %d)", 
-											shell32_major,
-											shell32_minor,
-											shell32_build);
+			if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor )
+			{
+				compatibility_mode = llformat(" compatibility mode. Real version: %d.%d (Build %d)", 
+												shell32_major,
+												shell32_minor,
+												shell32_build);
+			}
 		}
 	}
 	mOSString += compatibility_mode;
@@ -1027,6 +1036,10 @@ void LLMemoryInfo::stream(std::ostream& s) const
 			s << value;           // just use default LLSD formatting
 		s << std::endl;
 	}
+
+	// <FS:ND> tcmalloc replacement
+	nd::memorypool::dumpStats( s );
+	// </FS:ND>
 }
 
 LLSD LLMemoryInfo::getStatsMap() const

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ top="0"
+ left="0"
+ width="420"
+ height="480"
+ layout="topleft"
+ follows="all"
+ name="panel_profile_firstlife"
+ label="Profile">
+
+    <loading_indicator
+     top="5"
+     right="-10"
+     height="23"
+     width="23"
+     layout="topleft"
+     follows="top|right"
+     name="progress_indicator"
+     visible="false" />
+
+    <layout_stack
+     orientation="horizontal"
+     top="5"
+     left="6"
+     right="-6"
+     height="225"
+     follows="left|top|right"
+     layout="topleft">
+
+    <layout_panel
+     width="10" />
+
+    <layout_panel
+     auto_resize="false"
+     width="275">
+
+    <texture_picker
+     top="10"
+     left="0"
+     width="275"
+     height="225"
+     layout="topleft"
+     follows="top|left"
+     name="real_world_pic"
+     allow_no_texture="true"
+     default_image_name="None"
+     enabled="false"
+     fallback_image="Generic_Person_Large"
+     scale_image="false" />
+
+
+    </layout_panel>
+
+    <layout_panel
+     width="10" />
+
+    </layout_stack>
+
+    <text_editor
+     top_pad="16"
+     right="-6"
+     height="210"
+     layout="topleft"
+     follows="all"
+     name="fl_description_edit"
+     enabled="false"
+     max_length="512"
+     word_wrap="true"
+     parse_urls="true" />
+</panel>
+

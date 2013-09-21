@@ -123,19 +123,26 @@ bool LLVertexBuffer::sPreferStreamDraw = false;
 
 U32 LLVBOPool::genBuffer()
 {
-	U32 ret = 0;
+	// <FS:ND> user-defined names was deprecated with OpenGL 3.1
 
-	if (mGLNamePool.empty())
-	{
-		ret = sCurGLName++;
-	}
-	else
-	{
-		ret = mGLNamePool.front();
-		mGLNamePool.pop_front();
-	}
-
+	// U32 ret = 0;
+	// 
+	// if (mGLNamePool.empty())
+	// {
+	// 	ret = sCurGLName++;
+	// }
+	// else
+	// {
+	// 	ret = mGLNamePool.front();
+	// 	mGLNamePool.pop_front();
+	// }
+	// 
+	// return ret;
+	GLuint ret(0);
+	glGenBuffersARB( 1, &ret );
 	return ret;
+
+	// </FS:ND>
 }
 
 void LLVBOPool::deleteBuffer(U32 name)
@@ -147,9 +154,16 @@ void LLVBOPool::deleteBuffer(U32 name)
 		glBindBufferARB(mType, name);
 		glBufferDataARB(mType, 0, NULL, mUsage);
 
-		llassert(std::find(mGLNamePool.begin(), mGLNamePool.end(), name) == mGLNamePool.end());
+		// <FS:ND> user-defined names was deprecated with OpenGL 3.1
 
-		mGLNamePool.push_back(name);
+		// llassert(std::find(mGLNamePool.begin(), mGLNamePool.end(), name) == mGLNamePool.end());
+
+		// mGLNamePool.push_back(name);
+
+		GLuint nBuffer( name );
+		glDeleteBuffersARB( 1, &nBuffer );
+
+		// </FS:ND>
 
 		glBindBufferARB(mType, 0);
 	}
@@ -159,8 +173,8 @@ void LLVBOPool::deleteBuffer(U32 name)
 LLVBOPool::LLVBOPool(U32 vboUsage, U32 vboType)
 : mUsage(vboUsage), mType(vboType)
 {
-	mMissCount.resize(LL_VBO_POOL_SEED_COUNT);
-	std::fill(mMissCount.begin(), mMissCount.end(), 0);
+	// mMissCount.resize(LL_VBO_POOL_SEED_COUNT);
+	// std::fill(mMissCount.begin(), mMissCount.end(), 0);
 }
 
 volatile U8* LLVBOPool::allocate(U32& name, U32 size, bool for_seed)
@@ -169,84 +183,111 @@ volatile U8* LLVBOPool::allocate(U32& name, U32 size, bool for_seed)
 	
 	volatile U8* ret = NULL;
 
-	U32 i = vbo_block_index(size);
+	// <FS:ND> We're not using the free list
 
-	if (mFreeList.size() <= i)
-	{
-		mFreeList.resize(i+1);
-	}
+	// U32 i = vbo_block_index(size);
+	// 
+	// if (mFreeList.size() <= i)
+	// {
+	// 	mFreeList.resize(i+1);
+	// }
+	// 
+	// if (mFreeList[i].empty() || for_seed)
+	// {
+	// 	//make a new buffer
+	// 	name = genBuffer();
+	// 	
+	// 	glBindBufferARB(mType, name);
+	// 
+	// 	if (!for_seed && i < LL_VBO_POOL_SEED_COUNT)
+	// 	{ //record this miss
+	// 		mMissCount[i]++;	
+	// 	}
+	// 
+	// 	if (mType == GL_ARRAY_BUFFER_ARB)
+	// 	{
+	// 		LLVertexBuffer::sAllocatedBytes += size;
+	// 	}
+	// 	else
+	// 	{
+	// 		LLVertexBuffer::sAllocatedIndexBytes += size;
+	// 	}
+	// 
+	// 	if (LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
+	// 	{
+	// 		glBufferDataARB(mType, size, 0, mUsage);
+	// 		ret = (U8*) ll_aligned_malloc_16(size);
+	// 	}
+	// 	else
+	// 	{ //always use a true hint of static draw when allocating non-client-backed buffers
+	// 		glBufferDataARB(mType, size, 0, GL_STATIC_DRAW_ARB);
+	// 	}
+	// 
+	// 	glBindBufferARB(mType, 0);
+	// 
+	// 	if (for_seed)
+	// 	{ //put into pool for future use
+	// 		llassert(mFreeList.size() > i);
+	// 
+	// 		Record rec;
+	// 		rec.mGLName = name;
+	// 		rec.mClientData = ret;
+	// 
+	// 		if (mType == GL_ARRAY_BUFFER_ARB)
+	// 		{
+	// 			sBytesPooled += size;
+	// 		}
+	// 		else
+	// 		{
+	// 			sIndexBytesPooled += size;
+	// 		}
+	// 		mFreeList[i].push_back(rec);
+	// 	}
+	// }
+	// else
+	// {
+	// 	name = mFreeList[i].front().mGLName;
+	// 	ret = mFreeList[i].front().mClientData;
+	// 
+	// 	if (mType == GL_ARRAY_BUFFER_ARB)
+	// 	{
+	// 		sBytesPooled -= size;
+	// 	}
+	// 	else
+	// 	{
+	// 		sIndexBytesPooled -= size;
+	// 	}
+	// 
+	// 	mFreeList[i].pop_front();
+	// }
 
-	if (mFreeList[i].empty() || for_seed)
-	{
-		//make a new buffer
-		name = genBuffer();
+
+	name = genBuffer();
 		
-		glBindBufferARB(mType, name);
-
-		if (!for_seed && i < LL_VBO_POOL_SEED_COUNT)
-		{ //record this miss
-			mMissCount[i]++;	
-		}
-
-		if (mType == GL_ARRAY_BUFFER_ARB)
-		{
-			LLVertexBuffer::sAllocatedBytes += size;
-		}
-		else
-		{
-			LLVertexBuffer::sAllocatedIndexBytes += size;
-		}
-
-		if (LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
-		{
-			glBufferDataARB(mType, size, 0, mUsage);
-			if (mUsage != GL_DYNAMIC_COPY_ARB)
-			{ //data will be provided by application
-				ret = (U8*) ll_aligned_malloc(size, 64);
-			}
-		}
-		else
-		{ //always use a true hint of static draw when allocating non-client-backed buffers
-			glBufferDataARB(mType, size, 0, GL_STATIC_DRAW_ARB);
-		}
-
-		glBindBufferARB(mType, 0);
-
-		if (for_seed)
-		{ //put into pool for future use
-			llassert(mFreeList.size() > i);
-
-			Record rec;
-			rec.mGLName = name;
-			rec.mClientData = ret;
+	glBindBufferARB(mType, name);
 	
-			if (mType == GL_ARRAY_BUFFER_ARB)
-			{
-				sBytesPooled += size;
-			}
-			else
-			{
-				sIndexBytesPooled += size;
-			}
-			mFreeList[i].push_back(rec);
+	if (mType == GL_ARRAY_BUFFER_ARB)
+		LLVertexBuffer::sAllocatedBytes += size;
+	else
+		LLVertexBuffer::sAllocatedIndexBytes += size;
+
+	if (LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
+	{
+		glBufferDataARB(mType, size, 0, mUsage);
+		if (mUsage != GL_DYNAMIC_COPY_ARB)
+		{ //data will be provided by application
+			ret = (U8*) ll_aligned_malloc(size, 64);
 		}
 	}
 	else
 	{
-		name = mFreeList[i].front().mGLName;
-		ret = mFreeList[i].front().mClientData;
-
-		if (mType == GL_ARRAY_BUFFER_ARB)
-		{
-			sBytesPooled -= size;
-		}
-		else
-		{
-			sIndexBytesPooled -= size;
-		}
-
-		mFreeList[i].pop_front();
+		//always use a true hint of static draw when allocating non-client-backed buffers
+		glBufferDataARB(mType, size, 0, GL_STATIC_DRAW_ARB);
 	}
+
+	glBindBufferARB(mType, 0);
+
+	// </FS:ND>
 
 	return ret;
 }
@@ -270,68 +311,74 @@ void LLVBOPool::release(U32 name, volatile U8* buffer, U32 size)
 
 void LLVBOPool::seedPool()
 {
-	U32 dummy_name = 0;
+	// <FS:ND> We're not using the freelist
 
-	if (mFreeList.size() < LL_VBO_POOL_SEED_COUNT)
-	{
-		mFreeList.resize(LL_VBO_POOL_SEED_COUNT);
-	}
+	// U32 dummy_name = 0;
+	// 
+	// if (mFreeList.size() < LL_VBO_POOL_SEED_COUNT)
+	// {
+	// 	mFreeList.resize(LL_VBO_POOL_SEED_COUNT);
+	// }
+	// 
+	// for (U32 i = 0; i < LL_VBO_POOL_SEED_COUNT; i++)
+	// {
+	// 	if (mMissCount[i] > mFreeList[i].size())
+	// 	{ 
+	// 		U32 size = i*LL_VBO_BLOCK_SIZE;
+	// 	
+	// 		S32 count = mMissCount[i] - mFreeList[i].size();
+	// 		for (U32 j = 0; j < count; ++j)
+	// 		{
+	// 			allocate(dummy_name, size, true);
+	// 		}
+	// 	}
+	// }
 
-	for (U32 i = 0; i < LL_VBO_POOL_SEED_COUNT; i++)
-	{
-		if (mMissCount[i] > mFreeList[i].size())
-		{ 
-			U32 size = i*LL_VBO_BLOCK_SIZE;
-		
-			S32 count = mMissCount[i] - mFreeList[i].size();
-			for (U32 j = 0; j < count; ++j)
-			{
-				allocate(dummy_name, size, true);
-			}
-		}
-	}
+	// </FS:ND>
 }
+
+
 
 
 
 void LLVBOPool::cleanup()
 {
-	U32 size = LL_VBO_BLOCK_SIZE;
-
-	for (U32 i = 0; i < mFreeList.size(); ++i)
-	{
-		record_list_t& l = mFreeList[i];
-
-		while (!l.empty())
-		{
-			Record& r = l.front();
-
-			deleteBuffer(r.mGLName);
-			
-			if (r.mClientData)
-			{
-				ll_aligned_free((void*) r.mClientData);
-			}
-
-			l.pop_front();
-
-			if (mType == GL_ARRAY_BUFFER_ARB)
-			{
-				sBytesPooled -= size;
-				LLVertexBuffer::sAllocatedBytes -= size;
-			}
-			else
-			{
-				sIndexBytesPooled -= size;
-				LLVertexBuffer::sAllocatedIndexBytes -= size;
-			}
-		}
-
-		size += LL_VBO_BLOCK_SIZE;
-	}
-
-	//reset miss counts
-	std::fill(mMissCount.begin(), mMissCount.end(), 0);
+	// U32 size = LL_VBO_BLOCK_SIZE;
+	// 
+	// for (U32 i = 0; i < mFreeList.size(); ++i)
+	// {
+	// 	record_list_t& l = mFreeList[i];
+	// 
+	// 	while (!l.empty())
+	// 	{
+	// 		Record& r = l.front();
+	// 
+	// 		deleteBuffer(r.mGLName);
+	// 		
+	// 		if (r.mClientData)
+	// 		{
+	// 			ll_aligned_free((void*) r.mClientData);
+	// 		}
+	// 
+	// 		l.pop_front();
+	// 
+	// 		if (mType == GL_ARRAY_BUFFER_ARB)
+	// 		{
+	// 			sBytesPooled -= size;
+	// 			LLVertexBuffer::sAllocatedBytes -= size;
+	// 		}
+	// 		else
+	// 		{
+	// 			sIndexBytesPooled -= size;
+	// 			LLVertexBuffer::sAllocatedIndexBytes -= size;
+	// 		}
+	// 	}
+	// 
+	// 	size += LL_VBO_BLOCK_SIZE;
+	// }
+	// 
+	// //reset miss counts
+	// std::fill(mMissCount.begin(), mMissCount.end(), 0);
 }
 
 
@@ -572,7 +619,9 @@ void LLVertexBuffer::setupClientArrays(U32 data_mask)
 static LLFastTimer::DeclareTimer FTM_VB_DRAW_ARRAYS("drawArrays");
 void LLVertexBuffer::drawArrays(U32 mode, const std::vector<LLVector3>& pos, const std::vector<LLVector3>& norm)
 {
-	LLFastTimer t(FTM_VB_DRAW_ARRAYS);
+	// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+	// LLFastTimer t(FTM_VB_DRAW_ARRAYS);
+
 	llassert(!LLGLSLShader::sNoFixedFunction || LLGLSLShader::sCurBoundShaderPtr != NULL);
 	gGL.syncMatrices();
 
@@ -853,7 +902,8 @@ void LLVertexBuffer::drawArrays(U32 mode, U32 first, U32 count) const
 	}
 
 	{
-		LLFastTimer t2(FTM_GL_DRAW_ARRAYS);
+		// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+		// LLFastTimer t2(FTM_GL_DRAW_ARRAYS);
 	stop_glerror();
 	LLGLSLShader::startProfile();
 	glDrawArrays(sGLMode[mode], first, count);
@@ -1283,8 +1333,13 @@ void LLVertexBuffer::updateNumVerts(S32 nverts)
 
 	if (nverts > 65536)
 	{
-		llwarns << "Vertex buffer overflow!" << llendl;
-		nverts = 65536;
+		// <FS:ND> FIRE-5077; Just print an info if there are more than 0xFFFF, for now just so there is a message in the logs where in older version #vertices would have been capped.
+
+		// llwarns << "Vertex buffer overflow!" << llendl;
+		// nverts = 65536;
+		llinfos << "More vertices than 65536 (#" << nverts << ")" <<llendl;
+
+		// </FS:ND>
 	}
 
 	U32 needed_size = calcOffsets(mTypeMask, mOffsets, nverts);
@@ -1319,11 +1374,21 @@ void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 {
 	stop_glerror();
 
-	if (nverts < 0 || nindices < 0 ||
-		nverts > 65536)
-	{
+	// <FS:ND> FIRE-5077; Just print an info if there are more than 0xFFFF, for now just so there is a message in the logs where in older version #vertices would have been capped.
+
+	// if (nverts < 0 || nindices < 0 ||
+	// 	nverts > 65536)
+	// {
+	// 	llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
+	// }
+
+	if( nverts < 0 || nindices < 0 )
 		llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
-	}
+
+	if( nverts > 0xFFFF )
+		llinfos << "More vertices than 65535 (#" << nverts << ")" <<llendl;
+	
+	// </FS:ND>
 
 	updateNumVerts(nverts);
 	updateNumIndices(nindices);
@@ -1352,7 +1417,8 @@ void LLVertexBuffer::setupVertexArray()
 		return;
 	}
 
-	LLFastTimer t(FTM_SETUP_VERTEX_ARRAY);
+	// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+	// LLFastTimer t(FTM_SETUP_VERTEX_ARRAY);
 #if GL_ARB_vertex_array_object
 	glBindVertexArray(mGLArray);
 #endif
@@ -1441,13 +1507,13 @@ void LLVertexBuffer::setupVertexArray()
 				//glVertexattribIPointer requires GLSL 1.30 or later
 				if (gGLManager.mGLSLVersionMajor > 1 || gGLManager.mGLSLVersionMinor >= 30)
 				{
-					glVertexAttribIPointer(i, attrib_size[i], attrib_type[i], sTypeSize[i], (void*) mOffsets[i]); 
+					glVertexAttribIPointer(i, attrib_size[i], attrib_type[i], sTypeSize[i], (void*) (ptrdiff_t)mOffsets[i]); 
 				}
 #endif
 			}
 			else
 			{
-				glVertexAttribPointerARB(i, attrib_size[i], attrib_type[i], attrib_normalized[i], sTypeSize[i], (void*) mOffsets[i]); 
+				glVertexAttribPointerARB(i, attrib_size[i], attrib_type[i], attrib_normalized[i], sTypeSize[i], (void*) (ptrdiff_t)mOffsets[i]); 
 			}
 		}
 		else
@@ -1579,7 +1645,8 @@ volatile U8* LLVertexBuffer::mapVertexBuffer(S32 type, S32 index, S32 count, boo
 					if (map_range)
 					{
 #ifdef GL_ARB_map_buffer_range
-						LLFastTimer t(FTM_VBO_MAP_BUFFER_RANGE);
+						// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+						// LLFastTimer t(FTM_VBO_MAP_BUFFER_RANGE);
 						S32 offset = mOffsets[type] + sTypeSize[type]*index;
 						S32 length = (sTypeSize[type]*count+0xF) & ~0xF;
 						src = (U8*) glMapBufferRange(GL_ARRAY_BUFFER_ARB, offset, length, 
@@ -1603,7 +1670,8 @@ volatile U8* LLVertexBuffer::mapVertexBuffer(S32 type, S32 index, S32 count, boo
 							}
 						}
 
-						LLFastTimer t(FTM_VBO_MAP_BUFFER);
+						// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+						// LLFastTimer t(FTM_VBO_MAP_BUFFER);
 						src = (U8*) glMapBufferRange(GL_ARRAY_BUFFER_ARB, 0, mSize, 
 							GL_MAP_WRITE_BIT | 
 							GL_MAP_FLUSH_EXPLICIT_BIT);
@@ -1768,7 +1836,8 @@ volatile U8* LLVertexBuffer::mapIndexBuffer(S32 index, S32 count, bool map_range
 					if (map_range)
 					{
 #ifdef GL_ARB_map_buffer_range
-						LLFastTimer t(FTM_VBO_MAP_INDEX_RANGE);
+						// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+						// LLFastTimer t(FTM_VBO_MAP_INDEX_RANGE);
 						S32 offset = sizeof(U16)*index;
 						S32 length = sizeof(U16)*count;
 						src = (U8*) glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER_ARB, offset, length, 
@@ -1780,7 +1849,8 @@ volatile U8* LLVertexBuffer::mapIndexBuffer(S32 index, S32 count, bool map_range
 					else
 					{
 #ifdef GL_ARB_map_buffer_range
-						LLFastTimer t(FTM_VBO_MAP_INDEX);
+						// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+						// LLFastTimer t(FTM_VBO_MAP_INDEX);
 						src = (U8*) glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER_ARB, 0, sizeof(U16)*mNumIndices, 
 							GL_MAP_WRITE_BIT | 
 							GL_MAP_FLUSH_EXPLICIT_BIT);
@@ -1804,7 +1874,8 @@ volatile U8* LLVertexBuffer::mapIndexBuffer(S32 index, S32 count, bool map_range
 				}
 				else
 				{
-					LLFastTimer t(FTM_VBO_MAP_INDEX);
+					// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+					// LLFastTimer t(FTM_VBO_MAP_INDEX);
 					map_range = false;
 					src = (U8*) glMapBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, GL_WRITE_ONLY_ARB);
 				}
@@ -1873,8 +1944,9 @@ void LLVertexBuffer::unmapBuffer()
 
 	if (mMappedData && mVertexLocked)
 	{
-		LLFastTimer t(FTM_VBO_UNMAP);
-		bindGLBuffer(true);
+		// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+		// LLFastTimer t(FTM_VBO_UNMAP);
+		bindGLBuffer();
 		updated_all = mIndexLocked; //both vertex and index buffers done updating
 
 		if(!mMappable)
@@ -1914,7 +1986,8 @@ void LLVertexBuffer::unmapBuffer()
 						S32 length = sTypeSize[region.mType]*region.mCount;
 						if (gGLManager.mHasMapBufferRange)
 						{
-							LLFastTimer t(FTM_VBO_FLUSH_RANGE);
+							// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+							// LLFastTimer t(FTM_VBO_FLUSH_RANGE);
 #ifdef GL_ARB_map_buffer_range
 							glFlushMappedBufferRange(GL_ARRAY_BUFFER_ARB, offset, length);
 #endif
@@ -1944,7 +2017,8 @@ void LLVertexBuffer::unmapBuffer()
 	
 	if (mMappedIndexData && mIndexLocked)
 	{
-		LLFastTimer t(FTM_IBO_UNMAP);
+		// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+		// LLFastTimer t(FTM_IBO_UNMAP);
 		bindGLIndices();
 		if(!mMappable)
 		{
@@ -1981,7 +2055,8 @@ void LLVertexBuffer::unmapBuffer()
 						S32 length = sizeof(U16)*region.mCount;
 						if (gGLManager.mHasMapBufferRange)
 						{
-							LLFastTimer t(FTM_IBO_FLUSH_RANGE);
+							// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+							// LLFastTimer t(FTM_IBO_FLUSH_RANGE);
 #ifdef GL_ARB_map_buffer_range
 							glFlushMappedBufferRange(GL_ELEMENT_ARRAY_BUFFER_ARB, offset, length);
 #endif
@@ -2038,6 +2113,13 @@ template <class T,S32 type> struct VertexBufferStrider
 
 			strider = (T*)ptr;
 			strider.setStride(0);
+
+			#ifdef OPENSIM // <FS:ND> protect against buffer overflows
+			if( count == -1 )
+				count = vbo.getNumIndices()-index;
+			strider.setCount( count );
+			#endif // <FS:ND>
+
 			return true;
 		}
 		else if (vbo.hasDataType(type))
@@ -2054,6 +2136,13 @@ template <class T,S32 type> struct VertexBufferStrider
 
 			strider = (T*)ptr;
 			strider.setStride(stride);
+
+			#ifdef OPENSIM // <FS:ND> protect against buffer overflows
+			if( count == -1 )
+				count = vbo.getNumVerts()-index;
+			strider.setCount( count );
+			#endif // <FS:ND>
+
 			return true;
 		}
 		else
@@ -2182,7 +2271,8 @@ bool LLVertexBuffer::bindGLIndices(bool force_bind)
 	bool ret = false;
 	if (useVBOs() && (force_bind || (mGLIndices && (mGLIndices != sGLRenderIndices || !sIBOActive))))
 	{
-		LLFastTimer t(FTM_BIND_GL_INDICES);
+		// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+		// LLFastTimer t(FTM_BIND_GL_INDICES);
 		/*if (sMapped)
 		{
 			llerrs << "VBO bound while another VBO mapped!" << llendl;

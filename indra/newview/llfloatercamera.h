@@ -81,6 +81,8 @@ public:
 	LLPanelCameraZoom*	mZoom;
 	LLJoystickCameraTrack*	mTrack;
 
+	void setCameraFloaterTransparencyMode(const LLSD &data); // <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
+
 private:
 
 	LLFloaterCamera(const LLSD& val);
@@ -121,6 +123,10 @@ private:
 	static bool sFreeCamera;
 	static bool sAppearanceEditing;
 	BOOL mClosed;
+
+	void setModeTitle(const ECameraControlMode mode);
+
+	bool mUseFlatUI;	// <AW: Flat cam floater>
 	ECameraControlMode mPrevMode;
 	ECameraControlMode mCurrMode;
 	std::map<ECameraControlMode, LLButton*> mMode2Button;

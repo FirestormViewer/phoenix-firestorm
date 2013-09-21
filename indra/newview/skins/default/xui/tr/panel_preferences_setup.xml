@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ayarlar" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Network:">
 		Ağ:
 	</text>
@@ -9,14 +12,18 @@
 	<text name="text_box2">
 		kbps
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Özel port" name="connection_port_enabled"/>
 	<spinner label="Port numarası:" name="connection_port"/>
 	<text name="Web:">
 		Web:
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="Tarayıcımı kullan (IE, Firefox, Safari)" name="external" tool_tip="Yardım, web bağlantıları vs. için sistemin varsayılan web tarayıcısını kullanın. Tam ekran çalıştırılıyorsa tavsiye edilmez." value="true"/>
-		<radio_item label="Yerleşik tarayıcıyı kullan" name="internal" tool_tip="Yardım, web bağlantıları vs. için dahili web tarayıcısını kullanın. Bu tarayıcı [APP_NAME] içerisinde yeni bir pencere olarak açılır." value=""/>
+		<radio_item label="Tarayıcımı kullan (IE, Firefox, Safari)" name="external" tool_tip="Yardım, web bağlantıları vs. için sistemin varsayılan web tarayıcısını kullanın. Tam ekran çalıştırılıyorsa tavsiye edilmez."/>
+		<radio_item label="Yerleşik tarayıcıyı kullan" name="internal" tool_tip="Yardım, web bağlantıları vs. için dahili web tarayıcısını kullanın. Bu tarayıcı [APP_NAME] içerisinde yeni bir pencere olarak açılır."/>
 	</radio_group>
 	<check_box initial_value="true" label="Eklentileri etkinleştir" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Çerezleri kabul et" name="cookies_enabled"/>
@@ -34,4 +41,7 @@
 		Proxy Ayarları:
 	</text>
 	<button label="Proxy ayarlarını yap" label_selected="Gözat" name="set_proxy"/>
+
+		</layout_panel>
+	</layout_stack>
 </panel>

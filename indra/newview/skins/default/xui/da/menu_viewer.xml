@@ -112,22 +112,23 @@
 			<menu_item_call label="Gitter indstillinger" name="Grid Options"/>
 		</menu>
 		<menu label="Send" name="Upload">
-			<menu_item_call label="Billede (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Lyd (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animation (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Billede ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Lyd ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model..." name="Upload Model"/>
 			<menu_item_call label="Model Wizard..." name="Upload Model Wizard"/>
-			<menu_item_call label="Mange (L$[COST] pr. fil)..." name="Bulk Upload"/>
+			<menu_item_call label="Mange ([COST] pr. fil)..." name="Bulk Upload"/>
 			<menu_item_call label="Sæt standardværdier for upload rettigheder" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Fortyd" name="Undo"/>
 		<menu_item_call label="Gendan" name="Redo"/>
 	</menu>
 	<menu label="Hjælp" name="Help">
-		<menu_item_call label="[SECOND_LIFE] Help" name="Second Life Help"/>
+		<menu_item_call label="[CURRENT_GRID] Help" name="current_grid_help"/>
 		<menu_item_check label="Aktiver tips" name="Enable Hints"/>
 		<menu_item_call label="Rapporter misbrug" name="Report Abuse"/>
 		<menu_item_call label="Rapportér fejl" name="Report Bug"/>
+		<menu_item_call label="Stød, skub &amp; slag" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="Om [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="Avanceret" name="Advanced">
@@ -262,7 +263,6 @@
 			<menu_item_check label="Pause avatar" name="AgentPause"/>
 			<menu_item_call label="Mist en netværkspakke" name="Drop a Packet"/>
 		</menu>
-		<menu_item_call label="Stød, skub &amp; slag" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Verden" name="DevelopWorld">
 			<menu_item_check label="Vælg anden sol end region" name="Sim Sun Override"/>
 			<menu_item_check label="Fast vejr" name="Fixed Weather"/>
@@ -272,7 +272,6 @@
 			<menu_item_call label="Media browser test" name="Web Browser Test"/>
 			<menu_item_call label="Browser med webindhold" name="Web Content Browser"/>
 			<menu_item_call label="Print info om valgt objekt" name="Print Selected Object Info"/>
-			<menu_item_call label="Hukommelse statistik" name="Memory Stats"/>
 			<menu_item_check label="Debug konsol for region" name="Region Debug Console"/>
 			<menu_item_check label="Debug klik" name="Debug Clicks"/>
 			<menu_item_check label="Debug muse-hændelser" name="Debug Mouse Events"/>

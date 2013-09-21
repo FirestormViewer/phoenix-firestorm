@@ -35,6 +35,12 @@
 #include "llwaterparammanager.h"
 #include "llwlhandlers.h"
 #include "llwlparammanager.h"
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+#include <boost/algorithm/string.hpp>
+#include "rlvhandler.h"
+// [/RLVa:KB]
+#include "kcwlinterface.h"
+#include "quickprefs.h"
 
 std::string LLEnvPrefs::getWaterPresetName() const
 {
@@ -175,6 +181,9 @@ bool LLEnvManagerNew::useRegionSettings()
 
 bool LLEnvManagerNew::useWaterPreset(const std::string& name)
 {
+	// <FS:Ansariel> Quickprefs integration
+	FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(name));
+
 	LL_DEBUGS("Windlight") << "Displaying water preset " << name << LL_ENDL;
 	LLWaterParamManager& water_mgr = LLWaterParamManager::instance();
 	bool rslt = water_mgr.getParamSet(name, water_mgr.mCurParams);
@@ -189,7 +198,7 @@ bool LLEnvManagerNew::useWaterParams(const LLSD& params)
 	return true;
 }
 
-bool LLEnvManagerNew::useSkyPreset(const std::string& name)
+bool LLEnvManagerNew::useSkyPreset(const std::string& name, bool interpolate /*= false*/)
 {
 	LLWLParamManager& sky_mgr = LLWLParamManager::instance();
 	LLWLParamSet param_set;
@@ -200,8 +209,11 @@ bool LLEnvManagerNew::useSkyPreset(const std::string& name)
 		return false;
 	}
 
+	// <FS:Ansariel> Quickprefs integration
+	FloaterQuickPrefs::updateParam(QP_PARAM_SKY, LLSD(name));
+
 	LL_DEBUGS("Windlight") << "Displaying sky preset " << name << LL_ENDL;
-	sky_mgr.applySkyParams(param_set.getAll());
+	sky_mgr.applySkyParams(param_set.getAll(), interpolate);
 	return true;
 }
 
@@ -220,6 +232,9 @@ bool LLEnvManagerNew::useDayCycle(const std::string& name, LLEnvKey::EScope scop
 	{
 		LL_DEBUGS("Windlight") << "Displaying region day cycle " << name << LL_ENDL;
 		params = getRegionSettings().getWLDayCycle();
+
+		// <FS:Ansariel> Quickprefs integration
+		FloaterQuickPrefs::updateParam(QP_PARAM_DAYCYCLE, LLSD(PRESET_NAME_REGION_DEFAULT));
 	}
 	else
 	{
@@ -230,6 +245,9 @@ bool LLEnvManagerNew::useDayCycle(const std::string& name, LLEnvKey::EScope scop
 			llwarns << "No day cycle named " << name << llendl;
 			return false;
 		}
+
+		// <FS:Ansariel> Quickprefs integration
+		FloaterQuickPrefs::updateParam(QP_PARAM_DAYCYCLE, LLSD(name));
 	}
 
 	bool rslt = LLWLParamManager::instance().applyDayCycleParams(params, scope);
@@ -243,14 +261,14 @@ bool LLEnvManagerNew::useDayCycleParams(const LLSD& params, LLEnvKey::EScope sco
 	return LLWLParamManager::instance().applyDayCycleParams(params, scope);
 }
 
-void LLEnvManagerNew::setUseRegionSettings(bool val)
+void LLEnvManagerNew::setUseRegionSettings(bool val, bool interpolate /*= false*/)
 {
 	mUserPrefs.setUseRegionSettings(val);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
-void LLEnvManagerNew::setUseWaterPreset(const std::string& name)
+void LLEnvManagerNew::setUseWaterPreset(const std::string& name, bool interpolate /*= false*/)
 {
 	// *TODO: make sure the preset exists.
 	if (name.empty())
@@ -261,10 +279,10 @@ void LLEnvManagerNew::setUseWaterPreset(const std::string& name)
 
 	mUserPrefs.setUseWaterPreset(name);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
-void LLEnvManagerNew::setUseSkyPreset(const std::string& name)
+void LLEnvManagerNew::setUseSkyPreset(const std::string& name, bool interpolate /*= false*/)
 {
 	// *TODO: make sure the preset exists.
 	if (name.empty())
@@ -275,10 +293,10 @@ void LLEnvManagerNew::setUseSkyPreset(const std::string& name)
 
 	mUserPrefs.setUseSkyPreset(name);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
-void LLEnvManagerNew::setUseDayCycle(const std::string& name)
+void LLEnvManagerNew::setUseDayCycle(const std::string& name, bool interpolate /*= false*/)
 {
 	if (!LLDayCycleManager::instance().presetExists(name))
 	{
@@ -288,7 +306,7 @@ void LLEnvManagerNew::setUseDayCycle(const std::string& name)
 
 	mUserPrefs.setUseDayCycle(name);
 	saveUserPrefs();
-	updateManagersFromPrefs(false);
+	updateManagersFromPrefs(interpolate);
 }
 
 void LLEnvManagerNew::loadUserPrefs()
@@ -483,17 +501,33 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 	// Load region sky presets.
 	LLWLParamManager::instance().refreshRegionPresets();
 
-	// If using server settings, update managers.
-	if (getUseRegionSettings())
+	// Use the region settings if parcel settings didnt override it already -KC
+	if (KCWindlightInterface::instance().haveParcelOverride(new_settings))
 	{
-		updateManagersFromPrefs(mInterpNextChangeMessage);
+		// If using server settings, update managers.
+//	if (getUseRegionSettings())
+// [RLVa:KB] - Checked: 2011-08-29 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+	if ( (getUseRegionSettings()) && (LLWLParamManager::getInstance()->mAnimator.getIsRunning()) )
+// [/RLVa:KB]
+		{
+			updateManagersFromPrefs(mInterpNextChangeMessage);
+		}
+		//bit of a hacky override since I've repurposed many of the settings and methods here -KC
+		//NOTE* It might not be a good idea to do this if under RLV_BHVR_SETENV -KC
+		else if (gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways") 
+		 && !(rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)))
+		{
+			setUseRegionSettings(true, mInterpNextChangeMessage);
+		}
 	}
 
 	// Let interested parties know about the region settings update.
 	mRegionSettingsChangeSignal();
-
+	
+// <FS:CR> FIRE-8063: Aurora-sim windlight refresh
 	// reset
-	mInterpNextChangeMessage = false;
+	//mInterpNextChangeMessage = false;
+// </FS:CR>
 }
 
 void LLEnvManagerNew::onRegionSettingsApplyResponse(bool ok)
@@ -516,7 +550,7 @@ void LLEnvManagerNew::initSingleton()
 	loadUserPrefs();
 }
 
-void LLEnvManagerNew::updateSkyFromPrefs()
+void LLEnvManagerNew::updateSkyFromPrefs(bool interpolate /*= false*/)
 {
 	bool success = true;
 
@@ -533,7 +567,7 @@ void LLEnvManagerNew::updateSkyFromPrefs()
 		}
 		else
 		{
-			success = useSkyPreset(getSkyPresetName());
+			success = useSkyPreset(getSkyPresetName(), interpolate);
 		}
 	}
 
@@ -557,6 +591,9 @@ void LLEnvManagerNew::updateWaterFromPrefs(bool interpolate)
 		LLWaterParamSet default_water;
 		water_mgr.getParamSet("Default", default_water);
 		target_water_params = default_water.getAll();
+
+		// <FS:Ansariel> Quickprefs integration
+		FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD("Default"));
 	}
 
 	if (getUseRegionSettings())
@@ -567,6 +604,9 @@ void LLEnvManagerNew::updateWaterFromPrefs(bool interpolate)
 		{
 			LL_DEBUGS("Windlight") << "Applying region water" << LL_ENDL;
 			target_water_params = region_water_params;
+
+			// <FS:Ansariel> Quickprefs integration
+			FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(PRESET_NAME_REGION_DEFAULT));
 		}
 		else
 		{
@@ -585,6 +625,13 @@ void LLEnvManagerNew::updateWaterFromPrefs(bool interpolate)
 
 			// *TODO: Fix user preferences accordingly.
 		}
+		// <FS:Ansariel> Quickprefs integration
+		else
+		{
+			FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(water));
+		}
+		// </FS:Ansariel> Quickprefs integration
+
 		target_water_params = params.getAll();
 	}
 
@@ -594,11 +641,18 @@ void LLEnvManagerNew::updateWaterFromPrefs(bool interpolate)
 
 void LLEnvManagerNew::updateManagersFromPrefs(bool interpolate)
 {
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SETENV))
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	// Apply water settings.
 	updateWaterFromPrefs(interpolate);
 
 	// Apply sky settings.
-	updateSkyFromPrefs();
+	updateSkyFromPrefs(interpolate);
 }
 
 bool LLEnvManagerNew::useRegionSky()
@@ -614,6 +668,9 @@ bool LLEnvManagerNew::useRegionSky()
 	}
 
 	// *TODO: Support fixed sky from region.
+
+	// <FS:Ansariel> Quickprefs integration
+	FloaterQuickPrefs::updateParam(QP_PARAM_SKY, LLSD(PRESET_NAME_REGION_DEFAULT));
 
 	// Otherwise apply region day cycle.
 	LL_DEBUGS("Windlight") << "Applying region sky" << LL_ENDL;
@@ -634,6 +691,9 @@ bool LLEnvManagerNew::useRegionWater()
 		// well... apply the default water settings.
 		return useDefaultWater();
 	}
+
+	// <FS:Ansariel> Quickprefs integration
+	FloaterQuickPrefs::updateParam(QP_PARAM_WATER, LLSD(PRESET_NAME_REGION_DEFAULT));
 
 	// Otherwise apply region water.
 	LL_DEBUGS("Windlight") << "Applying region sky" << LL_ENDL;
@@ -676,3 +736,50 @@ void LLEnvManagerNew::onRegionChange(bool interpolate)
 	// Let interested parties know agent region has been changed.
 	mRegionChangeSignal();
 }
+
+// <FS:CR> FIRE-8063: Aurora-sim windlight refresh
+class WindLightRefresh : public LLHTTPNode
+{
+	/*virtual*/ void post(
+		LLHTTPNode::ResponsePtr response,
+		const LLSD& context,
+		const LLSD& input) const
+	{
+		if (!input || !context || !input.isMap() || !input.has("body")) {
+			llinfos << "malformed WindLightRefresh!" << llendl;	 
+			return;
+		}
+
+		//std::string dump = input["body"].asString();
+		//llwarns << dump << llendl;
+
+		LLSD body = input["body"];
+		LLEnvManagerNew *env = &LLEnvManagerNew::instance();
+
+		LLViewerRegion* regionp = gAgent.getRegion();
+		LLUUID region_uuid = regionp ? regionp->getRegionID() : LLUUID::null;
+
+		env->mNewRegionPrefs.clear();
+		env->mCurRegionUUID = region_uuid;
+
+		if(body.has("Interpolate")) {
+			if(body["Interpolate"].asInteger() == 1) {
+				env->mInterpNextChangeMessage = true;
+			}
+			else {
+				env->mInterpNextChangeMessage = false;
+			}
+		}
+		else {
+			env->mInterpNextChangeMessage = true;
+		}
+		llinfos << "Windlight Refresh , interpolate:" << env->mInterpNextChangeMessage << llendl;
+		env->requestRegionSettings();
+		env->mRegionChangeSignal();
+	}
+};
+
+LLHTTPRegistration<WindLightRefresh>
+gHTTPRegistrationWindLightRefresh(
+	"/message/WindLightRefresh");
+// </FS:CR> FIRE-8063: Aurora-sim windlight refresh

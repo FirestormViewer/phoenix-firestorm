@@ -40,6 +40,7 @@
 #include "llagentcamera.h"
 #include "llcommunicationchannel.h"
 #include "llfloaterreg.h"
+#include "lllogininstance.h" // <FS:AW  opensim destinations and avatar picker>
 #include "llmeshrepository.h"
 #include "llnotificationhandler.h"
 #include "llpanellogin.h"
@@ -126,6 +127,7 @@
 #include "llimageworker.h"
 #include "llkeyboard.h"
 #include "lllineeditor.h"
+#include "lllogininstance.h"
 #include "llmenugl.h"
 #include "llmenuoptionpathfindingrebakenavmesh.h"
 #include "llmodaldialog.h"
@@ -194,7 +196,9 @@
 #include "llviewerjoystick.h"
 #include "llviewernetwork.h"
 #include "llpostprocess.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llagentui.h"
 #include "llwearablelist.h"
 
@@ -204,13 +208,24 @@
 
 #include "llfloaternotificationsconsole.h"
 
+// <FS:Ansariel> [FS communication UI]
+#include "fsnearbychathub.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
 #include "llpaneltopinfobar.h"
+#include "llimview.h"
+
+// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #if LL_WINDOWS
 #include <tchar.h> // For Unicode conversion methods
 #endif
+
+#include "utilitybar.h"		// <FS:Zi> Support for the classic V1 style buttons in some skins
+#include "exopostprocess.h"	// <FS:Ansariel> Exodus Vignette
 
 //
 // Globals
@@ -244,11 +259,11 @@ LLVector4a		 gDebugRaycastEnd;
 BOOL				gDisplayWindInfo = FALSE;
 BOOL				gDisplayCameraPos = FALSE;
 BOOL				gDisplayFOV = FALSE;
-BOOL				gDisplayBadge = FALSE;
 
 static const U8 NO_FACE = 255;
 BOOL gQuietSnapshot = FALSE;
 
+const F32 MIN_AFK_TIME = 6.f; // minimum time after setting away state before coming back
 static const F32 MIN_DISPLAY_SCALE = 0.75f;
 
 std::string	LLViewerWindow::sSnapshotBaseName;
@@ -306,10 +321,10 @@ private:
 		mLineList.push_back(Line(text, x, y));
 	}
 	
-	void clearText() { mLineList.clear(); }
-	
 public:
 	LLDebugText(LLViewerWindow* window) : mWindow(window) {}
+
+	void clearText() { mLineList.clear(); }
 
 	void update()
 	{
@@ -341,7 +356,9 @@ public:
 
 		clearText();
 		
-		if (gSavedSettings.getBOOL("DebugShowTime"))
+		//if (gSavedSettings.getBOOL("DebugShowTime"))
+		static LLCachedControl<bool> debugShowTime(gSavedSettings, "DebugShowTime");
+		if (debugShowTime)
 		{
 			{
 			const U32 y_inc2 = 15;
@@ -363,7 +380,9 @@ public:
 		}
 		
 #if LL_WINDOWS
-		if (gSavedSettings.getBOOL("DebugShowMemory"))
+		//if (gSavedSettings.getBOOL("DebugShowMemory"))
+		static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
+		if (debugShowMemory)
 		{
 			addText(xpos, ypos, llformat("Memory: %d (KB)", LLMemory::getWorkingSetSize() / 1024)); 
 			ypos += y_inc;
@@ -447,11 +466,6 @@ public:
 			addText(xpos, ypos, llformat("FOV: %2.1f deg", RAD_TO_DEG * LLViewerCamera::getInstance()->getView()));
 			ypos += y_inc;
 		}
-		if (gDisplayBadge)
-		{
-			addText(xpos, ypos+(y_inc/2), llformat("Hippos!", RAD_TO_DEG * LLViewerCamera::getInstance()->getView()));
-			ypos += y_inc * 2;
-		}
 		
 		/*if (LLViewerJoystick::getInstance()->getOverrideCamera())
 		{
@@ -459,7 +473,9 @@ public:
 			ypos += y_inc;
 		}*/
 		
-		if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
+		//if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
+		static LLCachedControl<bool> debugShowRenderInfo(gSavedSettings, "DebugShowRenderInfo");
+		if (debugShowRenderInfo)
 		{
 			if (gPipeline.getUseVertexShaders() == 0)
 			{
@@ -628,6 +644,11 @@ public:
 				addText(xpos, ypos, llformat("%d/%d Mesh LOD Pending/Processing", LLMeshRepository::sLODPending, LLMeshRepository::sLODProcessing));
 				ypos += y_inc;
 
+				// <FS:Ansariel> Mesh debugging
+				addText(xpos, ypos, llformat("%d (%d) Mesh Active LOD Requests (max)", LLMeshRepoThread::sActiveLODRequests, LLMeshRepoThread::sMaxConcurrentRequests));
+				ypos += y_inc;
+				// </FS:Ansariel>
+
 				addText(xpos, ypos, llformat("%.3f/%.3f MB Mesh Cache Read/Write ", LLMeshRepository::sCacheBytesRead/(1024.f*1024.f), LLMeshRepository::sCacheBytesWritten/(1024.f*1024.f)));
 
 				ypos += y_inc;
@@ -673,7 +694,9 @@ public:
 				av_iter++;
 			}
 		}
-		if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
+		//if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
+		static LLCachedControl<bool> debugShowRenderMatrices(gSavedSettings, "DebugShowRenderMatrices");
+		if (debugShowRenderMatrices)
 		{
 			addText(xpos, ypos, llformat("%.4f    .%4f    %.4f    %.4f", gGLProjection[12], gGLProjection[13], gGLProjection[14], gGLProjection[15]));
 			ypos += y_inc;
@@ -706,7 +729,12 @@ public:
 			addText(xpos, ypos, "View Matrix");
 			ypos += y_inc;
 		}
-		if (gSavedSettings.getBOOL("DebugShowColor"))
+		//<FS:AO improve use of controls with radiogroups>
+		//if (gSavedSettings.getBOOL("DebugShowColor"))
+		//static LLCachedControl<bool> debugShowColor(gSavedSettings, "DebugShowColor");
+		static LLCachedControl<S32> debugShowColor(gSavedSettings, "DebugShowColor");
+		//</FS:AO>
+		if (debugShowColor)
 		{
 			U8 color[4];
 			LLCoordGL coord = gViewerWindow->getCurrentMouse();
@@ -715,7 +743,9 @@ public:
 			ypos += y_inc;
 		}
 
-		if (gSavedSettings.getBOOL("DebugShowPrivateMem"))
+		//if (gSavedSettings.getBOOL("DebugShowPrivateMem"))
+		static LLCachedControl<bool> debugShowPrivateMem(gSavedSettings, "DebugShowPrivateMem");
+		if (debugShowPrivateMem)
 		{
 			LLPrivateMemoryPoolManager::getInstance()->updateStatistics() ;
 			addText(xpos, ypos, llformat("Total Reserved(KB): %d", LLPrivateMemoryPoolManager::getInstance()->mTotalReservedSize / 1024));
@@ -724,31 +754,46 @@ public:
 			addText(xpos, ypos, llformat("Total Allocated(KB): %d", LLPrivateMemoryPoolManager::getInstance()->mTotalAllocatedSize / 1024));
 			ypos += y_inc;
 		}
+		// <FS:LO> pull the text saying if particles are hidden out from beacons
+		if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+		{
+			addText(xpos, ypos, particle_hiding);
+			ypos += y_inc;
+		}
+		// </FS:LO>
 
 		// only display these messages if we are actually rendering beacons at this moment
-		if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
+		if (LLPipeline::getRenderBeacons(NULL) /*&& LLFloaterReg::instanceVisible("beacons")*/) // <FS:LO> Always show the beacon text regardless if the floater is visible
 		{
 			if (LLPipeline::getRenderMOAPBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing media beacons (white)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing media beacons (white)");
+				addText(xpos, ypos, beacon_media);
 				ypos += y_inc;
 			}
 
-			if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+			// <FS:LO> pull the text saying if particles are hidden out from beacons
+			/*if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
 			{
 				addText(xpos, ypos, particle_hiding);
 				ypos += y_inc;
-			}
+			}*/
+			// </FS:LO>
 
 			if (LLPipeline::getRenderParticleBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing particle beacons (blue)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing particle beacons (blue)");
+				addText(xpos, ypos, beacon_particle);
 				ypos += y_inc;
 			}
 
 			if (LLPipeline::getRenderSoundBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing sound beacons (yellow)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing sound beacons (yellow)");
+				addText(xpos, ypos, beacon_sound);
 				ypos += y_inc;
 			}
 
@@ -766,7 +811,9 @@ public:
 
 			if (LLPipeline::getRenderPhysicalBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing physical object beacons (green)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing physical object beacons (green)");
+				addText(xpos, ypos, beacon_physical);
 				ypos += y_inc;
 			}
 		}
@@ -789,7 +836,9 @@ public:
 			}
 		}				
 
-		if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
+		//if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
+		static LLCachedControl<bool> debugShowTextureInfo(gSavedSettings, "DebugShowTextureInfo");
+		if (debugShowTextureInfo)
 		{
 			LLViewerObject* objectp = NULL ;
 			
@@ -833,6 +882,11 @@ public:
 				}
 			}
 		}
+		
+		// <FS:ND> Report amount of failed texture buffer allocations if any.
+		if( LLImageBase::getAllocationErrors() )
+			addText( xpos, ypos, llformat( "# textures discarded due to insufficent memory %ld", LLImageBase::getAllocationErrors() ) );
+		// </FS:ND>
 	}
 
 	void draw()
@@ -1102,7 +1156,8 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
 					{
 						if (drop)
 						{
-							LLURLDispatcher::dispatch( dropped_slurl.getSLURLString(), "clicked", NULL, true );
+							LLURLDispatcher::dispatch( dropped_slurl.getSLURLString
+(), "clicked", NULL, true );
 							return LLWindowCallbacks::DND_MOVE;
 						}
 						return LLWindowCallbacks::DND_COPY;
@@ -1111,7 +1166,10 @@ LLWindowCallbacks::DragNDropResult LLViewerWindow::handleDragNDrop( LLWindow *wi
 
 				if (prim_media_dnd_enabled)
 				{
-					LLPickInfo pick_info = pickImmediate( pos.mX, pos.mY,  TRUE /*BOOL pick_transparent*/ );
+//					LLPickInfo pick_info = pickImmediate( pos.mX, pos.mY,  TRUE /*BOOL pick_transparent*/ );
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+					LLPickInfo pick_info = pickImmediate( pos.mX, pos.mY,  TRUE /*BOOL pick_transparent*/, FALSE);
+// [/SL:KB]
 
 					LLUUID object_id = pick_info.getObjectID();
 					S32 object_face = pick_info.mObjectFace;
@@ -1588,7 +1646,8 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	mStatesDirty(false),
 	mCurrResolutionIndex(0),
 	mProgressView(NULL),
-	mMouseVelocityStat(new LLStat("Mouse Velocity"))
+	mMouseVelocityStat(new LLStat("Mouse Velocity")),
+	mProgressViewMini(NULL)
 {
 	// gKeyboard is still NULL, so it doesn't do LLWindowListener any good to
 	// pass its value right now. Instead, pass it a nullary function that
@@ -1710,6 +1769,8 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"), gSavedSettings.getBOOL("RenderVBOMappingDisable"));
 	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
 	gGL.init() ;
+	// <FS:Ansariel> Exodus vignette
+	exoPostProcess::getInstance(); // Make sure we've created one of these
 
 	if (LLFeatureManager::getInstance()->isSafe()
 		|| (gSavedSettings.getS32("LastFeatureVersion") != LLFeatureManager::getInstance()->getVersion())
@@ -1746,7 +1807,9 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLFontGL::initClass( gSavedSettings.getF32("FontScreenDPI"),
 								mDisplayScale.mV[VX],
 								mDisplayScale.mV[VY],
-								gDirUtilp->getAppRODataDir());
+								gDirUtilp->getAppRODataDir(),
+								gSavedSettings.getString("FSFontSettingsFile"),
+								gSavedSettings.getF32("FSFontSizeAdjustment"));
 	
 	// Create container for all sub-views
 	LLView::Params rvp;
@@ -1824,6 +1887,36 @@ void LLViewerWindow::initBase()
 
 	// Create global views
 
+	// <FS:Ansariel> Move console further down in the view hierarchy to not float
+	//               in front of floaters!
+	// Console
+	llassert( !gConsole );
+	LLConsole::Params cp;
+	cp.name("console");
+	cp.max_lines(gSavedSettings.getS32("ConsoleBufferSize"));
+	cp.rect(getChatConsoleRect());
+	cp.parse_urls(true); // Ansariel: Enable URL parsing for the chat console
+	cp.background_image("Rounded_Square"); // Ansariel: Configurable background for different console types
+	// <FS:AO>, have console respect/reuse NearbyToastLifeTime for the length popup chat messages are displayed.
+	//cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
+	cp.persist_time((F32)gSavedSettings.getS32("NearbyToastLifeTime"));
+	// </FS:AO>
+
+	cp.font_size_index(gSavedSettings.getS32("ChatConsoleFontSize"));
+	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
+	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
+	getRootView()->addChild(gConsole);
+	// </FS:Ansariel>
+
+	// <FS:Zi> Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them
+	initialize_edit_menu();
+	initialize_spellcheck_menu();
+	// </FS:Zi>
+	
+	//<FS:KC> Centralize a some of these volume panel callbacks
+	initialize_volume_controls_callbacks();
+	//</FS:KC>
+
 	// Create the floater view at the start so that other views can add children to it. 
 	// (But wait to add it as a child of the root view so that it will be in front of the 
 	// other views.)
@@ -1831,6 +1924,12 @@ void LLViewerWindow::initBase()
 	main_view->buildFromFile("main_view.xml");
 	main_view->setShape(full_window);
 	getRootView()->addChild(main_view);
+
+	// <FS:Zi> Moved this from the end of this function up here, so all context menus
+	//         created right after this get the correct parent assigned.
+	gMenuHolder = getRootView()->getChild<LLViewerMenuHolderGL>("Menu Holder");
+	LLMenuGL::sMenuContainer = gMenuHolder;
+	// </FS:Zi>
 
 	// placeholder widget that controls where "world" is rendered
 	mWorldViewPlaceholder = main_view->getChildView("world_view_rect")->getHandle();
@@ -1847,22 +1946,13 @@ void LLViewerWindow::initBase()
 	// Hide the toolbars for the moment: we'll make them visible after logging in world (see LLViewerWindow::initWorldUI())
 	gToolBarView->setVisible(FALSE);
 
+	// <FS:Zi> initialize the utility bar (classic V1 style buttons next to the chat bar)
+	UtilityBar::instance().init();
+
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
 	gFloaterView->setFloaterSnapView(main_view->getChild<LLView>("floater_snap_region")->getHandle());
 	gSnapshotFloaterView = main_view->getChild<LLSnapshotFloaterView>("Snapshot Floater View");
-
-	// Console
-	llassert( !gConsole );
-	LLConsole::Params cp;
-	cp.name("console");
-	cp.max_lines(gSavedSettings.getS32("ConsoleBufferSize"));
-	cp.rect(getChatConsoleRect());
-	cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
-	cp.font_size_index(gSavedSettings.getS32("ChatFontSize"));
-	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
-	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
-	getRootView()->addChild(gConsole);
 
 	// optionally forward warnings to chat console/chat floater
 	// for qa runs and dev builds
@@ -1884,13 +1974,20 @@ void LLViewerWindow::initBase()
 
 	// Add the progress bar view (startup view), which overrides everything
 	mProgressView = getRootView()->findChild<LLProgressView>("progress_view");
-	setShowProgress(FALSE);
+	mProgressViewMini = getRootView()->findChild<LLProgressViewMini>("progress_view_mini");
+
+	setShowProgress(FALSE,FALSE);
 	setProgressCancelButtonVisible(FALSE);
 
-	gMenuHolder = getRootView()->getChild<LLViewerMenuHolderGL>("Menu Holder");
+	if(mProgressViewMini)
+		mProgressViewMini->setVisible(FALSE);
 
-	LLMenuGL::sMenuContainer = gMenuHolder;
+	// <FS:Zi> Moved this to the top right after creation of main_view.xml, so all context menus
+	//         created right after that get the correct parent assigned.
+	// gMenuHolder = getRootView()->getChild<LLViewerMenuHolderGL>("Menu Holder");
 
+	// LLMenuGL::sMenuContainer = gMenuHolder;
+	// </FS:Zi>
 }
 
 void LLViewerWindow::initWorldUI()
@@ -1905,7 +2002,20 @@ void LLViewerWindow::initWorldUI()
 	//getRootView()->sendChildToFront(gFloaterView);
 	//getRootView()->sendChildToFront(gSnapshotFloaterView);
 
-	LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+	// <FS:Ansariel> Group notices, IMs and chiclets position
+	//LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+	LLPanel* chiclet_container;
+	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+	{
+		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+		getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+	}
+	else
+	{
+		getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container_bottom");
+	}
+	// </FS:Ansariel> Group notices, IMs and chiclets position
 	LLChicletBar* chiclet_bar = LLChicletBar::getInstance();
 	chiclet_bar->setShape(chiclet_container->getLocalRect());
 	chiclet_bar->setFollowsAll();
@@ -1941,33 +2051,49 @@ void LLViewerWindow::initWorldUI()
 	status_bar_container->addChildInBack(gStatusBar);
 	status_bar_container->setVisible(TRUE);
 
-	// Navigation bar
-	LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("nav_bar_container");
+	// <FS:Zi> Make navigation bar part of the UI
+	// // Navigation bar
+	// LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
 
-	LLNavigationBar* navbar = LLNavigationBar::getInstance();
-	navbar->setShape(nav_bar_container->getLocalRect());
-	navbar->setBackgroundColor(gMenuBarView->getBackgroundColor().get());
-	nav_bar_container->addChild(navbar);
-	nav_bar_container->setVisible(TRUE);
+	// LLNavigationBar* navbar = LLNavigationBar::getInstance();
+	// navbar->setShape(nav_bar_container->getLocalRect());
+	// navbar->setBackgroundColor(gMenuBarView->getBackgroundColor().get());
+	// nav_bar_container->addChild(navbar);
+	// nav_bar_container->setVisible(TRUE);
+
+	// if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+	// {
+	//		navbar->setVisible(FALSE);
+	// 	}
+
+	// Force navigation bar to initialize
+	LLNavigationBar::getInstance();
+	// set navbar container visible which is initially hidden on the login screen,
+	// the real visibility of navbar and favorites bar is done via visibility control -Zi
+	LLNavigationBar::instance().getView()->setVisible(TRUE);
+	// </FS:Zi>
+
+	if (!gSavedSettings.getBOOL("ShowMenuBarLocation"))
+	{
+		gStatusBar->childSetVisible("parcel_info_panel",FALSE);
+	}
 	
-	if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
-	{
-		navbar->setVisible(FALSE);
-	}
 
-	// Top Info bar
-	LLPanel* topinfo_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
-	LLPanelTopInfoBar* topinfo_bar = LLPanelTopInfoBar::getInstance();
+	// <FS:Zi> We don't have the mini location bar, so no topinfo_bar required
+	// // Top Info bar
+	// LLPanel* topinfo_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
+	// LLPanelTopInfoBar* topinfo_bar = LLPanelTopInfoBar::getInstance();
 
-	topinfo_bar->setShape(topinfo_bar_container->getLocalRect());
+	// topinfo_bar->setShape(topinfo_bar_container->getLocalRect());
 
-	topinfo_bar_container->addChild(topinfo_bar);
-	topinfo_bar_container->setVisible(TRUE);
+	// topinfo_bar_container->addChild(topinfo_bar);
+	// topinfo_bar_container->setVisible(TRUE);
 
-	if (!gSavedSettings.getBOOL("ShowMiniLocationPanel"))
-	{
-		topinfo_bar->setVisible(FALSE);
-	}
+	// if (!gSavedSettings.getBOOL("ShowMiniLocationPanel"))
+	// {
+	// 	topinfo_bar->setVisible(FALSE);
+	// }
+	// </FS:Zi>
 
 	if ( gHUDView == NULL )
 	{
@@ -1994,26 +2120,95 @@ void LLViewerWindow::initWorldUI()
 	// Note: we need to load the toolbars only *after* the user is logged in and IW
 	if (gToolBarView)
 	{
-		gToolBarView->loadToolbars();
+		if (gSavedSettings.getBOOL("ResetToolbarSettings"))
+		{
+			gToolBarView->loadDefaultToolbars();
+			gSavedSettings.setBOOL("ResetToolbarSettings",FALSE);
+		}
+		else
+		{
+			gToolBarView->loadToolbars();
+		}
 		gToolBarView->setVisible(TRUE);
 	}
+// <FS:AW  opensim destinations and avatar picker>
+// 	LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+// 	if (destinations)
+// 	{
+// 		destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+// 		std::string url = gSavedSettings.getString("DestinationGuideURL");
+// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
+// 		destinations->navigateTo(url, "text/html");
+// 	}
+// 	LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+// 	if (avatar_picker)
+// 	{
+// 		avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+// 		std::string url = gSavedSettings.getString("AvatarPickerURL");
+// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
+// 		avatar_picker->navigateTo(url, "text/html");
+// 	}
+	std::string destination_guide_url;
+#ifdef OPENSIM // <FS:AW optional opensim support>
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+		{
+			destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+		}
+	}
+	else
+#endif // OPENSIM  // <FS:AW optional opensim support>
+	{
+		destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
+	}
 
-	LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-	if (destinations)
-	{
-		destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-		std::string url = gSavedSettings.getString("DestinationGuideURL");
-		url = LLWeb::expandURLSubstitutions(url, LLSD());
-		destinations->navigateTo(url, "text/html");
+	if(!destination_guide_url.empty())
+	{	
+		LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+		if (destinations)
+		{
+			destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+			destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
+			LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
+			destinations->navigateTo(destination_guide_url, "text/html");
+		}
 	}
-	LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-	if (avatar_picker)
+
+	std::string avatar_picker_url;
+#ifdef OPENSIM // <FS:AW optional opensim support>
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-		std::string url = gSavedSettings.getString("AvatarPickerURL");
-		url = LLWeb::expandURLSubstitutions(url, LLSD());
-		avatar_picker->navigateTo(url, "text/html");
+		if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
+		{
+			avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
+		}
 	}
+	else
+#endif // OPENSIM  // <FS:AW optional opensim support>
+	{
+		avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
+	}
+
+	if(!avatar_picker_url.empty())
+	{	
+		LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+		if (avatar_picker)
+		{
+			avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+			avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
+			LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
+			avatar_picker->navigateTo(avatar_picker_url, "text/html");
+		}
+ 	}
+// </FS:AW  opensim destinations and avatar picker>
+
+	// <FS:Zi> Autohide main chat bar if applicable
+	BOOL visible=!gSavedSettings.getBOOL("AutohideChatBar");
+
+	FSNearbyChat::instance().showDefaultChatBar(visible);
+	gSavedSettings.setBOOL("MainChatbarVisible",visible);
+	// </FS:Zi>
 }
 
 // Destroy the UI
@@ -2117,6 +2312,11 @@ void LLViewerWindow::shutdownGL()
 	stop_glerror();
 
 	gGL.shutdown();
+	
+	// <FS:Ansariel> Exodus vignette
+	// This must die before LLVertexBuffer does
+	exoPostProcess::deleteSingleton();
+	// </FS:Ansariel> Exodus vignette
 
 	LLVertexBuffer::cleanupClass();
 
@@ -2227,7 +2427,12 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 		BOOL maximized = mWindow->getMaximized();
 		gSavedSettings.setBOOL("WindowMaximized", maximized);
 
-		if (!maximized)
+//<FS:KC - fix for EXP-1777/EXP-1832>
+        LLCoordScreen window_size;
+		if (!maximized
+			&& mWindow->getSize(&window_size))
+//		if (!maximized)
+//</FS:KC - fix for EXP-1777/EXP-1832>
 		{
 			U32 min_window_width=gSavedSettings.getU32("MinWindowWidth");
 			U32 min_window_height=gSavedSettings.getU32("MinWindowHeight");
@@ -2267,7 +2472,7 @@ void LLViewerWindow::setNormalControlsVisible( BOOL visible )
 
 		// ...and set the menu color appropriately.
 		setMenuBackgroundColor(gAgent.getGodLevel() > GOD_NOT, 
-			LLGridManager::getInstance()->isInProductionGrid());
+			!LLGridManager::getInstance()->isInSLBeta());
 	}
         
 	if ( gStatusBar )
@@ -2276,13 +2481,15 @@ void LLViewerWindow::setNormalControlsVisible( BOOL visible )
 		gStatusBar->setEnabled( visible );	
 	}
 	
-	LLNavigationBar* navbarp = LLUI::getRootView()->findChild<LLNavigationBar>("navigation_bar");
-	if (navbarp)
-	{
-		// when it's time to show navigation bar we need to ensure that the user wants to see it
-		// i.e. ShowNavbarNavigationPanel option is true
-		navbarp->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
-	}
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	//LLNavigationBar* navbarp = LLUI::getRootView()->findChild<LLNavigationBar>("navigation_bar");
+	//if (navbarp)
+	//{
+	//	// when it's time to show navigation bar we need to ensure that the user wants to see it
+	//	// i.e. ShowNavbarNavigationPanel option is true
+	//	navbarp->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
+	//}
+	// </FS:Zi>
 }
 
 void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
@@ -2299,7 +2506,8 @@ void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
 	// god more important than project, proj more important than grid
     if ( god_mode ) 
     {
-		if ( LLGridManager::getInstance()->isInProductionGrid() )
+		//if ( LLGridManager::getInstance()->isInProductionGrid() ) <FS:TM> use our grid code and not LL's
+		if ( !LLGridManager::getInstance()->isInSLBeta() )
 		{
 			new_bg_color = LLUIColorTable::instance().getColor( "MenuBarGodBgColor" );
 		}
@@ -2320,7 +2528,8 @@ void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
 	{
 		new_bg_color = LLUIColorTable::instance().getColor( "MenuBarTestBgColor" );
 	}
-	else if(!LLGridManager::getInstance()->isInProductionGrid())
+	//else if(!LLGridManager::getInstance()->isInProductionGrid()) <FS:TM> use our grid manager code, not LL's
+	else if(LLGridManager::getInstance()->isInSLBeta())
 	{
 		new_bg_color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
 	}
@@ -2382,13 +2591,17 @@ void LLViewerWindow::draw()
 
 	//S32 screen_x, screen_y;
 
-	if (!gSavedSettings.getBOOL("RenderUIBuffer"))
+	//if (!gSavedSettings.getBOOL("RenderUIBuffer"))
+	static LLCachedControl<bool> renderUIBuffer(gSavedSettings, "RenderUIBuffer");
+	if (!renderUIBuffer)
 	{
 		LLUI::sDirtyRect = getWindowRectScaled();
 	}
 
 	// HACK for timecode debugging
-	if (gSavedSettings.getBOOL("DisplayTimecode"))
+	//if (gSavedSettings.getBOOL("DisplayTimecode"))
+	static LLCachedControl<bool> displayTimecode(gSavedSettings, "DisplayTimecode");
+	if (displayTimecode)
 	{
 		// draw timecode block
 		std::string text;
@@ -2438,8 +2651,9 @@ void LLViewerWindow::draw()
 
 		// Draw tool specific overlay on world
 		LLToolMgr::getInstance()->getCurrentTool()->draw();
-
-		if( gAgentCamera.cameraMouselook() || LLFloaterCamera::inFreeCameraMode() )
+        // Only show Mouselookinstructions if FSShowMouselookInstruction is TRUE
+		static LLCachedControl<bool> fsShowMouselookInstructions(gSavedSettings, "FSShowMouselookInstructions");
+		if( fsShowMouselookInstructions && (gAgentCamera.cameraMouselook() || LLFloaterCamera::inFreeCameraMode()) )
 		{
 			drawMouselookInstructions();
 			stop_glerror();
@@ -2495,6 +2709,14 @@ void LLViewerWindow::draw()
 	LLView::sIsDrawing = FALSE;
 //#endif
 }
+
+
+//-TT Window Title Access
+void LLViewerWindow::setTitle(const std::string& win_title)
+{
+	mWindow->setTitle(win_title);
+}
+//-TT
 
 // Takes a single keydown event, usually when UI is visible
 BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
@@ -2575,18 +2797,47 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 
 	if( keyboard_focus )
 	{
-		if ((focusedFloaterName == "nearby_chat") || (focusedFloaterName == "im_container") || (focusedFloaterName == "impanel"))
+		// <FS:Ansariel> [FS Communication UI]
+		//if ((focusedFloaterName == "nearby_chat") || (focusedFloaterName == "im_container") || (focusedFloaterName == "impanel"))
+		//{
+		//	if (gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+		//	{
+		//		// let Control-Up and Control-Down through for chat line history,
+		//		if (!(key == KEY_UP && mask == MASK_CONTROL)
+		//			&& !(key == KEY_DOWN && mask == MASK_CONTROL)
+		//			&& !(key == KEY_UP && mask == MASK_ALT)
+		//			&& !(key == KEY_DOWN && mask == MASK_ALT))
+		//		{
+		//			switch(key)
+		//			{
+		//			case KEY_LEFT:
+		//			case KEY_RIGHT:
+		//			case KEY_UP:
+		//			case KEY_DOWN:
+		//			case KEY_PAGE_UP:
+		//			case KEY_PAGE_DOWN:
+		//			case KEY_HOME:
+		//				// when chatbar is empty or ArrowKeysAlwaysMove set,
+		//				// pass arrow keys on to avatar...
+		//				return FALSE;
+		//			default:
+		//				break;
+		//			}
+		//		}
+		//	}
+		if(FSNearbyChat::instance().defaultChatBarHasFocus() &&
+		   (FSNearbyChat::instance().defaultChatBarIsIdle() ||
+		    gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
 		{
-			if (gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+			// let Control-Up and Control-Down through for chat line history,
+			//<FS:TS> Control-Right and Control-Left too for chat line editing
+			if (!(key == KEY_UP && mask == MASK_CONTROL)
+				&& !(key == KEY_DOWN && mask == MASK_CONTROL)
+				&& !(key == KEY_LEFT && mask == MASK_CONTROL)
+				&& !(key == KEY_RIGHT && mask == MASK_CONTROL))
 			{
-				// let Control-Up and Control-Down through for chat line history,
-				if (!(key == KEY_UP && mask == MASK_CONTROL)
-					&& !(key == KEY_DOWN && mask == MASK_CONTROL)
-					&& !(key == KEY_UP && mask == MASK_ALT)
-					&& !(key == KEY_DOWN && mask == MASK_ALT))
+				switch (key)
 				{
-					switch(key)
-					{
 					case KEY_LEFT:
 					case KEY_RIGHT:
 					case KEY_UP:
@@ -2599,10 +2850,10 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 						return FALSE;
 					default:
 						break;
-					}
 				}
+			}
 		}
-		}
+		// </FS:Ansariel> [FS Communication UI]
 
 		if (keyboard_focus->handleKey(key, mask, FALSE))
 		{
@@ -2631,24 +2882,35 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// If "Pressing letter keys starts local chat" option is selected, we are not in mouselook, 
 	// no view has keyboard focus, this is a printable character key (and no modifier key is 
 	// pressed except shift), then give focus to nearby chat (STORM-560)
-	if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
+
+	// <FS:PP> Attempt to speed up things a little
+	// -- Also removed !gAgentCamera.cameraMouselook() because of FIRE-10906; Pressing letter keys SHOULD move focus to chat when this option is enabled, regardless of being in mouselook or not
+	// -- The need to press Enter key while being in mouselook mode every time to say a sentence is not too coherent with user's expectation, if he/she checked "starts local chat"
+	// if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
+	static LLCachedControl<S32> LetterKeysFocusChatBar(gSavedSettings, "LetterKeysFocusChatBar");
+	if ( LetterKeysFocusChatBar && 
+	// </FS:PP>
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
 		// Initialize nearby chat if it's missing
-		LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
-		if (!nearby_chat)
-		{	
-			LLSD name("im_container");
-			LLFloaterReg::toggleInstanceOrBringToFront(name);
-		}
+		// <FS:Ansariel> [FS Communication UI]
+		//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		//if (!nearby_chat)
+		//{	
+		//	LLSD name("im_container");
+		//	LLFloaterReg::toggleInstanceOrBringToFront(name);
+		//}
 
-		LLChatEntry* chat_editor = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->getChatBox();
-		if (chat_editor)
-		{
-			// passing NULL here, character will be added later when it is handled by character handler.
-			nearby_chat->startChat(NULL);
-			return TRUE;
-		}
+		//LLChatEntry* chat_editor = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->getChatBox();
+		//if (chat_editor)
+		//{
+		//	// passing NULL here, character will be added later when it is handled by character handler.
+		//	nearby_chat->startChat(NULL);
+		//	return TRUE;
+		//}
+		FSNearbyChat::instance().showDefaultChatBar(TRUE);
+		return TRUE;
+		// </FS:Ansariel> [FS Communication UI]
 	}
 
 	// give menus a chance to handle unmodified accelerator keys
@@ -2831,7 +3093,9 @@ void append_xui_tooltip(LLView* viewp, LLToolTip::Params& params)
 			{
 				params.styled_message.add()
 					.text("(" + panelp->getXMLFilename() + ")")
-					.style.color(LLColor4(0.7f, 0.7f, 1.f, 1.f));
+					//<FS:KC> Define in colors.xml instead
+//					 .style.color(LLColor4(0.7f, 0.7f, 1.f, 1.f));
+					.style.color(LLUIColorTable::instance().getColor("XUITooltipFileName"));
 			}
 			params.styled_message.add().text("/");
 		}
@@ -2847,17 +3111,19 @@ void LLViewerWindow::updateUI()
 
 	static std::string last_handle_msg;
 
-	if (gLoggedInTime.getStarted())
-	{
-		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("DestinationGuideHintTimeout"))
-		{
-			LLFirstUse::notUsingDestinationGuide();
-		}
-		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("SidePanelHintTimeout"))
-		{
-			LLFirstUse::notUsingSidePanel();
-		}
-	}
+	// <FS:Ansariel> We don't show the hints anyway, so needless to check here
+	//if (gLoggedInTime.getStarted())
+	//{
+	//	if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("DestinationGuideHintTimeout"))
+	//	{
+	//		LLFirstUse::notUsingDestinationGuide();
+	//	}
+	//	if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("SidePanelHintTimeout"))
+	//	{
+	//		LLFirstUse::notUsingSidePanel();
+	//	}
+	//}
+	// </FS:Ansariel>
 
 	LLConsole::updateClass();
 
@@ -2878,7 +3144,8 @@ void LLViewerWindow::updateUI()
 	if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_RAYCAST))
 	{
 		gDebugRaycastFaceHit = -1;
-		gDebugRaycastObject = cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		gDebugRaycastObject = cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE, FALSE,
 											  &gDebugRaycastFaceHit,
 											  &gDebugRaycastIntersection,
 											  &gDebugRaycastTexCoord,
@@ -2886,7 +3153,15 @@ void LLViewerWindow::updateUI()
 											  &gDebugRaycastTangent,
 											  &gDebugRaycastStart,
 											  &gDebugRaycastEnd);
-
+// [/SL:KB]
+//		gDebugRaycastObject = cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE,
+//											  &gDebugRaycastFaceHit,
+//											  &gDebugRaycastIntersection,
+//											  &gDebugRaycastTexCoord,
+//											  &gDebugRaycastNormal,
+//											  &gDebugRaycastBinormal,
+//											  &gDebugRaycastStart,
+//											  &gDebugRaycastEnd);
 		gDebugRaycastParticle = gPipeline.lineSegmentIntersectParticle(gDebugRaycastStart, gDebugRaycastEnd, &gDebugRaycastParticleIntersection, NULL);
 	}
 
@@ -3124,7 +3399,9 @@ void LLViewerWindow::updateUI()
 			LLRect screen_sticky_rect = mRootView->getLocalRect();
 			S32 local_x, local_y;
 
-			if (gSavedSettings.getBOOL("DebugShowXUINames"))
+			//if (gSavedSettings.getBOOL("DebugShowXUINames"))
+			static LLCachedControl<bool> debugShowXUINames(gSavedSettings, "DebugShowXUINames");
+			if (debugShowXUINames)
 			{
 				LLToolTip::Params params;
 
@@ -3306,7 +3583,9 @@ void LLViewerWindow::updateMouseDelta()
 
 	LLVector2 mouse_vel; 
 
-	if (gSavedSettings.getBOOL("MouseSmooth"))
+	//if (gSavedSettings.getBOOL("MouseSmooth"))
+	static LLCachedControl<bool> mouseSmooth(gSavedSettings, "MouseSmooth");
+	if (mouseSmooth)
 	{
 		static F32 fdx = 0.f;
 		static F32 fdy = 0.f;
@@ -3602,7 +3881,11 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 					BOOL moveable_object_selected = FALSE;
 					BOOL all_selected_objects_move = TRUE;
 					BOOL all_selected_objects_modify = TRUE;
-					BOOL selecting_linked_set = !gSavedSettings.getBOOL("EditLinkedParts");
+					// <FS:Ansariel> gSavedSettings replacement
+					//BOOL selecting_linked_set = !gSavedSettings.getBOOL("EditLinkedParts");
+					static LLCachedControl<bool> editLinkedParts(gSavedSettings, "EditLinkedParts");
+					BOOL selecting_linked_set = !(BOOL)editLinkedParts;
+					// </FS:Ansariel>
 
 					for (LLObjectSelection::iterator iter = LLSelectMgr::getInstance()->getSelection()->begin();
 						 iter != LLSelectMgr::getInstance()->getSelection()->end(); iter++)
@@ -3617,6 +3900,15 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 						{
 							moveable_object_selected = TRUE;
 							this_object_movable = TRUE;
+
+// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c) | Modified: RLVa-0.2.0g
+							if ( (rlv_handler_t::isEnabled()) && 
+								 ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))) )
+							{
+								if ((isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == object->getRootEdit()))
+									moveable_object_selected = this_object_movable = FALSE;
+							}
+// [/RLVa:KB]
 						}
 						all_selected_objects_move = all_selected_objects_move && this_object_movable;
 						all_selected_objects_modify = all_selected_objects_modify && object->permModify();
@@ -3698,7 +3990,10 @@ BOOL LLViewerWindow::clickPointOnSurfaceGlobal(const S32 x, const S32 y, LLViewe
 	return intersect;
 }
 
-void LLViewerWindow::pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback)(const LLPickInfo& info), BOOL pick_transparent)
+//void LLViewerWindow::pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback)(const LLPickInfo& info), BOOL pick_transparent)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+void LLViewerWindow::pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback)(const LLPickInfo& info), BOOL pick_transparent, BOOL pick_rigged)
+// [/SL:KB]
 {
 	BOOL in_build_mode = LLFloaterReg::instanceVisible("build");
 	if (in_build_mode || LLDrawPoolAlpha::sShowDebugAlpha)
@@ -3708,7 +4003,10 @@ void LLViewerWindow::pickAsync(S32 x, S32 y_from_bot, MASK mask, void (*callback
 		pick_transparent = TRUE;
 	}
 
-	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, FALSE, TRUE, callback);
+//	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, FALSE, TRUE, callback);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	LLPickInfo pick_info(LLCoordGL(x, y_from_bot), mask, pick_transparent, FALSE, pick_rigged, TRUE, callback);
+// [/SL:KB]
 	schedulePick(pick_info);
 }
 
@@ -3764,7 +4062,10 @@ void LLViewerWindow::returnEmptyPicks()
 }
 
 // Performs the GL object/land pick.
-LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_transparent, BOOL pick_particle)
+//LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_transparent, BOOL pick_particle)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_transparent, BOOL pick_particle, BOOL pick_rigged)
+// [/SL:KB]
 {
 	BOOL in_build_mode = LLFloaterReg::instanceVisible("build");
 	if (in_build_mode || LLDrawPoolAlpha::sShowDebugAlpha)
@@ -3776,7 +4077,10 @@ LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_trans
 	
 	// shortcut queueing in mPicks and just update mLastPick in place
 	MASK	key_mask = gKeyboard->currentMask(TRUE);
-	mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_particle, TRUE, NULL);
+	//mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_particle, TRUE, NULL);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, pick_particle, pick_rigged, TRUE, NULL);
+// [/SL:KB]
 	mLastPick.fetchResults();
 
 	return mLastPick;
@@ -3812,6 +4116,9 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 												LLViewerObject *this_object,
 												S32 this_face,
 												BOOL pick_transparent,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+												BOOL pick_rigged,
+// [/SL:KB]
 												S32* face_hit,
 												LLVector4a *intersection,
 												LLVector2 *uv,
@@ -3882,16 +4189,25 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 	{
 		if (this_object->isHUDAttachment()) // is a HUD object?
 		{
-			if (this_object->lineSegmentIntersect(mh_start, mh_end, this_face, pick_transparent,
+//			if (this_object->lineSegmentIntersect(mh_start, mh_end, this_face, pick_transparent,
+//												  face_hit, intersection, uv, normal, tangent))
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+			if (this_object->lineSegmentIntersect(mh_start, mh_end, this_face, pick_transparent, pick_rigged,
 												  face_hit, intersection, uv, normal, tangent))
+
+// [/SL:KB]
 			{
 				found = this_object;
 			}
 		}
 		else // is a world object
 		{
-			if (this_object->lineSegmentIntersect(mw_start, mw_end, this_face, pick_transparent,
+//			if (this_object->lineSegmentIntersect(mw_start, mw_end, this_face, pick_transparent,
+//												  face_hit, intersection, uv, normal, tangent))
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+			if (this_object->lineSegmentIntersect(mw_start, mw_end, this_face, pick_transparent, pick_rigged,
 												  face_hit, intersection, uv, normal, tangent))
+// [/SL:KB]
 			{
 				found = this_object;
 			}
@@ -3902,14 +4218,45 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 		found = gPipeline.lineSegmentIntersectInHUD(mh_start, mh_end, pick_transparent,
 													face_hit, intersection, uv, normal, tangent);
 
+// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c) | Modified: RLVa-1.2.0c
+		if ( (rlv_handler_t::isEnabled()) && (found) &&
+			 (LLToolCamera::getInstance()->hasMouseCapture()) && (gKeyboard->currentMask(TRUE) & MASK_ALT) )
+		{
+			found = NULL;
+		}
+// [/RLVa:KB]
 		if (!found) // if not found in HUD, look in world:
 		{
-			found = gPipeline.lineSegmentIntersectInWorld(mw_start, mw_end, pick_transparent,
+//			found = gPipeline.lineSegmentIntersectInWorld(mw_start, mw_end, pick_transparent,
+//														  face_hit, intersection, uv, normal, tangent);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+			found = gPipeline.lineSegmentIntersectInWorld(mw_start, mw_end, pick_transparent, pick_rigged,
 														  face_hit, intersection, uv, normal, tangent);
+
+// [/SL:KB]
 			if (found && !pick_transparent)
 			{
 				gDebugRaycastIntersection = *intersection;
 			}
+		}
+
+// [RLVa:KB] - Checked: 2010-01-02 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
+#ifdef RLV_EXTENSION_CMD_INTERACT
+		if ( (rlv_handler_t::isEnabled()) && (found) && (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) )
+		{
+			// Allow picking if:
+			//   - the drag-and-drop tool is active (allows inventory offers)
+			//   - the camera tool is active
+			//   - the pie tool is active *and* we picked our own avie (allows "mouse steering" and the self pie menu)
+			LLTool* pCurTool = LLToolMgr::getInstance()->getCurrentTool();
+			if ( (LLToolDragAndDrop::getInstance() != pCurTool) && 
+					(!LLToolCamera::getInstance()->hasMouseCapture()) &&
+					((LLToolPie::getInstance() != pCurTool) || (gAgent.getID() != found->getID())) )
+			{
+				found = NULL;
+			}
+#endif // RLV_EXTENSION_CMD_INTERACT
+// [/RLVa:KB]
 		}
 	}
 		
@@ -4207,13 +4554,26 @@ void LLViewerWindow::resetSnapshotLoc()
 // static
 void LLViewerWindow::movieSize(S32 new_width, S32 new_height)
 {
-	LLCoordWindow size;
-	LLCoordWindow new_size(new_width, new_height);
-	gViewerWindow->getWindow()->getSize(&size);
-	if ( size != new_size )
-	{
-		gViewerWindow->getWindow()->setSize(new_size);
-	}
+	// FS:TS FIRE-6182: Set Window Size sets random size each time
+	// Don't use LLCoordWindow, since the chosen resolution winds up
+	// with position dependent numbers added each time. Instead, we use
+	// LLCoordScreen, which avoids this. Fix from Niran's Viewer.
+	// LLCoordWindow size;
+	// LLCoordWindow new_size(new_width, new_height);
+	// gViewerWindow->getWindow()->getSize(&size);
+	// if ( size != new_size )
+	// {
+	//	gViewerWindow->getWindow()->setSize(new_size.convert());
+	// }
+	U32 nChromeW(0), nChromeH(0);
+	gViewerWindow->getWindow()->getWindowChrome( nChromeW, nChromeH );
+
+	LLCoordScreen new_size;
+	new_size.mX = new_width + nChromeW;
+	new_size.mY = new_height + nChromeH;
+	gViewerWindow->getWindow()->setSize(new_size);
+	// FS:TS FIRE-6182 end
+
 }
 
 BOOL LLViewerWindow::saveSnapshot( const std::string& filepath, S32 image_width, S32 image_height, BOOL show_ui, BOOL do_rebuild, ESnapshotType type)
@@ -4247,7 +4607,10 @@ BOOL LLViewerWindow::saveSnapshot( const std::string& filepath, S32 image_width,
 
 void LLViewerWindow::playSnapshotAnimAndSound()
 {
-	if (gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+	// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+	// if (gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+	if (gSavedSettings.getBOOL("PlayModeUISndSnapshot"))
+	// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	{
 		return;
 	}
@@ -4324,6 +4687,9 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		// If the user wants the UI, limit the output size to the available screen size
 		image_width  = llmin(image_width, window_width);
 		image_height = llmin(image_height, window_height);
+		
+		// <FS:CR> Hide currency balance in snapshots
+		gStatusBar->showBalance((bool)gSavedSettings.getBOOL("FSShowCurrencyBalanceInSnapshots"));
 	}
 
 	S32 original_width = 0;
@@ -4397,10 +4763,12 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	}
 	else
 	{
+		gStatusBar->showBalance(true);	// <FS:CR> Hide currency balance in snapshots
 		return FALSE ;
 	}
 	if (raw->isBufferInvalid())
 	{
+		gStatusBar->showBalance(true);	// <FS:CR> Hide currency balance in snapshots
 		return FALSE ;
 	}
 
@@ -4575,6 +4943,8 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		send_agent_resume();
 	}
 	
+	gStatusBar->showBalance(true);	// <FS:CR> Hide currency balance in snapshots
+	
 	return ret;
 }
 
@@ -4713,11 +5083,28 @@ void LLViewerWindow::revealIntroPanel()
 	}
 }
 
-void LLViewerWindow::setShowProgress(const BOOL show)
+void LLViewerWindow::setShowProgress(const BOOL show,BOOL fullscreen)
 {
-	if (mProgressView)
+	if(show)
 	{
-		mProgressView->setVisible(show);
+		if(fullscreen)
+		{
+			if(mProgressView)
+				mProgressView->fade(TRUE);
+		}
+		else
+		{
+			if(mProgressViewMini)
+				mProgressViewMini->setVisible(TRUE);
+		}
+	}
+	else
+	{
+		if(mProgressView && mProgressView->getVisible())
+			mProgressView->fade(FALSE);
+
+		if(mProgressViewMini)
+			mProgressViewMini->setVisible(FALSE);
 	}
 }
 
@@ -4740,6 +5127,11 @@ void LLViewerWindow::setProgressString(const std::string& string)
 	{
 		mProgressView->setText(string);
 	}
+
+	if (mProgressViewMini)
+	{
+		mProgressViewMini->setText(string);
+	}
 }
 
 void LLViewerWindow::setProgressMessage(const std::string& msg)
@@ -4756,6 +5148,11 @@ void LLViewerWindow::setProgressPercent(const F32 percent)
 	{
 		mProgressView->setPercent(percent);
 	}
+
+	if (mProgressViewMini)
+	{
+		mProgressViewMini->setPercent(percent);
+	}
 }
 
 void LLViewerWindow::setProgressCancelButtonVisible( BOOL b, const std::string& label )
@@ -4763,6 +5160,11 @@ void LLViewerWindow::setProgressCancelButtonVisible( BOOL b, const std::string& 
 	if (mProgressView)
 	{
 		mProgressView->setCancelButtonVisible( b, label );
+	}
+
+	if (mProgressViewMini)
+	{
+		mProgressViewMini->setCancelButtonVisible( b, label );
 	}
 }
 
@@ -4879,7 +5281,7 @@ void LLViewerWindow::restoreGL(const std::string& progress_message)
 		{
 			gRestoreGLTimer.reset();
 			gRestoreGL = TRUE;
-			setShowProgress(TRUE);
+			setShowProgress(TRUE,TRUE);
 			setProgressString(progress_message);
 		}
 		llinfos << "...Restoring GL done" << llendl;
@@ -4901,7 +5303,9 @@ void LLViewerWindow::initFonts(F32 zoom_factor)
 	LLFontGL::initClass( gSavedSettings.getF32("FontScreenDPI"),
 								mDisplayScale.mV[VX] * zoom_factor,
 								mDisplayScale.mV[VY] * zoom_factor,
-								gDirUtilp->getAppRODataDir());
+								gDirUtilp->getAppRODataDir(),
+								gSavedSettings.getString("FSFontSettingsFile"),
+								gSavedSettings.getF32("FSFontSizeAdjustment"));
 	// Force font reloads, which can be very slow
 	LLFontGL::loadDefaultFonts();
 }
@@ -5093,7 +5497,26 @@ S32 LLViewerWindow::getChatConsoleBottomPad()
 	S32 offset = 0;
 
 	if(gToolBarView)
-		offset += gToolBarView->getBottomToolbar()->getRect().getHeight();
+	{
+		// <FS:KC> Tie console to legacy snap edge when possible
+		static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+		if (legacy_snap)
+		{
+			LLRect snap_rect = gFloaterView->getSnapRect();
+			offset = snap_rect.mBottom;
+		}// </FS:KC> Tie console to legacy snap edge when possible
+		else
+		{
+			// FS:Ansariel This gets called every frame, so don't call getChild/findChild every time!
+			offset += gToolBarView->getBottomToolbar()->getRect().getHeight();
+			LLView* chat_stack = gToolBarView->getBottomChatStack();
+			if (chat_stack)
+			{
+				offset = chat_stack->getRect().getHeight();
+			}
+		}
+	}
+	// </FS:Ansariel>
 
 	return offset;
 }
@@ -5112,9 +5535,10 @@ LLRect LLViewerWindow::getChatConsoleRect()
 
 	console_rect.mLeft   += CONSOLE_PADDING_LEFT; 
 
-	static const BOOL CHAT_FULL_WIDTH = gSavedSettings.getBOOL("ChatFullWidth");
-
-	if (CHAT_FULL_WIDTH)
+	// <FS:Ansariel> This also works without relog!
+	static LLCachedControl<bool> chatFullWidth(gSavedSettings, "ChatFullWidth");
+	if (chatFullWidth)
+	// </FS:Ansariel>
 	{
 		console_rect.mRight -= CONSOLE_PADDING_RIGHT;
 	}
@@ -5122,8 +5546,51 @@ LLRect LLViewerWindow::getChatConsoleRect()
 	{
 		// Make console rect somewhat narrow so having inventory open is
 		// less of a problem.
-		console_rect.mRight  = console_rect.mLeft + 2 * getWindowWidthScaled() / 3;
+
+		//AO, Have console reuse/respect the desired nearby popup width set in NearbyToastWidth
+		//console_rect.mRight  = console_rect.mLeft + 2 * getWindowWidthScaled() / 3;
+		static LLCachedControl<S32> nearbyToastWidth(gSavedSettings, "NearbyToastWidth");
+		F32 percentage = nearbyToastWidth / 100.0;
+		console_rect.mRight = S32((console_rect.mRight - CONSOLE_PADDING_RIGHT ) * percentage);
+		//</AO>
 	}
+
+	// <FS:Ansariel> Push the chat console out of the way of the vertical toolbars
+	if (gToolBarView)
+	{
+		// <FS:KC> Tie console to legacy snap edge when possible
+		static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+		if (legacy_snap)
+		{
+			LLRect snap_rect = gFloaterView->getSnapRect();
+			if (console_rect.mRight > snap_rect.mRight)
+			{
+				console_rect.mRight = snap_rect.mRight;
+			}
+
+			if (console_rect.mLeft < snap_rect.mLeft)
+			{
+				console_rect.mLeft = snap_rect.mLeft;
+			}
+		}// </FS:KC> Tie console to legacy snap edge when possible
+		else
+		{
+			LLToolBar* toolbar_left = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_LEFT);
+			if (toolbar_left && toolbar_left->hasButtons())
+			{
+				console_rect.mLeft += toolbar_left->getRect().getWidth();
+			}
+
+			LLToolBar* toolbar_right = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_RIGHT);
+			LLRect toolbar_right_screen_rect;
+			toolbar_right->localRectToScreen(toolbar_right->getRect(), &toolbar_right_screen_rect);
+			if (toolbar_right && toolbar_right->hasButtons() && console_rect.mRight >= toolbar_right_screen_rect.mLeft)
+			{
+				console_rect.mRight -= toolbar_right->getRect().getWidth();
+			}
+		}
+	}
+	// </FS:Ansariel>
 
 	return console_rect;
 }
@@ -5149,7 +5616,8 @@ void LLViewerWindow::setUIVisibility(bool visible)
 		gToolBarView->setToolBarsVisible(visible);
 	}
 
-	LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
 	LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : FALSE);
 	mRootView->getChildView("status_bar_container")->setVisible(visible);
 }
@@ -5178,7 +5646,11 @@ LLPickInfo::LLPickInfo()
 	  mBinormal(),
 	  mHUDIcon(NULL),
 	  mPickTransparent(FALSE),
-	  mPickParticle(FALSE)
+//	  mPickParticle(FALSE)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	  mPickParticle(FALSE),
+	  mPickRigged(FALSE)
+// [/SL:KB]
 {
 }
 
@@ -5186,6 +5658,9 @@ LLPickInfo::LLPickInfo(const LLCoordGL& mouse_pos,
 		       MASK keyboard_mask, 
 		       BOOL pick_transparent,
 			   BOOL pick_particle,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		       BOOL pick_rigged,
+// [/SL:KB]
 		       BOOL pick_uv_coords,
 		       void (*pick_callback)(const LLPickInfo& pick_info))
 	: mMousePt(mouse_pos),
@@ -5202,7 +5677,11 @@ LLPickInfo::LLPickInfo(const LLCoordGL& mouse_pos,
 	  mBinormal(),
 	  mHUDIcon(NULL),
 	  mPickTransparent(pick_transparent),
-	  mPickParticle(pick_particle)
+//	  mPickParticle(pick_particle)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	  mPickParticle(pick_particle),
+	  mPickRigged(pick_rigged)
+// [/SL:KB]
 {
 }
 
@@ -5230,10 +5709,14 @@ void LLPickInfo::fetchResults()
 		delta.setSub(intersection, origin);
 		icon_dist = delta.getLength3().getF32();
 	}
-
+//	LLViewerObject* hit_object = gViewerWindow->cursorIntersect(mMousePt.mX, mMousePt.mY, 512.f,
+//									NULL, -1, mPickTransparent, &face_hit,
+//									&intersection, &uv, &normal, &binormal);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 	LLViewerObject* hit_object = gViewerWindow->cursorIntersect(mMousePt.mX, mMousePt.mY, 512.f,
-									NULL, -1, mPickTransparent, &face_hit,
+									NULL, -1, mPickTransparent, mPickRigged, &face_hit,
 									&intersection, &uv, &normal, &tangent, &start, &end);
+// [/SL:KB]
 	
 	mPickPt = mMousePt;
 
@@ -5376,13 +5859,22 @@ void LLPickInfo::getSurfaceInfo()
 
 	if (objectp)
 	{
+//		if (gViewerWindow->cursorIntersect(llround((F32)mMousePt.mX), llround((F32)mMousePt.mY), 1024.f,
+//										   objectp, -1, mPickTransparent,
+//										   &mObjectFace,
+//										   &mIntersection,
+//										   &mSTCoords,
+//										   &mNormal,
+//										   &mBinormal))
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
 		if (gViewerWindow->cursorIntersect(llround((F32)mMousePt.mX), llround((F32)mMousePt.mY), 1024.f,
-										   objectp, -1, mPickTransparent,
+										   objectp, -1, mPickTransparent, mPickRigged,
 										   &mObjectFace,
 										   &intersection,
 										   &mSTCoords,
 										   &normal,
 										   &tangent))
+// [/SL:KB]
 		{
 			// if we succeeded with the intersect above, compute the texture coordinates:
 

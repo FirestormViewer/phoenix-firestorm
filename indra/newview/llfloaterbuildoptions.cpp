@@ -34,34 +34,14 @@
 #include "llfloaterbuildoptions.h"
 #include "lluictrlfactory.h"
 
-#include "llcombobox.h"
-#include "llselectmgr.h"
-
 //
 // Methods
 //
-
 LLFloaterBuildOptions::LLFloaterBuildOptions(const LLSD& key)
   : LLFloater(key)
 {
 }
 
 LLFloaterBuildOptions::~LLFloaterBuildOptions()
-{}
-
-BOOL LLFloaterBuildOptions::postBuild()
 {
-	return TRUE;
-}
-
-// virtual
-void LLFloaterBuildOptions::onOpen(const LLSD& key)
-{
-	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
-}
-
-// virtual
-void LLFloaterBuildOptions::onClose(bool app_quitting)
-{
-	mObjectSelection = NULL;
 }

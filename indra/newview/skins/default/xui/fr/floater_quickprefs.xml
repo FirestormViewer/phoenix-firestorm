@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<floater name="quickprefs"
+    title="Préférences Rapides">
+	<panel name="quickprefs">
+        <text name="Draw Distance"
+			tool_tip="Distance d'affichage. Si Préférences → FS → CmdLine est activé, taper dd [nb m] en chat (Ex : dd 128 = distance d'affichage à 128m)">
+            Dist. d'affichage
+        </text>
+        <text name="Maximum bandwidth"
+			tool_tip="Bande passante allouée à ce viewer. Défaut 1000">
+            Bande passante
+        </text>
+        <text name="Particles"
+			tool_tip="Nombre de particules maximum affichées. Dépasser 4096 peut provoquer du lag">
+            Particules
+        </text>
+        <text name="Max Node"
+			tool_tip="Taille maximum (en kb) d'un noeud unique de vertex (vertex = sommet en infographie). Défaut : 8192">
+            Vertex/objet
+        </text>
+        <text name="LOD Factor"
+			tool_tip="(LOD : Niveau de Détail) Plus il est élevé, plus un petit objets s'affiche correctement de loin. Défaut : 2">
+            LOD
+        </text>
+        <text name="Max Avatars"
+			tool_tip="Nombre maximum d'avatars à afficher en 3D. Défaut 12">
+            Avatars en 3D
+        </text>
+        <text name="Height Offset"
+			tool_tip="Décalage vertical de l'avatar (axe Z). Effet immédiat. Défaut : 0">
+            Décal. Vert. Av.
+        </text>
+        <text name="WL Sky"
+			tool_tip="Paramètres WindLight prédéfinis pour le ciel.">
+            WL Ciel
+        </text>
+        <text name="WL Water"
+			tool_tip="Paramètres WindLight prédéfinis pour l'eau.">
+            WL Eau
+        </text>
+	</panel>
+</floater>

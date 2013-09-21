@@ -68,7 +68,10 @@ LLVOWater::LLVOWater(const LLUUID &id,
 {
 	// Terrain must draw during selection passes so it can block objects behind it.
 	mbCanSelect = FALSE;
-	setScale(LLVector3(256.f, 256.f, 0.f)); // Hack for setting scale for bounding boxes/visibility.
+// <FS:CR> Aurora Sim
+	//setScale(LLVector3(256.f, 256.f, 0.f)); // Hack for setting scale for bounding boxes/visibility.
+	setScale(LLVector3(mRegionp->getWidth(), mRegionp->getWidth(), 0.f));
+// </FS:CR> Aurora Sim
 
 	mUseTexture = TRUE;
 	mIsEdgePatch = FALSE;

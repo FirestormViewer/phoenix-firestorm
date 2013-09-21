@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Display Name" title="ANZEIGENAMEN ÄNDERN">
+<floater name="Display Name" title="Anzeigenamen ändern">
 	<text name="info_text">
 		Der Anzeigename ist der Name, den Sie Ihrem Avatar geben. Sie können ihn einmal pro Woche ändern.
 	</text>

@@ -74,6 +74,11 @@ template <typename T> T* LL_NEXT_ALIGNED_ADDRESS_64(T* address)
 
 #define LL_ALIGN_16(var) LL_ALIGN_PREFIX(16) var LL_ALIGN_POSTFIX(16)
 
+// <FS:ND> No tcmalloc
+#ifdef ND_NO_TCMALLOC
+#include "nd/ndmemory.h"
+#else
+
 inline void* ll_aligned_malloc( size_t size, int align )
 {
 #if defined(LL_WINDOWS)
@@ -181,6 +186,7 @@ inline void ll_aligned_free_32(void *p)
 	free(p); // posix_memalign() is compatible with heap deallocator
 #endif
 }
+#endif // </FS:ND> No tcmalloc
 
 
 // Copy words 16-byte blocks from src to dst. Source and destination MUST NOT OVERLAP. 
@@ -195,7 +201,7 @@ inline void ll_memcpy_nonaliased_aligned_16(char* __restrict dst, const char* __
 	ll_assert_aligned(src,16);
 	ll_assert_aligned(dst,16);
 	assert((src < dst) ? ((src + bytes) < dst) : ((dst + bytes) < src));
-	assert(bytes%16==0);
+	// assert(bytes%16==0);
 
 	char* end = dst + bytes;
 
@@ -244,14 +250,24 @@ inline void ll_memcpy_nonaliased_aligned_16(char* __restrict dst, const char* __
 		}
 	}
 
+
+	// <FS:ND> There is no guarantee that the remaining about of bytes left is a number of 16. If that's not the case using copy4a will overwrite and trash memory behind the end of dst
+
 	// Copy remainder 16b tail chunks (or ALL 16b chunks for sub-64b copies)
 	//
-	while (dst < end)
-	{
-		_mm_store_ps((F32*)dst, _mm_load_ps((F32*)src));
-		dst += 16;
-		src += 16;
-	}
+	// while (dst < end)
+	// {
+	// 	_mm_store_ps((F32*)dst, _mm_load_ps((F32*)src));
+	// 	dst += 16;
+	// 	src += 16;
+	// }
+
+	bytes = (U8*)end-(U8*)dst;
+	if( bytes > 0 )
+		memcpy( dst, src, bytes );
+
+	// </FS:ND>
+
 }
 
 #ifndef __DEBUG_PRIVATE_MEM__
@@ -387,7 +403,9 @@ public:
 		{
 			bool operator()(const LLMemoryBlock* const& lhs, const LLMemoryBlock* const& rhs)
 			{
-				return (U32)lhs->getBuffer() < (U32)rhs->getBuffer();
+				//return (U32)lhs->getBuffer() < (U32)rhs->getBuffer();
+				//<ND/> 64 bit fix
+				return reinterpret_cast<unsigned char*>(lhs->getBuffer()) < reinterpret_cast<unsigned char*>(rhs->getBuffer());
 			}
 		};
 	};
@@ -418,7 +436,8 @@ public:
 		void dump() ;
 
 	private:
-		U32 getPageIndex(U32 addr) ;
+//		U32 getPageIndex(U32 addr) ;
+		U32 getPageIndex(void* addr) ; // <ND/> 64 bit fix
 		U32 getBlockLevel(U32 size) ;
 		U16 getPageLevel(U32 size) ;
 		LLMemoryBlock* addBlock(U32 blk_idx) ;
@@ -570,6 +589,9 @@ public:
 	static void  freeMem(LLPrivateMemoryPool* poolp, void* addr) ;
 };
 
+// <FS:ND> No tcmalloc
+#ifndef ND_NO_TCMALLOC
+
 //-------------------------------------------------------------------------------------
 #if __DEBUG_PRIVATE_MEM__
 #define ALLOCATE_MEM(poolp, size) LLPrivateMemoryPoolManager::allocate((poolp), (size), __FUNCTION__, __LINE__)
@@ -578,6 +600,9 @@ public:
 #endif
 #define FREE_MEM(poolp, addr) LLPrivateMemoryPoolManager::freeMem((poolp), (addr))
 //-------------------------------------------------------------------------------------
+
+#endif
+// </FS:ND> No tcmalloc
 
 //
 //the below singleton is used to test the private memory pool.
@@ -665,4 +690,15 @@ void  LLPrivateMemoryPoolTester::operator delete[](void* addr)
 
 
 
+
+// <FS:ND> HACK! There are times when there's pointer that are not 0, but 1
+// This is to find those and research where they are coming.
+inline bool ndIsValidPtr( void const *aPtr )
+{
+	if( 0 == aPtr )
+		return false;
+	llassert_always( aPtr > (void*)0x3FF );
+	return true;
+}
+// </FS:ND>
 #endif

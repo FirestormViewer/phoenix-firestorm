@@ -61,6 +61,10 @@
 #include "curl/curl.h"
 #include "llstreamtools.h"
 
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+#include <boost/algorithm/string.hpp>
+// [/RLVa:KB]
+
 LLWLParamManager::LLWLParamManager() :
 
 	//set the defaults for the controls
@@ -487,10 +491,28 @@ bool LLWLParamManager::applyDayCycleParams(const LLSD& params, LLEnvKey::EScope 
 	return true;
 }
 
-bool LLWLParamManager::applySkyParams(const LLSD& params)
+bool LLWLParamManager::applySkyParams(const LLSD& params, bool interpolate /*= false*/)
 {
-	mAnimator.deactivate();
-	mCurParams.setAll(params);
+	if (params.size() == 0)
+	{
+		llwarns << "Undefined sky params" << llendl;
+		return false;
+	}
+
+	if (interpolate)
+	{
+		if (!mAnimator.getIsRunning())
+			resetAnimator(0.f, true); 
+		
+		if (!params.has("mName") || mCurParams.mName != params["mName"])
+			LLWLParamManager::getInstance()->mAnimator.startInterpolationSky(params);
+	}
+	else
+	{
+		mAnimator.deactivate();
+		mCurParams.setAll(params);
+	}
+
 	return true;
 }
 
@@ -644,10 +666,39 @@ void LLWLParamManager::getPresetNames(preset_name_list_t& region, preset_name_li
 	}
 }
 
+// [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
+const std::string& LLWLParamManager::findPreset(const std::string& strPresetName, LLEnvKey::EScope eScope)
+{
+	for (std::map<LLWLParamKey, LLWLParamSet>::const_iterator itList = mParamList.begin(); itList != mParamList.end(); itList++)
+	{
+		const LLWLParamKey& wlKey = itList->first;
+		if ( (wlKey.scope == eScope) && (boost::iequals(wlKey.name, strPresetName)) )
+			return wlKey.name;
+	}
+	return LLStringUtil::null;
+}
+// [/RLVa:KB]
+
 void LLWLParamManager::getUserPresetNames(preset_name_list_t& user) const
 {
 	preset_name_list_t region, sys; // unused
 	getPresetNames(region, user, sys);
+}
+
+void LLWLParamManager::getLocalPresetNames(preset_name_list_t& local) const
+{
+	local.clear();
+
+	for (std::map<LLWLParamKey, LLWLParamSet>::const_iterator it = mParamList.begin(); it != mParamList.end(); it++)
+	{
+		const LLWLParamKey& key = it->first;
+		const std::string& name = key.name;
+
+		if (key.scope != LLEnvKey::SCOPE_REGION)
+		{
+			local.push_back(name);
+		}
+	}
 }
 
 void LLWLParamManager::getPresetKeys(preset_key_list_t& keys) const

@@ -5,7 +5,7 @@
  height="372"
  layout="topleft"
  min_height="300"
- min_width="450"
+ min_width="545"
  name="top_objects"
  help_topic="top_objects"
  title="Top Objects"
@@ -228,12 +228,12 @@
     <button
      follows="bottom|right"
      height="22"
-     image_overlay="Refresh_Off"
+     label="Refresh"
      layout="topleft"
      name="refresh_btn"
      right="-8"
      top_pad="5"
-     width="23">
+     width="100">
       <button.commit_callback
           function="TopObjects.Refresh" />
     </button>
@@ -242,10 +242,10 @@
      height="23"
      label="Return Selected"
      layout="topleft"
-     left="112"
+     left="5"
      top_delta="0"
      name="return_selected_btn"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.ReturnSelected" />
     </button>
@@ -257,9 +257,34 @@
      left_pad="10"
      name="return_all_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.ReturnAll" />
+    </button>
+    <button
+     follows="bottom|left"
+     height="23"
+     label="Teleport to"
+     layout="topleft"
+     left_pad="10"
+     name="teleport_to_btn"
+     top_delta="0"
+     width="100">
+      <button.commit_callback
+          function="TopObjects.TeleportToObject" />
+    </button>
+    <button
+     enabled="false"
+     follows="bottom|left"
+     height="23"
+     label="Profile"
+     layout="topleft"
+     left_pad="10"
+     name="profile_btn"
+     top_delta="0"
+     width="100">
+      <button.commit_callback
+          function="TopObjects.Profile" />
     </button>
     <button
      follows="bottom|left"
@@ -267,9 +292,9 @@
      label="Disable Selected"
      layout="topleft"
 
-     left="112"
+     left="5"
      name="disable_selected_btn"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.DisableSelected" />
     </button>
@@ -281,8 +306,34 @@
      left_pad="10"
      name="disable_all_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.DisableAll" />
+    </button>
+    <button
+     enabled_control="UseLSLBridge"
+     follows="bottom|left"
+     height="23"
+     label="Script Info"
+     layout="topleft"
+     left_pad="10"
+     name="script_info_btn"
+     top_delta="0"
+     width="100">
+      <button.commit_callback
+          function="TopObjects.ScriptInfo" />
+    </button>
+    <button
+     enabled="false"
+     follows="bottom|left"
+     height="23"
+     label="Estate Kick"
+     layout="topleft"
+     left_pad="10"
+     name="estate_kick_btn"
+     top_delta="0"
+     width="100">
+      <button.commit_callback
+          function="TopObjects.Kick" />
     </button>
 </floater>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel name="topinfo_bar">
+   <text name="parcel_info_text" value="(ładowanie...)" />
+</panel>

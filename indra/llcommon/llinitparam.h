@@ -435,7 +435,8 @@ namespace LLInitParam
 		typedef self_t type_value_t;
 
 		TypeValuesHelper(const std::string& val)
-		:	TypeValuesHelper(val)
+			//		:	TypeValuesHelper(val) <FS:ND> Call base_t::ctor. Otherwise gcc can get confused.
+		:	base_t::TypeValuesHelper(val)
 		{}
 
 		void operator ()(const std::string& name)
@@ -1065,7 +1066,7 @@ namespace LLInitParam
 		void set(const value_t& val, bool flag_as_provided = true)
 		{
 			named_value_t::clearValueName();
-			setValue(val);
+			param_value_t::setValue(val);
 			setProvided(flag_as_provided);
 		}
 
@@ -1221,7 +1222,7 @@ namespace LLInitParam
 		// assign block contents to this param-that-is-a-block
 		void set(const value_t& val, bool flag_as_provided = true)
 		{
-			setValue(val);
+			param_value_t::setValue(val);
 			named_value_t::clearValueName();
 			// force revalidation of block
 			// next call to isProvided() will update provision status based on validity
@@ -1937,7 +1938,7 @@ namespace LLInitParam
 
 			Optional& operator =(const value_t& val)
 			{
-				set(val);
+				super_t::set(val);
 				return *this;
 			}
 
@@ -1967,7 +1968,7 @@ namespace LLInitParam
 
 			Mandatory& operator =(const value_t& val)
 			{
-				set(val);
+				super_t::set(val);
 				return *this;
 			}
 
@@ -2003,7 +2004,7 @@ namespace LLInitParam
 
 			Multiple& operator =(const container_t& val)
 			{
-				set(val);
+				super_t::set(val);
 				return *this;
 			}
 

@@ -54,6 +54,14 @@ public:
 	static void setUseDisplayNames(bool use);
 	static bool useDisplayNames();
 	
+	// <FS:CR> Set and return the legacy name flag
+	static void setUseLegacyFormat(bool use) { sUseLegacyNameFormat = use; };
+	static bool useLegacyFormat() { return sUseLegacyNameFormat; };
+	
+	// <FS:CR> Set and return the Resident trim flag
+	static void setTrimResidentSurname(bool use) { sTrimResidentSurname = use; };
+	static bool trimResidentSurname() { return sTrimResidentSurname; };
+	
 	// A name object is valid if not temporary and not yet expired (default is expiration not checked)
 	bool isValidName(F64 max_unrefreshed = 0.0f) const { return !mIsTemporaryName && (mExpires >= max_unrefreshed); }
 	
@@ -78,6 +86,9 @@ public:
 	// Used where we explicitely prefer or need a non UTF-8 legacy (ASCII) name
 	// Also used for backwards compatibility with systems like voice and muting
 	std::string getUserName() const;
+	
+	// <FS:CR> FIRE-6659 - Returns the same as getUserName() but honors sTrimResidentSurname
+	std::string getUserNameForDisplay() const;
 	
 	// Returns "james.linden" or the legacy name for very old names
 	std::string getAccountName() const { return mUsername; }
@@ -128,6 +139,13 @@ private:
 	// Global flag indicating if display name should be used or not
 	// This will affect the output of the high level "get" methods
 	static bool sUseDisplayNames;
+	
+	/// <FS:CR> Global flag indicating using legacy format (First Last)
+	/// over username format (first.last)
+	static bool sUseLegacyNameFormat;
+	
+	// <FS:CR> Flag indicating trimming "Resident" from names
+	static bool sTrimResidentSurname;
 };
 
 #endif

@@ -199,7 +199,11 @@ void LLDrawPoolBump::prerender()
 // static
 S32 LLDrawPoolBump::numBumpPasses()
 {
-	if (gSavedSettings.getBOOL("RenderObjectBump"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (gSavedSettings.getBOOL("RenderObjectBump"))
+	static LLCachedControl<bool> renderObjectBump(gSavedSettings, "RenderObjectBump");
+	if (renderObjectBump)
+	// </FS:Ansariel>
 	{
 		if (mVertexShaderLevel > 1)
 		{
@@ -807,7 +811,11 @@ void LLDrawPoolBump::endBump(U32 pass)
 
 S32 LLDrawPoolBump::getNumDeferredPasses()
 { 
-	if (gSavedSettings.getBOOL("RenderObjectBump"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (gSavedSettings.getBOOL("RenderObjectBump"))
+	static LLCachedControl<bool> RenderObjectBump(gSavedSettings, "RenderObjectBump");
+	if (RenderObjectBump)
+	// </FS:PP>
 	{
 		return 1;
 	}
@@ -1150,7 +1158,11 @@ void LLBumpImageList::generateNormalMapFromAlpha(LLImageRaw* src, LLImageRaw* nr
 
 	S32 src_cmp = src->getComponents();
 
-	F32 norm_scale = gSavedSettings.getF32("RenderNormalMapScale");
+	// <FS:PP> Attempt to speed up things a little
+	// F32 norm_scale = gSavedSettings.getF32("RenderNormalMapScale");
+	static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale");
+	F32 norm_scale = RenderNormalMapScale;
+	// </FS:PP>
 
 	U32 idx = 0;
 	//generate normal map from pseudo-heightfield

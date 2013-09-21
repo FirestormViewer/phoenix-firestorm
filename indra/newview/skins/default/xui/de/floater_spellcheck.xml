@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="spellcheck_floater" title="Einstellungen für Rechtschreibprüfung">
 	<check_box label="Rechtschreibprüfung aktivieren" name="spellcheck_enable"/>
-	<text name="spellcheck_main">
+	<text name="spellcheck_main" width="110">
 		Hauptwörterbuch:
 	</text>
 	<text label="Protokolle:" name="spellcheck_additional">

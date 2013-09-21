@@ -102,6 +102,9 @@ std::string LLDateUtil::ageFromDate(const LLDate& born_date, const LLDate& now)
 	}
 	S32 age_years = (now_year - born_year);
 
+	// Ansariel: We want total days too!
+	S32 age_days_total = (S32)((now.secondsSinceEpoch() - born_date.secondsSinceEpoch()) / 86400);
+
 	// Noun pluralization depends on language
 	std::string lang = LLUI::getLanguage();
 
@@ -114,6 +117,8 @@ std::string LLDateUtil::ageFromDate(const LLDate& born_date, const LLDate& now)
 			LLTrans::getCountString(lang, "AgeYears", age_years);
 		args["[AGEMONTHS]"] =
 			LLTrans::getCountString(lang, "AgeMonths", age_months);
+		args["[AGEDAYSTOTAL]"] =
+			LLTrans::getCountString(lang, "AgeDays", age_days_total);
 
 		// We want to display times like:
 		// 2 year 2 months
@@ -123,16 +128,16 @@ std::string LLDateUtil::ageFromDate(const LLDate& born_date, const LLDate& now)
 		{
 			if (age_months > 0)
 			{
-				return LLTrans::getString("YearsMonthsOld", args);
+				return LLTrans::getString("YearsMonthsOld", args) + LLTrans::getString("TotalDaysOld", args);
 			}
 			else
 			{
-				return LLTrans::getString("YearsOld", args);
+				return LLTrans::getString("YearsOld", args) + LLTrans::getString("TotalDaysOld", args);
 			}
 		}
 		else // age_years == 0
 		{
-			return LLTrans::getString("MonthsOld", args);
+			return LLTrans::getString("MonthsOld", args) + LLTrans::getString("TotalDaysOld", args);
 		}
 	}
 	// you're 0 months old, display in weeks or days
@@ -144,7 +149,11 @@ std::string LLDateUtil::ageFromDate(const LLDate& born_date, const LLDate& now)
 	{
 		args["[AGEWEEKS]"] = 
 			LLTrans::getCountString(lang, "AgeWeeks", age_weeks);
-		return LLTrans::getString("WeeksOld", args);
+
+		args["[AGEDAYSTOTAL]"] =
+			LLTrans::getCountString(lang, "AgeDays", age_days_total);
+
+		return LLTrans::getString("WeeksOld", args) + LLTrans::getString("TotalDaysOld", args);
 	}
 
 	// Down to days now

@@ -56,6 +56,7 @@
          visible="true">
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToEmailWidth"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -71,6 +72,7 @@
              width="95" />
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToEmailHeight"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -85,6 +87,7 @@
              top_delta="0"
              width="95" />
             <check_box
+             control_name="KeepAspectForEmailSnapshot"
               height="10"
              bottom_delta="20"
              follows="left|top"
@@ -104,6 +107,7 @@
          right="-1"
          visible="true">
             <slider
+             control_name="SnapshotQuality"
              decimal_digits="0"
              follows="left|top"
              height="15"
@@ -116,7 +120,7 @@
              max_val="100"
              name="image_quality_slider"
              top_pad="7"
-             width="190" />
+             width="200" />
             <text
              type="string"
              follows="left|top"
@@ -124,11 +128,12 @@
              length="1"
              height="14"
              layout="topleft"
-             left_pad="-5"
+			 left="85"
+			 top="30"
              halign="left"
              name="image_quality_level"
              top_delta="0"
-             width="60">
+             width="105">
                ([QLVL])
             </text>
         </layout_panel>

@@ -69,7 +69,7 @@
      left="10"    
      name="hint_item1"
      top="100"
-     width="300">
+     width="680">
      - Click on a tab to edit the specific sky settings and time.
     </text>
     <text
@@ -78,7 +78,7 @@
      layout="topleft"    
      name="hint_item2"
      top_pad="10"
-     width="300">
+     width="680">
      - Click and drag the tabs to set the transition times.
     </text>
     <text
@@ -87,7 +87,7 @@
      layout="topleft"
      name="hint_item3"
      top_pad="10"
-     width="300">
+     width="680">
      - Use the scrubber to preview your day cycle.
     </text>
     <panel

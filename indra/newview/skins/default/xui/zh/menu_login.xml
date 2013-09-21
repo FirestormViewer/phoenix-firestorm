@@ -5,7 +5,7 @@
 		<menu_item_call label="退出 [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="幫助" name="Help">
-		<menu_item_call label="[SECOND_LIFE] 幫助" name="Second Life Help"/>
+		<menu_item_call label="[CURRENT_GRID] 幫助" name="Second Life Help"/>
 		<menu_item_call label="關於 [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu_item_check label="顯示除錯選單" name="Show Debug Menu"/>

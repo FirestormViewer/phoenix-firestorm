@@ -9,7 +9,7 @@
  visible="false"
  width="128">
     <menu_item_check
-         label="Show Navigation &amp; Favorites Bar"
+         label="Show Navigation and Search Bar"
          layout="topleft"
          name="ShowNavbarNavigationPanel">
            <on_click
@@ -20,14 +20,49 @@
              parameter="ShowNavbarNavigationPanel" />
     </menu_item_check>
     <menu_item_check
-         label="Show Mini-Location Bar"
+         label="Show Favorites Bar"
          layout="topleft"
-         name="ShowMiniLocationPanel">
+         name="ShowNavbarFavoritesPanel">
            <on_click
              function="ToggleControl"
-             parameter="ShowMiniLocationPanel" />
+             parameter="ShowNavbarFavoritesPanel" /> 
              <on_check
              function="CheckControl"
-             parameter="ShowMiniLocationPanel" />
+             parameter="ShowNavbarFavoritesPanel" />
+    </menu_item_check>
+	<menu_item_check
+		 label="Show Search Bar"
+		 layout="topleft"
+		 name="ShowSearchTopBar">
+		   <on_click
+			 function="ToggleControl"
+			 parameter="ShowSearchTopBar" /> 
+			 <on_check
+			 function="CheckControl"
+			 parameter="ShowSearchTopBar" />
+    </menu_item_check>
+    <!-- AO - remove this option, problematic
+		<menu_item_check
+			 label="Show Mini-Location Bar"
+			 layout="topleft"
+			 name="ShowMiniLocationPanel">
+			   <on_click
+				 function="ToggleControl"
+				 parameter="ShowMiniLocationPanel" />
+				 <on_check
+				 function="CheckControl"
+				 parameter="ShowMiniLocationPanel" />
+		</menu_item_check>
+	-->
+    <menu_item_check
+         label="Show Location in Top Menu"
+         layout="topleft"
+         name="ShowMenuBarLocation">
+           <on_click
+             function="ToggleControl"
+             parameter="ShowMenuBarLocation" /> 
+             <on_check
+             function="CheckControl"
+             parameter="ShowMenuBarLocation" />
     </menu_item_check>
 </menu>

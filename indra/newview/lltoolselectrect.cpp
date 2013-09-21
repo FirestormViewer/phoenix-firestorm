@@ -72,7 +72,10 @@ void dialog_refresh_all(void);
 
 BOOL LLToolSelectRect::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	handlePick(gViewerWindow->pickImmediate(x, y, TRUE));
+//	handlePick(gViewerWindow->pickImmediate(x, y, TRUE));
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	handlePick(gViewerWindow->pickImmediate(x, y, TRUE, FALSE));
+// [/SL:KB]
 
 	LLTool::handleMouseDown(x, y, mask);
 

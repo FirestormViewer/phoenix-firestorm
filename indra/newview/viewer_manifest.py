@@ -33,6 +33,13 @@ import re
 import tarfile
 import time
 import random
+#AO
+import os
+import shlex
+import subprocess
+import zipfile
+#/AO
+
 viewer_dir = os.path.dirname(__file__)
 # Add indra/lib/python to our path so we don't have to muck with PYTHONPATH.
 # Put it FIRST because some of our build hosts have an ancient install of
@@ -58,6 +65,16 @@ class ViewerManifest(LLManifest):
         self.exclude("*.svn*")
         self.path(src="../../scripts/messages/message_template.msg", dst="app_settings/message_template.msg")
         self.path(src="../../etc/message.xml", dst="app_settings/message.xml")
+        
+        # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
+        if self.prefix(src="app_settings"):
+            # ... and the included spell checking dictionaries
+            pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+            if self.prefix(src=pkgdir,dst=""):
+                self.path("dictionaries")
+                self.end_prefix(pkgdir)
+            self.end_prefix("app_settings")
+        # </FS:LO>
 
         if self.is_packaging_viewer():
             if self.prefix(src="app_settings"):
@@ -98,11 +115,17 @@ class ViewerManifest(LLManifest):
                 # ... and the entire windlight directory
                 self.path("windlight")
 
+                # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
-                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-                if self.prefix(src=pkgdir,dst=""):
-                    self.path("dictionaries")
-                    self.end_prefix(pkgdir)
+#                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+#                if self.prefix(src=pkgdir,dst=""):
+#                    self.path("dictionaries")
+#                    self.end_prefix(pkgdir)
+                # </FS:LO>
+                # include the entire beams directory
+                self.path("beams")
+                self.path("beamsColors")
+
 
                 # CHOP-955: If we have "sourceid" in the build process
                 # environment, generate it into settings_install.xml.
@@ -137,10 +160,19 @@ class ViewerManifest(LLManifest):
             if self.prefix(src="fonts"):
                 self.path("*.ttf")
                 self.path("*.txt")
+                self.path("*.xml")
                 self.end_prefix("fonts")
+                
+            # AO: Include firestorm resources
+            if self.prefix(src="fs_resources"):
+				self.path("*.txt")
+				self.path("*.lsl")
+				self.path("*.lsltxt")
+				self.end_prefix("fs_resources");
 
             # skins
             if self.prefix(src="skins"):
+		    self.path("skins.xml")
                     # include the entire textures directory recursively
                     if self.prefix(src="*/textures"):
                             self.path("*/*.tga")
@@ -155,6 +187,32 @@ class ViewerManifest(LLManifest):
                             self.end_prefix("*/textures")
                     self.path("*/xui/*/*.xml")
                     self.path("*/xui/*/widgets/*.xml")
+		    self.path("*/themes/*/colors.xml")
+		    if self.prefix(src="*/themes/*/textures"):
+                            self.path("*/*.tga")
+                            self.path("*/*.j2c")
+                            self.path("*/*.jpg")
+                            self.path("*/*.png")
+                            self.path("*.tga")
+                            self.path("*.j2c")
+                            self.path("*.jpg")
+                            self.path("*.png")
+                            self.end_prefix("*/themes/*/textures")
+
+            # <FS:AO> - We intentionally do not package xui for themes, the reasoning is: 
+            #         Themes are defined as color/texture mods, not structual mods. Structural changes are done as "skins".
+            #         If a color is mentioned in xui, it can be refactored to use a more generic reference color, and
+            #         then overwritten by the theme-specific colors.xml. This saves us from having to maintain more XUI 
+            #         in more places than needed, and over time allows more and more of the viewer to be adjusted using
+            #         only color definitions.
+	 	
+            ## FS:Ansariel: Fix packaging for xui folders in themes (FIRE-6859)
+            #if self.prefix(src="*/themes/*/xui"):
+            #        self.path("*/*.xml")
+            #        self.path("*/widgets/*.xml")
+            #        self.end_prefix("*/themes/*/xui")
+            # </FS:AO>
+
                     self.path("*/*.xml")
 
                     # Local HTML files (e.g. loading screen)
@@ -189,21 +247,32 @@ class ViewerManifest(LLManifest):
     def channel(self):
         return self.args['channel']
     def channel_unique(self):
-        return self.channel().replace("Second Life", "").strip()
+        return self.channel().replace("Firestorm", "").strip()
+    def channel_legacy_oneword(self):
+        return "".join(self.channel().split())
     def channel_oneword(self):
         return "".join(self.channel_unique().split())
     def channel_lowerword(self):
         return self.channel_oneword().lower()
+    def flavor(self):               # Viewer Flavor [FS:CR]
+        return self.args['viewer_flavor']  # [oss or hvk]
 
     def app_name(self):
-        app_suffix='Test'
-        channel_type=self.channel_lowerword()
-        if channel_type.startswith('release') :
-            app_suffix='Viewer'
-        elif re.match('^(beta|project).*',channel_type) :
-            app_suffix=self.channel_unique()
-        return "Second Life "+app_suffix
-        
+        # [FS:CR]
+        #app_suffix='Test'
+        #channel_type=self.channel_lowerword()
+        #if channel_type.startswith('release') :
+        #    app_suffix='Viewer'
+        #elif re.match('^(beta|project).*',channel_type) :
+        #    app_suffix=self.channel_unique()
+        #return "Second Life "+app_suffix
+        app = 'Firestorm'
+        if (self.flavor() == 'oss') :
+            app = 'FirestormOS'
+        app_suffix = ''.join(self.channel_unique().split())
+        return app + app_suffix
+        # [/FS:CR]
+
     def icon_path(self):
         icon_path="icons/"
         channel_type=self.channel_lowerword()
@@ -215,7 +284,11 @@ class ViewerManifest(LLManifest):
         elif re.match('^project.*',channel_type) :
             icon_path += 'project'
         else :
-            icon_path += 'test'
+            icon_path += 'private' # FS default
+        #[FS:CR] OpenSim app icons
+        if (self.flavor() == 'oss') :
+            icon_path += '-os'
+        # [/FS:CR]
         return icon_path
 
     def flags_list(self):
@@ -268,13 +341,20 @@ class ViewerManifest(LLManifest):
 
 class WindowsManifest(ViewerManifest):
     def final_exe(self):
-        app_suffix="Test"
-        channel_type=self.channel_lowerword()
-        if channel_type.startswith('release') :
-            app_suffix=''
-        elif re.match('^(beta|project).*',channel_type) :
-            app_suffix=''.join(self.channel_unique().split())
-        return "SecondLife"+app_suffix+".exe"
+        # [FS:CR]
+        #app_suffix="Test"
+        #channel_type=self.channel_lowerword()
+        #if channel_type.startswith('release') :
+        #    app_suffix=''
+        #elif re.match('^(beta|project).*',channel_type) :
+        #    app_suffix=''.join(self.channel_unique().split())
+        #return "SecondLife"+app_suffix+".exe"
+        app = 'Firestorm'
+        if (self.flavor() == 'oss') :
+            app = 'FirestormOS'
+        app_suffix = ''.join(self.channel_unique().split())
+        return app + app_suffix + ".exe"
+        # [/FS:CR]
 
     def test_msvcrt_and_copy_action(self, src, dst):
         # This is used to test a dll manifest.
@@ -327,7 +407,7 @@ class WindowsManifest(ViewerManifest):
 
         if self.is_packaging_viewer():
             # Find secondlife-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
-            self.path(src='%s/secondlife-bin.exe' % self.args['configuration'], dst=self.final_exe())
+            self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
@@ -403,6 +483,19 @@ class WindowsManifest(ViewerManifest):
             # Hunspell
             self.path("libhunspell.dll")
 
+            # Growl
+            self.path("growl.dll")
+            self.path("growl++.dll")
+
+            # <FS:ND> Copy symbols for breakpad
+            self.path("ssleay32.pdb")
+            self.path("libeay32.pdb")
+            self.path("growl.pdb")
+            self.path("growl++.pdb")
+            self.path('apr-1.pdb', 'libarp.pdb')
+            self.path('aprutil-1.pdb', 'libaprutil.pdb')
+            # </FS:ND>
+
             # For google-perftools tcmalloc allocator.
             try:
                 if self.args['configuration'].lower() == 'debug':
@@ -417,6 +510,7 @@ class WindowsManifest(ViewerManifest):
         self.path(src="licenses-win32.txt", dst="licenses.txt")
         self.path("featuretable.txt")
         self.path("featuretable_xp.txt")
+        self.path("VivoxAUP.txt")
 
         # Media plugins - QuickTime
         if self.prefix(src='../media_plugins/quicktime/%s' % self.args['configuration'], dst="llplugin"):
@@ -513,7 +607,7 @@ class WindowsManifest(ViewerManifest):
             return path
 
         result = ""
-        dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1])]
+        dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1]) and not pair[1].endswith(".pdb") ] #<FS:ND/> Don't include pdb files.
         # sort deepest hierarchy first
         dest_files.sort(lambda a,b: cmp(a.count(os.path.sep),b.count(os.path.sep)) or cmp(a,b))
         dest_files.reverse()
@@ -562,7 +656,8 @@ class WindowsManifest(ViewerManifest):
             'channel':self.channel(),
             'channel_oneword':self.channel_oneword(),
             'channel_unique':self.channel_unique(),
-            'subchannel_underscores':'_'.join(self.channel_unique().split())
+            'subchannel_underscores':'_'.join(self.channel_unique().split()),
+            'app_name' : self.app_name()    #[FS:CR]
             }
 
         version_vars = """
@@ -574,38 +669,39 @@ class WindowsManifest(ViewerManifest):
         if self.default_channel():
             if self.default_grid():
                 # release viewer
-                installer_file = "Second_Life_%(version_dashes)s_Setup.exe"
+                installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
-                !define INSTNAME   "SecondLifeViewer"
-                !define SHORTCUT   "Second Life Viewer"
+                !define INSTNAME   "%(app_name)s"
+                !define SHORTCUT   "%(app_name)s"
                 !define URLNAME   "secondlife"
-                Caption "Second Life"
+                Caption "%(app_name)s ${VERSION}"
                 """
             else:
                 # alternate grid viewer
-                installer_file = "Second_Life_%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
+                installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_(%(grid_caps)s)_Setup.exe"
                 grid_vars_template = """
                 OutFile "%(installer_file)s"
                 !define INSTFLAGS "%(flags)s"
-                !define INSTNAME   "SecondLife%(grid_caps)s"
-                !define SHORTCUT   "Second Life (%(grid_caps)s)"
+                !define INSTNAME   "%(app_name)s%(grid_caps)s"
+                !define SHORTCUT   "%(app_name)s (%(grid_caps)s)"
                 !define URLNAME   "secondlife%(grid)s"
                 !define UNINSTALL_SETTINGS 1
-                Caption "Second Life %(grid)s ${VERSION}"
+                Caption "%(app_name)s %(grid)s ${VERSION}"
                 """
         else:
             # some other channel (grid name not used)
-            installer_file = "Second_Life_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe"
+            #installer_file = "Second_Life_%(version_dashes)s_%(subchannel_underscores)s_Setup.exe"
+            installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.exe" #<FS:CR>
             grid_vars_template = """
             OutFile "%(installer_file)s"
             !define INSTFLAGS "%(flags)s"
-            !define INSTNAME   "SecondLife%(channel_oneword)s"
-            !define SHORTCUT   "%(channel)s"
+            !define INSTNAME   "%(app_name)s"
+            !define SHORTCUT   "%(app_name)s"
             !define URLNAME   "secondlife"
             !define UNINSTALL_SETTINGS 1
-            Caption "%(channel)s ${VERSION}"
+            Caption "%(app_name)s ${VERSION}"
             """
         if 'installer_name' in self.args:
             installer_file = self.args['installer_name']
@@ -614,6 +710,16 @@ class WindowsManifest(ViewerManifest):
         substitution_strings['installer_file'] = installer_file
 
         tempfile = "secondlife_setup_tmp.nsi"
+        
+        #AO: Try to sign original executable first, if we can, using best available signing cert.
+        try:
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\firestorm-bin.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\slplugin.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\SLVoice.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+self.final_exe()],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+        except Exception, e:
+            print "Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe()
+            
         # the following replaces strings in the nsi template
         # it also does python-style % substitution
         self.replace_in("installers/windows/installer_template.nsi", tempfile, {
@@ -630,21 +736,60 @@ class WindowsManifest(ViewerManifest):
         NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
         if not os.path.exists(NSIS_path):
             NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
-        self.run_command('"' + proper_windows_path(NSIS_path) + '" ' + self.dst_path_of(tempfile))
+        self.run_command('"' + proper_windows_path(NSIS_path) + '" /V2 ' + self.dst_path_of(tempfile))
         # self.remove(self.dst_path_of(tempfile))
-        # If we're on a build machine, sign the code using our Authenticode certificate. JC
-        sign_py = os.path.expandvars("${SIGN}")
-        if not sign_py or sign_py == "${SIGN}":
-            sign_py = 'C:\\buildscripts\\code-signing\\sign.py'
-        else:
-            sign_py = sign_py.replace('\\', '\\\\\\\\')
-        python = os.path.expandvars("${PYTHON}")
-        if not python or python == "${PYTHON}":
-            python = 'python'
-        if os.path.exists(sign_py):
-            self.run_command("%s %s %s" % (python, sign_py, self.dst_path_of(installer_file).replace('\\', '\\\\\\\\')))
-        else:
-            print "Skipping code signing,", sign_py, "does not exist"
+
+        #AO: Try to sign installer next, if we can, using "The Phoenix Firestorm Project" signing cert.
+        try:
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+        except Exception, e:
+            print "Working directory: %s" % os.getcwd()
+            print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
+
+        #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            sName = "%s/Phoenix_%s_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),
+                                                                     self.channel_legacy_oneword(),
+                                                                     substitution_strings['version_dashes'],
+                                                                     self.args['viewer_flavor'])
+
+            if os.path.exists( sName ):
+                os.unlink( sName )
+
+            os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(), sName )
+        
+        # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
+        # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
+        # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for nowo.
+        symbolTar = tarfile.TarFile("%s/Phoenix-%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
+                                                                                    self.channel_legacy_oneword(),
+                                                                                    substitution_strings['version_dashes'],
+                                                                                    self.args['viewer_flavor']),
+                                                                                    'w')
+        symbolTar.add("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
+        symbolTar.add("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
+        symbolTar.close()
+
+
+
+# If we're on a build machine, sign the code using our Authenticode certificate. JC
+ 
+#        sign_py = os.path.expandvars("${SIGN}")
+#        if not sign_py or sign_py == "${SIGN}":
+#            sign_py = 'C:\\buildscripts\\code-signing\\sign.py'
+#        else:
+#            sign_py = sign_py.replace('\\', '\\\\\\\\')
+#        python = os.path.expandvars("${PYTHON}")
+#        if not python or python == "${PYTHON}":
+#            python = 'python'
+#        if os.path.exists(sign_py):
+#            self.run_command("%s %s %s" % (python, sign_py, self.dst_path_of(installer_file).replace('\\', '\\\\\\\\')))
+#        else:
+#            print "Skipping code signing,", sign_py, "does not exist"
+
+
         self.created_path(self.dst_path_of(installer_file))
         self.package_file = installer_file
 
@@ -656,7 +801,7 @@ class DarwinManifest(ViewerManifest):
 
     def construct(self):
         # copy over the build result (this is a no-op if run within the xcode script)
-        self.path(self.args['configuration'] + "/Second Life.app", dst="")
+        self.path(self.args['configuration'] + "/Firestorm.app", dst="")
 
         if self.prefix(src="", dst="Contents"):  # everything goes in Contents
             self.path("Info.plist", dst="Info.plist")
@@ -669,6 +814,9 @@ class DarwinManifest(ViewerManifest):
                 self.path2basename("../viewer_components/updater/scripts/darwin", "*.py")
                 self.end_prefix()
 
+            # Growl Frameworks
+            self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
+
             # most everything goes in the Resources directory
             if self.prefix(src="", dst="Resources"):
                 super(DarwinManifest, self).construct()
@@ -679,14 +827,14 @@ class DarwinManifest(ViewerManifest):
 
                 self.path("licenses-mac.txt", dst="licenses.txt")
                 self.path("featuretable_mac.txt")
-                self.path("SecondLife.nib")
+                self.path("VivoxAUP.txt")
 
                 icon_path = self.icon_path()
                 if self.prefix(src=icon_path, dst="") :
-                    self.path("secondlife.icns")
+                    self.path("firestorm_icon.icns")
                     self.end_prefix(icon_path)
 
-                self.path("SecondLife.nib")
+                self.path("Firestorm.nib")
                 
                 # Translations
                 self.path("English.lproj/language.txt")
@@ -737,18 +885,19 @@ class DarwinManifest(ViewerManifest):
                                        dst=libfile)
 
                 for libfile in (
-                                "libapr-1.0.dylib",
-                                "libaprutil-1.0.dylib",
                                 "libcollada14dom.dylib",
                                 "libexpat.1.5.2.dylib",
                                 "libexception_handler.dylib",
                                 "libfmodex.dylib",
+                                "libfmodexL.dylib",
                                 "libGLOD.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(libdir, libfile), libfile)
 
                 # SLVoice and vivox lols, no symlinks needed
                 for libfile in (
+                                'libalut.dylib',
+                                'libopenal.dylib',
                                 'libortp.dylib',
                                 'libsndfile.dylib',
                                 'libvivoxoal.dylib',
@@ -797,7 +946,7 @@ class DarwinManifest(ViewerManifest):
         if ("package" in self.args['actions'] or 
             "unpacked" in self.args['actions']):
             self.run_command('strip -S %(viewer_binary)r' %
-                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Second Life')})
+                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Firestorm')})
 
 
     def copy_finish(self):
@@ -807,44 +956,64 @@ class DarwinManifest(ViewerManifest):
             self.run_command("chmod +x %r" % os.path.join(self.get_dst_prefix(), script))
 
     def package_finish(self):
-        # Sign the app if requested.
-        if 'signature' in self.args:
-            identity = self.args['signature']
-            if identity == '':
-                identity = 'Developer ID Application'
+	# <FS:AO> Copied from windows manifest, since we're starting to use many of the same vars
+        # a standard map of strings for replacing in the templates
+        substitution_strings = {
+            'version' : '.'.join(self.args['version']),
+            'version_short' : '.'.join(self.args['version'][:-1]),
+            'version_dashes' : '-'.join(self.args['version']),
+            'grid':self.args['grid'],
+            'grid_caps':self.args['grid'].upper(),
+            'channel':self.channel(),
+            'channel_oneword':self.channel_oneword(),
+            'channel_unique':self.channel_unique(),
+            'subchannel_underscores':'_'.join(self.channel_unique().split()),
+            'app_name' : self.app_name()    #[FS:CR]
+        }
+	# </FS:AO>
 
-            # Look for an environment variable set via build.sh when running in Team City.
-            try:
-                build_secrets_checkout = os.environ['build_secrets_checkout']
-            except KeyError:
-                pass
-            else:
-                # variable found so use it to unlock keyvchain followed by codesign
-                home_path = os.environ['HOME']
-                keychain_pwd_path = os.path.join(build_secrets_checkout,'code-signing-osx','password.txt')
-                keychain_pwd = open(keychain_pwd_path).read().rstrip()
+#Comment out for now. FS:TM
+#Added from LL signing for OSX 10.8 
+#        # Sign the app if requested.
+#        if 'signature' in self.args:
+#            identity = self.args['signature']
+#            if identity == '':
+#                identity = 'Developer ID Application'
+#
+#            # Look for an environment variable set via build.sh when running in Team City.
+#            try:
+#                build_secrets_checkout = os.environ['build_secrets_checkout']
+#            except KeyError:
+#                pass
+#            else:
+#                # variable found so use it to unlock keyvchain followed by codesign
+#                home_path = os.environ['HOME']
+#                keychain_pwd_path = os.path.join(build_secrets_checkout,'code-signing-osx','password.txt')
+#                keychain_pwd = open(keychain_pwd_path).read().rstrip()
+#
+#                self.run_command('security unlock-keychain -p "%s" "%s/Library/Keychains/viewer.keychain"' % ( keychain_pwd, home_path ) )
+#                self.run_command('codesign --verbose --force --keychain "%(home_path)s/Library/Keychains/viewer.keychain" --sign %(identity)r %(bundle)r' % {
+#                                 'home_path' : home_path,
+#                                 'identity': identity,
+#                                 'bundle': self.get_dst_prefix()
+#                })
 
-                self.run_command('security unlock-keychain -p "%s" "%s/Library/Keychains/viewer.keychain"' % ( keychain_pwd, home_path ) )
-                self.run_command('codesign --verbose --force --keychain "%(home_path)s/Library/Keychains/viewer.keychain" --sign %(identity)r %(bundle)r' % {
-                                 'home_path' : home_path,
-                                 'identity': identity,
-                                 'bundle': self.get_dst_prefix()
-                })
-
-        imagename="SecondLife_" + '_'.join(self.args['version'])
+        imagename = ("Phoenix-" + self.app_name() + '-' + '-'.join(self.args['version']))
 
         # MBW -- If the mounted volume name changes, it breaks the .DS_Store's background image and icon positioning.
         #  If we really need differently named volumes, we'll need to create multiple DS_Store file images, or use some other trick.
 
-        volname="Second Life Installer"  # DO NOT CHANGE without understanding comment above
+        #volname="Firestorm Installer"  # DO NOT CHANGE without understanding comment above
+        #[FS:CR] Understood and disregarded!
+        volname = (self.app_name() + " " + '.'.join(self.args['version']) + " Installer")
 
-        if self.default_channel():
-            if not self.default_grid():
-                # beta case
-                imagename = imagename + '_' + self.args['grid'].upper()
-        else:
-            # first look, etc
-            imagename = imagename + '_' + self.channel_oneword().upper()
+        #if self.default_channel():
+        #    if not self.default_grid():
+        #        # beta case
+        #        imagename = imagename + '_' + self.args['grid'].upper()
+        #else:
+        #    # first look, etc
+        #    imagename = imagename + '_' + self.channel_oneword().upper()
 
         sparsename = imagename + ".sparseimage"
         finalname = imagename + ".dmg"
@@ -877,21 +1046,45 @@ class DarwinManifest(ViewerManifest):
             # one for release candidate and one for first look. Any other channels
             # will use the release .DS_Store, and will look broken.
             # - Ambroff 2008-08-20
+            # If the channel is "firestorm-private-"anything, then use the
+            #  private folder for .DS_Store and the background image. -- TS
+            template_chan = app_name.lower()
+            if template_chan.startswith("firestorm-private"):
+                template_chan = "firestorm-private"
+            elif template_chan.startswith("firestormos-private"):
+                template_chan = "firestormos-private"
             dmg_template = os.path.join(
-                'installers', 'darwin', '%s-dmg' % self.channel_lowerword())
+                'installers', 'darwin', '%s-dmg' % template_chan)
 
             if not os.path.exists (self.src_path_of(dmg_template)):
-                dmg_template = os.path.join ('installers', 'darwin', 'release-dmg')
+                dmg_template = os.path.join ('installers', 'darwin', 'firestorm-release-dmg')
 
             for s,d in {self.get_dst_prefix():app_name + ".app",
                         os.path.join(dmg_template, "_VolumeIcon.icns"): ".VolumeIcon.icns",
-                        os.path.join(dmg_template, "background.jpg"): "background.jpg",
-                        os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
+                        os.path.join(dmg_template, "background.png"): "background.png",
+                        os.path.join(dmg_template, "VivoxAUP.txt"): "Vivox Acceptable Use Policy.txt",
+                        os.path.join(dmg_template, "LGPL-license.txt"): "LGPL License.txt"}.items():
+                        #os.path.join(dmg_template, "_DS_Store"): ".DS_Store"}.items():
                 print "Copying to dmg", s, d
                 self.copy_action(self.src_path_of(s), os.path.join(volpath, d))
 
+            # <FS:TS> The next two commands *MUST* execute before the loop
+            #         that hides the files. If not, packaging will fail.
+            #         YOU HAVE BEEN WARNED. 
+            # Create the alias file (which is a resource file) from the .r
+            self.run_command('Rez %r -o %r' %
+                             (self.src_path_of("installers/darwin/firestorm-release-dmg/Applications-alias.r"),
+                              os.path.join(volpath, "Applications")))
+
+            # Set up the installer disk image: set icon positions, folder view
+            #  options, and icon label colors. This must be done before the
+            #  files are hidden.
+            self.run_command('osascript %r %r' % 
+                             (self.src_path_of("installers/darwin/installer-dmg.applescript"),
+                             volname))
+
             # Hide the background image, DS_Store file, and volume icon file (set their "visible" bit)
-            for f in ".VolumeIcon.icns", "background.jpg", ".DS_Store":
+            for f in ".VolumeIcon.icns", "background.png", ".DS_Store":
                 pathname = os.path.join(volpath, f)
                 # We've observed mysterious "no such file" failures of the SetFile
                 # command, especially on the first file listed above -- yet
@@ -910,11 +1103,6 @@ class DarwinManifest(ViewerManifest):
                 # the original problem manifest by executing the desired command.
                 self.run_command('SetFile -a V %r' % pathname)
 
-            # Create the alias file (which is a resource file) from the .r
-            self.run_command('Rez %r -o %r' %
-                             (self.src_path_of("installers/darwin/release-dmg/Applications-alias.r"),
-                              os.path.join(volpath, "Applications")))
-
             # Set the alias file's alias and custom icon bits
             self.run_command('SetFile -a AC %r' % os.path.join(volpath, "Applications"))
 
@@ -930,15 +1118,31 @@ class DarwinManifest(ViewerManifest):
         self.package_file = finalname
         self.remove(sparsename)
 
+        #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),
+                      "%s/Phoenix_%s_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),
+                                                                      self.channel_legacy_oneword(),
+                                                                      substitution_strings['version_dashes'],
+                                                                      self.args['viewer_flavor']))
+
+
+
+
 class LinuxManifest(ViewerManifest):
     def construct(self):
         super(LinuxManifest, self).construct()
         self.path("licenses-linux.txt","licenses.txt")
+        self.path("VivoxAUP.txt")
+        self.path("res/firestorm_icon.png","firestorm_icon.png")
         if self.prefix("linux_tools", dst=""):
             self.path("client-readme.txt","README-linux.txt")
+	    self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
-            self.path("wrapper.sh","secondlife")
+            self.path("wrapper.sh","firestorm")
             if self.prefix(src="", dst="etc"):
                 self.path("handle_secondlifeprotocol.sh")
                 self.path("register_secondlifeprotocol.sh")
@@ -949,7 +1153,7 @@ class LinuxManifest(ViewerManifest):
             self.end_prefix("linux_tools")
 
         if self.prefix(src="", dst="bin"):
-            self.path("secondlife-bin","do-not-directly-run-secondlife-bin")
+            self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             self.path2basename("../viewer_components/updater/scripts/linux", "update_install")
@@ -963,9 +1167,9 @@ class LinuxManifest(ViewerManifest):
         # Get the icons based on the channel
         icon_path = self.icon_path()
         if self.prefix(src=icon_path, dst="") :
-            self.path("secondlife_256.png","secondlife_icon.png")
+            self.path("firestorm_256.png","firestorm_48.png")
             if self.prefix(src="",dst="res-sdl") :
-                self.path("secondlife_256.BMP","ll_icon.BMP")
+                self.path("firestorm_256.BMP","ll_icon.BMP")
                 self.end_prefix("res-sdl")
             self.end_prefix(icon_path)
 
@@ -983,21 +1187,37 @@ class LinuxManifest(ViewerManifest):
     def copy_finish(self):
         # Force executable permissions to be set for scripts
         # see CHOP-223 and http://mercurial.selenic.com/bts/issue1802
-        for script in 'secondlife', 'bin/update_install':
+        for script in 'firestorm', 'bin/update_install':
             self.run_command("chmod +x %r" % os.path.join(self.get_dst_prefix(), script))
 
     def package_finish(self):
-        if 'installer_name' in self.args:
-            installer_name = self.args['installer_name']
-        else:
-            installer_name_components = ['SecondLife_', self.args.get('arch')]
-            installer_name_components.extend(self.args['version'])
-            installer_name = "_".join(installer_name_components)
-            if self.default_channel():
-                if not self.default_grid():
-                    installer_name += '_' + self.args['grid'].upper()
-            else:
-                installer_name += '_' + self.channel_oneword().upper()
+        # a standard map of strings for replacing in the templates
+        #installer_name_components = ['Phoenix',self.channel_oneword(),self.args.get('arch'),'.'.join(self.args['version'])]
+        installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
+        installer_name = "_".join(installer_name_components)
+
+	# <FS:AO> Copied from windows manifest, since we're starting to use many of the same vars
+        # a standard map of strings for replacing in the templates
+        substitution_strings = {
+            'version' : '.'.join(self.args['version']),
+            'version_short' : '.'.join(self.args['version'][:-1]),
+            'version_dashes' : '-'.join(self.args['version']),
+            'grid':self.args['grid'],
+            'grid_caps':self.args['grid'].upper(),
+            'channel':self.channel(),
+            'channel_oneword':self.channel_oneword(),
+            'channel_unique':self.channel_unique(),
+            'subchannel_underscores':'_'.join(self.channel_unique().split()),
+            'app_name' : self.app_name()    #[FS:CR]
+        }
+	# </FS:AO>
+
+        #if self.default_channel():
+        #    if not self.default_grid():
+        #        installer_name += '_' + self.args['grid'].upper()
+        #else:
+        #    installer_name += '_' + self.channel_oneword().upper()
+	print "installer name=%s" % installer_name
 
         self.strip_binaries()
 
@@ -1039,6 +1259,17 @@ class LinuxManifest(ViewerManifest):
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
             self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
 
+        #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),
+                      "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),
+                                                                     self.channel_legacy_oneword(),
+                                                                     '-'.join( self.args['version'] ),
+                                                                     self.args['viewer_flavor'] ) )
+
+
 class Linux_i686Manifest(LinuxManifest):
     def construct(self):
         super(Linux_i686Manifest, self).construct()
@@ -1057,6 +1288,9 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libboost_signals-mt.so.*")
             self.path("libboost_system-mt.so.*")
             self.path("libboost_thread-mt.so.*")
+            self.path("libboost_chrono-mt.so.*") #<FS:TM> FS spcific
+            self.path("libboost_date_time-mt.so.*") #<FS:TM> FS spcific
+            self.path("libboost_wave-mt.so.*") #<FS:TM> FS spcific
             self.path("libcollada14dom.so")
             self.path("libdb*.so")
             self.path("libcrypto.so.*")
@@ -1075,8 +1309,11 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libdirect-1.4.so.5*")
             self.path("libhunspell-1.3.so*")
             self.path("libalut.so")
+            self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
+            self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
             self.path("libopenal.so", "libopenal.so.1")
             self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
+            #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
             # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
             # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
             # and libfontconfig.so. Before we added support for library-file

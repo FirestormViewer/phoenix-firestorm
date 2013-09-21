@@ -54,7 +54,9 @@ public:
 						show_info_btn,
 						show_profile_btn,
 						show_speaking_indicator,
-						show_permissions_granted;
+						show_permissions_granted,
+						show_icons,
+						show_voice_volume;
 		Params();
 	};
 
@@ -71,6 +73,7 @@ public:
 	void setDirty(bool val = true, bool force_refresh = false);
 	uuid_vec_t& getIDs() 							{ return mIDs; }
 	bool contains(const LLUUID& id);
+	LLAvatarListItem* getAvatarListItem(const LLUUID& id);
 
 	void setContextMenu(LLListContextMenu* menu) { mContextMenu = menu; }
 	void setSessionID(const LLUUID& session_id) { mSessionID = session_id; }
@@ -78,7 +81,17 @@ public:
 
 	void toggleIcons();
 	void setSpeakingIndicatorsVisible(bool visible);
+	void setItemHeight(S32 height);
 	void showPermissions(bool visible);
+	void showRange(bool visible);
+	void showFirstSeen(bool visible);
+	void showStatusFlags(bool visible);
+	void showPaymentStatus(bool visible);
+	void showMiniProfileIcons(bool visible);
+	void showDisplayName(bool visible);
+	void showAvatarAge(bool visible);
+	void showUsername(bool visible);
+	void showVoiceVolume(bool visible);
 	void sortByName();
 	void setShowIcons(std::string param_name);
 	bool getIconsVisible() const { return mShowIcons; }
@@ -87,9 +100,19 @@ public:
 	/*virtual*/ BOOL handleMouseDown( S32 x, S32 y, MASK mask );
 	/*virtual*/ BOOL handleMouseUp(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL handleHover(S32 x, S32 y, MASK mask);
+	
+	// [Ansariel: Colorful radar]
+	void setUseRangeColors(bool UseRangeColors);
+	// [/Ansariel: Colorful radar]
 
 	// Return true if filter has at least one match.
 	bool filterHasMatches();
+
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	void setRlvCheckShowNames(bool fRlvCheckShowNames) { mRlvCheckShowNames = fRlvCheckShowNames; }
+	// We need this to be public since we call it from RlvUIEnabler::onToggleShowNames()
+	void updateAvatarNames();
+// [/RLVa:KB]
 
 	boost::signals2::connection setRefreshCompleteCallback(const commit_signal_t::slot_type& cb);
 
@@ -111,7 +134,8 @@ protected:
 	void updateLastInteractionTimes();	
 	void rebuildNames();
 	void onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask);
-	void updateAvatarNames();
+	virtual void onFocusReceived();
+//	void updateAvatarNames();
 
 private:
 
@@ -124,9 +148,26 @@ private:
 	bool mShowIcons;
 	bool mShowInfoBtn;
 	bool mShowProfileBtn;
+	bool mShowVoiceVolume;
 	bool mShowSpeakingIndicator;
 	bool mShowPermissions;
-
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	bool mRlvCheckShowNames;
+// [/RLVa:KB]
+	bool mShowRange;
+	bool mShowFirstSeen;
+	bool mShowStatusFlags;
+	bool mShowPaymentStatus;
+	bool mShowAge;
+	bool mShowDisplayName;
+	bool mShowUsername;
+	bool mIgnoreGlobalIcons;
+	S32  mItemHeight;
+	
+	// [Ansariel: Colorful radar]
+	bool mUseRangeColors;
+	// [/Ansariel: Colorful radar]
+	
 	LLTimer*				mLITUpdateTimer; // last interaction time update timer
 	std::string				mIconParamName;
 	std::string				mNameFilter;

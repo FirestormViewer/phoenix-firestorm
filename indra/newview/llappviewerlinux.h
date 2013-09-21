@@ -78,7 +78,12 @@ typedef struct
 } ViewerAppAPI;
 
 extern "C" {
-	gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean **success_rtn, GError **error);
+	// <FS:ND> FIRE-5417; The xml manifest for dbus claims success_rtn is a boolean, not a boolean array
+	
+	//	gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean **success_rtn, GError **error);
+	gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean *success_rtn, GError **error);
+	
+	// <FS:ND>
 }
 
 #define VIEWERAPI_SERVICE "com.secondlife.ViewerAppAPIService"

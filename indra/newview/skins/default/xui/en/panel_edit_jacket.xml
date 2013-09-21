@@ -10,10 +10,6 @@
 	 width="333" >
 	 <panel
 	  border="false"
-      bg_alpha_color="DkGray2"
-      bg_opaque_color="DkGray2"
-      background_visible="true"
-      background_opaque="true"
 	  follows="top|left|right"
 	  height="90" 
 	  left="10" 
@@ -26,7 +22,7 @@
         default_image_name="Default"
         follows="left|top"
         height="80"
-        label="Upper Texture"
+        label="Upper Fabric"
         layout="topleft"
         left="25"
         name="Upper Fabric"
@@ -41,7 +37,7 @@
         default_image_name="Default"
         follows="left|top"
         height="80"
-        label="Lower Texture"
+        label="Lower Fabric"
         layout="topleft"
         left_pad="20"
         name="Lower Fabric"

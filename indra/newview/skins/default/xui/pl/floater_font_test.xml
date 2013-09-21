@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="contents" title="CZCIONKA TEKSTU">
+<floater name="contents" title="Czcionka tekstu">
 	<text name="linea">
 		OverrideTest, powinno wyświetlać się jako Times. (From default/xui/en-us)
 	</text>

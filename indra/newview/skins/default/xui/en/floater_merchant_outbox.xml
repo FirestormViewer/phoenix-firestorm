@@ -11,7 +11,7 @@
     save_rect="true"
     save_visibility="false"
     reuse_instance="true"
-    title="MERCHANT OUTBOX"
+    title="Merchant Outbox"
     width="333">
   <string name="OutboxFolderCount0"></string>
   <string name="OutboxFolderCount1">1 folder</string>
@@ -19,6 +19,7 @@
   <string name="OutboxImporting">Sending folders...</string>
   <string name="OutboxInitializing">Initializing...</string>
   <panel
+      name="panel_1"
       follows="all"
       layout="topleft"
       left="0"
@@ -27,6 +28,7 @@
       height="440"
       width="333">
     <panel
+        name="panel_2"
         follows="all"
         left="10"
         bottom="370"
@@ -70,6 +72,7 @@
       </panel>
     </panel>
     <panel
+        name="panel_3"
         follows="bottom|left|right"
         left="10"
         bottom="435"
@@ -89,6 +92,7 @@
           bevel_style="in"
           visible="true">
         <text
+            name="text_1"
             type="string"
             follows="all"
             layout="topleft"

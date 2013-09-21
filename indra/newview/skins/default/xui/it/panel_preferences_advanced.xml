@@ -1,31 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel label="Avanzata" name="advanced">
-	<panel.string name="aspect_ratio_text">
-		[NUM]:[DEN]
-	</panel.string>
-	<text name="Cache:">
-		Cache:
-	</text>
-	<spinner label="Dimensione cache (64 - 9984 MB)" name="cachesizespinner"/>
-	<text name="text_box5">
-		MB
-	</text>
-	<button label="Pulizia della cache" label_selected="Pulizia della cache" name="clear_cache"/>
-	<text name="Cache location">
-		Ubicazione della cache:
-	</text>
-	<button label="Sfoglia" label_selected="Sfoglia" name="set_cache"/>
-	<button label="Posizione predefinita" label_selected="Posizione predefinita" name="default_cache_location"/>
-	<text name="UI Size:">
-		Dimensioni UI:
-	</text>
-	<check_box label="Mostra errori dello script in:" name="show_script_errors"/>
-	<radio_group name="show_location">
-		<radio_item label="Chat nei dintorni" name="0"/>
-		<radio_item label="Finestra separata" name="1"/>
-	</radio_group>
 	<check_box label="Consenti più Viewer" name="allow_multiple_viewer_check"/>
 	<check_box label="Mostra selezione griglia all&apos;accesso" name="show_grid_selection_check"/>
 	<check_box label="Mostra menu Avanzato" name="show_advanced_menu_check"/>
 	<check_box label="Mostra menu Sviluppatore" name="show_develop_menu_check"/>
+	<button label="Ripristina tutte le impostazioni" label_selected="Ripristina tutte le impostazioni" name="clear_settings"/>
 </panel>

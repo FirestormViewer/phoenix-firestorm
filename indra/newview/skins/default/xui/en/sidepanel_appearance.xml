@@ -25,9 +25,9 @@ width="333">
    name="Changing outfits"
    value="Changing outfits" />
    <panel
-   background_opaque="true"
-   background_visible="true"
-   bg_opaque_color="DkGray2"
+   background_opaque="false"
+   background_visible="false"
+   bg_alpha_color="SL-Background_66"
    left="10"
    top="5"
    follows="left|top|right"

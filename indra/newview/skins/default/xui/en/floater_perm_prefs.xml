@@ -6,7 +6,7 @@
  name="perm prefs"
  help_topic="perm_prefs"
  save_rect="true"
- title="DEFAULT UPLOAD PERMISSIONS"
+ title="Default Upload Permissions"
  width="315">
     <panel
      follows="left|top|right|bottom"

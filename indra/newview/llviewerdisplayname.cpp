@@ -40,6 +40,10 @@
 #include "llnotificationsutil.h"
 #include "llui.h"					// getLanguage()
 
+#include "fsradar.h"
+#include "lggcontactsets.h"
+#include "llviewercontrol.h"
+
 namespace LLViewerDisplayName
 {
 	// Fired when viewer receives server response to display name change
@@ -194,11 +198,36 @@ class LLDisplayNameUpdate : public LLHTTPNode
 		args["OLD_NAME"] = old_display_name;
 		args["SLID"] = av_name.getUserName();
 		args["NEW_NAME"] = av_name.getDisplayName();
-		LLNotificationsUtil::add("DisplayNameUpdate", args);
+		if (LGGContactSets::getInstance()->hasPseudonym(agent_id))
+		{
+			LLSD payload;
+			payload["agent_id"] = agent_id;
+			LLNotificationsUtil::add("DisplayNameUpdateRemoveAlias", args, payload,
+				boost::bind(&LGGContactSets::callbackAliasReset, LGGContactSets::getInstance(), _1, _2));
+		}
+		else
+		{
+			// <FS:Ansariel> Optional hiding of display name update notification
+			if (gSavedSettings.getBOOL("FSShowDisplayNameUpdateNotification"))
+			{
+				LLNotificationsUtil::add("DisplayNameUpdate", args);
+			}
+			// </FS:Ansariel> Optional hiding of display name update notification
+		}
 		if (agent_id == gAgent.getID())
 		{
 			LLViewerDisplayName::sNameChangedSignal();
 		}
+		// <FS:Ansariel> Update name in radar
+		else
+		{
+			FSRadar* radar = FSRadar::getInstance();
+			if (radar)
+			{
+				radar->updateName(agent_id);
+			}
+		}
+		// </FS:Ansariel>
 	}
 };
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Carica nel server" name="upload">
-		<menu_item_call label="Immagine ([COST]L$)..." name="Upload Image"/>
-		<menu_item_call label="Suono ([COST]L$)..." name="Upload Sound"/>
-		<menu_item_call label="Animazione ([COST]L$)..." name="Upload Animation"/>
+		<menu_item_call label="Immagine ([COST])..." name="Upload Image"/>
+		<menu_item_call label="Suono ([COST])..." name="Upload Sound"/>
+		<menu_item_call label="Animazione ([COST])..." name="Upload Animation"/>
 		<menu_item_call label="Modella..." name="Upload Model"/>
 		<menu_item_call label="Procedura guidata modellazione..." name="Upload Model Wizard"/>
-		<menu_item_call label="In blocco ([COST]L$ per file)..." name="Bulk Upload"/>
+		<menu_item_call label="In blocco ([COST] per file)..." name="Bulk Upload"/>
 		<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="Nuova cartella" name="New Folder"/>
 	<menu_item_call label="Nuovo script" name="New Script"/>
 	<menu_item_call label="Nuovo biglietto" name="New Note"/>
 	<menu_item_call label="Nuova gesture" name="New Gesture"/>
-	<menu label="Maglietta intima" name="New Clothes">
+	<menu label="Nuovo Indumento" name="New Clothes">
 		<menu_item_call label="Nuova camicia" name="New Shirt"/>
 		<menu_item_call label="Nuovi pantaloni" name="New Pants"/>
 		<menu_item_call label="Nuove scarpe" name="New Shoes"/>

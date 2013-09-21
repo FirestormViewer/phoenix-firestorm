@@ -12,10 +12,18 @@
 	<panel.string name="group_join_free">
 		Бесплатно
 	</panel.string>
+
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<panel name="group_info_top">
 		<text_editor name="group_name" value="(Загрузка...)"/>
 		<line_editor label="Введите здесь название новой группы" name="group_name_editor"/>
 	</panel>
+
+		</layout_panel>
+		<layout_panel name="group_info_content">
+
 	<layout_stack name="layout">
 		<layout_panel name="group_accordions">
 			<accordion name="groups_accordion">
@@ -36,6 +44,9 @@
 		<layout_panel name="btn_apply_lp">
 			<button label="Сохранить" label_selected="Сохранить" name="btn_apply"/>
 			<button label="Создать группу" name="btn_create" tool_tip="Создать новую группу"/>
+		</layout_panel>
+	</layout_stack>
+
 		</layout_panel>
 	</layout_stack>
 </panel>

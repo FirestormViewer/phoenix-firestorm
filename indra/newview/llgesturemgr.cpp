@@ -52,12 +52,17 @@
 #include "llviewermessage.h"
 #include "llvoavatarself.h"
 #include "llviewerstats.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS Communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsnearbychathub.h"
+// </FS:Ansariel> [FS Communication UI]
 #include "llappearancemgr.h"
 #include "llgesturelistener.h"
 
+#include "chatbar_as_cmdline.h" // <ND/> For FIRE-1624
+
 // Longest time, in seconds, to wait for all animations to stop playing
-const F32 MAX_WAIT_ANIM_SECS = 30.f;
+const F32 MAX_WAIT_ANIM_SECS = 60.f;
 
 // If this gesture is a link, get the base gesture that this link points to,
 // otherwise just return this id.
@@ -927,7 +932,8 @@ void LLGestureMgr::stepGesture(LLMultiGesture* gesture)
 			LLGestureStepWait* wait_step = (LLGestureStepWait*)step;
 
 			F32 elapsed = gesture->mWaitTimer.getElapsedTimeF32();
-			if (elapsed > wait_step->mWaitSeconds)
+			//if (elapsed > wait_step->mWaitSeconds) // <FS:LO> Fix for fire-5819 Gestures sticking on wait states
+			if (elapsed > wait_step->mWaitSeconds || wait_step->mWaitSeconds == 19426740371009173000000000000000.0f) // Im not to happy with how this fixes gestures getting stuck in the wait state, but, it does fix the problem</FS:LO> 
 			{
 				// wait is done, continue execution
 				gesture->mWaitingTimer = FALSE;
@@ -996,10 +1002,21 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
 			// Don't animate the nodding, as this might not blend with
 			// other playing animations.
 
+			// <FS:ND> FIRE-1624, try to parse text as command first. If that fails output it as chat
+			if( !cmd_line_chat( chat_text, CHAT_TYPE_NORMAL, true ) )
+			{
+				gesture->mCurrentStep++;
+				break;
+			}
+			//</FS:ND>
+			
 			const BOOL animate = FALSE;
 
-			(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
-					sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+			// <FS:Ansariel> [FS Communication UI]
+			//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+			//		sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+			FSNearbyChat::instance().sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+			// </FS:Ansariel> [FS Communication UI]
 
 			gesture->mCurrentStep++;
 			break;

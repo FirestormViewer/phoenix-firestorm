@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Avatar Pie">
+    <pie_slice label="Profilo..." name="Profile..."/>
+    <pie_slice label="Muta" name="Avatar Mute"/>
+    <pie_slice label="Vai a" name="Go to"/>
+    <pie_slice label="Aggiungi amico..." name="Add Friend"/>
+    <pie_slice label="Paga..." name="Pay..."/>
+    <pie_menu name="Avatar Pie More 1" label="Avanti >">
+        <pie_slice label="Immobilizza" name="Freeze..."/>
+        <pie_slice label="Aggiungi calling card" name="Add Calling Card"/>
+        <pie_slice label="Invita a gruppo" name="Group Invite..."/>
+        <pie_slice label="Espelli..." name="Eject..."/>
+        <pie_menu name="Avatar Pie More 2" label="Avanti >">
+            <pie_slice label="N. Script" name="ScriptInfo"/>
+            <pie_slice label="Chiama" name="Call"/>
+            <pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
+        </pie_menu>
+    </pie_menu>
+    <pie_slice label="IM" name="Send IM..."/>
+</pie_menu>

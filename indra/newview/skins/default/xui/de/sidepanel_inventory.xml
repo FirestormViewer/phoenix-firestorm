@@ -16,12 +16,12 @@
 					</text>
 					<panel name="inbox_inventory_placeholder_panel" tool_tip="Artikel zur Verwendung in Ihr Inventar ziehen">
 						<text name="inbox_inventory_placeholder">
-							Einkäufe aus dem Marktplatz werden hierher geliefert.
+							Einkäufe auf dem Marktplatz werden hierher geliefert.
 						</text>
 					</panel>
 				</panel>
 			</layout_panel>
-		</layout_stack>
+         </layout_stack>
 		<panel name="button_panel">
 			<layout_stack name="button_panel_ls">
 				<layout_panel name="info_btn_lp">

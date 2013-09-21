@@ -1,0 +1,7 @@
+[Chat/NearbyChat]
+- added : (user-resizable) multi-line chat bar to the nearby chat floater
+- added : "NearbyChatFloaterBarType" setting to control the appearance of the chat bar in the nearby chat floater
+    -> 0 - legacy, now single line; 1 - single line (default); 2 - multi line (can be toggled at run-time)
+- added : Shift+Enter to whisper from the chatbar(s)
+- added : "NearbyChatFloaterWindow" setting to optionally embed the nearby chat floater in the tabbed conversations floater
+- added : "save_tearoff_state" for floaters to track the torn off state of LLMultiFloater hosted floaters across viewer sessions

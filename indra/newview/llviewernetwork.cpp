@@ -61,7 +61,7 @@ const std::string  GRID_LOGIN_IDENTIFIER_TYPES = "login_identifier_types";
 const std::string GRID_SLURL_BASE = "slurl_base";
 const std::string GRID_APP_SLURL_BASE = "app_slurl_base";
 
-const std::string DEFAULT_LOGIN_PAGE = "http://viewer-login.agni.lindenlab.com/";
+const std::string DEFAULT_LOGIN_PAGE = "http://phoenixviewer.com/app/loginV3/";
 
 const std::string MAIN_GRID_LOGIN_URI = "https://login.agni.lindenlab.com/cgi-bin/login.cgi";
 
@@ -119,14 +119,14 @@ void LLGridManager::initialize(const std::string& grid_file)
 	mGridFile = grid_file;
 	// as we don't want an attacker to override our grid list
 	// to point the default grid to an invalid grid
-  	addSystemGrid("Second Life Main Grid (Agni)",
+  	addSystemGrid(SECOND_LIFE_MAIN_LABEL,
 				  MAINGRID,
 				  MAIN_GRID_LOGIN_URI,
 				  "https://secondlife.com/helpers/",
 				  DEFAULT_LOGIN_PAGE,
 				  SL_UPDATE_QUERY_URL,
 				  "Agni");
-	addSystemGrid("Second Life Beta Test Grid (Aditi)",
+	addSystemGrid(SECOND_LIFE_BETA_LABEL,
 				  "util.aditi.lindenlab.com",
 				  "https://login.aditi.lindenlab.com/cgi-bin/login.cgi",
 				  "http://aditi-secondlife.webdev.lindenlab.com/helpers/",
@@ -134,6 +134,7 @@ void LLGridManager::initialize(const std::string& grid_file)
 				  SL_UPDATE_QUERY_URL,
 				  "Aditi");
 
+#if 0 //<FS:AW disabled for meeting havok sublicense requirements/>
 	LLSD other_grids;
 	llifstream llsd_xml;
 	if (!grid_file.empty())
@@ -185,6 +186,7 @@ void LLGridManager::initialize(const std::string& grid_file)
 	{
 		LL_DEBUGS("GridManager")<<"no grid file specified"<<LL_ENDL;
 	}
+#endif //<FS:AW disabled for meeting havok sublicense requirements/>
 
 	// load a grid from the command line.
 	// if the actual grid name is specified from the command line,
@@ -213,7 +215,10 @@ void LLGridManager::initialize(const std::string& grid_file)
 		if ( ! getGrid(last_grid).empty() )
 		{
 			LL_INFOS("GridManager")<<"Using last grid: "<<last_grid<<LL_ENDL;
-			mGrid = last_grid;
+// <FS:AW last grid might be unknown switching between SL/OpenSim flavour>
+//			mGrid = last_grid;
+			mGrid = getGrid(last_grid);
+// </FS:AW last grid might be unknown switching between SL/OpenSim flavour>
 		}
 		else
 		{

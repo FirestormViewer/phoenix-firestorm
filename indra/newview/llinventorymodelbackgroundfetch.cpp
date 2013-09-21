@@ -183,10 +183,24 @@ void LLInventoryModelBackgroundFetch::backgroundFetchCB(void *)
 
 void LLInventoryModelBackgroundFetch::backgroundFetch()
 {
-	if (mBackgroundFetchActive && gAgent.getRegion() && gAgent.getRegion()->capabilitiesReceived())
+// <FS:AW>
+	//if (mBackgroundFetchActive && gAgent.getRegion() && gAgent.getRegion()->capabilitiesReceived())
+	LLViewerRegion* region = gAgent.getRegion();
+	if (!region || !region->capabilitiesReceived())
+	{
+		return;
+	}
+
+	if (mBackgroundFetchActive)
+// </FS:AW>
 	{
 		// If we'll be using the capability, we'll be sending batches and the background thing isn't as important.
-		if (gSavedSettings.getBOOL("UseHTTPInventory")) 
+// <FS:AW>
+//		if (gSavedSettings.getBOOL("UseHTTPInventory")) 
+		std::string url = region->getCapability("FetchInventory2");
+		static LLCachedControl<bool> sUseHTTPInventory(gSavedSettings, "UseHTTPInventory");
+		if (sUseHTTPInventory && !url.empty()) 
+// </FS:AW>
 		{
 			bulkFetch();
 			return;
@@ -216,7 +230,10 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 			// Double timeouts on failure.
 			mMinTimeBetweenFetches = llmin(mMinTimeBetweenFetches * 2.f, 10.f);
 			mMaxTimeBetweenFetches = llmin(mMaxTimeBetweenFetches * 2.f, 120.f);
-			lldebugs << "Inventory fetch times grown to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << llendl;
+// <FS:AW>
+//			lldebugs << "Inventory fetch times grown to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << llendl;
+			LL_DEBUGS("InventoryFetch") << "Inventory fetch times grown to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << llendl;
+// </FS:AW>
 			// fetch is no longer considered "timely" although we will wait for full time-out.
 			mTimelyFetchPending = FALSE;
 		}
@@ -289,7 +306,10 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 						// Shrink timeouts based on success.
 						mMinTimeBetweenFetches = llmax(mMinTimeBetweenFetches * 0.8f, 0.3f);
 						mMaxTimeBetweenFetches = llmax(mMaxTimeBetweenFetches * 0.8f, 10.f);
-						lldebugs << "Inventory fetch times shrunk to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << llendl;
+// <FS:AW>
+//						lldebugs << "Inventory fetch times shrunk to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << llendl;
+						LL_DEBUGS("InventoryFetch") << "Inventory fetch times shrunk to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << llendl;
+// </FS:AW>
 					}
 
 					mTimelyFetchPending = FALSE;
@@ -512,7 +532,7 @@ void LLInventoryModelFetchDescendentsResponder::result(const LLSD& content)
 			LLSD folder_sd = *folder_it;
 			
 			// These folders failed on the dataserver.  We probably don't want to retry them.
-			llinfos << "Folder " << folder_sd["folder_id"].asString() 
+ 			llinfos << "Folder " << folder_sd["folder_id"].asString() 
 					<< "Error: " << folder_sd["error"].asString() << llendl;
 		}
 	}
@@ -568,11 +588,14 @@ BOOL LLInventoryModelFetchDescendentsResponder::getIsRecursive(const LLUUID& cat
 // static   
 void LLInventoryModelBackgroundFetch::bulkFetch()
 {
+	if (gDisconnected) return; // <FS:AW>
 	//Background fetch is called from gIdleCallbacks in a loop until background fetch is stopped.
 	//If there are items in mFetchQueue, we want to check the time since the last bulkFetch was 
 	//sent.  If it exceeds our retry time, go ahead and fire off another batch.  
 	LLViewerRegion* region = gAgent.getRegion();
 	if (!region) return;
+
+	if (!region->capabilitiesReceived()) return;// <FS:AW>
 
 	S16 max_concurrent_fetches=8;
 	F32 new_min_time = 0.5f;			//HACK!  Clean this up when old code goes away entirely.
@@ -580,9 +603,11 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 	{
 		mMinTimeBetweenFetches=new_min_time;  //HACK!  See above.
 	}
-	
-	if (gDisconnected ||
-		(mFetchCount > max_concurrent_fetches) ||
+// <FS:AW>
+//	if (gDisconnected ||
+//		(mFetchCount > max_concurrent_fetches) ||
+	if (	(mFetchCount > max_concurrent_fetches) ||
+// </FS:AW>
 		(mFetchTimer.getElapsedTimeF32() < mMinTimeBetweenFetches))
 	{
 		return; // just bail if we are disconnected
@@ -686,23 +711,29 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 	{
 		if (folder_count)
 		{
-			std::string url = region->getCapability("FetchInventoryDescendents2");   
-			if ( !url.empty() )
-			{
-			mFetchCount++;
-			if (folder_request_body["folders"].size())
+// <FS:AW>
+//			std::string url = region->getCapability("FetchInventoryDescendents2");   
+//			mFetchCount++;
+//			if (folder_request_body["folders"].size())
+			mFetchCount++; //FIXME this looks wrong
+			std::string url = region->getCapability("FetchInventoryDescendents2");
+			if(!url.empty() && folder_request_body["folders"].size())
+// </FS:AW>
 			{
 				LLInventoryModelFetchDescendentsResponder *fetcher = new LLInventoryModelFetchDescendentsResponder(folder_request_body, recursive_cats);
 				LLHTTPClient::post(url, folder_request_body, fetcher, 300.0);
 			}
-			if (folder_request_body_lib["folders"].size())
+// <FS:AW>
+//			if (folder_request_body_lib["folders"].size())
+//			{
+//				std::string url_lib = gAgent.getRegion()->getCapability("FetchLibDescendents2");
+			std::string url_lib = gAgent.getRegion()->getCapability("FetchLibDescendents2");
+			if (!url_lib.empty() && folder_request_body_lib["folders"].size())
 			{
-				std::string url_lib = gAgent.getRegion()->getCapability("FetchLibDescendents2");
-
+// </FS:AW>
 				LLInventoryModelFetchDescendentsResponder *fetcher = new LLInventoryModelFetchDescendentsResponder(folder_request_body_lib, recursive_cats);
 				LLHTTPClient::post(url_lib, folder_request_body_lib, fetcher, 300.0);
 			}
-		}
 		}
 		if (item_count)
 		{
@@ -720,8 +751,13 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 
 					LLHTTPClient::post(url, body, new LLInventoryModelFetchItemResponder(body));
 				}
-				//else
-				//{
+// <FS:AW> 
+//				//else
+//				//{
+				else
+				{
+					llwarns << "FIXME! no FetchInventory2 capability" << llendl;
+// </FS:AW>
 				//	LLMessageSystem* msg = gMessageSystem;
 				//	msg->newMessage("FetchInventory");
 				//	msg->nextBlock("AgentData");
@@ -731,7 +767,10 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 				//	msg->addUUID("OwnerID", mPermissions.getOwner());
 				//	msg->addUUID("ItemID", mUUID);
 				//	gAgent.sendReliableMessage();
-				//}
+// <FS:AW> 
+//				//}
+				}
+// </FS:AW>
 			}
 
 			if (item_request_body_lib.size())

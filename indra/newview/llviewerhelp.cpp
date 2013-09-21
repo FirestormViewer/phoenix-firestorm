@@ -107,7 +107,7 @@ std::string LLViewerHelp::defaultTopic()
 std::string LLViewerHelp::preLoginTopic()
 {
 	// *hack: to be done properly
-	return "pre_login_help";
+	return "start";
 }
 
 std::string LLViewerHelp::f1HelpTopic()
@@ -115,6 +115,14 @@ std::string LLViewerHelp::f1HelpTopic()
 	// *hack: to be done properly
 	return "f1_help";
 }
+
+// <FS:TS> FIRE-7377: Add grid manager help topic to login screen
+std::string LLViewerHelp::gridMgrHelpTopic()
+{
+	// *hack: to be done properly
+	return "fs_grid_manager";
+}
+// </FS:TS>
 
 //////////////////////////////
 // our own interfaces

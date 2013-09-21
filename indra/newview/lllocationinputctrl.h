@@ -205,6 +205,15 @@ private:
 	std::string mHumanReadableLocation;
 	bool isHumanReadableLocationVisible;
 	std::string mMaturityHelpTopic;
+
+	// <FS:Zi> Pathfinding rebake functions
+	BOOL	rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+	// </FS:Zi>
+
+	// <FS:ND> Prevent querying LLTrans each frame
+	enum ETooltip{ eGeneral, eAdult, eModerate };
+	std::vector< std::string > mTooltips;
+	// </FS:ND>
 };
 
 #endif

@@ -4,15 +4,6 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
-	<string name="SECOND_LIFE">
-		Second Life
-	</string>
-	<string name="APP_NAME">
-		Second Life
-	</string>
-	<string name="CAPITALIZED_APP_NAME">
-		SECOND LIFE
-	</string>
 	<string name="SECOND_LIFE_GRID">
 		Grille de Second Life
 	</string>
@@ -859,6 +850,12 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="worldmap_results_none_found">
 		Aucun résultat.
 	</string>
+	<string name="worldmap_agent_position">
+		Vous êtes ici
+	</string>
+	<string name="minimap_distance">
+		(Distance: [DISTANCE] m)
+	</string>
 	<string name="Ok">
 		OK
 	</string>
@@ -1429,7 +1426,7 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="InvFolder Gestures">
 		Gestes
 	</string>
-	<string name="InvFolder Favorite">
+	<string name="InvFolder Favorites">
 		Mes Favoris
 	</string>
 	<string name="InvFolder favorite">
@@ -2095,7 +2092,7 @@ Veuillez réessayer de vous connecter dans une minute.
 		vous a donné
 	</string>
 	<string name="InvOfferDecline">
-		Vous refusez l&apos;offre [DESC] de &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Vous refusez l&apos;offre [DESC] de [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Total
@@ -2272,7 +2269,8 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="Adult">
 		Adulte
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Arts et culture
 	</string>
 	<string name="Business">
@@ -2290,7 +2288,8 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="Newcomer Friendly">
 		Accueil pour les nouveaux
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parcs et nature
 	</string>
 	<string name="Residential">
@@ -4893,7 +4892,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Construire
 	</string>
 	<string name="Command_Chat_Label">
-		Chat
+		Conversations
 	</string>
 	<string name="Command_Conversations_Label">
 		Conversations

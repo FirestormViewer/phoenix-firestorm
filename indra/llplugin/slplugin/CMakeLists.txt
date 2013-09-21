@@ -62,6 +62,14 @@ set_target_properties(SLPlugin
   )
 endif ()
 
+if(WINDOWS)
+  set_target_properties(SLPlugin
+   PROPERTIES
+   LINK_FLAGS "/debug"
+   )
+
+endif(WINDOWS)
+
 target_link_libraries(SLPlugin
   ${LLPLUGIN_LIBRARIES}
   ${LLMESSAGE_LIBRARIES}

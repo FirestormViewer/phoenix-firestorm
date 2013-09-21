@@ -56,6 +56,9 @@ class LLTextBox;
 class LLVFS;
 
 class LLPanelRegionGeneralInfo;
+// <FS:CR> Aurora Sim - Region Settings Panel
+class LLPanelRegionOpenSettingsInfo;
+// </FS:CR> Aurora Sim - Region Settings Panel
 class LLPanelRegionDebugInfo;
 class LLPanelRegionTerrainInfo;
 class LLPanelEstateInfo;
@@ -90,6 +93,9 @@ public:
 	static LLPanelEstateInfo* getPanelEstate();
 	static LLPanelEstateCovenant* getPanelCovenant();
 	static LLPanelRegionTerrainInfo* getPanelRegionTerrain();
+// <FS:CR> Aurora Sim - Region Settings Panel
+	static LLPanelRegionOpenSettingsInfo* getPanelOpenSettings();
+// </FS:CR> Aurora Sim - Region Settings Panel
 
 	// from LLPanel
 	virtual void refresh();
@@ -160,6 +166,26 @@ protected:
 // Actual panels start here
 /////////////////////////////////////////////////////////////////////////////
 
+// <FS:CR> Aurora Sim - Region Settings Panel
+class LLPanelRegionOpenSettingsInfo : public LLPanelRegionInfo
+{
+public:
+	LLPanelRegionOpenSettingsInfo()
+		:	LLPanelRegionInfo()	{}
+	~LLPanelRegionOpenSettingsInfo() {}
+	
+	virtual bool refreshFromRegion(LLViewerRegion* region);
+	
+	// LLPanel
+	virtual BOOL postBuild();
+
+protected:
+	static void onClickOrs(void* userdata);
+	static void onClickHelp(void* data);
+};
+/////////////////////////////////////////////////////////////////////////////
+// </FS:CR> Aurora Sim - Region Settings Panel
+
 class LLPanelRegionGeneralInfo : public LLPanelRegionInfo
 {
 	
@@ -207,7 +233,7 @@ protected:
 	static void onClickTopColliders(void*);
 	static void onClickTopScripts(void*);
 	static void onClickRestart(void* data);
-	bool callbackRestart(const LLSD& notification, const LLSD& response);
+	bool callbackRestart(const LLSD& notification, const LLSD& response, const LLSD& seconds); // Ansariel, added seconds for FIRE-1073
 	static void onClickCancelRestart(void* data);
 	
 private:

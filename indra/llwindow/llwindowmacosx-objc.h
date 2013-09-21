@@ -25,6 +25,9 @@
  * $/LicenseInfo$
  */
 
+#ifndef LL_LLWINDOWMACOSX_OBJC_H
+#define LL_LLWINDOWMACOSX_OBJC_H
+
 #include <map>
 #include <vector>
 
@@ -70,6 +73,7 @@ void showNSCursor();
 void hideNSCursorTillMove(bool hide);
 void requestUserAttention();
 long showAlert(std::string title, std::string text, int type);
+void setTitleCocoa(NSWindowRef window, const std::string &title);	// <FS:CR> Set Window title
 
 NSWindowRef createNSWindow(int x, int y, int width, int height);
 
@@ -143,3 +147,5 @@ NSWindowRef getMainAppWindow();
 GLViewRef getGLView();
 
 unsigned int getModifiers();
+
+#endif // LL_LLWINDOWMACOSX_OBJC_H

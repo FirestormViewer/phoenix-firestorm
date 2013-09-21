@@ -271,10 +271,13 @@ void LLHUDEffectSpiral::render()
 {
 	F32 time = mTimer.getElapsedTimeF32();
 
+	static LLCachedControl<bool> showSelectionBeam(gSavedSettings, "ShowSelectionBeam"); // <FS:Ansariel> Performance tweak
 	if ((!mSourceObject.isNull() && mSourceObject->isDead()) ||
 	    (!mTargetObject.isNull() && mTargetObject->isDead()) ||
 	    mKillTime < time ||
-		(!mPartSourcep.isNull() && !gSavedSettings.getBOOL("ShowSelectionBeam")) )
+		// <FS:Ansariel> Performance tweak
+		//(!mPartSourcep.isNull() && !gSavedSettings.getBOOL("ShowSelectionBeam")) )
+		(!mPartSourcep.isNull() && !showSelectionBeam) ) 
 	{
 		markDead();
 		return;

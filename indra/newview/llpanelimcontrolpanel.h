@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_LLPANELIMCONTROLPANEL_H
 #define LL_LLPANELIMCONTROLPANEL_H
 
@@ -82,3 +84,5 @@ public:
 };
 
 #endif // LL_LLPANELIMCONTROLPANEL_H
+
+#endif

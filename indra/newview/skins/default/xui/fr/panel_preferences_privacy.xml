@@ -15,7 +15,7 @@
 	<text name="Logs:">
 		Journaux de chat :
 	</text>
-	<check_box label="Sauvegarder les chats près de moi sur mon ordinateur" name="log_nearby_chat"/>
+	<check_box label="Sauvegarder le chat local sur mon ordinateur" name="log_nearby_chat"/>
 	<check_box label="Sauvegarder les IM sur mon ordinateur" name="log_instant_messages"/>
 	<check_box label="Inclure la date et l&apos;heure pour chaque ligne du journal de chat" name="show_timestamps_check_im"/>
 	<check_box label="Inclure la date dans le nom du fichier journal" name="logfile_name_datestamp"/>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbars>
+    <right_toolbar
+     button_alignment="center"
+     button_display_mode="icons_only"
+     button_layout_style="none" />
+    <bottom_toolbar
+     button_alignment="center"
+     button_display_mode="text_only"
+     button_layout_style="fill">
+        <command
+         name="chat" />
+        <command
+         name="fly" />
+        <command
+         name="people" />
+        <command
+         name="snapshot" />
+        <command
+         name="build" />
+        <command
+         name="search" />
+        <command
+         name="minimap" />
+        <command
+         name="map" />
+        <command
+         name="inventory" />
+    </bottom_toolbar>
+    <left_toolbar
+     button_alignment="center"
+     button_display_mode="icons_only"
+     button_layout_style="none" />
+</toolbars>

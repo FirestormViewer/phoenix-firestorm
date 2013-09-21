@@ -171,6 +171,11 @@ void LLMotionController::deleteAllMotions()
 
 	for_each(mAllMotions.begin(), mAllMotions.end(), DeletePairedPointer());
 	mAllMotions.clear();
+
+	// <FS:ND> There might still be motions in mDeprecatedMotions. Don't leak those.
+	for_each(mDeprecatedMotions.begin(), mDeprecatedMotions.end(), DeletePointer() );
+	mDeprecatedMotions.clear();
+	// </FS:ND>
 }
 
 //-----------------------------------------------------------------------------

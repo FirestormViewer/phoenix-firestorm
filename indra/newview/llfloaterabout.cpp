@@ -45,6 +45,9 @@
 #include "llviewerregion.h"
 #include "llversioninfo.h"
 #include "llweb.h"
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Linden library includes
 #include "llaudioengine.h"
@@ -66,6 +69,11 @@
 #if LL_WINDOWS
 #include "lldxhardware.h"
 #endif
+
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 
 extern LLMemoryInfo gSysMemory;
 extern U32 gPacketsIn;
@@ -90,29 +98,29 @@ public:
 };
 
 ///----------------------------------------------------------------------------
-/// Class LLFloaterAbout
+/// Class LLFloaterAbout moved to llfloaterabout.h for fsdata info
 ///----------------------------------------------------------------------------
-class LLFloaterAbout 
-	: public LLFloater
-{
-	friend class LLFloaterReg;
-private:
-	LLFloaterAbout(const LLSD& key);
-	virtual ~LLFloaterAbout();
-
-public:
-	/*virtual*/ BOOL postBuild();
-
-	/// Obtain the data used to fill out the contents string. This is
-	/// separated so that we can programmatically access the same info.
-	static LLSD getInfo();
-	void onClickCopyToClipboard();
-
-	void updateServerReleaseNotesURL(const std::string& url);
-
-private:
-	void setSupportText(const std::string& server_release_notes_url);
-};
+//class LLFloaterAbout 
+//	: public LLFloater
+//{
+//	friend class LLFloaterReg;
+//private:
+//	LLFloaterAbout(const LLSD& key);
+//	virtual ~LLFloaterAbout();
+//
+//public:
+//	/*virtual*/ BOOL postBuild();
+//
+//	/// Obtain the data used to fill out the contents string. This is
+//	/// separated so that we can programmatically access the same info.
+//	static LLSD getInfo();
+//	void onClickCopyToClipboard();
+//
+//	void updateServerReleaseNotesURL(const std::string& url);
+//
+//private:
+//	void setSupportText(const std::string& server_release_notes_url);
+//};
 
 
 // Default constructor
@@ -237,6 +245,43 @@ LLSD LLFloaterAbout::getInfo()
 	info["BUILD_DATE"] = __DATE__;
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
+// <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
+#ifdef OPENSIM
+	info["BUILD_TYPE"] = LLTrans::getString("FSWithOpensim");
+#else
+	info["BUILD_TYPE"] = LLTrans::getString("FSWithHavok");
+#endif // OPENSIM
+// </FS:CR>
+	info["SKIN"] = gSavedSettings.getString("FSInternalSkinCurrent");
+	info["THEME"] = gSavedSettings.getString("FSInternalSkinCurrentTheme");
+
+	//[FIRE 3113 : SJ] Added Font and fontsize to info
+	info["FONT"] = "Unknown Font";
+	std::string fsInternalFontSettingsFile = gSavedSettings.getString("FSInternalFontSettingsFile");
+	if (fsInternalFontSettingsFile == "fonts.xml") info["FONT"] = "Deja Vu";
+	else if (fsInternalFontSettingsFile == "fonts_ubuntu.xml") info["FONT"] = "Ubuntu Font Family";
+	else if (fsInternalFontSettingsFile == "fonts_liberation.xml") info["FONT"] = "Liberation";
+	else if (fsInternalFontSettingsFile == "fonts_droid.xml") info["FONT"] = "Droid Sans";
+	else if (fsInternalFontSettingsFile == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
+	else if (fsInternalFontSettingsFile == "fonts_roboto.xml") info["FONT"] = "Roboto";
+	else if (fsInternalFontSettingsFile == "fonts_dyslexia.xml") info["FONT"] = "OpenDyslexic";
+	
+	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
+	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
+
+	//[FIRE-3923 : SJ] Added Drawdistance, bandwidth and LOD to info
+	info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
+	info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	info["LOD"] =gSavedSettings.getF32("RenderVolumeLODFactor");
+
+	//[FIRE 3113 : SJ] Added Settingsfile to info
+	info["MODE"] = "Unknown Mode";
+	std::string sessionSettingsFile = gSavedSettings.getString("SessionSettingsFile");
+	if (sessionSettingsFile == "settings_firestorm.xml") info["MODE"] = "Firestorm";
+	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
+	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
+	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
+	else if (sessionSettingsFile == "settings_latency.xml") info["MODE"] = "Latency";
 
 	info["VIEWER_RELEASE_NOTES_URL"] = get_viewer_release_notes_url();
 
@@ -280,6 +325,9 @@ LLSD LLFloaterAbout::getInfo()
     }
 #endif
 
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a) | Added: RLVa-1.2.0e
+	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
+// [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCurl::getVersionString();
 	info["J2C_VERSION"] = LLImageJ2C::getEngineInfo();
@@ -307,6 +355,44 @@ LLSD LLFloaterAbout::getInfo()
 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
 	}
 
+	// <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
+	switch (gSavedSettings.getU32("RenderQualityPerformance"))
+	{
+		case 0:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_low");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Low (1/7)";
+			break;
+		case 1:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumlow");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-Low (2/7)";
+			break;
+		case 2:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_medium");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium (3/7)";
+			break;
+		case 3:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumhigh");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-High (4/7)";
+			break;
+		case 4:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_high");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High (5/7)";
+			break;
+		case 5:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_highultra");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High-Ultra (6/7)";
+			break;
+		case 6:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_ultra");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Ultra (7/7)";
+			break;
+		default:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_unknown");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Unknown, user has RenderQualityPerformance debug setting beyond the normal range (0-6)";
+			break;
+	}
+	// </FS:PP>
+
     return info;
 }
 
@@ -314,11 +400,12 @@ static std::string get_viewer_release_notes_url()
 {
 	// return a URL to the release notes for this viewer, such as:
 	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456
-	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
-	if (! LLStringUtil::endsWith(url, "/"))
-		url += "/";
-	url += LLVersionInfo::getChannel() + "/";
-	url += LLVersionInfo::getVersion();
+	//std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
+	//if (! LLStringUtil::endsWith(url, "/"))
+	//	url += "/";
+	//url += LLVersionInfo::getChannel() + "/";
+	//url += LLVersionInfo::getVersion();
+	std::string url = "http://wiki.phoenixviewer.com/firestorm_change_log";
 	return LLWeb::escapeURL(url);
 }
 
@@ -432,6 +519,11 @@ void LLFloaterAbout::setSupportText(const std::string& server_release_notes_url)
 		support << "\n" << getString("AboutDriver", args);
 	}
 	support << "\n" << getString("AboutLibs", args);
+	if (info.has("BANDWIDTH"))
+	{
+		support << "\n" << getString("AboutSettings", args);
+	}
+
 	if (info.has("COMPILER"))
 	{
 		support << "\n" << getString("AboutCompiler", args);

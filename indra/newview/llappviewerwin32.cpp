@@ -127,7 +127,10 @@ void ll_nvapi_init(NvDRSSessionHandle hSession)
 	}
 
 	NvAPI_UnicodeString profile_name;
-	std::string app_name = LLTrans::getString("APP_NAME");
+	// <FS:Ansariel> Use "Second Life" as app name to load the correct profile
+	//std::string app_name = LLTrans::getString("APP_NAME");
+	std::string app_name = "Second Life";
+	// </FS:Ansariel>
 	llutf16string w_app_name = utf8str_to_utf16str(app_name);
 	wsprintf(profile_name, L"%s", w_app_name.c_str());
 	status = NvAPI_DRS_SetCurrentGlobalProfile(hSession, profile_name);
@@ -581,6 +584,7 @@ bool LLAppViewerWin32::initHardwareTest()
 		std::string splash_msg;
 		LLStringUtil::format_map_t args;
 		args["[APP_NAME]"] = LLAppViewer::instance()->getSecondLifeTitle();
+		args["[CURRENT_GRID]"] = LLGridManager::getInstance()->getGridLabel();
 		splash_msg = LLTrans::getString("StartupLoading", args);
 
 		LLSplashScreen::update(splash_msg);

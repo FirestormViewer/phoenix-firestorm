@@ -24,6 +24,12 @@
  * $/LicenseInfo$
  */
 
+// </FS:ND> Fix for GCC 4.4.5, oherwise it complains at boost/signal
+#ifdef LL_LINUX
+#pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
+// </FS:ND>
+
 #include "llviewerprecompiledheaders.h"
 
 #include "llviewerjoystick.h"
@@ -39,7 +45,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llfocusmgr.h"
-
+#include "llmoveview.h"
 
 // ----------------------------------------------------------------------------
 // Constants
@@ -326,8 +332,11 @@ void LLViewerJoystick::handleRun(F32 inc)
 		if (1 == mJoystickRun)
 		{
 			++mJoystickRun;
-			gAgent.setRunning();
-			gAgent.sendWalkRun(gAgent.getRunning());
+//			gAgent.setRunning();
+//			gAgent.sendWalkRun(gAgent.getRunning());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+			gAgent.setTempRun();
+// [/RLVa:KB]
 		}
 		else if (0 == mJoystickRun)
 		{
@@ -342,8 +351,11 @@ void LLViewerJoystick::handleRun(F32 inc)
 			--mJoystickRun;
 			if (0 == mJoystickRun)
 			{
-				gAgent.clearRunning();
-				gAgent.sendWalkRun(gAgent.getRunning());
+//				gAgent.clearRunning();
+//				gAgent.sendWalkRun(gAgent.getRunning());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+				gAgent.clearTempRun();
+// [/RLVa:KB]
 			}
 		}
 	}
@@ -990,6 +1002,7 @@ bool LLViewerJoystick::toggleFlycam()
 	if (!gSavedSettings.getBOOL("JoystickEnabled") || !gSavedSettings.getBOOL("JoystickFlycamEnabled"))
 	{
 		mOverrideCamera = false;
+		LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
 		return false;
 	}
 
@@ -1007,7 +1020,7 @@ bool LLViewerJoystick::toggleFlycam()
 	if (mOverrideCamera)
 	{
 		moveFlycam(true);
-		
+		LLPanelStandStopFlying::setStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
 	}
 	else 
 	{
@@ -1015,6 +1028,7 @@ bool LLViewerJoystick::toggleFlycam()
 		// the main camera until the avatar moves, we need to track this situation.
 		setCameraNeedsUpdate(false);
 		setNeedsReset(true);
+		LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
 	}
 	return true;
 }

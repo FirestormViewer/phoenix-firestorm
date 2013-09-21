@@ -568,11 +568,8 @@ bool LLTextureCacheRemoteWorker::doWrite()
 			idx = mCache->setHeaderCacheEntry(mID, entry, mImageSize, mDataSize); // create the new entry.
 			if(idx >= 0)
 			{
-				// (almost always) write to the fast cache.
-				if (mRawImage->getDataSize())
-				{
-					llassert_always(mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel));
-				}
+				//write to the fast cache.
+				llassert_always(mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel));
 			}
 		}
 		else
@@ -916,6 +913,7 @@ void LLTextureCache::setDirNames(ELLPath location)
 {
 	std::string delem = gDirUtilp->getDirDelimiter();
 
+	mCacheParentDirName = gDirUtilp->getExpandedFilename(location,"");
 	mHeaderEntriesFileName = gDirUtilp->getExpandedFilename(location, textures_dirname, entries_filename);
 	mHeaderDataFileName = gDirUtilp->getExpandedFilename(location, textures_dirname, cache_filename);
 	mTexturesDirName = gDirUtilp->getExpandedFilename(location, textures_dirname);
@@ -992,6 +990,10 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, BOOL texture_cache
 	
 	if (!mReadOnly)
 	{
+	        if (!LLFile::isdir(mCacheParentDirName))
+	        {
+	                LLFile::mkdir(mCacheParentDirName);
+                }
 		LLFile::mkdir(mTexturesDirName);
 		
 		const char* subdirs = "0123456789abcdef";
@@ -1830,6 +1832,16 @@ LLTextureCache::handle_t LLTextureCache::writeToCache(const LLUUID& id, U32 prio
 		purgeTextures(false);
 		mDoPurge = FALSE;
 	}
+
+	// <FS:ND> There seems to be an edge case of KDU failing to decode images and then we end with null data here.
+	// This should be bettered handled up where it fails, but at least this stops the crashes.
+	if( rawimage.isNull() || !rawimage->getData() )
+	{
+		delete responder;
+		return LLWorkerThread::nullHandle();
+	}
+	// </FS:ND>
+
 	LLMutexLock lock(&mWorkersMutex);
 	LLTextureCacheWorker* worker = new LLTextureCacheRemoteWorker(this, priority, id,
 																  data, datasize, 0,

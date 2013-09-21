@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater" title="Impostazioni Contatti (Gruppo o Set)">
+	<floater.string name="AddToGroup" value="Aggiungi a: [GROUPNAME]"/>
+	<floater.string name="RemoveFromGroup" value="Rimuovi da: [GROUPNAME]"/>
+	<floater.string name="RemoveDisplayName" value="Rimuovi display name"/>
+	<floater.string name="ResetNameModification" value="Resetta il nome modificato"/>
+	<floater.string name="RemoveFromList" value="Rimuovi dalla lista"/>
+	<floater.string name="ShowProfile" value="Mostra profilo"/>
+	<floater.string name="ShowOnMap" value="Mostra sulla mappa"/>
+	<floater.string name="SendIM" value="Invia IMs"/>
+	<floater.string name="OfferTP" value="Offri teleport"/>
+	<floater.string name="AllSelected" value="All [COUNT] selected"/>
+	<floater.string name="StartConferenceCall" value="Inizia una chiamata di gruppo ([COUNT])"/>
+	<floater.string name="SendMassTP" value="Manda TP al Set ([COUNT])"/>
+	<floater.string name="DeselectAll" value="Deseleziona tutti ([COUNT])"/>
+	<floater.string name="SelectAll" value="Seleziona tutti ([COUNT])"/>
+	<floater.string name="AddNewAvatar" value="Aggiungi nuovo amico"/>
+	<floater.string name="FilterLabel" value="Usa filtro corrente:"/>
+	<floater.string name="TooltipFriendUnselected" value="Amico deselezionato"/>
+	<floater.string name="TooltipFriendSelected" value="Amico selezionato"/>
+	<floater.string name="TooltipFriendOnline" value="Amico online"/>
+	<floater.string name="TooltipFriendOffline" value="Amico offline"/>
+	<floater.string name="TooltipNotOnFriendlist" value="Non è nella tua lista amici"/>
+	<floater.string name="TooltipIM" value="Instant message"/>
+	<floater.string name="TooltipProfile" value="Mostra profilo"/>
+	<floater.string name="TooltipNameChanged" value="Il nome è stato cambiato"/>
+	
+    <text name="lgg_fg_text1">Mostra:</text>
+    <text name="lgg_fg_text2a">Mostra notifiche</text>
+    <text name="lgg_fg_text2b">per questo Gruppo</text>
+    <button label="Impostazioni" name="lgg_fg_openSettings" left_delta="103"/>
+    <button label="Elimina Set" name="lgg_fg_groupDelete" left_delta="90"/>
+    <color_swatch label="Colore Set" name="colorswatch" tool_tip="Clicca, per aprire la Tavoletta dei colori (Color Picker)"/>
+    <text name="lgg_fg_text3">Mostra:</text>
+    <text name="lgg_fg_text4a">Tutti</text>
+    <text name="lgg_fg_text4b">i Set</text>
+    <check_box label="Tutti" name="lgg_fg_showAllFriends"/>
+    <line_editor name="lgg_fg_groupNewName" label="Nome Nuovo Set"/>
+   <button label="Crea Set" name="lgg_fg_groupCreate"/>
+</floater>

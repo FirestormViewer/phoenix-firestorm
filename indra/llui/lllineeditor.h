@@ -65,7 +65,7 @@ public:
 	{
 		Alternative<S32> bytes, chars;
 		
-		MaxLength() : bytes("max_length_bytes", 254),
+		MaxLength() : bytes("max_length_bytes", 4096), // FS:TM needs to be this big for fields like entering in full path location to files on the local computer
 					  chars("max_length_chars", 0) 
 		{}
 	};
@@ -189,6 +189,12 @@ public:
 	virtual BOOL	setTextArg( const std::string& key, const LLStringExplicit& text );
 	virtual BOOL	setLabelArg( const std::string& key, const LLStringExplicit& text );
 
+	//<FS:TS> FIRE-11373: Autoreplace doesn't work in nearby chat bar
+	typedef boost::function<void(S32&, S32&, LLWString&, S32&, const LLWString&)> autoreplace_callback_t;
+	autoreplace_callback_t mAutoreplaceCallback;
+	void			setAutoreplaceCallback (autoreplace_callback_t cb) { mAutoreplaceCallback = cb; }
+	//</FS:TS> FIRE-11373
+
 	void			setLabel(const LLStringExplicit &new_label) { mLabel = new_label; }
 	const std::string& 	getLabel()	{ return mLabel.getString(); }
 
@@ -291,7 +297,7 @@ private:
 	
 	// Draw the background image depending on enabled/focused state.
 	void			drawBackground();
-
+	
 	//
 	// private data members
 	//

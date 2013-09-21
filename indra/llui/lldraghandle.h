@@ -45,9 +45,11 @@ public:
 		Optional<std::string> label;
 		Optional<LLUIColor> drag_highlight_color;
 		Optional<LLUIColor> drag_shadow_color;
+		Optional<S32> label_v_padding;		// <FS:Zi> Make vertical label padding a per-skin option
 		
 		Params() 
 		:	label("label"),	
+			label_v_padding("label_v_padding", -1),	// <FS:Zi> Make vertical label padding a per-skin option
 			drag_highlight_color("drag_highlight_color", LLUIColorTable::instance().getColor("DefaultHighlightLight")),
 			drag_shadow_color("drag_shadow_color", LLUIColorTable::instance().getColor("DefaultShadowDark"))
 		{
@@ -97,6 +99,9 @@ private:
 
 	// Pixels near the edge to snap floaters.
 	static S32		sSnapMargin;
+
+protected:
+	S32				mLabelVPadding;	// <FS:Zi> Make vertical label padding a per-skin option
 };
 
 

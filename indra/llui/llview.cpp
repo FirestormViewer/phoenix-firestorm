@@ -138,12 +138,19 @@ LLView::LLView(const LLView::Params& p)
 	mUseBoundingRect(p.use_bounding_rect),
 	mDefaultTabGroup(p.default_tab_group),
 	mLastTabGroup(0),
-	mToolTipMsg((LLStringExplicit)p.tool_tip()),
+//	mToolTipMsg((LLStringExplicit)p.tool_tip()),
 	mDefaultWidgets(NULL)
 {
 	// create rect first, as this will supply initial follows flags
 	setShape(p.rect);
 	parseFollowsFlags(p);
+
+	// <FS:ND> LLUIString comes with a tax of 92 byte (Numbers apply to Win32).
+	// Saving roughly 90% (char* + pointer for args) for each LLView derived object makes this really worthwile. Especially when having a large inventory,
+	mToolTipMsg = 0;
+	mTooltipArgs = 0;
+	setToolTip( static_cast<LLStringExplicit>( p.tool_tip() ) );
+	// </FS:ND>
 }
 
 LLView::~LLView()
@@ -176,6 +183,12 @@ LLView::~LLView()
 		delete mDefaultWidgets;
 		mDefaultWidgets = NULL;
 	}
+
+	// <FS:ND> LLUIString comes with a tax of 92 byte (Numbers apply to Win32).
+	// Saving roughly 90% (char* + pointer for args) for each LLView derived object makes this really worthwile. Especially when having a large inventory,
+	delete [] mToolTipMsg;
+	delete mTooltipArgs;
+	// </FS:ND>
 }
 
 // virtual
@@ -192,18 +205,50 @@ BOOL LLView::isPanel() const
 
 void LLView::setToolTip(const LLStringExplicit& msg)
 {
-	mToolTipMsg = msg;
+	// <FS:ND> LLUIString comes with a tax of 92 byte (Numbers apply to Win32).
+	// Saving roughly 90% (char* + pointer for args) for each LLView derived object makes this really worthwile. Especially when having a large inventory,
+
+	// mToolTipMsg = msg;
+
+	delete [] mToolTipMsg;
+	mToolTipMsg = 0;
+	if( msg.size() )
+	{
+		mToolTipMsg = new char[ msg.size() + 1 ];
+		memcpy( mToolTipMsg, msg.c_str(), msg.size()+1 );
+	}
+
+	// </FS:ND>
 }
 
 BOOL LLView::setToolTipArg(const LLStringExplicit& key, const LLStringExplicit& text)
 {
-	mToolTipMsg.setArg(key, text);
+	// <FS:ND> LLUIString comes with a tax of 92 byte (Numbers apply to Win32).
+	// Saving roughly 90% (char* + pointer for args) for each LLView derived object makes this really worthwile. Especially when having a large inventory,
+
+	// mToolTipMsg.setArg(key, text);
+
+	if( !mTooltipArgs )
+		mTooltipArgs = new LLStringUtil::format_map_t();
+	mTooltipArgs->operator[](key) = text;
+
+	// </FS:ND>
+
 	return TRUE;
 }
 
 void LLView::setToolTipArgs( const LLStringUtil::format_map_t& args )
 {
-	mToolTipMsg.setArgList(args);
+	// <FS:ND> LLUIString comes with a tax of 92 byte (Numbers apply to Win32).
+	// Saving roughly 90% (char* + pointer for args) for each LLView derived object makes this really worthwile. Especially when having a large inventory,
+
+	// mToolTipMsg.setArgList(args);
+
+	if( !mTooltipArgs )
+		mTooltipArgs = new LLStringUtil::format_map_t();
+	*mTooltipArgs = args;
+
+	// </FS:ND>
 }
 
 // virtual
@@ -834,7 +879,7 @@ LLView* LLView::childrenHandleHover(S32 x, S32 y, MASK mask)
 LLView*	LLView::childFromPoint(S32 x, S32 y, bool recur)
 {
 	if (!getVisible())
-		return false;
+		return NULL;
 
 	BOOST_FOREACH(LLView* viewp, mChildList)
 	{
@@ -866,6 +911,12 @@ LLView*	LLView::childFromPoint(S32 x, S32 y, bool recur)
 BOOL LLView::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	BOOL handled = FALSE;
+
+	// TS: Don't bother with a tooltip unless the app itself has focus.
+	if (!gFocusMgr.getAppHasFocus())
+	{
+		return TRUE;
+	}
 
 	// parents provide tooltips first, which are optionally
 	// overridden by children, in case child is mouse_opaque
@@ -2686,3 +2737,26 @@ void LLView::addInfo(LLSD & info)
 	info["rect"] = LLSDMap("left", rect.mLeft)("top", rect.mTop)
 				("right", rect.mRight)("bottom", rect.mBottom);
 }
+
+// <FS:ND> LLUIString comes with a tax of 92 byte (Numbers apply to Win32).
+// Saving roughly 90% (char* + pointer for args) for each LLView derived object makes this really worthwile. Especially when having a large inventory,
+
+const std::string LLView::getToolTip() const
+{
+	if( !mToolTipMsg || !*mToolTipMsg )
+		return "";
+
+	std::string strRet;
+	if( mTooltipArgs )
+	{
+		LLUIString strUI( mToolTipMsg,*mTooltipArgs );
+		return strUI.getString();
+	}
+	else
+	{
+		LLUIString strUI( mToolTipMsg );
+		return strUI.getString();
+	}
+}
+
+// </FS:ND>

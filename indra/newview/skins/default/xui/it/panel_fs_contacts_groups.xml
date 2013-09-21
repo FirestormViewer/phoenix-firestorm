@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="groups">
+	<group_list name="group_list"/>
+    <text name="groupcount">
+Sei iscritto a [COUNT] di [MAX] gruppi.
+    </text>
+	<button name="chat_btn" tool_tip="Inizia Chat di gruppo"/>
+	<button label="Attiva" name="activate_btn"/>
+	<button label="Abbandona" name="leave_btn"/>
+	<button label="Crea..." name="create_btn"/>
+	<button label="Cerca..." name="search_btn"/>
+	<button label="Titoli gruppi" name="titles_btn"/>
+</panel>

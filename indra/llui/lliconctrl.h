@@ -50,7 +50,10 @@ public:
 		Optional<LLUIImage*>	image;
 		Optional<LLUIColor>		color;
 		Optional<bool>			use_draw_context_alpha;
-		Ignored					scale_image;
+		// <FS:KC> Scaled imaged
+		//Ignored					scale_image;
+		Optional<bool>			scale_image;
+		// </FS:KC> Scaled imaged
 		Params();
 	};
 protected:
@@ -72,6 +75,11 @@ public:
 	void			setImage(LLPointer<LLUIImage> image) { mImagep = image; }
 	const LLPointer<LLUIImage> getImage() { return mImagep; }
 	
+	// <FS:KC> Scaled imaged
+	void			setScaleImage(BOOL scale)			{ mScaleImage = scale; }
+	BOOL			getScaleImage() const				{ return mScaleImage; }
+	// </FS:KC> Scaled imaged
+	
 private:
 	void setIconImageDrawSize() ;
 
@@ -89,6 +97,9 @@ protected:
 private:
 	LLUIColor mColor;
 	LLPointer<LLUIImage> mImagep;
+
+	// <FS:KC> Scaled imaged
+	BOOL mScaleImage;
 };
 
 #endif

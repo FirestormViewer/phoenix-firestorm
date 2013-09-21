@@ -3,14 +3,13 @@
   background_opaque="false"
       border_visible="false"
   background_visible="true"
-  bg_alpha_color="PanelNotificationBackground"
-  bg_opaque_color="PanelNotificationBackground"
+  bg_alpha_color="Cerise_0"
+  bg_opaque_color="Cerise_0"
   label="notification_panel"
   layout="topleft"
   left="0"
   name="notification_panel"
   chrome="true"
-  show_title="false"
   top="0"
   	height="140"
   translate="false"
@@ -20,8 +19,8 @@
       border_visible="false"
  bevel_style="none"
     background_visible="true"
-  bg_alpha_color="ToastBackground"
-  bg_opaque_color="ToastBackground"
+  bg_alpha_color="Titanium_0"
+  bg_opaque_color="Titanium_0"
     follows="left|right|top"
     height="100"
     label="info_panel"
@@ -97,4 +96,18 @@
     This panel holds buttons of notification. Change of its size can affect the layout of buttons. 
      -->
   </panel>
+
+  <!-- <FS:Zi> Dialog Stacking browser -->
+  <button
+    layout="topleft"
+    follows="right|bottom"
+    name="DialogStackButton"
+    visibility_control="DialogStackIconVisible"
+    image_selected="Icon_DialogStack"
+    image_unselected="Icon_DialogStack"   
+    width="24"
+    height="14"
+    right="-2"
+    bottom="-2" />
+  <!-- <FS:Zi> Dialog Stacking browser -->
 </panel>

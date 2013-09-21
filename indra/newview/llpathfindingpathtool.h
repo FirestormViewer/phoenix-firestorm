@@ -105,16 +105,32 @@ private:
 
 	void              setFinalA(const LLVector3 &pStartPoint, const LLVector3 &pEndPoint);
 	bool              hasFinalA() const;
-	const LLVector3   &getFinalAStart() const;
-	const LLVector3   &getFinalAEnd() const;
+
+	// <FS:ND> Cannot return reference here, due to stub returning a temporary
+
+	// const LLVector3   &getFinalAStart() const;
+	// const LLVector3   &getFinalAEnd() const;
+
+	LLVector3   getFinalAStart() const;
+	LLVector3   getFinalAEnd() const; 
+
+	// </FS:ND>
 
 	void              setTempA(const LLVector3 &pStartPoint, const LLVector3 &pEndPoint);
 	bool              hasTempA() const;
 
 	void              setFinalB(const LLVector3 &pStartPoint, const LLVector3 &pEndPoint);
 	bool              hasFinalB() const;
-	const LLVector3   &getFinalBStart() const;
-	const LLVector3   &getFinalBEnd() const;
+
+	// <FS:ND> Cannot return reference here, due to stub returning a temporary
+
+	// const LLVector3   &getFinalBStart() const;
+	// const LLVector3   &getFinalBEnd() const;
+
+	LLVector3   getFinalBStart() const;
+	LLVector3   getFinalBEnd() const;
+
+	// </FS:ND>
 
 	void              setTempB(const LLVector3 &pStartPoint, const LLVector3 &pEndPoint);
 	bool              hasTempB() const;

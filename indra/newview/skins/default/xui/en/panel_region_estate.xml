@@ -2,14 +2,14 @@
 <panel
  border="true"
  follows="top|left"
- height="510"
+ height="450"
  help_topic="panel_region_estate_tab"
  label="Estate"
  layout="topleft"
  left="0"
  name="Estate"
  top="320"
- width="530">
+ width="485">
     <text
      type="string"
      length="1"
@@ -84,9 +84,10 @@
      follows="top|left"
      height="95"
      layout="topleft"
-     left="10"
+     left="6"
      top_pad="5"
-     width="470" />
+     width="470"
+     name="wb1"/>
 
     <check_box
      height="20"
@@ -189,9 +190,10 @@
      follows="top|left"
      height="71"
      layout="topleft"
-     left="10"
+     left="6"
      top_pad="-5"
-     width="200" />
+     width="200"
+     name="wb2"/>
     <name_list
      follows="left|top"
      height="71"
@@ -208,9 +210,10 @@
      follows="top|left"
      height="71"
      layout="topleft"
-     left="280"
+     left="275"
      top_delta="0"
-     width="200" />
+     width="200"
+     name="wb3"/>
     <name_list
      follows="left|top"
      height="71"
@@ -227,7 +230,7 @@
      height="23"
      label="Add..."
      layout="topleft"
-     left="10"
+     left="6"
      name="add_estate_manager_btn"
      top_pad="6"
      width="97" />
@@ -244,7 +247,7 @@
     <button
      follows="left|top"
      height="23"
-     left="280"
+     left="275"
      label="Add..."
      layout="topleft"
      name="add_allowed_avatar_btn"
@@ -291,9 +294,10 @@
      follows="top|left"
      height="71"
      layout="topleft"
-     left="10"
+     left="6"
      top_pad="-5"
-     width="200" />
+     width="200"
+     name="wb4"/>
     <name_list
      follows="left|top"
      height="71"
@@ -310,9 +314,10 @@
      follows="top|left"
      height="71"
      layout="topleft"
-     left="280"
+     left="275"
      top_delta="0"
-     width="200" />
+     width="200"
+     name="wb5"/>
     <name_list
      follows="left|top"
      height="71"
@@ -329,7 +334,7 @@
      height="23"
      label="Add..."
      layout="topleft"
-     left="10"
+     left="6"
      name="add_allowed_group_btn"
      top_pad="6"
      width="97" />
@@ -349,7 +354,7 @@
      height="23"
      label="Add..."
      layout="topleft"
-     left="280"
+     left="275"
      name="add_banned_avatar_btn"
      top_delta="0"
      width="97" />
@@ -368,16 +373,16 @@
      height="23"
      label="Send Message To Estate..."
      layout="topleft"
-     left="10"
+     left="3"
      name="message_estate_btn"
-     top_pad="20"
+     top_pad="10"
      width="220" />
     <button
      follows="left|top"
      height="23"
      label="Kick Resident from Estate..."
      layout="topleft"
-     left="280"
+     left="260"
      name="kick_user_from_estate_btn"
      top_delta="0"
      width="220" />

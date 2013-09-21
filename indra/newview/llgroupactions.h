@@ -58,6 +58,7 @@ public:
 	 * Show group information panel.
 	 */
 	static void show(const LLUUID& group_id);
+	static void show(const LLUUID& group_id, const std::string& tab_name);
 
 	/**
 	 * Show group inspector floater.
@@ -72,7 +73,9 @@ public:
 	/**
 	 * Refresh group notices panel.
 	 */
-	static void refresh_notices();
+	// <FS:Ansariel> Standalone group floaters
+	//static void refresh_notices();
+	static void refresh_notices(const LLUUID& group_id = LLUUID::null);
 
 	/**
 	 * Refresh group information panel.
@@ -111,6 +114,12 @@ public:
 	 */
 	static bool isAvatarMemberOfGroup(const LLUUID& group_id, const LLUUID& avatar_id);
 	
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
+	static bool canEjectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent);
+	static void ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent);
+// [/SL:KB]
+	static bool callbackEject(const LLSD& notification, const LLSD& response);	// <FS:CR> FIRE-8499 - Eject from group confirmation
+
 private:
 	static bool onJoinGroup(const LLSD& notification, const LLSD& response);
 	static bool onLeaveGroup(const LLSD& notification, const LLSD& response);

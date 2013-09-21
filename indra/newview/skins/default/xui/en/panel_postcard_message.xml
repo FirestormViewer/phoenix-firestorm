@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
+ follows="all"
  height="380"
  layout="topleft"
  name="panel_postcard_message"
@@ -72,7 +73,7 @@
      name="subject_form"
      right="-10"
      top_delta="-4" />
-    <text
+<!--    <text
      type="string"
      length="1"
      bottom_delta="23"
@@ -83,22 +84,22 @@
      name="msg_label"
      right="-10">
         Message:
-    </text>
+    </text> -->
     <text_editor
      type="string"
      length="1"
-     follows="left|top|right"
-     height="60"
+     follows="all"
+     height="276"
      layout="topleft"
-     left_delta="0"
+     left="12"
      max_length="700"
      name="msg_form"
      right="-10"
-     top_pad="10"
+     top_pad="3"
      word_wrap="true">
         Type your message here.
     </text_editor>
-    <button
+<!--    <button
      follows="right|bottom"
      height="23"
      label="Cancel"
@@ -109,15 +110,15 @@
      width="100">
       <button.commit_callback
        function="Postcard.Cancel" />
-    </button>
+    </button>-->
     <button
+     bottom="-1"
      follows="right|bottom"
      height="23"
      label="Send"
      layout="topleft"
-     left_delta="-106"
+     right="-10"
      name="send_btn"
-     top_delta="0"
      width="100">
       <button.commit_callback
        function="Postcard.Send" />

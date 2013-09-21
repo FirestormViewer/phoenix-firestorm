@@ -44,6 +44,8 @@
 #include "llwindow.h"
 #include <boost/bind.hpp>
 
+#include "fsregistrarutils.h"
+
 const F32	CURSOR_FLASH_DELAY = 1.0f;  // in seconds
 const S32	CURSOR_THICKNESS = 2;
 const F32	TRIPLE_CLICK_INTERVAL = 0.3f;	// delay between double and triple click.
@@ -141,6 +143,17 @@ LLTextBase::LineSpacingParams::LineSpacingParams()
 {
 }
 
+// <FS:Ansariel> Optional icon position
+namespace LLInitParam
+{
+	void TypeValues<LLTextBaseEnums::EIconPositioning>::declareValues()
+	{
+		declare("left",   LLTextBaseEnums::LEFT);
+		declare("right",  LLTextBaseEnums::RIGHT);
+		declare("none",   LLTextBaseEnums::NONE);
+	}
+}
+// </FS:Ansariel> Optional icon position
 
 LLTextBase::Params::Params()
 :	cursor_color("cursor_color"),
@@ -168,6 +181,9 @@ LLTextBase::Params::Params()
 	font_shadow("font_shadow"),
 	wrap("wrap"),
 	use_ellipses("use_ellipses", false),
+	// <FS:Ansariel> Optional icon position
+	icon_positioning("icon_positioning", LLTextBaseEnums::RIGHT),
+	// </FS:Ansariel> Optional icon position
 	parse_urls("parse_urls", false),
 	parse_highlights("parse_highlights", false)
 {
@@ -223,6 +239,9 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mParseHighlights(p.parse_highlights),
 	mBGVisible(p.bg_visible),
 	mScroller(NULL),
+	// <FS:Ansariel> Optional icon position
+	mIconPositioning(p.icon_positioning),
+	// </FS:Ansariel> Optional icon position
 	mStyleDirty(true)
 {
 	if(p.allow_scroll)
@@ -235,7 +254,9 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 		scroll_params.mouse_opaque = false;
 		scroll_params.min_auto_scroll_rate = 200;
 		scroll_params.max_auto_scroll_rate = 800;
-		scroll_params.border_visible = p.border_visible;
+		// <FS:Zi> Commented out to prevent contents from scrolling away while typing
+		// scroll_params.border_visible = p.border_visible;
+		// </FS:Zi>
 		mScroller = LLUICtrlFactory::create<LLScrollContainer>(scroll_params);
 		addChild(mScroller);
 	}
@@ -1221,8 +1242,22 @@ void LLTextBase::draw()
 	}
 
 	bool should_clip = mClip || mScroller != NULL;
-	{ LLLocalClipRect clip(text_rect, should_clip);
- 
+	// <FS:Zi> Fix text bleeding at top edge of scrolling text editors
+	// { LLLocalClipRect clip(text_rect, should_clip);
+	{
+		// unsure why the rectangle is not properly calculated, but this fixes it.
+		// probably needs investigating the accuracy of:
+		// - LLScrollContainer::getContentWindowRect()
+		// - LLScrollContainer::localRectToOtherView()
+		// - LLRect::intersectWith()
+		if(text_rect.mTop>2)
+		{
+			text_rect.mTop-=2;
+		}
+		// push the modified text_rect as a GL clipping scissor on the stack
+		LLLocalClipRect clip(text_rect, should_clip);
+	// </FS:Zi>
+
 		// draw document view
 		if (mScroller)
 		{
@@ -1850,7 +1885,9 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getEditableSegIterContaini
 	return orig_it;
 }
 
-LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
+// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+//LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
+LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index, bool fix_position /* = true */)
 {
 
 	static LLPointer<LLIndexSegment> index_segment = new LLIndexSegment();
@@ -1874,10 +1911,40 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
 	index_segment->setStart(index);
 	index_segment->setEnd(index);
 	segment_set_t::iterator it = mSegments.upper_bound(index_segment);
+
+	// FIXME: I tried to put this into its own function but ended up with errors,
+	//        so this is duplicated in the const version of this function for now. -Zi
+
+	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
+	// but only if that segment is editable -Zi
+
+	static LLCachedControl<bool> fsFixCursorPosition(*LLUI::sSettingGroups["config"], "FSFixCursorPosition", true);
+	
+	if (fsFixCursorPosition)
+	{
+		if (fix_position)
+		{
+			LLTextSegment* seg=*it;
+			if(!seg->canEdit())
+			{
+				if(it!=mSegments.begin())
+				{
+					--it;
+
+					seg=*it;
+					if(!seg->canEdit())
+						++it;
+				}
+			}
+		}
+	}
+
 	return it;
 }
 
-LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index) const
+// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+//LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index) const
+LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index, bool fix_position /* = true */) const
 {
 	static LLPointer<LLIndexSegment> index_segment = new LLIndexSegment();
 
@@ -1899,15 +1966,49 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 	index_segment->setStart(index);
 	index_segment->setEnd(index);
 	LLTextBase::segment_set_t::const_iterator it =  mSegments.upper_bound(index_segment);
+
+	// FIXME: I tried to put this into its own function but ended up with errors,
+	//        so this is duplicated in the non-const version of this function for now. -Zi
+
+	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
+	// but only if that segment is editable -Zi
+	static LLCachedControl<bool> fsFixCursorPosition(*LLUI::sSettingGroups["config"], "FSFixCursorPosition", true);
+	
+	if (fsFixCursorPosition)
+	{
+		if (fix_position)
+		{
+			LLTextSegment* seg=*it;
+			if(!seg->canEdit())
+			{
+				if(it!=mSegments.begin())
+				{
+					--it;
+
+					seg=*it;
+					if(!seg->canEdit())
+						++it;
+				}
+			}
+		}
+	}
+
 	return it;
 }
 
 // Finds the text segment (if any) at the give local screen position
 LLTextSegmentPtr LLTextBase::getSegmentAtLocalPos( S32 x, S32 y, bool hit_past_end_of_line)
 {
+	if (!hasMouseCapture() && !mVisibleTextRect.pointInRect(x, y))
+	{
+		return LLTextSegmentPtr();
+	}
+	
 	// Find the cursor position at the requested local screen position
 	S32 offset = getDocIndexFromLocalCoord( x, y, FALSE, hit_past_end_of_line);
-	segment_set_t::iterator seg_iter = getSegIterContaining(offset);
+	// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+	//segment_set_t::iterator seg_iter = getSegIterContaining(offset);
+	segment_set_t::iterator seg_iter = getSegIterContaining(offset, false);
 	if (seg_iter != mSegments.end())
 	{
 		return *seg_iter;
@@ -1950,6 +2051,27 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("Url.ShowOnMap", boost::bind(&LLUrlAction::showLocationOnMap, url));
 	registrar.add("Url.CopyLabel", boost::bind(&LLUrlAction::copyLabelToClipboard, url));
 	registrar.add("Url.CopyUrl", boost::bind(&LLUrlAction::copyURLToClipboard, url));
+
+	// <FS:Ansariel> Additional convenience options
+	std::string target_id_str = LLUrlAction::extractUuidFromSlurl(url).asString();
+	registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/zoom"));
+	registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/teleportto"));
+	registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/offerteleport"));
+	registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/track"));
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Add enable checks for menu items
+	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+	LLUUID target_id(target_id_str);
+	enable_registrar.add("Url.EnableShowProfile", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SHOW_PROFILE));
+	enable_registrar.add("Url.EnableAddFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ADD_FRIEND));
+	enable_registrar.add("Url.EnableRemoveFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_REMOVE_FRIEND));
+	enable_registrar.add("Url.EnableSendIM", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_SEND_IM));
+	enable_registrar.add("FS.EnableZoomIn", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_ZOOM_IN));
+	enable_registrar.add("FS.EnableOfferTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_OFFER_TELEPORT));
+	enable_registrar.add("FS.EnableTrackAvatar", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_TRACK_AVATAR));
+	enable_registrar.add("FS.EnableTeleportToTarget", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, target_id, FS_RGSTR_ACT_TELEPORT_TO));
+	// </FS:Ansariel>
 
 	// create and return the context menu from the XUI file
 	delete mPopupMenu;
@@ -2041,7 +2163,9 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 			end = match.getEnd()+1;
 
 			LLStyle::Params link_params(style_params);
-			link_params.overwriteFrom(match.getStyle());
+			// <FS:CR> FIRE-11330 - if it's a name, don't stylize it like a url
+			if (!input_params.is_name_slurl)
+				link_params.overwriteFrom(match.getStyle());
 
 			// output the text before the Url
 			if (start > 0)
@@ -2058,8 +2182,20 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 				std::string subtext=text.substr(0,start);
 				appendAndHighlightText(subtext, part, style_params); 
 			}
+
+			// <FS:Ansariel> Optional icon position
+			if (mIconPositioning == LLTextBaseEnums::LEFT)
+			{
+				LLTextUtil::processUrlMatch(&match,this);
+			}
+			// </FS:Ansariel> Optional icon position
+
 			// output the styled Url
-			appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
+			// <FS:CR> FIRE-11437 - Don't supress font style for chat history name links
+			//appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
+			appendAndHighlightTextImpl(match.getLabel(), part, link_params,
+									   input_params.is_name_slurl ? false : match.underlineOnHoverOnly());
+			// </FS:CR>
 			
 			// set the tooltip for the Url label
 			if (! match.getTooltip().empty())
@@ -2072,7 +2208,13 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 					}
 			}
 
-			LLTextUtil::processUrlMatch(&match,this);
+			// <FS:Ansariel> Optional icon position
+			//LLTextUtil::processUrlMatch(&match,this);
+			if (mIconPositioning == LLTextBaseEnums::RIGHT)
+			{
+				LLTextUtil::processUrlMatch(&match,this);
+			}
+			// </FS:Ansariel> Optional icon position
 
 			// move on to the rest of the text after the Url
 			if (end < (S32)text.length()) 
@@ -2527,7 +2669,9 @@ LLRect LLTextBase::getLocalRectFromDocIndex(S32 pos) const
 	LLRect content_window_rect = mScroller ? mScroller->getContentWindowRect() : getLocalRect();
 	if (mBorderVisible)
 	{
-		content_window_rect.stretch(-1);
+		// <FS:Zi> Commented out to prevent contents from scrolling away while typing
+		// content_window_rect.stretch(-1);
+		// </FS:Zi>
 	}
 
 	LLRect local_rect;
@@ -2840,7 +2984,9 @@ void LLTextBase::updateRects()
 	//FIXME: replace border with image?
 	if (mBorderVisible)
 	{
-		mVisibleTextRect.stretch(-1);
+		// <FS:Zi> Commented out to prevent contents from scrolling away while typing
+		// mVisibleTextRect.stretch(-1);
+		// </FS:Zi>
 	}
 	if (mVisibleTextRect != old_text_rect)
 	{
@@ -3239,8 +3385,13 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 
 	S32 last_char = mEnd;
 
+	// <FS:Ansariel> Prevent unnecessary calculations
+	S32 start_offset = mStart + segment_offset;
+
 	// set max characters to length of segment, or to first newline
-	max_chars = llmin(max_chars, last_char - (mStart + segment_offset));
+	// <FS:Ansariel> Prevent unnecessary calculations
+	//max_chars = llmin(max_chars, last_char - (mStart + segment_offset));
+	max_chars = llmin(max_chars, last_char - start_offset);
 
 	// if no character yet displayed on this line, don't require word wrapping since
 	// we can just move to the next line, otherwise insist on it so we make forward progress
@@ -3249,9 +3400,13 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 		: LLFontGL::ONLY_WORD_BOUNDARIES;
 	
 	
-	S32 offsetLength = text.length() - (segment_offset + mStart);
+	// <FS:Ansariel> Prevent unnecessary calculations
 
-	if(getLength() < segment_offset + mStart)
+	//S32 offsetLength = text.length() - (segment_offset + mStart);
+	S32 offsetLength = text.length() - start_offset;
+	
+	//if(getLength() < segment_offset + mStart)
+	if(getLength() < start_offset)
 	{ 
 		llinfos << "getLength() < segment_offset + mStart\t getLength()\t" << getLength() << "\tsegment_offset:\t" 
 						<< segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << "\tmax_chars\t" << max_chars << llendl;
@@ -3259,11 +3414,15 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 
 	if( (offsetLength + 1) < max_chars)
 	{
-		llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetLength:\t" << offsetLength << " getLength() : "
+	// <FS:Ansariel> Prevent unnecessary calculations
+		//llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetLength:\t" << offsetLength << " getLength() : "
+		llinfos << "offsetString.length() + 1 < max_chars\t max_chars:\t" << max_chars << "\toffsetString.length():\t" << offsetLength << " getLength() : "
 			<< getLength() << "\tsegment_offset:\t" << segment_offset << "\tmStart:\t" << mStart << "\tsegments\t" << mEditor.mSegments.size() << llendl;
 	}
 	
-	S32 num_chars = mStyle->getFont()->maxDrawableChars( text.c_str() + (segment_offset + mStart),
+	// <FS:Ansariel> Prevent unnecessary calculations
+	//S32 num_chars = mStyle->getFont()->maxDrawableChars( text.c_str() + (segment_offset + mStart),
+	S32 num_chars = mStyle->getFont()->maxDrawableChars(text.c_str() + start_offset, 
 												(F32)num_pixels,
 												max_chars, 
 												word_wrap_style);
@@ -3278,7 +3437,9 @@ S32	LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 
 	// include *either* the EOF or newline character in this run of text
 	// but not both
-	S32 last_char_in_run = mStart + segment_offset + num_chars;
+	// <FS:Ansariel> Prevent unnecessary calculations
+	//S32 last_char_in_run = mStart + segment_offset + num_chars;
+	S32 last_char_in_run = start_offset + num_chars;
 	// check length first to avoid indexing off end of string
 	if (last_char_in_run < mEnd 
 		&& (last_char_in_run >= getLength()))

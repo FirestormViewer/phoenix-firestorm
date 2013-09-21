@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="UI-Настройки" name="Display panel">
+<tab_container label="Настройки Файершторм" name="tabs">
+
+	<!--General-->
+	<panel label="Основное" name="UI Prefs Panel">
+		<text name="UI Size:" width="220">
+			Интерфейс пользователя (UI):
+		</text>
+		<text name="HoverTipText">
+			Всплывающие подсказки:
+		</text>
+		<check_box label="Стандартные подсказки " name="ShowHoverTips" tool_tip="Установка данного параметра отображает подсказки при наведении на аватаров и другие объекты. Необходимо устанавливать первым"/>
+		<check_box label="На всех объектах" tool_tip="Установите, для отображения всплывающих подсказок на всех объектах." name="ShowAllHoverTips"/>
+		<check_box label="На земле" tool_tip="Установите, для отображения подсказок на земле." name="ShowLandHoverTips"/>
+		<text name="tooltip_textbox">
+			Задержка подсказки:
+		</text>
+		<combo_box name="Tooltipdelay">
+			<combo_box.item label="0,7 секунд" name="tt_item1"/>
+			<combo_box.item label="1,5 секунды" name="tt_item2"/>
+			<combo_box.item label="3 секунды" name="tt_item3"/>
+			<combo_box.item label="6 секунд" name="tt_item4"/>
+		</combo_box>
+
+		<text name="HoverTipText">
+			Размещение диалогов скриптов:
+		</text>
+		<check_box label="Справа наверху" name="ShowScriptDialogsTopRight" tool_tip=""/>
+		<check_box label="Нотисы сверху справа" name="ShowGroupNoticesTopRight" tool_tip=""/>
+		<text name="GroupTopRightRequiresRestart">
+			(рестарт)
+		</text>
+        <check_box name="FSAdvancedTooltips" label="Доп. информация в подсказках"/>		
+		<text name="UsePieMenuLabel">
+			Использовать круглое меню
+		</text>
+		<check_box label="Использовать PIE меню" name="UsePieMenu" tool_tip="Использование классического круглого меню при нажатии правой кнопкой на пользователей, на землю или на объекты"/>
+
+		<text name="ButtonFlashing">
+			Мигающие кнопки:
+		</text>
+		<slider label="Количество миганий ЛС:" tool_tip="" name="ButtonsFlashCount"/>
+		<slider label="Скорость мигания кнопки:" tool_tip="Скорость мигания кнопки ( Hz) - используется для ЛС" name="ButtonFlashRate"/>
+		<text name="ButtonFlashRateText">
+			Hz
+		</text>
+		<check_box name="ShowNetStats" label="Показать лаги" tool_tip=""/>
+		<text name="ToastSettings">
+			Настройки отображения уведомлений: (Popups, Консоль, Тосты):
+		</text>
+		<text name="ToastSpaceTextLabel">
+			Раст. среди
+		</text>
+		<slider label="тосты и нижний UI:" tool_tip="" name="ToastSpace"/>
+		<text name="ToastSpaceText">
+			пиксельем
+		</text>
+		<slider label="AПродолжительность уведомления:" tool_tip="" name="ToastLifetime"/>
+		<text name="ToastLifetimeText">
+			сек.
+		</text>
+		<slider label="Длительность подсказки::" tool_tip="" name="TipToastLifetime"/>
+		<text name="TipToastLifetimeText">
+			сек.
+		</text>
+		<slider label="Сообщение чата:" tool_tip="" name="NearbyToastLifetime"/>
+		<text name="NearbyToastLifetimeText">
+			сек.
+		</text>
+		<slider label="Стартовый тост:" tool_tip="" name="StartupToastLifetime"/>
+		<text name="StartupToastLifetimeText">
+			Sek.
+		</text>
+		<slider label="Время глушения тоста чата:" tool_tip="" name="NearbyToastFadingTime"/>
+		<text name="NearbyToastFadingTimeText">
+			Sek.
+		</text>
+		<slider label="Глушение норм. тоста:" tool_tip="" name="ToastFadingTime"/>
+		<text name="ToastFadingTimeText">
+			Sek.
+		</text>
+		<slider label="Раст. среди тостов:" tool_tip="" name="ToastGap"/>
+		<text name="ToastGapText">
+			Pixel
+		</text>
+		<slider label="Высота от пред. тоста:" tool_tip="" name="OverflowToastHeight"/>
+		<text name="OverflowToastHeightText">
+			Pixel
+		</text>
+		<slider label="Ширина тостов чата:" tool_tip="" name="NearbyToastWidth"/>
+		<text name="NearbyToastWidthText">
+			%
+		</text>
+	</panel>
+
+	<!--Font-->
+	<panel label="Шрифты" name="UI-font-tab">
+		<text name="tooltip_textbox1">
+			Схема шрифтов:
+		</text>
+		<text name="tooltip_textbox2">
+			(рестарт)
+		</text>
+		<text name="tooltip_textbox5">
+			Изменение размера:
+		</text>
+		<text name="tooltip_textbox6">
+			точка (рестарт)
+Стандарт 0. Более может не работать.
+		</text>
+		<text name="tooltip_textbox3">
+			Раст. среди строками в чате:
+		</text>
+		<text name="tooltip_textbox4">
+			Пиксель (рестарт)
+V2/3-Standard 0. V1-Standard 2.
+		</text>
+		<text name="Label_FolderItemViewHeight">
+			Высота записи папки:
+		</text>
+		<text name="Label_FolderItemViewHeight_Scale">
+			Пиксель (рестарт)
+V2/3-Standard 20. V1-Standard 18.
+		</text>
+	</panel>
+</tab_container>
+</panel>
+

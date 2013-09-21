@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
+bg_opaque_color="DkGray"
+       background_visible="true"
+       background_opaque="true"
  follows="all"
  height="570"
  layout="topleft"

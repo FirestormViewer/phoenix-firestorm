@@ -83,6 +83,8 @@ static const std::string LANDMARK_INFO_TYPE			= "landmark";
 static const std::string REMOTE_PLACE_INFO_TYPE		= "remote_place";
 static const std::string TELEPORT_HISTORY_INFO_TYPE	= "teleport_history";
 static const std::string LANDMARK_TAB_INFO_TYPE     = "open_landmark_tab";
+// <FS:Ansariel> Toggle teleport history panel directly
+static const std::string TELEPORT_HISTORY_TAB_INFO_TYPE = "open_teleport_history_tab";
 
 // Support for secondlife:///app/parcel/{UUID}/about SLapps
 class LLParcelHandler : public LLCommandHandler
@@ -116,7 +118,18 @@ public:
 				LLSD key;
 				key["type"] = "remote_place";
 				key["id"] = parcel_id;
-				LLFloaterSidePanelContainer::showPanel("places", key);
+				
+				// <FS:Ansariel> FIRE-817: Separate place details floater
+				//LLFloaterSidePanelContainer::showPanel("places", key);
+				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+				{
+					LLFloaterReg::showInstance("fs_placedetails", key);
+				}
+				else
+				{
+					LLFloaterSidePanelContainer::showPanel("places", key);
+				}
+				// </FS:Ansariel>
 				return true;
 			}
 		}
@@ -219,7 +232,9 @@ public:
 	}
 	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
 	{
-		llerrs << "Can't complete remote parcel request. Http Status: "
+		// <FS:Ansariel> Don't error out because of a HTTP error!
+		//llerrs << "Can't complete remote parcel request. Http Status: "
+		llwarns << "Can't complete remote parcel request. Http Status: "
 			   << status << ". Reason : " << reason << llendl;
 	}
 
@@ -385,6 +400,29 @@ void LLPanelPlaces::onOpen(const LLSD& key)
 			// Update the buttons at the bottom of the panel
 			updateVerbs();
 		}
+		// <FS:Ansariel> Toggle teleport history panel directly
+		else if (key_type == TELEPORT_HISTORY_TAB_INFO_TYPE)
+		{
+			togglePlaceInfoPanel(FALSE);
+			// This has been set intentially to not mess up other functions!
+			mPlaceInfoType = LANDMARK_TAB_INFO_TYPE;
+
+			// This has been basically borrowed from togglePlaceInfoPanel()
+			// further down.
+			mLandmarkInfo->setVisible(FALSE);
+			LLTeleportHistoryPanel* teleport_history_panel =
+					dynamic_cast<LLTeleportHistoryPanel*>(mTabContainer->getPanelByName("Teleport History"));
+			if (teleport_history_panel)
+			{
+				mTabContainer->selectTabPanel(teleport_history_panel);
+			}
+
+			// Update the active tab
+			onTabSelected();
+			// Update the buttons at the bottom of the panel
+			updateVerbs();
+		}
+		// </FS:Ansariel> Toggle teleport history panel directly
 		else
 		{
 			mFilterEditor->clear();
@@ -798,7 +836,11 @@ void LLPanelPlaces::onOverflowButtonClicked()
 		// STORM-411
 		// Creating landmarks for remote locations is impossible.
 		// So hide menu item "Make a Landmark" in "Teleport History Profile" panel.
-		menu->setItemVisible("landmark", mPlaceInfoType != TELEPORT_HISTORY_INFO_TYPE);
+		// <FS:Ansariel> If it doesn't work for remote locations, disable
+		//               it properly for ALL displays of remote locations!
+		//menu->setItemVisible("landmark", mPlaceInfoType != TELEPORT_HISTORY_INFO_TYPE);
+		menu->setItemVisible("landmark", is_agent_place_info_visible);
+		// </FS:Ansariel>
 		menu->arrangeAndClear();
 	}
 	else if (mPlaceInfoType == LANDMARK_INFO_TYPE && mLandmarkMenu != NULL)
@@ -1167,7 +1209,9 @@ void LLPanelPlaces::updateVerbs()
 			mTeleportBtn->setEnabled(have_3d_pos &&
 									 !LLViewerParcelMgr::getInstance()->inAgentParcel(mPosGlobal));
 		}
-		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
+		// <FS:Ansariel> FIRE-9536: Teleport button disabled if standalone TP history & sidepanel TP history detail
+		//else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
+		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE || mPlaceInfoType == TELEPORT_HISTORY_INFO_TYPE)
 		{
 			mTeleportBtn->setEnabled(have_3d_pos);
 		}
@@ -1196,6 +1240,14 @@ LLPanelPlaceInfo* LLPanelPlaces::getCurrentInfoPanel()
 
 	return NULL;
 }
+
+// <FS:Ansariel> Reset (clear) filter
+void LLPanelPlaces::resetFilter()
+{
+	mFilterEditor->clear();
+	onFilterEdit("", true);
+}
+// </FS:Ansariel>
 
 static bool is_agent_in_selected_parcel(LLParcel* parcel)
 {

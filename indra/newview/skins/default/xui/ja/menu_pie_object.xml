@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    name="Object Pie">
+
+   <pie_slice
+     enabled="false"
+     label="開く"
+     name="Open">
+        <pie_slice.on_click
+         function="Object.Open" />
+        <pie_slice.on_enable
+         function="Object.EnableOpen" />
+   </pie_slice>
+   <pie_slice
+        label="作成"
+        name="Build">
+        <pie_slice.on_click
+            function="Object.Build" />
+        <pie_slice.on_enable
+            function="EnableEdit"/>
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="触る"
+        name="Pie Object Touch">
+        <pie_slice.on_click
+            function="Object.Touch" />
+        <pie_slice.on_enable
+            function="Object.EnableTouch"
+            name="EnableTouch"
+            parameter="Touch" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        start_autohide="true"
+        label="ここに座る"
+        name="Pie Object Sit">
+        <pie_slice.on_click
+            function="Object.SitOrStand" />
+        <pie_slice.on_enable
+            function="Object.EnableSit" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        autohide="true"
+        label="立ち上がる"
+        name="Object Stand Up">
+        <pie_slice.on_click
+            function="Object.SitOrStand" />
+        <pie_slice.on_enable
+            function="Object.EnableStandUp" />
+    </pie_slice>
+    <pie_slice
+        start_autohide="true"
+        enabled="false"
+        label="購入"
+        name="Buy...">
+        <pie_slice.on_click
+            function="Object.Buy" />
+        <pie_slice.on_enable
+            function="Object.EnableBuy" />
+    </pie_slice>
+    <pie_slice
+        autohide="true"
+        label="取る"
+        name="Pie Object Take">
+        <pie_slice.on_click
+            function="Object.Take"/>
+        <pie_slice.on_enable
+            function="Object.VisibleTake"/>
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="支払い" 
+		name="Pay...">
+        <pie_slice.on_click
+            function="PayObject" />
+        <pie_slice.on_enable
+            function="EnablePayObject" />
+    </pie_slice>
+
+    <pie_menu
+        label="詳細＞"
+        name="Object Pie More 1">
+
+    <pie_slice
+        enabled="false"
+        label="削除"
+        name="Delete">
+        <pie_slice.on_click
+            function="Object.Delete" />
+        <pie_slice.on_enable
+            function="Object.EnableDelete" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="装着"
+        name="Wear">
+        <pie_slice.on_click
+            function="Object.AttachToAvatar" />
+        <pie_slice.on_enable
+            function="Object.EnableWear" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="コピーを取る"
+        name="Take Copy">
+        <pie_slice.on_click
+            function="Tools.TakeCopy" />
+        <pie_slice.on_enable
+            function="Tools.EnableTakeCopy" />
+    </pie_slice>
+    <pie_menu
+        label="HUD装着先＞"
+        name="Pie Object Attach HUD" />
+    <pie_menu
+        label="装着先 >"
+        name="Pie Object Attach" />
+    <pie_slice
+        enabled="false"
+        label="返却" 
+		name="Return...">
+        <pie_slice.on_click
+            function="Object.Return" />
+        <pie_slice.on_enable
+            function="Object.EnableReturn" />
+        </pie_slice>
+
+    <pie_menu
+        label="詳細＞"
+        name="Object Pie More 2">
+
+        <pie_slice
+            enabled="true"
+            label="テクスチャ更新"
+            name="Texture Refresh">
+            <pie_slice.on_click
+                function="Object.TexRefresh" />
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="表示しない"
+            name="Derender">
+            <pie_slice.on_click
+                function="Object.Derender" />
+        </pie_slice>
+        <pie_slice
+            enabled="false"
+            label="報告..."
+            name="Report Abuse...">
+            <pie_slice.on_click
+                function="Object.ReportAbuse" />
+            <pie_slice.on_enable
+                function="Object.EnableReportAbuse" />
+        </pie_slice>
+        <pie_separator name="export_placeholder" />
+		
+        <pie_menu label="パスファインディング >" name="Pathfinding">
+            <pie_slice label="リンクセットで表示" name="show_in_linksets" />
+            <pie_slice label="キャラクターで表示" name="show_in_characters" />
+            <pie_separator name="autohide_end_crash_protection" />
+        </pie_menu>
+		
+        <pie_slice
+            enabled="false"
+            label="無視"
+            name="Object Mute">
+            <pie_slice.on_click
+                function="Object.Mute" />
+            <pie_slice.on_enable
+                function="Object.EnableMute" />
+        </pie_slice>
+		
+        <pie_menu label="スクリプト" name="ScriptsMenu">
+			<pie_slice label="コンパイル（Mono）" name="CompileMono"/>
+			<pie_slice label="コンパイル（LSL）" name="CompileLSL"/>
+			<pie_slice label="スクリプトリセット" name="Object Reset Scripts"/>
+			<pie_slice label="スクリプト実行" name="Object Set Scripts to Running"/>
+			<pie_slice label="スクリプト停止" name="Object Set Scripts to Not Running"/>
+			<pie_slice label="スクリプト削除" name="Remove Scripts From Selection"/>
+			<pie_slice label="スクリプト情報" name="ScriptInfo"/>
+		</pie_menu>
+        <pie_slice
+            label="検査"
+            name="Object Inspect">
+            <pie_slice.on_click
+                function="Floater.Show"
+                parameter="inspect" />
+        </pie_slice>
+
+    </pie_menu>
+
+    <pie_slice
+        enabled="false"
+        label="購入" 
+		name="Buy...">
+        <pie_slice.on_click
+            function="Object.Buy" />
+        <pie_slice.on_enable
+            function="Object.EnableBuy" />
+        </pie_slice>
+
+    </pie_menu>
+
+    <pie_slice
+        label="編集" name="Edit...">
+        <pie_slice.on_click
+            function="Object.Edit" />
+        <pie_slice.on_enable
+            function="EnableEdit"/>
+    </pie_slice>
+
+</pie_menu>

@@ -41,9 +41,9 @@
 		Ad etiketleri:
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Kapalı" name="radio" value="0"/>
-		<radio_item label="Açık" name="radio2" value="1"/>
-		<radio_item label="Kısaca göster" name="radio3" value="2"/>
+		<radio_item label="Kapalı" name="radio"/>
+		<radio_item label="Açık" name="radio2"/>
+		<radio_item label="Kısaca göster" name="radio3"/>
 	</radio_group>
 	<check_box label="Adım" name="show_my_name_checkbox1"/>
 	<check_box label="Kullanıcı adları" name="show_slids" tool_tip="Kullanıcı adını göster, bobsmith123 gibi"/>
@@ -54,8 +54,8 @@
 		Basılacak harf tuşları:
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="Yerel sohbet başlat" name="radio_start_chat" value="1"/>
-		<radio_item label="Hareketi etkiler (yani WASD)" name="radio_move" value="0"/>
+		<radio_item label="Yerel sohbet başlat" name="radio_start_chat"/>
+		<radio_item label="Hareketi etkiler (yani WASD)" name="radio_move"/>
 	</radio_group>
 	<text name="title_afk_text">
 		Uzakta süre sonu:

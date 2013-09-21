@@ -110,7 +110,11 @@ public:
 	/*virtual*/ void updateLanguageTextInputArea();
 	/*virtual*/ void interruptLanguageTextInput();
 	/*virtual*/ void spawnWebBrowser(const std::string& escaped_url, bool async);
+				void openFile(const std::string& file_name);
 
+//-TT Window Title Access
+	/*virtual*/ void setTitle(const std::string& win_title);
+//-TT
 	LLWindowCallbacks::DragNDropResult completeDragNDropRequest( const LLCoordGL gl_coord, const MASK mask, LLWindowCallbacks::DragNDropAction action, const std::string url );
 
 	static std::vector<std::string> getDynamicFallbackFontList();
@@ -211,6 +215,10 @@ protected:
 	U32				mKeyVirtualKey;
 
 	friend class LLWindowManager;
+// <FS:ND> Allow to query for window chrome sizes.
+public:
+	virtual void getWindowChrome( U32 &aChromeW, U32 &aChromeH );
+// </FS:ND>
 };
 
 class LLSplashScreenWin32 : public LLSplashScreen

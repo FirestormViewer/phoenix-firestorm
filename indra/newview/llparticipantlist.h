@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_PARTICIPANTLIST_H
 #define LL_PARTICIPANTLIST_H
 
@@ -158,5 +160,7 @@ private:
 	validate_speaker_callback_t mValidateSpeakerCallback;
 	LLAvalineUpdater* mAvalineUpdater;
 };
+
+#endif // 0
 
 #endif // LL_PARTICIPANTLIST_H

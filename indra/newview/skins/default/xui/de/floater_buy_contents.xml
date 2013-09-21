@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater min_width="300" name="floater_buy_contents" title="INHALT KAUFEN">
+<floater min_width="300" name="floater_buy_contents" title="Inhalt kaufen">
 	<text name="contains_text">
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; enthält:
 	</text>
 	<text name="buy_text">
-		[AMOUNT] L$ von [NAME] kaufen?
+		Für [AMOUNT] L$ von [NAME] kaufen?
 	</text>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn" width="73"/>
 	<button label="Kaufen" label_selected="Kaufen" name="buy_btn"/>

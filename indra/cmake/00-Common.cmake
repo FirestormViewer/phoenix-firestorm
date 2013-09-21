@@ -49,32 +49,70 @@ if (WINDOWS)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi /MDd /MP -D_SCL_SECURE_NO_WARNINGS=1"
       CACHE STRING "C++ compiler debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
-      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /MP /Ob0 -D_SECURE_STL=0"
+      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /Ob0 /MP -D_SECURE_STL=0"
       CACHE STRING "C++ compiler release-with-debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELEASE
-      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP /Ob2 -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
+      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP /Ob2 /Oi /Ot /GF /Gy -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
       CACHE STRING "C++ compiler release options" FORCE)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE")
+
 
   set(CMAKE_CXX_STANDARD_LIBRARIES "")
   set(CMAKE_C_STANDARD_LIBRARIES "")
 
-  add_definitions(
-      /DLL_WINDOWS=1
-      /DDOM_DYNAMIC
-      /DUNICODE
-      /D_UNICODE 
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Zc:wchar_t-
-      /arch:SSE2
-      /fp:fast
-      )
+# <FS:Ansariel> [AVX Optimization]
+#  add_definitions(
+#      /DLL_WINDOWS=1
+#      /DDOM_DYNAMIC
+#      /DUNICODE
+#      /D_UNICODE 
+#      /GS
+#      /TP
+#      /W3
+#      /c
+#      /Zc:forScope
+#      /nologo
+#      /Oy-
+#      /Zc:wchar_t-
+#      /arch:SSE2
+#      /fp:fast
+#      )
+  if (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:AVX
+        /fp:fast
+        )
+  else (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:SSE2
+        /fp:fast
+        )
+  endif (USE_AVX_OPTIMIZATION)
+# </FS:Ansariel> [AVX Optimization]	
      
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)
@@ -120,6 +158,10 @@ if (LINUX)
       OUTPUT_VARIABLE CXX_VERSION
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+  #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
+  if (NOT ${GXX_VERSION} MATCHES "Gentoo 4.7.*")
+  #</FS:ND>
+
   if (${GXX_VERSION} STREQUAL ${CXX_VERSION})
     add_definitions(-D_FORTIFY_SOURCE=2)
   else (${GXX_VERSION} STREQUAL ${CXX_VERSION})
@@ -127,6 +169,10 @@ if (LINUX)
       add_definitions(-D_FORTIFY_SOURCE=2)
     endif (NOT ${GXX_VERSION} MATCHES " 4.1.*Red Hat")
   endif (${GXX_VERSION} STREQUAL ${CXX_VERSION})
+
+  #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
+  endif (NOT ${GXX_VERSION} MATCHES "Gentoo 4.7.*")
+  #</FS:ND>
 
   # Let's actually get a numerical version of gxx's version
   STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.([0-9]).*" "\\1\\2\\3" CXX_VERSION_NUMBER ${CXX_VERSION})
@@ -149,6 +195,17 @@ if (LINUX)
     set(CMAKE_CXX_FLAGS "-Wno-deprecated ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 429)
 
+  #<FS:ND> Disable unused-but-set-variable for GCC >= 4.6. It causes a lot of warning/errors all over the source. Fixing that would result in changing a good amount of files.
+  if(${CXX_VERSION_NUMBER} GREATER 460)
+    set(CMAKE_CXX_FLAGS "-Wno-unused-but-set-variable ${CMAKE_CXX_FLAGS}")
+  endif (${CXX_VERSION_NUMBER} GREATER 460)
+  #</FS:ND>
+  #<FS:ND> Disable attribute warnings for GCC >= 4.7. It causes a lot of warning/errors in boost.
+  if(${CXX_VERSION_NUMBER} GREATER 470)
+    set(CMAKE_CXX_FLAGS "-Wno-attributes ${CMAKE_CXX_FLAGS}")
+  endif (${CXX_VERSION_NUMBER} GREATER 470)
+  #</FS:ND>
+
   # End of hacks.
 
   add_definitions(
@@ -162,6 +219,7 @@ if (LINUX)
       -msse2
       -mfpmath=sse
       -pthread
+#      -std=gnu++0x
       )
 
   add_definitions(-DAPPID=secondlife)
@@ -189,7 +247,7 @@ if (DARWIN)
   add_definitions(-DLL_DARWIN=1)
   set(CMAKE_CXX_LINK_FLAGS "-Wl,-no_compact_unwind -Wl,-headerpad_max_install_names,-search_paths_first")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_CXX_LINK_FLAGS}")
-  set(DARWIN_extra_cstar_flags "-mlong-branch -g")
+  set(DARWIN_extra_cstar_flags "-g")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_extra_cstar_flags}")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ${DARWIN_extra_cstar_flags}")
   # NOTE: it's critical that the optimization flag is put in front.

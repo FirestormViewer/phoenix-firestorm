@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Self Pie">
+    <pie_slice label="Profilo" name="Profile..."/>
+    <pie_slice label="Gruppi" name="Groups..."/>
+    <pie_menu label="Rimuovi >" name="Take Off &gt;">
+        <pie_menu label="Vestiti >" name="Clothes &gt;">
+            <pie_slice label="Maglietta" name="Shirt"/>
+            <pie_slice label="Pantaloni" name="Pants"/>
+            <pie_slice label="Scarpe" name="Shoes"/>
+            <pie_slice label="Calzini" name="Socks"/>
+            <pie_slice label="Giacca" name="Jacket"/>
+            <pie_slice label="Guanti" name="Gloves"/>
+            <pie_menu label="Avanti >" name="Clothes More">
+                <pie_slice label="Canottiera" name="Self Undershirt"/>
+                <pie_slice label="Rimuovi tutto" name="All Clothes"/>
+                <pie_slice label="Mutande" name="Self Underpants"/>
+            </pie_menu>
+            <pie_slice label="Gonna" name="Skirt"/>
+        </pie_menu>
+        <pie_menu name="Pie Object Detach HUD"/>
+        <pie_menu label="Rimuovi >" name="Pie Object Detach"/>
+        <pie_slice label="Rimuovi tutto" name="Detach All"/>
+    </pie_menu>
+    <pie_slice label="Siediti" name="Sit Down Here"/>
+    <pie_slice label="Alzati" name="Stand Up"/>
+    <pie_slice label="N. Script" name="ScriptInfo"/>
+    <pie_menu name="Appearance &gt;">
+        <pie_slice label="Modifica Shape" name="Edit My Shape"/>
+        <pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
+        <pie_slice label="Modifica Outfit" name="Edit My Outfit"/>
+    </pie_menu>
+</pie_menu>

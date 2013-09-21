@@ -33,27 +33,15 @@
 #define LL_LLFLOATERBUILDOPTIONS_H
 
 #include "llfloater.h"
-#include "llselectmgr.h"
 
-class LLObjectSelection;
-
-typedef LLSafeHandle<LLObjectSelection> LLObjectSelectionHandle;
 
 class LLFloaterBuildOptions
 	:	public LLFloater
 {
-public:
-	virtual BOOL postBuild();
-
-	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/	void onClose(bool app_quitting);
-
-private:
 	friend class LLFloaterReg;
-
+private:
 	LLFloaterBuildOptions(const LLSD& key);
 	~LLFloaterBuildOptions();
-
-	LLObjectSelectionHandle	mObjectSelection;
 };
+
 #endif

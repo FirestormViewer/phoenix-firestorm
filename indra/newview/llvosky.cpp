@@ -287,7 +287,7 @@ void LLSkyTex::create(const F32 brightness)
 			S32 offset = basic_offset * sComponents;
 			U32* pix = (U32*)(data + offset);
 			LLColor4U temp = LLColor4U(mSkyData[basic_offset]);
-			*pix = temp.mAll;
+			*pix = temp.asRGBA();
 		}
 	}
 	createGLImage(sCurrent);
@@ -1037,7 +1037,11 @@ void LLVOSky::calcAtmospherics(void)
 
 	// Since WL scales everything by 2, there should always be at least a 2:1 brightness ratio
 	// between sunlight and point lights in windlight to normalize point lights.
-	F32 sun_dynamic_range = llmax(gSavedSettings.getF32("RenderSunDynamicRange"), 0.0001f);
+	// <FS:Ansariel> Performance improvement
+	//F32 sun_dynamic_range = llmax(gSavedSettings.getF32("RenderSunDynamicRange"), 0.0001f);
+	static LLCachedControl<F32> renderSunDynamicRange(gSavedSettings, "RenderSunDynamicRange");
+	F32 sun_dynamic_range = llmax(renderSunDynamicRange(), 0.0001f);
+	// </FS:Ansariel>
 	LLWLParamManager::getInstance()->mSceneLightStrength = 2.0f * (1.0f + sun_dynamic_range * dp);
 
 	mSunDiffuse = vary_SunlightColor;

@@ -58,7 +58,12 @@ bool isToolDragged()
 
 LLToolBarView::Toolbar::Toolbar()
 :	button_display_mode("button_display_mode"),
-	commands("command")
+	// <FS:Zi> Added layout style and alignment parameters
+	// commands("command")
+	commands("command"),
+	button_alignment("button_alignment"),
+	button_layout_style("button_layout_style")
+	// </FS:Zi>
 {}
 
 LLToolBarView::ToolbarSet::ToolbarSet()
@@ -75,7 +80,11 @@ LLToolBarView::LLToolBarView(const LLToolBarView::Params& p)
 	mDragToolbarButton(NULL),
 	mDragItem(NULL),
 	mToolbarsLoaded(false),
-	mBottomToolbarPanel(NULL)
+	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	//mBottomToolbarPanel(NULL)
+	mBottomToolbarPanel(NULL),
+	mBottomChatStack(NULL)
+	// </FS:Ansariel> Member variables needed for console chat bottom offset
 {
 	for (S32 i = 0; i < TOOLBAR_COUNT; i++)
 	{
@@ -110,6 +119,11 @@ BOOL LLToolBarView::postBuild()
 		mToolbars[i]->setButtonRemoveCallback(boost::bind(LLToolBarView::onToolBarButtonRemoved,_1));
 	}
 	
+	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	mBottomChatStack = findChild<LLView>("bottom_chat_stack");
+	mBottomToolbarPanel = findChild<LLView>("bottom_toolbar_panel");
+	// </FS:Ansariel> Member variables needed for console chat bottom offset
+
 	return TRUE;
 }
 
@@ -212,12 +226,17 @@ bool LLToolBarView::loadToolbars(bool force_default)
 	std::string toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "toolbars.xml");
 	if (force_default)
 	{
-		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "toolbars.xml");
+		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_TOP_SKIN, "toolbars.xml"); // FS:AO - Look in skin directory, not settings
 	}
 	else if (!gDirUtilp->fileExists(toolbar_file)) 
 	{
-		llwarns << "User toolbars def not found -> use default" << llendl;
-		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "toolbars.xml");
+		llwarns << "User toolbars def not found -> use selected skin" << llendl;
+		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_TOP_SKIN, "toolbars.xml"); // FS:AO - Look in skin directory, not settings
+	}
+	if (!gDirUtilp->fileExists(toolbar_file)) // FS:AO - Look in skin default dir as fallback
+	{
+		llwarns << "Skin toolbars def not found -> use default skin" << llendl;
+                toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_DEFAULT_SKIN, "toolbars.xml");
 	}
 	
 	LLXMLNodePtr root;
@@ -275,6 +294,19 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			LLToolBarEnums::ButtonType button_type = toolbar_set.left_toolbar.button_display_mode;
 			mToolbars[TOOLBAR_LEFT]->setButtonType(button_type);
 		}
+		// <FS:Zi> Load left toolbar layout and alignment from XML
+		if (toolbar_set.left_toolbar.button_alignment.isProvided())
+		{
+			LLToolBarEnums::Alignment alignment = toolbar_set.left_toolbar.button_alignment;
+			mToolbars[TOOLBAR_LEFT]->setAlignment(alignment);
+		}
+
+		if (toolbar_set.left_toolbar.button_layout_style.isProvided())
+		{
+			LLToolBarEnums::LayoutStyle layout_style = toolbar_set.left_toolbar.button_layout_style;
+			mToolbars[TOOLBAR_LEFT]->setLayoutStyle(layout_style);
+		}
+		// </FS:Zi>
 		BOOST_FOREACH(const LLCommandId::Params& command_params, toolbar_set.left_toolbar.commands)
 		{
 			if (addCommandInternal(LLCommandId(command_params), mToolbars[TOOLBAR_LEFT]))
@@ -290,6 +322,19 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			LLToolBarEnums::ButtonType button_type = toolbar_set.right_toolbar.button_display_mode;
 			mToolbars[TOOLBAR_RIGHT]->setButtonType(button_type);
 		}
+		// <FS:Zi> Load left toolbar layout and alignment from XML
+		if (toolbar_set.right_toolbar.button_alignment.isProvided())
+		{
+			LLToolBarEnums::Alignment alignment = toolbar_set.right_toolbar.button_alignment;
+			mToolbars[TOOLBAR_RIGHT]->setAlignment(alignment);
+		}
+
+		if (toolbar_set.right_toolbar.button_layout_style.isProvided())
+		{
+			LLToolBarEnums::LayoutStyle layout_style = toolbar_set.right_toolbar.button_layout_style;
+			mToolbars[TOOLBAR_RIGHT]->setLayoutStyle(layout_style);
+		}
+		// </FS:Zi>
 		BOOST_FOREACH(const LLCommandId::Params& command_params, toolbar_set.right_toolbar.commands)
 		{
 			if (addCommandInternal(LLCommandId(command_params), mToolbars[TOOLBAR_RIGHT]))
@@ -305,6 +350,19 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			LLToolBarEnums::ButtonType button_type = toolbar_set.bottom_toolbar.button_display_mode;
 			mToolbars[TOOLBAR_BOTTOM]->setButtonType(button_type);
 		}
+		// <FS:Zi> Load left toolbar layout and alignment from XML
+		if (toolbar_set.bottom_toolbar.button_alignment.isProvided())
+		{
+			LLToolBarEnums::Alignment alignment = toolbar_set.bottom_toolbar.button_alignment;
+			mToolbars[TOOLBAR_BOTTOM]->setAlignment(alignment);
+		}
+
+		if (toolbar_set.bottom_toolbar.button_layout_style.isProvided())
+		{
+			LLToolBarEnums::LayoutStyle layout_style = toolbar_set.bottom_toolbar.button_layout_style;
+			mToolbars[TOOLBAR_BOTTOM]->setLayoutStyle(layout_style);
+		}
+		// </FS:Zi>
 		BOOST_FOREACH(const LLCommandId::Params& command_params, toolbar_set.bottom_toolbar.commands)
 		{
 			if (addCommandInternal(LLCommandId(command_params), mToolbars[TOOLBAR_BOTTOM]))
@@ -374,16 +432,22 @@ void LLToolBarView::saveToolbars() const
 	if (mToolbars[TOOLBAR_LEFT])
 	{
 		toolbar_set.left_toolbar.button_display_mode = mToolbars[TOOLBAR_LEFT]->getButtonType();
+		toolbar_set.left_toolbar.button_alignment = mToolbars[TOOLBAR_LEFT]->getAlignment();	// <FS_Zi>
+		toolbar_set.left_toolbar.button_layout_style = mToolbars[TOOLBAR_LEFT]->getLayoutStyle();	// <FS_Zi>
 		addToToolset(mToolbars[TOOLBAR_LEFT]->getCommandsList(), toolbar_set.left_toolbar);
 	}
 	if (mToolbars[TOOLBAR_RIGHT])
 	{
 		toolbar_set.right_toolbar.button_display_mode = mToolbars[TOOLBAR_RIGHT]->getButtonType();
+		toolbar_set.right_toolbar.button_alignment = mToolbars[TOOLBAR_RIGHT]->getAlignment();	// <FS_Zi>
+		toolbar_set.right_toolbar.button_layout_style = mToolbars[TOOLBAR_RIGHT]->getLayoutStyle();	// <FS_Zi>
 		addToToolset(mToolbars[TOOLBAR_RIGHT]->getCommandsList(), toolbar_set.right_toolbar);
 	}
 	if (mToolbars[TOOLBAR_BOTTOM])
 	{
 		toolbar_set.bottom_toolbar.button_display_mode = mToolbars[TOOLBAR_BOTTOM]->getButtonType();
+		toolbar_set.bottom_toolbar.button_alignment = mToolbars[TOOLBAR_BOTTOM]->getAlignment();	// <FS_Zi>
+		toolbar_set.bottom_toolbar.button_layout_style = mToolbars[TOOLBAR_BOTTOM]->getLayoutStyle();	// <FS_Zi>
 		addToToolset(mToolbars[TOOLBAR_BOTTOM]->getCommandsList(), toolbar_set.bottom_toolbar);
 	}
 	

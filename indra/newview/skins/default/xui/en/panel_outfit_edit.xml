@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <!-- Side tray Outfit Edit panel -->
 <panel
- background_visible="true"
+ bg_alpha_color="Transparent"
+ bg_opaque_color="Transparent"
+ background_opaque="false"
+ background_visible="false"
  border="false"
  height="600"
  follows="all"
@@ -87,8 +90,8 @@
 
 <!-- "HEADER WITH ICON, STATUS TEXT AND OUTFIT NAME" -->
     <panel
-     background_visible="true"
-     bg_alpha_color="DkGray2"
+     background_visible="false"
+     bg_alpha_color="SL-Background_66"
      bevel_style="none"
      follows="top|left|right"
      height="40"
@@ -265,8 +268,8 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 
                 <layout_panel
                  auto_resize="false"
-                 background_visible="true"
-                 bg_alpha_color="DkGray2"
+                 background_visible="false"
+                 bg_alpha_color="SL-Background_66"
                  height="30"
                  name="filter_panel"
                  width="311"
@@ -283,7 +286,6 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 		             height="25"
 		             name="look_item_filter"
 		             search_button_visible="true"
-		             text_color="black"
 		             visible="true"/>
                     
                 </layout_panel>
@@ -293,7 +295,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 
                 <layout_panel
          background_visible="false"
-         bg_alpha_color="DkGray2"
+         bg_alpha_color="SL-Background_66"
                  auto_resize="true"
          default_tab_group="3"
          height="450"
@@ -341,7 +343,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 		             top_delta="0"
 		             visible="true">
 		             <wearable_items_list
-		              color="0.107 0.107 0.107 1"
+		              color="DkGray"
                  name="list_view"
 		              allow_select="true"
 		              layout="topleft"
@@ -368,7 +370,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 
     <!-- BUTTON BAR -->
     <panel
-     background_visible="true"
+     background_visible="false"
      bevel_style="none"
      follows="bottom|left|right"
      height="27"
@@ -415,7 +417,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
     
     <!-- BUTTON BAR - WEARABLES ADDING MODE -->
     <panel
-     background_visible="true"
+     background_visible="false"
      bevel_style="none"
      follows="left|right|bottom"
      height="27"

@@ -3,6 +3,10 @@
 	<menu_item_call label="Karte" name="show_on_map"/>
 	<menu_item_call label="Bezahlen" name="pay"/>
 	<menu_item_call label="Teilen" name="share"/>
+	<menu_item_call label="Anrufen" name="call"/>
+	<menu_item_call label="Name kopieren" name="copy_name_to_clipboard"/>
+	<menu_item_call label="URI kopieren" name="copy_uri_to_clipboard"/>
+	<menu_item_call label="UUID kopieren" name="copy_key_to_clipboard"/>
 	<menu_item_call label="Ignorieren" name="block"/>
 	<menu_item_call label="Freischalten" name="unblock"/>
 	<menu_item_call label="Hinauswerfen" name="kick"/>

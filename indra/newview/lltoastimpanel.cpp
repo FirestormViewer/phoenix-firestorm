@@ -38,6 +38,7 @@
 #include "lltooltip.h"
 
 #include "llviewerchat.h"
+#include "llviewercontrol.h"
 
 const S32 LLToastIMPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT	= 6;
 
@@ -79,15 +80,17 @@ LLToastIMPanel::LLToastIMPanel(LLToastIMPanel::Params &p) :	LLToastPanel(p.notif
 		//style_params.font.style = "UNDERLINE";
 		mMessage->clear();
 		
-		style_params.font.style ="ITALIC";
+		// italics for emotes -Zi
+		if (gSavedSettings.getBOOL("EmotesUseItalic"))
+		{
+			style_params.font.style ="ITALIC";
+		}
 		mMessage->appendText(p.from, FALSE, style_params);
-
-		style_params.font.style = "ITALIC";
 		mMessage->appendText(p.message.substr(3), FALSE, style_params);
 	}
 	else
 	{
-		style_params.font.style =  "NORMAL";
+		style_params.font.style = "NORMAL";
 		mMessage->setText(p.message, style_params);
 	}
 

@@ -197,6 +197,7 @@ public:
 		Optional<S32>			width;
 		Optional<S32>			max_length_chars;
 		Optional<std::string>	text;
+		Optional<bool>			is_default;
 
 		Optional<std::string>	value;
 		FormInput();
@@ -524,6 +525,10 @@ public:
 	{
 		return mTimestamp;
 	}
+
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	bool hasLabel() const;
+// [/SL:KB]
 
 	bool getOfferFromAgent() const
 	{

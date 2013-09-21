@@ -41,6 +41,7 @@
      Owner:
   </text>
   <text
+   icon_positioning="left"
    follows="top|left"
    height="16"
    left_pad="5"

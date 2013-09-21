@@ -29,9 +29,19 @@
 #include "llfloaterconversationpreview.h"
 #include "llimview.h"
 #include "lllineeditor.h"
-#include "llfloaterimnearbychat.h"
+// <FS:CR> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:CR> [FS communication UI]
 #include "llspinctrl.h"
 #include "lltrans.h"
+// <FS:CR>
+#include "llviewercontrol.h"
+#include "llavataractions.h"
+#include "llviewerwindow.h"
+#include "llwindow.h"
+#include "llconversationlog.h"
+// </FS:CR>
 
 const std::string LL_FCP_COMPLETE_NAME("complete_name");
 const std::string LL_FCP_ACCOUNT_NAME("user_name");
@@ -50,8 +60,13 @@ LLFloaterConversationPreview::LLFloaterConversationPreview(const LLSD& session_i
 
 BOOL LLFloaterConversationPreview::postBuild()
 {
-	mChatHistory = getChild<LLChatHistory>("chat_history");
+	// <FS:CR> [FS communication UI]
+	//mChatHistory = getChild<LLChatHistory>("chat_history");
+	mChatHistory = getChild<FSChatHistory>("chat_history");
+	// <FS:CR> [FS communication UI]
 	LLLoadHistoryThread::setLoadEndSignal(boost::bind(&LLFloaterConversationPreview::setPages, this, _1, _2));
+	
+	childSetAction("open_external_btn", boost::bind(&LLFloaterConversationPreview::onBtnOpenExternal, this));	//<FS:CR> Open chat history externally
 
 	const LLConversation* conv = LLConversationLog::instance().getConversation(mSessionID);
 	std::string name;
@@ -72,6 +87,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 		name = LLTrans::getString("NearbyChatTitle");
 		file = "chat";
 	}
+	// <FS:Ansariel> Remember used log file name
 	mChatHistoryFileName = file;
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = name;
@@ -182,14 +198,21 @@ void LLFloaterConversationPreview::showHistory()
 		}
 		else if (from_id.isNull())
 		{
-			chat.mSourceType = LLFloaterIMNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
+			// <FS:CR> [FS communication UI]
+			//chat.mSourceType = LLFloaterIMNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
+			chat.mSourceType = FSFloaterNearbyChat::isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
+			// </FS:CR> [FS communication UI]
 		}
 
 		LLSD chat_args;
 		chat_args["use_plain_text_chat_history"] =
 						gSavedSettings.getBOOL("PlainTextChatHistory");
-		chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+		// <FS:CR>
+		//chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
+		chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimestampsTranscripts");
+		// </FS:CR>
 		chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
+		chat_args["conversation_log"] = true;	// <FS:CR> Don't dim the history in conversation log
 
 		mChatHistory->appendMessage(chat,chat_args);
 	}
@@ -204,4 +227,10 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 	}
 
 	showHistory();
+}
+
+// <FS:CR> Open chat history externally
+void (LLFloaterConversationPreview::onBtnOpenExternal())
+{
+	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mChatHistoryFileName));
 }

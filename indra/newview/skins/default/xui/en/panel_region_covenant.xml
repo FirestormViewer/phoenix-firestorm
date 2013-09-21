@@ -79,7 +79,7 @@
      mouse_opaque="false"
      name="estate_owner_text"
      top_delta="0"
-     width="350">
+     width="300">
         (none)
     </text>
     <text
@@ -107,7 +107,7 @@
     <text_editor
      enabled="false"
      follows="left|top"
-     height="180"
+     height="172"
      layout="topleft"
      left="10"
      max_length="65535"
@@ -122,9 +122,9 @@
      height="18"
      label="Reset"
      layout="topleft"
-     left_delta="250"
+     left_delta="0"
      name="reset_covenant"
-     top_pad="5"
+     top_pad="10"
      width="90" />
 
     <text
@@ -133,7 +133,7 @@
      layout="topleft"
      left="120"
      name="covenant_help_text"
-     top_pad="10"
+     top_pad="-15"
      word_wrap="true"
      width="360">
         Changes to the covenant will show on all parcels in the estate.
@@ -159,7 +159,7 @@
      left="5"
      mouse_opaque="false"
      name="region_section_lbl"
-     top_pad="5"
+     top_pad="15"
      width="100">
         Region
     </text>

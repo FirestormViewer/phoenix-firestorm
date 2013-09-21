@@ -7,9 +7,9 @@ tell application "Finder"
 	set foo to every item in front window
 	repeat with i in foo
 		if the name of i is "Applications" then
-			set the position of i to {391, 165}
+			set the position of i to {368, 135}
 		else if the name of i ends with ".app" then
-			set the position of i to {121, 166}
+			set the position of i to {134, 135}
 		end if
 	end repeat
 	
@@ -19,7 +19,7 @@ tell application "Finder"
 	set current view of foo to icon view
 	set toolbar visible of foo to false
 	set statusbar visible of foo to false
-	set the bounds of foo to {100, 100, 600, 449}
+	set the bounds of foo to {100, 100, 600, 699}
 	
 	-- set the position of front window to {100, 100}
 	-- get {name, position} of every item of front window

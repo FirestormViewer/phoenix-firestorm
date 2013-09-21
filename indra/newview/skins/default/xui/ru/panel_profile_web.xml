@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_web" label="Веб">
+	<flyout_button name="load" label="Загрузка" label_selected="Загрузка" tool_tip="Открыть профиль в онлайн профиле.">
+		<flyout_button.item label="Открыть в локальном браузере" name="open_item"/>
+		<flyout_button.item label="Открыть во внешнем браузере " name="home_item"/>
+	</flyout_button>
+	<flyout_button name="web_profile" label="Profil" label_selected="Profil">
+		<flyout_button.item label="Открыть в локальном браузере" name="builtin_item"/>
+		<flyout_button.item label="Открыть во внешнем браузере" name="open_item"/>
+	</flyout_button>
+</panel>
+

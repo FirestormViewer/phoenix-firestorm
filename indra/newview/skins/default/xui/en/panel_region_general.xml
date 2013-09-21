@@ -33,6 +33,27 @@
         unknown
     </text>
     <text
+     follows="right|top"
+     font="SansSerif"
+     height="20"
+     layout="topleft"
+     top_delta="0"
+     right="-100"
+     name="estate_id_lbl"
+     width="80">
+        Estate ID:
+    </text>
+    <line_editor
+     follows="right|top"
+     font="SansSerif"
+     height="20"
+     layout="topleft"
+     top_delta="0"
+     name="estate_id"
+     right="-10"
+     initial_value="unknown"
+     width="85" />
+    <text
      follows="left|top"
      font="SansSerif"
      height="20"
@@ -54,6 +75,37 @@
      width="200">
         unknown
     </text>
+    <text
+     follows="right|top"
+     font="SansSerif"
+     height="20"
+     layout="topleft"
+     top_delta="0"
+     right="-100"
+     name="grid_position_lbl"
+     width="80">
+        Grid Position:
+    </text>
+    <line_editor
+     follows="right|top"
+     font="SansSerif"
+     height="20"
+     layout="topleft"
+     right="-55"
+     name="grid_position_x"
+     top_delta="0"
+     initial_value="unknown"
+     width="40" />
+    <line_editor
+     follows="right|top"
+     font="SansSerif"
+     height="20"
+     layout="topleft"
+     right="-10"
+     name="grid_position_y"
+     top_delta="0"
+     initial_value="unknown"
+     width="40" />
     <text
      follows="left|top"
      font="SansSerif"

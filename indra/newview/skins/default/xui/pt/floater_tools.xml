@@ -72,10 +72,13 @@
 	<check_box label="Editar partes linkadas" name="checkbox edit linked parts"/>
 	<button label="Link" name="link_btn"/>
 	<button label="Desconectar links" name="unlink_btn"/>
-	<check_box label="" name="checkbox uniform"/>
+	<text name="RenderingCost" tool_tip="Mostra o cálculo do custo de renderização do objeto">
+		þ: [COUNT]
+	</text>
 	<text label="Esticar ambos lados" name="checkbox uniform label">
 		Esticar ambos lados
 	</text>
+	<check_box label="Esticar ambos lados" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Esticar texturas" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Ajustar" name="checkbox snap to grid"/>
 	<combo_box name="combobox grid mode" tool_tip="Selecione o tipo de régua da grade onde o objeto será colocado">
@@ -352,7 +355,7 @@
 			<combo_box name="sculpt type control">
 				<combo_box.item label="Esfera" name="Sphere"/>
 				<combo_box.item label="Toróide" name="Torus"/>
-				<combo_box.item label="Plano" name="Plane"/>
+				<combo_box.item label="Plano / Nenhum" name="Plane"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>
 			</combo_box>
 		</panel>

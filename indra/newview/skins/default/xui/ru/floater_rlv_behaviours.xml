@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  can_close="true"
+  can_drag_on_left="false"
+  can_minimize="true"
+  can_resize="true"
+  height="455"
+  min_height="200"
+  min_width="375"
+  name="rlv_behaviours"
+  save_rect="true"
+  save_visibility="true"
+  single_instance="true"
+  title="Активные ограничения RLV"
+  width="350">
+
+  <tab_container
+    follows="all"
+    top="10"
+    left="10"
+    height="405"
+    width="330"
+    name="behaviour_tab"
+    tab_position="top"
+    layout="topleft">
+    <panel
+      border="true"
+      label="Ограничения"
+      name="behaviour_panel">
+      <scroll_list
+        top_pad="17"
+        follows="all"
+        draw_border="false"
+        multi_select="false"
+        name="behaviour_list"
+        draw_heading="true"
+        draw_stripes="true"
+        layout="topleft">
+        <scroll_list.columns
+          label="Ограничения"
+          name="behaviour"
+          width="170" />
+        <scroll_list.columns
+          label="Имя объекта"
+          name="issuer"
+          width="170" />
+      </scroll_list>
+    </panel>
+    <panel
+      border="true"
+      label="Исключения"
+      name="exception_panel">
+      <scroll_list
+        top_pad="17"
+        follows="all"
+        draw_border="false"
+        multi_select="false"
+        name="exception_list"
+        draw_heading="true"
+        draw_stripes="true"
+        layout="topleft">
+        <scroll_list.columns
+          label="Ограничения"
+          name="behaviour"
+          width="70" />
+        <scroll_list.columns
+          label="Опции"
+          name="option"
+          width="170" />
+        <scroll_list.columns
+          label="Имя объекта"
+          name="issuer"
+          width="170" />
+      </scroll_list>
+    </panel>
+  </tab_container>
+
+  <button
+    follows="bottom|left"
+    height="25"
+    label="Копировать в буфер обмена"
+    left="10"
+    name="copy_btn"
+    top_pad="5"
+    width="180" />
+
+</floater>

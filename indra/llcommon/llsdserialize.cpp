@@ -2111,6 +2111,7 @@ bool unzip_llsd(LLSD& data, std::istream& is, S32 size)
 		ret = inflate(&strm, Z_NO_FLUSH);
 		if (ret == Z_STREAM_ERROR)
 		{
+			lldebugs << "Unzip error: Z_STREAM_ERROR" << llendl;	// <FS>
 			inflateEnd(&strm);
 			free(result);
 			delete [] in;
@@ -2123,6 +2124,7 @@ bool unzip_llsd(LLSD& data, std::istream& is, S32 size)
 			ret = Z_DATA_ERROR;
 		case Z_DATA_ERROR:
 		case Z_MEM_ERROR:
+			lldebugs << "Unzip error: " << ret << llendl;	// <FS>
 			inflateEnd(&strm);
 			free(result);
 			delete [] in;
@@ -2131,8 +2133,22 @@ bool unzip_llsd(LLSD& data, std::istream& is, S32 size)
 		}
 
 		U32 have = CHUNK-strm.avail_out;
+		
+		// <FS:ND> Make sure to properly handle out of memory situations
 
-		result = (U8*) realloc(result, cur_size + have);
+		// result = (U8*) realloc(result, cur_size + have);
+		U8 *pNew = (U8*) realloc(result, cur_size + have);
+		if( !pNew )
+		{
+			free( result );
+			llwarns << "Unzip error: out of memory, needed " << cur_size+have << " bytes" << llendl;
+			return  false;
+		}
+		
+		result = pNew;
+
+		// </FS:ND>
+
 		memcpy(result+cur_size, out, have);
 		cur_size += have;
 
@@ -2143,6 +2159,7 @@ bool unzip_llsd(LLSD& data, std::istream& is, S32 size)
 
 	if (ret != Z_STREAM_END)
 	{
+		lldebugs << "Unzip error: !Z_STREAM_END" << llendl;	// <FS>
 		free(result);
 		return false;
 	}
@@ -2163,7 +2180,7 @@ bool unzip_llsd(LLSD& data, std::istream& is, S32 size)
 		
 		if (!LLSDSerialize::fromBinary(data, istr, cur_size))
 		{
-			llwarns << "Failed to unzip LLSD block" << llendl;
+			lldebugs << "Failed to unzip LLSD block" << llendl;	// <FS>
 			free(result);
 			return false;
 		}		

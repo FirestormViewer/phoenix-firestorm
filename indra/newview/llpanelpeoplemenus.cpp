@@ -29,6 +29,7 @@
 // libs
 #include "llmenugl.h"
 #include "lluictrlfactory.h"
+#include "llfolderview.h"	// <FS:CR> CHUI merge
 
 #include "llpanelpeoplemenus.h"
 
@@ -41,6 +42,8 @@
 #include "llviewermenu.h"			// for gMenuHolder
 #include "llconversationmodel.h"
 #include "llviewerobjectlist.h"
+#include "llinventorybridge.h"	// <FS:CR> CHUI merge
+#include "rlvhandler.h"
 
 namespace LLPanelPeopleMenus
 {
@@ -68,13 +71,18 @@ LLContextMenu* PeopleContextMenu::createMenu()
 		registrar.add("Avatar.IM",				boost::bind(&LLAvatarActions::startIM,					id));
 		registrar.add("Avatar.Call",			boost::bind(&LLAvatarActions::startCall,				id));
 		registrar.add("Avatar.OfferTeleport",	boost::bind(&PeopleContextMenu::offerTeleport,			this));
-		registrar.add("Avatar.ZoomIn",			boost::bind(&handle_zoom_to_object,						id));
+		// <FS:CR> CHUI merge - Make GCC happy
+		//registrar.add("Avatar.ZoomIn",			boost::bind(&handle_zoom_to_object,						id));
+		registrar.add("Avatar.ZoomIn",			boost::bind(&LLAvatarActions::zoomIn,						id));
+		// </FS:CR>
 		registrar.add("Avatar.ShowOnMap",		boost::bind(&LLAvatarActions::showOnMap,				id));
 		registrar.add("Avatar.Share",			boost::bind(&LLAvatarActions::share,					id));
 		registrar.add("Avatar.Pay",				boost::bind(&LLAvatarActions::pay,						id));
 		registrar.add("Avatar.BlockUnblock",	boost::bind(&LLAvatarActions::toggleBlock,				id));
 		registrar.add("Avatar.InviteToGroup",	boost::bind(&LLAvatarActions::inviteToGroup,			id));
 		registrar.add("Avatar.Calllog",			boost::bind(&LLAvatarActions::viewChatHistory,			id));
+		// <FS:Ansariel> Firestorm additions
+		registrar.add("Avatar.GroupInvite",		boost::bind(&LLAvatarActions::inviteToGroup,			id));
 
 		enable_registrar.add("Avatar.EnableItem", boost::bind(&PeopleContextMenu::enableContextMenuItem, this, _2));
 		enable_registrar.add("Avatar.CheckItem",  boost::bind(&PeopleContextMenu::checkContextMenuItem,	this, _2));
@@ -230,6 +238,12 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		return LLAvatarActions::canOfferTeleport(mUUIDs);
 	}
+	// <FS:Ansariel> FIRE-8804: Prevent opening inventory from using share in radar context menu
+	else if (item == std::string("can_open_inventory"))
+	{
+		return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+	}
+	// </FS:Ansariel>
 	else if (item == std::string("can_callog"))
 	{
 		return LLLogChat::isTranscriptExist(mUUIDs.front());

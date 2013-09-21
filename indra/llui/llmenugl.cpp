@@ -1999,7 +1999,10 @@ void LLMenuGL::arrange( void )
 		}
 
 		// *FIX: create the item first and then ask for its dimensions?
-		S32 spillover_item_width = PLAIN_PAD_PIXELS + LLFontGL::getFontSansSerif()->getWidth( std::string("More") ); // *TODO: Translate
+		// <FS:Ansariel> Calculate proper width for localized string
+		//S32 spillover_item_width = PLAIN_PAD_PIXELS + LLFontGL::getFontSansSerif()->getWidth( std::string("More") ); // *TODO: Translate
+		S32 spillover_item_width = PLAIN_PAD_PIXELS + LLFontGL::getFontSansSerif()->getWidth( LLTrans::getString("More") );
+		// </FS:Ansariel>
 		S32 spillover_item_height = LLFontGL::getFontSansSerif()->getLineHeight() + MENU_ITEM_PADDING;
 
 		// Scrolling support
@@ -4019,9 +4022,22 @@ void LLContextMenu::hide()
 
 	if (mHoverItem)
 	{
-		mHoverItem->setHighlight( FALSE );
+		// <FS:ND>FIRE-9257; Check if mHoverItem really is still valid before touching it
+
+		// mHoverItem->setHighlight( FALSE );
+
+		if( !mHoverItemHandle.isDead() )
+			mHoverItem->setHighlight( FALSE );
+		else
+			llwarns << "Hoveritem is already dead" << llendl;
+		// </FS:ND>
+
 	}
 	mHoverItem = NULL;
+
+	// <FS:ND>FIRE-9257; Item is invalid, reset handle too
+	mHoverItemHandle = LLHandle< LLView >();
+	// </FS:ND>
 }
 
 
@@ -4042,9 +4058,24 @@ BOOL LLContextMenu::handleHover( S32 x, S32 y, MASK mask )
 		{
 			if (mHoverItem)
 			{
-				mHoverItem->setHighlight( FALSE );
+				// <FS:ND>FIRE-9257; Check if mHoverItem really is still valid before touching it
+
+				// mHoverItem->setHighlight( FALSE );
+
+				if( !mHoverItemHandle.isDead() )
+					mHoverItem->setHighlight( FALSE );
+				else
+					llwarns << "Hoveritem is already dead" << llendl;
+
+				// </FS:ND>
 			}
+
 			mHoverItem = item;
+
+			// <FS:ND> FIRE-9257; get the handle to our new item
+			mHoverItemHandle = item->getHandle();
+			// </FS:ND>
+
 			mHoverItem->setHighlight( TRUE );
 		}
 		mHoveredAnyItem = TRUE;
@@ -4054,7 +4085,19 @@ BOOL LLContextMenu::handleHover( S32 x, S32 y, MASK mask )
 		// clear out our selection
 		if (mHoverItem)
 		{
-			mHoverItem->setHighlight(FALSE);
+			// <FS:ND>FIRE-9257; Check if mHoverItem really is still valid before touching it
+
+			// mHoverItem->setHighlight(FALSE);
+
+			if( !mHoverItemHandle.isDead() )
+				mHoverItem->setHighlight(FALSE);
+			else
+				llwarns << "Hoveritem is already dead" << llendl;
+
+			mHoverItemHandle = LLHandle< LLView >();
+
+			// </FS:ND>
+
 			mHoverItem = NULL;
 		}
 	}

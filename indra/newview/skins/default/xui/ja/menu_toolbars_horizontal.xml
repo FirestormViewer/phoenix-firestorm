@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Toolbars Popup">
+  <menu_item_call label="このボタンを削除" name="Remove button" />
+  <menu_item_separator />
+  <menu_item_call label="ツールバーのボタン..." name="Choose Buttons" />
+  <menu_item_separator />
+  <menu_item_check label="左に揃える" name="left_aligned" />
+  <menu_item_check label="中央に揃える" name="center_aligned" />
+  <menu_item_check label="右に揃える" name="right_aligned" />
+  <menu_item_separator />
+  <menu_item_check label="アイコンとラベル" name="icons_with_text" />
+  <menu_item_check label="アイコンのみ" name="icons_only" />
+  <menu_item_check label="ラベルのみ" name="text_only" />
+  <menu_item_separator />
+  <menu_item_check label="ボタンサイズ自動" name="layout_style_none" />
+  <menu_item_check label="ボタンサイズ固定" name="layout_style_equalize" />
+  <menu_item_check label="バーいっぱいにボタンを配置" name="layout_style_fill" />
+</context_menu>

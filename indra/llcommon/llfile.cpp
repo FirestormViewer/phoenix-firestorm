@@ -270,6 +270,17 @@ int	LLFile::stat(const std::string& filename, llstat* filestatus)
 #if LL_WINDOWS
 	std::string utf8filename = filename;
 	llutf16string utf16filename = utf8str_to_utf16str(utf8filename);
+	
+	// <FS:ND> Make sure no path does end in / or \. Otherwise _wstat fails
+	// See http://msdn.microsoft.com/en-us/library/windows/desktop/aa364418(v=vs.85).aspx (FindFileFirst)
+	if( utf16filename.size() )
+	{
+		wchar_t cLast( utf16filename[ utf16filename.size() -1 ] );
+		if( cLast == '\\' || cLast == '/' )
+			utf16filename[ utf16filename.size() -1 ] = 0;
+	}
+	// </FS:ND>
+
 	int rc = _wstat(utf16filename.c_str(),filestatus);
 #else
 	int rc = ::stat(filename.c_str(),filestatus);

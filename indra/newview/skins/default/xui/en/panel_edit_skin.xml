@@ -10,10 +10,6 @@
 	 width="333" >
 	 <panel
 	  border="false"
-      bg_alpha_color="DkGray2"
-      bg_opaque_color="DkGray2"
-      background_visible="true"
-      background_opaque="true"
 	  follows="top|left|right"
 	  height="90" 
 	  left="10" 

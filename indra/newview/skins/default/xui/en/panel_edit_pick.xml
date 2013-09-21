@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  background_visible="true"
+  background_opaque="false"
+  bg_alpha_color="DkGray2"
+  bg_opaque_color="DkGray2"
  bevel_style="in"
  follows="left|top|right|bottom"
  height="569"
@@ -44,7 +47,7 @@
         Edit Pick
     </text>
    <scroll_container
-     color="DkGray2"
+     color="SL-Background"
      follows="all"
      height="502"
      layout="topleft"
@@ -107,7 +110,6 @@
          top_pad="2"
          max_length_bytes="63"
          name="pick_name"
-         text_color="black"
          width="273" />
         <text
          type="string"
@@ -135,7 +137,6 @@
          max_length="1023"
          name="pick_desc"
          spellcheck="true"
-         text_color="black"
          word_wrap="true" />
         <text
          type="string"

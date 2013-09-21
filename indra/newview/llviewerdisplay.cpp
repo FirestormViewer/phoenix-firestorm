@@ -77,6 +77,10 @@
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
 #include "llpostprocess.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;
@@ -86,11 +90,16 @@ LLPointer<LLViewerTexture> gDisconnectedImagep = NULL;
 // used to toggle renderer back on after teleport
 const F32 TELEPORT_RENDER_DELAY = 20.f; // Max time a teleport is allowed to take before we raise the curtain
 const F32 TELEPORT_ARRIVAL_DELAY = 2.f; // Time to preload the world before raising the curtain after we've actually already arrived.
-const F32 TELEPORT_LOCAL_DELAY = 1.0f;  // Delay to prevent teleports after starting an in-sim teleport.
+// <FS:CR> FIRE-8721 - Remove local teleport delay
+//const F32 TELEPORT_LOCAL_DELAY = 1.0f;  // Delay to prevent teleports after starting an in-sim teleport.
+// </FS:CR>
 BOOL		 gTeleportDisplay = FALSE;
 LLFrameTimer gTeleportDisplayTimer;
 LLFrameTimer gTeleportArrivalTimer;
 const F32		RESTORE_GL_TIME = 5.f;	// Wait this long while reloading textures before we raise the curtain
+// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
+F32			gSavedDrawDistance = 0.0f;
+F32			gLastDrawDistanceStep = 0.0f;
 
 BOOL gForceRenderLandFence = FALSE;
 BOOL gDisplaySwapBuffers = FALSE;
@@ -191,6 +200,13 @@ void display_update_camera()
 	{
 		final_far *= 0.5f;
 	}
+// <FS:CR> Aurora sim
+	if(LLWorld::getInstance()->getLockedDrawDistance())
+	{
+		//Reset the draw distance and do not update with the new val
+		final_far = LLViewerCamera::getInstance()->getFar();
+	}
+// </FS:CR> Aurora sim
 	LLViewerCamera::getInstance()->setFar(final_far);
 	gViewerWindow->setup3DRender();
 	
@@ -205,7 +221,11 @@ void display_update_camera()
 // Write some stats to llinfos
 void display_stats()
 {
-	F32 fps_log_freq = gSavedSettings.getF32("FPSLogFrequency");
+	// <FS:Ansariel> gSavedSettings replacement
+	//F32 fps_log_freq = gSavedSettings.getF32("FPSLogFrequency");
+	static LLCachedControl<F32> fpsLogFrequency(gSavedSettings, "FPSLogFrequency");
+	F32 fps_log_freq = (F32)fpsLogFrequency;
+	// </FS:Ansariel>
 	if (fps_log_freq > 0.f && gRecentFPSTime.getElapsedTimeF32() >= fps_log_freq)
 	{
 		F32 fps = gRecentFrameCount / fps_log_freq;
@@ -213,7 +233,11 @@ void display_stats()
 		gRecentFrameCount = 0;
 		gRecentFPSTime.reset();
 	}
-	F32 mem_log_freq = gSavedSettings.getF32("MemoryLogFrequency");
+	// <FS:Ansariel> gSavedSettings replacement
+	//F32 mem_log_freq = gSavedSettings.getF32("MemoryLogFrequency");
+	static LLCachedControl<F32> memoryLogFrequency(gSavedSettings, "MemoryLogFrequency");
+	F32 mem_log_freq = (F32)memoryLogFrequency;
+	// </FS:Ansariel>
 	if (mem_log_freq > 0.f && gRecentMemoryTime.getElapsedTimeF32() >= mem_log_freq)
 	{
 		gMemoryAllocated = LLMemory::getCurrentRSS();
@@ -371,8 +395,21 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 	LLImageGL::updateStats(gFrameTimeSeconds);
 	
-	LLVOAvatar::sRenderName = gSavedSettings.getS32("AvatarNameTagMode");
-	LLVOAvatar::sRenderGroupTitles = (gSavedSettings.getBOOL("NameTagShowGroupTitles") && gSavedSettings.getS32("AvatarNameTagMode"));
+// <FS:CR> Aurora sim
+	//LLVOAvatar::sRenderName = gSavedSettings.getS32("AvatarNameTagMode");
+	static LLCachedControl<S32> avatarNameTagMode(gSavedSettings, "AvatarNameTagMode");
+	S32 RenderName = (S32)avatarNameTagMode;
+
+	if(RenderName > LLWorld::getInstance()->getAllowRenderName())//The most restricted gets set here
+		RenderName = LLWorld::getInstance()->getAllowRenderName();
+	LLVOAvatar::sRenderName = RenderName;
+// <FS:CR> Aurora sim
+
+	// <FS:Ansariel> gSavedSettings replacement
+	//LLVOAvatar::sRenderGroupTitles = (gSavedSettings.getBOOL("NameTagShowGroupTitles") && gSavedSettings.getS32("AvatarNameTagMode"));
+	static LLCachedControl<bool> nameTagShowGroupTitles(gSavedSettings, "NameTagShowGroupTitles");
+	LLVOAvatar::sRenderGroupTitles = (nameTagShowGroupTitles && LLVOAvatar::sRenderName);
+	// </FS:Ansariel>
 	
 	gPipeline.mBackfaceCull = TRUE;
 	gFrameCount++;
@@ -413,7 +450,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		{
 		case LLAgent::TELEPORT_PENDING:
 			gTeleportDisplayTimer.reset();
-			gViewerWindow->setShowProgress(TRUE);
+			gViewerWindow->setShowProgress(TRUE,!gSavedSettings.getBOOL("FSDisableTeleportScreens"));
 			gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
 			gAgent.setTeleportMessage(LLAgent::sTeleportProgressMessages["pending"]);
 			gViewerWindow->setProgressString(LLAgent::sTeleportProgressMessages["pending"]);
@@ -422,9 +459,27 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		case LLAgent::TELEPORT_START:
 			// Transition to REQUESTED.  Viewer has sent some kind
 			// of TeleportRequest to the source simulator
+
+			// Reset view angle if in mouselook. Fixes camera angle getting stuck on teleport. -Zi
+			if(gAgentCamera.cameraMouselook())
+			{
+				// If someone knows how to call "View.ZoomDefault" by hand, we should do that instead of
+				// replicating the behavior here. -Zi
+				LLViewerCamera::getInstance()->setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
+				if(gSavedSettings.getBOOL("FSResetCameraOnTP"))
+				{
+					gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
+				}
+				// also, reset the marker for "currently zooming" in the mouselook zoom settings. -Zi
+				LLVector3 vTemp=gSavedSettings.getVector3("_NACL_MLFovValues");
+				vTemp.mV[2]=0.0f;
+				gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
+			}
+
 			gTeleportDisplayTimer.reset();
-			gViewerWindow->setShowProgress(TRUE);
+			gViewerWindow->setShowProgress(TRUE,!gSavedSettings.getBOOL("FSDisableTeleportScreens"));
 			gViewerWindow->setProgressPercent(llmin(teleport_percent, 0.0f));
+
 			gAgent.setTeleportState( LLAgent::TELEPORT_REQUESTED );
 			gAgent.setTeleportMessage(
 				LLAgent::sTeleportProgressMessages["requesting"]);
@@ -452,15 +507,17 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			gAgent.setTeleportMessage(
 				LLAgent::sTeleportProgressMessages["arriving"]);
 			gTextureList.mForceResetTextureStats = TRUE;
-			gAgentCamera.resetView(TRUE, TRUE);
-			
+			if(!gSavedSettings.getBOOL("FSDisableTeleportScreens"))
+			{
+				gAgentCamera.resetView(TRUE, TRUE);
+			}
 			break;
 
 		case LLAgent::TELEPORT_ARRIVING:
 			// Make the user wait while content "pre-caches"
 			{
 				F32 arrival_fraction = (gTeleportArrivalTimer.getElapsedTimeF32() / TELEPORT_ARRIVAL_DELAY);
-				if( arrival_fraction > 1.f )
+				if( arrival_fraction > 1.f || gSavedSettings.getBOOL("FSDisableTeleportScreens") )
 				{
 					arrival_fraction = 1.f;
 					//LLFirstUse::useTeleport();
@@ -476,7 +533,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			// Short delay when teleporting in the same sim (progress screen active but not shown - did not
 			// fall-through from TELEPORT_START)
 			{
-				if( gTeleportDisplayTimer.getElapsedTimeF32() > TELEPORT_LOCAL_DELAY )
+				// <FS:CR> FIRE-8721 - Remove local teleport delay
+				//if( gTeleportDisplayTimer.getElapsedTimeF32() > TELEPORT_LOCAL_DELAY )
+				// </FS:CR>
 				{
 					//LLFirstUse::useTeleport();
 					gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
@@ -486,7 +545,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		case LLAgent::TELEPORT_NONE:
 			// No teleport in progress
-			gViewerWindow->setShowProgress(FALSE);
+			gViewerWindow->setShowProgress(FALSE,FALSE);
 			gTeleportDisplay = FALSE;
 			break;
 		}
@@ -514,7 +573,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		F32 percent_done = gRestoreGLTimer.getElapsedTimeF32() * 100.f / RESTORE_GL_TIME;
 		if( percent_done > 100.f )
 		{
-			gViewerWindow->setShowProgress(FALSE);
+			gViewerWindow->setShowProgress(FALSE,FALSE);
 			gRestoreGL = FALSE;
 		}
 		else
@@ -528,6 +587,43 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			gViewerWindow->setProgressPercent( percent_done );
 		}
 	}
+
+	// <FS::Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
+	// Progressively increase draw distance after TP when required.
+	static LLCachedControl<F32> renderFarClip(gSavedSettings, "RenderFarClip");
+	if (gSavedDrawDistance > 0.0f && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
+	{
+		if (gLastDrawDistanceStep != (F32)renderFarClip)
+		{
+			gSavedDrawDistance = 0.0f;
+			gLastDrawDistanceStep = 0.0f;
+			gSavedSettings.setF32("FSSavedRenderFarClip", 0.0f);
+		}
+
+		if (gTeleportArrivalTimer.getElapsedTimeF32() >=
+			(F32)gSavedSettings.getU32("FSRenderFarClipSteppingInterval"))
+		{
+			gTeleportArrivalTimer.reset();
+			F32 current = gSavedSettings.getF32("RenderFarClip");
+			if (gSavedDrawDistance > current)
+			{
+				current *= 2.0;
+				if (current > gSavedDrawDistance)
+				{
+					current = gSavedDrawDistance;
+				}
+				gSavedSettings.setF32("RenderFarClip", current);
+				gLastDrawDistanceStep = current;
+			}
+			if (current >= gSavedDrawDistance)
+			{
+				gSavedDrawDistance = 0.0f;
+				gLastDrawDistanceStep = 0.0f;
+				gSavedSettings.setF32("FSSavedRenderFarClip", 0.0f);
+			}
+		}
+	}
+	// </FS::Ansariel>
 
 	//////////////////////////
 	//
@@ -881,6 +977,12 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
 
+// <FS:CR> Aurora Sim
+		if (!LLWorld::getInstance()->getAllowRenderWater())
+		{
+			LLPipeline::sUnderWaterRender = FALSE;
+		}
+// </FS:CR> Aurora Sim
 		LLGLState::checkStates();
 		LLGLState::checkClientArrays();
 
@@ -917,7 +1019,11 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		{
 			LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 
-			if (gSavedSettings.getBOOL("RenderDepthPrePass") && LLGLSLShader::sNoFixedFunction)
+			// <FS:Ansariel> gSavedSettings replacement
+			//if (gSavedSettings.getBOOL("RenderDepthPrePass") && LLGLSLShader::sNoFixedFunction)
+			static LLCachedControl<bool> renderDepthPrePass(gSavedSettings, "RenderDepthPrePass");
+			if (renderDepthPrePass && LLGLSLShader::sNoFixedFunction)
+			// </FS:Ansariel>
 			{
 				gGL.setColorMask(false, false);
 				
@@ -1018,6 +1124,15 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		
 		LLSpatialGroup::sNoDelete = FALSE;
+		
+		// <	FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
+		// Depending	 on the state of the pipeline. this can trigger illegal deletion of drawables.
+		// To work around th	at, resizeScreenTexture will just set a flag, which then later does trigger the change
+		// in shaders.
+		// RenderDeffered will be shut down here if needed.
+		gPipeline.disableDeferredOnLowMemory();
+		// </FS:ND>
+
 		gPipeline.clearReferences();
 
 		gPipeline.rebuildGroups();
@@ -1057,7 +1172,11 @@ void render_hud_attachments()
 	glh::matrix4f current_mod = glh_get_current_modelview();
 
 	// clamp target zoom level to reasonable values
-	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, 0.1f, 1.f);
+//	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, 0.1f, 1.f);
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.0.0c
+	gAgentCamera.mHUDTargetZoom = llclamp(gAgentCamera.mHUDTargetZoom, (!gRlvAttachmentLocks.hasLockedHUD()) ? 0.1f : 0.85f, 1.f);
+// [/RLVa:KB]
+
 	// smoothly interpolate current zoom level
 	gAgentCamera.mHUDCurZoom = lerp(gAgentCamera.mHUDCurZoom, gAgentCamera.mHUDTargetZoom, LLCriticalDamp::getInterpolant(0.03f));
 
@@ -1069,7 +1188,11 @@ void render_hud_attachments()
 		hud_cam.setAxes(LLVector3(1,0,0), LLVector3(0,1,0), LLVector3(0,0,1));
 		LLViewerCamera::updateFrustumPlanes(hud_cam, TRUE);
 
-		bool render_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES) && gSavedSettings.getBOOL("RenderHUDParticles");
+		// <FS:Ansariel> gSavedSettings replacement
+		//bool render_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES) && gSavedSettings.getBOOL("RenderHUDParticles");
+		static LLCachedControl<bool> renderHUDParticles(gSavedSettings, "RenderHUDParticles");
+		bool render_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES) && renderHUDParticles;
+		// </FS:Ansariel>
 		
 		//only render hud objects
 		gPipeline.pushRenderTypeMask();
@@ -1410,7 +1533,11 @@ void render_ui_3d()
 	}
 
 	// Coordinate axes
-	if (gSavedSettings.getBOOL("ShowAxes"))
+	// <FS:Ansariel> gSavedSettings replacement
+	//if (gSavedSettings.getBOOL("ShowAxes"))
+	static LLCachedControl<bool> showAxes(gSavedSettings, "ShowAxes");
+	if (showAxes)
+	// </FS:Ansariel>
 	{
 		draw_axes();
 	}
@@ -1466,7 +1593,11 @@ void render_ui_2d()
 	}
 	
 
-	if (gSavedSettings.getBOOL("RenderUIBuffer"))
+	// <FS:Ansariel> gSavedSettings replacement
+	//if (gSavedSettings.getBOOL("RenderUIBuffer"))
+	static LLCachedControl<bool> renderUIBuffer(gSavedSettings, "RenderUIBuffer");
+	if (renderUIBuffer)
+	// </FS:Ansariel>
 	{
 		if (LLUI::sDirty)
 		{

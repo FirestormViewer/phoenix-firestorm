@@ -29,12 +29,14 @@ include_directories(SYSTEM
 set(win_crash_logger_SOURCE_FILES
     win_crash_logger.cpp
     llcrashloggerwindows.cpp
+    llcrashlookupwindows.cpp
     )
 
 set(win_crash_logger_HEADER_FILES
     CMakeLists.txt
 
     llcrashloggerwindows.h
+    llcrashlookupwindows.h
     resource.h
     StdAfx.h
     win_crash_logger.h
@@ -44,7 +46,7 @@ set_source_files_properties(${win_crash_logger_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 
 set(win_crash_logger_RESOURCE_FILES
-    ll_icon.ico
+    firestorm_icon.ico
     )
 
 set_source_files_properties(${win_crash_logger_RESOURCE_FILES}
@@ -84,6 +86,7 @@ target_link_libraries(windows-crash-logger
     oleaut32
     wininet
     Wldap32
+    dbgeng
     )
     
 if (WINDOWS)

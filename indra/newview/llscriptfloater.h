@@ -123,6 +123,18 @@ private:
 	typedef std::map<LLUUID, FloaterPositionInfo> floater_position_map_t;
 
 	floater_position_map_t mFloaterPositions;
+
+// <FS:Zi> script dialogs position
+private:
+	LLScriptFloaterManager();
+	friend class LLSingleton<LLScriptFloaterManager>;
+
+public:
+	S32 mNavigationPanelPad;
+	S32 mFavoritesPanelPad;
+
+	S32 getTopPad();
+// </FS:Zi>
 };
 
 /**
@@ -178,6 +190,8 @@ public:
 
 	void restorePosition();
 
+	F32 getCurrentTransparency();
+
 protected:
 
 	/**
@@ -208,6 +222,30 @@ private:
 	LLUUID mNotificationId;
 	LLUUID mObjectId;
 	bool mSaveFloaterPosition;
+	bool mNoTransparency;
+
+// <FS:Zi> Animated menus
+public:
+	S32 mCurrentHeight;
+	S32 mDesiredHeight;
+	F64 mStartTime;
+
+	virtual void draw();
+// </FS:Zi>
+
+// <FS:Zi> script dialogs position
+	enum eDialogPosition
+	{
+		POS_LEGACY,			//	Use ShowScriptDialogsTopRight once and convert to one of these
+		POS_DOCKED,
+		POS_TOP_LEFT,
+		POS_TOP_RIGHT,
+		POS_BOTTOM_LEFT,
+		POS_BOTTOM_RIGHT
+	};
+// </FS:Zi>
+
+	void onStackClicked();		// <FS:Zi> Dialog Stacking browser
 };
 
 #endif //LL_SCRIPTFLOATER_H

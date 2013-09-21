@@ -55,8 +55,8 @@ bool LLLandmark::getGlobalPos(LLVector3d& pos)
 	}
 	else if(mRegionID.notNull())
 	{
-		F32 g_x = -1.0;
-		F32 g_y = -1.0;
+		F32 g_x = -1.0f;
+		F32 g_y = -1.0f;
 		if(mRegionID == mLocalRegion.first)
 		{
 			from_region_handle(mLocalRegion.second, &g_x, &g_y);

@@ -26,6 +26,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llagent.h"
 #include "llagentdata.h" // for gAgentID
 #include "llfloaterimnearbychathandler.h"
 
@@ -45,7 +46,15 @@
 #include "llrootview.h"
 #include "lllayoutstack.h"
 
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
+#include "fsconsoleutils.h"
+#include "fsfloaternearbychat.h"
+
 //add LLFloaterIMNearbyChatHandler to LLNotificationsUI namespace
+
 using namespace LLNotificationsUI;
 
 static LLFloaterIMNearbyChatToastPanel* createToastPanel()
@@ -390,7 +399,9 @@ void LLFloaterIMNearbyChatScreenChannel::arrangeToasts()
 
 	S32 channel_bottom = channel_rect.mBottom;
 
-	S32		bottom = channel_bottom + 80;
+	// <FS:Ansariel> Configurable nearby chat toasts offset
+	//S32		bottom = channel_bottom + 80;
+	S32		bottom = channel_bottom + gSavedSettings.getS32("FSNearbyChatToastsOffset");
 	S32		margin = gSavedSettings.getS32("ToastGap");
 
 	//sort active toasts
@@ -432,7 +443,7 @@ void LLFloaterIMNearbyChatScreenChannel::arrangeToasts()
 	{
 		LLToast* toast = it->get();
 		if (toast)
-	{
+		{
 		toast->setIsHidden(false);
 		toast->setVisible(TRUE);
 		}
@@ -480,13 +491,42 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 									  const LLSD &args)
 {
 	if(chat_msg.mMuted == TRUE)
+	// <FS:Ansariel> Optional muted chat history
+		//return;
+	{
+		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+		nearby_chat->addMessage(chat_msg, true, args);
 		return;
+	}
+	// </FS:Ansariel> Optional muted chat history
 
 	if(chat_msg.mText.empty())
 		return;//don't process empty messages
 
-    LLFloaterReg::getInstance("im_container");
-	LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+	if (rlv_handler_t::isEnabled())
+	{
+		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
+		LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			RlvUtil::filterLocation(tmp_chat.mText);
+			tmp_chat.mRlvLocFiltered = TRUE;
+		}
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			RlvUtil::filterNames(tmp_chat.mText);
+			tmp_chat.mRlvNamesFiltered = TRUE;
+		}
+	}
+// [/RLVa:KB]
+
+	// <FS:Ansariel> [FS communication UI]
+    //LLFloaterReg::getInstance("im_container");
+	//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+	// </FS:Ansariel> [FS communication UI]
 
 	// Build notification data 
 	LLSD chat;
@@ -498,7 +538,11 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	chat["chat_type"] = (S32)chat_msg.mChatType;
 	chat["chat_style"] = (S32)chat_msg.mChatStyle;
 	// Pass sender info so that it can be rendered properly (STORM-1021).
-	chat["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+//	chat["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [RLVa:KB] - Checked: 2011-12-13 (RLVa-1.4.6) | Added: RLVa-1.4.6
+	if ((CHAT_SOURCE_AGENT != chat_msg.mSourceType) || (!chat_msg.mRlvNamesFiltered))
+		chat["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [/RLVa:KB]
 
 	if (chat_msg.mChatType == CHAT_TYPE_DIRECT &&
 		chat_msg.mText.length() > 0 &&
@@ -523,7 +567,8 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 			return;
 		}
 
-		if (gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)// show error in window //("ScriptErrorsAsChat"))
+		// <FS:Ansariel> Script debug icon
+		//if (gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)// show error in window //("ScriptErrorsAsChat"))
 		{
 
 			LLColor4 txt_color;
@@ -534,7 +579,14 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 												chat_msg.mFromName,
 												txt_color,
 												chat_msg.mFromID);
-			return;
+			// <FS:Ansariel> Script debug icon
+			//return;
+			if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 1)
+			{
+				return;
+			}
+			// </FS:Ansariel> Script debug icon
+
 		}
 	}
 
@@ -547,20 +599,38 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
  		LLFirstUse::otherAvatarChatFirst();
 
  		// Add sender to the recent people list.
- 		LLRecentPeople::instance().add(chat_msg.mFromID);
-
+// [RLVa:KB] - Checked: 2012-03-15 (RLVa-1.4.6) | Added: RLVa-1.4.6
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	 		LLRecentPeople::instance().add(chat_msg.mFromID);
+// [/RLVa:KB]
+// 		LLRecentPeople::instance().add(chat_msg.mFromID);
 	}
 
 	// Send event on to LLEventStream
 	sChatWatcher->post(chat);
 
-    LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+	// <FS:Ansariel> [FS communication UI]
+    //LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+	// </FS:Ansariel> [FS communication UI]
 
-	if((  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
-			&& gSavedSettings.getBOOL("UseChatBubbles") )
+	// <FS:Ansariel> Nearby chat in console
+	if (FSConsoleUtils::ProcessChatMessage(chat_msg, args))
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
+	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
+	// <FS:Ansariel> [FS communication UI]
+	//if((  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+	if(  ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
+	// </FS:Ansariel> [FS communication UI]
+			&& useChatBubbles )
 		|| mChannel.isDead()
 		|| !mChannel.get()->getShowToasts() )
-		&& nearby_chat->isMessagePaneExpanded())
+	// <FS:Ansariel> [FS communication UI]
+	//	&& nearby_chat->isMessagePaneExpanded())
+	// </FS:Ansariel> [FS communication UI]
 		// to prevent toasts in Do Not Disturb mode
 		return;//no need in toast if chat is visible or if bubble chat is enabled
 
@@ -583,44 +653,52 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	*/
 
 	LLFloaterIMNearbyChatScreenChannel* channel = dynamic_cast<LLFloaterIMNearbyChatScreenChannel*>(mChannel.get());
-
+		
 	if(channel)
 	{
 		// Handle IRC styled messages.
 		std::string toast_msg;
-		if (chat_msg.mChatStyle == CHAT_STYLE_IRC)
+		if (tmp_chat.mChatStyle == CHAT_STYLE_IRC)
 		{
-			if (!chat_msg.mFromName.empty())
+			if (!tmp_chat.mFromName.empty())
 			{
-				toast_msg += chat_msg.mFromName;
+				toast_msg += tmp_chat.mFromName;
 			}
-			toast_msg += chat_msg.mText.substr(3);
+			toast_msg += tmp_chat.mText.substr(3);
 		}
 		else
 		{
-			toast_msg = chat_msg.mText;
+			toast_msg = tmp_chat.mText;
 		}
 
 		//Don't show nearby toast, if conversation is visible and selected
-		if ((nearby_chat->hasFocus()) ||
-			(LLFloater::isVisible(nearby_chat) && nearby_chat->isTornOff() && !nearby_chat->isMinimized()) ||
-		    ((im_box->getSelectedSession().isNull() &&
-				((LLFloater::isVisible(im_box) && !im_box->isMinimized() && im_box->isFrontmost())
-						|| (LLFloater::isVisible(nearby_chat) && !nearby_chat->isMinimized() && nearby_chat->isFrontmost())))))
-		{
-			if(nearby_chat->isMessagePaneExpanded())
-			{
-				return;
-			}
-		}
+		// <FS:Ansariel> [FS communication UI]
+		//if ((nearby_chat->hasFocus()) ||
+		//	(LLFloater::isVisible(nearby_chat) && nearby_chat->isTornOff() && !nearby_chat->isMinimized()) ||
+		//    ((im_box->getSelectedSession().isNull() &&
+		//		((LLFloater::isVisible(im_box) && !im_box->isMinimized() && im_box->isFrontmost())
+		//				|| (LLFloater::isVisible(nearby_chat) && !nearby_chat->isMinimized() && nearby_chat->isFrontmost())))))
+		//{
+		//	if(nearby_chat->isMessagePaneExpanded())
+		//	{
+		//		return;
+		//	}
+		//}
+		// </FS:Ansariel> [FS communication UI]
 
         //Will show toast when chat preference is set        
-        if((gSavedSettings.getString("NotificationNearbyChatOptions") == "toast") || !nearby_chat->isMessagePaneExpanded())
+		// <FS:Ansariel> [FS communication UI] [CHUI Merge] Maybe need this later...
+        //if((gSavedSettings.getString("NotificationNearbyChatOptions") == "toast") || !nearby_chat->isMessagePaneExpanded())
+		// </FS:Ansariel> [FS communication UI]
         {
             // Add a nearby chat toast.
             LLUUID id;
             id.generate();
             chat["id"] = id;
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			if (rlv_handler_t::isEnabled())
+				chat["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
+// [/RLVa:KB]
             std::string r_color_name = "White";
             F32 r_color_alpha = 1.0f; 
             LLViewerChat::getChatColor( chat_msg, r_color_name, r_color_alpha);

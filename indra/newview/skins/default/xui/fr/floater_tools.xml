@@ -68,16 +68,22 @@
 		<radio_item label="Pivoter (Ctrl)" name="radio rotate"/>
 		<radio_item label="Étirer (Ctrl+Maj)" name="radio stretch"/>
 		<radio_item label="Choisir une face" name="radio select face"/>
+		<radio_item label="Aligner" name="radio align"/>
 	</radio_group>
-	<check_box label="Modification liée" name="checkbox edit linked parts"/>
+	<check_box label="Modifier parties liées" name="checkbox edit linked parts"/>
 	<button label="Lien" name="link_btn"/>
 	<button label="Annuler le lien" name="unlink_btn"/>
+	<text name="RenderingCost" tool_tip="Affiche le coût du rendu calculé pour cet objet">
+		þ : [COUNT]
+	</text>
 	<check_box label="" name="checkbox uniform"/>
 	<text label="Étirer les deux côtés" name="checkbox uniform label">
 		Étirer les deux côtés
 	</text>
+	<check_box label="Étirer les deux côtés" name="checkbox uniform"/>
 	<check_box initial_value="true" label="Étirer les textures" name="checkbox stretch textures"/>
 	<check_box initial_value="true" label="Fixer" name="checkbox snap to grid"/>
+	<check_box initial_value="false" label="Axes de modification sur racine" name="checkbox actual root"/>
 	<combo_box name="combobox grid mode" tool_tip="Choisir le type d&apos;axe de grille pour le positionnement de l&apos;objet.">
 		<combo_box.item label="Monde" name="World"/>
 		<combo_box.item label="Local" name="Local"/>
@@ -194,7 +200,7 @@
 			<text name="label click action">
 				Cliquer pour :
 			</text>
-			<combo_box name="clickaction">
+			<combo_box name="clickaction" width="178">
 				<combo_box.item label="Toucher (par défaut)" name="Touch/grab(default)"/>
 				<combo_box.item label="S&apos;asseoir sur l&apos;objet" name="Sitonobject"/>
 				<combo_box.item label="Acheter l&apos;objet" name="Buyobject"/>
@@ -352,7 +358,7 @@
 			<combo_box name="sculpt type control">
 				<combo_box.item label="Sphère" name="Sphere"/>
 				<combo_box.item label="Tore" name="Torus"/>
-				<combo_box.item label="Plan" name="Plane"/>
+				<combo_box.item label="Plan / Aucun" name="Plane"/>
 				<combo_box.item label="Cylindre" name="Cylinder"/>
 			</combo_box>
 		</panel>

@@ -23,12 +23,14 @@ include_directories(SYSTEM
 
 set(llcrashlogger_SOURCE_FILES
     llcrashlogger.cpp
+    llcrashlookup.cpp
     )
 
 set(llcrashlogger_HEADER_FILES
     CMakeLists.txt
 
     llcrashlogger.h
+    llcrashlookup.h
     )
 
 set_source_files_properties(${llcrashlogger_HEADER_FILES}

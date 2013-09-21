@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="particle_editor_floater" title="Edytor cząsteczek">
+<panel name="particle_editor_panel">
+<panel name="top_left_panel">
+<text name="Pattern_Label">
+Wzór:
+</text>
+<combo_box name="pattern_type_combo">
+	<combo_box.item label="Eksplozja" name="explode"/>
+	<combo_box.item label="Kąt" name="angle"/>
+	<combo_box.item label="Kąt - stożek" name="angle_cone"/>
+	<combo_box.item label="Kąt - pusty stożek" name="angle_cone_empty"/>
+	<combo_box.item label="Opadanie" name="drop"/>
+</combo_box>
+<text name="Texture_Label">
+	Tekstura:
+</text>
+<text name="Burst_Rate_Label">
+	Szybk. impulsów:
+</text>
+<text name="Burst_Count_Label">
+	Ilość impulsów:
+</text>
+<text name="Burst_Radius_Label">
+	Zasięg impulsów:
+</text>
+<text name="Angle_Begin_Label">
+	Początek kąta:
+</text>
+<text name="Burst_Speed_Min_Label">
+	Najwolniejsze:
+</text>
+<text name="Angle_End_Label">
+	Koniec kąta:
+</text>
+<text name="Burst_Speed_Max_Label">
+	Najszybsze:
+</text>
+<text name="Source_Max_Age_Label">
+	Max. wiek źródła:
+</text>
+<text name="Start_Alpha_Label">
+	Startowa Alpha:
+</text>
+<text name="Particles_Max_Age_Label">
+	Max. wiek cząst:
+</text>
+<text name="End_Alpha_Label">
+	Końcowa Alpha:
+</text>
+<text name="Scale_Start_Label">
+	Skala Startu:
+</text>
+<text name="End_Label">
+	K.:
+</text>
+</panel>
+<panel name="top_right_panel">
+<check_box name="bounce_checkbox" label="Odbijające"/>
+<check_box name="emissive_checkbox" label="Emisyjne"/>
+<check_box name="follow_source_checkbox" label="Śledzące źródło"/>
+<check_box name="follow_velocity_checkbox" label="Śledzące prędkość"/>
+<check_box name="interpolate_color_checkbox" label="Interpoluj kolor"/>
+<check_box name="interpolate_scale_checkbox" label="Interpoluj rozmiar"/>
+<check_box name="target_position_checkbox" label="Celuj w obiekt"/>
+<check_box name="target_linear_checkbox" label="Celuj liniowo"/>
+<check_box name="wind_checkbox" label="Wiatr"/>
+<button name="copy_button" label="Kopiuj" tool_tip="Kopiuj parametry edytora cząsteczek do schowka jako skrypt LSL."/>
+<button name="inject_button" label="Wstaw" tool_tip="Wstawia ustawiony system cząsteczek w zaznaczony obiekt."/>
+</panel>
+<panel name="bottom_left_panel">
+<text name="Target_Key_Label">
+	Klucz celu:
+</text>
+<button name="clear_target_button" tool_tip="Wyczyść klucz obiektu lub awatara."/>
+<button name="pick_target_button" tool_tip="Kliknij, aby wybrać klucz obiektu lub awatara jako cel dla cząsteczek."/>
+<text name="Acceleration_Label">
+	Przyspieszaj:
+</text>
+<text name="Omega_Label">
+	Obroty:
+</text>
+</panel>
+<panel name="bottom_right_panel">
+<color_swatch label="Kolor startu" name="start_color_selector"/>
+<color_swatch label="Kolor końca" name="end_color_selector"/>
+</panel>
+</panel>
+</floater>

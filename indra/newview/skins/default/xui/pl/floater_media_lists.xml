@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floatermedialists" title="Listy Mediów">
+	<floater.string name="EnterUrlAllow">
+		Wpisz domenę lub URL zawsze dozwolonej domeny:
+	</floater.string>
+	<floater.string name="EnterUrlDeny">
+		Wpisz domenę lub URL zawsze blokowanej domeny:
+	</floater.string>
+	<layout_stack name="lists_layout_stack">
+	<layout_panel name="whitelist_layout_panel">
+	<text name="whitelist_text">
+		Dozwolone domeny:
+	</text>
+	<scroll_list name="whitelist_list">
+		<column label="Biała lista" name="whitelist_col"/>
+	</scroll_list>
+	<layout_stack name="whitelist_buttons_layout_stack">
+	<layout_panel name="whitelist_buttons_panel_add">
+	<button label="Dodaj..." label_selected="Dodaj..." name="add_whitelist"/>
+	</layout_panel>
+	<layout_panel name="whitelist_buttons_panel_remove">
+	<button label="Usuń" label_selected="Usuń" name="remove_whitelist"/>
+	</layout_panel>
+	</layout_stack>
+	</layout_panel>
+	<layout_panel name="blacklist_layout_panel">
+	<text name="blacklist_text">
+		Blokowane domeny:
+	</text>
+	<scroll_list name="blacklist_list">
+		<column label="Czarna lista" name="blacklist_col"/>
+	</scroll_list>
+	<layout_stack name="blacklist_buttons_layout_stack">
+	<layout_panel name="blacklist_buttons_panel_add">
+	<button label="Dodaj..." label_selected="Dodaj..." name="add_blacklist"/>
+	</layout_panel>
+	<layout_panel name="blacklist_buttons_panel_remove">
+	<button label="Usuń" label_selected="Usuń" name="remove_blacklist"/>
+	</layout_panel>
+	</layout_stack>
+	</layout_panel>
+	</layout_stack>
+	<text initial_value="Wpisz URL:" name="add_text"/>
+	<button label="Dodaj" label_selected="Dodaj" name="commit_domain"/>
+</floater>

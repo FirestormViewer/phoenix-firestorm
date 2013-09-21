@@ -77,6 +77,14 @@
 #include "lltrans.h"
 
 #include "llgroupactions.h"
+#include "llsdutil_math.h"
+#include "llregionhandle.h"
+
+#include "llworld.h" // <FS:Ansariel> For FIRE-1292
+#include "llsdutil.h"
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif // OPENSIM
 
 static std::string OWNER_ONLINE 	= "0";
 static std::string OWNER_OFFLINE	= "1";
@@ -356,7 +364,8 @@ void* LLFloaterLand::createPanelLandAccess(void* data)
 LLPanelLandGeneral::LLPanelLandGeneral(LLParcelSelectionHandle& parcel)
 :	LLPanel(),
 	mUncheckedSell(FALSE),
-	mParcel(parcel)
+	mParcel(parcel),
+	mLastParcelLocalID(0)
 {
 }
 
@@ -365,6 +374,9 @@ BOOL LLPanelLandGeneral::postBuild()
 	mEditName = getChild<LLLineEditor>("Name");
 	mEditName->setCommitCallback(onCommitAny, this);	
 	getChild<LLLineEditor>("Name")->setPrevalidate(LLTextValidate::validateASCIIPrintableNoPipe);
+
+	mEditUUID = getChild<LLLineEditor>("UUID");
+	mEditUUID->setEnabled(FALSE);
 
 	mEditDesc = getChild<LLTextEditor>("Description");
 	mEditDesc->setCommitOnFocusLost(TRUE);
@@ -507,6 +519,8 @@ void LLPanelLandGeneral::refresh()
 		// nothing selected, disable panel
 		mEditName->setEnabled(FALSE);
 		mEditName->setText(LLStringUtil::null);
+
+		mEditUUID->setText(LLStringUtil::null);
 
 		mEditDesc->setEnabled(FALSE);
 		mEditDesc->setText(getString("no_selection_text"));
@@ -685,6 +699,7 @@ void LLPanelLandGeneral::refresh()
 
 		mEditName->setText( parcel->getName() );
 		mEditDesc->setText( parcel->getDesc() );
+		mEditUUID->setText(LLStringUtil::null);
 
 		BOOL for_sale = parcel->getForSale();
 				
@@ -786,6 +801,41 @@ void LLPanelLandGeneral::refresh()
 		BOOL use_pass = parcel->getOwnerID()!= gAgent.getID() && parcel->getParcelFlag(PF_USE_PASS_LIST) && !LLViewerParcelMgr::getInstance()->isCollisionBanned();;
 		mBtnBuyPass->setEnabled(use_pass);
 
+		// <Ansariel> Retrieve parcel UUID. We need to ask the itself for the
+		//            parcel UUID, because LLParcel gets initialized with a
+		//            null ID.
+		//            Following part is basically copied from
+		//            LLPanelScriptLimitsRegionMemory::StartRequestChain()
+		if (regionp && gAgent.getRegion() && gAgent.getRegion()->getRegionID() == regionp->getRegionID() &&
+			(mLastParcelLocalID == 0 || mLastParcelLocalID != parcel->getLocalID()) )
+		{
+			mLastParcelLocalID = parcel->getLocalID();
+			std::string url = regionp->getCapability("RemoteParcelRequest");
+			if (!url.empty())
+			{
+				LLSD body;
+				body["location"] = ll_sd_from_vector3(parcel->getCenterpoint());
+
+				LLUUID region_id = regionp->getRegionID();
+				if (!region_id.isNull())
+				{
+					body["region_id"] = region_id;
+				}
+
+				LLVector3d pos_global = regionp->getCenterGlobal();
+				if (!pos_global.isExactlyZero())
+				{
+					U64 region_handle = to_region_handle(pos_global);
+					body["region_handle"] = ll_sd_from_U64(region_handle);
+				}
+				LLHTTPClient::post(url, body, new LLRemoteParcelRequestResponder(getObserverHandle()));
+			}
+			else
+			{
+				mEditUUID->setText(getString("error_resolving_uuid"));
+			}
+		}
+		// </Ansariel>
 	}
 }
 
@@ -1062,6 +1112,28 @@ void LLPanelLandGeneral::onClickStopSellLand(void* data)
 
 	LLViewerParcelMgr::getInstance()->sendParcelPropertiesUpdate(parcel);
 }
+
+// <Ansariel> For retrieving the parcel UUID:
+//            Implementation of LLRemoteParcelInfoObserver interface
+void LLPanelLandGeneral::processParcelInfo(const LLParcelData& parcel_data)
+{
+}
+
+void LLPanelLandGeneral::setParcelID(const LLUUID& parcel_id)
+{
+	// No sanity check needed here. LLRemoteParcelRequestResponder
+	// will do that for us!
+	mEditUUID->setText(parcel_id.asString());
+}
+
+// virtual
+void LLPanelLandGeneral::setErrorStatus(U32 status, const std::string& reason)
+{
+	mEditUUID->setText(getString("error_resolving_uuid"));
+	mLastParcelLocalID = 0;
+	llwarns << "Can't handle remote parcel request."<< " Http Status: "<< status << ". Reason : "<< reason<<llendl;
+}
+// </Ansariel>
 
 //---------------------------------------------------------------------------
 // LLPanelLandObjects
@@ -1566,6 +1638,21 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		self->mFirstReply = FALSE;
 	}
 
+	// <FS:Ansariel> FIRE-1292: Highlight avatars in same region; Online status in
+	//               ParcelObjectOwnersReply message was intentionally deprecated by LL!
+	std::vector<LLVector3d> positions;
+	std::vector<LLUUID> avatar_ids;
+	LLUUID own_region_id;
+
+	LLViewerRegion* own_region = gAgent.getRegion();
+	if (own_region)
+	{
+		own_region_id = own_region->getRegionID();
+	}
+
+	LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), 8192.f);
+	// </FS:Ansariel>
+
 	for(S32 i = 0; i < rows; ++i)
 	{
 		msg->getUUIDFast(_PREHASH_Data, _PREHASH_OwnerID,		owner_id,		i);
@@ -1580,6 +1667,30 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		{
 			continue;
 		}
+
+		// <FS:Ansariel> FIRE-1292: Highlight avatars in same region; Online status in
+		//               ParcelObjectOwnersReply message was intentionally deprecated by LL!
+		if (gAgentID == owner_id)
+		{
+			is_online = TRUE;
+		}
+		else
+		{
+			is_online = FALSE;
+			for (U32 i = 0; i < avatar_ids.size(); i++)
+			{
+				if (avatar_ids[i] == owner_id)
+				{
+					LLViewerRegion* avatar_region = LLWorld::getInstance()->getRegionFromPosGlobal(positions[i]);
+					if (avatar_region && avatar_region->getRegionID() == own_region_id)
+					{
+						is_online = TRUE;
+					}
+					break;
+				}
+			}
+		}
+		// </FS:Ansariel>
 
 		LLNameListCtrl::NameItem item_params;
 		item_params.value = owner_id;
@@ -1809,6 +1920,7 @@ LLPanelLandOptions::LLPanelLandOptions(LLParcelSelectionHandle& parcel)
 	mCheckEditGroupObjects(NULL),
 	mCheckAllObjectEntry(NULL),
 	mCheckGroupObjectEntry(NULL),
+	mCheckEditLand(NULL), // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
 	mCheckSafe(NULL),
 	mCheckFly(NULL),
 	mCheckGroupScripts(NULL),
@@ -1841,6 +1953,11 @@ BOOL LLPanelLandOptions::postBuild()
 
 	mCheckGroupObjectEntry = getChild<LLCheckBoxCtrl>( "group object entry check");
 	childSetCommitCallback("group object entry check", onCommitAny, this);
+	
+  // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+	mCheckEditLand = getChild<LLCheckBoxCtrl>( "edit land check");
+	childSetCommitCallback("edit land check", onCommitAny, this);
+  // <FS:WF>
 	
 	mCheckGroupScripts = getChild<LLCheckBoxCtrl>( "check group scripts");
 	childSetCommitCallback("check group scripts", onCommitAny, this);
@@ -1939,6 +2056,14 @@ void LLPanelLandOptions::refresh()
 
 		mCheckGroupObjectEntry	->set(FALSE);
 		mCheckGroupObjectEntry	->setEnabled(FALSE);
+	
+     // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+       if ( mCheckEditLand )
+       {	
+		    mCheckEditLand		->set(FALSE);
+		    mCheckEditLand		->setEnabled(FALSE);
+       }
+	 // <FS:WF>
 
 		mCheckSafe			->set(FALSE);
 		mCheckSafe			->setEnabled(FALSE);
@@ -1987,6 +2112,12 @@ void LLPanelLandOptions::refresh()
 
 		mCheckGroupObjectEntry	->set( parcel->getAllowGroupObjectEntry() ||  parcel->getAllowAllObjectEntry());
 		mCheckGroupObjectEntry	->setEnabled( can_change_options && !parcel->getAllowAllObjectEntry() );
+		
+	// <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+	    BOOL can_change_terraform = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_EDIT);
+		mCheckEditLand		->set( parcel->getAllowTerraform() );
+		mCheckEditLand		->setEnabled( can_change_terraform );
+	// <FS:WF>	
 		
 		mCheckSafe			->set( !parcel->getAllowDamage() );
 		mCheckSafe			->setEnabled( can_change_options );
@@ -2091,7 +2222,36 @@ void LLPanelLandOptions::refresh()
 				}
 			}
 		}
+		S32 fee = getDirectoryFee();
+		if (fee == 0)
+		{
+			mCheckShowDirectory->setLabel(getString("DirectoryFree"));
+		}
+		else
+		{
+			LLStringUtil::format_map_t map;
+			map["DIRECTORY_FEE"] = llformat("%d", fee);
+			mCheckShowDirectory->setLabel(getString("DirectoryFee", map));
+		}
 	}
+}
+
+S32 LLPanelLandOptions::getDirectoryFee()
+{
+	S32 fee = PARCEL_DIRECTORY_FEE;
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		fee = LLGridManager::getInstance()->getDirectoryFee();
+	}
+	if (LLGridManager::getInstance()->isInAuroraSim())
+	{
+		LLSD grid_info;
+		LLGridManager::getInstance()->getGridData(grid_info);
+		fee = grid_info[GRID_DIRECTORY_FEE].asInteger();
+	}
+#endif // OPENSIM
+	return fee;
 }
 
 // virtual
@@ -2112,8 +2272,12 @@ void LLPanelLandOptions::refreshSearch()
 		mCheckShowDirectory->setEnabled(FALSE);
 
 		// *TODO:Translate
-		const std::string& none_string = LLParcel::getCategoryUIString(LLParcel::C_NONE);
-		mCategoryCombo->setSimple(none_string);
+		// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+		//const std::string& none_string = LLParcel::getCategoryUIString(LLParcel::C_NONE);
+		//mCategoryCombo->setSimple(none_string);
+		const std::string& none_string = LLParcel::getCategoryString(LLParcel::C_NONE);
+		mCategoryCombo->setValue(none_string);
+		// </FS:Ansariel>
 		mCategoryCombo->setEnabled(FALSE);
 		return;
 	}
@@ -2142,8 +2306,12 @@ void LLPanelLandOptions::refreshSearch()
 	// Set by string in case the order in UI doesn't match the order by index.
 	// *TODO:Translate
 	LLParcel::ECategory cat = parcel->getCategory();
-	const std::string& category_string = LLParcel::getCategoryUIString(cat);
-	mCategoryCombo->setSimple(category_string);
+	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+	//const std::string& category_string = LLParcel::getCategoryUIString(cat);
+	//mCategoryCombo->setSimple(category_string);
+	const std::string& category_string = LLParcel::getCategoryString(cat);
+	mCategoryCombo->setValue(category_string);
+	// </FS:Ansariel>
 
 	std::string tooltip;
 	bool enable_show_directory = false;
@@ -2216,7 +2384,11 @@ void LLPanelLandOptions::onCommitAny(LLUICtrl *ctrl, void *userdata)
 	BOOL create_group_objects	= self->mCheckEditGroupObjects->get() || self->mCheckEditObjects->get();
 	BOOL all_object_entry		= self->mCheckAllObjectEntry->get();
 	BOOL group_object_entry	= self->mCheckGroupObjectEntry->get() || self->mCheckAllObjectEntry->get();
-	BOOL allow_terraform	= false; // removed from UI so always off now - self->mCheckEditLand->get();
+	
+ // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+    BOOL allow_terraform	= self->mCheckEditLand->get();
+ //	BOOL allow_terraform	= false; // removed from UI so always off now - self->mCheckEditLand->get();
+ // <FS:WF>
 	BOOL allow_damage		= !self->mCheckSafe->get();
 	BOOL allow_fly			= self->mCheckFly->get();
 	BOOL allow_landmark		= TRUE; // cannot restrict landmark creation
@@ -2846,6 +3018,11 @@ void LLPanelLandAccess::onClickRemoveBanned(void* data)
 //---------------------------------------------------------------------------
 LLPanelLandCovenant::LLPanelLandCovenant(LLParcelSelectionHandle& parcel)
 	: LLPanel(),
+	  // <FS:Zi> Fix covenant loading slowdowns
+	  mCovenantChanged(true),
+	  mCovenantRequested(false),
+	  mPreviousRegion(NULL),
+	  // <FS:Zi>
 	  mParcel(parcel)
 {	
 }
@@ -2860,6 +3037,20 @@ void LLPanelLandCovenant::refresh()
 	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 	if(!region) return;
 		
+	// <FS:Zi> Fix covenant loading slowdowns
+	// Only refresh the covenant panel when we are looking at a different region now
+	if(region==mPreviousRegion)
+	{
+		return;
+	}
+
+	// We save the region pointer only here so a NULL region does not update mPreviousRegion.
+	// This means we don't update the covenant even when the user right clicked somewhere that
+	// invalidated the About Land floater. The covenant page does not clean up its elements,
+	// so the last region's data is still showing. -Zi
+	mPreviousRegion=region;
+	// </FS:Zi>
+
 	LLTextBox* region_name = getChild<LLTextBox>("region_name_text");
 	if (region_name)
 	{
@@ -2901,6 +3092,15 @@ void LLPanelLandCovenant::refresh()
 		}
 	}
 	
+	// <FS:Zi> Fix covenant loading slowdowns
+	// only request a covenant when we are not already waiting for one
+	if(mCovenantRequested)
+	{
+		return;
+	}
+	mCovenantRequested=true;
+	// </FS:Zi>
+
 	// send EstateCovenantInfo message
 	LLMessageSystem *msg = gMessageSystem;
 	msg->newMessage("EstateCovenantRequest");
@@ -2914,7 +3114,16 @@ void LLPanelLandCovenant::refresh()
 void LLPanelLandCovenant::updateCovenantText(const std::string &string)
 {
 	LLPanelLandCovenant* self = LLFloaterLand::getCurrentPanelLandCovenant();
-	if (self)
+	// <FS:Zi> Fix covenant loading slowdowns
+	// if (self)
+	// covenant received, allow requesting another one next time
+	self->mCovenantRequested=false;
+
+	// Only update covenant when Last Modified was found to be different and
+	// we still have a parcel selected. "Last Modified" will always be set before
+	// the covenant (see llviewermessage.cpp, process_covenant_reply()) -Zi
+	if(self && self->mCovenantChanged && self->mParcel->getParcel())
+	// </FS:Zi>
 	{
 		LLViewerTextEditor* editor = self->getChild<LLViewerTextEditor>("covenant_editor");
 		editor->setText(string);
@@ -2936,10 +3145,32 @@ void LLPanelLandCovenant::updateEstateName(const std::string& name)
 void LLPanelLandCovenant::updateLastModified(const std::string& text)
 {
 	LLPanelLandCovenant* self = LLFloaterLand::getCurrentPanelLandCovenant();
-	if (self)
+	// <FS:Zi> Fix covenant loading slowdowns
+	// if (self)
+
+	// only update the last modified field when we still have no parcel selected
+	if(self && self->mParcel->getParcel())
 	{
+	// </FS:Zi>
 		LLTextBox* editor = self->getChild<LLTextBox>("covenant_timestamp_text");
-		if (editor) editor->setText(text);
+		// <FS:Zi> Fix covenant loading slowdowns
+		// if (editor) editor->setText(text);
+		if(editor)
+		{
+			// check if Last Modified is different from before
+			if(editor->getText()!=text)
+			{
+				// Update Last Modified field and remember to allow covenant to change
+				editor->setText(text);
+				self->mCovenantChanged=true;
+			}
+			else
+			{
+				// Last Modified was the same, so don't allow the covenant to change
+				self->mCovenantChanged=false;
+			}
+		}
+		// </FS:Zi>
 	}
 }
 

@@ -24,14 +24,16 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_LLCONVERSATIONMODEL_H
 #define LL_LLCONVERSATIONMODEL_H
 
 #include <boost/signals2.hpp>
 
 #include "llavatarname.h"
-#include "../llui/llfolderviewitem.h"
-#include "../llui/llfolderviewmodel.h"
+#include "llfolderviewitem.h"
+#include "llfolderviewmodel.h"
 #include "llviewerfoldertype.h"
 
 // Implementation of conversations list
@@ -240,6 +242,8 @@ public:
 		
 	bool 				check(const LLFolderViewModelItem* item) { return true; }
 	bool				checkFolder(const LLFolderViewModelItem* folder) const { return true; }
+	// <FS:Ansariel> For clipboard highlighting
+	bool				checkClipboard(const LLFolderViewModelItem* item) { return true; }
 	void 				setEmptyLookupMessage(const std::string& message) { }
 	std::string			getEmptyLookupMessage() const { return mEmpty; }
 	bool				showAllResults() const { return true; }
@@ -311,3 +315,5 @@ void hide_context_entries(LLMenuGL& menu,
     const menuentry_vec_t &disabled_entries);
 
 #endif // LL_LLCONVERSATIONMODEL_H
+
+#endif

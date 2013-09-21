@@ -5,16 +5,17 @@
  layout="topleft"
  name="avatar_texture_debug"
  help_topic="avatar_texture_debug"
- title="AVATAR TEXTURES"
+ save_rect="true"
+ title="Avatar Textures"
  width="940"
- can_resize="true">
+ can_resize="false">
     <floater.string
      name="InvalidAvatar">
-        INVALID AVATAR
+        Invalid Avatar
     </floater.string>
 
     <scroll_container
-     color="DkGray2"
+     color="SL-Background"
      opaque="true"
      follows="all"
      height="680"

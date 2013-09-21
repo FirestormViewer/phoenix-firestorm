@@ -8,6 +8,21 @@
  tab_stop="false" 
  name="main_view"
  width="1024">
+
+  <!-- <FS:Zi> visible="false" to hide the panel on the login screen -->
+  <panel
+   mouse_opaque="false"
+   background_visible="false"
+   filename="panel_navigation_bar.xml"
+   top="19"
+   left="0"
+   follows="left|top|right"
+   height="39"
+   layout="topleft"
+   name="navigation_bar"
+   visible="false"
+   width="1024" />
+
   <layout_stack border_size="0"
                 follows="all"
                 mouse_opaque="false"
@@ -33,13 +48,6 @@
             width="1024"
             height="19"/>
     </layout_panel>
-    <layout_panel auto_resize="false"
-                  height="34"
-                  mouse_opaque="false"
-                  name="nav_bar_container"
-                  tab_stop="false"
-                  width="1024"
-                  visible="false"/>
     <layout_panel auto_resize="true"  
                   follows="all"
                   height="500"
@@ -55,8 +63,9 @@
             mouse_opaque="false"
             name="world_view_rect"
             width="1024"/>
+      <!-- <FS:Zi> We don't have the mini location bar, so no topinfo_bar required
       <panel follows="left|top|right"
-             height="19"
+             height="37"
              left="0"
              mouse_opaque="false"
              name="topinfo_bar_container"
@@ -64,6 +73,7 @@
              top="0"
              visible="false"
              width="1024"/>
+      -->
       <panel top="0"
              left="0"
              follows="all"
@@ -98,7 +108,7 @@
              tab_stop="false"/>
     </layout_panel>
   </layout_stack>
- 
+
   <panel top="0"
         follows="all"
         mouse_opaque="false"
@@ -117,6 +127,9 @@
                            visible="false"
                            width="1024"/>
   </panel>
+
+
+<!-- place for popups to be displayed in -->
   <panel top="0"
          follows="all"
          height="768"
@@ -139,6 +152,7 @@
         name="hint_holder"
         mouse_opaque="false"
         follows="all"/>
+<!-- area progress panel covers at login - nearly the whole screen -->
   <panel top="0"
          follows="all"
          height="768"
@@ -148,15 +162,29 @@
          class="progress_view"
          width="1024"
          visible="false"/>
+  <panel top="690"
+         follows="bottom|left|right"
+         height="20"
+         left="412"
+         mouse_opaque="true"
+         name="progress_view_mini"
+         filename="panel_progress_mini.xml"
+         class="progress_view_mini"
+         width="200"
+         visible="false"/>
+<!-- Where the menus can be displayed - the whole screen except bottom-bar -->
   <menu_holder top="0"
                follows="all"
                height="768"
+               left="0"
                mouse_opaque="false"
                name="Menu Holder"
                width="1024"/>
+<!-- tooltip area -->
   <tooltip_view top="0"
                 follows="all"
                 height="768"
+                left="0"
                 mouse_opaque="false"
                 name="tooltip view"
                 tab_group="-2"

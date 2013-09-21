@@ -53,6 +53,11 @@
 #include "lltrans.h"
 #include "llviewerwindow.h"
 
+// Firestorm includes
+#include "exogroupmutelist.h"
+#include "llclipboard.h"
+#include "lleconomy.h" // <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
+
 static LLRegisterPanelClassWrapper<LLPanelGroupGeneral> t_panel_group_general("panel_group_general");
 
 // consts
@@ -80,7 +85,8 @@ LLPanelGroupGeneral::LLPanelGroupGeneral()
 	mCtrlListGroup(NULL),
 	mActiveTitleLabel(NULL),
 	mComboActiveTitle(NULL),
-	mAvatarNameCacheConnection()
+	mAvatarNameCacheConnection(),
+	mCtrlReceiveGroupChat(NULL) // <exodus/>
 {
 
 }
@@ -104,7 +110,11 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mEditCharter->setFocusReceivedCallback(boost::bind(onFocusEdit, _1, this));
 		mEditCharter->setFocusChangedCallback(boost::bind(onFocusEdit, _1, this));
 	}
-
+	// <FS> set up callbacks for copy URI and name buttons
+	childSetCommitCallback("copy_uri", boost::bind(&LLPanelGroupGeneral::onCopyURI, this), NULL);
+	childSetCommitCallback("copy_name", boost::bind(&LLPanelGroupGeneral::onCopyName, this), NULL);
+	childSetEnabled("copy_name", FALSE);
+	// </FS>
 
 
 	mListVisibleMembers = getChild<LLNameListCtrl>("visible_members", recurse);
@@ -170,6 +180,19 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mCtrlReceiveNotices->set(accept_notices);
 		mCtrlReceiveNotices->setEnabled(data.mID.notNull());
 	}
+
+	// <exodus>
+	mCtrlReceiveGroupChat = getChild<LLCheckBoxCtrl>("receive_chat", recurse);
+	if(mCtrlReceiveGroupChat)
+	{
+		mCtrlReceiveNotices->setCommitCallback(onCommitUserOnly, this);
+		mCtrlReceiveNotices->setEnabled(data.mID.notNull());
+		if(data.mID.notNull())
+		{
+			mCtrlReceiveNotices->set(!exoGroupMuteList::instance().isMuted(data.mID));
+		}
+	}
+	// </exodus>
 	
 	mCtrlListGroup = getChild<LLCheckBoxCtrl>("list_groups_in_profile", recurse);
 	if (mCtrlListGroup)
@@ -381,7 +404,13 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 				return false;
 			}
 
-			LLNotificationsUtil::add("CreateGroupCost",  LLSD(), LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+			// <FS:AW> FIRE-7091 group creation cost inaccurate on opensim>
+			//LLNotificationsUtil::add("CreateGroupCost",  LLSD(), LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+			LLSD args;
+			S32 cost =  LLGlobalEconomy::Singleton::getInstance()->getPriceGroupCreate();
+			args["[COST]"] = llformat("%d", cost);
+			LLNotificationsUtil::add("CreateGroupCost",  args, LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+			// </FS:AW> FIRE-7091 group creation cost inaccurate on opensim>
 
 			return false;
 		}
@@ -443,6 +472,20 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 		list_in_profile = mCtrlListGroup->get();
 
 	gAgent.setUserGroupFlags(mGroupID, receive_notices, list_in_profile);
+
+	// <exodus>
+	if(mCtrlReceiveGroupChat)
+	{
+		if(mCtrlReceiveGroupChat->get())
+		{
+			exoGroupMuteList::instance().remove(mGroupID);
+		}
+		else
+		{
+			exoGroupMuteList::instance().add(mGroupID);
+		}
+	}
+	// </exodus>
 
 	resetDirty();
 
@@ -644,6 +687,16 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 		}
 	}
 
+	// <exodus>
+	if (mCtrlReceiveGroupChat)
+	{
+		mCtrlReceiveGroupChat->setVisible(is_member);
+		if (is_member)
+		{
+			mCtrlReceiveGroupChat->setEnabled(mAllowEdit);
+		}
+	}
+	// </exodus>
 
 	if (mInsignia) mInsignia->setEnabled(mAllowEdit && can_change_ident);
 	if (mEditCharter) mEditCharter->setEnabled(mAllowEdit && can_change_ident);
@@ -675,6 +728,7 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 		{
 			mMemberProgress = gdatap->mMembers.begin();
 			mPendingMemberUpdate = TRUE;
+			mIteratorGroup = mGroupID; // <FS:ND/> FIRE-6074
 
 			sSDTime = 0.0f;
 			sElementTime = 0.0f;
@@ -693,6 +747,11 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 			mListVisibleMembers->addElement(row);
 		}
 	}
+
+	// <FS:Ansariel> Copy group name button
+	childSetEnabled("copy_name", !gdatap->mName.empty());
+	mGroupName = gdatap->mName;
+	// </FS:Ansariel>
 
 	resetDirty();
 }
@@ -713,6 +772,15 @@ void LLPanelGroupGeneral::updateMembers()
 
 	LLTimer update_time;
 	update_time.setTimerExpirySec(UPDATE_MEMBERS_SECONDS_PER_FRAME);
+	
+	// <FS:ND> FIRE-6074; If the group changes, mMemberPRogresss is invalid, as it belongs to a different LLGroupMgrGroupData. Reset it, start over.
+	if( mIteratorGroup != mGroupID )
+	{
+		mMemberProgress = gdatap->mMembers.begin();
+		mIteratorGroup = mGroupID;
+	}
+	// </FS:ND> FIRE-6074
+
 
 	LLAvatarName av_name;
 
@@ -809,7 +877,8 @@ void LLPanelGroupGeneral::updateChanged()
 		mCtrlReceiveNotices,
 		mCtrlListGroup,
 		mActiveTitleLabel,
-		mComboActiveTitle
+		mComboActiveTitle,
+		mCtrlReceiveGroupChat // <exodus/>
 	};
 
 	mChanged = FALSE;
@@ -862,6 +931,12 @@ void LLPanelGroupGeneral::reset()
 
 	mInsignia->setImageAssetName(mInsignia->getDefaultImageName());
 
+	// <exodus>
+	mCtrlReceiveGroupChat->set(false);
+	mCtrlReceiveGroupChat->setEnabled(false);
+	mCtrlReceiveGroupChat->setVisible(true);
+	// </exodus>
+
 	{
 		std::string empty_str = "";
 		mEditCharter->setText(empty_str);
@@ -906,7 +981,8 @@ void	LLPanelGroupGeneral::resetDirty()
 		mCtrlReceiveNotices,
 		mCtrlListGroup,
 		mActiveTitleLabel,
-		mComboActiveTitle
+		mComboActiveTitle,
+		mCtrlReceiveGroupChat // <exodus/>
 	};
 
 	for( size_t i=0; i<LL_ARRAY_SIZE(check_list); i++ )
@@ -921,12 +997,37 @@ void	LLPanelGroupGeneral::resetDirty()
 void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 {
 	LLPanelGroupTab::setGroupID(id);
-
+	// <FS> Get group key display and copy URI/name button pointers
+	LLTextEditor* groupKeyEditor = getChild<LLTextEditor>("group_key");
+	LLButton* copyURIButton = getChild<LLButton>("copy_uri");
+	LLButton* copyNameButton = getChild<LLButton>("copy_name");
+	// happens when a new group is created
+	// </FS>
 	if(id == LLUUID::null)
 	{
+		// <FS>
+		if (groupKeyEditor)
+			groupKeyEditor->setValue(LLSD());
+
+		if (copyURIButton)
+			copyURIButton->setEnabled(FALSE);
+
+		if (copyNameButton)
+			copyNameButton->setEnabled(FALSE);
+		// </FS>
+
 		reset();
 		return;
 	}
+	// <FS>
+	// fill in group key
+	if (groupKeyEditor)
+		groupKeyEditor->setValue(id.asString());
+
+	// activate copy URI button
+	if (copyURIButton)
+		copyURIButton->setEnabled(TRUE);
+	// </FS>
 
 	BOOL accept_notices = FALSE;
 	BOOL list_in_profile = FALSE;
@@ -949,6 +1050,18 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 		mCtrlListGroup->set(list_in_profile);
 		mCtrlListGroup->setEnabled(data.mID.notNull());
 	}
+
+	// <exodus>
+	mCtrlReceiveGroupChat = getChild<LLCheckBoxCtrl>("receive_chat");
+	if (mCtrlReceiveGroupChat)
+	{
+		if(data.mID.notNull())
+		{
+			mCtrlReceiveGroupChat->set(!exoGroupMuteList::instance().isMuted(data.mID));
+		}
+		mCtrlReceiveGroupChat->setEnabled(data.mID.notNull());
+	}
+	// </exodus>
 
 	mCtrlShowInGroupList->setEnabled(data.mID.notNull());
 
@@ -979,3 +1092,18 @@ S32 LLPanelGroupGeneral::sortMembersList(S32 col_idx,const LLScrollListItem* i1,
 
 	return LLStringUtil::compareDict(cell1->getValue().asString(), cell2->getValue().asString());
 }
+
+// <FS> Copy button handlers
+// Copy URI button callback
+void LLPanelGroupGeneral::onCopyURI()
+{
+    std::string name = "secondlife:///app/group/"+getChild<LLUICtrl>("group_key")->getValue().asString()+"/about";
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
+}
+
+void LLPanelGroupGeneral::onCopyName()
+{
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(mGroupName), 0, mGroupName.size() );
+}
+
+// </FS> Copy button handlers

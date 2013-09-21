@@ -63,11 +63,21 @@ public:
 	/// like "Second Life Release 2.0.0.200030"
 	static const std::string &getChannelAndVersion();
 
+	//<FS:TS> Needed for fsdata version checking
+	/// return the viewer version and hardcoded channel as a string
+	/// like "Firestorm-Release 2.0.0 (200030)"
+	static const std::string &getChannelAndVersionFS();
+
 	/// return the channel name, e.g. "Second Life"
 	static const std::string &getChannel();
 	
 	/// reset the channel name used by the viewer.
 	static void resetChannel(const std::string& channel);
+
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	/// Return the platform the viewer was built for
+	static const std::string& getBuildPlatform();
+// [/SL:KB]
 };
 
 #endif
