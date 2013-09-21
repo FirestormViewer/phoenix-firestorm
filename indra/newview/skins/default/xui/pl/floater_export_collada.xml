@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_export_collada" title="Zapisz jako Collada...">
+	<floater.string name="texture_progress">
+		Zapis [OBJECT] jako Collada: Tekstury ([COUNT] pozostało)
+	</floater.string>
+	<floater.string name="floater_title">
+		Zapis [OBJECT] jako Collada...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="ObjectInfoText">
+				O obiekcie
+			</text>
+			<text name="NameText">
+				Nazwa: [NAME]
+			</text>
+			<text name="exportable_prims">
+				Eksportowalne primy: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Eksportowalne tekstury: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Opcje:
+			</text>
+			<check_box label="Zapisz tekstury" name="export_textures_check" />
+			<check_box label="Konsoliduj tekstury" name="consolidate_check" />
+			<check_box label="Pomiń przezroczystość" name="skip_transparent_check" />
+			<check_box label="Stosuj parametry tekstur" name="texture_params_check" />
+			<text name="TextureFormatText">
+				Format tekstur:
+			</text>
+			<button label="Zapisz jako..." name="export_btn" />
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -38,7 +38,7 @@
 	 height="15"
 	 layout="topleft"
 	 left="4"
-	 name="name"
+	 name="ObjectInfoText"
 	 top="2"
 	 width="235">
 		Object Info
@@ -47,7 +47,7 @@
 	 follows="left|top"
 	 height="15"
 	 layout="topleft"
-	 name="name"
+	 name="NameText"
 	 top_pad="2"
 	 width="235">
 		Name: [NAME]
@@ -75,7 +75,7 @@
 	 height="15"
 	 layout="topleft"
 	 left="4"
-	 name="options"
+	 name="OptionsText"
 	 top_pad="46"
 	 width="235">
 		Options:
@@ -125,7 +125,7 @@
 	 height="15"
 	 layout="topleft"
 	 left="4"
-	 name="options"
+	 name="TextureFormatText"
 	 top_pad="2"
 	 width="235">
 		Texture Format:
