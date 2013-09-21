@@ -298,7 +298,7 @@ ColladaExportFloater::~ColladaExportFloater()
 
 BOOL ColladaExportFloater::postBuild()
 {
-	childSetTextArg("name", "[NAME]", mObjectName);
+	childSetTextArg("NameText", "[NAME]", mObjectName);
 	childSetTextArg("exportable_prims", "[COUNT]", llformat("%d", mIncluded));
 	childSetTextArg("exportable_prims", "[TOTAL]", llformat("%d", mTotal));
 	childSetTextArg("exportable_textures", "[COUNT]", llformat("%d", mNumExportableTextures));
