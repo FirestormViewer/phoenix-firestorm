@@ -99,7 +99,7 @@
 // NaCl - LSL Preprocessor
 #include "fslslpreproc.h"
 // NaCl End
-#if OPENSIM
+#ifdef OPENSIM
 #include "llviewernetwork.h"	// for Grid manager
 #endif // OPENSIM
 

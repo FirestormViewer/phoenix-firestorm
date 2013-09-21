@@ -378,7 +378,7 @@ public:
 	void getNeighboringRegionsStatus( std::vector<S32>& regions );
 	const LLViewerRegionImpl * getRegionImpl() const { return mImpl; }
 	LLViewerRegionImpl * getRegionImplNC() { return mImpl; }
-	
+
 	// implements the materials capability throttle
 	bool materialsCapThrottled() const { return !mMaterialsCapThrottleTimer.hasExpired(); }
 	void resetMaterialsCapThrottle();

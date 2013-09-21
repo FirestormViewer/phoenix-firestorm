@@ -149,7 +149,6 @@
 #include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
-#include "daeexport.h"
 
 
 using namespace LLAvatarAppearanceDefines;
@@ -10112,10 +10111,15 @@ class FSObjectExportCollada : public view_listener_t
 {
 	bool handleEvent( const LLSD& userdata)
 	{
-		DAEExportUtil::export_selection();
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		if (objectp)
+		{
+			LLFloaterReg::showInstance("export_collada", LLSD(objectp->getID()), TAKE_FOCUS_YES);
+		}
 		return true;
 	}
 };
+// </FS:CR>
 
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.

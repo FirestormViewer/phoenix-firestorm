@@ -6277,7 +6277,7 @@ void LLVolumeFace::appendFace(const LLVolumeFace& face, LLMatrix4& mat_in, LLMat
 
 		//transform appended face normal and store
 		norm_mat.rotate(src_norm[i], dst_norm[i]);
-		dst_norm[i].normalize3fast();
+		dst_norm[i].normalize3fast_checked();
 
 		//copy appended face texture coordinate
 		dst_tc[i] = src_tc[i];

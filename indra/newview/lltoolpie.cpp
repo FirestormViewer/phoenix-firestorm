@@ -1076,6 +1076,13 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
+				// <FS:Zi> Make sure group title gets added to the tool tip. This is done separately to
+				//         the RLVa code to prevent this change from getting lost in future RLVa merges
+				if(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				{
+					final_name=group_title+final_name;
+				}
+				// </FS:Zi>
 			}
 			else
 			{

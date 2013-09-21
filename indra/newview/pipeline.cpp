@@ -826,25 +826,25 @@ void LLPipeline::resizeScreenTexture()
 		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
 		{
 			releaseScreenBuffers();
-		if (!allocateScreenBuffer(resX,resY))
+			if (!allocateScreenBuffer(resX,resY))
 			{
 #if PROBABLE_FALSE_DISABLES_OF_ALM_HERE
 				//FAILSAFE: screen buffer allocation failed, disable deferred rendering if it's enabled
-			//NOTE: if the session closes successfully after this call, deferred rendering will be 
-			// disabled on future sessions
-			if (LLPipeline::sRenderDeferred)
-			{
-				// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
-				// Depending on 	the state of the pipeline. this can trigger illegal deletion of drawables.
-				// To work around that, resizeScreen	Texture will just set a flag, which then later does trigger the change
-				// in shaders.	
+				//NOTE: if the session closes successfully after this call, deferred rendering will be 
+				// disabled on future sessions
+				if (LLPipeline::sRenderDeferred)
+				{
+					// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
+					// Depending on 	the state of the pipeline. this can trigger illegal deletion of drawables.
+					// To work around that, resizeScreen	Texture will just set a flag, which then later does trigger the change
+					// in shaders.	
 
-				// gSavedSettings.setBOOL("RenderDeferred", FALSE);
-				// LLPipeline::refreshCachedSettings();
+					// gSavedSettings.setBOOL("RenderDeferred", FALSE);
+					// LLPipeline::refreshCachedSettings();
 
-				TriggeredDisabledDeferred = true;
+					TriggeredDisabledDeferred = true;
 
-				// </FS:ND>
+					// </FS:ND>
 				}
 #endif
 			}
@@ -5493,7 +5493,7 @@ void LLPipeline::renderDebug()
 			if (i > 3)
 			{ //render shadow frusta as volumes
 				if (mShadowFrustPoints[i-4].empty())
-				{
+			{
 					continue;
 				}
 

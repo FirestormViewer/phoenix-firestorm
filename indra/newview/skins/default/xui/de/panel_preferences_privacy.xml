@@ -40,6 +40,7 @@
 			</text>
 			<check_box name="UseLegacyIMLogNames" label="Klassisches Dateinamensformat für Protokolle verwenden" tool_tip="Falls aktiviert, wird das alte Namensformat für Protokolle (Benutzer Name) anstatt des aktuellen (benutzer_name) verwendet."/>
 			<check_box name="LogFileNamewithDate" label="Datum zum Protokolldateinamen hinzufügen" tool_tip="Fügt das aktuelle Datum zum Dateinamen des Protokolls im Format „chat-JJJJ-MM-TT“ bzw. „Protokollname-JJJJ-MM-TT“ hinzu."/>
+			<check_box name="FSUseBuiltInHistory" label="Integrierte Protokollansicht verwenden" tool_tip="Verwendet den integrierten Betrachter für Protokolle. Falls deaktiviert, wird der standardmäßige Texteditor des Betriebssystems verwendet."/>
 			<button label="Ignorierte Einwohner/Objekte" name="block_list" width="180"/>
 		</panel>
 

@@ -535,14 +535,14 @@ void LLDrawPoolWater::shade()
 	
 	if (eyedepth < 0.f && LLPipeline::sWaterReflections)
 	{
-	if (deferred_render)
-	{
+		if (deferred_render)
+		{
 			shader = &gDeferredUnderWaterProgram;
-	}
+		}
 		else
-	{
-		shader = &gUnderWaterProgram;
-	}
+		{
+			shader = &gUnderWaterProgram;
+		}		
 	}
 	else if (deferred_render)
 	{

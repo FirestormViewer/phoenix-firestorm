@@ -1071,6 +1071,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="backup_files">
 		Kopie zapasowe obiektów
 	</string>
+	<string name="collada_files">
+		Modele COLLADA
+	</string>
 	<string name="shape">
 		Kształt
 	</string>

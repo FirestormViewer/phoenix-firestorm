@@ -1180,11 +1180,11 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("norm_mat");
 
 	mReservedUniforms.push_back("global_gamma");
-	mReservedUniforms.push_back("texture_gamma");
-	
+	mReservedUniforms.push_back("texture_gamma");	
+
 	mReservedUniforms.push_back("specular_color");
 	mReservedUniforms.push_back("env_intensity");
-
+	
 // <FS:CR> Import Vignette from Exodus
 	mReservedUniforms.push_back("exo_vignette");
 	mReservedUniforms.push_back("exo_screen");

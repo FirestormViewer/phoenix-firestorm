@@ -839,18 +839,6 @@
       <string>))</string>
     </map>
 
-  <key>FSPlayChatAnimation</key>
-    <map>
-      <key>Comment</key>
-      <string>Play the avatar chat animations, e.g. shouting</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>  
-
   <key>FSShowChatChannel</key>
     <map>
       <key>Comment</key>
@@ -5494,13 +5482,13 @@
     </map>
     <key>FilterItemsMaxTimePerFrameUnvisible</key>
     <map>
-        <key>Comment</key>
+      <key>Comment</key>
         <string>Max time devoted to items filtering per frame for non visible inventory listings (in milliseconds)</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>S32</string>
-        <key>Value</key>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
         <integer>1</integer>
     </map>
     <key>FindLandArea</key>
@@ -21431,6 +21419,61 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>DAEExportConsolidateMaterials</key>
+    <map>
+      <key>Comment</key>
+      <string>Combine faces with same texture</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>DAEExportSkipTransparent</key>
+    <map>
+      <key>Comment</key>
+      <string>Skip exporting faces with default transparent texture or full transparent</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>DAEExportTextures</key>
+    <map>
+      <key>Comment</key>
+      <string>Export textures when exporting Collada</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>DAEExportTextureParams</key>
+    <map>
+      <key>Comment</key>
+      <string>Apply texture params suchs as repeats to the exported UV map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>DAEExportTexturesFormat</key>
+    <map>
+      <key>Comment</key>
+      <string>Image file format to use when exporting Collada</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
 </map>
 </llsd>

@@ -162,7 +162,7 @@
              top_pad="1"
              width="400" />
             <check_box
-             control_name="FSPlayChatAnimation"
+             control_name="PlayChatAnim"
              follows="left|top"
              height="16"
              label="Play avatar animations (such as shouting)"

@@ -9738,9 +9738,9 @@ Not enough script resources available to attach object!
   </notification>
 
   <notification
-   icon="alertmodal.tga"
+   icon="notifytip.tga"
    name="YouDiedAndGotTPHome"
-   type="notify">
+   type="notifytip">
    <tag>fail</tag>
 You died and have been teleported to your home location
   </notification>
@@ -11442,15 +11442,7 @@ Export failed.
      name="ExportColladaSuccess"
      type="notify">
       <tag>Export</tag>
-Collada DAE export complete.  [TOTAL] object(s) exported.
-    </notification>
-    
-    <notification
-     icon="alertmodal.tga"
-     name="ExportColladaPartial"
-     type="notify">
-      <tag>Export</tag>
-Collada DAE export complete.  [FAILED] failure(s) out of [TOTAL] selected object(s) due to insufficient permissions.
+		Successfully saved [OBJECT] to [FILENAME].
     </notification>
     
     <notification

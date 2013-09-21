@@ -4641,11 +4641,7 @@ Export fehlgeschlagen.
 	</notification>
 
 	<notification name="ExportColladaSuccess">
-Collada DAE-Export beendet. [TOTAL] Objekt(e) exportiert.
-	</notification>
-
-	<notification name="ExportColladaPartial">
-Collada DAE-Export beendet. [FAILED] von [TOTAL] Objekt(en) wurden aufgrund fehlender Berechtigungen nicht exportiert.
+[OBJECT] erfolreich als [FILENAME] gespeichert.
 	</notification>
 
 	<notification name="AntiSpamBlocked">

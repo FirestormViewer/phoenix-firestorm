@@ -170,15 +170,16 @@ public:
 		DEFERRED_NORM_MATRIX,
 
 		GLOBAL_GAMMA,
-		TEXTURE_GAMMA,
-		
+		TEXTURE_GAMMA,		
+
 		SPECULAR_COLOR,
 		ENVIRONMENT_INTENSITY,
+		
 // <FS:CR> Import Vignette from Exodus
 		EXO_RENDER_VIGNETTE,
 		EXO_RENDER_SCREEN,
 // </FS:CR> Import Vignette from Exodus
-		
+
 		AVATAR_MATRIX,
 
 		WATER_SCREENTEX,

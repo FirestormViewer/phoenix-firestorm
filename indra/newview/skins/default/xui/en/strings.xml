@@ -483,6 +483,7 @@ Please try logging in again in a minute.</string>
 	<string name="script_files">Scripts</string>
 	<string name="dictionary_files">Dictionaries</string>
 	<string name="backup_files">Object Backups</string>
+	<string name="collada_files">COLLADA Models</string>
 
   <!-- LSL Usage Hover Tips -->
 	<string name="LSLTipSleepTime" translate="false">Sleeps script for [SLEEP_TIME] seconds.</string>

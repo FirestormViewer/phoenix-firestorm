@@ -807,10 +807,10 @@ void LLVertexBuffer::drawRange(U32 mode, U32 start, U32 end, U32 count, U32 indi
 	U16* idx = ((U16*) getIndicesPointer())+indices_offset;
 
 	stop_glerror();
-	LLGLSLShader::startProfile();
-	glDrawRangeElements(sGLMode[mode], start, end, count, GL_UNSIGNED_SHORT, 
+		LLGLSLShader::startProfile();
+		glDrawRangeElements(sGLMode[mode], start, end, count, GL_UNSIGNED_SHORT, 
 		idx);
-	LLGLSLShader::stopProfile(count, mode);
+		LLGLSLShader::stopProfile(count, mode);
 	stop_glerror();
 
 	
@@ -2333,7 +2333,7 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 					required_mask |= required;
 				}
 			}
-
+        
 			if ((data_mask & required_mask) != required_mask)
 			{
 				
