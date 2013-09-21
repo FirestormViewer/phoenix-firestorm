@@ -1041,7 +1041,7 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 			if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("FSPlayChatAnimation"));
+				sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
 			}
 		}
 		

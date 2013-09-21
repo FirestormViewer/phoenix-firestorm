@@ -839,18 +839,6 @@
       <string>))</string>
     </map>
 
-  <key>FSPlayChatAnimation</key>
-    <map>
-      <key>Comment</key>
-      <string>Play the avatar chat animations, e.g. shouting</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>  
-
   <key>FSShowChatChannel</key>
     <map>
       <key>Comment</key>
