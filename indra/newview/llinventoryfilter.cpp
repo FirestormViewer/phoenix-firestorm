@@ -826,7 +826,6 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 void LLInventoryFilter::setFilterLinks(U64 filter_links)
 {
 	// <FS:Zi> Filter Links Menu
-	// mFilterOps.mFilterLinks = filter_links;
 	// if (mFilterOps.mFilterLinks != filter_links)
 	// {
 	// 	if (mFilterOps.mFilterLinks == FILTERLINK_EXCLUDE_LINKS ||
@@ -835,6 +834,7 @@ void LLInventoryFilter::setFilterLinks(U64 filter_links)
 	// 	else
 	// 		setModified(FILTER_LESS_RESTRICTIVE);
 	// }
+	// mFilterOps.mFilterLinks = filter_links;
 	if (mFilterOps.mFilterLinks!=filter_links)
 	{
 		LLInventoryFilter::EFilterModified modifyMode=FILTER_RESTART;
