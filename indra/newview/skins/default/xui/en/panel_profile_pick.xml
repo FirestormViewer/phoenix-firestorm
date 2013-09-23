@@ -5,7 +5,7 @@
  height="360"
  width="310"
  layout="topleft"
- follows="left|top"
+ follows="all"
  name="panel_pick_info"
  help_topic="profile_pick_info" >
  
@@ -39,7 +39,7 @@
      height="100"
      width="290"
      layout="topleft"
-     follows="left|top"
+     follows="all"
      name="pick_desc"
      border_visible="true"
      v_pad="3"
@@ -55,7 +55,7 @@
      height="20"
      width="290"
      layout="topleft"
-     follows="left|top"
+     follows="left|bottom"
      name="pick_location"
      border_visible="true"
      type="string"
@@ -69,7 +69,7 @@
      height="20"
      width="80"
      layout="topleft"
-     follows="left|top"
+     follows="left|bottom"
      label="Teleport"
      top_pad="6"
      name="teleport_btn" />
@@ -80,7 +80,7 @@
      width="100"
      bottom_delta="0"
      layout="topleft"
-     follows="left|top"
+     follows="left|bottom"
      label="Show on Map"
      name="show_on_map_btn" />
 
@@ -89,7 +89,7 @@
      height="20"
      width="100"
      layout="topleft"
-     follows="left|top"
+     follows="left|bottom"
      label="Set Location"
      tool_tip="Set to Current Location"
      name="set_to_curr_location_btn"
@@ -100,7 +100,7 @@
      height="20"
      width="100"
      layout="topleft"
-     follows="left|top"
+     follows="left|bottom"
      label="Save Pick"
      name="save_changes_btn"
      visible="false" />
