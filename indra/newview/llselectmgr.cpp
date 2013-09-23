@@ -7874,3 +7874,23 @@ void LLSelectMgr::sendSelectionMove()
 
 	//saveSelectedObjectTransform(SELECT_ACTION_TYPE_PICK);
 }
+
+// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
+//-----------------------------------------------------------------------------
+// selectGetNoIndividual() - returns TRUE if current selection does not contain
+// individual selections (edit linked parts, select face)
+//-----------------------------------------------------------------------------
+BOOL LLSelectMgr::selectGetNoIndividual()
+{
+	for (LLObjectSelection::iterator iter = getSelection()->begin();
+		 iter != getSelection()->end(); iter++ )
+	{
+		LLSelectNode* node = *iter;
+		if(node->mIndividualSelection)
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+// </FS:Zi>

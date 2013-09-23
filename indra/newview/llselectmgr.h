@@ -803,6 +803,13 @@ private:
 	BOOL					mForceSelection;
 
 	LLAnimPauseRequest		mPauseRequest;
+
+// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
+public:
+	// returns TRUE if current selection does not contain individual selections
+	// (edit linked parts, select face)
+	BOOL selectGetNoIndividual();
+// </FS:Zi>
 };
 
 // *DEPRECATED: For callbacks or observers, use

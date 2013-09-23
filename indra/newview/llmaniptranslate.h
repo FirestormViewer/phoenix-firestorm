@@ -111,6 +111,7 @@ private:
 	LLVector3	mArrowScales;
 	LLVector3	mPlaneScales;
 	LLVector4	mPlaneManipPositions;
+	bool		mWarningNoDragCopy;		// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
 };
 
 #endif
