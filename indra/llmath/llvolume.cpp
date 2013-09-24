@@ -4880,13 +4880,15 @@ void LLVolumeFace::optimize(F32 angle_cutoff)
 
 	if (angle_cutoff > 1.f && !mNormals)
 	{
-		ll_aligned_free_16(new_face.mNormals);
+		// Now alloc'd with positions
+		//ll_aligned_free_16(new_face.mNormals);
 		new_face.mNormals = NULL;
 	}
 
 	if (!mTexCoords)
 	{
-		ll_aligned_free_16(new_face.mTexCoords);
+		// Now alloc'd with positions
+		//ll_aligned_free_16(new_face.mTexCoords);
 		new_face.mTexCoords = NULL;
 	}
 
@@ -6277,7 +6279,7 @@ void LLVolumeFace::appendFace(const LLVolumeFace& face, LLMatrix4& mat_in, LLMat
 
 		//transform appended face normal and store
 		norm_mat.rotate(src_norm[i], dst_norm[i]);
-		dst_norm[i].normalize3fast_checked();
+		dst_norm[i].normalize3fast();
 
 		//copy appended face texture coordinate
 		dst_tc[i] = src_tc[i];

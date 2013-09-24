@@ -694,6 +694,7 @@ public:
 				av_iter++;
 			}
 		}
+
 		//if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
 		static LLCachedControl<bool> debugShowRenderMatrices(gSavedSettings, "DebugShowRenderMatrices");
 		if (debugShowRenderMatrices)

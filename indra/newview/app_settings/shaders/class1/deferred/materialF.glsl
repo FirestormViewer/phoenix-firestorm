@@ -670,7 +670,7 @@ void main()
 	vec4 diffuse = final_color;
 	float envIntensity = final_normal.z;
 
-	vec3 col = vec3(0.0f,0.0f,0.0f);
+    vec3 col = vec3(0.0f,0.0f,0.0f);
 
 	float bloom = 0.0;
 	calcAtmospherics(pos.xyz, 1.0);
@@ -698,7 +698,7 @@ void main()
 	col.rgb = col.rgb + atmosAffectDirectionalLight(final_da);
 
 	col.rgb *= gamma_diff.rgb;
-
+	
 
 	float glare = 0.0;
 

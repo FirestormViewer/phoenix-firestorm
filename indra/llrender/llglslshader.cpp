@@ -381,11 +381,6 @@ BOOL LLGLSLShader::createShader(std::vector<LLStaticHashedString> * attributes,
 
 	// Create program
 	mProgramObject = glCreateProgramObjectARB();
-
-#if LL_DARWIN
-    // work-around missing mix(vec3,vec3,bvec3)
-    mDefines["OLD_SELECT"] = "1";
-#endif
 	
 #if LL_DARWIN
     // work-around missing mix(vec3,vec3,bvec3)

@@ -313,7 +313,8 @@ LLViewerShaderMgr::LLViewerShaderMgr() :
 	mShaderList.push_back(&gDeferredMaterialWaterProgram[1+LLMaterial::SHADER_COUNT]);
 	mShaderList.push_back(&gDeferredMaterialWaterProgram[5+LLMaterial::SHADER_COUNT]);
 	mShaderList.push_back(&gDeferredMaterialWaterProgram[9+LLMaterial::SHADER_COUNT]);
-	mShaderList.push_back(&gDeferredMaterialWaterProgram[13+LLMaterial::SHADER_COUNT]);
+	mShaderList.push_back(&gDeferredMaterialWaterProgram[13+LLMaterial::SHADER_COUNT]);	
+	mShaderList.push_back(&gDeferredAlphaProgram);
 	mShaderList.push_back(&gDeferredAlphaProgram);
 	mShaderList.push_back(&gDeferredAlphaImpostorProgram);
 	mShaderList.push_back(&gDeferredAlphaWaterProgram);
@@ -1170,7 +1171,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 
 	if (success)
 	{
-		gDeferredDiffuseProgram.mName = "Deferred Diffuse Shader";		
+		gDeferredDiffuseProgram.mName = "Deferred Diffuse Shader";
 		gDeferredDiffuseProgram.mShaderFiles.clear();
 		gDeferredDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseV.glsl", GL_VERTEX_SHADER_ARB));
 		gDeferredDiffuseProgram.mShaderFiles.push_back(make_pair("deferred/diffuseIndexedF.glsl", GL_FRAGMENT_SHADER_ARB));
@@ -1412,8 +1413,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 
 	for (U32 i = 0; i < LL_DEFERRED_MULTI_LIGHT_COUNT; i++)
 	{
-		if (success)
-		{
+	if (success)
+	{
 			gDeferredMultiLightProgram[i].mName = llformat("Deferred MultiLight Shader %d", i);
 			gDeferredMultiLightProgram[i].mShaderFiles.clear();
 			gDeferredMultiLightProgram[i].mShaderFiles.push_back(make_pair("deferred/multiPointLightV.glsl", GL_VERTEX_SHADER_ARB));
@@ -1728,20 +1729,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredWaterProgram.mShaderFiles.push_back(make_pair("deferred/waterF.glsl", GL_FRAGMENT_SHADER_ARB));
 		gDeferredWaterProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
 		success = gDeferredWaterProgram.createShader(NULL, NULL);
-	}
-
-	if (success)
-	{
-		// load water shader
-		gDeferredUnderWaterProgram.mName = "Deferred Under Water Shader";
-		gDeferredUnderWaterProgram.mFeatures.calculatesAtmospherics = true;
-		gDeferredUnderWaterProgram.mFeatures.hasGamma = true;
-		gDeferredUnderWaterProgram.mFeatures.hasTransport = true;
-		gDeferredUnderWaterProgram.mShaderFiles.clear();
-		gDeferredUnderWaterProgram.mShaderFiles.push_back(make_pair("deferred/waterV.glsl", GL_VERTEX_SHADER_ARB));
-		gDeferredUnderWaterProgram.mShaderFiles.push_back(make_pair("deferred/underWaterF.glsl", GL_FRAGMENT_SHADER_ARB));
-		gDeferredUnderWaterProgram.mShaderLevel = mVertexShaderLevel[SHADER_DEFERRED];
-		success = gDeferredUnderWaterProgram.createShader(NULL, NULL);
 	}
 
 	if (success)

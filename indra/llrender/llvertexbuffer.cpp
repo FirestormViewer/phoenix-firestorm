@@ -297,7 +297,9 @@ void LLVBOPool::release(U32 name, volatile U8* buffer, U32 size)
 	llassert(vbo_block_size(size) == size);
 
 	deleteBuffer(name);
-	ll_aligned_free((U8*) buffer);
+	
+	if ( LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
+		ll_aligned_free((U8*) buffer);
 
 	if (mType == GL_ARRAY_BUFFER_ARB)
 	{
@@ -807,10 +809,10 @@ void LLVertexBuffer::drawRange(U32 mode, U32 start, U32 end, U32 count, U32 indi
 	U16* idx = ((U16*) getIndicesPointer())+indices_offset;
 
 	stop_glerror();
-		LLGLSLShader::startProfile();
-		glDrawRangeElements(sGLMode[mode], start, end, count, GL_UNSIGNED_SHORT, 
+	LLGLSLShader::startProfile();
+	glDrawRangeElements(sGLMode[mode], start, end, count, GL_UNSIGNED_SHORT, 
 		idx);
-		LLGLSLShader::stopProfile(count, mode);
+	LLGLSLShader::stopProfile(count, mode);
 	stop_glerror();
 
 	
@@ -1946,7 +1948,7 @@ void LLVertexBuffer::unmapBuffer()
 	{
 		// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
 		// LLFastTimer t(FTM_VBO_UNMAP);
-		bindGLBuffer();
+		bindGLBuffer(true);
 		updated_all = mIndexLocked; //both vertex and index buffers done updating
 
 		if(!mMappable)
@@ -2220,7 +2222,8 @@ bool LLVertexBuffer::bindGLArray()
 	if (mGLArray && sGLRenderArray != mGLArray)
 	{
 		{
-			LLFastTimer t(FTM_BIND_GL_ARRAY);
+			// <FS:ND/> Fast timers can have measurable impact in frequent places. A better all around solution would be to disable all fast timers until the fast timer view is open. But we're not there yet.
+			// LLFastTimer t(FTM_BIND_GL_ARRAY);
 #if GL_ARB_vertex_array_object
 			glBindVertexArray(mGLArray);
 #endif
@@ -2333,7 +2336,7 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 					required_mask |= required;
 				}
 			}
-        
+
 			if ((data_mask & required_mask) != required_mask)
 			{
 				

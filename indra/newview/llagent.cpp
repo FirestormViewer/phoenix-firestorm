@@ -5050,7 +5050,7 @@ void LLAgent::sendAgentSetAppearance()
 			((param->getID() < 1100) || (!send_v1_message)))
 		{
 			msg->nextBlockFast(_PREHASH_VisualParam );
-
+			
 			// We don't send the param ids.  Instead, we assume that the receiver has the same params in the same sequence.
 			const F32 param_value = param->getWeight();
 			const U8 new_weight = F32_to_U8(param_value, param->getMinWeight(), param->getMaxWeight());
