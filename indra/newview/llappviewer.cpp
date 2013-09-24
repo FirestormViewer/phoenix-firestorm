@@ -5166,6 +5166,13 @@ void LLAppViewer::idle()
 
 	if (gDisconnected)
     {
+		// <FS:CR> Inworldz hang in disconnecting fix by McCabe Maxstead
+		// make sure to quit here if we need to, we can get caught in an infinite loop otherwise -- MC
+		if (mQuitRequested && logoutRequestSent() && (gLogoutTimer.getElapsedTimeF32() > gLogoutMaxTime))
+		{
+			forceQuit();
+		}
+		// </FS:CR>
 		return;
     }
 	if (gTeleportDisplay)
