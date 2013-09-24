@@ -21475,6 +21475,41 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <!-- <FS:Zi> Fix camera zoom to look at the avatar's face from the front -->
+    <key>CameraZoomDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Camera distance to the zoomed in avatar</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>2.5</integer>
+    </map>
+    <key>CameraZoomFocusZOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Camera height offset of zoomed point on the zoomed in avatar from avatar center</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>0.6</integer>
+    </map>
+    <key>CameraZoomEyeZOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Camera height offset of the camera itself on the zoomed in avatar from avatar center</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>1.0</integer>
+    </map>
+    <!-- </FS:Zi> Fix camera zoom to look at the avatar's face from the front -->
 </map>
 </llsd>
 

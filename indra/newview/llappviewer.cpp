@@ -3072,26 +3072,6 @@ bool LLAppViewer::initConfiguration()
 
 	//}
 
-#if LL_DARWIN
-
-#if __ppc__
-	// If the CPU doesn't have Altivec (i.e. it's not at least a G4), don't go any further.
-	// Only test PowerPC - all Intel Macs have SSE.
-	if(!gSysCPU.hasAltivec())
-	{
-		std::ostringstream msg;
-		msg << LLTrans::getString("MBRequiresAltiVec");
-		OSMessageBox(
-			msg.str(),
-			LLStringUtil::null,
-			OSMB_OK);
-		removeMarkerFile();
-		return false;
-	}
-#endif
-	
-#endif // LL_DARWIN
-
 	// Display splash screen.  Must be after above check for previous
 	// crash as this dialog is always frontmost.
 	std::string splash_msg;
@@ -5189,6 +5169,13 @@ void LLAppViewer::idle()
 
 	if (gDisconnected)
     {
+		// <FS:CR> Inworldz hang in disconnecting fix by McCabe Maxstead
+		// make sure to quit here if we need to, we can get caught in an infinite loop otherwise -- MC
+		if (mQuitRequested && logoutRequestSent() && (gLogoutTimer.getElapsedTimeF32() > gLogoutMaxTime))
+		{
+			forceQuit();
+		}
+		// </FS:CR>
 		return;
     }
 	if (gTeleportDisplay)

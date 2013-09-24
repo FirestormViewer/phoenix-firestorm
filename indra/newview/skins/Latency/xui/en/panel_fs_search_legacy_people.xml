@@ -103,7 +103,7 @@
      name="panel_profile_view"
      top_delta="-20"
      left="360"
-     height="506"
+     height="522"
      width="420"
      follows="top|right|bottom"
      layout="topleft"

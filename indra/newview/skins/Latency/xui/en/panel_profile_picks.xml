@@ -95,7 +95,7 @@
      height="18"
      width="300"
      layout="topleft"
-     follows="all"
+     follows="left|top"
      name="picks_panel_text"
      mouse_opaque="false">
         Loading...
