@@ -909,21 +909,21 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 		S32 topPad=LLScriptFloaterManager::instance().getTopPad();
 
 		S32 bottomPad = 0;
-		if (gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->hasButtons())
+		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->hasButtons())
 		{
-			bottomPad = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM)->getRect().getHeight();
+			bottomPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->getRect().getHeight();
 		}
 
 		S32 leftPad = 0;
-		if (gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->hasButtons())
+		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->hasButtons())
 		{
-			leftPad = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT)->getRect().getWidth();
+			leftPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->getRect().getWidth();
 		}
 
 		S32 rightPad = 0;
-		if (gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->hasButtons())
+		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->hasButtons())
 		{
-			rightPad = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT)->getRect().getWidth();
+			rightPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->getRect().getWidth();
 		}
 
 		S32 width = pos.getWidth();

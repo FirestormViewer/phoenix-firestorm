@@ -32,6 +32,7 @@
 #define LL_FLOATER_H
 
 #include "llpanel.h"
+#include "lltoolbar.h"
 #include "lluuid.h"
 //#include "llnotificationsutil.h"
 #include <set>
@@ -518,6 +519,8 @@ private:
 // LLFloaterView
 // Parent of all floating panels
 
+const S32 FLOATER_MIN_VISIBLE_PIXELS = 16;
+
 class LLFloaterView : public LLUICtrl
 {
 public:
@@ -583,10 +586,13 @@ public:
 	void setSnapOffsetLeft(S32 offset) { mSnapOffsetLeft = offset; }
 	// </FS:KC> Fix for bad edge snapping
 
+	void setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LLRect& toolbar_rect);
+
 private:
 	void hiddenFloaterClosed(LLFloater* floater);
 
 	LLRect				mLastSnapRect;
+	LLRect				mToolbarRects[LLToolBarEnums::TOOLBAR_COUNT];
 	LLHandle<LLView>	mSnapView;
 	BOOL			mFocusCycleMode;
 	S32				mSnapOffsetBottom;

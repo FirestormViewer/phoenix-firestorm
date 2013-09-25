@@ -145,9 +145,10 @@ LLToolBar::LLToolBar(const LLToolBar::Params& p)
 	mButtonLeaveSignal(NULL),
 	mButtonRemoveSignal(NULL),
 	mDragAndDropTarget(false),
-	// <FS:Zi> add layout style and alignment initialisation
-	//mCaretIcon(NULL)
 	mCaretIcon(NULL),
+	// <FS:Zi> add layout style and alignment initialisation
+	//mCenterPanel(NULL)
+	mCenterPanel(NULL),
 	mLayoutStyle(p.layout_style),
 	mAlignment(p.alignment)
 	// </FS:Zi>
@@ -257,14 +258,15 @@ void LLToolBar::initFromParams(const LLToolBar::Params& p)
 	center_panel_p.auto_resize = false;
 	center_panel_p.user_resize = false;
 	center_panel_p.mouse_opaque = false;
-	LLLayoutPanel* center_panel = LLUICtrlFactory::create<LLLayoutPanel>(center_panel_p);
-	mCenteringStack->addChild(center_panel);
+	mCenterPanel = LLUICtrlFactory::create<LLCenterLayoutPanel>(center_panel_p);
+	mCenteringStack->addChild(mCenterPanel);
 
 	LLPanel::Params button_panel_p(p.button_panel);
-	button_panel_p.rect = center_panel->getLocalRect();
-		button_panel_p.follows.flags = FOLLOWS_BOTTOM|FOLLOWS_LEFT;
+	button_panel_p.rect = mCenterPanel->getLocalRect();
+	button_panel_p.follows.flags = FOLLOWS_BOTTOM|FOLLOWS_LEFT;
 	mButtonPanel = LLUICtrlFactory::create<LLPanel>(button_panel_p);
-	center_panel->addChild(mButtonPanel);
+	mCenterPanel->setButtonPanel(mButtonPanel);
+	mCenterPanel->addChild(mButtonPanel);
 	
 	// <FS:Zi> Add alignment options to toolbars
 	// mCenteringStack->addChild(LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p));
@@ -1441,6 +1443,18 @@ const std::string LLToolBarButton::getToolTip() const
 	return tooltip;
 }
 
+void LLToolBar::LLCenterLayoutPanel::handleReshape(const LLRect& rect, bool by_user)
+{
+	LLLayoutPanel::handleReshape(rect, by_user);
+
+	if (!mReshapeCallback.empty())
+	{
+		LLRect r;
+		localRectToOtherView(mButtonPanel->getRect(), &r, gFloaterView);
+		r.stretch(FLOATER_MIN_VISIBLE_PIXELS);
+		mReshapeCallback(mLocationId, r);
+	}
+}
 // <FS:Zi> Returns the current alignment for saving in XML settings
 LLToolBarEnums::Alignment LLToolBar::getAlignment() const
 {

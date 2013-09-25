@@ -1964,6 +1964,14 @@ void LLViewerWindow::initBase()
 
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
+	for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; ++i)
+	{
+		LLToolBar * toolbarp = gToolBarView->getToolbar((LLToolBarEnums::EToolBarLocation)i);
+		if (toolbarp)
+		{
+			toolbarp->getCenterLayoutPanel()->setReshapeCallback(boost::bind(&LLFloaterView::setToolbarRect, gFloaterView, _1, _2));
+		}
+	}
 	gFloaterView->setFloaterSnapView(main_view->getChild<LLView>("floater_snap_region")->getHandle());
 	gSnapshotFloaterView = main_view->getChild<LLSnapshotFloaterView>("Snapshot Floater View");
 
@@ -5597,13 +5605,13 @@ LLRect LLViewerWindow::getChatConsoleRect()
 		}// </FS:KC> Tie console to legacy snap edge when possible
 		else
 		{
-			LLToolBar* toolbar_left = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT);
+			LLToolBar* toolbar_left = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT);
 			if (toolbar_left && toolbar_left->hasButtons())
 			{
 				console_rect.mLeft += toolbar_left->getRect().getWidth();
 			}
 
-			LLToolBar* toolbar_right = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT);
+			LLToolBar* toolbar_right = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT);
 			LLRect toolbar_right_screen_rect;
 			toolbar_right->localRectToScreen(toolbar_right->getRect(), &toolbar_right_screen_rect);
 			if (toolbar_right && toolbar_right->hasButtons() && console_rect.mRight >= toolbar_right_screen_rect.mLeft)
