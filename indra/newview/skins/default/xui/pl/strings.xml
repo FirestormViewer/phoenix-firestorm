@@ -5131,6 +5131,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="qtool_done">
 		Narzędzie wyrównywania zakończyło pracę.
 	</string>
+	<string name="fsbridge_cant_create_disabled">
+		Firestorm nie może utworzyć Mostu LSL, jeśli "Włącz Most w LScript Language" jest wyłączone w Ustawieniach.
+	</string>
 	<string name="fsbridge_no_library">
 		Firestorm nie mógł utworzyć Mostu LSL. Włącz swoją Bibliotekę i zaloguj się ponownie.
 	</string>
