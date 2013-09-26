@@ -5615,6 +5615,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="qtool_done">
 		Die Ausrichtung ist beendet.
 	</string>
+	<string name="fsbridge_cant_create_disabled">
+		Firestorm kann die LSL-Brücke nicht erstellen, wenn „LSL-Client-Brücke aktivieren“ in den Einstellungen deaktiviert ist.
+	</string>
 	<string name="fsbridge_no_library">
 		Firestorm konnte die LSL-Brücke nicht erstellen. Bitte die Bibliothek aktivieren und neu einloggen.
 	</string>
