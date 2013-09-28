@@ -166,7 +166,7 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 }
 
 #if !FOLLOW_PERMS
-You didn't think it would be that easy did you? :P
+#error "You didn't think it would be that easy, did you? :P"
 #endif
 
 bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std::string* description)
