@@ -4606,12 +4606,16 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 Export nach [FILENAME] beendet.
 	</notification>
 
-	<notification name="ExportColladaFailed">
-Export fehlgeschlagen.
+	<notification name="ExportCollada">
+Export unerwartet fehlgeschlagen. Siehe Log-Datei für weitergehende Details.
 	</notification>
 
 	<notification name="ExportColladaSuccess">
 [OBJECT] erfolreich als [FILENAME] gespeichert.
+	</notification>
+
+	<notification name="ImportSuccess">
+Erfolgreich [COUNT] [OBJECT] importiert.
 	</notification>
 
 	<notification name="AntiSpamBlocked">
