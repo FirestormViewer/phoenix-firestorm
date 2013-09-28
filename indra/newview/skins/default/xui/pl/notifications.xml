@@ -4468,11 +4468,14 @@ Nie można tego cofnąć.
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].
 	</notification>
-	<notification name="ExportColladaFailed">
-		Eksport nie powiódł się.
+	<notification name="ExportFailed">
+		Eksport nie powiódł się. Zobacz log, aby uzyskać więcej szczegółów.
 	</notification>
 	<notification name="ExportColladaSuccess">
 		Zapisano z powodzeniem [OBJECT] do [FILENAME].
+	</notification>
+	<notification name="ImportSuccess">
+		Pomyślnie zaimportowano [COUNT] [OBJECT].
 	</notification>
 	<notification name="AntiSpamBlocked">
 		Antyspam: Zablokowano [SOURCE] ze względu na spam [QUEUE] ([COUNT]) razy podczas [PERIOD] sekund.

@@ -3,16 +3,16 @@
 	<floater.string name="title_floater">
 		Backup von [OBJECT] auf Festplatte...
 	</floater.string>
-	<floater.string name="title_floater">
+	<floater.string name="title_working">
 		Backup von [OBJECT] in Arbeit - Hole Details...
 	</floater.string>
-	<floater.string name="title_floater">
+	<floater.string name="title_inventory">
 		Backup von [OBJECT] in Arbeit - Lade Inventar...
 	</floater.string>
-	<floater.string name="title_floater">
+	<floater.string name="title_assets">
 		Backup von [OBJECT] in Arbeit - Lade Assets...
 	</floater.string>
-	<floater.string name="title_floater">
+	<floater.string name="title_textures">
 		Backup von [OBJECT] in Arbeit - Lade Texturen...
 	</floater.string>
 	<layout_stack name="resizing_stack">
