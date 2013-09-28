@@ -658,7 +658,7 @@ bool DAESaver::saveDAE(std::string filename)
 	time_t rawtime;
 	time(&rawtime);
 	struct tm* utc_time = gmtime(&rawtime);
-	std::string date = llformat("%04d-%02d-%02dT%02d:%02d:%02dz", utc_time->tm_year + 1900, utc_time->tm_mon + 1, utc_time->tm_mday, utc_time->tm_hour, utc_time->tm_min, utc_time->tm_sec);
+	std::string date = llformat("%04d-%02d-%02dT%02d:%02d:%02d", utc_time->tm_year + 1900, utc_time->tm_mon + 1, utc_time->tm_mday, utc_time->tm_hour, utc_time->tm_min, utc_time->tm_sec);
 	daeElement* created = asset->add("created");
 	created->setCharData(date);
 	daeElement* modified = asset->add("modified");

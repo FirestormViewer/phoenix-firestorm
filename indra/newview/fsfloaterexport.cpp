@@ -261,10 +261,10 @@ bool FSFloaterObjectExport::exportSelection()
 	std::string author = "Unknown";
 	if (gCacheName)
 		gCacheName->getFullName(gAgentID, author);
-	char buff[10];
-	time_t now = time(NULL);
-	strftime(buff, 10, "%Y-%m-%d", localtime(&now));
-	std::string date(buff, 10);
+	time_t rawtime;
+	time(&rawtime);
+	struct tm* utc_time = gmtime(&rawtime);
+	std::string date = llformat("%04d-%02d-%02d", utc_time->tm_year + 1900, utc_time->tm_mon + 1, utc_time->tm_mday);
 	mManifest["format_version"] = OXP_FORMAT_VERSION;
 	mManifest["client"] = LLVersionInfo::getChannelAndVersion();
 	mManifest["creation_date"] = date;
