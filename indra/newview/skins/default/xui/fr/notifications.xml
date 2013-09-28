@@ -2275,7 +2275,7 @@ Liez-la à partir d&apos;une page web pour permettre aux autres résidents d&apo
 		Sujet : [SUBJECT], Message : [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; est [STATUS]
+		[NAME] est [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Même si vous êtes extrêmement sympathique, vous ne pouvez pas devenir ami avec vous-même.
