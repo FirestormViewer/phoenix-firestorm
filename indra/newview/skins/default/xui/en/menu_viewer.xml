@@ -363,8 +363,8 @@
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="fs_import" />
+                 function="File.ImportLinkset"
+                 parameter="" />
             </menu_item_call>
         </menu>
 
@@ -1743,8 +1743,8 @@
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="fs_import" />
+                 function="File.ImportLinkset"
+                 parameter="" />
             </menu_item_call>
         </menu>
         <menu_item_separator/>

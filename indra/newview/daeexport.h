@@ -127,7 +127,6 @@ private:
 	virtual ~ColladaExportFloater();
 	void onClickExport();
 	void onTextureExportCheck();
-	void filepickerCallback();
 	void onCommitTextureType();
 	void saveTextures();
 	void addSelectedObjects();

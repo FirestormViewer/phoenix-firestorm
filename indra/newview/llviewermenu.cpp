@@ -136,7 +136,7 @@
 // [/RLVa:KB]
 #include "fslslbridge.h"
 #include "fscommon.h"
-#include "fsexport.h"
+#include "fsfloaterexport.h"
 #include "fscontactsfloater.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 #include "fswsassetblacklist.h"
@@ -10060,7 +10060,11 @@ class FSObjectExport : public view_listener_t
 {
 	bool handleEvent( const LLSD& userdata)
 	{
-		FSExport::getInstance()->exportSelection();
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		if (objectp)
+		{
+			LLFloaterReg::showInstance("fs_export", LLSD(objectp->getID()), TAKE_FOCUS_YES);
+		}
 		return true;
 	}
 };
