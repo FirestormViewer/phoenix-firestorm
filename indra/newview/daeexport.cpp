@@ -943,13 +943,13 @@ void DAESaver::generateEffects(daeElement *effects)
 			{
 				colladaName = mTextureNames[i] + "_" + mImageFormat;
 				daeElement* newparam = profile->add("newparam");
-				newparam->setAttribute("sid", (colladaName.append("-surface")).c_str());
+				newparam->setAttribute("sid", (colladaName + "-surface").c_str());
 				daeElement* surface = newparam->add("surface");
 				surface->setAttribute("type", "2D");
 				surface->add("init_from")->setCharData(colladaName.c_str());
 				newparam = profile->add("newparam");
-				newparam->setAttribute("sid", (colladaName.append("-sampler")).c_str());
-				newparam->add("sampler2D source")->setCharData((colladaName.append("-surface")).c_str());
+				newparam->setAttribute("sid", (colladaName + "-sampler").c_str());
+				newparam->add("sampler2D source")->setCharData((colladaName + "-surface").c_str());
 			}
 		}
 
@@ -961,7 +961,7 @@ void DAESaver::generateEffects(daeElement *effects)
 		if (!colladaName.empty())
 		{
 			daeElement* txtr = diffuse->add("texture");
-			txtr->setAttribute("texture", (colladaName.append("-sampler")).c_str());
+			txtr->setAttribute("texture", (colladaName + "-sampler").c_str());
 			txtr->setAttribute("texcoord", colladaName.c_str());
 		}
 		else
