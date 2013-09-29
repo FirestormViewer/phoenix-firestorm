@@ -591,17 +591,17 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 			valid = !mPanel->mCtrlTexOffsetU->getTentative();
 			if (valid)
 			{
-				value = ctrlTexOffsetS->get();
+				value = mPanel->mCtrlTexOffsetU->get();
 				object->setTEOffsetS( te, value );
 			}
 		}
 
-		if (mPanel->mCtrlTexOffset)
+		if (mPanel->mCtrlTexOffsetV)
 		{
 			valid = !mPanel->mCtrlTexOffsetV->getTentative();
 			if (valid)
 			{
-				value = ctrlTexOffsetT->get();
+				value = mPanel->mCtrlTexOffsetV->get();
 				object->setTEOffsetT( te, value );
 			}
 		}
