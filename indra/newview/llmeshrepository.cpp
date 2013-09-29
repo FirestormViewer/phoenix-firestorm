@@ -2710,7 +2710,9 @@ void LLMeshRepository::notifyLoadedMeshes()
 		if (gAgent.getRegion()->getName() != region_name && gAgent.getRegion()->capabilitiesReceived())
 		{
 			region_name = gAgent.getRegion()->getName();
-			mGetMeshCapability = gAgent.getRegion()->getCapability("GetMesh");
+			mGetMeshCapability = gAgent.getRegion()->getCapability("GetMesh2");
+			if (mGetMeshCapability.empty())
+				mGetMeshCapability = gAgent.getRegion()->getCapability("GetMesh");
 		}
 	}
 
