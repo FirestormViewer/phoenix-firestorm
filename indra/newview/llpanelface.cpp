@@ -2737,9 +2737,6 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
 
 void LLPanelFace::changePrecision(S32 decimal_precision)
 {
-	if (decimal_precision < 0) decimal_precision = 0;
-	else if (decimal_precision > 9) decimal_precision = 9;
-	
 	mCtrlTexScaleU->setPrecision(decimal_precision);
 	mCtrlTexScaleV->setPrecision(decimal_precision);
 	mCtrlBumpyScaleU->setPrecision(decimal_precision);

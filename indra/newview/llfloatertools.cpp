@@ -352,6 +352,11 @@ void LLFloaterTools::updateToolsSizeLimits()
 
 void LLFloaterTools::changePrecision(S32 decimal_precision)
 {
+	// Precision gets funky at 8 digits.
+	if (decimal_precision < 0) decimal_precision = 0;
+	else if (decimal_precision > 7) decimal_precision = 7;
+	
+	mPanelObject->changePrecision(decimal_precision);
 	mPanelFace->changePrecision(decimal_precision);
 }
 
