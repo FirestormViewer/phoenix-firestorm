@@ -5,7 +5,7 @@
 	</floater.string>
 	<floater.string name="file_status">
 		[LINKSETS] zbiorów części. [PRIMS] prim. [TEXTURES] tekstur.
-        [SOUNDS] dźwięków. [ANIMATIONS] animacji.
+[SOUNDS] dźwięków. [ANIMATIONS] animacji.
 	</floater.string>
 	<floater.string name="file_status_error">
 		Błąd odczytu. Wybierz inny plik.
@@ -35,23 +35,23 @@
 		Łączny koszt ładowanych: [COST] L$.
 	</floater.string>
 	<floater.string name="object">
-        obiekt
-    </floater.string>
+		obiekt
+	</floater.string>
 	<floater.string name="objects">
-        obiektów
-    </floater.string>
+		obiektów
+	</floater.string>
 	<text name="filename_text">
 		[FILENAME]
 	</text>
 	<text name="creation_date_text">
 		Utworzono [DATE_STRING]
-    </text>
+	</text>
 	<text name="author_text">
 		przez [AUTHOR] [GRID]
 	</text>
 	<text name="client_text">
 		Klient: [CLIENT] v.[VERSION]
-    </text>
+	</text>
 	<text name="file_status_text">
 		Wybierz plik.
 	</text>
