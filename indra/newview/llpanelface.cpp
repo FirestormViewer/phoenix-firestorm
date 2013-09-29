@@ -552,7 +552,7 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 		//LLSpinCtrl*	ctrlTexOffsetS = mPanel->mCtrlTexOffsetU;
 		//LLSpinCtrl*	ctrlTexOffsetT = mPanel->mCtrlTexOffsetV;
 		//LLSpinCtrl*	ctrlTexRotation = mPanel->mCtrlTexRot;
-		//LLComboBox*		comboTexGen = mPanel->getChild<LLComboBox>("combobox texgen");
+		LLComboBox*		comboTexGen = mPanel->getChild<LLComboBox>("combobox texgen");
 		llassert(comboTexGen);
 		llassert(object);
 
