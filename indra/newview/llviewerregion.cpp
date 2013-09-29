@@ -1765,7 +1765,6 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("GetDisplayNames");
 	capabilityNames.append("GroupMemberData");
 	capabilityNames.append("GetMesh");
-	capabilityNames.append("GetMesh2");
 	capabilityNames.append("GetObjectCost");
 	capabilityNames.append("GetObjectPhysicsData");
 	capabilityNames.append("GetTexture");
