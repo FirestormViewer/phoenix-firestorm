@@ -40,7 +40,7 @@
      width="242" />
     <spinner
      control_name="FSBuildToolDecimalPrecision"
-     decimal_digits="1"
+     decimal_digits="0"
      follows="left|top"
      height="23"
      increment="1"
@@ -51,7 +51,7 @@
      left_delta="0"
      max_val="50"
      min_val="1"
-     name="GridDrawSize"
+     name="DecimalPrecision"
      top_pad="0"
      width="242" />
     <check_box
