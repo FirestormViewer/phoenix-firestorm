@@ -547,21 +547,21 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 	{
 		BOOL valid;
 		F32 value;
-		LLSpinCtrl*	ctrlTexScaleS = mPanel->mCtrlTexScaleU;
-		LLSpinCtrl*	ctrlTexScaleT = mPanel->mCtrlTexScaleV;
-		LLSpinCtrl*	ctrlTexOffsetS = mPanel->mCtrlTexOffsetU;
-		LLSpinCtrl*	ctrlTexOffsetT = mPanel->mCtrlTexOffsetV;
-		LLSpinCtrl*	ctrlTexRotation = mPanel->mCtrlTexRot;
-		LLComboBox*		comboTexGen = mPanel->getChild<LLComboBox>("combobox texgen");
+		//LLSpinCtrl*	ctrlTexScaleS = mPanel->mCtrlTexScaleU;
+		//LLSpinCtrl*	ctrlTexScaleT = mPanel->mCtrlTexScaleV;
+		//LLSpinCtrl*	ctrlTexOffsetS = mPanel->mCtrlTexOffsetU;
+		//LLSpinCtrl*	ctrlTexOffsetT = mPanel->mCtrlTexOffsetV;
+		//LLSpinCtrl*	ctrlTexRotation = mPanel->mCtrlTexRot;
+		//LLComboBox*		comboTexGen = mPanel->getChild<LLComboBox>("combobox texgen");
 		llassert(comboTexGen);
 		llassert(object);
 
-		if (ctrlTexScaleS)
+		if (mPanel->mCtrlTexScaleU)
 		{
-			valid = !ctrlTexScaleS->getTentative();
+			valid = !mPanel->mCtrlTexScaleU->getTentative();
 			if (valid)
 			{
-				value = ctrlTexScaleS->get();
+				value = mPanel->mCtrlTexScaleU->get();
 				if (comboTexGen &&
 				    comboTexGen->getCurrentIndex() == 1)
 				{
@@ -571,12 +571,12 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 			}
 		}
 
-		if (ctrlTexScaleT)
+		if (mPanel->mCtrlTexScaleV)
 		{
-			valid = !ctrlTexScaleT->getTentative();
+			valid = !mPanel->mCtrlTexScaleV->getTentative();
 			if (valid)
 			{
-				value = ctrlTexScaleT->get();
+				value = mPanel->mCtrlTexScaleV->get();
 				if (comboTexGen &&
 				    comboTexGen->getCurrentIndex() == 1)
 				{
@@ -586,9 +586,9 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 			}
 		}
 
-		if (ctrlTexOffsetS)
+		if (mPanel->mCtrlTexOffsetU)
 		{
-			valid = !ctrlTexOffsetS->getTentative();
+			valid = !mPanel->mCtrlTexOffsetU->getTentative();
 			if (valid)
 			{
 				value = ctrlTexOffsetS->get();
@@ -596,9 +596,9 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 			}
 		}
 
-		if (ctrlTexOffsetT)
+		if (mPanel->mCtrlTexOffset)
 		{
-			valid = !ctrlTexOffsetT->getTentative();
+			valid = !mPanel->mCtrlTexOffsetV->getTentative();
 			if (valid)
 			{
 				value = ctrlTexOffsetT->get();
@@ -606,12 +606,12 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 			}
 		}
 
-		if (ctrlTexRotation)
+		if (mPanel->mCtrlTexRot)
 		{
-			valid = !ctrlTexRotation->getTentative();
+			valid = !mPanel->mCtrlTexRot->getTentative();
 			if (valid)
 			{
-				value = ctrlTexRotation->get() * DEG_TO_RAD;
+				value = mPanel->mCtrlTexRot->get() * DEG_TO_RAD;
 				object->setTERotation( te, value );
 			}
 		}
