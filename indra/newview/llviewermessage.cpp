@@ -4919,7 +4919,7 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	}
 
 	// <FS:CR> FIRE-5118 - Lightshare support
-	FSLightshare::getInstance()->processLightshareRefresh();
+	FSLightshare::getInstance()->processLightshareReset();
 	// </FS:CR>
 /*
 	// send camera update to new region
