@@ -136,7 +136,7 @@ public:
 	FSLightshare();
 	virtual ~FSLightshare();
 	void processLightshareMessage(LLMessageSystem* msg);
-	void processLightshareRefresh();
+	void processLightshareReset();
 	bool getState() { return mLightshareState; };
 private:
 	friend class LLSingleton<FSLightshare>;
