@@ -218,7 +218,7 @@ BOOL	LLPanelFace::postBuild()
 	{
 		mCtrlBumpyOffsetV->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyOffsetY, this);
 	}
-	mCtrlShinyOffsetU = getChild<LLSpinCtrl>("bumpyOffsetU");
+	mCtrlShinyOffsetU = getChild<LLSpinCtrl>("shinyOffsetU");
 	if (mCtrlShinyOffsetU)
 	{
 		mCtrlShinyOffsetU->setCommitCallback(&LLPanelFace::onCommitMaterialShinyOffsetX, this);
@@ -238,10 +238,15 @@ BOOL	LLPanelFace::postBuild()
 	{
 		mCtrlBumpyRot->setCommitCallback(&LLPanelFace::onCommitMaterialBumpyRot, this);
 	}
-	mCtrlShinyRot = getChild<LLSpinCtrl>("TexRot");
+	mCtrlShinyRot = getChild<LLSpinCtrl>("shinyRot");
 	if (mCtrlShinyRot)
 	{
 		mCtrlShinyRot->setCommitCallback(&LLPanelFace::onCommitMaterialShinyRot, this);
+	}
+	mCtrlRpt = getChild<LLSpinCtrl>("rptctrl");
+	if (mCtrlRpt)
+	{
+		mCtrlRpt->setCommitCallback(LLPanelFace::onCommitRepeatsPerMeter, this);
 	}
 	
 	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
@@ -390,14 +395,6 @@ BOOL	LLPanelFace::postBuild()
 	{
 		mCtrlGlow->setCommitCallback(LLPanelFace::onCommitGlow, this);
 	}
-	
-	// <FS:CR>
-	mCtrlRpt = getChild<LLSpinCtrl>("rptctrl");
-	if (mCtrlRpt)
-	{
-		mCtrlRpt->setCommitCallback(LLPanelFace::onCommitRepeatsPerMeter, this);
-	}
-	// </FS:CR>
 
 	clearCtrls();
 
@@ -2741,7 +2738,7 @@ void LLPanelFace::onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data)
 void LLPanelFace::changePrecision(S32 decimal_precision)
 {
 	if (decimal_precision < 0) decimal_precision = 0;
-	else if (decimal_precision > 10) decimal_precision = 9;
+	else if (decimal_precision > 9) decimal_precision = 9;
 	
 	mCtrlTexScaleU->setPrecision(decimal_precision);
 	mCtrlTexScaleV->setPrecision(decimal_precision);
@@ -2755,5 +2752,9 @@ void LLPanelFace::changePrecision(S32 decimal_precision)
 	mCtrlBumpyOffsetV->setPrecision(decimal_precision);
 	mCtrlShinyOffsetU->setPrecision(decimal_precision);
 	mCtrlShinyOffsetV->setPrecision(decimal_precision);
+	mCtrlTexRot->setPrecision(decimal_precision);
+	mCtrlBumpyRot->setPrecision(decimal_precision);
+	mCtrlShinyRot->setPrecision(decimal_precision);
+	mCtrlRpt->setPrecision(decimal_precision);
 }
 // </FS:CR>
