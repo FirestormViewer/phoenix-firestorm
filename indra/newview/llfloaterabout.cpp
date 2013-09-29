@@ -393,6 +393,11 @@ LLSD LLFloaterAbout::getInfo()
 	}
 	// </FS:PP>
 
+	// <FS:Ansariel> FIRE-11768: Include texture memory settings
+	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
+	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
+	// </FS:Ansariel>
+
     return info;
 }
 

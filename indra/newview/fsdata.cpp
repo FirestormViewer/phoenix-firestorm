@@ -873,7 +873,8 @@ LLSD FSData::getSystemInfo()
 	sysinfo2 += llformat("Draw Distance: %d m\n", info["DRAW_DISTANCE"].asInteger());
 	sysinfo2 += llformat("Bandwidth: %d kbit/s\n", info["BANDWIDTH"].asInteger());
 	sysinfo2 += llformat("LOD Factor: %.3f\n", info["LOD"].asReal());
-	sysinfo2 += llformat("Render quality: %s", info["RENDERQUALITY_FSDATA_ENGLISH"].asString().c_str()); // <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
+	sysinfo2 += llformat("Render quality: %s\n", info["RENDERQUALITY_FSDATA_ENGLISH"].asString().c_str()); // <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
+	sysinfo2 += llformat("Texture memory: %d MB (%.2f)", info["TEXTUREMEMORY"].asInteger(), info["TEXTUREMEMORYMULTIPLIER"].asReal());
 
 	LLSD sysinfos;
 	sysinfos["Part1"] = sysinfo1;
