@@ -65,9 +65,6 @@ public:
 	static	void*	createPanelContents(void*	vdata);
 	static	void*	createPanelLandInfo(void*	vdata);
 
-// <FS:CR> Aurora Sim
-	void updateToolsSizeLimits();
-// </FS:CR> Aurora Sim
 	LLFloaterTools(const LLSD& key);
 	virtual ~LLFloaterTools();
 
@@ -80,6 +77,11 @@ public:
 	// call this once per frame to handle visibility, rect location,
 	// button highlights, etc.
 	void updatePopup(LLCoordGL center, MASK mask);
+	
+	// <FS:CR> Aurora Sim
+	void updateToolsSizeLimits();
+	// </FS:CR> Aurora Sim
+	void changePrecision(S32 decimal_precision);
 
 	// When the floater is going away, reset any options that need to be 
 	// cleared.
