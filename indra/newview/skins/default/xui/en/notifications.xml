@@ -11431,10 +11431,10 @@ Export finished and saved to [FILENAME].
     
     <notification
      icon="alertmodal.tga"
-     name="ExportColladaFailed"
+     name="ExportFailed"
      type="notify">
       <tag>Export</tag>
-Export failed.
+Export failed unexpectedly. Please see the log for details.
     </notification>
     
     <notification
@@ -11443,6 +11443,14 @@ Export failed.
      type="notify">
       <tag>Export</tag>
 		Successfully saved [OBJECT] to [FILENAME].
+    </notification>
+	
+    <notification
+     icon="alertmodal.tga"
+     name="ImportSuccess"
+     type="notify">
+        <tag>Export</tag>
+        Successfully imported [COUNT] [OBJECT].
     </notification>
     
     <notification

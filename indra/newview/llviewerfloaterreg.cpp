@@ -151,7 +151,7 @@
 #include "floatermedialists.h"
 #include "fsareasearch.h"
 #include "fscontactsfloater.h"
-#include "fsexport.h"
+#include "fsfloaterexport.h"
 #include "fsfloaterblocklist.h"
 #include "fsfloatergroup.h"
 #include "fsfloatergrouptitles.h"

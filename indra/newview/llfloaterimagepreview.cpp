@@ -123,12 +123,13 @@ BOOL LLFloaterImagePreview::postBuild()
 			getChildView("lossless_check")->setEnabled(TRUE);
 		
 // <FS:CR> Temporary texture uploads
-		if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0
-			|| gAgent.getRegion()->getCentralBakeVersion() > 0)
+		BOOL enable_temp_uploads = (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() != 0
+									&& gAgent.getRegion()->getCentralBakeVersion() == 0);
+		if (!enable_temp_uploads)
 		{
 			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
-			getChild<LLCheckBoxCtrl>("temp_check")->setVisible(FALSE);
 		}
+		getChild<LLCheckBoxCtrl>("temp_check")->setVisible(enable_temp_uploads);
 // </FS:CR>
 	}
 	else

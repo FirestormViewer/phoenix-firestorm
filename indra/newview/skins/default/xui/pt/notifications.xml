@@ -2311,7 +2311,7 @@ Inclua um link para facilitar o acesso para visitantes. Teste o link na barra de
 		Assunto: [SUBJECT], Mensagem: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; está [STATUS]
+		[NAME] está [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Você é o máximo! Mesmo assim, não dá para adicionar a si mesmo(a) como amigo(a).

@@ -2308,7 +2308,7 @@ SHA1 指紋：[MD5_DIGEST]
 		主旨：[SUBJECT]，訊息：[MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; 目前狀態為 [STATUS]
+		[NAME] 目前狀態為 [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		雖然你人很好，你還是不能把自己加為朋友。

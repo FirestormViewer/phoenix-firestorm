@@ -2324,7 +2324,7 @@ Inseriscilo in una pagina web per dare ad altri un accesso facile a questa ubica
 		Oggetto: [SUBJECT], Messaggio: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; è [STATUS]
+		[NAME] è [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Anche se sei molto simpatico, non puoi aggiungere te stesso all&apos;elenco degli amici.

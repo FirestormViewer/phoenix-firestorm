@@ -2317,7 +2317,7 @@ Diğer kişilerin bu konuma kolayca erişmesini sağlamak için bu adrese bir we
 		Konu: [SUBJECT], İleti: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; durumu: [STATUS]
+		[NAME] durumu: [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Çok iyi biri olduğunuza eminiz fakat kendinizi arkadaş olarak ekleyemezsiniz.

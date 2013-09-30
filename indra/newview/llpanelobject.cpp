@@ -337,6 +337,8 @@ BOOL	LLPanelObject::postBuild()
 // <FS:CR> Aurora Sim
 	updateLimits(FALSE);	// default to non-attachment
 // </FS:CR> Aurora Sim
+	
+	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));	// <FS:CR> Adjustable decimal precision
 
 	return TRUE;
 }
@@ -414,6 +416,36 @@ void LLPanelObject::updateLimits(BOOL attachment)
 // </FS:CR> Aurora Sim
 }
 // </AW: opensim-limits>
+
+// <FS:CR> Adjustable decimal precision
+void LLPanelObject::changePrecision(S32 decimal_precision)
+{
+	mSpinCutBegin->setPrecision(decimal_precision);
+	mSpinCutEnd->setPrecision(decimal_precision);
+	mSpinScaleX->setPrecision(decimal_precision);
+	mSpinScaleY->setPrecision(decimal_precision);
+	mSpinSkew->setPrecision(decimal_precision);
+	mSpinShearX->setPrecision(decimal_precision);
+	mSpinShearY->setPrecision(decimal_precision);
+	mSpinTaperX->setPrecision(decimal_precision);
+	mSpinTaperY->setPrecision(decimal_precision);
+	mSpinRadiusOffset->setPrecision(decimal_precision);
+	mSpinRevolutions->setPrecision(decimal_precision);
+	mSpinHollow->setPrecision(decimal_precision);
+	mCtrlPathBegin->setPrecision(decimal_precision);
+	mCtrlPathEnd->setPrecision(decimal_precision);
+
+	mCtrlPosX->setPrecision(decimal_precision);
+	mCtrlPosY->setPrecision(decimal_precision);
+	mCtrlPosZ->setPrecision(decimal_precision);
+	mCtrlScaleX->setPrecision(decimal_precision);
+	mCtrlScaleY->setPrecision(decimal_precision);
+	mCtrlScaleZ->setPrecision(decimal_precision);
+	mCtrlRotX->setPrecision(decimal_precision);
+	mCtrlRotY->setPrecision(decimal_precision);
+	mCtrlRotZ->setPrecision(decimal_precision);
+}
+// </FS:CR>
 
 void LLPanelObject::getState( )
 {

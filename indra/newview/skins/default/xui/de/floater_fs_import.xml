@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="fs_import" title="Objekt-Import">
+	<floater.string name="floater_title">
+		Importiere [FILENAME]
+	</floater.string>
 	<floater.string name="file_status">
 		[LINKSETS] Linksets. [PRIMS] Prims. [TEXTURES] Texturen.
 [SOUNDS] Sounds. [ANIMATIONS] Animationen.
@@ -31,13 +34,30 @@
 	<floater.string name="upload_cost">
 		Gesamte Kosten der Uploads: $L [COST].
 	</floater.string>
+	<floater.string name="object">
+		Objekt
+	</floater.string>
+	<floater.string name="objects">
+		Objekte
+	</floater.string>
+	<text name="filename_text">
+		[FILENAME]
+	</text>
+	<text name="creation_date_text">
+		Erstellt am [DATE_STRING]
+	</text>
+	<text name="author_text">
+		von [AUTHOR] [GRID]
+	</text>
+	<text name="client_text">
+		Client: [CLIENT] v.[VERSION]
+	</text>
 	<text name="file_status_text">
 		Datei auswählen.
 	</text>
-	<button name="pick_file" label="Datei auswählen"/>
-	<button name="import_file" label="Importieren"/>
 	<check_box name="do_not_attach" label="Objekt nicht anziehen"/>
 	<check_box name="region_position" label="An Regionsposition wiederherst."/>
 	<check_box name="upload_asset" label="Hochladen"/>
 	<check_box name="temp_asset" label="Temporär"/>
+	<button name="import_btn" label="Importieren"/>
 </floater>

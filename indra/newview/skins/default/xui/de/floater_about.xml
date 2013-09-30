@@ -43,6 +43,7 @@ Draw Distance: [DRAW_DISTANCE]
 Bandbreite: [BANDWIDTH]
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
+Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 </floater.string>
 	<floater.string name="none">
 		(keiner)

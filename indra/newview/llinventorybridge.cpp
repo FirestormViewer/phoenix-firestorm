@@ -5535,6 +5535,35 @@ LLInventoryObject* LLObjectBridge::getObject() const
 }
 
 // <FS:Ansariel> Touch worn objects
+bool is_attachment_touch_restricted(const LLUUID& idItem)
+{
+	const LLInventoryItem* pItem = gInventory.getItem(idItem);
+	if ( (!isAgentAvatarValid()) || (!pItem) )
+		return true;
+
+	std::string attachment_spot_name = gAgentAvatarp->getAttachedPointName(pItem->getLinkedUUID());
+	
+	bool attached_to_hud = (attachment_spot_name == "Center 2" ||
+		attachment_spot_name == "Top Right" ||
+		attachment_spot_name == "Top" ||
+		attachment_spot_name == "Top Left" ||
+		attachment_spot_name == "Center" ||
+		attachment_spot_name == "Bottom Left" ||
+		attachment_spot_name == "Bottom" ||
+		attachment_spot_name == "Bottom Right");
+
+	if (attached_to_hud)
+	{
+		return (gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHHUD));
+	}
+	else
+	{
+		return (gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHALL) ||
+			gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH) ||
+			gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF));
+	}
+}
+
 bool is_attachment_touchable(const LLUUID& idItem)
 {
 	const LLInventoryItem* pItem = gInventory.getItem(idItem);
@@ -5550,6 +5579,11 @@ bool is_attachment_touchable(const LLUUID& idItem)
 
 void handle_attachment_touch(const LLUUID& idItem)
 {
+	if (is_attachment_touch_restricted(idItem))
+	{
+		return;
+	}
+
 	const LLInventoryItem* pItem = gInventory.getItem(idItem);
 	if ( (!isAgentAvatarValid()) || (!pItem) )
 		return;
@@ -5841,6 +5875,10 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				if (is_attachment_touchable(mUUID))
 				{
 					items.push_back(std::string("Touch Attachment"));
+					if (is_attachment_touch_restricted(mUUID))
+					{
+						disabled_items.push_back(std::string("Touch Attachment"));
+					}
 				}
 				// </FS:Ansariel>
 

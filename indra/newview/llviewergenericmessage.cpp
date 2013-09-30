@@ -80,8 +80,8 @@ void process_generic_message(LLMessageSystem* msg, void**)
 	msg->getStringFast(_PREHASH_MethodData, _PREHASH_Method, method);
 	if (method == "Windlight")
 		FSLightshare::getInstance()->processLightshareMessage(msg);
-	else if (method == "WindlightRefresh")
-		FSLightshare::getInstance()->processLightshareRefresh();
+	else if (method == "WindlightReset")
+		FSLightshare::getInstance()->processLightshareReset();
 // </FS:CR> Lightshare support
 	LLUUID agent_id;
 	msg->getUUID("AgentData", "AgentID", agent_id);

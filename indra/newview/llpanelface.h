@@ -99,6 +99,7 @@ public:
 	void			refresh();
 	void			setMediaURL(const std::string& url);
 	void			setMediaType(const std::string& mime_type);
+	void			changePrecision(S32 decimal_precision);	// <FS:CR> Adjustable decimal precision
 
 	LLMaterialPtr createDefaultMaterial(LLMaterialPtr current_material)
 	{
@@ -200,6 +201,23 @@ protected:
 	
 public:
 	static void		onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data);
+	LLSpinCtrl*		mCtrlTexScaleU;
+	LLSpinCtrl*		mCtrlTexScaleV;
+	LLSpinCtrl*		mCtrlBumpyScaleU;
+	LLSpinCtrl*		mCtrlBumpyScaleV;
+	LLSpinCtrl*		mCtrlShinyScaleU;
+	LLSpinCtrl*		mCtrlShinyScaleV;
+	
+	LLSpinCtrl*		mCtrlTexOffsetU;
+	LLSpinCtrl*		mCtrlTexOffsetV;
+	LLSpinCtrl*		mCtrlBumpyOffsetU;
+	LLSpinCtrl*		mCtrlBumpyOffsetV;
+	LLSpinCtrl*		mCtrlShinyOffsetU;
+	LLSpinCtrl*		mCtrlShinyOffsetV;
+	
+	LLSpinCtrl*		mCtrlTexRot;
+	LLSpinCtrl*		mCtrlBumpyRot;
+	LLSpinCtrl*		mCtrlShinyRot;
 	// </FS>
 
 private:

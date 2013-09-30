@@ -2317,7 +2317,7 @@ http://secondlife.com/download.
 		Раздел: [SUBJECT], сообщение: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; [STATUS]
+		[NAME] [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Вы лучше всех, но нельзя добавить в друзья себя самого.

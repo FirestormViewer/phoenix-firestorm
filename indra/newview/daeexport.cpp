@@ -74,9 +74,6 @@
 #include "llagent.h"
 #include "llcallbacklist.h"
 #include "llfilepicker.h"
-#include "llinventoryfunctions.h"
-#include "llinventorymodel.h"
-#include "llmeshrepository.h"
 #include "llnotificationsutil.h"
 #include "llselectmgr.h"
 #include "lltexturecache.h"
@@ -86,6 +83,7 @@
 #include "llviewernetwork.h"
 #include "llviewerregion.h"
 #include "llvovolume.h"
+#include "fsexportperms.h"
 
 static const F32 TEXTURE_DOWNLOAD_TIMEOUT = 60.f;
 
@@ -105,178 +103,6 @@ namespace DAEExportUtil
 		ft_png,
 		ft_j2c
 	};
-	
-	static bool canExportTexture(const LLUUID& asset_id, std::string* name = NULL)
-	{
-		bool exportable = false;
-		
-		LLViewerInventoryCategory::cat_array_t cats;
-		LLViewerInventoryItem::item_array_t items;
-		LLAssetIDMatches asset_id_matches(asset_id);
-		gInventory.collectDescendentsIf(LLUUID::null,
-										cats,
-										items,
-										LLInventoryModel::INCLUDE_TRASH,
-										asset_id_matches);
-		
-		for (S32 i = 0; i < items.count(); i++)
-		{
-			const LLPermissions perms = items[i]->getPermissions();
-			if (LLGridManager::getInstance()->isInSecondLife())
-			{
-				exportable = (perms.getCreator() == gAgentID);
-			}
-#ifdef OPENSIM
-			else if (LLGridManager::getInstance()->isInOpenSim())
-			{
-				LLViewerRegion* region = gAgent.getRegion();
-				if (!region)
-				{
-					LL_WARNS("export") << "No region found to check export caps!" << LL_ENDL;
-					return false;
-				}
-				if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
-				{
-					exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
-				}
-				else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
-				{
-					exportable = perms.getCreator() == gAgentID;
-				}
-				/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
-				/// on whether we should allow full perm exports anymore.
-				else
-				{
-					exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
-				}
-				if (!exportable)
-					LL_INFOS("export") << "Texture has failed permissions check." << LL_ENDL;
-			}
-#endif
-			if (exportable && name != NULL)
-				(*name) = items[i]->getName();
-			else if (name != NULL)
-				(*name) = asset_id.getString();
-		}
-		return exportable;
-	}
-
-	static bool canExportNode(LLSelectNode* node)
-	{
-		bool exportable = false;
-		
-		LLViewerObject* object = node->getObject();
-		if (LLGridManager::getInstance()->isInSecondLife())
-		{
-			exportable = (object->permYouOwner()
-						  && gAgentID == node->mPermissions->getCreator());
-		}
-#ifdef OPENSIM
-		else if (LLGridManager::getInstance()->isInOpenSim())
-		{
-			LLViewerRegion* region = gAgent.getRegion();
-			if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
-			{
-				exportable = node->mPermissions->allowExportBy(gAgent.getID());
-			}
-			else if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
-			{
-				// Only your own creations if this is explicitly set
-				exportable = (object->permYouOwner()
-							  && gAgentID == node->mPermissions->getCreator());
-			}
-			/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
-			/// on whether we should allow full perm exports anymore.
-			else	// LLViewerRegion::EXPORT_UNDEFINED
-			{
-				exportable = (object->permYouOwner()
-							  && object->permModify()
-							  && object->permCopy()
-							  && object->permTransfer());
-			}
-		}
-#endif // OPENSIM
-		// We've got perms on the object itself, let's check for sculptmaps and meshes!
-		if (exportable)
-		{
-			LLVOVolume *volobjp = NULL;
-			if (object->getPCode() == LL_PCODE_VOLUME)
-			{
-				volobjp = (LLVOVolume *)object;
-			}
-			if (volobjp && volobjp->isSculpted())
-			{
-				const LLSculptParams *sculpt_params = (const LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-				if (LLGridManager::getInstance()->isInSecondLife())
-				{
-					if(volobjp->isMesh())
-					{
-						LLSD mesh_header = gMeshRepo.getMeshHeader(sculpt_params->getSculptTexture());
-						exportable = mesh_header["creator"].asUUID() == gAgentID;
-					}
-					else if (sculpt_params)
-					{
-						LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(sculpt_params->getSculptTexture());
-						exportable = (imagep->mComment.find("a") != imagep->mComment.end()
-									  && LLUUID(imagep->mComment["a"]) == gAgentID);
-						if (!exportable)
-							LL_INFOS("export") << "Sculpt map has failed permissions check." << LL_ENDL;
-					}
-				}
-#ifdef OPENSIM
-				else if (LLGridManager::getInstance()->isInOpenSim())
-				{
-					if (sculpt_params && !volobjp->isMesh())
-					{
-						LLUUID asset_id = sculpt_params->getSculptTexture();
-                        LLViewerInventoryCategory::cat_array_t cats;
-                        LLViewerInventoryItem::item_array_t items;
-                        LLAssetIDMatches asset_id_matches(asset_id);
-                        gInventory.collectDescendentsIf(LLUUID::null, cats, items,
-                                                        LLInventoryModel::INCLUDE_TRASH,
-                                                        asset_id_matches);
-						
-                        for (S32 i = 0; i < items.count(); ++i)
-						{
-							const LLPermissions perms = items[i]->getPermissions();
-							LLViewerRegion* region = gAgent.getRegion();
-							if (!region)
-							{
-								LL_WARNS("export") << "No region found to check export caps!" << LL_ENDL;
-								return false;
-							}
-							if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
-							{
-								exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
-							}
-							else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
-							{
-								exportable = perms.getCreator() == gAgentID;
-							}
-							/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
-							/// on whether we should allow full perm exports anymore.
-							else
-							{
-								exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
-							}
-							if (!exportable)
-								LL_INFOS("export") << "Sculpt map has failed permissions check." << LL_ENDL;
-                        }
-					}
-					else
-					{
-						exportable = true;
-					}
-				}
-#endif // OPENSIM
-			}
-			else
-			{
-				exportable = true;
-			}
-		}
-		return exportable;
-	}
 }
 
 
@@ -384,14 +210,14 @@ void ColladaExportFloater::addSelectedObjects()
 		{
 			mTotal++;
 			LLSelectNode* node = *iter;
-			if (!node->getObject()->getVolume() || !DAEExportUtil::canExportNode(node)) continue;
+			if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
 			mIncluded++;
 			mSaver.add(node->getObject(), node->mName);
 		}
 
 		if (mSaver.mObjects.empty())
 		{
-			LLNotificationsUtil::add("ExportColladaFailed");
+			LLNotificationsUtil::add("ExportFailed");
 			closeFloater();
 			return;
 		}
@@ -641,9 +467,27 @@ void DAESaver::updateTextureInfo()
 			if (std::find(mTextures.begin(), mTextures.end(), id) != mTextures.end()) continue;
 			
 			mTextures.push_back(id);
+			bool exportable = false;
+			LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(id);
 			std::string name;
-			if (id != DAEExportUtil::LL_TEXTURE_BLANK
-				&& DAEExportUtil::canExportTexture(id, &name))
+			std::string description;
+			if (LLGridManager::getInstance()->isInSecondLife())
+			{
+				if (imagep->mComment.find("a") != imagep->mComment.end())
+				{
+					if (LLUUID(imagep->mComment["a"]) == gAgentID)
+					{
+						exportable = true;
+						LL_DEBUGS("export") << id <<  " passed texture export comment check." << LL_ENDL;
+					}
+				}
+			}
+			if (exportable)
+				FSExportPermsCheck::canExportAsset(id, &name, &description);
+			else
+				exportable = FSExportPermsCheck::canExportAsset(id, &name, &description);
+			
+			if (id != DAEExportUtil::LL_TEXTURE_BLANK && exportable)
 			{
 				std::string safe_name = gDirUtilp->getScrubbedFileName(name);
 				std::replace(safe_name.begin(), safe_name.end(), ' ', '_');
@@ -814,7 +658,7 @@ bool DAESaver::saveDAE(std::string filename)
 	time_t rawtime;
 	time(&rawtime);
 	struct tm* utc_time = gmtime(&rawtime);
-	std::string date = llformat("%04d-%02d-%02dT%02d:%02d:%02dz", utc_time->tm_year + 1900, utc_time->tm_mon + 1, utc_time->tm_mday, utc_time->tm_hour, utc_time->tm_min, utc_time->tm_sec);
+	std::string date = llformat("%04d-%02d-%02dT%02d:%02d:%02d", utc_time->tm_year + 1900, utc_time->tm_mon + 1, utc_time->tm_mday, utc_time->tm_hour, utc_time->tm_min, utc_time->tm_sec);
 	daeElement* created = asset->add("created");
 	created->setCharData(date);
 	daeElement* modified = asset->add("modified");
@@ -1099,13 +943,13 @@ void DAESaver::generateEffects(daeElement *effects)
 			{
 				colladaName = mTextureNames[i] + "_" + mImageFormat;
 				daeElement* newparam = profile->add("newparam");
-				newparam->setAttribute("sid", (colladaName.append("-surface")).c_str());
+				newparam->setAttribute("sid", (colladaName + "-surface").c_str());
 				daeElement* surface = newparam->add("surface");
 				surface->setAttribute("type", "2D");
 				surface->add("init_from")->setCharData(colladaName.c_str());
 				newparam = profile->add("newparam");
-				newparam->setAttribute("sid", (colladaName.append("-sampler")).c_str());
-				newparam->add("sampler2D source")->setCharData((colladaName.append("-surface")).c_str());
+				newparam->setAttribute("sid", (colladaName + "-sampler").c_str());
+				newparam->add("sampler2D source")->setCharData((colladaName + "-surface").c_str());
 			}
 		}
 
@@ -1117,7 +961,7 @@ void DAESaver::generateEffects(daeElement *effects)
 		if (!colladaName.empty())
 		{
 			daeElement* txtr = diffuse->add("texture");
-			txtr->setAttribute("texture", (colladaName.append("-sampler")).c_str());
+			txtr->setAttribute("texture", (colladaName + "-sampler").c_str());
 			txtr->setAttribute("texcoord", colladaName.c_str());
 		}
 		else

@@ -142,7 +142,7 @@ public:
 	void setBeacons(bool b) { mBeacons = b; }
 	
 	void setExcludeAttachment(bool b) { mExcludeAttachment = b; }
-	void setExcludeTempary(bool b) { mExcludeTempary = b; }
+	void setExcludetemporary(bool b) { mExcludeTemporary = b; }
 	void setExcludePhysics(bool b) { mExcludePhysics = b; }
 	void setExcludeChildPrims(bool b) { mExcludeChildPrims = b; }
 	void setExcludeNeighborRegions(bool b) { mExcludeNeighborRegions = b; }
@@ -228,7 +228,7 @@ private:
 	S32 mBeaconLineWidth;
 	
 	bool mExcludeAttachment;
-	bool mExcludeTempary;
+	bool mExcludeTemporary;
 	bool mExcludePhysics;
 	bool mExcludeChildPrims;
 	bool mExcludeNeighborRegions;
@@ -383,7 +383,7 @@ private:
 	LLCheckBoxCtrl* mCheckboxAttachment;
 	LLCheckBoxCtrl* mCheckboxExcludeAttachment;
 	LLCheckBoxCtrl* mCheckboxExcludePhysics;
-	LLCheckBoxCtrl* mCheckboxExcludeTempary;
+	LLCheckBoxCtrl* mCheckboxExcludetemporary;
 	LLCheckBoxCtrl* mCheckboxExcludeChildPrim;
 	LLCheckBoxCtrl* mCheckboxExcludeNeighborRegions;
 };
