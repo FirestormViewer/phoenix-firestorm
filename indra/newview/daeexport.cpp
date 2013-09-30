@@ -107,9 +107,9 @@ namespace DAEExportUtil
 
 
 ColladaExportFloater::ColladaExportFloater(const LLSD& key)
-: LLFloater(key)
+: LLFloater(key),
+  mDirty(true)
 {
-	addSelectedObjects();
 	mCommitCallbackRegistrar.add("ColladaExport.TextureExport", boost::bind(&ColladaExportFloater::onTextureExportCheck, this));
 }
 
@@ -124,23 +124,46 @@ ColladaExportFloater::~ColladaExportFloater()
 
 BOOL ColladaExportFloater::postBuild()
 {
-	childSetTextArg("NameText", "[NAME]", mObjectName);
-	childSetTextArg("exportable_prims", "[COUNT]", llformat("%d", mIncluded));
-	childSetTextArg("exportable_prims", "[TOTAL]", llformat("%d", mTotal));
-	childSetTextArg("exportable_textures", "[COUNT]", llformat("%d", mNumExportableTextures));
-	childSetTextArg("exportable_textures", "[TOTAL]", llformat("%d", mNumTextures));
 	mTitleProgress = getString("texture_progress");
-	mExportBtn = getChild<LLButton>("export_btn");
-	if (mExportBtn)
-		mExportBtn->setCommitCallback(boost::bind(&ColladaExportFloater::onClickExport, this));
-	LLUIString title = getString("floater_title");
-	title.setArg("[OBJECT]", mObjectName);
-	setTitle(title);
-	childSetEnabled("export_textures_check", mNumExportableTextures);
-	onTextureExportCheck();
-	addTexturePreview();
+	childSetAction("export_btn", boost::bind(&ColladaExportFloater::onClickExport, this));
+	LLSelectMgr::getInstance()->mUpdateSignal.connect(boost::bind(&ColladaExportFloater::updateSelection, this));
 	
 	return TRUE;
+}
+
+void ColladaExportFloater::draw()
+{
+	if (mDirty)
+	{
+		refresh();
+		mDirty = false;
+	}
+	LLFloater::draw();
+}
+
+void ColladaExportFloater::dirty()
+{
+	mDirty = true;
+}
+
+void ColladaExportFloater::refresh()
+{
+	addSelectedObjects();
+	onTextureExportCheck();
+	addTexturePreview();
+	updateUI();
+}
+
+void ColladaExportFloater::onOpen(const LLSD& key)
+{
+	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
+	if(!(object_selection->getPrimaryObject()))
+	{
+		closeFloater();
+		return;
+	}
+	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+	refresh();
 }
 
 void ColladaExportFloater::updateTitleProgress()
@@ -150,6 +173,21 @@ void ColladaExportFloater::updateTitleProgress()
 	args["COUNT"] = llformat("%d", mTexturesToSave.size());
 	mTitleProgress.setArgs(args);
 	setTitle(mTitleProgress);
+}
+
+void ColladaExportFloater::updateUI()
+{
+	childSetTextArg("NameText", "[NAME]", mObjectName);
+	childSetTextArg("exportable_prims", "[COUNT]", llformat("%d", mIncluded));
+	childSetTextArg("exportable_prims", "[TOTAL]", llformat("%d", mTotal));
+	childSetTextArg("exportable_textures", "[COUNT]", llformat("%d", mNumExportableTextures));
+	childSetTextArg("exportable_textures", "[TOTAL]", llformat("%d", mNumTextures));
+	
+	LLUIString title = getString("floater_title");
+	title.setArg("[OBJECT]", mObjectName);
+	setTitle(title);
+	childSetEnabled("export_textures_check", mNumExportableTextures);
+	childSetEnabled("export_btn", mIncluded);
 }
 
 void ColladaExportFloater::onClickExport()
@@ -199,33 +237,57 @@ void ColladaExportFloater::onTexturesSaved()
 
 void ColladaExportFloater::addSelectedObjects()
 {
-	if (LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection())
+	mTotal = 0;
+	mIncluded = 0;
+	mNumTextures = 0;
+	mNumExportableTextures = 0;
+	mSaver.mObjects.clear();
+	mSaver.mTextures.clear();
+	mSaver.mTextureNames.clear();
+	if (mObjectSelection)
 	{
-		mSaver.mOffset = -selection->getFirstRootObject()->getRenderPosition();
-		mObjectName = selection->getFirstRootNode()->mName;
-		mTotal = 0;
-		mIncluded = 0;
-
-		for (LLObjectSelection::iterator iter = selection->begin(); iter != selection->end(); ++iter)
+		bool enabled = false;
+		LLSelectNode* node = mObjectSelection->getFirstRootNode();
+		if (node)
 		{
-			mTotal++;
-			LLSelectNode* node = *iter;
-			if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
-			mIncluded++;
-			mSaver.add(node->getObject(), node->mName);
+			mSaver.mOffset = -mObjectSelection->getFirstRootObject()->getRenderPosition();
+			mObjectName = node->mName;
+			enabled = true;
+			
+			for (LLObjectSelection::iterator iter = mObjectSelection->begin(); iter != mObjectSelection->end(); ++iter)
+			{
+				mTotal++;
+				LLSelectNode* node = *iter;
+				if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
+				mIncluded++;
+				mSaver.add(node->getObject(), node->mName);
+			}
+			
+			if (mSaver.mObjects.empty())
+			{
+				//LLNotificationsUtil::add("ExportFailed");
+				enabled = false;
+				return;
+			}
+			
+			mSaver.updateTextureInfo();
+			mNumTextures = mSaver.mTextures.size();
+			mNumExportableTextures = getNumExportableTextures();
 		}
-
-		if (mSaver.mObjects.empty())
+		else
 		{
-			LLNotificationsUtil::add("ExportFailed");
-			closeFloater();
-			return;
+			mObjectName = "";
+			enabled = false;
 		}
-
-		mSaver.updateTextureInfo();
-		mNumTextures = mSaver.mTextures.size();
-		mNumExportableTextures = getNumExportableTextures();
 	}
+}
+
+void ColladaExportFloater::updateSelection()
+{
+	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
+	mObjectSelection = object_selection;
+	dirty();
+	refresh();
 }
 
 S32 ColladaExportFloater::getNumExportableTextures()
@@ -246,6 +308,10 @@ S32 ColladaExportFloater::getNumExportableTextures()
 
 void ColladaExportFloater::addTexturePreview()
 {
+	LLScrollContainer* scroll_panel = getChild<LLScrollContainer>("textures_scroll");
+	LLPanel* old_panel = scroll_panel->getChild<LLPanel>("textures_panel");
+	if (old_panel)
+		scroll_panel->removeChild(old_panel);
 	S32 num_text = mNumExportableTextures;
 	if (num_text == 0) return;
 	S32 img_width = 100;
@@ -258,7 +324,7 @@ void ColladaExportFloater::addTexturePreview()
 	pp.layout("topleft");
 	pp.enabled(false);
 	LLPanel* texture_panel = LLUICtrlFactory::create<LLPanel>(pp);
-	getChild<LLScrollContainer>("textures_scroll")->addChild(texture_panel);
+	scroll_panel->addChild(texture_panel);
 	S32 img_nr = 0;
 	for (S32 i=0; i < mSaver.mTextures.size(); i++)
 	{

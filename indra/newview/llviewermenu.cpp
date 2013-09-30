@@ -10077,7 +10077,7 @@ class FSObjectExportCollada : public view_listener_t
 		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 		if (objectp)
 		{
-			LLFloaterReg::showInstance("export_collada", LLSD(objectp->getID()), TAKE_FOCUS_YES);
+			LLFloaterReg::showInstance("export_collada");
 		}
 		return true;
 	}
