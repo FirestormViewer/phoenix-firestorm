@@ -246,13 +246,11 @@ void ColladaExportFloater::addSelectedObjects()
 	mSaver.mTextureNames.clear();
 	if (mObjectSelection)
 	{
-		bool enabled = false;
 		LLSelectNode* node = mObjectSelection->getFirstRootNode();
 		if (node)
 		{
 			mSaver.mOffset = -mObjectSelection->getFirstRootObject()->getRenderPosition();
 			mObjectName = node->mName;
-			enabled = true;
 			
 			for (LLObjectSelection::iterator iter = mObjectSelection->begin(); iter != mObjectSelection->end(); ++iter)
 			{
@@ -266,26 +264,22 @@ void ColladaExportFloater::addSelectedObjects()
 			if (mSaver.mObjects.empty())
 			{
 				//LLNotificationsUtil::add("ExportFailed");
-				enabled = false;
 				return;
 			}
-			
-			mSaver.updateTextureInfo();
-			mNumTextures = mSaver.mTextures.size();
-			mNumExportableTextures = getNumExportableTextures();
 		}
 		else
 		{
 			mObjectName = "";
-			enabled = false;
 		}
+		mSaver.updateTextureInfo();
+		mNumTextures = mSaver.mTextures.size();
+		mNumExportableTextures = getNumExportableTextures();
 	}
 }
 
 void ColladaExportFloater::updateSelection()
 {
-	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
-	mObjectSelection = object_selection;
+	mObjectSelection = LLSelectMgr::getInstance()->getSelection();
 	dirty();
 	refresh();
 }
@@ -308,14 +302,10 @@ S32 ColladaExportFloater::getNumExportableTextures()
 
 void ColladaExportFloater::addTexturePreview()
 {
-	LLScrollContainer* scroll_panel = getChild<LLScrollContainer>("textures_scroll");
-	LLPanel* old_panel = scroll_panel->getChild<LLPanel>("textures_panel");
-	if (old_panel)
-		scroll_panel->removeChild(old_panel);
 	S32 num_text = mNumExportableTextures;
 	if (num_text == 0) return;
 	S32 img_width = 100;
-	S32 img_height = img_width + 15;	
+	S32 img_height = img_width + 15;
 	S32 panel_height = (num_text / 2 + 1) * (img_height) + 10;
 	LLRect pr(0, panel_height, 230, 0);
 	LLPanel::Params pp;
@@ -324,12 +314,11 @@ void ColladaExportFloater::addTexturePreview()
 	pp.layout("topleft");
 	pp.enabled(false);
 	LLPanel* texture_panel = LLUICtrlFactory::create<LLPanel>(pp);
-	scroll_panel->addChild(texture_panel);
+	getChild<LLScrollContainer>("textures_scroll")->addChild(texture_panel);
 	S32 img_nr = 0;
 	for (S32 i=0; i < mSaver.mTextures.size(); i++)
 	{
 		if (mSaver.mTextureNames[i].empty()) continue;
-
 		S32 left = 8 + (img_nr % 2) * (img_width + 13);
 		S32 bottom = panel_height - (10 + (img_nr / 2 + 1) * (img_height));
 		LLRect r(left, bottom + img_height, left + img_width, bottom);
@@ -789,7 +778,7 @@ bool DAESaver::saveDAE(std::string filename)
 			v4adapt verts(face->mPositions);
 			v4adapt norms(face->mNormals);
 
-			LLVector2* newCoord(0);
+			LLVector2* newCoord = NULL;
 
 			if (applyTexCoord)
 			{
