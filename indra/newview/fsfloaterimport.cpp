@@ -476,7 +476,7 @@ void FSFloaterImport::onClickBtnImport()
 	mStartPosition = gAgent.getPositionAgent();
 	LL_DEBUGS("import") << "gAgent position is " << mStartPosition << LL_ENDL;
 	LLVector3 offset;
-	offset.set(5.0f, 0.0f, 2.0f); // TODO: add debug settings for this and maybe expose in the UI.
+	offset.set(gSavedSettings.getVector3("FSImportBuildOffset"));
 	mStartPosition = mStartPosition + offset * gAgent.getQuat();
 	LL_DEBUGS("import") << "mStartPosition is " << mStartPosition << LL_ENDL;
 

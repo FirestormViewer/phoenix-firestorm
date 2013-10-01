@@ -21454,6 +21454,21 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSImportBuildOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Distance from user the importer begins to build</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Vector3</string>
+      <key>Value</key>
+      <array>
+        <real>5.0</real>
+        <real>0.0</real>
+        <real>2.0</real>
+      </array>
+    </map>
     <key>FSBuildToolDecimalPrecision</key>
     <map>
       <key>Comment</key>
