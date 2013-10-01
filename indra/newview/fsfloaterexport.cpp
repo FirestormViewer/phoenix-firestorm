@@ -211,6 +211,7 @@ FSFloaterObjectExport::~FSFloaterObjectExport()
 BOOL FSFloaterObjectExport::postBuild()
 {
 	mObjectList = getChild<LLScrollListCtrl>("selected_objects");
+	mTexturePanel = getChild<LLPanel>("textures_panel");
 	childSetAction("export_btn", boost::bind(&FSFloaterObjectExport::onClickExport, this));
 	
 	LLSelectMgr::getInstance()->mUpdateSignal.connect(boost::bind(&FSFloaterObjectExport::updateSelection, this));
@@ -1189,25 +1190,18 @@ S32 FSFloaterObjectExport::getNumExportableTextures()
 
 void FSFloaterObjectExport::addTexturePreview()
 {
-	LLScrollContainer* scroll_container = getChild<LLScrollContainer>("selected_textures");
 	S32 num_text = mNumExportableTextures;
 	if (num_text == 0) return;
 	S32 img_width = 100;
 	S32 img_height = img_width + 15;
 	S32 panel_height = (num_text / 2 + 1) * (img_height) + 10;
-	LLRect pr(0, panel_height, 230, 0);
-	LLPanel::Params pp;
-	pp.rect(pr);
-	pp.name("textures_panel");
-	pp.layout("topleft");
-	pp.enabled(false);
-	mTextureList = LLUICtrlFactory::create<LLPanel>(pp);
-	scroll_container->addChild(mTextureList);
+	// *TODO: It would be better to check against a list of controls
+	mTexturePanel->deleteAllChildren();
+	mTexturePanel->reshape(230, panel_height);
 	S32 img_nr = 0;
 	for (S32 i=0; i < mTextures.size(); i++)
 	{
-		if (mTextureNames[i].empty()) continue;
-		
+		if (mTextureNames[i].empty()) continue;		
 		S32 left = 8 + (img_nr % 2) * (img_width + 13);
 		S32 bottom = panel_height - (10 + (img_nr / 2 + 1) * (img_height));
 		LLRect r(left, bottom + img_height, left + img_width, bottom);
@@ -1218,7 +1212,7 @@ void FSFloaterObjectExport::addTexturePreview()
 		p.image_id(mTextures[i]);
 		p.tool_tip(mTextureNames[i]);
 		LLTextureCtrl* texture_block = LLUICtrlFactory::create<LLTextureCtrl>(p);
-		mTextureList->addChild(texture_block);
+		mTexturePanel->addChild(texture_block);
 		img_nr++;
 	}
 }

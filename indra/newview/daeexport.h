@@ -147,6 +147,7 @@ private:
 	S32 mNumExportableTextures;
 	std::string mObjectName;
 	LLUIString mTitleProgress;
+	LLPanel* mTexturePanel;
 	bool mDirty;
 	
 	class CacheReadResponder : public LLTextureCache::ReadResponder

@@ -125,6 +125,7 @@ ColladaExportFloater::~ColladaExportFloater()
 BOOL ColladaExportFloater::postBuild()
 {
 	mTitleProgress = getString("texture_progress");
+	mTexturePanel = getChild<LLPanel>("textures_panel");
 	childSetAction("export_btn", boost::bind(&ColladaExportFloater::onClickExport, this));
 	LLSelectMgr::getInstance()->mUpdateSignal.connect(boost::bind(&ColladaExportFloater::updateSelection, this));
 	
@@ -307,14 +308,9 @@ void ColladaExportFloater::addTexturePreview()
 	S32 img_width = 100;
 	S32 img_height = img_width + 15;
 	S32 panel_height = (num_text / 2 + 1) * (img_height) + 10;
-	LLRect pr(0, panel_height, 230, 0);
-	LLPanel::Params pp;
-	pp.rect(pr);
-	pp.name("textures_panel");
-	pp.layout("topleft");
-	pp.enabled(false);
-	LLPanel* texture_panel = LLUICtrlFactory::create<LLPanel>(pp);
-	getChild<LLScrollContainer>("textures_scroll")->addChild(texture_panel);
+	// *TODO: It would be better to check against a list of controls
+	mTexturePanel->deleteAllChildren();
+	mTexturePanel->reshape(230, panel_height);
 	S32 img_nr = 0;
 	for (S32 i=0; i < mSaver.mTextures.size(); i++)
 	{
@@ -325,10 +321,11 @@ void ColladaExportFloater::addTexturePreview()
 		LLTextureCtrl::Params p;
 		p.rect(r);
 		p.layout("topleft");
+		p.name(mSaver.mTextureNames[i]);
 		p.image_id(mSaver.mTextures[i]);
 		p.tool_tip(mSaver.mTextureNames[i]);
 		LLTextureCtrl* texture_block = LLUICtrlFactory::create<LLTextureCtrl>(p);
-		texture_panel->addChild(texture_block);
+		mTexturePanel->addChild(texture_block);
 		img_nr++;
 	}
 }

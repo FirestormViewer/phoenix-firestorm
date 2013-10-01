@@ -167,12 +167,20 @@
 	  <scroll_container
 	   opaque="false"
 	   follows="all"
-	   height="242"
-	   width="246"
 	   layout="topleft"
-	   left="0"
+	   left="1"
+	   right="-1"
 	   top="2"
+	   bottom="-1"
 	   name="textures_scroll">
+		  <panel
+		   name="textures_panel"
+		   layout="topleft"
+		   enabled="false"
+		   top="1"
+		   left="1"
+		   right="-1"
+		   bottom="-1" />
 	</scroll_container>
 	</layout_panel>
   </layout_stack>

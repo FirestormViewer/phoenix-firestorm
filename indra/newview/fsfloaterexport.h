@@ -105,7 +105,7 @@ private:
 	S32 mNumExportableTextures;
 	
 	LLScrollListCtrl* mObjectList;
-	LLPanel* mTextureList;
+	LLPanel* mTexturePanel;
 	
 	std::string mObjectName;
 	
