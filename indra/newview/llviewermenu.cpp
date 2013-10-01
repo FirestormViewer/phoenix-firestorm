@@ -10063,7 +10063,7 @@ class FSObjectExport : public view_listener_t
 		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
 		if (objectp)
 		{
-			LLFloaterReg::showInstance("fs_export", LLSD(objectp->getID()), TAKE_FOCUS_YES);
+			LLFloaterReg::showInstance("fs_export");
 		}
 		return true;
 	}

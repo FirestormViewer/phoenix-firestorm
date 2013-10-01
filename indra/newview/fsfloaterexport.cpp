@@ -196,12 +196,8 @@ void FSFloaterObjectExport::onIdle()
 
 FSFloaterObjectExport::FSFloaterObjectExport(const LLSD& key)
 : LLFloater(key),
-mTotal(0),
-mIncluded(0),
-mNumTextures(0),
-mNumExportableTextures(0)
+  mDirty(true)
 {
-	addSelectedObjects();
 }
 
 FSFloaterObjectExport::~FSFloaterObjectExport()
@@ -214,33 +210,64 @@ FSFloaterObjectExport::~FSFloaterObjectExport()
 
 BOOL FSFloaterObjectExport::postBuild()
 {
-	childSetTextArg("exportable_prims", "[COUNT]", llformat("%d", mIncluded));
-	childSetTextArg("exportable_prims", "[TOTAL]", llformat("%d", mTotal));
-	childSetTextArg("exportable_textures", "[COUNT]", llformat("%d", mNumExportableTextures));
-	childSetTextArg("exportable_textures", "[TOTAL]", llformat("%d", mNumTextures));
-	
 	mObjectList = getChild<LLScrollListCtrl>("selected_objects");
-	mExportBtn = getChild<LLButton>("export_btn");
-	if (mExportBtn)
-		mExportBtn->setCommitCallback(boost::bind(&FSFloaterObjectExport::onClickExport, this));
+	childSetAction("export_btn", boost::bind(&FSFloaterObjectExport::onClickExport, this));
 	
-	LLUIString title = getString("title_floater");
-	title.setArg("[OBJECT]", mObjectName);
-	setTitle(title);
-	populateObjectList();
-	addTexturePreview();
+	LLSelectMgr::getInstance()->mUpdateSignal.connect(boost::bind(&FSFloaterObjectExport::updateSelection, this));
 	
 	return TRUE;
 }
 
+void FSFloaterObjectExport::draw()
+{
+	if (mDirty)
+	{
+		refresh();
+		mDirty = false;
+	}
+	LLFloater::draw();
+}
+
+void FSFloaterObjectExport::refresh()
+{
+	addSelectedObjects();
+	addTexturePreview();
+	populateObjectList();
+	updateUI();
+}
+
+void FSFloaterObjectExport::dirty()
+{
+	mDirty = true;
+}
+
+void FSFloaterObjectExport::onOpen(const LLSD& key)
+{
+	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
+	if(!(object_selection->getPrimaryObject()))
+	{
+		closeFloater();
+		return;
+	}
+	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+	refresh();
+}
+
+void FSFloaterObjectExport::updateSelection()
+{
+	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
+	mObjectSelection = object_selection;
+	dirty();
+}
+
 bool FSFloaterObjectExport::exportSelection()
 {
-	if (!mSelection)
+	if (!mObjectSelection)
 	{
 		LL_WARNS("export") << "Nothing selected; Bailing!" << LL_ENDL;
 		return false;
 	}
-	LLObjectSelection::valid_root_iterator iter = mSelection->valid_root_begin();
+	LLObjectSelection::valid_root_iterator iter = mObjectSelection->valid_root_begin();
 	LLSelectNode* node = *iter;
 	if (!node)
 	{
@@ -271,7 +298,7 @@ bool FSFloaterObjectExport::exportSelection()
 	mManifest["author"] = author;
 	mManifest["grid"] = LLGridManager::getInstance()->getGridLabel();
 	
-	for ( ; iter != mSelection->valid_root_end(); ++iter)
+	for ( ; iter != mObjectSelection->valid_root_end(); ++iter)
 	{
 		mManifest["linkset"].append(getLinkSet((*iter)));
 	}
@@ -1030,6 +1057,21 @@ void FSFloaterObjectExport::updateTitleProgress(FSExportState state)
 	setTitle(title);
 }
 
+void FSFloaterObjectExport::updateUI()
+{
+	childSetTextArg("NameText", "[NAME]", mObjectName);
+	childSetTextArg("exportable_prims", "[COUNT]", llformat("%d", mIncluded));
+	childSetTextArg("exportable_prims", "[TOTAL]", llformat("%d", mTotal));
+	childSetTextArg("exportable_textures", "[COUNT]", llformat("%d", mNumExportableTextures));
+	childSetTextArg("exportable_textures", "[TOTAL]", llformat("%d", mNumTextures));
+	
+	LLUIString title = getString("title_floater");
+	title.setArg("[OBJECT]", mObjectName);
+	setTitle(title);
+	childSetEnabled("export_textures_check", mNumExportableTextures);
+	childSetEnabled("export_btn", mIncluded);
+}
+
 void FSFloaterObjectExport::onClickExport()
 {
 	LLFilePicker& file_picker = LLFilePicker::instance();
@@ -1053,8 +1095,11 @@ void FSFloaterObjectExport::onClickExport()
 
 void FSFloaterObjectExport::populateObjectList()
 {
-	if (mObjectList && !mObjects.empty())
+	
+	if (mObjectList)
 	{
+		mObjectList->deleteAllItems();
+		mObjectList->setCommentText(LLTrans::getString("LoadingData"));
 		for (obj_info_t::iterator obj_iter = mObjects.begin(); obj_iter != mObjects.end(); ++obj_iter)
 		{
 			LLSD element;
@@ -1066,41 +1111,64 @@ void FSFloaterObjectExport::populateObjectList()
 			mObjectList->addElement(element, ADD_BOTTOM);
 			
 		}
+		if (mObjectList && !mTextureNames.empty())
+		{
+			for (string_list_t::iterator iter = mTextureNames.begin(); iter != mTextureNames.end(); ++iter)
+			{
+				LLSD element;
+				element["columns"][0]["column"]	= "icon";
+				element["columns"][0]["type"]	= "icon";
+				element["columns"][0]["value"]	= "Inv_Texture";
+				element["columns"][1]["column"]	= "name";
+				element["columns"][1]["value"]	= (*iter);
+				mObjectList->addElement(element, ADD_BOTTOM);
+				
+			}
+		}
 	}
 }
 
 // Copypasta from DAE Export. :o
 void FSFloaterObjectExport::addSelectedObjects()
-{	
-	if ((mSelection = LLSelectMgr::getInstance()->getSelection()))
+{
+	mTotal = 0;
+	mIncluded = 0;
+	mNumTextures = 0;
+	mNumExportableTextures = 0;
+	mObjects.clear();
+	mTextures.clear();
+	mTextureNames.clear();
+
+	if (mObjectSelection)
 	{
-		mObjectName = mSelection->getFirstRootNode()->mName;
-		for (LLObjectSelection::iterator iter = mSelection->begin(); iter != mSelection->end(); ++iter)
+		LLSelectNode* node = mObjectSelection->getFirstRootNode();
+		if (node)
 		{
-			LLSelectNode* node = *iter;
-			mTotal++;
-			if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
-			mIncluded++;
-			addObject(node->getObject(), node->mName);
-		}
+			mObjectName = node->mName;
+			for (LLObjectSelection::iterator iter = mObjectSelection->begin(); iter != mObjectSelection->end(); ++iter)
+			{
+				node = *iter;
+				mTotal++;
+				if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
+				mIncluded++;
+				addObject(node->getObject(), node->mName);
+			}
 		
-		if (mObjects.empty())
+			if (mObjects.empty())
+			{
+				LL_WARNS("export") << "Nothing selected passed permissions checks!" << LL_ENDL;
+				//LLNotificationsUtil::add("ExportFailed");
+				return;
+			}
+		
+			updateTextureInfo();
+			mNumTextures = mTextures.size();
+			mNumExportableTextures = getNumExportableTextures();
+		}
+		else
 		{
-			LL_WARNS("export") << "Nothing selected passed permissions checks!" << LL_ENDL;
-			LLNotificationsUtil::add("ExportFailed");
-			closeFloater();
-			return;
+			mObjectName = "";
 		}
-		
-		updateTextureInfo();
-		mNumTextures = mTextures.size();
-		mNumExportableTextures = getNumExportableTextures();
-	}
-	else
-	{
-		LL_WARNS("export") << "Nothing selected!" << LL_ENDL;
-		LLNotificationsUtil::add("ExportFailed");
-		closeFloater();
 	}
 }
 
@@ -1121,6 +1189,7 @@ S32 FSFloaterObjectExport::getNumExportableTextures()
 
 void FSFloaterObjectExport::addTexturePreview()
 {
+	LLScrollContainer* scroll_container = getChild<LLScrollContainer>("selected_textures");
 	S32 num_text = mNumExportableTextures;
 	if (num_text == 0) return;
 	S32 img_width = 100;
@@ -1132,8 +1201,8 @@ void FSFloaterObjectExport::addTexturePreview()
 	pp.name("textures_panel");
 	pp.layout("topleft");
 	pp.enabled(false);
-	LLPanel* texture_panel = LLUICtrlFactory::create<LLPanel>(pp);
-	getChild<LLScrollContainer>("selected_textures")->addChild(texture_panel);
+	mTextureList = LLUICtrlFactory::create<LLPanel>(pp);
+	scroll_container->addChild(mTextureList);
 	S32 img_nr = 0;
 	for (S32 i=0; i < mTextures.size(); i++)
 	{
@@ -1145,26 +1214,12 @@ void FSFloaterObjectExport::addTexturePreview()
 		LLTextureCtrl::Params p;
 		p.rect(r);
 		p.layout("topleft");
+		p.name(mTextureNames[i]);
 		p.image_id(mTextures[i]);
 		p.tool_tip(mTextureNames[i]);
 		LLTextureCtrl* texture_block = LLUICtrlFactory::create<LLTextureCtrl>(p);
-		texture_panel->addChild(texture_block);
+		mTextureList->addChild(texture_block);
 		img_nr++;
-	}
-	// Put 'em in the other list too.
-	if (mObjectList && !mTextureNames.empty())
-	{
-		for (string_list_t::iterator iter = mTextureNames.begin(); iter != mTextureNames.end(); ++iter)
-		{
-			LLSD element;
-			element["columns"][0]["column"]	= "icon";
-			element["columns"][0]["type"]	= "icon";
-			element["columns"][0]["value"]	= "Inv_Texture";
-			element["columns"][1]["column"]	= "name";
-			element["columns"][1]["value"]	= (*iter);
-			mObjectList->addElement(element, ADD_BOTTOM);
-			
-		}
 	}
 }
 
