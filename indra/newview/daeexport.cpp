@@ -108,6 +108,7 @@ namespace DAEExportUtil
 
 ColladaExportFloater::ColladaExportFloater(const LLSD& key)
 : LLFloater(key),
+  mCurrentObjectID(NULL),
   mDirty(true)
 {
 	mCommitCallbackRegistrar.add("ColladaExport.TextureExport", boost::bind(&ColladaExportFloater::onTextureExportCheck, this));
@@ -250,6 +251,7 @@ void ColladaExportFloater::addSelectedObjects()
 		LLSelectNode* node = mObjectSelection->getFirstRootNode();
 		if (node)
 		{
+			mCurrentObjectID = node->getObject()->getID();
 			mSaver.mOffset = -mObjectSelection->getFirstRootObject()->getRenderPosition();
 			mObjectName = node->mName;
 			
@@ -280,7 +282,15 @@ void ColladaExportFloater::addSelectedObjects()
 
 void ColladaExportFloater::updateSelection()
 {
-	mObjectSelection = LLSelectMgr::getInstance()->getSelection();
+	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
+	LLSelectNode* node = object_selection->getFirstRootNode();
+	
+	if (node && !node->mValid && node->getObject()->getID() == mCurrentObjectID)
+	{
+		return;
+	}
+	
+	mObjectSelection = object_selection;
 	dirty();
 	refresh();
 }

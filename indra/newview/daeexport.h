@@ -148,6 +148,7 @@ private:
 	std::string mObjectName;
 	LLUIString mTitleProgress;
 	LLPanel* mTexturePanel;
+	LLUUID mCurrentObjectID;
 	bool mDirty;
 	
 	class CacheReadResponder : public LLTextureCache::ReadResponder

@@ -98,6 +98,7 @@ private:
 	obj_info_t mObjects;
 	std::string mFilename;
 	LLSafeHandle<LLObjectSelection> mObjectSelection;
+	LLUUID mCurrentObjectID;
 	
 	S32 mTotal;
 	S32 mIncluded;

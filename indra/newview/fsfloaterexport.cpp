@@ -196,6 +196,7 @@ void FSFloaterObjectExport::onIdle()
 
 FSFloaterObjectExport::FSFloaterObjectExport(const LLSD& key)
 : LLFloater(key),
+  mCurrentObjectID(NULL),
   mDirty(true)
 {
 }
@@ -257,8 +258,16 @@ void FSFloaterObjectExport::onOpen(const LLSD& key)
 void FSFloaterObjectExport::updateSelection()
 {
 	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
+	LLSelectNode* node = object_selection->getFirstRootNode();
+	
+	if (node && !node->mValid && node->getObject()->getID() == mCurrentObjectID)
+	{
+		return;
+	}
+		
 	mObjectSelection = object_selection;
 	dirty();
+	refresh();
 }
 
 bool FSFloaterObjectExport::exportSelection()
@@ -1145,6 +1154,7 @@ void FSFloaterObjectExport::addSelectedObjects()
 		LLSelectNode* node = mObjectSelection->getFirstRootNode();
 		if (node)
 		{
+			mCurrentObjectID = node->getObject()->getID();
 			mObjectName = node->mName;
 			for (LLObjectSelection::iterator iter = mObjectSelection->begin(); iter != mObjectSelection->end(); ++iter)
 			{
