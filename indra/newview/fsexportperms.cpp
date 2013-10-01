@@ -104,8 +104,26 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 				else if (sculpt_params)
 				{
 					LLViewerFetchedTexture* imagep = LLViewerTextureManager::getFetchedTexture(sculpt_params->getSculptTexture());
-					exportable = (imagep->mComment.find("a") != imagep->mComment.end()
-								  && LLUUID(imagep->mComment["a"]) == gAgentID);
+					if (imagep->mComment.find("a") != imagep->mComment.end())
+					{
+						exportable = (LLUUID(imagep->mComment["a"]) == gAgentID);
+					}
+					if (!exportable)
+					{
+						LLUUID asset_id = sculpt_params->getSculptTexture();
+						LLViewerInventoryCategory::cat_array_t cats;
+						LLViewerInventoryItem::item_array_t items;
+						LLAssetIDMatches asset_id_matches(asset_id);
+						gInventory.collectDescendentsIf(LLUUID::null, cats, items,
+														LLInventoryModel::INCLUDE_TRASH,
+														asset_id_matches);
+						
+						for (S32 i = 0; i < items.count(); ++i)
+						{
+							const LLPermissions perms = items[i]->getPermissions();
+							exportable = perms.getCreator() == gAgentID;
+						}
+					}
 					if (!exportable)
 						LL_INFOS("export") << "Sculpt map has failed permissions check." << LL_ENDL;
 				}
