@@ -107,9 +107,9 @@ namespace DAEExportUtil
 
 
 ColladaExportFloater::ColladaExportFloater(const LLSD& key)
-: LLFloater(key)
+: LLFloater(key),
+  mDirty(true)
 {
-	addSelectedObjects();
 	mCommitCallbackRegistrar.add("ColladaExport.TextureExport", boost::bind(&ColladaExportFloater::onTextureExportCheck, this));
 }
 
@@ -124,23 +124,47 @@ ColladaExportFloater::~ColladaExportFloater()
 
 BOOL ColladaExportFloater::postBuild()
 {
-	childSetTextArg("NameText", "[NAME]", mObjectName);
-	childSetTextArg("exportable_prims", "[COUNT]", llformat("%d", mIncluded));
-	childSetTextArg("exportable_prims", "[TOTAL]", llformat("%d", mTotal));
-	childSetTextArg("exportable_textures", "[COUNT]", llformat("%d", mNumExportableTextures));
-	childSetTextArg("exportable_textures", "[TOTAL]", llformat("%d", mNumTextures));
 	mTitleProgress = getString("texture_progress");
-	mExportBtn = getChild<LLButton>("export_btn");
-	if (mExportBtn)
-		mExportBtn->setCommitCallback(boost::bind(&ColladaExportFloater::onClickExport, this));
-	LLUIString title = getString("floater_title");
-	title.setArg("[OBJECT]", mObjectName);
-	setTitle(title);
-	childSetEnabled("export_textures_check", mNumExportableTextures);
-	onTextureExportCheck();
-	addTexturePreview();
+	mTexturePanel = getChild<LLPanel>("textures_panel");
+	childSetAction("export_btn", boost::bind(&ColladaExportFloater::onClickExport, this));
+	LLSelectMgr::getInstance()->mUpdateSignal.connect(boost::bind(&ColladaExportFloater::updateSelection, this));
 	
 	return TRUE;
+}
+
+void ColladaExportFloater::draw()
+{
+	if (mDirty)
+	{
+		refresh();
+		mDirty = false;
+	}
+	LLFloater::draw();
+}
+
+void ColladaExportFloater::dirty()
+{
+	mDirty = true;
+}
+
+void ColladaExportFloater::refresh()
+{
+	addSelectedObjects();
+	onTextureExportCheck();
+	addTexturePreview();
+	updateUI();
+}
+
+void ColladaExportFloater::onOpen(const LLSD& key)
+{
+	LLObjectSelectionHandle object_selection = LLSelectMgr::getInstance()->getSelection();
+	if(!(object_selection->getPrimaryObject()))
+	{
+		closeFloater();
+		return;
+	}
+	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+	refresh();
 }
 
 void ColladaExportFloater::updateTitleProgress()
@@ -150,6 +174,21 @@ void ColladaExportFloater::updateTitleProgress()
 	args["COUNT"] = llformat("%d", mTexturesToSave.size());
 	mTitleProgress.setArgs(args);
 	setTitle(mTitleProgress);
+}
+
+void ColladaExportFloater::updateUI()
+{
+	childSetTextArg("NameText", "[NAME]", mObjectName);
+	childSetTextArg("exportable_prims", "[COUNT]", llformat("%d", mIncluded));
+	childSetTextArg("exportable_prims", "[TOTAL]", llformat("%d", mTotal));
+	childSetTextArg("exportable_textures", "[COUNT]", llformat("%d", mNumExportableTextures));
+	childSetTextArg("exportable_textures", "[TOTAL]", llformat("%d", mNumTextures));
+	
+	LLUIString title = getString("floater_title");
+	title.setArg("[OBJECT]", mObjectName);
+	setTitle(title);
+	childSetEnabled("export_textures_check", mNumExportableTextures);
+	childSetEnabled("export_btn", mIncluded);
 }
 
 void ColladaExportFloater::onClickExport()
@@ -199,33 +238,51 @@ void ColladaExportFloater::onTexturesSaved()
 
 void ColladaExportFloater::addSelectedObjects()
 {
-	if (LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection())
+	mTotal = 0;
+	mIncluded = 0;
+	mNumTextures = 0;
+	mNumExportableTextures = 0;
+	mSaver.mObjects.clear();
+	mSaver.mTextures.clear();
+	mSaver.mTextureNames.clear();
+	if (mObjectSelection)
 	{
-		mSaver.mOffset = -selection->getFirstRootObject()->getRenderPosition();
-		mObjectName = selection->getFirstRootNode()->mName;
-		mTotal = 0;
-		mIncluded = 0;
-
-		for (LLObjectSelection::iterator iter = selection->begin(); iter != selection->end(); ++iter)
+		LLSelectNode* node = mObjectSelection->getFirstRootNode();
+		if (node)
 		{
-			mTotal++;
-			LLSelectNode* node = *iter;
-			if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
-			mIncluded++;
-			mSaver.add(node->getObject(), node->mName);
+			mSaver.mOffset = -mObjectSelection->getFirstRootObject()->getRenderPosition();
+			mObjectName = node->mName;
+			
+			for (LLObjectSelection::iterator iter = mObjectSelection->begin(); iter != mObjectSelection->end(); ++iter)
+			{
+				mTotal++;
+				LLSelectNode* node = *iter;
+				if (!node->getObject()->getVolume() || !FSExportPermsCheck::canExportNode(node)) continue;
+				mIncluded++;
+				mSaver.add(node->getObject(), node->mName);
+			}
+			
+			if (mSaver.mObjects.empty())
+			{
+				//LLNotificationsUtil::add("ExportFailed");
+				return;
+			}
 		}
-
-		if (mSaver.mObjects.empty())
+		else
 		{
-			LLNotificationsUtil::add("ExportFailed");
-			closeFloater();
-			return;
+			mObjectName = "";
 		}
-
 		mSaver.updateTextureInfo();
 		mNumTextures = mSaver.mTextures.size();
 		mNumExportableTextures = getNumExportableTextures();
 	}
+}
+
+void ColladaExportFloater::updateSelection()
+{
+	mObjectSelection = LLSelectMgr::getInstance()->getSelection();
+	dirty();
+	refresh();
 }
 
 S32 ColladaExportFloater::getNumExportableTextures()
@@ -249,31 +306,26 @@ void ColladaExportFloater::addTexturePreview()
 	S32 num_text = mNumExportableTextures;
 	if (num_text == 0) return;
 	S32 img_width = 100;
-	S32 img_height = img_width + 15;	
+	S32 img_height = img_width + 15;
 	S32 panel_height = (num_text / 2 + 1) * (img_height) + 10;
-	LLRect pr(0, panel_height, 230, 0);
-	LLPanel::Params pp;
-	pp.rect(pr);
-	pp.name("textures_panel");
-	pp.layout("topleft");
-	pp.enabled(false);
-	LLPanel* texture_panel = LLUICtrlFactory::create<LLPanel>(pp);
-	getChild<LLScrollContainer>("textures_scroll")->addChild(texture_panel);
+	// *TODO: It would be better to check against a list of controls
+	mTexturePanel->deleteAllChildren();
+	mTexturePanel->reshape(230, panel_height);
 	S32 img_nr = 0;
 	for (S32 i=0; i < mSaver.mTextures.size(); i++)
 	{
 		if (mSaver.mTextureNames[i].empty()) continue;
-
 		S32 left = 8 + (img_nr % 2) * (img_width + 13);
 		S32 bottom = panel_height - (10 + (img_nr / 2 + 1) * (img_height));
 		LLRect r(left, bottom + img_height, left + img_width, bottom);
 		LLTextureCtrl::Params p;
 		p.rect(r);
 		p.layout("topleft");
+		p.name(mSaver.mTextureNames[i]);
 		p.image_id(mSaver.mTextures[i]);
 		p.tool_tip(mSaver.mTextureNames[i]);
 		LLTextureCtrl* texture_block = LLUICtrlFactory::create<LLTextureCtrl>(p);
-		texture_panel->addChild(texture_block);
+		mTexturePanel->addChild(texture_block);
 		img_nr++;
 	}
 }
@@ -723,7 +775,7 @@ bool DAESaver::saveDAE(std::string filename)
 			v4adapt verts(face->mPositions);
 			v4adapt norms(face->mNormals);
 
-			LLVector2* newCoord(0);
+			LLVector2* newCoord = NULL;
 
 			if (applyTexCoord)
 			{

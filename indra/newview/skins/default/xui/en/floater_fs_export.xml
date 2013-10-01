@@ -153,7 +153,16 @@
 					 top="2"
 					 left="0"
 					 right="-1"
-					 bottom="-1" />
+					 bottom="-1">
+						<panel
+						 name="textures_panel"
+						 layout="topleft"
+						 enabled="false"
+						 top="0"
+						 left="0"
+						 right="-1"
+						 bottom="-1" />
+					</scroll_container>
 				</panel>
 			</tab_container>
 		</layout_panel>

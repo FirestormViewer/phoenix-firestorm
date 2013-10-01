@@ -25,13 +25,13 @@
 #ifndef DAEEXPORT_H_
 #define DAEEXPORT_H_
 
-#include "llbutton.h"
 #include "llfloater.h"
 #include "lltextureentry.h"
 #include "lltexturecache.h"
 #include <dom/domElements.h>
 
 class LLViewerObject;
+class LLObjectSelection;
 
 class DAESaver
 {
@@ -58,9 +58,7 @@ public:
 			return !(*this == rhs);
 		}
 
-		MaterialInfo()
-		{
-		}
+		MaterialInfo() {}
 
 		MaterialInfo(const MaterialInfo& rhs)
 		{
@@ -115,9 +113,12 @@ class ColladaExportFloater : public LLFloater
 public:
 	ColladaExportFloater(const LLSD& key);
 	BOOL postBuild();
+	void updateSelection();
 	
 protected:
 	void onTexturesSaved();
+	
+	LLSafeHandle<LLObjectSelection> mObjectSelection;
 	LLTimer mTimer;
 	typedef std::map<LLUUID, std::string> texture_list_t;
 	texture_list_t mTexturesToSave;
@@ -125,6 +126,10 @@ protected:
 	
 private:
 	virtual ~ColladaExportFloater();
+	/* virtual */ void draw();
+	/* virtual */ void onOpen(const LLSD& key);
+	void refresh();
+	void dirty();
 	void onClickExport();
 	void onTextureExportCheck();
 	void onCommitTextureType();
@@ -132,9 +137,8 @@ private:
 	void addSelectedObjects();
 	void addTexturePreview();
 	void updateTitleProgress();
+	void updateUI();
 	S32 getNumExportableTextures();
-	
-	LLButton* mExportBtn;
 	
 	DAESaver mSaver;
 	S32 mTotal;
@@ -143,6 +147,8 @@ private:
 	S32 mNumExportableTextures;
 	std::string mObjectName;
 	LLUIString mTitleProgress;
+	LLPanel* mTexturePanel;
+	bool mDirty;
 	
 	class CacheReadResponder : public LLTextureCache::ReadResponder
 	{

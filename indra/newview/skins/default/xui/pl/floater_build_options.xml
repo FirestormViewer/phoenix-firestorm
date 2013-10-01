@@ -2,6 +2,7 @@
 <floater name="build options floater" title="Opcje siatki">
 	<spinner label="Jednostki siatki (metry)" name="GridResolution"/>
 	<spinner label="Rozmiary siatki (metry)" name="GridDrawSize"/>
+	<spinner label="Dokładn. dziesiętna" name="DecimalPrecision"/>
 	<check_box label="Przyciągaj do podjednostek" name="GridSubUnit"/>
 	<check_box label="Pokaż przekroje" name="GridCrossSection"/>
 	<text name="Snap on">

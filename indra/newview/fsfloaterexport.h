@@ -38,6 +38,8 @@
 #include "llfloater.h"
 #include "llscrolllistctrl.h"
 
+class LLObjectSelection;
+
 struct FSAssetResourceData
 {
 	std::string name;
@@ -52,6 +54,7 @@ class FSFloaterObjectExport : public LLFloater, public LLVOInventoryListener
 public:
 	FSFloaterObjectExport(const LLSD& key);
 	BOOL postBuild();
+	void updateSelection();
 	
 	static void onImageLoaded(BOOL success,
 							  LLViewerFetchedTexture *src_vi,
@@ -74,8 +77,11 @@ public:
 	
 private:
 	typedef enum {IDLE, INVENTORY_DOWNLOAD, ASSET_DOWNLOAD, TEXTURE_DOWNLOAD} FSExportState;
-	virtual ~FSFloaterObjectExport();
-	
+	virtual ~FSFloaterObjectExport();	
+	/* virtual */ void draw();
+	/* virtual */ void onOpen(const LLSD& key);
+	void refresh();
+	void dirty();
 	bool exportSelection();
 	void addSelectedObjects();
 	void populateObjectList();
@@ -84,22 +90,22 @@ private:
 	S32 getNumExportableTextures();
 	void addObject(const LLViewerObject* prim, const std::string name);
 	void updateTextureInfo();
+	void updateUI();
 	void updateTitleProgress(FSExportState state);
 
 	FSExportState mExportState;
 	typedef std::vector<std::pair<LLViewerObject*,std::string> > obj_info_t;
 	obj_info_t mObjects;
 	std::string mFilename;
-	LLObjectSelectionHandle mSelection;
+	LLSafeHandle<LLObjectSelection> mObjectSelection;
 	
 	S32 mTotal;
 	S32 mIncluded;
 	S32 mNumTextures;
 	S32 mNumExportableTextures;
 	
-	LLButton* mExportBtn;
 	LLScrollListCtrl* mObjectList;
-	LLScrollListCtrl* mTextureList;
+	LLPanel* mTexturePanel;
 	
 	std::string mObjectName;
 	
@@ -121,6 +127,7 @@ private:
 	bool mExported;
 	bool mAborted;
 	bool mExportError;
+	bool mDirty;
 	
 	typedef std::vector<LLUUID> id_list_t;
 	typedef std::vector<std::string> string_list_t;
