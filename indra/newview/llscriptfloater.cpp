@@ -43,6 +43,7 @@
 #include "llviewerwindow.h"
 #include "llfloaterimsession.h"
 
+#include "llwindow.h"	// <FS:CR> flashIcon()
 #include "lltoolbarview.h"		// <FS:Zi> script dialogs position
 // <FS:Zi> Dialog Stacking browser
 #include "dialogstack.h"
@@ -571,6 +572,14 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 	data["new_message"] = set_new_message;
 	data["unread"] = 1; // each object has got only one floater
 	mNewObjectSignal(data);
+	
+	// <FS:CR> Flash or bounce the app icon on new script dialog
+	LLWindow* viewer_window = gViewerWindow->getWindow();
+	if (viewer_window && gSavedSettings.getBOOL("FSFlashOnScriptDialog"))
+	{
+		viewer_window->flashIcon(5.f);
+	}
+	// </FS:CR>
 
 	toggleScriptFloater(notification_id, set_new_message);
 }
