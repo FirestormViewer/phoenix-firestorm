@@ -94,6 +94,8 @@ std::vector<std::string>* doLoadDialog(const std::vector<std::string>* allowed_t
             outfiles->push_back(*afilestr);
         }
     }
+	[fileTypes release];	// <FS:CR> Fix memleak	
+	
     return outfiles;
 }
 
@@ -126,7 +128,9 @@ std::string* doSaveDialog(const std::string* file,
         NSString* p = [url path];
         outfile = new std::string( [p UTF8String] );
         // write the file 
-    } 
+    }
+	[fileType release];	// <FS:CR> Fix memleak
+	
     return outfile;
 }
 
