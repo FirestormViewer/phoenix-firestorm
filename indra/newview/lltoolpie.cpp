@@ -72,6 +72,8 @@
 #include "llui.h"
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
+
+#include "llviewernetwork.h"	// <FS:CR> For prim equivilance hiding
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -1268,6 +1270,15 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 							args["PEWEIGHT"] = llformat("%d", link_cost);
 							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalent", args));
 						}
+/// <FS:CR> Don't show loading on vanila OpenSim (some grids have it, not not vanilla) If they have it, it will
+/// show eventually
+#ifdef OPENSIM
+						else if (LLGridManager::getInstance()->isInOpenSim())
+						{
+							// Do nothing at all.
+						}
+#endif
+// </FS:CR>
 						else
 						{
 							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentLoading"));
