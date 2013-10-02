@@ -2183,7 +2183,7 @@ LLViewerRegion::EOSExportSupport LLViewerRegion::regionSupportsExport() const
 std::string LLViewerRegion::getHGMapServerURL() const
 {
 	std::string url = "";
-	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("mapServerURL"))
+	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("map-server-url"))
 	{
 		url = mSimulatorFeatures["OpenSimExtras"]["map-server-url"].asString();
 	}
