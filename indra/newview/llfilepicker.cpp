@@ -838,7 +838,12 @@ BOOL LLFilePicker::getOpenFile(ELoadFilter filter, bool blocking)
 
 	if(filter == FFLOAD_ALL)	// allow application bundles etc. to be traversed; important for DEV-16869, but generally useful
 	{
-        mPickOptions &= F_NAV_SUPPORT;
+        // <FS:ND> FIRE-11793/BUG-4053/MAINT-3262 Cannot select image to upload to Web profile. This is because anding F_NAV_SUPPORT clears F_FILE. Whereas in fact we want both (OR)
+
+        // mPickOptions &= F_NAV_SUPPORT;
+        mPickOptions |= F_NAV_SUPPORT;
+
+       // </FS:ND>
 	}
 	
 	if (blocking)
