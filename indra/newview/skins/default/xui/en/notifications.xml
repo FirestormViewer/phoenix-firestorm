@@ -8183,8 +8183,9 @@ Please check your network and firewall setup.
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+     ignoretext="Warn me when the viewer can't connect to the voice server"
+     name="okignore"
+     yestext="OK" />
   </notification>
 
   <notification
