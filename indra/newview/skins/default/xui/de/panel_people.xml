@@ -52,7 +52,7 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<dnd_button name="minus_btn" tool_tip="Ausgewählte Gruppe verlassen"/>
 			</panel>
 			<text name="groupcount">
-				Sie gehören zu [COUNT] Gruppen und können [REMAINING] weiteren beitreten.
+				Sie gehören [COUNT] Gruppen an und können [REMAINING] weiteren beitreten.
 			</text>
 		</panel>
 		<panel label="Aktuell" name="recent_panel">

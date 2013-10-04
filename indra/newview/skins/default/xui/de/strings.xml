@@ -130,6 +130,9 @@
 	<string name="create_account_url">
 		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
+	<string name="ViewerDownloadURL">
+		http://secondlife.com/download
+	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
 http://firestormviewer.org/downloads
@@ -478,8 +481,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="SLappAgentRequestFriend">
 		Freundschaftsangebot
 	</string>
-	<string name="SLappAgentRequestFriend">
-		Freundschaftsauflösung
+	<string name="SLappAgentRemoveFriend">
+		Entfernen von Freunden
 	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Schließen (⌘W)
@@ -875,7 +878,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Mehrfach
 	</string>
 	<string name="use_texture">
-		Textur benutzen
+		Textur verwenden
 	</string>
 	<string name="texture_loading">
 		Wird geladen...
@@ -979,18 +982,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ControlYourCamera">
 		Kamerasteuerung übernehmen
 	</string>
-	<string name="JoinAnExperience">
-		Einem Erlebnis beiwohnen
-	</string>
-	<string name="SilentlyManageEstateAccess">
-		Benachrichtigungen über Änderungen am Grundbesitzzugang stummschalten
-	</string>
-	<string name="OverrideYourAnimations">
-		Ihre Avatar-Animationen übersteuern
-	</string>
-	<string name="ScriptReturnObjects">
-		Objekte in deinem Auftrag zurückgeben
-	</string>
 	<string name="NotConnected">
 		Nicht verbunden
 	</string>
@@ -999,6 +990,18 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="TeleportYourAgent">
 		Sie teleportieren
+	</string>
+	<string name="JoinAnExperience">
+		Bei einem Erlebnis mitmachen
+	</string>
+	<string name="SilentlyManageEstateAccess">
+		Beim Verwalten von Grundbesitzzugangslisten Warnhinweise unterdrücken
+	</string>
+	<string name="OverrideYourAnimations">
+		Ihre Standardanimationen ersetzen
+	</string>
+	<string name="ScriptReturnObjects">
+		Objekte in Ihrem Namen zurückgeben
 	</string>
 	<string name="UnknownScriptPermission">
 		(unbekannt)!
@@ -5389,7 +5392,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Keine protokollierten Unterhaltungen verfügbar. Hier erscheint ein Protokolleintrag, wenn Sie eine Person kontaktieren oder von einer Person kontaktiert werden.
 	</string>
 	<string name="loading_chat_logs">
-		Wird geladen...
+		Laden...
 	</string>
 	
 <!-- Firestorm-specific translations -->

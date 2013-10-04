@@ -370,8 +370,8 @@ void LLDrawPoolTerrain::renderFullShader()
 	LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
 	llassert(shader);
 		
-	shader->uniform4fv("object_plane_s", 1, tp0.mV);
-	shader->uniform4fv("object_plane_t", 1, tp1.mV);
+	shader->uniform4fv(LLShaderMgr::OBJECT_PLANE_S, 1, tp0.mV);
+	shader->uniform4fv(LLShaderMgr::OBJECT_PLANE_T, 1, tp1.mV);
 
 	gGL.matrixMode(LLRender::MM_TEXTURE);
 	gGL.loadIdentity();
@@ -880,8 +880,8 @@ void LLDrawPoolTerrain::renderSimple()
 	
 	if (LLGLSLShader::sNoFixedFunction)
 	{
-		sShader->uniform4fv("object_plane_s", 1, tp0.mV);
-		sShader->uniform4fv("object_plane_t", 1, tp1.mV);
+		sShader->uniform4fv(LLShaderMgr::OBJECT_PLANE_S, 1, tp0.mV);
+		sShader->uniform4fv(LLShaderMgr::OBJECT_PLANE_T, 1, tp1.mV);
 	}
 	else
 	{

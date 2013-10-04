@@ -135,6 +135,9 @@
 	<string name="create_account_url">
 		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
+	<string name="ViewerDownloadURL">
+		http://secondlife.com/download.
+	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Ya no puedes acceder a Second Life con el visor que estás utilizando. Visita la siguiente página para descargar un nuevo visor:
 http://firestormviewer.org/downloads
@@ -458,6 +461,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="SLappAgentRequestFriend">
 		Ofrecer amistad
+	</string>
+	<string name="SLappAgentRemoveFriend">
+		Eliminación de amigos
 	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Cerrar (⌘W)
@@ -981,8 +987,20 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="TeleportYourAgent">
 		Teleportarte
 	</string>
+	<string name="JoinAnExperience">
+		Únete a una experiencia
+	</string>
+	<string name="SilentlyManageEstateAccess">
+		Suprimir alertas al gestionar las listas de acceso a un estado
+	</string>
+	<string name="OverrideYourAnimations">
+		Reemplazar tus animaciones predeterminadas
+	</string>
+	<string name="ScriptReturnObjects">
+		Devolver objetos en tu nombre
+	</string>
 	<string name="UnknownScriptPermission">
-		(desconocido)!
+		(desconocido)
 	</string>
 	<string name="SIM_ACCESS_PG">
 		General
@@ -2100,6 +2118,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="ATTACH_BRIDGE">
 		Bridge
+	</string>
+	<string name="ATTACH_NECK">
+		Cuello
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Centro del avatar
 	</string>
 	<string name="CursorPos">
 		Línea [LINE], Columna [COLUMN]
@@ -5361,6 +5385,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		No hay conversaciones guardadas. Después de contactar con un residente o de que alguien contacte contigo, se mostrará aquí una entrada de registro.
+	</string>
+	<string name="loading_chat_logs">
+		Cargando...
 	</string>
 	<string name="IMPrefix">
 		MI:

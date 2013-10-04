@@ -267,6 +267,17 @@ LLFastTimer::DeclareTimer FTM_RENDER_DEFERRED("Deferred Shading");
 static LLFastTimer::DeclareTimer FTM_STATESORT_DRAWABLE("Sort Drawables");
 static LLFastTimer::DeclareTimer FTM_STATESORT_POSTSORT("Post Sort");
 
+static LLStaticHashedString sTint("tint");
+static LLStaticHashedString sAmbiance("ambiance");
+static LLStaticHashedString sAlphaScale("alpha_scale");
+static LLStaticHashedString sNormMat("norm_mat");
+static LLStaticHashedString sOffset("offset");
+static LLStaticHashedString sScreenRes("screenRes");
+static LLStaticHashedString sDelta("delta");
+static LLStaticHashedString sDistFactor("dist_factor");
+static LLStaticHashedString sKern("kern");
+static LLStaticHashedString sKernScale("kern_scale");
+
 //----------------------------------------
 std::string gPoolNames[] = 
 {
@@ -678,6 +689,7 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("CameraMaxCoF");
 	connectRefreshCachedSettingsSafe("CameraDoFResScale");
 	connectRefreshCachedSettingsSafe("RenderAutoHideSurfaceAreaLimit");
+	gSavedSettings.getControl("RenderAutoHideSurfaceAreaLimit")->getCommitSignal()->connect(boost::bind(&LLPipeline::refreshCachedSettings));
 	connectRefreshCachedSettingsSafe("FSRenderVignette");	// <FS:CR> Import Vignette from Exodus
 }
 
@@ -819,7 +831,7 @@ void LLPipeline::resizeScreenTexture()
 		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
 		{
 			releaseScreenBuffers();
-			if (!allocateScreenBuffer(resX,resY))
+		if (!allocateScreenBuffer(resX,resY))
 			{
 #if PROBABLE_FALSE_DISABLES_OF_ALM_HERE
 				//FAILSAFE: screen buffer allocation failed, disable deferred rendering if it's enabled
@@ -1004,7 +1016,7 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 		{
 			screenFormat = GL_RGBA16F_ARB;
 		}
-		
+        
 		if (!mScreen.allocate(resX, resY, screenFormat, FALSE, FALSE, LLTexUnit::TT_RECT_TEXTURE, FALSE, samples)) return false;
 		if (samples > 0)
 		{
@@ -1245,7 +1257,7 @@ void LLPipeline::releaseGLBuffers()
 	mWaterRef.release();
 	mWaterDis.release();
 	mHighlight.release();
-
+	
 	for (U32 i = 0; i < 3; i++)
 	{
 		mGlow[i].release();
@@ -2781,14 +2793,14 @@ void LLPipeline::downsampleDepthBuffer(LLRenderTarget& source, LLRenderTarget& d
 	{
 		shader = &gDownsampleDepthRectProgram;
 		shader->bind();
-		shader->uniform2f("delta", 1.f, 1.f);
+		shader->uniform2f(sDelta, 1.f, 1.f);
 		shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, source.getWidth(), source.getHeight());
 	}
 	else
 	{
 		shader = &gDownsampleDepthProgram;
 		shader->bind();
-		shader->uniform2f("delta", 1.f/source.getWidth(), 1.f/source.getHeight());
+		shader->uniform2f(sDelta, 1.f/source.getWidth(), 1.f/source.getHeight());
 		shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, 1.f, 1.f);
 	}
 
@@ -3163,7 +3175,7 @@ void LLPipeline::markVisible(LLDrawable *drawablep, LLCamera& camera)
 					llassert(vobj); // trying to catch a bad assumption
 					if (vobj) // this test may not be needed, see above
 					{
-						const LLVOAvatar* av = vobj->asAvatar();
+						LLVOAvatar* av = vobj->asAvatar();
 						if (av && av->isImpostor())
 						{
 							return;
@@ -5006,9 +5018,9 @@ void LLPipeline::renderDebug()
 					if (LLGLSLShader::sNoFixedFunction)
 					{					
 						gPathfindingProgram.bind();			
-						gPathfindingProgram.uniform1f("tint", 1.f);
-						gPathfindingProgram.uniform1f("ambiance", 1.f);
-						gPathfindingProgram.uniform1f("alpha_scale", 1.f);
+						gPathfindingProgram.uniform1f(sTint, 1.f);
+						gPathfindingProgram.uniform1f(sAmbiance, 1.f);
+						gPathfindingProgram.uniform1f(sAlphaScale, 1.f);
 					}
 
 					//Requried character physics capsule render parameters
@@ -5025,7 +5037,7 @@ void LLPipeline::renderDebug()
 							llPathingLibInstance->renderSimpleShapeCapsuleID( gGL, id, pos, rot );				
 							gGL.setColorMask(true, false);
 							LLGLEnable blend(GL_BLEND);
-							gPathfindingProgram.uniform1f("alpha_scale", 0.90f);
+							gPathfindingProgram.uniform1f(sAlphaScale, 0.90f);
 							llPathingLibInstance->renderSimpleShapeCapsuleID( gGL, id, pos, rot );
 							gPathfindingProgram.bind();
 						}
@@ -5052,9 +5064,9 @@ void LLPipeline::renderDebug()
 					{					
 						gPathfindingProgram.bind();
 			
-						gPathfindingProgram.uniform1f("tint", 1.f);
-						gPathfindingProgram.uniform1f("ambiance", ambiance);
-						gPathfindingProgram.uniform1f("alpha_scale", 1.f);
+						gPathfindingProgram.uniform1f(sTint, 1.f);
+						gPathfindingProgram.uniform1f(sAmbiance, ambiance);
+						gPathfindingProgram.uniform1f(sAlphaScale, 1.f);
 					}
 
 					if ( !pathfindingConsole->isRenderWorld() )
@@ -5078,7 +5090,7 @@ void LLPipeline::renderDebug()
 						if ( pathfindingConsole->isRenderWorld() )
 						{					
 							LLGLEnable blend(GL_BLEND);
-							gPathfindingProgram.uniform1f("alpha_scale", 0.66f);
+							gPathfindingProgram.uniform1f(sAlphaScale, 0.66f);
 							llPathingLibInstance->renderNavMesh();
 						}
 						else
@@ -5090,8 +5102,8 @@ void LLPipeline::renderDebug()
 						if (LLGLSLShader::sNoFixedFunction)
 						{
 							gPathfindingNoNormalsProgram.bind();
-							gPathfindingNoNormalsProgram.uniform1f("tint", 1.f);
-							gPathfindingNoNormalsProgram.uniform1f("alpha_scale", 1.f);
+							gPathfindingNoNormalsProgram.uniform1f(sTint, 1.f);
+							gPathfindingNoNormalsProgram.uniform1f(sAlphaScale, 1.f);
 							llPathingLibInstance->renderNavMeshEdges();
 							gPathfindingProgram.bind();
 						}
@@ -5131,7 +5143,7 @@ void LLPipeline::renderDebug()
 							gGL.setColorMask(true, false);
 							//render the bookends
 							LLGLEnable blend(GL_BLEND);
-							gPathfindingProgram.uniform1f("alpha_scale", 0.90f);
+							gPathfindingProgram.uniform1f(sAlphaScale, 0.90f);
 							llPathingLibInstance->renderPathBookend( gGL, LLPathingLib::LLPL_START );
 							llPathingLibInstance->renderPathBookend( gGL, LLPathingLib::LLPL_END );
 							gPathfindingProgram.bind();
@@ -5149,7 +5161,7 @@ void LLPipeline::renderDebug()
 						if (LLGLSLShader::sNoFixedFunction)
 						{
 							LLGLEnable blend(GL_BLEND);
-							gPathfindingProgram.uniform1f("alpha_scale", 0.90f);
+							gPathfindingProgram.uniform1f(sAlphaScale, 0.90f);
 							llPathingLibInstance->renderSimpleShapes( gGL, gAgent.getRegion()->getWaterHeight() );
 						}
 						else
@@ -5197,7 +5209,7 @@ void LLPipeline::renderDebug()
 							LLGLEnable blend(GL_BLEND);
 				
 							{
-								gPathfindingProgram.uniform1f("ambiance", ambiance);
+								gPathfindingProgram.uniform1f(sAmbiance, ambiance);
 
 								{ //draw solid overlay
 									LLGLDepthTest depth(GL_TRUE, GL_FALSE, GL_LEQUAL);
@@ -5212,8 +5224,8 @@ void LLPipeline::renderDebug()
 
 								if (pathfindingConsole->isRenderXRay())
 								{
-									gPathfindingProgram.uniform1f("tint", gSavedSettings.getF32("PathfindingXRayTint"));
-									gPathfindingProgram.uniform1f("alpha_scale", gSavedSettings.getF32("PathfindingXRayOpacity"));
+									gPathfindingProgram.uniform1f(sTint, gSavedSettings.getF32("PathfindingXRayTint"));
+									gPathfindingProgram.uniform1f(sAlphaScale, gSavedSettings.getF32("PathfindingXRayOpacity"));
 									LLGLEnable blend(GL_BLEND);
 									LLGLDepthTest depth(GL_TRUE, GL_FALSE, GL_GREATER);
 								
@@ -5221,13 +5233,13 @@ void LLPipeline::renderDebug()
 								
 									if (gSavedSettings.getBOOL("PathfindingXRayWireframe"))
 									{ //draw hidden wireframe as darker and less opaque
-										gPathfindingProgram.uniform1f("ambiance", 1.f);
+										gPathfindingProgram.uniform1f(sAmbiance, 1.f);
 										llPathingLibInstance->renderNavMeshShapesVBO( render_order[i] );				
 									}
 									else
 									{
 										glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );	
-										gPathfindingProgram.uniform1f("ambiance", ambiance);
+										gPathfindingProgram.uniform1f(sAmbiance, ambiance);
 										llPathingLibInstance->renderNavMeshShapesVBO( render_order[i] );				
 										glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 									}
@@ -5235,9 +5247,9 @@ void LLPipeline::renderDebug()
 
 								{ //draw visible wireframe as brighter, thicker and more opaque
 									glPolygonOffset(offset, offset);
-									gPathfindingProgram.uniform1f("ambiance", 1.f);
-									gPathfindingProgram.uniform1f("tint", 1.f);
-									gPathfindingProgram.uniform1f("alpha_scale", 1.f);
+									gPathfindingProgram.uniform1f(sAmbiance, 1.f);
+									gPathfindingProgram.uniform1f(sTint, 1.f);
+									gPathfindingProgram.uniform1f(sAlphaScale, 1.f);
 
 									glLineWidth(gSavedSettings.getF32("PathfindingLineWidth"));
 									LLGLDisable blendOut(GL_BLEND);
@@ -5269,19 +5281,19 @@ void LLPipeline::renderDebug()
 						glLineWidth(2.0f);	
 						LLGLEnable cull(GL_CULL_FACE);
 																		
-						gPathfindingProgram.uniform1f("tint", gSavedSettings.getF32("PathfindingXRayTint"));
-						gPathfindingProgram.uniform1f("alpha_scale", gSavedSettings.getF32("PathfindingXRayOpacity"));
+						gPathfindingProgram.uniform1f(sTint, gSavedSettings.getF32("PathfindingXRayTint"));
+						gPathfindingProgram.uniform1f(sAlphaScale, gSavedSettings.getF32("PathfindingXRayOpacity"));
 								
 						if (gSavedSettings.getBOOL("PathfindingXRayWireframe"))
 						{ //draw hidden wireframe as darker and less opaque
 							glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );	
-							gPathfindingProgram.uniform1f("ambiance", 1.f);
+							gPathfindingProgram.uniform1f(sAmbiance, 1.f);
 							llPathingLibInstance->renderNavMesh();
 							glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );	
 						}	
 						else
 						{
-							gPathfindingProgram.uniform1f("ambiance", ambiance);
+							gPathfindingProgram.uniform1f(sAmbiance, ambiance);
 							llPathingLibInstance->renderNavMesh();
 						}
 
@@ -5289,8 +5301,8 @@ void LLPipeline::renderDebug()
 						if (LLGLSLShader::sNoFixedFunction)
 						{
 							gPathfindingNoNormalsProgram.bind();
-							gPathfindingNoNormalsProgram.uniform1f("tint", gSavedSettings.getF32("PathfindingXRayTint"));
-							gPathfindingNoNormalsProgram.uniform1f("alpha_scale", gSavedSettings.getF32("PathfindingXRayOpacity"));
+							gPathfindingNoNormalsProgram.uniform1f(sTint, gSavedSettings.getF32("PathfindingXRayTint"));
+							gPathfindingNoNormalsProgram.uniform1f(sAlphaScale, gSavedSettings.getF32("PathfindingXRayOpacity"));
 							llPathingLibInstance->renderNavMeshEdges();
 							gPathfindingProgram.bind();
 						}
@@ -5486,7 +5498,7 @@ void LLPipeline::renderDebug()
 			if (i > 3)
 			{ //render shadow frusta as volumes
 				if (mShadowFrustPoints[i-4].empty())
-			{
+				{
 					continue;
 				}
 
@@ -6399,13 +6411,6 @@ void LLPipeline::setupHWLights(LLDrawPool* pool)
 
 			F32 x = (3.f * (1.f + light->getLightFalloff())); // why this magic?  probably trying to match a historic behavior.
 			float linatten = x / (light_radius); // % of brightness at radius
-
-			if (LLPipeline::sRenderDeferred)
-			{
-				/*light_color.mV[0] = powf(light_color.mV[0], 2.2f);
-				light_color.mV[1] = powf(light_color.mV[1], 2.2f);
-				light_color.mV[2] = powf(light_color.mV[2], 2.2f);*/
-			}
 
 			mHWLightColors[cur_light] = light_color;
 			LLLightState* light_state = gGL.getLight(cur_light);
@@ -7805,15 +7810,11 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 				else
 				{
 					//focus on alt-zoom target
-					
-					// <FS:ND> Guard against agent not having a valid region set.
-
-					// focus_point = LLVector3(gAgentCamera.getFocusGlobal()-gAgent.getRegion()->getOriginGlobal());
-
-					if( gAgent.getRegion() )
-						focus_point = LLVector3(gAgentCamera.getFocusGlobal()-gAgent.getRegion()->getOriginGlobal());
-
-					// </FS:ND>
+					LLViewerRegion* region = gAgent.getRegion();
+					if (region)
+					{
+						focus_point = LLVector3(gAgentCamera.getFocusGlobal()-region->getOriginGlobal());
+					}
 				}
 			}
 
@@ -8437,10 +8438,10 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, U32 light_index, U32 n
 	shader.uniform1f(LLShaderMgr::DEFERRED_NORM_CUTOFF, RenderEdgeNormCutoff);
 	
 
-	if (shader.getUniformLocation("norm_mat") >= 0)
+	if (shader.getUniformLocation(LLShaderMgr::DEFERRED_NORM_MATRIX) >= 0)
 	{
 		glh::matrix4f norm_mat = glh_get_current_modelview().inverse().transpose();
-		shader.uniformMatrix4fv("norm_mat", 1, FALSE, norm_mat.m);
+		shader.uniformMatrix4fv(LLShaderMgr::DEFERRED_NORM_MATRIX, 1, FALSE, norm_mat.m);
 	}
 }
 
@@ -8562,8 +8563,8 @@ void LLPipeline::renderDeferredLighting()
 					}
 				}
 
-				gDeferredSunProgram.uniform3fv("offset", slice, offset);
-				gDeferredSunProgram.uniform2f("screenRes", mDeferredLight.getWidth(), mDeferredLight.getHeight());
+				gDeferredSunProgram.uniform3fv(sOffset, slice, offset);
+				gDeferredSunProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, mDeferredLight.getWidth(), mDeferredLight.getHeight());
 				
 				{
 					LLGLDisable blend(GL_BLEND);
@@ -8607,10 +8608,10 @@ void LLPipeline::renderDeferredLighting()
 				x += 1.f;
 			}
 
-			gDeferredBlurLightProgram.uniform2f("delta", 1.f, 0.f);
-			gDeferredBlurLightProgram.uniform1f("dist_factor", dist_factor);
-			gDeferredBlurLightProgram.uniform3fv("kern", kern_length, gauss[0].mV);
-			gDeferredBlurLightProgram.uniform1f("kern_scale", blur_size * (kern_length/2.f - 0.5f));
+			gDeferredBlurLightProgram.uniform2f(sDelta, 1.f, 0.f);
+			gDeferredBlurLightProgram.uniform1f(sDistFactor, dist_factor);
+			gDeferredBlurLightProgram.uniform3fv(sKern, kern_length, gauss[0].mV);
+			gDeferredBlurLightProgram.uniform1f(sKernScale, blur_size * (kern_length/2.f - 0.5f));
 		
 			{
 				LLGLDisable blend(GL_BLEND);
@@ -8627,7 +8628,7 @@ void LLPipeline::renderDeferredLighting()
 			mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
 			mDeferredLight.bindTarget();
 
-			gDeferredBlurLightProgram.uniform2f("delta", 0.f, 1.f);
+			gDeferredBlurLightProgram.uniform2f(sDelta, 0.f, 1.f);
 
 			{
 				LLGLDisable blend(GL_BLEND);
@@ -9171,8 +9172,8 @@ void LLPipeline::renderDeferredLightingToRT(LLRenderTarget* target)
 					}
 				}
 
-				gDeferredSunProgram.uniform3fv("offset", slice, offset);
-				gDeferredSunProgram.uniform2f("screenRes", mDeferredLight.getWidth(), mDeferredLight.getHeight());
+				gDeferredSunProgram.uniform3fv(LLShaderMgr::DEFERRED_SHADOW_OFFSET, slice, offset);
+				gDeferredSunProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, mDeferredLight.getWidth(), mDeferredLight.getHeight());
 				
 				{
 					LLGLDisable blend(GL_BLEND);
@@ -10489,14 +10490,14 @@ BOOL LLPipeline::getVisiblePointCloud(LLCamera& camera, LLVector3& min, LLVector
 			const LLPlane& cp = camera.getAgentPlane(j);
 			F32 dist = cp.dist(pp[i]);
 			if (dist > 0.05f) //point is above some plane, not contained
-					{
+			{
 				found = false;
 				break;
-						}
-					}
+			}
+		}
 
-					if (found)
-					{
+		if (found)
+		{
 			fp.push_back(pp[i]);
 		}
 	}
@@ -11398,11 +11399,11 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 	assertInitialized();
 
-	bool muted = avatar->isVisuallyMuted();		
+	bool visually_muted = avatar->isVisuallyMuted();		
 
 	pushRenderTypeMask();
 	
-	if (muted)
+	if (visually_muted)
 	{
 		andRenderTypeMask(LLPipeline::RENDER_TYPE_AVATAR, END_RENDER_TYPES);
 	}
@@ -11558,6 +11559,13 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 		avatar->mImpostor.bindTarget();
 	}
 
+	F32 old_alpha = LLDrawPoolAvatar::sMinimumAlpha;
+
+	if (visually_muted)
+	{ //disable alpha masking for muted avatars (get whole skin silhouette)
+		LLDrawPoolAvatar::sMinimumAlpha = 0.f;
+	}
+
 	if (LLPipeline::sRenderDeferred)
 	{
 		avatar->mImpostor.clear();
@@ -11602,7 +11610,9 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 		sImpostorRenderAlphaDepthPass = false;
 	}
-	
+
+	LLDrawPoolAvatar::sMinimumAlpha = old_alpha;
+
 	{ //create alpha mask based on depth buffer (grey out if muted)
 		LLFastTimer t(FTM_IMPOSTOR_BACKGROUND);
 
@@ -11614,7 +11624,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 		LLGLDisable blend(GL_BLEND);
 
-		if (muted)
+		if (visually_muted)
 		{
 			gGL.setColorMask(true, true);
 		}
@@ -11639,10 +11649,20 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 
 		if (LLGLSLShader::sNoFixedFunction)
 		{
-			gUIProgram.bind();
+			gDebugProgram.bind();
 		}
 
-		gGL.color4ub(64,64,64,255);
+
+		if (LLMuteList::getInstance()->isMuted(avatar->getID()))
+		{ //grey muted avatar
+			gGL.diffuseColor4ub(64,64,64,255);
+		}
+		else
+		{	// Visually muted avatar
+			gGL.diffuseColor4fv( avatar->getMutedAVColor().mV );
+		}
+
+		{
 		gGL.begin(LLRender::QUADS);
 		gGL.vertex3f(-1, -1, clip_plane);
 		gGL.vertex3f(1, -1, clip_plane);
@@ -11650,10 +11670,11 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar)
 		gGL.vertex3f(-1, 1, clip_plane);
 		gGL.end();
 		gGL.flush();
+		}
 
 		if (LLGLSLShader::sNoFixedFunction)
 		{
-			gUIProgram.unbind();
+			gDebugProgram.unbind();
 		}
 
 		gGL.popMatrix();
