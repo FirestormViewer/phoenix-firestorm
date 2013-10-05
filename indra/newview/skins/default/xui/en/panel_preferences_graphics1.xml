@@ -1000,7 +1000,7 @@
         <check_box
          control_name="ImagePipelineUseHTTP"
          height="16"
-         label="Use HTTP for receiving textures"
+         label="Use HTTP for recieving textures"
          tool_tip="Set this to load textures using the HTTP protocol - unset it if you are having rendering problems and wish to the legacy UDP protocol."
          layout="topleft"
          left_delta="5"
@@ -1041,6 +1041,10 @@
              value="3"/>
             <combo_box.item
              label="Low quality"
+             name="4"
+             value="4"/>
+            <combo_box.item
+             label="No textures"
              name="5"
              value="5"/>
         </combo_box>
