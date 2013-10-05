@@ -782,7 +782,7 @@
        follows="left|top"
        height="23"
        image_overlay="Refresh_Off"
-       tool_tip="Reload default graphcis settings."
+       tool_tip="Reload default graphics settings."
        layout="topleft"
        left="460"
        name="Defaults"
