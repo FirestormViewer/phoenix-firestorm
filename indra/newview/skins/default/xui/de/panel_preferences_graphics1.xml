@@ -140,7 +140,8 @@
 		<combo_box name="TextureDetail">
 			<combo_box.item label="Normale Qualität" name="0"/>
 			<combo_box.item label="Mittlere Qualität" name="3"/>
-			<combo_box.item label="Geringe Qualität" name="5"/>
+			<combo_box.item label="Geringe Qualität" name="4"/>
+			<combo_box.item label="Keine Texturen" name="5"/>
 		</combo_box>
 		<text name="Alpha Mask Rendering">
 			Darstellung von Alpha-Masken:
