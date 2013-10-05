@@ -1099,7 +1099,7 @@ void FSFloaterObjectExport::onClickExport()
 	if (!exportSelection())
 	{
 		LLNotificationsUtil::add("ExportFailed");
-		closeFloater();
+		//closeFloater();
 	}
 }
 
