@@ -1235,7 +1235,7 @@ std::string LLUrlEntryIcon::getIcon(const std::string &url)
 //
 LLUrlEntryJira::LLUrlEntryJira()
 {
-	mPattern = boost::regex("((?:ARVD|BUG|CHOP|CHUIBUG|DOC|DN|ECC|EXP|FIRE|LEAP|LLSD|MAINT|MATBUG|OPEN|PATHBUG|PHOE|PLAT|PYO|SCR|SEC|SH|SINV|SOCIAL|STORM|SUP|SVC|SPOT|VWR|WEB)-\\d+)",
+	mPattern = boost::regex("((?:ARVD|BUG|CHOP|CHUIBUG|DOC|DN|ECC|EXP|FIRE|LEAP|LLSD|MATBUG|MISC|OPEN|PATHBUG|PLAT|PYO|SCR|SH|SINV|SLS|SOCIAL|STORM|SVC|SPOT|SUN|SUP|TPV|VWR|WEB)-\\d+)",
 				// <FS:Ansariel> FIRE-917: Match case to reduce number of false positives
 				//boost::regex::perl|boost::regex::icase);
 				boost::regex::perl);
@@ -1255,8 +1255,7 @@ std::string LLUrlEntryJira::getTooltip(const std::string &string) const
 
 std::string LLUrlEntryJira::getUrl(const std::string &string) const
 {
-	if (string.find("PHOE") != std::string::npos ||
-		string.find("FIRE") != std::string::npos ||
+	if (string.find("FIRE") != std::string::npos ||
 		string.find("SLS") != std::string::npos ||
 		string.find("SUP") != std::string::npos )
 	{
