@@ -38,8 +38,6 @@
 #include "lluicolortable.h"
 #include "message.h"
 
-#include <boost/algorithm/string/find.hpp> //for boost::ifind_first -KC
-
 #define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife):///app))" // <AW: hop:// protocol>
 
 // Utility functions
@@ -1257,12 +1255,10 @@ std::string LLUrlEntryJira::getTooltip(const std::string &string) const
 
 std::string LLUrlEntryJira::getUrl(const std::string &string) const
 {
-	if (boost::ifind_first(string, "PHOE") ||
-		boost::ifind_first(string, "FIRE") ||
-		boost::ifind_first(string, "SLS") ||
-		//<FS:TS> FIRE-8319: SUP JIRAs link to secondlife.com
-		boost::ifind_first(string, "SUP"))
-		//</FS:TS> FIRE-8319
+	if (string.find("PHOE") != std::string::npos ||
+		string.find("FIRE") != std::string::npos ||
+		string.find("SLS") != std::string::npos ||
+		string.find("SUP") != std::string::npos )
 	{
 		return llformat("http://jira.phoenixviewer.com/browse/%s", string.c_str());
 	}
