@@ -966,6 +966,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TeleportYourAgent">
 		Teleportować Cię
 	</string>
+	<string name="ManageEstateSilently">
+		Zarządzać Twoimi majątkami bez powiadomień
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		Zmieniać Twoje domyślne animacje
+	</string>
 	<string name="JoinAnExperience">
 		Rozpocznij przygodę
 	</string>

@@ -87,7 +87,7 @@
 				<radio_item label="Mało" name="0"/>
 				<radio_item label="Dużo" name="2"/>
 			</radio_group>
-			<button label="Resetuj" name="Defaults"/>
+			<button tool_tip="Zresetuj wartości ustawień graficznych." name="Defaults"/>
 		</panel>
 		<panel label="Ustawienia sprzętowe" name="Hardware Settings">
 			<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani"/>
@@ -114,20 +114,21 @@
 			<text name="Texture Rendering">
 				Rendering tekstur:
 			</text>
-			<check_box label="Ładuj tekstury przez HTTP" tool_tip="Zaznacz tą opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP"/>
+			<check_box label="Pobieraj tekstury przez HTTP" tool_tip="Zaznacz tą opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP"/>
 			<text name="TextureDetailLabel">
-				Detale tekstur:
+				Maksymalny poziom jakości tekstur:
 			</text>
 			<combo_box name="TextureDetail">
 				<combo_box.item label="Normalna jakość" name="0"/>
-				<combo_box.item label="Niska jakość" name="3"/>
+				<combo_box.item label="Średnia jakość" name="3"/>
+				<combo_box.item label="Niska jakość" name="4"/>
 				<combo_box.item label="Bez tekstur" name="5"/>
 			</combo_box>
 			<text name="Alpha Mask Rendering">
 				Maski przezroczystości (alpha):
 			</text>
-			<check_box label="Renderuj maski przezroczystości gdy 'zaawansowane oświetlenie' jest WYŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie nie są zaznaczone" name="RenderAutoMaskAlphaNonDeferred"/>
-			<check_box label="Renderuj maski przezroczystości gdy 'zaawansowane oświetlenie' jest WŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie SĄ zaznaczone" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="Renderuj maski przezroczystości gdy 'zaawansowane oświetlenie' jest WYŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy zaawansowane oświetlenie nie jest włączone" name="RenderAutoMaskAlphaNonDeferred"/>
+			<check_box label="Renderuj maski przezroczystości gdy 'zaawansowane oświetlenie' jest WŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy zaawansowane oświetlenie JEST włączone" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Inne opcje wyświetlania:
 			</text>
