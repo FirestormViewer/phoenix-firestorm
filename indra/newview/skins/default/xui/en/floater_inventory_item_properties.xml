@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="350"
+ height="369"
  layout="topleft"
  name="item properties"
  help_topic="item_properties"
@@ -212,6 +212,14 @@
      layout="topleft"
      left_delta="0"
      name="CheckOwnerTransfer"
+     top_pad="5"
+     width="106" />
+    <check_box
+     height="16"
+     label="Export"
+     layout="topleft"
+     left_delta="0"
+     name="CheckOwnerExport"
      top_pad="5"
      width="106" />
     <text

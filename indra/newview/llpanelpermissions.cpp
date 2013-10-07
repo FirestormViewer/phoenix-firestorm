@@ -63,6 +63,7 @@
 #include "roles_constants.h"
 #include "llgroupactions.h"
 #include "lltrans.h"
+#include "llviewernetwork.h"	// <FS:CR> For OpenSim export perms visibility
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "llslurl.h"
 #include "rlvhandler.h"
@@ -155,6 +156,8 @@ BOOL LLPanelPermissions::postBuild()
 
 	childSetCommitCallback("checkbox allow everyone copy",LLPanelPermissions::onCommitEveryoneCopy,this);
 	
+	childSetCommitCallback("checkbox allow export", LLPanelPermissions::onCommitExport, this);	// <FS:CR> OpenSim export permissions
+	
 	getChild<LLUICtrl>("checkbox for sale")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitForSale, this));
 
 	getChild<LLUICtrl>("sale type")->setCommitCallback( boost::bind(&LLPanelPermissions::onCommitSaleInfo, this));
@@ -227,6 +230,12 @@ void LLPanelPermissions::disableAll()
 	getChildView("checkbox allow everyone move")->setEnabled(FALSE);
 	getChild<LLUICtrl>("checkbox allow everyone copy")->setValue(FALSE);
 	getChildView("checkbox allow everyone copy")->setEnabled(FALSE);
+	
+	// <FS:CR> OpenSim export permissions
+	getChild<LLUICtrl>("checkbox allow export")->setVisible(!LLGridManager::getInstance()->isInSecondLife());
+	getChild<LLUICtrl>("checkbox allow export")->setValue(FALSE);
+	getChildView("checkbox allow export")->setEnabled(FALSE);
+	// </FS:CR>
 
 	//Next owner can:
 	getChildView("Next owner can:")->setEnabled(FALSE);
@@ -701,6 +710,8 @@ void LLPanelPermissions::refresh()
 		if (objectp->permModify()) 		flag_mask |= PERM_MODIFY;
 		if (objectp->permCopy()) 		flag_mask |= PERM_COPY;
 		if (objectp->permTransfer()) 	flag_mask |= PERM_TRANSFER;
+		
+		//if (objectp->permExport())		flag_mask |= PERM_EXPORT;	// <FS:CR> OpenSim export permissions
 
 		getChild<LLUICtrl>("F:")->setValue("F:" + mask_to_string(flag_mask));
 		getChildView("F:")->setVisible(								TRUE);
@@ -747,6 +758,8 @@ void LLPanelPermissions::refresh()
 		getChildView("checkbox allow everyone move")->setEnabled(FALSE);
 		getChildView("checkbox allow everyone copy")->setEnabled(FALSE);
 	}
+	
+	getChildView("checkbox allow export")->setEnabled(gAgentID == mCreatorID);	// <FS:CR> OpenSim export permissions
 
 	//Do not update and clear sale info if changes are pending
 	if (update_sale_info)
@@ -832,6 +845,23 @@ void LLPanelPermissions::refresh()
 		{
 			getChild<LLUICtrl>("checkbox allow everyone copy")->setValue(TRUE);
 			getChild<LLUICtrl>("checkbox allow everyone copy")->setTentative(	TRUE);
+		}
+		
+		// <FS:CR> OpenSim export permissions
+		if (everyone_mask_on & PERM_EXPORT)
+		{
+			getChild<LLUICtrl>("checkbox allow export")->setValue(TRUE);
+			getChild<LLUICtrl>("checkbox allow export")->setTentative( 	FALSE);
+		}
+		else if (everyone_mask_off & PERM_COPY)
+		{
+			getChild<LLUICtrl>("checkbox allow export")->setValue(FALSE);
+			getChild<LLUICtrl>("checkbox allow export")->setTentative(	FALSE);
+		}
+		else
+		{
+			getChild<LLUICtrl>("checkbox allow export")->setValue(TRUE);
+			getChild<LLUICtrl>("checkbox allow export")->setTentative(	TRUE);
 		}
 	}
 
@@ -1077,6 +1107,14 @@ void LLPanelPermissions::onCommitNextOwnerTransfer(LLUICtrl* ctrl, void* data)
 	//llinfos << "LLPanelPermissions::onCommitNextOwnerTransfer" << llendl;
 	onCommitPerm(ctrl, data, PERM_NEXT_OWNER, PERM_TRANSFER);
 }
+
+// <FS:CR> OpenSim export permissions
+// static
+void LLPanelPermissions::onCommitExport(LLUICtrl* ctrl, void* data)
+{
+	onCommitPerm(ctrl, data, PERM_EVERYONE, PERM_EXPORT);
+}
+// </FS:CR>
 
 // static
 void LLPanelPermissions::onCommitName(LLUICtrl*, void* data)

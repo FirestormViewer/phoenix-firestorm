@@ -1826,6 +1826,12 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("ViewerStartAuction");
 	capabilityNames.append("ViewerStats");
 	
+// <FS:CR> OpenSim
+#ifdef OPENSIM
+	capabilityNames.append("OpenSimExtras");
+#endif // OPENSIM
+// </FS:CR>
+	
 	// Please add new capabilities alphabetically to reduce
 	// merge conflicts.
 }
