@@ -41,6 +41,7 @@ private:
 	BOOL tick();
 	void checkMetadata();
 	void sendStreamTitleToChat(const std::string& Title);
+	LLSD mMetadata;
 };
 
 #endif // STREAMTITLEDISPLAY_H
