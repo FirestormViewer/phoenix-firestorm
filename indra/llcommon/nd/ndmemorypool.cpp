@@ -80,7 +80,7 @@ namespace OSAllocator
 		if( aSize >= MIN_ALLOC_SIZE_FOR_LOG_STACK && aSize <= MAX_ALLOC_SIZE_FOR_LOG_STACK )
 			pEBP = nd::debugging::getEBP();
 #endif
-		nd::allocstats::logAllocation( aSize, pEBP );
+		nd::mallocstats::logAllocation( aSize, pEBP );
 
 		aSize += sizeof(uintptr_t)*2;
 		aSize += aAlign;
@@ -411,7 +411,7 @@ namespace nd
 					aOut << " " << i << "/" << dPercentages[i];
 			}
 			aOut << std::endl;
-			nd::allocstats::dumpStats( aOut );
+			nd::mallocstats::dumpStats( aOut );
 		}
 
 		void tryShrink( )
@@ -441,7 +441,7 @@ namespace nd
 			if( aSize >= MIN_ALLOC_SIZE_FOR_LOG_STACK && aSize <= MAX_ALLOC_SIZE_FOR_LOG_STACK )
 				pEBP = nd::debugging::getEBP();
 #endif
-			nd::allocstats::logAllocation( aSize, pEBP );
+			nd::mallocstats::logAllocation( aSize, pEBP );
 
 			return OSAllocator::ndMalloc( aSize, aAlign );
 		}
@@ -454,7 +454,7 @@ namespace nd
 			if( aSize >= MIN_ALLOC_SIZE_FOR_LOG_STACK && aSize <= MAX_ALLOC_SIZE_FOR_LOG_STACK )
 				pEBP = nd::debugging::getEBP();
 #endif
-			nd::allocstats::logAllocation( aSize, pEBP );
+			nd::mallocstats::logAllocation( aSize, pEBP );
 
 			return OSAllocator::ndRealloc( ptr, aSize, aAlign );
 		}

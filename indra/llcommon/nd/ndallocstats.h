@@ -1,5 +1,5 @@
-#ifndef NDMALLOCSTATS_H
-#define NDMALLOCSTATS_H
+#ifndef NDALLOCSTATS_H
+#define NDALLOCSTATS_H
 
 /**
  * $LicenseInfo:firstyear=2013&license=fsviewerlgpl$
@@ -26,20 +26,27 @@
  */
 
 #include <ostream>
-#include "ndstackwalk.h"
-#include "ndcallstack.h"
 
 namespace nd
 {
-	namespace mallocstats
+	namespace allocstats
 	{
+		class provider
+		{
+		public:
+			virtual ~provider()
+			{ }
+			virtual void dumpStats( std::ostream &aOut ) = 0;
+		};
+
 		void startUp();
 		void tearDown();
+		
+		void registerProvider( provider * );
+		void unregisterProvider( provider * );
 
-		void logAllocation( size_t aSize, nd::debugging::sEBP * aEBP );
-		void dumpStats( std::ostream &aOut );
+		void dumpStats( std::ostream &aOut );;
 
-		bool isEnabled();
 	}
 }
 

@@ -101,6 +101,7 @@ extern int errno;
 #endif
 
 #include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+#include "nd/ndallocstats.h" // <FS:ND/> Allocation stats.
 
 static const S32 CPUINFO_BUFFER_SIZE = 16383;
 LLCPUInfo gSysCPU;
@@ -1038,7 +1039,7 @@ void LLMemoryInfo::stream(std::ostream& s) const
 	}
 
 	// <FS:ND> tcmalloc replacement
-	nd::memorypool::dumpStats( s );
+	nd::allocstats::dumpStats( s );
 	// </FS:ND>
 }
 

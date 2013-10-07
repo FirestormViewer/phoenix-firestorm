@@ -257,6 +257,7 @@
 
 #include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 #include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "nd/ndallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "fsradar.h"
 
 
@@ -790,6 +791,7 @@ bool LLAppViewer::init()
 {	
 	nd::memorypool::startUp(); // <FS:ND/> tcmalloc replacement
 	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
+	nd::mallocstats::startUp(); // <FS:ND/> start collecting alloc stats
 
 	//
 	// Start of the application
@@ -1820,6 +1822,7 @@ bool LLAppViewer::cleanup()
 {
 	// <FS:ND> stop collection stats
 	nd::allocstats::tearDown();
+	nd::mallocstats::tearDown();
 	// </FS:ND>
 
 	//ditch LLVOAvatarSelf instance

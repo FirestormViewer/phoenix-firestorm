@@ -1,6 +1,3 @@
-#ifndef NDMALLOCSTATS_H
-#define NDMALLOCSTATS_H
-
 /**
  * $LicenseInfo:firstyear=2013&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -25,22 +22,42 @@
  * $/LicenseInfo$
  */
 
-#include <ostream>
-#include "ndstackwalk.h"
-#include "ndcallstack.h"
+#include "ndallocstats.h"
+#include "ndmemorypool.h"
+
+#include <set>
 
 namespace nd
 {
-	namespace mallocstats
+	namespace allocstats
 	{
-		void startUp();
-		void tearDown();
+		std::set< provider * > s_stProvider;
+		
+		void startUp()
+		{
+		}
 
-		void logAllocation( size_t aSize, nd::debugging::sEBP * aEBP );
-		void dumpStats( std::ostream &aOut );
+		void tearDown()
+		{
+		}
 
-		bool isEnabled();
+		void registerProvider( provider *aProvider )
+		{
+			s_stProvider.insert( aProvider );
+		}
+
+		void unregisterProvider( provider *aProvider )
+		{
+			s_stProvider.erase( aProvider );
+		}
+
+		void dumpStats( std::ostream &aOut )
+		{
+			nd::memorypool::dumpStats( aOut );
+			for( std::set< provider * >::iterator itr = s_stProvider.begin(); itr != s_stProvider.end(); ++itr )
+				(*itr)->dumpStats( aOut );
+		}
 	}
 }
 
-#endif
+
