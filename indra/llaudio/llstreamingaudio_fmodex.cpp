@@ -75,10 +75,7 @@ LLStreamingAudio_FMODEX::LLStreamingAudio_FMODEX(FMOD::System *system) :
 	mSystem(system),
 	mCurrentInternetStreamp(NULL),
 	mFMODInternetStreamChannelp(NULL),
-	mGain(1.0f),
-// <FS:CR> Streamtitle display
-	mMetadata(NULL)
-// </FS:CR> Streamtitle display
+	mGain(1.0f)
 {
 	// Number of milliseconds of audio to buffer for the audio card.
 	// Must be larger than the usual Second Life frame stutter time.
