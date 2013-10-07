@@ -368,6 +368,8 @@ BOOL enable_detach(const LLSD& = LLSD());
 void menu_toggle_attached_lights(void* user_data);
 void menu_toggle_attached_particles(void* user_data);
 
+void avatar_tex_refresh();	// <FS:CR> FIRE-11800
+
 class LLMenuParcelObserver : public LLParcelObserver
 {
 public:
@@ -2902,22 +2904,27 @@ class LLObjectTexRefresh : public view_listener_t
     }
 };
 
+void avatar_tex_refresh()
+{
+	LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+	if(avatar)
+	{
+		// I bet this can be done more elegantly, but this is just straightforward
+		destroy_texture(avatar->getTE(TEX_HEAD_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_UPPER_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_LOWER_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_EYES_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_SKIRT_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_HAIR_BAKED)->getID());
+		LLAvatarPropertiesProcessor::getInstance()->sendAvatarTexturesRequest(avatar->getID());
+	}
+}
+
 class LLAvatarTexRefresh : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-		LLVOAvatar* avatar=find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-		if(avatar)
-		{
-			// I bet this can be done more elegantly, but this is just straightforward
-			destroy_texture(avatar->getTE(TEX_HEAD_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_UPPER_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_LOWER_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_EYES_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_SKIRT_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_HAIR_BAKED)->getID());
-			LLAvatarPropertiesProcessor::getInstance()->sendAvatarTexturesRequest(avatar->getID());
-		}
+		avatar_tex_refresh();
 
         return true;
     }
@@ -9418,6 +9425,7 @@ void handle_rebake_textures(void*)
 	if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
 	{
 		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+		avatar_tex_refresh();	// <FS:CR> FIRE-11800 - Refresh the textures too
 	}
 }
 
