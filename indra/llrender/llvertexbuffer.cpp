@@ -297,9 +297,7 @@ void LLVBOPool::release(U32 name, volatile U8* buffer, U32 size)
 	llassert(vbo_block_size(size) == size);
 
 	deleteBuffer(name);
-	
-	if ( LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
-		ll_aligned_free((U8*) buffer);
+	ll_aligned_free((U8*) buffer);
 
 	if (mType == GL_ARRAY_BUFFER_ARB)
 	{
