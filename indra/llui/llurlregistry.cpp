@@ -162,11 +162,11 @@ static bool stringHasUrl(const std::string &text)
 static bool stringHasJira(const std::string &text)
 {
 	// same as above, but for jiras
+	// <FS:CR> Please make sure to sync these with the items in LLUrlEntryJira::LLUrlEntryJira() if you make a change
 	return (text.find("ARVD") != std::string::npos ||
 			text.find("BUG") != std::string::npos ||
 			text.find("CHOP") != std::string::npos ||
 			text.find("CHUIBUG") != std::string::npos ||
-			text.find("CTS") != std::string::npos ||
 			text.find("DOC") != std::string::npos ||
 			text.find("DN") != std::string::npos ||
 			text.find("ECC") != std::string::npos ||
@@ -184,9 +184,7 @@ static bool stringHasJira(const std::string &text)
 			text.find("SH") != std::string::npos ||
 			text.find("SINV") != std::string::npos ||
 			text.find("SLS") != std::string::npos ||
-			text.find("SNOW") != std::string::npos ||
 			text.find("SOCIAL") != std::string::npos ||
-			text.find("SPOT") != std::string::npos ||
 			text.find("STORM") != std::string::npos ||
 			text.find("SUN") != std::string::npos ||
 			text.find("SUP") != std::string::npos ||
