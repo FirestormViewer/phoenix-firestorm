@@ -248,6 +248,7 @@
 				</text>
 				<check_box label="Bewegen" name="checkbox allow everyone move"/>
 				<check_box label="Kopieren" name="checkbox allow everyone copy"/>
+				<check_box label="Exportieren" name="checkbox allow export"/>
 				<text name="Next owner can:">
 					Nächster Eigentümer:
 				</text>
