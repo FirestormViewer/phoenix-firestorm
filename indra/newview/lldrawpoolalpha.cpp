@@ -113,7 +113,8 @@ void LLDrawPoolAlpha::beginPostDeferredPass(S32 pass)
 			fullbright_shader = &gDeferredFullbrightProgram;
 		}
 		
-		F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		//F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
 
 		fullbright_shader->bind();
 		fullbright_shader->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 2.2f); 

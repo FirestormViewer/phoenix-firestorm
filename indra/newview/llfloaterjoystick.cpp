@@ -80,7 +80,9 @@ void LLFloaterJoystick::draw()
 BOOL LLFloaterJoystick::postBuild()
 {		
 	center();
-	F32 range = gSavedSettings.getBOOL("Cursor3D") ? 128.f : 2.f;
+	// <FS:CR> Micro Save on calls to gSavedSettings
+	//F32 range = gSavedSettings.getBOOL("Cursor3D") ? 128.f : 2.f;
+	F32 range = m3DCursor ? 128.f : 2.f;
 
 	for (U32 i = 0; i < 6; i++)
 	{
