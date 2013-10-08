@@ -1826,12 +1826,6 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("ViewerStartAuction");
 	capabilityNames.append("ViewerStats");
 	
-// <FS:CR> OpenSim
-#ifdef OPENSIM
-	capabilityNames.append("OpenSimExtras");
-#endif // OPENSIM
-// </FS:CR>
-	
 	// Please add new capabilities alphabetically to reduce
 	// merge conflicts.
 }
@@ -2170,51 +2164,3 @@ U32 LLViewerRegion::getMaxMaterialsPerTransaction() const
 	}
 	return max_entries;
 }
-
-
-// <FS:CR> OpenSim Extras support
-LLViewerRegion::EOSExportSupport LLViewerRegion::regionSupportsExport() const
-{
-#ifndef OPENSIM
-	return EXPORT_UNDEFINED;	// Second Life regions never support export.
-}
-#else // OPENSIM
-	EOSExportSupport export_support = EXPORT_UNDEFINED;
-	if ((mSimulatorFeatures.has("OpenSimExtras"))
-		&& (mSimulatorFeatures["OpenSimExtras"].has("ExportSupported")))
-	{
-		if (mSimulatorFeatures["OpenSimExtras"]["ExportSupported"].asBoolean())
-		{
-			export_support = EXPORT_ALLOWED;
-		}
-		else
-		{
-			export_support = EXPORT_DENIED;
-		}
-	}
-	return export_support;
-}
-
-// HG Maps
-std::string LLViewerRegion::getHGMapServerURL() const
-{
-	std::string url = "";
-	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("map-server-url"))
-	{
-		url = mSimulatorFeatures["OpenSimExtras"]["map-server-url"].asString();
-	}
-	return url;
-}
-
-// OS Search URL
-std::string LLViewerRegion::getSearchServerURL() const
-{
-	std::string url = "";
-	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("search-server-url"))
-	{
-		url = mSimulatorFeatures["OpenSimExtras"]["search-server-url"].asString();
-	}
-	return url;
-}
-#endif // OPENSIM
-// </FS:CR>

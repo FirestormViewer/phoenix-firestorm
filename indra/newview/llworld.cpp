@@ -189,10 +189,6 @@ void LLWorld::refreshLimits()
 		mEnforceMaxBuild = FALSE;
 		mLockedDrawDistance = FALSE;
 
-		mWhisperDistance = CHAT_WHISPER_RADIUS;
-		mSayDistance = CHAT_NORMAL_RADIUS;
-		mShoutDistance = CHAT_SHOUT_RADIUS;
-
 		mDrawDistance = -1.f;
 		mTerrainDetailScale = -1.f;
 
@@ -232,10 +228,6 @@ void LLWorld::refreshLimits()
 		mEnableTeenMode = FALSE; //get saved settings?
 		mEnforceMaxBuild = FALSE;
 		mLockedDrawDistance = FALSE;
-
-		mWhisperDistance = CHAT_WHISPER_RADIUS;
-		mSayDistance = CHAT_NORMAL_RADIUS;
-		mShoutDistance = CHAT_SHOUT_RADIUS;
 
 		mDrawDistance = -1.f;
 		mTerrainDetailScale = -1.f;
@@ -386,30 +378,6 @@ void LLWorld::setMinPrimZPos(F32 val)
 		mMinPrimZPos = 0.0f;
 	else
 		mMinPrimZPos = val;
-}
-
-void LLWorld::setWhisperDistance(F32 val)
-{
-	if(val <= 0.0f)
-		mWhisperDistance = CHAT_WHISPER_RADIUS;
-	else
-		mWhisperDistance = val;
-}
-
-void LLWorld::setSayDistance(F32 val)
-{
-	if(val <= 0.0f)
-		mSayDistance = CHAT_NORMAL_RADIUS;
-	else
-		mSayDistance = val;
-}
-
-void LLWorld::setShoutDistance(F32 val)
-{
-	if(val < 0.0f)
-		mShoutDistance = CHAT_SHOUT_RADIUS;
-	else
-		mShoutDistance = val;
 }
 
 void LLWorld::setDrawDistance(F32 val)

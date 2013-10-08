@@ -30,6 +30,7 @@
 
 #include "fsfloaterexport.h"
 
+#include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llagentconstants.h"
 #include "llagentdata.h"
@@ -734,20 +735,20 @@ void FSFloaterObjectExport::inventoryChanged(LLViewerObject* object, LLInventory
 #ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
-			LLViewerRegion* region = gAgent.getRegion();
-			if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+			switch (LFSimFeatureHandler::instance().exportPolicy())
 			{
-				exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
-			}
-			else if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
-			{
-				exportable = perms.getCreator() == gAgentID;
-			}
-			/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
-			/// on whether we should allow full perm exports anymore.
-			else
-			{
-				exportable = ((perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED);
+				case EXPORT_ALLOWED:
+					exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
+					break;
+					/// TODO: Once enough grids adopt a version supporting exports, get consensus
+					/// on whether we should allow full perm exports anymore.
+				case EXPORT_UNDEFINED:
+					exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+					break;
+				case EXPORT_DENIED:
+				default:
+					exportable = perms.getCreator() == gAgentID;
+					break;
 			}
 		}
 #endif

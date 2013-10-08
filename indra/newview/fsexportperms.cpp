@@ -25,11 +25,11 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsexportperms.h"
+#include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llinventoryfunctions.h"
 #include "llmeshrepository.h"
 #include "llviewernetwork.h"
-#include "llviewerregion.h"
 #include "llvovolume.h"
 #include "llworld.h"
 
@@ -61,25 +61,17 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 #ifdef OPENSIM
 	else if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		LLViewerRegion* region = gAgent.getRegion();
-		if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+		switch (LFSimFeatureHandler::instance().exportPolicy())
 		{
-			exportable = node->mPermissions->allowExportBy(gAgent.getID());
-		}
-		else if (region && region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
-		{
-			// Only your own creations if this is explicitly set
-			exportable = (object->permYouOwner()
-						  && gAgentID == node->mPermissions->getCreator());
-		}
-		/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
-		/// on whether we should allow full perm exports anymore.
-		else	// LLViewerRegion::EXPORT_UNDEFINED
-		{
-			exportable = (object->permYouOwner()
-						  && object->permModify()
-						  && object->permCopy()
-						  && object->permTransfer());
+			case EXPORT_ALLOWED:
+				exportable = node->mPermissions->allowExportBy(gAgent.getID());
+			/// TODO: Once enough grids adopt a version supporting exports, get consensus
+			/// on whether we should allow full perm exports anymore.
+			case EXPORT_UNDEFINED:
+				exportable = (object->permYouOwner() && object->permModify() && object->permCopy() && object->permTransfer());
+			case EXPORT_DENIED:
+			default:
+				exportable = (object->permYouOwner() && gAgentID == node->mPermissions->getCreator());
 		}
 	}
 #endif // OPENSIM
@@ -144,25 +136,19 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 					for (S32 i = 0; i < items.count(); ++i)
 					{
 						const LLPermissions perms = items[i]->getPermissions();
-						LLViewerRegion* region = gAgent.getRegion();
-						if (!region)
+						switch (LFSimFeatureHandler::instance().exportPolicy())
 						{
-							LL_WARNS("export") << "No region found to check export caps!" << LL_ENDL;
-							return false;
-						}
-						if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
-						{
-							exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
-						}
-						else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
-						{
-							exportable = perms.getCreator() == gAgentID;
-						}
-						/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
-						/// on whether we should allow full perm exports anymore.
-						else
-						{
-							exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+							case EXPORT_ALLOWED:
+								exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
+								break;
+							/// TODO: Once enough grids adopt a version supporting exports, get consensus
+							/// on whether we should allow full perm exports anymore.
+							case EXPORT_UNDEFINED:
+								exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+								break;
+							case EXPORT_DENIED:
+							default:
+								exportable = perms.getCreator() == gAgentID;
 						}
 						if (!exportable)
 							LL_INFOS("export") << "Sculpt map has failed permissions check." << LL_ENDL;
@@ -213,21 +199,20 @@ bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std:
 #ifdef OPENSIM
 				if (LLGridManager::getInstance()->isInOpenSim())
 				{
-					LLViewerRegion* region = gAgent.getRegion();
-					if (!region) return false;
-					if (region->regionSupportsExport() == LLViewerRegion::EXPORT_ALLOWED)
+					switch (LFSimFeatureHandler::instance().exportPolicy())
 					{
-						exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
-					}
-					else if (region->regionSupportsExport() == LLViewerRegion::EXPORT_DENIED)
-					{
-						exportable = perms.getCreator() == gAgentID;
-					}
-					/// TODO: Once enough grids adopt a version supporting the exports cap, get consensus
-					/// on whether we should allow full perm exports anymore.
-					else
-					{
-						exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+						case EXPORT_ALLOWED:
+							exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
+							break;
+						/// TODO: Once enough grids adopt a version supporting exports, get consensus
+						/// on whether we should allow full perm exports anymore.
+						case EXPORT_UNDEFINED:
+							exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+							break;
+						case EXPORT_DENIED:
+						default:
+							exportable = perms.getCreator() == gAgentID;
+							break;
 					}
 				}
 #endif
