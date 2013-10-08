@@ -4018,7 +4018,7 @@
                  function="Advanced.DumpRegionObjectCache" />
             </menu_item_call>
             <menu_item_call
-             label="Dump SimulatorFeatures to Nearby Chat"
+             label="Dump Simulator Features to Nearby Chat"
              name="DumpSimFeaturesToChat">
                 <menu_item_call.on_click
                  function="Develop.DumpSimFeaturesToChat" />
