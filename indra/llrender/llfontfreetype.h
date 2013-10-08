@@ -48,7 +48,7 @@ namespace nd
 {
 	namespace fonts
 	{
-		struct LoadedFont;
+		class LoadedFont;
 	}
 }
 // </FS:ND>
