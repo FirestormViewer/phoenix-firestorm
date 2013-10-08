@@ -63,11 +63,42 @@
 #include "roles_constants.h"
 #include "llgroupactions.h"
 #include "lltrans.h"
-#include "llviewernetwork.h"	// <FS:CR> For OpenSim export perms visibility
+
+// <FS:CR> For OpenSim export permisson
+#include "lfsimfeaturehandler.h"
+#include "llinventoryfunctions.h"
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "llslurl.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
+
+// <FS:CR> For OpenSim export permisson
+// base and own must have EXPORT, next owner must be UNRESTRICTED
+bool can_set_export(const U32& base, const U32& own, const U32& next)
+{
+	return base & PERM_EXPORT && own & PERM_EXPORT && (next & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
+}
+
+bool perms_allow_export(const LLPermissions& perms)
+{
+	return perms.getMaskBase() & PERM_EXPORT && perms.getMaskEveryone() & PERM_EXPORT;
+}
+
+bool is_asset_exportable(const LLUUID& asset_id)
+{
+	if (asset_id.isNull()) return true; // Don't permission-check null textures
+	LLViewerInventoryCategory::cat_array_t cats;
+	LLViewerInventoryItem::item_array_t items;
+	LLAssetIDMatches asset_id_matches(asset_id);
+	gInventory.collectDescendentsIf(LLUUID::null, cats, items, true, asset_id_matches, false);
+	
+	for (S32 i = 0; i < items.count(); ++i)
+	{
+		if (perms_allow_export(items[i]->getPermissions())) return true;
+	}
+	return false;
+}
+// </FS:CR>
 
 U8 string_value_to_click_action(std::string p_value);
 std::string click_action_to_string_value( U8 action);
@@ -232,7 +263,6 @@ void LLPanelPermissions::disableAll()
 	getChildView("checkbox allow everyone copy")->setEnabled(FALSE);
 	
 	// <FS:CR> OpenSim export permissions
-	getChild<LLUICtrl>("checkbox allow export")->setVisible(!LLGridManager::getInstance()->isInSecondLife());
 	getChild<LLUICtrl>("checkbox allow export")->setValue(FALSE);
 	getChildView("checkbox allow export")->setEnabled(FALSE);
 	// </FS:CR>
@@ -759,7 +789,32 @@ void LLPanelPermissions::refresh()
 		getChildView("checkbox allow everyone copy")->setEnabled(FALSE);
 	}
 	
-	getChildView("checkbox allow export")->setEnabled(gAgentID == mCreatorID);	// <FS:CR> OpenSim export permissions
+	// <FS:CR> Opensim export permissions - Codeblock courtesy of Liru Færs.	
+	// Is this user allowed to toggle export on this object?
+	if (LFSimFeatureHandler::instance().simSupportsExport()
+		&& self_owned && mCreatorID == mOwnerID
+		&& can_set_export(base_mask_on, owner_mask_on, next_owner_mask_on))
+	{
+		bool can_export = true;
+		LLInventoryObject::object_list_t objects;
+		objectp->getInventoryContents(objects);
+		for (LLInventoryObject::object_list_t::iterator i = objects.begin(); can_export && i != objects.end() ; ++i) //The object's inventory must have EXPORT.
+		{
+			LLViewerInventoryItem* item = static_cast<LLViewerInventoryItem*>(i->get()); //getInventoryContents() filters out categories, static_cast.
+			can_export = perms_allow_export(item->getPermissions());
+		}
+		for (U8 i = 0; can_export && i < objectp->getNumTEs(); ++i) // Can the textures be exported?
+			if (LLTextureEntry* texture = objectp->getTE(i))
+				can_export = is_asset_exportable(texture->getID());
+		getChildView("checkbox allow export")->setEnabled(can_export);
+	}
+	else
+	{
+		getChildView("checkbox allow export")->setEnabled(false);
+		if (!LFSimFeatureHandler::instance().simSupportsExport())
+			getChildView("checkbox allow export")->setVisible(false);
+	}
+	// </FS:CR>
 
 	//Do not update and clear sale info if changes are pending
 	if (update_sale_info)
@@ -848,21 +903,30 @@ void LLPanelPermissions::refresh()
 		}
 		
 		// <FS:CR> OpenSim export permissions
-		if (everyone_mask_on & PERM_EXPORT)
+		if (LFSimFeatureHandler::instance().simSupportsExport())
 		{
-			getChild<LLUICtrl>("checkbox allow export")->setValue(TRUE);
-			getChild<LLUICtrl>("checkbox allow export")->setTentative( 	FALSE);
-		}
-		else if (everyone_mask_off & PERM_COPY)
-		{
-			getChild<LLUICtrl>("checkbox allow export")->setValue(FALSE);
-			getChild<LLUICtrl>("checkbox allow export")->setTentative(	FALSE);
+			if(everyone_mask_on & PERM_EXPORT)
+			{
+				getChild<LLUICtrl>("checkbox allow export")->setValue(TRUE);
+				getChild<LLUICtrl>("checkbox allow export")->setTentative(	FALSE);
+			}
+			else if(everyone_mask_off & PERM_EXPORT)
+			{
+				getChild<LLUICtrl>("checkbox allow export")->setValue(FALSE);
+				getChild<LLUICtrl>("checkbox allow export")->setTentative(	FALSE);
+			}
+			else
+			{
+				getChild<LLUICtrl>("checkbox allow export")->setValue(TRUE);
+				getChild<LLUICtrl>("checkbox allow export")->setValue(	TRUE);
+			}
 		}
 		else
 		{
-			getChild<LLUICtrl>("checkbox allow export")->setValue(TRUE);
-			getChild<LLUICtrl>("checkbox allow export")->setTentative(	TRUE);
+			childSetValue("checkbox allow export", false);
+			childSetTentative("checkbox allow export", false);
 		}
+		// </FS:CR>
 	}
 
 	if (valid_next_perms)
