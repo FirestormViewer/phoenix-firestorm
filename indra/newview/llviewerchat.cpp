@@ -133,6 +133,22 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 		//Keyword alerts -KC
 		if ((gAgentID != chat.mFromID || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
 		{
+			static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");
+			if (FSEnableGrowl)
+			{
+				std::string msg = chat.mFromName;
+				std::string prefix = chat.mText.substr(0, 4);
+				if(prefix == "/me " || prefix == "/me'" || prefix == "/ME " || prefix == "/ME'")
+				{
+					msg = msg + chat.mText.substr(3);
+				}
+				else
+				{
+					msg = msg + ": " + chat.mText;
+				}
+				gGrowlManager->notify("Keyword Alert", msg, "Keyword Alert");
+			}
+
 			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
 			if (sFSKeywordChangeColor)
 			{
