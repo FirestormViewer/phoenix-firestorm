@@ -52,6 +52,7 @@ void StreamTitleDisplay::checkMetadata()
 {
 	static LLCachedControl<U32> ShowStreamMetadata(gSavedSettings, "ShowStreamMetadata", 1);
 	static LLCachedControl<bool> StreamMetadataAnnounceToChat(gSavedSettings, "StreamMetadataAnnounceToChat", false);
+	static std::string last_chat = "";
 
 	if (!gAudiop)
 		return;
@@ -72,7 +73,7 @@ void StreamTitleDisplay::checkMetadata()
 			}
 			chat.append(mMetadata["TITLE"].asString());
 		}
-		if (chat.length() > 0)
+		if ((chat.length() > 0) && (chat != last_chat))
 		{
 			if (StreamMetadataAnnounceToChat)
 			{
@@ -89,6 +90,7 @@ void StreamTitleDisplay::checkMetadata()
 				LLNotificationsUtil::add((mMetadata.has("ARTIST") ? "StreamMetadata" : "StreamMetadataNoArtist"), mMetadata);
 			}
 		}
+		last_chat = chat;
 	}
 }
 
