@@ -4431,13 +4431,13 @@ Poprzedni symulator: [OLDVERSION]
 		Pomyślnie zaimportowano listę strumieni z pliku XML.
 	</notification>
 	<notification name="StreamMetadata">
-        ♫ Teraz odtwarzane:
-          [TITLE]
-          [ARTIST] ♫
+♫ Teraz odtwarzane:
+  [TITLE]
+  [ARTIST] ♫
 	</notification>
 	<notification name="StreamMetadataNoArtist">
-        ♫ Teraz odtwarzane:
-          [TITLE] ♫
+♫ Teraz odtwarzane:
+  [TITLE] ♫
 	</notification>
 	<notification name="BackupFinished">
 		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.
