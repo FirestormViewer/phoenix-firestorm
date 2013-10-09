@@ -6,6 +6,9 @@
 	<text name="region_text">
 		ukendt
 	</text>
+	<text name="detail_texture_text">
+		Terræn teksturer (kræver 512x512 / 1024x1024, 24 bit .tga filer)
+	</text>
 	<spinner label="Vand højde" name="water_height_spin" />
 	<button label="?" name="water_height_help" />
 	<spinner label="Max. hævning af land" name="terrain_raise_spin" />

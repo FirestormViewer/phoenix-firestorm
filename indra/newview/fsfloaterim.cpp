@@ -1033,6 +1033,7 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 		}
 
 		floater->openFloater(floater->getKey());
+		floater->setFocus(TRUE);
 	}
 	else
 	{

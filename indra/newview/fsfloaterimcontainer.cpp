@@ -108,6 +108,12 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 			LLMultiFloater::showFloater(floater);
 		}
 	}
+
+	LLFloater* active_floater = getActiveFloater();
+	if (active_floater && !active_floater->hasFocus())
+	{
+		active_floater->setFocus(TRUE);
+	}
 	
 /*
 	if (key.isDefined())

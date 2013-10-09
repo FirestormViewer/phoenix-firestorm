@@ -108,15 +108,15 @@
 #include "llsdserialize.h"
 
 #include "fsdata.h"
+#include "llcontrol.h"
+#include "lggcontactsets.h"
+#include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+#include "lfsimfeaturehandler.h"	// <FS:CR> Opensim
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
 extern F32 ANIM_SPEED_MIN;
-
-#include "llcontrol.h"
-#include "lggcontactsets.h"
-#include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 
 // #define OUTPUT_BREAST_DATA
 
@@ -2749,9 +2749,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	if (!firstname || !lastname) return;
 
 	// <FS:Ansariel> OpenSim chat distance compatibility
-	static const F32 chat_range_whisper_squared = LLWorld::getInstance()->getWhisperDistance() * LLWorld::getInstance()->getWhisperDistance();
-	static const F32 chat_range_say_squared = LLWorld::getInstance()->getSayDistance() * LLWorld::getInstance()->getSayDistance();
-	static const F32 chat_range_shout_squared = LLWorld::getInstance()->getShoutDistance() * LLWorld::getInstance()->getShoutDistance();
+	static const F32 chat_range_whisper_squared = LFSimFeatureHandler::getInstance()->whisperRange() * LFSimFeatureHandler::getInstance()->whisperRange();
+	static const F32 chat_range_say_squared = LFSimFeatureHandler::getInstance()->sayRange() * LFSimFeatureHandler::getInstance()->sayRange();
+	static const F32 chat_range_shout_squared = LFSimFeatureHandler::getInstance()->shoutRange() * LFSimFeatureHandler::getInstance()->shoutRange();
 	// </FS:Ansariel>
 
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a

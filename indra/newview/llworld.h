@@ -150,10 +150,6 @@ public:
 	BOOL getEnforceMaxBuild() const		{ return mEnforceMaxBuild; }
 	BOOL getLockedDrawDistance() const	{ return mLockedDrawDistance; }
 
-	F32 getWhisperDistance() const		{ return mWhisperDistance; }
-	F32 getSayDistance() const			{ return mSayDistance; }
-	F32 getShoutDistance() const		{ return mShoutDistance; }
-
 	F32 getDrawDistance() const			{ return mDrawDistance; }
 	F32 getTerrainDetailScale() const	{ return mTerrainDetailScale; }
 
@@ -186,10 +182,6 @@ public:
 	void setEnableTeenMode(BOOL val);
 	void setEnforceMaxBuild(BOOL val);
 	void setLockedDrawDistance(BOOL val);
-	
-	void setWhisperDistance(F32 val);
-	void setSayDistance(F32 val);
-	void setShoutDistance(F32 val);
 
 	void setDrawDistance(F32 val);
 	void setTerrainDetailScale(F32 val);
@@ -294,10 +286,6 @@ private:
 	BOOL    mEnableTeenMode;
 	BOOL    mEnforceMaxBuild;
 	BOOL	mLockedDrawDistance;
-
-	F32 mWhisperDistance;
-	F32 mSayDistance;
-	F32 mShoutDistance;
 
 	F32 mDrawDistance;
 	F32 mTerrainDetailScale;

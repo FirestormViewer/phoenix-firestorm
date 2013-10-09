@@ -35,6 +35,7 @@
 	<check_box label="Modyfikacja" name="CheckOwnerModify"/>
 	<check_box label="Kopiowanie" name="CheckOwnerCopy"/>
 	<check_box label="Transferowanie" name="CheckOwnerTransfer"/>
+	<check_box label="Eksportowanie" name="CheckOwnerExport"/>
 	<text name="AnyoneLabel">
 		Każdy:
 	</text>

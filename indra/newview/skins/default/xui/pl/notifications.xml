@@ -4432,12 +4432,12 @@ Poprzedni symulator: [OLDVERSION]
 	</notification>
 	<notification name="StreamMetadata">
         ♫ Teraz odtwarzane:
-        [TITLE]
-        [ARTIST]♫
+          [TITLE]
+          [ARTIST] ♫
 	</notification>
 	<notification name="StreamMetadataNoArtist">
         ♫ Teraz odtwarzane:
-        [TITLE]♫
+          [TITLE] ♫
 	</notification>
 	<notification name="BackupFinished">
 		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.

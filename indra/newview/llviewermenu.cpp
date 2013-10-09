@@ -9011,6 +9011,24 @@ class FSStreamListImportXML :public view_listener_t
 };
 // </FS:CR> Stream list import/export
 
+// <FS:CR> Dump SimulatorFeatures to chat
+class FSDumpSimulatorFeaturesToChat : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (LLViewerRegion* region = gAgent.getRegion())
+		{
+			LLSD sim_features;
+			std::stringstream out_str;
+			region->getSimulatorFeatures(sim_features);
+			LLSDSerialize::toPrettyXML(sim_features, out_str);
+			reportToNearbyChat(out_str.str());
+		}
+		return true;
+	}
+};
+// </FS:CR> Dump SimulatorFeatures to chat
+
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -10781,6 +10799,8 @@ void initialize_menus()
 	// <FS:CR> Stream list import/export
 	view_listener_t::addMenu(new FSStreamListExportXML(), "Streamlist.xml_export");
 	view_listener_t::addMenu(new FSStreamListImportXML(), "Streamlist.xml_import");
+	// <FS:CR> Dump SimulatorFeatures to chat
+	view_listener_t::addMenu(new FSDumpSimulatorFeaturesToChat(), "Develop.DumpSimFeaturesToChat");
 
 	// <FS:Techwolf Lupindo> export
 	view_listener_t::addMenu(new FSObjectExport(), "Object.Export");

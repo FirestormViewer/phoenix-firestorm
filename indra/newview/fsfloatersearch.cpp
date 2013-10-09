@@ -28,6 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloatersearch.h"
+#include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llavatarname.h"
 #include "llavatarnamecache.h"
@@ -2916,7 +2917,7 @@ void FSPanelSearchWeb::loadURL(const FSFloaterSearch::SearchQuery &p)
 	}
 	else if(LLGridManager::getInstance()->isInOpenSim())
 	{		
-		std::string os_search_url = gAgent.getRegion()->getSearchServerURL();
+		std::string os_search_url = LFSimFeatureHandler::instance().searchURL();
 		if (!os_search_url.empty())
 			url = os_search_url;
 		else if (LLLoginInstance::getInstance()->hasResponse("search"))

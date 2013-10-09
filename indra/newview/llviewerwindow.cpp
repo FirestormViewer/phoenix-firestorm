@@ -658,7 +658,8 @@ public:
 				LLVertexBuffer::sSetCount = LLImageGL::sUniqueCount = 
 				gPipeline.mNumVisibleNodes = LLPipeline::sVisibleLightCount = 0;
 		}
-		if (gSavedSettings.getBOOL("DebugShowAvatarRenderInfo"))
+		static LLCachedControl<bool> sDebugShowAvatarRenderInfo(gSavedSettings, "DebugShowAvatarRenderInfo");
+		if (sDebugShowAvatarRenderInfo)
 		{
 			std::map<std::string, LLVOAvatar*> sorted_avs;
 			

@@ -40,6 +40,7 @@
 #include "lggcontactsets.h"
 #include "rlvhandler.h"
 
+#include "lfsimfeaturehandler.h"	// <FS:CR> Opensim
 #include "growlmanager.h" // <FS:LO> Growl include
 
 
@@ -132,6 +133,22 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 		//Keyword alerts -KC
 		if ((gAgentID != chat.mFromID || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
 		{
+			static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");
+			if (FSEnableGrowl)
+			{
+				std::string msg = chat.mFromName;
+				std::string prefix = chat.mText.substr(0, 4);
+				if(prefix == "/me " || prefix == "/me'" || prefix == "/ME " || prefix == "/ME'")
+				{
+					msg = msg + chat.mText.substr(3);
+				}
+				else
+				{
+					msg = msg + ": " + chat.mText;
+				}
+				gGrowlManager->notify("Keyword Alert", msg, "Keyword Alert");
+			}
+
 			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
 			if (sFSKeywordChangeColor)
 			{
@@ -144,11 +161,11 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 		{
 			LLVector3 pos_agent = gAgent.getPositionAgent();
 			F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
-// <FS:CR> Aurora Sim
+// <FS:CR> Opensim
 			//F32 dist_near_chat = gAgent.getNearChatRadius();
 			//if (!avatarp || dist_vec_squared(avatarp->getPositionAgent(), gAgent.getPositionAgent()) > say_distance_squared)
-			F32 dist_near_chat = LLWorld::getInstance()->getSayDistance();
-// </FS:CR> Aurora Sim
+			F32 dist_near_chat = LFSimFeatureHandler::getInstance()->sayRange();
+// </FS:CR> Opensim
 			if (distance_squared > dist_near_chat * dist_near_chat)
 			{
 				// diminish far-off chat
@@ -222,10 +239,10 @@ void LLViewerChat::getChatColor(const LLChat& chat, std::string& r_color_name, F
 		{
 			LLVector3 pos_agent = gAgent.getPositionAgent();
 			F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
-// <FS:CR> Aurora som
+// <FS:CR> Opensim
 			//F32 dist_near_chat = gAgent.getNearChatRadius();
-			F32 dist_near_chat = LLWorld::getInstance()->getSayDistance();
-// </FS:CR> Aurora sim
+			F32 dist_near_chat = LFSimFeatureHandler::getInstance()->sayRange();
+// </FS:CR> Opensim
 			if (distance_squared > dist_near_chat * dist_near_chat)
 			{
 				// diminish far-off chat
