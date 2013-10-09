@@ -63,6 +63,10 @@
 #include "llworldmapview.h"
 #include "llviewercontrol.h"
 
+// [RLVa:KB]
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 const F32 DESTINATION_REACHED_RADIUS    = 3.0f;
 const F32 DESTINATION_VISITED_RADIUS    = 6.0f;
 
