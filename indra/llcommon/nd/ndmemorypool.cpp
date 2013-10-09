@@ -466,7 +466,7 @@ namespace nd
 
 		void dumpStats( std::ostream &aOut )
 		{
-			nd::allocstats::dumpStats( aOut );
+			nd::mallocstats::dumpStats( aOut );
 		}
 
 		void tryShrink()
