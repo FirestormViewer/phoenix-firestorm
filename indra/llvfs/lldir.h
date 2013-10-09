@@ -301,6 +301,24 @@ protected:
 	std::string mLanguage;              // Current viewer language
 	std::string mLLPluginDir;			// Location for plugins and plugin shell
 	std::string mUserName;				// Current user name
+
+	// <FS:ND> To avoid doing IO calls (expensive) in walkdSearchedSkinDirs cache results.
+	struct SkinDirFile
+	{
+		std::string mName;
+		mutable bool mExists;
+
+		SkinDirFile( std::string const &aName, bool aExists )
+		: mName( aName )
+		, mExists( aExists )
+		{	}
+
+		bool operator<( SkinDirFile const &aRHS ) const
+		{ return mName < aRHS.mName; }
+	};
+
+	typedef std::set< SkinDirFile > tSkinDirCache;
+	mutable tSkinDirCache mSkinDirCache;
 };
 
 void dir_exists_or_crash(const std::string &dir_name);
