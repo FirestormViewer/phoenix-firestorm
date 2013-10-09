@@ -74,11 +74,6 @@ template <typename T> T* LL_NEXT_ALIGNED_ADDRESS_64(T* address)
 
 #define LL_ALIGN_16(var) LL_ALIGN_PREFIX(16) var LL_ALIGN_POSTFIX(16)
 
-// <FS:ND> No tcmalloc
-#ifdef ND_NO_TCMALLOC
-#include "nd/ndmemory.h"
-#else
-
 inline void* ll_aligned_malloc( size_t size, int align )
 {
 #if defined(LL_WINDOWS)
@@ -186,8 +181,6 @@ inline void ll_aligned_free_32(void *p)
 	free(p); // posix_memalign() is compatible with heap deallocator
 #endif
 }
-#endif // </FS:ND> No tcmalloc
-
 
 // Copy words 16-byte blocks from src to dst. Source and destination MUST NOT OVERLAP. 
 // Source and dest must be 16-byte aligned and size must be multiple of 16.
@@ -589,9 +582,6 @@ public:
 	static void  freeMem(LLPrivateMemoryPool* poolp, void* addr) ;
 };
 
-// <FS:ND> No tcmalloc
-#ifndef ND_NO_TCMALLOC
-
 //-------------------------------------------------------------------------------------
 #if __DEBUG_PRIVATE_MEM__
 #define ALLOCATE_MEM(poolp, size) LLPrivateMemoryPoolManager::allocate((poolp), (size), __FUNCTION__, __LINE__)
@@ -600,9 +590,6 @@ public:
 #endif
 #define FREE_MEM(poolp, addr) LLPrivateMemoryPoolManager::freeMem((poolp), (addr))
 //-------------------------------------------------------------------------------------
-
-#endif
-// </FS:ND> No tcmalloc
 
 //
 //the below singleton is used to test the private memory pool.

@@ -23,7 +23,6 @@
  */
 
 #include "ndallocstats.h"
-#include "ndmemorypool.h"
 
 #include <set>
 
@@ -53,7 +52,6 @@ namespace nd
 
 		void dumpStats( std::ostream &aOut )
 		{
-			nd::memorypool::dumpStats( aOut );
 			for( std::set< provider * >::iterator itr = s_stProvider.begin(); itr != s_stProvider.end(); ++itr )
 				(*itr)->dumpStats( aOut );
 		}

@@ -255,7 +255,6 @@
 // define a self-registering event API object
 #include "llappviewerlistener.h"
 
-#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 #include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "nd/ndallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "fsradar.h"
@@ -789,7 +788,6 @@ public:
 
 bool LLAppViewer::init()
 {	
-	nd::memorypool::startUp(); // <FS:ND/> tcmalloc replacement
 	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
 	nd::mallocstats::startUp(); // <FS:ND/> start collecting alloc stats
 
@@ -2352,9 +2350,6 @@ bool LLAppViewer::cleanup()
 	MEM_TRACK_RELEASE
 
     llinfos << "Goodbye!" << llendflush;
-
-	// This coud leak memory that was allocated in the pool. But that's ok. We're about to die and the OS will take care of this.
-	//	nd::memorypool::tearDown(); // <FS:ND/> tcmalloc replacement
 
 	// return 0;
 	return true;

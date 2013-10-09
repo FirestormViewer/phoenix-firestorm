@@ -270,17 +270,14 @@ set(llcommon_HEADER_FILES
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
 
 SET( llcommon_ND_SOURCE_FILES
-	 nd/ndallocators.cpp 
 	 nd/ndallocstats.cpp
 	 nd/ndexceptions.cpp
 	 nd/ndfile.cpp
 	 nd/ndintrin.cpp
 	 nd/ndlogthrottle.cpp
 	 nd/ndmallocstats.cpp
-	 nd/ndmemorypool.cpp
 	 )
 SET(  llcommon_ND_HEADER_FILES 
-	  nd/ndallocators.h
 	  nd/ndallocstats.h
 	  nd/ndboolswitch.h
 	  nd/ndcallstack.h
@@ -291,8 +288,6 @@ SET(  llcommon_ND_HEADER_FILES
 	  nd/ndlocks.h
 	  nd/ndlogthrottle.h
 	  nd/ndmallocstats.h
-	  nd/ndmemory.h
-	  nd/ndmemorypool.h
 	  nd/ndobjectpool.h
 	  nd/ndpooldefines.h
 	  nd/ndstackwalk.h

@@ -47,7 +47,6 @@
 #include "llsys.h"
 #include "llframetimer.h"
 
-#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 #include "nd/ndallocstats.h" // <FS:ND/> Allocation stats.
 
 //----------------------------------------------------------------------------
