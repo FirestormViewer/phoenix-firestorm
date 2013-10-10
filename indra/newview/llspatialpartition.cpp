@@ -91,28 +91,17 @@ class LLOcclusionQueryPool : public LLGLNamePool
 public:
 	LLOcclusionQueryPool()
 	{
-		mCurQuery = 1;
+		
 	}
 
 protected:
 
-	std::list<GLuint> mAvailableName;
-	GLuint mCurQuery;
-		
 	virtual GLuint allocateName()
 	{
 		GLuint ret = 0;
 
-		if (!mAvailableName.empty())
-		{
-			ret = mAvailableName.front();
-			mAvailableName.pop_front();
-		}
-		else
-		{
-			ret = mCurQuery++;
-		}
-
+		glGenQueriesARB(1, &ret);
+	
 		return ret;
 	}
 
@@ -121,8 +110,7 @@ protected:
 #if LL_TRACK_PENDING_OCCLUSION_QUERIES
 		LLSpatialGroup::sPendingQueries.erase(name);
 #endif
-		llassert(std::find(mAvailableName.begin(), mAvailableName.end(), name) == mAvailableName.end());
-		mAvailableName.push_back(name);
+		glDeleteQueriesARB(1, &name);
 	}
 };
 
@@ -4135,6 +4123,11 @@ void renderAvatarCollisionVolumes(LLVOAvatar* avatar)
 	avatar->renderCollisionVolumes();
 }
 
+void renderAvatarJoints(LLVOAvatar* avatar)
+{
+	avatar->renderJoints();
+}
+
 void renderAgentTarget(LLVOAvatar* avatar)
 {
 	// render these for self only (why, i don't know)
@@ -4290,6 +4283,11 @@ public:
 			if (avatar && gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_AVATAR_VOLUME))
 			{
 				renderAvatarCollisionVolumes(avatar);
+			}
+
+			if (avatar && gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_AVATAR_JOINTS))
+			{
+				renderAvatarJoints(avatar);
 			}
 
 			if (avatar && gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_AGENT_TARGET))
@@ -4575,6 +4573,7 @@ void LLSpatialPartition::renderDebug()
 									  LLPipeline::RENDER_DEBUG_TEXTURE_ANIM |
 									  LLPipeline::RENDER_DEBUG_RAYCAST |
 									  LLPipeline::RENDER_DEBUG_AVATAR_VOLUME |
+									  LLPipeline::RENDER_DEBUG_AVATAR_JOINTS |
 									  LLPipeline::RENDER_DEBUG_AGENT_TARGET |
 									  //LLPipeline::RENDER_DEBUG_BUILD_QUEUE |
 									  LLPipeline::RENDER_DEBUG_SHADOW_FRUSTA |
