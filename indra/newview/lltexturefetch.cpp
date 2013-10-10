@@ -1498,7 +1498,11 @@ bool LLTextureFetchWorker::doWork(S32 param)
 																	  mWorkPriority,
 																	  mUrl,
 																	  mRequestedOffset,
-																	  mRequestedSize,
+																	  //<FS:TS> FIRE-11448: Problems using cell networks
+																	  // this change from Monty Linden in the SL forums
+																	  //mRequestedSize,
+																	  (mRequestedOffset + mRequestedSize) > 20000000 ? 0 : mRequestedSize,
+																	  //</FS:TS> FIRE-11448
 																	  mFetcher->mHttpOptions,
 																	  mFetcher->mHttpHeaders,
 																	  this);
