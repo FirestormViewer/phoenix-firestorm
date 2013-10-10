@@ -270,6 +270,15 @@
      name="FSFlashOnScriptDialog"
      top_pad="5"
      width="160"/>
+    <check_box
+     control_name="FSDisableReturnObjectNotification"
+     height="16"
+     label="Disable 'object has been returned to your inventory' notifications"
+     layout="topleft"
+     left="10"
+     name="FSDisableReturnObjectNotification"
+     top_pad="2"
+     width="160"/>
       
     <check_box
       control_name="FSEnableGrowl"

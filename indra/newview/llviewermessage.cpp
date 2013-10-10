@@ -3357,6 +3357,17 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				return;
 			}
 
+			// <FS:PP> FIRE-6406: Feature to disable Object Return notification
+			static LLCachedControl<bool> FSDisableReturnObjectNotification(gSavedSettings, "FSDisableReturnObjectNotification");
+			if (FSDisableReturnObjectNotification)
+			{
+				if (message.find("been returned to your inventory") != -1)
+				{
+					return;
+				}
+			}
+			// </FS:PP>
+
 			// Build a link to open the object IM info window.
 			std::string location = ll_safe_string((char*)binary_bucket, binary_bucket_size-1);
 
