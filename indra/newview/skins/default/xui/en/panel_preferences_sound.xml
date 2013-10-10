@@ -773,6 +773,38 @@
          name="Show_Voice_Visualizers_In_Calls"
          top_pad="3"
          width="237"/>
+
+        <check_box
+         follows="left|top"
+         control_name="VoiceCallsRejectGroup"
+         height="15"
+         label="Automatically reject all incoming group voice calls"
+         layout="topleft"
+         left="25"
+         name="VoiceCallsRejectGroup"
+         width="237"
+         top_pad="10"/>
+        <check_box
+         follows="left|top"
+         control_name="VoiceCallsRejectAdHoc"
+         height="15"
+         label="Automatically reject all incoming AdHoc (conference) voice calls"
+         layout="topleft"
+         left="25"
+         name="VoiceCallsRejectAdHoc"
+         width="237"
+         top_pad="3"/>
+        <check_box
+         follows="left|top"
+         control_name="VoiceCallsRejectP2P"
+         height="15"
+         label="Automatically reject all incoming P2P (avatar with avatar) voice calls"
+         layout="topleft"
+         left="25"
+         name="VoiceCallsRejectP2P"
+         width="237"
+         top_pad="3"/>
+
         <check_box
          follows="top|left"
          enabled_control="EnableVoiceChat"
@@ -784,7 +816,7 @@
          name="push_to_talk_toggle_check"
          width="237"
          tool_tip="When in toggle mode, press and release the trigger key ONCE to switch your microphone on or off. When not in toggle mode, the microphone broadcasts your voice only while the trigger is being held down."
-         top_pad="3"/>
+         top_pad="10"/>
         <line_editor
          follows="top|left"
          control_name="PushToTalkButton"

@@ -3382,9 +3382,17 @@ void LLIMMgr::inviteToSession(
 	{
 		bool isRejectGroupCall = (gSavedSettings.getBOOL("VoiceCallsRejectGroup") && (notify_box_type == "VoiceInviteGroup"));
 		bool isRejectNonFriendCall = (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(caller_id) == NULL));
-		if	(isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb())
+		// <FS:PP> FIRE-6522: Options to automatically decline all group and personal voice chat requests
+		// if (isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb())
+		bool isRejectAdHocCall = (gSavedSettings.getBOOL("VoiceCallsRejectAdHoc") && (notify_box_type == "VoiceInviteAdHoc"));
+		bool isRejectP2PCall = (gSavedSettings.getBOOL("VoiceCallsRejectP2P") && (notify_box_type == "VoiceInviteP2P"));
+		if (isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb() || isRejectAdHocCall || isRejectP2PCall)
+		// </FS:PP>
 		{
-			if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall)
+			// <FS:PP> FIRE-6522
+			// if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall)
+			if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall && !isRejectAdHocCall && !isRejectP2PCall)
+			// </FS:PP>
 			{
 				LLSD args;
 				addSystemMessage(session_id, "you_auto_rejected_call", args);
