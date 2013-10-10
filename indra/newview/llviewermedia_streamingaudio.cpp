@@ -175,8 +175,10 @@ bool LLStreamingAudio_MediaPlugins::getNewMetadata(LLSD& metadata)
 
 	if (mTitle != mMediaPlugin->getTitle() || mArtist != mMediaPlugin->getArtist())
 	{
-		metadata["ARTIST"] = mMediaPlugin->getArtist();
-		metadata["TITLE"] = mMediaPlugin->getTitle();
+		mArtist = mMediaPlugin->getArtist();
+		mTitle = mMediaPlugin->getTitle();
+		metadata["ARTIST"] = mArtist;
+		metadata["TITLE"] = mTitle;
 		return true;
 	}
 	return false;
