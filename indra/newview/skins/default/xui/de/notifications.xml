@@ -4587,13 +4587,13 @@ Stream-Liste erfolgreich aus XML importiert.
 	</notification>
 	
 	<notification name="StreamMetadata">
-		♫ Aktueller Titel:
-       [TITLE]
-       [ARTIST]♫
+♫ Aktueller Titel:
+  [TITLE]
+  [ARTIST]♫
 	</notification>
 	<notification name="StreamMetadataNoArtist">
-		♫ Aktueller Titel:
-       [TITLE]♫
+♫ Aktueller Titel:
+  [TITLE]♫
 	</notification>
 
 	<notification name="RadarAlert">
