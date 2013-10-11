@@ -70,7 +70,7 @@
 	 border_size="0"
 	 auto_resize="false">
 
-	     <pull_button
+		<pull_button
 	     follows="left|top"
 	     direction="down"
 	     height="23"
@@ -109,7 +109,7 @@
 	    <button
 	     follows="left|top"
 	     height="23"
-           use_ellipses="true"
+	     use_ellipses="true"
 	     layout="topleft"
 	     left_pad="7"
 	     name="About_Land"
@@ -118,27 +118,23 @@
 	     top_delta="0"
 	     width="43">
 		 <button.init_callback
-               function="Button.SetFloaterToggle"
-               parameter="about_land" />
-		 </button>
+		  function="Button.SetFloaterToggle"
+		  parameter="about_land" />
+		</button>
           <!-- end of About Land Button -->
 
           <!-- Windlight Button here -->  
 	    <button
 	     follows="left|top"
 	     height="23"
-           use_ellipses="true"
+	     use_ellipses="true"
 	     layout="topleft"
 	     left_pad="7"
 	     name="Sky"
 	     label="Sky" 
 	     tool_tip="Pops up Sky Editor window"
 	     top_delta="0"
-	     width="30">
-		 <button.commit_callback
-               function="World.EnvPreset"
-               parameter="edit_sky" />
-		 </button>
+	     width="30" />
           <!-- end of Windlight Button -->
 
 	</layout_panel>
@@ -167,7 +163,7 @@
 	     top="0"
 	     width="587">
          <combo_list
-         mouse_wheel_opaque="true"/>
+          mouse_wheel_opaque="true"/>
 	    </location_input>
 
 	</layout_panel>

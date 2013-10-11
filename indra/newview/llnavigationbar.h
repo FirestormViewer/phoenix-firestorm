@@ -138,6 +138,8 @@ private:
 			const LLUUID& snapshot_id, bool teleport);
 
 	void fillSearchComboBox();
+	
+	void onClickedSkyBtn();	// <FS:CR> FIRE-11847
 
 	// <FS:Zi> Make navigation bar part of the UI
 	// static void destroyClass()
