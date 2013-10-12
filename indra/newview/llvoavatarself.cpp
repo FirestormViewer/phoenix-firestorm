@@ -3205,10 +3205,3 @@ void LLVOAvatarSelf::dumpWearableInfo(LLAPRFile& outfile)
 	}
 	apr_file_printf( file, "\n</wearable_info>\n" );
 }
-
-// [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
-F32 LLVOAvatarSelf::getAvatarOffset() /*const*/
-{
-	return ( (isUsingServerBakes()) || (0.0f == RlvSettings::getAvatarOffsetZ()) ) ? LLAvatarAppearance::getAvatarOffset() : RlvSettings::getAvatarOffsetZ();
-}
-// [/RLVa:KB]

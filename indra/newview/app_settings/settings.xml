@@ -57,17 +57,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>RestrainedLoveOffsetAvatarZ</key>
-    <map>
-      <key>Comment</key>
-      <string>Offset the avatar.</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.0</real>
-    </map>
     <key>RestrainedLoveReplaceWhenFolderBeginsWith</key>
     <map>
       <key>Comment</key>

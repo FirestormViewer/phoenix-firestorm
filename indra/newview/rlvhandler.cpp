@@ -1604,20 +1604,8 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_SIT:			// @sit:<option>=force
 			eRet = onForceSit(rlvCmd);
 			break;
-		case RLV_BHVR_ADJUSTHEIGHT:	// @adjustheight:<options>=force		- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
-			{
-				RlvCommandOptionAdjustHeight rlvCmdOption(rlvCmd);
-				VERIFY_OPTION(rlvCmdOption.isValid());
-				if (isAgentAvatarValid())
-				{
-					F32 nValue = (rlvCmdOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvCmdOption.m_nPelvisToFootDeltaMult;
-					nValue += rlvCmdOption.m_nPelvisToFootOffset;
-					if (!gAgentAvatarp->isUsingServerBakes())
-						gSavedSettings.setF32(RLV_SETTING_AVATAROFFSET_Z, llclamp<F32>(nValue, -1.0f, 1.0f));
-					else
-						eRet = RLV_RET_FAILED_DISABLED;
-				}
-			}
+		case RLV_BHVR_ADJUSTHEIGHT:	// @adjustheight:<options>=force
+			eRet = RLV_RET_DEPRECATED;
 			break;
 		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2011-03-28 (RLVa-1.3.0f) | Modified: RLVa-1.3.0f
 			{

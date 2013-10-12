@@ -101,9 +101,6 @@ void RlvSettings::initClass()
 			gSavedPerAccountSettings.getControl(RLV_SETTING_LOGINLASTLOCATION)->setHiddenFromSettingsEditor(true);
 #endif // RLV_EXTENSION_STARTLOCATION
 
-		if (gSavedSettings.controlExists(RLV_SETTING_AVATAROFFSET_Z))
-			gSavedSettings.getControl(RLV_SETTING_AVATAROFFSET_Z)->getSignal()->connect(boost::bind(&onChangedAvatarOffset, _2));
-
 		if (gSavedSettings.controlExists(RLV_SETTING_TOPLEVELMENU))
 			gSavedSettings.getControl(RLV_SETTING_TOPLEVELMENU)->getSignal()->connect(boost::bind(&onChangedMenuLevel));
 
@@ -296,6 +293,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "unknown command";
 		case RLV_RET_FAILED_NOSHAREDROOT:
 			return "missing #RLV";
+		case RLV_RET_DEPRECATED:
+			return "deprecated";
 		// The following are identified by the chat verb
 		case RLV_RET_RETAINED:
 		case RLV_RET_SUCCESS:

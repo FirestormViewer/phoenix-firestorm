@@ -152,15 +152,6 @@ protected:
 	uuid_vec_t m_idItems;
 };
 
-struct RlvCommandOptionAdjustHeight : public RlvCommandOption
-{
-	RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd);
-
-	F32 m_nPelvisToFoot;
-	F32 m_nPelvisToFootDeltaMult;
-	F32 m_nPelvisToFootOffset;
-};
-
 struct RlvCommandOptionTpTo : public RlvCommandOption
 {
 	RlvCommandOptionTpTo(const RlvCommand& rlvCmd);
