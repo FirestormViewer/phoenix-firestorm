@@ -234,8 +234,19 @@ class RlvIsLinkType : public LLInventoryCollectFunctor
 {
 public:
 	RlvIsLinkType() {}
-	virtual ~RlvIsLinkType() {}
+	/*virtual*/ ~RlvIsLinkType() {}
 	virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem) { return (pItem) && (pItem->getIsLinkType()); }
+};
+
+// If the attachment item is linked in COF but isn't worn (or just detached) the function will return inconsistent information
+class RlvFindAttachmentsOnPoint : public LLInventoryCollectFunctor
+{
+public:
+	RlvFindAttachmentsOnPoint(const LLViewerJointAttachment* pAttachPt) : m_pAttachPt(pAttachPt) {}
+	/*virtual*/ ~RlvFindAttachmentsOnPoint() {}
+	virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem);
+protected:
+	const LLViewerJointAttachment* m_pAttachPt;
 };
 
 // ============================================================================

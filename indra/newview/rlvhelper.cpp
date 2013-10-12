@@ -263,11 +263,11 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
 	{
-		getItemIDs(rlvCmdOption.getWearableType(), m_idItems, false);
+		getItemIDs(rlvCmdOption.getWearableType(), m_idItems);
 	}
 	else if (rlvCmdOption.isAttachmentPoint())	// ... or it can specify an attachment point
 	{
-		getItemIDs(rlvCmdOption.getAttachmentPoint(), m_idItems, false);
+		getItemIDs(rlvCmdOption.getAttachmentPoint(), m_idItems);
 	}
 	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
 	{
@@ -296,33 +296,39 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
 	}
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
-bool RlvCommandOptionGetPath::getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems, bool fClear)
+// Checked: 2013-10-12 (RLVa-1.4.9)
+bool RlvCommandOptionGetPath::getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems)
 {
-	if (fClear)
-		idItems.clear();
 	uuid_vec_t::size_type cntItemsPrev = idItems.size();
-	if (pAttachPt)
+
+	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
+	RlvFindAttachmentsOnPoint f(pAttachPt);
+	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, false, f);
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 	{
-		for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
-				itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
-		{
-			idItems.push_back((*itAttachObj)->getAttachmentItemID());
-		}
+		const LLViewerInventoryItem* pItem = *itItem;
+		if (pItem)
+			idItems.push_back(pItem->getLinkedUUID());
 	}
+
 	return (cntItemsPrev != idItems.size());
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
-bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems, bool fClear)
+// Checked: 2013-10-12 (RLVa-1.4.9)
+bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems)
 {
-	if (fClear)
-		idItems.clear();
 	uuid_vec_t::size_type cntItemsPrev = idItems.size();
-	for (S32 idxWearable = 0, cntWearable = gAgentWearables.getWearableCount(wtType); idxWearable < cntWearable; idxWearable++)
+
+	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
+	LLFindWearablesOfType f(wtType);
+	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, false, f);
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 	{
-		idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
+		const LLViewerInventoryItem* pItem = *itItem;
+		if (pItem)
+			idItems.push_back(pItem->getLinkedUUID());
 	}
+
 	return (cntItemsPrev != idItems.size());
 }
 
