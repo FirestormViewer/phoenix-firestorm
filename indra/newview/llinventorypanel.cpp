@@ -60,8 +60,10 @@ static LLDefaultChildRegistry::Register<LLInventoryPanel> r("inventory_panel");
 const std::string LLInventoryPanel::DEFAULT_SORT_ORDER = std::string("InventorySortOrder");
 const std::string LLInventoryPanel::RECENTITEMS_SORT_ORDER = std::string("RecentItemsSortOrder");
 const std::string LLInventoryPanel::INHERIT_SORT_ORDER = std::string("");
-static const LLInventoryFolderViewModelBuilder INVENTORY_BRIDGE_BUILDER; // <FS:TM> CHUI merge changed
-//static LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
+//<ND> const makes GCC >= 4.6 and Clang very angry about not user defined default ctor.
+//static const LLInventoryFolderViewModelBuilder INVENTORY_BRIDGE_BUILDER;
+static LLInventoryFolderViewModelBuilder INVENTORY_BRIDGE_BUILDER;
+// </ND>
 // statics 
 bool LLInventoryPanel::sColorSetInitialized = false;
 LLUIColor LLInventoryPanel::sDefaultColor;
