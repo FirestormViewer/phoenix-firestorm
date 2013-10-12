@@ -113,6 +113,9 @@ public:
 	// Update the baked texture hash.
 	virtual void		addToBakedTextureHash(LLMD5& hash) const = 0;
 
+	// <FS:CR> Moved public for access by llviewerwearable
+	typedef std::map<S32, LLVisualParam *>    visual_param_index_map_t;
+	
 protected:
 	typedef std::map<S32, LLLocalTextureObject*> te_map_t;
 	void				syncImages(te_map_t &src, te_map_t &dst);
@@ -132,7 +135,8 @@ protected:
 	typedef std::map<S32, F32> param_map_t;
 	param_map_t mSavedVisualParamMap; // last saved version of visual params
 
-	typedef std::map<S32, LLVisualParam *>    visual_param_index_map_t;
+	// <FS:CR> Moved public for access by llviewerwearable
+	//typedef std::map<S32, LLVisualParam *>    visual_param_index_map_t;
 	visual_param_index_map_t mVisualParamIndexMap;
 
 	te_map_t mTEMap;				// maps TE to LocalTextureObject
