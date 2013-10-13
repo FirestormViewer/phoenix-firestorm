@@ -112,7 +112,7 @@ FSRadar::~FSRadar()
 void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& postMsg)
 {
 // <FS:CR> Milkshake-style radar alerts
-	LLCachedControl<bool> milkshake_radar(gSavedSettings, "FSMilkshakeRadarToasts", false);
+	static LLCachedControl<bool> milkshake_radar(gSavedSettings, "FSMilkshakeRadarToasts", false);
 	
 	if (milkshake_radar)
 	{
