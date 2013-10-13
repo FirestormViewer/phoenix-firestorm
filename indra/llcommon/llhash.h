@@ -37,6 +37,10 @@
 #    include <backward/hashtable.h>
 #  elif GCC_VERSION >= 30400 // gcc 3.4 and up
 #    include <ext/hashtable.h>
+// <FS:CR> Clang support
+#  elif LL_CLANG
+#    include <hashtable.h>
+// </FS:CR> Clang support
 #  elif __GNUC__ >= 3
 #    include <ext/stl_hashtable.h>
 #  else
