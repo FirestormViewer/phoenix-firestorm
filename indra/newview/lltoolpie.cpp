@@ -593,7 +593,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	//   - @fartouch=n restricted and the object is out of range
 	//   - @interact=n restricted and the object isn't a HUD attachment
 	if ( (object) && (rlv_handler_t::isEnabled()) && 
-		( ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset)) || 
+		( (((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset))) || 
 		  ((gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (!object->isHUDAttachment())) ) )
 	{
 		gViewerWindow->setCursor(UI_CURSOR_ARROW);

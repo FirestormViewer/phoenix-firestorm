@@ -416,8 +416,8 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	if(((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
 		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
 //-TT Client LSL Bridge
-		|| (id==FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		|| (id==FSLSLBridge::instance().getBridgeFolder() || (model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
 		)
 //-TT
 		return FALSE;
@@ -469,8 +469,8 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	if(((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
 		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
 //-TT Client LSL Bridge
-		|| (id==FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		|| (id==FSLSLBridge::instance().getBridgeFolder() || (model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
 		)
 //-TT
 		return FALSE;
