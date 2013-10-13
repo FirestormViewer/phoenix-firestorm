@@ -94,7 +94,7 @@ const U32 LLMediaDataClient::MAX_ROUND_ROBIN_QUEUE_SIZE = 10000;
 std::ostream& operator<<(std::ostream &s, const LLMediaDataClient::request_queue_t &q);
 std::ostream& operator<<(std::ostream &s, const LLMediaDataClient::Request &q);
 
-static template <typename T>
+template <typename T>
 typename T::iterator find_matching_request(T &c, const LLMediaDataClient::Request *request, LLMediaDataClient::Request::Type match_type)
 {
 	for(typename T::iterator iter = c.begin(); iter != c.end(); ++iter)
@@ -108,7 +108,7 @@ typename T::iterator find_matching_request(T &c, const LLMediaDataClient::Reques
 	return c.end();
 }
 
-static template <typename T>
+template <typename T>
 typename T::iterator find_matching_request(T &c, const LLUUID &id, LLMediaDataClient::Request::Type match_type)
 {
 	for(typename T::iterator iter = c.begin(); iter != c.end(); ++iter)
@@ -125,7 +125,7 @@ typename T::iterator find_matching_request(T &c, const LLUUID &id, LLMediaDataCl
 // NOTE: remove_matching_requests will not work correctly for containers where deleting an element may invalidate iterators
 // to other elements in the container (such as std::vector).
 // If the implementation is changed to use a container with this property, this will need to be revisited.
-static template <typename T>
+template <typename T>
 void remove_matching_requests(T &c, const LLUUID &id, LLMediaDataClient::Request::Type match_type)
 {
 	for(typename T::iterator iter = c.begin(); iter != c.end();)

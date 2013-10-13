@@ -155,8 +155,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   # LLVM-GCC has been removed in Xcode5
   if (XCODE_VERSION GREATER 4.9)
     set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
-	# I hate myself for doing this, but it will take more time to clean up the warnings [FS:CR]
-	add_definitions(-w)
   else (XCODE_VERSION GREATER 4.9)
     set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
   endif (XCODE_VERSION GREATER 4.9)
