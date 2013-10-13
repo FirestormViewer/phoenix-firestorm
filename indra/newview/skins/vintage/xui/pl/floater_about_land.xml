@@ -264,7 +264,7 @@
 				<name_list.columns label="Typ" name="type"/>
 				<name_list.columns label="Nazwa" name="name"/>
 				<name_list.columns label="Liczba" name="count"/>
-				<name_list.columns label="Najbardziej aktualne" name="mostrecent"/>
+				<name_list.columns label="Najnowsze" name="mostrecent"/>
 			</name_list>
 		</panel>
 		<panel label="Opcje" name="land_options_panel">
