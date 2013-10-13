@@ -85,6 +85,11 @@ public:
 		return mObjectp;
 	}
 
+	Object const* get() const
+	{
+		return mObjectp;
+	}
+
 	Object* operator->()
 	{
 		if( !assertValid( mBytep ) )
