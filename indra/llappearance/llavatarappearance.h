@@ -154,7 +154,7 @@ protected:
 // [/RLVa:KB]
 
 	BOOL				setupBone(const LLAvatarBoneInfo* info, LLJoint* parent, S32 &current_volume_num, S32 &current_joint_num);
-	BOOL				allocateCharacterJoints(U32 num);
+	BOOL				allocateCharacterJoints(S32 num);
 	BOOL				buildSkeleton(const LLAvatarSkeletonInfo *info);
 protected:
 	void				clearSkeleton();
