@@ -896,7 +896,8 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 		
 		BOOL has_glow = FALSE;
 
-		if (cur_glow.get() != start_glow)
+		// if (cur_glow.get() != start_glow)
+		if (const_cast< LLStrider<LLColor4U> const&>(cur_glow).get() != start_glow)
 		{
 			has_glow = TRUE;
 		}
