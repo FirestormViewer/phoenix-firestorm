@@ -320,7 +320,6 @@ private:
 
 	LLFrameTimer		mPerformanceTimer;
 	bool				mFirstNavigate;
-	bool				mCompleted;
 };
 
 /**

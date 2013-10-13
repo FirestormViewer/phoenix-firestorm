@@ -116,10 +116,11 @@ bool move_task_inventory_callback(const LLSD& notification, const LLSD& response
 bool confirm_attachment_rez(const LLSD& notification, const LLSD& response);
 void teleport_via_landmark(const LLUUID& asset_id);
 static BOOL can_move_to_outfit(LLInventoryItem* inv_item, BOOL move_is_into_current_outfit);
-static bool check_category(LLInventoryModel* model,
-						   const LLUUID& cat_id,
-						   LLInventoryPanel* active_panel,
-						   LLInventoryFilter* filter);
+// <FS:CR> Function left unused from FIRE-7219
+//static bool check_category(LLInventoryModel* model,
+//						   const LLUUID& cat_id,
+//						   LLInventoryPanel* active_panel,
+//						   LLInventoryFilter* filter);
 static bool check_item(const LLUUID& item_id,
 					   LLInventoryPanel* active_panel,
 					   LLInventoryFilter* filter);
@@ -4603,6 +4604,8 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 	return accept;
 }
 
+// <FS:CR> Left unused from FIRE-7219
+#if 0
 // static
 bool check_category(LLInventoryModel* model,
 					const LLUUID& cat_id,
@@ -4652,6 +4655,8 @@ bool check_category(LLInventoryModel* model,
 
 	return true;
 }
+#endif // 0
+// <FS:CR> Unused 2013.10.12
 
 // static
 bool check_item(const LLUUID& item_id,
