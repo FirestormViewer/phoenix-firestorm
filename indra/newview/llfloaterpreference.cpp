@@ -1846,7 +1846,7 @@ void LLFloaterPreference::refresh()
 	//updateSliderText(getChild<LLSliderCtrl>("AvatarMeshDetail2",		true), getChild<LLTextBox>("AvatarMeshDetailText2",		true));
 	//updateSliderText(getChild<LLSliderCtrl>("AvatarPhysicsDetail",	true), getChild<LLTextBox>("AvatarPhysicsDetailText",		true));
 	//updateSliderText(getChild<LLSliderCtrl>("TerrainMeshDetail",	true), getChild<LLTextBox>("TerrainMeshDetailText",		true));
-	//updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
+	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
 	//updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
 	// </FS:Ansariel>
 		
