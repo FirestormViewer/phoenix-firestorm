@@ -185,6 +185,11 @@ protected:
 	*/
 	/*virtual*/ int sync();
 
+// <FS:CR> Clang support
+#if LL_CLANG
+	using llstdio_filebuf::xsputn;
+#endif
+// </FS:CR>
 	std::streamsize xsgetn(char_type*, std::streamsize);
 	std::streamsize xsputn(char_type*, std::streamsize);
 #endif
