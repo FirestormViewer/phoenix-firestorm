@@ -121,9 +121,12 @@ static BOOL can_move_to_outfit(LLInventoryItem* inv_item, BOOL move_is_into_curr
 //						   const LLUUID& cat_id,
 //						   LLInventoryPanel* active_panel,
 //						   LLInventoryFilter* filter);
-static bool check_item(const LLUUID& item_id,
-					   LLInventoryPanel* active_panel,
-					   LLInventoryFilter* filter);
+
+// <FS:ND> Unused function
+// static bool check_item(const LLUUID& item_id,
+// 					   LLInventoryPanel* active_panel,
+// 					   LLInventoryFilter* filter);
+// </FS:ND>
 
 // Helper functions
 
@@ -4655,8 +4658,6 @@ bool check_category(LLInventoryModel* model,
 
 	return true;
 }
-#endif // 0
-// <FS:CR> Unused 2013.10.12
 
 // static
 bool check_item(const LLUUID& item_id,
@@ -4670,6 +4671,8 @@ bool check_item(const LLUUID& item_id,
 
 	return filter->check(fv_item->getViewModelItem());
 }
+#endif // 0
+// <FS:CR> Unused 2013.10.12
 
 // <FS:Ansariel> Special for protected folders
 bool LLFolderBridge::isProtected() const
