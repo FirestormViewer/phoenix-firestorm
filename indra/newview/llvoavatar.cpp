@@ -6928,7 +6928,7 @@ void LLVOAvatar::updateMeshTextures()
 
 		LLViewerTexLayerSet* layerset = getTexLayerSet(i);
 		if (use_lkg_baked_layer[i] && !isUsingLocalAppearance() )
-	{
+		{
 			LLViewerFetchedTexture* baked_img = LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[i].mLastTextureID);
 			mBakedTextureDatas[i].mIsUsed = TRUE;
 
@@ -6937,12 +6937,12 @@ void LLVOAvatar::updateMeshTextures()
 			avatar_joint_mesh_list_t::iterator iter = mBakedTextureDatas[i].mJointMeshes.begin();
 			avatar_joint_mesh_list_t::iterator end  = mBakedTextureDatas[i].mJointMeshes.end();
 			for (; iter != end; ++iter)
-	{
+			{
 				LLAvatarJointMesh* mesh = (*iter);
 				if (mesh)
-		{
+				{
 					mesh->setTexture( baked_img );
-			}
+				}
 			}
 		}
 		else if (!isUsingLocalAppearance() && is_layer_baked[i])
@@ -6986,7 +6986,7 @@ void LLVOAvatar::updateMeshTextures()
 				if (mesh)
 				{
 					mesh->setLayerSet( layerset );
-			}
+				}
 			}
 		}
 		else
@@ -7008,7 +7008,7 @@ void LLVOAvatar::updateMeshTextures()
 		{
 			LLAvatarJointMesh* mesh = (*iter);
 			if (mesh)
-		{
+			{
 				mesh->setColor( color );
 				mesh->setTexture( hair_img );
 			}
@@ -7036,7 +7036,15 @@ void LLVOAvatar::updateMeshTextures()
 			}
 		}
 	}
-	removeMissingBakedTextures();
+
+	// removeMissingBakedTextures() will call back into this rountine if something is removed, and can blow up the stack
+	static bool call_remove_missing = true;	
+	if (call_remove_missing)
+	{
+		call_remove_missing = false;
+		removeMissingBakedTextures();	// May call back into this function if anything is removed
+		call_remove_missing = true;
+	}
 }
 
 // virtual
@@ -8313,7 +8321,7 @@ void LLVOAvatar::setIsUsingServerBakes(BOOL newval)
 
 // virtual
 void LLVOAvatar::removeMissingBakedTextures()
-			{
+{
 }
 
 //virtual
