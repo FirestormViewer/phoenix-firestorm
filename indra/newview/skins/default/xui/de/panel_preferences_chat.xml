@@ -31,7 +31,7 @@
 			<check_box label="Systemmeldungen in Klammern einschließen" name="FSIMSystemMessageBrackets"/>
 			<check_box label="In Chat-Verlauf „Du“ anstatt des eigenen Namens anzeigen" name="FSChatHistoryShowYou"/>
 			<check_box label="Namen in direkten IMs anzeigen" name="IMShowNamesForP2PConv"/>
-			<check_box label="IMs per Email zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
+			<check_box label="IMs per E-Mail zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="V1-Stil für IM- und Text-Chatverlauf verwenden" name="plain_text_chat_history"/>
 			<check_box label="Miniaturicons anzeigen, falls V2/3-Chat-Stil verwendet wird" name="ShowChatMiniIcons"/>	
 			<check_box label="Ende der letzten Konversation anzeigen" name="LogShowHistory"/>
@@ -133,6 +133,7 @@
 			<!-- Localchat chat bar -->
 			<check_box name="FSNearbyChatbar" label="Eingabezeile zum Fenster Lokaler Chat hinzufügen" width="300"/>
 			<check_box name="FSShowChatChannel" label="Kanalauswahl in Eingabezeile anzeigen"/>
+			<check_box name="FSShowChatType" label="Chat-Typ/Sende-Button anzeigen" left_delta="260"/>
 			<check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
 			<check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
 			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen um Vortäuschungen zu unterbinden"/>

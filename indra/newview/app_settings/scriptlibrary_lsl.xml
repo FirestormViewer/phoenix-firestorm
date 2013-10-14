@@ -764,6 +764,7 @@
 		<integer_constant name="JSON_FALSE" desc="Represents the constant &quot;false&quot; of a json value." />
 		<integer_constant name="JSON_NULL" desc="Represents the constant &quot;null&quot; of a json value." />
 		<integer_constant name="JSON_APPEND" desc="Used with llJsonSetValue as a specifier to indicate appending the value to the end of the array at that level." />
+		<integer_constant name="JSON_DELETE" desc="Used to delete a value within a JSON text string." />
 					
 		<integer_constant name="ERR_GENERIC" desc="Returned by llReturnObjectsByID and llReturnObjectsByOwner in case of a general error." />
 		<integer_constant name="ERR_PARCEL_PERMISSIONS" desc="Returned by llReturnObjectsByID and llReturnObjectsByOwner in case of a parcel owner permission error." />

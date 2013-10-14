@@ -62,6 +62,7 @@ void FSMoneyTracker::addMessage(const LLChat& chat,bool archive,const LLSD &args
 	tmp_chat.mFromName = chat.mFromName;
 	LLSD chat_args = args;
 	chat_args["use_plain_text_chat_history"] = true;
+	chat_args["show_time"] = true;
 	if(tmp_chat.mTimeStr.empty())
 		tmp_chat.mTimeStr = appendTime();
 	

@@ -112,7 +112,7 @@ public:
 
 	// Update the baked texture hash.
 	virtual void		addToBakedTextureHash(LLMD5& hash) const = 0;
-
+	
 protected:
 	typedef std::map<S32, LLLocalTextureObject*> te_map_t;
 	void				syncImages(te_map_t &src, te_map_t &dst);

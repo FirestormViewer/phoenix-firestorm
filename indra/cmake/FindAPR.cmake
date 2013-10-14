@@ -20,6 +20,9 @@
 FIND_PATH(APR_INCLUDE_DIR apr.h
 /Developer/SDKs/MacOSX10.5.sdk/usr/include/apr-1
 /Developer/SDKs/MacOSX10.6.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.7.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.8.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.9.sdk/usr/include/apr-1
 /usr/local/include/apr-1
 /usr/local/include/apr-1.0
 /usr/include/apr-1
@@ -35,6 +38,9 @@ FIND_LIBRARY(APR_LIBRARY
   NAMES ${APR_NAMES}
   PATHS /Developer/SDKs/MacOSX10.5.sdk/usr/lib
         /Developer/SDKs/MacOSX10.6.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.7.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.8.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.9.sdk/usr/lib
         /usr/lib /usr/local/lib
   NO_DEFAULT_PATH
   )
@@ -77,6 +83,9 @@ MARK_AS_ADVANCED(
 FIND_PATH(APRUTIL_INCLUDE_DIR apu.h
 /Developer/SDKs/MacOSX10.5.sdk/usr/include/apr-1
 /Developer/SDKs/MacOSX10.6.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.7.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.8.sdk/usr/include/apr-1
+/Developer/SDKs/MacOSX10.9.sdk/usr/include/apr-1
 /usr/local/include/apr-1
 /usr/local/include/apr-1.0
 /usr/include/apr-1
@@ -88,6 +97,9 @@ FIND_LIBRARY(APRUTIL_LIBRARY
   NAMES ${APRUTIL_NAMES}
   PATHS /Developer/SDKs/MacOSX10.5.sdk/usr/lib
         /Developer/SDKs/MacOSX10.6.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.7.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.8.sdk/usr/lib
+        /Developer/SDKs/MacOSX10.9.sdk/usr/lib
         /usr/lib /usr/local/lib
   NO_DEFAULT_PATH
   )

@@ -111,7 +111,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mBeaconTextColor(),
 	mBeacons(false),
 	mExcludeAttachment(true),
-	mExcludeTempary(true),
+	mExcludeTemporary(true),
 	mExcludePhysics(true),
 	mExcludeChildPrims(true),
 	mExcludeNeighborRegions(true),
@@ -467,7 +467,7 @@ bool FSAreaSearch::isSearchableObject(LLViewerObject* objectp, LLViewerRegion* o
 		return false;
 	}
 	
-	if (mExcludeTempary && objectp->flagTemporaryOnRez())
+	if (mExcludeTemporary && objectp->flagTemporaryOnRez())
 	{
 		return false;
 	}
@@ -1730,9 +1730,9 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mCheckboxExcludePhysics->set(TRUE);
 	mCheckboxExcludePhysics->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 	
-	mCheckboxExcludeTempary = getChild<LLCheckBoxCtrl>("exclude_temporary");
-	mCheckboxExcludeTempary->set(TRUE);
-	mCheckboxExcludeTempary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	mCheckboxExcludetemporary = getChild<LLCheckBoxCtrl>("exclude_temporary");
+	mCheckboxExcludetemporary->set(TRUE);
+	mCheckboxExcludetemporary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 	
 	mCheckboxExcludeChildPrim = getChild<LLCheckBoxCtrl>("exclude_childprim");
 	mCheckboxExcludeChildPrim->set(TRUE);
@@ -1786,17 +1786,17 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 	}
 	mFSAreaSearch->setFilterPhysicial(mCheckboxPhysical->get());
 
-	if (mCheckboxExcludeTempary->get())
+	if (mCheckboxExcludetemporary->get())
 	{
 		mFSAreaSearch->setFilterTemporary(false);
 		mCheckboxTemporary->set(FALSE);
 		mCheckboxTemporary->setEnabled(FALSE);
-		mFSAreaSearch->setExcludeTempary(true);
+		mFSAreaSearch->setExcludetemporary(true);
 	}
 	else
 	{
 		mCheckboxTemporary->setEnabled(TRUE);
-		mFSAreaSearch->setExcludeTempary(false);
+		mFSAreaSearch->setExcludetemporary(false);
 	}
 	mFSAreaSearch->setFilterTemporary(mCheckboxTemporary->get());
 

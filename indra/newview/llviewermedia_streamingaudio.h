@@ -51,9 +51,7 @@ class LLStreamingAudio_MediaPlugins : public LLStreamingAudioInterface
 	/*virtual*/ std::string getURL();
 
 	// <FS:ND> For FS metadata extraction
-	virtual bool hasNewMetadata();
-	virtual std::string getCurrentArtist();
-	virtual std::string getCurrentTitle();
+	virtual bool getNewMetadata(LLSD& metadata);
 	// </FS:ND>
 
 private:

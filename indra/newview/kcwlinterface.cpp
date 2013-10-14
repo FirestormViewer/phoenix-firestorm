@@ -41,6 +41,7 @@
 
 #include <boost/regex.hpp>
 
+#include "llslurl.h"
 #include "rlvhandler.h"
 #include "rlvactions.h"
 
@@ -525,15 +526,14 @@ LLUUID KCWindlightInterface::getOwnerID(LLParcel *parcel)
 
 std::string KCWindlightInterface::getOwnerName(LLParcel *parcel)
 {
-	//TODO: say if its a group or avatar on notice
-	std::string owner;
+	std::string owner = "";
 	if (parcel->getIsGroupOwned())
 	{
-		gCacheName->getGroupName(parcel->getGroupID(), owner);
+		owner = LLSLURL("group", parcel->getGroupID(), "inspect").getSLURLString();
 	}
 	else
 	{
-		gCacheName->getFullName(parcel->getOwnerID(), owner);
+		owner = LLSLURL("agent", parcel->getOwnerID(), "inspect").getSLURLString();
 	}
 	return owner;
 }

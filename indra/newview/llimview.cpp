@@ -2917,7 +2917,8 @@ void LLIMMgr::addMessage(
 		name_is_setted = true;
 	}
 	bool skip_message = false;
-	if (gSavedSettings.getBOOL("VoiceCallsFriendsOnly"))
+	bool from_linden = LLMuteList::getInstance()->isLinden(from);
+	if (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && !from_linden)
 	{
 		// Evaluate if we need to skip this message when that setting is true (default is false)
 		skip_message = (LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL);	// Skip non friends...
@@ -2990,7 +2991,7 @@ void LLIMMgr::addMessage(
 
 		// Logically it would make more sense to reject the session sooner, in another area of the
 		// code, but the session has to be established inside the server before it can be left.
-		if (LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
+		if (LLMuteList::getInstance()->isMuted(other_participant_id) && !from_linden)
 		{
 			llwarns << "Leaving IM session from initiating muted resident " << from << llendl;
 			if(!gIMMgr->leaveSession(new_session_id))
@@ -3381,9 +3382,17 @@ void LLIMMgr::inviteToSession(
 	{
 		bool isRejectGroupCall = (gSavedSettings.getBOOL("VoiceCallsRejectGroup") && (notify_box_type == "VoiceInviteGroup"));
 		bool isRejectNonFriendCall = (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(caller_id) == NULL));
-		if	(isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb())
+		// <FS:PP> FIRE-6522: Options to automatically decline all group and personal voice chat requests
+		// if (isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb())
+		bool isRejectAdHocCall = (gSavedSettings.getBOOL("VoiceCallsRejectAdHoc") && (notify_box_type == "VoiceInviteAdHoc"));
+		bool isRejectP2PCall = (gSavedSettings.getBOOL("VoiceCallsRejectP2P") && (notify_box_type == "VoiceInviteP2P"));
+		if (isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb() || isRejectAdHocCall || isRejectP2PCall)
+		// </FS:PP>
 		{
-			if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall)
+			// <FS:PP> FIRE-6522
+			// if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall)
+			if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall && !isRejectAdHocCall && !isRejectP2PCall)
+			// </FS:PP>
 			{
 				LLSD args;
 				addSystemMessage(session_id, "you_auto_rejected_call", args);

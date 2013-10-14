@@ -43,6 +43,7 @@
 #include "llbutton.h"
 #include "llchannelmanager.h"
 #include "llchatentry.h"
+#include "llcombobox.h"
 #include "llcommandhandler.h"
 #include "llconsole.h"
 #include "lldraghandle.h"
@@ -70,7 +71,7 @@
 #include "llworld.h"
 #include "rlvhandler.h"
 
-#define NAME_PREDICTION_MINIMUM_LENGTH 2
+static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
 S32 FSFloaterNearbyChat::sLastSpecialChatChannel = 0;
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-0.2.2)
@@ -158,6 +159,14 @@ BOOL FSFloaterNearbyChat::postBuild()
 	enableTranslationButton(LLTranslate::isTranslationConfigured());
 
 	childSetCommitCallback("chat_history_btn",onHistoryButtonClicked,this);
+
+	// chat type selector and send chat button
+	mChatTypeCombo=getChild<LLComboBox>("chat_type");
+	mChatTypeCombo->selectByValue("say");
+	mChatTypeCombo->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatTypeChanged,this));
+	mSendChatButton=getChild<LLButton>("send_chat");
+	mSendChatButton->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxCommit,this));
+	onChatTypeChanged();
 
 	mChatHistory = getChild<FSChatHistory>("chat_history");
 
@@ -895,9 +904,10 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				std::string first_name, last_name;
 				gCacheName->getFirstLastName(*(iter - 1), first_name, last_name);
 				std::string rest_of_match;
+				std::string replaced_text;
 				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 				{
-					prefix += RlvStrings::getAnonym(first_name + " " + last_name) + " ";
+					replaced_text += RlvStrings::getAnonym(first_name + " " + last_name) + " ";
 				}
 				else
 				{
@@ -909,11 +919,13 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 					{
 						rest_of_match = first_name.substr(pattern.size());
 					}
-					prefix += match + rest_of_match + " ";
+					replaced_text += match + rest_of_match + " ";
 				}
 				if (!rest_of_match.empty())
 				{
-					mInputEditor->setText(prefix + suffix);
+					mInputEditor->setText(prefix + replaced_text + suffix);
+					// *HACK: I don't know how to select text in a textbox. :(
+					mInputEditor->setCursorPos(prefix.size());
 					mInputEditor->selectNext((rest_of_match + " "), false);
 				}
 			}
@@ -1029,7 +1041,7 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 			if (!utf8_revised_text.empty() && cmd_line_chat(utf8_revised_text, type))
 			{
 				// Chat with animation
-				sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("FSPlayChatAnimation"));
+				sendChatFromViewer(utf8_revised_text, type, gSavedSettings.getBOOL("PlayChatAnim"));
 			}
 		}
 		
@@ -1050,10 +1062,28 @@ void FSFloaterNearbyChat::onChatBoxCommit()
 {
 	if (mInputEditor->getText().length() > 0)
 	{
-		sendChat(CHAT_TYPE_NORMAL);
+		EChatType type=CHAT_TYPE_NORMAL;
+		if(gSavedSettings.getBOOL("FSShowChatType"))
+		{
+			std::string typeString=mChatTypeCombo->getValue();
+			if(typeString=="whisper")
+			{
+				type=CHAT_TYPE_WHISPER;
+			}
+			else if(typeString=="shout")
+			{
+				type=CHAT_TYPE_SHOUT;
+			}
+		}
+		sendChat(type);
 	}
 	
 	gAgent.stopTyping();
+}
+
+void FSFloaterNearbyChat::onChatTypeChanged()
+{
+	mSendChatButton->setLabel(mChatTypeCombo->getSelectedItemLabel());
 }
 
 void FSFloaterNearbyChat::sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate)

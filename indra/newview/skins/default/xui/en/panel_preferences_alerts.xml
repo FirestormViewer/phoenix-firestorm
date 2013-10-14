@@ -261,6 +261,24 @@
       name="FSReportCollisionMessagesChannel"
       width="90"
       tool_tip="The channel used for reporting collision messages to scripts [Default: -25000]"/>
+    <check_box
+     control_name="FSFlashOnScriptDialog"
+     height="16"
+     label="Flash the app icon when receiving a script dialog and [APP_NAME] is not in focus"
+     layout="topleft"
+     left="10"
+     name="FSFlashOnScriptDialog"
+     top_pad="5"
+     width="160"/>
+    <check_box
+     control_name="FSDisableReturnObjectNotification"
+     height="16"
+     label="Disable 'object has been returned to your inventory' notifications"
+     layout="topleft"
+     left="10"
+     name="FSDisableReturnObjectNotification"
+     top_pad="2"
+     width="160"/>
       
     <check_box
       control_name="FSEnableGrowl"
@@ -269,7 +287,7 @@
       layout="topleft"
       left="10"
       name="notify_growl_checkbox"
-      top_pad="16"
+      top_pad="8"
       width="160"/>
     <check_box
       enabled_control="FSEnableGrowl"

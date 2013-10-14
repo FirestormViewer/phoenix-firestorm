@@ -134,11 +134,7 @@
 	     label="Sky" 
 	     tool_tip="Pops up Sky Editor window"
 	     top_delta="0"
-	     width="30">
-		 <button.commit_callback
-               function="World.EnvPreset"
-               parameter="edit_sky" />
-		 </button>
+	     width="30" />
           <!-- end of Windlight Button -->
 
 	</layout_panel>

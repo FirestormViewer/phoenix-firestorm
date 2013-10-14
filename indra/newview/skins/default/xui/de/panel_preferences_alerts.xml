@@ -33,6 +33,8 @@
 	<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
 	<check_box label="Kollisionsmeldungen an Skripte senden. Kanal:" name="FSReportCollisionMessages"/>
 	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Der Kanal, der verwendet wird, um Kollisionsmeldungen an Skripte zu senden [Standard: -25000]"/>
+	<check_box label="Anwendungsicon blinkt bei neuen Skriptdialogen, wenn [APP_NAME] keinen Fokus besitzt" name="FSFlashOnScriptDialog"/>
+	<check_box label="Objekt-Rückgabe-Benachrichtung deaktivieren" name="FSDisableReturnObjectNotification"/>
 	<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
 	<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
     </panel>

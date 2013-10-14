@@ -35,6 +35,7 @@
 			</text>
 			<check_box label="Używaj starego formatu nazw plików dla logów rozmów" name="UseLegacyIMLogNames" tool_tip="Włączenie tej opcji spowoduje używanie starego formatu nazw plików dla logów rozmów (Nazwa Użytkownika) zamiast nowego (nazwa_użytkownika)."/>
 			<check_box label="Dodawaj datę do nazw plików logów rozmów" name="LogFileNamewithDate" tool_tip="Dodawaj znaczniki czasu do logów czatów oraz IM w formacie czat-RRRR-MM-DD oraz 'Nazwa pliku IM'-RRRR-MM."/>
+			<check_box label="Używaj wbudowanej przeglądarki logów" name="FSUseBuiltInHistory" tool_tip="Używaj wbudowanej przeglądarki logów do przeglądania logów czatów. Gdy wyłączysz tą opcję, to logi będą się otwierać w domyślnym edytorze tekstowym Twojego systemu operacyjnego."/>
 			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
 		</panel>
 		<panel label="Śledzenie spojrzeń" name="tab-lookat">

@@ -69,6 +69,24 @@ ParticleEditor::ParticleEditor(const LLSD& key)
 	mScriptPatternMap["angle_cone"]="PSYS_SRC_PATTERN_ANGLE_CONE";
 	mScriptPatternMap["angle_cone_empty"]="PSYS_SRC_PATTERN_ANGLE_CONE_EMPTY";
 
+	mBlendMap["blend_one"]=LLPartData::LL_PART_BF_ONE;
+	mBlendMap["blend_zero"]=LLPartData::LL_PART_BF_ZERO;
+	mBlendMap["blend_dest_color"]=LLPartData::LL_PART_BF_DEST_COLOR;
+	mBlendMap["blend_src_color"]=LLPartData::LL_PART_BF_SOURCE_COLOR;
+	mBlendMap["blend_one_minus_dest_color"]=LLPartData::LL_PART_BF_ONE_MINUS_DEST_COLOR;
+	mBlendMap["blend_one_minus_src_color"]=LLPartData::LL_PART_BF_ONE_MINUS_SOURCE_COLOR;
+	mBlendMap["blend_src_alpha"]=LLPartData::LL_PART_BF_SOURCE_ALPHA;
+	mBlendMap["blend_one_minus_src_alpha"]=LLPartData::LL_PART_BF_ONE_MINUS_SOURCE_ALPHA;
+
+	mScriptBlendMap["blend_one"]="PSYS_PART_BF_ONE";
+	mScriptBlendMap["blend_zero"]="PSYS_PART_BF_ZERO";
+	mScriptBlendMap["blend_dest_color"]="PSYS_PART_BF_DEST_COLOR";
+	mScriptBlendMap["blend_src_color"]="PSYS_PART_BF_SOURCE_COLOR";
+	mScriptBlendMap["blend_one_minus_dest_color"]="PSYS_PART_BF_ONE_MINUS_DEST_COLOR";
+	mScriptBlendMap["blend_one_minus_src_color"]="PSYS_PART_BF_ONE_MINUS_SOURCE_COLOR";
+	mScriptBlendMap["blend_src_alpha"]="PSYS_PART_BF_SOURCE_ALPHA";
+	mScriptBlendMap["blend_one_minus_src_alpha"]="PSYS_PART_BF_ONE_MINUS_SOURCE_ALPHA";
+
 	// I don't really like referencing the particle texture name here, but it's being done
 	// like this all over the viewer, so this is apparently how it's meant to be. -Zi
 	mDefaultParticleTexture=LLViewerTextureManager::getFetchedTextureFromFile("pixiesmall.j2c");
@@ -105,6 +123,11 @@ BOOL ParticleEditor::postBuild()
 	mScaleEndYSpinner=panel->getChild<LLSpinCtrl>("scale_end_y_spinner");
 	mSourceMaxAgeSpinner=panel->getChild<LLSpinCtrl>("source_max_age_spinner");
 	mParticlesMaxAgeSpinner=panel->getChild<LLSpinCtrl>("particles_max_age_spinner");
+	mStartGlowSpinner=panel->getChild<LLSpinCtrl>("start_glow_spinner");
+	mEndGlowSpinner=panel->getChild<LLSpinCtrl>("end_glow_spinner");
+
+	mBlendFuncSrcCombo=panel->getChild<LLComboBox>("blend_func_src_combo");
+	mBlendFuncDestCombo=panel->getChild<LLComboBox>("blend_func_dest_combo");
 
 	mBounceCheckBox=panel->getChild<LLCheckBoxCtrl>("bounce_checkbox");
 	mEmissiveCheckBox=panel->getChild<LLCheckBoxCtrl>("emissive_checkbox");
@@ -115,6 +138,7 @@ BOOL ParticleEditor::postBuild()
 	mTargetPositionCheckBox=panel->getChild<LLCheckBoxCtrl>("target_position_checkbox");
 	mTargetLinearCheckBox=panel->getChild<LLCheckBoxCtrl>("target_linear_checkbox");
 	mWindCheckBox=panel->getChild<LLCheckBoxCtrl>("wind_checkbox");
+	mRibbonCheckBox=panel->getChild<LLCheckBoxCtrl>("ribbon_checkbox");
 
 	mTargetKeyInput=panel->getChild<LLLineEditor>("target_key_input");
 
@@ -159,6 +183,11 @@ BOOL ParticleEditor::postBuild()
 	mScaleEndYSpinner->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 	mSourceMaxAgeSpinner->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 	mParticlesMaxAgeSpinner->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
+	mStartGlowSpinner->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
+	mEndGlowSpinner->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
+
+	mBlendFuncSrcCombo->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
+	mBlendFuncDestCombo->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 
 	mBounceCheckBox->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 	mEmissiveCheckBox->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
@@ -169,6 +198,7 @@ BOOL ParticleEditor::postBuild()
 	mTargetPositionCheckBox->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 	mTargetLinearCheckBox->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 	mWindCheckBox->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
+	mRibbonCheckBox->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 
 	mTargetKeyInput->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange,this));
 
@@ -186,6 +216,9 @@ BOOL ParticleEditor::postBuild()
 	mStartColorSelector->setCanApplyImmediately(TRUE);
 	mEndColorSelector->setCanApplyImmediately(TRUE);
 	mTexturePicker->setCanApplyImmediately(TRUE);
+
+	mBlendFuncSrcCombo->setValue("blend_src_alpha");
+	mBlendFuncDestCombo->setValue("blend_one_minus_src_alpha");
 
 	onParameterChange();
 
@@ -231,7 +264,6 @@ void ParticleEditor::setObject(LLViewerObject* objectp)
 void ParticleEditor::onParameterChange()
 {
 	mParticles.mPattern=mPatternMap[mPatternTypeCombo->getSelectedValue()];
-
 	mParticles.mPartImageID=mTexturePicker->getImageAssetID();
 
 	// remember the selected texture here to give updateParticles() a UUID to work with
@@ -255,6 +287,13 @@ void ParticleEditor::onParameterChange()
 	mParticles.mMaxAge=mSourceMaxAgeSpinner->getValueF32();
 	mParticles.mPartData.setMaxAge(mParticlesMaxAgeSpinner->getValueF32());
 
+	// different way to set values here, ask Linden Lab why -Zi
+	mParticles.mPartData.mStartGlow=mStartGlowSpinner->getValueF32();
+	mParticles.mPartData.mEndGlow=mEndGlowSpinner->getValueF32();
+
+	mParticles.mPartData.mBlendFuncSource=mBlendMap[mBlendFuncSrcCombo->getSelectedValue()];
+	mParticles.mPartData.mBlendFuncDest=mBlendMap[mBlendFuncDestCombo->getSelectedValue()];
+
 	U32 flags=0;
 	if(mBounceCheckBox->getValue().asBoolean()) flags|=LLPartData::LL_PART_BOUNCE_MASK;
 	if(mEmissiveCheckBox->getValue().asBoolean()) flags|=LLPartData::LL_PART_EMISSIVE_MASK;
@@ -265,6 +304,7 @@ void ParticleEditor::onParameterChange()
 	if(mTargetPositionCheckBox->getValue().asBoolean()) flags|=LLPartData::LL_PART_TARGET_POS_MASK;
 	if(mTargetLinearCheckBox->getValue().asBoolean()) flags|=LLPartData::LL_PART_TARGET_LINEAR_MASK;
 	if(mWindCheckBox->getValue().asBoolean()) flags|=LLPartData::LL_PART_WIND_MASK;
+	if(mRibbonCheckBox->getValue().asBoolean()) flags|=LLPartData::LL_PART_RIBBON_MASK;
 	mParticles.mPartData.setFlags(flags);
 
 	mParticles.mTargetUUID=mTargetKeyInput->getValue().asUUID();
@@ -393,6 +433,10 @@ default\n\
             PSYS_PART_END_COLOR,[END_COLOR],\n\
             PSYS_PART_START_ALPHA,[START_ALPHA],\n\
             PSYS_PART_END_ALPHA,[END_ALPHA],\n\
+            PSYS_PART_START_GLOW,[START_GLOW],\n\
+            PSYS_PART_END_GLOW,[END_GLOW],\n\
+            PSYS_PART_BLEND_FUNC_SOURCE,[BLEND_FUNC_SOURCE],\n\
+            PSYS_PART_BLEND_FUNC_DEST,[BLEND_FUNC_DEST],\n\
             PSYS_PART_START_SCALE,[START_SCALE],\n\
             PSYS_PART_END_SCALE,[END_SCALE],\n\
             PSYS_SRC_TEXTURE,\"[TEXTURE]\",\n\
@@ -430,6 +474,8 @@ default\n\
 	LLStringUtil::replaceString(script,"[END_COLOR]",lslColor(mEndColorSelector->get()));
 	LLStringUtil::replaceString(script,"[START_ALPHA]",mStartAlphaSpinner->getValue().asString());
 	LLStringUtil::replaceString(script,"[END_ALPHA]",mEndAlphaSpinner->getValue().asString());
+	LLStringUtil::replaceString(script,"[START_GLOW]",mStartGlowSpinner->getValue().asString());
+	LLStringUtil::replaceString(script,"[END_GLOW]",mEndGlowSpinner->getValue().asString());
 	LLStringUtil::replaceString(script,"[START_SCALE]",lslVector(mScaleStartXSpinner->getValueF32(),mScaleStartYSpinner->getValueF32(),0.0f));
 	LLStringUtil::replaceString(script,"[END_SCALE]",lslVector(mScaleEndXSpinner->getValueF32(),mScaleEndYSpinner->getValueF32(),0.0f));
 	LLStringUtil::replaceString(script,"[TEXTURE]",textureString);
@@ -441,6 +487,8 @@ default\n\
 	LLStringUtil::replaceString(script,"[OMEGA]",lslVector(mOmegaXSpinner->getValueF32(),mOmegaYSpinner->getValueF32(),mOmegaZSpinner->getValueF32()));
 	LLStringUtil::replaceString(script,"[BURST_SPEED_MIN]",mBurstSpeedMinSpinner->getValue().asString());
 	LLStringUtil::replaceString(script,"[BURST_SPEED_MAX]",mBurstSpeedMaxSpinner->getValue().asString());
+	LLStringUtil::replaceString(script,"[BLEND_FUNC_SOURCE]",mScriptBlendMap[mBlendFuncSrcCombo->getValue().asString()]);
+	LLStringUtil::replaceString(script,"[BLEND_FUNC_DEST]",mScriptBlendMap[mBlendFuncDestCombo->getValue().asString()]);
 
 	std::string delimiter=" |\n                ";
 	std::string flagsString;
@@ -463,6 +511,8 @@ default\n\
 		flagsString+=delimiter+"PSYS_PART_TARGET_POS_MASK";
 	if(mWindCheckBox->getValue())
 		flagsString+=delimiter+"PSYS_PART_WIND_MASK";
+	if(mRibbonCheckBox->getValue())
+		flagsString+=delimiter+"PSYS_PART_RIBBON_MASK";
 
 	LLStringUtil::replaceString(script,"[FLAGS]",flagsString);
 	lldebugs << "\n" << script << llendl;

@@ -131,8 +131,9 @@ set(viewer_SOURCE_FILES
     fsconsoleutils.cpp
     fscontactsfloater.cpp
     fsdata.cpp
-    fsexport.cpp
+    fsexportperms.cpp
     fsfloaterblocklist.cpp
+    fsfloaterexport.cpp
     fsfloatergroup.cpp
     fsfloatergrouptitles.cpp
     fsfloaterimport.cpp
@@ -183,6 +184,7 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lggcontactsetsfloater.cpp
+    lfsimfeaturehandler.cpp
     llpanelopenregionsettings.cpp
 
     llaccountingcostmanager.cpp
@@ -211,6 +213,7 @@ set(viewer_SOURCE_FILES
     llavatariconctrl.cpp
     llavatarlist.cpp
     llavatarlistitem.cpp
+    llavatarrenderinfoaccountant.cpp
     llavatarpropertiesprocessor.cpp
     llblockedlistitem.cpp
     llblocklist.cpp
@@ -819,8 +822,9 @@ set(viewer_HEADER_FILES
     fsconsoleutils.h
     fscontactsfloater.h
     fsdata.h
-    fsexport.h
+    fsexportperms.h
     fsfloaterblocklist.h
+    fsfloaterexport.h
     fsfloatergroup.h
     fsfloatergrouptitles.h
     fsfloaterimport.h
@@ -874,6 +878,7 @@ set(viewer_HEADER_FILES
     lggbeamscolors.h
     lggcontactsets.h
     lggcontactsetsfloater.h
+    lfsimfeaturehandler.h
 
     llaccountingcostmanager.h
     llagent.h
@@ -903,6 +908,7 @@ set(viewer_HEADER_FILES
     llavatarlist.h
     llavatarlistitem.h
     llavatarpropertiesprocessor.h
+    llavatarrenderinfoaccountant.h
     llblockedlistitem.h
     llblocklist.h
     llbox.h

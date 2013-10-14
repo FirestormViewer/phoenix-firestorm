@@ -564,15 +564,17 @@ void LLViewerTextureList::addImageToList(LLViewerFetchedTexture *image)
 	llassert_always(mInitialized) ;
 	llassert(image);
 	if (image->isInImageList())
-	{
-		llerrs << "LLViewerTextureList::addImageToList - Image already in list" << llendl;
+	{	// Flag is already set?
+		llwarns << "LLViewerTextureList::addImageToList - image " << image->getID()  << " already in list" << llendl;
 	}
+	else
+	{
 	if((mImageList.insert(image)).second != true) 
 	{
-		llerrs << "Error happens when insert image to mImageList!" << llendl ;
+			llwarns << "Error happens when insert image " << image->getID()  << " into mImageList!" << llendl ;
 	}
-	
 	image->setInImageList(TRUE) ;
+}
 }
 
 void LLViewerTextureList::removeImageFromList(LLViewerFetchedTexture *image)
@@ -580,22 +582,44 @@ void LLViewerTextureList::removeImageFromList(LLViewerFetchedTexture *image)
 	assert_main_thread();
 	llassert_always(mInitialized) ;
 	llassert(image);
-	if (!image->isInImageList())
-	{
-		llinfos << "RefCount: " << image->getNumRefs() << llendl ;
-		uuid_map_t::iterator iter = mUUIDMap.find(image->getID());
-		if(iter == mUUIDMap.end() || iter->second != image)
-		{
-			llinfos << "Image is not in mUUIDMap!" << llendl ;
-		}
-		llerrs << "LLViewerTextureList::removeImageFromList - Image not in list" << llendl;
-	}
 
-	S32 count = mImageList.erase(image) ;
-	if(count != 1) 
+	S32 count = 0;
+	if (image->isInImageList())
 	{
-		llinfos << image->getID() << llendl ;
-		llerrs << "Error happens when remove image from mImageList: " << count << llendl ;
+		count = mImageList.erase(image) ;
+		if(count != 1) 
+	{
+			llinfos << "Image  " << image->getID() 
+				<< " had mInImageList set but mImageList.erase() returned " << count
+				<< llendl;
+		}
+	}
+	else
+	{	// Something is wrong, image is expected in list or callers should check first
+		llinfos << "Calling removeImageFromList() for " << image->getID() 
+			<< " but doesn't have mInImageList set"
+			<< " ref count is " << image->getNumRefs()
+			<< llendl;
+		uuid_map_t::iterator iter = mUUIDMap.find(image->getID());
+		if(iter == mUUIDMap.end())
+		{
+			llinfos << "Image  " << image->getID() << " is also not in mUUIDMap!" << llendl ;
+		}
+		else if (iter->second != image)
+		{
+			llinfos << "Image  " << image->getID() << " was in mUUIDMap but with different pointer" << llendl ;
+	}
+		else
+	{
+			llinfos << "Image  " << image->getID() << " was in mUUIDMap with same pointer" << llendl ;
+		}
+		count = mImageList.erase(image) ;
+		if(count != 0) 
+		{	// it was in the list already?
+			llwarns << "Image  " << image->getID() 
+				<< " had mInImageList false but mImageList.erase() returned " << count
+				<< llendl;
+		}
 	}
       
 	image->setInImageList(FALSE) ;
@@ -605,15 +629,15 @@ void LLViewerTextureList::addImage(LLViewerFetchedTexture *new_image)
 {
 	if (!new_image)
 	{
-		llwarning("No image to add to image list", 0);
 		return;
 	}
+	llassert(new_image);
 	LLUUID image_id = new_image->getID();
 	
 	LLViewerFetchedTexture *image = findImage(image_id);
 	if (image)
 	{
-		llwarns << "Image with ID " << image_id << " already in list" << llendl;
+		llinfos << "Image with ID " << image_id << " already in list" << llendl;
 	}
 	sNumImages++;
 	
@@ -1234,8 +1258,11 @@ LLPointer<LLImageJ2C> LLViewerTextureList::convertToUploadFile(LLPointer<LLImage
 	return compressedImage;
 }
 
-const S32 MIN_VIDEO_RAM = 32;
-const S32 MAX_VIDEO_RAM = 512; // 512MB max for performance reasons.
+//<FS:TS> These constants aren't actually used. See {MIN,MAX}_VIDEO_RAM_IN_MEGA_BYTES
+//	in llviewertexturelist.h for the real values.
+//const S32 MIN_VIDEO_RAM = 32;
+//const S32 MAX_VIDEO_RAM = 512; // 512MB max for performance reasons.
+//</FS:TS>
 
 // Returns min setting for TextureMemory (in MB)
 S32 LLViewerTextureList::getMinVideoRamSetting()
@@ -1262,7 +1289,13 @@ S32 LLViewerTextureList::getMaxVideoRamSetting(bool get_recommended, float mem_m
 		if(gGLManager.mIsATI)
 		{
 			//shrink the availabe vram for ATI cards because some of them do not handel texture swapping well.
-			max_vram = (S32)(max_vram * 0.75f);  
+			//<FS:TS> Add debug to not shrink
+			//max_vram = (S32)(max_vram * 0.75f);
+			if (!gSavedSettings.getBOOL("FSATIFullTextureMem"))
+			{  
+				max_vram = (S32)(max_vram * 0.75f);  
+			}
+			//</FS:TS>
 		}
 
 		max_vram = llmax(max_vram, getMinVideoRamSetting());
@@ -1358,7 +1391,16 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32 mem)
 	// </FS:Ansariel>
 
 	S32 fb_mem = llmax(VIDEO_CARD_FRAMEBUFFER_MEM, vb_mem/4);
-	mMaxResidentTexMemInMegaBytes = (vb_mem - fb_mem) ; //in MB
+	//<FS:TS> The memory reported by ATI cards is actually the texture
+	//	memory in use, already corrected for the framebuffer and
+	//	VBO pools. Don't back it out a second time.
+	//mMaxResidentTexMemInMegaBytes = (vb_mem - fb_mem) ; //in MB
+	mMaxResidentTexMemInMegaBytes = vb_mem; //in MB
+	if(!gGLManager.mIsATI)
+	{
+		mMaxResidentTexMemInMegaBytes -= fb_mem; //in MB
+	}
+	//</FS:TS>
 	
 	mMaxTotalTextureMemInMegaBytes = mMaxResidentTexMemInMegaBytes * 2;
 	if (mMaxResidentTexMemInMegaBytes > 640)
@@ -1380,7 +1422,8 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32 mem)
 	}
 	
 	llinfos << "Total Video Memory set to: " << vb_mem << " MB" << llendl;
-	llinfos << "Available Texture Memory set to: " << (vb_mem - fb_mem) << " MB" << llendl;
+	//llinfos << "Available Texture Memory set to: " << (vb_mem - fb_mem) << " MB" << llendl;
+	llinfos << "Available Texture Memory set to: " << mMaxResidentTexMemInMegaBytes << " MB" << llendl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

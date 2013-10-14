@@ -2839,14 +2839,17 @@ BOOL LLWindowWin32::getClientRectInScreenSpace( RECT* rectp )
 
 void LLWindowWin32::flashIcon(F32 seconds)
 {
-	FLASHWINFO flash_info;
+	if (getMinimized()) // <FS:CR> Moved this here from llviewermessage.cpp
+	{
+		FLASHWINFO flash_info;
 
-	flash_info.cbSize = sizeof(FLASHWINFO);
-	flash_info.hwnd = mWindowHandle;
-	flash_info.dwFlags = FLASHW_TRAY;
-	flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
-	flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
-	FlashWindowEx(&flash_info);
+		flash_info.cbSize = sizeof(FLASHWINFO);
+		flash_info.hwnd = mWindowHandle;
+		flash_info.dwFlags = FLASHW_TRAY;
+		flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
+		flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
+		FlashWindowEx(&flash_info);
+	}
 }
 
 F32 LLWindowWin32::getGamma()

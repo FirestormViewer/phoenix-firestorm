@@ -288,6 +288,9 @@ LLSD LLFloaterAbout::getInfo()
 #if LL_MSVC
 	info["COMPILER"] = "MSVC";
 	info["COMPILER_VERSION"] = _MSC_VER;
+#elif LL_CLANG	// <FS:CR> Clang identification
+	info["COMPILER"] = "Clang";
+	info["COMPILER_VERSION"] = CLANG_VERSION_STRING;
 #elif LL_GNUC
 	info["COMPILER"] = "GCC";
 	info["COMPILER_VERSION"] = GCC_VERSION;
@@ -392,6 +395,11 @@ LLSD LLFloaterAbout::getInfo()
 			break;
 	}
 	// </FS:PP>
+
+	// <FS:Ansariel> FIRE-11768: Include texture memory settings
+	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
+	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
+	// </FS:Ansariel>
 
     return info;
 }

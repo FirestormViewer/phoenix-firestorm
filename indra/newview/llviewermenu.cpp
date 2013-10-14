@@ -136,7 +136,7 @@
 // [/RLVa:KB]
 #include "fslslbridge.h"
 #include "fscommon.h"
-#include "fsexport.h"
+#include "fsfloaterexport.h"
 #include "fscontactsfloater.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 #include "fswsassetblacklist.h"
@@ -149,7 +149,6 @@
 #include "piemenu.h"	// ## Zi: Pie Menu
 #include "llfloaterpreference.h"	//<FS:KC> Volume controls prefs
 #include "llcheckboxctrl.h"			//<FS:KC> Volume controls prefs
-#include "daeexport.h"
 
 
 using namespace LLAvatarAppearanceDefines;
@@ -368,6 +367,8 @@ BOOL enable_save_into_task_inventory(void*);
 BOOL enable_detach(const LLSD& = LLSD());
 void menu_toggle_attached_lights(void* user_data);
 void menu_toggle_attached_particles(void* user_data);
+
+void avatar_tex_refresh();	// <FS:CR> FIRE-11800
 
 class LLMenuParcelObserver : public LLParcelObserver
 {
@@ -1202,10 +1203,6 @@ class LLAdvancedCheckInfoDisplay : public view_listener_t
 	{
 		U32 info_display = info_display_from_string( userdata.asString() );
 		bool new_value = false;
-
-		// <FS:Ansariel> Silence log spam
-		//LL_INFOS("ViewerMenu") << "check " << userdata.asString() << LL_ENDL;
-		LL_DEBUGS("ViewerMenu") << "check " << userdata.asString() << LL_ENDL;
 
 		if ( info_display != 0 )
 		{
@@ -2907,22 +2904,27 @@ class LLObjectTexRefresh : public view_listener_t
     }
 };
 
+void avatar_tex_refresh()
+{
+	LLVOAvatar* avatar = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+	if(avatar)
+	{
+		// I bet this can be done more elegantly, but this is just straightforward
+		destroy_texture(avatar->getTE(TEX_HEAD_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_UPPER_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_LOWER_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_EYES_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_SKIRT_BAKED)->getID());
+		destroy_texture(avatar->getTE(TEX_HAIR_BAKED)->getID());
+		LLAvatarPropertiesProcessor::getInstance()->sendAvatarTexturesRequest(avatar->getID());
+	}
+}
+
 class LLAvatarTexRefresh : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-		LLVOAvatar* avatar=find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-		if(avatar)
-		{
-			// I bet this can be done more elegantly, but this is just straightforward
-			destroy_texture(avatar->getTE(TEX_HEAD_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_UPPER_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_LOWER_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_EYES_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_SKIRT_BAKED)->getID());
-			destroy_texture(avatar->getTE(TEX_HAIR_BAKED)->getID());
-			LLAvatarPropertiesProcessor::getInstance()->sendAvatarTexturesRequest(avatar->getID());
-		}
+		avatar_tex_refresh();
 
         return true;
     }
@@ -3475,6 +3477,67 @@ bool enable_object_unmute()
 			   LLMuteList::getInstance()->isMuted(object->getID());;
 	}
 }
+
+
+// 0 = normal, 1 = always, 2 = never
+class LLAvatarCheckImpostorMode : public view_listener_t
+{	
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		if (!object) return false;
+
+		LLVOAvatar* avatar = find_avatar_from_object(object); 
+		if (!avatar) return false;
+		
+		U32 mode = userdata.asInteger();
+		switch (mode) 
+		{
+			case 0:
+				return (avatar->getVisualMuteSettings() == LLVOAvatar::VISUAL_MUTE_NOT_SET);
+			case 1:
+				return (avatar->getVisualMuteSettings() == LLVOAvatar::ALWAYS_VISUAL_MUTE);
+			case 2:
+				return (avatar->getVisualMuteSettings() == LLVOAvatar::NEVER_VISUAL_MUTE);
+			default:
+				return false;
+		}
+	}	// handleEvent()
+};
+
+// 0 = normal, 1 = always, 2 = never
+class LLAvatarSetImpostorMode : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		if (!object) return false;
+
+		LLVOAvatar* avatar = find_avatar_from_object(object); 
+		if (!avatar) return false;
+		
+		U32 mode = userdata.asInteger();
+		switch (mode) 
+		{
+			case 0:
+				avatar->setVisualMuteSettings(LLVOAvatar::VISUAL_MUTE_NOT_SET);
+				break;
+			case 1:
+				avatar->setVisualMuteSettings(LLVOAvatar::ALWAYS_VISUAL_MUTE);
+				break;
+			case 2:
+				avatar->setVisualMuteSettings(LLVOAvatar::NEVER_VISUAL_MUTE);
+				break;
+			default:
+				return false;
+		}
+
+		avatar->forceUpdateVisualMuteSettings();
+		LLVOAvatar::cullAvatarsByPixelArea();
+		return true;
+	}	// handleEvent()
+};
+
 
 class LLObjectMute : public view_listener_t
 {
@@ -6830,7 +6893,9 @@ void handle_look_at_selection(const LLSD& param)
 void handle_zoom_to_object(LLUUID object_id, const LLVector3d& object_pos)
 // </FS:Ansariel> Option to try via exact position
 {
-	const F32 PADDING_FACTOR = 2.f;
+	// <FS:Zi> Fix camera zoom to look at the avatar's face from the front
+	// const F32 PADDING_FACTOR = 2.f;
+	// </FS:Zi>
 
 	LLViewerObject* object = gObjectList.findObject(object_id);
 
@@ -6838,18 +6903,32 @@ void handle_zoom_to_object(LLUUID object_id, const LLVector3d& object_pos)
 	{
 		gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
 
-		LLBBox bbox = object->getBoundingBoxAgent() ;
-		F32 angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getAspect() > 1.f ? LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect() : LLViewerCamera::getInstance()->getView());
-		F32 distance = bbox.getExtentLocal().magVec() * PADDING_FACTOR / atan(angle_of_view);
+		// <FS:Zi> Fix camera zoom to look at the avatar's face from the front
+		// LLBBox bbox = object->getBoundingBoxAgent() ;
+		// F32 angle_of_view = llmax(0.1f, LLViewerCamera::getInstance()->getAspect() > 1.f ? LLViewerCamera::getInstance()->getView() * LLViewerCamera::getInstance()->getAspect() : LLViewerCamera::getInstance()->getView());
+		// F32 distance = bbox.getExtentLocal().magVec() * PADDING_FACTOR / atan(angle_of_view);
 
-		LLVector3 obj_to_cam = LLViewerCamera::getInstance()->getOrigin() - bbox.getCenterAgent();
-		obj_to_cam.normVec();
+		// LLVector3 obj_to_cam = LLViewerCamera::getInstance()->getOrigin() - bbox.getCenterAgent();
+		// obj_to_cam.normVec();
 
 
-			LLVector3d object_center_global = gAgent.getPosGlobalFromAgent(bbox.getCenterAgent());
+		//	LLVector3d object_center_global = gAgent.getPosGlobalFromAgent(bbox.getCenterAgent());
 
-			gAgentCamera.setCameraPosAndFocusGlobal(object_center_global + LLVector3d(obj_to_cam * distance), 
-											object_center_global, 
+		// 	gAgentCamera.setCameraPosAndFocusGlobal(object_center_global + LLVector3d(obj_to_cam * distance), 
+		// 									object_center_global, 
+
+		LLVector3d object_center_global=object->getPositionGlobal();
+
+		float eye_distance=gSavedSettings.getF32("CameraZoomDistance");
+		float eye_z_offset=gSavedSettings.getF32("CameraZoomEyeZOffset");
+		LLVector3d focus_z_offset=LLVector3d(0.0f,0.0f,gSavedSettings.getF32("CameraZoomFocusZOffset"));
+
+		LLVector3d eye_offset(eye_distance,0.0f,eye_z_offset);
+		eye_offset=eye_offset*object->getRotationRegion();
+
+		gAgentCamera.setCameraPosAndFocusGlobal(object_center_global+eye_offset, 
+										object_center_global+focus_z_offset, 
+		// </FS:Zi>
 											object_id );
 	}
 	// <FS:Ansariel> Option to try via exact position
@@ -8932,6 +9011,24 @@ class FSStreamListImportXML :public view_listener_t
 };
 // </FS:CR> Stream list import/export
 
+// <FS:CR> Dump SimulatorFeatures to chat
+class FSDumpSimulatorFeaturesToChat : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (LLViewerRegion* region = gAgent.getRegion())
+		{
+			LLSD sim_features;
+			std::stringstream out_str;
+			region->getSimulatorFeatures(sim_features);
+			LLSDSerialize::toPrettyXML(sim_features, out_str);
+			reportToNearbyChat(out_str.str());
+		}
+		return true;
+	}
+};
+// </FS:CR> Dump SimulatorFeatures to chat
+
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -9346,6 +9443,7 @@ void handle_rebake_textures(void*)
 	if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
 	{
 		LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+		avatar_tex_refresh();	// <FS:CR> FIRE-11800 - Refresh the textures too
 	}
 }
 
@@ -10045,7 +10143,11 @@ class FSObjectExport : public view_listener_t
 {
 	bool handleEvent( const LLSD& userdata)
 	{
-		FSExport::getInstance()->exportSelection();
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		if (objectp)
+		{
+			LLFloaterReg::showInstance("fs_export");
+		}
 		return true;
 	}
 };
@@ -10055,10 +10157,15 @@ class FSObjectExportCollada : public view_listener_t
 {
 	bool handleEvent( const LLSD& userdata)
 	{
-		DAEExportUtil::export_selection();
+		LLViewerObject* objectp = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+		if (objectp)
+		{
+			LLFloaterReg::showInstance("export_collada");
+		}
 		return true;
 	}
 };
+// </FS:CR>
 
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
@@ -10531,6 +10638,8 @@ void initialize_menus()
 	view_listener_t::addMenu( new LLCheckPanelPeopleTab(), "SideTray.CheckPanelPeopleTab");
 
 	 // Avatar pie menu
+	view_listener_t::addMenu(new LLAvatarCheckImpostorMode(), "Avatar.CheckImpostorMode");
+	view_listener_t::addMenu(new LLAvatarSetImpostorMode(), "Avatar.SetImpostorMode");
 	view_listener_t::addMenu(new LLObjectMute(), "Avatar.Mute");
 	view_listener_t::addMenu(new LLAvatarAddFriend(), "Avatar.AddFriend");
 	view_listener_t::addMenu(new LLAvatarAddContact(), "Avatar.AddContact");
@@ -10690,6 +10799,8 @@ void initialize_menus()
 	// <FS:CR> Stream list import/export
 	view_listener_t::addMenu(new FSStreamListExportXML(), "Streamlist.xml_export");
 	view_listener_t::addMenu(new FSStreamListImportXML(), "Streamlist.xml_import");
+	// <FS:CR> Dump SimulatorFeatures to chat
+	view_listener_t::addMenu(new FSDumpSimulatorFeaturesToChat(), "Develop.DumpSimFeaturesToChat");
 
 	// <FS:Techwolf Lupindo> export
 	view_listener_t::addMenu(new FSObjectExport(), "Object.Export");

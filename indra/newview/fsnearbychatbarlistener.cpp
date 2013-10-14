@@ -105,12 +105,6 @@ void FSNearbyChatBarListener::sendChat(LLSD const & chat_data) const
 	}
 
 	// Send it as if it was typed in
-	// <FS:Zi> Remove floating chat bar
-	// mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
-	// <FS:Ansariel> [FS communication UI]
-	//LLNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("FSPlayChatAnimation"));
-	FSNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("FSPlayChatAnimation"));
-	// </FS:Ansariel> [FS communication UI]
-	// <FS:Zi>
+	FSNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("PlayChatAnim"));
 }
 

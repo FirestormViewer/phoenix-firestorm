@@ -31,6 +31,8 @@
 		<check_box label="Powiadomienia o kolizjach w czacie lokalnym" name="FSCollisionMessagesInChat"/>
 		<check_box label="Przesyłaj skryptom powiad. o kolizjach na kanał:" name="FSReportCollisionMessages"/>
 		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Kanał używany do przesyłania skryptom powiadomień o kolizjach [Domyślnie: -25000]"/>
+		<check_box label="Mrugaj ikoną aplikacji, gdy otwiera się okno dialogowe skryptu, a [APP_NAME] jest w tle" name="FSFlashOnScriptDialog"/>
+		<check_box label="Wyłącz powiadomienia mówiące o zwróceniu przedmiotów do szafy" name="FSDisableReturnObjectNotification"/>
 		<check_box label="Włącz powiadomienia Growl" name="notify_growl_checkbox"/>
 		<check_box label="Włącz Growl nawet gdy Firestorm jest aktywny" name="notify_growl_always_checkbox"/>
 	</panel>

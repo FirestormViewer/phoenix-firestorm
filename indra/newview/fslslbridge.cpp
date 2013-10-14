@@ -306,6 +306,11 @@ void FSLSLBridge::recreateBridge()
 {
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 	{
+		//<FS:TS> FIRE-11746: Recreate should throw error if disabled
+		llwarns << "Asked to create bridge, but bridge is disabled. Aborting." << llendl;
+		reportToNearbyChat(LLTrans::getString("fsbridge_cant_create_disabled"));
+		mBridgeCreating = false;
+		//</FS:TS> FIRE-11746
 		return;
 	}
 

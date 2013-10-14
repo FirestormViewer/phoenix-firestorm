@@ -47,7 +47,7 @@
 #include "llsys.h"
 #include "llframetimer.h"
 
-#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+#include "nd/ndallocstats.h" // <FS:ND/> Allocation stats.
 
 //----------------------------------------------------------------------------
 
@@ -186,9 +186,9 @@ void LLMemory::logMemoryInfo(BOOL update)
 	llinfos << "Total reserved (KB): " << LLPrivateMemoryPoolManager::getInstance()->mTotalReservedSize / 1024 << llendl ;
 	llinfos << "Total allocated (KB): " << LLPrivateMemoryPoolManager::getInstance()->mTotalAllocatedSize / 1024 << llendl ;
 
-	// <FS:ND> tcmalloc replacement
+	// <FS:ND> log finer grained allocation stats
 	std::stringstream strm;
-	nd::memorypool::dumpStats( strm );
+	nd::allocstats::dumpStats( strm );
 	llinfos << strm.str() << llendl;
 	// </FS:ND>
 }

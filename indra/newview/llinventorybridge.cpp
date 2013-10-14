@@ -116,13 +116,17 @@ bool move_task_inventory_callback(const LLSD& notification, const LLSD& response
 bool confirm_attachment_rez(const LLSD& notification, const LLSD& response);
 void teleport_via_landmark(const LLUUID& asset_id);
 static BOOL can_move_to_outfit(LLInventoryItem* inv_item, BOOL move_is_into_current_outfit);
-static bool check_category(LLInventoryModel* model,
-						   const LLUUID& cat_id,
-						   LLInventoryPanel* active_panel,
-						   LLInventoryFilter* filter);
-static bool check_item(const LLUUID& item_id,
-					   LLInventoryPanel* active_panel,
-					   LLInventoryFilter* filter);
+// <FS:CR> Function left unused from FIRE-7219
+//static bool check_category(LLInventoryModel* model,
+//						   const LLUUID& cat_id,
+//						   LLInventoryPanel* active_panel,
+//						   LLInventoryFilter* filter);
+
+// <FS:ND> Unused function
+// static bool check_item(const LLUUID& item_id,
+// 					   LLInventoryPanel* active_panel,
+// 					   LLInventoryFilter* filter);
+// </FS:ND>
 
 // Helper functions
 
@@ -4603,6 +4607,8 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 	return accept;
 }
 
+// <FS:CR> Left unused from FIRE-7219
+#if 0
 // static
 bool check_category(LLInventoryModel* model,
 					const LLUUID& cat_id,
@@ -4665,6 +4671,8 @@ bool check_item(const LLUUID& item_id,
 
 	return filter->check(fv_item->getViewModelItem());
 }
+#endif // 0
+// <FS:CR> Unused 2013.10.12
 
 // <FS:Ansariel> Special for protected folders
 bool LLFolderBridge::isProtected() const
@@ -5535,6 +5543,35 @@ LLInventoryObject* LLObjectBridge::getObject() const
 }
 
 // <FS:Ansariel> Touch worn objects
+bool is_attachment_touch_restricted(const LLUUID& idItem)
+{
+	const LLInventoryItem* pItem = gInventory.getItem(idItem);
+	if ( (!isAgentAvatarValid()) || (!pItem) )
+		return true;
+
+	std::string attachment_spot_name = gAgentAvatarp->getAttachedPointName(pItem->getLinkedUUID());
+	
+	bool attached_to_hud = (attachment_spot_name == "Center 2" ||
+		attachment_spot_name == "Top Right" ||
+		attachment_spot_name == "Top" ||
+		attachment_spot_name == "Top Left" ||
+		attachment_spot_name == "Center" ||
+		attachment_spot_name == "Bottom Left" ||
+		attachment_spot_name == "Bottom" ||
+		attachment_spot_name == "Bottom Right");
+
+	if (attached_to_hud)
+	{
+		return (gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHHUD));
+	}
+	else
+	{
+		return (gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHALL) ||
+			gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH) ||
+			gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF));
+	}
+}
+
 bool is_attachment_touchable(const LLUUID& idItem)
 {
 	const LLInventoryItem* pItem = gInventory.getItem(idItem);
@@ -5550,6 +5587,11 @@ bool is_attachment_touchable(const LLUUID& idItem)
 
 void handle_attachment_touch(const LLUUID& idItem)
 {
+	if (is_attachment_touch_restricted(idItem))
+	{
+		return;
+	}
+
 	const LLInventoryItem* pItem = gInventory.getItem(idItem);
 	if ( (!isAgentAvatarValid()) || (!pItem) )
 		return;
@@ -5841,6 +5883,10 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				if (is_attachment_touchable(mUUID))
 				{
 					items.push_back(std::string("Touch Attachment"));
+					if (is_attachment_touch_restricted(mUUID))
+					{
+						disabled_items.push_back(std::string("Touch Attachment"));
+					}
 				}
 				// </FS:Ansariel>
 

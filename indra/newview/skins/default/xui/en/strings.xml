@@ -435,13 +435,16 @@ Please try logging in again in a minute.</string>
 	<string name="ChangePermissions">Change its permissions</string>
 	<string name="TrackYourCamera">Track your camera</string>
 	<string name="ControlYourCamera">Control your camera</string>
+	<string name="TeleportYourAgent">Teleport you</string>
+	<string name="ManageEstateSilently">Manage your estates silently</string>
+	<string name="ChangeYourDefaultAnimations">Change your default animations</string>
+	
 	<string name="JoinAnExperience">Join an experience</string> <!-- not used -->
 	<string name="SilentlyManageEstateAccess">Suppress alerts when managing estate access lists</string>
 	<string name="OverrideYourAnimations">Replace your default animations</string>
 	<string name="ScriptReturnObjects">Return objects on your behalf</string>
 	<string name="NotConnected">Not Connected</string>
 	<string name="AgentNameSubst">(You)</string> <!-- Substitution for agent name -->
-	<string name="TeleportYourAgent">Teleport you</string>
 	<string name="UnknownScriptPermission">(unknown)!</string>
 
 	<!-- Sim Access labels -->
@@ -479,6 +482,7 @@ Please try logging in again in a minute.</string>
 	<string name="script_files">Scripts</string>
 	<string name="dictionary_files">Dictionaries</string>
 	<string name="backup_files">Object Backups</string>
+	<string name="collada_files">COLLADA Models</string>
 
   <!-- LSL Usage Hover Tips -->
 	<string name="LSLTipSleepTime" translate="false">Sleeps script for [SLEEP_TIME] seconds.</string>
@@ -2529,6 +2533,7 @@ Try enclosing path to the editor with double quotes.
   <string name="qtool_still_busy">Please continue to wait, the align tool is still working.</string>
   <string name="qtool_done">The align tool has finished.</string>
 
+  <string name="fsbridge_cant_create_disabled">Firestorm cannot create the LSL bridge if "Enable LSL-Client Bridge" is disabled in Preferences.</string>
   <string name="fsbridge_no_library">Firestorm could not create an LSL bridge. Please enable your library and relog.</string>
   <string name="fsbridge_already_creating">Bridge creation in process, cannot start another. Please wait a few minutes before trying again.</string>
   <string name="fsbridge_creating">Creating the bridge. This might take a moment, please wait.</string>
@@ -2586,27 +2591,6 @@ Try enclosing path to the editor with double quotes.
   <string name="TotalScriptCountChangeIncrease">Total scripts in region jumped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
   <string name="TotalScriptCountChangeDecrease">Total scripts in region dropped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
   <string name="preproc_toggle_warning">Toggling the preprocessor will not take full effect until you close and reopen this editor.</string>
-	
-  <!-- <FS:CR> Exporter messages -->
-  <string name="export_started">Beginning export...</string>
-  <string name="export_finished">Export finished.</string>
-  <string name="export_fail_no_mesh">Exporting mesh is not currently supported. Aborting export.</string>
-  <string name="export_nothing_exported">Nothing was exported. Backup not created.</string>
-  <string name="export_node_not_found">LLSelect node for [OBJECT] not found. Using default prim instead.</string>
-  <string name="export_failed_export_check">[OBJECT] failed permissions check. Using default prim.</string>
-  <string name="export_asset_failed_export_check">[ITEM] failed permissions check. Skipping.</string>
-  <string name="export_failed_export_null_texture">Attempted to export null texture.</string>
-  <string name="export_loading_texture">Loading texture [ITEM]...</string>
-  <string name="export_saving_texture">Successfully saved texture [TEXTURE].</string>
-  <string name="export_saving_asset">Saving [ITEM]...</string>
-  <string name="export_failed_to_receive_texture">Failed to get texture [TEXTURE].</string>
-  <string name="export_received_null_texture">Received null texture [TEXTURE].</string>
-  <string name="export_item_not_exportable">[ITEM] is not currently supported by the exporter. Skipping.</string>
-  <string name="export_failed_fetch">Could not retrieve [ITEM]. (Status [STATUS] [EXT_STATUS])</string>
-  <string name="export_requesting_asset">Requesting asset [ITEM]...</string>
-  <string name="export_rerequesting_inventory">Rerequesting inventory for [ITEM].</string>
-  <string name="export_rerequesting_texture">Rerequesting texture [ITEM].</string>
-  <string name="export_failed_to_load">Failed to load asset [ITEM].</string>
 
   <!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
   <string name="skin_defaults_starlight_location">Showing your current location in the menu bar was disabled as a default for the Starlight skin series.</string>

@@ -117,6 +117,7 @@ LLManipTranslate::LLManipTranslate( LLToolComposite* composite )
 	mSendUpdateOnMouseUp(FALSE),
 	mMouseOutsideSlop(FALSE),
 	mCopyMadeThisDrag(FALSE),
+	mWarningNoDragCopy(false),	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
 	mMouseDownX(-1),
 	mMouseDownY(-1),
 	mAxisArrowLength(50),
@@ -424,6 +425,18 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 		return TRUE;
 	}
 	
+	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
+	if(mask==MASK_COPY && !LLSelectMgr::instance().selectGetNoIndividual())
+	{
+		if(!mWarningNoDragCopy)
+		{
+			mWarningNoDragCopy=true;
+			make_ui_sound("UISndInvalidOp");
+		}
+		return TRUE;
+	}
+	// </FS:Zi>
+
 	// Handle auto-rotation if necessary.
 	LLRect world_rect = gViewerWindow->getWorldViewRectScaled();
 	const F32 ROTATE_ANGLE_PER_SECOND = 30.f * DEG_TO_RAD;
@@ -1075,6 +1088,7 @@ BOOL LLManipTranslate::handleMouseUp(S32 x, S32 y, MASK mask)
 		//gAgent.setObjectTracking(gSavedSettings.getBOOL("TrackFocusObject"));
 	}
 
+	mWarningNoDragCopy=false;	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
 	return LLManip::handleMouseUp(x, y, mask);
 }
 
@@ -1732,7 +1746,8 @@ void LLManipTranslate::highlightIntersection(LLVector3 normal,
 
 		gGL.getModelviewMatrix().inverse().mult_vec_matrix(plane);
 
-		gClipProgram.uniform4fv("clip_plane", 1, plane.v);
+		static LLStaticHashedString sClipPlane("clip_plane");
+		gClipProgram.uniform4fv(sClipPlane, 1, plane.v);
 		
 		BOOL particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
 		BOOL clouds = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_CLOUDS);

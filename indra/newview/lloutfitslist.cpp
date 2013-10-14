@@ -531,7 +531,11 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 
 		// *TODO: LLUICtrlFactory::defaultBuilder does not use "display_children" from xml. Should be investigated.
 		tab->setDisplayChildren(false);
-		mAccordion->addCollapsibleCtrl(tab);
+
+		// <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
+		// mAccordion->addCollapsibleCtrl(tab);
+		mAccordion->addCollapsibleCtrl(tab, false );
+		// </FS:ND>	
 
 		// Start observing the new outfit category.
 		LLWearableItemsList* list  = tab->getChild<LLWearableItemsList>("wearable_items_list");
@@ -590,6 +594,10 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 			list->setFilterSubString(sFilterSubString);
 		}
 	}
+
+	// <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
+	mAccordion->arrange();
+	// </FS:ND>
 
 	// Handle removed tabs.
 	for (uuid_vec_t::const_iterator iter=vremoved.begin(); iter != vremoved.end(); ++iter)

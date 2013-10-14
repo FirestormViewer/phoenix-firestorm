@@ -10,7 +10,7 @@
 
 	</floater.string>
 	<floater.string name="AboutPosition">
-		Estás en la posición [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1], de [REGION], alojada en &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+		Estás en la posición [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] de [REGION], alojada en &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
 SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 (coordenadas globales [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
 [SERVER_VERSION]
@@ -34,6 +34,8 @@ Fuente utilizada (Font Used): [FONT] ([FONT_SCREEN_DPI])
 Distancia de dibujo (Draw distance): [DRAW_DISTANCE]
 Ancho de banda (Bandwidth): [BANDWIDTH]
 Factor de nivel de detalle (LOD factor): [LOD]
+Render quality: [RENDERQUALITY]
+Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 	</floater.string>
 	<floater.string name="none">
 		(ninguno)

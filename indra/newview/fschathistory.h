@@ -1,5 +1,5 @@
 /** 
- * @file llchathistory.h
+ * @file fschathistory.h
  * @brief LLTextEditor base class
  *
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$

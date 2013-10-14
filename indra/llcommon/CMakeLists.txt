@@ -122,6 +122,7 @@ set(llcommon_HEADER_FILES
     linden_common.h
     linked_lists.h
     llaccountingcost.h
+    llalignedarray.h
     llallocator.h
     llallocator_heap_profile.h
     llagentconstants.h
@@ -237,6 +238,7 @@ set(llcommon_HEADER_FILES
     llstrider.h
     llstring.h
     llstringtable.h
+    llstaticstringtable.h
     llsys.h
     llthread.h
     llthreadsafequeue.h
@@ -267,8 +269,30 @@ set(llcommon_HEADER_FILES
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
 
-FILE( GLOB llcommon_ND_SOURCE_FILES nd/nd*.cpp )
-FILE( GLOB llcommon_ND_HEADER_FILES nd/nd*.h )
+SET( llcommon_ND_SOURCE_FILES
+	 nd/ndallocstats.cpp
+	 nd/ndexceptions.cpp
+	 nd/ndfile.cpp
+	 nd/ndintrin.cpp
+	 nd/ndlogthrottle.cpp
+	 nd/ndmallocstats.cpp
+	 )
+SET(  llcommon_ND_HEADER_FILES 
+	  nd/ndallocstats.h
+	  nd/ndboolswitch.h
+	  nd/ndcallstack.h
+	  nd/ndexception_handler_stub.h
+	  nd/ndexceptions.h
+	  nd/ndfile.h
+	  nd/ndintrin.h
+	  nd/ndlocks.h
+	  nd/ndlogthrottle.h
+	  nd/ndmallocstats.h
+	  nd/ndobjectpool.h
+	  nd/ndpooldefines.h
+	  nd/ndstackwalk.h
+	  nd/ndstlallocator.h
+	  )
 
 SOURCE_GROUP( nd FILES ${llcommon_ND_SOURCE_FILES} ${llcommon_ND_HEADER_FILES} )
 

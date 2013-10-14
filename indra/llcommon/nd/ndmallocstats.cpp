@@ -38,7 +38,7 @@
 
 namespace nd
 {
-	namespace allocstats
+	namespace mallocstats
 	{
 		template< typename T> struct compare_stack
 		{

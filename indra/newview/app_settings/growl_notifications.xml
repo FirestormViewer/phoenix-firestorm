@@ -15,23 +15,15 @@
 -->
 <llsd>
   <map>
-    <key>FriendOnline</key>
-    <map>
-      <key>GrowlName</key>
-      <string>Friend logged on</string>
-      <key>GrowlTitle</key>
-      <string>[NAME]</string>
-      <key>GrowlBody</key>
-      <string>came online</string>
-    </map>
-    <key>FriendOffline</key>
+		FriendOnlineOffline
+    <key>FriendOnlineOffline</key>
     <map>
       <key>GrowlName</key>
       <string>Friend logged off</string>
       <key>GrowlTitle</key>
       <string>[NAME]</string>
       <key>GrowlBody</key>
-      <string>went offline</string>
+      <string>is [STATUS]</string>
     </map>
     <key>SystemMessageTip</key>
     <map>
@@ -160,7 +152,7 @@
       <key>GrowlBody</key>
       <string>[MESSAGE]</string>
     </map>
-    <key>RegionRestartMinute</key>
+    <key>RegionRestartMinutes</key>
     <map>
       <key>GrowlName</key>
       <string>Region restart warning</string>
@@ -171,7 +163,7 @@
       <key>Urgent</key>
       <boolean>true</boolean>
     </map>
-    <key>RegionRestartSecond</key>
+    <key>RegionRestartSeconds</key>
     <map>
       <key>GrowlName</key>
       <string>Region restart warning</string>

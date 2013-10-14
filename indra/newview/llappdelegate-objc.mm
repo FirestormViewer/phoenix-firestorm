@@ -54,6 +54,19 @@
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(languageUpdated) name:@"NSTextInputContextKeyboardSelectionDidChangeNotification" object:nil];
+
+    [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleGetURLEvent:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+}
+
+- (void) handleGetURLEvent:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
+    NSString    *url= nil;
+    url = [[[[NSAppleEventManager sharedAppleEventManager]// 1
+                      currentAppleEvent]// 2
+                     paramDescriptorForKeyword:keyDirectObject]// 3
+                    stringValue];// 4
+
+    const char* url_utf8 = [url UTF8String];
+   handleUrl(url_utf8);
 }
 
 - (void) applicationDidBecomeActive:(NSNotification *)notification
@@ -133,12 +146,14 @@
 	// How to add support for new languages with the input window:
 	// Simply append this array with the language code (ja for japanese, ko for korean, zh for chinese, etc.)
 	NSArray *nonRomanScript = [[NSArray alloc] initWithObjects:@"ja", @"ko", @"zh-Hant", @"zh-Hans", nil];
+	bool ret = true;
 	if ([nonRomanScript containsObject:currentInputLanguage])
     {
-        return false;
+        ret = false;
     }
+	[nonRomanScript release];
     
-    return true;
+    return ret;
 }
 
 @end

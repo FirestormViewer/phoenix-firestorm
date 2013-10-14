@@ -285,6 +285,16 @@
      top_pad="3"
      height="16"
      width="350" />
+   <check_box
+     control_name="FSUseBuiltInHistory"
+     label="Use built-in transcript viewer"
+     layout="topleft"
+     left="30"
+     name="FSUseBuiltInHistory"
+     tool_tip="Uses the built-in transcript viewer for reading transcripts. If disabled, transcripts will open in your operating system's defined text editor."
+     top_pad="3"
+     height="16"
+     width="350" />
 
     <button
      follows="left|top"

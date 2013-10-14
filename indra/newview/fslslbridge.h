@@ -80,6 +80,7 @@ public:
 	std::string currentFullName() { return mCurrentFullName; }
 
 	LLUUID getBridgeFolder() { return mBridgeFolderID; }
+	LLUUID getAttachedID() { return mBridgeUUID; }
 
 	// from LLVOInventoryListener
 	virtual void inventoryChanged(LLViewerObject* object,

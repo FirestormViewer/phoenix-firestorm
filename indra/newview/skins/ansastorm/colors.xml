@@ -675,6 +675,9 @@
      name="GridFocusPointColor"
      reference="White_50" />
     <color
+     name="GridlineBGColor"
+     value="0.92 0.92 1 0.78" />
+    <color
      name="GridlineColor"
      reference="White" />
     <color

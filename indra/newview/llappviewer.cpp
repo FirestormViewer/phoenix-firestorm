@@ -109,6 +109,7 @@
 #include "llfloaterscriptrecover.h"
 // [/SL:KB]
 #include "llspellcheck.h"
+#include "llavatarrenderinfoaccountant.h"
 
 // Linden library includes
 #include "llavatarnamecache.h"
@@ -254,8 +255,8 @@
 // define a self-registering event API object
 #include "llappviewerlistener.h"
 
-#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 #include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "nd/ndallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "fsradar.h"
 
 
@@ -634,7 +635,7 @@ static void settings_to_globals()
 	LLSurface::setTextureSize(gSavedSettings.getU32("RegionTextureSize"));
 	
 	LLRender::sGLCoreProfile = gSavedSettings.getBOOL("RenderGLCoreProfile");
-
+	LLVertexBuffer::sUseVAO = gSavedSettings.getBOOL("RenderUseVAO");
 	LLImageGL::sGlobalUseAnisotropic	= gSavedSettings.getBOOL("RenderAnisotropic");
 	LLImageGL::sCompressTextures		= gSavedSettings.getBOOL("RenderCompressTextures");
 	LLVOVolume::sLODFactor				= gSavedSettings.getF32("RenderVolumeLODFactor");
@@ -787,8 +788,8 @@ public:
 
 bool LLAppViewer::init()
 {	
-	nd::memorypool::startUp(); // <FS:ND/> tcmalloc replacement
 	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
+	nd::mallocstats::startUp(); // <FS:ND/> start collecting alloc stats
 
 	//
 	// Start of the application
@@ -1825,10 +1826,13 @@ bool LLAppViewer::cleanup()
 {
 	// <FS:ND> stop collection stats
 	nd::allocstats::tearDown();
+	nd::mallocstats::tearDown();
 	// </FS:ND>
 
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
+
+    LLNotifications::instance().clear();
 
 	// workaround for DEV-35406 crash on shutdown
 	LLEventPumps::instance().reset();
@@ -2063,7 +2067,8 @@ bool LLAppViewer::cleanup()
 
 	LLAvatarAppearance::cleanupClass();
 	
-	LLAvatarAppearance::cleanupClass();
+	// <FS:Ansariel> Comment out duplicate clean up
+	//LLAvatarAppearance::cleanupClass();
 	
 	LLPostProcess::cleanupClass();
 
@@ -2351,9 +2356,6 @@ bool LLAppViewer::cleanup()
 	MEM_TRACK_RELEASE
 
     llinfos << "Goodbye!" << llendflush;
-
-	// This coud leak memory that was allocated in the pool. But that's ok. We're about to die and the OS will take care of this.
-	//	nd::memorypool::tearDown(); // <FS:ND/> tcmalloc replacement
 
 	// return 0;
 	return true;
@@ -3040,6 +3042,7 @@ bool LLAppViewer::initConfiguration()
  		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
 								 gSavedSettings.getString("SkinCurrentTheme"),
  								 gSavedSettings.getString("Language"));
+		loadSettingsFromDirectory("CurrentSkin");
 // [/SL:KB]
 //		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
 //								 gSavedSettings.getString("Language"));
@@ -3072,26 +3075,6 @@ bool LLAppViewer::initConfiguration()
 	//	}
 
 	//}
-
-#if LL_DARWIN
-
-#if __ppc__
-	// If the CPU doesn't have Altivec (i.e. it's not at least a G4), don't go any further.
-	// Only test PowerPC - all Intel Macs have SSE.
-	if(!gSysCPU.hasAltivec())
-	{
-		std::ostringstream msg;
-		msg << LLTrans::getString("MBRequiresAltiVec");
-		OSMessageBox(
-			msg.str(),
-			LLStringUtil::null,
-			OSMB_OK);
-		removeMarkerFile();
-		return false;
-	}
-#endif
-	
-#endif // LL_DARWIN
 
 	// Display splash screen.  Must be after above check for previous
 	// crash as this dialog is always frontmost.
@@ -5194,6 +5177,13 @@ void LLAppViewer::idle()
 
 	if (gDisconnected)
     {
+		// <FS:CR> Inworldz hang in disconnecting fix by McCabe Maxstead
+		// make sure to quit here if we need to, we can get caught in an infinite loop otherwise -- MC
+		if (mQuitRequested && logoutRequestSent() && (gLogoutTimer.getElapsedTimeF32() > gLogoutMaxTime))
+		{
+			forceQuit();
+		}
+		// </FS:CR>
 		return;
     }
 	if (gTeleportDisplay)
@@ -5362,6 +5352,9 @@ void LLAppViewer::idle()
 		LLFastTimer t(FTM_LOD_UPDATE);
 		gObjectList.updateApparentAngles(gAgent);
 	}
+
+	// Update AV render info
+	LLAvatarRenderInfoAccountant::idle();
 
 	{
 		LLFastTimer t(FTM_AUDIO_UPDATE);

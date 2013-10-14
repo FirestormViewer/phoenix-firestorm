@@ -465,6 +465,8 @@ void LLDrawPoolBump::unbindCubeMap(LLGLSLShader* shader, S32 shader_level, S32& 
 				}
 			}
 		}
+        // Moved below shader->disableTexture call to avoid false alarms from auto-re-enable of textures on stage 0
+        // MAINT-755
 		cube_map->disable();
 		cube_map->restoreMatrix();
 	}
@@ -1389,13 +1391,14 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
 					LLGLDisable blend(GL_BLEND);
 					gGL.setColorMask(TRUE, TRUE);
 					gNormalMapGenProgram.bind();
-					// <FS:PP> Attempt to speed up things a little
-					// gNormalMapGenProgram.uniform1f("norm_scale", gSavedSettings.getF32("RenderNormalMapScale"));
-					static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale");
-					gNormalMapGenProgram.uniform1f("norm_scale", RenderNormalMapScale);
-					// </FS:PP>
-					gNormalMapGenProgram.uniform1f("stepX", 1.f/bump->getWidth());
-					gNormalMapGenProgram.uniform1f("stepY", 1.f/bump->getHeight());
+
+					static LLStaticHashedString sNormScale("norm_scale");
+					static LLStaticHashedString sStepX("stepX");
+					static LLStaticHashedString sStepY("stepY");
+
+					gNormalMapGenProgram.uniform1f(sNormScale, gSavedSettings.getF32("RenderNormalMapScale"));
+					gNormalMapGenProgram.uniform1f(sStepX, 1.f/bump->getWidth());
+					gNormalMapGenProgram.uniform1f(sStepY, 1.f/bump->getHeight());
 
 					LLVector2 v((F32) bump->getWidth()/gPipeline.mScreen.getWidth(),
 								(F32) bump->getHeight()/gPipeline.mScreen.getHeight());

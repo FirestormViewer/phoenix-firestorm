@@ -1353,7 +1353,7 @@ void LLStatusBar::onParcelWLClicked()
 // <FS:CR> FIRE-5118 - Lightshare support
 void LLStatusBar::onLightshareClicked()
 {
-	FSLightshare::getInstance()->processLightshareRefresh();
+	FSLightshare::getInstance()->processLightshareReset();
 }
 // </FS:CR>
 

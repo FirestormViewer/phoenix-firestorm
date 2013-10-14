@@ -1282,6 +1282,13 @@ even though the user gets a free copy.
              layout="topleft"
              left_pad="0"
              name="checkbox allow everyone copy"
+             width="80" />
+            <check_box
+             height="19"
+             label="Export"
+             layout="topleft"
+             left_pad="0"
+             name="checkbox allow export"
              width="90" />
             <text
                type="string"

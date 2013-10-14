@@ -108,6 +108,11 @@ BOOL LLEmote::onUpdate(F32 time, U8* joint_mask)
 		F32 weight = mParam->getMinWeight() + mPose.getWeight() * (mParam->getMaxWeight() - mParam->getMinWeight());
 		mParam->setWeight(weight, FALSE);
 
+		// <FS:ND> mCharacter being 0 might be one of the reasons for FIRE-11529
+		if( !mCharacter )
+			return TRUE;
+		// </FS:ND>	
+
 		// Cross fade against the default parameter
 		LLVisualParam* default_param = mCharacter->getVisualParam( "Express_Closed_Mouth" );
 		if( default_param )

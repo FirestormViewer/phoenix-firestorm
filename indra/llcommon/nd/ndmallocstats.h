@@ -31,7 +31,7 @@
 
 namespace nd
 {
-	namespace allocstats
+	namespace mallocstats
 	{
 		void startUp();
 		void tearDown();

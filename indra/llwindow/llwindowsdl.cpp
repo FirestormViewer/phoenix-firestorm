@@ -1276,20 +1276,23 @@ void LLWindowSDL::x11_set_urgent(BOOL urgent)
 
 void LLWindowSDL::flashIcon(F32 seconds)
 {
+	if (getMinimized())	// <FS:CR> Moved this here from llviewermessage.cpp
+	{
 #if !LL_X11
-	llinfos << "Stub LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
+		llinfos << "Stub LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
 #else	
-	llinfos << "X11 LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
+		llinfos << "X11 LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
 	
-	F32 remaining_time = mFlashTimer.getRemainingTimeF32();
-	if (remaining_time < seconds)
-		remaining_time = seconds;
-	mFlashTimer.reset();
-	mFlashTimer.setTimerExpirySec(remaining_time);
+		F32 remaining_time = mFlashTimer.getRemainingTimeF32();
+		if (remaining_time < seconds)
+			remaining_time = seconds;
+		mFlashTimer.reset();
+		mFlashTimer.setTimerExpirySec(remaining_time);
 
-	x11_set_urgent(TRUE);
-	mFlashing = TRUE;
+		x11_set_urgent(TRUE);
+		mFlashing = TRUE;
 #endif // LL_X11
+	}
 }
 
 

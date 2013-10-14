@@ -65,7 +65,7 @@
 			m
 		</text>
 		<slider label="Max. Partikelzahl:" name="MaxParticleCount"/>
-		<slider label="Max. Anzahl voll dargestellter Avatare:" label_width="230" name="MaxNumberAvatarDrawn" width="315"/>
+		<slider label="Max. voll dargestellte Avatare:" name="MaxNumberAvatarDrawn"/>
 		<slider label="Post-Processing-Qualität:" name="RenderPostProcess"/>
 		<text name="PostProcessText">
 			Niedrig
@@ -93,7 +93,7 @@
 			<radio_item label="Niedrig" name="0"/>
 			<radio_item label="Hoch" name="2"/>
 		</radio_group>
-		<button label="Zurücksetzen" name="Defaults"/>
+		<button tool_tip="Standardeinstellungen neu laden" name="Defaults"/>
 	</panel>
 
 	<panel label="Hardware" name="Hardware Settings">
@@ -132,21 +132,22 @@
 			Textur-Darstellung:
 		</text>
 		<check_box label="Minimale Texturen laden" tool_tip="Diese Einstellung setzt den 'TextureDisable'-Parameter - lädt Texturen extrem langsam, eventuell nützlich für Computer mit langsamer GPU" name="TexturesLoaded"/>
-		<check_box label="HTTP-Texturen aktivieren" tool_tip="Aktiviert das Laden von Texturen über das HTTP-Protokoll - ein Deaktivieren kann Probleme mit schlecht oder nicht korrekt ladenden Texturen beseitigen. HTTP-Texturen ist die Standardmethode seit Juli 2010" name="TexturesHTTP"/>
+		<check_box label="HTTP für Laden von Texturen verwenden" tool_tip="Aktiviert das Laden von Texturen über das HTTP-Protokoll - deaktivieren wenn es Probleme mit schlecht oder nicht korrekt ladenden Texturen gibt und das veraltete UDP-Protokoll verwendet werden soll." name="TexturesHTTP"/>
 		<slider label="Max. Anzahl gleichzeitiger HTTP-GET-Anfragen" name="HTTPFetchMaxRequests"/>
 		<text name="TextureDetailLabel">
-			Details für geladene Texturen:
+			Maximales Qualitätslevel für Texturen:
 		</text>
 		<combo_box name="TextureDetail">
 			<combo_box.item label="Normale Qualität" name="0"/>
-			<combo_box.item label="Geringe Qualität" name="3"/>
+			<combo_box.item label="Mittlere Qualität" name="3"/>
+			<combo_box.item label="Geringe Qualität" name="4"/>
 			<combo_box.item label="Keine Texturen" name="5"/>
 		</combo_box>
 		<text name="Alpha Mask Rendering">
 			Darstellung von Alpha-Masken:
 		</text>
-		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Deferred Rendering nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
-		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Erweitertes Beleuchtungsmodell aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
+		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls das erweiterte Beleuchtungsmodell nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
+		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls das erweiterte Beleuchtungsmodell aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>

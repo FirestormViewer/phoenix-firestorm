@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Metin Sohbeti" name="chat">
+	<panel name="general_chat_settings">
 	<text name="font_size">
 		Font büyüklüğü:
 	</text>
@@ -17,6 +18,18 @@
 	</text>
 	<text name="requires_restart_label">
 		(tekrar başlatma gerekir)
+		</text>
+		<check_box label="Sesi çal" name="play_sound_nearby_chat_im"/>
+		<text name="object_ims">
+			Nesne Aİ&apos;leri:
+		</text>
+		<combo_box name="ObjectIMOptions">
+			<item label="Sohbetler penceresini aç" name="OpenConversationsWindow" value="openconversations"/>
+			<item label="Mesajı açılır pencerede göster" name="PopUpMessage" value="toast"/>
+			<item label="Araç çubuğu düğmesi yanıp sönsün" name="FlashToolBarButton" value="flash"/>
+			<item label="Eylem yok" name="NoAction" value="noaction"/>
+		</combo_box>
+		<check_box label="Sesi çal" name="play_sound_object_im"/>
 	</text>
 	<radio_group name="chat_window" tool_tip="Anlık İletileri ayrı gezdiricilerde veya çoklu sekmelere sahip tek bir gezdiricide gösterin (tekrar başlatma gerekir)">
 		<radio_item label="Ayrı Pencereler" name="radio" value="0"/>

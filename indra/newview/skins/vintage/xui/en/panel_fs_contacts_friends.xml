@@ -4,33 +4,23 @@
  layout="topleft"
  mouse_opaque="true"
  name="friends"
- width="350">
+ width="355">
 	<panel.string name="FriendCount" value="Friends: [COUNT]"/>
-<!--
 	<view_border
-	 top="-9"
-	 bottom="9"
-	 left="9"
-	 right="-91"
-	 follows="left|top|right|bottom"
+	 top="1"
+	 bottom="-25"
+	 left="6"
+	 right="-87"
+	 follows="all"
+	 layout="topleft"
 	 bevel_style="in"
 	 name="info_border" />
-	<avatar_list
-	 allow_select="true"
-	 bottom="10"
-	 follows="left|top|right|bottom"
-	 left="10"
-	 multi_select="true"
-	 name="avatars_all"
-	 show_permissions_granted="true"
-	 top="-10"
-	 width="240" />
--->
+
 	<scroll_list
-     left="4"
-     right="-100"
-     top="10"
-     bottom="-10"
+     left="7"
+     right="-88"
+     top="1"
+     bottom="-26"
 	 follows="all"
 	 layout="topleft"
      column_padding="0"
@@ -83,12 +73,12 @@
 		 width="-1" />
 	</scroll_list>
 	<button
-	 top="10"
+	 top="1"
 	 follows="top|right"
 	 layout="topleft"
 	 height="22"
 	 label="IM/Call"
-	 right="-10"
+	 left_delta="267"
 	 name="im_btn"
 	 tool_tip="Open Instant Message session"
 	 width="80" />
@@ -147,13 +137,13 @@
 	 tool_tip="List your friends divided in groups"
 	 width="80" />
 	<text
-	 top_pad="10"
-	 left_delta="2"
-	 follows="top|right"
+	 bottom="296"
+	 left="7"
+	 follows="left|bottom"
 	 layout="topleft"
-	 height="20"
+	 height="14"
 	 name="friend_count"
-	 width="80">
+	 right="-10">
 	 Friends: ...
 	</text>
 </panel>

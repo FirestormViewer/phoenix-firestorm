@@ -38,6 +38,7 @@
 #include "fscommon.h"
 #include "fslslbridge.h"
 #include "lggcontactsets.h"
+#include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llavatarconstants.h"		// for range constants
@@ -111,7 +112,7 @@ FSRadar::~FSRadar()
 void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& postMsg)
 {
 // <FS:CR> Milkshake-style radar alerts
-	LLCachedControl<bool> milkshake_radar(gSavedSettings, "FSMilkshakeRadarToasts", false);
+	static LLCachedControl<bool> milkshake_radar(gSavedSettings, "FSMilkshakeRadarToasts", false);
 	
 	if (milkshake_radar)
 	{
@@ -146,8 +147,8 @@ void FSRadar::updateRadarList()
 	LLWorld* world = LLWorld::getInstance();
 	LLMuteList* mutelist = LLMuteList::getInstance();
 
-	static const F32 chat_range_say = world->getSayDistance();
-	static const F32 chat_range_shout = world->getShoutDistance();
+	static const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
+	static const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();
 
 	static const std::string str_chat_entering =			LLTrans::getString("entering_chat_range");
 	static const std::string str_chat_leaving =				LLTrans::getString("leaving_chat_range");

@@ -86,6 +86,9 @@ class ParticleEditor : public LLFloater
 		std::map<std::string,U8> mPatternMap;
 		std::map<std::string,std::string> mScriptPatternMap;
 
+		std::map<std::string,U8> mBlendMap;
+		std::map<std::string,std::string> mScriptBlendMap;
+
 		LLPanel* mMainPanel;
 
 		LLComboBox* mPatternTypeCombo;
@@ -106,6 +109,11 @@ class ParticleEditor : public LLFloater
 		LLSpinCtrl* mScaleEndYSpinner;
 		LLSpinCtrl* mSourceMaxAgeSpinner;
 		LLSpinCtrl* mParticlesMaxAgeSpinner;
+		LLSpinCtrl* mStartGlowSpinner;
+		LLSpinCtrl* mEndGlowSpinner;
+
+		LLComboBox* mBlendFuncSrcCombo;
+		LLComboBox* mBlendFuncDestCombo;
 
 		LLCheckBoxCtrl* mBounceCheckBox;
 		LLCheckBoxCtrl* mEmissiveCheckBox;
@@ -116,6 +124,7 @@ class ParticleEditor : public LLFloater
 		LLCheckBoxCtrl* mTargetPositionCheckBox;
 		LLCheckBoxCtrl* mTargetLinearCheckBox;
 		LLCheckBoxCtrl* mWindCheckBox;
+		LLCheckBoxCtrl* mRibbonCheckBox;
 
 		LLLineEditor* mTargetKeyInput;
 		LLButton* mClearTargetButton;

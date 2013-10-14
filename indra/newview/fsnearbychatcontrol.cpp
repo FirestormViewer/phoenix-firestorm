@@ -91,7 +91,7 @@
 // <FS:CR> FIRE-3192 - Name Prediction
 #include "llworld.h"
 
-#define NAME_PREDICTION_MINIMUM_LENGTH 2
+static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
 // </FS:CR>
 
 static LLDefaultChildRegistry::Register<FSNearbyChatControl> r("fs_nearby_chat_control");

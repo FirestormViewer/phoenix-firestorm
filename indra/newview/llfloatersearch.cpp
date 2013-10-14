@@ -40,7 +40,7 @@
 #include "llweb.h"
 
 #include "llviewernetwork.h"// </FS:AW  opensim search support>
-#include "llviewerregion.h"	// <FS:CR> Opensim search support
+#include "lfsimfeaturehandler.h"	// <FS:CR> Opensim search support
 
 // support secondlife:///app/search/{CATEGORY}/{QUERY} SLapps
 class LLSearchHandler : public LLCommandHandler
@@ -224,7 +224,7 @@ void LLFloaterSearch::search(const SearchQuery &p)
 	}
 	else if(LLGridManager::getInstance()->isInOpenSim())
 	{
-		std::string os_search_url = gAgent.getRegion()->getSearchServerURL();
+		std::string os_search_url = LFSimFeatureHandler::instance().searchURL();
 		if (!os_search_url.empty())
 			url = os_search_url;
 		else if (LLLoginInstance::getInstance()->hasResponse("search"))

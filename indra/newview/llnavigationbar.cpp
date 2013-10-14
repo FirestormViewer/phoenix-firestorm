@@ -313,6 +313,7 @@ void LLNavigationBar::setupPanel()
 
 	mView->getChild<LLUICtrl>("navigation_bar_context_menu_panel")->
 		setRightMouseDownCallback(boost::bind(&LLNavigationBar::onRightMouseDown, this, _2, _3, _4));
+	mView->getChild<LLButton>("Sky")->setCommitCallback(boost::bind(&LLNavigationBar::onClickedSkyBtn, this)); // <FS:CR> FIRE-11847
 	// </FS:Zi>
 
 	fillSearchComboBox();
@@ -819,3 +820,10 @@ void LLNavigationBar::onRightMouseDown(S32 x,S32 y,MASK mask)
 	show_navbar_context_menu(mView,x,y);
 }
 // </FS:Zi>
+
+// <FS:CR> FIRE-11847
+void LLNavigationBar::onClickedSkyBtn()
+{
+	LLFloaterReg::showInstance("env_edit_sky", "edit");
+}
+// </FS:CR> FIRE-11847

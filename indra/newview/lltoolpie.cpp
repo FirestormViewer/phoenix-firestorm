@@ -72,6 +72,8 @@
 #include "llui.h"
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
+
+#include "llviewernetwork.h"	// <FS:CR> For prim equivilance hiding
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -591,7 +593,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	//   - @fartouch=n restricted and the object is out of range
 	//   - @interact=n restricted and the object isn't a HUD attachment
 	if ( (object) && (rlv_handler_t::isEnabled()) && 
-		( ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset)) || 
+		( (((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset))) || 
 		  ((gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (!object->isHUDAttachment())) ) )
 	{
 		gViewerWindow->setCursor(UI_CURSOR_ARROW);
@@ -1076,6 +1078,13 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
+				// <FS:Zi> Make sure group title gets added to the tool tip. This is done separately to
+				//         the RLVa code to prevent this change from getting lost in future RLVa merges
+				if(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				{
+					final_name=group_title+final_name;
+				}
+				// </FS:Zi>
 			}
 			else
 			{
@@ -1261,6 +1270,15 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 							args["PEWEIGHT"] = llformat("%d", link_cost);
 							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalent", args));
 						}
+/// <FS:CR> Don't show loading on vanila OpenSim (some grids have it, not not vanilla) If they have it, it will
+/// show eventually
+#ifdef OPENSIM
+						else if (LLGridManager::getInstance()->isInOpenSim())
+						{
+							// Do nothing at all.
+						}
+#endif
+// </FS:CR>
 						else
 						{
 							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentLoading"));

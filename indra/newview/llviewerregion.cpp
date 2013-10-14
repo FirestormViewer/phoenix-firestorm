@@ -44,6 +44,7 @@
 
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llavatarrenderinfoaccountant.h"
 #include "llcallingcard.h"
 #include "llcaphttpsender.h"
 #include "llcapabilitylistener.h"
@@ -307,12 +308,17 @@ public:
 		
 		if ( regionp->getRegionImpl()->mCapabilities.size() != regionp->getRegionImpl()->mSecondCapabilitiesTracker.size() )
 		{
-			llinfos<<"BaseCapabilitiesCompleteTracker "<<"Sim sent duplicate seed caps that differs in size - most likely content."<<llendl;			
+			llinfos << "BaseCapabilitiesCompleteTracker " << "sim " << regionp->getName()
+				<< " sent duplicate seed caps that differs in size - most likely content. " 
+				<< (S32) regionp->getRegionImpl()->mCapabilities.size() << " vs " << regionp->getRegionImpl()->mSecondCapabilitiesTracker.size()
+				<< llendl;
+
 			//todo#add cap debug versus original check?
-			/*CapabilityMap::const_iterator iter = regionp->getRegionImpl()->mCapabilities.begin();
+			/*
+			CapabilityMap::const_iterator iter = regionp->getRegionImpl()->mCapabilities.begin();
 			while (iter!=regionp->getRegionImpl()->mCapabilities.end() )
 			{
-				llinfos<<"BaseCapabilitiesCompleteTracker Original "<<iter->first<<" "<< iter->second<<llendl;
+				llinfos << "BaseCapabilitiesCompleteTracker Original " << iter->first << " " << iter->second<<llendl;
 				++iter;
 			}
 			*/
@@ -416,6 +422,9 @@ void LLViewerRegion::initPartitions()
 	mImpl->mObjectPartition.push_back(new LLBridgePartition());	//PARTITION_BRIDGE
 	mImpl->mObjectPartition.push_back(new LLHUDParticlePartition());//PARTITION_HUD_PARTICLE
 	mImpl->mObjectPartition.push_back(NULL);						//PARTITION_NONE
+
+	mRenderInfoRequestTimer.resetWithExpiry(0.f);		// Set timer to be expired
+	setCapabilitiesReceivedCallback(boost::bind(&LLAvatarRenderInfoAccountant::expireRenderInfoReportTimer, _1));
 }
 
 // <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
@@ -1348,7 +1357,7 @@ void LLViewerRegion::getInfo(LLSD& info)
 	info["Region"]["Handle"]["y"] = (LLSD::Integer)y;
 }
 
-void LLViewerRegion::getSimulatorFeatures(LLSD& sim_features)
+void LLViewerRegion::getSimulatorFeatures(LLSD& sim_features) const
 {
 	sim_features = mSimulatorFeatures;
 }
@@ -1741,6 +1750,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("AgentState");
 	capabilityNames.append("AttachmentResources");
 	capabilityNames.append("AvatarPickerSearch");
+	capabilityNames.append("AvatarRenderInfo");
 	capabilityNames.append("CharacterProperties");
 	capabilityNames.append("ChatSessionRequest");
 	capabilityNames.append("CopyInventoryFromNotecard");
@@ -2112,49 +2122,45 @@ bool LLViewerRegion::dynamicPathfindingEnabled() const
 			 mSimulatorFeatures["DynamicPathfindingEnabled"].asBoolean());
 }
 
-// <FS:CR> OpenSim Extras support
-LLViewerRegion::EOSExportSupport LLViewerRegion::regionSupportsExport() const
+void LLViewerRegion::resetMaterialsCapThrottle()
 {
-#ifndef OPENSIM
-	return EXPORT_UNDEFINED;	// Second Life regions never support export.
-}
-#else // OPENSIM
-	EOSExportSupport export_support = EXPORT_UNDEFINED;
-	if ((mSimulatorFeatures.has("OpenSimExtras"))
-		&& (mSimulatorFeatures["OpenSimExtras"].has("ExportSupported")))
+	F32 requests_per_sec = 	1.0f; // original default;
+	if (   mSimulatorFeatures.has("RenderMaterialsCapability")
+		&& mSimulatorFeatures["RenderMaterialsCapability"].isReal() )
 	{
-		if (mSimulatorFeatures["OpenSimExtras"]["ExportSupported"].asBoolean())
+		requests_per_sec = mSimulatorFeatures["RenderMaterialsCapability"].asReal();
+		if ( requests_per_sec == 0.0f )
 		{
-			export_support = EXPORT_ALLOWED;
+			requests_per_sec = 1.0f;
+			LL_WARNS("Materials")
+				<< "region '" << getName()
+				<< "' returned zero for RenderMaterialsCapability; using default "
+				<< requests_per_sec << " per second"
+				<< LL_ENDL;
 		}
-		else
-		{
-			export_support = EXPORT_DENIED;
-		}
+		LL_DEBUGS("Materials") << "region '" << getName()
+							   << "' RenderMaterialsCapability " << requests_per_sec
+							   << LL_ENDL;
 	}
-	return export_support;
+	else
+	{
+		LL_DEBUGS("Materials")
+			<< "region '" << getName()
+			<< "' did not return RenderMaterialsCapability, using default "
+			<< requests_per_sec << " per second"
+			<< LL_ENDL;
+	}
+	
+	mMaterialsCapThrottleTimer.resetWithExpiry( 1.0f / requests_per_sec );
 }
 
-// HG Maps
-std::string LLViewerRegion::getHGMapServerURL() const
+U32 LLViewerRegion::getMaxMaterialsPerTransaction() const
 {
-	std::string url = "";
-	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("mapServerURL"))
+	U32 max_entries = 50; // original hard coded default
+	if (   mSimulatorFeatures.has( "MaxMaterialsPerTransaction" )
+		&& mSimulatorFeatures[ "MaxMaterialsPerTransaction" ].isInteger())
 	{
-		url = mSimulatorFeatures["OpenSimExtras"]["map-server-url"].asString();
+		max_entries = mSimulatorFeatures[ "MaxMaterialsPerTransaction" ].asInteger();
 	}
-	return url;
+	return max_entries;
 }
-
-// OS Search URL
-std::string LLViewerRegion::getSearchServerURL() const
-{
-	std::string url = "";
-	if (mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("search-server-url"))
-	{
-		url = mSimulatorFeatures["OpenSimExtras"]["search-server-url"].asString();
-	}
-	return url;
-}
-#endif // OPENSIM
-// </FS:CR>

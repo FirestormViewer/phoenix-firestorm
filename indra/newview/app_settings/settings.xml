@@ -839,18 +839,6 @@
       <string>))</string>
     </map>
 
-  <key>FSPlayChatAnimation</key>
-    <map>
-      <key>Comment</key>
-      <string>Play the avatar chat animations, e.g. shouting</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>  
-
   <key>FSShowChatChannel</key>
     <map>
       <key>Comment</key>
@@ -861,6 +849,18 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>  
+
+  <key>FSShowChatType</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows/Hides the chat type selector (Whisper, Say, Shout)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>  
 
   <key>ScriptDialogsPosition</key>
@@ -3982,6 +3982,17 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>DebugShowAvatarRenderInfo</key>
+    <map>
+      <key>Comment</key>
+      <string>Show avatar render cost information</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>DebugShowColor</key>
     <map>
       <key>Comment</key>
@@ -5471,13 +5482,13 @@
     </map>
     <key>FilterItemsMaxTimePerFrameUnvisible</key>
     <map>
-        <key>Comment</key>
+      <key>Comment</key>
         <string>Max time devoted to items filtering per frame for non visible inventory listings (in milliseconds)</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>S32</string>
-        <key>Value</key>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
         <integer>1</integer>
     </map>
     <key>FindLandArea</key>
@@ -6397,6 +6408,16 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
+      <integer>0</integer>
+      <key>SanityCheckType</key>
+      <string>Equals</string>
+      <key>SanityValue</key>
+      <array>
+        <integer>0</integer>
+      </array>
+      <key>SanityComment</key>
+      <string>This setting can lead to strange things happening in your conversations floater, personal IMs and group chats.</string>
+      <key>Backup</key>
       <integer>0</integer>
     </map>  
     <key>IgnorePixelDepth</key>
@@ -11269,6 +11290,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     </array>
   </map>
 
+  <key>RenderSpecularPrecision</key>
+  <map>
+    <key>Comment</key>
+    <string>Force 32-bit floating point LUT</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>0</real>
+  </map>
+  
   <key>RenderSpecularResX</key>
   <map>
     <key>Comment</key>
@@ -11591,6 +11624,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
+  <key>RenderDeferredDisplayGamma</key>
+  <map>
+    <key>Comment</key>
+    <string>Gamma ramp exponent for final correction before display gamma.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>2.2</real>
+  </map>
     <key>RenderGLCoreProfile</key>
     <map>
       <key>Comment</key>
@@ -12115,6 +12159,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>1.0</real>
     </map>
+    <key>FSATIFullTextureMem</key>
+    <map>
+      <key>Comment</key>
+      <string>Don't reduce ATI card texture memory automatically (EXPERIMENTAL)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>RenderTrackerBeacon</key>
     <map>
       <key>Comment</key>
@@ -12220,10 +12275,22 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+  
   <key>RenderAutoMuteByteLimit</key>
   <map>
     <key>Comment</key>
-    <string>Maximum bytes of attachments before an avatar is automatically visually muted (0 for no limit).</string>
+    <string>Maximum bytes of attachments before an avatar is rendered as a simple impostor (0 for no limit).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>RenderAutoMuteRenderWeightLimit</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum render weight before an avatar is rendered as a simple impostor (0 to not use this limit).</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -12236,7 +12303,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderAutoMuteSurfaceAreaLimit</key>
   <map>
     <key>Comment</key>
-    <string>Maximum surface area of attachments before an avatar is automatically visually muted (0 for no limit).</string>
+    <string>Maximum surface area of attachments before an avatar is rendered as a simple impostor (0 to not use this limit).</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -12246,7 +12313,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
-    
+  <key>RenderAutoMuteFunctions</key>
+  <map>
+    <key>Comment</key>
+    <string>Developing feature to render some avatars using simple impostors or colored silhouettes.  (Set to 7 for all functionality)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>0</real>
+  </map>
+  <key>RenderAutoMuteLogging</key>
+  <map>
+    <key>Comment</key>
+    <string>Show extra information in viewer logs about avatar rendering costs</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>    
   <key>RenderAutoHideSurfaceAreaLimit</key>
   <map>
     <key>Comment</key>
@@ -12360,6 +12448,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>RenderWaterMaterials</key>
+    <map>
+      <key>Comment</key>
+      <string>Water planar reflections include materials rendering.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>RenderWaterMipNormal</key>
     <map>
       <key>Comment</key>
@@ -12407,6 +12506,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>RevokePermsOnStopAnimation</key>
+    <map>
+      <key>Comment</key>
+      <string>Clear animation permssions when choosing "Stop Animating Me"</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>RotateRight</key>
     <map>
@@ -16288,6 +16398,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>VoiceCallsRejectAdHoc</key>
+    <map>
+      <key>Comment</key>
+      <string>Silently reject all incoming AdHoc (conference) voice calls.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>VoiceCallsRejectP2P</key>
+    <map>
+      <key>Comment</key>
+      <string>Silently reject all incoming P2P (avatar with avatar) voice calls.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>VoiceDisableMic</key>
     <map>
       <key>Comment</key>
@@ -19487,6 +19619,18 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+
+  <key>VersionChannelName</key>
+    <map>
+      <key>Comment</key>
+      <string>Version information generated by running the viewer</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string />
+    </map>
     <key>FSShowServerVersionChangeNotice</key>
     <map>
       <key>Comment</key>
@@ -20822,7 +20966,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSBuildPrefs_Temporary</key>
     <map>
       <key>Comment</key>
-      <string>New object created default of tempary</string>
+      <string>New object created default of temporary</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -21298,5 +21442,155 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>DAEExportConsolidateMaterials</key>
+    <map>
+      <key>Comment</key>
+      <string>Combine faces with same texture</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>DAEExportSkipTransparent</key>
+    <map>
+      <key>Comment</key>
+      <string>Skip exporting faces with default transparent texture or full transparent</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>DAEExportTextures</key>
+    <map>
+      <key>Comment</key>
+      <string>Export textures when exporting Collada</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>DAEExportTextureParams</key>
+    <map>
+      <key>Comment</key>
+      <string>Apply texture params suchs as repeats to the exported UV map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>DAEExportTexturesFormat</key>
+    <map>
+      <key>Comment</key>
+      <string>Image file format to use when exporting Collada</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <!-- <FS:Zi> Fix camera zoom to look at the avatar's face from the front -->
+    <key>CameraZoomDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Camera distance to the zoomed in avatar</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>2.5</integer>
+    </map>
+    <key>CameraZoomFocusZOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Camera height offset of zoomed point on the zoomed in avatar from avatar center</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>0.6</integer>
+    </map>
+    <key>CameraZoomEyeZOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Camera height offset of the camera itself on the zoomed in avatar from avatar center</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>1.0</integer>
+    </map>
+    <!-- </FS:Zi> Fix camera zoom to look at the avatar's face from the front -->
+    <key>FSExportContents</key>
+    <map>
+      <key>Comment</key>
+      <string>Export object contents in linkset backups</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSImportBuildOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Distance from user the importer begins to build</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Vector3</string>
+      <key>Value</key>
+      <array>
+        <real>5.0</real>
+        <real>0.0</real>
+        <real>2.0</real>
+      </array>
+    </map>
+    <key>FSBuildToolDecimalPrecision</key>
+    <map>
+      <key>Comment</key>
+      <string>Decimal digits to display on various build tool controls (0-7)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>5</integer>
+    </map>
+    <key>FSFlashOnScriptDialog</key>
+    <map>
+      <key>Comment</key>
+      <string>Flash/Bounce the app icon when a script dialog is received and Firestorm is not in focus</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSDisableReturnObjectNotification</key>
+    <map>
+      <key>Comment</key>
+      <string>Disable 'Object has been returned to your inventory Lost and Found folder' notifications</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 </map>
 </llsd>
+

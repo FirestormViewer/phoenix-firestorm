@@ -280,7 +280,7 @@ Skrypty muszą pozostać aktywne dla prawidłowego działania broni.
 	</notification>
 	<notification name="MultipleFacesSelected">
 		Obecnie zaznaczono wiele powierzchni.
-Jeśli kontynuujesz, to oddzielne instancje mediów będą ustawione na wielu powierzchniach obiektu. 
+Jeśli kontynuujesz, to oddzielne instancje mediów będą ustawione na wielu powierzchniach obiektu.
 W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia wyboru powierzchni i kliknij na ten wybranej oraz na Dodaj.
 		<usetemplate ignoretext="Media zostaną ustawione na wielu zaznaczonych powierzchniach" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
@@ -546,9 +546,9 @@ Ta osoba tymczasowo nie będzie mogła się poruszać, używać czatu (IM) lub o
 	</notification>
 	<notification name="FreezeAvatarMultiple">
 		Unieruchomić poniższe awatary?
- 
+
  [RESIDENTS]
- 
+
 Nie będą mogły tymczasowo się poruszać, używać czatu (IM) lub oddziaływać na świat.
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Odblokuj" yestext="Unieruchom"/>
 	</notification>
@@ -757,11 +757,11 @@ Nowe zapytanie: [FINALQUERY]
 [REASON]
 	</notification>
 	<notification name="invalid_tport">
-		Niestety, pojawił się błąd podczas próby teleportacji. Proponujemy wylogowanie się i spróbowanie teleportacji ponownie. 
+		Niestety, pojawił się błąd podczas próby teleportacji. Proponujemy wylogowanie się i spróbowanie teleportacji ponownie.
 Jeżeli nadal otrzymujesz tę wiadomość proponujemy odwiedzić stronę [SUPPORT_SITE].
 	</notification>
 	<notification name="invalid_region_handoff">
-		Niestety, pojawił się błąd podczas próby przedostania się na drugi region. Proponujemy wylogowanie się i spróbowanie przedostania się na drugi region ponownie. 
+		Niestety, pojawił się błąd podczas próby przedostania się na drugi region. Proponujemy wylogowanie się i spróbowanie przedostania się na drugi region ponownie.
 Jeżeli nadal otrzymujesz tę wiadomość proponujemy odwiedzić stronę [SUPPORT_SITE].
 	</notification>
 	<notification name="blocked_tport">
@@ -1480,21 +1480,21 @@ W celu instalacji aktualizacji [APP_NAME] musi zostać zrestartowany.
 	</notification>
 	<notification name="OtherChannelDownloadBackgroundTip">
 		Została pobrana aktualizacja dla Twojej instalacji [APP_NAME].
-Wersja [VERSION] 
+Wersja [VERSION]
 Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
 zobacz [[INFO_URL] aby uzyskać więcej informacji o tej aktualizacji]
 		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i zrestartuj [APP_NAME]"/>
 	</notification>
 	<notification name="OtherChannelDownloadBackgroundDialog">
 		Została pobrana aktualizacja dla Twojej instalacji [APP_NAME].
-Wersja [VERSION] 
+Wersja [VERSION]
 Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
 zobacz [[INFO_URL] aby uzyskać więcej informacji o tej aktualizacji]
 		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i zrestartuj [APP_NAME]"/>
 	</notification>
 	<notification name="OtherChannelRequiredUpdateDownloadedVerboseDialog">
 		Została pobrana wymagana aktualizacja.
-Wersja [VERSION] 
+Wersja [VERSION]
 Ta eksperymentalna przeglądarka została zastąpiona przez wersję [NEW_CHANNEL];
 zobacz [[INFO_URL] aby uzyskać więcej informacji o tej aktualizacji]
 
@@ -1589,7 +1589,7 @@ Chcesz opuścić grupę?
 	</notification>
 	<notification name="DoNotDisturbModeSet">
 		Tryb Zajętości jest włączony. Nie będziesz powiadamiany/a o nadchodzących rozmowach.
-		
+
 - Inni Rezydenci będą otrzymywać Twoją wiadomość Trybu Zajętości (Ustawienia &gt; Prywatność &gt; Autoodpowiedzi).
 - Propozycje teleportacji będą odrzucane.
 - Propozycje rozmów głosowych będą odrzucane.
@@ -1682,7 +1682,7 @@ Proszę spróbować ponownie później.
 	</notification>
 	<notification name="AgentDisplayNameSetBlocked">
 		Przepraszamy, nie można ustawić wskazanego imienia, ponieważ zawiera zabronione słowa.
- 
+
 Proszę spróbować wprowadzić inne imię.
 	</notification>
 	<notification name="AgentDisplayNameSetInvalidUnicode">
@@ -1694,7 +1694,6 @@ Proszę spróbować wprowadzić inne imię.
 	<notification name="DisplayNameUpdate">
 		[OLD_NAME] ([SLID]) jest od tej pory znana/y jako [NEW_NAME].
 	</notification>
-	
 	<notification name="DisplayNameUpdateRemoveAlias">
 	[OLD_NAME] ([SLID]) jest od tej pory znana/y jako [NEW_NAME].
 Ta osoba ma ustawiony alias, który zastąpi [NEW_NAME]
@@ -1703,7 +1702,7 @@ Czy chcesz go usunąć?
 			<button name="Yes" text="Tak"/>
 			<button name="No" text="Nie"/>
 		</form>
-	</notification> 
+	</notification>
 	<notification name="OfferTeleport">
 		Zaproponować teleportację do miejsca Twojego pobytu z tą wiadomością?
 		<form name="form">
@@ -2124,7 +2123,7 @@ Nie możesz tego cofnąć.
 	</notification>
 	<notification name="ConfirmClearAllToybox">
 		Ta akcja usunie wszystkie przyciski z pasków, będą one puste.
-    
+
 Nie możesz tego cofnąć.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
@@ -2338,7 +2337,7 @@ URL: [MEDIAURL]
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
 	</notification>
-	<notification name="MediaAlertSingle"> 
+	<notification name="MediaAlertSingle">
 		Ta działka dostarcza media z:
 
 Domena: [MEDIADOMAIN]
@@ -2371,7 +2370,7 @@ URL: [AUDIOURL]
 			<button name="RememberURL" text="[CONDITION] Zezwól temu URL"/>
 		</form>
 	</notification>
-	<notification name="AudioAlertSingle"> 
+	<notification name="AudioAlertSingle">
 		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na muzykę z tego źródła?
 
 Domena: [AUDIODOMAIN]
@@ -3112,7 +3111,7 @@ Przycisk zostanie wyświetlony w przypadku dostatecznej ilości przestrzeni.
 		Zaznacz Rezydentów, z którymi chcesz się podzielić.
 	</notification>
 	<notification name="MeshUploadError">
-		Nie można załadować [LABEL]: [MESSAGE] [IDENTIFIER] 
+		Nie można załadować [LABEL]: [MESSAGE] [IDENTIFIER]
 
 Zobacz log, aby dowiedzieć się więcej.
 	</notification>
@@ -3208,7 +3207,7 @@ Proszę sprawdź swoją sieć i ustawienia firewall.
 
 Komunikacja głosowa nie będzie dostępna.
 Proszę sprawdź swoją sieć i ustawienia firewall.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okignore" ignoretext="Ostrzegaj mnie, gdy przeglądarka nie może połączyć się z serwerem głosu" yestext="OK"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] sekund w Second Life)
@@ -3298,7 +3297,7 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	</notification>
 	<notification name="SOCKS_CONNECT_ERROR">
 		Serwer proxy SOCKS 5 "[HOST]:[PORT]" odmawia połączenia, nie można otworzyć kanału TCP.
-		<usetemplate name="okbutton" yestext="OK"/>	 
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="SOCKS_NOT_ACCEPTABLE">
 		Serwer proxy SOCKS 5 "[HOST]:[PORT]" odmówił połączenia na ustawionym sposobie autoryzacji.
@@ -3491,12 +3490,8 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 		Nie możesz usunąć siatki [REMOVE_GRID], gdy jesteś z nią połączony/a.
 		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem siatki z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
-	<notification name="PhoenixAutoReplace">
-		&apos;[BEFORE]&apos; automatycznie zamieniony na &apos;[REPLACEMENT]&apos;
-bazując na liście [LISTNAME].
-	</notification>
 	<notification name="FSWL">
-		&apos;[PARCEL_NAME]&apos;, własność &apos;[OWNER_NAME]&apos;, chce zmienić ustawienia otoczenia systemu Windlight.
+		&apos;[PARCEL_NAME]&apos;, własność [OWNER_NAME], chce zmienić ustawienia otoczenia systemu Windlight.
 		<form name="form">
 			<button name="Allow" text="Zezwól"/>
 			<button name="Ignore" text="Ignoruj"/>
@@ -4401,7 +4396,7 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
 	</notification>
 	<notification name="FirstUseFlyOverride">
-		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela działki może poskutkować zbanowaniem Twojego awatara z działki, nad którą będziesz latać.		
+		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela działki może poskutkować zbanowaniem Twojego awatara z działki, nad którą będziesz latać.
 	</notification>
 	<notification name="ServerVersionChanged">
 		Region, w którym się właśnie pojawiłeś/aś działa na innej wersji symulatora.
@@ -4436,14 +4431,14 @@ Poprzedni symulator: [OLDVERSION]
 		Pomyślnie zaimportowano listę strumieni z pliku XML.
 	</notification>
 	<notification name="StreamMetadata">
-        ♫ Teraz odtwarzane:
-        [TITLE]
-        [ARTIST]♫
+♫ Teraz odtwarzane:
+  [TITLE]
+  [ARTIST] ♫
 	</notification>
 	<notification name="StreamMetadataNoArtist">
-        ♫ Teraz odtwarzane:
-        [TITLE]♫
-	</notification>   
+♫ Teraz odtwarzane:
+  [TITLE] ♫
+	</notification>
 	<notification name="BackupFinished">
 		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.
 	</notification>
@@ -4473,14 +4468,14 @@ Nie można tego cofnąć.
 	<notification name="ExportFinished">
 		Wyeksportowano i zapisano do [FILENAME].
 	</notification>
-	<notification name="ExportColladaFailed">
-		Eksport nie powiódł się.
+	<notification name="ExportFailed">
+		Eksport nie powiódł się. Zobacz log, aby uzyskać więcej szczegółów.
 	</notification>
 	<notification name="ExportColladaSuccess">
-		Eksport w formacie Collada DAE zakończony. Wyeksportowano [TOTAL] obiektów.
+		Zapisano z powodzeniem [OBJECT] do [FILENAME].
 	</notification>
-	<notification name="ExportColladaPartial">
-		Eksport w formacie Collada DAE zakończony. Nie udało się wyeksportować [FAILED] z [TOTAL] zaznaczonych obiektów ze względu na niewystarczające prawa.
+	<notification name="ImportSuccess">
+		Pomyślnie zaimportowano [COUNT] [OBJECT].
 	</notification>
 	<notification name="AntiSpamBlocked">
 		Antyspam: Zablokowano [SOURCE] ze względu na spam [QUEUE] ([COUNT]) razy podczas [PERIOD] sekund.

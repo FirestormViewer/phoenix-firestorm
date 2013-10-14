@@ -631,10 +631,20 @@ void LLDir::walkSearchSkinDirs(const std::string& subdir,
 		BOOST_FOREACH(std::string subsubdir, subsubdirs)
 		{
 			std::string full_path(add(add(subdir_path, subsubdir), filename));
-			if (fileExists(full_path))
-			{
-				function(subsubdir, full_path);
-			}
+		
+			// <FS:ND> To avoid doing IO calls (expensive) in walkdSearchedSkinDirs cache results.
+
+			// if (fileExists(full_path))
+			// {
+			// 	function(subsubdir, full_path);
+			// }
+
+			std::pair< tSkinDirCache::iterator, bool > prInsert = mSkinDirCache.insert( SkinDirFile( full_path, false ) );
+			if( prInsert.second && fileExists(full_path) )
+				prInsert.first->mExists = true;
+
+			if( prInsert.first->mExists )
+				function( subsubdir, full_path );
 		}
 	}
 }

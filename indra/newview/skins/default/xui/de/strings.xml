@@ -130,6 +130,9 @@
 	<string name="create_account_url">
 		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
+	<string name="ViewerDownloadURL">
+		http://secondlife.com/download
+	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
 http://firestormviewer.org/downloads
@@ -478,8 +481,8 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="SLappAgentRequestFriend">
 		Freundschaftsangebot
 	</string>
-	<string name="SLappAgentRequestFriend">
-		Freundschaftsauflösung
+	<string name="SLappAgentRemoveFriend">
+		Entfernen von Freunden
 	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Schließen (⌘W)
@@ -875,7 +878,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Mehrfach
 	</string>
 	<string name="use_texture">
-		Textur benutzen
+		Textur verwenden
 	</string>
 	<string name="texture_loading">
 		Wird geladen...
@@ -979,18 +982,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ControlYourCamera">
 		Kamerasteuerung übernehmen
 	</string>
-	<string name="JoinAnExperience">
-		Einem Erlebnis beiwohnen
-	</string>
-	<string name="SilentlyManageEstateAccess">
-		Benachrichtigungen über Änderungen am Grundbesitzzugang stummschalten
-	</string>
-	<string name="OverrideYourAnimations">
-		Ihre Avatar-Animationen übersteuern
-	</string>
-	<string name="ScriptReturnObjects">
-		Objekte in deinem Auftrag zurückgeben
-	</string>
 	<string name="NotConnected">
 		Nicht verbunden
 	</string>
@@ -999,6 +990,18 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="TeleportYourAgent">
 		Sie teleportieren
+	</string>
+	<string name="JoinAnExperience">
+		Bei einem Erlebnis mitmachen
+	</string>
+	<string name="SilentlyManageEstateAccess">
+		Beim Verwalten von Grundbesitzzugangslisten Warnhinweise unterdrücken
+	</string>
+	<string name="OverrideYourAnimations">
+		Ihre Standardanimationen ersetzen
+	</string>
+	<string name="ScriptReturnObjects">
+		Objekte in Ihrem Namen zurückgeben
 	</string>
 	<string name="UnknownScriptPermission">
 		(unbekannt)!
@@ -1086,6 +1089,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="backup_files">
 		Objekt-Sicherungen
+	</string>
+	<string name="collada_files">
+		COLLADA-Modelle
 	</string>
 	<string name="AvatarSetNotAutorespond">
 		Automatische Antwort AUS
@@ -5386,7 +5392,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Keine protokollierten Unterhaltungen verfügbar. Hier erscheint ein Protokolleintrag, wenn Sie eine Person kontaktieren oder von einer Person kontaktiert werden.
 	</string>
 	<string name="loading_chat_logs">
-		Wird geladen...
+		Laden...
 	</string>
 	
 <!-- Firestorm-specific translations -->
@@ -5612,6 +5618,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="qtool_done">
 		Die Ausrichtung ist beendet.
 	</string>
+	<string name="fsbridge_cant_create_disabled">
+		Firestorm kann die LSL-Brücke nicht erstellen, wenn „LSL-Client-Brücke aktivieren“ in den Einstellungen deaktiviert ist.
+	</string>
 	<string name="fsbridge_no_library">
 		Firestorm konnte die LSL-Brücke nicht erstellen. Bitte die Bibliothek aktivieren und neu einloggen.
 	</string>
@@ -5765,63 +5774,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Umschalten des Präprozessors wird erst vollständig wirksam, nachdem der Editor geschlossen und neu geöffnet wurde.
 	</string>
 
-	<string name="export_started">
-		Beginne Export...
-	</string>
-	<string name="export_finished">
-		Export beendet.
-	</string>
-	<string name="export_fail_no_mesh">
-		Der Export von Mesh wird derzeit nicht unterstützt. Export abgebrochen.
-	</string>
-	<string name="export_nothing_exported">
-		Kein Export durchgeführt. Backup wurde nicht erstellt.
-	</string>
-	<string name="export_node_not_found">
-		LLSelect-Knoten für [OBJECT] gefunden. Verwende Standard-Prim.
-	</string>
-	<string name="export_failed_export_check">
-		Berechtigungen für [OBJECT] unzureichend. Verwende Standard-Prim.
-	</string>
-	<string name="export_asset_failed_export_check">
-		Berechtigungen für [ITEM] unzureichend - übersprungen...
-	</string>
-	<string name="export_failed_export_null_texture">
-		Versuchter Export einer leeren Textur.
-	</string>
-	<string name="export_loading_texture">
-		Lade Textur [ITEM]...
-	</string>
-	<string name="export_saving_texture">
-		Textur [TEXTURE] erfolgreich gespeichert.
-	</string>
-	<string name="export_saving_asset">
-		Speichere [ITEM]...
-	</string>
-	<string name="export_failed_to_receive_texture">
-		Fehler beim Laden von Textur [TEXTURE].
-	</string>
-	<string name="export_received_null_texture">
-		Leere Textur [TEXTURE] empfangen.
-	</string>
-	<string name="export_item_not_exportable">
-		[ITEM] wird aktuell nicht vom Exporter unterstützt - übersprungen...
-	</string>
-	<string name="export_failed_fetch">
-		[ITEM] konnte nicht geladen werden. (Status [STATUS] [EXT_STATUS])
-	</string>
-	<string name="export_requesting_asset">
-		Fordere Asset [ITEM] an...
-	</string>
-	<string name="export_rerequesting_inventory">
-		Fordere Inventar von [ITEM] erneut an.
-	</string>
-	<string name="export_rerequesting_texture">
-		Fordere Textur [ITEM] erneut an.
-	</string>
-	<string name="export_failed_to_load">
-		Asset [ITEM] konnte nicht geladen werden.
-	</string>
 	<string name="skin_defaults_starlight_location">
 		Die Anzeige der aktuellen Position in der Menüleiste wurde als Standard für Starlight-Oberflächendesigns deaktiviert.
 	</string>

@@ -208,16 +208,15 @@
               auto_resize="false"
               user_resize="false"
               name="input_button_layout_panel"
-              width="50"
+              width="66"
               top="0"
               bottom="-1">
               <spinner
                layout="topleft"
-               top="1"
+               top="0"
                left="1"
                right="-1"
                height="22"
-               width="90"
                decimal_digits="0"
                follows="all"
                increment="1.00"
@@ -229,6 +228,74 @@
                mouse_opaque="true"
                name="ChatChannel"
                tool_tip="Channel to send chat on. Enabled in Preferences -> Chat -> Firestorm -> Show channel selection in chat bar." />
+
+            </layout_panel>
+            <layout_panel
+              visibility_control="FSShowChatType"
+              auto_resize="false"
+              user_resize="false"
+              name="chat_type_layout_panel"
+              width="80"
+              top="0"
+              bottom="-1">
+
+            <!-- Makeshift split button since LLSplitButton is broken -->
+            <combo_box
+              name="chat_type"
+              layout="topleft"
+              top="1"
+              left="0"
+              right="-1"
+              height="22"
+              follows="top|right"
+              drop_down_button.image_pressed="PushButton_Off"
+              drop_down_button.image_pressed_selected="PushButton_Off"
+              drop_down_button.image_selected="PushButton_Off"
+              drop_down_button.image_unselected="PushButton_Off"
+              drop_down_button.halign="center"
+              list_position="above"
+              tool_tip="Whisper = 10m, Say = 20m, Shout = 100m">
+              <combo_box.item
+                name="chat_type_whisper"
+                value="whisper"
+                label="Whisper" />
+              <combo_box.item
+                name="chat_type_say"
+                value="say"
+                label="Say" />
+              <combo_box.item
+                name="chat_type_shout"
+                value="shout"
+                label="Shout" />
+            </combo_box>
+            <!-- pad_bottom used to move the button text away so it's invisible under the combo box -->
+            <button
+              image_unselected="transparent.j2c"
+              image_selected="PushButton_Off"
+              image_pressed="PushButton_Off"
+              image_pressed_selected="transparent.j2c"
+              image_disabled="transparent.j2c"
+              layout="topleft"
+              left_delta="0"
+              right="-20"
+              height="22"
+              follows="top|left|right"
+              label="Say"
+              pad_bottom="22"
+              name="send_chat"
+              tool_tip="Whisper = 10m, Say = 20m, Shout = 100m" />
+            <icon
+              name="chat_type_combo_arrow_icon"
+              layout="topleft"
+              left_pad="-1"
+              top_delta="1"
+              width="18"
+              height="20"
+              follows="top|right"
+              image_name="arrow_up.tga"
+              scale_image="true" />
+            <!-- Makeshift split button since LLSplitButton is broken -->
+
             </layout_panel>
           </layout_stack>
         </layout_panel>

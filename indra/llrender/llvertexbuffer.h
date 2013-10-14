@@ -112,6 +112,7 @@ public:
 		S32 mType;
 		S32 mIndex;
 		S32 mCount;
+		S32 mEnd;
 		
 		MappedRegion(S32 type, S32 index, S32 count);
 	};
@@ -130,9 +131,10 @@ public:
 
 	static LLVBOPool sStreamVBOPool;
 	static LLVBOPool sDynamicVBOPool;
+	static LLVBOPool sDynamicCopyVBOPool;
 	static LLVBOPool sStreamIBOPool;
 	static LLVBOPool sDynamicIBOPool;
-
+	
 	static std::list<U32> sAvailableVAOName;
 	static U32 sCurVAOName;
 

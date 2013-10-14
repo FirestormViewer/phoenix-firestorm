@@ -793,8 +793,8 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 		bool is_increasing_from_zero = is_increasing && !mFilterOps.mHoursAgo && !isSinceLogoff();
 
 		// *NOTE: need to cache last filter time, in case filter goes stale
-		BOOL less_restrictive = (are_date_limits_valid && ((is_increasing && mFilterOps.mHoursAgo)) || !hours);
-		BOOL more_restrictive = (are_date_limits_valid && (!is_increasing && hours) || is_increasing_from_zero);
+		BOOL less_restrictive = (are_date_limits_valid && ((is_increasing && mFilterOps.mHoursAgo) || !hours));
+		BOOL more_restrictive = (are_date_limits_valid && ((!is_increasing && hours) || is_increasing_from_zero));
 
 		mFilterOps.mHoursAgo = hours;
 		mFilterOps.mMinDate = time_min();
@@ -823,26 +823,21 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 	}
 }
 
-// ## Zi: Filter Links Menu
 void LLInventoryFilter::setFilterLinks(U64 filter_links)
 {
-	// original LL code
-	
-	mFilterOps.mFilterLinks = filter_links;
-	if (mFilterOps.mFilterLinks != filter_links)
+	// <FS:Zi> Filter Links Menu
+	// if (mFilterOps.mFilterLinks != filter_links)
+	// {
+	// 	if (mFilterOps.mFilterLinks == FILTERLINK_EXCLUDE_LINKS ||
+	// 		mFilterOps.mFilterLinks == FILTERLINK_ONLY_LINKS)
+	// 		setModified(FILTER_MORE_RESTRICTIVE);
+	// 	else
+	// 		setModified(FILTER_LESS_RESTRICTIVE);
+	// }
+	// mFilterOps.mFilterLinks = filter_links;
+	if (mFilterOps.mFilterLinks!=filter_links)
 	{
-		if (mFilterOps.mFilterLinks == FILTERLINK_EXCLUDE_LINKS ||
-			mFilterOps.mFilterLinks == FILTERLINK_ONLY_LINKS)
-			setModified(FILTER_MORE_RESTRICTIVE);
-		else
-			setModified(FILTER_LESS_RESTRICTIVE);
-	}
-	
-	// [CHUI Merge] FS Old Code
-	/*
-	if (mFilterOps.mFilterLinks != filter_links)
-	{
-		LLInventoryFilter::EFilterBehavior modifyMode=FILTER_RESTART;
+		LLInventoryFilter::EFilterModified modifyMode=FILTER_RESTART;
 
 		if(filter_links==FILTERLINK_INCLUDE_LINKS)
 			modifyMode=FILTER_LESS_RESTRICTIVE;
@@ -854,11 +849,11 @@ void LLInventoryFilter::setFilterLinks(U64 filter_links)
 		else if(filter_links==FILTERLINK_ONLY_LINKS && mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
 			modifyMode=FILTER_MORE_RESTRICTIVE;
 
-		mFilterOps.mFilterLinks = filter_links;
+		mFilterOps.mFilterLinks=filter_links;
 		setModified(modifyMode);
-	}*/
+	}
+	// </FS:Zi>
 }
-// ## Zi: Filter Links Menu
 
 void LLInventoryFilter::setShowFolderState(EFolderShow state)
 {

@@ -54,6 +54,7 @@ public:
 	virtual void	draw();
 	virtual void 	clearCtrls();
 
+	void			changePrecision(S32 decimal_precision);	// <FS:CR> Adjustable decimal precision
 	void 			updateLimits(BOOL attachment);// <AW: opensim-limits>
 	void			refresh();
 

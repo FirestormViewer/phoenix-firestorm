@@ -31,7 +31,6 @@
 #include "llfloater.h"
 #include "llinventorymodel.h"
 #include "llresourcedata.h"
-#include "llsingleton.h"
 #include "llselectmgr.h"
 #include "llviewerinventory.h"
 #include "llviewerobject.h"
@@ -40,7 +39,7 @@ struct FSResourceData
 {
 	LLUUID uuid;
 	void* user_data;
-	bool tempary;
+	bool temporary;
 	LLAssetType::EType asset_type;
 	LLUUID inventory_item;
 	LLWearableType::EType wearable_type;
@@ -50,18 +49,17 @@ struct FSResourceData
 
 #include "llassetuploadresponders.h"
 
-class FSFloaterImport : public LLFloater, public LLSingleton<FSFloaterImport>
+class FSFloaterImport : public LLFloater
 {
 	LOG_CLASS(FSFloaterImport);
 public:
-	FSFloaterImport(const LLSD &);
+	FSFloaterImport(const LLSD &filename);
 	virtual ~FSFloaterImport();
 	virtual BOOL postBuild();
 	
 	static void onIdle(void *user_data);
 	
-	void onClickBtnPickFile();
-	void onClickBtnImport();
+	
 	void onClickCheckBoxUploadAsset();
 	void onClickCheckBoxTempAsset();
 	bool processPrimCreated(LLViewerObject* object);
@@ -80,6 +78,9 @@ private:
 	} FSImportState;
 	FSImportState mImportState;
 
+	void loadFile();
+	void populateBackupInfo();
+	void onClickBtnImport();
 	void createPrim();
 	void postLink();
 	void onIdle();
@@ -89,9 +90,9 @@ private:
 	void searchInventory(LLUUID asset_id, LLViewerObject* object, std::string prim_name);
 	void processPrim(LLSD& prim);
 
-	LLSD mFile;
+	LLSD mManifest;
 	std::string mFileFullName;
-	std::string mFileName;
+	std::string mFilename;
 	std::string mFilePath;
 	bool mCreatingActive;
 	FSFloaterImport* mInstance;
@@ -106,7 +107,6 @@ private:
 	S32 mLinksetSize;
 	S32 mObjectSize;
 	LLObjectSelectionHandle	mObjectSelection;
-	bool mFileReady;
 	uuid_vec_t mTextureQueue;
 	U32 mTexturesTotal;
 	uuid_vec_t mSoundQueue;
@@ -117,6 +117,7 @@ private:
 	U32 mAssetsTotal;
 	std::map<LLUUID,LLUUID> mAssetMap;
 	BOOL mSavedSettingShowNewInventory;
+	boost::signals2::connection mObjectCreatedCallback;
 	
 	struct FSInventoryQueue
 	{

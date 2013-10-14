@@ -70,6 +70,8 @@ void LLFontManager::cleanupClass()
 
 LLFontManager::LLFontManager()
 {
+	nd::allocstats::registerProvider( this );
+
 	int error;
 	error = FT_Init_FreeType(&gFTLibrary);
 	if (error)
@@ -83,6 +85,9 @@ LLFontManager::LLFontManager()
 LLFontManager::~LLFontManager()
 {
 	FT_Done_FreeType(gFTLibrary);
+	unloadAllFonts(); 	// <FS:ND> FIRE-7570. Only load/mmap fonts once. Release everything here.
+
+	nd::allocstats::unregisterProvider( this );
 }
 
 
@@ -142,10 +147,25 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 	
 	int error;
 
-	error = FT_New_Face( gFTLibrary,
-						 filename.c_str(),
-						 0,
-						 &mFTFace );
+	// <FS:ND> FIRE-7570. Only load/mmap fonts once. loadFont will either load a font into memory, or reuse an already loaded font.
+
+	// error = FT_New_Face( gFTLibrary,
+	// 					 filename.c_str(),
+	// 					 0,
+	// 					 &mFTFace );
+
+	FT_Open_Args openArgs;
+	memset( &openArgs, 0, sizeof( openArgs ) );
+	openArgs.memory_base = gFontManagerp->loadFont( filename, openArgs.memory_size );
+
+	if( !openArgs.memory_base )
+		return FALSE;
+
+	openArgs.flags = FT_OPEN_MEMORY;
+
+	error = FT_Open_Face( gFTLibrary, &openArgs, 0, &mFTFace );
+
+	// </FS:ND>
 
     if (error)
 	{
@@ -590,3 +610,93 @@ void LLFontFreetype::setSubImageLuminanceAlpha(U32 x, U32 y, U32 bitmap_num, U32
 	}
 }
 
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+
+namespace nd
+{
+	namespace fonts
+	{
+		class LoadedFont
+		{
+		public:
+			LoadedFont( std::string aName , U8 *aAddress, long aSize )
+			{
+				mName = aName;
+				mAddress = aAddress;
+				mSize = aSize;
+				mRefs = 1;
+			}
+
+			~LoadedFont()
+			{
+			}
+
+			std::string mName;
+			U8 *mAddress;
+			long mSize;
+			U32  mRefs;
+		};
+	}
+}
+
+U8 const* LLFontManager::loadFont( std::string const &aFilename, long &a_Size)
+{
+	a_Size = 0;
+
+	std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.find( aFilename );
+	if( itr != m_LoadedFonts.end() )
+	{
+		++itr->second->mRefs;
+		a_Size = itr->second->mSize;
+		return itr->second->mAddress;
+	}
+
+	llstat oStat;
+
+	if( 0 != LLFile::stat( aFilename, &oStat ) || 0 == oStat.st_size )
+		return 0;
+
+	a_Size = oStat.st_size;
+	U8 *pBuffer = new U8[ a_Size ];
+
+	if( a_Size != nd::apr::ndFile::readEx( aFilename, pBuffer, 0, a_Size ) )
+	{
+		a_Size = 0;
+		delete []pBuffer;
+		return 0;
+	}
+
+	m_LoadedFonts[ aFilename ] = new nd::fonts::LoadedFont( aFilename, pBuffer, a_Size );
+	return pBuffer;
+}
+
+void LLFontManager::dumpStats( std::ostream &aOut )
+{
+	for( std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.begin(); itr != m_LoadedFonts.end(); ++itr )
+	{
+		nd::fonts::LoadedFont *pFont = itr->second;
+		aOut << "Font: " << pFont->mName << " " << pFont->mSize << " byte at 0x" << std::hex << (ptrdiff_t)pFont->mAddress << std::dec << std::endl;
+	}
+}
+
+
+void LLFontManager::unloadFont( std::string const &aFilename )
+{
+	std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.find( aFilename );
+	if( itr != m_LoadedFonts.end() )
+		--itr->second->mRefs;
+}
+
+void LLFontManager::unloadAllFonts()
+{
+	std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.begin();
+
+	while( itr != m_LoadedFonts.end() )
+	{
+		delete []itr->second->mAddress;
+		delete itr->second;
+		m_LoadedFonts.erase( itr );
+		itr = m_LoadedFonts.begin();
+	}
+}
+// </FS:ND>

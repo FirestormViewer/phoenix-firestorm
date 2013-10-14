@@ -38,9 +38,9 @@ void LLUrlRegistryNullCallback(const std::string &url, const std::string &label,
 
 LLUrlRegistry::LLUrlRegistry()
 {
-//	mUrlEntry.reserve(20);
+//	mUrlEntry.reserve(21);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-	mUrlEntry.reserve(21);
+	mUrlEntry.reserve(22);
 // [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
@@ -66,7 +66,6 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntryObjectIM());
 	registerUrl(new LLUrlEntryPlace());
 	registerUrl(new LLUrlEntryInventory());
-	registerUrl(new LLUrlEntryObjectIM());
 	//LLUrlEntrySL and LLUrlEntrySLLabel have more common pattern, 
 	//so it should be registered in the end of list
 	registerUrl(new LLUrlEntrySL());
@@ -163,34 +162,36 @@ static bool stringHasUrl(const std::string &text)
 static bool stringHasJira(const std::string &text)
 {
 	// same as above, but for jiras
-	return (boost::ifind_first(text, "ARVD") ||
-			boost::ifind_first(text, "CHOP") ||
-			boost::ifind_first(text, "CTS") ||
-			boost::ifind_first(text, "DOC") ||
-			boost::ifind_first(text, "DN") ||
-			boost::ifind_first(text, "ECC") ||
-			boost::ifind_first(text, "EXP") ||
-			boost::ifind_first(text, "FIRE") ||
-			boost::ifind_first(text, "LEAP") ||
-			boost::ifind_first(text, "LLSD") ||
-			boost::ifind_first(text, "MAINT") ||
-			boost::ifind_first(text, "MISC") ||
-			boost::ifind_first(text, "OPEN") ||
-			boost::ifind_first(text, "PATHBUG") ||
-			boost::ifind_first(text, "PHOE") ||
-			boost::ifind_first(text, "PLAT") ||
-			boost::ifind_first(text, "PYO") ||
-			boost::ifind_first(text, "SCR") ||
-			boost::ifind_first(text, "SEC") ||
-			boost::ifind_first(text, "SH") ||
-			boost::ifind_first(text, "SINV") ||
-			boost::ifind_first(text, "SNOW") ||
-			boost::ifind_first(text, "SOCIAL") ||
-			boost::ifind_first(text, "SPOT")) ||
-			boost::ifind_first(text, "STORM") ||
-			boost::ifind_first(text, "SVC") ||
-			boost::ifind_first(text, "VWR") ||
-			boost::ifind_first(text, "WEB");
+	// <FS:CR> Please make sure to sync these with the items in LLUrlEntryJira::LLUrlEntryJira() if you make a change
+	return (text.find("ARVD") != std::string::npos ||
+			text.find("BUG") != std::string::npos ||
+			text.find("CHOP") != std::string::npos ||
+			text.find("CHUIBUG") != std::string::npos ||
+			text.find("DOC") != std::string::npos ||
+			text.find("DN") != std::string::npos ||
+			text.find("ECC") != std::string::npos ||
+			text.find("EXP") != std::string::npos ||
+			text.find("FIRE") != std::string::npos ||
+			text.find("LEAP") != std::string::npos ||
+			text.find("LLSD") != std::string::npos ||
+			text.find("MATBUG") != std::string::npos ||
+			text.find("MISC") != std::string::npos ||
+			text.find("OPEN") != std::string::npos ||
+			text.find("PATHBUG") != std::string::npos ||
+			text.find("PLAT") != std::string::npos ||
+			text.find("PYO") != std::string::npos ||
+			text.find("SCR") != std::string::npos ||
+			text.find("SH") != std::string::npos ||
+			text.find("SINV") != std::string::npos ||
+			text.find("SLS") != std::string::npos ||
+			text.find("SOCIAL") != std::string::npos ||
+			text.find("STORM") != std::string::npos ||
+			text.find("SUN") != std::string::npos ||
+			text.find("SUP") != std::string::npos ||
+			text.find("SVC") != std::string::npos ||
+			text.find("TPV") != std::string::npos ||
+			text.find("VWR") != std::string::npos ||
+			text.find("WEB") != std::string::npos);
 }
 
 bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb)

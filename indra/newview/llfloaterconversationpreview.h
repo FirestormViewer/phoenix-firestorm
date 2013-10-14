@@ -45,7 +45,7 @@ public:
 	virtual ~LLFloaterConversationPreview(){};
 
 	virtual BOOL postBuild();
-	void SetPages(std::list<LLSD>& messages,const std::string& file_name);
+	void setPages(std::list<LLSD>& messages,const std::string& file_name);
 
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
@@ -55,6 +55,7 @@ private:
 	void showHistory();
 	void onBtnOpenExternal();	// <FS:CR> Open chat history externally
 
+	LLMutex			mMutex;
 	LLSpinCtrl*		mPageSpinner;
 	// <FS:CR> [FS communication UI]
 	//LLChatHistory*	mChatHistory;

@@ -103,9 +103,7 @@ void LLCommunicationChannel::onDelete(LLNotificationPtr p)
 void LLCommunicationChannel::onFilterFail(LLNotificationPtr pNotificationPtr)
 {
 	std::string notificationType = pNotificationPtr->getType();
-	if ((notificationType == "groupnotify")
-		|| (notificationType == "offer")
-		|| (notificationType == "notifytoast")
+	if (((notificationType == "groupnotify") || (notificationType == "offer") || (notificationType == "notifytoast"))
         && !pNotificationPtr->isCancelled())
 	{
 		mHistory.insert(std::make_pair<LLDate, LLNotificationPtr>(pNotificationPtr->getDate(), pNotificationPtr));

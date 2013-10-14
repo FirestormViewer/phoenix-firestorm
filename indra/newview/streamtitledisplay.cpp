@@ -1,4 +1,5 @@
 /* Copyright (c) 2010 Katharine Berry All rights reserved.
+ * Copyright (c) 2013 Cinder Roxley <cinder.roxley@phoenixviewer.com>
  *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -39,40 +40,37 @@
 #include "fscommon.h"
 #include "message.h"
 
-StreamTitleDisplay::StreamTitleDisplay() : LLEventTimer(2) { };
+StreamTitleDisplay::StreamTitleDisplay() : LLEventTimer(2.f) { }
 
 BOOL StreamTitleDisplay::tick()
 {
 	checkMetadata();
-	return false;
+	return FALSE;
 }
 
 void StreamTitleDisplay::checkMetadata()
 {
-	static LLCachedControl<U32> ShowStreamMetadata(gSavedSettings, "ShowStreamMetadata");
-	static LLCachedControl<bool> StreamMetadataAnnounceToChat(gSavedSettings, "StreamMetadataAnnounceToChat");
+	static LLCachedControl<U32> ShowStreamMetadata(gSavedSettings, "ShowStreamMetadata", 1);
+	static LLCachedControl<bool> StreamMetadataAnnounceToChat(gSavedSettings, "StreamMetadataAnnounceToChat", false);
 
 	if (!gAudiop)
-	{
 		return;
-	}
-	if ((ShowStreamMetadata > 0 || StreamMetadataAnnounceToChat) && gAudiop->getStreamingAudioImpl()->hasNewMetadata())
+	if ((ShowStreamMetadata > 0 || StreamMetadataAnnounceToChat)
+	    && gAudiop->getStreamingAudioImpl()->getNewMetadata(mMetadata))
 	{
 		std::string chat = "";
-		std::string title = gAudiop->getStreamingAudioImpl()->getCurrentTitle();
-		std::string artist = gAudiop->getStreamingAudioImpl()->getCurrentArtist();
-
-		if (artist.length() > 0)
+		
+		if (mMetadata.has("ARTIST"))
 		{
-			chat = artist;
+			chat = mMetadata["ARTIST"].asString();
 		}
-		if (title.length() > 0)
+		if (mMetadata.has("TITLE"))
 		{
 			if (chat.length() > 0)
 			{
-				chat += " - ";
+				chat.append(" - ");
 			}
-			chat += title;
+			chat.append(mMetadata["TITLE"].asString());
 		}
 		if (chat.length() > 0)
 		{
@@ -86,29 +84,21 @@ void StreamTitleDisplay::checkMetadata()
 				chat = LLTrans::getString("StreamtitleNowPlaying") + " " + chat;
 				reportToNearbyChat(chat);
 			}
-			else if (ShowStreamMetadata == 1)
+			else if (ShowStreamMetadata == 1
+					 && (mMetadata.has("TITLE") || mMetadata.has("ARTIST")))
 			{
-				LLSD args;
-				args["TITLE"] = title;
-				if (artist.length() > 0)
-				{
-					args["ARTIST"] = artist;
-					LLNotificationsUtil::add("StreamMetadata", args);
-					
-				}
-				else
-				{
-					LLNotificationsUtil::add("StreamMetadataNoArtist", args);
-				}
+				if (!mMetadata.has("TITLE"))
+					mMetadata["TITLE"] = "";
+				LLNotificationsUtil::add((mMetadata.has("ARTIST") ? "StreamMetadata" : "StreamMetadataNoArtist"), mMetadata);
 			}
 		}
 	}
 }
 
-void StreamTitleDisplay::sendStreamTitleToChat(const std::string& Title)
+void StreamTitleDisplay::sendStreamTitleToChat(const std::string& title)
 {
-	static LLCachedControl<S32> StreamMetadataAnnounceChannel(gSavedSettings, "StreamMetadataAnnounceChannel");
-	if (StreamMetadataAnnounceChannel != 0)
+	static LLCachedControl<S32> streamMetadataAnnounceChannel(gSavedSettings, "StreamMetadataAnnounceChannel");
+	if (streamMetadataAnnounceChannel != 0)
 	{
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessageFast(_PREHASH_ChatFromViewer);
@@ -116,9 +106,9 @@ void StreamTitleDisplay::sendStreamTitleToChat(const std::string& Title)
 		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 		msg->nextBlockFast(_PREHASH_ChatData);
-		msg->addStringFast(_PREHASH_Message, Title);
+		msg->addStringFast(_PREHASH_Message, title);
 		msg->addU8Fast(_PREHASH_Type, CHAT_TYPE_WHISPER);
-		msg->addS32("Channel", StreamMetadataAnnounceChannel);
+		msg->addS32("Channel", streamMetadataAnnounceChannel);
 
 		gAgent.sendReliableMessage();
 	}

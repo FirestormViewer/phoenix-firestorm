@@ -1601,6 +1601,8 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 				dp->setPassFlags(value);
 				dp->unpackUUID(owner_id, "Owner");
 
+				mOwnerID = owner_id;
+
 				if (value & 0x80)
 				{
 					dp->unpackVector3(new_angv, "Omega");
@@ -1680,13 +1682,13 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
                 retval |= checkMediaURL(media_url);
 
 				//
-				// Unpack particle system data
+				// Unpack particle system data (legacy)
 				//
 				if (value & 0x8)
 				{
-					unpackParticleSource(*dp, owner_id);
+					unpackParticleSource(*dp, owner_id, true);
 				}
-				else
+				else if (!(value & 0x400))
 				{
 					deleteParticleSource();
 				}
@@ -4504,12 +4506,10 @@ S32 LLViewerObject::setTEMaterialParams(const U8 te, const LLMaterialPtr pMateri
 
 void LLViewerObject::refreshMaterials()
 {
-	setChanged(ALL_CHANGED);
+	setChanged(TEXTURE);
 	if (mDrawable.notNull())
 	{
 		gPipeline.markTextured(mDrawable);
-		gPipeline.markRebuild(mDrawable,LLDrawable::REBUILD_ALL);
-		dirtySpatialGroup(TRUE);
 	}
 }
 
@@ -4618,6 +4618,30 @@ LLViewerTexture *LLViewerObject::getTEImage(const U8 face) const
 	return NULL;
 }
 
+
+bool LLViewerObject::isImageAlphaBlended(const U8 te) const
+{
+	LLViewerTexture* image = getTEImage(te);
+	LLGLenum format = image ? image->getPrimaryFormat() : GL_RGB;
+	switch (format)
+	{
+		case GL_RGBA:
+		case GL_ALPHA:
+		{
+			return true;
+		}
+		break;
+
+		case GL_RGB: break;
+		default:
+		{
+			llwarns << "Unexpected tex format in LLViewerObject::isImageAlphaBlended...returning no alpha." << llendl;
+		}
+		break;
+	}
+
+	return false;
+}
 
 LLViewerTexture *LLViewerObject::getTENormalMap(const U8 face) const
 {
@@ -4938,7 +4962,7 @@ void LLViewerObject::unpackParticleSource(const S32 block_num, const LLUUID& own
 	}
 }
 
-void LLViewerObject::unpackParticleSource(LLDataPacker &dp, const LLUUID& owner_id)
+void LLViewerObject::unpackParticleSource(LLDataPacker &dp, const LLUUID& owner_id, bool legacy)
 {
 	if (!mPartSourcep.isNull() && mPartSourcep->isDead())
 	{
@@ -4947,7 +4971,7 @@ void LLViewerObject::unpackParticleSource(LLDataPacker &dp, const LLUUID& owner_
 	if (mPartSourcep)
 	{
 		// If we've got one already, just update the existing source (or remove it)
-		if (!LLViewerPartSourceScript::unpackPSS(this, mPartSourcep, dp))
+		if (!LLViewerPartSourceScript::unpackPSS(this, mPartSourcep, dp, legacy))
 		{
 			mPartSourcep->setDead();
 			mPartSourcep = NULL;
@@ -4955,7 +4979,7 @@ void LLViewerObject::unpackParticleSource(LLDataPacker &dp, const LLUUID& owner_
 	}
 	else
 	{
-		LLPointer<LLViewerPartSourceScript> pss = LLViewerPartSourceScript::unpackPSS(this, NULL, dp);
+		LLPointer<LLViewerPartSourceScript> pss = LLViewerPartSourceScript::unpackPSS(this, NULL, dp, legacy);
 		//If the owner is muted, don't create the system
 		if(LLMuteList::getInstance()->isMuted(owner_id, LLMute::flagParticles)) return;
 		// We need to be able to deal with a particle source that hasn't changed, but still got an update!
@@ -5810,6 +5834,11 @@ void LLViewerObject::dirtyMesh()
 F32 LLAlphaObject::getPartSize(S32 idx)
 {
 	return 0.f;
+}
+
+void LLAlphaObject::getBlendFunc(S32 face, U32& src, U32& dst)
+{
+
 }
 
 // virtual

@@ -235,6 +235,7 @@
 				</text>
 				<check_box label="Przesuwać" name="checkbox allow everyone move"/>
 				<check_box label="Kopiować" name="checkbox allow everyone copy"/>
+				<check_box label="Eksportować" name="checkbox allow export"/>
 				<text name="Next owner can:">
 					Następny właściciel może:
 				</text>

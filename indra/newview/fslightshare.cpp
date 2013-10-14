@@ -89,7 +89,7 @@ void FSLightshare::processLightshareMessage(LLMessageSystem* msg)
 	gStatusBar->updateParcelIcons();
 }
 
-void FSLightshare::processLightshareRefresh()
+void FSLightshare::processLightshareReset()
 {
 	LLEnvManagerNew::getInstance()->usePrefs();
 	setState(false);

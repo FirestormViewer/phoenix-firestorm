@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Чат" name="chat">
+<panel label="Чат" name="general_chat_settings">
 	<tab_container
 	 label="Файршторм"
 	 layout="topleft"
@@ -54,6 +54,7 @@
 				  left_pad="55"
 				  width="120">
 				(Требуется перезагрузка)
+		<check_box label="Звук" name="play_sound_friend_im"/>
 			</text>
 			<radio_group name="chat_window" tool_tip="Отображать ваши ЛС в отдельных окнах или в виде вкладок (Требуется перезагрузка)."
 				 left_pad="10">

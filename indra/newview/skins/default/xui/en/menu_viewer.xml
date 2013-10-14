@@ -145,7 +145,7 @@
            <menu_item_check
              label="Fly"
              name="Fly"
-             shortcut="Home">
+             shortcut="HOME">
                 <menu_item_check.on_check
                  function="Agent.getFlying" />
                 <menu_item_check.on_click
@@ -153,6 +153,15 @@
                 <menu_item_check.on_enable
                  function="Agent.enableFlying" />
             </menu_item_check>
+        <menu_item_call
+         label="Stop flying"
+         name="Stop flying"
+         shortcut="HOME">
+          <menu_item_call.on_click
+           function="Agent.toggleFlying" />
+          <menu_item_call.on_enable
+           function="Agent.getFlying" />
+        </menu_item_call>	
             <menu_item_check
              label="Always Run"
              name="Always Run"
@@ -363,8 +372,8 @@
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="fs_import" />
+                 function="File.ImportLinkset"
+                 parameter="" />
             </menu_item_call>
         </menu>
 
@@ -1283,15 +1292,6 @@
                  function="Tools.EnableSelectNextPart" />
             </menu_item_call>
         </menu>
-        <menu_item_call
-            label="Linksets..."
-            name="pathfinding_linkset_menu_item">
-          <menu_item_call.on_click
-              function="Floater.ToggleOrBringToFront"
-              parameter="pathfinding_linksets" />
-          <menu_item_call.on_enable
-              function="Tools.EnablePathfinding" />
-        </menu_item_call> 
         <menu_item_separator/>
 
         <menu_item_call
@@ -1743,8 +1743,8 @@
              visibility_control="FSEnableObjectExports"
              name="import linkset">
                 <menu_item_call.on_click
-                 function="Floater.Toggle"
-                 parameter="fs_import" />
+                 function="File.ImportLinkset"
+                 parameter="" />
             </menu_item_call>
         </menu>
         <menu_item_separator/>
@@ -3203,6 +3203,16 @@
                  parameter="DebugShowTextureInfo" />
             </menu_item_check>
             <menu_item_check
+             label="Show Avatar Render Info"
+             name="Show Avatar Render Info">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="DebugShowAvatarRenderInfo" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="DebugShowAvatarRenderInfo" />
+            </menu_item_check>
+            <menu_item_check
              label="Show Render Info"
              name="Show Render Info">
                 <menu_item_check.on_check
@@ -4006,6 +4016,12 @@
              name="Dump Region Object Cache">
                 <menu_item_call.on_click
                  function="Advanced.DumpRegionObjectCache" />
+            </menu_item_call>
+            <menu_item_call
+             label="Dump Simulator Features to Nearby Chat"
+             name="DumpSimFeaturesToChat">
+                <menu_item_call.on_click
+                 function="Develop.DumpSimFeaturesToChat" />
             </menu_item_call>
         </menu>
         <menu

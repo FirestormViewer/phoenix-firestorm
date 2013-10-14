@@ -78,6 +78,8 @@ protected:
 
 	static void	onCommitClickAction(LLUICtrl* ctrl, void*);
 	static void onCommitIncludeInSearch(LLUICtrl* ctrl, void*);
+	
+	static void onCommitExport(LLUICtrl* ctrl, void* data);	// <FS:CR> OpenSim export permissions
 
 protected:
 	void disableAll();

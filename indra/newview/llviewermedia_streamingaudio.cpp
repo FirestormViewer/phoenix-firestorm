@@ -165,23 +165,22 @@ LLPluginClassMedia* LLStreamingAudio_MediaPlugins::initializeMedia(const std::st
 }
 
 // <FS:ND> stream metadata from plugin
-bool LLStreamingAudio_MediaPlugins::hasNewMetadata()
+bool LLStreamingAudio_MediaPlugins::getNewMetadata(LLSD& metadata)
 {
 	if (!mMediaPlugin)
+	{
+		metadata.clear();
 		return false;
+	}
 
-	return mTitle != mMediaPlugin->getTitle() || mArtist != mMediaPlugin->getArtist();
-}
-
-std::string LLStreamingAudio_MediaPlugins::getCurrentArtist()
-{
-	mArtist = mMediaPlugin->getArtist();
-	return mArtist;
-}
-
-std::string LLStreamingAudio_MediaPlugins::getCurrentTitle()
-{
-	mTitle = mMediaPlugin->getTitle();
-	return mTitle;
+	if (mTitle != mMediaPlugin->getTitle() || mArtist != mMediaPlugin->getArtist())
+	{
+		mArtist = mMediaPlugin->getArtist();
+		mTitle = mMediaPlugin->getTitle();
+		metadata["ARTIST"] = mArtist;
+		metadata["TITLE"] = mTitle;
+		return true;
+	}
+	return false;
 }
 // </FS:ND>

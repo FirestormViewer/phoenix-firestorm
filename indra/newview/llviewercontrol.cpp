@@ -758,6 +758,15 @@ static void handleMovelockOptionChanged(const LLSD& newvalue)
 {
 	FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
 }
+
+static void handleDecimalPrecisionChanged(const LLSD& newvalue)
+{
+	LLFloaterTools* build_tools = LLFloaterReg::findTypedInstance<LLFloaterTools>("build");
+	if (build_tools)
+	{
+		build_tools->changePrecision(newvalue);
+	}
+}
 // </FS:PP>
 
 ////////////////////////////////////////////////////////////////////////////
@@ -951,7 +960,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
 	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	gSavedSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
-
+	gSavedSettings.getControl("FSBuildToolDecimalPrecision")->getCommitSignal()->connect(boost::bind(&handleDecimalPrecisionChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

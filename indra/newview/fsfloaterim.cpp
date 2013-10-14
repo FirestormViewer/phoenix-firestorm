@@ -76,6 +76,7 @@
 
 #include "llnotificationtemplate.h"		// <FS:Zi> Viewer version popup
 #include "fscommon.h"
+#include "fsfloaternearbychat.h"
 
 floater_showed_signal_t FSFloaterIM::sIMFloaterShowedSignal;
 
@@ -1032,6 +1033,7 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 		}
 
 		floater->openFloater(floater->getKey());
+		floater->setFocus(TRUE);
 	}
 	else
 	{
@@ -1520,7 +1522,6 @@ void FSFloaterIM::processChatHistoryStyleUpdate(const LLSD& newvalue)
 			floater->mInputEditor->setFont(font);
 		}
 	}
-
 }
 
 void FSFloaterIM::processSessionUpdate(const LLSD& session_update)
@@ -1874,6 +1875,28 @@ void FSFloaterIM::setEnableAddFriendButton(BOOL enabled)
 	getChild<LLButton>("add_friend_btn")->setEnabled(enabled);
 }
 // </FS:Ansariel>
+
+// <FS:CR> FIRE-11734
+//static
+void FSFloaterIM::clearAllOpenHistories()
+{
+	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("fs_impanel");
+	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin();
+		 iter != inst_list.end(); ++iter)
+	{
+		FSFloaterIM* floater = dynamic_cast<FSFloaterIM*>(*iter);
+		if (floater)
+		{
+			floater->reloadMessages(true);
+		}
+	}
+	
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+	if (nearby_chat)
+	{
+		nearby_chat->reloadMessages(true);
+	}
+}
 
 void FSFloaterIM::initIMSession(const LLUUID& session_id)
 {

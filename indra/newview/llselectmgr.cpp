@@ -94,6 +94,7 @@
 #include "llvovolume.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
+#include "llpanelface.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -102,7 +103,6 @@
 #include "llworld.h"
 // </FS:CR> Aurora Sim
 #include "fsareasearch.h"
-
 #include "llglheaders.h"
 
 LLViewerObject* getSelectedParentObject(LLViewerObject *object) ;
@@ -2579,7 +2579,7 @@ void LLSelectMgr::adjustTexturesByScale(BOOL send_to_sim, BOOL stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
-						LLMaterialPtr p = new LLMaterial(orig->asLLSD());
+						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 
@@ -2605,8 +2605,8 @@ void LLSelectMgr::adjustTexturesByScale(BOOL send_to_sim, BOOL stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
+						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
 
-						LLMaterialPtr p = new LLMaterial(orig->asLLSD());
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 
@@ -6333,21 +6333,7 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &color)
 
 	if (shader)
 	{ //switch to "solid color" program for SH-2690 -- works around driver bug causing bad triangles when rendering silhouettes
-
-		// <FS:ND> FIRE-6855; When running with a intel gfx card, do not use the solidcolor?.glsl files. Instead use a custom one for those cards. Passing color as a uniform and
-		// not a shader attribute
-
-		// gSolidColorProgram.bind();
-
-		if( gGLManager.mIsIntel )
-		{
-			gSolidColorProgramIntel.bind();
-			gGL.diffuseColor4fv( color.mV );
-		}
-		else
-			gSolidColorProgram.bind();
-
-		// </FS:ND>
+		gSolidColorProgram.bind();
 	}
 
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
@@ -7874,3 +7860,23 @@ void LLSelectMgr::sendSelectionMove()
 
 	//saveSelectedObjectTransform(SELECT_ACTION_TYPE_PICK);
 }
+
+// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
+//-----------------------------------------------------------------------------
+// selectGetNoIndividual() - returns TRUE if current selection does not contain
+// individual selections (edit linked parts, select face)
+//-----------------------------------------------------------------------------
+BOOL LLSelectMgr::selectGetNoIndividual()
+{
+	for (LLObjectSelection::iterator iter = getSelection()->begin();
+		 iter != getSelection()->end(); iter++ )
+	{
+		LLSelectNode* node = *iter;
+		if(node->mIndividualSelection)
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+// </FS:Zi>

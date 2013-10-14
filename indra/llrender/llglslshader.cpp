@@ -64,10 +64,6 @@ U32 LLGLSLShader::sTotalDrawCalls = 0;
 LLGLSLShader	gUIProgram;
 LLGLSLShader	gSolidColorProgram;
 
-// <FS:ND> FIRE-6855; Solidcolor shader for Intel graphics
-LLGLSLShader	gSolidColorProgramIntel;
-// </FS:ND>
-
 BOOL shouldChange(const LLVector4& v1, const LLVector4& v2)
 {
 	return v1 != v2;
@@ -362,8 +358,8 @@ void LLGLSLShader::unload()
 	stop_glerror();
 }
 
-BOOL LLGLSLShader::createShader(vector<string> * attributes,
-								vector<string> * uniforms,
+BOOL LLGLSLShader::createShader(std::vector<LLStaticHashedString> * attributes,
+								std::vector<LLStaticHashedString> * uniforms,
 								U32 varying_count,
 								const char** varyings)
 {
@@ -381,6 +377,11 @@ BOOL LLGLSLShader::createShader(vector<string> * attributes,
 
 	// Create program
 	mProgramObject = glCreateProgramObjectARB();
+	
+#if LL_DARWIN
+    // work-around missing mix(vec3,vec3,bvec3)
+    mDefines["OLD_SELECT"] = "1";
+#endif
 	
 	//compile new source
 	vector< pair<string,GLenum> >::iterator fileIter = mShaderFiles.begin();
@@ -445,7 +446,8 @@ BOOL LLGLSLShader::createShader(vector<string> * attributes,
 
 		for (S32 i = 0; i < channel_count; i++)
 		{
-			uniform1i(llformat("tex%d", i), i);
+			LLStaticHashedString uniName(llformat("tex%d", i));
+			uniform1i(uniName, i);
 		}
 
 		S32 cur_tex = channel_count; //adjust any texture channels that might have been overwritten
@@ -502,7 +504,7 @@ void LLGLSLShader::attachObjects(GLhandleARB* objects, S32 count)
 	}
 }
 
-BOOL LLGLSLShader::mapAttributes(const vector<string> * attributes)
+BOOL LLGLSLShader::mapAttributes(const std::vector<LLStaticHashedString> * attributes)
 {
 	//before linking, make sure reserved attributes always have consistent locations
 	for (U32 i = 0; i < LLShaderMgr::instance()->mReservedAttribs.size(); i++)
@@ -539,7 +541,7 @@ BOOL LLGLSLShader::mapAttributes(const vector<string> * attributes)
 		{
 			for (U32 i = 0; i < numAttributes; i++)
 			{
-				const char* name = (*attributes)[i].c_str();
+				const char* name = (*attributes)[i].String().c_str();
 				S32 index = glGetAttribLocationARB(mProgramObject, name);
 				if (index != -1)
 				{
@@ -555,7 +557,7 @@ BOOL LLGLSLShader::mapAttributes(const vector<string> * attributes)
 	return FALSE;
 }
 
-void LLGLSLShader::mapUniform(GLint index, const vector<string> * uniforms)
+void LLGLSLShader::mapUniform(GLint index, const vector<LLStaticHashedString> * uniforms)
 {
 	if (index == -1)
 	{
@@ -625,8 +627,10 @@ void LLGLSLShader::mapUniform(GLint index, const vector<string> * uniforms)
 			is_array[0] = 0;
 		}
 
-		mUniformMap[name] = location;
+		LLStaticHashedString hashedName(name);
 		mUniformNameMap[location] = name;
+		mUniformMap[hashedName] = location;
+
 		LL_DEBUGS("ShaderLoading") << "Uniform " << name << " is at location " << location << LL_ENDL;
 	
 		//find the index of this uniform
@@ -647,7 +651,7 @@ void LLGLSLShader::mapUniform(GLint index, const vector<string> * uniforms)
 			for (U32 i = 0; i < uniforms->size(); i++)
 			{
 				if ( (mUniform[i+LLShaderMgr::instance()->mReservedUniforms.size()] == -1)
-					&& ((*uniforms)[i] == name))
+					&& ((*uniforms)[i].String() == name))
 				{
 					//found it
 					mUniform[i+LLShaderMgr::instance()->mReservedUniforms.size()] = location;
@@ -681,7 +685,7 @@ GLint LLGLSLShader::mapUniformTextureChannel(GLint location, GLenum type)
 	return -1;
 }
 
-BOOL LLGLSLShader::mapUniforms(const vector<string> * uniforms)
+BOOL LLGLSLShader::mapUniforms(const vector<LLStaticHashedString> * uniforms)
 {
 	BOOL res = TRUE;
 	
@@ -1143,18 +1147,18 @@ void LLGLSLShader::uniformMatrix4fv(U32 index, U32 count, GLboolean transpose, c
 	}
 }
 
-GLint LLGLSLShader::getUniformLocation(const string& uniform)
+GLint LLGLSLShader::getUniformLocation(const LLStaticHashedString& uniform)
 {
 	GLint ret = -1;
 	if (mProgramObject > 0)
 	{
-		std::map<string, GLint>::iterator iter = mUniformMap.find(uniform);
+		LLStaticStringTable<GLint>::iterator iter = mUniformMap.find(uniform);
 		if (iter != mUniformMap.end())
 		{
 			if (gDebugGL)
 			{
 				stop_glerror();
-				if (iter->second != glGetUniformLocationARB(mProgramObject, uniform.c_str()))
+				if (iter->second != glGetUniformLocationARB(mProgramObject, uniform.String().c_str()))
 				{
 					llerrs << "Uniform does not match." << llendl;
 				}
@@ -1191,7 +1195,7 @@ GLint LLGLSLShader::getAttribLocation(U32 attrib)
 	}
 }
 
-void LLGLSLShader::uniform1i(const string& uniform, GLint v)
+void LLGLSLShader::uniform1i(const LLStaticHashedString& uniform, GLint v)
 {
 	GLint location = getUniformLocation(uniform);
 				
@@ -1207,7 +1211,7 @@ void LLGLSLShader::uniform1i(const string& uniform, GLint v)
 	}
 }
 
-void LLGLSLShader::uniform2i(const string& uniform, GLint i, GLint j)
+void LLGLSLShader::uniform2i(const LLStaticHashedString& uniform, GLint i, GLint j)
 {
 	GLint location = getUniformLocation(uniform);
 				
@@ -1224,7 +1228,7 @@ void LLGLSLShader::uniform2i(const string& uniform, GLint i, GLint j)
 }
 
 
-void LLGLSLShader::uniform1f(const string& uniform, GLfloat v)
+void LLGLSLShader::uniform1f(const LLStaticHashedString& uniform, GLfloat v)
 {
 	GLint location = getUniformLocation(uniform);
 				
@@ -1240,7 +1244,7 @@ void LLGLSLShader::uniform1f(const string& uniform, GLfloat v)
 	}
 }
 
-void LLGLSLShader::uniform2f(const string& uniform, GLfloat x, GLfloat y)
+void LLGLSLShader::uniform2f(const LLStaticHashedString& uniform, GLfloat x, GLfloat y)
 {
 	GLint location = getUniformLocation(uniform);
 				
@@ -1257,7 +1261,7 @@ void LLGLSLShader::uniform2f(const string& uniform, GLfloat x, GLfloat y)
 
 }
 
-void LLGLSLShader::uniform3f(const string& uniform, GLfloat x, GLfloat y, GLfloat z)
+void LLGLSLShader::uniform3f(const LLStaticHashedString& uniform, GLfloat x, GLfloat y, GLfloat z)
 {
 	GLint location = getUniformLocation(uniform);
 				
@@ -1273,23 +1277,7 @@ void LLGLSLShader::uniform3f(const string& uniform, GLfloat x, GLfloat y, GLfloa
 	}
 }
 
-void LLGLSLShader::uniform4f(const string& uniform, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
-{
-	GLint location = getUniformLocation(uniform);
-
-	if (location >= 0)
-	{
-		std::map<GLint, LLVector4>::iterator iter = mValue.find(location);
-		LLVector4 vec(x,y,z,w);
-		if (iter == mValue.end() || shouldChange(iter->second,vec))
-		{
-			glUniform4fARB(location, x,y,z,w);
-			mValue[location] = vec;
-		}
-	}
-}
-
-void LLGLSLShader::uniform1fv(const string& uniform, U32 count, const GLfloat* v)
+void LLGLSLShader::uniform1fv(const LLStaticHashedString& uniform, U32 count, const GLfloat* v)
 {
 	GLint location = getUniformLocation(uniform);
 
@@ -1305,7 +1293,7 @@ void LLGLSLShader::uniform1fv(const string& uniform, U32 count, const GLfloat* v
 	}
 }
 
-void LLGLSLShader::uniform2fv(const string& uniform, U32 count, const GLfloat* v)
+void LLGLSLShader::uniform2fv(const LLStaticHashedString& uniform, U32 count, const GLfloat* v)
 {
 	GLint location = getUniformLocation(uniform);
 				
@@ -1321,7 +1309,7 @@ void LLGLSLShader::uniform2fv(const string& uniform, U32 count, const GLfloat* v
 	}
 }
 
-void LLGLSLShader::uniform3fv(const string& uniform, U32 count, const GLfloat* v)
+void LLGLSLShader::uniform3fv(const LLStaticHashedString& uniform, U32 count, const GLfloat* v)
 {
 	GLint location = getUniformLocation(uniform);
 				
@@ -1337,7 +1325,7 @@ void LLGLSLShader::uniform3fv(const string& uniform, U32 count, const GLfloat* v
 	}
 }
 
-void LLGLSLShader::uniform4fv(const string& uniform, U32 count, const GLfloat* v)
+void LLGLSLShader::uniform4fv(const LLStaticHashedString& uniform, U32 count, const GLfloat* v)
 {
 	GLint location = getUniformLocation(uniform);
 
@@ -1355,27 +1343,7 @@ void LLGLSLShader::uniform4fv(const string& uniform, U32 count, const GLfloat* v
 	}
 }
 
-void LLGLSLShader::uniformMatrix2fv(const string& uniform, U32 count, GLboolean transpose, const GLfloat* v)
-{
-	GLint location = getUniformLocation(uniform);
-				
-	if (location >= 0)
-	{
-		glUniformMatrix2fvARB(location, count, transpose, v);
-	}
-}
-
-void LLGLSLShader::uniformMatrix3fv(const string& uniform, U32 count, GLboolean transpose, const GLfloat* v)
-{
-	GLint location = getUniformLocation(uniform);
-				
-	if (location >= 0)
-	{
-		glUniformMatrix3fvARB(location, count, transpose, v);
-	}
-}
-
-void LLGLSLShader::uniformMatrix4fv(const string& uniform, U32 count, GLboolean transpose, const GLfloat* v)
+void LLGLSLShader::uniformMatrix4fv(const LLStaticHashedString& uniform, U32 count, GLboolean transpose, const GLfloat* v)
 {
 	GLint location = getUniformLocation(uniform);
 				

@@ -116,6 +116,8 @@ public:
 
 	void updateChatHistoryStyle();
 	static void processChatHistoryStyleUpdate(const LLSD& newvalue);
+	
+	static void clearAllOpenHistories();	// <FS:CR> FIRE-11734
 
 	BOOL handleDragAndDrop(S32 x, S32 y, MASK mask,
 							   BOOL drop, EDragAndDropType cargo_type,

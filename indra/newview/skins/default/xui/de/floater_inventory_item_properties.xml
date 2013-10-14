@@ -41,6 +41,7 @@
 	<check_box label="Bearbeiten" name="CheckOwnerModify"/>
 	<check_box label="Kopieren" name="CheckOwnerCopy"/>
 	<check_box label="Transferieren" name="CheckOwnerTransfer"/>
+	<check_box label="Exportieren" name="CheckOwnerExport"/>
 	<text name="AnyoneLabel">
 		Jeder:
 	</text>

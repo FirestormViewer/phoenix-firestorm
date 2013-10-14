@@ -26,7 +26,6 @@
  */
 
 #include "ndlocks.h"
-#include "ndallocators.h"
 
 namespace nd
 {
@@ -45,7 +44,7 @@ namespace nd
 
 			void grow()
 			{
-				char *pMemory = reinterpret_cast< char* >( nd::allocators::ndMalloc( mObjectSize * AllocationSize, Alignment ) );
+				char *pMemory = reinterpret_cast< char* >( ll_aligned_malloc( mObjectSize * AllocationSize, Alignment ) );
 				ObjectMemory *pPrev = &mMemory;
 
 				for( int i = 0; i < AllocationSize; ++i )

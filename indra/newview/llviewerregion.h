@@ -43,6 +43,7 @@
 #include "llcapabilityprovider.h"
 #include "m4math.h"					// LLMatrix4
 #include "llhttpclient.h"
+#include "llframetimer.h"
 
 // Surface id's
 #define LAND  1
@@ -312,24 +313,14 @@ public:
 	bool meshRezEnabled() const;
 	bool meshUploadEnabled() const;
 
-	void getSimulatorFeatures(LLSD& info);	
+	void getSimulatorFeatures(LLSD& info) const;	
 	void setSimulatorFeatures(const LLSD& info);
 
 	
 	bool dynamicPathfindingEnabled() const;
 
-// <FS:CR> Opensim Extras support
-	typedef enum e_os_export_support
-	{
-		EXPORT_UNDEFINED = 0,
-		EXPORT_ALLOWED,
-		EXPORT_DENIED
-	} EOSExportSupport;
-	
-	EOSExportSupport regionSupportsExport() const;	// ExportSupports
+// </FS:CR>
 #ifdef OPENSIM
-	std::string getHGMapServerURL() const; // HG Maps
-	std::string getSearchServerURL() const; // OS Search URL
 	std::set<std::string> getGods() { return mGodNames; };	
 #endif // OPENSIM
 // </FS:CR>
@@ -378,6 +369,11 @@ public:
 	const LLViewerRegionImpl * getRegionImpl() const { return mImpl; }
 	LLViewerRegionImpl * getRegionImplNC() { return mImpl; }
 	
+	// implements the materials capability throttle
+	bool materialsCapThrottled() const { return !mMaterialsCapThrottleTimer.hasExpired(); }
+	void resetMaterialsCapThrottle();
+	
+	U32 getMaxMaterialsPerTransaction() const;
 public:
 	struct CompareDistance
 	{
@@ -412,6 +408,8 @@ public:
 	// we stop supporting the old CoarseLocationUpdate message.
 	LLDynamicArray<U32> mMapAvatars;
 	LLDynamicArray<LLUUID> mMapAvatarIDs;
+
+	LLFrameTimer &	getRenderInfoRequestTimer()			{ return mRenderInfoRequestTimer;		};
 
 private:
 	LLViewerRegionImpl * mImpl;
@@ -481,6 +479,10 @@ private:
 	BOOL mReleaseNotesRequested;
 	
 	LLSD mSimulatorFeatures;
+
+	// the materials capability throttle
+	LLFrameTimer mMaterialsCapThrottleTimer;
+LLFrameTimer	mRenderInfoRequestTimer;
 };
 
 inline BOOL LLViewerRegion::getRegionProtocol(U64 protocol) const

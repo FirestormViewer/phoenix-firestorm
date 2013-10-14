@@ -63,7 +63,7 @@
         <menu_item_check label="Gespräche" name="Conversations"/>
         <menu label="Online-Status" name="Status">
             <menu_item_check label="Abwesend" name="Set Away"/>
-            <menu_item_check label="Nicht-stören-Modus" name="Do Not Disturb"/>		
+            <menu_item_check label="Nicht stören" name="Do Not Disturb"/>		
             <menu_item_check label="Automatische Antwort" name="Set Autorespond"/>
             <menu_item_check label="Automatische Antwort an Nicht-Freunde" name="Set Autorespond to non-friends"/>
         </menu>
@@ -154,7 +154,6 @@
 			<menu_item_call label="Vorherige Teile mit einschließen" name="Include Previous Part"/>
 		</menu>
 		<menu_item_call label="Fokus auf Auswahl" name="Focus on Selection"/>
-		<menu_item_call label="Linksets..." name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="Auf Auswahl zoomen" name="Zoom to Selection"/>
 		<menu label="Objekt" name="Object">
 			<menu_item_call label="Kaufen" name="Menu Object Buy"/>
@@ -401,7 +400,7 @@
 			<menu_item_check label="Framerate randomisieren" name="Randomize Framerate"/>
 			<menu_item_check label="Periodischer langsamer Frame" name="Periodic Slow Frame"/>
 			<menu_item_check label="Frame-Test" name="Frame Test"/>
-			<menu_item_check label="Frame-Profil" name="Frame Profile"/>
+			<menu_item_check label="Rahmenprofil" name="Frame Profile"/>
 		</menu>
 		<menu label="Metadaten darstellen" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
@@ -441,7 +440,7 @@
 			<menu_item_call label="Materialinfo für ausgewähltes Objekt" name="Selected Material Info"/>
 			<menu_item_check label="Wireframe" name="Wireframe"/>
 			<menu_item_check label="Objekt-Objekt Okklusion" name="Object-Object Occlusion"/>
-			<menu_item_check label="Erweitertes Beleuchtungsmodell" name="Lighting and Shadows"/>
+			<menu_item_check label="Erweitertes Beleuchtungsmodell" name="Advanced Lighting Model"/>
 			<menu_item_check label="Schatten von Sonne-/Mond-Projektoren" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO und Schattenglättung" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Globale Beleuchtung (experimentell)" name="Global Illumination"/>
@@ -476,6 +475,7 @@
 			<menu_item_check label="Sonnen-Override für Sim" name="Sim Sun Override"/>
 			<menu_item_check label="Festgelegtes Wetter" name="Fixed Weather"/>
 			<menu_item_call label="Regionsobjekt-Cache ausgeben" name="Dump Region Object Cache"/>
+			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">
 			<menu_item_call label="Test Medienbrowser" name="Web Browser Test"/>

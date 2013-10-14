@@ -55,7 +55,7 @@ std::string getProfileURL(const std::string& agent_name)
 	}
 	else
 	{
-#if OPENSIM
+#ifdef OPENSIM
 // <FS:CR> FIRE-8063: Web profiles for aurora, opensim, and osgrid
 		std::string match = "?name=[AGENT_NAME]";
 		if (LLGridManager::getInstance()->isInAuroraSim()) {

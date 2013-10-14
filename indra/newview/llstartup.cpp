@@ -283,7 +283,7 @@ boost::scoped_ptr<LLViewerStats::PhaseMap> LLStartUp::sPhases(new LLViewerStats:
 
 void login_show();
 void login_callback(S32 option, void* userdata);
-void show_first_run_dialog();
+//void show_first_run_dialog();	// <FS:CR> Unused in Firestorm
 bool first_run_dialog_callback(const LLSD& notification, const LLSD& response);
 void set_startup_status(const F32 frac, const std::string& string, const std::string& msg);
 bool login_alert_status(const LLSD& notification, const LLSD& response);
@@ -979,7 +979,8 @@ bool idle_startup()
 			if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
 			{
 				LL_INFOS("AppInit") << "FirstLoginThisInstall, calling show_first_run_dialog()" << LL_ENDL;
-				show_first_run_dialog();
+				// <FS:CR> Don't show first run dialog, ever, at all.
+			//	show_first_run_dialog();
 			}
 			else
 			{
@@ -2423,7 +2424,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		
 		// <FS:CR> Load dynamic script library from xml
 		gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_lsl.xml"));
-#if OPENSIM
+#ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 			gScriptLibrary.loadLibrary(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "scriptlibrary_ossl.xml"));
 		if (LLGridManager::getInstance()->isInAuroraSim())
@@ -2731,10 +2732,11 @@ void login_callback(S32 option, void *userdata)
 	}
 }
 
-void show_first_run_dialog()
-{
-	LLNotificationsUtil::add("FirstRun", LLSD(), LLSD(), first_run_dialog_callback);
-}
+// <FS:CR> Ditch the first run modal. Assume the user already has an account.
+//void show_first_run_dialog()
+//{
+//	LLNotificationsUtil::add("FirstRun", LLSD(), LLSD(), first_run_dialog_callback);
+//}
 
 bool first_run_dialog_callback(const LLSD& notification, const LLSD& response)
 {

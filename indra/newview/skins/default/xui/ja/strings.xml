@@ -130,7 +130,9 @@
 	<string name="create_account_url">
 		http://join.secondlife.com/index.php?lang=ja-JP&amp;sourceid=[sourceid]
 	</string>
-	<string name="ViewerDownloadURL">http://www.firestormviewer.org/downloads/</string>
+	<string name="ViewerDownloadURL">
+		http://www.firestormviewer.org/downloads/
+	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		お使いの古いビューワでは Second Life にアクセスできません。以下のページから新しいビューワをダウンロードしてください：
 http://firestormviewer.org/downloads
@@ -439,6 +441,9 @@ support@secondlife.com にお問い合わせください。
 	</string>
 	<string name="SLappAgentRequestFriend">
 		フレンド登録リクエスト
+	</string>
+	<string name="SLappAgentRemoveFriend">
+		フレンドの削除
 	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		閉じる （⌘W）
@@ -951,6 +956,18 @@ support@secondlife.com にお問い合わせください。
 	</string> <!-- Substitution for agent name -->
 	<string name="TeleportYourAgent">
 		あなたをテレポート
+	</string>
+	<string name="JoinAnExperience">
+		体験に参加する
+	</string>
+	<string name="SilentlyManageEstateAccess">
+		土地のアクセスリストを管理するときにアラートを表示しない
+	</string>
+	<string name="OverrideYourAnimations">
+		デフォルトのアニメーションを置き換え
+	</string>
+	<string name="ScriptReturnObjects">
+		あなたの代わりにオブジェクトを返却
 	</string>
 	<string name="UnknownScriptPermission">
 		(不明)!
@@ -1972,14 +1989,14 @@ support@secondlife.com にお問い合わせください。
 	<string name="ATTACH_HUD_BOTTOM_RIGHT">
 		HUD（右下）
 	</string>
-	
-	<!-- added Jun.30, 2013 -->
 	<string name="ATTACH_NECK">
 		首
 	</string>
 	<string name="ATTACH_AVATAR_CENTER">
-		アバターの中心
+		アバターの中央
 	</string>
+	
+	<!-- added Jun.30, 2013 -->
 	<string name="ATTACH_BRIDGE">
 		ブリッジ
 	</string>
@@ -3031,13 +3048,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Hip Width">
 		腰の幅
 	</string>
-	
-	<!-- added Jun.30, 2013 -->
 	<string name="Hover">
-		空中
+		ホバー
 	</string>
-	<!-- added Jun.30, 2013 -->
-	
 	<string name="In">
 		内向き
 	</string>
@@ -5265,6 +5278,9 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		ログが記録された会話はありません。あなたが誰かに話しかけるか、誰かがあなたに話しかけるとここにログが表示されるようになります。
+	</string>
+	<string name="loading_chat_logs">
+		ロード中...
 	</string>
 	
 	<!-- Build types for about floater -->

@@ -966,6 +966,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TeleportYourAgent">
 		Teleportować Cię
 	</string>
+	<string name="ManageEstateSilently">
+		Zarządzać Twoimi majątkami bez powiadomień
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		Zmieniać Twoje domyślne animacje
+	</string>
 	<string name="JoinAnExperience">
 		Rozpocznij przygodę
 	</string>
@@ -1070,6 +1076,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="backup_files">
 		Kopie zapasowe obiektów
+	</string>
+	<string name="collada_files">
+		Modele COLLADA
 	</string>
 	<string name="shape">
 		Kształt
@@ -5128,6 +5137,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="qtool_done">
 		Narzędzie wyrównywania zakończyło pracę.
 	</string>
+	<string name="fsbridge_cant_create_disabled">
+		Firestorm nie może utworzyć Mostu LSL, jeśli "Włącz Most w LScript Language" jest wyłączone w Ustawieniach.
+	</string>
 	<string name="fsbridge_no_library">
 		Firestorm nie mógł utworzyć Mostu LSL. Włącz swoją Bibliotekę i zaloguj się ponownie.
 	</string>
@@ -5271,63 +5283,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="preproc_toggle_warning">
 		Przełączenie trybu preprocesora odniesie pełny skutek dopiero po zamknięciu i ponownym otwarciu tego edytora.
-	</string>
-	<string name="export_started">
-		Rozpoczynanie eksportu...
-	</string>
-	<string name="export_finished">
-		Eksportowanie zakończone.
-	</string>
-	<string name="export_fail_no_mesh">
-		Eksportowanie meszy jest obecnie nieobsługiwane. Anulowano.
-	</string>
-	<string name="export_nothing_exported">
-		Nic nie zostało wyeksportowane. Kopia nie została stworzona.
-	</string>
-	<string name="export_node_not_found">
-		Nie znaleziono węzła obiektu [OBJECT] metodą LLSelect. Używam primy domyślnej zamiast tego.
-	</string>
-	<string name="export_failed_export_check">
-		[OBJECT] nie ma odpowiednich zezwoleń. Używam primy domyślnej.
-	</string>
-	<string name="export_asset_failed_export_check">
-		[ITEM] nie ma odpowiednich zezwoleń. Pomijam.
-	</string>
-	<string name="export_failed_export_null_texture">
-		Próbowano eksportować pustą teksturę.
-	</string>
-	<string name="export_loading_texture">
-		Ładowanie tekstury [ITEM]...
-	</string>
-	<string name="export_saving_texture">
-		Pomyślnie zapisano teksturę [TEXTURE].
-	</string>
-	<string name="export_saving_asset">
-		Zapisywanie [ITEM]...
-	</string>
-	<string name="export_failed_to_receive_texture">
-		Nie powiodło się pobranie tekstury [TEXTURE].
-	</string>
-	<string name="export_received_null_texture">
-		Otrzymano pustą teksturę: [TEXTURE].
-	</string>
-	<string name="export_item_not_exportable">
-		[ITEM] jest obecnie nieobsługiwany przez eksporter. Pomijam.
-	</string>
-	<string name="export_failed_fetch">
-		Nie można pobrać [ITEM]. (Status [STATUS] [EXT_STATUS])
-	</string>
-	<string name="export_requesting_asset">
-		Pobieranie danych [ITEM]...
-	</string>
-	<string name="export_rerequesting_inventory">
-		Pobieranie zawartości dla [ITEM].
-	</string>
-	<string name="export_rerequesting_texture">
-		Pobieranie tekstury [ITEM].
-	</string>
-	<string name="export_failed_to_load">
-		Nie powiodło się pobranie danych [ITEM].
 	</string>
 	<string name="skin_defaults_starlight_location">
 		Pokazywanie Twojej obecnej lokalizacji w pasku menu zostało wyłączone, to domyślne zachowanie dla skórek linii StarLight.

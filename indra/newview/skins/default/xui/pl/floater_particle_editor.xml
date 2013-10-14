@@ -48,6 +48,32 @@ Wzór:
 <text name="End_Alpha_Label">
 	Końcowa Alpha:
 </text>
+<text name="Start_Glow_Label">
+	Startowy blask:
+</text>
+<combo_box name="blend_func_src_combo">
+	<combo_box.item label="Miksuj bity pierwsze" name="blend_one" />
+	<combo_box.item label="Miksuj bity zerowe" name="blend_zero" />
+	<combo_box.item label="Miksuj kolor docelowy" name="blend_dest_color" />
+	<combo_box.item label="Miksuj kolor źródłowy" name="blend_src_color" />
+	<combo_box.item label="Miks 1 - kolor docelowy" name="blend_one_minus_dest_color" />
+	<combo_box.item label="Miks 1 - kolor źródłowy" name="blend_one_minus_src_color" />
+	<combo_box.item label="Miksuj źródłową alphę" name="blend_src_alpha" />
+	<combo_box.item label="Miks 1 - źródłowa alpha" name="blend_one_minus_src_alpha" />
+</combo_box>
+<text name="End_Glow_Label">
+	Końcowy blask:
+</text>
+<combo_box name="blend_func_dest_combo">
+	<combo_box.item label="Miksuj bity pierwsze" name="blend_one" />
+	<combo_box.item label="Miksuj bity zerowe" name="blend_zero" />
+	<combo_box.item label="Miksuj kolor docelowy" name="blend_dest_color" />
+	<combo_box.item label="Miksuj kolor źródłowy" name="blend_src_color" />
+	<combo_box.item label="Miks 1 - kolor docelowy" name="blend_one_minus_dest_color" />
+	<combo_box.item label="Miks 1 - kolor źródłowy" name="blend_one_minus_src_color" />
+	<combo_box.item label="Miksuj źródłową alphę" name="blend_src_alpha" />
+	<combo_box.item label="Miks 1 - źródłowa alpha" name="blend_one_minus_src_alpha" />
+</combo_box>
 <text name="Scale_Start_Label">
 	Skala Startu:
 </text>
@@ -65,6 +91,7 @@ Wzór:
 <check_box name="target_position_checkbox" label="Celuj w obiekt"/>
 <check_box name="target_linear_checkbox" label="Celuj liniowo"/>
 <check_box name="wind_checkbox" label="Wiatr"/>
+<check_box name="ribbon_checkbox" label="Wstęga"/>
 <button name="copy_button" label="Kopiuj" tool_tip="Kopiuj parametry edytora cząsteczek do schowka jako skrypt LSL."/>
 <button name="inject_button" label="Wstaw" tool_tip="Wstawia ustawiony system cząsteczek w zaznaczony obiekt."/>
 </panel>

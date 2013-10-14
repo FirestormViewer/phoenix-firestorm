@@ -207,6 +207,14 @@ No podrás retirarles ese rol, sino que deberán renunciar a él por sí mismos.
 ¿Añadir esta capacidad a &apos;[ROLE_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
+	<notification name="EjectGroupMemberWarning">
+		Estás a punto de expulsar a [AVATAR_NAME] del grupo.
+		<usetemplate ignoretext="Confirmar la expulsión de un miembro del grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
+	</notification>
+	<notification name="EjectGroupMembersWarning">
+		Estás a punto de expulsar a [COUNT] miembros del grupo.
+		<usetemplate ignoretext="Confirmar la expulsión de varios miembros del grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
+	</notification>
 	<notification name="AttachmentDrop">
 		Vas a soltar tu accesorio.
     ¿Estás seguro de que quieres continuar?
@@ -1171,7 +1179,7 @@ en TODO EL TERRENO de esta región?
 Por favor, elige un pago mayor.
 	</notification>
 	<notification name="ConfirmItemDeleteHasLinks">
-		Por lo menos uno de los elementos seleccionados tiene enlaces que lo señalan. Si eliminas este elemento, los enlaces dejarán de funcionar permanentemente. Lo más recomendable es eliminar primero los enlaces.
+		Por lo menos uno de los elementos contiene vínculos que lo señalan.  Si eliminas este elemento, los vínculos dejarán de funcionar permanentemente.  Lo más recomendable es eliminar primero los vínculos.
 
 ¿Estás seguro de que quieres eliminar los elementos?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
@@ -1189,9 +1197,9 @@ Por favor, elige un pago mayor.
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteNoOwn">
-		No eres el propietario de, al menos, uno de los items que has seleccionado.
+		Uno o más de los elementos seleccionados no son tuyos.
 
-¿Estás seguro de que quieres borrar estos items?
+¿Estás seguro de que quieres eliminar los elementos?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoCopy">
@@ -1202,25 +1210,25 @@ Al menos un objeto no es copiable.
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoOwn">
-		Al menos un objeto está bloqueado.
-No eres propietario de, al menos, un objeto.
+		Hay un objeto bloqueado como mínimo.
+No eres propietario de al menos un objeto.
 
-¿Estás seguro de que quieres borrar estos items?
+¿Estás seguro de que quieres eliminar los elementos?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteNoCopyNoOwn">
-		Al menos un objeto no es copiable.
-No eres propietario de, al menos, un objeto.
+		No se puede copiar un objeto como mínimo.
+No eres propietario de al menos un objeto.
 
-¿Estás seguro de que quieres borrar estos items?
+¿Estás seguro de que quieres eliminar los elementos?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoCopyNoOwn">
-		Al menos un objeto está bloqueado.
-Al menos un objeto no es copiable.
-No eres propietario de, al menos, un objeto.
+		Hay un objeto bloqueado como mínimo.
+No se puede copiar un objeto como mínimo.
+No eres propietario de al menos un objeto.
 
-¿Estás seguro de que quieres borrar estos items?
+¿Estás seguro de que quieres eliminar los elementos?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectTakeLock">
@@ -1547,11 +1555,11 @@ Versión [VERSION] [[RELEASE_NOTES_FULL_URL]; información acerca de esta actual
 		Hemos descargado una actualización de software necesaria.
 Versión [VERSION] [[INFO_URL] Información sobre esta actualización]
 
-Debemos reiniciar [APP_NAME] para instalar la actualización.
+Para instalar la actualización, hay que reiniciar [APP_NAME].
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="RequiredUpdateDownloadedDialog">
-		Debemos reiniciar [APP_NAME] para instalar la actualización.
+		Para instalar la actualización, hay que reiniciar [APP_NAME].
 [[INFO_URL] Información sobre esta actualización]
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
@@ -1575,14 +1583,13 @@ Versión [VERSION]
 Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
 visita [[INFO_URL] detalles sobre esta actualización]
 
-Debemos reiniciar [APP_NAME] para instalar la actualización.
+Para instalar la actualización, hay que reiniciar [APP_NAME].
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
-	<notification name="OtherChannelRequiredUpdateDownloadedDialog"
- type="alertmodal">
-		Debemos reiniciar [APP_NAME] para instalar la actualización.
-Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
-visita [[INFO_URL] detalles sobre esta actualización]
+	<notification name="OtherChannelRequiredUpdateDownloadedDialog">
+		Para instalar la actualización, hay que reiniciar [APP_NAME].
+Este visor experimental se ha sustituido por un visor de [NEW_CHANNEL].
+Consulta [[INFO_URL] Información sobre esta actualización].
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
@@ -1632,6 +1639,10 @@ visita [[INFO_URL] detalles sobre esta actualización]
 		Actualmente perteneces al grupo &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
 ¿Deseas abandonar el grupo?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="OwnerCannotLeaveGroup">
+		No es posible abandonar el grupo. No puedes abandonarlo porque eres su último propietario. Antes tienes que asignar el papel de propietario a otro miembro.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
 		¿Realmente quieres expulsar a todos los residentes fuera de la red de simuladores?
@@ -2520,7 +2531,7 @@ URL: [AUDIOURL]
 		Asunto: [SUBJECT], Mensaje: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; está [STATUS]
+		[NAME] está [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Aunque eres muy agradable, no puedes añadirte como amigo a ti mismo.
@@ -2643,9 +2654,7 @@ Por favor, selecciona un sólo objeto.
     elegir &apos;Teleportar&apos;.)
 	</notification>
 	<notification name="TeleportToPerson">
-		Para ponerte en contacto con Residentes como &apos;[NAME]&apos;, pulsa el botón &quot;Gente&quot;, selecciona un Residente en la ventana que se abre y después pulsa en &apos;MI&apos; en
-    la parte inferior de la ventana.
-    (También puedes pulsar dos veces en su nombre o pulsarlo con el botón derecho y elegir &apos;MI&apos;).
+		Para abrir una conversación privada con alguien, pulsa con el botón derecho en su avatar y selecciona &apos;MI&apos; en el menú.
 	</notification>
 	<notification name="CantSelectLandFromMultipleRegions">
 		No puedes seleccionar un terreno que cruce las fronteras entre servidores.
@@ -3036,6 +3045,15 @@ No autorices el acceso a tu cuenta si no conoces cuál es la razón exacta.
 		<form name="form">
 			<button name="Grant" text="Permitir acceso total"/>
 			<button name="Deny" text="Denegar"/>
+		</form>
+	</notification>
+	<notification name="UnknownScriptQuestion">
+		&apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, un objeto propiedad de &apos;[NAME]&apos;, ha solicitado un permiso de script en tiempo de ejecución que el visor no reconoce ni puede conceder.
+
+Para obtener el permiso, descárgate aquí la última versión: [DOWNLOADURL].
+		<form name="form">
+			<button name="Deny" text="Aceptar"/>
+			<button name="Mute" text="Ignorar"/>
 		</form>
 	</notification>
 	<notification name="UnknownScriptQuestion">

@@ -132,6 +132,7 @@ Try saving image as 24 bit Targa (.tga).
      width="280" />
      <check_box
       control_name="TemporaryUpload"
+      visible="false"
       follows="bottom|left"
       height="16"
       initial_value="false"

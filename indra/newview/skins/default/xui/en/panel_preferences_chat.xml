@@ -162,7 +162,7 @@
              top_pad="1"
              width="400" />
             <check_box
-             control_name="FSPlayChatAnimation"
+             control_name="PlayChatAnim"
              follows="left|top"
              height="16"
              label="Play avatar animations (such as shouting)"
@@ -793,6 +793,16 @@
              enabled_control="FSNearbyChatbar"
              name="FSShowChatChannel"
              label="Show channel selection in chat bar"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             left_delta="220"
+             width="250"
+             height="18"
+             control_name="FSShowChatType"
+             enabled_control="FSNearbyChatbar"
+             name="FSShowChatType"
+             label="Show chat type / send chat button in chat bar"/>
 
             <check_box
              control_name="AutohideChatBar"

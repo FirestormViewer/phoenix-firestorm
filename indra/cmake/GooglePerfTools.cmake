@@ -61,8 +61,3 @@ if (USE_GOOGLE_PERFTOOLS)
 else (USE_GOOGLE_PERFTOOLS)
 endif (USE_GOOGLE_PERFTOOLS)
 
-# <FS:ND> tcmalloc removal
-if( NOT USE_TCMALLOC )
- add_definitions( -DND_NO_TCMALLOC )
-endif( NOT USE_TCMALLOC )
-# </FS:ND> tcmalloc removal

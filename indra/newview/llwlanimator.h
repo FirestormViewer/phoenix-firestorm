@@ -147,3 +147,4 @@ private:
 };
 
 #endif // LL_WL_ANIMATOR_H
+

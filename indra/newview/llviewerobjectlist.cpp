@@ -226,6 +226,13 @@ void LLViewerObjectList::setUUIDAndLocal(const LLUUID &id,
 S32 gFullObjectUpdates = 0;
 S32 gTerseObjectUpdates = 0;
 
+// <FS:CR> Object Import
+boost::signals2::connection LLViewerObjectList::setNewObjectCallback(new_object_callback_t cb)
+{
+	return mNewObjectSignal.connect(cb);
+}
+// </FS:CR>
+
 void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp, 
 										   void** user_data, 
 										   U32 i, 
@@ -267,10 +274,10 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 		// <FS:Techwolf Lupindo> import support
 		bool import_handled = false;
 		bool own_full_perm = (objectp->permYouOwner() && objectp->permModify() && objectp->permTransfer() && objectp->permCopy());
-		FSFloaterImport* floater_import = LLFloaterReg::getTypedInstance<FSFloaterImport>("fs_import");
-		if (floater_import && own_full_perm)
+		if (own_full_perm)
 		{
-			import_handled = floater_import->processPrimCreated(objectp);
+			import_handled = mNewObjectSignal(objectp);
+			mNewObjectSignal.disconnect_all_slots();
 		}
 		if (!import_handled)
 		{

@@ -4,7 +4,6 @@
 #include "fskeywords.h"
 #include "llui.h"
 #include "llviewercontrol.h"
-#include "growlmanager.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 #include <boost/regex.hpp>
 //#include <boost/algorithm/string/find.hpp> //for boost::ifind_first
@@ -62,18 +61,5 @@ void FSKeywords::notify(const LLChat& chat)
 	static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedSettings, "PlayModeUISndFSKeywordSound");
 	if(PlayModeUISndFSKeywordSound)
 		LLUI::sAudioCallback(LLUUID(gSavedSettings.getString("UISndFSKeywordSound")));
-
-	std::string msg = chat.mFromName;
-	std::string prefix = chat.mText.substr(0, 4);
-	if(prefix == "/me " || prefix == "/me'" || prefix == "/ME " || prefix == "/ME'")
-	{
-		msg = msg + chat.mText.substr(3);
-	}
-	else
-	{
-		msg = msg + ": " + chat.mText;
-	}
-
-	gGrowlManager->notify("Keyword Alert", msg, "Keyword Alert");
 }
 // </FS:PP>

@@ -144,6 +144,8 @@ BOOL LLFloaterSettingsDebug::postBuild()
 	mDefaultButton = getChild<LLButton>("default_btn");
 	mSanityButton = getChild<LLButton>("sanity_warning_btn");
 
+	mSearchSettingsInput->setFocus(TRUE); // <FS:LO> Make search textbox focused on opening
+
 	// tried to make this an XUI callback, but keystroke_callback doesn't
 	// seem to work as hoped, so build the callback manually :/ -Zi
 	mSearchSettingsInput->setKeystrokeCallback(boost::bind(&LLFloaterSettingsDebug::onUpdateFilter,this));

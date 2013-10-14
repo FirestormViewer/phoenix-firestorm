@@ -3,6 +3,7 @@
 	<menu_item_call label="Mostrar perfil" name="show_agent"/>
 	<menu_item_call label="Enviar un MI..." name="send_im"/>
 	<menu_item_call label="Añadir como amigo..." name="add_friend"/>
+	<menu_item_call label="Quitar de los amigos..." name="remove_friend"/>
 	<menu_item_call label="Enfocar" name="zoom_agent"/>
 	<menu_item_call label="Teleportarme a su posición" name="teleportto_agent"/>
 	<menu_item_call label="Ofrecer teleporte" name="offer_teleport"/>

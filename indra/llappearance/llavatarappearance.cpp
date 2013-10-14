@@ -308,6 +308,8 @@ LLAvatarAppearance::~LLAvatarAppearance()
 	}
 	std::for_each(mMeshLOD.begin(), mMeshLOD.end(), DeletePointer());
 	mMeshLOD.clear();
+
+	delete mRoot;
 }
 
 //static
@@ -633,11 +635,11 @@ BOOL LLAvatarAppearance::setupBone(const LLAvatarBoneInfo* info, LLJoint* parent
 //-----------------------------------------------------------------------------
 // allocateCharacterJoints()
 //-----------------------------------------------------------------------------
-BOOL LLAvatarAppearance::allocateCharacterJoints( U32 num )
+BOOL LLAvatarAppearance::allocateCharacterJoints( S32 num )
 {
 	clearSkeleton();
 
-	for(S32 joint_num = 0; joint_num < (S32)num; joint_num++)
+	for(S32 joint_num = 0; joint_num < num; joint_num++)
 	{
 		mSkeleton.push_back(createAvatarJoint(joint_num));
 	}

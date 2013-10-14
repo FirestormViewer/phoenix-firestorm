@@ -80,22 +80,39 @@ uniform vec2 screen_res;
 
 vec3 srgb_to_linear(vec3 cs)
 {
-	
-/*        {  cs / 12.92,                 cs <= 0.04045
-    cl = {
-        {  ((cs + 0.055)/1.055)^2.4,   cs >  0.04045*/
+	vec3 low_range = cs / vec3(12.92);
+	vec3 high_range = pow((cs+vec3(0.055))/vec3(1.055), vec3(2.4));
+	bvec3 lte = lessThanEqual(cs,vec3(0.04045));
 
-	return pow((cs+vec3(0.055))/vec3(1.055), vec3(2.4));
+#ifdef OLD_SELECT
+	vec3 result;
+	result.r = lte.r ? low_range.r : high_range.r;
+	result.g = lte.g ? low_range.g : high_range.g;
+	result.b = lte.b ? low_range.b : high_range.b;
+    return result;
+#else
+	return mix(high_range, low_range, lte);
+#endif
+
 }
 
 vec3 linear_to_srgb(vec3 cl)
 {
-	    /*{  0.0,                          0         <= cl
-            {  12.92 * c,                    0         <  cl < 0.0031308
-    cs = {  1.055 * cl^0.41666 - 0.055,   0.0031308 <= cl < 1
-            {  1.0,                                       cl >= 1*/
+	cl = clamp(cl, vec3(0), vec3(1));
+	vec3 low_range  = cl * 12.92;
+	vec3 high_range = 1.055 * pow(cl, vec3(0.41666)) - 0.055;
+	bvec3 lt = lessThan(cl,vec3(0.0031308));
 
-	return 1.055 * pow(cl, vec3(0.41666)) - 0.055;
+#ifdef OLD_SELECT
+	vec3 result;
+	result.r = lt.r ? low_range.r : high_range.r;
+	result.g = lt.g ? low_range.g : high_range.g;
+	result.b = lt.b ? low_range.b : high_range.b;
+    return result;
+#else
+	return mix(high_range, low_range, lt);
+#endif
+
 }
 
 vec2 encode_normal(vec3 n)
@@ -245,7 +262,7 @@ void calcAtmospherics(vec3 inPositionEye, float ambFactor) {
 		vec3(blue_horizon * blue_weight * (sunlight*(1.-cloud_shadow) + tmpAmbient)
 	  + (haze_horizon * haze_weight) * (sunlight*(1.-cloud_shadow) * temp2.x
 		  + tmpAmbient)));
-	
+
 	/*  decrease value and saturation (that in HSV, not HSL) for occluded areas
 	 * // for HSV color/geometry used here, see http://gimp-savvy.com/BOOK/index.html?node52.html
 	 * // The following line of code performs the equivalent of:
@@ -265,6 +282,52 @@ void calcAtmospherics(vec3 inPositionEye, float ambFactor) {
 	setAmblitColor(vec3(tmpAmbient * .25));
 	setAdditiveColor(getAdditiveColor() * vec3(1.0 - temp1));
 }
+
+#ifdef WATER_FOG
+uniform vec4 waterPlane;
+uniform vec4 waterFogColor;
+uniform float waterFogDensity;
+uniform float waterFogKS;
+
+vec4 applyWaterFogDeferred(vec3 pos, vec4 color)
+{
+	//normalize view vector
+	vec3 view = normalize(pos);
+	float es = -(dot(view, waterPlane.xyz));
+
+	//find intersection point with water plane and eye vector
+	
+	//get eye depth
+	float e0 = max(-waterPlane.w, 0.0);
+	
+	vec3 int_v = waterPlane.w > 0.0 ? view * waterPlane.w/es : vec3(0.0, 0.0, 0.0);
+	
+	//get object depth
+	float depth = length(pos - int_v);
+		
+	//get "thickness" of water
+	float l = max(depth, 0.1);
+
+	float kd = waterFogDensity;
+	float ks = waterFogKS;
+	vec4 kc = waterFogColor;
+	
+	float F = 0.98;
+	
+	float t1 = -kd * pow(F, ks * e0);
+	float t2 = kd + ks * es;
+	float t3 = pow(F, t2*l) - 1.0;
+	
+	float L = min(t1/t2*t3, 1.0);
+	
+	float D = pow(0.98, l*kd);
+	
+	color.rgb = color.rgb * D + kc.rgb * L;
+	color.a = kc.a + color.a;
+	
+	return color;
+}
+#endif
 
 vec3 atmosLighting(vec3 light)
 {
@@ -485,8 +548,13 @@ void main()
 			  if (refdepth < 1.0) { // non-sky
 			    //refapprop /= (1.0 + refposdistpow2);
 			    //refapprop *= step(0.0, dot(refnorm, (refpos - pos)));
-			    //refapprop = min(refapprop, max(0.0, dot(refnorm, normalize(refpos - pos))));
-			    refapprop = min(refapprop, sqrt(max(0.0, dot(refnorm, (refpos - pos)) / (1.0 + refposdistpow2 ))) );
+			    //float angleapprop = max(0.0, dot(normalize(refnorm), (refpos - pos)));
+			    //float angleapprop = max(0.0, dot(normalize(refnorm), normalize(refpos - pos)));
+			    //float angleapprop = sqrt(max(0.0, dot(refnorm, (refpos - pos)) / (1.0 + refposdistpow2 )));
+			    float angleapprop = sqrt(max(0.0, dot(refnorm, (refpos - pos)) / (1.0 + refposdistpow2 )));
+			    refapprop = min(refapprop, angleapprop);
+			    //refapprop = min(refapprop, 4.0 * angleapprop*angleapprop*angleapprop*angleapprop);
+			    //refapprop = min(refapprop, sqrt(angleapprop));
 			    //refapprop *= (1.0 - sqrt(rdpow2));
 			    float refshad = texture2DRect(lightMap, ref2d).r;
 			    refshad = pow(refshad, light_gamma);
@@ -517,15 +585,17 @@ void main()
 
 			    //refapprop = /*magickybooster*/2.5*(refapprop);
 			    //refapprop = sqrt(refapprop); // we just plain like the appropriateness of non-sky reflections better where available
-			    refapprop *= 2.0; // we just plain like the appropriateness of non-sky reflections better where available
 			    total_refapprop += refapprop;
 			    best_refn += refn.xyz * refapprop;
 			    best_refshad += refshad * refapprop;
-
 			    float sunc = max(0.0, dot(reflight, refn));
-			    sunc = pow(sunc, light_gamma);
-			    best_refcol += ((vary_AmblitColor + vary_SunlitColor * min(sunc, refshad)) * refcol.rgb + vary_AdditiveColor) * refapprop;
+			    //sunc = pow(sunc, light_gamma);
 
+			    best_refcol += //pow
+			      (
+			       ((vary_AmblitColor + vary_SunlitColor * min(sunc, refshad)) * (refcol.rgb) + vary_AdditiveColor)
+					       //, vec3(light_gamma)
+					       ) * refapprop;
 			    //if (refapprop > best_refapprop) {
 			    //best_refapprop = refapprop;
 			    ////best_refn = refn.xyz;
@@ -535,32 +605,43 @@ void main()
 			  {
 			    //refapprop *= 1.0 / itsf;
 			    //refapprop *= 1.0 - rdpow2;
-			    refapprop = min(refapprop, (1.0 - rdpow2));
+			    //refapprop = min(refapprop, (1.0 - rdpow2));
 			    //refapprop = 0.0;
 
 			    // avoid forward-pointing reflections picking up sky
 			    //refapprop = max(min(refapprop, -dot(refnorm, vec3(0,0,1))), 0.0);
 			    refapprop = min(refapprop, max(-refnorm.z, 0.0));//dot(refnorm, vec3(0.0, 0.0, -1.0));
  
-			    //			    refapprop *= 0.5;
+			    refapprop *= 0.5; // we just plain like the appropriateness of non-sky reflections better where available
+
+
 			    total_refapprop += refapprop;
 			    //best_refn += vec3(0.0, 0.0, -1.0);//reflight.xyz * refapprop; // treat sky samples as if they always face the sun
 			    best_refn += reflight.xyz * refapprop; // treat sky samples as if they always face the sun
 			    best_refshad += 1.0 * refapprop; // sky is not shadowed
 			    best_refcol += refcol.rgb * refapprop;
+			    //best_refcol += vec3(0,1,0) * refapprop;
 			    //bloomdamp += refapprop; // even though we say they face the sun, don't want sky reflections blooming
 			  }
 			}
 			if (total_refapprop > 0.0) {
+			  // we must have the power of >= 25% voters, else damp progressively
+			  float use_refapprop = max(itsf*0.25, (total_refapprop));
+
 			  best_refn = normalize(best_refn);
-			  best_refshad /= total_refapprop;
-			  best_refcol /= total_refapprop;
-			  bloomdamp /= total_refapprop;
+			  best_refshad /= use_refapprop;
+			  best_refcol /= use_refapprop * 2.0; // div2 cos we'll be doubled again
+			  bloomdamp /= use_refapprop;
+			  best_refapprop = 1.0;//use_refapprop;//1.0;//min(1.0, total_refapprop);
+			}
+			else {
+			  //best_refcol.rgb = vec3(0,0,1);
+			  best_refcol.rgb = vec3(0,0,0);
+			  best_refapprop = 0.0;
 			}
 			//best_refapprop = min((total_refapprop / ((itsf+1.0) * 0.4)), 1.0);
 			//best_refapprop = min((total_refapprop / ((itsf))), 1.0);
-			best_refapprop = min((1.0 * total_refapprop / ((itsf))), 1.0);
-			//best_refapprop = min(total_refapprop, 1.0);
+			//best_refapprop = min((1.0 * total_refapprop / ((itsf))), 1.0);
 			// USE: refn, refshad, refapprop, refcol
 
 			// get appropriate light strength for guess-point
@@ -578,6 +659,7 @@ void main()
 			//vec3 env_vec = env_mat * refnormpersp;
 			//vec3 env_col = textureCube(environmentMap, env_vec).rgb;
 			vec3 refprod = best_refcol.rgb * best_refapprop;
+			//refprod = pow(refprod, vec3(light_gamma));
 			vec3 ssshiny = (refprod);// * spec.a);
 			//vec3 refprod = mix(env_col, vary_SunlitColor * refcol.rgb * refmod * spec.a, refapprop*0+1);
 
@@ -637,6 +719,12 @@ void main()
 			col = mix(atmosLighting(col), fullbrightAtmosTransport(col), diffuse.a);
 			col = mix(scaleSoftClip(col), fullbrightScaleSoftClip(col), diffuse.a);
 		}
+
+		#ifdef WATER_FOG
+			vec4 fogged = applyWaterFogDeferred(pos,vec4(col, bloom));
+			col = fogged.rgb;
+			bloom = fogged.a;
+		#endif
 
 		col = srgb_to_linear(col);
 

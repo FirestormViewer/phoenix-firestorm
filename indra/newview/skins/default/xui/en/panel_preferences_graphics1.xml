@@ -38,7 +38,7 @@
        layout="topleft"
        left="30"
        name="QualitySpeed"
-       top="10"
+       top="15"
        width="400">
         Quality and speed:
       </text>
@@ -205,10 +205,10 @@
          initial_value="false"
          label="Fullscreen Mode"
          layout="topleft"
-         left="10"
+         left="4"
          name="Fullscreen Mode"
          tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
-         top="65"
+         top="75"
          width="280" />
         <text
          type="string"
@@ -216,7 +216,7 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         left_delta="0"
+         left_delta="1"
          name="ShadersText"
          top_pad="5"
          width="128">
@@ -228,7 +228,7 @@
          initial_value="true"
          label="Transparent Water"
          layout="topleft"
-         left_delta="0"
+         left_delta="5"
          name="TransparentWater"
          top_pad="5"
          width="256" />
@@ -319,7 +319,7 @@
          width="110"
          word_wrap="true"
          layout="topleft"
-         left="10"
+         left_delta="-5"
          name="shadows_label">
           Shadows:
         </text>
@@ -327,7 +327,7 @@
          control_name="RenderShadowDetail"
          height="23"
          layout="topleft"
-         left="10"
+         left_delta="5"
          top_pad="3"
          name="ShadowDetail"
          width="150">
@@ -356,7 +356,7 @@
          width="110"
          word_wrap="true"
          layout="topleft"
-         left="10"
+         left_delta="-5"
          name="reflection_label">
           Water Reflections:
         </text>
@@ -364,7 +364,7 @@
          control_name="RenderReflectionDetail"
          height="23"
          layout="topleft"
-         left="10"
+         left_delta="5"
          top_pad ="3"
          name="Reflections"
          width="150">
@@ -400,7 +400,7 @@
          width="170"
          word_wrap="false"
          layout="topleft"
-         left="10"
+         left_delta="-5"
          name="local lights_label"
          tool_tip="Affects the number of rendered light sources when Advanced Lighting Model is disabled. A restart is required to change mode.">
           Point Lighting (restart required)
@@ -409,7 +409,7 @@
          control_name="RenderShaderLightingMaxLevel"
          height="23"
          layout="topleft"
-         left="10"
+         left_delta="5"
          top_pad="3"
          name="LocalLightsDetail"
          width="150">
@@ -441,7 +441,7 @@
          max_val="1024"
          min_val="32"
          name="DrawDistance"
-         top="65"
+         top="75"
          width="301" />
         <text
          type="string"
@@ -712,7 +712,7 @@
          initial_value="true"
          label="Avatar impostors"
          layout="topleft"
-         left_delta="0"
+         left_delta="5"
          name="AvatarImpostors"
          top_pad="5"
          width="256" />
@@ -776,16 +776,18 @@
            top_delta="16"
            width="50" />
         </radio_group>
-        
+      
+      <!--Reset Button-->
       <button
        follows="left|top"
        height="23"
-       label="Reset"
+       image_overlay="Refresh_Off"
+       tool_tip="Reload default graphics settings."
        layout="topleft"
-       left="210"
+       left="460"
        name="Defaults"
-       top_pad="25"
-       width="115">
+       top="25"
+       width="23">
         <button.commit_callback
          function="Pref.HardwareDefaults" />
       </button>
@@ -956,7 +958,8 @@
      follows="all"
      label="Rendering"
      name="Rendering" >
-        <text
+      <!-- world pauser -->
+      <text
          type="string"
          length="1"
          follows="left|top"
@@ -968,7 +971,6 @@
          width="308">
             World Updating:
         </text>
-      <!-- world pauser -->
         <check_box
          control_name="AgentPause"
          height="16"
@@ -976,9 +978,9 @@
          label="Freeze updates to World (pause everything)"
          tool_tip="Set this to freeze all updates from the server - stops all actions in-world but does not affect chat, IMs or voice"
          layout="topleft"
-         left_delta="10"
+         left_delta="5"
          name="WorldPause"
-         top_pad="12"
+         top_pad="6"
          width="256"/>
 
         <text
@@ -998,35 +1000,35 @@
         <check_box
          control_name="ImagePipelineUseHTTP"
          height="16"
-         label="Use HTTP Textures"
-         tool_tip="Set this to load textures using the HTTP protocol - unset it if you are having rendering problems and wish to load textures as they were done before July 2010 and on Viewer 1"
+         label="Use HTTP for receiving textures"
+         tool_tip="Set this to load textures using the HTTP protocol - unset it if you are having rendering problems and wish to the legacy UDP protocol."
          layout="topleft"
-         left_delta="0"
+         left_delta="5"
          name="TexturesHTTP"
-         top_pad="5"
+         top_pad="6"
          width="256"/>
 
       <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
          type="string"
          length="1"
-         top_pad="5"
+         top_pad="8"
          follows="top|left"
          height="18"
          width="180"
          word_wrap="true"
          layout="topleft"
-         left="20"
+         left_delta="0"
          name="TextureDetailLabel">
-            Texture Details Loaded:
+            Max Texture Quality Level:
         </text>
         <combo_box
          control_name="TextureDiscardLevel"
          height="23"
          layout="topleft"
          follows="left|top"
-         left="20"
-         top_pad="0"
+         left_delta="175"
+         top_pad="-23"
          name="TextureDetail"
          width="150">
             <combo_box.item
@@ -1034,9 +1036,13 @@
              name="0"
              value="0"/>
             <combo_box.item
-             label="Low quality"
+             label="Mid quality"
              name="3"
              value="3"/>
+            <combo_box.item
+             label="Low quality"
+             name="4"
+             value="4"/>
             <combo_box.item
              label="No textures"
              name="5"
@@ -1051,7 +1057,7 @@
          layout="topleft"
          left="10"
          name="Alpha Mask Rendering"
-         top_pad="13"
+         top_pad="20"
          width="308">
             Alpha Mask Rendering:
         </text>
@@ -1061,22 +1067,22 @@
          height="16"
          initial_value="false"
          label="Render alpha masks when 'Advanced Lighting Model' is not enabled"
-         tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly when Shadows are not selected"
+         tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly when ALM is not selected"
          layout="topleft"
          left_delta="10"
          name="RenderAutoMaskAlphaNonDeferred"
-         top_pad="12"
+         top_pad="6"
          width="256"/>
         <check_box
          control_name="RenderAutoMaskAlphaDeferred"
          height="16"
          initial_value="false"
          label="Render alpha masks when 'Advanced Lighting Model' is enabled"
-         tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly when Shadows are selected"
+         tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly when ALM is selected"
          layout="topleft"
          left_delta="0"
          name="RenderAutoMaskAlphaDeferred"
-         top_pad="3"
+         top_pad="2"
          width="256"/>
 
         <text
@@ -1087,7 +1093,7 @@
          layout="topleft"
          left="10"
          name="Miscellaneous Rendering"
-         top_pad="10"
+         top_pad="20"
          width="308">
             Miscellaneous Rendering:
         </text>
@@ -1101,18 +1107,18 @@
          left_delta="10"
          name="FSRenderSSR"
          tool_tip="Enables the rendering of screen space reflections when Advanced Lighting Model is enabled. Requires atmmospheric shaders, avatar hardware skinning and enabled shadows."
-         top_pad="10"
+         top_pad="2"
          width="256"/>
         <check_box
          control_name="RenderGlow"
          height="16"
-		 initial_value="true"
+         initial_value="true"
          label="Render glow"
-		 tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
+         tool_tip="Render glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."
          layout="topleft"
          left_delta="0"
          name="RenderGlow"
-         top_pad="4"
+         top_pad="2"
          width="256"/>
 		<slider
 		control_name="RenderGlowIterations"
@@ -1130,20 +1136,21 @@
 		min_val="0"
 		name="glow_strength"
 		enabled="true"
-		left_delta="150"
+		left_delta="240"
 		mouse_opaque="true"
 		show_text="true"
-		width="130" />
+		width="150" />
 		<check_box
          control_name="RenderUnloadedAvatar"
          height="16"
          initial_value="false"
          label="Show avatars that haven't finished loading"
          layout="topleft"
-         left_delta="-150"
+         left_delta="-240"
          name="RenderUnloadedAvatars"
-         top_pad="3"
+         top_pad="2"
          width="256"/>
+      
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"
@@ -1158,7 +1165,8 @@
          max_val="15"
          min_val="1"
          name="PrecachingDelay"
-         top_pad="10"
+         left="10"
+         top_pad="20"
          width="405" />
         <text
          type="string"
@@ -1177,17 +1185,17 @@
          follows="left|top"
          height="16"
          increment="0.1"
-         initial_value="1"
+         initial_value="1.0"
          label="Quality of the Shadows"
          tool_tip="What is the quality of the Shadows (default is 1)"
          label_width="300"
          layout="topleft"
-         left="20"
+         left="10"
          min_val="1.0"
-         max_val="4"
+         max_val="4.0"
          name="ShadowResolution"
          top_pad="3"
-         width="405" />
+         width="408" />
         <slider
          control_name="RenderTerrainScale"
          decimal_digits="0"
@@ -1198,7 +1206,7 @@
          label="Scale of Terrain Texture Rendering (requires restart)"
          label_width="300"
          layout="topleft"
-         left="20"
+         left="10"
          max_val="24"
          min_val="1"
          name="RenderTerrainScale"
@@ -1222,7 +1230,7 @@
         initial_value="true"
         label="Enable Depth of Field (This will blur the view except where the camera focus is at.)"
         layout="topleft"
-        left_delta="10"
+        left="10"
         name="UseDoF"
         top_pad="25"
         width="256">
@@ -1236,30 +1244,30 @@
          initial_value="false"
          label="Enable while in edit mode"
          layout="topleft"
-         left_delta="10"
+         left_delta="18"
          name="RenderDepthOfFieldInEditMode"
          top_pad="4"
          width="256"/>
         <slider
          control_name="CameraFNumber"
-         decimal_digits="2"
+         decimal_digits="1"
          follows="left|top"
          height="16"
-         increment="1"
-         initial_value="9.00"
+         increment=".5"
+         initial_value="9.5"
          label="Camera F Number:"
          label_width="160"
          layout="topleft"
-         left_delta="-10"
+         left_delta="-18"
          max_val="64"
          min_val="1"
          name="CameraFNum"
          tool_tip="Camera f-number value for DoF effect"
          top_pad="10"
-         width="374"/>
+         width="471"/>
         <slider
          control_name="CameraFocalLength"
-         decimal_digits="1"
+         decimal_digits="0"
          follows="left|top"
          height="16"
          increment="1"
@@ -1273,10 +1281,10 @@
          name="CameraFocal"
          tool_tip="Camera focal length for DoF effect (in millimeters)"
          top_pad="5"
-         width="374"/>
+         width="475"/>
         <slider
          control_name="CameraFieldOfView"
-         decimal_digits="2"
+         decimal_digits="0"
          follows="left|top"
          height="16"
          increment="1"
@@ -1290,7 +1298,7 @@
          name="Camera FOV"
          tool_tip="Vertical camera field of view for DoF effect (in degrees)"
          top_pad="5"
-         width="374"/>
+         width="468"/>
         <slider
          control_name="CameraAspectRatio"
          decimal_digits="2"
@@ -1307,7 +1315,7 @@
          name="CameraAspectRatio"
          tool_tip="Camera aspect ratio for DoF effect"
          top_pad="5"
-         width="374"/>
+         width="471"/>
         <slider
          control_name="CameraFocusTransitionTime"
          decimal_digits="2"
@@ -1324,13 +1332,13 @@
          name="CameraFocusTrans"
          tool_tip="Time taken to alter focus from one place to the next"
          top_pad="5"
-         width="374"/>
+         width="478"/>
        <slider
          control_name="CameraDoFResScale"
-         decimal_digits="2"
+         decimal_digits="3"
          follows="left|top"
          height="16"
-         increment="0.05"
+         increment="0.025"
          initial_value="0.70"
          label="DOF Rendering Quality:"
          label_width="160"
@@ -1341,7 +1349,7 @@
          name="CameraDoFResScale"
          tool_tip="Affects the quality of the blurring and the performance of rendering.  (higher = better quality, lower = better perforamce)"
          top_pad="5"
-         width="374"/>
+         width="477"/>
     </panel>
 </tab_container>
 </panel>

@@ -611,6 +611,10 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("lsl");
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
+			// <FS:CR> Import filter
+			allowedv->push_back("oxp");
+            //allowedv->push_back("hpa");
+			// </FS:CR>
         case FFLOAD_IMAGE:
             allowedv->push_back("jpg");
             allowedv->push_back("jpeg");
@@ -768,6 +772,7 @@ bool	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& filena
 			type = "DAE ";
 			creator = "\?\?\?\?";
 			extension = "dae";
+			break;
 		// </FS:CR>
 		case FFSAVE_ALL:
 		default:
@@ -833,7 +838,12 @@ BOOL LLFilePicker::getOpenFile(ELoadFilter filter, bool blocking)
 
 	if(filter == FFLOAD_ALL)	// allow application bundles etc. to be traversed; important for DEV-16869, but generally useful
 	{
-        mPickOptions &= F_NAV_SUPPORT;
+        // <FS:ND> FIRE-11793/BUG-4053/MAINT-3262 Cannot select image to upload to Web profile. This is because anding F_NAV_SUPPORT clears F_FILE. Whereas in fact we want both (OR)
+
+        // mPickOptions &= F_NAV_SUPPORT;
+        mPickOptions |= F_NAV_SUPPORT;
+
+       // </FS:ND>
 	}
 	
 	if (blocking)
@@ -1200,15 +1210,6 @@ static std::string add_import_filter_to_gtkchooser(GtkWindow *picker)
 	add_common_filters_to_gtkchooser(gfilter, picker, filtername);
 	return filtername;
 }
-
-static std::string add_export_filter_to_gtkchooser(GtkWindow *picker)
-{
-	GtkFileFilter *gfilter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(gfilter, "*.oxp");
-	std::string filtername = LLTrans::getString("backup_files") + " (*.oxp)";
-	add_common_filters_to_gtkchooser(gfilter, picker, filtername);
-	return filtername;
-}
 // </FS:CR>
 								
 BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename, bool blocking )
@@ -1281,12 +1282,12 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
 			break;
 // <FS:CR> Export filter
 		case FFSAVE_EXPORT:
-			caption += add_export_filter_to_gtkchooser(picker);
-			suggest_ext = ".oxp";
+			caption += add_simple_pattern_filter_to_gtkchooser
+				(picker, "*.oxp", LLTrans::getString("backup_files") + " (*.oxp)");
 			break;
 		case FFSAVE_COLLADA:
-			caption += add_export_filter_to_gtkchooser(picker);
-			suggest_ext = ".dae";
+			caption += add_simple_pattern_filter_to_gtkchooser
+				(picker, "*.dae", LLTrans::getString("collada_files") + " (*.dae)");
 			break;
 // </FS:CR>
 		default:;

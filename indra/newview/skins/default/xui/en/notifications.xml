@@ -8183,8 +8183,9 @@ Please check your network and firewall setup.
     <tag>voice</tag>
   <tag>fail</tag>
     <usetemplate
-     name="okbutton"
-     yestext="OK"/>
+     ignoretext="Warn me when the viewer can't connect to the voice server"
+     name="okignore"
+     yestext="OK" />
   </notification>
 
   <notification
@@ -8934,17 +8935,10 @@ You can not remove [REMOVE_GRID] while being connected to it.
 <!-- </FS:AW  grid management-->
 
   <notification
-     icon="notifytip.tga"
-     name="PhoenixAutoReplace"
-     type="notifytip">
-    &apos;[BEFORE]&apos; has been auto replaced by &apos;[REPLACEMENT]&apos;
-    based on your [LISTNAME] list.
-  </notification>
-  <notification
    icon="notify.tga"
    name="FSWL"
    type="notify">
-&apos;[PARCEL_NAME]&apos;, owned by &apos;[OWNER_NAME]&apos;, would like to change your Windlight visual environment settings.
+&apos;[PARCEL_NAME]&apos;, owned by [OWNER_NAME], would like to change your Windlight visual environment settings.
     <form name="form">
       <button
        index="0"
@@ -9745,9 +9739,9 @@ Not enough script resources available to attach object!
   </notification>
 
   <notification
-   icon="alertmodal.tga"
+   icon="notifytip.tga"
    name="YouDiedAndGotTPHome"
-   type="notify">
+   type="notifytip">
    <tag>fail</tag>
 You died and have been teleported to your home location
   </notification>
@@ -11137,7 +11131,7 @@ An internal error prevented us from properly updating your viewer.  The L$ balan
    <tag>fail</tag>
 Cannot create large prims that intersect other players.  Please re-try when other players have moved.
   </notification>
-
+  
   <notification
    icon="alertmodal.tga"
    name="PreferenceChatClearLog"
@@ -11339,9 +11333,9 @@ Error in the regular expression:
 		log_to_chat="false"
         type="notifytip">
         <tag>StreamMetadata</tag>
-        ♫ Now Playing:
-        [TITLE]
-        [ARTIST]♫
+♫ Now Playing:
+  [TITLE]
+  [ARTIST] ♫
     </notification>
     <notification
         icon="notifytip.tga"
@@ -11349,8 +11343,8 @@ Error in the regular expression:
 		log_to_chat="false"
         type="notifytip">
         <tag>StreamMetadata</tag>
-        ♫ Now Playing:
-        [TITLE]♫
+♫ Now Playing:
+  [TITLE] ♫
     </notification>
     
     <notification
@@ -11438,10 +11432,10 @@ Export finished and saved to [FILENAME].
     
     <notification
      icon="alertmodal.tga"
-     name="ExportColladaFailed"
+     name="ExportFailed"
      type="notify">
       <tag>Export</tag>
-Export failed.
+Export failed unexpectedly. Please see the log for details.
     </notification>
     
     <notification
@@ -11449,15 +11443,15 @@ Export failed.
      name="ExportColladaSuccess"
      type="notify">
       <tag>Export</tag>
-Collada DAE export complete.  [TOTAL] object(s) exported.
+		Successfully saved [OBJECT] to [FILENAME].
     </notification>
-    
+	
     <notification
      icon="alertmodal.tga"
-     name="ExportColladaPartial"
+     name="ImportSuccess"
      type="notify">
-      <tag>Export</tag>
-Collada DAE export complete.  [FAILED] failure(s) out of [TOTAL] selected object(s) due to insufficient permissions.
+        <tag>Export</tag>
+        Successfully imported [COUNT] [OBJECT].
     </notification>
     
     <notification

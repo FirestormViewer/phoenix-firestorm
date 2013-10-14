@@ -16,6 +16,7 @@
 		<menu label="Ruch" name="Movement">
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
 			<menu_item_check label="Zacznij latać" name="Fly"/>
+			<menu_item_call label="Przestań latać" name="Stop flying"/>
 			<menu_item_check label="Zawsze biegnij" name="Always Run"/>
 			<menu_item_check label="Wymuś siadanie na ziemi" name="Force Toggle Sitting" shortcut="control|alt|K"/>
 			<menu_item_check label="Unieruchom" name="Move Lock"/>
@@ -148,7 +149,6 @@
 			<menu_item_call label="Uwzględnij następną część" name="Include Next Part"/>
 			<menu_item_call label="Uwzględnij poprzednią część" name="Include Previous Part"/>
 		</menu>
-		<menu_item_call label="Zbiory części odnajdywania ścieżek" name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="Wycentruj na selekcji" name="Focus on Selection"/>
 		<menu_item_call label="Przybliż do selekcji" name="Zoom to Selection"/>
 		<menu label="Obiekt" name="Object">
@@ -367,7 +367,8 @@
 			<menu_item_check label="Pokaż czas" name="Show Time"/>
 			<menu_item_check label="Pokazuj koszt transakcji ładowania pliku" name="Show Upload Transaction"/>
 			<menu_item_check label="Pokaż informacje o teksturach" name="Show Texture Info"/>
-			<menu_item_check label="Pokaż informacje o renderowaniu" name="Show Render Info"/>
+			<menu_item_check label="Pokaż informacje o renderowaniu awatarów" name="Show Avatar Render Info"/>
+			<menu_item_check label="Pokaż informacje o renderowaniu ogólnym" name="Show Render Info"/>
 			<menu_item_check label="Pokaż macierze" name="Show Matrices"/>
 			<menu_item_check label="Pokaż kolor pod kursorem" name="Show Color Under Cursor"/>
 			<menu_item_check label="Pokaż pamięć" name="Show Memory"/>
@@ -463,6 +464,7 @@
 			<menu_item_check label="Domyślne ustawienia środowiska Regionu" name="Sim Sun Override"/>
 			<menu_item_check label="Ustalona pogoda" name="Fixed Weather"/>
 			<menu_item_call label="Zrzut buforu pamięci obiektów regionu" name="Dump Region Object Cache"/>
+			<menu_item_call label="Zrzut właściwości symulatora do czatu lokalnego" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Interfejs" name="UI">
 			<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>

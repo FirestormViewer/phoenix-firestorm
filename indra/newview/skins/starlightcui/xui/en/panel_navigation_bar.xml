@@ -138,9 +138,9 @@
 	     tool_tip="Pops up Environment Settings window"
 	     top_delta="0"
 	     width="38">
-		 <button.commit_callback
-               function="World.EnvSettings"
-               parameter="editor" />
+		 <button.init_callback
+               function="Button.SetFloaterToggle"
+               parameter="env_settings" />
 		 </button>
           <!-- end of Windlight Button -->
 

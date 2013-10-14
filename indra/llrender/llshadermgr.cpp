@@ -714,20 +714,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 
 		if (texture_index_channels > 1)
 		{
-			// <FS:ND> Fix for pink on old ATI drivers
-
-			// text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
-			
-			// <FS:TS> This causes shader link failures on 64-bit Linux
-			// <FS:TM> Below unfortently broke deferred on ATI cards during the merging on 3.4.4.  vary_texture_index wasnt handeled properly and shader 'simple shader' failed to compile
-//#if !(LL_GNUC && ( defined(__amd64__) || defined(__x86_64__) ) )
-//			if( gGLManager.mIsATI )
-//				text[count++] = strdup("VARYING int vary_texture_index;\n");
-//			else
-//#endif
 				text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
-
-			// </FS:ND>
 		}
 
 		text[count++] = strdup("vec4 diffuseLookup(vec2 texcoord)\n");
@@ -1033,7 +1020,9 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("texture_matrix1");
 	mReservedUniforms.push_back("texture_matrix2");
 	mReservedUniforms.push_back("texture_matrix3");
-	llassert(mReservedUniforms.size() == LLShaderMgr::TEXTURE_MATRIX3+1);
+	mReservedUniforms.push_back("object_plane_s");
+	mReservedUniforms.push_back("object_plane_t");
+	llassert(mReservedUniforms.size() == LLShaderMgr::OBJECT_PLANE_T+1);
 
 	mReservedUniforms.push_back("viewport");
 
@@ -1175,19 +1164,59 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("lightMap");
 	mReservedUniforms.push_back("bloomMap");
 	mReservedUniforms.push_back("projectionMap");
-	
+	mReservedUniforms.push_back("norm_mat");
+
 	mReservedUniforms.push_back("global_gamma");
 	mReservedUniforms.push_back("texture_gamma");
 	
 	mReservedUniforms.push_back("specular_color");
 	mReservedUniforms.push_back("env_intensity");
 
+	mReservedUniforms.push_back("matrixPalette");
+	
 // <FS:CR> Import Vignette from Exodus
 	mReservedUniforms.push_back("exo_vignette");
 	mReservedUniforms.push_back("exo_screen");
 // </FS:CR> Import Vignette from Exodus
+	
+	mReservedUniforms.push_back("screenTex");
+	mReservedUniforms.push_back("screenDepth");
+	mReservedUniforms.push_back("refTex");
+	mReservedUniforms.push_back("eyeVec");
+	mReservedUniforms.push_back("time");
+	mReservedUniforms.push_back("d1");
+	mReservedUniforms.push_back("d2");
+	mReservedUniforms.push_back("lightDir");
+	mReservedUniforms.push_back("specular");
+	mReservedUniforms.push_back("lightExp");
+	mReservedUniforms.push_back("waterFogColor");
+	mReservedUniforms.push_back("waterFogDensity");
+	mReservedUniforms.push_back("waterFogKS");
+	mReservedUniforms.push_back("refScale");
+	mReservedUniforms.push_back("waterHeight");
+	mReservedUniforms.push_back("waterPlane");
+	mReservedUniforms.push_back("normScale");
+	mReservedUniforms.push_back("fresnelScale");
+	mReservedUniforms.push_back("fresnelOffset");
+	mReservedUniforms.push_back("blurMultiplier");
+	mReservedUniforms.push_back("sunAngle");
+	mReservedUniforms.push_back("scaledAngle");
+	mReservedUniforms.push_back("sunAngle2");
+	
+	mReservedUniforms.push_back("camPosLocal");
 
+	mReservedUniforms.push_back("gWindDir");
+	mReservedUniforms.push_back("gSinWaveParams");
+	mReservedUniforms.push_back("gGravity");
 
+	mReservedUniforms.push_back("detail_0");
+	mReservedUniforms.push_back("detail_1");
+	mReservedUniforms.push_back("detail_2");
+	mReservedUniforms.push_back("detail_3");
+	mReservedUniforms.push_back("alpha_ramp");
+
+	mReservedUniforms.push_back("origin");
+	mReservedUniforms.push_back("display_gamma");
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 
 	std::set<std::string> dupe_check;

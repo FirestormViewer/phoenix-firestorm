@@ -11,7 +11,7 @@
     <spinner label="Altitude maximum " name="terrain_raise_spin"/>
     <spinner label="Altitude minimum" name="terrain_lower_spin"/>
     <text name="detail_texture_text">
-        Textures du terrain (fichiers .tga 1024x1024, 24 bit requis)
+        Textures du terrain (fichiers .tga 512x512 / 1024x1024, 24 bit requis)
     </text>
     <text name="height_text_lbl">
         1 (Bas)
