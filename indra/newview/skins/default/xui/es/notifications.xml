@@ -208,12 +208,12 @@ No podrás retirarles ese rol, sino que deberán renunciar a él por sí mismos.
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="EjectGroupMemberWarning">
-		Estás a punto de expulsar a [AVATAR_NAME] del grupo.
-		<usetemplate ignoretext="Confirmar la expulsión de un miembro del grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
+		Vas a expulsar a [AVATAR_NAME] del grupo.
+		<usetemplate ignoretext="Confirmar la expulsión de un miembro de un grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
 	</notification>
 	<notification name="EjectGroupMembersWarning">
-		Estás a punto de expulsar a [COUNT] miembros del grupo.
-		<usetemplate ignoretext="Confirmar la expulsión de varios miembros del grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
+		Vas a expulsar a [COUNT] miembros del grupo.
+		<usetemplate ignoretext="Confirmar la expulsión de múltiples miembros de un grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
 	</notification>
 	<notification name="AttachmentDrop">
 		Vas a soltar tu accesorio.
@@ -450,7 +450,7 @@ Nota: esto vaciará la caché.
 	</notification>
 	<notification name="ChangeSkin">
 		La nueva skin se aplicará tras reiniciar [APP_NAME].
-		<usetemplate ignoretext="Se ha seleccionado una nueva skin en Preferencias." name="okcancelignore" notext="Aceptar" yestext="Reiniciar"/>
+		<usetemplate name="okcancelbuttons" notext="Aceptar" yestext="Reiniciar"/>
 	</notification>
 	<notification name="ChangeSkin">
 		Verás la nueva apariencia cuando reinicies [APP_NAME].
@@ -1179,7 +1179,7 @@ en TODO EL TERRENO de esta región?
 Por favor, elige un pago mayor.
 	</notification>
 	<notification name="ConfirmItemDeleteHasLinks">
-		Por lo menos uno de los elementos contiene vínculos que lo señalan.  Si eliminas este elemento, los vínculos dejarán de funcionar permanentemente.  Lo más recomendable es eliminar primero los vínculos.
+		Por lo menos uno de los elementos seleccionados tiene enlaces que lo señalan. Si eliminas este elemento, los enlaces dejarán de funcionar permanentemente. Lo más recomendable es eliminar primero los enlaces.
 
 ¿Estás seguro de que quieres eliminar los elementos?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
@@ -1197,9 +1197,9 @@ Por favor, elige un pago mayor.
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteNoOwn">
-		Uno o más de los elementos seleccionados no son tuyos.
+		No eres el propietario de, al menos, uno de los items que has seleccionado.
 
-¿Estás seguro de que quieres eliminar los elementos?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoCopy">
@@ -1210,25 +1210,25 @@ Al menos un objeto no es copiable.
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoOwn">
-		Hay un objeto bloqueado como mínimo.
-No eres propietario de al menos un objeto.
+		Al menos un objeto está bloqueado.
+No eres propietario de, al menos, un objeto.
 
-¿Estás seguro de que quieres eliminar los elementos?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteNoCopyNoOwn">
-		No se puede copiar un objeto como mínimo.
-No eres propietario de al menos un objeto.
+		Al menos un objeto no es copiable.
+No eres propietario de, al menos, un objeto.
 
-¿Estás seguro de que quieres eliminar los elementos?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoCopyNoOwn">
-		Hay un objeto bloqueado como mínimo.
-No se puede copiar un objeto como mínimo.
-No eres propietario de al menos un objeto.
+		Al menos un objeto está bloqueado.
+Al menos un objeto no es copiable.
+No eres propietario de, al menos, un objeto.
 
-¿Estás seguro de que quieres eliminar los elementos?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectTakeLock">
@@ -1555,11 +1555,11 @@ Versión [VERSION] [[RELEASE_NOTES_FULL_URL]; información acerca de esta actual
 		Hemos descargado una actualización de software necesaria.
 Versión [VERSION] [[INFO_URL] Información sobre esta actualización]
 
-Para instalar la actualización, hay que reiniciar [APP_NAME].
+Debemos reiniciar [APP_NAME] para instalar la actualización.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="RequiredUpdateDownloadedDialog">
-		Para instalar la actualización, hay que reiniciar [APP_NAME].
+		Debemos reiniciar [APP_NAME] para instalar la actualización.
 [[INFO_URL] Información sobre esta actualización]
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
@@ -1583,13 +1583,14 @@ Versión [VERSION]
 Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
 visita [[INFO_URL] detalles sobre esta actualización]
 
-Para instalar la actualización, hay que reiniciar [APP_NAME].
+Debemos reiniciar [APP_NAME] para instalar la actualización.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
-	<notification name="OtherChannelRequiredUpdateDownloadedDialog">
-		Para instalar la actualización, hay que reiniciar [APP_NAME].
-Este visor experimental se ha sustituido por un visor de [NEW_CHANNEL].
-Consulta [[INFO_URL] Información sobre esta actualización].
+	<notification name="OtherChannelRequiredUpdateDownloadedDialog"
+ type="alertmodal">
+		Debemos reiniciar [APP_NAME] para instalar la actualización.
+Este visor experimental ha sido reemplazado por un visor [NEW_CHANNEL];
+visita [[INFO_URL] detalles sobre esta actualización]
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="DeedObjectToGroup">
@@ -1641,8 +1642,8 @@ Consulta [[INFO_URL] Información sobre esta actualización].
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
-		No es posible abandonar el grupo. No puedes abandonarlo porque eres su último propietario. Antes tienes que asignar el papel de propietario a otro miembro.
-		<usetemplate name="okbutton" yestext="OK"/>
+		No puedes abandonar el grupo porque eres el último propietario del mismo. Por favor, asigna el rol de propietario a otro usuario antes de abandonar el grupo.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmKick">
 		¿Realmente quieres expulsar a todos los residentes fuera de la red de simuladores?
@@ -2647,14 +2648,11 @@ Por favor, selecciona un sólo objeto.
 		Se ha rehusado tu tarjeta de visita.
 	</notification>
 	<notification name="TeleportToLandmark">
-		Para teleportarte a lugares como &apos;[NAME]&apos;, pulsa el botón &quot;Lugares&quot;,
-    y selecciona la pestaña Hitos en la ventana que se abre. Pulsa en un
-    hito para seleccionarlo y luego pulsa &apos;Teleportar&apos; en la parte inferior de la ventana.
-    (También puedes pulsar dos veces en el hito o pulsarlo con el botón derecho del ratón y
-    elegir &apos;Teleportar&apos;.)
+		Para teleportarte a lugares como &apos;[NAME]&apos;, pulsa el botón &quot;Lugares&quot;, y selecciona la pestaña Hitos en la ventana que se abre. Pulsa en un hito para seleccionarlo y luego pulsa &apos;Teleportar&apos; en la parte inferior de la ventana.
+(También puedes pulsar dos veces en el hito o pulsarlo con el botón derecho del ratón y elegir &apos;Teleportar&apos;.)
 	</notification>
 	<notification name="TeleportToPerson">
-		Para abrir una conversación privada con alguien, pulsa con el botón derecho en su avatar y selecciona &apos;MI&apos; en el menú.
+		Para abrir una conversación privada con alguien, haz clic con el botón derecho sobre su avatar y escoge &apos;MI&apos; en el menú.
 	</notification>
 	<notification name="CantSelectLandFromMultipleRegions">
 		No puedes seleccionar un terreno que cruce las fronteras entre servidores.
@@ -3048,15 +3046,6 @@ No autorices el acceso a tu cuenta si no conoces cuál es la razón exacta.
 		</form>
 	</notification>
 	<notification name="UnknownScriptQuestion">
-		&apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, un objeto propiedad de &apos;[NAME]&apos;, ha solicitado un permiso de script en tiempo de ejecución que el visor no reconoce ni puede conceder.
-
-Para obtener el permiso, descárgate aquí la última versión: [DOWNLOADURL].
-		<form name="form">
-			<button name="Deny" text="Aceptar"/>
-			<button name="Mute" text="Ignorar"/>
-		</form>
-	</notification>
-	<notification name="UnknownScriptQuestion">
 		El permiso de script en tiempo de ejecución solicitado por &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, un objeto propiedad de &apos;[NAME]&apos;, no se reconoce por el visor y no puede ser concedido.
 
 Para conceder este permiso, por favor actualiza tu visor a la última versión desde [DOWNLOADURL].
@@ -3366,7 +3355,7 @@ Comprueba la configuración de la red y del servidor de seguridad.
 
 No podrás establecer comunicaciones de voz.
 Comprueba la configuración de la red y del servidor de seguridad.
-		<usetemplate name="okbutton" yestext="Aceptar"/>
+		<usetemplate ignoretext="Avísame cuando el visor no pueda conectar al servidor de voz" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		( [EXISTENCE] segundos vivo )
@@ -4964,12 +4953,8 @@ el servidor está lleno.
 		No puedes eliminar la red [REMOVE_GRID] mientras estás conectado/a a ella.
 		<usetemplate ignoretext="Advertir que la red en uso no puede ser eliminada." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
-	<notification name="PhoenixAutoReplace">
-		&apos;[BEFORE]&apos; ha sido automáticamente reemplazada por &apos;[REPLACEMENT]&apos;
-basándose en tu lista [LISTNAME] list.
-	</notification>
 	<notification name="FSWL">
-		&apos;[PARCEL_NAME]&apos;, propiedad de &apos;[OWNER_NAME]&apos;, quisiera cambiar tu configuración visual (Windlight).
+		&apos;[PARCEL_NAME]&apos;, propiedad de [OWNER_NAME], quisiera cambiar tu configuración visual (Windlight).
 		<form name="form">
 			<button name="Allow" text="Permitir"/>
 			<button name="Ignore" text="Ignorar"/>
@@ -5292,13 +5277,13 @@ Simulador anterior: [OLDVERSION]
 		Lista de flujos importada con éxito de archivo XML.
 	</notification>
 	<notification name="StreamMetadata">
-        ♫ Estás escuchando:
-        [TITLE]
-        [ARTIST]♫
+♫ Estás escuchando:
+  [TITLE]
+  [ARTIST]♫
 	</notification>
 	<notification name="StreamMetadataNoArtist">
-        ♫ Estás escuchando:
-        [TITLE]♫
+♫ Estás escuchando:
+  [TITLE]♫
 	</notification>
 	<notification name="RadarAlert">
 		[NAME] [MESSAGE]
@@ -5329,30 +5314,27 @@ Esta acción restaurará inmediatamente tus preferencias rápidas a su configura
 No se podrá deshacer.
 		<usetemplate ignoretext="Confirmar la restauración de la configuración por defecto de las preferencias rápidas" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
-	<notification name="EjectGroupMemberWarning">
-		Vas a expulsar a [AVATAR_NAME] del grupo.
-		<usetemplate ignoretext="Confirmar la expulsión de un miembro de un grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
-	</notification>
-	<notification name="EjectGroupMembersWarning">
-		Vas a expulsar a [COUNT] miembros del grupo.
-		<usetemplate ignoretext="Confirmar la expulsión de múltiples miembros de un grupo" name="okcancelignore" notext="Cancelar" yestext="Expulsar"/>
-	</notification>
 	<notification name="ExportFinished">
 		Exportación finalizada y guardada en [FILENAME].
 	</notification>
-	<notification name="ExportColladaFailed">
-		La exportación ha fallado.
+	<notification name="ExportFailed">
+		La exportación ha fallado de forma inesperada. Ver registros para más detalles.
 	</notification>
 	<notification name="ExportColladaSuccess">
-		Exportación Collada DAE completada. [TOTAL] objeto(s) exportado(s).
+		[OBJECT] guardado con éxito en [FILENAME].
 	</notification>
-	<notification name="ExportColladaPartial">
-		Exportación Collada DAE completada. [FAILED] fallido(s) de [TOTAL] objeto(s) seleccionado(s) debido a insuficiencia de permisos.
+	<notification name="ImportSuccess">
+		[COUNT] [OBJECT] importado(s) con éxito.
 	</notification>
 	<notification name="AntiSpamBlocked">
 		AntiSpam: Bloqueado [SOURCE] por enviar spam a [QUEUE] ([COUNT]) veces en [PERIOD] segundos.
 	</notification>
 	<notification name="MeshMaxConcurrentReqTooHigh">
-		El valor que has configurado como número de peticiones concurrentes para cargar objetos mesh, [VALUE], es mayor que el máximo de [MAX]. Se ha restablecido al valor por defecto, [DEFAULT].
+		El valor que has configurado como número de peticiones concurrentes para cargar objetos mesh, [VALUE], es mayor que el máximo de [MAX]. Se ha restablecido al valor por defecto de [DEFAULT].
 	</notification>
+	<notification name="SkinDefaultsChangeSettings">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Una configuración de preferencias ha cambiado el valor por defecto de la skin."/>
+		</form>
 </notifications>

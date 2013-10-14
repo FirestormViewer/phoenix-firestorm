@@ -52,7 +52,7 @@
 				<dnd_button name="minus_btn" tool_tip="Abandonar el grupo seleccionado"/>
 			</panel>
 			<text name="groupcount">
-				Formas parte de [COUNT] grupos y puedes unirte a [REMAINING] más.
+				Perteneces a [COUNT] grupos, y puedes unirte a [REMAINING] más.
 			</text>
 		</panel>
 		<panel label="Reciente" name="recent_panel">

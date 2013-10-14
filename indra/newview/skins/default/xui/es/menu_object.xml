@@ -8,8 +8,6 @@
 	<menu_item_call label="Levantarme" name="Object Stand Up"/>
 	<context_menu label="Objeto..." name="Object Features">
 		<menu_item_call label="Propiedades" name="Object Inspect"/>
-	<menu_item_call label="Mostrar en linksets" name="show_in_linksets"/>
-	<menu_item_call label="Mostrar en personajes" name="show_in_characters"/>
 		<menu_item_call label="Inspeccionar" name="Object_Inspect_Floater"/>
 		<menu_item_call label="Información de scripts" name="ScriptInfo"/>
 		<menu_item_call label="Enlazar" name="Object Link"/>

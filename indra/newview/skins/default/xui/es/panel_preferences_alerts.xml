@@ -17,11 +17,6 @@
 		<radio_item label="En el chat local" name="script_0"/>
 		<radio_item label="En una ventana independiente" name="script_1" left_delta="110"/>
 	</radio_group>
-	<check_box label="Activar notificaciones Growl" name="notify_growl_checkbox"/>
-	<check_box name="notify_growl_always_checkbox" label="Mostrar Growl incluso si Firestorm está activo"/>
-	<check_box label="Mostrar notificaciones de colisión en el chat local" name="FSCollisionMessagesInChat"/>
-	<check_box label="Reportar colisiones a los scripts mediante el canal" name="FSReportCollisionMessages"/>
-	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Canal utilizado para reportar los mensajes de colisión a los scripts (Por defecto: -25000)"/>
 	<text name="friends_logon_label" width="310">
 		Mostrar cuando mis amigos se conecten/desconecten:
 	</text>
@@ -34,6 +29,14 @@
 	<check_box name="friends_notify_online_sound" label="Se conectan" width="95"/>
 	<check_box name="friends_notify_offline_sound" label="Se desconectan" width="95" />
 	<check_box label="Cuando el total de scripts de la región cambie:" name="FSReportTotalScriptCountChanges"/>
+	<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Umbral de cambios de total de scripts antes de reportarlo (Por defecto: 100)"/>
+	<check_box label="Mostrar notificaciones de colisión en el chat local" name="FSCollisionMessagesInChat"/>
+	<check_box label="Reportar colisiones a los scripts mediante el canal" name="FSReportCollisionMessages"/>
+	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Canal utilizado para reportar los mensajes de colisión a los scripts (Por defecto: -25000)"/>
+	<check_box label="Diálogos de script hacen parpadear icono cuando [APP_NAME] no tiene el foco" name="FSFlashOnScriptDialog"/>
+	<check_box label="Desactivar notificaciones de 'el objeto ha sido devuelto a tu inventario'" name="FSDisableReturnObjectNotification"/>
+	<check_box label="Activar notificaciones Growl" name="notify_growl_checkbox"/>
+	<check_box name="notify_growl_always_checkbox" label="Mostrar Growl incluso si Firestorm está activo"/>
     </panel>
     <panel label="Alertas" name="tab-alerts">
 	<text name="show_label">

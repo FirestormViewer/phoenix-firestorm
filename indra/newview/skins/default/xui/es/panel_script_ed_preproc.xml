@@ -35,6 +35,7 @@
 			<menu_item_call label="Seleccionar todo" name="Select All"/>
 			<menu_item_call label="Deseleccionar" name="Deselect"/>
 			<menu_item_call label="Buscar / Reemplazar..." name="Search / Replace..."/>
+			<menu_item_call label="Ir a la línea..." name="Go to line..."/>
 		</menu>
 		<menu label="Ayuda" name="Help">
 			<menu_item_call label="Ayuda..." name="Help..."/>
@@ -48,7 +49,7 @@
 			<button tool_tip="Editor externo de scripts" name="Edit_btn"/>
 			<button tool_tip="Cargar un script de tu disco duro" name="load_disk_btn"/>
 			<button tool_tip="Guardar un script en tu disco duro" name="save_disk_btn"/>
-			<button tool_tip="Cortar"/>
+			<button tool_tip="Cortar" name="cut_btn"/>
 			<button tool_tip="Copiar" name="copy_btn"/>
 			<button tool_tip="Pegar" name="paste_btn"/>
 			<button tool_tip="Deshacer" name="undo_btn"/>
@@ -64,7 +65,7 @@
 			</text_editor>
 		</panel>
 		<panel name="Preprocessed" label="Preprocesado">
-			<text_editor name="Script Editor">
+			<text_editor name="Post Editor">
 				Cargando...
 			</text_editor>
 		</panel>
