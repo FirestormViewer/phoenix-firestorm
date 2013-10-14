@@ -57,6 +57,7 @@ public:
 	}
 
 	Object* get()                  { return mObjectp; }
+	Object const* get() const      { return mObjectp; }	// <FS:CR>
     Object* operator->()           { return mObjectp; }
     Object& operator *()           { return *mObjectp; }
     Object* operator ++(int)       { Object* old = mObjectp; mBytep += mSkip; return old; }
