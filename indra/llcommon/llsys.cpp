@@ -184,6 +184,24 @@ bool get_shell32_dll_version(DWORD& major, DWORD& minor, DWORD& build_number)
 	}
 	return result;
 }
+
+// GetVersionEx should not works correct with Windows 8.1 and the later version. We need to check this case
+static bool	check_for_version(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor)
+{
+    OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
+    DWORDLONG        const dwlConditionMask = VerSetConditionMask(
+																  VerSetConditionMask(
+																					  VerSetConditionMask(
+																										  0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+																					  VER_MINORVERSION, VER_GREATER_EQUAL),
+																  VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
+	
+    osvi.dwMajorVersion = wMajorVersion;
+    osvi.dwMinorVersion = wMinorVersion;
+    osvi.wServicePackMajor = wServicePackMajor;
+	
+    return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
+}
 #endif // LL_WINDOWS
 
 // Wrap boost::regex_match() with a function that doesn't throw.
@@ -217,25 +235,6 @@ static bool regex_search_no_exc(const S& string, M& match, const R& regex)
         return false;
     }
 }
-
-// GetVersionEx should not works correct with Windows 8.1 and the later version. We need to check this case 
-static bool	check_for_version(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor)
-{
-    OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
-    DWORDLONG        const dwlConditionMask = VerSetConditionMask(
-        VerSetConditionMask(
-        VerSetConditionMask(
-            0, VER_MAJORVERSION, VER_GREATER_EQUAL),
-               VER_MINORVERSION, VER_GREATER_EQUAL),
-               VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
-
-    osvi.dwMajorVersion = wMajorVersion;
-    osvi.dwMinorVersion = wMinorVersion;
-    osvi.wServicePackMajor = wServicePackMajor;
-
-    return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR, dwlConditionMask) != FALSE;
-}
-
 
 LLOSInfo::LLOSInfo() :
 	mMajorVer(0), mMinorVer(0), mBuild(0), mOSVersionString("")	 
