@@ -17,6 +17,9 @@
 	<menu_item_call label="Enfocar" name="Zoom In"/>
 	<menu_item_call label="Pagar" name="Pay..."/>
 	<menu_item_call label="Inspeccionar" name="Object Inspect"/>
+	<menu_item_check name="Normal" label="Dibujo normal"/>
+	<menu_item_check name="Always use impostor" label="Usar siempre un impostor"/>
+	<menu_item_check name="Never use impostor" label="No usar nunca un impostor"/>
 	<menu_item_call label="Bloquear propietario de las partículas" name="Mute Particle"/>
 	<menu_item_call label="Información de scripts" name="ScriptInfo"/>
 	<menu_item_call label="Desdibujar temporalmente" name="Derender"/>

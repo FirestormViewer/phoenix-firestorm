@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="particle_editor_floater" title="Editor de partículas" width="591">
+	<panel name="particle_editor_panel" width="576">
+		<panel name="top_left_panel" width="415">
+			<text name="Pattern_Label">
+				Patrón:
+			</text>
+			<combo_box name="pattern_type_combo">
+				<combo_box.item label="Explosión" name="explode"/>
+				<combo_box.item label="Ángulo" name="angle"/>
+				<combo_box.item label="Ángulo cónico" name="angle_cone"/>
+				<combo_box.item label="Ángulo cónico vacío" name="angle_cone_empty"/>
+				<combo_box.item label="Disminución" name="drop"/>
+			</combo_box>
+			<text name="Texture_Label">
+				Textura:
+			</text>
+			<text name="Burst_Rate_Label" width="160">
+				Velocidad de ráfaga:
+			</text>
+			<text name="Burst_Count_Label" width="160">
+				Número de ráfagas:
+			</text>
+			<text name="Burst_Radius_Label" left_pad="20">
+				Radio de ráfaga:
+			</text>
+			<text name="Angle_Begin_Label" width="160">
+				Inicio de ángulo:
+			</text>
+			<text name="Burst_Speed_Min_Label" left_pad="20">
+				Vel. mín. ráfaga:
+			</text>
+			<text name="Angle_End_Label" width="160">
+				Fin de ángulo:
+			</text>
+			<text name="Burst_Speed_Max_Label" left_pad="20">
+				Vel. máx. ráfaga:
+			</text>
+			<text name="Source_Max_Age_Label" width="160">
+				Duración máx. de la fuente:
+			</text>
+			<text name="Start_Alpha_Label" left_pad="20">
+				Alpha inicial:
+			</text>
+			<text name="Particles_Max_Age_Label" width="160">
+				Duración máx. de partículas:
+			</text>
+			<text name="End_Alpha_Label" left_pad="20">
+				Alpha final:
+			</text>
+			<text name="Start_Glow_Label" width="160">
+				Brillo inicial:
+			</text>
+			<combo_box name="blend_func_src_combo" left_pad="20">
+				<combo_box.item label="Mezcla Uno" name="blend_one"/>
+				<combo_box.item label="Mezcla Cero" name="blend_zero"/>
+				<combo_box.item label="Mezclar color final" name="blend_dest_color"/>
+				<combo_box.item label="Mezclar color inicial" name="blend_src_color"/>
+				<combo_box.item label="Mezcla 1 - Color final" name="blend_one_minus_dest_color"/>
+				<combo_box.item label="Mezcla 1 - Color inicial" name="blend_one_minus_src_color"/>
+				<combo_box.item label="Mezclar alpha inicial" name="blend_src_alpha"/>
+				<combo_box.item label="Mezcla 1 - alpha inicial" name="blend_one_minus_src_alpha"/>
+			</combo_box>
+			<text name="End_Glow_Label" width="160">
+				Brillo final
+			</text>
+			<combo_box name="blend_func_dest_combo" left_pad="20">
+				<combo_box.item label="Mezcla Uno" name="blend_one"/>
+				<combo_box.item label="Mezcla Cero" name="blend_zero"/>
+				<combo_box.item label="Mezclar color final" name="blend_dest_color"/>
+				<combo_box.item label="Mezclar color inicial" name="blend_src_color"/>
+				<combo_box.item label="Mezcla 1 - Color final" name="blend_one_minus_dest_color"/>
+				<combo_box.item label="Mezcla 1 - Color inicial" name="blend_one_minus_src_color"/>
+				<combo_box.item label="Mezclar alpha inicial" name="blend_src_alpha"/>
+				<combo_box.item label="Mezcla 1 - alpha inicial" name="blend_one_minus_src_alpha"/>
+			</combo_box>
+			<text name="Scale_Start_Label">
+				Escala inicial:
+			</text>
+			<text name="End_Label">
+				Fin:
+			</text>
+		</panel>
+		<panel name="top_right_panel" width="160">
+			<check_box name="bounce_checkbox" label="Rebote"/>
+			<check_box name="emissive_checkbox" label="Emisivo"/>
+			<check_box name="follow_source_checkbox" label="Seguir a la fuente"/>
+			<check_box name="follow_velocity_checkbox" label="Velocidad de siguimiento"/>
+			<check_box name="interpolate_color_checkbox" label="Interpolar color"/>
+			<check_box name="interpolate_scale_checkbox" label="Interpolar escala"/>
+			<check_box name="target_position_checkbox" label="Objetivo posicional"/>
+			<check_box name="target_linear_checkbox" label="Objetivo lineal"/>
+			<check_box name="wind_checkbox" label="Viento"/>
+			<button name="copy_button" label="Copiar" tool_tip="Copia los parámetros del sistema de partículas al portapapeles como script LSL."/>
+			<button name="inject_button" label="Inyectar" tool_tip="Inyectar este sistema de partículas en el objeto seleccionado."/>
+		</panel>
+		<panel name="bottom_left_panel">
+			<text name="Target_Key_Label">
+				Clave del objetivo:
+			</text>
+			<button name="clear_target_button" tool_tip="Limpiar el objeto o avatar seleccionado como objetivo."/>
+			<button name="pick_target_button" tool_tip="Pulsa para seleccionar el objeto o avatar objetivo de las partículas."/>
+			<text name="Acceleration_Label">
+				Aceleración:
+			</text>
+			<text name="Omega_Label">
+				Omega:
+			</text>
+		</panel>
+		<panel name="bottom_right_panel">
+			<color_swatch label="Color inicial" name="start_color_selector"/>
+			<color_swatch label="Color final" name="end_color_selector"/>
+		</panel>
+	</panel>
+</floater>

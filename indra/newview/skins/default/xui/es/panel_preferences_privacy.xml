@@ -24,7 +24,7 @@
 				Guardar:
 			</text>
 			<check_box name="LogNearbyChat" label="Guardar chat local" tool_tip="Guardar un registro del chat local en mi equipo"/>
-			<combo_box name="conversation_log_combo">
+			<combo_box name="conversation_log_combo" width="170">
 				<item name="log_and_transcripts" label="Registro y transcripciones"/>
 				<item name="log_only" label="Sólo registro"/>
 				<item name="no_log_or_transcript" label="Ni registro ni transcripciones"/>
@@ -36,6 +36,7 @@
 			</text>
 			<check_box label="Usar el formato clásico de nombre de archivo para las transcripciones" name="UseLegacyIMLogNames" tool_tip="Si lo activas, se usará el formato de nombre de archivo para las transcripciones (nombre de usuario) en vez del nuevo formato (nombre_de_usuario)."/>
 			<check_box label="Añadir marca horaria a los nombres de archivo de registro" name="LogFileNamewithDate" tool_tip="Añadir fecha y hora a los nombres de archivo de los registros de MI y chat, con formato chat-YYYY-MM-DD y 'nombre_MI'-YYYY-MM."/>
+			<check_box label="Usar el visor de transcripciones incorporado" name="FSUseBuiltInHistory" tool_tip="Utiliza el visor incorporado de transcripciones. Si lo desactivas, las transcripciones se abrirán en el editor de texto predefinido en tu sistema operativo."/>
 			<button label="Administrar lista de bloqueados/silenciados" name="block_list"/>
 		</panel>
 		<panel label="Puntos de mira" name="tab-lookat">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Textura" name="Texture">
 	<panel.string name="string repeats per meter">
 		Repeticiones por metro
@@ -9,7 +9,7 @@
 	<text name="color label">
 		Color
 	</text>
-	<color_swatch label="" name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
+	<color_swatch name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
 	<text name="color trans">
 		Transparencia
 	</text>
@@ -26,7 +26,7 @@
 		<combo_box.item label="Bacheado (normal)" name="Bumpiness (normal)"/>
 		<combo_box.item label="Brillo (especular)" name="Shininess (specular)"/>
 	</combo_box>
-	<texture_picker label="Textura" name="texture control" tool_tip="Pulsa para elegir una imagen"/>
+	<texture_picker label="Textura       " name="texture control" tool_tip="Pulsa para elegir una imagen"/>
 	<text name="label alphamode">
 		Modo alpha
 	</text>
@@ -99,31 +99,25 @@
 		<combo_box.item label="Plano" name="Planar"/>
 	</combo_box>
 	<spinner label="Escala horizontal" name="TexScaleU"/>
-	<check_box name="checkbox flip s" tool_tip="Voltear"/>
+	<button name="flipTextureScaleU" tool_tip="Voltear"/>
 	<spinner label="Escala vertical" name="TexScaleV"/>
-	<check_box name="checkbox flip t" tool_tip="Voltear"/>
+	<button name="flipTextureScaleV" tool_tip="Voltear"/>
 	<spinner label="Repeticiones/metro" name="rptctrl"/>
 	<spinner label="Grados de rotación" name="TexRot"/>
 	<spinner label="Despl. horizontal" name="TexOffsetU"/>
 	<spinner label="Despl. vertical" name="TexOffsetV"/>
 	<spinner label="Escala horizontal" name="bumpyScaleU"/>
-	<check_box name="flipBumpyScaleU" tool_tip="Voltear"/>
 	<spinner label="Escala vertical" name="bumpyScaleV"/>
-	<check_box name="flipBumpyScaleV" tool_tip="Voltear"/>
 	<spinner label="Grados de rotación" name="bumpyRot"/>
 	<spinner label="Despl. horizontal" name="bumpyOffsetU"/>
 	<spinner label="Despl. vertical" name="bumpyOffsetV"/>
 	<spinner label="Horizontal scale" name="shinyScaleU"/>
-	<check_box name="flipShinyScaleU" tool_tip="Voltear"/>
 	<spinner label="Escala vertical" name="shinyScaleV"/>
-	<check_box name="flipShinyScaleV" tool_tip="Voltear"/>
 	<spinner label="Grados de rotación" name="shinyRot"/>
 	<spinner label="Despl. horizontal" name="shinyOffsetU"/>
 	<spinner label="Despl. vertical" name="shinyOffsetV"/>
 	<check_box label="Alinear caras planas" name="checkbox planar align" tool_tip="Alinea las texturas en todas las caras seleccionadas con la última en seleccionarse. Requiere mapeado de textura plano."/>
-	<text name="text_params_label" width="125">
-		Parámetros de textura
-	</text>
+	<check_box label="Sincronizar materiales" name="checkbox maps sync" tool_tip="Sincroniza los parámetros del mapa de texturas"/>
 	<button label="Copiar" name="copytextures"/>
 	<button label="Pegar" name="pastetextures"/>
 </panel>

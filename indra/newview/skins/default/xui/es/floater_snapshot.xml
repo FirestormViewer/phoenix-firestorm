@@ -88,6 +88,7 @@
 			<combo_box.item label="Profundidad" name="Depth"/>
 		</combo_box>
 		<check_box label="Interfaz" name="ui_check"/>
+		<check_box label="Balance de L$" name="currency_check" />
 		<check_box label="HUDs" name="hud_check"/>
 		<check_box label="Congelar la toma (pantalla completa)" name="freeze_frame_check"/>
 		<check_box label="Actualizar automáticamente" name="auto_snapshot_check"/>
