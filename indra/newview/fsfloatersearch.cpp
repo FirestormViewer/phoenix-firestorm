@@ -277,14 +277,7 @@ FSFloaterSearch::~FSFloaterSearch()
 void FSFloaterSearch::onOpen(const LLSD& key)
 {
 	Params p(key);
-	mPanelPeople->onSearchPanelOpen(this);
-	mPanelGroups->onSearchPanelOpen(this);
-	mPanelPlaces->onSearchPanelOpen(this);
-	mPanelEvents->onSearchPanelOpen(this);
-	mPanelLand->onSearchPanelOpen(this);
-	mPanelClassifieds->onSearchPanelOpen(this);
 	mPanelWeb->loadURL(p.search);
-	
 	if (key.has("query"))
 		mTabContainer->selectTabPanel(mPanelWeb);
 }
@@ -715,7 +708,6 @@ void FSFloaterSearch::onBtnEventReminder()
 static LLRegisterPanelClassWrapper<FSPanelSearchPeople> t_panel_fs_search_people("panel_ls_people");
 
 FSPanelSearchPeople::FSPanelSearchPeople() : LLPanel()
-, mParent(NULL)
 , mQueryID(NULL)
 , mStartSearch(0)
 , mResultsReceived(0)
@@ -725,11 +717,6 @@ FSPanelSearchPeople::FSPanelSearchPeople() : LLPanel()
 
 FSPanelSearchPeople::~FSPanelSearchPeople()
 {
-}
-
-void FSPanelSearchPeople::onSearchPanelOpen(FSFloaterSearch* parent)
-{
-	mParent = parent;
 }
 
 BOOL FSPanelSearchPeople::postBuild()
@@ -844,7 +831,9 @@ void FSPanelSearchPeople::onSelectItem()
 	{
 		return;
 	}
-	mParent->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_AVATAR);
+	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
+	if (search_instance)
+		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_AVATAR);
 }
 
 // static
@@ -993,11 +982,6 @@ FSPanelSearchGroups::~FSPanelSearchGroups()
 {
 }
 
-void FSPanelSearchGroups::onSearchPanelOpen(FSFloaterSearch* parent)
-{
-	mParent = parent;
-}
-
 BOOL FSPanelSearchGroups::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("groups_edit");
@@ -1130,7 +1114,9 @@ void FSPanelSearchGroups::onSelectItem()
 	{
 		return;
 	}
-	mParent->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_GROUP);
+	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
+	if (search_instance)
+		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_GROUP);
 }
 
 // static
@@ -1279,11 +1265,6 @@ FSPanelSearchPlaces::FSPanelSearchPlaces() : LLPanel()
 
 FSPanelSearchPlaces::~FSPanelSearchPlaces()
 {
-}
-
-void FSPanelSearchPlaces::onSearchPanelOpen(FSFloaterSearch* parent)
-{
-	mParent = parent;
 }
 
 BOOL FSPanelSearchPlaces::postBuild()
@@ -1441,7 +1422,9 @@ void FSPanelSearchPlaces::onSelectItem()
 	{
 		return;
 	}
-	mParent->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_PLACE);
+	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
+	if (search_instance)
+		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_PLACE);
 }
 
 // static
@@ -1615,11 +1598,6 @@ FSPanelSearchLand::~FSPanelSearchLand()
 {
 }
 
-void FSPanelSearchLand::onSearchPanelOpen(FSFloaterSearch* parent)
-{
-	mParent = parent;
-}
-
 BOOL FSPanelSearchLand::postBuild()
 {
 	mSearchResults	= getChild<LLScrollListCtrl>("search_results_land");
@@ -1786,7 +1764,9 @@ void FSPanelSearchLand::onSelectItem()
 	{
 		return;
 	}
-	mParent->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_PLACE);
+	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
+	if (search_instance)
+		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_PLACE);
 }
 
 // static
@@ -1968,11 +1948,6 @@ FSPanelSearchClassifieds::~FSPanelSearchClassifieds()
 {
 }
 
-void FSPanelSearchClassifieds::onSearchPanelOpen(FSFloaterSearch* parent)
-{
-	mParent = parent;
-}
-
 BOOL FSPanelSearchClassifieds::postBuild()
 {
 	mSearchComboBox = findChild<LLSearchComboBox>("classifieds_edit");
@@ -2111,7 +2086,9 @@ void FSPanelSearchClassifieds::onSelectItem()
 	{
 		return;
 	}
-	mParent->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_CLASSIFIED);
+	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
+	if (search_instance)
+		search_instance->FSFloaterSearch::onSelectedItem(mSearchResults->getSelectedValue(), FSFloaterSearch::SC_CLASSIFIED);
 }
 
 // static
@@ -2271,11 +2248,6 @@ FSPanelSearchEvents::FSPanelSearchEvents() : LLPanel()
 
 FSPanelSearchEvents::~FSPanelSearchEvents()
 {
-}
-
-void FSPanelSearchEvents::onSearchPanelOpen(FSFloaterSearch* parent)
-{
-	mParent = parent;
 }
 
 BOOL FSPanelSearchEvents::postBuild()
@@ -2482,7 +2454,9 @@ void FSPanelSearchEvents::onSelectItem()
 		return;
 	}
 	S32 event_id = mSearchResults->getSelectedValue();
-	mParent->FSFloaterSearch::onSelectedEvent(event_id);
+	FSFloaterSearch* search_instance = LLFloaterReg::getTypedInstance<FSFloaterSearch>("search");
+	if (search_instance)
+		search_instance->FSFloaterSearch::onSelectedEvent(event_id);
 }
 
 // static
@@ -2767,9 +2741,9 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 	mWebBrowser->navigateTo(url, "text/html");
 }
 
-///////////////////////////////
-// Local functions           //
-///////////////////////////////
+////////////////////////////////////////
+//           Local functions          //
+////////////////////////////////////////
 
 std::string filterShortWords(std::string query_string)
 {
