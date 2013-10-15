@@ -47,28 +47,271 @@ class LLAvatarPropertiesObserver;
 class LLGroupMgrObserver;
 class LLSearchEditor;
 class LLSearchComboBox;
+class FSFloaterSearch;
+
 class FSPanelProfile;
 
-typedef enum e_search_category
+struct SearchQuery : public LLInitParam::Block<SearchQuery>
 {
-	SC_AVATAR,
-	SC_GROUP,
-	SC_PLACE,
-	SC_CLASSIFIED
-}	ESearchCategory;
+	Optional<std::string> category;
+	Optional<std::string> query;
+	
+	SearchQuery();
+};
 
-class FSFloaterSearch
-:	public LLFloater
+///////////////////////////////
+//       Search Panels       //
+///////////////////////////////
+
+class FSPanelSearchPeople : public LLPanel
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
-	struct SearchQuery : public LLInitParam::Block<SearchQuery>
+	FSPanelSearchPeople();
+	void onSearchPanelOpen(FSFloaterSearch* parent);
+	static void processSearchReply(LLMessageSystem* msg, void**);
+	
+protected:
+	const S32& getNumResultsReturned() const { return mNumResultsReturned; };
+	const S32& getNumResultsReceived() const { return mResultsReceived; };
+	
+private:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ ~FSPanelSearchPeople();
+	
+	void onBtnFind();
+	void onSelectItem();
+	void onBtnNext();
+	void onBtnBack();
+	
+	void find();
+	void resetSearch();
+	S32  showNextButton(S32);
+	void setLoadingProgress(bool started);
+	
+	const LLUUID& getQueryID() const { return mQueryID; }
+	
+	S32			mNumResultsReturned;
+	S32			mStartSearch;
+	S32			mResultsReceived;
+	LLSD		mResultsContent;
+	LLUUID		mQueryID;
+	
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+};
+
+class FSPanelSearchGroups : public LLPanel
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	FSPanelSearchGroups();
+	void onSearchPanelOpen(FSFloaterSearch* parent);
+	static void processSearchReply(LLMessageSystem* msg, void**);
+protected:
+private:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ ~FSPanelSearchGroups();
+	
+	void onBtnFind();
+	void onSelectItem();
+	void onBtnNext();
+	void onBtnBack();
+	
+	void find();
+	void resetSearch();
+	S32  showNextButton(S32);
+	void setLoadingProgress(bool started);
+	
+	const LLUUID& getQueryID() const { return mQueryID; }
+	
+	S32			mNumResultsReturned;
+	S32			mStartSearch;
+	S32			mResultsReceived;
+	LLSD		mResultsContent;
+	LLUUID		mQueryID;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+};
+
+class FSPanelSearchPlaces : public LLPanel
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	FSPanelSearchPlaces();
+	void onSearchPanelOpen(FSFloaterSearch* parent);
+	static void processSearchReply(LLMessageSystem* msg, void**);
+protected:
+private:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ ~FSPanelSearchPlaces();
+	
+	void onBtnFind();
+	void onSelectItem();
+	void onBtnNext();
+	void onBtnBack();
+	
+	void find();
+	void resetSearch();
+	S32  showNextButton(S32);
+	void setLoadingProgress(bool started);
+	
+	const LLUUID& getQueryID() const { return mQueryID; }
+	
+	S32			mNumResultsReturned;
+	S32			mStartSearch;
+	S32			mResultsReceived;
+	LLSD		mResultsContent;
+	LLUUID		mQueryID;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+	LLComboBox*			mPlacesCategory;
+};
+
+class FSPanelSearchLand : public LLPanel
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	FSPanelSearchLand();
+	void onSearchPanelOpen(FSFloaterSearch* parent);
+	static void processSearchReply(LLMessageSystem* msg, void**);
+protected:
+private:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ ~FSPanelSearchLand();
+	
+	void onBtnFind();
+	void onSelectItem();
+	void onBtnNext();
+	void onBtnBack();
+	
+	void find();
+	void resetSearch();
+	S32  showNextButton(S32);
+	void setLoadingProgress(bool started);
+	
+	const LLUUID& getQueryID() const { return mQueryID; }
+	
+	S32			mNumResultsReturned;
+	S32			mStartSearch;
+	S32			mResultsReceived;
+	LLSD		mResultsContent;
+	LLUUID		mQueryID;
+	
+	FSFloaterSearch*	mParent;
+	LLLineEditor*		mPriceEditor;
+	LLLineEditor*		mAreaEditor;
+	LLScrollListCtrl*	mSearchResults;
+};
+
+class FSPanelSearchClassifieds : public LLPanel
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	FSPanelSearchClassifieds();
+	void onSearchPanelOpen(FSFloaterSearch* parent);
+	static void processSearchReply(LLMessageSystem* msg, void**);
+protected:
+private:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ ~FSPanelSearchClassifieds();
+	
+	void onBtnFind();
+	void onSelectItem();
+	void onBtnNext();
+	void onBtnBack();
+	
+	void find();
+	void resetSearch();
+	S32  showNextButton(S32);
+	void setLoadingProgress(bool started);
+	
+	const LLUUID& getQueryID() const { return mQueryID; }
+	
+	S32			mNumResultsReturned;
+	S32			mStartSearch;
+	S32			mResultsReceived;
+	LLSD		mResultsContent;
+	LLUUID		mQueryID;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+	LLComboBox*			mClassifiedsCategory;
+};
+
+class FSPanelSearchEvents : public LLPanel
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	FSPanelSearchEvents();
+	void onSearchPanelOpen(FSFloaterSearch* parent);
+	static void processSearchReply(LLMessageSystem* msg, void**);
+protected:
+private:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ ~FSPanelSearchEvents();
+	
+	void onBtnFind();
+	void onSelectItem();
+	void onBtnNext();
+	void onBtnBack();
+	void onBtnTomorrow();
+	void onBtnYesterday();
+	void onBtnToday();
+	
+	void find();
+	void setDay(S32 day);
+	void onSearchModeChanged();
+	void resetSearch();
+	S32  showNextButton(S32);
+	void setLoadingProgress(bool started);
+	
+	const LLUUID& getQueryID() const { return mQueryID; }
+	
+	S32			mNumResultsReturned;
+	S32			mResultsReceived;
+	S32			mStartSearch;
+	S32			mDay;
+	LLSD		mResultsContent;
+	LLUUID		mQueryID;
+
+	FSFloaterSearch*	mParent;
+	LLSearchComboBox*	mSearchComboBox;
+	LLScrollListCtrl*	mSearchResults;
+	LLRadioGroup*		mEventsMode;
+};
+
+class FSPanelSearchWeb : public LLPanel, public LLViewerMediaObserver
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	FSPanelSearchWeb();
+	/*virtual*/ BOOL postBuild();
+	void loadURL(const SearchQuery &query);
+private:
+	~FSPanelSearchWeb() {};
+	
+	LLMediaCtrl*	mWebBrowser;
+	LLSD			mCategoryPaths;
+};
+
+class FSFloaterSearch : public LLFloater
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	typedef enum e_search_category
 	{
-		Optional<std::string> category;
-		Optional<std::string> query;
-		
-		SearchQuery();
-	};
+		SC_AVATAR,
+		SC_GROUP,
+		SC_PLACE,
+		SC_CLASSIFIED
+	}	ESearchCategory;
 	
 	struct _Params : public LLInitParam::Block<_Params, LLFloater::Params>
 	{
@@ -78,8 +321,8 @@ public:
 	typedef LLSDParamAdapter<_Params> Params;
 	
 	FSFloaterSearch(const Params& key);
-	virtual ~FSFloaterSearch();
-	virtual void onOpen(const LLSD& key);
+	~FSFloaterSearch();
+	void onOpen(const LLSD& key);
 	BOOL postBuild();
 	
 	void avatarNameUpdatedCallback(const LLUUID& id, const LLAvatarName& av_name);
@@ -101,7 +344,8 @@ public:
 							 U32 eventCover,
 							 LLVector3d eventGlobalPos);
 	void setLoadingProgress(bool started);
-	static std::string filterShortWords(std::string query_string);
+	static LLPanel* getSearchPanel(std::string panel_name);
+	
 private:
 	virtual void onClose(bool app_quitting);
 	const LLUUID& getSelectedID() { return mSelectedID; }
@@ -127,6 +371,14 @@ private:
 	LLAvatarPropertiesObserver* mAvatarPropertiesObserver;
 	LLGroupMgrObserver* mGroupPropertiesRequest;
 	
+	FSPanelSearchPeople*	mPanelPeople;
+	FSPanelSearchGroups*	mPanelGroups;
+	FSPanelSearchPlaces*	mPanelPlaces;
+	FSPanelSearchEvents*	mPanelEvents;
+	FSPanelSearchLand*		mPanelLand;
+	FSPanelSearchClassifieds* mPanelClassifieds;
+	FSPanelSearchWeb*		mPanelWeb;
+	
 	LLPanel*		mDetailsPanel;
 	LLTextEditor*	mDetailTitle;
 	LLTextEditor*	mDetailDesc;
@@ -137,256 +389,6 @@ private:
 	LLIconCtrl*		mDetailMaturity;
 	LLTabContainer*	mTabContainer;
 	FSPanelProfile*	mPanelProfile;
-};
-
-///////////////////////////////
-//       Search Panels       //
-///////////////////////////////
-
-class FSPanelSearchPeople : public LLPanel
-{
-	LOG_CLASS(FSFloaterSearch);
-public:
-	FSPanelSearchPeople();
-	void onSearchPanelOpen(FSFloaterSearch* parent);
-	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
-private:
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchPeople();
-
-	static FSPanelSearchPeople* sInstance;
-	
-	void onBtnFind();
-	void onSelectItem();
-	void onBtnNext();
-	void onBtnBack();
-	
-	void find();
-	void fillSearchComboBox();
-	void resetSearch();
-	S32  showNextButton(S32);
-	void setLoadingProgress(bool started);
-	
-	const LLUUID& getQueryID() const { return mQueryID; }
-	
-	int			mNumResultsReturned;
-	S32			mStartSearch;
-	S32			mResultsReceived;
-	LLSD		mResultsContent;
-	LLUUID		mQueryID;
-	
-	FSFloaterSearch*	mParent;
-	LLSearchComboBox*	mSearchComboBox;
-	LLScrollListCtrl*	mSearchResults;
-};
-
-class FSPanelSearchGroups : public LLPanel
-{
-	LOG_CLASS(FSFloaterSearch);
-public:
-	FSPanelSearchGroups();
-	void onSearchPanelOpen(FSFloaterSearch* parent);
-	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
-private:
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchGroups();
-	static FSPanelSearchGroups* sInstance;
-	
-	void onBtnFind();
-	void onSelectItem();
-	void onBtnNext();
-	void onBtnBack();
-	
-	void find();
-	void fillSearchComboBox();
-	void resetSearch();
-	S32  showNextButton(S32);
-	void setLoadingProgress(bool started);
-	
-	const LLUUID& getQueryID() const { return mQueryID; }
-	
-	int			mNumResultsReturned;
-	S32			mStartSearch;
-	S32			mResultsReceived;
-	LLSD		mResultsContent;
-	LLUUID		mQueryID;
-
-	FSFloaterSearch*	mParent;
-	LLSearchComboBox*	mSearchComboBox;
-	LLScrollListCtrl*	mSearchResults;
-};
-
-class FSPanelSearchPlaces : public LLPanel
-{
-	LOG_CLASS(FSFloaterSearch);
-public:
-	FSPanelSearchPlaces();
-	void onSearchPanelOpen(FSFloaterSearch* parent);
-	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
-private:
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchPlaces();
-	static FSPanelSearchPlaces* sInstance;
-	
-	void onBtnFind();
-	void onSelectItem();
-	void onBtnNext();
-	void onBtnBack();
-	
-	void find();
-	void fillSearchComboBox();
-	void resetSearch();
-	S32  showNextButton(S32);
-	void setLoadingProgress(bool started);
-	
-	const LLUUID& getQueryID() const { return mQueryID; }
-	
-	int			mNumResultsReturned;
-	S32			mStartSearch;
-	S32			mResultsReceived;
-	LLSD		mResultsContent;
-	LLUUID		mQueryID;
-
-	FSFloaterSearch*	mParent;
-	LLSearchComboBox*	mSearchComboBox;
-	LLScrollListCtrl*	mSearchResults;
-	LLComboBox*			mPlacesCategory;
-};
-
-class FSPanelSearchLand : public LLPanel
-{
-	LOG_CLASS(FSFloaterSearch);
-public:
-	FSPanelSearchLand();
-	void onSearchPanelOpen(FSFloaterSearch* parent);
-	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
-private:
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchLand();
-	static FSPanelSearchLand* sInstance;
-	
-	void onBtnFind();
-	void onSelectItem();
-	void onBtnNext();
-	void onBtnBack();
-	
-	void find();
-	void resetSearch();
-	S32  showNextButton(S32);
-	void setLoadingProgress(bool started);
-	
-	const LLUUID& getQueryID() const { return mQueryID; }
-	
-	int			mNumResultsReturned;
-	S32			mStartSearch;
-	S32			mResultsReceived;
-	LLSD		mResultsContent;
-	LLUUID		mQueryID;
-	
-	FSFloaterSearch*	mParent;
-	LLLineEditor*		mPriceEditor;
-	LLLineEditor*		mAreaEditor;
-	LLScrollListCtrl*	mSearchResults;
-};
-
-class FSPanelSearchClassifieds : public LLPanel
-{
-	LOG_CLASS(FSFloaterSearch);
-public:
-	FSPanelSearchClassifieds();
-	void onSearchPanelOpen(FSFloaterSearch* parent);
-	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
-private:
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchClassifieds();
-	static FSPanelSearchClassifieds* sInstance;
-	
-	void onBtnFind();
-	void onSelectItem();
-	void onBtnNext();
-	void onBtnBack();
-	
-	void find();
-	void fillSearchComboBox();
-	void resetSearch();
-	S32  showNextButton(S32);
-	void setLoadingProgress(bool started);
-	
-	const LLUUID& getQueryID() const { return mQueryID; }
-	
-	int			mNumResultsReturned;
-	S32			mStartSearch;
-	S32			mResultsReceived;
-	LLSD		mResultsContent;
-	LLUUID		mQueryID;
-
-	FSFloaterSearch*	mParent;
-	LLSearchComboBox*	mSearchComboBox;
-	LLScrollListCtrl*	mSearchResults;
-	LLComboBox*			mClassifiedsCategory;
-};
-
-class FSPanelSearchEvents : public LLPanel
-{
-	LOG_CLASS(FSFloaterSearch);
-public:
-	FSPanelSearchEvents();
-	void onSearchPanelOpen(FSFloaterSearch* parent);
-	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
-private:
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchEvents();
-	static FSPanelSearchEvents* sInstance;
-	
-	void onBtnFind();
-	void onSelectItem();
-	void onBtnNext();
-	void onBtnBack();
-	void onBtnTomorrow();
-	void onBtnYesterday();
-	void onBtnToday();
-	
-	void find();
-	void fillSearchComboBox();
-	void setDay(S32 day);
-	void onSearchModeChanged();
-	void resetSearch();
-	S32  showNextButton(S32);
-	void setLoadingProgress(bool started);
-	
-	const LLUUID& getQueryID() const { return mQueryID; }
-	
-	int			mNumResultsReturned;
-	S32			mResultsReceived;
-	S32			mStartSearch;
-	S32			mDay;
-	LLSD		mResultsContent;
-	LLUUID		mQueryID;
-
-	FSFloaterSearch*	mParent;
-	LLSearchComboBox*	mSearchComboBox;
-	LLScrollListCtrl*	mSearchResults;
-	LLRadioGroup*		mEventsMode;
-};
-
-class FSPanelSearchWeb : public LLPanel, public LLViewerMediaObserver
-{
-	LOG_CLASS(FSFloaterSearch);
-public:
-	FSPanelSearchWeb();
-	/*virtual*/ BOOL postBuild();
-	void loadURL(const FSFloaterSearch::SearchQuery &query);
-private:
-	~FSPanelSearchWeb();
-	
-	LLMediaCtrl*	mWebBrowser;
-	LLSD			mCategoryPaths;
 };
 
 #endif // FS_FLOATERSEARCH_H
