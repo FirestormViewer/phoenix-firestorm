@@ -49,7 +49,7 @@
 			<button tool_tip="Editor externo de scripts" name="Edit_btn"/>
 			<button tool_tip="Cargar un script de tu disco duro" name="load_disk_btn"/>
 			<button tool_tip="Guardar un script en tu disco duro" name="save_disk_btn"/>
-			<button tool_tip="Cortar"/>
+			<button tool_tip="Cortar" name="cut_btn"/>
 			<button tool_tip="Copiar" name="copy_btn"/>
 			<button tool_tip="Pegar" name="paste_btn"/>
 			<button tool_tip="Deshacer" name="undo_btn"/>

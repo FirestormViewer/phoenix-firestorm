@@ -66,6 +66,9 @@
 			<check_box label="Animar los labios del avatar al hablar" name="enable_lip_sync"/>
 			<check_box label="Mostrar indicadores de voz sobre los avatares" tool_tip="Muestra el indicador de voz (punto blanco) sobre los avatares" name="FSShowVoiceVisualizer"/>
 			<check_box label="Mostrar indicadores de voz durante las llamadas" tool_tip="Muestra los indicadores de voz y mueve los labios del avatar mientras se mantienen llamadas privadas y de grupo" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Rechazar automáticamente todas las llamadas de voz de grupo" name="VoiceCallsRejectGroup"/>
+			<check_box label="Rechazar automáticamente todas las llamadas de voz AdHoc (conferencias)" name="VoiceCallsRejectAdHoc"/>
+			<check_box label="Rechazar automáticamente todas las llamadas de voz P2P (avatar con avatar)" name="VoiceCallsRejectP2P"/>
 			<check_box label="Conmutar el funcionamiento del micrófono al pulsar:" name="push_to_talk_toggle_check" tool_tip="Cuando se activa el modo de conmutación, pulsa y suelta una sola vez el botón o tecla seleccionado para activar o desactivar el micrófono. Cuando no se usa el modo de conmutación, el micrófono difunde tu voz sólo mientras la tecla o botón se mantienen pulsados."/>
 			<line_editor name="modifier_combo" label="Tecla 'Pulsar-para-Hablar'"/>
 			<button label="Configurar tecla" name="set_voice_hotkey_button"/>

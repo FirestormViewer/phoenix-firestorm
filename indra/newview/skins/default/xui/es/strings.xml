@@ -135,9 +135,6 @@
 	<string name="create_account_url">
 		http://join.secondlife.com/?sourceid=[sourceid]
 	</string>
-	<string name="ViewerDownloadURL">
-		http://secondlife.com/download.
-	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Ya no puedes acceder a Second Life con el visor que estás utilizando. Visita la siguiente página para descargar un nuevo visor:
 http://firestormviewer.org/downloads
@@ -460,10 +457,10 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Ofrecer teleporte a
 	</string>
 	<string name="SLappAgentRequestFriend">
-		Ofrecer amistad
+		Ofrecimiento de amistad
 	</string>
 	<string name="SLappAgentRemoveFriend">
-		Eliminación de amigos
+		Disolución de amistad
 	</string>
 	<string name="BUTTON_CLOSE_DARWIN">
 		Cerrar (⌘W)
@@ -966,6 +963,15 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="ControlYourCamera">
 		Controlar tu cámara
 	</string>
+	<string name="TeleportYourAgent">
+		Teleportarte
+	</string>
+	<string name="ManageEstateSilently">
+		Gestionar tus fincas silenciosamente
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		Cambiar tus animaciones por defecto
+	</string>
 	<string name="JoinAnExperience">
 		Participar en una experiencia
 	</string>
@@ -984,23 +990,8 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="AgentNameSubst">
 		(Tú)
 	</string>
-	<string name="TeleportYourAgent">
-		Teleportarte
-	</string>
-	<string name="JoinAnExperience">
-		Únete a una experiencia
-	</string>
-	<string name="SilentlyManageEstateAccess">
-		Suprimir alertas al gestionar las listas de acceso a un estado
-	</string>
-	<string name="OverrideYourAnimations">
-		Reemplazar tus animaciones predeterminadas
-	</string>
-	<string name="ScriptReturnObjects">
-		Devolver objetos en tu nombre
-	</string>
 	<string name="UnknownScriptPermission">
-		(desconocido)
+		(desconocido)!
 	</string>
 	<string name="SIM_ACCESS_PG">
 		General
@@ -1085,6 +1076,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="backup_files">
 		Respaldos de objetos
+	</string>
+	<string name="collada_files">
+		Modelos COLLADA
 	</string>
 	<string name="LSLTipSleepTime">
 		Duerme el script durante [SLEEP_TIME] segundos.
@@ -2118,12 +2112,6 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="ATTACH_BRIDGE">
 		Bridge
-	</string>
-	<string name="ATTACH_NECK">
-		Cuello
-	</string>
-	<string name="ATTACH_AVATAR_CENTER">
-		Centro del avatar
 	</string>
 	<string name="CursorPos">
 		Línea [LINE], Columna [COLUMN]
@@ -5371,24 +5359,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="snapshot_quality_very_high">
 		Muy alta
 	</string>
-	<string name="TeleportMaturityExceeded">
-		El residente no puede visitar esta región.
-	</string>
-	<string name="UserDictionary">
-		[Usuario]
-	</string>
-	<string name="logging_calls_disabled_log_empty">
-		No se están registrando las conversaciones. Para empezar a grabar un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
-	</string>
-	<string name="logging_calls_disabled_log_not_empty">
-		No se registrarán más conversaciones. Para reanudar la grabación de un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
-	</string>
-	<string name="logging_calls_enabled_log_empty">
-		No hay conversaciones guardadas. Después de contactar con un residente o de que alguien contacte contigo, se mostrará aquí una entrada de registro.
-	</string>
-	<string name="loading_chat_logs">
-		Cargando...
-	</string>
 	<string name="IMPrefix">
 		MI:
 	</string>
@@ -5451,7 +5421,24 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="MovelockEnabled">Bloqueo de movimiento activado</string>
 	<string name="MovelockDisabled">Bloqueo de movimiento desactivado</string>
 	<string name="BusyResponse">respuesta de ocupado</string>
-	<string name="TeleportMaturityExceeded">El residente no puede visitar esta región.</string>
+	<string name="TeleportMaturityExceeded">
+		El residente no puede visitar esta región.
+	</string>
+	<string name="UserDictionary">
+		[Usuario]
+	</string>
+	<string name="logging_calls_disabled_log_empty">
+		No se están registrando las conversaciones. Para empezar a grabar un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
+	</string>
+	<string name="logging_calls_disabled_log_not_empty">
+		No se registrarán más conversaciones. Para reanudar la grabación de un registro, elige "Guardar: Sólo registro" o "Guardar: Registro y transcripciones" en Preferencias &gt; Privacidad.
+	</string>
+	<string name="logging_calls_enabled_log_empty">
+		No hay conversaciones guardadas. Después de contactar con un residente o de que alguien contacte contigo, se mostrará aquí una entrada de registro.
+	</string>
+	<string name="loading_chat_logs">
+		Cargando...
+	</string>
 	<string name="LoadCameraPositionNoneSaved">Todavía no ha sido guardada ninguna vista de cámara.</string>
 	<string name="LoadCameraPositionOutsideDrawDistance">No se puede restaurar la vista de cámara porque su posición está más allá de tu distancia de dibujo.</string>
 	<string name="DrawDistanceSteppingGestureObsolete">Debido a cambios en el código, ya no es necesario usar este gesto. La distancia de dibujo progresiva ha sido activada.</string>
@@ -5477,6 +5464,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="qtool_busy">Espera, por favor. La herramienta de alineación está trabajando.</string>
 	<string name="qtool_still_busy">Por favor, continúa esperando. La herramienta de alineación aún está trabajando.</string>
 	<string name="qtool_done">La herramienta de alineación ha finalizado.</string>
+	<string name="fsbridge_cant_create_disabled">Firestorm no puede crear el LSL bridge si "Activar el LSL-Client Bridge" está desactivado en Preferencias.</string>
 	<string name="fsbridge_no_library">Firestorm no ha podido crear un LSL bridge. Por favor, activa tu librería y vuelve a iniciar sesión.</string>
 	<string name="fsbridge_already_creating">Creación del bridge en curso, no se puede iniciar otra. Por favor espera unos minutos antes de volverlo a intentar.</string>
 	<string name="fsbridge_creating">Creando el bridge. Puede tardar un momento, por favor espera.</string>
@@ -5525,61 +5513,10 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="TotalScriptCountChangeIncrease">El total de scripts en la región ha subido de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
 	<string name="TotalScriptCountChangeDecrease">El total de scripts en la región ha bajado de [OLD_VALUE] a [NEW_VALUE] ([DIFFERENCE]).</string>
 	<string name="preproc_toggle_warning">La conmutación del preprocesador no será efectiva hasta que no cierres y reabras este editor.</string>
-	<string name="export_started">
-		Iniciando exportación...
+	<string name="skin_defaults_starlight_location">
+		Mostrar tu localizacion actual en la barra de menú ha sido desactivado como opción por defecto en la serie de skins Starlight.
 	</string>
-	<string name="export_finished">
-		Exportación finalizada.
-	</string>
-	<string name="export_fail_no_mesh">
-		La exportación de modelos mesh no está actualmente soportada. Exportación abortada.
-	</string>
-	<string name="export_nothing_exported">
-		No se ha exportado nada. Respaldo no creado.
-	</string>
-	<string name="export_node_not_found">
-		No se ha encontrado el nodo LLSelect de [OBJECT]. Utilizando primitiva por defecto en su lugar.
-	</string>
-	<string name="export_failed_export_check">
-		Ha fallado la comprobación de permisos de [OBJECT]. Usando primitiva por defecto.
-	</string>
-	<string name="export_asset_failed_export_check">
-		Ha fallado la comprobación de permisos de [ITEM]. Ignorando.
-	</string>
-	<string name="export_failed_export_null_texture">
-		Se ha intentado exportar una textura nula.
-	</string>
-	<string name="export_loading_texture">
-		Cargando textura [ITEM]...
-	</string>
-	<string name="export_saving_texture">
-		Textura [TEXTURE] guardada con éxito.
-	</string>
-	<string name="export_saving_asset">
-		Guardando [ITEM]...
-	</string>
-	<string name="export_failed_to_receive_texture">
-		Error al obtener la textura [TEXTURE].
-	</string>
-	<string name="export_received_null_texture">
-		Se ha recibido la textura nula [TEXTURE].
-	</string>
-	<string name="export_item_not_exportable">
-		[ITEM] no es actualmente soportado por la exportación. Ignorando.
-	</string>
-	<string name="export_failed_fetch">
-		No se ha podido obtener [ITEM]. (Estado [STATUS] [EXT_STATUS])
-	</string>
-	<string name="export_requesting_asset">
-		Solicitando activo [ITEM]...
-	</string>
-	<string name="export_rerequesting_inventory">
-		Volviendo a solicitar inventario para [ITEM].
-	</string>
-	<string name="export_rerequesting_texture">
-		Volviendo a solicitar textura [ITEM].
-	</string>
-	<string name="export_failed_to_load">
-		Error al cargar el activo [ITEM].
+	<string name="skin_defaults_starlight_navbar">
+		Mostrar la barra de navegación ha sido activado como opción por defecto en la serie de skins Starlight.
 	</string>
 </strings>

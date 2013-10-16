@@ -96,7 +96,7 @@
 				<radio_item label="Bajo" name="0"/>
 				<radio_item label="Alto" name="2"/>
 			</radio_group>
-			<button label="Restablecer" name="Defaults"/>
+			<button tool_tip="Restablecer la configuración de gráficos por defecto" name="Defaults"/>
 		</panel>
 		<panel label="Hardware" name="Hardware Settings">
 			<check_box label="Filtrado anisotrópico (más lento cuando está activado)" name="ani"/>
@@ -128,21 +128,22 @@
 			<text name="Texture Rendering">
 				Dibujo de texturas:
 			</text>
-			<check_box label="Obtener texturas mediante HTTP" tool_tip="Activa la descarga de texturas mediante protocolo HTTP. Desactívalo si tienes problemas de dibujo y quieres seguir obteniendo las texturas como se hacía antes de Julio de 2010 y con el Viewer 1" name="TexturesHTTP"/>
-			<text name="TextureDetailLabel">
-				Detalle de textura:
+			<check_box label="Obtener texturas mediante HTTP" tool_tip="Activa la descarga de texturas mediante protocolo HTTP. Desactívalo si tienes problemas de dibujo y quieres usar el protocolo clásico (UDP)" name="TexturesHTTP"/>
+			<text name="TextureDetailLabel" width="200">
+				Máximo nivel de calidad de textura:
 			</text>
-			<combo_box name="TextureDetail">
+			<combo_box name="TextureDetail" left_delta="200">
 				<combo_box.item label="Calidad normal" name="0"/>
-				<combo_box.item label="Calidad mínima" name="3"/>
-				<combo_box.item label="Ninguna" name="5"/>
+				<combo_box.item label="Calidad media" name="3"/>
+				<combo_box.item label="Calidad baja" name="4"/>
+				<combo_box.item label="Sin texturas" name="5"/>
 			</combo_box>
 			<text name="Alpha Mask Rendering">
 				Dibujo de máscara alfa:
 			</text>
-			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está desactivado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando no están activadas las sombras" name="RenderAutoMaskAlphaNonDeferred"
+			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está desactivado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando no están activado el modelo avanzado de iluminación" name="RenderAutoMaskAlphaNonDeferred"
          top_pad="12"/>
-			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está activado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente SÍ están activadas las sombras" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está activado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando está activado el modelo avanzado de iluminación" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Dibujo (varios):
 			</text>

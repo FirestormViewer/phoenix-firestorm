@@ -16,14 +16,11 @@
 		<menu label="Movimiento" name="Movement">
 			<menu_item_call label="Sentarme" name="Sit Down Here"/>
 			<menu_item_check label="Volar" name="Fly"/>
+			<menu_item_call label="Dejar de volar" name="Stop flying"/>
 			<menu_item_check label="Correr siempre" name="Always Run"/>
 			<menu_item_check label="Forzar sentarme en el suelo" name="Force Toggle Sitting"/>
 			<menu_item_check label="Bloquear movimiento" name="Move Lock"/>
 			<menu_item_check label="Salto rápido" name="Avatar Ignore Prejump"/>
-		</menu>
-		<menu label="Estado" name="Status">
-			<menu_item_check label="Ausente" name="Away"/>
-			<menu_item_check label="No molestar" name="Do Not Disturb"/>
 		</menu>
 		<menu_item_check label="Controles de cámara" name="Camera Controls"/>
 		<menu label="Salud del avatar" name="avhealth">
@@ -57,7 +54,6 @@
 			<menu_item_check label="Ausente" name="Away"/>
 			<menu_item_check label="No disponible" name="Do Not Disturb"/>
 			<menu_item_check label="Autorresponder" name="Set Autorespond"/>
-			<menu_item_check label="Registro de conversación..." name="Conversation Log..."/>
 			<menu_item_check label="Autorresponder a no-amigos" name="Set Autorespond to non-friends"/>
 		</menu>
 		<menu_item_check label="Amigos" name="My Friends"/>
@@ -76,7 +72,6 @@
 		<menu_item_check name="Conversation Log..." label="Registro de conversaciones..."/>
 		<menu_item_check label="Chat de voz" name="Nearby Voice"/>
 		<menu_item_call label="Lista de bloqueados" name="Block List"/>
-		<menu_item_check label="No molestar" name="Do Not Disturb"/>
 	</menu>
 	<menu label="Mundo" name="World">
 		<menu_item_call label="Resincronizar animaciones" name="Resync Animations"/>
@@ -150,7 +145,6 @@
 			<menu_item_call label="Incluir la parte siguiente" name="Include Next Part"/>
 			<menu_item_call label="Incluir la parte previa" name="Include Previous Part"/>
 		</menu>
-		<menu_item_call label="Linksets..." name="pathfinding_linkset_menu_item"/>
 		<menu_item_call label="Enfocar lo seleccionado" name="Focus on Selection"/>
 		<menu_item_call label="Zoom en lo seleccionado" name="Zoom to Selection"/>
 		<menu label="Objeto" name="Object">
@@ -393,6 +387,7 @@
 		</menu>
 		<menu label="Metadatos de dibujo" name="Render Metadata">
 			<menu_item_check label="Cajas de dimensionado" name="Bounding Boxes"/>
+			<menu_item_check label="Cajas de impacto de los avatares" name="Avatar Hitboxes"/>
 			<menu_item_check label="Vectores Normales" name="Normals"/>
 			<menu_item_check label="Árbol de oclusión (Octree)" name="Octree"/>
 			<menu_item_check label="Refuerzo de oclusión (Shadow Frusta)" name="Shadow Frusta"/>
@@ -461,6 +456,7 @@
 			<menu_item_check label="Anular el sol de la región" name="Sim Sun Override"/>
 			<menu_item_check label="Meteorología fija" name="Fixed Weather"/>
 			<menu_item_call label="Volcar la caché de objetos de la región" name="Dump Region Object Cache"/>
+			<menu_item_call label="Volcar las características del simulador en el chat general" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Mundo" name="DevelopWorld">
 			<menu_item_check label="Ignorar sol de la región" name="Sim Sun Override"/>
@@ -517,8 +513,8 @@
 				<menu_item_call label="Restablecer la velocidad de todas" name="Reset All Animation Speed"/>
 				<menu_item_check label="Cámara lenta" name="Slow Motion Animations"/>
 			</menu>
-			<menu_item_call label="Force Params to Default" name="Force Params to Default"/>
-			<menu_item_check label="Animation Info" name="Animation Info"/>
+			<menu_item_call label="Forzar parámetros por defecto" name="Force Params to Default"/>
+			<menu_item_check label="Información de animaciones" name="Animation Info"/>
 			<menu_item_check label="Mostrar puntos de mira de foco" name="Show Look At"/>
 			<menu_item_check label="Mostrar puntos de mira de ratón" name="Show Point At"/>
 			<menu_item_check label="Depurar actualizaciones de articulación" name="Debug Joint Updates"/>

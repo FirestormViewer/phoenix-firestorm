@@ -2,6 +2,7 @@
 <floater name="build options floater" title="Opciones de rejilla">
 	<spinner label="Unidades (metros)" name="GridResolution"/>
 	<spinner label="Alcance (metros)" name="GridDrawSize"/>
+	<spinner label="Precisión decimal" name="DecimalPrecision"/>   
 	<check_box label="Ajustar a subunidades" name="GridSubUnit"/>
 	<check_box label="Ver sección transversal" name="GridCrossSection"/>
 	<text name="Snap on">

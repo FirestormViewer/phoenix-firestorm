@@ -22,6 +22,14 @@
 						<layout_panel name="input_button_layout_panel">
 							<spinner name="ChatChannel" tool_tip="Canal al que enviar el chat. Activado en Preferencias  -> Chat -> Firestorm -> Mostrar selector de canal en la barra de chat."/>
 						</layout_panel>
+						<layout_panel name="chat_type_layout_panel">
+							<combo_box name="chat_type" tool_tip="Susurrar = 10m, Hablar = 20m, Gritar = 100m">
+								<combo_box.item name="chat_type_whisper" label="Susurrar"/>
+								<combo_box.item name="chat_type_say" label="Decir"/>
+								<combo_box.item name="chat_type_shout" label="Gritar"/>
+							</combo_box>
+							<button label="Decir" name="send_chat" tool_tip="Susurrar = 10m, Decir = 20m, Gritar = 100m"/>
+						</layout_panel>
 					</layout_stack>
 				</layout_panel>
 			</layout_stack>
