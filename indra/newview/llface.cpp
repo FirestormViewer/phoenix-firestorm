@@ -1361,16 +1361,6 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			}
 		}
 
-		// <FS:ND> If rebuilding geometry a connect draw info might get out of sync, correct this here.
-		if( mDrawInfo )
-		{
-			mDrawInfo->mStart = getGeomIndex();
-			mDrawInfo->mEnd = (U32)getGeomIndex() + (U32)getGeomCount()-1;
-			mDrawInfo->mCount = getIndicesCount();
-			mDrawInfo->mOffset = getIndicesStart();
-		}
-		// </FS:ND>
-
 		if (map_range)
 		{
 			mVertexBuffer->flush();
@@ -1972,16 +1962,6 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			llassert(num_vertices > 0);
 		
 			mVertexBuffer->getVertexStrider(vert, mGeomIndex, mGeomCount, map_range);
-
-			// <FS:ND> If rebuilding geometry a connect draw info might get out of sync, correct this here.
-			if( mDrawInfo )
-			{
-				mDrawInfo->mStart = getGeomIndex();
-				mDrawInfo->mEnd = (U32)getGeomIndex() + (U32)getGeomCount()-1;
-				mDrawInfo->mCount = getIndicesCount();
-				mDrawInfo->mOffset = getIndicesStart();
-			}
-			// </FS:ND>
 			
 			LLMatrix4a mat_vert;
 			mat_vert.loadu(mat_vert_in);
