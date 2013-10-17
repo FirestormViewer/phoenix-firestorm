@@ -38,13 +38,11 @@
 
      <Component Id="slvoice" Guid="{6BF56CA8-0D48-4ea8-B3E8-CD38B7C502E6}">
       <File Source="$(var.BUILDDIR)/slvoice.exe" KeyPath="yes" />
-      <File Source="$(var.BUILDDIR)/alut.dll" />
       <File Source="$(var.BUILDDIR)/libsndfile-1.dll" />
       <File Source="$(var.BUILDDIR)/ortp.dll" />
       <File Source="$(var.BUILDDIR)/vivoxoal.dll" />
       <File Source="$(var.BUILDDIR)/vivoxplatform.dll" />
       <File Source="$(var.BUILDDIR)/vivoxsdk.dll" />
-      <File Source="$(var.BUILDDIR)/wrap_oal.dll" />
       <File Source="$(var.BUILDDIR)/zlib1.dll" />
      </Component>
 
