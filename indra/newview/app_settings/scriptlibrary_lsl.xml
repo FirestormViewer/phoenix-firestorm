@@ -221,6 +221,7 @@
 		<integer_constant name="OBJECT_PHYSICS" desc="Used with llGetObjectDetails to get an object's physics flag" />
 		<integer_constant name="OBJECT_PHANTOM" desc="Used with llGetObjectDetails to get an object's phantom flag" />
 		<integer_constant name="OBJECT_TEMP_ON_REZ" desc="Used with llGetObjectDetails to get an object's temporary flag" />
+		<integer_constant name="OBJECT_RENDER_WEIGHT" desc="Used with llGetObjectDetails to return an avatar's rendering weight" />
 
 		<integer_constant name="OBJECT_CHARACTER_TIME" desc="Used with llGetObjectDetails to get an object's average CPU time (in seconds) used by the object for navigation, if the object is a pathfinding character. Returns 0 for non-characters." />
 		<integer_constant name="OBJECT_ROOT" desc="Used with llGetObjectDetails to get an object's root prim ID." />
