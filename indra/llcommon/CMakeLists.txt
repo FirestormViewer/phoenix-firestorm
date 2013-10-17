@@ -321,7 +321,7 @@ endif(LLCOMMON_LINK_SHARED)
 #         shared but LLCOMMON_LINK_SHARED is turned off explicitly
 if(NOT WORD_SIZE EQUAL 32)
   if(WINDOWS)
-    add_definitions(/FIXED:NO)
+#    add_definitions(/FIXED:NO)
   else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
     add_definitions(-fPIC)
   endif(WINDOWS)

@@ -92,7 +92,7 @@ if (WINDOWS)
         /Oy-
         /Zc:wchar_t-
         /arch:AVX
-        /fp:fast
+#        /fp:fast
         )
   else (USE_AVX_OPTIMIZATION)
     add_definitions(
@@ -109,7 +109,7 @@ if (WINDOWS)
         /Oy-
         /Zc:wchar_t-
         /arch:SSE2
-        /fp:fast
+#        /fp:fast
         )
   endif (USE_AVX_OPTIMIZATION)
 # </FS:Ansariel> [AVX Optimization]	
@@ -122,6 +122,13 @@ if (WINDOWS)
   # configure win32 API for windows XP+ compatibility
   set(WINVER "0x0501" CACHE STRING "Win32 API Target version (see http://msdn.microsoft.com/en-us/library/aa383745%28v=VS.85%29.aspx)")
   add_definitions("/DWINVER=${WINVER}" "/D_WIN32_WINNT=${WINVER}")
+
+  if( ND_BUILD64BIT_ARCH )
+   add_definitions("/wd4267 /DND_BUILD64BIT_ARCH" )
+  else( ND_BUILD64BIT_ARCH )
+   add_definitions("/fp:fast" )
+  endif( ND_BUILD64BIT_ARCH )
+ 
 endif (WINDOWS)
 
 
@@ -254,6 +261,21 @@ if (DARWIN)
   # NOTE: it's critical to have both CXX_FLAGS and C_FLAGS covered.
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O0 ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
   set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O0 ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+  if (USE_AVX_OPTIMIZATION)
+    if (XCODE_VERSION GREATER 4.9)
+      set(CMAKE_XCODE_ATTRIBUTE_CLANG_X86_VECTOR_INSTRUCTIONS AVX)
+      set(CMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL -Ofast)
+      set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -mavx ${CMAKE_CXX_FLAGS_RELEASE}")
+      set(CMAKE_C_FLAGS_RELEASE "-Ofast -mavx ${CMAKE_C_FLAGS_RELEASE}")
+	else (XCODE_VERSION GREATER 4.9)
+	  error("Darwin AVX Optimizations only available on Xcode5 with Clang, silly person!")
+	endif (XCODE_VERSION GREATER 4.9)
+  else (USE_AVX_OPTIMIZATION)
+    set(CMAKE_XCODE_ATTRIBUTE_CLANG_X86_VECTOR_INSTRUCTIONS SSE3)
+	set(CMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL -O3)
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 ${CMAKE_CXX_FLAGS_RELEASE}")
+	set(CMAKE_C_FLAGS_RELEASE "-O3 -msse3 ${CMAKE_C_FLAGS_RELEASE}")
+  endif (USE_AVX_OPTIMIZATION)
   if (XCODE_VERSION GREATER 4.2)
     set(ENABLE_SIGNING TRUE)
     set(SIGNING_IDENTITY "Developer ID Application: Linden Research, Inc.")

@@ -59,7 +59,13 @@ class ViewerManifest(LLManifest):
         # files during the build (see copy_w_viewer_manifest
         # and copy_l_viewer_manifest targets)
         return 'package' in self.args['actions']
-    
+
+    def do_copy_artwork( self ):
+        return self.args.has_key( 'copy_artwork' )
+
+    def is_64bit_build( self ):
+        return self.args.has_key( 'm64' )
+
     def construct(self):
         super(ViewerManifest, self).construct()
         self.exclude("*.svn*")
@@ -76,7 +82,7 @@ class ViewerManifest(LLManifest):
             self.end_prefix("app_settings")
         # </FS:LO>
 
-        if self.is_packaging_viewer():
+        if self.is_packaging_viewer() or self.do_copy_artwork():
             if self.prefix(src="app_settings"):
                 self.exclude("logcontrol.xml")
                 self.exclude("logcontrol-dev.xml")
@@ -415,6 +421,7 @@ class WindowsManifest(ViewerManifest):
                            "slplugin.exe")
         
         self.path2basename("../viewer_components/updater/scripts/windows", "update_install.bat")
+
         # Get shared libs from the shared libs staging directory
         if self.prefix(src=os.path.join(os.pardir, 'sharedlibs', self.args['configuration']),
                        dst=""):
@@ -446,8 +453,10 @@ class WindowsManifest(ViewerManifest):
             try:
                 if self.args['configuration'].lower() == 'debug':
                     self.path("fmodexL.dll")
+                    self.path("fmodexL64.dll")
                 else:
                     self.path("fmodex.dll")
+                    self.path("fmodex64.dll")
             except:
                 print "Skipping fmodex audio library(assuming other audio engine)"
 
@@ -528,7 +537,7 @@ class WindowsManifest(ViewerManifest):
             self.end_prefix()
 
 
-        if self.args['configuration'].lower() == 'debug':
+        if self.args['configuration'].lower() == 'debug' and not self.is_64bit_build():
             if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'debug'),
                            dst="llplugin"):
                 self.path("libeay32.dll")
@@ -559,7 +568,7 @@ class WindowsManifest(ViewerManifest):
                     self.end_prefix()
 
                 self.end_prefix()
-        else:
+        elif not self.is_64bit_build():
             if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'),
                            dst="llplugin"):
                 self.path("libeay32.dll")
@@ -590,6 +599,23 @@ class WindowsManifest(ViewerManifest):
                     self.end_prefix()
 
                 self.end_prefix()
+        elif self.is_64bit_build() and self.prefix( src = "../packages/bin_x86/slplugin", dst="" ):
+            self.path( "slplugin.exe" )
+
+            if self.prefix( src = "llplugin", dst="llplugin" ):
+              self.path( "*.dll" )
+
+              if self.prefix( src = "imageformats", dst="imageformats" ):
+                self.path( "*.dll" )
+                self.end_prefix()
+              if self.prefix( src = "codecs", dst="codecs" ):
+                self.path( "*.dll" )
+                self.end_prefix()
+
+              self.end_prefix()
+
+            self.end_prefix()
+
 
         # pull in the crash logger and updater from other projects
         # tag:"crash-logger" here as a cue to the exporter
@@ -720,25 +746,36 @@ class WindowsManifest(ViewerManifest):
         except Exception, e:
             print "Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe()
             
-        # the following replaces strings in the nsi template
-        # it also does python-style % substitution
-        self.replace_in("installers/windows/installer_template.nsi", tempfile, {
-                "%%VERSION%%":version_vars,
-                "%%SOURCE%%":self.get_src_prefix(),
-                "%%GRID_VARS%%":grid_vars_template % substitution_strings,
-                "%%INSTALL_FILES%%":self.nsi_file_commands(True),
-                "%%DELETE_FILES%%":self.nsi_file_commands(False)})
 
-        # We use the Unicode version of NSIS, available from
-        # http://www.scratchpaper.com/
-        # Check two paths, one for Program Files, and one for Program Files (x86).
-        # Yay 64bit windows.
-        NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
-        if not os.path.exists(NSIS_path):
-            NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
-        self.run_command('"' + proper_windows_path(NSIS_path) + '" /V2 ' + self.dst_path_of(tempfile))
-        # self.remove(self.dst_path_of(tempfile))
+        if not self.is_64bit_build():
+          # the following replaces strings in the nsi template
+          # it also does python-style % substitution
+          self.replace_in("installers/windows/installer_template.nsi", tempfile, {
+                  "%%VERSION%%":version_vars,
+                  "%%SOURCE%%":self.get_src_prefix(),
+                  "%%GRID_VARS%%":grid_vars_template % substitution_strings,
+                  "%%INSTALL_FILES%%":self.nsi_file_commands(True),
+                  "%%DELETE_FILES%%":self.nsi_file_commands(False)})
 
+          # We use the Unicode version of NSIS, available from
+          # http://www.scratchpaper.com/
+          # Check two paths, one for Program Files, and one for Program Files (x86).
+          # Yay 64bit windows.
+          NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
+          if not os.path.exists(NSIS_path):
+              NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
+          self.run_command('"' + proper_windows_path(NSIS_path) + '" /V2 ' + self.dst_path_of(tempfile))
+          # self.remove(self.dst_path_of(tempfile))
+        else:
+          installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.msi" % substitution_strings
+          createMSI = "installers/windows_x64/build.bat"
+          createMSI  = self.dst_path_of( "../../../indra/newview/" + createMSI)
+          settingsFile = "settings_%s_v4.xml" % self.app_name()
+
+          self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
+                           " " + substitution_strings[ 'channel' ] + " " + substitution_strings[ 'version' ] +
+                           " " + settingsFile + " " + installer_file )
+          
         #AO: Try to sign installer next, if we can, using "The Phoenix Firestorm Project" signing cert.
         try:
             subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)

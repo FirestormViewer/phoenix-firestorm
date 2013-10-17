@@ -172,6 +172,10 @@ def main():
 ##                 for item in itertools.chain([sys.executable], sys.argv))
     option_names = [arg['name'] + '=' for arg in ARGUMENTS]
     option_names.append('help')
+
+    option_names.append('m64')
+    option_names.append('copy_artwork')
+
     options, remainder = getopt.getopt(sys.argv[1:], "", option_names)
 
     # convert options to a hash

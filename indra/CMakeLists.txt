@@ -83,7 +83,9 @@ add_subdirectory(${VIEWER_PREFIX}test)
 endif (LL_TESTS OR NOT STANDALONE)
 
 # viewer media plugins
-add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
+if( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
+  add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
+endif( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
 
 # <FS:AW opensim currency support>
 #teapot helper library

@@ -32,9 +32,9 @@
 #define BITS_PER_U8 (8)
 #define BITS_PER_U32 ( sizeof(U32) * BITS_PER_U8 )
 
-#define ND_OVERRIDE_NEW 0
+#define ND_USE_MEMORY_POOL 0
 
-// Define those to log the stacktrace for allocations with certain size. You better know what you do when enabing this, ND_OVERRIDE_NEW is best set to 1
+// Define those to log the stacktrace for allocations with certain size. You better know what you do when enabing this, needs ND_USE_MEMORY_POOL == 1
 #if 0
  #undef ND_USE_MEMORY_POOL
  #define ND_USE_MEMORY_POOL 1
@@ -46,14 +46,19 @@
  #define TOP_STACKS_TO_DUMP 10
 #endif
 
+
 #ifdef ND_NO_TCMALLOC
- #define MAX_PAGES (150)
- #define POOL_CHUNK_SIZE (64)
- #define POOL_CHUNK_ALIGNMENT (16)
- #define PAGE_SIZE (FROM_MB(1) )
- #define BITMAP_SIZE ( PAGE_SIZE / BITS_PER_U8 / POOL_CHUNK_SIZE )
+ #if ND_USE_MEMORY_POOL == 1
+  #define MAX_PAGES (150)
+  #define POOL_CHUNK_SIZE (64)
+  #define POOL_CHUNK_ALIGNMENT (16)
+  #define PAGE_SIZE (FROM_MB(1) )
+  #define BITMAP_SIZE ( PAGE_SIZE / BITS_PER_U8 / POOL_CHUNK_SIZE )
+ #else
+	#define MAX_PAGES (0)
+ #endif
 #else
- #define MAX_PAGES (0)
+	#define MAX_PAGES (0)
 #endif
 
 #define STATS_FREQ ( 15 )

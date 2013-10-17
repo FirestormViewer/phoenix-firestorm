@@ -298,9 +298,17 @@ std::string LLDir::buildSLOSCacheDir() const
 	{
 // <FS:CR> FIRE-8226 - Different flavoured cache directories.
 #ifdef OPENSIM
+  #ifdef ND_BUILD64BIT_ARCH
+		res = add(getOSCacheDir(), "FirestormOS_x64");
+  #else
 		res = add(getOSCacheDir(), "FirestormOS");
+  #endif
 #else
+  #ifdef ND_BUILD64BIT_ARCH
+		res = add(getOSCacheDir(), "Firestorm_x64");
+  #else
 		res = add(getOSCacheDir(), "Firestorm");
+  #endif
 #endif // OPENSIM
 // </FS:CR>
 	}

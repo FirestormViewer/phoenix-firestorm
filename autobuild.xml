@@ -566,9 +566,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1043241b4a86ca9a7b3433eb87708e25</string>
+              <string>10a609bfa2cd3f784fe67125cb947caa</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.18-windows-20130728.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodex-4.44.18-windows-20130802.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2049,15 +2049,63 @@
           </map>
         </map>
       </map>
+      <key>slplugin_x86</key>
+      <map>
+        <key>license</key>
+        <string>OpenSSL/LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/slplugin.txt</string>
+        <key>name</key>
+        <string>slplugin_x86</string>
+        <key>platforms</key>
+        <map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string></string>
+              <key>url</key>
+              <string></string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
+      <key>wix</key>
+      <map>
+        <key>license</key>
+        <string>MS-RL</string>
+        <key>license_file</key>
+        <string>LICENSES/wix.txt</string>
+        <key>name</key>
+        <string>wix</string>
+        <key>platforms</key>
+        <map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string></string>
+              <key>url</key>
+              <string></string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+        </map>
+      </map>
     </map>
     <key>package_description</key>
     <map>
       <key>description</key>
-      <string>Spell checking dictionaries</string>
+      <string>Firestorm viewer</string>
       <key>license</key>
       <string>various open</string>
       <key>name</key>
-      <string>dictionaries</string>
+      <string>firestorm</string>
       <key>platforms</key>
       <map>
         <key>common</key>

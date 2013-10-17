@@ -2025,6 +2025,14 @@ if (WINDOWS)
       windows-updater
       )
 
+    if( ND_BUILD64BIT_ARCH )
+      set( VIEWERMANIFEST_FLAGS --m64 --copy_artwork )
+      set( VIEWERMANIFEST_PACKAGE_FLAGS --m64 )
+    else( ND_BUILD64BIT_ARCH )
+      set( VIEWERMANIFEST_FLAGS "" )
+      set( VIEWERMANIFEST_PACKAGE_FLAGS )
+    endif( ND_BUILD64BIT_ARCH )
+
     if (FMODEX)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/Release/fmodex.dll
@@ -2039,6 +2047,7 @@ if (WINDOWS)
       ARGS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         --actions=copy
+        ${VIEWERMANIFEST_FLAGS}
         --artwork=${ARTWORK_DIR}
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
@@ -2106,6 +2115,7 @@ if (WINDOWS)
         COMMAND ${PYTHON_EXECUTABLE}
         ARGS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
+          ${VIEWERMANIFEST_PACKAGE_FLAGS}
           --artwork=${ARTWORK_DIR}
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}

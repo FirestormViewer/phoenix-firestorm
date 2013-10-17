@@ -39,6 +39,12 @@ class LLMutex;
 
 #define LL_FASTTIMER_USE_RDTSC 1
 
+#if defined(LL_WINDOWS) && defined(ND_BUILD64BIT_ARCH)
+#include "lltimer.h"
+#undef LL_FASTTIMER_USE_RDTSC
+#define LL_FASTTIMER_USE_RDTSC 0
+#endif
+
 
 LL_COMMON_API void assert_main_thread();
 

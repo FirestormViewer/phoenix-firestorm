@@ -26,9 +26,15 @@ if (FMODEX)
       include(Prebuilt)
       use_prebuilt_binary(fmodex)    
       if (WINDOWS)
-        set(FMODEX_LIBRARY 
-            debug fmodexL_vc
-            optimized fmodex_vc)
+        if( NOT ND_BUILD64BIT_ARCH )
+          set(FMODEX_LIBRARY 
+              debug fmodexL_vc
+              optimized fmodex_vc)
+        else( NOT ND_BUILD64BIT_ARCH )
+          set(FMODEX_LIBRARY 
+              debug fmodexL64_vc
+              optimized fmodex64_vc)
+        endif( NOT ND_BUILD64BIT_ARCH )
       elseif (DARWIN)
         set(FMODEX_LIBRARY 
             debug fmodexL

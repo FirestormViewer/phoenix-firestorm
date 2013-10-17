@@ -9,6 +9,9 @@
 #   LINUX   - Linux
 #   WINDOWS - Windows
 
+if( ${NDTARGET_ARCH} STREQUAL "x64" )
+ set( ND_BUILD64BIT_ARCH ON )
+endif( ${NDTARGET_ARCH} STREQUAL "x64" )
 
 # Relative and absolute paths to subtrees.
 
@@ -65,6 +68,9 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   set(LL_ARCH ${ARCH}_win32)
   set(LL_ARCH_DIR ${ARCH}-win32)
   set(WORD_SIZE 32)
+  if( ND_BUILD64BIT_ARCH )
+    set(WORD_SIZE 64)
+  endif( ND_BUILD64BIT_ARCH )
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")

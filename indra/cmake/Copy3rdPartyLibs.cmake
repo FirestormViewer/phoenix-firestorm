@@ -38,8 +38,6 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
-        growl++.dll
-        growl.dll
         ssleay32.dll
         libeay32.dll
         libcollada14dom22-d.dll
@@ -53,14 +51,15 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
-        growl++.dll
-        growl.dll
         ssleay32.dll
         libeay32.dll
         libcollada14dom22.dll
         glod.dll
         libhunspell.dll
         )
+    
+    set(debug_files ${debug_files} growl++.dll growl.dll )
+    set(release_files ${release_files} growl++.dll growl.dll )
 
     if(USE_TCMALLOC)
       set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
@@ -68,12 +67,18 @@ if(WINDOWS)
     endif(USE_TCMALLOC)
 
     if (FMODEX)
-      set(release_files ${release_files} fmodex.dll)
+      if( NOT ND_BUILD64BIT_ARCH )
+        set(release_files ${release_files} fmodex.dll)
+      else( NOT ND_BUILD64BIT_ARCH )
+        set(release_files ${release_files} fmodex64.dll)
+      endif( NOT ND_BUILD64BIT_ARCH )
     endif (FMODEX)
 
 # <FS:ND> Copy pdb files for symbol generation too
-    set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
-    set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+   if( NOT ND_BUILD64BIT_ARCH )
+     set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+     set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+   endif( NOT ND_BUILD64BIT_ARCH )
 # </FS:ND>
 
 #*******************************

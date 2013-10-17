@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+ <Product Id="AA43534B-9D12-4740-82AF-AC207AC2FB7A"
+   Name="Firestorm SecondLife and OpenSim viewer"
+   Language="1033" Version="1.0.0.0" Manufacturer="Phoenix Viewer Project"
+   UpgradeCode="3FCFE6FD-1A6F-40f8-8683-CDBFE16CF653">
+  <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
+
+  <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" />
+
+  <Directory Id="TARGETDIR" Name="SourceDir">
+    <Directory Id="ProgramMenuFolder">
+       <Directory Id="ApplicationProgramsFolder" Name="Firestorm"/>
+    </Directory>
+
+   <Directory Id="ProgramFiles64Folder">
+    <Directory Id="INSTALLDIR" Name="Firestorm">
+
+     <Component Id="firestorm" Guid="{2CDF0673-595F-4fb4-B38A-C338BF9D4DF1}">
+      <File Source="$(var.BUILDDIR)/$(var.PROGRAM_FILE)" KeyPath="yes"/>
+      <File Source="$(var.BUILDDIR)/win_crash_logger.exe" />
+      <File Source="$(var.BUILDDIR)/libcollada14dom22.dll" />
+      <File Source="$(var.BUILDDIR)/fmodex64.dll" />
+      <File Source="$(var.BUILDDIR)/glod.dll" />
+      <File Source="$(var.BUILDDIR)/libapr-1.dll" />
+      <File Source="$(var.BUILDDIR)/libapriconv-1.dll" />
+      <File Source="$(var.BUILDDIR)/libaprutil-1.dll" />
+      <File Source="$(var.BUILDDIR)/libeay32.dll" />
+      <File Source="$(var.BUILDDIR)/libhunspell.dll" />
+      <File Source="$(var.BUILDDIR)/growl++.dll" />
+      <File Source="$(var.BUILDDIR)/growl.dll" />
+      <File Source="$(var.BUILDDIR)/openjpeg.dll" />
+      <File Source="$(var.BUILDDIR)/ssleay32.dll" />
+      <File Source="$(var.BUILDDIR)/featuretable.txt" />
+      <File Source="$(var.BUILDDIR)/featuretable_xp.txt" />
+      <File Source="$(var.BUILDDIR)/gpu_table.txt" />
+      <File Source="$(var.BUILDDIR)/licenses.txt" />
+      <File Source="$(var.BUILDDIR)/VivoxAUP.txt" />
+     </Component>
+
+     <Component Id="slvoice" Guid="{6BF56CA8-0D48-4ea8-B3E8-CD38B7C502E6}">
+      <File Source="$(var.BUILDDIR)/slvoice.exe" KeyPath="yes" />
+      <File Source="$(var.BUILDDIR)/libsndfile-1.dll" />
+      <File Source="$(var.BUILDDIR)/ortp.dll" />
+      <File Source="$(var.BUILDDIR)/vivoxoal.dll" />
+      <File Source="$(var.BUILDDIR)/vivoxplatform.dll" />
+      <File Source="$(var.BUILDDIR)/vivoxsdk.dll" />
+      <File Source="$(var.BUILDDIR)/zlib1.dll" />
+      <File Source="$(var.BUILDDIR)/ca-bundle.crt" />
+     </Component>
+
+    </Directory>
+   </Directory>
+  </Directory>
+
+  <DirectoryRef Id="ApplicationProgramsFolder">
+    <Component Id="ApplicationShortcut" Guid="321F37BF-41D0-4c68-B774-3FEC1532F05C">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="Firestorm" Target="[INSTALLDIR]Firestorm-bin.exe" WorkingDirectory="INSTALLDIR" />
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\firestorm\firestorm" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+    </Component>
+  </DirectoryRef>
+
+
+  <Feature Id="FirestormFeature" Title="Firestorm" Level="1">
+   <ComponentRef Id="firestorm" />
+   <ComponentRef Id="Firestorm_Registy" />
+   <ComponentRef Id="ApplicationShortcut" />
+
+   <ComponentRef Id="slvoice" />
+
+   <ComponentRef Id="llplugin_exe" />
+   <ComponentRef Id="llplugin_libs" />
+   <ComponentRef Id="llplugin_dir_codec_libs" />
+   <ComponentRef Id="llplugin_dir_imageformat_libs" />
+
+   <ComponentGroupRef Id="fs_appsettings" />
+   <ComponentGroupRef Id="fs_character" />
+   <ComponentGroupRef Id="fs_fonts" />
+   <ComponentGroupRef Id="fs_fsres" />
+   <ComponentGroupRef Id="fs_skins" />
+  </Feature>
+        
+  <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" ></Property>
+  <UIRef Id="WixUI_InstallDir"/>
+  </Product>
+</Wix>

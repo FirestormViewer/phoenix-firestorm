@@ -817,7 +817,13 @@ bool LLAppViewer::init()
 
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
+
+#ifdef ND_BUILD64BIT_ARCH
+	gDirUtilp->initAppDirs("Firestorm_x64");
+#else
 	gDirUtilp->initAppDirs("Firestorm");
+#endif
+
 	// set skin search path to default, will be overridden later
 	// this allows simple skinned file lookups to work
 // [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
@@ -4740,7 +4746,11 @@ void LLAppViewer::purgeCache()
 
 std::string LLAppViewer::getSecondLifeTitle() const
 {
+#ifdef ND_BUILD64BIT_ARCH
+	return LLTrans::getString("APP_NAME") + "_x64";
+#else
 	return LLTrans::getString("APP_NAME");
+#endif
 }
 
 std::string LLAppViewer::getWindowTitle() const 
