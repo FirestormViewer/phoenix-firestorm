@@ -132,6 +132,28 @@
         <key>Value</key>
             <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;autorespond mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
         </map>
+    <key>FSRejectTeleportRequestsMode</key>
+        <map>
+        <key>Comment</key>
+            <string>Has the user selected reject all teleport requests mode?</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>FSRejectTeleportRequestsResponse</key>
+        <map>
+        <key>Comment</key>
+            <string>Auto response to instant messages from all avatars while in reject all teleport requests mode.</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string>The Resident you messaged has activated Firestorm viewer&apos;s &apos;reject all teleport requests mode&apos; which means they have requested not to be disturbed with teleport requests. You may still send an IM message manually.</string>
+        </map>
     <key>FSLSLBridgeUUID</key>
         <map>
         <key>Comment</key>

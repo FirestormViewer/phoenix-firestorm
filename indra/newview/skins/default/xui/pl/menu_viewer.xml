@@ -55,6 +55,7 @@
 			<menu_item_check label="Zajęty lub Niedostępny" name="Do Not Disturb" />
 			<menu_item_check label="Autoodpowiedź" name="Set Autorespond"/>
 			<menu_item_check label="Autoodpowiedź dla nieznajomych" name="Set Autorespond to non-friends"/>
+			<menu_item_check label="Automatycznie odrzucaj propozycje teleportów" name="Automatically reject teleport requests"/>
 		</menu>
 		<menu_item_call label="Znajomi" name="My Friends"/>
 		<menu_item_check label="Kontakty" name="Contacts"/>

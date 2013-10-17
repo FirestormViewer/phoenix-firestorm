@@ -529,6 +529,34 @@
            log_in_to_change
         </text_editor>
 
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_rtr_response_label"
+         top_pad="10"
+         width="450">
+           Automatic response to all avatars when in REJECT TELEPORT REQUESTS mode:
+        </text>
+        <text_editor
+         control_name="FSRejectTeleportRequestsResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="42"
+         layout="topleft"
+         left="35"
+         top_pad="10"
+         name="autorespond_rtr_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
         <check_box
          top_pad="10"
          follows="left|top"

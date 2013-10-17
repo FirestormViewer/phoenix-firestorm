@@ -1605,6 +1605,11 @@ Wiadomości przychodzące będą teraz otrzymywać skonfigurowaną wcześniej au
 Wiadomości przychodzące od osób spoza listy znajomych będą teraz otrzymywać skonfigurowaną wcześniej automatyczną odpowiedź.
 		<usetemplate ignoretext="Status zmieniony na Tryb Autoodpowiedzi dla nieznajomych" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="RejectTeleportRequestsModeSet">
+		Tryb odrzucania wszystkich propozycji teleportacji jest włączony.
+Wszystkie nadchodzące propozycje teleportacji będą teraz otrzymywać skonfigurowaną wcześniej automatyczną odpowiedź. Nie będziesz dostawać żadnego powiadomienia o tym fakcie.
+		<usetemplate ignoretext="I change my status to reject all teleport requests mode" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Należysz już do maksymalnej ilości grup. Opuść proszę przynajmniej jedną grupę żeby przyjąć członkostwo w tej grupie, albo odmów.
 [NAME] oferuje Ci członkostwo w grupie.

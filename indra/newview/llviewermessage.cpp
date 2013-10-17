@@ -2729,6 +2729,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	BOOL is_do_not_disturb = gAgent.isDoNotDisturb();
 	BOOL is_autorespond = gAgent.getAutorespond();
 	BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
+	BOOL is_rejecting_tp_requests = gAgent.getRejectTeleportRequests(); // <FS:PP> FIRE-1245: Option to block/reject teleport requests
 	BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
 	BOOL is_muted = LLMuteList::getInstance()->isMuted(from_id, name, LLMute::flagTextChat)
 		// object IMs contain sender object id in session_id (STORM-1209)
@@ -3616,6 +3617,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				send_do_not_disturb_message(msg, from_id);
 			}
+			// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+			else if ( (is_rejecting_tp_requests) && (!fRlvSummon) )
+			{
+				send_rejecting_tp_requests_message(msg, from_id);
+			}
+			// </FS:PP>
 			else
 			{
 				LLVector3 pos, look_at;
@@ -3958,6 +3965,27 @@ void send_do_not_disturb_message (LLMessageSystem* msg, const LLUUID& from_id, c
 		gAgent.sendReliableMessage();
 	}
 }
+
+// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+void send_rejecting_tp_requests_message (LLMessageSystem* msg, const LLUUID& from_id, const LLUUID& session_id)
+{
+	std::string my_name;
+	LLAgentUI::buildFullname(my_name);
+	std::string response = gSavedPerAccountSettings.getString("FSRejectTeleportRequestsResponse");
+	pack_instant_message(
+		msg,
+		gAgent.getID(),
+		FALSE,
+		gAgent.getSessionID(),
+		from_id,
+		my_name,
+		response,
+		IM_ONLINE,
+		IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+		session_id);
+	gAgent.sendReliableMessage();
+}
+// </FS:PP> FIRE-1245: Option to block/reject teleport requests
 
 bool callingcard_offer_callback(const LLSD& notification, const LLSD& response)
 {

@@ -3960,6 +3960,18 @@ Incoming instant messages from anyone who is not your friend will now receive yo
      yestext="OK"/>
   </notification>
 
+    <notification
+   icon="alert.tga"
+   name="RejectTeleportRequestsModeSet"
+   type="alert">
+Reject all incoming teleport requests mode is on.
+Incoming teleport requests from anyone will now receive your configured autoresponse. You will not be notified because of that fact.
+    <usetemplate
+     ignoretext="I change my status to reject all teleport requests mode"
+     name="okignore"
+     yestext="OK"/>
+  </notification>
+
   <notification
    icon="alert.tga"
    name="JoinedTooManyGroupsMember"

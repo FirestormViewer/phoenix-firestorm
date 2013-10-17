@@ -6782,6 +6782,35 @@ class LLWorldGetAutorespondNonFriends : public view_listener_t
 	}
 };
 
+// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+class LLWorldSetRejectTeleportRequests : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		if (gAgent.getRejectTeleportRequests())
+		{
+			gAgent.clearRejectTeleportRequests();
+		}
+		else
+		{
+			gAgent.setRejectTeleportRequests();
+			LLNotificationsUtil::add("RejectTeleportRequestsModeSet");
+		}
+		return true;
+	}
+};
+
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetRejectTeleportRequests : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getRejectTeleportRequests();
+		return new_value;
+	}
+};
+// </FS:PP> FIRE-1245: Option to block/reject teleport requests
+
 class LLWorldCreateLandmark : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -10361,6 +10390,10 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldGetBusy(), "World.GetBusy"); //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldSetAutorespond(), "World.SetAutorespond");
 	view_listener_t::addMenu(new LLWorldGetAutorespond(), "World.GetAutorespond");  //[SJ FIRE-2177]
+	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+	view_listener_t::addMenu(new LLWorldSetRejectTeleportRequests(), "World.SetRejectTeleportRequests");
+	view_listener_t::addMenu(new LLWorldGetRejectTeleportRequests(), "World.GetRejectTeleportRequests");
+	// </FS:PP>
 	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
 	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]
 // <FS:TM> CHUI Merge check above
