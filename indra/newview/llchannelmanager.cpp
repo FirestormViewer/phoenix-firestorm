@@ -57,13 +57,20 @@ LLChannelManager::LLChannelManager()
 //--------------------------------------------------------------------------
 LLChannelManager::~LLChannelManager()
 {
-	for(std::vector<ChannelElem>::iterator it = mChannelList.begin(); it !=  mChannelList.end(); ++it)
-	{
-		LLScreenChannelBase* channel = it->channel.get();
-		if (!channel) continue;
+	// <FS:ND> HACK/Test FIRE-11884 / Crash on exit. After making sure no ScreenChannel gets destroyed in a LLView dtor, this can still
+	// crash when the static singleton of LLChannelManager is destroyed.
+	// Leak those few channels on shutdown here to test if that fixes the rest of the crash. As this is shutdown code, the OS will clean up after us.
+	// Not nice or recommended, but not harmful either here.
 
-		delete channel;
-	}
+	// for(std::vector<ChannelElem>::iterator it = mChannelList.begin(); it !=  mChannelList.end(); ++it)
+	// {
+	// 	LLScreenChannelBase* channel = it->channel.get();
+	// 	if (!channel) continue;
+	// 
+	// 	delete channel;
+	// }
+
+	// </FS:ND>
 
 	mChannelList.clear();
 }
