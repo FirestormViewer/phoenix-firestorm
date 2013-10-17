@@ -654,7 +654,17 @@ void LLView::deleteAllChildren()
 	while (!mChildList.empty())
 	{
 		LLView* viewp = mChildList.front();
-		delete viewp; // will remove the child from mChildList
+
+		// <FS:ND> Only delete children we're allowed to delete
+
+		// delete viewp; // will remove the child from mChildList
+	
+		if( viewp->deletableByParent() )
+			delete viewp;
+		else
+			mChildList.erase( mChildList.begin() );
+
+		// </FS:ND>
 	}
 }
 

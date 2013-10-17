@@ -685,6 +685,12 @@ public:
 	static S32 sLastLeftXML;
 	static S32 sLastBottomXML;
 	static BOOL sForceReshape;
+
+// <FS:ND> virtual to override deleting a child by it's parent.
+private:
+	virtual bool deletableByParent()
+	{ return true; }
+// </FS:ND>
 };
 
 class LLCompareByTabOrder
