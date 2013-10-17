@@ -46,6 +46,7 @@
       <File Source="$(var.BUILDDIR)/vivoxplatform.dll" />
       <File Source="$(var.BUILDDIR)/vivoxsdk.dll" />
       <File Source="$(var.BUILDDIR)/zlib1.dll" />
+      <File Source="$(var.BUILDDIR)/ca-bundle.crt" />
      </Component>
 
     </Directory>
