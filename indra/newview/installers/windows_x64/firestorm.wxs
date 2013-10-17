@@ -27,6 +27,7 @@
       <File Source="$(var.BUILDDIR)/libaprutil-1.dll" />
       <File Source="$(var.BUILDDIR)/libeay32.dll" />
       <File Source="$(var.BUILDDIR)/libhunspell.dll" />
+      <File Source="$(var.BUILDDIR)/growl++.dll" />
       <File Source="$(var.BUILDDIR)/openjpeg.dll" />
       <File Source="$(var.BUILDDIR)/ssleay32.dll" />
       <File Source="$(var.BUILDDIR)/featuretable.txt" />
