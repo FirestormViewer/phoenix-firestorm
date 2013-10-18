@@ -57,6 +57,8 @@ public:
 	static U32 sBytesPooled;
 	static U32 sIndexBytesPooled;
 
+	static U32 sCurGLName;
+
 	LLVBOPool(U32 vboUsage, U32 vboType);
 		
 	const U32 mUsage;
@@ -86,6 +88,8 @@ public:
 	// 	U32 mGLName;
 	// 	volatile U8* mClientData;
 	// };
+	// 
+	// std::list<U32> mGLNamePool;
 	// 
 	// typedef std::list<Record> record_list_t;
 	// std::vector<record_list_t> mFreeList;
