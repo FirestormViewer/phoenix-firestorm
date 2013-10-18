@@ -2,6 +2,7 @@ This is WIP. Please change/expand when seeing fit.
 
 - Visual Studio 2010 with installed 64 bit compiler (Express ist not supported).
 - autobuild from https://bitbucket.org/NickyD/autobuild
+- M2Crypto from http://chandlerproject.org/Projects/MeTooCrypto You need it for the autobuild above
 - FMOD if you want sound, please see https://bitbucket.org/NickyD/3p-fmodex
 
 You will find the urls to all 64 bit prebuild packages in <viewer_source_dir>/package_override.ini
