@@ -158,7 +158,7 @@ void send_group_notice(const LLUUID& group_id,
 					   const LLInventoryItem* item);
 
 void send_do_not_disturb_message (LLMessageSystem* msg, const LLUUID& from_id, const LLUUID& session_id = LLUUID::null);
-void send_rejecting_tp_requests_message (LLMessageSystem* msg, const LLUUID& from_id, const LLUUID& session_id = LLUUID::null); // <FS:PP> FIRE-1245: Option to block/reject teleport requests
+void send_rejecting_tp_offers_message (LLMessageSystem* msg, const LLUUID& from_id, const LLUUID& session_id = LLUUID::null); // <FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 void handle_lure(const LLUUID& invitee);
 void handle_lure(const uuid_vec_t& ids);

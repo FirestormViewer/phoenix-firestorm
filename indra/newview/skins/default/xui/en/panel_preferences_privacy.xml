@@ -540,10 +540,10 @@
          name="autorespond_rtr_response_label"
          top_pad="10"
          width="450">
-           Automatic response to all avatars when in REJECT TELEPORT REQUESTS mode:
+           Automatic response to all avatars when in REJECT TELEPORT OFFERS mode:
         </text>
         <text_editor
-         control_name="FSRejectTeleportRequestsResponse"
+         control_name="FSRejectTeleportOffersResponse"
          use_ellipses="false"
          commit_on_focus_lost = "true"
          follows="left|top"

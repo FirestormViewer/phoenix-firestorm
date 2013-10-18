@@ -6782,34 +6782,34 @@ class LLWorldGetAutorespondNonFriends : public view_listener_t
 	}
 };
 
-// <FS:PP> FIRE-1245: Option to block/reject teleport requests
-class LLWorldSetRejectTeleportRequests : public view_listener_t
+// <FS:PP> FIRE-1245: Option to block/reject teleport offers
+class LLWorldSetRejectTeleportOffers : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		if (gAgent.getRejectTeleportRequests())
+		if (gAgent.getRejectTeleportOffers())
 		{
-			gAgent.clearRejectTeleportRequests();
+			gAgent.clearRejectTeleportOffers();
 		}
 		else
 		{
-			gAgent.setRejectTeleportRequests();
-			LLNotificationsUtil::add("RejectTeleportRequestsModeSet");
+			gAgent.setRejectTeleportOffers();
+			LLNotificationsUtil::add("RejectTeleportOffersModeSet");
 		}
 		return true;
 	}
 };
 
 // [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
-class LLWorldGetRejectTeleportRequests : public view_listener_t
+class LLWorldGetRejectTeleportOffers : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value = gAgent.getRejectTeleportRequests();
+		bool new_value = gAgent.getRejectTeleportOffers();
 		return new_value;
 	}
 };
-// </FS:PP> FIRE-1245: Option to block/reject teleport requests
+// </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 class LLWorldCreateLandmark : public view_listener_t
 {
@@ -10391,8 +10391,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldSetAutorespond(), "World.SetAutorespond");
 	view_listener_t::addMenu(new LLWorldGetAutorespond(), "World.GetAutorespond");  //[SJ FIRE-2177]
 	// <FS:PP> FIRE-1245: Option to block/reject teleport requests
-	view_listener_t::addMenu(new LLWorldSetRejectTeleportRequests(), "World.SetRejectTeleportRequests");
-	view_listener_t::addMenu(new LLWorldGetRejectTeleportRequests(), "World.GetRejectTeleportRequests");
+	view_listener_t::addMenu(new LLWorldSetRejectTeleportOffers(), "World.SetRejectTeleportOffers");
+	view_listener_t::addMenu(new LLWorldGetRejectTeleportOffers(), "World.GetRejectTeleportOffers");
 	// </FS:PP>
 	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
 	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]

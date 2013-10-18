@@ -417,7 +417,7 @@ LLAgent::LLAgent() :
 	mIsDoNotDisturb(false),
 	mIsAutorespond(FALSE),
 	mIsAutorespondNonFriends(FALSE),
-	mIsRejectTeleportRequests(FALSE), // <FS:PP> FIRE-1245: Option to block/reject teleport requests
+	mIsRejectTeleportOffers(FALSE), // <FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 	mControlFlags(0x00000000),
 	mbFlagsDirty(FALSE),
@@ -517,7 +517,7 @@ void LLAgent::init()
 	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updateFSAlwaysFly, this, _2));
 	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
 	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
-	selectRejectTeleportRequests(gSavedPerAccountSettings.getBOOL("FSRejectTeleportRequestsMode")); // <FS:PP> FIRE-1245: Option to block/reject teleport requests
+	selectRejectTeleportOffers(gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersMode")); // <FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(boost::bind(&LLAgent::parcelChangedCallback));
 
@@ -1713,43 +1713,43 @@ BOOL LLAgent::getAutorespondNonFriends() const
 	return mIsAutorespondNonFriends;
 }
 
-// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+// <FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 //-----------------------------------------------------------------------------
-// setRejectTeleportRequests()
+// setRejectTeleportOffers()
 //-----------------------------------------------------------------------------
-void LLAgent::setRejectTeleportRequests()
+void LLAgent::setRejectTeleportOffers()
 {
-	selectRejectTeleportRequests(TRUE);
+	selectRejectTeleportOffers(TRUE);
 }
 
 //-----------------------------------------------------------------------------
-// clearRejectTeleportRequests()
+// clearRejectTeleportOffers()
 //-----------------------------------------------------------------------------
-void LLAgent::clearRejectTeleportRequests()
+void LLAgent::clearRejectTeleportOffers()
 {
-	selectRejectTeleportRequests(FALSE);
+	selectRejectTeleportOffers(FALSE);
 }
 
 //-----------------------------------------------------------------------------
-// selectRejectTeleportRequests()
+// selectRejectTeleportOffers()
 //-----------------------------------------------------------------------------
-void LLAgent::selectRejectTeleportRequests(BOOL selected)
+void LLAgent::selectRejectTeleportOffers(BOOL selected)
 {
-	llinfos << "Setting rejecting teleport requests mode to " << selected << llendl;
-	mIsRejectTeleportRequests = selected;
-	gSavedPerAccountSettings.setBOOL("FSRejectTeleportRequestsMode", selected);
+	llinfos << "Setting rejecting teleport offers mode to " << selected << llendl;
+	mIsRejectTeleportOffers = selected;
+	gSavedPerAccountSettings.setBOOL("FSRejectTeleportOffersMode", selected);
 }
 
 //-----------------------------------------------------------------------------
-// getRejectTeleportRequests()
+// getRejectTeleportOffers()
 //-----------------------------------------------------------------------------
-BOOL LLAgent::getRejectTeleportRequests() const
+BOOL LLAgent::getRejectTeleportOffers() const
 {
-	return mIsRejectTeleportRequests;
+	return mIsRejectTeleportOffers;
 }
 
-// </FS:PP> FIRE-1245: Option to block/reject teleport requests
+// </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 //-----------------------------------------------------------------------------
 // startAutoPilotGlobal()

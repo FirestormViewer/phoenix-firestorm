@@ -427,15 +427,15 @@ public:
 private:
 	BOOL			mIsAutorespondNonFriends;
 
-// <FS:PP> FIRE-1245: Option to block/reject teleport requests
+// <FS:PP> FIRE-1245: Option to block/reject teleport offers
 public:
-	void			setRejectTeleportRequests();
-	void			clearRejectTeleportRequests();
-	void			selectRejectTeleportRequests(BOOL);
-	BOOL			getRejectTeleportRequests() const;
+	void			setRejectTeleportOffers();
+	void			clearRejectTeleportOffers();
+	void			selectRejectTeleportOffers(BOOL);
+	BOOL			getRejectTeleportOffers() const;
 private:
-	BOOL			mIsRejectTeleportRequests;
-// </FS:PP> FIRE-1245: Option to block/reject teleport requests
+	BOOL			mIsRejectTeleportOffers;
+// </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 	//--------------------------------------------------------------------
 	// Grab
