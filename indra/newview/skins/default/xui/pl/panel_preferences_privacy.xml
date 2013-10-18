@@ -68,7 +68,7 @@
 			<text name="autorespond_nf_response_label">
 				Do nieznajomych, gdy włączony jest tryb autoodpowiedzi dla nieznajomych:
 			</text>
-			<text name="autorespond_rtr_response_label">
+			<text name="autorespond_rto_response_label">
 				Do wszystkich awatarów, gdy włączony jest tryb odrzucania propozycji teleportacji:
 			</text>
 			<check_box label="Wysyłaj autoodpowiedzi do WYCISZONYCH awatarów" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>

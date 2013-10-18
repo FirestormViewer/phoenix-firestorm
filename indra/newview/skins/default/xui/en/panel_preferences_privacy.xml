@@ -537,7 +537,7 @@
          layout="topleft"
          left="15"
          mouse_opaque="false"
-         name="autorespond_rtr_response_label"
+         name="autorespond_rto_response_label"
          top_pad="10"
          width="450">
            Automatic response to all avatars when in REJECT TELEPORT OFFERS mode:
@@ -551,7 +551,7 @@
          layout="topleft"
          left="35"
          top_pad="10"
-         name="autorespond_rtr_response"
+         name="autorespond_rto_response"
          width="475"
          word_wrap="true">
            log_in_to_change
