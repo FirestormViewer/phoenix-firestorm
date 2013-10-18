@@ -3941,7 +3941,7 @@ Unavailable mode is on.  You will not be notified of incoming communications.
    name="AutorespondModeSet"
    type="alert">
 Autorespond mode is on.
-Incoming instant messages will now receive your configured autoresponse.
+Incoming instant messages will now be answered with your configured autoresponse.
     <usetemplate
      ignoretext="I change my status to autorespond mode"
      name="okignore"
@@ -3953,7 +3953,7 @@ Incoming instant messages will now receive your configured autoresponse.
    name="AutorespondNonFriendsModeSet"
    type="alert">
 Autorespond mode for non-friends is on.
-Incoming instant messages from anyone who is not your friend will now receive your configured autoresponse.
+Incoming instant messages from anyone who is not your friend will now be answered with your configured autoresponse.
     <usetemplate
      ignoretext="I change my status to autorespond mode for non-friends"
      name="okignore"
@@ -3965,7 +3965,7 @@ Incoming instant messages from anyone who is not your friend will now receive yo
    name="RejectTeleportOffersModeSet"
    type="alert">
 Reject all incoming teleport offers mode is on.
-Incoming teleport offers from anyone will now receive your configured autoresponse. You will not be notified because of that fact.
+Incoming teleport offers from anyone will now be rejected with your configured autoresponse. You will not be notified because of that fact.
     <usetemplate
      ignoretext="I change my status to reject all teleport offers mode"
      name="okignore"
