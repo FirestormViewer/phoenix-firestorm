@@ -70,13 +70,16 @@
 		<!--Autoresponse-->
 		<panel label="Automatische Antwort" name="tab-autoresponse">
 			<text name="text_box3">
-				Automatische Antwort wenn im "Beschäftigt"-Modus:
+				Automatische Antwort wenn im „Beschäftigt“-Modus:
 			</text>
 			<text name="autorespond_response_label">
-				Automatische Antwort für Onlinestatus "Automatische Antwort":
+				Automatische Antwort für Onlinestatus „Automatische Antwort“:
 			</text>
 			<text name="autorespond_nf_response_label">
-				Automatische Antwort für Onlinestatus "Automatische Antwort an Nicht-Freunde":
+				Automatische Antwort für Onlinestatus „Automatische Antwort an Nicht-Freunde“:
+			</text>
+			<text name="autorespond_rto_response_label">
+				Automatische Antwort für Onlinestatus „Automatisch Teleport-Angebote abweisen“:
 			</text>
 			<check_box label="Automatische Antwort an geblockte Avatare senden" name="send_muted_av_response" tool_tip="Sendet den unten stehenden Text an die geblockte Person, wenn sie eine Instant Message schickt."/>
 		</panel>

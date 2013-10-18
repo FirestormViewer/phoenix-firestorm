@@ -1639,8 +1639,13 @@ Sender von eingehenden Instant Messages erhalten jetzt die konfigurierte automat
 	</notification>
 	<notification name="AutorespondNonFriendsModeSet">
 		Automatische Antwort für Nicht-Freunde eingeschaltet.
-Eingehende Instant Messages von Personen, die sich nicht auf der Freundesliste befinden, erhalten jetzt die konfigurierte automatische Antwort.
 		<usetemplate ignoretext="Wenn die automatische Antwort für Nicht-Freunde eingeschaltet wird." name="okignore" yestext="OK"/>
+Eingehende Instant Messages von Personen, die sich nicht auf der Freundesliste befinden, werden jetzt mit der konfigurierten automatische Nachricht beantwortet.
+	</notification>
+	<notification name="RejectTeleportOffersModeSet">
+		Automatisches Abweisen von Teleport-Angeboten eingeschaltet.
+Eingehende Teleport-Angeboten werden jetzt mit der konfigurierten Antwort abgewiesen. Sie erhalten hierüber keine Benachrichtigung.
+		<usetemplate ignoretext="Wenn automatisches Abweisen von Teleport-Angeboten eingeschaltet wird." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Sie haben die maximale Anzahl an Gruppen erreicht. Bitte verlassen Sie eine andere Gruppe, um dieser beitreten zu können oder lehnen Sie das Angebot ab.

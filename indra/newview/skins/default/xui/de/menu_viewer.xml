@@ -66,6 +66,7 @@
             <menu_item_check label="Nicht stören" name="Do Not Disturb"/>		
             <menu_item_check label="Automatische Antwort" name="Set Autorespond"/>
             <menu_item_check label="Automatische Antwort an Nicht-Freunde" name="Set Autorespond to non-friends"/>
+            <menu_item_check label="Automatisch Teleport-Angebote abweisen" name="Automatically reject teleport offers"/>
         </menu>
         <menu_item_check label="Gesten" name="Gestures"/>
 		<menu label="Voice-Morphing" name="VoiceMorphing">
