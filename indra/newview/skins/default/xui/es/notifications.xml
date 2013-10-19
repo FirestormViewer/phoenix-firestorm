@@ -1683,13 +1683,18 @@ visita [[INFO_URL] detalles sobre esta actualización]
 	</notification>
 	<notification name="AutorespondModeSet">
 		Se ha activado el modo Autorrespuesta.
-Si algún avatar te envía un mensaje instantáneo, recibirá automáticamente la respuesta configurada.
+Los mensajes instantáneos entrantes serán respondidos con la texto configurado.
 		<usetemplate ignoretext="Cambio mi estado al modo Autorrespuesta" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="AutorespondNonFriendsModeSet">
 		Se ha activado el modo Autorrespuesta para residentes que no están en tu lista de amigos.
-Si algún avatar que no está en tu lista de amigos te envía un mensaje instantáneo, recibirá automáticamente la respuesta configurada.
+Los mensajes instantáneos procedentes de avatares que no están en tu lista de amigos serán respondidos con el texto configurado.
 		<usetemplate ignoretext="Cambio mi estado al modo Autorrespuesta para avatares que no son mis amigos" name="okignore" yestext="Aceptar"/>
+	</notification>
+	<notification name="RejectTeleportOffersModeSet">
+		El modo Rechazar todas las ofertas de teleporte entrantes está activo.
+Todas las ofertas de teleporte recibidas serán rechazadas con la respuesta configurada. No serás notificado cuando se produzcan.
+		<usetemplate ignoretext="Cambie mi estado para rechazar todas las ofertas de teleporte" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Has superado tu número máximo de grupos. Por favor, sal de al menos uno antes de entrar en éste o rehusa la oferta.

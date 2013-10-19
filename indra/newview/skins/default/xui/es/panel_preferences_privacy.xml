@@ -69,10 +69,11 @@
 			<text name="autorespond_nf_response_label">
 				Respuesta automática a no-amigos para el estado de AUTORRESPUESTA A NO-AMIGOS):
 			</text>
-			<check_box label="Enviar autorrespuesta a avatares bloqueados" name="send_muted_av_response" tool_tip="Responde con el siguiente texto cuando alguien a quien has bloqueado te envía un MI."/>
-			<!-- 
+			<text name="autorespond_rto_response_label">
+				Respuesta automática para el modo RECHAZAR OFERTAS DE TELEPORTE:
+			</text>
+			<check_box label="Enviar autorrespuesta a avatares bloqueados:" name="send_muted_av_response" tool_tip="Responde con el siguiente texto cuando alguien a quien has bloqueado te envía un MI."/>
 			<check_box label="Enviar autorrespuesta para el estado de AUSENTE:" name="send_away_av_response" tool_tip="Responde con el siguiente texto cuando alguien te envía un MI mientras estás en modo ausente."/>
-			-->
 		</panel>
 	</tab_container>
 </panel>
