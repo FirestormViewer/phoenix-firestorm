@@ -454,7 +454,7 @@
          left="15"
          mouse_opaque="false"
          name="text_box3"
-         top="15"
+         top="10"
          width="450">
           Automatic response when in UNAVAILABLE (ie, BUSY)  mode:
         </text>
@@ -466,7 +466,7 @@
          height="42"
          layout="topleft"
          left="35"
-         top_pad="10"
+         top_pad="5"
          name="do_not_disturb_response"
          width="475"
          word_wrap="true">
@@ -482,7 +482,7 @@
          left="15"
          mouse_opaque="false"
          name="autorespond_response_label"
-         top_pad="10"
+         top_pad="5"
          width="450">
            Automatic response to all avatars when in AUTORESPONSE to everyone mode:
         </text>
@@ -494,7 +494,7 @@
          height="42"
          layout="topleft"
          left="35"
-         top_pad="10"
+         top_pad="5"
          name="autorespond_response"
          width="475"
          word_wrap="true">
@@ -510,7 +510,7 @@
          left="15"
          mouse_opaque="false"
          name="autorespond_nf_response_label"
-         top_pad="10"
+         top_pad="5"
          width="450">
            Automatic response to non-friends when in AUTOREPONSE TO NON-FRIENDS mode:
         </text>
@@ -522,7 +522,7 @@
          height="42"
          layout="topleft"
          left="35"
-         top_pad="10"
+         top_pad="5"
          name="autorespond_nf_response"
          width="475"
          word_wrap="true">
@@ -538,7 +538,7 @@
          left="15"
          mouse_opaque="false"
          name="autorespond_rto_response_label"
-         top_pad="10"
+         top_pad="5"
          width="450">
            Automatic response to all avatars when in REJECT TELEPORT OFFERS mode:
         </text>
@@ -550,7 +550,7 @@
          height="42"
          layout="topleft"
          left="35"
-         top_pad="10"
+         top_pad="5"
          name="autorespond_rto_response"
          width="475"
          word_wrap="true">
@@ -558,10 +558,10 @@
         </text_editor>
 
         <check_box
-         top_pad="10"
+         top_pad="5"
          follows="left|top"
          height="16"
-         label="Send autoresponse to MUTED avatars"
+         label="Send autoresponse to MUTED avatars:"
          left="15"
          name="send_muted_av_response"
          width="270"
@@ -575,16 +575,15 @@
          height="42"
          layout="topleft"
          left="35"
-         top_pad="10"
+         top_pad="5"
          name="muted_avatar_response"
          width="475"
          word_wrap="true">
            log_in_to_change
         </text_editor>
-      
-      <!-- Reserved for future FIRE-10500 implementation
+
        <check_box
-        top_pad="10"
+        top_pad="5"
         follows="left|top"
         height="16"
         label="Send autoresponse when in AWAY mode:"
@@ -601,12 +600,13 @@
         height="42"
         layout="topleft"
         left="35"
-        top_pad="10"
+        top_pad="5"
         name="away_avatar_response"
         width="475"
         word_wrap="true">
         log_in_to_change
-      </text_editor>-->
+      </text_editor>
+
     </panel>
 </tab_container>
 </panel>

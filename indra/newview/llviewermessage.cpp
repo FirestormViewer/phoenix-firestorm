@@ -2740,6 +2740,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	//BOOL is_linden = chat.mSourceType != CHAT_SOURCE_OBJECT &&
 	//		LLMuteList::getInstance()->isLinden(name); <:FS:TM> Bear compie fix - is_linden not referenced
 
+	// <FS:PP> FIRE-10500: Autoresponse for (Away)
+	static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
+	BOOL is_afk = gAgent.getAFK();
+	// </FS:PP>
+
 	chat.mMuted = is_muted;
 	chat.mFromID = from_id;
 	chat.mFromName = name;
@@ -2795,7 +2800,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		//               to inform him about that fact.
 		else if ( (offline == IM_ONLINE &&
 			((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
-			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) && name != SYSTEM_FROM) &&
+			// <FS:PP> FIRE-10500: Autoresponse for (Away)
+			// (is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) && name != SYSTEM_FROM) &&
+			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) && name != SYSTEM_FROM) &&
+			// </FS:PP>
 			(RlvActions::canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
@@ -2828,6 +2836,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
 				}
+				// <FS:PP> FIRE-10500: Autoresponse for (Away)
+				else if (is_afk && FSSendAwayAvatarResponse)
+				{
+					response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
+				}
+				// </FS:PP>
 				pack_instant_message(
 					gMessageSystem,
 					gAgent.getID(),

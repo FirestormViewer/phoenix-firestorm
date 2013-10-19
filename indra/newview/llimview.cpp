@@ -3786,9 +3786,17 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 		BOOL is_linden = LLMuteList::getInstance()->isLinden(im_info->mName);
 		BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
 
+		// <FS:PP> FIRE-10500: Autoresponse for (Away)
+		static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
+		BOOL is_afk = gAgent.getAFK();
+		// </FS:PP>
+
 		if (RlvActions::canReceiveIM(im_info->mFromID) && !is_linden &&
 			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
-			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) )
+			// <FS:PP> FIRE-10500: Autoresponse for (Away)
+			// (is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) )
+			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
+			// </FS:PP>
 		{
 			std::string my_name;
 			std::string response;
@@ -3805,6 +3813,12 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			{
 				response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
 			}
+			// <FS:PP> FIRE-10500: Autoresponse for (Away)
+			else if (is_afk && FSSendAwayAvatarResponse)
+			{
+				response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
+			}
+			// </FS:PP>
 			pack_instant_message(
 				gMessageSystem,
 				gAgent.getID(),
