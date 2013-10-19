@@ -3756,6 +3756,16 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 		LLStringUtil::format_map_t args;
 		args["[NAME]"] = im_info->mName;
 		
+		// <FS:PP> FIRE-11893: Privacy settings cannot by overridden by chat notifcation
+		// First two BOOLs are copied from few lines below
+		BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
+		BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
+		static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedSettings, "VoiceCallsFriendsOnly");
+
+		if(!is_muted && ( (VoiceCallsFriendsOnly && is_friend) || !VoiceCallsFriendsOnly ))
+		{
+		// </FS:PP>
+
 		gIMMgr->addMessage(
 			session_id,
 			im_info->mFromID,
@@ -3774,6 +3784,11 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			TRUE
 			);
 
+		// <FS:PP> FIRE-11893: Privacy settings cannot by overridden by chat notifcation
+		// Bracket for "if" - ends here
+		}
+		// </FS:PP>
+
 		// Send busy and auto-response messages now or they won't be send
 		// later because a session has already been created by showing the
 		// incoming IM announcement.
@@ -3782,9 +3797,11 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 		BOOL is_autorespond = gAgent.getAutorespond();
 		BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
 		BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
-		BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
 		BOOL is_linden = LLMuteList::getInstance()->isLinden(im_info->mName);
-		BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
+		// <FS:PP> These two from below are now moved a bit upwards to honor FIRE-11893 (VoiceCallsFriendsOnly) and muted status for FSAnnounceIncomingIM message
+		// BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
+		// BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
+		// </FS:PP>
 
 		// <FS:PP> FIRE-10500: Autoresponse for (Away)
 		static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
