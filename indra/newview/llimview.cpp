@@ -3749,71 +3749,52 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 {
 	LLUUID session_id = computeSessionID(im_info->mIMType, im_info->mFromID);
 
-	// <Ansariel> Announce incoming IMs
+	// <FS:Ansariel> Announce incoming IMs
 	static LLCachedControl<bool> announceIncomingIM(gSavedSettings, "FSAnnounceIncomingIM");
 	if (typing && !gIMMgr->hasSession(session_id) && announceIncomingIM)
 	{
 		LLStringUtil::format_map_t args;
 		args["[NAME]"] = im_info->mName;
 		
-		// <FS:PP> FIRE-11893: Privacy settings cannot by overridden by chat notifcation
-		// First two BOOLs are copied from few lines below
 		BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
 		BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
 		static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedSettings, "VoiceCallsFriendsOnly");
 
 		if(!is_muted && ( (VoiceCallsFriendsOnly && is_friend) || !VoiceCallsFriendsOnly ))
 		{
-		// </FS:PP>
-
-		gIMMgr->addMessage(
-			session_id,
-			im_info->mFromID,
-			//<FS:TS> FIRE-8601: Use system name instead of NULL
-			//         Growl notifier acts funny with NULL here.
-			SYSTEM_FROM,
-			//</FS:TS> FIRE-8601
-			LLTrans::getString("IM_announce_incoming", args),
-			false,
-			im_info->mName,
-			IM_NOTHING_SPECIAL,
-			im_info->mParentEstateID,
-			im_info->mRegionID,
-			im_info->mPosition,
-			false, // <-- Wow! This parameter is never handled!!!
-			TRUE
-			);
-
-		// <FS:PP> FIRE-11893: Privacy settings cannot by overridden by chat notifcation
-		// Bracket for "if" - ends here
+			gIMMgr->addMessage(
+				session_id,
+				im_info->mFromID,
+				//<FS:TS> FIRE-8601: Use system name instead of NULL
+				//         Growl notifier acts funny with NULL here.
+				SYSTEM_FROM,
+				LLTrans::getString("IM_announce_incoming", args),
+				false,
+				im_info->mName,
+				IM_NOTHING_SPECIAL,
+				im_info->mParentEstateID,
+				im_info->mRegionID,
+				im_info->mPosition,
+				false, // <-- Wow! This parameter is never handled!!!
+				TRUE
+				);
 		}
-		// </FS:PP>
 
 		// Send busy and auto-response messages now or they won't be send
 		// later because a session has already been created by showing the
 		// incoming IM announcement.
-		// The logic is copied from process_improved_im() in llviewermessage.cpp
+		// The logic was originally copied from process_improved_im() in llviewermessage.cpp
 		BOOL is_busy = gAgent.isDoNotDisturb();
 		BOOL is_autorespond = gAgent.getAutorespond();
 		BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
 		BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
 		BOOL is_linden = LLMuteList::getInstance()->isLinden(im_info->mName);
-		// <FS:PP> These two from below are now moved a bit upwards to honor FIRE-11893 (VoiceCallsFriendsOnly) and muted status for FSAnnounceIncomingIM message
-		// BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
-		// BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
-		// </FS:PP>
-
-		// <FS:PP> FIRE-10500: Autoresponse for (Away)
 		static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
 		BOOL is_afk = gAgent.getAFK();
-		// </FS:PP>
 
 		if (RlvActions::canReceiveIM(im_info->mFromID) && !is_linden &&
 			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
-			// <FS:PP> FIRE-10500: Autoresponse for (Away)
-			// (is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) )
 			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
-			// </FS:PP>
 		{
 			std::string my_name;
 			std::string response;
@@ -3830,12 +3811,10 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			{
 				response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
 			}
-			// <FS:PP> FIRE-10500: Autoresponse for (Away)
 			else if (is_afk && FSSendAwayAvatarResponse)
 			{
 				response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
 			}
-			// </FS:PP>
 			pack_instant_message(
 				gMessageSystem,
 				gAgent.getID(),
@@ -3848,7 +3827,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				IM_DO_NOT_DISTURB_AUTO_RESPONSE,
 				session_id);
 			gAgent.sendReliableMessage();
-			// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
+
 			gIMMgr->addMessage(
 				session_id,
 				im_info->mFromID,
@@ -3863,10 +3842,9 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				false, // <-- Wow! This parameter is never handled!!!
 				TRUE
 				);
-			// </FS:LO>
 		}
 	}
-	// </Ansariel>
+	// </FS:Ansariel>
 
 	// <FS:Ansariel> [FS communication UI]
  	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
