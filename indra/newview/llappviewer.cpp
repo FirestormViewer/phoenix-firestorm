@@ -241,6 +241,10 @@
 #include "llmachineid.h"
 #include "llmainlooprepeater.h"
 
+
+#include "llviewereventrecorder.h"
+
+
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
 // this app, or another 'component' of the viewer. App globals should be 
@@ -768,6 +772,7 @@ LLAppViewer::LLAppViewer() :
 LLAppViewer::~LLAppViewer()
 {
 	delete mSettingsLocationList;
+	LLViewerEventRecorder::instance().~LLViewerEventRecorder();
 
 	LLLoginInstance::instance().setUpdaterService(0);
 	
@@ -2565,13 +2570,13 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 			}
 			// </FS:Ansariel>
 
-			llinfos << "Attempting to load settings for the group " << file.name()
-			    << " - from location " << location_key << llendl;
+			LL_INFOS("Settings") << "Attempting to load settings for the group " << file.name()
+			    << " - from location " << location_key << LL_ENDL;
 
 			LLControlGroup* settings_group = LLControlGroup::getInstance(file.name);
 			if(!settings_group)
 			{
-				llwarns << "No matching settings group for name " << file.name() << llendl;
+				LL_WARNS("Settings") << "No matching settings group for name " << file.name() << LL_ENDL;
 				continue;
 			}
 
@@ -2600,7 +2605,7 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 
 			if(settings_group->loadFromFile(full_settings_path, set_defaults, file.persistent))
 			{	// success!
-				llinfos << "Loaded settings file " << full_settings_path << llendl;
+				LL_INFOS("Settings") << "Loaded settings file " << full_settings_path << LL_ENDL;
 			}
 			else
 			{	// failed to load
@@ -2614,7 +2619,7 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 					// only complain if we actually have a filename at this point
 					if (!full_settings_path.empty())
 					{
-						llinfos << "Cannot load " << full_settings_path << " - No settings found." << llendl;
+						LL_INFOS("Settings") << "Cannot load " << full_settings_path << " - No settings found." << LL_ENDL;
 					}
 				}
 			}
@@ -2780,8 +2785,8 @@ bool LLAppViewer::initConfiguration()
 			LLFile::remove(user_settings_filename);
 		}
 
-		llinfos	<< "Using command line specified settings filename: " 
-			<< user_settings_filename << llendl;
+		LL_INFOS("Settings")	<< "Using command line specified settings filename: " 
+			<< user_settings_filename << LL_ENDL;
 	}
 	else
 	{
@@ -2839,8 +2844,8 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string session_settings_filename = clp.getOption("sessionsettings")[0];		
 		gSavedSettings.setString("SessionSettingsFile", session_settings_filename);
-		llinfos	<< "Using session settings filename: " 
-			<< session_settings_filename << llendl;
+		LL_INFOS("Settings")	<< "Using session settings filename: " 
+			<< session_settings_filename << LL_ENDL;
 	}
 	loadSettingsFromDirectory("Session",true); // AO The session file turns into the new defaults
 
@@ -2848,10 +2853,10 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string user_session_settings_filename = clp.getOption("usersessionsettings")[0];		
 		gSavedSettings.setString("UserSessionSettingsFile", user_session_settings_filename);
-		llinfos << "Using user session settings filename: " << user_session_settings_filename << llendl;
-	}
+		LL_INFOS("Settings") << "Using user session settings filename: " 
+			<< user_session_settings_filename << LL_ENDL;
 
-	
+	}
 	loadSettingsFromDirectory("UserSession");
 	
 	//AO: Re-read user settings again. This is a Firestorm hack to get user settings to override modes
@@ -2940,6 +2945,10 @@ bool LLAppViewer::initConfiguration()
                 }
             }
         }
+    }
+
+    if  (clp.hasOption("logevents")) {
+	LLViewerEventRecorder::instance().setEventLoggingOn();
     }
 
 	std::string CmdLineChannel(gSavedSettings.getString("CmdLineChannel"));

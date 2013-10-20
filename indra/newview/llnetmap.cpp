@@ -558,13 +558,11 @@ void LLNetMap::draw()
 		// Draw avatars
 		for (U32 i = 0; i < avatar_ids.size(); i++)
 		{
-			// <FS:CR> FIRE-11118 - skip our dot, we'll draw one later.
-			//pos_map = globalPosToView(positions[i]);
 			LLUUID uuid = avatar_ids[i];
-			if (uuid == gAgent.getID())
-				continue;
+			// Skip self, we'll draw it later
+			if (uuid == gAgent.getID()) continue;
+
 			pos_map = globalPosToView(positions[i]);
-			// </FS:CR>
 
 			// <FS:Ansariel> Check for unknown Z-offset => AVATAR_UNKNOWN_Z_OFFSET
 			//unknown_relative_z = positions[i].mdV[VZ] == COARSEUPDATE_MAX_Z &&

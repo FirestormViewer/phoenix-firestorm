@@ -323,7 +323,6 @@
      image_pressed="Pause_Press"
      image_pressed_selected="Play_Press"
      is_toggle="true"
-	 left_delta="60"
      left_pad="2"
      top="1"
      name="media_toggle_btn"

@@ -1057,12 +1057,8 @@ void LLBasicCertificateStore::validate(int validation_policy,
 		throw LLInvalidCertificate((*current_cert));			
 	}
 	std::string sha1_hash((const char *)cert_x509->sha1_hash, SHA_DIGEST_LENGTH);
-
-	// <FS:ND> LLBasicCertificate::getOpenSSLX509 returns a copy made with X509_dup
 	X509_free( cert_x509 );
-	cert_x509 = 0;
-	// </FS:ND>
-	
+	cert_x509 = NULL;
 	t_cert_cache::iterator cache_entry = mTrustedCertCache.find(sha1_hash);
 	if(cache_entry != mTrustedCertCache.end())
 	{

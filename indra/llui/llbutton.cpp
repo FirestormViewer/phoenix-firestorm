@@ -49,6 +49,7 @@
 #include "lluictrlfactory.h"
 #include "llhelp.h"
 #include "lldockablefloater.h"
+#include "llviewereventrecorder.h"
 
 #include "llcheckboxctrl.h"		// <FS:Zi> Add checkbox control toggle
 
@@ -479,6 +480,8 @@ BOOL LLButton::handleMouseDown(S32 x, S32 y, MASK mask)
 		 */
 		LLUICtrl::handleMouseDown(x, y, mask);
 
+		LLViewerEventRecorder::instance().updateMouseEventInfo(x,y,-55,-55,getPathname());
+
 		if(mMouseDownSignal) (*mMouseDownSignal)(this, LLSD());
 
 		mMouseDownTimer.start();
@@ -509,6 +512,7 @@ BOOL LLButton::handleMouseUp(S32 x, S32 y, MASK mask)
 		 * by calling LLUICtrl::mMouseUpSignal(x, y, mask);
 		 */
 		LLUICtrl::handleMouseUp(x, y, mask);
+		LLViewerEventRecorder::instance().updateMouseEventInfo(x,y,-55,-55,getPathname()); 
 
 		// Regardless of where mouseup occurs, handle callback
 		if(mMouseUpSignal) (*mMouseUpSignal)(this, LLSD());

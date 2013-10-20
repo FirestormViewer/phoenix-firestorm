@@ -837,6 +837,9 @@ void LLFloaterPreference::cancel()
 	// hide autoreplace settings floater
 	LLFloaterReg::hideInstance("prefs_autoreplace");
 	
+	// hide spellchecker settings folder
+	LLFloaterReg::hideInstance("prefs_spellchecker");
+	
 // <FS:CR> STORM-1888
 	// hide spellchecker settings floater
 	LLFloaterReg::hideInstance("prefs_spellchecker");

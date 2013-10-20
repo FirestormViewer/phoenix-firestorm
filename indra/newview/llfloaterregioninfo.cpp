@@ -1912,10 +1912,7 @@ void LLPanelEstateInfo::accessAddCore3(const uuid_vec_t& ids, void* data)
 			LLSD args;
 			args["NUM_ADDED"] = llformat("%d",ids.size());
 			args["MAX_AGENTS"] = llformat("%d",ESTATE_MAX_ACCESS_IDS);
-			// <FS:Ansariel> Fixed unlocalizable strings
-			//args["LIST_TYPE"] = "Allowed Residents";
 			args["LIST_TYPE"] = LLTrans::getString("RegionInfoListTypeAllowedAgents");
-			// </FS:Ansariel>
 			args["NUM_EXCESS"] = llformat("%d",(ids.size()+currentCount)-ESTATE_MAX_ACCESS_IDS);
 			LLNotificationsUtil::add("MaxAgentOnRegionBatch", args);
 			delete change_info;
@@ -1931,10 +1928,7 @@ void LLPanelEstateInfo::accessAddCore3(const uuid_vec_t& ids, void* data)
 			LLSD args;
 			args["NUM_ADDED"] = llformat("%d",ids.size());
 			args["MAX_AGENTS"] = llformat("%d",ESTATE_MAX_ACCESS_IDS);
-			// <FS:Ansariel> Fixed unlocalizable strings
-			//args["LIST_TYPE"] = "Banned Residents";
 			args["LIST_TYPE"] = LLTrans::getString("RegionInfoListTypeBannedAgents");
-			// </FS:Ansariel>
 			args["NUM_EXCESS"] = llformat("%d",(ids.size()+currentCount)-ESTATE_MAX_ACCESS_IDS);
 			LLNotificationsUtil::add("MaxAgentOnRegionBatch", args);
 			delete change_info;
@@ -2999,15 +2993,10 @@ bool LLDispatchSetEstateAccess::operator()(
 		}
 
 
-		// <FS:Ansariel> FIRE-5998: Unlocalizable label
-		//std::string msg = llformat("Banned residents: (%d, max %d)",
-		//							totalBannedAgents,
-		//							ESTATE_MAX_ACCESS_IDS);
 		LLStringUtil::format_map_t args;
 		args["[BANNEDAGENTS]"] = llformat("%d", totalBannedAgents);
 		args["[MAXBANNED]"] = llformat("%d", ESTATE_MAX_ACCESS_IDS);
 		std::string msg = LLTrans::getString("RegionInfoBannedResidents", args);
-		// </FS:Ansariel>
 		panel->getChild<LLUICtrl>("ban_resident_label")->setValue(LLSD(msg));
 
 		if (banned_agent_name_list)
@@ -3027,15 +3016,10 @@ bool LLDispatchSetEstateAccess::operator()(
 
 	if (access_flags & ESTATE_ACCESS_MANAGERS)
 	{
-		// <FS:Ansariel> FIRE-5998: Unlocalizable label
-		//std::string msg = llformat("Estate Managers: (%d, max %d)",
-		//							num_estate_managers,
-		//							ESTATE_MAX_MANAGERS);
 		LLStringUtil::format_map_t args;
 		args["[ESTATEMANAGERS]"] = llformat("%d", num_estate_managers);
 		args["[MAXMANAGERS]"] = llformat("%d", ESTATE_MAX_MANAGERS);
 		std::string msg = LLTrans::getString("RegionInfoEstateManagers", args);
-		// </FS:Ansariel>
 		panel->getChild<LLUICtrl>("estate_manager_label")->setValue(LLSD(msg));
 
 		LLNameListCtrl* estate_manager_name_list =

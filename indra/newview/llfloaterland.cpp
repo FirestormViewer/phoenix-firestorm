@@ -2257,7 +2257,6 @@ S32 LLPanelLandOptions::getDirectoryFee()
 // virtual
 void LLPanelLandOptions::draw()
 {
-	refreshSearch();	// Is this necessary?  JC
 	LLPanel::draw();
 }
 
@@ -2271,13 +2270,8 @@ void LLPanelLandOptions::refreshSearch()
 		mCheckShowDirectory->set(FALSE);
 		mCheckShowDirectory->setEnabled(FALSE);
 
-		// *TODO:Translate
-		// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
-		//const std::string& none_string = LLParcel::getCategoryUIString(LLParcel::C_NONE);
-		//mCategoryCombo->setSimple(none_string);
 		const std::string& none_string = LLParcel::getCategoryString(LLParcel::C_NONE);
 		mCategoryCombo->setValue(none_string);
-		// </FS:Ansariel>
 		mCategoryCombo->setEnabled(FALSE);
 		return;
 	}
@@ -2304,14 +2298,9 @@ void LLPanelLandOptions::refreshSearch()
 	mCheckShowDirectory	->set(show_directory);
 
 	// Set by string in case the order in UI doesn't match the order by index.
-	// *TODO:Translate
 	LLParcel::ECategory cat = parcel->getCategory();
-	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
-	//const std::string& category_string = LLParcel::getCategoryUIString(cat);
-	//mCategoryCombo->setSimple(category_string);
 	const std::string& category_string = LLParcel::getCategoryString(cat);
 	mCategoryCombo->setValue(category_string);
-	// </FS:Ansariel>
 
 	std::string tooltip;
 	bool enable_show_directory = false;

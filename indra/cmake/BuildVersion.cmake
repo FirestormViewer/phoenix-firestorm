@@ -16,7 +16,9 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
 
         else (DEFINED ENV{revision})
            find_program(MERCURIAL hg)
-           if (DEFINED MERCURIAL)
+           find_program(WORDCOUNT wc)
+           find_program(SED sed)
+           if (DEFINED MERCURIAL AND DEFINED WORDCOUNT AND DEFINED SED)
               execute_process(
                  # <FS:TS> FIRE-11737: Reverting to old revisions shows tip in build string
                  #         This command gets the revision number of the current
@@ -24,7 +26,9 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
                  #         building an earlier revision. Instead, we use
                  #         "hg identify -n" to get the local revision number
                  #         of the actual state of the repository.
-                 #COMMAND ${MERCURIAL} log -r tip --template "{rev}"
+                 #COMMAND ${MERCURIAL} log -r tip:0 --template '\\n'
+                 #COMMAND ${WORDCOUNT} -l
+                 #COMMAND ${SED} "s/ //g"
                  COMMAND ${MERCURIAL} identify -n
                  OUTPUT_VARIABLE VIEWER_VERSION_REVISION
                  OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -36,13 +40,13 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
               if ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")
                  message("Revision (from hg) ${VIEWER_VERSION_REVISION}")
               else ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")
+                 message("Revision not set (repository not found?); using 0")
                  set(VIEWER_VERSION_REVISION 0 )
-                 message("Revision not set, repository not found, using ${VIEWER_VERSION_REVISION}")
               endif ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")
-           else (DEFINED MERCURIAL)
+           else (DEFINED MERCURIAL AND DEFINED WORDCOUNT AND DEFINED SED)
+              message("Revision not set: 'hg', 'wc' or 'sed' not found; using 0")
               set(VIEWER_VERSION_REVISION 0)
-              message("Revision not set, 'hg' not found (${MERCURIAL}), using ${VIEWER_VERSION_REVISION}")
-           endif (DEFINED MERCURIAL)
+           endif (DEFINED MERCURIAL AND DEFINED WORDCOUNT AND DEFINED SED)
         endif (DEFINED ENV{revision})
         message("Building '${VIEWER_CHANNEL}' Version ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
     else ( EXISTS ${VIEWER_VERSION_BASE_FILE} )

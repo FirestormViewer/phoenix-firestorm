@@ -397,7 +397,7 @@ Please try logging in again in a minute.</string>
 	<!-- world map -->
 	<string name="texture_loading">Loading...</string>
 	<string name="worldmap_offline">Offline</string>
-	<string name="worldmap_item_tooltip_format">[AREA] m² L$[PRICE]</string>
+	<string name="worldmap_item_tooltip_format">[AREA] m² L$[PRICE] ([SQMPRICE] L$/m²)</string>
 	<string name="worldmap_results_none_found">None found.</string>
 	<string name="worldmap_agent_position">You are here</string>
 	
@@ -877,13 +877,11 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	</string>
 	<string name="RegionInfoAllowedResidents">Allowed Residents: ([ALLOWEDAGENTS], max [MAXACCESS])</string>
 	<string name="RegionInfoAllowedGroups">Allowed Groups: ([ALLOWEDGROUPS], max [MAXACCESS])</string>
-	<!-- FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="RegionInfoEstateManagers">Estate Managers: ([ESTATEMANAGERS], max [MAXMANAGERS])</string>
 	<string name="RegionInfoBannedResidents">Banned Residents: ([BANNEDAGENTS], max [MAXBANNED])</string>
 	<string name="RegionInfoListTypeAllowedAgents">Allowed Residents</string>
 	<string name="RegionInfoListTypeBannedAgents">Banned Residents</string>
-	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
-	
+
 	<!-- script limits floater -->
 	<string name="ScriptLimitsParcelScriptMemory">Parcel Script Memory</string>
 	<string name="ScriptLimitsParcelsOwned">Parcels Listed: [PARCELS]</string>

@@ -1016,21 +1016,17 @@ void LLViewerObjectList::update(LLAgent &agent, LLWorld &world)
 			objectp = *idle_iter;
 			llassert(objectp->isActive());
 			objectp->idleUpdate(agent, world, frame_time);
-
-			}
+		}
 
 		//update flexible objects
 		LLVolumeImplFlexible::updateClass();
 
 		//update animated textures
-		// <FS:Ansariel> FIRE-10557 / BUG-2814 / MAINT-2773: Disable texture animation doesn't work
-		//LLViewerTextureAnim::updateClass();
 		if (gAnimateTextures)
 		{
 			LLViewerTextureAnim::updateClass();
 		}
-		// </FS:Ansariel>
-			}
+	}
 
 
 

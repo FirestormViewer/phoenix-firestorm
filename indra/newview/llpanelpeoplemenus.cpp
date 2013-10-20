@@ -80,6 +80,7 @@ LLContextMenu* PeopleContextMenu::createMenu()
 		registrar.add("Avatar.Pay",				boost::bind(&LLAvatarActions::pay,						id));
 		registrar.add("Avatar.BlockUnblock",	boost::bind(&LLAvatarActions::toggleBlock,				id));
 		registrar.add("Avatar.InviteToGroup",	boost::bind(&LLAvatarActions::inviteToGroup,			id));
+		registrar.add("Avatar.TeleportRequest",	boost::bind(&PeopleContextMenu::requestTeleport,		this));
 		registrar.add("Avatar.Calllog",			boost::bind(&LLAvatarActions::viewChatHistory,			id));
 		// <FS:Ansariel> Firestorm additions
 		registrar.add("Avatar.GroupInvite",		boost::bind(&LLAvatarActions::inviteToGroup,			id));
@@ -133,6 +134,7 @@ void PeopleContextMenu::buildContextMenu(class LLMenuGL& menu, U32 flags)
 		items.push_back(std::string("view_profile"));
 		items.push_back(std::string("im"));
 		items.push_back(std::string("offer_teleport"));
+		items.push_back(std::string("request_teleport"));
 		items.push_back(std::string("voice_call"));
 		items.push_back(std::string("chat_history"));
 		items.push_back(std::string("separator_chat_history"));
@@ -269,6 +271,13 @@ bool PeopleContextMenu::checkContextMenuItem(const LLSD& userdata)
 	return false;
 }
 
+void PeopleContextMenu::requestTeleport()
+{
+	// boost::bind cannot recognize overloaded method LLAvatarActions::teleportRequest(),
+	// so we have to use a wrapper.
+	LLAvatarActions::teleportRequest(mUUIDs.front());
+}
+
 void PeopleContextMenu::offerTeleport()
 {
 	// boost::bind cannot recognize overloaded method LLAvatarActions::offerTeleport(),
@@ -298,6 +307,7 @@ void NearbyPeopleContextMenu::buildContextMenu(class LLMenuGL& menu, U32 flags)
 		items.push_back(std::string("view_profile"));
 		items.push_back(std::string("im"));
 		items.push_back(std::string("offer_teleport"));
+		items.push_back(std::string("request_teleport"));
 		items.push_back(std::string("voice_call"));
 		items.push_back(std::string("chat_history"));
 		items.push_back(std::string("separator_chat_history"));
