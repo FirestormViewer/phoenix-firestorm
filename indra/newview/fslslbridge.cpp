@@ -231,6 +231,24 @@ bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID
 			updateBoolSettingValue("FSPublishRadarTag");
 			mIsFirstCallDone = true;
 		}
+		// <FS:PP> FIRE-11924: Refresh movelock position after region change (crossing/teleporting), if lock was enabled
+		// Not called right after logging in, and only if movelock was enabled during transition
+		else if (gSavedSettings.getBOOL("UseMoveLock"))
+		{
+			if (!gSavedSettings.getBOOL("RelockMoveLockAfterRegionChange"))
+			{
+				// Don't call for update here and only change setting to 'false', getCommitSignal()->connect->boost in llviewercontrol.cpp will send a message to Bridge anyway
+				gSavedSettings.setBOOL("UseMoveLock", false);
+				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
+			}
+			else
+			{
+				// RelockMoveLockAfterRegionChange is 'true'? Then re-lock the movelock by sending a request to Bridge for coordinates update with current 'true' from UseMoveLock
+				updateBoolSettingValue("UseMoveLock");
+			}
+		}
+		// </FS:PP>
+
 		return true;
 	}
 	
