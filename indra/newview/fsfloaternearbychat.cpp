@@ -287,11 +287,21 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 				{
 					from_name = "IM: " + from_name;
 				}
+
+				// <FS:LO> hack to prevent chat logs from containing lines like "TIMESTANMP IM:: friend is on/offline" (aka the double ":" )
+				if (from_name == "IM:")
+				{
+					from_name = "IM";
+				}
+				// </FS:LO>
 			}
 			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		}
-
-		LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
+		// <FS:LO> Make logging IMs to the chat history file toggleable again
+		if ((chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP) && gSavedSettings.getBOOL("FSLogIMInChatHistory"))
+		{
+			LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
+		}
 	}
 }
 
