@@ -1228,7 +1228,7 @@ BOOL LLInventoryPanel::getSinceLogoff()
 // <FS:Ansariel> Optional hiding of empty system folders
 void LLInventoryPanel::updateHideEmptySystemFolders(const LLSD &data)
 {
-	LLInventoryFilter filter = getFilter();
+	LLInventoryFilter& filter = getFilter();
 	if (data.asBoolean())
 	{
 		filter.setFilterEmptySystemFolders();
@@ -1244,7 +1244,7 @@ void LLInventoryPanel::updateHideEmptySystemFolders(const LLSD &data)
 // <FS:Ansariel> Optional hiding of Inbox folder
 void LLInventoryPanel::updateShowInboxFolder(const LLSD &data)
 {
-	LLInventoryFilter filter = getFilter();
+	LLInventoryFilter& filter = getFilter();
 	if (data.asBoolean())
 	{
 		filter.setFilterCategoryTypes(filter.getFilterCategoryTypes() | (1ULL << LLFolderType::FT_INBOX));
