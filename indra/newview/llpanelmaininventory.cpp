@@ -877,6 +877,7 @@ void LLPanelMainInventory::updateItemcountText()
 	string_args["[FILTER]"] = getFilterText();
 
 	std::string text = "";
+	static std::string old_text = "";
 
 	if (LLInventoryModelBackgroundFetch::instance().folderFetchActive())
 	{
@@ -891,6 +892,14 @@ void LLPanelMainInventory::updateItemcountText()
 		text = getString("ItemcountUnknown");
 	}
 	
+	//<FS:TS> Don't actually do the update if the text hasn't changed.
+	if (text == old_text)
+	{
+		return;
+	}
+	old_text = text;
+	//</FS:TS>
+
     mCounterCtrl->setValue(text);
 }
 
