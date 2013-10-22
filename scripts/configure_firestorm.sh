@@ -313,8 +313,14 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
         mkdir -p build-darwin-i386/logs
 
     elif [ $PLATFORM == "win32" ] ; then
-        rm -rf build-vc100/*
-        mkdir -p build-vc100/logs
+        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        then
+           rm -rf build-vc100_x64/*
+         else
+           rm -rf build-vc100/* 
+        fi
+ 
+       mkdir -p build-vc100/logs
 
     elif [ $PLATFORM == "linux32" ] ; then
         rm -rf build-linux-i686/*
