@@ -1381,7 +1381,7 @@
          increment="0.1"
          initial_value="3.0"
          max_val="60"
-         min_val="0.1"
+         min_val="1.0"
          name="FSWindlightInterpolateTime"
          width="50"
          tool_tip="The duration for crossfading from one preset to another [Default: 3]"/>

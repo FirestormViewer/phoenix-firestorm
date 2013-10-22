@@ -126,6 +126,9 @@ void LLWLAnimator::update(LLWLParamSet& curParams)
 				// at the end of the interp cycle, force the end settings to get applied
 				curParams.setAll(mInterpEndWL->getAll());
 			}
+			// <FS:Ansariel> FIRE-11158: Set final merge for water WL on extreme values
+			LLWaterParamManager::getInstance()->mCurParams.setAll(mInterpEndWater->getAll());
+
 			mIsInterpolating = false;
 			mIsInterpolatingSky = false;
 			return;
