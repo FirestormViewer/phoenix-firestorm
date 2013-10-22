@@ -6,7 +6,7 @@
    UpgradeCode="3FCFE6FD-1A6F-40f8-8683-CDBFE16CF653">
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
 
-  <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" />
+  <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
   <Directory Id="TARGETDIR" Name="SourceDir">
     <Directory Id="ProgramMenuFolder">
