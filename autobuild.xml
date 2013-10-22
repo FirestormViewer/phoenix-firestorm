@@ -2103,7 +2103,7 @@
       <key>description</key>
       <string>Firestorm viewer</string>
       <key>license</key>
-      <string>various open</string>
+      <string>LGPL</string>
       <key>name</key>
       <string>firestorm</string>
       <key>platforms</key>

@@ -95,7 +95,6 @@ public:
 	// std::vector<record_list_t> mFreeList;
 	// std::vector<U32> mMissCount;
 
-
 	// </FS:ND>
 };
 

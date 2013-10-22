@@ -692,6 +692,7 @@ Katharine Berry
 	STORM-1900
     OPEN-149
 	STORM-1940
+    OPEN-149
 	STORM-1941
 Keklily Longfall
 Ken Lavender
@@ -942,6 +943,7 @@ Nicky Dasmijn
 	CHUIBUG-197
 	OPEN-187
 	STORM-1937
+	OPEN-187
 Nicky Perian
 	OPEN-1
 	STORM-1087

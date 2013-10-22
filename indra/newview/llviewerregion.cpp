@@ -1762,6 +1762,8 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 // </FS:CR> Aurora Sim
 	capabilityNames.append("EstateChangeInfo");
 	capabilityNames.append("EventQueueGet");
+	capabilityNames.append("FacebookConnect");
+	//capabilityNames.append("FacebookRedirect");
 
 	if (gSavedSettings.getBOOL("UseHTTPInventory"))
 	{

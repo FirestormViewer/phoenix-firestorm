@@ -2857,6 +2857,8 @@ bool LLAppViewer::initConfiguration()
 			<< user_session_settings_filename << LL_ENDL;
 
 	}
+
+	
 	loadSettingsFromDirectory("UserSession");
 	
 	//AO: Re-read user settings again. This is a Firestorm hack to get user settings to override modes
@@ -2953,7 +2955,7 @@ bool LLAppViewer::initConfiguration()
 
 	std::string CmdLineChannel(gSavedSettings.getString("CmdLineChannel"));
 	if(! CmdLineChannel.empty())
-	{
+    {
 		LLVersionInfo::resetChannel(CmdLineChannel);
 	}
 
@@ -2965,16 +2967,16 @@ bool LLAppViewer::initConfiguration()
 		LLFastTimer::sLog = TRUE;
 		LLFastTimer::sLogName = std::string("performance");		
 	}
-
+	
 	std::string test_name(gSavedSettings.getString("LogMetrics"));
 	if (! test_name.empty())
-	{
-		LLFastTimer::sMetricLog = TRUE ;
+ 	{
+ 		LLFastTimer::sMetricLog = TRUE ;
 		// '--logmetrics' is specified with a named test metric argument so the data gathering is done only on that test
 		// In the absence of argument, every metric would be gathered (makes for a rather slow run and hard to decipher report...)
 		llinfos << "'--logmetrics' argument : " << test_name << llendl;
-		LLFastTimer::sLogName = test_name;
- 	}
+			LLFastTimer::sLogName = test_name;
+		}
 
 	if (clp.hasOption("graphicslevel"))
 	{
@@ -2983,14 +2985,14 @@ bool LLAppViewer::initConfiguration()
 		// that value for validity.
 		U32 graphicslevel = gSavedSettings.getU32("RenderQualityPerformance");
 		if (LLFeatureManager::instance().isValidGraphicsLevel(graphicslevel))
-		{
+        {
 			// graphicslevel is valid: save it and engage it later. Capture
 			// the requested value separately from the settings variable
 			// because, if this is the first run, LLViewerWindow's constructor
 			// will call LLFeatureManager::applyRecommendedSettings(), which
 			// overwrites this settings variable!
 			mForceGraphicsLevel = graphicslevel;
-		}
+        }
 	}
 
 	LLFastTimerView::sAnalyzePerformance = gSavedSettings.getBOOL("AnalyzePerformance");
@@ -3021,6 +3023,7 @@ bool LLAppViewer::initConfiguration()
     // What can happen is that someone can use IE (or potentially 
     // other browsers) and do the rough equivalent of command 
     // injection and steal passwords. Phoenix. SL-55321
+	LLSLURL start_slurl;
 
 	// The gridmanager doesn't know the grids yet, only prepare
 	// parsing the slurls, actually done when the grids are fetched 
@@ -3028,19 +3031,34 @@ bool LLAppViewer::initConfiguration()
 	// but rather it belongs into the gridmanager)
 	std::string CmdLineLoginLocation(gSavedSettings.getString("CmdLineLoginLocation"));
 	if(! CmdLineLoginLocation.empty())
-	{
-		LLSLURL start_slurl(CmdLineLoginLocation);
+    {
+		start_slurl = CmdLineLoginLocation;
 		LLStartUp::setStartSLURL(start_slurl);
 		if(start_slurl.getType() == LLSLURL::LOCATION) 
 		{  
 			LLGridManager::getInstance()->setGridChoice(start_slurl.getGrid());
-		}
-	}
+    }
+    }
 
 //-TT Hacking to save the skin and theme for future use.
 	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
 	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
 //-TT
+	//RN: if we received a URL, hand it off to the existing instance.
+	// don't call anotherInstanceRunning() when doing URL handoff, as
+	// it relies on checking a marker file which will not work when running
+	// out of different directories
+
+	if (start_slurl.isValid() &&
+		(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
+	{
+		if (sendURLToOtherInstance(start_slurl.getSLURLString()))
+		{
+			// successfully handed off URL to existing instance, exit
+			return false;
+		}
+    }
+
 	const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
 	if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
 	{	
@@ -3198,7 +3216,7 @@ bool LLAppViewer::initConfiguration()
 		LL_DEBUGS("AppInit")<<"set start from NextLoginLocation: "<<nextLoginLocation<<LL_ENDL;
 		LLStartUp::setStartSLURL(LLSLURL(nextLoginLocation));
 	}
-	else if ((clp.hasOption("login") || clp.hasOption("autologin"))
+	else if (   (   clp.hasOption("login") || clp.hasOption("autologin"))
 			 && gSavedSettings.getString("CmdLineLoginLocation").empty())
 	{
 		// If automatic login from command line with --login switch
@@ -3605,7 +3623,7 @@ bool LLAppViewer::initWindow()
 		LLFeatureManager::getInstance()->setGraphicsLevel(*mForceGraphicsLevel, false);
 		gSavedSettings.setU32("RenderQualityPerformance", *mForceGraphicsLevel);
 	}
-
+			
 	// Set this flag in case we crash while initializing GL
 	gSavedSettings.setBOOL("RenderInitError", TRUE);
 	gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), TRUE );

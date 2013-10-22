@@ -29,6 +29,7 @@
 #if 0
 
 #include "llavatarnamecache.h"
+#include "llerror.h"
 // [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1)
 #include "llgroupactions.h"
 // [/SL:KB]
@@ -407,6 +408,8 @@ void LLParticipantList::addAvatarIDExceptAgent(const LLUUID& avatar_id)
 
 	adjustParticipant(avatar_id);
 }
+
+static LLFastTimer::DeclareTimer FTM_FOLDERVIEW_TEST("add test avatar agents");
 
 void LLParticipantList::adjustParticipant(const LLUUID& speaker_id)
 {

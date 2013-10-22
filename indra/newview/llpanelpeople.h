@@ -22,7 +22,7 @@
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
- */
+ */ 
 
 #ifndef LL_LLPANELPEOPLE_H
 #define LL_LLPANELPEOPLE_H
@@ -30,6 +30,7 @@
 #include <llpanel.h>
 
 #include "llcallingcard.h" // for avatar tracker
+#include "llfloaterwebcontent.h"
 #include "llvoiceclient.h"
 
 #include "llfloater.h"
@@ -61,10 +62,7 @@ public:
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
 
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	// Externalized to FSRadar
-	//LLAvatarList* getNearbyList() { return mNearbyList; }
-// [/RLVa:KB]
+    bool mTryToConnectToFbc;
 
 	// internals
 	class Updater;
@@ -84,8 +82,10 @@ private:
 	// methods indirectly called by the updaters
 	void					updateFriendListHelpText();
 	void					updateFriendList();
+	bool					updateSuggestedFriendList();
 	void					updateNearbyList();
 	void					updateRecentList();
+	void					updateFacebookList(bool visible);
 
 	bool					isItemsFreeOfFriends(const uuid_vec_t& uuids);
 
@@ -132,6 +132,8 @@ private:
 
 	void					onFriendListRefreshComplete(LLUICtrl*ctrl, const LLSD& param);
 
+	bool					onConnectedToFacebook(const LLSD& data);
+
 	void					setAccordionCollapsedByUser(LLUICtrl* acc_tab, bool collapsed);
 	void					setAccordionCollapsedByUser(const std::string& name, bool collapsed);
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
@@ -144,6 +146,7 @@ private:
 	LLTabContainer*			mTabContainer;
 	LLAvatarList*			mOnlineFriendList;
 	LLAvatarList*			mAllFriendList;
+	LLAvatarList*			mSuggestedFriends;
 	LLAvatarList*			mNearbyList;
 	// <FS:Ansariel> Firestorm radar
 	FSPanelRadar*			mRadarPanel;
@@ -160,6 +163,7 @@ private:
 	//Updater*				mNearbyListUpdater;
 	// </FS:Ansariel> Firestorm radar
 	Updater*				mRecentListUpdater;
+	Updater*				mFacebookListUpdater;
 	Updater*				mButtonsUpdater;
     LLHandle< LLFloater >	mPicker;
 };

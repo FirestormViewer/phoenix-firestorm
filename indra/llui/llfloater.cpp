@@ -521,8 +521,8 @@ LLFloater::~LLFloater()
 	
 	if( gFocusMgr.childHasKeyboardFocus(this))
 	{
-		// Just in case we might still have focus here, release it.
-		releaseFocus();
+	// Just in case we might still have focus here, release it.
+	releaseFocus();
 	}
 
 	// This is important so that floaters with persistent rects (i.e., those
@@ -1404,7 +1404,7 @@ void LLFloater::setFocus( BOOL b )
 	{
 		return;
 	}
-	LLUICtrl* last_focus = gFocusMgr.getLastFocusForGroup(this);
+	LLView* last_focus = gFocusMgr.getLastFocusForGroup(this);
 	// a descendent already has focus
 	BOOL child_had_focus = hasFocus();
 
