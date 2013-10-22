@@ -298,7 +298,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		}
 		// <FS:LO> Make logging IMs to the chat history file toggleable again
-		if ((chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP) && gSavedSettings.getBOOL("FSLogIMInChatHistory"))
+		if (!(chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP) || gSavedSettings.getBOOL("FSLogIMInChatHistory"))
 		{
 			LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
 		}
