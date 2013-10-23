@@ -7,5 +7,8 @@
 	<check_box label="Bei Anmeldung Gridauswahl anzeigen" name="show_grid_selection_check"/>
 	<check_box label="Menü „Erweitert“ anzeigen" name="show_advanced_menu_check"/>
 	<check_box label="Menü „Entwickler“ anzeigen" name="show_develop_menu_check"/>
+	<text name="BackgroundYieldTimeText">
+		Zeit in Millisekunden, die pro Frame an andere Anwendungen abgegeben werden, wenn [APP_NAME] nicht im Vordergrund ist [Standard: 40; 1 Sekunde = 1000 Millisekunden]
+	</text>
     <button label="Alle Einstellungen zurücksetzen" label_selected="Alle Einstellungen zurücksetzen..." name="clear_settings"/>
 </panel>
