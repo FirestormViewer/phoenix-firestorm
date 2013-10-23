@@ -57,6 +57,34 @@
      name="show_develop_menu_check"
      top_pad="5"
      width="237"/>
+
+    <text
+     name="BackgroundYieldTimeText"
+     follows="top|left"
+     layout="topleft"
+     left="30"
+     right="-1"
+     word_wrap="true"
+     top_pad="30"
+     height="100">
+        Amount of time, in milliseconds, to yield every frame to other applications when Firestorm is not the foreground window (default: 40; 1 second = 1000 milliseconds):
+    </text>
+    <slider
+     can_edit_text="true"
+     control_name="BackgroundYieldTime"
+     decimal_digits="0"
+     follows="top|left"
+     layout="topleft"
+     height="15"
+     increment="10"
+     initial_value="40"
+     left="30"
+     max_val="1000"
+     min_val="0"
+     name="BackgroundYieldTime"
+     top_delta="40"
+     width="250" />
+
     <button
      top="40"
      enabled="true"
