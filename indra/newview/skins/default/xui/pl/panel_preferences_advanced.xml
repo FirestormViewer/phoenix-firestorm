@@ -11,7 +11,7 @@
 	<check_box label="Pokaż menu Zaawansowane (na własną odpowiedzialność!)" name="show_advanced_menu_check"/>
 	<check_box label="Pokaż menu Programista" name="show_develop_menu_check"/>
 	<text name="BackgroundYieldTimeText">
-		Ilość czasu, w milisekundach, jaką Firestorm ma odstępować innym aplikacjom, gdy nie jest na pierwszym planie (domyślnie: 40; 1 sekunda = 1000 milisekund):
+		Ilość czasu, w milisekundach, jaką [APP_NAME] ma odstępować innym aplikacjom, gdy nie jest na pierwszym planie (domyślnie: 40; 1 sekunda = 1000 milisekund):
 	</text>
 	<button label="Resetuj wszystkie ustawienia" label_selected="Resetuj wszystkie ustawienia..." name="clear_settings"/>
 </panel>

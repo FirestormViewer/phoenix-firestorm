@@ -67,7 +67,7 @@
      word_wrap="true"
      top_pad="30"
      height="100">
-        Amount of time, in milliseconds, to yield every frame to other applications when Firestorm is not the foreground window (default: 40; 1 second = 1000 milliseconds):
+        Amount of time, in milliseconds, to yield every frame to other applications when [APP_NAME] is not the foreground window (default: 40; 1 second = 1000 milliseconds):
     </text>
     <slider
      can_edit_text="true"
