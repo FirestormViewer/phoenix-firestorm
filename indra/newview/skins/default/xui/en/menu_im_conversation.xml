@@ -41,7 +41,7 @@
      layout="topleft"
      name="View Icons Separator" />
     <menu_item_call
-     label="Chat history..."
+     label="Chat transcript..."
      layout="topleft"
      name="chat_history">
         <on_click function="Avatar.GearDoToSelected" parameter="chat_history"/>

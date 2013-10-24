@@ -923,6 +923,8 @@ class DarwinManifest(ViewerManifest):
 
                 for libfile in (
                                 "libcollada14dom.dylib",
+                                "libapr-1.0.dylib",
+                                "libaprutil-1.0.dylib",
                                 "libexpat.1.5.2.dylib",
                                 "libexception_handler.dylib",
                                 "libfmodex.dylib",

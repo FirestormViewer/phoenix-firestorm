@@ -93,7 +93,7 @@
 	<key>FSIMChatHistoryFade</key>
 	<map>
 		<key>Comment</key>
-		<string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
+		<string>Ammount to fade IM text into the background of the chat transcript floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
 		<key>Persist</key>
 		<integer>1</integer>
 		<key>Type</key>
@@ -107,7 +107,7 @@
 			<real>0.24</real>
 		</array>
 		<key>SanityComment</key>
-		<string>If you make this too small you might not be able to read IMs that are shown in chat history.</string>
+		<string>If you make this too small you might not be able to read IMs that are shown in chat transcript.</string>
 	</map>
   <key>UsePieMenu</key>
   <map>
@@ -313,7 +313,7 @@
 	<key>FSShowIMInChatHistory</key>
 	<map>
 		<key>Comment</key>
-		<string>If true, IM will also be shown in the nearby chat history.</string>
+		<string>If true, IM will also be shown in the nearby chat transcript.</string>
 		<key>Persist</key>
 		<integer>1</integer>
 		<key>Type</key>
@@ -335,7 +335,7 @@
 	<key>FSLogIMInChatHistory</key>
 	<map>
 		<key>Comment</key>
-		<string>If true, IM will also be logged in the nearby chat history if logging nearby chat and showing IMs in nearby chat is enabled.</string>
+		<string>If true, IM will also be logged in the nearby chat transcript if logging nearby chat and showing IMs in nearby chat is enabled.</string>
 		<key>Persist</key>
 		<integer>1</integer>
 		<key>Type</key>
@@ -1240,7 +1240,7 @@
   <key>OnlineOfflinetoNearbyChatHistory</key>
     <map>
       <key>Comment</key>
-      <string>Show online/offline notifications only in chat history</string>
+      <string>Show online/offline notifications only in chat transcript</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -1332,7 +1332,7 @@
     <key>ShowChatMiniIcons</key>
     <map>
       <key>Comment</key>
-      <string>Toggles the display of mini icons in chat history</string>
+      <string>Toggles the display of mini icons in chat transcript</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3274,7 +3274,7 @@
     <key>ChatHistoryTornOff</key>
     <map>
       <key>Comment</key>
-      <string>Show chat history window separately from Communicate window.</string>
+      <string>Show chat transcript window separately from Communicate window.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3396,7 +3396,7 @@
     <key>ConversationHistoryPageSize</key>
     <map>
       <key>Comment</key>
-      <string>Chat history of conversation opened from call log is displayed by pages. So this is number of entries per page.</string>
+      <string>Chat transcript of conversation opened from call log is displayed by pages. So this is number of entries per page.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3440,7 +3440,7 @@
     <key>CloseChatOnEmptyReturn</key>
     <map>
       <key>Comment</key>
-      <string>Close the chat history floater after hitting return on an empty line</string>
+      <string>Close the chat transcript floater after hitting return on an empty line</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3587,7 +3587,7 @@
     <key>ConsoleBufferSize</key>
     <map>
       <key>Comment</key>
-      <string>Size of chat console history (lines of chat)</string>
+      <string>Size of chat console transcript (lines of chat)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -5719,7 +5719,7 @@
     <key>FloaterStatisticsRect</key>
     <map>
       <key>Comment</key>
-      <string>Rectangle for chat history</string>
+      <string>Rectangle for chat transcript</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9612,7 +9612,7 @@ Change of this parameter will affect the layout of buttons in notification toast
    <key>PlainTextChatHistory</key>
     <map>
       <key>Comment</key>
-      <string>Enable/Disable plain text chat history style</string>
+      <string>Enable/Disable plain text chat transcript style</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -16638,7 +16638,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>WarningsAsChat</key>
     <map>
       <key>Comment</key>
-      <string>Display warning messages in chat history</string>
+      <string>Display warning messages in chat transcript</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -17360,7 +17360,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSCmdLineClearChat</key>
 		<map>
 			<key>Comment</key>
-			<string>Clear chat history to stop lag from chat spam</string>
+			<string>Clear chat transcript to stop lag from chat spam</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -20199,7 +20199,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSShowMutedChatHistory</key>
     <map>
       <key>Comment</key>
-      <string>Shows the muted text in nearby chat history if enabled.</string>
+      <string>Shows the muted text in nearby chat transcript if enabled.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -21252,7 +21252,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSIMSystemMessageBrackets</key>
     <map>
       <key>Comment</key>
-      <string>Enables surrounding system messages with square brackets in chat history. []</string>
+      <string>Enables surrounding system messages with square brackets in chat transcript. []</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -21296,7 +21296,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>FSUseBuiltInHistory</key>
     <map>
       <key>Comment</key>
-      <string>Open the conversation history in the built in log viewer.</string>
+      <string>Open the conversation transcript in the built in log viewer.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -21584,6 +21584,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Flash/Bounce the app icon when a script dialog is received and Firestorm is not in focus</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSFlashOnMessage</key>
+    <map>
+      <key>Comment</key>
+      <string>Flash/Bounce the app icon when a new message is recieved and Firestorm is not in focus</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

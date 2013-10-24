@@ -262,7 +262,7 @@
      name="log_path_desc"
      top_delta="35"
      width="300">
-        Chat Logs location:
+        Conversation logs and transcripts location:
     </text>
     <line_editor
      control_name="InstantMessageLogPath"

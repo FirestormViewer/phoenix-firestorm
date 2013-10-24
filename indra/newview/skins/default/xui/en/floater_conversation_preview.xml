@@ -70,7 +70,7 @@
      image_pressed="PushButton_Press"
      image_pressed_selected="PushButton_Selected_Press"
      image_selected="PushButton_Selected_Press"
-     tool_tip="Open chat history externally"
+     tool_tip="Open chat transcript externally"
      image_overlay="List_View_On"
      name="open_external_btn"
      top_delta="-2"
