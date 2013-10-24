@@ -25,7 +25,7 @@
 			<button label="Resetuj" label_selected="Resetuj" name="reset_cache"/>
 			<button label="Wyczyść" label_selected="Wyczyść" name="clear_cache"/>
 			<text name="log_path_desc">
-				Położenie logów czatów:
+				Położenie dzienników i logów czatów:
 			</text>
 			<button label="Pokaż" label_selected="Pokaż" name="open_log_path_button-panelsetup"/>
 			<button label="Ustaw" label_selected="Ustaw" name="log_path_button-panelsetup"/>
