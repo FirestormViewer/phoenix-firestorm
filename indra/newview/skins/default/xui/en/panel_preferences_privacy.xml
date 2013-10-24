@@ -184,12 +184,12 @@
     enabled="false"
     control_name="LogNearbyChat"
     name="LogNearbyChat"
-    label="Save Nearby chat"
+    label="Save nearby chat transcript"
     layout="topleft"
     top_delta="-2"
     left_pad="2"
     height="18"
-    tool_tip="Record nearby chat messages to your hard drive"
+    tool_tip="Record nearby chat message transcript to your hard drive"
     width="200" />
         
    <combo_box
@@ -198,6 +198,7 @@
     height="23"
     layout="topleft"
     left="32"
+    tool_tip="Logs (Conversation Logs): The list of chat conversations started by you or another party. Transcripts: The actual written text as it appeared on the screen."
     top_pad="0"
     name="conversation_log_combo"
     width="165">
@@ -245,7 +246,6 @@
      layout="topleft"
      follows="left|top"
      left="30"
-     text_color="White"
      height="12"
      top_pad="4"
      width="100">

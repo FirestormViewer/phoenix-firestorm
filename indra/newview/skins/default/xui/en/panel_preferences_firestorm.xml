@@ -1025,14 +1025,14 @@
       height="16"
       name="FSCmdLineClearChat_txt"
       width="250">
-      Clear the chat history (usage: cmd)
+      Clear the chat transcript (usage: cmd)
     </text>
     <line_editor
       top_pad="0"
       follows="left|top"
       height="20"
       max_length_chars="256"
-      tool_tip="Clears the Chat History to prevent lag effects from chat spammers."
+      tool_tip="Clears the Chat Transcript to prevent lag effects from chat spammers."
       name="FSCmdLineClearChat"
       control_name="FSCmdLineClearChat"
       width="200"/>

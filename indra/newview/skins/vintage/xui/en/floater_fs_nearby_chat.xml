@@ -77,7 +77,7 @@
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
        image_selected="PushButton_Selected_Press"
-       tool_tip="Open the nearby chat history."
+       tool_tip="Open the nearby chat transcript."
        name="chat_history_btn"/>
      </layout_panel>
      <layout_panel
@@ -100,7 +100,7 @@
        image_pressed="PushButton_Press"
        image_pressed_selected="PushButton_Selected_Press"
        image_selected="PushButton_Selected_Press"
-       tool_tip="Shows the muted chat in nearby chat history."
+       tool_tip="Shows the muted chat in nearby chat transcript."
        name="chat_history_muted_btn">
 		  </button>
 
