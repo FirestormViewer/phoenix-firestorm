@@ -198,7 +198,7 @@
     height="23"
     layout="topleft"
     left="32"
-    tool_tip="Logs (Conversation Logs): The list of chat conversations started by you or another party. Transcripts: The actual written text as it appeared on the screen."
+    tool_tip="Log (Conversation Log): The list of chat conversations started by you or another party. Transcript: The actual written text as it appeared on the screen."
     top_pad="0"
     name="conversation_log_combo"
     width="165">
