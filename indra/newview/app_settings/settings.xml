@@ -93,7 +93,7 @@
 	<key>FSIMChatHistoryFade</key>
 	<map>
 		<key>Comment</key>
-		<string>Ammount to fade IM text into the background of the chat transcript floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
+		<string>Amount to fade IM text into the background of the chat transcript floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
 		<key>Persist</key>
 		<integer>1</integer>
 		<key>Type</key>
