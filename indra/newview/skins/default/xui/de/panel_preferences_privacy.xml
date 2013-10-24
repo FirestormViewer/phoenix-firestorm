@@ -27,20 +27,20 @@
 			<text name="logging_label" width="100">
 				Speichern:
 			</text>
-			<check_box name="LogNearbyChat" label="Chat in der Nähe speichern" tool_tip="Protokolle von Gesprächen in der Nähe auf meinem Computer speichern"/>
-			<combo_box name="conversation_log_combo">
-				<item name="log_and_transcripts" label="Verlauf und Protokolle"/>
-				<item name="log_only" label="Nur Verlauf"/>
-				<item name="no_log_or_transcript" label="Keine Verlauf oder Protokoll"/>
+			<check_box name="LogNearbyChat" label="Chat in der Nähe speichern" tool_tip="Verlauf von Gesprächen in der Nähe auf meinem Computer speichern"/>
+			<combo_box name="conversation_log_combo" tool_tip="Protokoll: Liste von Gesprächen, die von Ihnen oder einer anderen Person initiiert wurden. Verläufe: Der eigentliche Text, wie er auf dem Bildschirm dargestellt wurde.">
+				<item name="log_and_transcripts" label="Protokoll und Verläufe"/>
+				<item name="log_only" label="Nur Protokoll"/>
+				<item name="no_log_or_transcript" label="Kein Protokoll oder Verläufe"/>
 			</combo_box>
-			<button label="Verlauf löschen..." name="clear_log"/>
-			<button label="Protokolle löschen..." name="delete_transcripts"/>
+			<button label="Protokoll löschen..." name="clear_log"/>
+			<button label="Verläufe löschen..." name="delete_transcripts"/>
 			<text name="log_location_label">
 				Speicherort:
 			</text>
-			<check_box name="UseLegacyIMLogNames" label="Klassisches Dateinamensformat für Protokolle verwenden" tool_tip="Falls aktiviert, wird das alte Namensformat für Protokolle (Benutzer Name) anstatt des aktuellen (benutzer_name) verwendet."/>
-			<check_box name="LogFileNamewithDate" label="Datum zum Protokolldateinamen hinzufügen" tool_tip="Fügt das aktuelle Datum zum Dateinamen des Protokolls im Format „chat-JJJJ-MM-TT“ bzw. „Protokollname-JJJJ-MM-TT“ hinzu."/>
-			<check_box name="FSUseBuiltInHistory" label="Integrierte Protokollansicht verwenden" tool_tip="Verwendet den integrierten Betrachter für Protokolle. Falls deaktiviert, wird der standardmäßige Texteditor des Betriebssystems verwendet."/>
+			<check_box name="UseLegacyIMLogNames" label="Klassisches Dateinamensformat für Verläufe verwenden" tool_tip="Falls aktiviert, wird das alte Namensformat für Verläufe (Benutzer Name) anstatt des aktuellen (benutzer_name) verwendet."/>
+			<check_box name="LogFileNamewithDate" label="Datum zum Verlaufsdateinamen hinzufügen" tool_tip="Fügt das aktuelle Datum zum Dateinamen des Verlaufs im Format „chat-JJJJ-MM-TT“ bzw. „Verlaufname-JJJJ-MM-TT“ hinzu."/>
+			<check_box name="FSUseBuiltInHistory" label="Integrierte Verlaufsansicht verwenden" tool_tip="Verwendet den integrierten Betrachter für Verläufe. Falls deaktiviert, wird der standardmäßige Texteditor des Betriebssystems verwendet."/>
 			<button label="Ignorierte Einwohner/Objekte" name="block_list" width="180"/>
 		</panel>
 

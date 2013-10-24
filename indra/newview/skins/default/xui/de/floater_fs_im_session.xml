@@ -32,7 +32,7 @@
 			<button name="voice_ctrls_btn" tool_tip="Anruf-Eigenschaften"/>
 		</layout_panel>
 		<layout_panel name="im_history_btn_panel">
-			<button name="im_history_btn" tool_tip="Gesprächsprotokoll öffnen"/>
+			<button name="im_history_btn" tool_tip="Gesprächsverlauf öffnen"/>
 		</layout_panel>
 	</layout_stack>
 
