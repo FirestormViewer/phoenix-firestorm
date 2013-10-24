@@ -262,13 +262,22 @@
       width="90"
       tool_tip="The channel used for reporting collision messages to scripts [Default: -25000]"/>
     <check_box
+     control_name="FSFlashOnMessage"
+     height="16"
+     label="Flash the app icon when receiving a message and [APP_NAME] is not in focus"
+     layout="topleft"
+     left="10"
+     name="FSFlashOnMessage"
+     top_pad="5"
+     width="160"/>
+    <check_box
      control_name="FSFlashOnScriptDialog"
      height="16"
      label="Flash the app icon when receiving a script dialog and [APP_NAME] is not in focus"
      layout="topleft"
      left="10"
      name="FSFlashOnScriptDialog"
-     top_pad="5"
+     top_pad="2"
      width="160"/>
     <check_box
      control_name="FSDisableReturnObjectNotification"
