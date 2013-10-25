@@ -326,8 +326,8 @@ Intel HD Graphics 4200					.*Intel.*HD Graphics 42.*							3	1	0	4.2
 Intel HD Graphics 4400					.*Intel.*HD Graphics 44.*							3	1	0	4.2
 Intel HD Graphics 4600					.*Intel.*HD Graphics 46.*							3	1	0	4.2
 Intel HD Graphics 5000					.*Intel.*HD Graphics 50.*							4	1	0	4.2
-Intel Intel Iris Graphics 5100			.*Intel.*Iris Graphics 51.*							4	1	0	4.2
-Intel Intel Iris Pro Graphics 5200		.*Intel.*Iris Pro Graphics 52.*						4	1	0	4.2
+Intel Iris Graphics 5100				.*Intel.*Iris (Graphics 51|OpenGL).*				4	1	0	4.2
+Intel Iris Pro Graphics 5200			.*Intel.*Iris Pro (Graphics 52|OpenGL).*			4	1	0	4.2
 Intel HD Graphics						.*Intel.*HD Graphics.*								2	1	1	3.1
 Intel Mobile 4 Series					.*Intel.*Mobile.* 4 Series.*						0	1	1	2.1
 Intel Mobile 45 Express					.*Intel.*Mobile.* 45 Express Chipset.*				0	1	0	2.1
@@ -504,7 +504,7 @@ NVIDIA GT 63x							.*NVIDIA .*GT 63.*									3	1	0	4.3
 NVIDIA GT 64x							.*NVIDIA .*GT 64.*									3	1	0	4.3
 NVIDIA GT 65x							.*NVIDIA .*GT 65.*									3	1	1	4.3
 NVIDIA GTX 64x							.*NVIDIA .*GTX 64.*									3	1	1	4.3
-NVIDIA GTX 65x							.*NVIDIA .*GTX 65.*									3	1	1	4.3
+NVIDIA GTX 65x							.*NVIDIA .*(GTX 65|D14P2).*							3	1	1	4.3
 NVIDIA GTX 66x							.*NVIDIA .*GTX 66.*									5	1	0	4.3
 NVIDIA GTX 67x							.*NVIDIA .*GTX 67.*									5	1	1	4.3
 NVIDIA GTX 68x							.*NVIDIA .*GTX 68.*									5	1	1	4.3
@@ -657,4 +657,3 @@ Oracle									VirtualBox.*										0	1	1	2.1
 Humper									Humper.*											0	1	1	2.1
 PowerVR SGX545							.*PowerVR SGX.*										1	1	1	3
 ATI GeForce Lulz						.*ATI.*GeForce.*									0	0	0	0
-
