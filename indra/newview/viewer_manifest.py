@@ -774,7 +774,7 @@ class WindowsManifest(ViewerManifest):
 
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
                            " " + substitution_strings[ 'channel' ] + " " + substitution_strings[ 'version' ] +
-                           " " + settingsFile + " " + installer_file )
+                           " " + settingsFile + " " + installer_file + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
           
         #AO: Try to sign installer next, if we can, using "The Phoenix Firestorm Project" signing cert.
         try:

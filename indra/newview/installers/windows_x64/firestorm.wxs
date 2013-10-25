@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
- <Product Id="AA43534B-9D12-4740-82AF-AC207AC2FB7A"
+ <Product Id="*"
    Name="Firestorm SecondLife and OpenSim viewer"
-   Language="1033" Version="1.0.0.0" Manufacturer="Phoenix Viewer Project"
+   Language="1033" Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)" Manufacturer="Phoenix Viewer Project"
    UpgradeCode="3FCFE6FD-1A6F-40f8-8683-CDBFE16CF653">
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
 
