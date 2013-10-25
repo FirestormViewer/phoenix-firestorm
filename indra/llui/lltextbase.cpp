@@ -2302,16 +2302,7 @@ void LLTextBase::appendLineBreakSegment(const LLStyle::Params& style_params)
 	LLStyleConstSP sp(new LLStyle(style_params));
 	segments.push_back(new LLLineBreakTextSegment(sp, getLength()));
 
-	//<FS:TS> FIRE-11836: Window doesn't scroll to bottom with new text
-	// If the cursor was at the end of the text, need to reset the
-	//  cursor position after appending the newline.
-	bool cursor_was_at_end = (mCursorPos == getLength());
 	insertStringNoUndo(getLength(), utf8str_to_wstring("\n"), &segments);
-	if (cursor_was_at_end)
-	{
-		setCursorPos(getLength());
-	}
-	//</FS:TS> FIRE-11836
 }
 
 void LLTextBase::appendImageSegment(const LLStyle::Params& style_params)
@@ -2324,16 +2315,7 @@ void LLTextBase::appendImageSegment(const LLStyle::Params& style_params)
 	LLStyleConstSP sp(new LLStyle(style_params));
 	segments.push_back(new LLImageTextSegment(sp, getLength(),*this));
 
-	//<FS:TS> FIRE-11836: Window doesn't scroll to bottom with new text
-	// If the cursor was at the end of the text, need to reset the
-	//  cursor position after appending the placeholder blank.
-	bool cursor_was_at_end = (mCursorPos == getLength());
 	insertStringNoUndo(getLength(), utf8str_to_wstring(" "), &segments);
-	if (cursor_was_at_end)
-	{
-		setCursorPos(getLength());
-	}
-	//</FS:TS> FIRE-11836
 }
 
 void LLTextBase::appendWidget(const LLInlineViewSegment::Params& params, const std::string& text, bool allow_undo)
@@ -2427,12 +2409,7 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
 	}
 	else if( cursor_was_at_end )
 	{
-		//<FS:TS> FIRE-11836: Window doesn't scroll to bottom with new text
-		// setCursorPos() doesn't change the scroll position, so
-		//  we use endOfDoc() (which will call setCursorPos()).
-		//setCursorPos(getLength());
-		endOfDoc();
-		//</FS:TS> FIRE-11836
+		setCursorPos(getLength());
 	}
 	else
 	{
