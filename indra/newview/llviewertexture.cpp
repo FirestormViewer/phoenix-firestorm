@@ -459,6 +459,13 @@ bool LLViewerTexture::isMemoryForTextureLow()
 	const F32 WAIT_TIME = 1.0f ; //second
 	static LLFrameTimer timer ;
 
+	// <FS:ND> Disable memory checking on request
+	static LLCachedControl<bool> FSDisableMemCheck(gSavedSettings, "FSDisableAMDTextureMemoryCheck");
+
+	if( FSDisableMemCheck )
+		return false;
+	// </FS:ND>
+
 	if(timer.getElapsedTimeF32() < WAIT_TIME) //call this once per second.
 	{
 		return false;
