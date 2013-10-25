@@ -2410,6 +2410,13 @@ void LLTextBase::appendAndHighlightTextImpl(const std::string &new_text, S32 hig
 	else if( cursor_was_at_end )
 	{
 		setCursorPos(getLength());
+		// <FS:CR> FIRE-11836 - Push the scroller down too when the cursor is at end of doc
+		if (mScroller)
+		{
+			mScroller->goToBottom();
+		}
+		// </FS:CR>
+
 	}
 	else
 	{
