@@ -100,6 +100,8 @@ private:
 	LLSD mLegacyClientList;
 	
 	std::string mFSdataFilename;
+	std::string mFSdataDefaultsFilename;
+	std::string mFSdataDefaultsUrl;
 	std::string mAgentsFilename;
 	std::string mAssestsFilename;
 	std::string mClientTagsFilename;
