@@ -193,6 +193,7 @@ inline S32 llceil( F32 f )
 
 #ifndef BOGUS_ROUND
 // Use this round.  Does an arithmetic round (0.5 always rounds up)
+#define llround _llround // <FS:TM> added to not conflict with 'Long Long Round' in newer compilers
 inline S32 llround(const F32 val)
 {
 	return llfloor(val + 0.5f);
