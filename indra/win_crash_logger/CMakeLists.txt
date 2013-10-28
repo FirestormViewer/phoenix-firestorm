@@ -3,6 +3,7 @@
 project(win_crash_logger)
 
 include(00-Common)
+include(DirectX)
 include(LLCommon)
 include(LLCrashLogger)
 include(LLMath)
