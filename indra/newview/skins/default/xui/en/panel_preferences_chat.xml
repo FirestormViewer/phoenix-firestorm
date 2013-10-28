@@ -541,7 +541,7 @@
              top_pad="3"
              left_delta="4"
              name="FSShowGroupNameLength_label"
-             width="275">
+             width="290">
                 Length of group name to be printed in chat transcript
             </text>
             <spinner
@@ -594,7 +594,7 @@
              height="15"
              left="44"
              name="FSIMChatHistoryFade_label"
-             width="325">
+             width="340">
                 Fade IM text into the background of the chat transcript window
             </text>
             <spinner
