@@ -975,10 +975,10 @@ void LLStatusBar::onNavBarShowCoordinatesCtrlChanged()
 
 void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 {
-	// Ansariel: Use V1 layout for location string in status bar so
-	//           that the most important information dont't get lost:
-	//           First region name, followed by location, maturity
-	//           rating and at the end the parcel description.
+	// <FS:Ansariel> Use V1 layout for location string in status bar so
+	//               that the most important information dont't get lost:
+	//               First region name, followed by location, maturity
+	//               rating and at the end the parcel description.
 	//LLAgentUI::ELocationFormat format =
 	//	(show_coords ? LLAgentUI::LOCATION_FORMAT_FULL : LLAgentUI::LOCATION_FORMAT_NO_COORDS);
 	LLAgentUI::ELocationFormat format = LLAgentUI::LOCATION_FORMAT_V1_STATUSBAR;
@@ -995,17 +995,16 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 	const LLFontGL* font = mParcelInfoText->getFont();
 	S32 new_text_width = font->getWidth(new_text);
 
-        //<FS:TS> Avoid processing the parcel string every frame if it
-        // hasn't changed.
-        static std::string old_text = "";
-        if (new_text == old_text)
-        {
-                return;
-        }
-        old_text = new_text;
-        //</FS:TS>
-
-	mParcelInfoText->setText(new_text);
+	//<FS:TS> Avoid processing the parcel string every frame if it
+	// hasn't changed.
+	//mParcelInfoText->setText(new_text);
+	static std::string old_text = "";
+	if (new_text != old_text)
+	{
+		mParcelInfoText->setText(new_text);
+		old_text = new_text;
+	}
+	//</FS:TS>
 
 	LLRect rect = mParcelInfoText->getRect();
 	rect.setOriginAndSize(rect.mLeft, rect.mBottom, new_text_width, rect.getHeight());
@@ -1058,10 +1057,10 @@ void LLStatusBar::updateParcelInfoText()
 {
 	static LLUICachedControl<bool> show_coords("NavBarShowCoordinates", false);
 
-	// Ansariel: This doesn't make sense at all. The location in the statusbar
-	//           has ever shown coordinates and why should one have to enable
-	//           the navigation bar to configure a setting that has effect on
-	//           the statusbar?
+	// <FS:Ansariel> This doesn't make sense at all. The location in the statusbar
+	//               has ever shown coordinates and why should one have to enable
+	//               the navigation bar to configure a setting that has effect on
+	//               the statusbar?
 	// if (show_coords)
 	// {
 		std::string new_text;
