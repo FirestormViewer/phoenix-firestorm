@@ -106,8 +106,10 @@ namespace {
 		{
 			mFile.close();
 		}
-		
-		bool okay() { return mFile; }
+
+		// <FS:TM> VS2013 compile fix
+		//bool okay() { return mFile; }
+		bool okay() { return !!mFile; }
 		
 		virtual bool wantsTime() { return true; }
 		
