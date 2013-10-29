@@ -28,7 +28,7 @@
 			<check_box name="FSChatbarGestureAutoCompleteEnable" label="Activar el autocompletado de los gestos en la barra de chat local"/>
 			<check_box name="FSChatbarNamePrediction" label="Activar la predicción automática de nombre en la barra de chat general"/>
 			<check_box name="FSIMSystemMessageBrackets" label="Encerrar los mensajes del sistema entre corchetes"/>
-			<check_box name="FSChatHistoryShowYou" label="Mostrar &quot;Tú&quot; en vez de tu nombre en el historial de chat"/>
+			<check_box name="FSChatHistoryShowYou" label="Mostrar &quot;Tú&quot; en vez de tu nombre en la transcripción de chat"/>
 			<check_box name="IMShowNamesForP2PConv" label="Mostrar nombres en MIs directos"/>
 			<check_box label="Cuando estoy desconectado, recibir los MI por email ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="No usar cabeceras de chat (usar estilo V1)" name="plain_text_chat_history"/>
@@ -87,14 +87,14 @@
 			<check_box name="FSLogImToChatConsole" label="Mostrar los MI en la consola"/>
 			<check_box name="FSLogGroupImToChatConsole" label="Mostrar chats de grupo en la consola"/>
 			<text name="FSShowGroupNameLength_label" width="380">
-				Longitud del nombre del grupo a mostrar en el historial de chat
+				Longitud del nombre del grupo a mostrar en la transcripción de chat
 			</text>
 			<spinner tool_tip="-1 para mostrar el nombre completo, 0 para no mostrar" name="FSShowGroupNameLength" width="45"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Abrir Conversaciones cuando se reciba un mensaje offline"/>
 			<check_box name="FSShowIMInChatHistory" label="Mostrar MIs en la ventana de chat local"/>
 			<check_box name="FSLogIMInChatHistory" label="Guardar MIs en el chat local" width="180"/>
 			<text name="FSIMChatHistoryFade_label" width="380">
-				Fundir el texto de MI con el fondo de la ventana de historial de chat
+				Fundir el texto de MI con el fondo de la ventana de transcripción de chat
 			</text>
 			<spinner tool_tip="0.0-1.0, 0 para fundido máximo, 1 para no fundir" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Anunciar MI entrante tan pronto como el remitente empiece a escribir"/>
@@ -173,7 +173,7 @@
 			</text>
 			<check_box label="Chat local" name="show_timestamps_nearby_chat"/>
 			<check_box label="MIs" name="show_timestamps_im"/>
-			<check_box label="Registro" name="show_timestamps_transcripts"/>
+			<check_box label="Transcripción" name="show_timestamps_transcripts"/>
 			<check_box name="FSSecondsinChatTimestamps" label="Mostrar segundos en las marcas de tiempo [HH:MM:SS]"/>
 			<text name="console_enhancements">
 				Consola:

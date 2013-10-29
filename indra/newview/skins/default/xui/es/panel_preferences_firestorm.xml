@@ -128,9 +128,9 @@
 				Activar/desactivar el AO (uso: cmd on/off)
 			</text>
 			<text name="FSCmdLineClearChat_txt" width="270">
-				Limpiar el historial de chat (uso: cmd)
+				Limpiar transcripción de chat (uso: cmd)
 			</text>
-			<line_editor tool_tip="Limpia el historial de chat para evitar efectos de lag procedentes de spammers." name="FSCmdLineClearChat"/>
+			<line_editor tool_tip="Limpia la transcripción de chat para evitar efectos de lag procedentes de spammers." name="FSCmdLineClearChat"/>
 			<text name="FSCmdLineMedia_txt" width="270">
 				Conf. URL de medios (uso: cmd url tipo)
 			</text>

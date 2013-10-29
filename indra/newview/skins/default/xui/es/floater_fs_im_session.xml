@@ -32,7 +32,7 @@
 			<button tool_tip="Controles de voz" name="voice_ctrls_btn"/>
 		</layout_panel>
 		<layout_panel name="im_history_btn_panel">             
-			<button tool_tip="Abre el historial de esta conversación" name="im_history_btn"/>
+			<button tool_tip="Abre la transcripción de esta conversación" name="im_history_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" tool_tip="Añade tu versión actual de visor y la información de skin al principio de tus mensajes para ayudar al equipo de soporte a diagnosticar tus problemas correctamente y a mejorar la precisión en las respuestas a tus preguntas"/>

@@ -3,5 +3,5 @@
 	<menu_item_check label="Ordenar alfabéticamente" name="sort_by_name"/>
 	<menu_item_check label="Ordenar por fecha" name="sort_by_date"/>
 	<menu_item_check label="Amigos al principio" name="sort_by_friends"/>
-	<menu_item_call label="Ver el historial de chat..." name="view_nearby_chat_history"/>
+	<menu_item_call label="Ver transcripción del chat general..." name="view_nearby_chat_history"/>
 </toggleable_menu>

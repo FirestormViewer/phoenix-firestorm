@@ -23,8 +23,8 @@
 			<text name="logging_label">
 				Guardar:
 			</text>
-			<check_box name="LogNearbyChat" label="Guardar chat local" tool_tip="Guardar un registro del chat local en mi equipo"/>
-			<combo_box name="conversation_log_combo" width="170">
+			<check_box name="LogNearbyChat" label="Guardar transcripción del chat local" tool_tip="Guardar una transcripción del chat local en mi equipo"/>
+			<combo_box name="conversation_log_combo" width="170" tool_tip="Registro (Registro de conversación): La lista de de conversaciones iniciadas por ti o por otras partes. Transcripción: El texto escrito real tal como aparece en pantalla.">
 				<item name="log_and_transcripts" label="Registro y transcripciones"/>
 				<item name="log_only" label="Sólo registro"/>
 				<item name="no_log_or_transcript" label="Ni registro ni transcripciones"/>

@@ -4,5 +4,5 @@
 		Conversación: [NAME]
 	</floater.string>
 	<text name="page_label" value="Pág."/>
-	<button tool_tip="Abrir historial de chat externamente" name="open_external_btn"/>
+	<button tool_tip="Abrir transcripción de chat externamente" name="open_external_btn"/>
 </floater>
