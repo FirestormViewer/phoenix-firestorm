@@ -53,11 +53,16 @@
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+const std::string BASE_URL = "http://phoenixviewer.com/app/fsdata";
+#else
 const std::string BASE_URL = "http://phoenixviewer.com/app/fsdatatest";
-const std::string FSDATA_URL = "http://phoenixviewer.com/app/fsdatatest/data.xml";
-const std::string AGENTS_URL = "http://phoenixviewer.com/app/fsdatatest/agents.xml";
+#endif
+
+const std::string FSDATA_URL = BASE_URL + "/" + "data.xml";
+const std::string AGENTS_URL = BASE_URL + "/" + "agents.xml";
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
-const std::string ASSETS_URL = "http://phoenixviewer.com/app/fsdatatest/assets.xml";
+const std::string ASSETS_URL = BASE_URL + "/" + "assets.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 const F32 HTTP_TIMEOUT = 30.f;
 
