@@ -772,6 +772,7 @@ class WindowsManifest(ViewerManifest):
           createMSI  = self.dst_path_of( "../../../indra/newview/" + createMSI)
           settingsFile = "settings_%s_v4.xml" % self.app_name()
 
+          substitution_strings['installer_file'] = installer_file
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
                            " " + substitution_strings[ 'channel' ] + " " + substitution_strings[ 'version' ] +
                            " " + settingsFile + " " + installer_file + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
