@@ -9099,6 +9099,7 @@ class LLGridCheck : public view_listener_t
 		{
 			return LLGridManager::getInstance()->isInSecondLife();
 		}
+#ifdef OPENSIM
 		else if ("opensim" == grid_type)
 		{
 			return LLGridManager::getInstance()->isInOpenSim();
@@ -9107,9 +9108,16 @@ class LLGridCheck : public view_listener_t
 		{
 			return LLGridManager::getInstance()->isInAuroraSim();
 		}
+#else // !OPENSIM
+		else if ("opensim" == grid_type || "aurorasim" == grid_type)
+		{
+			LL_DEBUGS("ViewerMenu") << grid_type << "is not a supported platform on Havok builds. Disabling item." << LL_ENDL;
+			return false;
+		}
+#endif // OPENSIM
 		else
 		{
-			LL_WARNS("ViewerMenu") << "Unhandled or bad on_visible gridcheck parameter!" << LL_ENDL;
+			LL_WARNS("ViewerMenu") << "Unhandled or bad on_visible gridcheck parameter! (" << grid_type << ")" << LL_ENDL;
 		}
 		return true;
 	}
