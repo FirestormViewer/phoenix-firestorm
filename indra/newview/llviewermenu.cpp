@@ -7390,15 +7390,6 @@ bool update_grid_help()
 			gMenuHolder->childSetVisible("Destinations", false);
 		}
 	}
-// <FS:CR> Show/hide some menu items depending on if they're supported by the platform or not
-	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
-	bool opensim = LLGridManager::getInstance()->isInOpenSim();
-	gMenuHolder->childSetVisible("Manage Account", !opensim);
-	gMenuHolder->childSetVisible("MerchantOutbox", !opensim);
-	// FIX ME: gMenuHolder->childSetVisible("Pathfinding", !opensim);
-	gMenuHolder->childSetVisible("LindenXchange", !opensim);
-	gMenuHolder->childSetVisible("SL Marketplace", !opensim); // TODO: Devise or conspire a way to fetch other grids' web marketplaces instead of hiding this
-// </FS:CR>
 #endif // OPENSIM // <FS:AW optional opensim support>
 // </FS:AW  opensim destinations and avatar picker>
 
@@ -9098,6 +9089,33 @@ class FSDumpSimulatorFeaturesToChat : public view_listener_t
 };
 // </FS:CR> Dump SimulatorFeatures to chat
 
+// <FS:CR> Opensim menu item visibility control
+class LLGridCheck : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		std::string grid_type = userdata.asString();
+		if ("secondlife" == grid_type)
+		{
+			return LLGridManager::getInstance()->isInSecondLife();
+		}
+		else if ("opensim" == grid_type)
+		{
+			return LLGridManager::getInstance()->isInOpenSim();
+		}
+		else if ("aurorasim" == grid_type)
+		{
+			return LLGridManager::getInstance()->isInAuroraSim();
+		}
+		else
+		{
+			LL_WARNS("ViewerMenu") << "Unhandled or bad on_visible gridcheck parameter!" << LL_ENDL;
+		}
+		return true;
+	}
+};
+// </FS:CR>
+
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -10354,6 +10372,8 @@ void initialize_menus()
 
 	// <FS:Ansariel> [FS communication UI]
 	//enable.add("Conversation.IsConversationLoggingAllowed", boost::bind(&LLFloaterIMContainer::isConversationLoggingAllowed));
+	
+	view_listener_t::addEnable(new LLGridCheck(), "GridCheck");	// <FS:CR> Opensim menu item visibility control
 
 	// Agent
 	commit.add("Agent.toggleFlying", boost::bind(&LLAgent::toggleFlying));
@@ -10438,7 +10458,6 @@ void initialize_menus()
 	// </FS:PP>
 	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
 	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]
-// <FS:TM> CHUI Merge check above
 	view_listener_t::addMenu(new LLWorldEnableCreateLandmark(), "World.EnableCreateLandmark");
 // [RLVa:KB]
 	enable.add("World.EnablePlaceProfile", boost::bind(&enable_place_profile));
