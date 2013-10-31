@@ -1047,8 +1047,6 @@ bool windows_post_minidump_callback(const wchar_t* dump_path,
 									MDRawAssertionInfo* assertion,
 									bool succeeded)
 {
-	MessageBox( NULL, L"", L"", MB_OK );
-
 	// <FS:ND> Convert all path to UTF8 and not MBCS. Having some path in MBCS and some in UTF8 is a source of great joy
 	// and bugs. Stick with one standard, that is UTF8.
 	
