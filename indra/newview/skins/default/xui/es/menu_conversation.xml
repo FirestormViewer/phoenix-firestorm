@@ -8,7 +8,7 @@
 	<menu_item_call label="MI" name="im"/>
 	<menu_item_call label="Ofrecer teleporte" name="offer_teleport"/>
 	<menu_item_call label="Llamada de voz" name="voice_call"/>
-	<menu_item_call label="Historial del chat..." name="chat_history"/>
+	<menu_item_call label="Transcripción del chat..." name="chat_history"/>
 	<menu_item_call label="Ofrecer amistad" name="add_friend"/>
 	<menu_item_call label="Disolver amistad" name="remove_friend"/>
 	<menu_item_call label="Disolver amistades" name="remove_friends"/>

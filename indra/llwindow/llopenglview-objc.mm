@@ -106,7 +106,7 @@ attributedStringInfo getSegments(NSAttributedString *str)
     CGLError the_err = CGLQueryRendererInfo (CGDisplayIDToOpenGLDisplayMask(kCGDirectMainDisplay), &info, &num_renderers);
     if(0 == the_err)
     {
-        CGLDescribeRenderer (info, 0, kCGLRPTextureMemoryMegabytes, &vram_bytes);
+        CGLDescribeRenderer (info, 0, kCGLRPTextureMemory, &vram_bytes);
         CGLDestroyRendererInfo (info);
     }
     else

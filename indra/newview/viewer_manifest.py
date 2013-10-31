@@ -786,9 +786,10 @@ class WindowsManifest(ViewerManifest):
           createMSI  = self.dst_path_of( "../../../indra/newview/" + createMSI)
           settingsFile = "settings_%s_v4.xml" % self.app_name()
 
+          substitution_strings['installer_file'] = installer_file
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
                            " " + substitution_strings[ 'channel' ] + " " + substitution_strings[ 'version' ] +
-                           " " + settingsFile + " " + installer_file )
+                           " " + settingsFile + " " + installer_file + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
           
         #AO: Try to sign installer next, if we can, using "The Phoenix Firestorm Project" signing cert.
         try:
@@ -937,6 +938,8 @@ class DarwinManifest(ViewerManifest):
 
                 for libfile in (
                                 "libcollada14dom.dylib",
+                                "libapr-1.0.dylib",
+                                "libaprutil-1.0.dylib",
                                 "libexpat.1.5.2.dylib",
                                 "libexception_handler.dylib",
                                 "libfmodex.dylib",

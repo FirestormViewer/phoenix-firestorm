@@ -287,10 +287,15 @@ void FSFloaterIM::sendMsgFromInputEditor()
 						skinIndicator = skinIndicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
 					}
 					// </FS:PP>
-					
+
+#if !defined(ND_BUILD64BIT_ARCH)
+					std::string strFSTag = "(FS ";
+#else
+					std::string strFSTag = "(FS64 ";
+#endif
 					if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
 					{
-						utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
+						utf8_text.insert(4,(strFSTag + LLVersionInfo::getShortVersion() + skinIndicator +
 #ifdef OPENSIM
 											" os" +
 #endif
@@ -298,7 +303,7 @@ void FSFloaterIM::sendMsgFromInputEditor()
 					}
 					else
 					{
-						utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
+						utf8_text.insert(0,(strFSTag + LLVersionInfo::getShortVersion() + skinIndicator +
 #ifdef OPENSIM
 											" os" +
 #endif

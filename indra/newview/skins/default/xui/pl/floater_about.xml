@@ -42,7 +42,7 @@ Pole widzenia (Draw Distance): [DRAW_DISTANCE]
 Przepustowość (Bandwidth): [BANDWIDTH]
 Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
-Pamięć tekstur: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
 	</floater.string>
 	<floater.string name="none">
 		(brak)

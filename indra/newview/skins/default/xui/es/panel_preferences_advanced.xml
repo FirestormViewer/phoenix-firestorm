@@ -10,5 +10,8 @@
 	<check_box label="Permitir el inicio de sesión en otras redes (no todas las redes soportarán Firestorm)" name="show_grid_selection_check"/>
 	<check_box label="Mostrar el menú Avanzado" name="show_advanced_menu_check"/>
 	<check_box label="Mostrar el menú Desarrollo" name="show_develop_menu_check"/>
+	<text name="BackgroundYieldTimeText">
+		Cantidad de tiempo, en milisegundos, para ceder cada cuadro a otras aplicaciones cuando [APP_NAME] no está en primer plano (por defecto: 40; 1 segundo = 1000 milisegundos):
+	</text>
 	<button label="Restablecer todas las configuraciones" label_selected="Restablecer todas las configuraciones" name="clear_settings" width="250"/>
 </panel>

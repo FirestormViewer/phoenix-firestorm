@@ -376,7 +376,9 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 	llofstream filtersFile(filterSaveName.str());
 	if(!LLSDSerialize::toPrettyXML(filterRoot, filtersFile))
 	{
-		llwarns << "Could not write to filters save file " << filterSaveName << llendl;
+		// <FS:TM> VS2013 compile fix
+		//llwarns << "Could not write to filters save file " << filterSaveName << llendl;
+		llwarns << "Could not write to filters save file " << filterSaveName.str() << llendl;
 	}
 	else
 		filtersFile.close();
@@ -862,7 +864,9 @@ void LLPanelMainInventory::draw()
 		mResortActivePanel = false;
 	}
 	LLPanel::draw();
-	updateItemcountText();
+	/// <FS:CR> This really doesn't need updated every frame. changed() handles
+	/// it whenever inventory changes.
+	//updateItemcountText();
 }
 
 void LLPanelMainInventory::updateItemcountText()
@@ -890,7 +894,7 @@ void LLPanelMainInventory::updateItemcountText()
 	{
 		text = getString("ItemcountUnknown");
 	}
-	
+
     mCounterCtrl->setValue(text);
 }
 

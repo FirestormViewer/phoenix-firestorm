@@ -140,9 +140,9 @@
 			AO ein-/ausschalten (Befehl: cmd on/off)
 		</text>
 		<text name="FSCmdLineClearChat_txt">
-			Chat-Historie löschen (Befehl: cmd)
+			Chatverlauf löschen (Befehl: cmd)
 		</text>
-		<line_editor tool_tip="Löscht die Chat-Historie um Lag durch Spammer vorzubeugen." name="FSCmdLineClearChat"/>
+		<line_editor tool_tip="Löscht den Chatverlauf um Lag durch Spammer vorzubeugen." name="FSCmdLineClearChat"/>
 		<text name="FSCmdLineMedia_txt">
 			Medien-URL setzen (Befehl: cmd URL Typ)
 		</text>

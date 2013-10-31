@@ -13,6 +13,11 @@ set PROGRAM_VERSION=%2
 set PLUGIN_SOURCEDIR=%VIEWER_BUILDDIR%
 set OUTPUT_FILE=%5
 
+set MAJOR=%6
+set MINOR=%7
+set HGCHANGE=%9
+
+
 set PATH=%PATH%;%1\..\..\packages\bin\wix
 
 heat dir %VIEWER_BUILDDIR%\app_settings -gg -cg fs_appsettings -var var.BUILDDIR -dr INSTALLDIR -out app_settings.wxs
@@ -28,7 +33,7 @@ candle -dBUILDDIR=%VIEWER_BUILDDIR%\fs_resources fs_resources.wxs
 candle -dBUILDDIR=%VIEWER_BUILDDIR%\skins skins.wxs
 
 candle -dPLUGIN_SOURCEDIR=%PLUGIN_SOURCEDIR% %~dp0\llplugin.wxs
-candle -dPROGRAM_FILE=%PROGRAM_FILE% -dBUILDDIR=%VIEWER_BUILDDIR%\ %~dp0\firestorm.wxs
+candle -dPROGRAM_FILE=%PROGRAM_FILE% -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dBUILDDIR=%VIEWER_BUILDDIR%\ %~dp0\firestorm.wxs
 candle -dPROGRAM_FILE=%PROGRAM_FILE% -dPROGRAM_VERSION=%PROGRAM_VERSION% -dCHANNEL_NAME=%CHANNEL_NAME% -dSETTINGS_FILE=%SETTINGS_FILE% -dPROGRAM_NAME=%PROGRAM_NAME% -dBUILDDIR=%VIEWER_BUILDDIR%\ %~dp0\registry.wxs
 
 light -sval -ext WixUIExtension -cultures:en-us -out %VIEWER_BUILDDIR%\%OUTPUT_FILE% firestorm.wixobj app_settings.wixobj character.wixobj fonts.wixobj fs_resources.wixobj llplugin.wixobj registry.wixobj skins.wixobj

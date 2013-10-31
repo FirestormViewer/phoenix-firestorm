@@ -23,7 +23,7 @@
 				Zapisywanie:
 			</text>
 			<check_box name="LogNearbyChat" label="Czat lokalny" tool_tip="Zapisuj wiadomości czatu lokalnego na twardym dysku swojego komputera"/>
-			<combo_box name="conversation_log_combo">
+			<combo_box name="conversation_log_combo" tool_tip="Dziennik: Lista konwersacji rozpoczętych przez Ciebie lub kogoś innego. Logi rozmów: Rzeczywisty tekst pokazywany na ekranie.">
 				<item name="log_and_transcripts" label="Dziennik i logi rozmów"/>
 				<item name="log_only" label="Tylko dziennik"/>
 				<item name="no_log_or_transcript" label="Nie zapisuj dziennika ani logów rozmów"/>

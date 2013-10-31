@@ -37,6 +37,7 @@
 #include <float.h>
 namespace
 {
+#define fpclassify _fpclassify // <FS:TM> added namespace to compile on VS2013
 	int fpclassify(double x)
 	{
 		return _fpclass(x);

@@ -4,7 +4,7 @@
 	<menu_item_call label="Wiadomość IM" name="im"/>
 	<menu_item_call label="Proponuj teleport" name="offer_teleport"/>
 	<menu_item_call label="Rozmowa głosowa" name="voice_call"/>
-	<menu_item_call label="Pokaż historię czatu" name="chat_history"/>
+	<menu_item_call label="Pokaż logi czatu" name="chat_history"/>
 	<menu_item_call label="Dodaj do znajomych" name="add_friend"/>
 	<menu_item_call label="Usuń ze znajomych" name="remove_friend"/>
 	<menu_item_call label="Zaproś do grupy" name="invite_to_group"/>

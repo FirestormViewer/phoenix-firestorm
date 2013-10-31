@@ -37,7 +37,7 @@
     <button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_cache" width="85"/>
     <button label="Löschen" label_selected="Löschen" name="clear_cache" width="55" left_pad="5"/>
     <text name="log_path_desc">
-        Chatprotokolle-Speicherort:
+        Speicherort für Chatprotokoll und Verläufe:
     </text>
     <button label="Öffnen" label_selected="Öffnen" name="open_log_path_button-panelsetup"/>
     <button label="Setzen" label_selected="Setzen" name="log_path_button-panelsetup" width="45"/>

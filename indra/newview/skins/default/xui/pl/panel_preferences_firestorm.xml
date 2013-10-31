@@ -122,9 +122,9 @@
             Włącz/wyłącz AO (użycie: cmd on/off)
         </text>
         <text name="FSCmdLineClearChat_txt">
-            Czyść historię czatu (użycie: cmd)
+            Czyść logi czatu (użycie: cmd)
         </text>
-        <line_editor tool_tip="Czyści historię czatu, aby zapobiec lagom pochodzącym od spamerów." name="FSCmdLineClearChat" />
+        <line_editor tool_tip="Czyści logi czatu, aby zapobiec lagom pochodzącym od spamerów." name="FSCmdLineClearChat" />
         <text name="FSCmdLineMedia_txt">
             Ustaw URL mediów (użycie: cmd url typ)
         </text>

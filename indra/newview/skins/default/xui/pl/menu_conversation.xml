@@ -8,7 +8,7 @@
 	<menu_item_call label="Wiadomość IM" name="im" />
 	<menu_item_call label="Proponuj teleport" name="offer_teleport" />
 	<menu_item_call label="Rozmowa głosowa" name="voice_call" />
-	<menu_item_call label="Historia czatu..." name="chat_history" />
+	<menu_item_call label="Logi czatu..." name="chat_history" />
 	<menu_item_call label="Dodaj do znajomych" name="add_friend" />
 	<menu_item_call label="Usuń znajomego" name="remove_friend" />
 	<menu_item_call label="Usuń znajomych" name="remove_friends" />

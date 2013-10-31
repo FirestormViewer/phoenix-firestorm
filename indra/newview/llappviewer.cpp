@@ -2708,6 +2708,17 @@ bool LLAppViewer::initConfiguration()
 		OSMessageBox(msg.str(),LLStringUtil::null,OSMB_OK);
 		return false;
 	}
+	
+	//<FS:Techwolf Lupindo>
+	// load defaults overide here. Can not use settings_files.xml as path is different then above loading of defaults.
+	std::string fsdata_defaults = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata_defaults.xml");
+	std::string fsdata_global = "Global";
+	LLControlGroup* settings_group = LLControlGroup::getInstance(fsdata_global);
+	if(settings_group && settings_group->loadFromFile(fsdata_defaults, set_defaults))
+	{
+		llinfos << "Loaded settings file " << fsdata_defaults << llendl;
+	}
+	//</FS:Techwolf Lupindo>
 
 	initStrings(); // setup paths for LLTrans based on settings files only
 	// - set procedural settings

@@ -53,10 +53,16 @@
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 
-const std::string FSDATA_URL = "http://phoenixviewer.com/app/fsdatatest/data.xml";
-const std::string AGENTS_URL = "http://phoenixviewer.com/app/fsdatatest/agents.xml";
+#ifdef LL_RELEASE_FOR_DOWNLOAD
+const std::string BASE_URL = "http://phoenixviewer.com/app/fsdata";
+#else
+const std::string BASE_URL = "http://phoenixviewer.com/app/fsdatatest";
+#endif
+
+const std::string FSDATA_URL = BASE_URL + "/" + "data.xml";
+const std::string AGENTS_URL = BASE_URL + "/" + "agents.xml";
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
-const std::string ASSETS_URL = "http://phoenixviewer.com/app/fsdatatest/assets.xml";
+const std::string ASSETS_URL = BASE_URL + "/" + "assets.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 const F32 HTTP_TIMEOUT = 30.f;
 
@@ -191,6 +197,17 @@ void FSData::processResponder(const LLSD& content, const std::string& url, bool 
 			saveLLSD(content , mClientTagsFilename, last_modified);
 		}
 	}
+	else if (url == mFSdataDefaultsUrl)
+	{
+		if (!save_to_file)
+		{
+			// do nothing as this file is loaded during app startup.
+		}
+		else
+		{
+			saveLLSD(content , mFSdataDefaultsFilename, last_modified);
+		}
+	}
 }
 
 bool FSData::loadFromFile(LLSD& data, std::string filename)
@@ -221,6 +238,7 @@ bool FSData::loadFromFile(LLSD& data, std::string filename)
 void FSData::startDownload()
 {
 	mFSdataFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata.xml");
+	mFSdataDefaultsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata_defaults.xml");
 	mClientTagsFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml");
 
 	// Stat the file to see if it exists and when it was last modified.
@@ -232,6 +250,16 @@ void FSData::startDownload()
 	}
 	LL_INFOS("fsdata") << "Downloading data.xml from " << FSDATA_URL << " with last modifed of " << last_modified << LL_ENDL;
 	LLHTTPClient::getIfModified(FSDATA_URL, new FSDownloader(FSDATA_URL), last_modified, mHeaders, HTTP_TIMEOUT);
+	
+	last_modified = 0;
+	if(!LLFile::stat(mFSdataDefaultsFilename, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	const std::string filename   = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
+	mFSdataDefaultsUrl = BASE_URL + "/" + filename;
+	LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modifed of " << last_modified << LL_ENDL;
+	LLHTTPClient::getIfModified(mFSdataDefaultsUrl, new FSDownloader(mFSdataDefaultsUrl), last_modified, mHeaders, HTTP_TIMEOUT);
 }
 
 // call this _after_ the login screen to pick up grid data.

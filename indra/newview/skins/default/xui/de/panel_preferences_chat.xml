@@ -29,7 +29,7 @@
 			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Automatische Namensvorhersage in „Chat in der Nähe“-Eingabezeile aktivieren" name="FSChatbarNamePrediction"/>
 			<check_box label="Systemmeldungen in Klammern einschließen" name="FSIMSystemMessageBrackets"/>
-			<check_box label="In Chat-Verlauf „Du“ anstatt des eigenen Namens anzeigen" name="FSChatHistoryShowYou"/>
+			<check_box label="Im Chatverlauf „Du“ anstatt des eigenen Namens anzeigen" name="FSChatHistoryShowYou"/>
 			<check_box label="Namen in direkten IMs anzeigen" name="IMShowNamesForP2PConv"/>
 			<check_box label="IMs per E-Mail zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="V1-Stil für IM- und Text-Chatverlauf verwenden" name="plain_text_chat_history"/>
@@ -87,14 +87,14 @@
 			<check_box name="FSLogImToChatConsole" label="Instant Messages in Chat-Konsole anzeigen"/>
 			<check_box name="FSLogGroupImToChatConsole" label="Gruppenchats in Chat-Konsole anzeigen"/>
 			<text name="FSShowGroupNameLength_label" width="365">
-				Länge des Gruppennamens, der in der Chathistorie angezeigt wird
+				Länge des Gruppennamens, der im Chatverlauf angezeigt wird
 			</text>
 			<spinner tool_tip="-1 für kompletten Gruppennamen, 0 für deaktiviert" name="FSShowGroupNameLength"/>
 			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Gespräche öffnen, wenn eine Offline-Nachricht empfangen wurde"/>
 			<check_box name="FSShowIMInChatHistory" label="Instant Messages im lokalem Chat anzeigen"/>
 			<check_box name="FSLogIMInChatHistory" label="IMs im lokalem Chat speichern" width="190"/>
-			<text name="FSIMChatHistoryFade_label" width="310">
-				IM-Text vor dem Hintergrund der Chathistorie ausblenden
+			<text name="FSIMChatHistoryFade_label" width="320">
+				IM-Text vor dem Hintergrund des Chatverlaufs ausblenden
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
@@ -181,7 +181,7 @@
 			</text>
 			<check_box label="Chat in der Nähe" name="show_timestamps_nearby_chat" width="120"/>
 			<check_box label="Instant Messages" name="show_timestamps_im" width="120"/>
-			<check_box label="Chat- und IM-Verlauf" name="show_timestamps_transcripts"/>
+			<check_box label="Verlauf" name="show_timestamps_transcripts"/>
 			<check_box label="Sekunden in Zeitstempel anzeigen [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
 
 			<!-- Console -->

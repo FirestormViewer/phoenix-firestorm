@@ -298,20 +298,16 @@
         else if (cmd == "UseMoveLock")
         {
             //debugOutput("Parsing params: " + llList2String(commandList, 1));
-            integer newstatus = llList2Integer(commandList, 1);
-            if (newstatus != useMoveLock)
+            useMoveLock = llList2Integer(commandList, 1);
+            if (useMoveLock)
             {
-                useMoveLock = newstatus;
-                if (useMoveLock)
-                {
-                    //debugOutput("Movelock true, going to movelock_init");
-                    movelock_init();
-                }
-                else
-                {
-                    //debugOutput("Movelock false, using llStopMoveToTarget()");
-                    llStopMoveToTarget();
-                }
+                //debugOutput("Movelock true, going to movelock_init");
+                movelock_init();
+            }
+            else
+            {
+                //debugOutput("Movelock false, using llStopMoveToTarget()");
+                llStopMoveToTarget();
             }
         }
 

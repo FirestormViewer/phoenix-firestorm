@@ -4,7 +4,7 @@
 	<menu_item_call label="MI" name="im"/>
 	<menu_item_call label="Ofrecer teleporte" name="offer_teleport"/>
 	<menu_item_call label="Llamar" name="voice_call"/>
-	<menu_item_call label="Mostrar historial de chat..." name="chat_history"/>
+	<menu_item_call label="Mostrar transcripciones de chat..." name="chat_history"/>
 	<menu_item_call label="Ofrecer amistad" name="add_friend"/>
 	<menu_item_call label="Disolver amistad" name="remove_friend"/>
 	<menu_item_call label="Invitar a un grupo" name="invite_to_group"/>

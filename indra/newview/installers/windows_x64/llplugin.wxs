@@ -26,7 +26,7 @@
              <File Id="llplugin_lib_qtwcodecs4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\codecs\qtwcodecs4.dll" />
            </Component>
          </Directory>
-         <Directory Id="llplugin_dir_imageformats" Name="codecs">
+         <Directory Id="llplugin_dir_imageformats" Name="imageformats">
            <Component Id="llplugin_dir_imageformat_libs" Guid="{0FDF538B-B98B-4bd0-AA58-CBDCBC924408}">
              <File Id="llplugin_lib_qgif4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qgif4.dll" />
              <File Id="llplugin_lib_qico4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qico4.dll" />

@@ -284,7 +284,7 @@
       image_pressed="PushButton_Press"
       image_pressed_selected="PushButton_Selected_Press"
       image_selected="PushButton_Selected_Press"
-      tool_tip="Open this conversation's past history."
+      tool_tip="Open this conversation's past transcripts."
       image_overlay="Chat_History"
       name="im_history_btn"
       top="0"

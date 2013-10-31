@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
- <Product Id="AA43534B-9D12-4740-82AF-AC207AC2FB7A"
+ <Product Id="*"
    Name="Firestorm SecondLife and OpenSim viewer"
-   Language="1033" Version="1.0.0.0" Manufacturer="Phoenix Viewer Project"
+   Language="1033" Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)" Manufacturer="Phoenix Viewer Project"
    UpgradeCode="3FCFE6FD-1A6F-40f8-8683-CDBFE16CF653">
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
 
-  <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" />
+  <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
   <Directory Id="TARGETDIR" Name="SourceDir">
-    <Directory Id="ProgramMenuFolder">
-       <Directory Id="ApplicationProgramsFolder" Name="Firestorm"/>
-    </Directory>
+   <Directory Id="ProgramMenuFolder">
+    <Directory Id="ApplicationProgramsFolder" Name="Firestorm"/>
+   </Directory>
+    
+   <Directory Id="DesktopFolder" SourceName="Desktop"/>
 
    <Directory Id="ProgramFiles64Folder">
     <Directory Id="INSTALLDIR" Name="Firestorm">
@@ -57,15 +59,23 @@
     <Component Id="ApplicationShortcut" Guid="321F37BF-41D0-4c68-B774-3FEC1532F05C">
         <Shortcut Id="ApplicationStartMenuShortcut" Name="Firestorm" Target="[INSTALLDIR]Firestorm-bin.exe" WorkingDirectory="INSTALLDIR" />
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
-        <RegistryValue Root="HKCU" Key="Software\firestorm\firestorm" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RegistryValue Root="HKLM" Key="Software\firestorm\firestorm" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
     </Component>
   </DirectoryRef>
 
+  <DirectoryRef Id="DesktopFolder">
+    <Component Id="ApplicationShortcut_Desktop" Guid="EFB2B902-E116-445D-8C17-E7E01DB9092B">
+      <Shortcut Id="ApplicationDesktopShortcut" Name="Firestorm" Target="[INSTALLDIR]Firestorm-bin.exe" WorkingDirectory="INSTALLDIR" />
+      <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+      <RegistryValue Root="HKLM" Key="Software\firestorm\firestorm" Name="installed_desktopshortcut" Type="integer" Value="1" KeyPath="yes"/>
+    </Component>
+  </DirectoryRef>
 
   <Feature Id="FirestormFeature" Title="Firestorm" Level="1">
    <ComponentRef Id="firestorm" />
    <ComponentRef Id="Firestorm_Registy" />
    <ComponentRef Id="ApplicationShortcut" />
+   <ComponentRef Id="ApplicationShortcut_Desktop" />
 
    <ComponentRef Id="slvoice" />
 

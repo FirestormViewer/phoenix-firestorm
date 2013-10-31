@@ -459,6 +459,13 @@ bool LLViewerTexture::isMemoryForTextureLow()
 	const F32 WAIT_TIME = 1.0f ; //second
 	static LLFrameTimer timer ;
 
+	// <FS:ND> Disable memory checking on request
+	static LLCachedControl<bool> FSDisableMemCheck(gSavedSettings, "FSDisableAMDTextureMemoryCheck");
+
+	if( FSDisableMemCheck )
+		return false;
+	// </FS:ND>
+
 	if(timer.getElapsedTimeF32() < WAIT_TIME) //call this once per second.
 	{
 		return false;
@@ -543,12 +550,21 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 		if (sEvaluationTimer.getElapsedTimeF32() > discard_delta_time)
 		{
 			sDesiredDiscardBias += discard_bias_delta;
+			llinfos << "new bias " << sDesiredDiscardBias
+					<< " sBoundTextureMemoryInBytes " << sBoundTextureMemoryInBytes 
+					<< " sTotalTextureMemoryInBytes " << sTotalTextureMemoryInBytes
+					<< " sMaxBoundTextureMemInMegaBytes " << sMaxBoundTextureMemInMegaBytes
+					<< " sMaxTotalTextureMemInMegaBytes " << sMaxTotalTextureMemInMegaBytes
+					<< llendl;
 			sEvaluationTimer.reset();
 		}
 	}
 	else if(sEvaluationTimer.getElapsedTimeF32() > discard_delta_time && isMemoryForTextureLow())
 	{
 		sDesiredDiscardBias += discard_bias_delta;
+		llinfos << "new bias " << sDesiredDiscardBias
+				<< llendl;
+
 		sEvaluationTimer.reset();
 	}
 	else if (sDesiredDiscardBias > 0.0f &&

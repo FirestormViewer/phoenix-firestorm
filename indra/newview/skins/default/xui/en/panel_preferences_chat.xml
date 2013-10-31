@@ -215,7 +215,7 @@
             <check_box
              control_name="FSChatHistoryShowYou"
              name="FSChatHistoryShowYou"
-             label="Show &quot;You&quot; in chat history instead of your name"
+             label="Show &quot;You&quot; in chat transcript instead of your name"
              layout="topleft"
              top_pad="1"
              height="16"
@@ -541,8 +541,8 @@
              top_pad="3"
              left_delta="4"
              name="FSShowGroupNameLength_label"
-             width="275">
-                Length of group name to be printed in chat history
+             width="290">
+                Length of group name to be printed in chat transcript
             </text>
             <spinner
              decimal_digits="0"
@@ -594,8 +594,8 @@
              height="15"
              left="44"
              name="FSIMChatHistoryFade_label"
-             width="325">
-                Fade IM text into the background of the chat history window
+             width="340">
+                Fade IM text into the background of the chat transcript window
             </text>
             <spinner
              decimal_digits="2"
@@ -1026,7 +1026,7 @@
             <check_box
              control_name="FSShowTimestampsTranscripts"
              height="16"
-             label="History"
+             label="Transcript"
              layout="topleft"
              name="show_timestamps_transcripts"
              top_delta="0"

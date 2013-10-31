@@ -72,6 +72,7 @@
 
 #if LL_DARWIN
 #include <CoreFoundation/CFURL.h>
+#include <CoreFoundation/CFBundle.h>	// [FS:CR]
 #endif
 
 // Static initialization

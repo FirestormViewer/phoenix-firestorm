@@ -8,10 +8,10 @@
 			<button tool_tip="Usar el servicio de traducción seleccionado" name="translate_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_chat_history_btn">
-			<button tool_tip="Abre la pestaña de chat local" name="chat_history_btn"/>
+			<button tool_tip="Abre la transcripción del chat local" name="chat_history_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_chat_history_muted_btn">
-			<button tool_tip="Muestra el chat silenciado en la pestaña de chat local" name="chat_history_muted_btn"/>
+			<button tool_tip="Muestra el chat silenciado en la transcripción del chat local" name="chat_history_muted_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="ls_chat">

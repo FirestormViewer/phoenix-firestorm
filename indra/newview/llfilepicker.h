@@ -36,7 +36,7 @@
 #include "stdtypes.h"
 
 #if LL_DARWIN
-#include <Carbon/Carbon.h>
+//#include <Carbon/Carbon.h>
 
 // AssertMacros.h does bad things.
 #undef verify
@@ -172,7 +172,7 @@ private:
 #if LL_DARWIN
     S32 mPickOptions;
 	std::vector<std::string> mFileVector;
-	UInt32 mFileIndex;
+	// [FS:CR] Unused 2013.10.24 UInt32 mFileIndex;
 	
 	bool doNavChooseDialog(ELoadFilter filter);
 	bool doNavSaveDialog(ESaveFilter filter, const std::string& filename);
