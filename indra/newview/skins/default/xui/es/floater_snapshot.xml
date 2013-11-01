@@ -6,6 +6,9 @@
 	<string name="postcard_progress_str">
 		Enviando por correo electrónico
 	</string>
+	<string name="facebook_progress_str">
+		Publicando en Facebook
+	</string>
 	<string name="profile_progress_str">
 		Publicando
 	</string>
@@ -18,6 +21,9 @@
 	<string name="local_progress_str">
 		Guardando en el equipo
 	</string>
+	<string name="facebook_succeeded_str">
+		Imagen subida
+ 	</string>
 	<string name="profile_succeeded_str">
 		Imagen subida
 	</string>
@@ -33,6 +39,9 @@
 	<string name="local_succeeded_str">
 		Guardado en el equipo
 	</string>
+	<string name="facebook_failed_str">
+		Error al subir la imagen a tu cronología de Facebook.
+ 	</string>
 	<string name="profile_failed_str">
 		Error al subir la imagen a los comentarios de tu perfil.
 	</string>

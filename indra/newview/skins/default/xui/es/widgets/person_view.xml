@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<person_view>
+	<facebook_icon name="facebook_icon" tool_tip="Usuario de Facebook"/>
+	<permission_edit_theirs_icon name="permission_edit_theirs_icon" tool_tip="Puedes editar los objetos de este amigo"/>
+	<permission_edit_mine_icon name="permission_edit_mine_icon" tool_tip="Este amigo puede editar, borrar o tomar tus objetos"/>
+	<permission_map_icon tool_tip="Este amigo puede localizarte en el mapa" name="permission_map_icon"/>
+	<permission_online_icon name="permission_online_icon" tool_tip="Este amigo puede ver cuándo estás conectado"/>
+	<info_btn name="info_btn" tool_tip="Más información"/>
+	<profile_btn name="profile_btn" tool_tip="Ver perfil"/>
+</person_view>
+

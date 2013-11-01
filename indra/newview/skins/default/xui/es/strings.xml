@@ -289,6 +289,24 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="TestingDisconnect">
 		Probando la desconexión del visor
 	</string>
+	<string name="SocialFacebookConnecting">
+		Conectando a Facebook...
+	</string>
+	<string name="SocialFacebookPosting">
+		Publicando...
+	</string>
+	<string name="SocialFacebookDisconnecting">
+		Desconectando de Facebook...
+	</string>
+	<string name="SocialFacebookErrorConnecting">
+		Problema conectando con Facebook
+	</string>
+	<string name="SocialFacebookErrorPosting">
+		Problema publicando en Facebook
+	</string>
+	<string name="SocialFacebookErrorDisconnecting">
+		Problema desconectando de Facebook
+	</string>
 	<string name="TooltipPerson">
 		Persona
 	</string>
@@ -865,7 +883,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Sin conexión
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[PRICE] L$ por [AREA] m²
+		[PRICE] L$ por [AREA] m² ([SQMPRICE] L$/m²)
 	</string>
 	<string name="worldmap_results_none_found">
 		No se ha encontrado.
@@ -4158,6 +4176,9 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="share_alert">
 		Arrastra aquí items del inventario
 	</string>
+	<string name="facebook_post_success">
+		Has publicado en Facebook.
+	</string>
 	<string name="no_session_message">
 		(La sesión de MI no existe)
 	</string>
@@ -4204,10 +4225,12 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		No se ha podido añadir usuarios a la sesión de chat con [RECIPIENT].
 	</string>
 	<string name="message">
-		No se ha podido enviar tu mensaje a la sesión de chat con [RECIPIENT].
+		El mensaje enviado a [RECIPIENT] aún se está procesando.
+Si el mensaje no aparece en los próximos minutos, puede haber sido descartado por el servidor.
 	</string>
 	<string name="message_session_event">
-		No se ha podido enviar tu mensaje a la sesión de chat con [RECIPIENT].
+		El mensaje enviado a [RECIPIENT] aún se está procesando.
+Si el mensaje no aparece en los próximos minutos, puede haber sido descartado por el servidor.
 	</string>
 	<string name="mute">
 		Error moderando.
@@ -5097,6 +5120,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Snapshot_Label">
 		Foto
 	</string>
+	<string name="Command_Social_Label">
+		Facebook
+	</string>
 	<string name="Command_Speak_Label">
 		Hablar
 	</string>
@@ -5243,6 +5269,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Snapshot_Tooltip">
 		Tomar una fotografía
+	</string>
+	<string name="Command_Social_Tooltip">
+		Publicar en Facebook
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Utiliza el micrófono para hablar con la gente próxima
@@ -5518,5 +5547,11 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="skin_defaults_starlight_navbar">
 		Mostrar la barra de navegación ha sido activado como opción por defecto en la serie de skins Starlight.
+	</string>
+	<string name="animation_explorer_seconds_ago">
+		Hace [SECONDS] segundos
+	</string>
+	<string name="animation_explorer_still_playing">
+		Reproduciéndose
 	</string>
 </strings>

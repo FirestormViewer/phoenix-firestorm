@@ -38,10 +38,11 @@
 				<button name="GlobalOnlineStatusToggle" tool_tip="Conmutar la visibilidad global"/>
 				<dnd_button name="friends_del_btn" tool_tip="Disolver la amistad con el residente seleccionado"/>
 			</panel>
-			<accordion name="friends_accordion">
-				<accordion_tab name="tab_online" title="Conectado"/>
-				<accordion_tab name="tab_all" title="Todos"/>
-			</accordion>
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="Conectados"/>
+				<panel name="tab_all" title="Todos"/>
+				<panel name="tab_suggested_friends" title="Posibles amigos"/>
+			</tab_container>
 		</panel>
 		<panel label="Grupos" name="groups_panel">
 			<panel label="bottom_panel" name="groups_buttons_panel">

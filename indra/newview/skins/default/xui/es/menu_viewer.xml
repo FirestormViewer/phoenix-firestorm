@@ -8,6 +8,7 @@
 		<menu_item_call label="Botones de la barra de herramientas" name="Toolbar Buttons"/>
 		<menu_item_call label="Mi perfil" name="Profile"/>
 		<menu_item_call label="Destacados..." name="Picks"/>
+		<menu_item_call label="Publicar en Facebook..." name="PostToFacebook"/>
 		<menu_item_call label="Mi apariencia" name="ChangeOutfit"/>
 		<menu_item_call label="Tomar fotografía" name="Take Snapshot"/>
 		<menu_item_check label="Mi inventario" name="Inventory"/>
@@ -126,6 +127,7 @@
 		<menu name="photo_and_video" label="Foto y vídeo"/>
 		<menu_item_call label="Buscar en el área" name="area_search"/>
 		<menu_item_call label="Explorador de sonidos" name="Sound Explorer"/>
+		<menu_item_call label="Explorador de animaciones" name="Animation Explorer"/>
 		<menu_item_call label="Lista negra" name="asset_blacklist"/>
 	</menu>
 	<menu label="Construir" name="BuildTools">
@@ -445,8 +447,12 @@
 			<menu_item_call label="Desactivar registro de mensajes" name="Disable Message Log"/>
 			<menu_item_call label="Descartar un paquete" name="Drop a Packet"/>
 		</menu>
+		<menu_item_call label="Volcar cámara programada" name="Dump Scripted Camera"/>
 		<menu_item_call label="Volcar cámara guionizada" name="Dump Scripted Camera"/>
 		<menu label="Grabadora" name="Recorder">
+			<menu_item_call label="Iniciar grabación de evento" name="Start event recording"/>
+			<menu_item_call label="Detener grabación del evento" name="Stop event recording"/>
+			<menu_item_call label="Reproducir grabación del evento" name="Playback event recording"/>
 			<menu_item_call label="Iniciar reproducción" name="Start Playback"/>
 			<menu_item_call label="Detener reprodución" name="Stop Playback"/>
 			<menu_item_check label="Reproducción en bucle" name="Loop Playback"/>
