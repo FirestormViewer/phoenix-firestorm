@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
     <panel
       height="400"
       width="304"
@@ -91,6 +92,7 @@
               name="add_place_view_cb"
               left_pad="5"/>
             <text
+              name="overhead_text"
               follows="left|top"
               font="SansSerif"
               height="32"
