@@ -51,7 +51,6 @@
 #include "llviewerwindow.h"			// for gViewerWindow
 #include "llvoavatar.h"
 #include "llvoavatarself.h"			// for gAgentAvatarp
-#include </storage/eisfuchs/SecondLife/source/phoenix-firestorm-lgpl-animation-explorer/indra/#[bin_dir]/packages/include/boost/container/detail/tree.hpp>
 
 const S32 MAX_ANIMATIONS=100;
 
