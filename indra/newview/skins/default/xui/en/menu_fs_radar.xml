@@ -90,6 +90,15 @@
        parameter="can_offer_teleport"/>
     </menu_item_call>
     <menu_item_call
+    label="Request Teleport"
+    name="request_teleport">
+      <menu_item_call.on_click
+       function="Avatar.TeleportRequest"/>
+      <menu_item_call.on_enable
+      function="Avatar.EnableItem"
+      parameter="can_offer_teleport"/>
+    </menu_item_call>
+    <menu_item_call
     label="Teleport To"
     name="teleport_to">
       <menu_item_call.on_click

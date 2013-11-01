@@ -66,6 +66,7 @@ LLContextMenu* FSRadarMenu::createMenu()
 		registrar.add("Avatar.IM",								boost::bind(&LLAvatarActions::startIM,						id));
 		registrar.add("Avatar.Call",							boost::bind(&LLAvatarActions::startCall,					id));
 		registrar.add("Avatar.OfferTeleport",					boost::bind(&FSRadarMenu::offerTeleport,					this));
+		registrar.add("Avatar.TeleportRequest",					boost::bind(&LLAvatarActions::teleportRequest,				id));
 		registrar.add("Avatar.GroupInvite",						boost::bind(&LLAvatarActions::inviteToGroup,				id));
 		registrar.add("Avatar.getScriptInfo",					boost::bind(&LLAvatarActions::getScriptInfo,				id));
 		registrar.add("Avatar.ShowOnMap",						boost::bind(&LLAvatarActions::showOnMap,					id));

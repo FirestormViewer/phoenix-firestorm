@@ -7127,7 +7127,7 @@ Joining this group costs a fee and the invitation cannot be accepted because of 
    sound="UISndTeleportOffer">
 [NAME_SLURL] has offered to teleport you to their location:
 
-"[MESSAGE]”
+“[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
     <tag>confirm</tag>
     <form name="form">
