@@ -467,6 +467,9 @@
 		</menu>
 		<menu_item_call label="Geskriptete Kamera ausgeben" name="Dump Scripted Camera"/>
 		<menu label="Rekorder" name="Recorder">
+			<menu_item_call label="Ereignis-Aufname starten" name="Start event recording"/>
+			<menu_item_call label="Ereignis-Aufname stoppen" name="Stop event recording"/>
+			<menu_item_call label="Ereignis-Aufname wiedergeben" name="Playback event recording"/>
 			<menu_item_call label="Wiedergabe starten" name="Start Playback"/>
 			<menu_item_call label="Wiedergabe stoppen" name="Stop Playback"/>
 			<menu_item_check label="Wiedergabeschleife" name="Loop Playback"/>

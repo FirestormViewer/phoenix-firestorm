@@ -77,6 +77,7 @@
 	<menu_item_call label="Lokal abspielen" name="Animation Audition"/>
 	<menu_item_call label="Instant Message senden" name="Send Instant Message"/>
 	<menu_item_call label="Teleport anbieten..." name="Offer Teleport..."/>
+	<menu_item_call label="Teleport anfordern..." name="Request Teleport..."/>
 	<menu_item_call label="Konferenz-Chat starten" name="Conference Chat"/>
 	<menu_item_call label="Aktivieren" name="Activate"/>
 	<menu_item_call label="Deaktivieren" name="Deactivate"/>

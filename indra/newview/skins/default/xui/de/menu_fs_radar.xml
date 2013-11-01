@@ -10,6 +10,7 @@
 	<menu_item_call label="Teilen" name="Share"/>
 	<menu_item_call label="Bezahlen" name="Pay"/>
 	<menu_item_call label="Teleport anbieten" name="teleport"/>
+	<menu_item_call label="Teleport anfordern" name="request_teleport"/>
 	<menu_item_call label="Teleportiere zu Avatar" name="teleport_to"/>
 	<menu_item_call label="Heranzoomen" name="zoom_in"/>
 	<menu_item_call label="Gruppeneinladung schicken" name="GroupInvite"/>

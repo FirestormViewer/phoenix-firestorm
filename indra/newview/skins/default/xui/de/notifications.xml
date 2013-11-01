@@ -1755,6 +1755,13 @@ Soll dieses entfernt werden?
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification name="TeleportRequestPrompt">
+		Teleport zu [NAME] mit folgender Nachricht anfordern:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="TooManyTeleportOffers">
 		Sie haben versucht, [OFFERS] Teleport-Angebote zu machen,
 womit Sie die Höchstgrenze von [LIMIT] überschreiten.
@@ -2798,6 +2805,16 @@ Diese Region enthält jedoch Inhalte, die nur für Erwachsene zugänglich sind.
 	</notification>
 	<notification name="TeleportOfferSent">
 		Ein Teleportangebot wurde an [TO_NAME] geschickt
+	</notification>
+	<notification name="TeleportRequest">
+		[NAME_SLURL] fordert einen Teleport zu Ihrer Position an.
+[MESSAGE]
+
+Teleport anbieten?
+		<form name="form">
+			<button name="Yes" text="Ja"/>
+			<button name="No" text="Nein"/>
+		</form>
 	</notification>
 	<notification name="GotoURL">
 		[MESSAGE]

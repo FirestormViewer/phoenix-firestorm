@@ -905,7 +905,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Offline
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[PRICE] L$ für [AREA] m²
+		[PRICE] L$ für [AREA] m² ([SQMPRICE] L$/m²)
 	</string>
 	<string name="worldmap_results_none_found">
 		Nicht gefunden.
