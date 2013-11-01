@@ -113,6 +113,7 @@ include_directories(SYSTEM
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
+    animationexplorer.cpp
     ao.cpp
     aoengine.cpp
     aoset.cpp
@@ -808,6 +809,7 @@ set(viewer_HEADER_FILES
     ViewerInstall.cmake
 
 # <Add FS includes below this line>
+    animationexplorer.h
     ao.h
     aoengine.h
     aoset.h

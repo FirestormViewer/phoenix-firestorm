@@ -147,6 +147,7 @@
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
 // ND: And for FS please put yours after this line, for easier merges too
+#include "animationexplorer.h"
 #include "ao.h"
 #include "daeexport.h"
 #include "floatermedialists.h"
@@ -385,6 +386,7 @@ void LLViewerFloaterReg::registerFloaters()
 
 	// *NOTE: Please keep these alphabetized for easier merges
 	// ND: And for FS please put yours after this line, for easier merges too
+	LLFloaterReg::add("animation_explorer", "floater_animation_explorer.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<AnimationExplorer>);
 	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("contactsets", "floater_contactsets.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloater>);

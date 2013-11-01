@@ -161,6 +161,8 @@ const static boost::regex NEWLINES("\\n{1}");
 #pragma warning (disable:4702)
 #endif
 
+#include "animationexplorer.h"		// <FS:Zi> Animation Explorer
+
 extern void on_new_message(const LLSD& msg);
 
 //
@@ -5744,6 +5746,12 @@ void process_object_properties(LLMessageSystem *msg, void**user_data)
 	{
 		area_search_floater->processObjectProperties(msg);
 	}
+
+	AnimationExplorer* explorer=LLFloaterReg::findTypedInstance<AnimationExplorer>("animation_explorer");
+	if(explorer)
+	{
+		explorer->requestNameCallback(msg);
+	}
 }
 // </FS:Techwolf Lupindo> area search
 
@@ -6326,6 +6334,12 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 					if (!anim_found)
 					{
 						avatarp->mAnimationSources.insert(LLVOAvatar::AnimationSourceMap::value_type(object_id, animation_id));
+						// <FS:Zi> Animation Explorer
+						if(avatarp==gAgentAvatarp)
+						{
+							RecentAnimationList::instance().addAnimation(animation_id,object_id);
+						}
+						// </FS:Zi>
 					}
 				}
 			}

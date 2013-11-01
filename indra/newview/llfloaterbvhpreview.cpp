@@ -1249,5 +1249,9 @@ void LLPreviewAnimation::pan(F32 right, F32 up)
 	mCameraOffset.mV[VZ] = llclamp(mCameraOffset.mV[VZ] + up * mCameraDistance / mCameraZoom, -1.f, 1.f);
 }
 
-
-
+// <FS:Zi> Animation Explorer
+LLVOAvatar* LLPreviewAnimation::getDummyAvatar()
+{
+	return (LLVOAvatar*) mDummyAvatar;
+}
+// </FS:Zi>

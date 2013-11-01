@@ -56,6 +56,7 @@ public:
 	virtual BOOL needsUpdate() { return mNeedsUpdate; }
 
 	LLVOAvatar* getPreviewAvatar();
+	LLVOAvatar* getDummyAvatar();	// <FS:Zi> Animation Explorer
 
 protected:
 	BOOL				mNeedsUpdate;
