@@ -352,7 +352,6 @@
 			  tool_tip="White List enabled"
 			  width="16" />
 		</layout_panel>
-			name="media_address_url_icons_sb"
 	  </layout_stack>
 	</layout_panel>
 	<layout_panel
