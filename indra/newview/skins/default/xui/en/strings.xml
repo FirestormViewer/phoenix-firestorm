@@ -1939,11 +1939,11 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   So, let add string with name="message" with the same value as "message_session_event" -->
   <string name="message">
     The message sent to [RECIPIENT] is still being processed.
-    If the message does not appear in the next few minutes, it may have been dropped by the server.
+If the message does not appear in the next few minutes, it may have been dropped by the server.
   </string>
   <string name="message_session_event">
     The message sent to [RECIPIENT] is still being processed.
-    If the message does not appear in the next few minutes, it may have been dropped by the server.
+If the message does not appear in the next few minutes, it may have been dropped by the server.
   </string>
   <string name="mute">
     Error while moderating.

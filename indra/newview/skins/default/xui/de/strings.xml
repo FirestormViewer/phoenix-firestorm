@@ -4203,9 +4203,11 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	</string>
 	<string name="message">
 		Ihre Nachricht konnte nicht an die Chat-Sitzung mit [RECIPIENT] gesendet werden.
+Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie vom Server verworfen.
 	</string>
 	<string name="message_session_event">
 		Ihre Nachricht konnte nicht an die Chat-Sitzung mit [RECIPIENT] gesendet werden.
+Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie vom Server verworfen.
 	</string>
 	<string name="mute">
 		Fehler während Moderation.
