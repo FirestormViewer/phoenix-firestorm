@@ -3,7 +3,7 @@
 	<layout_stack name="stack_place">
 		<layout_panel name="place_detail_panel">
 			<text name="place_caption_label">
-				Opowiedz coś o miejscu, w którym się znajdujesz:
+				Opowiedz coś o miejscu, w którym jesteś:
 			</text>
 		</layout_panel>
 		<layout_panel name="place_map_panel">
