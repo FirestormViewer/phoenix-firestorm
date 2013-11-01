@@ -76,7 +76,8 @@
 	<menu_item_call label="Odtwarzaj publicznie" name="Animation Play"/>
 	<menu_item_call label="Odtwarzaj lokalnie" name="Animation Audition"/>
 	<menu_item_call label="Wyślij wiadomość IM" name="Send Instant Message"/>
-	<menu_item_call label="Proponuj Teleport" name="Offer Teleport..."/>
+	<menu_item_call label="Proponuj teleport" name="Offer Teleport..."/>
+	<menu_item_call label="Poproś o teleport" name="Request Teleport..."/>
 	<menu_item_call label="Rozpocznij konferencję czatową" name="Conference Chat"/>
 	<menu_item_call label="Aktywuj" name="Activate"/>
 	<menu_item_call label="Deaktywuj" name="Deactivate"/>

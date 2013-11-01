@@ -274,6 +274,24 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TestingDisconnect">
 		Nastąpiło rozłączenie testowania klienta
 	</string>
+	<string name="SocialFacebookConnecting">
+		Łączenie z Facebookiem...
+	</string>
+	<string name="SocialFacebookPosting">
+		Wysyłanie...
+	</string>
+	<string name="SocialFacebookDisconnecting">
+		Rozłączanie z Facebookiem...
+	</string>
+	<string name="SocialFacebookErrorConnecting">
+		Problem z łączeniem z Facebookiem
+	</string>
+	<string name="SocialFacebookErrorPosting">
+		Problem z wysyłaniem na Facebooka
+	</string>
+	<string name="SocialFacebookErrorDisconnecting">
+		Problem z rozłączaniem z Facebookiem
+	</string>
 	<string name="TooltipPerson">
 		Osoba
 	</string>
@@ -868,7 +886,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Mapa Świata jest niedostępna
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] m² [PRICE]L$
+		[AREA] m² [PRICE]L$ ([SQMPRICE] L$/m²)
 	</string>
 	<string name="worldmap_results_none_found">
 		Miejsce nie zostało odnalezione.
@@ -4089,6 +4107,9 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="share_alert">
 		Przeciągaj tutaj rzeczy z Szafy
 	</string>
+	<string name="facebook_post_success">
+		Wysłałeś/aś post na Facebooka.
+	</string>
 	<string name="no_session_message">
 		(Sesja IM wygasła)
 	</string>
@@ -4136,11 +4157,11 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="message">
 		Wiadomość wysłana do [RECIPIENT] jest ciągle przetwarzana.
-    Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
+Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
 	</string>
 	<string name="message_session_event">
 		Wiadomość wysłana do [RECIPIENT] jest ciągle przetwarzana.
-    Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
+Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
 	</string>
 	<string name="mute">
 		Błąd podczas moderacji.
@@ -4636,6 +4657,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Snapshot_Label">
 		Zdjęcie
 	</string>
+	<string name="Command_Social_Label">
+		Facebook
+	</string>
 	<string name="Command_Speak_Label">
 		Głos
 	</string>
@@ -4782,6 +4806,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Snapshot_Tooltip">
 		Zrób zdjęcie (CTRL+SHIFT+S)
+	</string>
+	<string name="Command_Social_Tooltip">
+		Wyślij post na Facebooka
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Rozmawiaj z ludźmi w pobliżu używając mikrofonu

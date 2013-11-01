@@ -6,6 +6,7 @@
 	<menu_item_call label="Otwórz logi czatu w zewnętrznym oknie" name="Chat history External" />
 	<menu_item_call label="Pokaż profil" name="View Profile" />
 	<menu_item_call label="Proponuj teleport" name="teleport" />
+	<menu_item_call label="Poproś o teleport" name="request_teleport" />
 	<menu_item_call label="Dodaj do znajomych" name="add_friend" />
 	<menu_item_call label="Usuń znajomego" name="remove_friend" />
 	<menu_item_call label="Zaproś do grupy..." name="Invite" />

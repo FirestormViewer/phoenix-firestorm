@@ -1718,6 +1718,13 @@ Czy chcesz go usunąć?
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="TeleportRequestPrompt">
+		Poproś [NAME] o teleport z następującą wiadomością
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 	<notification name="TooManyTeleportOffers">
 		Próbujesz wysłać [OFFERS] ofert teleportu,
 co przekracza limit [LIMIT].
@@ -2814,6 +2821,16 @@ Ten region zawiera jednak treści tylko dla dorosłych.
 	</notification>
 	<notification name="TeleportOfferSent">
 		Oferta teleportacji wysłana do [TO_NAME]
+	</notification>
+	<notification name="TeleportRequest">
+		[NAME_SLURL] prosi o teleportację do miejsca, w jakim się znajdujesz.
+[MESSAGE]
+
+Zaproponować teleport?
+		<form name="form">
+			<button name="Yes" text="Tak"/>
+			<button name="No" text="Nie"/>
+		</form>
 	</notification>
 	<notification name="GotoURL">
 		[MESSAGE]
