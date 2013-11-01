@@ -33,6 +33,7 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 			<tab_container name="friends_accordion">
 				<panel name="tab_online" title="Online"/>
 				<panel name="tab_all" title="Alle"/>
+				<panel name="tab_suggested_friends" title="Mögliche Freunde"/>
 			</tab_container>
 			<panel label="bottom_panel" name="friends_buttons_panel">
 				<filter_editor label="Nach Personen filtern" name="friends_filter_input"/>

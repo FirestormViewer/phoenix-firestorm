@@ -6,6 +6,9 @@
 	<string name="postcard_progress_str">
 		E-Mail senden
 	</string>
+	<string name="facebook_progress_str">
+		Posten auf Facebook
+	</string>
 	<string name="profile_progress_str">
 		Posten
 	</string>
@@ -17,6 +20,9 @@
 	</string>
 	<string name="local_progress_str">
 		Speichern auf Computer
+	</string>
+	<string name="facebook_succeeded_str">
+		Bild hochgeladen
 	</string>
 	<string name="profile_succeeded_str">
 		Bild hochgeladen
@@ -32,6 +38,9 @@
 	</string>
 	<string name="local_succeeded_str">
 		Auf Computer gespeichert!
+	</string>
+	<string name="facebook_failed_str">
+		Fehler beim Hochladen des Bilds in Ihre Facebook-Zeitleiste.
 	</string>
 	<string name="profile_failed_str">
 		Fehler beim Hochladen des Bilds in Ihr Profil.
