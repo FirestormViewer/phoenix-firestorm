@@ -5317,4 +5317,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="skin_defaults_starlight_navbar">
 		Pokazywanie paska nawigacyjnego zostało włączone, to domyślne zachowanie dla skórek linii StarLight.
 	</string>
+	<string name="animation_explorer_seconds_ago">
+		[SECONDS] sekund temu
+	</string>
+	<string name="animation_explorer_still_playing">
+		Ciągle odtwarzane
+	</string>
 </strings>

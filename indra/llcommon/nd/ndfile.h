@@ -74,6 +74,8 @@ namespace nd
 			S32 read(void* buf, S32 nbytes);
 			S32 write(const void* buf, S32 nbytes);
 		
+			void flush();
+
 			tFiletype* getFileHandle() {return mFile;}	
 		
 		private:

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ can_close="true"
+ can_drag_on_left="false"
+ can_minimize="false"
+ can_resize="true"
+ height="314"
+ help_topic="fs_animation_explorer"
+ layout="topleft"
+ min_height="314"
+ min_width="400"
+ name="animation_explorer"
+ save_rect="true"
+ title="Animation Explorer"
+ width="524">
+
+	<scroll_list
+	 bottom="-4"
+	 draw_heading="true"
+	 follows="all"
+	 layout="topleft"
+	 left="4"
+	 name="animation_list"
+	 top="4"
+	 width="256">
+		<scroll_list.column
+		 label="Played by"
+		 name="played_by" />
+		<scroll_list.column
+		 label="Played"
+		 name="played" />
+		<scroll_list.column
+		 label="Timestamp"
+		 name="timestamp"
+		 width="-1" />
+		<scroll_list.column
+		 label="Animation ID"
+		 name="animation_id"
+		 width="-1" />
+		<scroll_list.column
+		 label="Object ID"
+		 name="object_id"
+		 width="-1" />
+	</scroll_list>
+
+	<view_border
+	 bevel_style="in"
+	 follows="top|bottom|right"
+	 height="256"
+	 name="animation_preview"
+	 layout="topleft"
+	 left_pad="4"
+	 top_delta="0"
+	 width="256" />
+
+	<panel
+	 follows="bottom|right"
+	 height="48"
+	 name="buttons_panel"
+	 top_pad="4"
+	 width="256">
+
+	<button
+	 follows="top|right"
+	 height="22"
+	 label="Stop"
+	 layout="topleft"
+	 left="0"
+	 name="stop_btn"
+	 top="0"
+	 width="98" />
+
+	<button
+	 follows="top|right"
+	 height="22"
+	 label="Stop and Revoke"
+	 layout="topleft"
+	 left_pad="4"
+	 name="stop_and_revoke_btn"
+	 width="154" />
+
+	<button
+	 follows="top|right"
+	 height="22"
+	 label="Revoke"
+	 layout="topleft"
+	 left="0"
+	 name="revoke_btn"
+	 top_pad="4"
+	 width="98" />
+
+	<check_box
+	 follows="top|right"
+	 height="22"
+	 label="No Owned Animations"
+	 left_pad="4"
+	 name="no_owned_animations_check"
+	 tool_tip="When checked this will filter out all animations that are owned by your avatar, like AO animations or system default animations."
+	 top_delta="-4"
+	 width="154" />
+
+	</panel>
+
+</floater>

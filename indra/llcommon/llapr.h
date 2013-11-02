@@ -239,6 +239,8 @@ public:
 	
 	apr_file_t* getFileHandle() {return mFile;}	
 
+	void flush(); // <FS:ND/> Forceful file flushing
+
 private:
 	apr_pool_t* getAPRFilePool(apr_pool_t* pool) ;	
 	

@@ -1804,6 +1804,16 @@ Se ha establecido un alias para este residente que reemplazará a [NEW_NAME]
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
+	<notification name="TeleportRequestPrompt">
+		Solicita teleporte a [NAME] con el siguiente mensaje
+		<form name="form">
+			<input name="message" type="text">
+
+			</input>
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
 	<notification name="TooManyTeleportOffers">
 		Has intentado hacer [OFFERS] ofertas de teleporte,
 excediendo el límite de [LIMIT].
@@ -2672,6 +2682,9 @@ Inténtalo seleccionando un trozo más pequeño de terreno.
 	<notification name="SystemMessage">
 		[MESSAGE]
 	</notification>
+	<notification name="FacebookConnect">
+		[MESSAGE]
+	</notification>
 	<notification name="PaymentReceived">
 		[MESSAGE]
 	</notification>
@@ -2950,6 +2963,16 @@ No obstante, el contenido de esta región solo es accesible para los adultos.
 	</notification>
 	<notification name="TeleportOfferSent">
 		Teleporte ofrecido a [TO_NAME]
+	</notification>
+	<notification name="TeleportRequest">
+		[NAME_SLURL] está solicitando ser teleportado a tu posición.
+[MESSAGE]
+
+¿Ofrecer teleporte?
+		<form name="form">
+			<button name="Yes" text="Sí"/>
+			<button name="No" text="No"/>
+		</form>
 	</notification>
 	<notification name="GotoURL">
 		[MESSAGE]

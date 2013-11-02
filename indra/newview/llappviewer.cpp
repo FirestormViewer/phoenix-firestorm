@@ -4033,6 +4033,8 @@ void LLAppViewer::recordMarkerVersion(LLAPRFile& marker_file)
 
 	// record the viewer version in the marker file
 	marker_file.write(marker_version.data(), marker_version.length());
+
+	marker_file.flush(); // <FS:ND/> Make sure filesystem reflects what we wrote.
 }
 
 bool LLAppViewer::markerIsSameVersion(const std::string& marker_name) const

@@ -33,8 +33,8 @@
 	<check_box label="Mostrar notificaciones de colisión en el chat local" name="FSCollisionMessagesInChat"/>
 	<check_box label="Reportar colisiones a los scripts mediante el canal" name="FSReportCollisionMessages"/>
 	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Canal utilizado para reportar los mensajes de colisión a los scripts (Por defecto: -25000)"/>
-	<check_box label="Mensajes recibidos hacen parpadear el icono de [APP_NAME] si no tiene el foco" name="FSFlashOnMessage"/>
-	<check_box label="Diálogos de script hacen parpadear el icono de [APP_NAME] si no tiene el foco" name="FSFlashOnScriptDialog"/>
+	<check_box label="Los mensajes recibidos hacen parpadear el icono de [APP_NAME] si éste no tiene el foco" name="FSFlashOnMessage"/>
+	<check_box label="Los diálogos de script hacen parpadear el icono de [APP_NAME] si éste no tiene el foco" name="FSFlashOnScriptDialog"/>
 	<check_box label="Desactivar notificaciones de 'el objeto ha sido devuelto a tu inventario'" name="FSDisableReturnObjectNotification"/>
 	<check_box label="Activar notificaciones Growl" name="notify_growl_checkbox"/>
 	<check_box name="notify_growl_always_checkbox" label="Mostrar Growl incluso si Firestorm está activo"/>

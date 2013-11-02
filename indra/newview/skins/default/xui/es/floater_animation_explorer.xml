@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="Explorador de animaciones">
+	<scroll_list name="animation_list">
+		<scroll_list.column
+		 label="Reproducida por" name="played_by"/>
+		<scroll_list.column label="Reproducida" name="played"/>
+		<scroll_list.column label="Marca horaria" name="timestamp"/>
+		<scroll_list.column label="ID animación" name="animation_id"/>
+		<scroll_list.column label="ID objeto" name="object_id"/>
+	</scroll_list>
+	<panel name="buttons_panel">
+		<button label="Detener" name="stop_btn"/>
+		<button label="Detener y revocar" name="stop_and_revoke_btn"/>
+		<button label="Revocar" name="revoke_btn"/>
+		<check_box label="Animaciones ajenas" name="no_owned_animations_check" tool_tip="Si lo marcas, se filtrarán todas las animaciones que pertenecen a tu avatar, como las del AO o las animaciones por defecto del sistema."/>
+	</panel>
+</floater>
