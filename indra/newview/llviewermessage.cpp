@@ -116,52 +116,39 @@
 #include "llpanelblockedlist.h"
 #include "llpanelplaceprofile.h"
 #include "llviewerregion.h"
-// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
+
+// Firestorm inclues
+#include <boost/algorithm/string/split.hpp>
+#include <boost/regex.hpp>
+#include "animationexplorer.h"		// <FS:Zi> Animation Explorer
+#include "fsareasearch.h"
+#include "fscommon.h"
+#include "fsdata.h"
+#include "fsradar.h"
+#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
+#include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
+#include "fslslbridge.h"
+#include "fsmoneytracker.h"
+#include "fswsassetblacklist.h"
+#include "llfloaterreg.h"
+#include "llnotificationmanager.h"
+#include "lltexturefetch.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvinventory.h"
 #include "rlvui.h"
-// [/RLVa:KB]
-//-TT Client LSL Bridge
-#include "fslslbridge.h"
-//-TT
-#include "llfloaterreg.h"
-#include "fsmoneytracker.h"
-#include "fsareasearch.h"
-#include "fsdata.h"
-
-#include "fswsassetblacklist.h"
-
-// NaCl - Antispam Registry
-#include "NACLantispam.h"
 #include "sound_ids.h"
-// NaCl End
+#include "tea.h" // <FS:AW opensim currency support>
+#include "NACLantispam.h"
+
 // NaCl - Newline flood protection
-#include <boost/regex.hpp>
 const static boost::regex NEWLINES("\\n{1}");
 // NaCl End
-
-#include <boost/algorithm/string/split.hpp> //
-#include <boost/regex.hpp>
-
-#include "llnotificationmanager.h" //
-
-#include "lltexturefetch.h"
-// [AO : Radar]
-#include "llpanelpeople.h"
-// [/AO]
-#include "tea.h" // <FS:AW opensim currency support>
-#include "fscommon.h"
-#include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
-#include "fsradar.h"
-#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
 #pragma warning (disable:4702)
 #endif
-
-#include "animationexplorer.h"		// <FS:Zi> Animation Explorer
 
 extern void on_new_message(const LLSD& msg);
 
