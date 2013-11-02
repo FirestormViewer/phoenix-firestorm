@@ -102,6 +102,12 @@ namespace nd
 			return written;
 		}
 		
+		void ndFile::flush()
+		{
+			if( mFile )
+				fflush( mFile );
+		}
+
 		S32 ndFile::seek(apr_seek_where_t where, S32 offset)
 		{
 			return ndFile::seek(mFile, where, offset) ;

@@ -813,6 +813,14 @@ bool LLAPRFile::removeDir(const std::string& dirname, LLVolatileAPRPool* pool)
 //end of static components of LLAPRFile
 //*******************************************************************************************************************************
 //
+// <FS:ND> Allow file to be flushed
+void LLAPRFile::flush()
+{
+	if( mFile )
+		apr_file_flush( mFile );
+
+}
+// </FS:ND>
 } }
 
 // <FS:ND> Special case for UTF-8 filenames under windows. As we cannot pass UTF-16 filenames into apr use a shortfilename, those are always ASCII
