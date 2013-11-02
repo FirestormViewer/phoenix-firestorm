@@ -1043,6 +1043,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					//appendText(std::string(link_params.link_href) + delimiter,
 					//		prependNewLineState, link_params);
 					appendText(std::string(name_params.link_href), prependNewLineState, name_params);
+					prependNewLineState = false;
 					appendText(delimiter, prependNewLineState, body_message_params);
 					// </FS:Ansariel>
 					prependNewLineState = false;
