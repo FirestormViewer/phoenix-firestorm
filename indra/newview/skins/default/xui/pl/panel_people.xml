@@ -52,7 +52,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 				<dnd_button name="minus_btn" tool_tip="Opuść wybraną grupę" />
 			</panel>
 			<text name="groupcount">
-				Należysz do [COUNT] grup, możesz jeszcze dołączyć do [REMAINING].
+				Należysz do [COUNT] grup ([REMAINING] pozostało).
 			</text>
 		</panel>
 		<panel label="Ostatnie" name="recent_panel">
