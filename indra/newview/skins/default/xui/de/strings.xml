@@ -5809,4 +5809,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="skin_defaults_starlight_navbar">
 		Die Anzeige der Navigationsleiste wurde als Standard für Starlight-Oberflächendesigns aktiviert.
 	</string>
+	
+	<string name="animation_explorer_seconds_ago">
+		Vor [SECONDS] Sekunden
+	</string>
+	<string name="animation_explorer_still_playing">
+		Wird abgespielt
+	</string>
 </strings>

@@ -135,6 +135,7 @@
 		</menu>
 		<menu_item_call label="Umgebungssuche" name="area_search"/>
 		<menu_item_call label="Sound-Explorer" name="Sound Explorer"/>
+		<menu_item_call label="Animation-Explorer" name="Animation Explorer"/>
 		<menu_item_call label="Asset-Blacklist" name="asset_blacklist"/>
 	</menu>
 	<menu label="Bauen" name="BuildTools">

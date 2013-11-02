@@ -130,7 +130,7 @@
 			Kamerapos. in Zwischenablage kopieren
 		</text>
 		<text name="FSCmdLineRezPlatform_txt">
-			Plattform rezzen (Befehl: cmd 0 - 30)
+			Plattform rezzen (Befehl: cmd 0 - 64)
 		</text>
 		<slider name="FSCmdLinePlatformSize" label="Breite" label_width="37" tool_tip="Legt die Größe der zu rezzenden Plattform fest."/>
 		<text name="FSCmdLineKeyToName_txt">

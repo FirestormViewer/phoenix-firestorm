@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_social_photo">
+	<layout_stack name="stack_photo">
+		<layout_panel name="snapshot_panel">
+			<combo_box name="resolution_combobox" tool_tip="Bild-Auflösung">
+				<combo_box.item label="Aktuelles Fenster" name="CurrentWindow" />
+			</combo_box>
+			<button label="Aktualisieren" name="new_snapshot_btn" tool_tip="Klicken, um zu aktualisieren" />
+			<text name="working_lbl">
+				Aktualisiere...
+			</text>
+			<text name="caption_label">
+				Kommentar (optional):
+			</text>
+			<check_box label="Position hinzufügen" name="add_location_cb" />
+		</layout_panel>
+		<layout_panel name="photo_button_panel">
+			<button label="Posten" name="post_photo_btn" />
+			<button label="Abbrechen" name="cancel_photo_btn" />
+		</layout_panel>
+	</layout_stack>
+</panel>

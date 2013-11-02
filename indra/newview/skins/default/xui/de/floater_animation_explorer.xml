@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="Animation-Explorer">
+	<scroll_list name="animation_list">
+		<scroll_list.column label="Abgespielt von" name="played_by" />
+		<scroll_list.column label="Abgespielt" name="played" />
+		<scroll_list.column label="Zeit" name="timestamp" />
+		<scroll_list.column label="Animation-ID" name="animation_id" />
+		<scroll_list.column label="Oktjekt-ID" name="object_id" />
+	</scroll_list>
+	<panel name="buttons_panel">
+		<button label="Stoppen" name="stop_btn" />
+		<button label="Stoppen und zurückziehen" name="stop_and_revoke_btn" />
+		<button label="Zurückziehen" name="revoke_btn" />
+		<check_box label="Keine im eigenen Besitz" name="no_owned_animations_check" tool_tip="Falls aktiviert, werden alle Animationen im Besitz des eigenen Avatars gefiltert, z.B. AO-Animationen oder Standard-Systemanimationen" />
+	</panel>
+</floater>
