@@ -91,7 +91,6 @@ LLVBOPool LLVertexBuffer::sDynamicIBOPool(GL_DYNAMIC_DRAW_ARB, GL_ELEMENT_ARRAY_
 
 U32 LLVBOPool::sBytesPooled = 0;
 U32 LLVBOPool::sIndexBytesPooled = 0;
-U32 LLVBOPool::sCurGLName = 1;
 
 std::list<U32> LLVertexBuffer::sAvailableVAOName;
 U32 LLVertexBuffer::sCurVAOName = 1;
@@ -123,26 +122,11 @@ bool LLVertexBuffer::sPreferStreamDraw = false;
 
 U32 LLVBOPool::genBuffer()
 {
-	// <FS:ND> user-defined names was deprecated with OpenGL 3.1
+	U32 ret = 0;
 
-	// U32 ret = 0;
-	// 
-	// if (mGLNamePool.empty())
-	// {
-	// 	ret = sCurGLName++;
-	// }
-	// else
-	// {
-	// 	ret = mGLNamePool.front();
-	// 	mGLNamePool.pop_front();
-	// }
-	// 
-	// return ret;
-	GLuint ret(0);
-	glGenBuffersARB( 1, &ret );
+	glGenBuffersARB(1, &ret);
+	
 	return ret;
-
-	// </FS:ND>
 }
 
 void LLVBOPool::deleteBuffer(U32 name)
@@ -153,19 +137,9 @@ void LLVBOPool::deleteBuffer(U32 name)
 
 		glBindBufferARB(mType, name);
 		glBufferDataARB(mType, 0, NULL, mUsage);
-
-		// <FS:ND> user-defined names was deprecated with OpenGL 3.1
-
-		// llassert(std::find(mGLNamePool.begin(), mGLNamePool.end(), name) == mGLNamePool.end());
-
-		// mGLNamePool.push_back(name);
-
-		GLuint nBuffer( name );
-		glDeleteBuffersARB( 1, &nBuffer );
-
-		// </FS:ND>
-
 		glBindBufferARB(mType, 0);
+
+		glDeleteBuffersARB(1, &name);
 	}
 }
 
@@ -1398,7 +1372,7 @@ void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 		//actually allocate space for the vertex buffer if using VBO mapping
 		flush();
 
-		if (gGLManager.mHasVertexArrayObject && useVBOs() && (LLRender::sGLCoreProfile || sUseVAO))
+		if (gGLManager.mHasVertexArrayObject && useVBOs() && sUseVAO)
 		{
 #if GL_ARB_vertex_array_object
 			mGLArray = getVAOName();
