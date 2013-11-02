@@ -10,10 +10,10 @@
   single_instance="true"
   reuse_instance="true"
   title="Post to Facebook"
-  height="482"
+  height="454"
   width="304">
   <panel
-   height="482"
+   height="454"
    width="304"
    visible="true"
    name="background"
@@ -24,10 +24,10 @@
      name="tabs"
      tab_group="1"
      tab_min_width="70"
-     tab_height="30"
+     tab_height="20"
      tab_position="top"
      top="7"
-     height="437"
+     height="419"
      halign="center">
      <panel
        filename="panel_social_status.xml"
@@ -57,6 +57,7 @@
     <panel
      name="connection_status_panel"
      follows="left|bottom|right"
+     bottom="-5"
      height="24">
      <text
       name="connection_error_text"
