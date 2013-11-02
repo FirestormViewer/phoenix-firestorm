@@ -739,7 +739,8 @@ LLAppViewer::LLAppViewer() :
 	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded.
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
-	mYieldTime(-1),
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+	//mYieldTime(-1),
 	mMainloopTimeout(NULL),
 	mAgentRegionLastAlive(false),
 	mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", FALSE)),
@@ -1483,9 +1484,15 @@ bool LLAppViewer::mainLoop()
 	
     LLSD newFrame;
 	
-	LLTimer frameTimer,idleTimer;
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+	//LLTimer frameTimer,idleTimer;
+	LLTimer frameTimer,idleTimer,periodicRenderingTimer;
+	// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 	LLTimer debugTime;
 	
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+	BOOL restore_rendering_masks = FALSE;
+
 	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
 	//LLPrivateMemoryPoolTester::destroy() ;
@@ -1508,6 +1515,31 @@ bool LLAppViewer::mainLoop()
 		
 		try
 		{
+			// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+			// Check if we need to restore rendering masks.
+			if (restore_rendering_masks)
+			{
+				gPipeline.popRenderDebugFeatureMask();
+				gPipeline.popRenderTypeMask();
+			}
+			// Check if we need to temporarily enable rendering.
+			//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
+			static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
+			if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
+			{
+				periodicRenderingTimer.reset();
+				restore_rendering_masks = TRUE;
+				gPipeline.pushRenderTypeMask();
+				gPipeline.pushRenderDebugFeatureMask();
+				gPipeline.setAllRenderTypes();
+				gPipeline.setAllRenderDebugFeatures();
+			}
+			else
+			{
+				restore_rendering_masks = FALSE;
+			}
+			// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+
 			pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
 			if (gViewerWindow)
@@ -1635,11 +1667,20 @@ bool LLAppViewer::mainLoop()
 				LLFastTimer t2(FTM_SLEEP);
 				
 				// yield some time to the os based on command line option
-				if(mYieldTime >= 0)
+				// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+				//if(mYieldTime >= 0)
+				//{
+				//	LLFastTimer t(FTM_YIELD);
+				//	ms_sleep(mYieldTime);
+				//}
+				//S32 yield_time = gSavedSettings.getS32("YieldTime");
+				LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime");
+				if(yield_time >= 0)
 				{
 					LLFastTimer t(FTM_YIELD);
-					ms_sleep(mYieldTime);
+					ms_sleep(yield_time);
 				}
+				// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 
 				// yield cooperatively when not running as foreground window
 				if (   (gViewerWindow && !gViewerWindow->getWindow()->getVisible())
@@ -1750,6 +1791,29 @@ bool LLAppViewer::mainLoop()
 				{
 					gFrameStalls++;
 				}
+
+				// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+				// Limit FPS
+				//F32 max_fps = gSavedSettings.getF32("MaxFPS");
+				static LLCachedControl<F32> max_fps(gSavedSettings, "MaxFPS");
+				// Only limit FPS when we are actually rendering something.  Otherwise
+				// logins, logouts and teleports take much longer to complete.
+				if (max_fps > F_APPROXIMATELY_ZERO && 
+					LLStartUp::getStartupState() == STATE_STARTED &&
+					!gTeleportDisplay &&
+					!logoutRequestSent())
+				{
+					// Sleep a while to limit frame rate.
+					F32 min_frame_time = 1.f / max_fps;
+					S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
+					if (milliseconds_to_sleep > 0)
+					{
+						LLFastTimer t(FTM_YIELD);
+						ms_sleep(milliseconds_to_sleep);
+					}
+				}
+				// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+
 				frameTimer.reset();
 
 				resumeMainloopTimeout();
@@ -3099,7 +3163,8 @@ bool LLAppViewer::initConfiguration()
 		}
 	}
 
-    mYieldTime = gSavedSettings.getS32("YieldTime");
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+    //mYieldTime = gSavedSettings.getS32("YieldTime");
 
 	// Read skin/branding settings if specified.
 	//if (! gDirUtilp->getSkinDir().empty() )
