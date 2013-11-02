@@ -1246,12 +1246,11 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 
     LLVolumeParams    volume_params;
 
-    volume_params.setType( LL_PCODE_PROFILE_CIRCLE, 0x21 ); //TODO: make this use LL_PCODE_PATH_CIRCLE_33 again instead of the hardcoded value
-    volume_params.setRatio( 2, 2 );
-    volume_params.setShear( 0, 0 );
-    volume_params.setTaper(2.0f,2.0f);
-    volume_params.setTaperX(0.f);
-    volume_params.setTaperY(0.f);
+	volume_params.setType( LL_PCODE_PROFILE_CIRCLE, LL_PCODE_PATH_LINE );
+	volume_params.setBeginAndEndS( 0.f, 1.f );
+	volume_params.setBeginAndEndT( 0.f, 1.f );
+	volume_params.setRatio	( 1, 1 );
+	volume_params.setShear	( 0, 0 );
 
     LLVolumeMessage::packVolumeParams(&volume_params, msg);
     LLVector3 rezpos = agentPos - LLVector3(0.0f,0.0f,2.5f);
@@ -1261,9 +1260,17 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	static LLCachedControl<F32> sFSCmdLinePlatformSize(gSavedSettings,  "FSCmdLinePlatformSize");
 
 	if (use_saved_value) visual_radius = sFSCmdLinePlatformSize;
-	F32 realsize = visual_radius / 3.0f;
-	if (realsize < 0.01f) realsize = 0.01f;
-	else if (realsize > 10.0f) realsize = 10.0f;
+	F32 max_scale = LLWorld::getInstance()->getRegionMaxPrimScale();
+	F32 min_scale = LLWorld::getInstance()->getRegionMinPrimScale();
+	F32 realsize = visual_radius;// / 3.0f;
+	if (realsize < min_scale)
+	{
+		realsize = min_scale;
+	}
+	else if (realsize > max_scale)
+	{
+		realsize = max_scale;
+	}
 
     msg->addVector3Fast(_PREHASH_Scale, LLVector3(0.01f,realsize,realsize) );
     msg->addQuatFast(_PREHASH_Rotation, rotation );

@@ -944,7 +944,7 @@
       height="16"
       name="FSCmdLineRezPlatform_txt"
       width="250">
-      Rez a platform (usage: cmd 0 - 30)
+      Rez a platform (usage: cmd 0 - 64)
     </text>
     <line_editor
       top_pad="0"
@@ -965,8 +965,8 @@
       increment="0.5"
       initial_value="5"
       label="Width"
-      label_width="30"
-      max_val="30"
+      label_width="64"
+      max_val="64"
       min_val="5"
       show_text="true"
       width="200"
