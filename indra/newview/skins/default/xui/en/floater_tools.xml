@@ -1252,13 +1252,13 @@ even though the user gets a free copy.
              length="1"
              left="10"
              word_wrap="true"
-             top_pad="9"
+             top_pad="4"
              text_color="EmphasisColor"
-             height="16"
+             height="24"
              follows="left|top|right"
              layout="topleft"
              name="perm_modify"
-             width="264">
+             width="214">
                 You can modify this object
             </text>
             <text
