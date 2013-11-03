@@ -1674,7 +1674,7 @@ bool LLAppViewer::mainLoop()
 				//	ms_sleep(mYieldTime);
 				//}
 				//S32 yield_time = gSavedSettings.getS32("YieldTime");
-				LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime");
+				static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime");
 				if(yield_time >= 0)
 				{
 					LLFastTimer t(FTM_YIELD);
