@@ -65,7 +65,11 @@ class LLViewerEventRecorder : public LLSingleton<LLViewerEventRecorder>
   std::string get_xui();
   void update_xui(std::string xui);
 
-  bool getLoggingStatus();
+  // <FS:ND> Implement this
+  // bool getLoggingStatus();
+  bool getLoggingStatus() const
+  { return logEvents; }
+
   void setEventLoggingOn();
   void setEventLoggingOff();
 
