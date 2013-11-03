@@ -705,7 +705,10 @@ void LLView::handleVisibilityChange ( BOOL new_visibility )
 		// only views that are themselves visible will have their overall visibility affected by their ancestors
 		old_visibility=viewp->getVisible();
 
-		if (old_visibility!=new_visibility)
+		// <FS:ND> Make this less awfull slow, at least when not logging (default).
+		// if (old_visibility!=new_visibility)
+		if (old_visibility!=new_visibility && LLViewerEventRecorder::instance().getLoggingStatus() )
+   		// <FS:ND/>
 		{
 			LLViewerEventRecorder::instance().logVisibilityChange( viewp->getPathname(), viewp->getName(), new_visibility,"widget");
 		}
