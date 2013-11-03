@@ -78,6 +78,9 @@ public:
 	LLFloaterIMNearbyChatScreenChannel(const Params& p)
 		: LLScreenChannelBase(p)
 	{
+		// <FS:Ansariel> Zi Ree's customizable nearby chat toast width
+		mWorldViewRectConnection = gViewerWindow->setOnWorldViewRectUpdated(boost::bind(&LLFloaterIMNearbyChatScreenChannel::updateSize, this, _1, _2));
+
 		mStopProcessing = false;
 
 		LLControlVariable* ctrl = gSavedSettings.getControl("NearbyToastLifeTime").get();
@@ -162,6 +165,12 @@ protected:
 
 	bool	mStopProcessing;
 	bool	mChannelRect;
+
+	// <FS:Ansariel> Zi Ree's customizable nearby chat toast width
+	void			reshapePanel(LLFloaterIMNearbyChatToastPanel* panel);
+	virtual void	updateSize(LLRect old_world_rect, LLRect new_world_rect);
+	boost::signals2::connection mWorldViewRectConnection;
+	// </FS:Ansariel> Zi Ree's customizable nearby chat toast width
 };
 
 
@@ -191,6 +200,34 @@ private:
 //-----------------------------------------------------------------------------------------------
 // LLFloaterIMNearbyChatScreenChannel
 //-----------------------------------------------------------------------------------------------
+
+// <FS:Ansariel> Zi Ree's customizable nearby chat toast width
+void LLFloaterIMNearbyChatScreenChannel::reshapePanel(LLFloaterIMNearbyChatToastPanel* panel)
+{
+	S32 percentage = gSavedSettings.getS32("NearbyToastWidth");
+	panel->reshape(gViewerWindow->getWindowWidthRaw() * percentage / 100, panel->getRect().getHeight(), TRUE);
+}
+
+void LLFloaterIMNearbyChatScreenChannel::updateSize(LLRect old_world_rect, LLRect new_world_rect)
+{
+	for(toast_vec_t::iterator it = m_active_toasts.begin(); it != m_active_toasts.end(); ++it)
+	{
+		LLToast* toast = it->get();
+
+		if (toast)
+		{
+			LLFloaterIMNearbyChatToastPanel* panel = dynamic_cast<LLFloaterIMNearbyChatToastPanel*>(toast->getPanel());
+
+			if(panel)
+			{
+				reshapePanel(panel);
+				toast->reshapeToPanel();
+			}
+		}
+	}
+	arrangeToasts();
+}
+// </FS:Ansariel> Zi Ree's customizable nearby chat toast width
 
 void LLFloaterIMNearbyChatScreenChannel::deactivateToast(LLToast* toast)
 {
@@ -276,7 +313,9 @@ bool	LLFloaterIMNearbyChatScreenChannel::createPoolToast()
 	p.fading_time_secs = gSavedSettings.getS32("NearbyToastFadingTime");
 
 	LLToast* toast = new LLFloaterIMNearbyChatToast(p, this);
-	
+
+	// <FS:Ansariel> Zi Ree's customizable nearby chat toast width
+	reshapePanel(panel);
 	
 	toast->setOnFadeCallback(boost::bind(&LLFloaterIMNearbyChatScreenChannel::onToastFade, this, _1));
 
@@ -310,6 +349,9 @@ void LLFloaterIMNearbyChatScreenChannel::addChat(LLSD& chat)
 			if(panel && panel->messageID() == fromID && panel->getFromName() == from && panel->canAddText())
 			{
 				panel->addMessage(chat);
+				// <FS:Ansariel> Zi Ree's customizable nearby chat toast width
+				reshapePanel(panel);
+				// </FS:Ansariel> Zi Ree's customizable nearby chat toast width
 				toast->reshapeToPanel();
 				toast->startTimer();
 	  
@@ -354,6 +396,9 @@ void LLFloaterIMNearbyChatScreenChannel::addChat(LLSD& chat)
 	if(!panel)
 		return;
 	panel->init(chat);
+
+	// <FS:Ansariel> Zi Ree's customizable nearby chat toast width
+	reshapePanel(panel);
 
 	toast->reshapeToPanel();
 	toast->startTimer();
