@@ -447,7 +447,6 @@
 			<menu_item_call label="Desactivar registro de mensajes" name="Disable Message Log"/>
 			<menu_item_call label="Descartar un paquete" name="Drop a Packet"/>
 		</menu>
-		<menu_item_call label="Volcar cámara programada" name="Dump Scripted Camera"/>
 		<menu_item_call label="Volcar cámara guionizada" name="Dump Scripted Camera"/>
 		<menu label="Grabadora" name="Recorder">
 			<menu_item_call label="Iniciar grabación de evento" name="Start event recording"/>
