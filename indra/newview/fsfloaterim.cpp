@@ -433,6 +433,7 @@ void FSFloaterIM::onViewProfileButtonClicked()
 	lldebugs << "FSFloaterIM::onViewProfileButtonClicked" << llendl;
 	LLAvatarActions::showProfile(mOtherParticipantUUID);
 }
+
 void FSFloaterIM::onAddFriendButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onAddFriendButtonClicked" << llendl;
@@ -443,46 +444,60 @@ void FSFloaterIM::onAddFriendButtonClicked()
 	//LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID, full_name);
 	LLAvatarActions::requestFriendshipDialog(mOtherParticipantUUID);
 }
+
 void FSFloaterIM::onShareButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onShareButtonClicked" << llendl;
 	LLAvatarActions::share(mOtherParticipantUUID);
 }
+
 void FSFloaterIM::onTeleportButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onTeleportButtonClicked" << llendl;
 	LLAvatarActions::offerTeleport(mOtherParticipantUUID);
 }
+
+void FSFloaterIM::onRequestTeleportButtonClicked()
+{
+	LLAvatarActions::teleportRequest(mOtherParticipantUUID);
+}
+
 void FSFloaterIM::onPayButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onPayButtonClicked" << llendl;
 	LLAvatarActions::pay(mOtherParticipantUUID);
 }
+
 void FSFloaterIM::onGroupInfoButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onGroupInfoButtonClicked" << llendl;
 	LLGroupActions::show(mSessionID);
 }
+
 void FSFloaterIM::onCallButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onCallButtonClicked" << llendl;
 	gIMMgr->startCall(mSessionID);
 }
+
 void FSFloaterIM::onEndCallButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onEndCallButtonClicked" << llendl;
 	gIMMgr->endCall(mSessionID);
 }
+
 void FSFloaterIM::onOpenVoiceControlsClicked()
 {
 	lldebugs << "FSFloaterIM::onOpenVoiceControlsClicked" << llendl;
 	LLFloaterReg::showInstance("fs_voice_controls");
 }
+
 void FSFloaterIM::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
 {
 	lldebugs << "FSFloaterIM::onVoiceChannelStateChanged" << llendl;
 	updateButtons(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
 }
+
 void FSFloaterIM::onHistoryButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onHistoryButtonClicked" << llendl;
@@ -630,6 +645,7 @@ void FSFloaterIM::changed(U32 mask)
 	if(LLAvatarActions::isFriend(mOtherParticipantUUID))
 	{
 		getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
+		getChild<LLButton>("request_tp_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
 	}
 }
 
@@ -683,6 +699,9 @@ BOOL FSFloaterIM::postBuild()
 	LLButton* tp = getChild<LLButton>("teleport_btn");
 	tp->setClickedCallback(boost::bind(&FSFloaterIM::onTeleportButtonClicked, this));
 	
+	LLButton* request_tp = getChild<LLButton>("request_tp_btn");
+	request_tp->setClickedCallback(boost::bind(&FSFloaterIM::onRequestTeleportButtonClicked, this));
+	
 	LLButton* pay = getChild<LLButton>("pay_btn");
 	pay->setClickedCallback(boost::bind(&FSFloaterIM::onPayButtonClicked, this));
 	
@@ -724,6 +743,7 @@ BOOL FSFloaterIM::postBuild()
 				{
 					llinfos << "LLAvatarActions::isFriend - tp button" << llendl;
 					getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
+					getChild<LLButton>("request_tp_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
 				}
 
 				// support sysinfo button -Zi

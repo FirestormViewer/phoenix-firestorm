@@ -910,6 +910,7 @@ with the same filename but different name
 <texture name="call_icon_24x24" file_name="icons/call_icon_24x24.png" preload="false" />
 <texture name="call_end_icon_24x24" file_name="icons/call_end_icon_24x24.png" preload="false" />
 <texture name="teleport_icon_24x24" file_name="icons/genie_icon_24x24.png" preload="false" />
+<texture name="request_tp_icon" file_name="icons/request_tp_icon_24x24.png" preload="false" />
 <texture name="friends_icon_24x24" file_name="icons/Friends_Icon_24x24.png" preload="false" />
 <texture name="gift_icon_24x24" file_name="icons/gift_icon_24x24.png" preload="false" />
 <texture name="avatar_in_region" file_name="green_dot.tga" preload="false" />
