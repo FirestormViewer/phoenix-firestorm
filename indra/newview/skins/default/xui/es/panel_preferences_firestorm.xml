@@ -118,7 +118,7 @@
 				Copiar pos. de cámara a portapapeles
 			</text>
 			<text name="FSCmdLineRezPlatform_txt">
-				Crear plataforma (uso: cmd 0 - 30)
+				Crear plataforma (uso: cmd 0 - 64)
 			</text>
 			<slider name="FSCmdLinePlatformSize" label="Diámetro" label_width="60" tool_tip="Diámetro de la plataforma por defecto si no se usa ningún parámetro"/>
 			<text name="FSCmdLineKeyToName_txt" width="270">
