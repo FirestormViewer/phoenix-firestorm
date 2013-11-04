@@ -132,6 +132,7 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 		default: break;
 		}
 	}
+	
 	setOverlapsScreenChannel(true);
 
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
@@ -670,46 +671,46 @@ BOOL FSFloaterIM::postBuild()
 
 	llinfos << "buttons setup in IM start" << llendl;
 
-	LLButton* slide_left = getChild<LLButton>("slide_left_btn");
-	slide_left->setVisible(mControlPanel->getParent()->getVisible());
-	slide_left->setClickedCallback(boost::bind(&FSFloaterIM::onSlide, this));
+	LLButton* button = getChild<LLButton>("slide_left_btn");
+	button->setVisible(mControlPanel->getParent()->getVisible());
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onSlide, this));
 
-	LLButton* slide_right = getChild<LLButton>("slide_right_btn");
-	slide_right->setVisible(!mControlPanel->getParent()->getVisible());
-	slide_right->setClickedCallback(boost::bind(&FSFloaterIM::onSlide, this));
+	button = getChild<LLButton>("slide_right_btn");
+	button->setVisible(!mControlPanel->getParent()->getVisible());
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onSlide, this));
 	
-	LLButton* view_profile  = getChild<LLButton>("view_profile_btn");
-	view_profile->setClickedCallback(boost::bind(&FSFloaterIM::onViewProfileButtonClicked, this));
+	button = getChild<LLButton>("view_profile_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onViewProfileButtonClicked, this));
 	
-	LLButton* group_profile = getChild<LLButton>("group_info_btn");
-	group_profile->setClickedCallback(boost::bind(&FSFloaterIM::onGroupInfoButtonClicked, this));
+	button = getChild<LLButton>("group_info_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onGroupInfoButtonClicked, this));
 	
-	LLButton* call = getChild<LLButton>("call_btn");
-	call->setClickedCallback(boost::bind(&FSFloaterIM::onCallButtonClicked, this));
+	button = getChild<LLButton>("call_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onCallButtonClicked, this));
 	
-	LLButton* endcall = getChild<LLButton>("end_call_btn");
-	endcall->setClickedCallback(boost::bind(&FSFloaterIM::onEndCallButtonClicked, this));
+	button = getChild<LLButton>("end_call_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onEndCallButtonClicked, this));
 	
-	LLButton* voicectrl = getChild<LLButton>("voice_ctrls_btn");
-	voicectrl->setClickedCallback(boost::bind(&FSFloaterIM::onOpenVoiceControlsClicked, this));
+	button = getChild<LLButton>("voice_ctrls_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onOpenVoiceControlsClicked, this));
 	
-	LLButton* share = getChild<LLButton>("share_btn");
-	share->setClickedCallback(boost::bind(&FSFloaterIM::onShareButtonClicked, this));
+	button = getChild<LLButton>("share_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onShareButtonClicked, this));
 	
-	LLButton* tp = getChild<LLButton>("teleport_btn");
-	tp->setClickedCallback(boost::bind(&FSFloaterIM::onTeleportButtonClicked, this));
+	button = getChild<LLButton>("teleport_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onTeleportButtonClicked, this));
 	
-	LLButton* request_tp = getChild<LLButton>("request_tp_btn");
-	request_tp->setClickedCallback(boost::bind(&FSFloaterIM::onRequestTeleportButtonClicked, this));
+	button = getChild<LLButton>("request_tp_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onRequestTeleportButtonClicked, this));
 	
-	LLButton* pay = getChild<LLButton>("pay_btn");
-	pay->setClickedCallback(boost::bind(&FSFloaterIM::onPayButtonClicked, this));
+	button = getChild<LLButton>("pay_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onPayButtonClicked, this));
 	
-	LLButton* add_friend = getChild<LLButton>("add_friend_btn");
-	add_friend->setClickedCallback(boost::bind(&FSFloaterIM::onAddFriendButtonClicked, this));
+	button = getChild<LLButton>("add_friend_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onAddFriendButtonClicked, this));
 
-	LLButton* im_history = getChild<LLButton>("im_history_btn");
-	im_history->setClickedCallback(boost::bind(&FSFloaterIM::onHistoryButtonClicked, this));
+	button = getChild<LLButton>("im_history_btn");
+	button->setClickedCallback(boost::bind(&FSFloaterIM::onHistoryButtonClicked, this));
 
 	// support sysinfo button -Zi
 	mSysinfoButton=getChild<LLButton>("send_sysinfo_btn");
