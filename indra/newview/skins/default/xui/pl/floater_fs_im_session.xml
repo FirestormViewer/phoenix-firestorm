@@ -13,6 +13,9 @@
 		<layout_panel name="tp_panel">
 			<button name="teleport_btn" tool_tip="Zaoferuj teleportację do siebie temu rezydentowi"/>
 		</layout_panel>
+		<layout_panel name="request_tp_panel">
+			<button tool_tip="Poproś tego rezydenta o teleportację" name="request_tp_btn"/>
+		</layout_panel>
 		<layout_panel name="share_panel">
 			<button name="share_btn" tool_tip="Wyślij przedmiot temu rezydentowi"/>
 		</layout_panel>
