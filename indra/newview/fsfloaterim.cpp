@@ -763,6 +763,7 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("request_tp_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
@@ -779,6 +780,7 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
+				getChild<LLLayoutPanel>("request_tp_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
