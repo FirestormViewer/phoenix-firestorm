@@ -1377,7 +1377,7 @@
 			desc="vector llGetGeometricCenter();Returns the geometric center of the linked set the script is attached to" />
 		<function name="llGetPrimitiveParams" sleep="0.0" energy="10.0"
 			desc="list llGetPrimitiveParams(list params);Returns the primitive parameters specified in the params list" />
-		<function name="llGetSimulatorHostName" sleep="0.0" energy="10.0"
+		<function name="llGetSimulatorHostname" sleep="0.0" energy="10.0"
 			desc="string llGetSimulatorHostname();Returns the hostname of the machine which the script is running on (same as string in viewer Help dialog)" />
 		<function name="llSetLocalRot" sleep="0.0" energy="10.0"
 			desc="llSetLocalRot(rotation rot);Sets the rotation of a child prim relative to the root prim" />
