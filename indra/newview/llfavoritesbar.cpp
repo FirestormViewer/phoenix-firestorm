@@ -1603,6 +1603,7 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	llofstream file;
 	file.open(filename);
 	LLSDSerialize::toPrettyXML(fav_llsd, file);
+	file.close();
 }
 
 void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
@@ -1635,6 +1636,7 @@ void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
 	llofstream out_file;
 	out_file.open(filename);
 	LLSDSerialize::toPrettyXML(fav_llsd, out_file);
+	out_file.close();
 
 }
 
@@ -1685,6 +1687,7 @@ void LLFavoritesOrderStorage::save()
 		llofstream file;
 		file.open(filename);
 		LLSDSerialize::toPrettyXML(settings_llsd, file);
+		file.close();
 	}
 }
 
