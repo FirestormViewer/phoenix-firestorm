@@ -611,6 +611,7 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("lsl");
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
+			allowedv->push_back("xml");
 			// <FS:CR> Import filter
 			allowedv->push_back("oxp");
             //allowedv->push_back("hpa");
@@ -631,6 +632,7 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("bvh");
             allowedv->push_back("anim");
             break;
+		case FFLOAD_MODEL:
         case FFLOAD_COLLADA:
             allowedv->push_back("dae");
             break;
@@ -649,6 +651,9 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
             break;
+		case FFLOAD_XML:
+			allowedv->push_back("xml");
+			break;
         case FFLOAD_DIRECTORY:
             break;
 	// <FS:CR> Import filter
@@ -774,6 +779,12 @@ bool	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& filena
 			extension = "dae";
 			break;
 		// </FS:CR>
+		case FFSAVE_BEAM:
+		case FFSAVE_XML:
+			type = "XML ";
+			creator = "\?\?\?\?";
+			extension = "xml";
+			break;
 		case FFSAVE_ALL:
 		default:
 			type = "\?\?\?\?";
