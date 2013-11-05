@@ -729,6 +729,10 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 		//		return;
 		//	}
 		//}
+		if (nearby_chat->getVisible())
+		{
+			return;
+		}
 		// </FS:Ansariel> [FS communication UI]
 
         //Will show toast when chat preference is set        
