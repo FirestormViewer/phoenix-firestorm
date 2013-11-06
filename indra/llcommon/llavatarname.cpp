@@ -44,6 +44,7 @@ static const std::string DISPLAY_NAME_EXPIRES("display_name_expires");
 static const std::string DISPLAY_NAME_NEXT_UPDATE("display_name_next_update");
 
 bool LLAvatarName::sUseDisplayNames = true;
+bool LLAvatarName::sUseUsernames = true;
 bool LLAvatarName::sUseLegacyNameFormat = false;	// <FS:CR> Legacy name option
 bool LLAvatarName::sTrimResidentSurname = true;		// FIRE-6659 - Trim "Resident" from legacy name
 
@@ -81,6 +82,16 @@ void LLAvatarName::setUseDisplayNames(bool use)
 bool LLAvatarName::useDisplayNames() 
 { 
 	return sUseDisplayNames; 
+}
+
+void LLAvatarName::setUseUsernames(bool use)
+{
+	sUseUsernames = use;
+}
+
+bool LLAvatarName::useUsernames()
+{
+	return sUseUsernames;
 }
 
 LLSD LLAvatarName::asLLSD() const
@@ -192,7 +203,11 @@ std::string LLAvatarName::getCompleteName() const
 		// </FS:CR>
 		else
 		{
-			name = mDisplayName + " (" + mUsername + ")";
+			name = mDisplayName;
+			if(sUseUsernames)
+			{
+				name += " (" + mUsername + ")";
+			}
 		}
 	}
 	else
