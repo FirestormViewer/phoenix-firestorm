@@ -33,6 +33,9 @@
 #include "lldir.h"
 #include "llteleporthistory.h"
 #include "llagent.h"
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Max offset for two global positions to consider them as equal
 const F64 MAX_GLOBAL_POS_OFFSET = 5.0f;
@@ -92,6 +95,13 @@ void LLTeleportHistoryStorage::onTeleportHistoryChange()
 	}
 
 	const LLTeleportHistoryItem &item = th->getItems()[th->getCurrentItemIndex()];
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+	// Make sure we don't attempt to save zero'ed out teleport history items
+	if (item.mGlobalPos.isExactlyZero())
+	{
+		return;
+	}
+// [/RLVa:KB]
 
 	addItem(item.mTitle, item.mGlobalPos);
 	save();
@@ -116,6 +126,13 @@ bool LLTeleportHistoryStorage::compareByTitleAndGlobalPos(const LLTeleportHistor
 
 void LLTeleportHistoryStorage::addItem(const std::string title, const LLVector3d& global_pos, const LLDate& date)
 {
+// [RLVa:KB] - Checked: 2010-09-03 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	LLTeleportHistoryPersistentItem item(title, global_pos, date);
 
 	slurl_list_t::iterator item_iter = std::find_if(mItems.begin(), mItems.end(),
