@@ -756,7 +756,7 @@
 		<integer_constant name="PU_FAILURE_DYNAMIC_PATHFINDING_DISABLED" desc="Triggered when a character enters a region with dynamic pathfinding disabled." />
 		<integer_constant name="PU_FAILURE_PARCEL_UNREACHABLE" desc="Triggered when a character failed to enter a parcel because it is not allowed to enter, e.g. because the parcel is already full or because object entry was disabled after the navmesh was baked." />
 					
-		<integer_constant name="JSON_INVALID" desc="Returned by llJsonGetValue and llJsonValueType if the specifiers to do specify a valid in the json value." />
+		<integer_constant name="JSON_INVALID" desc="A return value that indicates an invalid type was specified to an llJson* function" />
 		<integer_constant name="JSON_OBJECT" desc="Represents a json datatype represented in LSL as a strided list of name/value pairs" />
 		<integer_constant name="JSON_ARRAY" desc="Represents a json datatype mappable to the LSL datatype &quot;list&quot;" />
 		<integer_constant name="JSON_NUMBER" desc="Represents a json datatype mappable to the LSL datatypes &quot;integer&quot; and &quot;float&quot;" />
