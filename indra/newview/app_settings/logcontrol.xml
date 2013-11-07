@@ -50,6 +50,7 @@
 						     <string>import</string>
 						     <string>export</string>
 						     <string>fsdata</string>
+							 <string>SLURL</string>
 						</array>
 				</map>
       </array>
