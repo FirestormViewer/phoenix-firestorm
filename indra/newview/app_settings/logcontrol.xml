@@ -47,7 +47,6 @@
 							 <string>Voice</string>
 							 <string>Avatar</string>							
 						-->
-						     <string>parseFile</string>
 						     <string>import</string>
 						     <string>export</string>
 						     <string>fsdata</string>
