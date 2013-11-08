@@ -3209,7 +3209,10 @@ bool LLAppViewer::initConfiguration()
 	if (start_slurl.isValid() &&
 		(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
 	{
-		if (sendURLToOtherInstance(start_slurl.getSLURLString()))
+		// <FS:Ansariel> FIRE-11586: Temporary fix until grid manager has been reworked
+		//if (sendURLToOtherInstance(start_slurl.getSLURLString()))
+		if (sendURLToOtherInstance(CmdLineLoginLocation))
+		// </FS:Ansariel>
 		{
 			// successfully handed off URL to existing instance, exit
 			return false;
