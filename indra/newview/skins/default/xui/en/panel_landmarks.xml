@@ -11,7 +11,6 @@
    follows="all">
     <tab_container
      name="landmarks_accordion"
-     fit_parent="true"
      layout="topleft"
      follows="all"
      halign="center"
@@ -112,7 +111,6 @@
      follows="left|right|bottom"
      height="27"
      layout="bottomleft"
-	 auto_resize="true"
      left="3"
      name="bottom_panel"
      width="313">
@@ -126,14 +124,12 @@
 		   name="bottom_panel"
 		   width="307">
 		      <panel
-		       auto_resize="false"
 		       height="25"
 		       layout="topleft"
 			   follows="top|left"
 			   left="0"
 		       name="options_gear_btn_panel"
-		       width="32"
-               user_resize="false">
+		       width="32">
 		          <menu_button
 		           follows="bottom|left"
 		           tool_tip="Show additional options"
@@ -149,13 +145,11 @@
 		           width="31" />
 		      </panel>
 		      <panel
-		       auto_resize="false"
 		       height="25"
 		       layout="topleft"
 			   follows="top|left"
 			   left_pad="0"
 		       name="add_btn_panel"
-               user_resize="false"
 		       width="32">
 		          <button
 		           follows="bottom|left"
@@ -172,13 +166,11 @@
 		           width="31" />
 		      </panel>
 		      <panel
-		       auto_resize="true"
 		       height="25"
 		       layout="topleft"
 			   follows="top|left|right"
 			   left_pad="0"
 		       name="dummy_panel"
-               user_resize="false"
 			   min_width="1"
 		       width="212">
 		          <icon
@@ -192,13 +184,11 @@
 		           width="211" />
 		      </panel>
 		      <panel
-		       auto_resize="false"
 		       height="25"
 		       layout="topleft"
 		       name="trash_btn_panel"
 			   follows="top|right"
 			   left_pad="0"
-               user_resize="false"
 		       width="31">
 		          <dnd_button
 		           follows="bottom|right"
