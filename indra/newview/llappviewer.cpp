@@ -3115,24 +3115,10 @@ bool LLAppViewer::initConfiguration()
     }
     }
 
-//-TT Hacking to save the skin and theme for future use.
+	// <FS:TT> Hacking to save the skin and theme for future use.
 	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
 	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
-//-TT
-	//RN: if we received a URL, hand it off to the existing instance.
-	// don't call anotherInstanceRunning() when doing URL handoff, as
-	// it relies on checking a marker file which will not work when running
-	// out of different directories
-
-	if (start_slurl.isValid() &&
-		(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
-	{
-		if (sendURLToOtherInstance(start_slurl.getSLURLString()))
-		{
-			// successfully handed off URL to existing instance, exit
-			return false;
-		}
-    }
+	// </FS:TT>
 
 	const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
 	if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
@@ -3220,39 +3206,14 @@ bool LLAppViewer::initConfiguration()
 	// it relies on checking a marker file which will not work when running
 	// out of different directories
 
-	// <Ansariel> Since the start SLURL is set in LLStartup because of the
-	//            grid manager, we don't get a valid SLURL here. So we have
-	//            to create a new temporary SLURL to be able to hand off
-	//            SLURLs to already running viewers when opened in a web browser.
-	//if (LLStartUp::getStartSLURL().isValid() &&
-	//	(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
-	//{
-	//	if (sendURLToOtherInstance(LLStartUp::getStartSLURL().getSLURLString()))
-	//	{
-	//		// successfully handed off URL to existing instance, exit
-	//		return false;
-	//	}
-	//}
-	if ((clp.hasOption("url") || clp.hasOption("slurl")) &&
-		LLSLURL(LLStartUp::getStartSLURLString()).isValid() &&
-		gSavedSettings.getBOOL("SLURLPassToOtherInstance") &&
-		sendURLToOtherInstance(LLStartUp::getStartSLURLString()))
+	if (start_slurl.isValid() &&
+		(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
 	{
-		// successfully handed off URL to existing instance, exit
-		return false;
-	}
-	// </Ansariel>
-
-	// If automatic login from command line with --login switch
-	// init StartSLURL location. In interactive login, LLPanelLogin
-	// will take care of it.
-	if ((clp.hasOption("login") || clp.hasOption("autologin")) && !clp.hasOption("url") && !clp.hasOption("slurl"))
-	{
-// <FS:AW crash on startup>
-// also here LLSLURLs are not available at this point of startup
-//LLStartUp::setStartSLURL(LLSLURL(gSavedSettings.getString("LoginLocation")));
-		LLStartUp::setStartSLURLString(gSavedSettings.getString("LoginLocation"));
-// </FS:AW crash on startup>
+		if (sendURLToOtherInstance(start_slurl.getSLURLString()))
+		{
+			// successfully handed off URL to existing instance, exit
+			return false;
+		}
 	}
 
 	//
