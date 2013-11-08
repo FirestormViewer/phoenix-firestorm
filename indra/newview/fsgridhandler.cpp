@@ -38,7 +38,6 @@
 #include "llsecapi.h"
 
 #include "llhttpclient.h"
-// #include "llxmlnode.h"
 #include "lltrans.h"
 #include "llweb.h"
 #include "llbufferstream.h"
@@ -971,7 +970,7 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 void LLGridManager::addSystemGrid(const std::string& label,
 					  const std::string& name,
 					  const std::string& nick,
-					  const std::string& login,
+					  const std::string& login_uri,
 					  const std::string& helper,
 					  const std::string& login_page )
 {
@@ -983,9 +982,9 @@ void LLGridManager::addSystemGrid(const std::string& label,
 	grid_entry->grid[GRID_NICK_VALUE] = nick;
 	grid_entry->grid[GRID_HELPER_URI_VALUE] = helper;
 	grid_entry->grid[GRID_LOGIN_URI_VALUE] = LLSD::emptyArray();
-	grid_entry->grid[GRID_LOGIN_URI_VALUE].append(login);
+	grid_entry->grid[GRID_LOGIN_URI_VALUE].append(login_uri);
 	grid_entry->grid[GRID_LOGIN_PAGE_VALUE] = login_page;
-	grid_entry->grid[GRID_IS_SYSTEM_GRID_VALUE] = TRUE;
+	grid_entry->grid[GRID_IS_SYSTEM_GRID_VALUE] = true;
 	grid_entry->grid[GRID_LOGIN_IDENTIFIER_TYPES] = LLSD::emptyArray();
 	grid_entry->grid[GRID_LOGIN_IDENTIFIER_TYPES].append(CRED_IDENTIFIER_TYPE_AGENT);
 	

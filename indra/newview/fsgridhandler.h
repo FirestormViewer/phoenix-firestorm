@@ -36,43 +36,42 @@
                                                                                                        
 extern const char* DEFAULT_LOGIN_PAGE;
 //Kokua: for llviewernetwork_test
-#define KNOWN_GRIDS_SIZE 3
-#define AGNI "Second Life"
-#define ADITI "Second Life Beta"
+const S32 KNOWN_GRIDS_SIZE	= 3;
+const std::string AGNI		= "Second Life";
+const std::string ADITI		= "Second Life Beta";
+const std::string MAINGRID	= "util.agni.lindenlab.com";
 
-#define GRID_VALUE "name"
-#define GRID_ID_VALUE "grid_login_id"
-// <AW opensim> 
-#define GRID_LABEL_VALUE "gridname"
-#define GRID_NICK_VALUE "gridnick"
-#define GRID_LOGIN_URI_VALUE "loginuri"
-#define GRID_HELPER_URI_VALUE "helperuri"
-#define GRID_LOGIN_PAGE_VALUE "loginpage"
-#define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
-#define GRID_IS_FAVORITE_VALUE "favorite"
-#define GRID_REGISTER_NEW_ACCOUNT "register"
-#define GRID_FORGOT_PASSWORD "password"
-// <FS:CR> Aurora Sim
-#define GRID_HELP "help"
-#define GRID_ABOUT "about"
-#define GRID_SEARCH	"search"
-#define GRID_PROFILE_URI_VALUE "profileuri"
-#define GRID_SENDGRIDINFO "SendGridInfoToViewerOnLogin"
-#define GRID_DIRECTORY_FEE "DirectoryFee"
-#define GRID_PLATFORM "platform"
-#define GRID_MESSAGE "message"
-// </FS:CR> Aurora Sim
-// </AW opensim>
-#define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
-#define GRID_IS_FAVORITE_VALUE "favorite"
-#define MAINGRID "util.agni.lindenlab.com"
-#define GRID_LOGIN_IDENTIFIER_TYPES "login_identifier_types"
+const std::string GRID_VALUE					= "name";
+const std::string GRID_ID_VALUE					= "grid_login_id";
+const std::string GRID_IS_SYSTEM_GRID_VALUE		= "system_grid";
+const std::string GRID_IS_FAVORITE_VALUE		= "favorite";
+const std::string GRID_LOGIN_IDENTIFIER_TYPES	= "login_identifier_types";
+const std::string GRID_UPDATE_SERVICE_URL		= "update_query_url_base";
+
+// <Opensim/Aurora consts>
+const std::string GRID_LABEL_VALUE			= "gridname";
+const std::string GRID_NICK_VALUE			= "gridnick";
+const std::string GRID_LOGIN_URI_VALUE		= "loginuri";
+const std::string GRID_HELPER_URI_VALUE		= "helperuri";
+const std::string GRID_LOGIN_PAGE_VALUE		= "loginpage";
+const std::string GRID_REGISTER_NEW_ACCOUNT = "register";
+const std::string GRID_FORGOT_PASSWORD		= "password";
+const std::string GRID_HELP					= "help";
+const std::string GRID_ABOUT				= "about";
+const std::string GRID_SEARCH				= "search";
+const std::string GRID_PROFILE_URI_VALUE	= "profileuri";
+const std::string GRID_SENDGRIDINFO			= "SendGridInfoToViewerOnLogin";
+const std::string GRID_DIRECTORY_FEE		= "DirectoryFee";
+const std::string GRID_PLATFORM				= "platform";
+const std::string GRID_MESSAGE				= "message";
+
 // defines slurl formats associated with various grids.
 // we need to continue to support existing forms, as slurls
 // are shared between viewers that may not understand newer
 // forms.
-#define GRID_SLURL_BASE "slurl_base"
-#define GRID_APP_SLURL_BASE "app_slurl_base"
+const std::string GRID_SLURL_BASE		= "slurl_base";
+const std::string GRID_APP_SLURL_BASE	= "app_slurl_base";
+// </Opensim>
 
 class GridInfoRequestResponder;
 
@@ -121,7 +120,6 @@ public:
 		FAIL,
 		REMOVE
 	} AddState;
-public:
 	
 	// when the grid manager is instantiated, the default grids are automatically
 	// loaded, and the grids favorites list is loaded from the xml file.
