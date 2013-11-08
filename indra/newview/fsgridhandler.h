@@ -42,18 +42,18 @@ const std::string ADITI		= "Second Life Beta";
 const std::string MAINGRID	= "util.agni.lindenlab.com";
 
 const std::string GRID_VALUE					= "name";
+const std::string GRID_LABEL_VALUE				= "gridname";
 const std::string GRID_ID_VALUE					= "grid_login_id";
+const std::string GRID_LOGIN_URI_VALUE			= "loginuri";
+const std::string GRID_UPDATE_SERVICE_URL		= "update_query_url_base";
+const std::string GRID_HELPER_URI_VALUE			= "helperuri";
+const std::string GRID_LOGIN_PAGE_VALUE			= "loginpage";
 const std::string GRID_IS_SYSTEM_GRID_VALUE		= "system_grid";
 const std::string GRID_IS_FAVORITE_VALUE		= "favorite";
 const std::string GRID_LOGIN_IDENTIFIER_TYPES	= "login_identifier_types";
-const std::string GRID_UPDATE_SERVICE_URL		= "update_query_url_base";
 
 // <Opensim/Aurora consts>
-const std::string GRID_LABEL_VALUE			= "gridname";
 const std::string GRID_NICK_VALUE			= "gridnick";
-const std::string GRID_LOGIN_URI_VALUE		= "loginuri";
-const std::string GRID_HELPER_URI_VALUE		= "helperuri";
-const std::string GRID_LOGIN_PAGE_VALUE		= "loginpage";
 const std::string GRID_REGISTER_NEW_ACCOUNT = "register";
 const std::string GRID_FORGOT_PASSWORD		= "password";
 const std::string GRID_HELP					= "help";

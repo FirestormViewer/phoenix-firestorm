@@ -308,39 +308,13 @@ void LLGridManager::initCmdLineGrids()
 	// load a grid from the command line.
 	// if the actual grid name is specified from the command line,
 	// set it as the 'selected' grid.
-// <FS:AW fix commandline loginuri (partial fix of FIRE-3448)>
-//	LLSD cmd_line_login_uri = gSavedSettings.getLLSD("CmdLineLoginURI");
-//	if (cmd_line_login_uri.isString() && !cmd_line_login_uri.asString().empty())
-//	{	
-//	mGrid = cmd_line_login_uri.asString();
-//	gSavedSettings.setLLSD("CmdLineLoginURI", LLSD::emptyArray());	//in case setGridChoice tries to addGrid 
-//									//and  addGrid recurses here.
-	// NOTE: This isn't fixed in llviewernetwork because it seems upstream 
-	// is going to remove the commandline loginuri soon anyway.
-
 	std::string grid;
-
-	std::string cmd_line_login_uri = gSavedSettings.getString("CmdLineLoginURI1");
- 	if (!cmd_line_login_uri.empty())
-	{
-		grid = cmd_line_login_uri;
-
-		// clear in case setGridChoice tries to addGrid and addGrid recurses here;
-		// however this only happens refetching all grid infos.
-		gSavedSettings.setString("CmdLineLoginURI1",std::string());
-		LL_DEBUGS("GridManager") << "Setting grid from --loginuri " << grid << LL_ENDL;
-//</FS:AW fix commandline loginuri (partial fix of FIRE-3448)-->
-		setGridChoice(grid);
-		return;
-	}
 
 	std::string cmd_line_grid = gSavedSettings.getString("CmdLineGridChoice");
 	if(!cmd_line_grid.empty())
 	{
-
 		// try to find the grid assuming the command line parameter is
 		// the case-insensitive 'label' of the grid.  ie 'Agni'
-		gSavedSettings.setString("CmdLineGridChoice",std::string());
 		grid = getGridByGridNick(cmd_line_grid);
 
 		if(grid.empty())
