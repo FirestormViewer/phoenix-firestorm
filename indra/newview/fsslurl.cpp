@@ -35,7 +35,6 @@
 #include "llviewernetwork.h"
 #include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
-#include <boost/algorithm/string.hpp>
 #include "llstartup.h"
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
 #include "rlvhandler.h"
@@ -68,13 +67,12 @@ LLSLURL::LLSLURL(const std::string& slurl)
 {
 	// by default we go to agni.
 	mType = INVALID;
-	LL_INFOS("AppInit") << "SLURL: " << slurl << LL_ENDL;
-	LL_DEBUGS("SLURL") << "SLURL: " << slurl << LL_ENDL;
+	LL_DEBUGS2("AppInit", "SLURL") << "SLURL: " << slurl << LL_ENDL;
 	if(slurl == SIM_LOCATION_HOME)
 	{
 		mType = HOME_LOCATION;
 	}
-	else if(slurl.empty() || (slurl == SIM_LOCATION_LAST) )
+	else if(slurl.empty() || (slurl == SIM_LOCATION_LAST))
 	{
 		mType = LAST_LOCATION;
 	}
@@ -92,10 +90,11 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			// these slurls are typically passed in from the 'starting location' box on the login panel,
 			// where the user can type in <regionname>/<x>/<y>/<z>
 			std::string fixed_slurl = LLGridManager::getInstance()->getSLURLBase();
+
 			// the slurl that was passed in might have a prepended /, or not.  So,
 			// we strip off the prepended '/' so we don't end up with http://slurl.com/secondlife/<region>/<x>/<y>/<z>
 			// or some such.
-
+			
 			if(slurl[0] == '/')
 			{
 				fixed_slurl += slurl.substr(1);
@@ -125,15 +124,6 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			mHypergrid = true;
 
 			std::string hop = slurl;
-			std::string match = "|!!";
-			size_t pos = hop.find(match);
-			if (pos != std::string::npos)
-				hop.erase( 0,pos+match.length());
-
-			boost::replace_all(hop, "|", ":");
-			boost::replace_all(hop, "!", "/");
-			boost::replace_first(hop, "+", "/");
-			boost::replace_all(hop, "+", " ");
 
 			if (hop.find("hop://") == std::string::npos)
 				hop = "hop://" + hop;
@@ -213,8 +203,8 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				//           gridname yet. We are only interested in validating it.
 				if(mGrid.empty() && LLStartUp::getStartupState() == STATE_STARTED)
 				{
-					LL_DEBUGS("SLURL") << "couldn't find the grid so bail" << LL_ENDL;
 					// we couldn't find the grid in the grid manager, so bail
+					LL_WARNS2("AppInit", "SLURL") << "unable to find grid" << LL_ENDL;
 					return;
 				}
 				// set the type as appropriate.
@@ -443,7 +433,7 @@ LLSLURL::LLSLURL(const std::string& grid, const std::string& region, const LLVec
 // <FS:CR> FIRE-8063 - Aurora sim var region teleports
 	//mPosition = LLVector3(x, y, z);
 
-	if(!LLGridManager::getInstance()->isInAuroraSim())
+	if(!LLGridManager::getInstance()->isInOpenSim())
 	{
 		S32 x = llround( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
 		S32 y = llround( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
@@ -541,7 +531,7 @@ std::string LLSLURL::getSLURLString() const
 // 				ret.append(LLURI::escape(mRegion));
 // 				ret.append(llformat("/%d/%d/%d",x,y,z));
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-		ret.append(	( ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) || (!RlvUtil::isNearbyRegion(mRegion)))
+		ret.append( ( ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) || (!RlvUtil::isNearbyRegion(mRegion)))
 					 ? (LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z))
 					 : RlvStrings::getString(RLV_STRING_HIDDEN_REGION) ));
 // [/RLVa:KB]
