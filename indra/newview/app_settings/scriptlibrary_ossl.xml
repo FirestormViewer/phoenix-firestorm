@@ -278,6 +278,8 @@
 			desc="string osGetGridLoginURI();Returns the current grid&apos;s LoginURI" />
 		<function name="osGetGridHomeURI" sleep="0.0" energy="10.0"
 			desc="string osGetGridHomeURI();Returns the current grid&apos;s HomeURI" />
+		<function name="osGetGridGatekeeperURI" sleep="0.0" energy="10.0"
+			desc="string osGetGridGatekeeperURI();Returns the current grid&apos;s Gatekeeper URI as a string." />
 		<function name="osGetGridCustom" sleep="0.0" energy="10.0"
 			desc="string osGetGridCustom();Returns the current grid&apos;s GridInfo key" />
 		<function name="osFormatString" sleep="0.0" energy="10.0"
