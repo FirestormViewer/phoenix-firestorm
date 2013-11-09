@@ -54,6 +54,7 @@
       max_length_chars="4096"
       name="add_grid"
       top_pad="5"
+	  label="Enter a LoginURI"
       width="270" />
     <button
       follows="left|top"
