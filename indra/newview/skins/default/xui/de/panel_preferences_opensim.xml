@@ -5,6 +5,7 @@
 			<text name="add_grid_text">
 				Neues Grid hinzufügen
 			</text>
+			<line_editor name="add_grid" label="Login-URI eingeben"/>
 			<button label="Löschen" label_selected="Löschen" name="clear_grid" width="60"/>
 			<button label="Anwenden" name="apply_new_grid" width="70"/>
 			<text name="add_grid_text">
