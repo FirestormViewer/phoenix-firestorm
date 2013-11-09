@@ -95,7 +95,9 @@ bool rlvGetShowException(ERlvBehaviour eBhvr)
 		case RLV_BHVR_RECVIM:
 		case RLV_BHVR_STARTIM:
 		case RLV_BHVR_TPLURE:
+		case RLV_BHVR_TPREQUEST:
 		case RLV_BHVR_ACCEPTTP:
+		case RLV_BHVR_ACCEPTTPREQUEST:
 			return true;
 		default:
 			return false;

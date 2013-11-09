@@ -434,6 +434,7 @@ inline bool RlvCommand::hasStrictVariant(ERlvBehaviour eBhvr)
 		case RLV_BHVR_RECVIM:
 		case RLV_BHVR_SENDIM:
 		case RLV_BHVR_TPLURE:
+		case RLV_BHVR_TPREQUEST:
 		case RLV_BHVR_SENDCHANNEL:
 			return true;
 		default:

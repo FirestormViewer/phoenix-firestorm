@@ -91,7 +91,7 @@
 		<key>blocked_recvim_remote</key>
 		<map>
 			<key>value</key>
-			<string>The Resident you messaged is prevented from reading your instant messages at the moment, please try again later.</string>
+			<string>The Resident you messaged is currently prevented from reading your instant messages at the moment, please try again later.</string>
 			<key>description</key>
 			<string>Sent to the remote party when their IM was blocked</string>
 			<key>label</key>
@@ -99,14 +99,14 @@
 			<key>customizable</key>
 			<boolean>1</boolean>
 		</map>
-		<key>blocked_tplure_remote</key>
+		<key>blocked_tplurerequest_remote</key>
 		<map>
 			<key>value</key>
-			<string>The Resident you invited is prevented from accepting teleport offers. Please try again later.</string>
+			<string>The Resident is currently prevented from accepting. Please try again later.</string>
 			<key>description</key>
-			<string>Sent to the remote party when their teleport offer was blocked</string>
+			<string>Sent to the remote party when their teleport offer or request was blocked</string>
 			<key>label</key>
-			<string>Blocked teleport offer (remote)</string>
+			<string>Blocked teleport offer/request (remote)</string>
 			<key>customizable</key>
 			<boolean>1</boolean>
 		</map>

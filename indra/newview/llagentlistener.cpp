@@ -44,6 +44,7 @@
 #include "llhudeffectlookat.h"
 #include "llagentcamera.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "llvoavatarself.h"
 // [/RLVa:KB]
@@ -226,7 +227,7 @@ void LLAgentListener::requestStand(LLSD const & event_data) const
 {
 // [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
 	// TODO-RLVa: [RLVa-1.2.1] Figure out how to call this?
-	if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canStand()) )
+	if ( (rlv_handler_t::isEnabled()) && (!RlvActions::canStand()) )
 	{
 		return;
 	}

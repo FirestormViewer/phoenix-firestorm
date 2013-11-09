@@ -51,7 +51,7 @@
 #include "llviewerregion.h"
 #include "lltooltip.h"
 // [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
-#include "rlvhandler.h"
+#include "rlvactions.h"
 // [/RLVa:KB]
 
 //
@@ -463,7 +463,7 @@ void LLFloaterMove::sUpdateMovementStatus()
 	LLFloaterMove* pFloater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
 	if (pFloater)
 	{
-		pFloater->mModeControlButtonMap[MM_RUN]->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+		pFloater->mModeControlButtonMap[MM_RUN]->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_ALWAYSRUN));
 		pFloater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
 	}
 }
@@ -702,7 +702,7 @@ LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
 void LLPanelStandStopFlying::onStandButtonClick()
 {
 // [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-	if ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand()) )
+	if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canStand()) )
 	{
 		LLFirstUse::sit(false);
 

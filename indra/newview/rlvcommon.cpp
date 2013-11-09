@@ -27,6 +27,7 @@
 #include "llviewerstats.h"
 #include "llworld.h"
 
+#include "rlvactions.h"
 #include "rlvcommon.h"
 #include "rlvhelper.h"
 #include "rlvhandler.h"
@@ -114,7 +115,7 @@ void RlvSettings::initClass()
 	{
 		if ( (!LLApp::isQuitting()) && (gSavedPerAccountSettings.controlExists(RLV_SETTING_LOGINLASTLOCATION)) )
 		{
-			BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!gRlvHandler.canStand());
+			BOOL fValue = (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) || (!RlvActions::canStand());
 			if (gSavedPerAccountSettings.getBOOL(RLV_SETTING_LOGINLASTLOCATION) != fValue)
 			{
 				gSavedPerAccountSettings.setBOOL(RLV_SETTING_LOGINLASTLOCATION, fValue);

@@ -25,8 +25,10 @@
 
 class RlvActions
 {
+	// =============
+	// Communication
+	// =============
 public:
-
 	/*
 	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
 	 */
@@ -42,6 +44,45 @@ public:
 	 */
 	static bool canStartIM(const LLUUID& idRecipient);								// @startim and @startimto
 
+	// ========
+	// Movement
+	// ========
+public:
+	/*
+	 * Returns true if the user can accept an incoming teleport offer from the specified avatar
+	 */
+	static bool canAcceptTpOffer(const LLUUID& idSender);
+
+	/*
+	 * Returns true if a teleport offer from the specified avatar should be auto-accepted
+	 * (pass the null UUID to check if all teleport offers should be auto-accepted regardless of sender)
+	 */
+	static bool autoAcceptTeleportOffer(const LLUUID& idSender);
+
+	/*
+	 * Returns true if the user can accept an incoming teleport request from the specified avatar
+	 */
+	static bool canAcceptTpRequest(const LLUUID& idSender);
+
+	/*
+	 * Returns true if a teleport request from the specified avatar should be auto-accepted
+	 * (pass the null UUID to check if all teleport requests should be auto-accepted regardless of requester)
+	 */
+	static bool autoAcceptTeleportRequest(const LLUUID& idRequester);
+
+	// =================
+	// World interaction
+	// =================
+public:
+	/*
+	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
+	 */
+	static bool canStand();
+
+	// ================
+	// Helper functions
+	// ================
+public:
 	/*
 	 * Convenience function to check for a behaviour without having to include rlvhandler.h. 
 	 * Do NOT call this function if speed is important (i.e. per-frame)
@@ -53,6 +94,11 @@ public:
 	 */
 	static bool hasOpenP2PSession(const LLUUID& idAgent);
 	static bool hasOpenGroupSession(const LLUUID& idGroup);
+
+	/*
+	 * Convenience function to check if RLVa is enabled without having to include rlvhandler.h
+	 */
+	static bool isRlvEnabled();
 };
 
 // ============================================================================

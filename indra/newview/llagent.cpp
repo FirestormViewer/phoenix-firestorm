@@ -95,6 +95,7 @@
 #include "stringize.h"
 #include "boost/foreach.hpp"
 // [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
+#include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvui.h"
@@ -829,7 +830,7 @@ void LLAgent::standUp()
 //	setControlFlags(AGENT_CONTROL_STAND_UP);
 // [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
 	// RELEASE-RLVa: [SL-2.0.0] Check this function's callers since usually they require explicit blocking
-	if ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand()) )
+	if ( (!rlv_handler_t::isEnabled()) || (RlvActions::canStand()) )
 	{
 		setControlFlags(AGENT_CONTROL_STAND_UP);
 	}
@@ -1171,7 +1172,7 @@ void LLAgent::sitDown()
 //	setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
 // [RLVa:KB] - Checked: 2010-08-28 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 	// RELEASE-RLVa: [SL-2.0.0] Check this function's callers since usually they require explicit blocking
-	if ( (!rlv_handler_t::isEnabled()) || ((gRlvHandler.canStand()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SIT))) )
+	if ( (!rlv_handler_t::isEnabled()) || ((RlvActions::canStand()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SIT))) )
 	{
 		setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
 	}
@@ -4245,7 +4246,7 @@ void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 // [RLVa:KB] - Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
 	// RELEASE-RLVa: [SL-2.2.0] Make sure this isn't used for anything except double-click teleporting
 	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
-		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!gRlvHandler.canStand())) )
+		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!RlvActions::canStand())) )
 	{
 		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
 		return;
