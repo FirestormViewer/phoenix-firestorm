@@ -5,6 +5,7 @@
 			<text name="add_grid_text">
 				Dodaj siatkę
 			</text>
+			<line_editor name="add_grid" label="Wpisz URI logowania" />
 			<button label="Czyść" label_selected="Czyść" name="clear_grid" />
 			<button label="Dodaj" name="apply_new_grid" />
 			<text name="add_grid_text">
