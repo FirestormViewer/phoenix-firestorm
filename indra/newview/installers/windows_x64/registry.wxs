@@ -35,6 +35,20 @@
             </RegistryKey>
           </RegistryKey>
         </RegistryKey>
+        <RegistryKey Root="HKCR" Key="hop">
+          <RegistryValue Type="string" Value="URL:Second Life"/>
+          <RegistryValue Type="string" Name="URL Protocol" Value=""/>
+          <RegistryKey Key="DefaultIcon">
+            <RegistryValue Type="string" Value="[INSTALLDIR]\$(var.PROGRAM_FILE)"/>
+          </RegistryKey>
+          <RegistryKey Key="shell">
+            <RegistryKey Key="open">
+              <RegistryKey Key="command">
+                <RegistryValue Type="expandable" Value="[INSTALLDIR]\$(var.PROGRAM_FILE) --channel $(var.CHANNEL_NAME) --settings $(var.SETTINGS_FILE) --url &quot;&#37;1&quot;"/>
+              </RegistryKey>
+            </RegistryKey>
+          </RegistryKey>
+        </RegistryKey>
       </Component>
     </DirectoryRef>
   </Fragment>
