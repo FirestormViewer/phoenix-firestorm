@@ -1,4 +1,4 @@
-F/** 
+/** 
  * @file llappearancemgr.cpp
  * @brief Manager for initiating appearance changes on the viewer
  *
