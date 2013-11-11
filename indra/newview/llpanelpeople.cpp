@@ -1163,7 +1163,7 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 	//setAccordionCollapsedByUser("tab_all", false);
 	//	setAccordionCollapsedByUser("tab_suggested_friends", false);
 	// </FS:Ansariel> Friend list accordion replacement
-        showFriendsAccordionsIfNeeded();
+		showFriendsAccordionsIfNeeded();
 
 		// restore accordion tabs state _after_ all manipulations
 		if(saved_filter.empty())
@@ -1407,7 +1407,7 @@ void LLPanelPeople::onFriendsViewSortMenuItemClicked(const LLSD& userdata)
 		mAllFriendList->showPermissions(show_permissions);
 		mOnlineFriendList->showPermissions(show_permissions);
 	}
-}
+	}
 
 void LLPanelPeople::onGroupsViewSortMenuItemClicked(const LLSD& userdata)
 {
