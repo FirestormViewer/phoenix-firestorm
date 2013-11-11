@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="rlva_strings" title="RLVa-Texte">
+	<button label="Auf Standardwert zurücksetzen" name="default_btn" width="200"/>
+</floater>

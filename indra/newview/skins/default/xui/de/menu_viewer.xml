@@ -254,6 +254,7 @@
 		<menu_item_check label="Namensschilder anzeigen" name="Show Name Tags"/>
 		<menu_item_check label="Anziehen ersetzt nicht-gesperrte Kleidung" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Beschränkungen..." name="Restrictions"/>
+		<menu_item_check label="Texte..." name="Strings"/>
 	</menu>
 	<menu label="Erweitert" name="Advanced">
 		<menu_item_call label="Textur neu laden" name="Rebake Texture"/>
