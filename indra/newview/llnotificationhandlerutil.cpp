@@ -31,6 +31,7 @@
 
 #include "llfloaterreg.h"
 #include "llnotifications.h"
+#include "lltrans.h"
 #include "llurlaction.h"
 
 #include "llagent.h"

@@ -50,6 +50,7 @@
 #include "llavataractions.h"
 #include "llavatarnamecache.h"
 #include "llfloatersidepanelcontainer.h"
+#include "lltrans.h"
 #include "llviewerobject.h"
 #include "llviewerparceloverlay.h"
 #include "llviewerparcelmgr.h"

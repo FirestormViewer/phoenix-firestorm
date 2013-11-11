@@ -46,6 +46,7 @@
 #include "llmutelist.h"
 #include "llnotificationmanager.h"
 #include "lltracker.h"
+#include "lltrans.h"
 #include "llviewercontrol.h"		// for gSavedSettings
 #include "llviewermenu.h"			// for gMenuHolder
 #include "llvoavatar.h"
