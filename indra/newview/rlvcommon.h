@@ -105,7 +105,6 @@ public:
 
 	static void initClass();
 protected:
-	static bool onChangedAvatarOffset(const LLSD& sdValue);
 	static bool onChangedMenuLevel();
 	static bool onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting);
 
