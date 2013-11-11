@@ -58,7 +58,11 @@
 #include "llvolumemessage.h"
 #include "llworld.h"
 #include "llworldmap.h"
+
+// [RLVa:KB] - Checked by TM: 2013-11-10 (RLVa-1.4.9)
 #include "rlvhandler.h"
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 
 LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifolder)
@@ -701,7 +705,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
             }
 			else if (command == "/standup")
             {
-				if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand(	)))
+				if ((!rlv_handler_t::isEnabled()) || (RlvActions::canStand(	)))
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					reportToNearbyChat(std::string("Standing up"));

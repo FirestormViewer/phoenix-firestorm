@@ -66,7 +66,7 @@ const S32 RLV_VERSION_BUILD = 0;
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 4;
-const S32 RLVa_VERSION_PATCH = 8;
+const S32 RLVa_VERSION_PATCH = 9;
 const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
@@ -104,6 +104,7 @@ const S32 RLVa_VERSION_BUILD = 0;
 #define RLV_CMD_PREFIX					'@'
 #define RLV_PUTINV_PREFIX				"#RLV/~"
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90 degrees with the rest of SL
+#define RLV_STRINGS_FILE				"rlva_strings.xml"
 
 #define RLV_FOLDER_FLAG_NOSTRIP			"nostrip"
 #define RLV_FOLDER_PREFIX_HIDDEN		'.'
@@ -157,11 +158,13 @@ enum ERlvBehaviour {
 	RLV_BHVR_TPLM,					// "tplm"
 	RLV_BHVR_TPLOC,					// "tploc"
 	RLV_BHVR_TPLURE,				// "tplure"
+	RLV_BHVR_TPREQUEST,				// "tprequest"
 	RLV_BHVR_VIEWNOTE,				// "viewnote"
 	RLV_BHVR_VIEWSCRIPT,			// "viewscript"
 	RLV_BHVR_VIEWTEXTURE,			// "viewtexture"
 	RLV_BHVR_ACCEPTPERMISSION,		// "acceptpermission"
 	RLV_BHVR_ACCEPTTP,				// "accepttp"
+	RLV_BHVR_ACCEPTTPREQUEST,		// "accepttprequest"
 	RLV_BHVR_ALLOWIDLE,				// "allowidle"
 	RLV_BHVR_EDIT,					// "edit"
 	RLV_BHVR_EDITOBJ,				// "editobj"
@@ -254,6 +257,7 @@ enum ERlvCmdRet {
 	RLV_RET_FAILED_DISABLED,		// Command failed (command disabled by user)
 	RLV_RET_FAILED_UNKNOWN,			// Command failed (unknown command)
 	RLV_RET_FAILED_NOSHAREDROOT,	// Command failed (missing #RLV)
+	RLV_RET_DEPRECATED				// Command has been deprecated
 };
 
 enum ERlvExceptionCheck
@@ -295,8 +299,6 @@ enum ERlvAttachGroupType
 
 #define RLV_SETTING_MAIN				"RestrainedLove"
 #define RLV_SETTING_DEBUG				"RestrainedLoveDebug"
-// <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
-//#define RLV_SETTING_AVATAROFFSET_Z		"AvatarZOffset"
 #define RLV_SETTING_CANOOC				"RestrainedLoveCanOOC"
 #define RLV_SETTING_FORBIDGIVETORLV		"RestrainedLoveForbidGiveToRLV"
 #define RLV_SETTING_NOSETENV			"RestrainedLoveNoSetEnv"
@@ -338,8 +340,9 @@ enum ERlvAttachGroupType
 #define RLV_STRING_BLOCKED_STARTCONF		"blocked_startconf"
 #define RLV_STRING_BLOCKED_STARTIM			"blocked_startim"
 #define RLV_STRING_BLOCKED_TELEPORT			"blocked_teleport"
-#define RLV_STRING_BLOCKED_TPLURE_REMOTE	"blocked_tplure_remote"
+#define RLV_STRING_BLOCKED_TPLUREREQ_REMOTE	"blocked_tplurerequest_remote"
 #define RLV_STRING_BLOCKED_VIEWXXX			"blocked_viewxxx"
+#define RLV_STRING_BLOCKED_WIREFRAME		"blocked_wireframe"
 
 // ============================================================================
 

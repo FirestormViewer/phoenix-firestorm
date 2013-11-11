@@ -306,8 +306,6 @@ typedef MMRESULT (WINAPI *joySetCapture_type)( HWND hwnd, UINT uJoyID, UINT uPer
 extern joySetCapture_type joySetCapture_orig;
 typedef MMRESULT (WINAPI *joySetThreshold_type)( UINT uJoyID, UINT uThreshold);
 extern joySetThreshold_type joySetThreshold_orig;
-// <FS:TM> 2013 compile fix
-//typedef BOOL (WINAPI  *mciDriverNotify_type)(HWND hwndCallback, UINT uDeviceID, UINT uStatus);
 typedef BOOL (WINAPI  *mciDriverNotify_type)(HANDLE hwndCallback, UINT uDeviceID, UINT uStatus);
 extern mciDriverNotify_type mciDriverNotify_orig;
 typedef UINT (WINAPI  *mciDriverYield_type)(UINT uDeviceID);
@@ -386,8 +384,6 @@ typedef HTASK (WINAPI *mciGetCreatorTask_type)( MCIDEVICEID mciId);
 extern mciGetCreatorTask_type mciGetCreatorTask_orig;
 typedef YIELDPROC (WINAPI *mciGetYieldProc_type)( MCIDEVICEID mciId, LPDWORD pdwYieldData);
 extern mciGetYieldProc_type mciGetYieldProc_orig;
-// <FS:TM> 2013 copmile fix
-//typedef UINT (WINAPI *mciLoadCommandResource_type)(HINSTANCE hInstance, LPCWSTR lpResName, UINT uType);
 typedef UINT (WINAPI *mciLoadCommandResource_type)(HANDLE hInstance, LPCWSTR lpResName, UINT uType);
 extern mciLoadCommandResource_type mciLoadCommandResource_orig;
 typedef BOOL (WINAPI *mciExecute_type)(LPCSTR pszCommand);

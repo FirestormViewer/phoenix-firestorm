@@ -167,9 +167,9 @@ void RlvCommand::initLookupTable()
 				"unsharedwear", "unsharedunwear", "emote", "sendchat", "recvchat", "recvchatfrom", "recvemote", "recvemotefrom", 
 				"redirchat", "rediremote", "chatwhisper", "chatnormal", "chatshout", "sendchannel", "sendim", "sendimto", 
 				"recvim", "recvimfrom", "startim", "startimto", "permissive", "notify", "showinv", "showminimap", "showworldmap", "showloc", 
-				"shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", 
-				"viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "allowidle", "edit", "editobj", "rez", "fartouch", 
-				"interact", "touchthis", "touchattach", "touchattachself", "touchattachother", "touchhud", "touchworld", "touchall", 
+				"shownames", "showhovertext", "showhovertexthud", "showhovertextworld", "showhovertextall", "tplm", "tploc", "tplure", "tprequest",
+				"viewnote", "viewscript", "viewtexture", "acceptpermission", "accepttp", "accepttprequest", "allowidle", "edit", "editobj", "rez", 
+				"fartouch", "interact", "touchthis", "touchattach", "touchattachself", "touchattachother", "touchhud", "touchworld", "touchall", 
 				"touchme", "fly", "setgroup", "unsit", "sit", "sittp", "standtp", "setdebug", "setenv", "alwaysrun", "temprun", "detachme", 
 				"attachover", "attachthis", "attachthisover", "attachthis_except", "detachthis", "detachthis_except", "attachall", 
 				"attachallover", "detachall", "attachallthis", "attachallthis_except", "attachallthisover", "detachallthis", 
@@ -267,11 +267,11 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
 	RlvCommandOptionGeneric rlvCmdOption(rlvCmd.getOption());
 	if (rlvCmdOption.isWearableType())			// <option> can be a clothing layer
 	{
-		getItemIDs(rlvCmdOption.getWearableType(), m_idItems, false);
+		getItemIDs(rlvCmdOption.getWearableType(), m_idItems);
 	}
 	else if (rlvCmdOption.isAttachmentPoint())	// ... or it can specify an attachment point
 	{
-		getItemIDs(rlvCmdOption.getAttachmentPoint(), m_idItems, false);
+		getItemIDs(rlvCmdOption.getAttachmentPoint(), m_idItems);
 	}
 	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
 	{
@@ -300,53 +300,40 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpa
 	}
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
-bool RlvCommandOptionGetPath::getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems, bool fClear)
+// Checked: 2013-10-12 (RLVa-1.4.9)
+bool RlvCommandOptionGetPath::getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems)
 {
-	if (fClear)
-		idItems.clear();
 	uuid_vec_t::size_type cntItemsPrev = idItems.size();
-	if (pAttachPt)
+
+	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
+	RlvFindAttachmentsOnPoint f(pAttachPt);
+	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, false, f);
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 	{
-		for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
-				itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
-		{
-			idItems.push_back((*itAttachObj)->getAttachmentItemID());
-		}
+		const LLViewerInventoryItem* pItem = *itItem;
+		if (pItem)
+			idItems.push_back(pItem->getLinkedUUID());
 	}
+
 	return (cntItemsPrev != idItems.size());
 }
 
-// Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
-bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems, bool fClear)
+// Checked: 2013-10-12 (RLVa-1.4.9)
+bool RlvCommandOptionGetPath::getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems)
 {
-	if (fClear)
-		idItems.clear();
 	uuid_vec_t::size_type cntItemsPrev = idItems.size();
-	for (S32 idxWearable = 0, cntWearable = gAgentWearables.getWearableCount(wtType); idxWearable < cntWearable; idxWearable++)
-	{
-		idItems.push_back(gAgentWearables.getWearableItemID(wtType, idxWearable));
-	}
-	return (cntItemsPrev != idItems.size());
-}
 
-// Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
-RlvCommandOptionAdjustHeight::RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd)
-	: m_nPelvisToFoot(0.0f), m_nPelvisToFootDeltaMult(0.0f), m_nPelvisToFootOffset(0.0f)
-{
-	std::vector<std::string> cmdTokens;
-	boost::split(cmdTokens, rlvCmd.getOption(), boost::is_any_of(std::string(";")));
-	if (1 == cmdTokens.size())
+	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
+	LLFindWearablesOfType f(wtType);
+	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, false, f);
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 	{
-		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFootOffset));
-		m_nPelvisToFootOffset = llclamp<F32>(m_nPelvisToFootOffset / 100, -1.0f, 1.0f);
+		const LLViewerInventoryItem* pItem = *itItem;
+		if (pItem)
+			idItems.push_back(pItem->getLinkedUUID());
 	}
-	else if ( (2 <= cmdTokens.size()) && (cmdTokens.size() <= 3) )
-	{
-		m_fValid = (LLStringUtil::convertToF32(cmdTokens[0], m_nPelvisToFoot)) &&
-			 (LLStringUtil::convertToF32(cmdTokens[1], m_nPelvisToFootDeltaMult)) && 
-			 ( (2 == cmdTokens.size()) || (LLStringUtil::convertToF32(cmdTokens[2], m_nPelvisToFootOffset)) );
-	}
+
+	return (cntItemsPrev != idItems.size());
 }
 
 // Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f

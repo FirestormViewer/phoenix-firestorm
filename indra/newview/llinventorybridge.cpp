@@ -5820,7 +5820,6 @@ bool confirm_attachment_rez(const LLSD& notification, const LLSD& response)
 			/*
 			{
 				U8 attachment_pt = notification["payload"]["attachment_point"].asInteger();
-				
 				LLMessageSystem* msg = gMessageSystem;
 				msg->newMessageFast(_PREHASH_RezSingleAttachmentFromInv);
 				msg->nextBlockFast(_PREHASH_AgentData);

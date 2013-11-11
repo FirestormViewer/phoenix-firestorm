@@ -19,7 +19,6 @@
 
 #include "llavatarname.h"
 #include "llselectmgr.h"
-#include "lltrans.h"
 #include "llviewercontrol.h"
 
 #include "rlvdefines.h"
@@ -78,8 +77,6 @@ template<typename T> inline T rlvGetPerUserSetting(const std::string& strSetting
 class RlvSettings
 {
 public:
-    // <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
-	//static F32  getAvatarOffsetZ()				{ return rlvGetPerUserSetting<F32>(RLV_SETTING_AVATAROFFSET_Z, 0.0); }
 	static bool getDebug()						{ return rlvGetSetting<bool>(RLV_SETTING_DEBUG, false); }
 	static bool getCanOOC()						{ return fCanOOC; }
 	static bool getForbidGiveToRLV()			{ return rlvGetSetting<bool>(RLV_SETTING_FORBIDGIVETORLV, true); }
@@ -107,6 +104,7 @@ public:
 
 	static void initClass();
 protected:
+	static bool onChangedAvatarOffset(const LLSD& sdValue);
 	static bool onChangedMenuLevel();
 	static bool onChangedSettingBOOL(const LLSD& sdValue, bool* pfSetting);
 
@@ -127,20 +125,25 @@ class RlvStrings
 {
 public:
 	static void initClass();
+	static void loadFromFile(const std::string& strFilePath, bool fDefault);
+	static void saveToFile(const std::string& strFilePath);
 
 	static const std::string& getAnonym(const LLAvatarName& avName);		// @shownames
 	static const std::string& getAnonym(const std::string& strName);		// @shownames
-	static const std::string& getBehaviourNotificationString(ERlvBehaviour eBhvr, ERlvParamType eType);
 	static const std::string& getString(const std::string& strStringName);
 	static const char*        getStringFromReturnCode(ERlvCmdRet eRet);
+	static const std::string& getStringMapPath() { return m_StringMapPath; }
 	static std::string        getVersion(bool fLegacy = false);				// @version
 	static std::string        getVersionAbout();							// Shown in Help / About
 	static std::string        getVersionNum();								// @versionnum
-	static bool               hasString(const std::string& strStringName);
+	static bool               hasString(const std::string& strStringName, bool fCheckCustom = false);
+	static void               setCustomString(const std::string& strStringName, const std::string& strStringValue);
 
 protected:
 	static std::vector<std::string> m_Anonyms;
-	static std::map<std::string, std::string> m_StringMap;
+	typedef std::map<std::string, std::list<std::string> > string_map_t;
+	static string_map_t m_StringMap;
+	static std::string  m_StringMapPath;
 };
 
 // ============================================================================
@@ -163,7 +166,7 @@ public:
 
 	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 	static void notifyBlockedGeneric()	{ notifyBlocked(RLV_STRING_BLOCKED_GENERIC); }
-	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLTrans::getString(LLAssetType::lookupHumanReadable(assetType)))); }
+	static void notifyBlockedViewXXX(LLAssetType::EType assetType) { notifyBlocked(RLV_STRING_BLOCKED_VIEWXXX, LLSD().with("[TYPE]", LLAssetType::lookup(assetType))); }
 	static void notifyFailedAssertion(const std::string& strAssert, const std::string& strFile, int nLine);
 
 	static void sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, const LLUUID& idSession = LLUUID::null);

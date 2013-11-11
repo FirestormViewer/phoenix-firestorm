@@ -672,13 +672,6 @@ bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset /*= LLV
 		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < 1.5f * 1.5f) );
 }
 
-// Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool RlvHandler::canStand() const
-{
-	// NOTE: return FALSE only if we're @unsit=n restricted and the avie is currently sitting on something and TRUE for everything else
-	return (!hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
-}
-
 // Checked: 2010-04-11 (RLVa-1.3.0h) | Modified: RLVa-1.3.0h
 bool RlvHandler::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset /*=LLVector3::zero*/) const
 {
@@ -1257,6 +1250,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 				else
 					RlvBehaviourNotifyHandler::getInstance()->removeNotify(rlvCmd.getObjectID(), nChannel, strFilter);
 			}
+			break;
 		case RLV_BHVR_SHOWHOVERTEXT:		// @showhovertext:<uuid>=n|y		- Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0h
 			{
 				// There should be an option and it should specify a valid UUID
@@ -1325,7 +1319,9 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_RECVIM:				// @recvim[:<uuid>]=n|y				- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
 		case RLV_BHVR_STARTIM:				// @startim[:<uuid>]=n|y			- Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 		case RLV_BHVR_TPLURE:				// @tplure[:<uuid>]=n|y				- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
-		case RLV_BHVR_ACCEPTTP:				// @accepttp[:<uuid>]=n|y			- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
+		case RLV_BHVR_TPREQUEST:			// @tprequest[:<uuid>]=n|y			- Checked: 2013-11-08 (RLVa-1.4.9)
+		case RLV_BHVR_ACCEPTTP:				// @accepttp[:<uuid>]=n|y			- Checked: 2009-12-05 (RLVa-1.1.0)
+		case RLV_BHVR_ACCEPTTPREQUEST:		// @accepttprequest[:<uuid>]=n|y    - Checked: 2013-11-08 (RLVa-1.4.9)
 		case RLV_BHVR_TOUCHATTACH:			// @touchattach[:<uuid>=n|y			- Checked: 2010-01-01 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
 #ifdef RLV_EXTENSION_CMD_TOUCHXXX
 		case RLV_BHVR_TOUCHHUD:				// @touchhud[:<uuid>=n|y			- Checked: 2010-01-01 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
@@ -1603,21 +1599,8 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_SIT:			// @sit:<option>=force
 			eRet = onForceSit(rlvCmd);
 			break;
-		case RLV_BHVR_ADJUSTHEIGHT:	// @adjustheight:<options>=force		- Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
-			{
-				RlvCommandOptionAdjustHeight rlvCmdOption(rlvCmd);
-				VERIFY_OPTION(rlvCmdOption.isValid());
-				if (isAgentAvatarValid())
-				{
-					F32 nValue = (rlvCmdOption.m_nPelvisToFoot - gAgentAvatarp->getPelvisToFoot()) * rlvCmdOption.m_nPelvisToFootDeltaMult;
-					nValue += rlvCmdOption.m_nPelvisToFootOffset;
-					// <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
-					//if (!gAgentAvatarp->isUsingServerBakes())
-					//	gSavedSettings.setF32(RLV_SETTING_AVATAROFFSET_Z, llclamp<F32>(nValue, -1.0f, 1.0f));
-					//else
-					//	eRet = RLV_RET_FAILED_DISABLED;
-				}
-			}
+		case RLV_BHVR_ADJUSTHEIGHT:	// @adjustheight:<options>=force
+			eRet = RLV_RET_DEPRECATED;
 			break;
 		case RLV_BHVR_TPTO:			// @tpto:<option>=force					- Checked: 2011-03-28 (RLVa-1.3.0f) | Modified: RLVa-1.3.0f
 			{

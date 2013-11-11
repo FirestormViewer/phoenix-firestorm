@@ -144,21 +144,13 @@ struct RlvCommandOptionGetPath : public RlvCommandOption
 	/*virtual*/ bool  isEmpty() const	 { return m_idItems.empty(); }
 	const uuid_vec_t& getItemIDs() const { return m_idItems; }
 
-	static bool getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems, bool fClear = true);
-	static bool getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems, bool fClear = true);
+	// NOTE: Both functions are COF-based rather than items gathered from mAttachedObjects or gAgentWearables
+	static bool getItemIDs(const LLViewerJointAttachment* pAttachPt, uuid_vec_t& idItems);
+	static bool getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems);
 
 protected:
 	bool       m_fCallback; // TRUE if a callback is schedueled
 	uuid_vec_t m_idItems;
-};
-
-struct RlvCommandOptionAdjustHeight : public RlvCommandOption
-{
-	RlvCommandOptionAdjustHeight(const RlvCommand& rlvCmd);
-
-	F32 m_nPelvisToFoot;
-	F32 m_nPelvisToFootDeltaMult;
-	F32 m_nPelvisToFootOffset;
 };
 
 struct RlvCommandOptionTpTo : public RlvCommandOption
@@ -442,6 +434,7 @@ inline bool RlvCommand::hasStrictVariant(ERlvBehaviour eBhvr)
 		case RLV_BHVR_RECVIM:
 		case RLV_BHVR_SENDIM:
 		case RLV_BHVR_TPLURE:
+		case RLV_BHVR_TPREQUEST:
 		case RLV_BHVR_SENDCHANNEL:
 			return true;
 		default:

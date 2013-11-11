@@ -345,7 +345,7 @@ void LLHandlerUtil::updateIMFLoaterMesages(const LLUUID& session_id)
 	}
 }
 
-//// static <FS:TM> CHUI Merge check this, wasn't disabled in FS, but was in RLVa
+//// static
 //void LLHandlerUtil::updateVisibleIMFLoaterMesages(const LLNotificationPtr& notification)
 //{
 //	const std::string name = LLHandlerUtil::getSubstitutionName(notification);

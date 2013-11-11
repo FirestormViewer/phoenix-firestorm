@@ -392,14 +392,6 @@ BOOL LLTaskInvFVBridge::isItemRenameable() const
 	}
 // [/RLVa:KB]
 
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
-//	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
-	if ( (rlv_handler_t::isEnabled()) && (object) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
-	{
-		return FALSE;
-	}
-// [/RLVa:KB]
-
 	if(gAgent.isGodlike()) return TRUE;
 //	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
 	if(object)

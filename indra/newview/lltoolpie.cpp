@@ -72,6 +72,9 @@
 #include "llui.h"
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 #include "llviewernetwork.h"	// <FS:CR> For prim equivilance hiding
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
@@ -593,7 +596,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	//   - @fartouch=n restricted and the object is out of range
 	//   - @interact=n restricted and the object isn't a HUD attachment
 	if ( (object) && (rlv_handler_t::isEnabled()) && 
-		( (((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset))) || 
+		( ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset)) || 
 		  ((gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (!object->isHUDAttachment())) ) )
 	{
 		gViewerWindow->setCursor(UI_CURSOR_ARROW);

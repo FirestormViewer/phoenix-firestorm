@@ -810,3 +810,19 @@ bool RlvWearableItemCollector::operator()(LLInventoryCategory* pFolder, LLInvent
 }
 
 // ============================================================================
+// General purpose inventory helper classes
+//
+
+// Checked: 2013-10-12 (RLVa-1.4.9)
+bool RlvFindAttachmentsOnPoint::operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem)
+{
+#ifndef RLV_DEPRECATE_ATTACHPTNAMING
+	// First check if the item is attached to the attachment point; fall back to the item name otherwise
+	return (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) &&
+		( ((m_pAttachPt) && (m_pAttachPt->getAttachedObject(pItem->getLinkedUUID()))) || (RlvAttachPtLookup::getAttachPoint(pItem) == m_pAttachPt) );
+#else
+	return (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) && (m_pAttachPt) && (m_pAttachPt->getAttachedObject(pItem->getLinkedUUID()));
+#endif // RLV_DEPRECATE_LEGACY_ATTACHPT
+}
+
+// ============================================================================

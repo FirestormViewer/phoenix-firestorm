@@ -1338,8 +1338,6 @@ extern "C" {
 		return joySetThreshold_orig( uJoyID, uThreshold);
 	}
 
-	// <FS:TM> 2013 compile fix
-	//BOOL WINAPI  mciDriverNotify(HWND hwndCallback, UINT uDeviceID, UINT uStatus)
 	BOOL WINAPI  mciDriverNotify(HANDLE hwndCallback, UINT uDeviceID, UINT uStatus)
 	{
 		ll_winmm_shim_initialize();
@@ -1612,13 +1610,6 @@ extern "C" {
 		return mciGetYieldProc_orig( mciId, pdwYieldData);
 	}
 
-	// <FS:TM> 2013 compile fix
-	//UINT WINAPI mciLoadCommandResource(HINSTANCE hInstance, LPCWSTR lpResName, UINT uType)
-	//{
-	//	ll_winmm_shim_initialize();
-	//	//OutputDebugString(L"mciLoadCommandResource");
-	//	return mciLoadCommandResource_orig(hInstance, lpResName, uType);
-	//}
 	UINT WINAPI mciLoadCommandResource(HANDLE hInstance, LPCWSTR lpResName, UINT wType)
 	{
 		ll_winmm_shim_initialize();

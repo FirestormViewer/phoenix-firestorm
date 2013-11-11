@@ -2961,7 +2961,6 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 						addNameTagLine(av_name.getDisplayName(), name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), true);
 					}
 				}
-				
 				// Suppress SLID display if display name matches exactly (ugh)
 				if (show_usernames && !av_name.isDisplayNameDefault())
 				{
@@ -3118,6 +3117,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 				mNameText->addLine("...", new_chat);
 				break;
 			}
+
 		}
 	}
 	else

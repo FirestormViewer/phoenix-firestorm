@@ -1135,7 +1135,6 @@ bool LLInventoryPanel::beginIMSession()
 						id = item_array.get(i)->getCreatorUUID();
 						if(at.isBuddyOnline(id))
 						{
-							//members.put(id);
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
 							fRlvCanStartIM &= RlvActions::canStartIM(id);
 							members.push_back(id);
@@ -1159,7 +1158,6 @@ bool LLInventoryPanel::beginIMSession()
 
 						if(at.isBuddyOnline(id))
 						{
-							//members.put(id);
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
 							fRlvCanStartIM &= RlvActions::canStartIM(id);
 							members.push_back(id);

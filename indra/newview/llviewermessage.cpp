@@ -116,6 +116,12 @@
 #include "llpanelblockedlist.h"
 #include "llpanelplaceprofile.h"
 #include "llviewerregion.h"
+// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
+#include "rlvactions.h"
+#include "rlvhandler.h"
+#include "rlvinventory.h"
+#include "rlvui.h"
+// [/RLVa:KB]
 
 // Firestorm inclues
 #include <boost/algorithm/string/split.hpp>
@@ -307,9 +313,6 @@ bool friendship_offer_callback(const LLSD& notification, const LLSD& response)
 //		//{
 //// [/SL:KB]
 //		//	notification_ptr->repost();
-//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-//		//}
-//// [/SL:KB]
 // </FS:Ansariel>
     }
 
@@ -2361,9 +2364,6 @@ bool lure_callback(const LLSD& notification, const LLSD& response)
 //		{
 //// [/SL:KB]
 //			notification_ptr->repost();
-//// [SL:KB] - Patch: UI-Notifications | Checked: 2013-05-09 (Catznip-3.5)
-//		}
-//// [/SL:KB]
 //	}
 // </FS:Ansariel>
 
@@ -2779,9 +2779,16 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			RlvUtil::sendBusyMessage(from_id, RlvStrings::getVersion(), session_id);
 		}
 // [/RLVa:KB]
-//		else if (offline == IM_ONLINE && is_do_not_disturb && name != SYSTEM_FROM)
-// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-		//else if ( (offline == IM_ONLINE && is_do_not_disturb && name != SYSTEM_FROM) && (RlvActions::canReceiveIM(from_id)) )
+//		else if (offline == IM_ONLINE 
+//					&& is_do_not_disturb
+//					&& from_id.notNull() //not a system message
+//					&& to_id.notNull()) //not global message
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
+		//else if (offline == IM_ONLINE 
+		//			&& is_do_not_disturb
+		//			&& from_id.notNull() //not a system message
+		//			&& to_id.notNull() //not global message
+		//			&& RlvActions::canReceiveIM(from_id))
 		//AO Autorespond
 		//TS Autorespond to non-friends
 		// <FS:Ansariel> Only send the busy reponse if either the sender is not
@@ -2961,7 +2968,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			LL_INFOS("Messaging") << "process_improved_im: session_id( " << session_id << " ), from_id( " << from_id << " )" << LL_ENDL;
 
 //			bool mute_im = is_muted;
-//			if(accept_im_from_only_friend && !is_friend && !is_linden)
+//			if(accept_im_from_only_friend&&!is_friend)
 //			{
 //				if (!gIMMgr->isNonFriendSessionNotified(session_id))
 //				{
@@ -3015,8 +3022,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["MESSAGE"] = buffer;
 				LLNotificationsUtil::add("SystemMessageTip", args);
 				*/
-				// TS: If the user wants to send a response to muted avatars,
-				//     do so.
 				static LLCachedControl<bool> fsSendMutedAvatarResponse(gSavedPerAccountSettings, "FSSendMutedAvatarResponse");
 				if (fsSendMutedAvatarResponse)
 				{
@@ -3312,12 +3317,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 	case IM_INVENTORY_ACCEPTED:
 	{
-//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
 		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
-		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();
+		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();;
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -3329,12 +3334,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	}
 	case IM_INVENTORY_DECLINED:
 	{
-//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();
+//		args["NAME"] = LLSLURL("agent", from_id, "completename").getSLURLString();;
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 		// Only anonymize the name if the agent is nearby, there isn't an open IM session to them and their profile isn't open
 		bool fRlvFilterName = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(from_id)) && 
 			(!RlvUIEnabler::hasOpenProfile(from_id)) && (!RlvUIEnabler::hasOpenIM(from_id));
-		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();
+		args["NAME"] = LLSLURL("agent", from_id, (!fRlvFilterName) ? "completename" : "rlvanonym").getSLURLString();;
 // [/RLVa:KB]
 		LLSD payload;
 		payload["from_id"] = from_id;
@@ -3602,27 +3607,26 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	case IM_LURE_USER:
 	case IM_TELEPORT_REQUEST:
 		{
-// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-			// If the lure sender is a specific @accepttp exception they will override muted and busy status
-			bool fRlvSummon = (rlv_handler_t::isEnabled()) && (gRlvHandler.isException(RLV_BHVR_ACCEPTTP, from_id));
+// [RLVa:KB] - Checked: 2013-11-08 (RLVa-1.4.9)
+			// If we auto-accept the offer/request then this will override DnD status (but we'll still let the other party know later)
+			bool fRlvAutoAccept = (rlv_handler_t::isEnabled()) &&
+				( ((IM_LURE_USER == dialog) && (RlvActions::autoAcceptTeleportOffer(from_id))) ||
+				  ((IM_TELEPORT_REQUEST == dialog) && (RlvActions::autoAcceptTeleportRequest(from_id))) );
 // [/RLVa:KB]
 
-//			if (is_muted)
-// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-			if ( (is_muted) && (!fRlvSummon) )
-// [/RLVa:KB]
+			if (is_muted)
 			{ 
 				return;
 			}
 //			else if (is_do_not_disturb) 
-// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
-			else if ( (is_do_not_disturb)  && (!fRlvSummon) )
+// [RLVa:KB] - Checked: 2013-11-08 (RLVa-1.4.9)
+			else if ( (is_do_not_disturb) && (!fRlvAutoAccept) )
 // [/RLVa:KB]
 			{
 				send_do_not_disturb_message(msg, from_id);
 			}
 			// <FS:PP> FIRE-1245: Option to block/reject teleport offers
-			else if ( (is_rejecting_tp_offers) && (!fRlvSummon) )
+			else if ( (is_rejecting_tp_offers) && (!fRlvAutoAccept) )
 			{
 				send_rejecting_tp_offers_message(msg, from_id);
 			}
@@ -3682,19 +3686,20 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					}
 				}
 
-// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
+// [RLVa:KB] - Checked: 2013-11-08 (RLVa-1.4.9)
 				if (rlv_handler_t::isEnabled())
 				{
-					if (!gRlvHandler.canTeleportViaLure(from_id))
+					if ( ((IM_LURE_USER == dialog) && (!RlvActions::canAcceptTpOffer(from_id))) ||
+					     ((IM_TELEPORT_REQUEST == dialog) && (!RlvActions::canAcceptTpRequest(from_id))) )
 					{
-						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_TPLURE_REMOTE));
+						RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_TPLUREREQ_REMOTE));
 						if (is_do_not_disturb)
 							send_do_not_disturb_message(msg, from_id);
 						return;
 					}
 
-					// Censor lure message if: 1) restricted from receiving IMs from the sender, or 2) @showloc=n restricted
-					if ( (!RlvActions::canReceiveIM(from_id)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
+					// Censor lure message if: 1) restricted from receiving IMs from the sender, or 2) teleport offer and @showloc=n restricted
+					if ( (!RlvActions::canReceiveIM(from_id)) || ((IM_LURE_USER == dialog) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))) )
 					{
 						message = RlvStrings::getString(RLV_STRING_HIDDEN);
 					}
@@ -3750,17 +3755,18 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					params.substitutions = args;
 					params.payload = payload;
 
-// [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
-					if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTTP)) || (fRlvSummon)) )
+// [RLVa:KB] - Checked: 20103-11-08 (RLVa-1.4.9)
+					if ( (rlv_handler_t::isEnabled()) && (fRlvAutoAccept) )
 					{
-						gRlvHandler.setCanCancelTp(false);
+						if (IM_LURE_USER == dialog)
+							gRlvHandler.setCanCancelTp(false);
 						if (is_do_not_disturb)
 							send_do_not_disturb_message(msg, from_id);
-						LLNotifications::instance().forceResponse(LLNotification::Params("TeleportOffered").payload(payload), 0);
+						LLNotifications::instance().forceResponse(LLNotification::Params(params.name).payload(payload), 0);
 					}
 					else
 					{
-						LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+						LLPostponedNotification::add<LLPostponedOfferNotification>(params, from_id, false);
 					}
 // [/RLVa:KB]
 //					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
@@ -8105,7 +8111,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			payload["owner_name"] = owner_name;
 
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
-		if (rlv_handler_t::isEnabled())
+			if (rlv_handler_t::isEnabled())
 			{
 				RlvUtil::filterScriptQuestions(questions, payload);
 
