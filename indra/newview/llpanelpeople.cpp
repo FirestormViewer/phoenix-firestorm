@@ -1572,7 +1572,7 @@ void LLPanelPeople::showFriendsAccordionsIfNeeded()
 		//LLAccordionCtrl* accordion = getChild<LLAccordionCtrl>("friends_accordion");
 		//accordion->arrange();
 
-		childSetVisible("friends_accordion", mAllFriendList->filterHasMatches());
+		childSetVisible("friends_accordion", (mAllFriendList->filterHasMatches() || mSuggestedFriends->filterHasMatches()));
 		// </FS:Ansariel> Friend list accordion replacement
 
 		// *TODO: new no_matched_tabs_text attribute was implemented in accordion (EXT-7368).
