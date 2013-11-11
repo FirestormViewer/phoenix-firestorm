@@ -21,6 +21,7 @@
 #include "llinstantmessage.h"
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
+#include "lltrans.h"
 #include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"
@@ -545,8 +546,7 @@ bool rlvMenuToggleEnabled()
 	gSavedSettings.setBOOL(RLV_SETTING_MAIN, !rlv_handler_t::isEnabled());
 
 	LLSD args;
-	args["MESSAGE"] = 
-		llformat("RestrainedLove Support will be %s after you restart", (rlv_handler_t::isEnabled()) ? "disabled" : "enabled" );
+	args["MESSAGE"] = (rlv_handler_t::isEnabled() ? LLTrans::getString("RlvDisabled") : LLTrans::getString("RlvEnabled"));
 	LLNotificationsUtil::add("GenericAlert", args);
 	
 	return true;

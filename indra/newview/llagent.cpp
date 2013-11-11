@@ -98,32 +98,17 @@
 //#include "lscript_byteformat.h" // <FS:CR> We don't have the bytecode compiler in fs
 #include "stringize.h"
 #include "boost/foreach.hpp"
-// [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
+
+// Firestorm includes
+#include "fslslbridge.h"
+#include "fsscriptlibrary.h"
+#include "kcwlinterface.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "rlvhelper.h"
 #include "rlvui.h"
-// [/RLVa:KB]
-
-//-TT Client LSL Bridge
-#include "fslslbridge.h"
-//-TT
-#include "fsscriptlibrary.h"	// <FS:CR>
-#include "kcwlinterface.h"
-// [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
-#include "rlvhandler.h"
-#include "rlvhelper.h"
-#include "rlvui.h"
-// [/RLVa:KB]
-
-
-// NaCl - Antispam Registry
+#include "utilitybar.h"
 #include "NACLantispam.h"
-// NaCl End
-
-#include "utilitybar.h"		// <FS:Zi> show/hide utility bar in mouselook
-
-#include "boost/foreach.hpp" // <FS:LO> for boost::foreach
 
 using namespace LLAvatarAppearanceDefines;
 

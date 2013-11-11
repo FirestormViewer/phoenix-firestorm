@@ -72,9 +72,6 @@
 #include "llui.h"
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
-// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 #include "llviewernetwork.h"	// <FS:CR> For prim equivilance hiding
 // [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)

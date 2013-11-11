@@ -116,12 +116,6 @@
 #include "llpanelblockedlist.h"
 #include "llpanelplaceprofile.h"
 #include "llviewerregion.h"
-// [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
-#include "rlvactions.h"
-#include "rlvhandler.h"
-#include "rlvinventory.h"
-#include "rlvui.h"
-// [/RLVa:KB]
 
 // Firestorm inclues
 #include <boost/algorithm/string/split.hpp>

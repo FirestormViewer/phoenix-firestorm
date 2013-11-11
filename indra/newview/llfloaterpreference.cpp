@@ -111,10 +111,6 @@
 #include "llpluginclassmedia.h"
 #include "llteleporthistorystorage.h"
 #include "llproxy.h"
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a)
-#include "rlvactions.h"
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 #include "lllogininstance.h"        // to check if logged in yet
 #include "llsdserialize.h"
@@ -1536,18 +1532,6 @@ void LLFloaterPreference::refreshEnabledState()
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
 	// <FS:Ansariel> Radio group "ReflectionDetailRadio" doesn't exist as of 20/11/2012
 	//LLRadioGroup* radio_reflection_detail = getChild<LLRadioGroup>("ReflectionDetailRadio");
-
-// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e) | Modified: RLVa-1.2.0e
-	if (rlv_handler_t::isEnabled())
-		childSetEnabled("do_not_disturb_response", !gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM));
-// [/RLVa:KB]
-
-// [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
-	if (rlv_handler_t::isEnabled())
-	{
-		getChild<LLUICtrl>("do_not_disturb_response")->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_SENDIM));
-	}
-// [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
 	if (rlv_handler_t::isEnabled())

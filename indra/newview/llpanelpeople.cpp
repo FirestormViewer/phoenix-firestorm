@@ -77,9 +77,6 @@
 #include "llevents.h"				// for LLEventPumps
 
 // Firestorm includes
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 #include "fspanelradar.h"
 #include "lllayoutstack.h"
 #include "rlvhandler.h"
@@ -985,11 +982,6 @@ void LLPanelPeople::updateButtons()
 				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 			// </FS:Ansariel> RLVa check
 
-//			cur_panel->getChildView("add_friend_btn")->setEnabled(!is_friend);
-// [RLVa:KB] - Checked: 2010-07-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0h
-//			cur_panel->getChildView("add_friend_btn")->setEnabled(
-//				!is_friend && ((!nearby_tab_active) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))));
-// [/RLBa:KB]
 			if (friends_tab_active)
 			{
 				cur_panel->getChildView("friends_del_btn")->setEnabled(multiple_selected);
@@ -1001,13 +993,6 @@ void LLPanelPeople::updateButtons()
 			}
 		}
 	}
-
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
-	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
-	{
-		item_selected = multiple_selected = false;
-	}
-// [/RLBa:KB]
 }
 
 std::string LLPanelPeople::getActiveTabName() const
