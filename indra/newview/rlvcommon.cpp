@@ -37,6 +37,7 @@
 //#include "lscript_byteformat.h"
 #include "fsscriptlibrary.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/foreach.hpp>	// <FS:CR>
 
 // ============================================================================
 // RlvNotifications
@@ -171,10 +172,14 @@ void RlvStrings::initClass()
 		// Load the default string values
 		std::vector<std::string> files = gDirUtilp->findSkinnedFilenames(LLDir::XUI, RLV_STRINGS_FILE, LLDir::ALL_SKINS);
 		m_StringMapPath = (!files.empty()) ? files.front() : LLStringUtil::null;
-		for (auto itFile = files.cbegin(); itFile != files.cend(); ++itFile)
+		// <FS:CR> Old compiler compatibility
+		//for (auto itFile = files.cbegin(); itFile != files.cend(); ++itFile)
+		BOOST_FOREACH(const std::string file, files)
 		{
-			loadFromFile(*itFile, false);
+			//loadFromFile(*itFile, false);
+			loadFromFile(file, false);
 		}
+		// </FS:CR>
 
 		// Load the custom string overrides
 		loadFromFile(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, RLV_STRINGS_FILE), true);
