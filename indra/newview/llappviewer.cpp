@@ -533,12 +533,16 @@ void idle_afk_check()
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
 #ifdef RLV_EXTENSION_CMD_ALLOWIDLE
 	// Enforce an idle time of 30 minutes if @allowidle=n restricted
-	F32 afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? gSavedSettings.getS32("AFKTimeout") : 60 * 30;
+	// <FS:CR> Cache frequently hit location
+	static LLCachedControl<S32> sAFKTimeout(gSavedSettings, "AFKTimeout");
+	S32 afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? sAFKTimeout : 60 * 30;
 #else
-	F32 afk_timeout = gSavedSettings.getS32("AFKTimeout");
+	static LLCachedControl<S32> afk_timeout(gSavedSettings, "AFKTimeout");	// <FS:CR>
 #endif // RLV_EXTENSION_CMD_ALLOWIDLE
 // [/RLVa:KB]
-	if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
+	// <FS:CR> Explicit conversions just cos.
+	//if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
+	if (static_cast<F32>(afk_timeout) && (current_idle > static_cast<F32>(afk_timeout)) && ! gAgent.getAFK())
 	{
 		LL_INFOS("IdleAway") << "Idle more than " << afk_timeout << " seconds: automatically changing to Away status" << LL_ENDL;
 		gAgent.setAFK();
@@ -943,7 +947,7 @@ bool LLAppViewer::init()
 		// QAModeTermCode set, terminate with that rc on LL_ERRS. Use _exit()
 		// rather than exit() because normal cleanup depends too much on
 		// successful startup!
-		LLError::setFatalFunction(boost::bind(_exit, rc));
+		//LLError::setFatalFunction(boost::bind(_exit, rc));
 	}
 
     mAlloc.setProfilingEnabled(gSavedSettings.getBOOL("MemProfiling"));
