@@ -45,7 +45,7 @@
 #include "llscriptfloater.h"
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
-
+#include "llpersistentnotificationstorage.h"
 
 //---------------------------------------------------------------------------------
 LLSysWellWindow::LLSysWellWindow(const LLSD& key) : LLTransientDockableFloater(NULL, true,  key),
@@ -521,6 +521,9 @@ void LLNotificationWellWindow::closeAll()
 	clearScreenChannels();
 	std::vector<LLPanel*> items;
 	mMessageList->getItems(items);
+
+	LLPersistentNotificationStorage::getInstance()->startBulkUpdate(); // <FS:ND/>
+
 	for (std::vector<LLPanel*>::iterator
 			 iter = items.begin(),
 			 iter_end = items.end();
@@ -530,6 +533,11 @@ void LLNotificationWellWindow::closeAll()
 		if (sys_well_item)
 			onItemClose(sys_well_item);
 	}
+
+	// <FS:ND> All done, renable normal mode and save.
+	LLPersistentNotificationStorage::getInstance()->endBulkUpdate();
+	LLPersistentNotificationStorage::getInstance()->saveNotifications();
+	// </FS:ND>
 }
 
 void LLNotificationWellWindow::unlockWindowUpdate()

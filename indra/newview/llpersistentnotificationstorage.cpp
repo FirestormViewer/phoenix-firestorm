@@ -41,6 +41,7 @@ LLPersistentNotificationStorage::LLPersistentNotificationStorage()
 	, LLNotificationStorage("")
 	, mLoaded(false)
 {
+	mDuringBulkUpdate = false; // <FS:ND>
 }
 
 LLPersistentNotificationStorage::~LLPersistentNotificationStorage()
@@ -116,6 +117,8 @@ void LLPersistentNotificationStorage::loadNotifications()
 
 	LLNotifications& instance = LLNotifications::instance();
 
+	startBulkUpdate(); // <FS:ND>
+
 	for (LLSD::array_const_iterator notification_it = data.beginArray();
 		notification_it != data.endArray();
 		++notification_it)
@@ -138,6 +141,7 @@ void LLPersistentNotificationStorage::loadNotifications()
 		}
 	}
 
+	endBulkUpdate(); // <FS:ND>
 	LL_INFOS("LLPersistentNotificationStorage") << "finished loading notifications" << LL_ENDL;
 }
 
@@ -157,7 +161,11 @@ bool LLPersistentNotificationStorage::onPersistentChannelChanged(const LLSD& pay
 	}
 	// we ignore "load" messages, but rewrite the persistence file on any other
 	const std::string sigtype = payload["sigtype"].asString();
-	if ("load" != sigtype)
+
+	// <FS:ND> Don't save all notifications as they changed in bulk
+	// if ("load" != sigtype)
+	if ("load" != sigtype && !mDuringBulkUpdate )
+	// </FS:ND>
 	{
 		saveNotifications();
 	}
