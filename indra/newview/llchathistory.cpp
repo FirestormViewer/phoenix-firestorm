@@ -200,6 +200,10 @@ public:
 		{
 			LLAvatarActions::offerTeleport(getAvatarId());
 		}
+		else if (level == "request_teleport")
+		{
+			LLAvatarActions::teleportRequest(getAvatarId());
+		}
 		else if (level == "voice_call")
 		{
 			LLAvatarActions::startCall(getAvatarId());
@@ -593,6 +597,7 @@ protected:
 				menu->setItemEnabled("Send IM", false);
 				menu->setItemEnabled("Remove Friend", false);
 				menu->setItemEnabled("Offer Teleport",false);
+				menu->setItemEnabled("Request Teleport",false);
 				menu->setItemEnabled("Voice Call", false);
 				menu->setItemEnabled("Invite Group", false);
 				menu->setItemEnabled("Zoom In", false);
@@ -609,6 +614,7 @@ protected:
 				menu->setItemVisible("Send IM", false);
 			}
 				menu->setItemEnabled("Offer Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
+				menu->setItemEnabled("Request Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
 				menu->setItemEnabled("Voice Call", LLAvatarActions::canCall());
 
 				// We should only show 'Zoom in' item in a nearby chat
