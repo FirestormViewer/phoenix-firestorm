@@ -326,9 +326,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>aaea644191807f51051cefa2fac11069</string>
+              <string>e7c8008b524fe9105955cb292fcaac66</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/curl-7.21.1-darwin-20110316.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.24.0-darwin-20131112u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1700,9 +1700,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>694e9f09144d96d480526574d83b4d67</string>
+              <string>a265c0f38a7934fbe7ae7c020ddddf2c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.0g-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.0g-darwin-20131112u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
