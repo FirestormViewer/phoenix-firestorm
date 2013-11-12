@@ -955,7 +955,7 @@ bool idle_startup()
 			{                                                  
 				LL_DEBUGS("AppInit") << "loading credentials from gLoginHandler" << LL_ENDL;
 				display_startup();
-				gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getLLSD("UserLoginInfo").asString());
+				gUserCredential = gSecAPIHandler->loadCredential(gSavedSettings.getString("UserLoginInfo"));
 				display_startup();
 			}     
 			// Make sure the process dialog doesn't hide things

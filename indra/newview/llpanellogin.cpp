@@ -929,7 +929,7 @@ void LLPanelLogin::onClickConnect(void *)
 		// The start location SLURL has already been sent to LLStartUp::setStartSLURL
 
 		std::string username = sInstance->getChild<LLUICtrl>("username_combo")->getValue().asString();
-		gSavedSettings.setLLSD("UserLoginInfo", credentialName()); // <FS:CR>
+		gSavedSettings.setString("UserLoginInfo", credentialName()); // <FS:CR>
 
 // <FS:CR> Block release
 		LLSD blocked = FSData::instance().allowedLogin();
@@ -1201,7 +1201,7 @@ void LLPanelLogin::addUsersToCombo(BOOL show_server)
 	std::string current_creds=credentialName();
 	if(current_creds.find("@") < 1)
 	{
-		current_creds = gSavedSettings.getLLSD("UserLoginInfo").asString();
+		current_creds = gSavedSettings.getString("UserLoginInfo");
 	}
 	
 	std::vector<std::string> logins = gSecAPIHandler->listCredentials();
@@ -1265,7 +1265,7 @@ void LLPanelLogin::onClickRemove(void*)
 	{
 		LLComboBox* combo = sInstance->getChild<LLComboBox>("username_combo");
 		std::string credName = combo->getValue().asString();
-		if ( credName == gSavedSettings.getLLSD("UserLoginInfo").asString() )
+		if (credName == gSavedSettings.getString("UserLoginInfo"))
 			gSavedSettings.getControl("UserLoginInfo")->resetToDefault();
 		LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
 		gSecAPIHandler->deleteCredential(credential);

@@ -177,6 +177,7 @@
       <string>UserLogFile</string>
     </map>
 
+	<!-- [FS:CR] Use UserLoginInfoCmdLine Plz -->
     <key>login</key>
     <map>
       <key>desc</key>
@@ -184,7 +185,7 @@
       <key>count</key>
       <integer>3</integer>
       <key>map-to</key>
-      <string>UserLoginInfo</string>
+      <string>UserLoginInfoCmdLine</string>
     </map>
 
     <key>loginpage</key>

@@ -179,7 +179,7 @@ LLPointer<LLCredential> LLLoginHandler::loadSavedUserLoginInfo()
 {
   // load the saved user login info into a LLCredential.
   // perhaps this should be moved.
-	LLSD cmd_line_login = gSavedSettings.getLLSD("UserLoginInfo");
+	LLSD cmd_line_login = gSavedSettings.getLLSD("UserLoginInfoCmdLine");
 	if (cmd_line_login.size() == 3) 
 	{
 	
