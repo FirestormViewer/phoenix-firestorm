@@ -166,7 +166,7 @@ if (LINUX)
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
-  if (NOT ${GXX_VERSION} MATCHES "Gentoo 4.7.*")
+  if (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[78].*")
   #</FS:ND>
 
   if (${GXX_VERSION} STREQUAL ${CXX_VERSION})
@@ -178,7 +178,7 @@ if (LINUX)
   endif (${GXX_VERSION} STREQUAL ${CXX_VERSION})
 
   #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
-  endif (NOT ${GXX_VERSION} MATCHES "Gentoo 4.7.*")
+  endif (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[78].*")
   #</FS:ND>
 
   # Let's actually get a numerical version of gxx's version
@@ -212,6 +212,13 @@ if (LINUX)
     set(CMAKE_CXX_FLAGS "-Wno-attributes ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 470)
   #</FS:ND>
+  #<FS:ND> Disable unsed local typedef warnings for GCC >= 4.8. It causes a lot of warning/errors in boost.
+  if(${CXX_VERSION_NUMBER} GREATER 480)
+    set(CMAKE_CXX_FLAGS "-Wno-unused-local-typedefs ${CMAKE_CXX_FLAGS}")
+  endif (${CXX_VERSION_NUMBER} GREATER 480)
+  #</FS:ND>
+
+
 
   # End of hacks.
 
