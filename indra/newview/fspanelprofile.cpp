@@ -676,7 +676,7 @@ void FSPanelProfileSecondLife::onCopyToClipboard()
 
 void FSPanelProfileSecondLife::onCopyURI()
 {
-	std::string name = LLSLURL("agent", getAvatarId(), "inspect").getSLURLString();
+	std::string name = LLSLURL("agent", getAvatarId(), "about").getSLURLString();
 	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
 }
 
