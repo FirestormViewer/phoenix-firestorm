@@ -265,6 +265,7 @@
 		<menu_item_check label="Pokaż tagi imion" name="Show Name Tags"/>
 		<menu_item_check label="Zastępowanie odblokowane" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Ograniczenia..." name="Restrictions"/>
+		<menu_item_check label="Ciągi..." name="Strings"/>
 	</menu>
 	<menu label="Zaawansowane" name="Advanced">
 		<menu_item_call label="Odśwież tekstury (rebake)" name="Rebake Texture"/>
@@ -343,7 +344,7 @@
 			<menu_item_call label="Oddal" name="Zoom Out"/>
 		</menu>
 		<menu_item_check label="Wymuszanie latania" name="Fly Override"/>
-		<menu_item_check label="API dla RestrainedLove (RLVa)" name="RLV API"/>
+		<menu_item_check label="API dla RestrainedLove" name="RLV API"/>
 		<menu_item_call label="Pokaż ustawienia debugowania" name="Debug Settings"/>
 		<menu_item_check label="Pokaż menu programisty" name="Debug Mode"/>
 	</menu>

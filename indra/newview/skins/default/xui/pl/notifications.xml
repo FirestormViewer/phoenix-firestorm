@@ -4377,6 +4377,9 @@ ponieważ serwer jest pełny.
 	<notification name="LargePrimAgentIntersect">
 		Nie można utworzyć wielkich prim, które nachodzą na innych rezydentów. Spróbuj jeszcze raz, gdy przesuną się oni.
 	</notification>
+	<notification name="RLVChangeStrings">
+		Zmiany nie odniosą skutku, dopóki nie zrestartujesz [APP_NAME].
+	</notification>
 	<notification name="PreferenceChatClearLog">
 		Ta opcja usunie dzienniki poprzednich rozmów i wszelkie kopie zapasowe tego pliku.
 		<usetemplate ignoretext="Potwierdź, zanim usunę dzienniki poprzednich rozmów." name="okcancelignore" notext="Anuluj" yestext="OK"/>
