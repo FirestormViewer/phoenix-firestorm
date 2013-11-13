@@ -1261,6 +1261,7 @@ FSPanelSearchPlaces::FSPanelSearchPlaces() : LLPanel()
 , mResultsReceived(0)
 , mResultsContent()
 {
+	mCommitCallbackRegistrar.add("CommitSearch", boost::bind(&FSPanelSearchPlaces::find, this));
 }
 
 FSPanelSearchPlaces::~FSPanelSearchPlaces()
@@ -1592,6 +1593,7 @@ FSPanelSearchLand::FSPanelSearchLand() : LLPanel()
 , mResultsReceived(0)
 , mResultsContent()
 {
+	mCommitCallbackRegistrar.add("CommitSearch", boost::bind(&FSPanelSearchLand::find, this));
 }
 
 FSPanelSearchLand::~FSPanelSearchLand()
@@ -1942,6 +1944,7 @@ FSPanelSearchClassifieds::FSPanelSearchClassifieds() : LLPanel()
 , mResultsReceived(0)
 , mResultsContent()
 {
+	mCommitCallbackRegistrar.add("CommitSearch", boost::bind(&FSPanelSearchClassifieds::find, this));
 }
 
 FSPanelSearchClassifieds::~FSPanelSearchClassifieds()
@@ -2244,6 +2247,7 @@ FSPanelSearchEvents::FSPanelSearchEvents() : LLPanel()
 , mDay(0)
 , mResultsContent()
 {
+	mCommitCallbackRegistrar.add("CommitSearch", boost::bind(&FSPanelSearchEvents::find, this));
 }
 
 FSPanelSearchEvents::~FSPanelSearchEvents()
