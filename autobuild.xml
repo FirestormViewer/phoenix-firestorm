@@ -638,9 +638,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>172c905affa57a0072d4b7cc1fdc1636</string>
+              <string>05e66a9a07e7c0e19373a5fde7153378</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/freetype-2.3.9-darwin-20130102.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9-darwin-20131114u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1046,9 +1046,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>71bd6efbf508e1f2e7d98a6195a93e9e</string>
+              <string>980608f33010ac20886dfecd74a5df48</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/jpeglib-8c-darwin-20110228.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/jpeglib-8c-darwin-20131112u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1238,9 +1238,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6fe1adf12d98bce9111f60ee762007b9</string>
+              <string>ad7768b85116c3016a36151e0b7b5001</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/libpng-1.5.1-darwin-20110222.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.5.1-darwin-20131112u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
