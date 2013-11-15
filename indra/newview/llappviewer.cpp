@@ -542,7 +542,7 @@ void idle_afk_check()
 // [/RLVa:KB]
 	// <FS:CR> Explicit conversions just cos.
 	//if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
-	if (afk_timeout() && (current_idle > static_cast<F32>(afk_timeout)) && ! gAgent.getAFK())
+	if (afk_timeout && (current_idle > static_cast<F32>(afk_timeout)) && ! gAgent.getAFK())
 	{
 		LL_INFOS("IdleAway") << "Idle more than " << afk_timeout << " seconds: automatically changing to Away status" << LL_ENDL;
 		gAgent.setAFK();
