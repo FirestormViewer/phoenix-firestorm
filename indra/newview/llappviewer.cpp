@@ -531,13 +531,12 @@ void idle_afk_check()
 	F32 current_idle = gAwayTriggerTimer.getElapsedTimeF32();
 //	F32 afk_timeout  = gSavedSettings.getS32("AFKTimeout");
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
-	// Enforce an idle time of 30 minutes if @allowidle=n restricted
 	// <FS:CR> Cache frequently hit location
 	static LLCachedControl<S32> sAFKTimeout(gSavedSettings, "AFKTimeout");
-	S32 afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? sAFKTimeout : 60 * 30;
-#else
-	static LLCachedControl<S32> afk_timeout(gSavedSettings, "AFKTimeout");	// <FS:CR>
+	S32 afk_timeout = sAFKTimeout;
+#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
+	// Enforce an idle time of 30 minutes if @allowidle=n restricted
+	afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? afk_timeout : 60 * 30;
 #endif // RLV_EXTENSION_CMD_ALLOWIDLE
 // [/RLVa:KB]
 	// <FS:CR> Explicit conversions just cos.
