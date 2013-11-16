@@ -29,7 +29,11 @@
      halign="left"
      use_ellipses="true"
      top="0"
-     width="394"/>
+     width="394">
+        <first_tab tab_bottom_image_unselected="Toolbar_Left_IM_Unselected"/>
+        <middle_tab tab_bottom_image_unselected="Toolbar_Middle_IM_Unselected"/>
+        <last_tab tab_bottom_image_unselected="Toolbar_Right_IM_Unselected"/>
+    </tab_container>
     <icon
      color="DefaultShadowLight"
      enabled="false"

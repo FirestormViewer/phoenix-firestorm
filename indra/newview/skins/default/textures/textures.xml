@@ -722,6 +722,10 @@ with the same filename but different name
   <texture name="Toolbar_Right_Selected" file_name="containers/Toolbar_Right_Selected.png" preload="false" scale.left="1" scale.bottom="4" scale.top="24" scale.right="26" />
   <texture name="Toolbar_Right_Flash" file_name="containers/Toolbar_Right_Flash.png" preload="false" scale.left="1" scale.bottom="4" scale.top="24" scale.right="26" />
 
+  <texture name="Toolbar_Left_IM_Unselected" file_name="containers/Toolbar_Left_IM_Unselected.png" preload="false" scale.left="5" scale.bottom="4" scale.top="24" scale.right="30"  />
+  <texture name="Toolbar_Middle_IM_Unselected" file_name="containers/Toolbar_Middle_IM_Unselected.png"  preload="false" scale.left="1" scale.bottom="2" scale.top="24" scale.right="30"  />
+  <texture name="Toolbar_Right_IM_Unselected" file_name="containers/Toolbar_Right_IM_Unselected.png" preload="false" scale.left="1" scale.bottom="4" scale.top="24" scale.right="26" />
+
   <texture name="Tooltip" file_name="widgets/Tooltip.png" preload="true" scale.left="2" scale.top="16" scale.right="100" scale.bottom="3" />
 
   <texture name="TrashItem_Disabled" file_name="icons/TrashItem_Disabled.png" preload="true" />
