@@ -57,10 +57,10 @@
 #include "lggcontactsetsfloater.h"
 
 //Maximum number of people you can select to do an operation on at once.
-#define MAX_FRIEND_SELECT 20
-#define DEFAULT_PERIOD 5.0
-#define RIGHTS_CHANGE_TIMEOUT 5.0
-#define OBSERVER_TIMEOUT 0.5
+const S32 MAX_FRIEND_SELECT = 20;
+const F32 DEFAULT_PERIOD = 5.f;
+const F32 RIGHTS_CHANGE_TIMEOUT = 5.f;
+const F32 OBSERVER_TIMEOUT = 0.5f;
 
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
 static const std::string GROUP_TAB_NAME		= "groups_panel";
@@ -455,7 +455,7 @@ LLUUID FSFloaterContacts::getCurrentItemID() const
 		else
 			return LLUUID::null;
 	}
-	if (cur_tab == GROUP_TAB_NAME)
+	else if (cur_tab == GROUP_TAB_NAME)
 	{
 		return mGroupList->getSelectedUUID();
 	}
