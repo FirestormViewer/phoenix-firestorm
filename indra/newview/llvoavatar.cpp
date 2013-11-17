@@ -6288,7 +6288,7 @@ void LLVOAvatar::getOffObject()
 
 		//KC: revoke perms on sit
 		U32 revoke_on = gSavedSettings.getU32("FSRevokePerms");
-		if ((revoke_on == 2 || revoke_on == 3) && !sit_object->permYouOwner())
+		if ((revoke_on == 2 || revoke_on == 3) && (sit_object && !sit_object->permYouOwner()))
 		{
 			revokePermissionsOnObject(sit_object);
 		}
