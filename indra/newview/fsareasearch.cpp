@@ -1880,60 +1880,60 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 		{
 			mColumnParms[column_name] = result_list->delColumn(column_name);
 		}
-	}
 
-	// untill C++ supports variable withen a variablname, have to do this instead.
-	// used switch instead of a huge if then else if then else...
-	char c = column_name.at(0);
-	switch(c)
-	{
-	case 'd':
-	{
-		char d = column_name.at(1);
-		switch (d)
+		// untill C++ supports variable withen a variablname, have to do this instead.
+		// used switch instead of a huge if then else if then else...
+		char c = column_name.at(0);
+		switch(c)
 		{
-		case 'i':
-		{
-			mFSAreaSearch->setColumnDistance(checkboxctrl->get());
+			case 'd':
+			{
+				char d = column_name.at(1);
+				switch (d)
+				{
+					case 'i':
+					{
+						mFSAreaSearch->setColumnDistance(checkboxctrl->get());
+						break;
+					}
+					case 'e':
+					{
+						mFSAreaSearch->setColumnDescription(checkboxctrl->get());
+						break;
+					}
+					default:
+						break;
+				}
+				break;
+			}
+			case 'n':
+			{
+				mFSAreaSearch->setColumnName(checkboxctrl->get());
+				break;
+			}
+			case 'o':
+			{
+				mFSAreaSearch->setColumnOwner(checkboxctrl->get());
+				break;
+			}
+			case 'g':
+			{
+				mFSAreaSearch->setColumnGroup(checkboxctrl->get());
+				break;
+			}
+			case 'c':
+			{
+				mFSAreaSearch->setColumnCreator(checkboxctrl->get());
+				break;
+			}
+			case 'l':
+			{
+				mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
+				break;
+			}
+			default:
+				break;
 		}
-			break;
-		case 'e':
-		{
-			mFSAreaSearch->setColumnDescription(checkboxctrl->get());
-		}
-			break;
-		default:
-			break;
-		}
-	}
-		break;
-	case 'n':
-	{
-		mFSAreaSearch->setColumnName(checkboxctrl->get());
-	}
-		break;
-	case 'o':
-	{
-		mFSAreaSearch->setColumnOwner(checkboxctrl->get());
-	}
-		break;
-	case 'g':
-	{
-		mFSAreaSearch->setColumnGroup(checkboxctrl->get());
-	}
-		break;
-	case 'c':
-	{
-		mFSAreaSearch->setColumnCreator(checkboxctrl->get());
-	}
-		break;
-	case 'l':
-	{
-		mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
-	}
-		break;
-	default:
-		break;
 	}
 
 	result_list->updateLayout();
