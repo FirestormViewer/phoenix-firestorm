@@ -780,11 +780,11 @@ void FSFloaterPlaceDetails::onOverflowMenuItemClicked(const LLSD& param)
 		if (panel)
 		{
 			panel->createPick(mGlobalPos, mPickPanel);
-		}
 
-		LLRect rect = panel->getRect();
-		mPickPanel->reshape(rect.getWidth(), rect.getHeight());
-		mPickPanel->setRect(rect);
+			LLRect rect = panel->getRect();
+			mPickPanel->reshape(rect.getWidth(), rect.getHeight());
+			mPickPanel->setRect(rect);
+		}
 	}
 	else if (item == "add_to_favbar")
 	{
