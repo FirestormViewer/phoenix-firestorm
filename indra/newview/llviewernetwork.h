@@ -28,17 +28,17 @@
 #ifndef LL_LLVIEWERNETWORK_H
 #define LL_LLVIEWERNETWORK_H
 
-const std::string SECOND_LIFE_MAIN_LABEL = "Second Life Main Grid (Agni)";
-const std::string SECOND_LIFE_BETA_LABEL = "Second Life Beta Test Grid (Aditi)";
+const std::string SECOND_LIFE_MAIN_LABEL = "Second Life";
+const std::string SECOND_LIFE_BETA_LABEL = "Second Life Beta";
+
+// @TODO this really should be private, but is used in llslurl
+const std::string MAINGRID = "util.agni.lindenlab.com";
 
 // <FS:AW optional opensim support>
 #ifdef OPENSIM
 #include "fsgridhandler.h"
 #else
 // </FS:AW optional opensim support>
-
-// @TODO this really should be private, but is used in llslurl
-const std::string MAINGRID = "util.agni.lindenlab.com";
 
 /// Exception thrown when a grid is not valid
 class LLInvalidGridName

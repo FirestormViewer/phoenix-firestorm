@@ -230,13 +230,13 @@ void LLGridManager::initSystemGrids()
 // 	addSystemGrid("None", "", "", "", DEFAULT_LOGIN_PAGE);
 //we get this now from the grid list
 /*
-	addSystemGrid(	AGNI,
+	addSystemGrid(SECOND_LIFE_MAIN_LABEL,
 			MAINGRID,
 			"agni",
 			"https://login.agni.lindenlab.com/cgi-bin/login.cgi",
 			"https://secondlife.com/helpers/",
 			 DEFAULT_LOGIN_PAGE);
-	addSystemGrid(	ADITI,
+	addSystemGrid(SECOND_LIFE_BETA_LABEL,
 			"util.aditi.lindenlab.com",
 			"aditi",
 			"https://login.aditi.lindenlab.com/cgi-bin/login.cgi",

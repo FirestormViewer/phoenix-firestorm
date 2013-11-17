@@ -37,9 +37,6 @@
 extern const char* DEFAULT_LOGIN_PAGE;
 //Kokua: for llviewernetwork_test
 const S32 KNOWN_GRIDS_SIZE	= 3;
-const std::string AGNI		= "Second Life";
-const std::string ADITI		= "Second Life Beta";
-const std::string MAINGRID	= "util.agni.lindenlab.com";
 
 const std::string GRID_VALUE					= "name";
 const std::string GRID_LABEL_VALUE				= "gridname";
