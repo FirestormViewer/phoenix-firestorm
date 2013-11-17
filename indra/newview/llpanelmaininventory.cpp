@@ -248,30 +248,43 @@ BOOL LLPanelMainInventory::postBuild()
 
 		// Load the persistent "Recent Items" settings.
 		// Note that the "All Items" settings do not persist.
+		// <FS:ND> bring back worn items panel.
+		//if(recent_items_panel)
+		//{
+		//	if(savedFilterState.has(recent_items_panel->getFilter().getName()))
+		//	{
+		//		LLSD recent_items = savedFilterState.get(
+		//			recent_items_panel->getFilter().getName());
+		//		LLInventoryFilter::Params p;
+		//		LLParamSDParser parser;
+		//		parser.readSD(recent_items, p);
+		//		recent_items_panel->getFilter().fromParams(p);
+		//	}
+		//}
+
 		if(recent_items_panel)
 		{
-			if(savedFilterState.has(recent_items_panel->getFilter().getName()))
+			if(savedFilterState.has(recent_items_panel->getName()))
 			{
 				LLSD recent_items = savedFilterState.get(
-					recent_items_panel->getFilter().getName());
-				LLInventoryFilter::Params p;
+					recent_items_panel->getName());
+				LLInventoryPanel::InventoryState p;
 				LLParamSDParser parser;
 				parser.readSD(recent_items, p);
-				recent_items_panel->getFilter().fromParams(p);
+				recent_items_panel->getFilter().fromParams(p.filter);
 			}
 		}
 
-		// <FS:ND> bring back worn items panel.
 		if(worn_items_panel)
 		{
-			if(savedFilterState.has(worn_items_panel->getFilter().getName()))
+			if(savedFilterState.has(worn_items_panel->getName()))
 			{
 				LLSD worn_items = savedFilterState.get(
-					worn_items_panel->getFilter().getName());
-				LLInventoryFilter::Params p;
+					worn_items_panel->getName());
+				LLInventoryPanel::InventoryState p;
 				LLParamSDParser parser;
 				parser.readSD(worn_items, p);
-				recent_items_panel->getFilter().fromParams(p);
+				worn_items_panel->getFilter().fromParams(p.filter);
 			}
 		}
 		// </FS:ND>
