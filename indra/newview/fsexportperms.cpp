@@ -54,8 +54,9 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 			// Megaprim check
 			F32 max_object_size = LLWorld::getInstance()->getRegionMaxPrimScale();
 			LLVector3 vec = object->getScale();
-			exportable = (!(vec.mV[VX] > max_object_size || vec.mV[VY] > max_object_size || vec.mV[VZ] > max_object_size));
-			exportable = (creator == LLUUID("7ffd02d0-12f4-48b4-9640-695708fd4ae4")); // Zwagoth Klaar
+			if (vec.mV[VX] > max_object_size || vec.mV[VY] > max_object_size || vec.mV[VZ] > max_object_size)
+				exportable = (creator == LLUUID("7ffd02d0-12f4-48b4-9640-695708fd4ae4") // Zwagoth Klaar
+							  || creator == gAgentID);
 		}
 	}
 #ifdef OPENSIM
@@ -64,11 +65,17 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node)
 		switch (LFSimFeatureHandler::instance().exportPolicy())
 		{
 			case EXPORT_ALLOWED:
+			{
 				exportable = node->mPermissions->allowExportBy(gAgent.getID());
+				break;
+			}
 			/// TODO: Once enough grids adopt a version supporting exports, get consensus
 			/// on whether we should allow full perm exports anymore.
 			case EXPORT_UNDEFINED:
+			{
 				exportable = (object->permYouOwner() && object->permModify() && object->permCopy() && object->permTransfer());
+				break;
+			}
 			case EXPORT_DENIED:
 			default:
 				exportable = (object->permYouOwner() && gAgentID == node->mPermissions->getCreator());
