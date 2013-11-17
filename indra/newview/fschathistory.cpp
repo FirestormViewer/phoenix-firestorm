@@ -1190,7 +1190,8 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 
 		appendText(message, prependNewLineState, body_message_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-		prependNewLineState = false;
+		// Uncomment this if we never need to append to the end of a message. [FS:CR]
+		//prependNewLineState = false;
 	}
 
 	blockUndo();	// <FS:Zi> FIRE-8600: TAB out of chat history
