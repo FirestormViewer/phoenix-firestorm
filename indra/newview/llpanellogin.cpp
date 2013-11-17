@@ -332,9 +332,15 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	// Load favorites into the combo.
 	std::string user_defined_name = getChild<LLComboBox>("username_combo")->getSimple();
 // <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
-	//std::string canonical_user_name = canonicalize_username(user_defined_name);
+	std::string canonical_user_name = canonicalize_username(user_defined_name);
+	U32 resident_pos = canonical_user_name.find("Resident");
+	if (resident_pos > 0)
+	{
+		canonical_user_name = canonical_user_name.substr(0, resident_pos - 1);
+	}
 	std::string current_grid = getChild<LLComboBox>("server_combo")->getSimple();
-	std::string current_user = canonicalize_username(user_defined_name) + " @ " + current_grid;
+	std::string current_user = canonical_user_name + " @ " + current_grid;
+	LL_DEBUGS("Favorites") << "Current user: \"" << current_user << "\"" << LL_ENDL;
 // </FS:CR>
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	LLSD fav_llsd;
