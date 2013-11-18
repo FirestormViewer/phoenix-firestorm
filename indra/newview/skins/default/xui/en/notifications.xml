@@ -10835,7 +10835,7 @@ Not enough leased parcels in selection to join.
    name="CantDivideLandMultipleParcelsSelected"
    type="notify">
    <tag>fail</tag>
-Can't divide land.\nThere is more than one parcel selected.\nTry selecting a smaller piece of land.
+Can't divide land. There is more than one parcel selected. Try selecting a smaller piece of land.
   </notification>
 
   <notification
@@ -10843,7 +10843,7 @@ Can't divide land.\nThere is more than one parcel selected.\nTry selecting a sma
    name="CantDivideLandCantFindParcel"
    type="notify">
    <tag>fail</tag>
-Can't divide land.\nCan't find the parcel.\nPlease report with Help -> Report Bug...
+Can't divide land. Can't find the parcel. Please report with Help -> Report Bug...
   </notification>
 
   <notification
@@ -10851,7 +10851,7 @@ Can't divide land.\nCan't find the parcel.\nPlease report with Help -> Report Bu
    name="CantDivideLandWholeParcelSelected"
    type="notify">
    <tag>fail</tag>
-Can't divide land. Whole parcel is selected.\nTry selecting a smaller piece of land.
+Can't divide land. Whole parcel is selected. Try selecting a smaller piece of land.
   </notification>
 
   <notification

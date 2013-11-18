@@ -3886,13 +3886,13 @@ il server è pieno.
 		Non sono stati selezionati abbastanza lotti affittati da collegare.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Terreno non divisibile.\nHai selezionato più di un lotto.\nProva a selezionare una quantità di terreno più piccola.
+		Terreno non divisibile. Hai selezionato più di un lotto. Prova a selezionare una quantità di terreno più piccola.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		impossibile suddividere il terreno.\nimpossibile trovare il lotto.\nInvia una segnalazione con Aiuto -&gt; Segnala bug...
+		impossibile suddividere il terreno. Impossibile trovare il lotto. Invia una segnalazione con Aiuto -&gt; Segnala bug...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Impossibile suddividere il terreno. È stato selezionato l&apos;intero lotto.\nProva a selezionare un pezzo di terreno più piccolo.
+		Impossibile suddividere il terreno. È stato selezionato l&apos;intero lotto. Prova a selezionare un pezzo di terreno più piccolo.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Il terreno è stato diviso.

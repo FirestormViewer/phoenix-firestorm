@@ -3862,13 +3862,13 @@ o servidor está cheio.
 		Não há lotes alugados suficientes na seleção para reunir.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Não é possível dividir o terreno.\nHá mais de um lote selecionado.\nTente selecionar um pedaço menor de terreno.
+		Não é possível dividir o terreno. Há mais de um lote selecionado. Tente selecionar um pedaço menor de terreno.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Não é possível dividir o terreno.\nNão é possível encontrar o lote.\nComunique isso em Ajuda -&gt; Relatar bug...
+		Não é possível dividir o terreno. Não é possível encontrar o lote. Comunique isso em Ajuda -&gt; Relatar bug...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Não é possível dividir o terreno. O lote inteiro está selecionado.\nTente selecionar um pedaço menor do terreno.
+		Não é possível dividir o terreno. O lote inteiro está selecionado. Tente selecionar um pedaço menor do terreno.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		O terreno foi dividido.

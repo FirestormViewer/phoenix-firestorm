@@ -4210,13 +4210,13 @@ el servidor está lleno.
 		La selección no contiene suficientes parcelas alquiladas para unirlas.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		No se puede dividir el terreno.\nHay varias parcelas seleccionadas.\nPrueba a seleccionar un terreno más pequeño.
+		No se puede dividir el terreno. Hay varias parcelas seleccionadas. Prueba a seleccionar un terreno más pequeño.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		No se puede dividir el terreno.\nNo se encuentra la parcela.\nAvísanos con Ayuda -&gt; Notificar fallo...
+		No se puede dividir el terreno. No se encuentra la parcela. Avísanos con Ayuda -&gt; Notificar fallo...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		No se puede dividir el terreno. Está seleccionada la parcela completa.\nPrueba a seleccionar un terreno más pequeño.
+		No se puede dividir el terreno. Está seleccionada la parcela completa. Prueba a seleccionar un terreno más pequeño.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		El terreno se ha dividido.

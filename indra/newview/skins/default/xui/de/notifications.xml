@@ -3986,13 +3986,13 @@ der Server voll ist.
 		Auswahl enthält nicht genügend gemietete Parzellen zum Zusammenlegen.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Land kann nicht geteilt werden.\nMehr als eine Parzelle ist ausgewählt.\nWählen Sie ein kleineres Stück Land aus.
+		Land kann nicht geteilt werden. Mehr als eine Parzelle ist ausgewählt. Wählen Sie ein kleineres Stück Land aus.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Land kann nicht geteilt werden.\nParzelle nicht auffindbar.\nMelden Sie das Problem über „Hilfe“ -&gt; „Fehler melden“...
+		Land kann nicht geteilt werden. Parzelle nicht auffindbar. Melden Sie das Problem über „Hilfe“ -&gt; „Fehler melden“...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Land kann nicht geteilt werden. Die gesamte Parzelle ist ausgewählt.\nWählen Sie ein kleineres Stück Land aus.
+		Land kann nicht geteilt werden. Die gesamte Parzelle ist ausgewählt. Wählen Sie ein kleineres Stück Land aus.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Land wurde geteilt.

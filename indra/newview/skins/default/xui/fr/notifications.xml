@@ -3879,13 +3879,13 @@ le serveur est plein.
 		Pas suffisamment de parcelles louées dans la sélection pour effectuer la fusion.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Division du terrain impossible.\nPlusieurs parcelles sont sélectionnées.\nVeuillez sélectionner un terrain plus petit.
+		Division du terrain impossible. Plusieurs parcelles sont sélectionnées. Veuillez sélectionner un terrain plus petit.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Division du terrain impossible.\nParcelle introuvable.\nSignalez-le en allant à Aide -&gt; Signaler un bug...
+		Division du terrain impossible. Parcelle introuvable. Signalez-le en allant à Aide -&gt; Signaler un bug...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Division du terrain impossible. Toute la parcelle est sélectionnée.\nVeuillez sélectionner un terrain plus petit.
+		Division du terrain impossible. Toute la parcelle est sélectionnée. Veuillez sélectionner un terrain plus petit.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Le terrain a été divisé.

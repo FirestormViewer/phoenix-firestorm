@@ -3870,13 +3870,13 @@ SHA1 指紋：[MD5_DIGEST]
 		未選取足夠租用地段，無法合併。
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		無法分割土地，\n因為你選取了多個地段，\n請縮小所選土地。
+		無法分割土地， 因為你選取了多個地段， 請縮小所選土地。
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		無法分割土地。\n找不到地段。\n請到「幫助 &gt; 回報錯誤……」回報問題
+		無法分割土地。 找不到地段。 請到「幫助 &gt; 回報錯誤……」回報問題
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		無法分割土地。 選取了整個地段。\n請試著縮小所選的土地。
+		無法分割土地。 選取了整個地段。 請試著縮小所選的土地。
 	</notification>
 	<notification name="LandHasBeenDivided">
 		土地分割成功。

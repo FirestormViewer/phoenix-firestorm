@@ -3873,13 +3873,13 @@ sunucu dolu.
 		Seçimde birleştirilecek yeterli sayıda lease edilmiş parsel yok.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Arazi bölünemedi.\nBirden fazla parsel seçili durumda.\nDaha küçük bir arazi parçası seçmeyi deneyin.
+		Arazi bölünemedi. Birden fazla parsel seçili durumda. Daha küçük bir arazi parçası seçmeyi deneyin.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Arazi bölünemiyor.\nParsel bulunamıyor.\nLütfen Yardım -&gt; Hata Bildir ile bildirin...
+		Arazi bölünemiyor. Parsel bulunamıyor. Lütfen Yardım -&gt; Hata Bildir ile bildirin...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Arazi bölünemiyor. Tüm parsel seçilidir.\nDaha küçük bir arazi parçası seçmeyi deneyin.
+		Arazi bölünemiyor. Tüm parsel seçilidir. Daha küçük bir arazi parçası seçmeyi deneyin.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Arazi bölündü.

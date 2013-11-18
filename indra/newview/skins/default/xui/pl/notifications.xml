@@ -4243,13 +4243,13 @@ ponieważ serwer jest pełny.
 		Zbyt mało dzierżawionych działek w zaznaczeniu do przyłączenia.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Nie można podzielić ziemi.\nZaznaczono więcej niż jedną działkę.\nSpróbuj zaznaczyć mniejszy obszar ziemi.
+		Nie można podzielić ziemi. Zaznaczono więcej niż jedną działkę. Spróbuj zaznaczyć mniejszy obszar ziemi.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Nie można podzielić ziemi.\nNie można znaleźć działki.\nProsimy o zgłoszenie błędu, w menu Pomoc.
+		Nie można podzielić ziemi. Nie można znaleźć działki. Prosimy o zgłoszenie błędu, w menu Pomoc.
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Nie można podzielić ziemi. Cała działka jest zaznaczona.\nSpróbuj zaznaczyć mniejszy obszar ziemi.
+		Nie można podzielić ziemi. Cała działka jest zaznaczona. Spróbuj zaznaczyć mniejszy obszar ziemi.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Ziemia została podzielona.
