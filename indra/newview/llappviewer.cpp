@@ -4135,6 +4135,7 @@ void LLAppViewer::processMarkerFiles()
 			{
 				LL_WARNS_ONCE("MarkerFile") << "Locking exec marker failed." << LL_ENDL;
 				mSecondInstance = true; // lost a race? be conservative
+				mMarkerFile.close(); // <FS:ND/> Cannot lock the file and take ownership. Don't keep it open
 			}
 			else
 			{
