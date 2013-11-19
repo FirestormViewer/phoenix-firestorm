@@ -39,8 +39,8 @@
 #include <boost/foreach.hpp>
 #include "boost/lexical_cast.hpp"
 
-// <FS:CR> 30 days isn't very long...
-const int CONVERSATION_LIFETIME = 120; // lifetime of LLConversation is 30 days by spec
+// <FS:CR> Commenting out, let the user decide
+//const int CONVERSATION_LIFETIME = 30; // lifetime of LLConversation is 30 days by spec
 
 struct ConversationParams
 {
@@ -562,6 +562,8 @@ bool LLConversationLog::loadFromFile(const std::string& filename)
 		// CHUI-325
 		// The conversation log should be capped to the last 30 days. Conversations with the last utterance
 		// being over 30 days old should be purged from the conversation log text file on login.
+		// <FS:CR> Shut up, CHUI-325 Let the user decide.
+		U32 CONVERSATION_LIFETIME = gSavedSettings.getU32("FSConversationLogLifetime");
 		if (conversation.isOlderThan(CONVERSATION_LIFETIME))
 		{
 			continue;
