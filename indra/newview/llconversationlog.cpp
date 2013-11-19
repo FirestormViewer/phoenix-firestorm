@@ -39,7 +39,8 @@
 #include <boost/foreach.hpp>
 #include "boost/lexical_cast.hpp"
 
-const int CONVERSATION_LIFETIME = 30; // lifetime of LLConversation is 30 days by spec
+// <FS:CR> 30 days isn't very long...
+const int CONVERSATION_LIFETIME = 120; // lifetime of LLConversation is 30 days by spec
 
 struct ConversationParams
 {
