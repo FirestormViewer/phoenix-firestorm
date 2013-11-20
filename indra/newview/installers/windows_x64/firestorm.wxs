@@ -5,8 +5,8 @@
    Language="1033" Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)" Manufacturer="Phoenix Viewer Project"
    UpgradeCode="3FCFE6FD-1A6F-40f8-8683-CDBFE16CF653">
 
-  <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." MigrateFeatures="no"/>
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
+  <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." MigrateFeatures="no"/>
 
   <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
