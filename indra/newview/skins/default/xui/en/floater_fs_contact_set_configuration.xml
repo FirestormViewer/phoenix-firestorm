@@ -12,6 +12,7 @@
     [NAME] settings
     </floater.string>
     <panel
+     name="top_panel"
      top="18"
      left="0"
      height="80"
@@ -24,8 +25,7 @@
      layout="topleft"
      left="10"
      height="12"
-     name="set_label"
-     width="130">
+     name="set_label">
 Contact Set Settings:
     </text>
     <color_swatch
@@ -49,6 +49,7 @@ Contact Set Settings:
      width="400" />
     </panel>
     <panel
+     name="bottom_panel"
      top_pad="0"
      height="260"
      width="380"
@@ -60,8 +61,7 @@ Contact Set Settings:
      layout="topleft"
      left="10"
      height="12"
-     name="global_label"
-     width="130">
+     name="global_label">
 Global Settings:
     </text>
     <color_swatch
