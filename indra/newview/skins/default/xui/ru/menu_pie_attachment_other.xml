@@ -6,7 +6,10 @@
     <pie_slice label="Блокировать" name="Avatar Mute"/>
     <pie_slice label="Идти к" name="Go to"/>
     <pie_slice label="Отчет..." name="abuse"/>
-    <pie_slice label="Сделать другом" name="Add Friend"/>
+    <pie_menu label="Add &gt;" name="add_avatar">
+        <pie_slice label="Сделать другом" name="Add Friend"/>
+        <pie_slice label="To Set" name="Add to set"/>
+    </pie_menu>
     <pie_slice label="Заплатить" name="Pay..."/>
     <pie_menu name="Avatar Pie More 1" label="Еще >">
         <pie_slice label="Заморозить" name="Freeze..."/>

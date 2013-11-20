@@ -9,7 +9,10 @@
 	</pie_menu>
 	<pie_slice label="Gehe zu" name="Go to"/>
 	<pie_slice label="Melden..." name="abuse"/>
-	<pie_slice label="Freund hinzuf." name="Add Friend"/>
+	<pie_menu label="Hinzufügen &gt;" name="add_avatar">
+		<pie_slice label="Als Freund" name="Add Friend"/>
+		<pie_slice label="Kontaktset" name="Add to set"/>
+	</pie_menu>
 	<pie_slice label="Zahlen..." name="Pay..."/>
 	<pie_menu name="Avatar Pie More 1" label="Mehr >">
 		<pie_slice label="Einfrieren" name="Freeze..."/>

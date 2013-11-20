@@ -37,15 +37,10 @@
         <pie_slice.on_click
             function="Avatar.ReportAbuse" />
     </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="フレンドに追加..."
-        name="Add Friend">
-        <pie_slice.on_click
-            function="Avatar.AddFriend" />
-        <pie_slice.on_enable
-            function="Avatar.EnableAddFriend" />
-    </pie_slice>
+    <pie_menu label="Add &gt;" name="add_avatar">
+        <pie_slice label="フレンドに追加..." name="Add Friend"/>
+        <pie_slice label="To Set" name="Add to set"/>
+    </pie_menu>
     <pie_slice
         enabled="false"
         label="支払い..."

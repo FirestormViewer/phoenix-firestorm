@@ -7,7 +7,10 @@
     </pie_menu>
     <pie_slice label="Idź do" name="Go to"/>
     <pie_slice label="Zgłoś..." name="abuse"/>
-    <pie_slice label="Nowa znajomość..." name="Add Friend"/>
+    <pie_menu label="Add &gt;" name="add_avatar">
+        <pie_slice label="Nowa znajomość..." name="Add Friend"/>
+        <pie_slice label="To Set" name="Add to set"/>
+    </pie_menu>
     <pie_slice label="Zapłać..." name="Pay..."/>
     <pie_menu name="Avatar Pie More 1" label="Więcej &gt;">
         <pie_slice label="Unieruchom" name="Freeze..."/>
