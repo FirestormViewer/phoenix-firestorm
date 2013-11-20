@@ -4690,4 +4690,30 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 			<ignore name="ignore" text="Eine Einstellung wurde auf den Standardwert für das gewählte Oberflächendesign zurückgesetzt."/>
 		</form>
 	</notification>
+	
+	<notification name="AddNewContactSet">
+		Neues Kontakt-Set mit folgendem Namen erstellen:
+		<form name="form">
+			<input name="message">
+				Neues Kontakt-Set
+			</input>
+			<button name="Create" text="Erstellen"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="RemoveContactSet">
+		Soll Kontakt-Set „[SET_NAME]“ wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden!
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn ein Kontakt-Set gelöscht wird."/>
+	</notification>
+	<notification name="RemoveContactFromSet">
+		Soll „[NAME]“ wirklich aus Kontakt-Set „[SET_NAME]“ entfernt werden?
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn jemand aus einem Kontakt-Set entfernt wird."/>
+	</notification>
+	<notification name="RemoveContactsFromSet">
+		Sollen wirklich [COUNT] Avatare aus Kontakt-Set „[SET_NAME]“ entfernt werden?
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn mehrere Avatare aus einem Kontakt-Set entfernt werden."/>
+	</notification>
+	<notification name="AddToContactSetSuccess">
+		„[NAME]“ wurde zu Kontakt-Set „[SET]“ hinzugefügt.
+	</notification>
 </notifications>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_add_contact" title="Hinzufügen zu Kontakt-Set...">
+	<floater.string name="no_sets">
+		Keine Kontakt-Sets verfügbar.
+	</floater.string>
+	<text name="textfield">
+		Kontakt-Set wählen, zu dem [NAME] hinzugefügt werden soll:
+	</text>
+	<button label="Zu Set hinzufügen" name="add_btn"/>
+	<button label="Abbrechen" name="cancel_btn"/>
+</floater>
