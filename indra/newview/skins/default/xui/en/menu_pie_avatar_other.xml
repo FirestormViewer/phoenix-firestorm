@@ -94,7 +94,12 @@
                 function="RLV.EnableIfNot"
                 parameter="shownames" />
         </pie_slice>
-        <pie_separator />
+        <pie_slice
+            label="Add to set..."
+            name="Add to set">
+            <pie_slice.on_click
+                function="Avatar.AddToContactSet" />
+        </pie_slice>
         <pie_slice
             label="Eject..."
             name="Eject..."
