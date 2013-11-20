@@ -41,6 +41,7 @@ class FSPanelContactSets : public LLPanel
 public:
 	FSPanelContactSets();
 	BOOL postBuild();
+	void refreshSetList();
 	
 private:
 	~FSPanelContactSets(){};
@@ -53,7 +54,6 @@ private:
 	void onClickOpenProfile();
 	void onClickStartIM();
 	void onClickOfferTeleport();
-	void onSelectContactSet();
 	void onClickAddSet();
 	void onClickRemoveSet();
 	void onClickConfigureSet();

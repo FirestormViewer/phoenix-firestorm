@@ -66,7 +66,7 @@ BOOL FSPanelContactSets::postBuild()
 	mContactSetCombo = getChild<LLComboBox>("combo_sets");
 	if (mContactSetCombo)
 	{
-		mContactSetCombo->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectContactSet, this));
+		mContactSetCombo->setCommitCallback(boost::bind(&FSPanelContactSets::refreshSetList, this));
 		refreshContactSets();
 	}
 	
@@ -155,7 +155,7 @@ void FSPanelContactSets::refreshContactSets()
 	resetControls();
 }
 
-void FSPanelContactSets::onSelectContactSet()
+void FSPanelContactSets::refreshSetList()
 {
 	generateAvatarList(mContactSetCombo->getSimple());
 	resetControls();

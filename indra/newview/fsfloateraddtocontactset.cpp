@@ -30,6 +30,8 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsfloateraddtocontactset.h"
 
+#include "fscontactsfloater.h"
+#include "fspanelcontactsets.h"
 #include "llnotificationsutil.h"
 #include "llslurl.h"
 #include <boost/foreach.hpp>
@@ -65,6 +67,11 @@ void FSFloaterAddToContactSet::onClickAdd()
 	args["SET"] = set;
 	LLNotificationsUtil::add("AddToContactSetSuccess", args);
 	closeFloater();
+	
+	// Refresh the set list if it's there
+	FSPanelContactSets* panel = dynamic_cast<FSPanelContactSets*>(FSFloaterContacts::findInstance()->getPanelByName("contact_sets_panel"));
+	if (panel)
+		panel->refreshSetList();
 }
 
 void FSFloaterAddToContactSet::onClickCancel()
