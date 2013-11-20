@@ -87,7 +87,7 @@ void FSFloaterAddToContactSet::populateContactSets()
 	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllGroups();
 	if (contact_sets.empty())
 	{
-		mContactSetsCombo->add(getString("no_sets"), LLSD(NULL));
+		mContactSetsCombo->add(getString("no_sets"), LLSD("No Set"));
 		getChild<LLButton>("add_btn")->setEnabled(FALSE);
 	}
 	else
