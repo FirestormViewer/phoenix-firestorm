@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_contact_set_configure" title="Einstellungen Kontakt-Sets">
+	<floater.string name="title">
+		Einstellungen für [NAME]
+	</floater.string>
+	<panel name="top_panel">
+		<text name="set_label">
+			Kontakt-Set-Einstellungen:
+		</text>
+		<color_swatch label="Farbwahl" name="set_swatch" tool_tip="Anklicken, um Farbauswahl zu öffnen"/>
+		<check_box label="Zeige Benachrichtigungen" name="show_set_notifications"/>
+	</panel>
+	<panel name="bottom_panel">
+		<text name="global_label">
+			Globale Einstellungen:
+		</text>
+		<color_swatch label="Farbe" name="global_swatch" tool_tip="Anklicken, um Farbauswahl zu öffnen"/>
+		<text name="label_online">
+			Online-Benachrichtigungen:
+		</text>
+		<check_box label="Online-Meldungen für ALLE Freunde als Toasts anzeigen" name="ChatOnlineNotification"/>
+		<check_box label="Online-Meldungen für ALLE Freunde im Chat anzeigen" name="OnlineOfflinetoNearbyChat"/>
+		<check_box label="Online-Meldungen für bestimmte Sets als Toasts anzeigen" name="FSContactSetsNotificationToast"/>
+		<check_box label="Online-Meldungen für bestimmte Sets im Chat anzeigen" name="FSContactSetsNotificationNearbyChat"/>
+		<text name="label_colors">
+			Benutzerdefinierte Farben:
+		</text>
+		<check_box label="Farbe des Minimap-Icon eines Freundes anhand Kontakt-Set" name="FSContactSetsColorizeMiniMap"/>
+		<check_box label="Farbe des Namens-Tags eines Freundes anhand Kontakt-Set" name="FSContactSetsColorizeNameTag"/>
+		<check_box label="Farbe des Radar-Eintrags eines Freundes anhand Kontakt-Set" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Chatfarbe eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeChat"/>
+	</panel>
+</floater>

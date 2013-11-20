@@ -10,8 +10,13 @@
         label="Aller là"/>
     <pie_slice name="abuse"
         label="Signaler"/>
-    <pie_slice name="Add Friend"
-        label="Prendre en ami"/>
+    <pie_menu name="add_avatar"
+         label="Add &gt;">
+        <pie_slice name="Add Friend"
+            label="Prendre en ami"/>
+        <pie_slice name="Add to set"
+            label="To Set"/>
+    </pie_menu>
     <pie_slice name="Pay..."
         label="Payer"/>
     <pie_slice name="Send IM..."
