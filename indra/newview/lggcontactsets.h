@@ -94,10 +94,8 @@ public:
 
 	bool isInternalGroupName(const std::string& groupName);
 	bool hasGroups() { return !mGroups.empty(); }
-
-private:
+	
 	typedef boost::unordered_set<LLUUID, FSUUIDHash> uuid_set_t;
-	typedef boost::unordered_map<LLUUID, std::string, FSUUIDHash> uuid_map_t;
 
 	class ContactSetGroup
 	{
@@ -112,7 +110,10 @@ private:
 		bool			mNotify;
 		LLColor4		mColor;
 	};
-
+	ContactSetGroup* getGroup(const std::string& groupName);
+	
+private:	
+	typedef boost::unordered_map<LLUUID, std::string, FSUUIDHash> uuid_map_t;
 
 	LGGContactSets();
 	~LGGContactSets();
@@ -135,8 +136,6 @@ private:
 
 	typedef std::map<std::string, ContactSetGroup*> group_map_t;
 	group_map_t mGroups;
-
-	ContactSetGroup* getGroup(const std::string& groupName);
 
 	void importFromLLSD(const LLSD& data);
 	LLSD exportToLLSD();

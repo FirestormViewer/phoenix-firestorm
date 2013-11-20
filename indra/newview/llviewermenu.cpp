@@ -1344,7 +1344,7 @@ class LLAdvancedDumpScriptedCamera : public view_listener_t
 	{
 		handle_dump_followcam(NULL);
 		return true;
-}
+	}
 };
 
 
@@ -1596,7 +1596,7 @@ class LLAdvancedLoadUIFromXML : public view_listener_t
 	{
 		handle_load_from_xml(NULL);
 		return true;
-}
+	}
 };
 
 
@@ -1612,7 +1612,7 @@ class LLAdvancedSaveUIToXML : public view_listener_t
 	{
 		handle_save_to_xml(NULL);
 		return true;
-}
+	}
 };
 
 
@@ -1622,7 +1622,7 @@ class LLAdvancedSendTestIms : public view_listener_t
 	{
 		LLIMModel::instance().testMessages();
 		return true;
-}
+	}
 };
 
 
@@ -1767,7 +1767,7 @@ class LLAdvancedToggleCharacterGeometry : public view_listener_t
 	{
 		handle_god_request_avatar_geometry(NULL);
 		return true;
-}
+	}
 };
 
 
@@ -9094,6 +9094,21 @@ class FSDumpSimulatorFeaturesToChat : public view_listener_t
 };
 // </FS:CR> Dump SimulatorFeatures to chat
 
+// <FS:CR> Add to contact set
+class FSAddToContactSet : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLVOAvatar* avatarp = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+		if (avatarp)
+		{
+			LLFloaterReg::showInstance("fs_add_contact", LLSD(avatarp->getID()), TRUE);
+		}
+		return true;
+	}
+};
+// </FS:CR> Add to contact set
+
 // <FS:CR> Opensim menu item visibility control
 class LLGridCheck : public view_listener_t
 {
@@ -10909,6 +10924,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSStreamListImportXML(), "Streamlist.xml_import");
 	// <FS:CR> Dump SimulatorFeatures to chat
 	view_listener_t::addMenu(new FSDumpSimulatorFeaturesToChat(), "Develop.DumpSimFeaturesToChat");
+	// <FS:CR> Add to contact set
+	view_listener_t::addMenu(new FSAddToContactSet(), "Avatar.AddToContactSet");
 
 	// <FS:Techwolf Lupindo> export
 	view_listener_t::addMenu(new FSObjectExport(), "Object.Export");

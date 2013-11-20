@@ -133,7 +133,9 @@ set(viewer_SOURCE_FILES
     fscontactsfloater.cpp
     fsdata.cpp
     fsexportperms.cpp
+    fsfloateraddtocontactset.cpp
     fsfloaterblocklist.cpp
+    fsfloatercontactsetconfiguration.cpp
     fsfloaterexport.cpp
     fsfloatergroup.cpp
     fsfloatergrouptitles.cpp
@@ -162,6 +164,7 @@ set(viewer_SOURCE_FILES
     fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
     fspanelclassified.cpp
+    fspanelcontactsets.cpp
     fspanelimcontrolpanel.cpp
     fspanelprefs.cpp
     fspanelprofile.cpp
@@ -828,7 +831,9 @@ set(viewer_HEADER_FILES
     fscontactsfloater.h
     fsdata.h
     fsexportperms.h
+    fsfloateraddtocontactset.h
     fsfloaterblocklist.h
+    fsfloatercontactsetconfiguration.h
     fsfloaterexport.h
     fsfloatergroup.h
     fsfloatergrouptitles.h
@@ -857,6 +862,7 @@ set(viewer_HEADER_FILES
     fsnearbychatcontrol.h
     fsnearbychathub.h
     fsnearbychatvoicemonitor.h
+    fspanelcontactsets.h
     fspanelclassified.h
     fspanelimcontrolpanel.h
     fspanelprefs.h

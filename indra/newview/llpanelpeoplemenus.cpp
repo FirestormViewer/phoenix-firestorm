@@ -85,6 +85,7 @@ LLContextMenu* PeopleContextMenu::createMenu()
 		registrar.add("Avatar.Calllog",			boost::bind(&LLAvatarActions::viewChatHistory,			id));
 		// <FS:Ansariel> Firestorm additions
 		registrar.add("Avatar.GroupInvite",		boost::bind(&LLAvatarActions::inviteToGroup,			id));
+		registrar.add("Avatar.AddToContactSet",	boost::bind(&LLAvatarActions::addToContactSet,			id));	// [FS:CR]
 
 		enable_registrar.add("Avatar.EnableItem", boost::bind(&PeopleContextMenu::enableContextMenuItem, this, _2));
 		enable_registrar.add("Avatar.CheckItem",  boost::bind(&PeopleContextMenu::checkContextMenuItem,	this, _2));

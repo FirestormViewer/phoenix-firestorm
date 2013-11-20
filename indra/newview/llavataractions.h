@@ -197,6 +197,11 @@ public:
 	 * Open csr page for avatar
 	 */	
 	static void csr(const LLUUID& id, std::string name);
+	
+	/**
+	 * [FS:CR] Add avatar to contact set
+	 */
+	static void addToContactSet(const LLUUID& agent_id);
 
 	/**
 	 * Checks whether we can offer a teleport to the avatar, only offline friends

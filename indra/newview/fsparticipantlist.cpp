@@ -694,6 +694,7 @@ LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
 	registrar.add("Avatar.Share", boost::bind(&LLAvatarActions::share, mUUIDs.front()));
 	registrar.add("Avatar.Pay",	boost::bind(&LLAvatarActions::pay, mUUIDs.front()));
 	registrar.add("Avatar.Call", boost::bind(&LLAvatarActions::startCall, mUUIDs.front()));
+	registrar.add("Avatar.AddToContactSet", boost::bind(&LLAvatarActions::addToContactSet, mUUIDs.front()));
 
 	registrar.add("ParticipantList.ModerateVoice", boost::bind(&LLParticipantList::LLParticipantListMenu::moderateVoice, this, _2));
 

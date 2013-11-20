@@ -1234,6 +1234,14 @@ void LLAvatarActions::viewChatHistoryExternally(const LLUUID& id)
 }
 // </FS:CR>
 
+// [FS:CR] Add to contact set
+//static
+void LLAvatarActions::addToContactSet(const LLUUID& agent_id)
+{
+	LLFloaterReg::showInstance("fs_add_contact", agent_id, TRUE);
+}
+// [/FS:CR] Add to contact set
+
 //== private methods ========================================================================================
 
 // static

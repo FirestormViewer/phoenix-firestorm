@@ -11548,4 +11548,78 @@ The value you set for the number of concurrent requests to load mesh objects, [V
     </form>
   </notification>
   <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
+
+  <notification
+   icon="alertmodal.tga"
+   name="AddNewContactSet"
+   type="alertmodal">
+    <tag>contact set</tag>
+Create new contact set with the name:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text" default="true">
+      New Contact Set
+      </input>
+      <button
+       default="true"
+       index="0"
+       name="Create"
+       text="Create"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RemoveContactSet"
+   type="alertmodal">
+Are you sure you want to remove [SET_NAME]? You won&apos;t be able to restore it.
+    <tag>contact set</tag>
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before removing a contact set"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Ok"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RemoveContactFromSet"
+   type="alertmodal">
+Are you sure you want to remove [NAME] from [SET_NAME]?
+    <tag>contact set</tag>
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before removing someone from a contact set"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Ok"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RemoveContactsFromSet"
+   type="alertmodal">
+Are you sure you want to remove [COUNT] avatars from [SET_NAME]?
+    <tag>contact set</tag>
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm before removing multiple avatars from a contact set"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Ok"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="AddToContactSetSuccess"
+   type="notify">
+    <tag>Export</tag>
+[NAME] was added to [SET].
+  </notification>
+
 </notifications>

@@ -65,15 +65,13 @@
 	   right="-1"
        name="groups_panel"/>
 
-    <!-- Ansariel: Commented out. XML file does not exist. What is it?
 	  <panel
 	   bottom="0"
-	   filename="panel_fs_contacts_lists.xml"
-	   label="Friends &amp; Contacts"
+	   filename="panel_fs_contacts_sets.xml"
+	   class="contact_sets_panel"
+	   label="Contact Sets"
 	   left="0"
 	   right="-1"
-	   name="contacts_lists_panel" />
-     -->
-	   
+	   name="contact_sets_panel" />
     </tab_container>
 </floater>

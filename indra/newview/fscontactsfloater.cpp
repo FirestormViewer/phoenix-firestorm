@@ -443,6 +443,11 @@ std::string FSFloaterContacts::getActiveTabName() const
 	return mTabContainer->getCurrentPanel()->getName();
 }
 
+LLPanel* FSFloaterContacts::getPanelByName(const std::string& panel_name)
+{
+	return mTabContainer->getPanelByName(panel_name);
+}
+
 LLUUID FSFloaterContacts::getCurrentItemID() const
 {
 	std::string cur_tab = getActiveTabName();

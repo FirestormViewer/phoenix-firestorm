@@ -62,6 +62,7 @@ public:
 	static FSFloaterContacts* findInstance();
 
 	void openTab(const std::string& name);
+	LLPanel* getPanelByName(const std::string& panel_name);
 
 	void					sortFriendList();
 

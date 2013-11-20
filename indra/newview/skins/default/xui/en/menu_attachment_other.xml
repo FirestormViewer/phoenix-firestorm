@@ -22,6 +22,13 @@
         <menu_item_call.on_enable
          function="Avatar.EnableAddFriend" />
     </menu_item_call>
+	<menu_item_call
+	 label="Add to Set"
+	 layout="topleft"
+	 name="Add to Set">
+		<menu_item_call.on_click
+		 function="Avatar.AddToContactSet" />
+	</menu_item_call>
     <menu_item_call
      label="IM"
      name="Send IM...">
