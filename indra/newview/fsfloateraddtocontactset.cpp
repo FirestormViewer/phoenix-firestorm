@@ -59,7 +59,7 @@ BOOL FSFloaterAddToContactSet::postBuild()
 void FSFloaterAddToContactSet::onClickAdd()
 {
 	const std::string set = mContactSetsCombo->getSimple();
-	if (LGGContactSets::getInstance()->isNonFriend(mAgentID))
+	if (!LLAvatarTracker::instance().isBuddy(mAgentID))
 		LGGContactSets::getInstance()->addNonFriendToList(mAgentID);
 	LGGContactSets::getInstance()->addFriendToGroup(mAgentID, set);
 	LLSD args;

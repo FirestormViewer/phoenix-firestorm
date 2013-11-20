@@ -176,7 +176,7 @@ void FSPanelContactSets::handlePickerCallback(const uuid_vec_t& ids, const std::
 	
 	BOOST_FOREACH(const LLUUID& id, ids)
 	{
-		if (LGGContactSets::getInstance()->isNonFriend(id))
+		if (!LLAvatarTracker::instance().isBuddy(id))
 			LGGContactSets::getInstance()->addNonFriendToList(id);
 		LGGContactSets::getInstance()->addFriendToGroup(id, set);
 	}
@@ -193,7 +193,7 @@ void FSPanelContactSets::onClickRemoveAvatar()
 	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
 	{
 		LGGContactSets::getInstance()->removeFriendFromGroup(id, set);
-		if (LGGContactSets::getInstance()->isNonFriend(id))
+		if (!LLAvatarTracker::instance().isBuddy(id) && LGGContactSets::getInstance()->getFriendGroups(id).size() > 1)
 			LGGContactSets::getInstance()->removeNonFriendFromList(id);
 	}
 	if (set == mContactSetCombo->getSimple())
