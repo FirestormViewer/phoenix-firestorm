@@ -48,7 +48,6 @@ static LLRegisterPanelClassWrapper<FSPanelContactSets> t_panel_contact_sets("con
 FSPanelContactSets::FSPanelContactSets() : LLPanel()
 , mContactSetCombo(NULL)
 , mAvatarList(NULL)
-, mAvatarSelections(NULL)
 {
 }
 
