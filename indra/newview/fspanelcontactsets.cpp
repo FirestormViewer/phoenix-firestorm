@@ -33,6 +33,7 @@
 
 #include "fspanelcontactsets.h"
 #include "fscontactsfloater.h"
+#include "lggcontactsets.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"
 #include "llfloateravatarpicker.h"
@@ -103,16 +104,6 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 	{
 		
 	}
-	//else if (contact_set == "Friends")
-	//{
-	//	LLAvatarTracker::buddy_map_t buddies;
-	//	LLAvatarTracker::instance().copyBuddyList(buddies);
-	//	LLAvatarTracker::buddy_map_t::const_iterator buddy = buddies.begin();
-	//	for (; buddy != buddies.end(); ++buddy)
-	//	{
-	//		avatars.push_back(buddy->first);
-	//	}
-	//}
 	else
 	{
 		LGGContactSets::ContactSetGroup* group = LGGContactSets::getInstance()->getGroup(contact_set);	// UGLY!
@@ -167,8 +158,6 @@ void FSPanelContactSets::refreshContactSets()
 	{
 		mContactSetCombo->add(getString("no_sets"), LLSD("No Set"));
 	}
-	// This only gets enabled for testing.
-	//mContactSetCombo->add(LLTrans::getString("InvFolder Friends"), LLSD("Friends"), ADD_TOP);
 	resetControls();
 }
 
@@ -203,18 +192,22 @@ void FSPanelContactSets::onClickRemoveAvatar()
 {
 	if (!(mAvatarList && mContactSetCombo)) return;
 	
+	LLSD payload, args;
 	std::string set = mContactSetCombo->getSimple();
+	S32 selected_size = mAvatarSelections.size();
+	args["SET_NAME"] = set;
+	args["TARGET"] = (selected_size > 1 ? llformat("%d", selected_size) : LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString());
+	payload["contact_set"] = set;
 	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
 	{
-		LGGContactSets::getInstance()->removeFriendFromGroup(id, set);
-		if (!LLAvatarTracker::instance().isBuddy(id) && LGGContactSets::getInstance()->getFriendGroups(id).size() > 1)
-			LGGContactSets::getInstance()->removeNonFriendFromList(id);
+		payload["ids"].append(id);
 	}
+	LLNotificationsUtil::add((selected_size > 1 ? "RemoveContactsFromSet" : "RemoveContactFromSet"), args, payload, &LGGContactSets::handleRemoveAvatarFromSetCallback);
 }
 
 void FSPanelContactSets::onClickAddSet()
 {
-	LLNotificationsUtil::add("AddNewContactSet", LLSD(), LLSD(), &handleAddContactSetCallback);
+	LLNotificationsUtil::add("AddNewContactSet", LLSD(), LLSD(), &LGGContactSets::handleAddContactSetCallback);
 }
 
 void FSPanelContactSets::onClickRemoveSet()
@@ -223,7 +216,7 @@ void FSPanelContactSets::onClickRemoveSet()
 	std::string set = mContactSetCombo->getSimple();
 	args["SET_NAME"] = set;
 	payload["contact_set"] = set;
-	LLNotificationsUtil::add("RemoveContactSet", args, payload, &handleRemoveContactSetCallback);
+	LLNotificationsUtil::add("RemoveContactSet", args, payload, &LGGContactSets::handleRemoveContactSetCallback);
 }
 
 void FSPanelContactSets::onClickConfigureSet()
@@ -257,31 +250,4 @@ void FSPanelContactSets::onClickStartIM()
 void FSPanelContactSets::onClickOfferTeleport()
 {
 	LLAvatarActions::offerTeleport(mAvatarSelections);
-}
-
-////////////////////
-// Static methods //
-////////////////////
-
-// static
-bool FSPanelContactSets::handleAddContactSetCallback(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if (option == 0)
-	{
-		std::string set_name = response["message"].asString();
-		LGGContactSets::getInstance()->addGroup(set_name);
-	}
-	return false;
-}
-
-// static
-bool FSPanelContactSets::handleRemoveContactSetCallback(const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if (option == 0)
-	{
-		LGGContactSets::getInstance()->deleteGroup(notification["payload"]["contact_set"].asString());
-	}
-	return false;
 }

@@ -62,10 +62,6 @@ private:
 	void removeAvatarFromSet();
 	void resetControls();
 	
-	static bool handleAddContactSetCallback(const LLSD& notification, const LLSD& response);
-	static bool handleRemoveContactSetCallback(const LLSD& notification, const LLSD& response);
-	static bool handleRemoveAvatarFromSetCallback(const LLSD& notification, const LLSD& response);
-	
 	void updateSets(LGGContactSets::EContactSetUpdate type);
 	boost::signals2::connection mContactSetChangedConnection;
 	

@@ -11590,7 +11590,7 @@ Are you sure you want to remove [SET_NAME]? You won&apos;t be able to restore it
    icon="alertmodal.tga"
    name="RemoveContactFromSet"
    type="alertmodal">
-Are you sure you want to remove [NAME] from [SET_NAME]?
+Are you sure you want to remove [TARGET] from [SET_NAME]?
     <tag>contact set</tag>
     <tag>confirm</tag>
     <usetemplate
@@ -11604,7 +11604,7 @@ Are you sure you want to remove [NAME] from [SET_NAME]?
    icon="alertmodal.tga"
    name="RemoveContactsFromSet"
    type="alertmodal">
-Are you sure you want to remove [COUNT] avatars from [SET_NAME]?
+Are you sure you want to remove these [TARGET] avatars from [SET_NAME]?
     <tag>contact set</tag>
     <tag>confirm</tag>
     <usetemplate

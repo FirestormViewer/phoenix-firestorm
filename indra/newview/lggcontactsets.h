@@ -125,6 +125,12 @@ public:
 		return mChangedSignal.connect(cb);
 	};
 	
+	// Notification callbacks
+	static bool handleAddContactSetCallback(const LLSD& notification, const LLSD& response);
+	static bool handleRemoveContactSetCallback(const LLSD& notification, const LLSD& response);
+	static bool handleRemoveAvatarFromSetCallback(const LLSD& notification, const LLSD& response);
+	// [/FS:CR]
+	
 private:	
 	typedef boost::unordered_map<LLUUID, std::string, FSUUIDHash> uuid_map_t;
 

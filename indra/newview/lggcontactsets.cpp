@@ -28,6 +28,7 @@
 #include "lldir.h"
 #include "llmutelist.h"
 #include "llnotifications.h"
+#include "llnotificationsutil.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
 #include "fsdata.h"
@@ -1002,3 +1003,47 @@ LGGContactSets::ContactSetGroup* LGGContactSets::getGroup(const std::string& gro
 	}
 	return NULL;
 }
+
+// static
+bool LGGContactSets::handleAddContactSetCallback(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		std::string set_name = response["message"].asString();
+		LGGContactSets::getInstance()->addGroup(set_name);
+	}
+	return false;
+}
+
+// static
+bool LGGContactSets::handleRemoveContactSetCallback(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		LGGContactSets::getInstance()->deleteGroup(notification["payload"]["contact_set"].asString());
+	}
+	return false;
+}
+
+// static
+bool LGGContactSets::handleRemoveAvatarFromSetCallback(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		for(LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray();
+			it != notification["payload"]["ids"].endArray();
+			++it)
+		{
+			LLUUID id = it->asUUID();
+			std::string set = notification["payload"]["contact_set"].asString();
+			LGGContactSets::getInstance()->removeFriendFromGroup(id, set);
+			if (!LLAvatarTracker::instance().isBuddy(id) && LGGContactSets::getInstance()->getFriendGroups(id).size() > 1)
+				LGGContactSets::getInstance()->removeNonFriendFromList(id);
+		}
+	}
+	return false;
+}
+
