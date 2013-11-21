@@ -69,6 +69,14 @@ Looking for people to hang out with? Use the search box to find topics or conten
 	<string
 		name="avatar_name_count"
 		value="Name [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
+	<panel.string
+		name="empty_list">
+		This contact set is empty.
+	</panel.string>
+	<panel.string
+		name="no_sets">
+		No contact sets available.
+	</panel.string>
 
 	<tab_container
 		follows="all"
