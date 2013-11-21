@@ -32,7 +32,16 @@ No contact sets available.
 	 top_pad="4"
 	 left="8"
 	 name="contact_sets"
-	 width="265"/>
+	 width="239"/>
+    <button
+     left_pad="2"
+     top_delta="0"
+     follows="top|right"
+     layout="topleft"
+     height="24"
+	 image_overlay="AddItem_Off"
+     name="add_set_btn"
+     width="24" />
 	<button
 	 left="8"
 	 top_pad="3"

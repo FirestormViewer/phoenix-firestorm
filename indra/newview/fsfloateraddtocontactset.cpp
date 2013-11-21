@@ -53,6 +53,7 @@ BOOL FSFloaterAddToContactSet::postBuild()
 	
 	childSetAction("add_btn",	boost::bind(&FSFloaterAddToContactSet::onClickAdd, this));
 	childSetAction("cancel_btn", boost::bind(&FSFloaterAddToContactSet::onClickCancel, this));
+	childSetAction("add_set_btn", boost::bind(&FSFloaterAddToContactSet::onClickAddSet, this));
 	
 	return TRUE;
 }
@@ -75,6 +76,11 @@ void FSFloaterAddToContactSet::onClickCancel()
 	closeFloater();
 }
 
+void FSFloaterAddToContactSet::onClickAddSet()
+{
+	LLNotificationsUtil::add("AddNewContactSet", LLSD(), LLSD(), &LGGContactSets::handleAddContactSetCallback);
+}
+
 void FSFloaterAddToContactSet::updateSets(LGGContactSets::EContactSetUpdate type)
 {
 	if (type)
@@ -85,12 +91,11 @@ void FSFloaterAddToContactSet::populateContactSets()
 {
 	if (!mContactSetsCombo) return;
 	
-	mContactSetsCombo->clear();
+	mContactSetsCombo->clearRows();
 	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllGroups();
 	if (contact_sets.empty())
 	{
 		mContactSetsCombo->add(getString("no_sets"), LLSD("No Set"));
-		getChild<LLButton>("add_btn")->setEnabled(FALSE);
 	}
 	else
 	{
@@ -99,4 +104,5 @@ void FSFloaterAddToContactSet::populateContactSets()
 			mContactSetsCombo->add(set_name);
 		}
 	}
+	getChild<LLButton>("add_btn")->setEnabled(!contact_sets.empty());
 }

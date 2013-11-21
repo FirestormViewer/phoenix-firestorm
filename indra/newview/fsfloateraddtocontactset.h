@@ -46,6 +46,7 @@ private:
 	~FSFloaterAddToContactSet(){};
 	void onClickAdd();
 	void onClickCancel();
+	void onClickAddSet();
 	void populateContactSets();
 	
 	void updateSets(LGGContactSets::EContactSetUpdate type);
