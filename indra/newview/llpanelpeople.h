@@ -35,6 +35,10 @@
 
 #include "llfloater.h"
 
+// [FS:CR] Contact sets
+#include "lggcontactsets.h"
+#include <boost/signals2.hpp>
+
 class LLAvatarList;
 class LLAvatarName;
 class LLFilterEditor;
@@ -148,6 +152,7 @@ private:
 	LLAvatarList*			mAllFriendList;
 	LLAvatarList*			mSuggestedFriends;
 	LLAvatarList*			mNearbyList;
+	LLAvatarList*			mContactSetList;	// [FS:CR] Contact sets
 	// <FS:Ansariel> Firestorm radar
 	FSPanelRadar*			mRadarPanel;
 	// </FS:Ansariel> Firestorm radar
@@ -166,6 +171,19 @@ private:
 	Updater*				mFacebookListUpdater;
 	Updater*				mButtonsUpdater;
     LLHandle< LLFloater >	mPicker;
+	
+	// [FS:CR] Contact sets
+	bool					onContactSetsEnable(const LLSD& userdata);
+	void					onContactSetsMenuItemClicked(const LLSD& userdata);
+	void					handlePickerCallback(const uuid_vec_t& ids, const std::string& set);
+	void					refreshContactSets();
+	void					generateContactList(const std::string& contact_set);
+	void					generateCurrentContactList();
+	
+	void					updateContactSets(LGGContactSets::EContactSetUpdate type);
+	boost::signals2::connection mContactSetChangedConnection;
+	LLComboBox* mContactSetCombo;
+	// [/FS:CR]
 };
 
 #endif //LL_LLPANELPEOPLE_H

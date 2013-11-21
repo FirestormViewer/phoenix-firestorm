@@ -38,6 +38,7 @@
 #include "llcallingcard.h"
 #include "llfloateravatarpicker.h"
 #include "llfloaterreg.h"
+#include "llpanelpeoplemenus.h"
 #include "llslurl.h"
 #include "lltrans.h"
 
@@ -81,6 +82,7 @@ BOOL FSPanelContactSets::postBuild()
 	{
 		mAvatarList->setCommitCallback(boost::bind(&FSPanelContactSets::onSelectAvatar, this));
 		mAvatarList->setNoItemsCommentText(getString("empty_list"));
+		mAvatarList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 		generateAvatarList(mContactSetCombo->getSimple());
 	}
 	

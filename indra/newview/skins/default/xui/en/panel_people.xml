@@ -57,6 +57,14 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
     <string
      name="AltMiniMapToolTipMsg"
      value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+    <panel.string
+     name="empty_list">
+    This contact set is empty.
+    </panel.string>
+    <panel.string
+     name="no_sets">
+    No contact sets available.
+    </panel.string>
     <tab_container
      bottom="-10"
      follows="all"
@@ -678,5 +686,34 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
            top="0"
            right="-1" />
         </panel>
+
+<!-- ============================== CONTACT SETS tab ======================= -->
+
+        <panel
+         background_opaque="false"
+         background_visible="false"
+         follows="all"
+         height="383"
+         label="Contact Sets"
+         layout="topleft"
+         left="0"
+         help_topic="people_contact_sets_tab"
+         name="contact_sets_panel"
+         right="-1"
+         top="0">
+            <panel
+             class="panel_people_contacts_sidetray"
+             height="383"
+             name="panel_people_contacts_sidetray"
+             filename="panel_people_contact_sets.xml"
+             follows="all"
+             label="Contact Sets"
+             layout="topleft"
+             left="0"
+             font="SansSerifBold"
+             top="0"
+             right="-1" />
+        </panel>
+
     </tab_container>
 </panel>
