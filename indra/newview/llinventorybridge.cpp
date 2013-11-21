@@ -6761,7 +6761,7 @@ public:
 		if(item)
 		{
 			if ( get_is_item_worn(mUUID) ) LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
-			else LLAppearanceMgr::instance().wearItemOnAvatar(mUUID /*item->getUUID()*/, true, true);
+			else LLAppearanceMgr::instance().wearItemOnAvatar(mUUID /*item->getUUID()*/, true, !gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing"));
 		}
 		// </FS>
 	}

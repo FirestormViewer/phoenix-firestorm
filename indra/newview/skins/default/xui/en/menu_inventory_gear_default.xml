@@ -148,6 +148,17 @@
          function="Inventory.GearDefault.Check"
          parameter="add_objects_on_double_click" />
     </menu_item_check>
+    <menu_item_check
+     label="Add clothes on double click"
+     layout="topleft"
+     name="add_invclothing_toggle">
+       <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="add_clothing_on_double_click" />
+        <on_check
+         function="Inventory.GearDefault.Check"
+         parameter="add_clothing_on_double_click" />
+    </menu_item_check>
     <menu_item_separator
      layout="topleft" />
     <menu_item_call
