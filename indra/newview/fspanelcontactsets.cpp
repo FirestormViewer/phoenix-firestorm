@@ -144,7 +144,6 @@ void FSPanelContactSets::updateSets(LGGContactSets::EContactSetUpdate type)
 	{
 		case LGGContactSets::UPDATED_LISTS:
 			refreshContactSets();
-			break;
 		case LGGContactSets::UPDATED_MEMBERS:
 			refreshSetList();
 			break;
