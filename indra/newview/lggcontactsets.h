@@ -21,6 +21,7 @@
 
 #include "v4color.h"
 #include "llsingleton.h"
+#include <boost/signals2.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 
@@ -112,6 +113,18 @@ public:
 	};
 	ContactSetGroup* getGroup(const std::string& groupName);
 	
+	// [FS:CR] Signals for updating the various UI
+	typedef enum e_contact_set_update {
+		UPDATED_MEMBERS = 0,
+		UPDATED_LISTS
+	} EContactSetUpdate;
+	typedef boost::signals2::signal<void(EContactSetUpdate type)> contact_set_changed_signal_t;
+	contact_set_changed_signal_t mChangedSignal;
+	boost::signals2::connection setContactSetChangeCallback(const contact_set_changed_signal_t::slot_type& cb)
+	{
+		return mChangedSignal.connect(cb);
+	};
+	
 private:	
 	typedef boost::unordered_map<LLUUID, std::string, FSUUIDHash> uuid_map_t;
 
@@ -133,13 +146,12 @@ private:
 	std::string getDefaultFileName();
 	std::string getOldFileName();
 
-
-	typedef std::map<std::string, ContactSetGroup*> group_map_t;
-	group_map_t mGroups;
-
 	void importFromLLSD(const LLSD& data);
 	LLSD exportToLLSD();
 	void saveToDisk();
+	
+	typedef std::map<std::string, ContactSetGroup*> group_map_t;
+	group_map_t mGroups;
 
 	LLColor4		mDefaultColor;
 	uuid_set_t		mExtraAvatars;

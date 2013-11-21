@@ -33,7 +33,6 @@
 
 #include "fspanelcontactsets.h"
 #include "fscontactsfloater.h"
-#include "lggcontactsets.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"
 #include "llfloateravatarpicker.h"
@@ -49,6 +48,13 @@ FSPanelContactSets::FSPanelContactSets() : LLPanel()
 , mContactSetCombo(NULL)
 , mAvatarList(NULL)
 {
+	mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSPanelContactSets::updateSets, this, _1));
+}
+
+FSPanelContactSets::~FSPanelContactSets()
+{
+	if (mContactSetChangedConnection.connected())
+		mContactSetChangedConnection.disconnect();
 }
 
 BOOL FSPanelContactSets::postBuild()
@@ -132,6 +138,19 @@ void FSPanelContactSets::resetControls()
 	childSetEnabled("offer_teleport_btn", has_selection);	// Should probably check if they're online...
 }
 
+void FSPanelContactSets::updateSets(LGGContactSets::EContactSetUpdate type)
+{
+	switch (type)
+	{
+		case LGGContactSets::UPDATED_LISTS:
+			refreshContactSets();
+			break;
+		case LGGContactSets::UPDATED_MEMBERS:
+			refreshSetList();
+			break;
+	}
+}
+
 void FSPanelContactSets::refreshContactSets()
 {
 	if (!mContactSetCombo) return;
@@ -179,9 +198,6 @@ void FSPanelContactSets::handlePickerCallback(const uuid_vec_t& ids, const std::
 			LGGContactSets::getInstance()->addNonFriendToList(id);
 		LGGContactSets::getInstance()->addFriendToGroup(id, set);
 	}
-	// Only refresh the list if it's currently open.
-	if (set == mContactSetCombo->getSimple())
-		generateAvatarList(set);
 }
 
 void FSPanelContactSets::onClickRemoveAvatar()
@@ -195,8 +211,6 @@ void FSPanelContactSets::onClickRemoveAvatar()
 		if (!LLAvatarTracker::instance().isBuddy(id) && LGGContactSets::getInstance()->getFriendGroups(id).size() > 1)
 			LGGContactSets::getInstance()->removeNonFriendFromList(id);
 	}
-	if (set == mContactSetCombo->getSimple())
-		generateAvatarList(set);
 }
 
 void FSPanelContactSets::onClickAddSet()
@@ -258,13 +272,6 @@ bool FSPanelContactSets::handleAddContactSetCallback(const LLSD& notification, c
 	{
 		std::string set_name = response["message"].asString();
 		LGGContactSets::getInstance()->addGroup(set_name);
-		FSPanelContactSets* panel = dynamic_cast<FSPanelContactSets*>(FSFloaterContacts::findInstance()->getPanelByName("contact_sets_panel"));
-		if (panel)
-		{
-			panel->refreshContactSets();
-			panel->mContactSetCombo->setSimple(set_name);
-			panel->generateAvatarList(set_name);
-		}
 	}
 	return false;
 }
@@ -276,12 +283,6 @@ bool FSPanelContactSets::handleRemoveContactSetCallback(const LLSD& notification
 	if (option == 0)
 	{
 		LGGContactSets::getInstance()->deleteGroup(notification["payload"]["contact_set"].asString());
-		FSPanelContactSets* panel = dynamic_cast<FSPanelContactSets*>(FSFloaterContacts::findInstance()->getPanelByName("contact_sets_panel"));
-		if (panel)
-		{
-			panel->refreshContactSets();
-			panel->generateAvatarList(panel->mContactSetCombo->getSimple());
-		}
 	}
 	return false;
 }

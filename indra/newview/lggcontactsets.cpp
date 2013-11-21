@@ -769,6 +769,7 @@ void LGGContactSets::addFriendToGroup(const LLUUID& friend_id, const std::string
 	{
 		mGroups[groupName]->mFriends.insert(friend_id);
 		saveToDisk();
+		mChangedSignal(UPDATED_MEMBERS);
 	}
 }
 
@@ -776,6 +777,7 @@ void LGGContactSets::addNonFriendToList(const LLUUID& non_friend_id)
 {
 	mExtraAvatars.insert(non_friend_id);
 	saveToDisk();
+	mChangedSignal(UPDATED_MEMBERS);
 }
 
 void LGGContactSets::removeNonFriendFromList(const LLUUID& non_friend_id)
@@ -792,6 +794,7 @@ void LGGContactSets::removeNonFriendFromList(const LLUUID& non_friend_id)
 		}
 
 		saveToDisk();
+		mChangedSignal(UPDATED_MEMBERS);
 	}
 }
 
@@ -907,6 +910,7 @@ void LGGContactSets::removeFriendFromGroup(const LLUUID& friend_id, const std::s
 	{
 		group->mFriends.erase(friend_id);
 		saveToDisk();
+		mChangedSignal(UPDATED_MEMBERS);
 	}
 }
 
@@ -925,6 +929,7 @@ void LGGContactSets::addGroup(const std::string& groupName)
 		group->mNotify = false;
 		mGroups[groupName] = group;
 		saveToDisk();
+		mChangedSignal(UPDATED_LISTS);
 	}
 }
 
@@ -936,6 +941,7 @@ void LGGContactSets::deleteGroup(const std::string& groupName)
 		delete found->second;
 		mGroups.erase(found);
 		saveToDisk();
+		mChangedSignal(UPDATED_LISTS);
 	}
 }
 

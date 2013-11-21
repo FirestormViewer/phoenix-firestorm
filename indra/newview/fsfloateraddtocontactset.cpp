@@ -41,6 +41,7 @@ FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
 ,	mContactSetsCombo(NULL)
 {
 	mAgentID = target.asUUID();
+	mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSFloaterAddToContactSet::updateSets, this, _1));
 }
 
 BOOL FSFloaterAddToContactSet::postBuild()
@@ -67,16 +68,17 @@ void FSFloaterAddToContactSet::onClickAdd()
 	args["SET"] = set;
 	LLNotificationsUtil::add("AddToContactSetSuccess", args);
 	closeFloater();
-	
-	// Refresh the set list if it's there
-	FSPanelContactSets* panel = dynamic_cast<FSPanelContactSets*>(FSFloaterContacts::findInstance()->getPanelByName("contact_sets_panel"));
-	if (panel)
-		panel->refreshSetList();
 }
 
 void FSFloaterAddToContactSet::onClickCancel()
 {
 	closeFloater();
+}
+
+void FSFloaterAddToContactSet::updateSets(LGGContactSets::EContactSetUpdate type)
+{
+	if (type)
+		populateContactSets();
 }
 
 void FSFloaterAddToContactSet::populateContactSets()

@@ -30,6 +30,7 @@
 #ifndef FS_PANELCONTACTSETS_H
 #define FS_PANELCONTACTSETS_H
 
+#include "lggcontactsets.h"
 #include "llavatarlist.h"
 #include "llcombobox.h"
 #include "llpanel.h"
@@ -44,7 +45,7 @@ public:
 	void refreshSetList();
 	
 private:
-	~FSPanelContactSets(){};
+	~FSPanelContactSets();
 	
 	void onSelectAvatar();
 	void generateAvatarList(const std::string& contact_set);
@@ -64,6 +65,9 @@ private:
 	static bool handleAddContactSetCallback(const LLSD& notification, const LLSD& response);
 	static bool handleRemoveContactSetCallback(const LLSD& notification, const LLSD& response);
 	static bool handleRemoveAvatarFromSetCallback(const LLSD& notification, const LLSD& response);
+	
+	void updateSets(LGGContactSets::EContactSetUpdate type);
+	boost::signals2::connection mContactSetChangedConnection;
 	
 	uuid_vec_t mAvatarSelections;
 	
