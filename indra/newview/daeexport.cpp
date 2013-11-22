@@ -229,7 +229,7 @@ void ColladaExportFloater::onTextureExportCheck()
 
 void ColladaExportFloater::onTexturesSaved()
 {
-	mSaver.saveDAE(mFilename);
+	mSaver.saveDAE( nd::aprhelper::ndConvertFilename( mFilename ) );
 	LLSD args;
 	args["OBJECT"] = mObjectName;
 	args["FILENAME"] = mFilename;
