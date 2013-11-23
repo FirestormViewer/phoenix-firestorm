@@ -211,7 +211,7 @@
     </panel>
 </panel>
 
-<text  name="lod_label">
+<text name="lod_label">
  Podgląd:
  </text>
 <panel name="right_panel">

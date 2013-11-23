@@ -3,5 +3,5 @@
 	<menu_item_check label="Widok kompaktowy" name="compact_view" />
 	<menu_item_check label="Widok rozszerzony" name="expanded_view" />
 	<menu_item_check name="IMShowTime" label="Pokazuj czas" />
-	<menu_item_check name="IMShowNamesForP2PConv" label="Pokazuj imiona w rozmowach z jedną osobą" />    
+	<menu_item_check name="IMShowNamesForP2PConv" label="Pokazuj imiona w rozmowach z jedną osobą" />
 </toggleable_menu>

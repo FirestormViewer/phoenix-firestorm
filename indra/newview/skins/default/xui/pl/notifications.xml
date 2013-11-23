@@ -471,19 +471,19 @@ Odwiedzić [_URL], aby uzyskać więcej informacji?
 		<usetemplate ignoretext="Sprzęt w moim komputerze nie jest wspierany" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="IntelOldDriver">
-		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej.  Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
+		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
 
 Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
 		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="AMDOldDriver">
-		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej.  Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
+		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
 
 Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
 		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="NVIDIAOldDriver">
-		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej.  Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
+		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej. Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
 
 Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
 		<url name="url">
@@ -493,7 +493,7 @@ Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
 	</notification>
 	<notification name="UnknownGPU">
 		Twój system jest wyposażony w kartę graficzną, która nie jest rozpoznana przez [APP_NAME].
-Zdarza się to często w przypadku nowego sprzętu, który nie był testowany z [APP_NAME].  Prawdopodobnie wystarczy dostosowanie ustawień grafiki aby działanie było poprawne.
+Zdarza się to często w przypadku nowego sprzętu, który nie był testowany z [APP_NAME]. Prawdopodobnie wystarczy dostosowanie ustawień grafiki aby działanie było poprawne.
 (Awatar &gt; Ustawienia &gt; Grafika).
 		<form name="form">
 			<ignore name="ignore" text="Karta graficzna nie została zidentyfikowana."/>
@@ -2338,7 +2338,7 @@ URL: [MEDIAURL]
 			<button name="Deny" text="Odmów"/>
 		</form>
 	</notification>
-	<notification  name="MediaAlert2">
+	<notification name="MediaAlert2">
 		Chcesz zapamiętać swój wybór i zezwalać [LCONDITION] na media z tego źródła?
 
 Domena: [MEDIADOMAIN]
@@ -4513,5 +4513,30 @@ Nie można tego cofnąć.
 		<form name="form">
 			<ignore name="ignore" text="Ustawienie w preferencjach zostało zmienione do domyślnej wartości skórki."/>
 		</form>
+	</notification>
+	<notification name="AddNewContactSet">
+		Utwórz nowy zestaw kontaktów o nazwie:
+		<form name="form">
+			<input name="message">
+				Nowy zestaw kontaktów
+			</input>
+			<button name="Create" text="Utwórz"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="RemoveContactSet">
+		Na pewno chcesz usunąć [SET_NAME]? Nie będziesz mieć możliwości go przywrócić.
+		<usetemplate ignoretext="Potwierdź przed usunięciem Zestawu Kontaktów" name="okcancelignore" notext="Anuluj" yestext="Ok"/>
+	</notification>
+	<notification name="RemoveContactFromSet">
+		Na pewno chcesz usunąć [TARGET] z [SET_NAME]?
+		<usetemplate ignoretext="Potwierdź przed usunięciem kogoś z Zestawu Kontaktów" name="okcancelignore" notext="Anuluj" yestext="Ok"/>
+	</notification>
+	<notification name="RemoveContactsFromSet">
+		Na pewno chcesz usunąć [TARGET] z [SET_NAME]?
+		<usetemplate ignoretext="Potwierdź przed usunięciem większej ilości awatarów z Zestawu Kontaktów" name="okcancelignore" notext="Anuluj" yestext="Ok"/>
+	</notification>
+	<notification name="AddToContactSetSuccess">
+		[NAME] został/a dodany/a do [SET].
 	</notification>
 </notifications>

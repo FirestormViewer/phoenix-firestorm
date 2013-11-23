@@ -16,7 +16,7 @@
 		</layout_panel>
 		<layout_panel name="photo_button_panel">
 			<button label="Wyślij" name="post_photo_btn" />
-			<button label="Anuluj" name="cancel_photo_btn" />      
-		</layout_panel>        
+			<button label="Anuluj" name="cancel_photo_btn" />
+		</layout_panel>
 	</layout_stack>
 </panel>
