@@ -267,7 +267,9 @@ bool LLAppViewerLinux::initSLURLHandler()
 		return false; // failed
 	}
 
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 35 )
 	g_type_init();
+#endif
 
 	//ViewerAppAPI *api_server = (ViewerAppAPI*)
 	g_object_new(viewerappapi_get_type(), NULL);
@@ -287,7 +289,9 @@ bool LLAppViewerLinux::sendURLToOtherInstance(const std::string& url)
 	DBusGConnection *bus;
 	GError *error = NULL;
 
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 35 )
 	g_type_init();
+#endif
 	
 	bus = lldbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (bus)
