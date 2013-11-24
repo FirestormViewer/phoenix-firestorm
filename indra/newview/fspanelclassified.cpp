@@ -233,6 +233,7 @@ void FSPanelClassifiedInfo::onOpen(const LLSD& key)
 
 	LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
 	// LLAvatarPropertiesProcessor::getInstance()->sendClassifiedInfoRequest(getClassifiedId());
+	updateData();
 	gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
 
 	// While we're at it let's get the stats from the new table if that
