@@ -2,6 +2,6 @@
 <toggleable_menu name="menu_people_contact_sets_gear">
 	<menu_item_call label="Pokaż profil" name="profile" />
 	<menu_item_call label="Wiadomość IM" name="im" />
-	<menu_item_call label="Teleportacja" name="teleport" />
+	<menu_item_call label="Proponuj teleport" name="teleport" />
 	<menu_item_call label="Konfiguruj Zestaw Kontaktów" name="set_config" />
 </toggleable_menu>

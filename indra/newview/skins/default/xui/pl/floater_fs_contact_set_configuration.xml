@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_contact_set_configure" title="Ustawienia zestawu kontaktów">
+<floater name="floater_fs_contact_set_configure" title="Ustawienia zestawu kontaktów" width="450">
 	<floater.string name="title">
 		Ustawienia [NAME]
 	</floater.string>
-	<panel name="top_panel">
+	<panel name="top_panel" width="450">
 		<text name="set_label">
 			Ustawienia zestawu kontaktów:
 		</text>
 		<color_swatch label="Ustaw kolor" name="set_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
 		<check_box label="Pokazuj powiadomienia" name="show_set_notifications" />
 	</panel>
-	<panel name="bottom_panel">
+	<panel name="bottom_panel" width="450">
 		<text name="global_label">
 			Ustawienia globalne:
 		</text>
-		<color_swatch label="Domyślny kolor Zestawu" name="global_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
+		<color_swatch label="Domyślny kolor" name="global_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
 		<text name="label_online">
 			Powiadomienia online:
 		</text>
