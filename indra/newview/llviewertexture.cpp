@@ -1484,7 +1484,7 @@ void LLViewerFetchedTexture::processTextureStats()
 	{
 		updateVirtualSize() ;
 		
-		static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes");
+		static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes", false);
 		
 		if (textures_fullres)
 		{
@@ -1834,9 +1834,9 @@ bool LLViewerFetchedTexture::setDebugFetching(S32 debug_level)
 
 bool LLViewerFetchedTexture::updateFetch()
 {
-	static LLCachedControl<bool> textures_decode_disabled(gSavedSettings,"TextureDecodeDisabled");
-	static LLCachedControl<F32>  sCameraMotionThreshold(gSavedSettings,"TextureCameraMotionThreshold");
-	static LLCachedControl<S32>  sCameraMotionBoost(gSavedSettings,"TextureCameraMotionBoost");
+	static LLCachedControl<bool> textures_decode_disabled(gSavedSettings,"TextureDecodeDisabled", false);
+	static LLCachedControl<F32>  sCameraMotionThreshold(gSavedSettings,"TextureCameraMotionThreshold", 0.2);
+	static LLCachedControl<S32>  sCameraMotionBoost(gSavedSettings,"TextureCameraMotionBoost", 3);
 	if(textures_decode_disabled)
 	{
 		return false ;
@@ -2925,7 +2925,7 @@ void LLViewerLODTexture::processTextureStats()
 {
 	updateVirtualSize() ;
 	
-	static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes");
+	static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes", false);
 	
 	if (textures_fullres)
 	{

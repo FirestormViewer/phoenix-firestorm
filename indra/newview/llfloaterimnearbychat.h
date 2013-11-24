@@ -97,7 +97,7 @@ protected:
 	void onChatFontChange(LLFontGL* fontp);
 
 	/*virtual*/ void onTearOffClicked();
-	/*virtual*/ void onClickCloseBtn();
+	/*virtual*/ void onClickCloseBtn(bool app_qutting = false);
 
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
 	EChatType processChatTypeTriggers(EChatType type, std::string &str);

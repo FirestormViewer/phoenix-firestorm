@@ -46,6 +46,7 @@
 #include "llsd.h"
 #include "llsdserialize.h"
 #include "llteleportflags.h"
+#include "lltoastnotifypanel.h"
 #include "lltransactionflags.h"
 #include "llvfile.h"
 #include "llvfs.h"
@@ -3893,7 +3894,20 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			payload["online"] = (offline == IM_ONLINE);
 			payload["sender"] = msg->getSender().getIPandPort();
 
-			if (is_muted)
+			bool add_notification = true;
+			for (LLToastNotifyPanel::instance_iter ti(LLToastNotifyPanel::beginInstances())
+				, tend(LLToastNotifyPanel::endInstances()); ti != tend; ++ti)
+			{
+				LLToastNotifyPanel& panel = *ti;
+				const std::string& notification_name = panel.getNotificationName();
+				if (notification_name == "OfferFriendship" && panel.isControlPanelEnabled())
+				{
+					add_notification = false;
+					break;
+				}
+			}
+
+			if (is_muted && add_notification)
 			{
 				LLNotifications::instance().forceResponse(LLNotification::Params("OfferFriendship").payload(payload), 1);
 			}
@@ -3907,6 +3921,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["NAME_LABEL"] = LLSLURL("agent", from_id, "completename").getSLURLString();
 // [/SL:KB]
 				args["NAME_SLURL"] = LLSLURL("agent", from_id, "about").getSLURLString();
+
+				if (add_notification)
+				{
 				if(message.empty())
 				{
 					//support for frienship offers from clients before July 2008
@@ -3923,6 +3940,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				    make_ui_sound("UISndFriendshipOffer"); // <FS:PP> Friendship offer sound
 				}
 			}
+		}
 		}
 		break;
 
@@ -4823,19 +4841,6 @@ public:
 				LLInventoryModel::EXCLUDE_TRASH,
 				is_card);
 		}
-		LLSD args;
-		if ( land_items.count() > 0 )
-		{	// Show notification that they can now teleport to landmarks.  Use a random landmark from the inventory
-			S32 random_land = ll_rand( land_items.count() - 1 );
-			args["NAME"] = land_items[random_land]->getName();
-			LLNotificationsUtil::add("TeleportToLandmark",args);
-		}
-		if ( card_items.count() > 0 )
-		{	// Show notification that they can now contact people.  Use a random calling card from the inventory
-			S32 random_card = ll_rand( card_items.count() - 1 );
-			args["NAME"] = card_items[random_card]->getName();
-			LLNotificationsUtil::add("TeleportToPerson",args);
-		}
 
 		gInventory.removeObserver(this);
 		delete this;
@@ -5173,18 +5178,6 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 
 		if (isAgentAvatarValid())
 		{
-			// Chat the "back" SLURL. (DEV-4907)
-
-			LLSLURL slurl;
-			gAgent.getTeleportSourceSLURL(slurl);
-			LLSD substitution = LLSD().with("[T_SLURL]", slurl.getSLURLString());
-			std::string completed_from = LLAgent::sTeleportProgressMessages["completed_from"];
-			LLStringUtil::format(completed_from, substitution);
-
-			LLSD args;
-			args["MESSAGE"] = completed_from;
-			LLNotificationsUtil::add("SystemMessageTip", args);
-
 			// Set the new position
 			gAgentAvatarp->setPositionAgent(agent_pos);
 			gAgentAvatarp->clearChat();
