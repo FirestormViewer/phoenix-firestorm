@@ -5178,6 +5178,20 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 
 		if (isAgentAvatarValid())
 		{
+			// [FS:CR] Reimplement DEV-4907 (Maybe we like long distracting messages?)
+			if (gSavedSettings.getBOOL("FSShowBackSLURL"))
+			{
+				LLSLURL slurl;
+				gAgent.getTeleportSourceSLURL(slurl);
+				LLSD substitution = LLSD().with("[T_SLURL]", slurl.getSLURLString());
+				std::string completed_from = LLAgent::sTeleportProgressMessages["completed_from"];
+				LLStringUtil::format(completed_from, substitution);
+				
+				LLSD args;
+				args["MESSAGE"] = completed_from;
+				LLNotificationsUtil::add("SystemMessageTip", args);
+			}
+			// [/FS:CR]
 			// Set the new position
 			gAgentAvatarp->setPositionAgent(agent_pos);
 			gAgentAvatarp->clearChat();
