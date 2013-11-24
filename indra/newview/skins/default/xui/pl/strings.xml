@@ -1065,6 +1065,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="bitmap_image_files">
 		Obrazy bitmap
 	</string>
+	<string name="png_image_files">
+		Obrazy PNG
+	</string>
+	<string name="save_texture_image_files">
+		Obrazy Targa lub PNG
+	</string>
 	<string name="avi_movie_file">
 		Pliki filmowe AVI
 	</string>

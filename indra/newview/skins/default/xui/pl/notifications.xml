@@ -1457,12 +1457,12 @@ lub zainstalować teraz.
 	</notification>
 	<notification name="DownloadBackgroundTip">
 		Aktualizacja dla [APP_NAME] została pobrana.
-Wersja [VERSION] [[RELEASE_NOTES_FULL_URL] Informacja o tej aktualizacji]
+Wersja [VERSION] [[INFO_URL] Informacja o tej aktualizacji]
 		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i restartuj [APP_NAME]"/>
 	</notification>
 	<notification name="DownloadBackgroundDialog">
 		Aktualizacja [APP_NAME] została pobrana.
-Wersja [VERSION] [[RELEASE_NOTES_FULL_URL] Informacja o aktualizacji]
+Wersja [VERSION] [[INFO_URL] Informacja o aktualizacji]
 		<usetemplate name="okcancelbuttons" notext="Później..." yestext="Instaluj teraz i restartuj [APP_NAME]"/>
 	</notification>
 	<notification name="RequiredUpdateDownloadedVerboseDialog">
@@ -2673,6 +2673,9 @@ Nie możesz tutaj latać.
 	<notification name="RegionTPAccessBlocked">
 		Region, który próbujesz odwiedzić ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
 	</notification>
+	<notification name="RegionAboutToShutdown">
+		Region, do którego próbujesz się dostać, właśnie się wyłącza.
+	</notification>
 	<notification name="URBannedFromRegion">
 		Zostałeś zbanowany w regionie.
 	</notification>
@@ -2884,11 +2887,11 @@ Wizytówka w Twojej Szafie umożliwi szybki kontakt IM z tym Rezydentem.
 		</form>
 	</notification>
 	<notification name="RegionRestartMinutes">
-		Restart regionu za [MINUTES] min.
+		Restart regionu "[NAME]" za [MINUTES] min.
 Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 	</notification>
 	<notification name="RegionRestartSeconds">
-		Restart regionu za [SECONDS] sek.
+		Restart regionu "[NAME]" za [SECONDS] sek.
 Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 	</notification>
 	<notification name="LoadWebPage">
@@ -3857,9 +3860,9 @@ Spróbuj ponownie za minutę.
 	<notification name="EjectComingSoon">
 		Nie masz już dłużej pozwolenia na przebywanie w tym miejscu i w ciągu [EJECT_TIME] sekund musisz je opuścić.
 	</notification>
-	<notification name="NoEnterServerFull">
-		Nie możesz wejść do tego regionu,
-ponieważ serwer jest pełny.
+	<notification name="NoEnterRegionMaybeFull">
+		Nie możesz wejść do regionu "[NAME]",
+może być pełny lub właśnie restartuje.
 	</notification>
 	<notification name="SaveBackToInvDisabled">
 		Zabieranie z powrotem do Szafy zostało wyłączone.
@@ -4148,6 +4151,9 @@ ponieważ serwer jest pełny.
 	</notification>
 	<notification name="CantAttachNotEnoughScriptResources">
 		Niewystarczające dostępne zasoby skryptowe, aby założyć obiekt!
+	</notification>
+	<notification name="CantAttachObjectBeingRemoved">
+		Nie możesz odłączyć dodatku, ponieważ jest on już odłączony.
 	</notification>
 	<notification name="CantDropItemTrialUser">
 		Nie możesz tutaj upuszczać obiektów; spróbuj w strefie Darmowej Próby.
