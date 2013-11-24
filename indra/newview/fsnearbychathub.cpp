@@ -1,5 +1,5 @@
 /** 
- * @file fsnearbychat.cpp
+ * @file fsnearbychathub.cpp (was llnearbychat.cpp)
  * @brief @brief Nearby chat central class for handling multiple chat input controls
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$

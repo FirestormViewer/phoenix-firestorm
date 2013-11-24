@@ -1,5 +1,5 @@
  /** 
- * @file llnearbychat.h
+ * @file fsnearbychathub.h (was llnearbychat.h)
  * @brief Nearby chat central class for handling multiple chat input controls
  *
  * $LicenseInfo:firstyear=2004&license=viewerlgpl$
