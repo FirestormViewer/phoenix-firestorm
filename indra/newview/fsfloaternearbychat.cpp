@@ -808,7 +808,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				
 				// Select to end of line, starting from the character
 				// after the last one the user typed.
-				mInputEditor->selectNext(rest_of_match, false);
+				mInputEditor->selectByCursorPosition(utf8_out_str.size()-rest_of_match.size(),utf8_out_str.size());
 			}
 		}
 		else if (matchChatTypeTrigger(utf8_trigger, &utf8_out_str))
@@ -935,9 +935,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				if (!rest_of_match.empty())
 				{
 					mInputEditor->setText(prefix + replaced_text + suffix);
-					// *HACK: I don't know how to select text in a textbox. :(
-					mInputEditor->setCursorPos(prefix.size());
-					mInputEditor->selectNext((rest_of_match + " "), false);
+					mInputEditor->selectByCursorPosition(prefix.size(), (rest_of_match.size() + 1));
 				}
 			}
 		}
