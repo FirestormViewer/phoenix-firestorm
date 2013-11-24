@@ -481,27 +481,34 @@ void LLPreviewTexture::onFileLoadedForSaveTGA(BOOL success,
 
 	if( self && final && success )
 	{
-		const U32 ext_length = 3;
-		std::string extension = self->mSaveFileName.substr( self->mSaveFileName.length() - ext_length);
+		// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+		//const U32 ext_length = 3;
+		//std::string extension = self->mSaveFileName.substr( self->mSaveFileName.length() - ext_length);
 
-		// We only support saving in PNG or TGA format
-		LLPointer<LLImageFormatted> image;
-		if(extension == "png")
-		{
-			image = new LLImagePNG;
-		}
-		else if(extension == "tga")
-		{
-			image = new LLImageTGA;
-		}
+		//// We only support saving in PNG or TGA format
+		//LLPointer<LLImageFormatted> image;
+		//if(extension == "png")
+		//{
+		//	image = new LLImagePNG;
+		//}
+		//else if(extension == "tga")
+		//{
+		//	image = new LLImageTGA;
+		//}
 
-		if( image && !image->encode( src, 0 ) )
+		//if( image && !image->encode( src, 0 ) )
+		LLPointer<LLImageTGA> image_tga = new LLImageTGA;
+		if( !image_tga->encode( src ) )
+		// </FS:Ansariel>
 		{
 			LLSD args;
 			args["FILE"] = self->mSaveFileName;
 			LLNotificationsUtil::add("CannotEncodeFile", args);
 		}
-		else if( image && !image->save( self->mSaveFileName ) )
+		// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+		//else if( image && !image->save( self->mSaveFileName ) )
+		else if( !image_tga->save( self->mSaveFileName ) )
+		// </FS:Ansariel>
 		{
 			LLSD args;
 			args["FILE"] = self->mSaveFileName;
