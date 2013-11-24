@@ -150,6 +150,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 		mInputEditor->setPassDelete(TRUE);
 		mInputEditor->setFont(LLViewerChat::getChatFont());
 		mInputEditor->setLabel(getString("chatbox_label"));
+		mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 	}
 	mChatLayoutPanel = getChild<LLLayoutPanel>("chat_layout_panel");
 	mInputPanels = getChild<LLLayoutStack>("input_panels");

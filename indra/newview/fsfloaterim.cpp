@@ -826,6 +826,7 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setCommitOnFocusLost( FALSE );
 	mInputEditor->setPassDelete(TRUE);
 	mInputEditor->setFont(LLViewerChat::getChatFont());
+	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 
 	childSetCommitCallback("chat_editor", onSendMsg, this);
 
