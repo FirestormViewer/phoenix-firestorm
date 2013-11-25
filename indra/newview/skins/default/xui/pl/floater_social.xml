@@ -5,7 +5,7 @@
 			<panel label="Status" name="panel_social_status"/>
 			<panel label="Zdjęcie" name="panel_social_photo"/>
 			<panel label="Miejsce" name="panel_social_place"/>
-			<panel label="Konto" name="panel_social_account"/>     
+			<panel label="Konto" name="panel_social_account"/>
 		</tab_container>
 		<panel name="connection_status_panel">
 			<text name="connection_error_text">

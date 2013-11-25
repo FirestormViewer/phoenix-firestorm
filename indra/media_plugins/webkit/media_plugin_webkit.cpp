@@ -234,7 +234,9 @@ private:
 		if (!g_thread_supported ()) g_thread_init (NULL);
 #endif
 
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 35 )
 		g_type_init();
+#endif
 #endif
 
 #if LL_DARWIN

@@ -61,7 +61,7 @@ void LLFloaterSidePanelContainer::onOpen(const LLSD& key)
 	getChild<LLPanel>(sMainPanelName)->onOpen(key);
 }
 
-void LLFloaterSidePanelContainer::onClickCloseBtn()
+void LLFloaterSidePanelContainer::onClickCloseBtn(bool)
 {
 	LLPanelOutfitEdit* panel_outfit_edit =
 		dynamic_cast<LLPanelOutfitEdit*>(LLFloaterSidePanelContainer::getPanel("appearance", "panel_outfit_edit"));

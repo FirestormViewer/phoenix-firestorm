@@ -21,6 +21,12 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)" />
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie teleportuje, przeciąganie z Shiftem przesuwa)" />
 	<string name="avatar_name_count" value="Imię [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
+	<panel.string name="empty_list">
+		Ten zestaw kontaktów jest pusty.
+	</panel.string>
+	<panel.string name="no_sets">
+		Brak dostępnych zestawów kontaktów.
+	</panel.string>
 	<tab_container name="tabs">
 		<panel label="W pobliżu" name="nearby_panel">
 			<tab_container name="tabcont_radarpeople_main">

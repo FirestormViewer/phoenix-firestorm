@@ -1078,6 +1078,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="bitmap_image_files">
 		Bitmap-Bilder
 	</string>
+	<string name="png_image_files">
+		PNG-Bilder
+	</string>
+	<string name="save_texture_image_files">
+		Targa- oder PNG-Bilder
+	</string>
 	<string name="avi_movie_file">
 		AVI-Filmdatei
 	</string>

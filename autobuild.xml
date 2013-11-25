@@ -1523,6 +1523,10 @@
       </map>
       <key>ndPhysicsStub</key>
       <map>
+        <key>license</key>
+        <string>HACD/LGPL</string>
+        <key>license_file</key>
+        <string>LICENSES/ndPhysicsStub.txt</string>
         <key>name</key>
         <string>ndPhysicsStub</string>
         <key>platforms</key>

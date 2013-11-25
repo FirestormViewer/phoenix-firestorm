@@ -417,6 +417,8 @@
 			desc="lsSetWindlightScene(list parameters);Sets the Lightshare scene" />
 		<function name="lsSetWindlightSceneTargeted" sleep="0.0" energy="10.0"
 			desc="lsSetWindlightSceneTargeted(list parameters, key avatar);Sets the Lightshare scene for a given avatar" />
+		<function name="lsClearWindlightScene" sleep="0.0" energy="10.0"
+			desc="lsClearWindlightScene();Remove Windlight settings from a region" />
 		<!-- Bulletsim specific -->
 		<function name="physGetEngineType" sleep="0.0" energy="10.0"
 			desc="string physGetEngineType();Get physics engine type" />

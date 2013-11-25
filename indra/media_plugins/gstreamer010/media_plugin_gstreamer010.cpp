@@ -858,7 +858,9 @@ MediaPluginGStreamer010::startup()
 #endif
 
 		// Init the glib type system - we need it.
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 35 )
 		g_type_init();
+#endif
 
 		// Get symbols!
 #if LL_DARWIN

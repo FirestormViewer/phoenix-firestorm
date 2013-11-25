@@ -826,6 +826,7 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setCommitOnFocusLost( FALSE );
 	mInputEditor->setPassDelete(TRUE);
 	mInputEditor->setFont(LLViewerChat::getChatFont());
+	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 
 	childSetCommitCallback("chat_editor", onSendMsg, this);
 
@@ -1854,7 +1855,7 @@ void FSFloaterIM::onNewIMReceived( const LLUUID& session_id )
 
 }
 
-void	FSFloaterIM::onClickCloseBtn()
+void	FSFloaterIM::onClickCloseBtn(bool app_quitting)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(
 				mSessionID);

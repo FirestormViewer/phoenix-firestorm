@@ -110,9 +110,10 @@ public:
 		FFSAVE_PNG = 13,
 		FFSAVE_JPEG = 14,
 		FFSAVE_SCRIPT = 15,
-		FFSAVE_BEAM = 16,
+		FFSAVE_TGAPNG = 16,
+		FFSAVE_BEAM = 50, // <FS:TM> FS addition
 // <FS:CR> Export filter
-		FFSAVE_EXPORT = 17
+		FFSAVE_EXPORT = 51
 // </FS:CR>
 	};
 
@@ -186,6 +187,8 @@ private:
 	// we remember the last path that was accessed for a particular usage
 	std::map <std::string, std::string> mContextToPathMap;
 	std::string mCurContextName;
+	// we also remember the extension of the last added file.
+	std::string mCurrentExtension;
 #endif
 
 	std::vector<std::string> mFiles;

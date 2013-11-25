@@ -27,72 +27,30 @@
 
 #include "llviewerprecompiledheaders.h"
 
+// llui
+#include "lllineeditor.h"
+#include "llmenugl.h"
+#include "llspinctrl.h"
+
+// newview
 #include "fsnearbychatcontrol.h"
 #include "fsnearbychathub.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llfloaternearbychat.h"
 #include "fsfloaternearbychat.h"
-// </FS:Ansariel> [FS communication UI]
-// #include "llviewercontrol.h"
-// #include "llviewerwindow.h"
-// #include "llrootview.h"
-//#include "llchatitemscontainerctrl.h"
-// #include "lliconctrl.h"
-#include "llspinctrl.h"
-// #include "llfloatersidepanelcontainer.h"
-// #include "llfocusmgr.h"
-// #include "lllogchat.h"
-// #include "llresizebar.h"
-// #include "llresizehandle.h"
-#include "llmenugl.h"
-#include "llviewermenu.h"//for gMenuHolder
-
+#include "llagent.h" 		// gAgent
+#include "llagentcamera.h"	// gAgentCamera
 #include "llfloaterimnearbychathandler.h"
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
-// #include "llchannelmanager.h"
-
-#include "llagent.h" 			// gAgent
-#include "llagentcamera.h"		// gAgentCamera
-// #include "llchathistory.h"
-// #include "llstylemap.h"
-
-// #include "llavatarnamecache.h"
-
-// #include "lldraghandle.h"
-
-// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
-// #include "llfloaterreg.h"
-// #include "lltrans.h"
-
-// IM
-// #include "llbutton.h"
-// #include "lllayoutstack.h"
-
-// #include "llimfloatercontainer.h"
-// #include "llimfloater.h"
-#include "lllineeditor.h"
+#include "llviewermenu.h"	//for gMenuHolder
 
 //AO - includes for textentry
-#include "rlvhandler.h"
-#include "llcommandhandler.h"
-#include "llkeyboard.h"
-#include "llgesturemgr.h"
-#include "llmultigesture.h"
 #include "llautoreplace.h"
-
-// #include "llconsole.h"
-// #include "fscontactsfloater.h"
-
-// <FS:Zi> Moved nearby chat functionality here for now
-// #include "chatbar_as_cmdline.h"
-// #include "llanimationstates.h"	// ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
-// #include "llviewerstats.h"
-// </FS:Zi>
-// <FS:CR> FIRE-3192 - Name Prediction
-#include "llworld.h"
+#include "llcommandhandler.h"
+#include "llgesturemgr.h"
+#include "llkeyboard.h"
+#include "llmultigesture.h"
+#include "llworld.h"	// <FS:CR> FIRE-3192 - Name Prediction
+#include "rlvhandler.h"
 
 static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
-// </FS:CR>
 
 static LLDefaultChildRegistry::Register<FSNearbyChatControl> r("fs_nearby_chat_control");
 

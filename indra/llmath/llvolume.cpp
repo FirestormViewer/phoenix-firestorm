@@ -183,7 +183,8 @@ void calc_tangent_from_triangle(
 
 	F32 rd = s1*t2-s2*t1;
 
-	float r = ((rd*rd) > FLT_EPSILON) ? 1.0F / rd : 1024.f; //some made up large ratio for division by zero
+	float r = ((rd*rd) > FLT_EPSILON) ? (1.0f / rd)
+											    : ((rd > 0.0f) ? 1024.f : -1024.f); //some made up large ratio for division by zero
 
 	llassert(llfinite(r));
 	llassert(!llisnan(r));
@@ -6842,7 +6843,8 @@ void CalculateTangentArray(U32 vertexCount, const LLVector4a *vertex, const LLVe
         
 		F32 rd = s1*t2-s2*t1;
 
-		float r = ((rd*rd) > FLT_EPSILON) ? 1.0F / rd : 1024.f; //some made up large ratio for division by zero
+		float r = ((rd*rd) > FLT_EPSILON) ? (1.0f / rd)
+													 : ((rd > 0.0f) ? 1024.f : -1024.f); //some made up large ratio for division by zero
 
 		llassert(llfinite(r));
 		llassert(!llisnan(r));

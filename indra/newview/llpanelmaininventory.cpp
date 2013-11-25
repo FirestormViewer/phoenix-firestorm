@@ -846,6 +846,13 @@ void LLPanelMainInventory::changed(U32)
 	updateItemcountText();
 }
 
+void LLPanelMainInventory::setFocusFilterEditor()
+{
+	if(mFilterEditor)
+	{
+		mFilterEditor->setFocus(true);
+	}
+}
 
 // virtual
 void LLPanelMainInventory::draw()
@@ -1360,6 +1367,10 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 	{
 		gSavedSettings.setBOOL("FSDoubleClickAddInventoryObjects",!gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects"));
 	}
+	if (command_name == "add_clothing_on_double_click")
+	{
+		gSavedSettings.setBOOL("FSDoubleClickAddInventoryClothing",!gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing"));
+	}
 	if (command_name == "show_filters")
 	{
 		toggleFindOptions();
@@ -1542,6 +1553,12 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 	{
 		return gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects");
 	}
+	
+	if (command_name == "add_clothing_on_double_click")
+	{
+		return gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing");
+	}
+
 
 	return FALSE;
 }

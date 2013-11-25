@@ -1,5 +1,5 @@
 /** 
- * @file llimfloater.h
+ * @file fsfloaterim.h
  * @brief LLIMFloater class definition
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
@@ -150,7 +150,7 @@ public:
 
 protected:
 	/* virtual */
-	void	onClickCloseBtn();
+	void	onClickCloseBtn(bool app_quitting = false);
 
 	// support sysinfo button -Zi
 	void	onSysinfoButtonVisibilityChanged(const LLSD& yes);

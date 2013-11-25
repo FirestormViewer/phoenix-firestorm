@@ -70,6 +70,16 @@
 				function="ToggleControl"
 				parameter="FSDoubleClickAddInventoryObjects" />
 		</menu_item_check>
+		<menu_item_check
+			label="Add clothes on double click"
+			name="add_invclothing_toggle">
+			<menu_item_check.on_check
+				function="CheckControl"
+				parameter="FSDoubleClickAddInventoryClothing" />
+			<menu_item_check.on_click
+				function="ToggleControl"
+				parameter="FSDoubleClickAddInventoryClothing" />
+		</menu_item_check>
 		<menu_item_separator />
 		<menu_item_call
 			name="inventory_show_filters"

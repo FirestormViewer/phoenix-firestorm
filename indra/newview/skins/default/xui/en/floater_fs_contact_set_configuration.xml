@@ -73,7 +73,7 @@ Global Settings:
      left_delta="4"
      name="global_swatch"
      tool_tip="Click to open Color Picker"
-     width="65" />
+     width="100" />
     <text
      top_pad="-2"
      follows="left|top"

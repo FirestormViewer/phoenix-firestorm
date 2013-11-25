@@ -1224,10 +1224,18 @@ const LLVector3d &LLAgent::getPositionGlobal() const
 //-----------------------------------------------------------------------------
 const LLVector3 &LLAgent::getPositionAgent()
 {
-	if (isAgentAvatarValid() && !gAgentAvatarp->mDrawable.isNull())
+	if (isAgentAvatarValid())
+	{
+		if(gAgentAvatarp->mDrawable.isNull())
+		{
+			mFrameAgent.setOrigin(gAgentAvatarp->getPositionAgent());
+		}
+		else
 	{
 		mFrameAgent.setOrigin(gAgentAvatarp->getRenderPosition());	
 	}
+	}
+
 
 	return mFrameAgent.getOrigin();
 }
@@ -3494,7 +3502,7 @@ void LLAgent::sendRevokePermissions(const LLUUID & target, U32 permissions)
 
 		msg->nextBlockFast(_PREHASH_Data);
 		msg->addUUIDFast(_PREHASH_ObjectID, target);		// Must be in the region
-		msg->addS32Fast(_PREHASH_ObjectPermissions, (S32) permissions);
+		msg->addU32Fast(_PREHASH_ObjectPermissions, (U32) permissions);
 
 		sendReliableMessage();
 	}
