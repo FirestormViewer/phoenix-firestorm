@@ -1,0 +1,72 @@
+<llsd>
+    <array>
+        <array>
+            <real>0</real>
+            <string>(SS) Atmos 00:00 2</string>
+        </array>
+        <array>
+            <real>0.041666649281978607</real>
+            <string>(SS) Atmos 01:00 1</string>
+        </array>
+        <array>
+            <real>0.083333298563957214</real>
+            <string>(SS) Atmos 02:00 2</string>
+        </array>
+        <array>
+            <real>0.16666659712791443</real>
+            <string>(SS) Atmos 04:00 1</string>
+        </array>
+        <array>
+            <real>0.24999989569187164</real>
+            <string>(SS) Atmos 06:00 1</string>
+        </array>
+        <array>
+            <real>0.29166653752326965</real>
+            <string>(SS) Atmos 07:00 1</string>
+        </array>
+        <array>
+            <real>0.33333319425582886</real>
+            <string>(SS) Atmos 08:00 1</string>
+        </array>
+        <array>
+            <real>0.49999979138374329</real>
+            <string>(SS) Atmos 12:00 1</string>
+        </array>
+        <array>
+            <real>0.54166644811630249</real>
+            <string>(SS) Atmos 13:00 1</string>
+        </array>
+        <array>
+            <real>0.58333307504653931</real>
+            <string>(SS) Atmos 14:00 1</string>
+        </array>
+        <array>
+            <real>0.62499970197677612</real>
+            <string>(SS) Atmos 15:00 1</string>
+        </array>
+        <array>
+            <real>0.66666638851165771</real>
+            <string>(SS) Atmos 16:00 1</string>
+        </array>
+        <array>
+            <real>0.70833301544189453</real>
+            <string>(SS) Atmos 17:00 1</string>
+        </array>
+        <array>
+            <real>0.74999970197677612</real>
+            <string>(SS) Atmos 18:00 1</string>
+        </array>
+        <array>
+            <real>0.79166632890701294</real>
+            <string>(SS) Atmos 19:00 1</string>
+        </array>
+        <array>
+            <real>0.83333301544189453</real>
+            <string>(SS) Atmos 20:00 1</string>
+        </array>
+        <array>
+            <real>0.97916626930236816</real>
+            <string>(SS) Atmos 23.30 2</string>
+        </array>
+    </array>
+</llsd>
