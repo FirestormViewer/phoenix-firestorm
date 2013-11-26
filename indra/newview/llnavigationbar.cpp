@@ -319,16 +319,22 @@ void LLNavigationBar::setupPanel()
 	fillSearchComboBox();
 
 	mBtnBack->setEnabled(FALSE);
-	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
+	// [FS:CR] FIRE-12333
+	//mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
+	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this, _1));
 	mBtnBack->setHeldDownCallback(boost::bind(&LLNavigationBar::onBackOrForwardButtonHeldDown, this,_1, _2));
 	mBtnBack->setClickDraggingCallback(boost::bind(&LLNavigationBar::showTeleportHistoryMenu, this,_1));
 	
 	mBtnForward->setEnabled(FALSE);
-	mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this));
+	// [FS:CR] FIRE-12333
+	//mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this));
+	mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this, _1));
 	mBtnForward->setHeldDownCallback(boost::bind(&LLNavigationBar::onBackOrForwardButtonHeldDown, this, _1, _2));
 	mBtnForward->setClickDraggingCallback(boost::bind(&LLNavigationBar::showTeleportHistoryMenu, this,_1));
 
-	mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this));
+	// [FS:CR] FIRE-12333
+	//mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this));
+	mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this, _1));
 
 	mCmbLocation->setCommitCallback(boost::bind(&LLNavigationBar::onLocationSelection, this));
 	
@@ -419,9 +425,12 @@ void LLNavigationBar::fillSearchComboBox()
 // }
 // </FS:Zi>
 
-void LLNavigationBar::onBackButtonClicked()
+// [FS:CR] FIRE-12333
+//void LLNavigationBar::onBackButtonClicked()
+void LLNavigationBar::onBackButtonClicked(LLUICtrl* ctrl)
 {
 	LLTeleportHistory::getInstance()->goBack();
+	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
 }
 
 void LLNavigationBar::onBackOrForwardButtonHeldDown(LLUICtrl* ctrl, const LLSD& param)
@@ -430,14 +439,20 @@ void LLNavigationBar::onBackOrForwardButtonHeldDown(LLUICtrl* ctrl, const LLSD& 
 		showTeleportHistoryMenu(ctrl);
 }
 
-void LLNavigationBar::onForwardButtonClicked()
+// [FS:CR] FIRE-12333
+//void LLNavigationBar::onForwardButtonClicked()
+void LLNavigationBar::onForwardButtonClicked(LLUICtrl* ctrl)
 {
 	LLTeleportHistory::getInstance()->goForward();
+	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
 }
 
-void LLNavigationBar::onHomeButtonClicked()
+// [FS:CR] FIRE-12333
+//void LLNavigationBar::onHomeButtonClicked()
+void LLNavigationBar::onHomeButtonClicked(LLUICtrl* ctrl)
 {
 	gAgent.teleportHome();
+	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
 }
 
 void LLNavigationBar::onSearchCommit()

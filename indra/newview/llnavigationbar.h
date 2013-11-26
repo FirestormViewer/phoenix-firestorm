@@ -120,11 +120,16 @@ private:
 	// callbacks
 	void onTeleportHistoryMenuItemClicked(const LLSD& userdata);
 	void onTeleportHistoryChanged();
-	void onBackButtonClicked();
+	// [FS:CR] FIRE-12333
+	//void onBackButtonClicked();
+	void onBackButtonClicked(LLUICtrl* ctrl);
 	void onBackOrForwardButtonHeldDown(LLUICtrl* ctrl, const LLSD& param);
 	void onNavigationButtonHeldUp(LLButton* nav_button);
-	void onForwardButtonClicked();
-	void onHomeButtonClicked();
+	// [FS:CR] FIRE-12333
+	//void onForwardButtonClicked();
+	//void onHomeButtonClicked();
+	void onForwardButtonClicked(LLUICtrl* ctrl);
+	void onHomeButtonClicked(LLUICtrl* ctrl);
 	void onLocationSelection();
 	void onLocationPrearrange(const LLSD& data);
 	void onSearchCommit();
