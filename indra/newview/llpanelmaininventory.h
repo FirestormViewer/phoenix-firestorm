@@ -85,6 +85,8 @@ public:
 
 	void onFilterEdit(const std::string& search_string );
 
+	void setFocusFilterEditor();
+
 	// ## Zi: Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
 	void updateFilterDropdown(const LLInventoryFilter* filter);

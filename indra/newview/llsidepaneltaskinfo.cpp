@@ -1201,6 +1201,10 @@ void LLSidepanelTaskInfo::doClickAction(U8 click_action)
 			// Warn, but do it anyway.
 			LLNotificationsUtil::add("ClickActionNotPayable");
 		}
+		else
+		{
+			handle_give_money_dialog();
+		}
 	}
 	LLSelectMgr::getInstance()->selectionSetClickAction(click_action);
 }

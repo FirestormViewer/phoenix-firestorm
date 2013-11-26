@@ -13,6 +13,7 @@
 		<menu_item_check name="inventory_show_partial_results" label="Częściowe wyniki wyszukiwania"/>
 	</context_menu>
 	<menu_item_check label="Dodawaj obiekty po dwukliku" name="add_inv_toggle"/>
+	<menu_item_check label="Dodawaj ubrania po dwukliku" name="add_invclothing_toggle"/>
 	<menu_item_call label="Pokaż filtry" name="show_filters"/>
 	<menu_item_call label="Zresetuj filtry" name="reset_filters"/>
 	<menu_item_call label="Zamknij wszystkie foldery" name="close_folders"/>

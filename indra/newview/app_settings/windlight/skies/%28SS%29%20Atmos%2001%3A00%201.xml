@@ -2,10 +2,10 @@
     <map>
     <key>ambient</key>
         <array>
-            <real>0.26953125</real>
-            <real>0.26953125</real>
-            <real>0.26953125</real>
-            <real>0.08984375</real>
+            <real>0.375</real>
+            <real>0.375</real>
+            <real>0.375</real>
+            <real>0.125</real>
         </array>
     <key>blue_density</key>
         <array>
@@ -23,10 +23,10 @@
         </array>
     <key>cloud_color</key>
         <array>
-            <real>0</real>
-            <real>0</real>
-            <real>0</real>
-            <real>0</real>
+            <real>0.20703125</real>
+            <real>0.20703125</real>
+            <real>0.20703125</real>
+            <real>0.20703125</real>
         </array>
     <key>cloud_pos_density1</key>
         <array>
@@ -112,9 +112,9 @@
         </array>
     <key>lightnorm</key>
         <array>
-            <real>1.0674007455691026e-008</real>
-            <real>0.9981347918510437</real>
-            <real>-0.061048205941915512</real>
+            <real>4.5253191416350091e-008</real>
+            <real>0.96592611074447632</real>
+            <real>-0.25881808996200562</real>
             <real>1</real>
         </array>
     <key>max_y</key>
@@ -129,7 +129,7 @@
     <key>star_brightness</key>
         <real>7.5</real>
     <key>sun_angle</key>
-        <real>4.773475170135498</real>
+        <real>4.9741873741149902</real>
     <key>sunlight_color</key>
         <array>
             <real>0.42352947592735291</real>

@@ -38,6 +38,7 @@
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
 #include "llimagetga.h"
+#include "llimagepng.h"
 #include "llinventory.h"
 #include "llnotificationsutil.h"
 #include "llresmgr.h"
@@ -480,14 +481,34 @@ void LLPreviewTexture::onFileLoadedForSaveTGA(BOOL success,
 
 	if( self && final && success )
 	{
+		// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+		//const U32 ext_length = 3;
+		//std::string extension = self->mSaveFileName.substr( self->mSaveFileName.length() - ext_length);
+
+		//// We only support saving in PNG or TGA format
+		//LLPointer<LLImageFormatted> image;
+		//if(extension == "png")
+		//{
+		//	image = new LLImagePNG;
+		//}
+		//else if(extension == "tga")
+		//{
+		//	image = new LLImageTGA;
+		//}
+
+		//if( image && !image->encode( src, 0 ) )
 		LLPointer<LLImageTGA> image_tga = new LLImageTGA;
 		if( !image_tga->encode( src ) )
+		// </FS:Ansariel>
 		{
 			LLSD args;
 			args["FILE"] = self->mSaveFileName;
 			LLNotificationsUtil::add("CannotEncodeFile", args);
 		}
+		// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+		//else if( image && !image->save( self->mSaveFileName ) )
 		else if( !image_tga->save( self->mSaveFileName ) )
+		// </FS:Ansariel>
 		{
 			LLSD args;
 			args["FILE"] = self->mSaveFileName;

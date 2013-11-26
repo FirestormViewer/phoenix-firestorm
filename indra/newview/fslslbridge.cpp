@@ -1,5 +1,5 @@
 /** 
- * @fslslbridge.cpp 
+ * @file fslslbridge.cpp 
  * @FSLSLBridge implementation 
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$

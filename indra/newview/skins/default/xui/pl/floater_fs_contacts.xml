@@ -6,5 +6,6 @@
 	<tab_container name="friends_and_groups">
 		<panel label="Znajomi" name="friends_panel" />
 		<panel label="Grupy" name="groups_panel" />
+		<panel label="Zest. kont." name="contact_sets_panel" />
 	</tab_container>
 </floater>

@@ -356,6 +356,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 					}
 				}
 				mTexAnimMode = 0;
+				
 				mTextureAnimp->unpackTAMessage(mesgsys, block_num);
 			}
 			else
@@ -709,7 +710,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 		}
 	}
 
-	static LLCachedControl<bool> dont_load_textures(gSavedSettings,"TextureDisable");
+	static LLCachedControl<bool> dont_load_textures(gSavedSettings,"TextureDisable", false);
 		
 	if (dont_load_textures || LLAppViewer::getTextureFetch()->mDebugPause) // || !mDrawable->isVisible())
 	{
@@ -1081,8 +1082,7 @@ BOOL LLVOVolume::setVolume(const LLVolumeParams &params_in, const S32 detail, bo
 			}
 		}
 
-
-		static LLCachedControl<bool> use_transform_feedback(gSavedSettings, "RenderUseTransformFeedback");
+		static LLCachedControl<bool> use_transform_feedback(gSavedSettings, "RenderUseTransformFeedback", false);
 
 		bool cache_in_vram = use_transform_feedback && gTransformPositionProgram.mProgramObject &&
 			(!mVolumeImpl || !mVolumeImpl->isVolumeUnique());
@@ -4578,6 +4578,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	bool emissive = false;
 
+	
+
 	{
 		LLFastTimer t(FTM_REBUILD_VOLUME_FACE_LIST);
 
@@ -5338,7 +5340,7 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFac
 
 	U32 buffer_usage = group->mBufferUsage;
 	
-	static LLCachedControl<bool> use_transform_feedback(gSavedSettings, "RenderUseTransformFeedback");
+	static LLCachedControl<bool> use_transform_feedback(gSavedSettings, "RenderUseTransformFeedback", false);
 
 	if (use_transform_feedback &&
 		gTransformPositionProgram.mProgramObject && //transform shaders are loaded

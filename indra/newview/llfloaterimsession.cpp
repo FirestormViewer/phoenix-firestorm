@@ -117,7 +117,7 @@ void LLFloaterIMSession::onTearOffClicked()
 }
 
 // virtual
-void LLFloaterIMSession::onClickCloseBtn()
+void LLFloaterIMSession::onClickCloseBtn(bool)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
 

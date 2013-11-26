@@ -18,6 +18,12 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 	<string name="no_groups_msg" value="Chcesz dołączyć do jakiejś grupy? Spróbuj użyć [secondlife:///app/search/groups Wyszukiwarki]." />
 	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)" />
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie teleportuje, przeciąganie z Shiftem przesuwa)" />
+	<panel.string name="empty_list">
+		Ten zestaw kontaktów jest pusty.
+	</panel.string>
+	<panel.string name="no_sets">
+		Brak dostępnych zestawów kontaktów.
+	</panel.string>
 	<tab_container name="tabs">
 		<panel label="W pobliżu" name="nearby_panel">
 			<panel label="bottom_panel" name="nearby_buttons_panel">
@@ -66,6 +72,9 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 		</panel>
 		<panel label="Zablokowani" name="blocked_panel">
 			<panel name="panel_block_list_sidetray" label="Zablokowani Rezydenci i obiekty" />
+		</panel>
+		<panel label="Zestawy kontaktów" name="contact_sets_panel">
+			<panel name="panel_people_contacts_sidetray" label="Zestawy kontaktów" />
 		</panel>
 	</tab_container>
 </panel>

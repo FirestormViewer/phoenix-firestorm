@@ -1,5 +1,5 @@
 /** 
- * @fslslbridge.h 
+ * @file fslslbridge.h 
  * @FSLSLBridge header 
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$

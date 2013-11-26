@@ -99,7 +99,7 @@
 				Grupa:
 			</text>
 			<text name="GroupText">
-				Ładowanie...  
+				Ładowanie...
 			</text>
 			<button label="Ustaw" name="Set..."/>
 			<check_box label="Udostępnij przypisywanie na Grupę" name="check deed" tool_tip="Oficer Grupy ma prawo przepisać prawo własności działki na Grupę. Działka wspierana jest przez przydziały pochodzące od członków Grupy."/>
