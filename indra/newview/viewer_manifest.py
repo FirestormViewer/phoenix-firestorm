@@ -815,7 +815,7 @@ class WindowsManifest(ViewerManifest):
         # Store windows symbols we want to keep for debugging in a tar file, this will be later compressed with xz (lzma)
         # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
         # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for nowo.
-        symbolTar = tarfile.TarFile("%s/Phoenix-%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
+        symbolTar = tarfile.TarFile("%s/Phoenix_%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
                                                                                     self.channel_legacy_oneword(),
                                                                                     substitution_strings['version_dashes'],
                                                                                     self.args['viewer_flavor']),
