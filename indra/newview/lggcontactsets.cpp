@@ -91,7 +91,14 @@ std::string LGGContactSets::getOldFileName()
 
 	std::string normalPath=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "");
 	//we want to steal the last directory off this one
-	std::string userNameDir = normalPath.substr(normalPath.find_last_of(gDirUtilp->getDirDelimiter()));
+
+	std::string userNameDir;
+
+	if( normalPath.size() && std::string::npos != normalPath.find_last_of( gDirUtilp->getDirDelimiter() ) )
+		userNameDir = normalPath.substr(normalPath.find_last_of(gDirUtilp->getDirDelimiter()));
+	else
+		userNameDir = normalPath;
+
 	path += userNameDir;
 
 	if (!path.empty())
