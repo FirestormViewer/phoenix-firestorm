@@ -929,6 +929,7 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 				{
 					loadHistory(mFileName,mMessages,mLoadParams);
 					shutdown();
+					delete this; // <FS:ND/> FIRE-12242; make sure memory gets freed.
 				}
 			}
 	}
