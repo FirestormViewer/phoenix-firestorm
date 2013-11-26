@@ -50,6 +50,8 @@ class LGGContactSets : public LLSingleton<LGGContactSets>
 public:
 	typedef std::vector<std::string> string_vec_t;
 
+	void loadFromDisk();
+	
 	static LLColor4 toneDownColor(const LLColor4& inColor, float strength, bool usedForBackground = false);
 
 	void setGroupColor(const std::string& groupName, const LLColor4& color);
@@ -144,7 +146,6 @@ private:
 	void setPseudonym(const LLUUID& friend_id, const std::string& pseudonym);
 	bool hasVisuallyDifferentPseudonym(const LLUUID& friend_id);
 
-	void loadFromDisk();
 	LLSD exportGroup(const std::string& groupName);
 	bool saveGroupToDisk(const std::string& groupName, const std::string& fileName);
 

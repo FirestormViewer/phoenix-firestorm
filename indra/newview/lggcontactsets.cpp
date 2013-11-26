@@ -38,7 +38,6 @@
 LGGContactSets::LGGContactSets() :
 	mDefaultColor(LLColor4::grey)
 {
-	loadFromDisk();
 }
 
 LGGContactSets::~LGGContactSets()
@@ -200,6 +199,7 @@ void LGGContactSets::loadFromDisk()
 		file.close();
 		importFromLLSD(data);
 	}
+	mChangedSignal(UPDATED_LISTS);
 }
 
 void LGGContactSets::saveToDisk()

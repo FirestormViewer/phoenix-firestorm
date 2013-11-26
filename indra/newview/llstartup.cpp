@@ -2098,6 +2098,8 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			LLAvatarTracker::instance().addBuddyList(list);
 			display_startup();
  		}
+		
+		LGGContactSets::getInstance()->loadFromDisk();	// [FS:CR] Load contact sets
 
 		bool show_hud = false;
 		LLSD tutorial_setting = response["tutorial_setting"];
