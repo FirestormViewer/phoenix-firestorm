@@ -505,6 +505,12 @@ void LLFontFreetype::renderGlyph(U32 glyph_index) const
 	if (mFTFace == NULL)
 		return;
 
+
+	// <FS:ND> try to load given glyph, if that fails, fallback to ?. This can happen with invalid unicode codepoints.
+	if( 0 != FT_Load_Glyph(mFTFace, glyph_index, FT_LOAD_FORCE_AUTOHINT) )
+		glyph_index = FT_Get_Char_Index( mFTFace, L'?');
+	// </FS:ND>
+
 	llassert_always(! FT_Load_Glyph(mFTFace, glyph_index, FT_LOAD_FORCE_AUTOHINT) );
 
 	llassert_always(! FT_Render_Glyph(mFTFace->glyph, gFontRenderMode) );
