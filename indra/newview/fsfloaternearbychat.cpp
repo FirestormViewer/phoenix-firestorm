@@ -935,7 +935,7 @@ void FSFloaterNearbyChat::onChatBoxKeystroke()
 				if (!rest_of_match.empty())
 				{
 					mInputEditor->setText(prefix + replaced_text + suffix);
-					mInputEditor->selectByCursorPosition(prefix.size(), (rest_of_match.size() + 1));
+					mInputEditor->selectByCursorPosition(prefix.size() + match.size(), prefix.size() + replaced_text.size());
 				}
 			}
 		}
