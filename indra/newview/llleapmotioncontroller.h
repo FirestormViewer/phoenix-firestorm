@@ -27,10 +27,13 @@
 #ifndef LL_LLLEAPMOTIONCONTROLLER_H
 #define LL_LLLEAPMOTIONCONTROLLER_H
 
+#include "llsingleton.h"
+
 class	LLLMImpl;
 
-class LLLeapMotionController
+class LLLeapMotionController : public LLSingleton<LLLeapMotionController>
 {
+	friend class LLSingleton<LLLeapMotionController>;
 public:
 	LLLeapMotionController();
 	~LLLeapMotionController();

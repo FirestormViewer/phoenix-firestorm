@@ -43,6 +43,7 @@ class LLTextureFetch;
 class LLWatchdogTimeout;
 class LLUpdaterService;
 class LLViewerJoystick;
+class LLLeapMotionController;	// [FS:CR]
 
 extern LLFastTimer::DeclareTimer FTM_FRAME;
 
@@ -280,6 +281,12 @@ private:
     bool mPurgeOnExit;
 	bool mMainLoopInitialized;
 	LLViewerJoystick* joystick;
+	
+// [FS:CR]
+#ifdef USE_LEAPMOTION
+	LLLeapMotionController* gestureController;
+#endif // USE_LEAPMOTION
+// [/FS:CR]
 
 	bool mSavedFinalSnapshot;
 	bool mSavePerAccountSettings;		// only save per account settings if login succeeded

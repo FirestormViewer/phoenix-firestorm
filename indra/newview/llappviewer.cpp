@@ -1478,17 +1478,17 @@ bool LLAppViewer::mainLoop()
 		joystick = LLViewerJoystick::getInstance();
 		joystick->setNeedsReset(true);
 		
+// [FS:CR]
+#ifdef USE_LEAPMOTION
+		gestureController = LLLeapMotionController::getInstance();
+#endif // USE_LEAPMOTION
+// [/FS:CR]
+		
 #ifdef LL_DARWIN
 		// Ensure that this section of code never gets called again on OS X.
 		mMainLoopInitialized = true;
 #endif
 	}
-	
-// [FS:CR]
-#ifdef USE_LEAPMOTION
-	LLLeapMotionController gestureController;
-#endif // USE_LEAPMOTION
-// [/FS:CR]
 	
 	// As we do not (yet) send data on the mainloop LLEventPump that varies
 	// with each frame, no need to instantiate a new LLSD event object each
@@ -1675,7 +1675,8 @@ bool LLAppViewer::mainLoop()
 			
 // [FS:CR] Run any LeapMotion devices
 #ifdef USE_LEAPMOTION
-			gestureController.stepFrame();
+			if (gestureController)
+				gestureController->stepFrame();
 #endif //USE_LEAPMOTION
 
 			pingMainloopTimeout("Main:Sleep");
