@@ -470,6 +470,15 @@ class WindowsManifest(ViewerManifest):
                     self.path("fmodex64.dll")
             except:
                 print "Skipping fmodex audio library(assuming other audio engine)"
+			
+            # Get Leap Motion SDK
+            try:
+                if self.args['configuration'].lower() == 'debug':
+                    self.path("Leapd.dll")
+                else:
+                    self.path("Leap.dll")
+            except:
+                print "Leap Motion library was not found"
 
             # For textures
             if self.args['configuration'].lower() == 'debug':
@@ -945,6 +954,7 @@ class DarwinManifest(ViewerManifest):
                                 "libfmodex.dylib",
                                 "libfmodexL.dylib",
                                 "libGLOD.dylib",
+                                "libLeap.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(libdir, libfile), libfile)
 
@@ -1403,6 +1413,11 @@ class Linux_i686Manifest(LinuxManifest):
             except:
                     print "Skipping libfmodex.so - not found"
                     pass
+			
+            try:
+                self.path("libLeap.so")
+            except:
+                print "Leap Motion library not found"
 
             self.end_prefix("lib")
 

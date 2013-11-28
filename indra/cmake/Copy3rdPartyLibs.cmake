@@ -74,6 +74,11 @@ if(WINDOWS)
       endif( NOT ND_BUILD64BIT_ARCH )
     endif (FMODEX)
 
+    if (LEAPMOTION)
+      set(debug_files ${debug_files} Leapd.dll)
+      set(release_files ${release_files} Leap.dll)
+    endif (LEAPMOTION)
+
 # <FS:ND> Copy pdb files for symbol generation too
    if( NOT ND_BUILD64BIT_ARCH )
      set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
@@ -248,6 +253,10 @@ elseif(DARWIN)
       set(release_files ${release_files} libfmodex.dylib)
     endif (FMODEX)
 
+    if (LEAPMOTION)
+      set(release_files ${release_files} libLeap.dylib)
+    endif (LEAPMOTION)
+
 elseif(LINUX)
     # linux is weird, multiple side by side configurations aren't supported
     # and we don't seem to have any debug shared libs built yet anyways...
@@ -320,6 +329,10 @@ elseif(LINUX)
     if (FMODEX)
       set(release_file ${release_files} "libfmodex.so")
     endif (FMODEX)
+
+    if (LEAPMOTION)
+      set(release_file ${release_files} "libLeap.so")
+    endif (LEAPMOTION)
 
 else(WINDOWS)
     message(STATUS "WARNING: unrecognized platform for staging 3rd party libs, skipping...")

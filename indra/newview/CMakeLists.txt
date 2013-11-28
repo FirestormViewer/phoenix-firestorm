@@ -32,6 +32,7 @@ include(LLUI)
 include(LLVFS)
 include(LLWindow)
 include(LLXML)
+include(LeapMotion)
 # <FS:CR> Nope -> include(LScript)
 include(Linking)
 include(NDOF)
@@ -67,6 +68,11 @@ endif( LLPHYSICSEXTENSIONS_SRC_DIR )
 if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
 endif(FMODEX)
+
+if(LEAPMOTION)
+  add_definitions(-DUSE_LEAPMOTION=1)
+  include_directories(${LEAP_MOTION_INCLUDE_DIR})
+endif(LEAPMOTION)
 
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
@@ -1529,6 +1535,11 @@ set_source_files_properties(
 #   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
    )
 
+if (LEAPMOTION)
+  LIST(APPEND viewer_SOURCE_FILES llleapmotioncontroller.cpp)
+  LIST(APPEND viewer_HEADER_FILES llleapmotioncontroller.h)
+endif (LEAPMOTION)
+
 if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
   LIST(APPEND viewer_SOURCE_FILES llfilepicker_mac.mm)
@@ -2054,6 +2065,13 @@ if (WINDOWS)
            ${SHARED_LIB_STAGING_DIR}/Debug/fmodexL.dll
           )
     endif (FMODEX)
+	
+    if (LEAPMOTION)
+      list(APPEND_COPY_INPUT_DEPENDENCIES
+           ${SHARED_LIB_STAGING_DIR}/Release/Leap.dll
+           ${SHARED_LIB_STAGING_DIR}/Debug/Leapd.dll
+          )
+    endif (LEAPMOTION)
     
     add_custom_command(
       OUTPUT  ${CMAKE_CFG_INTDIR}/copy_touched.bat
@@ -2227,6 +2245,12 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLAPPEARANCE_LIBRARIES}
     ${GROWL_LIBRARY}
     )
+	
+if (LEAPMOTION)
+    target_link_libraries(${VIEWER_BINARY_NAME}
+	${LEAP_MOTION_LIBRARY}
+	)
+endif (LEAPMOTION)
 	
 if (WINDOWS)
     target_link_libraries(${VIEWER_BINARY_NAME}

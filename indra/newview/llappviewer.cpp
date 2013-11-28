@@ -244,6 +244,10 @@
 
 #include "llviewereventrecorder.h"
 
+#ifdef USE_LEAPMOTION
+#include "llleapmotioncontroller.h"
+#endif
+
 
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
@@ -1479,6 +1483,13 @@ bool LLAppViewer::mainLoop()
 		mMainLoopInitialized = true;
 #endif
 	}
+	
+// [FS:CR]
+#ifdef USE_LEAPMOTION
+	LLLeapMotionController gestureController;
+#endif // USE_LEAPMOTION
+// [/FS:CR]
+	
 	// As we do not (yet) send data on the mainloop LLEventPump that varies
 	// with each frame, no need to instantiate a new LLSD event object each
 	// time. Obviously, if that changes, just instantiate the LLSD at the
@@ -1661,6 +1672,11 @@ bool LLAppViewer::mainLoop()
 				}
 
 			}
+			
+// [FS:CR] Run any LeapMotion devices
+#ifdef USE_LEAPMOTION
+			gestureController.stepFrame();
+#endif //USE_LEAPMOTION
 
 			pingMainloopTimeout("Main:Sleep");
 			

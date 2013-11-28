@@ -17,6 +17,7 @@ FALSE=1
 #                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
 #                  <string>-DUSE_KDU=TRUE</string>
 #                  <string>-DFMODEX:BOOL=ON</string>
+#                  <string>-DLEAPMOTION:BOOL=OFF</string>
 #                  <string>-DOPENSIM:BOOL=ON</string>
 #                  <string>-DUSE_AVX_OPTIMIZATION:BOOL=OFF</string>
 #                  <string>-DLL_TESTS:BOOL=OFF</string>
@@ -33,6 +34,7 @@ WANTS_PACKAGE=$FALSE
 WANTS_VERSION=$FALSE
 WANTS_KDU=$FALSE
 WANTS_FMODEX=$FALSE
+WANTS_LEAPMOTION=$FALSE
 WANTS_OPENSIM=$TRUE
 WANTS_AVX=$FALSE
 WANTS_BUILD=$FALSE
@@ -62,6 +64,7 @@ showUsage()
     echo "  --package    : Build installer"
     echo "  --no-package : Build without installer (Overrides --package)"
     echo "  --fmodex     : Build with FMOD Ex"
+    echo "  --leapmotion : Build with Leap Motion Controller support"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
     echo "  --avx        : Build with Advanced Vector Extensions (Windows only)"
@@ -76,7 +79,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package no-package fmodex jobs: platform: kdu opensim no-opensim avx help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package no-package fmodex jobs: platform: kdu leapmotion opensim no-opensim avx help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -95,6 +98,7 @@ getArgs()
                       ;;
           kdu)        WANTS_KDU=$TRUE;;
           fmodex)     WANTS_FMODEX=$TRUE;;
+          leapmotion) WANTS_LEAPMOTION=$TRUE;;
           opensim)    WANTS_OPENSIM=$TRUE;;
           no-opensim) WANTS_OPENSIM=$FALSE;;
           avx)        WANTS_AVX=$TRUE;;
@@ -271,6 +275,7 @@ echo -e "configure_firestorm.py" > $LOG
 echo -e "    PLATFORM: '$PLATFORM'"          | tee -a $LOG
 echo -e "         KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
 echo -e "      FMODEX: `b2a $WANTS_FMODEX`"  | tee -a $LOG
+echo -e "  LEAPMOTION: `b2a $WANTS_LEAPMOTION`" | tee -a $LOG
 echo -e "     OPENSIM: `b2a $WANTS_OPENSIM`" | tee -a $LOG
 echo -e "         AVX: `b2a $WANTS_AVX` "    | tee -a $LOG
 echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`" | tee -a $LOG
@@ -356,6 +361,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         FMODEX="-DFMODEX:BOOL=OFF"
     fi
+    if [ $WANTS_LEAPMOTION -eq $TRUE ] ; then
+        LEAPMOTION="-DLEAPMOTION:BOOL=ON"
+    else
+        LEAPMOTION="-DLEAPMOTION:BOOL=OFF"
+    fi
     if [ $WANTS_OPENSIM -eq $TRUE ] ; then
         OPENSIM="-DOPENSIM:BOOL=ON"
     else
@@ -407,7 +417,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
+    cmake -G "$TARGET" ../indra $CHANNEL $FMODEX $KDU $LEAPMOTION $OPENSIM $AVX_OPTIMIZATION $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE \
           -DNDTARGET_ARCH="${TARGET_ARCH}" -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then
