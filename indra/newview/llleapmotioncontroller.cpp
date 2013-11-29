@@ -122,10 +122,13 @@ void LLLMImpl::onDisconnect(const Leap::Controller& controller)
 	mLMConnected = false;
 }
 
+static LLFastTimer::DeclareTimer FTM_LEAP_MOTION_ONFRAME("Leap Motion onFrame");
+
 // Callback from Leapmotion code when a new frame is available.  It simply
 // sets a flag so stepFrame() can pick up new controller data
 void LLLMImpl::onFrame(const Leap::Controller& controller) 
 {
+	LLFastTimer _(FTM_LEAP_MOTION_ONFRAME);
 	if (mLMConnected)
 	{
 		// Get the most recent frame and report some basic information
@@ -277,11 +280,11 @@ void LLLMImpl::modeFlyingControlTest(Leap::HandList & hands)
 			// Palm normal going left / right controls direction
 			if (mYawTimer.checkExpirationAndReset(LLLEAP_YAW_INTERVAL))
 			{
-				if (palm_normal.x > 0.4)
+				if (palm_normal.x > 0.4f)
 				{	// Go left fast
 					gAgent.moveYaw(1.f);
 				}
-				else if (palm_normal.x < -0.4)
+				else if (palm_normal.x < -0.4f)
 				{	// Go right fast
 					gAgent.moveYaw(-1.f);
 				}
