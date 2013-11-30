@@ -60,7 +60,7 @@
           follows="right"
           height="25"
           image_hover_unselected="Toolbar_Middle_Over"
-          image_overlay="MinusItem_Off"
+          image_overlay="TrashItem_Off"
           image_selected="Toolbar_Middle_Selected"
           image_unselected="Toolbar_Middle_Off"
           layout="topleft"
