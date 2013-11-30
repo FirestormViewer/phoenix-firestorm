@@ -27,6 +27,7 @@ private:
 	void handlePlayLocally();
 	void handleLookAt();
 	void handleStop();
+	void handleSelection();
 	void blacklistSound();
 
 	LLScrollListCtrl* mHistoryScroller;

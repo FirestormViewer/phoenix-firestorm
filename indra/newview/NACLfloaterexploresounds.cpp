@@ -62,10 +62,21 @@ BOOL NACLFloaterExploreSounds::postBuild()
 	getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this));
 
 	mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
+	mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
 	mHistoryScroller->setDoubleClickCallback(boost::bind(&NACLFloaterExploreSounds::handlePlayLocally, this));
 	mHistoryScroller->sortByColumn("playing", TRUE);
 	
 	return TRUE;
+}
+
+void NACLFloaterExploreSounds::handleSelection()
+{
+	S32 num_selected = mHistoryScroller->getAllSelected().size();
+	bool multiple = (num_selected > 1);
+	childSetEnabled("look_at_btn", (num_selected && !multiple));
+	childSetEnabled("play_locally_btn", num_selected);
+	childSetEnabled("stop_btn", num_selected);
+	childSetEnabled("bl_btn", num_selected);
 }
 
 LLSoundHistoryItem NACLFloaterExploreSounds::getItem(LLUUID itemID)
