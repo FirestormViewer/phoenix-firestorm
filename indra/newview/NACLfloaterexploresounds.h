@@ -9,25 +9,27 @@
 #include "lleventtimer.h"
 #include "llaudioengine.h"
 
+class LLScrollListCtrl;
+
 class NACLFloaterExploreSounds
 : public LLFloater, public LLEventTimer
 {
-	friend class LLFloaterReg;
 public:
 	NACLFloaterExploreSounds(const LLSD& key);
-	BOOL postBuild(void);
+	BOOL postBuild();
 
 	BOOL tick();
 
 	LLSoundHistoryItem getItem(LLUUID itemID);
 
-	void handle_play_locally();
-	void handle_look_at();
-	void handle_stop();
-	void blacklistSound();
-
 private:
 	virtual ~NACLFloaterExploreSounds();
+	void handlePlayLocally();
+	void handleLookAt();
+	void handleStop();
+	void blacklistSound();
+
+	LLScrollListCtrl* mHistoryScroller;
 	std::list<LLSoundHistoryItem> mLastHistory;
 };
 

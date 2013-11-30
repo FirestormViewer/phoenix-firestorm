@@ -1,15 +1,13 @@
 /** 
-* @file NACLfloaterexploresounds.cpp
-*/ 
+ * @file NACLfloaterexploresounds.cpp
+ */ 
 
 #include "llviewerprecompiledheaders.h"
 
 #include "NACLfloaterexploresounds.h"
-#include "lluictrlfactory.h"
 #include "llscrolllistctrl.h"
 #include "llagent.h"
 #include "llagentcamera.h"
-#include "llviewerwindow.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "fswsassetblacklist.h"
@@ -56,16 +54,17 @@ NACLFloaterExploreSounds::~NACLFloaterExploreSounds()
 {
 }
 
-BOOL NACLFloaterExploreSounds::postBuild(void)
+BOOL NACLFloaterExploreSounds::postBuild()
 {
-	getChild<LLButton>("play_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handle_play_locally, this));
-	getChild<LLButton>("look_at_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handle_look_at, this));
-	getChild<LLButton>("stop_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handle_stop, this));
+	getChild<LLButton>("play_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handlePlayLocally, this));
+	getChild<LLButton>("look_at_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleLookAt, this));
+	getChild<LLButton>("stop_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleStop, this));
 	getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this));
 
-	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
-	list->setDoubleClickCallback(boost::bind(&NACLFloaterExploreSounds::handle_play_locally, this));
-	list->sortByColumn("playing", TRUE);
+	mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
+	mHistoryScroller->setDoubleClickCallback(boost::bind(&NACLFloaterExploreSounds::handlePlayLocally, this));
+	mHistoryScroller->sortByColumn("playing", TRUE);
+	
 	return TRUE;
 }
 
@@ -142,18 +141,16 @@ BOOL NACLFloaterExploreSounds::tick()
 		mLastHistory = history;
 	}
 
-	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
-
 	// Save scroll pos and selection so they can be restored
-	S32 scroll_pos = list->getScrollPos();
+	S32 scroll_pos = mHistoryScroller->getScrollPos();
 	LLDynamicArray<LLUUID> selected_ids;
-	std::vector<LLScrollListItem*> selected_items = list->getAllSelected();
+	std::vector<LLScrollListItem*> selected_items = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selected_items.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selected_items.end();
 	for(; selection_iter != selection_end; ++selection_iter)
 		selected_ids.push_back((*selection_iter)->getUUID());
 
-	list->clearRows();
+	mHistoryScroller->clearRows();
 
 	std::list<LLUUID> unique_asset_list;
 
@@ -194,7 +191,7 @@ BOOL NACLFloaterExploreSounds::tick()
 		else
 		{
 			LLStringUtil::format_map_t format_args;
-			format_args["TIME"] = llformat("%.1f", (LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.f);
+			format_args["TIME"] = llformat("%.1f", static_cast<F32>((LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.0));
 			playing_column["value"] = getString("NotPlaying", format_args);
 		}
 
@@ -258,19 +255,18 @@ BOOL NACLFloaterExploreSounds::tick()
 		sound_column["column"] = "sound";
 		sound_column["value"] = item.mAssetID.asString().substr(0,16);
 
-		list->addElement(element, ADD_BOTTOM);
+		mHistoryScroller->addElement(element, ADD_BOTTOM);
 	}
 
-	list->selectMultiple(selected_ids);
-	list->setScrollPos(scroll_pos);
+	mHistoryScroller->selectMultiple(selected_ids);
+	mHistoryScroller->setScrollPos(scroll_pos);
 
 	return FALSE;
 }
 
-void NACLFloaterExploreSounds::handle_play_locally()
+void NACLFloaterExploreSounds::handlePlayLocally()
 {
-	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
-	std::vector<LLScrollListItem*> selection = list->getAllSelected();
+	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	std::vector<LLUUID> asset_list;
@@ -287,10 +283,9 @@ void NACLFloaterExploreSounds::handle_play_locally()
 	}
 }
 
-void NACLFloaterExploreSounds::handle_look_at()
+void NACLFloaterExploreSounds::handleLookAt()
 {
-	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
-	LLUUID selection = list->getSelectedValue().asUUID();
+	LLUUID selection = mHistoryScroller->getSelectedValue().asUUID();
 	LLSoundHistoryItem item = getItem(selection); // Single item only
 	if(item.mID.isNull()) return;
 
@@ -311,19 +306,18 @@ void NACLFloaterExploreSounds::handle_look_at()
 	LLVector3d cam = gAgent.getPositionGlobal() - pos_global;
 	cam.normalize();
 	// Go 4 meters back and 3 meters up
-	cam *= 4.0f;
+	cam *= 4.0;
 	cam += pos_global;
-	cam += LLVector3d(0.f, 0.f, 3.0f);
+	cam += LLVector3d(0.0, 0.0, 3.0);
 
 	gAgentCamera.setFocusOnAvatar(FALSE, FALSE);
 	gAgentCamera.setCameraPosAndFocusGlobal(cam, pos_global, item.mSourceID);
 	gAgentCamera.setCameraAnimating(FALSE);
 }
 
-void NACLFloaterExploreSounds::handle_stop()
+void NACLFloaterExploreSounds::handleStop()
 {
-	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
-	std::vector<LLScrollListItem*> selection = list->getAllSelected();
+	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	std::vector<LLUUID> asset_list;
@@ -338,8 +332,8 @@ void NACLFloaterExploreSounds::handle_stop()
 			// played twice without stopping it first. -Zi
 			if(!gAudiop->findAudioSource(item.mSourceID))
 			{
-				llwarns << "audio source " << item.mAudioSource << " already gone but still marked as playing. Fixing ..." << llendl;
-				gSoundHistory[item.mID].mPlaying=false;
+				LL_WARNS("SoundExplorer") << "audio source " << item.mAudioSource << " already gone but still marked as playing. Fixing ..." << LL_ENDL;
+				gSoundHistory[item.mID].mPlaying = false;
 				gSoundHistory[item.mID].mAudioSource = NULL;
 				gSoundHistory[item.mID].mTimeStopped = LLTimer::getElapsedSeconds();
 				continue;
@@ -359,8 +353,7 @@ void NACLFloaterExploreSounds::handle_stop()
 //add sound to blacklist
 void NACLFloaterExploreSounds::blacklistSound()
 {
-	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
-	std::vector<LLScrollListItem*> selection = list->getAllSelected();
+	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	std::vector<LLUUID> asset_list;
