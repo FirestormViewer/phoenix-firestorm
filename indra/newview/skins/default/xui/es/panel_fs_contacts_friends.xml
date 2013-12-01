@@ -17,7 +17,6 @@
 	<button label="Pagar..." name="pay_btn" tool_tip="Enviar dinero al contacto seleccionado"/>
 	<button label="Eliminar..." name="remove_btn" tool_tip="Disolver la amistad con el contacto seleccionado"/>
 	<button label="Añadir..." name="add_btn" tool_tip="Ofrecer amistad a un residente"/>
-	<button label="Contact Sets" name="lgg_fg_openFG" tool_tip="Muestra tus contactos organizados en grupos"/>
 	<text name="friend_count">
 		Amigos: ...
 	</text>

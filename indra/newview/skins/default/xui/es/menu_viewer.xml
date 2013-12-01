@@ -60,7 +60,7 @@
 		</menu>
 		<menu_item_check label="Amigos" name="My Friends"/>
 		<menu_item_check label="Contactos" name="Contacts"/>
-		<menu_item_check label="Grupos de contactos" name="Contact Sets"/>
+		<menu_item_call label="Grupos de contactos" name="Contact Sets"/>
 		<menu_item_call label="Grupos" name="My Groups"/>
 		<menu_item_check label="Chat" name="Nearby Chat"/>
 		<menu_item_check label="Gente" name="People"/>

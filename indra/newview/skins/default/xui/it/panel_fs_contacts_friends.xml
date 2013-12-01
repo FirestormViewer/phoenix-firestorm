@@ -17,7 +17,6 @@
 	<button label="Paga..." name="pay_btn" tool_tip="Dare Linden Dollars (L $) ad un amico"/>
 	<button label="Rimuovi..." name="remove_btn" tool_tip="Rimuovi l'amico selezionato dalla tua lista amici"/>
 	<button label="Aggiungi..." name="add_btn" tool_tip="Chiedere ad un residente, se vuole essere tuo amico"/>
-	<button name="lgg_fg_openFG" tool_tip="Mostra amici in gruppi personali diversi e gratuiti"/>
 	<text name="friend_count">
 	 Amici: ...
 	</text>

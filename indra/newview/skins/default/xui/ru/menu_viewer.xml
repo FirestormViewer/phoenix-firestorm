@@ -54,7 +54,7 @@
 		<menu_item_check label="Журнал разговора..." name="Conversation Log..."/>
 		<menu_item_check label="Друзья" name="My Friends"/>
 		<menu_item_check label="Контакты" name="Contacts"/>
-		<menu_item_check label="Контакт-сеты" name="Contact Sets"/>
+		<menu_item_call label="Контакт-сеты" name="Contact Sets"/>
 		<menu_item_call label="Группы" name="My Groups"/>
 		<menu_item_check label="Люди неподалеку" name="Nearby Chat"/>
         <menu_item_check label="Люди" name="People"/>

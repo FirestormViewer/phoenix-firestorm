@@ -17,7 +17,6 @@
 	<button label="Zapłać..." name="pay_btn" tool_tip="Daj Lindeny (L$) temu znajomemu"/>
 	<button label="Usuń..." name="remove_btn" tool_tip="Usuń tą osobę z listy Twoich znajomych"/>
 	<button label="Dodaj..." name="add_btn" tool_tip="Zapytaj tego Rezydenta, czy nie chce zostać Twoim znajomym"/>
-	<button label="Zest. Kont." name="lgg_fg_openFG" tool_tip="Pokaż Twoich znajomych podzielonych na grupy"/>
 	<text name="friend_count">
 	 Znajomi: ...
 	</text>

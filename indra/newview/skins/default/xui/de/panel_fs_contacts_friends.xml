@@ -42,11 +42,6 @@
 	 name="add_btn"
 	 tool_tip="Biete diesem Einwohner deine Freundschaft an"
 	 width="85" />
-	<button
-	 label="Kontakt-Sets"
-	 name="lgg_fg_openFG"
-	 tool_tip="Fasse deine Freunde in Gruppen zusammen"
-	 width="85" />
 	<text name="friend_count" width="85">
 	 Freunde: ...
 	</text>

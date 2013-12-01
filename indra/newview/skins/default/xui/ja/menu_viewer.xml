@@ -84,7 +84,8 @@
 		</menu>
 		<menu_item_call label="フレンド" name="My Friends"/>
 		<menu_item_check label="連絡先" name="Contacts"/>
-		<menu_item_check label="連絡先のセット" name="Contact Sets"/>					<menu_item_call label="所属グループ" name="My Groups"/>
+		<menu_item_call label="連絡先のセット" name="Contact Sets"/>
+		<menu_item_call label="所属グループ" name="My Groups"/>
 		<menu_item_check label="チャット..." name="Nearby Chat"/>
 		<menu_item_check label="人" name="People"/>
 		<menu_item_check label="会話" name="Conversations"/>

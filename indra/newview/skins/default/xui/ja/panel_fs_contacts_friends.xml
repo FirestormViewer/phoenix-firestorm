@@ -21,7 +21,6 @@
 	<button label="支払う..." name="pay_btn" tool_tip="リンデンドル (L$) をこのフレンドに送金します。" />
 	<button label="削除..." name="remove_btn" tool_tip="この人物をフレンドリストから除外します。" />
 	<button label="追加..." name="add_btn" tool_tip="住人にフレンドシップを申請します。" />
-	<button label="連絡先のセット" name="lgg_fg_openFG" tool_tip="複数のグループに分かれているフレンドを一覧します。" />
 	<text name="friend_count">
 		フレンドの数: ...
 	</text>
