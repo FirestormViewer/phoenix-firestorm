@@ -44,6 +44,7 @@
 #include "llinventorydefines.h"
 #include "llinventoryfunctions.h"
 #include "lllineeditor.h"
+#include "llmaterialmgr.h"
 #include "llmultigesture.h"
 #include "llnotificationsutil.h"
 #include "llparcel.h"
@@ -771,6 +772,23 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		}
 	}
 	object->sendTEUpdate();
+	
+	// [FS:CR] Materials
+	if(prim.has("materials"))
+	{
+		U8 te = 0;
+		LLSD materials = prim["materials"];
+		for (LLSD::array_iterator m_itr = materials.beginArray() ;
+			 m_itr != materials.endArray() ;
+			 ++m_itr)
+		{
+			LL_DEBUGS("import") << "Setting materials" << LL_ENDL;
+			LLMaterial* mat = new LLMaterial();
+			mat->fromLLSD(*m_itr);
+			object->setTEMaterialParams(te, mat);
+			++te;
+		}
+	}
 
 	if (prim.has("sculpt"))
 	{

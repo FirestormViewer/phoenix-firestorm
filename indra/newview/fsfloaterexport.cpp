@@ -503,6 +503,21 @@ void FSFloaterObjectExport::addPrim(LLViewerObject* object, bool root)
 				checkTE->setID(LL_DEFAULT_WOOD_UUID); // TODO: use user option of default texture.
 				prim["texture"].append(checkTE->asLLSD());
 			}
+			
+			// [FS:CR] Materials support
+			if (checkTE->getMaterialParams().notNull())
+			{
+				LL_DEBUGS("export") << "found materials. Checking permissions..." << LL_ENDL;
+				LLSD params = checkTE->getMaterialParams().get()->asLLSD();
+				/// *TODO: Feeling lazy so I made it check both. This is incorrect and needs to be expanded
+				/// to retain exportable textures not just failing both when one is non-exportable (or unset).
+				if (exportTexture(params["NormMap"].asUUID()) &&
+					exportTexture(params["SpecMap"].asUUID()))
+				{
+					LL_DEBUGS("export") << "...passed check." << LL_ENDL;
+					prim["materials"].append(params);
+				}
+			}
 		}
 
 		if (!object->getPhysicsShapeUnknown())
