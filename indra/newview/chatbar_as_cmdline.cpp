@@ -849,19 +849,10 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if (revised_text == "/cs")
-			{
-				LLFloaterReg::showInstance("contactsets");
-				reportToNearbyChat("Displaying Contact Sets Floater.");
-				return false;
-			}
 
 			else if (command == std::string(sFSCmdLineClearChat))
 			{
-				// <FS:Ansariel> [FS communication UI]
-				//LLFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
 				FSFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
-				// </FS:Ansariel> [FS communication UI]
 				if (chat)
 				{
 					chat->clearChatHistory();

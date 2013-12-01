@@ -193,7 +193,6 @@ set(viewer_SOURCE_FILES
     lggbeammaps.cpp
     lggbeamscolors.cpp
     lggcontactsets.cpp
-    lggcontactsetsfloater.cpp
     lfsimfeaturehandler.cpp
     llpanelopenregionsettings.cpp
 
@@ -894,7 +893,6 @@ set(viewer_HEADER_FILES
     lggbeammaps.h
     lggbeamscolors.h
     lggcontactsets.h
-    lggcontactsetsfloater.h
     lfsimfeaturehandler.h
 
     llaccountingcostmanager.h
