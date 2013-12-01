@@ -812,29 +812,11 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 {
 	// Popup a notify box with online status of this agent
 	// Use display name only because this user is your friend
-	// Ansariel: No please! Take preference settings into account!
 	LLSD args;
-
-	// <FS:PP> Attempt to speed up things a little
-	// if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
-	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
-	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
-	if ((NameTagShowUsernames) && (UseDisplayNames))
-	// </FS:PP>
-	{
-		args["NAME"] = av_name.getCompleteName();
-	}
-	// <FS:PP> Attempt to speed up things a little
-	// else if (gSavedSettings.getBOOL("UseDisplayNames"))
-	else if (UseDisplayNames)
-	// </FS:PP>
-	{
-		args["NAME"] = av_name.getDisplayName();
-	}
-	else
-	{
-		args["NAME"] = av_name.getUserNameForDisplay();
-	}
+	// <FS:Ansariel> Make name clickable
+	//	args["NAME"] = av_name.getDisplayName();
+	args["NAME"] = LLSLURL("agent", agent_id, "inspect").getSLURLString();
+	// </FS:Ansariel>
 	
 	args["STATUS"] = online ? LLTrans::getString("OnlineStatus") : LLTrans::getString("OfflineStatus");
 
