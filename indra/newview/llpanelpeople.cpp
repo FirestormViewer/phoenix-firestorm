@@ -87,6 +87,7 @@
 
 const F32 FRIEND_LIST_UPDATE_TIMEOUT =	0.5f;
 const F32 NEARBY_LIST_UPDATE_INTERVAL =	1.f;
+const U32 MAX_SELECTIONS = 20;
 
 static const std::string NEARBY_TAB_NAME	= "nearby_panel";
 static const std::string FRIENDS_TAB_NAME	= "friends_panel";
@@ -1785,7 +1786,8 @@ bool LLPanelPeople::onContactSetsEnable(const LLSD& userdata)
 	{
 		uuid_vec_t selected_uuids;
 		getCurrentItemIDs(selected_uuids);
-		return (!selected_uuids.empty());
+		return (!selected_uuids.empty() &&
+				selected_uuids.size() <= MAX_SELECTIONS);
 	}
 	return false;
 }

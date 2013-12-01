@@ -53,7 +53,7 @@
 #include "llvoiceclient.h"
 
 //Maximum number of people you can select to do an operation on at once.
-const S32 MAX_FRIEND_SELECT = 20;
+const U32 MAX_FRIEND_SELECT = 20;
 const F32 DEFAULT_PERIOD = 5.f;
 const F32 RIGHTS_CHANGE_TIMEOUT = 5.f;
 const F32 OBSERVER_TIMEOUT = 0.5f;

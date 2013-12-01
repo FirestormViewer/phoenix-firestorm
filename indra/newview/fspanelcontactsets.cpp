@@ -44,6 +44,7 @@
 
 #include <boost/foreach.hpp>
 
+const U32 MAX_SELECTIONS = 20;
 static LLRegisterPanelClassWrapper<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
 
 FSPanelContactSets::FSPanelContactSets() : LLPanel()
@@ -121,7 +122,9 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 void FSPanelContactSets::resetControls()
 {
 	bool has_sets = (!LGGContactSets::getInstance()->getAllGroups().empty());
-	bool has_selection = mAvatarSelections.size();
+	bool has_selection = (!mAvatarSelections.empty()
+						  // Set a maximum number of avatars users are allowed to operate on
+						  && mAvatarSelections.size() <= MAX_SELECTIONS);
 	childSetEnabled("remove_set_btn", has_sets);
 	childSetEnabled("config_btn", has_sets);
 	childSetEnabled("add_btn", has_sets);
