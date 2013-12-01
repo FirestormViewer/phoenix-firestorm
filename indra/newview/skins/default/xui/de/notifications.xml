@@ -461,6 +461,10 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 		Änderungen speichern?
 		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Nicht speichern" yestext="Speichern"/>
 	</notification>
+	<notification name="DeleteNotecard">
+		Notizkarte wirklich löschen?
+		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn eine Notizkarte gelöscht wird"/>
+	</notification>
 	<notification name="GestureSaveFailedTooManySteps">
 		Speichern der Geste fehlgeschlagen.
 Die Geste besteht aus zu vielen Schritten.
