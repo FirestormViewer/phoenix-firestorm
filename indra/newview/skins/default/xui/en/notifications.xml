@@ -1170,6 +1170,19 @@ Save Changes?
 
   <notification
    icon="alertmodal.tga"
+   name="DeleteNotecard"
+   type="alertmodal">
+Are you sure you want to delete this notecard?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm notecard deletion"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="Ok"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="GestureSaveFailedTooManySteps"
    type="alertmodal">
 Gesture save failed.

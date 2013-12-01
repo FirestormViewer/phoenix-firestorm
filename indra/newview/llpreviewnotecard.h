@@ -102,6 +102,11 @@ protected:
 							   S32 status, LLExtStat ext_status);
 
 	bool handleSaveChangesDialog(const LLSD& notification, const LLSD& response);
+	
+	// [FS:CR] FIRE-2700
+	bool handleDeleteChangesDialog(const LLSD& notification, const LLSD& response);
+	static void onConfirmDelete(void* user_data);
+	// [FS:CR]
 
 protected:
 	LLViewerTextEditor* mEditor;

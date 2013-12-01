@@ -403,6 +403,15 @@ void LLPreviewNotecard::onClickSave(void* user_data)
 // static
 void LLPreviewNotecard::onClickDelete(void* user_data)
 {
+// [FS:CR] FIRE-2700
+	LLPreviewNotecard* preview = (LLPreviewNotecard*)user_data;
+	LLNotificationsUtil::add("DeleteNotecard", LLSD(), LLSD(), boost::bind(&LLPreviewNotecard::handleDeleteChangesDialog, preview, _1, _2));
+}
+
+// static
+void LLPreviewNotecard::onConfirmDelete(void* user_data)
+{
+// [/FS:CR]
 	LLPreviewNotecard* preview = (LLPreviewNotecard*)user_data;
 	if(preview)
 	{
@@ -627,5 +636,18 @@ bool LLPreviewNotecard::handleSaveChangesDialog(const LLSD& notification, const 
 	}
 	return false;
 }
+
+// [FS:CR] FIRE-2700
+bool LLPreviewNotecard::handleDeleteChangesDialog(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		LLPreviewNotecard::onConfirmDelete((void*)this);
+	}
+	
+	return false;
+}
+// [/FS:CR]
 
 // EOF
