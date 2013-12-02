@@ -503,4 +503,14 @@
            is_running_function="Self.GetMoveLock"
            is_enabled_function="Self.EnableMoveLock"
            />
+  <command name="block_list"
+           available_in_toybox="true"
+           icon="block_list"
+           label_ref="Command_Blocklist_Label"
+           tooltip_ref="Command_Blocklist_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="fs_blocklist"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="fs_blocklist"
+           />
 </commands>
