@@ -36,11 +36,12 @@
 #include "llspinctrl.h"
 #include "lltrans.h"
 // <FS:CR>
-#include "llviewercontrol.h"
 #include "llavataractions.h"
-#include "llviewerwindow.h"
-#include "llwindow.h"
 #include "llconversationlog.h"
+#include "llfloatersearchreplace.h"
+#include "llviewerwindow.h"
+#include "llviewercontrol.h"
+#include "llwindow.h"
 // </FS:CR>
 
 const std::string LL_FCP_COMPLETE_NAME("complete_name");
@@ -68,6 +69,7 @@ BOOL LLFloaterConversationPreview::postBuild()
 	LLLoadHistoryThread::setLoadEndSignal(boost::bind(&LLFloaterConversationPreview::setPages, this, _1, _2));
 	
 	childSetAction("open_external_btn", boost::bind(&LLFloaterConversationPreview::onBtnOpenExternal, this));	//<FS:CR> Open chat history externally
+	childSetAction("search_btn", boost::bind(&LLFloaterConversationPreview::onClickSearch, this));	// [FS:CR] FIRE-6545
 
 	const LLConversation* conv = LLConversationLog::instance().getConversation(mSessionID);
 	std::string name;
@@ -227,7 +229,13 @@ void LLFloaterConversationPreview::onMoreHistoryBtnClick()
 }
 
 // <FS:CR> Open chat history externally
-void (LLFloaterConversationPreview::onBtnOpenExternal())
+void LLFloaterConversationPreview::onBtnOpenExternal()
 {
 	gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(mChatHistoryFileName));
+}
+
+// [FS:CR] FIRE-6545
+void LLFloaterConversationPreview::onClickSearch()
+{
+	LLFloaterSearchReplace::show(mChatHistory);
 }

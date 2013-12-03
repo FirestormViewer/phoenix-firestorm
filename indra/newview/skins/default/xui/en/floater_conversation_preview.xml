@@ -75,4 +75,16 @@
      name="open_external_btn"
      top_delta="-2"
      width="25"/>
+    <button
+     follows="bottom|left"
+     height="22"
+     left_pad="4"
+     image_pressed="PushButton_Press"
+     image_pressed_selected="PushButton_Selected_Press"
+     image_selected="PushButton_Selected_Press"
+     tool_tip="Search this transcript"
+     image_overlay="Script_Search"
+     name="search_btn"
+     top_delta="0"
+     width="25"/>
 </floater>
