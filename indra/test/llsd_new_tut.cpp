@@ -26,9 +26,9 @@
  */
 
 #define LLSD_DEBUG_INFO
-#include <tut/tut.hpp>
 #include "linden_common.h"
 #include "lltut.h"
+#include <tut/tut.hpp> // <FS:Cron> this header has to come AFTER lltut.h because clang wants operator<< overloads declared BEFORE the template that uses them. </FS:Cron>
 
 #include "llsdtraits.h"
 #include "llstring.h"

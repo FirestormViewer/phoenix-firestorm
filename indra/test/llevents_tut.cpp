@@ -48,10 +48,10 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/assign/list_of.hpp>
 // other Linden headers
-#include "lltut.h"
 #include "catch_and_store_what_in.h"
 #include "stringize.h"
 #include "tests/listener.h"
+#include "lltut.h" // <FS:Cron> this header has to come AFTER listener.h because clang wants operator<< overloads declared BEFORE the template that uses them. </FS:Cron>
 
 using boost::assign::list_of;
 
