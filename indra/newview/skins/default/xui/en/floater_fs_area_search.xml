@@ -53,7 +53,8 @@
 				<scroll_list.columns
 				 name="distance"
 				 label="Dist"
-				 width="40"/>
+				 width="50"
+				 tool_tip="Distance from your avatar to the object."/>
 				<scroll_list.columns
 				 name="name"
 				 label="Name"
@@ -65,15 +66,18 @@
 				<scroll_list.columns
 				 name="price"
 				 label="Price"
-				 width="140"/>
+				 width="70"
+				 tool_tip="If the object is for sale, what you'd pay to purchase it."/>
 				<scroll_list.columns
 				 name="land_impact"
 				 label="Land Impact"
-				 width="140"/>
+				 width="80"
+				 tool_tip="The number that is counted against your parcel's maximum."/>
 				<scroll_list.columns
 				 name="prim_count"
 				 label="Prim Count"
-				 width="140"/>
+				 width="80"
+				 tool_tip="Count of prims that make up each object."/>
 				<scroll_list.columns
 				 name="owner"
 				 label="Owner"
