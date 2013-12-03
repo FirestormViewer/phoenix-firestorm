@@ -53,30 +53,30 @@
 				<scroll_list.columns
 				 name="distance"
 				 label="Dist"
-				 width="50"
+				 width="40"
 				 tool_tip="Distance from your avatar to the object."/>
 				<scroll_list.columns
 				 name="name"
 				 label="Name"
-				 width="140"/>
+				 width="180"/>
 				<scroll_list.columns
 				 name="description"
 				 label="Description"
-				 width="140"/>
+				 width="180"/>
 				<scroll_list.columns
 				 name="price"
 				 label="Price"
-				 width="70"
+				 width="40"
 				 tool_tip="If the object is for sale, what you'd pay to purchase it."/>
 				<scroll_list.columns
 				 name="land_impact"
-				 label="Land Impact"
-				 width="80"
+				 label="LI"
+				 width="40"
 				 tool_tip="The number that is counted against your parcel's maximum."/>
 				<scroll_list.columns
 				 name="prim_count"
-				 label="Prim Count"
-				 width="80"
+				 label="Prims"
+				 width="40"
 				 tool_tip="Count of prims that make up each object."/>
 				<scroll_list.columns
 				 name="owner"
@@ -90,11 +90,11 @@
 				<scroll_list.columns
 				 name="creator"
 				 label="Creator"
-				 width="140"/>
+				 width="170"/>
 				<scroll_list.columns
 				 name="last_owner"
 				 label="Last Owner"
-				 width="140"
+				 width="150"
 				 tool_tip="Who owned it last."/>
 			</scroll_list>
 			<button
