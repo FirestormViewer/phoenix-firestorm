@@ -160,6 +160,7 @@ public:
 	void setColumnDistance(bool b) { mColumnDistance = b; }
 	void setColumnName(bool b) { mColumnName = b; }
 	void setColumnDescription(bool b) { mColumnDescription = b; }
+	void setColumnPrice(bool b) { mColumnPrice = b; }
 	void setColumnOwner(bool b) { mColumnOwner = b; }
 	void setColumnGroup(bool b) { mColumnGroup = b; }
 	void setColumnCreator(bool b) { mColumnCreator = b; }
@@ -254,6 +255,7 @@ private:
 	bool mColumnDistance;
 	bool mColumnName;
 	bool mColumnDescription;
+	bool mColumnPrice;
 	bool mColumnOwner;
 	bool mColumnGroup;
 	bool mColumnCreator;

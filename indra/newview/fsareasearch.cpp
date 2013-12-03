@@ -55,6 +55,7 @@
 #include "llnotificationsutil.h"
 #include "fswsassetblacklist.h"
 #include "llworld.h"
+#include "lltrans.h"	// getString()
 
 
 // max number of objects that can be (de-)selected in a single packet.
@@ -118,6 +119,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mColumnDistance(true),
 	mColumnName(true),
 	mColumnDescription(true),
+	mColumnPrice(true),
 	mColumnOwner(true),
 	mColumnGroup(true),
 	mColumnCreator(true),
@@ -328,7 +330,7 @@ void FSAreaSearch::findObjects()
 	LL_DEBUGS("FSAreaSearch_spammy") << "Doing a FSAreaSearch::findObjects" << LL_ENDL;
 	
 	mLastUpdateTimer.stop(); // stop sets getElapsedTimeF32() time to zero.
-	// Pause processing of requestqueue untill done adding new requests.
+	// Pause processing of requestqueue until done adding new requests.
 	mRequestQueuePause = true;
 	checkRegion();
 	mRefresh = false;
@@ -954,6 +956,21 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	{
 		cell_params.column = "description";
 		cell_params.value = details.description;
+		row_params.columns.add(cell_params);
+	}
+
+	if (mColumnPrice)
+	{
+		cell_params.column = "price";
+		if (details.sale_info.isForSale())
+		{
+			S32 price = details.sale_info.getSalePrice();
+			cell_params.value = price > 0 ? llformat("%s%d", "L$", details.sale_info.getSalePrice()) : LLTrans::getString("free");
+		}
+		else
+		{
+			cell_params.value = "--"; // or it could be LLTrans::getString("not for sale"); or similar, but "--" doesn't need translation.
+		}
 		row_params.columns.add(cell_params);
 	}
 
@@ -1881,11 +1898,17 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 			mColumnParms[column_name] = result_list->delColumn(column_name);
 		}
 
-		// untill C++ supports variable withen a variablname, have to do this instead.
-		// used switch instead of a huge if then else if then else...
+		/// until C++ supports variable within a variable name, have to do this instead.
+		/// used switch instead of a huge if then else if then else...
+		// Please keep in alphabetical order.  Provides both optimizations and ease of updating as the list grows.
 		char c = column_name.at(0);
 		switch(c)
 		{
+			case 'c':
+			{
+				mFSAreaSearch->setColumnCreator(checkboxctrl->get());
+				break;
+			}
 			case 'd':
 			{
 				char d = column_name.at(1);
@@ -1906,6 +1929,16 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 				}
 				break;
 			}
+			case 'g':
+			{
+				mFSAreaSearch->setColumnGroup(checkboxctrl->get());
+				break;
+			}
+			case 'l':
+			{
+				mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
+				break;
+			}
 			case 'n':
 			{
 				mFSAreaSearch->setColumnName(checkboxctrl->get());
@@ -1916,19 +1949,9 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 				mFSAreaSearch->setColumnOwner(checkboxctrl->get());
 				break;
 			}
-			case 'g':
+			case 'p':
 			{
-				mFSAreaSearch->setColumnGroup(checkboxctrl->get());
-				break;
-			}
-			case 'c':
-			{
-				mFSAreaSearch->setColumnCreator(checkboxctrl->get());
-				break;
-			}
-			case 'l':
-			{
-				mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
+				mFSAreaSearch->setColumnPrice(checkboxctrl->get());
 				break;
 			}
 			default:

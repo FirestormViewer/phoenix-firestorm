@@ -63,6 +63,10 @@
 				 label="Description"
 				 width="140"/>
 				<scroll_list.columns
+				 name="price"
+				 label="Price"
+				 width="140"/>
+				<scroll_list.columns
 				 name="owner"
 				 label="Owner"
 				 width="140"/>
@@ -600,6 +604,19 @@
 				<check_box.commit_callback
 				 function="AreaSearch.DisplayColumn"
 				 parameter="description"/>
+			</check_box>
+			<check_box
+			 follows="top|left"
+			 height="16"
+			 layout="topleft"
+			 left="8"
+			 name="show_price"
+			 label="Price"
+			 top_pad="10"
+			 initial_value="true">
+				<check_box.commit_callback
+				 function="AreaSearch.DisplayColumn"
+				 parameter="price"/>
 			</check_box>
 			<check_box
 			 follows="top|left"
