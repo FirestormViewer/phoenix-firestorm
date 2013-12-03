@@ -988,19 +988,6 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 		{
 			cell_params.value = "...";
 		}
-		/*
-		Displays "0".  Talk with Techwolf Lupindo resulted in the following: The above data is stale, and needs to be updated.
-		Calling the above function will cause a refresh of the stale data, but I need to hook into that refresh and update the list with the corrected values after the fact.
-		
-		Relevant chat:
-		"Have to hook into the http responder that handles the updating of said object data and call an upate in the area search floater scrollist."
-		"That responder is class LLObjectCostResponder : public LLCurl::Responder in llviewerobjectlist.cpp"
-		"Then look at the hook for getting objectdata: void process_object_properties(LLMessageSystem *msg, void**user_data) in llviewermessage.cpp"
-		"baceally, add the hook to call a new function in area search that will find and update the scrollist value to the new value."
-		"objectp->getUUID and LLScrollListItem* item->getUUID is the same."
-		"OH, found just what you needed. LLScrollListItem* LLScrollListCtrl::getItem(const LLSD& sd) const"
-		"That will get you the row you need to update.  Though you need to convert the LLUUID to LLSD first."
-		*/
 		row_params.columns.add(cell_params);
 	}
 
