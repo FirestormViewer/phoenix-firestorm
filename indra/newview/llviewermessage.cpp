@@ -5735,14 +5735,14 @@ void process_object_properties(LLMessageSystem *msg, void**user_data)
 	// Send the result to the corresponding requesters.
 	LLSelectMgr::processObjectProperties(msg, user_data);
 	
-	FSAreaSearch* area_search_floater = LLFloaterReg::getTypedInstance<FSAreaSearch>("area_search");
-	if( area_search_floater )
+	FSAreaSearch* area_search_floater = LLFloaterReg::findTypedInstance<FSAreaSearch>("area_search");
+	if (area_search_floater)
 	{
 		area_search_floater->processObjectProperties(msg);
 	}
 
-	AnimationExplorer* explorer=LLFloaterReg::findTypedInstance<AnimationExplorer>("animation_explorer");
-	if(explorer)
+	AnimationExplorer* explorer = LLFloaterReg::findTypedInstance<AnimationExplorer>("animation_explorer");
+	if (explorer)
 	{
 		explorer->requestNameCallback(msg);
 	}
