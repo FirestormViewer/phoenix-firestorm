@@ -175,7 +175,7 @@ void LLKeyboardMacOSX::resetMaskKeys()
 		mKeyLevel[KEY_SHIFT] = TRUE;
 	}
 
-	if(mask & MAC_CTRL_KEY)
+	if(mask & (MAC_CTRL_KEY | MAC_CMD_KEY))
 	{
 		mKeyLevel[KEY_CONTROL] = TRUE;
 	}
