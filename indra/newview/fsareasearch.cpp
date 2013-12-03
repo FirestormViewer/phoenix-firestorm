@@ -120,6 +120,8 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mColumnName(true),
 	mColumnDescription(true),
 	mColumnPrice(true),
+	mColumnLandImpact(true),
+	mColumnPrimCount(true),
 	mColumnOwner(true),
 	mColumnGroup(true),
 	mColumnCreator(true),
@@ -974,6 +976,41 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 		row_params.columns.add(cell_params);
 	}
 
+	if (mColumnLandImpact)
+	{
+		cell_params.column = "land_impact";
+		F32 cost = objectp->getLinksetCost();
+		if (cost > 0.001)
+		{
+			cell_params.value = cost;
+		}
+		else
+		{
+			cell_params.value = "...";
+		}
+		/*
+		Displays "0".  Talk with Techwolf Lupindo resulted in the following: The above data is stale, and needs to be updated.
+		Calling the above function will cause a refresh of the stale data, but I need to hook into that refresh and update the list with the corrected values after the fact.
+		
+		Relevant chat:
+		"Have to hook into the http responder that handles the updating of said object data and call an upate in the area search floater scrollist."
+		"That responder is class LLObjectCostResponder : public LLCurl::Responder in llviewerobjectlist.cpp"
+		"Then look at the hook for getting objectdata: void process_object_properties(LLMessageSystem *msg, void**user_data) in llviewermessage.cpp"
+		"baceally, add the hook to call a new function in area search that will find and update the scrollist value to the new value."
+		"objectp->getUUID and LLScrollListItem* item->getUUID is the same."
+		"OH, found just what you needed. LLScrollListItem* LLScrollListCtrl::getItem(const LLSD& sd) const"
+		"That will get you the row you need to update.  Though you need to convert the LLUUID to LLSD first."
+		*/
+		row_params.columns.add(cell_params);
+	}
+
+	if (mColumnPrimCount)
+	{
+		cell_params.column = "prim_count";
+		cell_params.value = objectp->numChildren() + 1;
+		row_params.columns.add(cell_params);
+	}
+
 	if (mColumnOwner)
 	{
 		cell_params.column = "owner";
@@ -1021,6 +1058,25 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 		{
 			LLScrollListText* list_cell = (LLScrollListText*)list_row->getColumn(i);
 			list_cell->setFontStyle(font_style);
+		}
+	}
+}
+
+// <FS:Cron> Allows the object costs to be updated on-the-fly so as to bypass the problem with the data being stale when first accessed.
+void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F32 link_cost, F32 physics_cost, F32 link_physics_cost)
+{
+	LLScrollListCtrl* result_list = mPanelList->getResultList();
+	if (result_list)
+	{
+		LLScrollListItem* list_row = result_list->getItem(LLSD(object_id));
+		if (list_row)
+		{
+			LLScrollListColumn* list_column = result_list->getColumn("land_impact");
+			if (list_column)
+			{
+				LLScrollListCell* linkset_cost_cell = list_row->getColumn(list_column->mIndex);
+				linkset_cost_cell->setValue(LLSD(link_cost));
+			}
 		}
 	}
 }
@@ -1936,7 +1992,22 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 			}
 			case 'l':
 			{
-				mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
+				char d = column_name.at(2);
+				switch (d)
+				{
+					case 'n':
+					{
+						mFSAreaSearch->setColumnLandImpact(checkboxctrl->get());
+						break;
+					}
+					case 's':
+					{
+						mFSAreaSearch->setColumnLastOwner(checkboxctrl->get());
+						break;
+					}
+					default:
+						break;
+				}
 				break;
 			}
 			case 'n':
@@ -1951,7 +2022,22 @@ void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdat
 			}
 			case 'p':
 			{
-				mFSAreaSearch->setColumnPrice(checkboxctrl->get());
+				char d = column_name.at(3);
+				switch (d)
+				{
+					case 'c':
+					{
+						mFSAreaSearch->setColumnPrice(checkboxctrl->get());
+						break;
+					}
+					case 'm':
+					{
+						mFSAreaSearch->setColumnPrimCount(checkboxctrl->get());
+						break;
+					}
+					default:
+						break;
+				}
 				break;
 			}
 			default:
