@@ -9755,6 +9755,16 @@ it is not in the same region as you.
   </notification>
   
   <notification
+   icon="alert.tga"
+   name="ChatHistoryIsBusyAlert"
+   type="alertmodal">
+   Chat history file is busy with previous operation. Please try again in a few minutes or choose chat with another person.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  
+  <notification
    icon="alertmodal.tga"
    name="NoNewObjectRegionFull"
    type="notify">
