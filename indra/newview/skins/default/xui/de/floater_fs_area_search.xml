@@ -7,10 +7,13 @@
 			<scroll_list name="result_list">
 				<scroll_list.columns name="distance" label="Entf."/>
 				<scroll_list.columns name="name" label="Name"/>
-				<scroll_list.columns name="description" label="Beschreibung"/>
+				<scroll_list.columns name="description" label="Beschreibung" width="170" tool_tip="Entfernung vom Avatar zum Objekt."/>
+				<scroll_list.columns name="price" label="Preis" tool_tip="Preis des Objects, falls es zum Verkauf steht."/>
+				<scroll_list.columns name="land_impact" label="LI" tool_tip="Der Wert, der mit dem Prim-Maximum der Parzelle verrechnet wird."/>
+				<scroll_list.columns name="prim_count" label="Prims" tool_tip="Anzahl an Primitiven, aus dem das Objekt besteht."/>
 				<scroll_list.columns name="owner" label="Eigentümer"/>
 				<scroll_list.columns name="group" label="Gruppe" tool_tip="Welcher Gruppe das Objekt zugeordnet ist."/>
-				<scroll_list.columns name="creator" label="Ersteller"/>
+				<scroll_list.columns name="creator" label="Ersteller" width="150"/>
 				<scroll_list.columns name="last_owner" label="Vorheriger Eigentümer" width="140" tool_tip="Der Vorbesitzer des Objekts."/>
 			</scroll_list>
 			<button name="Refresh" label="Aktualisieren" width="100"/>
@@ -92,6 +95,9 @@
 			<check_box name="show_distance" label="Entfernung"/>
 			<check_box name="show_name" label="Name"/>
 			<check_box name="show_description" label="Beschreibung"/>
+			<check_box name="show_price" label="Preis"/>
+			<check_box name="show_land_impact" label="Land Impact"/>
+			<check_box name="show_prim_count" label="Primitive"/>
 			<check_box name="show_owner" label="Eigentümer"/>
 			<check_box name="show_group" label="Gruppe"/>
 			<check_box name="show_creator" label="Ersteller"/>
