@@ -971,7 +971,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 		}
 		else
 		{
-			cell_params.value = "--"; // or it could be LLTrans::getString("not for sale"); or similar, but "--" doesn't need translation.
+			cell_params.value = " ";
 		}
 		row_params.columns.add(cell_params);
 	}
