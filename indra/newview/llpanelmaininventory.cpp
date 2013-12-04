@@ -274,19 +274,6 @@ BOOL LLPanelMainInventory::postBuild()
 				recent_items_panel->getFilter().fromParams(p.filter);
 			}
 		}
-
-		if(worn_items_panel)
-		{
-			if(savedFilterState.has(worn_items_panel->getName()))
-			{
-				LLSD worn_items = savedFilterState.get(
-					worn_items_panel->getName());
-				LLInventoryPanel::InventoryState p;
-				LLParamSDParser parser;
-				parser.readSD(worn_items, p);
-				worn_items_panel->getFilter().fromParams(p.filter);
-			}
-		}
 		// </FS:ND>
 
 	}
@@ -366,20 +353,6 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 		{
 			LLParamSDParser().writeSD(filterState, p);
 			filterRoot[panel->getName()] = filterState;
-		}
-	}
-
-	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
-	if (worn_items_panel)
-	{
-		LLSD filterState;
-		LLInventoryPanel::InventoryState p;
-		worn_items_panel->getFilter().toParams(p.filter);
-		worn_items_panel->getRootViewModel().getSorter().toParams(p.sort);
-		if (p.validateBlock(false))
-		{
-			LLParamSDParser().writeSD(filterState, p);
-			filterRoot[worn_items_panel->getName()] = filterState;
 		}
 	}
 
