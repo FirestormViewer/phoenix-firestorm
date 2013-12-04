@@ -5,4 +5,5 @@
 	</floater.string>
 	<text name="page_label" value="Str." />
 	<button tool_tip="Otwórz logi czatu w zewnętrznym oknie" name="open_external_btn" />
+	<button tool_tip="Przeszukaj ten log czatu" name="search_btn" />
 </floater>
