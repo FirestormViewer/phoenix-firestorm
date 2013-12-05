@@ -815,7 +815,22 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	LLSD args;
 	// <FS:Ansariel> Make name clickable
 	//	args["NAME"] = av_name.getDisplayName();
-	args["NAME"] = LLSLURL("agent", agent_id, "inspect").getSLURLString();
+	std::string used_name;
+	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
+	if ((NameTagShowUsernames) && (UseDisplayNames))
+	{
+		used_name = av_name.getCompleteName();
+	}
+	else if (UseDisplayNames)
+	{
+		used_name = av_name.getDisplayName();
+	}
+	else
+	{
+		used_name = av_name.getUserNameForDisplay();
+	}
+	args["NAME"] = used_name;
 	// </FS:Ansariel>
 	
 	args["STATUS"] = online ? LLTrans::getString("OnlineStatus") : LLTrans::getString("OfflineStatus");
@@ -857,24 +872,20 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	// online/offline times to be referenced in chat & logged.
 	// [FIRE-3522 : SJ] Only show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Toasts
 	//                  or for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Nearby Chat
-	
-	// <FS:PP> Attempt to speed up things a little
-	// if ((gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) || (gSavedSettings.getBOOL("FSContactSetsNotificationNearbyChat") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
 	static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
 	static LLCachedControl<bool> FSContactSetsNotificationNearbyChat(gSavedSettings, "FSContactSetsNotificationNearbyChat");
 	if ((OnlineOfflinetoNearbyChat) || (FSContactSetsNotificationNearbyChat && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
-	// </FS:PP>
 	{
 		static LLCachedControl<bool> history_only(gSavedSettings, "OnlineOfflinetoNearbyChatHistory"); // LO - Adding a setting to show online/offline notices only in chat history. Helps prevent your screen from being filled with online notices on login.
 		LLChat chat;
-		chat.mText = notify_msg;
+		chat.mText = (online ? LLTrans::getString("FriendOnlineNotification") : LLTrans::getString("FriendOfflineNotification"));
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		chat.mChatType = CHAT_TYPE_RADAR;
+		chat.mFromID = agent_id;
+		chat.mFromName = used_name;
 		if (history_only)
 		{
-			// <FS:Ansariel> [FS communication UI]
-			//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
 			FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
-			// </FS:Ansariel> [FS communication UI]
 			nearby_chat->addMessage(chat, true, LLSD());
 		}
 		else
@@ -883,12 +894,12 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		}
 
 		// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+		chat.mText = notify_msg;
 		if (FSKeywords::getInstance()->chatContainsKeyword(chat, true))
 		{
 			FSKeywords::notify(chat);
 		}
 		// </FS:PP>
-
 	}
 }
 
