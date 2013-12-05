@@ -229,7 +229,6 @@ private:
 	bool mBeacons;
 	LLColor4 mBeaconColor;
 	LLColor4 mBeaconTextColor;
-	S32 mBeaconLineWidth;
 	
 	bool mExcludeAttachment;
 	bool mExcludeTemporary;

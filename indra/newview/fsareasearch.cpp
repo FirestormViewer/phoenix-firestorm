@@ -176,7 +176,6 @@ BOOL FSAreaSearch::postBuild()
 	// TODO: add area search settings to the color.xml file
 	mBeaconColor = LLUIColorTable::getInstance()->getColor("PathfindingLinksetBeaconColor");
 	mBeaconTextColor = LLUIColorTable::getInstance()->getColor("PathfindingDefaultBeaconTextColor");
-	mBeaconLineWidth = gSavedSettings.getS32("DebugBeaconLineWidth");
 
 	return LLFloater::postBuild();
 }
@@ -184,6 +183,8 @@ BOOL FSAreaSearch::postBuild()
 void FSAreaSearch::draw()
 {
 	LLFloater::draw();
+	
+	static LLCachedControl<S32> beacon_line_width(gSavedSettings, "DebugBeaconLineWidth");
 	
 	if (mBeacons)
 	{
@@ -199,7 +200,7 @@ void FSAreaSearch::draw()
 			if (objectp)
 			{
 				const std::string &objectName = mObjectDetails[item->getUUID()].description;
-				gObjectList.addDebugBeacon(objectp->getPositionAgent(), objectName, mBeaconColor, mBeaconTextColor, mBeaconLineWidth);
+				gObjectList.addDebugBeacon(objectp->getPositionAgent(), objectName, mBeaconColor, mBeaconTextColor, beacon_line_width);
 			}
 		}
 	}
@@ -624,7 +625,7 @@ void FSAreaSearch::requestObjectProperties(const std::vector<U32>& request_list,
 
 void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 {
-	// This fuction is called by llviewermessage even if no floater has been created.
+	// This function is called by llviewermessage even if no floater has been created.
 	if (!(mInstance && mActive))
 	{
 	      return;
