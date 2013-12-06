@@ -5335,4 +5335,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="animation_explorer_still_playing">
 		Ciągle odtwarzane
 	</string>
+	<string name="FriendOnlineNotification">
+		jest online.
+	</string>
+	<string name="FriendOfflineNotification">
+		jest offline.
+	</string>
 </strings>
