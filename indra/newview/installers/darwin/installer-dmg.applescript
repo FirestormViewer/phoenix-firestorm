@@ -38,9 +38,6 @@ on run (volumeName)
 						set the position of i to {345, 225}
 						set the extension hidden of i to true
 					end if
-					-- Change the 7 to change the color: 0 is no label, then red,
-					-- orange, yellow, green, blue, purple, or gray.
-					set the label index of i to 7
 				end repeat
 			-- This close-open hack is nessesary to save positions on 10.6 Snow Leopard
 			close
