@@ -240,7 +240,7 @@ elseif(DARWIN)
         libhunspell-1.3.0.dylib
         # libexception_handler.dylib
         libcollada14dom.dylib
-        #libgrowl.dylib # *TODO - test/fix/get mac growl working
+        libgrowl++.dylib
        )
 
     # <FS:ND> We only ever need google breakpad when crash reporting is used

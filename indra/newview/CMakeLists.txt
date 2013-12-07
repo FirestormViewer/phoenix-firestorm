@@ -1549,14 +1549,12 @@ if (DARWIN)
 # [FS] Growl libs
   LIST(APPEND viewer_SOURCE_FILES
         growlmanager.cpp
-        growlnotifiermacosx.cpp
-        growlnotifiermacosx-objc.mm
+        growlnotifierwin.cpp
         )
 
   LIST(APPEND viewer_HEADER_FILES
          growlmanager.h
-         growlnotifiermacosx.h
-         growlnotifiermacosx-objc.h
+         growlnotifierwin.h
          )
 # [FS]
 

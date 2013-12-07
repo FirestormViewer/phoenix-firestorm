@@ -47,9 +47,7 @@
 #include "growlnotifier.h"
 
 // Platform-specific includes
-#ifdef LL_DARWIN
-#include "growlnotifiermacosx.h"
-#elif LL_WINDOWS
+#ifndef LL_LINUX
 #include "growlnotifierwin.h"
 #elif LL_LINUX
 #include "desktopnotifierlinux.h"
@@ -61,10 +59,7 @@ GrowlManager *gGrowlManager = NULL;
 GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 {
 	// Create a notifier appropriate to the platform.
-#ifdef LL_DARWIN
-	this->mNotifier = new GrowlNotifierMacOSX();
-	LL_INFOS("GrowlManagerInit") << "Created GrowlNotifierMacOSX." << LL_ENDL;
-#elif LL_WINDOWS
+#ifndef LL_LINUX
 	this->mNotifier = new GrowlNotifierWin();
 	LL_INFOS("GrowlManagerInit") << "Created GrowlNotifierWin." << LL_ENDL;
 #elif LL_LINUX
@@ -75,7 +70,7 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 	LL_INFOS("GrowlManagerInit") << "Created generic GrowlNotifier." << LL_ENDL;
 #endif
 	
-#ifdef LL_WINDOWS
+#ifndef LL_LINUX
 	if (mNotifier)
 	{
 		// Need to call loadConfig for Windows first before we know if
