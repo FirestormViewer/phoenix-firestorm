@@ -1363,7 +1363,7 @@
 			desc="key llGetCreator();Returns a key for the creator of the prim" />
 		<function name="llGetTimestamp" sleep="0.0" energy="10.0"
 			desc="string llGetTimestamp();Returns the timestamp in the UTC time zone in the format; YYYY-MM-DDThh;mm;ss.ff..fZ" />
-		<function name="llGetGMTClock" sleep="0.0" energy="10.0"
+		<function name="llGetGMTclock" sleep="0.0" energy="10.0"
 			desc="float llGetGMTclock();Returns the time in seconds since midnight GMT" />
 		<function name="llSetLinkAlpha" sleep="0.0" energy="10.0"
 			desc="llSetLinkAlpha(integer linknumber, float alpha, integer face);If a prim exists in the link chain at linknumber, sets face to alpha" />
