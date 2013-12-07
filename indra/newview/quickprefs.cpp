@@ -1384,7 +1384,6 @@ void FloaterQuickPrefs::onValuesChanged()
 
 			// do a best guess on variable types and control widgets
 			ControlType type;
-			BOOL integer;
 			switch(var->type())
 			{
 				// Boolean gets the full set
@@ -1393,7 +1392,6 @@ void FloaterQuickPrefs::onValuesChanged()
 					// increment will be calculated below
 					min_value=0.0;
 					max_value=1.0;
-					integer=TRUE;
 					type=ControlTypeRadio;
 					break;
 				}
@@ -1415,9 +1413,6 @@ void FloaterQuickPrefs::onValuesChanged()
 				}
 				// Fallthrough, S32 and U32 are integer values
 				case TYPE_S32:
-				{
-					integer=TRUE;
-				}
 				// Fallthrough, S32, U32 and F32 should use sliders
 				case TYPE_F32:
 				{
@@ -1428,7 +1423,6 @@ void FloaterQuickPrefs::onValuesChanged()
 				default:
 				{
 					type=ControlTypeText;
-					integer=FALSE;
 				}
 			}
 
