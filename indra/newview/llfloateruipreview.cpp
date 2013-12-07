@@ -181,7 +181,8 @@ private:
 	LLButton*					mToggleOverlapButton;				// button to togle overlap panel/highlighting
 	LLComboBox*					mLanguageSelection;					// combo box for primary language selection
 	LLComboBox*					mLanguageSelection_2;				// combo box for secondary language selection
-	LLScrollContainer*			mOverlapScrollView;					// overlapping elements scroll container
+	// [FS:CR] Unused 2013.12.7
+	//LLScrollContainer*			mOverlapScrollView;					// overlapping elements scroll container
 	S32							mLastDisplayedX, mLastDisplayedY;	// stored position of last floater so the new one opens up in the same place
 	std::string 				mDelim;								// the OS-specific delimiter character (/ or \) (*TODO: this shouldn't be needed, right?)
 
@@ -1065,9 +1066,11 @@ void LLFloaterUIPreview::onClickBrowseForEditor()
 	CFStringRef path_cfstr = CFStringCreateWithCString(kCFAllocatorDefault, chosen_path.c_str(), kCFStringEncodingMacRoman);		// get path as a CFStringRef
 	CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_cfstr, kCFURLPOSIXPathStyle, TRUE);			// turn it into a CFURLRef
 	CFBundleRef chosen_bundle = CFBundleCreate(kCFAllocatorDefault, path_url);												// get a handle for the bundle
+	CFRelease(path_url);	// [FS:CR] Don't leave a mess clean up our objects after we use them
 	if(NULL != chosen_bundle)
 	{
 		CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(chosen_bundle);												// get the bundle's dictionary
+		CFRelease(chosen_bundle);	// [FS:CR] Don't leave a mess clean up our objects after we use them
 		if(NULL != bundleInfoDict)
 		{
 			CFStringRef executable_cfstr = (CFStringRef)CFDictionaryGetValue(bundleInfoDict, CFSTR("CFBundleExecutable"));	// get the name of the actual executable (e.g. TextEdit or firefox-bin)
