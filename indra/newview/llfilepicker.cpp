@@ -1385,7 +1385,7 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
 			break;
 		// [FS:CR] FIRE-12276
 		case FFSAVE_CSV:
-			caption += add_simple_patterm_filter_to_gtkchooser
+			caption += add_simple_pattern_filter_to_gtkchooser
 				(picker, "*.csv", LLTrans::getString("csv_files") + " (*.csv)");
 // </FS:CR>
 		default:;
