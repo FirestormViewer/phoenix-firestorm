@@ -133,27 +133,27 @@
 					どのビューワのタグを見たいですか？
 				</text>
 				<combo_box name="ClientTagsVisibility">
-					<combo_item name="No Viewertags" label="ビューワタグ不要"/>
-					<combo_item name="TPVD Viewer" label="サードパーティー (リスト使用)"/>
-					<combo_item name="All known Viewers" label="識別できるビューワ (リスト使用)"/>
-					<combo_item name="All Viewers" label="全てのビューワ"/>
+					<combo_box.item name="No Viewertags" label="ビューワタグ不要"/>
+					<combo_box.item name="TPVD Viewer" label="サードパーティー (リスト使用)"/>
+					<combo_box.item name="All known Viewers" label="識別できるビューワ (リスト使用)"/>
+					<combo_box.item name="All Viewers" label="全てのビューワ"/>
 				</combo_box>
 				<text name="colorbasedonviewer">
 					ビューワ別にタグの色を変えますか？
 				</text>
 				<combo_box name="ColorClienttags">
-					<combo_item name="Color not based on Viewer" label="ビューワによって変えない"/>
-					<combo_item name="Single color per Viewer" label="ビューワごとに別の色"/>
-					<combo_item name="Multiple colors per Viewer" label="ビューワごとに複数の色"/>
-					<combo_item name="Userdefined color" label="ユーザー定義の色"/>
+					<combo_box.item name="Color not based on Viewer" label="ビューワによって変えない"/>
+					<combo_box.item name="Single color per Viewer" label="ビューワごとに別の色"/>
+					<combo_box.item name="Multiple colors per Viewer" label="ビューワごとに複数の色"/>
+					<combo_box.item name="Userdefined color" label="ユーザー定義の色"/>
 				</combo_box>
 				<text name="listtodisplayviewertags_txt">
 					ビューワタグの表示にリストを使いますか？
 				</text>
 				<combo_box name="UseLegacyClienttags">
-					<combo_item name="Don't use a list" label="リスト不使用"/>
-					<combo_item name="Local Clienttags" label="ローカルのタグリスト"/>
-					<combo_item name="Download Clienttags" label="起動時にリストをダウンロード"/>
+					<combo_box.item name="Don't use a list" label="リスト不使用"/>
+					<combo_box.item name="Local Clienttags" label="ローカルのタグリスト"/>
+					<combo_box.item name="Download Clienttags" label="起動時にリストをダウンロード"/>
 				</combo_box>
 			</panel>
 		</panel>

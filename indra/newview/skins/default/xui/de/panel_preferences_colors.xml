@@ -114,27 +114,27 @@
 					Tag-Anzeige:
 				</text>
 				<combo_box name="ClientTagsVisibility">
-					<combo_item name="No Viewertags" label="Keine Viewertags"/>
-					<combo_item name="TPVD Viewer" label="TPVD-Viewer (anhand einer Liste)"/>
-					<combo_item name="All known Viewers" label="Alle bekannten Viewer (anhand einer Liste)"/>
-					<combo_item name="All Viewers" label="Alle Viewer"/>
+					<combo_box.item name="No Viewertags" label="Keine Viewertags"/>
+					<combo_box.item name="TPVD Viewer" label="TPVD-Viewer (anhand einer Liste)"/>
+					<combo_box.item name="All known Viewers" label="Alle bekannten Viewer (anhand einer Liste)"/>
+					<combo_box.item name="All Viewers" label="Alle Viewer"/>
 				</combo_box>
 				<text name="colorbasedonviewer">
 					Tag-Farbe basierend auf Viewer:
 				</text>
 				<combo_box name="ColorClienttags">
-					<combo_item name="Color not based on Viewer" label="Farbe nicht basierend auf Viewer"/>
-					<combo_item name="Single color per Viewer" label="Eine Farbe pro Viewer"/>
-					<combo_item name="Multiple colors per Viewer" label="Mehrere Farben pro Viewer"/>
-					<combo_item name="Userdefined color" label="Benutzerdefinierte Farbe"/>
+					<combo_box.item name="Color not based on Viewer" label="Farbe nicht basierend auf Viewer"/>
+					<combo_box.item name="Single color per Viewer" label="Eine Farbe pro Viewer"/>
+					<combo_box.item name="Multiple colors per Viewer" label="Mehrere Farben pro Viewer"/>
+					<combo_box.item name="Userdefined color" label="Benutzerdefinierte Farbe"/>
 				</combo_box>
 				<text name="listtodisplayviewertags_txt">
 					Liste zur Anzeige von Tags:
 				</text>
 				<combo_box name="UseLegacyClienttags">
-					<combo_item name="Don't use a list" label="Keine Liste verwenden"/>
-					<combo_item name="Local Clienttags" label="Lokale Tag-Liste"/>
-					<combo_item name="Download Clienttags" label="Tag-Liste beim Start downloaden"/>
+					<combo_box.item name="Don't use a list" label="Keine Liste verwenden"/>
+					<combo_box.item name="Local Clienttags" label="Lokale Tag-Liste"/>
+					<combo_box.item name="Download Clienttags" label="Tag-Liste beim Start downloaden"/>
 				</combo_box>
 			</panel>
 		</panel>
