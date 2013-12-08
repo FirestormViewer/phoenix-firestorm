@@ -2798,9 +2798,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// then use that color as name_tag_color
 	static LLUICachedControl<bool> show_friends("NameTagShowFriends");
 	static LLUICachedControl<U32> color_client_tags("FSColorClienttags");
-	if (mClientTagData.has("color") &&
-		!(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))) &&
-		color_client_tags > 0 && !this->isSelf())
+	if (mClientTagData.has("color")
+		&& !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG)))
+		&& color_client_tags && !this->isSelf())
 	{
 		name_tag_color = mClientTagData["color"]; 
 	}
@@ -2844,7 +2844,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		// Override nametag color only if friend color is disabled
 		// or avatar is not a friend nor has a contact set color
-		if (show_distance_color_tag && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))))
+		if (show_distance_color_tag
+			&& !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))))
 		{
 			name_tag_color = distance_color;
 		}
@@ -2878,7 +2879,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			{
 				color = LLColor4::black;
 			}
-			mClientTagData = FSData::getInstance()->resolveClientTag(LLUUID(mClientTagData["uuid"].asString()), mClientTagData["id_based"].asBoolean(),color);
+			mClientTagData = FSData::getInstance()->resolveClientTag(LLUUID(mClientTagData["uuid"].asString()),
+																	 mClientTagData["id_based"].asBoolean(),
+																	 color);
 		}
 
 		clearNameTag();

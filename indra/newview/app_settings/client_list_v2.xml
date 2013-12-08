@@ -1,43 +1,5 @@
 <llsd>
     <map>
-    <key>01f13da6-fd61-82be-5a8b-68f2d165d8cd</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>1</real>
-                <real>0.50196078431373004</real>
-                <real>0</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>Smilodon</string>
-        </map>
-    <key>049af712-22c9-b2c4-50c7-90a9f1d1e5ef</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.90196078431372995</real>
-                <real>0.90196078431372995</real>
-                <real>0.90196078431372995</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>GNR</string>
-        </map>
-    <key>072343d0-1ce9-0952-4106-5312af4a789a</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
-        </map>
-    <key>0ae2f973-98c1-a4e8-9f4b-9db2044ab079</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
-        </map>
     <key>0b6bc011-15c7-721d-f4c9-cdbaf3448dba</key>
         <map>
         <key>color</key>
@@ -112,20 +74,6 @@
         <key>name</key>
             <string>Gemini</string>
         </map>
-    <key>1da8eb54-a70f-bd4a-77e5-c7b815c3b2a2</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
-        </map>
-    <key>1e0948ab-706a-b309-434c-a694436a79be</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
-        </map>
     <key>1fb9ce5c-bb36-a0c1-72b5-e4f3406c6d56</key>
         <map>
         <key>color</key>
@@ -161,18 +109,6 @@
             </array>
         <key>name</key>
             <string>lolcat</string>
-        </map>
-    <key>28b4da3f-5f9b-f44e-1387-6a115ab482c5</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.81568627450980002</real>
-                <real>0.7921568627451</real>
-                <real>0.68235294117647005</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>Diamond</string>
         </map>
     <key>29705410-bcdf-bfd5-e811-5fca794dfbc1</key>
         <map>
@@ -362,61 +298,6 @@
         <key>name</key>
             <string>Deus Ex Machina</string>
         </map>
-    <key>4ca51a79-41c0-91ec-7c58-a5195951bda2</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>1</real>
-                <real>0.27058823529412002</real>
-                <real>0</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>Horny Thel</string>
-        </map>
-    <key>4da16427-d81e-e816-f346-aaf4741b8056</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.99607843137255003</real>
-                <real>0.89411764705882002</real>
-                <real>0.78823529411765003</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>iLife</string>
-        </map>
-    <key>4e6c4027-9bbd-2dc5-2c00-c55a08fd49d1</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.082352941176471003</real>
-                <real>0.074509803921569001</real>
-                <real>0.074509803921569001</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>DOWN SYNDROME</string>
-        </map>
-    <key>4e8dcf80-336b-b1d8-ef3e-08dacf015a0f</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.32941176470588002</real>
-                <real>0.22745098039216</real>
-                <real>0.12156862745098</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>Sapphire</string>
-        </map>
-    <key>4eb67510-0924-ebb1-50ca-8af5694cd267</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
-        </map>
     <key>5262d71a-88f7-ef40-3b15-00ea148ab4b5</key>
         <map>
         <key>color</key>
@@ -467,18 +348,6 @@
         <key>name</key>
             <string>Combat Cubed</string>
         </map>
-    <key>5aa5c70d-d787-571b-0495-4fc1bdef1500</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.99607843137255003</real>
-                <real>0.22745098039216</real>
-                <real>0.12156862745098</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>LGG Proxy</string>
-        </map>
     <key>5bb6e4a6-8e24-7c92-be2e-91419bb0ebcb</key>
         <map>
         <key>alt</key>
@@ -526,13 +395,6 @@
             <string>Phoenix</string>
         <key>tpvd</key>
             <boolean>1</boolean>
-        </map>
-    <key>602243f4-8fb1-ac00-d5bc-7ab50c4433b7</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
         </map>
     <key>6043a54c-b320-523a-ed15-a8fdd2ebc923</key>
         <map>
@@ -667,13 +529,6 @@
             </array>
         <key>name</key>
             <string>Luna</string>
-        </map>
-    <key>8078ffb3-840c-d037-caf3-5cd02c2e7040</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
         </map>
     <key>8183e823-c443-2142-6eb6-2ab763d4f81c</key>
         <map>
@@ -813,18 +668,6 @@
         <key>name</key>
             <string>BetaLife</string>
         </map>
-    <key>9995490f-b248-46f2-91ed-910289676f99</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.25490196078430999</real>
-                <real>0.25490196078430999</real>
-                <real>0.25490196078430999</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>$</string>
-        </map>
     <key>9a4d13d4-b36b-ff89-715b-9b53091c1473</key>
         <map>
         <key>color</key>
@@ -913,18 +756,6 @@
         <key>name</key>
             <string>The Sorcerer</string>
         </map>
-    <key>b2848bed-38b3-3d6b-6ebe-7b4cb7d4994a</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.039215686274509998</real>
-                <real>0.19607843137254999</real>
-                <real>0.078431372549019995</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>KoreDEV-Ghost</string>
-        </map>
     <key>b32f01bc-f9b3-4535-b1f3-99dc38f022db</key>
         <map>
         <key>color</key>
@@ -961,18 +792,6 @@
         <key>name</key>
             <string>Meerkat</string>
         </map>
-    <key>b8c99aa0-6e82-0a84-3fc9-f73dc89471c2</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>0.66666666666666996</real>
-                <real>0</real>
-                <real>0.59999999999999998</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>ProlapsedPussyLife</string>
-        </map>
     <key>bb7fba3a-e7e0-14d6-b1ae-ce43f67745ab</key>
         <map>
         <key>color</key>
@@ -996,13 +815,6 @@
             </array>
         <key>name</key>
             <string>KoreDEV</string>
-        </map>
-    <key>bf33bd15-7020-cce1-3725-48923440b7ee</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
         </map>
     <key>c1936b62-6db5-1bc2-cfb6-54b040db74b4</key>
         <map>
@@ -1134,18 +946,6 @@
         <key>name</key>
             <string>Ruby</string>
         </map>
-    <key>ccda2b3b-e72c-a112-e126-fee238b67218</key>
-        <map>
-        <key>color</key>
-            <array>
-                <real>1</real>
-                <real>1</real>
-                <real>1</real>
-                <real>1</real>
-            </array>
-        <key>name</key>
-            <string>Loading...</string>
-        </map>
     <key>d0770263-aec5-6a26-f987-37c14e8f6523</key>
         <map>
         <key>color</key>
@@ -1244,13 +1044,6 @@
         <key>tpvd</key>
             <boolean>1</boolean>
         </map>
-    <key>e4117c3f-cc02-d537-665d-c31b8c11bb18</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
-        </map>
     <key>e46e7c2b-1de3-5347-db43-42ee4e1f5bf2</key>
         <map>
         <key>color</key>
@@ -1316,13 +1109,6 @@
             </array>
         <key>name</key>
             <string>Combat Cubed</string>
-        </map>
-    <key>e741e2bf-cf8c-191c-97f2-b2709a843dfc</key>
-        <map>
-        <key>alt</key>
-            <string>ccda2b3b-e72c-a112-e126-fee238b67218</string>
-        <key>name</key>
-            <string>Loading...</string>
         </map>
     <key>e8dd2ab3-e074-710c-bac9-e80790990bff</key>
         <map>
@@ -1479,6 +1265,18 @@
             <boolean>1</boolean>
         <key>name</key>
             <string>Corgi</string>
+        </map>
+	<key>ffce04ff-5303-4909-a044-d37af7ab0b0e</key>
+        <map>
+			<key>color</key>
+            <array>
+                <real>0.69</real>
+                <real>0.42</real>
+                <real>0.84</real>
+                <real>1</real>
+            </array>
+			<key>name</key>
+            <string>Teapot</string>
         </map>
     <key>isComplete</key>
         <boolean>1</boolean>

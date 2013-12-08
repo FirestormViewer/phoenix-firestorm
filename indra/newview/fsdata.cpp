@@ -372,7 +372,8 @@ void FSData::processData(const LLSD& fs_data)
 	processAssets(fs_data);
 
 	// FSUseLegacyClienttags: 0=Off, 1=Local Clienttags, 2=Download Clienttags
-	if(gSavedSettings.getU32("FSUseLegacyClienttags") > 1)
+	static LLCachedControl<U32> use_legacy_tags(gSavedSettings, "FSUseLegacyClienttags");
+	if(use_legacy_tags > 1)
 	{
 		time_t last_modified = 0;
 		llstat stat_data;
@@ -383,7 +384,7 @@ void FSData::processData(const LLSD& fs_data)
 		LL_INFOS("fsdata") << "Downloading client_list_v2.xml from " << LEGACY_CLIENT_LIST_URL << " with last modifed of " << last_modified << LL_ENDL;
 		LLHTTPClient::getIfModified(LEGACY_CLIENT_LIST_URL, new FSDownloader(LEGACY_CLIENT_LIST_URL), last_modified, mHeaders, HTTP_TIMEOUT);
 	}
-	else if(gSavedSettings.getU32("FSUseLegacyClienttags") > 0)
+	else if(use_legacy_tags)
 	{
 		updateClientTagsLocal();
 	}
@@ -474,12 +475,6 @@ void FSData::processClientTags(const LLSD& tags)
 	}
 }
 
-//WS: Some helper function to make the request for old tags easier (if someone needs it)
-LLSD FSData::resolveClientTag(LLUUID id)
-{
-	return resolveClientTag(id, false, LLColor4::black);
-}
-
 //WS: Create a new LLSD based on the data from the mLegacyClientList if
 LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 {	
@@ -487,119 +482,70 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 	curtag["uuid"] = id.asString();
 	curtag["id_based"] = new_system;
 	curtag["tex_color"] = color.getValue();
+	
+	static LLCachedControl<U32> client_tag_visibility(gSavedSettings, "FSClientTagsVisibility");
+	static LLCachedControl<U32> use_legacy_client_tags(gSavedSettings, "FSUseLegacyClienttags");
+	static LLCachedControl<U32> color_client_tags(gSavedSettings, "FSColorClienttags");
 	// If we don't want to display anything...return
-	if (gSavedSettings.getU32("FSClientTagsVisibility") == 0)
+	if (!client_tag_visibility)
 	{
 		return curtag;
 	}
 
 	//WS: Do we want to use Legacy Clienttags?
-	if (gSavedSettings.getU32("FSUseLegacyClienttags") > 0)
+	if (use_legacy_client_tags)
 	{
 		if (mLegacyClientList.has(id.asString()))
 		{
-			curtag=mLegacyClientList[id.asString()];
+			curtag = mLegacyClientList[id.asString()];
 		}
 		else
-		{		
-			if (id == LLUUID("5d9581af-d615-bc16-2667-2f04f8eeefe4"))//green
+		{
+			if (id == LLUUID("f25263b7-6167-4f34-a4ef-af65213b2e39"))
 			{
-				curtag["name"]="Phoenix";
-				curtag["color"] = LLColor4::green.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
+				curtag["name"] = "Singularity";
 			}
-			else if (id == LLUUID("e35f7d40-6071-4b29-9727-5647bdafb5d5"))//white
+			else if (id == LLUUID("4b6f6b75-bf77-d1ff-0000-000000000000"))
 			{
-				curtag["name"] = "Phoenix";			
-				curtag["color"] = LLColor4::white.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
+				curtag["name"] = "Kokua";
 			}
-			else if (id == LLUUID("ae4e92fb-023d-23ba-d060-3403f953ab1a"))//pink
+			else if (id == LLUUID("b748af88-58e2-995b-cf26-9486dea8e830"))
 			{
-				curtag["name"] = "Phoenix";
-				curtag["color"] = LLColor4::pink.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
-			}
-			else if (id == LLUUID("e71b780e-1a57-400d-4649-959f69ec7d51"))//red
-			{
-				curtag["name"] = "Phoenix";
-				curtag["color"] = LLColor4::red.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
-			}
-			else if (id == LLUUID("c1c189f5-6dab-fc03-ea5a-f9f68f90b018"))//orange
-			{
-				curtag["name"] = "Phoenix";
-				curtag["color"] = LLColor4::orange.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
-			}
-			else if (id == LLUUID("8cf0577c-22d3-6a73-523c-15c0a90d6c27")) //purple
-			{
-				curtag["name"] = "Phoenix";
-				curtag["color"] = LLColor4::purple.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
-			}
-			else if (id == LLUUID("5f0e7c32-38c3-9214-01f0-fb16a5b40128"))//yellow
-			{
-				curtag["name"] = "Phoenix";
-				curtag["color"] = LLColor4::yellow.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
-			}
-			else if (id == LLUUID("5bb6e4a6-8e24-7c92-be2e-91419bb0ebcb"))//blue
-			{
-				curtag["name"] = "Phoenix";
-				curtag["color"] = LLColor4::blue.getValue();
-				curtag["alt"] = "ed63fbd0-589e-fe1d-a3d0-16905efaa96b";
-			}
-			else if (id == LLUUID("ed63fbd0-589e-fe1d-a3d0-16905efaa96b"))//default (red)
-			{
-				curtag["name"] = "Phoenix";
-				curtag["color"] = LLColor4::red.getValue();
-			}	
-			else if (id == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
-			{
-				curtag["name"] = "SL Viewer";
+				curtag["name"] = "Radegast";
 			}
 			else if (id == LLUUID("cc7a030f-282f-c165-44d2-b5ee572e72bf"))
 			{
 				curtag["name"] = "Imprudence";
 			}
-			else if (id == LLUUID("54d93609-1392-2a93-255c-a9dd429ecca5"))
+			else if (id == LLUUID("7eab0700-f000-0000-0000-546561706f7"))
 			{
-				curtag["name"] = "Emergence";
+				curtag["name"] = "Teapot";
 			}
-			else if (id == LLUUID("8873757c-092a-98fb-1afd-ecd347566fcd"))
+			/// [FS:CR] Since SL Viewer can't connect to Opensim, and client tags only work on OpenSim
+			/// it doesn't make much sense to tag V3-based viewers as SL Viewer.
+			/*if (id == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))
 			{
-				curtag["name"] = "Ascent";
-			}
-			else if (id == LLUUID("f25263b7-6167-4f34-a4ef-af65213b2e39"))
-			{
-				curtag["name"] = "Singularity";
-			}
+				curtag["name"] = "SL Viewer";
+			}*/
 			if (curtag.has("name")) curtag["tpvd"] = true;
 		}
 	}
 	
 	
 	// Filtering starts here:
-	//WS: If the current tag has an "alt" definied and we don't want multiple colors. Resolve the alt.
-	if ((gSavedSettings.getU32("FSColorClienttags") == 1) && curtag.has("alt"))
-	{
-		curtag = resolveClientTag(curtag["alt"], new_system, color);
-	}
-
 	//WS: If we have a tag using the new system, check if we want to display it's name and/or color
 	if (new_system)
 	{
-		if (gSavedSettings.getU32("FSClientTagsVisibility") >= 3)
+		if (client_tag_visibility >= 3)
 		{
 			U32 tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
 			std::string clienttagname = std::string((const char*)&id.mData[0], tag_len);
 			LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
 			curtag["name"] = clienttagname;
 		}
-		if (gSavedSettings.getU32("FSColorClienttags") >= 3 || curtag["tpvd"].asBoolean())
+		if (color_client_tags >= 3 || curtag["tpvd"].asBoolean())
 		{
-			if (curtag["tpvd"].asBoolean() && gSavedSettings.getU32("FSColorClienttags") < 3)
+			if (curtag["tpvd"].asBoolean() && color_client_tags < 3)
 			{
 				if (color == LLColor4::blue ||
 					color == LLColor4::yellow ||
@@ -622,14 +568,14 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 
 	//If we only want to display tpvd viewer. And "tpvd" is not available or false, then
 	// clear the data, but keep the basedata (like uuid, id_based and tex_color) for (maybe) later displaying.
-	if(gSavedSettings.getU32("FSClientTagsVisibility") <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
+	if(client_tag_visibility <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
 	{
 		curtag.clear();
 	}
 
-	curtag["uuid"]=id.asString();
-	curtag["id_based"]=new_system;	
-	curtag["tex_color"]=color.getValue();	
+	curtag["uuid"] = id.asString();
+	curtag["id_based"] = new_system;
+	curtag["tex_color"] = color.getValue();
 
 	return curtag;
 }

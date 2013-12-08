@@ -46,7 +46,6 @@ public:
 	void processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified);
 	void addAgents();
 
-	LLSD resolveClientTag(LLUUID id);
 	LLSD resolveClientTag(LLUUID id, bool new_system, LLColor4 new_system_color);
 	
 	enum flags_t
