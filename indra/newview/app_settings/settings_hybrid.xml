@@ -451,18 +451,6 @@
     <integer>1</integer>
   </map>
 
-  <key>FSClientTagsVisibility2</key>
-  <map>
-    <key>Comment</key>
-    <string>Show client tags: 0=Client tags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-
   <key>AdvanceSnapshot</key>
   <map>
     <key>Comment</key>
