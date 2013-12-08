@@ -300,6 +300,9 @@ extern PFNGLGENERATEMIPMAPEXTPROC glGenerateMipmapEXT;
   # define GLH_EXT_GET_PROC_ADDRESS(p) SDL_GL_GetProcAddress(p) */
 #define GLX_GLXEXT_PROTOTYPES 1
 # include "GL/glx.h"
+
+typedef XID GLXContextID; // <FS:ND/> Some newer versions of glx.h don't include this typedef anymore.
+
 # include "GL/glxext.h"
 // Use glXGetProcAddressARB instead of glXGetProcAddress - the ARB symbol
 // is considered 'legacy' but works on more machines.
