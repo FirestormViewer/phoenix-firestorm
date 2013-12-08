@@ -954,7 +954,8 @@ class DarwinManifest(ViewerManifest):
                                 "libfmodex.dylib",
                                 "libfmodexL.dylib",
                                 "libGLOD.dylib",
-                                "libgrowl++,dylib",
+                                "libgrowl.dylib",
+                                "libgrowl++.dylib",
                                 "libLeap.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(libdir, libfile), libfile)

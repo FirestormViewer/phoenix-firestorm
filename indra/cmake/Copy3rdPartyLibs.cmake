@@ -240,6 +240,7 @@ elseif(DARWIN)
         libhunspell-1.3.0.dylib
         # libexception_handler.dylib
         libcollada14dom.dylib
+		libgrowl.dylib
         libgrowl++.dylib
        )
 
