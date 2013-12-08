@@ -1104,6 +1104,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="collada_files">
 		Modele COLLADA
 	</string>
+	<string name="csv_files">
+		Wartości oddzielone przecinkami
+	</string>
 	<string name="shape">
 		Kształt
 	</string>

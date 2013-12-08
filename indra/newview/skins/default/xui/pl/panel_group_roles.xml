@@ -19,6 +19,7 @@ Możesz wybrać wielu członków naciskając Ctrl i klikając na ich imionach.
 			</name_list>
 			<button label="Zaproś do grupy" name="member_invite"/>
 			<button label="Usuń z grupy" name="member_eject"/>
+			<button name="export_list" label="Eksport listy"/>
 		</panel>
 		<panel label="Funkcje" name="roles_sub_tab" tool_tip="Funkcje">
 			<panel.string name="help_text">
