@@ -216,6 +216,10 @@ protected:
 
 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
 	boost::signals2::connection mAvatarNameCacheConnection;
+	
+// [FS:CR] FIRE-12276
+private:
+	void onExportMembersToXML();
 };
 
 class LLPanelGroupRolesSubTab : public LLPanelGroupSubTab

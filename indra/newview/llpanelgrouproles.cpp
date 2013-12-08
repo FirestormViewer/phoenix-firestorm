@@ -55,6 +55,9 @@
 
 #include "roles_constants.h"
 
+// [FS:CR] FIRE-12276
+#include "llfilepicker.h"
+
 static LLRegisterPanelClassWrapper<LLPanelGroupRoles> t_panel_group_roles("panel_group_roles");
 
 bool agentCanRemoveFromRole(const LLUUID& group_id,
@@ -802,6 +805,14 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 		button->setClickedCallback(onInviteMember, this);
 		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_INVITE));
 	}
+	// [FS:CR] FIRE-12276
+	button = parent->getChild<LLButton>("export_list", recurse);
+	if (button)
+	{
+		button->setClickedCallback(boost::bind(&LLPanelGroupMembersSubTab::onExportMembersToXML, this));
+		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_VISIBLE_IN_DIR));
+	}
+	// [/FS:CR]
 
 	mEjectBtn = parent->getChild<LLButton>("member_eject", recurse);
 	if ( mEjectBtn )
@@ -1752,6 +1763,44 @@ void LLPanelGroupMembersSubTab::updateMembers()
 	handleMemberSelect();
 }
 
+// [FS:CR] FIRE-12276
+void LLPanelGroupMembersSubTab::onExportMembersToXML()
+{
+	if (mPendingMemberUpdate) return;
+	
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+	LLFilePicker& file_picker = LLFilePicker::instance();
+	if (!file_picker.getSaveFile(LLFilePicker::FFSAVE_CSV, LLDir::getScrubbedFileName(gdatap->mName + "_members.csv")))
+	{
+		return;
+	}
+	std::string fullpath = file_picker.getFirstFile();
+	
+	LLAPRFile outfile;
+	outfile.open(fullpath, LL_APR_WB );
+	LLAPRFile::tFiletype* file = outfile.getFileHandle();
+	if (!file) return;
+	
+	apr_file_printf(file, "Group membership record for %s", gdatap->mName.c_str());
+	
+	LLSD memberlist;
+	for (LLGroupMgrGroupData::member_list_t::const_iterator member_itr = gdatap->mMembers.begin();
+		 member_itr != gdatap->mMembers.end();
+		 ++member_itr)
+	{
+		/// *FIXME: Making an assumption that we already have the names in cache and getting names from
+		/// gCacheName directly because I am lazy and don't want bugger with avatarname cache this morning.
+		/// When the group membership is fully loaded, this works fine as is.
+		std::string name = "";
+		gCacheName->getFullName(member_itr->first, name);
+		apr_file_printf(file, "\n%s,%s,%s",
+						member_itr->first.asString().c_str(),
+						name.c_str(),
+						member_itr->second->getOnlineStatus().c_str());
+	}
+	apr_file_printf(file, "\n");
+}
+// [/FS:CR] FIRE-12276
 
 
 ////////////////////////////
@@ -2662,6 +2711,11 @@ void LLPanelGroupRoles::setGroupID(const LLUUID& id)
 	LLButton* button = getChild<LLButton>("member_invite");
 	if ( button )
 		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_INVITE));
+	// [FS:CR] FIRE-12276
+	button = getChild<LLButton>("export_list");
+	if (button)
+		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_VISIBLE_IN_DIR));
+	// [/FS:CR]
 
 	if(mSubTabContainer)
 		mSubTabContainer->selectTab(0);

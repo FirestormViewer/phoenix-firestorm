@@ -150,6 +150,15 @@ clicking on their names.
              height="23"
              follows="bottom|left"
              layout="topleft" />
+
+            <button
+             name="export_list"
+             label="Export List"
+             left_pad="4"
+             width="100"
+             height="23"
+             follows="bottom|left"
+             layout="topleft" />
         </panel>
 
 <!-- ROLES sub tab -->

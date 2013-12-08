@@ -87,9 +87,9 @@ public:
 		FFLOAD_SCRIPT = 11,
 		FFLOAD_DICTIONARY = 12,
 		FFLOAD_DIRECTORY = 13,   //To call from lldirpicker.
-		// <FS:CR> Export filter
-		FFLOAD_IMPORT = 14
-		// </FS:CR>
+		
+		// Firestorm additions
+		FFLOAD_IMPORT = 50
 	};
 
 	enum ESaveFilter
@@ -111,10 +111,11 @@ public:
 		FFSAVE_JPEG = 14,
 		FFSAVE_SCRIPT = 15,
 		FFSAVE_TGAPNG = 16,
-		FFSAVE_BEAM = 50, // <FS:TM> FS addition
-// <FS:CR> Export filter
-		FFSAVE_EXPORT = 51
-// </FS:CR>
+		
+		// Firestorm additions
+		FFSAVE_BEAM = 50,
+		FFSAVE_EXPORT = 51,
+		FFSAVE_CSV = 52
 	};
 
 	// open the dialog. This is a modal operation

@@ -550,6 +550,8 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 		mOFN.lpstrDefExt = L"txt";
 		mOFN.lpstrFilter = L"LSL Files (*.lsl)\0*.lsl\0" L"\0";
 		break;
+			
+// <Firestorm>
 	case FFSAVE_BEAM:
 		if (filename.empty())
 		{
@@ -559,8 +561,7 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 		mOFN.lpstrFilter =
 			L"XML File (*.xml)\0*.xml\0" \
 			L"\0";
-		break; 
-// <FS:CR> Export filter
+		break;
 	case FFSAVE_EXPORT:
 		if (filename.empty())
 		{
@@ -569,7 +570,17 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 		mOFN.lpstrDefExt = L"oxp";
 		mOFN.lpstrFilter = L"OXP Backup Files (*.oxp)\0*.oxp\0" L"\0";
 		break;
-// </FS:CR>
+	case FFSAVE_CSV:
+		if (filename.empty())
+		{
+			wcsncpy( mFilesW, L"untitled.csv", FILENAME_BUFFER_SIZE);
+		}
+		mOFN.lpstrDefExt = L".csv";
+		mOFN.lpstrFilter =
+		L"Comma seperated values (*.csv)\0*.csv\0" \
+		L"\0";
+		break;
+// </Firestorm>
 	default:
 		return FALSE;
 	}
@@ -793,6 +804,12 @@ bool	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& filena
 			type = "DAE ";
 			creator = "\?\?\?\?";
 			extension = "dae";
+			break;
+		// <FS:CR> CSV Filter
+		case FFSAVE_CSV:
+			type = "CSV ";
+			creator = "\?\?\?\?";
+			extension = "csv";
 			break;
 		// </FS:CR>
 		case FFSAVE_BEAM:
@@ -1242,6 +1259,13 @@ static std::string add_dictionary_filter_to_gtkchooser(GtkWindow *picker)
 							LLTrans::getString("dictionary_files") + " (*.dic; *.xcu)");
 }
 
+// [FS:CR] FIRE-12276
+static std::string add_csv_filter_to_gtkchooser(GrkWindow *picker)
+{
+	return add_simple_mime_filter_to_gtkchooser(picker, "text/csv",
+							LLTrans::getString("csv_files") + " (*.csv)");
+}
+
 // <FS:CR> GTK Import/Export filters
 static std::string add_import_filter_to_gtkchooser(GtkWindow *picker)
 {
@@ -1359,6 +1383,10 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
 			caption += add_simple_pattern_filter_to_gtkchooser
 				(picker, "*.dae", LLTrans::getString("collada_files") + " (*.dae)");
 			break;
+		// [FS:CR] FIRE-12276
+		case FFSAVE_CSV:
+			caption += add_simple_patterm_filter_to_gtkchooser
+				(picker, "*.csv", LLTrans::getString("csv_files") + " (*.csv)");
 // </FS:CR>
 		default:;
 			break;
