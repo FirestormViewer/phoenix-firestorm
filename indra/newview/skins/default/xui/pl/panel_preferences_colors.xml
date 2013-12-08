@@ -114,27 +114,27 @@
 					Które tagi chcesz widzieć?
 				</text>
 				<combo_box name="ClientTagsVisibility">
-					<combo_item name="No Viewertags">Bez rozpoznawania Przeglądarek</combo_item>
-					<combo_item name="TPVD Viewer">Przeglądarki z Third Party Viewer Directory (lista)</combo_item>
-					<combo_item name="All known Viewers">Wszystkie znane Przeglądarki (lista)</combo_item>
-					<combo_item name="All Viewers">Wszystkie Przeglądarki</combo_item>
+					<combo_box.item name="No Viewertags" label="Bez rozpoznawania Przeglądarek" />
+					<combo_box.item name="TPVD Viewer" label="Przeglądarki z Third Party Viewer Directory (lista)" />
+					<combo_box.item name="All known Viewers" label="Wszystkie znane Przeglądarki (lista)" />
+					<combo_box.item name="All Viewers" label="Wszystkie Przeglądarki" />
 				</combo_box>
 				<text name="colorbasedonviewer">
 					Kolor taga zależny od Przeglądarki?
 				</text>
 				<combo_box name="ColorClienttags">
-					<combo_item name="Color not based on Viewer">Kolor nie jest zależny od Przeglądarki</combo_item>
-					<combo_item name="Single color per Viewer">Jeden kolor na każdą Przeglądarkę</combo_item>
-					<combo_item name="Multiple colors per Viewer">Wiele kolorów na każdą Przeglądarkę</combo_item>
-					<combo_item name="Userdefined color">Kolor określony przez użytkownika</combo_item>
+					<combo_box.item name="Color not based on Viewer" label="Kolor nie jest zależny od Przeglądarki" />
+					<combo_box.item name="Single color per Viewer" label="Jeden kolor na każdą Przeglądarkę" />
+					<combo_box.item name="Multiple colors per Viewer" label="Wiele kolorów na każdą Przeglądarkę" />
+					<combo_box.item name="Userdefined color" label="Kolor określony przez użytkownika" />
 				</combo_box>
 				<text name="listtodisplayviewertags_txt">
 					Uzyć listy do rozpoznawania?
 				</text>
 				<combo_box name="UseLegacyClienttags">
-					<combo_item name="Don't use a list">Nie używaj listy</combo_item>
-					<combo_item name="Local Clienttags">Lokalna lista tagów</combo_item>
-					<combo_item name="Download Clienttags">Pobieraj listę tagów podczas uruchamiania Przeglądarki</combo_item>
+					<combo_box.item name="Don't use a list" label="Nie używaj listy" />
+					<combo_box.item name="Local Clienttags" label="Lokalna lista tagów" />
+					<combo_box.item name="Download Clienttags" label="Pobieraj listę tagów podczas uruchamiania Przeglądarki" />
 				</combo_box>
 			</panel>
 		</panel>
