@@ -958,8 +958,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 // <FS:CR> Show/hide Client Tag panel
 	bool show_client_tags = false;
 #ifdef OPENSIM
-	//Disabled for now because client tags don't currently work <FS:CR>
-	//show_client_tags = LLGridManager::getInstance()->isInOpenSim();
+	show_client_tags = LLGridManager::getInstance()->isInOpenSim();
 #endif // OPENSIM
 	getChild<LLPanel>("client_tags_panel")->setVisible(show_client_tags);
 // </FS:CR>

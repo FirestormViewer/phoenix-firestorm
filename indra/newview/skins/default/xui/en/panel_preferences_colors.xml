@@ -1054,6 +1054,7 @@
         What tags would you want to see?
       </text>
       <combo_box
+        control_name="FSClientTagsVisibility"
         follows="left|top"
         height="23"
         layout="topleft"
@@ -1062,10 +1063,22 @@
         width="220"
         allow_text_entry="false"
         name="ClientTagsVisibility">
-        <combo_item name="No Viewertags" value="0">No Viewertags</combo_item>
-        <combo_item name="TPVD Viewer" value="1">TPVD Viewers (using a list)</combo_item>
-        <combo_item name="All known Viewers" value="2">All known Viewers (using a list)</combo_item>
-        <combo_item name="All Viewers" value="3">All Viewers</combo_item>
+        <combo_box.item
+         name="No Viewertags"
+         value="0"
+         label="No Viewertags" />
+        <combo_box.item
+         name="TPVD Viewer"
+         value="1"
+         label="TPVD Viewers (using a list)" />
+        <combo_box.item
+         name="All known Viewers"
+         value="2"
+         label="All known Viewers (using a list)" />
+        <combo_box.item
+         name="All Viewers"
+         value="3"
+         label="All Viewers" />
       </combo_box>
       <text
         type="string"
@@ -1080,6 +1093,7 @@
         Tag Color based on Viewer?
       </text>
       <combo_box
+        control_name="FSColorClienttags"
         follows="left|top"
         height="23"
         layout="topleft"
@@ -1088,10 +1102,22 @@
         width="220"
         allow_text_entry="false"
         name="ColorClienttags">
-        <combo_item name="Color not based on Viewer" value="0">Color not based on Viewer</combo_item>
-        <combo_item name="Single color per Viewer" value="1">Single color per Viewer</combo_item>
-        <combo_item name="Multiple colors per Viewer" value="2">Multiple colors per Viewer</combo_item>
-        <combo_item name="Userdefined color" value="3">Userdefined Color</combo_item>
+        <combo_box.item
+         name="Color not based on Viewer"
+         value="0"
+         label="Color not based on Viewer" />
+        <combo_box.item
+         name="Single color per Viewer"
+         value="1"
+         label="Single color per Viewer" />
+        <combo_box.item
+         name="Multiple colors per Viewer"
+         value="2"
+         label="Multiple colors per Viewer" />
+        <combo_box.item
+         name="Userdefined color"
+         value="3"
+         label="Userdefined Color" />
       </combo_box>
       <text
         type="string"
@@ -1106,6 +1132,7 @@
         Use a list to display Viewertags?
       </text>
       <combo_box
+        control_name="FSUseLegacyClienttags"
         follows="left|top"
         height="23"
         layout="topleft"
@@ -1114,12 +1141,21 @@
         width="220"
         allow_text_entry="false"
         name="UseLegacyClienttags">
-        <combo_item name="Don't use a list" value="0">Don't use a list</combo_item>
-        <combo_item name="Local Clienttags" value="1">Local Tag List</combo_item>
-        <combo_item name="Download Clienttags" value="2">Download Tag List at Viewer Start</combo_item>
+        <combo_box.item
+         name="Don't use a list"
+         value="0"
+         label="Don't use a list" />
+        <combo_box.item
+         name="Local Clienttags"
+         value="1"
+         label="Local Tag List" />
+        <combo_box.item
+         name="Download Clienttags"
+         value="2"
+         label="Download Tag List at Viewer Start" />
       </combo_box>
     </panel>
-	 </panel>
+   </panel>
    <panel
      top_pad="5"
      bottom="-1"

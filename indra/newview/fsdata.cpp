@@ -488,7 +488,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 	curtag["id_based"] = new_system;
 	curtag["tex_color"] = color.getValue();
 	// If we don't want to display anything...return
-	if (gSavedSettings.getU32("FSClientTagsVisibility2") == 0)
+	if (gSavedSettings.getU32("FSClientTagsVisibility") == 0)
 	{
 		return curtag;
 	}
@@ -557,7 +557,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 			}	
 			else if (id == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
 			{
-				curtag["name"] = "LL Viewer";
+				curtag["name"] = "SL Viewer";
 			}
 			else if (id == LLUUID("cc7a030f-282f-c165-44d2-b5ee572e72bf"))
 			{
@@ -590,7 +590,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 	//WS: If we have a tag using the new system, check if we want to display it's name and/or color
 	if (new_system)
 	{
-		if (gSavedSettings.getU32("FSClientTagsVisibility2") >= 3)
+		if (gSavedSettings.getU32("FSClientTagsVisibility") >= 3)
 		{
 			U32 tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
 			std::string clienttagname = std::string((const char*)&id.mData[0], tag_len);
@@ -622,7 +622,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color)
 
 	//If we only want to display tpvd viewer. And "tpvd" is not available or false, then
 	// clear the data, but keep the basedata (like uuid, id_based and tex_color) for (maybe) later displaying.
-	if(gSavedSettings.getU32("FSClientTagsVisibility2") <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
+	if(gSavedSettings.getU32("FSClientTagsVisibility") <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
 	{
 		curtag.clear();
 	}

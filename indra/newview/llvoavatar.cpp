@@ -7649,18 +7649,14 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 
 	// <FS:clientTags>
 	//Wolfspirit: Read the UUID, system and Texturecolor
-	LLTextureEntry* tex = getTE(TEX_HEAD_BODYPAINT);
-	const LLUUID tag_uuid = tex->getID();
-	bool new_system = false;
-	if (tex->getGlow() > 0.0f)
-	{
-		new_system=true;
-	}
+	const LLTEContents& tec = contents.mTEContents;
+	const LLUUID tag_uuid = ((LLUUID*)tec.image_data)[TEX_HEAD_BODYPAINT];
+	bool new_system = (tec.glow > 0);
 
 	//WS: Write them into an LLSD map
 	mClientTagData["uuid"] = tag_uuid.asString();
 	mClientTagData["id_based"] = new_system;
-	mClientTagData["tex_color"] = tex->getColor().getValue();
+	mClientTagData["tex_color"] = LLColor4U(tec.colors).getValue();
 
 	//WS: Clear mNameString to force a rebuild
 	mNameIsSet = false;
