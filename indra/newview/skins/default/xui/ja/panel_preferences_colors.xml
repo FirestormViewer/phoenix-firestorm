@@ -133,49 +133,27 @@
 					どのビューワのタグを見たいですか？
 				</text>
 				<combo_box name="ClientTagsVisibility">
-					<combo_item name="No Viewertags" value="0">
-						ビューワタグ不要
-					</combo_item>
-					<combo_item name="TPVD Viewer" value="1">
-						サードパーティー (リスト使用)
-					</combo_item>
-					<combo_item name="All known Viewers" value="2">
-						識別できるビューワ (リスト使用)
-					</combo_item>
-					<combo_item name="All Viewers" value="3">
-						全てのビューワ
-					</combo_item>
+					<combo_item name="No Viewertags" label="ビューワタグ不要"/>
+					<combo_item name="TPVD Viewer" label="サードパーティー (リスト使用)"/>
+					<combo_item name="All known Viewers" label="識別できるビューワ (リスト使用)"/>
+					<combo_item name="All Viewers" label="全てのビューワ"/>
 				</combo_box>
 				<text name="colorbasedonviewer">
 					ビューワ別にタグの色を変えますか？
 				</text>
 				<combo_box name="ColorClienttags">
-					<combo_item name="Color not based on Viewer" value="0">
-						ビューワによって変えない
-					</combo_item>
-					<combo_item name="Single color per Viewer" value="1">
-						ビューワごとに別の色
-					</combo_item>
-					<combo_item name="Multiple colors per Viewer" value="2">
-						ビューワごとに複数の色
-					</combo_item>
-					<combo_item name="Userdefined color" value="3">
-						ユーザー定義の色
-					</combo_item>
+					<combo_item name="Color not based on Viewer" label="ビューワによって変えない"/>
+					<combo_item name="Single color per Viewer" label="ビューワごとに別の色"/>
+					<combo_item name="Multiple colors per Viewer" label="ビューワごとに複数の色"/>
+					<combo_item name="Userdefined color" label="ユーザー定義の色"/>
 				</combo_box>
 				<text name="listtodisplayviewertags_txt">
 					ビューワタグの表示にリストを使いますか？
 				</text>
 				<combo_box name="UseLegacyClienttags">
-					<combo_item name="Don't use a list" value="0">
-						リスト不使用
-					</combo_item>
-					<combo_item name="Local Clienttags" value="1">
-						ローカルのタグリスト
-					</combo_item>
-					<combo_item name="Download Clienttags" value="2">
-						起動時にリストをダウンロード
-					</combo_item>
+					<combo_item name="Don't use a list" label="リスト不使用"/>
+					<combo_item name="Local Clienttags" label="ローカルのタグリスト"/>
+					<combo_item name="Download Clienttags" label="起動時にリストをダウンロード"/>
 				</combo_box>
 			</panel>
 		</panel>

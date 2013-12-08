@@ -113,27 +113,27 @@
 					¿Qué etiquetas quieres ver?
 				</text>
 				<combo_box name="ClientTagsVisibility">
-					<combo_item name="No Viewertags">Ninguno</combo_item>
-					<combo_item name="TPVD Viewer">Visores TPVD (usando una lista)</combo_item>
-					<combo_item name="All known Viewers">Todos los visores conocidos (usando una lista)</combo_item>
-					<combo_item name="All Viewers">Todos los visores</combo_item>
+					<combo_item name="No Viewertags" label="Ninguno"/>
+					<combo_item name="TPVD Viewer" label="Visores TPVD (usando una lista)"/>
+					<combo_item name="All known Viewers" label="Todos los visores conocidos (usando una lista)"/>
+					<combo_item name="All Viewers" label="Todos los visores"/>
 				</combo_box>
 				<text name="colorbasedonviewer">
 					¿Basar color de la etiqueta en el visor?
 				</text>
 				<combo_box name="ColorClienttags">
-					<combo_item name="Color not based on Viewer">Color no basado en el visor</combo_item>
-					<combo_item name="Single color per Viewer">Un color por visor</combo_item>
-					<combo_item name="Multiple colors per Viewer">Múltiples colores por visor</combo_item>
-					<combo_item name="Userdefined color">Color personalizado</combo_item>
+					<combo_item name="Color not based on Viewer" label="Color no basado en el visor"/>
+					<combo_item name="Single color per Viewer" label="Un color por visor"/>
+					<combo_item name="Multiple colors per Viewer" label="Múltiples colores por visor"/>
+					<combo_item name="Userdefined color" label="Color personalizado"/>
 				</combo_box>
 				<text name="listtodisplayviewertags_txt">
 					¿Usar una lista de etiquetas de visor?
 				</text>
 				<combo_box name="UseLegacyClienttags">
-					<combo_item name="Don't use a list">No usar una lista</combo_item>
-					<combo_item name="Local Clienttags">Lista local</combo_item>
-					<combo_item name="Download Clienttags">Bajar lista al iniciar el visor</combo_item>
+					<combo_item name="Don't use a list" label="No usar una lista"/>
+					<combo_item name="Local Clienttags" label="Lista local"/>
+					<combo_item name="Download Clienttags" label="Bajar lista al iniciar el visor"/>
 				</combo_box>
 			</panel>
 		</panel>
