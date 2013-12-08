@@ -1737,7 +1737,7 @@ void LLPanelPeople::refreshContactSets()
 	if (!mContactSetCombo) return;
 	
 	mContactSetCombo->clearRows();
-	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllGroups();
+	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
 	if (!contact_sets.empty())
 	{
 		BOOST_FOREACH(const std::string& set_name, contact_sets)
@@ -1763,7 +1763,7 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 	}
 	else
 	{
-		LGGContactSets::ContactSetGroup* group = LGGContactSets::getInstance()->getGroup(contact_set);
+		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);
 		BOOST_FOREACH(const LLUUID id, group->mFriends)
 		{
 			avatars.push_back(id);
@@ -1781,7 +1781,7 @@ bool LLPanelPeople::onContactSetsEnable(const LLSD& userdata)
 {
 	std::string item = userdata.asString();
 	if (item == "has_set")
-		return (!LGGContactSets::getInstance()->getAllGroups().empty());
+		return (!LGGContactSets::getInstance()->getAllContactSets().empty());
 	else if (item == "has_selection")
 	{
 		uuid_vec_t selected_uuids;
@@ -1886,7 +1886,7 @@ void LLPanelPeople::handlePickerCallback(const uuid_vec_t& ids, const std::strin
 	{
 		if (!LLAvatarTracker::instance().isBuddy(id))
 			LGGContactSets::getInstance()->addNonFriendToList(id);
-		LGGContactSets::getInstance()->addFriendToGroup(id, set);
+		LGGContactSets::getInstance()->addFriendToSet(id, set);
 	}
 }
 // [/FS:CR]

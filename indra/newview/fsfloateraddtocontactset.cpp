@@ -63,7 +63,7 @@ void FSFloaterAddToContactSet::onClickAdd()
 	const std::string set = mContactSetsCombo->getSimple();
 	if (!LLAvatarTracker::instance().isBuddy(mAgentID))
 		LGGContactSets::getInstance()->addNonFriendToList(mAgentID);
-	LGGContactSets::getInstance()->addFriendToGroup(mAgentID, set);
+	LGGContactSets::getInstance()->addFriendToSet(mAgentID, set);
 	LLSD args;
 	args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
 	args["SET"] = set;
@@ -92,7 +92,7 @@ void FSFloaterAddToContactSet::populateContactSets()
 	if (!mContactSetsCombo) return;
 	
 	mContactSetsCombo->clearRows();
-	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllGroups();
+	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
 	if (contact_sets.empty())
 	{
 		mContactSetsCombo->add(getString("no_sets"), LLSD("No Set"));

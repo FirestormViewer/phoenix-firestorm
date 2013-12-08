@@ -109,7 +109,7 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 	}
 	else
 	{
-		LGGContactSets::ContactSetGroup* group = LGGContactSets::getInstance()->getGroup(contact_set);	// UGLY!
+		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);	// UGLY!
 		BOOST_FOREACH(const LLUUID id, group->mFriends)
 		{
 			avatars.push_back(id);
@@ -121,7 +121,7 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 
 void FSPanelContactSets::resetControls()
 {
-	bool has_sets = (!LGGContactSets::getInstance()->getAllGroups().empty());
+	bool has_sets = (!LGGContactSets::getInstance()->getAllContactSets().empty());
 	bool has_selection = (!mAvatarSelections.empty()
 						  // Set a maximum number of avatars users are allowed to operate on
 						  && mAvatarSelections.size() <= MAX_SELECTIONS);
@@ -151,7 +151,7 @@ void FSPanelContactSets::refreshContactSets()
 	if (!mContactSetCombo) return;
 	
 	mContactSetCombo->clearRows();
-	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllGroups();
+	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
 	if (!contact_sets.empty())
 	{
 		BOOST_FOREACH(const std::string& set_name, contact_sets)
@@ -189,7 +189,7 @@ void FSPanelContactSets::handlePickerCallback(const uuid_vec_t& ids, const std::
 	{
 		if (!LLAvatarTracker::instance().isBuddy(id))
 			LGGContactSets::getInstance()->addNonFriendToList(id);
-		LGGContactSets::getInstance()->addFriendToGroup(id, set);
+		LGGContactSets::getInstance()->addFriendToSet(id, set);
 	}
 }
 

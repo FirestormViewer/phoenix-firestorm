@@ -65,19 +65,19 @@ BOOL FSFloaterContactSetConfiguration::postBuild()
 
 void FSFloaterContactSetConfiguration::onOpen(const LLSD& target_set)
 {
-	mSetSwatch->set(LGGContactSets::getInstance()->getGroupColor(mContactSet), TRUE);
+	mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), TRUE);
 	mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), TRUE);
-	mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForGroup(mContactSet));
+	mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForSet(mContactSet));
 }
 
 void FSFloaterContactSetConfiguration::onCommitSetColor()
 {
-	LGGContactSets::getInstance()->setGroupColor(mContactSet, mSetSwatch->get());
+	LGGContactSets::getInstance()->setSetColor(mContactSet, mSetSwatch->get());
 }
 
 void FSFloaterContactSetConfiguration::onCommitSetNotifications()
 {
-	LGGContactSets::getInstance()->setNotifyForGroup(mContactSet, mNotificationCheckBox->getValue().asBoolean());
+	LGGContactSets::getInstance()->setNotifyForSet(mContactSet, mNotificationCheckBox->getValue().asBoolean());
 }
 
 void FSFloaterContactSetConfiguration::onCommitDefaultColor()
