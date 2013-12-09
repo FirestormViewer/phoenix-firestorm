@@ -7654,7 +7654,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	//Wolfspirit: Read the UUID, system and Texturecolor
 	const LLTEContents& tec = contents.mTEContents;
 	const LLUUID tag_uuid = ((LLUUID*)tec.image_data)[TEX_HEAD_BODYPAINT];
-	bool new_system = (tec.glow > 0);
+	bool new_system = (tec.glow[TEX_HEAD_BODYPAINT]);
 
 	//WS: Write them into an LLSD map
 	mClientTagData["uuid"] = tag_uuid.asString();
