@@ -310,6 +310,8 @@ private:
 	bool onContextMenuItemClick(const LLSD& userdata);
 	bool onContextMenuItemEnable(const LLSD& userdata);
 
+	F32 getBBoxAspectRatio(const LLBBox& bbox, const LLVector3& normal, F32* height, F32* width, F32* depth);
+
 	LLVector3d mAgentLastPosition;
 
 	FSAreaSearch* mFSAreaSearch;

@@ -32,6 +32,20 @@
 		 parameter="one"/>
 	</menu_item_call>
 	<menu_item_call
+	 label="Zoom"
+	 layout="topleft"
+	 name="look_at_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="q_zoom"/>
+		<menu_item_call.on_enable
+		 function="AreaSearch.Enable"
+		 parameter="one"/>
+		<menu_item_call.on_enable
+		 function="AreaSearch.Enable"
+		 parameter="in_dd"/>
+	</menu_item_call>
+	<menu_item_call
 	 label="Inspect"
 	 layout="topleft"
 	 name="inspect_object">
