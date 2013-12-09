@@ -1259,15 +1259,6 @@ static std::string add_dictionary_filter_to_gtkchooser(GtkWindow *picker)
 							LLTrans::getString("dictionary_files") + " (*.dic; *.xcu)");
 }
 
-#if 0
-// [FS:CR] FIRE-12276
-static std::string add_csv_filter_to_gtkchooser(GtkWindow *picker)
-{
-	return add_simple_mime_filter_to_gtkchooser(picker, "text/csv",
-							LLTrans::getString("csv_files") + " (*.csv)");
-}
-#endif
-
 // <FS:CR> GTK Import/Export filters
 static std::string add_import_filter_to_gtkchooser(GtkWindow *picker)
 {
