@@ -27,6 +27,10 @@ No Sets Loaded
 		name="ao_no_animations_loaded">
 No Animations Loaded
 	</floater.string>
+	<floater.string
+		name="ao_dnd_only_on_full_interface">
+You can only drag and drop an animation notecard on the full interface window. Click on the wrench icon to open it.
+	</floater.string>
 
 	<panel
 		name="animation_overrider_outer_panel"

@@ -701,7 +701,7 @@ BOOL FloaterAO::handleDragAndDrop(S32 x,S32 y,MASK mask,BOOL drop,EDragAndDropTy
 	// no drag & drop on small interface
 	if(!mMore)
 	{
-		tooltipMsg="ao_dnd_only_on_full_interface";
+		tooltipMsg=getString("ao_dnd_only_on_full_interface");
 		*accept=ACCEPT_NO;
 		return TRUE;
 	}
