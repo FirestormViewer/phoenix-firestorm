@@ -39,7 +39,7 @@
 #    include <ext/hashtable.h>
 // <FS:CR> Clang support
 #  elif LL_CLANG
-#    include <hashtable.h>
+#    include <ext/hashtable.h>
 // </FS:CR> Clang support
 #  elif __GNUC__ >= 3
 #    include <ext/stl_hashtable.h>
