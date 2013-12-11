@@ -70,6 +70,9 @@ BOOL FSPanelContactSets::postBuild()
 	childSetAction("profile_btn",			boost::bind(&FSPanelContactSets::onClickOpenProfile,	this));
 	childSetAction("start_im_btn",			boost::bind(&FSPanelContactSets::onClickStartIM,		this));
 	childSetAction("offer_teleport_btn",	boost::bind(&FSPanelContactSets::onClickOfferTeleport,	this));
+	childSetAction("set_pseudonym_btn",		boost::bind(&FSPanelContactSets::onClickSetPseudonym,	this));
+	childSetAction("remove_pseudonym_btn",	boost::bind(&FSPanelContactSets::onClickRemovePseudonym,	this));
+	childSetAction("remove_displayname_btn", boost::bind(&FSPanelContactSets::onClickRemoveDisplayName,	this));
 	
 	mContactSetCombo = getChild<LLComboBox>("combo_sets");
 	if (mContactSetCombo)
@@ -132,6 +135,11 @@ void FSPanelContactSets::resetControls()
 	childSetEnabled("profile_btn", has_selection);
 	childSetEnabled("start_im_btn", has_selection);
 	childSetEnabled("offer_teleport_btn", has_selection);	// Should probably check if they're online...
+	childSetEnabled("set_pseudonym_btn", (mAvatarSelections.size() == 1));
+	childSetEnabled("remove_pseudonym_btn", (has_selection
+											 && LGGContactSets::getInstance()->hasPseudonym(mAvatarSelections)));
+	childSetEnabled("remove_displayname_btn", (has_selection
+											   && !LGGContactSets::getInstance()->hasDisplayNameRemoved(mAvatarSelections)));
 }
 
 void FSPanelContactSets::updateSets(LGGContactSets::EContactSetUpdate type)
@@ -168,6 +176,7 @@ void FSPanelContactSets::refreshContactSets()
 
 void FSPanelContactSets::refreshSetList()
 {
+	mAvatarList->refreshNames();
 	generateAvatarList(mContactSetCombo->getSimple());
 	resetControls();
 }
@@ -255,4 +264,34 @@ void FSPanelContactSets::onClickStartIM()
 void FSPanelContactSets::onClickOfferTeleport()
 {
 	LLAvatarActions::offerTeleport(mAvatarSelections);
+}
+
+void FSPanelContactSets::onClickSetPseudonym()
+{
+	LLSD payload, args;
+	args["AVATAR"] = LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString();
+	payload["id"] = mAvatarSelections.front();
+	LLNotificationsUtil::add("SetAvatarPseudonym", args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
+}
+
+void FSPanelContactSets::onClickRemovePseudonym()
+{
+	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
+	{
+		if (LGGContactSets::getInstance()->hasPseudonym(id))
+		{
+			LGGContactSets::getInstance()->clearPseudonym(id);
+		}
+	}
+}
+
+void FSPanelContactSets::onClickRemoveDisplayName()
+{
+	BOOST_FOREACH(const LLUUID& id, mAvatarSelections)
+	{
+		if (!LGGContactSets::getInstance()->hasDisplayNameRemoved(id))
+		{
+			LGGContactSets::getInstance()->removeDisplayName(id);
+		}
+	}
 }

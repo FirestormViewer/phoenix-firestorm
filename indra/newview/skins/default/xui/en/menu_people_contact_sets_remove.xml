@@ -23,4 +23,25 @@
        function="ContactSet.Enable"
        parameter="has_selection" />
   </menu_item_call>
+  <menu_item_separator/>
+  <menu_item_call
+   label="Remove Alias..."
+   name="remove_alias">
+      <menu_item_call.on_click
+       function="ContactSet.Action"
+       parameter="remove_pseudonym"/>
+      <menu_item_call.on_visible
+       function="ContactSet.Enable"
+       parameter="has_pseudonym" />
+  </menu_item_call>
+  <menu_item_call
+   label="Remove Display Name..."
+   name="remove_display_name">
+      <menu_item_call.on_click
+       function="ContactSet.Action"
+       parameter="remove_display_name"/>
+      <menu_item_call.on_visible
+       function="ContactSet.Enable"
+       parameter="has_display_name" />
+  </menu_item_call>
 </toggleable_menu>

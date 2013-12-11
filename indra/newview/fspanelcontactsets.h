@@ -58,6 +58,10 @@ private:
 	void onClickAddSet();
 	void onClickRemoveSet();
 	void onClickConfigureSet();
+	void onClickRemoveDisplayName();
+	void onClickSetPseudonym();
+	void onClickRemovePseudonym();
+	
 	void refreshContactSets();
 	void removeAvatarFromSet();
 	void resetControls();

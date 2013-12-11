@@ -178,6 +178,13 @@ void LLAvatarList::showUsername(bool visible)
 	mNeedUpdateNames = true;
 }
 
+// [FS:CR] Refresh names
+void LLAvatarList::refreshNames()
+{
+	mNeedUpdateNames = true;
+}
+// [FS:CR]
+
 void LLAvatarList::showVoiceVolume(bool visible)
 {
 	mShowVoiceVolume=visible;

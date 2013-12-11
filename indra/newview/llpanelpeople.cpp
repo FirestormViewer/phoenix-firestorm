@@ -1774,6 +1774,7 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 
 void LLPanelPeople::generateCurrentContactList()
 {
+	mContactSetList->refreshNames();
 	generateContactList(mContactSetCombo->getSimple());
 }
 
@@ -1788,6 +1789,26 @@ bool LLPanelPeople::onContactSetsEnable(const LLSD& userdata)
 		getCurrentItemIDs(selected_uuids);
 		return (!selected_uuids.empty() &&
 				selected_uuids.size() <= MAX_SELECTIONS);
+	}
+	else if (item == "has_single_selection")
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		return (selected_uuids.size() == 1);
+	}
+	else if (item == "has_pseudonym")
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		if (!selected_uuids.empty())
+			return LGGContactSets::getInstance()->hasPseudonym(selected_uuids);
+	}
+	else if (item == "has_display_name")
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		if (!selected_uuids.empty())
+			return (!LGGContactSets::getInstance()->hasDisplayNameRemoved(selected_uuids));
 	}
 	return false;
 }
@@ -1875,6 +1896,45 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		if (selected_uuids.empty()) return;
 		
 		LLAvatarActions::offerTeleport(selected_uuids);
+	}
+	else if (chosen_item == "set_pseudonym")
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		if (selected_uuids.empty()) return;
+		
+		LLSD payload, args;
+		args["AVATAR"] = LLSLURL("agent", selected_uuids.front(), "about").getSLURLString();
+		payload["id"] = selected_uuids.front();
+		LLNotificationsUtil::add("SetAvatarPseudonym", args, payload, &LGGContactSets::handleSetAvatarPseudonymCallback);
+	}
+	else if (chosen_item == "remove_pseudonym")
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		if (selected_uuids.empty()) return;
+		
+		BOOST_FOREACH(const LLUUID& id, selected_uuids)
+		{
+			if (LGGContactSets::getInstance()->hasPseudonym(id))
+			{
+				LGGContactSets::getInstance()->clearPseudonym(id);
+			}
+		}
+	}
+	else if (chosen_item == "remove_display_name")
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		if (selected_uuids.empty()) return;
+		
+		BOOST_FOREACH(const LLUUID& id, selected_uuids)
+		{
+			if (!LGGContactSets::getInstance()->hasDisplayNameRemoved(id))
+			{
+				LGGContactSets::getInstance()->removeDisplayName(id);
+			}
+		}
 	}
 }
 

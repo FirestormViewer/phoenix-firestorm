@@ -114,4 +114,31 @@
 	 name="offer_teleport_btn"
 	 tool_tip="Offer a teleport to your current location"
 	 width="80" />
+	<button
+	 top_pad="25"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Set Alias..."
+	 name="set_pseudonym_btn"
+	 tool_tip="Give this avatar a pseudonym"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Rem Alias..."
+	 name="remove_pseudonym_btn"
+	 tool_tip="Remove an avatar's pseudonym"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Rem DN..."
+	 name="remove_displayname_btn"
+	 tool_tip="Remove an avatar's display name"
+	 width="80" />
 </panel>

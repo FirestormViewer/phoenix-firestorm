@@ -37,7 +37,7 @@ typedef enum e_lgg_cs
 
 const std::string CS_SET_ALL_SETS = "All Sets";
 const std::string CS_SET_NO_SETS = "No Sets";
-const std::string CS_SET_EXTRA_AVS = "Extra Avatars";
+const std::string CS_SET_EXTRA_AVS = "extraAvs";
 const std::string CS_SET_PSEUDONYM = "Pseudonyms";
 const std::string CS_GLOBAL_SETTINGS = "globalSettings";
 const std::string CS_PSEUDONYM = "--- ---";
@@ -63,10 +63,12 @@ public:
 
 	std::string getPseudonym(const LLUUID& friend_id);
 	bool hasPseudonym(const LLUUID& friend_id);
+	bool hasPseudonym(uuid_vec_t ids);
 	void clearPseudonym(const LLUUID& friend_id);
 
 	void removeDisplayName(const LLUUID& friend_id);
 	bool hasDisplayNameRemoved(const LLUUID& friend_id);
+	bool hasDisplayNameRemoved(uuid_vec_t ids);
 
 	string_vec_t getFriendSets(const LLUUID& friend_id);
 	string_vec_t getAllContactSets();
@@ -127,6 +129,7 @@ public:
 	static bool handleAddContactSetCallback(const LLSD& notification, const LLSD& response);
 	static bool handleRemoveContactSetCallback(const LLSD& notification, const LLSD& response);
 	static bool handleRemoveAvatarFromSetCallback(const LLSD& notification, const LLSD& response);
+	static bool handleSetAvatarPseudonymCallback(const LLSD& notification, const LLSD& response);
 	// [/FS:CR]
 	
 private:

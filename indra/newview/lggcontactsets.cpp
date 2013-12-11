@@ -32,6 +32,7 @@
 #include "llnotificationsutil.h"
 #include "llsdserialize.h"
 #include "llviewercontrol.h"
+#include "llvoavatar.h"
 #include "fsdata.h"
 #include "rlvhandler.h"
 
@@ -751,6 +752,9 @@ uuid_vec_t LGGContactSets::getListOfPseudonymAvs()
 void LGGContactSets::setPseudonym(const LLUUID& friend_id, const std::string& pseudonym)
 {
 	mPseudonyms[friend_id] = pseudonym;
+	LLAvatarNameCache::fetch(friend_id);
+	LLVOAvatar::invalidateNameTag(friend_id);
+	mChangedSignal(UPDATED_MEMBERS);
 	saveToDisk();
 }
 
@@ -771,6 +775,8 @@ void LGGContactSets::clearPseudonym(const LLUUID& friend_id)
 	{
 		mPseudonyms.erase(found);
 		LLAvatarNameCache::fetch(friend_id); // update
+		LLVOAvatar::invalidateNameTag(friend_id);
+		mChangedSignal(UPDATED_MEMBERS);
 		saveToDisk();
 	}
 }
@@ -780,9 +786,41 @@ bool LGGContactSets::hasPseudonym(const LLUUID& friend_id)
 	return (!getPseudonym(friend_id).empty());
 }
 
+bool LGGContactSets::hasPseudonym(uuid_vec_t ids)
+{
+	bool has_pseudonym = false;
+	for (uuid_vec_t::const_iterator id = ids.begin(); id != ids.end(); ++id)
+	{
+		if (LGGContactSets::getInstance()->hasPseudonym(*id))
+		{
+			has_pseudonym = true;
+		}
+		else
+			has_pseudonym = false;
+		break;
+	}
+	return has_pseudonym;
+}
+
 bool LGGContactSets::hasDisplayNameRemoved(const LLUUID& friend_id)
 {
 	return (getPseudonym(friend_id) == CS_PSEUDONYM);
+}
+
+bool LGGContactSets::hasDisplayNameRemoved(uuid_vec_t ids)
+{
+	bool has_pseudonym = false;
+	for (uuid_vec_t::const_iterator id = ids.begin(); id != ids.end(); ++id)
+	{
+		if (LGGContactSets::getInstance()->hasDisplayNameRemoved(*id))
+		{
+			has_pseudonym = true;
+		}
+		else
+			has_pseudonym = false;
+		break;
+	}
+	return has_pseudonym;
 }
 
 bool LGGContactSets::hasVisuallyDifferentPseudonym(const LLUUID& friend_id)
@@ -909,7 +947,7 @@ bool LGGContactSets::handleAddContactSetCallback(const LLSD& notification, const
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0)
 	{
-		std::string set_name = response["message"].asString();
+		const std::string set_name = response["message"].asString();
 		LGGContactSets::getInstance()->addSet(set_name);
 	}
 	return false;
@@ -942,6 +980,19 @@ bool LGGContactSets::handleRemoveAvatarFromSetCallback(const LLSD& notification,
 			if (!LLAvatarTracker::instance().isBuddy(id) && LGGContactSets::getInstance()->getFriendSets(id).size() > 1)
 				LGGContactSets::getInstance()->removeNonFriendFromList(id);
 		}
+	}
+	return false;
+}
+
+// static
+bool LGGContactSets::handleSetAvatarPseudonymCallback(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		const std::string pseudonym(response["message"].asString());
+		const LLUUID id(notification["payload"]["id"].asUUID());
+		LGGContactSets::getInstance()->setPseudonym(id, pseudonym);
 	}
 	return false;
 }

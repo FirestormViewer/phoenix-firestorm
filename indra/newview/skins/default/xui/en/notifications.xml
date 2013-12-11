@@ -11652,4 +11652,25 @@ Are you sure you want to remove these [TARGET] avatars from [SET_NAME]?
 [NAME] was added to [SET].
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="SetAvatarPseudonym"
+   type="alertmodal">
+    <tag>contact set</tag>
+Enter an alias for [AVATAR]:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text" default="true" />
+      <button
+       default="true"
+       index="0"
+       name="Create"
+       text="Create"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
 </notifications>
