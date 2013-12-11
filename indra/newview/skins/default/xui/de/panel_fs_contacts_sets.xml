@@ -16,4 +16,7 @@
 	<button label="Profil..." name="profile_btn" tool_tip="Avatarprofil öffnen" width="85"/>
 	<button label="IM..." name="start_im_btn" tool_tip="Öffnet eine Instant-Message-Sitzung" width="85"/>
 	<button label="Teleport..." name="offer_teleport_btn" tool_tip="Dieser Avatar einen Teleport zu deiner jetzigen Position anbieten" width="85"/>
+	<button label="Alias setzen" name="set_pseudonym_btn" tool_tip="Legt ein Pseudoynm für diesen Avatar fest" width="85"/>
+	<button label="Alias entf." name="remove_pseudonym_btn" tool_tip="Entfernt das Pseudonym eines Avatars" width="85"/>
+	<button label="AN entf." name="remove_displayname_btn" tool_tip="Entfernt den Anzeigenamen eines Avatars" width="85"/>
 </panel>

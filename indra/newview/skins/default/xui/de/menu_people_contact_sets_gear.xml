@@ -3,5 +3,6 @@
 	<menu_item_call label="Profil anzeigen" name="profile"/>
 	<menu_item_call label="IM" name="im"/>
 	<menu_item_call label="Teleport anbieten" name="teleport"/>
+	<menu_item_call label="Alias festlegen" name="set_pseudonym"/>
 	<menu_item_call label="Kontakt-Set konfigurieren" name="set_config"/>
 </toggleable_menu>

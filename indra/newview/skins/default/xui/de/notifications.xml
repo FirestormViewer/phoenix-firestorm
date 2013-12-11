@@ -4726,4 +4726,11 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 	<notification name="AddToContactSetSuccess">
 		„[NAME]“ wurde zu Kontakt-Set „[SET]“ hinzugefügt.
 	</notification>
+	<notification name="SetAvatarPseudonym">
+		Alias für „[NAME]“ eingeben:
+		<form name="form">
+			<button name="Create" text="Erstellen"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 </notifications>

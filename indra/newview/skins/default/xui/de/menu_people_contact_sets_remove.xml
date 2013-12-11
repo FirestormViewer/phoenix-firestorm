@@ -2,4 +2,6 @@
 <toggleable_menu name="menu_people_contact_sets_remove">
 	<menu_item_call label="Kontakt-Set entfernen..." name="remove_set"/>
 	<menu_item_call label="Kontakt entfernen..." name="remove_contact"/>
+	<menu_item_call label="Alias entfernen..." name="remove_alias"/>
+	<menu_item_call label="Anzeigename entfernen..." name="remove_display_name"/>
 </toggleable_menu>
