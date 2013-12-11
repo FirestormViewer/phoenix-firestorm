@@ -14,4 +14,7 @@
 	<button label="Profil..." name="profile_btn" tool_tip="Otwórz profil tego awatara" />
 	<button label="IM..." name="start_im_btn" tool_tip="Rozpocznij sesję wiadomości IM" />
 	<button label="Teleportuj..." name="offer_teleport_btn" tool_tip="Zaproponuj teleportację do swojej obecnej lokalizacji" />
+	<button label="Ustaw alias" name="set_pseudonym_btn" tool_tip="Nadaj pseudonim temu awatarowi" />
+	<button label="Usuń alias" name="remove_pseudonym_btn" tool_tip="Usuń pseudonim tego awatara" />
+	<button label="Usuń Wyśw." name="remove_displayname_btn" tool_tip="Usuń Imię Wyświetlane tego awatara" />
 </panel>

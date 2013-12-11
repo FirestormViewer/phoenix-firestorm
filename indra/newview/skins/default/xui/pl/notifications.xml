@@ -4549,4 +4549,11 @@ Nie można tego cofnąć.
 	<notification name="AddToContactSetSuccess">
 		[NAME] został/a dodany/a do [SET].
 	</notification>
+	<notification name="SetAvatarPseudonym">
+		Wprowadź alias dla [AVATAR]:
+		<form name="form">
+			<button name="Create" text="Ustaw"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 </notifications>
