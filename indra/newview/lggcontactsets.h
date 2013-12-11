@@ -68,7 +68,6 @@ public:
 	void removeDisplayName(const LLUUID& friend_id);
 	bool hasDisplayNameRemoved(const LLUUID& friend_id);
 
-	string_vec_t getInnerSets(const std::string& set_name);
 	string_vec_t getFriendSets(const LLUUID& friend_id);
 	string_vec_t getAllContactSets();
 

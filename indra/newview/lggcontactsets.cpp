@@ -109,7 +109,7 @@ LLSD LGGContactSets::exportContactSet(const std::string& set_name)
 
 void LGGContactSets::loadFromDisk()
 {
-	std::string filename(getFilename());
+	const std::string filename(getFilename());
 	if (filename.empty())
 	{
 		LL_INFOS("ContactSets") << "No valid user directory." << LL_ENDL;
@@ -447,7 +447,7 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, const std::stri
 
 	U32 lowest = 9999;
 	string_vec_t contact_sets = getFriendSets(friend_id);
-	for (U32 i = 0; i < static_cast<U32>(contact_sets.size()); i++)
+	for (U32 i = 0; i < static_cast<U32>(contact_sets.size()); ++i)
 	{
 		if (contact_sets[i] != ignored_set_name)
 		{
@@ -525,50 +525,6 @@ bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGC
 		return false;
 	}
 	return true;
-}
-
-string_vec_t LGGContactSets::getInnerSets(const std::string& set_name)
-{
-	string_vec_t sets;
-
-	static LLCachedControl<bool> useFolders(gSavedSettings, "FSContactSetsShowFolders");
-	static LLCachedControl<bool> showOnline(gSavedSettings, "FSContactSetsShowOnline");
-	static LLCachedControl<bool> showOffline(gSavedSettings, "FSContactSetsShowOffline");
-
-	if (!useFolders)
-	{
-		return sets;
-	}
-
-	std::set<std::string> newSets;
-
-	uuid_vec_t friends_in_set = getFriendsInSet(set_name);
-	for (uuid_vec_t::const_iterator pal = friends_in_set.begin(); pal != friends_in_set.end(); ++pal)
-	{
-		LLUUID friend_id = (*pal);
-		bool online = LLAvatarTracker::instance().isBuddyOnline(friend_id);
-		if (online && !showOnline)
-		{
-			continue;
-		}
-		if (!online && !showOffline)
-		{
-			continue;
-		}
-
-		string_vec_t inner_sets = getFriendSets(friend_id);
-		for (string_vec_t::const_iterator itr = inner_sets.begin(); itr != inner_sets.end(); ++itr)
-		{
-			std::string inner_set_name = (*itr);
-			if (set_name != inner_set_name)
-			{
-				newSets.insert(inner_set_name);
-			}
-		}
-	}
-
-	std::copy(newSets.begin(), newSets.end(), std::back_inserter(sets));
-	return sets;
 }
 
 string_vec_t LGGContactSets::getFriendSets(const LLUUID& friend_id)
