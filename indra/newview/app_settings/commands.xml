@@ -9,6 +9,8 @@
            tooltip_ref="Command_AboutLand_Tooltip"
            execute_function="Floater.ToggleOrBringToFront"
            execute_parameters="about_land"
+           is_enabled_function="Floater.CanShow"
+           is_enabled_parameters="about_land"
            is_running_function="Floater.IsOpen"
            is_running_parameters="about_land"
            />
@@ -118,6 +120,8 @@
            tooltip_ref="Command_Inventory_Tooltip"
            execute_function="Floater.ToggleOrBringToFront"
            execute_parameters="inventory"
+           is_enabled_function="RLV.EnableIfNot"
+           is_enabled_parameters="showinv"
            is_running_function="Floater.IsOpen"
            is_running_parameters="inventory"
            />
@@ -130,6 +134,8 @@
            tooltip_ref="Command_Map_Tooltip"
            execute_function="Floater.ToggleOrBringToFront"
            execute_parameters="world_map"
+           is_enabled_function="RLV.EnableIfNot"
+           is_enabled_parameters="showworldmap"
            is_running_function="Floater.IsOpen"
            is_running_parameters="world_map"
            />
@@ -151,6 +157,8 @@
            tooltip_ref="Command_MiniMap_Tooltip"
            execute_function="Floater.ToggleOrBringToFront"
            execute_parameters="mini_map"
+           is_enabled_function="RLV.EnableIfNot"
+           is_enabled_parameters="showminimap"
            is_running_function="Floater.IsOpen"
            is_running_parameters="mini_map"
            />
