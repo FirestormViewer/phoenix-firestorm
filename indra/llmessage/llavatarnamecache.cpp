@@ -606,7 +606,9 @@ bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)
 			{
 				LLSD info = av_name->asLLSD();
 				info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
-				info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)?(info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString()) : LGGContactSets::getInstance()->getPseudonym(agent_id);
+				info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)
+					? (info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString())
+					: LGGContactSets::getInstance()->getPseudonym(agent_id);
 				av_name->fromLLSD(info);
 			}
 

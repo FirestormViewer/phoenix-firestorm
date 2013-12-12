@@ -763,7 +763,7 @@ std::string LGGContactSets::getPseudonym(const LLUUID& friend_id)
 	uuid_map_t::iterator found = mPseudonyms.find(friend_id);
 	if (found != mPseudonyms.end())
 	{
-		return found->second;
+		return llformat("'%s'", found->second.c_str());
 	}
 	return std::string();
 }
@@ -804,7 +804,7 @@ bool LGGContactSets::hasPseudonym(uuid_vec_t ids)
 
 bool LGGContactSets::hasDisplayNameRemoved(const LLUUID& friend_id)
 {
-	return (getPseudonym(friend_id) == CS_PSEUDONYM);
+	return (getPseudonym(friend_id) == "'--- ---'");
 }
 
 bool LGGContactSets::hasDisplayNameRemoved(uuid_vec_t ids)
