@@ -16,8 +16,8 @@ if( LEAPMOTION )
     set(LEAP_MOTION_LIBRARY libLeap.dylib)
   elseif (WINDOWS)
     set(LEAP_MOTION_LIBRARY
-        debug Leapd.dll
-        optimized Leap.dll)
+        debug Leapd.lib
+        optimized Leap.lib)
    elseif (LINUX)
      set(LEAP_MOTION_LIBRARY libLeap.so)
    endif()

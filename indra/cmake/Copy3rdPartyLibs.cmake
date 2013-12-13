@@ -74,16 +74,6 @@ if(WINDOWS)
       endif( NOT ND_BUILD64BIT_ARCH )
     endif (FMODEX)
 
-    if (LEAPMOTION)
-      if( NOT ND_BUILD64BIT_ARCH )
-        set(debug_files ${debug_files} x86/Leapd.dll)
-        set(release_files ${release_files} x86/Leap.dll)
-      else( NOT ND_BUILD64BIT_ARCH )
-        set(debug_files ${debug_files} x64/Leapd.dll)
-        set(release_files ${release_files} x64/Leap.dll)
-      endif( NOT ND_BUILD64BIT_ARCH )
-    endif (LEAPMOTION)
-
 # <FS:ND> Copy pdb files for symbol generation too
    if( NOT ND_BUILD64BIT_ARCH )
      set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
