@@ -26,17 +26,23 @@ class FSViewerManifest:
             'version_short' : '.'.join(self.args['version'][:-1]),
             'version_dashes' : '-'.join(self.args['version']),
             'channel':self.channel(),
-            'channel_oneword':self.channel_oneword(),
-            'channel_unique':self.channel_unique(),
-            'subchannel_underscores':'_'.join(self.channel_unique().split()),
+            'channel_oneword':self.fs_channel_oneword(),
+            'channel_unique':self.fs_channel_unique(),
+            'subchannel_underscores':'_'.join(self.fs_channel_unique().split()),
             'app_name' : self.app_name()
         }
 
-        return fs_splice_grid_substitution_strings( substitution_strings )
+        return self.fs_splice_grid_substitution_strings( substitution_strings )
 
     def fs_channel_legacy_oneword(self):
         return "".join(self.channel().split())
     
+    def fs_channel_oneword(self):
+        return "".join(self.fs_channel_unique().split())
+
+    def fs_channel_unique(self):
+        return self.channel().replace("Firestorm", "").strip()
+
     def fs_sign_win_binaries( self ):
         try:
             subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\firestorm-bin.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
