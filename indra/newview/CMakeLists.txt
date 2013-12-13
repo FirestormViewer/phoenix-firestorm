@@ -2063,7 +2063,7 @@ if (WINDOWS)
     endif (FMODEX)
 	
     if (LEAPMOTION)
-      list(APPEND_COPY_INPUT_DEPENDENCIES
+      list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/Release/Leap.dll
            ${SHARED_LIB_STAGING_DIR}/Debug/Leapd.dll
           )
