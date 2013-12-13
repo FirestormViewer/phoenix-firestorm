@@ -470,6 +470,15 @@ class WindowsManifest(ViewerManifest):
                     self.path("fmodex64.dll")
             except:
                 print "Skipping fmodex audio library(assuming other audio engine)"
+			
+            # Get Leap Motion SDK
+            try:
+                if self.args['configuration'].lower() == 'debug':
+                    self.path("Leapd.dll")
+                else:
+                    self.path("Leap.dll")
+            except:
+                print "Leap Motion library was not found"
 
             # For textures
             if self.args['configuration'].lower() == 'debug':

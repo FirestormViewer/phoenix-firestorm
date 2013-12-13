@@ -2061,6 +2061,13 @@ if (WINDOWS)
            ${SHARED_LIB_STAGING_DIR}/Debug/fmodexL.dll
           )
     endif (FMODEX)
+	
+    if (LEAPMOTION)
+      list(APPEND COPY_INPUT_DEPENDENCIES
+           ${SHARED_LIB_STAGING_DIR}/Release/Leap.dll
+           ${SHARED_LIB_STAGING_DIR}/Debug/Leapd.dll
+          )
+    endif (LEAPMOTION)
     
     add_custom_command(
       OUTPUT  ${CMAKE_CFG_INTDIR}/copy_touched.bat
