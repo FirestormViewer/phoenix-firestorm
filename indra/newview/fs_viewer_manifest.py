@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 class FSViewerManifest:
@@ -9,8 +10,14 @@ class FSViewerManifest:
     
     def fs_splice_grid_substitution_strings( self, subst_strings ):
         ret = subst_strings
-        ret[ 'grid' ] = self.args['grid']
-        ret[ 'grid_caps' ] = self.args['grid'].upper()
+
+        if self.args.has_key( 'grid' ) and self.args['grid'] != None:
+          ret[ 'grid' ] = self.args['grid']
+          ret[ 'grid_caps' ] = self.args['grid'].upper()
+        else:
+          ret[ 'grid' ] = ""
+          ret[ 'grid_caps' ] = ""
+
         return ret
 
     def fs_get_substitution_strings( self ):

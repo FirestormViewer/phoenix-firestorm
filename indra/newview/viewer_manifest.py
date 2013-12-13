@@ -775,7 +775,7 @@ class Windows_i686_Manifest(ViewerManifest):
         if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
             sName = "%s/Phoenix_%s_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),
-                                                                     self.channel_legacy_oneword(),
+                                                                     self.fs_channel_legacy_oneword(),
                                                                      substitution_strings['version_dashes'],
                                                                      self.args['viewer_flavor'])
 
@@ -788,7 +788,7 @@ class Windows_i686_Manifest(ViewerManifest):
         # Using tat+xz gives far superior compression than zip (~half the size of the zip archive).
         # Python3 natively supports tar+xz via mode 'w:xz'. But we're stuck with Python2 for nowo.
         symbolTar = tarfile.TarFile("%s/Phoenix_%s_%s_%s_pdbsymbols-windows.tar" % (self.args['configuration'].lower(),
-                                                                                    self.channel_legacy_oneword(),
+                                                                                    self.fs_channel_legacy_oneword(),
                                                                                     substitution_strings['version_dashes'],
                                                                                     self.args['viewer_flavor']),
                                                                                     'w')
@@ -1135,7 +1135,7 @@ class Darwin_i386_Manifest(ViewerManifest):
             # Rename to add version numbers
             os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),
                       "%s/Phoenix_%s_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),
-                                                                      self.channel_legacy_oneword(),
+                                                                      self.fs_channel_legacy_oneword(),
                                                                       substitution_strings['version_dashes'],
                                                                       self.args['viewer_flavor']))
 
@@ -1254,7 +1254,7 @@ class LinuxManifest(ViewerManifest):
             # Rename to add version numbers
             os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),
                       "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),
-                                                                     self.channel_legacy_oneword(),
+                                                                     self.fs_channel_legacy_oneword(),
                                                                      '-'.join( self.args['version'] ),
                                                                      self.args['viewer_flavor'] ) )
 
