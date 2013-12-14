@@ -156,7 +156,7 @@ void LLLMImpl::stepFrame()
 		const Leap::Frame frame = mLMController->frame();
 		Leap::HandList hands = frame.hands();
 		
-		static LLCachedControl<S32> sControllerMode(gSavedSettings, "LeapMotionTestMode");
+		static LLCachedControl<S32> sControllerMode(gSavedSettings, "LeapMotionTestMode", 0);
 
 		switch (sControllerMode)
 		{
