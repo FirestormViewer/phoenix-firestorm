@@ -15,9 +15,15 @@ if( LEAPMOTION )
   if (DARWIN)
     set(LEAP_MOTION_LIBRARY libLeap.dylib)
   elseif (WINDOWS)
-    set(LEAP_MOTION_LIBRARY
-        debug Leapd.lib
-        optimized Leap.lib)
+    if (ND_BUILD64BIT_ARCH)
+        set(LEAP_MOTION_LIBRARY
+            debug ${LIBS_PREBUILT_DIR}/lib/debug/x64/Leapd.lib
+            optimized ${LIBS_PREBUILT_DIR}/lib/release/x64/Leap.lib)
+    else (ND_BUILD64BIT_ARCH)
+        set(LEAP_MOTION_LIBRARY
+            debug ${LIBS_PREBUILT_DIR}/lib/debug/x86/Leapd.lib
+            optimized ${LIBS_PREBUILT_DIR}/lib/release/x86/Leap.lib)
+    endif (ND_BUILD64BIT_ARCH)
    elseif (LINUX)
      set(LEAP_MOTION_LIBRARY libLeap.so)
    endif()
