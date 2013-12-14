@@ -1336,6 +1336,10 @@ class Linux_i686_Manifest(LinuxManifest):
                     print "Skipping libfmodex.so - not found"
                     pass
 			
+            self.end_prefix("lib")
+
+            self.prefix(src="../packages/lib/release/x86", dst="lib")
+
             try:
                 self.path("libLeap.so")
             except:

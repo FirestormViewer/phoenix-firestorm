@@ -337,7 +337,11 @@ elseif(LINUX)
     endif (FMODEX)
 
     if (LEAPMOTION)
-      set(release_file ${release_files} "libLeap.so")
+      if( NOT ND_BUILD64BIT_ARCH )
+        set(release_files ${release_files} x86/libLeap.so)
+      else( NOT ND_BUILD64BIT_ARCH )
+        set(release_files ${release_files} x64/libLeap.so)
+      endif( NOT ND_BUILD64BIT_ARCH )
     endif (LEAPMOTION)
 
 else(WINDOWS)
