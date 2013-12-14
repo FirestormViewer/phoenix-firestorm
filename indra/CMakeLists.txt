@@ -7,7 +7,9 @@
 cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
 
 # [FS:CR] Shut up Cmake 2.8.12+ by using the old policy.
-cmake_policy(SET CMP0022 OLD)
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
+  cmake_policy(SET CMP0022 OLD)
+endif()
 
 set(ROOT_PROJECT_NAME "SecondLife" CACHE STRING
     "The root project/makefile/solution name. Defaults to SecondLife.")
