@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
 
 # [FS:CR] Shut up Cmake 2.8.12+ by using the old policy.
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.12 OR ${CMAKE_VERSION} VERSION_EQUAL 2.8.12)
   cmake_policy(SET CMP0022 OLD)
 endif()
 
