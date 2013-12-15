@@ -470,7 +470,7 @@
              follows="bottom|left|right"
              height="23"
              layout="bottomleft"
-             left_pad="3"			
+             left_pad="3"
              mouse_opaque="false"
              name="revert_btn_lp"
              auto_resize="true"
@@ -484,6 +484,25 @@
                  name="revert_button"
                  top="0"
                  width="165" />
+            </layout_panel>
+            <layout_panel
+             follows="bottom|left|right"
+             height="23"
+             layout="bottomleft"
+             left_pad="3"
+             mouse_opaque="false"
+             name="import_btn_lp"
+             auto_resize="true"
+             width="151">
+                <button
+                 follows="bottom|left|right"
+                 height="23"
+                 label="Import"
+                 layout="topleft"
+                 left="1"
+                 name="import_btn"
+                 top="0"
+                 width="150" />
             </layout_panel>
         </layout_stack>
     </panel>
