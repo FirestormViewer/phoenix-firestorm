@@ -133,6 +133,8 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 		}
 	}
 	
+	mCommitCallbackRegistrar.add("IMSession.Menu.Action", boost::bind(&FSFloaterIM::doToSelected, this, _2));
+	
 	setOverlapsScreenChannel(true);
 
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
@@ -452,17 +454,6 @@ void FSFloaterIM::onShareButtonClicked()
 	LLAvatarActions::share(mOtherParticipantUUID);
 }
 
-void FSFloaterIM::onTeleportButtonClicked()
-{
-	lldebugs << "FSFloaterIM::onTeleportButtonClicked" << llendl;
-	LLAvatarActions::offerTeleport(mOtherParticipantUUID);
-}
-
-void FSFloaterIM::onRequestTeleportButtonClicked()
-{
-	LLAvatarActions::teleportRequest(mOtherParticipantUUID);
-}
-
 void FSFloaterIM::onPayButtonClicked()
 {
 	lldebugs << "FSFloaterIM::onPayButtonClicked" << llendl;
@@ -512,6 +503,17 @@ void FSFloaterIM::onHistoryButtonClicked()
 	}
 }
 
+void FSFloaterIM::doToSelected(const LLSD& userdata)
+{
+	const std::string command = userdata.asString();
+	if (command == "offer_tp")
+		LLAvatarActions::offerTeleport(mOtherParticipantUUID);
+	else if (command == "request_tp")
+		LLAvatarActions::teleportRequest(mOtherParticipantUUID);
+	else
+		LL_WARNS("IMFloater") << "Unhandled command '" << command << "'. Ignoring." << LL_ENDL;
+}
+
 // support sysinfo button -Zi
 void FSFloaterIM::onSysinfoButtonClicked()
 {
@@ -525,16 +527,16 @@ void FSFloaterIM::onSysinfoButtonClicked()
 
 BOOL FSFloaterIM::onSendSysinfo(const LLSD& notification, const LLSD& response)
 {
-	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+	S32 option = LLNotificationsUtil::getSelectedOption(notification,response);
 
-	if(option==0)
+	if (option == 0)
 	{
 		std::string part1 = notification["substitutions"]["Part1"];
 		std::string part2 = notification["substitutions"]["Part2"];
 		if (mSessionInitialized)
 		{
-			LLIMModel::sendMessage(part1, mSessionID,mOtherParticipantUUID,mDialog);
-			LLIMModel::sendMessage(part2, mSessionID,mOtherParticipantUUID,mDialog);
+			LLIMModel::sendMessage(part1, mSessionID, mOtherParticipantUUID, mDialog);
+			LLIMModel::sendMessage(part2, mSessionID, mOtherParticipantUUID, mDialog);
 		}
 		else
 		{
@@ -646,7 +648,6 @@ void FSFloaterIM::changed(U32 mask)
 	if(LLAvatarActions::isFriend(mOtherParticipantUUID))
 	{
 		getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
-		getChild<LLButton>("request_tp_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
 	}
 }
 
@@ -697,12 +698,6 @@ BOOL FSFloaterIM::postBuild()
 	button = getChild<LLButton>("share_btn");
 	button->setClickedCallback(boost::bind(&FSFloaterIM::onShareButtonClicked, this));
 	
-	button = getChild<LLButton>("teleport_btn");
-	button->setClickedCallback(boost::bind(&FSFloaterIM::onTeleportButtonClicked, this));
-	
-	button = getChild<LLButton>("request_tp_btn");
-	button->setClickedCallback(boost::bind(&FSFloaterIM::onRequestTeleportButtonClicked, this));
-	
 	button = getChild<LLButton>("pay_btn");
 	button->setClickedCallback(boost::bind(&FSFloaterIM::onPayButtonClicked, this));
 	
@@ -744,7 +739,6 @@ BOOL FSFloaterIM::postBuild()
 				{
 					llinfos << "LLAvatarActions::isFriend - tp button" << llendl;
 					getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
-					getChild<LLButton>("request_tp_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
 				}
 
 				// support sysinfo button -Zi
@@ -763,7 +757,6 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("profile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("request_tp_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
@@ -780,7 +773,6 @@ BOOL FSFloaterIM::postBuild()
 				getChild<LLLayoutPanel>("gprofile_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("friend_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("tp_panel")->setVisible(false);
-				getChild<LLLayoutPanel>("request_tp_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("share_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
 				getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
@@ -832,19 +824,19 @@ BOOL FSFloaterIM::postBuild()
 
 	LLCheckBoxCtrl* FSPrefixBox = getChild<LLCheckBoxCtrl>("FSSupportGroupChatPrefix_toggle");
 
-	BOOL isFSSupportGroup=FSData::getInstance()->isSupportGroup(mSessionID);
+	BOOL isFSSupportGroup = FSData::getInstance()->isSupportGroup(mSessionID);
 	FSPrefixBox->setVisible(isFSSupportGroup);
 
 	// <FS:Zi> Viewer version popup
 	if(isFSSupportGroup)
 	{
 		// check if the dialog was set to ignore
-		LLNotificationTemplatePtr templatep=LLNotifications::instance().getTemplate("FirstJoinSupportGroup");
+		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup");
 		if(!templatep.get()->mForm->getIgnored())
 		{
 			// if not, give the user a choice, whether to enable the version prefix or not
 			LLSD args;
-			LLNotificationsUtil::add("FirstJoinSupportGroup",args,LLSD(),boost::bind(&FSFloaterIM::enableViewerVersionCallback,this,_1,_2));
+			LLNotificationsUtil::add("FirstJoinSupportGroup", args, LLSD(),boost::bind(&FSFloaterIM::enableViewerVersionCallback, this, _1, _2));
 		}
 	}
 	// </FS:Zi> Viewer version popup
