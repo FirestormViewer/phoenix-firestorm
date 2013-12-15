@@ -900,8 +900,8 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		else if (domain.length() >= listed_domain.length())
 		{
 			size_t pos = domain.rfind(listed_domain);
-			if ((pos != std::string::npos) && 
-				(pos == domain.length()-listed_domain.length()))
+			if ((pos != std::string::npos)
+				&& (pos == domain.length()-listed_domain.length()))
 			{
 				found = true;
 			}
@@ -912,9 +912,9 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 			break;
 		}
 	}
-	if (media_action=="allow")
+	if (media_action == "allow")
 	{
-		llinfos << "Media filter: URL allowed by whitelist: "+parcel->getMediaURL() << llendl;
+		LL_INFOS("MediaFilter") << "Media filter: URL allowed by whitelist: "+parcel->getMediaURL() << LL_ENDL;
 		sCurrentMedia = *parcel;
 		if (parcel->getName() == currentparcel->getName())
 		{
@@ -922,7 +922,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		}
 		sMediaLastActionPlay = true;
 	}
-	else if (media_action=="deny")
+	else if (media_action == "deny")
 	{
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
@@ -1334,16 +1334,16 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 			break;
 		}
 	}
-	if (media_action=="allow")
+	if (media_action == "allow")
 	{
 		if (gAudiop != NULL)
 		{
-			llinfos << "Audio filter: URL allowed by whitelist" << llendl;
+			LL_INFOS("MediaFilter") << "Audio filter: URL allowed by whitelist" << LL_ENDL;
 			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
 		sAudioLastActionPlay = true;
 	}
-	else if (media_action=="deny")
+	else if (media_action == "deny")
 	{
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
@@ -1403,7 +1403,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
 
-	if ((option== 0) && allow) // allow now
+	if ((option == 0) && allow) // allow now
 	{
 		if (gAudiop != NULL)
 		{
@@ -1412,7 +1412,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
-	else if ((option==0) && !allow) //deny now
+	else if ((option == 0) && !allow) //deny now
 	{
 		if (gAudiop != NULL)
 		{
@@ -1421,7 +1421,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = false;
 	}
-	else if ((option== 1) && allow) // Whitelist domain
+	else if ((option == 1) && allow) // Whitelist domain
 	{
 		LLSD newmedia;
 		newmedia["domain"] = domain;
@@ -1438,7 +1438,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
-	else if ((option== 1) && !allow) //Blacklist domain
+	else if ((option == 1) && !allow) //Blacklist domain
 	{
 		LLSD newmedia;
 		newmedia["domain"] = domain;
@@ -1455,7 +1455,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = false;
 	}
-	else if ((option== 2) && allow) // Whitelist URL
+	else if ((option == 2) && allow) // Whitelist URL
 	{
 		LLSD newmedia;
 		newmedia["domain"] = media_url;
@@ -1472,7 +1472,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
-	else if ((option== 2) && !allow) //Blacklist URL
+	else if ((option == 2) && !allow) //Blacklist URL
 	{
 		LLSD newmedia;
 		newmedia["domain"] = media_url;
@@ -1540,7 +1540,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
 
-	if (option== 0) // allow now
+	if (option == 0) // allow now
 	{
 		if (gAudiop != NULL)
 		{
@@ -1549,7 +1549,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
-	else if (option==1) //deny now
+	else if (option == 1) //deny now
 	{
 		if (gAudiop != NULL)
 		{
@@ -1558,7 +1558,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = false;
 	}
-	else if (option== 3) // Whitelist domain
+	else if (option == 3) // Whitelist domain
 	{
 		LLSD newmedia;
 		newmedia["domain"] = domain;
@@ -1575,7 +1575,7 @@ void callback_audio_alert_single(const LLSD &notification, const LLSD &response,
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
-	else if (option== 4) //Blacklist domain
+	else if (option == 4) //Blacklist domain
 	{
 		LLSD newmedia;
 		newmedia["domain"] = domain;
@@ -1669,7 +1669,7 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 	{
 		if ((media_url == sCurrentMOAP) && (!sMediaReFilter))
 		{
-			llinfos << "MOAP URL filter: no active alert, same URL as previous: " + media_url << llendl;
+			LL_INFOS("MediaFilter") << "MOAP URL filter: no active alert, same URL as previous: " << media_url << LL_ENDL;
 			// The media hasn't changed, so keep playing if we were.
 			if (sMOAPLastActionPlay)
 			{
@@ -1679,7 +1679,7 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 			return;
 		}
 		// New MOAP, so flag the queue empty and filter it.
-		llinfos << "MOAP URL filter: no active alert, filtering new URL: " + media_url << llendl;
+		LL_INFOS("MediaFilter") << "MOAP URL filter: no active alert, filtering new URL: " << media_url << LL_ENDL;
 		sMOAPQueueEmpty = true;
 	}
 	// If an alert is active, place the media url in the MOAP queue
@@ -1690,7 +1690,7 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 		{
 			if (media_url != sQueuedMOAPUrl)
 			{
-				llinfos << "MOAP URL filter: active alert, replacing existing queue with: " + media_url << llendl;
+				LL_INFOS("MediaFilter") << "MOAP URL filter: active alert, replacing existing queue with: " << media_url << LL_ENDL;
 				sQueuedMOAPUrl = media_url;
 				sQueuedMOAPObject = object;
 				sQueuedMOAPNavObject = nav_object;
@@ -1704,7 +1704,7 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 		{
 			if (media_url != sCurrentMOAP)
 			{
-				llinfos << "MOAP URL filter: active alert, nothing queued, adding queue with: " + media_url << llendl;
+				LL_INFOS("MediaFilter") << "MOAP URL filter: active alert, nothing queued, adding queue with: " << media_url << LL_ENDL;
 				sQueuedMOAPUrl = media_url;
 				sQueuedMOAPObject = object;
 				sQueuedMOAPNavObject = nav_object;
@@ -1765,13 +1765,13 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 			break;
 		}
 	}
-	if (media_action=="allow")
+	if (media_action == "allow")
 	{
-		llinfos << "MOAP filter: URL allowed by whitelist" << llendl;
+		LL_INFOS("MediaFilter") << "MOAP filter: URL allowed by whitelist" << LL_ENDL;
 		nav_object->doNavigate(object, texture_index, media_url);
 		sMOAPLastActionPlay = true;
 	}
-	else if (media_action=="deny")
+	else if (media_action == "deny")
 	{
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
@@ -1829,18 +1829,18 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
 
-	if ((option== 0) && allow) // allow now
+	if ((option == 0) && allow) // allow now
 	{
 		nav_object->doNavigate(object, texture_index, media_url);
 		LLViewerParcelMedia::sCurrentMOAP = media_url;
 		LLViewerParcelMedia::sMOAPLastActionPlay = true;
 	}
-	else if ((option==0) && !allow) //deny now
+	else if ((option == 0) && !allow) //deny now
 	{
 		LLViewerParcelMedia::sCurrentMOAP = "";
 		LLViewerParcelMedia::sMOAPLastActionPlay = false;
 	}
-	else if ((option== 1) && allow) // Whitelist domain
+	else if ((option == 1) && allow) // Whitelist domain
 	{
 		LLSD newmedia;
 		newmedia["domain"] = domain;
@@ -1854,7 +1854,7 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		LLViewerParcelMedia::sCurrentMOAP = media_url;
 		LLViewerParcelMedia::sMOAPLastActionPlay = true;
 	}
-	else if ((option== 1) && !allow) //Blacklist domain
+	else if ((option == 1) && !allow) //Blacklist domain
 	{
 		LLSD newmedia;
 		newmedia["domain"] = domain;
@@ -1867,7 +1867,7 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		LLViewerParcelMedia::sCurrentMOAP = "";
 		LLViewerParcelMedia::sMOAPLastActionPlay = false;
 	}
-	else if ((option== 2) && allow) // Whitelist URL
+	else if ((option == 2) && allow) // Whitelist URL
 	{
 		LLSD newmedia;
 		newmedia["domain"] = media_url;
@@ -1881,7 +1881,7 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		LLViewerParcelMedia::sCurrentMOAP = media_url;
 		LLViewerParcelMedia::sMOAPLastActionPlay = true;
 	}
-	else if ((option== 2) && !allow) //Blacklist URL
+	else if ((option == 2) && !allow) //Blacklist URL
 	{
 		LLSD newmedia;
 		newmedia["domain"] = media_url;

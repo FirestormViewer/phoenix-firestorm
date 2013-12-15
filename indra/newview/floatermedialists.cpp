@@ -27,207 +27,151 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "floatermedialists.h"
-#include "llviewerparcelmedia.h"
-#include "lluictrlfactory.h" 
+#include "llfloaterreg.h"
+#include "llnotificationsutil.h"
 #include "llscrolllistctrl.h"
-#include "lllineeditor.h"
-
-bool FloaterMediaLists::sIsWhitelist;
+#include "llviewerparcelmedia.h"
 
 FloaterMediaLists::FloaterMediaLists(const LLSD& key) :
 	LLFloater(key)
 {
 }
 
-FloaterMediaLists::~FloaterMediaLists()
-{
-}
-
 BOOL FloaterMediaLists::postBuild()
 {
-	mWhitelistSLC = getChild<LLScrollListCtrl>("whitelist_list");
-	mBlacklistSLC = getChild<LLScrollListCtrl>("blacklist_list");
+	mWhitelistSLC = getChild<LLScrollListCtrl>("whitelist");
+	mBlacklistSLC = getChild<LLScrollListCtrl>("blacklist");
 
-	childSetAction("add_whitelist", onWhitelistAdd,this);
-	childSetAction("remove_whitelist", onWhitelistRemove,this);
-	childSetAction("add_blacklist", onBlacklistAdd,this);
-	childSetAction("remove_blacklist", onBlacklistRemove,this);
-	childSetAction("commit_domain", onCommitDomain,this);
+	childSetAction("add_whitelist", boost::bind(&FloaterMediaLists::onWhitelistAdd, this));
+	childSetAction("remove_whitelist", boost::bind(&FloaterMediaLists::onWhitelistRemove, this));
+	childSetAction("add_blacklist", boost::bind(&FloaterMediaLists::onBlacklistAdd, this));
+	childSetAction("remove_blacklist", boost::bind(&FloaterMediaLists::onBlacklistRemove, this));
 
 	if (!mWhitelistSLC || !mBlacklistSLC)
 	{
-		return true;
+		return TRUE;
 	}
 	
 	for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
 	{
+		LLSD element;
+		element["columns"][0]["column"] = "list";
+		element["columns"][0]["value"] = LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString();
 		if (LLViewerParcelMedia::sMediaFilterList[i]["action"].asString() == "allow")
 		{	
-			LLSD element;
-			element["columns"][0]["column"] = "whitelist_col";
-			element["columns"][0]["value"] = LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString();
-			element["columns"][0]["font"] = "SANSSERIF";
 			mWhitelistSLC->addElement(element);
-			mWhitelistSLC->sortByColumn("whitelist_col",TRUE);
+			mWhitelistSLC->sortByColumn("list", TRUE);
 		}
 		else if (LLViewerParcelMedia::sMediaFilterList[i]["action"].asString() == "deny")
 		{
-			LLSD element;
-			element["columns"][0]["column"] = "blacklist_col";
-			element["columns"][0]["value"] = LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString();
-			element["columns"][0]["font"] = "SANSSERIF";
 			mBlacklistSLC->addElement(element);
-			mBlacklistSLC->sortByColumn("blacklist_col",TRUE);
+			mBlacklistSLC->sortByColumn("list", TRUE);
 		}
 	}
 
 	return TRUE;
 }
 
-void FloaterMediaLists::draw()
+void FloaterMediaLists::onWhitelistAdd()
 {
-	refresh();
-	LLFloater::draw();
+	LLSD payload, args;
+	args["LIST"] = "whitelist";
+	payload["whitelist"] = true;
+	LLNotificationsUtil::add("AddToMediaList", args, payload, &FloaterMediaLists::handleAddDomainCallback);
 }
 
-void FloaterMediaLists::refresh()
+void FloaterMediaLists::onWhitelistRemove()
 {
+	LLScrollListItem* selected = mWhitelistSLC->getFirstSelected();
+
+	if (selected)
+	{
+		std::string domain = mWhitelistSLC->getSelectedItemLabel();
+
+		for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
+		{
+			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
+			{
+				LLViewerParcelMedia::sMediaFilterList.erase(i);
+				LLViewerParcelMedia::saveDomainFilterList();
+				//HACK: should really see if the URL being deleted
+				//  is the same as the saved one
+				LLViewerParcelMedia::sMediaLastURL = "";
+				LLViewerParcelMedia::sAudioLastURL = "";
+				LLViewerParcelMedia::sMediaReFilter = true;
+				break;
+			}
+		}
+		mWhitelistSLC->deleteSelectedItems();
+	}
+}
+
+void FloaterMediaLists::onBlacklistAdd()
+{
+	LLSD payload, args;
+	args["LIST"] = "blacklist";
+	payload["whitelist"] = false;
+	LLNotificationsUtil::add("AddToMediaList", args, payload, &FloaterMediaLists::handleAddDomainCallback);
+}
+
+void FloaterMediaLists::onBlacklistRemove()
+{
+	LLScrollListItem* selected = mBlacklistSLC->getFirstSelected();
+
+	if (selected)
+	{
+		std::string domain = mBlacklistSLC->getSelectedItemLabel();
+
+		for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
+		{
+			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
+			{
+				LLViewerParcelMedia::sMediaFilterList.erase(i);
+				LLViewerParcelMedia::saveDomainFilterList();
+				//HACK: should really see if the URL being deleted
+				//  is the same as the saved one
+				LLViewerParcelMedia::sMediaLastURL = "";
+				LLViewerParcelMedia::sAudioLastURL = "";
+				LLViewerParcelMedia::sMediaReFilter = true;
+				break;
+			}
+		}
+
+		mBlacklistSLC->deleteSelectedItems();
+	}
 }
 
 //static
-void FloaterMediaLists::onWhitelistAdd( void* data )
+bool FloaterMediaLists::handleAddDomainCallback(const LLSD& notification, const LLSD& response)
 {
-	FloaterMediaLists* self = (FloaterMediaLists*)data;
-	self->getChildView("blacklist_list")->setEnabled(false);
-	self->getChildView("whitelist_list")->setEnabled(false);
-	self->getChildView("remove_whitelist")->setEnabled(false);
-	self->getChildView("add_whitelist")->setEnabled(false);
-	self->getChildView("remove_blacklist")->setEnabled(false);
-	self->getChildView("add_blacklist")->setEnabled(false);
-	self->getChildView("input_domain")->setVisible(true);
-	self->getChildView("commit_domain")->setVisible(true);
-	self->getChild<LLUICtrl>("add_text")->
-	setValue(self->getString("EnterUrlAllow"));
-	self->getChildView("add_text")->setVisible(true);
-	sIsWhitelist = true;
-}
-
-void FloaterMediaLists::onWhitelistRemove( void* data )
-{
-	FloaterMediaLists* self = (FloaterMediaLists*)data;
-	LLScrollListItem* selected = self->mWhitelistSLC->getFirstSelected();
-
-	if (selected)
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
 	{
-		std::string domain = self->mWhitelistSLC->getSelectedItemLabel();
-
-		for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
+		const std::string domain = LLViewerParcelMedia::extractDomain(response["url"].asString());
+		if (domain.empty())
 		{
-			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
-			{
-				LLViewerParcelMedia::sMediaFilterList.erase(i);
-				LLViewerParcelMedia::saveDomainFilterList();
-				//HACK: should really see if the URL being deleted
-				//  is the same as the saved one
-				LLViewerParcelMedia::sMediaLastURL = "";
-				LLViewerParcelMedia::sAudioLastURL = "";
-				LLViewerParcelMedia::sMediaReFilter = true;
-				break;
-			}
+			LL_INFOS("MediaFilter") << "No domain specified" << LL_ENDL;
+			return false;
 		}
-
-		self->mWhitelistSLC->deleteSelectedItems();
-	}
-}
-
-void FloaterMediaLists::onBlacklistAdd( void* data )
-{
-	FloaterMediaLists* self = (FloaterMediaLists*)data;
-	self->getChildView("blacklist_list")->setEnabled(false);
-	self->getChildView("whitelist_list")->setEnabled(false);
-	self->getChildView("remove_whitelist")->setEnabled(false);
-	self->getChildView("add_whitelist")->setEnabled(false);
-	self->getChildView("remove_blacklist")->setEnabled(false);
-	self->getChildView("add_blacklist")->setEnabled(false);
-	self->getChildView("input_domain")->setVisible(true);
-	self->getChildView("commit_domain")->setVisible(true);
-	self->getChild<LLUICtrl>("add_text")->
-	setValue(self->getString("EnterUrlDeny"));
-	self->getChildView("add_text")->setVisible(true);
-	self->sIsWhitelist = false;
-}
-
-void FloaterMediaLists::onBlacklistRemove( void* data )
-{	
-	FloaterMediaLists* self = (FloaterMediaLists*)data;
-	LLScrollListItem* selected = self->mBlacklistSLC->getFirstSelected();
-
-	if (selected)
-	{
-		std::string domain = self->mBlacklistSLC->getSelectedItemLabel();
-
-		for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
-		{
-			if (LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString() == domain)
-			{
-				LLViewerParcelMedia::sMediaFilterList.erase(i);
-				LLViewerParcelMedia::saveDomainFilterList();
-				//HACK: should really see if the URL being deleted
-				//  is the same as the saved one
-				LLViewerParcelMedia::sMediaLastURL = "";
-				LLViewerParcelMedia::sAudioLastURL = "";
-				LLViewerParcelMedia::sMediaReFilter = true;
-				break;
-			}
-		}
-
-		self->mBlacklistSLC->deleteSelectedItems();
-	}
-}	
-
-void FloaterMediaLists::onCommitDomain( void* data )
-{
-	FloaterMediaLists* self = (FloaterMediaLists*)data;
-	std::string domain = 
-		self->getChild<LLLineEditor>("input_domain")->getText();
-	domain = LLViewerParcelMedia::extractDomain(domain);
-
-	if (sIsWhitelist)
-	{
+		
+		bool whitelist = notification["payload"]["whitelist"].asBoolean();
 		LLSD newmedia;
 		newmedia["domain"] = domain;
-		newmedia["action"] = "allow";
+		newmedia["action"] = (whitelist ? "allow" : "deny");
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		LLSD element;
-		element["columns"][0]["column"] = "whitelist_col";
-		element["columns"][0]["value"] = domain;
-		element["columns"][0]["font"] = "SANSSERIF";
-		self->mWhitelistSLC->addElement(element);
-		self->mWhitelistSLC->sortByColumn("whitelist_col",TRUE);
+		
+		LLFloater* floater = LLFloaterReg::getInstance("media_lists");
+		if (floater)
+		{
+			LLScrollListCtrl* list = floater->getChild<LLScrollListCtrl>(whitelist ? "whitelist" : "blacklist");
+			LLSD element;
+			element["columns"][0]["column"] = "list";
+			element["columns"][0]["value"] = domain;
+		
+			list->addElement(element);
+			list->sortByColumn("list", TRUE);
+		}
 	}
-	else
-	{
-		LLSD newmedia;
-		newmedia["domain"] = domain;
-		newmedia["action"] = "deny";
-		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
-		LLViewerParcelMedia::saveDomainFilterList();
-		LLSD element;
-		element["columns"][0]["column"] = "blacklist_col";
-		element["columns"][0]["value"] = domain;
-		element["columns"][0]["font"] = "SANSSERIF";
-		self->mBlacklistSLC->addElement(element);
-		self->mBlacklistSLC->sortByColumn("blacklist_col",TRUE);
-	}
-
-	self->getChildView("blacklist_list")->setEnabled(true);
-	self->getChildView("whitelist_list")->setEnabled(true);
-	self->getChildView("remove_whitelist")->setEnabled(true);
-	self->getChildView("add_whitelist")->setEnabled(true);
-	self->getChildView("remove_blacklist")->setEnabled(true);
-	self->getChildView("add_blacklist")->setEnabled(true);
-	self->getChildView("input_domain")->setVisible(false);
-	self->getChildView("commit_domain")->setVisible(false);
-	self->getChildView("add_text")->setVisible(false);
+	return false;
 }

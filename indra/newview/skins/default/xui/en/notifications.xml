@@ -11688,4 +11688,24 @@ There was a problem importing [FILENAME]. Please see the log for more details.
 Shape import failed. Are you sure [FILENAME] is an avatar file?
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="AddToMediaList"
+   type="alertmodal">
+Enter a domain name to be added to the [LIST]:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="url" type="text" default="true" />
+      <button
+       default="true"
+       index="0"
+       name="Add"
+       text="Add"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
 </notifications>

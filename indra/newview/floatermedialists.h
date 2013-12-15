@@ -36,21 +36,18 @@ class LLButton;
 class FloaterMediaLists : public LLFloater
 {
 public:
-    FloaterMediaLists(const LLSD &);
+    FloaterMediaLists(const LLSD& key);
 	BOOL postBuild();
-    virtual ~FloaterMediaLists();
-
-	virtual void draw();
-	void refresh();
-
-	static void onWhitelistAdd(void*);
-	static void onWhitelistRemove(void*);
-	static void onBlacklistAdd(void*);
-	static void onBlacklistRemove(void*);
-	static void onCommitDomain(void*);
+	static bool handleAddDomainCallback(const LLSD& notification, const LLSD& response);
 
 private:
-	static bool sIsWhitelist;
+	~FloaterMediaLists() {};
+	
+	void onWhitelistAdd();
+	void onWhitelistRemove();
+	void onBlacklistAdd();
+	void onBlacklistRemove();
+	
 	LLScrollListCtrl*	mWhitelistSLC;
 	LLScrollListCtrl*	mBlacklistSLC;
 };

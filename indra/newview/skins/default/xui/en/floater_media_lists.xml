@@ -4,14 +4,12 @@
 	can_drag_on_left="false"
 	can_minimize="true"
     can_resize="true"
-	enabled="true"
-	height="300"
+	height="254"
     name="floatermedialists"
 	title="Media Lists"
     width="460"
     min_height="300"
-    min_width="460"
-	rect_control="MediaListRect">
+    min_width="460">
 	<floater.string name="EnterUrlAllow">
 		Enter domain or URL to always allow:
 	</floater.string>
@@ -62,8 +60,8 @@
 	    draw_heading="false"
 		mouse_opaque="true"
 	    multi_select="false"
-		name="whitelist_list">
-		<column label="Whitelist" name="whitelist_col" width="195" />
+		name="whitelist">
+		<column label="Whitelist" name="list" width="195" />
 	</scroll_list>
 
 	<layout_stack
@@ -159,8 +157,8 @@
 	    draw_heading="false"
 		mouse_opaque="true"
 	    multi_select="false"
-		name="blacklist_list">
-		<column label="Blacklist" name="blacklist_col" width="195" />
+		name="blacklist">
+		<column label="Blacklist" name="list" width="195" />
 	</scroll_list>
 
 	<layout_stack
@@ -223,49 +221,5 @@
 
 	</layout_panel>
 	</layout_stack>
-
-<!-- This text will be replaced accordingly to ast for a URL/Domain to add to white-/blacklist -->
-	<text
-		bottom="250"
-		enabled="true"
-		follows="left|right|bottom"
-		font="SansSerifSmall"
-		height="16"
-		initial_value="Enter URL here:"
-		top_pad="8"
-		mouse_opaque="true"
-		name="add_text"
-		visible="false" />
-
-	<line_editor
-		visible="false"
-		bevel_style="in"
-		border_style="line"
-		border_thickness="1"
-		top_pad="4"
-		follows="left|bottom|right"
-		font="SansSerifSmall"
-		height="20"
-		name="input_domain"
-		right="-94"
-		select_all_on_focus_received="true"
-		select_on_focus="true"/>
-
-	<button
-		visible="false"
-		enabled="true"
-		follows="bottom|right"
-		font="SansSerifSmall"
-		halign="center"
-		height="20"
-		left_pad="4"
-		label="Add"
-		label_selected="Add"
-		left_delta="326"
-		mouse_opaque="true"
-		name="commit_domain"
-		scale_image="true"
-		width="80" />
-
 
 </floater>
