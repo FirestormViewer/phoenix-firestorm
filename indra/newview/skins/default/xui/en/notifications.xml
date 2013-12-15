@@ -11673,4 +11673,19 @@ Enter an alias for [AVATAR]:
     </form>
   </notification>
 
+  <notification
+   icon="notifytip.tga"
+   name="ShapeImportGenericFail"
+   type="notifytip">
+    <tag>fail</tag>
+There was a problem importing [FILENAME]. Please see the log for more details.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="ShapeImportVersionFail"
+   type="notifytip">
+    <tag>fail</tag>
+Shape import failed. Are you sure [FILENAME] is an avatar file?
+  </notification>
+
 </notifications>
