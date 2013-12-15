@@ -35,8 +35,4 @@
 			</layout_stack>
 		</layout_panel>
 	</layout_stack>
-
-<!-- This text will be replaced accordingly to ast for a URL/Domain to add to white-/blacklist -->
-	<text initial_value="URL eingeben:" name="add_text"/>
-	<button label="Hinzufügen" label_selected="Hinzufügen" name="commit_domain"/>
 </floater>

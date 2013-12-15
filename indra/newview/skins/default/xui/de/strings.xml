@@ -5509,6 +5509,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
 		Geteilte Medien von der URL [MEDIAURL] werden niemals abgespielt.
 	</string>
+	<string name="MediaFilterBlacklist">
+		Blacklist
+	</string>
+	<string name="MediaFilterWhitelist">
+		Whitelist
+	</string>
 
 	<!-- Settings sanity checks -->
 	<string name="SanityCheckEquals">
