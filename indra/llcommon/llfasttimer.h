@@ -39,13 +39,6 @@ class LLMutex;
 
 #define LL_FASTTIMER_USE_RDTSC 1
 
-#if defined(LL_WINDOWS) && defined(ND_BUILD64BIT_ARCH)
-#include "lltimer.h"
-#undef LL_FASTTIMER_USE_RDTSC
-#define LL_FASTTIMER_USE_RDTSC 0
-#endif
-
-
 LL_COMMON_API void assert_main_thread();
 
 class LL_COMMON_API LLFastTimer
@@ -285,6 +278,7 @@ private:
 	static U32 getCPUClockCount32()
 	{
 		U32 ret_val;
+#if !defined(ND_BUILD64BIT_ARCH)
 		__asm
 		{
 			_emit   0x0f
@@ -294,6 +288,11 @@ private:
 				or eax, edx
 				mov dword ptr [ret_val], eax
 		}
+#else
+		unsigned __int64 val = __rdtsc();
+		val = val >> 8;
+		ret_val = static_cast<U32>( val );
+#endif
 		return ret_val;
 	}
 
@@ -301,6 +300,7 @@ private:
 	static U64 getCPUClockCount64()
 	{
 		U64 ret_val;
+#if !defined(ND_BUILD64BIT_ARCH)
 		__asm
 		{
 			_emit   0x0f
@@ -310,6 +310,9 @@ private:
 				mov dword ptr [ret_val+4], edx
 				mov dword ptr [ret_val], eax
 		}
+#else
+		ret_val = static_cast<U64>( __rdtsc() );
+#endif
 		return ret_val;
 	}
 
