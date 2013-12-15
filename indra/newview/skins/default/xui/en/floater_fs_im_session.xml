@@ -26,7 +26,7 @@
     follows="top|left"
     clip="false"
     height="27"
-    width="200"
+    right="-3"
     left_pad="0"
     layout="topleft"
     orientation="horizontal"
@@ -137,44 +137,23 @@
       top="0"
       layout="topleft"
       height="24"
-      width="27"
+      width="33"
       follows="left|top">
-      <button
-      follows="left|top"
-      top="0"
+     <menu_button
+      menu_filename="menu_fs_im_teleport.xml"
+      follows="top|left"
       height="20"
-      left_delta="5"
-      image_overlay="teleport_icon_24x24"
+      image_overlay="teleport_menu"
       image_pressed="PushButton_Press"
       image_pressed_selected="PushButton_Selected_Press"
       image_selected="PushButton_Selected_Press"
-      tool_tip="Summon / Teleport this resident"
+      layout="topleft"
+      left_delta="5"
       name="teleport_btn"
-      width="24" />
+      tool_tip="Offer or request a teleport"
+      top="0"
+      width="31" />
     </layout_panel>
-	
-	<layout_panel
-	 name="request_tp_panel"
-	 auto_resize="false"
-	 user_resize="false"
-	 top="0"
-	 layout="topleft"
-	 height="24"
-	 width="27"
-	 follows="left|top">
-	<button
-	 follows="left|top"
-	 top="0"
-	 height="20"
-	 left_delta="5"
-	 image_overlay="request_tp_icon"
-	 image_pressed="PushButton_Press"
-	 image_pressed_selected="PushButton_Selected_Press"
-	 image_selected="PushButton_Selected_Press"
-	 tool_tip="Request a teleport from this resident"
-	 name="request_tp_btn"
-	 width="24" />
-	</layout_panel>
 
     <layout_panel
       name="share_panel"
@@ -280,7 +259,7 @@
       <button
       follows="left|top"
       height="20"
-      left_delta="10"
+      left_delta="5"
       image_pressed="PushButton_Press"
       image_pressed_selected="PushButton_Selected_Press"
       image_selected="PushButton_Selected_Press"
@@ -313,39 +292,45 @@
       top="0"
       width="25" />
     </layout_panel>
-    
+
+    <layout_panel
+     name="send_sysinfo_btn_panel"
+     auto_resize="false"
+     user_resize="false"
+     top="0"
+     layout="topleft"
+     height="24"
+     width="27"
+     follows="left|top">
+     <button
+     follows="left|top"
+     height="20"
+     left_delta="5"
+     image_pressed="Info_Press"
+     image_pressed_selected="PushButton_Selected_Press"
+     image_selected="PushButton_Selected_Press"
+     tool_tip="Send system info"
+     image_overlay="Info_Off"
+     name="send_sysinfo_btn"
+     top="0"
+     width="25" />
+  </layout_panel>
   </layout_stack>
-  
+
   <!-- Checkbox for FS prefix on support groups -->
   <check_box
-  visible="true"
-  control_name="FSSupportGroupChatPrefix2"
-  follows="left|top"
-  height="18"
-  label="Specify viewer type"
-  layout="topleft"
-  top_delta="4"
-  left_pad="1"
-  name="FSSupportGroupChatPrefix_toggle"
-  tab_group="5"
-  tool_tip="Adds your current viewer version and skin information to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions"
-  width="150" />
+   control_name="FSSupportGroupChatPrefix2"
+   follows="right|top"
+   height="18"
+   label="Specify version"
+   layout="topleft"
+   top_delta="9"
+   left_delta="246"
+   name="FSSupportGroupChatPrefix_toggle"
+   tool_tip="Adds your current viewer version and skin information to the front of messages sent by you to this group which will assist support staff in correctly diagnosing your issues and improve accuracy in answering your questions"
+   width="135" />
   <!-- END: FS Prefix -->
-  <!--button for sending sys info-->
-  <button
-	follows="right|top"
-	height="20"
-	image_pressed="Info_Press"
-	image_pressed_selected="PushButton_Selected_Press"
-	image_selected="PushButton_Selected_Press"
-	tool_tip="Send System Info"
-	image_overlay="Info_Off"
-	name="send_sysinfo_btn"
-	left_delta="0"
-	right="-35"
-	tab_group="5"
-	width="24" />
-  <!--End sys info button-->
+
   <layout_stack
     animate="false"
     follows="all"

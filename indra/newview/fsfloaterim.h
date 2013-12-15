@@ -186,11 +186,10 @@ private:
 	void onViewProfileButtonClicked();
 	void onAddFriendButtonClicked();
 	void onShareButtonClicked();
-	void onTeleportButtonClicked();
-	void onRequestTeleportButtonClicked();
 	void onPayButtonClicked();
 	void onGroupInfoButtonClicked();
 	void onHistoryButtonClicked();
+	void doToSelected(const LLSD& userdata);
 
 	// support sysinfo button -Zi
 	void onSysinfoButtonClicked();
