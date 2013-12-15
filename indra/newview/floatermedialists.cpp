@@ -30,6 +30,7 @@
 #include "llfloaterreg.h"
 #include "llnotificationsutil.h"
 #include "llscrolllistctrl.h"
+#include "lltrans.h"
 #include "llviewerparcelmedia.h"
 
 FloaterMediaLists::FloaterMediaLists(const LLSD& key) :
@@ -75,7 +76,7 @@ BOOL FloaterMediaLists::postBuild()
 void FloaterMediaLists::onWhitelistAdd()
 {
 	LLSD payload, args;
-	args["LIST"] = "whitelist";
+	args["LIST"] = LLTrans::getString("MediaFilterWhitelist");
 	payload["whitelist"] = true;
 	LLNotificationsUtil::add("AddToMediaList", args, payload, &FloaterMediaLists::handleAddDomainCallback);
 }
@@ -109,7 +110,7 @@ void FloaterMediaLists::onWhitelistRemove()
 void FloaterMediaLists::onBlacklistAdd()
 {
 	LLSD payload, args;
-	args["LIST"] = "blacklist";
+	args["LIST"] = LLTrans::getString("MediaFilterBlacklist");
 	payload["whitelist"] = false;
 	LLNotificationsUtil::add("AddToMediaList", args, payload, &FloaterMediaLists::handleAddDomainCallback);
 }
