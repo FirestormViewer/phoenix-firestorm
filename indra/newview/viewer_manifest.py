@@ -65,9 +65,6 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def do_copy_artwork( self ):
         return self.args.has_key( 'copy_artwork' )
 
-    def is_64bit_build( self ):
-        return self.args.has_key( 'm64' )
-
     def construct(self):
         super(ViewerManifest, self).construct()
         self.exclude("*.svn*")
@@ -564,7 +561,7 @@ class Windows_i686_Manifest(ViewerManifest):
             self.end_prefix()
 
 
-        if self.args['configuration'].lower() == 'debug' and not self.is_64bit_build():
+        if self.args['configuration'].lower() == 'debug' and not self.fs_is_64bit_build():
             if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'debug'),
                            dst="llplugin"):
                 self.path("libeay32.dll")
@@ -595,7 +592,7 @@ class Windows_i686_Manifest(ViewerManifest):
                     self.end_prefix()
 
                 self.end_prefix()
-        elif not self.is_64bit_build():
+        elif not self.fs_is_64bit_build():
             if self.prefix(src=os.path.join(os.pardir, 'packages', 'lib', 'release'),
                            dst="llplugin"):
                 self.path("libeay32.dll")
@@ -626,7 +623,7 @@ class Windows_i686_Manifest(ViewerManifest):
                     self.end_prefix()
 
                 self.end_prefix()
-        elif self.is_64bit_build() and self.prefix( src = "../packages/bin_x86/slplugin", dst="" ):
+        elif self.fs_is_64bit_build() and self.prefix( src = "../packages/bin_x86/slplugin", dst="" ):
             self.path( "slplugin.exe" )
 
             if self.prefix( src = "llplugin", dst="llplugin" ):
@@ -764,7 +761,7 @@ class Windows_i686_Manifest(ViewerManifest):
 
           substitution_strings['installer_file'] = installer_file
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
-                           " " + substitution_strings[ 'channel' ] + " " + substitution_strings[ 'version' ] +
+                           " " + self.channel() + " " + substitution_strings[ 'version' ] +
                            " " + settingsFile + " " + installer_file + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
           
 
