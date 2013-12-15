@@ -33,7 +33,6 @@
       function="ContactSet.Enable"
       parameter="has_selection" />
   </menu_item_call>
-  <menu_item_separator/>
   <menu_item_call
    label="Set alias..."
    name="set_pseudonym">
@@ -44,7 +43,6 @@
       function="ContactSet.Enable"
       parameter="has_single_selection" />
   </menu_item_call>
-  <menu_item_separator/>
   <menu_item_call
    label="Configure Contact Set..."
    name="set_config">
