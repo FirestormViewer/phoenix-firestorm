@@ -7,7 +7,7 @@
 
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
   <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." MigrateFeatures="no"/>
-
+  <Property Id="MSIFASTINSTALL" Value="1"/>
   <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
   <Directory Id="TARGETDIR" Name="SourceDir">
