@@ -4,7 +4,7 @@
 		Imię, które nadałaś/eś Twojemu awatarowi jest nazywane Wyświetlanym Imieniem. Możesz je zmienić raz w tygodniu.
 	</text>
 	<text name="lockout_text">
-		Nie możesz zmienić swojego Wyświetlanego Imienia do: [TIME].
+		Nie możesz zmienić swojego Imienia do: [TIME].
 	</text>
 	<text name="set_name_label">
 		Nowe Wyświetlane Imię:
