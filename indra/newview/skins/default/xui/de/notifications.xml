@@ -4733,4 +4733,19 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+
+	<notification name="ShapeImportGenericFail">
+		Es gab ein Problem beim importieren von [FILENAME]. Siehe Log-Datei für weitergehende Details.
+	</notification>
+	<notification name="ShapeImportVersionFail">
+		Import der Avatarform fehlgeschlagen. Sind Sie sicher, dass [FILENAME] eine korrekte Avatar-Datei ist?
+	</notification>
+
+	<notification name="AddToMediaList">
+		Domänennamen zum Hinzufügen zur [LIST] eingeben:
+		<form name="form">
+			<button name="Add" text="Hinzufügen"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 </notifications>
