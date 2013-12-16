@@ -122,13 +122,10 @@ void LLLMImpl::onDisconnect(const Leap::Controller& controller)
 	mLMConnected = false;
 }
 
-static LLFastTimer::DeclareTimer FTM_LEAP_MOTION_ONFRAME("Leap Motion onFrame");
-
 // Callback from Leapmotion code when a new frame is available.  It simply
 // sets a flag so stepFrame() can pick up new controller data
 void LLLMImpl::onFrame(const Leap::Controller& controller) 
 {
-	LLFastTimer _(FTM_LEAP_MOTION_ONFRAME);
 	if (mLMConnected)
 	{
 		// Get the most recent frame and report some basic information
