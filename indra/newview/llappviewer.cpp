@@ -1919,6 +1919,10 @@ bool LLAppViewer::cleanup()
 	nd::mallocstats::tearDown();
 	// </FS:ND>
 
+#ifdef USE_LEAPMOTION
+	LLLeapMotionController::getInstance()->cleanup(); // <FS:ND/> shutdown leap support
+#endif
+
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 

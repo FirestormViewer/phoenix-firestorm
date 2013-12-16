@@ -600,10 +600,14 @@ LLLeapMotionController::LLLeapMotionController()
 
 LLLeapMotionController::~LLLeapMotionController()
 {
+	cleanup();
+}
+
+void LLLeapMotionController::cleanup()
+{
 	delete mController;
 	mController = NULL;
 }
-
 
 // Called every viewer frame
 void LLLeapMotionController::stepFrame()

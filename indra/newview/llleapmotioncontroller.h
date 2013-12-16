@@ -38,6 +38,8 @@ public:
 	LLLeapMotionController();
 	~LLLeapMotionController();
 
+	void cleanup();
+
 	// Called every viewer frame
 	void stepFrame();
 
