@@ -5049,6 +5049,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
 		Współdzielone Media z URL [MEDIAURL] zawsze będą blokowane.
 	</string>
+	<string name="MediaFilterBlacklist">
+		czarnej listy
+	</string>
+	<string name="MediaFilterWhitelist">
+		białej listy
+	</string>
 	<string name="UnknownRegion">
 		(nieznany region)
 	</string>

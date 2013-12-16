@@ -4556,4 +4556,17 @@ Nie można tego cofnąć.
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="ShapeImportGenericFail">
+		Wystąpił problem podczas importowania [FILENAME]. Zobacz log, aby uzyskać więcej szczegółów.
+	</notification>
+	<notification name="ShapeImportVersionFail">
+		Importowanie kształtu nie powiodło się. Czy [FILENAME] jest na pewno plikiem awatara?
+	</notification>
+	<notification name="AddToMediaList">
+		Wpisz nazwę domeny, jaką chcesz dodać do [LIST]:
+		<form name="form">
+			<button name="Add" text="Dodaj"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
 </notifications>
