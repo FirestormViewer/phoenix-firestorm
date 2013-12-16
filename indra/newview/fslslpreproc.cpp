@@ -567,7 +567,7 @@ public:
 			usefulctx.remove_macro_definition(macro, true);
 			def = llformat("%s=\"%s\"",macro.c_str(),filename.c_str());
 			usefulctx.add_macro_definition(def,false);
-		}//else wave did something really fucked up
+		}//else wave did something really wrong
 	}
 private:
 	FSLSLPreprocessor* mProc;
@@ -639,7 +639,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 				}
 				else
 				{
-					lldebugs << "something fucked" << llendl;
+					lldebugs << "something went wrong" << llendl;
 				}
 			}
 			else self->mCore->mErrorList->setCommentText(std::string("Error: script named '") + name + "' isn't safe to copy to the filesystem. This include will fail.");
