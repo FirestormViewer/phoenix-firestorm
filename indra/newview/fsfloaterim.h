@@ -95,9 +95,6 @@ public:
 	static void newIMCallback(const LLSD& data);
 	
 	//AO: Callbacks for voice handling formerly in llPanelImControlPanel
-	void onCallButtonClicked();
-	void onEndCallButtonClicked();
-	void onOpenVoiceControlsClicked();
 	void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state);
 	void onChange(EStatusType status, const std::string &channelURI, bool proximal);
 	void updateButtons(bool is_call_started);
@@ -181,14 +178,7 @@ private:
 	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
 	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);
 	static void		onInputEditorKeystroke(LLTextEditor* caller, void* userdata);
-	
-	// AO, originally from llpaneChatControlPanel trees
-	void onViewProfileButtonClicked();
-	void onAddFriendButtonClicked();
-	void onShareButtonClicked();
-	void onPayButtonClicked();
-	void onGroupInfoButtonClicked();
-	void onHistoryButtonClicked();
+
 	void doToSelected(const LLSD& userdata);
 
 	// support sysinfo button -Zi
