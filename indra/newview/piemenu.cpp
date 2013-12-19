@@ -341,10 +341,12 @@ void PieMenu::draw( void )
 				label=currentSlice->getLabel();
 				currentSlice->updateVisible();
 				// disable it if it's not visible, pie slices never really disappear
-				if(!currentSlice->getVisible())
+				BOOL slice_visible = currentSlice->getVisible();
+				currentSlice->setEnabled(slice_visible);
+				if (!slice_visible)
 				{
-					lldebugs << label << " is not visible" << llendl;
-					currentSlice->setEnabled(FALSE);
+				//	lldebugs << label << " is not visible" << llendl;
+					label = "";
 				}
 
 				// if the current slice is the start of an autohide chain, clear out previous chains
