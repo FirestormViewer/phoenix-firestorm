@@ -2145,3 +2145,25 @@ void LLPanelObjectInventory::clearItemIDs()
 	mItemMap.clear();
 }
 
+// <FS:Ansariel> Fix broken return and delete key in task inventory
+BOOL LLPanelObjectInventory::handleKeyHere(KEY key, MASK mask)
+{
+	BOOL handled = FALSE;
+	switch (key)
+	{
+	case KEY_RETURN:
+		if (mask == MASK_NONE)
+		{
+			LLPanelObjectInventory::doToSelected(LLSD("task_open"));
+			handled = TRUE;
+		}
+		break;
+	case KEY_DELETE:
+	case KEY_BACKSPACE:
+		LLPanelObjectInventory::doToSelected(LLSD("delete"));
+		handled = TRUE;
+		break;
+	}
+	return handled;
+}
+// </FS:Ansariel> Fix broken return and delete key in task inventory
