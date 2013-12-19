@@ -289,6 +289,15 @@
            <pie_slice.on_enable
                function="Edit.EnableCustomizeAvatar" />
         </pie_slice>
+		<pie_separator />
+		<pie_slice
+			label="Dump XML"
+			name="Dump XML">
+			<pie_slice.on_click
+				function="Advanced.AppearanceToXML" />
+			<pie_slice.on_visible
+				function="Advanced.EnableAppearanceToXML"/>
+		</pie_slice>
 
     </pie_menu>
     <pie_slice
