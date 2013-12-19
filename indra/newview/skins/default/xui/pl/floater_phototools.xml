@@ -309,7 +309,7 @@
 				<button name="Reset_VignetteZ" tool_tip="Kliknij tutaj, aby zresetować ustawienia Vignette do domyślnych."/>
 			</panel>
 			<panel name="P_Render">
-				<check_box label="Renderuj poza polem widzenia" name="UseFarClip" tool_tip="Jeśli wyłączysz tą opcję przeglądarka będzie renderować obiekty poza ustawionym polem widzenia / zasięgiem rysowania."/>
+				<check_box label="Nie renderuj poza polem widzenia" name="UseFarClip" tool_tip="Jeśli wyłączysz tą opcję przeglądarka będzie renderować obiekty poza ustawionym polem widzenia / zasięgiem rysowania."/>
 				<check_box label="Dynamicznie dobieraj poziom detali" name="RednerLod1" tool_tip="Ta opcja zezwala przeglądarce na dynamiczne dobieranie poziomu detali w scenie, gdy kamera jest ustawiona w dalszej odległości od obiektów. Pomaga polepszyć wydajność, może też zmniejszać szczegółowość przedmiotów sceny."/>
 				<check_box label="Renderuj tylko obiekty widoczne dla kamery" tool_tip="Ta opcja zezwala przeglądarce na przetwarzanie/rysowanie tylko tych obiektów, które są w polu widzenia kamery i nie są ukryte za czymkolwiek innym. Zazwyczaj ogromnie zwiększa wydajność, ale może ją czasami zmniejszyć gdy scena/region ma bardzo mało obiektów. Poeksperymentuj!" name="UssOcclusion1"/>
 				<check_box label="Filtr anizotropowy (wyraźniejsze tekstury)" tool_tip="Ta opcja włącza filtrowanie anizotropowe" name="Anisotropic"/>

@@ -27,6 +27,7 @@
                 <pie_slice label="Kopia zapasowa" name="Backup"/>
                 <pie_slice label="Collada" name="Collada"/>
             </pie_menu>
+            <pie_slice label="Zrzuć XML" name="Dump XML"/>
         </pie_menu>
         <pie_slice label="Inspekcja" name="Avatar Inspect"/>
         <pie_menu name="DerenderMenu" label="Derenderuj &gt;">

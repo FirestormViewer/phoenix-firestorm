@@ -32,6 +32,7 @@
         <pie_slice label="Edytuj kształt" name="Edit My Shape"/>
         <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
         <pie_slice label="Edytuj strój" name="Edit My Outfit"/>
+        <pie_slice label="Zrzuć XML" name="Dump XML"/>
     </pie_menu>
     <pie_slice label="Pokaż tekstury" name="Debug..."/>
 </pie_menu>
