@@ -29,6 +29,7 @@
 				<pie_slice label="Backup" name="Backup"/>
 				<pie_slice label="Collada" name="Collada"/>
 			</pie_menu>
+			<pie_slice label="XML ausg." name="Dump XML"/>
 		</pie_menu>
 		<pie_slice label="Untersuchen" name="Avatar Inspect"/>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">

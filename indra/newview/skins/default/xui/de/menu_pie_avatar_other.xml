@@ -24,6 +24,8 @@
 			<pie_slice label="Skript-Info" name="ScriptInfo"/>
 			<pie_slice label="Anrufen" name="Call"/>
 			<pie_slice label="Hineinzoomen" name="Zoom In"/>
+			<pie_slice label="Tex Refresh" name="Texture Refresh"/>
+			<pie_slice label="XML ausg." name="Dump XML"/>
 		</pie_menu>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
 			<pie_slice label="Blacklist" name="DerenderPermanent"/>
