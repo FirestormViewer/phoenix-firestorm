@@ -707,7 +707,11 @@ class Windows_i686_Manifest(ViewerManifest):
 
         substitution_strings = self.fs_splice_grid_substitution_strings( substitution_strings ) #<FS:ND/> Add grid args
 
-        installer_file = self.installer_base_name() + '_Setup.exe'
+        # <FS:ND> Properly name OS version, also add Phoenix- in front of installer name
+        #installer_file = self.installer_base_name() + '_Setup.exe'
+        installer_file = "Phoenix-%(app_name)s-%(version_dashes)s_Setup.exe" % substitution_strings
+        # </FS:ND>
+        
         substitution_strings['installer_file'] = installer_file
         
         version_vars = """
