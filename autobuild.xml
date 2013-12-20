@@ -2785,7 +2785,6 @@
                 <array>
                   <string>--kdu</string>
                   <string>--fmodex</string>
-                  <string>--leapmotion</string>
                   <string>--platform linux32</string>
                   <string>--btype Debug</string>
                 </array>
@@ -2861,7 +2860,6 @@
                 <array>
                   <string>--kdu</string>
                   <string>--fmodex</string>
-                  <string>--leapmotion</string>
                   <string>--platform linux32</string>
                   <string>--package</string>
                   <string>--btype RelWithDebInfo</string>
@@ -2964,7 +2962,6 @@
                 <array>
                   <string>--kdu</string>
                   <string>--fmodex</string>
-                  <string>--leapmotion</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
@@ -2990,7 +2987,6 @@
                 <array>
                   <string>--kdu</string>
                   <string>--fmodex</string>
-                  <string>--leapmotion</string>
                   <string>--platform linux32</string>
                 </array>
               </map>
