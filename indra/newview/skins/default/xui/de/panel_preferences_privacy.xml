@@ -79,7 +79,7 @@
 				Automatische Antwort für Onlinestatus „Automatische Antwort an Nicht-Freunde“:
 			</text>
 			<text name="autorespond_rto_response_label">
-				Automatische Antwort für Onlinestatus „Automatisch Teleport-Angebote abweisen“:
+				Automatische Antwort für Onlinestatus „Teleport-Angebote und -Anforderungen abweisen“:
 			</text>
 			<check_box label="Automatische Antwort an geblockte Avatare senden:" name="send_muted_av_response" tool_tip="Sendet den unten stehenden Text an die geblockte Person, wenn sie eine Instant Message schickt."/>
 			<check_box label="Automatische Antwort während des „Abwesend“-Modus senden:" name="send_away_av_response" tool_tip="Sendet den unten stehenden Text an jemanden, wenn sie eine Instant Message während des „Abwesend“-Modus schickt."/>

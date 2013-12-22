@@ -539,8 +539,8 @@
          mouse_opaque="false"
          name="autorespond_rto_response_label"
          top_pad="5"
-         width="515">
-           Automatic response to all avatars when in REJECT TELEPORT OFFERS AND REQUESTS mode:
+         width="500">
+           Automatic response to all avatars when in REJECT TELEPORT OFFERS mode:
         </text>
         <text_editor
          control_name="FSRejectTeleportOffersResponse"
