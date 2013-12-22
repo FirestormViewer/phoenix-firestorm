@@ -47,7 +47,7 @@
 		<layout_panel name="script_editor_buttons_panel">
 			<button tool_tip="Skript speichern" name="save_btn"/>
 			<button tool_tip="Externer Skript-Editor" name="Edit_btn"/>
-			<button tool_tip="Skript von der Festplatte laden"/>
+			<button tool_tip="Skript von der Festplatte laden" name="load_disk_btn"/>
 			<button tool_tip="Skript auf der Festplatte speichern" name="save_disk_btn"/>
 			<button tool_tip="Ausschneiden" name="cut_btn"/>
 			<button tool_tip="Kopieren" name="copy_btn"/>
