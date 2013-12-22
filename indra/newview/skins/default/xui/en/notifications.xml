@@ -3977,10 +3977,10 @@ Incoming instant messages from anyone who is not your friend will now be answere
    icon="alert.tga"
    name="RejectTeleportOffersModeSet"
    type="alert">
-Reject all incoming teleport offers mode is on.
-Incoming teleport offers from anyone will now be rejected with your configured autoresponse. You will not be notified because of that fact.
+Reject all incoming teleport offers and requests mode is on.
+Incoming teleport offers and requests from anyone will now be rejected with your configured autoresponse. You will not be notified because of that fact.
     <usetemplate
-     ignoretext="I change my status to reject all teleport offers mode"
+     ignoretext="I change my status to reject all teleport offers and requests mode"
      name="okignore"
      yestext="OK"/>
   </notification>

@@ -481,7 +481,7 @@
         
             <menu_item_separator/>
                 <menu_item_check
-             label="Automatically reject teleport offers"
+             label="Reject teleport offers and requests"
              name="Automatically reject teleport offers">
                 <menu_item_check.on_check
                  function="World.GetRejectTeleportOffers"/>
