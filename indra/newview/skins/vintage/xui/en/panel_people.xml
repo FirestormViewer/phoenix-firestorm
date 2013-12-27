@@ -77,6 +77,14 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		name="no_sets">
 		No contact sets available.
 	</panel.string>
+	<panel.string
+		name="all_sets">
+		All sets
+	</panel.string>
+	<panel.string
+		name="pseudonyms">
+		Aliases
+	</panel.string>
 
 	<tab_container
 		follows="all"
