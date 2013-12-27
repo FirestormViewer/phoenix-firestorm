@@ -25,6 +25,12 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 	<string name="no_sets">
 		Keine Kontakt-Sets vorhanden.
 	</string>
+	<string name="all_sets">
+		Alle Kontakt-Sets
+	</string>
+	<string name="pseudonyms">
+		Aliase
+	</string>
 	<tab_container name="tabs">
 		<panel label="In der Nähe" name="nearby_panel">
 			<panel label="bottom_panel" name="nearby_buttons_panel">
