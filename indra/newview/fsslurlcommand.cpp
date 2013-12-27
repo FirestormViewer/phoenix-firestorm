@@ -124,6 +124,15 @@ public:
 	
 			return true;
 		}
+		
+		if (verb == "addtocontactset")
+		{
+			if (gAgentID != target_id)
+			{
+				LLAvatarActions::addToContactSet(target_id);
+			}
+			return true;
+		}
 
 		return false;
 	}

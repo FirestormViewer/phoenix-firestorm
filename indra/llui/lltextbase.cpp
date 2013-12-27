@@ -2058,6 +2058,7 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/teleportto"));
 	registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/offerteleport"));
 	registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/track"));
+	registrar.add("FS.AddToContactSet", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id_str + "/addtocontactset"));	// [FS:CR]
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Add enable checks for menu items

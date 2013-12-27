@@ -1915,6 +1915,7 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/teleportto"));
 			registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/offerteleport"));
 			registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track"));
+			registrar.add("FS.AddToContactSet", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/addtocontactset"));	// [FS:CR]
 			// </FS:Ansariel> Additional convenience options
 
 			// <FS:Ansariel> Add enable checks for menu items
