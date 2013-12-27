@@ -70,7 +70,7 @@
          parameter="can_add" />
     </menu_item_call>
 	<menu_item_call
-	 label="Add to Set"
+	 label="Add to Set..."
 	 layout="topleft"
 	 name="Add to Set">
 		<menu_item_call.on_click

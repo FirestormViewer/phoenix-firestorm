@@ -148,6 +148,8 @@ void PeopleContextMenu::buildContextMenu(class LLMenuGL& menu, U32 flags)
 		items.push_back(std::string("share"));
 		items.push_back(std::string("pay"));
 		items.push_back(std::string("block_unblock"));
+		
+		items.push_back(std::string("Add to Set"));	// [FS:CR] Contact sets
 	}
 
     hide_context_entries(menu, items, disabled_items);
