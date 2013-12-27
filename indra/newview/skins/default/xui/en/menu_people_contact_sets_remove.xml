@@ -11,7 +11,7 @@
        parameter="remove_set" />
       <menu_item_call.on_enable
        function="ContactSet.Enable"
-       parameter="has_set" /> 
+       parameter="has_mutable_set" /> 
   </menu_item_call>
   <menu_item_call
    label="Remove Contact..."
@@ -21,7 +21,7 @@
        parameter="remove_contact"/>
       <menu_item_call.on_enable
        function="ContactSet.Enable"
-       parameter="has_selection" />
+       parameter="has_mutable_set_and_selection" />
   </menu_item_call>
   <menu_item_call
    label="Remove Alias..."

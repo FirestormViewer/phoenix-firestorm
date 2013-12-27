@@ -1744,11 +1744,10 @@ void LLPanelPeople::refreshContactSets()
 		{
 			mContactSetCombo->add(set_name);
 		}
+		mContactSetCombo->addSeparator(ADD_BOTTOM);
 	}
-	else
-	{
-		mContactSetCombo->add(getString("no_sets"), LLSD("No Set"));
-	}
+	mContactSetCombo->add(getString("all_sets"), LLSD(CS_SET_ALL_SETS), ADD_BOTTOM);
+	mContactSetCombo->add(getString("pseudonyms"), LLSD(CS_SET_PSEUDONYM), ADD_BOTTOM);
 }
 
 void LLPanelPeople::generateContactList(const std::string& contact_set)
@@ -1757,11 +1756,26 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 	
 	uuid_vec_t& avatars = mContactSetList->getIDs();
 	avatars.clear();
-	if (contact_set == getString("no_sets"))
+	
+	if (contact_set == CS_SET_ALL_SETS)
+ 	{
+		avatars = LGGContactSets::getInstance()->getListOfNonFriends();
+ 		
+		// "All sets" includes buddies
+		LLAvatarTracker::buddy_map_t all_buddies;
+		LLAvatarTracker::instance().copyBuddyList(all_buddies);
+		for (LLAvatarTracker::buddy_map_t::const_iterator buddy = all_buddies.begin();
+			 buddy != all_buddies.end();
+			 ++buddy)
+		{
+			avatars.push_back(buddy->first);
+		}
+ 	}
+	else if (contact_set == CS_SET_PSEUDONYM)
 	{
-		
+		avatars = LGGContactSets::getInstance()->getListOfPseudonymAvs();
 	}
-	else
+	else if (!LGGContactSets::getInstance()->isInternalSetName(contact_set))
 	{
 		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);
 		BOOST_FOREACH(const LLUUID id, group->mFriends)
@@ -1775,20 +1789,27 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 void LLPanelPeople::generateCurrentContactList()
 {
 	mContactSetList->refreshNames();
-	generateContactList(mContactSetCombo->getSimple());
+	generateContactList(mContactSetCombo->getValue().asString());
 }
 
 bool LLPanelPeople::onContactSetsEnable(const LLSD& userdata)
 {
 	std::string item = userdata.asString();
-	if (item == "has_set")
-		return (!LGGContactSets::getInstance()->getAllContactSets().empty());
+	if (item == "has_mutable_set")
+		return (!LGGContactSets::getInstance()->isInternalSetName(mContactSetCombo->getValue().asString()));
 	else if (item == "has_selection")
 	{
 		uuid_vec_t selected_uuids;
 		getCurrentItemIDs(selected_uuids);
 		return (!selected_uuids.empty() &&
 				selected_uuids.size() <= MAX_SELECTIONS);
+	}
+	else if (item == "has_mutable_set_and_selection")
+	{
+		uuid_vec_t selected_uuids;
+		getCurrentItemIDs(selected_uuids);
+		return ((!selected_uuids.empty() && selected_uuids.size() <= MAX_SELECTIONS)
+				&& !LGGContactSets::getInstance()->isInternalSetName(mContactSetCombo->getValue().asString()));
 	}
 	else if (item == "has_single_selection")
 	{
@@ -1823,7 +1844,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 	else if (chosen_item == "remove_set")
 	{
 		LLSD payload, args;
-		std::string set = mContactSetCombo->getSimple();
+		std::string set = mContactSetCombo->getValue().asString();
 		args["SET_NAME"] = set;
 		payload["contact_set"] = set;
 		LLNotificationsUtil::add("RemoveContactSet", args, payload, &LGGContactSets::handleRemoveContactSetCallback);
@@ -1831,7 +1852,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 	else if (chosen_item == "add_contact")
 	{
 		LLFloater* root_floater = gFloaterView->getParentFloater(this);
-		LLFloater* avatar_picker = LLFloaterAvatarPicker::show(boost::bind(&LLPanelPeople::handlePickerCallback, this, _1, mContactSetCombo->getSimple()),
+		LLFloater* avatar_picker = LLFloaterAvatarPicker::show(boost::bind(&LLPanelPeople::handlePickerCallback, this, _1, mContactSetCombo->getValue().asString()),
 															   TRUE, TRUE, TRUE, root_floater->getName());
 		if (root_floater && avatar_picker)
 			root_floater->addDependentFloater(avatar_picker);
@@ -1845,7 +1866,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 		if (selected_uuids.empty()) return;
 		
 		LLSD payload, args;
-		std::string set = mContactSetCombo->getSimple();
+		std::string set = mContactSetCombo->getValue().asString();
 		S32 selected_size = selected_uuids.size();
 		args["SET_NAME"] = set;
 		args["TARGET"] = (selected_size > 1 ? llformat("%d", selected_size) : LLSLURL("agent", selected_uuids.front(), "about").getSLURLString());
@@ -1859,7 +1880,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 	else if (chosen_item == "set_config")
 	{
 		LLFloater* root_floater = gFloaterView->getParentFloater(this);
-		LLFloater* config_floater = LLFloaterReg::showInstance("fs_contact_set_config", LLSD(mContactSetCombo->getSimple()));
+		LLFloater* config_floater = LLFloaterReg::showInstance("fs_contact_set_config", LLSD(mContactSetCombo->getValue().asString()));
 		if (root_floater && config_floater)
 			root_floater->addDependentFloater(config_floater);
 	}

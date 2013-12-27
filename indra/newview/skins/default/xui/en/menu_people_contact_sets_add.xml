@@ -18,6 +18,6 @@
        parameter="add_contact"/>
       <menu_item_call.on_enable
        function="ContactSet.Enable"
-       parameter="has_set" />
+       parameter="has_mutable_set" />
   </menu_item_call>
 </toggleable_menu>

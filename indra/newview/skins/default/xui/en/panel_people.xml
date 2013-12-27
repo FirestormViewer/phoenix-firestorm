@@ -65,6 +65,15 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
      name="no_sets">
     No contact sets available.
     </panel.string>
+    <panel.string
+     name="all_sets">
+    All sets
+    </panel.string>
+    <panel.string
+     name="pseudonyms">
+    Aliases
+    </panel.string>
+
     <tab_container
      bottom="-10"
      follows="all"
