@@ -68,9 +68,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c76282271bb855e2722b11566389941a</string>
+              <string>affcd44a78003bbafca8d458f1030d47</string>
               <key>url</key>
-              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-20131208u.tar.bz2</uri>
+              <uri>http://downloads.phoenixviewer.com/gntp_growl-1.0-darwin-20131227u.tar.bz2</uri>
             </map>
           </map>
           <key>linux</key>
