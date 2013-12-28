@@ -121,6 +121,19 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 			avatars.push_back(buddy->first);
 		}
 	}
+	else if (contact_set == CS_SET_NO_SETS)
+	{
+		LLAvatarTracker::buddy_map_t all_buddies;
+		LLAvatarTracker::instance().copyBuddyList(all_buddies);
+		for (LLAvatarTracker::buddy_map_t::const_iterator buddy = all_buddies.begin();
+			 buddy != all_buddies.end();
+			 ++buddy)
+		{
+			// Only show our buddies who aren't in a set, by request.
+			if (!LGGContactSets::getInstance()->isFriendInSet(buddy->first))
+				avatars.push_back(buddy->first);
+		}
+	}
 	else if (contact_set == CS_SET_PSEUDONYM)
 	{
 		avatars = LGGContactSets::getInstance()->getListOfPseudonymAvs();
@@ -184,6 +197,7 @@ void FSPanelContactSets::refreshContactSets()
 		mContactSetCombo->addSeparator(ADD_BOTTOM);
 	}
 	mContactSetCombo->add(getString("all_sets"), LLSD(CS_SET_ALL_SETS), ADD_BOTTOM);
+	mContactSetCombo->add(getString("no_sets"), LLSD(CS_SET_NO_SETS), ADD_BOTTOM);
 	mContactSetCombo->add(getString("pseudonyms"), LLSD(CS_SET_PSEUDONYM), ADD_BOTTOM);
 	resetControls();
 }

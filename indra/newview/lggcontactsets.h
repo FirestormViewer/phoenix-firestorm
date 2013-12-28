@@ -86,6 +86,7 @@ public:
 	void addNonFriendToList(const LLUUID& non_friend_id);
 	void removeNonFriendFromList(const LLUUID& non_friend_id);
 	bool isNonFriend(const LLUUID& non_friend_id);
+	bool isFriendInSet(const LLUUID& friend_id);
 	uuid_vec_t getListOfNonFriends();
 	uuid_vec_t getListOfPseudonymAvs();
 
@@ -138,7 +139,6 @@ private:
 
 	void toneDownColor(LLColor4& color) const;
 	uuid_vec_t getFriendsInSet(const std::string& set_name);
-	bool isFriendInSet(const LLUUID& friend_id);
 	uuid_vec_t getFriendsInAnySet();
 
 	void setPseudonym(const LLUUID& friend_id, const std::string& pseudonym);
