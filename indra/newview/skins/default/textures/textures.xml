@@ -977,4 +977,7 @@ with the same filename but different name
 <texture name="Payment_Info_Used" file_name="legacy/payment_info_used.tga" preload="false" />
 	
 <texture name="Edit_Flip_X" file_name="icons/Edit_Flip_X.png" preload="false" />
+
+<texture name="AddItem_Menu" file_name="icons/AddItem_Menu.png" preload="false" />
+<texture name="TrashItem_Menu" file_name="icons/TrashItem_Menu.png" preload="false" />
 </textures>
