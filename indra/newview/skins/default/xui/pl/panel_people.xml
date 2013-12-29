@@ -22,7 +22,13 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 		Ten zestaw kontaktów jest pusty.
 	</panel.string>
 	<panel.string name="no_sets">
-		Brak dostępnych zestawów kontaktów.
+		Brak zestawów.
+	</panel.string>
+	<panel.string name="all_sets">
+		Wszystkie zestawy
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Aliasy
 	</panel.string>
 	<tab_container name="tabs">
 		<panel label="W pobliżu" name="nearby_panel">
