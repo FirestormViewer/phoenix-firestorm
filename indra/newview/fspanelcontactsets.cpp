@@ -146,6 +146,7 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 			avatars.push_back(id);
 		}
 	}
+	getChild<LLTextBox>("member_count")->setTextArg("[COUNT]", llformat("%d", avatars.size()));
 	mAvatarList->setDirty();
 	resetControls();
 }
