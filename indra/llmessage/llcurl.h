@@ -128,6 +128,10 @@ public:
 				return false;
 			}
 
+		// <Techwolf Lupindo> pass parse error down code path
+		bool mDeserializeError;
+		// </Techwolf Lupindo>
+
 	private:
 		std::string mURL;
 	};

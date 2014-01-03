@@ -182,7 +182,14 @@ void LLCurl::Responder::completedRaw(
 	{
 		llinfos << "Failed to deserialize LLSD. " << mURL << " [" << status << "]: " << reason << llendl;
 		content["reason"] = reason;
+	// <Techwolf Lupindo> pass parse error down code path
+		mDeserializeError = true;
 	}
+	else
+	{
+		mDeserializeError = false;
+	}
+	// </Techwolf Lupindo>
 
 	completed(status, reason, content);
 }

@@ -84,7 +84,15 @@ public:
 
 	void result(const LLSD& content)
 	{
-		FSData::getInstance()->processResponder(content, mURL, true, mLastModified);
+		// check for parse failure that can happen with [200] OK result.
+		if (mDeserializeError)
+		{
+			FSData::getInstance()->processResponder(content, mURL, false, mLastModified);
+		}
+		else
+		{
+			FSData::getInstance()->processResponder(content, mURL, true, mLastModified);
+		}
 	}
 	
 	void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
