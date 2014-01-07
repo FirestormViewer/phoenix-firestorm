@@ -1,6 +1,6 @@
 /** 
  *
- * Copyright (c) 2009-2011, Kitty Barnett
+ * Copyright (c) 2009-2014, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
  * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
@@ -118,6 +118,22 @@ protected:
 // "Give to #RLV" helper classes
 //
 
+class RlvGiveToRLVOffer
+{
+protected:
+	RlvGiveToRLVOffer(const std::string& strPath);
+	virtual ~RlvGiveToRLVOffer() {}
+
+protected:
+	bool         createDestinationFolder();
+	virtual void onDestinationCreated(const LLUUID& idFolder, const std::string& strName) = 0;
+private:
+	static void  onCategoryCreateCallback(const LLSD& sdData, void* pInstance);
+
+private:
+	std::list<std::string> m_DestPath;
+};
+
 // [See LLInventoryTransactionObserver which says it's not entirely complete?]
 // NOTE: the offer may span mulitple BulkUpdateInventory messages so if we're no longer around then (ie due to "delete this") then
 //       we'll miss those; in this specific case we only care about the *folder* though and that will be in the very first message
@@ -135,13 +151,17 @@ protected:
 	LLUUID       m_idTransaction;
 };
 
-class RlvGiveToRLVAgentOffer : public LLInventoryFetchDescendentsObserver
+class RlvGiveToRLVAgentOffer : public LLInventoryFetchDescendentsObserver, RlvGiveToRLVOffer
 {
 public:
-	RlvGiveToRLVAgentOffer(const LLUUID& idFolder) : LLInventoryFetchDescendentsObserver(idFolder) {}
+	RlvGiveToRLVAgentOffer(const LLUUID& idFolder, const std::string& strDestPath) : LLInventoryFetchDescendentsObserver(idFolder), RlvGiveToRLVOffer(strDestPath) {}
+	/*virtual*/ ~RlvGiveToRLVAgentOffer() {}
+
+public:
 	/*virtual*/ void done();
 protected:
-	void doneIdle();
+	            void doneIdle();
+	/*virtual*/ void onDestinationCreated(const LLUUID& idFolder, const std::string& strName);
 };
 
 // ============================================================================

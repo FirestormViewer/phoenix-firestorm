@@ -101,6 +101,8 @@ const S32 RLVa_VERSION_BUILD = 0;
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
 #define RLV_PUTINV_PREFIX				"#RLV/~"
+#define RLV_PUTINV_SEPARATOR			"/"
+#define RLV_PUTINV_MAXDEPTH				4
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90° with the rest of SL
 #define RLV_STRINGS_FILE				"rlva_strings.xml"
 
