@@ -1640,5 +1640,11 @@
 			desc="integer llReturnObjectsByID(list objects);Returns a list of objects by their IDs" />
 		<function name="llReturnObjectsByOwner" sleep="0.0" energy="10.0"
 			desc="integer llReturnObjectsByOwner(key owner, integer scope);Returns all objects of a particular owner in the given scope" />
+		<function name="llScaleByFactor" sleep="0.0" energy="10.0"
+			desc="integer llScaleByFactor(float scale_factor);Uniformly resizes the linkset by the given multiplicative scale factor;Returns TRUE if rescaling was successful or FALSE otherwise" />
+		<function name="llGetMinScaleFactor" sleep="0.0" energy="10.0"
+			desc="float llGetMinScaleFactor();Returns the minimum multiplicative scale factor which can be used by llScaleByFactor()" />
+		<function name="llGetMaxScaleFactor" sleep="0.0" energy="10.0"
+			desc="float llGetMaxScaleFactor();Returns the maximum multiplicative scale factor which can be used by llScaleByFactor()" />
 	</functions>
 </script_library>
