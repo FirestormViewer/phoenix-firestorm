@@ -64,10 +64,10 @@
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
 #define FS_BRIDGE_CONTAINER_FOLDER "Landscaping"
 #define FS_BRIDGE_MAJOR_VERSION 2
-#define FS_BRIDGE_MINOR_VERSION 5
+#define FS_BRIDGE_MINOR_VERSION 6
 #define FS_MAX_MINOR_VERSION 99
 
-//current script version is 2.5
+//current script version is 2.6
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
 
 //
@@ -230,6 +230,14 @@ bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID
 			updateBoolSettingValue("UseMoveLock");
 			updateBoolSettingValue("FSPublishRadarTag");
 			mIsFirstCallDone = true;
+
+			// <FS:PP> Inform user, if movelock was enabled at login
+			if (gSavedSettings.getBOOL("UseMoveLock"))
+			{
+				reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
+			}
+			// </FS:PP>
+
 		}
 		// <FS:PP> FIRE-11924: Refresh movelock position after region change (crossing/teleporting), if lock was enabled
 		// Not called right after logging in, and only if movelock was enabled during transition
