@@ -826,13 +826,13 @@
              top_pad="0"
              width="256" />
             <check_box
-             control_name="FSUnfocusChatHostoryOnReturn"
+             control_name="FSUnfocusChatHistoryOnReturn"
              follows="left|top"
              height="18"
              label="De-focus chat history as well"
              layout="topleft"
              left="30"
-             name="FSUnfocusChatHostoryOnReturn"
+             name="FSUnfocusChatHistoryOnReturn"
              enabled_control="CloseChatOnReturn"
              left_delta="240"
              width="256" />
