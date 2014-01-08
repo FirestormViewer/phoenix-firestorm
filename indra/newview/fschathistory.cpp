@@ -202,6 +202,18 @@ public:
 		{
 			LLAvatarActions::startIM(getAvatarId());
 		}
+		else if (level == "teleport")
+		{
+			LLAvatarActions::offerTeleport(getAvatarId());
+		}
+		else if (level == "voice_call")
+		{
+			LLAvatarActions::startCall(getAvatarId());
+		}
+		else if (level == "chat_history")
+		{
+			LLAvatarActions::viewChatHistory(getAvatarId());
+		}
 		else if (level == "add")
 		{
 			LLAvatarActions::requestFriendshipDialog(getAvatarId(), mFrom);
@@ -210,13 +222,75 @@ public:
 		{
 			LLAvatarActions::removeFriendDialog(getAvatarId());
 		}
+		else if (level == "invite_to_group")
+		{
+			LLAvatarActions::inviteToGroup(getAvatarId());
+		}
+		else if (level == "zoom_in")
+		{
+			handle_zoom_to_object(getAvatarId());
+		}
+		else if (level == "map")
+		{
+			LLAvatarActions::showOnMap(getAvatarId());
+		}
+		else if (level == "share")
+		{
+			LLAvatarActions::share(getAvatarId());
+		}
+		else if (level == "pay")
+		{
+			LLAvatarActions::pay(getAvatarId());
+		}
+		else if(level == "block_unblock")
+		{
+			mute(getAvatarId(), LLMute::flagVoiceChat);
+		}
+		else if(level == "mute_unmute")
+		{
+			mute(getAvatarId(), LLMute::flagTextChat);
+		}
+	}
+
+	bool onAvatarIconContextMenuItemChecked(const LLSD& userdata)
+	{
+		std::string level = userdata.asString();
+
+		if (level == "is_blocked")
+		{
+			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagVoiceChat);
+		}
+		if (level == "is_muted")
+		{
+			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagTextChat);
+		}
+		return false;
+	}
+
+	void mute(const LLUUID& participant_id, U32 flags)
+	{
+		BOOL is_muted = LLMuteList::getInstance()->isMuted(participant_id, flags);
+		std::string name;
+		gCacheName->getFullName(participant_id, name);
+		LLMute mute(participant_id, name, LLMute::AGENT);
+
+		if (!is_muted)
+		{
+			LLMuteList::getInstance()->add(mute, flags);
+		}
+		else
+		{
+			LLMuteList::getInstance()->remove(mute, flags);
+		}
 	}
 
 	BOOL postBuild()
 	{
 		LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+		LLUICtrl::EnableCallbackRegistry::ScopedRegistrar registrar_enable;
 
 		registrar.add("AvatarIcon.Action", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemClicked, this, _2));
+		registrar_enable.add("AvatarIcon.Check", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemChecked, this, _2));
 		registrar.add("ObjectIcon.Action", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemClicked, this, _2));
 
 		LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_avatar_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
