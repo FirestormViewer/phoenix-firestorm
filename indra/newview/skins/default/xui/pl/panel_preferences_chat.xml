@@ -127,7 +127,8 @@
 			<check_box name="FSShowChatChannel" label="Oferuj ręczny wybór kanału w pasku czatu"/>
 			<check_box name="FSShowChatType" label="Pokaż typ czatu i przycisk wysyłania" left_delta="250"/>
 			<check_box label="Autoukrywanie głównego paska czatu" name="AutohideChatBar" tool_tip="Ukryj pasek czatu na dolnej listwie przycisków i pokazuj go jako nakładkę tylko wtedy, gdy to potrzebne."/>
-			<check_box label="Odznaczaj czat po wysłaniu wiadomości" name="CloseChatOnReturn"/>
+			<check_box label="Odznaczaj pasek czatu po wysłaniu wiadomości" name="CloseChatOnReturn"/>
+			<check_box label="Odznaczaj także historię czatu" name="FSUnfocusChatHistoryOnReturn" left_delta="285"/>
 			<check_box name="FSMarkObjects" label="Oznaczaj obiekty frazą (bez nazwy) gdy wysyłają coś na czat, by zapobiec oszustwom"/>
 			<text name="group_enhancements">
 				Czat grupowy:
