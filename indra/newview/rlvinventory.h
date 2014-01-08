@@ -54,11 +54,12 @@ public:
 	LLViewerInventoryCategory*	getSharedRoot() const;
 	const LLUUID&				getSharedRootID() const;
 	// Returns a subfolder of idParent that starts with strFolderName (exact match > partial match)
-	LLViewerInventoryCategory*	getSharedFolder(const LLUUID& idParent, const std::string& strFolderName) const;
+	LLViewerInventoryCategory*	getSharedFolder(const LLUUID& idParent, const std::string& strFolderName, bool fMatchPartial = true) const;
 	// Looks up a folder from a path (relative to the shared root)
-	LLViewerInventoryCategory*	getSharedFolder(const std::string& strPath) const;
+	LLViewerInventoryCategory*	getSharedFolder(const std::string& strPath, bool fMatchPartial = true) const;
 	// Returns the path of the supplied folder (relative to the shared root)
 	std::string					getSharedPath(const LLViewerInventoryCategory* pFolder) const;
+	std::string					getSharedPath(const LLUUID& idFolder) const;
 	// Returns TRUE if the supplied folder is a descendent of the #RLV folder
 	bool						isSharedFolder(const LLUUID& idFolder);
 
@@ -121,12 +122,12 @@ protected:
 class RlvGiveToRLVOffer
 {
 protected:
-	RlvGiveToRLVOffer(const std::string& strPath);
+	RlvGiveToRLVOffer() {}
 	virtual ~RlvGiveToRLVOffer() {}
-
 protected:
-	bool         createDestinationFolder();
+	bool         createDestinationFolder(const std::string& strPath);
 	virtual void onDestinationCreated(const LLUUID& idFolder, const std::string& strName) = 0;
+	void         moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName);
 private:
 	static void  onCategoryCreateCallback(const LLSD& sdData, void* pInstance);
 
@@ -137,15 +138,17 @@ private:
 // [See LLInventoryTransactionObserver which says it's not entirely complete?]
 // NOTE: the offer may span mulitple BulkUpdateInventory messages so if we're no longer around then (ie due to "delete this") then
 //       we'll miss those; in this specific case we only care about the *folder* though and that will be in the very first message
-class RlvGiveToRLVTaskOffer : public LLInventoryObserver
+class RlvGiveToRLVTaskOffer : public LLInventoryObserver, RlvGiveToRLVOffer
 {
 public:
-	RlvGiveToRLVTaskOffer(const LLUUID& idTransaction) : m_idTransaction(idTransaction) {}
+	RlvGiveToRLVTaskOffer(const LLUUID& idTransaction) : RlvGiveToRLVOffer(), m_idTransaction(idTransaction) {}
 	/*virtual*/ void changed(U32 mask);
 protected:
 	/*virtual*/ void done();
-	void doneIdle();
+	            void doneIdle();
+	/*virtual*/ void onDestinationCreated(const LLUUID& idFolder, const std::string& strName);
 
+protected:
 	typedef std::vector<LLUUID> folder_ref_t;
 	folder_ref_t m_Folders;
 	LLUUID       m_idTransaction;
@@ -154,9 +157,8 @@ protected:
 class RlvGiveToRLVAgentOffer : public LLInventoryFetchDescendentsObserver, RlvGiveToRLVOffer
 {
 public:
-	RlvGiveToRLVAgentOffer(const LLUUID& idFolder, const std::string& strDestPath) : LLInventoryFetchDescendentsObserver(idFolder), RlvGiveToRLVOffer(strDestPath) {}
+	RlvGiveToRLVAgentOffer(const LLUUID& idFolder) : RlvGiveToRLVOffer(), LLInventoryFetchDescendentsObserver(idFolder) {}
 	/*virtual*/ ~RlvGiveToRLVAgentOffer() {}
-
 public:
 	/*virtual*/ void done();
 protected:
@@ -287,6 +289,12 @@ inline const LLUUID& RlvInventory::getFoldedParent(const LLUUID& idFolder, bool 
 	while ((pFolder) && (isFoldedFolder(pFolder, fCheckComposite)))
 		pFolder = gInventory.getCategory(pFolder->getParentUUID());
 	return (pFolder) ? pFolder->getUUID() : LLUUID::null;
+}
+
+// Checked: 2011-11-26 (RLVa-1.5.4a) | Added: RLVa-1.5.4a
+inline std::string RlvInventory::getSharedPath(const LLUUID& idFolder) const
+{
+	return getSharedPath(gInventory.getCategory(idFolder));
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
