@@ -596,6 +596,15 @@ bool LLAppViewerWin32::initHardwareTest()
 
 	if (gGLManager.mVRAM == 0)
 	{
+		// <FS:Ansariel> FIRE-12671: Force VRAM if DirectX detection is broken
+		S32 forced_memory;
+		if ((forced_memory = gSavedSettings.getS32("FSForcedMemory")) > 0)
+		{
+			LL_INFOS("AppInit") << "Forcing VRAM to " << forced_memory << " MB" << LL_ENDL;
+			gGLManager.mVRAM = forced_memory;
+		}
+		else
+		// </FS:Ansariel>
 		gGLManager.mVRAM = gDXHardware.getVRAM();
 	}
 
