@@ -452,7 +452,7 @@
     <key>forcememory</key>
     <map>
       <key>desc</key>
-      <string>Overrides the memory detection on Windows if a value greater 0 is passed</string>
+      <string>Overrides the video memory detection on Windows if a value greater 0 is passed</string>
       <key>count</key>
       <integer>1</integer>
       <key>map-to</key>
