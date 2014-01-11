@@ -449,14 +449,14 @@
     <! FS:Ansariel - Option to not auto-save passwords when using login option -->
 
     <!-- FS:Ansariel FIRE-12671: Force VRAM if DirectX detection is broken -->
-    <key>forcememory</key>
+    <key>forcevideomemory</key>
     <map>
       <key>desc</key>
       <string>Overrides the video memory detection on Windows if a value greater 0 is passed</string>
       <key>count</key>
       <integer>1</integer>
       <key>map-to</key>
-      <string>FSForcedMemory</string>
+      <string>FSForcedVideoMemory</string>
     </map>
     <!-- FS:Ansariel -->
 

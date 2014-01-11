@@ -21711,7 +21711,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>FSForcedMemory</key>
+    <key>FSForcedVideoMemory</key>
     <map>
       <key>Comment</key>
       <string>Overrides the video memory detection on Windows if a value greater 0 is passed (in case DirectX memory detection fails or is wrong)</string>
