@@ -44,7 +44,7 @@ class LLScriptLibrary
 {
 public:
     LLScriptLibrary();
-	void loadLibrary(const std::string& filename);
+	bool loadLibrary(const std::string& filename);
 	
 	std::vector<LLScriptLibraryFunction> mFunctions;
 	

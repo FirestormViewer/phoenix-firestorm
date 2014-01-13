@@ -37,6 +37,7 @@
 /* boost: will not compile unless equivalent is undef'd, beware. */
 #include "fix_macros.h"
 #include <boost/filesystem.hpp>
+#include <boost/foreach.hpp>
 
 #include "llappviewer.h"
 #include "llagent.h"
@@ -53,7 +54,7 @@
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 
-#ifdef LL_RELEASE_FOR_DOWNLOAD
+#if LL_RELEASE_FOR_DOWNLOAD
 const std::string BASE_URL = "http://phoenixviewer.com/app/fsdata";
 #else
 const std::string BASE_URL = "http://phoenixviewer.com/app/fsdatatest";
@@ -115,6 +116,86 @@ private:
 	LLDate mLastModified;
 };
 
+class FSDownloaderScript : public LLHTTPClient::Responder
+{
+	LOG_CLASS(FSDownloaderScript);
+public:
+	FSDownloaderScript(std::string filename, std::string url) :
+		mFilename(filename),
+		mURL(url)
+	{}
+
+	void completedRaw(
+		U32 status,
+		const std::string& reason,
+		const LLChannelDescriptors& channels,
+		const LLIOPipe::buffer_ptr_t& buffer)
+	{
+		if (!isGoodStatus(status))
+		{
+			if (status == 304)
+			{
+				LL_INFOS("fsdata") << "Got [304] not modified for " << mURL << LL_ENDL;
+			}
+			else
+			{
+				LL_WARNS("fsdata") << "Error fetching " << mURL << " Status: [" << status << "]" << LL_ENDL;
+			}
+			return;
+		}
+
+		S32 data_size = buffer->countAfter(channels.in(), NULL);
+		if (data_size <= 0)
+		{
+			LL_WARNS("fsdata") << "Recieved zero data for " << mURL << LL_ENDL;
+			return;
+		}
+
+		U8* data = NULL;
+		data = new U8[data_size];
+		buffer->readAfter(channels.in(), NULL, data, data_size);
+
+		// basic check for valid data received
+		LLXMLNodePtr xml_root;
+		if ( (!LLXMLNode::parseBuffer(data, data_size, xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
+		{
+			LL_WARNS("fsdata") << "Could not read the script library data from "<< mURL << LL_ENDL;
+			delete[] data;
+			data = NULL;
+			return;
+		}
+		
+		LLAPRFile outfile ;
+		outfile.open(mFilename, LL_APR_WB);
+		if (!outfile.getFileHandle())
+		{
+			LL_WARNS("fsdata") << "Unable to open file for writing: " << mFilename << LL_ENDL;
+		}
+		else
+		{
+			LL_INFOS("fsdata") << "Saving " << mFilename << LL_ENDL;
+			outfile.write(data, data_size);
+			outfile.close() ;
+		}
+		delete[] data;
+		data = NULL;
+	}
+
+	void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	{
+		LL_DEBUGS("fsdata") << "Status: [" << status << "]: " << "last-modified: " << content["last-modified"].asString() << LL_ENDL; //  Wed, 21 Mar 2012 17:41:14 GMT
+		if (content.has("last-modified"))
+		{
+			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
+		}
+		LL_DEBUGS("fsdata") << "Converted to: " << mLastModified.asString() << " and RFC1123: " << mLastModified.asRFC1123() << LL_ENDL;
+	}
+
+private:
+	std::string mURL;
+	std::string mFilename;
+	LLDate mLastModified;
+};
 
 FSData::FSData() :
 	mLegacySearch(true),
@@ -264,10 +345,28 @@ void FSData::startDownload()
 	{
 		last_modified = stat_data.st_mtime;
 	}
-	const std::string filename   = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
+	std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
 	mFSdataDefaultsUrl = BASE_URL + "/" + filename;
 	LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modifed of " << last_modified << LL_ENDL;
 	LLHTTPClient::getIfModified(mFSdataDefaultsUrl, new FSDownloader(mFSdataDefaultsUrl), last_modified, mHeaders, HTTP_TIMEOUT);
+
+#if OPENSIM
+	std::string filenames[] = {"scriptlibrary_lsl.xml", "scriptlibrary_ossl.xml", "scriptlibrary_aa.xml"};
+#else
+	std::string filenames[] = {"scriptlibrary_lsl.xml"};
+#endif
+	BOOST_FOREACH(std::string script_name, filenames)
+	{
+		filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, script_name);
+		last_modified = 0;
+		if(!LLFile::stat(filename, &stat_data))
+		{
+			last_modified = stat_data.st_mtime;
+		}
+		std::string url = BASE_URL + "/" + script_name;
+		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modifed of " << last_modified << LL_ENDL;
+		LLHTTPClient::getIfModified(url, new FSDownloaderScript(filename, url), last_modified, mHeaders, HTTP_TIMEOUT);
+	}
 }
 
 // call this _after_ the login screen to pick up grid data.

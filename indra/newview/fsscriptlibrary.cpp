@@ -35,13 +35,13 @@ LLScriptLibrary::LLScriptLibrary()
 {
 }
 
-void LLScriptLibrary::loadLibrary(const std::string& filename)
+bool LLScriptLibrary::loadLibrary(const std::string& filename)
 {
 	LLXMLNodePtr xml_root;
 	if ( (!LLUICtrlFactory::getLayeredXMLNode(filename, xml_root)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
 	{
 		llwarns << "Could not read the script library (" << filename << ")" << llendl;
-		return;
+		return false;
 	}
 	llinfos << "Loading script library at: " << filename << llendl;
 	for (LLXMLNode* pNode = xml_root->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
@@ -81,7 +81,7 @@ void LLScriptLibrary::loadLibrary(const std::string& filename)
 			}
 		}
 	}
-
+	return true;
 }
 
 void LLScriptLibrary::addFunction(std::string name, std::string desc, F32 sleep, F32 energy, bool god_only)
