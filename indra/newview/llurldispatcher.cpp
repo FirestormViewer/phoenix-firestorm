@@ -152,7 +152,11 @@ bool LLURLDispatcherImpl::dispatchApp(const LLSLURL& slurl,
 									  bool trusted_browser)
 {
 	llinfos << "cmd: " << slurl.getAppCmd() << " path: " << slurl.getAppPath() << " query: " << slurl.getAppQuery() << llendl;
-	const LLSD& query_map = LLURI::queryMap(slurl.getAppQuery());
+
+	// <FS:Ansariel> FIRE-6238: Don't try to parse an already unescaped query string - use the already created query map!
+	//const LLSD& query_map = LLURI::queryMap(slurl.getAppQuery());
+	const LLSD& query_map = slurl.getAppQueryMap();
+	// </FS:Ansariel>
 
 // <FS:AW handle hop app teleports properly>
 // 	bool handled = LLCommandDispatcher::dispatch(
