@@ -59,64 +59,70 @@ LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key)
 	mCommitCallbackRegistrar.add("ClickSanityIcon",	boost::bind(&LLFloaterSettingsDebug::onSanityCheck, this));
 
 	// make sure that the first filter update succeeds
-	mOldSearchTerm=std::string("---");
+	mOldSearchTerm = std::string("---");
 
 	// proper initialisation
-	mCurrentControlVariable=NULL;
-	mOldControlVariable=NULL;
+	mCurrentControlVariable = NULL;
+	mOldControlVariable = NULL;
 }
 
 LLFloaterSettingsDebug::~LLFloaterSettingsDebug()
 {
-	if(mOldControlVariable)
+	if (mOldControlVariable)
+	{
 		mOldControlVariable->getCommitSignal()->disconnect(boost::bind(&LLFloaterSettingsDebug::onSettingSelect, this));
+	}
 }
 
 void LLFloaterSettingsDebug::onUpdateFilter()
 {
-	std::string searchTerm=mSearchSettingsInput->getValue();
+	std::string searchTerm = mSearchSettingsInput->getValue();
 
 	// make sure not to reselect the first item in the list on focus restore
-	if(searchTerm==mOldSearchTerm)
+	if (searchTerm == mOldSearchTerm)
+	{
 		return;
-	mOldSearchTerm=searchTerm;
+	}
+	mOldSearchTerm = searchTerm;
 
 	mSettingsScrollList->deleteAllItems();
 	
 	settings_map_t::iterator it;
-	for(it=mSettingsMap.begin();it!=mSettingsMap.end();it++)
+	for (it = mSettingsMap.begin(); it != mSettingsMap.end(); ++it)
 	{
-		BOOL addItem=FALSE;
+		bool addItem = false;
 
-		if(searchTerm.empty())
+		if (searchTerm.empty())
 		{
-			addItem=TRUE;
+			addItem = true;
 		}
 		else
 		{
-			std::string itemValue=it->second->getName();
-			std::string itemComment=it->second->getComment();
+			std::string itemValue = it->second->getName();
+			std::string itemComment = it->second->getComment();
 
 			LLStringUtil::toLower(searchTerm);
 			LLStringUtil::toLower(itemValue);
 
-			if(itemValue.find(searchTerm,0)!=std::string::npos)
+			if (itemValue.find(searchTerm, 0) != std::string::npos)
 			{
-				addItem=TRUE;
+				addItem = true;
 			}
 			else	// performance: broken out to save toLower calls on comments
 			{
 				LLStringUtil::toLower(itemComment);
-				if(itemComment.find(searchTerm,0)!=std::string::npos)
-					addItem=TRUE;
+				if (itemComment.find(searchTerm, 0) != std::string::npos)
+				{
+					addItem = true;
+				}
 			}
 		}
 
-		if(addItem)
+		if (addItem)
 		{
 			LLSD item;
-			item["columns"][0]["value"]=it->second->getName();
-			mSettingsScrollList->addElement(item,ADD_BOTTOM,it->second);
+			item["columns"][0]["value"] = it->second->getName();
+			mSettingsScrollList->addElement(item, ADD_BOTTOM, it->second);
 		}
 	}
 
@@ -151,7 +157,7 @@ BOOL LLFloaterSettingsDebug::postBuild()
 
 	// tried to make this an XUI callback, but keystroke_callback doesn't
 	// seem to work as hoped, so build the callback manually :/ -Zi
-	mSearchSettingsInput->setKeystrokeCallback(boost::bind(&LLFloaterSettingsDebug::onUpdateFilter,this));
+	mSearchSettingsInput->setKeystrokeCallback(boost::bind(&LLFloaterSettingsDebug::onUpdateFilter, this));
 
 	struct f : public LLControlGroup::ApplyFunctor
 	{
@@ -186,30 +192,36 @@ BOOL LLFloaterSettingsDebug::postBuild()
 
 LLControlVariable* LLFloaterSettingsDebug::getControlVariable()
 {
-	LLControlVariable* controlp=NULL;
+	LLControlVariable* controlp = NULL;
 
-	LLScrollListItem* item=mSettingsScrollList->getFirstSelected();
-	if(item)
-		controlp=(LLControlVariable*) item->getUserdata();
+	LLScrollListItem* item = mSettingsScrollList->getFirstSelected();
+	if (item)
+	{
+		controlp = (LLControlVariable*)item->getUserdata();
+	}
 
 	return controlp;
 }
 
 void LLFloaterSettingsDebug::onSettingSelect()
 {
-	mCurrentControlVariable=getControlVariable();
+	mCurrentControlVariable = getControlVariable();
 
-	if(mOldControlVariable!=mCurrentControlVariable)
+	if (mOldControlVariable != mCurrentControlVariable)
 	{
 		// unbind change control signal from previously selected control
-		if(mOldControlVariable)
+		if (mOldControlVariable)
+		{
 			mOldControlVariable->getCommitSignal()->disconnect(boost::bind(&LLFloaterSettingsDebug::onSettingSelect, this));
+		}
 
 		// bind change control signal, so we can see updates to the current control in realtime
-		if(mCurrentControlVariable)
+		if (mCurrentControlVariable)
+		{
 			mCurrentControlVariable->getCommitSignal()->connect(boost::bind(&LLFloaterSettingsDebug::onSettingSelect, this));
+		}
 
-		mOldControlVariable=mCurrentControlVariable;
+		mOldControlVariable = mCurrentControlVariable;
 	}
 
 	updateControl();
@@ -217,11 +229,13 @@ void LLFloaterSettingsDebug::onSettingSelect()
 
 void LLFloaterSettingsDebug::draw()
 {
-	if(mCurrentControlVariable)
+	if (mCurrentControlVariable)
 	{
 		// check for changes in control visibility, like RLVa does
-		if(mCurrentControlVariable->isHiddenFromSettingsEditor()!=mOldVisibility)
+		if (mCurrentControlVariable->isHiddenFromSettingsEditor() != mOldVisibility)
+		{
 			updateControl();
+		}
 	}
 	LLFloater::draw();
 }
@@ -292,7 +306,7 @@ void LLFloaterSettingsDebug::onCommitSettings()
 		break;
 	}
 
-	if(!mCurrentControlVariable->isSane())
+	if (!mCurrentControlVariable->isSane())
 	{
 		onSanityCheck();
 	}
@@ -300,7 +314,7 @@ void LLFloaterSettingsDebug::onCommitSettings()
 
 void LLFloaterSettingsDebug::onClickDefault()
 {
-	if(mCurrentControlVariable)
+	if (mCurrentControlVariable)
 	{
 		mCurrentControlVariable->resetToDefault(true);
 		updateControl();
@@ -309,7 +323,7 @@ void LLFloaterSettingsDebug::onClickDefault()
 
 void LLFloaterSettingsDebug::onCopyToClipboard()
 {
-	if(mCurrentControlVariable)
+	if (mCurrentControlVariable)
 	{
 		getWindow()->copyTextToClipboard(utf8str_to_wstring(mCurrentControlVariable->getName()));
 		LLNotificationsUtil::add("ControlNameCopiedToClipboard");
@@ -338,7 +352,7 @@ void LLFloaterSettingsDebug::updateControl()
 	mBooleanCombo->setVisible(FALSE);
 	mSanityButton->setVisible(FALSE);
 
-	if(mCurrentControlVariable)
+	if (mCurrentControlVariable)
 	{
 // [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
 		// If "HideFromEditor" was toggled while the floater is open then we need to manually disable access to the control
@@ -353,9 +367,6 @@ void LLFloaterSettingsDebug::updateControl()
 		mBooleanCombo->setEnabled(!mOldVisibility);
 		mDefaultButton->setEnabled(!mOldVisibility);
 // [/RLVa:KB]
-
-
-
 
 		mCopyButton->setEnabled(TRUE);
 		mSanityButton->setVisible(!mCurrentControlVariable->isSane());
@@ -389,8 +400,8 @@ void LLFloaterSettingsDebug::updateControl()
 			mSpinner4->setIncrement(0.1f);
 		}
 
-		LLSD sd=mCurrentControlVariable->get();
-		switch(type)
+		LLSD sd = mCurrentControlVariable->get();
+		switch (type)
 		{
 		  case TYPE_U32:
 			mSpinner1->setVisible(TRUE);
