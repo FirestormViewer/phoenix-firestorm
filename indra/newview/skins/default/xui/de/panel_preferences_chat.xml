@@ -118,6 +118,8 @@
 				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
 				<combo_box.item label="Keinen Klang abspielen" name="0"/>
 			</combo_box>
+			<check_box name="FSGroupNoticesToIMLog" label="Gruppenmitteilungen im Gruppenchat zusätzlich zum Toast anzeigen"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Betreff und Autor ebenfalls anzeigen"/>
 		</panel>
 		
 		<!-- Chat: Firestorm -->
