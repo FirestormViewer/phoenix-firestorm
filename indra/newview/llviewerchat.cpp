@@ -334,7 +334,10 @@ std::string LLViewerChat::getSenderSLURL(const LLChat& chat, const LLSD& args)
 std::string LLViewerChat::getObjectImSLURL(const LLChat& chat, const LLSD& args)
 {
 	std::string url = LLSLURL("objectim", chat.mFromID, "").getSLURLString();
-	url += "?name=" + chat.mFromName;
+	// <FS:Ansariel> FIRE-6238: objectim SLURLs don't get handled correctly if the object's name contains ampersands
+	//url += "?name=" + chat.mFromName;
+	url += "?name=" + LLURI::escape(chat.mFromName);
+	// </FS:Ansariel>
 	url += "&owner=" + chat.mOwnerID.asString();
 
 	std::string slurl = args["slurl"].asString();
