@@ -5844,4 +5844,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FriendOfflineNotification">
 		ist offline.
 	</string>
+
+	<string name="Inbox_Folderview_New">
+		Neu
+	</string>
 </strings>

@@ -37,6 +37,8 @@
 #include "llplacesinventorybridge.h"
 #include "llviewerfoldertype.h"
 
+#include "lltrans.h"
+
 
 #define DEBUGGING_FRESHNESS	0
 
@@ -106,6 +108,8 @@ LLInboxFolderViewFolder::LLInboxFolderViewFolder(const Params& p)
 	mFresh(false)
 {
 	initBadgeParams(p.new_badge());
+	// <FS:Ansariel> "New" label in Marketplace inbox is not localizable
+	setBadgeLabel(LLStringExplicit(LLTrans::getString("Inbox_Folderview_New")));
 }
 
 void LLInboxFolderViewFolder::addItem(LLFolderViewItem* item)
@@ -191,6 +195,8 @@ LLInboxFolderViewItem::LLInboxFolderViewItem(const Params& p)
 	, mFresh(false)
 {
 	initBadgeParams(p.new_badge());
+	// <FS:Ansariel> "New" label in Marketplace inbox is not localizable
+	setBadgeLabel(LLStringExplicit(LLTrans::getString("Inbox_Folderview_New")));
 }
 
 void LLInboxFolderViewItem::addToFolder(LLFolderViewFolder* folder)
