@@ -32,6 +32,7 @@
 			max_chars="255"
 			name="search_settings_input"
 			right="-1"
+			text_pad_left="6"
 			tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the setting's name or comment."
 			top="3">
 			<!-- commit callback for clear button clicks -->
