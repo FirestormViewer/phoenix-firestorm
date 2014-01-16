@@ -1235,6 +1235,8 @@ FSPanelPick::FSPanelPick()
  , mRequestedId(LLUUID::null)
  , mLocationChanged(false)
  , mNewPick(false)
+ , mCurrentPickDescription("")
+ , mIsEditing(false)
 {
 }
 
@@ -1336,10 +1338,21 @@ BOOL FSPanelPick::postBuild()
 	mPickName->setEnabled( FALSE );
 
 	mPickDescription->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1));
+	mPickDescription->setFocusReceivedCallback(boost::bind(&FSPanelPick::onDescriptionFocusReceived, this));
 
 	getChild<LLUICtrl>("pick_location")->setEnabled(FALSE);
 
 	return TRUE;
+}
+
+void FSPanelPick::onDescriptionFocusReceived()
+{
+	if (!mIsEditing && getSelfProfile())
+	{
+		mIsEditing = true;
+		mPickDescription->setParseHTML(false);
+		setPickDesc(mCurrentPickDescription);
+	}
 }
 
 void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
@@ -1356,6 +1369,8 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
 		return;
 	}
 
+	mIsEditing = false;
+	mPickDescription->setParseHTML(true);
 	mParcelId = pick_info->parcel_id;
 	setSnapshotId(pick_info->snapshot_id);
 	if (!getSelfProfile() || getEmbedded())
@@ -1365,6 +1380,7 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
 	setPickName(pick_info->name);
 	setPickDesc(pick_info->desc);
 	setPosGlobal(pick_info->pos_global);
+	mCurrentPickDescription = pick_info->desc;
 
 	// Send remote parcel info request to get parcel name and sim (region) name.
 	sendParcelInfoRequest();

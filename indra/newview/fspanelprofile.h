@@ -494,6 +494,11 @@ protected:
 
 	bool mLocationChanged;
 	bool mNewPick;
+	bool mIsEditing;
+
+	std::string mCurrentPickDescription;
+
+	void onDescriptionFocusReceived();
 };
 
 class FSPanelProfilePicks
