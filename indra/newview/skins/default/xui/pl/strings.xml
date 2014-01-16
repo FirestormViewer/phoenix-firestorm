@@ -5349,4 +5349,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FriendOfflineNotification">
 		jest offline.
 	</string>
+	<string name="Inbox_Folderview_New">
+		Nowe
+	</string>
 </strings>
