@@ -436,7 +436,7 @@
      left="2"
      name="button_panel"
      top_pad="6"
-     width="333">
+     width="326">
         <layout_stack
          follows="bottom|left|right"
          height="23"
@@ -446,12 +446,12 @@
          left="0"
          orientation="horizontal"
          top="0"
-         width="333">	
+         width="326">
             <layout_panel
              follows="bottom|left|right"
              height="23"
              layout="bottomleft"
-             left="0"			
+             left="0"
              mouse_opaque="false"
              name="save_as_btn_lp"
              auto_resize="true"
