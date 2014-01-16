@@ -122,8 +122,11 @@ void LLFloaterSettingsDebug::onUpdateFilter()
 
 	// if at least one match was found, highlight and select the topmost entry in the list
 	// but only if actually a search term was given
-	if(mSettingsScrollList->getItemCount() && !searchTerm.empty())
+	if (mSettingsScrollList->getItemCount() && !searchTerm.empty())
+	{
+		mSettingsScrollList->sortByColumnIndex(0, TRUE);
 		mSettingsScrollList->selectFirstItem();
+	}
 
 	onSettingSelect();
 }
