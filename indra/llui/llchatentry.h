@@ -105,6 +105,9 @@ private:
 	S32									mExpandLinesCount;
 	S32									mPrevLinesCount;
 	S32									mPrevExpandedLineCount;
+
+	// <FS:Ansariel> FIRE-12537: CTRL-UP discards current input
+	std::string							mCurrentInput;
 };
 
 #endif /* LLCHATENTRY_H_ */

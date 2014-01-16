@@ -45,7 +45,9 @@ LLChatEntry::LLChatEntry(const Params& p)
  	mExpandLinesCount(p.expand_lines_count),
  	mPrevLinesCount(0),
 	mSingleLineMode(false),
-	mPrevExpandedLineCount(S32_MAX)
+	mPrevExpandedLineCount(S32_MAX),
+	// <FS:Ansariel> FIRE-12537: CTRL-UP discards current input
+	mCurrentInput("")
 {
 	// Initialize current history line iterator
 	mCurrentHistoryLine = mLineHistory.begin();
@@ -201,6 +203,9 @@ BOOL LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
 		{
 			needsReflow();
 		}
+		// <FS:Ansariel> FIRE-12537: CTRL-UP discards current input
+		mCurrentInput = "";
+
 		break;
 
 	case KEY_UP:
@@ -208,6 +213,13 @@ BOOL LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
 		{
 			if (!mLineHistory.empty() && mCurrentHistoryLine > mLineHistory.begin())
 			{
+				// <FS:Ansariel> FIRE-12537: CTRL-UP discards current input
+				if (mCurrentHistoryLine == mLineHistory.end())
+				{
+					mCurrentInput = getText();
+				}
+				// </FS:Ansariel>
+
 				setText(*(--mCurrentHistoryLine));
 				endOfDoc();
 			}
@@ -230,8 +242,11 @@ BOOL LLChatEntry::handleSpecialKey(const KEY key, const MASK mask)
 			else if (!mLineHistory.empty() && mCurrentHistoryLine == (mLineHistory.end() - 1) )
 			{
 				mCurrentHistoryLine++;
-				std::string empty("");
-				setText(empty);
+				// <FS:Ansariel> FIRE-12537: CTRL-UP discards current input
+				//std::string empty("");
+				//setText(empty);
+				setText(mCurrentInput);
+				// </FS:Ansariel>
 				needsReflow();
 				endOfDoc();
 			}
