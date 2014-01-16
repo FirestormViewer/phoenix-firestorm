@@ -76,6 +76,7 @@ void LLFloaterSearchReplace::show(LLTextEditor* pEditor)
 		pSelf->getChildView("replace_text")->setEnabled(!pEditor->getReadOnly());
 		pSelf->getChildView("replace_btn")->setEnabled(!pEditor->getReadOnly());
 		pSelf->getChildView("replace_all_btn")->setEnabled(!pEditor->getReadOnly());
+		pSelf->getChildView("search_text")->setFocus(TRUE);
 
 		pSelf->openFloater();
 	}
