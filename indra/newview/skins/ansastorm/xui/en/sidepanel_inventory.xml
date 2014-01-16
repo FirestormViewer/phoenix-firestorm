@@ -105,6 +105,7 @@
                         [NUM] new
                      </text>
                      <panel
+                        name="inbox_inventory_placeholder_panel"
                         follows="all"
                         left="10"
                         bottom="235"
