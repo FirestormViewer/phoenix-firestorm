@@ -212,6 +212,13 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 		return;
 	}
 
+	// <FS:PP> FIRE-10940: Add option to suppress group notice text in group chat
+	if (!gSavedSettings.getBOOL("FSGroupNoticesToIMLog"))
+	{
+		return;
+	}
+	// </FS:PP>
+
 	const std::string group_name = groupData.mName;
 	const std::string sender_name = payload["sender_name"].asString();
 

@@ -714,6 +714,28 @@
                  value="0"/>
             </combo_box>
 
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="10"
+             left="30"
+             width="400"
+             height="18"
+             name="FSGroupNoticesToIMLog"
+             control_name="FSGroupNoticesToIMLog"
+             label="Show group notices in group chats, in addition to toasts"/>
+            <check_box
+             enabled_control="FSGroupNoticesToIMLog"
+             layout="topleft"
+             follows="left|top"
+             top_pad="1"
+             left_delta="10"
+             width="400"
+             height="18"
+             name="FSBetterGroupNoticesToIMLog"
+             control_name="FSBetterGroupNoticesToIMLog"
+             label="Show their subjects and authors as well"/>
+
         </panel>
 
         <!-- Chat: Firestorm -->

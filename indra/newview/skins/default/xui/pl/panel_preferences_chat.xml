@@ -114,6 +114,8 @@
 				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
 				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
 			</combo_box>
+			<check_box name="FSGroupNoticesToIMLog" label="Pokazuj ogłoszenia grup także w czatach grupowych, a nie tylko w tostach"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Pokazuj również ich tematy i autorów"/>
 		</panel>
 		<panel name="ChatFirestorm">
 			<text name="chat_and_im_enhancements">
