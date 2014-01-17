@@ -401,15 +401,14 @@
       <layout_stack
         animate="false"
         follows="all"
-        height="308"
+        height="304"
         width="394"
         layout="topleft"
         orientation="vertical"
         name="im_panels"
         top="4"
         left="0"
-        right="0"
-        bottom="-1">
+        right="0">
         <layout_panel
           name="chat_holder">
           <fs_chat_history
