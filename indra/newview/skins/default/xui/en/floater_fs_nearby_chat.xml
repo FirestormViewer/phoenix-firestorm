@@ -163,7 +163,6 @@
         </layout_panel>
         <layout_panel
           visibility_control="FSNearbyChatbar"
-          top_delta="0"
           top="0"
           height="26"
           bottom="-1"
@@ -176,9 +175,9 @@
             orientation="horizontal"
             name="input_panels"
             top="0"
-            bottom="-2"
+            bottom="-1"
             left="0"
-            right="-1">
+            right="0">
             <layout_panel
               name="input_editor_layout_panel"
               auto_resize="true"
@@ -200,7 +199,7 @@
                top="1"
                bottom="-2"
                left="4"
-               right="-4"
+               right="0"
                wrap="true" />
             </layout_panel>
             <layout_panel
@@ -208,17 +207,15 @@
               auto_resize="false"
               user_resize="false"
               name="input_button_layout_panel"
-              width="66"
-              top="0"
-              bottom="-1">
+              width="66">
               <spinner
                layout="topleft"
-               top="0"
+               bottom="-1"
                left="1"
                right="-1"
                height="22"
                decimal_digits="0"
-               follows="all"
+               follows="left|right|bottom"
                increment="1.00"
                initial_value="0"
                label=""
@@ -235,19 +232,17 @@
               auto_resize="false"
               user_resize="false"
               name="chat_type_layout_panel"
-              width="80"
-              top="0"
-              bottom="-1">
+              width="85">
 
             <!-- Makeshift split button since LLSplitButton is broken -->
             <combo_box
               name="chat_type"
               layout="topleft"
-              top="1"
+              bottom="-1"
               left="0"
-              right="-1"
+              right="-2"
               height="22"
-              follows="top|right"
+              follows="bottom|right"
               drop_down_button.image_pressed="PushButton_Off"
               drop_down_button.image_pressed_selected="PushButton_Off"
               drop_down_button.image_selected="PushButton_Off"
@@ -277,21 +272,21 @@
               image_disabled="transparent.j2c"
               layout="topleft"
               left_delta="0"
-              right="-20"
+              right="-22"
               height="22"
-              follows="top|left|right"
+              follows="bottom|left|right"
               label="Say"
-              pad_bottom="22"
+              pad_bottom="-22"
               name="send_chat"
               tool_tip="Whisper = 10m, Say = 20m, Shout = 100m" />
             <icon
               name="chat_type_combo_arrow_icon"
               layout="topleft"
-              left_pad="-1"
+              left_pad="0"
               top_delta="1"
               width="18"
               height="20"
-              follows="top|right"
+              follows="bottom|right"
               image_name="arrow_up.tga"
               scale_image="true" />
             <!-- Makeshift split button since LLSplitButton is broken -->

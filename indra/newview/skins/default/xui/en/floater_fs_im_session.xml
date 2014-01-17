@@ -459,9 +459,9 @@
               spellcheck="true"
               tab_group="3"
               top="1"
-              bottom="-2"
+              bottom="-1"
               left="4"
-              right="-4"
+              right="-2"
               wrap="true" />
             </layout_panel>
             <!-- Not added yet, if ever [FS:CR]
