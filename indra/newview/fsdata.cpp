@@ -54,16 +54,7 @@
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
 
-#if LL_RELEASE_FOR_DOWNLOAD
-const std::string BASE_URL = "http://phoenixviewer.com/app/fsdata";
-#else
-const std::string BASE_URL = "http://phoenixviewer.com/app/fsdatatest";
-#endif
-
-const std::string FSDATA_URL = BASE_URL + "/" + "data.xml";
-const std::string AGENTS_URL = BASE_URL + "/" + "agents.xml";
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
-const std::string ASSETS_URL = BASE_URL + "/" + "assets.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 const F32 HTTP_TIMEOUT = 30.f;
 
@@ -204,11 +195,14 @@ FSData::FSData() :
 {
 	mHeaders.insert("User-Agent", LLViewerMedia::getCurrentUserAgent());
 	mHeaders.insert("viewer-version", LLVersionInfo::getChannelAndVersionFS());
+	
+	mBaseURL = gSavedSettings.getBOOL("FSdataQAtest") ? "http://phoenixviewer.com/app/fsdatatest" : "http://phoenixviewer.com/app/fsdata";
+	mFSDataURL = mBaseURL + "/" + "data.xml";
 }
 
 void FSData::processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified)
 {
-	if (url == FSDATA_URL)
+	if (url == mFSDataURL)
 	{
 		if (!save_to_file)
 		{
@@ -337,8 +331,8 @@ void FSData::startDownload()
 	{
 		last_modified = stat_data.st_mtime;
 	}
-	LL_INFOS("fsdata") << "Downloading data.xml from " << FSDATA_URL << " with last modifed of " << last_modified << LL_ENDL;
-	LLHTTPClient::getIfModified(FSDATA_URL, new FSDownloader(FSDATA_URL), last_modified, mHeaders, HTTP_TIMEOUT);
+	LL_INFOS("fsdata") << "Downloading data.xml from " << mFSDataURL << " with last modifed of " << last_modified << LL_ENDL;
+	LLHTTPClient::getIfModified(mFSDataURL, new FSDownloader(mFSDataURL), last_modified, mHeaders, HTTP_TIMEOUT);
 	
 	last_modified = 0;
 	if(!LLFile::stat(mFSdataDefaultsFilename, &stat_data))
@@ -346,7 +340,7 @@ void FSData::startDownload()
 		last_modified = stat_data.st_mtime;
 	}
 	std::string filename = llformat("defaults.%s.xml", LLVersionInfo::getShortVersion().c_str());
-	mFSdataDefaultsUrl = BASE_URL + "/" + filename;
+	mFSdataDefaultsUrl = mBaseURL + "/" + filename;
 	LL_INFOS("fsdata") << "Downloading defaults.xml from " << mFSdataDefaultsUrl << " with last modifed of " << last_modified << LL_ENDL;
 	LLHTTPClient::getIfModified(mFSdataDefaultsUrl, new FSDownloader(mFSdataDefaultsUrl), last_modified, mHeaders, HTTP_TIMEOUT);
 
@@ -363,7 +357,7 @@ void FSData::startDownload()
 		{
 			last_modified = stat_data.st_mtime;
 		}
-		std::string url = BASE_URL + "/" + script_name;
+		std::string url = mBaseURL + "/" + script_name;
 		LL_INFOS("fsdata") << "Downloading " << script_name << " from " << url << " with last modifed of " << last_modified << LL_ENDL;
 		LLHTTPClient::getIfModified(url, new FSDownloaderScript(filename, url), last_modified, mHeaders, HTTP_TIMEOUT);
 	}
@@ -391,8 +385,8 @@ void FSData::downloadAgents()
 	else
 #endif
 	{
-		mAgentsURL = AGENTS_URL;
-		mAssetsURL = ASSETS_URL;
+		mAgentsURL = mBaseURL + "/" + "agents.xml";
+		mAssetsURL = mBaseURL + "/" + "assets.xml";
 	}
 	
 	if (mAgentsURL.empty())

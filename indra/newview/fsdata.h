@@ -105,6 +105,8 @@ private:
 	std::string mAssestsFilename;
 	std::string mClientTagsFilename;
 	
+	std::string mBaseURL;
+	std::string mFSDataURL;
 	std::string mAgentsURL;
 	std::string mAssetsURL;
 	
