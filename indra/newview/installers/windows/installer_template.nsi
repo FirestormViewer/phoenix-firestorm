@@ -351,6 +351,9 @@ FunctionEnd
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Function CheckOldExeName
+  ; <FS:Ansariel> We don't need that
+  Return
+
   IfFileExists "$INSTDIR\SecondLife.exe" CHECKOLDEXE_FOUND CHECKOLDEXE_DONE
 
 CHECKOLDEXE_FOUND:
