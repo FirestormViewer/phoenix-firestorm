@@ -2361,11 +2361,13 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 	if (is_agent_inventory)
 	{
 		const LLUUID &trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH, false);
-		const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK, false);
+		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+		//const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK, false);
 
 		const BOOL move_is_into_trash = (mUUID == trash_id) || model->isObjectDescendentOf(mUUID, trash_id);
 		const BOOL move_is_into_outfit = getCategory() && (getCategory()->getPreferredType() == LLFolderType::FT_OUTFIT);
-		const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
+		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+		//const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
 
 		//--------------------------------------------------------------------------------
 		// Determine if folder can be moved.
@@ -2427,21 +2429,23 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 				}
 			}
 		}
-		if (is_movable && move_is_into_landmarks)
-		{
-			for (S32 i=0; i < descendent_items.count(); ++i)
-			{
-				LLViewerInventoryItem* item = descendent_items[i];
+		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+		//if (is_movable && move_is_into_landmarks)
+		//{
+		//	for (S32 i=0; i < descendent_items.count(); ++i)
+		//	{
+		//		LLViewerInventoryItem* item = descendent_items[i];
 
-				// Don't move anything except landmarks and categories into Landmarks folder.
-				// We use getType() instead of getActua;Type() to allow links to landmarks and folders.
-				if (LLAssetType::AT_LANDMARK != item->getType() && LLAssetType::AT_CATEGORY != item->getType())
-				{
-					is_movable = FALSE;
-					break; // It's generally movable, but not into Landmarks.
-				}
-			}
-		}
+		//		// Don't move anything except landmarks and categories into Landmarks folder.
+		//		// We use getType() instead of getActua;Type() to allow links to landmarks and folders.
+		//		if (LLAssetType::AT_LANDMARK != item->getType() && LLAssetType::AT_CATEGORY != item->getType())
+		//		{
+		//			is_movable = FALSE;
+		//			break; // It's generally movable, but not into Landmarks.
+		//		}
+		//	}
+		//}
+		// </FS:Ansariel>
 		if (is_movable && move_is_into_outbox)
 		{
 			const int nested_folder_levels = get_folder_path_length(outbox_id, mUUID) + get_folder_levels(inv_cat);
@@ -4209,13 +4213,15 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 
 	const LLUUID &current_outfit_id = model->findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT, false);
 	const LLUUID &favorites_id = model->findCategoryUUIDForType(LLFolderType::FT_FAVORITE, false);
-	const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK, false);
+	// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+	//const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK, false);
 	const LLUUID &outbox_id = model->findCategoryUUIDForType(LLFolderType::FT_OUTBOX, false);
 
 	const BOOL move_is_into_current_outfit = (mUUID == current_outfit_id);
 	const BOOL move_is_into_favorites = (mUUID == favorites_id);
 	const BOOL move_is_into_outfit = (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
-	const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
+	// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+	//const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
 	const BOOL move_is_into_outbox = model->isObjectDescendentOf(mUUID, outbox_id);
 	const BOOL move_is_from_outbox = model->isObjectDescendentOf(inv_item->getUUID(), outbox_id);
 
@@ -4301,7 +4307,10 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		{
 			accept = can_move_to_outfit(inv_item, move_is_into_current_outfit);
 		}
-		else if (move_is_into_favorites || move_is_into_landmarks)
+		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+		//else if (move_is_into_favorites || move_is_into_landmarks)
+		else if (move_is_into_favorites)
+		// </FS:Ansariel>
 		{
 			accept = can_move_to_landmarks(inv_item);
 		}
@@ -4464,7 +4473,10 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		}
 		// Don't allow to move a single item to Favorites or Landmarks
 		// if it is not a landmark or a link to a landmark.
-		else if ((move_is_into_favorites || move_is_into_landmarks)
+		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+		//else if ((move_is_into_favorites || move_is_into_landmarks)
+		else if (move_is_into_favorites
+		// </FS:Ansariel>
 				 && !can_move_to_landmarks(inv_item))
 		{
 			accept = FALSE;
@@ -4556,7 +4568,10 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 			}
 			// Don't allow to move a single item to Favorites or Landmarks
 			// if it is not a landmark or a link to a landmark.
-			else if (move_is_into_favorites || move_is_into_landmarks)
+			// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
+			//else if (move_is_into_favorites || move_is_into_landmarks)
+			else if (move_is_into_favorites)
+			// </FS:Ansariel>
 			{
 				accept = can_move_to_landmarks(inv_item);
 			}
