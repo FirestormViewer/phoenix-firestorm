@@ -182,14 +182,12 @@ FunctionEnd
 ; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Make sure we are not on a verion of windows older than XP SP2
+; Make sure we are not on a verion of windows older than Vista except for 32bit XP SP3
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
-  ${IfNot} ${AtLeastWin2000}
+  ${IfNot} ${AtLeastWinVista}
   ${OrIf} ${IsWinXP}
-  ${AndIfNot} ${AtLeastServicePack} 1
-  ${OrIf} ${IsWin2003}
-  ${AndIfNot} ${AtLeastServicePack} 1
+  ${AndIfNot} ${IsServicePack} 3
     MessageBox MB_OK $(CheckWindowsVersionMB)
     Quit
   ${EndIf}
@@ -199,11 +197,7 @@ FunctionEnd
 ;Recommend Upgrading Service Pack
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsServPack
-  ${If} ${IsWinXP}
-  ${AndIfNot} ${IsServicePack} 3
-  ${OrIf} ${IsWin2003}
-  ${AndIfNot} ${IsServicePack} 2
-  ${OrIf} ${IsWinVista}
+  ${If} ${IsWinVista}
   ${AndIfNot} ${IsServicePack} 2
   ${OrIf} ${IsWin2008}
   ${AndIfNot} ${IsServicePack} 2
@@ -832,7 +826,7 @@ SectionEnd 				; end of uninstall section
 ;;  entry to the language ID selector below
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInit
-Call CheckWindowsVersion		; Don't install if on Windows XP SP1 or older (do to XP x64 only having SP2 and no SP3)
+Call CheckWindowsVersion		;Check the version of windows we are installing on
     Push $0
     ${GetParameters} $COMMANDLINE              ; get our command line
 
