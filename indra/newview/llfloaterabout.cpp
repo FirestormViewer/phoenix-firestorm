@@ -354,7 +354,11 @@ LLSD LLFloaterAbout::getInfo()
 	if (gPacketsIn > 0)
 	{
 		info["PACKETS_LOST"] = LLViewerStats::getInstance()->mPacketsLostStat.getCurrent();
-		info["PACKETS_IN"] = F32(gPacketsIn);
+		// <FS:Ansariel> FIRE-3925: Formatting fails when reaching 1,000,000;
+		//               Use S32 since it will be used in LLStringUtil::formatNumber anyway.
+		//info["PACKETS_IN"] = F32(gPacketsIn);
+		info["PACKETS_IN"] = S32(gPacketsIn);
+		// </FS:Ansariel>
 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
 	}
 
