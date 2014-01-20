@@ -716,7 +716,7 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="InvFolder #RLV">#RLV</string>
 	
 	<string name="no_attachments">No attachments worn</string>
-    <string name="Attachments remain">Attachments ([COUNT] slots remain)</string>
+    <string name="Attachments remain">Attachments ([COUNT] remain)</string>
 
 	<!-- inventory FVBridge -->
 	<!--  This is used in llpanelinventory.cpp when constructing a context menu for an item for Sale  -->

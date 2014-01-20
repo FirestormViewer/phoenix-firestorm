@@ -1568,7 +1568,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Keine Anhänge getragen
 	</string>
 	<string name="Attachments remain">
-		Anhänge (noch [COUNT] Positionen frei)
+		Anhänge ([COUNT] frei)
 	</string>
 	<string name="Buy">
 		Kaufen
