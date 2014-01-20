@@ -790,10 +790,8 @@ bool LGGContactSets::hasPseudonym(uuid_vec_t ids)
 		if (LGGContactSets::getInstance()->hasPseudonym(*id))
 		{
 			has_pseudonym = true;
+			break;
 		}
-		else
-			has_pseudonym = false;
-		break;
 	}
 	return has_pseudonym;
 }
@@ -811,10 +809,8 @@ bool LGGContactSets::hasDisplayNameRemoved(uuid_vec_t ids)
 		if (LGGContactSets::getInstance()->hasDisplayNameRemoved(*id))
 		{
 			has_pseudonym = true;
+			break;
 		}
-		else
-			has_pseudonym = false;
-		break;
 	}
 	return has_pseudonym;
 }
