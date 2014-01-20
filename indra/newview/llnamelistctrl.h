@@ -170,7 +170,7 @@ private:
 	void showInspector(const LLUUID& avatar_id, bool is_group);
 	// <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
 	//void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, LLHandle<LLNameListItem> item);
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& suffix, LLHandle<LLNameListItem> item);
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, std::string suffix, LLHandle<LLNameListItem> item);
 	// </FS:Ansariel>
 
 private:

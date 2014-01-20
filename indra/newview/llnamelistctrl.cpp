@@ -408,7 +408,7 @@ void LLNameListCtrl::removeNameItem(const LLUUID& agent_id)
 void LLNameListCtrl::onAvatarNameCache(const LLUUID& agent_id,
 									   const LLAvatarName& av_name,
 									   // <FS:Ansariel> FIRE-12347 / MAINT-3187: Name list not loading
-									   const std::string& suffix,
+									   std::string suffix,
 									   // </FS:Ansariel>
 									   LLHandle<LLNameListItem> item)
 {
