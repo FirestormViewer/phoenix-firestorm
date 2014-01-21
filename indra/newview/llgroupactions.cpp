@@ -217,7 +217,10 @@ LLFetchLeaveGroupData* gFetchLeaveGroupData = NULL;
 // static
 void LLGroupActions::search()
 {
-	LLFloaterReg::showInstance("search", LLSD().with("category", "groups"));
+	// <FS:Ansariel> Open groups search panel instead of invoking presumed failed websearch
+	//LLFloaterReg::showInstance("search", LLSD().with("category", "groups"));
+	LLFloaterReg::showInstance("search", LLSD().with("tab", "groups"));
+	// </FS:Ansariel>
 }
 
 // static

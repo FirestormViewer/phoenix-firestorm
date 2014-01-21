@@ -279,7 +279,13 @@ void FSFloaterSearch::onOpen(const LLSD& key)
 	Params p(key);
 	mPanelWeb->loadURL(p.search);
 	if (key.has("query"))
+	{
 		mTabContainer->selectTabPanel(mPanelWeb);
+	}
+	else if (key.has("tab") && key["tab"].asString() == "groups")
+	{
+		mTabContainer->selectTabPanel(mPanelGroups);
+	}
 }
 
 //virtual
