@@ -62,19 +62,15 @@
 #include "llstring.h"
 #include "llurlaction.h"
 #include "llviewercontrol.h"
-// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
-#include "rlvcommon.h"
-// [/RLVa:KB]
-
-// llviewernetwork.h : SJ: Needed to find the grid we are running on
 #include "llviewernetwork.h"
 
-// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+#include "fscommon.h"
+#include "llchatentry.h"
 #include "llfocusmgr.h"
 #include "llkeyboard.h"
-#include "llchatentry.h"
-// </FS:Zi>
 #include "llpanelblockedlist.h"
+#include "rlvcommon.h"
+#include "rlvhandler.h"
 
 static LLDefaultChildRegistry::Register<FSChatHistory> r("fs_chat_history");
 
@@ -202,6 +198,10 @@ public:
 		{
 			LLAvatarActions::startIM(getAvatarId());
 		}
+		else if (level == "teleport_to")
+		{
+			LLUrlAction::executeSLURL(LLSLURL("firestorm", getAvatarId(), "teleportto").getSLURLString());
+		}
 		else if (level == "teleport")
 		{
 			LLAvatarActions::offerTeleport(getAvatarId());
@@ -217,6 +217,10 @@ public:
 		else if (level == "add")
 		{
 			LLAvatarActions::requestFriendshipDialog(getAvatarId(), mFrom);
+		}
+		else if (level == "add_set")
+		{
+			LLAvatarActions::addToContactSet(getAvatarId());
 		}
 		else if (level == "remove")
 		{
@@ -234,6 +238,10 @@ public:
 		{
 			LLAvatarActions::showOnMap(getAvatarId());
 		}
+		else if (level == "track")
+		{
+			LLUrlAction::executeSLURL(LLSLURL("firestorm", getAvatarId(), "track").getSLURLString());
+		}
 		else if (level == "share")
 		{
 			LLAvatarActions::share(getAvatarId());
@@ -241,6 +249,14 @@ public:
 		else if (level == "pay")
 		{
 			LLAvatarActions::pay(getAvatarId());
+		}
+		else if (level == "copy_name")
+		{
+			LLUrlAction::copyLabelToClipboard(LLSLURL("agent", getAvatarId(), "inspect").getSLURLString());
+		}
+		else if (level == "copy_url")
+		{
+			LLUrlAction::copyURLToClipboard(LLSLURL("agent", getAvatarId(), "inspect").getSLURLString());
 		}
 		else if(level == "block_unblock")
 		{
@@ -260,9 +276,61 @@ public:
 		{
 			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagVoiceChat);
 		}
-		if (level == "is_muted")
+		else if (level == "is_muted")
 		{
 			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagTextChat);
+		}
+		else if (level == "can_view_profile")
+		{
+			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_SHOW_PROFILE);
+		}
+		else if (level == "can_im")
+		{
+			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_SEND_IM);
+		}
+		else if (level == "can_offer_teleport")
+		{
+			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_OFFER_TELEPORT);
+		}
+		else if (level == "can_teleport_to")
+		{
+			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_TELEPORT_TO);
+		}
+		else if (level == "can_voice_call")
+		{
+			return (gAgentID != getAvatarId() && LLAvatarActions::canCall());
+		}
+		else if (level == "can_show_history")
+		{
+			return (gAgentID != getAvatarId());
+		}
+		else if (level == "can_zoom_in")
+		{
+			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_ZOOM_IN);
+		}
+		else if (level == "can_track")
+		{
+			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_TRACK_AVATAR);
+		}
+		else if (level == "can_share")
+		{
+			return (gAgentID != getAvatarId());
+		}
+		else if (level == "can_pay")
+		{
+			return (gAgentID != getAvatarId());
+		}
+		else if (level == "can_block")
+		{
+			return (gAgentID != getAvatarId());
+		}
+		else if (level == "can_mute")
+		{
+			return (gAgentID != getAvatarId());
+		}
+		else if (level == "can_invite_to_group")
+		{
+			return (gAgentID != getAvatarId());
 		}
 		return false;
 	}
