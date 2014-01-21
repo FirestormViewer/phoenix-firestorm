@@ -118,6 +118,9 @@ public:
 	void refreshNames();
 	// [/FS:CR]
 
+	// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+	static std::string getNameForDisplay(const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames);
+
 	boost::signals2::connection setRefreshCompleteCallback(const commit_signal_t::slot_type& cb);
 
 	boost::signals2::connection setItemDoubleClickCallback(const mouse_signal_t::slot_type& cb);

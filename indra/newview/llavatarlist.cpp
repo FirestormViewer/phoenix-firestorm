@@ -484,7 +484,10 @@ void LLAvatarList::refresh()
 		LLAvatarName av_name;
 		have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
 
-		if (!have_filter || findInsensitive(av_name.getDisplayName(), mNameFilter))
+		// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+		//if (!have_filter || findInsensitive(av_name.getDisplayName(), mNameFilter))
+		if (!have_filter || findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+		// </FS:Ansariel>
 		{
 			if (nadded >= ADD_LIMIT)
 			{
@@ -503,6 +506,7 @@ void LLAvatarList::refresh()
 				else
 				{
 					// <FS:AO> Always show usernames on avatar lists
+					// <FS:Ansa> The passed name is not used as of 21-01-2014
 					//std::string display_name = av_name.getDisplayName();
 					//addNewItem(buddy_id, 
 					//		display_name.empty() ? waiting_str : display_name,
@@ -536,10 +540,10 @@ void LLAvatarList::refresh()
 			const LLUUID& buddy_id = it->asUUID();
 			LLAvatarName av_name;
 			have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
-			// <FS:AO> Always show usernames on avatar lists
+			// <FS:Ansariel> FIRE-12750: Name filter not working correctly
 			//if (!findInsensitive(av_name.getDisplayName(), mNameFilter))
-			if (!findInsensitive(av_name.getCompleteName(), mNameFilter))
-			// </FS:AO>
+			if (!findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+			// </FS:Ansariel>
 			{
 				removeItemByUUID(buddy_id);
 				modified = true;
@@ -612,7 +616,10 @@ bool LLAvatarList::filterHasMatches()
 		// If name has not been loaded yet we consider it as a match.
 		// When the name will be loaded the filter will be applied again(in refresh()).
 
-		if (have_name && !findInsensitive(av_name.getDisplayName(), mNameFilter))
+		// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+		//if (have_name && !findInsensitive(av_name.getDisplayName(), mNameFilter))
+		if (have_name && !findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+		// </FS:Ansariel>
 		{
 			continue;
 		}
@@ -842,6 +849,26 @@ void LLAvatarList::onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 		mItemDoubleClickSignal(ctrl, x, y, mask);
 // [/RLVa:KB]
 }
+
+// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+// static
+std::string LLAvatarList::getNameForDisplay(const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames)
+{
+	bool fRlvFilter = (rlv_check_shownames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	if (show_displayname && !show_username)
+	{
+		return ( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
+	}
+	else if (!show_displayname && show_username)
+	{
+		return ( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+	}
+	else 
+	{
+		return ( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+	}
+}
+// </FS:Ansariel>
 
 bool LLAvatarItemComparator::compare(const LLPanel* item1, const LLPanel* item2) const
 {

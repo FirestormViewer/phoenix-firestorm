@@ -54,6 +54,7 @@
 #include "llvoiceclient.h"
 
 #include "lfsimfeaturehandler.h"	// <FS:CR> Opensim
+#include "llavatarlist.h"
 
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
@@ -727,13 +728,15 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 //	setAvatarName(av_name.getDisplayName());
 //	setAvatarToolTip(av_name.getUserName());
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	// <FS:Ansa> Centralized in LLAvatarList::getNameForDisplay!
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	if (mShowDisplayName && !mShowUsername)
-		setAvatarName( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
-	else if (!mShowDisplayName && mShowUsername)
-		setAvatarName( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
-	else 
-		setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+	//if (mShowDisplayName && !mShowUsername)
+	//	setAvatarName( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
+	//else if (!mShowDisplayName && mShowUsername)
+	//	setAvatarName( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+	//else 
+	//	setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+	setAvatarName(LLAvatarList::getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames));
 
 	// NOTE: If you change this, you will break sorting the contacts list
 	//  by username unless you go change the comparator too. -- TS	
