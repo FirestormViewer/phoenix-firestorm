@@ -81,12 +81,14 @@
 #include "fsfloaterimcontainer.h"
 #include "fsfloaterprofile.h"
 #include "fslslbridge.h"
+#include "fsradar.h"
 #include "fswsassetblacklist.h"
 #include "llfloaterregioninfo.h"
 #include "llfloaterreporter.h"
 #include "llparcel.h"
 #include "lltrans.h"
 #include "llviewermenu.h"
+#include "llviewernetwork.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerwindow.h"	// For opening logs externally
 #include "llworld.h"
@@ -1436,12 +1438,47 @@ void LLAvatarActions::report(const LLUUID& idAgent)
 
 bool LLAvatarActions::canZoomIn(const LLUUID& idAgent)
 {
-	return gObjectList.findObject(idAgent);
+	// <FS:Ansariel> Firestorm radar support
+	//return gObjectList.findObject(idAgent);
+
+	LLViewerObject* object = gObjectList.findObject(idAgent);
+	if (object)
+	{
+		return true;
+	}
+	else
+	{
+		// Special case for SL since interest list changes
+		FSRadarEntry* entry = FSRadar::getInstance()->getEntry(idAgent);
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInOpenSim())
+		{
+			return (entry && entry->getRange() <= gSavedSettings.getF32("RenderFarClip"));
+		}
+		else
+#endif
+		{
+			return (entry != NULL);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 void LLAvatarActions::zoomIn(const LLUUID& idAgent)
 {
-	handle_zoom_to_object(idAgent);
+	// <FS:Ansariel> Firestorm radar support
+	//handle_zoom_to_object(idAgent);
+
+	FSRadarEntry* entry = FSRadar::getInstance()->getEntry(idAgent);
+	if (entry)
+	{
+		handle_zoom_to_object(idAgent, entry->getGlobalPos());
+	}
+	else
+	{
+		handle_zoom_to_object(idAgent);
+	}
+	// </FS:Ansariel>
 }
 
 void LLAvatarActions::getScriptInfo(const LLUUID& idAgent)
