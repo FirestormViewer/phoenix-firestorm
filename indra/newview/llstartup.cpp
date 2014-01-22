@@ -2006,6 +2006,11 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		LLStatusBar::sendMoneyBalanceRequest();
 
 		display_startup();
+
+		// request all group information
+		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Requesting Agent Data during startup" << LL_ENDL;
+		gAgent.sendAgentDataUpdateRequest();
+		display_startup();
 		// </FS:Ansariel>
 
 		display_startup();
@@ -2182,11 +2187,11 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		//LLStatusBar::sendMoneyBalanceRequest();
 
 		//display_startup();
+		//// request all group information
+		//llinfos << "Requesting Agent Data" << llendl;
+		//gAgent.sendAgentDataUpdateRequest();
+		//display_startup();
 		// </FS:Ansariel>
-		// request all group information
-		llinfos << "Requesting Agent Data" << llendl;
-		gAgent.sendAgentDataUpdateRequest();
-		display_startup();
 
 		// Create the inventory views
 		llinfos << "Creating Inventory Views" << llendl;

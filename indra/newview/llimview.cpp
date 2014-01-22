@@ -4063,7 +4063,7 @@ public:
 			}
 // [/RLVa:KB]
 
-			// Mute group chat port from Phoenix
+			// <FS> Mute group chat port from Phoenix
 			BOOL FSMuteAllGroups = gSavedSettings.getBOOL("FSMuteAllGroups");
 			BOOL FSMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("FSMuteGroupWhenNoticesDisabled");
 			LLGroupData group_data;
@@ -4101,7 +4101,13 @@ public:
 					return;
 				}
 			}
-			// END: Mute group chat port from Phoenix
+			// <FS:Ansariel> Groupdata debug
+			else
+			{
+				LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group chat mute: No agent group data for group " << session_id.asString() << LL_ENDL;
+			}
+			// </FS:Ansariel>
+			// </FS> Mute group chat port from Phoenix
 
 			// standard message, not from system
 			std::string saved;

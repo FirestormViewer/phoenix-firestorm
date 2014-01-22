@@ -173,6 +173,12 @@ BOOL LLPanelGroupGeneral::postBuild()
 		accept_notices = data.mAcceptNotices;
 		list_in_profile = data.mListInProfile;
 	}
+	// <FS:Ansariel> Groupdata debug
+	else
+	{
+		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group panel: No agent group data for group " << mGroupID.asString() << LL_ENDL;
+	}
+	// </FS:Ansariel>
 	mCtrlReceiveNotices = getChild<LLCheckBoxCtrl>("receive_notices", recurse);
 	if (mCtrlReceiveNotices)
 	{
@@ -1037,6 +1043,12 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 		accept_notices = data.mAcceptNotices;
 		list_in_profile = data.mListInProfile;
 	}
+	// <FS:Ansariel> Groupdata debug
+	else
+	{
+		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group panel: No agent group data for group " << mGroupID.asString() << LL_ENDL;
+	}
+	// </FS:Ansariel>
 	mCtrlReceiveNotices = getChild<LLCheckBoxCtrl>("receive_notices");
 	if (mCtrlReceiveNotices)
 	{

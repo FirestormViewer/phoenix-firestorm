@@ -3832,6 +3832,12 @@ void LLAgent::processAgentGroupDataUpdate(LLMessageSystem *msg, void **)
 		llwarns << "processAgentGroupDataUpdate for agent other than me" << llendl;
 		return;
 	}	
+	// <FS:Ansariel> Groupdata debug
+	else
+	{
+		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Executing deprecated processAgentGroupDataUpdate" << LL_ENDL;
+	}
+	// </FS:Ansariel>
 	
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_GroupData);
 	LLGroupData group;
@@ -3884,6 +3890,12 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 			llwarns << "processAgentGroupDataUpdate for agent other than me" << llendl;
 			return;
 		}	
+		// <FS:Ansariel> Groupdata debug
+		else
+		{
+			LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Executing processAgentGroupDataUpdate" << LL_ENDL;
+		}
+		// </FS:Ansariel>
 
 		LLSD group_data = body["GroupData"];
 
