@@ -204,7 +204,7 @@ void LLGroupList::refresh()
 			continue;
 		// <FS:Ansariel> Mark groups hidden in profile
 		//addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM);
-		addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM, !group_data.mListInProfile);
+		addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM, group_data.mListInProfile);
 	}
 
 	// Sort the list.
@@ -264,7 +264,7 @@ void LLGroupList::setGroups(const std::map< std::string,LLUUID> group_list)
 
 // <FS:Ansariel> Mark groups hidden in profile
 //void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos)
-void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool hiddenInProfile)
+void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool visible_in_profile)
 {
 	LLGroupListItem* item = new LLGroupListItem(mForAgent && mShowIcons);
 
@@ -277,10 +277,7 @@ void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LL
 	item->setGroupIconVisible(mShowIcons);
 
 	// <FS:Ansariel> Mark groups hidden in profile
-	if (hiddenInProfile)
-	{
-		item->markHiddenInProfile();
-	}
+	item->setVisibleInProfile(visible_in_profile);
 	// </FS:Ansariel> Mark groups hidden in profile
 
 	addItem(item, id, pos);
@@ -297,6 +294,30 @@ bool LLGroupList::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD&
 		setDirty();
 		return true;
 	}
+
+	// <FS:Ansariel> Mark groups hidden in profile
+	if (event->desc() == "value_changed")
+	{
+		LLSD data = event->getValue();
+		if (data.has("group_id") && data.has("visible"))
+		{
+			LLUUID group_id = data["group_id"].asUUID();
+			bool visible = data["visible"].asBoolean();
+
+			std::vector<LLPanel*> items;
+			getItems(items);
+			for (std::vector<LLPanel*>::iterator it = items.begin(); it != items.end(); ++it)
+			{
+				LLGroupListItem* item = dynamic_cast<LLGroupListItem*>(*it);
+				if (item && item->getGroupID() == group_id)
+				{
+					item->setVisibleInProfile(visible);
+				}
+			}
+		}
+		return true;
+	}
+	// </FS:Ansariel>
 
 	return false;
 }
@@ -465,9 +486,9 @@ void LLGroupListItem::setGroupIconVisible(bool visible)
 }
 
 // <FS:Ansariel> Mark groups hidden in profile
-void LLGroupListItem::markHiddenInProfile()
+void LLGroupListItem::setVisibleInProfile(bool visible)
 {
-	mGroupNameBox->setColor(LLUIColorTable::instance().getColor("GroupHiddenInProfile", LLColor4::red).get());
+	mGroupNameBox->setColor(LLUIColorTable::instance().getColor((visible ? "LabelTextColor" : "GroupHiddenInProfile"), LLColor4::red).get());
 }
 // </FS:Ansariel> Mark groups hidden in profile
 

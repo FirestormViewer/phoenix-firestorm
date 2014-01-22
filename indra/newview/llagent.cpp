@@ -3365,6 +3365,10 @@ BOOL LLAgent::setUserGroupFlags(const LLUUID& group_id, BOOL accept_notices, BOO
 			msg->nextBlock("NewData");
 			msg->addBOOL("ListInProfile", list_in_profile);
 			sendReliableMessage();
+
+			// <FS:Ansariel> Mark groups hidden in profile
+			gAgent.fireEvent(new LLOldEvents::LLValueChangedEvent(&gAgent, LLSD().with("group_id", group_id).with("visible", list_in_profile)), "");
+
 			return TRUE;
 		}
 	}
