@@ -627,7 +627,7 @@ BOOL LLMuteList::saveToFile(const std::string& filename)
 BOOL LLMuteList::isMuted(const LLUUID& id, const std::string& name, U32 flags) const
 {
 	// <FS:ND> In case of an empty mutelist, we can exit right away.
-	if( 0 == mMutes.size() )
+	if( 0 == mMutes.size() && mLegacyMutes.size() == 0)
 		return FALSE;
 	// </FS:ND>
 
