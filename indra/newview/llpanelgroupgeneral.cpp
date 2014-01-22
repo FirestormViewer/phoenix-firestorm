@@ -185,11 +185,11 @@ BOOL LLPanelGroupGeneral::postBuild()
 	mCtrlReceiveGroupChat = getChild<LLCheckBoxCtrl>("receive_chat", recurse);
 	if(mCtrlReceiveGroupChat)
 	{
-		mCtrlReceiveNotices->setCommitCallback(onCommitUserOnly, this);
-		mCtrlReceiveNotices->setEnabled(data.mID.notNull());
+		mCtrlReceiveGroupChat->setCommitCallback(onCommitUserOnly, this);
+		mCtrlReceiveGroupChat->setEnabled(data.mID.notNull());
 		if(data.mID.notNull())
 		{
-			mCtrlReceiveNotices->set(!exoGroupMuteList::instance().isMuted(data.mID));
+			mCtrlReceiveGroupChat->set(!exoGroupMuteList::instance().isMuted(data.mID));
 		}
 	}
 	// </exodus>
