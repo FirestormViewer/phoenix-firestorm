@@ -312,6 +312,7 @@ bool LLGroupList::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD&
 				if (item && item->getGroupID() == group_id)
 				{
 					item->setVisibleInProfile(visible);
+					break;
 				}
 			}
 		}
