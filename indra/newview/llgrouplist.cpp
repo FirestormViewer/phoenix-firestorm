@@ -489,7 +489,7 @@ void LLGroupListItem::setGroupIconVisible(bool visible)
 // <FS:Ansariel> Mark groups hidden in profile
 void LLGroupListItem::setVisibleInProfile(bool visible)
 {
-	mGroupNameBox->setColor(LLUIColorTable::instance().getColor((visible ? "LabelTextColor" : "GroupHiddenInProfile"), LLColor4::red).get());
+	mGroupNameBox->setColor(LLUIColorTable::instance().getColor((visible ? "GroupVisibleInProfile" : "GroupHiddenInProfile"), LLColor4::red).get());
 }
 // </FS:Ansariel> Mark groups hidden in profile
 

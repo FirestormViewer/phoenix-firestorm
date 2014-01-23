@@ -259,6 +259,9 @@
 		reference="ScrollUnselectedColor" />
 	<!-- Groups visible in profiles -->
 	<color
+		name="GroupVisibleInProfile"
+		reference="ScrollUnselectedColor" />
+	<color
 		name="GroupHiddenInProfile"
 		reference="OldGray_63" />
 	<!-- Balance at the top -->

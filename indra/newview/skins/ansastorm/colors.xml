@@ -1197,6 +1197,9 @@
 
 	<!-- Groups visible in profiles -->
 	<color
+	 name="GroupVisibleInProfile"
+	 reference="LabelTextColor" />
+	<color
 	 name="GroupHiddenInProfile"
 	 reference="EmphasisColor" />
 	 
