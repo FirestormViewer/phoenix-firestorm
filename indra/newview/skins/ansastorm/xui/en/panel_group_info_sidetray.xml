@@ -180,25 +180,35 @@ background_visible="false"
    </layout_panel>
   </layout_stack>
   
-			<button
-		     follows="bottom|left"
-		     height="23"
-		     image_overlay="Refresh_Off"
-		     layout="topleft"
-		     left="6"
-		     top_pad="8"
-		     name="btn_refresh"
-		     width="23" />
-				     
-   		   <layout_stack
-	     	follows="bottom|left|right"
+		<layout_stack
+			follows="bottom|left|right"
 			height="25"
 			layout="topleft"
 			name="button_row_ls"
-			left_pad="0"
+			left="3"
 			orientation="horizontal"
-			top_delta="0"
-			width="445">
+			top_pad="6"
+			width="490">
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left="3"
+				name="btn_refresh_lp"
+				user_resize="false"
+				auto_resize="false"
+				width="24">
+					<button
+			         layout="topleft"
+				     follows="bottom|left|right"
+				     image_overlay="Refresh_Off"
+				     name="btn_refresh"
+				     left="1"
+				     height="23"
+				     top="0"
+				     width="23" />
+				</layout_panel>
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
@@ -207,15 +217,16 @@ background_visible="false"
 				name="btn_chat_lp"
 			    user_resize="false"
 			    auto_resize="true"
-				width="91">
+				width="97">
 					<button
+			         layout="topleft"
 				     follows="bottom|left|right"
 				     label="Chat"
 				     name="btn_chat"
 				     left="1"
 				     height="23"
 				     top="0"
-				     width="90" />
+				     width="96" />
 				</layout_panel>
 
 				<layout_panel
@@ -226,7 +237,7 @@ background_visible="false"
 				name="call_btn_lp"
 			    user_resize="false"
 			    auto_resize="true"
-				width="91">
+				width="97">
 					<button
 			         follows="bottom|left|right"
 			         left="1"
@@ -236,7 +247,7 @@ background_visible="false"
 			         layout="topleft"
 			         tool_tip="Call this group"
 			         top="0"
-			         width="90" />
+			         width="96" />
 				</layout_panel>
 
 				<layout_panel
@@ -247,7 +258,7 @@ background_visible="false"
 				name="btn_apply_lp"
 			    user_resize="false"
 			    auto_resize="true"
-				width="91">
+				width="97">
 					<button
 				     follows="bottom|left|right"
 				     height="23"
@@ -256,7 +267,7 @@ background_visible="false"
 				     name="btn_apply"
 				     left="1"
 				     top="0"
-				     width="90" />
+				     width="96" />
 					<button
     				 follows="bottom|left|right"
 	                 height="23"
@@ -267,7 +278,7 @@ background_visible="false"
      				 name="btn_create"
                		 visible="true"
                  	 tool_tip="Create a new Group"
-                 	 width="90" />
+                 	 width="96" />
 				</layout_panel>
 		   </layout_stack>
 
