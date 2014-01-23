@@ -568,7 +568,9 @@ void LLPanelGroup::draw()
 		for(std::vector<LLPanelGroupTab* >::iterator it = mTabs.begin();it!=mTabs.end();++it)
 			enable = enable || (*it)->needsApply(mesg);
 
-		childSetEnabled("btn_apply", enable);
+		// <FS:Ansariel> Don't parse the XML... again...
+		//childSetEnabled("btn_apply", enable);
+		button_apply->setEnabled(enable);
 	}
 }
 
