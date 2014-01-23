@@ -29,7 +29,7 @@
 #include "llfloatersettingsdebug.h"
 
 //#include "llfirstuse.h"
-#include "llbutton.cpp"
+#include "llbutton.h"
 #include "llcolorswatch.h"
 #include "llfloater.h"
 #include "lllineeditor.h"
@@ -47,6 +47,8 @@
 #include "sanitycheck.h"
 #include "stdenums.h"		// for ADD_BOTTOM
 // [/RLVa:KB]
+#include "llnotificationsutil.h"
+#include "llwindow.h"
 
 LLFloaterSettingsDebug::LLFloaterSettingsDebug(const LLSD& key) 
 :	LLFloater(key)
