@@ -5597,13 +5597,13 @@ LLRect LLViewerWindow::getChatConsoleRect()
 		}// </FS:KC> Tie console to legacy snap edge when possible
 		else
 		{
-			LLToolBar* toolbar_left = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_LEFT);
+			LLToolBar* toolbar_left = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT);
 			if (toolbar_left && toolbar_left->hasButtons())
 			{
 				console_rect.mLeft += toolbar_left->getRect().getWidth();
 			}
 
-			LLToolBar* toolbar_right = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_RIGHT);
+			LLToolBar* toolbar_right = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_RIGHT);
 			LLRect toolbar_right_screen_rect;
 			toolbar_right->localRectToScreen(toolbar_right->getRect(), &toolbar_right_screen_rect);
 			if (toolbar_right && toolbar_right->hasButtons() && console_rect.mRight >= toolbar_right_screen_rect.mLeft)

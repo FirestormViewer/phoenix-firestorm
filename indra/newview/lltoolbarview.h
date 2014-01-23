@@ -113,12 +113,8 @@ public:
 	LLView* getBottomToolbar() { return mBottomToolbarPanel; }
 	LLToolBar* getToolbar(EToolBarLocation toolbar) { return mToolbars[toolbar]; }
 	bool isModified() const;
-	
-	// <FS:Ansariel> Allow accessing the toolbars itself
-	LLToolBar* getToolBar(EToolBarLocation location) const { return mToolbars[location]; };
 
 	// <FS:Ansariel> Getters for member variables needed for console chat bottom offset
-	LLView* getBottomToolbarPanel() const { return mBottomToolbarPanel; };
 	LLView* getBottomChatStack() const { return mBottomChatStack; };
 	// </FS:Ansariel>
 
