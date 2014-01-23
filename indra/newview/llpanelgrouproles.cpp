@@ -1829,13 +1829,13 @@ void LLPanelGroupMembersSubTab::onExportMembersToXML()
 		 ++member_itr)
 	{
 		/// *FIXME: Making an assumption that we already have the names in cache and getting names from
-		/// gCacheName directly because I am lazy and don't want bugger with avatarname cache this morning.
+		/// LLAvatarNameCache directly because I am lazy and don't want bugger with avatarname cache this morning.
 		/// When the group membership is fully loaded, this works fine as is.
-		std::string name = "";
-		gCacheName->getFullName(member_itr->first, name);
+		LLAvatarName av_name;
+		LLAvatarNameCache::get(member_itr->first, &av_name);
 		apr_file_printf(file, "\n%s,%s,%s",
 						member_itr->first.asString().c_str(),
-						name.c_str(),
+						av_name.getCompleteName().c_str(),
 						member_itr->second->getOnlineStatus().c_str());
 	}
 	apr_file_printf(file, "\n");
