@@ -235,12 +235,20 @@
          label="Avatar Health"
          name="avhealth"
          tear_off="true">
-   	        <menu_item_call
-	         label="Stop Avatar Animations"
-	         name="Stop Animating My Avatar">
-	            <menu_item_call.on_click
-	             function="Tools.StopAllAnimations" />
-	        </menu_item_call>
+            <menu_item_call
+             label="Stop Avatar Animations"
+             name="Stop Animating My Avatar">
+                <menu_item_call.on_click
+                 function="Tools.StopAllAnimations"
+                 parameter="stop"/>
+            </menu_item_call>
+            <menu_item_call
+             label="Stop Avatar Animations &amp; Revoke Permissions"
+             name="Stop Animating My Avatar With Revoke">
+                <menu_item_call.on_click
+                 function="Tools.StopAllAnimations"
+                 parameter="stoprevoke"/>
+            </menu_item_call>
             <menu_item_call
                 label="Undeform Avatar"
                 name="undeform_avatar">
