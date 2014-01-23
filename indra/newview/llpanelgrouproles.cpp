@@ -746,17 +746,30 @@ LLPanelGroupMembersSubTab::LLPanelGroupMembersSubTab()
 	mChanged(FALSE),
 	mPendingMemberUpdate(FALSE),
 	mHasMatch(FALSE),
-	mNumOwnerAdditions(0),
-	mAvatarNameCacheConnection()
+	// <FS:Ansariel> Member list doesn't load properly
+	//mNumOwnerAdditions(0),
+	mNumOwnerAdditions(0)
+	//mAvatarNameCacheConnection()
+	// </FS:Ansariel>
 {
 }
 
 LLPanelGroupMembersSubTab::~LLPanelGroupMembersSubTab()
 {
-	if (mAvatarNameCacheConnection.connected())
+	// <FS:Ansariel> Member list doesn't load properly
+	//if (mAvatarNameCacheConnection.connected())
+	//{
+	//	mAvatarNameCacheConnection.disconnect();
+	//}
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
 	{
-		mAvatarNameCacheConnection.disconnect();
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
 	}
+	mAvatarNameCacheConnections.clear();
+	// </FS:Ansariel>
 	if (mMembersList)
 	{
 		gSavedSettings.setString("GroupMembersSortOrder", mMembersList->getSortColumnName());
@@ -1652,9 +1665,23 @@ void LLPanelGroupMembersSubTab::addMemberToList(LLGroupMemberData* data)
 	mHasMatch = TRUE;
 }
 
-void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name)
+// <FS:Ansariel> Member list doesn't load properly
+//void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name)
+void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name, const LLUUID& av_id)
+// </FS:Ansariel>
 {
-	mAvatarNameCacheConnection.disconnect();
+	// <FS:Ansariel> Member list doesn't load properly
+	//mAvatarNameCacheConnection.disconnect();
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+	// </FS:Ansariel>
 
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	if (!gdatap
@@ -1734,11 +1761,24 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		{
 			// If name is not cached, onNameCache() should be called when it is cached and add this member to list.
 			// *TODO : Add one callback per fetched avatar name
-			if (mAvatarNameCacheConnection.connected())
+			// <FS:Ansariel> Member list doesn't load properly
+			//if (mAvatarNameCacheConnection.connected())
+			//{
+			//	mAvatarNameCacheConnection.disconnect();
+			//}
+			//mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2));
+			
+			avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(mMemberProgress->first);
+			if (it != mAvatarNameCacheConnections.end())
 			{
-				mAvatarNameCacheConnection.disconnect();
+				if (it->second.connected())
+				{
+					it->second.disconnect();
+				}
+				mAvatarNameCacheConnections.erase(it);
 			}
-			mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2));
+			mAvatarNameCacheConnections[mMemberProgress->first] = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2, _1));
+			// </FS:Ansariel>
 		}
 	}
 

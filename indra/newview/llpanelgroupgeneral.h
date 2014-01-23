@@ -29,6 +29,8 @@
 
 #include "llpanelgroup.h"
 
+#include <boost/unordered_map.hpp>
+
 class LLLineEditor;
 class LLTextBox;
 class LLTextureCtrl;
@@ -63,7 +65,10 @@ public:
 
 	virtual void setupCtrls	(LLPanel* parent);
 
-	void onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name);
+	// <FS:Ansariel> Member list doesn't load properly
+	//void onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name);
+	void onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name, const LLUUID& av_id);
+	// </FS:Ansariel>
 	
 // <FS> Copy button callbacks
 protected:
@@ -119,7 +124,12 @@ private:
 	LLCheckBoxCtrl	*mCtrlReceiveGroupChat; // <exodus/>
 
 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
-	boost::signals2::connection mAvatarNameCacheConnection;
+	// <FS:Ansariel> Member list doesn't load properly
+	//boost::signals2::connection mAvatarNameCacheConnection;
+	typedef boost::unordered_map<LLUUID, boost::signals2::connection, FSUUIDHash> avatar_name_cache_connection_map_t;
+	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
+	// </FS:Ansariel>
+
 	LLUUID mIteratorGroup; // <FS:ND/> FIRE-6074; UUID of the group mMemberProgress belongs to.
 
 	// <FS:Ansariel> For storing group name for copy name button
