@@ -125,10 +125,8 @@ BOOL LLToolBarView::postBuild()
 		mToolbars[i]->setButtonRemoveCallback(boost::bind(LLToolBarView::onToolBarButtonRemoved,_1));
 	}
 	
-	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	// <FS:Ansariel> Member variable needed for console chat bottom offset
 	mBottomChatStack = findChild<LLView>("bottom_chat_stack");
-	mBottomToolbarPanel = findChild<LLView>("bottom_toolbar_panel");
-	// </FS:Ansariel> Member variables needed for console chat bottom offset
 
 	return TRUE;
 }
