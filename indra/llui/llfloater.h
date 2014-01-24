@@ -588,6 +588,9 @@ public:
 
 	void setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LLRect& toolbar_rect);
 
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	void setMainChatbarRect(const LLRect& chatbar_rect);
+
 private:
 	void hiddenFloaterClosed(LLFloater* floater);
 
@@ -603,6 +606,9 @@ private:
 	typedef std::vector<std::pair<LLHandle<LLFloater>, boost::signals2::connection> > hidden_floaters_t;
 	hidden_floaters_t mHiddenFloaters;
 	LLFloater *		mFrontChild;
+
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	LLRect			mMainChatbarRect;
 };
 
 //

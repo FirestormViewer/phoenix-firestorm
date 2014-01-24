@@ -2975,6 +2975,14 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 	{
 		floater->translate(delta_right, 0);
 	}
+
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	S32 delta_bottom_chatbar = mMainChatbarRect.notEmpty() ? mMainChatbarRect.mTop - floater_rect.mTop : 0;
+	if (delta_bottom_chatbar > 0 && floater_rect.mLeft > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight)
+	{
+		floater->translate(0, delta_bottom_chatbar);
+	}
+	// </FS:Ansariel>
 }
 
 void LLFloaterView::draw()
@@ -3193,6 +3201,14 @@ void LLFloaterView::setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LL
 		mToolbarRects[tb] = toolbar_rect;
 	}
 }
+
+// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+void LLFloaterView::setMainChatbarRect(const LLRect& chatbar_rect)
+{
+	mMainChatbarRect = chatbar_rect;
+	mMainChatbarRect.stretch(FLOATER_MIN_VISIBLE_PIXELS);
+}
+// </FS:Ansariel>
 
 void LLFloater::setInstanceName(const std::string& name)
 {

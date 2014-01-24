@@ -525,10 +525,12 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 	if(visible)
 	{
 		gFloaterView->setSnapOffsetChatBar(mDefaultChatBar->getRect().getHeight() + MAGIC_CHAT_BAR_PAD);
+		gFloaterView->setMainChatbarRect(mDefaultChatBar->getParent()->getRect());
 	}
 	else
 	{
 		gFloaterView->setSnapOffsetChatBar(0);
+		gFloaterView->setMainChatbarRect(LLRect());
 	}
 
 	if(!text)
