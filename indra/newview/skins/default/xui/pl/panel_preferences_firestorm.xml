@@ -29,7 +29,7 @@
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />
         <check_box label="Pozwól skryptom na pokazywanie interfejsu mapy (llMapDestination)" name="ScriptsCanShowUI" />
         <text name="revokepermissions_txt">
-         Cofnij zezwolenia:
+         Cofnij zezwolenia do animowania:
          </text>
         <radio_group name="FSRevokePerms">
             <radio_item label="Nigdy (oryginalne zachowanie)" name="never_radio" />
