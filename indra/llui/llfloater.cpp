@@ -2949,12 +2949,18 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 	S32 delta_bottom = bottom_toolbar_rect.notEmpty() ? bottom_toolbar_rect.mTop - floater_rect.mTop : 0;
 	S32 delta_right = right_toolbar_rect.notEmpty() ? right_toolbar_rect.mLeft - floater_rect.mLeft : 0;
 
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	S32 header_height = floater->getHeaderHeight();
+
 	// move window fully onscreen
 	if (floater->translateIntoRect( snap_in_toolbars ? getSnapRect() : gFloaterView->getRect(), allow_partial_outside ? FLOATER_MIN_VISIBLE_PIXELS : S32_MAX ))
 	{
 		floater->clearSnapTarget();
 	}
-	else if (delta_left > 0 && floater_rect.mTop < left_toolbar_rect.mTop && floater_rect.mBottom > left_toolbar_rect.mBottom)
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	//else if (delta_left > 0 && floater_rect.mTop < left_toolbar_rect.mTop && floater_rect.mBottom > left_toolbar_rect.mBottom)
+	else if (delta_left > 0 && floater_rect.mTop < left_toolbar_rect.mTop && (floater_rect.mTop - header_height) > left_toolbar_rect.mBottom)
+	// </FS:Ansariel>
 	{
 		floater->translate(delta_left, 0);
 	}
@@ -2962,7 +2968,10 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 	{
 		floater->translate(0, delta_bottom);
 	}
-	else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop	&& floater_rect.mBottom > right_toolbar_rect.mBottom)
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	//else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop	&& floater_rect.mBottom > right_toolbar_rect.mBottom)
+	else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop	&& (floater_rect.mTop - header_height) > right_toolbar_rect.mBottom)
+	// </FS:Ansariel>
 	{
 		floater->translate(delta_right, 0);
 	}
