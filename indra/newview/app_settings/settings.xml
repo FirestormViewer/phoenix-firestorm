@@ -6967,6 +6967,7 @@
       <key>Type</key>
       <string>LLSD</string>
       <key>Value</key>
+      <array />
     </map>
     <key>LSLFindCaseInsensitivity</key>
         <map>
@@ -13019,6 +13020,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>ShowEventRecorderMenuItems</key>
     <map>
       <key>Comment</key>
@@ -13029,8 +13032,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-      <integer>1</integer>
     </map>
     <key>ShowHoverTips</key>
     <map>
@@ -16211,6 +16212,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>LLSD</string>
       <key>Value</key>
+      <array/>
     </map>
     <key>UseLSLBridge</key>
     <map>
@@ -20883,7 +20885,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>LLSD</string>
       <key>Value</key>
-	  <string />
+      <map/>
     </map>
     <key>FSPoseStandLock</key>
     <map>
@@ -21572,7 +21574,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>2.5</integer>
+      <real>2.5</real>
     </map>
     <key>CameraZoomFocusZOffset</key>
     <map>
@@ -21583,7 +21585,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>0.6</integer>
+      <real>0.6</real>
     </map>
     <key>CameraZoomEyeZOffset</key>
     <map>
@@ -21594,7 +21596,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>1.0</integer>
+      <real>1.0</real>
     </map>
     <!-- </FS:Zi> Fix camera zoom to look at the avatar's face from the front -->
     <key>FSExportContents</key>
