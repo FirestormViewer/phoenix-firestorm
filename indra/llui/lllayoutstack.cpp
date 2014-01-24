@@ -201,6 +201,13 @@ void LLLayoutPanel::handleReshape(const LLRect& new_rect, bool by_user)
 		stackp->mNeedsLayout = true;
 	}
 	LLPanel::handleReshape(new_rect, by_user);
+
+	// <FS:Ansariel> Add callback for reshaping
+	if (!mReshapeCallback.empty())
+	{
+		mReshapeCallback(this, new_rect);
+	}
+	// </FS:Ansariel>
 }
 
 //

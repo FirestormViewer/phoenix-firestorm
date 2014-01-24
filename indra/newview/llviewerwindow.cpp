@@ -1975,6 +1975,15 @@ void LLViewerWindow::initBase()
 	gFloaterView->setFloaterSnapView(main_view->getChild<LLView>("floater_snap_region")->getHandle());
 	gSnapshotFloaterView = main_view->getChild<LLSnapshotFloaterView>("Snapshot Floater View");
 
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	LLLayoutPanel* chatbar_panel = dynamic_cast<LLLayoutPanel*>(gToolBarView->getChildView("default_chat_bar")->getParent());
+	if (chatbar_panel)
+	{
+		chatbar_panel->setReshapeCallback(boost::bind(&LLFloaterView::setMainChatbarRect, gFloaterView, _1, _2));
+		gFloaterView->setMainChatbarRect(chatbar_panel, chatbar_panel->getRect());
+	}
+	// </FS:Ansariel>
+
 	// optionally forward warnings to chat console/chat floater
 	// for qa runs and dev builds
 #if  !LL_RELEASE_FOR_DOWNLOAD

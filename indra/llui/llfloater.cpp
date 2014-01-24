@@ -3203,9 +3203,9 @@ void LLFloaterView::setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LL
 }
 
 // <FS:Ansariel> Prevent floaters being dragged under main chat bar
-void LLFloaterView::setMainChatbarRect(const LLRect& chatbar_rect)
+void LLFloaterView::setMainChatbarRect(LLLayoutPanel* panel, const LLRect& chatbar_rect)
 {
-	mMainChatbarRect = chatbar_rect;
+	panel->localRectToScreen(chatbar_rect, &mMainChatbarRect);
 	mMainChatbarRect.stretch(FLOATER_MIN_VISIBLE_PIXELS);
 }
 // </FS:Ansariel>

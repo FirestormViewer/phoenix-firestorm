@@ -210,6 +210,11 @@ public:
 
 	void setIgnoreReshape(bool ignore) { mIgnoreReshape = ignore; }
 
+	// <FS:Ansariel> Add callback for reshaping
+	typedef boost::function<void(LLLayoutPanel* panel, const LLRect& rect)> reshape_callback_t;
+	void setReshapeCallback(reshape_callback_t cb) { mReshapeCallback = cb; }
+	// </FS:Ansariel>
+
 protected:
 	LLLayoutPanel(const Params& p);
 	
@@ -226,6 +231,9 @@ protected:
 	bool	mIgnoreReshape;
 	LLLayoutStack::ELayoutOrientation mOrientation;
 	class LLResizeBar* mResizeBar;
+
+	// <FS:Ansariel> Add callback for reshaping
+	reshape_callback_t mReshapeCallback;
 };
 
 
