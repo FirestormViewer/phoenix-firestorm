@@ -2786,15 +2786,15 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					&& ((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
 						(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) ||
 						(FSSendAwayAvatarResponse && is_afk && !is_muted))
-					&& from_id.notNull()
-					&& to_id.notNull()
+					&& from_id.notNull() //not a system message
+					&& to_id.notNull() //not global message
 					&& RlvActions::canReceiveIM(from_id))
 // [/RLVa:KB]
 		{
 			// <FS:Ansariel> Log autoresponse notification after initial message
 			bool has_session = true;
 
-			// return a standard "busy" message, but only do it to online IM 
+			// return a standard "do not disturb" message, but only do it to online IM 
 			// (i.e. not other auto responses and not store-and-forward IM)
 			if (!gIMMgr->hasSession(session_id))
 			{
@@ -2956,7 +2956,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			LL_INFOS("Messaging") << "process_improved_im: session_id( " << session_id << " ), from_id( " << from_id << " )" << LL_ENDL;
 
 //			bool mute_im = is_muted;
-//			if(accept_im_from_only_friend&&!is_friend)
+//			if(accept_im_from_only_friend && !is_friend && !is_linden)
 //			{
 //				if (!gIMMgr->isNonFriendSessionNotified(session_id))
 //				{
