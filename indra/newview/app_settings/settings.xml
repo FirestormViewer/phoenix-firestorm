@@ -11,7 +11,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RestrainedLoveDebug</key>
     <map>
@@ -22,7 +22,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RestrainedLoveCanOOC</key>
     <map>
@@ -33,7 +33,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RestrainedLoveForbidGiveToRLV</key>
     <map>
@@ -44,7 +44,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RestrainedLoveNoSetEnv</key>
     <map>
@@ -55,7 +55,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RestrainedLoveReplaceWhenFolderBeginsWith</key>
     <map>
@@ -77,7 +77,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RestrainedLoveStackWhenFolderBeginsWith</key>
     <map>
@@ -110,7 +110,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RLVaEnableCompositeFolders</key>
     <map>
@@ -121,7 +121,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RLVaEnableLegacyNaming</key>
     <map>
@@ -132,7 +132,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RLVaEnableSharedWear</key>
     <map>
@@ -143,7 +143,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RLVaHideLockedLayers</key>
     <map>
@@ -154,7 +154,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RLVaHideLockedAttachments</key>
     <map>
@@ -165,7 +165,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RLVaSharedInvAutoRename</key>
     <map>
@@ -176,7 +176,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RLVaShowAssertionFailures</key>
     <map>
@@ -187,7 +187,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RLVaShowNameTags</key>
     <map>
@@ -198,7 +198,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>RLVaTopLevelMenu</key>
     <map>
@@ -209,7 +209,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>RLVaWearReplaceUnlocked</key>
     <map>
@@ -220,7 +220,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <boolean>0</boolean>
     </map>
     <key>WarnFirstRLVGiveToRLV</key>
     <map>
@@ -231,7 +231,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <boolean>1</boolean>
     </map>
     <key>IMShowTime</key>
     <map>
