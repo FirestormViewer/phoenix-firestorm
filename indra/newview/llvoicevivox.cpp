@@ -483,7 +483,7 @@ void LLVivoxVoiceClient::connectorCreate()
 		LL_DEBUGS("Voice") << "creating connector with logging enabled" << LL_ENDL;
 		// <FS:Ansariel> Fixing Vivox debug level
 		loglevel = "0";
-		loglevel = "10";
+		loglevel = savedLogLevel;
 		// </FS:Ansariel>
 	}
 	
