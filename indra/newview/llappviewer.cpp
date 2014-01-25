@@ -787,9 +787,6 @@ LLAppViewer::~LLAppViewer()
 	
 	destroyMainloopTimeout();
 
-	// <FS:Ansariel> Delete useless Vivox logs on logout
-	gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, ""), "VivoxVoiceService-*.log");
-
 	// If we got to this destructor somehow, the app didn't hang.
 	removeMarkerFile();
 }
