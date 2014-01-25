@@ -2782,10 +2782,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		// <FS:Ansariel> Only send the busy reponse if either the sender is not
 		//               muted OR the sender is muted and we explicitely want
 		//               to inform him about that fact.
-		else if ( (offline == IM_ONLINE &&
-			((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
-			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) && name != SYSTEM_FROM) &&
-			(RlvActions::canReceiveIM(from_id)) )
+		else if (offline == IM_ONLINE
+					&& ((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+						(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) ||
+						(FSSendAwayAvatarResponse && is_afk && !is_muted))
+					&& from_id.notNull()
+					&& to_id.notNull()
+					&& RlvActions::canReceiveIM(from_id))
 // [/RLVa:KB]
 		{
 			// <FS:Ansariel> Log autoresponse notification after initial message
