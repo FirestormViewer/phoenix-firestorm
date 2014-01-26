@@ -2423,7 +2423,9 @@ void LLPanelObject::onCommitSculptType(LLUICtrl *ctrl, void* userdata)
 
 void copy_vector_to_clipboard(const LLVector3& vec)
 {
-	std::string stringVec = llformat("<%g, %g, %g>", vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
+	S32 precision = gSavedSettings.getS32("FSBuildToolDecimalPrecision");
+	std::string format_string = llformat("<%%.%df, %%.%df, %%.%df>", precision, precision, precision);
+	std::string stringVec = llformat(format_string.c_str(), vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
 	LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringVec));
 }
 
