@@ -9,8 +9,9 @@
 		<menu_item_call.on_click
 		 function="AreaSearch.Action"
 		 parameter="script"/>
-        <menu_item_call.on_enable
-         function="Object.EnableScriptInfo" />
+		<menu_item_call.on_enable
+		 function="AreaSearch.Enable"
+		 parameter="script"/>
 	</menu_item_call>
 	<menu_item_call
 	 label="Touch"

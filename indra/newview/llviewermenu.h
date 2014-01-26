@@ -124,6 +124,7 @@ void handle_object_delete();
 // <FS:Techwolf Lupindo> area search
 // expose this function so other classes can call it
 void handle_object_edit();
+bool enable_bridge_function();
 // <FS:Techwolf Lupindo>
 
 void handle_buy_land();

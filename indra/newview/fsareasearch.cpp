@@ -1504,6 +1504,10 @@ bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
 		LLViewerObject* objectp = gObjectList.findObject(object_id);
 		return dist_vec_squared(gAgent.getPositionGlobal(), objectp->getPositionGlobal()) < gAgentCamera.mDrawDistance * gAgentCamera.mDrawDistance;
 	}
+	else if (parameter == "script")
+	{
+		return (mResultList->getNumSelected() > 0 && enable_bridge_function());
+	}
 	else
 	{
 		// return true if more then one is selected, but not just one.
