@@ -2783,9 +2783,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		//               muted OR the sender is muted and we explicitely want
 		//               to inform him about that fact.
 		else if (offline == IM_ONLINE
-					&& ((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) ||
-						(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) ||
-						(FSSendAwayAvatarResponse && is_afk && !is_muted))
+					&& ((is_do_not_disturb && (!is_muted || (is_muted && !is_autorespond_muted))) || // do not disturb
+						(is_autorespond && !is_muted) ||                                             // autorespond everyone
+						(is_autorespond_nonfriends && !is_friend && !is_muted) ||                    // autorespond friends only
+						(is_afk && FSSendAwayAvatarResponse && !is_muted))                           // away
 					&& from_id.notNull() //not a system message
 					&& to_id.notNull() //not global message
 					&& RlvActions::canReceiveIM(from_id))
