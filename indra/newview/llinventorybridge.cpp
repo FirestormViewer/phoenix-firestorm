@@ -2988,7 +2988,10 @@ void LLInventoryCopyAndWearObserver::changed(U32 mask)
 				    mContentsCount)
 				{
 					gInventory.removeObserver(this);
-					LLAppearanceMgr::instance().wearInventoryCategory(category, FALSE, FALSE);
+					// <FS:Ansariel> FIRE-938: "copy and wear" does replace
+					//LLAppearanceMgr::instance().wearInventoryCategory(category, FALSE, FALSE);
+					LLAppearanceMgr::instance().wearInventoryCategory(category, FALSE, TRUE);
+					// </FS:Ansariel>
 					delete this;
 				}
 			}
