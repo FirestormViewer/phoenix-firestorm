@@ -2948,6 +2948,8 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 	S32 delta_left = left_toolbar_rect.notEmpty() ? left_toolbar_rect.mRight - floater_rect.mRight : 0;
 	S32 delta_bottom = bottom_toolbar_rect.notEmpty() ? bottom_toolbar_rect.mTop - floater_rect.mTop : 0;
 	S32 delta_right = right_toolbar_rect.notEmpty() ? right_toolbar_rect.mLeft - floater_rect.mLeft : 0;
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	S32 delta_bottom_chatbar = mMainChatbarRect.notEmpty() ? mMainChatbarRect.mTop - floater_rect.mTop : 0;
 
 	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
 	S32 header_height = floater->getHeaderHeight();
@@ -2964,21 +2966,28 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 	{
 		floater->translate(delta_left, 0);
 	}
-	else if (delta_bottom > 0 && floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mRight < bottom_toolbar_rect.mRight)
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	//else if (delta_bottom > 0 && floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mRight < bottom_toolbar_rect.mRight)
+	else if (delta_bottom > 0 && ((floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mRight < bottom_toolbar_rect.mRight) // floater completely within toolbar rect
+		|| (floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mLeft < bottom_toolbar_rect.mRight && bottom_toolbar_rect.mRight > gFloaterView->getRect().mRight) // floater partially within toolbar rect, toolbar bound to right side
+		|| (delta_bottom_chatbar > 0 && floater_rect.mLeft < mMainChatbarRect.mRight && floater_rect.mRight > bottom_toolbar_rect.mLeft && bottom_toolbar_rect.mLeft <= mMainChatbarRect.mRight)) // floater within chatbar and toolbar rect
+		)
+	// </FS:Ansariel>
 	{
 		floater->translate(0, delta_bottom);
 	}
 	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
 	//else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop	&& floater_rect.mBottom > right_toolbar_rect.mBottom)
-	else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop	&& (floater_rect.mTop - header_height) > right_toolbar_rect.mBottom)
+	else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop && (floater_rect.mTop - header_height) > right_toolbar_rect.mBottom)
 	// </FS:Ansariel>
 	{
 		floater->translate(delta_right, 0);
 	}
-
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
-	S32 delta_bottom_chatbar = mMainChatbarRect.notEmpty() ? mMainChatbarRect.mTop - floater_rect.mTop : 0;
-	if (delta_bottom_chatbar > 0 && floater_rect.mLeft > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight)
+	else if (delta_bottom_chatbar > 0 && (floater_rect.mLeft > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight // floater completely within chatbar rect
+		|| (floater_rect.mRight > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight && mMainChatbarRect.mLeft < gFloaterView->getRect().mLeft) // floater partially within chatbar rect, chatbar bound to left side
+		|| (delta_bottom > 0 && floater_rect.mRight > bottom_toolbar_rect.mLeft && floater_rect.mLeft < mMainChatbarRect.mRight && bottom_toolbar_rect.mLeft <= mMainChatbarRect.mRight)) // floater within chatbar and toolbar rect
+		)
 	{
 		floater->translate(0, delta_bottom_chatbar);
 	}
