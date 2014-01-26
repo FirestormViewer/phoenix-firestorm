@@ -671,7 +671,7 @@ bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWea
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool rlvPredCanRemoveItem(const LLInventoryItem* pItem)
+bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 {
 	if ( (pItem) && (RlvForceWear::isWearableItem(pItem)) )
 	{
@@ -694,7 +694,7 @@ bool rlvPredCanRemoveItem(const LLInventoryItem* pItem)
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool rlvPredCanNotRemoveItem(const LLInventoryItem* pItem)
+bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem)
 {
 	return !rlvPredCanRemoveItem(pItem);
 }
