@@ -81,7 +81,8 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	  mImage(NULL),
 	  mImageOldBoostLevel(LLGLTexture::BOOST_NONE),
 	  mShowingButtons(false),
-	  mDisplayNameCallback(false)
+	  mDisplayNameCallback(false),
+	  mAvatarNameCallbackConnection()
 {
 	updateImageID();
 	if (key.has("save_as"))
@@ -100,6 +101,13 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 
 LLPreviewTexture::~LLPreviewTexture()
 {
+	// <FS:Ansariel> Handle avatar name callback
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
+
 	LLLoadedCallbackEntry::cleanUpCallbackList(&mCallbackTextureList) ;
 
 	if( mLoadingFullImage )
@@ -659,7 +667,11 @@ void LLPreviewTexture::updateDimensions()
 					{
 						mDisplayNameCallback = true;
 						mUploaderDateTime.setArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
-						LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+						if (mAvatarNameCallbackConnection.connected())
+						{
+							mAvatarNameCallbackConnection.disconnect();
+						}
+						mAvatarNameCallbackConnection = LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
 					}
 				}
 				getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
@@ -707,7 +719,11 @@ void LLPreviewTexture::updateDimensions()
 					{
 						mDisplayNameCallback = true;
 						getChild<LLLineEditor>("uploader")->setText(LLTrans::getString("AvatarNameWaiting"));
-						LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+						if (mAvatarNameCallbackConnection.connected())
+						{
+							mAvatarNameCallbackConnection.disconnect();
+						}
+						mAvatarNameCallbackConnection = LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
 					}
 				}
 			}
@@ -791,6 +807,11 @@ void LLPreviewTexture::updateDimensions()
 // <FS:Techwolf Lupindo> texture comment metadata reader
 void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
+
 	if (findChild<LLTextEditor>("uploader_date_time"))
 	{
 		mUploaderDateTime.setArg("[UPLOADER]", av_name.getCompleteName());

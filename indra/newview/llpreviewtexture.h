@@ -126,6 +126,7 @@ private:
 
 	bool mShowingButtons;
 	bool mDisplayNameCallback;
+	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 	LLUIString mUploaderDateTime;
 
 	LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ; 
