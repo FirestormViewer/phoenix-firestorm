@@ -91,6 +91,9 @@ public:
 	void onButtonClickUUID();
 	static void onTextureLoaded(BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata);
 	// </FS:Techwolf Lupindo>
+
+	// <FS:Ansariel> For requesting dimensions update
+	void setUpdateDimensions(BOOL update) { mUpdateDimensions = update; }
 	
 protected:
 	void				init();

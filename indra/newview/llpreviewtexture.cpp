@@ -606,7 +606,7 @@ void LLPreviewTexture::updateDimensions()
 	{
 		mUpdateDimensions = FALSE;
 		
-		// <Ansariel>: Show image at full resolution if possible
+		// <FS:Ansariel>: Show image at full resolution if possible
 		//reshape floater
 		//reshape(getRect().getWidth(), getRect().getHeight());
 
@@ -760,16 +760,17 @@ void LLPreviewTexture::updateDimensions()
 		floater_target_height = llmax(floater_target_height, getMinHeight());
 
 		// Resize floater
-		if (getHost())
+		LLMultiFloater* host = getHost();
+		if (host)
 		{
-			getHost()->growToFit(floater_target_width, floater_target_height);
+			S32 old_height = host->getRect().getHeight();
+			host->reshape(getMinWidth(), getMinHeight());
+			host->translate(0, old_height - getMinHeight());
+			host->growToFit(floater_target_width, floater_target_height);
 		}
-		else
-		{
-			reshape(floater_target_width, floater_target_height);
-			gFloaterView->adjustToFitScreen(this, FALSE);
-		}
-		// </Ansariel>: Show image at full resolution if possible
+		reshape(floater_target_width, floater_target_height);
+		gFloaterView->adjustToFitScreen(this, FALSE);
+		// </FS:Ansariel>: Show image at full resolution if possible
 
 		LLRect dim_rect(getChildView("dimensions")->getRect());
 		LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());

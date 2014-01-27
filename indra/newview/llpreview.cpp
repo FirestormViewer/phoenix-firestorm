@@ -55,6 +55,7 @@
 #include "llpreviewnotecard.h"
 #include "llpreviewscript.h"
 // [/SL:KB]
+#include "llpreviewtexture.h"
 
 // Constants
 
@@ -511,6 +512,14 @@ void LLMultiPreview::tabOpen(LLFloater* opened_floater, bool from_click)
 	{
 		opened_preview->loadAsset();
 	}
+
+	// <FS:Ansariel> Update preview dimensions for multi texture preview upon tab change
+	LLPreviewTexture* texture_preview = dynamic_cast<LLPreviewTexture*>(opened_floater);
+	if (texture_preview)
+	{
+		texture_preview->setUpdateDimensions(TRUE);
+	}
+	// </FS:Ansariel>
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	LLFloaterSearchReplace* pSearchFloater = LLFloaterReg::getTypedInstance<LLFloaterSearchReplace>("search_replace");
