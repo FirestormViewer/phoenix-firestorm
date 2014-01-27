@@ -252,6 +252,15 @@ if (LINUX)
     set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
   endif (NOT STANDALONE)
 
+  # <FS:TS> Enable AVX optimizations if requested and at least GCC 4.6.
+  if (USE_AVX_OPTIMIZATION)
+    if (NOT (${CXX_VERSION_NUMBER} LESS 460))
+      add_definitions(-mavx)
+    else (NOT (${CXX_VERSION_NUMBER} LESS 460))
+      error ("AVX optimizations require at least version 4.6.0 of GCC.")
+    endif (NOT (${CXX_VERSION_NUMBER} LESS 460))
+  endif (USE_AVX_OPTIMIZATION)
+
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
   set(CMAKE_CXX_FLAGS_RELEASE "-O2 ${CMAKE_CXX_FLAGS_RELEASE}")
 endif (LINUX)

@@ -67,7 +67,7 @@ showUsage()
     echo "  --leapmotion : Build with Leap Motion Controller support"
     echo "  --opensim    : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim : Build without OpenSim support (Overrides --opensim)"
-    echo "  --avx        : Build with Advanced Vector Extensions (Windows only)"
+    echo "  --avx        : Build with Advanced Vector Extensions"
     echo "  --platform   : darwin | win32 | win64 | linux32 | linux64"
     echo "  --jobs <num> : Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
