@@ -1036,12 +1036,12 @@ BOOL LLInvFVBridge::isProtectedFolder() const
 {
 	const LLInventoryModel* model = getInventoryModel();
 	if(!model) return FALSE;
-	if ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()) 
-		|| ((model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
-		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
+	if ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()
+		|| model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
 		return TRUE;
 
-	if ((mUUID==AOEngine::instance().getAOFolder() 
+	if ((mUUID == AOEngine::instance().getAOFolder() 
 		|| model->isObjectDescendentOf(mUUID, AOEngine::instance().getAOFolder()))
 		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
 		return TRUE;
@@ -2337,6 +2337,9 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 	if (!model) return FALSE;
 	if (!isAgentAvatarValid()) return FALSE;
 	if (!isAgentInventory()) return FALSE; // cannot drag categories into library
+	// <FS:TT> Client LSL Bridge (also for #AO)
+	if (isProtectedFolder()) return FALSE;
+	// </FS:TT>
 
 	LLInventoryPanel* destination_panel = mInventoryPanel.get();
 	if (!destination_panel) return false;
