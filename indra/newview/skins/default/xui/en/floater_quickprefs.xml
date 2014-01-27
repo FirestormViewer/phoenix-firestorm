@@ -455,19 +455,21 @@ Type:
  follows="left|top"
  name="control_integer_checkbox"
  tool_tip="Activate this checkbox if your setting is an integer value, i.e. it has only whole numbers"
+ enabled_control="QuickPrefsSelectedControl"
  left_pad="4"
  height="20"
  top_delta="0"
  width="16"
  label="Integer" />
 
-<!-- enable/disable done in code depending on the type of control chosen -->
+<!-- enable/disable additionally done in code depending on the type of control chosen -->
 <spinner
  layout="topleft"
  enabled="false"
  follows="left|top"
  name="control_min_edit"
  tool_tip="The lowest value you will be allowed to select"
+ enabled_control="QuickPrefsSelectedControl"
  decimal_digits="2"
  label="Min:"
  label_width="32"
@@ -484,6 +486,7 @@ Type:
  follows="left|top"
  name="control_max_edit"
  tool_tip="The highest value you will be allowed to select"
+ enabled_control="QuickPrefsSelectedControl"
  decimal_digits="2"
  label="Max:"
  label_width="32"
@@ -499,6 +502,7 @@ Type:
  follows="left|top"
  name="control_increment_edit"
  tool_tip="The increment for your value when you click the up/down arrow on a spinner or use the cursor keys on a slider"
+ enabled_control="QuickPrefsSelectedControl"
  decimal_digits="2"
  label="Incr:"
  label_width="32"
