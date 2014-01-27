@@ -129,6 +129,12 @@ private:
 	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 	LLUIString mUploaderDateTime;
 
+	// <FS:Ansariel> Performance improvement
+	LLUICtrl*	mDimensionsCtrl;
+	S32			mCurrentImageWidth;
+	S32			mCurrentImageHeight;
+	// </FS:Ansariel>
+
 	LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ; 
 };
 #endif  // LL_LLPREVIEWTEXTURE_H

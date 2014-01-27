@@ -82,7 +82,11 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	  mImageOldBoostLevel(LLGLTexture::BOOST_NONE),
 	  mShowingButtons(false),
 	  mDisplayNameCallback(false),
-	  mAvatarNameCallbackConnection()
+	  mAvatarNameCallbackConnection(),
+	  // <FS:Ansariel> Performance improvement
+	  mCurrentImageWidth(0),
+	  mCurrentImageHeight(0)
+	  // </FS:Ansariel>
 {
 	updateImageID();
 	if (key.has("save_as"))
@@ -182,6 +186,9 @@ BOOL LLPreviewTexture::postBuild()
 		getChild<LLLineEditor>("uuid")->setEnabled(FALSE);
 	}
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Performance improvement
+	mDimensionsCtrl = getChild<LLUICtrl>("dimensions");
 
 	return LLPreview::postBuild();
 }
@@ -606,8 +613,20 @@ void LLPreviewTexture::updateDimensions()
 	}
 	
 	// Update the width/height display every time
-	getChild<LLUICtrl>("dimensions")->setTextArg("[WIDTH]",  llformat("%d", mImage->getFullWidth()));
-	getChild<LLUICtrl>("dimensions")->setTextArg("[HEIGHT]", llformat("%d", mImage->getFullHeight()));
+	// <FS:Ansariel> Performance improvement
+	//getChild<LLUICtrl>("dimensions")->setTextArg("[WIDTH]",  llformat("%d", mImage->getFullWidth()));
+	//getChild<LLUICtrl>("dimensions")->setTextArg("[HEIGHT]", llformat("%d", mImage->getFullHeight()));
+	if (mCurrentImageWidth != mImage->getFullWidth())
+	{
+		mDimensionsCtrl->setTextArg("[WIDTH]", llformat("%d", mImage->getFullWidth()));
+		mCurrentImageWidth = mImage->getFullWidth();
+	}
+	if (mCurrentImageHeight != mImage->getFullHeight())
+	{
+		mDimensionsCtrl->setTextArg("[HEIGHT]", llformat("%d", mImage->getFullHeight()));
+		mCurrentImageHeight = mImage->getFullHeight();
+	}
+	// </FS:Ansariel>
 
 	// Reshape the floater only when required
 	if (mUpdateDimensions)
