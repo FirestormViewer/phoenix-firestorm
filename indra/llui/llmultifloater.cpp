@@ -60,8 +60,7 @@ void LLMultiFloater::buildTabContainer()
 	p.rect(LLRect(LLPANEL_BORDER_WIDTH, getRect().getHeight() - floater_header_size, getRect().getWidth() - LLPANEL_BORDER_WIDTH, 0));
 	p.tab_position(mTabPos);
 	p.follows.flags(FOLLOWS_ALL);
-	// <FS> Update torn off status and add title bar
-	//p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
+	p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
 
 	mTabContainer = LLUICtrlFactory::create<LLTabContainer>(p);
 	addChild(mTabContainer);
