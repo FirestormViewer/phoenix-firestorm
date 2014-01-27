@@ -55,6 +55,9 @@
 #include "llpreviewnotecard.h"
 #include "llpreviewscript.h"
 // [/SL:KB]
+#include "llpreviewanim.h"
+#include "llpreviewgesture.h"
+#include "llpreviewsound.h"
 #include "llpreviewtexture.h"
 
 // Constants
@@ -356,6 +359,16 @@ void LLPreview::onOpen(const LLSD& key)
 	{
 		loadAsset();
 	}
+
+	// <FS:Ansariel> Multi preview layout fix; Anim, gesture and sound previews can't be resized
+	if (getHost() &&
+		(dynamic_cast<LLPreviewAnim*>(this) ||
+		dynamic_cast<LLPreviewGesture*>(this) ||
+		dynamic_cast<LLPreviewSound*>(this)))
+	{
+		getHost()->setCanResize(FALSE);
+	}
+	// </FS:Ansariel>
 }
 
 void LLPreview::setAuxItem( const LLInventoryItem* item )
@@ -460,7 +473,10 @@ LLMultiPreview::LLMultiPreview()
 {
 	// start with a rect in the top-left corner ; will get resized
 	LLRect rect;
-	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 200, 400);
+	// <FS:Ansariel> Multi preview layout fix
+	//rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 200, 400);
+	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 10, 10);
+	// </FS:Ansariel>
 	setRect(rect);
 
 	LLFloater* last_floater = LLFloaterReg::getLastFloaterInGroup("preview");
@@ -471,7 +487,8 @@ LLMultiPreview::LLMultiPreview()
 	setTitle(LLTrans::getString("MultiPreviewTitle"));
 	buildTabContainer();
 	setCanResize(TRUE);
-	mAutoResize = FALSE;
+	// <FS:Ansariel> Multi preview layout fix
+	//mAutoResize = FALSE;
 }
 
 void LLMultiPreview::onOpen(const LLSD& key)
@@ -484,6 +501,9 @@ void LLMultiPreview::onOpen(const LLSD& key)
 		frontmost_preview->loadAsset();
 	}
 	LLMultiFloater::onOpen(key);
+
+	// <FS:Ansariel> Multi preview layout fix
+	center();
 }
 
 
