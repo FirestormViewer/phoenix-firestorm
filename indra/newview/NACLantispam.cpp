@@ -88,6 +88,19 @@ U32 NACLAntiSpamQueue::getAmount()
 	return mQueueAmount;
 }
 
+NACLAntiSpamQueueEntry* NACLAntiSpamQueue::getEntry(const LLUUID& source)
+{
+	spam_queue_entry_map_t::iterator found = mEntries.find(source);
+	if (found != mEntries.end())
+	{
+		return found->second;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 void NACLAntiSpamQueue::clearEntries()
 {
 	for (spam_queue_entry_map_t::iterator it = mEntries.begin(); it != mEntries.end(); ++it)
@@ -386,6 +399,40 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 
 	// fallback, should not get here
 	return false;
+}
+
+bool NACLAntiSpamRegistry::isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source)
+{
+	// skip all checks if we're we've been administratively turned off
+	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+	if (!useAntiSpam)
+	{
+		return false;
+	}
+
+	if (mGlobalQueue)
+	{
+		spam_queue_entry_map_t::iterator found = mGlobalEntries.find(source);
+		if (found != mGlobalEntries.end())
+		{
+			return (found->second->getBlocked());
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+		{
+			LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << llendl;
+			return false;
+		}
+
+		NACLAntiSpamQueueEntry* entry = mQueues[queue]->getEntry(source);
+		return (entry && entry->getBlocked());
+	}
 }
 
 // Global queue

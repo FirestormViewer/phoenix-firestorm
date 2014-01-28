@@ -2646,47 +2646,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	//msg->getData("MessageBlock", "Count",		&count);
 	msg->getStringFast(_PREHASH_MessageBlock, _PREHASH_FromAgentName, name);
 	msg->getStringFast(_PREHASH_MessageBlock, _PREHASH_Message,		message);
-
-	// NaCl - Newline flood protection
-	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
-	if (useAntiSpam)
-	{
-		bool doCheck = true;
-		if (from_id.isNull() || gAgentID == from_id)
-		{
-			doCheck = false;
-		}
-		if (doCheck)
-		{
-			LLViewerObject* obj = gObjectList.findObject(from_id);
-			if (obj && obj->permYouOwner())
-			{
-				doCheck = false;
-			}
-		}
-		if (doCheck)
-		{
-			static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
-			boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
-			if ((std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines))
-			{
-				NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_IM, from_id);
-				LLSD args;
-				llinfos << "[antispam] blocked owner due to too many newlines: " << from_id << llendl;
-				args["MESSAGE"] = llformat("AntiSpam: Blocked %s for sending message with %ud lines.", from_id.asString().c_str(), (U32)_NACL_AntiSpamNewlines);
-				LLNotificationsUtil::add("SystemMessageTip", args);
-				return;
-			}
-		}
-	}
-	// NaCl End
-
 	msg->getU32Fast(_PREHASH_MessageBlock, _PREHASH_ParentEstateID, parent_estate_id);
 	msg->getUUIDFast(_PREHASH_MessageBlock, _PREHASH_RegionID, region_id);
 	msg->getVector3Fast(_PREHASH_MessageBlock, _PREHASH_Position, position);
 	msg->getBinaryDataFast(  _PREHASH_MessageBlock, _PREHASH_BinaryBucket, binary_bucket, 0, 0, MTUBYTES);
 	binary_bucket_size = msg->getSizeFast(_PREHASH_MessageBlock, _PREHASH_BinaryBucket);
 	EInstantMessage dialog = (EInstantMessage)d;
+
 	// NaCl - Antispam Registry
 	if (dialog != IM_TYPING_START && dialog != IM_TYPING_STOP)
 	{
@@ -2728,6 +2694,52 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
 	BOOL is_afk = gAgent.getAFK();
 	// </FS:PP>
+
+	// NaCl - Newline flood protection
+	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
+	if (useAntiSpam)
+	{
+		bool doCheck = true;
+		if (from_id.isNull() || gAgentID == from_id)
+		{
+			doCheck = false;
+		}
+		if (doCheck)
+		{
+			LLViewerObject* obj = gObjectList.findObject(from_id);
+			if (obj && obj->permYouOwner())
+			{
+				doCheck = false;
+			}
+		}
+		if (doCheck)
+		{
+			if (!NACLAntiSpamRegistry::instance().isBlockedOnQueue(ANTISPAM_QUEUE_IM, from_id))
+			{
+				static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
+				boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
+				if ((std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines))
+				{
+					NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_IM, from_id);
+					if (!is_muted)
+					{
+						LLSD args;
+						LL_INFOS("AntiSpam") << "[antispam] blocked owner due to too many newlines: " << from_id << LL_ENDL;
+						args["SOURCE"] = from_id.asString();
+						args["COUNT"] = llformat("%u", _NACL_AntiSpamNewlines());
+						LLNotificationsUtil::add("AntiSpamImNewLineFloodBlocked", args);
+					}
+					return;
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+	// NaCl End
+
 
 	chat.mMuted = is_muted;
 	chat.mFromID = from_id;
@@ -4346,14 +4358,25 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			}
 			if (doCheck)
 			{
-				static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
-				boost::sregex_iterator iter(mesg.begin(), mesg.end(), NEWLINES);
-				if (std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
+				if (!NACLAntiSpamRegistry::instance().isBlockedOnQueue(ANTISPAM_QUEUE_CHAT, owner_id))
 				{
-					NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_CHAT, owner_id);
-					LLSD args;
-					args["MESSAGE"] = "Chat: Blocked newline flood from "+owner_id.asString();
-					LLNotificationsUtil::add("SystemMessageTip", args);
+					static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
+					boost::sregex_iterator iter(mesg.begin(), mesg.end(), NEWLINES);
+					if (std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
+					{
+						NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_CHAT, owner_id);
+						if (!is_muted)
+						{
+							LLSD args;
+							args["SOURCE"] = owner_id.asString();
+							args["COUNT"] = llformat("%u", _NACL_AntiSpamNewlines());
+							LLNotificationsUtil::add("AntiSpamChatNewLineFloodBlocked", args);
+						}
+						return;
+					}
+				}
+				else
+				{
 					return;
 				}
 			}

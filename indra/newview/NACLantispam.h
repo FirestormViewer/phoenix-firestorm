@@ -62,6 +62,7 @@ protected:
 
 	void blockEntry(const LLUUID& source);
 	S32 checkEntry(const LLUUID& source, U32 multiplier);
+	NACLAntiSpamQueueEntry* getEntry(const LLUUID& source);
 
 	void clearEntries();
 	void purgeEntries();
@@ -87,6 +88,7 @@ public:
 
 	void blockOnQueue(EAntispamQueue queue, const LLUUID& source);
 	bool checkQueue(EAntispamQueue queue, const LLUUID& source, U32 multiplier = 1, bool silent = false);
+	bool isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source);
 
 	void clearRegisteredQueue(EAntispamQueue queue);
 	void purgeRegisteredQueue(EAntispamQueue queue);

@@ -11558,6 +11558,22 @@ AntiSpam: Blocked [SOURCE] for spamming a [QUEUE] ([COUNT]) times in [PERIOD] se
     </notification>
 
     <notification
+      icon="notifytip.tga"
+      name="AntiSpamImNewLineFloodBlocked"
+      log_to_chat="false"
+      type="notifytip">
+AntiSpam: Blocked [SOURCE] for sending an instant message with more than [COUNT] lines.
+    </notification>
+
+    <notification
+      icon="notifytip.tga"
+      name="AntiSpamChatNewLineFloodBlocked"
+      log_to_chat="false"
+      type="notifytip">
+AntiSpam: Blocked [SOURCE] for sending a chat message with more than [COUNT] lines.
+    </notification>
+
+    <notification
      icon="alertmodal.tga"
      name="MeshMaxConcurrentReqTooHigh"
      type="alertmodal">
