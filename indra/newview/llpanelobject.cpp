@@ -301,8 +301,6 @@ BOOL	LLPanelObject::postBuild()
 		mCtrlSculptTexture->setOnCancelCallback( boost::bind(&LLPanelObject::onCancelSculpt, this, _2 ));
 		mCtrlSculptTexture->setOnSelectCallback( boost::bind(&LLPanelObject::onSelectSculpt, this, _2 ));
 		mCtrlSculptTexture->setDropCallback( boost::bind(&LLPanelObject::onDropSculpt, this, _2 ));
-		// <FS:Ansariel> FIRE-10125: Textures can be dragged into sculpt texture picker for meshes
-		mCtrlSculptTexture->setDragCallback( boost::bind(&LLPanelObject::onDragSculpt, this));
 		// Don't allow (no copy) or (no transfer) textures to be selected during immediate mode
 		mCtrlSculptTexture->setImmediateFilterPermMask(PERM_COPY | PERM_TRANSFER);
 		mCtrlSculptTexture->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
@@ -625,10 +623,6 @@ void LLPanelObject::getState( )
 	// BUG? Check for all objects being editable?
 	S32 roots_selected = LLSelectMgr::getInstance()->getSelection()->getRootObjectCount();
 	BOOL editable = root_objectp->permModify();
-	// <FS:Ansariel> FIRE-10125: Textures can be dragged into sculpt texture picker for meshes
-	mIsEditable = editable;
-	mIsMesh = false;
-	// </FS:Ansariel>
 
 	// Select Single Message
 	// <FS:Ansariel> We don't have those in FS (2013-04-28)
@@ -1364,8 +1358,6 @@ void LLPanelObject::getState( )
 			BOOL sculpt_invert = sculpt_type & LL_SCULPT_FLAG_INVERT;
 			BOOL sculpt_mirror = sculpt_type & LL_SCULPT_FLAG_MIRROR;
 			isMesh = (sculpt_stitching == LL_SCULPT_TYPE_MESH);
-			// <FS:Ansariel> FIRE-10125: Textures can be dragged into sculpt texture picker for meshes
-			mIsMesh = isMesh;
 
 			LLTextureCtrl*  mTextureCtrl = getChild<LLTextureCtrl>("sculpt texture control");
 			if(mTextureCtrl)
@@ -2408,12 +2400,6 @@ BOOL LLPanelObject::onDropSculpt(LLInventoryItem* item)
 	return TRUE;
 }
 
-// <FS:Ansariel> FIRE-10125: Textures can be dragged into sculpt texture picker for meshes
-BOOL LLPanelObject::onDragSculpt()
-{
-	return (mIsEditable && !mIsMesh);
-}
-// </FS:Ansariel>
 
 void LLPanelObject::onCancelSculpt(const LLSD& data)
 {

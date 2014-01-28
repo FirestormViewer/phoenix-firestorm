@@ -88,8 +88,6 @@ public:
 	void     		onSelectSculpt(const LLSD& data);
 	BOOL     		onDropSculpt(LLInventoryItem* item);
 	static void     onCommitSculptType(    LLUICtrl *ctrl, void* userdata);
-	// <FS:Ansariel> FIRE-10125: Textures can be dragged into sculpt texture picker for meshes
-	BOOL			onDragSculpt();
 
 protected:
 	void			getState();
@@ -227,11 +225,6 @@ protected:
 
 	LLPointer<LLViewerObject> mObject;
 	LLPointer<LLViewerObject> mRootObject;
-
-	// <FS:Ansariel> FIRE-10125: Textures can be dragged into sculpt texture picker for meshes
-	bool			mIsMesh;
-	bool			mIsEditable;
-	// </FS:Ansariel>
 };
 
 #endif
