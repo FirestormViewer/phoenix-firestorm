@@ -101,6 +101,9 @@ void LLPreview::setObjectID(const LLUUID& object_id)
 	{
 		loadAsset();
 	}
+
+	// <FS:Ansariel> FIRE-10899: Multi previews from object inventory misses tab titles
+	refreshFromItem();
 }
 
 void LLPreview::setItem( LLInventoryItem* item )
@@ -110,6 +113,9 @@ void LLPreview::setItem( LLInventoryItem* item )
 	{
 		loadAsset();
 	}
+
+	// <FS:Ansariel> FIRE-10899: Multi previews from object inventory misses tab titles
+	refreshFromItem();
 }
 
 const LLInventoryItem *LLPreview::getItem() const
