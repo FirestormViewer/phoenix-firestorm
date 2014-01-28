@@ -1714,8 +1714,12 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 
 		// Placeholder for name.
 		LLAvatarName av_name;
-		LLAvatarNameCache::get(owner_id, &av_name);
-		item_params.columns.add().value(av_name.getCompleteName()).font(FONT).column("name");
+		// <FS:Ansariel> The name list will do that for us - this implementation doesn't work anyway!
+		//LLAvatarNameCache::get(owner_id, &av_name);
+		//item_params.columns.add().value(av_name.getCompleteName()).font(FONT).column("name");
+		item_params.columns.add().font(FONT).column("name");
+		item_params.name = LLTrans::getString("AvatarNameWaiting");
+		// </FS:Ansariel>
 
 		object_count_str = llformat("%d", object_count);
 		item_params.columns.add().value(object_count_str).font(FONT).column("count");
