@@ -7,6 +7,7 @@
 		<check_box label="Bounding Boxes für Lichtquellen" name="lights_bounding_boxes"/>
 		<check_box label="Strahlen" name="beacons"/>
 		<check_box label="Hervorhebung" name="highlights"/>
+		<check_box label="Strahlen-Infotext im Viewerfenster" name="FSRenderBeaconText"/>
 		<text name="beacon_width_label" tool_tip="Strahlbreite">
 			Breite:
 		</text>

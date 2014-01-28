@@ -767,7 +767,12 @@ public:
 		// </FS:LO>
 
 		// only display these messages if we are actually rendering beacons at this moment
-		if (LLPipeline::getRenderBeacons(NULL) /*&& LLFloaterReg::instanceVisible("beacons")*/) // <FS:LO> Always show the beacon text regardless if the floater is visible
+		// <FS:LO> Always show the beacon text regardless if the floater is visible
+		// <FS:Ansa> ...and if we want to see it
+		//if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
+		static LLCachedControl<bool> fsRenderBeaconText(gSavedSettings, "FSRenderBeaconText");
+		if (LLPipeline::getRenderBeacons(NULL) && fsRenderBeaconText)
+		// </FS:Ansa>
 		{
 			if (LLPipeline::getRenderMOAPBeacons(NULL))
 			{

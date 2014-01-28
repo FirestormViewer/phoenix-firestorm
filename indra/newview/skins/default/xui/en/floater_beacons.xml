@@ -40,7 +40,7 @@
            parameter="lights"/>
         </check_box>
         <check_box
-         top_pad="10"
+         top_pad="2"
          control_name="renderbeacons"
          height="16"
          width="100"
@@ -60,6 +60,15 @@
           <check_box.commit_callback
            function="Beacons.UICheck" />
         </check_box>
+        <check_box
+         top_pad="2"
+         control_name="FSRenderBeaconText"
+         height="16"
+         width="100"
+         label="Beacon info text in viewer window"
+         layout="topleft"
+         left="0"
+         name="FSRenderBeaconText"/>
         <text
          type="string"
          length="1"
@@ -69,7 +78,7 @@
          left="20"
          tool_tip="Beacon width"
          name="beacon_width_label"
-         top_pad="3"
+         top_pad="4"
          width="128">
             Width:
         </text>
@@ -110,6 +119,7 @@
          control_name="scriptsbeacon"
          height="16"
          left="0"
+         top_pad="2"
          label="Scripted"
          layout="topleft"
          name="scripted">
@@ -119,7 +129,7 @@
          <check_box
          control_name="scripttouchbeacon"
          height="16"
-         top_pad="4"
+         top_pad="2"
          left="20"
          label="Touch only"
          layout="topleft"
@@ -131,6 +141,7 @@
          control_name="soundsbeacon"
          height="16"
          left="0"
+         top_pad="2"
          label="Sound sources"
          layout="topleft"
          name="sounds" >
@@ -140,6 +151,7 @@
         <check_box
          control_name="particlesbeacon"
          height="16"
+         top_pad="2"
          label="Particle sources"
          layout="topleft"
          name="particles" >
@@ -150,6 +162,7 @@
          control_name="moapbeacon"
          height="16"
          left="0"
+         top_pad="2"
          label="Media sources"
          layout="topleft"
          name="moapbeacon" >
