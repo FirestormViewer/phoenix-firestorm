@@ -314,7 +314,7 @@ BOOL LLScriptEdCore::postBuild()
 		if (mPostEditor)
 		{
 			mPostEditor->setFollowsAll();
-			mPostEditor->setEnabled(TRUE);
+			mPostEditor->setEnabled(FALSE);
 		}
 	}
 	// NaCl End
