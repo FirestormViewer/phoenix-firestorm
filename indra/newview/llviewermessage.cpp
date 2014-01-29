@@ -2089,14 +2089,6 @@ void LLOfferInfo::initRespondFunctionMap()
 
 void inventory_offer_handler(LLOfferInfo* info)
 {
-	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_INVENTORY, info->mFromID))
-	{
-		delete info;
-		return;
-	}
-	// NaCl End
-	
 	// If muted, don't even go through the messaging stuff.  Just curtail the offer here.
 	// Passing in a null UUID handles the case of where you have muted one of your own objects by_name.
 	// The solution for STORM-1297 seems to handle the cases where the object is owned by someone else.
@@ -2695,6 +2687,17 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	BOOL is_afk = gAgent.getAFK();
 	// </FS:PP>
 
+	chat.mMuted = is_muted;
+	chat.mFromID = from_id;
+	chat.mFromName = name;
+	chat.mSourceType = (from_id.isNull() || (name == std::string(SYSTEM_FROM))) ? CHAT_SOURCE_SYSTEM : CHAT_SOURCE_AGENT;
+
+	LLViewerObject *source = gObjectList.findObject(session_id); //Session ID is probably the wrong thing.
+	if (source)
+	{
+		is_owned_by_me = source->permYouOwner();
+	}
+
 	// NaCl - Newline flood protection
 	static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
 	if (useAntiSpam)
@@ -2704,13 +2707,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		{
 			doCheck = false;
 		}
-		if (doCheck)
+		if (doCheck && is_owned_by_me)
 		{
-			LLViewerObject* obj = gObjectList.findObject(from_id);
-			if (obj && obj->permYouOwner())
-			{
-				doCheck = false;
-			}
+			doCheck = false;
 		}
 		if (doCheck)
 		{
@@ -2739,18 +2738,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		}
 	}
 	// NaCl End
-
-
-	chat.mMuted = is_muted;
-	chat.mFromID = from_id;
-	chat.mFromName = name;
-	chat.mSourceType = (from_id.isNull() || (name == std::string(SYSTEM_FROM))) ? CHAT_SOURCE_SYSTEM : CHAT_SOURCE_AGENT;
-
-	LLViewerObject *source = gObjectList.findObject(session_id); //Session ID is probably the wrong thing.
-	if (source)
-	{
-		is_owned_by_me = source->permYouOwner();
-	}
 
 	std::string separator_string(": ");
 
@@ -4211,23 +4198,14 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 	msg->getU8("ChatData", "ChatType", type_temp);
 	chat.mChatType = (EChatType)type_temp;
-	
+
 	// NaCL - Antispam Registry
 	if (chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
 	{
-		if (owner_id.isNull())
+		// owner_id = from_id for agents
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id))
 		{
-			if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, from_id))
-			{
-				return;
-			}
-		}
-		else
-		{
-			if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id))
-			{
-				return;
-			}
+			return;
 		}
 	}
 	// NaCl End
@@ -4339,22 +4317,18 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		color.setVec(1.f,1.f,1.f,1.f);
 		msg->getStringFast(_PREHASH_ChatData, _PREHASH_Message, mesg);
 
-		// NaCl - Newline flood protection		
+		// NaCl - Newline flood protection
 		static LLCachedControl<bool> useAntiSpam(gSavedSettings, "UseAntiSpam");
 		if (useAntiSpam)
 		{
 			bool doCheck = true;
-			if (from_id.isNull() || gAgentID == from_id)
+			if (owner_id.isNull() || gAgentID == owner_id)
 			{
 				doCheck = false;
 			}
-			if (doCheck)
+			if (doCheck && chatter && chatter->permYouOwner())
 			{
-				LLViewerObject* obj = gObjectList.findObject(from_id);
-				if (obj && obj->permYouOwner())
-				{
-					doCheck = false;
-				}
+				doCheck = false;
 			}
 			if (doCheck)
 			{
@@ -5838,7 +5812,8 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	}
 	else
 	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti))
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti) ||
+			NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, owner_id, _NACL_AntiSpamSoundMulti))
 		{
 			return;
 		}
@@ -5909,8 +5884,6 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 		return;
 	}
 
-
-
 	LLUUID sound_id;
 	LLUUID object_id;
 	LLUUID owner_id;
@@ -5928,19 +5901,10 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings, "_NACL_AntiSpamSoundPreloadMulti");
-	if (owner_id.isNull())
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, object_id, _NACL_AntiSpamSoundPreloadMulti) ||
+		NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, owner_id, _NACL_AntiSpamSoundPreloadMulti))
 	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, object_id, _NACL_AntiSpamSoundPreloadMulti))
-		{
-			return;
-		}
-	}
-	else
-	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, owner_id, _NACL_AntiSpamSoundPreloadMulti))
-		{
-			return;
-		}
+		return;
 	}
 	// NaCl End
 
@@ -5994,7 +5958,8 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti))
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti) ||
+		NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, owner_id, _NACL_AntiSpamSoundMulti))
 	{
 		return;
 	}
@@ -6013,7 +5978,6 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 	if (LLMuteList::getInstance()->isMuted(object_id)) return;
 	
 	if (LLMuteList::getInstance()->isMuted(owner_id, LLMute::flagObjectSounds)) return;
-
 	
 	// Don't play sounds from a region with maturity above current agent maturity
 	LLVector3d pos = objectp->getPositionGlobal();
@@ -7776,13 +7740,6 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 
 void notify_cautioned_script_question(const LLSD& notification, const LLSD& response, S32 orig_questions, BOOL granted)
 {
-	// NaCl - Antispam Registry
-	LLUUID task_id = notification["payload"]["task_id"].asUUID();
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, task_id))
-	{
-		return;
-	}
-	// NaCl End
 	// only continue if at least some permissions were requested
 	if (orig_questions)
 	{
@@ -8023,19 +7980,9 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_ItemID, itemid );
 
 	// NaCl - Antispam Registry
-	if (taskid.isNull())
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid))
 	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, itemid))
-		{
-			return;
-		}
-	}
-	else
-	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid))
-		{
-			return;
-		}
+		return;
 	}
 	// NaCl End
 
@@ -8870,6 +8817,7 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 
 	LLUUID object_id;
 	msg->getUUID("Data", "ObjectID", object_id);
+
 	// NaCl - Antispam Registry
 	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id))
 	{
@@ -8882,12 +8830,6 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 	if (gMessageSystem->getNumberOfBlocks("OwnerData") > 0)
 	{
     msg->getUUID("OwnerData", "OwnerID", owner_id);
-	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, owner_id))
-	{
-		return;
-	}
-	// NaCl End
 	}
 
 	if (LLMuteList::getInstance()->isMuted(object_id) || LLMuteList::getInstance()->isMuted(owner_id))
@@ -9023,25 +8965,16 @@ void process_load_url(LLMessageSystem* msg, void**)
 	msg->getString("Data", "ObjectName", 256, object_name);
 	msg->getUUID(  "Data", "ObjectID", object_id);
 	msg->getUUID(  "Data", "OwnerID", owner_id);
-	// NaCl - Antispam Registry
-	if (owner_id.isNull())
-	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id))
-		{
-			return;
-		}
-	}
-	else
-	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, owner_id))
-		{
-			return;
-		}
-	}
-	// NaCl End
 	msg->getBOOL(  "Data", "OwnerIsGroup", owner_is_group);
 	msg->getString("Data", "Message", 256, message);
 	msg->getString("Data", "URL", 256, url);
+
+	// NaCl - Antispam Registry
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id))
+	{
+		return;
+	}
+	// NaCl End
 
 	LLSD payload;
 	payload["object_id"] = object_id;
