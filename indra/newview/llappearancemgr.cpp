@@ -2944,18 +2944,18 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id)
 	for (S32 i=0; i<item_array.count(); i++)
 	{
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 		const LLViewerInventoryItem* item = item_array.get(i).get();
 		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
 		{
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 			// NOTE-RLVa: debug-only, can be removed down the line
 			if (rlv_handler_t::isEnabled())
 			{
 				RLV_ASSERT(rlvPredCanRemoveItem(item));
 			}
+#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 			gInventory.purgeObject(item->getUUID());
 		}
-#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
 // [/RLVa:KB]
 //		const LLInventoryItem* item = item_array.get(i).get();
 //		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
