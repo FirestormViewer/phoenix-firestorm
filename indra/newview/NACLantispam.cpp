@@ -3,11 +3,15 @@
 #include "NACLantispam.h"
 
 #include "llagent.h"
+#include "llmutelist.h"
 #include "llnotificationsutil.h"
 #include "llviewercontrol.h"
 #include "llviewerobjectlist.h"
 #include "sound_ids.h"
 #include <time.h>
+#include <boost/regex.hpp>
+
+const static boost::regex NEWLINES("\\n{1}");
 
 // NACLAntiSpamQueueEntry
 
@@ -336,7 +340,7 @@ void NACLAntiSpamRegistry::blockGlobalEntry(const LLUUID& source)
 	mGlobalEntries[source]->setBlocked();
 }
 
-bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source, U32 multiplier, bool silent)
+bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source, U32 multiplier)
 // returns TRUE if blocked, FALSE otherwise
 {
 	// skip all checks if we're we've been administratively turned off
@@ -384,7 +388,7 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 	
 	if (result == 1) // newly blocked, result == 1
 	{
-		if (!silent)
+		if (!LLMuteList::getInstance()->isMuted(source))
 		{
 			LLSD args;
 			args["SOURCE"] = source.asString();
@@ -398,6 +402,37 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 	}
 
 	// fallback, should not get here
+	return false;
+}
+
+bool NACLAntiSpamRegistry::checkNewlineFlood(EAntispamQueue queue, const LLUUID& source, const std::string& message)
+{
+	if (!isBlockedOnQueue(ANTISPAM_QUEUE_IM, source))
+	{
+		static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
+		boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
+		if ((std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines))
+		{
+			blockOnQueue(ANTISPAM_QUEUE_IM, source);
+			if (!LLMuteList::getInstance()->isMuted(source))
+			{
+				LL_INFOS("AntiSpam") << "[antispam] blocked owner due to too many newlines: " << source << LL_ENDL;
+				LLSD args;
+				args["SOURCE"] = source.asString();
+				args["COUNT"] = llformat("%u", _NACL_AntiSpamNewlines());
+				if (queue == ANTISPAM_QUEUE_IM)
+				{
+					LLNotificationsUtil::add("AntiSpamImNewLineFloodBlocked", args);
+				}
+				else
+				{
+					LLNotificationsUtil::add("AntiSpamChatNewLineFloodBlocked", args);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 	return false;
 }
 

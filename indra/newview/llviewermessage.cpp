@@ -120,7 +120,6 @@
 
 // Firestorm inclues
 #include <boost/algorithm/string/split.hpp>
-#include <boost/regex.hpp>
 #include "animationexplorer.h"		// <FS:Zi> Animation Explorer
 #include "fsareasearch.h"
 #include "fscommon.h"
@@ -141,10 +140,6 @@
 #include "sound_ids.h"
 #include "tea.h" // <FS:AW opensim currency support>
 #include "NACLantispam.h"
-
-// NaCl - Newline flood protection
-const static boost::regex NEWLINES("\\n{1}");
-// NaCl End
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -2711,30 +2706,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		{
 			doCheck = false;
 		}
-		if (doCheck)
+		if (doCheck && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_IM, from_id, message))
 		{
-			if (!NACLAntiSpamRegistry::instance().isBlockedOnQueue(ANTISPAM_QUEUE_IM, from_id))
-			{
-				static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
-				boost::sregex_iterator iter(message.begin(), message.end(), NEWLINES);
-				if ((std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines))
-				{
-					NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_IM, from_id);
-					if (!is_muted)
-					{
-						LLSD args;
-						LL_INFOS("AntiSpam") << "[antispam] blocked owner due to too many newlines: " << from_id << LL_ENDL;
-						args["SOURCE"] = from_id.asString();
-						args["COUNT"] = llformat("%u", _NACL_AntiSpamNewlines());
-						LLNotificationsUtil::add("AntiSpamImNewLineFloodBlocked", args);
-					}
-					return;
-				}
-			}
-			else
-			{
-				return;
-			}
+			return;
 		}
 	}
 	// NaCl End
@@ -4330,29 +4304,9 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			{
 				doCheck = false;
 			}
-			if (doCheck)
+			if (doCheck && NACLAntiSpamRegistry::instance().checkNewlineFlood(ANTISPAM_QUEUE_CHAT, owner_id, mesg))
 			{
-				if (!NACLAntiSpamRegistry::instance().isBlockedOnQueue(ANTISPAM_QUEUE_CHAT, owner_id))
-				{
-					static LLCachedControl<U32> _NACL_AntiSpamNewlines(gSavedSettings, "_NACL_AntiSpamNewlines");
-					boost::sregex_iterator iter(mesg.begin(), mesg.end(), NEWLINES);
-					if (std::abs(std::distance(iter, boost::sregex_iterator())) > _NACL_AntiSpamNewlines)
-					{
-						NACLAntiSpamRegistry::instance().blockOnQueue(ANTISPAM_QUEUE_CHAT, owner_id);
-						if (!is_muted)
-						{
-							LLSD args;
-							args["SOURCE"] = owner_id.asString();
-							args["COUNT"] = llformat("%u", _NACL_AntiSpamNewlines());
-							LLNotificationsUtil::add("AntiSpamChatNewLineFloodBlocked", args);
-						}
-						return;
-					}
-				}
-				else
-				{
-					return;
-				}
+				return;
 			}
 		}
 		// NaCl End

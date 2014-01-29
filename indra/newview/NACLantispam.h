@@ -87,7 +87,8 @@ public:
 	void setAllQueueAmounts(U32 time);
 
 	void blockOnQueue(EAntispamQueue queue, const LLUUID& source);
-	bool checkQueue(EAntispamQueue queue, const LLUUID& source, U32 multiplier = 1, bool silent = false);
+	bool checkQueue(EAntispamQueue queue, const LLUUID& source, U32 multiplier = 1);
+	bool checkNewlineFlood(EAntispamQueue queue, const LLUUID& source, const std::string& message);
 	bool isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source);
 
 	void clearRegisteredQueue(EAntispamQueue queue);
