@@ -2984,7 +2984,7 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 		floater->translate(delta_right, 0);
 	}
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
-	else if (delta_bottom_chatbar > 0 && (floater_rect.mLeft > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight // floater completely within chatbar rect
+	else if (delta_bottom_chatbar > 0 && ((floater_rect.mLeft > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight) // floater completely within chatbar rect
 		|| (floater_rect.mRight > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight && mMainChatbarRect.mLeft < gFloaterView->getRect().mLeft) // floater partially within chatbar rect, chatbar bound to left side
 		|| (delta_bottom > 0 && floater_rect.mRight > bottom_toolbar_rect.mLeft && floater_rect.mLeft < mMainChatbarRect.mRight && bottom_toolbar_rect.mLeft <= mMainChatbarRect.mRight)) // floater within chatbar and toolbar rect
 		)
