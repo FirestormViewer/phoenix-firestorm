@@ -67,6 +67,15 @@
          function="FS.EnableOfferTeleport" />
     </menu_item_call>
     <menu_item_call
+     label="Request Teleport"
+     layout="topleft"
+     name="request_teleport">
+        <menu_item_call.on_click
+         function="FS.RequestTeleport" />
+        <menu_item_call.on_enable
+         function="FS.EnableRequestTeleport" />
+    </menu_item_call>
+    <menu_item_call
      label="Track Resident"
      layout="topleft"
      name="track_agent">

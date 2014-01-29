@@ -206,6 +206,10 @@ public:
 		{
 			LLAvatarActions::offerTeleport(getAvatarId());
 		}
+		else if (level == "request_teleport")
+		{
+			LLAvatarActions::teleportRequest(getAvatarId());
+		}
 		else if (level == "voice_call")
 		{
 			LLAvatarActions::startCall(getAvatarId());
@@ -276,61 +280,9 @@ public:
 		{
 			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagVoiceChat);
 		}
-		else if (level == "is_muted")
+		if (level == "is_muted")
 		{
 			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagTextChat);
-		}
-		else if (level == "can_view_profile")
-		{
-			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_SHOW_PROFILE);
-		}
-		else if (level == "can_im")
-		{
-			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_SEND_IM);
-		}
-		else if (level == "can_offer_teleport")
-		{
-			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_OFFER_TELEPORT);
-		}
-		else if (level == "can_teleport_to")
-		{
-			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_TELEPORT_TO);
-		}
-		else if (level == "can_voice_call")
-		{
-			return (gAgentID != getAvatarId() && LLAvatarActions::canCall());
-		}
-		else if (level == "can_show_history")
-		{
-			return (gAgentID != getAvatarId());
-		}
-		else if (level == "can_zoom_in")
-		{
-			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_ZOOM_IN);
-		}
-		else if (level == "can_track")
-		{
-			return FSCommon::checkIsActionEnabled(getAvatarId(), FS_RGSTR_ACT_TRACK_AVATAR);
-		}
-		else if (level == "can_share")
-		{
-			return (gAgentID != getAvatarId());
-		}
-		else if (level == "can_pay")
-		{
-			return (gAgentID != getAvatarId());
-		}
-		else if (level == "can_block")
-		{
-			return (gAgentID != getAvatarId());
-		}
-		else if (level == "can_mute")
-		{
-			return (gAgentID != getAvatarId());
-		}
-		else if (level == "can_invite_to_group")
-		{
-			return (gAgentID != getAvatarId());
 		}
 		return false;
 	}
@@ -689,13 +641,35 @@ protected:
 				menu->setItemEnabled("Add Friend", false);
 				menu->setItemEnabled("Send IM", false);
 				menu->setItemEnabled("Remove Friend", false);
+				menu->setItemEnabled("Offer Teleport",false);
+				menu->setItemEnabled("Request Teleport",false);
+				menu->setItemEnabled("Teleport to",false);
+				menu->setItemEnabled("Voice Call", false);
+				menu->setItemEnabled("Add Contact Set", false);
+				menu->setItemEnabled("Invite Group", false);
+				menu->setItemEnabled("Zoom In", false);
+				menu->setItemEnabled("track", false);
+				menu->setItemEnabled("Share", false);
+				menu->setItemEnabled("Pay", false);
+				menu->setItemEnabled("Block Unblock", false);
+				menu->setItemEnabled("Mute Text", false);
 			}
-
-			if (mSessionID == LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, mAvatarID))
+			else
 			{
-				menu->setItemVisible("Send IM", false);
+				menu->setItemEnabled("Send IM", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_SEND_IM));
+				menu->setItemEnabled("Show Profile", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_SHOW_PROFILE));
+				menu->setItemEnabled("Teleport to", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_TELEPORT_TO));
+				menu->setItemEnabled("Offer Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
+				menu->setItemEnabled("Request Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
+				menu->setItemEnabled("Voice Call", LLAvatarActions::canCall());
+				menu->setItemEnabled("Zoom In", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_ZOOM_IN));
+				menu->setItemEnabled("track", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_TRACK_AVATAR));
+				menu->setItemEnabled("Block Unblock", LLAvatarActions::canBlock(mAvatarID));
+				menu->setItemEnabled("Mute Text", LLAvatarActions::canBlock(mAvatarID));
 			}
 
+			menu->setItemEnabled("Chat History", LLLogChat::isTranscriptExist(mAvatarID));
+			menu->setItemEnabled("Map", (LLAvatarTracker::instance().isBuddyOnline(mAvatarID) && is_agent_mappable(mAvatarID)) || gAgent.isGodlike() );
 			menu->buildDrawLabels();
 			menu->updateParent(LLMenuGL::sMenuContainer);
 			LLMenuGL::showPopup(this, menu, x, y);

@@ -15,7 +15,6 @@
         <menu_item_call.on_click
          function="AvatarIcon.Action"
          parameter="profile" />
-       <on_enable function="AvatarIcon.Check" parameter="can_view_profile" />
     </menu_item_call>
     <menu_item_call
      label="IM"
@@ -24,41 +23,36 @@
         <menu_item_call.on_click
          function="AvatarIcon.Action"
          parameter="im" />
-       <on_enable function="AvatarIcon.Check" parameter="can_im" />
     </menu_item_call>
     <menu_item_call
      label="Teleport to resident"
      layout="topleft"
      name="Teleport to">
        <on_click function="AvatarIcon.Action" parameter="teleport_to"/>
-       <on_enable function="AvatarIcon.Check" parameter="can_teleport_to" />
     </menu_item_call>
     <menu_item_call
      label="Offer teleport"
      layout="topleft"
      name="Offer Teleport">
         <on_click function="AvatarIcon.Action" parameter="teleport"/>
-        <on_enable function="AvatarIcon.Check" parameter="can_offer_teleport" />
     </menu_item_call>
     <menu_item_call
      label="Request Teleport"
      layout="topleft"
      name="Request Teleport">
-        <on_click function="AvatarIcon.Action" parameter="request_teleport"/>      
+        <on_click function="AvatarIcon.Action" parameter="request_teleport"/>
     </menu_item_call>
     <menu_item_call
      label="Voice call"
      layout="topleft"
      name="Voice Call">
         <on_click function="AvatarIcon.Action" parameter="voice_call"/>
-        <on_enable function="AvatarIcon.Check" parameter="can_voice_call" />
     </menu_item_call>
     <menu_item_call
      label="Chat history..."
      layout="topleft"
      name="Chat History">
         <on_click function="AvatarIcon.Action" parameter="chat_history"/>   
-        <on_enable function="AvatarIcon.Check" parameter="can_show_history" />
     </menu_item_call>
     <menu_item_separator layout="topleft" name="separator_chat_history"/>
     <menu_item_call
@@ -90,7 +84,6 @@
      layout="topleft"
      name="Invite Group">
       <on_click function="AvatarIcon.Action" parameter="invite_to_group" />   
-      <on_enable function="AvatarIcon.Check" parameter="can_invite_to_group" />
     </menu_item_call>
     <menu_item_separator layout="topleft" name="separator_invite_to_group"/>
     <menu_item_call
@@ -98,7 +91,6 @@
      layout="topleft"
      name="Zoom In">
       <on_click function="AvatarIcon.Action" parameter="zoom_in" />
-      <on_enable function="AvatarIcon.Check" parameter="can_zoom_in" />
     </menu_item_call>
     <menu_item_call
      label="Map"
@@ -111,21 +103,18 @@
      layout="topleft"
      name="track">
       <on_click function="AvatarIcon.Action" parameter="track" />
-      <on_enable function="AvatarIcon.Check" parameter="can_track" />
     </menu_item_call>
     <menu_item_call
      label="Share"
      layout="topleft"
      name="Share">
        <on_click function="AvatarIcon.Action" parameter="share" />
-       <on_enable function="AvatarIcon.Check" parameter="can_share" />
     </menu_item_call>
     <menu_item_call
      label="Pay"
      layout="topleft"
      name="Pay">
        <on_click function="AvatarIcon.Action" parameter="pay" />
-       <on_enable function="AvatarIcon.Check" parameter="can_pay" />
     </menu_item_call>
     <menu_item_call
      label="Copy Name to clipboard"
@@ -146,7 +135,6 @@
      name="Block Unblock">
        <on_click function="AvatarIcon.Action" parameter="block_unblock" />
        <on_check function="AvatarIcon.Check" parameter="is_blocked" />
-       <on_enable function="AvatarIcon.Check" parameter="can_block" />
     </menu_item_check>
     <menu_item_check
      label="Block Text"
@@ -154,6 +142,5 @@
      name="Mute Text">
        <on_click function="AvatarIcon.Action" parameter="mute_unmute" />
        <on_check function="AvatarIcon.Check" parameter="is_muted" />   
-       <on_enable function="AvatarIcon.Check" parameter="can_mute" />
   </menu_item_check>
 </menu>
