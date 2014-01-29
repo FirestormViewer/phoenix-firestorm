@@ -401,7 +401,8 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 
 			if (sourcetype == ANTISPAM_SOURCE_OBJECT)
 			{
-				mObjectData[source] = data;
+				bool sent = false;
+
 				for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
 					iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
 				{
@@ -416,7 +417,13 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 						gMessageSystem->addU32Fast(_PREHASH_RequestFlags, 0);
 						gMessageSystem->addUUIDFast(_PREHASH_ObjectID, source);
 						gMessageSystem->sendReliable(region->getHost());
+						sent = true;
 					}
+				}
+
+				if (sent)
+				{
+					mObjectData[source] = data;
 				}
 			}
 			else if (sourcetype == ANTISPAM_SOURCE_AGENT)
