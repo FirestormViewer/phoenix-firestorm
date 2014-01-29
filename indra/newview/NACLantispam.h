@@ -4,6 +4,7 @@
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include "llsingleton.h"
+#include "llavatarnamecache.h"
 
 typedef enum e_antispam_queue
 {
@@ -17,6 +18,21 @@ typedef enum e_antispam_queue
 	ANTISPAM_QUEUE_TELEPORT,
 	ANTISPAM_QUEUE_MAX
 } EAntispamQueue;
+
+typedef enum e_antispam_source_type
+{
+	ANTISPAM_SOURCE_AGENT,
+	ANTISPAM_SOURCE_OBJECT
+} EAntispamSource;
+
+struct AntispamObjectData
+{
+	std::string		mName;
+	EAntispamQueue	mQueue;
+	U32				mCount;
+	U32				mPeriod;
+	std::string		mNotificationId;
+};
 
 class NACLAntiSpamQueueEntry
 {
@@ -87,7 +103,7 @@ public:
 	void setAllQueueAmounts(U32 time);
 
 	void blockOnQueue(EAntispamQueue queue, const LLUUID& source);
-	bool checkQueue(EAntispamQueue queue, const LLUUID& source, U32 multiplier = 1);
+	bool checkQueue(EAntispamQueue queue, const LLUUID& source, EAntispamSource sourcetype, U32 multiplier = 1);
 	bool checkNewlineFlood(EAntispamQueue queue, const LLUUID& source, const std::string& message);
 	bool isBlockedOnQueue(EAntispamQueue queue, const LLUUID& source);
 
@@ -97,6 +113,8 @@ public:
 	void purgeAllQueues();
 
 	bool isCollisionSound(const LLUUID& sound_id);
+
+	void processObjectPropertiesFamily(LLMessageSystem* msg);
 
 private:
 	NACLAntiSpamRegistry();
@@ -110,11 +128,18 @@ private:
 	void clearGlobalEntries();
 	void purgeGlobalEntries();
 
+	void onAvatarNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, AntispamObjectData data, const LLUUID& request_id);
+
+	void notify(AntispamObjectData data);
+
 	NACLAntiSpamQueue*		mQueues[ANTISPAM_QUEUE_MAX];
 	spam_queue_entry_map_t	mGlobalEntries;
 	U32						mGlobalTime;
 	U32						mGlobalAmount;
 	bool					mGlobalQueue;
 	collision_sound_set_t	mCollisionSounds;
+
+	std::map<LLUUID, AntispamObjectData>	mObjectData;
+	std::map<LLUUID, LLAvatarNameCache::callback_connection_t> mAvatarNameCallbackConnections;
 };
 #endif // NACL_ANTISPAM_H

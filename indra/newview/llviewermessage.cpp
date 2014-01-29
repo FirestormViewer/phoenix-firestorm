@@ -2643,7 +2643,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	// NaCl - Antispam Registry
 	if (dialog != IM_TYPING_START && dialog != IM_TYPING_STOP)
 	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_IM, from_id))
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_IM, from_id, ANTISPAM_SOURCE_AGENT))
 		{
 			return;
 		}
@@ -4038,7 +4038,7 @@ void process_offer_callingcard(LLMessageSystem* msg, void**)
 	LLUUID source_id;
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, source_id);
 	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CALLING_CARD, source_id))
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CALLING_CARD, source_id, ANTISPAM_SOURCE_AGENT))
 	{
 		return;
 	}
@@ -4177,7 +4177,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	if (chat.mChatType != CHAT_TYPE_START && chat.mChatType != CHAT_TYPE_STOP)
 	{
 		// owner_id = from_id for agents
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id))
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_CHAT, owner_id, ANTISPAM_SOURCE_AGENT))
 		{
 			return;
 		}
@@ -5694,6 +5694,19 @@ void process_object_properties(LLMessageSystem *msg, void**user_data)
 }
 // </FS:Techwolf Lupindo> area search
 
+// <FS:Ansariel> Anti spam
+void process_object_properties_family(LLMessageSystem *msg, void**user_data)
+{
+	// Send the result to the corresponding requesters.
+	LLSelectMgr::processObjectPropertiesFamily(msg, user_data);
+
+	if (NACLAntiSpamRegistry::instanceExists())
+	{
+		NACLAntiSpamRegistry::instance().processObjectPropertiesFamily(msg);
+	}
+}
+// </FS:Ansariel>
+
 void process_time_synch(LLMessageSystem *mesgsys, void **user_data)
 {
 	LLVector3 sun_direction;
@@ -5766,8 +5779,8 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	}
 	else
 	{
-		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti) ||
-			NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, owner_id, _NACL_AntiSpamSoundMulti))
+		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, ANTISPAM_SOURCE_OBJECT, _NACL_AntiSpamSoundMulti) ||
+			NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, owner_id, ANTISPAM_SOURCE_AGENT, _NACL_AntiSpamSoundMulti))
 		{
 			return;
 		}
@@ -5855,8 +5868,8 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings, "_NACL_AntiSpamSoundPreloadMulti");
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, object_id, _NACL_AntiSpamSoundPreloadMulti) ||
-		NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, owner_id, _NACL_AntiSpamSoundPreloadMulti))
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, object_id, ANTISPAM_SOURCE_OBJECT, _NACL_AntiSpamSoundPreloadMulti) ||
+		NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND_PRELOAD, owner_id, ANTISPAM_SOURCE_AGENT, _NACL_AntiSpamSoundPreloadMulti))
 	{
 		return;
 	}
@@ -5912,8 +5925,8 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti) ||
-		NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, owner_id, _NACL_AntiSpamSoundMulti))
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, ANTISPAM_SOURCE_OBJECT, _NACL_AntiSpamSoundMulti) ||
+		NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, owner_id, ANTISPAM_SOURCE_AGENT,_NACL_AntiSpamSoundMulti))
 	{
 		return;
 	}
@@ -7934,7 +7947,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_Data, _PREHASH_ItemID, itemid );
 
 	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid))
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, taskid, ANTISPAM_SOURCE_OBJECT))
 	{
 		return;
 	}
@@ -8773,7 +8786,7 @@ void process_script_dialog(LLMessageSystem* msg, void**)
 	msg->getUUID("Data", "ObjectID", object_id);
 
 	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id))
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id, ANTISPAM_SOURCE_OBJECT))
 	{
 		return;
 	}
@@ -8924,7 +8937,7 @@ void process_load_url(LLMessageSystem* msg, void**)
 	msg->getString("Data", "URL", 256, url);
 
 	// NaCl - Antispam Registry
-	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id))
+	if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SCRIPT_DIALOG, object_id, ANTISPAM_SOURCE_OBJECT))
 	{
 		return;
 	}
