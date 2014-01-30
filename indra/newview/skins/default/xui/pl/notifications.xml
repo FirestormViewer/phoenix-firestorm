@@ -2859,7 +2859,7 @@ Zaproponować teleport?
 		</form>
 	</notification>
 	<notification name="FriendshipOffered">
-		Zaoferowałeś/aś znajomość dla [TO_NAME]
+		Zaoferowałeś/aś znajomość osobie [TO_NAME]
 	</notification>
 	<notification name="OfferFriendshipNoMessage" label="Propozycja znajomości od [NAME_LABEL]">
 		[NAME_SLURL] proponuje Ci znajomość.
