@@ -2799,8 +2799,8 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 	<notification name="TeleportOffered" label="Propozycja teleportacji od [NAME_LABEL]">
 		[NAME_SLURL] proponuje Ci teleportację do siebie:
 
-+“[MESSAGE]”
-+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 		<form name="form">
 			<button name="Teleport" text="Teleportuj"/>
 			<button name="Cancel" text="Anuluj"/>
@@ -2809,7 +2809,7 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 	<notification name="TeleportOffered_MaturityExceeded">
 		[NAME_SLURL] proponuje Ci teleportację do siebie:
 
-“[MESSAGE]”
+[MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 
 Ten region zawiera treści [REGION_CONTENT_MATURITY], ale Twoje obecne preferencje są tak ustawione, aby odrzucać treści [REGION_CONTENT_MATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
@@ -2821,7 +2821,7 @@ Ten region zawiera treści [REGION_CONTENT_MATURITY], ale Twoje obecne preferenc
 	<notification name="TeleportOffered_MaturityBlocked">
 		[NAME_SLURL] zaproponował/a Ci teleportację do siebie:
 
-“[MESSAGE]”
+[MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 
 Ten region zawiera jednak treści tylko dla dorosłych.
