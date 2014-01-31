@@ -73,7 +73,7 @@
 
     <map>
       <key>name</key>
-      <string>Latency</string>
+      <string>Latency (beta)</string>
       <key>folder</key>
       <string>latency</string>
       <key>themes</key>
