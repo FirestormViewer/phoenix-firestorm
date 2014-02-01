@@ -5,6 +5,7 @@
 #include "llagent.h"
 #include "llmutelist.h"
 #include "llnotificationsutil.h"
+#include "llslurl.h"
 #include "llviewercontrol.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
@@ -673,7 +674,7 @@ void NACLAntiSpamRegistry::onAvatarNameCallback(const LLUUID& av_id, const LLAva
 		mAvatarNameCallbackConnections.erase(found);
 	}
 
-	data.mName = av_name.getCompleteName();
+	data.mName = LLSLURL("agent", av_id, "inspect").getSLURLString();
 	notify(data);
 }
 
