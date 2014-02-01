@@ -763,7 +763,7 @@ LLUrlEntryObjectIM::LLUrlEntryObjectIM()
 {
 	// <FS:AW> hop:// protocol; Ansa: Stop at first space so we can use it in notifications!
 	//mPattern = boost::regex("secondlife:///app/objectim/[\\da-f-]+\?.*",
-	mPattern = boost::regex("(hop|secondlife):///app/objectim/[\\da-f-]+\?[^ ]*",
+	mPattern = boost::regex("(hop|secondlife):///app/objectim/[\\da-f-]+\?[^ \t\r\n\v\f]*",
 	// </FS:AW>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_objectim.xml";
