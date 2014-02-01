@@ -646,8 +646,10 @@ void NACLAntiSpamRegistry::processObjectPropertiesFamily(LLMessageSystem* msg)
 	}
 
 	LLUUID id;
+	LLUUID owner_id;
 	std::string name;
 	msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, id);
+	msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_OwnerID, owner_id);
 	msg->getStringFast(_PREHASH_ObjectData, _PREHASH_Name, name);
 
 	std::map<LLUUID, AntispamObjectData>::iterator found = mObjectData.find(id);
@@ -655,7 +657,7 @@ void NACLAntiSpamRegistry::processObjectPropertiesFamily(LLMessageSystem* msg)
 	{
 		AntispamObjectData data = found->second;
 
-		data.mName = name;
+		data.mName = LLSLURL("objectim", id, "").getSLURLString() + "?name=" + LLURI::escape(name) + "&owner=" + owner_id.asString();
 		notify(data);
 
 		mObjectData.erase(found);
