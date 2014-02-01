@@ -761,7 +761,10 @@ std::string LLUrlEntryInventory::getLabel(const std::string &url, const LLUrlLab
 //
 LLUrlEntryObjectIM::LLUrlEntryObjectIM()
 {
-	mPattern = boost::regex("(hop|secondlife):///app/objectim/[\\da-f-]+\?.*", // <AW: hop:// protocol>
+	// <FS:AW> hop:// protocol; Ansa: Stop at first space so we can use it in notifications!
+	//mPattern = boost::regex("secondlife:///app/objectim/[\\da-f-]+\?.*",
+	mPattern = boost::regex("(hop|secondlife):///app/objectim/[\\da-f-]+\?[^ ]*",
+	// </FS:AW>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_objectim.xml";
 }
