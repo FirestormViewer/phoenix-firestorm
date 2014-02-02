@@ -957,6 +957,8 @@ LLMultiProperties::LLMultiProperties()
 	}
 	setTitle(LLTrans::getString("MultiPropertiesTitle"));
 	buildTabContainer();
+	// <FS:Ansariel> Center multifloater on screen
+	center();
 }
 
 ///----------------------------------------------------------------------------
