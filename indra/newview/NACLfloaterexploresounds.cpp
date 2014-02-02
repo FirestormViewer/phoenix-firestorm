@@ -197,7 +197,7 @@ BOOL NACLFloaterExploreSounds::tick()
 		playing_column["column"] = "playing";
 		if(item.mPlaying)
 		{
-			playing_column["value"] = getString("Playing");
+			playing_column["value"] = " " + getString("Playing");
 		}
 		else
 		{
