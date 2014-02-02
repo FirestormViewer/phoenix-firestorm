@@ -845,6 +845,7 @@
 					 parameter="RenderShadowResolutionScale"/>
 				</button>
 
+				<!-- RenderShadowSplitExponent Y component -->
 				<text
 				 name="T_Shd_Clarity"
 				 follows="top|left"
@@ -858,7 +859,6 @@
 				<slider_bar
 				 name="SB_Shd_Clarity"
 				 can_edit_text="true"
-				 control_name="FSRenderShadowSplitExponentY"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
@@ -872,7 +872,6 @@
 				<spinner
 				 name="S_Shd_Clarity"
 				 can_edit_text="true"
-				 control_name="FSRenderShadowSplitExponentY"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -892,11 +891,7 @@
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="FSRenderShadowSplitExponentY"/>
-				</button>
+				 tool_tip="Reset to the default value."/>
 
 				<text
 				 name="T_Blur_Size"
@@ -951,6 +946,7 @@
 					 parameter="RenderShadowBlurSize"/>
 				</button>
 
+				<!-- RenderShadowGaussian X component -->
 				<text
 				 name="T_Shd_Soften" 
 				 follows="top|left"
@@ -964,7 +960,6 @@
 				<slider_bar
 				 name="SB_Shd_Soften"
 				 can_edit_text="true"
-				 control_name="FSRenderShadowGaussianX"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
@@ -976,9 +971,8 @@
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
-				 name="S_Shd_Scale"
+				 name="S_Shd_Soften"
 				 can_edit_text="true"
-				 control_name="FSRenderShadowGaussianX"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -998,11 +992,7 @@
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="FSRenderShadowGaussianX"/>
-				</button>
+				 tool_tip="Reset to the default value."/>
 
 				<text
 				 name="T_Blur_Dist"
@@ -1433,7 +1423,8 @@
 					 function="ResetControl"
 					 parameter="RenderSSAOFactor"/>
 				</button>
-				
+
+				<!-- RenderSSAOEffect X component -->
 				<text
 				 name="T_Effect" 
 				 follows="top|left"
@@ -1447,7 +1438,6 @@
 				<slider_bar
 				 name="SB_Effect"
 				 can_edit_text="true"
-				 control_name="FSRenderSSAOEffect"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
@@ -1461,7 +1451,6 @@
 				<spinner
 				 name="S_Effect"
 				 can_edit_text="true"
-				 control_name="FSRenderSSAOEffect"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -1481,12 +1470,9 @@
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="FSRenderSSAOEffect"/>
-				</button>
-				
+				 tool_tip="Reset to the default value."/>
+
+				<!-- RenderShadowGaussian Y component -->
 				<text
 				 name="T_AO_Soften" 
 				 follows="top|left"
@@ -1500,7 +1486,6 @@
 				<slider_bar
 				 name="SB_AO_Soften"
 				 can_edit_text="true"
-				 control_name="FSRenderShadowGaussianY"
 				 follows="left|right"
 				 height="16"
 				 increment="0.001"
@@ -1512,9 +1497,8 @@
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
-				 name="S_Max_Scale"
+				 name="S_AO_Soften"
 				 can_edit_text="true"
-				 control_name="FSRenderShadowGaussianY"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
@@ -1534,11 +1518,7 @@
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="FSRenderShadowGaussianY"/>
-				</button>
+				 tool_tip="Reset to the default value."/>
 			</panel>
 		</panel>
 
