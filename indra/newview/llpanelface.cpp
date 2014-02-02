@@ -2646,6 +2646,13 @@ void LLPanelFace::alignMaterialsProperties(LLPanelFace* self)
 	F32 tex_offset_v =	self->getCurrentTextureOffsetV();
 	F32 tex_rot =		self->getCurrentTextureRot();
 
+	//<FS:TS> FIRE-12275: Material offset not working correctly
+	//  Since the server cannot store negative offsets for materials
+	//  textures, we normalize them to equivalent positive values here.
+	tex_offset_u = (tex_offset_u < 0.0) ? 1.0+tex_offset_u : tex_offset_u;
+	tex_offset_v = (tex_offset_v < 0.0) ? 1.0+tex_offset_v : tex_offset_v;
+	//</FS:TS> FIRE-12275
+
 	self->childSetValue("shinyScaleU",	tex_scale_u);
 	self->childSetValue("shinyScaleV",	tex_scale_v);
 	self->childSetValue("shinyOffsetU",	tex_offset_u);
