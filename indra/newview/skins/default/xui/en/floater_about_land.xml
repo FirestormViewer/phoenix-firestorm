@@ -673,6 +673,7 @@ Loading...
              left="10"
              max_length="65535"
              name="covenant_editor"
+             bg_visible="false"
              width="470"
              word_wrap="true">
                 There is no Covenant provided for this Estate.
