@@ -20,7 +20,7 @@
 	 halign="center"
 	 name="tabs"
 	 layout="topleft"
-	 height="555"
+	 height="547"
 	 width="285"
 	 top="0"
 	 left="0"
@@ -533,7 +533,7 @@
 				 top_pad="13"
 				 width="75"
 				 layout="topleft"
-				 tool_tip="Determine what will show up in water reflections.">
+				 tool_tip="Determines what will show up in water reflections.">
 					Type
 				</text>
 				<combo_box
@@ -742,7 +742,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="35"
+			 height="33"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -852,7 +852,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="This is a VERY important setting. It essentially determines how clear the Sun/Moon shadows are drawn overall. This setting should be set first before adjusting the setting below. With the value of 'Shd. Res' above set to 1.0, slide the value for 'Shd. Clarity' until the sharpest possible result is achieved. Please note, the clarity of shadows is directly related to the position of the camera and Sun/Moon. Every time you move either the camera or the Sun/Moon, it is best to adject this value again. In addition, in order to make adjusting this value easier, it is helpful to set 'Shd. Blur' to 0.0 first."
+				 tool_tip="This is a VERY important setting. It essentially determines how clear the Sun/Moon shadows are drawn overall. This setting should be set first before adjusting the setting below. With the value of 'Shd. Res' above set to 1.0, slide the value for 'Shd. Clarity' until the sharpest possible result is achieved. Please note, the clarity of shadows is directly related to the position of the camera and Sun/Moon. Every time you move either the camera or the Sun/Moon, it is best to adjust this value again. In addition, in order to make adjusting this value easier, it is helpful to set 'Shd. Blur' to 0.0 first."
 				 width="80">
 					Shd Clarity
 				</text>
@@ -866,7 +866,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="30"
+				 max_val="65"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -877,10 +877,10 @@
 				 left_pad="3"
 				 decimal_digits="4"
 				 follows="top|right"
-				 max_val="100"
+				 max_val="1000"
 				 min_val="0"
 				 width="53"
-				 increment="0.0001"
+				 increment="0.001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -899,7 +899,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="The higher the number, the softer the shadow edges. Set to '0' for the sharpest shadows possible. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
+				 tool_tip="The higher the number, the softer the shadow edges. Set to '0' for the sharpest shadows possible. This setting is directly related to the one below it as well. It allows you to set the overall possible amount of shadow blur. If set to 4.00, you can use Shadows Soften to adjust the shadow blur independent of the ambient occlusion. PLEASE NOTE: Ambient Occlusion must be enabled for this setting to work."
 				 width="80">
 					Shd. Blur
 				</text>
@@ -966,7 +966,7 @@
 				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
+				 min_val="0.001"
 				 max_val="3"
 				 top_delta="-2"
 				 width="127"/>
@@ -978,7 +978,7 @@
 				 left_pad="3"
 				 decimal_digits="3"
 				 follows="top|right"
-				 max_val="100000"
+				 max_val=".00001"
 				 min_val="-10000"
 				 width="53"
 				 increment=".001"
@@ -1152,59 +1152,6 @@
 					 function="ResetControl"
 					 parameter="RenderShadowBias"/>
 				</button>
-
-				<!--text
-				 name="T_Shd_Error"
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="5"
-				 tool_tip="This determines the FOV cutoff at which the viewer will switch between ortho instead of perspective projection. If you are getting shadows that are 'jaggedy' try adjusting this setting for improvement. Also adjusting the XYZ values for the debug setting RenderShadowSplitExponent can be VERY helpful."
-				 width="80">
-					Shd Error
-				</text>
-				<slider_bar
-				 name="SB_Shd_Error"
-				 can_edit_text="true"
-				 control_name="RenderShadowBiasError"
-				 follows="left|right"
-				 height="16"
-				 increment="0.001"
-				 decimal_digits="2"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="-.5"
-				 max_val="0"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Shd_Error"
-				 can_edit_text="true"
-				 control_name="RenderShadowBiasError"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="3"
-				 follows="top|right"
-				 max_val="100"
-				 min_val="-100"
-				 width="53"
-				 increment="0.001"
-				 border_visible="false"/>
-				<button
-				 follows="left|top"
-				 name="Shd_Error_Reset"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderShadowBiasError"/>
-				</button-->
 			</panel>
 
 			<panel
@@ -1214,7 +1161,7 @@
 			 top_pad="5"
 			 left="0"
 			 width="285"
-			 height="22"
+			 height="20"
 			 bg_alpha_color="Phototools_Header"
 			 border_visible="true"
 			 border_thickness="1"
@@ -1249,7 +1196,7 @@
 				 layout="topleft"
 				 left="5"
 				 name="UseSSAO"
-				 tool_tip="The effect is subtle in most scenes, acting simply to increase depth perception in shadowed areas such as indoor scenes. The most dramatic change is seen in complex, detailed objects which contain tucks and creases (dinosaur skeletons, for example). It manifests itself as a slight darkening around the edges of some objects, especially those which are surrounded closely by other objects. If you are not using this feature DISABLE IT! It will help speed up your frame rate."
+				 tool_tip="Ambient Occlusion adds shading to all objects. It is most effective when the Effect and AO Soften settings below are used. It can add a high level of realism to the image. This is especially true when images are made at resolutions of 2048 pixels or above."
 				 top_pad="10"
 				 width="230">
 				</check_box>
@@ -1431,7 +1378,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls the overall darkening effect of Ambient Occlusion. The default value of 0.8 produces an almost imperceptible effect. Values of 0.0 and below provide a more realistic result. Please note that the Ambient Occlusion produces a noise like effect and this can be softened using the 'AO Soften' controls below. In addition, the standard mesh avatar can look less than appealing with high Effect values due to the low quality geometry of the avatar."
+				 tool_tip="Controls the overall darkening effect of Ambient Occlusion. The default value of 0.8 produces an almost imperceptible effect. Values of 0.0 and below provide a more realistic result. Please note that the Ambient Occlusion produces a noise like effect and this can be softened using the 'AO Soften' controls below. In addition, the standard mesh avatar can look less than appealing with high Effect values due to the low quality geometry of the avatar. Please Note: The lowest value you can set in the slider is 0, while in the spinner you can enter negative values of up to -10000."
 				 width="80">
 					Effect
 				</text>
@@ -1444,7 +1391,7 @@
 				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="-2"
+				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
@@ -1479,7 +1426,7 @@
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Controls the softening of the Ambient Occlusion effect. One simple way to set this value for your specific needs is to first set the 'Shd. Blur' value above to around 3.0. Then the slider here to soften the AO to your liking. Please note, a value of 0.0 will effectively turn off Ambient Occlusion rendering."
+				 tool_tip="Controls the softening of the Ambient Occlusion effect. One simple way to set this value for your specific needs is to first set the 'Shd. Blur' value above to around 4.0. Then the slider here to soften the AO to your liking. Please note, a value of 0.0 will effectively turn off Ambient Occlusion rendering."
 				 width="80">
 					AO Soften
 				</text>
@@ -1492,7 +1439,7 @@
 				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
+				 min_val="0.001"
 				 max_val="3"
 				 top_delta="-2"
 				 width="127"/>
@@ -1778,7 +1725,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="1"
-				 max_val="2000"
+				 max_val="300"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1790,7 +1737,7 @@
 				 left_pad="3"
 				 decimal_digits="0"
 				 follows="top|left"
-				 max_val="5000"
+				 max_val="10000"
 				 min_val="0"
 				 width="53"
 				 increment="1"
@@ -1881,7 +1828,7 @@
 				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="-150"
+				 min_val="0"
 				 max_val="150"
 				 top_delta="-2"
 				 width="127"/>
@@ -1894,8 +1841,8 @@
 				 left_pad="3"
 				 decimal_digits="2"
 				 follows="top|left"
-				 max_val="150"
-				 min_val="-150"
+				 max_val="300"
+				 min_val="300"
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
@@ -1933,8 +1880,8 @@
 				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="-100"
-				 max_val="100"
+				 min_val="0"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2359,7 +2306,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="5"
+				 max_val="50"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2371,7 +2318,7 @@
 				 left_pad="3"
 				 decimal_digits="3"
 				 follows="top|left"
-				 max_val="5"
+				 max_val="5000"
 				 min_val="0"
 				 width="53"
 				 increment="0.001"
@@ -2411,7 +2358,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="10"
+				 max_val="100"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -3227,7 +3174,7 @@
 			 top_pad="3"
 			 left="4"
 			 width="275"
-			 height="100"
+			 height="98"
 			 border_visible="true"
 			 border_thickness="1"
 			 background_visible="true">
@@ -3847,13 +3794,13 @@
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale1"
 				 follows="left|right"
-				 decimal_digits="4"
+				 decimal_digits="3"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.1"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="5"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -3868,7 +3815,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"
+				 increment=".001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -3900,13 +3847,13 @@
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale2"
 				 follows="left|right"
-				 decimal_digits="4"
+				 decimal_digits="3"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.1"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="5"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -3921,7 +3868,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment=".0001"
+				 increment=".001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -3953,13 +3900,13 @@
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale0"
 				 follows="left|right"
-				 decimal_digits="4"
+				 decimal_digits="3"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.1"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="5"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -4006,9 +3953,9 @@
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale4"
 				 follows="left|right"
-				 decimal_digits="4"
+				 decimal_digits="5"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.00001"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
@@ -4059,9 +4006,9 @@
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale5"
 				 follows="left|right"
-				 decimal_digits="4"
+				 decimal_digits="5"
 				 height="16"
-				 increment="0.0001"
+				 increment="0.00001"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
