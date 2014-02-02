@@ -260,7 +260,7 @@ public:
 		}
 		else if (level == "copy_url")
 		{
-			LLUrlAction::copyURLToClipboard(LLSLURL("agent", getAvatarId(), "inspect").getSLURLString());
+			LLUrlAction::copyURLToClipboard(LLSLURL("agent", getAvatarId(), "about").getSLURLString());
 		}
 		else if(level == "block_unblock")
 		{
