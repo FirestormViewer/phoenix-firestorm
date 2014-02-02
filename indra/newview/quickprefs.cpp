@@ -163,6 +163,7 @@ void FloaterQuickPrefs::initCallbacks()
 		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+		gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 // <FS:CR> FIRE-9630 - Vignette UI controls
 		getChild<LLSpinCtrl>("VignetteSpinnerX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerX, this));
 		getChild<LLSlider>("VignetteSliderX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteX, this));
@@ -304,6 +305,7 @@ BOOL FloaterQuickPrefs::postBuild()
 		mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
 		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
 		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
+		mCtrlUseSSR = getChild<LLCheckBoxCtrl>("FSRenderSSR");
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
 		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
 // <FS:CR> FIRE-9630 - Vignette UI controls
@@ -710,6 +712,7 @@ void FloaterQuickPrefs::refreshSettings()
 
 	mCtrlDeferred->setEnabled(enabled);
 
+	mCtrlUseSSR->setEnabled(enabled && (mCtrlDeferred->get() ? TRUE : FALSE) && gSavedSettings.getS32("RenderShadowDetail") > 0);
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (mCtrlDeferred->get() ? TRUE : FALSE);
 		
 	mCtrlUseSSAO->setEnabled(enabled);
@@ -743,6 +746,9 @@ void FloaterQuickPrefs::refreshSettings()
 
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
+
+		mCtrlUseSSR->setEnabled(FALSE);
+		mCtrlUseSSR->setValue(FALSE);
 	}
 	
 	// disabled windlight
@@ -763,6 +769,9 @@ void FloaterQuickPrefs::refreshSettings()
 
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
+
+		mCtrlUseSSR->setEnabled(FALSE);
+		mCtrlUseSSR->setValue(FALSE);
 	}
 
 	// disabled deferred
@@ -780,6 +789,9 @@ void FloaterQuickPrefs::refreshSettings()
 
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
+
+		mCtrlUseSSR->setEnabled(FALSE);
+		mCtrlUseSSR->setValue(FALSE);
 	}
 	
 	// disabled deferred SSAO
@@ -794,6 +806,9 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
+
+		mCtrlUseSSR->setEnabled(FALSE);
+		mCtrlUseSSR->setValue(FALSE);
 	}
 
 	// disabled reflections
@@ -818,6 +833,9 @@ void FloaterQuickPrefs::refreshSettings()
 
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
+
+		mCtrlUseSSR->setEnabled(FALSE);
+		mCtrlUseSSR->setValue(FALSE);
 	}
 	
 	// <FS:CR> FIRE-9630 - Vignette UI controls

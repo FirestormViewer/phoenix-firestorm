@@ -637,23 +637,6 @@
 				 top_pad="5"
 				 width="240">
 				</check_box>
-				<!--slider
-				 control_name="RenderReflectionRes"
-				 can_edit_text="true"
-				 decimal_digits="0"
-				 follows="left|top"
-				 height="16"
-				 increment="1"
-				 label="Resolution"
-				 label_width="75"
-				 layout="topleft"
-				 left="10"
-				 max_val="100"
-				 min_val="0"
-				 name="REflection Res"
-				 tool_tip="D=64"
-				 top_pad="2"
-				 width="240" /-->
 			</panel>
 		</panel>
 
@@ -696,7 +679,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="70"
+			 height="90"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -710,6 +693,18 @@
 				 name="RenderDeferred"
 				 top_pad="10"
 				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'WL'."
+				 width="240">
+				</check_box>
+				<check_box
+				 control_name="FSRenderSSR"
+				 height="16"
+				 initial_value="true"
+				 label="Enable Screen Space Reflections"
+				 layout="topleft"
+				 left="5"
+				 name="FSRenderSSR"
+				 top_pad="5"
+				 tool_tip="This will enable Screen Space Reflections which brings an essential level of realism to textures."
 				 width="240">
 				</check_box>
 				<check_box
@@ -755,7 +750,7 @@
 				 follows="left|top"
 				 height="16"
 				 left="5" 
-				 top_pad="7"
+				 top_pad="4"
 				 width="50"
 				 word_wrap="true"
 				 layout="topleft"
@@ -794,7 +789,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="95"
+			 height="165"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -817,7 +812,7 @@
 				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0.00"
+				 min_val="0"
 				 max_val="4"
 				 top_delta="-2"
 				 width="127"/>
@@ -848,6 +843,59 @@
 					<button.commit_callback
 					 function="ResetControl"
 					 parameter="RenderShadowResolutionScale"/>
+				</button>
+
+				<text
+				 name="T_Shd_Clarity"
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="This is a VERY important setting. It essentially determines how clear the Sun/Moon shadows are drawn overall. This setting should be set first before adjusting the setting below. With the value of 'Shd. Res' above set to 1.0, slide the value for 'Shd. Clarity' until the sharpest possible result is achieved. Please note, the clarity of shadows is directly related to the position of the camera and Sun/Moon. Every time you move either the camera or the Sun/Moon, it is best to adject this value again. In addition, in order to make adjusting this value easier, it is helpful to set 'Shd. Blur' to 0.0 first."
+				 width="80">
+					Shd Clarity
+				</text>
+				<slider_bar
+				 name="SB_Shd_Clarity"
+				 can_edit_text="true"
+				 control_name="FSRenderShadowSplitExponentY"
+				 follows="left|right"
+				 height="16"
+				 increment="0.001"
+				 decimal_digits="3"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="30"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Shd_Clarity"
+				 can_edit_text="true"
+				 control_name="FSRenderShadowSplitExponentY"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="4"
+				 follows="top|right"
+				 max_val="100"
+				 min_val="0"
+				 width="53"
+				 increment="0.0001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Shd_Clarity_Reset"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FSRenderShadowSplitExponentY"/>
 				</button>
 
 				<text
@@ -902,7 +950,60 @@
 					 function="ResetControl"
 					 parameter="RenderShadowBlurSize"/>
 				</button>
-		
+
+				<text
+				 name="T_Shd_Soften" 
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 tool_tip="Controls the softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Shd. Blur' value above to around 3.0. Then the slider here to soften the AO to your liking. Please note, a value of 0.0 will effectively turn off all Sun/Moon shadows. In addition, this has no effect of shadows the caused by projector lights"
+				 width="80">
+					Shd. Soften
+				</text>
+				<slider_bar
+				 name="SB_Shd_Soften"
+				 can_edit_text="true"
+				 control_name="FSRenderShadowGaussianX"
+				 follows="left|right"
+				 height="16"
+				 increment="0.001"
+				 decimal_digits="3"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="3"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Shd_Scale"
+				 can_edit_text="true"
+				 control_name="FSRenderShadowGaussianX"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="top|right"
+				 max_val="100000"
+				 min_val="-10000"
+				 width="53"
+				 increment=".001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Shd_Soften_Reset"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FSRenderShadowGaussianX"/>
+				</button>
+
 				<text
 				 name="T_Blur_Dist"
 				 follows="top|left"
@@ -955,7 +1056,7 @@
 					 function="ResetControl"
 					 parameter="RenderShadowBlurDistFactor"/>
 				</button>
-						
+
 				<text
 				 name="T_FOV_Cutoff"
 				 follows="top|left"
@@ -1008,47 +1109,112 @@
 					 function="ResetControl"
 					 parameter="RenderShadowFOVCutoff"/>
 				</button>
-			</panel>
-		
-			<panel
-			 name="P_Light"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="45"
-			 border_visible="true"
-			 background_visible="true">
-				<check_box
+
+				<text
+				 name="T_Shd_Bias"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
+				 tool_tip=""
+				 width="80">
+					Shd. Bias
+				</text>
+				<slider_bar
+				 name="SB_Shd_Bias"
+				 can_edit_text="true"
+				 control_name="RenderShadowBias"
+				 follows="left|right"
 				 height="16"
-				 label="Show Bounding Boxes for All Lights in Scene"
-				 name="Lights">
-					<check_box.on_check
-					 function="Advanced.CheckInfoDisplay"
-					 parameter="lights"/>
-					<check_box.check_button.commit_callback
-					 function="Advanced.ToggleInfoDisplay"
-					 parameter="lights"/>
-				</check_box>
-				<check_box
+				 increment="0.0001"
+				 decimal_digits="3"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="-.008"
+				 max_val="0"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Shd_Bias"
+				 can_edit_text="true"
+				 control_name="RenderShadowBias"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="4"
+				 follows="top|right"
+				 max_val="5"
+				 min_val="-5"
+				 width="53"
+				 increment="0.0001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Shd_Bias_Reset"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderShadowBias"/>
+				</button>
+
+				<!--text
+				 name="T_Shd_Error"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
+				 tool_tip="This determines the FOV cutoff at which the viewer will switch between ortho instead of perspective projection. If you are getting shadows that are 'jaggedy' try adjusting this setting for improvement. Also adjusting the XYZ values for the debug setting RenderShadowSplitExponent can be VERY helpful."
+				 width="80">
+					Shd Error
+				</text>
+				<slider_bar
+				 name="SB_Shd_Error"
+				 can_edit_text="true"
+				 control_name="RenderShadowBiasError"
+				 follows="left|right"
 				 height="16"
-				 label="Show Light Radius for Selected Light(s)"
-				 name="Show Light Radius for Selection">
-					<check_box.on_check
-					 function="CheckControl"
-					 parameter="RenderLightRadius"/>
-					<check_box.check_button.commit_callback
-					 function="Tools.ShowSelectionLightRadius"/>
-				</check_box>
+				 increment="0.001"
+				 decimal_digits="2"
+				 layout="topleft"
+				 left_pad="-20"
+				 min_val="-.5"
+				 max_val="0"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Shd_Error"
+				 can_edit_text="true"
+				 control_name="RenderShadowBiasError"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="top|right"
+				 max_val="100"
+				 min_val="-100"
+				 width="53"
+				 increment="0.001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Shd_Error_Reset"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderShadowBiasError"/>
+				</button-->
 			</panel>
 
 			<panel
@@ -1097,22 +1263,6 @@
 				 top_pad="10"
 				 width="230">
 				</check_box>
-				<!--slider
-				 control_name="ExodusRenderSSAOEffect"
-				 can_edit_text="true"
-				 decimal_digits="3"
-				 follows="left|top"
-				 height="16"
-				 increment=".001"
-				 label="Quality"
-				 label_width="55"
-				 layout="topleft"
-				 left="6"
-				 max_val="3"
-				 min_val="0"
-				 name="SSAOQuality2"
-				 top_pad="2"
-				 width="240"/-->
 			</panel>
 		
 			<panel
@@ -1122,7 +1272,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="75"
+			 height="120"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -1283,137 +1433,48 @@
 					 function="ResetControl"
 					 parameter="RenderSSAOFactor"/>
 				</button>
-			</panel>
-
-			<panel
-			 name="P_Specular_Highlight"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="0"
-			 width="285"
-			 height="22"
-			 bg_alpha_color="Phototools_Header"
-			 border_visible="true"
-			 border_thickness="1"
-			 background_visible="true">
+				
 				<text
-				 name="T_Specular_Highlight"
-				 follows="left|top"
-				 layout="topleft"
-				 left="10"
-				 font="SansSerif"
-				 height="17"
-				 tool_tip="A specular highlight is the bright spot of light that appears on shiny objects when illuminated. (Wikipedia)"
-				 width="285">
-					Specular Highlight Settings
-				</text>
-			</panel>
-
-			<panel
-			 name="P_Spec_Highlight_Settings"
-			 follows="top|left"
-			 layout="topleft"
-			 top_pad="5"
-			 left="4"
-			 width="275"
-			 height="50"
-			 border_visible="true"
-			 background_visible="true">
-				<text
-				 name="T_Smoothness" 
-				 follows="top|left"
-				 layout="topleft"
-				 left="5"
-				 top_pad="10"
-				 tool_tip="Smoothness (Specular Exponent) is a user-chosen value that controls the apparent smoothness of the surface."
-				 width="80">
-					Smoothness
-				</text>
-				<slider_bar
-				 name="SB_Smoothness"
-				 can_edit_text="true"
-				 control_name="RenderSpecularExponent"
-				 follows="left|right"
-				 height="16"
-				 increment="1"
-				 decimal_digits="0"
-				 layout="topleft"
-				 left_pad="-20"
-				 min_val="-282"
-				 max_val="10000"
-				 top_delta="-2"
-				 width="127"/>
-				<spinner
-				 name="S_Smoothness"
-				 can_edit_text="true"
-				 control_name="RenderSpecularExponent"
-				 top_delta="-3"
-				 label_width="0"
-				 left_pad="3"
-				 decimal_digits="0"
-				 follows="top|right"
-				 max_val="10000"
-				 min_val="-282"
-				 width="53"
-				 increment="1"
-				 border_visible="false"/>
-				<button
-				 follows="left|top"
-				 name="Reset_Smoothness"
-				 height="22"
-				 label="D"
-				 layout="topleft"
-				 left_pad="0"
-				 top_delta="0"
-				 width="20"
-				 tool_tip="Reset to the default value.">
-					<button.commit_callback
-					 function="ResetControl"
-					 parameter="RenderSpecularExponent"/>
-				</button>
-						
-				<text
-				 name="T_Smooth_Res"
+				 name="T_Effect" 
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
 				 top_pad="5"
-				 tool_tip="Resolution (SpecularResX) adjusts the resolution (quality) of the specular mapping."
+				 tool_tip="Controls the overall darkening effect of Ambient Occlusion. The default value of 0.8 produces an almost imperceptible effect. Values of 0.0 and below provide a more realistic result. Please note that the Ambient Occlusion produces a noise like effect and this can be softened using the 'AO Soften' controls below. In addition, the standard mesh avatar can look less than appealing with high Effect values due to the low quality geometry of the avatar."
 				 width="80">
-					Resolution
+					Effect
 				</text>
 				<slider_bar
-				 name="SB_Smooth_Res"
+				 name="SB_Effect"
 				 can_edit_text="true"
-				 control_name="RenderSpecularResX"
+				 control_name="FSRenderSSAOEffect"
 				 follows="left|right"
 				 height="16"
-				 increment="1"
-				 decimal_digits="0"
+				 increment="0.001"
+				 decimal_digits="3"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
-				 max_val="8192"
+				 min_val="-2"
+				 max_val="1"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
-				 name="S_Smooth_Res"
+				 name="S_Effect"
 				 can_edit_text="true"
-				 control_name="RenderSpecularResX"
+				 control_name="FSRenderSSAOEffect"
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="0"
+				 decimal_digits="3"
 				 follows="top|right"
-				 max_val="8192"
-				 min_val="0"
+				 max_val="100000"
+				 min_val="-10000"
 				 width="53"
-				 increment="1"
+				 increment=".001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
-				 name="Reset_Smooth_Res"
+				 name="Reset_Effect"
 				 height="22"
 				 label="D"
 				 layout="topleft"
@@ -1423,58 +1484,61 @@
 				 tool_tip="Reset to the default value.">
 					<button.commit_callback
 					 function="ResetControl"
-					 parameter="RenderSpecularResX"/>
+					 parameter="FSRenderSSAOEffect"/>
 				</button>
-				<!--slider
-				 can_edit_text="true"
-				 control_name="RenderShadowSplitExponentX"
-				 decimal_digits="0"
-				 follows="left|top"
-				 height="16"
-				 increment=".01"
-				 label="Shad Per."
-				 label_width="50"
+				
+				<text
+				 name="T_AO_Soften" 
+				 follows="top|left"
 				 layout="topleft"
-				 left="10"
-				 max_val="50"
-				 min_val="-50"
-				 name="ShadowsExpX"
-				 top_pad="2"
-				 width="240" /-->
-				<!--slider
-				 can_edit_text="true"
-				 control_name="RenderShadowOffsetRenderShadowOffset"
-				 decimal_digits="3"
-				 follows="left|top"
-				 height="16"
-				 increment=".001"
-				 label="ShdOff-.01-"
-				 label_width="70"
-				 layout="topleft"
-				 left="10"
-				 max_val="10"
-				 min_val="-2"
-				 name="ShadowsOffset"
-				 tool_tip="D=0.010"
-				 top_pad="2"
-				 width="240"/>
+				 left="5"
+				 top_pad="5"
+				 tool_tip="Controls the softening of the Ambient Occlusion effect. One simple way to set this value for your specific needs is to first set the 'Shd. Blur' value above to around 3.0. Then the slider here to soften the AO to your liking. Please note, a value of 0.0 will effectively turn off Ambient Occlusion rendering."
+				 width="80">
+					AO Soften
+				</text>
 				<slider_bar
+				 name="SB_AO_Soften"
 				 can_edit_text="true"
-				 control_name="RenderShadowOffsetError"
-				 decimal_digits="3"
-				 follows="left|top"
+				 control_name="FSRenderShadowGaussianY"
+				 follows="left|right"
 				 height="16"
-				 increment=".001"
-				 label="ShdOffErr-0-"
-				 label_width="70"
+				 increment="0.001"
+				 decimal_digits="3"
 				 layout="topleft"
-				 left="10"
-				 max_val="2"
-				 min_val="-2"
-				 name="ShadowsOffsetError"
-				 tool_tip="D=0.000"
-				 top_pad="2"
-				 width="240" /-->
+				 left_pad="-20"
+				 min_val="0"
+				 max_val="3"
+				 top_delta="-2"
+				 width="127"/>
+				<spinner
+				 name="S_Max_Scale"
+				 can_edit_text="true"
+				 control_name="FSRenderShadowGaussianY"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="3"
+				 decimal_digits="3"
+				 follows="top|right"
+				 max_val="100000"
+				 min_val="-10000"
+				 width="53"
+				 increment=".001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_AO_Soften"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FSRenderShadowGaussianY"/>
+				</button>
 			</panel>
 		</panel>
 
@@ -1817,7 +1881,7 @@
 					 function="ResetControl"
 					 parameter="CameraFocusTransitionTime"/>
 				</button>
-						
+
 				<text
 				 name="T_CoC"
 				 follows="top|left"
@@ -1837,8 +1901,8 @@
 				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
-				 max_val="50"
+				 min_val="-150"
+				 max_val="150"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -1889,8 +1953,8 @@
 				 increment="0.01"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
-				 max_val="1"
+				 min_val="-100"
+				 max_val="100"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2006,7 +2070,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="40"
+			 height="30"
 			 border_visible="true"
 			 background_visible="true">
 				<!--
@@ -2027,7 +2091,7 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="15"
+				 top_pad="10"
 				 tool_tip="This will determine the quality of the glow effect, higher is better. There is little visual difference between 8 and 10."
 				 width="80">
 					Quality
@@ -2050,7 +2114,7 @@
 				 name="S_Glow_Quality"
 				 can_edit_text="true"
 				 control_name="RenderGlowResolutionPow"
-				 top_delta="-3"
+				 top_delta="-5"
 				 label_width="0"
 				 left_pad="110"
 				 decimal_digits="0"
@@ -2083,7 +2147,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="150"
+			 height="145"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -2091,7 +2155,7 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="15"
+				 top_pad="10"
 				 tool_tip="Number of times to iterate/repeat the glow (higher = wider and smoother and a bit slower)."
 				 width="80">
 					Iterations
@@ -2106,8 +2170,8 @@
 				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="1"
-				 max_val="50"
+				 min_val="0"
+				 max_val="200"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2119,8 +2183,8 @@
 				 left_pad="3"
 				 decimal_digits="0"
 				 follows="top|left"
-				 max_val="50"
-				 min_val="1"
+				 max_val="500"
+				 min_val="0"
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
@@ -2367,7 +2431,7 @@
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0"
-				 max_val="1"
+				 max_val="10"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2461,8 +2525,8 @@
 				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="32"
-				 max_val="1024"
+				 min_val="0"
+				 max_val="4096"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
@@ -2472,12 +2536,12 @@
 				 top_delta="-3"
 				 label_width="0"
 				 left_pad="3"
-				 decimal_digits="0"
+				 decimal_digits="2"
 				 follows="top|left"
-				 max_val="2048"
-				 min_val="0"
+				 max_val="10240"
+				 min_val="-10240"
 				 width="53"
-				 increment="1"
+				 increment=".01"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -3397,6 +3461,35 @@
 			 follows="top|left"
 			 layout="topleft"
 			 left="7"
+			 top_pad="5"
+			 height="16"
+			 label="Show Bounding Boxes for All Lights in Scene"
+			 name="Lights">
+				<check_box.on_check
+				 function="Advanced.CheckInfoDisplay"
+				 parameter="lights"/>
+				<check_box.check_button.commit_callback
+				 function="Advanced.ToggleInfoDisplay"
+				 parameter="lights"/>
+			</check_box>
+			<check_box
+			 follows="top|left"
+			 layout="topleft"
+			 left="7"
+			 top_pad="5"
+			 height="16"
+			 label="Show Light Radius for Selected Light(s)"
+			 name="Show Light Radius for Selection">
+				<check_box.on_check
+				 function="CheckControl"
+				 parameter="RenderLightRadius"/>
+				<check_box.check_button.commit_callback
+				 function="Tools.ShowSelectionLightRadius"/>
+			</check_box>
+			<check_box
+			 follows="top|left"
+			 layout="topleft"
+			 left="7"
 			 top_pad="10"
 			 label="Show Bounding Boxes for Objects in Scene"
 			 name="Bounding Boxes">
@@ -3587,7 +3680,7 @@
 			
 			<scroll_container
 			 follows="top|left"
-			 height="200"
+			 height="150"
 			 layout="topleft"
 			 left="10"
 			 name="statistics_scroll"
@@ -3756,7 +3849,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="185"
+			 height="184"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -3795,7 +3888,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment="1"
+				 increment=".0001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -3848,7 +3941,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment="1"
+				 increment=".0001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -3901,7 +3994,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment="1"
+				 increment=".0001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -3954,7 +4047,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment="1"
+				 increment=".0001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -4007,7 +4100,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment="1"
+				 increment=".0001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -4060,7 +4153,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment="1"
+				 increment=".0001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -4113,7 +4206,7 @@
 				 max_val="1024"
 				 min_val="0"
 				 width="53"
-				 increment="1"
+				 increment=".0001"
 				 border_visible="false"/>
 				<button
 				 follows="left|top"
@@ -4191,7 +4284,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="140"
+			 height="143"
 			 border_visible="true"
 			 background_visible="true">
 				<spinner
@@ -4207,10 +4300,10 @@
 				 min_val="-1"
 				 name="JoystickAxis6"
 				 tool_tip="Controls which mouse axis the zooming function is mapped to (set to work with)."
-				 top_pad="7"
+				 top_pad="5"
 				 width="255"/>
 				<check_box
-				 top_pad="20"
+				 top_pad="15"
 				 control_name="JoystickEnabled"
 				 halign="left"
 				 label="Enable 3D Mouse"
@@ -4269,6 +4362,20 @@
 					<check_box.check_button.commit_callback
 					 function="Advanced.ToggleHUDInfo"
 					 parameter="fov"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="6"
+				 top_pad="7"
+				 label="Show Detailed Camera Position Data"
+				 name="Camera">
+					<check_box.on_check
+					 function="Advanced.CheckHUDInfo"
+					 parameter="camera"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleHUDInfo"
+					 parameter="camera"/>
 				</check_box>
 			</panel>
 

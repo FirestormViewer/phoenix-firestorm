@@ -430,7 +430,7 @@
 				 label_width="50"
 				 layout="topleft"
 				 left="5"
-				 max_val="10"
+				 max_val="20"
 				 min_val="0"
 				 name="WLGamma"
 				 tool_tip="Scene Gamma - Adjusts your screen's distribution of light and dark output. Lower settings will cause everything to appear dim, while higher settings may make the scene look gray and 'washed out'. It only affects the 3D view, not the menus and rest of your computer's screen. NOTE: A value of 1.0 is normal."
