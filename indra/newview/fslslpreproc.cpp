@@ -569,6 +569,22 @@ public:
 			usefulctx.add_macro_definition(def,false);
 		}//else wave did something really wrong
 	}
+
+	template <typename ContextT, typename ExceptionT>
+	void throw_exception(ContextT const& ctx, ExceptionT const& e)
+	{
+		std::string err;
+		err = "warning: last line of file ends without a newline";
+		if( !err.compare( e.description())){
+			err = "Ignoring warning: ";
+			err += e.description();
+			llwarns << err << llendl;
+		}
+		else{
+			boost::throw_exception(e);
+		}
+	}
+
 private:
 	FSLSLPreprocessor* mProc;
 	std::stack<std::string> mAssetStack;
