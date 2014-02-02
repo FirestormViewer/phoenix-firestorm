@@ -99,6 +99,7 @@
 
 			<panel name="P_L_S_Settings">
 				<check_box label="Erweitertes Beleuchtungsmodell aktivieren" name="RenderDeferred" tool_tip="Diese Einstellung aktiviert Schatten von Sonne und Mond sowie anderen Lichtquellen. Sie ist Voraussetzung für Schärfentiefe und andere Grafik-Features. Falls diese Einstellung nicht aktiviert werden kann oder keinen Effekt hat, bitte prüfen, ob „Einfache Shader“ und „Atmosphären-Shader“ aktiviert sind (siehe Reiter „WL“)."/>
+				<check_box label="Screen Space Reflections aktivieren" name="RenderDeferred" tool_tip="Diese Einstellung aktiviert Screen Space Reflections und erhöht den Realismusgrad von Texturen."/>
 				<check_box label="Alle Lokalen Lichtquellen aktivieren" name="LocalLights" tool_tip="Diese Einstellung aktiviert alle lokalen Lichtquellen innerhalb der Welt. Wird sie deaktiviert, wird weiterhin das von Sonne und Mond ausgestrahlte Licht angezeigt. Nützlich, falls lokale Lichtquellen nicht und nur noch von Sonne und Mond angezeigt werden soll."/>
 				<check_box label="Angehängte Lichter aktivieren (Facelights)" name="Render Attached Lights" tool_tip="Diese Einstellung aktiviert alle Lichter wie zum Beispiel Facelights, die von Avataren getragen werden. Nützlich, falls Facelights deaktiviert werden sollen."/>
 			</panel>
@@ -120,25 +121,35 @@
 				</text>
 				<button name="Reset_Shadow_Res" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
+				<text name="T_Shd_Clarity" tool_tip="Dies ist eine sehr wichtige Einstellung. Sie bestimmt, wie klar die Sonne oder der Mond dargestellt wird. Sie sollte zuerst gesetzt werden, bevor die unten folgenden Einstellungen angepasst werden. Bei einem Wert für „Sch.Qual.“ von größer 1.0 sollte der Wert für „Sch.Klarh.“ so verändert werden, bis die bestmögliche Schärfe erreicht wird. Hinweis: Die Klarheit von Schatten ist direkt abhängig von der Position der Kamera und der Sonne bzw. des Mondes. Jedes Mal, wenn die Kamera oder die Sonne oder der Mond bewegt wird, sollte die Einstellung daher angepasst werden. Um die Anpassung zu vereinfachen, sollte vorher der Wert für „Sch.Unsch.“ auf 0.0 gesetzt werden.">
+					Sch.Klarh.
+				</text>
+				<button name="Shd_Clarity_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
 				<text name="T_Blur_Size" tool_tip="Je höher der Wert ist, desto weicher werden die Schattenränder. Ein Wert von 0 erzeugt die höchstmögliche Schärfe. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
 					Sch.Unsch.
 				</text>
 				<button name="Blur_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-		
+
+				<text name="T_Shd_Soften" tool_tip="Kontrolliert den Weichzeichnungseffekt der Sonne bzw. des Mondes. Eine einfache Möglichkeit, diesen Wert für die spezifische Anforderung zu bestimmen, liegt daran, zunächst den Wert für „Sch.Unsch.“ auf ca. 3.0 zu setzen. Anschließend kann der Wert für „Sch.Unsch.“ bestimmt werden. Hinweis: Ein Wert von 0.0 sorgt dafür, dass effektiv alle Schatten von Sonne und Mond deaktiviert werden. Zusätzlich hat dieser Wert keinen Einfluss auf Schatten, die von Projektoren erzeugt werden.">
+					Sch.Weich.
+				</text>
+				<button name="Shd_Soften_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
 				<text name="T_Blur_Dist" tool_tip="Legt den Punkt fest, ab dem Schatten relativ zur Kamera zu verschwimmen beginnen. Je kleiner der Wert, desto näher an der Kamera beginnen die Schatten unscharf zu werden. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
 					Unsch.Dist.
 				</text>
 				<button name="Blur_Dist_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-						
+
 				<text name="T_FOV_Cutoff" tool_tip="Legt den Punkt im Sichtbereich fest, an dem der Viewer zwischen orthogonaler und perspektivischer Projektion wechselt. Falls Schatten zackig und zerklüftet aussehen, sollte diese Einstellung justiert werden. Zusätzlich kann das justieren der XYZ-Werte für die Debug-Einstellung „RenderShadowSplitExponent“ äußerst hilfreich sein.">
 					FOV Cutoff
 				</text>
 				<button name="FOV_Cutoff_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-			</panel>
-		
-			<panel name="P_Light">
-				<check_box label="Bounding Boxes für Lichtquellen anzeigen" name="Lights"/>
-				<check_box label="Lichtradius für ausgewählte Lichter anzeigen" name="Show Light Radius for Selection"/>
+
+				<text name="T_Shd_Bias">
+					Sch. Bias
+				</text>
+				<button name="Shd_Bias_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 
 			<panel name="P_Ambient_Occlusion">
@@ -150,7 +161,7 @@
 			<panel name="P_Amb_Occ_Settings">
 				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="UseSSAO" tool_tip="Der Effekt ist in den meisten Szenen eher subtil und sorgt für eine verbesserte Tiefenwahrnehmung in Bereichen mit Licht und Schatten, zum Beispiel in Räumen. Größerer Einfluss kann bei komplexen und detaillierten Objekten mit Falten und Knittern wahrgenommen werden (zum Beispiel Dinosaurier-Sklelette). Der Effekt selbst manifestiert sich in leicht dunkleren Bereichen an den Kanten von Objekten, besonders solchen, die eng von anderen Objekten umgeben sind. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu verbessern."/>
 			</panel>
-		
+
 			<panel name="P_Scale">
 				<text name="T_Scale" tool_tip="Legt die Sampling-Region fest, wobei größere Region genauer sind. Es kann hilfreich sein, hier einen hohen Wert einzustellen und anschließend mit etwas Schattenunschärfe den Effekt abzumildern.">
 					Skalierung
@@ -166,24 +177,16 @@
 					Faktor
 				</text>
 				<button name="Reset_Scaling_Factor" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-			</panel>
 
-			<panel name="P_Specular_Highlight">
-				<text name="T_Specular_Highlight" tool_tip="Ein Specular Highlight ist ein heller Lichtpunkt, der auf glänzenden Objekten erscheint, wenn diese beleuchtet werden.">
-					Einstellungen Specular Highlight
+				<text name="T_Effect" tool_tip="Kontrolliert den Verdunkelungeffekt von Ambient Occlusion. Der Standardwert von 0.8 erzeugt einen kaum wahrnehmbaren Effekt. Werte von 0.0 oder weniger erzeugen realistischere Ergebnisse. Hinweis: Ambient Occlusion erzeugt ein Bildrauschen, das über die Einstellung „AO Weich.“ vermindert werden kann. Zusätzlich kann der Standard Avatar-Mesh weniger gut mit hohen Effekt-Werten aussehen aufgrund der geringen Qualität der Geometrie der Avatare.">
+					Effekt
 				</text>
-			</panel>
+				<button name="Reset_Effect" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-			<panel name="P_Spec_Highlight_Settings">
-				<text name="T_Smoothness" tool_tip="Glätte (Specular-Exponent) steuert die offensichtliche Glätte auf der Oberfläche.">
-					Glätte
+				<text name="T_AO_Soften" tool_tip="Legt die Weichzeichnung des Ambient-Occlusion-Effekts fest. Eine einfache Möglichkeit, diesen Wert für die spezifische Anforderung zu bestimmen, liegt daran, zunächst den Wert für „Sch.Unsch.“ auf ca. 3.0 zu setzen. Anschließend kann der Wert für die Weichzeichnung den eigenen Wünschen angepasst werden. Hinweis: Ein Wert von 0.0 deaktiviert effektiv Ambient Occlusion.">
+					AO Weich.
 				</text>
-				<button name="Reset_Smoothness" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
-						
-				<text name="T_Smooth_Res" tool_tip="Justiert die Qualität des Specular Mappings (SpecularResX).">
-					Qualität
-				</text>
-				<button name="Reset_Smooth_Res" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+				<button name="Reset_AO_Soften" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 			</panel>
 		</panel>
 
@@ -407,7 +410,9 @@
 					Benutzerschnittstellen-Hilfen
 				</text>
 			</panel>
-			
+
+			<check_box label="Bounding Boxes für Lichtquellen anzeigen" name="Lights"/>
+			<check_box label="Lichtradius für ausgewählte Lichter anzeigen" name="Show Light Radius for Selection"/>
 			<check_box label="Bounding Boxes für Objekte anzeigen" name="Bounding Boxes"/>
 			<check_box label="Statistiken-Fenster anzeigen" name="Statistics Bar"/>
 			<check_box label="Detaillierte Kamerapositionsdaten anzeigen" name="Camera"/>
@@ -500,6 +505,7 @@
 				<check_box name="CB_Move_Avatar" label="3D-Maus zur Avatarsteuerung verwenden" tool_tip="Falls aktiviert, wird der Avatar mit der Maus gesteuert."/>
 				<check_box name="CB_Move_Objects" label="3D-Maus zur Objektbewegung verwenden" tool_tip="Falls aktiviert, kann die 3D-Maus dazu benutzt werden, beim Bauen und Editieren Objekte zu bewegen."/>
 				<check_box label="Aktuelles Kamera-Sichtfeld (FOV) anzeigen" name="CAM_Show_FOV" tool_tip="Zeigt das aktuelle vertikale Sichtfeld der Kamera an. Im Viewer ist es wie im echten Leben möglich, die Brennweite der Kameralinse zu verändern. Je kleiner der Sichtbereich, desto größer die Brennweite. Eine 50mm-Linse hat ein Sichtfeld von 27.0 Grad. Siehe auch http://de.wikipedia.org/wiki/Bildwinkel für weitergehende Informationen. ACHTUNG: DIESE EINSTELLUNG SOLLTE VOR DEM FOTOGRAFIEREN AUSGESCHALTET WERDEN, DA SIE SONST AUF DEM BILD ERSCHEINT!"/>
+				<check_box label="Detallierte Kamera-Positionsdaten anzeigen" name="Camera" tool_tip="Zeigt das aktuelle vertikale Sichtfeld der Kamera an. Im Viewer ist es wie im echten Leben möglich, die Brennweite der Kameralinse zu verändern. Je kleiner der Sichtbereich, desto größer die Brennweite. Eine 50mm-Linse hat ein Sichtfeld von 27.0 Grad. Siehe auch http://de.wikipedia.org/wiki/Bildwinkel für weitergehende Informationen. ACHTUNG: DIESE EINSTELLUNG SOLLTE VOR DEM FOTOGRAFIEREN AUSGESCHALTET WERDEN, DA SIE SONST AUF DEM BILD ERSCHEINT!"/>
 			</panel>
 
 			<panel name="P_Viewer_Cam_Menu">
