@@ -16,7 +16,8 @@
 	type="string"
 	word_wrap="true"
   line_spacing.multiple="1.0" 
-  font="SansSerif">
+  font="SansSerif"
+  bg_visible="false">
   <more_chat_text
     mouse_opaque="true" 
     parse_urls="false"
