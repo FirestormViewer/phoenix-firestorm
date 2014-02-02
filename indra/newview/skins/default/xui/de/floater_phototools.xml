@@ -126,7 +126,7 @@
 				</text>
 				<button name="Shd_Clarity_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Blur_Size" tool_tip="Je höher der Wert ist, desto weicher werden die Schattenränder. Ein Wert von 0 erzeugt die höchstmögliche Schärfe. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
+				<text name="T_Blur_Size" tool_tip="Je höher der Wert ist, desto weicher werden die Schattenränder. Ein Wert von 0 erzeugt die höchstmögliche Schärfe. Dieser Wert ist direkt mit der darunter verbunden. Sie erlaubt es, denn insgesamt möglichen Wert an Schattenunschärfe zu setzen. Bei einem Wert von 4.0 kann „Sch.Weich.“ dazu verwendet werden, die Schattenunschärfe unabhängig von der Ambient Occlusion angepasst werden. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
 					Sch.Unsch.
 				</text>
 				<button name="Blur_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
@@ -159,7 +159,7 @@
 			</panel>
 
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="UseSSAO" tool_tip="Der Effekt ist in den meisten Szenen eher subtil und sorgt für eine verbesserte Tiefenwahrnehmung in Bereichen mit Licht und Schatten, zum Beispiel in Räumen. Größerer Einfluss kann bei komplexen und detaillierten Objekten mit Falten und Knittern wahrgenommen werden (zum Beispiel Dinosaurier-Sklelette). Der Effekt selbst manifestiert sich in leicht dunkleren Bereichen an den Kanten von Objekten, besonders solchen, die eng von anderen Objekten umgeben sind. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu verbessern."/>
+				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="UseSSAO" tool_tip="Ambient Occlusion fügt Schattierungen zu allen Objekten hinzu. Es ist am effektivsten, wenn die Effekt- und Weichzeinungs-Einstellungen genutzt werden und kann zum Bild ein hohes Maß an Realismus hinzufügen. Dies trifft besonders dann zu, wenn Bilder mit einer Auflösung von 2048 Pixel oder mehr erzeugt werden."/>
 			</panel>
 
 			<panel name="P_Scale">
@@ -178,12 +178,12 @@
 				</text>
 				<button name="Reset_Scaling_Factor" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_Effect" tool_tip="Kontrolliert den Verdunkelungeffekt von Ambient Occlusion. Der Standardwert von 0.8 erzeugt einen kaum wahrnehmbaren Effekt. Werte von 0.0 oder weniger erzeugen realistischere Ergebnisse. Hinweis: Ambient Occlusion erzeugt ein Bildrauschen, das über die Einstellung „AO Weich.“ vermindert werden kann. Zusätzlich kann der Standard Avatar-Mesh weniger gut mit hohen Effekt-Werten aussehen aufgrund der geringen Qualität der Geometrie der Avatare.">
+				<text name="T_Effect" tool_tip="Kontrolliert den Verdunkelungeffekt von Ambient Occlusion. Der Standardwert von 0.8 erzeugt einen kaum wahrnehmbaren Effekt. Werte von 0.0 oder weniger erzeugen realistischere Ergebnisse. Hinweis: Ambient Occlusion erzeugt ein Bildrauschen, das über die Einstellung „AO Weich.“ vermindert werden kann. Zusätzlich kann der Standard Avatar-Mesh weniger gut mit hohen Effekt-Werten aussehen aufgrund der geringen Qualität der Geometrie der Avatare. Hinweis: Der kleinste Wert, der mit dem Schieber gesetzt werden kann, ist 0, während die Eingabebox negative Werte bis -10000 erlaubt.">
 					Effekt
 				</text>
 				<button name="Reset_Effect" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
-				<text name="T_AO_Soften" tool_tip="Legt die Weichzeichnung des Ambient-Occlusion-Effekts fest. Eine einfache Möglichkeit, diesen Wert für die spezifische Anforderung zu bestimmen, liegt daran, zunächst den Wert für „Sch.Unsch.“ auf ca. 3.0 zu setzen. Anschließend kann der Wert für die Weichzeichnung den eigenen Wünschen angepasst werden. Hinweis: Ein Wert von 0.0 deaktiviert effektiv Ambient Occlusion.">
+				<text name="T_AO_Soften" tool_tip="Legt die Weichzeichnung des Ambient-Occlusion-Effekts fest. Eine einfache Möglichkeit, diesen Wert für die spezifische Anforderung zu bestimmen, liegt daran, zunächst den Wert für „Sch.Unsch.“ auf ca. 4.0 zu setzen. Anschließend kann der Wert für die Weichzeichnung den eigenen Wünschen angepasst werden. Hinweis: Ein Wert von 0.0 deaktiviert effektiv Ambient Occlusion.">
 					AO Weich.
 				</text>
 				<button name="Reset_AO_Soften" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
