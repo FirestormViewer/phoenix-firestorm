@@ -2653,6 +2653,11 @@ void LLPanelFace::alignMaterialsProperties(LLPanelFace* self)
 	tex_offset_v = (tex_offset_v < 0.0) ? 1.0+tex_offset_v : tex_offset_v;
 	//</FS:TS> FIRE-12275
 
+	//<FS:TS> FIRE-12831: Negative rotations revert to zero
+	//  The same goes for rotations as for offsets.
+	tex_rot = (tex_rot < 0.0) ? 360.0+tex_rot : tex_rot;
+	//</FS:TS> FIRE-12831
+
 	self->childSetValue("shinyScaleU",	tex_scale_u);
 	self->childSetValue("shinyScaleV",	tex_scale_v);
 	self->childSetValue("shinyOffsetU",	tex_offset_u);
