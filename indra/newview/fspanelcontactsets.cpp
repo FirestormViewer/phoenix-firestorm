@@ -104,8 +104,10 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 {
 	if (!mAvatarList) return;
 	
+	mAvatarList->clear();
+	mAvatarList->setDirty(true, true);
+
 	uuid_vec_t& avatars = mAvatarList->getIDs();
-	avatars.clear();
 	
 	if (contact_set == CS_SET_ALL_SETS)
 	{

@@ -127,7 +127,9 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 
 LLAvatarListItem::~LLAvatarListItem()
 {
-	if (mAvatarId.notNull())
+	// <FS:Ansariel> Always remove, even with null UUID; LLAvatarPropertiesProcessor
+	//               might have a request running with null UUID!
+	//if (mAvatarId.notNull())
 	{
 		LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarId, this);
 		// <FS> Remove our own observers
