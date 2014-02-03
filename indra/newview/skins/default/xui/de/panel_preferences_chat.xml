@@ -140,6 +140,7 @@
 			<check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
 			<check_box label="Chatverlauf ebenfalls deaktivieren" name="FSUnfocusChatHistoryOnReturn" left_delta="260"/>
 			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen um Vortäuschungen zu unterbinden"/>
+			<check_box name="FSChatnamesOpenFullProfile" label="Vollständiges Avatarprofil beim Klicken auf Namen öffnen" tool_tip="Beim Klicken auf den Namen eines Avatars im Chatverlauf wird direkt das vollständige Profil geöffnet anstatt des Mini-Profils. Diese Einstellung hat keine Auswirkung auf Namen für bereits empfangenen Chat."/>
 
 			<!-- Groups -->
 			<text name="group_enhancements">

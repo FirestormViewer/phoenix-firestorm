@@ -752,7 +752,7 @@
              name="chat_and_im_enhancements"
              follows="left|top"
              layout="topleft"
-             top_pad="5"
+             top_pad="4"
              left="19"
              height="16"
              width="400">
@@ -868,13 +868,24 @@
              name="FSMarkObjects"
              control_name="FSMarkObjects"
              label="Mark objects with (no name) when they speak to avoid spoofing"/>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="0"
+             left="30"
+             width="400"
+             height="18"
+             name="FSChatnamesOpenFullProfile"
+             control_name="FSChatnamesOpenFullProfile"
+             label="Open full profile when clicking on avatar name"
+             tool_tip="Clicking on the name of an avatar in chat history will open its full profile instead of the mini profile. This option will not affect names in previously received chat."/>
 
             <!-- Groups -->
             <text
              name="group_enhancements"
              follows="left|top"
              layout="topleft"
-             top_pad="5"
+             top_pad="3"
              left="19"
              height="16"
              width="400">
@@ -1022,7 +1033,7 @@
              name="logging_enhancements"
              follows="left|top"
              layout="topleft"
-             top_pad="5"
+             top_pad="3"
              left="19"
              height="16"
              width="400">
@@ -1032,7 +1043,7 @@
              name="show_timestamps_label"
              follows="left|top"
              layout="topleft"
-             top_pad="2"
+             top_pad="0"
              left="30"
              height="16"
              width="150">
@@ -1079,7 +1090,7 @@
              name="console_enhancements"
              follows="left|top"
              layout="topleft"
-             top_pad="5"
+             top_pad="3"
              left="19"
              height="16"
              width="400">
