@@ -954,7 +954,7 @@ void FSFloaterNearbyChat::onChatBoxFocusLost()
 
 void FSFloaterNearbyChat::onChatBoxFocusReceived()
 {
-	mInputEditor->setEnabled(!gDisconnected);
+	mInputEditor->setEnabled(!gDisconnected && gSavedSettings.getBOOL("FSNearbyChatbar"));
 }
 
 void FSFloaterNearbyChat::reshapeChatLayoutPanel()

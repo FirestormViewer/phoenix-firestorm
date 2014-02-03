@@ -184,6 +184,7 @@
               top="0"
               bottom="-1">
               <chat_editor
+               enabled_control="FSNearbyChatbar"
                layout="topleft"
                expand_lines_count="5"
                follows="left|right|bottom"
