@@ -404,14 +404,10 @@ LLFloater* FSFloaterIMContainer::getCurrentVoiceFloater()
 
 	for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
 	{
-		LLPanel* panel = mTabContainer->getPanelByIndex(i);
-		if (panel->getName() == "panel_im")
+		FSFloaterIM* im_floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getPanelByIndex(i));
+		if (im_floater && im_floater->getVoiceChannel() == LLVoiceChannel::getCurrentVoiceChannel())
 		{
-			FSFloaterIM* im_floater = dynamic_cast<FSFloaterIM*>(panel);
-			if (im_floater && im_floater->getVoiceChannel() == LLVoiceChannel::getCurrentVoiceChannel())
-			{
-				return im_floater;
-			}
+			return im_floater;
 		}
 	}
 	return NULL;
