@@ -139,9 +139,7 @@
 			</panel>
 		</panel>
 		<panel label="Mini-Karte" name="tab-minimap">
-			<text name="netmap_color_textbox">
-				Mini-Karte:
-			</text>
+			<slider name="FSMiniMapOpacity" label="Hintergrund-Deckkraft:" label_width="130" width="430"/>
 			<text name="netmap_dots_textbox">
 				Punkte auf Minikarte:
 			</text>

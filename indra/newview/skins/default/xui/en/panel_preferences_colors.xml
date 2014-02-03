@@ -1163,7 +1163,25 @@
      right="-1"
      follows="all"
      label="Minimap"
-     name="tab-minimap" >
+     name="tab-minimap">
+     <slider
+       can_edit_text="false"
+       control_name="FSMiniMapOpacity"
+       decimal_digits="2"
+       follows="left|top"
+       height="16"
+       increment="0.01"
+       initial_value="1.0"
+       layout="topleft"
+       label_width="115"
+       label="Background opacity:"
+       left="30"
+       max_val="1.00"
+       min_val="0.00"
+       name="FSMiniMapOpacity"
+       show_text="true"
+       top_pad="16"
+       width="415" />
      <text
        type="string"
        length="1"
@@ -1413,7 +1431,7 @@
        width="95">
        Shout range
      </text>
-     
+
 	 </panel>
    <!-- Misc Panel -->
    <panel

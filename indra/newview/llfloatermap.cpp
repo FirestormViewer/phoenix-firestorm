@@ -507,3 +507,12 @@ void LLFloaterMap::refreshParcelOverlay()
 {
 	mMap->mUpdateParcelImage = true;
 }
+
+// <FS:Ansariel> FIRE-1825: Minimap floater background transparency
+// virtual
+F32 LLFloaterMap::getCurrentTransparency()
+{
+	static LLCachedControl<F32> fsMiniMapOpacity(gSavedSettings, "FSMiniMapOpacity");
+	return fsMiniMapOpacity();
+}
+

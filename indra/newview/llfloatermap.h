@@ -50,6 +50,9 @@ public:
 	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	/*virtual*/ void	draw();
 
+	// <FS:Ansariel> FIRE-1825: Minimap floater background transparency
+	/*virtual*/ F32 getCurrentTransparency();
+
 private:
 	void handleZoom(const LLSD& userdata);
 	void handleStopTracking (const LLSD& userdata);

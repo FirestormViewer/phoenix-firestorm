@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- background_visible="false"
+ bg_alpha_image_overlay="White"
  legacy_header_height="0"
  can_minimize="false" 
  can_resize="true"
@@ -31,7 +31,7 @@
 	MINIMAP
     </floater.string>
     <net_map
-     bg_color="NetMapBackgroundColor"
+     bg_color="Transparent"
      follows="top|left|bottom|right"
      layout="topleft"
      left="0"
