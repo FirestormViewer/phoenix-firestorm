@@ -738,6 +738,7 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
         //Will show toast when chat preference is set        
 		// <FS:Ansariel> [FS communication UI] [CHUI Merge] Maybe need this later...
         //if((gSavedSettings.getString("NotificationNearbyChatOptions") == "toast") || !nearby_chat->isMessagePaneExpanded())
+		if (gSavedSettings.getS32("NearbyToastLifeTime") > 0 || gSavedSettings.getS32("NearbyToastFadingTime")) // Ansa: only create toast if it should be visible at all
 		// </FS:Ansariel> [FS communication UI]
         {
             // Add a nearby chat toast.

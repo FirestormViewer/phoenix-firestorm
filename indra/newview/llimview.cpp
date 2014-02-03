@@ -168,7 +168,10 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
 	args["SESSION_TYPE"] = msg["session_type"];
 	// <FS:Ansariel> [FS communication UI]
 	//LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
-	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+	if (gSavedSettings.getS32("NotificationToastLifeTime") > 0 || gSavedSettings.getS32("ToastFadingTime") > 0) // Ansa: only create toast if it should be visible at all
+	{
+		LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+	}
 	// </FS:Ansariel> [FS communication UI]
 }
 
