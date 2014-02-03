@@ -87,6 +87,7 @@
 			</panel>
 			<panel name="P_L_S_Settings">
 				<check_box label="Włącz zaawansowane oświetlenie" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
+				<check_box label="Renderowanie odbić powierzchni ekranu (SSR)" name="FSRenderSSR" tool_tip="Ta opcja włącza renderowanie odbić powierzchni ekranu (Screen Space Reflections), co podnosi wyraźnie poziom realizmu tekstur."/>
 				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
 				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>
@@ -105,10 +106,18 @@
 					Rozdz. cieni
 				</text>
 				<button name="Reset_Shadow_Res" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Blur_Size" tool_tip="Rozmycie cieni: Im wyższa wartość, tym bardziej rozmyte krawędzie cieni. Ustaw na '0', aby uzyskać cień tak ostry, jak to tylko możliwe. UWAGA: Okluzja otoczenia musi być włączona, aby ta opcja mogła działać.">
+				<text name="T_Shd_Clarity" tool_tip="Czystość/przejrzystość cieni. To jest BARDZO ważne ustawienie. Zasadniczo określa jak 'czysto' są rysowane cienie Słońca/Księżyca. Ta preferencja powinna być ustawiona przed modyfikowaniem wszystkich innych poniżej. Wraz z 'Rozdz. cieni' ustawionym powyżej na 1.0 eksperymentuj z 'Czyst. cieni' tak długo, dopóki najostrzejszy możliwy efekt nie zostanie uzyskany. Pamiętaj, że czystość cieni jest bezpośrednio zależna od pozycji kamery oraz Słońca/Księżyca. Za każdym razem, gdy poruszysz kamerą lub Słońcem/Księżycem dobrym pomysłem jest poprawienie tej wartości ponownie. Jeśli chcesz sprawić, aby ustawianie tej wartości było nieco łatwiejsze, przestaw najpierw 'Rozmycie' na 0.0.">
+					Czyst. cieni
+				</text>
+				<button name="Shd_Clarity_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
+				<text name="T_Blur_Size" tool_tip="Rozmycie cieni: Im wyższa wartość, tym bardziej rozmyte krawędzie cieni. Ustaw na '0', aby uzyskać cień tak ostry, jak to tylko możliwe. Ta preferencja jest również powiązana bezpośrednio z poniższą. Pozwala na ustawienie ogólnego, możliwego do pokazania rozmycia cieni. Jeśli przestawisz tą wartość na 4.00, to możesz użyć Wygładzania Cieni, aby mieć możliwość dostrajania rozmycia cieni niezależnie od okluzji otoczenia. UWAGA: Okluzja otoczenia musi być włączona, aby ta opcja mogła działać.">
 					Rozmycie
 				</text>
 				<button name="Blur_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
+				<text name="T_Shd_Soften" tool_tip="Kontrola efektu wygładzania cieni Słońca/Księżyca. Jeśli chcesz łatwo ustawić tą wartość tak, by spełniała Twoje oczekiwania, to przestaw najpierw 'Rozmycie' powyżej do wartości około 3.0, a następnie suwak tutaj, aby odpowiednio wygładzić cienie. Pamiętaj proszę, że wartość 0.0 wyłączy całkiem Słońce/Księżyc. To ustawienie nie ma wpływu na cienie rzucane przez inne źródła światła (projektory).">
+					Wygł. cieni
+				</text>
+				<button name="Shd_Soften_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Blur_Dist" tool_tip="Odległość rozmycia: Pozwala określić punkt, w którym cienie zaczynają się rozmywać w stosunku do kamery. Im niższa wartość, tym szybciej cienie zaczną tracić ostrość. UWAGA: Okluzja otoczenia musi być włączona, aby ta opcja mogła działać.">
 					Odl. rozm.
 				</text>
@@ -117,10 +126,10 @@
 					Odcięcie
 				</text>
 				<button name="FOV_Cutoff_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-			</panel>
-			<panel name="P_Light">
-				<check_box label="Bryły brzegowe wszystkich świateł sceny" name="Lights"/>
-				<check_box label="Wizualny zasięg światła dla zaznaczenia" name="Show Light Radius for Selection"/>
+				<text name="T_Shd_Bias">
+					Skośność
+				</text>
+				<button name="Shd_Bias_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 			</panel>
 			<panel name="P_Ambient_Occlusion">
 				<text name="T_Ambient_Occlusion">
@@ -128,7 +137,8 @@
 				</text>
 			</panel>
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Włącz okluzję otoczenia (percepcję głębi)" name="UseSSAO" tool_tip="Efekt jest subtelny w większości scen - zwiększa delikatnie percepcję głębi w zacienionych miejscach, takich jak sceny wewnątrz pomieszczeń. Najbardziej widoczne zmiany obrazu są widoczna w złożonych obiektach posiadających powłoki i zmarszczki (na przykład szkielety dinozaurów). Przejawia się w lekkim przyciemnianiu krawędzi obiektów - zwłaszcza tych, które są w bliskim sąsiedztwie innych. Jeśli nie korzystasz z tej funkcji - WYŁĄCZ JĄ! Pomoże to zwiększyć ilość klatek wyświetlanych na sekundę."/>
+				
+				<check_box label="Włącz okluzję otoczenia (percepcję głębi)" name="UseSSAO" tool_tip="Okluzja otoczenia włącza cieniowanie wszystkich obiektów. Jest najbardziej efektywna, gdy używa się dostępnych poniżej opcji Efektu i Wygładzania. Okluzja może sprawić, że scena będzie wyglądać realistycznie - szczególnie, gdy tekstury są w rozdzielczości 2048 pikseli lub wyższej."/>
 			</panel>
 			<panel name="P_Scale">
 				<text name="T_Scale" tool_tip="Kontroluje obszar próbkowania; większe regiony są bardziej dokładne. Dobrym pomysłem może być ustawienie tych wartości wysoko, a następnie dodanie nieco rozmycia cieni, aby złagodzić efekt.">
@@ -143,11 +153,14 @@
 					Mnożnik
 				</text>
 				<button name="Reset_Scaling_Factor" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-			</panel>
-			<panel name="P_Specular_Highlight">
-				<text name="T_Specular_Highlight" tool_tip="Podświetlenie uwydatniające (specular highlight) jest jasnym punktem (plamką) światła pojawiającym się na błyszczących przedmiotach, gdy je oświetlić (za angielską Wikipedią).">
-					Podświetlenia uwydatniające
+				<text name="T_Effect" tool_tip="Kontroluje ogólny efekt przyciemniania okluzji otoczenia. Wartość domyślna 0.8 tworzy prawie niedostrzegalny efekt. Wartość 0.0 i mniejsze sprawiają, że wynik końcowy jest bardziej realistyczny. Proszę pamiętać, że okluzja otoczenia może wywołać efekt podobny do szumu - możesz go osłabić za pomocą opcji dostępnej poniżej. Ponadto, standardowy mesz awatara może wyglądać nieco dziwnie z wartością Efektu ustawioną wysoko ze względu na słabą jakość geometrii awatara. Pamiętaj, że minimalna wartość na suwaku to 0, ale możesz wpisać ręcznie wartości poniżej zera, nawet -10000.">
+					Efekt
 				</text>
+				<button name="Reset_Effect" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
+				<text name="T_AO_Soften" tool_tip="Kontroluje efekt wygładzania okluzji otoczenia. Jeśli chcesz łatwo ustawić tą wartość tak, by spełniała Twoje oczekiwania, to przestaw najpierw 'Rozmycie' powyżej do wartości około 4.0, a następnie suwak tutaj, aby odpowiednio wygładzić cienie. Pamiętaj proszę, że wartość 0.0 wyłączy renderowanie okluzji otoczenia.">
+					Wygładzanie
+				</text>
+				<button name="Reset_AO_Soften" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 			</panel>
 			<panel name="P_Spec_Highlight_Settings">
 				<text name="T_Smoothness" tool_tip="Gładkość (wykładnik potęgowy dla podświetleń) jest wartością definiowalną przez użytkownika, która kontroluje widoczną gładkość powierzchni.">
@@ -345,6 +358,8 @@
 					Pomoce interfejsu
 				</text>
 			</panel>
+			<check_box label="Bryły brzegowe wszystkich świateł sceny" name="Lights"/>
+			<check_box label="Wizualny zasięg światła dla zaznaczenia" name="Show Light Radius for Selection"/>
 			<check_box label="Pokaż bryły brzegowe obiektów na scenie" name="Bounding Boxes"/>
 			<check_box label="Pokaż panel statystyk" name="Statistics Bar"/>
 			<check_box label="Pokaż detale pozycji kamery" name="Camera"/>
@@ -424,6 +439,7 @@
 				<check_box name="CB_Move_Avatar" label="Użyj myszy 3D, aby poruszać awatarem" tool_tip="Gdy włączone, to mysz będzie poruszać awatarem."/>
 				<check_box name="CB_Move_Objects" label="... aby poruszać obiektami (budowanie)" tool_tip="Użyj myszy 3D, aby poruszać obiektami podczas budowania i edytowania."/>
 				<check_box label="Pokazuj pole widzenia w przeglądarce" name="CAM_Show_FOV" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!"/>
+				<check_box label="Pokaż szczegóły pozycji kamery" name="Camera"/>
 			</panel>
 			<panel name="P_Viewer_Cam_Menu">
 				<text name="PT_Viewer_Cam_Menu">

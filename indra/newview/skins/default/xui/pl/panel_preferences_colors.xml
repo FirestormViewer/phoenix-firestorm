@@ -139,16 +139,7 @@
 			</panel>
 		</panel>
 		<panel label="Minimapa" name="tab-minimap">
-			<text name="netmap_color_textbox">
-				Minimapa:
-			</text>
-			<check_box name="MiniMapChatRing" label="Pierścienie na minimapie symbolizujące zasięg czatu i krzyku"/>
-			<text name="netmap_chatring_color_label">
-				Zasięg czatu
-			</text>
-			<text name="netmap_shoutring_color_label">
-				Zasięg krzyku
-			</text>
+			<slider label="Przezroczystość tła:" name="FSMiniMapOpacity"/>
 			<text name="netmap_dots_textbox">
 				Kropki minimapy:
 			</text>
@@ -166,6 +157,13 @@
 			</text>
 			<text name="MapAvatarMutedColor_label">
 				Wyciszeni
+			</text>
+			<check_box name="MiniMapChatRing" label="Pierścienie na minimapie symbolizujące zasięg czatu i krzyku"/>
+			<text name="netmap_chatring_color_label">
+				Zasięg czatu
+			</text>
+			<text name="netmap_shoutring_color_label">
+				Zasięg krzyku
 			</text>
 		</panel>
 		<panel label="Różne" name="tab-misc">
