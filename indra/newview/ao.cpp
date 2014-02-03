@@ -70,7 +70,7 @@ void FloaterAO::reloading(BOOL yes)
 BOOL FloaterAO::tick()
 {
 	// reloading took too long, probably missed the signal, so we hide the reload cover
-	llwarns << "AO reloading timeout." << llendl;
+	LL_WARNS("AOEngine") << "AO reloading timeout." << LL_ENDL;
 	updateList();
 	return FALSE;
 }
@@ -138,7 +138,7 @@ void FloaterAO::updateList()
 
 	if(mSetList.empty())
 	{
-		lldebugs << "empty set list" << llendl;
+		LL_DEBUGS("AOEngine") << "empty set list" << LL_ENDL;
 		mSetSelector->add(getString("ao_no_sets_loaded"));
 		mSetSelectorSmall->add(getString("ao_no_sets_loaded"));
 		mSetSelector->selectNthItem(0);
@@ -333,7 +333,7 @@ void FloaterAO::onRenameSet()
 {
 	if(!mSelectedSet)
 	{
-		llwarns << "Rename AO set without set selected." << llendl;
+		LL_WARNS("AOEngine") << "Rename AO set without set selected." << LL_ENDL;
 		return;
 	}
 
@@ -365,7 +365,7 @@ void FloaterAO::onClickActivate()
 	// sync small set selector with main set selector
 	mSetSelectorSmall->selectNthItem(mSetSelector->getCurrentIndex());
 
-	lldebugs << "Set activated: " << mSetSelector->getSelectedItemLabel() << llendl;
+	LL_DEBUGS("AOEngine") << "Set activated: " << mSetSelector->getSelectedItemLabel() << LL_ENDL;
 	AOEngine::instance().selectSet(mSelectedSet);
 }
 
@@ -536,7 +536,7 @@ void FloaterAO::onCheckDisableStands()
 void FloaterAO::onChangeAnimationSelection()
 {
 	std::vector<LLScrollListItem*> list=mAnimationList->getAllSelected();
-	lldebugs << "Selection count: " << list.size() << llendl;
+	LL_DEBUGS("AOEngine") << "Selection count: " << list.size() << LL_ENDL;
 
 	BOOL resortEnable=FALSE;
 	BOOL trashEnable=FALSE;
@@ -547,7 +547,7 @@ void FloaterAO::onChangeAnimationSelection()
 	if(!mCanDragAndDrop)
 	{
 		mAnimationList->deselectAllItems();
-		lldebugs << "Selection count now: " << list.size() << llendl;
+		LL_DEBUGS("AOEngine") << "Selection count now: " << list.size() << LL_ENDL;
 	}
 	else if(list.size()>0)
 	{

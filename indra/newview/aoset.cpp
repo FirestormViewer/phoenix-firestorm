@@ -39,7 +39,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 	mDirty(FALSE),
 	mCurrentMotion(LLUUID())
 {
-	lldebugs << "Creating new AO set: " << this << llendl;
+	LL_DEBUGS("AOEngine") << "Creating new AO set: " << this << LL_ENDL;
 
 	// ZHAO names first, alternate names following, separated by | characters
 	// keep number and order in sync with the enum in the declaration
@@ -124,7 +124,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 
 AOSet::~AOSet()
 {
-	lldebugs << "Set deleted: " << this << llendl;
+	LL_DEBUGS("AOEngine") << "Set deleted: " << this << LL_ENDL;
 }
 
 AOSet::AOState* AOSet::getState(S32 eName)
@@ -172,20 +172,20 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
 				if(state->mRandom)
 				{
 					state->mCurrentAnimation=ll_frand()*numOfAnimations;
-					lldebugs << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
+					LL_DEBUGS("AOEngine") << "randomly chosen " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
 				}
 				else
 				{
 					state->mCurrentAnimation++;
 					if(state->mCurrentAnimation>=state->mAnimations.size())
 						state->mCurrentAnimation=0;
-					lldebugs << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << llendl;
+					LL_DEBUGS("AOEngine") << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
 				}
 			}
 			return state->mAnimations[state->mCurrentAnimation].mAssetUUID;
 		}
 		else
-			lldebugs << "animation state has no animations assigned" << llendl;
+			LL_DEBUGS("AOEngine") << "animation state has no animations assigned" << LL_ENDL;
 	}
 	return LLUUID::null;
 }
@@ -195,12 +195,12 @@ void AOSet::startTimer(F32 timeout)
 	mEventTimer.stop();
 	mPeriod=timeout;
 	mEventTimer.start();
-	lldebugs << "Starting state timer for " << getName() << " at " << timeout << llendl;
+	LL_DEBUGS("AOEngine") << "Starting state timer for " << getName() << " at " << timeout << LL_ENDL;
 }
 
 void AOSet::stopTimer()
 {
-	lldebugs << "State timer for " << getName() << " stopped." << llendl;
+	LL_DEBUGS("AOEngine") << "State timer for " << getName() << " stopped." << LL_ENDL;
 	mEventTimer.stop();
 }
 
