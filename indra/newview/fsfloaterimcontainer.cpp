@@ -41,12 +41,14 @@
 #include "llfloater.h"
 #include "llviewercontrol.h"
 #include "fsfloaterim.h"
+#include "llvoiceclient.h"
 
 //
 // FSFloaterIMContainer
 //
 FSFloaterIMContainer::FSFloaterIMContainer(const LLSD& seed)
-:	LLMultiFloater(seed)
+:	LLMultiFloater(seed),
+	mActiveVoiceFloater(NULL)
 {
 	mAutoResize = FALSE;
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
@@ -344,6 +346,75 @@ void FSFloaterIMContainer::reloadEmptyFloaters()
 	{
 		nearby_chat->reloadMessages(true);
 	}
+}
+
+// virtual
+void FSFloaterIMContainer::draw()
+{
+	LLFloater* current_voice_floater = getCurrentVoiceFloater();
+	if (mActiveVoiceFloater != current_voice_floater)
+	{
+		if (mActiveVoiceFloater)
+		{
+			mTabContainer->setTabImage(mActiveVoiceFloater, "");
+		}
+	}
+
+	if (current_voice_floater)
+	{
+		static LLUIColor voice_connected_color = LLUIColorTable::instance().getColor("VoiceConnectedColor", LLColor4::green);
+		static LLUIColor voice_error_color = LLUIColorTable::instance().getColor("VoiceErrorColor", LLColor4::red);
+		static LLUIColor voice_not_connected_color = LLUIColorTable::instance().getColor("VoiceNotConnectedColor", LLColor4::yellow);
+
+		LLColor4 icon_color = LLColor4::white;
+		LLVoiceChannel* voice_channel = LLVoiceChannel::getCurrentVoiceChannel();
+		if (voice_channel)
+		{
+			if (voice_channel->isActive())
+			{
+				icon_color = voice_connected_color.get();
+			}
+			else if (voice_channel->getState() == LLVoiceChannel::STATE_ERROR)
+			{
+				icon_color = voice_error_color.get();
+			}
+			else
+			{
+				icon_color = voice_not_connected_color.get();
+			}
+		}
+		mTabContainer->setTabImage(current_voice_floater, "Active_Voice_Tab", LLFontGL::RIGHT, icon_color);
+	}
+	mActiveVoiceFloater = current_voice_floater;
+
+	LLMultiFloater::draw();
+}
+
+LLFloater* FSFloaterIMContainer::getCurrentVoiceFloater()
+{
+	if (!LLVoiceClient::instance().voiceEnabled())
+	{
+		return NULL;
+	}
+
+	if (LLVoiceChannelProximal::getInstance() == LLVoiceChannel::getCurrentVoiceChannel())
+	{
+		return FSFloaterNearbyChat::getInstance();
+	}
+
+	for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
+	{
+		LLPanel* panel = mTabContainer->getPanelByIndex(i);
+		if (panel->getName() == "panel_im")
+		{
+			FSFloaterIM* im_floater = dynamic_cast<FSFloaterIM*>(panel);
+			if (im_floater && im_floater->getVoiceChannel() == LLVoiceChannel::getCurrentVoiceChannel())
+			{
+				return im_floater;
+			}
+		}
+	}
+	return NULL;
 }
 
 // EOF

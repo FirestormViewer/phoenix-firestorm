@@ -219,6 +219,9 @@ public:
 	void 		setTabImage(LLPanel* child, std::string img_name, const LLColor4& color = LLColor4::white);
 	void 		setTabImage(LLPanel* child, const LLUUID& img_id, const LLColor4& color = LLColor4::white);
 	void		setTabImage(LLPanel* child, LLIconCtrl* icon);
+	// <FS:Ansariel> Custom tab image overlay button alignment
+	void		setTabImage(LLPanel* child, std::string image_name, LLFontGL::HAlign alignment, const LLColor4& color = LLColor4::white);
+	// </FS:Ansariel>
 	void		setTitle( const std::string& title );
 	const std::string getPanelTitle(S32 index);
 

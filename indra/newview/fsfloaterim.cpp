@@ -68,7 +68,6 @@
 //AO: For moving callbacks from control panel into this class
 #include "llavataractions.h"
 #include "llgroupactions.h"
-#include "llvoicechannel.h"
 //TL: for support group chat prefix
 #include "fsdata.h"
 #include "llversioninfo.h"
@@ -100,7 +99,8 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mChatLayoutPanel(NULL),
 	mInputPanels(NULL),
 	mChatLayoutPanelHeight(0),
-	mAvatarNameCacheConnection()
+	mAvatarNameCacheConnection(),
+	mVoiceChannel(NULL)
 {
 	LLIMModel::LLIMSession* im_session = LLIMModel::getInstance()->findIMSession(mSessionID);
 	if (im_session)
@@ -705,15 +705,15 @@ BOOL FSFloaterIM::postBuild()
 				break;
 		}
 	}
-	LLVoiceChannel* voice_channel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
-	if(voice_channel)
+	mVoiceChannel = LLIMModel::getInstance()->getVoiceChannel(mSessionID);
+	if(mVoiceChannel)
 	{
-	LL_DEBUGS("FSFloaterIM") << "voice_channel start" << LL_ENDL;
-		mVoiceChannelStateChangeConnection = voice_channel->setStateChangedCallback(boost::bind(&FSFloaterIM::onVoiceChannelStateChanged, this, _1, _2));
+		LL_DEBUGS("FSFloaterIM") << "voice_channel start" << LL_ENDL;
+		mVoiceChannelStateChangeConnection = mVoiceChannel->setStateChangedCallback(boost::bind(&FSFloaterIM::onVoiceChannelStateChanged, this, _1, _2));
 		
 		//call (either p2p, group or ad-hoc) can be already in started state
-		updateButtons(voice_channel->getState() >= LLVoiceChannel::STATE_CALL_STARTED);
-	LL_DEBUGS("FSFloaterIM") << "voice_channel end" << LL_ENDL;
+		updateButtons(mVoiceChannel->getState() >= LLVoiceChannel::STATE_CALL_STARTED);
+		LL_DEBUGS("FSFloaterIM") << "voice_channel end" << LL_ENDL;
 	}
 	LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
 	

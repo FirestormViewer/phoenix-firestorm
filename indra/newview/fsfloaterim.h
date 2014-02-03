@@ -145,6 +145,8 @@ public:
 
 	S32 getLastChatMessageIndex() {return mLastMessageIndex;}
 
+	LLVoiceChannel* getVoiceChannel() { return mVoiceChannel; }
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);
@@ -229,6 +231,8 @@ private:
 
 	bool mSessionInitialized;
 	LLSD mQueuedMsgsForInit;
+
+	LLVoiceChannel* mVoiceChannel;
 	
 	S32 mInputEditorPad;
 	S32 mChatLayoutPanelHeight;

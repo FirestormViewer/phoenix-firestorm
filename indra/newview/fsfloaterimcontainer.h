@@ -50,6 +50,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	void onCloseFloater(LLUUID& id);
+	/*virtual*/ void draw();
 	
 	/*virtual*/ void addFloater(LLFloater* floaterp, 
 								BOOL select_added_floater, 
@@ -58,10 +59,7 @@ public:
 	/*virtual*/ void removeFloater(LLFloater* floaterp);
 // [/SL:KB]
 
-	static LLFloater* getCurrentVoiceFloater();
-
 	static FSFloaterIMContainer* findInstance();
-
 	static FSFloaterIMContainer* getInstance();
 
 	virtual void setMinimized(BOOL b);
@@ -77,6 +75,10 @@ public:
 	static void reloadEmptyFloaters();
 
 private:
+	LLFloater* getCurrentVoiceFloater();
+
+	LLFloater* mActiveVoiceFloater;
+
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;
 	boost::signals2::connection mNewMessageConnection;

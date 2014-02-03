@@ -1240,4 +1240,13 @@
   <color
       name="XUITooltipFileName"
       value="0.7 0.7 1 1" />
+  <color
+      name="VoiceConnectedColor"
+      reference="Green" />
+  <color
+      name="VoiceErrorColor"
+      reference="Red" />
+  <color
+      name="VoiceNotConnectedColor"
+      reference="Yellow" />
 </colors>

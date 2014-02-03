@@ -980,4 +980,6 @@ with the same filename but different name
 
 <texture name="AddItem_Menu" file_name="icons/AddItem_Menu.png" preload="false" />
 <texture name="TrashItem_Menu" file_name="icons/TrashItem_Menu.png" preload="false" />
+
+<texture name="Active_Voice_Tab" file_name="legacy/active_voice_tab.tga" preload="false" />
 </textures>
