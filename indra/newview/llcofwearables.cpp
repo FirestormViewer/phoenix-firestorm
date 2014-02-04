@@ -309,7 +309,7 @@ BOOL LLCOFWearables::postBuild()
 	mAttachments->setComparator(&WEARABLE_NAME_COMPARATOR);
 	mBodyParts->setComparator(&WEARABLE_NAME_COMPARATOR);
 
-	// <FS:Ansariel> Accordions replaced with tab panels
+	// <FS:Ansariel> Accordions replaced with tab panels; See panel_cof_wearables.xml
 	//mClothingTab = getChild<LLAccordionCtrlTab>("tab_clothing");
 	//mClothingTab->setDropDownStateChangedCallback(boost::bind(&LLCOFWearables::onAccordionTabStateChanged, this, _1, _2));
 
