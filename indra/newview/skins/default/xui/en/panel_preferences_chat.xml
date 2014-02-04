@@ -1149,7 +1149,7 @@
              initial_value="10"
              left_pad="0"
              max_val="50"
-             min_val="1"
+             min_val="0"
              name="max_chat_count"
              width="60" />
             <text
