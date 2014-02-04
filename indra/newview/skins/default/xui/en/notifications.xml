@@ -7149,7 +7149,7 @@ Joining this group costs a fee and the invitation cannot be accepted because of 
    sound="UISndTeleportOffer">
 [NAME_SLURL] has offered to teleport you to their location:
 
-“[MESSAGE]”
+[MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
     <tag>confirm</tag>
     <form name="form">
@@ -7172,7 +7172,7 @@ Joining this group costs a fee and the invitation cannot be accepted because of 
    type="offer">
 [NAME_SLURL] has offered to teleport you to their location:
 
-“[MESSAGE]”
+[MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 
 This region contains [REGION_CONTENT_MATURITY] content, but your current preferences are set to exclude [REGION_CONTENT_MATURITY] content.  We can change your preferences and continue with the teleport, or you can cancel this teleport.
@@ -7197,7 +7197,7 @@ This region contains [REGION_CONTENT_MATURITY] content, but your current prefere
    type="notifytip">
 [NAME_SLURL] has offered to teleport you to their location:
 
-“[MESSAGE]”
+[MESSAGE]
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 
 However, this region contains content accessible to adults only.
