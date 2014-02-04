@@ -1746,12 +1746,13 @@ void LLTabContainer::setTabImage(LLPanel* child, std::string image_name, const L
 }
 
 // <FS:Ansariel> Custom tab image overlay button alignment
-void LLTabContainer::setTabImage(LLPanel* child, std::string image_name, LLFontGL::HAlign alignment, const LLColor4& color)
+void LLTabContainer::setTabImage(LLPanel* child, std::string img_name, LLFontGL::HAlign alignment, const LLColor4& color, const LLColor4& selected_color)
 {
 	LLTabTuple* tuple = getTabByPanel(child);
 	if( tuple )
 	{
-		tuple->mButton->setImageOverlay(image_name, alignment, color);
+		tuple->mButton->setImageOverlay(img_name, alignment, color);
+		tuple->mButton->setImageOverlaySelectedColor(selected_color);
 		reshapeTuple(tuple);
 	}
 }

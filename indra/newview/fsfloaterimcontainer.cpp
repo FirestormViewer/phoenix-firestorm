@@ -428,7 +428,7 @@ void FSFloaterIMContainer::draw()
 						icon_color = LLColor4::white;
 						break;
 				}
-				mTabContainer->setTabImage(current_voice_floater, "Active_Voice_Tab", LLFontGL::RIGHT, icon_color);
+				mTabContainer->setTabImage(current_voice_floater, "Active_Voice_Tab", LLFontGL::RIGHT, icon_color, icon_color);
 				mCurrentVoiceState = voice_state;
 			}
 		}

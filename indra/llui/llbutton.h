@@ -234,6 +234,8 @@ public:
 	void 			setImageOverlay(const LLUUID& image_id, LLFontGL::HAlign alignment = LLFontGL::HCENTER, const LLColor4& color = LLColor4::white);
 	LLPointer<LLUIImage> getImageOverlay() { return mImageOverlay; }
 	LLFontGL::HAlign getImageOverlayHAlign() const	{ return mImageOverlayAlignment; }
+	// <FS:Ansariel> Setter for overlay image selectedcolor
+	void			setImageOverlaySelectedColor(const LLColor4& color) { mImageOverlaySelectedColor = color; }
 	
 	void            autoResize();	// resize with label of current btn state 
 	void            resize(LLUIString label); // resize with label input
