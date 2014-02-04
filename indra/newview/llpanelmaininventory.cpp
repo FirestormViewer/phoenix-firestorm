@@ -538,7 +538,17 @@ void LLPanelMainInventory::onClearSearch()
 	if (mActivePanel)
 	{
 		mActivePanel->setFilterSubString(LLStringUtil::null);
-		mActivePanel->setFilterTypes(0xffffffffffffffffULL);
+		// <FS:Ansariel>
+		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
+		if (mActivePanel->getName() == "Worn Items")
+		{
+			mActivePanel->setFilterTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
+		}
+		else
+		{
+			mActivePanel->setFilterTypes(0xffffffffffffffffULL);
+		}
+		// </FS:Ansariel>
 
 		// ## Zi: Filter Links Menu
 		// We don't do this anymore, we have a menu option for it now. -Zi
