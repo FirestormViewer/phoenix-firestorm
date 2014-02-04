@@ -51,7 +51,8 @@ static const F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 FSFloaterIMContainer::FSFloaterIMContainer(const LLSD& seed)
 :	LLMultiFloater(seed),
 	mActiveVoiceFloater(NULL),
-	mCurrentVoiceState(VOICE_STATE_NONE)
+	mCurrentVoiceState(VOICE_STATE_NONE),
+	mForceVoiceStateUpdate(false)
 {
 	mAutoResize = FALSE;
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
@@ -150,6 +151,9 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 		openFloater(floaterp->getKey());
 		return;
 	}
+
+	// Need to force an update on the voice state because torn off floater might get re-attached
+	mForceVoiceStateUpdate = true;
 	
 	if (floaterp->getName() == "imcontacts" || floaterp->getName() == "nearby_chat")
 	{
@@ -374,7 +378,7 @@ void FSFloaterIMContainer::onVoiceStateIndicatorChanged(const LLSD& data)
 void FSFloaterIMContainer::draw()
 {
 	static LLCachedControl<bool> fsShowConversationVoiceStateIndicator(gSavedSettings, "FSShowConversationVoiceStateIndicator");
-	if (fsShowConversationVoiceStateIndicator && mActiveVoiceUpdateTimer.hasExpired())
+	if (fsShowConversationVoiceStateIndicator && (mActiveVoiceUpdateTimer.hasExpired() || mForceVoiceStateUpdate))
 	{
 		LLFloater* current_voice_floater = getCurrentVoiceFloater();
 		if (mActiveVoiceFloater != current_voice_floater)
@@ -410,7 +414,7 @@ void FSFloaterIMContainer::draw()
 				}
 			}
 
-			if (voice_state != mCurrentVoiceState)
+			if (voice_state != mCurrentVoiceState || mForceVoiceStateUpdate)
 			{
 				LLColor4 icon_color;
 				switch (voice_state)
@@ -432,6 +436,7 @@ void FSFloaterIMContainer::draw()
 				mCurrentVoiceState = voice_state;
 			}
 		}
+		mForceVoiceStateUpdate = false;
 		mActiveVoiceFloater = current_voice_floater;
 		mActiveVoiceUpdateTimer.setTimerExpirySec(VOICE_STATUS_UPDATE_INTERVAL);
 	}

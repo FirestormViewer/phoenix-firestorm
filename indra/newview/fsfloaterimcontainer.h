@@ -90,6 +90,7 @@ private:
 	LLFloater*	mActiveVoiceFloater;
 	LLTimer		mActiveVoiceUpdateTimer;
 	eVoiceState	mCurrentVoiceState;
+	bool		mForceVoiceStateUpdate;
 
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;
