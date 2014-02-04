@@ -4369,10 +4369,12 @@ void LLAppViewer::requestQuit()
 	}
 	
 	// Try to send last batch of avatar rez metrics.
-	if (!gDisconnected && isAgentAvatarValid())
-	{
-		gAgentAvatarp->updateAvatarRezMetrics(true); // force a last packet to be sent.
-	}
+	// <FS:Ansariel> LL merge error
+	//if (!gDisconnected && isAgentAvatarValid())
+	//{
+	//	gAgentAvatarp->updateAvatarRezMetrics(true); // force a last packet to be sent.
+	//}
+	// </FS:Ansariel>
 	
 	LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral*)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, TRUE);
 	effectp->setPositionGlobal(gAgent.getPositionGlobal());
