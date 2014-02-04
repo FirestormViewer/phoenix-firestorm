@@ -361,8 +361,11 @@ void FSFloaterIMContainer::onVoiceStateIndicatorChanged(const LLSD& data)
 {
 	if (!data.asBoolean())
 	{
-		mTabContainer->setTabImage(mActiveVoiceFloater, "");
-		mActiveVoiceFloater = NULL;
+		if (mActiveVoiceFloater)
+		{
+			mTabContainer->setTabImage(mActiveVoiceFloater, "");
+			mActiveVoiceFloater = NULL;
+		}
 		mCurrentVoiceState = VOICE_STATE_NONE;
 	}
 }
