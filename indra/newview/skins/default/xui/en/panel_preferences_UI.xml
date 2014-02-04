@@ -489,7 +489,7 @@
          height="16"
          increment="0.25"
          label="IM tab flash rate:"
-         tool_tip="Rate at which tabs flash (in Hz) - used for IM notifications"
+         tool_tip="Number of times IM tabs flash per second (in Hz) - used for IM notifications"
          label_width="300"
          layout="topleft"
          left="30"
