@@ -216,6 +216,7 @@ protected:
 	void onCopyURI();
 	void onCopyKey();
 	void onGroupInvite();
+	void onReport();
 
 	bool isGrantedToSeeOnlineStatus();
 

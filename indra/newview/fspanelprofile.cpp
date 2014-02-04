@@ -292,6 +292,7 @@ BOOL FSPanelProfileSecondLife::postBuild()
 	registrar.add("Profile.CopyNameToClipboard",	boost::bind(&FSPanelProfileSecondLife::onCopyToClipboard, this));
 	registrar.add("Profile.CopyURI",				boost::bind(&FSPanelProfileSecondLife::onCopyURI, this));
 	registrar.add("Profile.CopyKey",				boost::bind(&FSPanelProfileSecondLife::onCopyKey, this));
+	registrar.add("Profile.Report",					boost::bind(&FSPanelProfileSecondLife::onReport, this));
 
 	mAddFriendButton->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onAddFriendButtonClick, this));
 	mIMButton->setCommitCallback(boost::bind(&FSPanelProfileSecondLife::onIMButtonClick, this));
@@ -688,6 +689,11 @@ void FSPanelProfileSecondLife::onCopyKey()
 void FSPanelProfileSecondLife::onGroupInvite()
 {
 	LLAvatarActions::inviteToGroup(getAvatarId());
+}
+
+void FSPanelProfileSecondLife::onReport()
+{
+	LLAvatarActions::report(getAvatarId());
 }
 
 // virtual, called by LLAvatarTracker
