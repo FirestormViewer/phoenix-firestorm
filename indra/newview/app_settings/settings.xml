@@ -21790,6 +21790,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>Setting this value lower than 0.0 or higher than 1.0 has no effect.</string>
     </map>
+    <key>FSShowConversationVoiceStateIndicator</key>
+      <map>
+      <key>Comment</key>
+      <string>Show the voice state indicator in the conversation floater tabs</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
 </map>
 </llsd>
 

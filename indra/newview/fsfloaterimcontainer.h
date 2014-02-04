@@ -75,9 +75,21 @@ public:
 	static void reloadEmptyFloaters();
 
 private:
-	LLFloater* getCurrentVoiceFloater();
+	enum eVoiceState
+	{
+		VOICE_STATE_NONE,
+		VOICE_STATE_UNKNOWN,
+		VOICE_STATE_CONNECTED,
+		VOICE_STATE_NOT_CONNECTED,
+		VOICE_STATE_ERROR
+	};
 
-	LLFloater* mActiveVoiceFloater;
+	LLFloater*	getCurrentVoiceFloater();
+	void		onVoiceStateIndicatorChanged(const LLSD& data);
+
+	LLFloater*	mActiveVoiceFloater;
+	LLTimer		mActiveVoiceUpdateTimer;
+	eVoiceState	mCurrentVoiceState;
 
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;

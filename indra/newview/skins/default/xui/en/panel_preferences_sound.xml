@@ -773,6 +773,17 @@
          name="Show_Voice_Visualizers_In_Calls"
          top_pad="3"
          width="237"/>
+        <check_box
+         control_name="FSShowConversationVoiceStateIndicator"
+         follows="left|top"
+         height="15"
+         label="Show voice channel state in conversation tabs"
+         tool_tip="Shows the current voice channel state in the tabs in the conversations window"
+         layout="topleft"
+         left="25"
+         name="FSShowConversationVoiceStateIndicator"
+         top_pad="3"
+         width="237"/>
 
         <check_box
          follows="left|top"
