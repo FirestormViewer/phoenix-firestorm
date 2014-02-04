@@ -1502,7 +1502,7 @@ bool FSPanelAreaSearchList::onContextMenuItemEnable(const LLSD& userdata)
 		// return true if the object is within the draw distance.
 		LLUUID object_id = mResultList->getFirstSelected()->getUUID();
 		LLViewerObject* objectp = gObjectList.findObject(object_id);
-		return dist_vec_squared(gAgent.getPositionGlobal(), objectp->getPositionGlobal()) < gAgentCamera.mDrawDistance * gAgentCamera.mDrawDistance;
+		return (objectp && dist_vec_squared(gAgent.getPositionGlobal(), objectp->getPositionGlobal()) < gAgentCamera.mDrawDistance * gAgentCamera.mDrawDistance);
 	}
 	else if (parameter == "script")
 	{
