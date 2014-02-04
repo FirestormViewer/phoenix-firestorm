@@ -69,7 +69,7 @@
         </text>
         <check_box label="Ukryj ikony czatów IM oraz grup" name="FSDisableIMChiclets" tool_tip="Zaznacz, aby Firestorm ukrył ikony czatów IM oraz grup (koperta z powiadomieniami i suma wszystkich IM pozostaną na ekranie)" />
         <slider label="Ile razy mrugają karty IM:" name="ButtonsFlashCount" />
-        <slider label="Szybkość mrugania:" tool_tip="Szybkość mrugania (w Hercach) - używane przy powiadomieniach IM" name="ButtonFlashRate" />
+        <slider label="Szybkość mrugania:" tool_tip="Ten suwak określa ile razy karty rozmów IM mrugają na sekundę (w Hercach) - używane przy powiadomieniach IM" name="ButtonFlashRate" />
     </panel>
     <panel label="Tosty" name="UI-toasts-tab">
         <text name="ToastSettings">

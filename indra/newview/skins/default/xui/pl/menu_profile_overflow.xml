@@ -12,4 +12,5 @@
 	<menu_item_call label="Wyrzuć" name="kick"/>
 	<menu_item_call label="Unieruchom" name="freeze"/>
 	<menu_item_call label="Zezwól na ruch" name="unfreeze"/>
+	<menu_item_call label="Zgłoś" name="report"/>
 </toggleable_menu>

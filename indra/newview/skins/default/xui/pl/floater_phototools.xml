@@ -87,7 +87,7 @@
 			</panel>
 			<panel name="P_L_S_Settings">
 				<check_box label="Włącz zaawansowane oświetlenie" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
-				<check_box label="Renderowanie odbić powierzchni ekranu (SSR)" name="FSRenderSSR" tool_tip="Ta opcja włącza renderowanie odbić powierzchni ekranu (Screen Space Reflections), co podnosi wyraźnie poziom realizmu tekstur."/>
+				<check_box label="Włącz odbicia powierzchni ekranu (SSR)" name="FSRenderSSR" tool_tip="Ta opcja włącza renderowanie odbić powierzchni ekranu (Screen Space Reflections), co podnosi wyraźnie poziom realizmu tekstur."/>
 				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
 				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>
@@ -137,7 +137,6 @@
 				</text>
 			</panel>
 			<panel name="P_Amb_Occ_Settings">
-				
 				<check_box label="Włącz okluzję otoczenia (percepcję głębi)" name="UseSSAO" tool_tip="Okluzja otoczenia włącza cieniowanie wszystkich obiektów. Jest najbardziej efektywna, gdy używa się dostępnych poniżej opcji Efektu i Wygładzania. Okluzja może sprawić, że scena będzie wyglądać realistycznie - szczególnie, gdy tekstury są w rozdzielczości 2048 pikseli lub wyższej."/>
 			</panel>
 			<panel name="P_Scale">
@@ -158,7 +157,7 @@
 				</text>
 				<button name="Reset_Effect" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_AO_Soften" tool_tip="Kontroluje efekt wygładzania okluzji otoczenia. Jeśli chcesz łatwo ustawić tą wartość tak, by spełniała Twoje oczekiwania, to przestaw najpierw 'Rozmycie' powyżej do wartości około 4.0, a następnie suwak tutaj, aby odpowiednio wygładzić cienie. Pamiętaj proszę, że wartość 0.0 wyłączy renderowanie okluzji otoczenia.">
-					Wygładzanie
+					Wygładzaj
 				</text>
 				<button name="Reset_AO_Soften" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 			</panel>
