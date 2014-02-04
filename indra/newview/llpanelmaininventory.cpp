@@ -62,6 +62,9 @@
 #include "llviewernetwork.h"
 // </FS:AW opensim currency support>
 
+// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
+bool LLPanelMainInventory::sSaveFilters = true;
+
 const std::string FILTERS_FILENAME("filters.xml");
 
 static LLRegisterPanelClassWrapper<LLPanelMainInventory> t_inventory("panel_main_inventory");
@@ -356,7 +359,10 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 		}
 	}
 
-
+	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
+	if (sSaveFilters)
+	{
+	// </FS:Ansariel>
 	std::ostringstream filterSaveName;
 	filterSaveName << gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME);
 	llofstream filtersFile(filterSaveName.str());
@@ -368,6 +374,9 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 	}
 	else
 		filtersFile.close();
+	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
+	}
+	// </FS:Ansariel>
 
 	gInventory.removeObserver(this);
 	delete mSavedFolderState;

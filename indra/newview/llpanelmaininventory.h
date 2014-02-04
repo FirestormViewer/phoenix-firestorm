@@ -92,6 +92,9 @@ public:
 	void updateFilterDropdown(const LLInventoryFilter* filter);
 	// ## Zi: Filter dropdown
 
+	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
+	static bool sSaveFilters;
+
 protected:
 	//
 	// Misc functions

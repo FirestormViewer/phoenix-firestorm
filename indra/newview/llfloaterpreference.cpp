@@ -122,6 +122,7 @@
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs
 #include "lldiriterator.h"	// <Kadah> for populating the fonts combo
 #include "llline.h"
+#include "llpanelmaininventory.h"
 #include "llscrolllistctrl.h"
 #include "llspellcheck.h"
 #include "llsdserialize.h" // KB: SkinsSelector
@@ -3688,6 +3689,8 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification,const 
 		gToolBarView->clearToolbars();
 		llwarns << "reloading toolbars" << llendl;
 		gToolBarView->loadToolbars(FALSE);
+
+		LLPanelMainInventory::sSaveFilters = false;
 	}
 
 	// Get scroll list control that holds the list of global folders
