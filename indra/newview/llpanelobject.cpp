@@ -2428,12 +2428,15 @@ void LLPanelObject::onCommitSculptType(LLUICtrl *ctrl, void* userdata)
 	self->sendSculpt();
 }
 
+std::string get_vector_format_string()
+{
+	S32 precision = gSavedSettings.getS32("FSBuildToolDecimalPrecision");
+	return llformat("<%%.%df, %%.%df, %%.%df>", precision, precision, precision);
+}
 
 void copy_vector_to_clipboard(const LLVector3& vec)
 {
-	S32 precision = gSavedSettings.getS32("FSBuildToolDecimalPrecision");
-	std::string format_string = llformat("<%%.%df, %%.%df, %%.%df>", precision, precision, precision);
-	std::string stringVec = llformat(format_string.c_str(), vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
+	std::string stringVec = llformat(get_vector_format_string().c_str(), vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
 	LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringVec));
 }
 
@@ -2441,7 +2444,9 @@ void LLPanelObject::onCopyPos(const LLSD& data)
 {
 	mClipboardPos = LLVector3(mCtrlPosX->get(), mCtrlPosY->get(), mCtrlPosZ->get());
 	copy_vector_to_clipboard(mClipboardPos);
-	mBtnPastePos->setToolTip(llformat("Paste Position\n<%g, %g, %g>", mClipboardPos.mV[VX], mClipboardPos.mV[VY], mClipboardPos.mV[VZ]));
+	LLStringUtil::format_map_t args;
+	args["VALUE"] = llformat(get_vector_format_string().c_str(), mClipboardPos.mV[VX], mClipboardPos.mV[VY], mClipboardPos.mV[VZ]);
+	mBtnPastePos->setToolTip(getString("Paste Position", args));
 	mHasPosClipboard = TRUE;
 }
 
@@ -2449,7 +2454,9 @@ void LLPanelObject::onCopySize(const LLSD& data)
 {
 	mClipboardSize = LLVector3(mCtrlScaleX->get(), mCtrlScaleY->get(), mCtrlScaleZ->get());
 	copy_vector_to_clipboard(mClipboardSize);
-	mBtnPasteSize->setToolTip(llformat("Paste Size\n<%g, %g, %g>", mClipboardSize.mV[VX], mClipboardSize.mV[VY], mClipboardSize.mV[VZ]));
+	LLStringUtil::format_map_t args;
+	args["VALUE"] = llformat(get_vector_format_string().c_str(), mClipboardSize.mV[VX], mClipboardSize.mV[VY], mClipboardSize.mV[VZ]);
+	mBtnPasteSize->setToolTip(getString("Paste Size", args));
 	mHasSizeClipboard = TRUE;
 }
 
@@ -2457,7 +2464,9 @@ void LLPanelObject::onCopyRot(const LLSD& data)
 {
 	mClipboardRot = LLVector3(mCtrlRotX->get(), mCtrlRotY->get(), mCtrlRotZ->get());
 	copy_vector_to_clipboard(mClipboardRot);
-	mBtnPasteRot->setToolTip(llformat("Paste Rotation\n<%g, %g, %g>", mClipboardRot.mV[VX], mClipboardRot.mV[VY], mClipboardRot.mV[VZ]));
+	LLStringUtil::format_map_t args;
+	args["VALUE"] = llformat(get_vector_format_string().c_str(), mClipboardRot.mV[VX], mClipboardRot.mV[VY], mClipboardRot.mV[VZ]);
+	mBtnPasteRot->setToolTip(getString("Paste Rotation", args));
 	mHasRotClipboard = TRUE;
 }
 
