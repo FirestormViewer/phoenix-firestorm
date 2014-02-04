@@ -5092,19 +5092,16 @@ void LLAppViewer::idle()
 		}
 	}
 
-	// AO: setting to quit after N seconds of being AFK. Note: Server will time us out after 30m regardless
+	// <FS:AO> setting to quit after N seconds of being AFK. Note: Server will time us out after 30m regardless
 	static LLCachedControl<F32> quitAfterSecondsOfAFK(gSavedSettings, "QuitAfterSecondsOfAFK");
 	F32 qas_afk = (F32)quitAfterSecondsOfAFK;
-	if ((qas_afk > 0.f) && (gAgent.getAFK()))
+	if (!mQuitRequested && qas_afk > 0.f && gAgent.getAFK() && gAwayTimer.getElapsedTimeF32() > qas_afk)
 	{
-		// idle time is more than setting
-		if (gAwayTimer.getElapsedTimeF32() > qas_afk )
-		{
-			// go ahead and just quit gracefully
-			llinfos << "Logout, QuitAfterSecondsAFK expired." << llendl;
-                        LLAppViewer::instance()->requestQuit();
-		}
+		// go ahead and just quit gracefully
+		llinfos << "Logout, QuitAfterSecondsAFK expired." << llendl;
+		LLAppViewer::instance()->requestQuit();
 	}
+	// </FS:AO>
 
 	// Must wait until both have avatar object and mute list, so poll
 	// here.
