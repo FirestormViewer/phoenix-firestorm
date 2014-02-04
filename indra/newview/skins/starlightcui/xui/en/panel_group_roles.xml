@@ -104,16 +104,23 @@ clicking on their names.
              height="23"
              follows="top|left"
              label="Invite"
-             left="5"
+             left="3"
              name="member_invite"
              width="100" />
             <button
              height="23"
              label="Eject"
              follows="top|left"
-             left_pad="10"
+             left_pad="4"
              name="member_eject"
              width="100" />
+            <button
+             name="export_list"
+             label="Export List"
+             left_pad="4"
+             width="100"
+             height="23"
+             follows="top|left"/>
         </panel>
         <panel
          border="false"
