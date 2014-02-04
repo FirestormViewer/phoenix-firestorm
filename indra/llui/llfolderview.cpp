@@ -166,6 +166,10 @@ LLFolderView::LLFolderView(const Params& p)
 	mSignalSelectCallback(0),
 	mMinWidth(0),
 	mDragAndDropThisFrame(FALSE),
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+	mDragStartX(0),
+	mDragStartY(0),
+// [/SL:KB]
 	mCallbackRegistrar(NULL),
 	mParentPanel(p.parent_panel),
 	mUseEllipses(p.use_ellipses),
@@ -613,6 +617,24 @@ std::set<LLFolderViewItem*> LLFolderView::getSelectionList() const
 	std::copy(mSelectedItems.begin(), mSelectedItems.end(), std::inserter(selection, selection.begin()));
 	return selection;
 }
+
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+void LLFolderView::setDragStart(S32 screen_x, S32 screen_y)
+{
+	mDragStartX = screen_x;
+	mDragStartY = screen_y;
+}
+
+bool LLFolderView::isOverDragThreshold(S32 screen_x, S32 screen_y)
+{
+	static LLCachedControl<S32> drag_and_drop_threshold(*LLUI::sSettingGroups["config"], "DragAndDropDistanceThreshold", 3);
+	
+	S32 dX = screen_x - mDragStartX;
+	S32 dY = screen_y - mDragStartY;
+	
+	return (dX * dX) + (dY * dY) > drag_and_drop_threshold * drag_and_drop_threshold;
+}
+// [/SL:KB]
 
 bool LLFolderView::startDrag()
 {
