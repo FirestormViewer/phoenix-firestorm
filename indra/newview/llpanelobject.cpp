@@ -2032,7 +2032,15 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 	{
 		// Clamp the Z height
 		const F32 height = newpos.mV[VZ];
-		const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, mObject->getPositionGlobal());
+		// <FS:Ansariel> FIRE-12478: Clamp min Z height at new position instead of current if new position is valid
+		//const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, mObject->getPositionGlobal());
+		LLVector3d height_check_pos = mObject->getPositionGlobal();
+		if (LLWorld::getInstance()->positionRegionValidGlobal(regionp->getPosGlobalFromRegion(newpos)))
+		{
+			height_check_pos = regionp->getPosGlobalFromRegion(newpos);
+		}
+		const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, height_check_pos);
+		// </FS:Ansariel>
 		const F32 max_height = LLWorld::getInstance()->getRegionMaxHeight();
 
 		if ( height < min_height)
