@@ -74,7 +74,7 @@
 			Pie-Menü:
 		</text>
 		<slider label="Wiederholungen blinkende IM-Reiter:" name="ButtonsFlashCount"/>
-		<slider label="Blinkrate:" tool_tip="Blinkrate in Hz, mit der Reiter blinken - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
+		<slider label="Blinkrate:" tool_tip="Legt fest, wie oft IM-Reiter pro Sekunde blinken (in Hz) - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">
 			Hz
 		</text>
