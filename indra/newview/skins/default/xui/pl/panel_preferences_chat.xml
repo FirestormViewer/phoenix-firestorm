@@ -95,6 +95,8 @@
 			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość czatu lokalnego" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość czatu lokalnego. Okno czatu lokalnego musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał."/>
+			<check_box name="FSNotifyIMFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość IM" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość IM (dotyczy też wiadomości grupowych). Okno wiadomości IM musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał. Ta opcja jest dostępna tylko w wypadku, gdy wiadomości IM są pokazywane w kartach, a nie w osobnych oknach (zobacz zakładkę &quot;Ogólne&quot;)."/>
 			<check_box name="FSReportMutedGroupChat" label="Zgłaszaj wyciszenie czatu grupowego w czacie lokalnym"/>
 			<text name="WhenPlayIMLabel">
 				Gdy nadchodzi wiadomość IM:
