@@ -2450,6 +2450,14 @@ BOOL LLPanelPreference::postBuild()
 		}
 	}
 
+	// <FS:Ansariel> Flash chat toolbar button notification
+	if (hasChild("FSNotifyIMFlash", TRUE))
+	{
+		gSavedSettings.getControl("FSChatWindow")->getSignal()->connect(boost::bind(&LLPanelPreference::onChatWindowChanged, this));
+		onChatWindowChanged();
+	}
+	// </FS:Ansariel>
+
 	////////////////////// PanelVoice ///////////////////
 	if (hasChild("voice_unavailable", TRUE))
 	{
@@ -2652,6 +2660,13 @@ void LLPanelPreference::showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LL
 void LLPanelPreference::onEnableGrowlChanged()
 {
 	getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable());
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Flash chat toolbar button notification
+void  LLPanelPreference::onChatWindowChanged()
+{
+	getChild<LLCheckBoxCtrl>("FSNotifyIMFlash")->setEnabled(gSavedSettings.getS32("FSChatWindow") == 1);
 }
 // </FS:Ansariel>
 

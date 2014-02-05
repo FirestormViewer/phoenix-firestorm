@@ -82,6 +82,7 @@
 #include "exogroupmutelist.h"
 #include "fsconsoleutils.h"
 #include "fscommon.h"
+#include "fsfloaternearbychat.h"
 #ifdef OPENSIM
 #include "llviewernetwork.h"
 #endif // OPENSIM
@@ -409,15 +410,21 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 	LLUUID participant_id = msg["from_id"].asUUID();
 	LLUUID session_id = msg["session_id"].asUUID();
 
-	// Ansa: CHUI routes nearby chat through here with session id = null uuid!
-	if (session_id.isNull())
+	// do not show toast in busy mode or it goes from agent
+	if (gAgent.isDoNotDisturb() || gAgent.getID() == participant_id)
 	{
 		return;
 	}
 
-	// do not show toast in busy mode or it goes from agent
-	if (gAgent.isDoNotDisturb() || gAgent.getID() == participant_id)
+	// Ansa: CHUI routes nearby chat through here with session id = null uuid!
+	if (session_id.isNull())
 	{
+		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+		if (!im_container->getVisible() && im_container->hasFloater(FSFloaterNearbyChat::getInstance())
+			&& gSavedSettings.getBOOL("FSNotifyNearbyChatFlash"))
+		{
+			gToolBarView->flashCommand(LLCommandId("chat"), true, FSFloaterIMContainer::getInstance()->isMinimized());
+		}
 		return;
 	}
 
@@ -428,7 +435,20 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 	}
 	// </FS:Ansariel> Don't toast if the message is an announcement
 
-	// <FS:Ansariel> (Group-)IMs in chat console
+	// Skip toasting for system messages
+	if (participant_id.isNull())
+	{
+		return;
+	}
+
+	FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+	if (!im_container->getVisible() && im_container->hasFloater(FSFloaterIM::getInstance(session_id))
+		&& gSavedSettings.getBOOL("FSNotifyIMFlash"))
+	{
+		gToolBarView->flashCommand(LLCommandId("chat"), true, FSFloaterIMContainer::getInstance()->isMinimized());
+	}
+
+		// <FS:Ansariel> (Group-)IMs in chat console
 	if (FSConsoleUtils::ProcessInstantMessage(session_id, participant_id, msg["message"].asString()))
 	{
 		return;
@@ -438,12 +458,6 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 	// check whether incoming IM belongs to an active session or not
 	if (LLIMModel::getInstance()->getActiveSessionID().notNull()
 			&& LLIMModel::getInstance()->getActiveSessionID() == session_id)
-	{
-		return;
-	}
-
-	// Skip toasting for system messages
-	if (participant_id.isNull())
 	{
 		return;
 	}

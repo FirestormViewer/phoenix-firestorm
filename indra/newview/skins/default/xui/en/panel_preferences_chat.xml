@@ -638,6 +638,28 @@
              top_pad="1"
              width="400"
              height="18"
+             name="FSNotifyNearbyChatFlash"
+             control_name="FSNotifyNearbyChatFlash"
+             label="Flash chat toolbar button if new nearby chat arrives"
+             tool_tip="Flashes the chat toolbar button if a new nearby chat arrives. The nearby chat window must be docked to the conversations window and the conversations window must be closed for the button to flash."/>
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="1"
+             width="400"
+             height="18"
+             name="FSNotifyIMFlash"
+             control_name="FSNotifyIMFlash"
+             label="Flash chat toolbar button if new a IM arrives"
+             tool_tip="Flashes the chat toolbar button if a new (group) IM arrives. The IM window must be docked to the conversations window and the conversations window must be closed for the button to flash. This option is only available if IMs will be shown in tabs instead of separate windows (see &quot;General&quot; tab)."/>
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="1"
+             width="400"
+             height="18"
              name="FSReportMutedGroupChat"
              control_name="FSReportMutedGroupChat"
              label="Report muted group chat in nearby chat"/>

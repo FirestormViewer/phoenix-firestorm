@@ -269,6 +269,18 @@ void FSFloaterIMContainer::removeFloater(LLFloater* floaterp)
 }
 // [/SL:KB]
 
+bool FSFloaterIMContainer::hasFloater(LLFloater* floaterp)
+{
+	for (S32 i = 0; i < mTabContainer->getTabCount(); ++i)
+	{
+		if (dynamic_cast<LLFloater*>(mTabContainer->getPanelByIndex(i)) == floaterp)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
 {
 	mSessions.erase(id);

@@ -277,6 +277,8 @@ private:
 
 	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 	void onEnableGrowlChanged();
+	// <FS:Ansariel> Flash chat toolbar button notification
+	void onChatWindowChanged();
 
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;

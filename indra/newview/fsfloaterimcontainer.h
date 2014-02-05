@@ -58,6 +58,7 @@ public:
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
 	/*virtual*/ void removeFloater(LLFloater* floaterp);
 // [/SL:KB]
+	bool hasFloater(LLFloater* floaterp);
 
 	static FSFloaterIMContainer* findInstance();
 	static FSFloaterIMContainer* getInstance();
