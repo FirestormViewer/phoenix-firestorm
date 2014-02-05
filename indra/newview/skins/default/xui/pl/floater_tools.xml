@@ -250,6 +250,18 @@
 			</panel>
 		</panel>
 		<panel label="Obiekt" name="Object">
+			<panel.string name="Paste Position">
+				Wklej pozycję
+[VALUE]
+			</panel.string>
+			<panel.string name="Paste Size">
+				Wklej rozmiar
+[VALUE]
+			</panel.string>
+			<panel.string name="Paste Rotation">
+				Wklej obrót
+[VALUE]
+			</panel.string>
 			<check_box label="Zablokowany" name="checkbox locked" tool_tip="Chroni obiekt przed przesunięciem lub usunięciem. Bardzo pomocne w czasie budowania, aby uniknąć niezamierzonych edycji."/>
 			<check_box label="Fizyczny" name="Physical Checkbox Ctrl" tool_tip="Pozwala na popychanie obiektu i oddziaływanie na niego grawitacji."/>
 			<check_box label="Tymczasowy" name="Temporary Checkbox Ctrl" tool_tip="Umożliwia usunięcie obiektu po 1 minucie od jego stworzenia."/>
