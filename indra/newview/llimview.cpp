@@ -124,6 +124,12 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg);
 
 void process_dnd_im(const LLSD& notification)
 {
+	// <FS:Ansariel> [FS communication UI] CHUI will call this after returning
+	//               from DnD mode to highlight missed IMs in their
+	//               conversations floater; we don't need this as our IM tabs
+	//               will already be highlighted.
+	return;
+	// </FS:Ansariel> [FS communication UI]
     LLSD data = notification["substitutions"];
     LLUUID sessionID = data["SESSION_ID"].asUUID();
 	LLUUID fromID = data["FROM_ID"].asUUID();
@@ -149,7 +155,7 @@ void process_dnd_im(const LLSD& notification)
             false); //will need slight refactor to retrieve whether offline message or not (assume online for now)
 		}
 
-	//notify_of_message(data, true); <FS:TM> 3.6.4 check this, Do we need this? LL removed a sectionabove we comented out and added this
+	notify_of_message(data, true);
     }
 
 
