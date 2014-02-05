@@ -41,10 +41,12 @@
 			Мигающие кнопки:
 		</text>
 		<slider label="Количество миганий ЛС:" tool_tip="" name="ButtonsFlashCount"/>
+<!--
 		<slider label="Скорость мигания кнопки:" tool_tip="Скорость мигания кнопки ( Hz) - используется для ЛС" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">
 			Hz
 		</text>
+-->
 		<check_box name="ShowNetStats" label="Показать лаги" tool_tip=""/>
 		<text name="ToastSettings">
 			Настройки отображения уведомлений: (Popups, Консоль, Тосты):

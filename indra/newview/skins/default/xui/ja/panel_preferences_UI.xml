@@ -81,10 +81,12 @@
         <check_box name="ButtonFlashing" label="ボタンの点滅設定"/>
 		-->
         <slider label="ボタンの点滅回数：" tool_tip="何回ボタンを点滅させるかを設定します。" name="ButtonsFlashCount" />
+<!--
         <slider label="ボタン点滅の速さ：" tool_tip="ボタンが点滅する速さをHzで設定します。IMの通知に使用します。" name="ButtonFlashRate" />
         <text name="ButtonFlashRateText">
             Hz
         </text>
+-->
     </panel>
 	
 

@@ -484,16 +484,16 @@
          width="471" />
         <slider
          control_name="FlashPeriod"
-         decimal_digits="0"
+         decimal_digits="2"
          follows="left|top"
          height="16"
          increment="0.25"
-         label="IM tab flash rate:"
-         tool_tip="Number of times IM tabs flash per second (in Hz) - used for IM notifications"
+         label="IM tab flash period:"
+         tool_tip="Time in seconds a single flash of IM tabs takes - used for IM notifications"
          label_width="300"
          layout="topleft"
          left="30"
-         min_val="0"
+         min_val="0.25"
          max_val="4"
          name="ButtonFlashRate"
          top_pad="2"
@@ -508,7 +508,7 @@
          name="ButtonFlashRateText"
          top_delta="0"
          width="50">
-            Hz
+            sec
         </text>
     </panel>
 

@@ -70,10 +70,12 @@
 			</text>
 			<check_box label="Ocultar los iconos de notificación de chat de grupo y MI" name="FSDisableIMChiclets" tool_tip="Si se activa, Firestorm no mostrará ningún icono de notificación de chat de grupo / MI (el sobre de los avisos de grupo y la suma de MIs permanecerán en pantalla)."/>
 			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean para llamar tu atención" name="ButtonsFlashCount"/>
+<!--
 			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate"/>
 			<text name="ButtonFlashRateText">
 				Hz
 			</text>
+-->
 		</panel>
 		<panel label="Tostadas" name="UI-toasts-tab">		
 			<text name="ToastSettings">
