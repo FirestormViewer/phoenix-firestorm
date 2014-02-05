@@ -99,6 +99,8 @@
 			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Blinkende IM-Reiter, wenn Freunde sich an- oder abmelden"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Blinkender Chat-Toolbar-Button, wenn neuer Chat in der Nähe eintrifft" tool_tip="Der Chat-Button in der Toolbar blinkt, wenn ein neuer Chat in der Nähe eintrifft. Das Fenster vom Chat in der Nähe muss im Gespräche-Fenster eingedockt sein und das Gespräche-Fenster darf nicht sichtbar sein, damit der Button blinkt."/>
+			<check_box name="FSNotifyIMFlash" label="Blinkender Chat-Toolbar-Button, wenn eine neue (Gruppen-)IM eintrifft" tool_tip="Der Chat-Button in der Toolbar blinkt, wenn eine neue Instand Message oder ein neuer Gruppenchat eintrifft. Das entsprechende Fenster muss im Gespräche-Fenster eingedockt sein und das Gespräche-Fenster darf nicht sichtbar sein, damit der Button blinkt. Diese Option ist nur verfügbar, wenn (Gruppen-)IM-Fenster als Registerkarten und nicht als separate Fenster angezeigt werden (siehe Reiter „Allgemein“)."/>
 			<check_box name="FSReportMutedGroupChat" label="Stummgeschalteten Gruppenchat im lokalen Chat melden"/>
 			<text name="WhenPlayIMLabel" width="205">
 				Beim Eintreffen von Instant Messages:

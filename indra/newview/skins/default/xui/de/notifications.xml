@@ -2168,7 +2168,7 @@ Inventarobjekt(e) verschieben?
 		<usetemplate ignoretext="Warnhinweis anzeigen, bevor ich nicht-kopierbare Artikel verschiebe, die ein geskriptetes Objekt beschädigen können" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ClickActionNotPayable">
-		Achtung: Die Klickaktion „Objekt bezahlen&quot; wurde eingestellt. Diese funktioniert jedoch nicht, wenn ein Skript mit einer Geldtransaktion () hinzugefügt wird.
+		Achtung: Die Klickaktion „Objekt bezahlen“ wurde eingestellt. Diese funktioniert jedoch nicht, wenn ein Skript mit einer Geldtransaktion () hinzugefügt wird.
 		<form name="form">
 			<ignore name="ignore" text="Ich habe die Aktion „Objekt bezahlen&quot; eingestellt, während ich ein Objekt gebaut habe, dass kein Geld()-Skript enthält."/>
 		</form>
