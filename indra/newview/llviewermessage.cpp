@@ -2855,7 +2855,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
 				gIMMgr->addMessage(
 					session_id,
-					from_id,
+					gAgentID,
 					LLStringUtil::null, // Pass null value so no name gets prepended
 					LLTrans::getString("IM_autoresponse_sent"),
 					false,

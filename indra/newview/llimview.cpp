@@ -3847,7 +3847,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 
 			gIMMgr->addMessage(
 				session_id,
-				im_info->mFromID,
+				gAgentID,
 				LLStringUtil::null, // Pass null value so no name gets prepended
 				LLTrans::getString("IM_autoresponse_sent"),
 				false,
