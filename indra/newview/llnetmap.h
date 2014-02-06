@@ -96,7 +96,6 @@ public:
 	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 	LLUUID			getClosestAgentToCursor() const { return mClosestAgentToCursor; }
 	LLVector3d		getClosestAgentPosition() const { return mClosestAgentPosition; }
-	bool			isZoomable();
 
 	// <FS:Ansariel> Synchronize double click handling throughout instances
 	void			performDoubleClickAction(LLVector3d pos_global);
@@ -135,7 +134,7 @@ private:
 	LLUIColor		mBackgroundColor;
 
 	F32				mScale;					// Size of a region in pixels
-	static F32			sScale;					// <FS:Ansariel> Used to synchronize netmaps throughout instances
+	static F32		sScale;					// <FS:Ansariel> Used to synchronize netmaps throughout instances
 
 	F32				mPixelsPerMeter;		// world meters to map pixels
 	F32				mObjectMapTPM;			// texels per meter on map
@@ -166,28 +165,25 @@ private:
 	static std::string	sToolTipMsg;
 	// </FS:Ansariel> Synchronize tooltips throughout instances
 
+	// <FS:Ansariel> Mark avatar feature
 	static std::map<LLUUID, LLColor4> sAvatarMarksMap;
 
 public:
 	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
-	void			setAvatarMark(const LLSD& userdata);
-	void			clearAvatarMarks();
-	void			camAvatar();
 // <FS:CR> Minimap improvements
 	void			handleShowProfile(const LLSD& sdParam) const;
 	uuid_vec_t		mClosestAgentsToCursor;
 	LLVector3d		mPosGlobalRightClick;
 	LLUUID			mClosestAgentRightClick;
 // </FS:CR>
-	void			startTracking();
 
 private:
 	void handleZoom(const LLSD& userdata);
-	void handleStopTracking(const LLSD& userdata);
+	void handleStopTracking (const LLSD& userdata);
+	void handleStartTracking();
 	void handleMark(const LLSD& userdata);
 	void handleClearMarks();
 	void handleCam();
-	void handleStartTracking();
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
 	void handleOverlayToggle(const LLSD& sdParam);
 	bool checkTextureType(const LLSD& sdParam) const;

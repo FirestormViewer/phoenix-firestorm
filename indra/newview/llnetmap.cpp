@@ -1487,7 +1487,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 					pProfilesMenu->getBranch()->addChild(pMenuItem);
 			}
 		}
-		mPopupMenu->setItemVisible("Cam", isZoomable());
+		mPopupMenu->setItemVisible("Cam", LLAvatarActions::canZoomIn(mClosestAgentToCursor));
 		mPopupMenu->setItemVisible("MarkAvatar", mClosestAgentToCursor.notNull());
 		mPopupMenu->setItemVisible("Start Tracking", mClosestAgentToCursor.notNull());
 		mPopupMenu->setItemVisible("Profile Separator", (mClosestAgentsToCursor.size() >= 1
@@ -1636,46 +1636,27 @@ void LLNetMap::handleZoom(const LLSD& userdata)
 	}
 }
 
-void LLNetMap::handleStopTracking (const LLSD& userdata)
-{
-	if (mPopupMenu)
-	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", false);
-		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
-	}
-}
-
-// <FS:Ansariel> additional functions
+// <FS:Ansariel> Mark avatar feature
 void LLNetMap::handleMark(const LLSD& userdata)
-{
-	setAvatarMark(userdata);
-}
-
-void LLNetMap::handleClearMarks()
-{
-	clearAvatarMarks();
-}
-
-void LLNetMap::setAvatarMark(const LLSD& userdata)
 {
 	if (mClosestAgentRightClick.notNull())
 	{
 		// Use the name as color definition name from colors.xml
 		LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
 		LLNetMap::sAvatarMarksMap[mClosestAgentRightClick] = color;
-		llinfos << "Minimap: Marking " << mClosestAgentRightClick.asString() << " in " << userdata.asString() << llendl;
+		LL_INFOS("NetMap") << "Minimap: Marking " << mClosestAgentRightClick.asString() << " in " << userdata.asString() << LL_ENDL;
 	}
 }
 
-void LLNetMap::clearAvatarMarks()
+void LLNetMap::handleClearMarks()
 {
 	LLNetMap::sAvatarMarksMap.clear();
 }
 //</FS:Ansariel>
 
-void LLNetMap::camAvatar()
+void LLNetMap::handleCam()
 {
-	if (isZoomable())
+	if (LLAvatarActions::canZoomIn(mClosestAgentRightClick))
 	{
 		LLAvatarActions::zoomIn(mClosestAgentRightClick);
 	}
@@ -1685,25 +1666,8 @@ void LLNetMap::camAvatar()
 	}
 }
 
-void LLNetMap::handleCam()
-{
-	camAvatar();
-}
-
-bool LLNetMap::isZoomable()
-{
-	F32 range = dist_vec(gAgent.getPositionGlobal(), mClosestAgentPosition);
-	bool is_zoomable = (range < gSavedSettings.getF32("RenderFarClip") || gObjectList.findObject(mClosestAgentRightClick) != NULL);
-	return is_zoomable;
-}
-
 // <FS:Ansariel> Avatar tracking feature
 void LLNetMap::handleStartTracking()
-{
-	startTracking();
-}
-
-void LLNetMap::startTracking()
 {
 	if (mClosestAgentRightClick.notNull())
 	{
@@ -1715,6 +1679,15 @@ void LLNetMap::startTracking()
 	}
 }
 // </FS:Ansariel> Avatar tracking feature
+
+void LLNetMap::handleStopTracking (const LLSD& userdata)
+{
+	if (mPopupMenu)
+	{
+		mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
+	}
+}
 
 // <FS:Ansariel> Synchronize tooltips throughout instances
 // static
