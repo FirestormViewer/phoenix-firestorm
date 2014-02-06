@@ -976,8 +976,18 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	{
 		floater->setSavePosition(true);
 
-		if (chicletsDisabled)
+		// <FS:PP> FIRE-12037: Inventory Offer Dialog boxes hidden
+		// They should be ALWAYS visible on screen, all of them, not only the most recent one
+		// Otherwise (after accepting/declining that most recent one) user may not notice, that still has something to click (with chiclets hidden, or just too many of them visible on screen), relog and lost pending inventory offer items
+		// if (chicletsDisabled)
+		// {
+		if (chicletsDisabled || floaterType == LLScriptFloaterManager::OBJ_UNKNOWN)
 		{
+			if (floaterType == LLScriptFloaterManager::OBJ_UNKNOWN)
+			{
+				floater->setDocked(false, true); 
+			}
+		// </FS:PP>
 			S32 width = pos.getWidth();
 			S32 height = pos.getHeight();
 
