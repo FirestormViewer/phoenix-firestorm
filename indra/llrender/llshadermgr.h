@@ -175,6 +175,7 @@ public:
 		SPECULAR_COLOR,
 		ENVIRONMENT_INTENSITY,
 		AVATAR_MATRIX,
+		AVATAR_TRANSLATION,
 		
 // <FS:CR> Import Vignette from Exodus
 		EXO_RENDER_VIGNETTE,
@@ -228,7 +229,7 @@ DISPLAY_GAMMA,
 	virtual void initAttribsAndUniforms(void);
 
 	BOOL attachShaderFeatures(LLGLSLShader * shader);
-	void dumpObjectLog(GLhandleARB ret, BOOL warns = TRUE);
+	void dumpObjectLog(GLhandleARB ret, BOOL warns = TRUE, const std::string& filename = "");
 	BOOL	linkProgramObject(GLhandleARB obj, BOOL suppress_errors = FALSE);
 	BOOL	validateProgramObject(GLhandleARB obj);
 	GLhandleARB loadShaderFile(const std::string& filename, S32 & shader_level, GLenum type, boost::unordered_map<std::string, std::string>* defines = NULL, S32 texture_index_channels = -1);

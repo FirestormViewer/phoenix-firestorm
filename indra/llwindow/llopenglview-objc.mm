@@ -375,19 +375,6 @@ attributedStringInfo getSegments(NSAttributedString *str)
         [[self inputContext] handleEvent:theEvent];
     }
     
-    //<FS:TS> FIRE-11828: Hitting Return or Enter acts as though it was hit twice
-    //  This is unnecessary. The callKeyDown will always return false
-    //  for enter or return, so that it will be processed as a Unicode
-    //  character instead of a keystroke, which will result in handleEvent
-    //  being called in the else clause above.
-    //if ([[theEvent charactersIgnoringModifiers] characterAtIndex:0] == NSCarriageReturnCharacter ||
-    //    [[theEvent charactersIgnoringModifiers] characterAtIndex:0] == NSEnterCharacter)
-    //{
-    //    // callKeyDown won't return the value we expect for enter or return.  Handle them as a separate case.
-    //    [[self inputContext] handleEvent:theEvent];
-    //}
-    //</FS:TS> FIRE-11828
-    
     // OS X intentionally does not send us key-up information on cmd-key combinations.
     // This behaviour is not a bug, and only applies to cmd-combinations (no others).
     // Since SL assumes we receive those, we fake it here.

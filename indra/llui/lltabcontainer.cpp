@@ -194,15 +194,12 @@ LLTabContainer::TabParams::TabParams()
 :	tab_top_image_unselected("tab_top_image_unselected"),
 	tab_top_image_selected("tab_top_image_selected"),
 	tab_top_image_flash("tab_top_image_flash"),
-	tab_top_image_hovered("tab_top_image_hovered"),
 	tab_bottom_image_unselected("tab_bottom_image_unselected"),
 	tab_bottom_image_selected("tab_bottom_image_selected"),
 	tab_bottom_image_flash("tab_bottom_image_flash"),
-	tab_bottom_image_hovered("tab_bottom_image_hovered"),
 	tab_left_image_unselected("tab_left_image_unselected"),
 	tab_left_image_selected("tab_left_image_selected"),
-	tab_left_image_flash("tab_left_image_flash"),
-	tab_left_image_hovered("tab_left_image_hovered")
+	tab_left_image_flash("tab_left_image_flash")
 {}
 
 LLTabContainer::Params::Params()
@@ -226,8 +223,7 @@ LLTabContainer::Params::Params()
 	tab_icon_ctrl_pad("tab_icon_ctrl_pad", 0),
 	use_ellipses("use_ellipses"),
 	label_shadow("label_shadow",false),		// no drop shadowed labels by default -Zi
-	font_halign("halign"),
-	use_highlighting_on_hover("use_highlighting_on_hover",false)
+	font_halign("halign")
 {}
 
 LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
@@ -268,8 +264,7 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mOpenTabsOnDragAndDrop(p.open_tabs_on_drag_and_drop),
 	mTabIconCtrlPad(p.tab_icon_ctrl_pad),
 	mUseTabEllipses(p.use_ellipses),
-	mDropShadowedText(p.label_shadow),			// support for drop shadowed tab labels -Zi
-	mUseHighlightingOnHover(p.use_highlighting_on_hover)
+	mDropShadowedText(p.label_shadow)			// support for drop shadowed tab labels -Zi
 {
 	// AO: Treat the IM tab container specially 
 	if (getName() == "im_box_tab_container")
@@ -1004,30 +999,18 @@ void LLTabContainer::update_images(LLTabTuple* tuple, TabParams params, LLTabCon
 			tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_top_image_unselected));
 			tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_top_image_selected));
 			tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_top_image_flash));
-			if(mUseHighlightingOnHover)
-			{
-				tuple->mButton->setImageHoverUnselected(static_cast<LLUIImage*>(params.tab_top_image_hovered));
-			}
 		}
 		else if (pos == LLTabContainer::BOTTOM)
 		{
 			tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_bottom_image_unselected));
 			tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_bottom_image_selected));
 			tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_bottom_image_flash));
-			if(mUseHighlightingOnHover)
-			{
-				tuple->mButton->setImageHoverUnselected(static_cast<LLUIImage*>(params.tab_bottom_image_hovered));
-			}
 		}
 		else if (pos == LLTabContainer::LEFT)
 		{
 			tuple->mButton->setImageUnselected(static_cast<LLUIImage*>(params.tab_left_image_unselected));
 			tuple->mButton->setImageSelected(static_cast<LLUIImage*>(params.tab_left_image_selected));
 			tuple->mButton->setImageFlash(static_cast<LLUIImage*>(params.tab_left_image_flash));
-			if(mUseHighlightingOnHover)
-			{
-				tuple->mButton->setImageHoverUnselected(static_cast<LLUIImage*>(params.tab_left_image_hovered));
-			}
 		}
 	}
 }

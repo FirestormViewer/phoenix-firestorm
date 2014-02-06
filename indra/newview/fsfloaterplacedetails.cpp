@@ -195,7 +195,7 @@ FSFloaterPlaceDetails::FSFloaterPlaceDetails(const LLSD& seed)
 	mInventoryObserver = new FSPlaceDetailsInventoryObserver(this);
 	gInventory.addObserver(mInventoryObserver);
 
-	mAgentParcelChangedConnection = LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(
+	mAgentParcelChangedConnection = gAgent.addParcelChangedCallback(
 			boost::bind(&FSFloaterPlaceDetails::updateVerbs, this));
 }
 

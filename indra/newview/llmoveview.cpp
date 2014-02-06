@@ -143,9 +143,9 @@ BOOL LLFloaterMove::postBuild()
 
 	initMovementMode();
 
-//	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
+//	gAgent.addParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
 // [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
-	LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(LLFloaterMove::sUpdateMovementStatus);
+	gAgent.addParcelChangedCallback(LLFloaterMove::sUpdateMovementStatus);
 // [/RLVa:KB]
 
 	return TRUE;

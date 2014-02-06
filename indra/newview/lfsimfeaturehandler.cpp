@@ -31,7 +31,7 @@ LFSimFeatureHandler::LFSimFeatureHandler()
 , mWhisperRange(10)
 {
 	if (!LLGridManager::getInstance()->isInSecondLife()) // Remove this line if we ever handle SecondLife sim features
-		LLEnvManagerNew::instance().setRegionChangeCallback(boost::bind(&LFSimFeatureHandler::handleRegionChange, this));
+		gAgent.addRegionChangedCallback(boost::bind(&LFSimFeatureHandler::handleRegionChange, this));
 }
 
 ExportSupport LFSimFeatureHandler::exportPolicy() const

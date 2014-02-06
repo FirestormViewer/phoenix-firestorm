@@ -828,8 +828,8 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 	if (!sim_info)
 	{
 		// We haven't found a region for that point yet, leave the tracking to the world map
-		LLWorldMap::getInstance()->setTracking(pos_global);
 		LLTracker::stopTracking(NULL);
+		LLWorldMap::getInstance()->setTracking(pos_global);
 		S32 world_x = S32(pos_global.mdV[0] / 256);
 		S32 world_y = S32(pos_global.mdV[1] / 256);
 		LLWorldMapMessage::getInstance()->sendMapBlockRequest(world_x, world_y, world_x, world_y, true);
@@ -844,9 +844,9 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 	{
 		// Down region. Show the blue circle of death!
 		// i.e. let the world map that this and tell it it's invalid
+		LLTracker::stopTracking(NULL);
 		LLWorldMap::getInstance()->setTracking(pos_global);
 		LLWorldMap::getInstance()->setTrackingInvalid();
-		LLTracker::stopTracking(NULL);
 		setDefaultBtn("");
 		
 		// clicked on a down region - turn off coord display
@@ -872,11 +872,11 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 	
 	std::string tooltip("");
 	mTrackedStatus = LLTracker::TRACKING_LOCATION;
+	LLWorldMap::getInstance()->cancelTracking();		// The floater is taking over the tracking
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
 	LLTracker::trackLocation(pos_global, (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? full_name : RlvStrings::getString(RLV_STRING_HIDDEN).c_str(), tooltip);
 // [/RLVa:KB]
 //	LLTracker::trackLocation(pos_global, full_name, tooltip);
-	LLWorldMap::getInstance()->cancelTracking();		// The floater is taking over the tracking
 
 	// <FS:Ansariel> Parcel details on map
 	if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))

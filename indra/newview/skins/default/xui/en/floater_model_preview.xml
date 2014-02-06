@@ -215,11 +215,11 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="215"
+             left="222"
              name="lod_mode_high"
              top_delta="0"
              visible="false"
-             width="135">
+             width="130">
                 <item
                  name="Triangle Limit"
                  label="Triangle Limit"
@@ -235,7 +235,7 @@
              height="20"
              increment="10"
              layout="topleft"
-             left_pad="5"
+             left_pad="3"
              name="lod_triangle_limit_high"
              visible="false"
              width="55" />
@@ -350,10 +350,10 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="215"
+             left="222"
              name="lod_mode_medium"
              top_delta="0"
-             width="135">
+             width="130">
                 <item
                  name="Triangle Limit"
                  label="Triangle Limit"
@@ -369,7 +369,7 @@
              height="20"
              increment="10"
              layout="topleft"
-             left_pad="5"
+             left_pad="3"
              name="lod_triangle_limit_medium"
              width="55" />
             <spinner
@@ -483,10 +483,10 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="215"
+             left="222"
              name="lod_mode_low"
              top_delta="0"
-             width="135">
+             width="130">
                 <item
                  name="Triangle Limit"
                  label="Triangle Limit"
@@ -502,7 +502,7 @@
              height="20"
              increment="10"
              layout="topleft"
-             left_pad="5"
+             left_pad="3"
              name="lod_triangle_limit_low"
              width="55" />
             <spinner
@@ -616,10 +616,10 @@
              follows="top|left"
              height="20"
              layout="topleft"
-             left="215"
+             left="222"
              name="lod_mode_lowest"
              top_delta="0"
-             width="135">
+             width="130">
                 <item
                  name="Triangle Limit"
                  label="Triangle Limit"
@@ -635,7 +635,7 @@
              height="20"
              increment="10"
              layout="topleft"
-             left_pad="5"
+             left_pad="3"
              name="lod_triangle_limit_lowest"
              width="55" />
             <spinner

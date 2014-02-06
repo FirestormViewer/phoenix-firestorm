@@ -1114,8 +1114,6 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 		button_p.image_overlay = LLUI::getUIImage(commandp->icon());
 	}
 	// </FS:Zi>
-	button_p.image_hover_unselected = LLUI::getUIImage(commandp->hoverIconUnselected());
-	button_p.image_hover_selected = LLUI::getUIImage(commandp->hoverIconSelected());
 	button_p.button_flash_enable = commandp->isFlashingAllowed();
 	button_p.overwriteFrom(mButtonParams[mButtonType]);
 	LLToolBarButton* button = LLUICtrlFactory::create<LLToolBarButton>(button_p);

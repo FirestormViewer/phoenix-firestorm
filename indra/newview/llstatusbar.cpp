@@ -417,7 +417,7 @@ BOOL LLStatusBar::postBuild()
 		mShowCoordsCtrlConnection = ctrl->getSignal()->connect(boost::bind(&LLStatusBar::onNavBarShowCoordinatesCtrlChanged, this));
 	}
 
-	mParcelMgrConnection = LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(
+	mParcelMgrConnection = gAgent.addParcelChangedCallback(
 			boost::bind(&LLStatusBar::onAgentParcelChange, this));
 
 	if (!gSavedSettings.getBOOL("ShowNetStats"))

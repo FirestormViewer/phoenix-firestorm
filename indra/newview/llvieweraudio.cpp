@@ -411,6 +411,7 @@ void init_audio()
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndTyping")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndWindowClose")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndWindowOpen")));
+		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndRestart")));
 		// ## Zi: Pie menu
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuAppear")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuHide")));

@@ -677,10 +677,7 @@ void LLButton::draw()
 	
 	bool use_glow_effect = FALSE;
 	LLColor4 highlighting_color = LLColor4::white;
-	// <FS:Ansariel> Fix broken buttons hovering effect
-	//LLColor4 glow_color;
 	LLColor4 glow_color = LLColor4::white;
-	// </FS:Ansariel>
 	LLRender::eBlendType glow_type = LLRender::BT_ADD_WITH_ALPHA;
 	LLUIImage* imagep = NULL;
 

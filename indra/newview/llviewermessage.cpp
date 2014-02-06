@@ -117,6 +117,7 @@
 #include "llpanelblockedlist.h"
 #include "llpanelplaceprofile.h"
 #include "llviewerregion.h"
+#include "llfloaterregionrestarting.h"
 
 // Firestorm inclues
 #include <boost/algorithm/string/split.hpp>
@@ -7060,7 +7061,6 @@ bool handle_special_notification(std::string notificationID, LLSD& llsdBlock)
 	std::string regionMaturity = LLViewerRegion::accessToString(regionAccess);
 	LLStringUtil::toLower(regionMaturity);
 	llsdBlock["REGIONMATURITY"] = regionMaturity;
-	
 	bool returnValue = false;
 	LLNotificationPtr maturityLevelNotification;
 	std::string notifySuffix = "_Notify";
@@ -7239,6 +7239,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			(notificationID == "RegionEntryAccessBlocked") ||
 			(notificationID == "LandClaimAccessBlocked") ||
 			(notificationID == "LandBuyAccessBlocked")
+
 		   )
 		{
 			/*---------------------------------------------------------------------
@@ -7279,6 +7280,40 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			snap_filename += gDirUtilp->getDirDelimiter();
 			snap_filename += SCREEN_HOME_FILENAME;
 			gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
+		}
+
+		if (notificationID == "RegionRestartMinutes" ||
+			notificationID == "RegionRestartSeconds")
+		{
+			S32 seconds;
+			if (notificationID == "RegionRestartMinutes")
+			{
+				seconds = 60 * static_cast<S32>(llsdBlock["MINUTES"].asInteger());
+			}
+			else
+			{
+				seconds = static_cast<S32>(llsdBlock["SECONDS"].asInteger());
+			}
+
+			LLFloaterRegionRestarting* floaterp = LLFloaterReg::findTypedInstance<LLFloaterRegionRestarting>("region_restarting");
+
+			if (floaterp)
+			{
+				LLFloaterRegionRestarting::updateTime(seconds);
+			}
+			else
+			{
+				LLSD params;
+				params["NAME"] = llsdBlock["NAME"];
+				params["SECONDS"] = (LLSD::Integer)seconds;
+				LLFloaterRegionRestarting* restarting_floater = dynamic_cast<LLFloaterRegionRestarting*>(LLFloaterReg::showInstance("region_restarting", params));
+				if(restarting_floater)
+				{
+					restarting_floater->center();
+				}
+			}
+
+			send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -7364,7 +7399,6 @@ void process_alert_message(LLMessageSystem *msgsystem, void **user_data)
 		
 	std::string message;
 	msgsystem->getStringFast(_PREHASH_AlertData, _PREHASH_Message, message);
-
 	process_special_alert_messages(message);
 
 	if (!attempt_standard_notification(msgsystem))
@@ -7388,7 +7422,6 @@ bool handle_not_age_verified_alert(const std::string &pAlertName)
 bool handle_special_alerts(const std::string &pAlertName)
 {
 	bool isHandled = false;
-
 	if (LLStringUtil::compareStrings(pAlertName, "NotAgeVerified") == 0)
 	{
 		
@@ -7427,25 +7460,17 @@ void process_alert_core(const std::string& message, BOOL modal)
 		// System message is important, show in upper-right box not tip
 		std::string text(message.substr(1));
 		LLSD args;
-		if (text.substr(0,17) == "RESTART_X_MINUTES")
+
+		// *NOTE: If the text from the server ever changes this line will need to be adjusted.
+		std::string restart_cancelled = "Region restart cancelled.";
+		if (text.substr(0, restart_cancelled.length()) == restart_cancelled)
+			processed_message = "region restart"; // <FS:PP> FIRE-317, region restart alert
 		{
-			S32 mins = 0;
-			LLStringUtil::convertToS32(text.substr(18), mins);
-			args["MINUTES"] = llformat("%d",mins);
-			LLNotificationsUtil::add("RegionRestartMinutes", args);
+			LLFloaterRegionRestarting::close();
 			processed_message = "region restart"; // <FS:PP> FIRE-317, region restart alert
 		}
-		else if (text.substr(0,17) == "RESTART_X_SECONDS")
-		{
-			S32 secs = 0;
-			LLStringUtil::convertToS32(text.substr(18), secs);
-			args["SECONDS"] = llformat("%d",secs);
-			LLNotificationsUtil::add("RegionRestartSeconds", args);
-			processed_message = "region restart"; // <FS:PP> FIRE-317, region restart alert
-		}
-		else
-		{
-			std::string new_msg =LLNotifications::instance().getGlobalString(text);
+
+		std::string new_msg =LLNotifications::instance().getGlobalString(text);
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
 			if ( (new_msg == text) && (rlv_handler_t::isEnabled()) )
 			{
@@ -7455,10 +7480,9 @@ void process_alert_core(const std::string& message, BOOL modal)
 					RlvUtil::filterNames(new_msg);
 			}
 // [/RLVa:KB]
-			args["MESSAGE"] = new_msg;
-			LLNotificationsUtil::add("SystemMessage", args);
+		args["MESSAGE"] = new_msg;
+		LLNotificationsUtil::add("SystemMessage", args);
 			processed_message = new_msg; // <FS:PP> FIRE-317, region restart alert
-		}
 	}
 	else if (modal)
 	{
