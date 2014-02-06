@@ -28,9 +28,7 @@
 #define LL_LLFLOATERMAP_H
 
 #include "llfloater.h"
-#include "llavatarname.h" // <FS:CR>
 
-class LLMenuGL;
 class LLNetMap;
 class LLTextBox;
 
@@ -46,7 +44,6 @@ public:
 	
 	/*virtual*/ BOOL 	postBuild();
 	/*virtual*/ BOOL	handleDoubleClick( S32 x, S32 y, MASK mask );
-	/*virtual*/ BOOL	handleRightMouseDown( S32 x, S32 y, MASK mask );
 	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	/*virtual*/ void	draw();
 
@@ -54,26 +51,15 @@ public:
 	/*virtual*/ F32 getCurrentTransparency();
 
 private:
-	void handleZoom(const LLSD& userdata);
-	void handleStopTracking (const LLSD& userdata);
+	// <FS:Ansariel> Unused as of 06-02-2014; Handled in LLNetMap
+	//void handleZoom(const LLSD& userdata);
 	void setDirectionPos( LLTextBox* text_box, F32 rotation );
 	void updateMinorDirections();
-	void handleMark(const LLSD& userdata);
-	void handleClearMarks();
-	void handleCam();
-	void handleStartTracking();
-	void handleShowProfile(const LLSD& sdParam) const;
-	void handleOverlayToggle(const LLSD& sdParam);
-	void refreshParcelOverlay();
-	bool checkTextureType(const LLSD& sdParam) const;
-	void handleTextureType(const LLSD& sdParam) const;
-	void setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name);	// <FS:CR>
 
+	// <FS:Ansariel> Remove titlebar
 	void setMinimized( BOOL );
-
 	void stretchMiniMap(S32 width,S32 height);
-	
-	LLMenuGL*		mPopupMenu;
+	// </FS:Ansariel>
 
 	LLTextBox*		mTextBoxEast;
 	LLTextBox*		mTextBoxNorth;
