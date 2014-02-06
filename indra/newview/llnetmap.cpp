@@ -231,7 +231,14 @@ void LLNetMap::draw()
 	}
 	// </FS:Ansariel>: Synchronize netmap scale throughout instances
 
- 	static LLFrameTimer map_timer;
+// <FS:Ansariel> Aurora Sim
+	if (!LLWorld::getInstance()->getAllowMinimap())
+	{
+		return;
+	}
+// <FS:Ansariel> Aurora Sim
+
+	static LLFrameTimer map_timer;
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	//static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
