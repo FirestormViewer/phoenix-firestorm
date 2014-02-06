@@ -219,7 +219,7 @@
 			<check_box label="En venta:" name="checkbox for sale"/>
 	  		<combo_box name="sale type">
 				<combo_box.item name="Copy" label="Copia"/>
-                                <combo_box.item name="Contents" label="Contenido"/>
+				<combo_box.item name="Contents" label="Contenido"/>
 				<combo_box.item name="Original" label="Original"/>
 			</combo_box>
 			<spinner name="Edit Cost" label="Precio: L$"/>
@@ -406,7 +406,7 @@
 				<combo_box.item label="Cilindro" name="Cylinder"/>
 			</combo_box>
 		</panel>
-		<panel label="Caract." name="Features">
+		<panel label="Caracter" name="Features">
                         <panel.string name="None">
                                 Ninguno
                         </panel.string>
@@ -459,7 +459,7 @@
 			<spinner label="Rebote" name="Physics Restitution"/>
 		</panel>
 		<panel label="Textura" name="Texture"/>
-	   	<panel label="Contenido" name="Contents">
+	   	<panel label="Cont." name="Contents">
 			<button label="Nuevo script" label_selected="Nuevo script" name="button new script" width="88"/>
 			<button label="Permisos" name="button permissions" width="78"/>
 			<button label="Refrescar" name="button refresh" width="94"/>
