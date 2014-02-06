@@ -406,7 +406,7 @@
 				<combo_box.item label="Cilindro" name="Cylinder"/>
 			</combo_box>
 		</panel>
-		<panel label="Caracter" name="Features">
+		<panel label="Caracter." name="Features">
                         <panel.string name="None">
                                 Ninguno
                         </panel.string>
