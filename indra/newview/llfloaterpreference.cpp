@@ -2458,6 +2458,15 @@ BOOL LLPanelPreference::postBuild()
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Exodus' mouselook combat feature
+	if (hasChild("FSMouselookCombatFeatures", TRUE))
+	{
+		gSavedSettings.getControl("EnableMouselook")->getSignal()->connect(boost::bind(&LLPanelPreference::updateMouselookCombatFeatures, this));
+		gSavedSettings.getControl("FSMouselookCombatFeatures")->getSignal()->connect(boost::bind(&LLPanelPreference::updateMouselookCombatFeatures, this));
+		updateMouselookCombatFeatures();
+	}
+	// </FS:Ansariel>
+
 	////////////////////// PanelVoice ///////////////////
 	if (hasChild("voice_unavailable", TRUE))
 	{
@@ -2667,6 +2676,15 @@ void LLPanelPreference::onEnableGrowlChanged()
 void  LLPanelPreference::onChatWindowChanged()
 {
 	getChild<LLCheckBoxCtrl>("FSNotifyIMFlash")->setEnabled(gSavedSettings.getS32("FSChatWindow") == 1);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Exodus' mouselook combat feature
+void LLPanelPreference::updateMouselookCombatFeatures()
+{
+	bool enabled = gSavedSettings.getBOOL("EnableMouselook") && gSavedSettings.getBOOL("FSMouselookCombatFeatures");
+	getChild<LLCheckBoxCtrl>("ExodusMouselookIFF")->setEnabled(enabled);
+	getChild<LLSliderCtrl>("ExodusMouselookIFFRange")->setEnabled(enabled);
 }
 // </FS:Ansariel>
 

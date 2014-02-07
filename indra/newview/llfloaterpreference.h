@@ -279,6 +279,8 @@ private:
 	void onEnableGrowlChanged();
 	// <FS:Ansariel> Flash chat toolbar button notification
 	void onChatWindowChanged();
+	// <FS:Ansariel> Exodus' mouselook combat feature
+	void updateMouselookCombatFeatures();
 
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;

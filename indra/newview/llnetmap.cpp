@@ -1710,6 +1710,18 @@ void LLNetMap::handleClearMarks()
 {
 	sAvatarMarksMap.clear();
 }
+
+bool LLNetMap::getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color)
+{
+	avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);
+	if (found != sAvatarMarksMap.end())
+	{
+		color = found->second;
+		return true;
+	}
+	return false;
+}
+
 //</FS:Ansariel>
 
 void LLNetMap::handleCam()

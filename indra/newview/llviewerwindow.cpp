@@ -228,6 +228,8 @@
 
 #include "utilitybar.h"		// <FS:Zi> Support for the classic V1 style buttons in some skins
 #include "exopostprocess.h"	// <FS:Ansariel> Exodus Vignette
+#include "llnetmap.h"
+#include "lggcontactsets.h"
 
 //
 // Globals
@@ -2686,6 +2688,104 @@ void LLViewerWindow::draw()
 
 		// Draw tool specific overlay on world
 		LLToolMgr::getInstance()->getCurrentTool()->draw();
+
+		// <exodus> Draw HUD stuff.
+		bool inMouselook = gAgentCamera.cameraMouselook();
+		static LLCachedControl<bool> fsMouselookCombatFeatures(gSavedSettings, "FSMouselookCombatFeatures", true);
+		if (inMouselook && fsMouselookCombatFeatures)
+		{
+			S32 windowWidth = gViewerWindow->getWorldViewRectScaled().getWidth();
+			S32 windowHeight = gViewerWindow->getWorldViewRectScaled().getHeight();
+
+			static const std::string unknown_agent = LLTrans::getString("Mouselook_Unknown_Avatar");
+			static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
+			static LLCachedControl<F32> renderIFFRange(gSavedSettings, "ExodusMouselookIFFRange", 380.f);
+			static LLCachedControl<bool> renderIFF(gSavedSettings, "ExodusMouselookIFF", true);
+			static LLUICachedControl<F32> userPresetX("ExodusMouselookTextOffsetX", 0.f);
+			static LLUICachedControl<F32> userPresetY("ExodusMouselookTextOffsetY", -150.f);
+			static LLUICachedControl<U32> userPresetHAlign("ExodusMouselookTextHAlign", 2);
+
+			LLVector3d myPosition = gAgentCamera.getCameraPositionGlobal();
+			LLQuaternion myRotation = LLViewerCamera::getInstance()->getQuaternion();
+
+			myRotation.set(-myRotation.mQ[VX], -myRotation.mQ[VY], -myRotation.mQ[VZ], myRotation.mQ[VW]);
+
+			uuid_vec_t avatars;
+			std::vector<LLVector3d> positions;
+			LLWorld::getInstance()->getAvatars(&avatars, &positions, gAgent.getPositionGlobal(), renderIFFRange);
+	
+			bool crosshairRendered = false;
+
+			S32 length = avatars.size();
+			if (length)
+			{
+				for (S32 i = 0; i < length; i++)
+				{
+					LLUUID& targetKey = avatars[i];
+					if (targetKey == gAgentID)
+					{
+						continue;
+					}
+
+					LLVector3d targetPosition = positions[i];
+					if (targetPosition.isNull())
+					{
+						continue;
+					}
+
+					LLColor4 targetColor = map_avatar_color.get();
+					targetColor = LGGContactSets::getInstance()->colorize(targetKey, targetColor, LGG_CS_MINIMAP);
+
+					//color based on contact sets prefs
+					if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP))
+					{
+						targetColor = LGGContactSets::getInstance()->getFriendColor(targetKey);
+					}
+
+					LLColor4 mark_color;
+					if (LLNetMap::getAvatarMarkColor(targetKey, mark_color))
+					{
+						targetColor = mark_color;
+					}
+
+					if (renderIFF)
+					{
+						LLTracker::instance()->drawMarker(targetPosition, targetColor);
+					}
+
+					if (inMouselook && !crosshairRendered)
+					{
+						LLVector3d magicVector = (targetPosition - myPosition) * myRotation;
+						magicVector.setVec(-magicVector.mdV[VY], magicVector.mdV[VZ], magicVector.mdV[VX]);
+
+						if (magicVector.mdV[VX] > -0.75 && magicVector.mdV[VX] < 0.75 && magicVector.mdV[VZ] > 0.0 && magicVector.mdV[VY] > -1.5 && magicVector.mdV[VY] < 1.5) // Do not fuck with these, cheater. :(
+						{
+							LLAvatarName avatarName;
+							std::string targetName = unknown_agent;
+							if (LLAvatarNameCache::get(targetKey, &avatarName))
+							{
+								targetName = avatarName.getCompleteName();
+							}
+
+							LLFontGL::getFontSansSerifBold()->renderUTF8(
+								llformat("%s, %.2fm", targetName.c_str(), (targetPosition - myPosition).magVec()),
+								0, (windowWidth / 2.f) + userPresetX, (windowHeight / 2.f) + userPresetY, targetColor,
+								(LLFontGL::HAlign)((S32)userPresetHAlign), LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT
+							);
+
+							crosshairRendered = true;
+						}
+					}
+
+					if (!renderIFF && inMouselook && crosshairRendered)
+					{
+						break;
+					}
+				}
+			}
+		}
+		// </exodus>
+
         // Only show Mouselookinstructions if FSShowMouselookInstruction is TRUE
 		static LLCachedControl<bool> fsShowMouselookInstructions(gSavedSettings, "FSShowMouselookInstructions");
 		if( fsShowMouselookInstructions && (gAgentCamera.cameraMouselook() || LLFloaterCamera::inFreeCameraMode()) )

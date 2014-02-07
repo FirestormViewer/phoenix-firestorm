@@ -100,6 +100,9 @@ public:
 	// <FS:Ansariel> Synchronize double click handling throughout instances
 	void			performDoubleClickAction(LLVector3d pos_global);
 
+	// <FS:Ansariel> Mark avatar feature
+	static bool		getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color);
+
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }
 	void 			renderPoint(const LLVector3 &pos, const LLColor4U &color, 
