@@ -144,19 +144,19 @@
 				Punkte auf Minikarte:
 			</text>
 			<text name="MapAvatarSelfColor_label">
-				Ich:
+				Ich
 			</text>
 			<text name="MapAvatarColor_label">
-				Andere:
+				Andere
 			</text>
 			<text name="MapAvatarFriendColor_label">
-				Freunde:
+				Freunde
 			</text>
 			<text name="MapAvatarLindenColor_label">
-				Linden Lab:
+				Linden Lab
 			</text>
 			<text name="MapAvatarMutedColor_label">
-				Blockiert:
+				Blockiert
 			</text>
 			<check_box name="MiniMapChatRing" label="Ringe auf der Minikarte für Darstellung der Sprech- und Rufreichweite anzeigen"/>
 			<text name="netmap_chatring_color_label">
