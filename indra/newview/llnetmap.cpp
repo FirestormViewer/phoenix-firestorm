@@ -103,7 +103,7 @@ const F64 COARSEUPDATE_MAX_Z = 1020.0f;
 const F32 WIDTH_PIXELS = 2.f;
 const S32 CIRCLE_STEPS = 100;
 
-std::map<LLUUID, LLColor4> LLNetMap::sAvatarMarksMap; // <FS:Ansariel>
+LLNetMap::avatar_marks_map_t LLNetMap::sAvatarMarksMap; // <FS:Ansariel>
 F32 LLNetMap::sScale; // <FS:Ansariel> Synchronizing netmaps throughout instances
 
 // <FS:Ansariel> Synchronize tooltips throughout instances
@@ -161,6 +161,7 @@ BOOL LLNetMap::postBuild()
 	registrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
 	// <FS:Ansariel>
 	registrar.add("Minimap.Mark", boost::bind(&LLNetMap::handleMark, this, _2));
+	registrar.add("Minimap.ClearMark", boost::bind(&LLNetMap::handleClearMark, this));
 	registrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
 	// </FS:Ansariel>
 	registrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
@@ -640,9 +641,10 @@ void LLNetMap::draw()
 			}
 			
 			// <FS:Ansariel> Mark Avatars with special colors
-			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
+			avatar_marks_map_t::iterator found = sAvatarMarksMap.find(uuid);
+			if (found != sAvatarMarksMap.end())
 			{
-				color = LLNetMap::sAvatarMarksMap[uuid];
+				color = found->second;
 			}
 			// </FS:Ansariel> Mark Avatars with special colors
 
@@ -1678,14 +1680,22 @@ void LLNetMap::handleMark(const LLSD& userdata)
 	{
 		// Use the name as color definition name from colors.xml
 		LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
-		LLNetMap::sAvatarMarksMap[mClosestAgentRightClick] = color;
-		LL_INFOS("NetMap") << "Minimap: Marking " << mClosestAgentRightClick.asString() << " in " << userdata.asString() << LL_ENDL;
+		sAvatarMarksMap[mClosestAgentRightClick] = color;
+	}
+}
+
+void LLNetMap::handleClearMark()
+{
+	avatar_marks_map_t::iterator it = sAvatarMarksMap.find(mClosestAgentRightClick);
+	if (it != sAvatarMarksMap.end())
+	{
+		sAvatarMarksMap.erase(it);
 	}
 }
 
 void LLNetMap::handleClearMarks()
 {
-	LLNetMap::sAvatarMarksMap.clear();
+	sAvatarMarksMap.clear();
 }
 //</FS:Ansariel>
 

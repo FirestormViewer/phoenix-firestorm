@@ -166,7 +166,8 @@ private:
 	// </FS:Ansariel> Synchronize tooltips throughout instances
 
 	// <FS:Ansariel> Mark avatar feature
-	static std::map<LLUUID, LLColor4> sAvatarMarksMap;
+	typedef std::map<LLUUID, LLColor4> avatar_marks_map_t;
+	static avatar_marks_map_t sAvatarMarksMap;
 
 public:
 	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
@@ -182,6 +183,7 @@ private:
 	void handleStopTracking (const LLSD& userdata);
 	void handleStartTracking();
 	void handleMark(const LLSD& userdata);
+	void handleClearMark();
 	void handleClearMarks();
 	void handleCam();
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
