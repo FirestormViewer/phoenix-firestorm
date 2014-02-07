@@ -21823,6 +21823,25 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSMinimapPickScale</key>
+      <map>
+      <key>Comment</key>
+      <string>Controls the pick radius on the minimap</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>3.0</real>
+      <key>SanityCheckType</key>
+      <string>GreaterThan</string>
+      <key>SanityValue</key>
+      <array>
+        <real>0.4999</real>
+      </array>
+      <key>SanityComment</key>
+      <string>This value should at least be 0.5.</string>
+    </map>
 </map>
 </llsd>
 

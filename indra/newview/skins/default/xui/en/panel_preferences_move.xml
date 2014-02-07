@@ -592,7 +592,7 @@
          text_color="White_25">
             (requires restart)
         </text>
-		
+
         <check_box
          top_pad="0"
          follows="left|top"
@@ -616,7 +616,7 @@
          width="200">
          Minimap options:
         </text>
-        
+
         <check_box
          top_pad="4"
          follows="left|top"
@@ -629,7 +629,7 @@
          width="350"
          control_name="MiniMapRotate"
          tool_tip="Rotate miniature world map to avatar direction."/>
-		 
+
         <text
          follows="left|top"
          type="string"
@@ -663,6 +663,26 @@
              name="2"
              value="2"/>
         </combo_box>
+
+        <slider
+         can_edit_text="true"
+         control_name="FSMinimapPickScale"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.5"
+         initial_value="1"
+         layout="topleft"
+         label="Pick scale:"
+         left="35"
+         label_width="150"
+         max_val="10"
+         min_val="0.5"
+         name="FSMinimapPickScale"
+         show_text="true"
+         tool_tip="Controls the radius of the pick range on the minimap"
+         width="360"
+         top_pad="5"/>
 
         <text
          top_pad="6"

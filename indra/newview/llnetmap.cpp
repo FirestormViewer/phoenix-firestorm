@@ -588,7 +588,11 @@ void LLNetMap::draw()
 		mClosestAgentsToCursor.clear();
 // [/SL:KB]
 		F32 closest_dist_squared = F32_MAX; // value will be overridden in the loop
-		F32 min_pick_dist_squared = (mDotRadius * MIN_PICK_SCALE) * (mDotRadius * MIN_PICK_SCALE);
+		// <FS:Ansariel> Configurable pick distance
+		//F32 min_pick_dist_squared = (mDotRadius * MIN_PICK_SCALE) * (mDotRadius * MIN_PICK_SCALE);
+		static LLCachedControl<F32> fsMinimapPickScale(gSavedSettings, "FSMinimapPickScale");
+		F32 min_pick_dist_squared = (mDotRadius * fsMinimapPickScale) * (mDotRadius * fsMinimapPickScale);
+		// </FS:Ansariel>
 
 		LLVector3 pos_map;
 		uuid_vec_t avatar_ids;
@@ -793,7 +797,7 @@ void LLNetMap::draw()
 
 		// <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
 		gGL.color4fv((map_frustum_color()).mV);
-		gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * MIN_PICK_SCALE, 32, true);
+		gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
 		// </FS:Ansariel>
 
 		if( rotate_map )
