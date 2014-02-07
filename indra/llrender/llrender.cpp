@@ -2242,16 +2242,7 @@ void LLRender::texCoord2fv(const GLfloat* tc)
 
 void LLRender::color4ub(const GLubyte& r, const GLubyte& g, const GLubyte& b, const GLubyte& a)
 {
-	if (LLGLSLShader::sNoFixedFunction && 
-		(!LLGLSLShader::sCurBoundShaderPtr || 
-		LLGLSLShader::sCurBoundShaderPtr->mAttributeMask & LLVertexBuffer::MAP_COLOR))
-	{
-		mColorsp[mCount] = LLColor4U(r,g,b,a);
-	}
-	else
-	{ //not using shaders or shader reads color from a uniform
-		diffuseColor4ub(r,g,b,a);
-	}
+	mColorsp[mCount] = LLColor4U(r,g,b,a);
 }
 void LLRender::color4ubv(const GLubyte* c)
 {
