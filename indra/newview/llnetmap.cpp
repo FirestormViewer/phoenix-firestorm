@@ -791,6 +791,11 @@ void LLNetMap::draw()
 
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
+		// <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
+		gGL.color4fv((map_frustum_color()).mV);
+		gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * MIN_PICK_SCALE, 32, true);
+		// </FS:Ansariel>
+
 		if( rotate_map )
 		{
 			gGL.color4fv((map_frustum_color()).mV);
