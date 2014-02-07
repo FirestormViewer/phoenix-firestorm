@@ -170,8 +170,42 @@ BOOL LLNetMap::postBuild()
 	registrar.add("Minimap.TextureType", boost::bind(&LLNetMap::handleTextureType, this, _2));
 	registrar.add("Minimap.ToggleOverlay", boost::bind(&LLNetMap::handleOverlayToggle, this, _2));
 
+	registrar.add("Minimap.AddFriend", boost::bind(&LLNetMap::handleAddFriend, this));
+	registrar.add("Minimap.AddToContactSet", boost::bind(&LLNetMap::handleAddToContactSet, this));
+	registrar.add("Minimap.RemoveFriend", boost::bind(&LLNetMap::handleRemoveFriend, this));
+	registrar.add("Minimap.IM", boost::bind(&LLNetMap::handleIM, this));
+	registrar.add("Minimap.Call", boost::bind(&LLNetMap::handleCall, this));
+	registrar.add("Minimap.Map", boost::bind(&LLNetMap::handleMap, this));
+	registrar.add("Minimap.Share", boost::bind(&LLNetMap::handleShare, this));
+	registrar.add("Minimap.Pay", boost::bind(&LLNetMap::handlePay, this));
+	registrar.add("Minimap.OfferTeleport", boost::bind(&LLNetMap::handleOfferTeleport, this));
+	registrar.add("Minimap.RequestTeleport", boost::bind(&LLNetMap::handleRequestTeleport, this));
+	registrar.add("Minimap.TeleportToAvatar", boost::bind(&LLNetMap::handleTeleportToAvatar, this));
+	registrar.add("Minimap.GroupInvite", boost::bind(&LLNetMap::handleGroupInvite, this));
+	registrar.add("Minimap.GetScriptInfo", boost::bind(&LLNetMap::handleGetScriptInfo, this));
+	registrar.add("Minimap.BlockUnblock", boost::bind(&LLNetMap::handleBlockUnblock, this));
+	registrar.add("Minimap.Report", boost::bind(&LLNetMap::handleReport, this));
+	registrar.add("Minimap.Freeze", boost::bind(&LLNetMap::handleFreeze, this));
+	registrar.add("Minimap.Eject", boost::bind(&LLNetMap::handleEject, this));
+	registrar.add("Minimap.Kick", boost::bind(&LLNetMap::handleKick, this));
+	registrar.add("Minimap.TeleportHome", boost::bind(&LLNetMap::handleTeleportHome, this));
+	registrar.add("Minimap.EstateBan", boost::bind(&LLNetMap::handleEstateBan, this));
+	registrar.add("Minimap.Derender", boost::bind(&LLNetMap::handleDerender, this, false));
+	registrar.add("Minimap.DerenderPermanent", boost::bind(&LLNetMap::handleDerender, this, true));
+
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	enable_registrar.add("Minimap.CheckTextureType", boost::bind(&LLNetMap::checkTextureType, this, _2));
+
+	enable_registrar.add("Minimap.CanAddFriend", boost::bind(&LLNetMap::canAddFriend, this));
+	enable_registrar.add("Minimap.CanRemoveFriend", boost::bind(&LLNetMap::canRemoveFriend, this));
+	enable_registrar.add("Minimap.CanCall", boost::bind(&LLNetMap::canCall, this));
+	enable_registrar.add("Minimap.CanMap", boost::bind(&LLNetMap::canMap, this));
+	enable_registrar.add("Minimap.CanShare", boost::bind(&LLNetMap::canShare, this));
+	enable_registrar.add("Minimap.CanOfferTeleport", boost::bind(&LLNetMap::canOfferTeleport, this));
+	enable_registrar.add("Minimap.IsBlocked", boost::bind(&LLNetMap::isBlocked, this));
+	enable_registrar.add("Minimap.CanBlock", boost::bind(&LLNetMap::canBlock, this));
+	enable_registrar.add("Minimap.VisibleFreezeEject", boost::bind(&LLNetMap::canFreezeEject, this));
+	enable_registrar.add("Minimap.VisibleKickTeleportHome", boost::bind(&LLNetMap::canKickTeleportHome, this));
 // [/SL:KB]
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
@@ -1456,6 +1490,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mClosestAgentRightClick = mClosestAgentToCursor;
 		mPosGlobalRightClick = viewPosToGlobal(x, y);
 
+		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
 		mPopupMenu->setItemVisible("View Profile", mClosestAgentsToCursor.size() == 1);
 
 		LLMenuItemBranchGL* pProfilesMenu = mPopupMenu->getChild<LLMenuItemBranchGL>("View Profiles");
@@ -1742,3 +1777,159 @@ void LLNetMap::performDoubleClickAction(LLVector3d pos_global)
 	}
 }
 // </FS:Ansariel> Synchronize double click handling throughout instances
+
+
+bool LLNetMap::canAddFriend()
+{
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_ADD_FRIEND);
+}
+
+bool LLNetMap::canRemoveFriend()
+{
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_REMOVE_FRIEND);
+}
+
+bool LLNetMap::canCall()
+{
+	return LLAvatarActions::canCall();
+}
+
+bool LLNetMap::canMap()
+{
+	return (LLAvatarTracker::instance().isBuddyOnline(mClosestAgentRightClick) && is_agent_mappable(mClosestAgentRightClick));
+}
+
+bool LLNetMap::canShare()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+}
+
+bool LLNetMap::canOfferTeleport()
+{
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_OFFER_TELEPORT);
+}
+
+bool LLNetMap::canBlock()
+{
+	return LLAvatarActions::canBlock(mClosestAgentRightClick);
+}
+
+bool LLNetMap::canFreezeEject()
+{
+	return LLAvatarActions::canLandFreezeOrEject(mClosestAgentRightClick);
+}
+
+bool LLNetMap::canKickTeleportHome()
+{
+	return LLAvatarActions::canEstateKickOrTeleportHome(mClosestAgentRightClick);
+}
+
+bool LLNetMap::isBlocked()
+{
+	return LLAvatarActions::isBlocked(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleAddFriend()
+{
+	LLAvatarActions::requestFriendshipDialog(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleAddToContactSet()
+{
+	LLAvatarActions::addToContactSet(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleRemoveFriend()
+{
+	LLAvatarActions::removeFriendDialog(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleIM()
+{
+	LLAvatarActions::startIM(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleCall()
+{
+	LLAvatarActions::startCall(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleMap()
+{
+	LLAvatarActions::showOnMap(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleShare()
+{
+	LLAvatarActions::share(mClosestAgentRightClick);
+}
+
+void LLNetMap::handlePay()
+{
+	LLAvatarActions::pay(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleOfferTeleport()
+{
+	LLAvatarActions::offerTeleport(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleRequestTeleport()
+{
+	LLAvatarActions::teleportRequest(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleTeleportToAvatar()
+{
+	FSRadar::getInstance()->teleportToAvatar(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleGroupInvite()
+{
+	LLAvatarActions::inviteToGroup(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleGetScriptInfo()
+{
+	LLAvatarActions::getScriptInfo(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleBlockUnblock()
+{
+	LLAvatarActions::toggleBlock(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleReport()
+{
+	LLAvatarActions::report(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleFreeze()
+{
+	LLAvatarActions::landFreeze(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleEject()
+{
+	LLAvatarActions::landEject(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleKick()
+{
+	LLAvatarActions::estateKick(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleTeleportHome()
+{
+	LLAvatarActions::estateTeleportHome(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleEstateBan()
+{
+	LLAvatarActions::estateBan(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleDerender(bool permanent)
+{
+	LLAvatarActions::derender(mClosestAgentRightClick, permanent);
+}

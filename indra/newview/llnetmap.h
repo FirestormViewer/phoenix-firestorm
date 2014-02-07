@@ -191,6 +191,39 @@ private:
 	void setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name);
 // [/SL:KB]
 
+	bool canAddFriend();
+	bool canRemoveFriend();
+	bool canCall();
+	bool canMap();
+	bool canShare();
+	bool canOfferTeleport();
+	bool canBlock();
+	bool canFreezeEject();
+	bool canKickTeleportHome();
+	bool isBlocked();
+
+	void handleAddFriend();
+	void handleAddToContactSet();
+	void handleRemoveFriend();
+	void handleIM();
+	void handleCall();
+	void handleMap();
+	void handleShare();
+	void handlePay();
+	void handleOfferTeleport();
+	void handleRequestTeleport();
+	void handleTeleportToAvatar();
+	void handleGroupInvite();
+	void handleGetScriptInfo();
+	void handleBlockUnblock();
+	void handleReport();
+	void handleFreeze();
+	void handleEject();
+	void handleKick();
+	void handleTeleportHome();
+	void handleEstateBan();
+	void handleDerender(bool permanent);
+
 	LLMenuGL*		mPopupMenu;
 	uuid_vec_t		gmSelected;
 };
