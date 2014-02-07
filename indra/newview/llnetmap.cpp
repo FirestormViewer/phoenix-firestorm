@@ -1499,6 +1499,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
 		mClosestAgentRightClick = mClosestAgentToCursor;
+		mClosestAgentsRightClick = mClosestAgentsToCursor;
 		mPosGlobalRightClick = viewPosToGlobal(x, y);
 
 		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
@@ -1685,20 +1686,23 @@ void LLNetMap::handleZoom(const LLSD& userdata)
 // <FS:Ansariel> Mark avatar feature
 void LLNetMap::handleMark(const LLSD& userdata)
 {
-	if (mClosestAgentRightClick.notNull())
+	// Use the name as color definition name from colors.xml
+	LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
+	for (uuid_vec_t::iterator it = mClosestAgentsRightClick.begin(); it != mClosestAgentsRightClick.end(); ++it)
 	{
-		// Use the name as color definition name from colors.xml
-		LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
-		sAvatarMarksMap[mClosestAgentRightClick] = color;
+		sAvatarMarksMap[*it] = color;
 	}
 }
 
 void LLNetMap::handleClearMark()
 {
-	avatar_marks_map_t::iterator it = sAvatarMarksMap.find(mClosestAgentRightClick);
-	if (it != sAvatarMarksMap.end())
+	for (uuid_vec_t::iterator it = mClosestAgentsRightClick.begin(); it != mClosestAgentsRightClick.end(); ++it)
 	{
-		sAvatarMarksMap.erase(it);
+		avatar_marks_map_t::iterator found = sAvatarMarksMap.find(*it);
+		if (found != sAvatarMarksMap.end())
+		{
+			sAvatarMarksMap.erase(found);
+		}
 	}
 }
 

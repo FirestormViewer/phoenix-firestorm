@@ -176,6 +176,7 @@ public:
 	uuid_vec_t		mClosestAgentsToCursor;
 	LLVector3d		mPosGlobalRightClick;
 	LLUUID			mClosestAgentRightClick;
+	uuid_vec_t		mClosestAgentsRightClick;
 // </FS:CR>
 
 private:
