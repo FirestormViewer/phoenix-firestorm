@@ -777,7 +777,9 @@ class WindLightRefresh : public LLHTTPNode
 		}
 		llinfos << "Windlight Refresh , interpolate:" << env->mInterpNextChangeMessage << llendl;
 		env->requestRegionSettings();
-		env->mRegionChangeSignal();
+
+		// Ansa: This cause the windlight editor and others to update since the windlight has changed!
+		gAgent.changeRegion();
 	}
 };
 
