@@ -4659,7 +4659,7 @@ Das Wiederherstellen von Einstellungen erfordert einen Neustart des Viewers. Sol
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Wiederherstellen und beenden"/>
 	</notification>
 
-	<notification name="SettingsRestoreNeedsLogout">
+	<notification name="RestoreFinished">
 Wiederherstellen abgeschlossen! Bitte den Viewer neu starten!
 		<usetemplate name="okbutton" yestext="Beenden"/>
 	</notification>
