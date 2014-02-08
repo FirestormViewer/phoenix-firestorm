@@ -26,7 +26,6 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-
 #include "animationexplorer.h"
 
 #include "indra_constants.h"		// for MASK_ALT etc.
