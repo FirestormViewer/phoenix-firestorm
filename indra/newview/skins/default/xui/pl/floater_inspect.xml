@@ -5,6 +5,7 @@
 		<scroll_list.columns label="Właściciel" name="owner_name"/>
 		<scroll_list.columns label="Twórca" name="creator_name"/>
 		<scroll_list.columns label="Utworzony" name="creation_date"/>
+		<scroll_list.columns label="Opis" name="description"/>
 	</scroll_list>
 	<button label="Profil Właściciela..." name="button owner" tool_tip="Zobacz profil Właściciela podświetlonego obiektu"/>
 	<button label="Profil Twórcy..." name="button creator" tool_tip="Zobacz profil Twórcy podświetlonego obiektu"/>

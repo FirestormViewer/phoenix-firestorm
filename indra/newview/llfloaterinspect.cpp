@@ -306,6 +306,11 @@ void LLFloaterInspect::refresh()
 		row["columns"][3]["column"] = "creation_date";
 		row["columns"][3]["type"] = "text";
 		row["columns"][3]["value"] = timeStr;
+		// <FS:PP> FIRE-12854: Include a Description column in the Inspect Objects floater
+		row["columns"][4]["column"] = "description";
+		row["columns"][4]["type"] = "text";
+		row["columns"][4]["value"] = obj->mDescription;
+		// </FS:PP>
 		mObjectList->addElement(row, ADD_TOP);
 	}
 	if(selected_index > -1 && mObjectList->getItemIndex(selected_uuid) == selected_index)
