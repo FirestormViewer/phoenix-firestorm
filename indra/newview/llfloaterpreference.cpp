@@ -1452,6 +1452,11 @@ void LLFloaterPreference::buildPopupLists()
 			item->setUserdata((void*)&iter->first);
 		}
 	}
+
+	// <FS:Ansariel> Let's sort it so we can find stuff!
+	enabled_popups.sortByColumnIndex(0, TRUE);
+	disabled_popups.sortByColumnIndex(0, TRUE);
+	// </FS:Ansariel>
 }
 
 void LLFloaterPreference::refreshEnabledState()
