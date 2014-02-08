@@ -40,6 +40,13 @@
 
 #include <leap-motion/Leap.h>
 
+// <FS:Zi> Leap Motion flycam
+#include "llmoveview.h"
+#include "llquaternion.h"
+#include "llviewercamera.h"
+#include "llviewerjoystick.h"
+// </FS:Zi>
+
 const F32	LM_DEAD_ZONE			= 20.f;		// Dead zone in the middle of the space
 const F32   LM_ORBIT_RATE_FACTOR	= 80.f;		// Number for camera orbit magic factor
 
@@ -78,6 +85,28 @@ private:
 	void	modeGestureDetection1(Leap::HandList & hands);
 	void	modeMoveAndCamTest1(Leap::HandList & hands);
 	void	modeDumpDebugInfo(Leap::HandList & hands);
+
+// <FS:Zi> Leap Motion flycam
+public:
+	// returns true when in leapmotion flycam mode
+	bool 	getOverrideCamera();
+	// called once per frame when in flycam mode
+	void	moveFlycam();
+
+private:
+	Leap::Vector	mHandCenterPos;			// point where the hand entered flycam
+
+	void	modeFlycam(Leap::HandList & hands);
+
+	bool			mOverrideCamera;		// true when in leapmotion flycam mode
+
+	LLVector3		mFlycamDelta;			// next movement delta for flycam
+	LLVector3		mFlycamFeatheredDelta;	// feathered positional data
+	LLVector3		mFlycamPos;				// current flycam position
+	LLQuaternion	mFlycamInitialRot;		// initial flycam rotation
+	LLVector3		mFlycamRot;				// current flycam rotation as vector
+	LLVector3	 	mFlycamFeatheredRot;	// current feathered rotation as vector
+// </FS:Zi>
 };
 
 const F32		LLLEAP_YAW_INTERVAL = 0.075f;
@@ -92,6 +121,7 @@ LLLMImpl::LLLMImpl() : mLMController(NULL)
 , mLMConnected(false)
 , mFrameAvailable(false)
 , mCurrentFrameID(0)
+, mOverrideCamera(false)	// <FS:Zi> Leap Motion flycam
 {
 	mLMController = new Leap::Controller(*this);
 	mYawTimer.setTimerExpirySec(LLLEAP_YAW_INTERVAL);
@@ -169,6 +199,11 @@ void LLLMImpl::stepFrame()
 			case 4:
 				modeMoveAndCamTest1(hands);
 				break;
+			// <FS:Zi> Leap Motion flycam
+			case 10:
+				modeFlycam(hands);
+				break;
+			// </FS:Zi>
 			case 411:
 				modeDumpDebugInfo(hands);
 				break;
@@ -615,3 +650,161 @@ void LLLeapMotionController::stepFrame()
 		mController->stepFrame();
 	}
 }
+
+// <FS:Zi> Leap Motion flycam
+bool LLLMImpl::getOverrideCamera()
+{
+	return mOverrideCamera;
+}
+
+// This controller mode is used to fly around with the camera
+void LLLMImpl::modeFlycam(Leap::HandList& hands)
+{
+	static bool old_joystick_enabled=false;
+
+	S32 numHands=hands.count();
+	if(numHands!=1)
+	{
+		if(mOverrideCamera)
+		{
+			mOverrideCamera=false;
+
+			gSavedSettings.setBOOL("JoystickEnabled",old_joystick_enabled);
+			gSavedSettings.setBOOL("JoystickFlycamEnabled",false);
+
+			LLPanelStandStopFlying::clearStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
+
+			// make sure to keep the camera where we left it when we switch off flycam
+			LLViewerJoystick::instance().setCameraNeedsUpdate(false);
+		}
+	}
+	else
+	{
+		// Get the first hand
+		Leap::Hand hand=hands[0];
+
+		// Check if the hand has at least 3 fingers
+		Leap::FingerList finger_list=hand.fingers();
+		S32 num_fingers=finger_list.count();
+
+		static F32 y_rot=0.0f;
+		static F32 z_rot=0.0f;
+
+		if(!mOverrideCamera)
+		{
+			mOverrideCamera=true;
+
+			old_joystick_enabled=gSavedSettings.getBOOL("JoystickEnabled");
+
+			gSavedSettings.setBOOL("JoystickEnabled",true);
+			gSavedSettings.setBOOL("JoystickFlycamEnabled",true);
+
+			mFlycamPos=LLViewerCamera::instance().getOrigin();
+			mFlycamDelta=LLVector3::zero;
+			mFlycamFeatheredDelta=LLVector3::zero;
+			mFlycamInitialRot=LLViewerCamera::instance().getQuaternion();
+			mFlycamRot=LLVector3::zero;
+			mFlycamFeatheredRot=LLVector3::zero;
+			y_rot=0.0f;
+			z_rot=0.0f;
+
+			LLPanelStandStopFlying::setStandStopFlyingMode(LLPanelStandStopFlying::SSFM_FLYCAM);
+		}
+
+		Leap::Vector palm_pos=hand.palmPosition();
+		Leap::Vector palm_normal=hand.palmNormal();
+
+		if(num_fingers<3)
+		{
+			mFlycamDelta=LLVector3::zero;
+			mHandCenterPos=hand.palmPosition();
+
+			// auto leveling (not quite perfect yet)
+			mFlycamRot=LLVector3(0.0f,y_rot,z_rot);
+		}
+		else
+		{
+			F32 delta=palm_pos.z-mHandCenterPos.z;
+			if(fabsf(delta)>5.0f)
+			{
+				mFlycamDelta.mV[VX]=-delta*fabsf(delta)/1000.0f;
+			}
+
+			delta=palm_pos.y-mHandCenterPos.y;
+			if(fabsf(delta)>5.0f)
+			{
+				mFlycamDelta.mV[VZ]=delta*fabsf(delta)/1000.0f;
+			}
+
+			delta=palm_pos.x-mHandCenterPos.x;
+			if(fabsf(delta)>5.0f)
+			{
+				mFlycamDelta.mV[VY]=-delta*fabsf(delta)/1000.0f;
+			}
+
+			y_rot=palm_normal.z*150.0f;
+			if(fabsf(palm_normal.x)>0.2f)
+			{
+				z_rot+=(palm_normal.x*fabsf(palm_normal.x)*50.0f);
+			}
+
+			// palm_normal.z = pitch
+			// palm_normal.x = roll
+			mFlycamRot=LLVector3(-palm_normal.x*60.0f,y_rot,z_rot);
+		}
+	}
+}
+
+void LLLMImpl::moveFlycam()
+{
+	if(!mOverrideCamera)
+	{
+		return;
+	}
+
+	// simple feathering of the positional data
+	mFlycamFeatheredDelta+=(mFlycamDelta-mFlycamFeatheredDelta)/10.0f;
+
+	// simple feathering of the rotational data
+	mFlycamFeatheredRot+=(mFlycamRot-mFlycamFeatheredRot)/10.0f;
+
+	LLQuaternion final_flycam_rot=mayaQ(
+		mFlycamFeatheredRot.mV[VX],
+		mFlycamFeatheredRot.mV[VY],
+		mFlycamFeatheredRot.mV[VZ],
+		LLQuaternion::XYZ
+	);
+
+	final_flycam_rot=final_flycam_rot*mayaQ(
+		0.0f,
+		0.0f,
+		mFlycamFeatheredRot.mV[VZ],
+		LLQuaternion::XYZ
+	);
+
+	final_flycam_rot=final_flycam_rot*mFlycamInitialRot;
+
+	mFlycamPos+=mFlycamFeatheredDelta*final_flycam_rot;
+
+	LLViewerCamera::instance().setView(LLViewerCamera::instance().getView());
+	LLViewerCamera::instance().setOrigin(mFlycamPos);
+
+	LLMatrix3 mat(final_flycam_rot);
+	LLViewerCamera::instance().mXAxis=LLVector3(mat.mMatrix[0]);
+	LLViewerCamera::instance().mYAxis=LLVector3(mat.mMatrix[1]);
+	LLViewerCamera::instance().mZAxis=LLVector3(mat.mMatrix[2]);
+}
+
+bool LLLeapMotionController::getOverrideCamera()
+{
+	return mController->getOverrideCamera();
+}
+
+void LLLeapMotionController::moveFlycam()
+{
+	if(mController->getOverrideCamera())
+	{
+		mController->moveFlycam();
+	}
+}
+// </FS:Zi>

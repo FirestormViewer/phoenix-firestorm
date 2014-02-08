@@ -45,6 +45,15 @@ public:
 
 protected:
 	LLLMImpl	* mController;
+
+// <FS:Zi> Leap Motion flycam
+public:
+	// returns true if in leapmotion flycam mode
+	bool getOverrideCamera();
+
+	// Called every viewer frame when in flycam mode
+	void moveFlycam();
+// </FS:Zi>
 };
 
 #endif  // LL_LLLEAPMOTIONCONTROLLER_H
