@@ -22,7 +22,7 @@
 			<check_box label="Pokazuj instrukcje trybu pierwszoosobowego" name="mouselook_instructions_visible" tool_tip="Pokazuj instrukcje w trybie pierwszoosobowym"/>
 			<check_box label="Pokazuj celownik myszki" name="ShowCrosshairs" tool_tip="Pokazuj celownik myszki, gdy widok pierwszoosobowy jest włączony"/>
 			<check_box label="Włącz funkcje bojowe" name="FSMouselookCombatFeatures"/>
-			<check_box label="Pokazuj oznaczenia celów" name="ExodusMouselookIFF"/>
+			<check_box label="Pokazuj wskaźniki celów (strzałki)" name="ExodusMouselookIFF"/>
 			<slider label="Ogranicz dystans do (m):" name="ExodusMouselookIFFRange"/>
 			<text name="Mouse Sensitivity">
 				Czułość myszki w tym widoku:
