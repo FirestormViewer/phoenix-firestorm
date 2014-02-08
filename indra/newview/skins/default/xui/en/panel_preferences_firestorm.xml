@@ -191,6 +191,16 @@
 		 top_pad="5"
 		 width="350" />
 		<check_box
+		 control_name="FSInspectAvatarSlurlOpensProfile"
+		 height="16"
+		 label="Open avatar profile directly when clicking on its name"
+		 layout="topleft"
+		 name="FSInspectAvatarSlurlOpensProfile"
+		 tool_tip="If enabled, Firestorm will open the profile of an avatar directly when clicking on a link with its name"
+		 initial_value="true"
+		 top_pad="5"
+		 width="250" />
+		<check_box
 		 control_name="FSRenderFarClipStepping"
 		 height="16"
 		 label="Enable progressive draw distance stepping"

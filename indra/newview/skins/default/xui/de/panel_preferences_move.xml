@@ -22,6 +22,9 @@
 			<check_box label="Mouselook verlassen, nachdem Fokus wiederlangt wurde" name="exit_mouselook_focus_on_focus" tool_tip="Verlässt den Mouselook-Modus, wenn Firestorm den Fokus wiederlangt hat, nachdem es im Hintergrund lief."/>
 			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible" tool_tip="Zeigt Hilfestellungen zum Mouselook-Modus an."/>
 			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
+			<check_box label="Combat-Funktionen aktivieren" name="FSMouselookCombatFeatures"/>
+			<check_box label="Ziel-Markierungen aktivieren" name="ExodusMouselookIFF"/>
+			<slider label="Reichweite (m)" name="ExodusMouselookIFFRange"/>
 			<text name="Mouse Sensitivity" width="195">
 				Mausempfindlichkeit für Mouselook:
 			</text>
@@ -87,6 +90,7 @@
 				<combo_box.item label="Weltkarte öffnen" name="1"/>
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
+			<slider label="Auswahlradius-Skalierung:" tool_tip="Steuert den Radius für den Auswahlbereich auf der Minikarte" name="FSMinimapPickScale"/>
 			<text name="world_map_options_label">
 			   Weltkarte-Optionen:
 			</text>

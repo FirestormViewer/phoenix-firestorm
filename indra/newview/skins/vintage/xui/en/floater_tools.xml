@@ -1441,6 +1441,18 @@ even though the user gets a free copy.
          name="Object"
          top="16"
          width="295">
+            <panel.string name="Paste Position">
+                Paste Position
+[VALUE]
+            </panel.string>
+            <panel.string name="Paste Size">
+                Paste Size
+[VALUE]
+            </panel.string>
+            <panel.string name="Paste Rotation">
+                Paste Rotation
+[VALUE]
+            </panel.string>
             <check_box
              height="19"
              label="Locked"

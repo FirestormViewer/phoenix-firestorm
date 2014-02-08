@@ -59,6 +59,9 @@ public:
 	void unset();
 
 private:
+	// <FS:Ansariel> Configurable at runtime
+	void onUpdateFlashSettings();
+
 	callback_t		mCallback;
 	/**
 	 * How many times parent will blink.

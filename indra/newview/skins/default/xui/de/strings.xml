@@ -5848,4 +5848,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Inbox_Folderview_New">
 		Neu
 	</string>
+
+	<string name="Mouselook_Unknown_Avatar">
+		Unbekannter Avatar
+	</string>
 </strings>

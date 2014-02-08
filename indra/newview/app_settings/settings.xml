@@ -21759,10 +21759,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>FSChatnamesOpenFullProfile</key>
+    <key>FSInspectAvatarSlurlOpensProfile</key>
       <map>
       <key>Comment</key>
-      <string>Open the full profile of an avatar directly when clicking on its name in chat</string>
+      <string>Open the full profile of an avatar directly when clicking on its name</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -21822,6 +21822,91 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>FSMinimapPickScale</key>
+      <map>
+      <key>Comment</key>
+      <string>Controls the pick radius on the minimap</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>3.0</real>
+      <key>SanityCheckType</key>
+      <string>GreaterThan</string>
+      <key>SanityValue</key>
+      <array>
+        <real>0.4999</real>
+      </array>
+      <key>SanityComment</key>
+      <string>This value should at least be 0.5.</string>
+    </map>
+    <key>FSMouselookCombatFeatures</key>
+      <map>
+      <key>Comment</key>
+      <string>Enable combat features (target distance etc.) when in mouselook</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>ExodusMouselookIFF</key>
+      <map>
+      <key>Comment</key>
+      <string>Draw tracking markers in mouselook for people in range if combat features are enabled</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>ExodusMouselookIFFRange</key>
+      <map>
+      <key>Comment</key>
+      <string>Draw tracking markers in mouselook for people in range if combat features are enabled</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>380.0</real>
+    </map>
+    <key>ExodusMouselookTextOffsetX</key>
+      <map>
+      <key>Comment</key>
+      <string>Text X offset for target information text in mouselook if combat features are enabled</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
+    <key>ExodusMouselookTextOffsetY</key>
+      <map>
+      <key>Comment</key>
+      <string>Text Y offset for target information text in mouselook if combat features are enabled</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>-150.0</real>
+    </map>
+    <key>ExodusMouselookTextHAlign</key>
+      <map>
+      <key>Comment</key>
+      <string>Text alignment for target information text in mouselook if combat features are enabled</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>2</integer>
     </map>
 </map>
 </llsd>

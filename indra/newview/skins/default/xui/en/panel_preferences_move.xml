@@ -129,7 +129,7 @@
          label="Don't use the mouse wheel to control zoom level of the camera"
          layout="topleft"
          name="FSDisableMouseWheelCameraZoom"
-         top_pad="5"
+         top_pad="2"
          width="315"/>
         <text
          follows="left|top"
@@ -201,8 +201,8 @@
          height="16"
          label="Show avatar in Mouselook"
          layout="topleft"
-         left_delta="5"
-         top_pad="7"
+         left_delta="10"
+         top_pad="2"
          name="first_person_avatar_visible"
          width="256" />
         <check_box
@@ -213,6 +213,7 @@
          label="Show user interface in Mouselook"
          layout="topleft"
          name="first_person_ui_visible"
+         top_pad="2"
          width="256" />
         <check_box
          control_name="FSEnableRightclickMenuInMouselook"
@@ -223,6 +224,7 @@
          layout="topleft"
          name="FSEnableRightclickMenuInMouselook"
          tool_tip="Opens pie/context menu in mouselook mode upon ALT + right mouse button"
+         top_pad="2"
          width="256" />
         <check_box
          control_name="FSLeaveMouselookOnFocus"
@@ -234,6 +236,7 @@
          layout="topleft"
          name="exit_mouselook_focus_on_focus"
          tool_tip="Leaves the mouselook if Firestorm regains focus after it has been running in the background."
+         top_pad="2"
          width="256" />
         <check_box
          control_name="FSShowMouselookInstructions"
@@ -245,6 +248,7 @@
          layout="topleft"
          name="mouselook_instructions_visible"
          tool_tip="Show Mouselook Instructions"
+         top_pad="2"
          width="256" />
         <check_box
          control_name="ShowCrosshairs"
@@ -252,18 +256,55 @@
          enabled_control="EnableMouselook"
          height="16"
          initial_value="true"
-         label="Show Mouselook Crosshairs"
+         label="Show Mouselook crosshairs"
          layout="topleft"
          name="ShowCrosshairs"
          tool_tip="Display crosshairs when in mouselook mode"
+         top_pad="2"
          width="256" />
+        <check_box
+         control_name="FSMouselookCombatFeatures"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Enable combat features"
+         layout="topleft"
+         name="FSMouselookCombatFeatures"
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="ExodusMouselookIFF"
+         follows="left|top"
+         height="16"
+         label="Draw target markers"
+         layout="topleft"
+         left_delta="10"
+         name="ExodusMouselookIFF"
+         top_pad="2"
+         width="256" />
+        <slider
+         control_name="ExodusMouselookIFFRange"
+         follows="left|top"
+         height="15"
+         can_edit_text="true"
+         decimal_digits="0"
+         increment="5"
+         layout="topleft"
+         label="Range (m):"
+         label_width="150"
+         show_text="true"
+         left_delta="5"
+         max_val="500"
+         name="ExodusMouselookIFFRange"
+         top_pad="2"
+         width="333" />
         <text
          type="string"
          length="1"
          follows="left|top"
          height="10"
          layout="topleft"
-         left_delta="3"
+         left_delta="-10"
          name="Mouse Sensitivity"
          top_pad="7"
          width="160">
@@ -592,7 +633,7 @@
          text_color="White_25">
             (requires restart)
         </text>
-		
+
         <check_box
          top_pad="0"
          follows="left|top"
@@ -616,7 +657,7 @@
          width="200">
          Minimap options:
         </text>
-        
+
         <check_box
          top_pad="4"
          follows="left|top"
@@ -629,7 +670,7 @@
          width="350"
          control_name="MiniMapRotate"
          tool_tip="Rotate miniature world map to avatar direction."/>
-		 
+
         <text
          follows="left|top"
          type="string"
@@ -663,6 +704,26 @@
              name="2"
              value="2"/>
         </combo_box>
+
+        <slider
+         can_edit_text="true"
+         control_name="FSMinimapPickScale"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.5"
+         initial_value="1"
+         layout="topleft"
+         label="Pick scale:"
+         left="35"
+         label_width="150"
+         max_val="10"
+         min_val="0.5"
+         name="FSMinimapPickScale"
+         show_text="true"
+         tool_tip="Controls the radius of the pick range on the minimap"
+         width="360"
+         top_pad="5"/>
 
         <text
          top_pad="6"

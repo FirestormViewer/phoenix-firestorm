@@ -1452,6 +1452,11 @@ void LLFloaterPreference::buildPopupLists()
 			item->setUserdata((void*)&iter->first);
 		}
 	}
+
+	// <FS:Ansariel> Let's sort it so we can find stuff!
+	enabled_popups.sortByColumnIndex(0, TRUE);
+	disabled_popups.sortByColumnIndex(0, TRUE);
+	// </FS:Ansariel>
 }
 
 void LLFloaterPreference::refreshEnabledState()
@@ -1618,7 +1623,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 	//Deferred/SSAO/Shadows
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
-	LLCheckBoxCtrl* ctrl_deferred2 = getChild<LLCheckBoxCtrl>("UseLightShaders2");
+	//LLCheckBoxCtrl* ctrl_deferred2 = getChild<LLCheckBoxCtrl>("UseLightShaders2"); <FS:Ansariel> We don't have that
 
 	
 	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
@@ -1629,7 +1634,7 @@ void LLFloaterPreference::refreshEnabledState()
 						(ctrl_wind_light->get()) ? TRUE : FALSE;
 
 	ctrl_deferred->setEnabled(enabled);
-	ctrl_deferred2->setEnabled(enabled);
+	//ctrl_deferred2->setEnabled(enabled); <FS:Ansariel> We don't have that
 
 	// <FS:Ansariel> Tofu's SSR
 	getChild<LLCheckBoxCtrl>("FSRenderSSR")->setEnabled(enabled && (ctrl_deferred->get() ? TRUE : FALSE) && gSavedSettings.getS32("RenderShadowDetail") > 0);
@@ -1666,7 +1671,7 @@ void LLFloaterPreference::disableUnavailableSettings()
 	LLCheckBoxCtrl* ctrl_wind_light    = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	LLCheckBoxCtrl* ctrl_avatar_impostors = getChild<LLCheckBoxCtrl>("AvatarImpostors");
 	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
-	LLCheckBoxCtrl* ctrl_deferred2 = getChild<LLCheckBoxCtrl>("UseLightShaders2");
+	//LLCheckBoxCtrl* ctrl_deferred2 = getChild<LLCheckBoxCtrl>("UseLightShaders2"); <FS:Ansariel> We don't have that
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
@@ -1702,8 +1707,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
-		ctrl_deferred2->setEnabled(FALSE);
-		ctrl_deferred2->setValue(FALSE);
+		// <FS:Ansariel> We don't have that
+		//ctrl_deferred2->setEnabled(FALSE);
+		//ctrl_deferred2->setValue(FALSE);
 
 		// <FS:Ansariel> Tofu's SSR
 		ctrl_ssr->setEnabled(FALSE);
@@ -1728,8 +1734,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
-		ctrl_deferred2->setEnabled(FALSE);
-		ctrl_deferred2->setValue(FALSE);
+		// <FS:Ansariel> We don't have that
+		//ctrl_deferred2->setEnabled(FALSE);
+		//ctrl_deferred2->setValue(FALSE);
 
 		// <FS:Ansariel> Tofu's SSR
 		ctrl_ssr->setEnabled(FALSE);
@@ -1751,8 +1758,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
-		ctrl_deferred2->setEnabled(FALSE);
-		ctrl_deferred2->setValue(FALSE);
+		// <FS:Ansariel> We don't have that
+		//ctrl_deferred2->setEnabled(FALSE);
+		//ctrl_deferred2->setValue(FALSE);
 
 		// <FS:Ansariel> Tofu's SSR
 		ctrl_ssr->setEnabled(FALSE);
@@ -1805,8 +1813,9 @@ void LLFloaterPreference::disableUnavailableSettings()
 
 		ctrl_deferred->setEnabled(FALSE);
 		ctrl_deferred->setValue(FALSE);
-		ctrl_deferred2->setEnabled(FALSE);
-		ctrl_deferred2->setValue(FALSE);
+		// <FS:Ansariel> We don't have that
+		//ctrl_deferred2->setEnabled(FALSE);
+		//ctrl_deferred2->setValue(FALSE);
 
 		// <FS:Ansariel> Tofu's SSR
 		ctrl_ssr->setEnabled(FALSE);
@@ -2458,6 +2467,15 @@ BOOL LLPanelPreference::postBuild()
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Exodus' mouselook combat feature
+	if (hasChild("FSMouselookCombatFeatures", TRUE))
+	{
+		gSavedSettings.getControl("EnableMouselook")->getSignal()->connect(boost::bind(&LLPanelPreference::updateMouselookCombatFeatures, this));
+		gSavedSettings.getControl("FSMouselookCombatFeatures")->getSignal()->connect(boost::bind(&LLPanelPreference::updateMouselookCombatFeatures, this));
+		updateMouselookCombatFeatures();
+	}
+	// </FS:Ansariel>
+
 	////////////////////// PanelVoice ///////////////////
 	if (hasChild("voice_unavailable", TRUE))
 	{
@@ -2667,6 +2685,15 @@ void LLPanelPreference::onEnableGrowlChanged()
 void  LLPanelPreference::onChatWindowChanged()
 {
 	getChild<LLCheckBoxCtrl>("FSNotifyIMFlash")->setEnabled(gSavedSettings.getS32("FSChatWindow") == 1);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Exodus' mouselook combat feature
+void LLPanelPreference::updateMouselookCombatFeatures()
+{
+	bool enabled = gSavedSettings.getBOOL("EnableMouselook") && gSavedSettings.getBOOL("FSMouselookCombatFeatures");
+	getChild<LLCheckBoxCtrl>("ExodusMouselookIFF")->setEnabled(enabled);
+	getChild<LLSliderCtrl>("ExodusMouselookIFFRange")->setEnabled(enabled);
 }
 // </FS:Ansariel>
 

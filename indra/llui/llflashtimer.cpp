@@ -59,7 +59,21 @@ LLFlashTimer::LLFlashTimer(callback_t cb, S32 count, F32 period)
 		//mPeriod = gSavedSettings.getF32("FlashPeriod");
 		// </FS:CR>
 	}
+
+	// <FS:Ansariel> Configurable at runtime
+	LLUI::sSettingGroups["config"]->getControl("FlashCount")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
+	LLUI::sSettingGroups["config"]->getControl("FlashPeriod")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
+	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> Configurable at runtime
+void LLFlashTimer::onUpdateFlashSettings()
+{
+	stopFlashing();
+	mFlashCount = 2 * llmax(LLUI::sSettingGroups["config"]->getS32("FlashCount"), 0);
+	mPeriod = llmax(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"), 0.f);
+}
+// </FS:Ansariel>
 
 void LLFlashTimer::unset()
 {

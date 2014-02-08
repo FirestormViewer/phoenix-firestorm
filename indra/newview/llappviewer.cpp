@@ -5420,6 +5420,14 @@ void LLAppViewer::idle()
 	{
 		gAgentPilot.moveCamera();
 	}
+// <FS:Zi> Leap Motion flycam
+#ifdef USE_LEAPMOTION
+	else if(gestureController && gestureController->getOverrideCamera())
+	{
+		gestureController->moveFlycam();
+	}
+#endif //USE_LEAPMOTION
+// </FS:Zi>
 	else if (LLViewerJoystick::getInstance()->getOverrideCamera())
 	{ 
 		LLViewerJoystick::getInstance()->moveFlycam();

@@ -28,41 +28,226 @@
    </menu_item_call>
 	<menu name="MarkAvatar" label="Mark...">
 		<menu_item_call
-      label="Red"
-      name="MarkRed">
+			label="Red"
+			name="MarkRed">
 			<menu_item_call.on_click
-      function="Minimap.Mark"
-      parameter="Red" />
+				function="Minimap.Mark"
+				parameter="Red"/>
 		</menu_item_call>
 		<menu_item_call
-      label="Purple"
-      name="MarkPurple">
+		label="Green"
+		name="MarkGreen">
 			<menu_item_call.on_click
-      function="Minimap.Mark"
-      parameter="Purple" />
+				function="Minimap.Mark"
+				parameter="Green"/>
 		</menu_item_call>
 		<menu_item_call
-      label="Green"
-      name="MarkGreen">
+		label="Blue"
+		name="MarkBlue">
 			<menu_item_call.on_click
-      function="Minimap.Mark"
-      parameter="Green" />
+				function="Minimap.Mark"
+				parameter="Blue"/>
 		</menu_item_call>
 		<menu_item_call
-      label="Yellow"
-      name="MarkYellow">
+			label="Purple"
+			name="MarkPurple">
 			<menu_item_call.on_click
-      function="Minimap.Mark"
-      parameter="LtYellow" />
+				function="Minimap.Mark"
+				parameter="Purple"/>
 		</menu_item_call>
-		<menu_item_separator />
 		<menu_item_call
-      label="Clear Marks"
-      name="Clear Marks">
+			label="Yellow"
+			name="MarkYellow">
 			<menu_item_call.on_click
-      function="Minimap.ClearMarks"/>
+				function="Minimap.Mark"
+				parameter="LtYellow"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Clear Mark"
+			name="Clear Mark">
+			<menu_item_call.on_click
+				function="Minimap.ClearMark"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Clear Marks"
+			name="Clear Marks">
+			<menu_item_call.on_click
+				function="Minimap.ClearMarks"/>
 		</menu_item_call>
 	</menu>
+
+	<menu
+		name="More Options"
+		label="More Options...">
+		<menu_item_call
+			label="Add Friend"
+			name="Add Friend">
+			<menu_item_call.on_click
+				function="Minimap.AddFriend"/>
+			<menu_item_call.on_enable
+				function="Minimap.CanAddFriend"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Add to Set"
+			name="Add to Set">
+			<menu_item_call.on_click
+				function="Minimap.AddToContactSet"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Remove Friend"
+			name="Remove Friend">
+			<menu_item_call.on_click
+				function="Minimap.RemoveFriend"/>
+			<menu_item_call.on_enable
+				function="Minimap.CanRemoveFriend"/>
+		</menu_item_call>
+		<menu_item_call
+			label="IM"
+			name="IM">
+			<menu_item_call.on_click
+				function="Minimap.IM"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Call"
+			name="Call">
+			<menu_item_call.on_click
+				function="Minimap.Call"/>
+			<menu_item_call.on_enable
+				function="Minimap.CanCall"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Map"
+			name="Map">
+			<menu_item_call.on_click
+				function="Minimap.Map"/>
+			<menu_item_call.on_enable
+				function="Minimap.CanMap"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Share"
+			name="Share">
+			<menu_item_call.on_click
+				function="Minimap.Share"/>
+			<menu_item_call.on_enable
+				function="Minimap.CanShare"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Pay"
+			name="Pay">
+			<menu_item_call.on_click
+				function="Minimap.Pay"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Offer Teleport"
+			name="teleport">
+			<menu_item_call.on_click
+				function="Minimap.OfferTeleport"/>
+			<menu_item_call.on_enable
+				function="Minimap.CanOfferTeleport"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Request Teleport"
+			name="request_teleport">
+			<menu_item_call.on_click
+				function="Minimap.RequestTeleport"/>
+			<menu_item_call.on_enable
+				function="Minimap.CanOfferTeleport"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Teleport To"
+			name="teleport_to">
+			<menu_item_call.on_click
+				function="Minimap.TeleportToAvatar"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Invite To Group"
+			name="GroupInvite">
+			<menu_item_call.on_click
+				function="Minimap.GroupInvite"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Get Script Info"
+			name="ScriptInfo">
+			<menu_item_call.on_click
+				function="Minimap.GetScriptInfo"/>
+			<menu_item_call.on_enable
+				function="EnableBridgeFunction"/>
+		</menu_item_call>
+
+		<menu_item_separator />
+
+		<menu_item_check
+			label="Block/Unblock"
+			name="Block/Unblock">
+			<menu_item_check.on_click
+				function="Minimap.BlockUnblock"/>
+			<menu_item_check.on_check
+				function="Minimap.IsBlocked"/>
+			<menu_item_check.on_enable
+				function="Minimap.CanBlock"/>
+		</menu_item_check>
+		<menu_item_call
+			label="Report"
+			name="report">
+			<menu_item_call.on_click
+				function="Minimap.Report"/>
+		</menu_item_call>  
+		<menu_item_call
+			label="Freeze"
+			name="freeze">
+			<menu_item_call.on_click
+				function="Minimap.Freeze"/>
+			<menu_item_call.on_visible
+				function="Minimap.VisibleFreezeEject"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Parcel Eject"
+			name="eject">
+			<menu_item_call.on_click
+				function="Minimap.Eject"/>
+			<menu_item_call.on_visible
+				function="Minimap.VisibleFreezeEject"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Estate Kick"
+			name="kick">
+			<menu_item_call.on_click
+				function="Minimap.Kick"/>
+			<menu_item_call.on_visible
+				function="Minimap.VisibleKickTeleportHome"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Estate Teleport Home"
+			name="teleport_home">
+			<menu_item_call.on_click
+				function="Minimap.TeleportHome"/>
+			<menu_item_call.on_visible
+				function="Minimap.VisibleKickTeleportHome"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Estate Ban"
+			name="estate_ban">
+			<menu_item_call.on_click
+				function="Minimap.EstateBan"/>
+			<menu_item_call.on_visible
+				function="Minimap.VisibleKickTeleportHome"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Derender"
+			name="derender">
+			<menu_item_call.on_click
+				function="Minimap.Derender"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Derender + Blacklist"
+			name="derender_permanent">
+			<menu_item_call.on_click
+				function="Minimap.DerenderPermanent"/>
+		</menu_item_call>
+	</menu>
+
   <menu_item_separator
    name="Profile Separator" />
   <menu_item_call

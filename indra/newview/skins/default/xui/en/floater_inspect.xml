@@ -5,15 +5,15 @@
  height="300"
  layout="topleft"
  min_height="300"
- min_width="400"
+ min_width="600"
  name="inspect"
  help_topic="inspect"
  save_rect="true"
  title="Inspect Objects"
- width="400">
+ width="600">
     <floater.string
      name="timeStamp">
-        [wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+        [year,datetime,local] [mth,datetime,local] [day,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local], [wkday,datetime,local]
     </floater.string>
     <scroll_list
      bottom="268"
@@ -27,20 +27,24 @@
      tool_tip="Select an object from this list to highlight it in-world"
      top="20">
         <scroll_list.columns
-         relative_width="0.30"
+         relative_width="0.20"
          label="Object Name"
          name="object_name" />
         <scroll_list.columns
-         relative_width="0.25"
+         relative_width="0.20"
          label="Owner Name"
          name="owner_name" />
         <scroll_list.columns
-         relative_width="0.25"
+         relative_width="0.20"
          label="Creator Name"
          name="creator_name" />
         <scroll_list.columns
          label="Creation Date"
          name="creation_date"
+         relative_width="0.20" />
+        <scroll_list.columns
+         label="Description"
+         name="description"
          relative_width="0.20" />
 		 <scroll_list.commit_callback
 		   function="Inspect.SelectObject" />

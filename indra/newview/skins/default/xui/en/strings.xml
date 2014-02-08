@@ -2623,4 +2623,6 @@ Try enclosing path to the editor with double quotes.
   <string name="FriendOfflineNotification">is offline.</string>
 
   <string name="Inbox_Folderview_New">New</string>
+
+  <string name="Mouselook_Unknown_Avatar">Unknown agent</string>
 </strings>

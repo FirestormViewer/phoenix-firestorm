@@ -96,10 +96,12 @@ public:
 	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 	LLUUID			getClosestAgentToCursor() const { return mClosestAgentToCursor; }
 	LLVector3d		getClosestAgentPosition() const { return mClosestAgentPosition; }
-	bool			isZoomable();
 
 	// <FS:Ansariel> Synchronize double click handling throughout instances
 	void			performDoubleClickAction(LLVector3d pos_global);
+
+	// <FS:Ansariel> Mark avatar feature
+	static bool		getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color);
 
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }
@@ -135,7 +137,7 @@ private:
 	LLUIColor		mBackgroundColor;
 
 	F32				mScale;					// Size of a region in pixels
-	static F32			sScale;					// <FS:Ansariel> Used to synchronize netmaps throughout instances
+	static F32		sScale;					// <FS:Ansariel> Used to synchronize netmaps throughout instances
 
 	F32				mPixelsPerMeter;		// world meters to map pixels
 	F32				mObjectMapTPM;			// texels per meter on map
@@ -166,34 +168,67 @@ private:
 	static std::string	sToolTipMsg;
 	// </FS:Ansariel> Synchronize tooltips throughout instances
 
-	static std::map<LLUUID, LLColor4> sAvatarMarksMap;
+	// <FS:Ansariel> Mark avatar feature
+	typedef std::map<LLUUID, LLColor4> avatar_marks_map_t;
+	static avatar_marks_map_t sAvatarMarksMap;
 
 public:
 	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
-	void			setAvatarMark(const LLSD& userdata);
-	void			clearAvatarMarks();
-	void			camAvatar();
 // <FS:CR> Minimap improvements
 	void			handleShowProfile(const LLSD& sdParam) const;
 	uuid_vec_t		mClosestAgentsToCursor;
 	LLVector3d		mPosGlobalRightClick;
 	LLUUID			mClosestAgentRightClick;
+	uuid_vec_t		mClosestAgentsRightClick;
 // </FS:CR>
-	void			startTracking();
 
 private:
 	void handleZoom(const LLSD& userdata);
-	void handleStopTracking(const LLSD& userdata);
+	void handleStopTracking (const LLSD& userdata);
+	void handleStartTracking();
 	void handleMark(const LLSD& userdata);
+	void handleClearMark();
 	void handleClearMarks();
 	void handleCam();
-	void handleStartTracking();
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
 	void handleOverlayToggle(const LLSD& sdParam);
 	bool checkTextureType(const LLSD& sdParam) const;
 	void handleTextureType(const LLSD& sdParam) const;
 	void setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name);
 // [/SL:KB]
+
+	bool canAddFriend();
+	bool canRemoveFriend();
+	bool canCall();
+	bool canMap();
+	bool canShare();
+	bool canOfferTeleport();
+	bool canBlock();
+	bool canFreezeEject();
+	bool canKickTeleportHome();
+	bool isBlocked();
+
+	void handleAddFriend();
+	void handleAddToContactSet();
+	void handleRemoveFriend();
+	void handleIM();
+	void handleCall();
+	void handleMap();
+	void handleShare();
+	void handlePay();
+	void handleOfferTeleport();
+	void handleRequestTeleport();
+	void handleTeleportToAvatar();
+	void handleGroupInvite();
+	void handleGetScriptInfo();
+	void handleBlockUnblock();
+	void handleReport();
+	void handleFreeze();
+	void handleEject();
+	void handleKick();
+	void handleTeleportHome();
+	void handleEstateBan();
+	void handleDerender(bool permanent);
 
 	LLMenuGL*		mPopupMenu;
 	uuid_vec_t		gmSelected;

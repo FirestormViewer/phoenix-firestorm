@@ -2827,6 +2827,19 @@ void LLPanelLandAccess::onCommitPublicAccess(LLUICtrl *ctrl, void *userdata)
 		return;
 	}
 
+	// <FS:Ansariel> FIRE-12551: Enable group access by default if public access is removed
+	//                           or we might end up banning ourself from the land!
+	bool public_access = self->getChild<LLUICtrl>("public_access")->getValue().asBoolean();
+	if (!public_access)
+	{
+		std::string group_name;
+		if (gCacheName->getGroupName(parcel->getGroupID(), group_name))
+		{
+			self->getChild<LLUICtrl>("GroupCheck")->setValue(public_access ? FALSE : TRUE);
+		}
+	}
+	// </FS:Ansariel>
+
 	onCommitAny(ctrl, userdata);
 }
 

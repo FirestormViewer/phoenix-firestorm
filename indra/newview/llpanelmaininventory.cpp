@@ -222,8 +222,8 @@ BOOL LLPanelMainInventory::postBuild()
 		worn_items_panel->setWorn(TRUE);
 		worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
 		worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-		//worn_items_panel->getFilter().markDefault();
 		worn_items_panel->getFilter().setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
+		worn_items_panel->getFilter().markDefault();
 
 		// <FS:ND> Do not go all crazy and recurse through the whole inventory
 		//		worn_items_panel->openAllFolders();

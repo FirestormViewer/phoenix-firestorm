@@ -890,17 +890,6 @@
              name="FSMarkObjects"
              control_name="FSMarkObjects"
              label="Mark objects with (no name) when they speak to avoid spoofing"/>
-            <check_box
-             layout="topleft"
-             follows="left|top"
-             top_pad="0"
-             left="30"
-             width="400"
-             height="18"
-             name="FSChatnamesOpenFullProfile"
-             control_name="FSChatnamesOpenFullProfile"
-             label="Open full profile when clicking on avatar name"
-             tool_tip="Clicking on the name of an avatar in chat history will open its full profile instead of the mini profile. This option will not affect names in previously received chat."/>
 
             <!-- Groups -->
             <text

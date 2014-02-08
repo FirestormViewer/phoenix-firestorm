@@ -126,7 +126,10 @@ public:
 		}
 
 		const std::string verb = params[1].asString();
-		if (verb == "about")
+		// <FS:Ansariel> FIRE-9045: Inspect links always open full profile
+		//if (verb == "about")
+		if (verb == "about" || (gSavedSettings.getBOOL("FSInspectAvatarSlurlOpensProfile") && verb == "inspect"))
+		// </FS:Ansariel>
 		{
 			LLAvatarActions::showProfile(avatar_id);
 			return true;

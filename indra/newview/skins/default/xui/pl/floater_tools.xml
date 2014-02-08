@@ -427,7 +427,7 @@
 			<spinner label="Odbijanie" name="Physics Restitution"/>
 		</panel>
 		<panel label="Tekstura" name="Texture"/>
-		<panel label="Zawartość" name="Contents">
+		<panel label="Zawart." name="Contents">
 			<button label="Nowy skrypt" label_selected="Nowy skrypt" name="button new script"/>
 			<button label="Prawa" name="button permissions"/>
 			<button label="Odśwież" name="button refresh"/>

@@ -103,7 +103,7 @@ const F64 COARSEUPDATE_MAX_Z = 1020.0f;
 const F32 WIDTH_PIXELS = 2.f;
 const S32 CIRCLE_STEPS = 100;
 
-std::map<LLUUID, LLColor4> LLNetMap::sAvatarMarksMap; // <FS:Ansariel>
+LLNetMap::avatar_marks_map_t LLNetMap::sAvatarMarksMap; // <FS:Ansariel>
 F32 LLNetMap::sScale; // <FS:Ansariel> Synchronizing netmaps throughout instances
 
 // <FS:Ansariel> Synchronize tooltips throughout instances
@@ -161,6 +161,7 @@ BOOL LLNetMap::postBuild()
 	registrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
 	// <FS:Ansariel>
 	registrar.add("Minimap.Mark", boost::bind(&LLNetMap::handleMark, this, _2));
+	registrar.add("Minimap.ClearMark", boost::bind(&LLNetMap::handleClearMark, this));
 	registrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
 	// </FS:Ansariel>
 	registrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
@@ -170,8 +171,42 @@ BOOL LLNetMap::postBuild()
 	registrar.add("Minimap.TextureType", boost::bind(&LLNetMap::handleTextureType, this, _2));
 	registrar.add("Minimap.ToggleOverlay", boost::bind(&LLNetMap::handleOverlayToggle, this, _2));
 
+	registrar.add("Minimap.AddFriend", boost::bind(&LLNetMap::handleAddFriend, this));
+	registrar.add("Minimap.AddToContactSet", boost::bind(&LLNetMap::handleAddToContactSet, this));
+	registrar.add("Minimap.RemoveFriend", boost::bind(&LLNetMap::handleRemoveFriend, this));
+	registrar.add("Minimap.IM", boost::bind(&LLNetMap::handleIM, this));
+	registrar.add("Minimap.Call", boost::bind(&LLNetMap::handleCall, this));
+	registrar.add("Minimap.Map", boost::bind(&LLNetMap::handleMap, this));
+	registrar.add("Minimap.Share", boost::bind(&LLNetMap::handleShare, this));
+	registrar.add("Minimap.Pay", boost::bind(&LLNetMap::handlePay, this));
+	registrar.add("Minimap.OfferTeleport", boost::bind(&LLNetMap::handleOfferTeleport, this));
+	registrar.add("Minimap.RequestTeleport", boost::bind(&LLNetMap::handleRequestTeleport, this));
+	registrar.add("Minimap.TeleportToAvatar", boost::bind(&LLNetMap::handleTeleportToAvatar, this));
+	registrar.add("Minimap.GroupInvite", boost::bind(&LLNetMap::handleGroupInvite, this));
+	registrar.add("Minimap.GetScriptInfo", boost::bind(&LLNetMap::handleGetScriptInfo, this));
+	registrar.add("Minimap.BlockUnblock", boost::bind(&LLNetMap::handleBlockUnblock, this));
+	registrar.add("Minimap.Report", boost::bind(&LLNetMap::handleReport, this));
+	registrar.add("Minimap.Freeze", boost::bind(&LLNetMap::handleFreeze, this));
+	registrar.add("Minimap.Eject", boost::bind(&LLNetMap::handleEject, this));
+	registrar.add("Minimap.Kick", boost::bind(&LLNetMap::handleKick, this));
+	registrar.add("Minimap.TeleportHome", boost::bind(&LLNetMap::handleTeleportHome, this));
+	registrar.add("Minimap.EstateBan", boost::bind(&LLNetMap::handleEstateBan, this));
+	registrar.add("Minimap.Derender", boost::bind(&LLNetMap::handleDerender, this, false));
+	registrar.add("Minimap.DerenderPermanent", boost::bind(&LLNetMap::handleDerender, this, true));
+
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	enable_registrar.add("Minimap.CheckTextureType", boost::bind(&LLNetMap::checkTextureType, this, _2));
+
+	enable_registrar.add("Minimap.CanAddFriend", boost::bind(&LLNetMap::canAddFriend, this));
+	enable_registrar.add("Minimap.CanRemoveFriend", boost::bind(&LLNetMap::canRemoveFriend, this));
+	enable_registrar.add("Minimap.CanCall", boost::bind(&LLNetMap::canCall, this));
+	enable_registrar.add("Minimap.CanMap", boost::bind(&LLNetMap::canMap, this));
+	enable_registrar.add("Minimap.CanShare", boost::bind(&LLNetMap::canShare, this));
+	enable_registrar.add("Minimap.CanOfferTeleport", boost::bind(&LLNetMap::canOfferTeleport, this));
+	enable_registrar.add("Minimap.IsBlocked", boost::bind(&LLNetMap::isBlocked, this));
+	enable_registrar.add("Minimap.CanBlock", boost::bind(&LLNetMap::canBlock, this));
+	enable_registrar.add("Minimap.VisibleFreezeEject", boost::bind(&LLNetMap::canFreezeEject, this));
+	enable_registrar.add("Minimap.VisibleKickTeleportHome", boost::bind(&LLNetMap::canKickTeleportHome, this));
 // [/SL:KB]
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
@@ -231,7 +266,14 @@ void LLNetMap::draw()
 	}
 	// </FS:Ansariel>: Synchronize netmap scale throughout instances
 
- 	static LLFrameTimer map_timer;
+// <FS:Ansariel> Aurora Sim
+	if (!LLWorld::getInstance()->getAllowMinimap())
+	{
+		return;
+	}
+// <FS:Ansariel> Aurora Sim
+
+	static LLFrameTimer map_timer;
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	//static LLUIColor map_track_disabled_color = LLUIColorTable::instance().getColor("MapTrackDisabledColor", LLColor4::white);
@@ -546,7 +588,11 @@ void LLNetMap::draw()
 		mClosestAgentsToCursor.clear();
 // [/SL:KB]
 		F32 closest_dist_squared = F32_MAX; // value will be overridden in the loop
-		F32 min_pick_dist_squared = (mDotRadius * MIN_PICK_SCALE) * (mDotRadius * MIN_PICK_SCALE);
+		// <FS:Ansariel> Configurable pick distance
+		//F32 min_pick_dist_squared = (mDotRadius * MIN_PICK_SCALE) * (mDotRadius * MIN_PICK_SCALE);
+		static LLCachedControl<F32> fsMinimapPickScale(gSavedSettings, "FSMinimapPickScale");
+		F32 min_pick_dist_squared = (mDotRadius * fsMinimapPickScale) * (mDotRadius * fsMinimapPickScale);
+		// </FS:Ansariel>
 
 		LLVector3 pos_map;
 		uuid_vec_t avatar_ids;
@@ -599,9 +645,10 @@ void LLNetMap::draw()
 			}
 			
 			// <FS:Ansariel> Mark Avatars with special colors
-			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
+			avatar_marks_map_t::iterator found = sAvatarMarksMap.find(uuid);
+			if (found != sAvatarMarksMap.end())
 			{
-				color = LLNetMap::sAvatarMarksMap[uuid];
+				color = found->second;
 			}
 			// </FS:Ansariel> Mark Avatars with special colors
 
@@ -747,6 +794,11 @@ void LLNetMap::draw()
 
 
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+		// <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
+		gGL.color4fv((map_frustum_color()).mV);
+		gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
+		// </FS:Ansariel>
 
 		if( rotate_map )
 		{
@@ -1447,8 +1499,10 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
 		mClosestAgentRightClick = mClosestAgentToCursor;
+		mClosestAgentsRightClick = mClosestAgentsToCursor;
 		mPosGlobalRightClick = viewPosToGlobal(x, y);
 
+		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
 		mPopupMenu->setItemVisible("View Profile", mClosestAgentsToCursor.size() == 1);
 
 		LLMenuItemBranchGL* pProfilesMenu = mPopupMenu->getChild<LLMenuItemBranchGL>("View Profiles");
@@ -1480,7 +1534,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 					pProfilesMenu->getBranch()->addChild(pMenuItem);
 			}
 		}
-		mPopupMenu->setItemVisible("Cam", isZoomable());
+		mPopupMenu->setItemVisible("Cam", LLAvatarActions::canZoomIn(mClosestAgentToCursor));
 		mPopupMenu->setItemVisible("MarkAvatar", mClosestAgentToCursor.notNull());
 		mPopupMenu->setItemVisible("Start Tracking", mClosestAgentToCursor.notNull());
 		mPopupMenu->setItemVisible("Profile Separator", (mClosestAgentsToCursor.size() >= 1
@@ -1629,46 +1683,50 @@ void LLNetMap::handleZoom(const LLSD& userdata)
 	}
 }
 
-void LLNetMap::handleStopTracking (const LLSD& userdata)
+// <FS:Ansariel> Mark avatar feature
+void LLNetMap::handleMark(const LLSD& userdata)
 {
-	if (mPopupMenu)
+	// Use the name as color definition name from colors.xml
+	LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
+	for (uuid_vec_t::iterator it = mClosestAgentsRightClick.begin(); it != mClosestAgentsRightClick.end(); ++it)
 	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", false);
-		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
+		sAvatarMarksMap[*it] = color;
 	}
 }
 
-// <FS:Ansariel> additional functions
-void LLNetMap::handleMark(const LLSD& userdata)
+void LLNetMap::handleClearMark()
 {
-	setAvatarMark(userdata);
+	for (uuid_vec_t::iterator it = mClosestAgentsRightClick.begin(); it != mClosestAgentsRightClick.end(); ++it)
+	{
+		avatar_marks_map_t::iterator found = sAvatarMarksMap.find(*it);
+		if (found != sAvatarMarksMap.end())
+		{
+			sAvatarMarksMap.erase(found);
+		}
+	}
 }
 
 void LLNetMap::handleClearMarks()
 {
-	clearAvatarMarks();
+	sAvatarMarksMap.clear();
 }
 
-void LLNetMap::setAvatarMark(const LLSD& userdata)
+bool LLNetMap::getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color)
 {
-	if (mClosestAgentRightClick.notNull())
+	avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);
+	if (found != sAvatarMarksMap.end())
 	{
-		// Use the name as color definition name from colors.xml
-		LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
-		LLNetMap::sAvatarMarksMap[mClosestAgentRightClick] = color;
-		llinfos << "Minimap: Marking " << mClosestAgentRightClick.asString() << " in " << userdata.asString() << llendl;
+		color = found->second;
+		return true;
 	}
+	return false;
 }
 
-void LLNetMap::clearAvatarMarks()
-{
-	LLNetMap::sAvatarMarksMap.clear();
-}
 //</FS:Ansariel>
 
-void LLNetMap::camAvatar()
+void LLNetMap::handleCam()
 {
-	if (isZoomable())
+	if (LLAvatarActions::canZoomIn(mClosestAgentRightClick))
 	{
 		LLAvatarActions::zoomIn(mClosestAgentRightClick);
 	}
@@ -1678,25 +1736,8 @@ void LLNetMap::camAvatar()
 	}
 }
 
-void LLNetMap::handleCam()
-{
-	camAvatar();
-}
-
-bool LLNetMap::isZoomable()
-{
-	F32 range = dist_vec(gAgent.getPositionGlobal(), mClosestAgentPosition);
-	bool is_zoomable = (range < gSavedSettings.getF32("RenderFarClip") || gObjectList.findObject(mClosestAgentRightClick) != NULL);
-	return is_zoomable;
-}
-
 // <FS:Ansariel> Avatar tracking feature
 void LLNetMap::handleStartTracking()
-{
-	startTracking();
-}
-
-void LLNetMap::startTracking()
 {
 	if (mClosestAgentRightClick.notNull())
 	{
@@ -1708,6 +1749,15 @@ void LLNetMap::startTracking()
 	}
 }
 // </FS:Ansariel> Avatar tracking feature
+
+void LLNetMap::handleStopTracking (const LLSD& userdata)
+{
+	if (mPopupMenu)
+	{
+		mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
+	}
+}
 
 // <FS:Ansariel> Synchronize tooltips throughout instances
 // static
@@ -1762,3 +1812,159 @@ void LLNetMap::performDoubleClickAction(LLVector3d pos_global)
 	}
 }
 // </FS:Ansariel> Synchronize double click handling throughout instances
+
+
+bool LLNetMap::canAddFriend()
+{
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_ADD_FRIEND);
+}
+
+bool LLNetMap::canRemoveFriend()
+{
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_REMOVE_FRIEND);
+}
+
+bool LLNetMap::canCall()
+{
+	return LLAvatarActions::canCall();
+}
+
+bool LLNetMap::canMap()
+{
+	return (LLAvatarTracker::instance().isBuddyOnline(mClosestAgentRightClick) && is_agent_mappable(mClosestAgentRightClick));
+}
+
+bool LLNetMap::canShare()
+{
+	return (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV));
+}
+
+bool LLNetMap::canOfferTeleport()
+{
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_OFFER_TELEPORT);
+}
+
+bool LLNetMap::canBlock()
+{
+	return LLAvatarActions::canBlock(mClosestAgentRightClick);
+}
+
+bool LLNetMap::canFreezeEject()
+{
+	return LLAvatarActions::canLandFreezeOrEject(mClosestAgentRightClick);
+}
+
+bool LLNetMap::canKickTeleportHome()
+{
+	return LLAvatarActions::canEstateKickOrTeleportHome(mClosestAgentRightClick);
+}
+
+bool LLNetMap::isBlocked()
+{
+	return LLAvatarActions::isBlocked(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleAddFriend()
+{
+	LLAvatarActions::requestFriendshipDialog(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleAddToContactSet()
+{
+	LLAvatarActions::addToContactSet(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleRemoveFriend()
+{
+	LLAvatarActions::removeFriendDialog(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleIM()
+{
+	LLAvatarActions::startIM(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleCall()
+{
+	LLAvatarActions::startCall(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleMap()
+{
+	LLAvatarActions::showOnMap(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleShare()
+{
+	LLAvatarActions::share(mClosestAgentRightClick);
+}
+
+void LLNetMap::handlePay()
+{
+	LLAvatarActions::pay(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleOfferTeleport()
+{
+	LLAvatarActions::offerTeleport(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleRequestTeleport()
+{
+	LLAvatarActions::teleportRequest(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleTeleportToAvatar()
+{
+	FSRadar::getInstance()->teleportToAvatar(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleGroupInvite()
+{
+	LLAvatarActions::inviteToGroup(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleGetScriptInfo()
+{
+	LLAvatarActions::getScriptInfo(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleBlockUnblock()
+{
+	LLAvatarActions::toggleBlock(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleReport()
+{
+	LLAvatarActions::report(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleFreeze()
+{
+	LLAvatarActions::landFreeze(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleEject()
+{
+	LLAvatarActions::landEject(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleKick()
+{
+	LLAvatarActions::estateKick(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleTeleportHome()
+{
+	LLAvatarActions::estateTeleportHome(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleEstateBan()
+{
+	LLAvatarActions::estateBan(mClosestAgentRightClick);
+}
+
+void LLNetMap::handleDerender(bool permanent)
+{
+	LLAvatarActions::derender(mClosestAgentRightClick, permanent);
+}
