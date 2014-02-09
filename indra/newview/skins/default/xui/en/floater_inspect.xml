@@ -41,11 +41,16 @@
         <scroll_list.columns
          label="Creation Date"
          name="creation_date"
-         relative_width="0.20" />
+         relative_width="0.20"
+         sort_column="creation_date_sort"/>
         <scroll_list.columns
          label="Description"
          name="description"
          relative_width="0.20" />
+        <scroll_list.columns
+         label=""
+         name="creation_date_sort"
+         width="-1" />
 		 <scroll_list.commit_callback
 		   function="Inspect.SelectObject" />
     </scroll_list>
