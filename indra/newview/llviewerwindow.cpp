@@ -2753,7 +2753,7 @@ void LLViewerWindow::draw()
 						LLTracker::instance()->drawMarker(targetPosition, targetColor);
 					}
 
-					if (inMouselook && !crosshairRendered)
+					if (inMouselook && !crosshairRendered && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 					{
 						LLVector3d magicVector = (targetPosition - myPosition) * myRotation;
 						magicVector.setVec(-magicVector.mdV[VY], magicVector.mdV[VZ], magicVector.mdV[VX]);
