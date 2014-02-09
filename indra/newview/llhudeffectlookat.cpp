@@ -671,10 +671,12 @@ void LLHUDEffectLookAt::update()
 		}
 	}
 
-	if (mDebugLookAt)
-	{
-		((LLVOAvatar*)(LLViewerObject*)mSourceObject)->addDebugText((*mAttentions)[mTargetType].mName);
-	}
+	// <FS:Ansariel> FIRE-12878: Don't render debug text for lookats
+	//if (mDebugLookAt)
+	//{
+	//	((LLVOAvatar*)(LLViewerObject*)mSourceObject)->addDebugText((*mAttentions)[mTargetType].mName);
+	//}
+	// </FS:Ansariel>
 }
 
 /**
