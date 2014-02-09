@@ -784,9 +784,6 @@ void LLFloaterPreference::apply()
 		int proxy_port = getChild<LLUICtrl>("web_proxy_port")->getValue();
 		LLViewerMedia::setProxyConfig(proxy_enable, proxy_address, proxy_port);
 	}
-
-	// <FS:Ansariel> [FS communication UI]
-	gSavedSettings.setBOOL("PlainTextChatHistory", getChild<LLUICtrl>("plain_text_chat_history")->getValue().asBoolean());
 	
 	if (mGotPersonalInfo)
 	{ 
