@@ -244,9 +244,7 @@
 
 #include "llviewereventrecorder.h"
 
-#ifdef USE_LEAPMOTION
 #include "llleapmotioncontroller.h"
-#endif
 
 
 // *FIX: These extern globals should be cleaned up.
@@ -1479,9 +1477,7 @@ bool LLAppViewer::mainLoop()
 		joystick->setNeedsReset(true);
 		
 // [FS:CR]
-#ifdef USE_LEAPMOTION
 		gestureController = LLLeapMotionController::getInstance();
-#endif // USE_LEAPMOTION
 // [/FS:CR]
 		
 #ifdef LL_DARWIN
@@ -1674,10 +1670,8 @@ bool LLAppViewer::mainLoop()
 			}
 			
 // [FS:CR] Run any LeapMotion devices
-#ifdef USE_LEAPMOTION
 			if (gestureController)
 				gestureController->stepFrame();
-#endif //USE_LEAPMOTION
 
 			pingMainloopTimeout("Main:Sleep");
 			
@@ -1919,9 +1913,7 @@ bool LLAppViewer::cleanup()
 	nd::mallocstats::tearDown();
 	// </FS:ND>
 
-#ifdef USE_LEAPMOTION
 	LLLeapMotionController::getInstance()->cleanup(); // <FS:ND/> shutdown leap support
-#endif
 
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;

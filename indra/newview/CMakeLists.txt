@@ -1533,9 +1533,12 @@ set_source_files_properties(
 #   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
    )
 
+LIST(APPEND viewer_SOURCE_FILES llleapmotioncontroller.cpp)
+LIST(APPEND viewer_HEADER_FILES llleapmotioncontroller.h)
+
 if (LEAPMOTION)
-  LIST(APPEND viewer_SOURCE_FILES llleapmotioncontroller.cpp)
-  LIST(APPEND viewer_HEADER_FILES llleapmotioncontroller.h)
+  LIST(APPEND viewer_SOURCE_FILES fsleaptool.cpp fsleapexampletool.cpp )
+  LIST(APPEND viewer_HEADER_FILES fsleaptool.h fsleapexampletool.h )
 endif (LEAPMOTION)
 
 if (DARWIN)

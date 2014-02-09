@@ -29,6 +29,8 @@
 
 #include "llleapmotioncontroller.h"
 
+#ifdef USE_LEAPMOTION
+
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llgesturemgr.h"
@@ -37,6 +39,7 @@
 #include "lltimer.h"
 #include "llviewercontrol.h"
 #include "fsnearbychathub.h"
+#include "fsleaptool.h"
 
 #include <leap-motion/Leap.h>
 
@@ -77,7 +80,11 @@ public:
 
 	LLTimer			mGestureTimer;			// Throttle invoking SL gestures
 
+	std::string getDebugString();
+	void render();
+
 private:
+	nd::leap::Tool *mTool;
 
 	// Various controller modes
 	void	modeFlyingControlTest(Leap::HandList & hands);
@@ -122,6 +129,7 @@ LLLMImpl::LLLMImpl() : mLMController(NULL)
 , mFrameAvailable(false)
 , mCurrentFrameID(0)
 , mOverrideCamera(false)	// <FS:Zi> Leap Motion flycam
+, mTool(0)
 {
 	mLMController = new Leap::Controller(*this);
 	mYawTimer.setTimerExpirySec(LLLEAP_YAW_INTERVAL);
@@ -132,6 +140,7 @@ LLLMImpl::LLLMImpl() : mLMController(NULL)
 LLLMImpl::~LLLMImpl()
 {
 	delete mLMController;
+	delete mTool;
 }
 
 void LLLMImpl::onInit(const Leap::Controller& controller) 
@@ -169,6 +178,19 @@ void LLLMImpl::onFrame(const Leap::Controller& controller)
 	}
 }
 
+std::string LLLMImpl::getDebugString()
+{
+	if( mTool )
+		return mTool->getDebugString();
+
+	return "";
+}
+
+void LLLMImpl::render()
+{
+	if( mTool )
+		return mTool->render();
+}
 
 // This is called every SL viewer frame
 void LLLMImpl::stepFrame()
@@ -185,31 +207,41 @@ void LLLMImpl::stepFrame()
 		
 		static LLCachedControl<S32> sControllerMode(gSavedSettings, "LeapMotionTestMode", 0);
 
-		switch (sControllerMode)
+		if( mTool && mTool->getId() != sControllerMode )
+			delete mTool;
+
+		mTool = nd::leap::constructTool( sControllerMode );
+
+		if( mTool )
+			mTool->onFrame( hands );
+		else
 		{
-			case 1:
-				modeFlyingControlTest(hands);
-				break;
-			case 2:
-				modeStreamDataToSL(hands);
-				break;
-			case 3:
-				modeGestureDetection1(hands);
-				break;
-			case 4:
-				modeMoveAndCamTest1(hands);
-				break;
-			// <FS:Zi> Leap Motion flycam
-			case 10:
-				modeFlycam(hands);
-				break;
-			// </FS:Zi>
-			case 411:
-				modeDumpDebugInfo(hands);
-				break;
-			default:
-				// Do nothing
-				break;
+			switch (sControllerMode)
+			{
+				case 1:
+					modeFlyingControlTest(hands);
+					break;
+				case 2:
+					modeStreamDataToSL(hands);
+					break;
+				case 3:
+					modeGestureDetection1(hands);
+					break;
+				case 4:
+					modeMoveAndCamTest1(hands);
+					break;
+				// <FS:Zi> Leap Motion flycam
+				case 10:
+					modeFlycam(hands);
+					break;
+				// </FS:Zi>
+				case 411:
+					modeDumpDebugInfo(hands);
+					break;
+				default:
+					// Do nothing
+					break;
+			}
 		}
 	}
 }
@@ -808,3 +840,20 @@ void LLLeapMotionController::moveFlycam()
 	}
 }
 // </FS:Zi>
+
+std::string LLLeapMotionController::getDebugString()
+{
+	if( !mController || STATE_STARTED != LLStartUp::getStartupState())
+		return "";
+
+	return mController->getDebugString();
+}
+
+void LLLeapMotionController::render()
+{
+	if( !mController || STATE_STARTED != LLStartUp::getStartupState())
+		return;
+
+	return mController->render();
+}
+#endif

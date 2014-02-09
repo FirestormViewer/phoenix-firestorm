@@ -57,6 +57,8 @@
 // void drawBoxOutline(const LLVector3& pos,const LLVector3& size);	// llspatialpartition.cpp
 // </FS:Zi>
 
+#include "llleapmotioncontroller.h"
+
 static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
 static U32 sBufferUsage = GL_STREAM_DRAW_ARB;
 static U32 sShaderLevel = 0;
@@ -1228,6 +1230,11 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
+
+	// <FS:ND> Leap motion visualizer
+	if( avatarp->isSelf() && 1 == pass )
+		LLLeapMotionController::getInstance()->render();
+	// <FS:ND>
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings,"DebugRenderHitboxes",false);
