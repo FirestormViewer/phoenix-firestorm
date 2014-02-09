@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="inspect" title="UNDERSØG OBJEKT">
 	<floater.string name="timeStamp">
-		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
+		[year,datetime,local]-[mthnum,datetime,local]-[day,datetime,local], [hour,datetime,local]:[min,datetime,local]:[second,datetime,local], [wkday,datetime,local]
 	</floater.string>
 	<scroll_list name="object_list" tool_tip="Vælg et objekt fra listen for at markere det">
 		<scroll_list.columns label="Objekt navn" name="object_name"/>
