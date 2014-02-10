@@ -885,4 +885,13 @@
   <color
       name="Phototools_Header"
       reference="EmphasisColor" />
+  <color
+      name="FSChatHistoryBackground"
+      reference="Transparent" />
+  <color
+      name="ChatHeaderAlphaBackground"
+      reference="Black_25" />
+  <color
+      name="ChatHeaderOpaqueBackground"
+      reference="Black_25" />
 </colors>

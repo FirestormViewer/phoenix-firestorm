@@ -1252,4 +1252,10 @@
   <color
       name="FSChatHistoryBackground"
       reference="Transparent" />
+  <color
+      name="ChatHeaderAlphaBackground"
+      reference="DkGray_66" />
+  <color
+      name="ChatHeaderOpaqueBackground"
+      reference="Black" />
 </colors>
