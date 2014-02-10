@@ -1294,4 +1294,7 @@
   <color
       name="VoiceNotConnectedColor"
       reference="Yellow" />
+  <color
+      name="FSChatHistoryBackground"
+      reference="Transparent" />
 </colors>

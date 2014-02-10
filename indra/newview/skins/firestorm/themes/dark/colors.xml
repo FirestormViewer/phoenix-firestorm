@@ -79,4 +79,7 @@
   <color
       name="Phototools_Header"
       reference="EmphasisColor" />
+  <color
+      name="FSChatHistoryBackground"
+      reference="DkGray" />
 </colors>
