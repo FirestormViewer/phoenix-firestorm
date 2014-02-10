@@ -246,6 +246,9 @@
   <color
       name="LtBlue"
       value="0 0.5 1 1" />
+  <color
+      name="Orange"
+      value="1 .82 .46 1" />
 
 	<!-- Added by Ansariel -->
 	<color
@@ -826,6 +829,9 @@
      name="MapTrackColor"
      reference="Red" />
 <!-- Changed Color -->
+    <color
+     name="MapTrackColorUnder"
+     reference="Blue" />
     <color
      name="MapTrackDisabledColor"
      reference="BrickBrown" />
