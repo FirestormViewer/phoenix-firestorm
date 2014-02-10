@@ -1754,7 +1754,10 @@ void LLNetMap::handleStopTracking (const LLSD& userdata)
 {
 	if (mPopupMenu)
 	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		// <FS:Ansariel> Hide tracking option instead of disabling
+		//mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		mPopupMenu->setItemVisible ("Stop Tracking", false);
+		// </FS:Ansariel>
 		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
 	}
 }
