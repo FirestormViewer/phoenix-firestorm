@@ -202,6 +202,7 @@ public:
 	 * [FS:CR] Add avatar to contact set
 	 */
 	static void addToContactSet(const LLUUID& agent_id);
+	static void addToContactSet(const uuid_vec_t& agent_ids);
 
 	/**
 	 * Checks whether we can offer a teleport to the avatar, only offline friends

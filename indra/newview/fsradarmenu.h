@@ -46,6 +46,7 @@ private:
 	void offerTeleport();
 	void teleportToAvatar();
 	void onTrackAvatarMenuItemClick();
+	void addToContactSet();
 };
 
 extern FSRadarMenu gFSRadarMenu;

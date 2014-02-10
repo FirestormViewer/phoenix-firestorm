@@ -1502,6 +1502,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mClosestAgentsRightClick = mClosestAgentsToCursor;
 		mPosGlobalRightClick = viewPosToGlobal(x, y);
 
+		mPopupMenu->setItemVisible("Add to Set Multiple", mClosestAgentsToCursor.size() > 1);
 		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
 		mPopupMenu->setItemVisible("View Profile", mClosestAgentsToCursor.size() == 1);
 
@@ -1874,7 +1875,7 @@ void LLNetMap::handleAddFriend()
 
 void LLNetMap::handleAddToContactSet()
 {
-	LLAvatarActions::addToContactSet(mClosestAgentRightClick);
+	LLAvatarActions::addToContactSet(mClosestAgentsRightClick);
 }
 
 void LLNetMap::handleRemoveFriend()

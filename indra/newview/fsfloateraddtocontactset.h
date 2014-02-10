@@ -52,7 +52,9 @@ private:
 	void updateSets(LGGContactSets::EContactSetUpdate type);
 	boost::signals2::connection mContactSetChangedConnection;
 	
+	bool mHasMultipleAgents;
 	LLUUID mAgentID;
+	uuid_vec_t mAgentIDs;
 	
 	LLComboBox* mContactSetsCombo;
 };

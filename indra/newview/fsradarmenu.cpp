@@ -82,7 +82,7 @@ LLContextMenu* FSRadarMenu::createMenu()
 		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBan,					id));
 		registrar.add("Avatar.Derender",						boost::bind(&LLAvatarActions::derender,						id, false));
 		registrar.add("Avatar.DerenderPermanent",				boost::bind(&LLAvatarActions::derender,						id, true));
-		registrar.add("Avatar.AddToContactSet",					boost::bind(&LLAvatarActions::addToContactSet,				id));
+		registrar.add("Avatar.AddToContactSet",					boost::bind(&FSRadarMenu::addToContactSet,					this));
 		registrar.add("Nearby.People.TeleportToAvatar",			boost::bind(&FSRadarMenu::teleportToAvatar,					this));
 		registrar.add("Nearby.People.TrackAvatar",				boost::bind(&FSRadarMenu::onTrackAvatarMenuItemClick,		this));
 
@@ -255,4 +255,8 @@ void FSRadarMenu::onTrackAvatarMenuItemClick()
 	}
 }
 
+void FSRadarMenu::addToContactSet()
+{
+	LLAvatarActions::addToContactSet(mUUIDs.front());
+}
 } // namespace FSFloaterRadarMenu

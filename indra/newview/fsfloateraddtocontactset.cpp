@@ -40,13 +40,37 @@ FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
 :	LLFloater(target)
 ,	mContactSetsCombo(NULL)
 {
-	mAgentID = target.asUUID();
+	if (target.isArray())
+	{
+		mHasMultipleAgents = true;
+		for (S32 i = 0; i < target.size(); ++i)
+		{
+			mAgentIDs.push_back(target[i].asUUID());
+		}
+	}
+	else
+	{
+		mHasMultipleAgents = false;
+		mAgentID = target.asUUID();
+	}
+
 	mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSFloaterAddToContactSet::updateSets, this, _1));
 }
 
 BOOL FSFloaterAddToContactSet::postBuild()
 {
-	childSetTextArg("textfield", "[NAME]", LLSLURL("agent", mAgentID, "inspect").getSLURLString());
+	if (mHasMultipleAgents)
+	{
+		LLStringUtil::format_map_t args;
+		args["COUNT"] = llformat("%d", mAgentIDs.size());
+		childSetText("textfield", getString("text_add_multiple", args));
+	}
+	else
+	{
+		LLStringUtil::format_map_t args;
+		args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
+		childSetText("textfield", getString("text_add_single", args));
+	}
 	
 	mContactSetsCombo = getChild<LLComboBox>("contact_sets");
 	populateContactSets();
@@ -61,13 +85,35 @@ BOOL FSFloaterAddToContactSet::postBuild()
 void FSFloaterAddToContactSet::onClickAdd()
 {
 	const std::string set = mContactSetsCombo->getSimple();
-	if (!LLAvatarTracker::instance().isBuddy(mAgentID))
-		LGGContactSets::getInstance()->addNonFriendToList(mAgentID);
-	LGGContactSets::getInstance()->addFriendToSet(mAgentID, set);
-	LLSD args;
-	args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
-	args["SET"] = set;
-	LLNotificationsUtil::add("AddToContactSetSuccess", args);
+
+	if (!mHasMultipleAgents)
+	{
+		mAgentIDs.push_back(mAgentID);
+	}
+
+	for (uuid_vec_t::iterator it = mAgentIDs.begin(); it != mAgentIDs.end(); ++it)
+	{
+		if (!LLAvatarTracker::instance().isBuddy(*it))
+		{
+			LGGContactSets::getInstance()->addNonFriendToList(*it);
+		}
+		LGGContactSets::getInstance()->addFriendToSet(*it, set);
+	}
+
+	if (mHasMultipleAgents)
+	{
+		LLSD args;
+		args["COUNT"] = llformat("%d", mAgentIDs.size());
+		args["SET"] = set;
+		LLNotificationsUtil::add("AddToContactSetMultipleSuccess", args);
+	}
+	else
+	{
+		LLSD args;
+		args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
+		args["SET"] = set;
+		LLNotificationsUtil::add("AddToContactSetSingleSuccess", args);
+	}
 	closeFloater();
 }
 

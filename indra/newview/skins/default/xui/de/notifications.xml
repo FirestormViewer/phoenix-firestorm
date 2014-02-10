@@ -4724,18 +4724,21 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn ein Kontakt-Set gelöscht wird."/>
 	</notification>
 	<notification name="RemoveContactFromSet">
-		Soll „[TARGET]“ wirklich aus Kontakt-Set „[SET_NAME]“ entfernt werden?
+		Soll [TARGET] wirklich aus Kontakt-Set „[SET_NAME]“ entfernt werden?
 		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn jemand aus einem Kontakt-Set entfernt wird."/>
 	</notification>
 	<notification name="RemoveContactsFromSet">
 		Sollen wirklich diese [TARGET] Avatare aus Kontakt-Set „[SET_NAME]“ entfernt werden?
 		<usetemplate name="okcancelignore" notext="Abbrechen" yestext="Ok" ignoretext="Bestätigen, wenn mehrere Avatare aus einem Kontakt-Set entfernt werden."/>
 	</notification>
-	<notification name="AddToContactSetSuccess">
-		„[NAME]“ wurde zu Kontakt-Set „[SET]“ hinzugefügt.
+	<notification name="AddToContactSetSingleSuccess">
+		[NAME] wurde zu Kontakt-Set „[SET]“ hinzugefügt.
+	</notification>
+	<notification name="AddToContactSetMultipleSuccess">
+		[COUNT] Avatare wurden zu Kontakt-Set „[SET]“ hinzugefügt.
 	</notification>
 	<notification name="SetAvatarPseudonym">
-		Alias für „[NAME]“ eingeben:
+		Alias für [NAME] eingeben:
 		<form name="form">
 			<button name="Create" text="Erstellen"/>
 			<button name="Cancel" text="Abbrechen"/>

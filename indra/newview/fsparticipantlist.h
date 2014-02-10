@@ -220,6 +220,8 @@ protected:
 		void moderateVoiceAllParticipants(bool unmute);
 
 		static void confirmMuteAllCallback(const LLSD& notification, const LLSD& response);
+
+		void handleAddToContactSet();
 	};
 
 	/**

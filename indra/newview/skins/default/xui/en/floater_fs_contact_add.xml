@@ -8,10 +8,15 @@
  can_resize="false"
  name="floater_fs_add_contact"
  title="Add to Contact Set...">
-    <floater.string
-     name="no_sets">
-No contact sets available.
-    </floater.string>
+	<floater.string name="no_sets">
+		No contact sets available.
+	</floater.string>
+	<floater.string name="text_add_single">
+		Please select which contact set to add [NAME] to:
+	</floater.string>
+	<floater.string name="text_add_multiple">
+		Please select which contact set to add [COUNT] avatars to:
+	</floater.string>
 	<text
 	 type="string"
 	 follows="left|top"
@@ -22,7 +27,6 @@ No contact sets available.
 	 word_wrap="true"
 	 top="20"
 	 width="265">
-	Please select which contact set to add [NAME] to:
 	</text>
 	<combo_box
 	 follows="left|top"
