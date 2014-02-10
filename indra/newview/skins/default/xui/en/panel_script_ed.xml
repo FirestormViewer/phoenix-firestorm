@@ -334,6 +334,7 @@
 	 bg_focus_color="ScriptBackground"
      text_readonly_color="ScriptText"
      bg_readonly_color="ScriptBackground"
+     bg_selected_color="ScriptSelectedColor"
      cursor_color="ScriptCursorColor"
      width="487"
      show_line_numbers="true"

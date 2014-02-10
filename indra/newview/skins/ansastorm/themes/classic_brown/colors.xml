@@ -1303,4 +1303,7 @@
   <color
       name="ChatHeaderOpaqueBackground"
       reference="Black_25" />
+  <color
+      name="ScriptSelectedColor"
+      reference="EmphasisColor" />
 </colors>

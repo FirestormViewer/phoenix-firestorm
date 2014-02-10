@@ -326,6 +326,9 @@
 		name="XUITooltipFileName"
 		value="0.4 0.4 .7 1" />
 
+  <color
+      name="ScriptSelectedColor"
+      reference="TextBgSelectedColor" />
 
 
 

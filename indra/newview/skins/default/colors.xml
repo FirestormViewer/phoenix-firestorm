@@ -1258,4 +1258,7 @@
   <color
       name="ChatHeaderOpaqueBackground"
       reference="Black" />
+  <color
+      name="ScriptSelectedColor"
+      reference="EmphasisColor" />
 </colors>

@@ -82,4 +82,7 @@
   <color
       name="FSChatHistoryBackground"
       reference="DkGray" />
+  <color
+      name="ScriptSelectedColor"
+      reference="EmphasisColor" />
 </colors>
