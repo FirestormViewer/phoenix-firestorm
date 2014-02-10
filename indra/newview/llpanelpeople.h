@@ -79,6 +79,8 @@ private:
 		E_SORT_BY_MOST_RECENT = 2,
 		E_SORT_BY_DISTANCE = 3,
 		E_SORT_BY_RECENT_SPEAKERS = 4,
+		// <FS:Ansariel> FIRE-5283: Sort by username
+		E_SORT_BY_USERNAME = 5,
 	} ESortOrder;
 
     void				    removePicker();
