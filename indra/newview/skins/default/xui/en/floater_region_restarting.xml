@@ -7,7 +7,7 @@
  help_topic="floater_region_restarting"
  single_instance="true"
  reuse_instance="false"
- title="REGION RESTARTING">
+ title="Region Restart">
     <string name="RegionName">
     The region you are in now ([NAME]) is about to restart.
 
