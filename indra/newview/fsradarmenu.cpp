@@ -118,6 +118,7 @@ LLContextMenu* FSRadarMenu::createMenu()
 		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBanMultiple,					mUUIDs));
 		registrar.add("Avatar.Derender",						boost::bind(&LLAvatarActions::derenderMultiple,						mUUIDs, false));
 		registrar.add("Avatar.DerenderPermanent",				boost::bind(&LLAvatarActions::derenderMultiple,						mUUIDs, true));
+		registrar.add("Avatar.AddToContactSet",					boost::bind(&FSRadarMenu::addToContactSet,							this));
 
 		enable_registrar.add("Avatar.EnableItem",				boost::bind(&FSRadarMenu::enableContextMenuItem,					this, _2));
 		enable_registrar.add("Avatar.VisibleFreezeEject",		boost::bind(&LLAvatarActions::canLandFreezeOrEjectMultiple,			mUUIDs, false));
@@ -257,6 +258,6 @@ void FSRadarMenu::onTrackAvatarMenuItemClick()
 
 void FSRadarMenu::addToContactSet()
 {
-	LLAvatarActions::addToContactSet(mUUIDs.front());
+	LLAvatarActions::addToContactSet(mUUIDs);
 }
 } // namespace FSFloaterRadarMenu

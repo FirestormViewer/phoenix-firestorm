@@ -1033,7 +1033,7 @@ bool LLParticipantList::LLParticipantListMenu::checkContextMenuItem(const LLSD& 
 
 void LLParticipantList::LLParticipantListMenu::handleAddToContactSet()
 {
-	LLAvatarActions::addToContactSet(mUUIDs.front());
+	LLAvatarActions::addToContactSet(mUUIDs);
 }
 
 bool LLParticipantList::LLAvatarItemRecentSpeakerComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
