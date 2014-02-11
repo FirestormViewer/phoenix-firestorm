@@ -73,6 +73,7 @@
 	<menu_item_call label="Odtwarzaj" name="Sound Play"/>
 	<menu_item_call label="Kopiuj SLurl" name="url_copy"/>
 	<menu_item_call label="O Miejscu" name="About Landmark"/>
+	<menu_item_call label="Pokaż na mapie" name="show_on_map"/>
 	<menu_item_call label="Odtwarzaj publicznie" name="Animation Play"/>
 	<menu_item_call label="Odtwarzaj lokalnie" name="Animation Audition"/>
 	<menu_item_call label="Wyślij wiadomość IM" name="Send Instant Message"/>

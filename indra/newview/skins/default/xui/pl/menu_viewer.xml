@@ -414,6 +414,7 @@
 			<menu_item_check label="Kolejka budowania" name="Build Queue"/>
 			<menu_item_check label="Światła" name="Lights"/>
 			<menu_item_check label="Szkielet kolizji" name="Collision Skeleton"/>
+			<menu_item_check label="Stawy" name="Joints"/>
 			<menu_item_check label="Promienie" name="Raycast"/>
 			<menu_item_check label="Wektory wiatru" name="Wind Vectors"/>
 			<menu_item_check label="Złożoność renderowania" name="rendercomplexity"/>

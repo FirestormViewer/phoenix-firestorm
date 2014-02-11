@@ -140,6 +140,9 @@
 		</panel>
 		<panel label="Minimapa" name="tab-minimap">
 			<slider label="Przezroczystość tła:" name="FSMiniMapOpacity"/>
+			<text name="netmap_pickradius_textbox">
+				Okrąg zazn.:
+			</text>
 			<text name="netmap_dots_textbox">
 				Kropki minimapy:
 			</text>
