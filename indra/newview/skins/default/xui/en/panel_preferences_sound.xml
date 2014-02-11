@@ -2878,13 +2878,13 @@ Hover your mouse cursor over UUID field to show its default value.
             Region restart alert:
         </text>
         <line_editor
-         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
+         tool_tip="b92a0f64-7709-8811-40c5-16afd624a45f"
          follows="left|top"
          left_pad="5"
          height="20"
          max_length_chars="256"
          name="UISndRegionRestart"
-         control_name="UISndRegionRestart"
+         control_name="UISndRestart"
          width="218"/>
         <button
          follows="left|top"
@@ -2898,7 +2898,7 @@ Hover your mouse cursor over UUID field to show its default value.
          tool_tip="Preview this sound.">
 		    <button.commit_callback
              function="PreviewUISound"
-             parameter="UISndRegionRestart"/>
+             parameter="UISndRestart"/>
 		</button>
         <button
          follows="left|top"
@@ -2911,7 +2911,7 @@ Hover your mouse cursor over UUID field to show its default value.
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
-             parameter="UISndRegionRestart"/>
+             parameter="UISndRestart"/>
 		</button>
         <check_box
          control_name="PlayModeUISndRegionRestart"

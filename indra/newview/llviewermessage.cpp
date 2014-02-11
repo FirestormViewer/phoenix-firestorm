@@ -2876,22 +2876,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			LLSD args;
 			args["MESSAGE"] = message;
 			LLNotificationsUtil::add("SystemMessage", args);
-			// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
-			if (message.find("estart") != -1 && message.find("egion") != -1)
-			{
-				make_ui_sound("UISndRegionRestart");
-			}
 		}
 		else if (to_id.isNull())
 		{
 			// Message to everyone from GOD, look up the fullname since
 			// server always slams name to legacy names
 			LLAvatarNameCache::get(from_id, boost::bind(god_message_name_cb, _2, chat, message));
-			// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
-			if (message.find("estart") != -1 && message.find("egion") != -1)
-			{
-				make_ui_sound("UISndRegionRestart");
-			}
 		}
 		else
 		{
@@ -7226,14 +7216,6 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				llwarns << "attempt_standard_notification: Attempted to read notification parameter data into LLSD but failed:" << llsdRaw << llendl;
 			}
 		}
-		
-		// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
-		// Also, FIRE-11550
-		if (notificationID == "RegionRestartSeconds" || notificationID == "RegionRestartMinutes")
-		{
-			make_ui_sound("UISndRegionRestart");
-		}
-		// </FS:PP>
 
 		if (
 			(notificationID == "RegionEntryAccessBlocked") ||
@@ -7433,7 +7415,6 @@ bool handle_special_alerts(const std::string &pAlertName)
 
 void process_alert_core(const std::string& message, BOOL modal)
 {
-	std::string processed_message = message;
 	const std::string ALERT_PREFIX("ALERT: ");
 	const std::string NOTIFY_PREFIX("NOTIFY: ");
 	if (message.find(ALERT_PREFIX) == 0)
@@ -7444,7 +7425,6 @@ void process_alert_core(const std::string& message, BOOL modal)
 		if (!handle_special_alerts(alert_name))
 		{
 			LLNotificationsUtil::add(alert_name);
-			processed_message = alert_name; // <FS:PP> FIRE-317, region restart alert
 		}
 	}
 	else if (message.find(NOTIFY_PREFIX) == 0)
@@ -7453,7 +7433,6 @@ void process_alert_core(const std::string& message, BOOL modal)
 		// translated out of English.
 		std::string notify_name(message.substr(NOTIFY_PREFIX.length()));
 		LLNotificationsUtil::add(notify_name);
-		processed_message = notify_name; // <FS:PP> FIRE-317, region restart alert
 	}
 	else if (message[0] == '/')
 	{
@@ -7464,25 +7443,22 @@ void process_alert_core(const std::string& message, BOOL modal)
 		// *NOTE: If the text from the server ever changes this line will need to be adjusted.
 		std::string restart_cancelled = "Region restart cancelled.";
 		if (text.substr(0, restart_cancelled.length()) == restart_cancelled)
-			processed_message = "region restart"; // <FS:PP> FIRE-317, region restart alert
 		{
 			LLFloaterRegionRestarting::close();
-			processed_message = "region restart"; // <FS:PP> FIRE-317, region restart alert
 		}
 
 		std::string new_msg =LLNotifications::instance().getGlobalString(text);
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
-			if ( (new_msg == text) && (rlv_handler_t::isEnabled()) )
-			{
-				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
-					RlvUtil::filterLocation(new_msg);
-				if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-					RlvUtil::filterNames(new_msg);
-			}
+		if ( (new_msg == text) && (rlv_handler_t::isEnabled()) )
+		{
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+				RlvUtil::filterLocation(new_msg);
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				RlvUtil::filterNames(new_msg);
+		}
 // [/RLVa:KB]
 		args["MESSAGE"] = new_msg;
 		LLNotificationsUtil::add("SystemMessage", args);
-			processed_message = new_msg; // <FS:PP> FIRE-317, region restart alert
 	}
 	else if (modal)
 	{
@@ -7499,7 +7475,6 @@ void process_alert_core(const std::string& message, BOOL modal)
 // [/RLVa:KB]
 		args["ERROR_MESSAGE"] = new_msg;
 		LLNotificationsUtil::add("ErrorMessage", args);
-		processed_message = new_msg; // <FS:PP> FIRE-317, region restart alert
 	}
 	else
 	{
@@ -7525,13 +7500,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 
 			args["MESSAGE"] = is_message_localized ? localized_msg : new_msg;
 			LLNotificationsUtil::add("SystemMessageTip", args);
-			processed_message = new_msg; // <FS:PP> FIRE-317, region restart alert
 		}
-	}
-	// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
-	if (processed_message.find("estart") != -1 && processed_message.find("egion") != -1)
-	{
-		make_ui_sound("UISndRegionRestart");
 	}
 }
 
