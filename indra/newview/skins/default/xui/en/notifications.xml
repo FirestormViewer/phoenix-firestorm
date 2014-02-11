@@ -11664,10 +11664,18 @@ Are you sure you want to remove these [TARGET] avatars from [SET_NAME]?
 
   <notification
    icon="alertmodal.tga"
-   name="AddToContactSetSuccess"
+   name="AddToContactSetSingleSuccess"
    type="notify">
-    <tag>Export</tag>
+    <tag>contact set</tag>
 [NAME] was added to [SET].
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="AddToContactSetMultipleSuccess"
+   type="notify">
+    <tag>contact set</tag>
+[COUNT] avatars were added to [SET].
   </notification>
 
   <notification

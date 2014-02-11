@@ -147,6 +147,17 @@ LLNetMap::LLNetMap (const Params & p)
 
 LLNetMap::~LLNetMap()
 {
+	// <FS:Ansariel> Protect avatar name lookup callbacks
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
+	// </FS:Ansariel>
+
 	// <FS:Ansariel> Fixing borked minimap zoom level persistance
 	//gSavedSettings.setF32("MiniMapScale", mScale);
 	gSavedSettings.setF32("MiniMapScale", sScale);
@@ -796,7 +807,8 @@ void LLNetMap::draw()
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 		// <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
-		gGL.color4fv((map_frustum_color()).mV);
+		static LLUIColor pick_radius_color = LLUIColorTable::instance().getColor("MapPickRadiusColor", map_frustum_color());
+		gGL.color4fv((pick_radius_color()).mV);
 		gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
 		// </FS:Ansariel>
 
@@ -1090,7 +1102,7 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			else
 			{
 				static LLCachedControl<F32> farClip(gSavedSettings, "RenderFarClip");
-				args["DISTANCE"] = llformat("> %.02f", F32(farClip));
+				args["DISTANCE"] = llformat("> %.02f", farClip());
 			}
 			std::string distanceLabel = LLTrans::getString("minimap_distance");
 			LLStringUtil::format(distanceLabel, args);
@@ -1428,8 +1440,18 @@ BOOL LLNetMap::handleMouseUp( S32 x, S32 y, MASK mask )
 }
 
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
-void LLNetMap::setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name)
+void LLNetMap::setAvatarProfileLabel(const LLUUID& av_id, const LLAvatarName& avName, const std::string& item_name)
 {
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+
 	LLMenuItemGL* pItem = mPopupMenu->findChild<LLMenuItemGL>(item_name, TRUE /*recurse*/);
 	if (pItem)
 	{
@@ -1502,6 +1524,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mClosestAgentsRightClick = mClosestAgentsToCursor;
 		mPosGlobalRightClick = viewPosToGlobal(x, y);
 
+		mPopupMenu->setItemVisible("Add to Set Multiple", mClosestAgentsToCursor.size() > 1);
 		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
 		mPopupMenu->setItemVisible("View Profile", mClosestAgentsToCursor.size() == 1);
 
@@ -1524,7 +1547,16 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 				else
 				{
 					p.label = LLTrans::getString("LoadingData");
-					LLAvatarNameCache::get(idAgent, boost::bind(&LLNetMap::setAvatarProfileLabel, this, _2, p.name.getValue()));
+					avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(idAgent);
+					if (it != mAvatarNameCacheConnections.end())
+					{
+						if (it->second.connected())
+						{
+							it->second.disconnect();
+						}
+						mAvatarNameCacheConnections.erase(it);
+					}
+					mAvatarNameCacheConnections[idAgent] = LLAvatarNameCache::get(idAgent, boost::bind(&LLNetMap::setAvatarProfileLabel, this, _1, _2, p.name.getValue()));
 				}
 				p.on_click.function = boost::bind(&LLAvatarActions::showProfile, _2);
 				p.on_click.parameter = idAgent;
@@ -1754,7 +1786,10 @@ void LLNetMap::handleStopTracking (const LLSD& userdata)
 {
 	if (mPopupMenu)
 	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		// <FS:Ansariel> Hide tracking option instead of disabling
+		//mPopupMenu->setItemEnabled ("Stop Tracking", false);
+		mPopupMenu->setItemVisible ("Stop Tracking", false);
+		// </FS:Ansariel>
 		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
 	}
 }
@@ -1871,7 +1906,7 @@ void LLNetMap::handleAddFriend()
 
 void LLNetMap::handleAddToContactSet()
 {
-	LLAvatarActions::addToContactSet(mClosestAgentRightClick);
+	LLAvatarActions::addToContactSet(mClosestAgentsRightClick);
 }
 
 void LLNetMap::handleRemoveFriend()

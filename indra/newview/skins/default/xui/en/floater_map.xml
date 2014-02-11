@@ -70,14 +70,14 @@
     <text
      type="string"
      length="1"
-     bottom="205"
+     bottom="218"
      label="W"
      layout="topleft"
      left="0"
      name="floater_map_west"
-     right="11"
+     right="12"
      text_color="1 1 1 0.7"
-     top="195"
+     top="209"
      valign="center">
         W
     </text>
@@ -145,7 +145,7 @@
      layout="topleft"
      left="0"
      name="floater_map_northwest"
-     right="20"
+     right="21"
      text_color="1 1 1 0.7"
      top="209"
      valign="center">

@@ -322,6 +322,10 @@ if (LINUX OR DARWIN)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
   endif (WORD_SIZE EQUAL 32)
+
+  if (ND_BUILD64BIT_ARCH)
+   add_definitions(-DND_BUILD64BIT_ARCH)
+  endif (ND_BUILD64BIT_ARCH)
 endif (LINUX OR DARWIN)
 
 

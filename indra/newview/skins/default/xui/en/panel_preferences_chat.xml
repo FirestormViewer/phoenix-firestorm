@@ -237,6 +237,7 @@
              top_pad="1"
              width="400" />
             <check_box
+             control_name="PlainTextChatHistory"
              enabled="true"
              height="16"
              label="Use V1 style chat headers"

@@ -784,9 +784,6 @@ void LLFloaterPreference::apply()
 		int proxy_port = getChild<LLUICtrl>("web_proxy_port")->getValue();
 		LLViewerMedia::setProxyConfig(proxy_enable, proxy_address, proxy_port);
 	}
-
-	// <FS:Ansariel> [FS communication UI]
-	gSavedSettings.setBOOL("PlainTextChatHistory", getChild<LLUICtrl>("plain_text_chat_history")->getValue().asBoolean());
 	
 	if (mGotPersonalInfo)
 	{ 
@@ -2459,6 +2456,16 @@ BOOL LLPanelPreference::postBuild()
 		}
 	}
 
+	// <FS:Ansariel> Minimap pick radius transparency
+	LLSliderCtrl* map_pickradius_transparency = findChild<LLSliderCtrl>("MapPickRadiusTransparency");
+	if (map_pickradius_transparency)
+	{
+		mOriginalMapPickRadiusTransparency = LLUIColorTable::instance().getColor("MapPickRadiusColor").get().mV[VW];
+		map_pickradius_transparency->setValue(mOriginalMapPickRadiusTransparency);
+		map_pickradius_transparency->setCommitCallback(boost::bind(&LLPanelPreference::updateMapPickRadiusTransparency, this, _2));
+	}
+	// </FS:Ansariel>
+
 	// <FS:Ansariel> Flash chat toolbar button notification
 	if (hasChild("FSNotifyIMFlash", TRUE))
 	{
@@ -2697,6 +2704,19 @@ void LLPanelPreference::updateMouselookCombatFeatures()
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> Minimap pick radius transparency
+void LLPanelPreference::updateMapPickRadiusTransparency(const LLSD& value)
+{
+	static LLColorSwatchCtrl* color_swatch = getChild<LLColorSwatchCtrl>("MapPickRadiusColor");
+
+	LLUIColorTable& color_table = LLUIColorTable::instance();
+	LLColor4 color = color_table.getColor("MapPickRadiusColor").get();
+	color.mV[VW] = value.asReal();
+	color_table.setColor("MapPickRadiusColor", color);
+	color_swatch->set(color);
+}
+// </FS:Ansariel>
+
 void LLPanelPreference::cancel()
 {
 	for (control_values_map_t::iterator iter =  mSavedValues.begin();
@@ -2717,6 +2737,14 @@ void LLPanelPreference::cancel()
 			color_swatch->onCommit();
 		}
 	}
+
+	// <FS:Ansariel> Minimap pick radius transparency
+	LLSliderCtrl* map_pickradius_transparency = findChild<LLSliderCtrl>("MapPickRadiusTransparency");
+	if (map_pickradius_transparency)
+	{
+		map_pickradius_transparency->setValue(mOriginalMapPickRadiusTransparency);
+	}
+	// </FS:Ansariel>
 }
 
 //<FS:KC> Handled centrally now

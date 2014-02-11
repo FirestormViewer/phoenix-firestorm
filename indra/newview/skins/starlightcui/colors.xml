@@ -1111,5 +1111,9 @@
     <color
      name="CurrencyColor"
      reference="LabelTextColor" />
+
+  <color
+      name="ScriptSelectedColor"
+      reference="SL-EmphasisColor" />
 </colors>
 

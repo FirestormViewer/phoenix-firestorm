@@ -694,8 +694,8 @@ LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
 	registrar.add("Avatar.Share", boost::bind(&LLAvatarActions::share, mUUIDs.front()));
 	registrar.add("Avatar.Pay",	boost::bind(&LLAvatarActions::pay, mUUIDs.front()));
 	registrar.add("Avatar.Call", boost::bind(&LLAvatarActions::startCall, mUUIDs.front()));
-	registrar.add("Avatar.AddToContactSet", boost::bind(&LLAvatarActions::addToContactSet, mUUIDs.front()));
-
+	registrar.add("Avatar.AddToContactSet", boost::bind(&LLParticipantList::LLParticipantListMenu::handleAddToContactSet, this));
+	
 	registrar.add("ParticipantList.ModerateVoice", boost::bind(&LLParticipantList::LLParticipantListMenu::moderateVoice, this, _2));
 
 	enable_registrar.add("ParticipantList.EnableItem", boost::bind(&LLParticipantList::LLParticipantListMenu::enableContextMenuItem,	this, _2));
@@ -1029,6 +1029,11 @@ bool LLParticipantList::LLParticipantListMenu::checkContextMenuItem(const LLSD& 
 	}
 
 	return false;
+}
+
+void LLParticipantList::LLParticipantListMenu::handleAddToContactSet()
+{
+	LLAvatarActions::addToContactSet(mUUIDs);
 }
 
 bool LLParticipantList::LLAvatarItemRecentSpeakerComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const

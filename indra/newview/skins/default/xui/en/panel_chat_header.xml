@@ -2,8 +2,8 @@
 <panel
 	 background_visible="true"
      bevel_style="in"
-     bg_opaque_color="Black" 
-     bg_alpha_color="DkGray_66"
+     bg_opaque_color="ChatHeaderOpaqueBackground" 
+     bg_alpha_color="ChatHeaderAlphaBackground"
      follows="top|left|right"
      height="24"
      label="im_header"

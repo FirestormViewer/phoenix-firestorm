@@ -93,6 +93,8 @@ public:
 	void showUsername(bool visible);
 	void showVoiceVolume(bool visible);
 	void sortByName();
+	// <FS:Ansariel> FIRE-5283: Sort by username
+	void sortByUserName();
 	void setShowIcons(std::string param_name);
 	bool getIconsVisible() const { return mShowIcons; }
 	const std::string getIconParamName() const{return mIconParamName;}
@@ -232,6 +234,20 @@ public:
 protected:
 	virtual bool doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const;
 };
+
+// <FS:Ansariel> FIRE-5283: Sort by username
+class LLAvatarItemUserNameComparator : public LLAvatarItemComparator
+{
+	LOG_CLASS(LLAvatarItemUserNameComparator);
+
+public:
+	LLAvatarItemUserNameComparator() {};
+	virtual ~LLAvatarItemUserNameComparator() {};
+
+protected:
+	virtual bool doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const;
+};
+// </FS:Ansariel>
 
 /**
  * Represents Avaline caller in Avatar list in Voice Control Panel and group chats.

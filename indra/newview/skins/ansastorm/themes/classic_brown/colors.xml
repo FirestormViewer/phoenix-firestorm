@@ -1300,4 +1300,19 @@
   <color
       name="VoiceNotConnectedColor"
       reference="Yellow" />
+  <color
+      name="FSChatHistoryBackground"
+      reference="Transparent" />
+  <color
+      name="ChatHeaderAlphaBackground"
+      reference="Black_25" />
+  <color
+      name="ChatHeaderOpaqueBackground"
+      reference="Black_25" />
+  <color
+      name="ScriptSelectedColor"
+      reference="EmphasisColor" />
+  <color
+      name="MapPickRadiusColor"
+      reference="EmphasisColor_35" />
 </colors>

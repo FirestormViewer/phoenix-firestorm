@@ -224,6 +224,8 @@ static bool findInsensitive(std::string haystack, const std::string& needle_uppe
 //comparators
 static const LLAvatarItemNameComparator NAME_COMPARATOR;
 static const LLFlatListView::ItemReverseComparator REVERSE_NAME_COMPARATOR(NAME_COMPARATOR);
+// <FS:Ansariel> FIRE-5283: Sort by username
+static const LLAvatarItemUserNameComparator USERNAME_COMPARATOR;
 
 LLAvatarList::Params::Params()
 : ignore_online_status("ignore_online_status", false)
@@ -430,6 +432,14 @@ void LLAvatarList::sortByName()
 	setComparator(&NAME_COMPARATOR);
 	sort();
 }
+
+// <FS:Ansariel> FIRE-5283: Sort by username
+void LLAvatarList::sortByUserName()
+{
+	setComparator(&USERNAME_COMPARATOR);
+	sort();
+}
+// </FS:Ansariel>
 
 void LLAvatarList::setDirty(bool val /*= true*/, bool force_refresh /*= false*/)
 {
@@ -908,6 +918,19 @@ bool LLAvatarItemAgentOnTopComparator::doCompare(const LLAvatarListItem* avatar_
 	}
 	return LLAvatarItemNameComparator::doCompare(avatar_item1,avatar_item2);
 }
+
+// <FS:Ansariel> FIRE-5283: Sort by username
+bool LLAvatarItemUserNameComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
+{
+	std::string name1 = avatar_item1->getUserName();
+	std::string name2 = avatar_item2->getUserName();
+
+	LLStringUtil::toUpper(name1);
+	LLStringUtil::toUpper(name2);
+
+	return name1 < name2;
+}
+// </FS:Ansariel>
 
 /************************************************************************/
 /*             class LLAvalineListItem                                  */

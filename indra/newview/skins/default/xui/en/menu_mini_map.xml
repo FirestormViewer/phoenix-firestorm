@@ -20,6 +20,12 @@
    label="View Profile"
    name="View Profiles">
   </menu>
+	<menu_item_call
+		label="Add to Set"
+		name="Add to Set Multiple">
+		<menu_item_call.on_click
+			function="Minimap.AddToContactSet"/>
+	</menu_item_call>
   <menu_item_call
    label="Cam"
    name="Cam">

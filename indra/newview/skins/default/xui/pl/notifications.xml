@@ -4552,8 +4552,11 @@ Nie można tego cofnąć.
 		Na pewno chcesz usunąć [TARGET] osób z [SET_NAME]?
 		<usetemplate ignoretext="Potwierdź przed usunięciem większej ilości awatarów z Zestawu Kontaktów" name="okcancelignore" notext="Anuluj" yestext="Ok"/>
 	</notification>
-	<notification name="AddToContactSetSuccess">
+	<notification name="AddToContactSetSingleSuccess">
 		[NAME] został/a dodany/a do [SET].
+	</notification>
+	<notification name="AddToContactSetMultipleSuccess">
+		[COUNT] awatarów zostało dodanych do [SET].
 	</notification>
 	<notification name="SetAvatarPseudonym">
 		Wprowadź alias dla [AVATAR]:

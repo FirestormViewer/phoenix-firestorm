@@ -1242,6 +1242,23 @@ void LLAvatarActions::addToContactSet(const LLUUID& agent_id)
 {
 	LLFloaterReg::showInstance("fs_add_contact", agent_id, TRUE);
 }
+
+void LLAvatarActions::addToContactSet(const uuid_vec_t& agent_ids)
+{
+	if (agent_ids.size() == 1)
+	{
+		LLAvatarActions::addToContactSet(agent_ids.front());
+	}
+	else
+	{
+		LLSD data;
+		for (uuid_vec_t::const_iterator it = agent_ids.begin(); it != agent_ids.end(); ++it)
+		{
+			data.append(*it);
+		}
+		LLFloaterReg::showInstance("fs_add_contact", data, TRUE);
+	}
+}
 // [/FS:CR] Add to contact set
 
 //== private methods ========================================================================================

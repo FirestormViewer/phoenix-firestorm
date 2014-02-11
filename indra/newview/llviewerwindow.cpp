@@ -231,6 +231,8 @@
 #include "llnetmap.h"
 #include "lggcontactsets.h"
 
+#include "llleapmotioncontroller.h"
+
 //
 // Globals
 //
@@ -897,6 +899,12 @@ public:
 		// <FS:ND> Report amount of failed texture buffer allocations if any.
 		if( LLImageBase::getAllocationErrors() )
 			addText( xpos, ypos, llformat( "# textures discarded due to insufficient memory %ld", LLImageBase::getAllocationErrors() ) );
+		// </FS:ND>
+
+		// <FS:ND> Add some fancy leap debug text
+		std::string strLeapDebug( LLLeapMotionController::getInstance()->getDebugString() );
+		if( strLeapDebug.size() )
+			addText( xpos, ypos, strLeapDebug );
 		// </FS:ND>
 	}
 
@@ -2753,7 +2761,7 @@ void LLViewerWindow::draw()
 						LLTracker::instance()->drawMarker(targetPosition, targetColor);
 					}
 
-					if (inMouselook && !crosshairRendered)
+					if (inMouselook && !crosshairRendered && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 					{
 						LLVector3d magicVector = (targetPosition - myPosition) * myRotation;
 						magicVector.setVec(-magicVector.mdV[VY], magicVector.mdV[VZ], magicVector.mdV[VX]);

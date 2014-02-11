@@ -656,8 +656,10 @@ protected:
 			}
 			else
 			{
-				menu->setItemEnabled("Send IM", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_SEND_IM));
-				menu->setItemEnabled("Show Profile", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_SHOW_PROFILE));
+				if (mSessionID == LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, mAvatarID))
+				{
+					menu->setItemVisible("Send IM", false);
+				}
 				menu->setItemEnabled("Teleport to", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_TELEPORT_TO));
 				menu->setItemEnabled("Offer Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
 				menu->setItemEnabled("Request Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));

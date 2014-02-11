@@ -1148,6 +1148,11 @@ void LLPanelPeople::setSortOrder(LLAvatarList* list, ESortOrder order, bool save
 		list->setComparator(&DISTANCE_COMPARATOR);
 		list->sort();
 		break;
+	// <FS:Ansariel> FIRE-5283: Sort by username
+	case E_SORT_BY_USERNAME:
+		list->sortByUserName();
+		break;
+	// </FS:Ansariel>
 	default:
 		llwarns << "Unrecognized people sort order for " << list->getName() << llendl;
 		return;
@@ -1435,6 +1440,12 @@ void LLPanelPeople::onFriendsViewSortMenuItemClicked(const LLSD& userdata)
 	{
 		setSortOrder(mAllFriendList, E_SORT_BY_NAME);
 	}
+	// <FS:Ansariel> FIRE-5283: Sort by username
+	if (chosen_item == "sort_username")
+	{
+		setSortOrder(mAllFriendList, E_SORT_BY_USERNAME);
+	}
+	// </FS:Ansariel>
 	else if (chosen_item == "sort_status")
 	{
 		setSortOrder(mAllFriendList, E_SORT_BY_STATUS);
@@ -1528,6 +1539,10 @@ bool LLPanelPeople::onFriendsViewSortMenuItemCheck(const LLSD& userdata)
 		return sort_order == E_SORT_BY_NAME;
 	if (item == "sort_status")
 		return sort_order == E_SORT_BY_STATUS;
+	// <FS:Ansariel> FIRE-5283: Sort by username
+	if (item == "sort_username") 
+		return sort_order == E_SORT_BY_USERNAME;
+	// </FS:Ansariel>
 
 	return false;
 }

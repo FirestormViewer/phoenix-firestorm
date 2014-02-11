@@ -283,9 +283,7 @@ private:
 	LLViewerJoystick* joystick;
 	
 // [FS:CR]
-#ifdef USE_LEAPMOTION
 	LLLeapMotionController* gestureController;
-#endif // USE_LEAPMOTION
 // [/FS:CR]
 
 	bool mSavedFinalSnapshot;

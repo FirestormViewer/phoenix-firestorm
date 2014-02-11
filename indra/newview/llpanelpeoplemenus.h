@@ -48,6 +48,9 @@ private:
 	bool checkContextMenuItem(const LLSD& userdata);
 	void offerTeleport();
 	void requestTeleport();
+
+	// <FS:Ansariel> Add to contact set
+	void addToContactSet();
 };
 
 /**

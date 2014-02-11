@@ -3,9 +3,12 @@
 	<floater.string name="no_sets">
 		Brak dostępnych Zestawów Kontaktów.
 	</floater.string>
-	<text name="textfield">
+	<floater.string name="text_add_single">
 		Wybierz, do którego Zestawu Kontaktów dodać [NAME]:
-	</text>
+	</floater.string>
+	<floater.string name="text_add_multiple">
+		Wybierz, do którego Zestawu Kontaktów dodać [COUNT] awatarów:
+	</floater.string>
 	<button label="Dodaj" name="add_btn" />
 	<button label="Anuluj" name="cancel_btn" />
 </floater>

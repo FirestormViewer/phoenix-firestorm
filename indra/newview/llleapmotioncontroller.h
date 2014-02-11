@@ -43,6 +43,10 @@ public:
 	// Called every viewer frame
 	void stepFrame();
 
+	std::string getDebugString();
+
+	void render();
+
 protected:
 	LLLMImpl	* mController;
 
@@ -55,5 +59,33 @@ public:
 	void moveFlycam();
 // </FS:Zi>
 };
+
+#ifndef USE_LEAPMOTION
+inline LLLeapMotionController::LLLeapMotionController()
+{
+}
+
+inline LLLeapMotionController::~LLLeapMotionController()
+{
+}
+
+inline void LLLeapMotionController::cleanup()
+{
+}
+
+inline void LLLeapMotionController::stepFrame()
+{
+}
+
+inline std::string LLLeapMotionController::getDebugString()
+{
+	return "";
+}
+
+inline void LLLeapMotionController::render()
+{
+}
+
+#endif
 
 #endif  // LL_LLLEAPMOTIONCONTROLLER_H
