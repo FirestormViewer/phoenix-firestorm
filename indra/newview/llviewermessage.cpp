@@ -7295,7 +7295,13 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				}
 			}
 
-			send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
+			// <FS:Ansariel> Only play when we want
+			//send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
+			if (gSavedSettings.getBOOL("PlayModeUISndRegionRestart"))
+			{
+				send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
+			}
+			// </FS:Ansariel>
 		}
 
 		// <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
