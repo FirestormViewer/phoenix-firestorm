@@ -7446,6 +7446,59 @@ void process_alert_core(const std::string& message, BOOL modal)
 		std::string text(message.substr(1));
 		LLSD args;
 
+		// <FS:Ansariel> Let's hope this works for OpenSim...
+		bool is_region_restart = false;
+		S32 seconds = 0;
+		if (text.substr(0,17) == "RESTART_X_MINUTES")
+		{
+			S32 mins = 0;
+			LLStringUtil::convertToS32(text.substr(18), mins);
+			seconds = mins * 60;
+			is_region_restart = true;
+		}
+		else if (text.substr(0,17) == "RESTART_X_SECONDS")
+		{
+			LLStringUtil::convertToS32(text.substr(18), seconds);
+			is_region_restart = true;
+		}
+		if (is_region_restart)
+		{
+			LLFloaterRegionRestarting* floaterp = LLFloaterReg::findTypedInstance<LLFloaterRegionRestarting>("region_restarting");
+
+			if (floaterp)
+			{
+				LLFloaterRegionRestarting::updateTime(seconds);
+			}
+			else
+			{
+				std::string region_name;
+				if (gAgent.getRegion())
+				{
+					region_name = gAgent.getRegion()->getName();
+				}
+				else
+				{
+					region_name = LLTrans::getString("Unknown");
+				}
+				LLSD params;
+				params["NAME"] = region_name;
+				params["SECONDS"] = (LLSD::Integer)seconds;
+				LLFloaterRegionRestarting* restarting_floater = dynamic_cast<LLFloaterRegionRestarting*>(LLFloaterReg::showInstance("region_restarting", params));
+				if(restarting_floater)
+				{
+					restarting_floater->center();
+				}
+			}
+
+			if (gSavedSettings.getBOOL("PlayModeUISndRegionRestart"))
+			{
+				// Not nice, but no idea if the other sound will be available on OpenSim
+				send_sound_trigger(LLUUID("4174f859-0d3d-c517-c424-72923dc21f65"), 1.0f);
+			}
+			return;
+		}
+		// </FS:Ansariel>
+
 		// *NOTE: If the text from the server ever changes this line will need to be adjusted.
 		std::string restart_cancelled = "Region restart cancelled.";
 		if (text.substr(0, restart_cancelled.length()) == restart_cancelled)
