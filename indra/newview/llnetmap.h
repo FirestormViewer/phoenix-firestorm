@@ -194,7 +194,9 @@ private:
 	void handleOverlayToggle(const LLSD& sdParam);
 	bool checkTextureType(const LLSD& sdParam) const;
 	void handleTextureType(const LLSD& sdParam) const;
-	void setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name);
+	void setAvatarProfileLabel(const LLUUID& av_id, const LLAvatarName& avName, const std::string& item_name);
+	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 // [/SL:KB]
 
 	bool canAddFriend();

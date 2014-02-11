@@ -147,6 +147,17 @@ LLNetMap::LLNetMap (const Params & p)
 
 LLNetMap::~LLNetMap()
 {
+	// <FS:Ansariel> Protect avatar name lookup callbacks
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
+	// </FS:Ansariel>
+
 	// <FS:Ansariel> Fixing borked minimap zoom level persistance
 	//gSavedSettings.setF32("MiniMapScale", mScale);
 	gSavedSettings.setF32("MiniMapScale", sScale);
@@ -1429,8 +1440,18 @@ BOOL LLNetMap::handleMouseUp( S32 x, S32 y, MASK mask )
 }
 
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
-void LLNetMap::setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name)
+void LLNetMap::setAvatarProfileLabel(const LLUUID& av_id, const LLAvatarName& avName, const std::string& item_name)
 {
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+
 	LLMenuItemGL* pItem = mPopupMenu->findChild<LLMenuItemGL>(item_name, TRUE /*recurse*/);
 	if (pItem)
 	{
@@ -1526,7 +1547,16 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 				else
 				{
 					p.label = LLTrans::getString("LoadingData");
-					LLAvatarNameCache::get(idAgent, boost::bind(&LLNetMap::setAvatarProfileLabel, this, _2, p.name.getValue()));
+					avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(idAgent);
+					if (it != mAvatarNameCacheConnections.end())
+					{
+						if (it->second.connected())
+						{
+							it->second.disconnect();
+						}
+						mAvatarNameCacheConnections.erase(it);
+					}
+					mAvatarNameCacheConnections[idAgent] = LLAvatarNameCache::get(idAgent, boost::bind(&LLNetMap::setAvatarProfileLabel, this, _1, _2, p.name.getValue()));
 				}
 				p.on_click.function = boost::bind(&LLAvatarActions::showProfile, _2);
 				p.on_click.parameter = idAgent;
