@@ -282,6 +282,10 @@ private:
 	// <FS:Ansariel> Exodus' mouselook combat feature
 	void updateMouselookCombatFeatures();
 
+	// <FS:Ansariel> Minimap pick radius transparency
+	void updateMapPickRadiusTransparency(const LLSD& value);
+	F32 mOriginalMapPickRadiusTransparency;
+
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;
 

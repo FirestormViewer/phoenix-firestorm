@@ -1261,4 +1261,7 @@
   <color
       name="ScriptSelectedColor"
       reference="EmphasisColor" />
+  <color
+      name="MapPickRadiusColor"
+      reference="MapFrustumColor" />
 </colors>

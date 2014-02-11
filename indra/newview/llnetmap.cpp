@@ -796,7 +796,8 @@ void LLNetMap::draw()
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 		// <FS:Ansariel> Draw pick radius; from Ayamo Nozaki (Exodus Viewer)
-		gGL.color4fv((map_frustum_color()).mV);
+		static LLUIColor pick_radius_color = LLUIColorTable::instance().getColor("MapPickRadiusColor", map_frustum_color());
+		gGL.color4fv((pick_radius_color()).mV);
 		gl_circle_2d(local_mouse_x, local_mouse_y, mDotRadius * fsMinimapPickScale, 32, true);
 		// </FS:Ansariel>
 
@@ -1090,7 +1091,7 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			else
 			{
 				static LLCachedControl<F32> farClip(gSavedSettings, "RenderFarClip");
-				args["DISTANCE"] = llformat("> %.02f", F32(farClip));
+				args["DISTANCE"] = llformat("> %.02f", farClip());
 			}
 			std::string distanceLabel = LLTrans::getString("minimap_distance");
 			LLStringUtil::format(distanceLabel, args);
