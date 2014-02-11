@@ -1306,4 +1306,7 @@
   <color
       name="ScriptSelectedColor"
       reference="EmphasisColor" />
+  <color
+      name="MapPickRadiusColor"
+      reference="EmphasisColor_35" />
 </colors>
