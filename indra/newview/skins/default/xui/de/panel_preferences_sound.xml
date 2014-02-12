@@ -192,8 +192,8 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
-		<text tool_tip="Sound UUID played on incoming conference instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving AdHoc Instant Messages'." name="textFSNewConferenceIncomingIMSession">
-			AdHoc Instant Message:
+		<text tool_tip="UUID des Klangs bei eingehenden Gruppenchats. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Beim Eintreffen von AdHoc-Messages:'." name="textFSNewConferenceIncomingIMSession">
+			AdHoc-Messages:
 		</text>
 		<button label="V" name="Prev_UISndNewIncomingConfIMSession" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndNewIncomingConfIMSession" tool_tip="Auf Standardwert zurücksetzen."/>

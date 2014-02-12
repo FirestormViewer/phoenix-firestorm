@@ -120,6 +120,15 @@
 				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
 				<combo_box.item label="Keinen Klang abspielen" name="0"/>
 			</combo_box>
+			<text name="WhenPlayConfIMLabel" width="205">
+				Beim Eintreffen von AdHoc-Messages:
+			</text>
+			<combo_box name="WhenPlayConfIM" width="265">
+				<combo_box.item label="Klang nur bei neuer Sitzung abspielen" name="1"/>
+				<combo_box.item label="Klang bei jeder Nachricht abspielen" name="2"/>
+				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
+				<combo_box.item label="Keinen Klang abspielen" name="0"/>
+			</combo_box>
 			<check_box name="FSGroupNoticesToIMLog" label="Gruppenmitteilungen im Gruppenchat zusätzlich zum Toast anzeigen"/>
 			<check_box name="FSBetterGroupNoticesToIMLog" label="Betreff und Autor ebenfalls anzeigen"/>
 		</panel>
