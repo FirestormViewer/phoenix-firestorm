@@ -100,11 +100,6 @@ U32 LLMeshRepository::sPeakKbps = 0;
 
 const U32 MAX_TEXTURE_UPLOAD_RETRIES = 5;
 
-//<FS:TS> FIRE-11451: Cap concurrent mesh requests at a sane value
-const U32 MESH_CONCURRENT_REQUEST_LIMIT = 64;	// upper limit
-const U32 MESH_CONCURRENT_REQUEST_RESET = 16;	// reset to this if too high
-//</FS:TS> FIRE-11451
-
 static S32 dump_num = 0;
 std::string make_dump_name(std::string prefix, S32 num)
 {
@@ -2622,12 +2617,6 @@ void LLMeshRepository::notifyLoadedMeshes()
 	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
 	//LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("MeshMaxConcurrentRequests");
 	static LLCachedControl<U32> meshMaxConcurrentRequests(gSavedSettings, "MeshMaxConcurrentRequests");
-	//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value
-	if ((U32)meshMaxConcurrentRequests > MESH_CONCURRENT_REQUEST_LIMIT)
-	{
-		gSavedSettings.setU32("MeshMaxConcurrentRequests",MESH_CONCURRENT_REQUEST_RESET);
-	}
-	//</FS:TS> FIRE-11451
 	LLMeshRepoThread::sMaxConcurrentRequests = (U32)meshMaxConcurrentRequests;
 	// </FS:Ansariel>
 
