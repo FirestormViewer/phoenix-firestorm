@@ -485,7 +485,7 @@ void LLFloaterWorldMap::reshape( S32 width, S32 height, BOOL called_from_parent 
 void LLFloaterWorldMap::draw()
 {
 	// <FS:Ansariel> Performance improvement
-	static LLUICtrl* avatar_icon = getChild<LLUICtrl>("avatar_icon");
+	static LLUICtrl* avatar_icon = getChild<LLUICtrl>("friends_icon");  // <FS:Ansariel> Used to be avatar_icon
 	static LLUICtrl* landmark_icon = getChild<LLUICtrl>("landmark_icon");
 	static LLUICtrl* location_icon = getChild<LLUICtrl>("location_icon");
 	static LLView* teleport_btn = getChildView("Teleport");
@@ -496,7 +496,6 @@ void LLFloaterWorldMap::draw()
 	static LLUICtrl* zoom_slider = getChild<LLUICtrl>("zoom slider");
 	static LLView* people_chk = getChildView("people_chk");
 	static LLView* infohub_chk = getChildView("infohub_chk");
-	static LLView* telehub_chk = getChildView("telehub_chk");
 	static LLView* land_for_sale_chk = getChildView("land_for_sale_chk");
 	static LLView* event_chk = getChildView("event_chk");
 	static LLView* events_mature_chk = getChildView("events_mature_chk");
@@ -632,14 +631,13 @@ void LLFloaterWorldMap::draw()
 	// <FS:Ansariel> Performance improvement
 	//getChildView("people_chk")->setEnabled(enable);
 	//getChildView("infohub_chk")->setEnabled(enable);
-	//getChildView("telehub_chk")->setEnabled(enable);
+	//getChildView("telehub_chk")->setEnabled(enable); // <FS:Ansariel> Does not exist as of 12-02-2014!
 	//getChildView("land_for_sale_chk")->setEnabled(enable);
 	//getChildView("event_chk")->setEnabled(enable);
 	//getChildView("events_mature_chk")->setEnabled(enable);
 	//getChildView("events_adult_chk")->setEnabled(enable);
 	people_chk->setEnabled(enable);
 	infohub_chk->setEnabled(enable);
-	telehub_chk->setEnabled(enable);
 	land_for_sale_chk->setEnabled(enable);
 	event_chk->setEnabled(enable);
 	events_mature_chk->setEnabled(enable);
