@@ -32,6 +32,7 @@
 #include "lluictrl.h"
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llviewercontrol.h" // <FS:PP> FIRE-12900, FIRE-12901: gSavedSettings, make screen shaking optional
 #include "llviewerwindow.h"
 
 static S32 sSeconds;
@@ -99,6 +100,13 @@ void LLFloaterRegionRestarting::refresh()
 void LLFloaterRegionRestarting::draw()
 {
 	LLFloater::draw();
+
+	// <FS:PP> FIRE-12900, FIRE-12901: Make screen shaking optional
+	if (gSavedSettings.getBOOL("FSNoScreenShakeOnRegionRestart"))
+	{
+		return;
+	}
+	// </FS:PP>
 
 	double SHAKE_INTERVAL = 0.025;
 	double SHAKE_TOTAL_DURATION = 1.8; // the length of the default alert tone for this
