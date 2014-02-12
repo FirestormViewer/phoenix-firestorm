@@ -7492,7 +7492,6 @@ void process_alert_core(const std::string& message, BOOL modal)
 
 			if (gSavedSettings.getBOOL("PlayModeUISndRestartOpenSim"))
 			{
-				// Not nice, but no idea if the other sound will be available on OpenSim
 				send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestartOpenSim")), 1.0f);
 			}
 			return;
