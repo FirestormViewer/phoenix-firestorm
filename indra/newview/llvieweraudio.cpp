@@ -411,7 +411,8 @@ void init_audio()
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndWindowClose")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndWindowOpen")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndRestart")));
-		// ## Zi: Pie menu
+		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndRestartOpenSim"))); // <FS:Ansariel> Preload OpenSim restart sound
+		// <FS:Zi> Pie menu
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuAppear")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuHide")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuSliceHighlight0")));
@@ -422,7 +423,7 @@ void init_audio()
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuSliceHighlight5")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuSliceHighlight6")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndPieMenuSliceHighlight7")));
-		// ## Zi: Pie menu
+		// </FS:Zi> Pie menu
 	}
 
 	audio_update_volume(true);
