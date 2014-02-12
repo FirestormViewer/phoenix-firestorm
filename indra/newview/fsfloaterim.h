@@ -228,6 +228,8 @@ private:
 	bool mShouldSendTypingState;
 	LLFrameTimer mTypingTimer;
 	LLFrameTimer mTypingTimeoutTimer;
+	LLFrameTimer mMeTypingTimer;
+	LLFrameTimer mOtherTypingTimer;
 
 	bool mSessionInitialized;
 	LLSD mQueuedMsgsForInit;

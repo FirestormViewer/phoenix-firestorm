@@ -77,6 +77,9 @@
 #include "fscommon.h"
 #include "fsfloaternearbychat.h"
 
+const F32 ME_TYPING_TIMEOUT = 4.0f;
+const F32 OTHER_TYPING_TIMEOUT = 9.0f;
+
 floater_showed_signal_t FSFloaterIM::sIMFloaterShowedSignal;
 
 FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
@@ -100,7 +103,9 @@ FSFloaterIM::FSFloaterIM(const LLUUID& session_id)
 	mInputPanels(NULL),
 	mChatLayoutPanelHeight(0),
 	mAvatarNameCacheConnection(),
-	mVoiceChannel(NULL)
+	mVoiceChannel(NULL),
+	mMeTypingTimer(),
+	mOtherTypingTimer()
 {
 	LLIMModel::LLIMSession* im_session = LLIMModel::getInstance()->findIMSession(mSessionID);
 	if (im_session)
@@ -874,13 +879,30 @@ void FSFloaterIM::onAvatarNameCache(const LLUUID& agent_id,
 // virtual
 void FSFloaterIM::draw()
 {
-	if ( mMeTyping )
+	if (mMeTyping)
 	{
+		// Send an additional Start Typing packet every ME_TYPING_TIMEOUT seconds
+		if (mMeTypingTimer.getElapsedTimeF32() > ME_TYPING_TIMEOUT && false == mShouldSendTypingState)
+		{
+			LL_DEBUGS("TypingMsgs") << "Send additional Start Typing packet" << LL_ENDL;
+			LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, TRUE);
+			mMeTypingTimer.reset();
+		}
+
 		// Time out if user hasn't typed for a while.
-		if ( mTypingTimeoutTimer.getElapsedTimeF32() > LLAgent::TYPING_TIMEOUT_SECS )
+		if (mTypingTimeoutTimer.getElapsedTimeF32() > LLAgent::TYPING_TIMEOUT_SECS)
 		{
 			setTyping(false);
+			LL_DEBUGS("TypingMsgs") << "Send stop typing due to timeout" << LL_ENDL;
 		}
+	}
+
+	// Clear <name is typing> message if no data received for OTHER_TYPING_TIMEOUT seconds
+	if (mOtherTyping && mOtherTypingTimer.getElapsedTimeF32() > OTHER_TYPING_TIMEOUT)
+	{
+		LL_DEBUGS("TypingMsgs") << "Received: is typing cleared due to timeout" << LL_ENDL;
+		removeTypingIndicator();
+		mOtherTyping = false;
 	}
 
 	LLTransientDockableFloater::draw();
@@ -1369,6 +1391,7 @@ void FSFloaterIM::setTyping(bool typing)
 				// Still typing, send 'start typing' notification
 				LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, TRUE);
 				mShouldSendTypingState = false;
+				mMeTypingTimer.reset();
 			}
 		}
 		else
@@ -1391,6 +1414,7 @@ void FSFloaterIM::processIMTyping(const LLIMInfo* im_info, BOOL typing)
 	{
 		// other user started typing
 		addTypingIndicator(im_info);
+		mOtherTypingTimer.reset();
 	}
 	else
 	{
@@ -1674,7 +1698,18 @@ void FSFloaterIM::removeTypingIndicator(const LLIMInfo* im_info)
 				speaker_mgr->setSpeakerTyping(im_info->mFromID, FALSE);
 			}
 		}
-
+		// Ansariel: Transplant of STORM-1975; Typing notifications are only sent in P2P sessions,
+		//           so we can use mOtherParticipantUUID here and don't need LLIMInfo (Kitty said
+		//           it's dangerous to use the stored LLIMInfo in LL's version!)
+		else if (mDialog == IM_NOTHING_SPECIAL && mOtherParticipantUUID.notNull())
+		{
+			// Update speaker
+			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+			if ( speaker_mgr )
+			{
+				speaker_mgr->setSpeakerTyping(mOtherParticipantUUID, FALSE);
+			}
+		}
 	}
 }
 
