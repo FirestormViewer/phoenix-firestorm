@@ -76,8 +76,7 @@
 
 LLMeshRepository gMeshRepo;
 
-// <FS:Ansariel> Configurable request throttle
-//const U32 MAX_MESH_REQUESTS_PER_SECOND = 100;
+const U32 MAX_MESH_REQUESTS_PER_SECOND = 100;
 
 // Maximum mesh version to support.  Three least significant digits are reserved for the minor version, 
 // with major version changes indicating a format change that is not backwards compatible and should not
@@ -579,9 +578,6 @@ void LLMeshRepoThread::run()
 		llwarns << "convex decomposition unable to be loaded" << llendl;
 	}
 
-	// <FS:Ansariel> Configurable request throttle
-	static LLCachedControl<U32> fsMaxMeshRequestsPerSecond(gSavedSettings, "FSMaxMeshRequestsPerSecond");
-
 	while (!LLApp::isQuitting())
 	{
 		mWaiting = true;
@@ -602,10 +598,7 @@ void LLMeshRepoThread::run()
 
 			// NOTE: throttling intentionally favors LOD requests over header requests
 			
-			// <FS:Ansariel> Configurable request throttle
-			//while (!mLODReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveLODRequests < sMaxConcurrentRequests)
-			while (!mLODReqQ.empty() && count < (U32)fsMaxMeshRequestsPerSecond && sActiveLODRequests < sMaxConcurrentRequests)
-			// </FS:Ansariel> Configurable request throttle
+			while (!mLODReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveLODRequests < sMaxConcurrentRequests)
 			{
 				if (mMutex)
 				{
@@ -623,10 +616,7 @@ void LLMeshRepoThread::run()
 				}
 			}
 
-			// <FS:Ansariel> Configurable request throttle
-			//while (!mHeaderReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveHeaderRequests < sMaxConcurrentRequests)
-			while (!mHeaderReqQ.empty() && count < (U32)fsMaxMeshRequestsPerSecond && sActiveHeaderRequests < sMaxConcurrentRequests)
-			// </FS:Ansariel> Configurable request throttle
+			while (!mHeaderReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveHeaderRequests < sMaxConcurrentRequests)
 			{
 				if (mMutex)
 				{
