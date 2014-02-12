@@ -7297,7 +7297,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 
 			// <FS:Ansariel> Only play when we want
 			//send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
-			if (gSavedSettings.getBOOL("PlayModeUISndRegionRestart"))
+			if (gSavedSettings.getBOOL("PlayModeUISndRestart"))
 			{
 				send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
 			}
@@ -7490,10 +7490,10 @@ void process_alert_core(const std::string& message, BOOL modal)
 				}
 			}
 
-			if (gSavedSettings.getBOOL("PlayModeUISndRegionRestart"))
+			if (gSavedSettings.getBOOL("PlayModeUISndRestartOpenSim"))
 			{
 				// Not nice, but no idea if the other sound will be available on OpenSim
-				send_sound_trigger(LLUUID("4174f859-0d3d-c517-c424-72923dc21f65"), 1.0f);
+				send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestartOpenSim")), 1.0f);
 			}
 			return;
 		}

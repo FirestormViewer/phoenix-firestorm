@@ -312,11 +312,12 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndWindowOpen" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndWindowOpen" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndWindowOpen"/>
-			<text tool_tip="Sonido a reproducir cuando se alerta de un reinicio de región." name="textFSRegionRestart">
-				Alerta reinicio región:
+			<text tool_tip="Sonido a reproducir con las pisadas por defecto. Requiere reiniciar para aplicar los cambios." name="textFSFootsteps">
+				Sonido de pasos:
 			</text>
-			<button name="Prev_UISndRegionRestart" label="P" tool_tip="Probar sonido."/>
-			<button name="Def_UISndRegionRestart" label="R" tool_tip="Restablecer al UUID por defecto."/> <check_box label="Reproducir" name="PlayModeUISndRegionRestart"/>
+			<button name="Prev_UISndFootsteps" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndFootsteps" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndFootsteps"/>
 			<text tool_tip="Sonido a reproducir cuando un amigo se conecta." name="textFSFriendOnline">
 				Conexión de un amigo:
 			</text>
@@ -359,12 +360,6 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndIncomingVoiceCall" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndIncomingVoiceCall" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndIncomingVoiceCall"/>
-			<text tool_tip="Sonido a reproducir con las pisadas por defecto. Requiere reiniciar para aplicar los cambios." name="textFSFootsteps">
-				Sonido de pasos:
-			</text>
-			<button name="Prev_UISndFootsteps" label="P" tool_tip="Probar sonido."/>
-			<button name="Def_UISndFootsteps" label="R" tool_tip="Restablecer al UUID por defecto."/>
-			<check_box label="Reproducir" name="PlayModeUISndFootsteps"/>
 			<text tool_tip="Sonido a reproducir cuando te invitan a un grupo." name="textFSGroupInvitation">
 				Invitación a grupo:
 			</text>
@@ -377,6 +372,18 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndGroupNotice" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndGroupNotice" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndGroupNotice"/>
+			<text tool_tip="Sonido a reproducir cuando se alerta de un reinicio de región." name="textFSRestart">
+				Reinicio región:
+			</text>
+			<button name="Prev_UISndRestart" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndRestart" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndRestart"/>
+			<text tool_tip="Sonido a reproducir cuando se alerta de un reinicio de región (OpenSim)." name="textFSRestartOpenSim">
+				Reinicio región (OpenSim):
+			</text>
+			<button name="Prev_UISndRestartOpenSim" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndRestartOpenSim" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndRestartOpenSim"/>
 		</panel>
 	</tab_container>
 </panel>

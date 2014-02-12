@@ -348,12 +348,12 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndWindowOpen" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndWindowOpen"/>
 
-		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRegionRestart">
-			Warnung Regionsneustart:
+		<text tool_tip="UUID des Klangs für Schritte. Erfordert Neustart" name="textFSFootsteps">
+			Schritte:
 		</text>
-		<button label="V" name="Prev_UISndRegionRestart" tool_tip="Vorschau zu diesem Sound."/>
-		<button label="S" name="Def_UISndRegionRestart" tool_tip="Auf Standardwert zurücksetzen."/>
-		<check_box label="Abspielen" name="PlayModeUISndRegionRestart"/>
+		<button label="V" name="Prev_UISndFootsteps" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndFootsteps" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndFootsteps"/>
 
 		<text tool_tip="UUID des Klangs beim Einloggen eines Freundes." name="textFSFriendOnline">
 			Einloggen Freund:
@@ -405,13 +405,6 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndIncomingVoiceCall" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndIncomingVoiceCall"/>
 
-		<text tool_tip="UUID des Klangs für Schritte. Erfordert Neustart" name="textFSFootsteps">
-			Schritte:
-		</text>
-		<button label="V" name="Prev_UISndFootsteps" tool_tip="Vorschau zu diesem Sound."/>
-		<button label="S" name="Def_UISndFootsteps" tool_tip="Auf Standardwert zurücksetzen."/>
-		<check_box label="Abspielen" name="PlayModeUISndFootsteps"/>
-
 		<text tool_tip="UUID des Klangs für Gruppeneinladungen." name="textFSGroupInvitation">
 			Gruppeneinladungen:
 		</text>
@@ -425,6 +418,20 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="V" name="Prev_UISndGroupNotice" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndGroupNotice" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndGroupNotice"/>
+		
+		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRestart">
+			Regionsneustart:
+		</text>
+		<button label="V" name="Prev_UISndRestart" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndRestart" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndRestart"/>
+		
+		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region (OpenSim)." name="textFSRestartOpenSim">
+			Regionsneustart (OpenSim):
+		</text>
+		<button label="V" name="Prev_UISndRestartOpenSim" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndRestartOpenSim" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndRestartOpenSim"/>
     </panel>
 	
 	</tab_container>

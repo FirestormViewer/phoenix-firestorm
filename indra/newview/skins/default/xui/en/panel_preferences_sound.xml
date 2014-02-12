@@ -2873,22 +2873,22 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when the region restart alert appears."
-         name="textFSRegionRestart">
-            Region restart alert:
+         tool_tip="Sound UUID played on default footsteps. Change requires restart to take effect."
+         name="textFSFootsteps">
+            Default footsteps:
         </text>
         <line_editor
-         tool_tip="b92a0f64-7709-8811-40c5-16afd624a45f"
+         tool_tip="e8af4a28-aa83-4310-a7c4-c047e15ea0df"
          follows="left|top"
          left_pad="5"
          height="20"
          max_length_chars="256"
-         name="UISndRegionRestart"
-         control_name="UISndRestart"
+         name="UISndFootsteps"
+         control_name="UISndFootsteps"
          width="218"/>
         <button
          follows="left|top"
-         name="Prev_UISndRegionRestart"
+         name="Prev_UISndFootsteps"
          height="20"
          label="P"
          layout="topleft"
@@ -2896,29 +2896,29 @@ Hover your mouse cursor over UUID field to show its default value.
          left_pad="1"
          width="17"
          tool_tip="Preview this sound.">
-		    <button.commit_callback
+           <button.commit_callback
              function="PreviewUISound"
-             parameter="UISndRestart"/>
-		</button>
+             parameter="UISndFootsteps"/>
+        </button>
         <button
          follows="left|top"
-         name="Def_UISndRegionRestart"
+         name="Def_UISndFootsteps"
          height="20"
          label="D"
          layout="topleft"
          left_pad="1"
          width="15"
          tool_tip="Reset to the default UUID.">
-		    <button.commit_callback
+           <button.commit_callback
              function="ResetControl"
-             parameter="UISndRestart"/>
-		</button>
+             parameter="UISndFootsteps"/>
+        </button>
         <check_box
-         control_name="PlayModeUISndRegionRestart"
+         control_name="PlayModeUISndFootsteps"
          height="20"
          label="Play this sound"
          layout="topleft"
-         name="PlayModeUISndRegionRestart"
+         name="PlayModeUISndFootsteps"
          left_pad="1"
          width="120" />
 
@@ -3289,62 +3289,6 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on default footsteps. Change requires restart to take effect."
-         name="textFSFootsteps">
-            Default footsteps:
-        </text>
-        <line_editor
-         tool_tip="e8af4a28-aa83-4310-a7c4-c047e15ea0df"
-         follows="left|top"
-         left_pad="5"
-         height="20"
-         max_length_chars="256"
-         name="UISndFootsteps"
-         control_name="UISndFootsteps"
-         width="218"/>
-        <button
-         follows="left|top"
-         name="Prev_UISndFootsteps"
-         height="20"
-         label="P"
-         layout="topleft"
-         top_delta="-1"
-         left_pad="1"
-         width="17"
-         tool_tip="Preview this sound.">
-           <button.commit_callback
-             function="PreviewUISound"
-             parameter="UISndFootsteps"/>
-        </button>
-        <button
-         follows="left|top"
-         name="Def_UISndFootsteps"
-         height="20"
-         label="D"
-         layout="topleft"
-         left_pad="1"
-         width="15"
-         tool_tip="Reset to the default UUID.">
-           <button.commit_callback
-             function="ResetControl"
-             parameter="UISndFootsteps"/>
-        </button>
-        <check_box
-         control_name="PlayModeUISndFootsteps"
-         height="20"
-         label="Play this sound"
-         layout="topleft"
-         name="PlayModeUISndFootsteps"
-         left_pad="1"
-         width="120" />
-
-        <text
-         layout="topleft"
-         follows="left|top"
-         top_pad="7"
-         left="5"
-         height="14"
-         width="150"
          tool_tip="Sound UUID played on group invitation."
          name="textFSGroupInvitation">
             Group invitation:
@@ -3447,6 +3391,123 @@ Hover your mouse cursor over UUID field to show its default value.
          label="Play this sound"
          layout="topleft"
          name="PlayModeUISndGroupNotice"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when the region restart alert appears."
+         name="textFSRestart">
+            Region restart:
+        </text>
+        <line_editor
+         tool_tip="b92a0f64-7709-8811-40c5-16afd624a45f"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndRestart"
+         control_name="UISndRestart"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndRestart"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+            <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndRestart"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndRestart"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="UISndRestart"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndRestart"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndRestart"
+         left_pad="1"
+         width="120" />
+
+        <text
+         visible="false"
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when the region restart alert appears (OpenSim)."
+         name="textFSRestartOpenSim">
+            Region restart (OpenSim):
+        </text>
+        <line_editor
+         visible="false"
+         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndRestartOpenSim"
+         control_name="UISndRestartOpenSim"
+         width="218"/>
+        <button
+         visible="false"
+         follows="left|top"
+         name="Prev_UISndRestartOpenSim"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+            <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndRestartOpenSim"/>
+        </button>
+        <button
+         visible="false"
+         follows="left|top"
+         name="Def_UISndRestartOpenSim"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="UISndRestartOpenSim"/>
+        </button>
+        <check_box
+         visible="false"
+         control_name="PlayModeUISndRestartOpenSim"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndRestartOpenSim"
          left_pad="1"
          width="120" />
 

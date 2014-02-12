@@ -348,12 +348,12 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndWindowOpen" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndWindowOpen"/>
 
-			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu." name="textFSRegionRestart">
-				Alarm o restarcie regionu:
+			<text tool_tip="UUID dźwięku odgrywany, gdy rozlega się domyślny odgłos kroków. Zmiana wymaga restartu, aby odniosła skutek." name="textFSFootsteps">
+				Domyślny odgłos kroków:
 			</text>
-			<button name="Prev_UISndRegionRestart" tool_tip="Podgląd dźwięku."/>
-			<button name="Def_UISndRegionRestart" tool_tip="Resetuj do domyślnego UUID."/>
-			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndRegionRestart"/>
+			<button name="Prev_UISndFootsteps" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
 
 			<text tool_tip="UUID dźwięku odgrywany, gdy loguje się znajomy." name="textFSFriendOnline">
 				Znajomy się loguje:
@@ -404,13 +404,6 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndIncomingVoiceCall" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndIncomingVoiceCall"/>
 
-			<text tool_tip="UUID dźwięku odgrywany, gdy rozlega się domyślny odgłos kroków. Zmiana wymaga restartu, aby odniosła skutek." name="textFSFootsteps">
-				Domyślny odgłos kroków:
-			</text>
-			<button name="Prev_UISndFootsteps" tool_tip="Podgląd dźwięku."/>
-			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
-			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
-
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się zaproszenie do grupy." name="textFSGroupInvitation">
 				Zaproszenie do grupy:
 			</text>
@@ -424,6 +417,20 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Prev_UISndGroupNotice" tool_tip="Podgląd dźwięku."/>
 			<button name="Def_UISndGroupNotice" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndGroupNotice"/>
+			
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu." name="textFSRestart">
+				Restart regionu:
+			</text>
+			<button name="Prev_UISndRestart" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRestart" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndRestart"/>
+
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu (OpenSim)." name="textFSRestartOpenSim">
+				Restart regionu (OpenSim):
+			</text>
+			<button name="Prev_UISndRestartOpenSim" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRestartOpenSim" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndRestartOpenSim"/>
 
 		</panel>
 	</tab_container>
