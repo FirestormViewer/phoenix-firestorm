@@ -711,7 +711,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
          right="-1"
          top="0">
             <panel
-             class="panel_people_contacts_sidetray"
              height="383"
              name="panel_people_contacts_sidetray"
              filename="panel_people_contact_sets.xml"
