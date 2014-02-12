@@ -154,13 +154,6 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndHealthReductionM" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndHealthReductionM"/>
 
-		<text tool_tip="UUID des Klangs bei einer ungültigen Aktion." name="textFSInvalidOp">
-			Ungültige Aktion:
-		</text>
-		<button label="V" name="Prev_UISndInvalidOp" tool_tip="Vorschau zu diesem Sound."/>
-		<button label="S" name="Def_UISndInvalidOp" tool_tip="Auf Standardwert zurücksetzen."/>
-		<check_box label="Abspielen" name="PlayModeUISndInvalidOp"/>
-
 		<text tool_tip="UUID des Klangs bei Geldausgang." name="textFSMoneyChangeDown">
 			Geldausgang:
 		</text>
@@ -193,6 +186,18 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="V" name="Prev_UISndNewIncomingGroupIMSession" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndNewIncomingGroupIMSession" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
+			<combo_box.item label="Bei neuer Nachr." name="1"/>
+			<combo_box.item label="Bei jeder Nachr." name="2"/>
+			<combo_box.item label="Wenn kein Fokus" name="3"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="Sound UUID played on incoming conference instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving AdHoc Instant Messages'." name="textFSNewConferenceIncomingIMSession">
+			AdHoc Instant Message:
+		</text>
+		<button label="V" name="Prev_UISndNewIncomingConfIMSession" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndNewIncomingConfIMSession" tool_tip="Auf Standardwert zurücksetzen."/>
+		<combo_box name="PlayModeUISndNewIncomingConfIMSession">
 			<combo_box.item label="Bei neuer Nachr." name="1"/>
 			<combo_box.item label="Bei jeder Nachr." name="2"/>
 			<combo_box.item label="Wenn kein Fokus" name="3"/>
@@ -418,7 +423,14 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="V" name="Prev_UISndGroupNotice" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndGroupNotice" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndGroupNotice"/>
-		
+
+		<text tool_tip="UUID des Klangs bei einer ungültigen Aktion." name="textFSInvalidOp">
+			Ungültige Aktion:
+		</text>
+		<button label="V" name="Prev_UISndInvalidOp" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndInvalidOp" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndInvalidOp"/>
+
 		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRestart">
 			Regionsneustart:
 		</text>

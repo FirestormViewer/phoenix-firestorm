@@ -487,7 +487,7 @@
              name="EnableGroupChatPopups"
              label="Group Chats"
              layout="topleft"
-             top_pad="1"
+             top_pad="0"
              left_delta="10"
              height="18"
              tool_tip="Check to see popups when a Group Chat message arrives"
@@ -517,7 +517,7 @@
              enabled_control="FSUseNearbyChatConsole"
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              left_delta="10"
              width="400"
              height="18"
@@ -529,7 +529,7 @@
              enabled_control="FSUseNearbyChatConsole"
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              width="400"
              height="18"
              name="FSLogGroupImToChatConsole"
@@ -572,7 +572,7 @@
 			<check_box
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              width="400"
              height="18"
              name="FSShowIMInChatHistory"
@@ -582,7 +582,7 @@
              enabled_control="FSShowIMInChatHistory"
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              left_delta="10"
              width="155"
              height="18"
@@ -590,7 +590,7 @@
              control_name="FSLogIMInChatHistory"
              label="Save IMs in nearby chat"/>
             <text
-             top_pad="1"
+             top_pad="0"
              follows="left|top"
              height="15"
              left="44"
@@ -626,7 +626,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              width="400"
              height="18"
              name="FSIMChatFlashOnFriendStatusChange"
@@ -636,7 +636,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              width="400"
              height="18"
              name="FSNotifyNearbyChatFlash"
@@ -647,7 +647,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              width="400"
              height="18"
              name="FSNotifyIMFlash"
@@ -658,7 +658,7 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              width="400"
              height="18"
              name="FSReportMutedGroupChat"
@@ -672,7 +672,7 @@
              height="20"
              name="WhenPlayIMLabel"
              width="220"
-             top_pad="15">
+             top_pad="10">
               When receiving Instant Messages:
             </text>
             <combo_box
@@ -708,7 +708,7 @@
              height="20"
              name="WhenPlayGroupIMLabel"
              width="220"
-             top_pad="5">
+             top_pad="3">
               When receiving Group Instant Messages:
             </text>
             <combo_box
@@ -737,10 +737,46 @@
                  value="0"/>
             </combo_box>
 
+            <text
+             follows="left|top"
+             layout="topleft"
+             left="30"
+             height="20"
+             name="WhenPlayConfIMLabel"
+             width="220"
+             top_pad="3">
+              When receiving AdHoc Instant Messages:
+            </text>
+            <combo_box
+             left_pad="5"
+             top_delta="-3"
+             height="20"
+             layout="topleft"
+             control_name="PlayModeUISndNewIncomingConfIMSession"
+             name="WhenPlayConfIM"
+             width="245">
+                <combo_box.item
+                 label="Play sound only on new IM session"
+                 name="1"
+                 value="1"/>
+                <combo_box.item
+                 label="Play sound on every message received"
+                 name="2"
+                 value="2"/>
+                <combo_box.item
+                 label="Play sound only if not in focus"
+                 name="3"
+                 value="3"/>
+                <combo_box.item
+                 label="Don't play any notification sound"
+                 name="0"
+                 value="0"/>
+            </combo_box>
+
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="10"
+             top_pad="8"
              left="30"
              width="400"
              height="18"
@@ -751,7 +787,7 @@
              enabled_control="FSGroupNoticesToIMLog"
              layout="topleft"
              follows="left|top"
-             top_pad="1"
+             top_pad="0"
              left_delta="10"
              width="400"
              height="18"

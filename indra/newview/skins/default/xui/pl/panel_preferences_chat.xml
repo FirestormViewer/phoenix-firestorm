@@ -116,6 +116,15 @@
 				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
 				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
 			</combo_box>
+			<text name="WhenPlayConfIMLabel">
+				Gdy nadchodzi wiadomość konferencji:
+			</text>
+			<combo_box name="WhenPlayConfIM">
+				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
+				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
+				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
+			</combo_box>
 			<check_box name="FSGroupNoticesToIMLog" label="Pokazuj ogłoszenia grup także w czatach grupowych, a nie tylko w tostach"/>
 			<check_box name="FSBetterGroupNoticesToIMLog" label="Pokazuj również ich tematy i autorów"/>
 		</panel>

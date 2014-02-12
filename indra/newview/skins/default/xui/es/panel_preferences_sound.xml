@@ -146,12 +146,6 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndHealthReductionM" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndHealthReductionM" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndHealthReductionM"/>
-			<text tool_tip="Sonido a reproducir por operaciones inválidas." name="textFSInvalidOp">
-				Operación inválida:
-			</text>
-			<button name="Prev_UISndInvalidOp" label="P" tool_tip="Probar sonido."/>
-			<button name="Def_UISndInvalidOp" label="R" tool_tip="Restablecer al UUID por defecto."/>
-			<check_box label="Reproducir" name="PlayModeUISndInvalidOp"/>
 			<text tool_tip="Sonido a reproducir al reducir el balance de L$." name="textFSMoneyChangeDown">
 				Gasto de L$:
 			</text>
@@ -181,6 +175,17 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndNewIncomingGroupIMSession" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndNewIncomingGroupIMSession" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
+				<combo_box.item label="Sólo si inicia sesión" name="1"/>
+				<combo_box.item label="En cada mensaje" name="2"/>
+				<combo_box.item label="Sólo si no tiene el foco" name="3"/>
+				<combo_box.item label="Nunca" name="0"/>
+			</combo_box>
+			<text tool_tip="Sound UUID played on incoming conference instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving AdHoc Instant Messages'." name="textFSNewConferenceIncomingIMSession">
+				AdHoc Instant Message:
+			</text>
+			<button name="Prev_UISndNewIncomingConfIMSession" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndNewIncomingConfIMSession" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<combo_box name="PlayModeUISndNewIncomingConfIMSession">
 				<combo_box.item label="Sólo si inicia sesión" name="1"/>
 				<combo_box.item label="En cada mensaje" name="2"/>
 				<combo_box.item label="Sólo si no tiene el foco" name="3"/>
@@ -372,6 +377,12 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndGroupNotice" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndGroupNotice" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndGroupNotice"/>
+			<text tool_tip="Sonido a reproducir por operaciones inválidas." name="textFSInvalidOp">
+				Operación inválida:
+			</text>
+			<button name="Prev_UISndInvalidOp" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndInvalidOp" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndInvalidOp"/>
 			<text tool_tip="Sonido a reproducir cuando se alerta de un reinicio de región." name="textFSRestart">
 				Reinicio región:
 			</text>
