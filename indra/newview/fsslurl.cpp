@@ -144,6 +144,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		// default to current
 		std::string default_grid = LLGridManager::getInstance()->getGrid();
 		mGrid = default_grid;
+		LL_DEBUGS("SLURL") << "default grid: " << default_grid << LL_ENDL;
 
 		if(slurl_uri.scheme() == LLSLURL::SLURL_SECONDLIFE_SCHEME)
 		{

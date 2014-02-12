@@ -3125,11 +3125,14 @@ bool LLAppViewer::initConfiguration()
 	if(! CmdLineLoginLocation.empty())
     {
 		start_slurl = CmdLineLoginLocation;
-		LLStartUp::setStartSLURL(start_slurl);
-		if(start_slurl.getType() == LLSLURL::LOCATION) 
-		{  
-			LLGridManager::getInstance()->setGridChoice(start_slurl.getGrid());
-    }
+		// <FS:Ansariel> FIRE-11586: Restore grid manager workaround (grid is still empty here!)
+		//LLStartUp::setStartSLURL(start_slurl);
+		//if(start_slurl.getType() == LLSLURL::LOCATION) 
+		//{  
+		//	LLGridManager::getInstance()->setGridChoice(start_slurl.getGrid());
+  //  }
+		LLStartUp::setStartSLURLString(CmdLineLoginLocation);
+		// </FS:Ansariel>
     }
 
 	// <FS:TT> Hacking to save the skin and theme for future use.
