@@ -130,6 +130,7 @@
 			%
 		</text>
 		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
+		<check_box label="Bei Regions-Neustart-Meldung Bildschirm nicht wackeln" name="FSNoScreenShakeOnRegionRestart"/>
 	</panel>
 	<!--Font-->
 	<panel label="Schrift" name="UI-font-tab">
