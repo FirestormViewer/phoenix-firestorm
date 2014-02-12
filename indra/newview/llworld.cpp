@@ -1507,7 +1507,7 @@ void process_enable_simulator(LLMessageSystem *msg, void **user_data)
 	U32 region_size_y = 256;
 
 #ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInAuroraSim())
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		msg->getU32Fast(_PREHASH_SimulatorInfo, _PREHASH_RegionSizeX, region_size_x);
 		msg->getU32Fast(_PREHASH_SimulatorInfo, _PREHASH_RegionSizeY, region_size_y);

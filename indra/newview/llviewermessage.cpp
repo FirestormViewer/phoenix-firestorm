@@ -4879,7 +4879,7 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	U32 region_size_y = 256;
 
 #ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInAuroraSim())
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		msg->getU32Fast(_PREHASH_Info, _PREHASH_RegionSizeX, region_size_x);
 		msg->getU32Fast(_PREHASH_Info, _PREHASH_RegionSizeY, region_size_y);
@@ -5269,7 +5269,7 @@ void process_crossed_region(LLMessageSystem* msg, void**)
 	U32 region_size_y = 256;
 
 #ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInAuroraSim())
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		msg->getU32(_PREHASH_RegionData, _PREHASH_RegionSizeX, region_size_x);
 		msg->getU32(_PREHASH_RegionData, _PREHASH_RegionSizeY, region_size_y);
