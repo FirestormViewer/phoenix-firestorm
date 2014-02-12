@@ -11575,14 +11575,6 @@ AntiSpam: Blocked [SOURCE] for sending an instant message with more than [COUNT]
 AntiSpam: Blocked [SOURCE] for sending a chat message with more than [COUNT] lines.
     </notification>
 
-    <notification
-     icon="alertmodal.tga"
-     name="MeshMaxConcurrentReqTooHigh"
-     type="alertmodal">
-The value you set for the number of concurrent requests to load mesh objects, [VALUE], is higher than the maximum of [MAX]. It has been reset to the default of [DEFAULT].
-    <tag>fail</tag>
-    </notification>
-
   <!-- <FS:Zi> Notification template for changed settings when selecting certain skins -->
   <!--         The actual texts for the messages are in strings.xml -->
   <notification

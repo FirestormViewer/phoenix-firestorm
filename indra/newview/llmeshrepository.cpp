@@ -2625,11 +2625,6 @@ void LLMeshRepository::notifyLoadedMeshes()
 	//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value
 	if ((U32)meshMaxConcurrentRequests > MESH_CONCURRENT_REQUEST_LIMIT)
 	{
-		LLSD args;
-		args["VALUE"] = llformat("%d", (U32)meshMaxConcurrentRequests);
-		args["MAX"] = llformat("%d", MESH_CONCURRENT_REQUEST_LIMIT);
-		args["DEFAULT"] = llformat("%d", MESH_CONCURRENT_REQUEST_RESET);
-		LLNotificationsUtil::add("MeshMaxConcurrentReqTooHigh", args);
 		gSavedSettings.setU32("MeshMaxConcurrentRequests",MESH_CONCURRENT_REQUEST_RESET);
 	}
 	//</FS:TS> FIRE-11451
