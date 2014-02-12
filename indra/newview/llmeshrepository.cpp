@@ -607,7 +607,7 @@ void LLMeshRepoThread::run()
 				count = 0;	
 
 				// <FS:Ansariel> Mesh header/LOD retry functionality
-				F32 curl_timeout = llmax((F32)fsMeshRequestTimeout, 150.f) + 2.f; // 150 secs minimum timeout as defined in LLCurl.cpp (30s connect, 120s operation)
+				F32 curl_timeout = llmax((F32)fsMeshRequestTimeout, 30.f) + 2.f; // 30 secs minimum timeout as defined in LLCurl.cpp
 
 				if (mMutex)
 				{
