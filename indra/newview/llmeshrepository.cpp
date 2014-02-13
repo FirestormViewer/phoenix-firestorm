@@ -1940,11 +1940,7 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 
 	if (data_size < mRequestedBytes)
 	{
-		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
-		//               not produce a request within the time that the server
-		//               was prepared to wait.)
-		//if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
-		if (status == HTTP_REQUEST_TIME_OUT || status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
+		if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
 		{ //timeout or service unavailable, try again
 			llwarns << "Timeout or service unavailable, retrying." << llendl;
 			LLMeshRepository::sHTTPRetryCount++;
@@ -2008,11 +2004,7 @@ void LLMeshSkinInfoResponder::completedRaw(U32 status, const std::string& reason
 
 	if (data_size < mRequestedBytes)
 	{
-		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
-		//               not produce a request within the time that the server
-		//               was prepared to wait.)
-		//if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
-		if (status == HTTP_REQUEST_TIME_OUT || status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
+		if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
 		{ //timeout or service unavailable, try again
 			llwarns << "Timeout or service unavailable, retrying loadMeshSkinInfo() for " << mMeshID << llendl;
 			LLMeshRepository::sHTTPRetryCount++;
@@ -2075,11 +2067,7 @@ void LLMeshDecompositionResponder::completedRaw(U32 status, const std::string& r
 
 	if (data_size < mRequestedBytes)
 	{
-		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
-		//               not produce a request within the time that the server
-		//               was prepared to wait.)
-		//if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
-		if (status == HTTP_REQUEST_TIME_OUT || status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
+		if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
 		{ //timeout or service unavailable, try again
 			llwarns << "Timeout or service unavailable, retrying loadMeshDecomposition() for " << mMeshID << llendl;
 			LLMeshRepository::sHTTPRetryCount++;
@@ -2143,11 +2131,7 @@ void LLMeshPhysicsShapeResponder::completedRaw(U32 status, const std::string& re
 
 	if (data_size < mRequestedBytes)
 	{
-		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
-		//               not produce a request within the time that the server
-		//               was prepared to wait.)
-		//if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
-		if (status == HTTP_REQUEST_TIME_OUT || status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
+		if (status == HTTP_INTERNAL_ERROR || status == HTTP_SERVICE_UNAVAILABLE)
 		{ //timeout or service unavailable, try again
 			llwarns << "Timeout or service unavailable, retrying loadMeshPhysicsShape() for " << mMeshID << llendl;
 			LLMeshRepository::sHTTPRetryCount++;
