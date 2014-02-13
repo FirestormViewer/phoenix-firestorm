@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2012, Linden Research, Inc.
+ * Copyright (C) 2012-2013, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,7 @@
 #include "llviewertexturelist.h"
 #include "llvovolume.h"
 #include "llviewerstats.h"
+#include "llmeshrepository.h"
 
 // For avatar texture view
 #include "llvoavatarself.h"
@@ -526,6 +527,8 @@ void LLGLTexMemBar::draw()
 	F32 total_texture_downloaded = (F32)gTotalTextureBytes / (1024 * 1024);
 	F32 total_object_downloaded = (F32)gTotalObjectBytes / (1024 * 1024);
 	U32 total_http_requests = LLAppViewer::getTextureFetch()->getTotalNumHTTPRequests();
+	F32 x_right = 0.0;
+	
 	//----------------------------------------------------------------------------
 	LLGLSUIDefault gls_ui;
 	LLColor4 text_color(1.f, 1.f, 1.f, 0.75f);
@@ -553,8 +556,8 @@ void LLGLTexMemBar::draw()
 	//, cache_entries, cache_max_entries
 
 	// <FS:Ansariel> Texture memory bars
-	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*4,
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*5,
+	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*5,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*6,
 	// </FS:Ansariel>
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
@@ -639,16 +642,14 @@ void LLGLTexMemBar::draw()
 					LLViewerTextureList::sNumFastCacheReads);
 					// </FS:Ansariel>
 
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*3,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*4,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
-	// <FS:Ansariel> Texture memory bars
-	//S32 left = 0 ;
 	//----------------------------------------------------------------------------
 
 	// <FS:Ansariel> Fast cache stats
-	//text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d",
-	text = llformat("Tex: %d Fetch: %d(%d) Pkts:%d(%d) CAC R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d FCA:%d",
+	//text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d ",
+	text = llformat("Tex: %d Fetch: %d(%d) Pkts:%d(%d) CAC R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d FCA:%d ",
 	// </FS:Ansariel>
 					gTextureList.getNumImages(),
 					LLAppViewer::getTextureFetch()->getNumRequests(), LLAppViewer::getTextureFetch()->getNumDeletes(),
@@ -664,12 +665,13 @@ void LLGLTexMemBar::draw()
 					gTextureList.mFastCacheList.size());
 					// </FS:Ansariel>
 
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*2,
-									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
-
+	x_right = 550.0;
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*3,
+											 text_color, LLFontGL::LEFT, LLFontGL::TOP,
+											 LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX,
+											 &x_right, FALSE);
 
 	// <FS:Ansariel> Move BW figures further to the right to prevent overlapping
-	//left = 550;
 	left = 575;
 	F32 bandwidth = LLAppViewer::getTextureFetch()->getTextureBandwidth();
 	// <FS:Ansariel> Speed-up
@@ -677,12 +679,22 @@ void LLGLTexMemBar::draw()
 	static LLCachedControl<F32> throttleBandwidthKBPS(gSavedSettings, "ThrottleBandwidthKBPS");
 	F32 max_bandwidth = F32(throttleBandwidthKBPS);
 	// </FS:Ansariel> Speed-up
-	color = bandwidth > max_bandwidth ? LLColor4::red : bandwidth > max_bandwidth*.75f ? LLColor4::yellow : text_color;
+	color = bandwidth > max_bandwidth ? LLColor4::red : bandwidth > max_bandwidth * .75f ? LLColor4::yellow : text_color;
 	color[VALPHA] = text_color[VALPHA];
-	text = llformat("BW:%.0f/%.0f",bandwidth, max_bandwidth);
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*2,
+	text = llformat("BW:%.0f/%.0f", bandwidth, max_bandwidth);
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, x_right, v_offset + line_height*3,
 											 color, LLFontGL::LEFT, LLFontGL::TOP);
-	
+
+	// Mesh status line
+	text = llformat("Mesh: Reqs(Tot/Htp/Big): %u/%u/%u Rtr/Err: %u/%u Cread/Cwrite: %u/%u Low/At/High: %d/%d/%d",
+					LLMeshRepository::sMeshRequestCount, LLMeshRepository::sHTTPRequestCount, LLMeshRepository::sHTTPLargeRequestCount,
+					LLMeshRepository::sHTTPRetryCount, LLMeshRepository::sHTTPErrorCount,
+					LLMeshRepository::sCacheReads, LLMeshRepository::sCacheWrites,
+					LLMeshRepoThread::sRequestLowWater, LLMeshRepoThread::sRequestWaterLevel, LLMeshRepoThread::sRequestHighWater);
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*2,
+											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+
+	// Header for texture table columns
 	S32 dx1 = 0;
 	if (LLAppViewer::getTextureFetch()->mDebugPause)
 	{
@@ -726,8 +738,8 @@ LLRect LLGLTexMemBar::getRequiredRect()
 {
 	LLRect rect;
 	// <FS:Ansariel> Texture memory bars
-	//rect.mTop = 50; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
-	rect.mTop = 65;
+	//rect.mTop = 68; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
+	rect.mTop = 83;
 	// </FS:Ansariel>
 	return rect;
 }
