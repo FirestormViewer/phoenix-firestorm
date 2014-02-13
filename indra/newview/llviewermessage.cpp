@@ -3553,7 +3553,11 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		}
 		else
 		{
-			gIMMgr->addMessage(session_id, from_id, name, message);
+			// <FS:Ansariel> FIRE-12908: Add busy response indicator back to busy messages
+			//gIMMgr->addMessage(session_id, from_id, name, message);
+			buffer = llformat("(%s): %s", LLTrans::getString("BusyResponse").c_str(), message.c_str());
+			gIMMgr->addMessage(session_id, from_id, name, buffer);
+			// </FS:Ansariel>
 		}
 		break;
 		
