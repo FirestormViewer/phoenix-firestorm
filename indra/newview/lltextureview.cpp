@@ -565,7 +565,7 @@ void LLGLTexMemBar::draw()
 	S32 bar_left = 0;
 	S32 bar_width = 200;
 	S32 bar_space = 32;
-	S32 top = line_height*4 - 2 + v_offset;
+	S32 top = line_height*5 - 2 + v_offset;
 	S32 bottom = top - 6;
 	S32 left = bar_left;
 	S32 right = left + bar_width;
@@ -577,7 +577,7 @@ void LLGLTexMemBar::draw()
 		
 	left = bar_left;
 	text = "GL";
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*4,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*5,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 	
 	left = bar_left+20;
@@ -605,7 +605,7 @@ void LLGLTexMemBar::draw()
 
 	left = bar_left;
 	text = "Bound";
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*4,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*5,
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 	left = bar_left + 42;
 	right = left + bar_width;
