@@ -120,6 +120,7 @@
         </text>
         <slider label="Szerokość tosta czatu:" tool_tip="Szerokość tosta czatu lokalnego ustalana procentowo do szerokości ekranu" name="NearbyToastWidth" />
         <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
+        <check_box label="Nowy sposób powiadamiania o restarcie regionu" name="FSUseNewRegionRestartNotification" />
         <check_box label="Nie trzęś moim ekranem, gdy pojawia się informacja o restarcie regionu" name="FSNoScreenShakeOnRegionRestart" />
     </panel>
     <panel label="Czcionka" name="UI-font-tab">
