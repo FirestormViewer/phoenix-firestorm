@@ -7291,6 +7291,14 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				seconds = static_cast<S32>(llsdBlock["SECONDS"].asInteger());
 			}
 
+			// <FS:Ansariel> Optional new region restart notification
+			if (!gSavedSettings.getBOOL("FSUseNewRegionRestartNotification"))
+			{
+				notificationID += "Toast";
+			}
+			else
+			{
+			// </FS:Ansariel>
 			LLFloaterRegionRestarting* floaterp = LLFloaterReg::findTypedInstance<LLFloaterRegionRestarting>("region_restarting");
 
 			if (floaterp)
@@ -7308,6 +7316,9 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 					restarting_floater->center();
 				}
 			}
+			// <FS:Ansariel> Optional new region restart notification
+			}
+			// </FS:Ansariel>
 
 			// <FS:Ansariel> Only play when we want
 			//send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
@@ -7469,38 +7480,55 @@ void process_alert_core(const std::string& message, BOOL modal)
 			LLStringUtil::convertToS32(text.substr(18), mins);
 			seconds = mins * 60;
 			is_region_restart = true;
+
+			if (!gSavedSettings.getBOOL("FSUseNewRegionRestartNotification"))
+			{
+				LLSD args;
+				args["MINUTES"] = llformat("%d", mins);
+				LLNotificationsUtil::add("RegionRestartMinutesToast", args);
+			}
 		}
 		else if (text.substr(0,17) == "RESTART_X_SECONDS")
 		{
 			LLStringUtil::convertToS32(text.substr(18), seconds);
 			is_region_restart = true;
+
+			if (!gSavedSettings.getBOOL("FSUseNewRegionRestartNotification"))
+			{
+				LLSD args;
+				args["SECONDS"] = llformat("%d", seconds);
+				LLNotificationsUtil::add("RegionRestartSecondsToast", args);
+			}
 		}
 		if (is_region_restart)
 		{
-			LLFloaterRegionRestarting* floaterp = LLFloaterReg::findTypedInstance<LLFloaterRegionRestarting>("region_restarting");
+			if (gSavedSettings.getBOOL("FSUseNewRegionRestartNotification"))
+			{
+				LLFloaterRegionRestarting* floaterp = LLFloaterReg::findTypedInstance<LLFloaterRegionRestarting>("region_restarting");
 
-			if (floaterp)
-			{
-				LLFloaterRegionRestarting::updateTime(seconds);
-			}
-			else
-			{
-				std::string region_name;
-				if (gAgent.getRegion())
+				if (floaterp)
 				{
-					region_name = gAgent.getRegion()->getName();
+					LLFloaterRegionRestarting::updateTime(seconds);
 				}
 				else
 				{
-					region_name = LLTrans::getString("Unknown");
-				}
-				LLSD params;
-				params["NAME"] = region_name;
-				params["SECONDS"] = (LLSD::Integer)seconds;
-				LLFloaterRegionRestarting* restarting_floater = dynamic_cast<LLFloaterRegionRestarting*>(LLFloaterReg::showInstance("region_restarting", params));
-				if(restarting_floater)
-				{
-					restarting_floater->center();
+					std::string region_name;
+					if (gAgent.getRegion())
+					{
+						region_name = gAgent.getRegion()->getName();
+					}
+					else
+					{
+						region_name = LLTrans::getString("Unknown");
+					}
+					LLSD params;
+					params["NAME"] = region_name;
+					params["SECONDS"] = (LLSD::Integer)seconds;
+					LLFloaterRegionRestarting* restarting_floater = dynamic_cast<LLFloaterRegionRestarting*>(LLFloaterReg::showInstance("region_restarting", params));
+					if(restarting_floater)
+					{
+						restarting_floater->center();
+					}
 				}
 			}
 
