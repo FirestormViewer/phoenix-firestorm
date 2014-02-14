@@ -4314,6 +4314,13 @@
                  function="ToggleControl"
                  parameter="DebugViews" />
             </menu_item_check>
+            <menu_item_call
+             label="XUI Preview Tool"
+             name="UI Preview Tool">
+                <menu_item_call.on_click
+                 function="Floater.Toggle"
+                 parameter="ui_preview" />
+            </menu_item_call>
           <menu_item_call
            label="Send Test IMs"
            name="Send Test IMs">

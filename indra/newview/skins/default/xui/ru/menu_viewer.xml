@@ -435,6 +435,7 @@
 			<menu_item_call label="Обновить настройки цветов" name="Reload Color Settings"/>
 			<menu_item_call label="Показать проверку шрифтов" name="Show Font Test"/>
 			<menu_item_check label="Показать имена XUI" name="Show XUI Names"/>
+			<menu_item_call label="Просмотр XUI" name="UI Preview Tool"/>
 			<menu_item_call label="Отправить тестовое сообщение" name="Send Test IMs"/>
 			<menu_item_call label="Очистить кэши имен" name="Flush Names Caches"/>
 		</menu>
