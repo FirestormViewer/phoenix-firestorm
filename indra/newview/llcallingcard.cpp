@@ -124,6 +124,7 @@ LLAvatarTracker::~LLAvatarTracker()
 {
 	deleteTrackingData();
 	std::for_each(mObservers.begin(), mObservers.end(), DeletePointer());
+	mObservers.clear();
 	std::for_each(mBuddyInfo.begin(), mBuddyInfo.end(), DeletePairedPointer());
 }
 

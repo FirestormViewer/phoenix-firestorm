@@ -81,6 +81,7 @@ LLRoleActionSet::~LLRoleActionSet()
 {
 	delete mActionSetData;
 	std::for_each(mActions.begin(), mActions.end(), DeletePointer());
+	mActions.clear();
 }
 
 //
