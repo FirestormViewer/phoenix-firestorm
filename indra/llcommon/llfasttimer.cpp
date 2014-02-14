@@ -125,6 +125,7 @@ public:
 	~NamedTimerFactory()
 	{
 		std::for_each(mTimers.begin(), mTimers.end(), DeletePairedPointer());
+		mTimers.clear();
 
 		delete mTimerRoot;
 	}
