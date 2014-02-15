@@ -3208,7 +3208,11 @@ void LLMeshRepository::notifyLoadedMeshes()
 	{
 		// GetMesh2 operation with keepalives, etc.  With pipelining,
 		// we'll increase this.
-		LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("Mesh2MaxConcurrentRequests");
+		// <FS:TM> Use faster LLCachedControls for frequently visited locations
+		//LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("Mesh2MaxConcurrentRequests");
+		static LLCachedControl<U32> mesh2MaxConcurrentRequests(gSavedSettings, "Mesh2MaxConcurrentRequests");
+		LLMeshRepoThread::sMaxConcurrentRequests = (U32)mesh2MaxConcurrentRequests;
+		// </FS:TM>
 		LLMeshRepoThread::sRequestHighWater = llclamp(5 * S32(LLMeshRepoThread::sMaxConcurrentRequests),
 													  REQUEST2_HIGH_WATER_MIN,
 													  REQUEST2_HIGH_WATER_MAX);
