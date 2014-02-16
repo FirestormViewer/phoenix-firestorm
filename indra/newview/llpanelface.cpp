@@ -1136,7 +1136,10 @@ void LLPanelFace::updateUI()
 			mCtrlBumpyScaleU->setTentative(LLSD(norm_scale_tentative));
 			
 			// <FS:CR> FIRE-11407 - Materials alignment
-			getChildView("checkbox maps sync")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()));
+			// <FS:TS> FIRE-11911 - Synchronize materials doens't work with planar textures
+			//   Disable the checkbox if planar textures are in use
+			getChildView("checkbox maps sync")->setEnabled(editable && (specmap_id.notNull() || normmap_id.notNull()) && !align_planar);
+			// </FS:TS> FIRE-11911
 			// </FS:CR>
 		}
 
@@ -2637,6 +2640,14 @@ void LLPanelFace::onClickMapsSync(LLUICtrl* ctrl, void *userdata)
 //static
 void LLPanelFace::alignMaterialsProperties(LLPanelFace* self)
 {
+	// <FS:TS> FIRE-11911: Synchronize materials doesn't work with planar textures
+	//  Don't even try to do the alignment if we wind up here and planar is enabled.
+	if ((bool)self->childGetValue("checkbox planar align").asBoolean())
+	{
+		return;
+	}
+	// </FS:TS> FIRE-11911
+
 	//LLPanelFace *self = (LLPanelFace*) userdata;
 	llassert_always(self);
 	
