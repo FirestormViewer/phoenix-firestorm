@@ -40,9 +40,15 @@ if (FMODEX)
             debug fmodexL
             optimized fmodex)
       elseif (LINUX)
-        set(FMODEX_LIBRARY 
-            debug fmodexL
-            optimized fmodex)
+        if(ND_BUILD64BIT_ARCH)
+          set(FMODEX_LIBRARY
+              debug fmodexL64
+              optimized fmodex64)
+        else(ND_BUILD64BIT_ARCH)
+          set(FMODEX_LIBRARY
+              debug fmodexL
+              optimized fmodex)
+        endif(ND_BUILD64BIT_ARCH)
       endif (WINDOWS)
       set(FMODEX_LIBRARIES ${FMODEX_LIBRARY})
       set(FMODEX_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/fmodex)
