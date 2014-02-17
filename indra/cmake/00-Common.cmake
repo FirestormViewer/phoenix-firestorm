@@ -338,8 +338,9 @@ if (STANDALONE)
 
 else (STANDALONE)
   set(${ARCH}_linux_INCLUDES
-      ELFIO
       atk-1.0
+      cairo
+      freetype
       glib-2.0
       gstreamer-0.10
       gtk-2.0
