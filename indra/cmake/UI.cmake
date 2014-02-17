@@ -59,7 +59,7 @@ else (STANDALONE)
                    NO_DEFAULT_PATH
                    )
       set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_${libname}})
-    endforeach(uilibname)
+    endforeach(libname)
     set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
   endif (LINUX)
 
