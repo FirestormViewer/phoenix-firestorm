@@ -805,7 +805,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 		return;
 	}
 	
-	if (mFilterLocked && !objectp->flagObjectPermanent())
+	if (mFilterLocked && (details.owner_mask & PERM_MOVE))
 	{
 		return;
 	}
