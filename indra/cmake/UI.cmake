@@ -40,7 +40,6 @@ else (STANDALONE)
         gdk-x11-2.0
         gdk_pixbuf-2.0
         glib-2.0
-        gio-2.0
         gmodule-2.0
         gobject-2.0
         gthread-2.0
@@ -60,6 +59,18 @@ else (STANDALONE)
                    )
       set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_${libname}})
     endforeach(libname)
+
+    if (ND_BUILD64BIT_ARCH)
+      find_library(UI_LIB_gio-2.0
+                   NAMES gio-2.0
+                   PATHS
+                     debug ${LIBS_PREBUILT_DIR}/lib/debug
+                     optimized ${LIBS_PREBUILT_DIR}/lib/release
+                   NO_DEFAULT_PATH
+                   )
+      set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_gio-2.0})
+    endif(ND_BUILD64BIT_ARCH)
+
     set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
   endif (LINUX)
 
