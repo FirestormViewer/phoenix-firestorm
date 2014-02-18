@@ -140,6 +140,10 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 	{
 		avatars = LGGContactSets::getInstance()->getListOfPseudonymAvs();
 	}
+	else if (contact_set == CS_SET_EXTRA_AVS)
+	{
+		avatars = LGGContactSets::getInstance()->getListOfNonFriends();
+	}
 	else if (!LGGContactSets::getInstance()->isInternalSetName(contact_set))
 	{
 		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);	// UGLY!
@@ -202,6 +206,7 @@ void FSPanelContactSets::refreshContactSets()
 	mContactSetCombo->add(getString("all_sets"), LLSD(CS_SET_ALL_SETS), ADD_BOTTOM);
 	mContactSetCombo->add(getString("no_sets"), LLSD(CS_SET_NO_SETS), ADD_BOTTOM);
 	mContactSetCombo->add(getString("pseudonyms"), LLSD(CS_SET_PSEUDONYM), ADD_BOTTOM);
+	mContactSetCombo->add(getString("non_friends"), LLSD(CS_SET_EXTRA_AVS), ADD_BOTTOM);
 	resetControls();
 }
 
