@@ -2017,8 +2017,18 @@ void LLFloaterPreference::onClickLogPath()
 //[FIX FIRE-2765 : SJ] Making sure Reset button resets the chatlogdirectory to the default setting
 void LLFloaterPreference::onClickResetLogPath()
 {
-	gDirUtilp->setChatLogsDir(gDirUtilp->getOSUserAppDir());
-	gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
+	// <FS:Ansariel> FIRE-12955: Logs don't get moved when clicking reset log path button
+	//gDirUtilp->setChatLogsDir(gDirUtilp->getOSUserAppDir());
+	//gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
+
+	mPriorInstantMessageLogPath = gDirUtilp->getChatLogsDir();
+	gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getOSUserAppDir());
+
+	// enable/disable 'Delete transcripts button
+	updateDeleteTranscriptsButton();
+
+	getChildView("reset_logpath")->setEnabled(FALSE);
+	// </FS:Ansariel>
 }
 
 bool LLFloaterPreference::moveTranscriptsAndLog()
