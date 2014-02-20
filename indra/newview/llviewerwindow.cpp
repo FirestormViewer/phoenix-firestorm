@@ -1979,24 +1979,24 @@ void LLViewerWindow::initBase()
 
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
-	for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; ++i)
-	{
-		LLToolBar * toolbarp = gToolBarView->getToolbar((LLToolBarEnums::EToolBarLocation)i);
-		if (toolbarp)
-		{
-			toolbarp->getCenterLayoutPanel()->setReshapeCallback(boost::bind(&LLFloaterView::setToolbarRect, gFloaterView, _1, _2));
-		}
-	}
+	//for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; ++i)
+	//{
+	//	LLToolBar * toolbarp = gToolBarView->getToolbar((LLToolBarEnums::EToolBarLocation)i);
+	//	if (toolbarp)
+	//	{
+	//		toolbarp->getCenterLayoutPanel()->setReshapeCallback(boost::bind(&LLFloaterView::setToolbarRect, gFloaterView, _1, _2));
+	//	}
+	//}
 	gFloaterView->setFloaterSnapView(main_view->getChild<LLView>("floater_snap_region")->getHandle());
 	gSnapshotFloaterView = main_view->getChild<LLSnapshotFloaterView>("Snapshot Floater View");
 
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
-	LLLayoutPanel* chatbar_panel = dynamic_cast<LLLayoutPanel*>(gToolBarView->getChildView("default_chat_bar")->getParent());
-	if (chatbar_panel)
-	{
-		chatbar_panel->setReshapeCallback(boost::bind(&LLFloaterView::setMainChatbarRect, gFloaterView, _1, _2));
-		gFloaterView->setMainChatbarRect(chatbar_panel, chatbar_panel->getRect());
-	}
+	//LLLayoutPanel* chatbar_panel = dynamic_cast<LLLayoutPanel*>(gToolBarView->getChildView("default_chat_bar")->getParent());
+	//if (chatbar_panel)
+	//{
+	//	chatbar_panel->setReshapeCallback(boost::bind(&LLFloaterView::setMainChatbarRect, gFloaterView, _1, _2));
+	//	gFloaterView->setMainChatbarRect(chatbar_panel, chatbar_panel->getRect());
+	//}
 	// </FS:Ansariel>
 
 	// optionally forward warnings to chat console/chat floater
