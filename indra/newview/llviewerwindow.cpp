@@ -1979,7 +1979,10 @@ void LLViewerWindow::initBase()
 
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
-	for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; ++i)
+	// <FS:Ansariel> Memory corruption crash at login/logout
+	//for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; ++i)
+	for (S32 i = LLToolBarEnums::TOOLBAR_FIRST; i < LLToolBarEnums::TOOLBAR_LAST; ++i)
+	// </FS:Ansariel>
 	{
 		LLToolBar * toolbarp = gToolBarView->getToolbar((LLToolBarEnums::EToolBarLocation)i);
 		if (toolbarp)

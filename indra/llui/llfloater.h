@@ -595,7 +595,12 @@ private:
 	void hiddenFloaterClosed(LLFloater* floater);
 
 	LLRect				mLastSnapRect;
-	LLRect				mToolbarRects[LLToolBarEnums::TOOLBAR_COUNT];
+	// <FS:Ansariel> Memory corruption crash at login/logout
+	//LLRect				mToolbarRects[LLToolBarEnums::TOOLBAR_COUNT];
+	LLRect			mToolbarLeftRect;
+	LLRect			mToolbarRightRect;
+	LLRect			mToolbarBottomRect;
+	// </FS:Ansariel>
 	LLHandle<LLView>	mSnapView;
 	BOOL			mFocusCycleMode;
 	S32				mSnapOffsetBottom;
