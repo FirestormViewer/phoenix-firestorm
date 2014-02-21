@@ -384,10 +384,6 @@ void LLView::removeChild(LLView* child)
 	if (child->mParentView == this) 
 	{
 		// if we are removing an item we are currently iterating over, that would be bad
-		if (child->mInDraw)
-		{
-			llinfos << "LOGINCRASH: Removing child while in draw. child name = \"" << child->mName << "\"" << llendl;
-		}
 		llassert(child->mInDraw == false);
 		mChildList.remove( child );
 		child->mParentView = NULL;

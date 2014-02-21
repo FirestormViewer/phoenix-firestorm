@@ -131,8 +131,6 @@ void LLChannelManager::onLoginCompleted()
 	}
 	else
 	{
-		llinfos << "LOGINCRASH: Away notifications init" << llendl;
-
 		// create a channel for the StartUp Toast
 		LLScreenChannelBase::Params p;
 		p.id = LLUUID(gSavedSettings.getString("StartUpChannelUUID"));
@@ -141,28 +139,21 @@ void LLChannelManager::onLoginCompleted()
 
 		if(!mStartUpChannel)
 		{
-			llinfos << "LOGINCRASH: No startup channel" << llendl;
 			onStartUpToastClose();
 		}
 		else
 		{
-			llinfos << "LOGINCRASH: Add startup channel" << llendl;
 			gViewerWindow->getRootView()->addChild(mStartUpChannel);
 
 			// init channel's position and size
-			llinfos << "LOGINCRASH: Calculate channel rect" << llendl;
 			S32 channel_right_bound = gViewerWindow->getWorldViewRectScaled().mRight - gSavedSettings.getS32("NotificationChannelRightMargin"); 
 			S32 channel_width = gSavedSettings.getS32("NotifyBoxWidth");
-			llinfos << "LOGINCRASH: Startup channel init" << llendl;
 			mStartUpChannel->init(channel_right_bound - channel_width, channel_right_bound);
-			llinfos << "LOGINCRASH: Startup channel set mouse down callback" << llendl;
 			mStartUpChannel->setMouseDownCallback(boost::bind(&LLNotificationWellWindow::onStartUpToastClick, LLNotificationWellWindow::getInstance(), _2, _3, _4));
 
 			mStartUpChannel->setCommitCallback(boost::bind(&LLChannelManager::onStartUpToastClose, this));
-			llinfos << "LOGINCRASH: Startup channel create toast" << llendl;
 			mStartUpChannel->createStartUpToast(away_notifications, gSavedSettings.getS32("StartUpToastLifeTime"));
 		}
-		llinfos << "LOGINCRASH: Away notifications done" << llendl;
 	}
 
 	LLPersistentNotificationStorage::getInstance()->loadNotifications();
