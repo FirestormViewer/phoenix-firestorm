@@ -1994,7 +1994,7 @@ void LLViewerWindow::initBase()
 	LLLayoutPanel* chatbar_panel = dynamic_cast<LLLayoutPanel*>(gToolBarView->getChildView("default_chat_bar")->getParent());
 	if (chatbar_panel)
 	{
-		chatbar_panel->setReshapeCallback(boost::bind(&LLFloaterView::setMainChatbarRect, gFloaterView, _1, _2));
+		chatbar_panel->setReshapePanelCallback(boost::bind(&LLFloaterView::setMainChatbarRect, gFloaterView, _1, _2));
 		gFloaterView->setMainChatbarRect(chatbar_panel, chatbar_panel->getRect());
 	}
 	// </FS:Ansariel>
