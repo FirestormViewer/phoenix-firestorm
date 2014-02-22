@@ -21,6 +21,10 @@
      name="pseudonyms">
     Aliases
     </panel.string>
+    <panel.string
+     name="non_friends">
+    Non-Friends
+    </panel.string>
     <combo_box
      follows="left|top|right"
      layout="topleft"

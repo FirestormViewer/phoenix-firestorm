@@ -2898,6 +2898,14 @@ Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 		Restart regionu "[NAME]" za [SECONDS] sek.
 Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 	</notification>
+	<notification name="RegionRestartMinutesToast">
+		Region "[NAME]" zostanie zrestartowany za [MINUTES] minut.
+Jeśli w nim zostaniesz, to symulator Cię wyloguje.
+	</notification>
+	<notification name="RegionRestartSecondsToast">
+		Region "[NAME]" zostanie zrestartowany za [SECONDS] sekund.
+Jeśli w nim zostaniesz, to symulator Cię wyloguje.
+	</notification>
 	<notification name="LoadWebPage">
 		Załadować stronę [URL] ?
 

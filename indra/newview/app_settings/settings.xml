@@ -17032,7 +17032,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>-1.0</real>
+      <real>60.0</real>
     </map>
     <key>ForcePeriodicRenderingTime</key>
     <map>
@@ -21953,6 +21953,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <map>
       <key>Comment</key>
       <string>Don't shake my screen when region restart alert message is shown</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSUseNewRegionRestartNotification</key>
+      <map>
+      <key>Comment</key>
+      <string>Use the new region restart notification instead of the old one with toasts</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSLimitFramerate</key>
+      <map>
+      <key>Comment</key>
+      <string>Enable framerate limitation defined by MaxFPS</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

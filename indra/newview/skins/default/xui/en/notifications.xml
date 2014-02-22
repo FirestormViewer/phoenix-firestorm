@@ -7389,6 +7389,24 @@ If you stay in this region when it shuts down, you will be logged out.
 
   <notification
    icon="notify.tga"
+   name="RegionRestartMinutesToast"
+   priority="high"
+   type="notify">
+The region "[NAME]" will restart in [MINUTES] minutes.
+If you stay in this region when it shuts down, you will be logged out.
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="RegionRestartSecondsToast"
+   priority="high"
+   type="notify">
+The region "[NAME]" will restart in [SECONDS] seconds.
+If you stay in this region when it shuts down, you will be logged out.
+  </notification>
+
+  <notification
+   icon="notify.tga"
    name="LoadWebPage"
    show_toast="false"
    type="notify">

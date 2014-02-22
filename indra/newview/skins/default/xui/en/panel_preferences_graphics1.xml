@@ -1150,7 +1150,34 @@
          name="RenderUnloadedAvatars"
          top_pad="2"
          width="256"/>
-      
+        <check_box
+         control_name="FSLimitFramerate"
+         height="16"
+         initial_value="true"
+         label="Limit Framerate"
+         layout="topleft"
+         left_delta="0"
+         name="FSLimitFramerate"
+         top_pad="2"
+         width="256"/>
+        <slider
+         enabled_control="FSLimitFramerate"
+         control_name="MaxFPS"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="FPS:"
+         label_width="30"
+         layout="topleft"
+         max_val="120"
+         min_val="15"
+         name="MaxFPS"
+         left_delta="240"
+         mouse_opaque="true"
+         show_text="true"
+         width="200" />
+
         <slider
          control_name="PrecachingDelay"
          decimal_digits="0"

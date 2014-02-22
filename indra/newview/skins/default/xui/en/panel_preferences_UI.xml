@@ -849,11 +849,21 @@
        top_pad="10"
        width="256" />
       <check_box
+       control_name="FSUseNewRegionRestartNotification"
+       height="16"
+       label="Use new region restart notification"
+       layout="topleft"
+       left="10"
+       name="FSUseNewRegionRestartNotification"
+       top_pad="5"
+       width="256" />
+      <check_box
+       enabled_control="FSUseNewRegionRestartNotification"
        control_name="FSNoScreenShakeOnRegionRestart"
        height="16"
        label="Don't shake my screen when region restart alert message is shown"
        layout="topleft"
-       left="10"
+       left="15"
        name="FSNoScreenShakeOnRegionRestart"
        top_pad="5"
        width="256" />

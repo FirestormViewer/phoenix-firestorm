@@ -1643,8 +1643,8 @@ Sender von eingehenden Instant Messages erhalten jetzt die konfigurierte automat
 	</notification>
 	<notification name="AutorespondNonFriendsModeSet">
 		Automatische Antwort für Nicht-Freunde eingeschaltet.
-		<usetemplate ignoretext="Wenn die automatische Antwort für Nicht-Freunde eingeschaltet wird." name="okignore" yestext="OK"/>
 Eingehende Instant Messages von Personen, die sich nicht auf der Freundesliste befinden, werden jetzt mit der konfigurierten automatische Nachricht beantwortet.
+		<usetemplate ignoretext="Wenn die automatische Antwort für Nicht-Freunde eingeschaltet wird." name="okignore" yestext="OK"/>
 	</notification>
 	<notification name="RejectTeleportOffersModeSet">
 		Abweisen von Teleport-Angeboten und -Anforderungen ist eingeschaltet.
@@ -2879,6 +2879,14 @@ In Ihrem Inventar wird ein Lesezeichen erstellt, damit Sie diesem Einwohner schn
     Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
   </notification>
 	<notification name="RegionRestartSeconds">
+    Die Region „[NAME]“ wird in [SECONDS] Sekunden neu gestartet.
+    Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
+  </notification>
+	<notification name="RegionRestartMinutesToast">
+    Die Region „[NAME]“ wird in [MINUTES] Minuten neu gestartet.
+    Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
+  </notification>
+	<notification name="RegionRestartSecondsToast">
     Die Region „[NAME]“ wird in [SECONDS] Sekunden neu gestartet.
     Wenn Sie in dieser Region bleiben, werden Sie abgemeldet.
   </notification>
