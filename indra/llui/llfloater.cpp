@@ -1417,7 +1417,8 @@ void LLFloater::setFocus( BOOL b )
 
 		// <FS:ND/> Don't use C-cast to cast between objects.
 		// if (!getHost() && !((LLFloaterView*)getParent())->getCycleMode())
-		if (!getHost() && ! static_cast<LLFloaterView*>(getParent())->getCycleMode() )
+		LLFloaterView *pParent = dynamic_cast<LLFloaterView*>(getParent());
+		if (!getHost() && pParent && !pParent->getCycleMode() )
 		{
 			if (!isFrontmost())
 			{
@@ -1689,7 +1690,7 @@ void LLFloater::bringToFront( S32 x, S32 y )
 		{
 			// <FS:ND/> Don't use C-cast to cast between objects.
 			// LLFloaterView* parent = (LLFloaterView*) getParent();
-			LLFloaterView* parent = static_cast<LLFloaterView*>( getParent() );
+			LLFloaterView* parent = dynamic_cast<LLFloaterView*>( getParent() );
 
 			if (parent)
 			{
@@ -1732,7 +1733,9 @@ void LLFloater::setFrontmost(BOOL take_focus)
 
 		// <FS:ND/> Don't use C-cast to cast between objects.
 		// ((LLFloaterView*)getParent())->bringToFront(this, take_focus);
-		static_cast<LLFloaterView*>(getParent())->bringToFront(this, take_focus);
+		LLFloaterView* pView = dynamic_cast<LLFloaterView*>(getParent());
+		if( pView )
+			pView->bringToFront(this, take_focus);
 
 		// Make sure to set the appropriate transparency type (STORM-732).
 		updateTransparency(hasFocus() || getIsChrome() ? TT_ACTIVE : TT_INACTIVE);
