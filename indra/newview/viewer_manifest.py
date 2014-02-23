@@ -1213,45 +1213,39 @@ class LinuxManifest(ViewerManifest):
         
         if self.is_packaging_viewer():
           if self.prefix("../packages/lib/release", dst="lib"):
-            self.path("libapr-1.so")
-            self.path("libapr-1.so.0")
-            self.path("libapr-1.so.0.4.5")
-            self.path("libaprutil-1.so")
-            self.path("libaprutil-1.so.0")
-            self.path("libaprutil-1.so.0.4.1")
-            self.path("libboost_context-mt.so.*")
-            self.path("libboost_filesystem-mt.so.*")
-            self.path("libboost_program_options-mt.so.*")
-            self.path("libboost_regex-mt.so.*")
-            self.path("libboost_signals-mt.so.*")
-            self.path("libboost_system-mt.so.*")
-            self.path("libboost_thread-mt.so.*")
-            self.path("libboost_chrono-mt.so.*") #<FS:TM> FS spcific
-            self.path("libboost_date_time-mt.so.*") #<FS:TM> FS spcific
-            self.path("libboost_wave-mt.so.*") #<FS:TM> FS spcific
-            self.path("libcollada14dom.so")
-            self.path("libdb*.so")
-            self.path("libcrypto.so.*")
-            self.path("libexpat.so.*")
-            self.path("libssl.so.1.0.0")
+            self.path("libapr-1.so*")
+            self.path("libaprutil-1.so*")
+            self.path("libboost_context-mt.so*")
+            self.path("libboost_filesystem-mt.so*")
+            self.path("libboost_program_options-mt.so*")
+            self.path("libboost_regex-mt.so*")
+            self.path("libboost_signals-mt.so*")
+            self.path("libboost_system-mt.so*")
+            self.path("libboost_thread-mt.so*")
+            self.path("libboost_chrono-mt.so*") #<FS:TM> FS spcific
+            self.path("libboost_date_time-mt.so*") #<FS:TM> FS spcific
+            self.path("libboost_wave-mt.so*") #<FS:TM> FS spcific
+            self.path("libcollada14dom.so*")
+            self.path("libdb*.so*")
+            self.path("libcrypto.so*")
+            self.path("libexpat.so*")
+            self.path("libssl.so*")
             self.path("libGLOD.so")
             self.path("libminizip.so")
             self.path("libuuid.so*")
-            self.path("libSDL-1.2.so.*")
-            self.path("libdirectfb-1.*.so.*")
-            self.path("libfusion-1.*.so.*")
-            self.path("libdirect-1.*.so.*")
+            self.path("libSDL-1.2.so*")
+            self.path("libdirectfb*.so*")
+            self.path("libfusion*.so*")
+            self.path("libdirect*.so*")
             self.path("libopenjpeg.so*")
-            self.path("libdirectfb-1.4.so.5")
-            self.path("libfusion-1.4.so.5")
-            self.path("libdirect-1.4.so.5*")
             self.path("libhunspell-1.3.so*")
-            self.path("libalut.so")
+            self.path("libalut.so*")
             self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
             self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
-            self.path("libopenal.so", "libopenal.so.1")
+            self.path("libopenal.so*")
             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
             self.path("libpangox-1.0.so*")
+
             # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
             # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
             # and libfontconfig.so. Before we added support for library-file
@@ -1270,6 +1264,7 @@ class LinuxManifest(ViewerManifest):
             # previous call did, without having to explicitly state the
             # version number.
             self.path("libfontconfig.so.*.*")
+
             try:
                 self.path("libtcmalloc.so*") #formerly called google perf tools
                 pass
@@ -1374,21 +1369,19 @@ class Linux_i686_Manifest(LinuxManifest):
 
             self.end_prefix("lib")
 
-            self.prefix(src="../packages/lib/release/x86", dst="lib")
-
-            try:
-                self.path("libLeap.so")
-            except:
-                print "Leap Motion library not found"
-
-            self.end_prefix("lib")
+          self.prefix(src="../packages/lib/release/x86", dst="lib")
+          try:
+              self.path("libLeap.so")
+          except:
+              print "Leap Motion library not found"
+          self.end_prefix("lib")
 
 
 class Linux_x86_64_Manifest(LinuxManifest):
     def construct(self):
         super(Linux_x86_64_Manifest, self).construct()
 
-        if self.is_packaging_viewer():        
+        if self.is_packaging_viewer():
           if self.prefix("../packages/lib/release", dst="lib"):
 
             # vivox 32-bit hack.
@@ -1405,6 +1398,13 @@ class Linux_x86_64_Manifest(LinuxManifest):
                     pass
 
             self.end_prefix("lib")
+
+          self.prefix(src="../packages/lib/release/x64", dst="lib")
+          try:
+              self.path("libLeap.so")
+          except:
+              print "Leap Motion library not found"
+          self.end_prefix("lib")
 
         # support file for valgrind debug tool
         self.path("secondlife-i686.supp")
