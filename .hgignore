@@ -91,3 +91,4 @@ glob:*.diff
 glob:fmod*
 syntax: regexp
 ^indra/build
+.*\.wixobj
