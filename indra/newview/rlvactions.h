@@ -79,6 +79,11 @@ public:
 	 */
 	static bool canStand();
 
+	/*
+	 * Returns true if the user can see their in-world location
+	 */
+	static bool canShowLocation();
+
 	// ================
 	// Helper functions
 	// ================

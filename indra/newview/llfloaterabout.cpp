@@ -45,8 +45,9 @@
 #include "llviewerregion.h"
 #include "llversioninfo.h"
 #include "llweb.h"
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a)
-#include "rlvhandler.h"
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0)
+#include "rlvactions.h"
+#include "rlvhelper.h"
 // [/RLVa:KB]
 
 // Linden library includes
@@ -283,8 +284,8 @@ LLSD LLFloaterAbout::getInfo()
     }
 #endif
 
-// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a) | Added: RLVa-1.2.0e
-	info["RLV_VERSION"] = (rlv_handler_t::isEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
+	info["RLV_VERSION"] = (RlvActions::isRlvEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
 // [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCurl::getVersionString();
@@ -429,7 +430,14 @@ void LLFloaterAbout::setSupportText(const std::string& server_release_notes_url)
 	support << getString("AboutHeader", args);
 	if (info.has("REGION"))
 	{
-		support << "\n\n" << getString("AboutPosition", args);
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+		support << "\n\n";
+		if (RlvActions::canShowLocation())
+			support << getString("AboutPosition", args);
+		else
+			support << RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+// [/RLVa:KB]
+//		support << "\n\n" << getString("AboutPosition", args);
 	}
 	support << "\n\n" << getString("AboutSystem", args);
 	support << "\n";
