@@ -2953,14 +2953,9 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 		}
 	}
 
-	// <FS:Ansariel> Memory corruption crash at login/logout
-	//const LLRect& left_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_LEFT];
-	//const LLRect& bottom_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_BOTTOM];
-	//const LLRect& right_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_RIGHT];
-	const LLRect& left_toolbar_rect = mToolbarLeftRect;
-	const LLRect& bottom_toolbar_rect = mToolbarBottomRect;
-	const LLRect& right_toolbar_rect = mToolbarRightRect;
-	// </FS:Ansariel>
+	const LLRect& left_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_LEFT];
+	const LLRect& bottom_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_BOTTOM];
+	const LLRect& right_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_RIGHT];
 	const LLRect& floater_rect = floater->getRect();
 
 	S32 delta_left = left_toolbar_rect.notEmpty() ? left_toolbar_rect.mRight - floater_rect.mRight : 0;
@@ -3225,23 +3220,7 @@ void LLFloaterView::setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LL
 {
 	if (tb < LLToolBarEnums::TOOLBAR_COUNT)
 	{
-		// <FS:Ansariel> Memory corruption crash at login/logout
-		//mToolbarRects[tb] = toolbar_rect;
-		switch (tb)
-		{
-			case LLToolBarEnums::TOOLBAR_LEFT:
-				mToolbarLeftRect = toolbar_rect;
-				break;
-			case LLToolBarEnums::TOOLBAR_RIGHT:
-				mToolbarRightRect = toolbar_rect;
-				break;
-			case LLToolBarEnums::TOOLBAR_BOTTOM:
-				mToolbarBottomRect = toolbar_rect;
-				break;
-			default:
-				break;
-		}
-		// </FS:Ansariel>
+		mToolbarRects[tb] = toolbar_rect;
 	}
 }
 
