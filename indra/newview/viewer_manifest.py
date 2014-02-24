@@ -764,7 +764,7 @@ class Windows_i686_Manifest(ViewerManifest):
           substitution_strings['installer_file'] = installer_file
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
                            " " + self.channel() + " " + substitution_strings[ 'version' ] +
-                           " " + settingsFile + " " + installer_file + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
+                           " " + settingsFile + " " + installer_file[:-4] + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
           
 
         self.fs_sign_win_installer( substitution_strings ) # <FS:ND/> Sign files, step two. Sign installer.
