@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?> 
+
+<Wix RequiredVersion="3.6.2830.0" xmlns="http://schemas.microsoft.com/wix/2006/wi"  xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"> 
+  <Bundle Name="Firestorm x64"
+		  Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)"
+		  Manufacturer="Phoenix Firestorm Project Inc"
+		  UpgradeCode="{32BC3287-D4C6-43AC-A98A-54BF1AFA610D}"
+		  HelpUrl="http://www.firestormviewer.org" 
+		  AboutUrl="http://www.firestormviewer.org" 
+		  Copyright="Copyright© 2014, Phoenix Firestorm Project Inc" 
+		  Condition="VersionNT >= v6.0"
+		  IconSourceFile="$(var.WIX_SOURCEDIR)\..\windows\firestorm_icon.ico"
+		  >
+
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
+      <bal:WixStandardBootstrapperApplication
+          LicenseFile="$(var.WIX_SOURCEDIR)\..\..\VivoxAUP.rtf"
+          LogoFile="$(var.WIX_SOURCEDIR)\..\windows\firestorm_icon_small.BMP"
+          />
+	</BootstrapperApplicationRef>
+
+	<!--
+    <WixVariable Id="WixStdbaLicenseUrl" Value="" /> 
+    <WixVariable Id="WixStdbaLogo" Value="Resource\logoSmall.png" /> 
+    <WixVariable Id="WixStdbaLicenseFile" Value="test.rtf" /> 
+	-->
+
+    <Variable Name="InstallFolder" Type="string" Value="[ProgramFiles64Folder]Firestorm\" /> 
+
+    <Chain> 
+	  <ExePackage
+		  Id="vcredist_x86"
+		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist_x86.exe"
+		  InstallCommand="/q"
+		  PerMachine="yes"
+		  />
+	  <ExePackage
+		  Id="vcredist_x64"
+		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist_x64.exe"
+		  InstallCommand="/q"
+		  PerMachine="yes"
+		  />
+      <MsiPackage 
+          Id="Setup" 
+          Compressed="yes" 
+          SourceFile="$(var.FS_MSI_FILE)" 
+          Vital="yes"
+		  ForcePerMachine="yes"
+		  >
+        <MsiProperty Name="INSTALLLOCATION" Value="[InstallFolder]" /> 
+      </MsiPackage> 
+    </Chain> 
+  </Bundle> 
+</Wix>
