@@ -33,12 +33,14 @@
 		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist_x86.exe"
 		  InstallCommand="/q"
 		  PerMachine="yes"
+		  Vital="no"
 		  />
 	  <ExePackage
 		  Id="vcredist_x64"
 		  SourceFile="$(var.WIX_SOURCEDIR)/vcredist_x64.exe"
 		  InstallCommand="/q"
 		  PerMachine="yes"
+		  Vital="no"
 		  />
       <MsiPackage 
           Id="Setup" 
