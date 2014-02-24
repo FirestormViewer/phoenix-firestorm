@@ -368,6 +368,9 @@ public:
 		{
 			{
 			const U32 y_inc2 = 15;
+				// <FS:Ansariel> FIRE-9746: Show FPS with DebugShowTime
+				addText(xpos, ypos, llformat("FPS: %3.1f", LLViewerStats::getInstance()->mFPSStat.getMeanPerSec())); ypos += y_inc2;
+				// </FS:Ansariel>
 				LLFrameTimer& timer = gTextureTimer;
 				F32 time = timer.getElapsedTimeF32();
 				S32 hours = (S32)(time / (60*60));
