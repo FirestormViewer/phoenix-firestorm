@@ -5134,7 +5134,7 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 				
 				LLSD args;
 				args["MESSAGE"] = completed_from;
-				LLNotificationsUtil::add("SystemMessageTip", args);
+				LLNotificationsUtil::add("ChatSystemMessageTip", args);
 			}
 			// [/FS:CR]
 			// Set the new position
