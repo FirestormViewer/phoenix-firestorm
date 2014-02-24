@@ -7322,10 +7322,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 
 			// <FS:Ansariel> Only play when we want
 			//send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
-			if (gSavedSettings.getBOOL("PlayModeUISndRestart"))
-			{
-				send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestart")), 1.0f);
-			}
+			make_ui_sound("UISndRestart");
 			// </FS:Ansariel>
 		}
 
@@ -7532,10 +7529,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 				}
 			}
 
-			if (gSavedSettings.getBOOL("PlayModeUISndRestartOpenSim"))
-			{
-				send_sound_trigger(LLUUID(gSavedSettings.getString("UISndRestartOpenSim")), 1.0f);
-			}
+			make_ui_sound("UISndRestartOpenSim");
 			return;
 		}
 		// </FS:Ansariel>
