@@ -368,6 +368,9 @@ public:
 		{
 			{
 			const U32 y_inc2 = 15;
+				// <FS:Ansariel> FIRE-9746: Show FPS with DebugShowTime
+				addText(xpos, ypos, llformat("FPS: %3.1f", LLViewerStats::getInstance()->mFPSStat.getMeanPerSec())); ypos += y_inc2;
+				// </FS:Ansariel>
 				LLFrameTimer& timer = gTextureTimer;
 				F32 time = timer.getElapsedTimeF32();
 				S32 hours = (S32)(time / (60*60));
@@ -1979,10 +1982,7 @@ void LLViewerWindow::initBase()
 
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
-	// <FS:Ansariel> Memory corruption crash at login/logout
-	//for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; ++i)
-	for (S32 i = LLToolBarEnums::TOOLBAR_FIRST; i <= LLToolBarEnums::TOOLBAR_LAST; ++i)
-	// </FS:Ansariel>
+	for (S32 i = 0; i < LLToolBarEnums::TOOLBAR_COUNT; ++i)
 	{
 		LLToolBar * toolbarp = gToolBarView->getToolbar((LLToolBarEnums::EToolBarLocation)i);
 		if (toolbarp)

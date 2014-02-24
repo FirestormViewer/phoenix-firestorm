@@ -882,7 +882,7 @@ void FSFloaterIM::draw()
 	if (mMeTyping)
 	{
 		// Send an additional Start Typing packet every ME_TYPING_TIMEOUT seconds
-		if (mMeTypingTimer.getElapsedTimeF32() > ME_TYPING_TIMEOUT && false == mShouldSendTypingState)
+		if (mMeTypingTimer.getElapsedTimeF32() > ME_TYPING_TIMEOUT && false == mShouldSendTypingState && mDialog == IM_NOTHING_SPECIAL)
 		{
 			LL_DEBUGS("TypingMsgs") << "Send additional Start Typing packet" << LL_ENDL;
 			LLIMModel::instance().sendTypingState(mSessionID, mOtherParticipantUUID, TRUE);

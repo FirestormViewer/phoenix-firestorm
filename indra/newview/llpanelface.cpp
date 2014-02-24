@@ -122,8 +122,8 @@ F32		LLPanelFace::getCurrentBumpyOffsetV()		{ return mCtrlBumpyOffsetV->getValue
 F32		LLPanelFace::getCurrentShinyRot()			{ return mCtrlShinyRot->getValue().asReal();						}
 F32		LLPanelFace::getCurrentShinyScaleU()		{ return mCtrlShinyScaleU->getValue().asReal();					}
 F32		LLPanelFace::getCurrentShinyScaleV()		{ return mCtrlShinyScaleV->getValue().asReal();					}
-F32		LLPanelFace::getCurrentShinyOffsetU()		{ return mCtrlShinyScaleU->getValue().asReal();					}
-F32		LLPanelFace::getCurrentShinyOffsetV()		{ return mCtrlShinyScaleV->getValue().asReal();					}
+F32		LLPanelFace::getCurrentShinyOffsetU()		{ return mCtrlShinyOffsetU->getValue().asReal();					}
+F32		LLPanelFace::getCurrentShinyOffsetV()		{ return mCtrlShinyOffsetV->getValue().asReal();					}
 
 // <FS:CR> UI provided diffuse parameters
 F32		LLPanelFace::getCurrentTextureRot()			{ return mCtrlTexRot->getValue().asReal();						}

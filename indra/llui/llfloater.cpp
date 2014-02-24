@@ -1414,7 +1414,11 @@ void LLFloater::setFocus( BOOL b )
 	if (b)
 	{
 		// only push focused floaters to front of stack if not in midst of ctrl-tab cycle
-		if (!getHost() && !((LLFloaterView*)getParent())->getCycleMode())
+
+		// <FS:ND/> Don't use C-cast to cast between objects.
+		// if (!getHost() && !((LLFloaterView*)getParent())->getCycleMode())
+		LLFloaterView *pParent = dynamic_cast<LLFloaterView*>(getParent());
+		if (!getHost() && pParent && !pParent->getCycleMode() )
 		{
 			if (!isFrontmost())
 			{
@@ -1684,7 +1688,10 @@ void LLFloater::bringToFront( S32 x, S32 y )
 		}
 		else
 		{
-			LLFloaterView* parent = (LLFloaterView*) getParent();
+			// <FS:ND/> Don't use C-cast to cast between objects.
+			// LLFloaterView* parent = (LLFloaterView*) getParent();
+			LLFloaterView* parent = dynamic_cast<LLFloaterView*>( getParent() );
+
 			if (parent)
 			{
 				parent->bringToFront( this );
@@ -1723,7 +1730,12 @@ void LLFloater::setFrontmost(BOOL take_focus)
 	{
 		// there are more than one floater view
 		// so we need to query our parent directly
-		((LLFloaterView*)getParent())->bringToFront(this, take_focus);
+
+		// <FS:ND/> Don't use C-cast to cast between objects.
+		// ((LLFloaterView*)getParent())->bringToFront(this, take_focus);
+		LLFloaterView* pView = dynamic_cast<LLFloaterView*>(getParent());
+		if( pView )
+			pView->bringToFront(this, take_focus);
 
 		// Make sure to set the appropriate transparency type (STORM-732).
 		updateTransparency(hasFocus() || getIsChrome() ? TT_ACTIVE : TT_INACTIVE);
@@ -2941,14 +2953,9 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 		}
 	}
 
-	// <FS:Ansariel> Memory corruption crash at login/logout
-	//const LLRect& left_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_LEFT];
-	//const LLRect& bottom_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_BOTTOM];
-	//const LLRect& right_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_RIGHT];
-	const LLRect& left_toolbar_rect = mToolbarLeftRect;
-	const LLRect& bottom_toolbar_rect = mToolbarBottomRect;
-	const LLRect& right_toolbar_rect = mToolbarRightRect;
-	// </FS:Ansariel>
+	const LLRect& left_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_LEFT];
+	const LLRect& bottom_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_BOTTOM];
+	const LLRect& right_toolbar_rect = mToolbarRects[LLToolBarEnums::TOOLBAR_RIGHT];
 	const LLRect& floater_rect = floater->getRect();
 
 	S32 delta_left = left_toolbar_rect.notEmpty() ? left_toolbar_rect.mRight - floater_rect.mRight : 0;
@@ -3213,23 +3220,7 @@ void LLFloaterView::setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LL
 {
 	if (tb < LLToolBarEnums::TOOLBAR_COUNT)
 	{
-		// <FS:Ansariel> Memory corruption crash at login/logout
-		//mToolbarRects[tb] = toolbar_rect;
-		switch (tb)
-		{
-			case LLToolBarEnums::TOOLBAR_LEFT:
-				mToolbarLeftRect = toolbar_rect;
-				break;
-			case LLToolBarEnums::TOOLBAR_RIGHT:
-				mToolbarRightRect = toolbar_rect;
-				break;
-			case LLToolBarEnums::TOOLBAR_BOTTOM:
-				mToolbarBottomRect = toolbar_rect;
-				break;
-			default:
-				break;
-		}
-		// </FS:Ansariel>
+		mToolbarRects[tb] = toolbar_rect;
 	}
 }
 

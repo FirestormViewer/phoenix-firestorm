@@ -7,7 +7,7 @@
 
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
   <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." MigrateFeatures="no"/>
-  <Icon Id="firestorm.ico" SourceFile="..\..\..\indra\newview\installers\windows\firestorm_icon.ico"/>
+  <Icon Id="firestorm.ico" SourceFile="$(var.WIX_SOURCEDIR)\..\windows\firestorm_icon.ico"/>
   <Property Id="MSIFASTINSTALL" Value="1"/>
   <Property Id="ARPSIZE" Value="204800"/>
   <Property Id="ARPURLINFOABOUT" Value="http://www.firestormviewer.org"/>
@@ -52,6 +52,10 @@
       <File Source="$(var.BUILDDIR)/gpu_table.txt" />
       <File Source="$(var.BUILDDIR)/licenses.txt" />
       <File Source="$(var.BUILDDIR)/VivoxAUP.txt" />
+      <File Source="$(var.BUILDDIR)/skins.cab" />
+      <File Source="$(var.BUILDDIR)/skins.cabdir" />
+      <File Source="$(var.BUILDDIR)/app_settings.cab" />
+      <File Source="$(var.BUILDDIR)/app_settings.cabdir" />
      </Component>
 
      <Component Id="slvoice" Guid="{6BF56CA8-0D48-4ea8-B3E8-CD38B7C502E6}">
@@ -98,13 +102,42 @@
    <ComponentRef Id="llplugin_dir_codec_libs" />
    <ComponentRef Id="llplugin_dir_imageformat_libs" />
 
-   <ComponentGroupRef Id="fs_appsettings" />
    <ComponentGroupRef Id="fs_character" />
    <ComponentGroupRef Id="fs_fonts" />
    <ComponentGroupRef Id="fs_fsres" />
-   <ComponentGroupRef Id="fs_skins" />
   </Feature>
+  <Binary Id="ExtractCab" SourceFile="$(var.WIX_SOURCEDIR)\ExtractCab.dll" />
+
+  <CustomAction Id="ExtractSkins_pre" Property="ExtractSkins"
+				Value="InstallDir=[INSTALLDIR]\skins\;CabFile=[INSTALLDIR]\skins.cab;CabDirFile=[INSTALLDIR]\skins.cabdir"/>
+  <CustomAction Id="ExtractSkins" BinaryKey="ExtractCab" DllEntry="ExtractCab" Execute="deferred" Return="check" Impersonate="no" HideTarget="no"/>
+
+  <CustomAction Id="DeleteSkins_pre" Property="DeleteSkins"
+				Value="InstallDir=[INSTALLDIR]\skins\;CabFile=[INSTALLDIR]\skins.cab;CabDirFile=[INSTALLDIR]\skins.cabdir"/>
+  <CustomAction Id="DeleteSkins" BinaryKey="ExtractCab" DllEntry="DeleteExtracted" Execute="deferred" Return="check" Impersonate="no" HideTarget="no"/>
         
+  <CustomAction Id="ExtractAppSettings_pre" Property="ExtractAppSettings"
+				Value="InstallDir=[INSTALLDIR]\app_settings\;CabFile=[INSTALLDIR]\app_settings.cab;CabDirFile=[INSTALLDIR]\app_settings.cabdir"/>
+  <CustomAction Id="ExtractAppSettings" BinaryKey="ExtractCab" DllEntry="ExtractCab" Execute="deferred" Return="check" Impersonate="no" HideTarget="no"/>
+
+  <CustomAction Id="DeleteAppSettings_pre" Property="DeleteAppSettings"
+				Value="InstallDir=[INSTALLDIR]\app_settings\;CabFile=[INSTALLDIR]\app_settings.cab;CabDirFile=[INSTALLDIR]\app_settings.cabdir"/>
+  <CustomAction Id="DeleteAppSettings" BinaryKey="ExtractCab" DllEntry="DeleteExtracted" Execute="deferred" Return="check" Impersonate="no" HideTarget="no"/>
+
+
+  <InstallExecuteSequence>
+    <Custom Action="ExtractSkins_pre" After="InstallInitialize">Not Installed</Custom>
+    <Custom Action="ExtractSkins" Before="InstallFinalize">Not Installed</Custom>
+    <Custom Action="DeleteSkins_pre" After="InstallInitialize">REMOVE</Custom>
+    <Custom Action="DeleteSkins" Before="RemoveFiles">REMOVE</Custom>
+
+    <Custom Action="ExtractAppSettings_pre" After="InstallInitialize">Not Installed</Custom>
+    <Custom Action="ExtractAppSettings" Before="InstallFinalize">Not Installed</Custom>
+    <Custom Action="DeleteAppSettings_pre" After="InstallInitialize">REMOVE</Custom>
+    <Custom Action="DeleteAppSettings" Before="RemoveFiles">REMOVE</Custom>
+  </InstallExecuteSequence>
+
+  <WixVariable Id="WixUILicenseRtf" Value="$(var.WIX_SOURCEDIR)/../../VivoxAUP.rtf" />
   <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" ></Property>
   <UIRef Id="WixUI_InstallDir"/>
   </Product>
