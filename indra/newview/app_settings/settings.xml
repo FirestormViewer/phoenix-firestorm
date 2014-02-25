@@ -12630,6 +12630,14 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>U32</string>
     <key>Value</key>
     <integer>8</integer>
+    <key>SanityCheckType</key>
+    <string>LessThan</string>
+    <key>SanityValue</key>
+    <array>
+      <integer>13</integer>
+    </array>
+    <key>SanityComment</key>
+    <string>Setting this value too high will make it less likely that mesh objects will load correctly and cause performace degradation for you and others in the same region.</string>
   </map>
   <key>MeshMaxConcurrentRequests</key>
   <map>
@@ -12640,7 +12648,15 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>32</integer>
+    <integer>16</integer>
+    <key>SanityCheckType</key>
+    <string>LessThan</string>
+    <key>SanityValue</key>
+    <array>
+      <integer>33</integer>
+    </array>
+    <key>SanityComment</key>
+    <string>Setting this value too high will make it less likely that mesh objects will load correctly and cause performace degradation for you and others in the same region.</string>
   </map>
   <key>MeshUseHttpRetryAfter</key>
   <map>
