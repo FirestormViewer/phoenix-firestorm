@@ -20262,9 +20262,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
     </map>
     <!-- End: Prefs > Sound/Media => UI Sounds -->
-=======
->>>>>>> other
-  
     <key>FSShowVoiceVisualizer</key>
     <map>
       <key>Comment</key>
