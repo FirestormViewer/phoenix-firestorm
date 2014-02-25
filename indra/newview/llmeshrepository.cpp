@@ -379,9 +379,7 @@ const S32 MAX_MESH_VERSION = 999;
 
 //<FS:TS> FIRE-11451: Cap concurrent mesh requests at a sane value 
 const U32 MESH_CONCURRENT_REQUEST_LIMIT = 64;  // upper limit 
-const U32 MESH_CONCURRENT_REQUEST_RESET = 16;  // reset to this if too high 
 const U32 MESH2_CONCURRENT_REQUEST_LIMIT = 32;  // upper limit 
-const U32 MESH2_CONCURRENT_REQUEST_RESET = 8;  // reset to this if too high 
 //</FS:TS> FIRE-11451 
 
 U32 LLMeshRepository::sBytesReceived = 0;
@@ -3202,19 +3200,20 @@ void LLMeshRepository::notifyLoadedMeshes()
 		// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
 		//LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("MeshMaxConcurrentRequests");
 		static LLCachedControl<U32> meshMaxConcurrentRequests(gSavedSettings, "MeshMaxConcurrentRequests");
-		//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value 
-		if ((U32)meshMaxConcurrentRequests > MESH_CONCURRENT_REQUEST_LIMIT) 
-		{ 
+		//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value
+		if (meshMaxConcurrentRequests() > MESH_CONCURRENT_REQUEST_LIMIT) 
+		{
+			U32 mesh_max_concurrent_requests_default = gSavedSettings.getControl("MeshMaxConcurrentRequests")->getDefault().asInteger();
 			LLSD args; 
-			args["VALUE"] = llformat("%d", (U32)meshMaxConcurrentRequests); 
+			args["VALUE"] = llformat("%d", meshMaxConcurrentRequests()); 
 			args["MAX"] = llformat("%d", MESH_CONCURRENT_REQUEST_LIMIT); 
-			args["DEFAULT"] = llformat("%d", MESH_CONCURRENT_REQUEST_RESET);
+			args["DEFAULT"] = llformat("%d", mesh_max_concurrent_requests_default);
 			args["DEBUGNAME"] = "MeshMaxConccurrentRequests";
 			LLNotificationsUtil::add("MeshMaxConcurrentReqTooHigh", args); 
-			gSavedSettings.setU32("MeshMaxConcurrentRequests",MESH_CONCURRENT_REQUEST_RESET);
+			gSavedSettings.setU32("MeshMaxConcurrentRequests", mesh_max_concurrent_requests_default);
 		}
 		//</FS:TS> FIRE-11451 
-		LLMeshRepoThread::sMaxConcurrentRequests = (U32)meshMaxConcurrentRequests;
+		LLMeshRepoThread::sMaxConcurrentRequests = meshMaxConcurrentRequests();
 		// </FS:Ansariel>
 		LLMeshRepoThread::sRequestHighWater = llclamp(2 * S32(LLMeshRepoThread::sMaxConcurrentRequests),
 													  REQUEST_HIGH_WATER_MIN,
@@ -3230,19 +3229,20 @@ void LLMeshRepository::notifyLoadedMeshes()
 		// <FS:TM> Use faster LLCachedControls for frequently visited locations
 		//LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("Mesh2MaxConcurrentRequests");
 		static LLCachedControl<U32> mesh2MaxConcurrentRequests(gSavedSettings, "Mesh2MaxConcurrentRequests");
-		//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value 
-		if ((U32)mesh2MaxConcurrentRequests > MESH2_CONCURRENT_REQUEST_LIMIT) 
+		//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value
+		if (mesh2MaxConcurrentRequests() > MESH2_CONCURRENT_REQUEST_LIMIT) 
 		{ 
+			U32 mesh2_max_concurrent_requests_default = gSavedSettings.getControl("Mesh2MaxConcurrentRequests")->getDefault().asInteger();
 			LLSD args; 
-			args["VALUE"] = llformat("%d", (U32)mesh2MaxConcurrentRequests); 
+			args["VALUE"] = llformat("%d", mesh2MaxConcurrentRequests()); 
 			args["MAX"] = llformat("%d", MESH2_CONCURRENT_REQUEST_LIMIT); 
-			args["DEFAULT"] = llformat("%d", MESH2_CONCURRENT_REQUEST_RESET);
+			args["DEFAULT"] = llformat("%d", mesh2_max_concurrent_requests_default);
 			args["DEBUGNAME"] = "Mesh2MaxConccurrentRequests";
 			LLNotificationsUtil::add("MeshMaxConcurrentReqTooHigh", args); 
-			gSavedSettings.setU32("Mesh2MaxConcurrentRequests",MESH2_CONCURRENT_REQUEST_RESET);
+			gSavedSettings.setU32("Mesh2MaxConcurrentRequests", mesh2_max_concurrent_requests_default);
 		}
 		//</FS:TS> FIRE-11451 
-		LLMeshRepoThread::sMaxConcurrentRequests = (U32)mesh2MaxConcurrentRequests;
+		LLMeshRepoThread::sMaxConcurrentRequests = mesh2MaxConcurrentRequests();
 		// </FS:TM>
 		LLMeshRepoThread::sRequestHighWater = llclamp(5 * S32(LLMeshRepoThread::sMaxConcurrentRequests),
 													  REQUEST2_HIGH_WATER_MIN,
