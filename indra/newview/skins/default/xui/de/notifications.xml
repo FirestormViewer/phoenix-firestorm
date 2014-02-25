@@ -4707,7 +4707,7 @@ AntiSpam: [SOURCE] wurde wegen senden einer Chatnachricht mit mehr als [COUNT] Z
 	</notification>
 
 	<notification name="MeshMaxConcurrentReqTooHigh">
-Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VALUE]), ist höher als das Maximum von [MAX]. Er wurde auf den Standardwert [DEFAULT] zurückgesetzt.
+Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VALUE]; Debug-Einstellung [DEBUGNAME]), ist höher als das Maximum von [MAX]. Er wurde auf den Standardwert [DEFAULT] zurückgesetzt.
 	</notification>
 
 	<notification name="SkinDefaultsChangeSettings">
