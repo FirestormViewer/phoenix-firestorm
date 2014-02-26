@@ -3835,10 +3835,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 
 			// Filtering "rules":
 			//   avatar  => filter all avie text (unless it's this avie or they're an exemption)
-			//   objects => filter everything except attachments this avie owns (never filter llOwnerSay chat)
+			//   objects => filter everything except attachments this avie owns (never filter llOwnerSay or llRegionSayTo chat)
 			if ( ( (CHAT_SOURCE_AGENT == chat.mSourceType) && (from_id != gAgent.getID()) ) || 
 				 ( (CHAT_SOURCE_OBJECT == chat.mSourceType) && ((!is_owned_by_me) || (!is_attachment)) && 
-				   (CHAT_TYPE_OWNER != chat.mChatType) ) )
+				   (CHAT_TYPE_OWNER != chat.mChatType) && (CHAT_TYPE_DIRECT != chat.mChatType) ) )
 			{
 				bool fIsEmote = RlvUtil::isEmote(mesg);
 				if ((!fIsEmote) &&
