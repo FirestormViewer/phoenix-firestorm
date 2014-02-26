@@ -49,7 +49,7 @@
           Vital="yes"
 		  ForcePerMachine="yes"
 		  >
-        <MsiProperty Name="INSTALLLOCATION" Value="[InstallFolder]" /> 
+        <MsiProperty Name="INSTALLDIR" Value="[InstallFolder]" /> 
       </MsiPackage> 
     </Chain> 
   </Bundle> 
