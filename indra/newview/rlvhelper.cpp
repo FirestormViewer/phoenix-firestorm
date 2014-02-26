@@ -422,18 +422,15 @@ bool RlvObject::hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOpt
 }
 
 // Checked: 2009-11-27 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
-std::string RlvObject::getStatusString(const std::string& strMatch) const
+std::string RlvObject::getStatusString(const std::string& strFilter, const std::string& strSeparator) const
 {
 	std::string strStatus, strCmd;
 
 	for (rlv_command_list_t::const_iterator itCmd = m_Commands.begin(); itCmd != m_Commands.end(); ++itCmd)
 	{
 		strCmd = itCmd->asString();
-		if ( (strMatch.empty()) || (std::string::npos != strCmd.find(strMatch)) )
-		{
-			strStatus.push_back('/');
-			strStatus += strCmd;
-		}
+		if ( (strFilter.empty()) || (std::string::npos != strCmd.find(strFilter)) )
+			strStatus.append(strSeparator).append(strCmd);
 	}
 
 	return strStatus;

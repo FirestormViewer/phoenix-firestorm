@@ -177,7 +177,7 @@ public:
 	bool removeCommand(const RlvCommand& rlvCmd);
 	void setCommandRet(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 
-	std::string getStatusString(const std::string& strMatch) const;
+	std::string getStatusString(const std::string& strFilter, const std::string& strSeparator) const;
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, bool fStrictOnly) const;
 	bool        hasBehaviour(ERlvBehaviour eBehaviour, const std::string& strOption, bool fStrictOnly) const;
 
