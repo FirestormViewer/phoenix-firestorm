@@ -104,8 +104,8 @@ protected:
     S32                         mLocalIndentation;
 	S32							mIndentation;
 	S32							mItemHeight;
-	S32							mDragStartX,
-								mDragStartY;
+//	S32							mDragStartX,
+//								mDragStartY;
 
     S32                         mLeftPad,
                                 mIconPad,

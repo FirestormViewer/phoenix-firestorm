@@ -67,6 +67,34 @@ static bool rlvParseNotifyOption(const std::string& strOption, S32& nChannel, st
 	return (itTok == tokens.end());
 }
 
+// Checked: 2014-02-26 (RLVa-1.4.10)
+static bool rlvParseGetStatusOption(const std::string& strOption, std::string& strFilter, std::string& strSeparator)
+{
+	// @getstatus:[<option>][;<separator>]
+	//   * Parameters: first and second parameters are both optional
+	//   * Examples  : @getstatus=123 ; @getstatus:tp=123 ; @getstatus:tp;|=123 ; @getstatus:;|=123
+
+	boost_tokenizer tokens(strOption, boost::char_separator<char>(";", "", boost::keep_empty_tokens));
+	boost_tokenizer::const_iterator itTok = tokens.begin();
+
+	strSeparator = "/";
+	strFilter.clear();
+
+	// <option> optional parameter (defaults to empty string if unspecified)
+	if (itTok != tokens.end())
+		strFilter = *itTok++;
+	else
+		strFilter.clear();
+
+	// <separator> optional paramter (defaults to '/' if unspecified)
+	if ( (itTok != tokens.end()) && (!(*itTok).empty()) )
+		strSeparator = *itTok++;
+	else
+		strSeparator = "/";
+
+	return true;
+}
+
 // ============================================================================
 // Constructor/destructor
 //
@@ -1898,19 +1926,27 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 			}
 			break;
 #endif // RLV_EXTENSION_CMD_GETCOMMAND
-		case RLV_BHVR_GETSTATUS:		// @getstatus[:<option>]=<channel>		- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
+		case RLV_BHVR_GETSTATUS:		// @getstatus                           - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
-				// NOTE: specification says response should start with '/' but RLV-1.16.1 returns an empty string when no rules are set
-				rlv_object_map_t::const_iterator itObj = m_Objects.find(rlvCmd.getObjectID());
-				if (itObj != m_Objects.end())
-					strReply = itObj->second.getStatusString(rlvCmd.getOption());
+				std::string strFilter, strSeparator;
+				if (rlvParseGetStatusOption(rlvCmd.getOption(), strFilter, strSeparator))
+				{
+					// NOTE: specification says response should start with '/' but RLV-1.16.1 returns an empty string when no rules are set
+					rlv_object_map_t::const_iterator itObj = m_Objects.find(rlvCmd.getObjectID());
+					if (itObj != m_Objects.end())
+						strReply = itObj->second.getStatusString(strFilter, strSeparator);
+				}
 			}
 			break;
-		case RLV_BHVR_GETSTATUSALL:		// @getstatusall[:<option>]=<channel>	- Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
+		case RLV_BHVR_GETSTATUSALL:		// @getstatusall                        - Checked: 2010-04-07 (RLVa-1.2.0d) | Modified: RLVa-1.1.0f
 			{
-				// NOTE: specification says response should start with '/' but RLV-1.16.1 returns an empty string when no rules are set
-				for (rlv_object_map_t::const_iterator itObj = m_Objects.begin(); itObj != m_Objects.end(); ++itObj)
-					strReply += itObj->second.getStatusString(rlvCmd.getOption());
+				std::string strFilter, strSeparator;
+				if (rlvParseGetStatusOption(rlvCmd.getOption(), strFilter, strSeparator))
+				{
+					// NOTE: specification says response should start with '/' but RLV-1.16.1 returns an empty string when no rules are set
+					for (rlv_object_map_t::const_iterator itObj = m_Objects.begin(); itObj != m_Objects.end(); ++itObj)
+						strReply += itObj->second.getStatusString(strFilter, strSeparator);
+				}
 			}
 			break;
 		case RLV_BHVR_UNKNOWN:

@@ -3030,11 +3030,18 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id)
 								  LLInventoryModel::EXCLUDE_TRASH);
 	for (S32 i=0; i<item_array.count(); i++)
 	{
-		const LLInventoryItem* item = item_array.get(i).get();
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+		const LLViewerInventoryItem* item = item_array.get(i).get();
 		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
 		{
 			gInventory.purgeObject(item->getUUID());
 		}
+// [/RLVa:KB]
+//		const LLInventoryItem* item = item_array.get(i).get();
+//		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
+//		{
+//			gInventory.purgeObject(item->getUUID());
+//		}
 	}
 }
 
@@ -3881,7 +3888,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 	bool fUpdateAppearance = false;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
-		const LLInventoryItem* linked_item = gInventory.getLinkedItem(*it);
+		const LLViewerInventoryItem* linked_item = gInventory.getLinkedItem(*it);
 		if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
 		{
 			continue;
@@ -3910,7 +3917,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 {
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-	const LLInventoryItem* linked_item = gInventory.getLinkedItem(id_to_remove);
+	const LLViewerInventoryItem* linked_item = gInventory.getLinkedItem(id_to_remove);
 
 	if (linked_item && (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
 	{

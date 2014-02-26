@@ -86,9 +86,13 @@ public:
 	void setType(LLAssetType::EType type);
 	virtual void setCreationDate(time_t creation_date_utc); // only stored for items
 
-private:
+// [RLVa:KB] - Checked: 2014-01-07 (RLVa-1.4.10)
 	// in place correction for inventory name string
-	void correctInventoryName(std::string& name);
+	static void correctInventoryName(std::string& name);
+// [/RLVa:KB]
+private:
+//	// in place correction for inventory name string
+//	void correctInventoryName(std::string& name);
 
 	//--------------------------------------------------------------------
 	// File Support

@@ -114,12 +114,11 @@
 #include "llfloatertools.h"
 #include "llpanelface.h"
 #include "llpathfindingpathtool.h"
-#include "exopostprocess.h"	// <FS:CR> Import Vignette from Exodus
-
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "exopostprocess.h"	// <FS:CR> Import Vignette from Exodus
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02
@@ -828,13 +827,17 @@ void LLPipeline::resizeScreenTexture()
 		GLuint resX = gViewerWindow->getWorldViewWidthRaw();
 		GLuint resY = gViewerWindow->getWorldViewHeightRaw();
 	
-		//<FS:TS> FIRE-11830: RenderResolutionDivisor broken
-		// We need to reallocate the screen buffer even if the size
-		//    hasn't changed, since changing that debug setting only
-		//    resizes the screen texture to itself and depends on the
-		//    side effects. Found by Felis Darwin.
-		//if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
-		//</FS:TS> FIRE-11830
+// [RLVa:KB] - Checked: 2014-02-23 (RLVa-1.4.10)
+		U32 resMod = RenderResolutionDivisor, resAdjustedX = resX, resAdjustedY = resY;
+		if ( (resMod > 1) && (resMod < resX) && (resMod < resY) )
+		{
+			resAdjustedX /= resMod;
+			resAdjustedY /= resMod;
+		}
+
+		if ( (resAdjustedX != mScreen.getWidth()) || (resAdjustedY != mScreen.getHeight()) )
+// [/RLVa:KB]
+//		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
 		{
 			releaseScreenBuffers();
 		if (!allocateScreenBuffer(resX,resY))
