@@ -1028,8 +1028,11 @@ bool LLInventoryPanel::beginIMSession()
 
 	std::string name;
 
-	LLDynamicArray<LLUUID> members;
-	EInstantMessage type = IM_SESSION_CONFERENCE_START;
+//	LLDynamicArray<LLUUID> members;
+//	EInstantMessage type = IM_SESSION_CONFERENCE_START;
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	uuid_vec_t members;
+// [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
 	bool fRlvCanStartIM = true;
@@ -1072,13 +1075,17 @@ bool LLInventoryPanel::beginIMSession()
 					for(S32 i = 0; i < count; ++i)
 					{
 						id = item_array.get(i)->getCreatorUUID();
-						if(at.isBuddyOnline(id))
-						{
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+						if ( (at.isBuddyOnline(id)) && (members.end() == std::find(members.begin(), members.end(), id)) )
+						{
 							fRlvCanStartIM &= RlvActions::canStartIM(id);
-// [/RLVa:KB]
-							members.put(id);
+							members.push_back(id);
 						}
+// [/RLVa:KB]
+//						if(at.isBuddyOnline(id))
+//						{
+//							members.put(id);
+//						}
 					}
 				}
 			}
@@ -1095,13 +1102,17 @@ bool LLInventoryPanel::beginIMSession()
 						LLAvatarTracker& at = LLAvatarTracker::instance();
 						LLUUID id = inv_item->getCreatorUUID();
 
-						if(at.isBuddyOnline(id))
-						{
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+						if ( (at.isBuddyOnline(id)) && (members.end() == std::find(members.begin(), members.end(), id)) )
+						{
 							fRlvCanStartIM &= RlvActions::canStartIM(id);
-// [/RLVa:KB]
-							members.put(id);
+							members.push_back(id);
 						}
+// [/RLVa:KB]
+//						if(at.isBuddyOnline(id))
+//						{
+//							members.put(id);
+//						}
 					}
 				} //if IT_CALLINGCARD
 			} //if !IT_CATEGORY
@@ -1125,11 +1136,20 @@ bool LLInventoryPanel::beginIMSession()
 		name = LLTrans::getString("conference-title");
 	}
 
-	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
-	if (session_id != LLUUID::null)
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if (!members.empty())
 	{
-		LLFloaterIMContainer::getInstance()->showConversation(session_id);
+		if (members.size() > 1)
+			LLAvatarActions::startConference(members);
+		else
+			LLAvatarActions::startIM(members[0]);
 	}
+// [/RLVa:KB]
+//	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
+//	if (session_id != LLUUID::null)
+//	{
+//		LLFloaterIMContainer::getInstance()->showConversation(session_id);
+//	}
 		
 	return true;
 }
