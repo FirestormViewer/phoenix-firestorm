@@ -1,6 +1,8 @@
-@echo off
+rem @echo off
 setlocal
 
+del /F /Q build_MSI\*
+rmdir build_MSI
 md build_MSI
 cd build_MSI
 
@@ -16,7 +18,6 @@ set OUTPUT_FILE=%5
 set MAJOR=%6
 set MINOR=%7
 set HGCHANGE=%9
-
 
 set PATH=%PATH%;%1\..\..\packages\bin\wix
 
@@ -41,5 +42,9 @@ signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com %VIEW
 
 candle -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dWIX_SOURCEDIR=%~dp0 -dFS_MSI_FILE=%VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi -ext WixBalExtension %~dp0\installer.wxs
 light -sval -ext WixBalExtension -out %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe installer.wixobj
+
+insignia -ib %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe -o engine.exe
+signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com engine.exe
+insignia -ab engine.exe %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe -o %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe
 
 signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe
