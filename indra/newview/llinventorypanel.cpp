@@ -54,6 +54,7 @@
 #include "rlvactions.h"
 #include "rlvcommon.h"
 // [/RLVa:KB]
+#include "fsfloaterim.h"
 
 static LLDefaultChildRegistry::Register<LLInventoryPanel> r("inventory_panel");
 
@@ -1086,11 +1087,8 @@ bool LLInventoryPanel::beginIMSession()
 
 	std::string name;
 
-//	LLDynamicArray<LLUUID> members;
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-	uuid_vec_t members;
-// [/RLVa:KB]
-//	EInstantMessage type = IM_SESSION_CONFERENCE_START;
+	LLDynamicArray<LLUUID> members;
+	EInstantMessage type = IM_SESSION_CONFERENCE_START;
 
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
 	bool fRlvCanStartIM = true;
@@ -1137,8 +1135,8 @@ bool LLInventoryPanel::beginIMSession()
 						{
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
 							fRlvCanStartIM &= RlvActions::canStartIM(id);
-							members.push_back(id);
 // [/RLVa:KB]
+							members.put(id);
 						}
 					}
 				}
@@ -1160,8 +1158,8 @@ bool LLInventoryPanel::beginIMSession()
 						{
 // [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
 							fRlvCanStartIM &= RlvActions::canStartIM(id);
-							members.push_back(id);
 // [/RLVa:KB]
+							members.put(id);
 						}
 					}
 				} //if IT_CALLINGCARD
@@ -1186,14 +1184,12 @@ bool LLInventoryPanel::beginIMSession()
 		name = LLTrans::getString("conference-title");
 	}
 
-//	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
-//	if (session_id != LLUUID::null)
-//	{
+	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
+	if (session_id != LLUUID::null)
+	{
 //		LLFloaterIMContainer::getInstance()->showConversation(session_id);
-//	}
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-	LLAvatarActions::startConference(members);
-// [/RLVa:KB]
+		FSFloaterIM::show(session_id);
+	}
 		
 	return true;
 }

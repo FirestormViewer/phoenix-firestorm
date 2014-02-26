@@ -114,12 +114,11 @@
 #include "llfloatertools.h"
 #include "llpanelface.h"
 #include "llpathfindingpathtool.h"
-#include "exopostprocess.h"	// <FS:CR> Import Vignette from Exodus
-
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "exopostprocess.h"	// <FS:CR> Import Vignette from Exodus
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02
