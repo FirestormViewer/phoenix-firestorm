@@ -268,7 +268,7 @@ void LLInventoryObject::updateServer(BOOL) const
 	llwarns << "LLInventoryObject::updateServer() called.  Doesn't do anything." << llendl;
 }
 
-inline
+//inline
 void LLInventoryObject::correctInventoryName(std::string& name)
 {
 	LLStringUtil::replaceNonstandardASCII(name, ' ');

@@ -827,13 +827,17 @@ void LLPipeline::resizeScreenTexture()
 		GLuint resX = gViewerWindow->getWorldViewWidthRaw();
 		GLuint resY = gViewerWindow->getWorldViewHeightRaw();
 	
-		//<FS:TS> FIRE-11830: RenderResolutionDivisor broken
-		// We need to reallocate the screen buffer even if the size
-		//    hasn't changed, since changing that debug setting only
-		//    resizes the screen texture to itself and depends on the
-		//    side effects. Found by Felis Darwin.
-		//if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
-		//</FS:TS> FIRE-11830
+// [RLVa:KB] - Checked: 2014-02-23 (RLVa-1.4.10)
+		U32 resMod = RenderResolutionDivisor, resAdjustedX = resX, resAdjustedY = resY;
+		if ( (resMod > 1) && (resMod < resX) && (resMod < resY) )
+		{
+			resAdjustedX /= resMod;
+			resAdjustedY /= resMod;
+		}
+
+		if ( (resAdjustedX != mScreen.getWidth()) || (resAdjustedY != mScreen.getHeight()) )
+// [/RLVa:KB]
+//		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
 		{
 			releaseScreenBuffers();
 		if (!allocateScreenBuffer(resX,resY))

@@ -236,8 +236,8 @@ protected:
 
 bool rlvPredCanWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
 bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
-bool rlvPredCanRemoveItem(const LLInventoryItem* pItem);
-bool rlvPredCanNotRemoveItem(const LLInventoryItem* pItem);
+bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem);
+bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem);
 
 struct RlvPredCanWearItem
 {
@@ -253,6 +253,18 @@ struct RlvPredCanNotWearItem
 	bool operator()(const LLViewerInventoryItem* pItem) { return rlvPredCanNotWearItem(pItem, m_eWearMask); }
 protected:
 	ERlvWearMask m_eWearMask;
+};
+
+struct RlvPredCanRemoveItem
+{
+	RlvPredCanRemoveItem() {}
+	bool operator()(const LLViewerInventoryItem* pItem) { return rlvPredCanRemoveItem(pItem); }
+};
+
+struct RlvPredCanNotRemoveItem
+{
+	RlvPredCanNotRemoveItem() {}
+	bool operator()(const LLViewerInventoryItem* pItem) { return rlvPredCanNotRemoveItem(pItem); }
 };
 
 struct RlvPredIsEqualOrLinkedItem
