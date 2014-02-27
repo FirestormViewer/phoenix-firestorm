@@ -59,6 +59,7 @@
 #include "llagentcamera.h" // gAgentCamera
 #include "llviewerjoystick.h" // For disabling/re-enabling when requested to look at an object.
 #include "llmoveview.h" // For LLPanelStandStopFlying::clearStandStopFlyingMode
+#include "rlvhandler.h"
 
 // max number of objects that can be (de-)selected in a single packet.
 const S32 MAX_OBJECTS_PER_PACKET = 255;
@@ -1846,9 +1847,12 @@ void FSPanelAreaSearchList::touchObject(LLViewerObject* objectp)
 {
 	// *NOTE: Hope the packets arrive safely and in order or else
 	// there will be some problems.
-	LLPickInfo pick; // default constructor will set sane values.
-	send_ObjectGrab_message(objectp, pick, LLVector3::zero);
-	send_ObjectDeGrab_message(objectp, pick);
+	if (gRlvHandler.canTouch(objectp))
+	{
+		LLPickInfo pick; // default constructor will set sane values.
+		send_ObjectGrab_message(objectp, pick, LLVector3::zero);
+		send_ObjectDeGrab_message(objectp, pick);
+	}
 }
 
 void FSPanelAreaSearchList::buyObject(FSObjectProperties& details, LLViewerObject* objectp)
