@@ -5680,6 +5680,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="fsbridge_creating">
 		LSL-Brücke wird erstellt. Dies kann einen Moment dauern. Bitte warten...
 	</string>
+	<string name="fsbridge_failure_creation_create_script">
+		LSL-Brücke nicht erstellt. Das Skript der Brücke konnte nicht erstellt werden.
+	</string>
 	<string name="fsbridge_failure_creation_bad_name">
 		LSL-Brücke nicht erstellt. Der Name der Brücke ist inkorrekt. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
 	</string>

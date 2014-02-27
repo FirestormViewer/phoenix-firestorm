@@ -2555,6 +2555,7 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_no_library">Firestorm could not create an LSL bridge. Please enable your library and relog.</string>
   <string name="fsbridge_already_creating">Bridge creation in process, cannot start another. Please wait a few minutes before trying again.</string>
   <string name="fsbridge_creating">Creating the bridge. This might take a moment, please wait.</string>
+  <string name="fsbridge_failure_creation_create_script">Bridge not created. The bridge script could not be created.</string>
   <string name="fsbridge_failure_creation_bad_name">Bridge not created. The bridge is named incorrectly. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
   <string name="fsbridge_failure_creation_null">Bridge not created. The bridge couldn't be found in inventory. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
   <string name="fsbridge_failure_attach_wrong_object">Bridge failed to attach. This is not the current bridge version. Please use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to recreate the bridge.</string>
