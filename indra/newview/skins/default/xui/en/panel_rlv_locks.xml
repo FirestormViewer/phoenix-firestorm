@@ -40,13 +40,13 @@
       left="0"
       name="refresh_btn"
       top="1"
-      width="74" />
+      width="90" />
     <icon
       follows="left|right"
       image_name="Toolbar_Right_Off"
       left_pad="1"
       name="dummy_icon"
       top="1"
-      width="425" />
+      right="-1"/>
   </panel>
 </panel>

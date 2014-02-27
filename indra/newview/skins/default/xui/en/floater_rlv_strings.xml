@@ -41,7 +41,8 @@
       layout="topleft"
       left="10"
       name="bottom_panel"
-      top="180" >
+      top="180"
+      right="-8">
       <button
 	follows="top|left"
 	image_hover_unselected="Toolbar_Left_Over"
@@ -54,7 +55,7 @@
 	left="0"
 	name="default_btn"
 	top="1"
-	width="120" >
+	width="140" >
 	<button.commit_callback
 	  function="ClickDefault" />
       </button>
@@ -64,6 +65,6 @@
 	left_pad="1"
 	name="dummy_icon"
 	top="1"
-	width="200" />
+	right="-1" />
     </panel>
 </floater>
