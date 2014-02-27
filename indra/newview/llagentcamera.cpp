@@ -182,13 +182,6 @@ LLAgentCamera::LLAgentCamera() :
 	mPanInKey(0.f),
 	mPanOutKey(0.f),
 
-	// <FS:Ansariel> FIRE-7758: Save/load camera position
-	mStoredCameraPos(),
-	mStoredCameraFocus(),
-	mStoredCameraFocusObjectId(),
-	mHasStoredCameraPos(false),
-	// </FS:Ansariel>
-
 	mPointAtObject(NULL)
 {
 	mFollowCam.setMaxCameraDistantFromSubject( MAX_CAMERA_DISTANCE_FROM_AGENT );
@@ -2902,35 +2895,39 @@ S32 LLAgentCamera::directionToKey(S32 direction)
 // <FS:Ansariel> FIRE-7758: Save/load camera position feature
 void LLAgentCamera::storeCameraPosition()
 {
-	mStoredCameraPos = getCameraPositionGlobal();
-	mStoredCameraFocus = getFocusTargetGlobal();
-	mStoredCameraFocusObjectId = LLUUID::null;
+	gSavedPerAccountSettings.setVector3d("FSStoredCameraPos", getCameraPositionGlobal());
+	gSavedPerAccountSettings.setVector3d("FSStoredCameraFocus", getFocusTargetGlobal());
+	LLUUID stored_camera_focus_object_id = LLUUID::null;
 	if (mFocusObject)
 	{
-		mStoredCameraFocusObjectId = mFocusObject->getID();
+		stored_camera_focus_object_id = mFocusObject->getID();
 	}
-	mHasStoredCameraPos = true;
+	gSavedPerAccountSettings.setString("FSStoredCameraFocusObjectId", stored_camera_focus_object_id.asString());
 }
 
 void LLAgentCamera::loadCameraPosition()
 {
+	LLVector3d stored_camera_pos = gSavedPerAccountSettings.getVector3d("FSStoredCameraPos");
+	LLVector3d stored_camera_focus = gSavedPerAccountSettings.getVector3d("FSStoredCameraFocus");
+	LLUUID stored_camera_focus_object_id = LLUUID(gSavedPerAccountSettings.getString("FSStoredCameraFocusObjectId"));
+
 	F32 renderFarClip = gSavedSettings.getF32("RenderFarClip");
 	F32 far_clip_squared = renderFarClip * renderFarClip;
 
-	if (!mHasStoredCameraPos)
+	if (stored_camera_pos.isNull())
 	{
 		reportToNearbyChat(LLTrans::getString("LoadCameraPositionNoneSaved"));
 		return;
 	}
 
-	if (dist_vec_squared(gAgent.getPositionGlobal(), mStoredCameraPos) > far_clip_squared)
+	if (dist_vec_squared(gAgent.getPositionGlobal(), stored_camera_pos) > far_clip_squared)
 	{
 		reportToNearbyChat(LLTrans::getString("LoadCameraPositionOutsideDrawDistance"));
 		return;
 	}
 
 	unlockView();
-	setCameraPosAndFocusGlobal(mStoredCameraPos, mStoredCameraFocus, mStoredCameraFocusObjectId);
+	setCameraPosAndFocusGlobal(stored_camera_pos, stored_camera_focus, stored_camera_focus_object_id);
 }
 // </FS:Ansariel> FIRE-7758: Save/load camera position feature
 
