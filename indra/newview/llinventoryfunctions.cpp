@@ -347,16 +347,18 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
-	// ## Zi: Animation Overrider
-	if((model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder())
-		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
-//-TT Client LSL Bridge
-		|| (model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
+	// <FS> Protected Folders
+	if (
+		(model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		||
+		(model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder())
 			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
 		)
-//-TT
+	{
 		return FALSE;
-	// ## Zi: Animation Overrider
+	}
+	// </FS> Protected Folders
 
 	// Disable delete from COF folder; have users explicitly choose "detach/take off",
 	// unless the item is not worn but in the COF (i.e. is bugged).
@@ -412,16 +414,18 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	}
 // [/RLVa:KB]
 
-	// ## Zi: Animation Overrider
-	if(((id==AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id,AOEngine::instance().getAOFolder()))
-		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
-//-TT Client LSL Bridge
-		|| (id==FSLSLBridge::instance().getBridgeFolder() || (model->isObjectDescendentOf(id,FSLSLBridge::instance().getBridgeFolder())
-			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
+	// <FS> Protected Folders
+	if (
+		((id == AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		||
+		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
 		)
-//-TT
+	{
 		return FALSE;
-	// ## Zi: Animation Overrider
+	}
+	// </FS> Protected Folders
 
 	if (!isAgentAvatarValid()) return FALSE;
 
