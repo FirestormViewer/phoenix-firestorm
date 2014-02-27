@@ -1,6 +1,6 @@
 /** 
  * @file fslslbridgerequest.cpp
- * @FSLSLBridgerequest implementation 
+ * @brief FSLSLBridgerequest implementation
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code

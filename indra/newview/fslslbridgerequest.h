@@ -1,6 +1,6 @@
 /** 
- * @file fslslbridgerequest.h 
- * @FSLSLBridgerequest header 
+ * @file fslslbridgerequest.h
+ * @brief FSLSLBridgerequest header
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
