@@ -5204,6 +5204,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Blocklist_Label">
 		Blockierliste
 	</string>
+	<string name="Command_ResyncAnimations_Label">
+		Animationen synchronisieren
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5355,7 +5358,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Aktiviert die Movelock-Funktion der Brücke und hält den Avatar an der aktuellen Position
 	</string>
 	<string name="Command_Blocklist_Tooltip">
-		Öffnet die Blockierliste / Liste der ignorierten Einwohner &amp; Objekte 
+		Öffnet die Blockierliste / Liste der ignorierten Einwohner &amp; Objekte
+	</string>
+	<string name="Command_ResyncAnimations_Tooltip">
+		Synchronisiert die Avatar-Animationen neu
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
