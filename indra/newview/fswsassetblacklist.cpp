@@ -247,11 +247,11 @@ void FSWSAssetBlacklist::loadBlacklist()
 			}
 			oldfile.close();
 			saveBlacklist();
-			llinfos << "Using old Phoenix file: " << old_file << llendl;
+			LL_INFOS("AssetBlacklist") << "Using old Phoenix file: " << old_file << LL_ENDL;
 		}
 		else
 		{
-			llinfos << "No Settings file found." << old_file << llendl;
+			LL_INFOS("AssetBlacklist") << "No Settings file found." << old_file << LL_ENDL;
 		}
 	}
 }
