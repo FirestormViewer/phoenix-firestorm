@@ -556,8 +556,13 @@ BOOL LLFolderViewItem::handleMouseDown( S32 x, S32 y, MASK mask )
 		mSelectPending = TRUE;
 	}
 
-	mDragStartX = x;
-	mDragStartY = y;
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+	S32 screen_x, screen_y;
+	localPointToScreen(x, y, &screen_x, &screen_y);
+	getRoot()->setDragStart( screen_x, screen_y );
+// [/SL:KB]
+//	mDragStartX = x;
+//	mDragStartY = y;
 	return TRUE;
 }
 
@@ -571,10 +576,34 @@ BOOL LLFolderViewItem::handleHover( S32 x, S32 y, MASK mask )
 	{
 			LLFolderView* root = getRoot();
 
-		if( (x - mDragStartX) * (x - mDragStartX) + (y - mDragStartY) * (y - mDragStartY) > drag_and_drop_threshold() * drag_and_drop_threshold() 
-			&& root->getCurSelectedItem()
-			&& root->startDrag())
+//		if( (x - mDragStartX) * (x - mDragStartX) + (y - mDragStartY) * (y - mDragStartY) > drag_and_drop_threshold() * drag_and_drop_threshold() 
+//			&& root->getCurSelectedItem()
+//			&& root->startDrag())
+//		{
+//					// RN: when starting drag and drop, clear out last auto-open
+//					root->autoOpenTest(NULL);
+//					root->setShowSelectionContext(TRUE);
+//
+//					// Release keyboard focus, so that if stuff is dropped into the
+//					// world, pressing the delete key won't blow away the inventory
+//					// item.
+//					gFocusMgr.setKeyboardFocus(NULL);
+//
+//			getWindow()->setCursor(UI_CURSOR_ARROW);
+//		}
+//		else if (x != mDragStartX || y != mDragStartY)
+//		{
+//			getWindow()->setCursor(UI_CURSOR_NOLOCKED);
+//		}
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+		S32 screen_x, screen_y;
+		localPointToScreen(x, y, &screen_x, &screen_y);
+
+		bool can_drag = true;
+		if ( (root->isOverDragThreshold(screen_x, screen_y)) && (root->getCurSelectedItem()) )
 		{
+			if (can_drag = root->startDrag())
+			{
 					// RN: when starting drag and drop, clear out last auto-open
 					root->autoOpenTest(NULL);
 					root->setShowSelectionContext(TRUE);
@@ -583,13 +612,14 @@ BOOL LLFolderViewItem::handleHover( S32 x, S32 y, MASK mask )
 					// world, pressing the delete key won't blow away the inventory
 					// item.
 					gFocusMgr.setKeyboardFocus(NULL);
+			}
+		}
 
+		if (can_drag)
 			getWindow()->setCursor(UI_CURSOR_ARROW);
-		}
-		else if (x != mDragStartX || y != mDragStartY)
-		{
+		else
 			getWindow()->setCursor(UI_CURSOR_NOLOCKED);
-		}
+// [/SL:KB]
 
 		return TRUE;
 	}

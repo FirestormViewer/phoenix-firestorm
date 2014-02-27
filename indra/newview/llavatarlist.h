@@ -115,7 +115,7 @@ public:
 	// We need this to be public since we call it from RlvUIEnabler::onToggleShowNames()
 	void updateAvatarNames();
 // [/RLVa:KB]
-	
+
 	// [FS:CR] Refresh names
 	void refreshNames();
 	// [/FS:CR]

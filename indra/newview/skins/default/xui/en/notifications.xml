@@ -6105,6 +6105,14 @@ URL: [MOAPURL]
 
   <notification
    icon="notifytip.tga"
+   name="ChatSystemMessageTip"
+   type="notifytip"
+   log_to_chat="true">
+[MESSAGE]
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
    name="Cancelled"
    type="notifytip">
 Cancelled.
@@ -7381,6 +7389,24 @@ If you stay in this region when it shuts down, you will be logged out.
    icon="notify.tga"
    name="RegionRestartSeconds"
    show_toast="false"
+   priority="high"
+   type="notify">
+The region "[NAME]" will restart in [SECONDS] seconds.
+If you stay in this region when it shuts down, you will be logged out.
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="RegionRestartMinutesToast"
+   priority="high"
+   type="notify">
+The region "[NAME]" will restart in [MINUTES] minutes.
+If you stay in this region when it shuts down, you will be logged out.
+  </notification>
+
+  <notification
+   icon="notify.tga"
+   name="RegionRestartSecondsToast"
    priority="high"
    type="notify">
 The region "[NAME]" will restart in [SECONDS] seconds.
@@ -11541,6 +11567,14 @@ Export failed unexpectedly. Please see the log for details.
      type="notify">
       <tag>Export</tag>
 		Successfully saved [OBJECT] to [FILENAME].
+    </notification>
+
+    <notification
+     icon="alertmodal.tga"
+     name="MeshMaxConcurrentReqTooHigh"
+     type="alertmodal">
+The value you set, [VALUE], for the number of concurrent requests to load mesh objects (debug setting [DEBUGNAME]) is higher than the maximum of [MAX]. It has been reset to the default of [DEFAULT].
+    <tag>fail</tag>
     </notification>
 	
     <notification

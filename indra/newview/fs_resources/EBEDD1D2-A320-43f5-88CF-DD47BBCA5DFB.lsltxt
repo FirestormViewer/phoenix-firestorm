@@ -1,4 +1,4 @@
-//http bridge script v.2.6
+//http bridge script v.2.7
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -19,7 +19,7 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      // Control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
-    string  bridgeVersion = "2.6";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.7";    // This should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
     integer debug = FALSE;
@@ -218,6 +218,11 @@
 
         else if (cmd == "llMoveToTarget")
         {
+            if(llSubStringIndex(llGetSimulatorHostname(),"lindenlab.com")!=-1)
+            {
+                // llMoveToTarget teleports are disabled for Second Life grids
+                return;
+            }
 
             // Pause movelock for now, if present
             if (useMoveLock)

@@ -63,14 +63,13 @@
 #include "roles_constants.h"
 #include "llgroupactions.h"
 #include "lltrans.h"
-
-// <FS:CR> For OpenSim export permisson
-#include "lfsimfeaturehandler.h"
-#include "llinventoryfunctions.h"
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "llslurl.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
+// <FS:CR> For OpenSim export permisson
+#include "lfsimfeaturehandler.h"
+#include "llinventoryfunctions.h"
 
 // <FS:CR> For OpenSim export permisson
 // base and own must have EXPORT, next owner must be UNRESTRICTED

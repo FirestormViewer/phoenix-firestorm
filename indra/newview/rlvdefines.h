@@ -59,14 +59,14 @@
 
 // Version of the specifcation we support
 const S32 RLV_VERSION_MAJOR = 2;
-const S32 RLV_VERSION_MINOR = 7;
+const S32 RLV_VERSION_MINOR = 8;
 const S32 RLV_VERSION_PATCH = 0;
 const S32 RLV_VERSION_BUILD = 0;
 
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 4;
-const S32 RLVa_VERSION_PATCH = 9;
+const S32 RLVa_VERSION_PATCH = 10;
 const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
@@ -103,6 +103,8 @@ const S32 RLVa_VERSION_BUILD = 0;
 #define RLV_ROOT_FOLDER					"#RLV"
 #define RLV_CMD_PREFIX					'@'
 #define RLV_PUTINV_PREFIX				"#RLV/~"
+#define RLV_PUTINV_SEPARATOR			"/"
+#define RLV_PUTINV_MAXDEPTH				4
 #define RLV_SETROT_OFFSET				F_PI_BY_TWO		// @setrot is off by 90 degrees with the rest of SL
 #define RLV_STRINGS_FILE				"rlva_strings.xml"
 

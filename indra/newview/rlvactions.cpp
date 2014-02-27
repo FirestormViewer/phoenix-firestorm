@@ -91,6 +91,12 @@ bool RlvActions::canStand()
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
 }
 
+// Checked: 2014-02-24 (RLVa-1.4.10)
+bool RlvActions::canShowLocation()
+{
+	return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
+}
+
 // Checked: 2013-05-10 (RLVa-1.4.9)
 bool RlvActions::hasBehaviour(ERlvBehaviour eBhvr)
 {

@@ -5524,10 +5524,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte nicht den Wert [VALUE_1] haben.
 	</string>
 	<string name="SanityCheckLessThan">
-		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert kleiner als [VALUE_1] haben.
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert kleiner als [VALUE_1] haben.
 	</string>
 	<string name="SanityCheckGreaterThan">
-		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert größer als [VALUE_1] haben.
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert größer als [VALUE_1] haben.
 	</string>
 	<string name="SanityCheckBetween">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert zwischen [VALUE_1] und [VALUE_2] haben.

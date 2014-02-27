@@ -5609,52 +5609,23 @@ LLInventoryObject* LLObjectBridge::getObject() const
 	return object;
 }
 
+// [RLVa:KB] - Checked: 2012-08-15 (RLVa-1.4.7)
+bool enable_attachment_touch(const LLUUID& idItem)
+{
+	const LLInventoryItem* pItem = gInventory.getItem(idItem);
+	if ( (isAgentAvatarValid()) && (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) )
+	{
+		const LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
+		return (pAttachObj) && (pAttachObj->flagHandleTouch()) && ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canTouch(gAgentAvatarp->getWornAttachment(idItem))) );
+	}
+	return false;
+}
+// [/RLVa:KB]
+
 // <FS:Ansariel> Touch worn objects
-bool is_attachment_touch_restricted(const LLUUID& idItem)
-{
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (!isAgentAvatarValid()) || (!pItem) )
-		return true;
-
-	std::string attachment_spot_name = gAgentAvatarp->getAttachedPointName(pItem->getLinkedUUID());
-	
-	bool attached_to_hud = (attachment_spot_name == "Center 2" ||
-		attachment_spot_name == "Top Right" ||
-		attachment_spot_name == "Top" ||
-		attachment_spot_name == "Top Left" ||
-		attachment_spot_name == "Center" ||
-		attachment_spot_name == "Bottom Left" ||
-		attachment_spot_name == "Bottom" ||
-		attachment_spot_name == "Bottom Right");
-
-	if (attached_to_hud)
-	{
-		return (gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHHUD));
-	}
-	else
-	{
-		return (gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHALL) ||
-			gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACH) ||
-			gRlvHandler.hasBehaviour(RLV_BHVR_TOUCHATTACHSELF));
-	}
-}
-
-bool is_attachment_touchable(const LLUUID& idItem)
-{
-	const LLInventoryItem* pItem = gInventory.getItem(idItem);
-	if ( (!isAgentAvatarValid()) || (!pItem) )
-		return false;
-
-	LLViewerObject* pAttachObj = gAgentAvatarp->getWornAttachment(pItem->getLinkedUUID());
-	if (!pAttachObj)
-		return false;
-
-	return pAttachObj->flagHandleTouch();
-}
-
 void handle_attachment_touch(const LLUUID& idItem)
 {
-	if (is_attachment_touch_restricted(idItem))
+	if (!enable_attachment_touch(idItem))
 	{
 		return;
 	}
@@ -5790,7 +5761,7 @@ void rez_attachment(LLViewerInventoryItem* item, LLViewerJointAttachment* attach
 {
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1)
 	// If no attachment point was specified, try looking it up from the item name
-	static LLCachedControl<bool> fRlvDeprecateAttachPt(gSavedSettings, "RLVaDebugDeprecateExplicitPoint");
+	static LLCachedControl<bool> fRlvDeprecateAttachPt(gSavedSettings, "RLVaDebugDeprecateExplicitPoint", false);
 	if ( (rlv_handler_t::isEnabled()) && (!fRlvDeprecateAttachPt) && 
 	     (!attachment) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
@@ -5945,16 +5916,10 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 				// TOOD-Catznip: should really be "Wearable And Object Edit" if we ever plan on pushing this upstream
 				items.push_back(std::string("Wearable Edit"));
 // [/SL:KB]
-				// <FS:Ansariel> Touch worn objects
-				if (is_attachment_touchable(mUUID))
-				{
-					items.push_back(std::string("Touch Attachment"));
-					if (is_attachment_touch_restricted(mUUID))
-					{
-						disabled_items.push_back(std::string("Touch Attachment"));
-					}
-				}
-				// </FS:Ansariel>
+
+				items.push_back(std::string("Touch Attachment"));
+				if ( ((flags & FIRST_SELECTED_ITEM) == 0) || (!enable_attachment_touch(mUUID)) )
+					disabled_items.push_back(std::string("Touch Attachment"));
 
 				items.push_back(std::string("Detach From Yourself"));
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a

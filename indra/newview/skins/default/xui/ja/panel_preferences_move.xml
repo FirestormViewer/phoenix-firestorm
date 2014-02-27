@@ -25,7 +25,6 @@
 			<check_box label="一人称視点で表示する" name="first_person_avatar_visible"/>
 			<check_box label="マウスルックにユーザーインターフェイスを表示" name="first_person_ui_visible" />
 			<check_box label="マウスルックでコンテキストメニューを有効にする" name="FSEnableRightclickMenuInMouselook" tool_tip="ALT-右クリックでパイメニュー／コンテキストメニューを開けるようにします。" />
-			<check_box label="フォーカスが戻ったらマウスルックを終了" name="exit_mouselook_focus_on_focus" tool_tip="ファイアーストームをバックグラウンドで走らせていた後、再びフォーカスが戻った時に、マウスルックを終了するようにします。" />
 			<check_box label="マウスルックのガイドを表示" name="mouselook_instructions_visible" />
 			<check_box label="マウスルックに十字を表示" name="ShowCrosshairs" tool_tip="マウスルックモードの時に、焦点を示す十字を表示します。" />
 			<text name="Mouse Sensitivity">

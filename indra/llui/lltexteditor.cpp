@@ -310,7 +310,7 @@ LLTextEditor::~LLTextEditor()
 
 	// Scrollbar is deleted by LLView
 	std::for_each(mUndoStack.begin(), mUndoStack.end(), DeletePointer());
-
+	mUndoStack.clear();
 	// context menu is owned by menu holder, not us
 	//delete mContextMenu;
 }
@@ -867,7 +867,10 @@ BOOL LLTextEditor::handleMouseUp(S32 x, S32 y, MASK mask)
 	BOOL	handled = FALSE;
 
 	// if I'm not currently selecting text
-	if (!(hasSelection() && hasMouseCapture()))
+//	if (!(hasSelection() && hasMouseCapture()))
+// [SL:KB] - Patch: Control-TextEditor | Checked: 2014-02-04 (Catznip)
+	if (!(hasSelection() && mIsSelecting && hasMouseCapture()))
+// [/SL:KB]
 	{
 		// let text segments handle mouse event
 		handled = LLTextBase::handleMouseUp(x, y, mask);

@@ -211,8 +211,8 @@ public:
 	void setIgnoreReshape(bool ignore) { mIgnoreReshape = ignore; }
 
 	// <FS:Ansariel> Add callback for reshaping
-	typedef boost::function<void(LLLayoutPanel* panel, const LLRect& rect)> reshape_callback_t;
-	void setReshapeCallback(reshape_callback_t cb) { mReshapeCallback = cb; }
+	typedef boost::function<void(LLLayoutPanel* panel, const LLRect& rect)> reshape_panel_callback_t;
+	void setReshapePanelCallback(reshape_panel_callback_t cb) { mReshapePanelCallback = cb; }
 	// </FS:Ansariel>
 
 protected:
@@ -233,7 +233,7 @@ protected:
 	class LLResizeBar* mResizeBar;
 
 	// <FS:Ansariel> Add callback for reshaping
-	reshape_callback_t mReshapeCallback;
+	reshape_panel_callback_t mReshapePanelCallback;
 };
 
 

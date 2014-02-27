@@ -19,7 +19,6 @@
 			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
 			<check_box label="Benutzerinterface im Mouselook anzeigen" name="first_person_ui_visible"/>
 			<check_box label="Kontextmenüs im Mouselook aktivieren" name="FSEnableRightclickMenuInMouselook" tool_tip="Öffnet das Pie-/Kontextmenü im Mouselook-Modus beim drücken von ALT + rechter Maustaste."/>
-			<check_box label="Mouselook verlassen, nachdem Fokus wiederlangt wurde" name="exit_mouselook_focus_on_focus" tool_tip="Verlässt den Mouselook-Modus, wenn Firestorm den Fokus wiederlangt hat, nachdem es im Hintergrund lief."/>
 			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible" tool_tip="Zeigt Hilfestellungen zum Mouselook-Modus an."/>
 			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
 			<check_box label="Combat-Funktionen aktivieren" name="FSMouselookCombatFeatures"/>

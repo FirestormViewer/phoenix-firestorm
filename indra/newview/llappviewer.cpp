@@ -1813,7 +1813,11 @@ bool LLAppViewer::mainLoop()
 				static LLCachedControl<F32> max_fps(gSavedSettings, "MaxFPS");
 				// Only limit FPS when we are actually rendering something.  Otherwise
 				// logins, logouts and teleports take much longer to complete.
-				if (max_fps > F_APPROXIMATELY_ZERO && 
+				// <FS:Ansariel> FIRE-11804: Expose MaxFPS
+				//if (max_fps > F_APPROXIMATELY_ZERO && 
+				static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
+				if (fsLimitFramerate && max_fps > F_APPROXIMATELY_ZERO && 
+				// </FS:Ansariel>
 					LLStartUp::getStartupState() == STATE_STARTED &&
 					!gTeleportDisplay &&
 					!logoutRequestSent())

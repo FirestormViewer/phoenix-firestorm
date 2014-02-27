@@ -147,6 +147,9 @@
 #include "llcommandhandler.h"
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
+// [RLVa:KB] - Checked: 2010-03-11
+#include "rlvfloaters.h"
+// [/RLVa:KB]
 // ND: And for FS please put yours after this line, for easier merges too
 #include "animationexplorer.h"
 #include "ao.h"
@@ -183,9 +186,6 @@
 #include "NACLfloaterexploresounds.h"
 #include "particleeditor.h"
 #include "quickprefs.h"
-// [RLVa:KB] - Checked: 2010-03-11
-#include "rlvfloaters.h"
-// [/RLVa:KB]
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
 {

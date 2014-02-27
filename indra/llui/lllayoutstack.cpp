@@ -203,9 +203,9 @@ void LLLayoutPanel::handleReshape(const LLRect& new_rect, bool by_user)
 	LLPanel::handleReshape(new_rect, by_user);
 
 	// <FS:Ansariel> Add callback for reshaping
-	if (!mReshapeCallback.empty())
+	if (!mReshapePanelCallback.empty())
 	{
-		mReshapeCallback(this, new_rect);
+		mReshapePanelCallback(this, new_rect);
 	}
 	// </FS:Ansariel>
 }

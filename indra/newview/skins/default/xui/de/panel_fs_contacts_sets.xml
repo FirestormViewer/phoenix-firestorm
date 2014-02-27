@@ -12,6 +12,9 @@
 	<panel.string name="pseudonyms">
 		Aliase
 	</panel.string>
+	<panel.string name="non_friends">
+		Nicht-Freunde
+	</panel.string>
 	<combo_box name="combo_sets" width="199"/>
 	<button name="config_btn" tool_tip="Ausgewähltes Kontakt-Set konfigurieren"/>
 	<button name="add_set_btn" tool_tip="Neues Kontakt-Set hinzufügen"/>

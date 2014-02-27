@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
  
 <floater
- open_positioning="left"
+ positioning="left"
  height="600"
  layout="topleft"
  name="Edit Sky Preset"
@@ -425,7 +425,7 @@
              initial_value="0"
              layout="topleft"
              left="5"
-             max_val="99"		 
+             max_val="500"		 
              name="WLStarAlpha"
              top_pad="0"
              width="255" />
@@ -453,7 +453,7 @@
              initial_value="2"
              layout="topleft"
              left="5"
-             max_val="10"
+             max_val="20"
              min_val="0"
              name="WLGamma"
              top_pad="0"

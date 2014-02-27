@@ -227,18 +227,6 @@
          top_pad="2"
          width="256" />
         <check_box
-         control_name="FSLeaveMouselookOnFocus"
-         follows="left|top"
-         enabled_control="EnableMouselook"
-         height="16"
-         initial_value="true"
-         label="Leave Mouselook after regaining focus"
-         layout="topleft"
-         name="exit_mouselook_focus_on_focus"
-         tool_tip="Leaves the mouselook if Firestorm regains focus after it has been running in the background."
-         top_pad="2"
-         width="256" />
-        <check_box
          control_name="FSShowMouselookInstructions"
          follows="left|top"
          enabled_control="EnableMouselook"

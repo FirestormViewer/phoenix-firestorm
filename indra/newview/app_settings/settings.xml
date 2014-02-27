@@ -1182,17 +1182,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-  <key>FSLeaveMouselookOnFocus</key>
-    <map>
-      <key>Comment</key>
-      <string>Exit mouselook mode when regaining focus</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
   <key>FSEnableRightclickMenuInMouselook</key>
     <map>
       <key>Comment</key>
@@ -12630,6 +12619,14 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>U32</string>
     <key>Value</key>
     <integer>8</integer>
+    <key>SanityCheckType</key>
+    <string>LessThan</string>
+    <key>SanityValue</key>
+    <array>
+      <integer>13</integer>
+    </array>
+    <key>SanityComment</key>
+    <string>Setting this value too high will make it less likely that mesh objects will load correctly and cause performace degradation for you and others in the same region.</string>
   </map>
   <key>MeshMaxConcurrentRequests</key>
   <map>
@@ -12640,7 +12637,15 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>32</integer>
+    <integer>16</integer>
+    <key>SanityCheckType</key>
+    <string>LessThan</string>
+    <key>SanityValue</key>
+    <array>
+      <integer>33</integer>
+    </array>
+    <key>SanityComment</key>
+    <string>Setting this value too high will make it less likely that mesh objects will load correctly and cause performace degradation for you and others in the same region.</string>
   </map>
   <key>MeshUseHttpRetryAfter</key>
   <map>
@@ -17032,7 +17037,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>-1.0</real>
+      <real>60.0</real>
     </map>
     <key>ForcePeriodicRenderingTime</key>
     <map>
@@ -20246,9 +20251,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
     </map>
     <!-- End: Prefs > Sound/Media => UI Sounds -->
-=======
->>>>>>> other
-  
     <key>FSShowVoiceVisualizer</key>
     <map>
       <key>Comment</key>
@@ -21953,6 +21955,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <map>
       <key>Comment</key>
       <string>Don't shake my screen when region restart alert message is shown</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSUseNewRegionRestartNotification</key>
+      <map>
+      <key>Comment</key>
+      <string>Use the new region restart notification instead of the old one with toasts</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSLimitFramerate</key>
+      <map>
+      <key>Comment</key>
+      <string>Enable framerate limitation defined by MaxFPS</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

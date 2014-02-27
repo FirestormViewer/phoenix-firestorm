@@ -2898,6 +2898,14 @@ Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 		Restart regionu "[NAME]" za [SECONDS] sek.
 Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 	</notification>
+	<notification name="RegionRestartMinutesToast">
+		Region "[NAME]" zostanie zrestartowany za [MINUTES] minut.
+Jeśli w nim zostaniesz, to symulator Cię wyloguje.
+	</notification>
+	<notification name="RegionRestartSecondsToast">
+		Region "[NAME]" zostanie zrestartowany za [SECONDS] sekund.
+Jeśli w nim zostaniesz, to symulator Cię wyloguje.
+	</notification>
 	<notification name="LoadWebPage">
 		Załadować stronę [URL] ?
 
@@ -4509,6 +4517,9 @@ Nie można tego cofnąć.
 	<notification name="ExportColladaSuccess">
 		Zapisano z powodzeniem [OBJECT] do [FILENAME].
 	</notification>
+	<notification name="MeshMaxConcurrentReqTooHigh">	
+		Wartość ustawienia ([VALUE]) dla liczby jednoczesnych żądań ładowania obiektów meszowych określona przez Ciebie (ustawienie debugowania [DEBUGNAME]) jest wyższa niż dopuszczalne [MAX]. Została ona zresetowana do domyślnej, [DEFAULT].
+	</notification>
 	<notification name="ImportSuccess">
 		Pomyślnie zaimportowano [COUNT] [OBJECT].
 	</notification>
@@ -4520,9 +4531,6 @@ Nie można tego cofnąć.
 	</notification>
 	<notification name="AntiSpamChatNewLineFloodBlocked">
 		Antyspam: Zablokowano [SOURCE] za wysłanie wiadomości czatu mającej więcej niż [COUNT] linii.
-	</notification>
-	<notification name="MeshMaxConcurrentReqTooHigh">
-		Wartość ustawienia dla liczby jednoczesnych żądań ładowania obiektów meszowych określona przez Ciebie, [VALUE], jest wyższa niż dopuszczalne [MAX]. Została ona zresetowana do domyślnej, [DEFAULT].
 	</notification>
 	<notification name="SkinDefaultsChangeSettings">
 		[MESSAGE]

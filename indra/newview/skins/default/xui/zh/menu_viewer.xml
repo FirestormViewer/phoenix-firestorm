@@ -378,6 +378,7 @@
 			<menu_item_call label="重新載入顏色設定" name="Reload Color Settings"/>
 			<menu_item_call label="顯示字型測試" name="Show Font Test"/>
 			<menu_item_check label="顯示 XUI 名稱" name="Show XUI Names"/>
+			<menu_item_call label="XUI 預覽工具" name="UI Preview Tool"/>
 			<menu_item_call label="送出測試 IMs" name="Send Test IMs"/>
 			<menu_item_call label="沖洗名稱快取資料" name="Flush Names Caches"/>
 		</menu>

@@ -1,6 +1,8 @@
-@echo off
+rem @echo off
 setlocal
 
+del /F /Q build_MSI\*
+rmdir build_MSI
 md build_MSI
 cd build_MSI
 
@@ -17,23 +19,32 @@ set MAJOR=%6
 set MINOR=%7
 set HGCHANGE=%9
 
-
 set PATH=%PATH%;%1\..\..\packages\bin\wix
 
-heat dir %VIEWER_BUILDDIR%\app_settings -gg -cg fs_appsettings -var var.BUILDDIR -dr INSTALLDIR -out app_settings.wxs
 heat dir %VIEWER_BUILDDIR%\character -gg -cg fs_character -var var.BUILDDIR -dr INSTALLDIR -out character.wxs
 heat dir %VIEWER_BUILDDIR%\fonts -gg -cg fs_fonts -var var.BUILDDIR -dr INSTALLDIR -out fonts.wxs
 heat dir %VIEWER_BUILDDIR%\fs_resources -gg -cg fs_fsres -var var.BUILDDIR -dr INSTALLDIR -out fs_resources.wxs
-heat dir %VIEWER_BUILDDIR%\skins -gg -cg fs_skins -var var.BUILDDIR -dr INSTALLDIR -out skins.wxs
 
-candle -dBUILDDIR=%VIEWER_BUILDDIR%\app_settings app_settings.wxs
+python %~dp0\compress_assets.py %VIEWER_BUILDDIR%\skins %VIEWER_BUILDDIR%\skins
+python %~dp0\compress_assets.py %VIEWER_BUILDDIR%\app_settings %VIEWER_BUILDDIR%\app_settings
+
 candle -dBUILDDIR=%VIEWER_BUILDDIR%\character character.wxs
 candle -dBUILDDIR=%VIEWER_BUILDDIR%\fonts fonts.wxs
 candle -dBUILDDIR=%VIEWER_BUILDDIR%\fs_resources fs_resources.wxs
-candle -dBUILDDIR=%VIEWER_BUILDDIR%\skins skins.wxs
 
 candle -dPLUGIN_SOURCEDIR=%PLUGIN_SOURCEDIR% %~dp0\llplugin.wxs
-candle -dPROGRAM_FILE=%PROGRAM_FILE% -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dBUILDDIR=%VIEWER_BUILDDIR%\ %~dp0\firestorm.wxs
+candle -dPROGRAM_FILE=%PROGRAM_FILE% -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dBUILDDIR=%VIEWER_BUILDDIR%\ -dWIX_SOURCEDIR=%~dp0 %~dp0\firestorm.wxs
 candle -dPROGRAM_FILE=%PROGRAM_FILE% -dPROGRAM_VERSION=%PROGRAM_VERSION% -dCHANNEL_NAME=%CHANNEL_NAME% -dSETTINGS_FILE=%SETTINGS_FILE% -dPROGRAM_NAME=%PROGRAM_NAME% -dBUILDDIR=%VIEWER_BUILDDIR%\ %~dp0\registry.wxs
 
-light -sval -ext WixUIExtension -cultures:en-us -out %VIEWER_BUILDDIR%\%OUTPUT_FILE% firestorm.wixobj app_settings.wixobj character.wixobj fonts.wixobj fs_resources.wixobj llplugin.wixobj registry.wixobj skins.wixobj
+light -sval -ext WixUIExtension -cultures:en-us -out %VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi firestorm.wixobj character.wixobj fonts.wixobj fs_resources.wixobj llplugin.wixobj registry.wixobj
+
+signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com %VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi
+
+candle -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dWIX_SOURCEDIR=%~dp0 -dFS_MSI_FILE=%VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi -ext WixBalExtension %~dp0\installer.wxs
+light -sval -ext WixBalExtension -out %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe installer.wixobj
+
+insignia -ib %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe -o engine.exe
+signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com engine.exe
+insignia -ab engine.exe %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe -o %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe
+
+signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe

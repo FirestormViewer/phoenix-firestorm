@@ -249,7 +249,7 @@ if (LINUX)
     # this stops us requiring a really recent glibc at runtime
     add_definitions(-fno-stack-protector)
     # linking can be very memory-hungry, especially the final viewer link
-    set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
+    set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id")
   endif (NOT STANDALONE)
 
   # <FS:TS> Enable AVX optimizations if requested and at least GCC 4.6.
@@ -338,8 +338,9 @@ if (STANDALONE)
 
 else (STANDALONE)
   set(${ARCH}_linux_INCLUDES
-      ELFIO
       atk-1.0
+      cairo
+      freetype
       glib-2.0
       gstreamer-0.10
       gtk-2.0

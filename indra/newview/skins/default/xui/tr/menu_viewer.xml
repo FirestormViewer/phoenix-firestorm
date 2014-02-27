@@ -379,6 +379,7 @@
 			<menu_item_call label="Renk Ayarlarını Tekrar Yükle" name="Reload Color Settings"/>
 			<menu_item_call label="Fon Testini Göster" name="Show Font Test"/>
 			<menu_item_check label="XUI Adlarını Göster" name="Show XUI Names"/>
+			<menu_item_call label="XKA Önizleme Aracı" name="UI Preview Tool"/>
 			<menu_item_call label="Test Amaçlı Aİ&apos;ler Gönder" name="Send Test IMs"/>
 			<menu_item_call label="Ad Önbelleklerini Temizle" name="Flush Names Caches"/>
 		</menu>

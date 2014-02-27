@@ -381,7 +381,9 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 		if (LLAvatarNameCache::get(idAgents[idxAgent], &avName))
 		{
 			const std::string& strDisplayName = avName.getDisplayName();
+			bool fFilterDisplay = (strDisplayName.length() > 2);
 			const std::string& strLegacyName = avName.getLegacyName();
+			fFilterLegacy &= (strLegacyName.length() > 2);
 			const std::string& strAnonym = RlvStrings::getAnonym(avName);
 
 			// If the display name is a subset of the legacy name we need to filter that first, otherwise it's the other way around
@@ -389,11 +391,13 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 			{
 				if (fFilterLegacy)
 					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
-				boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
+				if (fFilterDisplay)
+					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
 			}
 			else
 			{
-				boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
+				if (fFilterDisplay)
+					boost::ireplace_all(strUTF8Text, strDisplayName, strAnonym);
 				if (fFilterLegacy)
 					boost::ireplace_all(strUTF8Text, strLegacyName, strAnonym);
 			}
@@ -666,7 +670,7 @@ bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWea
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool rlvPredCanRemoveItem(const LLInventoryItem* pItem)
+bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem)
 {
 	if ( (pItem) && (RlvForceWear::isWearableItem(pItem)) )
 	{
@@ -689,7 +693,7 @@ bool rlvPredCanRemoveItem(const LLInventoryItem* pItem)
 }
 
 // Checked: 2010-03-22 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
-bool rlvPredCanNotRemoveItem(const LLInventoryItem* pItem)
+bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem)
 {
 	return !rlvPredCanRemoveItem(pItem);
 }

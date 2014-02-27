@@ -586,7 +586,6 @@
     </button>
     <scroll_list
      draw_stripes="false"
-     bg_writeable_color="MouseGray"
      follows="all"
      height="145"
      layout="topleft"

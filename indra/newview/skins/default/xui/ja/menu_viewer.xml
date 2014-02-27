@@ -615,6 +615,7 @@
 			<menu_item_check label="デバッグ情報を表示" name="DebugViews" />
 			<!-- added Jun.30, 2013 -->
 			
+			<menu_item_call label="XUI プレビューツール" name="UI Preview Tool"/>
 			<menu_item_call label="テスト用 IM を送信する" name="Send Test IMs"/>
 			<menu_item_call label="名前のキャッシュをフラッシュ" name="Flush Names Caches"/>
 		</menu>

@@ -2017,8 +2017,18 @@ void LLFloaterPreference::onClickLogPath()
 //[FIX FIRE-2765 : SJ] Making sure Reset button resets the chatlogdirectory to the default setting
 void LLFloaterPreference::onClickResetLogPath()
 {
-	gDirUtilp->setChatLogsDir(gDirUtilp->getOSUserAppDir());
-	gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
+	// <FS:Ansariel> FIRE-12955: Logs don't get moved when clicking reset log path button
+	//gDirUtilp->setChatLogsDir(gDirUtilp->getOSUserAppDir());
+	//gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getChatLogsDir());
+
+	mPriorInstantMessageLogPath = gDirUtilp->getChatLogsDir();
+	gSavedPerAccountSettings.setString("InstantMessageLogPath", gDirUtilp->getOSUserAppDir());
+
+	// enable/disable 'Delete transcripts button
+	updateDeleteTranscriptsButton();
+
+	getChildView("reset_logpath")->setEnabled(FALSE);
+	// </FS:Ansariel>
 }
 
 bool LLFloaterPreference::moveTranscriptsAndLog()
@@ -2817,8 +2827,31 @@ public:
 		}
 	}
 
+	// <FS:Ansariel> DebugLookAt checkbox status not working properly
+	/*virtual*/ BOOL postBuild()
+	{
+		getChild<LLUICtrl>("DebugLookAt")->setCommitCallback(boost::bind(&LLPanelPreferencePrivacy::onClickDebugLookAt, this, _2));
+		gSavedPerAccountSettings.getControl("DebugLookAt")->getSignal()->connect(boost::bind(&LLPanelPreferencePrivacy::onChangeDebugLookAt, this));
+		onChangeDebugLookAt();
+
+		return TRUE;
+	}
+	// </FS:Ansariel>
+
 private:
 	std::list<std::string> mAccountIndependentSettings;
+
+	// <FS:Ansariel> DebugLookAt checkbox status not working properly
+	void onChangeDebugLookAt()
+	{
+		getChild<LLCheckBoxCtrl>("DebugLookAt")->set(gSavedPerAccountSettings.getS32("DebugLookAt") == 0 ? FALSE : TRUE);
+	}
+
+	void onClickDebugLookAt(const LLSD& value)
+	{
+		gSavedPerAccountSettings.setS32("DebugLookAt", value.asBoolean());
+	}
+	// </FS:Ansariel>
 };
 
 static LLRegisterPanelClassWrapper<LLPanelPreferenceGraphics> t_pref_graph("panel_preference_graphics");

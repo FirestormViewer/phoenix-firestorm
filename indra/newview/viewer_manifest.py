@@ -764,7 +764,7 @@ class Windows_i686_Manifest(ViewerManifest):
           substitution_strings['installer_file'] = installer_file
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
                            " " + self.channel() + " " + substitution_strings[ 'version' ] +
-                           " " + settingsFile + " " + installer_file + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
+                           " " + settingsFile + " " + installer_file[:-4] + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
           
 
         self.fs_sign_win_installer( substitution_strings ) # <FS:ND/> Sign files, step two. Sign installer.
@@ -1210,6 +1210,82 @@ class LinuxManifest(ViewerManifest):
             print "Skipping llcommon.so (assuming llcommon was linked statically)"
 
         self.path("featuretable_linux.txt")
+        
+        if self.is_packaging_viewer():
+          if self.prefix("../packages/lib/release", dst="lib"):
+            self.path("libapr-1.so*")
+            self.path("libaprutil-1.so*")
+            self.path("libboost_context-mt.so*")
+            self.path("libboost_filesystem-mt.so*")
+            self.path("libboost_program_options-mt.so*")
+            self.path("libboost_regex-mt.so*")
+            self.path("libboost_signals-mt.so*")
+            self.path("libboost_system-mt.so*")
+            self.path("libboost_thread-mt.so*")
+            self.path("libboost_chrono-mt.so*") #<FS:TM> FS spcific
+            self.path("libboost_date_time-mt.so*") #<FS:TM> FS spcific
+            self.path("libboost_wave-mt.so*") #<FS:TM> FS spcific
+            self.path("libcollada14dom.so*")
+            self.path("libdb*.so*")
+            self.path("libcrypto.so*")
+            self.path("libexpat.so*")
+            self.path("libssl.so*")
+            self.path("libGLOD.so")
+            self.path("libminizip.so")
+            self.path("libuuid.so*")
+            self.path("libSDL-1.2.so*")
+            self.path("libdirectfb*.so*")
+            self.path("libfusion*.so*")
+            self.path("libdirect*.so*")
+            self.path("libopenjpeg.so*")
+            self.path("libhunspell-1.3.so*")
+            self.path("libalut.so*")
+            self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
+            self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
+            self.path("libopenal.so*")
+            #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
+            self.path("libpangox-1.0.so*")
+
+            # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
+            # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
+            # and libfontconfig.so. Before we added support for library-file
+            # wildcards, though, this self.path() call specifically named
+            # libfontconfig.so.1.4.4 WITHOUT also copying the symlinks. When I
+            # (nat) changed the call to self.path("libfontconfig.so.*"), we
+            # ended up with the libfontconfig.so.1 symlink in the target
+            # directory as well. But guess what! At least on Ubuntu 10.04,
+            # certain viewer fonts look terrible with libfontconfig.so.1
+            # present in the target directory. Removing that symlink suffices
+            # to improve them. I suspect that means we actually do better when
+            # the viewer fails to find our packaged libfontconfig.so*, falling
+            # back on the system one instead -- but diagnosing and fixing that
+            # is a bit out of scope for the present project. Meanwhile, this
+            # particular wildcard specification gets us exactly what the
+            # previous call did, without having to explicitly state the
+            # version number.
+            self.path("libfontconfig.so.*.*")
+
+            try:
+                self.path("libtcmalloc.so*") #formerly called google perf tools
+                pass
+            except:
+                print "tcmalloc files not found, skipping"
+                pass
+
+            self.end_prefix("lib")
+
+            # Vivox runtimes
+            # Currentelly, the 32-bit ones will work with a 64-bit client.
+            if self.prefix(src="../packages/lib/release", dst="bin"):
+                    self.path("SLVoice")
+                    self.end_prefix()
+            if self.prefix(src="../packages/lib/release", dst="lib"):
+                    self.path("libortp.so")
+                    self.path("libsndfile.so.1")
+                    #self.path("libvivoxoal.so.1") # no - we'll re-use the viewer's own OpenAL lib
+                    self.path("libvivoxsdk.so")
+                    self.path("libvivoxplatform.so")
+                    self.end_prefix("lib")
 
     def copy_finish(self):
         # Force executable permissions to be set for scripts
@@ -1278,70 +1354,10 @@ class Linux_i686_Manifest(LinuxManifest):
     def construct(self):
         super(Linux_i686_Manifest, self).construct()
 
-        if self.prefix("../packages/lib/release", dst="lib"):
-            self.path("libapr-1.so")
-            self.path("libapr-1.so.0")
-            self.path("libapr-1.so.0.4.5")
-            self.path("libaprutil-1.so")
-            self.path("libaprutil-1.so.0")
-            self.path("libaprutil-1.so.0.4.1")
-            self.path("libboost_context-mt.so.*")
-            self.path("libboost_filesystem-mt.so.*")
-            self.path("libboost_program_options-mt.so.*")
-            self.path("libboost_regex-mt.so.*")
-            self.path("libboost_signals-mt.so.*")
-            self.path("libboost_system-mt.so.*")
-            self.path("libboost_thread-mt.so.*")
-            self.path("libboost_chrono-mt.so.*") #<FS:TM> FS spcific
-            self.path("libboost_date_time-mt.so.*") #<FS:TM> FS spcific
-            self.path("libboost_wave-mt.so.*") #<FS:TM> FS spcific
-            self.path("libcollada14dom.so")
-            self.path("libdb*.so")
-            self.path("libcrypto.so.*")
-            self.path("libexpat.so.*")
-            self.path("libssl.so.1.0.0")
-            self.path("libGLOD.so")
-            self.path("libminizip.so")
-            self.path("libuuid.so*")
-            self.path("libSDL-1.2.so.*")
-            self.path("libdirectfb-1.*.so.*")
-            self.path("libfusion-1.*.so.*")
-            self.path("libdirect-1.*.so.*")
-            self.path("libopenjpeg.so*")
-            self.path("libdirectfb-1.4.so.5")
-            self.path("libfusion-1.4.so.5")
-            self.path("libdirect-1.4.so.5*")
-            self.path("libhunspell-1.3.so*")
-            self.path("libalut.so")
-            self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
-            self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
-            self.path("libopenal.so", "libopenal.so.1")
+        if self.is_packaging_viewer():
+          if self.prefix("../packages/lib/release", dst="lib"):
+
             self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
-            #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
-            # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
-            # libfontconfig.so.1.4.4, along with symlinks libfontconfig.so.1
-            # and libfontconfig.so. Before we added support for library-file
-            # wildcards, though, this self.path() call specifically named
-            # libfontconfig.so.1.4.4 WITHOUT also copying the symlinks. When I
-            # (nat) changed the call to self.path("libfontconfig.so.*"), we
-            # ended up with the libfontconfig.so.1 symlink in the target
-            # directory as well. But guess what! At least on Ubuntu 10.04,
-            # certain viewer fonts look terrible with libfontconfig.so.1
-            # present in the target directory. Removing that symlink suffices
-            # to improve them. I suspect that means we actually do better when
-            # the viewer fails to find our packaged libfontconfig.so*, falling
-            # back on the system one instead -- but diagnosing and fixing that
-            # is a bit out of scope for the present project. Meanwhile, this
-            # particular wildcard specification gets us exactly what the
-            # previous call did, without having to explicitly state the
-            # version number.
-            self.path("libfontconfig.so.*.*")
-            try:
-                self.path("libtcmalloc.so*") #formerly called google perf tools
-                pass
-            except:
-                print "tcmalloc files not found, skipping"
-                pass
 
             try:
                     self.path("libfmodex-*.so")
@@ -1350,36 +1366,45 @@ class Linux_i686_Manifest(LinuxManifest):
             except:
                     print "Skipping libfmodex.so - not found"
                     pass
-			
-            self.end_prefix("lib")
-
-            self.prefix(src="../packages/lib/release/x86", dst="lib")
-
-            try:
-                self.path("libLeap.so")
-            except:
-                print "Leap Motion library not found"
 
             self.end_prefix("lib")
 
-            # Vivox runtimes
-            if self.prefix(src="../packages/lib/release", dst="bin"):
-                    self.path("SLVoice")
-                    self.end_prefix()
-            if self.prefix(src="../packages/lib/release", dst="lib"):
-                    self.path("libortp.so")
-                    self.path("libsndfile.so.1")
-                    #self.path("libvivoxoal.so.1") # no - we'll re-use the viewer's own OpenAL lib
-                    self.path("libvivoxsdk.so")
-                    self.path("libvivoxplatform.so")
-                    self.end_prefix("lib")
-
-            self.strip_binaries()
+          self.prefix(src="../packages/lib/release/x86", dst="lib")
+          try:
+              self.path("libLeap.so")
+          except:
+              print "Leap Motion library not found"
+          self.end_prefix("lib")
 
 
 class Linux_x86_64_Manifest(LinuxManifest):
     def construct(self):
         super(Linux_x86_64_Manifest, self).construct()
+
+        if self.is_packaging_viewer():
+          if self.prefix("../packages/lib/release", dst="lib"):
+
+            # vivox 32-bit hack.
+            # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
+            # and place it in the prebuilt lib/release directory
+            self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
+
+            try:
+                    self.path("libfmodex64-*.so")
+                    self.path("libfmodex64.so")
+                    pass
+            except:
+                    print "Skipping libfmodex.so - not found"
+                    pass
+
+            self.end_prefix("lib")
+
+          self.prefix(src="../packages/lib/release/x64", dst="lib")
+          try:
+              self.path("libLeap.so")
+          except:
+              print "Leap Motion library not found"
+          self.end_prefix("lib")
 
         # support file for valgrind debug tool
         self.path("secondlife-i686.supp")

@@ -34,12 +34,11 @@ if (STANDALONE)
 else (STANDALONE)
   use_prebuilt_binary(gtk-atk-pango-glib)
   if (LINUX)
-    set(UI_LIBRARIES
+    set(UI_LIB_NAMES
         freetype
         atk-1.0
         gdk-x11-2.0
         gdk_pixbuf-2.0
-        Xinerama
         glib-2.0
         gmodule-2.0
         gobject-2.0
@@ -49,8 +48,30 @@ else (STANDALONE)
         pangoft2-1.0
         pangox-1.0
         pangoxft-1.0
-        ${FREETYPE_LIBRARIES}
         )
+    foreach(libname ${UI_LIB_NAMES})
+      find_library(UI_LIB_${libname}
+                   NAMES ${libname}
+                   PATHS
+                     debug ${LIBS_PREBUILT_DIR}/lib/debug
+                     optimized ${LIBS_PREBUILT_DIR}/lib/release
+                   NO_DEFAULT_PATH
+                   )
+      set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_${libname}})
+    endforeach(libname)
+
+    if (ND_BUILD64BIT_ARCH)
+      find_library(UI_LIB_gio-2.0
+                   NAMES gio-2.0
+                   PATHS
+                     debug ${LIBS_PREBUILT_DIR}/lib/debug
+                     optimized ${LIBS_PREBUILT_DIR}/lib/release
+                   NO_DEFAULT_PATH
+                   )
+      set(UI_LIBRARIES ${UI_LIBRARIES} ${UI_LIB_gio-2.0})
+    endif(ND_BUILD64BIT_ARCH)
+
+    set(UI_LIBRARIES ${UI_LIBRARIES} Xinerama)
   endif (LINUX)
 
   include_directories (
