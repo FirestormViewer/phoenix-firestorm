@@ -187,21 +187,6 @@
         <key>Value</key>
             <string>The Resident you messaged is currently away from keyboard. Your message will still be shown in their IM panel for later viewing.</string>
         </map>
-    <key>FSLSLBridgeUUID</key>
-        <map>
-        <key>Comment</key>
-            <string>Current bridge UUID</string>
-        <key>Persist</key>
-            <integer>1</integer>
-        <key>HideFromEditor</key>
-            <integer>1</integer>
-        <key>Type</key>
-            <string>String</string>
-        <key>Value</key>
-            <string>00000</string>
-        <key>Backup</key>
-            <integer>0</integer>
-        </map>
     <key>FSMutedAvatarResponse</key>
         <map>
         <key>Comment</key>

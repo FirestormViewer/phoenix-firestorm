@@ -155,7 +155,7 @@ bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID
 		return false;
 	}
 	std::string tag = message.substr(0, tagend + 1);
-	std::string ourBridge = gSavedPerAccountSettings.getString("FSLSLBridgeUUID");
+	std::string ourBridge = findFSCategory().asString();
 	//</FS:TS> FIRE-962
 	
 	bool status = false;
@@ -920,9 +920,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 	std::string bridgeScript( (char const*)&vctData[0] );
 
 	std::string bridgekey = "BRIDGEKEY";
-	std::string newauth = LLUUID::generateNewID().asString();
-	bridgeScript.replace(bridgeScript.find(bridgekey), bridgekey.length(), newauth);
-	gSavedPerAccountSettings.setString("FSLSLBridgeUUID", newauth);
+	bridgeScript.replace(bridgeScript.find(bridgekey), bridgekey.length(), FSLSLBridge::getInstance()->findFSCategory().asString());
 
 	LLFILE *fpOut = LLFile::fopen(fNew, "wt");
 
