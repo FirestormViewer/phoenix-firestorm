@@ -513,4 +513,11 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="fs_blocklist"
            />
+  <command name="resync_animations"
+           available_in_toybox="true"
+           icon="resync_animations"
+           label_ref="Command_ResyncAnimations_Label"
+           tooltip_ref="Command_ResyncAnimations_Tooltip"
+           execute_function="Tools.ResyncAnimations"
+           />
 </commands>

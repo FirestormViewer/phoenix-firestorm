@@ -2348,7 +2348,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Conversation_Log_Label">Conversation Log</string>
   <string name="Command_Move_Lock_Label">Move Lock</string>
   <string name="Command_Blocklist_Label">Block List</string>
-	
+  <string name="Command_ResyncAnimations_Label">Resync animations</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -2401,6 +2401,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Conversation_Log_Tooltip">Opens the conversation log to view past chat transcripts</string>
   <string name="Command_Move_Lock_Tooltip">Locks your avatar in its current position</string>
   <string name="Command_Blocklist_Tooltip">Opens the block/mute list</string>
+  <string name="Command_ResyncAnimations_Tooltip">Synchronizes avatar animations</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>

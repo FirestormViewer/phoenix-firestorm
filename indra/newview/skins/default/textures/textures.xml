@@ -756,6 +756,7 @@ with the same filename but different name
   <texture name="radar" file_name="toolbar_icons/radar.png" preload="true" />
   <texture name="move_lock" file_name="toolbar_icons/movelock.png" preload="true" />
   <texture name="block_list" file_name="toolbar_icons/blocklist.png" preload="true" />
+  <texture name="resync_animations" file_name="toolbar_icons/resync_animations.png" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
 
