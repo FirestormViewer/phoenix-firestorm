@@ -25,9 +25,9 @@
 		<text name="label_colors">
 			Benutzerdefinierte Farben:
 		</text>
-		<check_box label="Farbe des Minimap-Icon eines Freundes anhand Kontakt-Set" name="FSContactSetsColorizeMiniMap"/>
-		<check_box label="Farbe des Namens-Tags eines Freundes anhand Kontakt-Set" name="FSContactSetsColorizeNameTag"/>
-		<check_box label="Farbe des Radar-Eintrags eines Freundes anhand Kontakt-Set" name="FSContactSetsColorizeRadar"/>
-		<check_box label="Chatfarbe eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeChat"/>
+		<check_box label="Minimap-Icon basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeMiniMap"/>
+		<check_box label="Namens-Tag basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeNameTag"/>
+		<check_box label="Radar-Eintrag basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeRadar"/>
+		<check_box label="Chat basierend auf Kontakt-Set einfärben" name="FSContactSetsColorizeChat"/>
 	</panel>
 </floater>

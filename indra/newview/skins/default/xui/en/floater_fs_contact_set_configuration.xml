@@ -128,7 +128,7 @@ Custom Colors:
      top_pad="4"
      follows="left|top"
      height="12"
-     label="Color a friend's mini map icon based on their Contact Set"
+     label="Color mini map icon based on their Contact Set"
      left_delta="5"
      name="FSContactSetsColorizeMiniMap"
      width="270"
@@ -136,14 +136,14 @@ Custom Colors:
     <check_box
      follows="left|top"
      height="12"
-     label="Color a friend's name tag based on their Contact Set"
+     label="Color name tag based on their Contact Set"
      name="FSContactSetsColorizeNameTag"
      width="270"
      control_name="FSContactSetsColorizeNameTag"/>
     <check_box
      follows="left|top"
      height="12"
-     label="Color a friend's radar list entry based on their Contact Set"
+     label="Color radar list entry based on their Contact Set"
      name="FSContactSetsColorizeRadar"
      width="270"
      control_name="FSContactSetsColorizeRadar"/>
@@ -151,7 +151,7 @@ Custom Colors:
      follows="left|top"
      height="12"
      initial_value="false"
-     label="Color a friend's chat based on their Contact Set"
+     label="Color chat based on their Contact Set"
      name="FSContactSetsColorizeChat"
      width="270"
      control_name="FSContactSetsColorizeChat"/>
