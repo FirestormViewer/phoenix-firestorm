@@ -1637,6 +1637,20 @@ BOOL LLTabContainer::setTab(S32 which)
 					else
 					{
 						is_visible = FALSE;
+
+						// <FS:Ansariel> FIRE-12999: Automatically scroll to selected tab
+						//               in vertical tabs if it's outside the visible tabs
+						if (which - num_visible <= getMaxScrollPos())
+						{
+							setScrollPos(which - num_visible);
+							is_visible = TRUE;
+						}
+						else if (which < getScrollPos())
+						{
+							setScrollPos(which);
+							is_visible = TRUE;
+						}
+						// </FS:Ansariel>
 					}
 				}
 				else if (getMaxScrollPos() > 0)
