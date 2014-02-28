@@ -503,25 +503,6 @@ void RlvAttachmentLockWatchdog::detach(const LLViewerObject* pAttachObj)
 			m_PendingDetach.push_back(pAttachObj->getAttachmentItemID());
 
 		gMessageSystem->sendReliable(gAgent.getRegionHost() );
-
-		// HACK-RLVa: force the region to send out an ObjectUpdate for the old attachment so obsolete viewers will remember it exists
-		S32 idxAttachPt = RlvAttachPtLookup::getAttachPointIndex(pAttachObj);
-		const LLViewerJointAttachment* pAttachPt = 
-			(isAgentAvatarValid()) ? get_if_there(gAgentAvatarp->mAttachmentPoints, (S32)idxAttachPt, (LLViewerJointAttachment*)NULL) : NULL;
-		if ( (pAttachPt) && (!pAttachPt->getIsHUDAttachment()) && (pAttachPt->mAttachedObjects.size() > 1) )
-		{
-			for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
-					itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
-			{
-				if (pAttachObj != *itAttachObj)
-				{
-					LLSelectMgr::instance().deselectAll();
-					LLSelectMgr::instance().selectObjectAndFamily(*itAttachObj);
-					LLSelectMgr::instance().deselectAll();
-					break;
-				}
-			}
-		}
 	}
 }
 
@@ -558,22 +539,6 @@ void RlvAttachmentLockWatchdog::detach(S32 idxAttachPt, const uuid_vec_t& idsAtt
 		}
 
 		gMessageSystem->sendReliable(gAgent.getRegionHost());
-
-		// HACK-RLVa: force the region to send out an ObjectUpdate for the old attachment so obsolete viewers will remember it exists
-		if ( (!pAttachPt->getIsHUDAttachment()) && (pAttachPt->mAttachedObjects.size() > attachObjs.size()) )
-		{
-			for (LLViewerJointAttachment::attachedobjs_vec_t::const_iterator itAttachObj = pAttachPt->mAttachedObjects.begin();
-					itAttachObj != pAttachPt->mAttachedObjects.end(); ++itAttachObj)
-			{
-				if (std::find(attachObjs.begin(), attachObjs.end(), *itAttachObj) == attachObjs.end())
-				{
-					LLSelectMgr::instance().deselectAll();
-					LLSelectMgr::instance().selectObjectAndFamily(*itAttachObj);
-					LLSelectMgr::instance().deselectAll();
-					break;
-				}
-			}
-		}
 	}
 }
 
