@@ -1238,8 +1238,8 @@ std::string LLUrlEntryIcon::getIcon(const std::string &url)
 //
 LLUrlEntryJira::LLUrlEntryJira()
 {
-	// <FS:CR> Please make sure to sync these with the items in LLURLRegistry::stringHasJira() if you make a change
-	mPattern = boost::regex("((?:ARVD|BUG|CHOP|CHUIBUG|DOC|DN|ECC|EXP|FIRE|LEAP|LLSD|MATBUG|MISC|OPEN|PATHBUG|PLAT|PYO|SCR|SH|SINV|SLS|SOCIAL|STORM|SUN|SVC|SPOT|SUN|SUP|TPV|VWR|WEB)-\\d+)",
+	// <FS:CR> Please make sure to sync these with the items in "static bool stringHasJira(const std::string &text)" if you make a change
+	mPattern = boost::regex("((?:ARVD|BUG|CHOP|CHUIBUG|DOC|DN|ECC|EXP|FIRE|FITMESH|LEAP|LLSD|MATBUG|MISC|OPEN|PATHBUG|PLAT|PYO|SCR|SH|SINV|SLS|SOCIAL|STORM|SUN|SVC|SPOT|SUN|SUP|TPV|VWR|WEB)-\\d+)",
 				// <FS:Ansariel> FIRE-917: Match case to reduce number of false positives
 				//boost::regex::perl|boost::regex::icase);
 				boost::regex::perl);
