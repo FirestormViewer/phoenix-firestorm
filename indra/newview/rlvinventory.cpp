@@ -669,8 +669,9 @@ void RlvGiveToRLVTaskOffer::onDestinationCreated(const LLUUID& idFolder, const s
 	const LLViewerInventoryCategory* pTarget = (idFolder.notNull()) ? gInventory.getCategory(idFolder) : NULL;
 	if (pTarget)
 	{
-		moveAndRename(m_Folders.front(), idFolder, strName);
-		RlvBehaviourNotifyHandler::sendNotification("accepted_in_rlv inv_offer " + RlvInventory::instance().getSharedPath(idFolder));
+		const LLUUID& idOfferedFolder = m_Folders.front();
+		moveAndRename(idOfferedFolder, idFolder, strName);
+		RlvBehaviourNotifyHandler::sendNotification("accepted_in_rlv inv_offer " + RlvInventory::instance().getSharedPath(idOfferedFolder));
 	}
 	delete this;
 }
