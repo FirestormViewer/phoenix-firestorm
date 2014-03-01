@@ -37,7 +37,6 @@
       <File Source="$(var.BUILDDIR)/libcollada14dom22.dll" />
       <File Source="$(var.BUILDDIR)/fmodex64.dll" />
       <File Source="$(var.BUILDDIR)/glod.dll" />
-      <File Source="$(var.BUILDDIR)/Leap.dll" />
       <File Source="$(var.BUILDDIR)/libapr-1.dll" />
       <File Source="$(var.BUILDDIR)/libapriconv-1.dll" />
       <File Source="$(var.BUILDDIR)/libaprutil-1.dll" />
