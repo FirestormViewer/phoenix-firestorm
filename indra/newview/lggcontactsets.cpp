@@ -874,6 +874,7 @@ void LGGContactSets::removeSet(const std::string& set_name)
 	contact_set_map_t::iterator found = mContactSets.find(set_name);
 	if (found != mContactSets.end())
 	{
+		uuid_vec_t non_friends_for_removal;
 		ContactSet* cset = found->second;
 		for (uuid_set_t::iterator member_it = cset->mFriends.begin(); member_it != cset->mFriends.end(); ++member_it)
 		{
@@ -881,8 +882,13 @@ void LGGContactSets::removeSet(const std::string& set_name)
 				LGGContactSets::getInstance()->getFriendSets(*member_it).size() == 1 && // Current set is only set!
 				!LGGContactSets::getInstance()->hasPseudonym(*member_it))
 			{
-				LGGContactSets::getInstance()->removeNonFriendFromList(*member_it);
+				non_friends_for_removal.push_back(*member_it);
 			}
+		}
+
+		for (uuid_vec_t::iterator nf_it = non_friends_for_removal.begin(); nf_it != non_friends_for_removal.end(); ++nf_it)
+		{
+			LGGContactSets::getInstance()->removeNonFriendFromList(*nf_it);
 		}
 
 		delete found->second;
