@@ -211,6 +211,9 @@
   <color
       name="Blue_80"
       value="0 0 1 0.8" />
+  <color
+      name="Orange"
+      value="1 .82 .46 1" />
 <!-- Colors below transparent in panel_notification.xml -->
 	<color
 	 name="Cerise_0"
@@ -682,6 +685,9 @@
      name="MapTrackColor"
      reference="Red" />
     <color
+     name="MapTrackColorUnder"
+     reference="Blue" />
+    <color
      name="MapTrackDisabledColor"
      reference="BrickBrown" />
     <color
@@ -1026,6 +1032,9 @@
      name="LindenChatColor"
      reference="DkBlue" />
     <!-- Groups visible in profiles -->
+	<color
+	 name="GroupVisibleInProfile"
+	 reference="LabelTextColor" />
     <color
      name="GroupHiddenInProfile"
      reference="White_25" />
@@ -1097,6 +1106,30 @@
     <color
      name="ChatNameObjectColor"
      reference="AccentColor" />
+  <color
+      name="VoiceConnectedColor"
+      reference="Green" />
+  <color
+      name="VoiceErrorColor"
+      reference="Red" />
+  <color
+      name="VoiceNotConnectedColor"
+      reference="Yellow" />
+  <color
+      name="FSChatHistoryBackground"
+      reference="Transparent" />
+  <color
+      name="ChatHeaderAlphaBackground"
+      reference="DkGray_66" />
+  <color
+      name="ChatHeaderOpaqueBackground"
+      reference="Black" />
+  <color
+      name="ScriptSelectedColor"
+      reference="EmphasisColor" />
+  <color
+      name="MapPickRadiusColor"
+      reference="MapFrustumColor" />
 	
     <!-- for FS legacy profiles -->
     <color
