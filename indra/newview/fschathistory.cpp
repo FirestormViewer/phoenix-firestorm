@@ -373,7 +373,7 @@ public:
 		}
 		else if (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		{
-			LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", mAvatarID));
+			LLUrlAction::executeSLURL(LLSLURL("agent", mAvatarID, "inspect").getSLURLString());
 		}
 		//if chat source is system, you may add "else" here to define behaviour.
 	}
