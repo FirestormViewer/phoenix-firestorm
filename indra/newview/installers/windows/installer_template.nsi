@@ -182,7 +182,7 @@ FunctionEnd
 ; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Make sure we are not on a verion of windows older than Vista except for 32bit XP SP3
+; Make sure we are not on a version of windows older than Vista except for 32bit XP SP3
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
   ${IfNot} ${AtLeastWin2000}
