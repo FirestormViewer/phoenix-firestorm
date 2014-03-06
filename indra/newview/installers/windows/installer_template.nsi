@@ -185,9 +185,11 @@ FunctionEnd
 ; Make sure we are not on a verion of windows older than Vista except for 32bit XP SP3
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
-  ${IfNot} ${AtLeastWinVista}
+  ${IfNot} ${AtLeastWin2000}
   ${OrIf} ${IsWinXP}
   ${AndIfNot} ${IsServicePack} 3
+  ${OrIf} ${IsWin2003}
+  ${AndIfNot} ${IsServicePack} 2
     MessageBox MB_OK $(CheckWindowsVersionMB)
     Quit
   ${EndIf}
