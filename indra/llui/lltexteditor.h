@@ -305,6 +305,7 @@ protected:
 
 	/*virtual*/ void	updateSegments();
 	void				updateLinkSegments();
+	void				keepSelectionOnReturn(bool keep) { mKeepSelectionOnReturn = keep; }
 
 private:
 	//
@@ -348,6 +349,7 @@ private:
 	bool			mParseOnTheFly;
 	bool			mEnableTooltipPaste;
 	bool			mPassDelete;
+	bool			mKeepSelectionOnReturn;	// disabling of removing selected text after pressing of Enter
 	
 	LLUUID			mSourceID;
 
