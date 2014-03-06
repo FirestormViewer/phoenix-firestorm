@@ -70,14 +70,14 @@
 		</menu_item_call>
 		<menu_item_separator/>
 		<menu_item_call
-			label="Clear Mark"
+			label="Clear Mark(s)"
 			name="Clear Mark">
 			<menu_item_call.on_click
 				function="Minimap.ClearMark"/>
 		</menu_item_call>
 		<menu_item_separator/>
 		<menu_item_call
-			label="Clear Marks"
+			label="Clear all Marks"
 			name="Clear Marks">
 			<menu_item_call.on_click
 				function="Minimap.ClearMarks"/>
