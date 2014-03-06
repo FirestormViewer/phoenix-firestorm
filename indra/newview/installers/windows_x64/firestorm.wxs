@@ -16,6 +16,11 @@
   <Property Id="ARPPRODUCTICON" Value="firestorm.ico"/>
   <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
+  <!-- VersionNT64 is undefined if the operating system is not 64-bit: http://msdn.microsoft.com/en-us/library/aa372497%28v=vs.85%29.aspx -->
+  <Condition Message="You can't install Firestorm viewer in 64 bit version on computer without support for the 64 bit architecture. Installation canceled.">
+    <![CDATA[VersionNT64]]>
+  </Condition>
+
   <!-- OS list: http://msdn.microsoft.com/library/aa370556.aspx - WinXP_x64 is based on Windows Server 2003 -->
   <Condition Message="Firestorm viewer in 64 bit version is only supported by Windows XP Professional x64 SP2, or newer. Installation canceled.">
     <![CDATA[Installed OR (VersionNT64 > 502) OR (VersionNT64 = 502 AND ServicePackLevel >= 2)]]>
