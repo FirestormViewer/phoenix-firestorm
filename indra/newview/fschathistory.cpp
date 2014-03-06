@@ -775,7 +775,7 @@ private:
 			style_params_name.font.name("SansSerifSmall");
 			style_params_name.font.style("NORMAL");
 			style_params_name.readonly_color(userNameColor);
-			user_name->appendText("  - " + av_name.getUserNameForDisplay(), false, style_params_name);
+			user_name->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
 		}
 		setToolTip( av_name.getUserName() );
 		// name might have changed, update width
