@@ -420,7 +420,7 @@ public:
 			user_name->setValue(mFrom);
 			updateMinUserNameWidth();
 		}
-		else if (mSourceType == CHAT_SOURCE_AGENT
+		else if ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR))
 				 && !mAvatarID.isNull()
 				 && chat.mChatStyle != CHAT_STYLE_HISTORY)
 		{
@@ -450,7 +450,7 @@ public:
 // [/RLVa:KB]
 		}
 		else if (chat.mChatStyle == CHAT_STYLE_HISTORY ||
-				 mSourceType == CHAT_SOURCE_AGENT)
+				 (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)))
 		{
 			//if it's an avatar name with a username add formatting
 			S32 username_start = chat.mFromName.rfind(" (");
@@ -496,7 +496,7 @@ public:
 
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
 		// Don't show the context menu, info control or avatar icon tooltip if this chat was subject to @shownames=n
-		if ( (chat.mRlvNamesFiltered) && ((CHAT_SOURCE_AGENT == mSourceType) || (CHAT_SOURCE_OBJECT == mSourceType))  )
+		if ( (chat.mRlvNamesFiltered) && ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) || (CHAT_SOURCE_OBJECT == mSourceType))  )
 		{
 			mShowInfoCtrl = mShowContextMenu = false;
 			icon->setDrawTooltip(false);
@@ -682,7 +682,7 @@ protected:
 	{
 //		if (mAvatarID.isNull() || mFrom.empty() || CHAT_SOURCE_SYSTEM == mSourceType) return;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() || mFrom.empty() || CHAT_SOURCE_SYSTEM == mSourceType) ) return;
+		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() || mFrom.empty() || (CHAT_SOURCE_SYSTEM == mSourceType && mType != CHAT_TYPE_RADAR)) ) return;
 // [/RLVa:KB]
 				
 		if (!sInfoCtrl)
