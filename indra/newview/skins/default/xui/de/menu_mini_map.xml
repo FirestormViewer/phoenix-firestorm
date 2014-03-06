@@ -10,8 +10,8 @@
 		<menu_item_call label="Blau" name="MarkBlue"/>
 		<menu_item_call label="Lila" name="MarkPurple"/>
 		<menu_item_call label="Gelb" name="MarkYellow"/>
-		<menu_item_call label="Markierung löschen" name="Clear Mark"/>
-		<menu_item_call label="Markierungen löschen" name="Clear Marks"/>
+		<menu_item_call label="Markierung(en) löschen" name="Clear Mark"/>
+		<menu_item_call label="Alle Markierungen löschen" name="Clear Marks"/>
 	</menu>
 	<menu name="More Options" label="Weitere Optionen...">
 		<menu_item_call label="Freund hinzufügen" name="Add Friend"/>
