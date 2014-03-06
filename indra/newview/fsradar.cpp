@@ -782,9 +782,13 @@ void FSRadar::teleportToAvatar(const LLUUID& targetAv)
 		}
 		else
 		{
+			avpos.mdV[VZ] += 2.0;
 			gAgent.teleportViaLocation(avpos);
 		}
-		return;
+	}
+	else
+	{
+		LLNotificationsUtil::add("TeleportToAvatarNotPossible");
 	}
 }
 
@@ -870,8 +874,15 @@ bool FSRadar::radarReportToCheck(const LLSD& userdata)
 
 void FSRadar::startTracking(const LLUUID& avatar_id)
 {
-	mTrackedAvatarId = avatar_id;
-	updateTracking();
+	if (getEntry(avatar_id))
+	{
+		mTrackedAvatarId = avatar_id;
+		updateTracking();
+	}
+	else
+	{
+		LLNotificationsUtil::add("TrackAvatarNotPossible");
+	}
 }
 
 void FSRadar::checkTracking()

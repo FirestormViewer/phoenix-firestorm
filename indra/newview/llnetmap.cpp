@@ -1808,11 +1808,7 @@ void LLNetMap::handleStartTracking()
 {
 	if (mClosestAgentRightClick.notNull())
 	{
-		FSRadar* radar = FSRadar::getInstance();
-		if (radar)
-		{
-			radar->startTracking(mClosestAgentRightClick);
-		}
+		LLAvatarActions::track(mClosestAgentRightClick);
 	}
 }
 // </FS:Ansariel> Avatar tracking feature
@@ -1986,7 +1982,7 @@ void LLNetMap::handleRequestTeleport()
 
 void LLNetMap::handleTeleportToAvatar()
 {
-	FSRadar::getInstance()->teleportToAvatar(mClosestAgentRightClick);
+	LLAvatarActions::teleportTo(mClosestAgentRightClick);
 }
 
 void LLNetMap::handleGroupInvite()

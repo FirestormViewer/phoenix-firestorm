@@ -654,6 +654,29 @@ void LLAvatarActions::share(const LLUUID& id)
 	}
 }
 
+// <FS:Ansariel> Avatar tracking feature
+//static 
+void LLAvatarActions::track(const LLUUID& id)
+{
+	FSRadar* radar = FSRadar::getInstance();
+	if (radar)
+	{
+		radar->startTracking(id);
+	}
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Teleport to feature
+//static
+void LLAvatarActions::teleportTo(const LLUUID& id)
+{
+	FSRadar* radar = FSRadar::getInstance();
+	if (radar)
+	{
+		radar->teleportToAvatar(id);
+	}
+}
+
 namespace action_give_inventory
 {
 	typedef std::set<LLUUID> uuid_set_t;

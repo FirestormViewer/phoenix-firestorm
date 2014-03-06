@@ -94,20 +94,7 @@ public:
 		{
 			if (gAgentID != target_id)
 			{
-				FSRadar* radar = FSRadar::getInstance();
-				if (radar)
-				{
-					FSRadarEntry* entry = radar->getEntry(target_id);
-					if (entry)
-					{
-						LLVector3d pos = entry->getGlobalPos();
-						pos.mdV[VZ] += 2.0;
-						gAgent.teleportViaLocation(pos);
-						return true;
-					}
-				}
-
-				LLNotificationsUtil::add("TeleportToAvatarNotPossible");
+				LLAvatarActions::teleportTo(target_id);
 			}
 
 			return true;
@@ -117,19 +104,7 @@ public:
 		{
 			if (gAgentID != target_id)
 			{
-				FSRadar* radar = FSRadar::getInstance();
-				if (radar)
-				{
-					FSRadarEntry* entry = radar->getEntry(target_id);
-					if (entry)
-					{
-						radar->startTracking(target_id);
-						return true;
-					}
-				}
-
-
-				LLNotificationsUtil::add("TrackAvatarNotPossible");
+				LLAvatarActions::track(target_id);
 			}
 	
 			return true;

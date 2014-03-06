@@ -38,6 +38,7 @@
 #include "fsradar.h"
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llavataractions.h"
 #include "llcalc.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaternearbychat.h"
@@ -1207,20 +1208,10 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 void cmdline_tp2name(std::string target)
 {
 	LLUUID avkey = cmdline_partial_name2key(target);
-	FSRadar* radar = FSRadar::getInstance();
-	if (avkey.notNull() && radar)
+	if (avkey.notNull())
 	{
-		FSRadarEntry* entry = radar->getEntry(avkey);
-		if (entry)
-		{
-			LLVector3d pos = entry->getGlobalPos();
-			pos.mdV[VZ] += 2.0;
-			gAgent.teleportViaLocation(pos);
-			return;
-		}
+		LLAvatarActions::teleportTo(avkey);
 	}
-
-	reportToNearbyChat("Avatar not found.");
 }
 
 void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat() will still work... just will use the saved value

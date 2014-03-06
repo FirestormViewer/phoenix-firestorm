@@ -246,21 +246,13 @@ void FSRadarMenu::teleportToAvatar()
 // AO: wrapper for functionality managed by LLPanelPeople, because it manages the nearby avatar list.
 // Will only work for avatars within radar range.
 {
-	FSRadar* radar = FSRadar::getInstance();
-	if (radar)
-	{
-		radar->teleportToAvatar(mUUIDs.front());
-	}
+	LLAvatarActions::teleportTo(mUUIDs.front());
 }
 
 // Ansariel: Avatar tracking feature
 void FSRadarMenu::onTrackAvatarMenuItemClick()
 {
-	FSRadar* radar = FSRadar::getInstance();
-	if (radar)
-	{
-		radar->startTracking(mUUIDs.front());
-	}
+	LLAvatarActions::track(mUUIDs.front());
 }
 
 void FSRadarMenu::addToContactSet()

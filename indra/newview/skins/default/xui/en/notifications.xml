@@ -9493,7 +9493,7 @@ Cannot zoom to this avatar, because it is out of reach.
    icon="alertmodal.tga"
    name="TrackAvatarNotPossible"
    type="alertmodal">
-Cannot track this avatar, because it is out of reach.
+Cannot track this avatar, because it is beyond radar range.
   <tag>fail</tag>
   </notification>
 

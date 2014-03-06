@@ -200,7 +200,7 @@ public:
 		}
 		else if (level == "teleport_to")
 		{
-			LLUrlAction::executeSLURL(LLSLURL("firestorm", getAvatarId(), "teleportto").getSLURLString());
+			LLAvatarActions::teleportTo(getAvatarId());
 		}
 		else if (level == "teleport")
 		{
@@ -244,7 +244,7 @@ public:
 		}
 		else if (level == "track")
 		{
-			LLUrlAction::executeSLURL(LLSLURL("firestorm", getAvatarId(), "track").getSLURLString());
+			LLAvatarActions::track(getAvatarId());
 		}
 		else if (level == "share")
 		{

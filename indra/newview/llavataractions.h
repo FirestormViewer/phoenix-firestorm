@@ -255,6 +255,12 @@ public:
 	static void zoomIn(const LLUUID& idAgent);
 	static void getScriptInfo(const LLUUID& idAgent);
 
+	// <FS:Ansariel> Avatar tracking feature
+	static void track(const LLUUID& id);
+
+	// <FS:Ansariel> Teleport to feature
+	static void teleportTo(const LLUUID& id);
+
 	//
 	// Parcel actions
 	//
