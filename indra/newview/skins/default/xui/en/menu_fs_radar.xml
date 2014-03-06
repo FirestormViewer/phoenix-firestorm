@@ -70,6 +70,57 @@
         <menu_item_call.on_click
          function="Nearby.People.TrackAvatar" />
     </menu_item_call>
+	<menu name="MarkAvatar" label="Mark...">
+		<menu_item_call
+			label="Red"
+			name="MarkRed">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Red"/>
+		</menu_item_call>
+		<menu_item_call
+		label="Green"
+		name="MarkGreen">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Green"/>
+		</menu_item_call>
+		<menu_item_call
+		label="Blue"
+		name="MarkBlue">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Blue"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Purple"
+			name="MarkPurple">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="Purple"/>
+		</menu_item_call>
+		<menu_item_call
+			label="Yellow"
+			name="MarkYellow">
+			<menu_item_call.on_click
+				function="Nearby.People.SetAvatarMarkColor"
+				parameter="LtYellow"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Clear Mark"
+			name="Clear Mark">
+			<menu_item_call.on_click
+				function="Nearby.People.ClearAvatarMarkColor"/>
+		</menu_item_call>
+		<menu_item_separator/>
+		<menu_item_call
+			label="Clear Marks"
+			name="Clear Marks">
+			<menu_item_call.on_click
+				function="Nearby.People.ClearAllAvatarMarkColors"/>
+		</menu_item_call>
+	</menu>
     <menu_item_call
      label="Share"
      layout="topleft"

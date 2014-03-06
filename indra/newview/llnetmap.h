@@ -102,6 +102,12 @@ public:
 
 	// <FS:Ansariel> Mark avatar feature
 	static bool		getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color);
+	static void		setAvatarMarkColor(const LLUUID& avatar_id, const LLSD& color);
+	static void		setAvatarMarkColors(const uuid_vec_t& avatar_ids, const LLSD& color);
+	static void		clearAvatarMarkColor(const LLUUID& avatar_id);
+	static void		clearAvatarMarkColors(const uuid_vec_t& avatar_ids);
+	static void		clearAvatarMarkColors();
+	// </FS:Ansariel>
 
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }

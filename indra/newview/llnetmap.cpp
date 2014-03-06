@@ -1718,31 +1718,20 @@ void LLNetMap::handleZoom(const LLSD& userdata)
 // <FS:Ansariel> Mark avatar feature
 void LLNetMap::handleMark(const LLSD& userdata)
 {
-	// Use the name as color definition name from colors.xml
-	LLColor4 color = LLUIColorTable::instance().getColor(userdata.asString(), LLColor4::green);
-	for (uuid_vec_t::iterator it = mClosestAgentsRightClick.begin(); it != mClosestAgentsRightClick.end(); ++it)
-	{
-		sAvatarMarksMap[*it] = color;
-	}
+	setAvatarMarkColors(mClosestAgentsRightClick, userdata);
 }
 
 void LLNetMap::handleClearMark()
 {
-	for (uuid_vec_t::iterator it = mClosestAgentsRightClick.begin(); it != mClosestAgentsRightClick.end(); ++it)
-	{
-		avatar_marks_map_t::iterator found = sAvatarMarksMap.find(*it);
-		if (found != sAvatarMarksMap.end())
-		{
-			sAvatarMarksMap.erase(found);
-		}
-	}
+	clearAvatarMarkColors(mClosestAgentsRightClick);
 }
 
 void LLNetMap::handleClearMarks()
 {
-	sAvatarMarksMap.clear();
+	clearAvatarMarkColors();
 }
 
+// static
 bool LLNetMap::getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color)
 {
 	avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);
@@ -1754,6 +1743,52 @@ bool LLNetMap::getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color)
 	return false;
 }
 
+// static
+void LLNetMap::setAvatarMarkColor(const LLUUID& avatar_id, const LLSD& color)
+{
+	uuid_vec_t ids;
+	ids.push_back(avatar_id);
+	setAvatarMarkColors(ids, color);
+}
+
+// static
+void LLNetMap::setAvatarMarkColors(const uuid_vec_t& avatar_ids, const LLSD& color)
+{
+	// Use the name as color definition name from colors.xml
+	LLColor4 mark_color = LLUIColorTable::instance().getColor(color.asString(), LLColor4::green);
+
+	for (uuid_vec_t::const_iterator it = avatar_ids.begin(); it != avatar_ids.end(); ++it)
+	{
+		sAvatarMarksMap[*it] = mark_color;
+	}
+}
+
+// static
+void LLNetMap::clearAvatarMarkColor(const LLUUID& avatar_id)
+{
+	uuid_vec_t ids;
+	ids.push_back(avatar_id);
+	clearAvatarMarkColors(ids);
+}
+
+// static
+void LLNetMap::clearAvatarMarkColors(const uuid_vec_t& avatar_ids)
+{
+	for (uuid_vec_t::const_iterator it = avatar_ids.begin(); it != avatar_ids.end(); ++it)
+	{
+		avatar_marks_map_t::iterator found = sAvatarMarksMap.find(*it);
+		if (found != sAvatarMarksMap.end())
+		{
+			sAvatarMarksMap.erase(found);
+		}
+	}
+}
+
+// static
+void LLNetMap::clearAvatarMarkColors()
+{
+	sAvatarMarksMap.clear();
+}
 //</FS:Ansariel>
 
 void LLNetMap::handleCam()
