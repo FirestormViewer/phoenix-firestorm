@@ -1418,14 +1418,14 @@
          tool_tip="Select the cloud texture you would like to use."/>
     </panel>
 
-    <!--Build-->
+    <!--Build 1-->
     <panel
      top_pad="5"
      bottom="-1"
      left="1"
      right="-1"
      follows="all"
-     label="Build"
+     label="Build 1"
      name="BuildTab">
      
         <text
@@ -1915,62 +1915,10 @@ For now, just make the UI elements invisiable but still have the debug settings 
          control_name="FSBuildPrefs_PivotIsPercent"/>
 
         <check_box
-         top_pad="-30"
          follows="left|top"
          height="16"
-		 left="3"
-         label="Enable highlighting of selected prims"
-         tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
-         name="FSBuildPrefsRenderHighlight_toggle"
-         control_name="RenderHighlightSelections"/>
-
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Use old &quot;Set Object For Sale&quot; behavior"
-         tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
-         name="FSCommitForSaleOnChange_toggle"
-         control_name="FSCommitForSaleOnChange"/>
-        <check_box
-         top_pad="3"
-         follows="left|top"
-         height="16"
-         label="Save scripts edited from inventory as Mono"
-         tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
-         name="FSSaveInventoryScriptsAsMono_toggle"
-         control_name="FSSaveInventoryScriptsAsMono"/>
-        <check_box
-         top_pad="0"
-         follows="left|top"
-         height="16"
-         label="Save textures from inventory to disk as PNG instead of TGA by default"
-         tool_tip="Used in the texture preview floater and context menu in inventory."
-         name="FSTextureDefaultSaveAsFormat"
-         control_name="FSTextureDefaultSaveAsFormat"/>
-        <check_box
-         top_pad="2"
-         follows="left|top"
-         height="16"
-         label="Use Ctrl+mouse to grab and manipulate objects"
-         tool_tip="When checked, you will be able to grab and move objects with your mouse and CTRL key."
-         name="FSEnableGrab"
-         control_name="EnableGrab"/>
-        <check_box
-         top_pad="0"
-         follows="left|top"
-         height="16"
-		 initial_value="false"
-         label="Allow click-drag or click-scale (together with caps lock) of a texture face in build mode"
-         tool_tip="If enabled, allows to click-drag or click-scale (together with caps lock) a texture face in build mode. This feature is still experimental and should be used with caution."
-         name="FSExperimentalDragTexture"
-         control_name="FSExperimentalDragTexture"/>
-
-
-        <check_box
-         follows="left|top"
-         height="16"
-         top="320"
+         top_pad="70"
+         left="5"
          label="Enable LSL preprocessor"
          tool_tip="When checked, the LSL preprocessor is enabled."
          name="preproc_checkbox"
@@ -1978,7 +1926,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
         <check_box
          follows="left|top"
          height="16"
-         left="20"
+         left="15"
          enabled_control="_NACL_LSLPreprocessor"
          label="Script optimizer"
          tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."
@@ -2051,5 +1999,74 @@ For now, just make the UI elements invisiable but still have the debug settings 
           function="NACL.SetPreprocInclude" />
         </button>
   </panel>
+
+    <!--Build 2-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Build 2"
+     name="BuildTab2">
+        <check_box
+         top="10"
+         follows="left|top"
+         height="16"
+		 left="3"
+         label="Enable highlighting of selected prims"
+         tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
+         name="FSBuildPrefsRenderHighlight_toggle"
+         control_name="RenderHighlightSelections"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Limit select distance"
+         name="LimitSelectDistance"
+         control_name="LimitSelectDistance"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Use old &quot;Set Object For Sale&quot; behavior"
+         tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
+         name="FSCommitForSaleOnChange_toggle"
+         control_name="FSCommitForSaleOnChange"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Save scripts edited from inventory as Mono"
+         tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."
+         name="FSSaveInventoryScriptsAsMono_toggle"
+         control_name="FSSaveInventoryScriptsAsMono"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Save textures from inventory to disk as PNG instead of TGA by default"
+         tool_tip="Used in the texture preview floater and context menu in inventory."
+         name="FSTextureDefaultSaveAsFormat"
+         control_name="FSTextureDefaultSaveAsFormat"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Use Ctrl+mouse to grab and manipulate objects"
+         tool_tip="When checked, you will be able to grab and move objects with your mouse and CTRL key."
+         name="FSEnableGrab"
+         control_name="EnableGrab"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+		 initial_value="false"
+         label="Allow click-drag or click-scale (together with caps lock) of a texture face in build mode"
+         tool_tip="If enabled, allows to click-drag or click-scale (together with caps lock) a texture face in build mode. This feature is still experimental and should be used with caution."
+         name="FSExperimentalDragTexture"
+         control_name="FSExperimentalDragTexture"/>
+    </panel>
+
 </tab_container>
 </panel>

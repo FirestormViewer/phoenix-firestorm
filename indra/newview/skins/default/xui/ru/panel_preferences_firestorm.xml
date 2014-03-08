@@ -96,29 +96,13 @@
 	</panel>
 
 	<!--CmdLine-->
-	<panel label="Команды" name="tab1-3">
+	<panel label="Команды1" name="tab-CmdLine1">
 		<check_box label="Вкл. краткие команды" name="chat_cmd_toggle"/>
 
-		<text name="FSCmdLinePos_txt">
-			Телепорт (кмд: cmd x z y)
-		</text>
-		<text name="FSCmdLineGround_txt">
-			Телепорт на поверхность (кмд: cmd)
-		</text>
-		<text name="FSCmdLineHeight_txt">
-			Телепорт на высоту (кмд: cmd z)
-		</text>
-		<text name="FSCmdLineTeleportHome_txt">
-			Телепорт домой (кмд: cmd)
-		</text>
 		<text name="FSCmdLineRezPlatform_txt">
 			выложить платформу (кмд: cmd 0 - 30)
 		</text>
 		<slider name="FSCmdLinePlatformSize" label="Ширина" tool_tip=""/>
-		<text name="FSCmdLineMapTo_txt">
-			Телепорт а регион (cmd regionname)
-		</text>
-		<check_box label="Selbe Position auf neuer Region" name="toggle"/>
 		<text name="FSCmdLineCalc_txt">
 			Решить (кмд: cmd SIN(2+2))
 		</text>
@@ -128,17 +112,8 @@
 		<text name="FSCmdLineDrawDistance_txt">
 			Дальность видемости (кмд: cmd Meter)
 		</text>
-		<text name="FSCmdTeleportToCam_txt">
-			Телепорт к камере (кмд: cmd)
-		</text>
 		<text name="FSCmdLineKeyToName_txt">
 			Узнать имя аватара по UUI (кмд: cmd key)
-		</text>
-		<text name="FSCmdLineOfferTp_txt">
-			пред. телепорт аватару (кмд: cmd key)
-		</text>
-		<text name="FSCmdLineTP2_txt">
-			Телепорт к аватару (кмд: cmd name)
 		</text>
 		<line_editor tool_tip="" name="FSCmdLineTP2"/>
 		<text name="FSCmdLineAO_txt">
@@ -157,7 +132,36 @@
 		</text>
 		<line_editor tool_tip="" name="FSCmdLineMusic"/>
 	</panel>
+	<panel label="Команды1" name="tab-CmdLine2">
+		<check_box label="Вкл. краткие команды" name="chat_cmd_toggle2"/>
 
+		<text name="FSCmdLinePos_txt">
+			Телепорт (кмд: cmd x z y)
+		</text>
+		<text name="FSCmdLineGround_txt">
+			Телепорт на поверхность (кмд: cmd)
+		</text>
+		<text name="FSCmdLineHeight_txt">
+			Телепорт на высоту (кмд: cmd z)
+		</text>
+		<text name="FSCmdLineTeleportHome_txt">
+			Телепорт домой (кмд: cmd)
+		</text>
+		<text name="FSCmdLineMapTo_txt">
+			Телепорт а регион (cmd regionname)
+		</text>
+		<check_box label="Selbe Position auf neuer Region" name="toggle"/>
+		<text name="FSCmdTeleportToCam_txt">
+			Телепорт к камере (кмд: cmd)
+		</text>
+		<text name="FSCmdLineOfferTp_txt">
+			пред. телепорт аватару (кмд: cmd key)
+		</text>
+		<text name="FSCmdLineTP2_txt">
+			Телепорт к аватару (кмд: cmd name)
+		</text>
+
+	</panel>
 
 	<!--Windlight-->
 	<panel label="О.Среда" name="WindlightTab">
@@ -175,7 +179,7 @@
 	</panel>
 
 	<!--Build-->
-	<panel label="Строить" name="BuildTab">
+	<panel label="Строить1" name="BuildTab">
 		<text name="text_box_objprams">
 			Параметры объекта по умолчанию
 		</text>
@@ -203,11 +207,14 @@
 		<spinner label="Y-pos" name="Y pos" label_width="60" width="140"/>
 		<spinner label="Z-pos" name="Z pos" label_width="60" width="140"/>
 		<check_box label="Значения процентов" tool_tip="" name="EmPivotPercToggle"/>
-		<check_box label="Включить подсветку выбранного примитива" tool_tip="" name="EmBuildPrefsRenderHighlight_toggle"/>
+	</panel>
+
+	<panel label="Строить2" name="BuildTab2">
+		<check_box label="Включить подсветку выбранного примитива" tool_tip="" name="FSBuildPrefsRenderHighlight_toggle"/>
+		<check_box label="Ограничение расстояния выбора" name="LimitSelectDistance"/>
 		<check_box label="Использование старый &quot;Установить объект на продажу&quot;" tool_tip="" name="FSCommitForSaleOnChange_toggle"/>
 		<check_box label="Сохранять скрипты редактируемые в инвенторе как Моно" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 	</panel>
-
 
 	<!--Tags-->
 	<panel label="Тэги" name="TagTab">
