@@ -1770,8 +1770,10 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 {
 	if (!mContactSetList) return;
 	
+	mContactSetList->clear();
+	mContactSetList->setDirty(true, true);
+
 	uuid_vec_t& avatars = mContactSetList->getIDs();
-	avatars.clear();
 	
 	if (contact_set == CS_SET_ALL_SETS)
  	{
