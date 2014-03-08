@@ -2022,7 +2022,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          top_pad="8"
          follows="left|top"
          height="16"
-         label="Limit select distance (metres):"
+         label="Limit select distance (meters):"
          name="LimitSelectDistance"
          control_name="LimitSelectDistance"/>
         <spinner
