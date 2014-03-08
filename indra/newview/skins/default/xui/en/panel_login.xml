@@ -211,7 +211,7 @@ label="Home"
           left="10"
           height="16"
           name="create_new_account_text"
-          top="19"
+          top="10"
           width="280">
         Create an account
       </text>
@@ -221,13 +221,13 @@ label="Home"
           text_color="EmphasisColor"
           height="16"
           name="forgot_password_text"
-          top="35"
+          top="26"
           width="280">
         Forgot your username or password?
       </text>
       <button
           follows="left|bottom"
-          top_pad="0"
+          top_pad="9"
           height="23"
           label="Log In"
           layout="topleft"
