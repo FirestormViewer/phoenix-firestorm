@@ -675,44 +675,6 @@ class LLFileCloseWindow : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		// If the IM container is focused, try to close the selected tab instead of the container -KC
-		// <FS:Ansariel> [FS communication UI]
-		//LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
-		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
-		// </FS:Ansariel> [FS communication UI]
-		if (im_container && im_container->hasFocus())
-		{
-			LLFloater* floater = im_container->getActiveFloater();
-			// is user closeable and is system closeable
-			if (floater && floater->canClose())
-			{
-				if (floater->isCloseable())
-				{
-					floater->closeFloater();
-					// and return focus back to the container
-					im_container->setFocus(TRUE);
-				}
-				else
-				{
-					// close the im container if selected tab is not closable (ie. contacts or nerby chat) -KC
-					im_container->closeFloater();
-
-					// if nothing took focus after closing focused floater
-					// give it to next floater (to allow closing multiple windows via keyboard in rapid succession)
-					if (gFocusMgr.getKeyboardFocus() == NULL)
-					{
-						// HACK: use gFloaterView directly in case we are using Ctrl-W to close snapshot window
-						// which sits in gSnapshotFloaterView, and needs to pass focus on to normal floater view
-						gFloaterView->focusFrontFloater();
-					}
-				}
-				
-				
-				
-				return true;
-			}
-		}
-		
 		LLFloater::closeFrontmostFloater();
 		return true;
 	}

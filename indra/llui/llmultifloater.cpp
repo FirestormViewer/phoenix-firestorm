@@ -387,6 +387,7 @@ void LLMultiFloater::setVisible(BOOL visible)
 
 BOOL LLMultiFloater::handleKeyHere(KEY key, MASK mask)
 {
+	// <FS:Ansariel> This won't work - CTRL-W is intercepted by LLFileCloseWindow!
 	if (key == 'W' && mask == MASK_CONTROL)
 	{
 		LLFloater* floater = getActiveFloater();
@@ -576,3 +577,58 @@ void LLMultiFloater::computeResizeLimits(S32& new_min_width, S32& new_min_height
 		}
 	}
 }
+
+// <FS:Ansariel> CTRL-W doesn't work with multifloaters
+void LLMultiFloater::closeFloater(bool app_quitting)
+{
+	if (app_quitting)
+	{
+		LLFloater::closeFloater(app_quitting);
+		return;
+	}
+
+	LLFloater* floater = getActiveFloater();
+	// is user closeable and is system closeable
+	if (floater && floater->canClose() && floater->isCloseable())
+	{
+		floater->closeFloater();
+
+		// EXT-5695 (Tabbed IM window loses focus if close any tabs by Ctrl+W)
+		// bring back focus on tab container if there are any tab left
+		if(mTabContainer->getTabCount() > 0)
+		{
+			mTabContainer->setFocus(TRUE);
+		}
+		else
+		{
+			// Call closeFloater() here so that focus gets properly handed over
+			LLFloater::closeFloater();
+		}
+
+		return;
+	}
+
+	// Close multifloater itself if we can't close any hosted floaters
+	LLFloater::closeFloater();
+}
+
+void LLMultiFloater::onClickCloseBtn(bool app_quitting)
+{
+	LLFloater::closeFloater(false);
+}
+
+// Ansa: Will be called when toggling view - in that case we want to
+//       toggle the whole floater instead of the active hosted floater
+void LLMultiFloater::closeHostedFloater()
+{
+	// When toggling *visibility*, close the host instead of the floater when hosted
+	if (getHost())
+	{
+		getHost()->closeFloater();
+	}
+	else
+	{
+		LLFloater::closeFloater(false);
+	}
+}
+// <FS:Ansariel>
