@@ -4,7 +4,7 @@
  help_topic="fs_area_search"
  title="Area Search for Objects"
  min_width="430"
- min_height="255"
+ min_height="355"
  width="610"
  height="435"
  save_rect="true"
