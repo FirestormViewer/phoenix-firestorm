@@ -500,6 +500,7 @@
 			tool_tip="Masque les contours lumineux bleu et jaune, améliorant la vision lors de l'édition de nombreux prim rapprochés, comme les cheveux, par ex."/>
 		<check_box name="LimitSelectDistance"
 			label="Limiter la distance de sélection"/>
+		<spinner name="MaxSelectDistance" left_delta="195" />
 		<check_box name="FSCommitForSaleOnChange_toggle"
 			label="Mise en vente d'obj. anc. style"
 			tool_tip="Cette option sauvegarde immédiatement les changements lors de la mise en vente d'un objet au lieu d'en demander confirmation."/>

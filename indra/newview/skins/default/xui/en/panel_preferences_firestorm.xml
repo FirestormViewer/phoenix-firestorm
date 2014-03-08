@@ -2022,11 +2022,26 @@ For now, just make the UI elements invisiable but still have the debug settings 
          top_pad="8"
          follows="left|top"
          height="16"
-         label="Limit select distance"
+         label="Limit select distance (metres):"
          name="LimitSelectDistance"
          control_name="LimitSelectDistance"/>
+        <spinner
+         enabled_control="LimitSelectDistance"
+         control_name="MaxSelectDistance"
+         decimal_digits="3"
+         top_delta="-5"
+         left_delta="187"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="1024"
+         min_val="0.001"
+         name="MaxSelectDistance"
+         width="75"
+         tool_tip="Maximum allowed selection distance (meters from avatar) [Default: 128.000]"/>
         <check_box
-         top_pad="8"
+         left="3"
+         top_pad="13"
          follows="left|top"
          height="16"
          label="Limit drag distance (meters):"
