@@ -290,7 +290,10 @@
 	<!--Build 2-->
 	<panel label="Bauen 2" name="BuildTab2">
 		<check_box label="Ausgewählte Primitive hervorheben" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="FSBuildPrefsRenderHighlight_toggle"/>
-		<check_box label="Auswahldistanz einschränken" name="LimitSelectDistance"/>
+		<check_box label="Auswahldistanz einschränken (Meter)" name="LimitSelectDistance"/>
+		<spinner name="MaxSelectDistance" tool_tip="Maximale Distanz, innerhalb dessen ein Objekt ausgewählt werden kann (in Meter vom Avatar) [Standard: 128.000]" left_delta="225"/>
+		<check_box label="Ziehdistanz einschränken (Meter)" name="LimitDragDistance"/>
+		<spinner name="MaxDragDistance" tool_tip="Maximale Distanz, die ein Objekt in einem Zug bewegt werden kann (in Meter vom Ausgangspunkt) [Standard: 48.000]" left_delta="225"/>
 		<check_box label="Strg+Maus zum Greifen und Manipulieren von Objekten verwenden" tool_tip="Falls aktiviert, können Objekte durch Bewegen der Maus bei gleichzeitig gedrückter Strg-Taste gegriffen und bewegt werden." name="FSEnableGrab"/>
 		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche beim Bauen" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>
 		<check_box label="Altes Verhalten für &quot;Zum Verkauf:&quot; akt." tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
