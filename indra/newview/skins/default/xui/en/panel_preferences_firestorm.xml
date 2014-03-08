@@ -2029,6 +2029,28 @@ For now, just make the UI elements invisiable but still have the debug settings 
          top_pad="8"
          follows="left|top"
          height="16"
+         label="Limit drag distance (meters):"
+         name="LimitDragDistance"
+         control_name="LimitDragDistance"/>
+        <spinner
+         enabled_control="LimitDragDistance"
+         control_name="MaxDragDistance"
+         decimal_digits="3"
+         top_delta="-5"
+         left_delta="180"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="1024"
+         min_val="0.001"
+         name="MaxDragDistance"
+         width="75"
+         tool_tip="Maximum allowed distance in a single operation of move tool (meters from start point) [Default: 48.000]"/>
+        <check_box
+         left="3"
+         top_pad="13"
+         follows="left|top"
+         height="16"
          label="Use old &quot;Set Object For Sale&quot; behavior"
          tool_tip="When checked, object for sale info is saved on change instead of requiring a confirm."
          name="FSCommitForSaleOnChange_toggle"

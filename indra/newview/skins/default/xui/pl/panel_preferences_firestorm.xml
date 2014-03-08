@@ -263,6 +263,8 @@
     <panel label="Buduj 2" name="BuildTab2">
         <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="FSBuildPrefsRenderHighlight_toggle" />
         <check_box label="Ogranicz dystans selekcji" name="LimitSelectDistance" />
+        <check_box label="Ogranicz dystans przeciągania (metry):" name="LimitDragDistance" />
+        <spinner name="MaxDragDistance" left_delta="240" tool_tip="Maksymalna dozwolona odległość przeciągnięcia obiektu narzędziem przesuwania w pojedynczej operacji (metry od punktu staru) [Domyślnie: 48.000]"/>
         <check_box label="Stare zachowanie &quot;Ustaw na sprzedaż&quot;" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Zapisuj tekstury z Szafy na dysk domyślnie jako PNG zamiast TGA" tool_tip="Używane w oknie podglądu tekstur oraz menu kontekstowym Szafy." name="FSTextureDefaultSaveAsFormat" />
