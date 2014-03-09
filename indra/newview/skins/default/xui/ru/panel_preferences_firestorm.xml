@@ -211,8 +211,7 @@
 
 	<panel label="Строить2" name="BuildTab2">
 		<check_box label="Включить подсветку выбранного примитива" tool_tip="" name="FSBuildPrefsRenderHighlight_toggle"/>
-		<check_box label="Ограничение расстояния выбора" name="LimitSelectDistance"/>
-		<spinner name="MaxSelectDistance" left_delta="215" />
+		<check_box label="Ограничение расстояния выбора" name="LimitSelectDistance" width="215"/>
 		<check_box label="Использование старый &quot;Установить объект на продажу&quot;" tool_tip="" name="FSCommitForSaleOnChange_toggle"/>
 		<check_box label="Сохранять скрипты редактируемые в инвенторе как Моно" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 	</panel>
