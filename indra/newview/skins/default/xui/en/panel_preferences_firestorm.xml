@@ -2024,13 +2024,14 @@ For now, just make the UI elements invisiable but still have the debug settings 
          height="16"
          label="Limit select distance (meters):"
          name="LimitSelectDistance"
-         control_name="LimitSelectDistance"/>
+         control_name="LimitSelectDistance"
+         width="190"/>
         <spinner
          enabled_control="LimitSelectDistance"
          control_name="MaxSelectDistance"
          decimal_digits="3"
          top_delta="-5"
-         left_delta="187"
+         left_pad="0"
          follows="left|top"
          height="16"
          increment="0.01"
@@ -2046,13 +2047,14 @@ For now, just make the UI elements invisiable but still have the debug settings 
          height="16"
          label="Limit drag distance (meters):"
          name="LimitDragDistance"
-         control_name="LimitDragDistance"/>
+         control_name="LimitDragDistance"
+         width="190"/>
         <spinner
          enabled_control="LimitDragDistance"
          control_name="MaxDragDistance"
          decimal_digits="3"
          top_delta="-5"
-         left_delta="180"
+         left_pad="0"
          follows="left|top"
          height="16"
          increment="0.01"
@@ -2074,7 +2076,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          control_name="RotationStep"
          decimal_digits="2"
          top_delta="-5"
-         left_delta="190"
+         left_pad="0"
          follows="left|top"
          height="16"
          increment="0.01"
