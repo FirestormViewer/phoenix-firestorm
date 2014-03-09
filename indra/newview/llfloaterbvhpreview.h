@@ -36,6 +36,8 @@
 
 class LLVOAvatar;
 class LLViewerJointMesh;
+// <FS> Preview on own avatar
+class LLFloaterBvhPreview;
 
 class LLPreviewAnimation : public LLViewerDynamicTexture
 {
@@ -57,7 +59,7 @@ public:
 
 	LLVOAvatar* getDummyAvatar() { return mDummyAvatar; }
 	// <FS> Preview on own avatar
-	LLVOAvatar* getPreviewAvatar();
+	LLVOAvatar* getPreviewAvatar(LLFloaterBvhPreview* floaterp);
 
 protected:
 	BOOL				mNeedsUpdate;
@@ -72,6 +74,9 @@ protected:
 
 class LLFloaterBvhPreview : public LLFloaterNameDesc
 {
+	// <FS> Preview on own avatar
+	friend class LLPreviewAnimation;
+
 public:
 	LLFloaterBvhPreview(const std::string& filename);
 	virtual ~LLFloaterBvhPreview();
@@ -111,8 +116,6 @@ public:
 									   LLAssetType::EType type,
 									   void* user_data,
 									   S32 status, LLExtStat ext_status);
-	// <FS> Preview on own avatar
-	static bool sUseDummy;
 private:
 	void setAnimCallbacks() ;
 	// <FS> Reload animation from disk
@@ -137,6 +140,9 @@ protected:
 	LLAnimPauseRequest	mPauseRequest;
 
 	std::map<std::string, LLUUID>	mIDList;
+
+	// <FS> Preview on own avatar
+	bool mUseDummy;
 
 	// <FS:Ansariel> FIRE-2083: Slider in upload animation floater doesn't work
 	LLFrameTimer		mTimer;

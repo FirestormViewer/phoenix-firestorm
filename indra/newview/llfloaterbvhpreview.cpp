@@ -116,9 +116,6 @@ std::string STATUS[] =
 "E_ST_BAD_ROOT"
 };
 
-// <FS> Preview on own avatar
-bool LLFloaterBvhPreview::sUseDummy = false;
-
 //-----------------------------------------------------------------------------
 // LLFloaterBvhPreview()
 //-----------------------------------------------------------------------------
@@ -129,7 +126,7 @@ LLFloaterBvhPreview::LLFloaterBvhPreview(const std::string& filename) :
 	mLastMouseY = 0;
 
 	// <FS> Preview on own avatar
-	sUseDummy = gSavedSettings.getBOOL("UploadAnimationPreviewUseDummy");
+	mUseDummy = gSavedSettings.getBOOL("UploadAnimationPreviewUseDummy");
 
 	mIDList["Standing"] = ANIM_AGENT_STAND;
 	mIDList["Walking"] = ANIM_AGENT_FEMALE_WALK;
@@ -217,7 +214,7 @@ BOOL LLFloaterBvhPreview::postBuild()
 	//	getRect().getWidth() - PREVIEW_HPAD, 
 	//	PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
 	//mPreviewImageRect.set(0.f, 1.f, 1.f, 0.f); 
-	if (sUseDummy)
+	if (mUseDummy)
 	{ 
 		LLRect rect = getRect(); 
 		translate(0, PREVIEW_TEXTURE_HEIGHT-30); 
@@ -330,7 +327,7 @@ BOOL LLFloaterBvhPreview::loadBVH()
 		// load the keyframe data locally
 		// <FS> Preview on own avatar
 		//motionp = (LLKeyframeMotion*)mAnimPreview->getDummyAvatar()->createMotion(mMotionID);
-		motionp = (LLKeyframeMotion*)mAnimPreview->getPreviewAvatar()->createMotion(mMotionID);
+		motionp = (LLKeyframeMotion*)mAnimPreview->getPreviewAvatar(this)->createMotion(mMotionID);
 		// </FS>
 
 		// create data buffer for keyframe initialization
@@ -368,7 +365,7 @@ BOOL LLFloaterBvhPreview::loadBVH()
 			motionp->setName(getChild<LLUICtrl>("name_form")->getValue().asString());
 			// <FS> Preview on own avatar
 			//mAnimPreview->getDummyAvatar()->startMotion(mMotionID);
-			mAnimPreview->getPreviewAvatar()->startMotion(mMotionID);
+			mAnimPreview->getPreviewAvatar(this)->startMotion(mMotionID);
 			// </FS>
 			
 			getChild<LLSlider>("playback_slider")->setMinValue(0.0);
@@ -431,12 +428,12 @@ BOOL LLFloaterBvhPreview::loadBVH()
 //-----------------------------------------------------------------------------
 void LLFloaterBvhPreview::unloadMotion()
 {
-	if (mMotionID.notNull() && mAnimPreview && !sUseDummy)
+	if (mMotionID.notNull() && mAnimPreview && !mUseDummy)
 	{ 
 		resetMotion(); 
 		// <FS> Preview on own avatar
 		//mAnimPreview->getDummyAvatar()->removeMotion(mMotionID);
-		mAnimPreview->getPreviewAvatar()->removeMotion(mMotionID);
+		mAnimPreview->getPreviewAvatar(this)->removeMotion(mMotionID);
 		// </FS>
 		LLKeyframeDataCache::removeKeyframeData(mMotionID); 
 	}
@@ -472,7 +469,7 @@ void LLFloaterBvhPreview::draw()
 	if (mMotionID.notNull() && mAnimPreview)
 	{
 		// <FS> Preview on own avatar
-		if (sUseDummy)
+		if (mUseDummy)
 		{
 		// </FS>
 		gGL.color3f(1.f, 1.f, 1.f); 
@@ -493,7 +490,7 @@ void LLFloaterBvhPreview::draw()
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
 		}
-		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 		// </FS>
 		if (!avatarp->areAnimationsPaused())
 		{
@@ -519,7 +516,7 @@ void LLFloaterBvhPreview::resetMotion()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	BOOL paused = avatarp->areAnimationsPaused();
 
@@ -562,7 +559,7 @@ void LLFloaterBvhPreview::resetMotion()
 BOOL LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
-	if (!sUseDummy) return LLFloater::handleMouseDown(x, y, mask);
+	if (!mUseDummy) return LLFloater::handleMouseDown(x, y, mask);
 
 	if (mPreviewRect.pointInRect(x, y))
 	{
@@ -583,7 +580,7 @@ BOOL LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLFloaterBvhPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
-	if (!sUseDummy) return LLFloater::handleMouseUp(x, y, mask);
+	if (!mUseDummy) return LLFloater::handleMouseUp(x, y, mask);
 
 	gFocusMgr.setMouseCapture(FALSE);
 	gViewerWindow->showCursor();
@@ -596,7 +593,7 @@ BOOL LLFloaterBvhPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 BOOL LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
-	if (sUseDummy)
+	if (mUseDummy)
 	{
 	// </FS>
 	MASK local_mask = mask & ~MASK_ALT; 
@@ -656,7 +653,7 @@ BOOL LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
 BOOL LLFloaterBvhPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	// <FS> Preview on own avatar
-	if (!sUseDummy)
+	if (!mUseDummy)
 		return false;
 	// </FS>
 
@@ -676,7 +673,7 @@ void LLFloaterBvhPreview::onMouseCaptureLost()
 {
 	// <FS> Preview on own avatar
 	//gViewerWindow->showCursor();
-	if (sUseDummy)
+	if (mUseDummy)
 	{
 		gViewerWindow->showCursor();
 	}
@@ -695,7 +692,7 @@ void LLFloaterBvhPreview::onBtnPlay()
 	{
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 		// </FS>
 		
 		if (!avatarp->isMotionActive(mMotionID))
@@ -722,7 +719,7 @@ void LLFloaterBvhPreview::onBtnPause()
 	{
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 		// </FS>
 
 		if (avatarp->isMotionActive(mMotionID))
@@ -747,7 +744,7 @@ void LLFloaterBvhPreview::onBtnStop()
 	{
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 		// </FS>
 		resetMotion();
 		mPauseRequest = avatarp->requestPause();
@@ -766,7 +763,7 @@ void LLFloaterBvhPreview::onSliderMove()
 	{
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 		// </FS>
 		F32 slider_value = (F32)getChild<LLUICtrl>("playback_slider")->getValue().asReal();
 		LLUUID base_id = mIDList[getChild<LLUICtrl>("preview_base_anim")->getValue().asString()];
@@ -799,7 +796,7 @@ void LLFloaterBvhPreview::onCommitBaseAnim()
 	{
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 		// </FS>
 
 		BOOL paused = avatarp->areAnimationsPaused();
@@ -829,7 +826,7 @@ void LLFloaterBvhPreview::onCommitLoop()
 	
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
@@ -851,7 +848,7 @@ void LLFloaterBvhPreview::onCommitLoopIn()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
@@ -874,7 +871,7 @@ void LLFloaterBvhPreview::onCommitLoopOut()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
@@ -897,7 +894,7 @@ void LLFloaterBvhPreview::onCommitName()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
@@ -941,7 +938,7 @@ void LLFloaterBvhPreview::onCommitPriority()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
@@ -958,7 +955,7 @@ void LLFloaterBvhPreview::onCommitEaseIn()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
@@ -976,7 +973,7 @@ void LLFloaterBvhPreview::onCommitEaseOut()
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 
@@ -994,7 +991,7 @@ bool LLFloaterBvhPreview::validateEaseIn(const LLSD& data)
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	
@@ -1017,7 +1014,7 @@ bool LLFloaterBvhPreview::validateEaseOut(const LLSD& data)
 
 	// <FS> Preview on own avatar
 	//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+	LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 	// </FS>
 	LLKeyframeMotion* motionp = (LLKeyframeMotion*)avatarp->findMotion(mMotionID);
 	
@@ -1110,7 +1107,7 @@ void LLFloaterBvhPreview::refresh()
 		mStopButton->setEnabled(TRUE);
 		// <FS> Preview on own avatar
 		//LLVOAvatar* avatarp = mAnimPreview->getDummyAvatar();
-		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar();
+		LLVOAvatar* avatarp = mAnimPreview->getPreviewAvatar(this);
 		// </FS>
 		if (avatarp->isMotionActive(mMotionID))
 		{
@@ -1151,7 +1148,7 @@ void LLFloaterBvhPreview::onBtnOK(void* userdata)
 	{
 		// <FS> Preview on own avatar
 		//LLKeyframeMotion* motionp = (LLKeyframeMotion*)floaterp->mAnimPreview->getDummyAvatar()->findMotion(floaterp->mMotionID);
-		LLKeyframeMotion* motionp = (LLKeyframeMotion*)floaterp->mAnimPreview->getPreviewAvatar()->findMotion(floaterp->mMotionID);
+		LLKeyframeMotion* motionp = (LLKeyframeMotion*)floaterp->mAnimPreview->getPreviewAvatar(floaterp)->findMotion(floaterp->mMotionID);
 		// </FS>
 
 		S32 file_size = motionp->getFileSize();
@@ -1195,7 +1192,7 @@ void LLFloaterBvhPreview::onBtnOK(void* userdata)
 		// <FS> Preview on own avatar
 		//floaterp->mAnimPreview->getDummyAvatar()->removeMotion(floaterp->mMotionID);
 		floaterp->resetMotion();
-		floaterp->mAnimPreview->getPreviewAvatar()->removeMotion(floaterp->mMotionID);
+		floaterp->mAnimPreview->getPreviewAvatar(floaterp)->removeMotion(floaterp->mMotionID);
 		// </FS>
 		LLKeyframeDataCache::removeKeyframeData(floaterp->mMotionID);
 		// <FS> Preview on own avatar
@@ -1383,8 +1380,13 @@ void LLPreviewAnimation::pan(F32 right, F32 up)
 }
 
 // <FS> Preview on own avatar
-LLVOAvatar* LLPreviewAnimation::getPreviewAvatar()
+LLVOAvatar* LLPreviewAnimation::getPreviewAvatar(LLFloaterBvhPreview* floaterp)
 {
-	return LLFloaterBvhPreview::sUseDummy ? (LLVOAvatar*)mDummyAvatar : (LLVOAvatar*)gAgentAvatarp;
+	if (!floaterp)
+	{
+		// Don't return null - missing safety checks all around the code!
+		return (LLVOAvatar*)mDummyAvatar;
+	}
+	return floaterp->mUseDummy ? (LLVOAvatar*)mDummyAvatar : (LLVOAvatar*)gAgentAvatarp;
 }
 // </FS>
