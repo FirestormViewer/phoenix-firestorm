@@ -37,17 +37,13 @@ template <class Object> class LLStrider
 	};
 	U32     mSkip;
 public:
+
+	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); } 
 	~LLStrider() { } 
 
+	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; return *this;}
 	void setStride (S32 skipBytes)	{ mSkip = (skipBytes ? skipBytes : sizeof(Object));}
 
-    void skip(const U32 index)     { mBytep += mSkip*index;}
-    U32 getSkip() const            { return mSkip; }
-
-#ifndef OPENSIM // <FS:ND> protect against buffer overflows, but only for non HAvok builds. Otherwise changing the object size plays really foul when used in the binary Havok blob
-	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); } 
-	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; return *this;}
-
 	LLStrider<Object> operator+(const S32& index) 
 	{
 		LLStrider<Object> ret;
@@ -56,111 +52,15 @@ public:
 		return ret;
 	}
 
+	void skip(const U32 index)     { mBytep += mSkip*index;}
+	U32 getSkip() const			   { return mSkip; }
 	Object* get()                  { return mObjectp; }
-	Object const* get() const      { return mObjectp; }	// <FS:CR>
-    Object* operator->()           { return mObjectp; }
-    Object& operator *()           { return *mObjectp; }
-    Object* operator ++(int)       { Object* old = mObjectp; mBytep += mSkip; return old; }
-    Object* operator +=(int i)     { mBytep += mSkip*i; return mObjectp; }
+	Object* operator->()           { return mObjectp; }
+	Object& operator *()           { return *mObjectp; }
+	Object* operator ++(int)       { Object* old = mObjectp; mBytep += mSkip; return old; }
+	Object* operator +=(int i)     { mBytep += mSkip*i; return mObjectp; }
 
-    Object& operator[](U32 index)  { return *(Object*)(mBytep + (mSkip * index)); }
-#else
-	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); mBufferEnd = 0; } 
-	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; mBufferEnd = 0; return *this;}
-
-	LLStrider<Object> operator+(const S32& index) 
-	{
-		LLStrider<Object> ret;
-		ret.mBytep = mBytep + mSkip*index;
-		ret.mSkip = mSkip;
-		ret.mBufferEnd = mBufferEnd;
-
-		return ret;
-	}
-
-	Object* get()
-	{
-		if( !assertValid( mBytep ) )
-			return &mDummy;
-
-		return mObjectp;
-	}
-
-	Object const* get() const
-	{
-		return mObjectp;
-	}
-
-	Object* operator->()
-	{
-		if( !assertValid( mBytep ) )
-			return &mDummy;
-
-		return mObjectp;
-	}
-
-	Object& operator *()
-	{
-		if( !assertValid( mBytep ) )
-			return mDummy;
-
-		return *mObjectp;
-	}
-
-	Object* operator ++(int)
-	{
-		Object* old = mObjectp;
-		mBytep += mSkip;
-
-		if( !assertValid( (U8*)old ) )
-			return &mDummy;
-
-		return old;
-	}
-
-	Object* operator +=(int i)
-	{
-		mBytep += mSkip*i;
-		assertValid( mBytep );
-		return mObjectp;
-	}
-
-	Object& operator[](U32 index)
-	{
-		if( !assertValid( mBytep + mSkip*index ) )
-			return mDummy;
-
-		return *(Object*)(mBytep + (mSkip * index));
-	}
-
-	void setCount( U32 aCount )
-	{
-		mBufferEnd = mBytep + mSkip*aCount;
-#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-		mCount = aCount;
-#endif
-	}
-
-	bool assertValid( U8 const *aBuffer )
-	{
-		if( !aBuffer || !mBufferEnd )
-			return true;
-		if( aBuffer < mBufferEnd )
-			return true;
-
-		llerrs << "Vertex buffer access beyond end of VBO" << llendl;
-		return false;
-	}
-
-private:
-	U8 *mBufferEnd;
-
-#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
-	U32 mCount;
-#endif
-
-	Object mDummy;
-#endif
+	Object& operator[](U32 index)  { return *(Object*)(mBytep + (mSkip * index)); }
 };
 
 #endif // LL_LLSTRIDER_H
