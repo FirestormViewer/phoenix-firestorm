@@ -153,6 +153,9 @@ LLFloaterBvhPreview::LLFloaterBvhPreview(const std::string& filename) :
 	mIDList["Surprise"] = ANIM_AGENT_EXPRESS_SURPRISE;
 	mIDList["Wink"] = ANIM_AGENT_EXPRESS_WINK;
 	mIDList["Worry"] = ANIM_AGENT_EXPRESS_WORRY;
+
+	// <FS:Ansariel> FIRE-2083: Slider in upload animation floater doesn't work
+	mTimer.stop();
 }
 
 //-----------------------------------------------------------------------------
@@ -454,6 +457,13 @@ void LLFloaterBvhPreview::draw()
 		{
 			mAnimPreview->requestUpdate();
 		}
+		// <FS:Ansariel> FIRE-2083: Slider in upload animation floater doesn't work
+		if (mTimer.getStarted() && mTimer.hasExpired())
+		{
+			mTimer.stop();
+			mPauseRequest = avatarp->requestPause();
+		}
+		// </FS:Ansariel>
 	}
 }
 
@@ -687,7 +697,12 @@ void LLFloaterBvhPreview::onSliderMove()
 		avatarp->deactivateAllMotions();
 		avatarp->startMotion(base_id, delta_time + BASE_ANIM_TIME_OFFSET);
 		avatarp->startMotion(mMotionID, delta_time);
-		mPauseRequest = avatarp->requestPause();
+		// <FS:Ansariel> FIRE-2083: Slider in upload animation floater doesn't work
+		//mPauseRequest = avatarp->requestPause();
+		mPauseRequest = NULL;
+		mTimer.resetWithExpiry(0.001f);
+		mTimer.start();
+		// </FS:Ansariel>
 		refresh();
 	}
 

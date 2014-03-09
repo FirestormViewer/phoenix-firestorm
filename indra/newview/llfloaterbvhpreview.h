@@ -129,6 +129,9 @@ protected:
 	LLAnimPauseRequest	mPauseRequest;
 
 	std::map<std::string, LLUUID>	mIDList;
+
+	// <FS:Ansariel> FIRE-2083: Slider in upload animation floater doesn't work
+	LLFrameTimer		mTimer;
 };
 
 #endif  // LL_LLFLOATERBVHPREVIEW_H
