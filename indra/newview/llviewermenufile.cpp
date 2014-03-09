@@ -80,11 +80,6 @@
 #include <boost/tokenizer.hpp>
 
 #include "llinventorydefines.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llimfloatercontainer.h"
-#include "fsfloaterimcontainer.h"
-// </FS:Ansariel> [FS communication UI]
-
 
 class LLFileEnableUpload : public view_listener_t
 {
