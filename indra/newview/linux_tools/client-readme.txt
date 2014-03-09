@@ -87,8 +87,8 @@ probably missing the appropriate GStreamer plugin on your system - you may
 be able to install it (see TROUBLESHOOTING).
 
 User data is stored in the hidden directory ~/.firestorm by default; you may
-override this location with the FIRESTORM_USER_DIR environment variable if
-you wish.
+override this location with the FIRESTORM_USER_DIR, or FIRESTORM_X64_USER_DIR
+if using the 64 bit version, environment variable if you wish.
 
 
 4. KNOWN ISSUES
