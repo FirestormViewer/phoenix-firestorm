@@ -2061,9 +2061,40 @@ For now, just make the UI elements invisiable but still have the debug settings 
          name="MaxDragDistance"
          width="75"
          tool_tip="Maximum allowed distance in a single operation of move tool (meters from start point) [Default: 48.000]"/>
-        <check_box
+        <text
          left="3"
          top_pad="13"
+         follows="left|top"
+         height="16"
+         name="RotationStepText1"
+         width="190">
+          Constrain rotations to multiples of
+        </text>
+        <spinner
+         control_name="RotationStep"
+         decimal_digits="2"
+         top_delta="-5"
+         left_delta="190"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         max_val="359.99"
+         min_val="0.01"
+         name="RotationStep"
+         width="65"
+         tool_tip="All rotations via rotation tool are constrained to multiples of this unit [Default: 1.0]"/>
+        <text
+         left_pad="5"
+         top_pad="-11"
+         follows="left|top"
+         height="16"
+         name="RotationStepText2"
+         width="270">
+          degrees, when not using 'snap to grid'
+        </text>
+        <check_box
+         left="3"
+         top_pad="8"
          follows="left|top"
          height="16"
          label="Use old &quot;Set Object For Sale&quot; behavior"
