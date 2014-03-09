@@ -55,8 +55,9 @@ public:
 	void	pan(F32 right, F32 up);
 	virtual BOOL needsUpdate() { return mNeedsUpdate; }
 
+	LLVOAvatar* getDummyAvatar() { return mDummyAvatar; }
+	// <FS> Preview on own avatar
 	LLVOAvatar* getPreviewAvatar();
-	LLVOAvatar* getDummyAvatar();	// <FS:Zi> Animation Explorer
 
 protected:
 	BOOL				mNeedsUpdate;
@@ -104,13 +105,20 @@ public:
 	bool validateEaseIn(const LLSD& data);
 	bool validateEaseOut(const LLSD& data);
 	static void	onBtnOK(void*);
+	// <FS> Reload animation from disk
 	static void	onBtnReload(void*);
-	static void onSaveComplete(const LLUUID& asset_uuid, LLAssetType::EType type, void* user_data, S32 status, LLExtStat ext_status);
+	static void onSaveComplete(const LLUUID& asset_uuid,
+									   LLAssetType::EType type,
+									   void* user_data,
+									   S32 status, LLExtStat ext_status);
+	// <FS> Preview on own avatar
 	static bool sUseDummy;
 private:
 	void setAnimCallbacks() ;
+	// <FS> Reload animation from disk
 	BOOL loadBVH();
 	void unloadMotion();
+	// </FS>
 	
 protected:
 	void			draw();
