@@ -1720,7 +1720,11 @@ void LLDrawPoolAvatar::updateRiggedFaceVertexBuffer(LLVOAvatar* avatar, LLFace* 
 			{
 				F32 w = weight[j][k];
 
-				idx[k] = llclamp((S32) floorf(w), 0, 63);
+				// <FS:ND> proper bounds checking, the maximum changed from 64 to 52(JOINT_COUNT).
+				// idx[k] = llclamp((S32) floorf(w), 0, 63);
+				idx[k] = llclamp((S32) floorf(w), 0, JOINT_COUNT-1);
+				// </FS:ND>
+
 				wght[k] = w - floorf(w);
 				scale += wght[k];
 			}
