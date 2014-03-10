@@ -130,6 +130,7 @@ Var NO_STARTMENU        ; <FS:Ansariel> Optional start menu entry
 !insertmacro GetParameters
 !insertmacro GetOptions
 !include WinVer.nsh			; for OS and SP detection
+!include x64.nsh
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; After install completes, launch app
@@ -182,17 +183,35 @@ FunctionEnd
 ; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Make sure we are not on a version of windows older than Vista except for 32bit XP SP3
+; Make sure this computer meets the minimum system requirements.
+; Currently: Windows 32bit XP SP3, 64bit XP SP2 and Server 2003 SP2
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
-  ${IfNot} ${AtLeastWin2000}
-  ${OrIf} ${IsWinXP}
+  ${If} ${AtMostWin2000}
+    MessageBox MB_OK $(CheckWindowsVersionMB)
+    Quit
+  ${EndIf}
+
+  ${If} ${IsWinXP}
+  ${AndIfNot} ${RunningX64}
   ${AndIfNot} ${IsServicePack} 3
-  ${OrIf} ${IsWin2003}
+    MessageBox MB_OK $(CheckWindowsVersionMB)
+    Quit
+  ${EndIf}
+
+  ${If} ${IsWinXP}
+  ${AndIf} ${RunningX64}
   ${AndIfNot} ${IsServicePack} 2
     MessageBox MB_OK $(CheckWindowsVersionMB)
     Quit
   ${EndIf}
+
+  ${If} ${IsWin2003}
+  ${AndIfNot} ${IsServicePack} 2
+    MessageBox MB_OK $(CheckWindowsVersionMB)
+    Quit
+  ${EndIf}
+
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
