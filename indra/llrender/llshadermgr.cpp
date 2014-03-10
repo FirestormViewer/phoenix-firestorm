@@ -684,6 +684,11 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 	}
 	}
 
+	// <FS:ND> add define for ATI/AMD so we can do some special ifdef magic in shaders.
+	if( gGLManager.mIsATI )
+		text[ count++ ] = strdup( "#define ND_IS_AMD_CARD 1\n" );
+	// </FS:ND>
+
 	if (texture_index_channels > 0 && type == GL_FRAGMENT_SHADER_ARB)
 	{
 		//use specified number of texture channels for indexed texture rendering
