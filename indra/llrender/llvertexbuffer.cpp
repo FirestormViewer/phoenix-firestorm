@@ -147,8 +147,8 @@ void LLVBOPool::deleteBuffer(U32 name)
 LLVBOPool::LLVBOPool(U32 vboUsage, U32 vboType)
 : mUsage(vboUsage), mType(vboType)
 {
-	// mMissCount.resize(LL_VBO_POOL_SEED_COUNT);
-	// std::fill(mMissCount.begin(), mMissCount.end(), 0);
+	mMissCount.resize(LL_VBO_POOL_SEED_COUNT);
+	std::fill(mMissCount.begin(), mMissCount.end(), 0);
 }
 
 volatile U8* LLVBOPool::allocate(U32& name, U32 size, bool for_seed)
@@ -157,111 +157,84 @@ volatile U8* LLVBOPool::allocate(U32& name, U32 size, bool for_seed)
 	
 	volatile U8* ret = NULL;
 
-	// <FS:ND> We're not using the free list
+	U32 i = vbo_block_index(size);
 
-	// U32 i = vbo_block_index(size);
-	// 
-	// if (mFreeList.size() <= i)
-	// {
-	// 	mFreeList.resize(i+1);
-	// }
-	// 
-	// if (mFreeList[i].empty() || for_seed)
-	// {
-	// 	//make a new buffer
-	// 	name = genBuffer();
-	// 	
-	// 	glBindBufferARB(mType, name);
-	// 
-	// 	if (!for_seed && i < LL_VBO_POOL_SEED_COUNT)
-	// 	{ //record this miss
-	// 		mMissCount[i]++;	
-	// 	}
-	// 
-	// 	if (mType == GL_ARRAY_BUFFER_ARB)
-	// 	{
-	// 		LLVertexBuffer::sAllocatedBytes += size;
-	// 	}
-	// 	else
-	// 	{
-	// 		LLVertexBuffer::sAllocatedIndexBytes += size;
-	// 	}
-	// 
-	// 	if (LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
-	// 	{
-	// 		glBufferDataARB(mType, size, 0, mUsage);
-	// 		ret = (U8*) ll_aligned_malloc_16(size);
-	// 	}
-	// 	else
-	// 	{ //always use a true hint of static draw when allocating non-client-backed buffers
-	// 		glBufferDataARB(mType, size, 0, GL_STATIC_DRAW_ARB);
-	// 	}
-	// 
-	// 	glBindBufferARB(mType, 0);
-	// 
-	// 	if (for_seed)
-	// 	{ //put into pool for future use
-	// 		llassert(mFreeList.size() > i);
-	// 
-	// 		Record rec;
-	// 		rec.mGLName = name;
-	// 		rec.mClientData = ret;
-	// 
-	// 		if (mType == GL_ARRAY_BUFFER_ARB)
-	// 		{
-	// 			sBytesPooled += size;
-	// 		}
-	// 		else
-	// 		{
-	// 			sIndexBytesPooled += size;
-	// 		}
-	// 		mFreeList[i].push_back(rec);
-	// 	}
-	// }
-	// else
-	// {
-	// 	name = mFreeList[i].front().mGLName;
-	// 	ret = mFreeList[i].front().mClientData;
-	// 
-	// 	if (mType == GL_ARRAY_BUFFER_ARB)
-	// 	{
-	// 		sBytesPooled -= size;
-	// 	}
-	// 	else
-	// 	{
-	// 		sIndexBytesPooled -= size;
-	// 	}
-	// 
-	// 	mFreeList[i].pop_front();
-	// }
-
-
-	name = genBuffer();
-		
-	glBindBufferARB(mType, name);
-	
-	if (mType == GL_ARRAY_BUFFER_ARB)
-		LLVertexBuffer::sAllocatedBytes += size;
-	else
-		LLVertexBuffer::sAllocatedIndexBytes += size;
-
-	if (LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
+	if (mFreeList.size() <= i)
 	{
-		glBufferDataARB(mType, size, 0, mUsage);
-		if (mUsage != GL_DYNAMIC_COPY_ARB)
-		{ //data will be provided by application
-			ret = (U8*) ll_aligned_malloc(size, 64);
+		mFreeList.resize(i+1);
+	}
+
+	if (mFreeList[i].empty() || for_seed)
+	{
+		//make a new buffer
+		name = genBuffer();
+		
+		glBindBufferARB(mType, name);
+
+		if (!for_seed && i < LL_VBO_POOL_SEED_COUNT)
+		{ //record this miss
+			mMissCount[i]++;	
+		}
+
+		if (mType == GL_ARRAY_BUFFER_ARB)
+		{
+			LLVertexBuffer::sAllocatedBytes += size;
+		}
+		else
+		{
+			LLVertexBuffer::sAllocatedIndexBytes += size;
+		}
+
+		if (LLVertexBuffer::sDisableVBOMapping || mUsage != GL_DYNAMIC_DRAW_ARB)
+		{
+			glBufferDataARB(mType, size, 0, mUsage);
+			if (mUsage != GL_DYNAMIC_COPY_ARB)
+			{ //data will be provided by application
+				ret = (U8*) ll_aligned_malloc(size, 64);
+			}
+		}
+		else
+		{ //always use a true hint of static draw when allocating non-client-backed buffers
+			glBufferDataARB(mType, size, 0, GL_STATIC_DRAW_ARB);
+		}
+
+		glBindBufferARB(mType, 0);
+
+		if (for_seed)
+		{ //put into pool for future use
+			llassert(mFreeList.size() > i);
+
+			Record rec;
+			rec.mGLName = name;
+			rec.mClientData = ret;
+	
+			if (mType == GL_ARRAY_BUFFER_ARB)
+			{
+				sBytesPooled += size;
+			}
+			else
+			{
+				sIndexBytesPooled += size;
+			}
+			mFreeList[i].push_back(rec);
 		}
 	}
 	else
 	{
-		//always use a true hint of static draw when allocating non-client-backed buffers
-		glBufferDataARB(mType, size, 0, GL_STATIC_DRAW_ARB);
+		name = mFreeList[i].front().mGLName;
+		ret = mFreeList[i].front().mClientData;
+
+		if (mType == GL_ARRAY_BUFFER_ARB)
+		{
+			sBytesPooled -= size;
+		}
+		else
+		{
+			sIndexBytesPooled -= size;
+		}
+
+		mFreeList[i].pop_front();
 	}
-
-	glBindBufferARB(mType, 0);
-
-	// </FS:ND>
 
 	return ret;
 }
@@ -285,74 +258,68 @@ void LLVBOPool::release(U32 name, volatile U8* buffer, U32 size)
 
 void LLVBOPool::seedPool()
 {
-	// <FS:ND> We're not using the freelist
+	U32 dummy_name = 0;
 
-	// U32 dummy_name = 0;
-	// 
-	// if (mFreeList.size() < LL_VBO_POOL_SEED_COUNT)
-	// {
-	// 	mFreeList.resize(LL_VBO_POOL_SEED_COUNT);
-	// }
-	// 
-	// for (U32 i = 0; i < LL_VBO_POOL_SEED_COUNT; i++)
-	// {
-	// 	if (mMissCount[i] > mFreeList[i].size())
-	// 	{ 
-	// 		U32 size = i*LL_VBO_BLOCK_SIZE;
-	// 	
-	// 		S32 count = mMissCount[i] - mFreeList[i].size();
-	// 		for (U32 j = 0; j < count; ++j)
-	// 		{
-	// 			allocate(dummy_name, size, true);
-	// 		}
-	// 	}
-	// }
+	if (mFreeList.size() < LL_VBO_POOL_SEED_COUNT)
+	{
+		mFreeList.resize(LL_VBO_POOL_SEED_COUNT);
+	}
 
-	// </FS:ND>
+	for (U32 i = 0; i < LL_VBO_POOL_SEED_COUNT; i++)
+	{
+		if (mMissCount[i] > mFreeList[i].size())
+		{ 
+			U32 size = i*LL_VBO_BLOCK_SIZE;
+		
+			S32 count = mMissCount[i] - mFreeList[i].size();
+			for (U32 j = 0; j < count; ++j)
+			{
+				allocate(dummy_name, size, true);
+			}
+		}
+	}
 }
-
-
 
 
 
 void LLVBOPool::cleanup()
 {
-	// U32 size = LL_VBO_BLOCK_SIZE;
-	// 
-	// for (U32 i = 0; i < mFreeList.size(); ++i)
-	// {
-	// 	record_list_t& l = mFreeList[i];
-	// 
-	// 	while (!l.empty())
-	// 	{
-	// 		Record& r = l.front();
-	// 
-	// 		deleteBuffer(r.mGLName);
-	// 		
-	// 		if (r.mClientData)
-	// 		{
-	// 			ll_aligned_free((void*) r.mClientData);
-	// 		}
-	// 
-	// 		l.pop_front();
-	// 
-	// 		if (mType == GL_ARRAY_BUFFER_ARB)
-	// 		{
-	// 			sBytesPooled -= size;
-	// 			LLVertexBuffer::sAllocatedBytes -= size;
-	// 		}
-	// 		else
-	// 		{
-	// 			sIndexBytesPooled -= size;
-	// 			LLVertexBuffer::sAllocatedIndexBytes -= size;
-	// 		}
-	// 	}
-	// 
-	// 	size += LL_VBO_BLOCK_SIZE;
-	// }
-	// 
-	// //reset miss counts
-	// std::fill(mMissCount.begin(), mMissCount.end(), 0);
+	U32 size = LL_VBO_BLOCK_SIZE;
+
+	for (U32 i = 0; i < mFreeList.size(); ++i)
+	{
+		record_list_t& l = mFreeList[i];
+
+		while (!l.empty())
+		{
+			Record& r = l.front();
+
+			deleteBuffer(r.mGLName);
+			
+			if (r.mClientData)
+			{
+				ll_aligned_free((void*) r.mClientData);
+			}
+
+			l.pop_front();
+
+			if (mType == GL_ARRAY_BUFFER_ARB)
+			{
+				sBytesPooled -= size;
+				LLVertexBuffer::sAllocatedBytes -= size;
+			}
+			else
+			{
+				sIndexBytesPooled -= size;
+				LLVertexBuffer::sAllocatedIndexBytes -= size;
+			}
+		}
+
+		size += LL_VBO_BLOCK_SIZE;
+	}
+
+	//reset miss counts
+	std::fill(mMissCount.begin(), mMissCount.end(), 0);
 }
 
 
@@ -1307,13 +1274,8 @@ void LLVertexBuffer::updateNumVerts(S32 nverts)
 
 	if (nverts > 65536)
 	{
-		// <FS:ND> FIRE-5077; Just print an info if there are more than 0xFFFF, for now just so there is a message in the logs where in older version #vertices would have been capped.
-
-		// llwarns << "Vertex buffer overflow!" << llendl;
-		// nverts = 65536;
-		llinfos << "More vertices than 65536 (#" << nverts << ")" <<llendl;
-
-		// </FS:ND>
+		llwarns << "Vertex buffer overflow!" << llendl;
+		nverts = 65536;
 	}
 
 	U32 needed_size = calcOffsets(mTypeMask, mOffsets, nverts);
@@ -1348,21 +1310,11 @@ void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 {
 	stop_glerror();
 
-	// <FS:ND> FIRE-5077; Just print an info if there are more than 0xFFFF, for now just so there is a message in the logs where in older version #vertices would have been capped.
-
-	// if (nverts < 0 || nindices < 0 ||
-	// 	nverts > 65536)
-	// {
-	// 	llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
-	// }
-
-	if( nverts < 0 || nindices < 0 )
+	if (nverts < 0 || nindices < 0 ||
+		nverts > 65536)
+	{
 		llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
-
-	if( nverts > 0xFFFF )
-		llinfos << "More vertices than 65535 (#" << nverts << ")" <<llendl;
-	
-	// </FS:ND>
+	}
 
 	updateNumVerts(nverts);
 	updateNumIndices(nindices);
@@ -2087,13 +2039,6 @@ template <class T,S32 type> struct VertexBufferStrider
 
 			strider = (T*)ptr;
 			strider.setStride(0);
-
-			#ifdef OPENSIM // <FS:ND> protect against buffer overflows
-			if( count == -1 )
-				count = vbo.getNumIndices()-index;
-			strider.setCount( count );
-			#endif // <FS:ND>
-
 			return true;
 		}
 		else if (vbo.hasDataType(type))
@@ -2110,13 +2055,6 @@ template <class T,S32 type> struct VertexBufferStrider
 
 			strider = (T*)ptr;
 			strider.setStride(stride);
-
-			#ifdef OPENSIM // <FS:ND> protect against buffer overflows
-			if( count == -1 )
-				count = vbo.getNumVerts()-index;
-			strider.setCount( count );
-			#endif // <FS:ND>
-
 			return true;
 		}
 		else

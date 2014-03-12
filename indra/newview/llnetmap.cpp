@@ -1139,7 +1139,17 @@ void LLNetMap::showAvatarInspector(const LLUUID& avatar_id)
 		params["pos"]["y"] = rect.mTop;
 	}
 
-	LLFloaterReg::showInstance("inspect_avatar", params);
+	// <FS:Ansariel> FIRE-9045: Remove avatar inspector
+	//LLFloaterReg::showInstance("inspect_avatar", params);
+	if (gSavedSettings.getBOOL("FSInspectAvatarSlurlOpensProfile"))
+	{
+		LLAvatarActions::showProfile(avatar_id);
+	}
+	else
+	{
+		LLFloaterReg::showInstance("inspect_avatar", params);
+	}
+	// </FS:Ansariel>
 }
 
 void LLNetMap::renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius_meters )

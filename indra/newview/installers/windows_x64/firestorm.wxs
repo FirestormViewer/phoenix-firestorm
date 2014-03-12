@@ -16,6 +16,11 @@
   <Property Id="ARPPRODUCTICON" Value="firestorm.ico"/>
   <Media Id="1" Cabinet="firestorm.cab" EmbedCab="yes" CompressionLevel="high"/>
 
+  <!-- VersionNT64 is undefined if the operating system is not 64-bit: http://msdn.microsoft.com/en-us/library/aa372497%28v=vs.85%29.aspx -->
+  <Condition Message="You can't install Firestorm viewer in 64 bit version on computer without support for the 64 bit architecture. Installation canceled.">
+    <![CDATA[VersionNT64]]>
+  </Condition>
+
   <!-- OS list: http://msdn.microsoft.com/library/aa370556.aspx - WinXP_x64 is based on Windows Server 2003 -->
   <Condition Message="Firestorm viewer in 64 bit version is only supported by Windows XP Professional x64 SP2, or newer. Installation canceled.">
     <![CDATA[Installed OR (VersionNT64 > 502) OR (VersionNT64 = 502 AND ServicePackLevel >= 2)]]>
@@ -32,40 +37,45 @@
     <Directory Id="INSTALLDIR" Name="Firestorm">
 
      <Component Id="firestorm" Guid="{2CDF0673-595F-4fb4-B38A-C338BF9D4DF1}">
-      <File Source="$(var.BUILDDIR)/$(var.PROGRAM_FILE)" KeyPath="yes"/>
-      <File Source="$(var.BUILDDIR)/win_crash_logger.exe" />
-      <File Source="$(var.BUILDDIR)/libcollada14dom22.dll" />
-      <File Source="$(var.BUILDDIR)/fmodex64.dll" />
-      <File Source="$(var.BUILDDIR)/glod.dll" />
-      <File Source="$(var.BUILDDIR)/Leap.dll" />
-      <File Source="$(var.BUILDDIR)/libapr-1.dll" />
-      <File Source="$(var.BUILDDIR)/libapriconv-1.dll" />
-      <File Source="$(var.BUILDDIR)/libaprutil-1.dll" />
-      <File Source="$(var.BUILDDIR)/libeay32.dll" />
-      <File Source="$(var.BUILDDIR)/libhunspell.dll" />
-      <File Source="$(var.BUILDDIR)/growl++.dll" />
-      <File Source="$(var.BUILDDIR)/growl.dll" />
-      <File Source="$(var.BUILDDIR)/openjpeg.dll" />
-      <File Source="$(var.BUILDDIR)/ssleay32.dll" />
+      <File Id="firestorm" Source="$(var.BUILDDIR)/$(var.PROGRAM_FILE)" KeyPath="yes"/>
+
+      <File Source="$(var.BUILDDIR)/win_crash_logger.exe" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/libcollada14dom22.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/fmodex64.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/glod.dll" CompanionFile="firestorm" />
+
+      <?if $(var.PACKAGE_LEAP)=1?>
+        <File Source="$(var.BUILDDIR)/Leap.dll" CompanionFile="firestorm" />
+      <?endif?>
+
+      <File Source="$(var.BUILDDIR)/libapr-1.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/libapriconv-1.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/libaprutil-1.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/libeay32.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/libhunspell.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/growl++.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/growl.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/openjpeg.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/ssleay32.dll" CompanionFile="firestorm" />
+
       <File Source="$(var.BUILDDIR)/featuretable.txt" />
       <File Source="$(var.BUILDDIR)/featuretable_xp.txt" />
       <File Source="$(var.BUILDDIR)/gpu_table.txt" />
       <File Source="$(var.BUILDDIR)/licenses.txt" />
       <File Source="$(var.BUILDDIR)/VivoxAUP.txt" />
+
       <File Source="$(var.BUILDDIR)/skins.cab" />
       <File Source="$(var.BUILDDIR)/skins.cabdir" />
       <File Source="$(var.BUILDDIR)/app_settings.cab" />
       <File Source="$(var.BUILDDIR)/app_settings.cabdir" />
-     </Component>
 
-     <Component Id="slvoice" Guid="{6BF56CA8-0D48-4ea8-B3E8-CD38B7C502E6}">
-      <File Source="$(var.BUILDDIR)/slvoice.exe" KeyPath="yes" />
-      <File Source="$(var.BUILDDIR)/libsndfile-1.dll" />
-      <File Source="$(var.BUILDDIR)/ortp.dll" />
-      <File Source="$(var.BUILDDIR)/vivoxoal.dll" />
-      <File Source="$(var.BUILDDIR)/vivoxplatform.dll" />
-      <File Source="$(var.BUILDDIR)/vivoxsdk.dll" />
-      <File Source="$(var.BUILDDIR)/zlib1.dll" />
+      <File Source="$(var.BUILDDIR)/slvoice.exe" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/libsndfile-1.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/ortp.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/vivoxoal.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/vivoxplatform.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/vivoxsdk.dll" CompanionFile="firestorm" />
+      <File Source="$(var.BUILDDIR)/zlib1.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/ca-bundle.crt" />
      </Component>
 
@@ -94,8 +104,6 @@
    <ComponentRef Id="Firestorm_Registy" />
    <ComponentRef Id="ApplicationShortcut" />
    <ComponentRef Id="ApplicationShortcut_Desktop" />
-
-   <ComponentRef Id="slvoice" />
 
    <ComponentRef Id="llplugin_exe" />
    <ComponentRef Id="llplugin_libs" />

@@ -181,7 +181,7 @@
         <check_box label="Cambiare gradualmente le impostazioni al cambio sim del WL" name="FSInterpolateParcelWL" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
     </panel>
 	<!--Costruzione-->
-    <panel label="Costruzione" name="BuildTab">
+    <panel label="Costr. 1" name="BuildTab">
         <text name="text_box_objprams" width="250">
          Parametri di base alla creazione dell'oggetto
          </text>
@@ -208,9 +208,6 @@
         <spinner label="Poz. Y" name="Y pos" />
         <spinner label="Poz. Z" name="Z pos" />
         <check_box label="Valori in percentuale" tool_tip="Di Default è impostato a 50%" name="EmPivotPercToggle" />
-        <check_box label="Evidenzia i prims selezionati" tool_tip="Quando non è spuntata questa casella, i prim editati non verranno messi in evidenza con i contorni gialli/blu. Questa casella non spuntata aumenta le prestazioni del viewer evitando crash quando si selezionano molti oggetti." name="EmBuildPrefsRenderHighlight_toggle" />
-        <check_box label="Usa il vecchio metodo &quot;Metti oggetto in vendita&quot;" tool_tip="Quando selezionato, l'oggetto in vendita viene salvato senza chiedere conferma" name="FSCommitForSaleOnChange_toggle" />
-        <check_box label="Salva gli Script in inventario come Mono" tool_tip="Quando selezionato, salverà gli script editati nell'invetario con il formato mono." name="FSSaveInventoryScriptsAsMono_toggle" />
 	<check_box label="Abilita LSL preprocessor" tool_tip="Quando spuntata, LSL preprocessor è attivo." name="preproc_checkbox" />
 	<check_box label="Ottimizza Script" tool_tip="Quando spuntato, LSL preprocessor ottimizzerà lo spazio usato usato dallo script e migliora la leggibilità." name="preprocoptimizer_checkbox"/>
 	<check_box tool_tip="Quando spuntato, LSL preprocessor sarà autorizzato a fare lo switch() statement per controllare il flusso dello script." name="preprocswitch_checkbox"/>
@@ -221,6 +218,14 @@
 	</text>
 	<button label="Sfoglia" label_selected="Sfoglia" name="SetPreprocInclude"/>
     </panel>
+
+    <panel label="Costr. 2" name="BuildTab2">
+        <check_box label="Evidenzia i prims selezionati" tool_tip="Quando non è spuntata questa casella, i prim editati non verranno messi in evidenza con i contorni gialli/blu. Questa casella non spuntata aumenta le prestazioni del viewer evitando crash quando si selezionano molti oggetti." name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Limita distanza di selezione" name="LimitSelectDistance" />
+        <check_box label="Usa il vecchio metodo &quot;Metti oggetto in vendita&quot;" tool_tip="Quando selezionato, l'oggetto in vendita viene salvato senza chiedere conferma" name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Salva gli Script in inventario come Mono" tool_tip="Quando selezionato, salverà gli script editati nell'invetario con il formato mono." name="FSSaveInventoryScriptsAsMono_toggle" />
+    </panel>
+
 	<!--Tag-->
     <panel label="Tag" name="TagTab">
         <text name="SL-Tags-Notice">

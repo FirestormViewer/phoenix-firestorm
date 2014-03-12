@@ -362,7 +362,7 @@
 
 <!--Build-->
 	<panel name="BuildTab"
-		label="Bâtir">
+		label="Bâtir 1">
 		<text name="text_box_objprams">
 			Taille
 		</text>
@@ -467,25 +467,6 @@
 		<check_box name="FSPivotPercToggle"
 			label="Exprimé en %"
 			tool_tip="Par défaut, ces valeur sont définies à 50%, soit au centre mathématique d'un prim/objet lié."/>
-	<!--spec-->
-		<check_box name="FSBuildPrefsRenderHighlight_toggle"
-			label="Contour lumineux de la sélection"
-			tool_tip="Masque les contours lumineux bleu et jaune, améliorant la vision lors de l'édition de nombreux prim rapprochés, comme les cheveux, par ex."/>
-		<check_box name="FSCommitForSaleOnChange_toggle"
-			label="Mise en vente d'obj. anc. style"
-			tool_tip="Cette option sauvegarde immédiatement les changements lors de la mise en vente d'un objet au lieu d'en demander confirmation."/>
-		<check_box name="FSSaveInventoryScriptsAsMono_toggle"
-			label="Enregistrer les scripts en Mono"
-			tool_tip="Editer et enregistrer un script directement depuis l'inventaire se fait en Mono plutôt qu'en LSL."/>
-		<check_box name="FSTextureDefaultSaveAsFormat"
-			label="Enregistrer par défaut les textures en PNG plutôt qu'en TGA"
-			tool_tip="Utilisé dans la fenêtre de prévisualisation et dans le menu contextuel de l'inventaire lors de l'enregistrement d'une texture sur le disque dur."/>
-		<check_boxn name="FSEnableGrab"
-			label="Ctrl+souris pour saisir / manip. les objets"
-			tool_tip="Saisir et manipuler les objets en utilisant la combinaison souris + touche Ctrl. "/>
-        <check_box name="FSExperimentalDragTexture"
-			label="Clic-déplac. / -éch. (av Verr. Maj.) sur une surface de texture en mode bâtir"
-			tool_tip="Cette option permet de cliquer-déplacer ou cliquer-échelonner (avec le verrouillage des majuscules) une surface de texture en mode d'édition. (Encore expérimental, à utiliser avec prudence). "/>
 	<!--lsl preprocessor-->
 	<!--do not translate
 		<check_box name="preproc_checkbox"
@@ -511,6 +492,30 @@
 			label_selected="Browse">
         </button>
 	-->
+	</panel>
+	<panel name="BuildTab2"
+		label="Bâtir 2">
+		<check_box name="FSBuildPrefsRenderHighlight_toggle"
+			label="Contour lumineux de la sélection"
+			tool_tip="Masque les contours lumineux bleu et jaune, améliorant la vision lors de l'édition de nombreux prim rapprochés, comme les cheveux, par ex."/>
+		<check_box name="LimitSelectDistance"
+			label="Limiter la distance de sélection"
+			width="195" />
+		<check_box name="FSCommitForSaleOnChange_toggle"
+			label="Mise en vente d'obj. anc. style"
+			tool_tip="Cette option sauvegarde immédiatement les changements lors de la mise en vente d'un objet au lieu d'en demander confirmation."/>
+		<check_box name="FSSaveInventoryScriptsAsMono_toggle"
+			label="Enregistrer les scripts en Mono"
+			tool_tip="Editer et enregistrer un script directement depuis l'inventaire se fait en Mono plutôt qu'en LSL."/>
+		<check_box name="FSTextureDefaultSaveAsFormat"
+			label="Enregistrer par défaut les textures en PNG plutôt qu'en TGA"
+			tool_tip="Utilisé dans la fenêtre de prévisualisation et dans le menu contextuel de l'inventaire lors de l'enregistrement d'une texture sur le disque dur."/>
+		<check_boxn name="FSEnableGrab"
+			label="Ctrl+souris pour saisir / manip. les objets"
+			tool_tip="Saisir et manipuler les objets en utilisant la combinaison souris + touche Ctrl. "/>
+        <check_box name="FSExperimentalDragTexture"
+			label="Clic-déplac. / -éch. (av Verr. Maj.) sur une surface de texture en mode bâtir"
+			tool_tip="Cette option permet de cliquer-déplacer ou cliquer-échelonner (avec le verrouillage des majuscules) une surface de texture en mode d'édition. (Encore expérimental, à utiliser avec prudence). "/>
 	</panel>
 	
 <!--Tags-->
