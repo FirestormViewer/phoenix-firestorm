@@ -54,7 +54,7 @@
 #include "llavataractions.h"
 
 // <FS:Ansariel> Name returned if object is not an avatar (with and without display names)
-const std::string OBJECT_NOT_AVATAR_NAME = "(???) (???)";
+const std::string OBJECT_NOT_AVATAR_NAME = "(?\?\?) (?\?\?)";
 
 //LLFloaterTopObjects* LLFloaterTopObjects::sInstance = NULL;
 
