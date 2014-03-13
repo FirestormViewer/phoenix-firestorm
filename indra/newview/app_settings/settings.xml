@@ -1805,16 +1805,16 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>UploadAnimationPreviewUseDummy</key>
+  <key>FSUploadAnimationOnOwnAvatar</key>
     <map>
       <key>Comment</key>
-      <string>Uploading an animation preview on dummy if set to true, preview on self if false. Both plays only on the local machine.</string>
+      <string>Uploading an animation preview on own avatar if set to true, preview on dummy if false. Both plays only on the local machine.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
 
   <key>PrivateLookAtTarget</key>

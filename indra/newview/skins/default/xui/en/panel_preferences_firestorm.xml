@@ -2136,6 +2136,14 @@ For now, just make the UI elements invisiable but still have the debug settings 
          tool_tip="If enabled, allows to click-drag or click-scale (together with caps lock) a texture face in build mode. This feature is still experimental and should be used with caution."
          name="FSExperimentalDragTexture"
          control_name="FSExperimentalDragTexture"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Preview animations on own avatar during upload"
+         tool_tip="If enabled, you can preview animations during the upload process on your own avatar"
+         name="FSUploadAnimationOnOwnAvatar"
+         control_name="FSUploadAnimationOnOwnAvatar"/>
     </panel>
 
 </tab_container>

@@ -126,7 +126,7 @@ LLFloaterBvhPreview::LLFloaterBvhPreview(const std::string& filename) :
 	mLastMouseY = 0;
 
 	// <FS> Preview on own avatar
-	mUseDummy = gSavedSettings.getBOOL("UploadAnimationPreviewUseDummy");
+	mUseOwnAvatar = gSavedSettings.getBOOL("FSUploadAnimationOnOwnAvatar");
 
 	mIDList["Standing"] = ANIM_AGENT_STAND;
 	mIDList["Walking"] = ANIM_AGENT_FEMALE_WALK;
@@ -214,7 +214,7 @@ BOOL LLFloaterBvhPreview::postBuild()
 	//	getRect().getWidth() - PREVIEW_HPAD, 
 	//	PREVIEW_HPAD + PREF_BUTTON_HEIGHT + PREVIEW_HPAD);
 	//mPreviewImageRect.set(0.f, 1.f, 1.f, 0.f); 
-	if (mUseDummy)
+	if (!mUseOwnAvatar)
 	{ 
 		LLRect rect = getRect(); 
 		translate(0, PREVIEW_TEXTURE_HEIGHT-30); 
@@ -428,7 +428,7 @@ BOOL LLFloaterBvhPreview::loadBVH()
 //-----------------------------------------------------------------------------
 void LLFloaterBvhPreview::unloadMotion()
 {
-	if (mMotionID.notNull() && mAnimPreview && !mUseDummy)
+	if (mMotionID.notNull() && mAnimPreview && mUseOwnAvatar)
 	{ 
 		resetMotion(); 
 		// <FS> Preview on own avatar
@@ -469,7 +469,7 @@ void LLFloaterBvhPreview::draw()
 	if (mMotionID.notNull() && mAnimPreview)
 	{
 		// <FS> Preview on own avatar
-		if (mUseDummy)
+		if (!mUseOwnAvatar)
 		{
 		// </FS>
 		gGL.color3f(1.f, 1.f, 1.f); 
@@ -559,7 +559,7 @@ void LLFloaterBvhPreview::resetMotion()
 BOOL LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
-	if (!mUseDummy) return LLFloater::handleMouseDown(x, y, mask);
+	if (mUseOwnAvatar) return LLFloater::handleMouseDown(x, y, mask);
 
 	if (mPreviewRect.pointInRect(x, y))
 	{
@@ -580,7 +580,7 @@ BOOL LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLFloaterBvhPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
-	if (!mUseDummy) return LLFloater::handleMouseUp(x, y, mask);
+	if (mUseOwnAvatar) return LLFloater::handleMouseUp(x, y, mask);
 
 	gFocusMgr.setMouseCapture(FALSE);
 	gViewerWindow->showCursor();
@@ -593,7 +593,7 @@ BOOL LLFloaterBvhPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 BOOL LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
-	if (mUseDummy)
+	if (!mUseOwnAvatar)
 	{
 	// </FS>
 	MASK local_mask = mask & ~MASK_ALT; 
@@ -653,7 +653,7 @@ BOOL LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
 BOOL LLFloaterBvhPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	// <FS> Preview on own avatar
-	if (!mUseDummy)
+	if (mUseOwnAvatar)
 		return false;
 	// </FS>
 
@@ -673,7 +673,7 @@ void LLFloaterBvhPreview::onMouseCaptureLost()
 {
 	// <FS> Preview on own avatar
 	//gViewerWindow->showCursor();
-	if (mUseDummy)
+	if (!mUseOwnAvatar)
 	{
 		gViewerWindow->showCursor();
 	}
@@ -1387,6 +1387,6 @@ LLVOAvatar* LLPreviewAnimation::getPreviewAvatar(LLFloaterBvhPreview* floaterp)
 		// Don't return null - missing safety checks all around the code!
 		return (LLVOAvatar*)mDummyAvatar;
 	}
-	return floaterp->mUseDummy ? (LLVOAvatar*)mDummyAvatar : (LLVOAvatar*)gAgentAvatarp;
+	return floaterp->mUseOwnAvatar ? (LLVOAvatar*)gAgentAvatarp : (LLVOAvatar*)mDummyAvatar;
 }
 // </FS>

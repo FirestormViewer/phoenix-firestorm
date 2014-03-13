@@ -306,6 +306,7 @@
 		<check_box label="Altes Verhalten für „Zum Verkauf:“ akt." tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
 		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="Texturen standardmäßig im PNG-Format anstelle von TGA speichern" tool_tip="Falls aktiviert, werden Texturen in der Vorschau standardmäßig im PNG-Format gespeichert" name="FSTextureDefaultSaveAsFormat"/>
+		<check_box label="Vorschau von Animation beim Upload am eigenen Avatar" tool_tip="Falls aktiviert, werden Animationen in der Vorschau am eigenen Avatar abgespielt" name="FSUploadAnimationOnOwnAvatar"/>
 	</panel>
 </tab_container>
 </panel>
