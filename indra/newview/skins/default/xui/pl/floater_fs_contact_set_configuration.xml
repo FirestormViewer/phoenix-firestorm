@@ -25,9 +25,9 @@
 		<text name="label_colors">
 			Custom Colors:
 		</text>
-		<check_box label="Koloruj ikonę znajomego na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
-		<check_box label="Koloruj tag imienia znajomego bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
-		<check_box label="Koloruj wpis znajomego w radarze bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar" />
-		<check_box label="Koloruj czat znajomego bazując na zestawie kontaktów" name="FSContactSetsColorizeChat" />
+		<check_box label="Koloruj ikonę na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="Koloruj tag imienia bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
+		<check_box label="Koloruj wpis w radarze bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar" />
+		<check_box label="Koloruj czat bazując na zestawie kontaktów" name="FSContactSetsColorizeChat" />
 	</panel>
 </floater>

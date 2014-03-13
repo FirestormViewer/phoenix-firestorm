@@ -10,7 +10,7 @@
 		<menu_item_call label="Niebieski" name="MarkBlue"/>
 		<menu_item_call label="Fioletowy" name="MarkPurple"/>
 		<menu_item_call label="Żółty" name="MarkYellow"/>
-		<menu_item_call label="Usuń to oznaczenie" name="Clear Mark"/>
+		<menu_item_call label="Usuń to oznaczenie/a" name="Clear Mark"/>
 		<menu_item_call label="Usuń wszystkie oznaczenia" name="Clear Marks"/>
 	</menu>
 	<menu name="More Options" label="Więcej opcji...">

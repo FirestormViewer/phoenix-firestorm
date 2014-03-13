@@ -3729,7 +3729,7 @@ Obecne ustawienie: [CURRENT_VALUE]
 		Nie można przybliżyć do tego awatara, ponieważ jest poza zasięgiem.
 	</notification>
 	<notification name="TrackAvatarNotPossible">
-		Nie można śledzić tego awatara, ponieważ jest poza zasięgiem.
+		Nie można śledzić tego awatara, ponieważ jest poza zasięgiem radaru.
 	</notification>
 	<notification name="CacheEmpty">
 		Pamięć podręczna Twojej Przeglądarki jest pusta. Miej na uwadze, że możesz przez jakiś czas odczuwać obniżoną wydajność i spowolnione doczytywanie obiektów z Szafy.
