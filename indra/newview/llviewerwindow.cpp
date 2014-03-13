@@ -2761,7 +2761,7 @@ void LLViewerWindow::draw()
 
 					if (renderIFF)
 					{
-						LLTracker::instance()->drawMarker(targetPosition, targetColor);
+						LLTracker::instance()->drawMarker(targetPosition, targetColor, true);
 					}
 
 					if (inMouselook && !crosshairRendered && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))

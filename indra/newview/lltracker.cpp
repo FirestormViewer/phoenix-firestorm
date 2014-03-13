@@ -715,7 +715,10 @@ void LLTracker::clearFocus()
 	instance()->mTrackingStatus = TRACKING_NOTHING;
 }
 
-void LLTracker::drawMarker(const LLVector3d& pos_global, const LLColor4& color)
+// <FS:Ansariel> Exodus' mouselook combat feature
+//void LLTracker::drawMarker(const LLVector3d& pos_global, const LLColor4& color)
+void LLTracker::drawMarker(const LLVector3d& pos_global, const LLColor4& color, bool is_iff /*= false*/)
+// </FS:Ansariel>
 {
 	// get position
 	LLVector3 pos_local = gAgent.getPosAgentFromGlobal(pos_global);
@@ -726,8 +729,13 @@ void LLTracker::drawMarker(const LLVector3d& pos_global, const LLColor4& color)
 	S32 y = 0;
 	const BOOL CLAMP = TRUE;
 
-	if (LLViewerCamera::getInstance()->projectPosAgentToScreen(pos_local, screen, CLAMP)
-		|| LLViewerCamera::getInstance()->projectPosAgentToScreenEdge(pos_local, screen) )
+	// <FS:Ansariel> Exodus' mouselook combat feature
+	//if (LLViewerCamera::getInstance()->projectPosAgentToScreen(pos_local, screen, CLAMP)
+	//	|| LLViewerCamera::getInstance()->projectPosAgentToScreenEdge(pos_local, screen) )
+	bool on_screen = LLViewerCamera::getInstance()->projectPosAgentToScreen(pos_local, screen, CLAMP);
+	if (on_screen && is_iff) return;
+	if (on_screen || LLViewerCamera::getInstance()->projectPosAgentToScreenEdge(pos_local, screen) )
+	// </FS:Ansariel>
 	{
 		gHUDView->screenPointToLocal(screen.mX, screen.mY, &x, &y);
 

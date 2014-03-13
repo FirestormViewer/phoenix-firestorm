@@ -107,7 +107,7 @@ public:
 	static const std::string& getToolTip() { return instance()->mToolTip; }
 
 	// <FS:Ansariel> Exodus' mouselook combat feature
-	void drawMarker(const LLVector3d& pos_global, const LLColor4& color);
+	void drawMarker(const LLVector3d& pos_global, const LLColor4& color, bool is_iff = false);
 
 protected:
 	LLTracker();
