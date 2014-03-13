@@ -782,7 +782,7 @@ void FSRadar::teleportToAvatar(const LLUUID& targetAv)
 		}
 		else
 		{
-			avpos.mdV[VZ] += 2.0;
+			avpos.mdV[VZ] += 2.0f;
 			gAgent.teleportViaLocation(avpos);
 		}
 	}
