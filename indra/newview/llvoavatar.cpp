@@ -108,10 +108,11 @@
 #include "llsdserialize.h"
 
 #include "fsdata.h"
-#include "llcontrol.h"
-#include "lggcontactsets.h"
-#include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 #include "lfsimfeaturehandler.h"	// <FS:CR> Opensim
+#include "lggcontactsets.h"
+#include "llcontrol.h"
+#include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+#include "llnetmap.h"
 #include "llviewernetwork.h"	// [FS:CR] isInSecondlife()
 
 extern F32 SPEED_ADJUST_MAX;
@@ -2891,8 +2892,10 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// then use that color as name_tag_color
 	static LLUICachedControl<bool> show_friends("NameTagShowFriends");
 	static LLUICachedControl<U32> color_client_tags("FSColorClienttags");
+	bool special_color_override = (show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))) ||
+									LLNetMap::hasAvatarMarkColor(getID());
 	if (mClientTagData.has("color")
-		&& !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG)))
+		&& !special_color_override
 		&& color_client_tags && !this->isSelf())
 	{
 		name_tag_color = mClientTagData["color"]; 
@@ -2937,8 +2940,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		// Override nametag color only if friend color is disabled
 		// or avatar is not a friend nor has a contact set color
-		if (show_distance_color_tag
-			&& !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))))
+		if (show_distance_color_tag && !special_color_override)
 		{
 			name_tag_color = distance_color;
 		}
@@ -3393,6 +3395,8 @@ LLColor4 LLVOAvatar::getNameTagColor()
 	{
 		color = LGGContactSets::getInstance()->getFriendColor(getID());
 	}
+
+	LLNetMap::getAvatarMarkColor(getID(), color);
 
 	return color;
 }

@@ -101,6 +101,7 @@ public:
 	void			performDoubleClickAction(LLVector3d pos_global);
 
 	// <FS:Ansariel> Mark avatar feature
+	static bool		hasAvatarMarkColor(const LLUUID& avatar_id) { return sAvatarMarksMap.find(avatar_id) != sAvatarMarksMap.end(); }
 	static bool		getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color);
 	static void		setAvatarMarkColor(const LLUUID& avatar_id, const LLSD& color);
 	static void		setAvatarMarkColors(const uuid_vec_t& avatar_ids, const LLSD& color);
