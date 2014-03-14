@@ -39,9 +39,29 @@
      <menu_item_call.on_click
       function="ContactSet.Action"
       parameter="set_pseudonym"/>
-	 <menu_item_call.on_visible
+     <menu_item_call.on_visible
       function="ContactSet.Enable"
       parameter="has_single_selection" />
+  </menu_item_call>
+  <menu_item_call
+   label="Remove alias..."
+   name="remove_pseudonym">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="remove_pseudonym"/>
+     <menu_item_call.on_visible
+      function="ContactSet.Enable"
+      parameter="has_pseudonym" />
+  </menu_item_call>
+  <menu_item_call
+   label="Remove display name..."
+   name="remove_displayname">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="remove_display_name"/>
+     <menu_item_call.on_visible
+      function="ContactSet.Enable"
+      parameter="has_display_name" />
   </menu_item_call>
   <menu_item_call
    label="Configure Contact Set..."

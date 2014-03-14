@@ -4,5 +4,7 @@
 	<menu_item_call label="IM" name="im"/>
 	<menu_item_call label="Teleport anbieten" name="teleport"/>
 	<menu_item_call label="Alias festlegen" name="set_pseudonym"/>
+	<menu_item_call label="Alias entfernen" name="remove_pseudonym"/>
+	<menu_item_call label="Anzeigename entfernen" name="remove_displayname"/>
 	<menu_item_call label="Kontakt-Set konfigurieren" name="set_config"/>
 </toggleable_menu>
