@@ -1149,14 +1149,17 @@ void LLVivoxVoiceClient::stateMachine()
 				std::stringstream errs;
 				errs << mVoiceAccountServerURI << "\n:UDP: 3478, 3479, 5060, 5062, 12000-17000";
 				args["HOSTID"] = errs.str();
-				if (LLGridManager::getInstance()->isSystemGrid())
-				{
-					LLNotificationsUtil::add("NoVoiceConnect", args);	
-				}
-				else
-				{
-					LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
-				}				
+				// <FS:Ansariel> FIRE-13130: Unknown notification "NoVoiceConnect-GIAB"
+				//if (LLGridManager::getInstance()->isSystemGrid())
+				//{
+				//	LLNotificationsUtil::add("NoVoiceConnect", args);	
+				//}
+				//else
+				//{
+				//	LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
+				//}				
+				LLNotificationsUtil::add("NoVoiceConnect", args);
+				// </FS:Ansariel>
 			}
 			else
 			{
@@ -2631,14 +2634,17 @@ void LLVivoxVoiceClient::connectorCreateResponse(int statusCode, std::string &st
 		std::stringstream errs;
 		errs << mVoiceAccountServerURI << "\n:UDP: 3478, 3479, 5060, 5062, 12000-17000";
 		args["HOSTID"] = errs.str();
-		if (LLGridManager::getInstance()->isSystemGrid())
-		{
-			LLNotificationsUtil::add("NoVoiceConnect", args);	
-		}
-		else
-		{
-			LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
-		}
+		// <FS:Ansariel> FIRE-13130: Unknown notification "NoVoiceConnect-GIAB"
+		//if (LLGridManager::getInstance()->isSystemGrid())
+		//{
+		//	LLNotificationsUtil::add("NoVoiceConnect", args);	
+		//}
+		//else
+		//{
+		//	LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
+		//}
+		LLNotificationsUtil::add("NoVoiceConnect", args);
+		// </FS:Ansariel>
 	}
 	else
 	{
