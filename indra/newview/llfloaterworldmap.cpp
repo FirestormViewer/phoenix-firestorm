@@ -246,11 +246,14 @@ FSWorldMapParcelInfoObserver::~FSWorldMapParcelInfoObserver()
 
 void FSWorldMapParcelInfoObserver::processParcelInfo(const LLParcelData& parcel_data)
 {
-	LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelID, this);
-
-	if (gFloaterWorldMap)
+	if (parcel_data.parcel_id == mParcelID)
 	{
-		gFloaterWorldMap->processParcelInfo(parcel_data, mPosGlobal);
+		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelID, this);
+
+		if (gFloaterWorldMap)
+		{
+			gFloaterWorldMap->processParcelInfo(parcel_data, mPosGlobal);
+		}
 	}
 }
 
@@ -265,7 +268,7 @@ void FSWorldMapParcelInfoObserver::setParcelID(const LLUUID& parcel_id)
 // virtual
 void FSWorldMapParcelInfoObserver::setErrorStatus(U32 status, const std::string& reason)
 {
-	llwarns << "Can't handle remote parcel request."<< " Http Status: "<< status << ". Reason : "<< reason<<llendl;
+	LL_WARNS("FSWorldMapParcelInfoObserver") << "Can't handle remote parcel request." << " Http Status: " << status << ". Reason : " << reason << LL_ENDL;
 }
 // </FS:Ansariel> Parcel details on map
 
@@ -655,8 +658,9 @@ void LLFloaterWorldMap::draw()
 // <FS:Ansariel> Parcel details on map
 void LLFloaterWorldMap::processParcelInfo(const LLParcelData& parcel_data, const LLVector3d& pos_global)
 {
+	LLVector3d tracker_pos = LLTracker::getTrackedPositionGlobal();
 	if (!mShowParcelInfo ||
-		LLTracker::getTrackedPositionGlobal() != pos_global ||
+		(tracker_pos.mdV[VX] != pos_global.mdV[VX] && tracker_pos.mdV[VY] != pos_global.mdV[VY]) ||
 		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_NOTHING ||
 		LLTracker::getTrackingStatus() != LLTracker::TRACKING_LOCATION)
 	{
