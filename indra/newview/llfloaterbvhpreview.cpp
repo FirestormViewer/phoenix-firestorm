@@ -365,7 +365,7 @@ BOOL LLFloaterBvhPreview::loadBVH()
 			motionp->setName(getChild<LLUICtrl>("name_form")->getValue().asString());
 			// <FS> Preview on own avatar
 			//mAnimPreview->getDummyAvatar()->startMotion(mMotionID);
-			mAnimPreview->getPreviewAvatar(this)->startMotion(mMotionID);
+			onBtnPlay();
 			// </FS>
 			
 			getChild<LLSlider>("playback_slider")->setMinValue(0.0);
