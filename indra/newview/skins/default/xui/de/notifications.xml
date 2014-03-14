@@ -4746,7 +4746,7 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 		[COUNT] Avatare wurden zu Kontakt-Set „[SET]“ hinzugefügt.
 	</notification>
 	<notification name="SetAvatarPseudonym">
-		Alias für [NAME] eingeben:
+		Alias für [AVATAR] eingeben:
 		<form name="form">
 			<button name="Create" text="Erstellen"/>
 			<button name="Cancel" text="Abbrechen"/>
