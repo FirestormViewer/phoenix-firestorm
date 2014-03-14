@@ -58,6 +58,7 @@
 		</panel>
 		<panel label="Rozmowy głosowe" name="Media Voice tab">
 			<check_box label="Włącz rozmowy głosowe" name="enable_voice_check"/>
+			<check_box label="Zezwól na rozmowy głosowe w wielu instancjach przeglądarki jednocześnie" name="VoiceMultiInstance" />
 			<text name="Listen from">
 				Odtwarzaj z:
 			</text>
