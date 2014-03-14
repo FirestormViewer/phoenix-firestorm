@@ -161,6 +161,10 @@ private:
 	LLColor4		mDefaultColor;
 	uuid_set_t		mExtraAvatars;
 	uuid_map_t		mPseudonyms;
+
+	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
+	void onAvatarNameCache(const LLUUID& av_id);
 };
 
 #endif // LGG_CONTACTSETS_H

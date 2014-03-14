@@ -47,6 +47,15 @@ LGGContactSets::LGGContactSets()
 
 LGGContactSets::~LGGContactSets()
 {
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
+
 	for (contact_set_map_t::iterator itr = mContactSets.begin(); itr != mContactSets.end(); ++itr)
 	{
 		delete itr->second;
@@ -748,9 +757,20 @@ uuid_vec_t LGGContactSets::getListOfPseudonymAvs()
 void LGGContactSets::setPseudonym(const LLUUID& friend_id, const std::string& pseudonym)
 {
 	mPseudonyms[friend_id] = pseudonym;
+	LLAvatarNameCache::erase(friend_id);
 	LLAvatarNameCache::fetch(friend_id);
 	LLVOAvatar::invalidateNameTag(friend_id);
-	mChangedSignal(UPDATED_MEMBERS);
+
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(friend_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+	mAvatarNameCacheConnections[friend_id] = LLAvatarNameCache::get(friend_id, boost::bind(&LGGContactSets::onAvatarNameCache, this, _1));
 	saveToDisk();
 }
 
@@ -770,6 +790,7 @@ void LGGContactSets::clearPseudonym(const LLUUID& friend_id)
 	if (found != mPseudonyms.end())
 	{
 		mPseudonyms.erase(found);
+		LLAvatarNameCache::erase(friend_id);
 		LLAvatarNameCache::fetch(friend_id); // update
 		LLVOAvatar::invalidateNameTag(friend_id);
 		if (!LLAvatarTracker::instance().isBuddy(friend_id) && LGGContactSets::getInstance()->getFriendSets(friend_id).size() == 0)
@@ -777,9 +798,32 @@ void LGGContactSets::clearPseudonym(const LLUUID& friend_id)
 			LGGContactSets::getInstance()->removeNonFriendFromList(friend_id);
 		}
 
-		mChangedSignal(UPDATED_MEMBERS);
+		avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(friend_id);
+		if (it != mAvatarNameCacheConnections.end())
+		{
+			if (it->second.connected())
+			{
+				it->second.disconnect();
+			}
+			mAvatarNameCacheConnections.erase(it);
+		}
+		mAvatarNameCacheConnections[friend_id] = LLAvatarNameCache::get(friend_id, boost::bind(&LGGContactSets::onAvatarNameCache, this, _1));
 		saveToDisk();
 	}
+}
+
+void LGGContactSets::onAvatarNameCache(const LLUUID& av_id)
+{
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+	mChangedSignal(UPDATED_MEMBERS);
 }
 
 bool LGGContactSets::hasPseudonym(const LLUUID& friend_id)
