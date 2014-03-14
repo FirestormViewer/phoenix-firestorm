@@ -442,6 +442,7 @@ public:
 							void* cargo_data,
 							std::string& tooltip_msg);
 	void refreshFolderViewItem();
+	void checkSearchBySuffixChanges();
 protected:
 	LLCallingCardObserver* mObserver;
 };
