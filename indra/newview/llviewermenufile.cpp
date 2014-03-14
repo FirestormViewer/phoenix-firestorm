@@ -126,14 +126,6 @@ void LLFilePickerThread::getFile()
 #endif
 }
 
-// <FS:CR Threaded Filepickers>
-//static
-void LLFilePickerThread::initClass()
-{
-	sMutex = new LLMutex(NULL);
-}
-// </FS:CR Threaded Filepickers>
-
 //virtual 
 // <FS:CR Threaded Filepickers>
 //void LLFilePickerThread::run()
@@ -161,12 +153,9 @@ void LLLoadFilePickerThread::run()
 }
 
 // <FS:CR Threaded Filepickers>
-////static
-//void LLFilePickerThread::initClass()
 //virtual 
 void LLSaveFilePickerThread::run()
 {
-	//sMutex = new LLMutex(NULL);
 	LLFilePicker picker;
 #if LL_WINDOWS
 	if (picker.getSaveFile(mFilter, mDefaultFilename, false))
@@ -199,6 +188,12 @@ void LLGenericSaveFilePicker::notify(const std::string& filename)
 	mSignal(filename);
 }
 // </FS:CR Threaded Filepickers>
+
+//static
+void LLFilePickerThread::initClass()
+{
+	sMutex = new LLMutex(NULL);
+}
 
 //static
 void LLFilePickerThread::cleanupClass()
