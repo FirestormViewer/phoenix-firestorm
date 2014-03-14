@@ -579,14 +579,8 @@ void LLMultiFloater::computeResizeLimits(S32& new_min_width, S32& new_min_height
 }
 
 // <FS:Ansariel> CTRL-W doesn't work with multifloaters
-void LLMultiFloater::closeFloater(bool app_quitting)
+void LLMultiFloater::closeDockedFloater()
 {
-	if (app_quitting)
-	{
-		LLFloater::closeFloater(app_quitting);
-		return;
-	}
-
 	LLFloater* floater = getActiveFloater();
 	// is user closeable and is system closeable
 	if (floater && floater->canClose() && floater->isCloseable())
@@ -602,33 +596,13 @@ void LLMultiFloater::closeFloater(bool app_quitting)
 		else
 		{
 			// Call closeFloater() here so that focus gets properly handed over
-			LLFloater::closeFloater();
+			closeFloater();
 		}
 
 		return;
 	}
 
 	// Close multifloater itself if we can't close any hosted floaters
-	LLFloater::closeFloater();
-}
-
-void LLMultiFloater::onClickCloseBtn(bool app_quitting)
-{
-	LLFloater::closeFloater(false);
-}
-
-// Ansa: Will be called when toggling view - in that case we want to
-//       toggle the whole floater instead of the active hosted floater
-void LLMultiFloater::closeHostedFloater()
-{
-	// When toggling *visibility*, close the host instead of the floater when hosted
-	if (getHost())
-	{
-		getHost()->closeFloater();
-	}
-	else
-	{
-		LLFloater::closeFloater(false);
-	}
+	closeFloater();
 }
 // <FS:Ansariel>

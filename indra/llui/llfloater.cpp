@@ -1874,6 +1874,14 @@ void LLFloater::initRectControl()
 void LLFloater::closeFrontmostFloater()
 {
 	LLFloater* floater_to_close = gFloaterView->getFrontmostClosableFloater();
+	// <FS:Ansariel> CTRL-W doesn't work with multifloaters
+	LLMultiFloater* multi_floater = dynamic_cast<LLMultiFloater*>(floater_to_close);
+	if (multi_floater)
+	{
+		multi_floater->closeDockedFloater();
+	}
+	else
+	// </FS:Ansariel>
 	if(floater_to_close)
 	{
 		floater_to_close->closeFloater();
