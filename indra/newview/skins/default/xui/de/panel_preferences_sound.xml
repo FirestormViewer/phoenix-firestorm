@@ -61,6 +61,7 @@
     <!-- Voice -->
     <panel label="Voice-Chat-Einstellungen" name="Media Voice tab">
         <check_box label="Voice-Chat aktivieren" name="enable_voice_check"/>
+        <check_box label="Voice-Chat in mehreren Viewer-Instanzen gleichzeitig erlauben" name="VoiceMultiInstance"/>
 		<text name="Listen from">
 			Zuhören von:
 		</text>
