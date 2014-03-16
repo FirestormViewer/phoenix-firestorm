@@ -68,6 +68,7 @@ public:
 	void loadHistory();
 	void reloadMessages(bool clean_messages = false);
 
+	static FSFloaterNearbyChat* findInstance();
 	static FSFloaterNearbyChat* getInstance();
 	
 	void removeScreenChat();

@@ -426,10 +426,11 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 	if (session_id.isNull())
 	{
 		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
-		if (!im_container->getVisible() && im_container->hasFloater(FSFloaterNearbyChat::getInstance())
+		FSFloaterNearbyChat* nearby_chat_instance = FSFloaterNearbyChat::findInstance();
+		if (!im_container->getVisible() && nearby_chat_instance && im_container->hasFloater(nearby_chat_instance)
 			&& gSavedSettings.getBOOL("FSNotifyNearbyChatFlash"))
 		{
-			gToolBarView->flashCommand(LLCommandId("chat"), true, FSFloaterIMContainer::getInstance()->isMinimized());
+			gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
 		}
 		return;
 	}
@@ -448,10 +449,11 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 	}
 
 	FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
-	if (!im_container->getVisible() && im_container->hasFloater(FSFloaterIM::getInstance(session_id))
+	FSFloaterIM* im_instance = FSFloaterIM::findInstance(session_id);
+	if (!im_container->getVisible() && im_instance && im_container->hasFloater(im_instance)
 		&& gSavedSettings.getBOOL("FSNotifyIMFlash"))
 	{
-		gToolBarView->flashCommand(LLCommandId("chat"), true, FSFloaterIMContainer::getInstance()->isMinimized());
+		gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
 	}
 
 		// <FS:Ansariel> (Group-)IMs in chat console

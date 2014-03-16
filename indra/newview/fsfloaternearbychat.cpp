@@ -650,6 +650,12 @@ void FSFloaterNearbyChat::loadHistory()
 }
 
 //static
+FSFloaterNearbyChat* FSFloaterNearbyChat::findInstance()
+{
+	return LLFloaterReg::findTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+}
+
+//static
 FSFloaterNearbyChat* FSFloaterNearbyChat::getInstance()
 {
 	return LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
