@@ -4765,7 +4765,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Rozmawiaj z ludźmi w pobliżu używając tekstu (CTRL+T)
 	</string>
 	<string name="Command_Conversations_Tooltip">
-		Rozmawiaj ze wszystkimi
+		Rozmawiaj ze wszystkimi (CTRL+T)
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Kompas
@@ -4864,10 +4864,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Otwiera listę obiektów, jakie masz na swojej czarnej liście zasobów danych (assetów)
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Narzędzia do zaawansowanego tworzenia obrazów
+		Narzędzia do zaawansowanego tworzenia obrazów (ATL+P)
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
-		Zaawansowane ustawienia kamery fotograficznej
+		Zaawansowane ustawienia kamery fotograficznej (CTRL+SHIFT+C)
 	</string>
 	<string name="Command_Contact_Sets_Tooltip">
 		Otwiera interfejs Zestawów kontaktów (CTRL+ALT+SHIFT+C)
@@ -4879,7 +4879,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Utwórz Landmark Twojej bieżącej pozycji
 	</string>
 	<string name="Command_Teleport_History_Tooltip">
-		Otwiera historię teleportacji
+		Otwiera historię teleportacji (ALT+H)
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
 		Podest do pozowania dla awatara, do dostrajania dodatków
@@ -4894,7 +4894,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Otwiera dziennik rozmów, aby zobaczyć przeszłe logi
 	</string>
 	<string name="Command_Move_Lock_Tooltip">
-		Blokuje Twojego awatara na obecnej pozycji
+		Blokuje Twojego awatara na obecnej pozycji (CTRL+ALT+P)
 	</string>
 	<string name="Command_Blocklist_Tooltip">
 		Otwiera listę zablokowanych/wyciszonych
@@ -4912,7 +4912,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		obecnie na Twoim prawym pasku
 	</string>
 	<string name="Command_Fly_Tooltip">
-		Włącz/wyłącz tryb latania
+		Włącz/wyłącz tryb latania (HOME)
 	</string>
 	<string name="Retain%">
 		%Zachowania
