@@ -40,6 +40,7 @@
 #include "lltrans.h"
 #include "llnotificationsutil.h"
 #include "llviewermessage.h"
+#include "llavataractions.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
@@ -319,6 +320,7 @@ void LLToastNotifyPanel::init( LLRect rect, bool show_images )
     mTextBox->setVisible(TRUE);
     mTextBox->setPlainText(!show_images);
     mTextBox->setValue(mNotification->getMessage());
+	mTextBox->setIsFriendCallback(LLAvatarActions::isFriend);
 
 	// <FS:Ansariel> Script dialog colors
 	if (mIsScriptDialog)

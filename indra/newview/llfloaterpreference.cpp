@@ -2449,7 +2449,7 @@ void LLFloaterPreference::changed()
 //---------------------------------------------------------------------------- */
 //</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 
-static LLRegisterPanelClassWrapper<LLPanelPreference> t_places("panel_preference");
+static LLPanelInjector<LLPanelPreference> t_places("panel_preference");
 LLPanelPreference::LLPanelPreference()
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //: LLPanel(),
@@ -2854,8 +2854,8 @@ private:
 	// </FS:Ansariel>
 };
 
-static LLRegisterPanelClassWrapper<LLPanelPreferenceGraphics> t_pref_graph("panel_preference_graphics");
-static LLRegisterPanelClassWrapper<LLPanelPreferencePrivacy> t_pref_privacy("panel_preference_privacy");
+static LLPanelInjector<LLPanelPreferenceGraphics> t_pref_graph("panel_preference_graphics");
+static LLPanelInjector<LLPanelPreferencePrivacy> t_pref_privacy("panel_preference_privacy");
 
 BOOL LLPanelPreferenceGraphics::postBuild()
 {
@@ -3134,7 +3134,7 @@ void LLFloaterPreferenceProxy::onChangeSocksSettings()
 }
 
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b
-static LLRegisterPanelClassWrapper<LLPanelPreferenceCrashReports> t_pref_crashreports("panel_preference_crashreports");
+static LLPanelInjector<LLPanelPreferenceCrashReports> t_pref_crashreports("panel_preference_crashreports");
 
 LLPanelPreferenceCrashReports::LLPanelPreferenceCrashReports()
 	: LLPanelPreference()
@@ -3197,7 +3197,7 @@ void LLPanelPreferenceCrashReports::cancel()
 // [/SL:KB]
 
 // [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-21 (Catznip-2.2)
-static LLRegisterPanelClassWrapper<LLPanelPreferenceSkins> t_pref_skins("panel_preference_skins");
+static LLPanelInjector<LLPanelPreferenceSkins> t_pref_skins("panel_preference_skins");
 
 LLPanelPreferenceSkins::LLPanelPreferenceSkins()
 	: LLPanelPreference()
@@ -3427,7 +3427,7 @@ S32 copy_prefs_file(const std::string& from, const std::string& to)
 	return rv;
 }
 
-static LLRegisterPanelClassWrapper<FSPanelPreferenceBackup> t_pref_backup("panel_preference_backup");
+static LLPanelInjector<FSPanelPreferenceBackup> t_pref_backup("panel_preference_backup");
 
 FSPanelPreferenceBackup::FSPanelPreferenceBackup() : LLPanelPreference()
 {
@@ -3965,7 +3965,7 @@ void LLFloaterPreference::populateFontSelectionCombo()
 
 // <FS:AW optional opensim support>
 #ifdef OPENSIM
-static LLRegisterPanelClassWrapper<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
+static LLPanelInjector<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
 
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 	mGridListControl(NULL)

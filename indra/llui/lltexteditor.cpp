@@ -1676,12 +1676,10 @@ BOOL LLTextEditor::handleControlKey(const KEY key, const MASK mask)
 		}
 	}
 
-	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
-	//if (handled)
-	//{
-	//	updatePrimary();
-	//}
-	// </FS:AW> Linux primary "clipboard" tainted by auto-selection
+	if (handled && !gFocusMgr.getMouseCapture())
+	{
+		updatePrimary();
+	}
 
 	return handled;
 }

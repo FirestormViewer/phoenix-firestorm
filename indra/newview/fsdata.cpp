@@ -908,7 +908,7 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 //static
 LLSD FSData::getSystemInfo()
 {
-	LLSD info=LLFloaterAbout::getInfo();
+	LLSD info=LLAppViewer::instance()->getViewerInfo();
 
 	std::string sysinfo1("\n");
 	sysinfo1 += llformat("%s %s (%d) %s %s (%s) %s\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str(),

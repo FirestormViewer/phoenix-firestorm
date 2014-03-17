@@ -65,7 +65,7 @@
 #include "llviewernetwork.h"
 #endif // OPENSIM
 
-static LLRegisterPanelClassWrapper<LLSidepanelInventory> t_inventory("sidepanel_inventory");
+static LLPanelInjector<LLSidepanelInventory> t_inventory("sidepanel_inventory");
 
 //
 // Constants

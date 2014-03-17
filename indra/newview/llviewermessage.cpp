@@ -2766,15 +2766,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// <FS:Ansariel> Log autoresponse notification after initial message
 			bool has_session = true;
 
-			// return a standard "do not disturb" message, but only do it to online IM 
+			// return a standard "do not disturb" message, but only do it to online IM
 			// (i.e. not other auto responses and not store-and-forward IM)
-			if (!gIMMgr->hasSession(session_id))
-			{
+
 				// <FS:Ansariel> Log autoresponse notification after initial message
 				has_session = false;
 
-				// if there is not a panel for this conversation (i.e. it is a new IM conversation
-				// initiated by the other party) then...
 				// <FS:Ansariel> FS autoresponse feature
 				//send_do_not_disturb_message(msg, from_id, session_id);
 				std::string my_name;
@@ -2811,7 +2808,6 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					session_id);
 				gAgent.sendReliableMessage();
 				// </FS:Ansariel> FS autoresponse feature
-			}
 
 			// <FS:Ansariel> checkfor and process reqinfo
 			if (has_session)

@@ -40,7 +40,7 @@
      label="Request Teleport"
      layout="topleft"
      name="Request Teleport">
-        <on_click function="AvatarIcon.Action" parameter="request_teleport"/>
+        <on_click function="AvatarIcon.Action" parameter="request_teleport"/>      
     </menu_item_call>
     <menu_item_call
      label="Voice call"

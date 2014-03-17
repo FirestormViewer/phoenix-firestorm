@@ -180,6 +180,7 @@ LLTextBase::Params::Params()
 	max_text_length("max_length", 255),
 	font_shadow("font_shadow"),
 	wrap("wrap"),
+	trusted_content("trusted_content", true),
 	use_ellipses("use_ellipses", false),
 	// <FS:Ansariel> Optional icon position
 	icon_positioning("icon_positioning", LLTextBaseEnums::RIGHT),
@@ -227,6 +228,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mLineSpacingPixels(p.line_spacing.pixels),
 	mClip(p.clip),
 	mClipPartial(p.clip_partial && !p.allow_scroll),
+	mTrustedContent(p.trusted_content),
 	mTrackEnd( p.track_end ),
 	mScrollIndex(-1),
 	mSelectionStart( 0 ),
@@ -3317,7 +3319,7 @@ BOOL LLNormalTextSegment::handleMouseUp(S32 x, S32 y, MASK mask)
 		// Only process the click if it's actually in this segment, not to the right of the end-of-line.
 		if(mEditor.getSegmentAtLocalPos(x, y, false) == this)
 		{
-			LLUrlAction::clickAction(getStyle()->getLinkHREF());
+			LLUrlAction::clickAction(getStyle()->getLinkHREF(), mEditor.isContentTrusted());
 			return TRUE;
 		}
 	}

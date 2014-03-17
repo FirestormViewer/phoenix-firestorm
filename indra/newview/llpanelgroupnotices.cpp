@@ -59,7 +59,7 @@
 
 #include "llviewercontrol.h"	// <FS:CR> FIRE-11247 - gSavedSettings
 
-static LLRegisterPanelClassWrapper<LLPanelGroupNotices> t_panel_group_notices("panel_group_notices");
+static LLPanelInjector<LLPanelGroupNotices> t_panel_group_notices("panel_group_notices");
 
 
 /////////////////////////

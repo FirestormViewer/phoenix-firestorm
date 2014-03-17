@@ -44,7 +44,7 @@
 #include "lltrans.h"
 #include "lltabcontainer.h"
 
-static LLRegisterPanelClassWrapper<LLCOFWearables> t_cof_wearables("cof_wearables");
+static LLPanelInjector<LLCOFWearables> t_cof_wearables("cof_wearables");
 
 const LLSD REARRANGE = LLSD().with("rearrange", LLSD());
 

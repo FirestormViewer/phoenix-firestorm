@@ -71,7 +71,7 @@ private:
 	void uploadCallback(bool success, const LLSD& response);
 };
 
-static LLRegisterPanelClassWrapper<exoPanelSnapshotFlickr> panel_class("exopanelsnapshotflickr");
+static LLPanelInjector<exoPanelSnapshotFlickr> panel_class("exopanelsnapshotflickr");
 
 void exoPanelSnapshotFlickr::onOpen(const LLSD& key)
 {

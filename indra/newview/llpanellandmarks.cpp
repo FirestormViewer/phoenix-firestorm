@@ -61,7 +61,7 @@
 // [/RLVa:KB]
 
 // Not yet implemented; need to remove buildPanel() from constructor when we switch
-//static LLRegisterPanelClassWrapper<LLLandmarksPanel> t_landmarks("panel_landmarks");
+//static LLPanelInjector<LLLandmarksPanel> t_landmarks("panel_landmarks");
 
 static const std::string OPTIONS_BUTTON_NAME = "options_gear_btn";
 static const std::string ADD_BUTTON_NAME = "add_btn";

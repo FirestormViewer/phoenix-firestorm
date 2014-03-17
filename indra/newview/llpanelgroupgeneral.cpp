@@ -58,7 +58,7 @@
 #include "llclipboard.h"
 #include "lleconomy.h" // <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
 
-static LLRegisterPanelClassWrapper<LLPanelGroupGeneral> t_panel_group_general("panel_group_general");
+static LLPanelInjector<LLPanelGroupGeneral> t_panel_group_general("panel_group_general");
 
 // consts
 const S32 MATURE_CONTENT = 1;
@@ -68,14 +68,12 @@ const S32 DECLINE_TO_STATE = 0;
 
 LLPanelGroupGeneral::LLPanelGroupGeneral()
 :	LLPanelGroupTab(),
-	mPendingMemberUpdate(FALSE),
 	mChanged(FALSE),
 	mFirstUse(TRUE),
 	mGroupNameEditor(NULL),
 	mFounderName(NULL),
 	mInsignia(NULL),
 	mEditCharter(NULL),
-	mListVisibleMembers(NULL),
 	mCtrlShowInGroupList(NULL),
 	mComboMature(NULL),
 	mCtrlOpenEnrollment(NULL),
@@ -85,8 +83,6 @@ LLPanelGroupGeneral::LLPanelGroupGeneral()
 	mCtrlListGroup(NULL),
 	mActiveTitleLabel(NULL),
 	mComboActiveTitle(NULL),
-	// <FS:Ansariel> Member list doesn't load properly
-	//mAvatarNameCacheConnection(),
 	mCtrlReceiveGroupChat(NULL) // <exodus/>
 {
 
@@ -94,20 +90,6 @@ LLPanelGroupGeneral::LLPanelGroupGeneral()
 
 LLPanelGroupGeneral::~LLPanelGroupGeneral()
 {
-	// <FS:Ansariel> Member list doesn't load properly
-	//if (mAvatarNameCacheConnection.connected())
-	//{
-	//	mAvatarNameCacheConnection.disconnect();
-	//}
-	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
-	{
-		if (it->second.connected())
-		{
-			it->second.disconnect();
-		}
-	}
-	mAvatarNameCacheConnections.clear();
-	// </FS:Ansariel>
 }
 
 BOOL LLPanelGroupGeneral::postBuild()
@@ -126,17 +108,6 @@ BOOL LLPanelGroupGeneral::postBuild()
 	childSetCommitCallback("copy_name", boost::bind(&LLPanelGroupGeneral::onCopyName, this), NULL);
 	childSetEnabled("copy_name", FALSE);
 	// </FS>
-
-
-	mListVisibleMembers = getChild<LLNameListCtrl>("visible_members", recurse);
-	if (mListVisibleMembers)
-	{
-		mListVisibleMembers->setDoubleClickCallback(openProfile, this);
-		mListVisibleMembers->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
-		
-		mListVisibleMembers->setSortCallback(boost::bind(&LLPanelGroupGeneral::sortMembersList,this,_1,_2,_3));
-	}
-
 	// Options
 	mCtrlShowInGroupList = getChild<LLCheckBoxCtrl>("show_in_group_list", recurse);
 	if (mCtrlShowInGroupList)
@@ -330,21 +301,6 @@ void LLPanelGroupGeneral::onClickInfo(void *userdata)
 
 }
 
-// static
-void LLPanelGroupGeneral::openProfile(void* data)
-{
-	LLPanelGroupGeneral* self = (LLPanelGroupGeneral*)data;
-
-	if (self && self->mListVisibleMembers)
-	{
-		LLScrollListItem* selected = self->mListVisibleMembers->getFirstSelected();
-		if (selected)
-		{
-			LLAvatarActions::showProfile(selected->getUUID());
-		}
-	}
-}
-
 bool LLPanelGroupGeneral::needsApply(std::string& mesg)
 { 
 	updateChanged();
@@ -376,11 +332,6 @@ void LLPanelGroupGeneral::activate()
 void LLPanelGroupGeneral::draw()
 {
 	LLPanelGroupTab::draw();
-
-	if (mPendingMemberUpdate)
-	{
-		updateMembers();
-	}
 }
 
 bool LLPanelGroupGeneral::apply(std::string& mesg)
@@ -582,10 +533,6 @@ bool LLPanelGroupGeneral::createGroupCallback(const LLSD& notification, const LL
 	return false;
 }
 
-static F32 sSDTime = 0.0f;
-static F32 sElementTime = 0.0f;
-static F32 sAllTime = 0.0f;
-
 // virtual
 void LLPanelGroupGeneral::update(LLGroupChange gc)
 {
@@ -736,172 +683,8 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 	{
 		mEditCharter->setText(gdatap->mCharter);
 	}
-	
-	if (mListVisibleMembers)
-	{
-		mListVisibleMembers->deleteAllItems();
-
-		if (gdatap->isMemberDataComplete())
-		{
-			mMemberProgress = gdatap->mMembers.begin();
-			mPendingMemberUpdate = TRUE;
-			mIteratorGroup = mGroupID; // <FS:ND/> FIRE-6074
-
-			sSDTime = 0.0f;
-			sElementTime = 0.0f;
-			sAllTime = 0.0f;
-		}
-		else
-		{
-			std::stringstream pending;
-			pending << "Retrieving member list (" << gdatap->mMembers.size() << "\\" << gdatap->mMemberCount  << ")";
-
-			LLSD row;
-			row["columns"][0]["value"] = pending.str();
-			row["columns"][0]["column"] = "name";
-
-			mListVisibleMembers->setEnabled(FALSE);
-			mListVisibleMembers->addElement(row);
-		}
-	}
-
-	// <FS:Ansariel> Copy group name button
-	childSetEnabled("copy_name", !gdatap->mName.empty());
-	mGroupName = gdatap->mName;
-	// </FS:Ansariel>
 
 	resetDirty();
-}
-
-void LLPanelGroupGeneral::updateMembers()
-{
-	mPendingMemberUpdate = FALSE;
-
-	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
-
-	if (!mListVisibleMembers 
-		|| !gdatap 
-		|| !gdatap->isMemberDataComplete()
-		|| gdatap->mMembers.empty())
-	{
-		return;
-	}
-
-	LLTimer update_time;
-	update_time.setTimerExpirySec(UPDATE_MEMBERS_SECONDS_PER_FRAME);
-	
-	// <FS:ND> FIRE-6074; If the group changes, mMemberPRogresss is invalid, as it belongs to a different LLGroupMgrGroupData. Reset it, start over.
-	if( mIteratorGroup != mGroupID )
-	{
-		mMemberProgress = gdatap->mMembers.begin();
-		mIteratorGroup = mGroupID;
-	}
-	// </FS:ND> FIRE-6074
-
-
-	LLAvatarName av_name;
-
-	for( ; mMemberProgress != gdatap->mMembers.end() && !update_time.hasExpired(); 
-			++mMemberProgress)
-	{
-		LLGroupMemberData* member = mMemberProgress->second;
-		if (!member)
-		{
-			continue;
-		}
-
-		if (LLAvatarNameCache::get(mMemberProgress->first, &av_name))
-		{
-			addMember(mMemberProgress->second);
-		}
-		else
-		{
-			// If name is not cached, onNameCache() should be called when it is cached and add this member to list.
-			// *TODO : Use a callback per member, not for the panel group.
-			// <FS:Ansariel> Member list doesn't load properly
-			//if (mAvatarNameCacheConnection.connected())
-			//{
-			//	mAvatarNameCacheConnection.disconnect();
-			//}
-			//mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupGeneral::onNameCache, this, gdatap->getMemberVersion(), member, _2));
-			
-			avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(mMemberProgress->first);
-			if (it != mAvatarNameCacheConnections.end())
-			{
-				if (it->second.connected())
-				{
-					it->second.disconnect();
-				}
-				mAvatarNameCacheConnections.erase(it);
-			}
-			mAvatarNameCacheConnections[mMemberProgress->first] = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupGeneral::onNameCache, this, gdatap->getMemberVersion(), member, _2, _1));
-			// </FS:Ansariel>
-		}
-	}
-
-	if (mMemberProgress == gdatap->mMembers.end())
-	{
-		lldebugs << "   member list completed." << llendl;
-		mListVisibleMembers->setEnabled(TRUE);
-	}
-	else
-	{
-		mPendingMemberUpdate = TRUE;
-		mListVisibleMembers->setEnabled(FALSE);
-	}
-}
-
-void LLPanelGroupGeneral::addMember(LLGroupMemberData* member)
-{
-	LLNameListCtrl::NameItem item_params;
-	item_params.value = member->getID();
-
-	LLScrollListCell::Params column;
-	item_params.columns.add().column("name").font.name("SANSSERIF_SMALL");
-
-	item_params.columns.add().column("title").value(member->getTitle()).font.name("SANSSERIF_SMALL");
-
-	item_params.columns.add().column("status").value(member->getOnlineStatus()).font.name("SANSSERIF_SMALL");
-
-	LLScrollListItem* member_row = mListVisibleMembers->addNameItemRow(item_params);
-
-	if ( member->isOwner() )
-	{
-		LLScrollListText* name_textp = dynamic_cast<LLScrollListText*>(member_row->getColumn(0));
-		if (name_textp)
-			name_textp->setFontStyle(LLFontGL::BOLD);
-	}
-}
-
-// <FS:Ansariel> Member list doesn't load properly
-//void LLPanelGroupGeneral::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name)
-void LLPanelGroupGeneral::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name, const LLUUID& av_id)
-// </FS:Ansariel>
-{
-	// <FS:Ansariel> Member list doesn't load properly
-	//mAvatarNameCacheConnection.disconnect();
-	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
-	if (it != mAvatarNameCacheConnections.end())
-	{
-		if (it->second.connected())
-		{
-			it->second.disconnect();
-		}
-		mAvatarNameCacheConnections.erase(it);
-	}
-	// </FS:Ansariel>
-
-	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
-
-	if (!gdatap
-		|| !gdatap->isMemberDataComplete()
-		|| gdatap->getMemberVersion() != update_id)
-	{
-		// Stale data
-		return;
-	}
-
-	addMember(member);
 }
 
 void LLPanelGroupGeneral::updateChanged()
@@ -986,17 +769,6 @@ void LLPanelGroupGeneral::reset()
 		mEditCharter->setText(empty_str);
 		mGroupNameEditor->setText(empty_str);
 	}
-	
-	{
-		LLSD row;
-		row["columns"][0]["value"] = "no members yet";
-		row["columns"][0]["column"] = "name";
-
-		mListVisibleMembers->deleteAllItems();
-		mListVisibleMembers->setEnabled(FALSE);
-		mListVisibleMembers->addElement(row);
-	}
-
 
 	{
 		mComboMature->setEnabled(true);
@@ -1126,21 +898,6 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 	resetDirty();
 
 	activate();
-}
-S32 LLPanelGroupGeneral::sortMembersList(S32 col_idx,const LLScrollListItem* i1,const LLScrollListItem* i2)
-{
-	const LLScrollListCell *cell1 = i1->getColumn(col_idx);
-	const LLScrollListCell *cell2 = i2->getColumn(col_idx);
-
-	if(col_idx == 2)
-	{
-		if(LLStringUtil::compareDict(cell1->getValue().asString(),"Online") == 0 )
-			return 1;
-		if(LLStringUtil::compareDict(cell2->getValue().asString(),"Online") == 0 )
-			return -1;
-	}
-
-	return LLStringUtil::compareDict(cell1->getValue().asString(), cell2->getValue().asString());
 }
 
 // <FS> Copy button handlers

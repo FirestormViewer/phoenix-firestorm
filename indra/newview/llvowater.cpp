@@ -103,7 +103,7 @@ void LLVOWater::updateTextures()
 }
 
 // Never gets called
-void  LLVOWater::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
+void  LLVOWater::idleUpdate(LLAgent &agent, const F64 &time)
 {
 }
 

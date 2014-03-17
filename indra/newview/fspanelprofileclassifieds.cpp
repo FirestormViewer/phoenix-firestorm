@@ -62,7 +62,7 @@ static const std::string CLASSIFIED_ID("classified_id");
 static const std::string CLASSIFIED_NAME("classified_name");
 
 
-static LLRegisterPanelClassWrapper<FSPanelClassifieds> t_panel_classifieds("panel_profile_classified");
+static LLPanelInjector<FSPanelClassifieds> t_panel_classifieds("panel_profile_classified");
 
 //////////////////////////////////////////////////////////////////////////
 

@@ -313,10 +313,6 @@ LLAvatarAppearance::~LLAvatarAppearance()
 	clearSkeleton();
 	deleteAndClearArray(mCollisionVolumes);
 
-	deleteAndClear(mTexSkinColor);
-	deleteAndClear(mTexHairColor);
-	deleteAndClear(mTexEyeColor);
-
 	std::for_each(mPolyMeshes.begin(), mPolyMeshes.end(), DeletePairedPointer());
 	mPolyMeshes.clear();
 

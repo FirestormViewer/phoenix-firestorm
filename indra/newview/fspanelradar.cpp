@@ -75,7 +75,7 @@ public:
 
 //=============================================================================
 
-static LLRegisterPanelClassWrapper<FSPanelRadar> t_fs_panel_radar("fs_panel_radar");
+static LLPanelInjector<FSPanelRadar> t_fs_panel_radar("fs_panel_radar");
 
 FSPanelRadar::FSPanelRadar()
 	:	LLPanel(),

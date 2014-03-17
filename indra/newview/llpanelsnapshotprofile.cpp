@@ -66,7 +66,7 @@ private:
 	void onSend();
 };
 
-static LLRegisterPanelClassWrapper<LLPanelSnapshotProfile> panel_class("llpanelsnapshotprofile");
+static LLPanelInjector<LLPanelSnapshotProfile> panel_class("llpanelsnapshotprofile");
 
 LLPanelSnapshotProfile::LLPanelSnapshotProfile()
 {

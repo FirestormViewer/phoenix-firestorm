@@ -67,7 +67,6 @@ Hover your mouse over the options for more help.
       follows="top|left|right"
       layout="topleft" />
 
-
     <button
      name="copy_uri"
      left_pad="4"
@@ -134,7 +133,7 @@ Hover your mouse over the options for more help.
      word_wrap="true"
      layout="topleft">
     Group Charter
-    </text_editor>
+    </text_editor>   
 
     <text
      name="join_cost_text"
@@ -160,77 +159,18 @@ Hover your mouse over the options for more help.
      follows="top|right"
      layout="topleft" />
 
-<!--
-    removing layouts due to bugs or strange side-effects with name_list and scroll_list
-
-    <layout_stack
-     name="group_members_preferences_layout"
-     left="0"
-     top_pad="4"
-     right="-1"
-     height="242"
-     orientation="vertical"
-     follows="all"
-     layout="topleft">
-
-    <layout_panel
-     width="228"
-     name="group_members_layout_panel"
-     user_resize="false"
-     follows="top|left|right"
-     layout="topleft">
-//-->
-    <name_list
-     left="0"
-     top_pad="4"
-     height="115"
-     column_padding="0"
-     draw_heading="true"
-     heading_height="23"
-     name="visible_members"
-     short_names="false"
-     follows="all"
-     layout="topleft">
-        <name_list.columns
-         label="Member"
-         name="name"
-         relative_width="0.4" />
-        <name_list.columns
-         label="Title"
-         name="title"
-         relative_width="0.4" />
-        <name_list.columns
-         label="Status"
-         name="status"
-         relative_width="0.2" />
-    </name_list>
-<!--
-    </layout_panel>
-
-    <layout_panel
-     width="228"
-     height="115"
-     name="group_preferences_container"
-     user_resize="false"
-     auto_resize="false"
-     follows="top|left|right"
-     layout="topleft">
-//-->
-
     <layout_stack
      name="group_preferences_layout"
-     top_pad="4"
-     right="-1"
-     height="131"
-     orientation="horizontal"
-     follows="bottom|left|right"
+     top_pad="0"
+     width="200"
+     left="10"
+     height="262"
+     orientation="vertical"
+     follows="top|left|right"
      layout="topleft">
 
     <layout_panel
-     width="228"
      name="user_preferences_container"
-     bevel_style="in"
-     border="true"
      user_resize="true"
      follows="top|left|right"
      layout="topleft">
@@ -238,7 +178,7 @@ Hover your mouse over the options for more help.
         <text
          left="0"
          top_pad="4"
-         width="300"
+         width="150"
          type="string"
          height="16"
          text_color="EmphasisColor"
@@ -307,28 +247,15 @@ Hover your mouse over the options for more help.
     </layout_panel>
 
     <layout_panel
-     name="preferences_divider"
-     width="2"
-     border="false"
-     auto_resize="false"
-     user_resize="false"
-     follows="top|left|right"
-     layout="topleft" />
-
-    <layout_panel
      name="group_preferences_container"
-     width="228"
-     bevel_style="in"
-     border="true"
      user_resize="true"
      follows="top|left|right"
      layout="topleft">
 
-
         <text
          follows="left|top|right"
          left="4"
-         height="16"
+         top_pad="20"
          type="string"
          text_color="EmphasisColor"
          name="group_settngs_label"
@@ -358,24 +285,6 @@ Hover your mouse over the options for more help.
          width="10"
          layout="topleft" />
 
-<!--
-        <layout_stack
-         name="enrollment_fee_layout"
-         top_pad="4"
-         right="-1"
-         height="16"
-         orientation="horizontal"
-         follows="all"
-         layout="topleft">
-
-        <layout_panel
-         name="enrollment_fee_checkbox_panel"
-         width="90"
-         height="16"
-         auto_resize="false"
-         user_resize="false"
-         layout="topleft">
-//-->
         <check_box
          name="check_enrollment_fee"
          tool_tip="Sets whether to require an enrollment fee to join the group"
@@ -385,15 +294,6 @@ Hover your mouse over the options for more help.
          height="16"
          layout="topleft" />
 
-<!--
-        </layout_panel>
-
-        <layout_panel
-         name="enrollment_fee_spinner_panel"
-         width="114"
-         user_resize="false"
-         layout="topleft">
-//-->
         <spinner
          name="spin_enrollment_fee"
          tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked."
@@ -408,10 +308,7 @@ Hover your mouse over the options for more help.
          max_val="99999"
          follows="top|left"
          layout="topleft" />
-<!--
-        </layout_panel>
-        </layout_stack>
-//-->
+
         <combo_box
          name="group_mature_check"
          tool_tip="Sets whether your group contains information rated as Moderate"
@@ -435,9 +332,5 @@ Hover your mouse over the options for more help.
         </combo_box>
     </layout_panel>
     </layout_stack>
-<!--
-    </layout_panel>
-    </layout_stack>
-//-->
     </panel>
 </panel>

@@ -459,7 +459,7 @@ void LLTeleportHistoryPanel::ContextMenu::onCopyToClipboard()
 }
 
 // Not yet implemented; need to remove buildPanel() from constructor when we switch
-//static LLRegisterPanelClassWrapper<LLTeleportHistoryPanel> t_teleport_history("panel_teleport_history");
+//static LLPanelInjector<LLTeleportHistoryPanel> t_teleport_history("panel_teleport_history");
 
 LLTeleportHistoryPanel::LLTeleportHistoryPanel()
 	:	LLPanelPlacesTab(),

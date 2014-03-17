@@ -1,10 +1,9 @@
 /** 
- * @file llfloaterabout.h
- * @brief The about box from Help -> About
+ * @file benchmarkF.glsl
  *
- * $LicenseInfo:firstyear=2001&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2011, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,12 +23,17 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLFLOATERABOUT_H
-#define LL_LLFLOATERABOUT_H
+#ifdef DEFINE_GL_FRAGCOLOR
+out vec4 frag_color;
+#else
+#define frag_color gl_FragColor
+#endif
 
-namespace LLFloaterAboutUtil
+uniform sampler2D diffuseMap;
+
+VARYING vec2 tc0;
+
+void main() 
 {
-	void registerFloater();
+	frag_color = texture2D(diffuseMap, tc0);
 }
-
-#endif // LL_LLFLOATERABOUT_H

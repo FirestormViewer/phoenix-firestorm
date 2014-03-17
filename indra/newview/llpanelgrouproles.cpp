@@ -58,7 +58,7 @@
 // [FS:CR] FIRE-12276
 #include "llfilepicker.h"
 
-static LLRegisterPanelClassWrapper<LLPanelGroupRoles> t_panel_group_roles("panel_group_roles");
+static LLPanelInjector<LLPanelGroupRoles> t_panel_group_roles("panel_group_roles");
 
 bool agentCanRemoveFromRole(const LLUUID& group_id,
 							const LLUUID& role_id)
@@ -736,7 +736,7 @@ void LLPanelGroupSubTab::setFooterEnabled(BOOL enable)
 ////////////////////////////
 
 
-static LLRegisterPanelClassWrapper<LLPanelGroupMembersSubTab> t_panel_group_members_subtab("panel_group_members_subtab");
+static LLPanelInjector<LLPanelGroupMembersSubTab> t_panel_group_members_subtab("panel_group_members_subtab");
 
 LLPanelGroupMembersSubTab::LLPanelGroupMembersSubTab()
 : 	LLPanelGroupSubTab(),
@@ -756,20 +756,10 @@ LLPanelGroupMembersSubTab::LLPanelGroupMembersSubTab()
 
 LLPanelGroupMembersSubTab::~LLPanelGroupMembersSubTab()
 {
-	// <FS:Ansariel> Member list doesn't load properly
-	//if (mAvatarNameCacheConnection.connected())
-	//{
-	//	mAvatarNameCacheConnection.disconnect();
-	//}
-	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	if (mAvatarNameCacheConnection.connected())
 	{
-		if (it->second.connected())
-		{
-			it->second.disconnect();
-		}
+		mAvatarNameCacheConnection.disconnect();
 	}
-	mAvatarNameCacheConnections.clear();
-	// </FS:Ansariel>
 	if (mMembersList)
 	{
 		gSavedSettings.setString("GroupMembersSortOrder", mMembersList->getSortColumnName());
@@ -1660,28 +1650,17 @@ void LLPanelGroupMembersSubTab::addMemberToList(LLGroupMemberData* data)
 
 	item_params.columns.add().column("online").value(data->getOnlineStatus())
 			.font.name("SANSSERIF_SMALL").style("NORMAL");
+
+	item_params.columns.add().column("title").value(data->getTitle()).font.name("SANSSERIF_SMALL").style("NORMAL");;
+
 	mMembersList->addNameItemRow(item_params);
 
 	mHasMatch = TRUE;
 }
 
-// <FS:Ansariel> Member list doesn't load properly
-//void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name)
-void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name, const LLUUID& av_id)
-// </FS:Ansariel>
+void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name)
 {
-	// <FS:Ansariel> Member list doesn't load properly
-	//mAvatarNameCacheConnection.disconnect();
-	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
-	if (it != mAvatarNameCacheConnections.end())
-	{
-		if (it->second.connected())
-		{
-			it->second.disconnect();
-		}
-		mAvatarNameCacheConnections.erase(it);
-	}
-	// </FS:Ansariel>
+	mAvatarNameCacheConnection.disconnect();
 
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	if (!gdatap
@@ -1692,10 +1671,7 @@ void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemb
 	}
 	
 	// trying to avoid unnecessary hash lookups
-	// <FS:CR> FIRE-11350
-	//if (matchesSearchFilter(av_name.getAccountName()))
-	if (matchesSearchFilter(av_name.getUserName()))
-	// </FS:CR>
+	if (matchesSearchFilter(av_name.getAccountName()))
 	{
 		addMemberToList(member);
 		if(!mMembersList->getEnabled())
@@ -1761,24 +1737,11 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		{
 			// If name is not cached, onNameCache() should be called when it is cached and add this member to list.
 			// *TODO : Add one callback per fetched avatar name
-			// <FS:Ansariel> Member list doesn't load properly
-			//if (mAvatarNameCacheConnection.connected())
-			//{
-			//	mAvatarNameCacheConnection.disconnect();
-			//}
-			//mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2));
-			
-			avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(mMemberProgress->first);
-			if (it != mAvatarNameCacheConnections.end())
+			if (mAvatarNameCacheConnection.connected())
 			{
-				if (it->second.connected())
-				{
-					it->second.disconnect();
-				}
-				mAvatarNameCacheConnections.erase(it);
+				mAvatarNameCacheConnection.disconnect();
 			}
-			mAvatarNameCacheConnections[mMemberProgress->first] = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2, _1));
-			// </FS:Ansariel>
+			mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2));
 		}
 	}
 
@@ -1847,7 +1810,7 @@ void LLPanelGroupMembersSubTab::onExportMembersToXML()
 // LLPanelGroupRolesSubTab
 ////////////////////////////
 
-static LLRegisterPanelClassWrapper<LLPanelGroupRolesSubTab> t_panel_group_roles_subtab("panel_group_roles_subtab");
+static LLPanelInjector<LLPanelGroupRolesSubTab> t_panel_group_roles_subtab("panel_group_roles_subtab");
 
 LLPanelGroupRolesSubTab::LLPanelGroupRolesSubTab()
   : LLPanelGroupSubTab(),
@@ -2561,7 +2524,7 @@ void LLPanelGroupRolesSubTab::saveRoleChanges(bool select_saved_role)
 // LLPanelGroupActionsSubTab
 ////////////////////////////
 
-static LLRegisterPanelClassWrapper<LLPanelGroupActionsSubTab> t_panel_group_actions_subtab("panel_group_actions_subtab");
+static LLPanelInjector<LLPanelGroupActionsSubTab> t_panel_group_actions_subtab("panel_group_actions_subtab");
 
 
 LLPanelGroupActionsSubTab::LLPanelGroupActionsSubTab()
@@ -2758,7 +2721,7 @@ void LLPanelGroupRoles::setGroupID(const LLUUID& id)
 	// [/FS:CR]
 
 	if(mSubTabContainer)
-		mSubTabContainer->selectTab(0);
+		mSubTabContainer->selectTab(1);
 
 	activate();
 }

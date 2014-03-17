@@ -269,7 +269,6 @@ BOOL LLConversationViewSession::handleMouseDown( S32 x, S32 y, MASK mask )
     //This node (conversation) was selected and a child (participant) was not
     if(result && getRoot())
     {
-
 		if(getRoot()->getCurSelectedItem() == this)
 		{
 			LLConversationItem* item = dynamic_cast<LLConversationItem *>(getViewModelItem());
@@ -284,7 +283,6 @@ BOOL LLConversationViewSession::handleMouseDown( S32 x, S32 y, MASK mask )
 			{
 				im_container->collapseMessagesPane(false);
 			}
-
 		}
 		selectConversationItem();
     }

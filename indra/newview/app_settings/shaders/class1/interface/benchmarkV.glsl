@@ -1,10 +1,9 @@
 /** 
- * @file llfloaterabout.h
- * @brief The about box from Help -> About
+ * @file benchmarkV.glsl
  *
- * $LicenseInfo:firstyear=2001&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2011, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,12 +23,16 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLFLOATERABOUT_H
-#define LL_LLFLOATERABOUT_H
+uniform mat4 modelview_projection_matrix;
 
-namespace LLFloaterAboutUtil
+ATTRIBUTE vec3 position;
+
+VARYING vec2 tc0;
+
+void main()
 {
-	void registerFloater();
+	gl_Position = vec4(position, 1.0); 
+	
+	tc0 = (position.xy*0.5+0.5);
 }
 
-#endif // LL_LLFLOATERABOUT_H

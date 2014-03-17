@@ -41,7 +41,7 @@
 #include "lltexturectrl.h"
 #include "llinventorymodel.h"
 
-static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
+static LLPanelInjector<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
 
 PanelPreferenceFirestorm::PanelPreferenceFirestorm() : LLPanelPreference()
 {

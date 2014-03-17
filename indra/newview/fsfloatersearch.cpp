@@ -711,7 +711,7 @@ void FSFloaterSearch::onBtnEventReminder()
 //         People Search Panel        //
 ////////////////////////////////////////
 
-static LLRegisterPanelClassWrapper<FSPanelSearchPeople> t_panel_fs_search_people("panel_ls_people");
+static LLPanelInjector<FSPanelSearchPeople> t_panel_fs_search_people("panel_ls_people");
 
 FSPanelSearchPeople::FSPanelSearchPeople() : LLPanel()
 , mQueryID(NULL)
@@ -974,7 +974,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 //         Groups Search Panel        //
 ////////////////////////////////////////
 
-static LLRegisterPanelClassWrapper<FSPanelSearchGroups> t_panel_fs_search_groups("panel_ls_groups");
+static LLPanelInjector<FSPanelSearchGroups> t_panel_fs_search_groups("panel_ls_groups");
 
 FSPanelSearchGroups::FSPanelSearchGroups() : LLPanel()
 , mQueryID(NULL)
@@ -1259,7 +1259,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 //         Places Search Panel        //
 ////////////////////////////////////////
 
-static LLRegisterPanelClassWrapper<FSPanelSearchPlaces> t_panel_fs_search_places("panel_ls_places");
+static LLPanelInjector<FSPanelSearchPlaces> t_panel_fs_search_places("panel_ls_places");
 
 FSPanelSearchPlaces::FSPanelSearchPlaces() : LLPanel()
 , mQueryID(NULL)
@@ -1591,7 +1591,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 //          Land Search Panel         //
 ////////////////////////////////////////
 
-static LLRegisterPanelClassWrapper<FSPanelSearchLand> t_panel_fs_search_land("panel_ls_land");
+static LLPanelInjector<FSPanelSearchLand> t_panel_fs_search_land("panel_ls_land");
 
 FSPanelSearchLand::FSPanelSearchLand() : LLPanel()
 , mQueryID(NULL)
@@ -1942,7 +1942,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 //      Classifieds Search Panel      //
 ////////////////////////////////////////
 
-static LLRegisterPanelClassWrapper<FSPanelSearchClassifieds> t_panel_fs_search_classifieds("panel_ls_classifieds");
+static LLPanelInjector<FSPanelSearchClassifieds> t_panel_fs_search_classifieds("panel_ls_classifieds");
 
 FSPanelSearchClassifieds::FSPanelSearchClassifieds() : LLPanel()
 , mQueryID(NULL)
@@ -2244,7 +2244,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 //        Events Search Panel         //
 ////////////////////////////////////////
 
-static LLRegisterPanelClassWrapper<FSPanelSearchEvents> t_panel_fs_search_events("panel_ls_events");
+static LLPanelInjector<FSPanelSearchEvents> t_panel_fs_search_events("panel_ls_events");
 
 FSPanelSearchEvents::FSPanelSearchEvents() : LLPanel()
 , mQueryID(NULL)
@@ -2656,7 +2656,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 //          WebSearch Panel           //
 ////////////////////////////////////////
 
-static LLRegisterPanelClassWrapper<FSPanelSearchWeb> t_panel_fs_search_web("panel_ls_web");
+static LLPanelInjector<FSPanelSearchWeb> t_panel_fs_search_web("panel_ls_web");
 
 FSPanelSearchWeb::FSPanelSearchWeb() : LLPanel()
 , mWebBrowser(NULL)

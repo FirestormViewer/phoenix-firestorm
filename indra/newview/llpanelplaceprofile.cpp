@@ -56,7 +56,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-static LLRegisterPanelClassWrapper<LLPanelPlaceProfile> t_place_profile("panel_place_profile");
+static LLPanelInjector<LLPanelPlaceProfile> t_place_profile("panel_place_profile");
 
 // Statics for textures filenames
 static std::string icon_pg;

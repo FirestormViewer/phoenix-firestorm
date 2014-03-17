@@ -45,7 +45,7 @@
 #include <boost/foreach.hpp>
 
 const U32 MAX_SELECTIONS = 20;
-static LLRegisterPanelClassWrapper<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
+static LLPanelInjector<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
 
 FSPanelContactSets::FSPanelContactSets() : LLPanel()
 , mContactSetCombo(NULL)

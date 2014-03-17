@@ -56,7 +56,7 @@
 #include "llviewermessage.h"
 #include "tea.h" // <FS:AW opensim currency support>
 
-static LLRegisterPanelClassWrapper<LLPanelGroupLandMoney> t_panel_group_money("panel_group_land_money");
+static LLPanelInjector<LLPanelGroupLandMoney> t_panel_group_money("panel_group_land_money");
 
 
 
