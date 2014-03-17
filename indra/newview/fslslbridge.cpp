@@ -232,7 +232,7 @@ bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID
 			mIsFirstCallDone = true;
 
 			// <FS:PP> Inform user, if movelock was enabled at login
-			if (gSavedSettings.getBOOL("UseMoveLock"))
+			if (gSavedPerAccountSettings.getBOOL("UseMoveLock"))
 			{
 				reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
 			}
@@ -241,12 +241,12 @@ bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID
 		}
 		// <FS:PP> FIRE-11924: Refresh movelock position after region change (crossing/teleporting), if lock was enabled
 		// Not called right after logging in, and only if movelock was enabled during transition
-		else if (gSavedSettings.getBOOL("UseMoveLock"))
+		else if (gSavedPerAccountSettings.getBOOL("UseMoveLock"))
 		{
 			if (!gSavedSettings.getBOOL("RelockMoveLockAfterRegionChange"))
 			{
 				// Don't call for update here and only change setting to 'false', getCommitSignal()->connect->boost in llviewercontrol.cpp will send a message to Bridge anyway
-				gSavedSettings.setBOOL("UseMoveLock", false);
+				gSavedPerAccountSettings.setBOOL("UseMoveLock", false);
 				reportToNearbyChat(LLTrans::getString("MovelockDisabled"));
 			}
 			else
@@ -305,7 +305,7 @@ bool FSLSLBridge::updateBoolSettingValue(std::string msgVal)
 {
 	std::string boolVal = "0";
 
-	if (gSavedSettings.getBOOL(msgVal))
+	if (gSavedPerAccountSettings.getBOOL(msgVal))
 	{
 		boolVal = "1";
 	}
