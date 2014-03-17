@@ -4251,8 +4251,8 @@ class FSSelfToggleMoveLock : public view_listener_t
         {
 			if (LLGridManager::getInstance()->isInSecondLife())
 			{
-				bool new_value = !gSavedSettings.getBOOL("UseMoveLock");
-				gSavedSettings.setBOOL("UseMoveLock", new_value);
+				bool new_value = !gSavedPerAccountSettings.getBOOL("UseMoveLock");
+				gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
 				if (new_value)
 				{
 					reportToNearbyChat(LLTrans::getString("MovelockEnabled"));
@@ -4281,7 +4281,7 @@ class FSSelfCheckMoveLock : public view_listener_t
 		bool new_value(false);
 		if (LLGridManager::getInstance()->isInSecondLife())
 		{
-			new_value = gSavedSettings.getBOOL("UseMoveLock");
+			new_value = gSavedPerAccountSettings.getBOOL("UseMoveLock");
 		}
 #ifdef OPENSIM
 		else
