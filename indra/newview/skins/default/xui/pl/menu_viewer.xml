@@ -395,6 +395,7 @@
 			<menu_item_check label="Okresowe spowolnienie" name="Periodic Slow Frame"/>
 			<menu_item_check label="Test klatek obrazu" name="Frame Test"/>
 			<menu_item_call label="Profil klatek obrazu" name="Frame Profile"/>
+			<menu_item_call label="Testowanie (benchmark)" name="Benchmark"/>
 		</menu>
 		<menu label="Renderowanie metadanych" name="Render Metadata">
 			<menu_item_check label="Bryły brzegowe (Bounding Boxes)" name="Bounding Boxes"/>

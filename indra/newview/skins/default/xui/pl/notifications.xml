@@ -1969,6 +1969,9 @@ Kontynuować?
 	<notification name="ProblemAddingEstateManager">
 		Problemy z dodawaniem nowego zarządcy majątku. Jeden lub więcej majątków może mieć wypełnioną listę zarządców.
 	</notification>
+	<notification name="ProblemAddingEstateBanManager">
+		Nie można dodać właściciela lub zarządcy majątku na listę banów.
+	</notification>
 	<notification name="ProblemAddingEstateGeneric">
 		Problemy z dodawaniem do listy majątku. Jeden lub więcej majątków może mieć wypełnioną listę.
 	</notification>
@@ -4065,6 +4068,9 @@ może być pełny lub właśnie restartuje.
 	<notification name="LinkFailedTooMuchPhysics">
 		Obiekt zużywa zbyt dużo zasobów fizycznych -- jego cechy dynamiczne zostały wyłączone.
 	</notification>
+	<notification name="EstateManagerFailedllTeleportHome">
+		Obiekt '[OBJECT_NAME]' na pozycji [SLURL] nie może teleportować zarządców majątku do ich miejsc startu.
+	</notification>
 	<notification name="TeleportedHomeByObjectOnParcel">
 		Zostałeś/aś przeniesiony/a do lokalizacji startowej przez obiekt '[OBJECT_NAME]' na działce '[PARCEL_NAME]'
 	</notification>
@@ -4236,9 +4242,6 @@ może być pełny lub właśnie restartuje.
 	<notification name="UpdateViewerBuyParcel">
 		Musisz zaktualizować swoją przeglądarkę, aby móc kupić tą działkę.
 	</notification>
-	<notification name="LandBuyAccessBlocked">
-		Nie możesz kupić tej ziemi ze względu na swoją klasyfikację wieku. Musisz potwierdzić swój wiek lub/oraz zainstalować najnowszą przeglądarkę. Udaj się proszę do Bazy Wiedzy, aby poznać więcej szczegółów na temat uzyskiwania dostępu z tą klasyfikacją wieku.
-	</notification>
 	<notification name="CantBuyParcelNotForSale">
 		Nie można kupić, ta działka nie jest na sprzedaż.
 	</notification>
@@ -4261,13 +4264,19 @@ może być pełny lub właśnie restartuje.
 		Zbyt mało dzierżawionych działek w zaznaczeniu do przyłączenia.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Nie można podzielić ziemi. Zaznaczono więcej niż jedną działkę. Spróbuj zaznaczyć mniejszy obszar ziemi.
+		Nie można podzielić ziemi.
+Zaznaczono więcej niż jedną działkę.
+Spróbuj zaznaczyć mniejszy obszar ziemi.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Nie można podzielić ziemi. Nie można znaleźć działki. Prosimy o zgłoszenie błędu, w menu Pomoc.
+		Nie można podzielić ziemi.
+Nie można znaleźć działki.
+Prosimy o zgłoszenie błędu, w menu Pomoc.
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Nie można podzielić ziemi. Cała działka jest zaznaczona. Spróbuj zaznaczyć mniejszy obszar ziemi.
+		Nie można podzielić ziemi.
+Cała działka jest zaznaczona.
+Spróbuj zaznaczyć mniejszy obszar ziemi.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Ziemia została podzielona.

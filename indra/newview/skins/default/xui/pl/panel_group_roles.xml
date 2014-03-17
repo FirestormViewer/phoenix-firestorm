@@ -16,6 +16,7 @@ Możesz wybrać wielu członków naciskając Ctrl i klikając na ich imionach.
 			<name_list name="member_list">
 				<name_list.columns label="Członek" name="name"/>
 				<name_list.columns label="Dotacje" name="donated"/>
+				<name_list.columns label="Tytuł" name="title"/>
 			</name_list>
 			<button label="Zaproś do grupy" name="member_invite"/>
 			<button label="Usuń z grupy" name="member_eject"/>
