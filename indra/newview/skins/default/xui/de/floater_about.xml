@@ -1,59 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_about" title="Info über [APP_NAME]">
-	<floater.string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
-[[VIEWER_RELEASE_NOTES_URL] Versionshinweise]
-	</floater.string>
-	<floater.string name="AboutCompiler">
-		Kompiliert mit [COMPILER] version [COMPILER_VERSION]
-	</floater.string>
-	<floater.string name="AboutPosition">
-		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
-SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
-(globalen Koordinaten [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
-[SERVER_VERSION]
-[SERVER_RELEASE_NOTES_URL]
-	</floater.string>
-	<floater.string name="AboutSystem">
-		CPU: [CPU]
-Speicher: [MEMORY_MB] MB
-Betriebssystem: [OS_VERSION]
-Grafikkarten-Hersteller: [GRAPHICS_CARD_VENDOR]
-Grafikkarte: [GRAPHICS_CARD]
-	</floater.string>
-	<floater.string name="AboutDriver">
-		Windows Grafiktreiber-Version: [GRAPHICS_DRIVER_VERSION]
-	</floater.string>
-	<floater.string name="AboutLibs">
-		OpenGL Version: [OPENGL_VERSION]
-
-RestrainedLove API: [RLV_VERSION]
-libcurl-Version: [LIBCURL_VERSION]
-J2C-Decoderversion: [J2C_VERSION]
-Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
-Qt Webkit-Version: [QT_WEBKIT_VERSION]
-Voice-Serverversion: [VOICE_VERSION]
-	</floater.string>
-  <floater.string
-     name="AboutSettings">
-Modus: [MODE]
-Oberflächendesign: [SKIN] ([THEME])
-Schriftart: [FONT] ([FONT_SCREEN_DPI])
-Draw Distance: [DRAW_DISTANCE]
-Bandbreite: [BANDWIDTH]
-LOD-Faktor: [LOD]
-Darstellungsqualität: [RENDERQUALITY]
-Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-</floater.string>
-	<floater.string name="none">
-		(keiner)
-	</floater.string>
-	<floater.string name="AboutTraffic">
-		Paketverlust: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
-	</floater.string>
-	<floater.string name="ErrorFetchingServerReleaseNotesURL">
-		Fehler beim Abrufen der URL für die Server-Versionshinweise.
-	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="Info" name="support_panel">
     <text name="support_intro">    

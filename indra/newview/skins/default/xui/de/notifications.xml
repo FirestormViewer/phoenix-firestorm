@@ -1986,10 +1986,6 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 			<ignore name="ignore" text="Das Land, das Sie in Besitz nehmen möchten, enthält Inhalte, die aufgrund Ihrer Einstellungen nicht dargestellt werden können."/>
 		</form>
 	</notification>
-	<notification name="LandBuyAccessBlocked">
-		Die Inhaltseinstufung des Landes, das Sie kaufen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Nur Erwachsene können dieses Land kaufen.
 		<url name="url">
@@ -2021,6 +2017,9 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 	</notification>
 	<notification name="ProblemAddingEstateManager">
 		Es gibt Probleme beim Hinzufügen eines neuen Grundbesitzverwalters.  Bei mindestens einem Grundbesitz ist die Verwalterliste voll.
+	</notification>
+	<notification name="ProblemAddingEstateBanManager">
+		Grundbesitzeigentümer oder Grundbesitzverwalter kann nicht zur Bannliste hinzugefügt werden.
 	</notification>
 	<notification name="ProblemAddingEstateGeneric">
 		Problem beim Hinzufügen zu dieser Grundbesitzliste.  Bei mindestens einem Grundbesitz ist die Liste voll.
@@ -3811,6 +3810,9 @@ Sie ist voll oder startet in Kürze neu.
 	<notification name="LinkFailedTooMuchPhysics">
 		Objekt verwendet zu viele Physikressourcen – seine Dynamik wurde deaktiviert.
 	</notification>
+	<notification name="EstateManagerFailedllTeleportHome">
+		Das Objekt „[OBJECT_NAME]“ an [SLURL] kann Grundbesitzverwalter nicht nach Hause teleportieren.
+	</notification>
 	<notification name="TeleportedHomeByObjectOnParcel">
 		Sie wurden vom Objekt „[OBJECT_NAME]“ auf der Parzelle „[PARCEL_NAME]“ nach Hause teleportiert
 	</notification>
@@ -4004,13 +4006,19 @@ Sie ist voll oder startet in Kürze neu.
 		Auswahl enthält nicht genügend gemietete Parzellen zum Zusammenlegen.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Land kann nicht geteilt werden. Mehr als eine Parzelle ist ausgewählt. Wählen Sie ein kleineres Stück Land aus.
+		Land kann nicht geteilt werden.
+Mehr als eine Parzelle ist ausgewählt.
+Wählen Sie ein kleineres Stück Land aus.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Land kann nicht geteilt werden. Parzelle nicht auffindbar. Melden Sie das Problem über „Hilfe“ -&gt; „Fehler melden“...
+		Land kann nicht geteilt werden.
+Parzelle nicht auffindbar.
+Melden Sie das Problem über „Hilfe“ -&gt; „Fehler melden“...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Land kann nicht geteilt werden. Die gesamte Parzelle ist ausgewählt. Wählen Sie ein kleineres Stück Land aus.
+		Land kann nicht geteilt werden.
+Die gesamte Parzelle ist ausgewählt.
+Wählen Sie ein kleineres Stück Land aus.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Land wurde geteilt.

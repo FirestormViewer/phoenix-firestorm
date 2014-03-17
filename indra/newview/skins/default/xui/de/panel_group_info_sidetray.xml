@@ -28,7 +28,7 @@
 		<layout_panel name="group_accordions">
 			<accordion name="groups_accordion">
 				<accordion_tab name="group_general_tab" title="Allgemein"/>
-				<accordion_tab name="group_roles_tab" title="Rollen"/>
+				<accordion_tab name="group_roles_tab" title="Rollen &amp; Mitglieder"/>
 				<accordion_tab name="group_notices_tab" title="Mitteilungen"/>
 				<accordion_tab name="group_land_tab" title="Land/Kapital"/>
 			</accordion>
