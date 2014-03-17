@@ -4323,12 +4323,10 @@ bool LLAgent::teleportBridgeLocal(LLVector3& pos_local)
 	msgstream << pos_local.mV[VX] << ", " << pos_local.mV[VY] << ", "  << pos_local.mV[VZ];
 
 	// Check for FIRE-10718: llGetSimulatorHostname() is causing LSL Bridge to sleep for 10 seconds during check for current hostname in order to prevent double-click teleport on SL grid, so let's check this in the viewer itself and send 1/0 as additional value
-	std::string isLindenLabHost = "1";
 #ifdef OPENSIM
-	if (!LLGridManager::getInstance()->isInSecondLife())
-	{
-		isLindenLabHost = "0";
-	}
+	const std::string isLindenLabHost = LLGridManager::getInstance()->isInSecondLife() ? "1" : "0";
+#else
+	const std::string isLindenLabHost = "1";
 #endif
 
 	return FSLSLBridge::instance().viewerToLSL("llMoveToTarget|" + msgstream.str() + "|" + isLindenLabHost);
