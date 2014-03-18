@@ -2768,7 +2768,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// return a standard "do not disturb" message, but only do it to online IM
 			// (i.e. not other auto responses and not store-and-forward IM)
-
+			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
+			if (!gIMMgr->hasSession(session_id))
+			{
+			// </FS:Ansariel>
 				// <FS:Ansariel> Log autoresponse notification after initial message
 				has_session = false;
 
@@ -2808,6 +2811,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					session_id);
 				gAgent.sendReliableMessage();
 				// </FS:Ansariel> FS autoresponse feature
+			// <FS:Ansariel> Old "do not disturb" message behavior: only send once if session not open
+			}
+			// </FS:Ansariel>
 
 			// <FS:Ansariel> checkfor and process reqinfo
 			if (has_session)
