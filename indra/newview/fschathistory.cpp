@@ -645,6 +645,7 @@ protected:
 				menu->setItemEnabled("Request Teleport",false);
 				menu->setItemEnabled("Teleport to",false);
 				menu->setItemEnabled("Voice Call", false);
+				menu->setItemEnabled("Chat History", false);
 				menu->setItemEnabled("Add Contact Set", false);
 				menu->setItemEnabled("Invite Group", false);
 				menu->setItemEnabled("Zoom In", false);
@@ -668,9 +669,9 @@ protected:
 				menu->setItemEnabled("track", FSCommon::checkIsActionEnabled(mAvatarID, FS_RGSTR_ACT_TRACK_AVATAR));
 				menu->setItemEnabled("Block Unblock", LLAvatarActions::canBlock(mAvatarID));
 				menu->setItemEnabled("Mute Text", LLAvatarActions::canBlock(mAvatarID));
+				menu->setItemEnabled("Chat History", LLLogChat::isTranscriptExist(mAvatarID));
 			}
 
-			menu->setItemEnabled("Chat History", LLLogChat::isTranscriptExist(mAvatarID));
 			menu->setItemEnabled("Map", (LLAvatarTracker::instance().isBuddyOnline(mAvatarID) && is_agent_mappable(mAvatarID)) || gAgent.isGodlike() );
 			menu->buildDrawLabels();
 			menu->updateParent(LLMenuGL::sMenuContainer);

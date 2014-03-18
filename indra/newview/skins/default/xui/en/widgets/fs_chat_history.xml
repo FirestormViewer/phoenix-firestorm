@@ -15,7 +15,8 @@
 	name="chat_history"
 	type="string"
 	word_wrap="true"
-  line_spacing.multiple="1.0" 
+  line_spacing.multiple="1.0"
+  trusted_content="false"
   font="SansSerif"
   bg_visible="true"
   bg_readonly_color="FSChatHistoryBackground">
