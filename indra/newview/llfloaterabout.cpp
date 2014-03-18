@@ -106,7 +106,8 @@ public:
 	static LLSD getInfo();
 	void onClickCopyToClipboard();
 
-private:
+// <FS:Ansariel> Release notes link not updating
+//private:
 	void setSupportText(const std::string& server_release_notes_url);
 };
 
@@ -310,7 +311,10 @@ void LLServerReleaseNotesURLFetcher::completedHeader(U32 status, const std::stri
 	lldebugs << "Reason: " << reason << llendl;
 	lldebugs << "Headers: " << content << llendl;
 
-	LLFloaterAbout* floater_about = LLFloaterReg::getTypedInstance<LLFloaterAbout>("sl_about");
+	// <FS:Ansariel> Only update if about floater still exists
+	//LLFloaterAbout* floater_about = LLFloaterReg::getTypedInstance<LLFloaterAbout>("sl_about");
+	LLFloaterAbout* floater_about = LLFloaterReg::findTypedInstance<LLFloaterAbout>("sl_about");
+	// </FS:Ansariel>
 	if (floater_about)
 	{
 		std::string location = content["location"].asString();
@@ -319,6 +323,8 @@ void LLServerReleaseNotesURLFetcher::completedHeader(U32 status, const std::stri
 			location = LLTrans::getString("ErrorFetchingServerReleaseNotesURL");
 		}
 		LLAppViewer::instance()->setServerReleaseNotesURL(location);
+		// <FS:Ansariel> Yes, please update the release notes URL after we received it!
+		floater_about->setSupportText(location);
 	}
 }
 
