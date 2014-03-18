@@ -753,10 +753,11 @@ class Windows_i686_Manifest(ViewerManifest):
           NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
           if not os.path.exists(NSIS_path):
               NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
-        installer_created=False
-        nsis_attempts=3
-        nsis_retry_wait=15
-        while (not installer_created) and (nsis_attempts > 0):
+
+          installer_created=False
+          nsis_attempts=3
+          nsis_retry_wait=15
+          while (not installer_created) and (nsis_attempts > 0):
             try:
                 nsis_attempts-=1;
                 self.run_command('"' + proper_windows_path(NSIS_path) + '" /V2 ' + self.dst_path_of(tempfile))
