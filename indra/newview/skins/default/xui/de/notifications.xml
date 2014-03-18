@@ -1986,6 +1986,10 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 			<ignore name="ignore" text="Das Land, das Sie in Besitz nehmen möchten, enthält Inhalte, die aufgrund Ihrer Einstellungen nicht dargestellt werden können."/>
 		</form>
 	</notification>
+	<notification name="LandBuyAccessBlocked">
+		Die Inhaltseinstufung des Landes, das Sie kaufen möchten, überschreitet Ihre aktuellen Einstellungen. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
 		Nur Erwachsene können dieses Land kaufen.
 		<url name="url">
