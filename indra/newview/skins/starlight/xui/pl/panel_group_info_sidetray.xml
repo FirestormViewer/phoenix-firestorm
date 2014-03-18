@@ -25,7 +25,7 @@
 				<layout_panel name="group_accordions">
 					<accordion name="groups_accordion">
 						<accordion_tab name="group_general_tab" title="Ogólne"/>
-						<accordion_tab name="group_roles_tab" title="Funkcje"/>
+						<accordion_tab name="group_roles_tab" title="Funkcje i członkowie"/>
 						<accordion_tab name="group_notices_tab" title="Ogłoszenia"/>
 						<accordion_tab name="group_land_tab" title="Działka/Majątek"/>
 					</accordion>
