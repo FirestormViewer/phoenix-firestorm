@@ -12520,7 +12520,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Type</key>
 			<string>String</string>
 			<key>Value</key>
-			<string>https://jira.secondlife.com/secure/CreateIssueDetails!init.jspa?pid=10610&amp;issuetype=1&amp;environment=[ENVIRONMENT]&amp;customfield_10253=[LOCATION]</string>
+			<string>http://jira.phoenixviewer.com/secure/CreateIssueDetails!init.jspa?pid=10005&amp;issuetype=1&amp;priority=3&amp;environment=[ENVIRONMENT]</string>
 		</map>
 	<key>RevokePermsOnStopAnimation</key>
     <map>
