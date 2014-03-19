@@ -484,10 +484,10 @@
         <key>slurl_base</key>
             <string>hop://login.ufsgrid.com:8002/</string>
         </map>
-    <key>osgrid.kitely.com:8002</key>
+    <key>grid.kitely.com:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2012-11-20T02:21:28.55Z</date>
+            <date>2014-03-19T12:37.51.00Z</date>
         <key>gridname</key>
             <string>Kitely</string>
         <key>gridnick</key>
@@ -501,14 +501,14 @@
             <undef />
         <key>loginuri</key>
             <array>
-                <string>http://osgrid.kitely.com:8002/</string>
+                <string>http://grid.kitely.com:8002/</string>
             </array>
         <key>name</key>
-            <string>osgrid.kitely.com:8002</string>
+            <string>grid.kitely.com:8002</string>
         <key>platform</key>
             <string>OpenSim</string>
         <key>slurl_base</key>
-            <string>hop://osgrid.kitely.com:8002/</string>
+            <string>hop://grid.kitely.com:8002/</string>
         </map>
     <key>reactiongrid.com:8008</key>
         <map>
