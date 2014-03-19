@@ -354,11 +354,9 @@ void LLSocialPhotoPanel::sendPhoto()
 		std::string slurl_string = slurl.getSLURLString();
 
 		// Add query parameters so Google Analytics can track incoming clicks!
-		// <FS:CR> No.
-		//slurl_string += DEFAULT_PHOTO_QUERY_PARAMETERS;
+		slurl_string += DEFAULT_PHOTO_QUERY_PARAMETERS;
 
 		// Add it to the caption (pretty crude, but we don't have a better option with photos)
-		// <FS:CR> If it's crude, then why even bother?
 		if (caption.empty())
 			caption = slurl_string;
 		else
