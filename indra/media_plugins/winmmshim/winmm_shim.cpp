@@ -34,19 +34,43 @@ static float sVolumeLevel = 1.f;
 static bool sMute = false;
 static CRITICAL_SECTION sCriticalSection;
 
+static bool initialized;
+
+class CritSecLock
+{
+	CRITICAL_SECTION &mSection;
+public:
+	CritSecLock( CRITICAL_SECTION &aSection )
+		: mSection( aSection )
+	{
+		::EnterCriticalSection( &mSection );
+	}
+
+	~CritSecLock( )
+	{
+		::LeaveCriticalSection( &mSection );
+	}
+};
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
 					 )
 {
-	InitializeCriticalSection(&sCriticalSection);
+	if( DLL_PROCESS_ATTACH == ul_reason_for_call )
+		::InitializeCriticalSection( &sCriticalSection );
+	else if( DLL_PROCESS_DETACH == ul_reason_for_call )
+		::DeleteCriticalSection( &sCriticalSection );
 	return TRUE;
 }
 
 void ll_winmm_shim_initialize(){
-	static bool initialized = false;
+	// static bool initialized = false;
 	// do this only once
-	EnterCriticalSection(&sCriticalSection);
+
+	// EnterCriticalSection(&sCriticalSection);
+	CritSecLock oLock( sCriticalSection );
+	
 	if (!initialized)
 	{	// bind to original winmm.dll
 		TCHAR system_path[MAX_PATH];
@@ -69,7 +93,7 @@ void ll_winmm_shim_initialize(){
 			::OutputDebugStringA("WINMM_SHIM.DLL: Failed to initialize real winmm.dll\n");
 		}
 	}
-	LeaveCriticalSection(&sCriticalSection);
+	// LeaveCriticalSection(&sCriticalSection);
 }
 
 
@@ -100,6 +124,8 @@ extern "C"
 			&& ((fdwOpen & WAVE_FORMAT_QUERY) == 0)) // not just querying for format support
 		{	// remember the requested bits per sample, and associate with the given handle
 			WaveOutFormat* wave_outp = new WaveOutFormat(pwfx->wBitsPerSample);
+
+			CritSecLock lock( sCriticalSection );
 			sWaveOuts.insert(std::make_pair(*phwo, wave_outp));
 		}
 		return result;
@@ -108,6 +134,9 @@ extern "C"
 	MMRESULT WINAPI waveOutClose( HWAVEOUT hwo)
 	{
 		ll_winmm_shim_initialize();
+		
+		CritSecLock lock( sCriticalSection );
+		
 		wave_out_map_t::iterator found_it = sWaveOuts.find(hwo);
 		if (found_it != sWaveOuts.end())
 		{	// forget what we know about this handle
@@ -128,7 +157,10 @@ extern "C"
 		}
 		else if (sVolumeLevel != 1.f) 
 		{ // need to apply volume level
+			
+			CritSecLock lock( sCriticalSection );
 			wave_out_map_t::iterator found_it = sWaveOuts.find(hwo);
+			
 			if (found_it != sWaveOuts.end())
 			{
 				WaveOutFormat* formatp = found_it->second;
