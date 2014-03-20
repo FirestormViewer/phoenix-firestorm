@@ -715,7 +715,7 @@ BOOL LLCacheName::getIfThere(const LLUUID& id, std::string& fullname, BOOL& is_g
 		}
 		else
 		{
-			fullname = entry->mFirstName + " " + entry->mLastName;
+			fullname = buildFullName(entry->mFirstName, entry->mLastName);
 		}
 		is_group = entry->mIsGroup;
 		return TRUE;
