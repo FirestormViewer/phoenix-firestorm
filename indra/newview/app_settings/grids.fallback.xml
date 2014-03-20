@@ -487,7 +487,7 @@
     <key>grid.kitely.com:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2014-03-19T12:37:51.00Z</date>
+            <date>2014-03-20T12:30.00.00Z</date>
         <key>gridname</key>
             <string>Kitely</string>
         <key>gridnick</key>
@@ -498,11 +498,15 @@
                 <string>account</string>
             </array>
         <key>loginpage</key>
-            <undef />
+            <string>http://www.kitely.com/viewer_login</string>
         <key>loginuri</key>
             <array>
                 <string>http://grid.kitely.com:8002/</string>
             </array>
+        <key>gatekeeper</key>
+            <string>grid.kitely.com:8002</string>
+        <key>helperuri</key>
+            <string>http://grid.kitely.com:8002/</string>
         <key>name</key>
             <string>grid.kitely.com:8002</string>
         <key>platform</key>
