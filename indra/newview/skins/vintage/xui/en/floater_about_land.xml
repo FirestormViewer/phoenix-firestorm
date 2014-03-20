@@ -1529,6 +1529,16 @@ Only large parcels can be listed in search.
              name="Clear"
              tool_tip="Clear the landing point"
              width="55" />
+            <button
+             follows="right|bottom"
+             height="20"
+             label="Teleport"
+             label_selected="Teleport"
+             layout="topleft"
+             left_pad="5"
+             name="teleport_to_landing_point"
+             tool_tip="Teleport to the landing point"
+             width="55" />
             <text
              type="string"
              length="1"

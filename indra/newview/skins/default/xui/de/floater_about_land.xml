@@ -391,6 +391,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</text>
 			<button label="Festlegen" label_selected="Festlegen" left="234" name="Set" right="-88" tool_tip="Legt Ihren Standort als Landepunkt fest, an dem Besucher ankommen. Legt die Position Ihres Avatars innerhalb dieser Parzelle fest." width="70"/>
 			<button label="Löschen" label_selected="Löschen" left="312" name="Clear" tool_tip="Landepunkt löschen" width="70"/>
+			<button label="Teleportieren" label_selected="Teleportieren" left="390" name="teleport_to_landing_point" tool_tip="Zum Landepunkt teleportieren" width="80"/>
 			<text name="Teleport Routing: ">
 				Teleport-Route:
 			</text>

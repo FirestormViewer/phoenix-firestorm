@@ -334,6 +334,9 @@ private:
 	static void onClickSet(void* userdata);
 	static void onClickClear(void* userdata);
 
+	// <FS:Ansariel> FIRE-10043: Teleport to LP button
+	void onClickTeleport();
+
 private:
 	S32 getDirectoryFee();
 	LLCheckBoxCtrl*	mCheckEditObjects;
@@ -355,6 +358,8 @@ private:
 	LLTextBox*		mLocationText;
 	LLButton*		mSetBtn;
 	LLButton*		mClearBtn;
+	// <FS:Ansariel> FIRE-10043: Teleport to LP button
+	LLButton*		mTeleportToLandingPointBtn;
 
 	LLCheckBoxCtrl		*mMatureCtrl;
 	LLCheckBoxCtrl		*mPushRestrictionCtrl;

@@ -2037,6 +2037,11 @@ BOOL LLPanelLandOptions::postBuild()
 	mLandingTypeCombo = getChild<LLComboBox>( "landing type");
 	childSetCommitCallback("landing type", onCommitAny, this);
 
+	// <FS:Ansariel> FIRE-10043: Teleport to LP button
+	mTeleportToLandingPointBtn = getChild<LLButton>("teleport_to_landing_point");
+	mTeleportToLandingPointBtn->setCommitCallback(boost::bind(&LLPanelLandOptions::onClickTeleport, this));
+	// </FS:Ansariel>
+
 	return TRUE;
 }
 
@@ -2103,6 +2108,10 @@ void LLPanelLandOptions::refresh()
 		mClearBtn->setEnabled(FALSE);
 
 		mMatureCtrl->setEnabled(FALSE);
+
+		// <FS:Ansariel> FIRE-10043: Teleport to LP button
+		mTeleportToLandingPointBtn->setEnabled(FALSE);
+		// </FS:Ansariel>
 	}
 	else
 	{
@@ -2175,6 +2184,9 @@ void LLPanelLandOptions::refresh()
 		if (pos.isExactlyZero())
 		{
 			mLocationText->setTextArg("[LANDING]", getString("landing_point_none"));
+			// <FS:Ansariel> FIRE-10043: Teleport to LP button
+			mTeleportToLandingPointBtn->setEnabled(FALSE);
+			// </FS:Ansariel>
 		}
 		else
 		{
@@ -2183,6 +2195,9 @@ void LLPanelLandOptions::refresh()
 														   llround(pos.mV[VY]),
 		   												   llround(pos.mV[VZ]),
 														   user_look_at_angle));
+			// <FS:Ansariel> FIRE-10043: Teleport to LP button
+			mTeleportToLandingPointBtn->setEnabled(TRUE);
+			// </FS:Ansariel>
 		}
 
 		mSetBtn->setEnabled( can_change_landing_point );
@@ -2487,6 +2502,17 @@ void LLPanelLandOptions::onClickClear(void* userdata)
 	self->refresh();
 }
 
+// <FS:Ansariel> FIRE-10043: Teleport to LP button
+void LLPanelLandOptions::onClickTeleport()
+{
+	LLParcel* selected_parcel = mParcel->getParcel();
+	LLViewerRegion* region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
+	if (selected_parcel && !selected_parcel->getUserLocation().isExactlyZero() && region)
+	{
+		gAgent.teleportViaLocation(region->getPosGlobalFromRegion(selected_parcel->getUserLocation()));
+	}
+}
+// </FS:Ansariel>
 
 //---------------------------------------------------------------------------
 // LLPanelLandAccess
