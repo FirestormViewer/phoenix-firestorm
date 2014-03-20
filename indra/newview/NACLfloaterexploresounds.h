@@ -9,6 +9,7 @@
 #include "lleventtimer.h"
 #include "llaudioengine.h"
 
+class LLCheckBoxCtrl;
 class LLScrollListCtrl;
 
 class NACLFloaterExploreSounds
@@ -20,7 +21,7 @@ public:
 
 	BOOL tick();
 
-	LLSoundHistoryItem getItem(LLUUID itemID);
+	LLSoundHistoryItem getItem(const LLUUID& itemID);
 
 private:
 	virtual ~NACLFloaterExploreSounds();
@@ -30,7 +31,13 @@ private:
 	void handleSelection();
 	void blacklistSound();
 
-	LLScrollListCtrl* mHistoryScroller;
+	LLScrollListCtrl*	mHistoryScroller;
+	LLCheckBoxCtrl*		mCollisionSounds;
+	LLCheckBoxCtrl*		mRepeatedAssets;
+	LLCheckBoxCtrl*		mAvatarSounds;
+	LLCheckBoxCtrl*		mObjectSounds;
+	LLCheckBoxCtrl*		mPaused;
+
 	std::list<LLSoundHistoryItem> mLastHistory;
 };
 

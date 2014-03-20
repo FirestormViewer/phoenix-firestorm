@@ -5,6 +5,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "NACLfloaterexploresounds.h"
+#include "llcheckboxctrl.h"
 #include "llscrolllistctrl.h"
 #include "llagent.h"
 #include "llagentcamera.h"
@@ -12,6 +13,7 @@
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "fswsassetblacklist.h"
+#include "fscommon.h"
 
 static const size_t num_collision_sounds = 28;
 const LLUUID collision_sounds[num_collision_sounds] =
@@ -66,7 +68,13 @@ BOOL NACLFloaterExploreSounds::postBuild()
 	mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
 	mHistoryScroller->setDoubleClickCallback(boost::bind(&NACLFloaterExploreSounds::handlePlayLocally, this));
 	mHistoryScroller->sortByColumn("playing", TRUE);
-	
+
+	mCollisionSounds = getChild<LLCheckBoxCtrl>("collision_chk");
+	mRepeatedAssets = getChild<LLCheckBoxCtrl>("repeated_asset_chk");
+	mAvatarSounds = getChild<LLCheckBoxCtrl>("avatars_chk");
+	mObjectSounds = getChild<LLCheckBoxCtrl>("objects_chk");
+	mPaused = getChild<LLCheckBoxCtrl>("pause_chk");
+
 	return TRUE;
 }
 
@@ -80,18 +88,24 @@ void NACLFloaterExploreSounds::handleSelection()
 	childSetEnabled("bl_btn", num_selected);
 }
 
-LLSoundHistoryItem NACLFloaterExploreSounds::getItem(LLUUID itemID)
+LLSoundHistoryItem NACLFloaterExploreSounds::getItem(const LLUUID& itemID)
 {
-	if(gSoundHistory.find(itemID) != gSoundHistory.end())
-		return gSoundHistory[itemID];
+	std::map<LLUUID, LLSoundHistoryItem>::iterator found = gSoundHistory.find(itemID);
+	if (found != gSoundHistory.end())
+	{
+		return found->second;
+	}
 	else
 	{
 		// If log is paused, hopefully we can find it in mLastHistory
 		std::list<LLSoundHistoryItem>::iterator iter = mLastHistory.begin();
 		std::list<LLSoundHistoryItem>::iterator end = mLastHistory.end();
-		for( ; iter != end; ++iter)
+		for ( ; iter != end; ++iter)
 		{
-			if((*iter).mID == itemID) return (*iter);
+			if ((*iter).mID == itemID)
+			{
+				return (*iter);
+			}
 		}
 	}
 	LLSoundHistoryItem item;
@@ -128,15 +142,21 @@ public:
 
 BOOL NACLFloaterExploreSounds::tick()
 {
-	//if(childGetValue("pause_chk").asBoolean()) return FALSE;
+	static const std::string str_playing =  getString("Playing");
+	static const std::string str_not_playing = getString("NotPlaying");
+	static const std::string str_type_ui =  getString("Type_UI");
+	static const std::string str_type_avatar = getString("Type_Avatar");
+	static const std::string str_type_trigger_sound = getString("Type_llTriggerSound");
+	static const std::string str_type_loop_sound = getString("Type_llLoopSound");
+	static const std::string str_type_play_sound = getString("Type_llPlaySound");
 
-	bool show_collision_sounds = childGetValue("collision_chk").asBoolean();
-	bool show_repeated_assets = childGetValue("repeated_asset_chk").asBoolean();
-	bool show_avatars = childGetValue("avatars_chk").asBoolean();
-	bool show_objects = childGetValue("objects_chk").asBoolean();
+	bool show_collision_sounds = mCollisionSounds->get();
+	bool show_repeated_assets = mRepeatedAssets->get();
+	bool show_avatars = mAvatarSounds->get();
+	bool show_objects = mObjectSounds->get();
 
 	std::list<LLSoundHistoryItem> history;
-	if(childGetValue("pause_chk").asBoolean())
+	if (mPaused->get())
 	{
 		history = mLastHistory;
 	}
@@ -155,12 +175,14 @@ BOOL NACLFloaterExploreSounds::tick()
 
 	// Save scroll pos and selection so they can be restored
 	S32 scroll_pos = mHistoryScroller->getScrollPos();
-	LLDynamicArray<LLUUID> selected_ids;
+	uuid_vec_t selected_ids;
 	std::vector<LLScrollListItem*> selected_items = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selected_items.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selected_items.end();
-	for(; selection_iter != selection_end; ++selection_iter)
+	for (; selection_iter != selection_end; ++selection_iter)
+	{
 		selected_ids.push_back((*selection_iter)->getUUID());
+	}
 
 	mHistoryScroller->clearRows();
 
@@ -198,13 +220,13 @@ BOOL NACLFloaterExploreSounds::tick()
 		playing_column["column"] = "playing";
 		if(item.mPlaying)
 		{
-			playing_column["value"] = " " + getString("Playing");
+			playing_column["value"] = " " + str_playing;
 		}
 		else
 		{
 			LLStringUtil::format_map_t format_args;
 			format_args["TIME"] = llformat("%.1f", static_cast<F32>((LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.0));
-			playing_column["value"] = getString("NotPlaying", format_args);
+			playing_column["value"] = formatString(str_not_playing, format_args);
 		}
 
 		LLSD& type_column = element["columns"][1];
@@ -212,7 +234,7 @@ BOOL NACLFloaterExploreSounds::tick()
 		if(item.mType == LLAudioEngine::AUDIO_TYPE_UI)
 		{
 			// this shouldn't happen for now, as UI is forbidden in the log
-			type_column["value"] = getString("Type_UI");
+			type_column["value"] = str_type_ui;
 		}
 		else
 		{
@@ -220,23 +242,23 @@ BOOL NACLFloaterExploreSounds::tick()
 
 			if(is_avatar)
 			{
-				type = getString("Type_Avatar");
+				type = str_type_avatar;
 			}
 			else
 			{
 				if(item.mIsTrigger)
 				{
-					type = getString("Type_llTriggerSound");
+					type = str_type_trigger_sound;
 				}
 				else
 				{
 					if(item.mIsLooped)
 					{
-						type = getString("Type_llLoopSound");
+						type = str_type_loop_sound;
 					}
 					else
 					{
-						type = getString("Type_llPlaySound");
+						type = str_type_play_sound;
 					}
 				}
 			}
@@ -325,7 +347,7 @@ void NACLFloaterExploreSounds::handleStop()
 	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-	std::vector<LLUUID> asset_list;
+	uuid_vec_t asset_list;
 	for( ; selection_iter != selection_end; ++selection_iter)
 	{
 		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
@@ -361,7 +383,7 @@ void NACLFloaterExploreSounds::blacklistSound()
 	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-	std::vector<LLUUID> asset_list;
+	uuid_vec_t asset_list;
 
 	for ( ; selection_iter != selection_end; ++selection_iter)
 	{
