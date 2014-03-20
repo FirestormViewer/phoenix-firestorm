@@ -12,7 +12,6 @@
 			<text name="caption_label">
 				Komentarz (opcjonalnie):
 			</text>
-			<check_box label="Dołącz lokalizację" name="add_location_cb" />
 		</layout_panel>
 		<layout_panel name="photo_button_panel">
 			<button label="Wyślij" name="post_photo_btn" />
