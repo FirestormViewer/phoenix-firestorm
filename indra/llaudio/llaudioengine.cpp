@@ -1391,13 +1391,13 @@ LLAudioSource::~LLAudioSource()
 		// Stop playback of this sound
 		mChannelp->setSource(NULL);
 		mChannelp = NULL;
-		// NaCl - Sound Explorer
-		if (mType != LLAudioEngine::AUDIO_TYPE_UI) // && mSourceID.notNull())
-		{
-			logSoundStop(mLogID);
-		}
-		// NaCl End
 	}
+	// NaCl - Sound Explorer
+	if (mType != LLAudioEngine::AUDIO_TYPE_UI) // && mSourceID.notNull())
+	{
+		logSoundStop(mLogID);
+	}
+	// NaCl End
 }
 
 
