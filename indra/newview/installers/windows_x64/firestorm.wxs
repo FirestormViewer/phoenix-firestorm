@@ -48,6 +48,9 @@
         <File Source="$(var.BUILDDIR)/Leap.dll" CompanionFile="firestorm" />
       <?endif?>
 
+	  <File Source="$(var.WIX_SOURCEDIR)/msvcp100.dll" CompanionFile="firestorm" />
+	  <File Source="$(var.WIX_SOURCEDIR)/msvcr100.dll" CompanionFile="firestorm" />
+
       <File Source="$(var.BUILDDIR)/libapr-1.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/libapriconv-1.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/libaprutil-1.dll" CompanionFile="firestorm" />
