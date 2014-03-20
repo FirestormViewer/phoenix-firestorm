@@ -8,6 +8,7 @@
 #include "llscrolllistctrl.h"
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llavatarnamecache.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "fswsassetblacklist.h"
@@ -245,17 +246,10 @@ BOOL NACLFloaterExploreSounds::tick()
 
 		LLSD& owner_column = element["columns"][2];
 		owner_column["column"] = "owner";
-		std::string fullname;
-		BOOL is_group;
-		if(gCacheName->getIfThere(item.mOwnerID, fullname, is_group))
+		LLAvatarName av_name;
+		if (LLAvatarNameCache::get(item.mOwnerID, &av_name))
 		{
-			if (is_group)
-			{
-				LLStringUtil::format_map_t format_args;
-				format_args["NAME"] = fullname;
-				fullname = getString("GroupOwned", format_args);
-			}
-			owner_column["value"] = fullname;
+			owner_column["value"] = av_name.getCompleteName();
 		}
 		else
 		{

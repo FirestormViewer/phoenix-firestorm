@@ -35,9 +35,6 @@
 	<floater.string name="Type_llPlaySound">
 		llPlaySound
 	</floater.string>
-	<floater.string name="GroupOwned">
-		[NAME] (Group)
-	</floater.string>
 	<check_box follows="top|left" bottom_delta="20" left="5" width="64" name="avatars_chk" label="Avatars" control_name="FloaterSoundsLogAvatars" />
 	<check_box follows="top|left" bottom_delta="0" left_delta="64" width="64" name="objects_chk" label="Objects" initial_value="true" control_name="FloaterSoundsLogObjects" />
 	<check_box follows="top|left" bottom_delta="0" left_delta="64" width="160" name="collision_chk" label="Default Collision Sounds" control_name="FloaterSoundsLogCollisions" />

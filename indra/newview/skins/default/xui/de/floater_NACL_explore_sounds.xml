@@ -21,9 +21,6 @@
 	<floater.string name="Type_llPlaySound">
 		llPlaySound
 	</floater.string>
-	<floater.string name="GroupOwned">
-		[NAME] (Gruppe)
-	</floater.string>
 	<check_box name="avatars_chk" label="Avatare"/>
 	<check_box name="objects_chk" label="Objekte"/>
 	<check_box name="collision_chk" label="Standard-Kollisionssounds"/>
