@@ -1319,8 +1319,7 @@ void LLAudioSource::logSoundPlay(const LLUUID& id, LLAudioSource* audio_source, 
 	// </FS:ND>
 
 	// <FS:ND> Do not overflow our log here.
-	if( gSoundHistory.size() > 2048 )
-		pruneSoundLog();
+	pruneSoundLog();
 	if( gSoundHistory.size() > 2048 )
 		return; // Might clear out oldest entries before giving up?
 	// </FS:ND>
