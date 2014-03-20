@@ -55,6 +55,14 @@ NACLFloaterExploreSounds::NACLFloaterExploreSounds(const LLSD& key)
 
 NACLFloaterExploreSounds::~NACLFloaterExploreSounds()
 {
+	for (blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.begin(); it != mBlacklistAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mBlacklistAvatarNameCacheConnections.clear();
 }
 
 BOOL NACLFloaterExploreSounds::postBuild()
@@ -393,18 +401,38 @@ void NACLFloaterExploreSounds::blacklistSound()
 			continue;
 		}
 
-		std::string entry_name;
-		std::string agent;
 		std::string region_name;
-
-		gCacheName->getFullName(item.mOwnerID, agent);
 		LLViewerRegion* cur_region = gAgent.getRegion();
-
 		if (cur_region)
 		{
 			region_name = cur_region->getName();
 		}
 
-		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID, agent, region_name, LLAssetType::AT_SOUND, true);
+		blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(item.mOwnerID);
+		if (it != mBlacklistAvatarNameCacheConnections.end())
+		{
+			if (it->second.connected())
+			{
+				it->second.disconnect();
+			}
+			mBlacklistAvatarNameCacheConnections.erase(it);
+		}
+		mBlacklistAvatarNameCacheConnections[item.mOwnerID] =
+			LLAvatarNameCache::get(item.mOwnerID, boost::bind(&NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback, this, _1, _2, item.mAssetID, region_name));
 	}
 }
+
+void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name)
+{
+	blacklist_avatar_name_cache_connection_map_t::iterator it = mBlacklistAvatarNameCacheConnections.find(av_id);
+	if (it != mBlacklistAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mBlacklistAvatarNameCacheConnections.erase(it);
+	}
+	FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(asset_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, true);
+}
+
