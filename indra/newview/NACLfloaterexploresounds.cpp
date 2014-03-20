@@ -213,7 +213,7 @@ BOOL NACLFloaterExploreSounds::tick()
 
 		if(!item.mReviewed)
 		{
-			item.mReviewedCollision	= std::find(&collision_sounds[0], &collision_sounds[num_collision_sounds], item.mAssetID) != &collision_sounds[num_collision_sounds];
+			item.mReviewedCollision = std::find(&collision_sounds[0], &collision_sounds[num_collision_sounds], item.mAssetID) != &collision_sounds[num_collision_sounds];
 			item.mReviewed = true;
 		}
 		bool is_collision_sound = item.mReviewedCollision;
@@ -304,7 +304,7 @@ void NACLFloaterExploreSounds::handlePlayLocally()
 	std::vector<LLScrollListItem*> selection = mHistoryScroller->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
-	std::vector<LLUUID> asset_list;
+	uuid_vec_t asset_list;
 	for( ; selection_iter != selection_end; ++selection_iter)
 	{
 		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
