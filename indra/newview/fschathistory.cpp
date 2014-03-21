@@ -927,6 +927,7 @@ static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
 	LLFastTimer _(FTM_APPEND_MESSAGE);
+	bool is_at_end = (!getScrollContainer() || getScrollContainer()->isAtBottom());
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
 	bool square_brackets = false; // square brackets necessary for a system messages
 	bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
@@ -1319,6 +1320,11 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	if (from_me)
 	{
 		setCursorAndScrollToEnd();	// <FS:Zi> FIRE-8600: TAB out of chat history
+	}
+
+	if (is_at_end && getScrollContainer())
+	{
+		getScrollContainer()->goToBottom();
 	}
 }
 
