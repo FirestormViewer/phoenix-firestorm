@@ -32,7 +32,7 @@
 #include "llnotificationsutil.h"
 
 #include "fspanelcontactsets.h"
-#include "fscontactsfloater.h"
+#include "fsfloatercontacts.h"
 #include "lggcontactsets.h"
 #include "llavataractions.h"
 #include "llcallingcard.h"

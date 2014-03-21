@@ -136,11 +136,11 @@ set(viewer_SOURCE_FILES
     fschathistory.cpp
     fscommon.cpp
     fsconsoleutils.cpp
-    fscontactsfloater.cpp
     fsdata.cpp
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
     fsfloaterblocklist.cpp
+    fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
     fsfloaterexport.cpp
     fsfloatergroup.cpp
@@ -834,11 +834,11 @@ set(viewer_HEADER_FILES
     fschathistory.h
     fscommon.h
     fsconsoleutils.h
-    fscontactsfloater.h
     fsdata.h
     fsexportperms.h
     fsfloateraddtocontactset.h
     fsfloaterblocklist.h
+    fsfloatercontacts.h
     fsfloatercontactsetconfiguration.h
     fsfloaterexport.h
     fsfloatergroup.h

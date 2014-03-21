@@ -1,5 +1,5 @@
 /** 
- * @file fscontactsfloater.h
+ * @file fsfloatercontacts.h
  * @brief Legacy contacts floater header file
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
@@ -26,8 +26,8 @@
  */
  
  
-#ifndef FS_CONTACTSFLOATER_H
-#define FS_CONTACTSFLOATER_H
+#ifndef FS_FLOATERCONTACTS_H
+#define FS_FLOATERCONTACTS_H
 
 #include "llfloater.h"
 #include "lleventtimer.h"
@@ -142,4 +142,4 @@ private:
 };
 
 
-#endif // FS_CONTACTSFLOATER_H
+#endif // FS_FLOATERCONTACTS_H

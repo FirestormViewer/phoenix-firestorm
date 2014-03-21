@@ -1,5 +1,5 @@
 /** 
- * @file fscontactsfloater.cpp
+ * @file fsfloatercontacts.cpp
  * @brief Legacy contacts floater implementation
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
@@ -28,7 +28,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "fscontactsfloater.h"
+#include "fsfloatercontacts.h"
 
 // libs
 #include "llagent.h"

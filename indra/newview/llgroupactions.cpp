@@ -44,8 +44,8 @@
 
 // Firestorm includes
 #include "exogroupmutelist.h"
-#include "fscontactsfloater.h"
 #include "fsdata.h"
+#include "fsfloatercontacts.h"
 #include "fsfloatergroup.h"
 #include "fsfloaterim.h"
 #include "llpanelgroup.h"

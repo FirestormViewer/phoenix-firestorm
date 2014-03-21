@@ -137,7 +137,7 @@
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fsfloaterexport.h"
-#include "fscontactsfloater.h"	// <FS:Zi> Display group list in contacts floater
+#include "fsfloatercontacts.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 #include "fswsassetblacklist.h"
 #include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh

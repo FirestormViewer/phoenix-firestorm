@@ -116,7 +116,7 @@
 #include "llsdserialize.h"
 
 // Firestorm Includes
-#include "fscontactsfloater.h" // TS: sort contacts list
+#include "fsfloatercontacts.h" // TS: sort contacts list
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
 #include "llavatarname.h"	// <FS:CR> Deeper name cache stuffs

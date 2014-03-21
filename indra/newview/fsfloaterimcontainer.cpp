@@ -37,7 +37,7 @@
 #include "llagent.h"
 #include "lltransientfloatermgr.h"
 #include "fsfloaternearbychat.h"
-#include "fscontactsfloater.h"
+#include "fsfloatercontacts.h"
 #include "llfloater.h"
 #include "llviewercontrol.h"
 #include "fsfloaterim.h"

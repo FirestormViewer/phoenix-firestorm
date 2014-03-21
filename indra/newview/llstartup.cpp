@@ -210,8 +210,8 @@
 #include "growlmanager.h"
 #endif
 
-#include "fscontactsfloater.h"
 #include "fsdata.h"
+#include "fsfloatercontacts.h"
 #include "fsfloaterimcontainer.h"
 #include "fsfloaternearbychat.h"
 #include "fsfloatersearch.h"
