@@ -90,6 +90,8 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 {
 	LLMultiFloater::onOpen(key);
 
+	LLFloater* active_floater = getActiveFloater();
+
 	// If we're using multitabs, and we open up for the first time
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
 	// But only if it hasnt been already so we can reopen it to the same tab -KC
@@ -139,10 +141,9 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 		}
 	}
 
-	LLFloater* active_floater = getActiveFloater();
-	if (active_floater && !active_floater->hasFocus())
+	if (active_floater && active_floater != getActiveFloater())
 	{
-		active_floater->setFocus(TRUE);
+		mTabContainer->selectTabPanel(active_floater);
 	}
 }
 
