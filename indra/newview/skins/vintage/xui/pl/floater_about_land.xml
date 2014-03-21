@@ -366,6 +366,7 @@ Jedynie większe działki mogą być umieszczone w bazie wyszukiwarki.
 			</text>
 			<button label="Ustaw" label_selected="Ustaw" name="Set" tool_tip="Ustal miejsce lądowania dla przybywających gości. Używa położenia Twojego awatara na tej działce."/>
 			<button label="Wyczyść" label_selected="Wyczyść" name="Clear" tool_tip="Usuń dotychczasowe miejsce lądowania."/>
+			<button label="Teleportuj" label_selected="Teleportuj" name="teleport_to_landing_point" width="70" tool_tip="Teleportuj do miejsca lądowania"/>
 			<text name="Teleport Routing: ">
 				Trasa teleportacji:
 			</text>
