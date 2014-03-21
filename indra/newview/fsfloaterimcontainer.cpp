@@ -111,7 +111,7 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 			// first set the tear-off host to the conversations container
 			floater_contacts->setHost(this);
 			// clear the tear-off host right after, the "last host used" will still stick
-			setHost(NULL);
+			floater_contacts->setHost(NULL);
 			// reparent to floater view
 			gFloaterView->addChild(floater_contacts);
 		}
