@@ -195,27 +195,11 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 		return;
 	}
 
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-17 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	LLUUID session_id = floaterp->getKey();
-	if (session_id.isNull())
-	{
-		// Re-insert the nearby chat floater at the start
-		insertion_point = LLTabContainer::START;
-	}
-// [/SL:KB]
-
 	LLMultiFloater::addFloater(floaterp, select_added_floater, insertion_point);
 
-	if (session_id.isNull())
-	{
-		// Don't allow the nearby chat tab to be drag-rearranged
-		mTabContainer->lockTabs(1);
-	}
-	else
-	{
-		mSessions[session_id] = floaterp;
-		floaterp->mCloseSignal.connect(boost::bind(&FSFloaterIMContainer::onCloseFloater, this, session_id));
-	}
+	LLUUID session_id = floaterp->getKey();
+	mSessions[session_id] = floaterp;
+	floaterp->mCloseSignal.connect(boost::bind(&FSFloaterIMContainer::onCloseFloater, this, session_id));
 }
 
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
@@ -237,13 +221,6 @@ void FSFloaterIMContainer::removeFloater(LLFloater* floaterp)
 		floaterp->setCanClose(TRUE);
 	}
 	// </FS:ND>
-
-
-	LLUUID idSession = floaterp->getKey();
-	if (idSession.isNull())
-	{
-		mTabContainer->unlockTabs();
-	}
 	LLMultiFloater::removeFloater(floaterp);
 }
 // [/SL:KB]
