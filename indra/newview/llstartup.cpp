@@ -1756,7 +1756,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		
 		// Do something with pContacts so no overzealous optimizer optimzes our neat little call to FSFloaterContacts::getInstance() away.
 		if( pContacts )
-			llinfos << "Constructed " <<  pContacts->getTitle() << llendl;
+			LL_INFOS("AppInit") << "Constructed " <<  pContacts->getName() << LL_ENDL;
 		// </FS:ND>
 
 		// <FS:Ansariel> FIRE-8560/FIRE-8592: We neet to create the instance of the radar
@@ -1766,7 +1766,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		//               data update.
 		LLFloaterSidePanelContainer::getPanel("people", "panel_people");
 		FSRadar::instance();
-		llinfos << "Radar initialized" << llendl;
+		LL_INFOS("AppInit") << "Radar initialized" << LL_ENDL;
 		// </FS:Ansariel>
 
 		// <FS:Ansariel> Register check function for registrar enable checks
