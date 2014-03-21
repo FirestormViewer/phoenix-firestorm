@@ -117,7 +117,7 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 		}
 		else
 		{
-			LLMultiFloater::showFloater(floater_contacts);
+			addFloater(floater_contacts, TRUE);
 		}
 	}
 
@@ -135,7 +135,7 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 		}
 		else
 		{
-			LLMultiFloater::showFloater(floater_chat);
+			addFloater(floater_chat, TRUE);
 		}
 	}
 
@@ -175,7 +175,7 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 		else
 		{
 			// add chat history as second tab if contact window is present, first tab otherwise
-			if (getChildView("imcontacts"))
+			if (dynamic_cast<FSFloaterContacts*>(mTabContainer->getPanelByIndex(0)))
 			{
 				// assuming contacts window is first tab, select it
 				mTabContainer->selectFirstTab();
