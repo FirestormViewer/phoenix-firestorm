@@ -226,7 +226,7 @@ void FSFloaterContacts::openTab(const std::string& name)
 		return;
 	}
 
-	FSFloaterIMContainer* floater_container = (FSFloaterIMContainer *) getHost();
+	FSFloaterIMContainer* floater_container = dynamic_cast<FSFloaterIMContainer*>(getHost());
 	if (floater_container)
 	{
 		floater_container->setVisible(TRUE);
