@@ -1824,6 +1824,9 @@ void LLFloater::onClickTearOff(LLFloater* self)
 	}
 	self->updateTitleButtons();
     self->setOpenPositioning(LLFloaterEnums::POSITIONING_RELATIVE);
+	// <FS:Ansariel> Explicitly call storeVisibilityControl() here so we don't produce
+	//               stale visibility settings, especially if floaters get docked
+	self->storeVisibilityControl();
 }
 
 // static
