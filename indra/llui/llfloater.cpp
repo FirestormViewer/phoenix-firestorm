@@ -610,11 +610,6 @@ LLControlGroup*	LLFloater::getControlGroup()
 
 void LLFloater::setVisible( BOOL visible )
 {
-	// Ansariel: This method is called everytime the UI updates.
-	//           Why should we want to update visibility even
-	//           if nothing has changed?
-	if (visible == LLPanel::getVisible()) return;
-
 	LLPanel::setVisible(visible); // calls handleVisibilityChange()
 	if( visible && mFirstLook )
 	{
