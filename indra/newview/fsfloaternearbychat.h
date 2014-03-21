@@ -40,7 +40,7 @@ class FSChatHistory;
 #include "llchatentry.h"
 #include "lllayoutstack.h"
 
-class FSFloaterNearbyChat: public LLDockableFloater
+class FSFloaterNearbyChat: public LLFloater
 {
 public:
 	FSFloaterNearbyChat(const LLSD& key);
@@ -57,8 +57,6 @@ public:
 
 	/*virtual*/ void	setVisible(BOOL visible);
 	void	openFloater(const LLSD& key);
-
-	virtual void setRect		(const LLRect &rect);
 
 	void clearChatHistory();
 	virtual void updateChatHistoryStyle();
@@ -116,8 +114,6 @@ protected:
 	static S32 sLastSpecialChatChannel;
 
 private:
-	void	getAllowedRect		(LLRect& rect);
-
 	void	onNearbySpeakers	();
 
 private:

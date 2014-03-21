@@ -90,7 +90,7 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 };
 
 FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key) 
-	: LLDockableFloater(NULL, false, false, key)
+	: LLFloater(key)
 	,mChatHistory(NULL)
 	,mInputEditor(NULL)
 	// <FS:Ansariel> Optional muted chat history
@@ -177,7 +177,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
 	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
 	
-	return LLDockableFloater::postBuild();
+	return LLFloater::postBuild();
 }
 
 std::string appendTime()
@@ -388,16 +388,13 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 	{
 		removeScreenChat();
 	}
-	LLDockableFloater::setVisible(visible);
+	LLFloater::setVisible(visible);
 	
 	// <Ansariel> Support for chat console
 	static LLCachedControl<bool> chatHistoryTornOff(gSavedSettings, "ChatHistoryTornOff");
 	if (FSUseNearbyChatConsole)
 	{
-		// <FS:Ansariel> [FS communication UI]
-		//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 		FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
-		// </FS:Ansariel> [FS communication UI]
 		if (floater_container && !chatHistoryTornOff && !floater_container->getVisible())
 		{
 			// In case the nearby chat is docked into the IM floater and the
@@ -465,17 +462,7 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
 		setVisible(TRUE);
 	}
 
-	LLDockableFloater::onOpen(key);
-}
-
-void FSFloaterNearbyChat::setRect(const LLRect &rect)
-{
-	LLDockableFloater::setRect(rect);
-}
-
-void FSFloaterNearbyChat::getAllowedRect(LLRect& rect)
-{
-	rect = gViewerWindow->getWorldViewRectScaled();
+	LLFloater::onOpen(key);
 }
 
 // exported here for "clrchat" command line -Zi
@@ -669,10 +656,7 @@ BOOL FSFloaterNearbyChat::getVisible()
 {
 	if (isChatMultiTab())
 	{
-		// <FS:Ansariel> [FS communication UI]
-		//LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
 		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
-		// </FS:Ansariel> [FS communication UI]
 		
 		// Treat inactive floater as invisible.
 		bool is_active = im_container->getActiveFloater() == this;
@@ -680,7 +664,7 @@ BOOL FSFloaterNearbyChat::getVisible()
 		//torn off floater is always inactive
 		if (!is_active && getHost() != im_container)
 		{
-			return LLDockableFloater::getVisible();
+			return LLFloater::getVisible();
 		}
 		
 		// getVisible() returns TRUE when Tabbed IM window is minimized.
@@ -688,7 +672,7 @@ BOOL FSFloaterNearbyChat::getVisible()
 	}
 	else
 	{
-		return LLDockableFloater::getVisible();
+		return LLFloater::getVisible();
 	}
 }
 
