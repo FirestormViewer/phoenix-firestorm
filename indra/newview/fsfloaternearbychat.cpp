@@ -434,10 +434,7 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 
 void FSFloaterNearbyChat::onOpen(const LLSD& key )
 {
-	// <FS:Ansariel> [FS communication UI]
-	//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 	FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
-	// </FS:Ansariel> [FS communication UI]
 	if (floater_container)
 	{
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))

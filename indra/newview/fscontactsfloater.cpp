@@ -185,10 +185,7 @@ void FSFloaterContacts::updateGroupButtons()
 
 void FSFloaterContacts::onOpen(const LLSD& key)
 {
-	// <FS:Ansariel> [FS communication UI]
-	//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 	FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
-	// </FS:Ansariel> [FS communication UI]
 	if (gSavedSettings.getBOOL("ContactsTornOff"))
 	{
 		// first set the tear-off host to the conversations container
@@ -204,6 +201,8 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	}
 
 	openTab(key.asString());
+
+	LLFloater::onOpen(key);
 }
 
 void FSFloaterContacts::openTab(const std::string& name)

@@ -74,12 +74,6 @@ FSFloaterIMContainer::~FSFloaterIMContainer()
 
 BOOL FSFloaterIMContainer::postBuild()
 {
-	
-	if (!gSavedSettings.getBOOL("ContactsTornOff"))
-	{
-		addFloater(FSFloaterContacts::getInstance(), TRUE);
-	}
-
 	mNewMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&FSFloaterIMContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
 	// mTabContainer will be initialized in LLMultiFloater::addChild()
@@ -94,30 +88,54 @@ BOOL FSFloaterIMContainer::postBuild()
 
 void FSFloaterIMContainer::onOpen(const LLSD& key)
 {
-
 	LLMultiFloater::onOpen(key);
-	
 
 	// If we're using multitabs, and we open up for the first time
 	// Add localchat by default if it's not already on the screen somewhere else. -AO	
 	// But only if it hasnt been already so we can reopen it to the same tab -KC
 	// Improved handling to leave most of the work to the LL tear-off code -Zi
+	// This is mirrored from FSFloaterContacts::onOpen() and FSFloaterNearbyChat::onOpen()
+	// respectively: If those floaters are hosted, they don't store their visibility state.
+	// Instead, the visibility state of the hosting container is stored. (See Zi's changes to
+	// LLFloater::storeVisibilityControl()) That means if contacts and/or nearby chat floater
+	// are hosted and FSFloaterIMContainer was visible at logout, we will end up here during
+	// next login and have to configure those floaters so their tear off state and icon is
+	// correct. Configure contacts first and nearby chat last so nearby chat will be active
+	// once FSFloaterIMContainer has opened. -AH
 
-	LLFloater* floater = FSFloaterNearbyChat::getInstance();
-	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
+	FSFloaterContacts* floater_contacts = FSFloaterContacts::getInstance();
+	if (!LLFloater::isVisible(floater_contacts) && (floater_contacts->getHost() != this))
+	{
+		if (gSavedSettings.getBOOL("ContactsTornOff"))
+		{
+			// first set the tear-off host to the conversations container
+			floater_contacts->setHost(this);
+			// clear the tear-off host right after, the "last host used" will still stick
+			setHost(NULL);
+			// reparent to floater view
+			gFloaterView->addChild(floater_contacts);
+		}
+		else
+		{
+			LLMultiFloater::showFloater(floater_contacts);
+		}
+	}
+
+	LLFloater* floater_chat = FSFloaterNearbyChat::getInstance();
+	if (!LLFloater::isVisible(floater_chat) && (floater_chat->getHost() != this))
 	{
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			// first set the tear-off host to this floater
-			floater->setHost(this);
+			floater_chat->setHost(this);
 			// clear the tear-off host right after, the "last host used" will still stick
-			floater->setHost(NULL);
+			floater_chat->setHost(NULL);
 			// reparent to floater view
-			gFloaterView->addChild(floater);
+			gFloaterView->addChild(floater_chat);
 		}
 		else
 		{
-			LLMultiFloater::showFloater(floater);
+			LLMultiFloater::showFloater(floater_chat);
 		}
 	}
 
@@ -126,17 +144,6 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 	{
 		active_floater->setFocus(TRUE);
 	}
-	
-/*
-	if (key.isDefined())
-	{
-		LLIMFloater* im_floater = LLIMFloater::findInstance(key.asUUID());
-		if (im_floater)
-		{
-			im_floater->openFloater();
-		}
-	}
-*/
 }
 
 void FSFloaterIMContainer::addFloater(LLFloater* floaterp, 
