@@ -141,7 +141,7 @@ void FSFloaterIMContainer::initTabs()
 void FSFloaterIMContainer::onOpen(const LLSD& key)
 {
 	LLMultiFloater::onOpen(key);
-
+	initTabs();
 	LLFloater* active_floater = getActiveFloater();
 	if (active_floater && !active_floater->hasFocus())
 	{
