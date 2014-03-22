@@ -143,9 +143,9 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 	LLMultiFloater::onOpen(key);
 
 	LLFloater* active_floater = getActiveFloater();
-	if (active_floater && active_floater != getActiveFloater())
+	if (active_floater && !active_floater->hasFocus())
 	{
-		mTabContainer->selectTabPanel(active_floater);
+		mTabContainer->setFocus(TRUE);
 	}
 }
 
