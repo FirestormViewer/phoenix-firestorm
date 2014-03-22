@@ -2628,7 +2628,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			{
 				if (!mute_im)
 					RlvUtil::sendBusyMessage(from_id, RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM_REMOTE), session_id);
-				message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+				buffer = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
 			}
 // [/RLVa:KB]
 
