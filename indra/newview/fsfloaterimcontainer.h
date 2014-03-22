@@ -74,6 +74,7 @@ public:
 	virtual void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) {};
 
 	static void reloadEmptyFloaters();
+	void initTabs();
 
 private:
 	enum eVoiceState

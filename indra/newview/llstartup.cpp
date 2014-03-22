@@ -1747,7 +1747,8 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		// by the voice's events
 		// <FS:Ansariel> [FS communication UI]
 		//LLFloaterIMContainer::getInstance();
-		FSFloaterIMContainer::getInstance();
+		FSFloaterIMContainer* floater_imcontainer = FSFloaterIMContainer::getInstance();
+		floater_imcontainer->initTabs();
 
 		// <FS:ND> FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
 		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
