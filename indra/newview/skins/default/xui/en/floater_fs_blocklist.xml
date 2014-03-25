@@ -10,7 +10,7 @@
   layout="topleft"
   name="floater_blocklist"
   save_rect="true"
-  save_visibility="true"
+  save_visibility="false"
   single_instance="true"
   reuse_instance="true"
   title="Blocked Residents &amp; Objects"
