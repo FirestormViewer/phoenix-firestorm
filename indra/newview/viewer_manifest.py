@@ -7,7 +7,7 @@
 
 $LicenseInfo:firstyear=2006&license=viewerlgpl$
 Second Life Viewer Source Code
-Copyright (C) 2006-2011, Linden Research, Inc.
+Copyright (C) 2006-2014, Linden Research, Inc.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -929,7 +929,6 @@ class Darwin_i386_Manifest(ViewerManifest):
                                 "libaprutil-1.0.dylib",
                                 "libexpat.1.5.2.dylib",
                                 "libexception_handler.dylib",
-                                "libfmodex.dylib",
                                 "libfmodexL.dylib",
                                 "libGLOD.dylib",
                                 "libgrowl.dylib",
@@ -951,6 +950,20 @@ class Darwin_i386_Manifest(ViewerManifest):
                                 'SLVoice',
                                 ):
                      self.path2basename(libdir, libfile)
+
+                # dylibs that vary based on configuration
+                if self.args['configuration'].lower() == 'debug':
+                    for libfile in (
+                                "libfmodexL.dylib",
+                                ):
+                        dylibs += path_optional(os.path.join("../packages/lib/debug",
+                                                             libfile), libfile)
+                else:
+                    for libfile in (
+                                "libfmodex.dylib",
+                                ):
+                        dylibs += path_optional(os.path.join("../packages/lib/release",
+                                                             libfile), libfile)
                 
                 # our apps
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
