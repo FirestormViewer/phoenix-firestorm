@@ -1073,9 +1073,11 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 			{
 				LLScrollListCell* linkset_cost_cell = list_row->getColumn(list_column->mIndex);
 				linkset_cost_cell->setValue(LLSD(link_cost));
+				result_list->setNeedsSort(); // re-sort if needed.
 			}
 		}
 	}
+	
 }
 
 void FSAreaSearch::getNameFromUUID(LLUUID& id, std::string& name, BOOL group, bool& name_requested)
@@ -1441,24 +1443,28 @@ void FSPanelAreaSearchList::updateName(LLUUID id, std::string name)
 		{
 			LLScrollListText* creator_text = (LLScrollListText*)item->getColumn(creator_column->mIndex);
 			creator_text->setText(name);
+			mResultList->setNeedsSort();
 		}
 
 		if (owner_column && (id == details.owner_id))
 		{
 			LLScrollListText* owner_text = (LLScrollListText*)item->getColumn(owner_column->mIndex);
 			owner_text->setText(name);
+			mResultList->setNeedsSort();
 		}
 
 		if (group_column && (id == details.group_id))
 		{
 			LLScrollListText* group_text = (LLScrollListText*)item->getColumn(group_column->mIndex);
 			group_text->setText(name);
+			mResultList->setNeedsSort();
 		}
 
 		if (last_owner_column && (id == details.last_owner_id))
 		{
 			LLScrollListText* last_owner_text = (LLScrollListText*)item->getColumn(last_owner_column->mIndex);
 			last_owner_text->setText(name);
+			mResultList->setNeedsSort();
 		}
 	}
 }
