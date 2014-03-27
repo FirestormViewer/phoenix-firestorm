@@ -698,11 +698,12 @@
          follows="left|top"
          layout="topleft"
          left="25"
-         top_pad="10"
+         top_pad="5"
          name="Listen from"
          width="112">
             Listen from:
         </text>
+<!--
         <icon
          follows="left|top"
          height="18"
@@ -725,14 +726,16 @@
          visible="true"
          width="18"
          top_delta="0" />
+-->
         <radio_group
          enabled_control="EnableVoiceChat"
          control_name="VoiceEarLocation"
          follows="left|top"
          layout="topleft"
-         left_delta="-168"
-         width="221"
+         left_pad="0"
+         width="400"
          height="20"
+         top_pad="-17"
          name="ear_location">
             <radio_item
              height="19"
@@ -740,7 +743,7 @@
              follows="left|top"
              layout="topleft"
              name="0"
-             width="200"/>
+             width="150"/>
             <radio_item
              height="19"
              follows="left|top"
@@ -749,7 +752,16 @@
              left_pad="-16"
              name="1"
              top_delta ="0"
-             width="200" />
+             width="150" />
+            <radio_item
+             height="19"
+             follows="left|top"
+             label="Speaker position"
+             layout="topleft"
+             left_pad="-16"
+             name="2"
+             top_delta ="0"
+             width="150" />
         </radio_group>
 
         <check_box

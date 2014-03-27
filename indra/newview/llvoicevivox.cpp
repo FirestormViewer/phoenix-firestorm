@@ -2406,6 +2406,10 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
 		LLVector3	earVelocity;
 		LLMatrix3	earRot;
 		
+		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
+		if (mEarLocation != earLocSpeaker)
+		{
+		// </FS:Ansariel>
 		switch(mEarLocation)
 		{
 			case earLocCamera:
@@ -2437,7 +2441,10 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
 //		LL_DEBUGS("Voice") << "Sending listener position " << earPosition << LL_ENDL;
 		
 		oldSDKTransform(l, u, a, pos, vel);
-		
+		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
+		}
+		// </FS:Ansariel>
+
 		stream 
 			<< "<Position>"
 				<< "<X>" << pos.mdV[VX] << "</X>"
