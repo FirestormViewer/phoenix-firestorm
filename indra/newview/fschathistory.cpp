@@ -825,7 +825,8 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 	mBottomHeaderPad(p.bottom_header_pad),
 	mChatInputLine(NULL),	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	mIsLastMessageFromLog(false),
-	mNotifyAboutUnreadMsg(p.notify_unread_msg)
+	mNotifyAboutUnreadMsg(p.notify_unread_msg),
+	mScrollToBottom(false)
 {
 	mLineSpacingPixels=llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"),0,36);
 }
@@ -927,7 +928,10 @@ static LLFastTimer::DeclareTimer FTM_APPEND_MESSAGE("Append Chat Message");
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
 	LLFastTimer _(FTM_APPEND_MESSAGE);
-	bool is_at_end = (!getScrollContainer() || getScrollContainer()->isAtBottom());
+	// Ansa: FIRE-12754: Hack around a weird issue where the doc size magically increases by 1px
+	//       during draw if the doc exceeds the visible space and the scrollbar is getting visible.
+	mScrollToBottom = (mScroller->isAtBottom() || mScroller->getScrollbar(LLScrollContainer::VERTICAL)->getDocPosMax() <= 1);
+
 	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
 	bool square_brackets = false; // square brackets necessary for a system messages
 	bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
@@ -1321,11 +1325,6 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	{
 		setCursorAndScrollToEnd();	// <FS:Zi> FIRE-8600: TAB out of chat history
 	}
-
-	if (is_at_end && getScrollContainer())
-	{
-		getScrollContainer()->goToBottom();
-	}
 }
 
 // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
@@ -1363,5 +1362,17 @@ BOOL FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
 
 	// we don't know what to do, so let our base class handle the keystroke
 	return LLTextEditor::handleUnicodeCharHere(uni_char);
+}
+
+void FSChatHistory::draw()
+{
+	LLTextEditor::draw();
+	// Ansa: FIRE-12754: Hack around a weird issue where the doc size magically increases by 1px
+	//       during draw if the doc exceeds the visible space and the scrollbar is getting visible.
+	if (mScrollToBottom)
+	{
+		mScroller->goToBottom();
+		mScrollToBottom = false;
+	}
 }
 // </FS:Zi>

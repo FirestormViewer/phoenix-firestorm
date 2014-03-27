@@ -118,6 +118,7 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		 */
 		void appendMessage(const LLChat& chat, const LLSD &args = LLSD(), const LLStyle::Params& input_append_params = LLStyle::Params());
 		/*virtual*/ void clear();
+		/*virtual*/ void draw();
 
 	private:
 		std::string mLastFromName;
@@ -126,6 +127,7 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 		bool mIsLastMessageFromLog;
 		bool mNotifyAboutUnreadMsg;
 		//std::string mLastMessageTimeStr;
+		bool mScrollToBottom;
 
 		std::string mMessageHeaderFilename;
 		std::string mMessageSeparatorFilename;
