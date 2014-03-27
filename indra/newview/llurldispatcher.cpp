@@ -317,7 +317,10 @@ public:
 	// Teleport requests *must* come from a trusted browser
 	// inside the app, otherwise a malicious web page could
 	// cause a constant teleport loop.  JC
-	LLTeleportHandler() : LLCommandHandler("teleport", UNTRUSTED_BLOCK) { }
+	// <FS:Ansariel> FIRE-13303: Teleport SLURLs don't work anymore
+	//LLTeleportHandler() : LLCommandHandler("teleport", UNTRUSTED_BLOCK) { }
+	LLTeleportHandler() : LLCommandHandler("teleport", UNTRUSTED_THROTTLE) { }
+	// </FS:Ansariel>
 
 	bool handle(const LLSD& tokens, const LLSD& query_map,
 				LLMediaCtrl* web)
