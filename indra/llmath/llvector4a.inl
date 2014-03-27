@@ -27,11 +27,6 @@
 ////////////////////////////////////
 // LOAD/STORE
 ////////////////////////////////////
-#if defined( LL_WINDOWS ) && defined( ND_BUILD64BIT_ARCH )
-#pragma optimize( "", off )
-#pragma warning(push)
-#pragma warning(disable:4748)
-#endif
 
 // Load from 16-byte aligned src array (preferred method of loading)
 inline void LLVector4a::load4a(const F32* src)
@@ -614,8 +609,3 @@ inline LLVector4a::operator LLQuad() const
 {
 	return mQ;
 }
-
-#if defined( LL_WINDOWS ) && defined( ND_BUILD64BIT_ARCH )
-#pragma warning(pop)
-#pragma optimize( "", on )
-#endif
