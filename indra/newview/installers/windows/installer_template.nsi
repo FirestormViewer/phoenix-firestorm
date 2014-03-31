@@ -808,7 +808,8 @@ FunctionEnd
 ;;; Uninstall settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 UninstallText $(UninstallTextMsg)
-ShowUninstDetails show
+;<FS:TM> Expose detail button instead of always showing detailed uninstall info
+;ShowUninstDetails show 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Uninstall section
