@@ -21,8 +21,10 @@
 #include "rlvhandler.h"
 
 // ============================================================================
-// RlvActions member functions
-//
+// Communication/Avatar interaction
+// 
+
+bool RlvActions::s_BlockNamesContexts[SNC_COUNT] = { 0 };
 
 // Checked: 2010-11-30 (RLVa-1.3.0)
 bool RlvActions::canReceiveIM(const LLUUID& idSender)
@@ -60,6 +62,10 @@ bool RlvActions::canStartIM(const LLUUID& idRecipient)
 		  ( (!gRlvHandler.hasBehaviour(RLV_BHVR_STARTIMTO)) || (!gRlvHandler.isException(RLV_BHVR_STARTIMTO, idRecipient)) ) );
 }
 
+// ============================================================================
+// Movement
+// 
+
 // Checked: 2010-12-11 (RLVa-1.2.2)
 bool RlvActions::canAcceptTpOffer(const LLUUID& idSender)
 {
@@ -84,6 +90,10 @@ bool RlvActions::autoAcceptTeleportRequest(const LLUUID& idRequester)
 	return ((idRequester.notNull()) && (gRlvHandler.isException(RLV_BHVR_ACCEPTTPREQUEST, idRequester))) || (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTTPREQUEST));
 }
 
+// ============================================================================
+// World interaction
+// 
+
 // Checked: 2010-03-07 (RLVa-1.2.0)
 bool RlvActions::canStand()
 {
@@ -96,6 +106,10 @@ bool RlvActions::canShowLocation()
 {
 	return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
 }
+
+// ============================================================================
+// Helper functions
+// 
 
 // Checked: 2013-05-10 (RLVa-1.4.9)
 bool RlvActions::hasBehaviour(ERlvBehaviour eBhvr)

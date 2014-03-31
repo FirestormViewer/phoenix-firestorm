@@ -463,10 +463,7 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is
 BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
-//	if ( mContextMenu && !isAvalineItemSelected())
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
-	if ( (mContextMenu && !isAvalineItemSelected()) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) )
-// [/RLVa:KB]
+	if ( mContextMenu && !isAvalineItemSelected())
 	{
 		uuid_vec_t selected_uuids;
 		getSelectedUUIDs(selected_uuids);
@@ -588,11 +585,7 @@ void LLAvatarList::updateLastInteractionTimes()
 
 void LLAvatarList::onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 {
-//	mItemDoubleClickSignal(ctrl, x, y, mask);
-// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	if ( (!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
-		mItemDoubleClickSignal(ctrl, x, y, mask);
-// [/RLVa:KB]
+	mItemDoubleClickSignal(ctrl, x, y, mask);
 }
 
 bool LLAvatarItemComparator::compare(const LLPanel* item1, const LLPanel* item2) const

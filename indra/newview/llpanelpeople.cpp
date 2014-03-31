@@ -1146,6 +1146,13 @@ void LLPanelPeople::onTabSelected(const LLSD& param)
 
 void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 {
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (NEARBY_TAB_NAME == getActiveTabName()) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
 	if(!item)
 	{
@@ -1271,6 +1278,13 @@ void LLPanelPeople::onGearButtonClicked(LLUICtrl* btn)
 
 void LLPanelPeople::onImButtonClicked()
 {
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (NEARBY_TAB_NAME == getActiveTabName()) )
+	{
+		return;
+	}
+// [/RLVa:KB]
+
 	uuid_vec_t selected_uuids;
 	getCurrentItemIDs(selected_uuids);
 	if ( selected_uuids.size() == 1 )

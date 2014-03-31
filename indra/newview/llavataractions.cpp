@@ -488,14 +488,17 @@ void LLAvatarActions::teleportRequest(const LLUUID& id)
 {
 	LLSD notification;
 	notification["uuid"] = id;
-	LLAvatarName av_name;
-	if (!LLAvatarNameCache::get(id, &av_name))
-	{
-		// unlikely ... they just picked this name from somewhere...
-		LLAvatarNameCache::get(id, boost::bind(&LLAvatarActions::teleportRequest, id));
-		return; // reinvoke this when the name resolves
-	}
-	notification["NAME"] = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2014-03-31 (Catznip-3.6)
+	notification["NAME"] = LLSLURL("agent", id, (RlvActions::canShowName(RlvActions::SNC_TELEPORTREQUEST)) ? "completename" : "rlvanonym").getSLURLString();
+// [/RLVa:KB]
+//	LLAvatarName av_name;
+//	if (!LLAvatarNameCache::get(id, &av_name))
+//	{
+//		// unlikely ... they just picked this name from somewhere...
+//		LLAvatarNameCache::get(id, boost::bind(&LLAvatarActions::teleportRequest, id));
+//		return; // reinvoke this when the name resolves
+//	}
+//	notification["NAME"] = av_name.getCompleteName();
 
 	LLSD payload;
 
