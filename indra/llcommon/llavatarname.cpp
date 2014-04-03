@@ -139,7 +139,7 @@ void LLAvatarName::fromString(const std::string& full_name)
 		mLegacyLastName = full_name.substr(index+1);
 		// <FS:CR> FIRE-6659 - Trim "Resident" from legacy name
 		//if (mLegacyLastName != "Resident")
-		if ((mLegacyLastName != "Resident") && sTrimResidentSurname)
+		if ((mLegacyLastName != "Resident") || !sTrimResidentSurname)
 		// </FS:CR>
 		{
 			mUsername = mLegacyFirstName + "." + mLegacyLastName;
