@@ -3648,6 +3648,8 @@ void LLViewerWindow::updateUI()
 
 	updateLayout();
 
+	saveLastMouse(mCurrentMousePoint);
+
 	// cleanup unused selections when no modal dialogs are open
 	if (LLModalDialog::activeCount() == 0)
 	{
