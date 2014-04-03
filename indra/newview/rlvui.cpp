@@ -370,7 +370,11 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
 	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
 	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
+	{
+		if (pPeoplePanel->getNearbyList()->isInVisibleChain())
+			pPeoplePanel->onCommit();
 		pPeoplePanel->getNearbyList()->updateAvatarNames();
+	}
 
 //	// Refresh the speaker list
 //	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
