@@ -29,6 +29,7 @@
     <text name="text_box5">
         MB
     </text>
+    <button label="Inventar-Cache löschen" name="ClearInventoryCache" width="140"/>
     <text name="Cache location">
         Cache-Speicherort:
     </text>

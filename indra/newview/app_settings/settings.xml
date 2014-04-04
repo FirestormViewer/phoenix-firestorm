@@ -21961,6 +21961,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSPurgeInventoryCacheOnStartup</key>
+    <map>
+      <key>Comment</key>
+      <string>Clear the inventory cache of the specific agent (ID) at next startup</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string/>
+    </map>
 </map>
 </llsd>
 

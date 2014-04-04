@@ -217,6 +217,7 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 
 // <Firestorm>
+bool callback_clear_inventory_cache(const LLSD& notification, const LLSD& response);
 void handleFlightAssistOptionChanged(const LLSD& newvalue);
 void handleMovelockOptionChanged(const LLSD& newvalue);
 bool callback_clear_settings(const LLSD& notification, const LLSD& response);
@@ -240,6 +241,21 @@ void handleUsernameFormatOptionChanged(const LLSD& newvalue);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 
 void fractionFromDecimal(F32 decimal_val, S32& numerator, S32& denominator);
+
+// <FS:Ansariel> Clear inventory cache button
+bool callback_clear_inventory_cache(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+		// flag client texture cache for clearing next time the client runs
+		gSavedSettings.setString("FSPurgeInventoryCacheOnStartup", gAgentID.asString());
+		LLNotificationsUtil::add("CacheWillClear");
+	}
+
+	return false;
+}
+// </FS:Ansariel>
 
 bool callback_clear_cache(const LLSD& notification, const LLSD& response)
 {
@@ -431,6 +447,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	
 	mCommitCallbackRegistrar.add("Pref.ClearCache",				boost::bind(&LLFloaterPreference::onClickClearCache, this));
 	mCommitCallbackRegistrar.add("Pref.WebClearCache",			boost::bind(&LLFloaterPreference::onClickBrowserClearCache, this));
+	// <FS:Ansariel> Clear inventory cache button
+	mCommitCallbackRegistrar.add("Pref.InvClearCache",			boost::bind(&LLFloaterPreference::onClickInventoryClearCache, this));
+	// </FS:Ansariel>
 	mCommitCallbackRegistrar.add("Pref.SetCache",				boost::bind(&LLFloaterPreference::onClickSetCache, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
 //	mCommitCallbackRegistrar.add("Pref.ClickSkin",				boost::bind(&LLFloaterPreference::onClickSkin, this,_1, _2));
@@ -1171,6 +1190,13 @@ void LLFloaterPreference::onClickBrowserClearCache()
 {
 	LLNotificationsUtil::add("ConfirmClearBrowserCache", LLSD(), LLSD(), callback_clear_browser_cache);
 }
+
+// <FS:Ansariel> Clear inventory cache button
+void LLFloaterPreference::onClickInventoryClearCache()
+{
+	LLNotificationsUtil::add("ConfirmClearInventoryCache", LLSD(), LLSD(), callback_clear_inventory_cache);
+}
+// </FS:Ansariel>
 
 // Called when user changes language via the combobox.
 void LLFloaterPreference::onLanguageChange()
@@ -2153,6 +2179,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> FIRE-420: Show end of last conversation in history
 	getChildView("LogShowHistory")->setEnabled(TRUE);
+
+	// <FS:Ansariel> Clear inventory cache button
+	getChildView("ClearInventoryCache")->setEnabled(TRUE);
 }
 
 void LLFloaterPreference::refreshUI()

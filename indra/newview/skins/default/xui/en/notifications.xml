@@ -5643,6 +5643,18 @@ Are you sure you want to clear your viewer cache?
      notext="Cancel"
      yestext="OK"/>
   </notification>
+  
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmClearInventoryCache"
+   type="alertmodal">
+Are you sure you want to clear your inventory cache?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
 
   <notification
    icon="alertmodal.tga"

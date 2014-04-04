@@ -4897,6 +4897,17 @@ bool LLAppViewer::initCache()
 
 	if(!read_only)
 	{
+		// <FS:Ansariel> Clear inventory cache button
+		std::string clear_inventory_agent_id = gSavedSettings.getString("FSPurgeInventoryCacheOnStartup");
+		if (clear_inventory_agent_id != std::string())
+		{
+			gSavedSettings.setString("FSPurgeInventoryCacheOnStartup", std::string());
+			std::string inv_cache_file = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, clear_inventory_agent_id + ".inv.gz");
+			LL_INFOS("LLAppViewer") << "Purging inventory cache file: " << inv_cache_file << LL_ENDL;
+			LLFile::remove(inv_cache_file);
+		}
+		// </FS:Ansariel>
+
 		// Purge cache if user requested it
 		if (gSavedSettings.getBOOL("PurgeCacheOnStartup") ||
 			gSavedSettings.getBOOL("PurgeCacheOnNextStartup"))
