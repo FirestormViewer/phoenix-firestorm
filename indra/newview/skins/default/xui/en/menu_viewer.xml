@@ -3020,22 +3020,6 @@
              function="ToggleControl"
              parameter="QAMode" />
         </menu_item_check>
-        
-        <!-- Proof of concept V1 menu toggle entry, Disabled for release 
-        
-     <menu_item_check
-         label="Use V1 Menus"
-         name="V1 Menus">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="FSUseV1Menus" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="FSUseV1Menus" />
-        </menu_item_check>
-
-        END: V1 menu toggle entry  -WoLf -->
-        
     </menu>
 
     <menu
@@ -5094,82 +5078,4 @@
             </menu>
         </menu>
     </menu>
-    
-    <!-- BEGIN: V1 Menu System -WoLf -->
-    <!-- V1 menu: File -->
-    <menu
-     create_jump_keys="true"
-     label="File"
-     name="V1-File"
-     tear_off="true"
-     visible="false">
-    </menu>
-    <!-- V1 menu: Edit -->
-    <menu
-     create_jump_keys="true"
-     label="Edit"
-     name="V1-Edit"
-     tear_off="true"
-     visible="false">
-    </menu>
-    <!-- V1 menu: View -->
-    <menu
-     create_jump_keys="true"
-     label="View"
-     name="V1-View"
-     tear_off="true"
-     visible="false">
-    </menu>
-    <!-- V1 menu: World -->
-    <menu
-     create_jump_keys="true"
-     label="World"
-     name="V1-World"
-     tear_off="true"
-     visible="false">
-    </menu>
-    <!-- V1 menu: Tools -->
-    <menu
-     create_jump_keys="true"
-     label="Tools"
-     name="V1-Tools"
-     tear_off="true"
-     visible="false">
-    </menu>
-    <!-- V1 menu: Help -->
-    <menu
-     create_jump_keys="true"
-     label="Help"
-     name="V1-Help"
-     tear_off="true"
-     visible="false">
-    </menu>
-    <!-- V1 menu: Firestorm -->
-    <menu
-     create_jump_keys="true"
-     label="Firestorm"
-     name="V1-Firestorm"
-     tear_off="true"
-     visible="false">
-    </menu>
-    <!-- V1 menu: Advanced -->
-    <menu
-     create_jump_keys="true"
-     label="Advanced"
-     name="V1-Advanced"
-     tear_off="true"
-     visible="false">
-     <menu_item_check
-         label="Use V1 Menus"
-         name="V1 Menus">
-            <menu_item_check.on_check
-             function="CheckControl"
-             parameter="FSUseV1Menus" />
-            <menu_item_check.on_click
-             function="ToggleControl"
-             parameter="FSUseV1Menus" />
-        </menu_item_check>
-    </menu>
-    <!-- END: V1 Menu System -WoLf -->    
-    
 </menu_bar>

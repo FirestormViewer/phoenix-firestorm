@@ -934,7 +934,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
 	// <FS:CR> FIRE-9759 - Temporarily remove AvatarZOffset since it's broken
 	//gSavedPerAccountSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
-	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
 	// </FS:Zi>
