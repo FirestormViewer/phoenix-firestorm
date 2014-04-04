@@ -17,6 +17,7 @@
 			<text name="cache_size_label_l">
 				Rozmiar cache
 			</text>
+			<button label="Wyczyść cache Szafy" name="ClearInventoryCache"/>
 			<text name="Cache location">
 				Położenie cache:
 			</text>

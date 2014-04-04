@@ -2230,6 +2230,10 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		Na pewno chcesz wyczyścić bufor Przeglądarki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmClearInventoryCache">
+		Na pewno chcesz wyczyścić bufor Szafy?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmClearCookies">
 		Na pewno chcesz wyczyścić ciasteczka?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak"/>

@@ -611,14 +611,4 @@
 			</menu>
 		</menu>
 	</menu>
-	<menu label="Plik" name="V1-File"/>
-	<menu label="Edycja" name="V1-Edit"/>
-	<menu label="Widok" name="V1-View"/>
-	<menu label="Świat" name="V1-World"/>
-	<menu label="Narzędzia" name="V1-Tools"/>
-	<menu label="Pomoc" name="V1-Help"/>
-	<menu label="Firestorm" name="V1-Firestorm"/>
-	<menu label="Zaawansowane" name="V1-Advanced">
-		<menu_item_check label="Używaj menu V1" name="V1 Menus"/>
-	</menu>
 </menu_bar>
