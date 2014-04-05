@@ -4731,7 +4731,7 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		sendReliableMessage();
 	}
 // <FS:TT> Client LSL Bridge
-	if (gSavedSettings.getBOOL("UseLSLBridge") && isLocal)
+	if (FSLSLBridge::instance().canUseBridge() && isLocal)
 	{
 		teleportBridgeGlobal(pos_global);
 	}
@@ -4771,7 +4771,7 @@ void LLAgent::doTeleportViaLocationLookAt(const LLVector3d& pos_global)
 	teleportRequest(region_handle, pos_local, getTeleportKeepsLookAt());
 
 // <FS:TT> Client LSL Bridge
-	if (gSavedSettings.getBOOL("UseLSLBridge"))
+	if (FSLSLBridge::instance().canUseBridge())
 	{
 		if (region_handle == to_region_handle(getPositionGlobal()))
 		{

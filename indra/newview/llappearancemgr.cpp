@@ -1493,7 +1493,7 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 	gInventory.collectDescendentsIf(cat_id, cats, items, FALSE, collector);
 
 // <FS:TT> Client LSL Bridge
-	if (gSavedSettings.getBOOL("UseLSLBridge"))
+	if (FSLSLBridge::instance().canUseBridge())
 	{
 		//if replacing - make sure bridge stays.
 		if (FSLSLBridge::instance().getBridge())
@@ -2034,7 +2034,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 	obj_items.insert(obj_items.end(), obj_items_new.begin(), obj_items_new.end());
 // [/RLVa:KB]
 //-TT Client LSL Bridge
-	if (gSavedSettings.getBOOL("UseLSLBridge"))
+	if (FSLSLBridge::instance().canUseBridge())
 	{
 		//if replacing - make sure bridge stays.
 		if (!append && FSLSLBridge::instance().getBridge())

@@ -58,11 +58,11 @@ public:
 	FSLSLBridge();
 	~FSLSLBridge();
 
-	bool lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID);
-	bool viewerToLSL(std::string message, FSLSLBridgeRequestResponder* responder = NULL);
+	bool lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID);
+	bool viewerToLSL(const std::string& message, FSLSLBridgeRequestResponder* responder = NULL);
 
-	bool updateBoolSettingValue(std::string msgVal);
-	bool updateBoolSettingValue(std::string msgVal, bool contentVal);
+	bool updateBoolSettingValue(const std::string& msgVal);
+	bool updateBoolSettingValue(const std::string& msgVal, bool contentVal);
 	
 	void initBridge();
 	void recreateBridge();
@@ -74,9 +74,9 @@ public:
 
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
-	bool isBridgeValid() const { return NULL != mpBridge; }
+	bool canUseBridge();
 
-	void checkBridgeScriptName(std::string fileName);
+	void checkBridgeScriptName(const std::string& fileName);
 	std::string currentFullName() { return mCurrentFullName; }
 
 	LLUUID getBridgeFolder() { return mBridgeFolderID; }
@@ -100,18 +100,19 @@ private:
 	LLUUID					mBridgeUUID;
 
 	bool					mIsFirstCallDone; //initialization conversation
+	bool isBridgeValid() const { return NULL != mpBridge; }
 
 protected:
-	LLViewerInventoryItem* findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type);
+	LLViewerInventoryItem* findInvObject(const std::string& obj_name, const LLUUID& catID, LLAssetType::EType type);
 	LLUUID findFSCategory();
 	LLUUID findFSBridgeContainerCategory();
 
-	bool isItemAttached(LLUUID iID);
+	bool isItemAttached(const LLUUID& iID);
 	void createNewBridge();
 	void create_script_inner(LLViewerObject* object);
 	bool isOldBridgeVersion(LLInventoryItem* item);
 	void cleanUpBridgeFolder();
-	void cleanUpBridgeFolder(std::string nameToCleanUp);
+	void cleanUpBridgeFolder(const std::string& nameToCleanUp);
 	void setupBridgePrim(LLViewerObject* object);
 	void initCreationStep();
 	void cleanUpBridge();

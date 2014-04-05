@@ -4426,8 +4426,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			case CHAT_TYPE_OWNER:
 				// <FS:TT> Client LSL Bridge
 				{
-					static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
-					if (sUseLSLBridge && FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
+					if (FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
 					{
 						return;
 					}
@@ -8367,7 +8366,7 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 	gAgent.stopTyping();
 
 	llinfos << "Teleport error, reason=" << reason << llendl;
-	if ((!gSavedSettings.getBOOL("UseLSLBridge")) ||
+	if (!FSLSLBridge::instance().canUseBridge() ||
 		(reason != "Could not teleport closer to destination"))
 	{
 		LLNotificationsUtil::add("CouldNotTeleportReason", args);

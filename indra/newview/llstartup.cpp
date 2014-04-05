@@ -2579,15 +2579,6 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		set_startup_status(1.0, "", "");
 		display_startup();
 
-// <FS:AW Disable LSL bridge on opensim>
-#ifdef OPENSIM // <FS:AW optional opensim support/>
-		if (LLGridManager::getInstance()->isInOpenSim()  && !LLGridManager::getInstance()->isInAuroraSim())
-		{
-			gSavedSettings.setBOOL("UseLSLBridge", FALSE);
-		}
-#endif // OPENSIM // <FS:AW optional opensim support/>
-// </FS:AW Disable LSL bridge on opensim>
-
 		// <FS:TT> Client LSL Bridge
 		if (gSavedSettings.getBOOL("UseLSLBridge"))
 		{

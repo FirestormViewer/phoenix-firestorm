@@ -60,6 +60,9 @@
 #include <fstream>
 #include <streambuf>
 
+#if OPENSIM
+#include "llviewernetwork.h"
+#endif
 
 const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
 const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
@@ -111,7 +114,7 @@ FSLSLBridge::~FSLSLBridge()
 {
 }
 
-bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID)
+bool FSLSLBridge::lslToViewer(const std::string& message, const LLUUID& fromID, const LLUUID& ownerID)
 {
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 	{
@@ -275,9 +278,15 @@ bool FSLSLBridge::lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID
 	return status;
 }
 
-bool FSLSLBridge::viewerToLSL(std::string message, FSLSLBridgeRequestResponder* responder)
+bool FSLSLBridge::canUseBridge()
 {
-	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
+	return (isBridgeValid() && sUseLSLBridge);
+}
+
+bool FSLSLBridge::viewerToLSL(const std::string& message, FSLSLBridgeRequestResponder* responder)
+{
+	if (!canUseBridge())
 	{
 		return false;
 	}
@@ -291,7 +300,7 @@ bool FSLSLBridge::viewerToLSL(std::string message, FSLSLBridgeRequestResponder* 
 	return true;
 }
 
-bool FSLSLBridge::updateBoolSettingValue(std::string msgVal)
+bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal)
 {
 	std::string boolVal = "0";
 
@@ -303,7 +312,7 @@ bool FSLSLBridge::updateBoolSettingValue(std::string msgVal)
 	return viewerToLSL(msgVal + "|" + boolVal, new FSLSLBridgeRequestResponder());
 }
 
-bool FSLSLBridge::updateBoolSettingValue(std::string msgVal, bool contentVal)
+bool FSLSLBridge::updateBoolSettingValue(const std::string& msgVal, bool contentVal)
 {
 	std::string boolVal = "0";
 
@@ -356,7 +365,7 @@ void FSLSLBridge::recreateBridge()
 		}
 	}
 	// clear the stored bridge ID - we are starting over.
-	mpBridge = 0; //the object itself will get cleaned up when new one is created.
+	mpBridge = NULL; //the object itself will get cleaned up when new one is created.
 
 	initCreationStep();
 }
@@ -438,6 +447,11 @@ void FSLSLBridge::startCreation()
 
 void FSLSLBridge::initCreationStep()
 {
+// Don't create on OpenSim. We need to fallback to another creation process there, unfortunately.
+// There is no way to ensure a rock object will ever be in a grid's Library.
+#if OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim()) return;
+#endif
 	mBridgeCreating = true;
 	//announce yourself
 	reportToNearbyChat(LLTrans::getString("fsbridge_creating"));
@@ -715,7 +729,7 @@ void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 	object->setVolume(LLVolumeParams(profParams, pathParams), 0);
 
 	object->setScale(LLVector3(10.0f, 10.0f, 10.0f), TRUE);
-	for (int i = 0; i < object->getNumTEs(); i++)
+	for (S32 i = 0; i < object->getNumTEs(); i++)
 	{
 		LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture( IMG_INVISIBLE );
 		object->setTEImage(i, image); //transparent texture
@@ -904,8 +918,8 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 
 std::string FSLSLBridgeScriptCallback::prepUploadFile()
 {
-	std::string fName = gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, UPLOAD_SCRIPT_CURRENT);
-	std::string fNew = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,UPLOAD_SCRIPT_CURRENT);
+	const std::string fName = gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, UPLOAD_SCRIPT_CURRENT);
+	const std::string fNew = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,UPLOAD_SCRIPT_CURRENT);
 
 	LLFILE* fpIn = LLFile::fopen(fName, "rt");
 	if (!fpIn)
@@ -928,7 +942,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 
 	std::string bridgeScript( (char const*)&vctData[0] );
 
-	std::string bridgekey = "BRIDGEKEY";
+	const std::string bridgekey = "BRIDGEKEY";
 	bridgeScript.replace(bridgeScript.find(bridgekey), bridgekey.length(), FSLSLBridge::getInstance()->findFSCategory().asString());
 
 	LLFILE *fpOut = LLFile::fopen(fNew, "wt");
@@ -947,9 +961,9 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 	return fNew;
 }
 
-void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
+void FSLSLBridge::checkBridgeScriptName(const std::string& fileName)
 {
-	if ((fileName.length() == 0) || !mBridgeCreating)
+	if ((fileName.empty()) || !mBridgeCreating)
 	{
 		LL_WARNS("FSLSLBridge") << "Bridge script length was zero, or bridge was not marked as under creation. Aborting." << LL_ENDL; 
 		return;
@@ -963,7 +977,7 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 	}
 
 	//need to parse out the last length of a GUID and compare to saved possible names.
-	std::string fileOnly = fileName.substr(fileName.length() - UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
+	const std::string fileOnly = fileName.substr(fileName.length() - UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
 
 	if (fileOnly == UPLOAD_SCRIPT_CURRENT)
 	{
@@ -1022,7 +1036,7 @@ void FSLSLBridge::finishBridge()
 //
 // Helper functions
 ///
-bool FSLSLBridge::isItemAttached(LLUUID iID)
+bool FSLSLBridge::isItemAttached(const LLUUID& iID)
 {
 	return (isAgentAvatarValid() && gAgentAvatarp->isWearingAttachment(iID));
 }
@@ -1122,7 +1136,7 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 	return LLUUID();
 }
 
-LLViewerInventoryItem* FSLSLBridge::findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type)
+LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, const LLUUID& catID, LLAssetType::EType type)
 {
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
@@ -1151,7 +1165,7 @@ LLViewerInventoryItem* FSLSLBridge::findInvObject(std::string obj_name, LLUUID c
 	return NULL;
 }
 
-void FSLSLBridge::cleanUpBridgeFolder(std::string nameToCleanUp)
+void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 {
 	LL_INFOS("FSLSLBridge") << "Cleaning leftover scripts and bridges for folder " << nameToCleanUp << LL_ENDL;
 	
