@@ -3893,6 +3893,12 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 		{
 			continue;
 		}
+		// <FS:Ansariel> LSL Bridge
+		if (FSLSLBridge::instance().canUseBridge() && linked_item == FSLSLBridge::instance().getBridge())
+		{
+			continue;
+		}
+		// </FS:Ansariel>
 
 		fUpdateAppearance = true;
 		const LLUUID& linked_item_id = gInventory.getLinkedItemID(*it);
