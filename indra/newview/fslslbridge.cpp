@@ -61,11 +61,11 @@
 #include <streambuf>
 
 
-#define FS_BRIDGE_FOLDER "#LSL Bridge"
-#define FS_BRIDGE_CONTAINER_FOLDER "Landscaping"
-#define FS_BRIDGE_MAJOR_VERSION 2
-#define FS_BRIDGE_MINOR_VERSION 8
-#define FS_MAX_MINOR_VERSION 99
+const std::string FS_BRIDGE_FOLDER = "#LSL Bridge";
+const std::string FS_BRIDGE_CONTAINER_FOLDER = "Landscaping";
+const U32 FS_BRIDGE_MAJOR_VERSION = 2;
+const U32 FS_BRIDGE_MINOR_VERSION = 8;
+const U32 FS_MAX_MINOR_VERSION = 99;
 
 //current script version is 2.8
 const std::string UPLOAD_SCRIPT_CURRENT = "EBEDD1D2-A320-43f5-88CF-DD47BBCA5DFB.lsltxt";
@@ -104,17 +104,7 @@ FSLSLBridge::FSLSLBridge():
 					mIsFirstCallDone(false)
 {
 	LL_INFOS("FSLSLBridge") << "Initializing FSLSLBridge" << LL_ENDL;
-	std::stringstream sstr;
-	
-	sstr << FS_BRIDGE_NAME;
-	sstr << FS_BRIDGE_MAJOR_VERSION;
-	sstr << ".";
-	sstr << FS_BRIDGE_MINOR_VERSION;
-
-	mCurrentFullName = sstr.str();
-
-	//mBridgeCreating = false;
-	//mpBridge = NULL;
+	mCurrentFullName = llformat("%s%d.%d", FS_BRIDGE_NAME.c_str(), FS_BRIDGE_MAJOR_VERSION, FS_BRIDGE_MINOR_VERSION);
 }
 
 FSLSLBridge::~FSLSLBridge()
@@ -1214,14 +1204,7 @@ void FSLSLBridge::cleanUpOldVersions()
 
 		for (S32 j = 0; j < minor_tip; j++)
 		{
-			std::stringstream sstr;
-	
-			sstr << FS_BRIDGE_NAME;
-			sstr << i;
-			sstr << ".";
-			sstr << j;
-
-			mProcessingName = sstr.str();
+			mProcessingName = llformat("%s%d.%d", FS_BRIDGE_NAME.c_str(), i, j);
 			cleanUpBridgeFolder(mProcessingName);
 		}
 	}
