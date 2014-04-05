@@ -155,6 +155,12 @@ protected:
 public:
 
 	void setCacheLocation(const LLStringExplicit& location);
+	// <FS:Ansariel> Sound cache
+	void setSoundCacheLocation(const LLStringExplicit& location);
+	void onClickSetSoundCache();
+	void onClickBrowseSoundCache();
+	void onClickResetSoundCache();
+	// </FS:Ansariel>
 
 	void onClickSetCache();
 	void onClickBrowseCache();

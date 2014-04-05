@@ -440,6 +440,9 @@ Sind Sie sicher, dass Sie fortfahren wollen?
 		Der Cache wird nach einem Neustart von [APP_NAME] verschoben.
 Hinweis: Der Cache wird dabei gelöscht/geleert.
 	</notification>
+	<notification name="SoundCacheWillBeMoved">
+		Der Sound-Cache wird nach einem Neustart von [APP_NAME] verschoben.
+	</notification>
 	<notification name="ChangeConnectionPort">
 		Die Port-Einstellungen werden nach einem Neustart von [APP_NAME] wirksam.
 	</notification>

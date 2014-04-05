@@ -1114,6 +1114,13 @@ If you disable Javascript, the search function will not work properly, and you w
 Cache will be moved after restarting [APP_NAME].
 Note: This will also clear the cache.
   </notification>
+  
+  <notification
+   icon="alertmodal.tga"
+   name="SoundCacheWillBeMoved"
+   type="alertmodal">
+Sound cache will be moved after restarting [APP_NAME].
+  </notification>
 
   <notification
    icon="alertmodal.tga"

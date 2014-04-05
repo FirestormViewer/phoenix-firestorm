@@ -2098,10 +2098,13 @@ bool LLAppViewer::cleanup()
 	removeCacheFiles("*.tmp");
 	removeCacheFiles("*.lso");
 	removeCacheFiles("*.out");
-	if(!gSavedSettings.getBOOL("FSKeepUnpackedCacheFiles"))
+	// <FS:Ansariel> Sound cache
+	//removeCacheFiles("*.dsf");
+	if (!gSavedSettings.getBOOL("FSKeepUnpackedCacheFiles"))
 	{
-		removeCacheFiles("*.dsf");
+		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, ""), "*.dsf");
 	}
+	// </FS:Ansariel>
 	removeCacheFiles("*.bodypart");
 	removeCacheFiles("*.clothing");
 
@@ -2284,6 +2287,8 @@ bool LLAppViewer::cleanup()
 	{
 		llinfos << "Purging all cache files on exit" << llendflush;
 		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""), "*.*");
+		// <FS:Ansariel> Sound cache
+		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, ""), "*.*");
 	}
 
 	removeMarkerFile(); // Any crashes from here on we'll just have to ignore
@@ -4952,6 +4957,14 @@ bool LLAppViewer::initCache()
 		gSavedSettings.setString("CacheLocation", "");
 		gSavedSettings.setString("CacheLocationTopFolder", "");
 	}
+
+	// <FS:Ansariel> Sound cache
+	if (!gDirUtilp->setSoundCacheDir(gSavedSettings.getString("FSSoundCacheLocation")))
+	{
+		LL_WARNS("AppCache") << "Unable to set sound cache location" << LL_ENDL;
+		gSavedSettings.setString("FSSoundCacheLocation", "");
+	}
+	// </FS:Ansariel>
 	
 	if (mPurgeCache && !read_only)
 	{

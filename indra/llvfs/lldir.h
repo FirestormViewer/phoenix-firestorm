@@ -56,7 +56,12 @@ typedef enum ELLPath
 // [SL:KB] - Patch: Viewer-Skins | mS: 2010-10-19 (Catznip-2.4)
 	LL_PATH_TOP_SKINTHEME = 19,
 // [/SL:KB]
-	LL_PATH_FS_RESOURCES = 20,  // TT - Firestorm data
+	// <FS:TT> Firestorm data
+	LL_PATH_FS_RESOURCES = 20,
+	// </FS:TT>
+	// <FS:Ansariel> Sound cache
+	LL_PATH_FS_SOUND_CACHE = 21,
+	// </FS:Ansariel>
 	LL_PATH_LAST
 } ELLPath;
 
@@ -141,6 +146,9 @@ class LLDir
 	const std::string getSkinBaseDir() const;		// folder that contains all installed skins (not user modifications). e.g. c:\program files\second life\skins
 	const std::string &getLLPluginDir() const;		// Directory containing plugins and plugin shell
 	const std::string &getUserName() const;
+	// <FS:Ansariel> Sound cache
+	const std::string &getSoundCacheDir() const;
+	// </FS:Ansariel>
 
 	// Expanded filename
 	std::string getExpandedFilename(ELLPath location, const std::string &filename) const;
@@ -237,6 +245,9 @@ class LLDir
 	virtual std::string getLanguage() const;
 	virtual bool setCacheDir(const std::string &path);
 	virtual void updatePerAccountChatLogsDir();
+	// <FS:Ansariel> Sound cache
+	virtual bool setSoundCacheDir(const std::string& path);
+	// </FS:Ansariel>
 
 	virtual void dumpCurrentDirectories();
 
@@ -301,6 +312,9 @@ protected:
 	std::string mLanguage;              // Current viewer language
 	std::string mLLPluginDir;			// Location for plugins and plugin shell
 	std::string mUserName;				// Current user name
+	// <FS:Ansariel> Sound cache
+	std::string mSoundCacheDir;			// Sound cache
+	// </FS:Ansariel>
 
 	// <FS:ND> To avoid doing IO calls (expensive) in walkdSearchedSkinDirs cache results.
 	struct SkinDirFile

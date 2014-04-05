@@ -1015,7 +1015,10 @@ bool LLAudioEngine::hasDecodedFile(const LLUUID &uuid)
 	uuid.toString(uuid_str);
 
 	std::string wav_path;
-	wav_path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str);
+	// <FS:Ansariel> Sound cache
+	//wav_path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str);
+	wav_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE,uuid_str);
+	// </FS:Ansariel>
 	wav_path += ".dsf";
 
 	if (gDirUtilp->fileExists(wav_path))
@@ -1904,7 +1907,10 @@ bool LLAudioData::load()
 	std::string uuid_str;
 	std::string wav_path;
 	mID.toString(uuid_str);
-	wav_path= gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str) + ".dsf";
+	// <FS:Ansariel> Sound cache
+	//wav_path= gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str) + ".dsf";
+	wav_path= gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE,uuid_str) + ".dsf";
+	// </FS:Ansariel>
 
 	if (!mBufferp->loadWAV(wav_path))
 	{

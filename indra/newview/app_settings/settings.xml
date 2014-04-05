@@ -21972,6 +21972,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string/>
     </map>
+    <key>FSSoundCacheLocation</key>
+    <map>
+      <key>Comment</key>
+      <string>Location for caching sound files (.DSF); Uses default cache directory if empty</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string/>
+    </map>
 </map>
 </llsd>
 

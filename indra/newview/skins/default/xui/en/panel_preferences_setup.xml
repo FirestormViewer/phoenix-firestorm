@@ -265,6 +265,86 @@
         <button.commit_callback
          function="Pref.ClearCache" />
     </button>
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left="15"
+     name="Sound Cache location"
+     top_delta="25"
+     width="300">
+        Sound Cache location:
+    </text>
+    <line_editor
+     control_name="FSSoundCacheLocation"
+     border_style="line"
+     border_thickness="1"
+     follows="left|top"
+     font="SansSerif"
+     height="23"
+     layout="topleft"
+     left="20"
+     max_length_chars="4096"
+     name="FSSoundCacheLocation"
+     top_pad="5"
+     width="270" />
+    <button
+     enabled="true"
+     follows="left|top"
+     height="23"
+     label="Open"
+     label_selected="Open"
+     layout="topleft"
+     left_pad="5"
+     name="open_sound_cache"
+     top_delta="-1"
+     width="45">
+      <button.commit_callback
+       function="Pref.BrowseSoundCache" />
+    </button>
+    <button
+     follows="left|top"
+     height="23"
+     label="Set"
+     label_selected="Set"
+     layout="topleft"
+     left_pad="5"
+     name="set_sound_cache"
+     top_delta="-0"
+     width="40">
+      <button.commit_callback
+       function="Pref.SetSoundCache" />
+    </button>
+    <button
+     follows="left|top"
+     height="23"
+     label="Reset"
+     label_selected="Reset"
+     layout="topleft"
+     left_pad="3"
+     name="reset_sound_cache"
+     top_delta="0"
+     width="50">
+      <button.commit_callback
+       function="Pref.ResetSoundCache" />
+    </button>
+
+    <check_box
+     follows="left|top"
+     height="16"
+     control_name="FSKeepUnpackedCacheFiles"
+     label="Don't delete unpacked DSF (sound) cache files when logging out"
+     tool_tip="If checked, the viewer won't delete unpacked sound files from the cache when logging out, which may improve experience with playing inworld sounds. Please note: Enabling this will likely fill your cache directory very quickly, and does not adhere to the max cache setting. This may result in excessive disk space usage. Disabled by default."
+     left="15"
+     mouse_opaque="true"
+     name="keep_unpacked_cache"
+     radio_style="false"
+     width="400"
+     top_pad="5"/>
+
     <text
      type="string"
      length="1"
@@ -273,7 +353,7 @@
      layout="topleft"
      left="15"
      name="log_path_desc"
-     top_delta="35"
+     top_pad="10"
      width="300">
         Conversation logs and transcripts location:
     </text>
@@ -361,19 +441,6 @@
          function="Pref.BrowseSettingsDir" />
     </button>
 
-    <check_box
-     follows="left|top"
-     height="16"
-     control_name="FSKeepUnpackedCacheFiles"
-     label="Don't delete unpacked DSF (sound) cache files when logging out"
-     tool_tip="If checked, the viewer won't delete unpacked sound files from the cache when logging out, which may improve experience with playing inworld sounds. Please note: Enabling this will likely fill your cache directory very quickly, and does not adhere to the max cache setting. This may result in excessive disk space usage. Disabled by default."
-     left="15"
-     mouse_opaque="true"
-     name="keep_unpacked_cache"
-     radio_style="false"
-     width="400"
-     top_pad="10"/>
-
     <text
      type="string"
      length="1"
@@ -425,7 +492,7 @@
      left="25"
      name="numberwebfloaters_label"
      mouse_opaque="false"
-     top_pad="5"
+     top_pad="0"
      width="300">
         Maximum number of web browser windows:
     </text>
@@ -527,7 +594,7 @@
      name="Proxy Settings:"
      mouse_opaque="false"
      top_pad="5"
-     width="300">
+     width="80">
         Proxy Settings:
     </text>
     <button
@@ -537,9 +604,9 @@
      width="140"
      label_selected="Browse"
      layout="topleft"
-     left_delta="50"
+     left_pad="10"
      name="set_proxy"
-     top_pad="5" >
+     top_delta="-5" >
         <button.commit_callback
           function="Pref.Proxy" />
     </button>

@@ -91,7 +91,9 @@ LLDir::LLDir()
 	mTempDir(""),
 	mDirDelimiter("/"), // fallback to forward slash if not overridden
 	mLanguage("en"),
-	mUserName("undefined")
+	mUserName("undefined"),
+	// <FS:Ansariel> Sound cache
+	mSoundCacheDir("")
 {
 }
 
@@ -375,6 +377,13 @@ const std::string &LLDir::getUserName() const
 	return mUserName;
 }
 
+// <FS:Ansariel> Sound cache
+const std::string &LLDir::getSoundCacheDir() const
+{
+	return mSoundCacheDir;
+}
+// </FS:Ansariel>
+
 static std::string ELLPathToString(ELLPath location)
 {
 	typedef std::map<ELLPath, const char*> ELLPathMap;
@@ -523,6 +532,12 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 		prefix = add(getAppRODataDir(), "fonts");
 		break;
 		
+	// <FS:Ansariel> Sound cache
+	case LL_PATH_FS_SOUND_CACHE:
+		prefix = getSoundCacheDir();
+		break;
+	// </FS:Ansariel>
+
 	default:
 		llassert(0);
 	}
@@ -1041,6 +1056,38 @@ bool LLDir::setCacheDir(const std::string &path)
 		return false;
 	}
 }
+
+// <FS:Ansariel> Sound cache
+bool LLDir::setSoundCacheDir(const std::string& path)
+{
+	bool result = false;
+
+	// Default to normal cache directory
+	mSoundCacheDir = getCacheDir();
+
+	if (path.empty() )
+	{
+		// reset to default
+		result = true;
+	}
+	else
+	{
+		LLFile::mkdir(path);
+		std::string tempname = add(path, "temp");
+		LLFILE* file = LLFile::fopen(tempname,"wt");
+		if (file)
+		{
+			fclose(file);
+			LLFile::remove(tempname);
+			mSoundCacheDir = path;
+			result = true;
+		}
+	}
+	LL_INFOS2("AppInit", "Directories") << "Setting sound cache directory: " << mSoundCacheDir << LL_ENDL;
+
+	return result;
+}
+// </FS:Ansariel>
 
 void LLDir::dumpCurrentDirectories()
 {

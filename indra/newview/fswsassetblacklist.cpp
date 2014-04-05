@@ -134,7 +134,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 	if (type == LLAssetType::AT_SOUND)
 	{
 		gVFS->removeFile(id, LLAssetType::AT_SOUND);
-		std::string wav_path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, id.asString()) + ".dsf";
+		std::string wav_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, id.asString()) + ".dsf";
 		if (gDirUtilp->fileExists(wav_path))
 		{
 			LLFile::remove(wav_path);

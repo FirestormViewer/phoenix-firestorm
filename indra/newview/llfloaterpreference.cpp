@@ -515,6 +515,12 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("FSClientTagsVisibility")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
 	gSavedSettings.getControl("FSColorClienttags")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged, _2));
 	// </FS:CR>
+
+	// <FS:Ansariel> Sound cache
+	mCommitCallbackRegistrar.add("Pref.BrowseSoundCache",				boost::bind(&LLFloaterPreference::onClickBrowseSoundCache, this));
+	mCommitCallbackRegistrar.add("Pref.SetSoundCache",					boost::bind(&LLFloaterPreference::onClickSetSoundCache, this));
+	mCommitCallbackRegistrar.add("Pref.ResetSoundCache",				boost::bind(&LLFloaterPreference::onClickResetSoundCache, this));
+	// </FS:Ansariel>
 	// </Firestorm callbacks>
 }
 
@@ -607,6 +613,10 @@ BOOL LLFloaterPreference::postBuild()
 	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
+	// <FS:Ansariel> Sound cache
+	setSoundCacheLocation(gSavedSettings.getString("FSSoundCacheLocation"));
+	getChild<LLUICtrl>("FSSoundCacheLocation")->setEnabled(FALSE);
+	// </FS:Ansariel>
 
 	getChild<LLComboBox>("language_combobox")->setCommitCallback(boost::bind(&LLFloaterPreference::onLanguageChange, this));
 	
@@ -793,6 +803,8 @@ void LLFloaterPreference::apply()
 	
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
+	// <FS:Ansariel> Sound cache
+	setSoundCacheLocation(gSavedSettings.getString("FSSoundCacheLocation"));
 	
 	LLViewerMedia::setCookiesEnabled(getChild<LLUICtrl>("cookies_enabled")->getValue());
 	
@@ -1311,6 +1323,39 @@ void LLFloaterPreference::onClickResetCache()
 	gSavedSettings.setString("CacheLocationTopFolder", top_folder);
 }
 
+// <FS:Ansariel> Sound cache
+void LLFloaterPreference::onClickSetSoundCache()
+{
+	std::string cur_name(gSavedSettings.getString("FSSoundCacheLocation"));
+	std::string proposed_name(cur_name);
+
+	LLDirPicker& picker = LLDirPicker::instance();
+	if (! picker.getDir(&proposed_name ) )
+	{
+		return; //Canceled!
+	}
+
+	std::string dir_name = picker.getDirName();
+	if (!dir_name.empty() && dir_name != cur_name)
+	{
+		gSavedSettings.setString("FSSoundCacheLocation", dir_name);
+		setSoundCacheLocation(dir_name);
+		LLNotificationsUtil::add("SoundCacheWillBeMoved");
+	}
+}
+
+void LLFloaterPreference::onClickBrowseSoundCache()
+{
+	gViewerWindow->getWindow()->openFile(gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, ""));
+}
+
+void LLFloaterPreference::onClickResetSoundCache()
+{
+	gSavedSettings.setString("FSSoundCacheLocation", std::string());
+	setSoundCacheLocation(std::string());
+	LLNotificationsUtil::add("SoundCacheWillBeMoved");
+}
+// </FS:Ansariel>
 
 
 // Performs a wipe of the local settings dir on next restart 
@@ -2388,6 +2433,15 @@ void LLFloaterPreference::setCacheLocation(const LLStringExplicit& location)
 	cache_location_editor->setValue(location);
 	cache_location_editor->setToolTip(location);
 }
+
+// <FS:Ansariel> Sound cache
+void LLFloaterPreference::setSoundCacheLocation(const LLStringExplicit& location)
+{
+	LLUICtrl* cache_location_editor = getChild<LLUICtrl>("FSSoundCacheLocation");
+	cache_location_editor->setValue(location);
+	cache_location_editor->setToolTip(location);
+}
+// </FS:Ansariel>
 
 void LLFloaterPreference::selectPanel(const LLSD& name)
 {

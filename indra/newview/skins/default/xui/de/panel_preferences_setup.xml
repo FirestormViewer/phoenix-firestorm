@@ -37,6 +37,13 @@
     <button label="Setzen" label_selected="Setzen" name="set_cache" width="45"/>
     <button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_cache" width="85"/>
     <button label="Löschen" label_selected="Löschen" name="clear_cache" width="55" left_pad="5"/>
+    <text name="Sound Cache location">
+        Sound-Cache-Speicherort:
+    </text>
+    <button label="Öffnen" label_selected="Öffnen" name="open_sound_cache"/>
+    <button label="Setzen" label_selected="Setzen" name="set_sound_cache" width="45"/>
+    <button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_sound_cache" width="85"/>
+    <check_box label="DSF (Sound) Cache-Dateien beim Ausloggen nicht löschen" tool_tip="Falls aktiviert, werden entpackte Sound-Dateien beim Ausloggen nicht aus dem Cache gelöscht, wodurch das Abspielen von Sounds verbessert werden kann. ACHTUNG: Hierdurch kann die Cache-Größe sehr schnell ansteigen und zudem wird Cache-Größenlimit in diesem Fall NICHT beachtet, wodurch mehr als 10GB an Festplattenspeicher belegt werden kann! Diese Option ist in Firestorm standardmäßig deaktiviert." name="keep_unpacked_cache"/>
     <text name="log_path_desc">
         Speicherort für Chatprotokoll und Verläufe:
     </text>
@@ -45,7 +52,6 @@
     <button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_logpath" width="85"/>
     <button label="Öffne Crash-Protokolle" label_selected="Öffne Crash-Protokolle" name="browse_crashlogs" width="140"/>
     <button label="Öffne Ordner mit Einstellungen" label_selected="Öffne Ordner mit Einstellungen" name="browse_settingsdir" width="190"/>
-    <check_box label="DSF (Sound) Cache-Dateien beim Ausloggen nicht löschen" tool_tip="Falls aktiviert, werden entpackte Sound-Dateien beim Ausloggen nicht aus dem Cache gelöscht, wodurch das Abspielen von Sounds verbessert werden kann. ACHTUNG: Hierdurch kann die Cache-Größe sehr schnell ansteigen und zudem wird Cache-Größenlimit in diesem Fall NICHT beachtet, wodurch mehr als 10GB an Festplattenspeicher belegt werden kann! Diese Option ist in Firestorm standardmäßig deaktiviert." name="keep_unpacked_cache"/>
 
 	<text name="Web:">
 		Web:
@@ -67,7 +73,7 @@
 	<check_box initial_value="true" label="Cookies annehmen" name="cookies_enabled"/>
 	<check_box initial_value="true" label="Javascript aktivieren" name="browser_javascript_enabled"/>
 	<check_box initial_value="false" label="Medienbrowser-Popups aktivieren" name="media_popup_enabled"/>
-	<text name="Proxy Settings:">
+	<text name="Proxy Settings:" width="110">
 		Proxy-Einstellungen:
 	</text>
 	<button label="Proxy-Einstellungen ändern" label_selected="Durchsuchen" name="set_proxy" width="180"/>
