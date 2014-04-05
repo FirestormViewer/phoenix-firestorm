@@ -390,6 +390,9 @@ Czy na pewno chcesz kontynuować?
 		Bufor danych zostanie przeniesiony po restarcie aplikacji [APP_NAME].
 Pamiętaj: Opcja ta wyczyszcza bufor danych.
 	</notification>
+	<notification name="SoundCacheWillBeMoved">
+		Bufor dźwięków zostanie przeniesiony po restarcie aplikacji [APP_NAME].
+	</notification>
 	<notification name="ChangeConnectionPort">
 		Ustawienia portu zostają zaktualizowane po restarcie aplikacji [APP_NAME].
 	</notification>
@@ -3739,7 +3742,7 @@ Obecne ustawienie: [CURRENT_VALUE]
 		Nie można śledzić tego awatara, ponieważ jest poza zasięgiem radaru.
 	</notification>
 	<notification name="CacheEmpty">
-		Pamięć podręczna Twojej Przeglądarki jest pusta. Miej na uwadze, że możesz przez jakiś czas odczuwać obniżoną wydajność i spowolnione doczytywanie obiektów z Szafy.
+		Pamięć podręczna (bufor danych) Twojej Przeglądarki jest pusta. Miej na uwadze, że możesz przez jakiś czas odczuwać obniżoną wydajność i spowolnione doczytywanie obiektów z Szafy.
 	</notification>
 	<notification name="FirstJoinSupportGroup">
 		Witaj w grupie wsparcia Phoenix/Firestorm!
