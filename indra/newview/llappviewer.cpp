@@ -754,7 +754,8 @@ LLAppViewer::LLAppViewer() :
 	mFastTimerLogThread(NULL),
 	mUpdater(new LLUpdaterService()),
 	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
-	mSettingsLocationList(NULL)
+	mSettingsLocationList(NULL),
+	mPurgeTextures(false) // <FS:Ansariel> FIRE-13066
 {
 	if(NULL != sInstance)
 	{
@@ -4918,21 +4919,22 @@ bool LLAppViewer::initCache()
 			gSavedSettings.getBOOL("PurgeCacheOnNextStartup"))
 		{
 			gSavedSettings.setBOOL("PurgeCacheOnNextStartup", false);
-			llinfos << "Scheduling texture purge, based on PurgeCache* settings." << llendl;
+			LL_INFOS("AppCache") << "Scheduling texture purge, based on PurgeCache* settings." << LL_ENDL;
 			mPurgeCache = true;
 			// STORM-1141 force purgeAllTextures to get called to prevent a crash here. -brad
 			texture_cache_mismatch = true;
 		}
 		
-		// If the J2C has changed since the last run, clear the cache
+		// <FS> If the J2C has changed since the last run, clear the cache
 		const std::string j2c_info = LLImageJ2C::getEngineInfo();
 		const std::string j2c_last = gSavedSettings.getString("LastJ2CVersion");
 		if (j2c_info != j2c_last && !j2c_last.empty())
 		{
-			llinfos << "Scheduling texture purge, based on LastJ2CVersion mismatch." << llendl;
-			mPurgeCache = true;
+			LL_INFOS("AppCache") << "Scheduling texture purge, based on LastJ2CVersion mismatch." << LL_ENDL;
+			mPurgeTextures = true;
 		}
 		gSavedSettings.setString("LastJ2CVersion", j2c_info);
+		// </FS>
 	
 		// We have moved the location of the cache directory over time.
 		migrateCacheDirectory();
@@ -4971,6 +4973,15 @@ bool LLAppViewer::initCache()
 		LLSplashScreen::update(LLTrans::getString("StartupClearingCache"));
 		purgeCache();
 	}
+
+	// <FS:Ansariel> FIRE-13066
+	if (mPurgeTextures && !read_only)
+	{
+		LL_INFOS("AppCache") << "Purging Texture Cache..." << LL_ENDL;
+		LLSplashScreen::update(LLTrans::getString("StartupClearingTextureCache"));
+		LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
+	}
+	// </FS:Ansariel>
 
 	LLSplashScreen::update(LLTrans::getString("StartupInitializingTextureCache"));
 	

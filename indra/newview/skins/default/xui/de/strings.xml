@@ -19,6 +19,9 @@
 	<string name="StartupClearingCache">
 		Cache wird gelöscht...
 	</string>
+	<string name="StartupClearingTextureCache">
+		Textur-Cache wird gelöscht...
+	</string>
 	<string name="StartupInitializingTextureCache">
 		Textur-Cache wird initialisiert...
 	</string>

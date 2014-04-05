@@ -284,6 +284,7 @@ private:
 	std::string mSerialNumber;
 	bool mPurgeCache;
 	bool mPurgeSettings;	// <FS>
+	bool mPurgeTextures;	// <FS:Ansariel> FIRE-13066
     bool mPurgeOnExit;
 	bool mMainLoopInitialized;
 	LLViewerJoystick* joystick;
