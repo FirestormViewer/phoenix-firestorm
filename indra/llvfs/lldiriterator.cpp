@@ -51,7 +51,16 @@ private:
 LLDirIterator::Impl::Impl(const std::string &dirname, const std::string &mask)
 	: mIsValid(false)
 {
+	// <FS:ND> Unicode path on Windows need some extra handling
+
+	// fs::path dir_path(dirname);
+#ifdef LL_WINDOWS
+	fs::path dir_path( utf8str_to_utf16str(dirname) );
+#else
 	fs::path dir_path(dirname);
+#endif                                                                                                                                                                                                                                      
+	
+	// </FS:ND>
 
 	bool is_dir = false;
 
