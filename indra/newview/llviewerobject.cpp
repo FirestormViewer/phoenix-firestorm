@@ -4142,11 +4142,6 @@ void LLViewerObject::setTE(const U8 te, const LLTextureEntry &texture_entry)
 		const LLUUID& image_id = getTE(te)->getID();
 		mTEImages[te] = LLViewerTextureManager::getFetchedTexture(image_id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
 
-		// <FS:ND> Debug aid <ND:TODO> Remove again
-		if( !ndIsValidPtr( mTEImages[te].get() ) &&  mTEImages[te].get() != 0 )
-			llerrs << "Set invalid pointer to mTEImages" << llendl;
-		// </FS:ND>
-	
 	if (getTE(te)->getMaterialParams().notNull())
 	{
 		const LLUUID& norm_id = getTE(te)->getMaterialParams()->getNormalID();
@@ -4162,11 +4157,6 @@ void LLViewerObject::setTEImage(const U8 te, LLViewerTexture *imagep)
 	if (mTEImages[te] != imagep)
 	{
 		mTEImages[te] = imagep;
-
-		// <FS:ND> Debug aid <ND:TODO> Remove again
-		if( !ndIsValidPtr( mTEImages[te].get() ) &&  mTEImages[te].get() != 0 )
-			llerrs << "Set invalid pointer to mTEImages" << llendl;
-		// </FS:ND>
 
 		LLPrimitive::setTETexture(te, imagep->getID());
 		setChanged(TEXTURE);
@@ -4249,9 +4239,6 @@ void LLViewerObject::changeTEImage(S32 index, LLViewerTexture* new_image)
 		return ;
 	}
 	mTEImages[index] = new_image ;
-
-	if( !ndIsValidPtr( mTEImages[index].get() ) &&  mTEImages[index].get() != 0 )
-		llerrs << "Set invalid pointer to mTEImages" << llendl;
 }
 
 void LLViewerObject::changeTENormalMap(S32 index, LLViewerTexture* new_image)
@@ -4593,12 +4580,6 @@ LLViewerTexture *LLViewerObject::getTEImage(const U8 face) const
 	if (face < getNumTEs())
 	{
 		LLViewerTexture* image = mTEImages[face];
-		if( !ndIsValidPtr( image ) && image != 0 )
-		{
-			llwarns << "mTEImages[" << (S32)face << "] = " << (void*)image << llendl;
-			return 0;
-		}
-
 		if (image)
 		{
 			return image;
