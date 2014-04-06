@@ -555,15 +555,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 	{
 		return 0;
 	}
-	
-	// <FS:ND> Don't recompile shaders if it is already loaded.
-	// <FS:TM> recompile for now to test some issues
-	//if( mShaderObjects.end() != mShaderObjects.find(filename) )
-	//{
-	//	LL_INFOS("ShaderLoading") << "Reusing compiled shader for " << filename << LL_ENDL;
-	//	return mShaderObjects[ filename ];
-	//}
-	// </FS:ND>
+
 
 	//read in from file
 	LLFILE* file = NULL;
@@ -735,7 +727,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 
 		if (texture_index_channels > 1)
 		{
-				text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
+			text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
 		}
 
 		text[count++] = strdup("vec4 diffuseLookup(vec2 texcoord)\n");
@@ -748,53 +740,34 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 			text[count++] = strdup("}\n");
 		}
 		else if (major_version > 1 || minor_version >= 30)
-		{
-			//switches are supported in GLSL 1.30 and later
-		
-			//// <FS:ND> 2012-10-15. Yay for pink AGAIN! Replacing LL's version once again with ours.
-
-			text[count++] = strdup("float frVal = float( vary_texture_index );\n");
-			text[count++] = strdup("if ( frVal < 0 ) { return vec4(0,1,1,1); }\n");
-
-			for (S32 i = 0; i < texture_index_channels; ++i)
-			{
-				std::stringstream str;
-				str << "if ( frVal <= " << i << ".25 ) { return texture2D(tex" << i << ", texcoord); }\n";
-				text[count++] = strdup(str.str().c_str());
+		{  //switches are supported in GLSL 1.30 and later
+			if (gGLManager.mIsNVIDIA)
+			{ //switches are unreliable on some NVIDIA drivers
+				for (U32 i = 0; i < texture_index_channels; ++i)
+				{
+					std::string if_string = llformat("\t%sif (vary_texture_index == %d) { return texture2D(tex%d, texcoord); }\n", i > 0 ? "else " : "", i, i); 
+					text[count++] = strdup(if_string.c_str());
+				}
+				text[count++] = strdup("\treturn vec4(1,0,1,1);\n");
+				text[count++] = strdup("}\n");
 			}
-			text[count++] = strdup("return vec4(1,0,1,1);\n");
-			text[count++] = strdup("}\n");
-
-			//// </FS:ND>
-			//below is LL's shader code:
-
-			//if (gGLManager.mIsNVIDIA)
-			//{ //switches are unreliable on some NVIDIA drivers
-			//	for (U32 i = 0; i < texture_index_channels; ++i)
-			//	{
-			//		std::string if_string = llformat("\t%sif (vary_texture_index == %d) { return texture2D(tex%d, texcoord); }\n", i > 0 ? "else " : "", i, i); 
-			//		text[count++] = strdup(if_string.c_str());
-			//	}
-			//	text[count++] = strdup("\treturn vec4(1,0,1,1);\n");
-			//	text[count++] = strdup("}\n");
-			//}
-			//else
-			//{
-			//	text[count++] = strdup("\tvec4 ret = vec4(1,0,1,1);\n");
-			//	text[count++] = strdup("\tswitch (vary_texture_index)\n");
-			//	text[count++] = strdup("\t{\n");
+			else
+			{
+				text[count++] = strdup("\tvec4 ret = vec4(1,0,1,1);\n");
+				text[count++] = strdup("\tswitch (vary_texture_index)\n");
+				text[count++] = strdup("\t{\n");
 		
-			//	//switch body
-			//	for (S32 i = 0; i < texture_index_channels; ++i)
-			//	{
-			//		std::string case_str = llformat("\t\tcase %d: return texture2D(tex%d, texcoord);\n", i, i);
-			//		text[count++] = strdup(case_str.c_str());
-			//	}
+				//switch body
+				for (S32 i = 0; i < texture_index_channels; ++i)
+				{
+					std::string case_str = llformat("\t\tcase %d: return texture2D(tex%d, texcoord);\n", i, i);
+					text[count++] = strdup(case_str.c_str());
+				}
 
-			//	text[count++] = strdup("\t}\n");
-			//	text[count++] = strdup("\treturn ret;\n");
-			//	text[count++] = strdup("}\n");
-			//}
+				text[count++] = strdup("\t}\n");
+				text[count++] = strdup("\treturn ret;\n");
+				text[count++] = strdup("}\n");
+			}
 		}
 		else
 		{ //should never get here.  Indexed texture rendering requires GLSL 1.30 or later 
