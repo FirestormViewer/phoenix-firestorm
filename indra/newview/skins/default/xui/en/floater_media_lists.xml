@@ -6,6 +6,8 @@
     can_resize="true"
 	height="254"
     name="floatermedialists"
+	positioning="centered"
+	save_rect="true"
 	title="Media Lists"
     width="460"
     min_height="300"
