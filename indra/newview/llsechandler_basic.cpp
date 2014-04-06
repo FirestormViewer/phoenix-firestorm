@@ -602,10 +602,16 @@ void LLBasicCertificateStore::load_from_file(const std::string& filename)
 		return;
 	}
 	
-	BIO* file_bio = BIO_new(BIO_s_file());
+	// <FS:ND> Do not use BIO_new(BIO_s_file())/BIO_read_filename. This will fail if filename is an UTF8 encoded unicode path. Instead
+	// use BIO_new_file. BIO_new_file handles UTF8 encoded filenames gracefully.
+
+	// BIO* file_bio = BIO_new(BIO_s_file());
+	BIO *file_bio( BIO_new_file( filename.c_str(), "rt" ) );
+	// </FS:ND>
+
 	if(file_bio)
 	{
-		if (BIO_read_filename(file_bio, filename.c_str()) > 0)
+		// if (BIO_read_filename(file_bio, filename.c_str()) > 0) // <FS:ND/>
 		{	
 			X509 *cert_x509 = NULL;
 			while((PEM_read_bio_X509(file_bio, &cert_x509, 0, NULL)) && 
