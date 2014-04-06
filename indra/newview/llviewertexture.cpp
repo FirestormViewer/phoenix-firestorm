@@ -797,11 +797,6 @@ void LLViewerTexture::addFace(U32 ch, LLFace* facep)
 	facep->setIndexInTex(ch, mNumFaces[ch]) ;
 	mNumFaces[ch]++ ;
 
-	// <FS:ND> Debug aid <ND:TODO> Remove again
-	if( facep && !ndIsValidPtr( facep ) )
-		llerrs << "Setting invalid face" << llendl;
-	// </FS:ND>
-
 	mLastFaceListUpdateTimer.reset() ;
 }
 
