@@ -610,7 +610,7 @@ void LLUpdateAgentInventoryResponder::uploadComplete(const LLSD& content)
 			  }
 		  }
 		// <FS:TT> Client LSL Bridge
-		if (gSavedSettings.getBOOL("UseLSLBridge"))
+		if (FSLSLBridge::instance().canUseBridge())
 		{
 			FSLSLBridge::instance().checkBridgeScriptName(mFileName);
 		}

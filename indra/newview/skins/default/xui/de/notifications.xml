@@ -2293,6 +2293,10 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		Möchten Sie Ihren Inventar-Cache wirklich leeren?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmClearWebBrowserCache">
+		Möchten Sie Ihren Webbrowser-Cache wirklich leeren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmClearCookies">
 		Sind Sie sicher, dass Sie Ihre Cookies löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Ja"/>

@@ -12,6 +12,9 @@
 	<string name="StartupClearingCache">
 		Czyszczenie bufora danych...
 	</string>
+	<string name="StartupClearingTextureCache">
+		Czyszczenie bufora tekstur...
+	</string>
 	<string name="StartupInitializingTextureCache">
 		Inicjowanie bufora danych tekstur...
 	</string>

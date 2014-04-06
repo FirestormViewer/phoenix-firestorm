@@ -4295,12 +4295,7 @@ class FSSelfCheckMoveLock : public view_listener_t
 
 bool enable_bridge_function()
 {
-#ifdef OPENSIM
-	if (LLGridManager::getInstance()->isInOpenSim() && !LLGridManager::getInstance()->isInAuroraSim())
-		// No bridge on OpenSim yet.
-		return false;
-#endif // OPENSIM
-	return (gSavedSettings.getBOOL("UseLSLBridge") && FSLSLBridge::instance().isBridgeValid());
+	return FSLSLBridge::instance().canUseBridge();
 }
 
 bool enable_move_lock()

@@ -169,10 +169,10 @@ void FSRadar::updateRadarList()
 	static LLCachedControl<bool> RadarLeaveChannelAlert(gSavedSettings, "RadarLeaveChannelAlert");
 	static LLCachedControl<F32> nearMeRange(gSavedSettings, "NearMeRange");
 	static LLCachedControl<bool> limitRange(gSavedSettings, "LimitRadarByRange");
-	static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
 	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
 	static LLCachedControl<bool> sFSLegacyRadarFriendColoring(gSavedSettings, "FSLegacyRadarFriendColoring");
 	static LLCachedControl<bool> sRadarColorNamesByDistance(gSavedSettings, "FSRadarColorNamesByDistance", false);
+	bool sUseLSLBridge = FSLSLBridge::instance().canUseBridge();
 
 	F32 drawRadius(RenderFarClip);
 	const LLVector3d& posSelf = gAgent.getPositionGlobal();

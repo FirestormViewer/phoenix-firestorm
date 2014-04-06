@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Sieć/cache" name="Input panel">
+<panel label="Sieć i bufory" name="Input panel">
 	<layout_stack name="max_bandwidth_layout">
 		<layout_panel name="bandwidth_panel">
 			<text name="Maximum bandwidth">
@@ -15,16 +15,23 @@
 			<check_box label="Własny port" name="connection_port_enabled"/>
 			<spinner label="Numer portu:" name="connection_port"/>
 			<text name="cache_size_label_l">
-				Rozmiar cache
+				Rozmiar pamięci podr.
 			</text>
-			<button label="Wyczyść cache Szafy" name="ClearInventoryCache"/>
+			<button label="Wyczyść bufor Szafy" name="ClearInventoryCache"/>
 			<text name="Cache location">
-				Położenie cache:
+				Położenie głównego buforu pamięci podr. (cache):
 			</text>
 			<button label="Pokaż" label_selected="Pokaż" name="open_cache"/>
 			<button label="Ustaw" label_selected="Ustaw" name="set_cache"/>
 			<button label="Resetuj" label_selected="Resetuj" name="reset_cache"/>
 			<button label="Wyczyść" label_selected="Wyczyść" name="clear_cache"/>
+			<text name="Sound Cache location">
+				Położenie buforu pamięci podręcznej dźwięków:
+			</text>
+			<button label="Pokaż" label_selected="Pokaż" name="open_sound_cache"/>
+			<button label="Ustaw" label_selected="Ustaw" name="set_sound_cache"/>
+			<button label="Resetuj" label_selected="Resetuj" name="reset_sound_cache"/>
+			<check_box label="Nie usuwaj wypakowanych plików DSF (dźwięków) z buforu podczas wylogowywania" tool_tip="Gdy zaznaczysz tą opcję, to przeglądarka nie będzie usuwać wypakowanych plików dźwiękowych z pamięci podręcznej podczas wylogowywania, co może poprawić wydajność podczas odtwarzania ich w świecie. Pamiętaj proszę, że włączenie tej opcji spowoduje bardzo szybkie zapełnienie się katalogu pamięci podręcznej, a także że nie obowiązuje w jej wypadku ustawienie maksymalnego jej limitu. Może to doprowadzić do wykorzystywania powierzchni dyskowej ponad miarę. Ta opcja jest domyślnie wyłączona." name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
 				Położenie dzienników i logów czatów:
 			</text>
@@ -33,7 +40,6 @@
 			<button label="Resetuj" label_selected="Resetuj" name="reset_logpath"/>
 			<button label="Logi błędów" label_selected="Logi błędów" name="browse_crashlogs"/>
 			<button label="Folder ustawień" label_selected="Folder ustawień" name="browse_settingsdir"/>
-			<check_box label="Nie usuwaj wypakowanych plików DSF (dźwięków) z cache podczas wylogowywania" tool_tip="Gdy zaznaczysz tą opcję, to przeglądarka nie będzie usuwać wypakowanych plików dźwiękowych z pamięci podręcznej podczas wylogowywania, co może poprawić wydajność podczas odtwarzania ich w świecie. Pamiętaj proszę, że włączenie tej opcji spowoduje bardzo szybkie zapełnienie się katalogu pamięci podręcznej, a także że nie obowiązuje w jej wypadku ustawienie maksymalnego jej limitu. Może to doprowadzić do wykorzystywania powierzchni dyskowej ponad miarę. Ta opcja jest domyślnie wyłączona." name="keep_unpacked_cache"/>
 			<text name="Web:">
 				Przeglądarka internetowa:
 			</text>
@@ -54,7 +60,7 @@
 			<check_box label="Akceptuj ciasteczka" name="cookies_enabled"/>
 			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
 			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
-			<text name="Proxy Settings:">
+			<text name="Proxy Settings:" width="95">
 				Ustawienia proxy:
 			</text>
 			<button label="Dostosuj ustawienia" label_selected="Przeglądaj" name="set_proxy"/>

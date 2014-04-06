@@ -12,7 +12,7 @@
 		<panel label="Kolory" name="colors"/>
 		<panel label="Grafika" name="display"/>
 		<panel label="Dźwięk i media" name="audio"/>
-		<panel label="Sieć i cache" name="input"/>
+		<panel label="Sieć i bufory" name="input"/>
 		<panel label="Ruch i widok" name="move"/>
 		<panel label="Powiadomienia" name="msgs"/>
 		<panel label="Prywatność" name="im"/>
