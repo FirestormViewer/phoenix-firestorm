@@ -524,6 +524,20 @@
          value="10" />
     </combo_box>
 
+    <button
+     enabled="false"
+     follows="right|top"
+     height="23"
+     label="Clear Browser Cache"
+     layout="topleft"
+     right="-10"
+     name="ClearWebBrowserCache"
+     top_delta="0"
+     width="140">
+        <button.commit_callback
+         function="Pref.WebBrowserClearCache" />
+    </button>
+
     <check_box
      enabled="true"
      follows="left|top"
@@ -531,7 +545,7 @@
      initial_value="true"
      control_name="BrowserPluginsEnabled"
      label="Enable plugins"
-     left_delta="0"
+     left="25"
      mouse_opaque="true"
      name="browser_plugins_enabled"
      radio_style="false"

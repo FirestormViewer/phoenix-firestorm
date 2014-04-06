@@ -257,6 +257,20 @@ bool callback_clear_inventory_cache(const LLSD& notification, const LLSD& respon
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> Clear inventory cache button
+bool callback_clear_web_browser_cache(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+		LLViewerMedia::clearAllCaches();
+		LLViewerMedia::clearAllCookies();
+	}
+
+	return false;
+}
+// </FS:Ansariel>
+
 bool callback_clear_cache(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
@@ -449,6 +463,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.WebClearCache",			boost::bind(&LLFloaterPreference::onClickBrowserClearCache, this));
 	// <FS:Ansariel> Clear inventory cache button
 	mCommitCallbackRegistrar.add("Pref.InvClearCache",			boost::bind(&LLFloaterPreference::onClickInventoryClearCache, this));
+	// </FS:Ansariel>
+	// <FS:Ansariel> Clear web browser cache button
+	mCommitCallbackRegistrar.add("Pref.WebBrowserClearCache",		boost::bind(&LLFloaterPreference::onClickWebBrowserClearCache, this));
 	// </FS:Ansariel>
 	mCommitCallbackRegistrar.add("Pref.SetCache",				boost::bind(&LLFloaterPreference::onClickSetCache, this));
 	mCommitCallbackRegistrar.add("Pref.ResetCache",				boost::bind(&LLFloaterPreference::onClickResetCache, this));
@@ -1207,6 +1224,13 @@ void LLFloaterPreference::onClickBrowserClearCache()
 void LLFloaterPreference::onClickInventoryClearCache()
 {
 	LLNotificationsUtil::add("ConfirmClearInventoryCache", LLSD(), LLSD(), callback_clear_inventory_cache);
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Clear web browser cache button
+void LLFloaterPreference::onClickWebBrowserClearCache()
+{
+	LLNotificationsUtil::add("ConfirmClearWebBrowserCache", LLSD(), LLSD(), callback_clear_web_browser_cache);
 }
 // </FS:Ansariel>
 
@@ -2227,6 +2251,9 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 
 	// <FS:Ansariel> Clear inventory cache button
 	getChildView("ClearInventoryCache")->setEnabled(TRUE);
+
+	// <FS:Ansariel> Clear web browser cache button
+	getChildView("ClearWebBrowserCache")->setEnabled(TRUE);
 }
 
 void LLFloaterPreference::refreshUI()

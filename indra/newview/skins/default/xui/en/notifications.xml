@@ -5662,6 +5662,18 @@ Are you sure you want to clear your inventory cache?
      notext="Cancel"
      yestext="OK"/>
   </notification>
+  
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmClearWebBrowserCache"
+   type="alertmodal">
+Are you sure you want to clear your web browser cache?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
 
   <notification
    icon="alertmodal.tga"

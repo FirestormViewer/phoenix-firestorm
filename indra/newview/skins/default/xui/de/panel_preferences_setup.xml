@@ -69,6 +69,7 @@
         <combo_box.item label="Fünf Fenster" name="web_5"/>
         <combo_box.item label="Zehn Fenster" name="web_10"/>
     </combo_box>
+	<button label="Webbrowser-Cache löschen" name="ClearWebBrowserCache" width="160"/>
 	<check_box initial_value="true" label="Plugins aktivieren" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Cookies annehmen" name="cookies_enabled"/>
 	<check_box initial_value="true" label="Javascript aktivieren" name="browser_javascript_enabled"/>
