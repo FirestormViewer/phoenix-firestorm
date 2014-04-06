@@ -128,9 +128,9 @@ private:
 	radarfields_map_t		mLastRadarSweep;
 	entry_map_t				mEntryList;
 
-	std::vector<LLUUID>		mRadarEnterAlerts;
-	std::vector<LLUUID>		mRadarLeaveAlerts;
-	std::vector<LLUUID>		mRadarOffsetRequests;
+	uuid_vec_t				mRadarEnterAlerts;
+	uuid_vec_t				mRadarLeaveAlerts;
+	uuid_vec_t				mRadarOffsetRequests;
 	std::vector<LLSD>		mRadarEntriesData;
 	 	
 	S32						mRadarFrameCount;
