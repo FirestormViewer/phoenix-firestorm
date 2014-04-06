@@ -28,8 +28,6 @@
 #include "llmath.h"
 #include "llquantize.h"
 
-#include <string.h> // <FS:ND> for mempcy
-
 extern const LLQuad F_ZERO_4A		= { 0, 0, 0, 0 };
 extern const LLQuad F_APPROXIMATELY_ZERO_4A = { 
 	F_APPROXIMATELY_ZERO,
