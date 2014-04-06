@@ -1939,38 +1939,33 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 	}
 }
 
-bool LLViewerParcelMedia::saveDomainFilterList()
+void LLViewerParcelMedia::saveDomainFilterList()
 {
-	std::string medialist_filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "medialist.xml");
+	const std::string medialist_filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "medialist.xml");
 
-	llofstream medialistFile(medialist_filename);
-	LLSDSerialize::toPrettyXML(sMediaFilterList, medialistFile);
-	medialistFile.close();
-	return true;
+	llofstream medialist;
+	medialist.open(medialist_filename);
+	LLSDSerialize::toPrettyXML(sMediaFilterList, medialist);
+	medialist.close();
 }
 
-bool LLViewerParcelMedia::loadDomainFilterList()
+void LLViewerParcelMedia::loadDomainFilterList()
 {
-	std::string medialist_filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "medialist.xml");
+	const std::string medialist_filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "medialist.xml");
 
-	if(!LLFile::isfile(medialist_filename))
-	{
-		LLSD emptyllsd;
-		llofstream medialistFile(medialist_filename);
-		LLSDSerialize::toPrettyXML(emptyllsd, medialistFile);
-		medialistFile.close();
-	}
-
-	if(LLFile::isfile(medialist_filename))
+	if (LLFile::isfile(medialist_filename))
 	{
 		llifstream medialistFile(medialist_filename);
 		LLSDSerialize::fromXML(sMediaFilterList, medialistFile);
 		medialistFile.close();
-		return true;
 	}
 	else
 	{
-		return false;
+		LLSD emptyllsd;
+		llofstream medialist;
+		medialist.open(medialist_filename);
+		LLSDSerialize::toPrettyXML(emptyllsd, medialist);
+		medialist.close();
 	}
 }
 

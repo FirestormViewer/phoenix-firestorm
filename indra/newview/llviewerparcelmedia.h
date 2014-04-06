@@ -59,8 +59,8 @@ class LLViewerParcelMedia : public LLViewerMediaObserver
 			// user has media filter enabled and play requested
 		static std::string extractDomain(std::string url);
 			// helper function to extract domain from url and conve
-		static bool loadDomainFilterList();
-		static bool saveDomainFilterList();
+		static void loadDomainFilterList();
+		static void saveDomainFilterList();
 
 		static void stop();
 			// user clicked stop button in media transport controls

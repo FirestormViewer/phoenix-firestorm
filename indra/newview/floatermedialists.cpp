@@ -47,23 +47,21 @@ BOOL FloaterMediaLists::postBuild()
 	childSetAction("remove_whitelist", boost::bind(&FloaterMediaLists::onWhitelistRemove, this));
 	childSetAction("add_blacklist", boost::bind(&FloaterMediaLists::onBlacklistAdd, this));
 	childSetAction("remove_blacklist", boost::bind(&FloaterMediaLists::onBlacklistRemove, this));
-
-	if (!mWhitelistSLC || !mBlacklistSLC)
-	{
-		return TRUE;
-	}
 	
-	for(S32 i = 0;i<(S32)LLViewerParcelMedia::sMediaFilterList.size();i++)
+	for (LLSD::array_iterator p_itr = LLViewerParcelMedia::sMediaFilterList.beginArray();
+		 p_itr != LLViewerParcelMedia::sMediaFilterList.endArray();
+		 ++p_itr)
 	{
+		LLSD itr = (*p_itr);
 		LLSD element;
 		element["columns"][0]["column"] = "list";
-		element["columns"][0]["value"] = LLViewerParcelMedia::sMediaFilterList[i]["domain"].asString();
-		if (LLViewerParcelMedia::sMediaFilterList[i]["action"].asString() == "allow")
+		element["columns"][0]["value"] = itr["domain"].asString();
+		if (itr["action"].asString() == "allow")
 		{	
 			mWhitelistSLC->addElement(element);
 			mWhitelistSLC->sortByColumn("list", TRUE);
 		}
-		else if (LLViewerParcelMedia::sMediaFilterList[i]["action"].asString() == "deny")
+		else if (itr["action"].asString() == "deny")
 		{
 			mBlacklistSLC->addElement(element);
 			mBlacklistSLC->sortByColumn("list", TRUE);
