@@ -246,6 +246,8 @@ inline void ll_memcpy_nonaliased_aligned_16(char* __restrict dst, const char* __
 
 	// <FS:ND> There is no guarantee that the remaining about of bytes left is a number of 16. If that's not the case using copy4a will overwrite and trash memory behind the end of dst
 
+	// <FS:ND> 2014-04-06: This still applies, placing a llassert_always( 0 == (bytes%16)) right after login.
+
 	// Copy remainder 16b tail chunks (or ALL 16b chunks for sub-64b copies)
 	//
 	// while (dst < end)
@@ -677,15 +679,4 @@ void  LLPrivateMemoryPoolTester::operator delete[](void* addr)
 
 
 
-
-// <FS:ND> HACK! There are times when there's pointer that are not 0, but 1
-// This is to find those and research where they are coming.
-inline bool ndIsValidPtr( void const *aPtr )
-{
-	if( 0 == aPtr )
-		return false;
-	llassert_always( aPtr > (void*)0x3FF );
-	return true;
-}
-// </FS:ND>
 #endif
