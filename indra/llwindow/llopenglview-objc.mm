@@ -248,6 +248,8 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) mouseDown:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
     // Apparently people still use this?
     if ([theEvent modifierFlags] & NSCommandKeyMask &&
         !([theEvent modifierFlags] & (NSControlKeyMask | NSShiftKeyMask
@@ -270,6 +272,8 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) mouseUp:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
     if (mSimulatedRightClick)
     {
         callRightMouseUp(mMousePos, mModifiers);
@@ -281,11 +285,15 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) rightMouseDown:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
 	callRightMouseDown(mMousePos, mModifiers);
 }
 
 - (void) rightMouseUp:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
 	callRightMouseUp(mMousePos, mModifiers);
 }
 
@@ -327,11 +335,15 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) otherMouseDown:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
 	callMiddleMouseDown(mMousePos, mModifiers);
 }
 
 - (void) otherMouseUp:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
 	callMiddleMouseUp(mMousePos, mModifiers);
 }
 
@@ -352,11 +364,15 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 - (void) keyUp:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
 	callKeyUp([theEvent keyCode], mModifiers);
 }
 
 - (void) keyDown:(NSEvent *)theEvent
 {
+	mModifiers = [theEvent modifierFlags]; // <FS:ND/> Make sure we're grabbing current modifiers, or they might get stuck until another one is pressed.
+
     uint keycode = [theEvent keyCode];
     bool acceptsText = mHasMarkedText ? false : callKeyDown(keycode, mModifiers);
     if (acceptsText &&

@@ -454,6 +454,14 @@ long showAlert(std::string text, std::string title, int type)
 
 unsigned int getModifiers()
 {
+	// <FS:ND> Try current event of app first, otherwise we might get wrong results
+	NSEvent *pEvent = [NSApp currentEvent];
+	if( pEvent != nil )
+	{
+		return [pEvent modifierFlags];
+	}
+	// </FS:ND>
+
 	return [NSEvent modifierFlags];
 }
 
