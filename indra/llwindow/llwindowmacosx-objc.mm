@@ -92,7 +92,12 @@ const unsigned short *copyFromPBoard()
 		str = [objToPaste objectAtIndex:0];
 	}
 	NSUInteger len = [str length];
-	unichar* buffer = (unichar*)calloc(len, sizeof(unichar));
+
+	// <FS:ND> add+1 for 0-terminator.
+	// unichar* buffer = (unichar*)calloc(len, sizeof(unichar));
+	unichar* buffer = (unichar*)calloc(len+1, sizeof(unichar));
+	// </FS:ND>
+
 	[str getCharacters:buffer range:NSMakeRange(0, len)];
 	[pool release];
 	return buffer;
