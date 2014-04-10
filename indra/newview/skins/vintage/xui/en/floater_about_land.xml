@@ -2072,7 +2072,7 @@ Only large parcels can be listed in search.
              name="AllowedText"
              top="0"
              width="230">
-                Allowed Residents
+                Allowed Residents ([LISTED]/[MAX])
             </text>
             <name_list
              column_padding="0"
@@ -2121,7 +2121,7 @@ Only large parcels can be listed in search.
              name="BanCheck"
              top="0"
              width="200">
-                Banned Residents
+                Banned Residents ([LISTED]/[MAX])
             </text>
             <name_list
              column_padding="0"
