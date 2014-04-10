@@ -260,7 +260,7 @@ void LLPanelGroupInvite::impl::addRoleNames(LLGroupMgrGroupData* gdatap)
 			//else if they have the limited add to roles power
 			//we add every role the user is in
 			//else we just add to everyone
-			bool is_owner   = member_data->isInRole(gdatap->mOwnerRole);
+			bool is_owner   = member_data->isOwner();
 			bool can_assign_any = gAgent.hasPowerInGroup(mGroupID,
 												 GP_ROLE_ASSIGN_MEMBER);
 			bool can_assign_limited = gAgent.hasPowerInGroup(mGroupID,
@@ -581,7 +581,7 @@ void LLPanelGroupInvite::updateLists()
 		{
 			waiting = true;
 		}
-		if (gdatap->isRoleDataComplete() && gdatap->isMemberDataComplete()) 
+		if (gdatap->isRoleDataComplete() && gdatap->isMemberDataComplete() && gdatap->isRoleMemberDataComplete()) 
 		{
 			if ( mImplementation->mRoleNames )
 			{
@@ -609,6 +609,7 @@ void LLPanelGroupInvite::updateLists()
 		{
 			LLGroupMgr::getInstance()->sendGroupPropertiesRequest(mImplementation->mGroupID);
 			LLGroupMgr::getInstance()->sendGroupRoleDataRequest(mImplementation->mGroupID);
+			LLGroupMgr::getInstance()->sendGroupRoleMembersRequest(mImplementation->mGroupID);
 			LLGroupMgr::getInstance()->sendCapGroupMembersRequest(mImplementation->mGroupID);
 		}
 		mPendingUpdate = TRUE;
