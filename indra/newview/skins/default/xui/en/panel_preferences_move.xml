@@ -522,7 +522,7 @@
      label="Firestorm"
      name="tab-firestorm" >
         <text
-         top_pad="10"
+         top_pad="5"
          type="string"
          length="1"
          follows="left|top"
@@ -634,7 +634,7 @@
          control_name="FSAlwaysOpaqueCameraControls"/>
 
         <text
-         top_pad="6"
+         top_pad="4"
          type="string"
          length="1"
          follows="left|top"
@@ -714,7 +714,7 @@
          top_pad="5"/>
 
         <text
-         top_pad="6"
+         top_pad="4"
          type="string"
          length="1"
          follows="left|top"
@@ -787,6 +787,14 @@
          control_name="TurnAroundWhenWalkingBackwards"
          tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
         
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Turn avatar towards a selected object"
+         name="FSTurnAvatarToSelectedObject"
+         width="270"
+         control_name="FSTurnAvatarToSelectedObject"
+         tool_tip="Turns your avatar around to face the object you are currently selecting."/>
 	 </panel>
 </tab_container>
 </panel>

@@ -200,7 +200,11 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 
 		if (!gAgentCamera.getFocusOnAvatar() &&										// if camera not glued to avatar
 			LLVOAvatar::findAvatarFromAttachment(object) != gAgentAvatarp &&	// and it's not one of your attachments
-			object != gAgentAvatarp)									// and it's not you
+			// <FS:Ansariel> FIRE-8039: Prevent avatar from turning to selected object
+			//object != gAgentAvatarp)									// and it's not you
+			object != gAgentAvatarp &&									// and it's not you
+			gSavedSettings.getBOOL("FSTurnAvatarToSelectedObject"))
+			// </FS:Ansariel>
 		{
 			// have avatar turn to face the selected object(s)
 			LLVector3d selection_center = LLSelectMgr::getInstance()->getSelectionCenterGlobal();
