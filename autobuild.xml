@@ -1776,9 +1776,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>38205bccb5dcedf73fded9f15cafd29e</string>
+              <string>d452b598ab437cc6658fe77ae96f22dd</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.1e-windows-20130810.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1g-windows-20140410.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
