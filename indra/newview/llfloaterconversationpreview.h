@@ -42,13 +42,14 @@ class LLFloaterConversationPreview : public LLFloater
 public:
 
 	LLFloaterConversationPreview(const LLSD& session_id);
-	virtual ~LLFloaterConversationPreview(){};
+	virtual ~LLFloaterConversationPreview();
 
 	virtual BOOL postBuild();
-	void setPages(std::list<LLSD>& messages,const std::string& file_name);
+	void setPages(std::list<LLSD>* messages,const std::string& file_name);
 
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
+	virtual void onClose(bool app_quitting);
 
 private:
 	void onMoreHistoryBtnClick();
@@ -66,11 +67,13 @@ private:
 	int				mCurrentPage;
 	int				mPageSize;
 
-	std::list<LLSD> mMessages;
+	std::list<LLSD>*	mMessages;
 	std::string		mAccountName;
 	std::string		mCompleteName;
-	std::string     mChatHistoryFileName;
+	std::string		mChatHistoryFileName;
 	bool			mShowHistory;
+	bool			mHistoryThreadsBusy;
+	bool			mOpened;
 };
 
 #endif /* LLFLOATERCONVERSATIONPREVIEW_H_ */

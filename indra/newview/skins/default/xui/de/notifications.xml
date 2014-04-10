@@ -3575,6 +3575,10 @@ Versuch abgebrochen.
 		Kommen Sie näher heran.  Sitzen auf Objekt nicht möglich, da
 es sich nicht in der gleichen Region befindet wie Sie.
 	</notification>
+	<notification name="ChatHistoryIsBusyAlert">
+		Der Chatverlauf ist noch mit einer vorhergehenden Aktion beschäftigt. Bitte versuchen Sie es in ein paar Sekunden erneut oder wählen Sie den Chatverlauf einer anderen Person.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="NoNewObjectRegionFull">
 		Neues Objekt kann nicht erstellt werden. Die Region ist voll.
 	</notification>

@@ -2591,6 +2591,10 @@ void LLPanelLandAccess::refresh()
 			S32 count = parcel->mAccessList.size();
 			getChild<LLUICtrl>("AccessList")->setToolTipArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
 			getChild<LLUICtrl>("AccessList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
+			// <FS:Ansariel> FIRE-9211: Add counter to parcel ban and access lists
+			getChild<LLUICtrl>("AllowedText")->setTextArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
+			getChild<LLUICtrl>("AllowedText")->setTextArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
+			// </FS:Ansariel>
 
 			for (access_map_const_iterator cit = parcel->mAccessList.begin();
 				 cit != parcel->mAccessList.end(); ++cit)
@@ -2637,6 +2641,10 @@ void LLPanelLandAccess::refresh()
 
 			getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
 			getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
+			// <FS:Ansariel> FIRE-9211: Add counter to parcel ban and access lists
+			getChild<LLUICtrl>("BanCheck")->setTextArg(LLStringExplicit("[LISTED]"), llformat("%d",count));
+			getChild<LLUICtrl>("BanCheck")->setTextArg(LLStringExplicit("[MAX]"), llformat("%d",PARCEL_MAX_ACCESS_LIST));
+			// </FS:Ansariel>
 
 			for (access_map_const_iterator cit = parcel->mBanList.begin();
 				 cit != parcel->mBanList.end(); ++cit)
@@ -2725,6 +2733,12 @@ void LLPanelLandAccess::refresh()
 		getChild<LLUICtrl>("AccessList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",0));
 		getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[LISTED]"), llformat("%d",0));
 		getChild<LLUICtrl>("BannedList")->setToolTipArg(LLStringExplicit("[MAX]"), llformat("%d",0));
+		// <FS:Ansariel> FIRE-9211: Add counter to parcel ban and access lists
+		getChild<LLUICtrl>("AllowedText")->setTextArg(LLStringExplicit("[LISTED]"), llformat("%d",0));
+		getChild<LLUICtrl>("AllowedText")->setTextArg(LLStringExplicit("[MAX]"), llformat("%d",0));
+		getChild<LLUICtrl>("BanCheck")->setTextArg(LLStringExplicit("[LISTED]"), llformat("%d",0));
+		getChild<LLUICtrl>("BanCheck")->setTextArg(LLStringExplicit("[MAX]"), llformat("%d",0));
+		// </FS:Ansariel>
 	}	
 }
 

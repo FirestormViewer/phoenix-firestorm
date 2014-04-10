@@ -467,8 +467,12 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 			if(command == std::string(sFSCmdLinePos))
 			{
 				F32 x, y, z;
-				if (i >> x && i >> y && i >> z)
+				if (i >> x && i >> y)
 				{
+					if (!(i >> z))
+					{
+						z = gAgent.getPositionGlobal().mdV[VZ];
+					}
 					LLViewerRegion* agentRegionp = gAgent.getRegion();
 					if (agentRegionp)
 					{
