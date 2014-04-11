@@ -29,10 +29,7 @@
 
 #include "fsnearbychathub.h"
 #include "fsnearbychatcontrol.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llfloaternearbychat.h"
 #include "fsfloaternearbychat.h"
-// </FS:Ansariel> [FS communication UI]
 
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
@@ -159,12 +156,12 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 	U32 total = utf8_out_text.length();
 
 	// Don't break null messages
-	if(total == 0)
+	if (total == 0)
 	{
 		really_send_chat_from_viewer(utf8_out_text, type, channel);
 	}
 
-	while(pos < total)
+	while (pos < total)
 	{
 		U32 next_split = split;
 
@@ -222,11 +219,13 @@ void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32
 	LLMessageSystem* msg = gMessageSystem;
 
 	// <FS:ND> gMessageSystem can be 0, not sure how it is exactly to reproduce, maybe during viewer shutdown?
-	if( !msg )
+	if (!msg)
+	{
 		return;
+	}
 	// </FS:ND>
 
-	if(channel >= 0)
+	if (channel >= 0)
 	{
 		msg->newMessageFast(_PREHASH_ChatFromViewer);
 		msg->nextBlockFast(_PREHASH_AgentData);
@@ -270,10 +269,7 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 		gSavedSettings.getBOOL("FSShowChatChannel") &&
 		(channel == 0))
 	{
-		// <FS:Ansariel> [FS communication UI]
-		//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-		// </FS:Ansariel> [FS communication UI]
 	}
 	std::string utf8_out_text = wstring_to_utf8str(out_text);
 	std::string utf8_text = wstring_to_utf8str(wtext);
@@ -304,22 +300,22 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	{
 		if (type == CHAT_TYPE_WHISPER)
 		{
-			lldebugs << "You whisper " << utf8_text << llendl;
+			LL_DEBUGS("FSNearbyChatHub") << "You whisper " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_WHISPER, ANIM_REQUEST_START);
 		}
 		else if (type == CHAT_TYPE_NORMAL)
 		{
-			lldebugs << "You say " << utf8_text << llendl;
+			LL_DEBUGS("FSNearbyChatHub") << "You say " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_TALK, ANIM_REQUEST_START);
 		}
 		else if (type == CHAT_TYPE_SHOUT)
 		{
-			lldebugs << "You shout " << utf8_text << llendl;
+			LL_DEBUGS("FSNearbyChatHub") << "You shout " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_SHOUT, ANIM_REQUEST_START);
 		}
 		else
 		{
-			llinfos << "send_chat_from_viewer() - invalid volume" << llendl;
+			LL_INFOS("FSNearbyChatHub") << "send_chat_from_viewer() - invalid volume" << LL_ENDL;
 			return;
 		}
 	}
@@ -351,14 +347,20 @@ EChatType FSNearbyChat::processChatTypeTriggers(EChatType type, std::string &str
 
 				// It's to remove space after trigger name
 				if (length > trigger_length && str[trigger_length] == ' ')
+				{
 					trigger_length++;
+				}
 
 				str = str.substr(trigger_length, length);
 
 				if (CHAT_TYPE_NORMAL == type)
+				{
 					return sChatTypeTriggers[n].type;
+				}
 				else
+				{
 					break;
+				}
 			}
 		}
 	}
@@ -392,8 +394,10 @@ LLWString FSNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel)
 		S32 pos = 0;
 		//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
 		//        (this code was here; documenting for the future)
-		if(mesg[1] == '-')
+		if (mesg[1] == '-')
+		{
 			pos++;
+		}
 		//</FS:TS> FIRE-11412
 		
 		// Copy the channel number into a string
@@ -401,16 +405,16 @@ LLWString FSNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel)
 		llwchar c;
 		do
 		{
-			c = mesg[pos+1];
+			c = mesg[pos + 1];
 			channel_string.push_back(c);
 			pos++;
 		}
-		while(c && pos < 64 && LLStringOps::isDigit(c));
+		while (c && pos < 64 && LLStringOps::isDigit(c));
 		
 		// Move the pointer forward to the first non-whitespace char
 		// Check isspace before looping, so we can handle "/33foo"
 		// as well as "/33 foo"
-		while(c && iswspace(c))
+		while (c && iswspace(c))
 		{
 			c = mesg[pos+1];
 			pos++;
@@ -419,8 +423,10 @@ LLWString FSNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel)
 		sLastSpecialChatChannel = strtol(wstring_to_utf8str(channel_string).c_str(), NULL, 10);
 		//<FS:TS> FIRE-11412: Allow saying /-channel for negative numbers
 		//        (this code was here; documenting for the future)
-		if(mesg[1] == '-')
+		if (mesg[1] == '-')
+		{
 			sLastSpecialChatChannel = -sLastSpecialChatChannel;
+		}
 		//</FS:TS> FIRE-11412
 		*channel = sLastSpecialChatChannel;
 		return mesg.substr(pos, mesg.length() - pos);
@@ -433,13 +439,13 @@ LLWString FSNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel)
 	}
 }
 
-void FSNearbyChat::sendChat(LLWString text,EChatType type)
+void FSNearbyChat::sendChat(LLWString text, EChatType type)
 {
 	LLWStringUtil::trim(text);
 
 	if (!text.empty())
 	{
-		if(type == CHAT_TYPE_OOC)
+		if (type == CHAT_TYPE_OOC)
 		{
 			std::string tempText = wstring_to_utf8str( text );
 			tempText = gSavedSettings.getString("FSOOCPrefix") + " " + tempText + " " + gSavedSettings.getString("FSOOCPostfix");
@@ -455,10 +461,7 @@ void FSNearbyChat::sendChat(LLWString text,EChatType type)
 			gSavedSettings.getBOOL("FSShowChatChannel") &&
 			(channel == 0))
 		{
-			// <FS:Ansariel> [FS communication UI]
-			//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
 			channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
-			// </FS:Ansariel> [FS communication UI]
 		}
 		
 		std::string utf8text = wstring_to_utf8str(text);
@@ -481,10 +484,14 @@ void FSNearbyChat::sendChat(LLWString text,EChatType type)
 		utf8_revised_text = utf8str_trim(utf8_revised_text);
 
 		EChatType nType;
-		if(type == CHAT_TYPE_OOC)
+		if (type == CHAT_TYPE_OOC)
+		{
 			nType = CHAT_TYPE_NORMAL;
+		}
 		else
+		{
 			nType = type;
+		}
 
 		type = processChatTypeTriggers(nType, utf8_revised_text);
 
@@ -502,17 +509,19 @@ void FSNearbyChat::sendChat(LLWString text,EChatType type)
 void FSNearbyChat::registerChatBar(FSNearbyChatControl* chatBar)
 {
 	// TODO: make this a Param option "is_default"
-	if(!mDefaultChatBar || chatBar->getName()=="default_chat_bar")
+	if (!mDefaultChatBar || chatBar->getName() == "default_chat_bar")
 	{
 		mDefaultChatBar=chatBar;
 	}
 }
 
 // unhide the default nearby chat bar on request (pressing Enter or a letter key)
-void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
+void FSNearbyChat::showDefaultChatBar(BOOL visible, const char* text) const
 {
-	if(!mDefaultChatBar)
+	if (!mDefaultChatBar)
+	{
 		return;
+	}
 
 	// change settings control to signal button state
 	gSavedSettings.setBOOL("MainChatbarVisible",visible);
@@ -522,7 +531,7 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 	mDefaultChatBar->setFocus(visible);
 
 	// <FS:KC> Fix for bad edge snapping
-	if(visible)
+	if (visible)
 	{
 		gFloaterView->setSnapOffsetChatBar(mDefaultChatBar->getRect().getHeight() + MAGIC_CHAT_BAR_PAD);
 	}
@@ -531,10 +540,12 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 		gFloaterView->setSnapOffsetChatBar(0);
 	}
 
-	if(!text)
+	if (!text)
+	{
 		return;
+	}
 
-	if(mDefaultChatBar->getText().empty())
+	if (mDefaultChatBar->getText().empty())
 	{
 		mDefaultChatBar->setText(LLStringExplicit(text));
 		mDefaultChatBar->setCursorToEnd();
@@ -543,23 +554,29 @@ void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 }
 
 // We want to know which nearby chat editor (if any) currently has focus
-void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor,BOOL focus)
+void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus)
 {
-	if(focus)
-		mFocusedInputEditor=inputEditor;
+	if (focus)
+	{
+		mFocusedInputEditor = inputEditor;
+	}
 
 	// only remove focus if the request came from the previously active input editor
 	// to avoid races
-	else if(mFocusedInputEditor==inputEditor)
-		mFocusedInputEditor=NULL;
+	else if (mFocusedInputEditor == inputEditor)
+	{
+		mFocusedInputEditor = NULL;
+	}
 }
 
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
 // and the hide chat bar feature in mouselook in llagent.cpp
 BOOL FSNearbyChat::defaultChatBarIsIdle() const
 {
-	if(mFocusedInputEditor && mFocusedInputEditor->getName()=="default_chat_bar")
+	if (mFocusedInputEditor && mFocusedInputEditor->getName() == "default_chat_bar")
+	{
 		return mFocusedInputEditor->getText().empty();
+	}
 
 	// if any other chat bar has focus, report "idle", because they're not the default
 	return TRUE;
@@ -568,8 +585,10 @@ BOOL FSNearbyChat::defaultChatBarIsIdle() const
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
 BOOL FSNearbyChat::defaultChatBarHasFocus() const
 {
-	if(mFocusedInputEditor && mFocusedInputEditor->getName()=="default_chat_bar")
+	if (mFocusedInputEditor && mFocusedInputEditor->getName() == "default_chat_bar")
+	{
 		return TRUE;
+	}
 
 	return FALSE;
 }
@@ -581,7 +600,7 @@ public:
 	// not allowed from outside the app
 	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_THROTTLE) { }
 
-    // Your code here
+	// Your code here
 	bool handle(const LLSD& tokens, const LLSD& query_map,
 				LLMediaCtrl* web)
 	{
