@@ -1751,6 +1751,10 @@ co przekracza limit [LIMIT].
 		Na pewno chcesz się teleportować do &lt;nolink&gt;[LOCATION]&lt;/nolink&gt;?
 		<usetemplate ignoretext="Potwierdź próbę teleportacji do zapisanego miejsca" name="okcancelignore" notext="Anuluj" yestext="Teleportuj"/>
 	</notification>
+	<notification name="TeleportViaSLAPP">
+		Na pewno chcesz się teleportować do &lt;nolink&gt;[LOCATION]&lt;/nolink&gt;?
+		<usetemplate ignoretext="Potwierdź próbę teleportacji przez SLAPP" name="okcancelignore" notext="Anuluj" yestext="Teleportuj"/>
+	</notification>	
 	<notification name="TeleportToPick">
 		Teleportować do [PICK]?
 		<usetemplate ignoretext="Potwierdź, że chcesz teleportować się do miejsca w Ulubionych" name="okcancelignore" notext="Anuluj" yestext="Teleportuj"/>
@@ -3828,6 +3832,9 @@ Anulowano.
 	<notification name="SitFailNotSameRegion">
 		Spróbuj podejść bliżej. Nie można usiąść na obiekcie,
 bo nie jest w tym samym regionie, co Ty.
+	</notification>
+	<notification name="ChatHistoryIsBusyAlert">
+		Plik historii czatu jest w tej chwili przetwarzany przez poprzednią operację. Spróbuj ponownie za kilka minut lub wybierz czat innej osoby.
 	</notification>
 	<notification name="NoNewObjectRegionFull">
 		Nie można utworzyć nowego obiektu. Region jest pełny.

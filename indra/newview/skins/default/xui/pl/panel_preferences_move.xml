@@ -94,6 +94,7 @@
 			<check_box label="Powiadom, jeśli wersja symulatora ulegnie zmianie podczas zmiany regionu" name="FSShowServerVersionChangeNotice" tool_tip="Wyświetla powiadomienie, jeśli wersja symulatora ulegnie zmianie podczas teleportowania się lub przekraczania granicy regionu."/>
 			<check_box label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecny kanał symulatora na pasku statusu w stylu V1."/>
 			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>
+			<check_box label="Obróć awatara w kierunku zaznaczonego obiektu" name="FSTurnAvatarToSelectedObject" tool_tip="Obracaj awatara w taki sposób, aby twarz była skierowana w stronę zaznaczonego w danej chwili obiektu."/>
 		</panel>
 	</tab_container>
 </panel>
