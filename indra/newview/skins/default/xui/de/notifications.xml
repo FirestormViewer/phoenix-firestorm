@@ -1788,6 +1788,10 @@ womit Sie die Höchstgrenze von [LIMIT] überschreiten.
 		Sind Sie sicher, dass Sie zu &lt;nolink&gt;[LOCATION]&lt;/nolink&gt; teleportieren möchten?
 		<usetemplate ignoretext="Bestätigen, dass ich zu einer Landmarke teleportieren möchte" name="okcancelignore" notext="Abbrechen" yestext="Teleportieren"/>
 	</notification>
+	<notification name="TeleportViaSLAPP">
+		Sind Sie sicher, dass Sie zu &lt;nolink&gt;[LOCATION]&lt;/nolink&gt; teleportieren möchten?
+		<usetemplate ignoretext="Bestätigen, dass ich via SLAPP teleportieren möchte" name="okcancelignore" notext="Abbrechen" yestext="Teleportieren"/>
+	</notification>
 	<notification name="TeleportToPick">
 		Nach [PICK] teleportieren?
 		<usetemplate ignoretext="Bestätigen, dass ich zu einer Position in Auswahl teleportieren möchte" name="okcancelignore" notext="Abbrechen" yestext="Teleportieren"/>
