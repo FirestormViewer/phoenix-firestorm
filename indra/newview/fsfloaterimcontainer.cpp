@@ -42,6 +42,7 @@
 #include "llviewercontrol.h"
 #include "fsfloaterim.h"
 #include "llvoiceclient.h"
+#include "lltoolbarview.h"
 
 static const F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 
@@ -288,6 +289,15 @@ void FSFloaterIMContainer::setMinimized(BOOL b)
 	}
 }
 
+void FSFloaterIMContainer::setVisible(BOOL b)
+{
+	LLMultiFloater::setVisible(b);
+
+	if (b)
+	{
+		mFlashingSessions.clear();
+	}
+}
 
 //virtual
 void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg)
@@ -308,6 +318,13 @@ void FSFloaterIMContainer::sessionRemoved(const LLUUID& session_id)
 	if (iMfloater != NULL)
 	{
 		iMfloater->closeFloater();
+	}
+
+	uuid_vec_t::iterator found = std::find(mFlashingSessions.begin(), mFlashingSessions.end(), session_id);
+	if (found != mFlashingSessions.end())
+	{
+		mFlashingSessions.erase(found);
+		checkFlashing();
 	}
 }
 
@@ -438,4 +455,20 @@ LLFloater* FSFloaterIMContainer::getCurrentVoiceFloater()
 	return NULL;
 }
 
+void FSFloaterIMContainer::addFlashingSession(const LLUUID& session_id)
+{
+	uuid_vec_t::iterator found = std::find(mFlashingSessions.begin(), mFlashingSessions.end(), session_id);
+	if (found == mFlashingSessions.end())
+	{
+		mFlashingSessions.push_back(session_id);
+	}
+}
+
+void FSFloaterIMContainer::checkFlashing()
+{
+	if (mFlashingSessions.empty())
+	{
+		gToolBarView->flashCommand(LLCommandId("chat"), false);
+	}
+}
 // EOF

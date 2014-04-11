@@ -64,6 +64,7 @@ public:
 	static FSFloaterIMContainer* getInstance();
 
 	virtual void setMinimized(BOOL b);
+	virtual void setVisible(BOOL b);
 	
 	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
 
@@ -75,6 +76,8 @@ public:
 
 	static void reloadEmptyFloaters();
 	void initTabs();
+
+	void addFlashingSession(const LLUUID& session_id);
 
 private:
 	enum eVoiceState
@@ -97,6 +100,9 @@ private:
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;
 	boost::signals2::connection mNewMessageConnection;
+
+	void checkFlashing();
+	uuid_vec_t	mFlashingSessions;
 };
 
 #endif // FS_FLOATERIMCONTAINER_H
