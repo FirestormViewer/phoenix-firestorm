@@ -592,12 +592,19 @@ void FSFloaterIM::updateButtons(bool is_call_started)
 void FSFloaterIM::changed(U32 mask)
 {
 	LL_DEBUGS("FSFloaterIM") << "FSFloaterIM::changed(U32 mask)" << LL_ENDL;
-	getChild<LLButton>("call_btn")->setEnabled(!LLAvatarActions::isFriend(mOtherParticipantUUID));
 	
-	// Disable "Teleport" button if friend is offline
 	if(LLAvatarActions::isFriend(mOtherParticipantUUID))
 	{
-		getChild<LLButton>("teleport_btn")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID));
+		bool is_online = LLAvatarTracker::instance().isBuddyOnline(mOtherParticipantUUID);
+		getChild<LLButton>("teleport_btn")->setEnabled(is_online);
+		getChild<LLButton>("call_btn")->setEnabled(is_online);
+	}
+	else
+	{
+		// If friendship dissolved, enable buttons by default because we don't
+		// know about their online status anymore
+		getChild<LLButton>("teleport_btn")->setEnabled(TRUE);
+		getChild<LLButton>("call_btn")->setEnabled(TRUE);
 	}
 }
 
