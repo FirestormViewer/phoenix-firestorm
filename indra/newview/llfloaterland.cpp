@@ -392,8 +392,9 @@ BOOL LLPanelLandGeneral::postBuild()
 	mContentRating = getChild<LLTextBox>("ContentRatingText");
 	mLandType = getChild<LLTextBox>("LandTypeText");
 	
-	mBtnProfile = getChild<LLButton>("Profile...");
-	mBtnProfile->setClickedCallback(boost::bind(&LLPanelLandGeneral::onClickProfile, this));
+	// <FS:Ansariel> Doesn't exists as of 2014-04-14
+	//mBtnProfile = getChild<LLButton>("Profile...");
+	//mBtnProfile->setClickedCallback(boost::bind(&LLPanelLandGeneral::onClickProfile, this));
 
 	
 	mTextGroupLabel = getChild<LLTextBox>("Group:");
@@ -540,8 +541,9 @@ void LLPanelLandGeneral::refresh()
 		mTextOwner->setText(LLStringUtil::null);
 		mContentRating->setText(LLStringUtil::null);
 		mLandType->setText(LLStringUtil::null);
-		mBtnProfile->setLabel(getString("profile_text"));
-		mBtnProfile->setEnabled(FALSE);
+		// <FS:Ansariel> Doesn't exists as of 2014-04-14
+		//mBtnProfile->setLabel(getString("profile_text"));
+		//mBtnProfile->setEnabled(FALSE);
 
 		mTextClaimDate->setText(LLStringUtil::null);
 		mTextGroup->setText(LLStringUtil::null);
@@ -603,7 +605,8 @@ void LLPanelLandGeneral::refresh()
 			mTextSalePending->setEnabled(FALSE);
 			mTextOwner->setText(getString("public_text"));
 			mTextOwner->setEnabled(FALSE);
-			mBtnProfile->setEnabled(FALSE);
+			// <FS:Ansariel> Doesn't exists as of 2014-04-14
+			//mBtnProfile->setEnabled(FALSE);
 			mTextClaimDate->setText(LLStringUtil::null);
 			mTextClaimDate->setEnabled(FALSE);
 			mTextGroup->setText(getString("none_text"));
@@ -633,12 +636,14 @@ void LLPanelLandGeneral::refresh()
 			mTextOwner->setEnabled(TRUE);
 
 			// We support both group and personal profiles
-			mBtnProfile->setEnabled(TRUE);
+			// <FS:Ansariel> Doesn't exists as of 2014-04-14
+			//mBtnProfile->setEnabled(TRUE);
 
 			if (parcel->getGroupID().isNull())
 			{
 				// Not group owned, so "Profile"
-				mBtnProfile->setLabel(getString("profile_text"));
+				// <FS:Ansariel> Doesn't exists as of 2014-04-14
+				//mBtnProfile->setLabel(getString("profile_text"));
 
 				mTextGroup->setText(getString("none_text"));
 				mTextGroup->setEnabled(FALSE);
@@ -646,7 +651,8 @@ void LLPanelLandGeneral::refresh()
 			else
 			{
 				// Group owned, so "Info"
-				mBtnProfile->setLabel(getString("info_text"));
+				// <FS:Ansariel> Doesn't exists as of 2014-04-14
+				//mBtnProfile->setLabel(getString("info_text"));
 
 				//mTextGroup->setText("HIPPOS!");//parcel->getGroupName());
 				mTextGroup->setEnabled(TRUE);
@@ -914,22 +920,24 @@ void LLPanelLandGeneral::onClickSetGroup()
 	}
 }
 
-void LLPanelLandGeneral::onClickProfile()
-{
-	LLParcel* parcel = mParcel->getParcel();
-	if (!parcel) return;
-
-	if (parcel->getIsGroupOwned())
-	{
-		const LLUUID& group_id = parcel->getGroupID();
-		LLGroupActions::show(group_id);
-	}
-	else
-	{
-		const LLUUID& avatar_id = parcel->getOwnerID();
-		LLAvatarActions::showProfile(avatar_id);
-	}
-}
+// <FS:Ansariel> Doesn't exists as of 2014-04-14
+//void LLPanelLandGeneral::onClickProfile()
+//{
+//	LLParcel* parcel = mParcel->getParcel();
+//	if (!parcel) return;
+//
+//	if (parcel->getIsGroupOwned())
+//	{
+//		const LLUUID& group_id = parcel->getGroupID();
+//		LLGroupActions::show(group_id);
+//	}
+//	else
+//	{
+//		const LLUUID& avatar_id = parcel->getOwnerID();
+//		LLAvatarActions::showProfile(avatar_id);
+//	}
+//}
+// </FS:Ansariel>
 
 // public
 void LLPanelLandGeneral::setGroup(const LLUUID& group_id)

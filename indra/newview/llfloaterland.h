@@ -140,7 +140,8 @@ public:
 	virtual void draw();
 
 	void setGroup(const LLUUID& group_id);
-	void onClickProfile();
+	// <FS:Ansariel> Doesn't exists as of 2014-04-14
+	//void onClickProfile();
 	void onClickSetGroup();
 	static void onClickDeed(void*);
 	static void onClickBuyLand(void* data);
@@ -188,7 +189,8 @@ protected:
 
 	LLTextBox*		mTextOwnerLabel;
 	LLTextBox*		mTextOwner;
-	LLButton*		mBtnProfile;
+	// <FS:Ansariel> Doesn't exists as of 2014-04-14
+	//LLButton*		mBtnProfile;
 	
 	LLTextBox*		mContentRating;
 	LLTextBox*		mLandType;
