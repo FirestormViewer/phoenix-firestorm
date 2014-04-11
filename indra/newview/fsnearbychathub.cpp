@@ -579,7 +579,7 @@ class LLChatCommandHandler : public LLCommandHandler
 {
 public:
 	// not allowed from outside the app
-	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_BLOCK) { }
+	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_THROTTLE) { }
 
     // Your code here
 	bool handle(const LLSD& tokens, const LLSD& query_map,
