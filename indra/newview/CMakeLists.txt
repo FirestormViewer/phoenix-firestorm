@@ -1539,8 +1539,8 @@ LIST(APPEND viewer_SOURCE_FILES llleapmotioncontroller.cpp)
 LIST(APPEND viewer_HEADER_FILES llleapmotioncontroller.h)
 
 if (LEAPMOTION)
-  LIST(APPEND viewer_SOURCE_FILES fsleaptool.cpp fsleapexampletool.cpp )
-  LIST(APPEND viewer_HEADER_FILES fsleaptool.h fsleapexampletool.h )
+  LIST(APPEND viewer_SOURCE_FILES fsleaptool.cpp fsleapexampletool.cpp fsleapmaniptool.cpp )
+  LIST(APPEND viewer_HEADER_FILES fsleaptool.h fsleapexampletool.h fsleapmaniptool.h )
 endif (LEAPMOTION)
 
 if (DARWIN)

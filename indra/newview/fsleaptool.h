@@ -30,6 +30,7 @@
 namespace Leap
 {
 	class HandList;
+	class Frame;
 }
 
 namespace nd
@@ -41,7 +42,8 @@ namespace nd
 		public:
 			virtual ~Tool(){}
 
-			virtual void onFrame( Leap::HandList const& ) = 0;
+			virtual void onLeapFrame( Leap::Frame const& ) = 0;
+			virtual void onRenderFrame( Leap::Frame const& ) = 0;
 			virtual void render() = 0;
 			virtual std::string getDebugString() = 0;
 			virtual std::string getName() = 0;

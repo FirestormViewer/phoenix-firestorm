@@ -194,6 +194,8 @@ public:
 	std::vector<LLVector3>	mSilhouetteNormals;	// array of normals to render silhouette of object
 	BOOL					mSilhouetteExists;	// need to generate silhouette?
 
+	LLColor4 mHighlightColor; // <FS:ND/> Color per highlighted object
+
 protected:
 	LLPointer<LLViewerObject>	mObject;
 	S32				mTESelectMask;
@@ -440,7 +442,11 @@ public:
 	LLSelectNode *getHoverNode();
 	LLSelectNode *getPrimaryHoverNode();
 
-	void highlightObjectOnly(LLViewerObject *objectp);
+	// <FS:ND> Color per highlighted object
+	// void highlightObjectOnly(LLViewerObject *objectp);
+	void highlightObjectOnly(LLViewerObject *objectp, LLColor4 const &aColor = LLColor4() );
+	// </FS:ND>
+
 	void highlightObjectAndFamily(LLViewerObject *objectp);
 	void highlightObjectAndFamily(const std::vector<LLViewerObject*>& list);
 
@@ -782,6 +788,8 @@ private:
 	LLObjectSelectionHandle					mHighlightedObjects;
 	std::set<LLPointer<LLViewerObject> >	mRectSelectedObjects;
 	
+	std::map< LLPointer< LLViewerObject >, LLColor4 > mHighlightColor; // <FS:ND/> Color per highlighted object
+
 	LLObjectSelection		mGridObjects;
 	LLQuaternion			mGridRotation;
 	LLVector3				mGridOrigin;

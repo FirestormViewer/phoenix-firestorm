@@ -175,6 +175,9 @@ void LLLMImpl::onFrame(const Leap::Controller& controller)
 			mCurrentFrameID = frame_id;
 			mFrameAvailable = true;
 		}
+
+		if( mTool )
+			mTool->onLeapFrame( frame);
 	}
 }
 
@@ -207,13 +210,14 @@ void LLLMImpl::stepFrame()
 		
 		static LLCachedControl<S32> sControllerMode(gSavedSettings, "LeapMotionTestMode", 0);
 
-		if( mTool && mTool->getId() != sControllerMode )
+		if( !mTool || mTool->getId() != sControllerMode )
+		{
 			delete mTool;
-
-		mTool = nd::leap::constructTool( sControllerMode );
+			mTool = nd::leap::constructTool( sControllerMode );
+		}
 
 		if( mTool )
-			mTool->onFrame( hands );
+			mTool->onRenderFrame( frame );
 		else
 		{
 			switch (sControllerMode)

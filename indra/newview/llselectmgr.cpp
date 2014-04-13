@@ -1000,7 +1000,10 @@ LLSelectNode *LLSelectMgr::getPrimaryHoverNode()
 	return mHoverObjects->mSelectNodeMap[mHoverObjects->mPrimaryObject];
 }
 
-void LLSelectMgr::highlightObjectOnly(LLViewerObject* objectp)
+// <FS:ND> Color per highlighted object
+//void LLSelectMgr::highlightObjectOnly(LLViewerObject* objectp)
+void LLSelectMgr::highlightObjectOnly(LLViewerObject *objectp, LLColor4 const &aColor )
+// </FS:ND>
 {
 	if (!objectp)
 	{
@@ -1027,6 +1030,8 @@ void LLSelectMgr::highlightObjectOnly(LLViewerObject* objectp)
 	// </FS:Ansariel>
 
 	mRectSelectedObjects.insert(objectp);
+
+	mHighlightColor[ objectp ] = aColor; // <FS:ND/> Color per highlighted object
 }
 
 void LLSelectMgr::highlightObjectAndFamily(LLViewerObject* objectp)
@@ -1088,6 +1093,7 @@ void LLSelectMgr::unhighlightObjectOnly(LLViewerObject* objectp)
 	}
 
 	mRectSelectedObjects.erase(objectp);
+	mHighlightColor.erase( objectp ); // <FS:ND/> Color per highlighted object
 }
 
 void LLSelectMgr::unhighlightObjectAndFamily(LLViewerObject* objectp)
@@ -1115,6 +1121,8 @@ void LLSelectMgr::unhighlightAll()
 {
 	mRectSelectedObjects.clear();
 	mHighlightedObjects->deleteAllNodes();
+
+	mHighlightColor.clear(); // <FS:ND/> Color per highlighted object
 }
 
 LLObjectSelectionHandle LLSelectMgr::selectHighlightedObjects()
@@ -5575,6 +5583,11 @@ void LLSelectMgr::updateSilhouettes()
 			LLSelectNode* rect_select_root_node = new LLSelectNode(objectp, TRUE);
 			rect_select_root_node->selectAllTEs(TRUE);
 
+			 // <FS:ND> Color per highlighted object
+			if( mHighlightColor.find( objectp ) != mHighlightColor.end() )
+				rect_select_root_node->mHighlightColor = mHighlightColor[ objectp ];
+			// </FS:ND>
+
 			if (!select_linked_set)
 			{
 				rect_select_root_node->mIndividualSelection = TRUE;
@@ -6206,7 +6219,7 @@ void pushWireframe(LLDrawable* drawable)
 	
 }
 
-void LLSelectNode::renderOneWireframe(const LLColor4& color)
+void LLSelectNode::renderOneWireframe(const LLColor4& color) 
 {
 	LLViewerObject* objectp = getObject();
 	if (!objectp)
@@ -6296,8 +6309,17 @@ void LLSelectNode::renderOneWireframe(const LLColor4& color)
 //-----------------------------------------------------------------------------
 // renderOneSilhouette()
 //-----------------------------------------------------------------------------
-void LLSelectNode::renderOneSilhouette(const LLColor4 &color)
+// <FS:ND> Color per highlighted object
+//void LLSelectNode::renderOneSilhouette(const LLColor4 &color)
+void LLSelectNode::renderOneSilhouette(const LLColor4 &aColor)
+// </FS:ND>
 {
+	 // <FS:ND> Color per highlighted object
+	LLColor4 color( aColor );
+	if( this->mHighlightColor.lengthSquared() > 0 )
+		color = this->mHighlightColor;
+	// </FS:ND>
+
 	LLViewerObject* objectp = getObject();
 	if (!objectp)
 	{

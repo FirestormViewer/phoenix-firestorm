@@ -25,11 +25,14 @@
 
 #include "fsleaptool.h"
 #include "fsleapexampletool.h"
+#include "fsleapmaniptool.h"
 
 nd::leap::Tool* nd::leap::constructTool( S32 aTool )
 {
 	if( 111 == aTool )
 		return new nd::leap::ExampleTool();
+	if( 11 == aTool )
+		return new nd::leap::ManipTool();
 
 	return 0;
 }
