@@ -759,6 +759,13 @@ LLSD FSData::allowedLogin()
 	}
 	else
 	{
+#if OPENSIM
+		// Don't disallow logins for OpenSim grids, the admins of the grid can disallow logins if they want to.
+		if (LLGridManager::getInstance()->isInOpenSim())
+		{
+			return LLSD();
+		}
+#endif
 		return iter->second;
 	}
 }
