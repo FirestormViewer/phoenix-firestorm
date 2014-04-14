@@ -27,6 +27,9 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fskeywords.h"
+#include "llagent.h"
+#include "llinstantmessage.h"
+#include "llmutelist.h"
 #include "llui.h"
 #include "llviewercontrol.h"
 
@@ -83,8 +86,16 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 void FSKeywords::notify(const LLChat& chat)
 {
-	static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedSettings, "PlayModeUISndFSKeywordSound");
-	if(PlayModeUISndFSKeywordSound)
-		LLUI::sAudioCallback(LLUUID(gSavedSettings.getString("UISndFSKeywordSound")));
+	if (chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM)
+	{
+		if (!LLMuteList::getInstance()->isMuted(chat.mFromID))
+		{
+			static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedSettings, "PlayModeUISndFSKeywordSound");
+			if (PlayModeUISndFSKeywordSound)
+			{
+				LLUI::sAudioCallback(LLUUID(gSavedSettings.getString("UISndFSKeywordSound")));
+			}
+		}
+	}
 }
 // </FS:PP>
