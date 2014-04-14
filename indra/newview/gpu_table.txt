@@ -544,11 +544,11 @@ NVIDIA GeForce 4 Go						.*NVIDIA .*GeForce ?4.*Go.*							0	0	0	0
 NVIDIA GeForce 4 MX						.*NVIDIA .*GeForce ?4 MX.*							0	0	0	0
 NVIDIA GeForce 4 PCX					.*NVIDIA .*GeForce ?4 PCX.*							0	0	0	0
 NVIDIA GeForce 4 Ti						.*NVIDIA .*GeForce ?4 Ti.*							0	0	0	0
-NVIDIA GeForce 6100						.*NVIDIA .*GeForce 61.*								0	0	1	2.1
-NVIDIA GeForce 6200						.*NVIDIA .*GeForce 62.*								0	0	1	2.1
-NVIDIA GeForce 6500						.*NVIDIA .*GeForce 65.*								0	0	1	2.1
-NVIDIA GeForce 6600						.*NVIDIA .*GeForce 66.*								2	1	1	2.1
-NVIDIA GeForce 6700						.*NVIDIA .*GeForce 67.*								2	1	1	2.1
+NVIDIA GeForce 6100						.*NVIDIA .*GeForce 61.*								0	1	1	2.1
+NVIDIA GeForce 6200						.*NVIDIA .*GeForce 62.*								0	1	1	2.1
+NVIDIA GeForce 6500						.*NVIDIA .*GeForce 65.*								0	1	1	2.1
+NVIDIA GeForce 6600						.*NVIDIA .*GeForce 66.*								1	1	1	2.1
+NVIDIA GeForce 6700						.*NVIDIA .*GeForce 67.*								1	1	1	2.1
 NVIDIA GeForce 6800						.*NVIDIA .*GeForce 68.*								1	1	1	2.1
 NVIDIA GeForce 7000						.*NVIDIA .*GeForce 70.*								1	1	1	2.1
 NVIDIA GeForce 7100						.*NVIDIA .*GeForce 71.*								1	1	1	2.1
