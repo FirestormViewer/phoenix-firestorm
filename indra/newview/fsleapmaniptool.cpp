@@ -242,7 +242,7 @@ namespace nd
 			curFingers.clear();
 			curFingers.mTimestamp = mLastExaminedFrame;
 
-			Leap::HandList &hands = aFrame.hands();
+			Leap::HandList hands = aFrame.hands();
 			for( int i = 0; i < hands.count(); ++i )
 			{
 				for( int j = 0; j < hands[i].fingers().count(); ++j )
