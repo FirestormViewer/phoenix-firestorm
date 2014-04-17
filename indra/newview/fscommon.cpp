@@ -56,6 +56,8 @@ static const std::string LL_SCOUT = "Scout";
 static const std::string LL_TESTER = "Tester";
 
 
+extern S32 gMaxAgentGroups;
+
 S32 FSCommon::sObjectAddMsg = 0;
 
 void reportToNearbyChat(const std::string& message)
@@ -336,5 +338,15 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 	}
 
 	return false;
+}
+
+LLSD FSCommon::populateGroupCount()
+{
+	LLStringUtil::format_map_t args;
+	S32 groupcount = gAgent.mGroups.count();
+	args["[COUNT]"] = llformat("%d", groupcount);
+	args["[REMAINING]"] = llformat("%d", gMaxAgentGroups - groupcount);
+	LLUIString groupcountstring = LLTrans::getString((gMaxAgentGroups ? "groupcountstring" : "groupcountunlimitedstring"), args);
+	return LLSD(groupcountstring);
 }
 
