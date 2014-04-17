@@ -5915,4 +5915,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Mouselook_Unknown_Avatar">
 		Unbekannter Avatar
 	</string>
+
+	<string name="groupcountstring">
+		Sie gehören [COUNT] Gruppe(n) an ([REMAINING] verbleibend).
+	</string>
+	<string name="groupcountunlimitedstring">
+		Sie gehören [COUNT] Gruppe(n) an.
+	</string>
 </strings>

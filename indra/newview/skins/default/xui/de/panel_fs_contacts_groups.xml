@@ -41,8 +41,4 @@
 	 label="Einladen..."
 	 name="invite_btn"
 	 width="85" />
-	<text
-	 name="groupcount">
-		Du bist Mitglied bei [COUNT] Gruppen von max [MAX]. 
-	</text>
 </panel>
