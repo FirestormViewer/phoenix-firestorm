@@ -46,6 +46,8 @@
 #include "lluictrlfactory.h"
 #include "lltrans.h"
 
+#include "fscommon.h"
+
 using namespace LLOldEvents;
 
 // helper functions
@@ -171,8 +173,11 @@ void LLPanelGroups::reset()
 	{
 		group_list->operateOnAll(LLCtrlListInterface::OP_DELETE);
 	}
-	getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
-	getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
+	// [CR] FIRE-12229
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
+	getChild<LLUICtrl>("groupcount")->setValue(FSCommon::populateGroupCount());
+	// [/CR]
 
 	init_group_list(getChild<LLScrollListCtrl>("group list"), gAgent.getGroupID());
 	enableButtons();
@@ -182,8 +187,11 @@ BOOL LLPanelGroups::postBuild()
 {
 	childSetCommitCallback("group list", onGroupList, this);
 
-	getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
-	getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
+	// [CR] FIRE-12229
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
+	//getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d",gMaxAgentGroups));
+	getChild<LLUICtrl>("groupcount")->setValue(FSCommon::populateGroupCount());
+	// [/CR]
 
 	LLScrollListCtrl *list = getChild<LLScrollListCtrl>("group list");
 	if (list)

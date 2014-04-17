@@ -77,6 +77,7 @@
 #include "llevents.h"				// for LLEventPumps
 
 // Firestorm includes
+#include "fscommon.h"
 #include "fspanelradar.h"
 #include "lggcontactsets.h"
 #include "llcombobox.h"
@@ -97,8 +98,8 @@ static const std::string BLOCKED_TAB_NAME	= "blocked_panel"; // blocked avatars
 static const std::string CONTACT_SETS_TAB_NAME = "contact_sets_panel";	// [FS:CR] Contact sets
 static const std::string COLLAPSED_BY_USER  = "collapsed_by_user";
 
-
-extern S32 gMaxAgentGroups;
+// [FS] FIRE-12229
+//extern S32 gMaxAgentGroups;
 
 /** Comparator for comparing avatar items by last interaction date */
 class LLAvatarItemRecentComparator : public LLAvatarItemComparator
@@ -996,8 +997,11 @@ void LLPanelPeople::updateButtons()
 
 		LLPanel* groups_panel = mTabContainer->getCurrentPanel();
 		groups_panel->getChildView("minus_btn")->setEnabled(item_selected && selected_id.notNull()); // a real group selected
-		groups_panel->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
-		groups_panel->getChild<LLUICtrl>("groupcount")->setTextArg("[REMAINING]", llformat("%d",(gMaxAgentGroups-gAgent.mGroups.count())));
+		// [CR] FIRE-12229
+		//groups_panel->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d",gAgent.mGroups.count()));
+		//groups_panel->getChild<LLUICtrl>("groupcount")->setTextArg("[REMAINING]", llformat("%d",(gMaxAgentGroups-gAgent.mGroups.count())));
+		getChild<LLUICtrl>("groupcount")->setValue(FSCommon::populateGroupCount());
+		// [/CR]
 	}
 	else
 	{

@@ -716,7 +716,10 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		S32 max_groups = gMaxAgentGroups;
 		if(gAgent.isInGroup(group_id)) ++max_groups;
 
-		if(gAgent.mGroups.count() < max_groups)
+		// [CR] FIRE-12229
+		//if(gAgent.mGroups.count() < max_groups)
+		if(!max_groups || gAgent.mGroups.count() < max_groups)
+		// [/CR] FIRE-12229
 		{
 			accept_invite = true;
 		}

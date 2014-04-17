@@ -2674,4 +2674,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Inbox_Folderview_New">New</string>
 
   <string name="Mouselook_Unknown_Avatar">Unknown agent</string>
+
+  <string name="groupcountstring">You belong to [COUNT] groups ([REMAINING] remaining).</string>
+  <string name="groupcountunlimitedstring">You belong to [COUNT] groups.</string>
+
 </strings>
