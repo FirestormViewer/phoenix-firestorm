@@ -38,6 +38,7 @@
 // newview
 #include "fscommon.h"
 #include "fslslbridge.h"
+#include "fswsassetblacklist.h"
 #include "lggcontactsets.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
@@ -173,6 +174,7 @@ void FSRadar::updateRadarList()
 	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
 	static LLCachedControl<bool> sFSLegacyRadarFriendColoring(gSavedSettings, "FSLegacyRadarFriendColoring");
 	static LLCachedControl<bool> sRadarColorNamesByDistance(gSavedSettings, "FSRadarColorNamesByDistance", false);
+	static LLCachedControl<bool> RadarShowMutedAndDerendered(gSavedSettings, "FSRadarShowMutedAndDerendered");
 	bool sUseLSLBridge = FSLSLBridge::instance().canUseBridge();
 
 	F32 drawRadius(RenderFarClip);
@@ -281,6 +283,12 @@ void FSRadar::updateRadarList()
 			{
 				continue;
 			}
+		}
+
+		bool is_muted = mutelist->isMuted(avId);
+		if (!RadarShowMutedAndDerendered && (is_muted || FSWSAssetBlacklist::getInstance()->isBlacklisted(avId, LLAssetType::AT_OBJECT)))
+		{
+			continue;
 		}
 
 		LLUUID avRegion;
@@ -513,7 +521,7 @@ void FSRadar::updateRadarList()
 		{
 			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::BOLD);
 		}
-		if (mutelist->isMuted(avId))
+		if (is_muted)
 		{
 			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::ITALIC);
 		}

@@ -2,6 +2,7 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Karte oberhalb Radar anzeigen" name="ShowRadarMinimap"/>
 	<menu_item_check label="Anzeige auf definierten Radius beschränken" name="LimitRadarByRange"/>
+	<menu_item_check label="Ignorierte und geblacklistete Einwohner anzeigen" name="FSRadarShowMutedAndDerendered"/>
 	<context_menu label="Radar-Namensformat" name="radarNameFormat">
 		<menu_item_check label="Anzeigename" name="radarFmtDN"/>
 		<menu_item_check label="Benutzername" name="radarFmtUN"/>
@@ -22,5 +23,5 @@
 	<menu_item_check label="Verlassen der Region melden" name="RadarReportSimRangeLeave"/>
 	<menu_item_check label="Eintrittsmeldungen an Skripte senden" name="RadarEnterChannelAlert"/>
 	<menu_item_check label="Austrittsmeldungen an Skripte senden" name="RadarLeaveChannelAlert"/>
-	<menu_item_call label="Ignorierte Einwohner &amp; Objekte anzeigen" name="show_blocked_list"/>
+	<menu_item_call label="Liste ignorierter Einwohner &amp; Objekte öffnen" name="show_blocked_list"/>
 </toggleable_menu>
