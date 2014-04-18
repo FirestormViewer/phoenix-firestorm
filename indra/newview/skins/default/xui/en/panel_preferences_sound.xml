@@ -692,6 +692,7 @@
          name="VoiceMultiInstance"
          width="400"/>
          
+<!--
         <text
          type="string"
          length="1"
@@ -703,7 +704,6 @@
          width="112">
             Listen from:
         </text>
-<!--
         <icon
          follows="left|top"
          height="18"
@@ -732,14 +732,14 @@
          control_name="VoiceEarLocation"
          follows="left|top"
          layout="topleft"
-         left_pad="0"
+         left="25"
          width="400"
-         height="20"
-         top_pad="-17"
+         height="60"
+         top_pad="0"
          name="ear_location">
             <radio_item
              height="19"
-             label="Camera position"
+             label="Hear Voice from Camera position"
              follows="left|top"
              layout="topleft"
              name="0"
@@ -747,20 +747,18 @@
             <radio_item
              height="19"
              follows="left|top"
-             label="Avatar position"
+             label="Hear Voice from Avatar position"
              layout="topleft"
-             left_pad="-16"
              name="1"
-             top_delta ="0"
+             top_pad="-2"
              width="150" />
             <radio_item
              height="19"
              follows="left|top"
-             label="Speaker position"
+             label="Hear Voice equally from everyone"
              layout="topleft"
-             left_pad="-16"
              name="2"
-             top_delta ="0"
+             top_pad="-2"
              width="150" />
         </radio_group>
 
