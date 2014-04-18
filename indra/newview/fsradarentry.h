@@ -53,6 +53,7 @@ public:
 	F32			getZOffset() const { return mZOffset; }
 	time_t		getLastZOffsetTime() const { return mLastZOffsetTime; }
 	bool		getIsLinden() const { return mIsLinden; }
+	bool		getIgnore() const { return mIgnore; }
 
 	void		setZOffset(F32 offset) { mZOffset = offset; }
 
@@ -76,6 +77,7 @@ private:
 	F32			mZOffset;
 	time_t		mLastZOffsetTime;
 	bool		mIsLinden;
+	bool		mIgnore;
 
 	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 };

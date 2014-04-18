@@ -149,6 +149,7 @@ void FSRadar::updateRadarList()
 	//Configuration
 	LLWorld* world = LLWorld::getInstance();
 	LLMuteList* mutelist = LLMuteList::getInstance();
+	FSWSAssetBlacklist* blacklist = FSWSAssetBlacklist::getInstance();
 
 	static const F32 chat_range_say = LFSimFeatureHandler::getInstance()->sayRange();
 	static const F32 chat_range_shout = LFSimFeatureHandler::getInstance()->shoutRange();
@@ -286,7 +287,10 @@ void FSRadar::updateRadarList()
 		}
 
 		bool is_muted = mutelist->isMuted(avId);
-		if (!RadarShowMutedAndDerendered && (is_muted || FSWSAssetBlacklist::getInstance()->isBlacklisted(avId, LLAssetType::AT_OBJECT)))
+		bool is_blacklisted = blacklist->isBlacklisted(avId, LLAssetType::AT_OBJECT);
+		bool should_be_ignored = is_muted || is_blacklisted;
+		ent->mIgnore = should_be_ignored;
+		if (!RadarShowMutedAndDerendered && should_be_ignored)
 		{
 			continue;
 		}
@@ -394,7 +398,7 @@ void FSRadar::updateRadarList()
 		//
 		// 2c. Process previously detected avatars
 		//
-		else 
+		else
 		{
 			RadarFields rf = last_sweep_found_it->second;
 			if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
@@ -624,9 +628,9 @@ void FSRadar::updateRadarList()
 	for (radarfields_map_t::iterator i = mLastRadarSweep.begin(); i != rf_it_end; ++i)
 	{
 		LLUUID prevId = i->first;
-		if (mEntryList.find(prevId) == mEntryList.end())
+		RadarFields rf = i->second;
+		if ((RadarShowMutedAndDerendered || !rf.lastIgnore) && mEntryList.find(prevId) == mEntryList.end())
 		{
-			RadarFields rf = i->second;
 			if (RadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
 			{
 				make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
@@ -729,6 +733,7 @@ void FSRadar::updateRadarList()
 		FSRadarEntry* ent = em_it->second;
 		RadarFields rf;
 		rf.lastDistance = ent->mRange;
+		rf.lastIgnore = ent->mIgnore;
 		rf.lastRegion = LLUUID::null;
 		if (ent->mGlobalPos != LLVector3d(0.0f, 0.0f, 0.0f))
 		{

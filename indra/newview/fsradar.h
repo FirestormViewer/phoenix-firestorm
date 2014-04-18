@@ -122,6 +122,7 @@ private:
 	{
 		F32			lastDistance;
 		LLUUID		lastRegion;
+		bool		lastIgnore;
 	};
 
 	typedef boost::unordered_map<LLUUID, RadarFields, FSUUIDHash> radarfields_map_t;

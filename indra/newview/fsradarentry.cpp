@@ -49,6 +49,7 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mLastZOffsetTime(time(NULL)),
 	mAge(-1),
 	mIsLinden(false),
+	mIgnore(false),
 	mAvatarNameCallbackConnection()
 {
 	if (mID.notNull())
