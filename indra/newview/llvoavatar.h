@@ -821,6 +821,8 @@ public:
 	void	   		clearChat();
 	void	   		startTyping() { mTyping = TRUE; mTypingTimer.reset(); }
 	void			stopTyping() { mTyping = FALSE; }
+	// <FS:Ansariel> Get typing status
+	bool			isTyping() const { return mTyping; }
 private:
 	BOOL			mVisibleChat;
 	BOOL			mVisibleTyping;

@@ -7,6 +7,8 @@
 	<string name="FlagsColumnValue_0" value=""/>
 	<string name="FlagsColumnValue_1" value="Payment_Info_Filled"/>
 	<string name="FlagsColumnValue_2" value="Payment_Info_Used"/>
+	<string name="TypingStatusKey" value="T"/>
+	<string name="SittingStatusKey" value="S"/>
 	<string
 	 name="MiniMapToolTipMsg"
 	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
@@ -91,7 +93,7 @@
 					 label="Name"
 					 name="name"
 					 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
-					 relative_width="0.32"/>
+					 relative_width="0.28"/>
 					<radar_list.columns
 					 label=""
 					 name="voice_level"
@@ -114,6 +116,16 @@
 					 name="in_region"
 					 tool_tip="Is in the same region"
 					 relative_width="0.03"/>
+					<radar_list.columns
+					 label=""
+					 name="typing_status"
+					 tool_tip="Is typing"
+					 relative_width="0.02"/>
+					<radar_list.columns
+					 label=""
+					 name="sitting_status"
+					 tool_tip="Is sitting"
+					 relative_width="0.02"/>
 					<radar_list.columns
 					 label=""
 					 name="flags"

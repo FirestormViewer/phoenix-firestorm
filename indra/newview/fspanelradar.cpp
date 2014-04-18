@@ -295,6 +295,8 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 
 	static const std::string flagsColumnType = getString("FlagsColumnType");
 	static const std::string flagsColumnValues [3] = { getString("FlagsColumnValue_0"), getString("FlagsColumnValue_1"), getString("FlagsColumnValue_2") };
+	static const std::string typingStatusKey = getString("TypingStatusKey");
+	static const std::string sittingStatusKey = getString("SittingStatusKey");
 
 	// Store current selection and scroll position
 	static S32 uuidColumnIndex = mRadarList->getColumn("uuid")->mIndex;
@@ -324,16 +326,20 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["columns"][2]["column"] = "in_region";
 		row_data["columns"][2]["type"] = "icon";
 		row_data["columns"][2]["value"] = (entry["in_region"].asBoolean() ? "avatar_in_region" : "");
-		row_data["columns"][3]["column"] = "flags";
-		row_data["columns"][3]["type"] = flagsColumnType;
-		row_data["columns"][4]["column"] = "age";
-		row_data["columns"][4]["value"] = entry["age"];
-		row_data["columns"][5]["column"] = "seen";
-		row_data["columns"][5]["value"] = entry["seen"];
-		row_data["columns"][6]["column"] = "range";
-		row_data["columns"][6]["value"] = entry["range"];
-		row_data["columns"][7]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
-		row_data["columns"][7]["value"] = entry["id"];
+		row_data["columns"][3]["column"] = "typing_status";
+		row_data["columns"][3]["value"] = (entry["typing"].asBoolean() ? typingStatusKey : "");
+		row_data["columns"][4]["column"] = "sitting_status";
+		row_data["columns"][4]["value"] = (entry["sitting"].asBoolean() ? sittingStatusKey : "");
+		row_data["columns"][5]["column"] = "flags";
+		row_data["columns"][5]["type"] = flagsColumnType;
+		row_data["columns"][6]["column"] = "age";
+		row_data["columns"][6]["value"] = entry["age"];
+		row_data["columns"][7]["column"] = "seen";
+		row_data["columns"][7]["value"] = entry["seen"];
+		row_data["columns"][8]["column"] = "range";
+		row_data["columns"][8]["value"] = entry["range"];
+		row_data["columns"][9]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
+		row_data["columns"][9]["value"] = entry["id"];
 
 		LLScrollListItem* row = mRadarList->addElement(row_data);
 

@@ -30,6 +30,7 @@
 
 // libs
 #include "llavatarnamecache.h"
+#include "llanimationstates.h"
 #include "llcommonutils.h"
 #include "llnotificationsutil.h"
 #include "lleventtimer.h"
@@ -468,6 +469,8 @@ void FSRadar::updateRadarList()
 		entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
 		entry["seen"] = avSeenStr;
 		entry["range"] = (avRange > AVATAR_UNKNOWN_RANGE ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
+		entry["typing"] = (avVo && avVo->isTyping());
+		entry["sitting"] = (avVo && (avVo->getParent() || avVo->isMotionActive(ANIM_AGENT_SIT_GROUND) || avVo->isMotionActive(ANIM_AGENT_SIT_GROUND_CONSTRAINED)));
 
 		//AO: Set any range colors / styles
 		LLUIColor range_color;
