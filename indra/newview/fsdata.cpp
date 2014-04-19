@@ -759,14 +759,35 @@ LLSD FSData::allowedLogin()
 	}
 	else
 	{
-#if OPENSIM
-		// Don't disallow logins for OpenSim grids, the admins of the grid can disallow logins if they want to.
-		if (LLGridManager::getInstance()->isInOpenSim())
+		LLSD block = iter->second;
+		bool blocked = true; // default is to block all unless there is a gridtype or grids present.
+		if(block.has("gridtype"))
 		{
-			return LLSD();
+			blocked = false;
+			if ((block["gridtype"].asString() == "opensim") && LLGridManager::getInstance()->isInOpenSim())
+			{
+				return block;
+			}
+			if ((block["gridtype"].asString() == "secondlife") && LLGridManager::getInstance()->isInSecondLife())
+			{
+				return block;
+			}
 		}
-#endif
-		return iter->second;
+		if(block.has("grids"))
+		{
+			blocked = false;
+			LLSD grids = block["grids"];
+			for (LLSD::array_iterator grid_iter = grids.beginArray();
+				grid_iter != grids.endArray();
+				++grid_iter)
+			{
+				if ((*grid_iter).asString() == LLGridManager::getInstance()->getGrid())
+				{
+					return block;
+				}
+			}
+		}
+		return blocked ? block : LLSD();
 	}
 }
 
