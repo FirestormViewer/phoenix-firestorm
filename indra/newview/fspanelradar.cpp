@@ -320,24 +320,38 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 		row_data["value"] = entry["id"];
 		row_data["columns"][0]["column"] = "name";
 		row_data["columns"][0]["value"] = entry["name"];
+
 		row_data["columns"][1]["column"] = "voice_level";
 		row_data["columns"][1]["type"] = "icon";
 		row_data["columns"][1]["value"] = ""; // Need to set it after the row has been created because it's to big for the row
+
 		row_data["columns"][2]["column"] = "in_region";
 		row_data["columns"][2]["type"] = "icon";
 		row_data["columns"][2]["value"] = (entry["in_region"].asBoolean() ? "avatar_in_region" : "");
+		row_data["columns"][2]["halign"] = "center";
+
 		row_data["columns"][3]["column"] = "typing_status";
 		row_data["columns"][3]["value"] = (entry["typing"].asBoolean() ? typingStatusKey : "");
+		row_data["columns"][3]["halign"] = "center";
+
 		row_data["columns"][4]["column"] = "sitting_status";
 		row_data["columns"][4]["value"] = (entry["sitting"].asBoolean() ? sittingStatusKey : "");
+		row_data["columns"][4]["halign"] = "center";
+
 		row_data["columns"][5]["column"] = "flags";
 		row_data["columns"][5]["type"] = flagsColumnType;
+
 		row_data["columns"][6]["column"] = "age";
 		row_data["columns"][6]["value"] = entry["age"];
+		row_data["columns"][6]["halign"] = "right";
+
 		row_data["columns"][7]["column"] = "seen";
 		row_data["columns"][7]["value"] = entry["seen"];
+		row_data["columns"][7]["halign"] = "right";
+
 		row_data["columns"][8]["column"] = "range";
 		row_data["columns"][8]["value"] = entry["range"];
+
 		row_data["columns"][9]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
 		row_data["columns"][9]["value"] = entry["id"];
 
