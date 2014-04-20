@@ -30,14 +30,26 @@ macro (use_prebuilt_binary _binary)
     endif("${${_binary}_installed}" STREQUAL "" AND EXISTS "${CMAKE_BINARY_DIR}/temp/${_binary}_installed")
 
     if(${CMAKE_BINARY_DIR}/temp/sentinel_installed IS_NEWER_THAN ${CMAKE_BINARY_DIR}/temp/${_binary}_installed OR NOT ${${_binary}_installed} EQUAL 0)
+      if (ND_BUILD64BIT_ARCH)
+        if (LINUX)
+          set(autobuild_install_platform "--platform=linux64")
+        endif (LINUX)
+        if (DARWIN)
+          set(autobuild_install_platform "")
+        endif (DARWIN)
+        if (WINDOWS)
+          set(autobuild_install_platform "")
+        endif (WINDOWS)
+      endif (ND_BUILD64BIT_ARCH)
       if(DEBUG_PREBUILT)
-        message("cd ${CMAKE_SOURCE_DIR} && ${AUTOBUILD_EXECUTABLE} install
+        message("cd ${CMAKE_SOURCE_DIR} && ${AUTOBUILD_EXECUTABLE} install ${autobuild_install_platform}
         --install-dir=${AUTOBUILD_INSTALL_DIR}
         --skip-license-check
         ${_binary} ")
       endif(DEBUG_PREBUILT)
       execute_process(COMMAND "${AUTOBUILD_EXECUTABLE}"
         install
+        ${autobuild_install_platform}
         --install-dir=${AUTOBUILD_INSTALL_DIR}
         --skip-license-check
         ${_binary}
