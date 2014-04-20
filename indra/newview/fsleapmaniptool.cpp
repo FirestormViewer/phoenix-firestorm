@@ -117,10 +117,6 @@ namespace nd
 		{
 			return LLVector3( -aZ, -aX, aY );
 		}
-		static LLVector3 toAgentCS( LLVector3 const &aIn  )
-		{
-			return toAgentCS( aIn.mV[VX], aIn.mV[VY], aIn.mV[VZ] );
-		}
 
 		static float scaleY( float aIn )
 		{
