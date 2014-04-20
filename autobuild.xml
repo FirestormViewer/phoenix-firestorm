@@ -710,9 +710,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>49703ed28482530ee958c233efea2c04</string>
+              <string>5178792b004a3617598b0593cacb23b5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.32-linux-x64-20140410.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.32-linux-20140407.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
