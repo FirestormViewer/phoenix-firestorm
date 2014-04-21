@@ -175,8 +175,8 @@ void lggBeamColorMapFloater::draw()
 			//convertHueToX(i),237,output);
 
 	}
-	S32 X1 = convertHueToX(myData.startHue) + CORRECTION_X;
-	S32 X2 = convertHueToX(myData.endHue) + CORRECTION_X;
+	S32 X1 = convertHueToX(myData.mStartHue) + CORRECTION_X;
+	S32 X2 = convertHueToX(myData.mEndHue) + CORRECTION_X;
 	LLFontGL* font = LLFontGL::getFontSansSerifSmall();
 
 	gGL.color4fv(LLColor4::white.mV);
@@ -269,15 +269,15 @@ BOOL lggBeamColorMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 	{
 		if (x < (6 + CORRECTION_X))
 		{
-			myData.startHue=0.0f;
+			myData.mStartHue=0.0f;
 		}
 		else if (x > (402 + CORRECTION_X))
 		{
-			myData.endHue=720.0f;
+			myData.mEndHue=720.0f;
 		}
 		else
 		{
-			myData.startHue  = convertXToHue(x + CORRECTION_X);
+			myData.mStartHue  = convertXToHue(x + CORRECTION_X);
 		}
 	
 		fixOrder();
@@ -294,15 +294,15 @@ BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x,S32 y,MASK mask)
 	{
 		if (x < (6 + CORRECTION_X))
 		{
-			myData.startHue=0.0f;
+			myData.mStartHue=0.0f;
 		}
 		else if (x > (402 + CORRECTION_X))
 		{
-			myData.endHue=720.0f;
+			myData.mEndHue=720.0f;
 		}
 		else
 		{
-			myData.endHue  = convertXToHue(x + CORRECTION_X);
+			myData.mEndHue  = convertXToHue(x + CORRECTION_X);
 		}
 
 		fixOrder();
@@ -314,14 +314,14 @@ BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x,S32 y,MASK mask)
 
 void lggBeamColorMapFloater::fixOrder()
 {
-	myData.rotateSpeed = mColorSlider->getValueF32();
-	myData.rotateSpeed /= 100.0f;
+	myData.mRotateSpeed = mColorSlider->getValueF32();
+	myData.mRotateSpeed /= 100.0f;
 	
-	if(myData.endHue < myData.startHue)
+	if(myData.mEndHue < myData.mStartHue)
 	{
-		F32 temp = myData.startHue;
-		myData.startHue = myData.endHue;
-		myData.endHue = temp;
+		F32 temp = myData.mStartHue;
+		myData.mStartHue = myData.mEndHue;
+		myData.mEndHue = temp;
 	}
 }
 
@@ -378,21 +378,21 @@ void lggBeamColorMapFloater::onClickSave()
 
 void lggBeamColorMapFloater::onClickCancel()
 {
-	closeFloater();	
+	closeFloater();
 }
 
 void lggBeamColorMapFloater::onClickLoad()
 {
 	LLFilePicker& picker = LLFilePicker::instance();
-	if(!picker.getOpenFile(LLFilePicker::FFLOAD_XML))
+	if (!picker.getOpenFile(LLFilePicker::FFLOAD_XML))
 	{
-		return; 
+		return;
 	}
 	LLSD minedata;
 	llifstream importer(picker.getFirstFile());
 	LLSDSerialize::fromXMLDocument(minedata, importer);
 	
 	myData = lggBeamsColors::fromLLSD(minedata);
-	childSetValue("BeamColor_Speed",/*self->*/myData.rotateSpeed*100);
+	childSetValue("BeamColor_Speed", myData.mRotateSpeed * 100);
 }
 

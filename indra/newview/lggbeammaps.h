@@ -18,40 +18,49 @@
 #include "llviewerprecompiledheaders.h"
 #include "lggbeamscolors.h"
 #include "llframetimer.h"
+
 class lggBeamData
 {
-	public:
-		LLVector3d p;
-		LLColor4U c;
-	
-};
-class lggBeamMaps
-{
-	public:
-		lggBeamMaps():lastFileName(""),scale(0.0f),duration(0.25f),sPartsNow(FALSE),sBeamLastAt(LLVector3d::zero){}
-		~lggBeamMaps() {}
-	public:
-		F32		setUpAndGetDuration();
-		void	fireCurrentBeams(LLPointer<LLHUDEffectSpiral>, LLColor4U rgb);
-		void	forceUpdate();
-		static LLColor4U beamColorFromData(lggBeamsColors data);
-		LLColor4U getCurrentColor(LLColor4U agentColor);
-		std::vector<std::string> getFileNames();
-		std::vector<std::string> getColorsFileNames();
-		void stopBeamChat();
-		void updateBeamChat(LLVector3d currentPos);
-	private:
-		LLSD	getPic(std::string filename); 
-		std::string lastFileName;
-		std::string lastColorFileName;
-		BOOL		sPartsNow;
-		LLVector3d sBeamLastAt;
-		lggBeamsColors lastColorsData;
-		F32 duration;
-		F32 scale;
-		std::vector<lggBeamData> dots;     
+public:
+	LLVector3d p;
+	LLColor4U c;
 };
 
+class lggBeamMaps
+{
+public:
+	lggBeamMaps() :
+		mLastFileName(""),
+		mScale(0.0f),
+		mDuration(0.25f),
+		mPartsNow(false),
+		mBeamLastAt(LLVector3d::zero)
+		{}
+	~lggBeamMaps() {}
+
+	F32							setUpAndGetDuration();
+	void						fireCurrentBeams(LLPointer<LLHUDEffectSpiral>, const LLColor4U& rgb);
+	void						forceUpdate();
+	void						stopBeamChat();
+	void						updateBeamChat(const LLVector3d& currentPos);
+	static LLColor4U			beamColorFromData(const lggBeamsColors& data);
+	LLColor4U					getCurrentColor(const LLColor4U& agentColor);
+	std::vector<std::string>	getFileNames();
+	std::vector<std::string>	getColorsFileNames();
+
+private:
+	LLSD			getPic(const std::string& filename); 
+
+	std::string		mLastFileName;
+	std::string		mLastColorFileName;
+	lggBeamsColors	mLastColorsData;
+	F32				mDuration;
+	F32				mScale;
+	bool			mPartsNow;
+	LLVector3d		mBeamLastAt;
+
+	std::vector<lggBeamData> mDots;
+};
 
 extern lggBeamMaps gLggBeamMaps;
 

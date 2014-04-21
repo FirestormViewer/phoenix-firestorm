@@ -18,44 +18,56 @@
 #include "llviewerprecompiledheaders.h"
 #include "lggbeamscolors.h"
 
-lggBeamsColors lggBeamsColors::fromLLSD(LLSD inputData)
+lggBeamsColors lggBeamsColors::fromLLSD(const LLSD& inputData)
 {
-
 	lggBeamsColors toReturn;
 	
-	if(inputData.has("startHue")) toReturn.startHue = (F32)inputData["startHue"].asReal();
-	if(inputData.has("endHue")) toReturn.endHue = (F32)inputData["endHue"].asReal();
-	if(inputData.has("rotateSpeed")) toReturn.rotateSpeed = (F32)inputData["rotateSpeed"].asReal();
+	if (inputData.has("startHue"))
+	{
+		toReturn.mStartHue = (F32)inputData["startHue"].asReal();
+	}
+
+	if (inputData.has("endHue"))
+	{
+		toReturn.mEndHue = (F32)inputData["endHue"].asReal();
+	}
+
+	if (inputData.has("rotateSpeed"))
+	{
+		toReturn.mRotateSpeed = (F32)inputData["rotateSpeed"].asReal();
+	}
 
 	return toReturn;
 }
+
 LLSD lggBeamsColors::toLLSD()
 {
-
 	LLSD out;
-	out["startHue"]=startHue;
-	out["endHue"]=endHue;
-	out["rotateSpeed"]=rotateSpeed;
+	out["startHue"] = mStartHue;
+	out["endHue"] = mEndHue;
+	out["rotateSpeed"] = mRotateSpeed;
 	return out;
 }
 
 std::string lggBeamsColors::toString()
 {
+	return llformat("Start Hue %d\nEnd Hue is %d\nRotate Speed is %d", mStartHue, mEndHue, mRotateSpeed);
+}
 
-	return llformat("Start Hue %d\nEnd Hue is %d\nRotate Speed is %d",
-		startHue,endHue,rotateSpeed
-		
-		);
-}
-lggBeamsColors::lggBeamsColors(F32 istartHue, F32 iendHue, F32 irotateSpeed):
-startHue(istartHue),endHue(iendHue),rotateSpeed(irotateSpeed)
+lggBeamsColors::lggBeamsColors(F32 startHue, F32 endHue, F32 rotateSpeed) :
+	mStartHue(startHue),
+	mEndHue(endHue),
+	mRotateSpeed(rotateSpeed)
 {
 }
+
 lggBeamsColors::lggBeamsColors():
-startHue(0.0f),endHue(360.0f),rotateSpeed(1.0f)
+	mStartHue(0.0f),
+	mEndHue(360.0f),
+	mRotateSpeed(1.0f)
 {
 }
+
 lggBeamsColors::~lggBeamsColors()
 {
-
 }
