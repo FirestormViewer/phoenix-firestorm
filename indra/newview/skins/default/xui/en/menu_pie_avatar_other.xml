@@ -101,6 +101,9 @@
             name="Give Calling Card">
             <pie_slice.on_click
                 function="Avatar.GiveCard" />
+            <pie_slice.on_enable
+                function="RLV.EnableIfNot"
+                parameter="shownames" />
         </pie_slice>
         <pie_slice
             label="Invite to Group"
