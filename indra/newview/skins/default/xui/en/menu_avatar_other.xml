@@ -27,6 +27,9 @@
       name="Give Calling Card">
          <menu_item_call.on_click
           function="Avatar.GiveCard" />
+         <menu_item_call.on_enable
+          function="RLV.EnableIfNot"
+          parameter="shownames" />
 	</menu_item_call>
 	<menu_item_call
 	 label="Add to Set"
