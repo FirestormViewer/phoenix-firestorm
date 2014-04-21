@@ -3103,8 +3103,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			{
 				if (mClientTagData.has("name") && !mClientTagData["name"].asString().empty())
 				{
-					lldebugs << "ClientTag is set! mClientTag=" << mClientTagData["name"].asString() << llendl;
-					addNameTagLine(full_name+" (" + mClientTagData["name"].asString() + ")",name_tag_color,LLFontGL::NORMAL, LLFontGL::getFontSansSerif(), true);
+					addNameTagLine(full_name + " (" + mClientTagData["name"].asString() + ")", name_tag_color, LLFontGL::NORMAL, font, true);
 				}
 				else
 				{
