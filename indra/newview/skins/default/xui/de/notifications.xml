@@ -2491,6 +2491,9 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	<notification name="CannotRemoveProtectedCategories">
 		Geschützte Kategorien können nicht entfernt werden.
 	</notification>
+	<notification name="OfferedCard">
+		Sie haben [NAME] Ihre Vistenkarte angeboten.
+	</notification>
 	<notification name="UnableToBuyWhileDownloading">
 		Kauf nicht möglich. Objektdaten werden noch geladen.
 Bitte versuchen Sie es erneut.

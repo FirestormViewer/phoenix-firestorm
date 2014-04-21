@@ -98,9 +98,9 @@
         </pie_slice>
         <pie_slice
             label="Give Card"
-            name="Add Calling Card">
+            name="Give Calling Card">
             <pie_slice.on_click
-                function="Avatar.AddContact" />
+                function="Avatar.GiveCard" />
         </pie_slice>
         <pie_slice
             label="Invite to Group"

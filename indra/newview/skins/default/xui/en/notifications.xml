@@ -6403,6 +6403,13 @@ You cannot remove protected categories.
 
   <notification
    icon="notifytip.tga"
+   name="OfferedCard"
+   type="notifytip">
+You have offered a calling card to [NAME].
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
    name="UnableToBuyWhileDownloading"
    type="notifytip">
 Unable to buy while downloading object data.
