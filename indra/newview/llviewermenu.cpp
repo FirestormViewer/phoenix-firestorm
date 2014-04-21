@@ -4011,6 +4011,61 @@ bool enable_freeze_eject(const LLSD& avatar_id)
 //	return new_value;
 }
 
+// <FS:Ansariel> FIRE-13515: Re-add give calling card
+class LLAvatarGiveCard : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LL_INFOS("LLAvatarGiveCard") << "handle_give_card()" << LL_ENDL;
+		LLViewerObject* dest = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d | OK
+		//if(dest && dest->isAvatar())
+		if ( (dest && dest->isAvatar()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+// [/RLVa:KB]
+		{
+			bool found_name = false;
+			LLSD args;
+			LLSD old_args;
+			LLNameValue* nvfirst = dest->getNVPair("FirstName");
+			LLNameValue* nvlast = dest->getNVPair("LastName");
+			if(nvfirst && nvlast)
+			{
+				std::string full_name = gCacheName->buildFullName(nvfirst->getString(), nvlast->getString());
+				args["NAME"] = full_name;
+				old_args["NAME"] = full_name;
+				found_name = true;
+			}
+			LLViewerRegion* region = dest->getRegion();
+			LLHost dest_host;
+			if(region)
+			{
+				dest_host = region->getHost();
+			}
+			if(found_name && dest_host.isOk())
+			{
+				LLMessageSystem* msg = gMessageSystem;
+				msg->newMessage("OfferCallingCard");
+				msg->nextBlockFast(_PREHASH_AgentData);
+				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+				msg->nextBlockFast(_PREHASH_AgentBlock);
+				msg->addUUIDFast(_PREHASH_DestID, dest->getID());
+				LLUUID transaction_id;
+				transaction_id.generate();
+				msg->addUUIDFast(_PREHASH_TransactionID, transaction_id);
+				msg->sendReliable(dest_host);
+				LLNotificationsUtil::add("OfferedCard", args);
+			}
+			else
+			{
+				LLNotificationsUtil::add("CantOfferCallingCard", old_args);
+			}
+		}
+		return true;
+	}
+};
+// </FS:Ansariel> FIRE-13515: Re-add give calling card
+
 bool callback_leave_group(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
@@ -10767,6 +10822,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAvatarDebug(), "Avatar.Debug");
 	view_listener_t::addMenu(new LLAvatarVisibleDebug(), "Avatar.VisibleDebug");
 	view_listener_t::addMenu(new LLAvatarInviteToGroup(), "Avatar.InviteToGroup");
+	// <FS:Ansariel> FIRE-13515: Re-add give calling card
+	view_listener_t::addMenu(new LLAvatarGiveCard(), "Avatar.GiveCard");
+	// </FS:Ansariel> FIRE-13515: Re-add give calling card
 	commit.add("Avatar.Eject", boost::bind(&handle_avatar_eject, LLSD()));
 	commit.add("Avatar.ShowInspector", boost::bind(&handle_avatar_show_inspector));
 	view_listener_t::addMenu(new LLAvatarSendIM(), "Avatar.SendIM");

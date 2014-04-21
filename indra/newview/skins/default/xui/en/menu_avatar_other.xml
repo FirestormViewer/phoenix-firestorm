@@ -23,10 +23,10 @@
          function="Avatar.EnableAddFriend" />
     </menu_item_call>
     <menu_item_call
-    label="Add Calling Card"
-      name="Add Calling Card">
+    label="Give Calling Card"
+      name="Give Calling Card">
          <menu_item_call.on_click
-          function="Avatar.AddContact" />
+          function="Avatar.GiveCard" />
 	</menu_item_call>
 	<menu_item_call
 	 label="Add to Set"
