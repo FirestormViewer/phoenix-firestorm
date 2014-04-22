@@ -9133,10 +9133,13 @@ class FSAddToContactSet : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		LLVOAvatar* avatarp = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
-		if (avatarp)
+		if (!rlv_handler_t::isEnabled() || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
-			LLFloaterReg::showInstance("fs_add_contact", LLSD(avatarp->getID()), TRUE);
+			LLVOAvatar* avatarp = find_avatar_from_object(LLSelectMgr::getInstance()->getSelection()->getPrimaryObject());
+			if (avatarp)
+			{
+				LLFloaterReg::showInstance("fs_add_contact", LLSD(avatarp->getID()), TRUE);
+			}
 		}
 		return true;
 	}
