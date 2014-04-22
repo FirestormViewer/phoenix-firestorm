@@ -404,6 +404,8 @@ public:
 		return mSortCallback->connect(cb);
 	}
 
+	// <FS:Ansariel> For manually setting line height; we might need it at some time
+	void setLineHeight(S32 height) { mLineHeight = height; }
 
 protected:
 	// "Full" interface: use this when you're creating a list that has one or more of the following:
