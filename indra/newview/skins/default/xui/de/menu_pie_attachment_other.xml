@@ -16,7 +16,7 @@
 	<pie_slice label="Zahlen..." name="Pay..."/>
 	<pie_menu name="Avatar Pie More 1" label="Mehr >">
 		<pie_slice label="Einfrieren" name="Freeze..."/>
-		<pie_slice label="Karte geben" name="Add Calling Card"/>
+		<pie_slice label="Karte geben" name="Give Calling Card"/>
 		<pie_slice label="Gruppeneinl."  name="Group Invite..."/>
 		<pie_slice label="Hinauswerfen" name="Eject..."/>
 		<pie_menu name="Avatar Pie More 2" label="Mehr >">

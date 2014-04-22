@@ -710,9 +710,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>49703ed28482530ee958c233efea2c04</string>
+              <string>5178792b004a3617598b0593cacb23b5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodex-4.44.32-linux-x64-20140410.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodex-4.44.32-linux-20140407.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1622,7 +1622,7 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1501c09ebcaf6a97ac9d5d4933e750e0</string>
+              <string>bac1f696d942610da5c8d371f1c51703</string>
               <key>url</key>
               <string>http://downloads.firestormviewer.org/installables/libpng-1.5.1-linux-x64-20131220.tar.bz2</string>
             </map>
