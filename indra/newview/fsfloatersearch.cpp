@@ -286,6 +286,12 @@ void FSFloaterSearch::onOpen(const LLSD& key)
 	{
 		mTabContainer->selectTabPanel(mPanelGroups);
 	}
+
+	FSSearchPanelBase* current_panel = dynamic_cast<FSSearchPanelBase*>(mTabContainer->getCurrentPanel());
+	if (current_panel)
+	{
+		current_panel->focusDefaultElement();
+	}
 }
 
 //virtual
@@ -713,7 +719,7 @@ void FSFloaterSearch::onBtnEventReminder()
 
 static LLPanelInjector<FSPanelSearchPeople> t_panel_fs_search_people("panel_ls_people");
 
-FSPanelSearchPeople::FSPanelSearchPeople() : LLPanel()
+FSPanelSearchPeople::FSPanelSearchPeople() : FSSearchPanelBase()
 , mQueryID(NULL)
 , mStartSearch(0)
 , mResultsReceived(0)
@@ -747,6 +753,11 @@ BOOL FSPanelSearchPeople::postBuild()
 	getChildView("people_back")->setEnabled(FALSE);
 	
 	return TRUE;
+}
+
+void FSPanelSearchPeople::focusDefaultElement()
+{
+	mSearchComboBox->focusTextEntry();
 }
 
 void FSPanelSearchPeople::find()
@@ -976,7 +987,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 
 static LLPanelInjector<FSPanelSearchGroups> t_panel_fs_search_groups("panel_ls_groups");
 
-FSPanelSearchGroups::FSPanelSearchGroups() : LLPanel()
+FSPanelSearchGroups::FSPanelSearchGroups() : FSSearchPanelBase()
 , mQueryID(NULL)
 , mStartSearch(0)
 , mResultsReceived(0)
@@ -1010,6 +1021,11 @@ BOOL FSPanelSearchGroups::postBuild()
 	getChildView("groups_back")->setEnabled(FALSE);
 	
 	return TRUE;
+}
+
+void FSPanelSearchGroups::focusDefaultElement()
+{
+	mSearchComboBox->focusTextEntry();
 }
 
 void FSPanelSearchGroups::find()
@@ -1261,7 +1277,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 
 static LLPanelInjector<FSPanelSearchPlaces> t_panel_fs_search_places("panel_ls_places");
 
-FSPanelSearchPlaces::FSPanelSearchPlaces() : LLPanel()
+FSPanelSearchPlaces::FSPanelSearchPlaces() : FSSearchPanelBase()
 , mQueryID(NULL)
 , mStartSearch(0)
 , mResultsReceived(0)
@@ -1306,6 +1322,11 @@ BOOL FSPanelSearchPlaces::postBuild()
 	getChildView("places_back")->setEnabled(FALSE);
 	
 	return TRUE;
+}
+
+void FSPanelSearchPlaces::focusDefaultElement()
+{
+	mSearchComboBox->focusTextEntry();
 }
 
 void FSPanelSearchPlaces::find()
@@ -1593,7 +1614,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 
 static LLPanelInjector<FSPanelSearchLand> t_panel_fs_search_land("panel_ls_land");
 
-FSPanelSearchLand::FSPanelSearchLand() : LLPanel()
+FSPanelSearchLand::FSPanelSearchLand() : FSSearchPanelBase()
 , mQueryID(NULL)
 , mStartSearch(0)
 , mResultsReceived(0)
@@ -1944,7 +1965,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 
 static LLPanelInjector<FSPanelSearchClassifieds> t_panel_fs_search_classifieds("panel_ls_classifieds");
 
-FSPanelSearchClassifieds::FSPanelSearchClassifieds() : LLPanel()
+FSPanelSearchClassifieds::FSPanelSearchClassifieds() : FSSearchPanelBase()
 , mQueryID(NULL)
 , mStartSearch(0)
 , mResultsReceived(0)
@@ -1993,6 +2014,11 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	getChildView("classifieds_back")->setEnabled(FALSE);
 	
 	return TRUE;
+}
+
+void FSPanelSearchClassifieds::focusDefaultElement()
+{
+	mSearchComboBox->focusTextEntry();
 }
 
 void FSPanelSearchClassifieds::find()
@@ -2246,7 +2272,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 
 static LLPanelInjector<FSPanelSearchEvents> t_panel_fs_search_events("panel_ls_events");
 
-FSPanelSearchEvents::FSPanelSearchEvents() : LLPanel()
+FSPanelSearchEvents::FSPanelSearchEvents() : FSSearchPanelBase()
 , mQueryID(NULL)
 , mResultsReceived(0)
 , mStartSearch(0)
@@ -2296,6 +2322,11 @@ BOOL FSPanelSearchEvents::postBuild()
 	setDay(0);
 	
 	return TRUE;
+}
+
+void FSPanelSearchEvents::focusDefaultElement()
+{
+	mSearchComboBox->focusTextEntry();
 }
 
 void FSPanelSearchEvents::find()
@@ -2658,7 +2689,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 
 static LLPanelInjector<FSPanelSearchWeb> t_panel_fs_search_web("panel_ls_web");
 
-FSPanelSearchWeb::FSPanelSearchWeb() : LLPanel()
+FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 , mWebBrowser(NULL)
 {
 	// declare a map that transforms a category name into
