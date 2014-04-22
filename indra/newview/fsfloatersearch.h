@@ -63,20 +63,30 @@ struct SearchQuery : public LLInitParam::Block<SearchQuery>
 //       Search Panels       //
 ///////////////////////////////
 
-class FSPanelSearchPeople : public LLPanel
+class FSSearchPanelBase : public LLPanel
+{
+public:
+	FSSearchPanelBase() : LLPanel() { }
+	virtual ~FSSearchPanelBase() { }
+	virtual void focusDefaultElement() { }
+};
+
+class FSPanelSearchPeople : public FSSearchPanelBase
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchPeople();
 	static void processSearchReply(LLMessageSystem* msg, void**);
 	
+	/*virtual*/ void focusDefaultElement();
+
 protected:
 	const S32& getNumResultsReturned() const { return mNumResultsReturned; };
 	const S32& getNumResultsReceived() const { return mResultsReceived; };
 	
 private:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchPeople();
+	virtual ~FSPanelSearchPeople();
 	
 	void onBtnFind();
 	void onSelectItem();
@@ -101,16 +111,18 @@ private:
 	LLScrollListCtrl*	mSearchResults;
 };
 
-class FSPanelSearchGroups : public LLPanel
+class FSPanelSearchGroups : public FSSearchPanelBase
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchGroups();
 	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
+	
+	/*virtual*/ void focusDefaultElement();
+
 private:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchGroups();
+	virtual ~FSPanelSearchGroups();
 	
 	void onBtnFind();
 	void onSelectItem();
@@ -135,16 +147,18 @@ private:
 	LLScrollListCtrl*	mSearchResults;
 };
 
-class FSPanelSearchPlaces : public LLPanel
+class FSPanelSearchPlaces : public FSSearchPanelBase
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchPlaces();
 	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
+	
+	/*virtual*/ void focusDefaultElement();
+
 private:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchPlaces();
+	virtual ~FSPanelSearchPlaces();
 	
 	void onBtnFind();
 	void onSelectItem();
@@ -170,7 +184,7 @@ private:
 	LLComboBox*			mPlacesCategory;
 };
 
-class FSPanelSearchLand : public LLPanel
+class FSPanelSearchLand : public FSSearchPanelBase
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
@@ -179,7 +193,7 @@ public:
 protected:
 private:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchLand();
+	virtual ~FSPanelSearchLand();
 	
 	void onBtnFind();
 	void onSelectItem();
@@ -205,16 +219,18 @@ private:
 	LLScrollListCtrl*	mSearchResults;
 };
 
-class FSPanelSearchClassifieds : public LLPanel
+class FSPanelSearchClassifieds : public FSSearchPanelBase
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchClassifieds();
 	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
+	
+	/*virtual*/ void focusDefaultElement();
+
 private:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchClassifieds();
+	virtual ~FSPanelSearchClassifieds();
 	
 	void onBtnFind();
 	void onSelectItem();
@@ -240,16 +256,18 @@ private:
 	LLComboBox*			mClassifiedsCategory;
 };
 
-class FSPanelSearchEvents : public LLPanel
+class FSPanelSearchEvents : public FSSearchPanelBase
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchEvents();
 	static void processSearchReply(LLMessageSystem* msg, void**);
-protected:
+	
+	/*virtual*/ void focusDefaultElement();
+
 private:
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ ~FSPanelSearchEvents();
+	virtual ~FSPanelSearchEvents();
 	
 	void onBtnFind();
 	void onSelectItem();
@@ -281,15 +299,16 @@ private:
 	LLRadioGroup*		mEventsMode;
 };
 
-class FSPanelSearchWeb : public LLPanel, public LLViewerMediaObserver
+class FSPanelSearchWeb : public FSSearchPanelBase, public LLViewerMediaObserver
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchWeb();
 	/*virtual*/ BOOL postBuild();
 	void loadURL(const SearchQuery &query);
+
 private:
-	~FSPanelSearchWeb() {};
+	virtual ~FSPanelSearchWeb() {};
 	
 	LLMediaCtrl*	mWebBrowser;
 	LLSD			mCategoryPaths;
