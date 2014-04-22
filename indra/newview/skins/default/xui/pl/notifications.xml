@@ -2532,6 +2532,9 @@ Spróbuj jeszcze raz.
 	<notification name="CannotRemoveProtectedCategories">
 		Nie możesz usunąć chronionych kategorii.
 	</notification>
+	<notification name="OfferedCard">
+		Zaoferowano wizytówkę osobie [NAME].
+	</notification>
 	<notification name="UnableToBuyWhileDownloading">
 		Nie można kupować w trakcie ładowania danych obiektu.
 Spróbuj jeszcze raz.

@@ -14,7 +14,7 @@
     <pie_slice label="Zapłać..." name="Pay..."/>
     <pie_menu name="Avatar Pie More 1" label="Więcej &gt;">
         <pie_slice label="Unieruchom" name="Freeze..."/>
-        <pie_slice label="Daj wizytówkę" name="Add Calling Card"/>
+        <pie_slice label="Daj wizytówkę" name="Give Calling Card"/>
         <pie_slice label="Zaproś do grupy" name="Group Invite..."/>
         <pie_slice label="Wyrzuć..." name="Eject..."/>
         <pie_menu name="Avatar Pie More 2" label="Więcej &gt;">
