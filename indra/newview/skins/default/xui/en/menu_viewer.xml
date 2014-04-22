@@ -1446,7 +1446,7 @@
      tear_off="true"
      visible="true">
       <menu
-       label="Debug"
+       label="Develop"
        name="Debug"
        tear_off="true">
         <menu_item_check
