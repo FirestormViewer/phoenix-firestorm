@@ -2201,6 +2201,20 @@ void LLFloater::updateTitleButtons()
 		localRectToOtherView(buttons_rect, &buttons_rect, mDragHandle);
 		mDragHandle->setButtonsRect(buttons_rect);
 	}
+
+	// <FS:Ansariel> FIRE-7782: Set correct tooltip for dock/tear-off button
+	if (mButtons[BUTTON_TEAR_OFF])
+	{
+		if (isTornOff())
+		{
+			mButtons[BUTTON_TEAR_OFF]->setToolTip(sButtonToolTips[BUTTON_DOCK]);
+		}
+		else
+		{
+			mButtons[BUTTON_TEAR_OFF]->setToolTip(sButtonToolTips[BUTTON_TEAR_OFF]);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 void LLFloater::buildButtons(const Params& floater_params)
