@@ -169,7 +169,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|right"
          name="status"
          halign="center"
          value="" />

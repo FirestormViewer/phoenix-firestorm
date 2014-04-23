@@ -230,7 +230,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          height="16"
          name="info_border3"
          layout="topleft"
-         follows="top|left"
+         follows="top|left|right"
          bevel_style="in" />
         <text_editor
          top_delta="0"
@@ -238,7 +238,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="16"
          layout="topleft"
-         follows="top|left"
+         follows="top|left|right"
          name="register_date"
          value="(loading...)"
          max_length="254"
@@ -267,7 +267,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="48"
          layout="topleft"
-         follows="top|left"
+         follows="top|left|right"
          name="acct_border"
          bevel_style="in" />
         <text_editor
@@ -276,7 +276,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="44"
          layout="topleft"
-         follows="top|left"
+         follows="top|left|right"
          name="acc_status_text"
          bg_visible="false"
          border_visible="false"
@@ -303,7 +303,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="18"
          layout="topleft"
-         follows="top|left"
+         follows="top|left|right"
          name="info_border4"
          bevel_style="in" />
         <text
@@ -313,7 +313,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          right="-6"
          height="16"
          layout="topleft"
-         follows="top|left"
+         follows="top|left|right"
          name="partner_text"
          max_length="254" />
 
