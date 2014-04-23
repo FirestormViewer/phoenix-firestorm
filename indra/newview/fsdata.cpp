@@ -764,10 +764,12 @@ LLSD FSData::allowedLogin()
 		if(block.has("gridtype"))
 		{
 			blocked = false;
+#ifdef OPENSIM
 			if ((block["gridtype"].asString() == "opensim") && LLGridManager::getInstance()->isInOpenSim())
 			{
 				return block;
 			}
+#endif
 			if ((block["gridtype"].asString() == "secondlife") && LLGridManager::getInstance()->isInSecondLife())
 			{
 				return block;
