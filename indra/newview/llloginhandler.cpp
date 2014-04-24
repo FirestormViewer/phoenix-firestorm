@@ -200,5 +200,9 @@ LLPointer<LLCredential> LLLoginHandler::loadSavedUserLoginInfo()
 		return gSecAPIHandler->createCredential(identifier["first_name"].asString() + " " + identifier["last_name"].asString() + "@" +LLGridManager::getInstance()->getGrid(),
 												identifier, authenticator);
 	}
-	return NULL;
+	// <FS:Zi> Fix --autologin by loading the currently selected credentials if the above fails.
+	//         UserLoginInfo contains "First Last @ Grid" and gets set in LLPanelLogin::onClickConnect()
+	// return NULL;
+	return gSecAPIHandler->loadCredential(gSavedSettings.getLLSD("UserLoginInfo"));
+	// </FS:Zi>
 }
