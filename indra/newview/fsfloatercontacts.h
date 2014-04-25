@@ -121,6 +121,7 @@ private:
 	void					onDeleteFriendButtonClicked();
 	void					onAddFriendWizButtonClicked();
 	void					onContactSetsButtonClicked();
+	void					onMapButtonClicked();
 	
 	// group buttons
 	void					onGroupChatButtonClicked();

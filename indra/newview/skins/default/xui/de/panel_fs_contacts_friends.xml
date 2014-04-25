@@ -28,6 +28,11 @@
 	 tool_tip="Diesem Freund einen Teleport zu deiner jetzigen Position anbieten"
 	 width="85" />
 	<button
+	 label="Karte..."
+	 name="map_btn"
+	 tool_tip="Position dieses Freundes auf der Karte anzeigen"
+	 width="85" />
+	<button
 	 label="Zahlen..."
 	 name="pay_btn"
 	 tool_tip="Gib Linden-Dollar (L$) an diesen Freund"

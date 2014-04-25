@@ -52,6 +52,7 @@
 #include "llviewercontrol.h"
 #include "llvoiceclient.h"
 #include "fscommon.h"
+#include "llviewermenu.h"
 
 //Maximum number of people you can select to do an operation on at once.
 const U32 MAX_FRIEND_SELECT = 20;
@@ -140,6 +141,7 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("im_btn",				boost::bind(&FSFloaterContacts::onImButtonClicked,				this));
 	mFriendsTab->childSetAction("profile_btn",			boost::bind(&FSFloaterContacts::onViewProfileButtonClicked,		this));
 	mFriendsTab->childSetAction("offer_teleport_btn",	boost::bind(&FSFloaterContacts::onTeleportButtonClicked,		this));
+	mFriendsTab->childSetAction("map_btn", 				boost::bind(&FSFloaterContacts::onMapButtonClicked,				this));
 	mFriendsTab->childSetAction("pay_btn",				boost::bind(&FSFloaterContacts::onPayButtonClicked,				this));
 	mFriendsTab->childSetAction("remove_btn",			boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked,	this));
 	mFriendsTab->childSetAction("add_btn",				boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked,	this));
@@ -634,6 +636,14 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	mFriendsList->addElement(element, ADD_BOTTOM);
 }
 
+void FSFloaterContacts::onMapButtonClicked()
+{
+	LLUUID current_id = getCurrentItemID();
+	if (current_id.notNull() && is_agent_mappable(current_id))
+	{
+		LLAvatarActions::showOnMap(current_id);
+	}
+}
 
 // propagate actual relationship to UI.
 // Does not resort the UI list because it can be called frequently. JC
@@ -738,7 +748,7 @@ void FSFloaterContacts::refreshUI()
 		single_selected = TRUE;
 		if(num_selected > 1)
 		{
-			multiple_selected = TRUE;		
+			multiple_selected = TRUE;
 		}
 	}
 
@@ -750,6 +760,15 @@ void FSFloaterContacts::refreshUI()
 	//(single_selected will always be true in this situations)
 	childSetEnabled("remove_btn", single_selected);
 	childSetEnabled("im_btn", single_selected);
+
+	LLScrollListItem* selected_item = mFriendsList->getFirstSelected();
+	bool mappable = false;
+	if (selected_item)
+	{
+		LLUUID av_id = selected_item->getUUID();
+		mappable = (single_selected && !multiple_selected && av_id.notNull() && is_agent_mappable(av_id));
+	}
+	childSetEnabled("map_btn", mappable);
 
 	// Set friend count
 	LLStringUtil::format_map_t args;
