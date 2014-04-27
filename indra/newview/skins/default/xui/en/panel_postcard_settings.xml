@@ -37,7 +37,7 @@
     <layout_stack
      animate="false"
      follows="all"
-     height="275"
+     height="375"
      layout="bottomleft"
      name="postcard_image_params_ls"
      left_delta="0"

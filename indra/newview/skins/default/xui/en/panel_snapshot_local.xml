@@ -83,7 +83,7 @@
     <layout_stack
      animate="false"
      follows="all"
-     height="275"
+     height="325"
      layout="bottomleft"
      name="local_image_params_ls"
      left_delta="0"
