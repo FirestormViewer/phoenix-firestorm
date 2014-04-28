@@ -70,6 +70,14 @@
 	                 function="Floater.Toggle"
 	                 parameter="perm_prefs" />
 	            </menu_item_call>
+	            <menu_item_call
+	             label="Import Linkset..."
+	             visibility_control="FSEnableObjectExports"
+	             name="import linkset">
+	                <menu_item_call.on_click
+	                 function="File.ImportLinkset"
+	                 parameter="" />
+	            </menu_item_call>
             </menu>
 
             <menu_item_call
