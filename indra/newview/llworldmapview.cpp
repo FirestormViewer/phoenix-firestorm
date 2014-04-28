@@ -1696,6 +1696,16 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 }
 
 
+// <FS:Ansariel> Backout MAINT-3250
+BOOL outside_slop(S32 x, S32 y, S32 start_x, S32 start_y)
+{
+	S32 dx = x - start_x;
+	S32 dy = y - start_y;
+
+	return (dx <= -2 || 2 <= dx || dy <= -2 || 2 <= dy);
+}
+// </FS:Ansariel>
+
 BOOL LLWorldMapView::handleMouseDown( S32 x, S32 y, MASK mask )
 {
 	gFocusMgr.setMouseCapture( this );
@@ -1778,7 +1788,10 @@ BOOL LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
 {
 	if (hasMouseCapture())
 	{
-		if (mPanning || llabs(x - mMouseDownX) > 1 || llabs(y - mMouseDownY) > 1)
+		// <FS:Ansariel> Backout MAINT-3250
+		//if (mPanning || llabs(x - mMouseDownX) > 1 || llabs(y - mMouseDownY) > 1)
+		if (mPanning || outside_slop(x, y, mMouseDownX, mMouseDownY))
+		// </FS:Ansariel>
 		{
 			// just started panning, so hide cursor
 			if (!mPanning)
@@ -1795,6 +1808,9 @@ BOOL LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
 			sPanY += delta_y;
 			sTargetPanX = sPanX;
 			sTargetPanY = sPanY;
+
+			// <FS:Ansariel> Backout MAINT-3250
+			gViewerWindow->moveCursorToCenter();
 		}
 
 		// doesn't matter, cursor should be hidden
