@@ -654,7 +654,7 @@ public:
 				ypos += y_inc;
 
 				// <FS:Ansariel> Mesh debugging
-				addText(xpos, ypos, llformat("%d (%d) Mesh Active LOD Requests (max)", LLMeshRepoThread::sActiveLODRequests, LLMeshRepoThread::sMaxConcurrentRequests));
+				addText(xpos, ypos, llformat("%d Mesh Active LOD Requests", LLMeshRepoThread::sActiveLODRequests));
 				ypos += y_inc;
 				// </FS:Ansariel>
 
