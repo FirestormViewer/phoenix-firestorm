@@ -442,6 +442,14 @@ public:
 	/// @brief ground-sit at agent's current position
 	void			sitDown();
 
+	// <FS:Ansariel> FIRE-1568: Fix sit on AFK issues (standing up when sitting before)
+	void			setIsAfkSitting(bool sitting) { mAfkSitting = sitting; }
+	bool			isAfkSitting() const { return mAfkSitting; }
+
+private:
+	bool			mAfkSitting;
+	// </FS:Ansariel>
+
 	//--------------------------------------------------------------------
 	// Do Not Disturb
 	//--------------------------------------------------------------------

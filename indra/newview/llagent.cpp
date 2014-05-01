@@ -408,6 +408,7 @@ LLAgent::LLAgent() :
 	mIsAutorespond(FALSE),
 	mIsAutorespondNonFriends(FALSE),
 	mIsRejectTeleportOffers(FALSE), // <FS:PP> FIRE-1245: Option to block/reject teleport offers
+	mAfkSitting(false), // <FS:Ansariel> FIRE-1568: Fix sit on AFK issues (standing up when sitting before)
 
 	mControlFlags(0x00000000),
 	mbFlagsDirty(FALSE),
@@ -1582,6 +1583,7 @@ void LLAgent::setAFK()
 			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
 			{
 				gAgent.sitDown();
+				gAgent.setIsAfkSitting(true);
 			}
 		}
 		// </FS:AO>
@@ -1607,13 +1609,16 @@ void LLAgent::clearAFK()
 		// <FS:AO> if we sat while away, stand back up on clear
 		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
 		{
-			if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+			if (gAgent.isAfkSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
 			{
 				gAgent.standUp();
 			}
 		}
 		// </FS:AO>
 	}
+
+	// <FS:Ansariel> FIRE-1568: Fix sit on AFK issues (standing up when sitting before)
+	gAgent.setIsAfkSitting(false);
 }
 
 //-----------------------------------------------------------------------------
