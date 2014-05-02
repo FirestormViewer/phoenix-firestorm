@@ -5,6 +5,8 @@
  layout="topleft"
  name="gesture_preview"
  help_topic="gesture_preview"
+ positioning="centered"
+ save_rect="true"
  width="280">
     <floater.string
      name="step_anim">
