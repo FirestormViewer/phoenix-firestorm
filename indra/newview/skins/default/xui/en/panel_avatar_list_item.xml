@@ -220,6 +220,7 @@
      right="-3"
      mouse_opaque="true"
      name="speaking_indicator"
+     tool_tip="Displays that the avatar is in voice chat range and the power level if speaking"
      visible="true"
      width="20" />
 </panel>

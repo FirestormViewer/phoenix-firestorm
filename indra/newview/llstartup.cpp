@@ -4093,9 +4093,16 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	else
 	{
+// [CR] FIRE-12229
+#ifdef OPENSIM
+		gMaxAgentGroups = 0;
+		LL_INFOS("LLStartup") << "did not receive max-agent-groups. unlimited groups activated" << LL_ENDL;
+#else
 		gMaxAgentGroups = DEFAULT_MAX_AGENT_GROUPS;
 		LL_INFOS("LLStartup") << "using gMaxAgentGroups default: "
 							  << gMaxAgentGroups << LL_ENDL;
+#endif
+// [CR] FIRE-12229
 	}
 
 // <FS:AW opensim currency support>

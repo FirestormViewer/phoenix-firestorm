@@ -48,12 +48,16 @@ namespace nd
 			return 111;
 		}
 
-		void ExampleTool::onFrame( Leap::HandList const &aHands )
+		void ExampleTool::onLeapFrame( Leap::Frame const &aFrame )
 		{
-			mHands = aHands.count();
+			mHands = aFrame.hands().count();
 			mFingers = 0;
 			for( int i = 0; i < mHands; ++ i )
-				mFingers += aHands[ i ].fingers().count();
+				mFingers += aFrame.hands()[ i ].fingers().count();
+		}
+
+		void ExampleTool::onRenderFrame( Leap::Frame const &aFrame )
+		{
 		}
 
 		void ExampleTool::render()

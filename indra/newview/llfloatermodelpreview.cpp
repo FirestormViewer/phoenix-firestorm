@@ -5662,6 +5662,12 @@ BOOL LLModelPreview::render()
 
 								position[j] = v;
 							}
+							
+							// <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it
+							if( instance.mModel->mMaterialList.size() > i &&
+								instance.mMaterial.end() != instance.mMaterial.find( instance.mModel->mMaterialList[ i ] ) )
+							{
+							// </FS:ND>
 
 							const std::string& binding = instance.mModel->mMaterialList[i];
 							const LLImportMaterial& material = instance.mMaterial[binding];
@@ -5676,7 +5682,14 @@ BOOL LLModelPreview::render()
 									gGL.getTexUnit(0)->bind(material.mDiffuseMap, true);
 									mTextureSet.insert(material.mDiffuseMap.get());
 								}
+	
 							}
+							
+							} else  // <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it, if none, set buffer type and unbind texture.
+							{
+								buffer->setBuffer(type_mask & buffer->getTypeMask());
+								gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+							} // </FS:ND>
 						
 							buffer->draw(LLRender::TRIANGLES, buffer->getNumIndices(), 0);
 							gGL.diffuseColor3f(0.4f, 0.4f, 0.4f);

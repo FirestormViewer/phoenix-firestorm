@@ -5411,4 +5411,13 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Inbox_Folderview_New">
 		Nowe
 	</string>
+	<string name="Mouselook_Unknown_Avatar">
+		Nieznana osoba
+	</string>
+	<string name="groupcountstring">
+		Należysz do [COUNT] grup ([REMAINING] pozostało).
+	</string>
+	<string name="groupcountunlimitedstring">
+		Należysz do [COUNT] grup.
+	</string>
 </strings>

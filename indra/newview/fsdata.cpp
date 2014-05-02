@@ -759,7 +759,37 @@ LLSD FSData::allowedLogin()
 	}
 	else
 	{
-		return iter->second;
+		LLSD block = iter->second;
+		bool blocked = true; // default is to block all unless there is a gridtype or grids present.
+		if(block.has("gridtype"))
+		{
+			blocked = false;
+#ifdef OPENSIM
+			if ((block["gridtype"].asString() == "opensim") && LLGridManager::getInstance()->isInOpenSim())
+			{
+				return block;
+			}
+#endif
+			if ((block["gridtype"].asString() == "secondlife") && LLGridManager::getInstance()->isInSecondLife())
+			{
+				return block;
+			}
+		}
+		if(block.has("grids"))
+		{
+			blocked = false;
+			LLSD grids = block["grids"];
+			for (LLSD::array_iterator grid_iter = grids.beginArray();
+				grid_iter != grids.endArray();
+				++grid_iter)
+			{
+				if ((*grid_iter).asString() == LLGridManager::getInstance()->getGrid())
+				{
+					return block;
+				}
+			}
+		}
+		return blocked ? block : LLSD();
 	}
 }
 

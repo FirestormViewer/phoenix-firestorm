@@ -23,17 +23,16 @@
 	 color="ScrollBgWriteableColor"
 	 top="-1"
 	 width="260" />
-    <text
-     type="string"
-     length="1"
-     bottom="296"
-     follows="left|bottom"
-     height="14"
-     layout="topleft"
-     right="-10"
-     name="groupcount">
-You belong to [COUNT] out of [MAX] groups.
-    </text>
+	<text
+	 type="string"
+	 length="1"
+	 bottom="296"
+	 follows="left|bottom"
+	 height="14"
+	 layout="topleft"
+	 right="-10"
+	 name="groupcount">
+	</text>
 	<button
 	 top="-1"
 	 follows="top|right"

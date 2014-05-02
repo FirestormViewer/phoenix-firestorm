@@ -136,7 +136,8 @@ void LLPanelLandMedia::refresh()
 		mMediaURLEdit->setText(parcel->getMediaURL());
 		mMediaURLEdit->setEnabled( FALSE );
 
-		getChild<LLUICtrl>("current_url")->setValue(parcel->getMediaCurrentURL());
+		// <FS:Ansariel> Doesn't exists as of 2014-04-14
+		//getChild<LLUICtrl>("current_url")->setValue(parcel->getMediaCurrentURL());
 
 		mMediaDescEdit->setText(parcel->getMediaDesc());
 		mMediaDescEdit->setEnabled( can_change_media );
@@ -241,7 +242,8 @@ void LLPanelLandMedia::setMediaURL(const std::string& media_url)
 
 	mMediaURLEdit->onCommit();
 	// LLViewerParcelMedia::sendMediaNavigateMessage(media_url);
-	getChild<LLUICtrl>("current_url")->setValue(media_url);
+	// <FS:Ansariel> Doesn't exists as of 2014-04-14
+	//getChild<LLUICtrl>("current_url")->setValue(media_url);
 }
 std::string LLPanelLandMedia::getMediaURL()
 {
@@ -321,10 +323,12 @@ void LLPanelLandMedia::onSetBtn(void *userdata)
 void LLPanelLandMedia::onResetBtn(void *userdata)
 {
 	LLPanelLandMedia *self = (LLPanelLandMedia *)userdata;
-	LLParcel* parcel = self->mParcel->getParcel();
+	// <FS:Ansariel> Doesn't exists as of 2014-04-14
+	//LLParcel* parcel = self->mParcel->getParcel();
 	// LLViewerMedia::navigateHome();
 	self->refresh();
-	self->getChild<LLUICtrl>("current_url")->setValue(parcel->getMediaURL());
+	// <FS:Ansariel> Doesn't exists as of 2014-04-14
+	//self->getChild<LLUICtrl>("current_url")->setValue(parcel->getMediaURL());
 	// LLViewerParcelMedia::sendMediaNavigateMessage(parcel->getMediaURL());
 
 }

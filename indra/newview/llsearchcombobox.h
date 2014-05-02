@@ -61,6 +61,9 @@ public:
 
 	~LLSearchComboBox();
 
+	// <FS:Ansariel> Made publicly accessible
+	void focusTextEntry();
+
 protected:
 
 	LLSearchComboBox(const Params&p);
@@ -96,7 +99,8 @@ protected:
 	/**
 	 * Sets focus to text box
 	 */
-	void focusTextEntry();
+	// <FS:Ansariel> Made publicly accessible
+	//void focusTextEntry();
 
 	LLButton* mSearchButton;
 };

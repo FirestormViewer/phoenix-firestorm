@@ -76,6 +76,7 @@ namespace FSCommon
 	extern S32 sObjectAddMsg;
 
 	bool checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType);
+	LLSD populateGroupCount();
 };
 
 #endif // FS_COMMON_H

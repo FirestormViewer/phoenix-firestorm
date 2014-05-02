@@ -430,6 +430,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 		if (!im_container->getVisible() && nearby_chat_instance && im_container->hasFloater(nearby_chat_instance)
 			&& gSavedSettings.getBOOL("FSNotifyNearbyChatFlash"))
 		{
+			im_container->addFlashingSession(session_id);
 			gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
 		}
 		return;
@@ -453,6 +454,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 	if (!im_container->getVisible() && im_instance && im_container->hasFloater(im_instance)
 		&& gSavedSettings.getBOOL("FSNotifyIMFlash"))
 	{
+		im_container->addFlashingSession(session_id);
 		gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
 	}
 

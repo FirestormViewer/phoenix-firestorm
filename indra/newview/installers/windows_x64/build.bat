@@ -46,13 +46,13 @@ candle -dPROGRAM_FILE=%PROGRAM_FILE% -dPROGRAM_VERSION=%PROGRAM_VERSION% -dCHANN
 
 light -sval -ext WixUIExtension -cultures:en-us -out %VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi firestorm.wixobj character.wixobj fonts.wixobj fs_resources.wixobj llplugin.wixobj registry.wixobj
 
-signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com %VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi
+signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com /t http://timestamp.verisign.com/scripts/timstamp.dll %VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi
 
 candle -dMAJOR=%MAJOR% -dMINOR=%MINOR% -dHGCHANGE=%HGCHANGE% -dWIX_SOURCEDIR=%~dp0 -dFS_MSI_FILE=%VIEWER_BUILDDIR%\%OUTPUT_FILE%.msi -ext WixBalExtension %~dp0\installer.wxs
 light -sval -ext WixBalExtension -out %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe installer.wixobj
 
 insignia -ib %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe -o engine.exe
-signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com engine.exe
+signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com /t http://timestamp.verisign.com/scripts/timstamp.dll engine.exe
 insignia -ab engine.exe %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe -o %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe
 
-signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe
+signtool.exe sign /n Phoenix /d Firestorm /du http://www.phoenixviewer.com /t http://timestamp.verisign.com/scripts/timstamp.dll %VIEWER_BUILDDIR%\%OUTPUT_FILE%.exe

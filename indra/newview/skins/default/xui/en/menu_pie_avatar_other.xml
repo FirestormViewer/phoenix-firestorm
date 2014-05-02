@@ -69,6 +69,9 @@
             name="Add to set">
             <pie_slice.on_click
                 function="Avatar.AddToContactSet" />
+            <pie_slice.on_enable
+                function="RLV.EnableIfNot"
+                parameter="shownames" />
         </pie_slice>
     </pie_menu>
     <pie_slice
@@ -95,9 +98,12 @@
         </pie_slice>
         <pie_slice
             label="Give Card"
-            name="Add Calling Card">
+            name="Give Calling Card">
             <pie_slice.on_click
-                function="Avatar.AddContact" />
+                function="Avatar.GiveCard" />
+            <pie_slice.on_enable
+                function="RLV.EnableIfNot"
+                parameter="shownames" />
         </pie_slice>
         <pie_slice
             label="Invite to Group"

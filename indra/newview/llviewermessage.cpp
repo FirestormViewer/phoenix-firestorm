@@ -716,7 +716,10 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		S32 max_groups = gMaxAgentGroups;
 		if(gAgent.isInGroup(group_id)) ++max_groups;
 
-		if(gAgent.mGroups.count() < max_groups)
+		// [CR] FIRE-12229
+		//if(gAgent.mGroups.count() < max_groups)
+		if(!max_groups || gAgent.mGroups.count() < max_groups)
+		// [/CR] FIRE-12229
 		{
 			accept_invite = true;
 		}
@@ -2830,7 +2833,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 			chat.mText = buffer;
-			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 			{
 				FSKeywords::notify(chat);
 			}
@@ -2926,7 +2929,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 				// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 				chat.mText = message;
-				if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+				if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 				{
 					FSKeywords::notify(chat);
 				}
@@ -3386,7 +3389,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			chat.mText = message;
 
 			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of Task IM)
-			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+			if (FSKeywords::getInstance()->chatContainsKeyword(chat, true))
 			{
 				FSKeywords::notify(chat);
 			}
@@ -3488,7 +3491,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
 			chat.mText = message;
-			if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, false))
+			if (FSKeywords::getInstance()->chatContainsKeyword(chat, false))
 			{
 				FSKeywords::notify(chat);
 			}
@@ -4607,7 +4610,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		chat.mOwnerID = owner_id;
 
 		// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of local chat)
-		if ((chat.mFromID != gAgent.getID() || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+		if (FSKeywords::getInstance()->chatContainsKeyword(chat, true))
 		{
 			FSKeywords::notify(chat);
 		}

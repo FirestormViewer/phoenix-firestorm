@@ -377,7 +377,7 @@ void FSPanelProfileSecondLife::onOpen(const LLSD& key)
 	
 	if (!own_profile)
 	{
-		mVoiceStatus = LLAvatarActions::canCall();
+		mVoiceStatus = LLAvatarActions::canCall() && (LLAvatarActions::isFriend(avatar_id) ? LLAvatarTracker::instance().isBuddyOnline(avatar_id) : TRUE);
 		drop_target->setAgentID( avatar_id );
 		updateOnlineStatus();
 	}
@@ -711,7 +711,7 @@ void FSPanelProfileSecondLife::onChange(EStatusType status, const std::string &c
 		return;
 	}
 
-	mVoiceStatus = LLAvatarActions::canCall();
+	mVoiceStatus = LLAvatarActions::canCall() && (LLAvatarActions::isFriend(getAvatarId()) ? LLAvatarTracker::instance().isBuddyOnline(getAvatarId()) : TRUE);
 }
 
 void FSPanelProfileSecondLife::setAvatarId(const LLUUID& id)

@@ -22,12 +22,13 @@
  * $/LicenseInfo$
  */
 
-#ifndef NDLEAPEXAMPLETOOL_H
-#define NDLEAPEXAMPLETOOL_H
+#ifndef NDLEAPMANIPTOOL_H
+#define NDLEAPMANIPTOOL_H
 
 #pragma once
 
 #include "fsleaptool.h"
+#include <string.h>
 
 class LLViewerObject;
 
@@ -35,12 +36,41 @@ namespace nd
 {
 	namespace leap
 	{
-		class ExampleTool: public Tool
+		struct Finger;
+		struct Fingers;
+		class ManipTool: public Tool
 		{
-			int mHands;
-			int mFingers;
+			enum EMAXKEPTFRAMES{ eMaxKeptFrames = 120 };
+
+			inline U16 getNextFrameNo( U16 aFrame ) const
+			{ return aFrame==eMaxKeptFrames-1?0:aFrame+1; }
+			inline U16 getPrevFrameNo( U16 aFrame ) const
+			{ return aFrame==0?eMaxKeptFrames-1:aFrame-1; }
+
+            inline U32 getMaxBacktrackMicroseconds() const
+			{ return 1500*1000; }
+
+			U64 mLastExaminedFrame;
+			U16 mLastStoredFrame;
+			U16 mNextRenderedFrame;
+			U64 mTotalStoredFrames;
+
+			Fingers *mFingersPerFrame;
+
+			void clearSelection();
+			void doSelect();
+
+			void selectWithFinger( U16 aIndex );
+			void findPartner( U16 aIndex );
+
+			void renderCone( Finger const & );
+			void renderMovementDirection( Finger const & );
+			void renderMovementAngle( Finger const &, U16 aIndex );
+			void renderFinger( Finger const&, U16 aIndex );
+
 		public:
-			virtual ~ExampleTool(){}
+			ManipTool();
+			virtual ~ManipTool();
 
 			virtual void onLeapFrame( Leap::Frame const& );
 			virtual void onRenderFrame( Leap::Frame const& );
