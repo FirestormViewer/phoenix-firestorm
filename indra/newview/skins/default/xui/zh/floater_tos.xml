@@ -10,6 +10,6 @@
 	<button label="取消" label_selected="取消" name="Cancel"/>
 	<check_box label="我同意接受服務條款及隱私政策" name="agree_chk"/>
 	<text name="tos_heading">
-		請仔細閱讀以下服務條款及隱私政策。 繼續登入 [SECOND_LIFE] 前，你必須同意條款。
+		請仔細閱讀以下服務條款及隱私政策。 繼續登入 [CURRENT_GRID] 前，你必須同意條款。
 	</text>
 </floater>

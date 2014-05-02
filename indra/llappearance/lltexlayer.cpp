@@ -1909,9 +1909,9 @@ void LLTexLayerStaticImageList::deleteCachedImages()
 {
 	if( mGLBytes || mTGABytes )
 	{
-		llinfos << "Clearing Static Textures " <<
-			"KB GL:" << (mGLBytes / 1024) <<
-			"KB TGA:" << (mTGABytes / 1024) << "KB" << llendl;
+		//llinfos << "Clearing Static Textures " <<
+		//	"KB GL:" << (mGLBytes / 1024) <<
+		//	"KB TGA:" << (mTGABytes / 1024) << "KB" << llendl;
 
 		//mStaticImageLists uses LLPointers, clear() will cause deletion
 		

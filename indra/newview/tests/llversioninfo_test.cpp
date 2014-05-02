@@ -29,6 +29,10 @@
 
 #include "../llversioninfo.h"
 
+// <FS:TS> Use configured file instead of compile time definitions to avoid
+//         rebuilding the world with every Mercurial pull
+#include "fsversionvalues.h"
+
 namespace tut
 {
     struct versioninfo

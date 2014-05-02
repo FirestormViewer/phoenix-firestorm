@@ -54,6 +54,8 @@ public:
 	virtual void	draw();
 	virtual void 	clearCtrls();
 
+	void			changePrecision(S32 decimal_precision);	// <FS:CR> Adjustable decimal precision
+	void 			updateLimits(BOOL attachment);// <AW: opensim-limits>
 	void			refresh();
 
 	static bool		precommitValidate(const LLSD& data);
@@ -65,6 +67,18 @@ public:
 	static void 	onCommitTemporary(		LLUICtrl* ctrl, void* userdata);
 	static void 	onCommitPhantom(		LLUICtrl* ctrl, void* userdata);
 	static void 	onCommitPhysics(		LLUICtrl* ctrl, void* userdata);
+
+	void 	onCopyPos(				const LLSD& data);
+	void 	onPastePos(				const LLSD& data);
+	void 	onPastePosClip(			const LLSD& data);
+	void 	onCopySize(				const LLSD& data);
+	void 	onPasteSize(			const LLSD& data);
+	void 	onPasteSizeClip(		const LLSD& data);
+	void 	onCopyRot(				const LLSD& data);
+	void 	onPasteRot(				const LLSD& data);
+	void 	onPasteRotClip(			const LLSD& data);
+	void 	onCopyParams(			const LLSD& data);
+	void 	onPasteParams(			const LLSD& data);
 
 	static void 	onCommitParametric(LLUICtrl* ctrl, void* userdata);
 
@@ -90,16 +104,44 @@ protected:
 	void 			getVolumeParams(LLVolumeParams& volume_params);
 	
 protected:
+
+	LLVector3		mClipboardPos;
+	LLVector3		mClipboardSize;
+	LLVector3		mClipboardRot;
+
+	BOOL			mHasPosClipboard;
+	BOOL			mHasSizeClipboard;
+	BOOL			mHasRotClipboard;
+
+	LLSD			mPramsClipboard;
+	LLVolumeParams	mClipboardVolumeParams;
+	BOOL			mHasParamClipboard;
+	BOOL			mHasFlexiParam;
+	BOOL			mHasSculptParam;
+	BOOL			mHasLightParam;
+
+	S32				mComboMaterialItemCount;
+
+	LLComboBox*		mComboMaterial;
+	
 	// Per-object options
 	LLComboBox*		mComboBaseType;
 
 	LLTextBox*		mLabelCut;
 	LLSpinCtrl*		mSpinCutBegin;
 	LLSpinCtrl*		mSpinCutEnd;
+// <AW: opensim-limits>
+	F32			mRegionMaxHeight;
 
+	F32			mMinScale;
+	F32			mMaxScale;
+
+	F32			mMaxHollowSize;
+// </AW: opensim-limits>
 	LLTextBox*		mLabelHollow;
 	LLSpinCtrl*		mSpinHollow;
 
+	F32			mMinHoleSize;// <AW: opensim-limits>
 	LLTextBox*		mLabelHoleType;
 	LLComboBox*		mComboHoleType;
 
@@ -145,6 +187,21 @@ protected:
 	LLSpinCtrl*		mCtrlRotX;
 	LLSpinCtrl*		mCtrlRotY;
 	LLSpinCtrl*		mCtrlRotZ;
+
+	LLButton		*mBtnCopyPos;
+	LLButton		*mBtnPastePos;
+	LLButton		*mBtnPastePosClip;
+	
+	LLButton		*mBtnCopySize;
+	LLButton		*mBtnPasteSize;
+	LLButton		*mBtnPasteSizeClip;
+	
+	LLButton		*mBtnCopyRot;
+	LLButton		*mBtnPasteRot;
+	LLButton		*mBtnPasteRotClip;
+
+	LLButton*		mBtnCopyParams;
+	LLButton*		mBtnPasteParams;
 
 	LLCheckBoxCtrl	*mCheckLock;
 	LLCheckBoxCtrl	*mCheckPhysics;

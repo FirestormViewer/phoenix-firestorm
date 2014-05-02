@@ -46,14 +46,14 @@ static const U32 LENGTHOFCOLOR4U = 4;
 class LLColor4U
 {
 public:
-
-	union
-	{
+	//64bit compile fix - Do not put pointers into the LLColor4U union. FS:ND
+	//	union
+	//	{
 		U8         mV[LENGTHOFCOLOR4U];
-		U32        mAll;
-		LLColor4*  mSources;
-		LLColor4U* mSourcesU;
-	};
+	//		U32        mAll;
+	//		LLColor4*  mSources;
+	//		LLColor4U* mSourcesU;
+	//	};
 
 
 	LLColor4U();						// Initializes LLColor4U to (0, 0, 0, 1)
@@ -82,6 +82,9 @@ public:
 		ret[3] = mV[3];
 		return ret;
 	}
+
+	U32 asRGBA() const;
+	void fromRGBA( U32 aVal );
 
 	const LLColor4U&	setToBlack();						// zero LLColor4U to (0, 0, 0, 1)
 	const LLColor4U&	setToWhite();						// zero LLColor4U to (0, 0, 0, 1)

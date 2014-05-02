@@ -51,6 +51,8 @@
 #include "lldockablefloater.h"
 #include "llviewereventrecorder.h"
 
+#include "llcheckboxctrl.h"		// <FS:Zi> Add checkbox control toggle
+
 static LLDefaultChildRegistry::Register<LLButton> r("button");
 
 // Compiler optimization, generate extern template
@@ -108,7 +110,11 @@ LLButton::Params::Params()
 	held_down_delay("held_down_delay"),
 	button_flash_enable("button_flash_enable", false),
 	button_flash_count("button_flash_count"),
-	button_flash_rate("button_flash_rate")
+	// <FS:Zi> Add checkbox control toggle
+	//button_flash_rate("button_flash_rate")
+	button_flash_rate("button_flash_rate"),
+	checkbox_control("checkbox_control")
+	// </FS:Zi>
 {
 	addSynonym(is_toggle, "toggle");
 	changeDefault(initial_value, LLSD(false));
@@ -173,7 +179,12 @@ LLButton::LLButton(const LLButton::Params& p)
 	mHeldDownSignal(NULL),
 	mUseDrawContextAlpha(p.use_draw_context_alpha),
 	mHandleRightMouse(p.handle_right_mouse),
-	mFlashingTimer(NULL)
+	// <FS:Zi> Add checkbox control toggle
+	//mFlashingTimer(NULL)
+	mFlashingTimer(NULL),
+	mCheckboxControl(p.checkbox_control),
+	mCheckboxControlPanel(NULL)
+	// </FS:Zi>
 {
 	if (p.button_flash_enable)
 	{
@@ -383,6 +394,31 @@ boost::signals2::connection LLButton::setHeldDownCallback( button_callback_t cb,
 BOOL LLButton::postBuild()
 {
 	autoResize();
+
+	// <FS:Zi> Add checkbox control toggle
+	if(!mCheckboxControl.empty())
+	{
+		mCheckboxControlPanel=LLUICtrlFactory::createFromFile<LLPanel>("panel_button_checkbox.xml",this,LLDefaultChildRegistry::instance());
+		if(mCheckboxControlPanel)
+		{
+			mCheckboxControlPanel->reshape(getRect().getWidth(),getRect().getHeight());
+
+			LLCheckBoxCtrl* check=mCheckboxControlPanel->findChild<LLCheckBoxCtrl>("check_control");
+			if(check)
+			{
+				check->setControlName(mCheckboxControl,NULL);
+			}
+			else
+			{
+				llwarns << "Could not find checkbox control for button " << getName() << llendl;
+			}
+		}
+		else
+		{
+			llwarns << "Could not create checkbox panel for button " << getName() << llendl;
+		}
+	}
+	// <FS:Zi>
 
 	addBadgeToParentPanel();
 
@@ -782,7 +818,9 @@ void LLButton::draw()
 	if (use_glow_effect)
 	{
 		mCurGlowStrength = lerp(mCurGlowStrength,
-					mFlashing ? (mFlashingTimer->isCurrentlyHighlighted() || !mFlashingTimer->isFlashingInProgress() || mNeedsHighlight? 1.0 : 0.0) : mHoverGlowStrength,
+					// <FS:Ansariel> Crash fix; Calling setFlashing can cause mFlashing being true while is mFlashingTimer is NULL
+					//mFlashing ? (mFlashingTimer->isCurrentlyHighlighted() || !mFlashingTimer->isFlashingInProgress() || mNeedsHighlight? 1.0 : 0.0) : mHoverGlowStrength,
+					(mFlashing && mFlashingTimer) ? (mFlashingTimer->isCurrentlyHighlighted() || !mFlashingTimer->isFlashingInProgress() || mNeedsHighlight? 1.0 : 0.0) : mHoverGlowStrength,
 					LLCriticalDamp::getInterpolant(0.05f));
 	}
 	else
@@ -941,6 +979,15 @@ void LLButton::draw()
 			S32_MAX, text_width,
 			NULL, mUseEllipses);
 	}
+
+	// <FS:Zi> Add checkbox control toggle
+	if(mCheckboxControlPanel)
+	{
+		mCheckboxControlPanel->setOrigin(0,0);
+		mCheckboxControlPanel->reshape(getRect().getWidth(),getRect().getHeight());
+		mCheckboxControlPanel->draw();
+	}
+	// <FS:Zi>
 
 	LLUICtrl::draw();
 }

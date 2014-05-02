@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="Exportar objetos...">
+	<floater.string name="title_floater">
+		Exportar [OBJECT] al disco duro...
+	</floater.string>
+	<floater.string name="title_working">
+		Exportando [OBJECT] - Recopilando información...
+	</floater.string>
+	<floater.string name="title_inventory">
+		Exportando [OBJECT] - Extrayendo inventario...
+	</floater.string>
+	<floater.string name="title_assets">
+		Exportando [OBJECT] - Extrayendo activos...
+	</floater.string>
+	<floater.string name="title_textures">
+		Exportando [OBJECT] - Extrayendo texturas...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				Información de la selección
+			</text>
+			<text name="exportable_prims">
+				Prims exportables: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Texturas exportables: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Opciones:
+			</text>
+			<check_box label="Respaldar contenidos del objeto" name="contents_check"/>
+			<button label="Guardar como..." name="export_btn"/>
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel label="Objetos" name="prims_panel"/>
+				<panel label="Texturas" name="texture_panel"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

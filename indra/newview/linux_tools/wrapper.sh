@@ -4,8 +4,12 @@
 ## These options are for self-assisted troubleshooting during this beta
 ## testing phase; you should not usually need to touch them.
 
+## AO: TCMALLOC Tuning as suggested by Henri Beauchamp for more aggressive garbage collection
+export TCMALLOC_RELEASE_RATE=10000
+
 ## - Avoids using any FMOD Ex audio driver.
 #export LL_BAD_FMODEX_DRIVER=x
+
 ## - Avoids using any OpenAL audio driver.
 #export LL_BAD_OPENAL_DRIVER=x
 
@@ -91,11 +95,13 @@ RUN_PATH=`dirname "${SCRIPTSRC}" || echo .`
 echo "Running from ${RUN_PATH}"
 cd "${RUN_PATH}"
 
-# Re-register the secondlife:// protocol handler every launch, for now.
+# Re-register hop:// and secondlife:// protocol handler every launch, for now.
+./etc/register_hopprotocol.sh
 ./etc/register_secondlifeprotocol.sh
 
 # Re-register the application with the desktop system every launch, for now.
-./etc/refresh_desktop_app_entry.sh
+# AO: Disabled don't install by default
+#./etc/refresh_desktop_app_entry.sh
 
 ## Before we mess with LD_LIBRARY_PATH, save the old one to restore for
 ##  subprocesses that care.
@@ -120,6 +126,22 @@ export SAVED_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 #fi
 
 export LD_LIBRARY_PATH="$PWD/lib:${LD_LIBRARY_PATH}"
+# AO: experimentally removing to allow --settings on the command line w/o error. FIRE-1031
+#export SL_OPT="`cat etc/gridargs.dat` $@"
+
+# <FS:ND> [blerg] set LD_PRELOAD so plugins will pick up the correct sll libs, otherwise they will pick up the system versions.
+LLCRYPTO="`pwd`/lib/libcrypto.so.1.0.0"
+LLSSL="`pwd`/lib/libssl.so.1.0.0"
+if [ -f ${LLCRYPTO} ]
+then
+	export LD_PRELOAD="${LD_PRELOAD}:${LLCRYPTO}"
+fi
+if [ -f ${LLSSL} ]
+then
+	export LD_PRELOAD="${LD_PRELOAD}:${LLSSL}"
+fi
+# <FS:ND> End of hack; God will kill a kitten for this :(
+
 
 # Copy "$@" to ARGS array specifically to delete the --skip-gridargs switch.
 # The gridargs.dat file is no more, but we still want to avoid breaking
@@ -135,19 +157,19 @@ done
 # Don't quote $LL_WRAPPER because, if empty, it should simply vanish from the
 # command line. But DO quote "${ARGS[@]}": preserve separate args as
 # individually quoted.
-$LL_WRAPPER bin/do-not-directly-run-secondlife-bin "${ARGS[@]}"
+$LL_WRAPPER bin/do-not-directly-run-firestorm-bin "${ARGS[@]}"
 LL_RUN_ERR=$?
 
 # Handle any resulting errors
 if [ $LL_RUN_ERR -ne 0 ]; then
 	# generic error running the binary
 	echo '*** Bad shutdown ($LL_RUN_ERR). ***'
-	if [ "$(uname -m)" = "x86_64" ]; then
+	if [ "$(uname -m)" = "x86_64" ] && [ "$(file bin/do-not-directly-run-firestorm-bin | grep -o 64-bit )" != "64-bit" ]; then
 		echo
 		cat << EOFMARKER
-You are running the Second Life Viewer on a x86_64 platform.  The
+You are running the Firestorm Viewer on a x86_64 platform.  The
 most common problems when launching the Viewer (particularly
-'bin/do-not-directly-run-secondlife-bin: not found' and 'error while
+'bin/do-not-directly-run-firestorm-bin: not found' and 'error while
 loading shared libraries') may be solved by installing your Linux
 distribution's 32-bit compatibility packages.
 For example, on Ubuntu and other Debian-based Linuxes you might run:
@@ -156,9 +178,3 @@ EOFMARKER
 	fi
 fi
 
-echo
-echo '*******************************************************'
-echo 'This is a BETA release of the Second Life linux client.'
-echo 'Thank you for testing!'
-echo 'Please see README-linux.txt before reporting problems.'
-echo

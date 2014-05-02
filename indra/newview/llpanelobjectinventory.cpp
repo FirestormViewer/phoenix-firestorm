@@ -66,8 +66,13 @@
 #include "llviewerregion.h"
 #include "llviewerobjectlist.h"
 #include "llviewermessage.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 const LLColor4U DEFAULT_WHITE(255, 255, 255);
+#include "tea.h" // <FS:AW opensim currency support>
 
 ///----------------------------------------------------------------------------
 /// Class LLTaskInvFVBridge
@@ -192,7 +197,9 @@ LLInventoryItem* LLTaskInvFVBridge::findItem() const
 
 void LLTaskInvFVBridge::showProperties()
 {
-	show_task_item_profile(mUUID, mPanel->getTaskUUID());
+	//show_task_item_profile(mUUID, mPanel->getTaskUUID());
+	//-TT Experiment.
+	LLFloaterReg::showInstance("properties", LLSD().with("item_id", mUUID).with("object_id", mPanel->getTaskUUID()));
 }
 
 struct LLBuyInvItemData
@@ -377,8 +384,16 @@ void LLTaskInvFVBridge::openItem()
 
 BOOL LLTaskInvFVBridge::isItemRenameable() const
 {
-	if(gAgent.isGodlike()) return TRUE;
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+	if ( (rlv_handler_t::isEnabled()) && (object) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+	if(gAgent.isGodlike()) return TRUE;
+//	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
 	if(object)
 	{
 		LLInventoryItem* item = (LLInventoryItem*)(object->getInventoryObject(mUUID));
@@ -393,7 +408,15 @@ BOOL LLTaskInvFVBridge::isItemRenameable() const
 
 BOOL LLTaskInvFVBridge::renameItem(const std::string& new_name)
 {
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+	if ( (rlv_handler_t::isEnabled()) && (object) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+//	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
 	if(object)
 	{
 		LLViewerInventoryItem* item = NULL;
@@ -420,12 +443,45 @@ BOOL LLTaskInvFVBridge::isItemMovable() const
 	//	return TRUE;
 	//}
 	//return FALSE;
+// [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-1.0.5a
+	if (rlv_handler_t::isEnabled())
+	{
+		const LLViewerObject* pObj = gObjectList.findObject(mPanel->getTaskUUID());
+		if (pObj)
+		{
+			if (gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))
+			{
+				return FALSE;
+			}
+			else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) )
+			{
+				if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == pObj->getRootEdit()) )
+					return FALSE;
+			}
+		}
+	}
+// [/RLVa:KB]
 	return TRUE;
 }
 
 BOOL LLTaskInvFVBridge::isItemRemovable() const
 {
 	const LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
+// [RLVa:KB] - Checked: 2010-04-01 (RLVa-1.2.0c) | Modified: RLVa-1.0.5a
+	if ( (object) && (rlv_handler_t::isEnabled()) )
+	{
+		if (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit()))
+		{
+			return FALSE;
+		}
+		else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) )
+		{
+			if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == object->getRootEdit()) )
+				return FALSE;
+		}
+	}
+// [/RLVa:KB]
+
 	if(object
 	   && (object->permModify() || object->permYouOwner()))
 	{
@@ -574,6 +630,13 @@ BOOL LLTaskInvFVBridge::startDrag(EDragAndDropType* type, LLUUID* id) const
 				const LLPermissions& perm = inv->getPermissions();
 				bool can_copy = gAgent.allowOperation(PERM_COPY, perm,
 														GP_OBJECT_MANIPULATE);
+// [RLVa:KB] - Checked: 2009-10-10 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
+				// Kind of redundant due to the note below, but in case that ever gets fixed
+				if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+				{
+					return FALSE;
+				}
+// [/RLVa:KB]
 				if (object->isAttachment() && !can_copy)
 				{
                     //RN: no copy contents of attachments cannot be dragged out
@@ -670,7 +733,10 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		else
 		{
 			std::ostringstream info;
-			info << LLTrans::getString("BuyforL$") << price;
+// <FS:AW opensim currency support>
+//			info << LLTrans::getString("BuyforL$") << price;
+			info << Tea::wrapCurrency(LLTrans::getString("BuyforL$")) << price;
+// </FS:AW opensim currency support>
 			label.assign(info.str());
 		}
 
@@ -693,16 +759,41 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		{
 			disabled_items.push_back(std::string("Task Open"));
 		}
+// [RLVa:KB] - Checked: 2010-03-01 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
+		else if (rlv_handler_t::isEnabled())
+		{
+			LLViewerObject* pAttachObj = gObjectList.findObject(mPanel->getTaskUUID());
+			bool fLocked = (pAttachObj) ? gRlvAttachmentLocks.isLockedAttachment(pAttachObj->getRootEdit()) : false;
+			if ( ((LLAssetType::AT_NOTECARD == item->getType()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_VIEWNOTE)) || (fLocked))) || 
+				 ((LLAssetType::AT_LSL_TEXT == item->getType()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_VIEWSCRIPT)) || (fLocked))) ||
+				 ((LLAssetType::AT_TEXTURE == item->getType()) && (gRlvHandler.hasBehaviour(RLV_BHVR_VIEWTEXTURE))) )
+			{
+				disabled_items.push_back(std::string("Task Open"));
+			}
+		}
+// [/RLVa:KB]
 	}
 	items.push_back(std::string("Task Properties"));
-	if(isItemRenameable())
+//	if(isItemRenameable())
+//	{
+//		items.push_back(std::string("Task Rename"));
+//	}
+//	if(isItemRemovable())
+//	{
+//		items.push_back(std::string("Task Remove"));
+//	}
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+	items.push_back(std::string("Task Rename"));
+	items.push_back(std::string("Task Remove"));
+	if (!isItemRenameable())
 	{
-		items.push_back(std::string("Task Rename"));
+		disabled_items.push_back(std::string("Task Rename"));
 	}
-	if(isItemRemovable())
+	if (!isItemRemovable())
 	{
-		items.push_back(std::string("Task Remove"));
+		disabled_items.push_back(std::string("Task Remove"));
 	}
+// [/RLVa:KB]
 
 	hide_context_entries(menu, items, disabled_items);
 }
@@ -758,7 +849,17 @@ const std::string& LLTaskCategoryBridge::getDisplayName() const
 
 	if (cat)
 	{
-		mDisplayName.assign(cat->getName());
+		// <FS:Ansariel> Make object root folder name localizable again
+		//mDisplayName.assign(cat->getName());
+		if (cat->getParentUUID().isNull() && cat->getName() == "Contents")
+		{
+			mDisplayName.assign(LLTrans::getString("Contents"));
+		}
+		else
+		{
+			mDisplayName.assign(cat->getName());
+		}
+		// </FS:Ansariel>
 	}
 
 	return mDisplayName;
@@ -983,7 +1084,10 @@ void LLTaskSoundBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		else
 		{
 			std::ostringstream info;
-			info <<  LLTrans::getString("BuyforL$") << price;
+// <FS:AW opensim currency support>
+//			info <<  LLTrans::getString("BuyforL$") << price;
+			info <<  Tea::wrapCurrency(LLTrans::getString("BuyforL$")) << price;
+// </FS:AW opensim currency support>
 			label.assign(info.str());
 		}
 
@@ -1101,6 +1205,13 @@ void LLTaskLSLBridge::openItem()
 	{
 		return;
 	}
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0a
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_SCRIPT);
+		return;
+	}
+// [/RLVa:KB]
 	if (object->permModify() || gAgent.isGodlike())
 	{
 		LLLiveLSLEditor* preview = LLFloaterReg::showTypedInstance<LLLiveLSLEditor>("preview_scriptedit", LLSD(mUUID), TAKE_FOCUS_YES);
@@ -1159,6 +1270,13 @@ void LLTaskNotecardBridge::openItem()
 	{
 		return;
 	}
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.2.0b
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		RlvUtil::notifyBlockedViewXXX(LLAssetType::AT_NOTECARD);
+		return;
+	}
+// [/RLVa:KB]
 	if(object->permModify() || gAgent.isGodlike())
 	{
 		LLPreviewNotecard* preview = LLFloaterReg::showTypedInstance<LLPreviewNotecard>("preview_notecard", LLSD(mUUID), TAKE_FOCUS_YES);
@@ -1341,7 +1459,10 @@ void LLTaskMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		else
 		{
 			std::ostringstream info;
-			info <<  LLTrans::getString("BuyforL$") << price;
+// <FS:AW opensim currency support>
+// 			info <<  LLTrans::getString("BuyforL$") << price;
+			info <<  Tea::wrapCurrency(LLTrans::getString("BuyforL$")) << price;
+// </FS:AW opensim currency support>
 			label.assign(info.str());
 		}
 
@@ -1572,6 +1693,9 @@ void LLPanelObjectInventory::reset()
 	p.root = NULL;
     p.options_menu = "menu_inventory.xml";
 
+	// <FS:Ansariel> Inventory specials
+	p.for_inventory = true;
+
 	mFolders = LLUICtrlFactory::create<LLFolderView>(p);
 
 	mFolders->setCallbackRegistrar(&mCommitCallbackRegistrar);
@@ -1733,6 +1857,9 @@ void LLPanelObjectInventory::createFolderViews(LLInventoryObject* inventory_root
 		p.font_color = item_color;
 		p.font_highlight_color = item_color;
 
+		// <FS:Ansariel> Inventory specials
+		p.for_inventory = true;
+
 		LLFolderViewFolder* new_folder = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 		new_folder->addToFolder(mFolders);
 		new_folder->toggleOpen();
@@ -1779,6 +1906,10 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 				p.tool_tip = p.name;
 				p.font_color = item_color;
 				p.font_highlight_color = item_color;
+
+				// <FS:Ansariel> Inventory specials
+				p.for_inventory = true;
+
 				view = LLUICtrlFactory::create<LLFolderViewFolder>(p);
 				child_categories.put(new obj_folder_pair(obj,
 														 (LLFolderViewFolder*)view));
@@ -1794,6 +1925,10 @@ void LLPanelObjectInventory::createViewsForCategory(LLInventoryObject::object_li
 				params.tool_tip = params.name;
 				params.font_color = item_color;
 				params.font_highlight_color = item_color;
+
+				// <FS:Ansariel> Inventory specials
+				params.for_inventory = true;
+
 				view = LLUICtrlFactory::create<LLFolderViewItem> (params);
 			}
 			view->addToFolder(folder);
@@ -2010,3 +2145,25 @@ void LLPanelObjectInventory::clearItemIDs()
 	mItemMap.clear();
 }
 
+// <FS:Ansariel> Fix broken return and delete key in task inventory
+BOOL LLPanelObjectInventory::handleKeyHere(KEY key, MASK mask)
+{
+	BOOL handled = FALSE;
+	switch (key)
+	{
+	case KEY_RETURN:
+		if (mask == MASK_NONE)
+		{
+			LLPanelObjectInventory::doToSelected(LLSD("task_open"));
+			handled = TRUE;
+		}
+		break;
+	case KEY_DELETE:
+	case KEY_BACKSPACE:
+		LLPanelObjectInventory::doToSelected(LLSD("delete"));
+		handled = TRUE;
+		break;
+	}
+	return handled;
+}
+// </FS:Ansariel> Fix broken return and delete key in task inventory

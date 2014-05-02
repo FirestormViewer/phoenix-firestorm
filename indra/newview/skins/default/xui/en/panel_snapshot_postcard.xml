@@ -16,7 +16,7 @@
      name="upload_message">
         Sending...
     </string>
-    <icon
+<!--    <icon
      follows="top|left"
      height="18"
      image_name="Snapshot_Email"
@@ -84,16 +84,27 @@
      name="postcard_panel_container"
      default_panel_name="panel_postcard_message"
      top_pad="10"
+     width="490">-->
+    <tab_container
+     follows="all"
+     height="376"
+     layout="topleft"
+     left="1"
+     name="postcard_panel_container"
+     top="5"
      width="490">
       <panel
        follows="all"
+       label="Message"
        layout="topleft"
        name="panel_postcard_message"
        filename="panel_postcard_message.xml" />
       <panel
        follows="all"
+       label="Settings"
        layout="topleft"
        name="panel_postcard_settings"
        filename="panel_postcard_settings.xml" />
-    </panel_container>
+    </tab_container>
+<!--    </panel_container>-->
 </panel>

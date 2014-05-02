@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ background_visible="false"
+ mouse_opaque="false"
+ follows="all"
+ height="32"
+ layout="topleft"
+ left="0"
+ name="checkbox_panel"
+ top="0"
+ width="32">
+
+<check_box
+ mouse_opaque="true"
+ name="check_control"
+ layout="topleft"
+ follows="right|top"
+ left="16"
+ top="1"
+ width="16"
+ height="16" />
+
+</panel>

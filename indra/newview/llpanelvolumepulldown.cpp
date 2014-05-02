@@ -40,6 +40,9 @@
 #include "llfloaterpreference.h"
 #include "llsliderctrl.h"
 
+#include "llcheckboxctrl.h"
+#include "llviewercontrol.h"
+
 /* static */ const F32 LLPanelVolumePulldown::sAutoCloseFadeStartTimeSec = 4.0f;
 /* static */ const F32 LLPanelVolumePulldown::sAutoCloseTotalTimeSec = 5.0f;
 
@@ -52,15 +55,22 @@ LLPanelVolumePulldown::LLPanelVolumePulldown()
 {
 	mHoverTimer.stop();
 
+	/*//<FS:KC> Handled centrally now
     mCommitCallbackRegistrar.add("Vol.setControlFalse", boost::bind(&LLPanelVolumePulldown::setControlFalse, this, _2));
 	mCommitCallbackRegistrar.add("Vol.GoAudioPrefs", boost::bind(&LLPanelVolumePulldown::onAdvancedButtonClick, this, _2));
+	// <FS:Ansariel> Missing callback function
+	mCommitCallbackRegistrar.add("Vol.SetSounds", boost::bind(&LLPanelVolumePulldown::setSounds, this));
+	*/
+
 	buildFromFile( "panel_volume_pulldown.xml");
 }
 
 BOOL LLPanelVolumePulldown::postBuild()
 {
 	// set the initial volume-slider's position to reflect reality
-	LLSliderCtrl* volslider =  getChild<LLSliderCtrl>( "mastervolume" );
+	// <FS:Ansariel> Was renamed to "System Volume"
+	//LLSliderCtrl* volslider =  getChild<LLSliderCtrl>( "mastervolume" );
+	LLSliderCtrl* volslider =  getChild<LLSliderCtrl>( "System Volume" );
 	volslider->setValue(gSavedSettings.getF32("AudioLevelMaster"));
 
 	return LLPanel::postBuild();
@@ -100,6 +110,8 @@ void LLPanelVolumePulldown::handleVisibilityChange ( BOOL new_visibility )
 	}
 }
 
+//<FS:KC> Handled centrally now
+/*
 void LLPanelVolumePulldown::onAdvancedButtonClick(const LLSD& user_data)
 {
 	// close the global volume minicontrol, we're bringing up the big one
@@ -129,6 +141,7 @@ void LLPanelVolumePulldown::setControlFalse(const LLSD& user_data)
 	if (control)
 		control->set(LLSD(FALSE));
 }
+*/
 
 //virtual
 void LLPanelVolumePulldown::draw()
@@ -146,3 +159,15 @@ void LLPanelVolumePulldown::draw()
 	}
 }
 
+//<FS:KC> Handled centrally now
+/*
+// <FS:Ansariel> Missing callback function
+void LLPanelVolumePulldown::setSounds()
+{
+	// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
+	// or if sound effects are disabled.
+	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+}
+// </FS:Ansariel> Missing callback function
+*/

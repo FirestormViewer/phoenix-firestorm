@@ -83,6 +83,11 @@ public:
 
 
 	static U32		sNextPartID;
+
+	// <FS:ND> Object pool for LLViewerPart
+	void* operator new(size_t size);
+	void operator delete(void* ptr);
+	// </FS:ND>
 };
 
 

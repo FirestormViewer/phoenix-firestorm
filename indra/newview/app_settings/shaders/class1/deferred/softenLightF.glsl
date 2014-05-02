@@ -299,21 +299,15 @@ void calcAtmospherics(vec3 inPositionEye, float ambFactor) {
 	//increase ambient when there are more clouds
 	vec4 tmpAmbient = ambient + (vec4(1.) - ambient) * cloud_shadow * 0.5;
 	
-	/*  decrease value and saturation (that in HSV, not HSL) for occluded areas
-	 * // for HSV color/geometry used here, see http://gimp-savvy.com/BOOK/index.html?node52.html
-	 * // The following line of code performs the equivalent of:
-	 * float ambAlpha = tmpAmbient.a;
-	 * float ambValue = dot(vec3(tmpAmbient), vec3(0.577)); // projection onto <1/rt(3), 1/rt(3), 1/rt(3)>, the neutral white-black axis
-	 * vec3 ambHueSat = vec3(tmpAmbient) - vec3(ambValue);
-	 * tmpAmbient = vec4(RenderSSAOEffect.valueFactor * vec3(ambValue) + RenderSSAOEffect.saturationFactor *(1.0 - ambFactor) * ambHueSat, ambAlpha);
-	 */
-	tmpAmbient = vec4(mix(ssao_effect_mat * tmpAmbient.rgb, tmpAmbient.rgb, ambFactor), tmpAmbient.a);
 
 	//haze color
 	setAdditiveColor(
 		vec3(blue_horizon * blue_weight * (sunlight*(1.-cloud_shadow) + tmpAmbient)
 	  + (haze_horizon * haze_weight) * (sunlight*(1.-cloud_shadow) * temp2.x
 		  + tmpAmbient)));
+
+	// decrease value for occluded area
+	tmpAmbient = vec4(mix(ssao_effect_mat * tmpAmbient.rgb, tmpAmbient.rgb, ambFactor), tmpAmbient.a);
 
 	//brightness of surface both sunlight and ambient
 	setSunlitColor(vec3(sunlight * .5));

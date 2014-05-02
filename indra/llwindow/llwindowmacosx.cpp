@@ -37,6 +37,7 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "indra_constants.h"
+#include "../newview/llviewercontrol.h"
 
 #include <OpenGL/OpenGL.h>
 #include <CoreServices/CoreServices.h>
@@ -51,6 +52,10 @@ const S32	WHEEL_DELTA = 1;     /* Value for rolling one detent */
 const S32	BITS_PER_PIXEL = 32;
 const S32	MAX_NUM_RESOLUTIONS = 32;
 
+// <FS:CR> Various missing prototypes
+BOOL check_for_card(const char* RENDERER, const char* bad_card);
+const char* cursorIDToName(int id);
+// </FS:CR>
 
 //
 // LLWindowMacOSX
@@ -65,17 +70,18 @@ BOOL check_for_card(const char* RENDERER, const char* bad_card)
 	if (!strnicmp(RENDERER, bad_card, strlen(bad_card)))
 	{
 		std::string buffer = llformat(
-			"Your video card appears to be a %s, which Second Life does not support.\n"
+			"Your video card appears to be a %s, which Firestorm does not support.\n"
 			"\n"
-			"Second Life requires a video card with 32 Mb of memory or more, as well as\n"
+			"Firestorm requires a video card with 32 Mb of memory or more, as well as\n"
 			"multitexture support.  We explicitly support nVidia GeForce 2 or better, \n"
 			"and ATI Radeon 8500 or better.\n"
 			"\n"
 			"If you own a supported card and continue to receive this message, try \n"
-			"updating to the latest video card drivers. Otherwise look in the\n"
-			"secondlife.com support section or e-mail technical support\n"
+			"updating to the latest video card drivers. Otherwise contact the\n"
+			"Phoenix Viewer Support group in world, or visit www.phoenixviewer.com\n"
+			"for support.\n"
 			"\n"
-			"You can try to run Second Life, but it will probably crash or run\n"
+			"You can try to run Firestorm, but it will probably crash or run\n"
 			"very slowly.  Try anyway?",
 			bad_card);
 		S32 button = OSMessageBox(buffer.c_str(), "Unsupported video card", OSMB_YESNO);
@@ -558,8 +564,9 @@ BOOL LLWindowMacOSX::createContext(int x, int y, int width, int height, int bits
 	if(mContext != NULL)
 	{
 		
-		
-		U32 err = CGLSetCurrentContext(mContext);
+		// <FS:CR> Mac OpenGL
+		//U32 err = CGLSetCurrentContext(mContext);
+		CGLError err = CGLSetCurrentContext(mContext);		
 		if (err != kCGLNoError)
 		{
 			setupFailure("Can't activate GL rendering context", "Error", OSMB_OK);
@@ -1155,8 +1162,9 @@ BOOL LLWindowMacOSX::isClipboardTextAvailable()
 
 BOOL LLWindowMacOSX::pasteTextFromClipboard(LLWString &dst)
 {	
-	llutf16string str(copyFromPBoard());
-	dst = utf16str_to_wstring(str);
+	//llutf16string str(copyFromPBoard());
+	dst = utf16str_to_wstring(copyFromPBoard());
+	LLWStringUtil::removeCRLF(dst);	// <FS:CR>
 	if (dst != L"")
 	{
 		return true;
@@ -1313,6 +1321,7 @@ void LLWindowMacOSX::setupFailure(const std::string& text, const std::string& ca
 			// it is handled at a very low-level
 const char* cursorIDToName(int id)
 {
+	BOOL use_legacy_cursors = gSavedSettings.getBOOL("UseLegacyCursors");
 	switch (id)
 	{
 		case UI_CURSOR_ARROW:							return "UI_CURSOR_ARROW";
@@ -1348,15 +1357,16 @@ const char* cursorIDToName(int id)
 		case UI_CURSOR_TOOLPAUSE:						return "UI_CURSOR_TOOLPAUSE";
 		case UI_CURSOR_TOOLMEDIAOPEN:					return "UI_CURSOR_TOOLMEDIAOPEN";
 		case UI_CURSOR_PIPETTE:							return "UI_CURSOR_PIPETTE";
-		case UI_CURSOR_TOOLSIT:							return "UI_CURSOR_TOOLSIT";
-		case UI_CURSOR_TOOLBUY:							return "UI_CURSOR_TOOLBUY";
-		case UI_CURSOR_TOOLOPEN:						return "UI_CURSOR_TOOLOPEN";
 		case UI_CURSOR_TOOLPATHFINDING:					return "UI_CURSOR_PATHFINDING";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START:		return "UI_CURSOR_PATHFINDING_START";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD:	return "UI_CURSOR_PATHFINDING_START_ADD";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_END:		return "UI_CURSOR_PATHFINDING_END";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_END_ADD:	return "UI_CURSOR_PATHFINDING_END_ADD";
 		case UI_CURSOR_TOOLNO:							return "UI_CURSOR_NO";
+		case UI_CURSOR_TOOLSIT:							if (use_legacy_cursors) return "UI_CURSOR_TOOLSIT_LEGACY"; else return "UI_CURSOR_TOOLSIT";
+		case UI_CURSOR_TOOLBUY:							if (use_legacy_cursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
+		case UI_CURSOR_TOOLOPEN:						if (use_legacy_cursors) return "UI_CURSOR_TOOLOPEN_LEGACY"; else return "UI_CURSOR_TOOLOPEN";
+		case UI_CURSOR_TOOLPAY:							if (use_legacy_cursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLPAY";
 	}
 
 	llerrs << "cursorIDToName: unknown cursor id" << id << llendl;
@@ -1461,6 +1471,7 @@ void LLWindowMacOSX::updateCursor()
 	case UI_CURSOR_TOOLMEDIAOPEN:
 	case UI_CURSOR_TOOLSIT:
 	case UI_CURSOR_TOOLBUY:
+	case UI_CURSOR_TOOLPAY:
 	case UI_CURSOR_TOOLOPEN:
 	case UI_CURSOR_TOOLPATHFINDING:
 	case UI_CURSOR_TOOLPATHFINDING_PATH_START:
@@ -1512,6 +1523,7 @@ void LLWindowMacOSX::initCursors()
 	initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15);
 	initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15);
 	initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);
+	initPixmapCursor(UI_CURSOR_TOOLPAY, 20, 15);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD, 16, 16);
@@ -1589,7 +1601,10 @@ void LLWindowMacOSX::hideCursorUntilMouseMove()
 	}
 }
 
-
+void LLWindowMacOSX::setTitle(const std::string &title)
+{
+	setTitleCocoa(mWindow, title);
+}
 
 //
 // LLSplashScreenMacOSX
@@ -1610,12 +1625,14 @@ void LLSplashScreenMacOSX::showImpl()
 
 void LLSplashScreenMacOSX::updateImpl(const std::string& mesg)
 {
+#if 0 // [FS:CR] This isn't used for anything at all...
 	if(mWindow != NULL)
 	{
 		CFStringRef string = NULL;
 
 		string = CFStringCreateWithCString(NULL, mesg.c_str(), kCFStringEncodingUTF8);
 	}
+#endif // [FS:CR]
 }
 
 
@@ -1686,6 +1703,18 @@ void LLWindowMacOSX::spawnWebBrowser(const std::string& escaped_url, bool async)
 	else
 	{
 		llinfos << "Error: couldn't create URL." << llendl;
+	}
+}
+
+void LLWindowMacOSX::openFile(const std::string& file_name )
+{
+        llinfos << "Opening file " << file_name << llendl;
+	FSRef appRef;
+	OSStatus os_result = FSPathMakeRef((UInt8*)file_name.c_str(),
+					   &appRef,NULL);
+	if(os_result >= 0)
+	{
+		os_result = LSOpenFSRef(&appRef, NULL);
 	}
 }
 

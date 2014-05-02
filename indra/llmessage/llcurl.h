@@ -128,6 +128,10 @@ public:
 				return false;
 			}
 
+		// <Techwolf Lupindo> pass parse error down code path
+		bool mDeserializeError;
+		// </Techwolf Lupindo>
+
 	private:
 		std::string mURL;
 	};
@@ -390,7 +394,10 @@ public:
 	~LLCurlRequest();
 
 	void get(const std::string& url, LLCurl::ResponderPtr responder);
-	bool getByteRange(const std::string& url, const headers_t& headers, S32 offset, S32 length, LLCurl::ResponderPtr responder);
+	// <FS:Ansariel> Expose time out param
+	//bool getByteRange(const std::string& url, const headers_t& headers, S32 offset, S32 length, LLCurl::ResponderPtr responder);
+	bool getByteRange(const std::string& url, const headers_t& headers, S32 offset, S32 length, LLCurl::ResponderPtr responder, S32 time_out = 0);
+	// </FS:Ansariel>
 	bool post(const std::string& url, const headers_t& headers, const LLSD& data, LLCurl::ResponderPtr responder, S32 time_out = 0);
 	bool post(const std::string& url, const headers_t& headers, const std::string& data, LLCurl::ResponderPtr responder, S32 time_out = 0);
 	
@@ -463,7 +470,12 @@ private:
 			}
 			else
 			{
-				return (U32)lhs < (U32)rhs;
+				// <FS:ND> 64 bit fix. do not truncate a pointer down to 32 bit
+
+				// return (U32)lhs < (U32)rhs;
+				return lhs < rhs;
+
+				// </FS:ND>
 			}
 		}
 	};

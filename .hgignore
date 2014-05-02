@@ -12,12 +12,18 @@ syntax: glob
 *.DS_Store
 #*.orig
 LICENSES
+scripts/install.cache.*
+indra/newview/res/viewerRes.rc
+indra/llcommon/llversionserver.h
+indra/llcommon/llversionviewer.h
+indra/newview/exoflickrkeys.h
+indra/llcommon/res/llcommon.rc
+indra/newview/Info-SecondLife.plist
+indra/newview/info-Firestorm.plist
 indra/.distcc
 build-linux-*
 build-darwin-*
-build-vc80/
-build-vc100/
-indra/build-vc[0-9]*
+build-vc[0-9]*
 indra/CMakeFiles
 indra/lib/mono/1.0/*.dll
 indra/lib/mono/indra/*.dll
@@ -39,7 +45,11 @@ indra/newview/mozilla-universal-darwin.tgz
 indra/newview/res/ll_icon.*
 indra/newview/res-sdl/ll_icon.*
 indra/newview/vivox-runtime
+indra/newview/English.lproj/InfoPlist.strings
+indra/newview/Info-Firestorm.plist
 indra/server-linux-*
+indra/newview/res/firestorm_icon.BMP
+indra/newview/res/firestorm_icon.ico
 indra/temp
 indra/test/linden_file.dat
 indra/test_apps/llmediatest/dependencies/i686-win32
@@ -50,6 +60,7 @@ indra/web/doc/asset-upload/plugins/verify-notecard
 indra/web/doc/asset-upload/plugins/verify-texture
 installed.xml
 libraries
+logs
 tarfile_tmp
 debian/secondlife-viewer*
 debian/secondlife-appearance-utility*
@@ -64,6 +75,7 @@ configure-stamp
 ^indra/web/dataservice/lib/shared/vault.*
 ^indra/web/dataservice/vendor.*
 glob:indra/newview/dbghelp.dll
+glob:*Thumbs.db
 glob:*.cpp.orig
 glob:*.cpp.bak
 glob:*.h.bak
@@ -76,3 +88,7 @@ glob:indra/newview/avatar_icons_cache.txt
 glob:indra/newview/avatar_lad.log
 glob:*.diff
 #*.rej
+glob:fmod*
+syntax: regexp
+^indra/build
+.*\.wixobj

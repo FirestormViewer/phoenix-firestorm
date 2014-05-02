@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="move_floater" title="CAMMINA / CORRI / VOLA">
+<floater name="move_floater" title="">
 	<string name="walk_forward_tooltip">
 		Cammina in avanti (premi freccia su o W)
 	</string>
@@ -49,13 +49,10 @@
 		Accovacciarsi (premi C)
 	</string>
 	<string name="walk_title">
-		Cammina
 	</string>
 	<string name="run_title">
-		Corri
 	</string>
 	<string name="fly_title">
-		Vola
 	</string>
 	<panel name="panel_actions">
 		<button label="" label_selected="" name="turn left btn" tool_tip="Gira a sinistra (premi freccia sinistra o A)"/>

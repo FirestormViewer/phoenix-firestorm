@@ -11,9 +11,9 @@
   save_rect="true"
   single_instance="true"
   reuse_instance="true"
-  title="APPEARANCE"
-  min_height="440"
-  min_width="333"
+  title="Appearance"
+  min_height="200"
+  min_width="200"
   width="333">
     <panel
       top="18"

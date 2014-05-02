@@ -41,6 +41,8 @@
 #include "llspatialpartition.h"
 #include "llvovolume.h"
 
+#include "nd/ndobjectpool.h" // <FS:ND/> For operator new/delete
+
 const F32 PART_SIM_BOX_SIDE = 16.f;
 const F32 PART_SIM_BOX_OFFSET = 0.5f*PART_SIM_BOX_SIDE;
 const F32 PART_SIM_BOX_RAD = 0.5f*F_SQRT3*PART_SIM_BOX_SIDE;
@@ -654,10 +656,12 @@ void LLViewerPartSim::updateSimulation()
 
 	const F32 dt = llmin(update_timer.getElapsedTimeAndResetF32(), 0.1f);
 
- 	if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES)))
+	// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
+ 	/*if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES)))
 	{
 		return;
-	}
+	}*/
+	// </FS:LO>
 
 	LLFastTimer ftm(FTM_SIMULATE_PARTICLES);
 
@@ -730,7 +734,9 @@ void LLViewerPartSim::updateSimulation()
 		LLViewerObject* vobj = mViewerPartGroups[i]->mVOPartGroupp;
 
 		S32 visirate = 1;
-		if (vobj)
+		// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+		//if (vobj)
+		if (vobj && vobj->mDrawable)
 		{
 			LLSpatialGroup* group = vobj->mDrawable->getSpatialGroup();
 			if (group && !group->isVisible()) // && !group->isState(LLSpatialGroup::OBJECT_DIRTY))
@@ -741,7 +747,9 @@ void LLViewerPartSim::updateSimulation()
 
 		if ((LLDrawable::getCurrentFrame()+mViewerPartGroups[i]->mID)%visirate == 0)
 		{
-			if (vobj)
+			// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+			// <vobj)
+			if (vobj && vobj->mDrawable)
 			{
 				gPipeline.markRebuild(vobj->mDrawable, LLDrawable::REBUILD_ALL, TRUE);
 			}
@@ -871,3 +879,21 @@ void LLViewerPartSim::clearParticlesByOwnerID(const LLUUID& task_id)
 		}
 	}
 }
+
+// <FS:ND> Object pool for LLViewerPart
+
+// Assume this is singlethreaded (nd::locks::NoLock) 16 byte aligned and allocate 128 objects per chunk
+nd::objectpool::ObjectPool< LLViewerPart, nd::locks::NoLock, 16, 128 > sViewerpartPool;
+
+void* LLViewerPart::operator new(size_t size)
+{
+	llassert_always( size == sizeof(LLViewerPart) );
+	return sViewerpartPool.allocMemoryForObject();
+}
+
+void LLViewerPart::operator delete(void* ptr)
+{
+	sViewerpartPool.freeMemoryOfObject( ptr );
+}
+
+// </FS:ND>

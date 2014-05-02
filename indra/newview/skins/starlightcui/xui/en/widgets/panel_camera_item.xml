@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel_camera_item
+ background_visible="false"
+ height="20"
+ layout="topleft"
+ width="150">
+  <panel_camera_item.icon_over
+   follows="top|left"
+     height="20"
+     image_name="ListItem_Over"
+     left="0"
+     mouse_opaque="false"
+     layout="topleft"
+     name="hovered_icon"
+     top="20"
+     scale_image="true"
+     visible="false"
+     width="152" />
+  <panel_camera_item.icon_selected
+   follows="top|left"
+     height="20"
+     image_name="ListItem_Select"
+     layout="topleft"
+     left="0"
+     mouse_opaque="false"
+     name="selected_icon"
+     top="20"
+     scale_image="true"
+     visible="false"
+     width="152" />
+  <panel_camera_item.picture
+     follows="top|left"
+     height="20"
+     image_name="Icon_For_Sale"
+     layout="topleft"
+     left="0"
+     mouse_opaque="false"
+     name="picture"
+     tab_stop="false"
+     top="20"
+     top_pad="10"
+     width="20" />
+  <panel_camera_item.selected_picture
+     follows="top|left"
+     height="20"
+     image_name="Cam_Rotate_In"
+     layout="topleft"
+     left="0"
+     mouse_opaque="false"
+     name="selected_picture"
+     tab_stop="false"
+     top="20"
+     top_pad="8"
+     visible="false" 
+     width="20" />
+  <panel_camera_item.text
+   follows="top|left|right"
+     font="SansSerifMedium"
+     height="20"
+     layout="topleft"
+     left="25"
+     name="picture_name"
+     text_color="White"
+     top="16"
+     use_ellipses="true"
+     width="120"
+     word_wrap="false" >
+   Text
+   </panel_camera_item.text>
+</panel_camera_item>

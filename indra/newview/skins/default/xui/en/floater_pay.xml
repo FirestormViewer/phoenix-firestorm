@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="200"
+ height="240"
  layout="topleft"
  name="Give Money"
  help_topic="give_money"
@@ -84,9 +84,29 @@
      top_pad="0"
      layout="topleft"
      left="130"
-     max_length_bytes="9"
+     max_length="9"
      name="amount"
      width="80" />
+	<text
+	 type="string"
+	 follows="top|left"
+	 height="18"
+	 left="35"
+	 name="payment_message_label"
+	 top_pad="8"
+	 width="180">
+		Payment message (optional):
+	</text>
+    <line_editor
+     border_style="line"
+     follows="left|top|right"
+     height="19"
+     top_pad="0"
+     layout="topleft"
+     left="35"
+     max_length="9"
+     name="payment_message"
+     width="175" />
     <button
      enabled="false"
      height="23"

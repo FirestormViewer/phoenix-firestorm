@@ -238,10 +238,10 @@
 У вас не хватает L$ для вступления.
 	</notification>
 	<notification name="CreateGroupCost">
-		Создание этой группы стоит L$100.
+		Создание этой группы стоит L$[COST].
 В группе должно быть более одного участника, иначе она будет удалена.
 Пригласите участников в ближайшие 48 часов.
-		<usetemplate canceltext="Отмена" name="okcancelbuttons" notext="Отмена" yestext="Создать группу за L$100"/>
+		<usetemplate canceltext="Отмена" name="okcancelbuttons" notext="Отмена" yestext="Создать группу за L$[COST]"/>
 	</notification>
 	<notification name="LandBuyPass">
 		За L$[COST] вы можете находиться на этой земле («[PARCEL_NAME]») в течение [TIME] часов.  Купить пропуск?
@@ -1346,13 +1346,13 @@
 		Не удалось задать текстуры региона:
 у текстуры [TEXTURE_NUM] неправильная битовая глубина [TEXTURE_BIT_DEPTH].
 
-Замените текстуру [TEXTURE_NUM] на 24-битное изображение размером 512x512 или меньше и снова нажмите кнопку «Применить».
+Замените текстуру [TEXTURE_NUM] на 24-битное изображение размером 1024x1024 или меньше и снова нажмите кнопку «Применить».
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Не удалось задать текстуры региона:
 у текстуры [TEXTURE_NUM] слишком большой размер [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
-Замените текстуру [TEXTURE_NUM] на 24-битное изображение размером 512x512 или меньше и снова нажмите кнопку «Применить».
+Замените текстуру [TEXTURE_NUM] на 24-битное изображение размером 1024x1024 или меньше и снова нажмите кнопку «Применить».
 	</notification>
 	<notification name="RawUploadStarted">
 		Началась передача. Она может занять до двух минут, в зависимости от скорости соединения.
@@ -2317,7 +2317,7 @@ http://secondlife.com/download.
 		Раздел: [SUBJECT], сообщение: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; [STATUS]
+		[NAME] [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Вы лучше всех, но нельзя добавить в друзья себя самого.
@@ -2773,7 +2773,7 @@ http://secondlife.com/download.
 Если вы останетесь в этом регионе, вы выйдете из программы.
 	</notification>
 	<notification name="LoadWebPage">
-		Загрузить веб-страницу [URL]?
+		Загрузить веб-страницу [URL] ?
 
 [MESSAGE]
 
@@ -3879,13 +3879,13 @@ http://secondlife.com/download.
 		Выбрано недостаточно арендуемых участков для вступления.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Нельзя разделить землю.\nВыбрано больше одного участка.\nВыберите меньшую территорию.
+		Нельзя разделить землю. Выбрано больше одного участка. Выберите меньшую территорию.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Нельзя разделить землю.\nНе удалось найти участок.\nСообщите об этой неполадке: Справка -&gt; Сообщить об ошибке...
+		Нельзя разделить землю. Не удалось найти участок. Сообщите об этой неполадке: Справка -&gt; Сообщить об ошибке...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Невозможно разделить землю. Выбран весь участок.\nПопробуйте выбрать территорию поменьше.
+		Невозможно разделить землю. Выбран весь участок. Попробуйте выбрать территорию поменьше.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Земля разделена.

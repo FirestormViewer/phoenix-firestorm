@@ -84,6 +84,7 @@ LLNotificationForm::FormButton::FormButton()
 LLNotificationForm::FormInput::FormInput()
 :	type("type"),
 	text("text"),
+	is_default("default"),
 	max_length_chars("max_length_chars"),
 	width("width", 0),
 	value("value")
@@ -191,7 +192,7 @@ LLNotificationForm::LLNotificationForm(const std::string& name, const LLNotifica
 :	mIgnore(IGNORE_NO),
 	mInvertSetting(false) // ignore settings by default mean true=show, false=ignore
 {
-	if (p.ignore.isProvided())
+	if (p.ignore.isProvided() && LLUI::sSettingGroups["ignores"] && LLUI::sSettingGroups["config"])
 	{
 		mIgnoreMsg = p.ignore.text;
 
@@ -427,7 +428,7 @@ LLNotificationTemplate::LLNotificationTemplate(const LLNotificationTemplate::Par
 	mShowToast(p.show_toast),
     mSoundName("")
 {
-	if (p.sound.isProvided()
+	if (p.sound.isProvided() && LLUI::sSettingGroups["config"]
 		&& LLUI::sSettingGroups["config"]->controlExists(p.sound))
 	{
 		mSoundName = p.sound;
@@ -904,6 +905,13 @@ std::string LLNotification::getLabel() const
 	return (mTemplatep ? label : "");
 }
 
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+bool LLNotification::hasLabel() const
+{
+	return !mTemplatep->mLabel.empty();
+}
+// [/SL:KB]
+
 std::string LLNotification::getURL() const
 {
 	if (!mTemplatep)
@@ -1206,7 +1214,8 @@ LLNotifications::LLNotifications()
 :	LLNotificationChannelBase(LLNotificationFilters::includeEverything),
 	mIgnoreAllNotifications(false)
 {
-        mListener.reset(new LLNotificationsListener(*this));
+	// <FS:Ansariel> Disable test API
+        //mListener.reset(new LLNotificationsListener(*this));
 	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Notification.Show", boost::bind(&LLNotifications::addFromCallback, this, _2));
 }
 

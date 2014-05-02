@@ -6,7 +6,7 @@
  layout="topleft"
  name="script goto"
  help_topic="script_goto"
- title="GO TO LINE"
+ title="Go to Line"
  width="200">
     <button
      height="24"
@@ -35,7 +35,7 @@
      follows="left|top"
      height="16"
      layout="topleft"
-     left="75"
+     left_pad="10"
      max_length_bytes="9"
      name="goto_line"
      tab_group="1"

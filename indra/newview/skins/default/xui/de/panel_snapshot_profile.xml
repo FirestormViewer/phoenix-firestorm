@@ -10,19 +10,19 @@
 		<combo_box.item label="1024x768" name="1024x768"/>
 		<combo_box.item label="Benutzerdefiniert" name="Custom"/>
 	</combo_box>
-	<layout_stack name="profile_image_params_ls">
-		<layout_panel name="profile_image_size_lp">
+<!--	<layout_stack name="profile_image_params_ls">
+		<layout_panel name="profile_image_size_lp">-->
 			<spinner label="Breite" name="profile_snapshot_width"/>
 			<spinner label="Höhe" name="profile_snapshot_height"/>
 			<check_box label="Seitenverhältnis beibehalten" name="profile_keep_aspect_check"/>
-		</layout_panel>
-		<layout_panel name="profile_image_metadata_lp">
+<!--		</layout_panel>
+		<layout_panel name="profile_image_metadata_lp">-->
 			<text name="caption_label">
 				Bildunterschrift:
 			</text>
 			<check_box initial_value="true" label="Ort einschließen" name="add_location_cb"/>
-		</layout_panel>
-	</layout_stack>
+<!--		</layout_panel>
+	</layout_stack>-->
 	<button label="Abbrechen" name="cancel_btn"/>
 	<button label="Posten" name="post_btn"/>
 </panel>

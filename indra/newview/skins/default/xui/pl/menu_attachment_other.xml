@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- *NOTE: See also menu_avatar_other.xml -->
 <context_menu name="Avatar Pie">
 	<menu_item_call label="Zobacz profil" name="Profile..."/>
-	<menu_item_call label="Dodaj znajomość" name="Add Friend"/>
-	<menu_item_call label="IM" name="Send IM..."/>
+	<menu_item_call label="Nowy znajomy" name="Add Friend"/>
+	<menu_item_call label="Dodaj do Zestawu" name="Add to Set"/>
+	<menu_item_call label="Wiadomość IM" name="Send IM..."/>
+	<menu_item_call label="Dodaj wizytówkę" name="Add Calling Card"/>
 	<menu_item_call label="Zadzwoń" name="Call"/>
 	<menu_item_call label="Zaproś do grupy" name="Invite..."/>
-	<menu_item_call label="Zablokuj" name="Avatar Mute"/>
-	<menu_item_call label="Raport" name="abuse"/>
-	<menu_item_call label="Unieruchom" name="Freeze..."/>
-	<menu_item_call label="Wyrzuć" name="Eject..."/>
-	<menu_item_call label="Debugowanie tekstur" name="Debug..."/>
+	<context_menu label="Irytacja?" name="Annoyance">
+		<menu_item_call label="Zablokuj" name="Avatar Mute"/>
+		<menu_item_call label="Odblokuj" name="Avatar Unmute"/>
+		<menu_item_call label="Zgłoś" name="abuse"/>
+		<menu_item_call label="Unieruchom" name="Freeze..."/>
+		<menu_item_call label="Wyrzuć" name="Eject..."/>
+	</context_menu>
+	<menu_item_call label="Zrzuć XML" name="Dump XML"/>
 	<menu_item_call label="Przybliż" name="Zoom In"/>
 	<menu_item_call label="Zapłać" name="Pay..."/>
-	<menu_item_call label="Sprawdź" name="Object Inspect"/>
+	<menu_item_call label="Profil obiektu" name="Object Inspect"/>
+	<menu_item_check label="Renderuj normalnie" name="Normal"/>
+	<menu_item_check label="Zawsze upraszczaj" name="Always use impostor"/>
+	<menu_item_check label="Nigdy nie upraszczaj" name="Never use impostor"/>
+	<menu_item_call label="Blokuj właściciela cząsteczek" name="Mute Particle"/>
+	<menu_item_call label="O skryptach" name="ScriptInfo"/>
+	<menu_item_call label="Derenderuj" name="Derender"/>
+	<menu_item_call label="Derenderuj + czarna lista" name="DerenderPermanent"/>
+	<menu_item_call label="Pokaż tekstury" name="Debug..."/>
+	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
+	<context_menu label="Zapisz jako" name="Export Menu">
+		<menu_item_call label="Kopia zapasowa" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 </context_menu>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_notes" label="Заметки &amp; приватность">
+	<text name="status_message" value="Личные заметки об этом человеке:"/>
+	<text name="status_message2" value="Позвольте этому человеку:"/>
+	<check_box name="status_check" label="Видеть, когда я в сети"/>
+	<check_box name="map_check" label="Найди меня на карте"/>
+	<check_box name="objects_check" label="Редактировать, удалять, или взять мои объекты "/>
+</panel>

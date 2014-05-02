@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<pie_menu name="Attachment Pie">
+    <pie_slice name="Profile..."
+        label="Profil"/>
+    <pie_slice name="Drop"
+        label="Déposer"/>
+    <pie_slice name="Sit Down Here"
+        label="S'asseoir ici"/>
+    <pie_slice name="Stand Up"
+        label="Se lever"/>
+    <pie_slice name="Detach"
+        label="Détacher &gt;"/>
+    <pie_slice name="Gestures"
+        label="Gestes"/>
+    <pie_slice name="Edit..."
+        label="Editer"/>
+		
+    <pie_menu name="Attachment Pie More"
+        label="Plus &gt;">
+        <pie_slice name="Attachment Object Touch"
+            label="Toucher"/>
+        <pie_slice name="Derender"
+            label="'Derender'"/>
+    </pie_menu>
+	
+    <pie_menu name="Appearance &gt;"
+        label="Apparence &gt;">
+        <pie_slice name="Edit My Shape"
+			label="&gt; Corps"/>
+        <pie_slice name="Edit My Outfit"
+			label="&gt; Tenue"/>
+    </pie_menu>
+</pie_menu>

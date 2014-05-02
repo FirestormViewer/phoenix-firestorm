@@ -1113,9 +1113,13 @@ void LLVOTree::updateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 	mDrawable->setPositionGroup(pos);
 }
 
-BOOL LLVOTree::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
-									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-	
+//BOOL LLVOTree::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+BOOL LLVOTree::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
+								  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+									  
+// [/SL:KB]
 {
 
 	if (!lineSegmentBoundingBox(start, end))

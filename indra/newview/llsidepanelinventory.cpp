@@ -59,6 +59,12 @@
 #include "llviewernetwork.h"
 #include "llweb.h"
 
+#include "llfiltereditor.h"
+// <FS:CR> Needed to hide Received Items on OpenSim
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif // OPENSIM
+
 static LLPanelInjector<LLSidepanelInventory> t_inventory("sidepanel_inventory");
 
 //
@@ -247,6 +253,9 @@ BOOL LLSidepanelInventory::postBuild()
 
 	gSavedSettings.getControl("InventoryDisplayInbox")->getCommitSignal()->connect(boost::bind(&handleInventoryDisplayInboxChanged));
 
+	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLSidepanelInventory::refreshInboxVisibility, this));
+
 	// Update the verbs buttons state.
 	updateVerbs();
 
@@ -341,8 +350,24 @@ void LLSidepanelInventory::enableInbox(bool enabled)
 	mInboxEnabled = enabled;
 	
 	LLLayoutPanel * inbox_layout_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
-	inbox_layout_panel->setVisible(enabled);
+	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+	//inbox_layout_panel->setVisible(enabled);
+	inbox_layout_panel->setVisible(enabled&& !gSavedSettings.getBOOL("FSShowInboxFolder")//); <FS:CR>
+// <FS:CR> Show Received Items panel only in Second Life
+#ifdef OPENSIM
+								   && LLGridManager::getInstance()->isInSecondLife()
+#endif // OPENSIM
+
+								   );
+// </FS:CR>
 }
+
+// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+void LLSidepanelInventory::refreshInboxVisibility()
+{
+	enableInbox(mInboxEnabled);
+}
+// </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
 void LLSidepanelInventory::openInbox()
 {
@@ -414,7 +439,12 @@ void LLSidepanelInventory::onOpen(const LLSD& key)
 #endif
 
 	if(key.size() == 0)
+	{
+		// set focus on filter editor when side tray inventory shows up
+		LLFilterEditor* filter_editor = mPanelMainInventory->getChild<LLFilterEditor>("inventory search editor");
+		filter_editor->setFocus(TRUE);
 		return;
+	}
 
 	mItemPanel->reset();
 

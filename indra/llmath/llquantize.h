@@ -130,7 +130,9 @@ inline U8 F32_TO_STRING(F32 val, F32 lower, F32 upper)
 	val -= lower;					//[0, upper-lower]
 	val /= (upper - lower);			//[0,1]
 	val = val * MAXSTRINGVAL;		//[0, MAXSTRINGVAL]
-	val = floor(val + 0.5f);		//[0, MAXSTRINGVAL]
+	// <FS:CR> Fix implicit conversaion float to double
+	//val = floor(val + 0.5f);		//[0, MAXSTRINGVAL]
+	val = floorf(val + 0.5f);		//[0, MAXSTRINGVAL]
 
 	U8 stringVal = (U8)(val) + FIRSTVALIDCHAR;			//[FIRSTVALIDCHAR, MAXSTRINGVAL + FIRSTVALIDCHAR]
 	return stringVal;

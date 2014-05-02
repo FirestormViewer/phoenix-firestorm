@@ -47,10 +47,17 @@ extern std::string SCREEN_LAST_FILENAME;
 
 typedef enum {
 	STATE_FIRST,					// Initial startup
+// <AW: opensim>
+	STATE_FETCH_GRID_INFO,		// wait for the grid infos to load
+	STATE_AUDIO_INIT,			//init audio
+// </AW: opensim>
 	STATE_BROWSER_INIT,             // Initialize web browser for login screen
 	STATE_LOGIN_SHOW,				// Show login screen
 	STATE_LOGIN_WAIT,				// Wait for user input at login screen
 	STATE_LOGIN_CLEANUP,			// Get rid of login screen and start login
+// <FS:Techwolf Lupindo> fsdata support
+	STATE_AGENTS_WAIT,			// Wait for agents.xml to load.
+// </FS:Techwolf Lupindo>
 	STATE_LOGIN_AUTH_INIT,			// Start login to SL servers
 	STATE_LOGIN_CURL_UNSTUCK,		// Update progress to remove "SL appears frozen" msg.
 	STATE_LOGIN_PROCESS_RESPONSE,	// Check authentication reply
@@ -110,7 +117,13 @@ public:
 		// the viewer, dispatch it
 
 	static void postStartupState();
-	static void setStartSLURL(const LLSLURL& slurl); 
+
+// <AW: opensim>
+	static void setStartSLURLString(const std::string& slurl_string){sStartSLURLString = slurl_string;}
+	static std::string getStartSLURLString() { return sStartSLURLString; };
+// </AW: opensim>
+
+	static void setStartSLURL(const LLSLURL& slurl);
 	static LLSLURL& getStartSLURL();
 
 	static bool startLLProxy(); // Initialize the SOCKS 5 proxy
@@ -118,6 +131,7 @@ public:
 	static LLViewerStats::PhaseMap& getPhases() { return *sPhases; }
 private:
 	static LLSLURL sStartSLURL;
+	static std::string sStartSLURLString;
 
 	static std::string startupStateToString(EStartupState state);
 	static EStartupState gStartupState; // Do not set directly, use LLStartup::setStartupState

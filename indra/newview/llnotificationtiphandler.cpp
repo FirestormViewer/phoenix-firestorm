@@ -28,8 +28,10 @@
 #include "llviewerprecompiledheaders.h" // must be first include
 
 #include "llfloaterreg.h"
-#include "llfloaterimnearbychat.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
 #include "lltoastnotifypanel.h"
@@ -37,6 +39,7 @@
 #include "llviewerwindow.h"
 #include "llnotificationmanager.h"
 #include "llpaneltiptoast.h"
+#include "lggcontactsets.h" // [FIRE-3522 : SJ]
 
 using namespace LLNotificationsUI;
 
@@ -87,6 +90,8 @@ bool LLTipHandler::processNotification(const LLNotificationPtr& notification)
 
 	std::string session_name = notification->getPayload()["SESSION_NAME"];
 	const std::string name = notification->getSubstitutions()["NAME"];
+		const LLUUID agent_id = notification->getSubstitutions()["AGENT-ID"]; // [FIRE-3522 : SJ]
+		
 	if (session_name.empty())
 	{
 		session_name = name;
@@ -95,7 +100,7 @@ bool LLTipHandler::processNotification(const LLNotificationPtr& notification)
 	if (notification->canLogToIM())
 	{
 		LLHandlerUtil::logToIM(IM_NOTHING_SPECIAL, session_name, name,
-				notification->getMessage(), from_id, from_id);
+			notification->getMessage(), from_id, from_id);
 	}
 
 	if (notification->canLogToIM() && notification->hasFormElements())
@@ -106,6 +111,16 @@ bool LLTipHandler::processNotification(const LLNotificationPtr& notification)
 	if (notification->canLogToIM() && LLHandlerUtil::isIMFloaterOpened(notification))
 	{
 		return false;
+	}
+
+	// [FIRE-3522 : SJ] Only show Online/Offline toast when ChatOnlineNotification is enabled or the Friend is one you want to have on/offline notices from
+	if (!gSavedSettings.getBOOL("ChatOnlineNotification") && "FriendOnlineOffline" == notification->getName())
+	{
+		// [FIRE-3522 : SJ] Only show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Toasts
+		if (!(gSavedSettings.getBOOL("FSContactSetsNotificationToast") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
+		{
+			return false;
+		}
 	}
 
 	LLToastPanel* notify_box = LLToastPanel::buidPanelFromNotification(notification);

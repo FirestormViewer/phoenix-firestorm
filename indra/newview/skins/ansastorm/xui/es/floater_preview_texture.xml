@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_texture">
+	<floater.string name="Title">
+		Textura: [NAME]
+	</floater.string>
+	<floater.string name="Copy">
+		Copiar al inventario
+	</floater.string>
+	<floater.string name="DateTime">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
+	</floater.string>
+	<floater.string name="UploaderDateTime"/>
+	<text name="desc txt">
+		Descripción:
+	</text>
+	<text name="uploader_label">
+		Subida por:
+	</text>
+ 	<button label="Perfil" name="openprofile"/>
+	<text name="upload_time_label">
+		Fecha:
+	</text>
+	<button name="copyuuid" label="Copiar"/>
+	<panel name="dimensions_panel">
+		<text name="aspect_ratio">
+			Previsualizar aspecto
+		</text>
+		<combo_box name="combo_aspect_ratio" tool_tip="Previsualizar con una relación de aspecto determinada">
+			<combo_item name="Unconstrained">
+				Sin restricciones
+			</combo_item>
+			<combo_item name="1:1" tool_tip="Insignia de grupo o información adicional de perfil"/>
+			<combo_item name="4:3" tool_tip="Perfil  [CURRENT_GRID]"/>
+			<combo_item name="10:7" tool_tip="Clasificados y listados de búsqueda, hitos"/>
+			<combo_item name="3:2" tool_tip="Acerca del terreno"/>
+			<combo_item name="16:9" tool_tip="Destacados"/>
+		</combo_box>
+	</panel>
+	<panel name="button_panel">
+		<button label="Aceptar" name="Keep"/>
+		<button label="Descartar" name="Discard"/>
+		<flyout_button label="Guardar..." name="save_tex_btn">
+			<flyout_button.item label="Guardar como TGA" name="save_item_tga"/>
+			<flyout_button.item label="Guardar como PNG" name="save_item_png"/>	 
+		</flyout_button>
+	</panel>
+</floater>

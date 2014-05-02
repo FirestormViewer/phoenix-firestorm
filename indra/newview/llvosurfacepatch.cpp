@@ -122,7 +122,7 @@ public:
 //============================================================================
 
 LLVOSurfacePatch::LLVOSurfacePatch(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
-	:	LLStaticViewerObject(id, pcode, regionp),
+	:	LLStaticViewerObject(id, LL_VO_SURFACE_PATCH, regionp),
 		mDirtiedPatch(FALSE),
 		mPool(NULL),
 		mBaseComp(0),
@@ -936,8 +936,12 @@ void LLVOSurfacePatch::getGeomSizesEast(const S32 stride, const S32 east_stride,
 	}
 }
 
-BOOL LLVOSurfacePatch::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//BOOL LLVOSurfacePatch::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+BOOL LLVOSurfacePatch::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
 									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+// [/SL:KB]
 	
 {
 

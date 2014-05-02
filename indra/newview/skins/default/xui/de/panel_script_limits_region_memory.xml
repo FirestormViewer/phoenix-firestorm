@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="REGIONSSPEICHER" name="script_limits_region_memory_panel">
+<panel label="Regionsspeicher" name="script_limits_region_memory_panel">
 	<text name="script_memory">
 		Parzellenskript-Speicher
 	</text>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- Primarily used when @showloc restricted -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(Versteckt)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(Versteckte Parzelle)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(Versteckte Region)</string>
+		</map>
+
+		<!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>*** IM wurde von deinem Viewer blockiert.</string>
+			<key>description</key>
+			<string>Wird an Stelle der Original-Nachricht gezeigt, wenn eine eingehende IM geblockt wird.</string>
+			<key>label</key>
+			<string>Geblockte eingehende IM (lokal)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>*** IM wurde vom Viewer des Senders blockiert.</string>
+			<key>description</key>
+			<string>Wird angezeigt (und an den Gesprächspartner geschickt), wenn eine ausgehende IM geblockt wird.</string>
+			<key>label</key>
+			<string>Geblockte ausgehende IM (lokal + remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Shown as notifications -->
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>Aktion konnte aufgrund von RLV-Einschränkungen nicht durchgeführt werden.</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>Der Versuch „[OBJECT]“ anzuhängen wurde aufgrund von RLV-Einschränkungen verweigert.</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>„[OBJECT]“ wurde aufgrund von RLV-Einschränkungen verweigert, dich zu teleportieren.</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>IM-Sitzung mit [RECIPIENT] konnte aufgrund von RLV-Einschränkungen nicht gestartet werden.</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>Konferenz konnte aufgrund von RLV-Einschränkungen nicht gestartet werden.</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>Teleport konnte aufgrund von RLV-Einschränkungen nicht initialisiert werden.</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>[TYPE] konnte aufgrund von RLV-Einschränkungen nicht geöffnet werden.</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>Gitternetz-Modus konnte aufgrund von RLV-Einschränkungen nicht aktiviert werden.</string>
+		</map>
+	</map>
+</map>
+</llsd>

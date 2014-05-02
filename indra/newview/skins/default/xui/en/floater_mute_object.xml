@@ -6,7 +6,7 @@
  layout="topleft"
  name="block by name"
  help_topic="mute_by_name"
- title="BLOCK OBJECT BY NAME"
+ title="Block Object by Name"
  width="375">
     <text
      type="string"

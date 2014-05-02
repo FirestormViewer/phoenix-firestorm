@@ -76,6 +76,12 @@
 #include "object_flags.h"
 
 #include "llappviewer.h"
+#include "fswsassetblacklist.h"
+#include "fsfloaterimport.h"
+#include "fscommon.h"
+#include "llfloaterreg.h"
+
+#include "fsareasearch.h" // <FS:Cron> Added to provide the ability to update the impact costs in area search. </FS:Cron>
 
 extern F32 gMinObjectDistance;
 extern BOOL gAnimateTextures;
@@ -93,7 +99,7 @@ extern LLPipeline	gPipeline;
 U32						LLViewerObjectList::sSimulatorMachineIndex = 1; // Not zero deliberately, to speed up index check.
 std::map<U64, U32>		LLViewerObjectList::sIPAndPortToIndex;
 std::map<U64, LLUUID>	LLViewerObjectList::sIndexAndLocalIDToUUID;
-LLStat					LLViewerObjectList::sCacheHitRate("object_cache_hits", 128);
+LLStat					LLViewerObjectList::sCacheHitRate("object_cache_hits", 32);
 
 LLViewerObjectList::LLViewerObjectList()
 {
@@ -222,6 +228,13 @@ void LLViewerObjectList::setUUIDAndLocal(const LLUUID &id,
 S32 gFullObjectUpdates = 0;
 S32 gTerseObjectUpdates = 0;
 
+// <FS:CR> Object Import
+boost::signals2::connection LLViewerObjectList::setNewObjectCallback(new_object_callback_t cb)
+{
+	return mNewObjectSignal.connect(cb);
+}
+// </FS:CR>
+
 void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp, 
 										   void** user_data, 
 										   U32 i, 
@@ -254,20 +267,37 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 	// (from gPipeline.addObject)
 	// so that the drawable parent is set properly
 	findOrphans(objectp, msg->getSenderIP(), msg->getSenderPort());
-	
+
 	// If we're just wandering around, don't create new objects selected.
 	if (just_created 
 		&& update_type != OUT_TERSE_IMPROVED 
 		&& objectp->mCreateSelected)
 	{
-		if ( LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance() )
+		// <FS:Techwolf Lupindo> import support
+		bool import_handled = false;
+		bool own_full_perm = (objectp->permYouOwner() && objectp->permModify() && objectp->permTransfer() && objectp->permCopy());
+		if (own_full_perm)
 		{
-			// llinfos << "DEBUG selecting " << objectp->mID << " " 
-			// << objectp->mLocalID << llendl;
-			LLSelectMgr::getInstance()->selectObjectAndFamily(objectp);
-			dialog_refresh_all();
+			import_handled = mNewObjectSignal(objectp);
+			mNewObjectSignal.disconnect_all_slots();
 		}
+		if (!import_handled)
+		{
+			if (own_full_perm && (FSCommon::sObjectAddMsg > 0))
+			{
+				FSCommon::sObjectAddMsg--;
+				FSCommon::applyDefaultBuildPreferences(objectp);
+			}
 
+			if ( LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance() )
+			{
+				// llinfos << "DEBUG selecting " << objectp->mID << " " 
+				// << objectp->mLocalID << llendl;
+				LLSelectMgr::getInstance()->selectObjectAndFamily(objectp);
+				dialog_refresh_all();
+			}
+		}
+		// <FS:Techwolf Lupindo>
 		objectp->mCreateSelected = false;
 		gViewerWindow->getWindow()->decBusyCount();
 		gViewerWindow->setCursor( UI_CURSOR_ARROW );
@@ -513,6 +543,14 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			}
 #endif
 
+
+			
+			if(FSWSAssetBlacklist::getInstance()->isBlacklisted(fullid,LLAssetType::AT_OBJECT))
+			{
+				llinfos << "Blacklisted object blocked." << llendl; 
+				continue;
+			}
+
 			objectp = createObject(pcode, regionp, fullid, local_id, gMessageSystem->getSender());
 			if (!objectp)
 			{
@@ -527,10 +565,14 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 		}
 
 
+		// Gah, why bother spamming the log with messages we can't do
+		//  anything about?! -- TS
+#if 0
 		if (objectp->isDead())
 		{
 			llwarns << "Dead object " << objectp->mID << " in UUID map 1!" << llendl;
 		}
+#endif
 
 		bool bCached = false;
 		if (compressed)
@@ -743,6 +785,15 @@ public:
 				F32 link_physics_cost = content[iter->asString()]["linked_set_physics_cost"].asReal();
 
 				gObjectList.updateObjectCost(object_id, object_cost, link_cost, physics_cost, link_physics_cost);
+
+				// <FS:Cron> area search
+				// Update area search to have current information.
+				FSAreaSearch* area_search_floater = LLFloaterReg::findTypedInstance<FSAreaSearch>("area_search");
+				if( area_search_floater )
+				{
+					area_search_floater->updateObjectCosts(object_id, object_cost, link_cost, physics_cost, link_physics_cost);
+				}
+				// </FS:Cron> area search
 			}
 			else
 			{
@@ -854,12 +905,28 @@ private:
 
 void LLViewerObjectList::update(LLAgent &agent)
 {
+	// <FS:Ansariel> Speed up debug settings
+	static LLCachedControl<bool> velocityInterpolate(gSavedSettings, "VelocityInterpolate");
+	static LLCachedControl<bool> pingInterpolate(gSavedSettings, "PingInterpolate");
+	static LLCachedControl<F32> interpolationTime(gSavedSettings, "InterpolationTime");
+	static LLCachedControl<F32> interpolationPhaseOut(gSavedSettings, "InterpolationPhaseOut");
+	static LLCachedControl<bool> animateTextures(gSavedSettings, "AnimateTextures");
+	static LLCachedControl<bool> freezeTime(gSavedSettings, "FreezeTime");
+	// </FS:Ansariel> Speed up debug settings
+
 	// Update globals
-	LLViewerObject::setVelocityInterpolate( gSavedSettings.getBOOL("VelocityInterpolate") );
-	LLViewerObject::setPingInterpolate( gSavedSettings.getBOOL("PingInterpolate") );
+	// </FS:Ansariel> Speed up debug settings
+	//LLViewerObject::setVelocityInterpolate( gSavedSettings.getBOOL("VelocityInterpolate") );
+	//LLViewerObject::setPingInterpolate( gSavedSettings.getBOOL("PingInterpolate") );
+	//
+	//F32 interp_time = gSavedSettings.getF32("InterpolationTime");
+	//F32 phase_out_time = gSavedSettings.getF32("InterpolationPhaseOut");
+	LLViewerObject::setVelocityInterpolate(velocityInterpolate);
+	LLViewerObject::setPingInterpolate(pingInterpolate);
 	
-	F32 interp_time = gSavedSettings.getF32("InterpolationTime");
-	F32 phase_out_time = gSavedSettings.getF32("InterpolationPhaseOut");
+	F32 interp_time = (F32)interpolationTime;
+	F32 phase_out_time = (F32)interpolationPhaseOut;
+	// </FS:Ansariel> Speed up debug settings
 	if (interp_time < 0.0 || 
 		phase_out_time < 0.0 ||
 		phase_out_time > interp_time)
@@ -871,7 +938,10 @@ void LLViewerObjectList::update(LLAgent &agent)
 	LLViewerObject::setPhaseOutUpdateInterpolationTime( interp_time );
 	LLViewerObject::setMaxUpdateInterpolationTime( phase_out_time );
 
-	gAnimateTextures = gSavedSettings.getBOOL("AnimateTextures");
+	// <FS:Ansariel> Speed up debug settings
+	//gAnimateTextures = gSavedSettings.getBOOL("AnimateTextures");
+	gAnimateTextures = animateTextures;
+	// </FS:Ansariel> Speed up debug settings
 
 	// update global timer
 	F32 last_time = gFrameTimeSeconds;
@@ -933,7 +1003,10 @@ void LLViewerObjectList::update(LLAgent &agent)
 
 	std::vector<LLViewerObject*>::iterator idle_end = idle_list.begin()+idle_count;
 
-	if (gSavedSettings.getBOOL("FreezeTime"))
+	// <FS:Ansariel> Speed up debug settings
+	//if (gSavedSettings.getBOOL("FreezeTime"))
+	if (freezeTime)
+	// </FS:Ansariel> Speed up debug settings
 	{
 		
 		for (std::vector<LLViewerObject*>::iterator iter = idle_list.begin();
@@ -1638,7 +1711,20 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 	LLColor4 group_own_below_water_color = 
 						LLUIColorTable::instance().getColor( "NetMapGroupOwnBelowWater" );
 
-	F32 max_radius = gSavedSettings.getF32("MiniMapPrimMaxRadius");
+// <FS:CR> FIRE-1846: Firestorm netmap enhancements
+	LLColor4 you_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapYouPhysical", LLColor4::red );
+	LLColor4 group_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapGroupPhysical", LLColor4::green );
+	LLColor4 other_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapOtherPhysical", LLColor4::green );
+	LLColor4 scripted_object_color = LLUIColorTable::instance().getColor ( "NetMapScripted", LLColor4::orange );
+	LLColor4 temp_on_rez_object_color = LLUIColorTable::instance().getColor ( "NetMapTempOnRez", LLColor4::orange );
+	static LLCachedControl<bool> fs_netmap_physical(gSavedSettings, "FSNetMapPhysical", false);
+	static LLCachedControl<bool> fs_netmap_scripted(gSavedSettings, "FSNetMapScripted", false);
+	static LLCachedControl<bool> fs_netmap_temp_on_rez(gSavedSettings, "FSNetMapTempOnRez", false);
+	static LLCachedControl<U32> fs_netmap_phantom_opacity(gSavedSettings, "FSNetMapPhantomOpacity", 100);
+	const F32 MIN_RADIUS_FOR_ACCENTED_OBJECTS = 2.f;
+// </FS:CR>
+	static LLCachedControl<F32> max_radius(gSavedSettings, "MiniMapPrimMaxRadius");
+	static LLCachedControl<F32> max_zdistance_from_avatar(gSavedSettings, "MiniMapPrimMaxVertDistance");
 
 	for (vobj_list_t::iterator iter = mMapObjects.begin(); iter != mMapObjects.end(); ++iter)
 	{
@@ -1656,14 +1742,23 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 		const LLVector3& scale = objectp->getScale();
 		const LLVector3d pos = objectp->getPositionGlobal();
 		const F64 water_height = F64( objectp->getRegion()->getWaterHeight() );
-		// LLWorld::getInstance()->getWaterHeight();
+
+		// Skip all objects that are more than MiniMapPrimMaxVertDistance above or below the avatar
+		if (max_zdistance_from_avatar > 0.0)
+		{
+			F64 zdistance = pos.mdV[VZ] - gAgent.getPositionGlobal().mdV[VZ];
+			if (zdistance < (-max_zdistance_from_avatar) || zdistance > max_zdistance_from_avatar)
+			{
+				continue;
+			}
+		}
 
 		F32 approx_radius = (scale.mV[VX] + scale.mV[VY]) * 0.5f * 0.5f * 1.3f;  // 1.3 is a fudge
 
 		// Limit the size of megaprims so they don't blot out everything on the minimap.
 		// Attempting to draw very large megaprims also causes client lag.
 		// See DEV-17370 and DEV-29869/SNOW-79 for details.
-		approx_radius = llmin(approx_radius, max_radius);
+		approx_radius = llmin(approx_radius, (F32)max_radius);
 
 		LLColor4U color = above_water_color;
 		if( objectp->permYouOwner() )
@@ -1702,7 +1797,53 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 		{
 			color = below_water_color;
 		}
-
+		
+// <FS:CR> FIRE-1846: Firestorm netmap enhancements
+		if (fs_netmap_scripted && objectp->flagScripted())
+		{
+			color = scripted_object_color;
+			if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
+			{
+				approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
+			}
+		}
+		
+		if (fs_netmap_physical && objectp->flagUsePhysics())
+		{
+			if (objectp->permYouOwner())
+			{
+				color = you_own_physical_color;
+			}
+			else if (objectp->permGroupOwner())
+			{
+				color = group_own_physical_color;
+			}
+			else
+			{
+				color = other_own_physical_color;
+			}
+			if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
+			{
+				approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
+			}
+		}
+		
+		if (fs_netmap_temp_on_rez && objectp->flagTemporaryOnRez())
+		{
+			color = temp_on_rez_object_color;
+			if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
+			{
+				approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
+			}
+		}
+		
+		if (objectp->flagPhantom())
+		{
+			color.setAlpha(llclampb((U32)fs_netmap_phantom_opacity));
+			
+		}
+// </FS:CR>
+		
 		netmap.renderScaledPointGlobal( 
 			pos, 
 			color,

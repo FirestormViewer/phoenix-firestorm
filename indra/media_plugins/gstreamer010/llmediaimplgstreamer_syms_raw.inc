@@ -49,3 +49,11 @@ LL_GST_SYM(false, gst_version, void, guint *major, guint *minor, guint *micro, g
 // GStreamer 'internal' symbols which may not be visible in some runtimes but are still used in expanded GStreamer header macros - yuck!  We'll substitute our own stubs for these.
 //LL_GST_SYM(true, _gst_debug_register_funcptr, void, GstDebugFuncPtr func, gchar* ptrname);
 //LL_GST_SYM(true, _gst_debug_category_new, GstDebugCategory *, gchar *name, guint color, gchar *description);
+
+// [ML] Symbols needed to make "Now playing" work in standard builds
+LL_GST_SYM(true, gst_message_parse_tag, void, GstMessage *, GstTagList **);
+LL_GST_SYM(true, gst_tag_list_foreach, void, const GstTagList *, GstTagForeachFunc, gpointer);
+LL_GST_SYM(true, gst_tag_list_free, void, GstTagList *);
+LL_GST_SYM(true, gst_tag_list_get_tag_size, guint, const GstTagList *, const gchar *);
+LL_GST_SYM(true, gst_tag_list_get_value_index, const GValue *, const GstTagList *, const gchar *, guint);
+// [/ML]

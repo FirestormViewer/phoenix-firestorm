@@ -79,6 +79,6 @@ const std::string SL_KB_URL (
 	"http://secondlife.com/knowledgebase/"); // *TODO: NOT USED
 
 const std::string RELEASE_NOTES_BASE_URL (
-	"http://secondlife.com/app/releasenotes/");
+	"http://wiki.phoenixviewer.com/firestorm_change_log");
 */
 

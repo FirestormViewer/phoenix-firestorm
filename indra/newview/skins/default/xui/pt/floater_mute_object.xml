@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="mute by name" title="BLOQUEAR OBJETO POR NOME">
+<floater name="block by name" title="BLOQUEAR OBJETO POR NOME">
 	<text name="message">
 		Bloquear o objeto:
 	</text>

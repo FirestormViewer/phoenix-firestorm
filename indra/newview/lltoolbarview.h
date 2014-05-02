@@ -47,12 +47,14 @@ public:
 	typedef LLDefaultChildRegistry child_registry_t;
 	
 	// Xml structure of the toolbars.xml setting
-	// Those live in a toolbars.xml found in app_settings (for the default) and in
+	// Those live in a toolbars.xml found in the selected skin folder and in
 	// the user folder for the user specific (saved) settings
 	struct Toolbar : public LLInitParam::Block<Toolbar>
 	{
 		Mandatory<LLToolBarEnums::ButtonType>	button_display_mode;
 		Multiple<LLCommandId::Params>	commands;
+		Optional<LLToolBarEnums::Alignment>		button_alignment;		// <FS:Zi> Added alignment parameter
+		Optional<LLToolBarEnums::LayoutStyle>	button_layout_style;	// <FS:Zi> Added layout style parameter
 
 		Toolbar();
 	};
@@ -98,7 +100,11 @@ public:
 	LLView* getBottomToolbar() { return mBottomToolbarPanel; }
 	LLToolBar* getToolbar(LLToolBarEnums::EToolBarLocation toolbar) { return mToolbars[toolbar]; }
 	bool isModified() const;
-	
+
+	// <FS:Ansariel> Getters for member variables needed for console chat bottom offset
+	LLView* getBottomChatStack() const { return mBottomChatStack; };
+	// </FS:Ansariel>
+
 protected:
 	friend class LLUICtrlFactory;
 	LLToolBarView(const Params&);
@@ -122,6 +128,10 @@ private:
 	LLInventoryObject*	mDragItem;
 	bool				mShowToolbars;
 	LLView*				mBottomToolbarPanel;
+
+	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	LLView*				mBottomChatStack;
+	// </FS:Ansariel>
 };
 
 extern LLToolBarView* gToolBarView;

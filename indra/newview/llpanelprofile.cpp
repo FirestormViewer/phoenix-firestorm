@@ -45,14 +45,43 @@ std::string getProfileURL(const std::string& agent_name)
 {
 	std::string url;
 
-	if (LLGridManager::getInstance()->isInProductionGrid())
+	if (LLGridManager::getInstance()->isInSLMain())
 	{
 		url = gSavedSettings.getString("WebProfileURL");
 	}
-	else
+	else if (LLGridManager::getInstance()->isInSLBeta())
 	{
 		url = gSavedSettings.getString("WebProfileNonProductionURL");
 	}
+	else
+	{
+#ifdef OPENSIM
+// <FS:CR> FIRE-8063: Web profiles for aurora, opensim, and osgrid
+		std::string match = "?name=[AGENT_NAME]";
+		if (LLGridManager::getInstance()->isInAuroraSim()) {
+			url = gSavedSettings.getString("WebProfileURL");
+		}
+		else if(LLGridManager::getInstance()->getGridId() == "osgrid") {
+			url = "http://my.osgrid.org/?name=[AGENT_NAME]";
+		}
+		else {
+			LLSD grid_info;
+			LLGridManager::getInstance()->getGridData(grid_info);
+			url = grid_info[GRID_PROFILE_URI_VALUE].asString();
+			
+			if (url.empty())
+				url = gSavedSettings.getString("WebProfileURL");
+		}
+
+		if(std::string::npos == url.find(match))
+		{
+			url += match;
+		}
+		gSavedSettings.setString("WebProfileURL", url);
+// </FS:CR> 
+#endif
+	}
+
 	LLSD subs;
 	subs["AGENT_NAME"] = agent_name;
 	url = LLWeb::expandURLSubstitutions(url,subs);
@@ -97,7 +126,10 @@ public:
 		}
 
 		const std::string verb = params[1].asString();
-		if (verb == "about")
+		// <FS:Ansariel> FIRE-9045: Inspect links always open full profile
+		//if (verb == "about")
+		if (verb == "about" || (gSavedSettings.getBOOL("FSInspectAvatarSlurlOpensProfile") && verb == "inspect"))
+		// </FS:Ansariel>
 		{
 			LLAvatarActions::showProfile(avatar_id);
 			return true;

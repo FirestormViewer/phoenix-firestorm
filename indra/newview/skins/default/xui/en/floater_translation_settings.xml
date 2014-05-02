@@ -6,7 +6,7 @@
  name="floater_translation_settings"
  help_topic="translation_settings"
  save_rect="true"
- title="CHAT TRANSLATION SETTINGS"
+ title="Chat Translation Settings"
  width="485">
 
  <string name="bing_api_key_not_verified">Bing appID not verified. Please try again.</string>

@@ -72,6 +72,7 @@ public:
 	// If not available, copies the string "waiting".
 	// Returns TRUE iff available.
 	BOOL getFullName(const LLUUID& id, std::string& full_name);
+	BOOL getFirstLastName(const LLUUID& id, std::string& first, std::string& last);	// <FS:CR> returns first name, last name
 
 	// Reverse lookup of UUID from name
 	BOOL getUUID(const std::string& first, const std::string& last, LLUUID& id);
@@ -107,6 +108,10 @@ public:
 	// otherwise, will request the data, and will call the callback when
 	// available.  There is no garuntee the callback will ever be called.
 	boost::signals2::connection get(const LLUUID& id, bool is_group, const LLCacheNameCallback& callback);
+
+	// NaCl - Sound explorer
+	BOOL getIfThere(const LLUUID& id, std::string& fullname, BOOL& is_group);
+	// NaCl end
 
 	// Convenience method for looking up a group name, so you can
 	// tell the difference between avatar lookup and group lookup

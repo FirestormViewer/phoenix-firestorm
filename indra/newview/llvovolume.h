@@ -132,6 +132,7 @@ public:
 	/*virtual*/	const LLMatrix4	getRenderMatrix() const;
 				typedef std::map<LLUUID, S32> texture_cost_t;
 				U32 	getRenderCost(texture_cost_t &textures) const;
+
 				F32		getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_value) const;
 	/*virtual*/	F32		getStreamingCost(S32* bytes = NULL, S32* visible_bytes = NULL) { return getStreamingCost(bytes, visible_bytes, NULL); }
 
@@ -140,6 +141,9 @@ public:
 	/*virtual*/ BOOL lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, 
 										  S32 face = -1,                        // which face to check, -1 = ALL_SIDES
 										  BOOL pick_transparent = FALSE,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+										  BOOL pick_rigged = FALSE,
+// [/SL:KB]
 										  S32* face_hit = NULL,                 // which face was hit
 										  LLVector4a* intersection = NULL,       // return the intersection point
 										  LLVector2* tex_coord = NULL,          // return the texture coordinates of the intersection point
@@ -312,7 +316,10 @@ public:
 	
 
 	//rigged volume update (for raycasting)
-	void updateRiggedVolume();
+//	void updateRiggedVolume();
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	void updateRiggedVolume(bool force_update = false);
+// [/SL:KB]
 	LLRiggedVolume* getRiggedVolume();
 
 	//returns true if volume should be treated as a rigged volume
@@ -346,6 +353,7 @@ public:
 
 	LLViewerTextureAnim *mTextureAnimp;
 	U8 mTexAnimMode;
+	F32 mVolumeSurfaceArea; // ZK LBG
 private:
 	friend class LLDrawable;
 	friend class LLFace;

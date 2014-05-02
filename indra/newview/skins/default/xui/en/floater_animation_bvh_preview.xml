@@ -2,7 +2,8 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="610"
+ height="415"
+ left="30"
  layout="topleft"
  name="Animation Preview"
  help_topic="animation_preview"
@@ -14,13 +15,11 @@
     <floater.string
      name="anim_too_long">
         Animation file is [LENGTH] seconds in length.
-
 Maximum animation length is [MAX_LENGTH] seconds.
     </floater.string>
     <floater.string
      name="failed_file_read">
         Unable to read animation file.
-
 [STATUS]
     </floater.string>
     <floater.string
@@ -549,20 +548,28 @@ Maximum animation length is [MAX_LENGTH] seconds.
      left="70"
      name="bad_animation_text">
         Unable to read animation file.
-
 We recommend BVH files exported from Poser 4.
     </text>
+  <button
+    bottom="-32"
+   follows="bottom|left"
+   height="23"
+   label="Reload file"
+   layout="topleft"
+   left="10"
+   name="reload_btn"
+   width="128" />
+  <button
+    bottom="-5"
+   follows="bottom|left"
+   height="23"
+   label="Upload (L$[AMOUNT])"
+   layout="topleft"
+   left="10"
+   name="ok_btn"
+   width="128" />
     <button
-    	top="580"
-     follows="bottom|left"
-     height="23"
-     label="Upload (L$[AMOUNT])"
-     layout="topleft"
-     left="10"
-     name="ok_btn"
-     width="128" />
-    <button
-    	top="580"
+    	bottom="-5"
      follows="bottom|left"
      height="23"
      label="Cancel"

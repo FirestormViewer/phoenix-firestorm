@@ -19,8 +19,8 @@ Massimo 200 per gruppo al giorno
 	<text name="notice_list_none_found">
 		Nessuno trovato
 	</text>
-	<button label="Nuovo avviso" label_selected="Crea una nuova notice" name="create_new_notice" tool_tip="Crea un nuovo avviso"/>
-	<button label="Aggiorna" label_selected="Aggiorna l&apos;elenco" name="refresh_notices" tool_tip="Aggiorna la lista degli avvisi"/>
+	<button label="Nuova Notice" label_selected="Crea una nuova notice" name="create_new_notice" tool_tip="Crea un nuovo avviso" width="105"/>
+	<button name="refresh_notices" tool_tip="Aggiorna la lista degli avvisi"/>
 	<panel label="Crea una nuova notice" name="panel_create_new_notice">
 		<text name="lbl">
 			Crea una notice
@@ -43,17 +43,20 @@ Massimo 200 per gruppo al giorno
 		<group_drop_target name="drop_target" tool_tip="Trascina un oggetto dall&apos;inventario ín questa casella per spedirlo con questo avviso. Devi avere i diritti per la copia e il trasferimento per poter allegare l&apos;oggetto."/>
 	</panel>
 	<panel label="Vedi le notice precedenti" name="panel_view_past_notice">
-		<text name="lbl">
+		<text name="lbl6">
 			Notice archiviate
 		</text>
-		<text name="lbl2">
+		<text name="lbl7">
 			Per spedire un nuovo avviso, clicca sul pulsante +
 		</text>
-		<text name="lbl3">
+		<text name="lbl8">
 			Oggetto:
 		</text>
-		<text name="lbl4">
+		<text name="lbl9">
 			Messaggio:
+		</text>
+		<text name="lbl10">
+			Allegato:
 		</text>
 		<button label="Apri l&apos;allegato" label_selected="Apri l&apos;allegato" name="open_attachment"/>
 	</panel>

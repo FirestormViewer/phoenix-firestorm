@@ -87,8 +87,14 @@ Vá para o menu Mundo &gt; Sobre o terreno ou selecione outro lote para mostrar 
 			<text name="Owner:">
 				Proprietário:
 			</text>
+			<text name="OwnerText">
+				Loading...
+			</text>
 			<text name="Group:">
 				Grupo:
+			</text>
+			<text name="GroupText">
+				Loading...
 			</text>
 			<button label="Ajustar" name="Set..."/>
 			<check_box label="Permitir doação para o grupo" name="check deed" tool_tip="Oficiais do grupo podem doar esse terreno ao grupo, passando a administração para o gestor da ilha"/>
@@ -451,9 +457,6 @@ Mídia:
 			<panel.string name="access_estate_defined">
 				(Definições do terreno)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Acesso para público: [MATURITY]) (Desmarcar esse item cria limites)
-			</panel.string>
 			<panel.string name="estate_override">
 				Uma ou mais destas opções está definida no nível de propriedade.
 			</panel.string>
@@ -476,7 +479,7 @@ Mídia:
 			<spinner label="Horas de acesso:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Always Allow" name="AllowedText">
-					Residentes permitidos
+					Residentes permitidos ([LISTED]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="(Total [LISTED], máx de [MAX])"/>
 				<button label="Adicionar" name="add_allowed"/>
@@ -484,7 +487,7 @@ Mídia:
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="Ban" name="BanCheck">
-					Residentes banidos
+					Residentes banidos ([LISTED]/[MAX])
 				</text>
 				<name_list name="BannedList" tool_tip="(Total [LISTED], máx de [MAX])"/>
 				<button label="Adicionar" name="add_banned"/>

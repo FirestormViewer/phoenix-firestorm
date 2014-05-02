@@ -35,6 +35,7 @@
 #include "llpointer.h"	// LLPointer<>
 //#include "llviewertexturelist.h"
 #include "llsafehandle.h"
+#include "llremoteparcelrequest.h"
 
 typedef std::set<LLUUID, lluuid_less> uuid_list_t;
 const F32 CACHE_REFRESH_TIME	= 2.5f;
@@ -129,7 +130,7 @@ public:
 
 
 class LLPanelLandGeneral
-:	public LLPanel
+:	public LLPanel, LLRemoteParcelInfoObserver
 {
 public:
 	LLPanelLandGeneral(LLSafeHandle<LLParcelSelection>& parcelp);
@@ -178,6 +179,7 @@ protected:
 	LLLineEditor*	mEditName;
 	LLTextBox*		mLabelDesc;
 	LLTextEditor*	mEditDesc;
+	LLLineEditor*	mEditUUID;
 
 	LLTextBox*		mTextSalePending;
 
@@ -234,6 +236,13 @@ protected:
 	static LLPointer<LLParcelSelection>	sSelectionForBuyPass;
 
 	static LLHandle<LLFloater> sBuyPassDialogHandle;
+
+	S32			mLastParcelLocalID;
+
+// LLRemoteParcelInfoObserver interface:
+/*virtual*/ void processParcelInfo(const LLParcelData& parcel_data);
+/*virtual*/ void setParcelID(const LLUUID& parcel_id);
+/*virtual*/ void setErrorStatus(U32 status, const std::string& reason);
 };
 
 class LLPanelLandObjects
@@ -325,11 +334,16 @@ private:
 	static void onClickSet(void* userdata);
 	static void onClickClear(void* userdata);
 
+	// <FS:Ansariel> FIRE-10043: Teleport to LP button
+	void onClickTeleport();
+
 private:
+	S32 getDirectoryFee();
 	LLCheckBoxCtrl*	mCheckEditObjects;
 	LLCheckBoxCtrl*	mCheckEditGroupObjects;
 	LLCheckBoxCtrl*	mCheckAllObjectEntry;
 	LLCheckBoxCtrl*	mCheckGroupObjectEntry;
+	LLCheckBoxCtrl*	mCheckEditLand; // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
 	LLCheckBoxCtrl*	mCheckSafe;
 	LLCheckBoxCtrl*	mCheckFly;
 	LLCheckBoxCtrl*	mCheckGroupScripts;
@@ -344,6 +358,8 @@ private:
 	LLTextBox*		mLocationText;
 	LLButton*		mSetBtn;
 	LLButton*		mClearBtn;
+	// <FS:Ansariel> FIRE-10043: Teleport to LP button
+	LLButton*		mTeleportToLandingPointBtn;
 
 	LLCheckBoxCtrl		*mMatureCtrl;
 	LLCheckBoxCtrl		*mPushRestrictionCtrl;
@@ -383,6 +399,7 @@ protected:
 	LLSafeHandle<LLParcelSelection>&	mParcel;
 };
 
+class LLViewerRegion;		// <FS:Zi> Fix covenant loading slowdowns
 
 class LLPanelLandCovenant
 :	public LLPanel
@@ -398,6 +415,12 @@ public:
 
 protected:
 	LLSafeHandle<LLParcelSelection>&	mParcel;
+
+	// <FS:Zi> Fix covenant loading slowdowns
+	bool mCovenantChanged;				// flag to allow covenant to be changed
+	bool mCovenantRequested;			// flag to remember if a covenant was already requested
+	LLViewerRegion* mPreviousRegion;	// remember the last region we requested a covenant from
+	// </FS:Zi>
 };
 
 #endif

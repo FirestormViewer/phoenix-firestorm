@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="script goto" title="IR A LA LÍNEA">
-	<button label="OK" label_selected="OK" name="goto_btn"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="script goto" title="Ir a la línea">
+	<button label="Aceptar" label_selected="Aceptar" name="goto_btn"/>
 	<text name="txt">
-		Ir a la línea
+		Ir a línea
 	</text>
 </floater>

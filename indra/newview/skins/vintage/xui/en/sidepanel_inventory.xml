@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+	follows="all"
+	height="550"
+	label="Things"
+	layout="topleft"
+	name="objects panel"
+	width="328">
+    <panel
+		follows="all"
+		layout="topleft"
+		left="0"
+		name="sidepanel__inventory_panel"
+		top="0"
+		label=""
+		height="550"
+		visible="true"
+		width="330">
+		<tab_container
+			follows="left|right|top|bottom"
+			layout="topleft"
+			left="0"
+			top="0"
+			open_tabs_on_drag_and_drop="true"
+			tab_drag_commit="true"
+			tab_position="bottom"
+			name="inventory_tab_container"
+			height="550"
+			width="330">
+			<panel
+				label="Inventory"
+				class="panel_main_inventory"
+				filename="panel_main_inventory.xml"
+				follows="all"
+				layout="topleft"
+				name="panel_main_inventory" />
+			<panel
+				label="Marketplace"
+				layout="topleft"
+				auto_resize="true"
+				user_resize="false"
+				follows="bottom|left|right"
+				name="inbox_outbox_layout_panel"
+				visible="true">
+
+				<layout_stack
+					follows="all"
+					layout="topleft"
+					left="0"
+					top="0"
+					orientation="vertical"
+					name="inbox_outbox_layout_stack_off"
+					bottom="-1"
+					right="-1">
+					<layout_panel
+						layout="topleft"
+						auto_resize="true"
+						user_resize="false"
+						follows="left|right|top"
+						name="inbox_layout_panel_off"
+						visible="true">
+						<panel
+							follows="all"
+							layout="topleft"
+							name="marketplace_inbox"
+							class="panel_marketplace_inbox"
+							label="">
+							<string name="InboxLabelWithArg">Received Items ([NUM])</string>
+							<string name="InboxLabelNoArg">Received Items</string>
+							<text
+								layout="topleft"
+								value="Received Items"
+								name="inbox_label"
+								height="16"
+								width="200"
+								follows="top|left|right"
+								h_pad="3"
+								top="0"
+								left="2" />
+							<!-- gets auto-hidden in preview editor, change name to view -->
+							<text
+								type="string"
+								length="1"
+								follows="right|top"
+								layout="topleft"
+								height="16"
+								top_delta="0"
+								right="-3"
+								name="inbox_fresh_new_count"
+								halign="right"
+								width="300">
+								[NUM] New
+							</text>
+							<view_border
+								layout="topleft"
+								follows="all"
+								bevel_style="in"
+								left="3"
+								height="50"
+								right="-3"
+								top_pad="2" />
+							<panel
+								name="inbox_inventory_placeholder_panel"
+								follows="all"
+								left_delta="0"
+								height="50"
+								right="-3"
+								top_delta="1"
+								tool_tip="Drag and drop items to your inventory to manage and use them">
+								<panel
+									name="inbox_inventory_placeholder"
+									type="string"
+									follows="all"
+									left="0"
+									bottom="-1"
+									right="-1"
+									top="0"
+									layout="topleft"
+									wrap="true"
+									halign="center">
+									Purchases from the marketplace will be delivered here.
+								</panel>
+							</panel>
+						</panel>
+					</layout_panel>
+					<layout_panel
+						layout="topleft"
+						auto_resize="true"
+						user_resize="false"
+						follows="all"
+						name="outbox_layout_panel"
+						visible="false">
+						<panel
+							follows="all"
+							layout="topleft"
+							left="0"
+							name="marketplace_outbox"
+							class="panel_marketplace_outbox"
+							top="0"
+							label=""
+							height="200"
+							width="330">
+							<string name="OutboxLabelWithArg">Merchant Outbox ([NUM])</string>
+							<string name="OutboxLabelNoArg">Merchant Outbox</string>
+							<text
+								value="Merchant Outbox"
+								name="outbox_label"
+								height="16"
+								width="200"
+								follows="top|left|right"
+								h_pad="3"
+								top="5"
+								left="2" />
+							<button
+								image_unselected="OutboxPush_Off"
+								image_selected="OutboxPush_Selected"
+								image_hover_selected="OutboxPush_Selected_Over"
+								image_hover_unselected="OutboxPush_Over"
+								image_disabled_selected="OutboxPush_Selected_Disabled"
+								image_disabled="OutboxPush_Disabled"
+								image_pressed="OutboxPush_Press"
+								image_pressed_selected="OutboxPush_Selected_Press"
+								label=""
+								tool_tip="Push to my Marketplace Storefront"
+								is_toggle="false"
+								name="outbox_sync_btn"
+								follows="top|right"
+								tab_stop="false"
+								top="0"
+								right="-6"
+								height="23"
+								width="32"
+								enabled="false" />
+							<loading_indicator
+								follows="top|right"
+								name="outbox_sync_indicator"
+								top_delta="0"
+								left_delta="0"
+								height="23"
+								width="32"
+								images_per_sec="1.15"
+								tab_stop="false"
+								visible="false">
+								<images>
+									<image name="OutboxPush_Progress_1"/>
+									<image name="OutboxPush_Progress_2"/>
+									<image name="OutboxPush_Progress_3"/>
+									<image name="OutboxPush_Progress_4"/>
+									<image name="OutboxPush_Progress_5"/>
+									<image name="OutboxPush_Progress_6"/>
+								</images>
+							</loading_indicator>
+							<view_border
+								layout="topleft"
+								follows="all"
+								bevel_style="in"
+								left="3"
+								height="50"
+								right="-3"
+								top_pad="2" />
+							<panel
+								name="outbox_inventory_placeholder_upperpanel"
+								follows="all"
+								left_delta="0"
+								height="50"
+								right="-3"
+								top_delta="1">
+								<panel
+									name="outbox_inventory_placeholder_panel"
+									follows="all"
+									left="0"
+									bottom="-1"
+									right="-1"
+									top="0"
+									layout="topleft"
+									bg_opaque_color="InventoryBackgroundColor"
+									background_visible="true"
+									background_opaque="true">
+									<text
+										name="outbox_inventory_placeholder_title"
+										type="string"
+										follows="all"
+										layout="topleft"
+										wrap="true"
+										halign="center">
+										Loading...
+									</text>
+									<text
+										name="outbox_inventory_placeholder_text"
+										type="string"
+										follows="all"
+										layout="topleft"
+										wrap="true"
+										halign="left" />
+								</panel>
+							</panel>
+						</panel>
+					</layout_panel>
+				</layout_stack>
+			</panel>
+		</tab_container>
+	</panel>
+
+	<!-- keep the buttons so the code doesn't complain about missing controls -Zi -->
+	<panel name="hide_buttons" enabled="false" visible="false" left="0" top="0">
+		<button follows="top|left" height="0" layout="topleft" name="info_btn"
+				left="0" top="0" width="0" />
+		<button follows="top|left" height="0" layout="topleft" name="share_btn"
+				left="0" top="0" width="0" />
+		<button follows="top|left" height="0" layout="topleft" name="shop_btn"
+				left="0" top="0" width="0" />
+		<button follows="top|left" height="0" layout="topleft" name="wear_btn"
+				left="0" top="0" width="0" />
+		<button follows="top|left" height="0" layout="topleft" name="play_btn"
+				left="0" top="0" width="0" />
+		<button follows="top|left" height="0" layout="topleft" name="teleport_btn"
+				left="0" top="0" width="0" />
+		<button follows="top|left" height="0" layout="topleft" name="inbox_btn"
+				left="0" top="0" width="0" />
+		<button follows="top|left" height="0" layout="topleft" name="outbox_btn"
+				left="0" top="0" width="0" />
+	</panel>
+
+	<panel
+		follows="all"
+		layout="topleft"
+		left="0"
+		class="sidepanel_item_info"
+		filename="sidepanel_item_info.xml"
+		name="sidepanel__item_panel"
+		top="0"
+		label=""
+		height="570"
+		visible="false"
+		width="330">
+	</panel>
+
+	<panel
+		 follows="all"
+		 layout="topleft"
+		 left="0"
+		 class="sidepanel_task_info"
+		 filename="sidepanel_task_info.xml"
+		 name="sidepanel__task_panel"
+		 top="0"
+		 label=""
+		 height="570"
+		 visible="false"
+		 width="330">
+	</panel>
+</panel>

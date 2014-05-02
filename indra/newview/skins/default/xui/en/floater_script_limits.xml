@@ -7,7 +7,7 @@
  layout="topleft"
  name="scriptlimits"
  save_rect="true"
- title="SCRIPT INFORMATION"
+ title="Script Information"
  width="480">
     <tab_container
      bottom="555"

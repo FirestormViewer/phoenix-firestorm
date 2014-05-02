@@ -1,32 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="build options floater" title="RASTER-OPTIONEN">
-	<floater.string name="grid_screen_text">
-		Bildschirm
-	</floater.string>
-	<floater.string name="grid_local_text">
-		Lokal
-	</floater.string>
-	<floater.string name="grid_world_text">
-		Welt
-	</floater.string>
-	<floater.string name="grid_reference_text">
-		Referenz
-	</floater.string>
-	<floater.string name="grid_attachment_text">
-		Anhang
-	</floater.string>
-	<text name="grid_mode_label" tool_tip="Rasteropazität">
-		Modus
-	</text>
-	<combo_box name="combobox grid mode" tool_tip="Wählen Sie das gewünschte Rasterlineal zum Positionieren des Objekts aus.">
-		<combo_box.item label="Globales Raster" name="World"/>
-		<combo_box.item label="Lokales Raster" name="Local"/>
-		<combo_box.item label="Referenzraster" name="Reference"/>
-	</combo_box>
+<floater name="build options floater" title="Raster-Optionen">
 	<spinner label="Einheiten (m)" name="GridResolution"/>
-	<spinner label="Rastergröße (meter)" name="GridDrawSize"/>
+	<spinner label="Rastergröße (m)" name="GridDrawSize"/>
+	<spinner label="Nachkommastellen" name="DecimalPrecision"/>
 	<check_box label="An Untereinheiten ausrichten" name="GridSubUnit"/>
 	<check_box label="Überschneidungen anzeigen" name="GridCrossSection"/>
+	<text name="Snap on">
+		Einrasten an:
+	</text>
+	<radio_group name="FSSnapDomain">
+		<radio_item name="radio inside" label="Innenseite" tool_tip="Rastet an der Innenseite des Rasters ein."/>
+		<radio_item name="radio outside" label="Außenseite" tool_tip="Rastet an der Außenseite des Rasters ein (klassisches Verhalten)."/>
+	</radio_group>
 	<text name="grid_opacity_label" tool_tip="Raster-Deckkraft">
 		Deckkraft:
 	</text>

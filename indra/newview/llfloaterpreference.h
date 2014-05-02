@@ -36,6 +36,7 @@
 #include "llfloater.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llconversationlog.h"
+#include "lllineeditor.h" // <FS:CR>
 
 class LLConversationLogObserver;
 class LLPanelPreference;
@@ -46,6 +47,7 @@ class LLScrollListCtrl;
 class LLSliderCtrl;
 class LLSD;
 class LLTextBox;
+class LLComboBox;
 
 typedef std::map<std::string, std::string> notifications_map;
 
@@ -68,7 +70,7 @@ public:
 
 	void apply();
 	void cancel();
-	/*virtual*/ void draw();
+	///*virtual*/ void draw();
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/	void onClose(bool app_quitting);
@@ -76,7 +78,9 @@ public:
 	/*virtual*/ void changed(const LLUUID& session_id, U32 mask) {};
 
 	// static data update, called from message handler
-	static void updateUserInfo(const std::string& visibility, bool im_via_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//static void updateUserInfo(const std::string& visibility, bool im_via_email);
+	static void updateUserInfo(const std::string& visibility, bool im_via_email, const std::string& email);
 
 	// refresh all the graphics preferences menus
 	static void refreshEnabledGraphics();
@@ -91,18 +95,27 @@ public:
 	void selectPrivacyPanel();
 	void selectChatPanel();
 
-protected:	
+// <FS:CR> Make onBtnOk() public for settings backup panel
+//protected:
 	void		onBtnOK();
+protected:
+// </FS:CR>
 	void		onBtnCancel();
 	void		onBtnApply();
 
-	void		onClickClearCache();			// Clear viewer texture cache, vfs, and VO cache on next startup
+	//void		onClickClearCache();			// Clear viewer texture cache, vfs, and VO cache on next startup // AO: was protected, moved to public
 	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
 	void		onLanguageChange();
 	void		onNotificationsChange(const std::string& OptionName);
 	void		onNameTagOpacityChange(const LLSD& newvalue);
+	void		onConsoleOpacityChange(const LLSD& newvalue);	// <FS:CR> FIRE-1332 - Sepeate opacity settings for nametag and console chat
 
 	// set value of "DoNotDisturbResponseChanged" in account settings depending on whether do not disturb response
+	// <FS:Zi> Pie menu
+	// make sure controls get greyed out or enabled when pie color override is toggled
+	void onPieColorsOverrideChanged();
+	// </FS:Zi> Pie menu
+
 	// string differs from default after user changes.
 	void onDoNotDisturbResponseChanged();
 	// if the custom settings box is clicked
@@ -113,6 +126,8 @@ protected:
 	void setHardwareDefaults();
 	// callback for when client turns on shaders
 	void onVertexShaderEnable();
+	// <FS:AO> callback for local lights toggle
+	void onLocalLightsEnable();
 
 	// callback for commit in the "Single click on land" and "Double click on land" comboboxes.
 	void onClickActionChange();
@@ -120,38 +135,77 @@ protected:
 	void updateClickActionSettings();
 	// updates click/double-click action controls depending on values from settings.xml
 	void updateClickActionControls();
+	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
+	void updateUISoundsControls();
 	
+	// <FS:Zi> Optional Edit Appearance Lighting
+	// make sure controls get greyed out or enabled when appearance camera movement is toggled
+	void onAppearanceCameraChanged();
+	// </FS:Zi> Optional Edit Appearance Lighting
+
+	//<FS:Kadah> Font Selection
+	void populateFontSelectionCombo();
+	void loadFontPresetsFromDir(const std::string& dir, LLComboBox* font_selection_combo);
+	//</FS:Kadah>
+    
 	// This function squirrels away the current values of the controls so that
 	// cancel() can restore them.	
 	void saveSettings();
-		
 
 public:
 
 	void setCacheLocation(const LLStringExplicit& location);
+	// <FS:Ansariel> Sound cache
+	void setSoundCacheLocation(const LLStringExplicit& location);
+	void onClickSetSoundCache();
+	void onClickBrowseSoundCache();
+	void onClickResetSoundCache();
+	// </FS:Ansariel>
 
 	void onClickSetCache();
+	void onClickBrowseCache();
+	void onClickBrowseCrashLogs();
+	void onClickBrowseChatLogDir();
 	void onClickResetCache();
+	void onClickClearCache(); // AO: was protected, moved to public
+	void onClickCookies();
+	void onClickJavascript();
+	void onClickBrowseSettingsDir();
 	void onClickSkin(LLUICtrl* ctrl,const LLSD& userdata);
 	void onSelectSkin();
 	void onClickSetKey();
 	void setKey(KEY key);
 	void onClickSetMiddleMouse();
-	void onClickSetSounds();
+	// void onClickSetSounds();	//<FS:KC> Handled centrally now
+	void onClickPreviewUISound(const LLSD& ui_sound_id); // <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+	void setPreprocInclude();
 	void onClickEnablePopup();
 	void onClickDisablePopup();	
 	void resetAllIgnored();
 	void setAllIgnored();
 	void onClickLogPath();
 	bool moveTranscriptsAndLog();
+	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
+	void onClickResetLogPath();
 	void enableHistory();
-	void setPersonalInfo(const std::string& visibility, bool im_via_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//void setPersonalInfo(const std::string& visibility, bool im_via_email);
+	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
+	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 	void refreshEnabledState();
 	void disableUnavailableSettings();
 	void onCommitWindowedMode();
 	void refresh();	// Refresh enable/disable
 	// if the quality radio buttons are changed
 	void onChangeQuality(const LLSD& data);
+	void onClickClearSettings();
+	void onClickChatOnlineNotices();
+	void onClickClearSpamList();
+	//void callback_clear_settings(const LLSD& notification, const LLSD& response);
+	// <FS:Ansariel> Clear inventory cache button
+	void onClickInventoryClearCache();
+	// <FS:Ansariel> Clear web browser cache button
+	void onClickWebBrowserClearCache();
 	
 	void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
 	void refreshUI();
@@ -162,6 +216,7 @@ public:
 	void applyResolution();
 	void onChangeMaturity();
 	void onClickBlockList();
+	void onClickSortContacts();
 	void onClickProxySettings();
 	void onClickTranslationSettings();
 	void onClickAutoReplace();
@@ -204,7 +259,7 @@ public:
 
 	virtual void apply();
 	virtual void cancel();
-	void setControlFalse(const LLSD& user_data);
+	// void setControlFalse(const LLSD& user_data);	//<FS:KC> Handled centrally now
 	virtual void setHardwareDefaults(){};
 
 	// Disables "Allow Media to auto play" check box only when both
@@ -224,13 +279,28 @@ protected:
 private:
 	//for "Only friends and groups can call or IM me"
 	static void showFriendsOnlyWarning(LLUICtrl*, const LLSD&);
-	//for "Show my Favorite Landmarks at Login"
+
+	static void showCustomPortWarning(LLUICtrl*, const LLSD&); // -WoLf
+
+ 	//for "Show my Favorite Landmarks at Login"
 	static void showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value);
+
+	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
+	void onEnableGrowlChanged();
+	// <FS:Ansariel> Flash chat toolbar button notification
+	void onChatWindowChanged();
+	// <FS:Ansariel> Exodus' mouselook combat feature
+	void updateMouselookCombatFeatures();
+
+	// <FS:Ansariel> Minimap pick radius transparency
+	void updateMapPickRadiusTransparency(const LLSD& value);
+	F32 mOriginalMapPickRadiusTransparency;
 
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;
 
-	Updater* mBandWidthUpdater;
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+	//Updater* mBandWidthUpdater;
 };
 
 class LLPanelPreferenceGraphics : public LLPanelPreference
@@ -246,7 +316,116 @@ protected:
 	bool hasDirtyChilds();
 	void resetDirtyChilds();
 	
+
+	LLButton*	mButtonApply;
 };
+
+// [SL:KB] - Catznip Viewer-Skins
+class LLPanelPreferenceSkins : public LLPanelPreference
+{
+public:
+	LLPanelPreferenceSkins();
+	
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void apply();
+	/*virtual*/ void cancel();
+	void callbackRestart(const LLSD& notification, const LLSD& response);	// <FS:CR> Callback for restart dialogs
+protected:
+	void onSkinChanged();
+	void onSkinThemeChanged();
+	void refreshSkinList();
+	void refreshSkinThemeList();
+	
+protected:
+	std::string m_Skin;
+	LLComboBox* m_pSkinCombo;
+	std::string m_SkinTheme;
+	LLComboBox* m_pSkinThemeCombo;
+	LLSD        m_SkinsInfo;
+	std::string	m_SkinName;
+	std::string	m_SkinThemeName;
+};
+// [/SL:KB]
+
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-10-21 (Catznip-2.6.0a) | Added: Catznip-2.2.0c
+class LLPanelPreferenceCrashReports : public LLPanelPreference
+{
+public:
+	LLPanelPreferenceCrashReports();
+
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void apply();
+	/*virtual*/ void cancel();
+
+	void refresh();
+};
+// [/SL:KB]
+
+// <FS:CR> Settings Backup
+class FSPanelPreferenceBackup : public LLPanelPreference
+{
+public:
+	FSPanelPreferenceBackup();
+	/*virtual*/ BOOL postBuild();
+	
+protected:
+	// <FS:Zi> Backup settings
+	void onClickSetBackupSettingsPath();
+	void onClickSelectAll();
+	void onClickDeselectAll();
+	void onClickBackupSettings();
+	void onClickRestoreSettings();
+	
+	void doSelect(BOOL all);												// calls applySelection for each list
+	void applySelection(LLScrollListCtrl* control, BOOL all);				// selects or deselects all items in a scroll list
+	void doRestoreSettings(const LLSD& notification, const LLSD& response);	// callback for restore dialog
+	void onQuitConfirmed(const LLSD& notification, const LLSD& response);	// callback for finished restore dialog
+	// </FS:Zi>
+};
+
+#ifdef OPENSIM // <FS:AW optional opensim support>
+// <FS:AW  opensim preferences>
+class LLPanelPreferenceOpensim : public LLPanelPreference
+{
+public:
+	LLPanelPreferenceOpensim();
+// <FS:AW  grid management>
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void apply();
+	/*virtual*/ void cancel();
+
+protected:
+
+	void onClickAddGrid();
+	void addedGrid(bool success);
+	void onClickClearGrid();
+	void onClickRefreshGrid();
+	void onClickSaveGrid();
+	void onClickRemoveGrid();
+	void onSelectGrid();
+	bool removeGridCB(const LLSD& notification, const LLSD& response);
+// </FS:AW  grid management>
+// <FS:AW  opensim search support>
+	void onClickClearDebugSearchURL();
+	void onClickPickDebugSearchURL();
+// </FS:AW  opensim search support>
+
+	void refreshGridList(bool success = true);
+	LLScrollListCtrl* mGridListControl;
+private:
+	LLLineEditor* mEditorGridName;
+	LLLineEditor* mEditorGridURI;
+	LLLineEditor* mEditorLoginPage;
+	LLLineEditor* mEditorHelperURI;
+	LLLineEditor* mEditorWebsite;
+	LLLineEditor* mEditorSupport;
+	LLLineEditor* mEditorRegister;
+	LLLineEditor* mEditorPassword;
+	LLLineEditor* mEditorSearch;
+	LLLineEditor* mEditorGridMessage;
+};
+// </FS:AW  opensim preferences>
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 class LLFloaterPreferenceProxy : public LLFloater
 {
@@ -273,7 +452,6 @@ private:
 	bool mSocksSettingsDirty;
 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;
 	control_values_map_t mSavedValues;
-
 };
 
 

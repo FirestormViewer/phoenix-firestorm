@@ -254,7 +254,10 @@ public:
 	S32 numChildren() const { return mChildList.size(); }
 	void addThisAndAllChildren(std::vector<LLViewerObject*>& objects);
 	void addThisAndNonJointChildren(std::vector<LLViewerObject*>& objects);
-	BOOL isChild(LLViewerObject *childp) const;
+//	BOOL isChild(LLViewerObject *childp) const;
+// [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	BOOL isChild(const LLViewerObject *childp) const;
+// [/RLVa:KB]
 	BOOL isSeat() const;
 	
 
@@ -263,6 +266,9 @@ public:
 	virtual BOOL lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 									  S32 face = -1,                          // which face to check, -1 = ALL_SIDES
 									  BOOL pick_transparent = FALSE,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+									  BOOL pick_rigged = FALSE,
+// [/SL:KB]
 									  S32* face_hit = NULL,                   // which face was hit
 									  LLVector4a* intersection = NULL,         // return the intersection point
 									  LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
@@ -306,6 +312,7 @@ public:
 	/*virtual*/ S32		setTENormalMap(const U8 te, const LLUUID &uuid);
 	/*virtual*/ S32		setTESpecularMap(const U8 te, const LLUUID &uuid);
 	S32 				setTETextureCore(const U8 te, LLViewerTexture *image);
+	S32 setTETextureCore(const U8 te, const LLUUID& uuid, const std::string &url );
 	S32 setTENormalMapCore(const U8 te, LLViewerTexture *image);
 	S32 setTESpecularMapCore(const U8 te, LLViewerTexture *image);
 	/*virtual*/ S32		setTEColor(const U8 te, const LLColor3 &color);
@@ -366,7 +373,10 @@ public:
 
 	void sendShapeUpdate();
 
-	U8 getState()							{ return mState; }
+//	U8 getState()							{ return mState; }
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	U8 getState() const						{ return mState; }
+// [/RLVa:KB]
 
 	F32 getAppAngle() const					{ return mAppAngle; }
 	F32 getPixelArea() const				{ return mPixelArea; }
@@ -400,6 +410,9 @@ public:
 	void setDebugText(const std::string &utf8text);
 	void setIcon(LLViewerTexture* icon_image);
 	void clearIcon();
+
+	// <FS:Ansariel> Getter for HUD icon attached to the object
+	LLPointer<LLHUDIcon> getIcon() const { return mIcon; };
 
 	void markForUpdate(BOOL priority);
 	void updateVolume(const LLVolumeParams& volume_params);
@@ -503,6 +516,10 @@ public:
 	inline BOOL		flagCameraSource() const		{ return ((mFlags & FLAGS_CAMERA_SOURCE) != 0); }
 	inline BOOL		flagCameraDecoupled() const		{ return ((mFlags & FLAGS_CAMERA_DECOUPLED) != 0); }
 
+	// <FS:Techwolf Lupindo> prim export
+	U32 getFlags() { return mFlags; }
+	// <FS:Techwolf Lupindo>
+	
 	U8       getPhysicsShapeType() const;
 	inline F32      getPhysicsGravity() const       { return mPhysicsGravity; }
 	inline F32      getPhysicsFriction() const      { return mPhysicsFriction; }
@@ -690,7 +707,10 @@ protected:
 	void setParticleSource(const LLPartSysData& particle_parameters, const LLUUID& owner_id);
 	
 public:
-		
+	// <FS:Techwolf Lupindo> export
+	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
+	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
+	// </FS:Techwolf Lupindo>
 private:
 	void setNameValueList(const std::string& list);		// clears nv pairs and then individually adds \n separated NV pairs from \0 terminated string
 	void deleteTEImages(); // correctly deletes list of images

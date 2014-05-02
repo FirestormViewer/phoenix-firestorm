@@ -38,7 +38,7 @@
 #include "lluicolortable.h"
 #include "message.h"
 
-#define APP_HEADER_REGEX "((x-grid-location-info://[-\\w\\.]+/app)|(secondlife:///app))"
+#define APP_HEADER_REGEX "(((hop|x-grid-location-info)://[-\\w\\.\\:\\@]+/app)|((hop|secondlife):///app))" // <AW: hop:// protocol>
 
 // Utility functions
 std::string localize_slapp_label(const std::string& url, const std::string& full_name);
@@ -324,11 +324,19 @@ std::string LLUrlEntrySLURL::getLabel(const std::string &url, const LLUrlLabelCa
 std::string LLUrlEntrySLURL::getLocation(const std::string &url) const
 {
 	// return the part of the Url after slurl.com/secondlife/
-	const std::string search_string = "/secondlife";
+	std::string search_string = "/secondlife"; // <AW: hop:// protocol>
 	size_t pos = url.find(search_string);
 	if (pos == std::string::npos)
 	{
-		return "";
+ // <AW: hop:// protocol>
+		search_string = "/region";
+		pos = url.find(search_string);
+
+		if (pos == std::string::npos)
+		{
+				return std::string();
+		}
+ // </AW: hop:// protocol>
 	}
 
 	pos += search_string.size() + 1;
@@ -630,6 +638,27 @@ std::string LLUrlEntryAgentUserName::getName(const LLAvatarName& avatar_name)
 	return avatar_name.getAccountName();
 }
 
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+
+// Defined in rlvcommon.cpp - redirects to RlvStrings::getAnonym() since we can't really get to that class from here
+extern const std::string& rlvGetAnonym(const LLAvatarName& avName);
+
+//
+// LLUrlEntryAgentRLVAnonymizedName Describes an RLV anonymized agent name Url, e.g.,
+// secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/rlvanonym
+// x-grid-location-info://lincoln.lindenlab.com/app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/rlvanonym
+//
+LLUrlEntryAgentRLVAnonymizedName::LLUrlEntryAgentRLVAnonymizedName()
+{
+	mPattern = boost::regex(APP_HEADER_REGEX "/agent/[\\da-f-]+/rlvanonym", boost::regex::perl|boost::regex::icase);
+}
+
+std::string LLUrlEntryAgentRLVAnonymizedName::getName(const LLAvatarName& avatar_name)
+{
+	return rlvGetAnonym(avatar_name);
+}
+// [/RLVa:KB]
+
 //
 // LLUrlEntryGroup Describes a Second Life group Url, e.g.,
 // secondlife:///app/group/00005ff3-4044-c79f-9de8-fb28ae0df991/about
@@ -732,7 +761,10 @@ std::string LLUrlEntryInventory::getLabel(const std::string &url, const LLUrlLab
 //
 LLUrlEntryObjectIM::LLUrlEntryObjectIM()
 {
-	mPattern = boost::regex("secondlife:///app/objectim/[\\da-f-]+\?.*",
+	// <FS:AW> hop:// protocol; Ansa: Stop at first space so we can use it in notifications!
+	//mPattern = boost::regex("secondlife:///app/objectim/[\\da-f-]+\?.*",
+	mPattern = boost::regex("(hop|secondlife):///app/objectim/[\\da-f-]+\?[^ \t\r\n\v\f]*",
+	// </FS:AW>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_objectim.xml";
 }
@@ -860,7 +892,7 @@ void LLUrlEntryParcel::processParcelInfo(const LLParcelData& parcel_data)
 //
 LLUrlEntryPlace::LLUrlEntryPlace()
 {
-	mPattern = boost::regex("((x-grid-location-info://[-\\w\\.]+/region/)|(secondlife://))\\S+/?(\\d+/\\d+/\\d+|\\d+/\\d+)/?",
+	mPattern = boost::regex("((hop://[-\\w\\.\\:\\@]+/)|((x-grid-location-info://[-\\w\\.]+/region/)|(secondlife://)))\\S+/?(\\d+/\\d+/\\d+|\\d+/\\d+)/?", // <AW: hop:// protocol>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_slurl.xml";
 	mTooltip = LLTrans::getString("TooltipSLURL");
@@ -1042,7 +1074,7 @@ std::string LLUrlEntryTeleport::getLocation(const std::string &url) const
 //
 LLUrlEntrySL::LLUrlEntrySL()
 {
-	mPattern = boost::regex("secondlife://(\\w+)?(:\\d+)?/\\S+",
+	mPattern = boost::regex("(hop|secondlife)://(\\w+)?(:\\d+)?/\\S+", // <AW: hop:// protocol>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_slapp.xml";
 	mTooltip = LLTrans::getString("TooltipSLAPP");
@@ -1059,7 +1091,7 @@ std::string LLUrlEntrySL::getLabel(const std::string &url, const LLUrlLabelCallb
 //
 LLUrlEntrySLLabel::LLUrlEntrySLLabel()
 {
-	mPattern = boost::regex("\\[secondlife://\\S+[ \t]+[^\\]]+\\]",
+	mPattern = boost::regex("\\[(hop|secondlife)://\\S+[ \t]+[^\\]]+\\]", // <AW: hop:// protocol>
 							boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_slapp.xml";
 	mTooltip = LLTrans::getString("TooltipSLAPP");
@@ -1200,4 +1232,42 @@ std::string LLUrlEntryIcon::getIcon(const std::string &url)
 		: LLStringUtil::null;
 	LLStringUtil::trim(mIcon);
 	return mIcon;
+}
+
+//
+// LLUrlEntryJira Describes Jira issue names -KC
+//
+LLUrlEntryJira::LLUrlEntryJira()
+{
+	// <FS:CR> Please make sure to sync these with the items in "static bool stringHasJira(const std::string &text)" if you make a change
+	mPattern = boost::regex("((?:ARVD|BUG|CHOP|CHUIBUG|CTS|DOC|DN|ECC|EXP|FIRE|FITMESH|LEAP|LLSD|MATBUG|MISC|OPEN|PATHBUG|PLAT|PYO|SCR|SH|SINV|SLS|SNOW|SOCIAL|STORM|SUN|SVC|SPOT|SUN|SUP|TPV|VWR|WEB)-\\d+)",
+				// <FS:Ansariel> FIRE-917: Match case to reduce number of false positives
+				//boost::regex::perl|boost::regex::icase);
+				boost::regex::perl);
+	mMenuName = "menu_url_http.xml";
+	mTooltip = LLTrans::getString("TooltipHttpUrl");
+}
+
+std::string LLUrlEntryJira::getLabel(const std::string &url, const LLUrlLabelCallback &cb)
+{
+	return unescapeUrl(url);
+}
+
+std::string LLUrlEntryJira::getTooltip(const std::string &string) const
+{
+	return getUrl(string);
+}
+
+std::string LLUrlEntryJira::getUrl(const std::string &string) const
+{
+	if (string.find("FIRE") != std::string::npos ||
+		string.find("SLS") != std::string::npos ||
+		string.find("SUP") != std::string::npos )
+	{
+		return llformat("http://jira.phoenixviewer.com/browse/%s", string.c_str());
+	}
+	else
+	{
+		return llformat("https://jira.secondlife.com/browse/%s", string.c_str());
+	}
 }

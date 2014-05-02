@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skirt_panel">
+	<panel name="avatar_skirt_color_panel">
+		<texture_picker label="Textura" name="Fabric" tool_tip="Pulsa para elegir una imagen"/>
+		<color_swatch label="Color" name="Color/Tint" tool_tip="Pulsa para abrir el selector de color"/>
+	</panel>
+	<panel name="skirt_main_tab_holder">
+		<accordion name="skirt_main_accordion">
+			<accordion_tab name="skirt_main_tab" title="Falda"/>
+		</accordion>
+	</panel>
+</panel>

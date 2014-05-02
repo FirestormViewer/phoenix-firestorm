@@ -32,11 +32,13 @@ include(LLUI)
 include(LLVFS)
 include(LLWindow)
 include(LLXML)
-include(LScript)
+include(LeapMotion)
+# <FS:CR> Nope -> include(LScript)
 include(Linking)
 include(NDOF)
 include(NVAPI)
 include(GooglePerfTools)
+include(Teapot)# <FS:AW opensim currency support>
 include(TemplateCheck)
 include(UI)
 include(UnixInstall)
@@ -47,15 +49,30 @@ include(VisualLeakDetector)
 include(GLOD)
 include(CMakeCopyIfDifferent)
 include(LLAppearance)
+include(Growl)
+include(ColladaDom)
+
+# <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
+if( LLPHYSICSEXTENSIONS_SRC_DIR )
+# </FS:ND>
 
 if (NOT HAVOK_TPV)
    # When using HAVOK_TPV, the library is precompiled, so no need for this
    add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
 endif (NOT HAVOK_TPV)
 
+# <FS:ND>
+endif( LLPHYSICSEXTENSIONS_SRC_DIR )
+# </FS:ND>
+
 if(FMODEX)
   include_directories(${FMODEX_INCLUDE_DIR})
 endif(FMODEX)
+
+if(LEAPMOTION)
+  add_definitions(-DUSE_LEAPMOTION=1)
+  include_directories(${LEAP_MOTION_INCLUDE_DIR})
+endif(LEAPMOTION)
 
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
@@ -78,16 +95,20 @@ include_directories(
     ${LLVFS_INCLUDE_DIRS}
     ${LLWINDOW_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
-    ${LSCRIPT_INCLUDE_DIRS}
-    ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
+    # <FS:CR> ${LSCRIPT_INCLUDE_DIRS}
+    # <FS:CR> ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
     ${UPDATER_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada
     ${LIBS_PREBUILD_DIR}/include/hunspell
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
+    ${GROWL_INCLUDE_DIRS}
+    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
+    ${COLLADA_INCLUDE_DIRS}
     ${LLAPPEARANCE_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
     )
 
 include_directories(SYSTEM
@@ -97,7 +118,84 @@ include_directories(SYSTEM
     )
 
 set(viewer_SOURCE_FILES
+# <Add FS includes below this line>
+    animationexplorer.cpp
+    ao.cpp
+    aoengine.cpp
+    aoset.cpp
+    chatbar_as_cmdline.cpp
+    daeexport.cpp
+    dialogstack.cpp
+    exoflickr.cpp
+    exoflickrauth.cpp
+    exogroupmutelist.cpp
+    exopanelsnapshotflickr.cpp
+    exopostprocess.cpp
+    floatermedialists.cpp
+    fsareasearch.cpp
+    fschathistory.cpp
+    fscommon.cpp
+    fsconsoleutils.cpp
+    fsdata.cpp
+    fsexportperms.cpp
+    fsfloateraddtocontactset.cpp
+    fsfloaterblocklist.cpp
+    fsfloatercontacts.cpp
+    fsfloatercontactsetconfiguration.cpp
+    fsfloaterexport.cpp
+    fsfloatergroup.cpp
+    fsfloatergrouptitles.cpp
+    fsfloaterimport.cpp
+    fsfloaterim.cpp
+    fsfloaterimcontainer.cpp
+    fsfloaternearbychat.cpp
+    fsfloaterplacedetails.cpp
+    fsfloaterposestand.cpp
+    fsfloaterprofile.cpp
+    fsfloaterradar.cpp
+    fsfloaterscripteditorprefs.cpp
+    fsfloatersearch.cpp
+    fsfloaterteleporthistory.cpp
+    fsfloatervoicecontrols.cpp
+    fsfloatervolumecontrols.cpp
+    fsfloaterwsassetblacklist.cpp
+    fskeywords.cpp
+    fslightshare.cpp
+    fslslbridge.cpp
+    fslslbridgerequest.cpp
+    fslslpreproc.cpp
+    fsmoneytracker.cpp
+    fsnearbychatbarlistener.cpp
+    fsnearbychatcontrol.cpp
+    fsnearbychathub.cpp
+    fsnearbychatvoicemonitor.cpp
+    fspanelclassified.cpp
+    fspanelcontactsets.cpp
+    fspanelimcontrolpanel.cpp
+    fspanelprefs.cpp
+    fspanelprofile.cpp
+    fspanelprofileclassifieds.cpp
+    fspanelradar.cpp
+    fsparticipantlist.cpp
+    fspose.cpp
+    fsradar.cpp
+    fsradarentry.cpp
+    fsradarlistctrl.cpp
+    fsradarmenu.cpp
+    fsscriptlibrary.cpp
+    fsslurlcommand.cpp
+    fswsassetblacklist.cpp
     groupchatlistener.cpp
+    #growlmanager.cpp
+    kcwlinterface.cpp
+    lggbeamcolormapfloater.cpp
+    lggbeammapfloater.cpp
+    lggbeammaps.cpp
+    lggbeamscolors.cpp
+    lggcontactsets.cpp
+    lfsimfeaturehandler.cpp
+    llpanelopenregionsettings.cpp
+
     llaccountingcostmanager.cpp
     llagent.cpp
     llagentaccess.cpp
@@ -137,7 +235,6 @@ set(viewer_SOURCE_FILES
     llcapabilitylistener.cpp
     llcaphttpsender.cpp
     llchannelmanager.cpp
-    llchatbar.cpp
     llchathistory.cpp
     llchatitemscontainerctrl.cpp
     llchatmsgbox.cpp
@@ -270,7 +367,9 @@ set(viewer_SOURCE_FILES
     llfloaterregionrestarting.cpp
     llfloaterscriptdebug.cpp
     llfloaterscriptlimits.cpp
+    llfloaterscriptrecover.cpp
     llfloatersearch.cpp
+    llfloatersearchreplace.cpp
     llfloatersellland.cpp
     llfloatersettingsdebug.cpp
     llfloatersidepanelcontainer.cpp
@@ -510,7 +609,7 @@ set(viewer_SOURCE_FILES
     llsidepaneltaskinfo.cpp
     llsidetraypanelcontainer.cpp
     llsky.cpp
-    llslurl.cpp
+    #llslurl.cpp #<FS:AW optional opensim support>
     llsnapshotlivepreview.cpp
     llspatialpartition.cpp
     llspeakers.cpp
@@ -611,7 +710,7 @@ set(viewer_SOURCE_FILES
     llviewermenu.cpp
     llviewermenufile.cpp
     llviewermessage.cpp
-    llviewernetwork.cpp
+    #llviewernetwork.cpp #<FS:AW optional opensim support>
     llviewerobject.cpp
     llviewerobjectlist.cpp
     llviewerparcelmedia.cpp
@@ -676,16 +775,127 @@ set(viewer_SOURCE_FILES
     llxmlrpclistener.cpp
     llxmlrpctransaction.cpp
     noise.cpp
+    particleeditor.cpp
+    piemenu.cpp
+    pieseparator.cpp
+    pieslice.cpp
     pipeline.cpp
+    qtoolalign.cpp
+    quickprefs.cpp
+    rlvactions.cpp
+    rlvhandler.cpp
+    rlvhelper.cpp
+    rlvcommon.cpp
+    rlvlocks.cpp
+    rlvinventory.cpp
+    rlvextensions.cpp
+    rlvfloaters.cpp
+    rlvui.cpp
+    sanitycheck.cpp
+    streamtitledisplay.cpp
+    utilitybar.cpp
+    NACLantispam.cpp
+    NACLfloaterexploresounds.cpp
     )
 
-set(VIEWER_BINARY_NAME "secondlife-bin" CACHE STRING
+if (OPENSIM)
+    list(APPEND viewer_SOURCE_FILES
+                fsgridhandler.cpp
+                fsslurl.cpp
+        )
+else (OPENSIM)
+    list(APPEND viewer_SOURCE_FILES
+                llslurl.cpp
+                llviewernetwork.cpp
+        )
+endif (OPENSIM)
+
+set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
     "The name of the viewer executable to create.")
 
 set(viewer_HEADER_FILES
     CMakeLists.txt
     ViewerInstall.cmake
+
+# <Add FS includes below this line>
+    animationexplorer.h
+    ao.h
+    aoengine.h
+    aoset.h
+    chatbar_as_cmdline.h
+    daeexport.h
+    dialogstack.h
+    exoflickr.h
+    exoflickrauth.h
+    exogroupmutelist.h
+    exopostprocess.h
+    floatermedialists.h
+    fsareasearch.h
+    fschathistory.h
+    fscommon.h
+    fsconsoleutils.h
+    fsdata.h
+    fsexportperms.h
+    fsfloateraddtocontactset.h
+    fsfloaterblocklist.h
+    fsfloatercontacts.h
+    fsfloatercontactsetconfiguration.h
+    fsfloaterexport.h
+    fsfloatergroup.h
+    fsfloatergrouptitles.h
+    fsfloaterimport.h
+    fsfloaterim.h
+    fsfloaterimcontainer.h
+    fsfloaternearbychat.h
+    fsfloaterplacedetails.h
+    fsfloaterposestand.h
+    fsfloaterprofile.h
+    fsfloaterradar.h
+    fsfloaterscripteditorprefs.h
+    fsfloatersearch.h
+    fsfloaterteleporthistory.h
+    fsfloatervoicecontrols.h
+    fsfloatervolumecontrols.h
+    fsfloaterwsassetblacklist.h
+    fsgridhandler.h
+    fskeywords.h
+    fslightshare.h
+    fslslbridge.h
+    fslslbridgerequest.h
+    fslslpreproc.h
+    fsmoneytracker.h
+    fsnearbychatbarlistener.h
+    fsnearbychatcontrol.h
+    fsnearbychathub.h
+    fsnearbychatvoicemonitor.h
+    fspanelcontactsets.h
+    fspanelclassified.h
+    fspanelimcontrolpanel.h
+    fspanelprefs.h
+    fspanelprofile.h
+    fspanelprofileclassifieds.h
+    fspanelradar.h
+    fsparticipantlist.h
+    fspose.h
+    fsradar.h
+    fsradarentry.h
+    fsradarlistctrl.h
+    fsradarmenu.h
+    fsscriptlibrary.h
+    fsslurl.h
+    fsslurlcommand.h
+    fswsassetblacklist.h
     groupchatlistener.h
+    #growlmanager.h
+    #growlnotifier.h
+    kcwlinterface.h
+    lggbeamcolormapfloater.h
+    lggbeammapfloater.h
+    lggbeammaps.h
+    lggbeamscolors.h
+    lggcontactsets.h
+    lfsimfeaturehandler.h
+
     llaccountingcostmanager.h
     llagent.h
     llagentaccess.h
@@ -726,7 +936,6 @@ set(viewer_HEADER_FILES
     llcapabilityprovider.h
     llcaphttpsender.h
     llchannelmanager.h
-    llchatbar.h
     llchathistory.h
     llchatitemscontainerctrl.h
     llchatmsgbox.h
@@ -859,7 +1068,9 @@ set(viewer_HEADER_FILES
     llfloaterregionrestarting.h
     llfloaterscriptdebug.h
     llfloaterscriptlimits.h
+    llfloaterscriptrecover.h
     llfloatersearch.h
+    llfloatersearchreplace.h
     llfloatersellland.h
     llfloatersettingsdebug.h
     llfloatersidepanelcontainer.h
@@ -1257,10 +1468,50 @@ set(viewer_HEADER_FILES
     llxmlrpctransaction.h
     macmain.h
     noise.h
+    particleeditor.h
+    piemenu.h
+    pieseparator.h
+    pieslice.h
     pipeline.h
+    qtoolalign.h
+    quickprefs.h
+    rlvactions.h
+    rlvdefines.h
+    rlvhandler.h
+    rlvhelper.h
+    rlvcommon.h
+    rlvlocks.h
+    rlvinventory.h
+    rlvextensions.h
+    rlvfloaters.h
+    rlvui.h
+    sanitycheck.h
+    streamtitledisplay.h
+    utilitybar.h
     VertexCache.h
     VorbisFramework.h
+    NACLantispam.h
+    NACLfloaterexploresounds.h
     )
+
+# <exodus>
+# Generate the flickr keys header.
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/exoflickrkeys.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h
+    @ONLY
+)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
+# </exodus>
+
+# <FS:TS> Generate the version information header file.
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/fsversionvalues.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h
+    @ONLY
+)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h)
+# </FS:TS>
 
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
@@ -1277,8 +1528,20 @@ set_source_files_properties(
    llversioninfo.cpp tests/llversioninfo_test.cpp 
    PROPERTIES
    DEPENDS generate_viewer_version  # dummy dependency to force recompile every time
-   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
+# <FS:TS> The next line causes a full rebuild of the entire newview
+#         directory every time the Mercurial revision number changes.
+#         Instead of doing that, we use the configure tool to build
+#         fsversionstrings.h with the right numbers in it.
+#   COMPILE_DEFINITIONS "${VIEWER_CHANNEL_VERSION_DEFINES}" # see BuildVersion.cmake
    )
+
+LIST(APPEND viewer_SOURCE_FILES llleapmotioncontroller.cpp)
+LIST(APPEND viewer_HEADER_FILES llleapmotioncontroller.h)
+
+if (LEAPMOTION)
+  LIST(APPEND viewer_SOURCE_FILES fsleaptool.cpp fsleapexampletool.cpp )
+  LIST(APPEND viewer_HEADER_FILES fsleaptool.h fsleapexampletool.h )
+endif (LEAPMOTION)
 
 if (DARWIN)
   LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
@@ -1289,6 +1552,18 @@ if (DARWIN)
 
   # This should be compiled with the viewer.
   LIST(APPEND viewer_SOURCE_FILES llappdelegate-objc.mm)
+
+# [FS] Growl libs
+  LIST(APPEND viewer_SOURCE_FILES
+        growlmanager.cpp
+        growlnotifierwin.cpp
+        )
+
+  LIST(APPEND viewer_HEADER_FILES
+         growlmanager.h
+         growlnotifierwin.h
+         )
+# [FS]
 
   find_library(AGL_LIBRARY AGL)
   find_library(APPKIT_LIBRARY AppKit)
@@ -1305,11 +1580,11 @@ if (DARWIN)
 
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
-    secondlife.icns
+    firestorm_icon.icns
     macview.r
     gpu_table.txt
-    Info-SecondLife.plist
-    SecondLife.xib/
+    Info-Firestorm.plist
+    Firestorm.xib/
     # CMake doesn't seem to support Xcode language variants well just yet
     English.lproj/InfoPlist.strings
     English.lproj/language.txt
@@ -1330,15 +1605,33 @@ endif (DARWIN)
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
+# [FS] Growl support
+    LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
+    LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
+# [FS] Growl support
+
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
     set(viewer_LIBRARIES
         Xinerama
         )
+
+    # <FS:ND> Enable user to create a ctags database via using -DND_CTAGS=On
+    if( ND_CTAGS )
+      message( "Will generate ctags database during compilation" )
+      set_source_files_properties( TAGS PROPERTIES GENERATED true)
+      add_custom_command ( OUTPUT TAGS COMMAND ctags --extra=+q --fields=+aiS --c++-kinds=+p -e --recurse=yes .
+                           WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} )
+      list(APPEND viewer_SOURCE_FILES TAGS )
+    endif( ND_CTAGS )
+    # </FS:ND>
+
 endif (LINUX)
 
 if (WINDOWS)
     list(APPEND viewer_SOURCE_FILES
+         growlmanager.cpp
+         growlnotifierwin.cpp
          llappviewerwin32.cpp
          llwindebug.cpp
          )
@@ -1346,6 +1639,10 @@ if (WINDOWS)
     list(APPEND viewer_HEADER_FILES
          llappviewerwin32.h
          llwindebug.h
+# [FS] Growl libs
+         growlmanager.h
+         growlnotifierwin.h
+# [FS]
          )
 
     # precompiled header configuration
@@ -1363,34 +1660,34 @@ if (WINDOWS)
 
     # Replace the icons with the appropriate ones for the channel
     # ('test' is the default)
-    set(ICON_PATH "test")
+    set(ICON_PATH "private")
     set(VIEWER_MACOSX_PHASE "d")
     string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
-    if(channel_lower MATCHES "^second life release")
+    if(channel_lower MATCHES "release")
         set(ICON_PATH "release")
         set(VIEWER_MACOSX_PHASE "f")
-    elseif(channel_lower MATCHES "^second life beta")
+    elseif(channel_lower MATCHES "beta")
         set(ICON_PATH "beta")
         set(VIEWER_MACOSX_PHASE "b")
-    elseif(channel_lower MATCHES "^second life project")
+    elseif(channel_lower MATCHES "project")
         set(ICON_PATH "project")
         set(VIEWER_MACOSX_PHASE "a")
     endif()
     message("Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/secondlife.ico"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/ll_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_icon.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.ico"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/secondlife_256.BMP"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res/ll_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res/firestorm_icon.BMP"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/secondlife_256.BMP"
-        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/ll_icon.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/firestorm_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/firestorm_icon.BMP"
       )
 
     # Add resource files to the project.
@@ -1402,7 +1699,6 @@ if (WINDOWS)
         res/arrowcopmulti.cur
         res/arrowdrag.cur
         res/circleandline.cur
-        res/icon1.ico
         res/llarrow.cur
         res/llarrowdrag.cur
         res/llarrowdragmulti.cur
@@ -1427,9 +1723,9 @@ if (WINDOWS)
         res/lltooltranslate.cur
         res/lltoolzoomin.cur
         res/lltoolzoomout.cur
-        res-sdl/ll_icon.BMP
-        res/ll_icon.BMP
-        res/ll_icon.ico
+        res/firestorm_icon.BMP
+        res/firestorm_icon.ico
+        res-sdl/firestorm_icon.BMP
         res/resource.h
         res/toolpickobject.cur
         res/toolpickobject2.cur
@@ -1534,22 +1830,34 @@ set(viewer_APPSETTINGS_FILES
     app_settings/high_graphics.xml
     app_settings/ignorable_dialogs.xml
     app_settings/keys.xml
+    app_settings/keys_azerty.xml
     app_settings/keywords.ini
     app_settings/logcontrol.xml
     app_settings/low_graphics.xml
     app_settings/mid_graphics.xml
+    app_settings/grids.fallback.xml
+    app_settings/account_settings_phoenix.xml
+    app_settings/settings_firestorm.xml
+    app_settings/settings_hybrid.xml
+    app_settings/settings_phoenix.xml
+    app_settings/settings_v3.xml
     app_settings/settings.xml
     app_settings/settings_crash_behavior.xml
     app_settings/settings_files.xml
     app_settings/settings_per_account.xml
     app_settings/std_bump.ini
-    app_settings/toolbars.xml
+    #app_settings/toolbars.xml  FS:AO moved to skins
     app_settings/trees.xml
     app_settings/ultra_graphics.xml
     app_settings/viewerart.xml
     ${CMAKE_SOURCE_DIR}/../etc/message.xml
     ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
+    #app_settings/growl_notifications.xml
     )
+	
+if (WINDOWS)
+  LIST(APPEND viewer_APPSETTINGS_FILES app_settings/growl_notifications.xml)
+endif (WINDOWS)
 
 source_group("App Settings" FILES ${viewer_APPSETTINGS_FILES})
 
@@ -1621,13 +1929,19 @@ list(APPEND EVENT_HOST_SCRIPTS ${EVENT_HOST_SCRIPT_GLOB_LIST})
 set(PACKAGE ON CACHE BOOL
     "Add a package target that builds an installer package.")
 
+if ( OPENSIM )
+  set( ND_VIEWER_FLAVOR "oss" )
+else ( OPENSIM )
+  set( ND_VIEWER_FLAVOR "hvk" )
+endif ( OPENSIM )
+
 if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
         # *TODO -reenable this once we get server usage sorted out
         LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS} /LARGEADDRESSAWARE"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO /LARGEADDRESSAWARE"
-        LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE"
+        LINK_FLAGS_RELEASE "/MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE"
         )
     if(USE_PRECOMPILED_HEADERS)
         set_target_properties(
@@ -1730,6 +2044,7 @@ if (WINDOWS)
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qjpcodecsd4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qkrcodecsd4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qtwcodecsd4.dll
+      ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
       SLPlugin
       media_plugin_quicktime
       media_plugin_webkit
@@ -1738,6 +2053,14 @@ if (WINDOWS)
       windows-updater
       )
 
+    if( ND_BUILD64BIT_ARCH )
+      set( VIEWERMANIFEST_FLAGS --m64 --copy_artwork )
+      set( VIEWERMANIFEST_PACKAGE_FLAGS --m64 )
+    else( ND_BUILD64BIT_ARCH )
+      set( VIEWERMANIFEST_FLAGS "" )
+      set( VIEWERMANIFEST_PACKAGE_FLAGS )
+    endif( ND_BUILD64BIT_ARCH )
+
     if (FMODEX)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/Release/fmodex.dll
@@ -1745,6 +2068,13 @@ if (WINDOWS)
            ${SHARED_LIB_STAGING_DIR}/Debug/fmodexL.dll
           )
     endif (FMODEX)
+	
+    if (LEAPMOTION)
+      list(APPEND COPY_INPUT_DEPENDENCIES
+           ${SHARED_LIB_STAGING_DIR}/Release/Leap.dll
+           ${SHARED_LIB_STAGING_DIR}/Debug/Leapd.dll
+          )
+    endif (LEAPMOTION)
     
     add_custom_command(
       OUTPUT  ${CMAKE_CFG_INTDIR}/copy_touched.bat
@@ -1753,6 +2083,7 @@ if (WINDOWS)
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         --actions=copy
         --arch=${ARCH}
+        ${VIEWERMANIFEST_FLAGS}
         --artwork=${ARTWORK_DIR}
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
@@ -1821,6 +2152,7 @@ if (WINDOWS)
         ARGS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
           --arch=${ARCH}
+          ${VIEWERMANIFEST_PACKAGE_FLAGS}
           --artwork=${ARTWORK_DIR}
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}
@@ -1831,6 +2163,7 @@ if (WINDOWS)
           --grid=${GRID}
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/touched.bat
+          --viewer_flavor=${ND_VIEWER_FLAVOR}
         DEPENDS
             ${VIEWER_BINARY_NAME}
             ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -1883,7 +2216,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLVFS_LIBRARIES}
     ${LLWINDOW_LIBRARIES}
     ${LLXML_LIBRARIES}
-    ${LSCRIPT_LIBRARIES}
+    # <FS:CR> ${LSCRIPT_LIBRARIES}
     ${LLMATH_LIBRARIES}
     ${LLCOREHTTP_LIBRARIES}
     ${LLCOMMON_LIBRARIES}
@@ -1894,6 +2227,8 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${BOOST_PROGRAM_OPTIONS_LIBRARY}
     ${BOOST_REGEX_LIBRARY}
     ${BOOST_CONTEXT_LIBRARY}
+    ${BOOST_WAVE_LIBRARY} #FS specific
+    ${BOOST_THREAD_LIBRARY} #FS specific
     ${DBUSGLIB_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio
@@ -1913,13 +2248,30 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLPHYSICSEXTENSIONS_LIBRARIES}
     ${TCMALLOC_LIBRARIES}
     ${LLAPPEARANCE_LIBRARIES}
+    ${GROWL_LIBRARY}
     )
+	
+if (LEAPMOTION)
+    target_link_libraries(${VIEWER_BINARY_NAME}
+	${LEAP_MOTION_LIBRARY}
+	)
+endif (LEAPMOTION)
+	
+if (WINDOWS)
+    target_link_libraries(${VIEWER_BINARY_NAME}
+    ${GROWL_LIBRARY}
+    )
+endif (WINDOWS)
+
+if (LINUX)
+    target_link_libraries(${VIEWER_BINARY_NAME} "dl" )
+endif (LINUX)
 
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
     "Path to artwork files.")
 
 if (LINUX)
-  set(product SecondLife-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
+  set(product Firestorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
 
   # These are the generated targets that are copied to package/
   set(COPY_INPUT_DEPENDENCIES
@@ -1947,14 +2299,13 @@ if (LINUX)
         --grid=${GRID}
         --source=${CMAKE_CURRENT_SOURCE_DIR}
         --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
+        --viewer_flavor=${ND_VIEWER_FLAVOR}
       DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
         generate_viewer_version
         ${COPY_INPUT_DEPENDENCIES}
       )
 
-  if (PACKAGE)
-  endif (PACKAGE)
 
   add_custom_command(
     OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.copy_touched
@@ -1990,29 +2341,33 @@ if (LINUX)
 endif (LINUX)
 
 if (DARWIN)
-  # These all get set with PROPERTIES
-  set(product "Second Life")
-  set(MACOSX_BUNDLE_INFO_STRING "Second Life Viewer")
-  set(MACOSX_BUNDLE_ICON_FILE "secondlife.icns")
-  set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.secondlife.indra.viewer")
+ # These all get set with PROPERTIES
+  set(product "Firestorm")
+  set(MACOSX_BUNDLE_INFO_STRING "Firestorm Viewer")
+  set(MACOSX_BUNDLE_ICON_FILE "firestorm_icon.icns")
+  set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.phoenixviewer.firestorm.viewer-${ND_VIEWER_FLAVOR}")
   set(MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
-  set(MACOSX_BUNDLE_BUNDLE_NAME "SecondLife")
+  set(MACOSX_BUNDLE_BUNDLE_NAME "Firestorm")
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "Copyright © Linden Research, Inc. 2007")
-  set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "SecondLife.nib")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2014 The Phoenix Firestorm Project, Inc.")
+  set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Firestorm.nib")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "NSApplication")
-  
+
   set_target_properties(
     ${VIEWER_BINARY_NAME}
     PROPERTIES
     OUTPUT_NAME "${product}"
     MACOSX_BUNDLE_INFO_PLIST
-    "${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
+    # <FS:CR> Use Firestorm plist
+    #"${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Info-Firestorm.plist"
     )
 
   configure_file(
-     "${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
+     # <FS:CR> Use Firestorm plist
+     #"${CMAKE_CURRENT_SOURCE_DIR}/Info-SecondLife.plist"
+     "${CMAKE_CURRENT_SOURCE_DIR}/Info-Firestorm.plist"
      "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app/Contents/Info.plist"
     )
 
@@ -2067,6 +2422,7 @@ if (DARWIN)
           --versionfile=${CMAKE_CURRENT_BINARY_DIR}/viewer_version.txt
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
+          --viewer_flavor=${ND_VIEWER_FLAVOR}
           ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2083,7 +2439,7 @@ if (PACKAGE)
   set(SYMBOL_SEARCH_DIRS "")
   if (WINDOWS)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-windows.tar.bz2")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-windows.tar.bz2")
     # slplugin.exe failing symbols dump - need to debug, might have to do with updated version of google breakpad
     # set(VIEWER_EXE_GLOBS "${VIEWER_BINARY_NAME}${CMAKE_EXECUTABLE_SUFFIX} slplugin.exe")
     set(VIEWER_EXE_GLOBS "${VIEWER_BINARY_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
@@ -2098,19 +2454,19 @@ if (PACKAGE)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/webkit/${CMAKE_CFG_INTDIR}")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-darwin.tar.bz2")
-    set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin mac-crash-logger")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-darwin.tar.bz2")
+    set(VIEWER_EXE_GLOBS "'Firestorm' SLPlugin mac-crash-logger")
     set(VIEWER_LIB_GLOB "*.dylib")
   endif (DARWIN)
   if (LINUX)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/packaged")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-linux.tar.bz2")
-    set(VIEWER_EXE_GLOBS "do-not-directly-run-secondlife-bin SLPlugin")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/firestorm-symbols-linux.tar.bz2")
+    set(VIEWER_EXE_GLOBS "do-not-directly-run-firestorm-bin SLPlugin")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}*")
     set(VIEWER_COPY_MANIFEST copy_l_viewer_manifest)
   endif (LINUX)
 
-  if(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
+  if( (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND NOT (ND_BUILD64BIT_ARCH AND WINDOWS) )
   if(CMAKE_CFG_INTDIR STREQUAL ".")
       set(LLBUILD_CONFIG ${CMAKE_BUILD_TYPE})
   else(CMAKE_CFG_INTDIR STREQUAL ".")
@@ -2134,7 +2490,7 @@ if (PACKAGE)
   add_custom_target(generate_breakpad_symbols DEPENDS "${VIEWER_SYMBOL_FILE}")
   add_dependencies(generate_breakpad_symbols "${VIEWER_BINARY_NAME}" "${VIEWER_COPY_MANIFEST}")
   add_dependencies(package generate_breakpad_symbols)
-  endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
+  endif( (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND NOT (ND_BUILD64BIT_ARCH AND WINDOWS) )
 endif (PACKAGE)
 
 if (LL_TESTS)
@@ -2152,6 +2508,15 @@ if (LL_TESTS)
     llversioninfo.cpp
     llworldmap.cpp
     llworldmipmap.cpp
+  )
+
+  set_source_files_properties(
+    llworldmap.cpp
+    llworldmipmap.cpp
+    PROPERTIES
+    LL_TEST_ADDITIONAL_SOURCE_FILES 
+    tests/llviewertexture_stub.cpp
+    #llviewertexturelist.cpp
   )
 
   set_source_files_properties(
@@ -2265,17 +2630,18 @@ if (LL_TESTS)
      llsecapi.cpp
     "${test_libs}"
     )
-
-  set(llslurl_test_sources
-      llslurl.cpp
-      llviewernetwork.cpp
-  )
-
-
-  LL_ADD_INTEGRATION_TEST(llslurl
-     "${llslurl_test_sources}"
-    "${test_libs}"
+  if (NOT OPENSIM)#<FS:AW optional opensim support>
+    set(llslurl_test_sources
+        llslurl.cpp
+        llviewernetwork.cpp
     )
+  endif (NOT OPENSIM)#<FS:AW optional opensim support>
+
+# RLVa - incompatible
+#  LL_ADD_INTEGRATION_TEST(llslurl
+#     "${llslurl_test_sources}"
+#    "${test_libs}"
+#    )
 
   LL_ADD_INTEGRATION_TEST(llviewernetwork
      llviewernetwork.cpp

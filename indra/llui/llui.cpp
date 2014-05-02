@@ -96,12 +96,16 @@ static LLDefaultChildRegistry::Register<LLSearchEditor> register_search_editor("
 // register other widgets which otherwise may not be linked in
 static LLDefaultChildRegistry::Register<LLLoadingIndicator> register_loading_indicator("loading_indicator");
 static LLDefaultChildRegistry::Register<LLToolBar> register_toolbar("toolbar");
+static LLDefaultChildRegistry::Register<LLToolBarVertical> register_toolbar_vertical("toolbar_vertical"); // <FS:Ansariel> Separate vertical toolbar
 
 //
 // Functions
 //
 
-LLUUID find_ui_sound(const char * namep)
+// <FS:PP> UI Sounds preview
+//LLUUID find_ui_sound(const char * namep)
+LLUUID find_ui_sound(const char * namep, bool force_sound)
+// </FS:PP> UI Sounds preview
 {
 	std::string name = ll_safe_string(namep);
 	LLUUID uuid = LLUUID(NULL);
@@ -128,6 +132,14 @@ LLUUID find_ui_sound(const char * namep)
 		}
 		else if (LLUI::sAudioCallback != NULL)
 		{
+			// <FS:PP> Silencer for FIRE-7556: Configurable User Interface sounds
+			if (name != "UISndNewIncomingIMSession" && name != "UISndNewIncomingGroupIMSession" && name != "UISndNewIncomingConfIMSession") // There is no need to process these three, checks are in llimview.cpp already, in LLIMMgr::addMessage
+			{
+				if (!force_sound && ( (name != "UISndSnapshot" && !LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) ) )
+					return LLUUID(NULL);
+			}
+			// </FS:PP>
+			
 			if (LLUI::sSettingGroups["config"]->getBOOL("UISndDebugSpamToggle"))
 			{
 				llinfos << "UI sound name: " << name << llendl;	
@@ -138,18 +150,20 @@ LLUUID find_ui_sound(const char * namep)
 	return uuid;
 }
 
-void make_ui_sound(const char* namep)
+//void make_ui_sound(const char* namep)
+void make_ui_sound(const char* namep, bool force_sound)
 {
-	LLUUID soundUUID = find_ui_sound(namep);
+	LLUUID soundUUID = find_ui_sound(namep, force_sound);
 	if(soundUUID.notNull())
 	{
 		LLUI::sAudioCallback(soundUUID);
 	}
 }
 
-void make_ui_sound_deferred(const char* namep)
+//void make_ui_sound_deferred(const char* namep)
+void make_ui_sound_deferred(const char* namep, bool force_sound)
 {
-	LLUUID soundUUID = find_ui_sound(namep);
+	LLUUID soundUUID = find_ui_sound(namep, force_sound);
 	if(soundUUID.notNull())
 	{
 		LLUI::sDeferredAudioCallback(soundUUID);
@@ -201,6 +215,9 @@ void LLUI::initClass(const settings_map_t& settings,
 	// Used by menus along with Floater.Toggle to display visibility as a check-mark
 	LLUICtrl::EnableCallbackRegistry::defaultRegistrar().add("Floater.Visible", boost::bind(&LLFloaterReg::instanceVisible, _2, LLSD()));
 	LLUICtrl::EnableCallbackRegistry::defaultRegistrar().add("Floater.IsOpen", boost::bind(&LLFloaterReg::instanceVisible, _2, LLSD()));
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	LLUICtrl::EnableCallbackRegistry::defaultRegistrar().add("Floater.CanShow", boost::bind(&LLFloaterReg::canShowInstance, _2, LLSD()));
+// [/RLVa:KB]
 
 	// Parse the master list of commands
 	LLCommandManager::load();

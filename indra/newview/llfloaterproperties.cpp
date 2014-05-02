@@ -58,6 +58,11 @@
 
 #include "lluictrlfactory.h"
 
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+#include "llcombobox.h"
+#include "llviewernetwork.h"	// <FS:CR> For OpenSim export perms
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPropertiesObserver
@@ -102,11 +107,16 @@ void LLPropertiesObserver::changed(U32 mask)
 ///----------------------------------------------------------------------------
 
 // Default constructor
-LLFloaterProperties::LLFloaterProperties(const LLUUID& item_id)
-  : LLFloater(mItemID),
-	mItemID(item_id),
+LLFloaterProperties::LLFloaterProperties(const LLSD& key)
+  : LLFloater(key),
 	mDirty(TRUE)
 {
+	if (key.has("item_id"))
+	{
+		mItemID = key["item_id"].asUUID();
+		if (key.has("object_id"))
+			mObjectID = key["object_id"].asUUID();
+	}
 	mPropertiesObserver = new LLPropertiesObserver(this);
 }
 
@@ -141,9 +151,13 @@ BOOL LLFloaterProperties::postBuild()
 	getChild<LLUICtrl>("CheckNextOwnerModify")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitPermissions, this));
 	getChild<LLUICtrl>("CheckNextOwnerCopy")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitPermissions, this));
 	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitPermissions, this));
+	// <FS:CR> OpenSim export permissions
+	getChild<LLUICtrl>("CheckOwnerExport")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitPermissions, this));
+	getChild<LLUICtrl>("CheckOwnerExport")->setVisible(!LLGridManager::getInstance()->isInSecondLife());
+	// </FS:CR>
 	// Mark for sale or not, and sale info
 	getChild<LLUICtrl>("CheckPurchase")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleInfo, this));
-	getChild<LLUICtrl>("RadioSaleType")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleType, this));
+	getChild<LLUICtrl>("ComboSaleType")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleType, this));
 	// "Price" label for edit
 	getChild<LLUICtrl>("Edit Cost")->setCommitCallback(boost::bind(&LLFloaterProperties::onCommitSaleInfo, this));
 	// The UI has been built, now fill in all the values
@@ -187,8 +201,9 @@ void LLFloaterProperties::refresh()
 			"CheckNextOwnerModify",
 			"CheckNextOwnerCopy",
 			"CheckNextOwnerTransfer",
+			"CheckOwnerExport",	// <FS:CR> OpenSim export permissions
 			"CheckPurchase",
-			"RadioSaleType",
+			"ComboSaleType",
 			"Edit Cost"
 		};
 		for(size_t t=0; t<LL_ARRAY_SIZE(enableNames); ++t)
@@ -278,6 +293,16 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("BtnCreator")->setEnabled(TRUE);
 		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
 		getChildView("LabelCreatorName")->setEnabled(TRUE);
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+		// If the object creator matches the object owner we need to anonymize the creator field as well
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && 
+			( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
+			  (RlvUtil::isNearbyAgent(item->getCreatorUUID())) ) )
+		{
+			childSetEnabled("BtnCreator", FALSE);
+			name = RlvStrings::getAnonym(name);
+		}
+// [/RLVa:KB]
 		getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
 	}
 	else
@@ -301,8 +326,15 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		else
 		{
 			gCacheName->getFullName(perm.getOwner(), name);
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				name = RlvStrings::getAnonym(name);
+// [/RLVa:KB]
 		}
-		getChildView("BtnOwner")->setEnabled(TRUE);
+//		getChildView("BtnOwner")->setEnabled(TRUE);
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.0.0e
+		getChildView("BtnOwner")->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+// [/RLVa:KB]
 		getChildView("LabelOwnerTitle")->setEnabled(TRUE);
 		getChildView("LabelOwnerName")->setEnabled(TRUE);
 		getChild<LLUICtrl>("LabelOwnerName")->setValue(name);
@@ -358,6 +390,11 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	getChild<LLUICtrl>("CheckOwnerCopy")->setValue(LLSD((BOOL)(owner_mask & PERM_COPY)));
 	getChildView("CheckOwnerTransfer")->setEnabled(FALSE);
 	getChild<LLUICtrl>("CheckOwnerTransfer")->setValue(LLSD((BOOL)(owner_mask & PERM_TRANSFER)));
+	
+	// <FS:CR> OpenSim export permissions
+	getChildView("CheckOwnerExport")->setEnabled(FALSE);
+	getChild<LLUICtrl>("CheckOwnerExport")->setValue(LLSD((BOOL)(owner_mask & PERM_EXPORT)));
+	// </FS:CR>
 
 	///////////////////////
 	// DEBUG PERMISSIONS //
@@ -436,6 +473,8 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("CheckShareWithGroup")->setEnabled(FALSE);
 		getChildView("CheckEveryoneCopy")->setEnabled(FALSE);
 	}
+	
+	getChildView("CheckOwnerExport")->setEnabled(gAgentID == item->getCreatorUUID());	// <FS:CR> OpenSim export permissions
 
 	// Set values.
 	BOOL is_group_copy = (group_mask & PERM_COPY) ? TRUE : FALSE;
@@ -491,8 +530,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("CheckNextOwnerCopy")->setEnabled((base_mask & PERM_COPY) && !cannot_restrict_permissions);
 		getChildView("CheckNextOwnerTransfer")->setEnabled((next_owner_mask & PERM_COPY) && !cannot_restrict_permissions);
 
-		getChildView("RadioSaleType")->setEnabled(is_complete && is_for_sale);
-		getChildView("TextPrice")->setEnabled(is_complete && is_for_sale);
+		getChildView("ComboSaleType")->setEnabled(is_complete && is_for_sale);
 		getChildView("Edit Cost")->setEnabled(is_complete && is_for_sale);
 	}
 	else
@@ -505,30 +543,27 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		getChildView("CheckNextOwnerCopy")->setEnabled(FALSE);
 		getChildView("CheckNextOwnerTransfer")->setEnabled(FALSE);
 
-		getChildView("RadioSaleType")->setEnabled(FALSE);
-		getChildView("TextPrice")->setEnabled(FALSE);
+		getChildView("ComboSaleType")->setEnabled(FALSE);
 		getChildView("Edit Cost")->setEnabled(FALSE);
 	}
 
 	// Set values.
 	getChild<LLUICtrl>("CheckPurchase")->setValue(is_for_sale);
-	getChildView("combobox sale copy")->setEnabled(is_for_sale);
-	getChildView("Edit Cost")->setEnabled(is_for_sale);
 	getChild<LLUICtrl>("CheckNextOwnerModify")->setValue(LLSD(BOOL(next_owner_mask & PERM_MODIFY)));
 	getChild<LLUICtrl>("CheckNextOwnerCopy")->setValue(LLSD(BOOL(next_owner_mask & PERM_COPY)));
 	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setValue(LLSD(BOOL(next_owner_mask & PERM_TRANSFER)));
 
-	LLRadioGroup* radioSaleType = getChild<LLRadioGroup>("RadioSaleType");
+	LLComboBox* comboSaleType = getChild<LLComboBox>("ComboSaleType");
 	if (is_for_sale)
 	{
-		radioSaleType->setSelectedIndex((S32)sale_info.getSaleType() - 1);
+		comboSaleType->setCurrentByIndex((S32)sale_info.getSaleType() - 1);
 		S32 numerical_price;
 		numerical_price = sale_info.getSalePrice();
 		getChild<LLUICtrl>("Edit Cost")->setValue(llformat("%d",numerical_price));
 	}
 	else
 	{
-		radioSaleType->setSelectedIndex(-1);
+		comboSaleType->setCurrentByIndex(-1);
 		getChild<LLUICtrl>("Edit Cost")->setValue(llformat("%d",0));
 	}
 }
@@ -539,6 +574,17 @@ void LLFloaterProperties::onClickCreator()
 	if(!item) return;
 	if(!item->getCreatorUUID().isNull())
 	{
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		{
+			const LLPermissions& perm = item->getPermissions();
+			if ( ((perm.isOwned()) && (!perm.isGroupOwned()) && (perm.getOwner() == item->getCreatorUUID()) ) ||
+			     (RlvUtil::isNearbyAgent(item->getCreatorUUID())) )
+			{
+				return;
+			}
+		}
+// [/RLVa:KB]
 		LLAvatarActions::showProfile(item->getCreatorUUID());
 	}
 }
@@ -554,6 +600,10 @@ void LLFloaterProperties::onClickOwner()
 	}
 	else
 	{
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Modified: RLVa-1.0.0e
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			return;
+// [/RLVa:KB]
 		LLAvatarActions::showProfile(item->getPermissions().getOwner());
 	}
 }
@@ -674,6 +724,15 @@ void LLFloaterProperties::onCommitPermissions()
 		perm.setNextOwnerBits(gAgent.getID(), gAgent.getGroupID(),
 							CheckNextOwnerTransfer->get(), PERM_TRANSFER);
 	}
+	// <FS:CR> OpenSim export permissions
+	LLCheckBoxCtrl* CheckOwnerExport = getChild<LLCheckBoxCtrl>("CheckOwnerExport");
+	if (CheckOwnerExport)
+	{
+		perm.setNextOwnerBits(gAgent.getID(), gAgent.getGroupID(),
+							  CheckOwnerExport->get(), PERM_EXPORT);
+	}
+	
+	
 	if(perm != item->getPermissions()
 		&& item->isFinished())
 	{
@@ -758,10 +817,10 @@ void LLFloaterProperties::updateSaleInfo()
 		// turn on sale info
 		LLSaleInfo::EForSale sale_type = LLSaleInfo::FS_COPY;
 	
-		LLRadioGroup* RadioSaleType = getChild<LLRadioGroup>("RadioSaleType");
-		if(RadioSaleType)
+		LLComboBox* ComboSaleType = getChild<LLComboBox>("ComboSaleType");
+		if(ComboSaleType)
 		{
-			switch (RadioSaleType->getSelectedIndex())
+			switch (ComboSaleType->getCurrentIndex())
 			{
 			case 0:
 				sale_type = LLSaleInfo::FS_ORIGINAL;
@@ -889,7 +948,7 @@ LLMultiProperties::LLMultiProperties()
 {
 	// start with a small rect in the top-left corner ; will get resized
 	LLRect rect;
-	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 20, 20);
+	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 350, 350);
 	setRect(rect);
 	LLFloater* last_floater = LLFloaterReg::getLastFloaterInGroup("properties");
 	if (last_floater)
@@ -898,6 +957,8 @@ LLMultiProperties::LLMultiProperties()
 	}
 	setTitle(LLTrans::getString("MultiPropertiesTitle"));
 	buildTabContainer();
+	// <FS:Ansariel> Center multifloater on screen
+	center();
 }
 
 ///----------------------------------------------------------------------------

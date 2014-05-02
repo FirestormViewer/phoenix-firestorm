@@ -52,6 +52,7 @@
 // viewer includes
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llaudioengine.h" // <FS:PP> For object deletion sound
 #include "llviewerwindow.h"
 #include "lldrawable.h"
 #include "llfloaterinspect.h"
@@ -67,6 +68,7 @@
 #include "llmenugl.h"
 #include "llmeshrepository.h"
 #include "llmutelist.h"
+#include "llparcel.h"
 #include "llnotificationsutil.h"
 #include "llsidepaneltaskinfo.h"
 #include "llslurl.h"
@@ -85,6 +87,7 @@
 #include "llviewermenu.h"
 #include "llviewerobject.h"
 #include "llviewerobjectlist.h"
+#include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
 #include "llvoavatarself.h"
@@ -92,6 +95,15 @@
 #include "pipeline.h"
 #include "llviewershadermgr.h"
 #include "llpanelface.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvactions.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
+// <FS:CR> Aurora Sim
+#include "llviewernetwork.h"
+#include "llworld.h"
+// </FS:CR> Aurora Sim
+#include "fsareasearch.h"
 #include "llglheaders.h"
 
 LLViewerObject* getSelectedParentObject(LLViewerObject *object) ;
@@ -573,11 +585,19 @@ bool LLSelectMgr::linkObjects()
 	}
 
 	S32 object_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-	if (object_count > MAX_CHILDREN_PER_TASK + 1)
+// <FS:CR> Aurora Sim
+	//if (object_count > MAX_CHILDREN_PER_TASK + 1)
+	S32 object_max = LLWorld::getInstance()->getMaxLinkedPrims();
+
+	if (object_count > object_max + 1)
+// </FS:CR> Aurora Sim
 	{
 		LLSD args;
 		args["COUNT"] = llformat("%d", object_count);
-		int max = MAX_CHILDREN_PER_TASK+1;
+// <FS:CR> Aurora Sim
+		//int max = MAX_CHILDREN_PER_TASK+1;
+		int max = object_max+1;
+// </FS:CR> Aurora Sim
 		args["MAX"] = llformat("%d", max);
 		LLNotificationsUtil::add("UnableToLinkObjects", args);
 		return true;
@@ -655,6 +675,16 @@ bool LLSelectMgr::enableLinkObjects()
 			new_value = LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func, firstonly);
 		}
 	}
+// [RLVa:KB] - Checked: 2011-03-19 (RLVa-1.3.0f) | Modified: RLVa-0.2.0g
+	if ( (new_value) && ((rlv_handler_t::isEnabled()) && (!RlvActions::canStand())) )
+	{
+		// Allow only if the avie isn't sitting on any of the selected objects
+		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsSittingOn f(gAgentAvatarp);
+		if (hSel->getFirstRootNode(&f, TRUE) != NULL)
+			new_value = false;
+	}
+// [/RLVa:KB]
 	return new_value;
 }
 
@@ -667,7 +697,16 @@ bool LLSelectMgr::enableUnlinkObjects()
 		first_editable_object &&
 		!first_editable_object->isAttachment() && !first_editable_object->isPermanentEnforced() &&
 		((root_object == NULL) || !root_object->isPermanentEnforced());
-
+// [RLVa:KB] - Checked: 2011-03-19 (RLVa-1.3.0f) | Modified: RLVa-0.2.0g
+	if ( (new_value) && ((rlv_handler_t::isEnabled()) && (!RlvActions::canStand())) )
+	{
+		// Allow only if the avie isn't sitting on any of the selected objects
+		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
+		RlvSelectIsSittingOn f(gAgentAvatarp);
+		if (hSel->getFirstRootNode(&f, TRUE) != NULL)
+			new_value = false;
+	}
+// [/RLVa:KB]
 	return new_value;
 }
 
@@ -979,6 +1018,13 @@ void LLSelectMgr::highlightObjectOnly(LLViewerObject* objectp)
 		// only select my own objects
 		return;
 	}
+
+	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
+	if (objectp->permGroupOwner() && !gSavedSettings.getBOOL("FSSelectIncludeGroupOwned"))
+	{
+		return;
+	}
+	// </FS:Ansariel>
 
 	mRectSelectedObjects.insert(objectp);
 }
@@ -1934,7 +1980,7 @@ void LLSelectMgr::selectionSetMedia(U8 media_type, const LLSD &media_data)
 					llassert(mMediaData.isMap());
 					const LLTextureEntry *texture_entry = object->getTE(te);
 					if (!mMediaData.isMap() ||
-						(NULL != texture_entry) && !texture_entry->hasMedia() && !mMediaData.has(LLMediaEntry::HOME_URL_KEY))
+						((NULL != texture_entry) && !texture_entry->hasMedia() && !mMediaData.has(LLMediaEntry::HOME_URL_KEY)))
 					{
 						// skip adding/updating media
 					}
@@ -3407,6 +3453,16 @@ BOOL LLSelectMgr::selectGetPermissions(LLPermissions& result_perm)
 
 void LLSelectMgr::selectDelete()
 {
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Added: RLVa-1.2.0a
+	if ( (rlv_handler_t::isEnabled()) && (!rlvCanDeleteOrReturn()) )
+	{
+		make_ui_sound("UISndInvalidOp");
+		if (!gFloaterTools->getVisible())
+			deselectAll();
+		return;
+	}
+// [/RLVa:KB]
+
 	S32 deleteable_count = 0;
 
 	BOOL locked_but_deleteable_object = FALSE;
@@ -3537,6 +3593,13 @@ bool LLSelectMgr::confirmDelete(const LLSD& notification, const LLSD& response, 
 				duration += LLSelectMgr::getInstance()->mSelectedObjects->getObjectCount() / 64.f;
 				effectp->setDuration(duration);
 			}
+			
+			// <FS:PP> Configurable UI sounds
+			if (gAudiop && gSavedSettings.getBOOL("PlayModeUISndObjectDelete"))
+			{
+				gAudiop->triggerSound( LLUUID(gSavedSettings.getString("UISndObjectDelete")), gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+			}
+			// </FS:PP> Configurable UI sounds
 
 			gAgentCamera.setLookAt(LOOKAT_TARGET_CLEAR);
 
@@ -3719,7 +3782,10 @@ struct LLDuplicateData
 
 void LLSelectMgr::selectDuplicate(const LLVector3& offset, BOOL select_copy)
 {
-	if (mSelectedObjects->isAttachment())
+//	if (mSelectedObjects->isAttachment())
+// [RLVa:KB] - Checked: 2010-03-24 (RLVa-1.2.0e) | Added: RLVa-1.2.0a
+	if ( (mSelectedObjects->isAttachment()) || ((rlv_handler_t::isEnabled()) && (!rlvCanDeleteOrReturn())) )
+// [/RLVa:KB]
 	{
 		//RN: do not duplicate attachments
 		make_ui_sound("UISndInvalidOp");
@@ -3882,7 +3948,20 @@ void LLSelectMgr::packDuplicateOnRayHead(void *user_data)
 	msg->nextBlockFast(_PREHASH_AgentData);
 	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
 	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID() );
-	msg->addUUIDFast(_PREHASH_GroupID, gAgent.getGroupID() );
+	LLUUID group_id = gAgent.getGroupID();
+	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+	{
+		LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+		if (gAgent.isInGroup(parcel->getGroupID()))
+		{
+			group_id = parcel->getGroupID();
+		}
+		else if (gAgent.isInGroup(parcel->getOwnerID()))
+		{
+			group_id = parcel->getOwnerID();
+		}
+	}
+	msg->addUUIDFast(_PREHASH_GroupID, group_id);
 	msg->addVector3Fast(_PREHASH_RayStart, data->mRayStartRegion );
 	msg->addVector3Fast(_PREHASH_RayEnd, data->mRayEndRegion );
 	msg->addBOOLFast(_PREHASH_BypassRaycast, data->mBypassRaycast );
@@ -4173,10 +4252,38 @@ void LLSelectMgr::convertTransient()
 
 void LLSelectMgr::deselectAllIfTooFar()
 {
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	if ( (!mSelectedObjects->isEmpty()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_EDITOBJ))) )
+	{
+		struct NotTransientOrFocusedMediaOrEditable : public LLSelectedNodeFunctor
+		{
+			bool apply(LLSelectNode* pNode)
+			{
+				const LLViewerObject* pObj = pNode->getObject();
+				return (!pNode->isTransient()) && (pObj) && (!gRlvHandler.canEdit(pObj)) &&
+					(pObj->getID() != LLViewerMediaFocus::getInstance()->getFocusedObjectID());
+			}
+		} f;
+		if (mSelectedObjects->getFirstRootNode(&f, TRUE))
+			deselectAll();
+	}
+// [/RLVa:KB]
+
 	if (mSelectedObjects->isEmpty() || mSelectedObjects->mSelectType == SELECT_TYPE_HUD)
 	{
 		return;
 	}
+
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.1.0l
+#ifdef RLV_EXTENSION_CMD_INTERACT
+	// [Fall-back code] Don't allow an active selection (except for HUD attachments - see above) when @interact=n restricted
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))
+	{
+		deselectAll();
+		return;
+	}
+#endif // RLV_EXTENSION_CMD_INTERACT
+// [/RLVa:KB]
 
 	// HACK: Don't deselect when we're navigating to rate an object's
 	// owner or creator.  JC
@@ -4186,13 +4293,20 @@ void LLSelectMgr::deselectAllIfTooFar()
 	}
 
 	LLVector3d selectionCenter = getSelectionCenterGlobal();
-	if (gSavedSettings.getBOOL("LimitSelectDistance")
+//	if (gSavedSettings.getBOOL("LimitSelectDistance")
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
+	BOOL fRlvFartouch = gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH) && gFloaterTools->getVisible();
+	if ( (gSavedSettings.getBOOL("LimitSelectDistance") || (fRlvFartouch) )
+// [/RLVa:KB]
 		&& (!mSelectedObjects->getPrimaryObject() || !mSelectedObjects->getPrimaryObject()->isAvatar())
 		&& (mSelectedObjects->getPrimaryObject() != LLViewerMediaFocus::getInstance()->getFocusedObject())
 		&& !mSelectedObjects->isAttachment()
 		&& !selectionCenter.isExactlyZero())
 	{
-		F32 deselect_dist = gSavedSettings.getF32("MaxSelectDistance");
+//		F32 deselect_dist = gSavedSettings.getF32("MaxSelectDistance");
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
+		F32 deselect_dist = (!fRlvFartouch) ? gSavedSettings.getF32("MaxSelectDistance") : 1.5f;
+// [/RLVa:KB]
 		F32 deselect_dist_sq = deselect_dist * deselect_dist;
 
 		LLVector3d select_delta = gAgent.getPositionGlobal() - selectionCenter;
@@ -4218,7 +4332,10 @@ void LLSelectMgr::selectionSetObjectName(const std::string& name)
 	std::string name_copy(name);
 
 	// we only work correctly if 1 object is selected.
-	if(mSelectedObjects->getRootObjectCount() == 1)
+// FIRE-777
+	if(mSelectedObjects->getRootObjectCount() >= 1)
+//	if(mSelectedObjects->getRootObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectName",
 						  packAgentAndSessionID,
@@ -4226,7 +4343,10 @@ void LLSelectMgr::selectionSetObjectName(const std::string& name)
 						  (void*)(&name_copy),
 						  SEND_ONLY_ROOTS);
 	}
-	else if(mSelectedObjects->getObjectCount() == 1)
+// FIRE-777
+	else if(mSelectedObjects->getObjectCount() >= 1)
+//	else if(mSelectedObjects->getObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectName",
 						  packAgentAndSessionID,
@@ -4241,7 +4361,10 @@ void LLSelectMgr::selectionSetObjectDescription(const std::string& desc)
 	std::string desc_copy(desc);
 
 	// we only work correctly if 1 object is selected.
-	if(mSelectedObjects->getRootObjectCount() == 1)
+// FIRE-777
+	if(mSelectedObjects->getRootObjectCount() >= 1)
+//	if(mSelectedObjects->getRootObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectDescription",
 						  packAgentAndSessionID,
@@ -4249,7 +4372,10 @@ void LLSelectMgr::selectionSetObjectDescription(const std::string& desc)
 						  (void*)(&desc_copy),
 						  SEND_ONLY_ROOTS);
 	}
-	else if(mSelectedObjects->getObjectCount() == 1)
+// FIRE-777
+	else if(mSelectedObjects->getObjectCount() >= 1)
+//	else if(mSelectedObjects->getObjectCount() == 1)
+// /FIRE-777
 	{
 		sendListToRegions("ObjectDescription",
 						  packAgentAndSessionID,
@@ -4671,6 +4797,18 @@ void LLSelectMgr::packAgentAndSessionAndGroupID(void* user_data)
 void LLSelectMgr::packDuplicateHeader(void* data)
 {
 	LLUUID group_id(gAgent.getGroupID());
+	if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+	{
+		LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+		if (gAgent.isInGroup(parcel->getGroupID()))
+		{
+			group_id = parcel->getGroupID();
+		}
+		else if (gAgent.isInGroup(parcel->getOwnerID()))
+		{
+			group_id = parcel->getOwnerID();
+		}
+	}
 	packAgentAndSessionAndGroupID(&group_id);
 
 	LLDuplicateData* dup_data = (LLDuplicateData*) data;
@@ -5107,7 +5245,15 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 
 		if (!node)
 		{
+			// <FS:Techwolf Lupindo> area search
+			FSAreaSearch* area_search_floater = LLFloaterReg::getTypedInstance<FSAreaSearch>("area_search");
+			if(!(area_search_floater && area_search_floater->isActive())) // Don't spam the log when areasearch is active.
+			{
+			// </FS:Techwolf Lupindo>
 			llwarns << "Couldn't find object " << id << " selected." << llendl;
+			// <FS:Techwolf Lupindo> area search
+			}
+			// </FS:Techwolf Lupindo>
 		}
 		else
 		{
@@ -6425,10 +6571,35 @@ void LLSelectMgr::updateSelectionCenter()
 	{
 		mSelectedObjects->mSelectType = getSelectTypeForObject(object);
 
-		if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid())
+		// <FS:Ansariel> Chalice Yao's pause agent on attachment selection
+		//if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid())
+		//{
+		//	mPauseRequest = gAgentAvatarp->requestPause();
+		//}
+		if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT)
 		{
-			mPauseRequest = gAgentAvatarp->requestPause();
+			if (isAgentAvatarValid() && object->permYouOwner())
+			{
+				mPauseRequest = gAgentAvatarp->requestPause();
+			}
+			else
+			{
+				LLViewerObject* objectp = mSelectedObjects->getPrimaryObject();
+				if (objectp && objectp->isAttachment())
+				{
+					while (objectp && !objectp->isAvatar())
+					{
+						objectp = (LLViewerObject*)objectp->getParent();
+					}
+
+					if (objectp && objectp->isAvatar())
+					{
+						mPauseRequest = objectp->asAvatar()->requestPause();
+					}
+				}
+			}
 		}
+		// </FS:Ansariel>
 		else
 		{
 			mPauseRequest = NULL;
@@ -6614,7 +6785,10 @@ BOOL LLSelectMgr::canDoDelete() const
 			can_delete = true;
 		}
 	}
-	
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Added: RLVa-1.2.0a
+	can_delete &= (!rlv_handler_t::isEnabled()) || (rlvCanDeleteOrReturn());
+// [/RLVa:KB]
+
 	return can_delete;
 }
 
@@ -6646,7 +6820,12 @@ void LLSelectMgr::deselect()
 //-----------------------------------------------------------------------------
 BOOL LLSelectMgr::canDuplicate() const
 {
-	return const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstCopyableObject() != NULL; // HACK: casting away constness - MG
+//	return const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstCopyableObject() != NULL; // HACK: casting away constness - MG
+// [RLVa:KB] - Checked: 2010-03-24 (RLVa-1.2.0e) | Added: RLVa-1.2.0a
+	return 
+		(const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstCopyableObject() != NULL) &&
+		( (!rlv_handler_t::isEnabled()) || (rlvCanDeleteOrReturn()) );
+// [/RLVa:KB]
 }
 //-----------------------------------------------------------------------------
 // duplicate()
@@ -7683,3 +7862,23 @@ void LLSelectMgr::sendSelectionMove()
 
 	//saveSelectedObjectTransform(SELECT_ACTION_TYPE_PICK);
 }
+
+// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
+//-----------------------------------------------------------------------------
+// selectGetNoIndividual() - returns TRUE if current selection does not contain
+// individual selections (edit linked parts, select face)
+//-----------------------------------------------------------------------------
+BOOL LLSelectMgr::selectGetNoIndividual()
+{
+	for (LLObjectSelection::iterator iter = getSelection()->begin();
+		 iter != getSelection()->end(); iter++ )
+	{
+		LLSelectNode* node = *iter;
+		if(node->mIndividualSelection)
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+// </FS:Zi>

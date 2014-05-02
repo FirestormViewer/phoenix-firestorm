@@ -159,12 +159,17 @@ public:
 	virtual void updateLanguageTextInputArea() {}
 	virtual void interruptLanguageTextInput() {}
 	virtual void spawnWebBrowser(const std::string& escaped_url, bool async) {};
+	virtual void openFile(const std::string& file_name) {};
 
 	static std::vector<std::string> getDynamicFallbackFontList();
 	
 	// Provide native key event data
 	virtual LLSD getNativeKeyData() { return LLSD::emptyMap(); }
 
+//-TT Window Title Access
+//this needs to be overridden for all platforms
+	virtual void setTitle(const std::string& win_title) {};
+//-TT
 protected:
 	LLWindow(LLWindowCallbacks* callbacks, BOOL fullscreen, U32 flags);
 	virtual ~LLWindow();
@@ -208,6 +213,12 @@ protected:
 	void handleUnicodeUTF16(U16 utf16, MASK mask);
 
 	friend class LLWindowManager;
+
+// <FS:ND> Allow to query for window chrome sizes. Default it none, only win32 windows override this.
+public:
+	virtual void getWindowChrome( U32 &aChromeW, U32 &aChromeH )
+	{ aChromeW = aChromeH = 0; }
+// </FS:ND>
 };
 
 

@@ -35,6 +35,7 @@
 class LLImageRaw;
 class LLButton;
 class LLProgressBar;
+class LLTextBox;
 
 class LLProgressView : 
 	public LLPanel,
@@ -68,6 +69,8 @@ public:
 	// turns on (under certain circumstances) the into video after login
 	void revealIntroPanel();
 
+	void fade(BOOL in);		// ## Zi: Fade teleport screens
+
 	void setStartupComplete();
 
 	void setCancelButtonVisible(BOOL b, const std::string& label);
@@ -78,6 +81,8 @@ public:
 
 protected:
 	LLProgressBar* mProgressBar;
+	LLTextBox* mProgressText;
+	LLTextBox* mMessageText;
 	LLMediaCtrl* mMediaCtrl;
 	F32 mPercentDone;
 	std::string mMessage;
@@ -95,6 +100,27 @@ protected:
 
 	bool handleUpdate(const LLSD& event_data);
 	static void onIdle(void* user_data);
+};
+
+class LLProgressViewMini : 
+	public LLPanel
+{
+	public:
+		LLProgressViewMini();
+
+		BOOL postBuild();
+		void setText(const std::string& text);
+		void setPercent(const F32 percent);
+		void setCancelButtonVisible(BOOL b, const std::string& label);
+
+		static void onCancelButtonClicked(void* dummy);
+
+	protected:
+		static LLProgressViewMini* sInstance;
+
+		LLProgressBar* mProgressBar;
+		LLButton* mCancelBtn;
+		LLTextBox* mProgressText;
 };
 
 #endif // LL_LLPROGRESSVIEW_H

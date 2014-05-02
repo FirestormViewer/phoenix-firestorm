@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_radar">
+	<string name="MiniMapToolTipMsg" value="[REGION] (Doble-clic para abrir el mapa, mayús-arrastrar para vista panorámica)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Doble-clic para abrir el mapa, mayús-arrastrar para vista panorámica)"/>
+	<string name="avatar_name_count" value="Nombre [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<panel name="nearby_buttons_panel">
+			<filter_editor label="Filtrar" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="Acciones sobre el residente seleccionado"/>
+			<menu_button name="options_btn" tool_tip="Opciones del radar"/>
+			<button name="add_friend_btn"
+			 tool_tip="Ofrecer amistad a un residente"/>
+			<button label="Perfil" name="view_profile_btn" tool_tip="Muestra la foto, grupos, y otras informaciones de los residentes"/>
+		</panel>
+		<layout_stack name="radar_outer_ls">
+			<layout_panel name="radar_upper_layout">
+				<layout_stack name="radar_ls">
+					<layout_panel name="radarlayout">
+						<radar_list name="radar_list">
+							<radar_list.columns label="Nombre" name="name" tool_tip="[TOTAL] avatares, [IN_REGION] en la misma región, [IN_CHAT_RANGE] en distancia de chat"/>
+							<radar_list.columns label="" name="voice_level" tool_tip="Está usando voz"/>
+							<radar_list.columns label="" name="in_region" tool_tip="Está en la misma región"/>
+							<radar_list.columns label="" name="flags" tool_tip="Estado de la información de pago"/>
+							<radar_list.columns label="Edad" name="age"/>
+							<radar_list.columns label="Visto" name="seen"/>
+							<radar_list.columns label="Dist." name="range"/>
+						</radar_list>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="radar_lower_layout">
+				<slider label="Alcance (m):" name="NearMeRange"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

@@ -46,6 +46,12 @@
 #include "llrecentpeople.h"
 #include "llviewerobjectlist.h"
 #include "llvoavatarself.h"
+// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.2a)
+#include "llavatarnamecache.h"
+#include "rlvhandler.h"
+#include "rlvui.h"
+// [/RLVa:KB]
+#include "llworld.h"	// <FS:CR> Aurora Sim
 
 // MAX ITEMS is based on (sizeof(uuid)+2) * count must be < MTUBYTES
 // or 18 * count < 1200 => count < 1200/18 => 66. I've cut it down a
@@ -264,7 +270,10 @@ bool LLGiveInventory::doGiveInventoryCategory(const LLUUID& to_agent,
 		give_successful = false;
 	}
 	count = items.count() + cats.count();
-	if (count > MAX_ITEMS)
+// <FS:CR> Aurora Sim
+	//if (count > MAX_ITEMS)
+	if (count > LLWorld::getInstance()->getMaxInventoryItemsTransfer())
+// </FS:CR> Aurora Sim
 	{
 		LLNotificationsUtil::add("TooManyItems");
 		give_successful = false;
@@ -315,6 +324,20 @@ void LLGiveInventory::logInventoryOffer(const LLUUID& to_agent, const LLUUID &im
 	{
 		gIMMgr->addSystemMessage(im_session_id, "inventory_item_offered", args);
 	}
+// [RLVa:KB] - Checked: 2010-05-26 (RLVa-1.2.2a) | Modified: RLVa-1.2.0h
+	else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (RlvUtil::isNearbyAgent(to_agent)) &&
+		      (!RlvUIEnabler::hasOpenProfile(to_agent)) )
+	{
+		// Log to chat history if the user didn't drop on an IM session or a profile to avoid revealing the name of the recipient
+		std::string strMsgName = "inventory_item_offered-im"; LLSD args; LLAvatarName avName;
+		if (LLAvatarNameCache::get(to_agent, &avName))
+		{
+			args["NAME"] = RlvStrings::getAnonym(avName);
+			strMsgName = "inventory_item_offered_rlv";
+		}
+		gIMMgr->addSystemMessage(LLUUID::null, strMsgName, args);
+	}
+// [/RLVa:KB]
 	// If this item was given by drag-and-drop on avatar while IM panel was open, log this action in the IM panel chat.
 	else if (LLIMModel::getInstance()->findIMSession(session_id))
 	{
@@ -328,7 +351,17 @@ void LLGiveInventory::logInventoryOffer(const LLUUID& to_agent, const LLUUID &im
 		{
 			// Build a new format username or firstname_lastname for legacy names
 			// to use it for a history log filename.
-			full_name = LLCacheName::buildUsername(full_name);
+			// <FS:Ansariel> [Legacy IM logfile names]
+			//full_name = LLCacheName::buildUsername(full_name);
+			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+			{
+				full_name = full_name.substr(0, full_name.find(" Resident"));;
+			}
+			else
+			{
+				full_name = LLCacheName::buildUsername(full_name);
+			}
+			// </FS:Ansariel> [Legacy IM logfile names]
 			LLIMModel::instance().logToFile(full_name, LLTrans::getString("SECOND_LIFE"), im_session_id, LLTrans::getString("inventory_item_offered-im"));
 		}
 	}
@@ -410,11 +443,15 @@ void LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
 	gAgent.sendReliableMessage();
 
 	// VEFFECT: giveInventory
-	LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
-	effectp->setSourceObject(gAgentAvatarp);
-	effectp->setTargetObject(gObjectList.findObject(to_agent));
-	effectp->setDuration(LL_HUD_DUR_SHORT);
-	effectp->setColor(LLColor4U(gAgent.getEffectColor()));
+	// <FS:Ansariel> Make the particle effect optional
+	if (gSavedSettings.getBOOL("FSCreateGiveInventoryParticleEffect"))
+	{
+		LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
+		effectp->setSourceObject(gAgentAvatarp);
+		effectp->setTargetObject(gObjectList.findObject(to_agent));
+		effectp->setDuration(LL_HUD_DUR_SHORT);
+		effectp->setColor(LLColor4U(gAgent.getEffectColor()));
+	}
 	gFloaterTools->dirty();
 
 	LLMuteList::getInstance()->autoRemove(to_agent, LLMuteList::AR_INVENTORY);
@@ -422,7 +459,15 @@ void LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
 	logInventoryOffer(to_agent, im_session_id);
 
 	// add buddy to recent people list
-	LLRecentPeople::instance().add(to_agent);
+//	LLRecentPeople::instance().add(to_agent);
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+	// Block the recent activity update if this was an in-world drop on an avatar (as opposed to a drop on an IM session or on a profile)
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (im_session_id.notNull()) || (!RlvUtil::isNearbyAgent(to_agent)) ||
+		 (RlvUIEnabler::hasOpenProfile(to_agent)) )
+	{
+		LLRecentPeople::instance().add(to_agent);
+	}
+// [/RLVa:KB]
 }
 
 // static
@@ -488,7 +533,15 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 		<< cat->getUUID() << llendl;
 
 	// add buddy to recent people list
-	LLRecentPeople::instance().add(to_agent);
+//	LLRecentPeople::instance().add(to_agent);
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+	// Block the recent activity update if this was an in-world drop on an avatar (as opposed to a drop on an IM session or on a profile)
+	if ( (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (im_session_id.notNull()) || (!RlvUtil::isNearbyAgent(to_agent)) ||
+		 (RlvUIEnabler::hasOpenProfile(to_agent)) )
+	{
+		LLRecentPeople::instance().add(to_agent);
+	}
+// [/RLVa:KB]
 
 	// Test out how many items are being given.
 	LLViewerInventoryCategory::cat_array_t cats;
@@ -505,7 +558,10 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 	// MTUBYTES or 18 * count < 1200 => count < 1200/18 =>
 	// 66. I've cut it down a bit from there to give some pad.
 	S32 count = items.count() + cats.count();
-	if (count > MAX_ITEMS)
+// <FS:CR> Aurora Sim>
+	//if (count > MAX_ITEMS)
+	if (count > LLWorld::getInstance()->getMaxInventoryItemsTransfer())
+// <FS:CR> Aurora Sim
 	{
 		LLNotificationsUtil::add("TooManyItems");
 		give_successful = false;
@@ -568,11 +624,15 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 		delete[] bucket;
 
 		// VEFFECT: giveInventoryCategory
-		LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
-		effectp->setSourceObject(gAgentAvatarp);
-		effectp->setTargetObject(gObjectList.findObject(to_agent));
-		effectp->setDuration(LL_HUD_DUR_SHORT);
-		effectp->setColor(LLColor4U(gAgent.getEffectColor()));
+		// <FS:Ansariel> Make the particle effect optional
+		if (gSavedSettings.getBOOL("FSCreateGiveInventoryParticleEffect"))
+		{
+			LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
+			effectp->setSourceObject(gAgentAvatarp);
+			effectp->setTargetObject(gObjectList.findObject(to_agent));
+			effectp->setDuration(LL_HUD_DUR_SHORT);
+			effectp->setColor(LLColor4U(gAgent.getEffectColor()));
+		}
 		gFloaterTools->dirty();
 
 		LLMuteList::getInstance()->autoRemove(to_agent, LLMuteList::AR_INVENTORY);

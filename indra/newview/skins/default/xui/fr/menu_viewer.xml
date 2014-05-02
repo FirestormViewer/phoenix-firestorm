@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
 	<menu label="Moi" name="Me">
-		<menu_item_call label="Profil..." name="Profile"/>
-		<menu_item_call label="Apparence..." name="ChangeOutfit"/>
-		<menu_item_call label="Choisir un avatar..." name="Avatar Picker"/>
-		<menu_item_check label="Inventaire..." name="Inventory"/>
-		<menu_item_call label="Nouvelle fenêtre d&apos;inventaire" name="NewInventoryWindow"/>
-		<menu_item_call label="Endroits..." name="Places"/>
-		<menu_item_call label="Favoris..." name="Picks"/>
+		<menu_item_call label="Préférences" name="Preferences"/>
+		<menu_item_call label="Ma Page d&apos;accueil" name="Manage My Account">
+			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=fr"/>
+		</menu_item_call>
+    <menu_item_call label="mon compte" name="Manage Account"/>
+    <menu_item_call label="Acheter des L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Mon profil" name="Profile"/>
+		<menu_item_call label="Mon apparence" name="ChangeOutfit"/>
 		<menu_item_call label="Contrôles de la caméra..." name="Camera Controls"/>
+    <menu_item_check label="Photo" name="Take Snapshot"/>
+    <menu_item_check label="Mon inventaire" name="Inventory"/>
+		<menu_item_check label="Mon inventaire" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Mes gestes" name="Gestures"/>
+		<menu_item_check label="Ma voix" name="ShowVoice"/>
 		<menu label="Déplacement" name="Movement">
 			<menu_item_call label="M&apos;asseoir" name="Sit Down Here"/>
 			<menu_item_check label="Voler" name="Fly"/>
@@ -153,19 +159,19 @@
 			<menu_item_call label="Options de la grille" name="Grid Options"/>
 		</menu>
 		<menu label="Charger" name="Upload">
-			<menu_item_call label="Image ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Son ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Image ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Son ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modèle..." name="Upload Model"/>
-			<menu_item_call label="Lot ([COST] L$ par fichier)..." name="Bulk Upload"/>
+			<menu_item_call label="Lot ([COST] par fichier)..." name="Bulk Upload"/>
 			<menu_item_call label="Définir les droits de chargement par défaut" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Annuler" name="Undo"/>
 		<menu_item_call label="Refaire" name="Redo"/>
 	</menu>
 	<menu label="Aide" name="Help">
-		<menu_item_call label="Aide rapide..." name="How To"/>
-		<menu_item_call label="Aide de [SECOND_LIFE]" name="Second Life Help"/>
+		<menu_item_call label="Aide de [CURRENT_GRID]" name="current_grid_help"/>
+		<menu_item_check label="Activer les astuces" name="Enable Hints"/>
 		<menu_item_call label="Guide de l&apos;utilisateur" name="User’s guide"/>
 		<menu_item_call label="Base de connaissances" name="Knowledge Base"/>
 		<menu_item_call label="Wiki" name="Wiki"/>
@@ -175,6 +181,7 @@
 		<menu_item_call label="Blogs [SECOND_LIFE]" name="Second Life Blogs"/>
 		<menu_item_call label="Signaler une infraction" name="Report Abuse"/>
 		<menu_item_call label="Signaler un bug" name="Report Bug"/>
+        <menu_item_call label="Collisions, coups et bousculades" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="À propos de [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="Avancé" name="Advanced">
@@ -332,7 +339,7 @@
 			<menu_item_check label="Masques alpha automatiques (non différés)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Textures d&apos;animation" name="Animation Textures"/>
 			<menu_item_check label="Désactiver les textures" name="Disable Textures"/>
-			<menu_item_check label="Textures pleine résolution" name="Rull Res Textures"/>
+			<menu_item_check label="Textures pleine résolution (dangerous)" name="Full Res Textures"/>
 			<menu_item_check label="Rendu des lumières jointes" name="Render Attached Lights"/>
 			<menu_item_check label="Rendu des particules jointes" name="Render Attached Particles"/>
 			<menu_item_check label="Objets en surbrillance avec le pointeur" name="Hover Glow Objects"/>
@@ -346,7 +353,6 @@
 			<menu_item_call label="Abandonner un paquet" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Dump caméra scriptée" name="Dump Scripted Camera"/>
-		<menu_item_call label="Collisions, coups et bousculades" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Enregistreur" name="Recorder">
 			<menu_item_call label="Commencer la lecture" name="Start Playback"/>
 			<menu_item_call label="Arrêter la lecture" name="Stop Playback"/>
@@ -381,6 +387,7 @@
 			<menu_item_call label="Recharger les paramètres de couleurs" name="Reload Color Settings"/>
 			<menu_item_call label="Afficher le test de police" name="Show Font Test"/>
 			<menu_item_check label="Afficher les noms XUI" name="Show XUI Names"/>
+			<menu_item_call label="Outil d&apos;aperçu XUI" name="UI Preview Tool"/>
 			<menu_item_call label="Envoyer des IM tests" name="Send Test IMs"/>
 			<menu_item_call label="Vider les caches de noms" name="Flush Names Caches"/>
 		</menu>

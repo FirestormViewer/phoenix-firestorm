@@ -2,20 +2,20 @@
 <floater
  positioning="centered"
  legacy_header_height="18"
- height="440"
+ height="600"
  layout="topleft"
  name="floater_about"
  help_topic="floater_about"
  save_rect="true"
- title="ABOUT [CAPITALIZED_APP_NAME]"
+ title="About [APP_NAME]"
  width="470">
   
   <tab_container
     follows="all" 
-    top="25"
-    left="10"
-    height="405" 
-    width="450" 
+    top="20"
+    left="7"
+    height="572" 
+    width="456" 
     name="about_tab"
     tab_position="top">
     <panel
@@ -23,54 +23,68 @@
       label="Info"
       help_topic="about_support_tab"
       name="support_panel">
+      <text
+        follows="top|left|right"
+        font="SansSerif"
+        height="30"
+        layout="topleft"
+        left="11"
+        name="support_intro"
+        top="16"
+        width="434"
+        wrap="true">
+For the latest information about Firestorm, visit 
+http://www.firestormviewer.org
+      </text>
       <text_editor
-        parse_urls="true" 
-       follows="top|left"
-       font="SansSerif"
-       height="343"
-       bg_readonly_color="Transparent"
-       left="5"
-       max_length="65536"
-       name="support_editor"
-       top="5"
-       width="435"
-       word_wrap="true" />
+        parse_urls="true"
+        follows="top|left"
+        font="SansSerif"
+        height="468"
+        bg_readonly_color="Transparent"
+        left="5"
+        max_length="65536"
+        name="support_editor"
+        top_pad="5"
+        width="444"
+        word_wrap="true" />
       <button
         follows="left|top" 
         label="Copy to Clipboard"
         name="copy_btn"
-        left="10"
+        left="5"
         top_pad="5"
         height="25"
         width="180" />
     </panel>
     <panel
-      border="true" 
-      label="Credits" 
+      border="true"
+      label="Linden Lab Credits"
       help_topic="about_credits_tab"
       name="credits_panel">
       <text
-          follows="top|left|right"
-          height="10"
-          layout="topleft"
-          left="5"
-          name="linden_intro"
-          top="10"
-          width="435"
-          wrap="true">
-Second Life is brought to you by the Lindens:
+        follows="top|left|right"
+        height="52"
+        layout="topleft"
+        left="4"
+        name="linden_intro"
+        top="16"
+        width="444"
+        wrap="true">
+Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
+
+The Lindens are:
       </text>
       <text_editor
-       enabled="false" 
+       enabled="false"
        follows="top|left"
-       height="98"
+       height="158"
        bg_readonly_color="Transparent"
-       left="5"
        text_color="LtGray"
        max_length="65536"
        name="linden_names"
-       top_pad="10"
-       width="435"
+       top_pad="5"
+       width="444"
        word_wrap="true">
 Philip, Andrew, Doug, Richard, Phoenix, Ian, Mark, Robin, Dan, Char, Ryan, Eric, Jim, Lee, Jeff, Michael, Kelly, Steve, Catherine, Bub, Ramzi, Jill, Jeska, Don, Kona, Callum, Charity, Jack, Shawn, babbage, James, Lauren, Blue, Brent, Reuben, Pathfinder, Jesse, Patsy, Torley, Bo, Cyn, Jonathan, Gia, Annette, Ginsu, Harry, Lex, Runitai, Guy, Cornelius, Beth, Swiss, Thumper, Wendy, Teeple, Seth, Dee, Mia, Sally, Liana, Aura, Beez, Milo, Red, Gulliver, Marius, Joe, Jose, Dore, Justin, Nora, Morpheus, Lexie, Amber, Chris, Xan, Leyla, Walker, Sabin, Joshua, Hiromi, Tofu, Fritz, June, Jean, Ivy, Dez, Ken, Betsy, Which, Spike, Rob, Zee, Dustin, George, Claudia, del, Matthew, jane, jay, Adrian, Yool, Rika, Yoz, siobhan, Qarl, Benjamin, Beast, Everett, madhavi, Christopher, Izzy, stephany, Jeremy, sean, adreanne, Pramod, Tobin, sejong, Iridium, maurice, kj, Meta, kari, JP, bert, kyle, Jon, Socrates, Bridie, Ivan, maria, Aric, Coco, Periapse, sandy, Storrs, Lotte, Colossus, Brad, Pastrami, Zen, BigPapi, Banzai, Sardonyx, Mani, Garry, Jaime, Neuro, Samuel, Niko, CeeLo, Austin, Soft, Poppy, emma, tessa, angelo, kurz, alexa, Sue, CG, Blake, Erica, Brett, Bevis, kristen, Q, simon, Enus, MJ, laurap, Kip, Scouse, Ron, Ram, kend, Marty, Prospero, melissa, kraft, Nat, Seraph, Hamilton, Lordan, Green, miz, Ashlei, Trinity, Ekim, Echo, Charlie, Rowan, Rome, Jt, Doris, benoc, Christy, Bao, Kate, Tj, Patch, Cheah, Johan, Brandy, Angela, Oreh, Cogsworth, Lan, Mitchell, Space, Bambers, Einstein, Bender, Malbers, Matias, Maggie, Rothman, Milton, Niall, Marin, Allison, Mango, Andrea, Katt, Yi, Ambroff, Rico, Raymond, Gail, Christa, William, Dawn, Usi, Dynamike, M, Corr, Dante, Molly, kaylee, Danica, Kelv, Lil, jacob, Nya, Rodney, elsie, Blondin, Grant, Nyx, Devin, Monty, Minerva, Keira, Katie, Jenn, Makai, Clare, Joy, Cody, Gayathri, FJ, spider, Oskar, Landon, Jarv, Noelle, Al, Doc, Gray, Vir, t, Maestro, Simone, Shannon, yang, Courtney, Scott, charlene, Quixote, Susan, Zed, Amanda, Katelin, Esbee, JoRoan, Enkidu, roxie, Scarlet, Merov, Kevin, Judy, Rand, Newell, Les, Dessie, Galen, Michon, Geo, Siz, Calyle, Pete, Praveen, Callen, Sheldon, Pink, Nelson, jenelle, Terrence, Nathan, Juan, Sascha, Huseby, Karina, Kaye, Kotler, Lis, Darv, Charrell, Dakota, Kimmora, Theeba, Taka, Mae, Perry, Ducot, dana, Esther, Dough, gisele, Doten, Viale, Fisher, jessieann, ashley, Torres, delby, rountree, kurt, Slaton, Madison, Rue, Gino, Wen, Casssandra, Brodesky, Squid, Gez, Rakesh, Gecko, Ladan, Tony, Tatem, Squire, Falcon, BK, Crimp, Tiggs, Bacon, Coyot, Carmilla, Webb, Sea, Arch, Jillian, Jason, Bernard, Vogt, Peggy, dragon, Pup, xandix, Wallace, Bewest, Inoshiro, Rhett, AG, Aimee, Ghengis, Itiaes, Eli, Steffan, Epic, Grapes, Stone, Prep, Scobu, Robert, Alain, Carla, Vicky, Tia, Alec, Taras, Lisa, Oz, Ariane, Log, House, Kazu, Kim, Drofnas, Tyler, Campbell, Michele, Madeline, Nelly, Baron, Thor, Lori, Hele, Fredrik, Teddy, Pixie, Berry, Gabrielle, Alfonso, Brooke, Wolf, Ringo, Cru, Charlar, Rodvik, Gibson, Elise, Bagman, Greger, Leonidas, Jerm, Leslie, CB, Brenda, Durian, Carlo, mm, Zeeshan, Caleb, Max, Elikak, Mercille, Steph, Chase
       </text_editor>
@@ -78,24 +92,22 @@ Philip, Andrew, Doug, Richard, Phoenix, Ian, Mark, Robin, Dan, Char, Ryan, Eric,
           follows="top|left"
           height="10"
           layout="topleft"
-          left="5"
           name="contrib_intro"
-          top_pad="10"
-          width="435"
+          top_pad="12"
+          width="444"
           wrap="true">
 with open source contributions from:
       </text>
       <text_editor
        enabled="false" 
        follows="top|left"
-       height="98"
+       height="168"
        bg_readonly_color="Transparent"
-       left="5"
        text_color="LtGray"
        max_length="65536"
        name="contrib_names"
-       top_pad="10"
-       width="435"
+       top_pad="4"
+       width="444"
        word_wrap="true">
 Dummy Name replaced at run time
       </text_editor>
@@ -103,10 +115,9 @@ Dummy Name replaced at run time
           follows="top|left"
           height="10"
           layout="topleft"
-          left="5"
           name="trans_intro"
-          top_pad="10"
-          width="435"
+          top_pad="12"
+          width="444"
           wrap="true">
 and translations from:
       </text>
@@ -115,15 +126,146 @@ and translations from:
        follows="top|left"
        height="98"
        bg_readonly_color="Transparent"
-       left="5"
        text_color="LtGray"
        max_length="65536"
        name="trans_names"
-       top_pad="10"
-       width="435"
+       top_pad="4"
+       width="444"
        word_wrap="true">
 Dummy Name replaced at run time
       </text_editor>
+    </panel>
+    <panel
+      height="840"
+      border="true"
+      label="Firestorm Credits"
+      help_topic="about_fscredits_tab"
+      name="fs_credits_panel">
+        <scroll_container
+         follows="all"
+         layout="topleft"
+         left="0"
+         name="fs_credits_scroll_container"
+         reserve_scroll_corner="false"
+         top="16"
+         bottom="-1"
+         right="-4">
+            <panel
+             name="fs_credits_scroll_container_content_panel"
+             follows="left|top"
+             layout="topleft"
+             min_height="300"
+             top="0"
+             background_visible="false"
+             left="0"
+             right="-15"
+             bottom="-1">
+                <text
+                 follows="top|left|right"
+                 height="102"
+                 layout="topleft"
+                 left="5"
+                 name="firestorm_intro"
+                 top="0"
+                 width="420"
+                 wrap="true">
+Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Firestorm Project, Inc., a non-profit organization.
+
+The Firestorm Development Team:
+                </text>
+                <text
+                 enabled="false"
+                 follows="top|left"
+                 height="70"
+                 bg_readonly_color="Transparent"
+                 left="5"
+                 text_color="LtGray"
+                 max_length="65536"
+                 name="firestorm_names"
+                 top_pad="4"
+                 width="420"
+                 wrap="true">
+Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Cinder Roxley, Holy Gavenkrantz, Jessica Lyon, Kadah Coba, Kitty Barnett, Liny Odell, LordGregGreg Back, Mobius Ryba, Nicky Dasmijn, PanteraPolnocy, Selo Jacobus, Tankmaster Finesmith, Techwolf Lupindo, Tonya Souther, Tozh Taurog, Vortex Saito, WoLf Loonie, Wolfspirit Magic and Zi Ree.
+                </text>
+                <text
+                 follows="top|left"
+                 height="10"
+                 layout="topleft"
+                 left="5"
+                 name="fs_contrib_intro"
+                 top_pad="8"
+                 width="420"
+                 wrap="true">
+Additional code generously contributed to Firestorm by:
+                </text>
+                <text
+                 enabled="false"
+                 follows="top|left"
+                 height="160"
+                 bg_readonly_color="Transparent"
+                 left="5"
+                 text_color="LtGray"
+                 max_length="65536"
+                 name="fs_contrib_names"
+                 top_pad="4"
+                 width="420"
+                 wrap="true">
+Albatroz Hird, Alexie Birman, Andromeda Rage, Armin Weatherwax, Casper Warden, Chalice Yao, Cron Stardust, Damian Zhaoying, Dan Threebeards, Dawa Gurbux, Drake Arconis, Felyza Wishbringer, f0rbidden, Fractured Crystal, Geenz Spad, Hitomi Tiponi, Inusaito Sayori, Katharine Berry, Kittin Ninetails, Kool Koolhoven, Lance Corrimal, Latif Khalifa, Magne Metaverse LLC, Magus Freston, Manami Hokkigai, MartinRJ Fayray, McCabe Maxstead, Melancholy Lemon, Miguael Liamano, Mimika Oh, Mister Acacia, Mysty Saunders, Nagi Michinaga, Name Short, nhede Core, NiranV Dean, Nogardrevlis Lectar, paperwork, Peyton Menges, programmtest, Qwerty Venom, Revolution Smythe, Sahkolihaa Contepomi, sal Kaligawa, Satomi Ahn, Sei Lisa, Shin Wasp, Shyotl Kuhr, Sione Lomu, Skills Hak, StarlightShining, Sunset Faulkes, Thickbrick Sleaford, Vaalith Jinn, Whirly Fizzle, Zwagoth Klaar and others.
+                </text>
+                <text
+                 follows="top|left"
+                 height="25"
+                 layout="topleft"
+                 left="5"
+                 name="fs_support_intro"
+                 top_pad="8"
+                 width="420"
+                 wrap="true">
+Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
+                </text>
+                <text
+                 enabled="false"
+                 follows="top|left"
+                 height="260"
+                 bg_readonly_color="Transparent"
+                 left="5"
+                 text_color="LtGray"
+                 max_length="65536"
+                 name="fs_trans_names"
+                 top_pad="4"
+                 width="420"
+                 word_wrap="true">
+Afrika Burton, Albatroz Hird, Alexru Resident, alison Seesaw, AnaLucia Loon, Angell Airy, Annuccia Resident, Annuccia Vuckovic, Anubi Alter, Atthosz Amiot, Ayelin Ethaniel, Basement Desade, Bia Scribe, Bluezy Bleac, Christy Mansbridge, Chymy India, Cordoba Cluny, Damian Zhaoying, DARK Mirabella, Ed Merryman, Eressea Karsin, Erick Gregan, F0RBIDDEN, Fabry String, Flandria Connolly, Foksy, Franklyn Watanabe, FreeSpirit Simmering, Gee McAuley, Gweneth Lange, Hatake Kohime, Hiroshi Kumaki, Hope Dreier, Jodi Nikolaidis, JogiTE Clip, Kool Koolhoven, Kosmox Voom, Lachrimo Skytower, Lalwende Leakey, Landaree Levee, Lassie, Lette Ponnier, Lina Pussycat, Lyn Mimistrobell, Marybeth Oceanlane, Mickeala Praga, Miller Thor, Miro Collas, Mister Acacia, Morgause Whiteberry, Mysty Saunders, Nano Bouscario, narcisssia McMahon, Natem Andel, Nicoletta Schnute, Nisa Maverick, NogarDrevlis Lectar, Norton Burns, PanteraPolnocy, Peewee Musytari, Pisano Smit, PixelProphet Lane, Pol Xaron, Poledra Behemoth, Programmtest, Rander Teskat, Ricky Munz, Riku Highfield, RINOBIT Footman, Robert0 Siamendes, Roth Grut, Sabah Back, SaHaRa Connor, Selene Gregoire, Selo Jacobus, silvanaf Demina, Sniper Siemans, Spartaco Zemenis , Spino Forcella, Srilania Svoboda, Sunset Faulkes, Tanja Levenque, TankMaster Finesmith, Tarlyn Dagger, Thea Brianna, Toy Wylie, Whirly Fizzle, Willow Wilder, Wolfspirit Magic and XLR8RRICK Hudson.
+                </text>
+                <text
+                 follows="top|left"
+                 height="78"
+                 layout="topleft"
+                 left="5"
+                 name="fs_art_intro"
+                 top_pad="8"
+                 width="420"
+                 wrap="true">
+Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of providing an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+UI Artists and Designers:
+                </text>
+                <text
+                 enabled="false"
+                 follows="top|left"
+                 height="75"
+                 bg_readonly_color="Transparent"
+                 left="5"
+                 text_color="LtGray"
+                 max_length="65536"
+                 name="fs_artists_names"
+                 top_pad="4"
+                 width="420"
+                 wrap="true">
+Adam Frisby, Alexandrea Fride, DarkAgent Baphomet, David Rowe, Digital Scribe, Hitomi Tiponi, Hugh Helendale, KirstenLee Cinquetti, Mobius Ryba, Nadin, Naomah Beaumont, psi Merlin, samm florian, Sammie Benoir, Tommi Waydelich, and Vincent Nacon.
+                </text>
+            </panel>
+        </scroll_container>
     </panel>
     <panel
       border="true"
@@ -133,43 +275,46 @@ Dummy Name replaced at run time
       <text_editor
        enabled="false"
        follows="left|top"
-       height="375"
+       height="532"
        bg_readonly_color="Transparent"
-       left="5"
+       left="4"
        text_color="LtGray"
        max_length="65536"
        name="credits_editor"
-       top="5"
-       width="435"
+       top="16"
+       width="444"
        word_wrap="true">
-        3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
-        APR Copyright (C) 2011 The Apache Software Foundation
-        Collada DOM Copyright 2006 Sony Computer Entertainment Inc.
-        cURL Copyright (C) 1996-2010, Daniel Stenberg, (daniel@haxx.se)
-        DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
-        expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
-        FreeType Copyright (C) 1996-2002, 2006 David Turner, Robert Wilhelm, and Werner Lemberg.
-        GL Copyright (C) 1999-2004 Brian Paul.
-        GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University and David Luebke, Brenden Schubert, University of Virginia.
-        google-perftools Copyright (c) 2005, Google Inc.
-        Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
-        jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
-        jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
-        ogg/vorbis Copyright (C) 2002, Xiphophorus
-        OpenSSL Copyright (C) 1998-2008 The OpenSSL Project.
-        PCRE Copyright (c) 1997-2012 University of Cambridge
-        SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
-        SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
-        xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
-        zlib Copyright (C) 1995-2012 Jean-loup Gailly and Mark Adler.
+3Dconnexion SDK Copyright (C) 1992-2009 3Dconnexion
+APR Copyright (C) 2011 The Apache Software Foundation
+Collada DOM Copyright 2006 Sony Computer Entertainment Inc.
+cURL Copyright (C) 1996-2010, Daniel Stenberg, (daniel@haxx.se)
+DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
+expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
+FMOD Sound System, Copyright (C) Firelight Technologies Pty, Ltd., 1994-2013
+FreeType Copyright (C) 1996-2002, 2006 David Turner, Robert Wilhelm, and Werner Lemberg.
+GL Copyright (C) 1999-2004 Brian Paul.
+GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University and David Luebke, Brenden Schubert, University of Virginia.
+google-perftools Copyright (c) 2005, Google Inc.
+Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
+HACD Copyright (C) 2011, Khaled Mamou (kmamou@gmail.com)
+jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
+jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
+ogg/vorbis Copyright (C) 2002, Xiphophorus
+OpenSSL Copyright (C) 1998-2008 The OpenSSL Project.
+PCRE Copyright (c) 1997-2012 University of Cambridge
+SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
+SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
+zlib Copyright (C) 1995-2012 Jean-loup Gailly and Mark Adler.
+Some icons by Joseph Wain / glyphish.com
 
-        Second Life Viewer uses Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (and its Licensors). All Rights Reserved. See www.havok.com for details.
+Second Life Viewer uses Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (and its Licensors). All Rights Reserved. See www.havok.com for details.
 
-        This software contains source code provided by NVIDIA Corporation.
+This software contains source code provided by NVIDIA Corporation.
 
-        All rights reserved.  See licenses.txt for details.
+All rights reserved.  See licenses.txt for details.
 
-        Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
+Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
       </text_editor>
       </panel>
     </tab_container>

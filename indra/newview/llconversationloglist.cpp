@@ -34,6 +34,9 @@
 #include "llconversationloglistitem.h"
 #include "llviewermenu.h"
 #include "lltrans.h"
+#include "llviewercontrol.h"	// <FS:CR>
+#include "llviewerwindow.h"
+#include "llwindow.h"
 
 static LLDefaultChildRegistry::Register<LLConversationLogList> r("conversation_log_list");
 
@@ -351,6 +354,13 @@ void LLConversationLogList::onCustomAction(const LLSD& userdata)
 	{
 		LLAvatarActions::toggleBlock(selected_conversation_participant_id);
 	}
+	// <FS:CR> Open conversation history externally
+	else if ("chat_history_external" == command_name)
+	{
+		gViewerWindow->getWindow()->openFile(LLLogChat::makeLogFileName(
+			LLConversationLog::getInstance()->getConversation(selected_conversation_session_id)->getHistoryFileName()));
+	}
+	// </FS:CR>
 }
 
 bool LLConversationLogList::isActionEnabled(const LLSD& userdata)

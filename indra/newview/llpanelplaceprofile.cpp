@@ -52,6 +52,9 @@
 #include "llviewercontrol.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
+// [RLVa:KB] - Checked: 2010-09-02 (RLVa-1.2.1b)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 static LLPanelInjector<LLPanelPlaceProfile> t_place_profile("panel_place_profile");
 
@@ -172,29 +175,43 @@ void LLPanelPlaceProfile::resetLocation()
 	mForSalePanel->setVisible(FALSE);
 	mYouAreHerePanel->setVisible(FALSE);
 
+	// <FS:Ansariel> Fix loading icon; don't use translated string!
+	const std::string unknown("Unknown_Icon");
+
 	std::string loading = LLTrans::getString("LoadingData");
 	mParcelOwner->setValue(loading);
 
-	mParcelRatingIcon->setValue(loading);
+// <FS:Ansariel> Fix loading icon; don't use translated string!
+	//mParcelRatingIcon->setValue(loading);
+	mParcelRatingIcon->setValue(unknown);
 	mParcelRatingText->setText(loading);
-	mVoiceIcon->setValue(loading);
+	//mVoiceIcon->setValue(loading);
+	mVoiceIcon->setValue(unknown);
 	mVoiceText->setText(loading);
-	mFlyIcon->setValue(loading);
+	//mFlyIcon->setValue(loading);
+	mFlyIcon->setValue(unknown);
 	mFlyText->setText(loading);
-	mPushIcon->setValue(loading);
+	//mPushIcon->setValue(loading);
+	mPushIcon->setValue(unknown);
 	mPushText->setText(loading);
-	mBuildIcon->setValue(loading);
+	//mBuildIcon->setValue(loading);
+	mBuildIcon->setValue(unknown);
 	mBuildText->setText(loading);
-	mScriptsIcon->setValue(loading);
+	//mScriptsIcon->setValue(loading);
+	mScriptsIcon->setValue(unknown);
 	mScriptsText->setText(loading);
-	mDamageIcon->setValue(loading);
+	//mDamageIcon->setValue(loading);
+	mDamageIcon->setValue(unknown);
 	mDamageText->setText(loading);
-	mSeeAVsIcon->setValue(loading);
+	//mSeeAVsIcon->setValue(loading);
+	mSeeAVsIcon->setValue(unknown);
 	mSeeAVsText->setText(loading);
 
 	mRegionNameText->setValue(loading);
 	mRegionTypeText->setValue(loading);
-	mRegionRatingIcon->setValue(loading);
+	//mRegionRatingIcon->setValue(loading);
+	mRegionRatingIcon->setValue(unknown);
+// </FS:Ansariel> Fix loading icon; don't use translated string!
 	mRegionRatingText->setValue(loading);
 	mRegionOwnerText->setValue(loading);
 	mRegionGroupText->setValue(loading);
@@ -590,7 +607,10 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 	mLastSelectedRegionID = region->getRegionID();
 	LLPanelPlaceInfo::processParcelInfo(parcel_data);
 
-	mYouAreHerePanel->setVisible(is_current_parcel);
+//	mYouAreHerePanel->setVisible(is_current_parcel);
+// [RLVa:KB] - Checked: 2010-09-02 (RLVa-1.4.5) | Added: RLVa-1.2.1
+	mYouAreHerePanel->setVisible(is_current_parcel && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)));
+// [/RLVa:KB]
 	getChild<LLAccordionCtrlTab>("sales_tab")->setVisible(for_sale);
 }
 
@@ -657,6 +677,9 @@ void LLPanelPlaceProfile::updateYouAreHereBanner(void* userdata)
 		BOOL display_banner = gAgent.getRegion()->getRegionID() == self->mLastSelectedRegionID &&
 										LLAgentUI::checkAgentDistance(self->mPosRegion, radius);
 
-		self->mYouAreHerePanel->setVisible(display_banner);
+//		self->mYouAreHerePanel->setVisible(display_banner);
+// [RLVa:KB] - Checked: 2010-09-02 (RLVa-1.4.5) | Added: RLVa-1.2.1
+		self->mYouAreHerePanel->setVisible(display_banner && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)));
+// [/RLVa:KB]
 	}
 }

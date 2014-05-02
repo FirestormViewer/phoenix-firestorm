@@ -154,7 +154,10 @@ void ll_nvapi_init(NvDRSSessionHandle hSession)
 	}
 
 	NvAPI_UnicodeString profile_name;
-	std::string app_name = LLTrans::getString("APP_NAME");
+	// <FS:Ansariel> Use "Second Life" as app name to load the correct profile
+	//std::string app_name = LLTrans::getString("APP_NAME");
+	std::string app_name = "Second Life";
+	// </FS:Ansariel>
 	llutf16string w_app_name = utf8str_to_utf16str(app_name);
 	wsprintf(profile_name, L"%s", w_app_name.c_str());
 	status = NvAPI_DRS_SetCurrentGlobalProfile(hSession, profile_name);
@@ -617,6 +620,7 @@ bool LLAppViewerWin32::initHardwareTest()
 		std::string splash_msg;
 		LLStringUtil::format_map_t args;
 		args["[APP_NAME]"] = LLAppViewer::instance()->getSecondLifeTitle();
+		args["[CURRENT_GRID]"] = LLGridManager::getInstance()->getGridLabel();
 		splash_msg = LLTrans::getString("StartupLoading", args);
 
 		LLSplashScreen::update(splash_msg);
@@ -629,6 +633,15 @@ bool LLAppViewerWin32::initHardwareTest()
 
 	if (gGLManager.mVRAM == 0)
 	{
+		// <FS:Ansariel> FIRE-12671: Force VRAM if DirectX detection is broken
+		S32 forced_video_memory;
+		if ((forced_video_memory = gSavedSettings.getS32("FSForcedVideoMemory")) > 0)
+		{
+			LL_INFOS("AppInit") << "Forcing VRAM to " << forced_video_memory << " MB" << LL_ENDL;
+			gGLManager.mVRAM = forced_video_memory;
+		}
+		else
+		// </FS:Ansariel>
 		gGLManager.mVRAM = gDXHardware.getVRAM();
 	}
 

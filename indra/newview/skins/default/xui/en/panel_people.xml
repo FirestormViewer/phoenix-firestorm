@@ -12,6 +12,9 @@
  top="0"
  width="333">
     <string
+     name="high_server_load"
+     value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
+    <string
      name="no_recent_people"
      value="No recent people. Looking for people to hang out with? Try [secondlife:///app/search/people Search] or the [secondlife:///app/worldmap World Map]." />
     <string
@@ -48,12 +51,29 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
     <string
      name="no_groups_msg"
      value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
-	<string
-	 name="MiniMapToolTipMsg"
-	 value="[REGION](Double-click to open Map, shift-drag to pan)"/>
-	<string
-	 name="AltMiniMapToolTipMsg"
-	 value="[REGION](Double-click to teleport, shift-drag to pan)"/>
+    <string
+     name="MiniMapToolTipMsg"
+     value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
+    <string
+     name="AltMiniMapToolTipMsg"
+     value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+    <panel.string
+     name="empty_list">
+    This contact set is empty.
+    </panel.string>
+    <panel.string
+     name="no_sets">
+    No sets
+    </panel.string>
+    <panel.string
+     name="all_sets">
+    All sets
+    </panel.string>
+    <panel.string
+     name="pseudonyms">
+    Aliases
+    </panel.string>
+
     <tab_container
      bottom="-10"
      follows="all"
@@ -62,7 +82,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
      name="tabs"
      tab_group="1"
      tab_min_width="70"
-     tab_height="30"
+     tab_height="20"
      tab_position="top"
      top="0"
      halign="center"
@@ -71,19 +91,18 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
 <!-- ================================= NEARBY tab =========================== -->
 
         <panel
-         background_opaque="true"
-         background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_opaque="false"
+         background_visible="false"
          bottom="-1"
          follows="all"
-         label="NEARBY"
+         label="Nearby"
          layout="topleft"
          left="0"
          help_topic="people_nearby_tab"
          name="nearby_panel"
          right="-1"
          top="0">
+<!-- FS:Ansariel: Firestorm radar
             <panel
              follows="left|top|right"
              height="27"
@@ -101,10 +120,8 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter People"
                  max_length_chars="300"
                  name="nearby_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
-                 width="178" />
+                 right="-6" />
                 <button
                  commit_callback.function="People.Gear"
                  follows="right"
@@ -183,6 +200,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
              layout="topleft"
              min_dim="100"
              mouse_opaque="false"
+             name="Net Map Panel"
              user_resize="true"
              visibility_control="NearbyListShowMap"
              width="313">
@@ -218,18 +236,27 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                top="2" />
            </layout_panel>
          </layout_stack>
+-->
+            <panel
+             class="fs_panel_radar"
+             name="panel_radar"
+             filename="panel_fs_radar.xml"
+             follows="all"
+             height="441"
+             layout="topleft"
+             left="3"
+             top_pad="3"
+             width="319"/>
         </panel>
 
 <!-- ================================= FRIENDS tab ========================== -->
 
         <panel
-         background_opaque="true"
-       background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_opaque="false"
+       background_visible="false"
          bottom="-1"
          follows="all"
-         label="FRIENDS"
+         label="Friends"
          layout="topleft"
          left="0"
          help_topic="people_friends_tab"
@@ -253,10 +280,8 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter People"
                  max_length_chars="300"
                  name="friends_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
-                 width="177" />
+                 width="144" />
                 <button
                  commit_callback.function="People.Gear"
                  follows="right"
@@ -302,6 +327,20 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                     <commit_callback
                      function="People.AddFriendWizard" />
                 </button>
+                <button
+                 follows="right"
+                 height="25"
+                 image_hover_unselected="Toolbar_Middle_Over"
+                 image_overlay="Permission_Visible_Online"
+                 image_selected="Toolbar_Middle_Selected"
+                 image_unselected="Toolbar_Middle_Off"
+                 control_name="GlobalOnlineStatusToggle"
+                 is_toggle="true"
+                 layout="topleft"
+                 left_pad="2"
+                 name="GlobalOnlineStatusToggle"
+                 tool_tip="Toggle Global Visibility"
+                 width="31" />
                 <dnd_button
                  follows="right"
                  height="25"
@@ -319,70 +358,73 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                      function="People.DelFriend" />
                 </dnd_button>
             </panel>
-            <accordion
-       		 background_visible="true"
-       		 bg_alpha_color="DkGray2"
-       		 bg_opaque_color="DkGray2"
+            <tab_container
+             name="friends_accordion"
              follows="all"
+             background_visible="false"
+             bg_alpha_color="Transparent"
+             bg_opaque_color="Transparent"
              height="408"
              layout="topleft"
-             left="3"
-             name="friends_accordion"
-             right="-2"
-             top_pad="2">
-                <accordion_tab
+             left_delta="-1"
+             tab_group="1"
+             tab_position="top"
+             halign="center"
+             top_pad="0"
+             right="319">
+                <panel
                  layout="topleft"
-                 height="172"
-                 min_height="150"
+                 height="385"
+                 width="317"
                  name="tab_online"
+                 follows="all"
                  title="Online">
                         <avatar_list
                          allow_select="true"
                          follows="all"
-                         height="172"
+                         height="383"
                          layout="topleft"
-                         left="0"
                          multi_select="true"
                          name="avatars_online"
                          show_permissions_granted="true"
-                         top="0"
-                         width="307" />
-                </accordion_tab>
-                <accordion_tab
+                         width="317" />
+                </panel>
+                <panel
                  layout="topleft"
-                 height="173"
+                 height="385"
+                 width="317"
                  name="tab_all"
+                 follows="all"
                  title="All">
                         <avatar_list
                          allow_select="true"
                          follows="all"
-                         height="173"
+                         height="383"
                          layout="topleft"
-                         left="0"
                          multi_select="true"
                          name="avatars_all"
                          show_permissions_granted="true"
+                         width="317" />
+                </panel>
+                <panel
+                 layout="topleft"
+                 height="385"
+                 width="317"
+                 name="tab_suggested_friends"
+                 title="Possible friends">
+                        <avatar_list
+                         ignore_online_status="true"
+                         allow_select="true"
+                         follows="all"
+                         height="383"
+                         layout="topleft"
+                         left="0"
+                         name="suggested_friends"
+                         show_permissions_granted="true"
                          top="0"
                          width="307" />
-                </accordion_tab>
-              <accordion_tab
-               layout="topleft"
-               height="173"
-               name="tab_suggested_friends"
-               title="People you may want to friend">
-                <avatar_list
-                 ignore_online_status="true"
-                 allow_select="true"
-                 follows="all"
-                 height="173"
-                 layout="topleft"
-                 left="0"
-                 name="suggested_friends"
-                 show_permissions_granted="true"
-                 top="0"
-                 width="307" />
-              </accordion_tab>              
-            </accordion>
+                </panel>
+            </tab_container>
             <text
              follows="all"
              height="450"
@@ -396,13 +438,11 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
 <!-- ================================= GROUPS tab =========================== -->
 
         <panel
-         background_opaque="true"
-       background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_opaque="false"
+       background_visible="false"
          bottom="-1"
          follows="all"
-         label="GROUPS"
+         label="Groups"
          layout="topleft"
          left="0"
          help_topic="people_groups_tab"
@@ -430,8 +470,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter Groups"
                  max_length_chars="300"
                  name="groups_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
                  width="177" />
                 <menu_button
@@ -508,7 +546,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                 left="3"
                 use_ellipses="true"
                 name="groupcount">
-              You belong to [COUNT] groups, and can join [REMAINING] more.
+              You belong to [COUNT] groups ([REMAINING] remaining).
             </text>
             <group_list
              allow_select="true" 
@@ -524,13 +562,11 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
 <!-- ================================= RECENT tab =========================== -->
 
         <panel
-         background_opaque="true"
-       background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_opaque="false"
+       background_visible="false"
          follows="all"
          height="383"
-         label="RECENT"
+         label="Recent"
          layout="topleft"
          left="0"
          help_topic="people_recent_tab"
@@ -554,8 +590,6 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
                  label="Filter People"
                  max_length_chars="300"
                  name="recent_filter_input"
-                 text_color="Black"
-                 text_pad_left="10"
                  top="4"
                  width="177" />
                 <button
@@ -637,13 +671,11 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
 <!-- ================================= BLOCKED tab ========================== -->
 
         <panel
-         background_opaque="true"
-         background_visible="true"
-         bg_alpha_color="DkGray"
-         bg_opaque_color="DkGray"
+         background_opaque="false"
+         background_visible="false"
          follows="all"
          height="383"
-         label="BLOCKED"
+         label="Blocked"
          layout="topleft"
          left="0"
          help_topic="people_blocked_tab"
@@ -663,5 +695,33 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
            top="0"
            right="-1" />
         </panel>
+
+<!-- ============================== CONTACT SETS tab ======================= -->
+
+        <panel
+         background_opaque="false"
+         background_visible="false"
+         follows="all"
+         height="383"
+         label="Contact Sets"
+         layout="topleft"
+         left="0"
+         help_topic="people_contact_sets_tab"
+         name="contact_sets_panel"
+         right="-1"
+         top="0">
+            <panel
+             height="383"
+             name="panel_people_contacts_sidetray"
+             filename="panel_people_contact_sets.xml"
+             follows="all"
+             label="Contact Sets"
+             layout="topleft"
+             left="0"
+             font="SansSerifBold"
+             top="0"
+             right="-1" />
+        </panel>
+
     </tab_container>
 </panel>

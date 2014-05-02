@@ -9,8 +9,9 @@
  width="980"
  min_width="980"
  name="Model Preview"
- title="UPLOAD MODEL"
- help_topic="upload_model" >
+ title="Upload Model"
+ help_topic="upload_model">
+  <string name="no_havok">mesh upload with physics</string>
 
   <string name="status_idle"></string>
   <string name="status_parse_error">Error: Dae parsing issue - see log for details.</string>
@@ -184,9 +185,11 @@
              width="135">
                 <item
                  name="Load from file"
+                 label="Load from file"
                  value="Load from file" />
                 <item
                  name="Generate"
+                 label="Generate"
                  value="Generate" />
             </combo_box>
             <line_editor
@@ -219,9 +222,11 @@
              width="130">
                 <item
                  name="Triangle Limit"
+                 label="Triangle Limit"
                  value="Triangle Limit" />
                 <item
                  name="Error Threshold"
+                 label="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
             <spinner
@@ -309,12 +314,15 @@
              width="135">
                 <item
                  name="Load from file"
+                 label="Load from file"
                  value="Load from file" />
                 <item
                  name="Generate"
+                 label="Generate"
                  value="Generate" />
                 <item
                  name="Use LoD above"
+                 label="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
             <line_editor
@@ -348,9 +356,11 @@
              width="130">
                 <item
                  name="Triangle Limit"
+                 label="Triangle Limit"
                  value="Triangle Limit" />
                 <item
                  name="Error Threshold"
+                 label="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
             <spinner
@@ -437,12 +447,15 @@
              width="135">
                 <item
                  name="Load from file"
+                 label="Load from file"
                  value="Load from file" />
                 <item
                  name="Generate"
+                 label="Generate"
                  value="Generate" />
                 <item
                  name="Use LoD above"
+                 label="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
             <line_editor
@@ -476,9 +489,11 @@
              width="130">
                 <item
                  name="Triangle Limit"
+                 label="Triangle Limit"
                  value="Triangle Limit" />
                 <item
                  name="Error Threshold"
+                 label="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
             <spinner
@@ -565,12 +580,15 @@
              width="135">
                 <item
                  name="Load from file"
+                 label="Load from file"
                  value="Load from file" />
                 <item
                  name="Generate"
+                 label="Generate"
                  value="Generate" />
                 <item
                  name="Use LoD above"
+                 label="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
             <line_editor
@@ -604,9 +622,11 @@
              width="130">
                 <item
                  name="Triangle Limit"
+                 label="Triangle Limit"
                  value="Triangle Limit" />
                 <item
                  name="Error Threshold"
+                 label="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
             <spinner
@@ -1178,7 +1198,7 @@
              name="pelvis_offset_label"
              text_color="White"
              top="134"
-             width="200">
+             width="250">
              Z offset (raise or lower avatar):
            </text>
            <spinner

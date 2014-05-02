@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="170"
+ height="217"
  layout="topleft"
  name="build options floater"
  help_topic="build_options_floater"
  save_rect="true"
- title="GRID OPTIONS"
+ title="Grid Options"
  width="264">
     <spinner
      control_name="GridResolution"
@@ -14,14 +14,14 @@
      height="23"
      initial_value="1"
      label="Units (meters)"
-     label_width="130"
+     label_width="172"
      layout="topleft"
      left="10"
      max_val="5"
      min_val="0.01"
      name="GridResolution"
      top_pad="30"
-     width="200" />
+     width="242" />
     <spinner
      control_name="GridDrawSize"
      decimal_digits="1"
@@ -30,14 +30,30 @@
      increment="0.5"
      initial_value="5"
      label="Extents (meters)"
-     label_width="130"
+     label_width="172"
      layout="topleft"
      left_delta="0"
      max_val="50"
      min_val="1"
      name="GridDrawSize"
      top_pad="0"
-     width="200" />
+     width="242" />
+    <spinner
+     control_name="FSBuildToolDecimalPrecision"
+     decimal_digits="0"
+     follows="left|top"
+     height="23"
+     increment="1"
+     initial_value="5"
+     label="Decimal Precision"
+     label_width="172"
+     layout="topleft"
+     left_delta="0"
+     max_val="7"
+     min_val="0"
+     name="DecimalPrecision"
+     top_pad="0"
+     width="242" />
     <check_box
      control_name="GridSubUnit"
      height="16"
@@ -54,6 +70,50 @@
      name="GridCrossSection"
      top_pad="5"
      width="200" />
+<!-- <FS:Cron> FIRE-8882 -->
+    <text
+     type="string"
+     length="1"
+     text_color="White"
+     follows="left|top"
+     height="0"
+     layout="topleft"
+     left="10"
+     top_pad="10"
+     name="Snap on"
+     width="80">
+        Snap on:
+    </text>
+    <radio_group
+     control_name="FSSnapDomain"
+     left="90"
+     height="20"
+     layout="topleft"
+     name="FSSnapDomain"
+     top_pad="0"
+     width="170">
+        <radio_item
+         label="Inside"
+         tool_tip="Snaps set to inside of snapping boundary"
+         name="radio inside"
+         value="1"
+         layout="topleft"
+         left="0"
+         top_delta="20"
+         width="90"
+         height="16" />
+        <radio_item
+         label="Outside"
+         tool_tip="Snaps set to outside of snapping boundary (classic behavior)"
+         name="radio outside"
+         value="0"
+         layout="topleft"
+         left_pad="-10"
+         top_delta="0"
+         width="75"
+         height="16" />
+    </radio_group>
+<!-- </FS:Cron> -->
    <text
          type="string"
          length="1"

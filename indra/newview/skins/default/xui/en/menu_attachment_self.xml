@@ -43,6 +43,26 @@
         <menu_item_call.on_enable
          function="Attachment.EnableDetach" />
     </menu_item_call>
+    <context_menu
+        label="Save as"
+        name="Export Menu">
+        <menu_item_call
+            label="Backup"
+            name="Backup">
+            <menu_item_call.on_click
+            function="Object.Export" />
+            <menu_item_call.on_enable
+            function="Object.EnableExport" />
+        </menu_item_call>
+        <menu_item_call
+            label="Collada"
+            name="Collada">
+            <menu_item_call.on_click
+            function="Object.ExportCollada" />
+            <menu_item_call.on_enable
+            function="Object.EnableExport" />
+        </menu_item_call>
+    </context_menu>
   <menu_item_separator
     layout="topleft" />
 
@@ -68,14 +88,14 @@ name="Stand Up">
      function="Self.EnableStandUp" />
   </menu_item_call>
   <menu_item_call
-  label="My Appearance"
+  label="Change Outfit"
   name="Change Outfit">
     <menu_item_call.on_click
      function="CustomizeAvatar" />
     <menu_item_call.on_enable
      function="Edit.EnableCustomizeAvatar" />
   </menu_item_call>
-  <menu_item_call label="Edit My Outfit"
+  <menu_item_call label="Edit Outfit"
 layout="topleft"
 name="Edit Outfit">
     <menu_item_call.on_click
@@ -83,7 +103,7 @@ name="Edit Outfit">
     <menu_item_call.on_enable
      function="Edit.EnableCustomizeAvatar" />
   </menu_item_call>
-  <menu_item_call label="Edit My Shape"
+  <menu_item_call label="Edit Shape"
     layout="topleft"
     name="Edit My Shape">
     <menu_item_call.on_click
@@ -92,7 +112,7 @@ name="Edit Outfit">
      function="Edit.EnableEditShape" />
   </menu_item_call>
   <menu_item_call
-    label="My Friends"
+    label="Friends"
     layout="topleft"
     name="Friends...">
     <menu_item_call.on_click
@@ -100,7 +120,7 @@ name="Edit Outfit">
      parameter="friends_panel" />
   </menu_item_call>
   <menu_item_call
-   label="My Groups"
+   label="Groups"
    layout="topleft"
    name="Groups...">
     <menu_item_call.on_click
@@ -108,20 +128,12 @@ name="Edit Outfit">
      parameter="groups_panel" />
   </menu_item_call>
   <menu_item_call
-    label="My Profile"
+    label="Profile"
     layout="topleft"
     name="Profile...">
     <menu_item_call.on_click
      function="ShowAgentProfile"
      parameter="agent" />
-  </menu_item_call>
-  <menu_item_call
- label="Debug Textures"
-     name="Debug...">
-    <menu_item_call.on_click
-     function="Avatar.Debug" />
-    <menu_item_call.on_visible
-     function="IsGodCustomerService"/>
   </menu_item_call>
     <menu_item_call
 		 label="Dump XML"
@@ -131,6 +143,47 @@ name="Edit Outfit">
             <menu_item_call.on_visible
              function="Advanced.EnableAppearanceToXML"/>
     </menu_item_call>
+  <menu_item_call 
+      enabled="true"
+      label="Script Info"
+      name="ScriptInfo">
+      <menu_item_call.on_click
+       function="Tools.ScriptInfo" />
+      <menu_item_call.on_enable
+       function="Object.EnableScriptInfo" />
+  </menu_item_call>
+  <menu_item_call
+      enabled="true"
+      label="Derender"
+      name="Derender">
+      <menu_item_call.on_click
+       function="Object.Derender" />
+      <menu_item_call.on_enable
+       function="Object.EnableDerender" />
+  </menu_item_call>
+   <menu_item_call
+      enabled="true"
+      label="Derender + Blacklist"
+      name="DerenderPermanent">
+    <menu_item_call.on_click
+      function="Object.DerenderPermanent" />
+    <menu_item_call.on_enable
+      function="Object.EnableDerender" />
+   </menu_item_call>
+  <menu_item_call
+ label="Show Textures"
+     name="Debug...">
+    <menu_item_call.on_click
+     function="Avatar.Debug" />
+  </menu_item_call>
+  <menu_item_call
+      enabled="true"
+      label="Texture Refresh"
+      layout="topleft"
+      name="Texture Refresh">
+      <menu_item_call.on_click
+       function="Object.TexRefresh" />
+   </menu_item_call>
   <menu_item_separator
   layout="topleft" />
   <menu_item_call

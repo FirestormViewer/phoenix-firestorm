@@ -174,9 +174,13 @@ public:
 		
 		SPECULAR_COLOR,
 		ENVIRONMENT_INTENSITY,
-		
 		AVATAR_MATRIX,
 		AVATAR_TRANSLATION,
+		
+// <FS:CR> Import Vignette from Exodus
+		EXO_RENDER_VIGNETTE,
+		EXO_RENDER_SCREEN,
+// </FS:CR> Import Vignette from Exodus
 
 		WATER_SCREENTEX,
 		WATER_SCREENDEPTH,

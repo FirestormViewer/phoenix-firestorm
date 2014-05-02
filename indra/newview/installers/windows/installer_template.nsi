@@ -58,6 +58,8 @@ RequestExecutionLevel admin	; on Vista we must be admin because we write to Prog
 !include "%%SOURCE%%\installers\windows\lang_tr.nsi"
 !include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
+;;!include "%%SOURCE%%\installers\windowsMUI.nsh"
+
 # *TODO: Move these into the language files themselves
 LangString LanguageCode ${LANG_DANISH}   "da"
 LangString LanguageCode ${LANG_GERMAN}   "de"
@@ -77,23 +79,33 @@ LangString LanguageCode ${LANG_TRADCHINESE}  "zh"
 
 Name ${INSTNAME}
 
-SubCaption 0 $(LicenseSubTitleSetup)	; override "license agreement" text
+LicenseText "Vivox Voice System License Agreement"
+LicenseData "VivoxAUP.txt"
+
+;SubCaption 0 $(LicenseSubTitleSetup)	; override "license agreement" text
 
 BrandingText " "						; bottom of window text
-Icon          %%SOURCE%%\installers\windows\install_icon.ico
-UninstallIcon %%SOURCE%%\installers\windows\uninstall_icon.ico
+Icon          %%SOURCE%%\installers\windows\firestorm_icon.ico
+UninstallIcon %%SOURCE%%\installers\windows\firestorm_icon.ico
 WindowIcon on							; show our icon in left corner
 BGGradient off							; no big background window
 CRCCheck on								; make sure CRC is OK
 InstProgressFlags smooth colored		; new colored smooth look
-ShowInstDetails nevershow				; no details, no "show" button
+; <FS:Ansariel> Expose details button (details hidden by default)
+;ShowInstDetails nevershow				; no details, no "show" button
 SetOverwrite on							; stomp files by default
-AutoCloseWindow true					; after all files install, close window
+; <FS:Ansariel> Don't auto-close so we can check details
+;AutoCloseWindow true					; after all files install, close window
 
 InstallDir "$PROGRAMFILES\${INSTNAME}"
-InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\${INSTNAME}" ""
+InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" ""
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
-Page directory dirPre
+
+Page license
+; <FS:Ansariel> Optional start menu entry
+;Page directory dirPre
+Page directory dirPre "" dirPost
+; </FS:Ansariel>
 Page instfiles
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -107,6 +119,7 @@ Var SHORTCUT_LANG_PARAM ; "--set InstallLanguage de", passes language to viewer
 Var SKIP_DIALOGS        ; set from command line in  .onInit. autoinstall 
                         ; GUI and the defaults.
 Var DO_UNINSTALL_V2     ; If non-null, path to a previous Viewer 2 installation that will be uninstalled.
+Var NO_STARTMENU        ; <FS:Ansariel> Optional start menu entry
 
 ;;; Function definitions should go before file includes, because calls to
 ;;; DLLs like LangDLL trigger an implicit file include, so if that call is at
@@ -116,11 +129,14 @@ Var DO_UNINSTALL_V2     ; If non-null, path to a previous Viewer 2 installation 
 !include "FileFunc.nsh"     ; For GetParameters, GetOptions
 !insertmacro GetParameters
 !insertmacro GetOptions
+!include WinVer.nsh			; for OS and SP detection
+!include x64.nsh
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; After install completes, launch app
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInstSuccess
+Call CheckWindowsServPack				; Warn if not on the latest SP before asking to launch.
     Push $R0	# Option value, unused
 
     StrCmp $SKIP_DIALOGS "true" label_launch 
@@ -151,27 +167,83 @@ Function dirPre
 	Abort
 FunctionEnd    
 
+; <FS:Ansariel> Optional start menu entry
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Make sure we're not on Windows 98 / ME
+;;; Post-directory page callback
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Function dirPost
+    StrCmp $SKIP_DIALOGS "true" label_create_start_menu
+	
+    MessageBox MB_YESNO|MB_ICONQUESTION $(CreateStartMenuEntry) IDYES label_create_start_menu
+    StrCpy $NO_STARTMENU "true"
+
+label_create_start_menu:
+
+FunctionEnd
+; </FS:Ansariel>
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Make sure this computer meets the minimum system requirements.
+; Currently: Windows 32bit XP SP3, 64bit XP SP2 and Server 2003 SP2
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
-	DetailPrint "Checking Windows version..."
-	Call GetWindowsVersion
-	Pop $R0
-	; Just get first two characters, ignore 4.0 part of "NT 4.0"
-	StrCpy $R0 $R0 2
-	; Blacklist certain OS versions
-	StrCmp $R0 "95" win_ver_bad
-	StrCmp $R0 "98" win_ver_bad
-	StrCmp $R0 "ME" win_ver_bad
-	StrCmp $R0 "NT" win_ver_bad
-	Return
-win_ver_bad:
-	StrCmp $SKIP_DIALOGS "true" +2 ; If skip_dialogs is set just install
-            MessageBox MB_YESNO $(CheckWindowsVersionMB) IDNO win_ver_abort
-	Return
-win_ver_abort:
-	Quit
+  ${If} ${AtMostWin2000}
+    MessageBox MB_OK $(CheckWindowsVersionMB)
+    Quit
+  ${EndIf}
+
+  ${If} ${IsWinXP}
+  ${AndIfNot} ${RunningX64}
+  ${AndIfNot} ${IsServicePack} 3
+    MessageBox MB_OK $(CheckWindowsVersionMB)
+    Quit
+  ${EndIf}
+
+  ${If} ${IsWinXP}
+  ${AndIf} ${RunningX64}
+  ${AndIfNot} ${IsServicePack} 2
+    MessageBox MB_OK $(CheckWindowsVersionMB)
+    Quit
+  ${EndIf}
+
+  ${If} ${IsWin2003}
+  ${AndIfNot} ${IsServicePack} 2
+    MessageBox MB_OK $(CheckWindowsVersionMB)
+    Quit
+  ${EndIf}
+FunctionEnd
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Recommend Upgrading Service Pack
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Function CheckWindowsServPack
+  ${If} ${IsWinVista}
+  ${AndIfNot} ${IsServicePack} 2
+    MessageBox MB_OK $(CheckWindowsServPackMB)
+    DetailPrint $(UseLatestServPackDP)
+    Return
+  ${EndIf}
+
+  ${If} ${IsWin2008}
+  ${AndIfNot} ${IsServicePack} 2
+    MessageBox MB_OK $(CheckWindowsServPackMB)
+    DetailPrint $(UseLatestServPackDP)
+    Return
+  ${EndIf}
+
+  ${If} ${IsWin7}
+  ${AndIfNot} ${IsServicePack} 1
+    MessageBox MB_OK $(CheckWindowsServPackMB)
+    DetailPrint $(UseLatestServPackDP)
+    Return
+  ${EndIf}
+
+  ${If} ${IsWin2008R2}
+  ${AndIfNot} ${IsServicePack} 1
+    MessageBox MB_OK $(CheckWindowsServPackMB)
+    DetailPrint $(UseLatestServPackDP)
+    Return
+  ${EndIf}
 FunctionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -208,7 +280,7 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckIfAlreadyCurrent
     Push $0
-    ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\$INSTPROG" "Version"
+    ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Version"
     StrCmp $0 ${VERSION_LONG} 0 continue_install
     StrCmp $SKIP_DIALOGS "true" continue_install
     MessageBox MB_OKCANCEL $(CheckIfCurrentMB) /SD IDOK IDOK continue_install
@@ -222,17 +294,13 @@ FunctionEnd
 ; Checks for CPU valid (must have SSE2 support)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckCPUFlags
-    Call GetWindowsVersion
-    Pop $R0
-    StrCmp $R0 "2000" OK_SSE  ; sse check not available on win2k.
-
     Push $1
     System::Call 'kernel32::IsProcessorFeaturePresent(i) i(10) .r1'
-    IntCmp $1 1 OK_SSE
-    MessageBox MB_OKCANCEL $(MissingSSE2) /SD IDOK IDOK OK_SSE
+    IntCmp $1 1 OK_SSE2
+    MessageBox MB_OKCANCEL $(MissingSSE2) /SD IDOK IDOK OK_SSE2
     Quit
 
-  OK_SSE:
+  OK_SSE2:
     Pop $1
     Return
 FunctionEnd
@@ -274,6 +342,8 @@ FunctionEnd
 ; if it is up to date.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckNetworkConnection
+    ; Disabling this, not needed for Firestorm -AO
+    Return 
     Push $0
     Push $1
     Push $2	# Option value for GetOptions
@@ -311,6 +381,9 @@ FunctionEnd
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Function CheckOldExeName
+  ; <FS:Ansariel> We don't need that
+  Return
+
   IfFileExists "$INSTDIR\SecondLife.exe" CHECKOLDEXE_FOUND CHECKOLDEXE_DONE
 
 CHECKOLDEXE_FOUND:
@@ -330,6 +403,9 @@ FunctionEnd
 Function CheckWillUninstallV2
 
   StrCpy $DO_UNINSTALL_V2 ""
+
+  ; <FS:Ansariel> Don't mess with the official viewer
+  Return
 
   StrCmp $SKIP_DIALOGS "true" 0 CHECKV2_DONE
   StrCmp $INSTDIR "$PROGRAMFILES\SecondLifeViewer2" CHECKV2_DONE ; don't uninstall our own install dir.
@@ -536,10 +612,13 @@ FunctionEnd
 Function RemoveOldXUI
 
 ;; remove old XUI and texture files
-RmDir /r "$INSTDIR\skins\html"
-RmDir /r "$INSTDIR\skins\xui"
-RmDir /r "$INSTDIR\skins\textures"
-Delete "$INSTDIR\skins\*.txt"
+; <FS:Ansariel> FIRE-869: Delete all existing skins prior installation
+;RmDir /r "$INSTDIR\skins\html"
+;RmDir /r "$INSTDIR\skins\xui"
+;RmDir /r "$INSTDIR\skins\textures"
+;Delete "$INSTDIR\skins\*.txt"
+RMDir /r "$INSTDIR\skins"
+; </FS:Ansariel>
 
 FunctionEnd
 
@@ -570,7 +649,7 @@ Push $0
 Push $1
 Push $2
 
-  DetailPrint "Deleting files in Documents and Settings folder"
+  DetailPrint $(DeleteDocumentAndSettingsDP)
 
   StrCpy $0 0 ; Index number used to iterate via EnumRegKey
 
@@ -584,36 +663,42 @@ Push $2
     ; Required since ProfileImagePath is of type REG_EXPAND_SZ
     ExpandEnvStrings $2 $2
 
-        ; Remove all cache and settings files but leave any other .txt files to preserve the chat logs
-;    RMDir /r "$2\Application Data\SecondLife\logs"
-    RMDir /r "$2\Application Data\SecondLife\browser_profile"
-    RMDir /r "$2\Application Data\SecondLife\user_settings"
-    Delete  "$2\Application Data\SecondLife\*.xml"
-    Delete  "$2\Application Data\SecondLife\*.bmp"
-    Delete  "$2\Application Data\SecondLife\search_history.txt"
-    Delete  "$2\Application Data\SecondLife\plugin_cookies.txt"
-    Delete  "$2\Application Data\SecondLife\typed_locations.txt"
+	; If uninstalling a normal install remove everything
+	; Otherwise (preview/dmz etc) just remove cache
+
+        # Local Settings directory is the cache, there is no "cache" subdir
+        RMDir /r "$2\Local Settings\Application Data\Firestorm\user_settings"
+	RMDir /r "$2\Local Settings\Application Data\Firestorm\data"
+        # Vista version of the same
+        RMDir /r "$2\AppData\Local\Firestorm\user_settings"
+	RMDir /r "$2\AppData\Local\Firestorm\data"
+    Delete  "$2\Application Data\Firestorm\*.bmp"
+    Delete  "$2\Application Data\Firestorm\search_history.txt"
+    Delete  "$2\Application Data\Firestorm\plugin_cookies.txt"
+    Delete  "$2\Application Data\Firestorm\typed_locations.txt"
 
   CONTINUE:
     IntOp $0 $0 + 1
     Goto LOOP
   DONE:
+  
+  MessageBox MB_OK $(UnChatlogsNoticeMB)
 
 Pop $2
 Pop $1
 Pop $0
 
-; Delete files in Documents and Settings\All Users\SecondLife
+; Delete files in Documents and Settings\All Users\Firestorm
 Push $0
   ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
   StrCmp $0 "" +2
-  RMDir /r "$0\SecondLife"
+  RMDir /r "$0\Firestorm"
 Pop $0
 
 ; Delete files in C:\Windows\Application Data\SecondLife
 ; If the user is running on a pre-NT system, Application Data lives here instead of
 ; in Documents and Settings.
-RMDir /r "$WINDIR\Application Data\SecondLife"
+RMDir /r "$WINDIR\Application Data\Firestorm"
 
 FunctionEnd
 
@@ -653,10 +738,10 @@ FunctionEnd
 ;
 Function un.RemovePassword
 
-DetailPrint "Removing Second Life password"
+DetailPrint $(UnRemovePasswordsDP)
 
 SetShellVarContext current
-Delete "$APPDATA\SecondLife\user_settings\password.dat"
+Delete "$APPDATA\Firestorm\user_settings\password.dat"
 SetShellVarContext all
 
 FunctionEnd
@@ -723,7 +808,8 @@ FunctionEnd
 ;;; Uninstall settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 UninstallText $(UninstallTextMsg)
-ShowUninstDetails show
+;<FS:TM> Expose detail button instead of always showing detailed uninstall info
+;ShowUninstDetails show 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Uninstall section
@@ -743,8 +829,11 @@ SetShellVarContext all
 Call un.CloseSecondLife
 
 ; Clean up registry keys and subkeys (these should all be !defines somewhere)
-DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\$INSTPROG"
+DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG"
 DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG"
+
+; <FS:ND> BUG-2707 Remove entry that disabled SEHOP
+DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE"
 
 ; Clean up shortcuts
 Delete "$SMPROGRAMS\$INSTSHORTCUT\*.*"
@@ -768,109 +857,24 @@ Call un.ProgramFiles
 
 SectionEnd 				; end of uninstall section
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; (From the NSIS documentation, JC)
-; GetWindowsVersion
-;
-; Based on Yazno's function, http://yazno.tripod.com/powerpimpit/
-; Updated by Joost Verburg
-;
-; Returns on top of stack
-;
-; Windows Version (95, 98, ME, NT x.x, 2000, XP, 2003)
-; or
-; '' (Unknown Windows Version)
-;
-; Usage:
-;   Call GetWindowsVersion
-;   Pop $R0
-;   ; at this point $R0 is "NT 4.0" or whatnot
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function GetWindowsVersion
- 
-   Push $R0
-   Push $R1
- 
-   ReadRegStr $R0 HKLM \
-   "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
-
-   IfErrors 0 lbl_winnt
-   
-   ; we are not NT
-   ReadRegStr $R0 HKLM \
-   "SOFTWARE\Microsoft\Windows\CurrentVersion" VersionNumber
- 
-   StrCpy $R1 $R0 1
-   StrCmp $R1 '4' 0 lbl_error
- 
-   StrCpy $R1 $R0 3
- 
-   StrCmp $R1 '4.0' lbl_win32_95
-   StrCmp $R1 '4.9' lbl_win32_ME lbl_win32_98
- 
-   lbl_win32_95:
-     StrCpy $R0 '95'
-   Goto lbl_done
- 
-   lbl_win32_98:
-     StrCpy $R0 '98'
-   Goto lbl_done
- 
-   lbl_win32_ME:
-     StrCpy $R0 'ME'
-   Goto lbl_done
- 
-   lbl_winnt:
- 
-   StrCpy $R1 $R0 1
- 
-   StrCmp $R1 '3' lbl_winnt_x
-   StrCmp $R1 '4' lbl_winnt_x
- 
-   StrCpy $R1 $R0 3
- 
-   StrCmp $R1 '5.0' lbl_winnt_2000
-   StrCmp $R1 '5.1' lbl_winnt_XP
-   StrCmp $R1 '5.2' lbl_winnt_2003 lbl_error
- 
-   lbl_winnt_x:
-     StrCpy $R0 "NT $R0" 6
-   Goto lbl_done
- 
-   lbl_winnt_2000:
-     Strcpy $R0 '2000'
-   Goto lbl_done
- 
-   lbl_winnt_XP:
-     Strcpy $R0 'XP'
-   Goto lbl_done
- 
-   lbl_winnt_2003:
-     Strcpy $R0 '2003'
-   Goto lbl_done
- 
-   lbl_error:
-     Strcpy $R0 ''
-   lbl_done:
- 
-   Pop $R1
-   Exch $R0
- 
-FunctionEnd
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  Note: to add new languages, add a language file include to the list 
 ;;  at the top of this file, add an entry to the menu and then add an 
 ;;  entry to the language ID selector below
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function .onInit
+Call CheckWindowsVersion		;Check the version of windows we are installing on
     Push $0
     ${GetParameters} $COMMANDLINE              ; get our command line
 
     ${GetOptions} $COMMANDLINE "/SKIP_DIALOGS" $0   
-    IfErrors +2 0 ; If error jump past setting SKIP_DIALOGS
+    ; <FS:Ansariel> Auto-close if auto-updating
+    ; IfErrors +2 0 ; If error jump past setting SKIP_DIALOGS
+    ;    StrCpy $SKIP_DIALOGS "true"
+    IfErrors +3 0 ; If error jump past setting SKIP_DIALOGS
         StrCpy $SKIP_DIALOGS "true"
+        SetAutoClose true
+    ; </FS:Ansariel>
 
     ${GetOptions} $COMMANDLINE "/LANGID=" $0   ; /LANGID=1033 implies US English
     ; If no language (error), then proceed
@@ -882,15 +886,17 @@ Function .onInit
 lbl_configure_default_lang:
     ; If we currently have a version of SL installed, default to the language of that install
     ; Otherwise don't change $LANGUAGE and it will default to the OS UI language.
-    ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\${INSTNAME}" "InstallerLanguage"
+    ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" "InstallerLanguage"
     IfErrors +2 0 ; If error skip the copy instruction 
 	StrCpy $LANGUAGE $0
 
     ; For silent installs, no language prompt, use default
     IfSilent lbl_return
     StrCmp $SKIP_DIALOGS "true" lbl_return
-  
-lbl_build_menu:
+
+; <FS:Ansariel> Commented out; Warning in build log about not being used
+;lbl_build_menu:
+; </FS:Ansariel> Commented out; Warning in build log about not being used
 	Push ""
     # Use separate file so labels can be UTF-16 but we can still merge changes
     # into this ASCII file. JC
@@ -904,7 +910,7 @@ lbl_build_menu:
     StrCpy $LANGUAGE $0
 
 	; save language in registry		
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\${INSTNAME}" "InstallerLanguage" $LANGUAGE
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" "InstallerLanguage" $LANGUAGE
 lbl_return:
     Pop $0
     Return
@@ -914,7 +920,7 @@ FunctionEnd
 Function un.onInit
 	; read language from registry and set for uninstaller
     ; Key will be removed on successful uninstall
-	ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\${INSTNAME}" "InstallerLanguage"
+	ReadRegStr $0 HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\${INSTNAME}" "InstallerLanguage"
     IfErrors lbl_end
 	StrCpy $LANGUAGE $0
 lbl_end:
@@ -933,13 +939,12 @@ StrCpy $INSTPROG "${INSTNAME}"
 StrCpy $INSTEXE "${INSTEXE}"
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
-Call CheckWindowsVersion		; warn if on Windows 98/ME
-Call CheckCPUFlags			; Make sure we have SSE2 support
+Call CheckCPUFlags				; Make sure we have SSE2 support
 Call CheckIfAdministrator		; Make sure the user can install/uninstall
 Call CheckIfAlreadyCurrent		; Make sure that we haven't already installed this version
 Call CloseSecondLife			; Make sure we're not running
 Call CheckNetworkConnection		; ping secondlife.com
-Call CheckWillUninstallV2               ; See if a V2 install exists and will be removed.
+Call CheckWillUninstallV2		; See if a V2 install exists and will be removed.
 Call CheckOldExeName                    ; Clean up a previous version of the exe
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -973,6 +978,10 @@ StrCpy $SHORTCUT_LANG_PARAM "--set InstallLanguage $(LanguageCode)"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Shortcuts in start menu
+; <FS:Ansariel> Optional start menu entry
+StrCmp $NO_STARTMENU "true" label_skip_start_menu
+; </FS:Ansariel>
+
 CreateDirectory	"$SMPROGRAMS\$INSTSHORTCUT"
 SetOutPath "$INSTDIR"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
@@ -985,11 +994,15 @@ WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
 WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Your Account.url" \
 				"InternetShortcut" "URL" \
 				"http://www.secondlife.com/account/"
-WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Scripting Language Help.url" \
+WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\LSL Scripting Language Help.url" \
 				"InternetShortcut" "URL" \
                 "http://wiki.secondlife.com/wiki/LSL_Portal"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\Uninstall $INSTSHORTCUT.lnk" \
 				'"$INSTDIR\uninst.exe"' ''
+
+; <FS:Ansariel> Optional start menu entry
+label_skip_start_menu:
+; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Other shortcuts
@@ -1004,12 +1017,24 @@ CreateShortCut "$INSTDIR\Uninstall $INSTSHORTCUT.lnk" \
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Write registry
-WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\$INSTPROG" "" "$INSTDIR"
-WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\$INSTPROG" "Version" "${VERSION_LONG}"
-WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\$INSTPROG" "Shortcut" "$INSTSHORTCUT"
-WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Linden Research, Inc.\$INSTPROG" "Exe" "$INSTEXE"
+WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "" "$INSTDIR"
+WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Version" "${VERSION_LONG}"
+WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Shortcut" "$INSTSHORTCUT"
+WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Firestorm Project\$INSTPROG" "Exe" "$INSTEXE"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG (remove only)"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" '"$INSTDIR\uninst.exe"'
+; <FS:Ansariel> Add additional data for uninstall list in Windows
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "Publisher" "The Phoenix Firestorm Project, Inc."
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "http://www.firestormviewer.org"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "http://www.firestormviewer.org/downloads"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "HelpLink" "http://www.firestormviewer.org/support"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayVersion" "${VERSION_LONG}"
+WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x00030C00" ; 195 MB
+; </FS:Ansariel>
+
+; <FS:ND> BUG-2707 Disable SEHOP for installed viewer.
+WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\$INSTEXE" "DisableExceptionChainValidation" 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Write URL registry info
@@ -1025,6 +1050,13 @@ WriteRegStr HKEY_CLASSES_ROOT "x-grid-location-info\DefaultIcon" "" '"$INSTDIR\$
 ;; URL param must be last item passed to viewer, it ignores subsequent params
 ;; to avoid parameter injection attacks.
 WriteRegExpandStr HKEY_CLASSES_ROOT "x-grid-location-info\shell\open\command" "" '"$INSTDIR\$INSTEXE" -url "%1"'
+
+; <FS:CR> Register hop:// protocol registry info
+WriteRegStr HKEY_CLASSES_ROOT "hop" "(default)" "URL:Second Life"
+WriteRegStr HKEY_CLASSES_ROOT "hop" "URL Protocol" ""
+WriteRegStr HKEY_CLASSES_ROOT "hop\DefaultIcon" "" '"$INSTDIR\$INSTEXE"'
+WriteRegExpandStr HKEY_CLASSES_ROOT "hop\shell\open\command" "" '"$INSTDIR\$INSTEXE" -url "%1"'
+; </FS:CR>
 
 ; write out uninstaller
 WriteUninstaller "$INSTDIR\uninst.exe"

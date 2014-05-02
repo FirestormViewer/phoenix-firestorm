@@ -55,6 +55,13 @@
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "lltrans.h"
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
+#ifdef OPENSIM
+#include "llviewernetwork.h"	// <FS:CR> Aurora Sim
+#endif
 
 #include "llglheaders.h"
 
@@ -108,6 +115,7 @@ std::map<std::string,std::string> LLWorldMapView::sStringsMap;
 const F32 DRAW_TEXT_THRESHOLD = 96.f;		// Don't draw text under that resolution value (res = width region in meters)
 const S32 DRAW_SIMINFO_THRESHOLD = 3;		// Max level for which we load or display sim level information (level in LLWorldMipmap sense)
 const S32 DRAW_LANDFORSALE_THRESHOLD = 2;	// Max level for which we load or display land for sale picture data (level in LLWorldMipmap sense)
+const S32 DRAW_MATURITY_THRESHOLD = 1;		// Ansariel: Max level for which the maturity level will be shown (level in LLWorldMipmap sense)
 
 // When on, draw an outline for each mipmap tile gotten from S3
 #define DEBUG_DRAW_TILE 0
@@ -121,7 +129,9 @@ void LLWorldMapView::initClass()
 	sAvatarLevelImage =		LLUI::getUIImage("map_avatar_32.tga");
 	sAvatarAboveImage =		LLUI::getUIImage("map_avatar_above_32.tga");
 	sAvatarBelowImage =		LLUI::getUIImage("map_avatar_below_32.tga");
-	sAvatarUnknownImage =	LLUI::getUIImage("map_avatar_unknown_32.tga");
+	// <FS:Ansariel> Use our own, established indicator
+	//sAvatarUnknownImage =	LLUI::getUIImage("map_avatar_unknown_32.tga");
+	sAvatarUnknownImage =	LLUI::getUIImage("map_avatar_unknown.tga");
 
 	sHomeImage =			LLUI::getUIImage("map_home.tga");
 	sTelehubImage = 		LLUI::getUIImage("map_telehub.tga");
@@ -139,7 +149,10 @@ void LLWorldMapView::initClass()
 	sForSaleAdultImage =    LLUI::getUIImage("icon_for_sale_adult.tga");
 	
 	sStringsMap["loading"] = LLTrans::getString("texture_loading");
+	
 	sStringsMap["offline"] = LLTrans::getString("worldmap_offline");
+	// Missing translation for agent position
+	sStringsMap["agent_position"] = LLTrans::getString("worldmap_agent_position");
 }
 
 // static
@@ -295,6 +308,17 @@ void LLWorldMapView::draw()
 {
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
 	
+	// Ansariel: Replaced slow calls to gSavedSettings with faster LLCachedControl
+	static LLCachedControl<bool> mapShowInfohubs(gSavedSettings, "MapShowInfohubs");
+	static LLCachedControl<bool> mapShowTelehubs(gSavedSettings, "MapShowTelehubs");
+	static LLCachedControl<bool> mapShowLandForSale(gSavedSettings, "MapShowLandForSale");
+	static LLCachedControl<bool> mapShowEvents(gSavedSettings, "MapShowEvents");
+	static LLCachedControl<bool> mapShowPeople(gSavedSettings, "MapShowPeople");
+	static LLCachedControl<bool> showMatureEvents(gSavedSettings, "ShowMatureEvents");
+	static LLCachedControl<bool> showAdultEvents(gSavedSettings, "ShowAdultEvents");
+	static LLCachedControl<bool> drawAdvancedRegionInfo(gSavedSettings, "FSAdvancedWorldmapRegionInfo");
+	static LLCachedControl<bool> sDrawRegionGridCoordinates(gSavedSettings, "FSShowRegionGridCoordinates", false);
+
 	LLTextureView::clearDebugImages();
 
 	F64 current_time = LLTimer::getElapsedSeconds();
@@ -334,7 +358,16 @@ void LLWorldMapView::draw()
 	gGL.setColorMask(true, true);
 
 	// Draw the image tiles
+// <FS:CR> Aurora Sim
+#ifdef OPENSIM
+	if(!LLGridManager::getInstance()->isInAuroraSim()) {
+		drawMipmap(width, height);
+	}
+#else
 	drawMipmap(width, height);
+#endif //OPENSIM
+// </FS:CR> Aurora Sim
+
 	gGL.flush();
 
 	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
@@ -358,8 +391,12 @@ void LLWorldMapView::draw()
 		// When the view isn't panned, 0,0 = center of rectangle
 		F32 bottom =    sPanY + half_height + relative_y;
 		F32 left =      sPanX + half_width + relative_x;
-		F32 top =       bottom + sMapScale ;
-		F32 right =     left + sMapScale ;
+// <FS:CR> Aurora Sim
+		//F32 top =       bottom + sMapScale ;
+		//F32 right =     left + sMapScale ;
+		F32 top =		bottom+ (sMapScale * (info->mSizeY / REGION_WIDTH_METERS));
+		F32 right =		left  + (sMapScale * (info->mSizeX / REGION_WIDTH_METERS));
+// </FS:CR> Aurora Sim
 
 		// Discard if region is outside the screen rectangle (not visible on screen)
 		if ((top < 0.f)   || (bottom > height) ||
@@ -413,15 +450,28 @@ void LLWorldMapView::draw()
 			gGL.end();
 		}
 		 **********************/
-		else if (gSavedSettings.getBOOL("MapShowLandForSale") && (level <= DRAW_LANDFORSALE_THRESHOLD))
+// <FS:CR> Aurora Sim
+#ifdef OPENSIM
+		else if ((mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD)) || LLGridManager::getInstance()->isInAuroraSim())
+#else
+		else if (mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD))
+#endif //OPENSIM
 		{
 			// Draw the overlay image "Land for Sale / Land for Auction"
 			LLViewerFetchedTexture* overlayimage = info->getLandForSaleImage();
 			if (overlayimage)
 			{
 				// Inform the fetch mechanism of the size we need
-				S32 draw_size = llround(sMapScale);
-				overlayimage->setKnownDrawSize(llround(draw_size * LLUI::getScaleFactor().mV[VX]), llround(draw_size * LLUI::getScaleFactor().mV[VY]));
+// <FS:CR> Aurora Sim
+				//S32 draw_size = llround(sMapScale);
+				//overlayimage->setKnownDrawSize(llround(draw_size * LLUI::getScaleFactor().mV[VX]), llround(draw_size * LLUI::getScaleFactor().mV[VY]));
+				S32 x_draw_size = llround(sMapScale);
+				S32 y_draw_size = llround(sMapScale);
+				x_draw_size *= (info->mSizeX / REGION_WIDTH_METERS);
+				y_draw_size *= (info->mSizeY / REGION_WIDTH_METERS);
+
+				overlayimage->setKnownDrawSize(llround(x_draw_size * LLUI::getScaleFactor().mV[VX]), llround(y_draw_size * LLUI::getScaleFactor().mV[VY]));
+// </FS:CR> Aurora Sim
 				// Draw something whenever we have enough info
 				if (overlayimage->hasGLTexture())
 				{
@@ -452,15 +502,39 @@ void LLWorldMapView::draw()
 		{
 			LLFontGL* font = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Small", LLFontGL::BOLD));
 			std::string mesg;
-			if (info->isDown())
-			{
-				mesg = llformat( "%s (%s)", info->getName().c_str(), sStringsMap["offline"].c_str());
-			}
-			else
 			{
 				mesg = info->getName();
+
+				if (drawAdvancedRegionInfo)
+				{
+					// Only show agent count when region is online
+					if (!info->isDown())
+					{
+						S32 agent_count = info->getAgentCount();
+						LLViewerRegion *region = gAgent.getRegion();
+						if (region && region->getHandle() == info->getHandle())
+						{
+							++agent_count; // Bump by 1 if we're in this region
+						}
+						if (agent_count > 0)
+						{
+							mesg += llformat(" (%d)", agent_count);
+						}
+					}
+				
+					// Let the LLSimInfo instance do the translation;
+					// it knows everything needed for this, including
+					// offline status!
+					if (level <= DRAW_MATURITY_THRESHOLD)
+					{
+						mesg += llformat(" (%s)", info->getAccessString().c_str());
+					}
+				}
 			}
-			if (!mesg.empty())
+//			if (!mesg.empty())
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+			if ( (!mesg.empty()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
+// [/RLVa:KB]
 			{
 				font->renderUTF8(
 					mesg, 0,
@@ -468,6 +542,17 @@ void LLWorldMapView::draw()
 					LLColor4::white,
 					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW);
 			}
+// <FS:CR> Show the grid coordinates (in units of regions)
+			if (sDrawRegionGridCoordinates)
+			{
+				LLVector3d origin = info->getGlobalOrigin();
+				std::ostringstream coords;
+				coords << "(" << origin.mdV[VX] / REGION_WIDTH_METERS << "," << origin.mdV[VY] / REGION_WIDTH_METERS << ")";
+				//mesg += coords.str();
+				font->renderUTF8(coords.str(), 0, llfloor(left + 3), llfloor(bottom + 16), LLColor4::white,
+								 LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::DROP_SHADOW);
+			}
+// </FS:CR>
 		}
 	}
 
@@ -487,12 +572,12 @@ void LLWorldMapView::draw()
 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
 	// Draw item infos if we're not zoomed out too much and there's something to draw
-	if ((level <= DRAW_SIMINFO_THRESHOLD) && (gSavedSettings.getBOOL("MapShowInfohubs") || 
-											  gSavedSettings.getBOOL("MapShowTelehubs") ||
-											  gSavedSettings.getBOOL("MapShowLandForSale") || 
-											  gSavedSettings.getBOOL("MapShowEvents") || 
-											  gSavedSettings.getBOOL("ShowMatureEvents") ||
-											  gSavedSettings.getBOOL("ShowAdultEvents")))
+	if ((level <= DRAW_SIMINFO_THRESHOLD) && (mapShowInfohubs || 
+											  mapShowTelehubs ||
+											  mapShowLandForSale || 
+											  mapShowEvents || 
+											  showMatureEvents ||
+											  showAdultEvents))
 	{
 		drawItems();
 	}
@@ -514,7 +599,7 @@ void LLWorldMapView::draw()
 		drawTracking(pos_global,
 					 lerp(LLColor4::yellow, LLColor4::orange, 0.4f),
 					 TRUE,
-					 "You are here",
+					 sStringsMap["agent_position"].c_str(),
 					 "",
 					 LLFontGL::getFontSansSerifSmall()->getLineHeight()); // offset vertically by one line, to avoid overlap with target tracking
 	}
@@ -524,7 +609,7 @@ void LLWorldMapView::draw()
 
 	// Draw icons for the avatars in each region.
 	// Drawn this after the current agent avatar so one can see nearby people
-	if (gSavedSettings.getBOOL("MapShowPeople") && (level <= DRAW_SIMINFO_THRESHOLD))
+	if (mapShowPeople && (level <= DRAW_SIMINFO_THRESHOLD))
 	{
 		drawAgents();
 	}
@@ -795,8 +880,15 @@ void LLWorldMapView::drawItems()
 	bool mature_enabled = gAgent.canAccessMature();
 	bool adult_enabled = gAgent.canAccessAdult();
 
-    BOOL show_mature = mature_enabled && gSavedSettings.getBOOL("ShowMatureEvents");
-	BOOL show_adult = adult_enabled && gSavedSettings.getBOOL("ShowAdultEvents");
+	// Ansariel: Replaced slow calls to gSavedSettings with faster LLCachedControl
+	static LLCachedControl<bool> mapShowInfohubs(gSavedSettings, "MapShowInfohubs");
+	static LLCachedControl<bool> mapShowTelehubs(gSavedSettings, "MapShowTelehubs");
+	static LLCachedControl<bool> mapShowLandForSale(gSavedSettings, "MapShowLandForSale");
+	static LLCachedControl<bool> mapShowEvents(gSavedSettings, "MapShowEvents");
+	static LLCachedControl<bool> showMatureEvents(gSavedSettings, "ShowMatureEvents");
+	static LLCachedControl<bool> showAdultEvents(gSavedSettings, "ShowAdultEvents");
+    bool show_mature = mature_enabled && showMatureEvents;
+	bool show_adult = adult_enabled && showAdultEvents;
 
 	for (handle_list_t::iterator iter = mVisibleRegions.begin(); iter != mVisibleRegions.end(); ++iter)
 	{
@@ -807,17 +899,17 @@ void LLWorldMapView::drawItems()
 			continue;
 		}
 		// Infohubs
-		if (gSavedSettings.getBOOL("MapShowInfohubs"))
+		if (mapShowInfohubs)
 		{
 			drawGenericItems(info->getInfoHub(), sInfohubImage);
 		}
 		// Telehubs
-		if (gSavedSettings.getBOOL("MapShowTelehubs"))
+		if (mapShowTelehubs)
 		{
 			drawGenericItems(info->getTeleHub(), sTelehubImage);
 		}
 		// Land for sale
-		if (gSavedSettings.getBOOL("MapShowLandForSale"))
+		if (mapShowLandForSale)
 		{
 			drawGenericItems(info->getLandForSale(), sForSaleImage);
 			// for 1.23, we're showing normal land and adult land in the same UI; you don't
@@ -829,7 +921,7 @@ void LLWorldMapView::drawItems()
 			}
 		}
 		// PG Events
-		if (gSavedSettings.getBOOL("MapShowEvents"))
+		if (mapShowEvents)
 		{
 			drawGenericItems(info->getPGEvent(), sEventImage);
 		}
@@ -979,6 +1071,7 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& 
 		}
 	}
 	else if (LLTracker::getTrackingStatus() == LLTracker::TRACKING_LOCATION &&
+		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_AVATAR && // Ansariel: For avatar tracking feature
 		LLTracker::getTrackedLocationType() != LLTracker::LOCATION_NOTHING)
 	{
 		drawTrackingCircle( getRect(), x, y, color, 3, 15 );
@@ -994,7 +1087,10 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& 
 	text_x = llclamp(text_x, half_text_width + TEXT_PADDING, getRect().getWidth() - half_text_width - TEXT_PADDING);
 	text_y = llclamp(text_y + vert_offset, TEXT_PADDING + vert_offset, getRect().getHeight() - font->getLineHeight() - TEXT_PADDING - vert_offset);
 
-	if (label != "")
+//	if (label != "")
+// [RLVa:KB] - Checked: 2009-07-04 (RLVa-1.4.5) | Added: RLVa-1.0.0
+	if ( (label != "") && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) )
+// [/RLVa:KB]
 	{
 		font->renderUTF8(
 			label, 0,
@@ -1054,7 +1150,12 @@ BOOL LLWorldMapView::handleToolTip( S32 x, S32 y, MASK mask )
 	{
 		LLViewerRegion *region = gAgent.getRegion();
 
-		std::string message = llformat("%s (%s)", info->getName().c_str(), info->getAccessString().c_str());
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.4.5) | Modified: RLVa-1.4.5
+		std::string message = llformat("%s (%s)", 
+			(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? info->getName().c_str() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION).c_str(), 
+			info->getAccessString().c_str());
+// [/RLVa:KB]
+//		std::string message = llformat("%s (%s)", info->getName().c_str(), info->getAccessString().c_str());
 
 		if (!info->isDown())
 		{
@@ -1770,7 +1871,9 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 					// Teleport if we got a valid location
 					LLVector3d pos_global = viewPosToGlobal(x,y);
 					LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
-					if (sim_info && !sim_info->isDown())
+					// <FS:Ansariel> Doubleclick teleport option for worldmap
+					//if (sim_info && !sim_info->isDown())
+					if (sim_info && !sim_info->isDown() && gSavedSettings.getBOOL("FSWorldMapDoubleclickTeleport"))
 					{
 						gAgent.teleportViaLocation( pos_global );
 					}

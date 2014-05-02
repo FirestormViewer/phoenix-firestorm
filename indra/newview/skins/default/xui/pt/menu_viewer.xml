@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
 	<menu label="Eu" name="Me">
-		<menu_item_call label="Perfil..." name="Profile"/>
-		<menu_item_call label="Aparência..." name="ChangeOutfit"/>
-		<menu_item_call label="Selecione um avatar..." name="Avatar Picker"/>
-		<menu_item_check label="Inventário..." name="Inventory"/>
-		<menu_item_call label="Nova janela de inventário" name="NewInventoryWindow"/>
-		<menu_item_call label="Lugares..." name="Places"/>
-		<menu_item_call label="Destaques..." name="Picks"/>
-		<menu_item_call label="Controles da câmera..." name="Camera Controls"/>
+		<menu_item_call label="Preferências" name="Preferences"/>
+		<menu_item_call label="Meu painel" name="Manage My Account">
+			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=pt"/>
+		</menu_item_call>
+		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Meu perfil" name="Profile"/>
+		<menu_item_call label="Minha aparência" name="ChangeOutfit"/>
+		<menu_item_check label="Meu inventário" name="Inventory"/>
+		<menu_item_check label="Meu inventário" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Meus gestos" name="Gestures"/>
+		<menu_item_check label="Minha voz" name="ShowVoice"/>
 		<menu label="Movimentos" name="Movement">
 			<menu_item_call label="Sentar" name="Sit Down Here"/>
 			<menu_item_check label="Voar" name="Fly"/>
@@ -153,19 +156,19 @@
 			<menu_item_call label="Opções de grade" name="Grid Options"/>
 		</menu>
 		<menu label="Upload" name="Upload">
-			<menu_item_call label="Imagem (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Som (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animação (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Imagem ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Som ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animação ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modelar..." name="Upload Model"/>
-			<menu_item_call label="Volume (L$[COST] por arquivo)..." name="Bulk Upload"/>
+			<menu_item_call label="Volume ([COST] por arquivo)..." name="Bulk Upload"/>
 			<menu_item_call label="Autorizações de upload padrão" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Desfazer" name="Undo"/>
 		<menu_item_call label="Repetir" name="Redo"/>
 	</menu>
 	<menu label="Ajuda" name="Help">
-		<menu_item_call label="Como..." name="How To"/>
-		<menu_item_call label="[SECOND_LIFE] Ajuda" name="Second Life Help"/>
+		<menu_item_call label="[CURRENT_GRID] Ajuda" name="current_grid_help"/>
+		<menu_item_check label="Ativar dicas" name="Enable Hints"/>
 		<menu_item_call label="Guia do usuário" name="User’s guide"/>
 		<menu_item_call label="Base de conhecimento" name="Knowledge Base"/>
 		<menu_item_call label="Wiki" name="Wiki"/>
@@ -175,6 +178,7 @@
 		<menu_item_call label="Blogs do [SECOND_LIFE]" name="Second Life Blogs"/>
 		<menu_item_call label="Denunciar abuso" name="Report Abuse"/>
 		<menu_item_call label="Relatar bug" name="Report Bug"/>
+        <menu_item_call label="Empurrões, trombadas e tapas" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="Sobre [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="Avançado" name="Advanced">
@@ -317,7 +321,6 @@
 			<menu_item_check label="Pausar avatar" name="AgentPause"/>
 			<menu_item_call label="Drop a Packet" name="Drop a Packet"/>
 		</menu>
-		<menu_item_call label="Empurrões, trombadas e tapas" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Mundo" name="DevelopWorld">
 			<menu_item_check label="Impor sobre sol de simulação" name="Sim Sun Override"/>
 			<menu_item_check label="Clima fixo" name="Fixed Weather"/>

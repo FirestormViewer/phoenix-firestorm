@@ -56,9 +56,12 @@
 #include "lltoggleablemenu.h"
 #include "llviewermenu.h"
 #include "llviewerregion.h"
+// [RLVa:KB]
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Not yet implemented; need to remove buildPanel() from constructor when we switch
-//static LLRegisterPanelClassWrapper<LLLandmarksPanel> t_landmarks("panel_landmarks");
+//static LLPanelInjector<LLLandmarksPanel> t_landmarks("panel_landmarks");
 
 static const std::string OPTIONS_BUTTON_NAME = "options_gear_btn";
 static const std::string ADD_BUTTON_NAME = "add_btn";
@@ -233,23 +236,40 @@ BOOL LLLandmarksPanel::postBuild()
 // virtual
 void LLLandmarksPanel::onSearchEdit(const std::string& string)
 {
+	// <FS:Ansariel> Fix for landmark search (FIRE-6611): We don't have
+	//               accordion tabs but normal tabs!
 	// give FolderView a chance to be refreshed. So, made all accordions visible
-	for (accordion_tabs_t::const_iterator iter = mAccordionTabs.begin(); iter != mAccordionTabs.end(); ++iter)
+	//for (accordion_tabs_t::const_iterator iter = mAccordionTabs.begin(); iter != mAccordionTabs.end(); ++iter)
+	//{
+	//	LLAccordionCtrlTab* tab = *iter;
+	//	tab->setVisible(TRUE);
+
+	//	// expand accordion to see matched items in each one. See EXT-2014.
+	//	if (string != "")
+	//	{
+	//		tab->changeOpenClose(false);
+	//	}
+
+	//	LLPlacesInventoryPanel* inventory_list = dynamic_cast<LLPlacesInventoryPanel*>(tab->getAccordionView());
+	//	if (NULL == inventory_list) continue;
+
+	if (mFavoritesInventoryPanel)
 	{
-		LLAccordionCtrlTab* tab = *iter;
-		tab->setVisible(TRUE);
-
-		// expand accordion to see matched items in each one. See EXT-2014.
-		if (string != "")
-		{
-			tab->changeOpenClose(false);
-		}
-
-		LLPlacesInventoryPanel* inventory_list = dynamic_cast<LLPlacesInventoryPanel*>(tab->getAccordionView());
-		if (NULL == inventory_list) continue;
-
-		filter_list(inventory_list, string);
+		filter_list(mFavoritesInventoryPanel, string);
 	}
+	if (mLandmarksInventoryPanel)
+	{
+		filter_list(mLandmarksInventoryPanel, string);
+	}
+	if (mMyInventoryPanel)
+	{
+		filter_list(mMyInventoryPanel, string);
+	}
+	if (mLibraryInventoryPanel)
+	{
+		filter_list(mLibraryInventoryPanel, string);
+	}
+	// </FS:Ansariel> Fix for landmark search (FIRE-6611)
 
 	if (sFilterSubString != string)
 		sFilterSubString = string;
@@ -357,7 +377,17 @@ void LLLandmarksPanel::onSelectorButtonClicked()
 		key["type"] = "landmark";
 		key["id"] = listenerp->getUUID();
 
-		LLFloaterSidePanelContainer::showPanel("places", key);
+		// <FS:Ansariel> FIRE-817: Separate place details floater
+		//LLFloaterSidePanelContainer::showPanel("places", key);
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", key);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", key);
+		}
+		// </FS:Ansariel>
 	}
 }
 
@@ -766,15 +796,32 @@ void LLLandmarksPanel::onAddAction(const LLSD& userdata) const
 	std::string command_name = userdata.asString();
 	if("add_landmark" == command_name)
 	{
-		LLViewerInventoryItem* landmark = LLLandmarkActions::findLandmarkForAgentPos();
-		if(landmark)
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		{
-			LLNotificationsUtil::add("LandmarkAlreadyExists");
+// [/RLVa:KB]
+			LLViewerInventoryItem* landmark = LLLandmarkActions::findLandmarkForAgentPos();
+			if(landmark)
+			{
+				LLNotificationsUtil::add("LandmarkAlreadyExists");
+			}
+			else
+			{
+				// <FS:Ansariel> FIRE-817: Separate place details floater
+				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+				{
+					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
+				}
+				else
+				{
+					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+				}
+				// </FS:Ansariel>
+			}
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
 		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
-		}
+// [/RLVa:KB]
 	} 
 	else if ("category" == command_name)
 	{
@@ -1006,9 +1053,9 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
 
 			// Disable "Show on Map" if landmark loading is in progress.
 			return !gLandmarkList.isAssetInLoadedCallbackMap(asset_uuid);
-	}
-	else if ("rename" == command_name)
-	{
+		}
+		else if ("rename" == command_name)
+		{
 			LLFolderViewItem* selected_item = getCurSelectedItem();
 			if (!selected_item) return false;
 
@@ -1040,6 +1087,12 @@ bool LLLandmarksPanel::isActionEnabled(const LLSD& userdata) const
 		}
 		return false;
 	}
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	else if("add_landmark" == command_name)
+	{
+		return !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
+	}
+// [/RLVa:KB]
 	else
 	{
 		llwarns << "Unprocessed command has come: " << command_name << llendl;
@@ -1414,7 +1467,8 @@ static void collapse_all_folders(LLFolderView* root_folder)
 
 	// The top level folder is invisible, it must be open to
 	// display its sub-folders.
-	root_folder->openTopLevelFolders();
+	// <FS:Ansariel> Also collapse top level folders on Firestorm - we don't have accordions (FIRE-3961)
+	//root_folder->openTopLevelFolders();
 	root_folder->arrangeAll();
 }
 

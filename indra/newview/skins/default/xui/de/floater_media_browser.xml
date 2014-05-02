@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_about" title="MEDIEN-BROWSER">
+<floater name="floater_about" title="Medien-Browser">
 	<floater.string name="home_page_url">
 		http://de.secondlife.com
 	</floater.string>
@@ -22,6 +22,12 @@
 			<button label="Aktuelle Seite an Parzelle senden" name="assign"/>
 		</layout_panel>
 		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+Das Medien-Browser-Plugin lädt gerade.
+Sollte das Plugin nicht laden, sind Informationen zur Problemlösung erhältlich unter
+
+http://wiki.phoenixviewer.com/fs_media
+			</text>
 			<button label="In meinem Browser öffnen" name="open_browser"/>
 			<check_box label="Immer in meinem Browser öffnen" name="open_always"/>
 			<button label="Schließen" name="close"/>

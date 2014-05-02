@@ -4,15 +4,6 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
-	<string name="SECOND_LIFE">
-		Second Life
-	</string>
-	<string name="APP_NAME">
-		Second Life
-	</string>
-	<string name="CAPITALIZED_APP_NAME">
-		SECOND LIFE
-	</string>
 	<string name="SECOND_LIFE_GRID">
 		Second Life-Grid:
 	</string>
@@ -28,6 +19,9 @@
 	<string name="StartupClearingCache">
 		Cache wird gelöscht...
 	</string>
+	<string name="StartupClearingTextureCache">
+		Textur-Cache wird gelöscht...
+	</string>
 	<string name="StartupInitializingTextureCache">
 		Textur-Cache wird initialisiert...
 	</string>
@@ -37,6 +31,57 @@
 	<string name="StartupRequireDriverUpdate">
 		Grafikinitialisierung fehlgeschlagen. Bitte aktualisieren Sie Ihren Grafiktreiber.
 	</string>
+	<string name="AboutHeader">
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
+[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+	</string>
+	<string name="AboutCompiler">
+		Kompiliert mit [COMPILER] version [COMPILER_VERSION]
+	</string>
+	<string name="AboutPosition">
+		Sie befinden sich an [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] in [REGION] auf &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
+SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
+(globalen Koordinaten [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutSystem">
+		CPU: [CPU]
+Speicher: [MEMORY_MB] MB
+Betriebssystem: [OS_VERSION]
+Grafikkarten-Hersteller: [GRAPHICS_CARD_VENDOR]
+Grafikkarte: [GRAPHICS_CARD]
+	</string>
+	<string name="AboutDriver">
+		Windows Grafiktreiber-Version: [GRAPHICS_DRIVER_VERSION]
+	</string>
+	<string name="AboutLibs">
+		OpenGL Version: [OPENGL_VERSION]
+
+RestrainedLove API: [RLV_VERSION]
+libcurl-Version: [LIBCURL_VERSION]
+J2C-Decoderversion: [J2C_VERSION]
+Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
+Qt Webkit-Version: [QT_WEBKIT_VERSION]
+Voice-Serverversion: [VOICE_VERSION]
+	</string>
+	<string name="AboutSettings">
+Modus: [MODE]
+Oberflächendesign: [SKIN] ([THEME])
+Schriftart: [FONT] ([FONT_SCREEN_DPI])
+Draw Distance: [DRAW_DISTANCE]
+Bandbreite: [BANDWIDTH]
+LOD-Faktor: [LOD]
+Darstellungsqualität: [RENDERQUALITY]
+Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTraffic">
+		Paketverlust: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
+	</string>
+	<string name="ErrorFetchingServerReleaseNotesURL">
+		Fehler beim Abrufen der URL für die Server-Versionshinweise.
+	</string>
+	
 	<string name="ProgressRestoring">
 		Wird wiederhergestellt...
 	</string>
@@ -47,7 +92,7 @@
 		Fullbright (Legacy)
 	</string>
 	<string name="LoginInProgress">
-		Anmeldevorgang gestartet. [APP_NAME] reagiert möglicherweise nicht.  Bitte warten.
+		Anmeldevorgang gestartet. [APP_NAME] reagiert möglicherweise nicht. Bitte warten.
 	</string>
 	<string name="LoginInProgressNoFrozen">
 		Anmeldung erfolgt...
@@ -95,10 +140,10 @@
 		QuickTime wurde initialisiert.
 	</string>
 	<string name="LoginRequestSeedCapGrant">
-		Regionsfähigkeiten anfordern...
+		Fähigkeiten der Region werden ermittelt...
 	</string>
 	<string name="LoginRetrySeedCapGrant">
-		Regionsfähigkeiten anfordern. Versuch [NUMBER]...
+		Fähigkeiten der Region werden ermittelt, Versuch [NUMBER]...
 	</string>
 	<string name="LoginWaitingForRegionHandshake">
 		Region-Handshake...
@@ -110,13 +155,13 @@
 		Kleidung wird geladen...
 	</string>
 	<string name="InvalidCertificate">
-		Der Server hat ein ungültiges oder korruptes Zertifikate zurückgegeben. Bitte kontaktieren Sie den Grid-Administrator.
+		Der Server hat ein ungültiges oder korruptes Zertifikat zurückgegeben. Bitte kontaktieren Sie den Grid-Administrator.
 	</string>
 	<string name="CertInvalidHostname">
 		Ein ungültiger Hostname wurde verwendet, um auf den Server zuzugreifen. Bitte überprüfen Sie Ihre SLURL oder den Grid-Hostnamen.
 	</string>
 	<string name="CertExpired">
-		Das vom Grid ausgegebene Zertifikate ist abgelaufen.  Bitte überprüfen Sie Ihre Systemuhr oder kontaktieren Sie Ihren Grid-Administrator.
+		Das vom Grid ausgegebene Zertifikat ist abgelaufen.  Bitte überprüfen Sie Ihre Systemuhr oder kontaktieren Sie Ihren Grid-Administrator.
 	</string>
 	<string name="CertKeyUsage">
 		Das vom Server ausgegebene Zertifikat konnte nicht für SSL verwendet werden.  Bitte kontaktieren Sie Ihren Grid-Administrator.
@@ -144,7 +189,7 @@
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
-http://secondlife.com/download
+http://firestormviewer.org/downloads
 
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
 http://secondlife.com/viewer-access-faq
@@ -296,6 +341,24 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TestingDisconnect">
 		Verbindungsabbruch wird getestet
 	</string>
+	<string name="SocialFacebookConnecting">
+		Verbinde mit Facebook...
+	</string>
+	<string name="SocialFacebookPosting">
+		Poste...
+	</string>
+	<string name="SocialFacebookDisconnecting">
+		Trenne Verbindung zu Facebook...
+	</string>
+	<string name="SocialFacebookErrorConnecting">
+		Problem beim Verbinden mit Facebook
+	</string>
+	<string name="SocialFacebookErrorPosting">
+		Problem beim Posten auf Facebook
+	</string>
+	<string name="SocialFacebookErrorDisconnecting">
+		Problem beim Trennen der Verbindung zu Facebook
+	</string>
 	<string name="TooltipPerson">
 		Person
 	</string>
@@ -321,7 +384,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Bauen aus
 	</string>
 	<string name="TooltipFlagNoEdit">
-		Gruppenbau
+		Editieren aus
 	</string>
 	<string name="TooltipFlagNotSafe">
 		Unsicher
@@ -345,11 +408,17 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipOutboxDragToWorld">
 		Sie können Artikel nicht in Ihrer Händler-Outbox rezzen
 	</string>
+	<string name="TooltipFlagScript">
+		Skript
+	</string>
 	<string name="TooltipOutboxNoTransfer">
 		Einer oder mehrere dieser Artikel können nicht verkauft oder übertragen werden.
 	</string>
 	<string name="TooltipOutboxNotInInventory">
 		Nur Artikel direkt aus Ihrem Inventar können in Ihre Händler-Outbox gelegt werden
+	</string>
+	<string name="TooltipFlagPhysics">
+		Physik
 	</string>
 	<string name="TooltipOutboxWorn">
 		Artikel, die Sie tragen, können nicht in Ihre Händler-Outbox gelegt werden.
@@ -357,11 +426,17 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipOutboxCallingCard">
 		Sie können keine Visitenkarten in Ihre Händler-Outbox legen
 	</string>
+	<string name="TooltipFlagTouch">
+		Berühren
+	</string>
 	<string name="TooltipOutboxFolderLevels">
 		Tiefe der verschachtelten Ordner überschreitet 3
 	</string>
 	<string name="TooltipOutboxTooManyFolders">
 		Anzahl von Unterordnern im obersten Ordner überschreitet 20
+	</string>
+	<string name="TooltipFlagL$">
+		L$
 	</string>
 	<string name="TooltipOutboxTooManyObjects">
 		Anzahl von Artikeln im obersten Ordner überschreitet 200
@@ -371,6 +446,33 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="TooltipDragOntoSelf">
 		Sie können einen Ordner nicht in sich selbst verschieben
+	</string>
+	<string name="TooltipFlagDropInventory">
+		Inventar fallen lassen
+	</string>
+	<string name="TooltipFlagPhantom">
+		Phantom
+	</string>
+	<string name="TooltipFlagTemporary">
+		Temporär
+	</string>
+	<string name="TooltipPrimCount">
+		Primitive: [COUNT]
+	</string>
+	<string name="TooltipPrimEquivalent">
+		, Auswirkung auf Land: [PEWEIGHT] PE
+	</string>
+	<string name="TooltipPrimEquivalentLoading">
+		, bestimme Auswirkung auf Land...
+	</string>
+	<string name="TooltipPrimEquivalentUnavailable">
+		, Auswirkung auf Land nicht verfügbar
+	</string>
+	<string name="TooltipDistance">
+		Entfernung: [DISTANCE] m
+	</string>
+	<string name="TooltipPosition">
+		Position: [POSITION]
 	</string>
 	<string name="TooltipHttpUrl">
 		Anklicken, um Webseite anzuzeigen
@@ -495,6 +597,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="LoadingData">
 		Wird geladen...
+	</string>
+	<string name="ProtectedFolder">
+		geschützt
 	</string>
 	<string name="AvatarNameNobody">
 		(niemand)
@@ -854,10 +959,19 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Offline
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[PRICE] L$ für [AREA] m²
+		[PRICE] L$ für [AREA] m² ([SQMPRICE] L$/m²)
 	</string>
 	<string name="worldmap_results_none_found">
 		Nicht gefunden.
+	</string>
+	<string name="worldmap_agent_position">
+		Sie sind hier
+	</string>
+	<string name="minimap_distance">
+		(Entfernung: [DISTANCE] m)
+	</string>
+	<string name="minimap_no_focus">
+		Die Kamera konnte nicht auf den Einwohner fokussiert werden, da er sich außerhalb der Draw Distance befindet.
 	</string>
 	<string name="Ok">
 		OK
@@ -867,6 +981,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="ST_NO_JOINT">
 		HAUPTVERZEICHNIS oder VERBINDUNG nicht gefunden.
+	</string>
+	<string name="no_name_object">
+		(namenlos)
 	</string>
 	<string name="NearbyChatTitle">
 		Chat in der Nähe
@@ -902,7 +1019,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Dem Objekt „[OBJECTNAME]“, ein Objekt von „[OWNERNAME]“, in [REGIONNAME] [REGIONPOS], wurde folgende Berechtigung verweigert: [PERMISSIONS].
 	</string>
 	<string name="AdditionalPermissionsRequestHeader">
-		Wenn Sie dem Objekt Zugriff auf Ihr Konto gewähren, kann dieses außerdem:
+		Falls Sie den Zugriff auf Ihr Konto erlauben, erlauben Sie dem Objekt ebenfalls:
 	</string>
 	<string name="ScriptTakeMoney">
 		Linden-Dollar (L$) von Ihnen nehmen
@@ -932,10 +1049,10 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Berechtigungen ändern
 	</string>
 	<string name="TrackYourCamera">
-		Kameraverfolgung
+		Kameraverfolgung aktivieren
 	</string>
 	<string name="ControlYourCamera">
-		Kamerasteuerung
+		Kamerasteuerung übernehmen
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden
@@ -959,7 +1076,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Objekte in Ihrem Namen zurückgeben
 	</string>
 	<string name="UnknownScriptPermission">
-		(unbekannt)
+		(unbekannt)!
 	</string>
 	<string name="SIM_ACCESS_PG">
 		Generell
@@ -1015,6 +1132,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="bitmap_image_files">
 		Bitmap-Bilder
 	</string>
+	<string name="png_image_files">
+		PNG-Bilder
+	</string>
+	<string name="save_texture_image_files">
+		Targa- oder PNG-Bilder
+	</string>
 	<string name="avi_movie_file">
 		AVI-Filmdatei
 	</string>
@@ -1037,10 +1160,31 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Verzeichnis auswählen
 	</string>
 	<string name="script_files">
-		Skripts
+		Skripte
 	</string>
 	<string name="dictionary_files">
 		Wörterbücher
+	</string>
+	<string name="backup_files">
+		Objekt-Sicherungen
+	</string>
+	<string name="collada_files">
+		COLLADA-Modelle
+	</string>
+	<string name="csv_files">
+		Komma-separierte Werte
+	</string>
+	<string name="AvatarSetNotAutorespond">
+		Automatische Antwort AUS
+	</string>
+	<string name="AvatarSetAutorespond">
+		Automatische Antwort
+	</string>
+	<string name="AvatarSetNotAutorespondNonFriends">
+		Automatische Antwort an Nicht-Freunde AUS
+	</string>
+	<string name="AvatarSetAutorespondNonFriends">
+		Automatische Antwort an Nicht-Freunde
 	</string>
 	<string name="shape">
 		Form
@@ -1216,6 +1360,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="GroupNotifySaveAttachment">
 		Siehe Anhang
 	</string>
+	<string name="GroupNotifySender">
+		Gesendet von [SENDER], [GROUPNAME]
+	</string>
 	<string name="TeleportOffer">
 		Teleport-Angebot
 	</string>
@@ -1274,7 +1421,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+		http://community.secondlife.com/t5/Deutsche-Knowledge-Base/Verkaufen-von-Artikeln-im-Marktplatz/ta-p/1443499#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1290,7 +1437,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="InventoryOutboxNotMerchantTooltip"/>
 	<string name="InventoryOutboxNotMerchant">
-		Wenn Sie als Händler aktiv werden möchten, müssen Sie einen [[MARKETPLACE_CREATE_STORE_URL] Laden im Marktplatz erstellen].
+		Falls Sie ein Händler werden möchten, müssen Sie einen [[MARKETPLACE_CREATE_STORE_URL] Shop im Marktplatz erstellen].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		Ihre Outbox ist leer.
@@ -1363,14 +1510,14 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="Landmarks" value=" Landmarken,"/>
 	<string name="Notecards" value=" Notizkarten,"/>
 	<string name="Objects" value=" Objekte,"/>
-	<string name="Scripts" value=" Skripts,"/>
+	<string name="Scripts" value=" Skripte,"/>
 	<string name="Sounds" value=" Sounds,"/>
 	<string name="Textures" value=" Texturen,"/>
 	<string name="Snapshots" value=" Fotos,"/>
-	<string name="No Filters" value="Nein "/>
+	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
 	<string name="InvFolder My Inventory">
-		Mein Inventar
+		Inventar
 	</string>
 	<string name="InvFolder Library">
 		Bibliothek
@@ -1388,7 +1535,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Landmarken
 	</string>
 	<string name="InvFolder Scripts">
-		Skripts
+		Skripte
 	</string>
 	<string name="InvFolder Clothing">
 		Kleidung
@@ -1406,7 +1553,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Inventar
 	</string>
 	<string name="InvFolder Uncompressed Images">
-		Nicht-Komprimierte Bilder
+		Unkomprimierte Bilder
 	</string>
 	<string name="InvFolder Body Parts">
 		Körperteile
@@ -1421,7 +1568,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Fundbüro
 	</string>
 	<string name="InvFolder Uncompressed Sounds">
-		Nicht-Komprimierte Sounds
+		Unkomprimierte Sounds
 	</string>
 	<string name="InvFolder Animations">
 		Animationen
@@ -1429,11 +1576,14 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvFolder Gestures">
 		Gesten
 	</string>
-	<string name="InvFolder Favorite">
-		Meine Favoriten
-	</string>
 	<string name="InvFolder favorite">
-		Meine Favoriten
+		Favoriten
+	</string>
+	<string name="InvFolder Favorites">
+		Favoriten
+	</string>
+	<string name="InvFolder favorites">
+		Favoriten
 	</string>
 	<string name="InvFolder Favorites">
 		Meine Favoriten
@@ -1448,7 +1598,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Ursprüngliche Outfits
 	</string>
 	<string name="InvFolder My Outfits">
-		Meine Outfits
+		Outfits
 	</string>
 	<string name="InvFolder Accessories">
 		Zubehör
@@ -1472,7 +1622,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Keine Anhänge getragen
 	</string>
 	<string name="Attachments remain">
-		Anhänge (noch [COUNT] Positionen frei)
+		Anhänge ([COUNT] frei)
 	</string>
 	<string name="Buy">
 		Kaufen
@@ -1598,7 +1748,10 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Linke Brust
 	</string>
 	<string name="Right Pec">
-		Rechts
+		Rechte Brust
+	</string>
+	<string name="Bridge">
+		Brücke
 	</string>
 	<string name="Neck">
 		Hals
@@ -1610,7 +1763,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Ungültige Stelle für Anhang
 	</string>
 	<string name="YearsMonthsOld">
-		[AGEYEARS] [AGEMONTHS] alt
+		[AGEYEARS] [AGEMONTHS]
 	</string>
 	<string name="YearsOld">
 		[AGEYEARS] alt
@@ -1742,28 +1895,37 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Unbekannter Fehler beim Herunterladen
 	</string>
 	<string name="CompileQueueTitle">
-		Rekompilierung
+		SKRIPTE REKOMPILIEREN
 	</string>
 	<string name="CompileQueueStart">
-		rekompilieren
+		Rekompilieren
 	</string>
 	<string name="ResetQueueTitle">
-		Zurücksetzen
+		SKRIPTE ZURÜCKSETZEN
 	</string>
 	<string name="ResetQueueStart">
 		Zurücksetzen
 	</string>
 	<string name="RunQueueTitle">
-		Skript ausführen
+		SKRIPTE AUSFÜHREN
 	</string>
 	<string name="RunQueueStart">
 		Skript ausführen
 	</string>
 	<string name="NotRunQueueTitle">
-		Skript anhalten
+		SKRIPTE ANHALTEN
 	</string>
 	<string name="NotRunQueueStart">
 		Skript anhalten
+	</string>
+	<string name="DeleteQueueTitle">
+		SKRIPTE LÖSCHEN
+	</string>
+	<string name="DeleteQueueStart">
+		Löschen
+	</string>
+	<string name="Compiling">
+		Kompiliere [NAME]
 	</string>
 	<string name="CompileSuccessful">
 		Kompilieren erfolgreich abgeschlossen!
@@ -1788,9 +1950,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		(unbekannt)
 	</string>
 	<string name="SummaryForTheWeek" value="Zusammenfassung für diese Woche, beginnend am "/>
-	<string name="NextStipendDay" value=". Der nächste Stipendium-Tag ist "/>
+	<string name="NextStipendDay" value="Der nächste Stipendium-Tag ist "/>
 	<string name="GroupPlanningDate">
-		[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
 	</string>
 	<string name="GroupIndividualShare" value="                      Gruppenanteil       Einzelanteil"/>
 	<string name="GroupColumn" value="Gruppe"/>
@@ -1839,6 +2001,20 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="RegionInfoAllowedGroups">
 		Zulässige Gruppen: ([ALLOWEDGROUPS], max [MAXACCESS])
 	</string>
+	<!-- FS:Ansariel: Estate managers and banned residents strings -->
+	<string name="RegionInfoEstateManagers">
+		Grundbesitzverwalter: ([ESTATEMANAGERS], max [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Verbannte Einwohner: ([BANNEDAGENTS], max [MAXBANNED])
+	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		zulässige Einwohner
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		verbannte Einwohner
+	</string>
+	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="ScriptLimitsParcelScriptMemory">
 		Parzellenskript-Speicher
 	</string>
@@ -1998,6 +2174,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ATTACH_AVATAR_CENTER">
 		Avatar-Mitte
 	</string>
+	<string name="ATTACH_BRIDGE">
+		Brücke
+	</string>
 	<string name="CursorPos">
 		Zeile [LINE], Spalte [COLUMN]
 	</string>
@@ -2070,6 +2249,18 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="PicksClassifiedsLoadingText">
 		Wird geladen...
 	</string>
+	<string name="NoPicksText">
+		Du hast noch keine Auswahl erstellt.
+	</string>
+	<string name="NoAvatarPicksText">
+		Der Einwohner hat keine Auswahl.
+	</string>
+	<string name="NoClassifiedsText">
+		Sie haben keine Anzeige erstelllt. Klicken Sie auf die „Plus&quot;-Schaltfläche, um eine Anzeige zu erstellen.
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		Der Einwohner hat keine Anzeigen.
+	</string>
 	<string name="MultiPreviewTitle">
 		Vorschau
 	</string>
@@ -2094,8 +2285,11 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvOfferGaveYou">
 		hat Ihnen folgendes übergeben
 	</string>
+	<string name="InvOfferYouDecline">
+		Sie lehnen ab
+	</string>
 	<string name="InvOfferDecline">
-		Sie lehnen [DESC] von &lt;nolink&gt;[NAME]&lt;/nolink&gt; ab.
+		Sie lehnen [DESC] von [NAME] ab.
 	</string>
 	<string name="GroupMoneyTotal">
 		Gesamtbetrag
@@ -2128,7 +2322,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Soll
 	</string>
 	<string name="GroupMoneyDate">
-		[weekday,datetime,utc] [mth,datetime,utc] [day,datetime,utc], [year,datetime,utc]
+		[weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="AcquiredItems">
 		Erworbene Artikel
@@ -2272,7 +2466,8 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .bvh
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Kunst &amp; Kultur
 	</string>
 	<string name="Business">
@@ -2290,7 +2485,8 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .bvh
 	<string name="Newcomer Friendly">
 		Anfängergerecht
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parks und Natur
 	</string>
 	<string name="Residential">
@@ -2344,6 +2540,10 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .bvh
 	<string name="Play Media">
 		Medien Abspielen/Pausieren
 	</string>
+	<string name="StreamtitleNowPlaying">
+		Aktueller Titel:
+	</string>
+
 	<string name="MBCmdLineError">
 		Beim Parsen der Befehlszeile wurde ein Fehler festgestellt.
 Weitere Informationen: http://wiki.secondlife.com/wiki/Client_parameters (EN)
@@ -2361,6 +2561,11 @@ Falls der Fehler dann weiterhin auftritt, müssen Sie [APP_NAME] von Ihrem Syste
 	</string>
 	<string name="MBFatalError">
 		Unbehebbarer Fehler
+	</string>
+	<string name="MBApplicationError">Anwendungsfehler - Keine Panik</string>
+	<string name="MBApplicationErrorDetails">Es tut uns leid, aber [APP_NAME] ist abgestürzt und wird deshalb beendet. Falls dieser Fehler wiederholt auftritt, konktaktieren Sie bitte unser Support-Team und informieren Sie es über folgende Fehlermeldung:
+
+[ERROR_DETAILS]
 	</string>
 	<string name="MBRequiresAltiVec">
 		[APP_NAME] erfordert einen Prozessor mit AltiVec (G4 oder später).
@@ -3400,19 +3605,19 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Dicke
 	</string>
 	<string name="Nose Tip Angle">
-		Nasenspitze
+		Winkel Nasenspitze
 	</string>
 	<string name="Nose Tip Shape">
-		Nasenspitze
+		Form Nasenspitze
 	</string>
 	<string name="Nose Width">
 		Nasenbreite
 	</string>
 	<string name="Nostril Division">
-		Teilung
+		Nasenloch-Teilung
 	</string>
 	<string name="Nostril Width">
-		Größe
+		Nasenloch-Größe
 	</string>
 	<string name="Opaque">
 		Deckend
@@ -3904,7 +4109,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Generelle Region
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		Avatare in dieser Parzelle können von Avataren außerhalb dieser Parzelle weder gesehen noch gehört werden
+		Avatare innerhalb dieser Parzelle können nicht von Avataren außerhalb der Parzelle gesehen oder gehört werden.
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		Bewegliche Objekte verhalten sich in dieser Region u. U. erst dann korrekt, wenn die Region neu geformt wird.
@@ -3981,11 +4186,17 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="IM_unblock_only_groups_friends">
 		Wenn Sie diese Meldung sehen, müssen Sie unter „Einstellungen“ &gt; „Privatsphäre“ die Option „Nur IMs und Anrufe von Freunden oder Gruppen durchstellen“ deaktivieren.
 	</string>
+	<string name="IM_announce_incoming">
+		Ankommende Instant Message von [NAME]
+	</string>
+	<string name="IM_autoresponse_sent">
+		Automatische Antwort gesendet.
+	</string>
 	<string name="OnlineStatus">
-		Online
+		online
 	</string>
 	<string name="OfflineStatus">
-		Offline
+		offline
 	</string>
 	<string name="answered_call">
 		Ihr Anruf wurde entgegengenommen
@@ -4025,6 +4236,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	</string>
 	<string name="share_alert">
 		Objekte aus dem Inventar hier her ziehen
+	</string>
+	<string name="facebook_post_success">
+		Sie haben auf Facebook gepostet.
 	</string>
 	<string name="no_session_message">
 		(IM-Session nicht vorhanden)
@@ -4073,9 +4287,11 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	</string>
 	<string name="message">
 		Ihre Nachricht konnte nicht an die Chat-Sitzung mit [RECIPIENT] gesendet werden.
+Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie vom Server verworfen.
 	</string>
 	<string name="message_session_event">
 		Ihre Nachricht konnte nicht an die Chat-Sitzung mit [RECIPIENT] gesendet werden.
+Falls die Nachricht nicht innerhalb der nächsten Minuten erscheint, wurde sie vom Server verworfen.
 	</string>
 	<string name="mute">
 		Fehler während Moderation.
@@ -4443,7 +4659,7 @@ Missbrauchsbericht
 		Tanzen8
 	</string>
 	<string name="AvatarBirthDateFormat">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
 		Keine/Keiner
@@ -4455,8 +4671,8 @@ Missbrauchsbericht
 	<string name="server_is_down">
 		Trotz all unserer Bemühungen ist ein unerwarteter Fehler aufgetreten.
 
-	Bitte überprüfen Sie status.secondlifegrid.net, um herauszufinden, ob ein Problem besteht.
- Falls Sie weiterhin Problem haben, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
+Bitte überprüfen Sie status.secondlifegrid.net um festzustellen, ob ein bekanntes Problem besteht.
+Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
 	</string>
 	<string name="dateTimeWeekdaysNames">
 		Sonntag:Montag:Dienstag:Mittwoch:Donnerstag:Freitag:Samstag
@@ -4482,6 +4698,11 @@ Missbrauchsbericht
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
 	</string>
+<!--  FS:AW opensim currency support -->
+	<string name="free">
+		 kostenlos
+	</string>
+<!--  /FS:AW opensim currency support -->
 	<string name="Membership">
 		Mitgliedschaft
 	</string>
@@ -4584,10 +4805,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		CapsLock
 	</string>
 	<string name="Home">
-		Zuhause
+		Pos1
 	</string>
 	<string name="End">
-		End
+		Ende
 	</string>
 	<string name="PgUp">
 		PgUp
@@ -4869,7 +5090,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Beacons für Skriptobjekte werden angezeigt (rot)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Beacons für Skriptobjekte mit Berührungsfunktion werden angezeigt (rot)
+		Beacons für Skriptobjekte mit Berührungsfunktion (rot)
 	</string>
 	<string name="BeaconSound">
 		Sound-Beacons werden angezeigt (gelb)
@@ -4949,14 +5170,96 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Snapshot_Label">
 		Foto
 	</string>
+	<string name="Command_Social_Label">
+		Facebook
+	</string>
 	<string name="Command_Speak_Label">
 		Sprechen
 	</string>
 	<string name="Command_View_Label">
 		Kamerasteuerungen
 	</string>
+<!-- Ansariel: Renamed for FS (FIRE-5019)
 	<string name="Command_Voice_Label">
 		Voice-Einstellungen
+	</string> -->
+	<string name="Command_Voice_Label">
+		Stimmen in der Nähe
+	</string>
+	<string name="Command_Quickprefs_Label">
+		Schnelleinstellungen
+	</string>
+	<string name="Command_AO_Label">
+		Animation Overrider
+	</string>
+	<string name="Command_Webbrowser_Label">
+		Webbrowser
+	</string>
+	<string name="Command_Default_Chat_Bar_Label">
+		Chatleiste
+	</string>
+	<string name="Command_Areasearch_Label">
+		Umgebungssuche
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Debug-Einstellungen
+	</string>
+	<string name="Command_Statistics_Label">
+		Statistiken
+	</string>
+	<string name="Command_Region_Label">
+		Region/Grundbesitz
+	</string>
+	<string name="Command_Fly_Label">
+		Fliegen
+	</string>
+	<string name="Command_Groundsit_Label">
+		Auf Boden sitzen
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Sound-Explorer
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Asset-Blacklist
+	</string>
+	<string name="Command_Phototools_Label">
+		Fototools
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Kameratools
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Kontakt-Sets
+	</string>
+	<string name="Command_Mouselook_Label">
+		Mouselook-Modus
+	</string>
+	<string name="Command_Landmark_Here_Label">
+		Landmarke erstellen
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Teleport-Liste
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Pose-Stand
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Foto auf Datenträger
+	</string>
+	<string name="Command_Radar_Label">
+		Radar
+	</string>
+	<string name="Command_Conversation_Log_Label">
+		Unterhaltungsprotokoll
+	</string>
+	<string name="Command_Move_Lock_Label">
+		Movelock
+	</string>
+	<string name="Command_Blocklist_Label">
+		Blockierliste
+	</string>
+	<string name="Command_ResyncAnimations_Label">
+		Animationen synchronisieren
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
@@ -4968,13 +5271,13 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Kompletten Avatar auswählen
 	</string>
 	<string name="Command_Build_Tooltip">
-		Objekte bauen und Terrain umformen
+		Objekte bauen und Terrain umformen (Strg+4)
 	</string>
 	<string name="Command_Chat_Tooltip">
-		Mit Leuten in der Nähe chatten
+		Mit Leuten in der Nähe chatten (Strg+T)
 	</string>
 	<string name="Command_Conversations_Tooltip">
-		Mit allen unterhalten
+		Mit allen unterhalten (Strg+T)
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Kompass
@@ -4983,22 +5286,22 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Ziele von Interesse
 	</string>
 	<string name="Command_Gestures_Tooltip">
-		Gesten für Ihren Avatar
+		Gesten für Ihren Avatar (Strg+G)
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Wie führe ich gängige Aufgaben aus?
 	</string>
 	<string name="Command_Inventory_Tooltip">
-		Ihr Eigentum anzeigen und benutzen
+		Eigentum anzeigen und benutzen (Strg+I)
 	</string>
 	<string name="Command_Map_Tooltip">
-		Weltkarte
+		Weltkarte (Strg+M)
 	</string>
 	<string name="Command_Marketplace_Tooltip">
 		Einkaufen gehen
 	</string>
 	<string name="Command_MiniMap_Tooltip">
-		Leute in der Nähe anzeigen
+		Leute in der Nähe anzeigen (Strg+Umschalt+M)
 	</string>
 	<string name="Command_Move_Tooltip">
 		Ihren Avatar bewegen
@@ -5013,19 +5316,22 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Orte, die in Ihrem Profil als Favoriten angezeigt werden sollen
 	</string>
 	<string name="Command_Places_Tooltip">
-		Von Ihnen gespeicherte Orte
+		Von Ihnen gespeicherte Orte (Alt+H)
 	</string>
 	<string name="Command_Preferences_Tooltip">
-		Einstellungen
+		Einstellungen (Strg+P)
 	</string>
 	<string name="Command_Profile_Tooltip">
 		Ihr Profil bearbeiten oder anzeigen
 	</string>
 	<string name="Command_Search_Tooltip">
-		Orte, Veranstaltungen, Leute finden
+		Orte, Veranstaltungen, Leute finden (Strg+F)
 	</string>
 	<string name="Command_Snapshot_Tooltip">
-		Foto aufnehmen
+		Foto aufnehmen (Strg+Umschalt+S)
+	</string>
+	<string name="Command_Social_Tooltip">
+		Auf Facebook posten
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Über Ihr Mikrofon mit Leuten in der Nähe sprechen
@@ -5035,6 +5341,81 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Voice_Tooltip">
 		Lautstärkeregler für Anrufe und Leute in Ihrer Nähe in SL
+	</string>
+	<string name="Command_Quickprefs_Tooltip">
+		Schnelleinstellungen zum Ändern oft benötigter Einstellungen
+	</string>
+	<string name="Command_AO_Tooltip">
+		Animation Overrider
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		Öffnet den internen Webbrowser (Strg+Umschalt+Z)
+	</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">
+		Zeigt oder versteckt die Standard-Chatleiste
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		Umgebungssuche nach Objekten
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Konfigurationseinstellungen des Viewers ändern (Strg+Alt+Umschalt+S)
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		Viewer-Statistiken anzeigen (Strg+Umschalt+1)
+	</string>
+	<string name="Command_Region_Tooltip">
+		Öffnet die Regions- und Grundbesitzverwaltung (Alt+R)
+	</string>
+	<string name="Command_Fly_Tooltip">
+		Flugmodus ein-/ausschalten (Pos1)
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		Aktiviert/Deaktiviert erzwungenes Sitzen auf dem Boden (Strg+Alt+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Öffnet den Sound-Explorer
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Öffnet die Asset-Blacklist mit einer Übersicht über alle geblockten Objekte
+	</string>
+	<string name="Command_Phototools_Tooltip">
+		Erweiterte Fotografie-Tools (Alt+P)
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Erweiterte Kameratools (Strg+Umschalt+C)
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Öffnet die Kontakt-Sets (Strg+Alt+Umschalt+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Mouselook-Modus aktivieren (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Erstellt eine Landmarke an der aktuellen Position
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Öffnet die Teleport-Liste (Alt+H)
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Startet den Pose-Stand für den Avatar zum Justieren von Anhängen
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Macht ein Foto und speichert es auf der Festplatte
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Öffnet das Radar für Avatare in der Nähe
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Öffnet das Unterhaltungsprotokoll mit Chatverläufen
+	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Aktiviert die Movelock-Funktion der Brücke und hält den Avatar an der aktuellen Position (Strg+Alt+P)
+	</string>
+	<string name="Command_Blocklist_Tooltip">
+		Öffnet die Blockierliste / Liste der ignorierten Einwohner &amp; Objekte
+	</string>
+	<string name="Command_ResyncAnimations_Tooltip">
+		Synchronisiert die Avatar-Animationen neu
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -5106,15 +5487,432 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		[Benutzer]
 	</string>
 	<string name="logging_calls_disabled_log_empty">
-		Unterhaltungen werden nicht protokolliert. Um ein Protokoll zu starten, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Chat“.
+		Unterhaltungen werden nicht protokolliert. Um ein Protokoll zu starten, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Privatsphäre“.
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		Es werden keine Unterhaltungen mehr protokolliert. Um weiterhin ein Protokoll zu führen, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Chat“.
+		Es werden keine Unterhaltungen mehr protokolliert. Um weiterhin ein Protokoll zu führen, wählen Sie „Speichern: nur Protokoll“ oder „Speichern: Protokoll und Transkripte“ unter „Einstellungen“ &gt; „Privatsphäre“.
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		Keine protokollierten Unterhaltungen verfügbar. Hier erscheint ein Protokolleintrag, wenn Sie eine Person kontaktieren oder von einer Person kontaktiert werden.
 	</string>
 	<string name="loading_chat_logs">
 		Laden...
+	</string>
+	
+<!-- Firestorm-specific translations -->
+	<string name="RlvEnabled">
+		RestrainedLove-Unterstützung ist beim nächsten Start eingeschaltet.
+	</string>
+	<string name="RlvDisabled">
+		RestrainedLove-Unterstützung ist beim nächsten Start ausgeschaltet.
+	</string>
+	<string name="MediaFilterActionAllow">
+		erlauben
+	</string>
+	<string name="MediaFilterActionDeny">
+		verbieten
+	</string>
+	<string name="MediaFilterConditionAlways">
+		Immer
+	</string>
+	<string name="MediaFilterConditionAlwaysLower">
+		immer
+	</string>
+	<string name="MediaFilterConditionNever">
+		Niemals
+	</string>
+	<string name="MediaFilterConditionNeverLower">
+		niemals
+	</string>
+	<string name="MediaFilterMediaContentBlocked">
+		Medien von der Domain [DOMAIN] wurden geblockt.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
+		Medien von der Domain [DOMAIN] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
+		Medien von der Domain [DOMAIN] werden niemals abgespielt.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
+		Medien von der URL [MEDIAURL] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
+		Medien von der URL [MEDIAURL] werden niemals abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentBlocked">
+		Musik von der Domain [DOMAIN] wurde geblockt.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
+		Musik von der Domain [DOMAIN] wird immer abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
+		Musik von der Domain [DOMAIN] wird niemals abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
+		Musik von der URL [MEDIAURL] wird immer abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
+		Musik von der URL [MEDIAURL] wird niemals abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentBlocked">
+		Geteilte Medien von der Domain [DOMAIN] wurden geblockt.
+	</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">
+		Geteilte Medien von der Domain [DOMAIN] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">
+		Geteilte Medien von der Domain [DOMAIN] werden niemals abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">
+		Geteilte Medien von der URL [MEDIAURL] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
+		Geteilte Medien von der URL [MEDIAURL] werden niemals abgespielt.
+	</string>
+	<string name="MediaFilterBlacklist">
+		Blacklist
+	</string>
+	<string name="MediaFilterWhitelist">
+		Whitelist
+	</string>
+
+	<!-- Settings sanity checks -->
+	<string name="SanityCheckEquals">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte den Wert [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckNotEquals">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte nicht den Wert [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckLessThan">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert kleiner als [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckGreaterThan">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert größer als [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckBetween">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert zwischen [VALUE_1] und [VALUE_2] haben.
+	</string>
+	<string name="SanityCheckNotBetween">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert zwischen [VALUE_1] und [VALUE_2] haben.
+	</string>
+
+	<!-- Replacement for hardcoded UI strings -->
+	<string name="UnknownRegion">
+		(unbekannte Region)
+	</string>
+	<string name="UnknownPosition">
+		(unbekannte Position)
+	</string>
+	
+	<string name="FSCmdLineRSP">
+		Maximale Bandbreite gesetzt auf: [VALUE] kbit/s.
+	</string>
+	
+	<!-- NetMap double click action tooltip messages -->
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
+		[AGENT][REGION](Doppelklicken, um Karte zu öffnen; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+	</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">
+		[REGION](Doppelklicken, um zu teleportieren; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+	</string>
+	<string name="NetMapDoubleClickNoActionToolTipMsg">
+		[REGION]
+	</string>
+	
+	<!-- Nearby Chat Collision Messages -->
+	<string name="Collision_Bump">
+		[NAME] hat Sie gestoßen.
+	</string>
+	<string name="Collision_PushObject">
+		[NAME] hat Sie mit einem Skript gestoßen.
+	</string>
+	<string name="Collision_ObjectCollide">
+		[NAME] hat Sie mit einem Objekt getroffen.
+	</string>
+	<string name="Collision_ScriptedObject">
+		[NAME] hat Sie mit einem Skript-Objekt getroffen.
+	</string>
+	<string name="Collision_PhysicalObject">
+		[NAME] hat Sie mit einem physischen Objekt getroffen.
+	</string>
+	<string name="Collision_UnknownType">
+		[NAME] hat eine Kollision unbekannten Typs verursacht.
+	</string>
+	
+	<string name="MovelockEnabled">
+		Movelock aktiviert.
+	</string>
+	<string name="MovelockDisabled">
+		Movelock deaktiviert.
+	</string>
+	<string name="BusyResponse">
+		Beschäftigt-Nachricht
+	</string>
+
+	<string name="LoadCameraPositionNoneSaved">
+		Es wurde noch keine Kamerasicht gespeichert.
+	</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">
+		Kamerasicht kann nicht wiederhergestellt werden, da sich die Kameraposition außerhalb der Draw Distance befindet.
+	</string>
+	
+	<string name="DrawDistanceSteppingGestureObsolete">
+		Aufgrund von Änderungen im Code ist es nicht mehr notwendig, diese Geste zu benutzen. Progressives Draw-Distance-Stepping wurde aktiviert.
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Draw Distance wurde auf [DISTANCE]m gesetzt.
+	</string>
+	<string name="FSCameraPositionCopied">
+		Kameraposition [POS] wurde in Zwischenablage kopiert.
+	</string>
+	
+	<string name="FSWithHavok">
+		mit Havok-Unterstützung
+	</string>
+	<string name="FSWithOpensim">
+		mit OpenSimulator-Unterstützung
+	</string>
+
+	<!-- Firestorm search -->
+	<string name="not_found">
+		„[TEXT]“ nicht gefunden.
+	</string>
+	<string name="no_results">
+		Keine Treffer
+	</string>
+	<string name="searching">
+		Suche läuft...
+	</string>
+	<string name="all_categories">
+		Alle Kategorien
+	</string>
+	<string name="search_banned">
+		Einige Begriffe der Suchabfrage wurden aufgrund von Einschränkungen, die in den Community Standards festgelegt wurden, von der Suche ausgeschlossen.
+	</string>
+	<string name="search_short">
+		Die eingebenen Suchbegriffe waren zu kurz, so dass keine Suche durchgeführt wurde.
+	</string>
+	<string name="search_disabled">
+		Die klassische Suche wurde in dieser Region deaktiviert.
+	</string>
+	<string name="render_quality_low">
+		Niedrig
+	</string>
+	<string name="render_quality_mediumlow">
+		Mittel-Niedrig
+	</string>
+	<string name="render_quality_medium">
+		Mittel
+	</string>
+	<string name="render_quality_mediumhigh">
+		Mittel-Hoch
+	</string>
+	<string name="render_quality_high">
+		Hoch
+	</string>
+	<string name="render_quality_highultra">
+		Hoch-Ultra
+	</string>
+	<string name="render_quality_ultra">
+		Ultra
+	</string>
+	<string name="render_quality_unknown">
+		Unbekannt; Bitte die Debugeinstellung RenderQualityPerformance prüfen!
+	</string>
+	<string name="qtool_busy">
+		Bitte warten, das Ausrichtungstool ist aktiv.
+	</string>
+	<string name="qtool_still_busy">
+		Bitte warten, das Ausrichtungstool ist weiterhin aktiv.
+	</string>
+	<string name="qtool_done">
+		Die Ausrichtung ist beendet.
+	</string>
+	<string name="fsbridge_cant_create_disabled">
+		Firestorm kann die LSL-Brücke nicht erstellen, wenn „LSL-Client-Brücke aktivieren“ in den Einstellungen deaktiviert ist.
+	</string>
+	<string name="fsbridge_no_library">
+		Firestorm konnte die LSL-Brücke nicht erstellen. Bitte die Bibliothek aktivieren und neu einloggen.
+	</string>
+	<string name="fsbridge_already_creating">
+		LSL-Brücke wird bereits erstellt. Bitte einige Minuten vor einem erneuten Versuch warten.
+	</string>
+	<string name="fsbridge_creating">
+		LSL-Brücke wird erstellt. Dies kann einen Moment dauern. Bitte warten...
+	</string>
+	<string name="fsbridge_failure_creation_create_script">
+		LSL-Brücke nicht erstellt. Das Skript der Brücke konnte nicht erstellt werden.
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		LSL-Brücke nicht erstellt. Der Name der Brücke ist inkorrekt. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		LSL-Brücke nicht erstellt. Die Brücke konnte nicht im Inventar gefunden werden. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Version der Brücke ist falsch. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Brücke wurde nicht am korrekten Ort im Inventar gefunden. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		LSL-Brücke konnte nicht hinzugefügt werden. Der Anhängepunkt war bereits durch ein anderes Objekt belegt. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_not_found">
+		Das Objekt für die LSL-Brücke konnte nicht gefunden werden. Mit der Erstellung kann nicht fortgefahren werden.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		Die LSL-Brücke enthält unerwartete Objekte.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Die LSL-Brücke wurde noch nicht vollständig erstellt, sie muss eventuell über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellt werden, um genutzt werden zu können.
+	</string>
+	<string name="fsbridge_detached">
+		LSL-Brücke abgenommen.
+	</string>
+	<string name="fsbridge_created">
+		LSL-Brücke erstellt.
+	</string>
+
+	<string name="QP Draw Distance">
+		Draw Distance
+	</string>
+	<string name="QP Max Particles">
+		Max. Partikel
+	</string>
+	<string name="QP Avatar Physics LOD">
+		Avatar-Physik LOD
+	</string>
+	<string name="QP LOD Factor">
+		LOD-Faktor
+	</string>
+	<string name="QP Max Avatars">
+		Max. Avatare
+	</string>
+	<string name="QP Tags Offset">
+		Tag-Höhenabstand
+	</string>
+	<string name="QP Name Tags">
+		Avatarnamen
+	</string>
+	<string name="QP LookAt Target">
+		Kamerafokus
+	</string>
+	<string name="QP Color Under Cursor">
+		Farbe unter Cursor
+	</string>
+	
+	<!-- <FS:Ansariel> Posestand animation names -->
+	<string name="PS_T_Pose">
+		T-Pose
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Arme unten, Beine zusammen
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Arme unten, sitzend
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Arme abwärts, Beine zusammen
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Arme abwärts, Beine auseinander
+	</string>
+	<string name="PS_Arms_forward_Legs_apart">
+		Arme nach vorn, Beine auseinander
+	</string>
+	<string name="PS_Arms_forward_Legs_together">
+		Arme nach vorn, Beine zusammen
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Arme gerade, Beine auseinander
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Arme gerade, sitzend
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Arme aufwärts, Beine auseinander
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Arme aufwärts, Beine zusammen
+	</string>
+
+	<string name="QP_WL_Region_Default">
+		Regionsstandard
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Tageszyklus-basiert
+	</string>
+	<string name="QP_WL_None">
+		Keiner
+	</string>
+
+	<string name="GroupChatMuteNotice">
+		Ignoriere Gruppenchat von [NAME].
+	</string>
+	
+	<!-- <FS:Ansariel> Radar notifications -->
+	<string name="camera_no_focus">
+		Die Kamera kann nicht auf [AVATARNAME] fokussiert werden, da er/sie sich außerhalb der Draw Distance befindet.
+	</string>
+	<string name="entering_draw_distance">
+		kommt in Draw Distance ([DISTANCE] m).
+	</string>
+	<string name="leaving_draw_distance">
+		hat die Draw Distance verlassen.
+	</string>
+	<string name="entering_chat_range">
+		kommt in Chat-Reichweite ([DISTANCE] m).
+	</string>
+	<string name="leaving_chat_range">
+		hat die Chat-Reichweite verlassen.
+	</string>
+	<string name="entering_region">
+		hat die Region betreten.
+	</string>
+	<string name="entering_region_distance">
+		hat die Region betreten ([DISTANCE] m).
+	</string>
+	<string	name="leaving_region">
+		hat die Region verlassen.
+	</string>
+
+	<string name="TotalScriptCountChangeIncrease">
+		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] erhöht ([DIFFERENCE]).
+	</string>
+	<string name="TotalScriptCountChangeDecrease">
+		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] verringert ([DIFFERENCE]).
+	</string>
+	<string name="preproc_toggle_warning">
+		Umschalten des Präprozessors wird erst vollständig wirksam, nachdem der Editor geschlossen und neu geöffnet wurde.
+	</string>
+
+	<string name="skin_defaults_starlight_location">
+		Die Anzeige der aktuellen Position in der Menüleiste wurde als Standard für Starlight-Oberflächendesigns deaktiviert.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Die Anzeige der Navigationsleiste wurde als Standard für Starlight-Oberflächendesigns aktiviert.
+	</string>
+
+	<string name="animation_explorer_seconds_ago">
+		Vor [SECONDS] Sekunden
+	</string>
+	<string name="animation_explorer_still_playing">
+		Wird abgespielt
+	</string>
+
+	<string name="FriendOnlineNotification">
+		ist online.
+	</string>
+	<string name="FriendOfflineNotification">
+		ist offline.
+	</string>
+
+	<string name="Inbox_Folderview_New">
+		Neu
+	</string>
+
+	<string name="Mouselook_Unknown_Avatar">
+		Unbekannter Avatar
 	</string>
 </strings>

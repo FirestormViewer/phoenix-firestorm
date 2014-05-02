@@ -4,7 +4,7 @@
  can_minimize="false"
  height="100"
  layout="topleft"
- title="SAVE OUTFIT"
+ title="Save Outfit"
  name="modal container"
  width="240">
     <button
@@ -50,7 +50,7 @@ as a new Outfit:
      left_delta="0"
      show_text_as_tentative="false"
      top_pad="0"
-     max_length_bytes="63"
+     max_length="63"
      name="name ed"
      width="200">
         [DESC] (new)

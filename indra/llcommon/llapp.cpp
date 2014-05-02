@@ -46,7 +46,20 @@
 #include "llstl.h" // for DeletePointer()
 #include "llstring.h"
 #include "lleventtimer.h"
-#include "google_breakpad/exception_handler.h"
+
+
+// <FS:ND> Build without google breakpad if it's not available. That's fine to do.
+// Breakpad is only ever used to create minidumps. Those are important for official released, but if a selfcompiler wants to build without it, that's no problem.
+
+// #include "google_breakpad/exception_handler.h"
+
+#ifndef ND_NO_BREAKPAD
+  #include "google_breakpad/exception_handler.h"
+#else
+  #include "nd/ndexception_handler_stub.h"
+#endif
+
+// </FS:ND>
 #include "stringize.h"
 
 //
@@ -72,7 +85,17 @@ void setup_signals();
 void default_unix_signal_handler(int signum, siginfo_t *info, void *);
 
 #if LL_LINUX
-#include "google_breakpad/minidump_descriptor.h"
+
+// <FS:ND> Build without google breakpad if it's not available. That's fine to do.
+// Breakpad is only ever used to create minidumps. Those are important for official released, but if a selfcompiler wants to build without it, that's no problem.
+// #include "google_breakpad/minidump_descriptor.h"
+
+#ifndef ND_NO_BREAKPAD
+ #include "google_breakpad/minidump_descriptor.h"
+#endif
+
+// </FS:ND>
+
 static bool unix_minidump_callback(const google_breakpad::MinidumpDescriptor& minidump_desc, 
                                    void* context, 
                                    bool succeeded);
@@ -320,7 +343,10 @@ void EnableCrashingOnCrashes()
 }
 #endif
 
-void LLApp::setupErrorHandling()
+//void LLApp::setupErrorHandling()
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
+void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
+// [/SL:KB]
 {
 	// Error handling is done by starting up an error handling thread, which just sleeps and
 	// occasionally checks to see if the app is in an error state, and sees if it needs to be run.
@@ -348,6 +374,22 @@ void LLApp::setupErrorHandling()
 		for (; retries > 0; --retries)
 		{
 			if (mExceptionHandler != 0) delete mExceptionHandler;
+			// <FS:ND> Reapply patch from Catznip to allow different types of minidumps
+			U32 maskMiniDumpType = MiniDumpNormal | MiniDumpFilterModulePaths;
+			switch (minidump_type)
+			{
+				case MINIDUMP_MINIMAL:
+					maskMiniDumpType |= MiniDumpFilterMemory;
+				break;
+				case MINIDUMP_EXTENDED:
+					maskMiniDumpType |= MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory;
+					break;
+				case MINIDUMP_NORMAL:
+				default:
+					break;
+			}
+			// </FS:ND>
+
 
 			mExceptionHandler = new google_breakpad::ExceptionHandler(
 														wdump_path,		
@@ -355,7 +397,8 @@ void LLApp::setupErrorHandling()
 														windows_post_minidump_callback,
 														0,
 														google_breakpad::ExceptionHandler::HANDLER_ALL,
-														MiniDumpNormal, //Generate a 'normal' minidump.
+														// MiniDumpNormal, //Generate a 'normal' minidump.
+														(MINIDUMP_TYPE)maskMiniDumpType, // <FS:ND/> Pass custom minidump type from prefs to breakpad.
 														wpipe_name.c_str(),
 														NULL);  //No custom client info.
 			if (mExceptionHandler->IsOutOfProcess())
@@ -502,9 +545,12 @@ void LLApp::setMiniDumpDir(const std::string &path)
 
 	if(mExceptionHandler == 0) return;
 #ifdef LL_WINDOWS
-	wchar_t buffer[MAX_MINDUMP_PATH_LENGTH];
-	mbstowcs(buffer, mDumpPath.c_str(), MAX_MINDUMP_PATH_LENGTH);
-	mExceptionHandler->set_dump_path(std::wstring(buffer));
+	// <FS:ND> Make sure to pass a proper unicode string to breapad. path is UTF8, not MBCS
+	// wchar_t buffer[MAX_MINDUMP_PATH_LENGTH];
+	// mbstowcs(buffer, mDumpPath.c_str(), MAX_MINDUMP_PATH_LENGTH);
+	// mExceptionHandler->set_dump_path(std::wstring(buffer));
+	mExceptionHandler->set_dump_path( utf8str_to_utf16str(mDumpPath) );
+	// </FS:ND>
 #elif LL_LINUX
         //google_breakpad::MinidumpDescriptor desc("/tmp");	//path works in debug fails in production inside breakpad lib so linux gets a little less stack reporting until it is patched.
         google_breakpad::MinidumpDescriptor desc(mDumpPath);	//path works in debug fails in production inside breakpad lib so linux gets a little less stack reporting until it is patched.
@@ -976,6 +1022,41 @@ bool unix_post_minidump_callback(const char *dump_dir,
 #endif // !WINDOWS
 
 #ifdef LL_WINDOWS
+
+// <FS:ND> Helper function to convert a wchar_t string into an UTF8 buffer
+namespace nd
+{
+	namespace strings
+	{
+		inline bool convertString( wchar_t const *aIn, char *&aOut, S32 &aLen )
+		{
+			char tmpBuffer[8];
+			S32 i(0), j(0);
+			
+			while( *aIn )
+			{
+				i = wchar_to_utf8chars( *aIn++, tmpBuffer );
+				
+				if( i < aLen )
+				{
+					j = 0;
+					while( j < i )
+					{
+						*aOut++ = tmpBuffer[ j++ ];
+						--aLen;
+					}
+				}
+				else
+					return true;
+			}
+			
+			return false;
+		}
+	}
+}
+
+// </FS:ND>
+
 bool windows_post_minidump_callback(const wchar_t* dump_path,
 									const wchar_t* minidump_id,
 									void* context,
@@ -983,29 +1064,59 @@ bool windows_post_minidump_callback(const wchar_t* dump_path,
 									MDRawAssertionInfo* assertion,
 									bool succeeded)
 {
-	char * path = LLApp::instance()->getMiniDumpFilename();
-	S32 remaining = LLApp::MAX_MINDUMP_PATH_LENGTH;
-	size_t bytesUsed;
+	// <FS:ND> Convert all path to UTF8 and not MBCS. Having some path in MBCS and some in UTF8 is a source of great joy
+	// and bugs. Stick with one standard, that is UTF8.
 
-	LL_INFOS("MINIDUMPCALLBACK") << "Dump file was generated." << LL_ENDL;
-	bytesUsed = wcstombs(path, dump_path, static_cast<size_t>(remaining));
-	remaining -= bytesUsed;
-	path += bytesUsed;
-	if(remaining > 0 && bytesUsed > 0 && path[-1] != '\\')
+	// char * path = LLApp::instance()->getMiniDumpFilename();
+	// S32 remaining = LLApp::MAX_MINDUMP_PATH_LENGTH;
+	// size_t bytesUsed;
+
+	// LL_INFOS("MINIDUMPCALLBACK") << "Dump file was generated." << LL_ENDL;
+	// bytesUsed = wcstombs(path, dump_path, static_cast<size_t>(remaining));
+	// remaining -= bytesUsed;
+	// path += bytesUsed;
+	// if(remaining > 0 && bytesUsed > 0 && path[-1] != '\\')
+	// {
+	// 	*path++ = '\\';
+	// 	--remaining;
+	// }
+	// if(remaining > 0)
+	// {
+	// 	bytesUsed = wcstombs(path, minidump_id, static_cast<size_t>(remaining));
+	// 	remaining -= bytesUsed;
+	// 	path += bytesUsed;
+	// }
+	// if(remaining > 0)
+	// {
+	// 	strncpy(path, ".dmp", remaining);
+	// }
+
+	char *pOut( LLApp::instance()->getMiniDumpFilename() );
+	bool hasOverflow( false );
+	S32 bufferLength( LLApp::MAX_MINDUMP_PATH_LENGTH );
+
+	hasOverflow = nd::strings::convertString( dump_path, pOut, bufferLength );
+	if( !hasOverflow && bufferLength < LLApp::MAX_MINDUMP_PATH_LENGTH && bufferLength > 1 && pOut[-1] != '\\' && pOut[-1] != '/' )
 	{
-		*path++ = '\\';
-		--remaining;
+		*pOut++ = '\\';
+		--bufferLength;
 	}
-	if(remaining > 0)
+
+	if( !hasOverflow )
+		hasOverflow = nd::strings::convertString( minidump_id, pOut, bufferLength );
+
+	if( !hasOverflow && bufferLength >= 5 )
 	{
-		bytesUsed = wcstombs(path, minidump_id, static_cast<size_t>(remaining));
-		remaining -= bytesUsed;
-		path += bytesUsed;
+		pOut[0] = '.';
+		pOut[1] = 'd';
+		pOut[2] = 'm';
+		pOut[3] = 'p';
+		pOut[4] = 0;
 	}
-	if(remaining > 0)
-	{
-		strncpy(path, ".dmp", remaining);
-	}
+	else if( hasOverflow )
+		LLApp::instance()->getMiniDumpFilename()[ 0 ] = 0;
+
+	// </FS:ND>
 
 	llinfos << "generated minidump: " << LLApp::instance()->getMiniDumpFilename() << llendl;
    // *NOTE:Mani - this code is stolen from LLApp, where its never actually used.

@@ -78,6 +78,10 @@
 #include "llvoavatar.h"
 #include "llvocache.h"
 #include "llmaterialmgr.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 const S32 MIN_QUIET_FRAMES_COALESCE = 30;
 const F32 FORCE_SIMPLE_RENDER_AREA = 512.f;
@@ -102,6 +106,12 @@ static LLFastTimer::DeclareTimer FTM_GEN_VOLUME("Generate Volumes");
 static LLFastTimer::DeclareTimer FTM_VOLUME_TEXTURES("Volume Textures");
 
 extern BOOL gGLDebugLoggingEnabled;
+
+static bool enableVolumeSAPProtection()
+{
+	static LLCachedControl<bool> protect(gSavedSettings,"RenderVolumeSAProtection");
+	return protect;
+}
 
 // Implementation class of LLMediaDataClientObject.  See llmediadataclient.h
 class LLMediaDataClientObjectImpl : public LLMediaDataClientObject
@@ -206,7 +216,10 @@ private:
 
 LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
 	: LLViewerObject(id, pcode, regionp),
-	  mVolumeImpl(NULL)
+	// NaCl - Graphics crasher protection
+	  mVolumeImpl(NULL),
+	  mVolumeSurfaceArea(-1.0)
+	// NaCl End
 {
 	mTexAnimMode = 0;
 	mRelativeXform.setIdentity();
@@ -481,7 +494,10 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			}
 		}
 	}
-	if (retval & (MEDIA_URL_REMOVED | MEDIA_URL_ADDED | MEDIA_URL_UPDATED | MEDIA_FLAGS_CHANGED)) 
+// <FS:CR> OpenSim returns a zero. Don't request MediaData where MOAP isn't supported
+	//if (retval & (MEDIA_URL_REMOVED | MEDIA_URL_ADDED | MEDIA_URL_UPDATED | MEDIA_FLAGS_CHANGED))
+	if (retval != 0 && retval & (MEDIA_URL_REMOVED | MEDIA_URL_ADDED | MEDIA_URL_UPDATED | MEDIA_FLAGS_CHANGED))
+// </FS:CR>
 	{
 		// If only the media URL changed, and it isn't a media version URL,
 		// ignore it
@@ -850,6 +866,32 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 	{
 		setDebugText(llformat("%.0f:%.0f", (F32) sqrt(min_vsize),(F32) sqrt(max_vsize)));
 	}
+	else if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXTURE_SIZE))
+	{
+		mDrawable->getNumFaces();
+		std::set<LLViewerFetchedTexture*> tex_list;
+		std::string output="";
+		for(S32 i = 0 ; i < num_faces; i++)
+		{
+			LLFace* facep = mDrawable->getFace(i) ;
+			if(facep)
+			{						
+				LLViewerFetchedTexture* tex = dynamic_cast<LLViewerFetchedTexture*>(facep->getTexture()) ;
+				if(tex)
+				{
+					if(tex_list.find(tex) != tex_list.end())
+					{
+						continue ; //already displayed.
+					}
+					tex_list.insert(tex);
+					S32 width= tex->getWidth();
+					S32 height= tex->getHeight();
+					output+=llformat("%dx%d\n",width,height);
+				}
+			}
+		}
+		setDebugText(output);
+	}
 
 	if (mPixelArea == 0)
 	{ //flexi phasing issues make this happen
@@ -1009,6 +1051,9 @@ BOOL LLVOVolume::setVolume(const LLVolumeParams &params_in, const S32 detail, bo
 		}
 	
 		updateSculptTexture();
+		// NaCl - Graphics crasher protection
+		getVolume()->calcSurfaceArea();
+		// NaCl End
 
 		if (isSculpted())
 		{
@@ -1365,6 +1410,11 @@ void LLVOVolume::updateFaceFlags()
 	// There's no guarantee that getVolume()->getNumFaces() == mDrawable->getNumFaces()
 	for (S32 i = 0; i < getVolume()->getNumFaces() && i < mDrawable->getNumFaces(); i++)
 	{
+		// <FS:ND> There's no guarantee that getVolume()->getNumFaces() == mDrawable->getNumFaces()
+		if( mDrawable->getNumFaces() <= i || getNumTEs() <= i )
+			return;
+		// </FS:ND>
+
 		LLFace *face = mDrawable->getFace(i);
 		if (face)
 		{
@@ -1474,6 +1524,11 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global)
 		 i < getVolume()->getNumVolumeFaces() && i < mDrawable->getNumFaces() && i < getNumTEs();
 		 i++)
 	{
+		// <FS:ND> There's no guarantee that getVolume()->getNumFaces() == mDrawable->getNumFaces()
+		if( mDrawable->getNumFaces() <= i )
+			break;
+		// </FS:ND>
+
 		LLFace *face = mDrawable->getFace(i);
 		if (!face)
 		{
@@ -1650,6 +1705,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 			LLFastTimer t(FTM_GEN_FLEX);
 			res = mVolumeImpl->doUpdateGeometry(drawable);
 		}
+		// NaCl - Graphics crasher protection
+		if( enableVolumeSAPProtection() )
+			mVolumeSurfaceArea = getVolume()->getSurfaceArea();
+		// NaCl End
 		updateFaceFlags();
 		return res;
 	}
@@ -1754,7 +1813,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		LLFastTimer t(FTM_GEN_TRIANGLES);
 		genBBoxes(FALSE);
 	}
-
+	// NaCl - Graphics crasher protection
+	if( enableVolumeSAPProtection() )
+		mVolumeSurfaceArea = getVolume()->getSurfaceArea();
+	// NaCl End
 	// Update face flags
 	updateFaceFlags();
 	
@@ -3393,7 +3455,11 @@ F32 LLVOVolume::getStreamingCost(S32* bytes, S32* visible_bytes, F32* unscaled_v
 	{
 		LLVolume* volume = getVolume();
 		S32 counts[4];
-		LLVolume::getLoDTriangleCounts(volume->getParams(), counts);
+
+		// <FS:ND> try to cache calcuated triangles instead of calculating them over and over again
+		//		LLVolume::getLoDTriangleCounts(volume->getParams(), counts);
+		LLVolume::getLoDTriangleCounts(volume->getParams(), counts, volume);
+		// </FS:ND>
 
 		LLSD header;
 		header["lowest_lod"]["size"] = counts[0] * 10;
@@ -3501,10 +3567,22 @@ F32 LLVOVolume::getBinRadius()
 	
 	F32 scale = 1.f;
 
-	S32 size_factor = llmax(gSavedSettings.getS32("OctreeStaticObjectSizeFactor"), 1);
-	S32 attachment_size_factor = llmax(gSavedSettings.getS32("OctreeAttachmentSizeFactor"), 1);
-	LLVector3 distance_factor = gSavedSettings.getVector3("OctreeDistanceFactor");
-	LLVector3 alpha_distance_factor = gSavedSettings.getVector3("OctreeAlphaDistanceFactor");
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//S32 size_factor = llmax(gSavedSettings.getS32("OctreeStaticObjectSizeFactor"), 1);
+	//S32 attachment_size_factor = llmax(gSavedSettings.getS32("OctreeAttachmentSizeFactor"), 1);
+	//LLVector3 distance_factor = gSavedSettings.getVector3("OctreeDistanceFactor");
+	//LLVector3 alpha_distance_factor = gSavedSettings.getVector3("OctreeAlphaDistanceFactor");
+
+	static LLCachedControl<S32> octreeStaticObjectSizeFactor(gSavedSettings, "OctreeStaticObjectSizeFactor");
+	static LLCachedControl<S32> octreeAttachmentSizeFactor(gSavedSettings, "OctreeAttachmentSizeFactor");
+	static LLCachedControl<LLVector3> octreeDistanceFactor(gSavedSettings, "OctreeDistanceFactor");
+	static LLCachedControl<LLVector3> octreeAlphaDistanceFactor(gSavedSettings, "OctreeAlphaDistanceFactor");
+
+	S32 size_factor = (S32)octreeStaticObjectSizeFactor;
+	S32 attachment_size_factor = (S32)octreeAttachmentSizeFactor;
+	LLVector3 distance_factor = (LLVector3)octreeDistanceFactor;
+	LLVector3 alpha_distance_factor = (LLVector3)octreeAlphaDistanceFactor;
+	// </FS:Ansariel>
 	const LLVector4a* ext = mDrawable->getSpatialExtents();
 	
 	BOOL shrink_wrap = mDrawable->isAnimating();
@@ -3649,9 +3727,13 @@ LLVector3 LLVOVolume::volumeDirectionToAgent(const LLVector3& dir) const
 }
 
 
-BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
 									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-	
+									  
+// [/SL:KB]
 {
 	if (!mbCanSelect 
 		|| mDrawable->isDead() 
@@ -3668,9 +3750,15 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 
 	if (mDrawable->isState(LLDrawable::RIGGED))
 	{
-		if (LLFloater::isVisible(gFloaterTools) && getAvatar()->isSelf())
+//		if (LLFloater::isVisible(gFloaterTools) && getAvatar()->isSelf())
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		if ( (pick_rigged) || ( getAvatar() && getAvatar()->isSelf() && (LLFloater::isVisible(gFloaterTools)))  )
+// [/SL:KB]
 		{
-			updateRiggedVolume();
+//			updateRiggedVolume();
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+			updateRiggedVolume(true);
+// [/SL:KB]
 			volume = mRiggedVolume;
 			transform = false;
 		}
@@ -3849,10 +3937,13 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 
 bool LLVOVolume::treatAsRigged()
 {
-	return LLFloater::isVisible(gFloaterTools) && 
+//	return LLFloater::isVisible(gFloaterTools) && 
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	return isSelected() &&
+// [/SL:KB]
 			isAttachment() && 
-			getAvatar() &&
-			getAvatar()->isSelf() &&
+//			getAvatar() &&
+//			getAvatar()->isSelf() &&
 			mDrawable.notNull() &&
 			mDrawable->isState(LLDrawable::RIGGED);
 }
@@ -3871,12 +3962,18 @@ void LLVOVolume::clearRiggedVolume()
 	}
 }
 
-void LLVOVolume::updateRiggedVolume()
+//void LLVOVolume::updateRiggedVolume()
+// [SL:KB]
+void LLVOVolume::updateRiggedVolume(bool force_update)
+// [/SL:KB]
 {
 	//Update mRiggedVolume to match current animation frame of avatar. 
 	//Also update position/size in octree.  
 
-	if (!treatAsRigged())
+//	if (!treatAsRigged())
+// [SL:KB]
+	if ( (!force_update) && (!treatAsRigged()) )
+// [/SL:KB]
 	{
 		clearRiggedVolume();
 		
@@ -4036,6 +4133,10 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 			}
 
+		// <FS:ND> Crashfix if mExtents is 0
+		if( dst_face.mExtents )
+		// </FS:ND>
+
 			{
 				LLFastTimer t(FTM_RIGGED_OCTREE);
 				delete dst_face.mOctree;
@@ -4120,7 +4221,14 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		LL_WARNS("RenderMaterials") << "Oh no! No binormals for this alpha blended face!" << LL_ENDL;
 	}
 	
-	if (facep->getViewerObject()->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects)
+//	if (facep->getViewerObject()->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects)
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+	const LLViewerObject* pObj = facep->getViewerObject();
+	if ( (pObj->isSelected() && LLSelectMgr::getInstance()->mHideSelectedObjects) && 
+		 ( (!rlv_handler_t::isEnabled()) || 
+		   ( ((!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) && 
+		     (gRlvHandler.canEdit(pObj)) ) ) )
+// [/RVLa:KB]
 	{
 		return;
 	}
@@ -4452,8 +4560,18 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	U32 useage = group->mSpatialPartition->mBufferUsage;
 
-	U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
-	U32 max_total = (gSavedSettings.getS32("RenderMaxNodeSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+	// <FS:ND> replace frequent calls to saved settings with LLCachedControl
+	// U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+	// U32 max_total = (gSavedSettings.getS32("RenderMaxNodeSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	static LLCachedControl< S32 > RenderMaxVBOSize( gSavedSettings, "RenderMaxVBOSize");
+	static LLCachedControl< S32 > RenderMaxNodeSize( gSavedSettings, "RenderMaxNodeSize");
+
+	U32 max_vertices = (RenderMaxVBOSize*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+	U32 max_total = (RenderMaxNodeSize*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	// </FS:ND>
+
 	max_vertices = llmin(max_vertices, (U32) 65535);
 
 	U32 cur_total = 0;
@@ -4501,6 +4619,28 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 			}
 
 			llassert_always(vobj);
+
+		// AO:  Z's protection auto-derender code
+		if (enableVolumeSAPProtection())
+		{
+			// NaCl - Graphics crasher protection
+	   		static LLCachedControl<F32> volume_sa_thresh(gSavedSettings,"RenderVolumeSAThreshold");
+			static LLCachedControl<F32> sculpt_sa_thresh(gSavedSettings, "RenderSculptSAThreshold");
+			static LLCachedControl<F32> volume_sa_max_frame(gSavedSettings, "RenderVolumeSAFrameMax");
+			F32 max_for_this_vol = (vobj->isSculpted()) ? sculpt_sa_thresh : volume_sa_thresh;
+
+			if (vobj->mVolumeSurfaceArea > max_for_this_vol)
+			{
+				LLPipeline::sVolumeSAFrame += vobj->mVolumeSurfaceArea;
+				if(LLPipeline::sVolumeSAFrame > volume_sa_max_frame)
+				{
+					continue;
+				}
+			}
+			// NaCl End
+		}
+		// </AO>
+
 			vobj->updateTextureVirtualSize(true);
 			vobj->preRebuild();
 
@@ -5221,8 +5361,15 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFac
 	}
 #endif
 	
-	//calculate maximum number of vertices to store in a single buffer
-	U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	// <FS:ND> replace frequent calls to saved settings with LLCachedControl
+	// U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	static LLCachedControl< S32 > RenderMaxVBOSize( gSavedSettings, "RenderMaxVBOSize");
+	U32 max_vertices = (RenderMaxVBOSize*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	// </FS:ND>
+
 	max_vertices = llmin(max_vertices, (U32) 65535);
 
 	{
@@ -5265,7 +5412,13 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFac
 		texture_index_channels = gDeferredAlphaProgram.mFeatures.mIndexedTextureChannels;
 	}
 
-	texture_index_channels = llmin(texture_index_channels, (S32) gSavedSettings.getU32("RenderMaxTextureIndex"));
+	// <FS:ND> replace frequent calls to saved settings with LLCachedControl
+	// texture_index_channels = llmin(texture_index_channels, (S32) gSavedSettings.getU32("RenderMaxTextureIndex"));
+
+	static LLCachedControl< U32 > RenderMaxTextureIndex( gSavedSettings, "RenderMaxTextureIndex");
+	texture_index_channels = llmin(texture_index_channels, (S32) RenderMaxTextureIndex);
+
+	// </FS:ND>
 	
 	//NEVER use more than 16 texture index channels (workaround for prevalent driver bug)
 	texture_index_channels = llmin(texture_index_channels, 16);

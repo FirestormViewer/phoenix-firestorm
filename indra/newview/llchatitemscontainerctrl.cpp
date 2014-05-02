@@ -35,12 +35,19 @@
 #include "llfloaterreg.h"
 #include "lllocalcliprect.h"
 #include "lltrans.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 
 #include "llviewercontrol.h"
 #include "llagentdata.h"
 
 #include "llslurl.h"
+
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 static const S32 msg_left_offset = 10;
 static const S32 msg_right_offset = 10;
@@ -146,6 +153,7 @@ void LLFloaterIMNearbyChatToastPanel::addMessage(LLSD& notification)
 		default:
 		case 1: messageFont = LLFontGL::getFontSansSerif();	    break;
 		case 2:	messageFont = LLFontGL::getFontSansSerifBig();	break;
+		case 3:	messageFont = LLFontGL::getFontSansSerifHuge();	break;
 	}
 
 	//append text
@@ -161,7 +169,9 @@ void LLFloaterIMNearbyChatToastPanel::addMessage(LLSD& notification)
 
 		if(notification["chat_style"].asInteger()== CHAT_STYLE_IRC)
 		{
-			style_params.font.style = "ITALIC";
+			// italics for emotes -Zi
+			if(gSavedSettings.getBOOL("EmotesUseItalic"))
+				style_params.font.style = "ITALIC";
 		}
 		else if( chat_type == CHAT_TYPE_SHOUT)
 		{
@@ -184,7 +194,11 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
 	std::string		fromName = notification["from"].asString();	// agent or object name
 	mFromID = notification["from_id"].asUUID();		// agent id or object id
 	mFromName = fromName;
-	
+
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+	mShowIconTooltip = notification.has("show_icon_tooltip") ? notification["show_icon_tooltip"].asBoolean() : true;
+// [/RLVa:KB]
+
 	int sType = notification["source"].asInteger();
     mSourceType = (EChatSourceType)sType;
 	
@@ -202,6 +216,7 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
 		default:
 		case 1: messageFont = LLFontGL::getFontSansSerif();	    break;
 		case 2:	messageFont = LLFontGL::getFontSansSerifBig();	break;
+		case 3:	messageFont = LLFontGL::getFontSansSerifHuge();	break;
 	}
 	
 	LLChatMsgBox* msg_text = getChild<LLChatMsgBox>("msg_text", false);
@@ -229,8 +244,15 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
 			style_params_name.font.name(font_name);
 			style_params_name.font.size(font_style_size);
 
-			style_params_name.link_href = notification["sender_slurl"].asString();
-			style_params_name.is_link = true;
+//			style_params_name.link_href = notification["sender_slurl"].asString();
+//			style_params_name.is_link = true;
+// [RLVa:KB] - Checked: 2011-12-13 (RLVa-1.4.6) | Added: RLVa-1.4.6
+			if (notification.has("sender_slurl"))
+			{
+				style_params_name.link_href = notification["sender_slurl"].asString();
+				style_params_name.is_link = true;
+			}
+// [/RLVa:KB]
 
 			msg_text->appendText(str_sender, FALSE, style_params_name);
 
@@ -323,11 +345,32 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 			return TRUE;
 		else
 		{
-			LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
+			FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
+
+			// <FS:Ansariel> If nearby chat history is docked, we also need
+			//               to open the container floater (FIRE-6265)
+			if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
+			{
+				LLFloaterReg::showInstance("fs_im_container");
+			}
+			// </FS:Ansariel> [FS communication UI]
 			return FALSE;
 		}
 	}
-	LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
+
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
+	FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
+
+	// <FS:Ansariel> If nearby chat history is docked, we also need
+	//               to open the container floater (FIRE-6265)
+	if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
+	{
+		LLFloaterReg::showInstance("fs_im_container");
+	}
+	// </FS:Ansariel> [FS communication UI]
 	return LLPanel::handleMouseUp(x,y,mask);
 }
 
@@ -368,7 +411,10 @@ void LLFloaterIMNearbyChatToastPanel::draw()
 		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon", false);
 		if(icon)
 		{
-			icon->setDrawTooltip(mSourceType == CHAT_SOURCE_AGENT);
+//			icon->setDrawTooltip(mSourceType == CHAT_SOURCE_AGENT);
+// [RLVa:KB] - Checked: 2010-04-200 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			icon->setDrawTooltip( (mShowIconTooltip) && (mSourceType == CHAT_SOURCE_AGENT) );
+// [/RLVa:KB]
 			if(mSourceType == CHAT_SOURCE_OBJECT)
 				icon->setValue(LLSD("OBJECT_Icon"));
 			else if(mSourceType == CHAT_SOURCE_SYSTEM)

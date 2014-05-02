@@ -36,7 +36,7 @@
 #include "stdtypes.h"
 
 #if LL_DARWIN
-#include <Carbon/Carbon.h>
+//#include <Carbon/Carbon.h>
 
 // AssertMacros.h does bad things.
 #undef verify
@@ -86,7 +86,10 @@ public:
 		FFLOAD_COLLADA = 10,
 		FFLOAD_SCRIPT = 11,
 		FFLOAD_DICTIONARY = 12,
-        FFLOAD_DIRECTORY = 13   //To call from lldirpicker. 
+		FFLOAD_DIRECTORY = 13,   //To call from lldirpicker.
+		
+		// Firestorm additions
+		FFLOAD_IMPORT = 50
 	};
 
 	enum ESaveFilter
@@ -107,13 +110,22 @@ public:
 		FFSAVE_PNG = 13,
 		FFSAVE_JPEG = 14,
 		FFSAVE_SCRIPT = 15,
-		FFSAVE_TGAPNG = 16
+		FFSAVE_TGAPNG = 16,
+		
+		// Firestorm additions
+		FFSAVE_BEAM = 50,
+		FFSAVE_EXPORT = 51,
+		FFSAVE_CSV = 52
 	};
 
 	// open the dialog. This is a modal operation
-	BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null );
+// <FS:CR Threaded Filepickers>
+	//BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null );
+	BOOL getSaveFile( ESaveFilter filter = FFSAVE_ALL, const std::string& filename = LLStringUtil::null, bool blocking = true );
 	BOOL getOpenFile( ELoadFilter filter = FFLOAD_ALL, bool blocking = true  );
-	BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL );
+	//BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL );
+	BOOL getMultipleOpenFiles( ELoadFilter filter = FFLOAD_ALL, bool blocking = true );
+// </FS:CR Threaded Filepickers>
 
 	// Get the filename(s) found. getFirstFile() sets the pointer to
 	// the start of the structure and allows the start of iteration.
@@ -162,7 +174,7 @@ private:
 #if LL_DARWIN
     S32 mPickOptions;
 	std::vector<std::string> mFileVector;
-	UInt32 mFileIndex;
+	// [FS:CR] Unused 2013.10.24 UInt32 mFileIndex;
 	
 	bool doNavChooseDialog(ELoadFilter filter);
 	bool doNavSaveDialog(ESaveFilter filter, const std::string& filename);

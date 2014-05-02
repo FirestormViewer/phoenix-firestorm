@@ -58,7 +58,9 @@ set_source_files_properties(${llplugin_HEADER_FILES}
 
 if(NOT WORD_SIZE EQUAL 32)
   if(WINDOWS)
+   if( NOT ND_BUILD64BIT_ARCH )
     add_definitions(/FIXED:NO)
+   endif( NOT ND_BUILD64BIT_ARCH )
   else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
     add_definitions(-fPIC)
   endif(WINDOWS)
@@ -68,7 +70,9 @@ list(APPEND llplugin_SOURCE_FILES ${llplugin_HEADER_FILES})
 
 add_library (llplugin ${llplugin_SOURCE_FILES})
 
-add_subdirectory(slplugin)
+if( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
+  add_subdirectory(slplugin)
+endif( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
 
 # Add tests
 if (LL_TESTS)

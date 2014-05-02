@@ -146,6 +146,7 @@ public:
 		   void		onBtnPipette( );
 	//static void		onBtnRevert( void* userdata );
 	static void		onBtnBlank( void* userdata );
+	static void		onBtnTransparent( void* userdata ); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	static void		onBtnNone( void* userdata );
 	static void		onBtnClear( void* userdata );
 		   void		onSelectionChange(const std::deque<LLFolderViewItem*> &items, BOOL user_action);
@@ -166,6 +167,7 @@ protected:
 	LLUUID				mImageAssetID; // Currently selected texture
 	LLUIImagePtr		mFallbackImage; // What to show if currently selected texture is null.
 
+	LLUUID				mTransparentImageAssetID; // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	LLUUID				mSpecialCurrentImageAssetID;  // Used when the asset id has no corresponding texture in the user's inventory.
 	LLUUID				mOriginalImageAssetID;
 
@@ -209,6 +211,7 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	mOwner( owner ),
 	mImageAssetID( owner->getImageAssetID() ),
 	mFallbackImage( fallback_image ),	
+	mTransparentImageAssetID( gSavedSettings.getString( "UIImgTransparentUUID" ) ), // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	mOriginalImageAssetID(owner->getImageAssetID()),
 	mLabel(label),
 	mTentativeLabel(NULL),
@@ -338,6 +341,9 @@ BOOL LLFloaterTexturePicker::handleDragAndDrop(
 		{
 			if (drop)
 			{
+				// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+				setCanApply(true, true);
+				// </FS:Ansariel>
 				setImageID( item->getAssetUUID() );
 				commitIfImmediateSet();
 			}
@@ -426,6 +432,7 @@ BOOL LLFloaterTexturePicker::postBuild()
 	childSetAction("Default",LLFloaterTexturePicker::onBtnSetToDefault,this);
 	childSetAction("None", LLFloaterTexturePicker::onBtnNone,this);
 	childSetAction("Blank", LLFloaterTexturePicker::onBtnBlank,this);
+	childSetAction("Transparent", LLFloaterTexturePicker::onBtnTransparent,this); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 
 
 	childSetCommitCallback("show_folders_check", onShowFolders, this);
@@ -581,6 +588,7 @@ void LLFloaterTexturePicker::draw()
 
 		getChildView("Default")->setEnabled(mImageAssetID != mOwner->getDefaultImageAssetID());
 		getChildView("Blank")->setEnabled(mImageAssetID != mOwner->getBlankImageAssetID());
+		getChildView("Transparent")->setEnabled(mImageAssetID != mTransparentImageAssetID ); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 		getChildView("None")->setEnabled(mOwner->getAllowNoTexture() && !mImageAssetID.isNull() );
 
 		LLFloater::draw();
@@ -701,7 +709,10 @@ PermissionMask LLFloaterTexturePicker::getFilterPermMask()
 
 void LLFloaterTexturePicker::commitIfImmediateSet()
 {
-	if (!mNoCopyTextureSelected && mOwner && mCanApply)
+	// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+	//if (!mNoCopyTextureSelected && mOwner && mCanApply)
+	if (!mNoCopyTextureSelected && mOwner && mCanApply && mCanPreview)
+	// </FS:Ansariel>
 	{
 		mOwner->onFloaterCommit(LLTextureCtrl::TEXTURE_CHANGE);
 	}
@@ -736,6 +747,16 @@ void LLFloaterTexturePicker::onBtnBlank(void* userdata)
 	self->commitIfImmediateSet();
 }
 
+// <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
+// static
+void LLFloaterTexturePicker::onBtnTransparent(void* userdata)
+{
+	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
+	self->setCanApply(true, true);
+	self->setImageID( self->mTransparentImageAssetID );
+	self->commitIfImmediateSet();
+}
+// </FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 
 // static
 void LLFloaterTexturePicker::onBtnNone(void* userdata)
@@ -820,6 +841,9 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 			{
 				mNoCopyTextureSelected = TRUE;
 			}
+			// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+			setCanApply(true, true);
+			// </FS:Ansariel>
 			setImageID(itemp->getAssetUUID());
 			mViewModel->setDirty(); // *TODO: shouldn't we be using setValue() here?
 			if (user_action && mCanPreview)
@@ -839,6 +863,7 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 
 	self->getChild<LLButton>("Default")->setVisible(mode);
 	self->getChild<LLButton>("Blank")->setVisible(mode);
+	self->getChild<LLButton>("Transparent")->setVisible(mode); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	self->getChild<LLButton>("None")->setVisible(mode);
 	self->getChild<LLButton>("Pipette")->setVisible(mode);
 	self->getChild<LLFilterEditor>("inventory search editor")->setVisible(mode);
@@ -928,7 +953,10 @@ void LLFloaterTexturePicker::onLocalScrollCommit(LLUICtrl* ctrl, void* userdata)
 	{
 		LLUUID tracking_id = (LLUUID)self->mLocalScrollCtrl->getSelectedItemLabel(LOCAL_TRACKING_ID_COLUMN); 
 		LLUUID inworld_id = LLLocalBitmapMgr::getWorldID(tracking_id);
-		self->mOwner->setImageAssetID(inworld_id);
+		// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+		//self->mOwner->setImageAssetID(inworld_id);
+		self->setImageID(inworld_id);
+		// </FS:Ansariel>
 
 		if (self->childGetValue("apply_immediate_check").asBoolean())
 		{
@@ -960,7 +988,9 @@ void LLFloaterTexturePicker::onApplyImmediateCheck(LLUICtrl* ctrl, void *user_da
 
 	LLCheckBoxCtrl* check_box = (LLCheckBoxCtrl*)ctrl;
 	gSavedSettings.setBOOL("TextureLivePreview", check_box->get());
-
+	// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+	picker->setCanApply(true, true);
+	// </FS:Ansariel>
 	picker->updateFilterPermMask();
 	picker->commitIfImmediateSet();
 }
@@ -1020,6 +1050,9 @@ void LLFloaterTexturePicker::onTextureSelect( const LLTextureEntry& te )
 	if (inventory_item_id.notNull())
 	{
 		LLToolPipette::getInstance()->setResult(TRUE, "");
+		// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+		setCanApply(true, true);
+		// </FS:Ansariel>
 		setImageID(te.getID());
 
 		mNoCopyTextureSelected = FALSE;
@@ -1062,7 +1095,11 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	mImageAssetID(p.image_id),
 	mDefaultImageAssetID(p.default_image_id),
 	mDefaultImageName(p.default_image_name),
-	mFallbackImage(p.fallback_image)
+	mFallbackImage(p.fallback_image),
+	// <FS:Ansariel> Mask texture if desired
+	mIsMasked(FALSE),
+	// </FS:Ansariel> Mask texture if desired
+	mPreviewMode(!p.enabled) // <FS:Ansariel> For texture preview mode
 {
 
 	// Default of defaults is white image for diff tex
@@ -1179,7 +1216,11 @@ void LLTextureCtrl::setEnabled( BOOL enabled )
 
 	mCaption->setEnabled( enabled );
 
-	LLView::setEnabled( enabled );
+	// <FS:Ansariel> Texture preview mode
+	//LLView::setEnabled( enabled );
+	LLView::setEnabled( (enabled || getValue().asUUID().notNull()) );
+	mPreviewMode = !enabled;
+	// </FS:Ansariel>
 }
 
 void LLTextureCtrl::setValid(BOOL valid )
@@ -1289,11 +1330,30 @@ BOOL LLTextureCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
 
 	if (!handled && mBorder->parentPointInView(x, y))
 	{
-		showPicker(FALSE);
-		//grab textures first...
-		LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
-		//...then start full inventory fetch.
-		LLInventoryModelBackgroundFetch::instance().start();
+		// <FS:Ansariel> Texture preview mode
+		//showPicker(FALSE);
+		////grab textures first...
+		//LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
+		////...then start full inventory fetch.
+		//LLInventoryModelBackgroundFetch::instance().start();
+		if (!mPreviewMode)
+		{
+			showPicker(FALSE);
+			//grab textures first...
+			LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
+			//...then start full inventory fetch.
+			LLInventoryModelBackgroundFetch::instance().start();
+		}
+		else if (!mIsMasked)
+		{
+			// Open the preview floater for the texture
+			LLSD params;
+			params["uuid"] = getValue();
+			params["preview_only"] = TRUE;
+			LLFloaterReg::showInstance("preview_texture", params, TRUE);
+		}
+		// </FS:Ansariel>
+
 		handled = TRUE;
 	}
 
@@ -1419,7 +1479,10 @@ BOOL LLTextureCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask,
 	LLInventoryItem* item = (LLInventoryItem*)cargo_data; 
 	bool is_mesh = cargo_type == DAD_MESH;
 
-	if (getEnabled() &&
+	// <FS:Ansariel> FIRE-10125: Texture picker allows dragging of textures while in preview mode
+	//if (getEnabled() &&
+	if (getEnabled() && !mPreviewMode &&
+	// </FS:Ansariel>
 		((cargo_type == DAD_TEXTURE) || is_mesh) &&
 		 allowDrop(item))
 	{
@@ -1491,6 +1554,13 @@ void LLTextureCtrl::draw()
 		
 		gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), mTexturep, UI_VERTEX_COLOR % alpha);
 		mTexturep->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
+		// <FS:Ansariel> Mask texture if desired
+		if (mIsMasked)
+		{
+			gl_rect_2d( interior, LLColor4(0.5f, 0.5f, 0.5f, 0.44f), TRUE);
+			gl_draw_x( interior, LLColor4::black );
+		}
+		// </FS:Ansariel> Mask texture if desired
 	}
 	else if (!mFallbackImage.isNull())
 	{
@@ -1617,7 +1687,12 @@ BOOL LLTextureCtrl::handleUnicodeCharHere(llwchar uni_char)
 
 void LLTextureCtrl::setValue( const LLSD& value )
 {
-	setImageAssetID(value.asUUID());
+	// <FS:Ansariel> Texture preview mode
+	//setImageAssetID(value.asUUID());
+	LLUUID uuid = value.asUUID();
+	setImageAssetID(uuid);
+	LLView::setEnabled( (!mPreviewMode || uuid.notNull()) );
+	// </FS:Ansariel>
 }
 
 LLSD LLTextureCtrl::getValue() const

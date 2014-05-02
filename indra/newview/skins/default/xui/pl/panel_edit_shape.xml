@@ -4,12 +4,11 @@
 		Metry
 	</string>
 	<string name="feet">
-		Feet
+		Stopy
 	</string>
 	<string name="height">
 		Wysokość:
 	</string>
-	<text name="avatar_height"/>
 	<panel label="Koszula" name="accordion_panel">
 		<accordion name="wearable_accordion">
 			<accordion_tab name="shape_body_tab" title="Ciało"/>
@@ -19,7 +18,7 @@
 			<accordion_tab name="shape_nose_tab" title="Nos"/>
 			<accordion_tab name="shape_mouth_tab" title="Usta"/>
 			<accordion_tab name="shape_chin_tab" title="Podbródek"/>
-			<accordion_tab name="shape_torso_tab" title="Tors"/>
+			<accordion_tab name="shape_torso_tab" title="Tułów"/>
 			<accordion_tab name="shape_legs_tab" title="Nogi"/>
 		</accordion>
 	</panel>

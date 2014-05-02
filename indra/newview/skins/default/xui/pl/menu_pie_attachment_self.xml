@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Attachment Pie">
+    <pie_slice label="Profil..." name="Profile..."/>
+    <pie_slice label="Upuść" name="Drop"/>
+    <pie_menu name="Attachment Pie More" label="Więcej &gt;">
+        <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
+        <pie_slice label="O skryptach" name="ScriptInfo"/>
+        <pie_slice label="Dotknij" name="Attachment Object Touch"/>
+        <pie_menu name="DerenderMenu" label="Derenderuj &gt;">
+            <pie_slice label="Tymczasowo" name="Derender"/>
+            <pie_slice label="Czarna lista" name="DerenderPermanent"/>
+        </pie_menu>
+        <pie_menu name="ExportMenu" label="Zapisz jako &gt;">
+            <pie_slice label="Kopia zapasowa" name="Backup"/>
+            <pie_slice label="Collada" name="Collada"/>
+        </pie_menu>
+        <pie_slice label="Pokaż tekstury" name="Debug..."/>
+    </pie_menu>
+    <pie_slice label="Usiądź tu" name="Sit Down Here"/>
+    <pie_slice label="Wstań" name="Stand Up"/>
+    <pie_slice label="Odłącz" name="Detach"/>
+    <pie_slice label="Gesty..." name="Gestures"/>
+    <pie_menu label="Wygląd &gt;" name="Appearance &gt;">
+        <pie_slice label="Edytuj kształt" name="Edit My Shape"/>
+        <pie_slice label="Edytuj strój" name="Edit My Outfit"/>
+        <pie_slice label="Zrzuć XML" name="Dump XML"/>
+    </pie_menu>
+    <pie_slice label="Edytuj" name="Edit..."/>
+</pie_menu>

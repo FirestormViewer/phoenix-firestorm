@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="spellcheck_floater" title="Configuración del corrector ortográfico">
 	<check_box label="Habilitar la revisión ortográfica" name="spellcheck_enable"/>
-	<text name="spellcheck_main">
+	<text name="spellcheck_main" width="120">
 		Diccionario principal:
 	</text>
 	<text label="Registros:" name="spellcheck_additional">

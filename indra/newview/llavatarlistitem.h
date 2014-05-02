@@ -36,12 +36,14 @@
 #include "llstyle.h"
 
 #include "llcallingcard.h" // for LLFriendObserver
+#include "llavatarpropertiesprocessor.h"
 
 class LLAvatarIconCtrl;
 class LLAvatarName;
 class LLIconCtrl;
+class LLUICtrl;
 
-class LLAvatarListItem : public LLPanel, public LLFriendObserver
+class LLAvatarListItem : public LLPanel, public LLFriendObserver, public LLAvatarPropertiesObserver
 {
 public:
 	struct Params : public LLInitParam::Block<Params, LLPanel::Params>
@@ -51,7 +53,9 @@ public:
 									voice_call_joined_style,
 									voice_call_left_style,
 									online_style,
-									offline_style;
+									offline_style,
+									group_moderator_style;
+
 
 		Optional<S32>				name_right_pad;
 
@@ -65,6 +69,7 @@ public:
 		IS_VOICE_LEFT,
 		IS_ONLINE,
 		IS_OFFLINE,
+		IS_GROUPMOD,
 	} EItemState;
 
 	/**
@@ -93,6 +98,7 @@ public:
 
 	void setOnline(bool online);
 	void updateAvatarName(); // re-query the name cache
+	void updateAvatarProperties(); // (re)query the avatar's server properties
 	void setAvatarName(const std::string& name);
 	void setAvatarToolTip(const std::string& tooltip);
 	void setHighlight(const std::string& highlight);
@@ -102,20 +108,63 @@ public:
 	//Show/hide profile/info btn, translating speaker indicator and avatar name coordinates accordingly
 	void setShowProfileBtn(bool show);
 	void setShowInfoBtn(bool show);
+	void setShowVoiceVolume(bool show);
 	void showSpeakingIndicator(bool show);
-	void setShowPermissions(bool show) { mShowPermissions = show; };
+	void showRange(bool show);
+	void setRange(F32 distance);
+	F32  getRange();
+	void setPosition(LLVector3d globalPos);
+	LLVector3d getPosition();
+	void setAvStatus(S32 statusFlags);
+	S32  getAvStatus();
+	void setFirstSeen(time_t seenTime);
+	time_t	 getFirstSeen();
+	void setLastZOffsetTime(time_t oTime);
+	time_t	getLastZOffsetTime();
+	void setZOffset(F32 offset);
+	F32  getZOffset();
+	void showDisplayName(bool show, bool updateName = true);
+	void showFirstSeen(bool show);
+	void showStatusFlags(bool show);
+	void showAvatarAge(bool show);
+	std::string getAvatarAge();
+	std::string getSeen();
+	void showPaymentStatus(bool show);
+	void updateFirstSeen();
+	void showUsername(bool show, bool updateName = true);
+	void setShowPermissions(bool show);
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	void setRlvCheckShowNames(bool fRlvCheckShowNames) { mRlvCheckShowNames = fRlvCheckShowNames; }
+// [/RLVa:KB]
 	
 	const LLUUID& getAvatarId() const;
 	std::string getAvatarName() const;
+	std::string getUserName() const { return mUserName; }
 	std::string getAvatarToolTip() const;
+	bool getShowingBothNames() const;
 
 	void onInfoBtnClick();
+	void onVolumeChange(const LLSD& data);
 	void onProfileBtnClick();
+	void onPermissionOnlineClick();
+	void onPermissionEditMineClick();
+	void onPermissionMapClick();
+	
+	//Radar state-specific
+	// [Ansariel: Colorful radar]
+	void setUseRangeColors(bool UseRangeColors);
+	void setShoutRangeColor(const LLUIColor& shoutRangeColor);
+	void setBeyondShoutRangeColor(const LLUIColor& beyondShoutRangeColor);
+	// [/Ansariel: Colorful radar]
 
 	/*virtual*/ BOOL handleDoubleClick(S32 x, S32 y, MASK mask);
-
+// [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, 
+	                                   EAcceptance *accept, std::string& tooltip_msg);
+// [/SL:KB]
+ 
 protected:
 	/**
 	 * Contains indicator to show voice activity. 
@@ -125,13 +174,28 @@ protected:
 	LLAvatarIconCtrl* mAvatarIcon;
 
 	/// Indicator for permission to see me online.
-	LLIconCtrl* mIconPermissionOnline;
+	LLButton* mBtnPermissionOnline;
 	/// Indicator for permission to see my position on the map.
-	LLIconCtrl* mIconPermissionMap;
+	LLButton* mBtnPermissionMap;
 	/// Indicator for permission to edit my objects.
-	LLIconCtrl* mIconPermissionEditMine;
+	LLButton* mBtnPermissionEditMine;
 	/// Indicator for permission to edit their objects.
 	LLIconCtrl* mIconPermissionEditTheirs;
+	void confirmModifyRights(bool grant, S32 rights);
+	void rightsConfirmationCallback(const LLSD& notification,
+									const LLSD& response, S32 rights);
+	
+	//radar_specific
+	LLTextBox* mNearbyRange;
+	bool mShowDisplayName;
+	bool mShowUsername;
+	bool mShowFirstSeen;
+	
+	// [Ansariel: Colorful radar]
+	bool mUseRangeColors;
+	LLUIColor mShoutRangeColor;
+	LLUIColor mBeyondShoutRangeColor;
+	// [/Ansariel: Colorful radar]
 
 private:
 
@@ -145,6 +209,7 @@ private:
 	 * Enumeration of item elements in order from right to left.
 	 * 
 	 * updateChildren() assumes that indexes are in the such order to process avatar icon easier.
+	 * assume that child indexes are in back order: the first in Enum is the last (right) in the item
 	 *
 	 * @see updateChildren()
 	 */
@@ -152,6 +217,7 @@ private:
 		ALIC_SPEAKER_INDICATOR,
 		ALIC_PROFILE_BUTTON,
 		ALIC_INFO_BUTTON,
+		ALIC_VOLUME_SLIDER,
 		ALIC_PERMISSION_ONLINE,
 		ALIC_PERMISSION_MAP,
 		ALIC_PERMISSION_EDIT_MINE,
@@ -164,6 +230,8 @@ private:
 
 	void setNameInternal(const std::string& name, const std::string& highlight);
 	void onAvatarNameCache(const LLAvatarName& av_name);
+	void processProperties(void* data, EAvatarProcessorType type);
+
 
 	std::string formatSeconds(U32 secs);
 
@@ -199,22 +267,42 @@ private:
 
 	LLTextBox* mAvatarName;
 	LLTextBox* mLastInteractionTime;
+	LLTextBox* mFirstSeenDisplay;
+	LLTextBox* mAvatarAgeDisplay;
+	LLIconCtrl* mPaymentStatus;
 	LLStyle::Params mAvatarNameStyle;
 	
 	LLButton* mInfoBtn;
 	LLButton* mProfileBtn;
+	LLUICtrl* mVoiceSlider;
 
-	LLUUID mAvatarId;
+	LLUUID	mAvatarId;
+	time_t	mFirstSeen;
+	time_t	mLastZOffsetTime;
+	F32	mZOffset;
+	S32	mAvStatus;
+	LLVector3d mAvPosition;
+	S32	mAvatarAge;
+	F32 	mDistance;
+	
 	std::string mHighlihtSubstring; // substring to highlight
 	EOnlineStatus mOnlineStatus;
 	//Flag indicating that info/profile button shouldn't be shown at all.
 	//Speaker indicator and avatar name coords are translated accordingly
 	bool mShowInfoBtn;
+	bool mShowVoiceVolume;
 	bool mShowProfileBtn;
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	bool mRlvCheckShowNames;
+// [/RLVa:KB]
+	std::string mUserName; //KC - username cache used for sorting
 
 	/// indicates whether to show icons representing permissions granted
 	bool mShowPermissions;
-
+	bool mShowStatusFlags;
+	bool mShowAvatarAge;
+	bool mShowPaymentStatus;
+	
 	/// true when the mouse pointer is hovering over this item
 	bool mHovered;
 	

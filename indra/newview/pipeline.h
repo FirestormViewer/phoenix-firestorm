@@ -197,6 +197,9 @@ public:
 	//get the object between start and end that's closest to start.
 	LLViewerObject* lineSegmentIntersectInWorld(const LLVector4a& start, const LLVector4a& end,
 												BOOL pick_transparent,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+												BOOL pick_rigged,
+// [/SL:KB]
 												S32* face_hit,                          // return the face hit
 												LLVector4a* intersection = NULL,         // return the intersection point
 												LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point
@@ -544,7 +547,8 @@ public:
 		RENDER_DEBUG_LOD_INFO	        = 0x08000000,
 		RENDER_DEBUG_RENDER_COMPLEXITY  = 0x10000000,
 		RENDER_DEBUG_ATTACHMENT_BYTES	= 0x20000000,
-		RENDER_DEBUG_TEXEL_DENSITY		= 0x40000000
+		RENDER_DEBUG_TEXEL_DENSITY		= 0x40000000,
+		RENDER_DEBUG_TEXTURE_SIZE		= 0x80000000
 	};
 
 public:
@@ -608,6 +612,9 @@ public:
 	static S32				sVisibleLightCount;
 	static F32				sMinRenderSize;
 	static BOOL				sRenderingHUDs;
+	static F32        		sVolumeSAFrame;
+
+	static bool				sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
 
 	//screen texture
 	U32 					mScreenWidth;
@@ -746,7 +753,10 @@ protected:
 	LLSpatialGroup::sg_vector_t		mMeshDirtyGroup; //groups that need rebuildMesh called
 	U32 mMeshDirtyQueryObject;
 
-	LLDrawable::drawable_list_t		mPartitionQ; //drawables that need to update their spatial partition radius 
+	// <FS:ND> A vector is much better suited for the use case of mPartitionQ
+	// LLDrawable::drawable_list_t		mPartitionQ; //drawables that need to update their spatial partition radius 
+	LLDrawable::drawable_vector_t	mPartitionQ; //drawables that need to update their spatial partition radius 
+	// </FS:ND>
 
 	bool mGroupQ2Locked;
 	bool mGroupQ1Locked;
@@ -955,6 +965,16 @@ public:
 	static F32 CameraMaxCoF;
 	static F32 CameraDoFResScale;
 	static F32 RenderAutoHideSurfaceAreaLimit;
+
+
+ 	// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
+	// Depending on the state of the pipeline. this can trigger illegal deletion of drawables.
+	// To work around that, resizeScreenTexture will just set a flag, which then later does trigger the change
+	// in shaders.
+	static bool TriggeredDisabledDeferred;
+
+	void disableDeferredOnLowMemory();
+	// </FS:ND>
 };
 
 void render_bbox(const LLVector3 &min, const LLVector3 &max);

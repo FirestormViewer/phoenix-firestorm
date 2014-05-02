@@ -35,6 +35,7 @@
 #include "llcoordframe.h"			// for mFrameAgent
 #include "llavatarappearancedefines.h"
 #include "llpermissionsflags.h"
+#include "llviewerinventory.h"	// <FS:CR> Needed for LLViewerInventoryItem
 
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -155,6 +156,7 @@ public:
 	//--------------------------------------------------------------------
 public:
 	//*TODO remove, is not used as of August 20, 2009
+	void			buildFullname(std::string& name) const;
 	void			buildFullnameAndTitle(std::string &name) const;
 
 	//--------------------------------------------------------------------
@@ -253,6 +255,9 @@ private:
 	LLHost			getRegionHost() const;
 	BOOL			inPrelude();
 
+	// <FS:Ansariel> Aurora sim windlight refresh
+	void changeRegion();
+
 	/**
 	 * Register a boost callback to be called when the agent changes regions
 	 * Note that if you need to access a capability for the region, you may need to wait
@@ -294,6 +299,14 @@ private:
 	std::set<U64>	mRegionsVisited;		// Stat - what distinct regions has the avatar been to?
 	F64				mDistanceTraveled;		// Stat - how far has the avatar moved?
 	LLVector3d		mLastPositionGlobal;	// Used to calculate travel distance
+
+	//------------------------------------------------------------------------
+	// Inventory
+	//------------------------------------------------------------------------
+	public:
+		bool restoreToWorld;
+		LLUUID restoreToWorldGroup;
+		LLViewerInventoryItem* restoreToWorldItem;
 	
 /**                    Position
  **                                                                            **
@@ -394,19 +407,31 @@ public:
 		DOUBLETAP_SLIDERIGHT
 	};
 
-	void			setAlwaysRun() 			{ mbAlwaysRun = true; }
-	void			clearAlwaysRun() 		{ mbAlwaysRun = false; }
-	void			setRunning() 			{ mbRunning = true; }
-	void			clearRunning() 			{ mbRunning = false; }
-	void 			sendWalkRun(bool running);
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	void			setAlwaysRun();
+	void			setTempRun();
+	void			clearAlwaysRun();
+	void			clearTempRun();
+	void 			sendWalkRun();
+	bool			getTempRun()			{ return mbTempRun; }
+	bool			getRunning() const 		{ return (mbAlwaysRun) || (mbTempRun); }
+// [/RLVa:KB]
+//	void			setAlwaysRun() 			{ mbAlwaysRun = true; }
+//	void			clearAlwaysRun() 		{ mbAlwaysRun = false; }
+//	void			setRunning() 			{ mbRunning = true; }
+//	void			clearRunning() 			{ mbRunning = false; }
+//	void 			sendWalkRun(bool running);
 	bool			getAlwaysRun() const 	{ return mbAlwaysRun; }
-	bool			getRunning() const 		{ return mbRunning; }
+//	bool			getRunning() const 		{ return mbRunning; }
 public:
 	LLFrameTimer 	mDoubleTapRunTimer;
 	EDoubleTapRunMode mDoubleTapRunMode;
 private:
 	bool 			mbAlwaysRun; 			// Should the avatar run by default rather than walk?
-	bool 			mbRunning;				// Is the avatar trying to run right now?
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	bool 			mbTempRun;
+// [/RLVa:KB]
+//	bool 			mbRunning;				// Is the avatar trying to run right now?
 	bool			mbTeleportKeepsLookAt;	// Try to keep look-at after teleport is complete
 
 	//--------------------------------------------------------------------
@@ -425,6 +450,34 @@ public:
 	bool			isDoNotDisturb() const;
 private:
 	bool			mIsDoNotDisturb;
+	//--------------------------------------------------------------------
+	// Autorespond
+	//--------------------------------------------------------------------
+public:
+	void			setAutorespond();
+	void			clearAutorespond();
+	void			selectAutorespond(BOOL);
+	BOOL			getAutorespond() const;
+private:
+	BOOL			mIsAutorespond;
+
+public:
+	void			setAutorespondNonFriends();
+	void			clearAutorespondNonFriends();
+	void			selectAutorespondNonFriends(BOOL);
+	BOOL			getAutorespondNonFriends() const;
+private:
+	BOOL			mIsAutorespondNonFriends;
+
+// <FS:PP> FIRE-1245: Option to block/reject teleport offers
+public:
+	void			setRejectTeleportOffers();
+	void			clearRejectTeleportOffers();
+	void			selectRejectTeleportOffers(BOOL);
+	BOOL			getRejectTeleportOffers() const;
+private:
+	BOOL			mIsRejectTeleportOffers;
+// </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 	//--------------------------------------------------------------------
 	// Grab
@@ -460,12 +513,22 @@ private:
 	U32				mControlFlags;					// Replacement for the mFooKey's
 	BOOL 			mbFlagsDirty;
 	BOOL 			mbFlagsNeedReset;				// ! HACK ! For preventing incorrect flags sent when crossing region boundaries
-	
+
+	// <FS> Ignore prejump and always fly
+	static BOOL ignorePrejump;
+	static BOOL fsAlwaysFly;
+	void updateIgnorePrejump(const LLSD &data);
+	void updateFSAlwaysFly(const LLSD &data);
+	// </FS> Ignore prejump and always fly
+
 	//--------------------------------------------------------------------
 	// Animations
 	//--------------------------------------------------------------------
 public:
-	void            stopCurrentAnimations();
+	// <FS:Ansariel> FIRE-12148: Pose stand breaks XPOSE animations
+	//void            stopCurrentAnimations();
+	void            stopCurrentAnimations(bool force_keep_script_perms = false);
+	// </FS:Ansariel>
 	void			requestStopMotion(LLMotion* motion);
 	void			onAnimStop(const LLUUID& id);
 	void			sendAnimationRequests(LLDynamicArray<LLUUID> &anim_ids, EAnimRequest request);
@@ -611,6 +674,10 @@ public:
 	void			teleportViaLocationLookAt(const LLVector3d& pos_global);// To a global location, preserving camera rotation
 	void 			teleportCancel();										// May or may not be allowed by server
 	bool			getTeleportKeepsLookAt() { return mbTeleportKeepsLookAt; } // Whether look-at reset after teleport
+// <FS:TT> Client LSL Bridge
+	bool			teleportBridgeLocal(LLVector3& pos_local);					// Teleport using LSL Bridge
+	bool			teleportBridgeGlobal(const LLVector3d& pos_global);			// Teleport using LSL Bridge
+// </FS:TT>
 protected:
 	bool 			teleportCore(bool is_local = false); 					// Stuff for all teleports; returns true if the teleport can proceed
 
@@ -922,6 +989,20 @@ public:
  **                                                                            **
  *******************************************************************************/
 
+/********************************************************************************
+ **                                                                            **
+ **                    Firestorm
+ **/
+
+public:
+	void		togglePhantom();
+	bool		getPhantom() const;
+private:
+	BOOL		mPhantom;
+
+/**                    Firestorm
+ **                                                                            **
+ *******************************************************************************/
 };
 
 extern LLAgent gAgent;

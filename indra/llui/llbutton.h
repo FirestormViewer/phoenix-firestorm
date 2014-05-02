@@ -138,6 +138,8 @@ public:
 		Optional<S32>				button_flash_count;
 		Optional<F32>				button_flash_rate;
 
+		Optional<std::string>		checkbox_control;		// <FS:Zi> Add checkbox control toggle
+
 		Params();
 	};
 	
@@ -232,6 +234,8 @@ public:
 	void 			setImageOverlay(const LLUUID& image_id, LLFontGL::HAlign alignment = LLFontGL::HCENTER, const LLColor4& color = LLColor4::white);
 	LLPointer<LLUIImage> getImageOverlay() { return mImageOverlay; }
 	LLFontGL::HAlign getImageOverlayHAlign() const	{ return mImageOverlayAlignment; }
+	// <FS:Ansariel> Setter for overlay image selectedcolor
+	void			setImageOverlaySelectedColor(const LLColor4& color) { mImageOverlaySelectedColor = color; }
 	
 	void            autoResize();	// resize with label of current btn state 
 	void            resize(LLUIString label); // resize with label input
@@ -380,6 +384,11 @@ protected:
 	LLFlashTimer *				mFlashingTimer;
 	bool                        mForceFlashing; // Stick flashing color even if button is pressed
 	bool						mHandleRightMouse;
+
+	// <FS:Zi> Add checkbox control toggle
+	std::string					mCheckboxControl;
+	LLPanel*					mCheckboxControlPanel;
+	// </FS:Zi>
 };
 
 // Build time optimization, generate once in .cpp file

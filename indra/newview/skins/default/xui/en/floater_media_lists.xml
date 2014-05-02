@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+	can_close="true"
+	can_drag_on_left="false"
+	can_minimize="true"
+    can_resize="true"
+	height="254"
+    name="floatermedialists"
+	positioning="centered"
+	save_rect="true"
+	title="Media Lists"
+    width="460"
+    min_height="300"
+    min_width="460">
+	<floater.string name="EnterUrlAllow">
+		Enter domain or URL to always allow:
+	</floater.string>
+	<floater.string name="EnterUrlDeny">
+		Enter domain or URL to never allow:
+	</floater.string>
+
+	<layout_stack
+		name="lists_layout_stack"
+		left="10"
+		top="10"
+		right="-10"
+		height="234"
+		follows="all"
+		orientation="horizontal"
+		layout="topleft">
+
+	<layout_panel
+		name="whitelist_layout_panel"
+		width="220"
+		height="204"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
+	<text
+		left="0"
+		top="0"
+		right="-5"
+		height="16"
+		enabled="true"
+		follows="left|right|top"
+		font="SansSerifSmall"
+		mouse_opaque="true"
+		name="whitelist_text">
+		Allowed Domains:
+	</text>
+
+	<scroll_list
+		left_delta="0"
+		top_pad="4"
+		right="-5"
+		height="160"
+		follows="all"
+		background_visible="true"
+		column_padding="5"
+		draw_border="true"
+	    draw_heading="false"
+		mouse_opaque="true"
+	    multi_select="false"
+		name="whitelist">
+		<column label="Whitelist" name="list" width="195" />
+	</scroll_list>
+
+	<layout_stack
+		name="whitelist_buttons_layout_stack"
+		left="0"
+		top_pad="4"
+		height="20"
+		follows="left|right|bottom"
+		orientation="horizontal"
+		layout="topleft">
+
+	<layout_panel
+		name="whitelist_buttons_panel_add"
+		width="110"
+		height="20"
+		user_resize="false"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
+	<button
+		top="0"
+		left="0"
+		height="20"
+		right="-2"
+		enabled="true"
+		follows="all"
+		font="SansSerifSmall"
+		halign="center"
+		label="Add..."
+		label_selected="Add..."
+		mouse_opaque="true"
+		name="add_whitelist" />
+
+	</layout_panel>
+	<layout_panel
+		name="whitelist_buttons_panel_remove"
+		width="110"
+		height="20"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
+	<button
+		top="0"
+		left="2"
+		height="20"
+		right="-1"
+		enabled="true"
+		follows="all"
+		font="SansSerifSmall"
+		halign="center"
+		label="Remove"
+		label_selected="Remove"
+		mouse_opaque="true"
+		name="remove_whitelist" />
+
+	</layout_panel>
+	</layout_stack>
+
+	</layout_panel>
+
+	<layout_panel
+		name="blacklist_layout_panel"
+		width="220"
+		height="204"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
+	<text
+		left="5"
+		top="0"
+		right="-1"
+		height="16"
+		enabled="true"
+		follows="left|right|top"
+		font="SansSerifSmall"
+		mouse_opaque="true"
+		name="blacklist_text">
+		Blocked Domains:
+	</text>
+
+	<scroll_list
+		left_delta="0"
+		top_pad="4"
+		right="-1"
+		height="160"
+		follows="all"
+		background_visible="true"
+		column_padding="5"
+		draw_border="true"
+	    draw_heading="false"
+		mouse_opaque="true"
+	    multi_select="false"
+		name="blacklist">
+		<column label="Blacklist" name="list" width="195" />
+	</scroll_list>
+
+	<layout_stack
+		name="blacklist_buttons_layout_stack"
+		left="5"
+		top_pad="4"
+		height="20"
+		follows="left|right|bottom"
+		orientation="horizontal"
+		layout="topleft">
+
+	<layout_panel
+		name="blacklist_buttons_panel_add"
+		width="110"
+		height="20"
+		user_resize="false"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
+	<button
+		top="0"
+		left="0"
+		height="20"
+		right="-2"
+		enabled="true"
+		follows="all"
+		font="SansSerifSmall"
+		halign="center"
+		label="Add..."
+		label_selected="Add..."
+		mouse_opaque="true"
+		name="add_blacklist" />
+
+	</layout_panel>
+	<layout_panel
+		name="blacklist_buttons_panel_remove"
+		width="110"
+		height="20"
+		auto_resize="true"
+		follows="all"
+		layout="topleft">
+
+	<button
+		top="0"
+		left="2"
+		height="20"
+		right="-1"
+		enabled="true"
+		follows="all"
+		font="SansSerifSmall"
+		halign="center"
+		label="Remove"
+		label_selected="Remove"
+		mouse_opaque="true"
+		name="remove_blacklist" />
+
+	</layout_panel>
+	</layout_stack>
+
+	</layout_panel>
+	</layout_stack>
+
+</floater>

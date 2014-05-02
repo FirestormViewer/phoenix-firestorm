@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_radar">
+	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie aktywuje teleport, przeciąganie z Shiftem przesuwa)"/>
+	<string name="avatar_name_count" value="Imię [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<panel name="nearby_buttons_panel">
+			<filter_editor label="Filtruj ludzi" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="Akcje dotyczące wybranej osoby"/>
+			<menu_button name="options_btn" tool_tip="Opcje radaru"/>
+			<button name="add_friend_btn" tool_tip="Zaproponuj rezydentowi znajomość"/>
+		</panel>
+		<layout_stack name="radar_outer_ls">
+			<layout_panel name="radar_upper_layout">
+				<layout_stack name="radar_ls">
+					<layout_panel name="radarlayout">
+						<radar_list name="radar_list">
+							<radar_list.columns label="Imię" name="name" tool_tip="[TOTAL] awatarów, [IN_REGION] w tym samym regionie, [IN_CHAT_RANGE] w zasięgu czatu"/>
+							<radar_list.columns name="voice_level" tool_tip="Rozmawia głosowo"/>
+							<radar_list.columns name="in_region" tool_tip="Jest w tym samym regionie"/>
+							<radar_list.columns name="flags" tool_tip="Stan danych płatniczych"/>
+							<radar_list.columns label="Wiek" name="age"/>
+							<radar_list.columns label="Widz." name="seen"/>
+							<radar_list.columns label="Odl." name="range"/>
+						</radar_list>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="radar_lower_layout">
+				<slider label="Dystans (m):" name="NearMeRange" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

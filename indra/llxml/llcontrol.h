@@ -88,6 +88,18 @@ typedef enum e_control_type
 	TYPE_COUNT
 } eControlType;
 
+typedef enum e_sanity_type
+{
+	SANITY_TYPE_NONE = 0,
+	SANITY_TYPE_EQUALS,
+	SANITY_TYPE_NOT_EQUALS,
+	SANITY_TYPE_LESS_THAN,
+	SANITY_TYPE_GREATER_THAN,
+	SANITY_TYPE_BETWEEN,
+	SANITY_TYPE_NOT_BETWEEN,
+	SANITY_TYPE_COUNT
+} eSanityType;
+
 class LLControlVariable : public LLRefCount
 {
 	LOG_CLASS(LLControlVariable);
@@ -97,6 +109,7 @@ class LLControlVariable : public LLRefCount
 public:
 	typedef boost::signals2::signal<bool(LLControlVariable* control, const LLSD&), boost_boolean_combiner> validate_signal_t;
 	typedef boost::signals2::signal<void(LLControlVariable* control, const LLSD&, const LLSD&)> commit_signal_t;
+	typedef boost::signals2::signal<void(LLControlVariable* control, const LLSD&)> sanity_signal_t;
 
 	enum ePersist
 	{
@@ -108,23 +121,38 @@ public:
 private:
 	std::string		mName;
 	std::string		mComment;
-	eControlType	mType;
+	eControlType		mType;
+	eSanityType		mSanityType;
+	std::string		mSanityComment;
 	ePersist		mPersist;
+	bool			mCanBackup;		// <FS:Zi> Backup Settings
 	bool			mHideFromSettingsEditor;
 	std::vector<LLSD> mValues;
+	std::vector<LLSD> mSanityValues;
 
 	commit_signal_t mCommitSignal;
 	validate_signal_t mValidateSignal;
+	sanity_signal_t mSanitySignal;
 	
 public:
 	LLControlVariable(const std::string& name, eControlType type,
-					  LLSD initial, const std::string& comment,
-					  ePersist persist = PERSIST_NONDFT, bool hidefromsettingseditor = false);
+		LLSD initial, const std::string& comment,
+		eSanityType sanityType,
+		LLSD sanityValues,
+		const std::string& sanityComment,
+		// <FS:Zi> Backup Settings
+		// ePersist persist = PERSIST_NONDFT, bool hidefromsettingseditor = false
+		ePersist persist = PERSIST_NONDFT, bool can_backup = true, bool hidefromsettingseditor = false
+		// </FS:Zi>
+	);
 
 	virtual ~LLControlVariable();
 	
 	const std::string& getName() const { return mName; }
 	const std::string& getComment() const { return mComment; }
+	eSanityType getSanityType() { return mSanityType; }
+	const std::string& getSanityComment() const { return mSanityComment; }
+	const std::vector<LLSD>& getSanityValues() { return mSanityValues; };
 
 	eControlType type()		{ return mType; }
 	bool isType(eControlType tp) { return tp == mType; }
@@ -134,10 +162,13 @@ public:
 	commit_signal_t* getSignal() { return &mCommitSignal; } // shorthand for commit signal
 	commit_signal_t* getCommitSignal() { return &mCommitSignal; }
 	validate_signal_t* getValidateSignal() { return &mValidateSignal; }
+	sanity_signal_t* getSanitySignal() { return &mSanitySignal; }
 
 	bool isDefault() { return (mValues.size() == 1); }
+	bool isSane();
 	bool shouldSave(bool nondefault_only);
 	bool isPersisted() { return mPersist != PERSIST_NO; }
+	bool isBackupable() { return mCanBackup; }		// <FS:Zi> Backup Settings
 	bool isHiddenFromSettingsEditor() { return mHideFromSettingsEditor; }
 	LLSD get()			const	{ return getValue(); }
 	LLSD getValue()		const	{ return mValues.back(); }
@@ -148,6 +179,7 @@ public:
 	void setValue(const LLSD& value, bool saved_value = TRUE);
 	void setDefaultValue(const LLSD& value);
 	void setPersist(ePersist);
+	void setBackupable(bool state);		// <FS:Zi> Backup Settings
 	void setHiddenFromSettingsEditor(bool hide);
 	void setComment(const std::string& comment);
 
@@ -193,10 +225,13 @@ protected:
 	typedef std::map<std::string, LLControlVariablePtr > ctrl_name_table_t;
 	ctrl_name_table_t mNameTable;
 	std::string mTypeString[TYPE_COUNT];
+	std::string mSanityTypeString[SANITY_TYPE_COUNT];
 
 public:
 	eControlType typeStringToEnum(const std::string& typestr);
+	eSanityType sanityTypeStringToEnum(const std::string& sanitystr);
 	std::string typeEnumToString(eControlType typeenum);	
+	std::string sanityTypeEnumToString(eSanityType sanitytypeenum);	
 
 	LLControlGroup(const std::string& name);
 	~LLControlGroup();
@@ -213,7 +248,11 @@ public:
 	};
 	void applyToAll(ApplyFunctor* func);
 
-	LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, LLControlVariable::ePersist persist, BOOL hidefromsettingseditor = FALSE);
+	// <FS:Zi> Backup Settings
+	//LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, LLControlVariable::ePersist persist, BOOL hidefromsettingseditor = FALSE);
+	LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, LLControlVariable::ePersist persist, BOOL can_backup = TRUE, BOOL hidefromsettingseditor = FALSE);
+	// </FS:Zi>
+
 	LLControlVariable* declareU32(const std::string& name, U32 initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
 	LLControlVariable* declareS32(const std::string& name, S32 initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
 	LLControlVariable* declareF32(const std::string& name, F32 initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
@@ -338,7 +377,7 @@ public:
 	{
 		if(!group.controlExists(name))
 		{
-			llerrs << "Control named " << name << "not found." << llendl;
+			llerrs << "Control named \"" << name << "\" not found." << llendl;
 		}
 
 		bindToControl(group, name);
@@ -373,7 +412,10 @@ private:
 		init_value = convert_to_llsd(default_value);
 		if(type < TYPE_COUNT)
 		{
-			group.declareControl(name, type, init_value, comment, LLControlVariable::PERSIST_NO);
+			// <FS:Zi> Backup Settings
+			// group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), LLControlVariable::PERSIST_NO);
+			group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), LLControlVariable::PERSIST_NO);
+			// </FS_Zi>
 			return true;
 		}
 		return false;
@@ -405,6 +447,16 @@ public:
 		if (mCachedControlPtr.isNull())
 		{
 			mCachedControlPtr = new LLControlCache<T>(group, name, default_value, comment);
+		}
+	}
+
+	LLCachedControl(LLControlGroup& group,
+					const std::string& name)
+	{
+		mCachedControlPtr = LLControlCache<T>::getInstance(name);
+		if (mCachedControlPtr.isNull())
+		{
+			mCachedControlPtr = new LLControlCache<T>(group, name);
 		}
 	}
 

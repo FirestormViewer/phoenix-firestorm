@@ -32,6 +32,12 @@
 #include "llnotifications.h"
 #include "lltextbox.h"
 
+// Firestorm includes
+#include "llgroupmgr.h"
+#include "llimview.h"
+#include "lloutputmonitorctrl.h"
+#include "llpanel.h"
+
 class LLMenuGL;
 class LLFloaterIMSession;
 
@@ -116,6 +122,37 @@ protected:
 	friend class LLUICtrlFactory;
 };
 
+// <FS:Ansariel> [FS communication UI]
+/**
+ * Class for displaying group's icon in Group chiclet.
+ */
+class LLChicletGroupIconCtrl : public LLIconCtrl
+{
+public:
+
+	struct Params :	public LLInitParam::Block<Params, LLIconCtrl::Params>
+	{
+		Optional<std::string> default_icon;
+
+		Params()
+		:	default_icon("default_icon", "Generic_Group")
+		{}
+	};
+
+	/**
+	 * Sets icon, if value is LLUUID::null - default icon will be set.
+	 */
+	virtual void setValue(const LLSD& value );
+
+protected:
+
+	LLChicletGroupIconCtrl(const Params& p);
+	friend class LLUICtrlFactory;
+
+	std::string mDefaultIcon;
+};
+// </FS:Ansariel> [FS communication UI]
+
 /**
  * Class for displaying icon in inventory offer chiclet.
  */
@@ -148,6 +185,25 @@ protected:
 private:
 	std::string mDefaultIcon;
 };
+
+// <FS:Ansariel> [FS communication UI]
+/**
+ * Class for displaying of speaker's voice indicator 
+ */
+class LLChicletSpeakerCtrl : public LLOutputMonitorCtrl
+{
+public:
+
+	struct Params : public LLInitParam::Block<Params, LLOutputMonitorCtrl::Params>
+	{
+		Params(){};
+	};
+protected:
+
+	LLChicletSpeakerCtrl(const Params&p);
+	friend class LLUICtrlFactory;
+};
+// </FS:Ansariel> [FS communication UI]
 
 /**
  * Base class for all chiclets.
@@ -205,6 +261,23 @@ public:
 	 * Returns IM Session id using LLSD
 	 */
 	/*virtual*/ void setValue(const LLSD& value);
+
+	// <FS:Ansariel> [FS communication UI]
+	/**
+	 * Sets number of unread notifications.
+	 */
+	virtual void setCounter(S32 counter) = 0;
+
+	/**
+	 * Returns number of unread notifications.
+	 */
+	virtual S32 getCounter() = 0;
+
+	/**
+	 * Returns show counter state.
+	 */
+	virtual bool getShowCounter() {return mShowCounter;};
+	// </FS:Ansariel> [FS communication UI]
 
 protected:
 
@@ -305,6 +378,64 @@ public:
 	 */
 	virtual BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
+	// <FS:Ansariel> [FS communication UI]
+	/**
+	 * Gets id of person/group user is chatting with.
+	 */
+	virtual LLUUID getOtherParticipantId() { return mOtherParticipantId; }
+
+	/**
+	 * Init Speaker Control with speaker's ID
+	 */
+	virtual void initSpeakerControl();
+
+	/**
+	 * set status (Shows/Hide) for voice control.
+	 */
+	virtual void setShowSpeaker(bool show);
+
+	/**
+	 * Returns voice chat status control visibility.
+	 */
+	virtual bool getShowSpeaker() {return mShowSpeaker;};
+
+	/**
+	 * Shows/Hides for voice control for a chiclet.
+	 */
+	virtual void toggleSpeakerControl();
+
+	/**
+	* Sets number of unread messages. Will update chiclet's width if number text 
+	* exceeds size of counter and notify it's parent about size change.
+	*/
+	virtual void setCounter(S32);
+
+	/**
+	* Sets show counter state.
+	*/
+	virtual void setShowCounter(bool show);
+
+	/**
+	* Shows/Hides for counter control for a chiclet.
+	*/
+	virtual void toggleCounterControl();
+
+	virtual void draw();
+
+	/**
+	 * Determine whether given ID refers to a group or an IM chat session.
+	 * 
+	 * This is used when we need to chose what IM chiclet (P2P/group)
+	 * class to instantiate.
+	 * 
+	 * @param session_id session ID.
+	 * @return TYPE_GROUP in case of group chat session,
+	 *         TYPE_IM in case of P2P session,
+	 *         TYPE_UNKNOWN otherwise.
+	 */
+	static EType getIMSessionType(const LLUUID& session_id);
+	// </FS:Ansariel> [FS communication UI]
+
 protected:
 
 	LLIMChiclet(const LLIMChiclet::Params& p);
@@ -332,6 +463,11 @@ protected:
 
 	LLIconCtrl* mNewMessagesIcon;
 	LLButton* mChicletButton;
+
+	// <FS:Ansariel> [FS communication UI]
+	LLChicletNotificationCounterCtrl* mCounterCtrl;
+	LLChicletSpeakerCtrl* mSpeakerCtrl;
+	// </FS:Ansariel> [FS communication UI]
 
 	/** the id of another participant, either an avatar id or a group id*/
 	LLUUID mOtherParticipantId;
@@ -384,6 +520,12 @@ public:
 	 */
 	/*virtual*/ void onMouseDown();
 
+	// <FS:Ansariel> [FS communication UI]
+	/*virtual*/ void setCounter(S32 counter);
+
+	/*virtual*/ S32 getCounter() { return 0; }
+	// </FS:Ansariel> [FS communication UI]
+
 protected:
 
 	LLScriptChiclet(const Params&);
@@ -429,6 +571,12 @@ public:
 	 */
 	/*virtual*/ void onMouseDown();
 
+	// <FS:Ansariel> [FS communication UI]
+	/*virtual*/ void setCounter(S32 counter);
+
+	/*virtual*/ S32 getCounter() { return 0; }
+	// </FS:Ansariel> [FS communication UI]
+
 protected:
 	LLInvOfferChiclet(const Params&);
 	friend class LLUICtrlFactory;
@@ -446,6 +594,223 @@ protected:
 private:
 	LLChicletInvOfferIconCtrl* mChicletIconCtrl;
 };
+
+// <FS:Ansariel> [FS communication UI]
+/**
+ * Implements P2P chiclet.
+ */
+class LLIMP2PChiclet : public LLIMChiclet
+{
+public:
+	struct Params : public LLInitParam::Block<Params, LLIMChiclet::Params>
+	{
+		Optional<LLButton::Params> chiclet_button;
+
+		Optional<LLChicletAvatarIconCtrl::Params> avatar_icon;
+
+		Optional<LLChicletNotificationCounterCtrl::Params> unread_notifications;
+
+		Optional<LLChicletSpeakerCtrl::Params> speaker;
+
+		Optional<LLIconCtrl::Params> new_message_icon;
+
+		Optional<bool>	show_speaker;
+
+		Params();
+	};
+
+	/* virtual */ void setOtherParticipantId(const LLUUID& other_participant_id);
+
+	/**
+	 * Init Speaker Control with speaker's ID
+	 */
+	/*virtual*/ void initSpeakerControl();
+
+	/**
+	 * Returns number of unread messages.
+	 */
+	/*virtual*/ S32 getCounter() { return mCounterCtrl->getCounter(); }
+
+protected:
+	LLIMP2PChiclet(const Params& p);
+	friend class LLUICtrlFactory;
+
+	/**
+	 * Creates chiclet popup menu. Will create P2P or Group IM Chat menu 
+	 * based on other participant's id.
+	 */
+	virtual void createPopupMenu();
+
+	/**
+	 * Processes clicks on chiclet popup menu.
+	 */
+	virtual void onMenuItemClicked(const LLSD& user_data);
+
+	/** 
+	 * Enables/disables menus based on relationship with other participant.
+	 * Enables/disables "show session" menu item depending on visible IM floater existence.
+	 */
+	virtual void updateMenuItems();
+
+private:
+
+	LLChicletAvatarIconCtrl* mChicletIconCtrl;
+};
+
+/**
+ * Implements AD-HOC chiclet.
+ */
+class LLAdHocChiclet : public LLIMChiclet
+{
+public:
+	struct Params : public LLInitParam::Block<Params, LLIMChiclet::Params>
+	{
+		Optional<LLButton::Params> chiclet_button;
+
+		Optional<LLChicletAvatarIconCtrl::Params> avatar_icon;
+
+		Optional<LLChicletNotificationCounterCtrl::Params> unread_notifications;
+
+		Optional<LLChicletSpeakerCtrl::Params> speaker;
+
+		Optional<LLIconCtrl::Params> new_message_icon;
+
+		Optional<bool>	show_speaker;
+
+		Optional<LLColor4>	avatar_icon_color;
+
+		Params();
+	};
+
+	/**
+	 * Sets session id.
+	 * Session ID for group chat is actually Group ID.
+	 */
+	/*virtual*/ void setSessionId(const LLUUID& session_id);
+
+	/**
+	 * Keep Speaker Control with actual speaker's ID
+	 */
+	/*virtual*/ void draw();
+
+	/**
+	 * Init Speaker Control with speaker's ID
+	 */
+	/*virtual*/ void initSpeakerControl();
+
+	/**
+	 * Returns number of unread messages.
+	 */
+	/*virtual*/ S32 getCounter() { return mCounterCtrl->getCounter(); }
+
+protected:
+	LLAdHocChiclet(const Params& p);
+	friend class LLUICtrlFactory;
+
+	/**
+	 * Creates chiclet popup menu. Will create AdHoc Chat menu 
+	 * based on other participant's id.
+	 */
+	virtual void createPopupMenu();
+
+	/**
+	 * Processes clicks on chiclet popup menu.
+	 */
+	virtual void onMenuItemClicked(const LLSD& user_data);
+
+	/**
+	 * Finds a current speaker and resets the SpeakerControl with speaker's ID
+	 */
+	/*virtual*/ void switchToCurrentSpeaker();
+
+private:
+
+	LLChicletAvatarIconCtrl* mChicletIconCtrl;
+};
+
+/**
+ * Implements Group chat chiclet.
+ */
+class LLIMGroupChiclet : public LLIMChiclet, public LLGroupMgrObserver
+{
+public:
+
+	struct Params : public LLInitParam::Block<Params, LLIMChiclet::Params>
+	{
+		Optional<LLButton::Params> chiclet_button;
+
+		Optional<LLChicletGroupIconCtrl::Params> group_icon;
+
+		Optional<LLChicletNotificationCounterCtrl::Params> unread_notifications;
+
+		Optional<LLChicletSpeakerCtrl::Params> speaker;
+
+		Optional<LLIconCtrl::Params> new_message_icon;
+
+		Optional<bool>	show_speaker;
+
+		Params();
+	};
+
+	/**
+	 * Sets session id.
+	 * Session ID for group chat is actually Group ID.
+	 */
+	/*virtual*/ void setSessionId(const LLUUID& session_id);
+
+	/**
+	 * Keep Speaker Control with actual speaker's ID
+	 */
+	/*virtual*/ void draw();
+
+	/**
+	 * Callback for LLGroupMgrObserver, we get this when group data is available or changed.
+	 * Sets group icon.
+	 */
+	/*virtual*/ void changed(LLGroupChange gc);
+
+	/**
+	 * Init Speaker Control with speaker's ID
+	 */
+	/*virtual*/ void initSpeakerControl();
+
+	/**
+	 * Returns number of unread messages.
+	 */
+	/*virtual*/ S32 getCounter() { return mCounterCtrl->getCounter(); }
+
+	~LLIMGroupChiclet();
+
+protected:
+	LLIMGroupChiclet(const Params& p);
+	friend class LLUICtrlFactory;
+
+	/**
+	 * Finds a current speaker and resets the SpeakerControl with speaker's ID
+	 */
+	/*virtual*/ void switchToCurrentSpeaker();
+
+	/**
+	 * Creates chiclet popup menu. Will create P2P or Group IM Chat menu 
+	 * based on other participant's id.
+	 */
+	virtual void createPopupMenu();
+
+	/**
+	 * Processes clicks on chiclet popup menu.
+	 */
+	virtual void onMenuItemClicked(const LLSD& user_data);
+
+	/**
+	 * Enables/disables "show session" menu item depending on visible IM floater existence.
+	 */
+	virtual void updateMenuItems();
+
+private:
+
+	LLChicletGroupIconCtrl* mChicletIconCtrl;
+};
+// </FS:Ansariel> [FS communication UI]
 
 /**
  * Implements notification chiclet. Used to display total amount of unread messages 
@@ -572,6 +937,56 @@ protected:
 	S32 mUreadSystemNotifications;
 };
 
+// <FS:Ansariel> [FS communication UI]
+/**
+ * Class represented a chiclet for IM Well Icon.
+ *
+ * It displays a count of unread messages from other participants in all IM sessions.
+ */
+class LLIMWellChiclet : public LLSysWellChiclet, LLIMSessionObserver
+{
+	friend class LLUICtrlFactory;
+public:
+	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg) {}
+	/*virtual*/ void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {}
+	/*virtual*/ void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
+	/*virtual*/ void sessionRemoved(const LLUUID& session_id) { messageCountChanged(LLSD()); }
+	/*virtual*/ void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id) {}
+
+	~LLIMWellChiclet();
+protected:
+	LLIMWellChiclet(const Params& p);
+
+	/**
+	 * Processes clicks on chiclet popup menu.
+	 */
+	virtual void onMenuItemClicked(const LLSD& user_data);
+
+	/**
+	 * Enables chiclet menu items.
+	 */
+	bool enableMenuItem(const LLSD& user_data);
+
+	/**
+	 * Creates menu.
+	 */
+	/*virtual*/ void createMenu();
+
+	/**
+	 * Handles changes in a session (message was added, messages were read, etc.)
+	 *
+	 * It get total count of unread messages from a LLIMMgr in all opened sessions and display it.
+	 *
+	 * @param[in] session_data contains session related data, is not used now
+	 *		["session_id"] - id of an appropriate session
+	 *		["participant_unread"] - count of unread messages from "real" participants.
+	 *
+	 * @see LLIMMgr::getNumberOfUnreadParticipantMessages()
+	 */
+	void messageCountChanged(const LLSD& session_data);
+};
+// </FS:Ansariel> [FS communication UI]
+
 /**
  * Storage class for all IM chiclets. Provides mechanism to display, 
  * scroll, create, remove chiclets.
@@ -679,6 +1094,9 @@ public:
 	 * Toggle chiclet by session id ON and toggle OFF all other chiclets.
 	 */
 	void setChicletToggleState(const LLUUID& session_id, bool toggle);
+
+	// <FS:Ansariel> [FS communication UI]
+	S32 getTotalUnreadIMCount();
 
 protected:
 	LLChicletPanel(const Params&p);

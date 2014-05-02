@@ -1,0 +1,60 @@
+<llsd>
+    <array>
+        <array>
+            <real>0</real>
+            <string>(SS) Atmospheric 00:00b</string>
+        </array>
+        <array>
+            <real>0.16666659712791443</real>
+            <string>(SS) Atmospheric 04:00b</string>
+        </array>
+        <array>
+            <real>0.24999991059303284</real>
+            <string>(SS) Atmospheric 06:00 6b</string>
+        </array>
+        <array>
+            <real>0.29166656732559204</real>
+            <string>(SS) Atmospheric 07:00b</string>
+        </array>
+        <array>
+            <real>0.33333319425582886</real>
+            <string>(SS) Atmospheric 08:00b</string>
+        </array>
+        <array>
+            <real>0.49999982118606567</real>
+            <string>(SS) Atmospheric 12:00 midday6b</string>
+        </array>
+        <array>
+            <real>0.54166644811630249</real>
+            <string>(SS) Atmospheric 13:00b</string>
+        </array>
+        <array>
+            <real>0.58333313465118408</real>
+            <string>(SS) Atmospheric 14:00b</string>
+        </array>
+        <array>
+            <real>0.6249997615814209</real>
+            <string>(SS) Atmospheric 15:00b</string>
+        </array>
+        <array>
+            <real>0.66666638851165771</real>
+            <string>(SS) Atmospheric 16:00b</string>
+        </array>
+        <array>
+            <real>0.70833301544189453</real>
+            <string>(SS) Atmospheric 17:00b</string>
+        </array>
+        <array>
+            <real>0.74999970197677612</real>
+            <string>(SS) Atmospheric 18:00b</string>
+        </array>
+        <array>
+            <real>0.79166638851165771</real>
+            <string>(SS) Atmospheric 19:00b</string>
+        </array>
+        <array>
+            <real>0.83333301544189453</real>
+            <string>(SS) Atmospheric 20:00b</string>
+        </array>
+    </array>
+</llsd>

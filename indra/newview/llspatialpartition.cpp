@@ -54,6 +54,8 @@
 #include "llglslshader.h"
 #include "llviewershadermgr.h"
 
+#include "nd/ndobjectpool.h" // <FS:ND/> For operator new/delete
+
 static LLFastTimer::DeclareTimer FTM_FRUSTUM_CULL("Frustum Culling");
 static LLFastTimer::DeclareTimer FTM_CULL_REBOUND("Cull Rebound Partition");
 
@@ -3366,7 +3368,7 @@ void renderPhysicsShape(LLDrawable* drawable, LLVOVolume* volume)
 					index_offset += face.mNumVertices;
 				}
 
-				if (!pos.empty() && !index.empty())
+				if (!pos.empty() && !index.empty() && LLConvexDecomposition::getInstance() ) // ND: FIRE-3427
 				{
 					LLCDMeshData mesh;
 					mesh.mIndexBase = &index[0];
@@ -4653,6 +4655,88 @@ BOOL LLSpatialPartition::isVisible(const LLVector3& v)
 	return TRUE;
 }
 
+// <FS:ND> Class to watch for any octree changes while iterating. Will catch child insertion/removal as well as data insertion/removal.
+// Template so it can be used for than LLOctreeNode< LLDrawable > if needed
+
+template< typename T > class ndOctreeListener: public LLOctreeListener< T >
+{
+	typedef LLOctreeNode< T > tNode;
+	typedef std::vector< LLPointer< LLTreeListener< T > > > tListener;
+
+	tNode *mNode;
+	bool mNodeIsDead;
+	bool mNodeChildrenChanged;
+	bool mNodeDataChanged;
+
+	virtual void handleInsertion(const LLTreeNode<T>* node, T* data)
+	{ mNodeDataChanged = true; }
+	
+	virtual void handleRemoval(const LLTreeNode<T>* node, T* data)
+	{ mNodeDataChanged = true; }
+
+	virtual void handleDestruction(const LLTreeNode<T>* node)
+	{ mNodeIsDead = true; }
+
+	virtual void handleStateChange(const LLTreeNode<T>* node)
+	{ }
+
+	virtual void handleChildAddition(const tNode* parent, tNode* child)
+	{ mNodeChildrenChanged = true; }
+
+	virtual void handleChildRemoval(const tNode* parent, const tNode* child)
+	{ mNodeChildrenChanged = true; }
+
+public:
+	ndOctreeListener( LLSpatialGroup::OctreeNode *aNode )
+		: mNode( aNode )
+		, mNodeIsDead( false )
+		, mNodeChildrenChanged( false )
+		, mNodeDataChanged( false )
+	{
+		if( mNode )
+			mNode->addListener( this );
+		else
+			mNodeIsDead = true;
+	}
+
+	~ndOctreeListener()
+	{ removeObserver();	}
+
+	bool getNodeIsDead() const
+	{ return mNodeIsDead; }
+
+	bool getNodeChildrenChanged() const
+	{ return mNodeChildrenChanged; }
+
+	bool getNodeDataChanged() const
+	{ return mNodeDataChanged; }
+
+	// FS:ND This is kind of hackery, poking into the internals of mNode like that. But there's no removeListener function.
+	// To keep change locality for merges I decided to put the implemention here.
+	// This is what you get for making your member public/protected.
+	void removeObserver()
+	{
+		if( mNode && !getNodeIsDead() )
+		{
+			for( typename tListener::iterator itr = mNode->mListeners.begin(); itr != mNode->mListeners.end(); ++itr )
+			{
+				if( (*itr).get() == this )
+				{
+					mNode->mListeners.erase( itr );
+					break;
+				}
+			}
+		}
+		mNode = 0;
+		mNodeIsDead = true;
+	}
+};
+
+typedef ndOctreeListener< LLDrawable > ndDrawableOctreeListener;
+typedef LLPointer< ndDrawableOctreeListener > ndDrawableOctreeListenerPtr;
+
+// </FS:ND>
+
 LL_ALIGN_PREFIX(16)
 class LLOctreeIntersect : public LLSpatialGroup::OctreeTraveler
 {
@@ -4667,9 +4751,16 @@ public:
 	LLVector4a *mTangent;
 	LLDrawable* mHit;
 	BOOL mPickTransparent;
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	BOOL mPickRigged;
+// [/SL:KB]
 
-	LLOctreeIntersect(const LLVector4a& start, const LLVector4a& end, BOOL pick_transparent,
-					  S32* face_hit, LLVector4a* intersection, LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+//	LLOctreeIntersect(const LLVector4a& start, const LLVector4a& end, BOOL pick_transparent,
+//					  S32* face_hit, LLVector4a* intersection, LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	LLOctreeIntersect(const LLVector4a& start, const LLVector4a& end, BOOL pick_transparent, BOOL pick_rigged,
+				  S32* face_hit, LLVector4a* intersection, LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+// [/SL:KB]
 		: mStart(start),
 		  mEnd(end),
 		  mFaceHit(face_hit),
@@ -4678,25 +4769,62 @@ public:
 		  mNormal(normal),
 		  mTangent(tangent),
 		  mHit(NULL),
-		  mPickTransparent(pick_transparent)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		  mPickTransparent(pick_transparent),
+		  mPickRigged(pick_rigged)
+// [/SL:KB]
+//		  mPickTransparent(pick_transparent)
 	{
 	}
 	
 	virtual void visit(const LLSpatialGroup::OctreeNode* branch) 
 	{	
-		for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); ++i)
+		// <FS:ND> Make sure we catch any changes to this node while we iterate over it
+		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<LLSpatialGroup::OctreeNode*>(branch) );
+
+		// for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); ++i)
+		for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); )
+		// </FS:ND>
 		{
-			check(*i);
+		 	check(*i);
+
+			// <FS:ND> Check for any change that happened during check, it is possible the tree changes due to calling it.
+			// If it does, we need to restart again as pointers might be invalidated.
+
+			if( !nodeObserver->getNodeDataChanged() )
+				++i;
+			else
+			{
+				i = branch->getDataBegin();
+				llwarns << "Warning, resetting data iterator to branch->getDataBegin due to tree change." << llendl;
+			}
+
+			// FS:ND Can this really happen? I seriously hope not.
+			if( nodeObserver->getNodeIsDead() )
+			{
+				llwarns << "Warning, node died. Exiting iteration" << llendl;
+				break;
+			}
+
+			// </FS:ND>
 		}
+
+		nodeObserver->removeObserver();
 	}
 
 	virtual LLDrawable* check(const LLSpatialGroup::OctreeNode* node)
 	{
 		node->accept(this);
-	
-		for (U32 i = 0; i < node->getChildCount(); i++)
+
+		// <FS:ND> Make sure we catch any changes to this node while we iterate over it
+		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<LLSpatialGroup::OctreeNode*>(node) );
+
+		// for (U32 i = 0; i < node->getChildCount(); i++)
+		for (U32 i = 0; i < node->getChildCount(); )
+		// </FS:ND>
 		{
 			const LLSpatialGroup::OctreeNode* child = node->getChild(i);
+
 			LLVector3 res;
 
 			LLSpatialGroup* group = (LLSpatialGroup*) child->getListener(0);
@@ -4726,13 +4854,35 @@ public:
 			{
 				check(child);
 			}
+
+			// <FS:ND> Check for any change that happened during check, it is possible the tree changes due to calling it.
+			// If it does, do we need to restart again as pointers might be invalidated? Child insertion/removal happens it seems, but restarting
+			// iteration leads into endless recursion.
+
+			if( !nodeObserver->getNodeChildrenChanged() )
+				++i;
+			else
+			{
+				++i;
+			 	llwarns << "Warning, child nodes changed during tree iteration." << llendl;
+			}
+
+			// FS:ND Can this really happen? I seriously hope not.
+			if( nodeObserver->getNodeIsDead() )
+			{
+				llwarns << "Warning, node died. Exiting iteration" << llendl;
+				break;
+			}
+
+			// </FS:ND>
 		}	
 
+		nodeObserver->removeObserver();
 		return mHit;
 	}
 
 	virtual bool check(LLDrawable* drawable)
-	{	
+	{
 		if (!drawable || !gPipeline.hasRenderType(drawable->getRenderType()) || !drawable->isVisible())
 		{
 			return false;
@@ -4758,9 +4908,15 @@ public:
 				if (vobj->isAvatar())
 				{
 					LLVOAvatar* avatar = (LLVOAvatar*) vobj;
-					if (avatar->isSelf() && LLFloater::isVisible(gFloaterTools))
+//					if (avatar->isSelf() && LLFloater::isVisible(gFloaterTools))
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+					if ( (mPickRigged) || ((avatar->isSelf()) && (LLFloater::isVisible(gFloaterTools))) )
+// [/SL:KB]
 					{
-						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mTangent);
+//						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mTangent);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mPickRigged, mFaceHit, &intersection, mTexCoord, mNormal, mTangent);
+// [/SL:KB]
 						if (hit)
 						{
 							mEnd = intersection;
@@ -4776,7 +4932,10 @@ public:
 					}
 				}
 
-				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mTangent))
+//				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mTangent))
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+				if (!skip_check && vobj->lineSegmentIntersect(mStart, mEnd, -1, mPickTransparent, mPickRigged, mFaceHit, &intersection, mTexCoord, mNormal, mTangent))
+// [/SL:KB]
 				{
 					mEnd = intersection;  // shorten ray so we only find CLOSER hits
 					if (mIntersection)
@@ -4795,6 +4954,9 @@ public:
 
 LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 													 BOOL pick_transparent,													
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+													 BOOL pick_rigged,
+// [/SL:KB]
 													 S32* face_hit,                   // return the face hit
 													 LLVector4a* intersection,         // return the intersection point
 													 LLVector2* tex_coord,            // return the texture coordinates of the intersection point
@@ -4803,7 +4965,10 @@ LLDrawable* LLSpatialPartition::lineSegmentIntersect(const LLVector4a& start, co
 	)
 
 {
-	LLOctreeIntersect intersect(start, end, pick_transparent, face_hit, intersection, tex_coord, normal, tangent);
+//	LLOctreeIntersect intersect(start, end, pick_transparent, face_hit, intersection, tex_coord, normal, tangent);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	LLOctreeIntersect intersect(start, end, pick_transparent, pick_rigged, face_hit, intersection, tex_coord, normal, tangent);
+// [/SL:KB]
 	LLDrawable* drawable = intersect.check(mOctree);
 
 	return drawable;
@@ -5132,5 +5297,19 @@ void LLCullResult::assertDrawMapsEmpty()
 	}
 }
 
+// <FS:ND> Make this non inline to use an object pool
 
+// Assume this is singlethreaded (nd::locks::NoLock) 16 byte aligned and allocate 128 objects per chunk
+nd::objectpool::ObjectPool< LLDrawInfo, nd::locks::NoLock, 16, 128 > sDrawinfoPool;
 
+void* LLDrawInfo::operator new(size_t size)
+{
+	return sDrawinfoPool.allocMemoryForObject();
+}
+
+void LLDrawInfo::operator delete(void* ptr)
+{
+	sDrawinfoPool.freeMemoryOfObject( ptr );
+}
+
+// </FS:ND>

@@ -100,6 +100,7 @@ protected:
 	LLComboBox*		mAddressCombo;
 	LLIconCtrl*		mSecureLockIcon;
 	LLTextBox*		mStatusBarText;
+	LLTextBox* mPluginFailText;
 	LLProgressBar*	mStatusBarProgress;
 
 	LLView*			mBtnBack;

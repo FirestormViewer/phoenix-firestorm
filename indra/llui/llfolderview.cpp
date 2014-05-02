@@ -166,6 +166,10 @@ LLFolderView::LLFolderView(const Params& p)
 	mSignalSelectCallback(0),
 	mMinWidth(0),
 	mDragAndDropThisFrame(FALSE),
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+	mDragStartX(0),
+	mDragStartY(0),
+// [/SL:KB]
 	mCallbackRegistrar(NULL),
 	mParentPanel(p.parent_panel),
 	mUseEllipses(p.use_ellipses),
@@ -325,7 +329,12 @@ void LLFolderView::filter( LLFolderViewFilter& filter )
 {
     // Entry point of inventory filtering (CHUI-849)
 	LLFastTimer t2(FTM_FILTER);
-    filter.resetTime(llclamp(LLUI::sSettingGroups["config"]->getS32(mParentPanel->getVisible() ? "FilterItemsMaxTimePerFrameVisible" : "FilterItemsMaxTimePerFrameUnvisible"), 1, 100));
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+    //filter.resetTime(llclamp(LLUI::sSettingGroups["config"]->getS32(mParentPanel->getVisible() ? "FilterItemsMaxTimePerFrameVisible" : "FilterItemsMaxTimePerFrameUnvisible"), 1, 100));
+	static LLCachedControl<S32> sFilterItemsMaxTimePerFrameVisible(*LLUI::sSettingGroups["config"], "FilterItemsMaxTimePerFrameVisible");
+	static LLCachedControl<S32> sFilterItemsMaxTimePerFrameUnvisible(*LLUI::sSettingGroups["config"], "FilterItemsMaxTimePerFrameUnvisible");
+	filter.resetTime(llclamp((mParentPanel->getVisible() ? sFilterItemsMaxTimePerFrameVisible() : sFilterItemsMaxTimePerFrameUnvisible()), 1, 100));
+	// </FS:Ansariel>
 
     // Note: we filter the model, not the view
 	getViewModelItem()->filter(filter);
@@ -609,6 +618,24 @@ std::set<LLFolderViewItem*> LLFolderView::getSelectionList() const
 	return selection;
 }
 
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+void LLFolderView::setDragStart(S32 screen_x, S32 screen_y)
+{
+	mDragStartX = screen_x;
+	mDragStartY = screen_y;
+}
+
+bool LLFolderView::isOverDragThreshold(S32 screen_x, S32 screen_y)
+{
+	static LLCachedControl<S32> drag_and_drop_threshold(*LLUI::sSettingGroups["config"], "DragAndDropDistanceThreshold", 3);
+	
+	S32 dX = screen_x - mDragStartX;
+	S32 dY = screen_y - mDragStartY;
+	
+	return (dX * dX) + (dY * dY) > drag_and_drop_threshold * drag_and_drop_threshold;
+}
+// [/SL:KB]
+
 bool LLFolderView::startDrag()
 {
 	std::vector<LLFolderViewModelItem*> selected_items;
@@ -642,7 +669,11 @@ void LLFolderView::draw()
 		closeAutoOpenedFolders();
 	}
 
-	if (mSearchTimer.getElapsedTimeF32() > LLUI::sSettingGroups["config"]->getF32("TypeAheadTimeout") || !mSearchString.size())
+	// <FS:Ansariel> Performance improvement
+	//if (mSearchTimer.getElapsedTimeF32() > LLUI::sSettingGroups["config"]->getF32("TypeAheadTimeout") || !mSearchString.size())
+	static LLCachedControl<F32> typeAheadTimeout(*LLUI::sSettingGroups["config"], "TypeAheadTimeout");
+	if (mSearchTimer.getElapsedTimeF32() > typeAheadTimeout || !mSearchString.size())
+	// </FS:Ansariel>
 	{
 		mSearchString.clear();
 	}
@@ -942,7 +973,9 @@ void LLFolderView::cut()
 			if (listener)
 			{
 				listener->cutToClipboard();
-				listener->removeItem();
+				// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
+				//listener->removeItem();
+				// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
 			}
 		}
 		
@@ -961,12 +994,24 @@ BOOL LLFolderView::canPaste() const
 
 	if(getVisible() && getEnabled())
 	{
+		std::set< char const * > stListeners;
+
 		for (selected_items_t::const_iterator item_it = mSelectedItems.begin();
 			 item_it != mSelectedItems.end(); ++item_it)
 		{
 			// *TODO: only check folders and parent folders of items
 			const LLFolderViewItem* item = (*item_it);
 			const LLFolderViewModelItem* listener = item->getViewModelItem();
+
+			// Nicky D.; Only run each isClipboardPasteable once for each type of listeners.
+			// isClipboardPasteable is a very expensive operation, and it will always process the whole clipboards contents.
+			// Thus running it for n objects means each object gets n times processed.
+			if( listener && stListeners.end() != stListeners.find( typeid( *listener ).name() ) )
+				continue;
+			else if( listener )
+				stListeners.insert( typeid( *listener ) .name() );
+			//
+
 			if(!listener || !listener->isClipboardPasteable())
 			{
 				const LLFolderViewFolder* folderp = item->getParentFolder();
@@ -1366,6 +1411,11 @@ BOOL LLFolderView::search(LLFolderViewItem* first_item, const std::string &searc
 			{
 				break;
 			}
+
+			//<FS:TS> FIRE-8253: Hang when typing at inventory window
+			// Ensure this loop doesn't execute more than one more time.
+			original_search_item = search_item;
+			//</FS:TS> FIRE-8253
 		}
 
 		const std::string current_item_label(search_item->getViewModelItem()->getSearchableName());

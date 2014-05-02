@@ -182,7 +182,6 @@ inline void ll_aligned_free_32(void *p)
 #endif
 }
 
-
 // Copy words 16-byte blocks from src to dst. Source and destination MUST NOT OVERLAP. 
 // Source and dest must be 16-byte aligned and size must be multiple of 16.
 //
@@ -195,7 +194,7 @@ inline void ll_memcpy_nonaliased_aligned_16(char* __restrict dst, const char* __
 	ll_assert_aligned(src,16);
 	ll_assert_aligned(dst,16);
 	assert((src < dst) ? ((src + bytes) < dst) : ((dst + bytes) < src));
-	assert(bytes%16==0);
+	// assert(bytes%16==0);
 
 	char* end = dst + bytes;
 
@@ -244,14 +243,26 @@ inline void ll_memcpy_nonaliased_aligned_16(char* __restrict dst, const char* __
 		}
 	}
 
+
+	// <FS:ND> There is no guarantee that the remaining about of bytes left is a number of 16. If that's not the case using copy4a will overwrite and trash memory behind the end of dst
+
+	// <FS:ND> 2014-04-06: This still applies, placing a llassert_always( 0 == (bytes%16)) right after login.
+
 	// Copy remainder 16b tail chunks (or ALL 16b chunks for sub-64b copies)
 	//
-	while (dst < end)
-	{
-		_mm_store_ps((F32*)dst, _mm_load_ps((F32*)src));
-		dst += 16;
-		src += 16;
-	}
+	// while (dst < end)
+	// {
+	// 	_mm_store_ps((F32*)dst, _mm_load_ps((F32*)src));
+	// 	dst += 16;
+	// 	src += 16;
+	// }
+
+	bytes = (U8*)end-(U8*)dst;
+	if( bytes > 0 )
+		memcpy( dst, src, bytes );
+
+	// </FS:ND>
+
 }
 
 #ifndef __DEBUG_PRIVATE_MEM__
@@ -387,7 +398,9 @@ public:
 		{
 			bool operator()(const LLMemoryBlock* const& lhs, const LLMemoryBlock* const& rhs)
 			{
-				return (U32)lhs->getBuffer() < (U32)rhs->getBuffer();
+				//return (U32)lhs->getBuffer() < (U32)rhs->getBuffer();
+				//<ND/> 64 bit fix
+				return reinterpret_cast<unsigned char*>(lhs->getBuffer()) < reinterpret_cast<unsigned char*>(rhs->getBuffer());
 			}
 		};
 	};
@@ -418,7 +431,8 @@ public:
 		void dump() ;
 
 	private:
-		U32 getPageIndex(U32 addr) ;
+//		U32 getPageIndex(U32 addr) ;
+		U32 getPageIndex(void* addr) ; // <ND/> 64 bit fix
 		U32 getBlockLevel(U32 size) ;
 		U16 getPageLevel(U32 size) ;
 		LLMemoryBlock* addBlock(U32 blk_idx) ;

@@ -1,207 +1,268 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- <FS:Zi> top="19" starts right below the status bar (menu bar) -->
+<!-- <FS:Zi> visible="false" to hide the panel on the login screen -->
 <panel
- background_opaque="true"
- background_visible="true"
- bg_opaque_color="MouseGray"
+ mouse_opaque="false"
+ background_visible="false"
+ top="19"
+ left="0"
  follows="left|top|right"
- focus_root="true" 
- height="34"
+ height="39"
  layout="topleft"
  name="navigation_bar"
- chrome="true"
- width="800">
-	<icon
-	 follows="all"
-	 image_name="NavBar_BG"
-	 mouse_opaque="false"
-	 name="bg_icon"
-	 scale_image="true"
-	 visible="false"
-	 left="0"
-	 top="0"
-	 height="34"
-	 width="600"/>
-	<icon
-	 follows="all"
-	 image_name="NavBar_BG_NoFav_Bevel"
-	 mouse_opaque="false"
-	 name="bg_icon_no_fav_bevel"
-	 scale_image="true"
-	 visible="false"
-	 left="0"
-	 top="0"
-	 height="34"
-	 width="600"/>
-	<icon
-	 follows="all"
-	 image_name="NavBar_BG_NoNav_Bevel"
-	 mouse_opaque="false"
-	 name="bg_icon_no_nav_bevel"
-	 scale_image="true"
-	 visible="false"
-	 left="0"
-	 top="0"
-	 height="34"
-	 width="600"/>
-  <icon
-    follows="all"
-    image_name="NavBar Separator"
-    mouse_opaque="false"
-    name="separator_image"
-    scale_image="true"
-    left="0"
-    top="0"
-    width="800"
-    height="2"/>
-	 <layout_stack
-       follows="all"
-       height="34"
-       layout="topleft"
-       border_size="0"
-       resize_bar_overlap="3"
-       left="0"
-       mouse_opaque="false"
-       name="nvp_stack"
-       orientation="horizontal"
-       top="0"
-       width="800">
-         <layout_panel
-           follows="top|left"
-           layout="topleft"
-           auto_resize="true"
-           user_resize="true"
-           min_width="410"
-           name="navigation_layout_panel"
-           width="480">
-	        <panel
-	         background_visible="false"
-	         follows="left|top|right"
-	         top="3"
-	         height="23"
-	         layout="topleft"
-                       left="0"
-	         name="navigation_panel"
-             width="480">
-	         <pull_button
-	         follows="left|top"
-	         direction="down"
-	         height="23"
-	         image_overlay="Arrow_Left_Off"
-	         image_hover_unselected="PushButton_Over"
-	         image_bottom_pad="1"
-	         layout="topleft"
-	         left="10"
-	         name="back_btn"
-	         tool_tip="Go back to previous location"
-	         top="2"
-	         width="31" />
-	        <pull_button
-	         follows="left|top"
-	         direction="down"
-	         height="23"
-	         image_overlay="Arrow_Right_Off"
-	         image_hover_unselected="PushButton_Over"
-	         image_bottom_pad="1"
-	         layout="topleft"
-	         left_pad="0"
-	         name="forward_btn"
-	         tool_tip="Go forward one location"
-	         top_delta="0"
-	         width="31" />
-	        <button
-	         follows="left|top"
-	         height="23"
-	         image_bottom_pad="1"
-	         image_overlay="Home_Off"
-	         image_hover_unselected="PushButton_Over"
-	         layout="topleft"
-	         left_pad="7"
-	         name="home_btn"
-	         tool_tip="Teleport to my home location"
-	         top_delta="0"
-	         width="32" />
-	        <location_input
-                       follows="all"
-	         halign="right"
-	         height="23"
-	         label="Location"
-	         layout="topleft"
-	         left_pad="7"
-	         max_chars="254"
-	         mouse_opaque="false"
-	         name="location_combo"
-	         top_delta="0"
-                width="355">
-             <combo_list
-             mouse_wheel_opaque="true"/>
-	        </location_input>
-         </panel>
-          <icon
-             follows="top|right"
-             height="25"
-             image_name="ChatBarHandle"
-             layout="topleft"
-             left="-3"
-             name="resize_handle"
-             top="4"
-             width="5" />
-        </layout_panel>
-         <layout_panel
-           follows="top|left"
-	         layout="topleft"
-           auto_resize="true"
-           user_resize="true"
-           min_width="185"
-           name="favorites_layout_panel"
-           width="320">
-           <icon
-             follows="top|left"
-             height="25"
-             image_name="ChatBarHandle"
-             layout="topleft"
-             left="-323"
-             name="resize_handle"
-             top="4"
-             width="5" />
+ visible="false"
+ width="1024">
 
-           <favorites_bar
-             follows="left|right|top"
-             font="SansSerifSmall"
-             height="20"
-             layout="topleft"
-             left="0"
-             top="4"
-             name="favorite"
-             image_drag_indication="Accordion_ArrowOpened_Off"
-             tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-             width="320">
-            <label
-             follows="left|top"
-             height="13"
-             layout="topleft"
-             left="10"
-             name="favorites_bar_label"
-             text_color="LtGray"
-             tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-             top="13"
+<!-- Navigation and Favorites Bar visibility stack -->
+<layout_stack
+ mouse_opaque="false"
+ top="0"
+ left="0"
+ follows="left|top|right"
+ height="39"
+ layout="topleft"
+ border_size="0"
+ name="navigation_favorites_bar_visibility_stack"
+ orientation="vertical"
+ width="1024">
+
+<!-- Navigation Bar visibility panel -->
+<layout_panel
+ mouse_opaque="false"
+ height="22"
+ layout="topleft"
+ name="navigation_bar_visibility_panel"
+ visibility_control="ShowNavbarNavigationPanel"
+ auto_resize="false"
+ width="1024">
+
+	<!-- This panel takes up the right click menu, so it only shows when clicking
+	inactive parts. Will be bound to right click in code, so keep the name intact. -->
+	<panel
+	 name="navigation_bar_context_menu_panel"
+	 layout="topleft"
+	 left="0"
+	 top="0"
+	 follows="all"
+	 right="-1"
+	 bottom="-1" />
+
+	<!-- Layout stack for buttons, location input and search field -->
+	<layout_stack
+	 mouse_opaque="false"
+	 follows="left|top|right"
+	 layout="topleft"
+	 orientation="horizontal"
+	 name="location_search_layout"
+	 width="1024"
+	 height="22"
+	 left="0"
+	 top="0">
+
+	<!-- Contains the navigation buttons -->
+	<layout_panel
+	 mouse_opaque="false"
+	 name="navigation_buttons_visibility_panel"
+	 layout="topleft"
+	 right="193"
+	 height="22"
+	 border_size="0"
+	 auto_resize="false">
+
+		<pull_button
+	     follows="left|top"
+	     direction="down"
+	     height="23"
+	     image_overlay="Arrow_Left_Off"
+	     image_bottom_pad="1"
+	     layout="topleft"
+	     left="5"
+	     name="back_btn"
+	     tool_tip="Go back to previous location"
+	     top="0"
+	     width="31" />
+	    <pull_button
+	     follows="left|top"
+	     direction="down"
+	     height="23"
+	     image_overlay="Arrow_Right_Off"
+	     image_bottom_pad="1"
+	     layout="topleft"
+	     left_pad="0"
+	     name="forward_btn"
+	     tool_tip="Go forward one location"
+	     top_delta="0"
+	     width="31" />
+	    <button
+	     follows="left|top"
+	     height="23"
+	     image_bottom_pad="1"
+	     image_overlay="Home_Off"
+	     layout="topleft"
+	     left_pad="7"
+	     name="home_btn"
+	     tool_tip="Teleport to home location"
+	     top_delta="0"
+	     width="32" />
+          <!-- About Land Button here -->         
+	    <button
+	     follows="left|top"
+	     height="23"
+	     use_ellipses="true"
+	     layout="topleft"
+	     left_pad="7"
+	     name="About_Land"
+	     label="Land" 
+	     tool_tip="Pops up Land Information window"
+	     top_delta="0"
+	     width="43">
+		 <button.init_callback
+		  function="Button.SetFloaterToggle"
+		  parameter="about_land" />
+		</button>
+          <!-- end of About Land Button -->
+
+          <!-- Windlight Button here -->  
+	    <button
+	     follows="left|top"
+	     height="23"
+	     use_ellipses="true"
+	     layout="topleft"
+	     left_pad="7"
+	     name="Sky"
+	     label="Sky" 
+	     tool_tip="Pops up Sky Editor window"
+	     top_delta="0"
+	     width="30" />
+          <!-- end of Windlight Button -->
+
+	</layout_panel>
+	<!-- Contains the navigation buttons -->
+
+	<!-- Contains the location bar -->
+	<layout_panel
+	 mouse_opaque="false"
+	 name="location_bar_visibility_panel"
+	 layout="topleft"
+	 width="587"
+	 height="22"
+	 border_size="0"
+	 auto_resize="true">
+
+	    <location_input
+	     follows="all"
+	     halign="right"
+	     height="23"
+	     label="Location"
+	     layout="topleft"
+	     left="7"
+	     max_chars="254"
+	     mouse_opaque="false"
+	     name="location_combo"
+	     top="0"
+	     width="587">
+         <combo_list
+          mouse_wheel_opaque="true"/>
+	    </location_input>
+
+	</layout_panel>
+	<!-- Contains the location bar -->
+
+	<!-- Contains the search bar, can be hidden by control values -->
+	<layout_panel
+	 mouse_opaque="false"
+	 name="search_bar_visibility_panel"
+	 layout="topleft"
+	 width="244"
+	 height="22"
+	 visibility_control="ShowSearchTopBar"
+	 auto_resize="false">
+
+        <search_combo_box
+	     follows="all"
+	     left="10"
+	     halign="right"
+	     height="23"
+	     label="Search"
+	     layout="topleft"
+	     mouse_opaque="false"
+	     name="search_combo_box"
+	     tool_tip="Search"
+	     top="0"
+	     width="234">
+         <combo_editor
+          label="Search Metaverse"
+          name="search_combo_editor"/>
+         <combo_list
+          draw_border="true"
+          border.highlight_light_color="FocusColor"
+          border.highlight_dark_color="FocusColor"
+          border.shadow_light_color="FocusColor"
+          border.shadow_dark_color="FocusColor"
+          mouse_wheel_opaque="true" />
+        </search_combo_box>
+
+	</layout_panel>
+	<!-- Contains the search bar, can be hidden by control values -->
+
+	</layout_stack>
+	<!-- Layout stack for buttons, location input and search field -->
+
+</layout_panel>
+<!-- Navigation Bar visibility panel -->
+
+<!-- Favorites Bar visibility panel -->
+<layout_panel
+ mouse_opaque="false"
+ height="15"
+ layout="topleft"
+ name="favorites_bar_visibility_panel"
+ visibility_control="ShowNavbarFavoritesPanel"
+ auto_resize="false">
+
+  <favorites_bar
+ 	 background_visible="false"
+ 	 bg_alpha_color="Transparent"
+ 	 color="Transparent"
+     follows="left|top|right"
+     top_pad="2"
+     font="SansSerifSmall"
+     height="15"
+     layout="topleft"
+     left="0"
+     name="favorite"
+     image_drag_indication="Accordion_ArrowOpened_Off"
+     tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+     width="1024">
+        <label
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         top_pad="2"
+         left="10"
+         name="favorites_bar_label"
+         text_color="LtGray"
+         tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
 	     valign="bottom"
-             width="102">
-              Favorites Bar
-            </label>
-              <!-- More button actually is a text box. -->
-              <more_button
-                follows="left|bottom"
-                name=">>"
-                tab_stop="false"
-                tool_tip="Show more of My Favorites"
-                top="13"
-                width="50"
-                bottom="0"
-                valign="bottom">
-                More &#9660;
-                </more_button>
-         </favorites_bar>
-         </layout_panel>
-     
-     </layout_stack>
+         width="102">
+          Favorites Bar
+        </label>
+        <chevron_button
+             name="more_btn"
+             image_unselected="TabIcon_Close_Off"
+             image_selected="TabIcon_Close_Off"
+             tab_stop="false"
+             follows="left|bottom"
+             tool_tip="Show more of My Favorites"
+             width="15"
+             height="15"/>
+  </favorites_bar>
+
+</layout_panel>
+<!-- Favorites Bar visibility panel -->
+
+</layout_stack>
+<!-- Navigation and Favorites Bar visibility stack -->
+
 </panel>

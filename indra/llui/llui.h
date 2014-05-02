@@ -53,8 +53,13 @@ class LLWindow;
 class LLView;
 class LLHelp;
 
-void make_ui_sound(const char* name);
-void make_ui_sound_deferred(const char * name);
+// <FS:PP> UI Sounds preview
+// void make_ui_sound(const char* name);
+void make_ui_sound(const char* name, bool force_sound = false);
+// </FS:PP> UI Sounds preview
+// <FS:CR>
+//void make_ui_sound_deferred(const char * name);
+void make_ui_sound_deferred(const char* name, bool force_sound = false);
 
 class LLImageProviderInterface;
 
@@ -404,6 +409,11 @@ public:
 					  const T& default_value,
 					  const std::string& comment = "Declared In Code")
 	:	LLCachedControl<T>(LLUI::getControlControlGroup(name), name, default_value, comment)
+	{}
+
+	// This constructor will signal an error if the control doesn't exist in the control group
+	LLUICachedControl(const std::string& name)
+	:	LLCachedControl<T>(LLUI::getControlControlGroup(name), name)
 	{}
 };
 

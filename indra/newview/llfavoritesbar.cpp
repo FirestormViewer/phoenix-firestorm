@@ -55,6 +55,8 @@
 #include "lltooldraganddrop.h"
 #include "llsdserialize.h"
 
+#include "llviewernetwork.h"	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml - getGrid()
+
 static LLDefaultChildRegistry::Register<LLFavoritesBarCtrl> r("favorites_bar");
 
 const S32 DROP_DOWN_MENU_WIDTH = 250;
@@ -367,6 +369,9 @@ struct LLFavoritesSort
 LLFavoritesBarCtrl::Params::Params()
 : image_drag_indication("image_drag_indication"),
   more_button("more_button"),
+  // <FS:Ansariel> Allow V3 and FS style favorites bar
+  chevron_button("chevron_button"),
+  // </FS:Ansariel>
   label("label")
 {
 }
@@ -395,10 +400,26 @@ LLFavoritesBarCtrl::LLFavoritesBarCtrl(const LLFavoritesBarCtrl::Params& p)
 	gInventory.addObserver(this);
 
 	//make chevron button                                                                                                                               
-	LLTextBox::Params more_button_params(p.more_button);
-	mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
-	mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
-	addChild(mMoreTextBox);
+	// <FS:Ansariel> Allow V3 and FS style favorites bar
+	//LLTextBox::Params more_button_params(p.more_button);
+	//mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
+	//mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
+	//addChild(mMoreTextBox);
+	if (p.chevron_button.isProvided())
+	{
+		LLButton::Params chevron_button_params(p.chevron_button);                                         
+		chevron_button_params.click_callback.function(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));     
+		mMoreCtrl = LLUICtrlFactory::create<LLButton> (chevron_button_params);
+		addChild(mMoreCtrl);
+	}
+	else
+	{
+		LLTextBox::Params more_button_params(p.more_button);
+		mMoreCtrl = LLUICtrlFactory::create<LLTextBox> (more_button_params);
+		((LLTextBox*)mMoreCtrl)->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
+		addChild(mMoreCtrl);
+	}
+	// </FS:Ansariel>
 
 	mDropDownItemsCount = 0;
 
@@ -736,7 +757,10 @@ void LLFavoritesBarCtrl::updateButtons()
 	const child_list_t* childs = getChildList();
 	child_list_const_iter_t child_it = childs->begin();
 	int first_changed_item_index = 0;
-	int rightest_point = getRect().mRight - mMoreTextBox->getRect().getWidth();
+	// <FS:Ansariel> Allow V3 and FS style favorites bar
+	//int rightest_point = getRect().mRight - mMoreTextBox->getRect().getWidth();
+	int rightest_point = getRect().mRight - mMoreCtrl->getRect().getWidth();
+	// </FS:Ansariel>
 	//lets find first changed button
 	while (child_it != childs->end() && first_changed_item_index < mItems.count())
 	{
@@ -779,10 +803,16 @@ void LLFavoritesBarCtrl::updateButtons()
 		}
 		// we have to remove ChevronButton to make sure that the last item will be LandmarkButton to get the right aligning
 		// keep in mind that we are cutting all buttons in space between the last visible child of favbar and ChevronButton
-		if (mMoreTextBox->getParent() == this)
+		// <FS:Ansariel> Allow V3 and FS style favorites bar
+		//if (mMoreTextBox->getParent() == this)
+		//{
+		//	removeChild(mMoreTextBox);
+		//}
+		if (mMoreCtrl->getParent() == this)
 		{
-			removeChild(mMoreTextBox);
+			removeChild(mMoreCtrl);
 		}
+		// </FS:Ansariel>
 		int last_right_edge = 0;
 		//calculate new buttons offset
 		if (getChildList()->size() > 0)
@@ -821,13 +851,22 @@ void LLFavoritesBarCtrl::updateButtons()
 			S32 buttonHGap = button_params.rect.left; // default value
 			LLRect rect;
 			// Chevron button should stay right aligned
-			rect.setOriginAndSize(getRect().mRight - mMoreTextBox->getRect().getWidth() - buttonHGap, 0,
-					mMoreTextBox->getRect().getWidth(),
-					mMoreTextBox->getRect().getHeight());
+			// <FS:Ansariel> Allow V3 and FS style favorites bar
+			//rect.setOriginAndSize(getRect().mRight - mMoreTextBox->getRect().getWidth() - buttonHGap, 0,
+			//		mMoreTextBox->getRect().getWidth(),
+			//		mMoreTextBox->getRect().getHeight());
 
-			addChild(mMoreTextBox);
-			mMoreTextBox->setRect(rect);
-			mMoreTextBox->setVisible(TRUE);
+			//addChild(mMoreTextBox);
+			//mMoreTextBox->setRect(rect);
+			//mMoreTextBox->setVisible(TRUE);
+			rect.setOriginAndSize(getRect().mRight - mMoreCtrl->getRect().getWidth() - buttonHGap, 0,
+					mMoreCtrl->getRect().getWidth(),
+					mMoreCtrl->getRect().getHeight());
+
+			addChild(mMoreCtrl);
+			mMoreCtrl->setRect(rect);
+			mMoreCtrl->setVisible(TRUE);
+			// </FS:Ansariel>
 		}
 		// Update overflow menu
 		LLToggleableMenu* overflow_menu = static_cast <LLToggleableMenu*> (mOverflowMenuHandle.get());
@@ -863,7 +902,10 @@ LLButton* LLFavoritesBarCtrl::createButton(const LLPointer<LLViewerInventoryItem
 	LLFavoriteLandmarkButton* fav_btn = NULL;
 
 	// do we have a place for next button + double buttonHGap + mMoreTextBox ?
-	if(curr_x + width + 2*button_x_delta +  mMoreTextBox->getRect().getWidth() > getRect().mRight )
+	// <FS:Ansariel> Allow V3 and FS style favorites bar
+	//if(curr_x + width + 2*button_x_delta +  mMoreTextBox->getRect().getWidth() > getRect().mRight )
+	if(curr_x + width + 2*button_x_delta +  mMoreCtrl->getRect().getWidth() > getRect().mRight )
+	// </FS:Ansariel>
 	{
 		return NULL;
 	}
@@ -951,7 +993,10 @@ void LLFavoritesBarCtrl::showDropDownMenu()
 
 		menu->buildDrawLabels();
 		menu->updateParent(LLMenuGL::sMenuContainer);
-		menu->setButtonRect(mMoreTextBox->getRect(), this);
+		// <FS:Ansariel> Allow V3 and FS style favorites bar
+		//menu->setButtonRect(mMoreTextBox->getRect(), this);
+		menu->setButtonRect(mMoreCtrl->getRect(), this);
+		// </FS:Ansariel>
 		positionAndShowMenu(menu);
 		mDropDownItemsCount = menu->getItemCount();
 	}
@@ -1176,7 +1221,17 @@ void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
 		key["type"] = "landmark";
 		key["id"] = mSelectedItemID;
 
-		LLFloaterSidePanelContainer::showPanel("places", key);
+		// <FS:Ansariel> FIRE-817: Separate place details floater
+		//LLFloaterSidePanelContainer::showPanel("places", key);
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", key);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", key);
+		}
+		// </FS:Ansariel>
 	}
 	else if (action == "copy_slurl")
 	{
@@ -1487,14 +1542,14 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	// Do not change the file if we are not logged in yet.
 	if (!LLLoginInstance::getInstance()->authSuccess())
 	{
-		llwarns << "Cannot save favorites: not logged in" << llendl;
+		LL_WARNS("Favorites") << "Cannot save favorites: not logged in" << LL_ENDL;
 		return;
 	}
 
 	std::string user_dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "");
 	if (user_dir.empty())
 	{
-		llwarns << "Cannot save favorites: empty user dir name" << llendl;
+		LL_WARNS("Favorites") << "Cannot save favorites: empty user dir name" << LL_ENDL;
 		return;
 	}
 
@@ -1522,13 +1577,13 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 		slurls_map_t::iterator slurl_iter = mSLURLs.find(value["asset_id"]);
 		if (slurl_iter != mSLURLs.end())
 		{
-			lldebugs << "Saving favorite: idx=" << LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID()) << ", SLURL=" <<  slurl_iter->second << ", value=" << value << llendl;
+			LL_DEBUGS("Favorites") << "Saving favorite: idx=" << LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID()) << ", SLURL=" <<  slurl_iter->second << ", value=" << value << LL_ENDL;
 			value["slurl"] = slurl_iter->second;
 			user_llsd[LLFavoritesOrderStorage::instance().getSortIndex((*it)->getUUID())] = value;
 		}
 		else
 		{
-			llwarns << "Not saving favorite " << value["name"] << ": no matching SLURL" << llendl;
+			LL_WARNS("Favorites") << "Not saving favorite " << value["name"] << ": no matching SLURL" << LL_ENDL;
 		}
 	}
 
@@ -1536,12 +1591,19 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	LLAvatarNameCache::get( gAgentID, &av_name );
 	// Note : use the "John Doe" and not the "john.doe" version of the name 
 	// as we'll compare it with the stored credentials in the login panel.
-	lldebugs << "Saved favorites for " << av_name.getUserName() << llendl;
-	fav_llsd[av_name.getUserName()] = user_llsd;
+	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//lldebugs << "Saved favorites for " << av_name.getUserName() << llendl;
+	//fav_llsd[av_name.getUserName()] = user_llsd;
+	std::string name = av_name.getUserName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	LL_DEBUGS("Favorites") << "Saved favorites for " << name << LL_ENDL;
+	fav_llsd[name] = user_llsd;
+	// </FS:CR>
+
 
 	llofstream file;
 	file.open(filename);
 	LLSDSerialize::toPrettyXML(fav_llsd, file);
+	file.close();
 }
 
 void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
@@ -1557,15 +1619,24 @@ void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
 	LLAvatarNameCache::get( gAgentID, &av_name );
 	// Note : use the "John Doe" and not the "john.doe" version of the name.
 	// See saveFavoritesSLURLs() here above for the reason why.
-	lldebugs << "Removed favorites for " << av_name.getUserName() << llendl;
-	if (fav_llsd.has(av_name.getUserName()))
+	// <FS:CR> FIRE-10122 - User@grid stored_favorites.xml
+	//lldebugs << "Removed favorites for " << av_name.getUserName() << llendl;
+	//if (fav_llsd.has(av_name.getUserName()))
+	//{
+	//	fav_llsd.erase(av_name.getUserName());
+	//}
+	std::string name = av_name.getUserName() + " @ " + LLGridManager::getInstance()->getGridLabel();
+	LL_DEBUGS("Favorites") << "Removed favorites for " << name << LL_ENDL;
+	if (fav_llsd.has(name))
 	{
-		fav_llsd.erase(av_name.getUserName());
+		fav_llsd.erase(name);
 	}
+	// </FS:CR>
 
 	llofstream out_file;
 	out_file.open(filename);
 	LLSDSerialize::toPrettyXML(fav_llsd, out_file);
+	out_file.close();
 
 }
 
@@ -1616,6 +1687,7 @@ void LLFavoritesOrderStorage::save()
 		llofstream file;
 		file.open(filename);
 		LLSDSerialize::toPrettyXML(settings_llsd, file);
+		file.close();
 	}
 }
 

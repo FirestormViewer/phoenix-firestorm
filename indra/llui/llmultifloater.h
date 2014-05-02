@@ -70,11 +70,17 @@ public:
 
 	virtual void setFloaterFlashing(LLFloater* floaterp, BOOL flashing);
 	virtual BOOL closeAllFloaters();	//Returns FALSE if the floater could not be closed due to pending confirmation dialogs
-	void setTabContainer(LLTabContainer* tab_container) { if (!mTabContainer) mTabContainer = tab_container; }
+	// <FS> Update torn off status and add title bar
+	//void setTabContainer(LLTabContainer* tab_container) { if (!mTabContainer) mTabContainer = tab_container; } // LL Code
+	void setTabContainer(LLTabContainer* tab_container);
+	// </FS> Update torn off status and add title bar
 	void onTabSelected();
 
 	virtual void updateResizeLimits();
 	virtual void updateFloaterTitle(LLFloater* floaterp);
+
+	// <FS:Ansariel> CTRL-W doesn't work with multifloaters
+	void closeDockedFloater();
 
 protected:
 	struct LLFloaterData

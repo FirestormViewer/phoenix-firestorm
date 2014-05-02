@@ -1,39 +1,105 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Bewegen" name="move_panel">
-	<slider label="Sichtwinkel" name="camera_fov"/>
-	<slider label="Abstand" name="camera_offset_scale"/>
-	<text name="heading2">
-		Automatische Position für:
-	</text>
-	<check_box label="Bauen/Bearbeiten" name="edit_camera_movement" tool_tip="Automatische Kamerapositionierung bei Wechsel in und aus dem Bearbeitungsmodus verwenden"/>
-	<check_box label="Aussehen" name="appearance_camera_movement" tool_tip="Automatische Kamerapositionierung im Bearbeitenmodus verwenden"/>
-	<text name="keyboard_lbl">
-		Tastatur:
-	</text>
-	<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
-	<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run"/>
-	<text name="mouse_lbl">
-		Maus:
-	</text>
-	<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
-	<text name=" Mouse Sensitivity">
-		Mausempfindlichkeit für Mouselook:
-	</text>
-	<check_box label="Umkehren" name="invert_mouse"/>
-	<text name="single_click_action_lbl">
-		Einmal auf Land klicken:
-	</text>
-	<combo_box name="single_click_action_combo">
-		<combo_box.item label="Keine Aktion" name="0"/>
-		<combo_box.item label="Zu angeklicktem Ort bewegen" name="1"/>
-	</combo_box>
-	<text name="double_click_action_lbl">
-		Auf Land doppelklicken:
-	</text>
-	<combo_box name="double_click_action_combo">
-		<combo_box.item label="Keine Aktion" name="0"/>
-		<combo_box.item label="Zu angeklicktem Ort bewegen" name="1"/>
-		<combo_box.item label="Zu angeklicktem Ort teleportieren" name="2"/>
-	</combo_box>
-	<button label="Andere Geräte" name="joystick_setup_button"/>
+	<tab_container label="Move and View" name="tabs">
+		<!--View-->
+		<panel label="Ansicht" name="tab-view">
+			<slider label="Sichtwinkel" name="camera_fov"/>
+			<slider label="Abstand" name="camera_offset_scale"/>
+			<slider label="Übergangszeit" name="camera_transition_time"/>
+			<slider label="Glättung" name="camera_position_smoothing"/>
+			<check_box label="Kamerabeschränkungen aufheben" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche"/>
+			<check_box label="Mausrad nicht zum Zoomen verwenden" name="FSDisableMouseWheelCameraZoom"/>
+			<text name="heading2">
+				Automatische Position für:
+			</text>
+			<check_box label="Bauen/Bearbeiten" name="edit_camera_movement" tool_tip="Automatische Kamerapositionierung bei Wechsel in und aus dem Bearbeitungsmodus verwenden"/>
+			<check_box label="Aussehen" name="appearance_camera_movement" tool_tip="Automatische Kamerapositionierung im Bearbeitenmodus verwenden"/>
+			<check_box label="Zusätzliche Beleuchtung aktivieren" name="EditAppearanceLighting" tool_tip="Aktiviert die zusätzliche Beleuchtung, wenn die Form des Avatars bearbeitet wird."/>
+			<check_box label="Mouselook-Funktionalität aktivieren" name="EnableMouselook" tool_tip="Aktiviert die Ego-Perspektive und -Steuerung mit der Maus."/>
+			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
+			<check_box label="Benutzerinterface im Mouselook anzeigen" name="first_person_ui_visible"/>
+			<check_box label="Kontextmenüs im Mouselook aktivieren" name="FSEnableRightclickMenuInMouselook" tool_tip="Öffnet das Pie-/Kontextmenü im Mouselook-Modus beim drücken von ALT + rechter Maustaste."/>
+			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible" tool_tip="Zeigt Hilfestellungen zum Mouselook-Modus an."/>
+			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
+			<check_box label="Combat-Funktionen aktivieren" name="FSMouselookCombatFeatures"/>
+			<check_box label="Ziel-Markierungen aktivieren" name="ExodusMouselookIFF"/>
+			<slider label="Reichweite (m)" name="ExodusMouselookIFFRange"/>
+			<text name="Mouse Sensitivity" width="195">
+				Mausempfindlichkeit für Mouselook:
+			</text>
+			<check_box label="Umkehren" name="invert_mouse"/>
+		</panel>
+		
+		<!--Movement-->
+		<panel label="Bewegung" name="tab-movement">
+			<check_box label="Mit Pfeiltasten bewegen" name="arrow_keys_move_avatar_check"/>
+			<check_box label="AZERTY-Tastaturlayout verwenden" name="FSUseAzertyKeyboardLayout" width="200"/>
+			<text name="FSUseAzertyKeyboardLayout_requires_restart">
+				(Erfordert Neustart)
+			</text>
+			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run" left_delta="-210"/>
+			<check_box label="Fliegen/Landen beim Drücken von auf/ab" name="automatic_fly" />
+			<check_box label="Kriech-Umschaltmodus aktivieren" name="crouch_toggle_mode"/>
+			<check_box label="Soundeffekte beim Teleportieren abspielen" name="PlayTeleportSound"/>
+			<check_box label="Nach einem Teleport immer fliegen" name="FSFlyAfterTeleport"/>
+			<check_box label="Springen oder Kriechen gedrückt halten, um fliegen zu starten oder zu stoppen" name="automatic_fly"/>
+			<check_box label="Movelock nach Teleport erneut aktivieren, falls zuvor aktiv" name="RelockMoveLockAfterRegionChange"/>
+			<text name="single_click_action_lbl">
+				Einfacher Klick auf Land:
+			</text>
+			<combo_box name="single_click_action_combo">
+				<combo_box.item label="Keine Aktion" name="0"/>
+				<combo_box.item label="Zur Position gehen" name="1"/>
+			</combo_box>
+			<text name="double_click_action_lbl">
+				Doppelklick auf Land:
+			</text>
+			<combo_box name="double_click_action_combo">
+				<combo_box.item label="Keine Aktion" name="0"/>
+				<combo_box.item label="Zur Position gehen" name="1"/>
+				<combo_box.item label="Zur Position teleportieren" name="2"/>
+			</combo_box>
+			<button label="Joystick-Konfiguration" name="joystick_setup_button"/>
+		</panel>
+
+		<!-- Firestorm -->
+		<panel label="Firestorm" name="tab-firestorm">
+			<text name="camera_options_label">
+			   Kamera-Optionen:
+			</text>
+			<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+			<check_box label="Kameraposition nach Teleport zurücksetzen (innerhalb einer Region)" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+			<check_box label="Kameraposition bei Avatarbewegung zurücksetzen" name="FSResetCameraOnMovement"/>
+			<check_box label="Minimale Zoomdistanz der Kamera aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
+			<check_box label="Beim Zurücksetzen der Ansicht Avatar in Blickrichtung der Kamera drehen" name="resetviewturnsavatar" tool_tip="Behält die Blickrichtung der Kamera bei und dreht den Avatar, wenn die Ansicht zurückgesetzt wird (Beim Drücken von ESC)."/>
+			<check_box label="Kamerabewegung durch primitive Objekte erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann."/>
+			<text name="ignorecameraconstraints_requires_restart">
+				(Erfordert Neustart)
+			</text>
+			<check_box label="Kamera-Kontrollen auf undurchsichtigem Hintergrund anzeigen" name="FSAlwaysOpaqueCameraControls"/>
+			<text name="minimap_options_label">
+			   Minikarte-Optionen:
+			</text>
+			<check_box label="Rotation der Minikarte aktivieren" name="minimaprotate" tool_tip="Aktiviert die Rotation der Minikarte bei Drehung des Avatars."/>
+			<text name="netmap_double_click_action_lbl">
+				Doppelklick auf Minikarte:
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Keine Aktion" name="0"/>
+				<combo_box.item label="Weltkarte öffnen" name="1"/>
+				<combo_box.item label="Zur Position teleportieren" name="2"/>
+			</combo_box>
+			<slider label="Auswahlradius-Skalierung:" tool_tip="Steuert den Radius für den Auswahlbereich auf der Minikarte" name="FSMinimapPickScale"/>
+			<text name="world_map_options_label">
+			   Weltkarte-Optionen:
+			</text>
+			<check_box label="Doppelte Landmarken auf der Weltkarte filtern" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtert doppelte (identische) Landmarken in der Übersicht der Landmarken auf der Weltkarte."/>
+			<check_box label="Erweiterte Regionsinformationen auf der Weltkarte anzeigen" name="FSAdvancedWorldmapRegionInfo" tool_tip="Zeigt erweiterte Regionsinformationen (Anzahl Avatare und Alterseinstufung) auf der Weltkarte an."/>
+			<check_box label="Grid-Koordinaten auf der Weltkarte anzeigen" name="FSShowRegionGridCoordinates" tool_tip="Zeigt die Gridkoordinaten (mit Region als Einheit) auf der Weltkarte an."/>
+			<check_box label="Info anzeigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
+			<check_box label="Simulator-Kanal in der Statusleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an, auf dem die aktuelle Region läuft."/>
+			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
+			<check_box label="Avatar zum ausgewählten Objekt drehen" name="FSTurnAvatarToSelectedObject" tool_tip="Dreht den Avatar mit dem Gesicht zum aktuell ausgewählten Objekt."/>
+		</panel>
+	</tab_container>
 </panel>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_firstlife" label="リアルライフ">
+
+    <loading_indicator name="progress_indicator" />
+    <texture_picker name="real_world_pic" />
+    <view_border name="info_border" />
+    <text_editor name="fl_description_edit" />
+	
+</panel>
+

@@ -47,10 +47,19 @@ public:
 	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	/*virtual*/ void	draw();
 
+	// <FS:Ansariel> FIRE-1825: Minimap floater background transparency
+	/*virtual*/ F32 getCurrentTransparency();
+
 private:
-	void handleZoom(const LLSD& userdata);
+	// <FS:Ansariel> Unused as of 06-02-2014; Handled in LLNetMap
+	//void handleZoom(const LLSD& userdata);
 	void setDirectionPos( LLTextBox* text_box, F32 rotation );
 	void updateMinorDirections();
+
+	// <FS:Ansariel> Remove titlebar
+	void setMinimized( BOOL );
+	void stretchMiniMap(S32 width,S32 height);
+	// </FS:Ansariel>
 
 	LLTextBox*		mTextBoxEast;
 	LLTextBox*		mTextBoxNorth;

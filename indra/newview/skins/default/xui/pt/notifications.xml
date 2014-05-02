@@ -237,10 +237,10 @@ Deseja continuar?
 Você não tem L$ suficientes para associar-se a este grupo.
 	</notification>
 	<notification name="CreateGroupCost">
-		Criar este grupo custa L$100.
+		Criar este grupo custa L$[COST].
 Grupos ser formados por mais de um membro, caso contrário serão definitivamente excluídos. 
 Convite outros membros dentro de 48 horas.
-		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Criar grupo por L$100"/>
+		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Criar grupo por L$[COST]"/>
 	</notification>
 	<notification name="LandBuyPass">
 		Por L$[COST] você pode ingressar no terreno (&apos;[PARCEL_NAME]&apos;) por [TIME] horas.  Comprar um passe de acesso?
@@ -256,7 +256,7 @@ Seu preço de venda será  L$[SALE_PRICE] e está autorizado para venda para [NA
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Continuar"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ATENÇÃO: Clicar em &apos;vender a qualquer um&apos; torna o terreno disponível para toda a comunidade do [SECOND_LIFE], inclusive residentes de outras regiões.
+		ATENÇÃO: Clicar em &apos;vender a qualquer um&apos; torna o terreno disponível para toda a comunidade do [CURRENT_GRID], inclusive residentes de outras regiões.
 
 O terreno selecionado, de [LAND_SIZE] m², está sendo reservado para venda. 
 O preço será L$[SALE_PRICE] e [NAME] pode comprar o terreno.
@@ -350,7 +350,7 @@ Para colocar a mídia em só uma face, selecione Selecionar face e clique na fac
 		Houve um problema ao carregar a foto da reportagem devido à seguinte razão: [REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		Você deve concordar com os Termos de Serviço para continuar a entrar no [SECOND_LIFE].
+		Você deve concordar com os Termos de Serviço para continuar a entrar no [CURRENT_GRID].
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		Não foi possível vestir o look. A pasta do look não contém roupas, partes do corpo ou acessórios.
@@ -369,7 +369,7 @@ Ele ultrapassa o limite de anexos, de [MAX_ATTACHMENTS] objetos. Remova um objet
 		Opa! Alguma coisa ficou em branco.
 Digite o nome de usuário de seu avatar.
 
-É preciso ter uma conta para entrar no [SECOND_LIFE]. Deseja criar uma conta agora?
+É preciso ter uma conta para entrar no [CURRENT_GRID]. Deseja criar uma conta agora?
 		<url name="url">
 			[create_account_url]
 		</url>
@@ -411,7 +411,7 @@ Tem certeza de que quer prosseguir?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		Ir até a página web de enventos [SECOND_LIFE] ?
+		Ir até a página web de enventos [CURRENT_GRID] ?
 		<url name="url">
 			http://secondlife.com/events/?lang=pt-BR
 		</url>
@@ -440,7 +440,7 @@ Nota: Este procedimento limpa o cache.
 		Reinicie o [APP_NAME] para exibir o idioma selecionado.
 	</notification>
 	<notification name="GoToAuctionPage">
-		Ir para a página do [SECOND_LIFE] para ver os detalhes do leilão ou fazer um lance?
+		Ir para a página do [CURRENT_GRID] para ver os detalhes do leilão ou fazer um lance?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Ir para a página"/>
 	</notification>
 	<notification name="SaveChanges">
@@ -993,7 +993,7 @@ Unir os terrenos?
 Em geral, essa é uma falha técnica temporária.  Personalize e volte a salvar o item novamente dentro de alguns minutos.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Ah não!  O [SECOND_LIFE] teve de fechar. 
+		Ah não!  O [CURRENT_GRID] teve de fechar. 
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Sair" yestext="Exibir IM &amp; bate-papo"/>
 	</notification>
@@ -1236,7 +1236,7 @@ Pense em usar outra região como seu início.
 	</notification>
 	<notification name="ClothingLoading">
 		As suas roupas estão sendo transferidas. 
-Enquando isso, use o [SECOND_LIFE] normalmente. Seu visual será exibido corretamente.
+Enquando isso, use o [CURRENT_GRID] normalmente. Seu visual será exibido corretamente.
 		<form name="form">
 			<ignore name="ignore" text="A roupa está demorando para chegar"/>
 		</form>
@@ -1244,7 +1244,8 @@ Enquando isso, use o [SECOND_LIFE] normalmente. Seu visual será exibido correta
 	<notification name="FirstRun">
 		A instalação do [APP_NAME] está pronta.
 
-Se você ainda não conhece o [SECOND_LIFE], basta criar uma conta para começar.
+Se você ainda não conhece o [CURRENT_GRID], basta criar uma conta para começar. 
+Voltar para [http://join.secondlife.com secondlife.com] para criar sua conta?
 		<usetemplate name="okcancelbuttons" notext="Continuar" yestext="Criar conta"/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
@@ -1264,7 +1265,7 @@ Cheque sua conexão e tente em alguns minutos, clique na Ajuda para acessar o [S
 		Seu personagem irá aparecer num momento.
 
 Use as teclas de seta para andar.
-Pressione a tecla F1 para ajuda ou aprender mais sobre [SECOND_LIFE].
+Pressione a tecla F1 para ajuda ou aprender mais sobre [CURRENT_GRID].
 Por favor, escolha se o seu avatar é feminino ou masculino. Você pode mudar de idéia depois.
 		<usetemplate name="okcancelbuttons" notext="Feminino" yestext="Masculino"/>
 	</notification>
@@ -1338,13 +1339,13 @@ Isso é realmente útil apenas para depuração.
 		Não foi possível definir texturas da região:
 Textura do Terreno [TEXTURE_NUM] tem uma profundidade de bits inválidos [TEXTURE_BIT_DEPTH].
 
-Substitua textura [TEXTURE_NUM], com uma imagem de 24-bit 512x512 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
+Substitua textura [TEXTURE_NUM], com uma imagem de 24-bit 1024x1024 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Não foi possível definir texturas da região:
 Textura do Terreno [TEXTURE_NUM] é muito grande em [TEXTURE_SIZE_X] x [TEXTURE_SIZE_Y].
 
-Substituir textura [TEXTURE_NUM], com uma imagem de 24-bit 512x512 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
+Substituir textura [TEXTURE_NUM], com uma imagem de 24-bit 1024x1024 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
 	</notification>
 	<notification name="RawUploadStarted">
 		Upload iniciado. Pode levar uns 2 minutos, dependendo da sua velocidade de conexão.
@@ -1533,15 +1534,15 @@ consulte a informação [[INFO_URL] sobre essa atualização]
 		<usetemplate ignoretext="Abrir o navegador para acessar minha conta" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		Visite a Wiki do [SECOND_LIFE] para detalhes de como Reportar um Problema de Segurança.
+		Visite a Wiki do [CURRENT_GRID] para detalhes de como Reportar um Problema de Segurança.
 		<usetemplate ignoretext="Abrir o navegador para ver como denunciar uma ocorrência" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		Visite o Wiki de  QA do [SECOND_LIFE].
+		Visite o Wiki de  QA do [CURRENT_GRID].
 		<usetemplate ignoretext="Abrir meu navegador para ver a página Wiki" name="okcancelignore" notext="Cancelar" yestext="OK"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		Visite o Rastreador Público de Problemas do [SECOND_LIFE], onde você poderá reportar Bugs e outros Problemas.
+		Visite o Rastreador Público de Problemas do [CURRENT_GRID], onde você poderá reportar Bugs e outros Problemas.
 		<usetemplate ignoretext="Abrir o navegador para usar o Monitor de problemas" name="okcancelignore" notext="Cancelar" yestext="Ir para a Página"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -1962,7 +1963,7 @@ Publicar este classificado agora por L$ [AMOUNT]?
 		<usetemplate canceltext="Cancelar" name="yesnocancelbuttons" notext="Não" yestext="Sim"/>
 	</notification>
 	<notification label="Confirmar reiniciar" name="ConfirmRestart">
-		Você quer realmente reiniciar esta região em 2 minutos?
+		Você quer realmente reiniciar esta região?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Reiniciar"/>
 	</notification>
 	<notification label="Mensagem para todos desta Região" name="MessageRegion">
@@ -2144,9 +2145,9 @@ Fazer uma descrição precisa nos ajuda a arquivar e processar as reportagens de
 
 Aparentemente você fez uma denúncia de infranção de propriedade intelectual.  Certifique-se de que sua denúncia está correta: 
 
-(1) Procedimento do abuso Se você tem motivos para acreditar que um residente está burlando o sistema de autorização do [SECOND_LIFE] usando o CopyBot ou ferramentas parecidas para infringir direitos de propriedade intelectual, envie um relatório de abuso.  A equipe anti-abuso investiga e impõe sanções em casos de infranção dos [SECOND_LIFE] [http://secondlife.com/corporate/tos.php Termos de Serviço] ou das [http://secondlife.com/corporate/cs.php Normas da Comunidade]. Entretando, a equipe anti-abuso não lida com pedidos de remoção de conteúdo do [SECOND_LIFE]. Tais pedidos não serão atendidos. 
+(1) Procedimento do abuso Se você tem motivos para acreditar que um residente está burlando o sistema de autorização do [CURRENT_GRID] usando o CopyBot ou ferramentas parecidas para infringir direitos de propriedade intelectual, envie um relatório de abuso.  A equipe anti-abuso investiga e impõe sanções em casos de infranção dos [CURRENT_GRID] [http://secondlife.com/corporate/tos.php Termos de Serviço] ou das [http://secondlife.com/corporate/cs.php Normas da Comunidade]. Entretando, a equipe anti-abuso não lida com pedidos de remoção de conteúdo do [CURRENT_GRID]. Tais pedidos não serão atendidos. 
 
-(2) Procedimentos DMCA ou remoção de conteúdo.  Para solicitar a remoção de conteúdo do [SECOND_LIFE], é imprescindível enviar uma notificação de infração elaborada conforme as disposicões da [http://secondlife.com/corporate/dmca.php Política DMCA].
+(2) Procedimentos DMCA ou remoção de conteúdo.  Para solicitar a remoção de conteúdo do [CURRENT_GRID], é imprescindível enviar uma notificação de infração elaborada conforme as disposicões da [http://secondlife.com/corporate/dmca.php Política DMCA].
 
 Se você deseja continuar o procedimento de denúncia de abuso, feche esta janela e termine o relatório.   A categoria &apos;CopyBot or Permissions Exploit&apos; (robô de cópia ou exploit de autorização)
 
@@ -2277,7 +2278,7 @@ Inclua um link para facilitar o acesso para visitantes. Teste o link na barra de
 		Localização restrita para 18 anos de idade ou mais.
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Área restrita a residentes que já cadastraram seus dados de pagamento  Deseja ir ao site do [SECOND_LIFE] para cuidar disso? 
+		Área restrita a residentes que já cadastraram seus dados de pagamento  Deseja ir ao site do [CURRENT_GRID] para cuidar disso? 
 
 [_URL]
 		<url name="url" option="0">
@@ -2310,7 +2311,7 @@ Inclua um link para facilitar o acesso para visitantes. Teste o link na barra de
 		Assunto: [SUBJECT], Mensagem: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; está [STATUS]
+		[NAME] está [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Você é o máximo! Mesmo assim, não dá para adicionar a si mesmo(a) como amigo(a).
@@ -2616,13 +2617,13 @@ Por favor, tente novamente em alguns instantes.
 		Impossível criar a conexão pendente.
 	</notification>
 	<notification name="InternalUsherError">
-		Um erro interno ocorreu enquanto se tentava direcioná-lo para seu destino de Tele-transporte. O [SECOND_LIFE] pode estar passando por problemas no serviço, neste momento.
+		Um erro interno ocorreu enquanto se tentava direcioná-lo para seu destino de Tele-transporte. O [CURRENT_GRID] pode estar passando por problemas no serviço, neste momento.
 	</notification>
 	<notification name="NoGoodTPDestination">
 		Impossível encontrar um bom destino para tele-transporte nesta região.
 	</notification>
 	<notification name="InternalErrorRegionResolver">
-		Um erro interno ocorreu enquanto tentava-se definir as coordenadas globais da sua solicitação de tele-transporte. O [SECOND_LIFE] pode estar passando por problemas no serviço, no momento.
+		Um erro interno ocorreu enquanto tentava-se definir as coordenadas globais da sua solicitação de tele-transporte. O [CURRENT_GRID] pode estar passando por problemas no serviço, no momento.
 	</notification>
 	<notification name="NoValidLanding">
 		Não se achou um ponto de aterrissagem válido.
@@ -2740,10 +2741,10 @@ Cada um pode ver o status do outro (definição padrão).
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; rejeitou sua oferta de amizade.
 	</notification>
 	<notification name="FriendshipAcceptedByMe">
-		Oferta de amizada aceita.
+		Oferta de amizade aceita.
 	</notification>
 	<notification name="FriendshipDeclinedByMe">
-		Oferta de amizada aceita.
+		Oferta de amizade recusada.
 	</notification>
 	<notification name="OfferCallingCard">
 		[NOME] está te oferecendo um cartão de visita.
@@ -2762,7 +2763,7 @@ Se permanecer aqui, você será desconectado.
 Se permanecer aqui, você será desconectado.
 	</notification>
 	<notification name="LoadWebPage">
-		Carregar a página [URL]?
+		Carregar a página [URL] ?
 
 [MESSAGE]
 
@@ -3861,13 +3862,13 @@ o servidor está cheio.
 		Não há lotes alugados suficientes na seleção para reunir.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Não é possível dividir o terreno.\nHá mais de um lote selecionado.\nTente selecionar um pedaço menor de terreno.
+		Não é possível dividir o terreno. Há mais de um lote selecionado. Tente selecionar um pedaço menor de terreno.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Não é possível dividir o terreno.\nNão é possível encontrar o lote.\nComunique isso em Ajuda -&gt; Relatar bug...
+		Não é possível dividir o terreno. Não é possível encontrar o lote. Comunique isso em Ajuda -&gt; Relatar bug...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Não é possível dividir o terreno. O lote inteiro está selecionado.\nTente selecionar um pedaço menor do terreno.
+		Não é possível dividir o terreno. O lote inteiro está selecionado. Tente selecionar um pedaço menor do terreno.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		O terreno foi dividido.

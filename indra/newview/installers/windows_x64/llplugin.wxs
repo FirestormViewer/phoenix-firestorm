@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIR">
+      <Component Id="llplugin_exe" Guid="{E25C2EB6-3A61-49d7-8995-22380F703250}">
+        <File Source="$(var.PLUGIN_SOURCEDIR)/slplugin.exe" />
+       </Component>
+       <Directory Id="llplugin_dir" Name="llplugin">
+         <Component Id="llplugin_libs" Guid="{09911740-D305-4b46-AC19-17D366D78F70}">
+           <File Id="llplugin_lib_libeay32" KeyPath="yes" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\libeay32.dll" />
+           <File Id="llplugin_lib_media_plugin_quicktime" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_quicktime.dll" />
+           <File Id="llplugin_lib_media_plugin_webkit" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\media_plugin_webkit.dll" />
+           <File Id="llplugin_lib_qtcore4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtcore4.dll" />
+           <File Id="llplugin_lib_qtgui4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtgui4.dll" />
+           <File Id="llplugin_lib_qtnetwork4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtnetwork4.dll" />
+           <File Id="llplugin_lib_qtopengl4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtopengl4.dll" />
+           <File Id="llplugin_lib_qtwebkit4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtwebkit4.dll" />
+           <File Id="llplugin_lib_qtxmlpatterns4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\qtxmlpatterns4.dll" />
+           <File Id="llplugin_lib_ssleay32" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\ssleay32.dll" />
+         </Component>
+         <Directory Id="llplugin_dir_codecs" Name="codecs">
+           <Component Id="llplugin_dir_codec_libs" Guid="{E702A942-2D3A-4173-B5A9-E2F83B35FF19}">
+             <File Id="llplugin_lib_qcncodecs4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\codecs\qcncodecs4.dll" />
+             <File Id="llplugin_lib_qjpcodecs4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\codecs\qjpcodecs4.dll" />
+             <File Id="llplugin_lib_qkrcodecs4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\codecs\qkrcodecs4.dll" />
+             <File Id="llplugin_lib_qtwcodecs4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\codecs\qtwcodecs4.dll" />
+           </Component>
+         </Directory>
+         <Directory Id="llplugin_dir_imageformats" Name="imageformats">
+           <Component Id="llplugin_dir_imageformat_libs" Guid="{0FDF538B-B98B-4bd0-AA58-CBDCBC924408}">
+             <File Id="llplugin_lib_qgif4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qgif4.dll" />
+             <File Id="llplugin_lib_qico4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qico4.dll" />
+             <File Id="llplugin_lib_qjpeg4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qjpeg4.dll" />
+             <File Id="llplugin_lib_qmng4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qmng4.dll" />
+             <File Id="llplugin_lib_qsvg4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qsvg4.dll" />
+             <File Id="llplugin_lib_qtiff4" Source="$(var.PLUGIN_SOURCEDIR)\llplugin\imageformats\qtiff4.dll" />
+           </Component>
+         </Directory>
+       </Directory>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

@@ -1,40 +1,87 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Suoni" name="Preference Media panel">
+<panel label="Audio e media" name="Preference Media panel">
 	<panel.string name="middle_mouse">
 		Pulsante centrale del mouse
 	</panel.string>
-	<slider label="Vol. principale" name="System Volume"/>
-	<check_box initial_value="true" label="" name="mute_when_minimized"/>
-	<text name="mute_chb_label">
-		Disatt. audio se minimizzato
-	</text>
-	<slider label="Pulsanti" name="UI Volume"/>
-	<slider label="Ambiente" name="Wind Volume"/>
-	<slider label="Effetti sonori" name="SFX Volume"/>
-	<slider label="Musica in streaming" name="Music Volume"/>
-	<check_box label="Abilitato" name="enable_music"/>
-	<slider label="Multimediale" name="Media Volume"/>
-	<check_box label="Abilitato" name="enable_media"/>
-	<slider label="Chat vocale" name="Voice Volume"/>
-	<check_box label="Abilitato" name="enable_voice_check"/>
-	<check_box label="Consenti riproduzione multimediale automatica" name="media_auto_play_btn" tool_tip="Seleziona qui per consentire la riproduzione multimediale automatica" value="true"/>
-	<check_box label="Riproduci media in uso da altri avatar" name="media_show_on_others_btn" tool_tip="Deseleziona qui per nascondere i media in uso dagli altri avatar nei dintorni" value="true"/>
-	<check_box label="Riproduci suoni dai gesti" name="gesture_audio_play_btn" tool_tip="Seleziona per ascoltare i suoni dai gesti" value="true"/>
-	<text name="voice_chat_settings">
-		Impostazioni Chat vocale
-	</text>
-	<text name="Listen from">
-		Ascolta da:
-	</text>
-	<radio_group name="ear_location">
-		<radio_item label="Posizione della fotocamera" name="0"/>
-		<radio_item label="Posizione dell&apos;avatar" name="1"/>
-	</radio_group>
-	<check_box label="Muovi le labbra dell&apos;avatar quando parla" name="enable_lip_sync"/>
-	<check_box label="Attiva/disattiva la funzione parla quando premo:" name="push_to_talk_toggle_check" tool_tip="In modalità &quot;interruttore ON/OFF&quot; premi il tasto una volta per attivare o disattivare il microfono. Quando non usi questa modalità, il microfono è attivo solo se tieni premuto il tasto di comando."/>
-	<line_editor label="Pulsante di comando della funzione Premi per parlare" name="modifier_combo"/>
-	<button label="Imposta tasto" name="set_voice_hotkey_button"/>
-	<button name="set_voice_middlemouse_button" tool_tip="Reimposta sul pulsante centrale del mouse"/>
-	<button label="Dispositivi di Input/Output" name="device_settings_btn" width="165"/>
-	<panel label="Impostazioni del dispositivo" name="device_settings_panel"/>
+	<tab_container label="Preferenze Firestorm" name="tabs">
+		<panel label="Generale" name="Media General Panel">
+			<slider label="Volume generale" name="System Volume"/>
+			<check_box label="Muta quando ridotto ad icona" name="mute_when_minimized"/>
+			<slider label="Interfaccia" name="UI Volume"/>
+			<slider label="Ambiente" name="Wind Volume"/>
+			<slider label="Suoni oggetti" name="SFX Volume"/>
+			<check_box name="gesture_audio_play_btn" tool_tip="Se spuntata, riprodurrà i suoni di tutte le Gesture" label="Riproduci suoni gesture"/>
+			<slider label="Streaming Musica" name="Music Volume"/>
+			<check_box label="Abilita" name="enable_music"/>
+			<slider label="Media" name="Media Volume"/>
+			<check_box label="Abilita" name="enable_media"/>
+			<slider label="Volume Voice" name="Voice Volume"/>
+			<check_box label="Abilita" name="enable_voice_check"/>
+			<check_box label="Riproduci automaticamente lo streaming quando entri in Regione" name="media_auto_play_btn" tool_tip="Spunta per startare automaticamente i Media quando entri in una Sim."/>
+			<check_box name="media_allowscript_btn" tool_tip="Questa impostazione consente/impedisce di controllare le connessioni multimediali da parte di script di altri utenti" label="Consenti agli script di un residente di riprodurre Media"/>
+			<check_box label="Riproduci media indossati da altri Avatar" name="media_show_on_others_btn" tool_tip="Non selezionare se non si vogliono ascoltare i media indossati su altri avatar."/>
+			<check_box name="media_filter" tool_tip="Selezionare questa opzione per abilitare il filtro che permette di scegliere se riprodurre file multimediali da un host specifico" label="Attiva filtro Media (Aumenta la sicrezza)"/>
+			<button label="Gestisci siti Media" name="edit_media_lists_button"/>
+			<check_box name="ShowStreamMetadata" label="Mostra titoli Media nella local chat"/>
+			<check_box name="StreamMetadataAnnounceToChat" label="Trasmetti titolo su un Canale:"/>
+			<text name="Media Rolloff" width="220">
+				Distanza di attenuazione Audio/Media:
+			</text>
+			<slider label="Min" name="MediaRollOffMin" tool_tip="Distanza minima dalla sorgente per la quale avvenga l'effetto di attenuazione."/>
+			<text name="MinMeters">
+				metri
+			</text>
+			<slider label="Max" name="MediaRollOffMax" tool_tip="Distanza massima dalla fonte sonora per disattivare completamente l'audio."/>
+			<text name="MaxMeters">
+				metri
+			</text>
+		</panel>
+		<panel label="Impostazioni Voice" name="Media Voice tab">
+			<check_box label="Abilita Voice" name="enable_voice_check"/>
+			<text name="Listen from">
+				Ascolta da:
+			</text>
+			<radio_group name="ear_location">
+				<radio_item label="Posizione Camera" name="0"/>
+				<radio_item label="Posizione Avatar" name="1"/>
+			</radio_group>
+			<check_box label="Muovi le labbra quando parli" name="enable_lip_sync"/>
+			<check_box label="Mostra visualizzatori voice nelle chiamate" tool_tip="Mostra l'indicatore vocale e il movimento delle labbra anche quando si è in una chiamata privata" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Alterna voice on/off quando premo:" name="push_to_talk_toggle_check" tool_tip="Se spuntato, quando terrete premuto il pulsante da voi selezionato, il Voice sarà attivo e l'altro interlocutore potrà ascoltarvi. Al rilascio il voice verrà mutato."/>
+			<line_editor label="Premi il tasto-per-parlare" name="modifier_combo"/>
+			<button label="Imposta Tasto" name="set_voice_hotkey_button"/>
+			<button name="set_voice_middlemouse_button" tool_tip="Ripristina Tasto originale (Default: MiddleMouse = Tasto centrale del Mouse)"/>
+			<button label="Impostazioni Periferiche Audio" name="device_settings_btn"/>
+			<panel label="Impostazione Periferiche" name="device_settings_panel">
+				<panel.string name="default_text">
+					Default
+				</panel.string>
+				<panel.string name="default system device">
+					Periferica Audio di Sistema
+				</panel.string>
+				<panel.string name="name_default_system_device">
+					Periferica Audio di Sistema
+				</panel.string>
+				<panel.string name="no device">
+					Nessuna Periferica
+				</panel.string>
+				<panel.string name="name_no_device">
+					Nessuna Periferica
+				</panel.string>
+				<text name="Input">
+					Ingresso
+				</text>
+				<text name="Output">
+					Uscita
+				</text>
+				<text name="Volume label">
+					Volume ingresso:
+				</text>
+				<slider_bar name="mic_volume_slider" tool_tip="Cambia il volume utilizzando questo cursore"/>
+				<text name="wait_text">
+					Attendere Prego
+				</text>
+			</panel>
+		</panel>
+	</tab_container>
 </panel>

@@ -114,7 +114,11 @@
 #include "llviewershadermgr.h"
 #include "glod/glod.h"
 #include <boost/algorithm/string.hpp>
+// <AW: opensim-limits>
+#include "llworld.h"
+// </AW: opensim-limits>
 
+#include "nd/ndboolswitch.h" // <FS:ND/> To toggle LLRender::sGLCoreProfile 
 
 const S32 SLM_SUPPORTED_VERSION = 3;
 
@@ -390,7 +394,10 @@ BOOL stop_gloderror()
 
 
 LLMeshFilePicker::LLMeshFilePicker(LLModelPreview* mp, S32 lod)
-	: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+// <FS:CR Threaded Filepickers>
+	//: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+	: LLLoadFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+// </FS:CR Threaded Filepickers>
 	{
 		mMP = mp;
 		mLOD = lod;
@@ -514,22 +521,53 @@ BOOL LLFloaterModelPreview::postBuild()
 			text->setMouseDownCallback(boost::bind(&LLModelPreview::setPreviewLOD, mModelPreview, i));
 		}
 	}
+
+	// <Ansariel> Changed grid detection and validation URL generation
+	//            because of grid manager. This will need adjustments
+	//            when OpenSims become mesh-capable!
+	//std::string current_grid = LLGridManager::getInstance()->getGridId();
+	//std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
+	//std::string validate_url;
+	//if (current_grid == "agni")
+	//{
+	//	validate_url = "http://secondlife.com/my/account/mesh.php";
+	//}
+	//else if (current_grid == "damballah")
+	//{
+	//	// Staging grid has its own naming scheme.
+	//	validate_url = "http://secondlife-staging.com/my/account/mesh.php";
+	//}
+	//else
+	//{
+	//	validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
+	//}
+
 	std::string current_grid = LLGridManager::getInstance()->getGridId();
 	std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
+
 	std::string validate_url;
-	if (current_grid == "agni")
+	if (LLGridManager::getInstance()->isInSLMain())
 	{
 		validate_url = "http://secondlife.com/my/account/mesh.php";
 	}
-	else if (current_grid == "damballah")
+	else if (LLGridManager::getInstance()->isInSLBeta())
 	{
-		// Staging grid has its own naming scheme.
-		validate_url = "http://secondlife-staging.com/my/account/mesh.php";
+		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", current_grid.c_str());
 	}
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	else
 	{
-		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
+		// TODO: Opensim: Set it to something reasonable
+		validate_url = LLGridManager::getInstance()->getLoginPage();
 	}
+	// </Ansariel>
+// <FS:CR> Show an alert dialog if using the Opensim viewer as functionality will be limited without Havok
+	LLSD args;
+	args["FEATURE"] = getString("no_havok");
+	LLNotificationsUtil::add("NoHavok", args);
+// </FS:CR>
+#endif // OPENSIM <FS:AW optional opensim support>
+
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);
 
 	mUploadBtn = getChild<LLButton>("ok_btn");
@@ -1394,6 +1432,32 @@ LLModelLoader::LLModelLoader( std::string filename, S32 lod, LLModelPreview* pre
 	mJointMap["lThigh"] = "mHipLeft";
 	mJointMap["lShin"] = "mKneeLeft";
 	mJointMap["lFoot"] = "mFootLeft";
+
+// <FS:WF> FIRE-7937 : Patch from Magus Freston - allows ALL bones including all attachment points to be weighted to mesh and animated	
+	mJointMap["Right_Ear"] = "Right Ear";
+    mJointMap["Left_Ear"] = "Left Ear";
+    mJointMap["Right_Eyeball"] = "Right Eyeball";
+    mJointMap["Left_Eyeball"] = "Left Eyeball";
+    mJointMap["Right_Shoulder"] = "Right Shoulder";
+    mJointMap["Left_Shoulder"] = "Left Shoulder";
+    mJointMap["R_Upper_Arm"] = "R Upper Arm";
+    mJointMap["L_Upper_Arm"] = "L Upper Arm";
+    mJointMap["R_Forearm"] = "R Forearm";
+    mJointMap["L_Forearm"] = "L Forearm";
+    mJointMap["Right_Hand"] = "Right Hand";
+    mJointMap["Left_Hand"] = "Left Hand";
+    mJointMap["Right_Pec"] = "Right Pec";
+    mJointMap["Left_Pec"] = "Left Pec";
+    mJointMap["Avatar_Center"] = "Avatar Center";
+    mJointMap["Right_Hip"] = "Right Hip";
+    mJointMap["Left_Hip"] = "Left Hip";
+    mJointMap["R_Upper_Leg"] = "R Upper Leg";
+    mJointMap["L_Upper_Leg"] = "L Upper Leg";
+    mJointMap["R_Lower_Leg"] = "R Lower Leg";
+    mJointMap["R_Lower_Leg"] = "R Lower Leg";
+    mJointMap["Right_Foot"] = "Right Foot";
+    mJointMap["Left_Foot"] = "Left Foot";
+// <FS:WF> FIRE-7937 end
 
 	if (mPreview)
 	{
@@ -3215,7 +3279,12 @@ LLModelPreview::~LLModelPreview()
 		mModelLoader->mPreview = NULL;
 		mModelLoader = NULL;
 	}
+
+	// WS: Mark the preview avatar as dead, when the floater closes. Prevents memleak!
+	mPreviewAvatar->markDead();
+
 	//*HACK : *TODO : turn this back on when we understand why this crashes
+	
 	//glodShutdown();
 }
 
@@ -3427,7 +3496,11 @@ void LLModelPreview::rebuildUploadData()
 		}
 	}
 
-	F32 max_import_scale = (DEFAULT_MAX_PRIM_SCALE-0.1f)/max_scale;
+// <AW: opensim-limits>
+	//F32 max_import_scale = (DEFAULT_MAX_PRIM_SCALE-0.1f)/max_scale;
+	F32 region_max_prim_scale = LLWorld::getInstance()->getRegionMaxPrimScale();
+	F32 max_import_scale = region_max_prim_scale/max_scale;
+// </AW: opensim-limits>
 
 	F32 max_axis = llmax(mPreviewScale.mV[0], mPreviewScale.mV[1]);
 	max_axis = llmax(max_axis, mPreviewScale.mV[2]);
@@ -4120,7 +4193,15 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 			{
 				type_mask = mVertexBuffer[5][base][i]->getTypeMask();
 
+				// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
+				nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
+				// </FS:	ND>
+
 				LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
+
+				// <FS:ND> And reset LLRender::sGLCoreProfile again
+				switchCoreProfile.reset();
+				// </FS:	ND>
 
 				if (sizes[i*2+1] > 0 && sizes[i*2] > 0)
 				{
@@ -4812,7 +4893,15 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 				mask |= LLVertexBuffer::MAP_WEIGHT4;
 			}
 
+			// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
+			nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
+			// </FS:ND>
+
 			vb = new LLVertexBuffer(mask, 0);
+			
+			// <FS:ND> And reset LLRender::sGLCoreProfile again
+			switchCoreProfile.reset();
+			// </FS:ND>
 
 			vb->allocateBuffer(num_vertices, num_indices, TRUE);
 
@@ -4943,8 +5032,16 @@ void LLModelPreview::addEmptyFace( LLModel* pTarget )
 {
 	U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 	
+	// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
+	nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
+	// </FS:ND>
+
 	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
 	
+	// <FS:ND> And reset LLRender::sGLCoreProfile again
+	switchCoreProfile.reset();
+	// </FS:ND>
+
 	buff->allocateBuffer(1, 3, true);
 	memset( (U8*) buff->getMappedData(), 0, buff->getSize() );
 	memset( (U8*) buff->getIndicesPointer(), 0, buff->getIndicesSize() );

@@ -132,12 +132,20 @@ bool LLControlVariable::llsd_compare(const LLSD& a, const LLSD & b)
 
 LLControlVariable::LLControlVariable(const std::string& name, eControlType type,
 							 LLSD initial, const std::string& comment,
-							 ePersist persist, bool hidefromsettingseditor)
+							 eSanityType sanityType,LLSD sanityValues,const std::string& sanityComment,
+							 // <FS:Zi> Backup Settings
+							 // ePersist persist, bool hidefromsettingseditor
+							 ePersist persist, bool can_backup, bool hidefromsettingseditor
+							 // </FS:Zi>
+)
 	: mName(name),
 	  mComment(comment),
 	  mType(type),
 	  mPersist(persist),
-	  mHideFromSettingsEditor(hidefromsettingseditor)
+	  mCanBackup(can_backup),		// <FS:Zi> Backup Settings
+	  mHideFromSettingsEditor(hidefromsettingseditor),
+	  mSanityType(sanityType),
+	  mSanityComment(sanityComment)
 {
 	if ((persist != PERSIST_NO) && mComment.empty())
 	{
@@ -145,6 +153,9 @@ LLControlVariable::LLControlVariable(const std::string& name, eControlType type,
 	}
 	//Push back versus setValue'ing here, since we don't want to call a signal yet
 	mValues.push_back(initial);
+
+	mSanityValues.push_back(sanityValues[0]);
+	mSanityValues.push_back(sanityValues[1]);
 }
 
 
@@ -239,6 +250,7 @@ void LLControlVariable::setValue(const LLSD& new_value, bool saved_value)
     if(value_changed)
     {
 		firePropertyChanged(original_value);
+		mSanitySignal(this,isSane());
     }
 }
 
@@ -256,6 +268,7 @@ void LLControlVariable::setDefaultValue(const LLSD& value)
 	mValues[0] = comparable_value;
 	if(value_changed)
 	{
+		mSanitySignal(this,isSane());
 		firePropertyChanged(original_value);
 	}
 }
@@ -264,6 +277,13 @@ void LLControlVariable::setPersist(ePersist state)
 {
 	mPersist = state;
 }
+
+// <FS:Zi> Backup Settings
+void LLControlVariable::setBackupable(bool state)
+{
+	mCanBackup = state;
+}
+// </FS:Zi>
 
 void LLControlVariable::setHiddenFromSettingsEditor(bool hide)
 {
@@ -290,6 +310,47 @@ void LLControlVariable::resetToDefault(bool fire_signal)
 	{
 		firePropertyChanged(originalValue);
 	}
+}
+
+bool LLControlVariable::isSane()
+{
+	if(mSanityType<=0)
+		return TRUE;
+
+	bool sanity=FALSE;
+
+	// it's the default value, or we can't check sanity, assume it's sane
+	if(mValues.size() < 2 || !mValues[1] || mValues[1].isUndefined())
+		return TRUE;
+
+	switch(mSanityType)
+	{
+		case SANITY_TYPE_EQUALS:
+			sanity=llsd_compare(mValues[1],mSanityValues[0]);
+			break;
+		case SANITY_TYPE_NOT_EQUALS:
+			sanity=!llsd_compare(mValues[1],mSanityValues[0]);
+			break;
+		case SANITY_TYPE_LESS_THAN:
+			sanity=(mValues[1].asReal()<mSanityValues[0].asReal());
+			break;
+		case SANITY_TYPE_GREATER_THAN:
+			sanity=(mValues[1].asReal()>mSanityValues[0].asReal());
+			break;
+		case SANITY_TYPE_BETWEEN:
+			sanity=(mValues[1].asReal()>=mSanityValues[0].asReal() && mValues[1].asReal()<=mSanityValues[1].asReal());
+			break;
+		case SANITY_TYPE_NOT_BETWEEN:
+			sanity=(mValues[1].asReal()<=mSanityValues[0].asReal() || mValues[1].asReal()>=mSanityValues[1].asReal());
+			break;
+		case SANITY_TYPE_NONE:
+			sanity=TRUE;
+			break;
+		default:
+			sanity=FALSE;
+	}
+
+	return sanity;
 }
 
 bool LLControlVariable::shouldSave(bool nondefault_only)
@@ -348,6 +409,14 @@ LLControlGroup::LLControlGroup(const std::string& name)
 	mTypeString[TYPE_COL4] = "Color4";
 	mTypeString[TYPE_COL3] = "Color3";
 	mTypeString[TYPE_LLSD] = "LLSD";
+
+	mSanityTypeString[SANITY_TYPE_NONE]="None";
+	mSanityTypeString[SANITY_TYPE_EQUALS]="Equals";
+	mSanityTypeString[SANITY_TYPE_NOT_EQUALS]="NotEquals";
+	mSanityTypeString[SANITY_TYPE_LESS_THAN]="LessThan";
+	mSanityTypeString[SANITY_TYPE_GREATER_THAN]="GreaterThan";
+	mSanityTypeString[SANITY_TYPE_BETWEEN]="Between";
+	mSanityTypeString[SANITY_TYPE_NOT_BETWEEN]="NotBetween";
 }
 
 LLControlGroup::~LLControlGroup()
@@ -369,12 +438,29 @@ eControlType LLControlGroup::typeStringToEnum(const std::string& typestr)
 	return (eControlType)-1;
 }
 
+eSanityType LLControlGroup::sanityTypeStringToEnum(const std::string& sanitystr)
+{
+	for(int i = 0; i < (int)SANITY_TYPE_COUNT; ++i)
+	{
+		if(mSanityTypeString[i] == sanitystr) return (eSanityType)i;
+	}
+	return SANITY_TYPE_NONE;
+}
+
 std::string LLControlGroup::typeEnumToString(eControlType typeenum)
 {
 	return mTypeString[typeenum];
 }
 
-LLControlVariable* LLControlGroup::declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, LLControlVariable::ePersist persist, BOOL hidefromsettingseditor)
+std::string LLControlGroup::sanityTypeEnumToString(eSanityType sanitytypeenum)
+{
+	return mSanityTypeString[sanitytypeenum];
+}
+
+// <FS:Zi> Backup Settings
+//LLControlVariable* LLControlGroup::declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, LLControlVariable::ePersist persist, BOOL hidefromsettingseditor)
+LLControlVariable* LLControlGroup::declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, LLControlVariable::ePersist persist, BOOL can_backup, BOOL hidefromsettingseditor)
+// </FS:Zi>
 {
 	LLControlVariable* existing_control = getControl(name);
 	if (existing_control)
@@ -397,64 +483,67 @@ LLControlVariable* LLControlGroup::declareControl(const std::string& name, eCont
 	}
 
 	// if not, create the control and add it to the name table
-	LLControlVariable* control = new LLControlVariable(name, type, initial_val, comment, persist, hidefromsettingseditor);
+	// <FS:Zi> Backup Settings
+	// LLControlVariable* control = new LLControlVariable(name, type, initial_val, comment, sanity_type, sanity_value, sanity_comment, persist, hidefromsettingseditor);
+	LLControlVariable* control = new LLControlVariable(name, type, initial_val, comment, sanity_type, sanity_value, sanity_comment, persist, can_backup, hidefromsettingseditor);
+	// </FS:Zi>
 	mNameTable[name] = control;	
 	return control;
 }
 
 LLControlVariable* LLControlGroup::declareU32(const std::string& name, const U32 initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_U32, (LLSD::Integer) initial_val, comment, persist);
+	return declareControl(name, TYPE_U32, (LLSD::Integer) initial_val, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareS32(const std::string& name, const S32 initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_S32, initial_val, comment, persist);
+	return declareControl(name, TYPE_S32, initial_val, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareF32(const std::string& name, const F32 initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_F32, initial_val, comment, persist);
+	return declareControl(name, TYPE_F32, initial_val, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareBOOL(const std::string& name, const BOOL initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_BOOLEAN, initial_val, comment, persist);
+	return declareControl(name, TYPE_BOOLEAN, initial_val, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareString(const std::string& name, const std::string& initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_STRING, initial_val, comment, persist);
+	return declareControl(name, TYPE_STRING, initial_val, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareVec3(const std::string& name, const LLVector3 &initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_VEC3, initial_val.getValue(), comment, persist);
+	return declareControl(name, TYPE_VEC3, initial_val.getValue(), comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareVec3d(const std::string& name, const LLVector3d &initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_VEC3D, initial_val.getValue(), comment, persist);
+	return declareControl(name, TYPE_VEC3D, initial_val.getValue(), comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareRect(const std::string& name, const LLRect &initial_val, const std::string& comment, LLControlVariable::ePersist persist)
 {
-	return declareControl(name, TYPE_RECT, initial_val.getValue(), comment, persist);
+	return declareControl(name, TYPE_RECT, initial_val.getValue(), comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareColor4(const std::string& name, const LLColor4 &initial_val, const std::string& comment, LLControlVariable::ePersist persist )
 {
-	return declareControl(name, TYPE_COL4, initial_val.getValue(), comment, persist);
+	return declareControl(name, TYPE_COL4, initial_val.getValue(), comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareColor3(const std::string& name, const LLColor3 &initial_val, const std::string& comment, LLControlVariable::ePersist persist )
 {
-	return declareControl(name, TYPE_COL3, initial_val.getValue(), comment, persist);
+	return declareControl(name, TYPE_COL3, initial_val.getValue(), comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 LLControlVariable* LLControlGroup::declareLLSD(const std::string& name, const LLSD &initial_val, const std::string& comment, LLControlVariable::ePersist persist )
 {
-	return declareControl(name, TYPE_LLSD, initial_val, comment, persist);
+	return declareControl(name, TYPE_LLSD, initial_val, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), persist);
 }
 
 BOOL LLControlGroup::getBOOL(const std::string& name)
@@ -829,6 +918,7 @@ U32 LLControlGroup::saveToFile(const std::string& filename, BOOL nondefault_only
 			settings[iter->first]["Type"] = typeEnumToString(control->type());
 			settings[iter->first]["Comment"] = control->getComment();
 			settings[iter->first]["Value"] = control->getSaveValue();
+				settings[iter->first]["Backup"] = control->isBackupable();		// <FS:Zi> Backup Settings
 			++num_saved;
 		}
 	}
@@ -873,6 +963,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 	for(LLSD::map_const_iterator itr = settings.beginMap(); itr != settings.endMap(); ++itr)
 	{
 		LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT;
+		bool can_backup = true;		// <FS:Zi> Backup Settings
 		std::string const & name = itr->first;
 		LLSD const & control_map = itr->second;
 		
@@ -881,7 +972,14 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 			persist = control_map["Persist"].asInteger()?
 					  LLControlVariable::PERSIST_NONDFT : LLControlVariable::PERSIST_NO;
 		}
-		
+
+		// <FS:Zi> Backup Settings
+		if(control_map.has("Backup")) 
+		{
+			can_backup = control_map["Backup"].asInteger();
+		}
+		// </FS:Zi>
+
 		// Sometimes we want to use the settings system to provide cheap persistence, but we
 		// don't want the settings themselves to be easily manipulated in the UI because 
 		// doing so can cause support problems. So we have this option:
@@ -911,6 +1009,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 					existing_control->setPersist(persist);
 					existing_control->setHiddenFromSettingsEditor(hidefromsettingseditor);
 					existing_control->setComment(control_map["Comment"].asString());
+					existing_control->setBackupable(can_backup);		// <FS:Zi> Backup Settings
 				}
 				else
 				{
@@ -967,8 +1066,12 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 			declareControl(name, 
 						   typeStringToEnum(control_map["Type"].asString()), 
 						   control_map["Value"], 
-						   control_map["Comment"].asString(), 
+						   control_map["Comment"].asString(),
+						   sanityTypeStringToEnum(control_map["SanityCheckType"].asString()),
+						   control_map["SanityValue"],
+						   control_map["SanityComment"].asString(),
 						   persist,
+						   can_backup,		// <FS:Zi> Backup Settings
 						   hidefromsettingseditor
 						   );
 		}
@@ -1355,7 +1458,7 @@ void test_cached_control()
 	TEST_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
 //There's no LLSD comparsion for LLCC yet. TEST_LLCC(LLSD, test_llsd); 
 
-	if((std::string)test_BrowserHomePage != "http://www.secondlife.com") llerrs << "Fail BrowserHomePage" << llendl;
+	if((std::string)test_BrowserHomePage != "http://www.firestormviewer.org") llerrs << "Fail BrowserHomePage" << llendl;
 }
 #endif // TEST_CACHED_CONTROL
 

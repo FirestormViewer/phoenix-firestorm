@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    name="Attachment Pie">
+
+    <pie_slice
+        label="Профиль..."
+        name="Profile...">
+        <pie_slice.on_click
+            function="ShowAgentProfile"
+            parameter="agent" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Бросить"
+        name="Drop">
+        <pie_slice.on_click
+            function="Attachment.Drop" />
+        <pie_slice.on_enable
+            function="Attachment.EnableDrop" />
+    </pie_slice>
+    <pie_menu
+        name="Attachment Pie More"
+        label="Еще &gt;">
+
+        <pie_separator />
+        <pie_separator name="script_count_placeholder" />
+        <pie_slice
+            enabled="false"
+            label="Коснуться"
+            name="Attachment Object Touch">
+            <pie_slice.on_click
+                function="Object.Touch" />
+            <pie_slice.on_enable
+                function="Object.EnableTouch"
+                name="EnableTouch"/>
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="Скрыть"
+            name="Derender">
+            <pie_slice.on_click
+                function="Object.Derender" />
+        </pie_slice>
+        <pie_separator name="inspect_placeholder" />
+
+    </pie_menu>
+    <pie_slice
+        label="Сесть"
+        start_autohide="true"
+        name="Sit Down Here">
+        <pie_slice.on_click
+            function="Self.SitDown"
+            parameter="" />
+        <pie_slice.on_enable
+            function="Self.EnableSitDown" />
+    </pie_slice>
+    <pie_slice
+        label="Встать"
+        autohide="true"
+        name="Stand Up">
+        <pie_slice.on_click
+            function="Self.StandUp" />
+        <pie_slice.on_enable
+            function="Self.EnableStandUp" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="Отделить"
+        name="Detach">
+        <pie_slice.on_click
+            function="Attachment.Detach" />
+        <pie_slice.on_enable
+            function="Attachment.EnableDetach" />
+    </pie_slice>
+    <pie_slice
+        label="Жесты..."
+        name="Gestures">
+        <pie_slice.on_click
+            function="Floater.Toggle"
+            parameter="gestures" />
+    </pie_slice>
+
+    <pie_menu
+        label="Внешность &gt;"
+        layout="topleft"
+        name="Appearance &gt;">
+
+        <pie_slice label="Править тело"
+           layout="topleft"
+           name="Править тело">
+           <pie_slice.on_click
+               function="EditShape" />
+           <pie_slice.on_enable
+               function="Edit.EnableEditShape" />
+        </pie_slice>
+
+        <pie_separator />
+        <pie_separator />
+        <pie_separator />
+
+        <pie_slice label="Править костюм"
+           layout="topleft"
+           name="Править костюм">
+           <pie_slice.on_click
+               function="EditOutfit" />
+           <pie_slice.on_enable
+               function="Edit.EnableCustomizeAvatar" />
+        </pie_slice>
+
+    </pie_menu>
+
+    <pie_slice
+        enabled="false"
+        label="Править..."
+        name="Edit...">
+        <pie_slice.on_click
+            function="Object.Edit" />
+        <pie_slice.on_enable
+            function="EnableEdit" />
+    </pie_slice>
+
+</pie_menu>

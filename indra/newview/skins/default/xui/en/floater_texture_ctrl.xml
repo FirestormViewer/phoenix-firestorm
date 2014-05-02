@@ -9,7 +9,7 @@
  min_width="410"
  name="texture picker"
  help_topic="texture_picker"
- title="PICK: TEXTURE"
+ title="Pick: Texture"
  width="410">
  
 <!--  top static -->
@@ -87,7 +87,8 @@
      name="unknown"
      top_pad="4"
      width="">
-        Size: [DIMENSIONS]
+        Size:
+[DIMENSIONS]
     </text>
     
 <!--  middle: inventory mode -->
@@ -105,24 +106,35 @@
      top="215"/>
     <button
      follows="left|top"
-     height="20"
+     height="18"
      label="Blank"
      label_selected="Blank"
      layout="topleft"
      left_delta="0"
      name="Blank"
-     top_pad="5"
+     top_pad="0"
+     width="73" />
+    <button
+     follows="left|top"
+     height="18"
+     label="Transparent"
+     label_selected="Transparent"
+     layout="topleft"
+     left_delta="0"
+     name="Transparent"
+     tool_tip="Note: If transparent texture is selected, or another texture with partial transperancy, light will not project."
+     top_pad="0"
      width="73" />
      <button
      enabled="false"
      follows="left|top"
-     height="20"
+     height="18"
      label="None"
      label_selected="None"
      layout="topleft"
      left_delta="0"
      name="None"
-     top_pad="5"
+     top_pad="0"
      width="73" />
     <button
      follows="left|top"
@@ -140,7 +152,7 @@
      layout="topleft"
      left="8"
      name="preview_disabled"
-     top="266"
+     top="282"
      value="Preview Disabled"
      visible="false"
      width="120" />
@@ -171,7 +183,7 @@
      label="Show folders"
      layout="topleft"
      name="show_folders_check"
-     top_pad="0"
+     top_pad="5"
      left_delta="-3"
      width="200" />
 
@@ -255,7 +267,7 @@
      initial_value="true"
      label="Apply now"
      layout="topleft"
-     left="6"
+     left="4"
      name="apply_immediate_check"
      top_delta="0"
      width="120" />

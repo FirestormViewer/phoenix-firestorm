@@ -520,7 +520,7 @@ void LLLoginInstance::reconnect()
 	std::vector<std::string> uris;
 	LLGridManager::getInstance()->getLoginURIs(uris);
 	mLoginModule->connect(uris.front(), mRequestData);
-	gViewerWindow->setShowProgress(true);
+	gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLoginScreens"));
 }
 
 void LLLoginInstance::disconnect()
@@ -569,7 +569,6 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 	//send this info to login.cgi for stats gathering 
 	//since viewerstats isn't reliable enough
 	requested_options.append("advanced-mode");
-
 #endif
 	requested_options.append("max-agent-groups");	
 	requested_options.append("map-server-url");	
@@ -582,7 +581,23 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 		gSavedSettings.setBOOL("UseDebugMenus", TRUE);
 		requested_options.append("god-connect");
 	}
-	
+
+// <FS:AW various patches>
+#ifdef OPENSIM // <FS:AW optional opensim support>
+	//TODO: make this more flexible
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		requested_options.append("currency");// <FS:AW opensim currency support>
+		requested_options.append("max_groups");// <FS:AW  opensim max groups support>
+		requested_options.append("search"); // <FS:AW  opensim search support>
+		requested_options.append("destination_guide_url");// <FS:AW  opensim destinations and avatar picker>
+		requested_options.append("avatar_picker_url");// <FS:AW  opensim destinations and avatar picker>
+		//not in this patch
+		//requested_options.append("profile-server-url");
+	}
+#endif // OPENSIM // <FS:AW optional opensim support>
+// </FS:AW various patches>
+
 	// (re)initialize the request params with creds.
 	LLSD request_params = user_credential->getLoginParams();
 
@@ -662,7 +677,7 @@ void LLLoginInstance::handleLoginFailure(const LLSD& event)
 		data["message"] = message_response;
 		data["reply_pump"] = TOS_REPLY_PUMP;
 		if (gViewerWindow)
-			gViewerWindow->setShowProgress(FALSE);
+		gViewerWindow->setShowProgress(FALSE,FALSE);
 		LLFloaterReg::showInstance("message_tos", data);
 		LLEventPumps::instance().obtain(TOS_REPLY_PUMP)
 			.listen(TOS_LISTENER_NAME,
@@ -686,8 +701,7 @@ void LLLoginInstance::handleLoginFailure(const LLSD& event)
 		}
 		
 		if (gViewerWindow)
-			gViewerWindow->setShowProgress(FALSE);
-
+		gViewerWindow->setShowProgress(FALSE,FALSE);
 		LLFloaterReg::showInstance("message_critical", data);
 		LLEventPumps::instance().obtain(TOS_REPLY_PUMP)
 			.listen(TOS_LISTENER_NAME,
@@ -788,7 +802,7 @@ void LLLoginInstance::updateApp(bool mandatory, const std::string& auth_msg)
 {
 	if(mandatory)
 	{
-		gViewerWindow->setShowProgress(false);
+		gViewerWindow->setShowProgress(false,false);
 		MandatoryUpdateMachine * machine = new MandatoryUpdateMachine(*this, *mUpdaterService);
 		mUpdateStateMachine.reset(machine);
 		machine->start();
@@ -852,7 +866,7 @@ void LLLoginInstance::updateApp(bool mandatory, const std::string& auth_msg)
 		mNotifications->add(notification_name, args, payload, 
 			boost::bind(&LLLoginInstance::updateDialogCallback, this, _1, _2));
 
-		gViewerWindow->setShowProgress(false);
+		gViewerWindow->setShowProgress(false,false);
 	}
 }
 

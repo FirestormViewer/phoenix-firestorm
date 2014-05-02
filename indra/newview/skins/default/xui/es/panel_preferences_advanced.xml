@@ -3,29 +3,15 @@
 	<panel.string name="aspect_ratio_text">
 		[NUM]:[DEN]
 	</panel.string>
-	<text name="Cache:">
-		Caché:
-	</text>
-	<spinner label="Tamaño de la caché (64 - 9984 MB)" name="cachesizespinner"/>
-	<text name="text_box5">
-		MB
-	</text>
-	<button label="Vaciar la caché" label_selected="Vaciar la caché" name="clear_cache"/>
-	<text name="Cache location">
-		Localización de la caché:
-	</text>
-	<button label="Elegir" label_selected="Elegir" name="set_cache"/>
-	<button label="Ubicación predeterminada" label_selected="Ubicación predeterminada" name="default_cache_location"/>
-	<text name="UI Size:">
-		Tamaño de la UI:
-	</text>
-	<check_box label="Mostrar los errores de los scripts en:" name="show_script_errors"/>
-	<radio_group name="show_location">
-		<radio_item label="Chat" name="0"/>
-		<radio_item label="Ventanas distintas" name="1"/>
-	</radio_group>
-	<check_box label="Permitir el acceso de varios usuarios" name="allow_multiple_viewer_check"/>
-	<check_box label="Mostrar la selección de cuadrícula al iniciar sesión" name="show_grid_selection_check"/>
+	<panel.string name="middle_mouse">
+		Botón central del ratón
+	</panel.string>
+	<check_box label="Permitir múltiples instancias del visor (puede reducir la estabilidad y el rendimiento)" name="allow_multiple_viewer_check"/>
+	<check_box label="Permitir el inicio de sesión en otras redes (no todas las redes soportarán Firestorm)" name="show_grid_selection_check"/>
 	<check_box label="Mostrar el menú Avanzado" name="show_advanced_menu_check"/>
-	<check_box label="Mostrar el menú Develop" name="show_develop_menu_check"/>
+	<check_box label="Mostrar el menú Desarrollo" name="show_develop_menu_check"/>
+	<text name="BackgroundYieldTimeText">
+		Cantidad de tiempo, en milisegundos, para ceder cada cuadro a otras aplicaciones cuando [APP_NAME] no está en primer plano (por defecto: 40; 1 segundo = 1000 milisegundos):
+	</text>
+	<button label="Restablecer todas las configuraciones" label_selected="Restablecer todas las configuraciones" name="clear_settings" width="250"/>
 </panel>

@@ -19,6 +19,7 @@
 	 top="10"
 	 width="18" />
     <text
+     icon_positioning="none"
      font="SansSerifSmall"
      follows="all"
      height="13"

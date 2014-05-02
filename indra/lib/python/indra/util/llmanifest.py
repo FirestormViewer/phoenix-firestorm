@@ -85,8 +85,8 @@ def get_default_platform(dummy):
             }[sys.platform]
 
 DEFAULT_SRCTREE = os.path.dirname(sys.argv[0])
-CHANNEL_VENDOR_BASE = 'Second Life'
-RELEASE_CHANNEL = CHANNEL_VENDOR_BASE + ' Release'
+CHANNEL_VENDOR_BASE = 'Firestorm'
+RELEASE_CHANNEL = CHANNEL_VENDOR_BASE + ' Development'
 
 ARGUMENTS=[
     dict(name='actions',
@@ -147,7 +147,8 @@ ARGUMENTS=[
          description="""This specifies an identity to sign the viewer with, if any.
         If no value is supplied, the default signature will be used, if any. Currently
         only used on Mac OS X.""",
-         default=None)
+         default=None),
+    dict(name='viewer_flavor', description='Type of viewer build. Can be oss or hvk.', default="oss"),
     ]
 
 def usage(srctree=""):
@@ -173,6 +174,10 @@ def main():
 ##                 for item in itertools.chain([sys.executable], sys.argv))
     option_names = [arg['name'] + '=' for arg in ARGUMENTS]
     option_names.append('help')
+
+    option_names.append('m64')
+    option_names.append('copy_artwork')
+
     options, remainder = getopt.getopt(sys.argv[1:], "", option_names)
 
     # convert options to a hash

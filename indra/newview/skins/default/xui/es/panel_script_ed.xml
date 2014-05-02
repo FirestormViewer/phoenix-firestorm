@@ -4,7 +4,7 @@
 		Cargando...
 	</panel.string>
 	<panel.string name="can_not_view">
-		No puedes ver ni editar este script. Ha sido configurado como &quot;no copiable&quot;. Necesitas todos los permisos para ver o editar un script que está dentro de un objeto.
+		No puedes ver ni editar este script, ya que ha sido configurado con permisos restringidos. Necesitas todos los permisos para ver o editar un script que está dentro de un objeto.
 	</panel.string>
 	<panel.string name="public_objects_can_not_run">
 		Los objetos públicos no pueden ejecutar scripts
@@ -24,6 +24,7 @@
 			<menu_item_call label="Deshacer todos los cambios" name="Revert All Changes"/>
 			<menu_item_call label="Cargar desde archivo..." name="LoadFromFile"/>
 			<menu_item_call label="Guardar en archivo..." name="SaveToFile"/>
+			<menu_item_call label="Preferencias..." name="ScriptPrefs"/>
 		</menu>
 		<menu label="Editar" name="Edit">
 			<menu_item_call label="Deshacer" name="Undo"/>
@@ -39,12 +40,29 @@
 		<menu label="Ayuda" name="Help">
 			<menu_item_call label="Ayuda..." name="Help..."/>
 			<menu_item_call label="Ayuda de palabras clave..." name="Keyword Help..."/>
+			<menu_item_call label="Librería de scripts..." name="Script Library"/>
 		</menu>
 	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Guardar script"  name="save_btn"/>
+			<button tool_tip="Editor externo de scripts" name="Edit_btn"/>
+			<button tool_tip="Cargar un script de tu disco duro" name="load_disk_btn"/>
+			<button tool_tip="Guardar un script en tu disco duro" name="save_disk_btn"/>
+			<button tool_tip="Cortar" name="cut_btn"/>
+			<button tool_tip="Copiar" name="copy_btn"/>
+			<button tool_tip="Pegar" name="paste_btn"/>
+			<button tool_tip="Deshacer" name="undo_btn"/>
+			<button tool_tip="Rehacer" name="redo_btn"/>
+			<button tool_tip="Buscar/Reemplazar" name="search_btn"/>
+			<button tool_tip="Preferencias" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
 	<text_editor name="Script Editor">
 		Cargando...
 	</text_editor>
 	<combo_box label="Insertar..." name="Insert..."/>
-	<button label="Guardar" label_selected="Guardar" name="Save_btn"/>
-	<button label="Editar..." name="Edit_btn"/>
+	<text name="line_col" value="Línea 0, Columna 0"/>
+	<button label="Editar..." name="edit_btn_2"/>
+	<button label="Guardar" label_selected="Guardar" name="save_btn_2"/>
 </panel>

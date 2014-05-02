@@ -82,8 +82,15 @@ LLURLRequestDetail::LLURLRequestDetail() :
 {
 	mCurlRequest = new LLCurlEasyRequest();
 	
+	if(!mCurlRequest)
+	{
+		lldebugs << "failed to allocate new curl request." << llendl;
+		return;
+	}
+
 	if(!mCurlRequest->isValid()) //failed.
 	{
+		lldebugs << "new curl request is not valid." << llendl;
 		delete mCurlRequest ;
 		mCurlRequest = NULL ;
 	}
@@ -122,6 +129,18 @@ CURLcode LLURLRequest::_sslCtxCallback(CURL * curl, void *sslctx, void *param)
 	// set the verification callback.
 	SSL_CTX_set_cert_verify_callback(ctx, req->mDetail->mSSLVerifyCallback, (void *)req);
 	// the calls are void
+
+	// <FS:ND> FIRE-11406
+	// Some server at LL don't like it at all when curl/openssl try to speak TLSv1.2 to them, instead
+	// of renegotiating to SSLv3 they clamp up and don't talk to us at all anywmore, not even dropping the connection.
+	// This then leads to unfun timeouts and failed transactions.
+
+#ifdef SSL_TXT_TLSV1_2
+	SSL_CTX_set_options( ctx, SSL_OP_ALL | SSL_OP_NO_TLSv1_2 );
+#endif
+
+	// </FS:ND>
+
 	return CURLE_OK;
 	
 }
@@ -231,8 +250,7 @@ void LLURLRequest::useProxy(bool use_proxy)
         }
     }
 
-
-    lldebugs << "use_proxy = " << (use_proxy?'Y':'N') << ", env_proxy = " << (env_proxy ? env_proxy : "(null)") << llendl;
+    LL_DEBUGS("Proxy") << "use_proxy = " << (use_proxy?'Y':'N') << ", env_proxy = " << (env_proxy ? env_proxy : "(null)") << LL_ENDL;
 
     if (env_proxy && use_proxy)
     {
@@ -254,10 +272,21 @@ void LLURLRequest::allowCookies()
 	mDetail->mCurlRequest->setoptString(CURLOPT_COOKIEFILE, "");
 }
 
+// <AW: opensim>
+void LLURLRequest::setModifiedSince(const time_t &if_modified_since)
+{
+	if(if_modified_since)
+	{
+		mDetail->mCurlRequest->setopt(CURLOPT_TIMECONDITION, CURL_TIMECOND_IFMODSINCE);
+		mDetail->mCurlRequest->setopt(CURLOPT_TIMEVALUE, (long)if_modified_since);
+	}
+}
+// </AW: opensim>
+
 //virtual 
 bool LLURLRequest::isValid() 
 {
-	return mDetail->mCurlRequest && mDetail->mCurlRequest->isValid(); 
+	return mDetail && mDetail->mCurlRequest && mDetail->mCurlRequest->isValid(); 
 }
 
 // virtual
@@ -384,7 +413,7 @@ LLIOPipe::EStatus LLURLRequest::process_impl(
 			mState = STATE_HAVE_RESPONSE;
 			context[CONTEXT_REQUEST][CONTEXT_TRANSFERED_BYTES] = mRequestTransferedBytes;
 			context[CONTEXT_RESPONSE][CONTEXT_TRANSFERED_BYTES] = mResponseTransferedBytes;
-			lldebugs << this << "Setting context to " << context << llendl;
+			LL_DEBUGS_ONCE(NULL) << this << "Setting context to " << context << llendl;
 			switch(result)
 			{
 				case CURLE_OK:
@@ -419,7 +448,7 @@ LLIOPipe::EStatus LLURLRequest::process_impl(
 					keep_looping = false;
 					break;
 				default:			// CURLE_URL_MALFORMAT
-					llwarns << "URLRequest Error: " << result
+					LL_WARNS_ONCE(NULL) << "URLRequest Error: " << result
 							<< ", "
 							<< LLCurl::strerror(result)
 							<< ", "

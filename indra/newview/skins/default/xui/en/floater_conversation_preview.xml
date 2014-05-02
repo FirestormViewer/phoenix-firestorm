@@ -4,18 +4,20 @@
  can_resize="true"
  default_tab_group="1"
  help_topic="conversation_preview"
- height="391"
+ height="387"
  layout="topleft"
  min_height="243"
  min_width="234"
  name="preview_conversation"
- title="CONVERSATION:"
+ positioning="centered"
+ save_rect="true"
+ title="Conversation:"
  width="400">
     <floater.string
      name="Title">
-        CONVERSATION: [NAME]
+        Conversation: [NAME]
     </floater.string>
-    <chat_history
+    <fs_chat_history
      font="SansSerifSmall"
      follows="all"
      visible="true"
@@ -24,10 +26,10 @@
      notify_unread_msg="false"
      parse_highlights="true"
      parse_urls="true"
-     left="5"
+     left="0"
      top_pad="25"
-     width="390">
-    </chat_history>
+     width="395">
+    </fs_chat_history>
     <text
      follows="bottom|right"
      font="SansSerif"
@@ -61,4 +63,28 @@
      top_delta="4"
      width="40">
     </text>
+    <button
+     follows="bottom|left"
+     height="22"
+     left="5"
+     image_pressed="PushButton_Press"
+     image_pressed_selected="PushButton_Selected_Press"
+     image_selected="PushButton_Selected_Press"
+     tool_tip="Open chat transcript externally"
+     image_overlay="List_View_On"
+     name="open_external_btn"
+     top_delta="-2"
+     width="25"/>
+    <button
+     follows="bottom|left"
+     height="22"
+     left_pad="4"
+     image_pressed="PushButton_Press"
+     image_pressed_selected="PushButton_Selected_Press"
+     image_selected="PushButton_Selected_Press"
+     tool_tip="Search this transcript"
+     image_overlay="Script_Search"
+     name="search_btn"
+     top_delta="0"
+     width="25"/>
 </floater>

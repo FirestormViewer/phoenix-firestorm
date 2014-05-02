@@ -1,39 +1,75 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
+<!--IO-->
 	<menu label="Io" name="Me">
-		<menu_item_call label="Profilo..." name="Profile"/>
-		<menu_item_call label="Aspetto fisico..." name="ChangeOutfit"/>
-		<menu_item_call label="Scegli un avatar..." name="Avatar Picker"/>
-		<menu_item_check label="Inventario..." name="Inventory"/>
-		<menu_item_call label="Nuova finestra inventario" name="NewInventoryWindow"/>
-		<menu_item_call label="Luoghi..." name="Places"/>
-		<menu_item_call label="Preferiti..." name="Picks"/>
-		<menu_item_call label="Controlli fotocamera..." name="Camera Controls"/>
+		<menu_item_call label="Preferenze" name="Preferences"/>
+		<menu_item_call label="Il mio Dashboard" name="Manage My Account">
+			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=it"/>
+		</menu_item_call>
+		<!--<menu_item_call label="??" name="MerchantOutbox"/>-->
+		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Il mio profilo" name="Profile"/>
+		<menu_item_call label="Il mio aspetto" name="ChangeOutfit"/>
+		<menu_item_call label="Foto istantanea" name="Take Snapshot"/>
+		<menu_item_check label="Il mio inventario" name="Inventory"/>
+		<menu_item_check label="Il mio inventario" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Le mie gesture" name="Gestures"/>
+		<menu_item_check label="La mia voce" name="ShowVoice"/>
+		<menu_item_check label="Contolli Movimento" name="Movement Controls"/>
 		<menu label="Spostamento" name="Movement">
 			<menu_item_call label="Siedi" name="Sit Down Here"/>
 			<menu_item_check label="Vola" name="Fly"/>
 			<menu_item_check label="Corri sempre" name="Always Run"/>
 			<menu_item_call label="Ferma animazione" name="Stop Animating My Avatar"/>
-			<menu_item_call label="Cammina / corri / vola..." name="Walk / run / fly"/>
+			<menu_item_check label="Siedi a terra" name="Force Toggle Sitting"/>
+			<menu_item_check label="Salto rapido" name="Avatar Ignore Prejump"/>
 		</menu>
 		<menu label="Stato" name="Status">
 			<menu_item_check label="Assente" name="Away"/>
 			<menu_item_check label="Non disturbare" name="Do Not Disturb"/>
 		</menu>
-		<menu_item_call label="Acquista L$..." name="Buy and Sell L$"/>
-		<menu_item_call label="Casella venditore in uscita..." name="MerchantOutbox"/>
+		<menu_item_check label="Contolli Camera" name="Camera Controls"/>
+		<menu label="Ripara Avatar" name="avhealth">
+			<menu_item_call label="Ferma tutte le animazioni" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Forza caricamento apparence (rebake)" name="Rebake Texture"/>
+			<menu_item_call label="Ripristina avatar ad avatar maschio (Character Test)" name="ResetDefaultAvM"/>
+			<menu_item_call label="Ripristina avatar ad avatar femmina (Character Test)" name="ResetDefaultAvF"/>
+			<menu_item_check label="Mostra peso dell'avatar (Avatar Rendering Cost)" name="Avatar Rendering Cost"/>
+			<menu_item_call label="Ricrea LSL Bridge" name="Recreate LSL Bridge"/>
+		</menu>
+		<menu label="Carica sul server" name="Upload">
+			<menu_item_call label="Immagine ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Suono ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animazione ([COST])..." name="Upload Animation"/>
+			<menu_item_call label="Modello..." name="Upload Model"/>
+			<menu_item_call label="Caricamento multiplo..." name="Bulk Upload"/>
+			<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
+		</menu>
+		<!--<menu_item_call label="Richiedi diritti Admin" name="Request Admin Options"/>
+		<menu_item_call label="Lascia stato Admin" name="Leave Admin Options"/>
+		<menu_item_call label="Compra [CUR]" name="Buy and Sell L$"/>
 		<menu_item_call label="Dashboard dell&apos;account..." name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=it"/>
 		</menu_item_call>
 		<menu_item_call label="Preferenze..." name="Preferences"/>
 		<menu_item_call label="Pulsanti barra strumenti..." name="Toolbars"/>
-		<menu_item_call label="Nascondi tutti i controlli" name="Hide UI"/>
+		<menu_item_call label="Nascondi tutti i controlli" name="Hide UI"/>-->
 		<menu_item_check label="Mostra elementi HUD" name="Show HUD Attachments"/>
 		<menu_item_call label="Esci da [APP_NAME]" name="Quit"/>
 	</menu>
+<!--Comunica-->
 	<menu label="Comunica" name="Communicate">
-		<menu_item_check label="Conversazioni..." name="Conversations"/>
-		<menu_item_check label="Chat nei dintorni..." name="Nearby Chat"/>
+		<menu label="Stato online" name="Status">
+			<menu_item_check label="Autorisposta" name="Set Autorespond"/>
+			<menu_item_check label="Autorisposta ai non amici" name="Set Autorespond to non-friends"/>
+			<menu_item_check label="Occupato (Busy)" name="Set Busy"/>
+		</menu>
+		<menu_item_check label="Contatti" name="Contacts"/>
+		<menu_item_check label="Persone" name="People"/>
+		<!--<menu_item_call label="Cronologia teleport" name="Teleport History"/>-->
+		<menu_item_check label="Luoghi" name="Places"/>
+		<menu_item_check label="Conversazioni" name="Conversations"/>
+		<menu_item_check label="Chat..." name="Nearby Chat"/>
 		<menu_item_check label="Parla" name="Speak"/>
 		<menu_item_check label="Registro conversazioni..." name="Conversation Log..."/>
 		<menu label="Manipolazione voce" name="VoiceMorphing">
@@ -48,7 +84,11 @@
 		<menu_item_call label="Blocca lista" name="Block List"/>
 		<menu_item_check label="Non disturbare" name="Do Not Disturb"/>
 	</menu>
+<!--Mondo-->
 	<menu label="Mondo" name="World">
+		<menu_item_call label="Avatar nelle Vicinanze" name="Active Speakers" />
+		<menu_item_call label="Cronologia teleport" name="Teleport History"/>
+		<menu_item_check label="Cronologia teleport" name="Places"/>
 		<menu_item_call label="Crea punto di riferimento per questo luogo" name="Create Landmark Here"/>
 		<menu_item_call label="Destinazioni..." name="Destinations"/>
 		<menu_item_check label="Mappamondo" name="World Map"/>
@@ -71,12 +111,13 @@
 			<menu_item_check label="Proprietà del lotto" name="Parcel Properties"/>
 			<menu_item_check label="Menu Avanzato" name="Show Advanced Menu"/>
 		</menu>
-		<menu label="Sole" name="Sun">
+		<menu label="Sole" name="Environment Settings">
 			<menu_item_call label="Alba" name="Sunrise"/>
 			<menu_item_call label="Mezzogiorno" name="Noon"/>
 			<menu_item_call label="Tramonto" name="Sunset"/>
 			<menu_item_call label="Mezzanotte" name="Midnight"/>
 			<menu_item_call label="Usa impostazioni regione" name="Use Region Settings"/>
+			<menu_item_call label="Imposta come da Default" name="Revert to Region Default"/>
 		</menu>
 		<menu label="Editor ambiente" name="Environment Editor">
 			<menu_item_call label="Impostazioni ambiente..." name="Environment Settings"/>
@@ -96,7 +137,10 @@
 				<menu_item_call label="Cancella valore predefinito..." name="delete_day_preset"/>
 			</menu>
 		</menu>
+		<menu_item_call label="Lista Suoni" name="Sound Explorer"/>
+     	<menu_item_call label="Asset Blacklist" name="asset_blacklist"/>
 	</menu>
+<!--Costruisci-->
 	<menu label="Costruisci" name="BuildTools">
 		<menu_item_check label="Costruisci" name="Show Build Tools"/>
 		<menu label="Seleziona strumento di costruzione" name="Select Tool">
@@ -131,6 +175,8 @@
 			<menu_item_call label="Reimposta script" name="Reset Scripts"/>
 			<menu_item_call label="Imposta gli script come in esecuzione" name="Set Scripts to Running"/>
 			<menu_item_call label="Imposta script come non in esecuzione" name="Set Scripts to Not Running"/>
+			<menu_item_call label="Rimuovi script dalla selezione" name="Remove Scripts From Selection"/>
+			<menu_item_call label="Script Info (N.Script)" name="Script Info"/>
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
 			<menu_item_call label="Set collegati..." name="pathfinding_linksets_menu_item"/>
@@ -153,30 +199,34 @@
 			<menu_item_call label="Opzioni della griglia" name="Grid Options"/>
 		</menu>
 		<menu label="Carica sul server" name="Upload">
-			<menu_item_call label="Immagine ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Suono ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animazione ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Immagine ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Suono ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animazione ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modella..." name="Upload Model"/>
-			<menu_item_call label="In blocco ([COST] L$ per file)..." name="Bulk Upload"/>
+			<menu_item_call label="In blocco ([COST] per file)..." name="Bulk Upload"/>
 			<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
 		</menu>
+		<menu_item_call label="Texture caricate localmente" name="Local Bitmap Browser"/>
 		<menu_item_call label="Annulla" name="Undo"/>
 		<menu_item_call label="Ripeti" name="Redo"/>
 	</menu>
+<!--Contenuto-->
+	<menu label="Contenuto" name="Content">
+		<menu_item_check label="Cerca" name="Search"/>
+		<menu_item_call label="Bibleoteca Script" name="Script Library"/>
+	</menu>
+<!--Aiuto-->
 	<menu label="Aiuto" name="Help">
-		<menu_item_call label="Istruzioni..." name="How To"/>
-		<menu_item_call label="Aiuto di [SECOND_LIFE]" name="Second Life Help"/>
-		<menu_item_call label="Guida dell&apos;utente" name="User’s guide"/>
-		<menu_item_call label="Base di conoscenza" name="Knowledge Base"/>
-		<menu_item_call label="Wiki" name="Wiki"/>
-		<menu_item_call label="Forum della comunità" name="Community Forums"/>
-		<menu_item_call label="Portale assistenza" name="Support portal"/>
-		<menu_item_call label="[SECOND_LIFE] Notizie" name="Second Life News"/>
-		<menu_item_call label="[SECOND_LIFE] Blog" name="Second Life Blogs"/>
+		<menu_item_call label="Aiuto di [CURRENT_GRID]" name="current_grid_help"/>
+		<menu_item_check label="Attiva suggerimenti" name="Enable Hints"/>
+		<menu_item_call label="Controlla stato Grid [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Segnala abuso" name="Report Abuse"/>
 		<menu_item_call label="Segnala bug" name="Report Bug"/>
+        <menu_item_call label="Urti, spinte e contatti" name="Bumps, Pushes &amp;amp; Hits"/>
+		<menu_item_check label="Abilita tasto informazioni di sistema" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Informazioni su [APP_NAME]" name="About Second Life"/>
 	</menu>
+<!--Avanzate-->
 	<menu label="Avanzate" name="Advanced">
 		<menu_item_call label="Ridisegna le texture" name="Rebake Texture"/>
 		<menu_item_call label="Imposta dimensioni dell&apos;interfaccia sui valori predefiniti" name="Set UI Size to Default"/>
@@ -198,22 +248,22 @@
 			<menu_item_check label="Mostra mirino visuale soggettiva" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="Modalità di rendering" name="Rendering Types">
-			<menu_item_check label="Semplice" name="Rendering Type Simple"/>
-			<menu_item_check label="Alpha (Trasparenza)" name="Rendering Type Alpha"/>
-			<menu_item_check label="Albero" name="Rendering Type Tree"/>
-			<menu_item_check label="Avatar" name="Rendering Type Character"/>
-			<menu_item_check label="Toppa superficie" name="Rendering Type Surface Patch"/>
-			<menu_item_check label="Cielo" name="Rendering Type Sky"/>
-			<menu_item_check label="Acqua" name="Rendering Type Water"/>
-			<menu_item_check label="Suolo" name="Rendering Type Ground"/>
-			<menu_item_check label="Volume" name="Rendering Type Volume"/>
-			<menu_item_check label="Erba" name="Rendering Type Grass"/>
-			<menu_item_check label="Nuvole" name="Rendering Type Clouds"/>
-			<menu_item_check label="Particelle" name="Rendering Type Particles"/>
-			<menu_item_check label="Urto" name="Rendering Type Bump"/>
+			<menu_item_check label="Semplice" name="Simple"/>
+			<menu_item_check label="Alpha (Trasparenza)" name="Alpha"/>
+			<menu_item_check label="Albero" name="Tree"/>
+			<menu_item_check label="Avatar" name="Character"/>
+			<menu_item_check label="Superficie chiusa" name="Surface Patch"/>
+			<menu_item_check label="Cielo" name="Sky"/>
+			<menu_item_check label="Acqua" name="Water"/>
+			<menu_item_check label="Suolo" name="Ground"/>
+			<menu_item_check label="Volume" name="Volume"/>
+			<menu_item_check label="Erba" name="Grass"/>
+			<menu_item_check label="Nuvole" name="Clouds"/>
+			<menu_item_check label="Particelle" name="Particles"/>
+			<menu_item_check label="Urti" name="Bump"/>
 		</menu>
 		<menu label="Caratteristiche di rendering" name="Rendering Features">
-			<menu_item_check label="Interfaccia utente" name="ToggleUI"/>
+			<menu_item_check label="Interfaccia utente" name="UI"/>
 			<menu_item_check label="Selezionati" name="Selected"/>
 			<menu_item_check label="Evidenziato" name="Highlighted"/>
 			<menu_item_check label="Texture dinamiche" name="Dynamic Textures"/>
@@ -226,6 +276,8 @@
 		<menu_item_check label="Fluidità mouse" name="Mouse Smoothing"/>
 		<menu_item_call label="Rilascia tasti" name="Release Keys"/>
 		<menu label="Scorciatoie" name="Shortcuts">
+			<menu_item_call label="Immagine ([COST])..." name="Upload Image"/>
+			<menu_item_check label="Cerca" name="Search"/>
 			<menu_item_check label="Mostra menu Avanzato - tasti di scelta rapida esistenti" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_call label="Chiudi finestra" name="Close Window"/>
 			<menu_item_call label="Chiudi tutte le finestre" name="Close All Windows"/>
@@ -234,13 +286,22 @@
 			<menu_item_check label="Joystick Flycam" name="Joystick Flycam"/>
 			<menu_item_call label="Reimposta vista" name="Reset View"/>
 			<menu_item_call label="Guarda l&apos;ultima conversazione" name="Look at Last Chatter"/>
+			<menu label="Seleziona strumento di costruzione" name="Select Tool">
+				<menu_item_call label="Strumento Ingrandisci" name="Focus"/>
+				<menu_item_call label="Strumento Movimento" name="Move"/>
+				<menu_item_call label="Strumento Modifica" name="Edit"/>
+				<menu_item_call label="Strumento Crea" name="Create"/>
+				<menu_item_call label="Strumento Terreno" name="Land"/>
+			</menu>
 			<menu_item_call label="Zoom avanti" name="Zoom In"/>
 			<menu_item_call label="Zoom predefinito" name="Zoom Default"/>
 			<menu_item_call label="Zoom indietro" name="Zoom Out"/>
 		</menu>
+		<menu_item_check label="Vola ovunque" name="Fly Override"/>
 		<menu_item_call label="Mostra impostazioni di debug" name="Debug Settings"/>
 		<menu_item_check label="Mostra menu sviluppo" name="Debug Mode"/>
 	</menu>
+<!--Sviluppo-->
 	<menu label="Sviluppo" name="Develop">
 		<menu label="Console" name="Consoles">
 			<menu_item_check label="Console texture" name="Texture Console"/>
@@ -289,7 +350,6 @@
 			<menu_item_check label="Crea coda" name="Build Queue"/>
 			<menu_item_check label="Vettori vento" name="Wind Vectors"/>
 			<menu_item_check label="Complessità rendering" name="rendercomplexity"/>
-			<menu_item_check label="Byte collegamento" name="attachment bytes"/>
 			<menu_item_check label="Scolpisci" name="Sculpt"/>
 			<menu label="Densità texture" name="Texture Density">
 				<menu_item_check label="Nessuna" name="None"/>
@@ -317,9 +377,9 @@
 			<menu_item_check label="Metti in pausa" name="AgentPause"/>
 			<menu_item_call label="Lascia un pacchetto" name="Drop a Packet"/>
 		</menu>
-		<menu_item_call label="Urti, spinte e contatti" name="Bumps, Pushes &amp;amp; Hits"/>
-		<menu label="Mondo" name="DevelopWorld">
-			<menu_item_check label="Esclusione al sole della simulazione" name="Sim Sun Override"/>
+		<menu label="Mondo" name="World">
+			<menu_item_check label="Esclusione al sole della regione" name="Sim Sun Override"/>
+			<menu_item_check label="Effetto marcatore lampeggiante" name="Cheesy Beacon"/>
 			<menu_item_check label="Clima fisso" name="Fixed Weather"/>
 			<menu_item_call label="Dump della cache oggetti regione" name="Dump Region Object Cache"/>
 		</menu>
@@ -340,11 +400,11 @@
 		</menu>
 		<menu label="Avatar" name="Character">
 			<menu label="Grab Baked Texture" name="Grab Baked Texture">
-				<menu_item_call label="Iride" name="Grab Iris"/>
-				<menu_item_call label="Testa" name="Grab Head"/>
-				<menu_item_call label="Parte superiore del corpo" name="Grab Upper Body"/>
-				<menu_item_call label="Parte inferiore del corpo" name="Grab Lower Body"/>
-				<menu_item_call label="Gonna" name="Grab Skirt"/>
+				<menu_item_call label="Iride" name="Iris"/>
+				<menu_item_call label="Testa" name="Head"/>
+				<menu_item_call label="Parte superiore del corpo" name="Upper Body"/>
+				<menu_item_call label="Parte inferiore del corpo" name="Lower Body"/>
+				<menu_item_call label="Gonna" name="Skirt"/>
 			</menu>
 			<menu label="Test personaggio" name="Character Tests">
 				<menu_item_call label="Alterna la geometria dei personaggi" name="Toggle Character Geometry"/>
@@ -365,27 +425,19 @@
 		</menu>
 		<menu_item_check label="Texture HTTP" name="HTTP Textures"/>
 		<menu_item_check label="Inventario HTTP" name="HTTP Inventory"/>
-		<menu_item_call label="Attiva Visual Leak Detector" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Finestra Console al prossimo lancio" name="Console Window"/>
-		<menu label="Imposta livello di registrazione" name="Set Logging Level">
-			<menu_item_check label="Debug" name="Debug"/>
-			<menu_item_check label="Informazioni" name="Info"/>
-			<menu_item_check label="Attenzione" name="Warning"/>
-			<menu_item_check label="Errore" name="Error"/>
-			<menu_item_check label="Nessuno" name="None"/>
-		</menu>
 		<menu_item_call label="Richiedi diritti Admin" name="Request Admin Options"/>
 		<menu_item_call label="Lascia stato Admin" name="Leave Admin Options"/>
 		<menu_item_check label="Mostra menu Admin" name="View Admin Options"/>
 	</menu>
+<!--Admin-->
 	<menu label="Admin" name="Admin">
-		<menu label="Oggetto" name="AdminObject">
-			<menu_item_call label="Prendi copia" name="Admin Take Copy"/>
+		<menu label="Object">
+			<menu_item_call label="Prendi copia" name="Take Copy"/>
 			<menu_item_call label="Rendimi proprietario" name="Force Owner To Me"/>
 			<menu_item_call label="Forza permesso proprietario" name="Force Owner Permissive"/>
 			<menu_item_call label="Elimina" name="Delete"/>
 			<menu_item_call label="Blocca" name="Lock"/>
-			<menu_item_call label="Ottieni ID asset" name="Get Assets IDs"/>
 		</menu>
 		<menu label="Lotto" name="Parcel">
 			<menu_item_call label="Rendimi proprietario" name="Owner To Me"/>
@@ -401,17 +453,6 @@
 	<menu label="Admin" name="Deprecated">
 		<menu label="Take Off Clothing" name="Take Off Clothing">
 			<menu_item_call label="Fisica" name="Physics"/>
-		</menu>
-		<menu label="Guida" name="DeprecatedHelp">
-			<menu_item_call label="Blog ufficiale Linden" name="Official Linden Blog"/>
-			<menu_item_call label="Portale script" name="Scripting Portal"/>
-			<menu label="Segnalazione bug" name="Bug Reporting">
-				<menu_item_call label="Monitoraggio problemi pubblici" name="Public Issue Tracker"/>
-				<menu_item_call label="Guida Monitoraggio problemi pubblici" name="Publc Issue Tracker Help"/>
-				<menu_item_call label="Guida alla segnalazione di bug" name="Bug Reporing 101"/>
-				<menu_item_call label="Problemi sicurezza" name="Security Issues"/>
-				<menu_item_call label="Wiki domande e risposte" name="QA Wiki"/>
-			</menu>
 		</menu>
 	</menu>
 </menu_bar>

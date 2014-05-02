@@ -47,11 +47,14 @@
 #include "llvoiceclient.h"
 #include "llviewercontrol.h"	// for gSavedSettings
 #include "lltooldraganddrop.h"
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLAvatarList> r("avatar_list");
 
 // Last interaction time update period.
-static const F32 LIT_UPDATE_PERIOD = 5;
+static const F32 LIT_UPDATE_PERIOD = 5.f;
 
 // Maximum number of avatars that can be added to a list in one pass.
 // Used to limit time spent for avatar list update per frame.
@@ -63,18 +66,26 @@ bool LLAvatarList::contains(const LLUUID& id)
 	return std::find(ids.begin(), ids.end(), id) != ids.end();
 }
 
+LLAvatarListItem* LLAvatarList::getAvatarListItem(const LLUUID& id)
+{
+	return (LLAvatarListItem*)getItemByValue(id);
+}
+
 void LLAvatarList::toggleIcons()
 {
-	// Save the new value for new items to use.
-	mShowIcons = !mShowIcons;
-	gSavedSettings.setBOOL(mIconParamName, mShowIcons);
-	
-	// Show/hide icons for all existing items.
-	std::vector<LLPanel*> items;
-	getItems(items);
-	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	if (!mIgnoreGlobalIcons)
 	{
-		static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+		// Save the new value for new items to use.
+		mShowIcons = !mShowIcons;
+		gSavedSettings.setBOOL(mIconParamName, mShowIcons);
+		
+		// Show/hide avatar icons for all existing items.
+		std::vector<LLPanel*> items;
+		getItems(items);
+		for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+		{
+			static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+		}
 	}
 }
 
@@ -106,6 +117,103 @@ void LLAvatarList::showPermissions(bool visible)
 	}
 }
 
+void LLAvatarList::showRange(bool visible)
+{
+	mShowRange = visible;
+	// Enable or disable showing distance field for all detected avatars.
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showRange(mShowRange);
+	}	
+}
+
+void LLAvatarList::showFirstSeen(bool visible)
+{
+	mShowFirstSeen = visible;
+	// Enable or disable showing time since noticed, for all detected avatars.
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showFirstSeen(visible);
+	}	
+}
+
+void LLAvatarList::showStatusFlags(bool visible)
+{
+	mShowStatusFlags = visible;
+	// Enable or disable showing movement flags for all detected avatars.
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showStatusFlags(visible);
+	}	
+}
+
+
+void LLAvatarList::showDisplayName(bool visible)
+{
+	mShowDisplayName = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showDisplayName(visible);
+	}
+	mNeedUpdateNames = true;
+}
+
+void LLAvatarList::showUsername(bool visible)
+{
+	mShowUsername = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showUsername(visible);
+	}
+	mNeedUpdateNames = true;
+}
+
+// [FS:CR] Refresh names
+void LLAvatarList::refreshNames()
+{
+	mNeedUpdateNames = true;
+}
+// [FS:CR]
+
+void LLAvatarList::showVoiceVolume(bool visible)
+{
+	mShowVoiceVolume=visible;
+}
+
+void LLAvatarList::showAvatarAge(bool visible)
+{
+	mShowAge = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showAvatarAge(visible);
+	}
+}
+
+void LLAvatarList::showPaymentStatus(bool visible)
+{
+	mShowPaymentStatus = visible;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		static_cast<LLAvatarListItem*>(*it)->showPaymentStatus(visible);
+	}
+	mNeedUpdateNames = true;
+}
+
+
 static bool findInsensitive(std::string haystack, const std::string& needle_upper)
 {
     LLStringUtil::toUpper(haystack);
@@ -116,14 +224,18 @@ static bool findInsensitive(std::string haystack, const std::string& needle_uppe
 //comparators
 static const LLAvatarItemNameComparator NAME_COMPARATOR;
 static const LLFlatListView::ItemReverseComparator REVERSE_NAME_COMPARATOR(NAME_COMPARATOR);
+// <FS:Ansariel> FIRE-5283: Sort by username
+static const LLAvatarItemUserNameComparator USERNAME_COMPARATOR;
 
 LLAvatarList::Params::Params()
 : ignore_online_status("ignore_online_status", false)
 , show_last_interaction_time("show_last_interaction_time", false)
-, show_info_btn("show_info_btn", true)
+, show_info_btn("show_info_btn", false)
 , show_profile_btn("show_profile_btn", true)
 , show_speaking_indicator("show_speaking_indicator", true)
 , show_permissions_granted("show_permissions_granted", false)
+, show_icons("show_icons",true)
+, show_voice_volume("show_voice_volume", false)
 {
 }
 
@@ -135,11 +247,26 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mDirty(true) // to force initial update
 , mNeedUpdateNames(false)
 , mLITUpdateTimer(NULL)
-, mShowIcons(true)
+, mShowIcons(p.show_icons)
 , mShowInfoBtn(p.show_info_btn)
 , mShowProfileBtn(p.show_profile_btn)
 , mShowSpeakingIndicator(p.show_speaking_indicator)
 , mShowPermissions(p.show_permissions_granted)
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+, mRlvCheckShowNames(false)
+// [/RLVa:KB]
+, mShowVoiceVolume(p.show_voice_volume)
+, mShowRange(false)
+, mShowStatusFlags(false)
+, mShowUsername((bool)gSavedSettings.getBOOL("NameTagShowUsernames"))
+, mShowDisplayName((bool)gSavedSettings.getBOOL("UseDisplayNames"))
+, mIgnoreGlobalIcons(false)
+, mShowAge(false)
+, mShowPaymentStatus(false)
+, mItemHeight(0)
+// [Ansariel: Colorful radar]
+, mUseRangeColors(false)
+// [Ansariel: Colorful radar]
 {
 	setCommitOnSelectionChange(true);
 
@@ -154,11 +281,27 @@ LLAvatarList::LLAvatarList(const Params& p)
 	}
 	
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
+
+	// <FS:Ansariel> FIRE-1089: List needs to update also if we change the username setting
+	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
 }
 
 
 void LLAvatarList::handleDisplayNamesOptionChanged()
 {
+	// <FS:Ansariel> FIRE-1089: Set the proper name options for the AvatarListItem before we update the list.
+	mShowUsername = (bool)gSavedSettings.getBOOL("NameTagShowUsernames");
+	mShowDisplayName = (bool)gSavedSettings.getBOOL("UseDisplayNames");
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	{
+		LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+		item->showUsername(mShowUsername, false);
+		item->showDisplayName(mShowDisplayName, false);
+	}
+	// </FS:Ansariel>
+
 	mNeedUpdateNames = true;
 }
 
@@ -170,9 +313,41 @@ LLAvatarList::~LLAvatarList()
 
 void LLAvatarList::setShowIcons(std::string param_name)
 {
-	mIconParamName= param_name;
-	mShowIcons = gSavedSettings.getBOOL(mIconParamName);
+	if (!mIgnoreGlobalIcons)
+	{
+		mIconParamName= param_name;
+		mShowIcons = gSavedSettings.getBOOL(mIconParamName);
+	}
 }
+
+// AO: This can be used to disable icon display on a particular list, without affecting the global preference.
+void LLAvatarList::showMiniProfileIcons(bool visible)
+{
+	mShowIcons = visible;
+	mIgnoreGlobalIcons = true;
+	// Show/hide icons for all existing items.
+	
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	{
+		static_cast<LLAvatarListItem*>(*it)->setAvatarIconVisible(mShowIcons);
+	}
+}
+
+// [Ansariel: Colorful radar]
+void LLAvatarList::setUseRangeColors(bool UseRangeColors)
+{
+	mUseRangeColors = UseRangeColors;
+
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	{
+		static_cast<LLAvatarListItem*>(*it)->setUseRangeColors(mUseRangeColors);
+	}
+}
+// [Ansariel: Colorful radar]
 
 // virtual
 void LLAvatarList::draw()
@@ -180,7 +355,8 @@ void LLAvatarList::draw()
 	// *NOTE dzaporozhan
 	// Call refresh() after draw() to avoid flickering of avatar list items.
 
-	LLFlatListViewEx::draw();
+	// AO: skip llflatlistview's implementation to better manage mSelectedItemsBorder.
+	LLScrollContainer::draw();
 
 	if (mNeedUpdateNames)
 	{
@@ -220,11 +396,50 @@ void LLAvatarList::setNameFilter(const std::string& filter)
 	}
 }
 
+void LLAvatarList::setItemHeight(S32 height)
+// AO: Adjust some parameters that need to be changed when we adjust item spacing form the .xml default
+// If you change these, also change addNewItem()
+{
+	mItemHeight = height;
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for(std::vector<LLPanel*>::const_iterator it = items.begin(), end_it = items.end(); it != end_it; ++it)
+	{
+		LLAvatarListItem* avItem = static_cast<LLAvatarListItem*>(*it);
+		if (mItemHeight != 0)
+		{
+			S32 width = avItem->getRect().getWidth();
+			avItem->reshape(width,mItemHeight);
+			LLIconCtrl* highlight = avItem->getChild<LLIconCtrl>("hovered_icon");
+			LLIconCtrl* select = avItem->getChild<LLIconCtrl>("selected_icon");
+			highlight->setOrigin(0,24-height); // temporary hack to be in the right ballpark.
+			highlight->reshape(width,mItemHeight);
+			select->setOrigin(0,24-height);
+			select->reshape(width,mItemHeight);
+		}
+	}
+	mNeedUpdateNames = true;
+}
+
+void LLAvatarList::onFocusReceived()
+// AO: Override this from base class to bypass highlighting border. It has issues with resized item spacing.
+{
+	gEditMenuHandler = this;
+}
+
 void LLAvatarList::sortByName()
 {
 	setComparator(&NAME_COMPARATOR);
 	sort();
 }
+
+// <FS:Ansariel> FIRE-5283: Sort by username
+void LLAvatarList::sortByUserName()
+{
+	setComparator(&USERNAME_COMPARATOR);
+	sort();
+}
+// </FS:Ansariel>
 
 void LLAvatarList::setDirty(bool val /*= true*/, bool force_refresh /*= false*/)
 {
@@ -279,7 +494,10 @@ void LLAvatarList::refresh()
 		LLAvatarName av_name;
 		have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
 
-		if (!have_filter || findInsensitive(av_name.getDisplayName(), mNameFilter))
+		// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+		//if (!have_filter || findInsensitive(av_name.getDisplayName(), mNameFilter))
+		if (!have_filter || findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+		// </FS:Ansariel>
 		{
 			if (nadded >= ADD_LIMIT)
 			{
@@ -297,12 +515,17 @@ void LLAvatarList::refresh()
 				}
 				else
 				{
-					std::string display_name = av_name.getDisplayName();
+					// <FS:AO> Always show usernames on avatar lists
+					// <FS:Ansa> The passed name is not used as of 21-01-2014
+					//std::string display_name = av_name.getDisplayName();
+					//addNewItem(buddy_id, 
+					//		display_name.empty() ? waiting_str : display_name,
+					//		   LLAvatarTracker::instance().isBuddyOnline(buddy_id));
 					addNewItem(buddy_id, 
-						display_name.empty() ? waiting_str : display_name, 
-						LLAvatarTracker::instance().isBuddyOnline(buddy_id));
+							   av_name.getCompleteName(),
+							   LLAvatarTracker::instance().isBuddyOnline(buddy_id));
+					// </FS:AO>
 				}
-				
 				modified = true;
 				nadded++;
 			}
@@ -327,7 +550,10 @@ void LLAvatarList::refresh()
 			const LLUUID& buddy_id = it->asUUID();
 			LLAvatarName av_name;
 			have_names &= LLAvatarNameCache::get(buddy_id, &av_name);
-			if (!findInsensitive(av_name.getDisplayName(), mNameFilter))
+			// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+			//if (!findInsensitive(av_name.getDisplayName(), mNameFilter))
+			if (!findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+			// </FS:Ansariel>
 			{
 				removeItemByUUID(buddy_id);
 				modified = true;
@@ -400,7 +626,10 @@ bool LLAvatarList::filterHasMatches()
 		// If name has not been loaded yet we consider it as a match.
 		// When the name will be loaded the filter will be applied again(in refresh()).
 
-		if (have_name && !findInsensitive(av_name.getDisplayName(), mNameFilter))
+		// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+		//if (have_name && !findInsensitive(av_name.getDisplayName(), mNameFilter))
+		if (have_name && !findInsensitive(getNameForDisplay(av_name, mShowDisplayName, mShowUsername, mRlvCheckShowNames), mNameFilter))
+		// </FS:Ansariel>
 		{
 			continue;
 		}
@@ -428,12 +657,42 @@ S32 LLAvatarList::notifyParent(const LLSD& info)
 		sort();
 		return 1;
 	}
+// [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	else if ( (info.has("select")) && (info["select"].isUUID()) )
+	{
+		const LLSD& sdValue = getSelectedValue();
+		const LLUUID idItem = info["select"].asUUID();
+		if ( (!sdValue.isDefined()) || ((sdValue.isUUID()) && (sdValue.asUUID() != idItem)) )
+		{
+			resetSelection();
+			selectItemByUUID(info["select"].asUUID());
+		}
+	}
+// [/SL:KB]
 	return LLFlatListViewEx::notifyParent(info);
 }
 
 void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is_online, EAddPosition pos)
 {
 	LLAvatarListItem* item = new LLAvatarListItem();
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	item->setRlvCheckShowNames(mRlvCheckShowNames);
+// [/RLVa:KB]
+	
+	// AO: Adjust some parameters that need to be changed when we adjust item spacing form the .xml default
+	// If you change these, also change setLineHeight()
+	if (mItemHeight != 0)
+	{
+		S32 width = item->getRect().getWidth();
+		item->reshape(width,mItemHeight);
+		LLIconCtrl* highlight = item->getChild<LLIconCtrl>("hovered_icon");
+		LLIconCtrl* select = item->getChild<LLIconCtrl>("selected_icon");
+		highlight->setOrigin(0,24-mItemHeight); // temporary hack to be in the right ballpark.
+		highlight->reshape(width,mItemHeight);
+		select->setOrigin(0,24-mItemHeight);
+		select->reshape(width,mItemHeight);
+	}
+	
 	// This sets the name as a side effect
 	item->setAvatarId(id, mSessionID, mIgnoreOnlineStatus);
 	item->setOnline(mIgnoreOnlineStatus ? true : is_online);
@@ -441,9 +700,24 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is
 
 	item->setAvatarIconVisible(mShowIcons);
 	item->setShowInfoBtn(mShowInfoBtn);
+	item->setShowVoiceVolume(mShowVoiceVolume);
 	item->setShowProfileBtn(mShowProfileBtn);
 	item->showSpeakingIndicator(mShowSpeakingIndicator);
 	item->setShowPermissions(mShowPermissions);
+	item->showUsername(mShowUsername);
+	item->showDisplayName(mShowDisplayName);
+	item->showRange(mShowRange);
+	item->showFirstSeen(mShowFirstSeen);
+	item->showStatusFlags(mShowStatusFlags);
+	item->showPaymentStatus(mShowPaymentStatus);
+	item->showAvatarAge(mShowAge);
+	
+	// [Ansariel: Colorful radar]
+	item->setUseRangeColors(mUseRangeColors);
+	LLUIColorTable* colorTable = &LLUIColorTable::instance();
+	item->setShoutRangeColor(colorTable->getColor("AvatarListItemShoutRange", LLColor4::yellow));
+	item->setBeyondShoutRangeColor(colorTable->getColor("AvatarListItemBeyondShoutRange", LLColor4::red));
+	// [/Ansariel: Colorful radar]
 
 	item->setDoubleClickCallback(boost::bind(&LLAvatarList::onItemDoubleClicked, this, _1, _2, _3, _4));
 
@@ -454,7 +728,10 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is
 BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
-	if ( mContextMenu && !isAvalineItemSelected())
+//	if ( mContextMenu && !isAvalineItemSelected())
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
+	if ( (mContextMenu && !isAvalineItemSelected()) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) )
+// [/RLVa:KB]
 	{
 		uuid_vec_t selected_uuids;
 		getSelectedUUIDs(selected_uuids);
@@ -576,8 +853,32 @@ void LLAvatarList::updateLastInteractionTimes()
 
 void LLAvatarList::onItemDoubleClicked(LLUICtrl* ctrl, S32 x, S32 y, MASK mask)
 {
-	mItemDoubleClickSignal(ctrl, x, y, mask);
+//	mItemDoubleClickSignal(ctrl, x, y, mask);
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	if ( (!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
+		mItemDoubleClickSignal(ctrl, x, y, mask);
+// [/RLVa:KB]
 }
+
+// <FS:Ansariel> FIRE-12750: Name filter not working correctly
+// static
+std::string LLAvatarList::getNameForDisplay(const LLAvatarName& av_name, bool show_displayname, bool show_username, bool rlv_check_shownames)
+{
+	bool fRlvFilter = (rlv_check_shownames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+	if (show_displayname && !show_username)
+	{
+		return ( (!fRlvFilter) ? av_name.getDisplayName() : RlvStrings::getAnonym(av_name) );
+	}
+	else if (!show_displayname && show_username)
+	{
+		return ( (!fRlvFilter) ? av_name.getUserName() : RlvStrings::getAnonym(av_name) );
+	}
+	else 
+	{
+		return ( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
+	}
+}
+// </FS:Ansariel>
 
 bool LLAvatarItemComparator::compare(const LLPanel* item1, const LLPanel* item2) const
 {
@@ -618,6 +919,19 @@ bool LLAvatarItemAgentOnTopComparator::doCompare(const LLAvatarListItem* avatar_
 	return LLAvatarItemNameComparator::doCompare(avatar_item1,avatar_item2);
 }
 
+// <FS:Ansariel> FIRE-5283: Sort by username
+bool LLAvatarItemUserNameComparator::doCompare(const LLAvatarListItem* avatar_item1, const LLAvatarListItem* avatar_item2) const
+{
+	std::string name1 = avatar_item1->getUserName();
+	std::string name2 = avatar_item2->getUserName();
+
+	LLStringUtil::toUpper(name1);
+	LLStringUtil::toUpper(name2);
+
+	return name1 < name2;
+}
+// </FS:Ansariel>
+
 /************************************************************************/
 /*             class LLAvalineListItem                                  */
 /************************************************************************/
@@ -637,7 +951,7 @@ BOOL LLAvalineListItem::postBuild()
 		setOnline(true);
 		showLastInteractionTime(false);
 		setShowProfileBtn(false);
-		setShowInfoBtn(false);
+		
 		mAvatarIcon->setValue("Avaline_Icon");
 		mAvatarIcon->setToolTip(std::string(""));
 	}

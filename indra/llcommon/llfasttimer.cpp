@@ -45,6 +45,7 @@
 #elif LL_DARWIN
 #include <sys/time.h>
 #include "lltimer.h"	// get_clock_count()
+#include <mach/mach_time.h>
 #else 
 #error "architecture not supported"
 #endif
@@ -64,7 +65,12 @@ BOOL LLFastTimer::sMetricLog = FALSE;
 LLMutex* LLFastTimer::sLogLock = NULL;
 std::queue<LLSD> LLFastTimer::sLogQueue;
 
-#if LL_LINUX || LL_SOLARIS
+#ifdef LL_DARWIN
+//AO: Added ability to test this separately from other OS's
+#define USE_RDTSC 0
+#else
+#endif
+#if LL_LINUX || LL_SOLARIS || LL_DARWIN // AO: Add LL_DARWIN to this list now
 U64 LLFastTimer::sClockResolution = 1000000000; // Nanosecond resolution
 #else
 U64 LLFastTimer::sClockResolution = 1000000; // Microsecond resolution
@@ -314,9 +320,21 @@ void LLFastTimer::NamedTimer::buildHierarchy()
 {
 	if (sCurFrameIndex < 0 ) return;
 
+	// <FS:ND> Minimize calls to getStatic
+
+	typedef LLInstanceTracker<LLFastTimer::NamedTimer, LLFastTimer::NamedTimer*> tBase;
+	static tBase::StaticData &sData = tBase::getStatic();
+
+	// </FS:ND>
+
 	// set up initial tree
 	{
-		for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+		// <FS:ND> Minimize calls to getStatic
+	
+		for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
+		//		for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+
+		// </FS:ND>
 		{
 			NamedTimer& timer = *it;
 			if (&timer == NamedTimerFactory::instance().getRootTimer()) continue;
@@ -423,6 +441,9 @@ void LLFastTimer::NamedTimer::accumulateTimings()
 // static
 void LLFastTimer::NamedTimer::resetFrame()
 {
+	typedef LLInstanceTracker<LLFastTimer::NamedTimer, LLFastTimer::NamedTimer*> tBase;
+	static tBase::StaticData &sData = tBase::getStatic();
+
 	if (sLog)
 	{ //output current frame counts to performance log
 
@@ -444,7 +465,7 @@ void LLFastTimer::NamedTimer::resetFrame()
 		LLSD sd;
 
 		{
-			for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+			for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
 			{
 				NamedTimer& timer = *it;
 				FrameState& info = timer.getFrameState();
@@ -467,7 +488,7 @@ void LLFastTimer::NamedTimer::resetFrame()
 	}
 
 	// reset for next frame
-	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+	for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
 	{
 		NamedTimer& timer = *it;
 			
@@ -569,10 +590,14 @@ void LLFastTimer::nextFrame()
 {
 	countsPerSecond(); // good place to calculate clock frequency
 	U64 frame_time = getCPUClockCount64();
+//<FS:TS> Don't spam the log with messages about fast timer inaccuracy
+//        when we've turned fast timers off
+#if FAST_TIMER_ON
 	if ((frame_time - sLastFrameTime) >> 8 > 0xffffffff)
 	{
 		llinfos << "Slow frame, fast timers inaccurate" << llendl;
 	}
+#endif
 
 	if (!sPauseHistory)
 	{

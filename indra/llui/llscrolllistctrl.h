@@ -156,6 +156,9 @@ public:
 	// Adds a single column descriptor: ["name" : string, "label" : string, "width" : integer, "relwidth" : integer ]
 	virtual void addColumn(const LLScrollListColumn::Params& column, EAddPosition pos = ADD_BOTTOM);
 	virtual void addColumn(const LLSD& column, EAddPosition pos = ADD_BOTTOM);	
+	// <FS:Techwolf Lupindo> area search, allow deleting a column
+	virtual LLScrollListColumn::Params delColumn(std::string name);
+	// </FS:Techwolf Lupindo> area search
 	virtual void clearColumns();
 	virtual void setColumnLabel(const std::string& column, const std::string& label);
 	virtual bool 	preProcessChildNode(LLXMLNodePtr child);
@@ -235,6 +238,9 @@ public:
 	S32				getItemIndex( const LLUUID& item_id ) const;
 
 	void setCommentText( const std::string& comment_text);
+	// <FS:Ansariel> Allow appending of comment text
+	void addCommentText( const std::string& comment_text);
+	// </FS:Ansariel> Allow appending of comment text
 	LLScrollListItem* addSeparator(EAddPosition pos);
 
 	// "Simple" interface: use this when you're creating a list that contains only unique strings, only
@@ -300,6 +306,12 @@ public:
 	S32				getRowOffsetFromIndex(S32 index);
 
 	void			clearSearchString() { mSearchString.clear(); }
+
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
+	void			setFilterString(const std::string& str);
+	void			setFilterColumn(S32 col) { mFilterColumn = col; }
+	bool			isFiltered(const LLScrollListItem* item) const;
+	// </FS:Ansariel> Fix for FS-specific people list (radar)
 
 	// support right-click context menus for avatar/group lists
 	enum ContextMenuType { MENU_NONE, MENU_AVATAR, MENU_GROUP };
@@ -414,6 +426,7 @@ protected:
 	typedef std::deque<LLScrollListItem *> item_list;
 	item_list&		getItemList() { return mItemList; }
 
+public:
 	void			updateLineHeight();
 
 private:
@@ -433,6 +446,9 @@ private:
 	static void		showProfile(std::string id, bool is_group);
 	static void		sendIM(std::string id);
 	static void		addFriend(std::string id);
+	// <FS:Ansariel> Add remove friend option
+	static void		removeFriend(std::string id);
+	// </FS:Ansariel>
 	static void		showNameDetails(std::string id, bool is_group);
 	static void		copyNameToClipboard(std::string id, bool is_group);
 	static void		copySLURLToClipboard(std::string id, bool is_group);
@@ -491,6 +507,11 @@ private:
 	LLWString		mSearchString;
 	LLFrameTimer	mSearchTimer;
 	
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
+	std::string		mFilterString;
+	S32				mFilterColumn;
+	bool			mIsFiltered;
+
 	S32				mSearchColumn;
 	S32				mNumDynamicWidthColumns;
 	S32				mTotalStaticColumnWidth;

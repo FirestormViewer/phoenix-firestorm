@@ -1,44 +1,195 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Colores" name="colors_panel">
-	<text name="effects_color_textbox">
-		Mis efectos (rayo indicador):
-	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="Pulsa para abrir el selector de color"/>
-	<text name="font_colors">
-		Colores de fuente del chat:
-	</text>
-	<text name="text_box1">
-		Yo
-	</text>
-	<text name="text_box2">
-		Otros avatares
-	</text>
-	<text name="text_box3">
-		Objetos
-	</text>
-	<text name="text_box4">
-		Sistema
-	</text>
-	<text name="text_box5">
-		Errores
-	</text>
-	<text name="text_box10">
-		Directo
-	</text>
-	<text name="text_box7">
-		Propietario
-	</text>
-	<text name="text_box9">
-		URLs
-	</text>
-	<text name="bubble_chat">
-		Color de fondo de la etiqueta del nombre (afectará también a los bocadillos del chat):
-	</text>
-	<color_swatch name="background" tool_tip="Elige el color de las etiquetas de nombre"/>
-	<slider label="Opacidad:" name="bubble_chat_opacity" tool_tip="Elige la opacidad de las etiquetas de nombre"/>
-	<text name="floater_opacity">
-		Opacidad de la ventana:
-	</text>
-	<slider label="Activa:" name="active"/>
-	<slider label="Inactiva:" name="inactive"/>
+	<tab_container label="Color Prefs" name="color_tabs">
+		<panel label="Color del chat" name="tab-chat">
+			<text name="font_colors" width="240">
+				Colores de los mensajes de chat:
+			</text>
+			<text name="user_label">
+				Mi texto
+			</text>
+			<text name="others_label">
+				Otros
+			</text>
+			<text name="text_box3">
+				Objetos
+			</text>
+			<text name="friends_label">
+				Amigos
+			</text>
+			<text name="linden_label">
+				Linden
+			</text>
+			<text name="muted_label">
+				Bloqueados
+			</text>
+			<text name="system_label">
+				Sistema
+			</text>
+			<text name="script_error_label">
+				Errores
+			</text>
+			<text name="object_im_label">
+				MIs de objetos
+			</text>
+			<text name="llownersay_label">
+				Propietario
+			</text>
+			<text name="htmllink_label">
+				URLs
+			</text>
+			<text name="direct_label">
+				Directo
+			</text>
+			<text name="header_colors">
+				Cabeceras de chat
+			</text>
+			<text name="chat_name_label">
+				Avatares
+			</text>
+			<text name="object_name_header_label">
+				Objetos
+			</text>
+			<check_box name="FSColorIMsDistinctly" label="Colorear diferenciadamente los chats de grupo/MI en consola:"/>
+			<panel name="im_color_panel">
+				<text name="console_im_label">
+					MIs/Grupo
+				</text>
+			</panel>
+		</panel>
+		<panel label="Etiquetas de nombre" name="tab-nametag">
+			<text name="nametag_colors">
+				Colores de las etiquetas de nombre:
+			</text>
+			<text name="self_tag_label">
+				Mi etiqueta
+			</text>
+			<text name="friend_tag_label">
+				Amigos
+			</text>
+			<text name="muted_tag_label">
+				Bloqueados
+			</text>
+			<text name="linden_tag_label">
+				Linden Lab
+			</text>
+			<text name="match_tag_label">
+				Coincidentes
+			</text>
+			<text name="mismatch_tag_label">
+				No coincidentes
+			</text>
+			<check_box name="FSColorUsername" label="Colorear diferenciadamente los nombres de usuario" tool_tip="Muerstra los nombres de usuario en un color diferente"/>
+			<check_box name="NameTagShowFriends" label="Colorear diferenciadamente las etiquetas de tus amigos" tool_tip="Muestra las etiquetas de tus amigos en un color diferente"/>
+			<text name="username_tag_label">
+				Nombre de usuario
+			</text>
+			<text name="bubble_chat">
+				Etiqueta/Bocadillo:
+			</text>
+			<slider label="Opacidad:" label_width="135" name="bubble_chat_opacity" tool_tip="Ajusta la opacidad de la etiqueta de nombre"/>
+			<slider label="Desplazamiento vertical:" label_width="135" name="FSNameTagZOffsetCorrection" tool_tip="Cambia la distancia vertical de la etiqueta sobre el avatar. 0 por defecto."/>
+			<check_box name="FSTagShowDistance" label="Mostrar distancia en la etiqueta" tool_tip="Muestra la distancia a la que está el avatar en su etiqueta de nombre"/>
+			<check_box name="FSTagShowDistanceColors" label="Colorear las etiquetas basándose en la distancia:"/>
+			<panel name="distance_panel">
+				<text name="chat_distance_tag_label">
+					Alcance de chat
+				</text>
+				<text name="whisper_distance_tag_label">
+					Distancia de susurro
+				</text>
+				<text name="shout_tag_label">
+					Distancia de grito
+				</text>
+				<text name="beyond_shout_distance_tag_label">
+					Más allá del grito
+				</text>
+			</panel>
+			<panel name="client_tags_panel">
+				<text name="client_tags_colors">
+					Colores por visor (Sólo en OpenSim/AuroraSim):
+				</text>
+				<text name="whattagstoshow">
+					¿Qué etiquetas quieres ver?
+				</text>
+				<combo_box name="ClientTagsVisibility">
+					<combo_box.item name="No Viewertags" label="Ninguno"/>
+					<combo_box.item name="TPVD Viewer" label="Visores TPVD (usando una lista)"/>
+					<combo_box.item name="All known Viewers" label="Todos los visores conocidos (usando una lista)"/>
+					<combo_box.item name="All Viewers" label="Todos los visores"/>
+				</combo_box>
+				<text name="colorbasedonviewer">
+					¿Basar color de la etiqueta en el visor?
+				</text>
+				<combo_box name="ColorClienttags">
+					<combo_box.item name="Color not based on Viewer" label="Color no basado en el visor"/>
+					<combo_box.item name="Single color per Viewer" label="Un color por visor"/>
+					<combo_box.item name="Multiple colors per Viewer" label="Múltiples colores por visor"/>
+					<combo_box.item name="Userdefined color" label="Color personalizado"/>
+				</combo_box>
+				<text name="listtodisplayviewertags_txt">
+					¿Usar una lista de etiquetas de visor?
+				</text>
+				<combo_box name="UseLegacyClienttags">
+					<combo_box.item name="Don't use a list" label="No usar una lista"/>
+					<combo_box.item name="Local Clienttags" label="Lista local"/>
+					<combo_box.item name="Download Clienttags" label="Bajar lista al iniciar el visor"/>
+				</combo_box>
+			</panel>
+		</panel>
+		<panel label="Minimapa" name="tab-minimap">
+			<text name="netmap_dots_textbox">
+				Puntos del minimapa:
+			</text>
+			<text name="MapAvatarSelfColor_label">
+				Yo
+			</text>
+			<text name="MapAvatarColor_label">
+				Otros
+			</text>
+			<text name="MapAvatarFriendColor_label">
+				Amigos
+			</text>
+			<text name="MapAvatarLindenColor_label">
+				Linden Lab
+			</text>
+			<text name="MapAvatarMutedColor_label">
+				Bloqueados
+			</text>
+			<check_box name="MiniMapChatRing" label="Mostrar anillos en el minipapa indicando las distancias de chat y de grito:"/>
+			<text name="netmap_chatring_color_label">
+				Chat
+			</text>
+			<text name="netmap_shoutring_color_label">
+				Grito
+			</text>
+		</panel>
+		<panel label="Varios" name="tab-misc">
+			<text name="effects_color_textbox" width="230">
+				Efectos de selección (rayo de partículas):
+			</text>
+			<text name="ScriptDialogFgLabel" width="120">
+				Diálogo de script T/F:
+			</text>
+			<text name="floater_opacity">
+				Opacidad de ventana flotante:
+			</text>
+			<slider label="Activa:" name="active"/>
+			<slider label="Inactiva:" name="inactive"/>
+			<text name="console_opacity">
+				Opacidad de la consola:
+			</text>
+			<color_swatch name="console_background" tool_tip="Elige el color de la consola"/>
+			<slider label="Opacidad:" name="console_background_opacity" tool_tip="Configura la opacidad del fondo de la consola"/>
+			<check_box name="FSScriptDialogNoTransparency" label="Mostrar los diálogos de script siempre sobre fondo opaco"/>
+			<check_box name="FSGroupNotifyNoTransparency" label="Mostrar los avisos de grupo siempre sobre fondo opaco"/>
+			<check_box name="override_pie_color_checkbox" label="Modificar el color y la opacidad del fondo de los manús circulares:"/>
+			<panel name="tab-colorize">
+				<color_swatch name="pie_bg_color_override" tool_tip="Elige el color de fondo del menú circular"/>
+				<color_swatch name="pie_selected_color_override" tool_tip="Elige el color de la selección del menú circular"/>
+				<slider label="Opacidad:" label_width="100" name="pie_menu_opacity" tool_tip="Configura la opacidad del menú circular"/>
+				<slider label="Desvanecimiento:" label_width="100" name="pie_menu_fade_out" tool_tip="Configura la cantidad de desvanecimiento hacia el borde del menú circular"/>
+			</panel>
+		</panel>
+	</tab_container>
 </panel>

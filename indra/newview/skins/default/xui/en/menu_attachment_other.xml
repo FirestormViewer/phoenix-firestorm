@@ -9,6 +9,9 @@
         <menu_item_call.on_click
          function="ShowAgentProfile"
          parameter="hit object" />
+        <menu_item_call.on_enable
+         function="RLV.EnableIfNot"
+         parameter="shownames" />
     </menu_item_call>
    <menu_item_call
      enabled="false"
@@ -19,11 +22,28 @@
         <menu_item_call.on_enable
          function="Avatar.EnableAddFriend" />
     </menu_item_call>
+	<menu_item_call
+	 label="Add to Set"
+	 layout="topleft"
+	 name="Add to Set">
+		<menu_item_call.on_click
+		 function="Avatar.AddToContactSet" />
+	</menu_item_call>
     <menu_item_call
      label="IM"
      name="Send IM...">
         <menu_item_call.on_click
          function="Avatar.SendIM" />
+        <menu_item_call.on_enable
+         function="RLV.EnableIfNot"
+         parameter="shownames" />
+    </menu_item_call>
+<!-- Starlight add calling card -->
+    <menu_item_call
+     label="Add Calling Card"
+     name="Add Calling Card">
+        <menu_item_call.on_click
+         function="Avatar.AddContact" />
     </menu_item_call>
     <menu_item_call
      label="Call"
@@ -36,19 +56,36 @@
       <menu_item_call
          label="Invite to Group"
          name="Invite...">
-      <menu_item_call.on_click
+        <menu_item_call.on_click
          function="Avatar.InviteToGroup" />
+        <menu_item_call.on_enable
+         function="RLV.EnableIfNot"
+         parameter="shownames" />
       </menu_item_call>
    <menu_item_separator />
+  <context_menu
+         label="Annoyance"
+         name="Annoyance">
     <menu_item_call
-     enabled="false"
+     enabled="true"
      label="Block"
      name="Avatar Mute">
         <menu_item_call.on_click
          function="Avatar.Mute" />
-        <menu_item_call.on_enable
-         function="Avatar.EnableMute" />
+        <menu_item_call.on_visible
+         function="Object.EnableMute" />
     </menu_item_call>
+    <!-- <FS:Zi> Add unblock menu entry since renaming the context menu item doesn't seem to work -->
+    <menu_item_call
+     enabled="true"
+     label="Unblock"
+     name="Avatar Unmute">
+        <menu_item_call.on_click
+         function="Avatar.Mute" />
+        <menu_item_call.on_visible
+         function="Object.EnableUnmute" />
+    </menu_item_call>
+    <!-- </FS:Zi> -->
     <menu_item_call
      label="Report"
      name="abuse">
@@ -62,23 +99,16 @@
              function="Avatar.Freeze" />
             <menu_item_call.on_visible
              function="Avatar.EnableFreezeEject"/>
-        </menu_item_call>
-        <menu_item_call
+    </menu_item_call>
+    <menu_item_call
          label="Eject"
          name="Eject...">
             <menu_item_call.on_click
              function="Avatar.Eject" />
             <menu_item_call.on_visible
              function="Avatar.EnableFreezeEject"/>
-        </menu_item_call>
-        <menu_item_call
-         label="Debug Textures"
-         name="Debug...">
-            <menu_item_call.on_click
-             function="Avatar.Debug" />
-            <menu_item_call.on_visible
-             function="IsGodCustomerService"/>
-        </menu_item_call>
+    </menu_item_call>
+   </context_menu>	
     <menu_item_call
 		 label="Dump XML"
          name="Dump XML">
@@ -158,4 +188,60 @@
     <menu_item_call.on_enable
      function="EnableMuteParticle" />
   </menu_item_call>
+  <menu_item_call 
+      enabled="true"
+      label="Script Info"
+      name="ScriptInfo">
+      <menu_item_call.on_click
+       function="Tools.ScriptInfo" />
+      <menu_item_call.on_enable
+       function="Object.EnableScriptInfo" />
+  </menu_item_call>
+    <menu_item_call 
+    enabled="true"
+    label="Derender"
+    name="Derender">
+    <menu_item_call.on_click
+       function="Object.Derender" />
+    </menu_item_call>
+   <menu_item_call
+      enabled="true"
+      label="Derender + Blacklist"
+      name="DerenderPermanent">
+    <menu_item_call.on_click
+      function="Object.DerenderPermanent" />
+   </menu_item_call>
+    <menu_item_call
+         label="Show Textures"
+         name="Debug...">
+            <menu_item_call.on_click
+             function="Avatar.Debug" />
+    </menu_item_call>
+    <menu_item_call 
+    enabled="true"
+    label="Texture Refresh"
+    name="Texture Refresh">
+  <menu_item_call.on_click
+       function="Object.TexRefresh" />
+    </menu_item_call>
+    <context_menu
+		label="Save as"
+		name="Export Menu">
+		<menu_item_call
+			label="Backup"
+			name="Backup">
+			<menu_item_call.on_click
+			function="Object.Export" />
+			<menu_item_call.on_enable
+			function="Object.EnableExport" />
+		</menu_item_call>
+		<menu_item_call
+			label="Collada"
+			name="Collada">
+			<menu_item_call.on_click
+			function="Object.ExportCollada" />
+			<menu_item_call.on_enable
+			function="Object.EnableExport" />
+		</menu_item_call>
+	</context_menu>
 </context_menu>

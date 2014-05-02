@@ -102,13 +102,15 @@ ting i denne gruppe. Der er en bred vifte af rettigheder.
 		</scroll_list>
 	</panel>
 	<panel name="actions_footer">
-		<text_editor name="action_description">
-			Denne rettigheder &apos;Udmeld medlemmer fra denne gruppe&apos;. Kun en ejer kan udmelde en anden ejer.
-		</text_editor>
-		<text name="static2">
+		<panel name="action_description_panel">
+			<text_editor name="action_description">
+				Denne rettigheder &apos;Udmeld medlemmer fra denne gruppe&apos;. Kun en ejer kan udmelde en anden ejer.
+			</text_editor>
+		</panel>
+		<text name="action_roles_label">
 			Roller med rettighed
 		</text>
-		<text name="static3">
+		<text name="action_members_label">
 			Medlemmer med rettighed
 		</text>
 	</panel>

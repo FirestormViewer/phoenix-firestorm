@@ -576,29 +576,30 @@ bool LLUpdaterServiceImpl::onMainLoop(LLSD const & event)
 
 			setState(LLUpdaterService::TERMINAL);
 		}
-		else
-		{
-			std::string query_url = LLGridManager::getInstance()->getUpdateServiceURL();
-			if ( !query_url.empty() )
-			{
-				mUpdateChecker.checkVersion(query_url, mChannel, mVersion,
-											mPlatform, mPlatformVersion, mUniqueId,
-											mWillingToTest);
-				setState(LLUpdaterService::CHECKING_FOR_UPDATE);
-			}
-			else
-			{
-				LL_WARNS("UpdaterService")
-					<< "No updater service defined for grid '" << LLGridManager::getInstance()->getGrid()
-					<< "' will check again in " << mCheckPeriod << " seconds"
-					<< LL_ENDL;
-				// Because the grid can be changed after the viewer is started (when the first check takes place)
-				// but before the user logs in, the next check may be on a different grid, so set the retry timer
-				// even though this check did not happen.  The default time is once an hour, and if we're not
-				// doing the check anyway the performance impact is completely insignificant.
-				restartTimer(mCheckPeriod);
-			}
-		}
+		//<FS:TM> 3.6.4 check this, commented out to compile
+		//else
+		//{
+		//	std::string query_url = LLGridManager::getInstance()->getUpdateServiceURL();
+		//	if ( !query_url.empty() )
+		//	{
+		//		mUpdateChecker.checkVersion(query_url, mChannel, mVersion,
+		//									mPlatform, mPlatformVersion, mUniqueId,
+		//									mWillingToTest);
+		//		setState(LLUpdaterService::CHECKING_FOR_UPDATE);
+		//	}
+		//	else
+		//	{
+		//		LL_WARNS("UpdaterService")
+		//			<< "No updater service defined for grid '" << LLGridManager::getInstance()->getGrid()
+		//			<< "' will check again in " << mCheckPeriod << " seconds"
+		//			<< LL_ENDL;
+		//		// Because the grid can be changed after the viewer is started (when the first check takes place)
+		//		// but before the user logs in, the next check may be on a different grid, so set the retry timer
+		//		// even though this check did not happen.  The default time is once an hour, and if we're not
+		//		// doing the check anyway the performance impact is completely insignificant.
+		//		restartTimer(mCheckPeriod);
+		//	}
+		//}
 	} 
 	else 
 	{

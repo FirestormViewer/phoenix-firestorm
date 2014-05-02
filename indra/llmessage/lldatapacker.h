@@ -27,6 +27,8 @@
 #ifndef LL_LLDATAPACKER_H 
 #define LL_LLDATAPACKER_H
 
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
+
 class LLColor4;
 class LLColor4U;
 class LLVector2;
@@ -199,9 +201,18 @@ inline BOOL LLDataPackerBinaryBuffer::verifyLength(const S32 data_size, const ch
 {
 	if (mWriteEnabled && (mCurBufferp - mBufferp) > mBufferSize - data_size)
 	{
-		llwarns << "Buffer overflow in BinaryBuffer length verify, field name " << name << "!" << llendl;
-		llwarns << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << llendl;
-		return FALSE;
+		// <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
+
+		// llwarns << "Buffer overflow in AsciiBuffer length verify, field name " << name << "!" << llendl;
+		// llwarns << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << llendl;
+		// return FALSE;
+
+		std::stringstream strm;
+		strm << "Buffer overflow in BinaryBuffer length verify, field name " << name << "!" << std::endl;
+		strm << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << std::endl;
+		throw nd::exceptions::xran( strm.str() );
+
+		// </FS:ND>
 	}
 
 	return TRUE;

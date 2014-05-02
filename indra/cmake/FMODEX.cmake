@@ -26,20 +26,32 @@ if (FMODEX)
       include(Prebuilt)
       use_prebuilt_binary(fmodex)    
       if (WINDOWS)
-        set(FMODEX_LIBRARY 
-            debug fmodexL_vc
-            optimized fmodex_vc)
+        if( NOT ND_BUILD64BIT_ARCH )
+          set(FMODEX_LIBRARY 
+              debug fmodexL_vc
+              optimized fmodex_vc)
+        else( NOT ND_BUILD64BIT_ARCH )
+          set(FMODEX_LIBRARY 
+              debug fmodexL64_vc
+              optimized fmodex64_vc)
+        endif( NOT ND_BUILD64BIT_ARCH )
       elseif (DARWIN)
         set(FMODEX_LIBRARY 
             debug fmodexL
             optimized fmodex)
       elseif (LINUX)
-        set(FMODEX_LIBRARY 
-            debug fmodexL
-            optimized fmodex)
+        if(ND_BUILD64BIT_ARCH)
+          set(FMODEX_LIBRARY
+              debug fmodexL64
+              optimized fmodex64)
+        else(ND_BUILD64BIT_ARCH)
+          set(FMODEX_LIBRARY
+              debug fmodexL
+              optimized fmodex)
+        endif(ND_BUILD64BIT_ARCH)
       endif (WINDOWS)
       set(FMODEX_LIBRARIES ${FMODEX_LIBRARY})
-      set(FMODEX_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/)
+      set(FMODEX_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/fmodex)
     endif (FMODEX_LIBRARY AND FMODEX_INCLUDE_DIR)
   endif (STANDALONE)
 endif (FMODEX)

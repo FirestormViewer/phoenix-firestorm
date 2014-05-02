@@ -1,0 +1,1115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="440"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="UI-Pref"
+ name="Display panel">
+<tab_container
+ label="Firestorm Prefs"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-1"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+
+    <!--General-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="General"
+     name="UI Prefs Panel" >
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="UI Size:"
+         top_pad="8"
+         width="200">
+            UI Scaling (may cause side effects):
+        </text>
+        <slider
+         control_name="UIScaleFactor"
+         decimal_digits="2"
+         follows="left|top"
+         height="17"
+         increment="0.025"
+         initial_value="1"
+         layout="topleft"
+         left_pad="0"
+         max_val="1.4"
+         min_val="0.75"
+         name="ui_scale_slider"
+         top_pad="-14"
+         width="250" />
+
+        <text
+         type="string"
+         left="10"
+         top_pad="5"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="HoverTipText"
+         width="100">
+            Hover Tips:
+        </text>
+        <check_box
+         control_name="ShowHoverTips"
+         height="16"
+         initial_value="true"
+         label="Show Hover Tips"
+         layout="topleft"
+         left_delta="10"
+         name="ShowHoverTips"
+         tool_tip="Set this to show hover tips on avatars and some other things - set this one first (CTRL+SHIFT+T)"
+         top_pad="5"
+         width="256" />
+        <check_box
+         control_name="ShowAllObjectHoverTip"
+         height="16"
+         initial_value="true"
+         label="on All Objects"
+         tool_tip="Set this to show hover tips on in-world objects"
+         layout="topleft"
+         left_delta="10"
+         name="ShowAllHoverTips"
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="ShowLandHoverTip"
+         height="16"
+         initial_value="true"
+         label="on Land"
+         tool_tip="Set this to show hover tips on land"
+         layout="topleft"
+         name="ShowLandHoverTips"
+         top_pad="2"
+         width="256" />
+		<check_box
+		control_name="FSAdvancedTooltips"
+		name="FSAdvancedTooltips"
+		label="Show extended information in hovertips (Phoenix style)"
+		layout="topleft"
+		top_pad="2"
+		left_delta="-10"
+		height="16"
+		width="350" />
+        <check_box
+		control_name="FSShowGroupTitleInTooltip"
+		name="FSShowGroupTitleInTooltip"
+		label="Show avatar group titles in hovertips"
+		layout="topleft"
+		top_pad="2"
+		height="16"
+		width="350" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="265"
+         name="tooltip_textbox"
+         top="30"
+         width="200">
+           Hovertip Trigger Delays:
+        </text>
+		
+        <slider
+         control_name="ToolTipDelay"
+         decimal_digits="3"
+         follows="left|top"
+         height="16"
+         increment="0.025"
+         initial_value="0.7"
+         label="Tooltips:"
+         label_width="50"
+         layout="topleft"
+         max_val="6.0"
+         min_val="0"
+         name="ToolTipDelay_slider"
+         tool_tip="Delay after that tooltips for user interface elements such as buttons are shown. (Default: 0.7)"
+         top_pad="1"
+         left="275"
+         width="200" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_pad="1"
+         name="ToolTipDelay_text"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+		
+        <slider
+         control_name="AvatarInspectorTooltipDelay"
+         decimal_digits="3"
+         follows="left|top"
+         height="17"
+         increment="0.025"
+         initial_value="0.35"
+         label="Avatars:"
+         label_width="50"
+         layout="topleft"
+         left="275"
+         max_val="6.0"
+         min_val="0"
+         name="AvatarInspectorTooltipDelay_slider"
+         tool_tip="Delay after that hovertips for avatars are shown. (Default: 0.35)"
+         top_pad="2"
+         width="200" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_pad="1"
+         name="AvatarInspectorTooltipDelay_text"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+		
+        <slider
+         control_name="ObjectInspectorTooltipDelay"
+         decimal_digits="3"
+         follows="left|top"
+         height="17"
+         increment="0.025"
+         initial_value="0.35"
+         label="Objects:"
+         label_width="50"
+         layout="topleft"
+         left="275"
+         max_val="6.0"
+         min_val="0"
+         name="ObjectInspectorTooltipDelay_slider"
+         tool_tip="Delay after that hovertips for objects are shown. (Default: 0.35)"
+         top_pad="2"
+         width="200" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_pad="1"
+         name="ObjectInspectorTooltipDelay_text"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+
+      <check_box
+       control_name="UsePieMenu"
+       height="16"
+       initial_value="true"
+       label="Use Pie Menu"
+       layout="topleft"
+       left="5"
+       name="UsePieMenu"
+       tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."
+       top="140"
+       width="256" />
+      
+      <check_box
+       top_pad="2"
+       control_name="ShowNetStats"
+       follows="left|top"
+       height="16"
+       initial_value="false"
+       name="ShowNetStats"
+       label="Show lag meter"
+       width="110"
+       tool_tip="Show lag meter in the Status Overlay"/>
+
+      <check_box
+       control_name="FSEnableVolumeControls"
+       height="16"
+       name="FSEnableVolumeControls"
+       label="Show media controls in top menu"
+       width="256"
+       tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
+
+      <text
+        type="string"
+        length="1"
+        follows="left|top"
+        height="16"
+        layout="topleft"
+        name="standalone_textbox"
+        left="5"
+        top_pad="2"
+        width="200">
+        Use stand-alone windows for:
+      </text>
+      
+      <check_box
+       top_pad="2"
+       control_name="FSUseStandaloneGroupFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandaloneGroupFloater"
+       label="Group profiles"
+       left="15"
+       width="170"
+       tool_tip="If enabled, group profiles will open in separate windows."/>
+      <check_box
+       control_name="FSUseStandaloneTeleportHistoryFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandaloneTeleportHistoryFloater"
+       label="Teleport history"
+       left_pad="5"
+       width="170"
+       tool_tip="If enabled, using the shortcut for teleport history will open the history in a separate window."/>
+      <check_box
+       top_pad="2"
+       control_name="FSUseStandaloneBlocklistFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandaloneBlocklistFloater"
+       label="Block/mute list"
+       left="15"
+       width="170"
+       tool_tip="If enabled, the list of blocked/muted residents and objects will open in a separate window."/>
+      <check_box
+       control_name="FSUseStandalonePlaceDetailsFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandalonePlaceDetailsFloater"
+       label="Landmarks, place details and teleport history details"
+       left_pad="5"
+       width="170"
+       tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
+
+      <text
+       type="string"
+       left="5"
+       top_pad="2"
+       width="140"
+       follows="left|top"
+       height="16"
+       layout="topleft"
+       name="ExtendedTeleportHistoryLabel">
+        Extend teleport history by:
+      </text>
+	  
+      <check_box
+       top_delta="0"
+       control_name="FSTeleportHistoryShowPosition"
+       follows="left|top"
+       height="16"
+       name="FSTeleportHistoryShowPosition"
+       label="Position"
+       left_pad="15"
+       width="75"
+       tool_tip="If enabled, the local coordinates within the region will be shown in the teleport history."/>
+
+      <check_box
+       top_delta="0"
+       control_name="FSTeleportHistoryShowDate"
+       follows="left|top"
+       height="16"
+       name="FSTeleportHistoryShowDate"
+       label="Date"
+       left_pad="5"
+       width="75"
+       tool_tip="If enabled, the date and time of the teleport will be shown in the teleport history."/>
+
+      <text
+       type="string"
+       left="5"
+       top_pad="6"
+       width="140"
+       follows="left|top"
+       height="16"
+       layout="topleft"
+       name="ScriptDialogsPerObjectLabel">
+        Script Dialogs per Object:
+      </text>
+      <combo_box
+       control_name="ScriptDialogPerObject"
+       height="23"
+       layout="topleft"
+       left_pad="10"
+       top_delta="-5"
+       name="ScriptDialogPerObjectDropdown"
+       width="180">
+        <combo_box.item
+         label="One per Object"
+         name="ScriptDialogOption_0"
+         value="0"/>
+        <combo_box.item
+         label="One per Object &amp; Channel"
+         name="ScriptDialogOption_1"
+         value="1"/>
+        <combo_box.item
+         label="Unconstrained"
+         name="ScriptDialogOption_2"
+         value="2"/>
+      </combo_box>
+
+      <text
+       type="string"
+       left="5"
+       top_pad="6"
+       width="140"
+       follows="left|top"
+       height="16"
+       layout="topleft"
+       name="ScriptDialogsPositionLabel">
+        Script Dialogs Position:
+      </text>
+
+        <combo_box
+         control_name="ScriptDialogsPosition"
+         height="23"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-5"
+         name="ScriptDialogsPositionDropdown"
+         tool_tip="Choose where script dialogs (menus) come up on your screen."
+         width="180">
+
+        <combo_box.item
+         label="Importing old Value"
+         name="ScriptDialogPositionOption_0"
+         value="0"/>
+        <combo_box.item
+         label="Docked to Chiclet"
+         name="ScriptDialogPositionOption_1"
+         value="1"/>
+        <combo_box.item
+         label="Top Left"
+         name="ScriptDialogPositionOption_2"
+         value="2"/>
+        <combo_box.item
+         label="Top Right"
+         name="ScriptDialogPositionOption_3"
+         value="3"/>
+        <combo_box.item
+         label="Bottom Left"
+         name="ScriptDialogPositionOption_4"
+         value="4"/>
+        <combo_box.item
+         label="Bottom Right"
+         name="ScriptDialogPositionOption_5"
+         value="5"/>
+
+        </combo_box>
+        <check_box
+         control_name="FSAnimatedScriptDialogs"
+         enabled_control="ShowScriptDialogsTopRight"
+         height="16"
+         initial_value="true"
+         label="Animate Script Dialogs"
+         layout="topleft"
+         left="15"
+         name="FSAnimatedScriptDialogs"
+         tool_tip="Set this to make script dialogs animate when opening (Classic V1.x behavior). Only works when dialogs open from the top down."
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="ShowGroupNoticesTopRight"
+         height="16"
+         initial_value="true"
+         label="Group Notices and chiclets in Top Right"
+         layout="topleft"
+         left="5"
+         name="ShowGroupNoticesTopRight"
+         tool_tip="Set this to move group notifications and chiclet icons to the top right corner of the screen (Classic V1.x behavior)."
+         top_pad="2"
+         width="256" />
+        <text
+         type="string"
+         left_delta="240"
+         top_pad="-15"
+         width="128"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         text_color="White_50"
+         name="GroupTopRightRequiresRestart">
+            (requires restart)
+        </text>
+        <check_box
+         control_name="FSDisableIMChiclets"
+         height="16"
+         label="Hide group and IM chat chiclets"
+         layout="topleft"
+         left="5"
+         name="FSDisableIMChiclets"
+         tool_tip="If checked, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen)."
+         top_pad="4"
+         width="256" />
+
+        <slider
+         control_name="FlashCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Number of times IM tabs flash:"
+         label_width="300"
+         layout="topleft"
+         left="30"
+         min_val="0"
+         max_val="16"
+         name="ButtonsFlashCount"
+         top_pad="6"
+         width="471" />
+        <slider
+         control_name="FlashPeriod"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.25"
+         label="IM tab flash period:"
+         tool_tip="Time in seconds a single flash of IM tabs takes - used for IM notifications"
+         label_width="300"
+         layout="topleft"
+         left="30"
+         min_val="0.25"
+         max_val="4"
+         name="ButtonFlashRate"
+         top_pad="2"
+         width="467" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="490"
+         name="ButtonFlashRateText"
+         top_delta="0"
+         width="50">
+            sec
+        </text>
+    </panel>
+
+    <!--Toasts-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Toasts"
+     name="UI-toasts-tab" >
+        <text
+         type="string"
+         left="10"
+         top="10"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         name="ToastSettings"
+         width="330">
+            Notification Display Settings (popups, console, toasts):
+        </text>
+        <slider
+         control_name="ChannelBottomPanelMargin"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Space between lowest Toast and bottom:"
+         tool_tip="Space in pixels between the bottom of the UI and the bottom toast"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         min_val="0"
+         max_val="250"
+         name="ToastSpace"
+         top_pad="10"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="ToastSpaceText"
+         top_delta="0"
+         width="80">
+            pixels
+        </text>
+        <slider
+         control_name="NotificationToastLifeTime"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="5"
+         label="Notification Toast life:"
+         tool_tip="Number of seconds that a notification toast is displayed before fading"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="300"
+         name="ToastLifetime"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="ToastLifetimeText"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+        <slider
+         control_name="NotificationTipToastLifeTime"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="5"
+         label="Tip Toast life:"
+         tool_tip="Number of seconds that a tip toast is displayed before fading"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="30"
+         name="TipToastLifetime"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="TipToastLifetimeText"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+        <slider
+         control_name="NearbyToastLifeTime"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="5"
+         label="Nearby Chat Toast life:"
+         tool_tip="Number of seconds that a nearby chat popup is displayed before fading"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="60"
+         name="NearbyToastLifetime"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="NearbyToastLifetimeText"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+        <slider
+         control_name="FSNearbyChatToastsOffset"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="5"
+         label="Nearby Chat Toast z-offset:"
+         tool_tip="Controls the z-offset of nearby chat toasts"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="60"
+         name="FSNearbyChatToastsOffset"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="FSNearbyChatToastsOffsetText"
+         top_delta="0"
+         width="80">
+            pixels
+        </text>
+        <slider
+         control_name="NearbyToastFadingTime"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Nearby Chat Toast fade time:"
+         tool_tip="Number of seconds that a nearby chat popup takes to fade completely"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="10"
+         name="NearbyToastFadingTime"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="NearbyToastFadingTimeText"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+        <slider
+         control_name="StartupToastLifeTime"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="5"
+         label="Startup Toast life:"
+         tool_tip="Number of seconds that a toast is shown on startup before fading"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="30"
+         name="StartupToastLifetime"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="StartupToastLifetimeText"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+        <slider
+         control_name="ToastFadingTime"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Normal Toast fade time:"
+         tool_tip="Number of seconds that a normal toast is displayed before fading"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="10"
+         name="ToastFadingTime"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="ToastFadingTimeText"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+        <slider
+         control_name="ToastGap"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         initial_value="5"
+         label="Gap between Toasts:"
+         tool_tip="Gap between adjacent toasts in pixels"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="30"
+         name="ToastGap"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="ToastGapText"
+         top_delta="0"
+         width="80">
+            pixels
+        </text>
+        <slider
+         control_name="OverflowToastHeight"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Height of Overflow Toast:"
+         tool_tip="Height of an overflow toast in pixels"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         max_val="250"
+         name="OverflowToastHeight"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="OverflowToastHeightText"
+         top_delta="0"
+         width="80">
+            pixels
+        </text>
+        <slider
+         control_name="NearbyToastWidth"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Width of Nearby Chat Toast:"
+         tool_tip="Width of a the nearby chat popups in percent of screen width"
+         label_width="250"
+         layout="topleft"
+         left="10"
+         min_val="20"
+         max_val="90"
+         name="NearbyToastWidth"
+         top_pad="7"
+         width="400" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="400"
+         name="NearbyToastWidthText"
+         top_delta="0"
+         width="80">
+            %
+        </text>
+      <check_box
+       control_name="FSShowToastsInFront"
+       height="16"
+       initial_value="true"
+       label="Show toasts in front of other windows"
+       layout="topleft"
+       left="10"
+       name="FSShowToastsInFront"
+       top_pad="10"
+       width="256" />
+      <check_box
+       control_name="FSUseNewRegionRestartNotification"
+       height="16"
+       label="Use new region restart notification"
+       layout="topleft"
+       left="10"
+       name="FSUseNewRegionRestartNotification"
+       top_pad="5"
+       width="256" />
+      <check_box
+       enabled_control="FSUseNewRegionRestartNotification"
+       control_name="FSNoScreenShakeOnRegionRestart"
+       height="16"
+       label="Don't shake my screen when region restart alert message is shown"
+       layout="topleft"
+       left="15"
+       name="FSNoScreenShakeOnRegionRestart"
+       top_pad="5"
+       width="256" />
+	</panel>
+	
+    <!--Font-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Font"
+     name="UI-font-tab" >
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="tooltip_textbox1"
+         top_pad="10"
+         width="120">
+           Font Scheme:
+        </text>
+        <combo_box
+         height="23"
+         layout="topleft"
+         follows="left|top"
+         control_name="FSFontSettingsFile"
+         left_pad="5"
+         name="Fontsettingsfile"
+         width="160">
+            <!-- KC: Dynamicly loaded now -->
+        </combo_box>
+        <text
+         name="tooltip_textbox2"
+         top_delta="5"
+         left_pad="5"
+         height="16"
+         width="120"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1">
+           (Requires restart)
+        </text>
+
+        <text
+         name="tooltip_textbox5"
+         top_pad="15"
+         left="10"
+         height="16"
+         width="120"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1">
+           Font Size Adjustment:
+        </text>
+        <spinner
+         name="font_size_adj_slider"
+         top_delta="-5"
+         left_pad="5"
+         height="18"
+         width="50"
+         layout="topleft"
+         follows="left|top"
+         control_name="FSFontSizeAdjustment"
+         increment=".1"
+         decimal_digits="1"
+         initial_value="0"
+         min_val="-1"
+         max_val="2" />
+        <text
+         name="tooltip_textbox6"
+         top_delta="5"
+         left_pad="3"
+         height="36"
+         width="345"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         line_spacing.pixels="5" >
+           pt (requires restart)
+Default 0. Larger values may not work well.
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="tooltip_textbox3"
+         top_pad="15"
+         width="120">
+           Chat Line spacing:
+        </text>
+        <spinner
+         top_delta="-5"
+         left_pad="5"
+         height="18"
+         width="50"
+         control_name="FSFontChatLineSpacingPixels"
+         layout="topleft"
+         follows="left|top"
+         increment="1"
+         decimal_digits="0"
+         initial_value="7"
+         min_val="0"
+         max_val="36"
+         name="chat_line_spacing_slider" />
+        <text
+         name="tooltip_textbox4"
+         top_delta="5"
+         left_pad="3"
+         height="36"
+         width="335"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         line_spacing.pixels="5">
+          pixels (requires restart)
+V2/3 default 0. V1 default 2.
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="Label_FolderItemViewHeight"
+         top_pad="15"
+         width="120">
+           Folder Item Height:
+        </text>
+        <spinner
+         top_delta="-5"
+         left_pad="5"
+         height="18"
+         width="50"
+         control_name="FSFolderViewItemHeight"
+         layout="topleft"
+         follows="left|top"
+         increment="1"
+         decimal_digits="0"
+         initial_value="20"
+         min_val="10"
+         max_val="30"
+         name="FSFolderViewItemHeight" />
+        <text
+         name="Label_FolderItemViewHeight_Scale"
+         top_delta="5"
+         left_pad="3"
+         height="36"
+         width="335"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         line_spacing.pixels="5">
+          pixels (requires restart)
+V2/3 default 20. V1 default 18.
+        </text>
+
+<!-- not a live preview
+        <text
+         name="tooltip_textbox"
+         top_pad="15"
+         left="10"
+         height="24"
+         width="480"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         font="SansSerifHuge">
+           The quick brown fox jumps over the lazy dog.
+        </text>
+
+        <text
+         name="tooltip_textbox"
+         top_pad="5"
+         left="10"
+         height="18"
+         width="480"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         font="SansSerifLarge">
+           The quick brown fox jumps over the lazy dog.
+        </text>
+
+        <text
+         name="tooltip_textbox"
+         top_pad="5"
+         left="10"
+         height="16"
+         width="480"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         font="SansSerifMedium">
+           The quick brown fox jumps over the lazy dog.
+        </text>
+
+        <text
+         name="tooltip_textbox"
+         top_pad="5"
+         left="10"
+         height="16"
+         width="480"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         font="SansSerifSmall">
+           The quick brown fox jumps over the lazy dog.
+        </text>
+
+        <text
+         name="tooltip_textbox"
+         top_pad="8"
+         left="10"
+         height="12"
+         width="480"
+         layout="topleft"
+         follows="left|top"
+         type="string"
+         length="1"
+         font="Monospace">
+           The quick brown fox jumps over the lazy dog.
+        </text>
+-->
+
+    </panel>
+</tab_container>
+</panel>
+

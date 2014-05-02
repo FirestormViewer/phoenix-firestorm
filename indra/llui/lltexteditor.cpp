@@ -342,7 +342,10 @@ void LLTextEditor::setText(const LLStringExplicit &utf8str, const LLStyle::Param
 	resetDirty();
 }
 
-void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap)
+//void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap)
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap, BOOL search_up)
+// [/SL:KB]
 {
 	if (search_text_in.empty())
 	{
@@ -363,17 +366,35 @@ void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insen
 		
 		if (selected_text == search_text)
 		{
-			// We already have this word selected, we are searching for the next.
-			setCursorPos(mCursorPos + search_text.size());
+//			// We already have this word selected, we are searching for the next.
+//			setCursorPos(mCursorPos + search_text.size());
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+			if (search_up)
+			{
+				// We already have this word selected, we are searching for the previous.
+				setCursorPos(llmax(0, mCursorPos - 1));
+			}
+			else
+			{
+				// We already have this word selected, we are searching for the next.
+				setCursorPos(mCursorPos + search_text.size());
+			}
+// [/SL:KB]
 		}
 	}
 	
-	S32 loc = text.find(search_text,mCursorPos);
-	
+//	S32 loc = text.find(search_text,mCursorPos);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	S32 loc = (search_up) ? text.rfind(search_text, llmax(0, mCursorPos - (S32)search_text.size())) : text.find(search_text,mCursorPos);
+// [/SL:KB]
+
 	// If Maybe we wrapped, search again
 	if (wrap && (-1 == loc))
 	{	
-		loc = text.find(search_text);
+//		loc = text.find(search_text);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+		loc = (search_up) ? text.rfind(search_text) : text.find(search_text);
+// [/SL:KB]
 	}
 	
 	// If still -1, then search_text just isn't found.
@@ -386,14 +407,24 @@ void LLTextEditor::selectNext(const std::string& search_text_in, BOOL case_insen
 	}
 
 	setCursorPos(loc);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	if (mReadOnly)
+	{
+		updateScrollFromCursor();
+	}
+// [/SL:KB]
 	
 	mIsSelecting = TRUE;
 	mSelectionEnd = mCursorPos;
 	mSelectionStart = llmin((S32)getLength(), (S32)(mCursorPos + search_text.size()));
 }
 
+//BOOL LLTextEditor::replaceText(const std::string& search_text_in, const std::string& replace_text,
+//							   BOOL case_insensitive, BOOL wrap)
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 BOOL LLTextEditor::replaceText(const std::string& search_text_in, const std::string& replace_text,
-							   BOOL case_insensitive, BOOL wrap)
+							   BOOL case_insensitive, BOOL wrap, BOOL search_up)
+// [/SL:KB]
 {
 	BOOL replaced = FALSE;
 
@@ -421,7 +452,10 @@ BOOL LLTextEditor::replaceText(const std::string& search_text_in, const std::str
 		}
 	}
 
-	selectNext(search_text_in, case_insensitive, wrap);
+//	selectNext(search_text_in, case_insensitive, wrap);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	selectNext(search_text_in, case_insensitive, wrap, search_up);
+// [/SL:KB]
 	return replaced;
 }
 
@@ -499,7 +533,12 @@ void LLTextEditor::getSegmentsInRange(LLTextEditor::segment_vec_t& segments_out,
 	segment_set_t::const_iterator end_it = getSegIterContaining(end - 1);
 	if (end_it != mSegments.end()) ++end_it;
 
-	for (segment_set_t::const_iterator it = first_it; it != end_it; ++it)
+	// <FS:ND> FIRE-3278; end_it can point before first_it (std::distance( first_it, mSegments.end() ) < std::distance( end_it, mSegments.end() ))
+	// In that case the loop below does not correctly terminate. Checking for it != mSegments.end() too, that will avoid that error
+
+	// for (segment_set_t::const_iterator it = first_it; it != end_it; ++it)
+	for (segment_set_t::const_iterator it = first_it; it != mSegments.end() && it != end_it; ++it)
+	// </FS:ND>
 	{
 		LLTextSegmentPtr segment = *it;
 		if (include_partial
@@ -663,7 +702,8 @@ void LLTextEditor::selectAll()
 	mSelectionStart = getLength();
 	mSelectionEnd = 0;
 	setCursorPos(mSelectionEnd);
-	updatePrimary();
+	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
+	//updatePrimary();
 }
 
 void LLTextEditor::selectByCursorPosition(S32 prev_cursor_pos, S32 next_cursor_pos)
@@ -742,6 +782,9 @@ BOOL LLTextEditor::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		setFocus(TRUE);
 	}
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+	setCursorAtLocalPos(x, y, FALSE);
+// [/SL:KB]
 	// Prefer editor menu if it has selection. See EXT-6806.
 	if (hasSelection() || !LLTextBase::handleRightMouseDown(x, y, mask))
 	{
@@ -824,7 +867,10 @@ BOOL LLTextEditor::handleMouseUp(S32 x, S32 y, MASK mask)
 	BOOL	handled = FALSE;
 
 	// if I'm not currently selecting text
-	if (!(hasSelection() && hasMouseCapture()))
+//	if (!(hasSelection() && hasMouseCapture()))
+// [SL:KB] - Patch: Control-TextEditor | Checked: 2014-02-04 (Catznip)
+	if (!(hasSelection() && mIsSelecting && hasMouseCapture()))
+// [/SL:KB]
 	{
 		// let text segments handle mouse event
 		handled = LLTextBase::handleMouseUp(x, y, mask);
@@ -910,7 +956,8 @@ BOOL LLTextEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 		resetCursorBlink();
 
 		// take selection to 'primary' clipboard
-		updatePrimary();
+		// <FS:AW> Linux primary "clipboard" tainted by auto-selection
+		//updatePrimary();
 
 		handled = TRUE;
 	}
@@ -1253,11 +1300,13 @@ BOOL LLTextEditor::handleSelectionKey(const KEY key, const MASK mask)
 		}
 	}
 
-	if( handled )
-	{
-		// take selection to 'primary' clipboard
-		updatePrimary();
-	}
+	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
+	//if( handled )
+	//{
+	//	// take selection to 'primary' clipboard
+	//	updatePrimary();
+	//}
+	// </FS:AW> Linux primary "clipboard" tainted by auto-selection
  
 	return handled;
 }
@@ -1454,6 +1503,13 @@ void LLTextEditor::pasteHelper(bool is_primary)
 	// Clean up string (replace tabs and remove characters that our fonts don't support).
 	LLWString clean_string(paste);
 	cleanStringForPaste(clean_string);
+
+	// <FS:ND> FIRE-4885; Truncate the text to mMaxTextByteLength.
+	// Can safely do this here, otherwise it would done in '::insert', which is bad for performance, as ::insert is called once per line.
+	// In theory text already in the editor should be taken into account too, but then text that would be overwriten would have to be considered aswell.
+	if ( wstring_utf8_length(clean_string) > mMaxTextByteLength )
+		clean_string = utf8str_to_wstring( utf8str_truncate( wstring_to_utf8str(clean_string), mMaxTextByteLength ) );
+	// </FS:ND>
 
 	// Insert the new text into the existing text.
 
@@ -2332,7 +2388,10 @@ void LLTextEditor::getCurrentLineAndColumn( S32* line, S32* col, BOOL include_wo
 void LLTextEditor::autoIndent()
 {
 	// Count the number of spaces in the current line
-	S32 line = getLineNumFromDocIndex(mCursorPos, false);
+	// <FS:Zi> Fix indentation, always assume things can be word wrapped
+	// S32 line = getLineNumFromDocIndex(mCursorPos, false);
+	S32 line = getLineNumFromDocIndex(mCursorPos, true);
+	// </FS:Zi>
 	S32 line_start = getLineStart(line);
 	S32 space_count = 0;
 	S32 i;

@@ -78,6 +78,10 @@ BOOL LLPanelBlockedList::postBuild()
 {
 	mBlockedList = getChild<LLBlockList>("blocked");
 	mBlockedList->setCommitOnSelectionChange(TRUE);
+	// <FS:Ansariel> Performance tweak
+	mBlockedList->setCommitCallback(boost::bind(&LLPanelBlockedList::onSelectionChanged, this));
+	// <FS:Ansariel> Blocklist multi selection
+	mBlockedList->setAllowMultipleSelection(true);
     this->setVisibleCallback(boost::bind(&LLPanelBlockedList::removePicker, this));
 
 	switch (gSavedSettings.getU32("BlockPeopleSortOrder"))
@@ -104,12 +108,16 @@ BOOL LLPanelBlockedList::postBuild()
 	getChild<LLButton>("unblock_btn")->setCommitCallback(boost::bind(&LLPanelBlockedList::unblockItem, this));
 	getChild<LLFilterEditor>("blocked_filter_input")->setCommitCallback(boost::bind(&LLPanelBlockedList::onFilterEdit, this, _2));
 
+	// <FS:Ansariel> Performance tweak
+	onSelectionChanged();
+
 	return LLPanel::postBuild();
 }
 
 void LLPanelBlockedList::draw()
 {
-	updateButtons();
+	// <FS:Ansariel> Performance tweak
+	//updateButtons();
 	LLPanel::draw();
 }
 
@@ -123,13 +131,32 @@ void LLPanelBlockedList::onOpen(const LLSD& key)
 
 void LLPanelBlockedList::selectBlocked(const LLUUID& mute_id)
 {
+	// <FS:Ansariel> Clear selection first before selecting new
+	mBlockedList->resetSelection();
 	mBlockedList->selectItemByUUID(mute_id);
 }
 
 void LLPanelBlockedList::showPanelAndSelect(const LLUUID& idToSelect)
 {
-	LLFloaterSidePanelContainer::showPanel("people", "panel_people",
-		LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));
+	// <FS:Ansariel> FIRE-572: Disable auto-open of blocklist
+	if (gSavedSettings.getBOOL("FSDisableBlockListAutoOpen"))
+	{
+		return;
+	}
+
+	// <FS:Ansariel> Optional standalone blocklist floater
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+	//	LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));
+	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+	{
+		LLFloaterReg::showInstance("fs_blocklist", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+			LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));
+	}
+	// </FS:Ansariel>
 }
 
 
@@ -145,12 +172,27 @@ void LLPanelBlockedList::updateButtons()
 
 void LLPanelBlockedList::unblockItem()
 {
-	LLBlockedListItem* item = mBlockedList->getBlockedItem();
-	if (item)
+	// <FS:Ansariel> Blocklist multi selection
+	//LLBlockedListItem* item = mBlockedList->getBlockedItem();
+	//if (item)
+	//{
+	//	LLMute mute(item->getUUID(), item->getName());
+	//	LLMuteList::instance().remove(mute);
+	//}
+
+	std::vector<LLPanel*> panels;
+	mBlockedList->getSelectedItems(panels);
+	for (std::vector<LLPanel*>::iterator it = panels.begin(); it != panels.end(); ++it)
 	{
-		LLMute mute(item->getUUID(), item->getName());
-		LLMuteList::instance().remove(mute);
+		LLBlockedListItem* item = dynamic_cast<LLBlockedListItem*>(*it);
+		if (item)
+		{
+			LLMute mute(item->getUUID(), item->getName());
+			LLMuteList::getInstance()->remove(mute);
+		}
 	}
+	onSelectionChanged();
+	// </FS:Ansariel>
 }
 
 void LLPanelBlockedList::onCustomAction(const LLSD& userdata)
@@ -224,6 +266,13 @@ void LLPanelBlockedList::onFilterEdit(const std::string& search_string)
 
 	mBlockedList->setNameFilter(filter);
 }
+
+// <FS:Ansariel> Performance tweak
+void LLPanelBlockedList::onSelectionChanged()
+{
+	updateButtons();
+}
+// </FS:Ansariel>
 
 void LLPanelBlockedList::callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
 {

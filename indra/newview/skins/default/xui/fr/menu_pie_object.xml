@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<pie_menu name="Object Pie">
+	<pie_slice name="Open"
+		label="Ouvrir">
+	</pie_slice>
+	<pie_slice name="Build"
+		label="Créer">
+    </pie_slice>
+    <pie_slice name="Object Touch"
+        label="Toucher">
+    </pie_slice>
+    <pie_slice name="Object Sit"
+        label="S'asseoir ici">
+    </pie_slice>
+    <pie_slice name="Object Stand Up"
+        label="Se lever">
+    </pie_slice>
+    <pie_slice name="Buy..."
+        label="Acheter">
+    </pie_slice>
+    <pie_slice name="Pie Object Take"
+        label="Prendre">
+    </pie_slice>
+    <pie_slice name="Pay..."
+        label="Payer">
+    </pie_slice>
+	<pie_slice name="Edit..."
+        label="Editer &gt;">
+    </pie_slice>
+
+    <pie_menu name="Object Pie More 1"
+        label="Plus &gt;">
+		<pie_slice name="Delete"
+			label="Supprimer">
+		</pie_slice>
+		<pie_slice name="Wear"
+			label="Porter">
+		</pie_slice>
+		<pie_slice name="Take Copy"
+			label="Prendre une copie">
+		</pie_slice>
+		<pie_slice name="Buy..."
+			label="Acheter">
+		</pie_slice>
+		<pie_slice name="Return..."
+			label="Renvoyer">
+		</pie_slice>
+
+		<pie_menu name="Object Pie More 2"
+			label="Plus &gt;">
+			<pie_slice name="Derender"
+				label="'Derender'">
+			</pie_slice>
+			<pie_slice name="Object Inspect"
+				label="Inspecter">
+			</pie_slice>
+			<pie_slice name="Report Abuse..."
+				label="Signaler">
+			</pie_slice>
+			<pie_slice name="Object Mute"
+				label="Ignorer">
+			</pie_slice>
+		</pie_menu>
+
+		<pie_menu name="Pie Object Attach HUD"
+			label="Attacher HUD &gt;">
+		</pie_menu>
+
+		<pie_menu name="Pie Object Attach"
+			label="Attacher &gt;">
+		</pie_menu>
+
+	</pie_menu>
+</pie_menu>

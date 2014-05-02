@@ -157,6 +157,10 @@ public:
 	void addToSelectionList(LLFolderViewItem* item);
 	void removeFromSelectionList(LLFolderViewItem* item);
 
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+	void setDragStart(S32 screen_x, S32 screen_y);
+	bool isOverDragThreshold(S32 screen_x, S32 screen_y);
+// [/SL:KB]
 	bool startDrag();
 	void setDragAndDropThisFrame() { mDragAndDropThisFrame = TRUE; }
 	void setDraggingOverItem(LLFolderViewItem* item) { mDraggingOverItem = item; }
@@ -294,6 +298,10 @@ protected:
 	S32								mSignalSelectCallback;
 	S32								mMinWidth;
 	BOOL							mDragAndDropThisFrame;
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+	S32                             mDragStartX;
+	S32                             mDragStartY;
+// [/SL:KB]
 	
 	LLPanel*						mParentPanel;
 	

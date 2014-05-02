@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Object Pie">
+	<pie_slice label="Abrir" name="Open"/>
+	<pie_slice label="Construir" name="Build"/>
+	<pie_slice label="Tocar" name="Pie Object Touch"/>
+	<pie_slice label="Sentarme" name="Pie Object Sit"/>
+	<pie_slice label="Levantarme" name="Object Stand Up"/>
+	<pie_slice label="Comprar" name="Buy..."/>
+	<pie_slice label="Tomar" name="Pie Object Take"/>
+	<pie_slice label="Pagar" name="Pay..."/>
+	<pie_menu label="Más &gt;" name="Object Pie More 1">
+		<pie_slice label="Eliminar" name="Delete"/>
+		<pie_slice label="Vestir" name="Wear"/>
+		<pie_slice label="Tomar una copia" name="Take Copy"/>
+		<pie_menu label="Anexar HUD >" name="Pie Object Attach HUD"/>
+		<pie_menu label="Anexar &gt;" name="Pie Object Attach"/>
+		<pie_slice label="Devolver" name="Return..."/>
+		<pie_menu label="Más &gt;" name="Object Pie More 2">
+			<pie_slice label="Retexturizar" name="Texture Refresh"/>
+			<pie_menu name="DerenderMenu" label="Desdibujar &gt;">
+				<pie_slice label="Permanente" name="DerenderPermanent"/>
+				<pie_slice label="Temporal" name="Derender"/>
+			</pie_menu>
+			<pie_slice label="Denunciar..." name="Report Abuse..."/>
+			<pie_menu name="ExportMenu" label="Guardar como &gt;">
+				<pie_slice label="Respaldo" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+			</pie_menu>
+			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
+				<pie_slice label="Mostrar en linksets" name="show_in_linksets"/>
+				<pie_slice label="Mostrar en personajes" name="show_in_characters"/>
+			</pie_menu>
+			<pie_menu name="mute_menu" label="Bloquear &gt;">
+				<pie_slice label="Bloquear" name="Object Mute"/>
+				<pie_slice label="Prop. partículas" name="Mute Particle"/>
+			</pie_menu>
+			<pie_menu label="Scripts &gt;" name="ScriptsMenu">
+				<pie_slice label="Compilar (Mono)" name="CompileMono"/>
+				<pie_slice label="Compilar (LSL)" name="CompileLSL"/>
+				<pie_slice label="Reinic. scripts" name="Object Reset Scripts"/>
+				<pie_slice label="Ejecutar scripts" name="Object Set Scripts to Running"/>
+				<pie_slice label="Detener scripts" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Eliminar scripts" name="Remove Scripts From Selection"/>
+				<pie_slice label="Información" name="ScriptInfo"/>
+			</pie_menu>
+			<pie_slice label="Inspeccionar" name="Object Inspect"/>
+		</pie_menu>
+		<pie_slice label="Comprar" name="Buy..."/>
+	</pie_menu>
+	<pie_slice label="Editar" name="Edit..."/>
+</pie_menu>

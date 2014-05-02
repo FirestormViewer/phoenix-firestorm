@@ -61,7 +61,15 @@ const F32 OBJECT_TWIST_LINEAR_MIN	= -180.f;
 const F32 OBJECT_TWIST_LINEAR_MAX	=  180.f;
 const F32 OBJECT_TWIST_LINEAR_INC	=    9.f;
 
-const F32 OBJECT_MIN_HOLE_SIZE = 0.05f;
+// <AW: opensim-limits>
+//const F32 OBJECT_MIN_HOLE_SIZE = 0.05f;
+const F32 SL_OBJECT_MAX_HOLLOW_SIZE = 95.f;
+const F32 OS_OBJECT_MAX_HOLLOW_SIZE = 99.f;
+
+const F32 SL_OBJECT_MIN_HOLE_SIZE = 0.05f;
+const F32 OS_OBJECT_MIN_HOLE_SIZE = 0.01f;
+// </AW: opensim-limits>
+
 const F32 OBJECT_MAX_HOLE_SIZE_X = 1.0f;
 const F32 OBJECT_MAX_HOLE_SIZE_Y = 0.5f;
 
@@ -175,7 +183,10 @@ LLPrimitive::~LLPrimitive()
 {
 	clearTextureList();
 	// Cleanup handled by volume manager
-	if (mVolumep)
+
+	// <FS:ND/> During shutdown sVolumeManager can be 0
+	//	if (mVolumep)
+	if ( mVolumep && sVolumeManager )
 	{
 		sVolumeManager->unrefVolume(mVolumep);
 	}

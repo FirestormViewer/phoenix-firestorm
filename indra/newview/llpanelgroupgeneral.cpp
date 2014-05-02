@@ -53,6 +53,11 @@
 #include "lltrans.h"
 #include "llviewerwindow.h"
 
+// Firestorm includes
+#include "exogroupmutelist.h"
+#include "llclipboard.h"
+#include "lleconomy.h" // <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
+
 static LLPanelInjector<LLPanelGroupGeneral> t_panel_group_general("panel_group_general");
 
 // consts
@@ -60,6 +65,11 @@ const S32 MATURE_CONTENT = 1;
 const S32 NON_MATURE_CONTENT = 2;
 const S32 DECLINE_TO_STATE = 0;
 
+// <FS:Ansariel> Re-add group member list on general panel
+static F32 sSDTime = 0.0f;
+static F32 sElementTime = 0.0f;
+static F32 sAllTime = 0.0f;
+// </FS:Ansariel>
 
 LLPanelGroupGeneral::LLPanelGroupGeneral()
 :	LLPanelGroupTab(),
@@ -77,13 +87,28 @@ LLPanelGroupGeneral::LLPanelGroupGeneral()
 	mCtrlReceiveNotices(NULL),
 	mCtrlListGroup(NULL),
 	mActiveTitleLabel(NULL),
-	mComboActiveTitle(NULL)
+	mComboActiveTitle(NULL),
+	mCtrlReceiveGroupChat(NULL), // <exodus/>
+	// <FS:Ansariel> Re-add group member list on general panel
+	mPendingMemberUpdate(FALSE),
+	mListVisibleMembers(NULL)
+	// </FS:Ansariel>
 {
 
 }
 
 LLPanelGroupGeneral::~LLPanelGroupGeneral()
 {
+	// <FS:Ansariel> Re-add group member list on general panel
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+	}
+	mAvatarNameCacheConnections.clear();
+	// </FS:Ansariel>
 }
 
 BOOL LLPanelGroupGeneral::postBuild()
@@ -97,6 +122,22 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mEditCharter->setFocusReceivedCallback(boost::bind(onFocusEdit, _1, this));
 		mEditCharter->setFocusChangedCallback(boost::bind(onFocusEdit, _1, this));
 	}
+	// <FS> set up callbacks for copy URI and name buttons
+	childSetCommitCallback("copy_uri", boost::bind(&LLPanelGroupGeneral::onCopyURI, this), NULL);
+	childSetCommitCallback("copy_name", boost::bind(&LLPanelGroupGeneral::onCopyName, this), NULL);
+	childSetEnabled("copy_name", FALSE);
+	// </FS>
+
+	// <FS:Ansariel> Re-add group member list on general panel
+	mListVisibleMembers = getChild<LLNameListCtrl>("visible_members", recurse);
+	if (mListVisibleMembers)
+	{
+		mListVisibleMembers->setDoubleClickCallback(openProfile, this);
+		mListVisibleMembers->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
+		
+		mListVisibleMembers->setSortCallback(boost::bind(&LLPanelGroupGeneral::sortMembersList,this,_1,_2,_3));
+	}
+	// </FS:Ansariel>
 
 	// Options
 	mCtrlShowInGroupList = getChild<LLCheckBoxCtrl>("show_in_group_list", recurse);
@@ -145,6 +186,12 @@ BOOL LLPanelGroupGeneral::postBuild()
 		accept_notices = data.mAcceptNotices;
 		list_in_profile = data.mListInProfile;
 	}
+	// <FS:Ansariel> Groupdata debug
+	else
+	{
+		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group panel: No agent group data for group " << mGroupID.asString() << LL_ENDL;
+	}
+	// </FS:Ansariel>
 	mCtrlReceiveNotices = getChild<LLCheckBoxCtrl>("receive_notices", recurse);
 	if (mCtrlReceiveNotices)
 	{
@@ -152,6 +199,19 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mCtrlReceiveNotices->set(accept_notices);
 		mCtrlReceiveNotices->setEnabled(data.mID.notNull());
 	}
+
+	// <exodus>
+	mCtrlReceiveGroupChat = getChild<LLCheckBoxCtrl>("receive_chat", recurse);
+	if(mCtrlReceiveGroupChat)
+	{
+		mCtrlReceiveGroupChat->setCommitCallback(onCommitUserOnly, this);
+		mCtrlReceiveGroupChat->setEnabled(data.mID.notNull());
+		if(data.mID.notNull())
+		{
+			mCtrlReceiveGroupChat->set(!exoGroupMuteList::instance().isMuted(data.mID));
+		}
+	}
+	// </exodus>
 	
 	mCtrlListGroup = getChild<LLCheckBoxCtrl>("list_groups_in_profile", recurse);
 	if (mCtrlListGroup)
@@ -303,6 +363,13 @@ void LLPanelGroupGeneral::activate()
 void LLPanelGroupGeneral::draw()
 {
 	LLPanelGroupTab::draw();
+
+	// <FS:Ansariel> Re-add group member list on general panel
+	if (mPendingMemberUpdate)
+	{
+		updateMembers();
+	}
+	// </FS:Ansariel>
 }
 
 bool LLPanelGroupGeneral::apply(std::string& mesg)
@@ -343,7 +410,13 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 				return false;
 			}
 
-			LLNotificationsUtil::add("CreateGroupCost",  LLSD(), LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+			// <FS:AW> FIRE-7091 group creation cost inaccurate on opensim>
+			//LLNotificationsUtil::add("CreateGroupCost",  LLSD(), LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+			LLSD args;
+			S32 cost =  LLGlobalEconomy::Singleton::getInstance()->getPriceGroupCreate();
+			args["[COST]"] = llformat("%d", cost);
+			LLNotificationsUtil::add("CreateGroupCost",  args, LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+			// </FS:AW> FIRE-7091 group creation cost inaccurate on opensim>
 
 			return false;
 		}
@@ -405,6 +478,20 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 		list_in_profile = mCtrlListGroup->get();
 
 	gAgent.setUserGroupFlags(mGroupID, receive_notices, list_in_profile);
+
+	// <exodus>
+	if(mCtrlReceiveGroupChat)
+	{
+		if(mCtrlReceiveGroupChat->get())
+		{
+			exoGroupMuteList::instance().remove(mGroupID);
+		}
+		else
+		{
+			exoGroupMuteList::instance().add(mGroupID);
+		}
+	}
+	// </exodus>
 
 	resetDirty();
 
@@ -602,6 +689,16 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 		}
 	}
 
+	// <exodus>
+	if (mCtrlReceiveGroupChat)
+	{
+		mCtrlReceiveGroupChat->setVisible(is_member);
+		if (is_member)
+		{
+			mCtrlReceiveGroupChat->setEnabled(mAllowEdit);
+		}
+	}
+	// </exodus>
 
 	if (mInsignia) mInsignia->setEnabled(mAllowEdit && can_change_ident);
 	if (mEditCharter) mEditCharter->setEnabled(mAllowEdit && can_change_ident);
@@ -625,6 +722,41 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 		mEditCharter->setText(gdatap->mCharter);
 	}
 
+	// <FS:Ansariel> Re-add group member list on general panel
+	if (mListVisibleMembers)
+	{
+		mListVisibleMembers->deleteAllItems();
+
+		if (gdatap->isMemberDataComplete())
+		{
+			mMemberProgress = gdatap->mMembers.begin();
+			mPendingMemberUpdate = TRUE;
+			mIteratorGroup = mGroupID; // <FS:ND/> FIRE-6074
+
+			sSDTime = 0.0f;
+			sElementTime = 0.0f;
+			sAllTime = 0.0f;
+		}
+		else
+		{
+			std::stringstream pending;
+			pending << "Retrieving member list (" << gdatap->mMembers.size() << "\\" << gdatap->mMemberCount  << ")";
+
+			LLSD row;
+			row["columns"][0]["value"] = pending.str();
+			row["columns"][0]["column"] = "name";
+
+			mListVisibleMembers->setEnabled(FALSE);
+			mListVisibleMembers->addElement(row);
+		}
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Copy group name button
+	childSetEnabled("copy_name", !gdatap->mName.empty());
+	mGroupName = gdatap->mName;
+	// </FS:Ansariel>
+
 	resetDirty();
 }
 
@@ -645,7 +777,8 @@ void LLPanelGroupGeneral::updateChanged()
 		mCtrlReceiveNotices,
 		mCtrlListGroup,
 		mActiveTitleLabel,
-		mComboActiveTitle
+		mComboActiveTitle,
+		mCtrlReceiveGroupChat // <exodus/>
 	};
 
 	mChanged = FALSE;
@@ -698,11 +831,29 @@ void LLPanelGroupGeneral::reset()
 
 	mInsignia->setImageAssetName(mInsignia->getDefaultImageName());
 
+	// <exodus>
+	mCtrlReceiveGroupChat->set(false);
+	mCtrlReceiveGroupChat->setEnabled(false);
+	mCtrlReceiveGroupChat->setVisible(true);
+	// </exodus>
+
 	{
 		std::string empty_str = "";
 		mEditCharter->setText(empty_str);
 		mGroupNameEditor->setText(empty_str);
 	}
+
+	// <FS:Ansariel> Re-add group member list on general panel
+	{
+		LLSD row;
+		row["columns"][0]["value"] = "no members yet";
+		row["columns"][0]["column"] = "name";
+
+		mListVisibleMembers->deleteAllItems();
+		mListVisibleMembers->setEnabled(FALSE);
+		mListVisibleMembers->addElement(row);
+	}
+	// </FS:Ansariel>
 
 	{
 		mComboMature->setEnabled(true);
@@ -731,7 +882,8 @@ void	LLPanelGroupGeneral::resetDirty()
 		mCtrlReceiveNotices,
 		mCtrlListGroup,
 		mActiveTitleLabel,
-		mComboActiveTitle
+		mComboActiveTitle,
+		mCtrlReceiveGroupChat // <exodus/>
 	};
 
 	for( size_t i=0; i<LL_ARRAY_SIZE(check_list); i++ )
@@ -746,12 +898,37 @@ void	LLPanelGroupGeneral::resetDirty()
 void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 {
 	LLPanelGroupTab::setGroupID(id);
-
+	// <FS> Get group key display and copy URI/name button pointers
+	LLTextEditor* groupKeyEditor = getChild<LLTextEditor>("group_key");
+	LLButton* copyURIButton = getChild<LLButton>("copy_uri");
+	LLButton* copyNameButton = getChild<LLButton>("copy_name");
+	// happens when a new group is created
+	// </FS>
 	if(id == LLUUID::null)
 	{
+		// <FS>
+		if (groupKeyEditor)
+			groupKeyEditor->setValue(LLSD());
+
+		if (copyURIButton)
+			copyURIButton->setEnabled(FALSE);
+
+		if (copyNameButton)
+			copyNameButton->setEnabled(FALSE);
+		// </FS>
+
 		reset();
 		return;
 	}
+	// <FS>
+	// fill in group key
+	if (groupKeyEditor)
+		groupKeyEditor->setValue(id.asString());
+
+	// activate copy URI button
+	if (copyURIButton)
+		copyURIButton->setEnabled(TRUE);
+	// </FS>
 
 	BOOL accept_notices = FALSE;
 	BOOL list_in_profile = FALSE;
@@ -761,6 +938,12 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 		accept_notices = data.mAcceptNotices;
 		list_in_profile = data.mListInProfile;
 	}
+	// <FS:Ansariel> Groupdata debug
+	else
+	{
+		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group panel: No agent group data for group " << mGroupID.asString() << LL_ENDL;
+	}
+	// </FS:Ansariel>
 	mCtrlReceiveNotices = getChild<LLCheckBoxCtrl>("receive_notices");
 	if (mCtrlReceiveNotices)
 	{
@@ -774,6 +957,18 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 		mCtrlListGroup->set(list_in_profile);
 		mCtrlListGroup->setEnabled(data.mID.notNull());
 	}
+
+	// <exodus>
+	mCtrlReceiveGroupChat = getChild<LLCheckBoxCtrl>("receive_chat");
+	if (mCtrlReceiveGroupChat)
+	{
+		if(data.mID.notNull())
+		{
+			mCtrlReceiveGroupChat->set(!exoGroupMuteList::instance().isMuted(data.mID));
+		}
+		mCtrlReceiveGroupChat->setEnabled(data.mID.notNull());
+	}
+	// </exodus>
 
 	mCtrlShowInGroupList->setEnabled(data.mID.notNull());
 
@@ -789,3 +984,167 @@ void LLPanelGroupGeneral::setGroupID(const LLUUID& id)
 
 	activate();
 }
+
+// <FS> Copy button handlers
+// Copy URI button callback
+void LLPanelGroupGeneral::onCopyURI()
+{
+    std::string name = "secondlife:///app/group/"+getChild<LLUICtrl>("group_key")->getValue().asString()+"/about";
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
+}
+
+void LLPanelGroupGeneral::onCopyName()
+{
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(mGroupName), 0, mGroupName.size() );
+}
+
+// </FS> Copy button handlers
+
+// <FS:Ansariel> Re-add group member list on general panel
+// static
+void LLPanelGroupGeneral::openProfile(void* data)
+{
+	LLPanelGroupGeneral* self = (LLPanelGroupGeneral*)data;
+
+	if (self && self->mListVisibleMembers)
+	{
+		LLScrollListItem* selected = self->mListVisibleMembers->getFirstSelected();
+		if (selected)
+		{
+			LLAvatarActions::showProfile(selected->getUUID());
+		}
+	}
+}
+
+void LLPanelGroupGeneral::updateMembers()
+{
+	mPendingMemberUpdate = FALSE;
+
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+
+	if (!mListVisibleMembers 
+		|| !gdatap 
+		|| !gdatap->isMemberDataComplete()
+		|| gdatap->mMembers.empty())
+	{
+		return;
+	}
+
+	LLTimer update_time;
+	update_time.setTimerExpirySec(UPDATE_MEMBERS_SECONDS_PER_FRAME);
+	
+	// <FS:ND> FIRE-6074; If the group changes, mMemberPRogresss is invalid, as it belongs to a different LLGroupMgrGroupData. Reset it, start over.
+	if( mIteratorGroup != mGroupID )
+	{
+		mMemberProgress = gdatap->mMembers.begin();
+		mIteratorGroup = mGroupID;
+	}
+	// </FS:ND> FIRE-6074
+
+
+	LLAvatarName av_name;
+
+	for( ; mMemberProgress != gdatap->mMembers.end() && !update_time.hasExpired(); 
+			++mMemberProgress)
+	{
+		LLGroupMemberData* member = mMemberProgress->second;
+		if (!member)
+		{
+			continue;
+		}
+
+		if (LLAvatarNameCache::get(mMemberProgress->first, &av_name))
+		{
+			addMember(mMemberProgress->second);
+		}
+		else
+		{
+			avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(mMemberProgress->first);
+			if (it != mAvatarNameCacheConnections.end())
+			{
+				if (it->second.connected())
+				{
+					it->second.disconnect();
+				}
+				mAvatarNameCacheConnections.erase(it);
+			}
+			mAvatarNameCacheConnections[mMemberProgress->first] = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupGeneral::onNameCache, this, gdatap->getMemberVersion(), member, _2, _1));
+		}
+	}
+
+	if (mMemberProgress == gdatap->mMembers.end())
+	{
+		lldebugs << "   member list completed." << llendl;
+		mListVisibleMembers->setEnabled(TRUE);
+	}
+	else
+	{
+		mPendingMemberUpdate = TRUE;
+		mListVisibleMembers->setEnabled(FALSE);
+	}
+}
+
+void LLPanelGroupGeneral::addMember(LLGroupMemberData* member)
+{
+	LLNameListCtrl::NameItem item_params;
+	item_params.value = member->getID();
+
+	LLScrollListCell::Params column;
+	item_params.columns.add().column("name").font.name("SANSSERIF_SMALL");
+
+	item_params.columns.add().column("title").value(member->getTitle()).font.name("SANSSERIF_SMALL");
+
+	item_params.columns.add().column("status").value(member->getOnlineStatus()).font.name("SANSSERIF_SMALL");
+
+	LLScrollListItem* member_row = mListVisibleMembers->addNameItemRow(item_params);
+
+	if ( member->isOwner() )
+	{
+		LLScrollListText* name_textp = dynamic_cast<LLScrollListText*>(member_row->getColumn(0));
+		if (name_textp)
+			name_textp->setFontStyle(LLFontGL::BOLD);
+	}
+}
+
+void LLPanelGroupGeneral::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name, const LLUUID& av_id)
+{
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+
+	if (!gdatap
+		|| !gdatap->isMemberDataComplete()
+		|| gdatap->getMemberVersion() != update_id)
+	{
+		// Stale data
+		return;
+	}
+
+	addMember(member);
+}
+
+S32 LLPanelGroupGeneral::sortMembersList(S32 col_idx,const LLScrollListItem* i1,const LLScrollListItem* i2)
+{
+	const LLScrollListCell *cell1 = i1->getColumn(col_idx);
+	const LLScrollListCell *cell2 = i2->getColumn(col_idx);
+
+	if(col_idx == 2)
+	{
+		if(LLStringUtil::compareDict(cell1->getValue().asString(),"Online") == 0 )
+			return 1;
+		if(LLStringUtil::compareDict(cell2->getValue().asString(),"Online") == 0 )
+			return -1;
+	}
+
+	return LLStringUtil::compareDict(cell1->getValue().asString(), cell2->getValue().asString());
+}
+// </FS:Ansariel>
+

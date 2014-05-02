@@ -30,9 +30,11 @@ from janitor import Janitor
 from messageframe import MessageFrame
 import Tkinter, tkMessageBox
 
-TITLE = "Second Life Viewer Updater"
+#TITLE = "Second Life Viewer Updater"
+TITLE = "Firestorm Viewer Updater"
 # Magic bundle identifier used by all Second Life viewer bundles
-BUNDLE_IDENTIFIER = "com.secondlife.indra.viewer"
+#BUNDLE_IDENTIFIER = "com.secondlife.indra.viewer"
+BUNDLE_IDENTIFIER = "com.firestorm.indra.viewer"
 # Magic OS directory name that causes Cocoa viewer to crash on OS X 10.7.5
 # (see MAINT-3331)
 STATE_DIR = os.path.join(

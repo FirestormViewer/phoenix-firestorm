@@ -48,6 +48,43 @@ extern "C" {
 
 #include "llmediaimplgstreamer_syms.h"
 
+// <FS:ND> extract stream metadata so we can report back into the client what's playing
+// <ML> Fix this to use llgst symbols so it will work in standard builds
+struct ndStreamMetadata
+{
+	std::string mArtist;
+	std::string mTitle;
+};
+
+static void extractMetadata (const GstTagList * list, const gchar * tag, gpointer user_data)
+{
+	int i, num;
+
+	if( !user_data )
+		return;
+
+	ndStreamMetadata *pOut( reinterpret_cast< ndStreamMetadata* >( user_data ) );
+	std::string *pStrOut(0);
+
+	if( strcmp( tag, "title" ) == 0 )
+		pStrOut = &pOut->mTitle;
+	else if( strcmp( tag, "artist" ) == 0 )
+		pStrOut = &pOut->mArtist;
+
+	if( !pStrOut )
+		return;
+
+	num = llgst_tag_list_get_tag_size (list, tag);
+	for (i = 0; i < num; ++i)
+	{
+		const GValue *val( llgst_tag_list_get_value_index (list, tag, i) );
+
+		if (G_VALUE_HOLDS_STRING (val))
+			pStrOut->assign( g_value_get_string(val) );
+  }
+}
+// </FS:ND>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 class MediaPluginGStreamer010 : public MediaPluginBase
@@ -244,6 +281,23 @@ MediaPluginGStreamer010::processGSTEvents(GstBus     *bus,
 		}
 		break;
 	}
+// <FS:ND> In case of metadata upate, extract it, then send it back to the client
+	case GST_MESSAGE_TAG:
+	{
+		ndStreamMetadata oMData;
+		GstTagList *tags(0);
+
+		llgst_message_parse_tag (message, &tags);
+		llgst_tag_list_foreach (tags, extractMetadata, &oMData );
+		llgst_tag_list_free (tags);
+		
+		LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "ndMediadata_change");
+		message.setValue("title", oMData.mTitle );
+		message.setValue("artist", oMData.mArtist );
+		sendMessage(message);
+		break;
+	}
+// </FS:ND>
 	case GST_MESSAGE_ERROR: {
 		GError *err = NULL;
 		gchar *debug = NULL;
@@ -798,10 +852,15 @@ MediaPluginGStreamer010::startup()
 	// only do global GStreamer initialization once.
 	if (!mDoneInit)
 	{
+
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32 )
 		g_thread_init(NULL);
+#endif
 
 		// Init the glib type system - we need it.
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 35 )
 		g_type_init();
+#endif
 
 		// Get symbols!
 #if LL_DARWIN

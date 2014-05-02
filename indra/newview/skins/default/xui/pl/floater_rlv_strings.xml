@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="rlva_strings" title="Ciągi RLVa">
+	<button label="Reset do domyślnych" name="default_btn" />
+</floater>

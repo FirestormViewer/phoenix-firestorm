@@ -56,10 +56,17 @@ BOOL LLFloaterAvatarTextures::postBuild()
 	{
 		const std::string tex_name = LLAvatarAppearanceDictionary::getInstance()->getTexture(ETextureIndex(i))->mName;
 		mTextures[i] = getChild<LLTextureCtrl>(tex_name);
+		// <FS:Ansariel> Mask avatar textures and disable
+		mTextures[i]->setIsMasked(TRUE);
+		mTextures[i]->setEnabled(FALSE);
+		// </FS:Ansariel>
 	}
 	mTitle = getTitle();
 
 	childSetAction("Dump", onClickDump, this);
+
+	// <FS:Ansariel> Hide dump button if not in god mode
+	childSetVisible("Dump", gAgent.isGodlike());
 
 	refresh();
 	return TRUE;
@@ -106,7 +113,10 @@ static void update_texture_ctrl(LLVOAvatar* avatarp,
 	else
 	{
 		ctrl->setImageAssetID(id);
-		ctrl->setToolTip(tex_entry->mName + " : " + id.asString());
+		// <FS:Ansariel> Hide full texture uuid
+		//ctrl->setToolTip(tex_entry->mName + " : " + id.asString());
+		ctrl->setToolTip(tex_entry->mName + " : " + id.asString().substr(0,7));
+		// </FS:Ansariel>
 	}
 }
 
@@ -130,7 +140,8 @@ static LLVOAvatar* find_avatar(const LLUUID& id)
 
 void LLFloaterAvatarTextures::refresh()
 {
-	if (gAgent.isGodlike())
+	// <FS:Ansariel> Enable for regular user
+	//if (gAgent.isGodlike())
 	{
 		LLVOAvatar *avatarp = find_avatar(mID);
 		if (avatarp)

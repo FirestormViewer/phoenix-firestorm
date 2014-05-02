@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Gente" name="people_panel">
+	<string name="high_server_load" value="Debido a la carga del servidor, la conmutación de tu visibilidad puede tardar en ser efectiva. Por favor sé paciente."/>
+	<string name="no_recent_people" value="No hay nadie reciente. ¿Buscas gente con la que pasar el rato? Prueba la [secondlife:///app/search/people Búsqueda] o el [secondlife:///app/worldmap Mapa del mundo]."/>
+	<string name="no_filtered_recent_people" value="¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/people/[SEARCH_TERM] Buscar]."/>
+	<string name="no_one_near" value="No hay nadie cerca. ¿Buscas gente con la que pasar el rato? Prueba la [secondlife:///app/search/people Búsqueda] o el [secondlife:///app/worldmap Mapa del mundo]."/>
+	<string name="no_one_filtered_near" value="¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/people/[SEARCH_TERM] Buscar]."/>
+	<string name="no_friends_online" value="No hay amigos conectados" />
+	<string name="no_friends" value="Brak znajomych"/>
+	<string name="no_friends_msg">
+		Busca amigos usando la [secondlife:///app/search/people Búsqueda] o pulsa con el botón derecho del ratón en un Residente para añadirle como amigo.
+¿Buscas gente con la que pasar el rato? Prueba el [secondlife:///app/worldmap Mapa del mundo].
+	</string>
+	<string name="no_filtered_friends_msg">
+		¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/people/[SEARCH_TERM] Buscar].
+	</string>
+	<string name="people_filter_label" value="Filtrar"/>
+	<string name="groups_filter_label" value="Filtrar"/>
+	<string name="no_filtered_groups_msg" value="¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/groups/[SEARCH_TERM] Buscar]."/>
+	<string name="no_groups_msg" value="¿Buscas grupos en que participar? Prueba la [secondlife:///app/search/groups Búsqueda]."/>
+	<string name="MiniMapToolTipMsg" value="[REGION](Pulsa dos veces para abrir el mapa, pulsa mayús y arrastra para obtener una panorámica)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION](Pulsa dos veces para teleportarte, pulsa mayús y arrastra para obtener una panorámica)"/>
+	<string name="avatar_name_count" value="Nombre [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]"/>
+	<tab_container name="tabs">
+		<panel label="Cercana" name="nearby_panel">
+			<tab_container name="tabcont_radarpeople_main">
+				<panel name="panel_radar" label="Lista" />
+				<panel name="radarmap_options_panel" label="Opciones">
+					<check_box label="Mostrar minimapa sobre el radar" name="ShowRadarMinimap"/>
+					<check_box label="Reportar los que entran en distancia de dibujo" name="RadarReportDrawRangeEnter"/>
+					<check_box label="Reportar los que salen de distancia de dibujo" name="RadarReportDrawRangeLeaving"/>
+					<check_box label="Reportar los que entran en distancia de chat" name="RadarReportChatRangeEnter"/>
+					<check_box label="Reportar los que salen de distancia de chat" name="RadarReportChatRangeLeave"/>
+					<check_box label="Reportar los que entran en la región" name="RadarReportSimRangeEnter"/>
+					<check_box label="Reportar los que salen de la región" name="RadarReportSimRangeLeave"/>
+					<check_box label="Reportar entradas a los scripts" name="RadarEnterChannelAlert"/>
+					<check_box label="Reportar salidas a los scripts" name="RadarLeaveChannelAlert"/>
+					<check_box label="Color de nombre basado en distancia" name="FSRadarColorNamesByDistance"/>
+					<check_box label="Limitar alcance a:" tool_tip="Limitar el resultado a un radio específico" name="LimitRadarByRange" width="130"/>
+					<text name="radarmap_range_label" value="Formato de nombres:"/>
+					<combo_box name="RadarNameFormat">
+						<combo_box.item name="RadarNameFormat_display" label="Sólo displayname" />
+						<combo_box.item name="RadarNameFormat_user" label="Sólo nombre de usuario" />
+						<combo_box.item name="RadarNameFormat_displayuser" label="Displayname (nombre de usuario)" />
+						<combo_box.item name="RadarNameFormat_userdisplay" label="Nombre de usuario (Displayname)" />
+					</combo_box>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel label="Reciente" name="recent_panel" />
+		<panel label="Bloqueados" name="blocked_panel" />
+	</tab_container>
+</panel>

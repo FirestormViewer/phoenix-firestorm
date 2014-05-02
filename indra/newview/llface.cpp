@@ -805,10 +805,11 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 		const LLVolumeFace &face = volume.getVolumeFace(f);
 		min = face.mExtents[0];
 		max = face.mExtents[1];
-		
-		llassert(less_than_max_mag(min));
-		llassert(less_than_max_mag(max));
 
+// <FS:AW>		
+// 		llassert(less_than_max_mag(min));
+// 		llassert(less_than_max_mag(max));
+// </FS:AW>
 		//min, max are in volume space, convert to drawable render space
 
 		//get 8 corners of bounding box
@@ -1049,21 +1050,23 @@ bool LLFace::canRenderAsMask()
 	{
 		return false;
 	}
-	
+
 	LLMaterial* mat = te->getMaterialParams();
 	if (mat && mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND)
 	{
 		return false;
 	}
 	
-	if ((te->getColor().mV[3] == 1.0f) && // can't treat as mask if we have face alpha
-		(te->getGlow() == 0.f) && // glowing masks are hard to implement - don't mask
-		getTexture()->getIsAlphaMask()) // texture actually qualifies for masking (lazily recalculated but expensive)
+	if ((te->getColor().mV[3] == 1.0f) &&			// can't treat as mask if we have face alpha
+		(te->getGlow() == 0.f) &&					// glowing masks are hard to implement - don't mask
+		!getViewerObject()->isHUDAttachment() &&	// Fix from CoolVL: hud attachments are NOT maskable (else they would get affected by day light)
+		getTexture()->getIsAlphaMask())				// texture actually qualifies for masking (lazily recalculated but expensive)
 	{
 		if (LLPipeline::sRenderDeferred)
 		{
-			if (getViewerObject()->isHUDAttachment() || te->getFullbright())
-			{ //hud attachments and fullbright objects are NOT subject to the deferred rendering pipe
+			// Fix from CoolVL: hud attachments are NOT maskable at all - see above
+			if (/*!getViewerObject()->isHUDAttachment() &&*/ te->getFullbright())
+			{ //fullbright objects are NOT subject to the deferred rendering pipe
 				return LLPipeline::sAutoMaskAlphaNonDeferred;
 			}
 			else
@@ -1192,6 +1195,21 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	{
 		updateRebuildFlags();
 	}
+
+
+	// <FS:ND> The volume face vf can have more indices/vertices than this face. All striders below are aquired with a size of this face, but then written with num_verices/num_indices values,
+	// thus overflowing the buffer when vf holds more data.
+	// We can either clamp num_* down like here, or aquire all striders not using the face size, but the size if vf (that is swapping out mGeomCount with num_vertices and mIndicesCout with num_indices
+	// in all calls to nVertbuffer->get*Strider(...). Final solution is to just return FALSE and be done with it.
+	// 
+	// The correct poison of choice is debatable, either copying not all data of vf (clamping) or writing more data than this face claims to have (aquiring bigger striders). Returning will not display this face at all.
+	//
+	// clamping it is for now.
+
+	num_vertices = llclamp( num_vertices, (S32)0, (S32)mGeomCount );
+	num_indices = llclamp( num_indices, (S32)0, (S32)mIndicesCount );
+
+	// </FS:ND>
 
 
 	//don't use map range (generates many redundant unmap calls)
@@ -1671,7 +1689,14 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						if (!do_xform)
 						{
 							LLFastTimer t(FTM_FACE_TEX_QUICK_NO_XFORM);
-							S32 tc_size = (num_vertices*2*sizeof(F32)+0xF) & ~0xF;
+
+							// <FS:ND> Don't round up, or there's high risk to write past buffer
+
+							// S32 tc_size = (num_vertices*2*sizeof(F32)+0xF) & ~0xF;
+							S32 tc_size = (num_vertices*2*sizeof(F32));
+
+							// </FS:ND>
+
 							LLVector4a::memcpyNonAliased16((F32*) tex_coords0.get(), (F32*) vf.mTexCoords, tc_size);
 						}
 						else
@@ -2100,7 +2125,8 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			LLVector4a src;
 
 			U32 vec[4];
-			vec[0] = vec[1] = vec[2] = vec[3] = color.mAll;
+			//vec[0] = vec[1] = vec[2] = vec[3] = color.mAll;
+			vec[0] = vec[1] = vec[2] = vec[3] = color.asRGBA(); //64bit compile fix FS:ND
 		
 			src.loadua((F32*) vec);
 
@@ -2136,7 +2162,8 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		
 			LLColor4U glow4u = LLColor4U(0,0,0,glow);
 
-			U32 glow32 = glow4u.mAll;
+			//U32 glow32 = glow4u.mAll;
+			U32 glow32 = glow4u.asRGBA(); //64bit compile fix FS:ND
 			
 			U32 vec[4];
 			vec[0] = vec[1] = vec[2] = vec[3] = glow32;

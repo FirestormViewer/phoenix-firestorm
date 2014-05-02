@@ -50,6 +50,7 @@
 	<menu_item_call label="Abrir" name="Sound Open"/>
 	<menu_item_call label="Reemplazar el vestuario" name="Replace Outfit"/>
 	<menu_item_call label="Añadir al vestuario" name="Add To Outfit"/>
+	<menu_item_call label="Vestir items" name="Wear Items"/>
 	<menu_item_call label="Quitar del vestuario actual" name="Remove From Outfit"/>
 	<menu_item_call label="Encontrar el original" name="Find Original"/>
 	<menu_item_call label="Eliminar el ítem" name="Purge Item"/>
@@ -59,31 +60,36 @@
 	<menu_item_call label="Propiedades" name="Properties"/>
 	<menu_item_call label="Renombrar" name="Rename"/>
 	<menu_item_call label="Copiar la UUID" name="Copy Asset UUID"/>
+	<menu_item_call label="Devolver a la última posición" name="Restore to Last Position"/>
 	<menu_item_call label="Copiar" name="Copy"/>
+	<menu_item_call label="Cortar" name="Cut"/>
 	<menu_item_call label="Pegar" name="Paste"/>
 	<menu_item_call label="Pegar como enlace" name="Paste As Link"/>
-	<menu_item_call label="Borrar" name="Remove Link"/>
+	<menu_item_call label="Borrar enlace" name="Remove Link"/>
 	<menu_item_call label="Borrar" name="Delete"/>
+	<menu_item_call label="Mover a Objetos Perdidos" name="Move to Lost And Found"/>
 	<menu_item_call label="Borrar carpeta del sistema" name="Delete System Folder"/>
 	<menu_item_call label="Empezar multiconferencia" name="Conference Chat Folder"/>
-	<menu_item_call label="Escuchar" name="Sound Play"/>
+	<menu_item_call label="Reproducir" name="Sound Play"/>
 	<menu_item_call label="Copiar la SLurl" name="url_copy"/>
 	<menu_item_call label="Acerca del hito" name="About Landmark"/>
-	<menu_item_call label="Escuchar en el mundo" name="Animation Play"/>
+	<menu_item_call label="Ejecutar en el mundo" name="Animation Play"/>
 	<menu_item_call label="Ejecutarla para usted" name="Animation Audition"/>
 	<menu_item_call label="Enviar un mensaje instantáneo" name="Send Instant Message"/>
 	<menu_item_call label="Ofrecer teleporte..." name="Offer Teleport..."/>
-	<menu_item_call label="Empezar multiconferencia" name="Conference Chat"/>
+	<menu_item_call label="Solicitar teleporte..." name="Request Teleport..."/>
+	<menu_item_call label="Iniciar multiconferencia" name="Conference Chat"/>
 	<menu_item_call label="Activar" name="Activate"/>
 	<menu_item_call label="Desactivar" name="Deactivate"/>
 	<menu_item_call label="Guardar como" name="Save As"/>
-	<menu_item_call label="Quitarse" name="Detach From Yourself"/>
 	<menu_item_call label="Ponerme" name="Wearable And Object Wear"/>
+	<menu_item_call label="Añadir" name="Wearable Add"/>
 	<menu label="Anexar a" name="Attach To"/>
 	<menu label="Anexar como HUD" name="Attach To HUD"/>
 	<menu_item_call label="Editar" name="Wearable Edit"/>
-	<menu_item_call label="Añadir" name="Wearable Add"/>
+	<menu_item_call label="Tocar" name="Touch Attachment"/>
 	<menu_item_call label="Quitarse" name="Take Off"/>
+	<menu_item_call label="Quitarse" name="Detach From Yourself"/>
 	<menu_item_call label="Copiar al Buzón de salida de comerciante" name="Merchant Copy"/>
 	<menu_item_call label="Enviar al Mercado" name="Marketplace Send"/>
 	<menu_item_call label="--sin opciones--" name="--no options--"/>

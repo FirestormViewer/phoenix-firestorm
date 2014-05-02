@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="UI-Pref" name="Display panel">
+	<tab_container label="Prefs Firestorm" name="tabs">
+		<panel label="General" name="UI Prefs Panel">
+			<text name="UI Size:" left="5" width="290">
+				Escalado de la IU (puede tener efectos inesperados):
+			</text>
+			<slider name="ui_scale_slider" width="230"/>
+			<text name="HoverTipText">
+				Bulas:
+			</text>
+			<check_box label="Básicas" name="ShowHoverTips" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre avatares o algunas otras cosas (es necesario activarlas para que funcionen las otras)"/>
+			<check_box label="En todos los objetos" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre cualquier objeto del mundo" name="ShowAllHoverTips"/>
+			<check_box label="En el terreno" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre el terreno" name="ShowLandHoverTips"/>
+			<text name="tooltip_textbox">
+				Demora en mostrar bulas:
+			</text>
+			<slider label="De ayuda:" name="ToolTipDelay_slider" tool_tip="Demora antes de mostrar las bulas de los elementos de la interfaz, como los botones. (Por defecto: 0.7)" label_width="54"/>
+			<text name="ToolTipDelay_text">
+				segundos
+			</text>
+			<slider label="Avatares:" name="AvatarInspectorTooltipDelay_slider" tool_tip="Demora antes de mostrar las bulas de los avatares. (Por defecto: 0.35)" label_width="54"/>
+			<text name="AvatarInspectorTooltipDelay_text">
+				segundos
+			</text>
+			<slider label="Objetos:" name="ObjectInspectorTooltipDelay_slider" tool_tip="Demora antes de mostrar las bulas de los objetos. (Por defecto: 0.35)" label_width="54"/>
+			<text name="ObjectInspectorTooltipDelay_text">
+				segundos
+			</text>
+			<check_box name="FSAdvancedTooltips" label="Mostrar información extendida en las bulas (estilo clásico de Phoenix)"/>
+			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>			
+			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
+			<check_box name="ShowNetStats" label="Mostrar medidor de lag" width="150" tool_tip="Muestra el medidor de lag en la barra de estado" left="5"/>
+			<check_box label="Mostrar controles de medios en esquina superior derecha" name="FSEnableVolumeControls" tool_tip="Si lo activas, Firestorm mostrará los controles de sonido, flujos de medios y audio, etc.) en la esquina superior derecha de la pantalla. Puede ser útil desactivarlo si la skin seleccionada ya dispone de sus propios controles." />
+			<text name="standalone_textbox">
+				Usar ventanas independientes para:
+			</text>
+			<check_box name="FSUseStandaloneGroupFloater" label="Perfiles de grupo" width="195" tool_tip="Si se activa, los perfiles de grupo se abrirán en ventanas separadas."/>
+			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Historial de teleportes" tool_tip="Si se activa, al usar el atajo para el historial de teleportes, éste se abrirá en una ventana separada."/>
+			<check_box name="FSUseStandaloneBlocklistFloater" label="Lista de bloqueos/silenciados" width="195"  tool_tip="Si se activa, la lista de avatares y objetos bloqueados/silenciados se abrirá en una ventana separada."/>
+			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Hitos, detalles de lugar y de historial de teleportes" tool_tip="Si se activa, los hitos, los detalles de lugar y los del historial de teleportes se abrirán en ventanas separadas."/>
+			<text width="200" name="ExtendedTeleportHistoryLabel">
+				Extender historial de telepores con:
+			</text>
+			<check_box name="FSTeleportHistoryShowPosition" label="Posición" tool_tip="Si lo activas, se mostrarán las coordenadas de la región en el historial de teleportes."/>
+			<check_box name="FSTeleportHistoryShowDate" label="Fecha" tool_tip="Si lo activas, se mostrará la fecha y la hora del teleporte en el historial de teleportes."/>
+			<text name="ScriptDialogsPerObjectLabel" width="160">
+				Diálogos de script por objeto:
+			</text>
+			<combo_box name="ScriptDialogPerObjectDropdown">
+				<combo_box.item name="ScriptDialogOption_0" label="Uno por objeto"/>
+				<combo_box.item name="ScriptDialogOption_1" label="Uno por objeto y canal"/>
+				<combo_box.item name="ScriptDialogOption_2" label="Sin restricciones"/>
+			</combo_box>
+			<text name="ScriptDialogsPositionLabel" width="180">
+				Posición de los diálogos de script:
+			</text>
+			<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Selecciona dónde deben aparecer los diálogos de script en tu pantalla.">
+				<combo_box.item label="Valor anterior" name="ScriptDialogPositionOption_0"/>
+				<combo_box.item label="Acoplado a los chiclets" name="ScriptDialogPositionOption_1"/>
+				<combo_box.item label="Arriba a la izquerda" name="ScriptDialogPositionOption_2"/>
+				<combo_box.item label="Arriba a la derecha" name="ScriptDialogPositionOption_3"/>
+				<combo_box.item label="Abajo a la izquerda" name="ScriptDialogPositionOption_4"/>
+				<combo_box.item label="Abajo a la derecha" name="ScriptDialogPositionOption_5"/>
+			</combo_box>
+			<check_box label="Diálogos de script animados" name="FSAnimatedScriptDialogs" tool_tip="Actívalo para que los diálogos de script se abran con animación (comportamiento clásico de v1.x). Sólo funciona si los diálogos se abren desde arriba hacia abajo." width="256"/>
+			<check_box label="Avisos de grupo en esquina superior derecha" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)" width="256"/>
+			<text name="GroupTopRightRequiresRestart" left_delta="267" top_pad="-17">
+				(requiere reiniciar)
+			</text>
+			<check_box label="Ocultar los iconos de notificación de chat de grupo y MI" name="FSDisableIMChiclets" tool_tip="Si se activa, Firestorm no mostrará ningún icono de notificación de chat de grupo / MI (el sobre de los avisos de grupo y la suma de MIs permanecerán en pantalla)."/>
+			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean para llamar tu atención" name="ButtonsFlashCount"/>
+<!--
+			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate"/>
+			<text name="ButtonFlashRateText">
+				Hz
+			</text>
+-->
+		</panel>
+		<panel label="Tostadas" name="UI-toasts-tab">		
+			<text name="ToastSettings">
+				Notificaciones (emergentes, en consola, tostadas):
+			</text>
+			<slider label="Espaciado entre tostada más baja y el borde inferior:" tool_tip="Espacio en pixels entre el borde inferior de la interfaz de usuario y la tostada inferior" name="ToastSpace" label_width="290" width="440"/>
+			<text name="ToastSpaceText" left_delta="440">
+				pixels
+			</text>
+			<slider label="Vida de las tostadas:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada" name="ToastLifetime" label_width="290" width="440"/>
+			<text name="ToastLifetimeText" left_delta="440">
+				segundos
+			</text>
+			<slider label="Vida de las tostadas de aviso:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de aviso" name="TipToastLifetime" label_width="290" width="440"/>
+			<text name="TipToastLifetimeText" left_delta="440">
+				segundos
+			</text>
+			<slider label="Vida de las tostadas de chat:"
+         tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de chat local" name="NearbyToastLifetime" label_width="290" width="440"/>
+			<text name="NearbyToastLifetimeText" left_delta="440">
+				segundos
+			</text>
+			<slider label="Desplazamiento vertical de las tostadas:" tool_tip="Desplazamiento vertical de las tostadas de chat local" name="FSNearbyChatToastsOffset" label_width="290" width="440"/>
+			<text name="FSNearbyChatToastsOffsetText" left_delta="440">
+				pixels
+			</text>
+			<slider label="Apagado de las tostadas de chat:" tool_tip="Tiempo en segundos que tarda en desvanecerse por completo una tostada de chat local" name="NearbyToastFadingTime" label_width="290" width="440"/>
+			<text name="NearbyToastFadingTimeText" left_delta="440">
+				segundos
+			</text>
+			<slider label="Vida de las tostadas de inicio:"
+         tool_tip="Tiempo en segundos que tardan en desvanecerse las tostadas que se muestran al iniciar sesión" name="StartupToastLifetime" label_width="290" width="440"/>
+			<text name="StartupToastLifetimeText" left_delta="440">
+				segundos
+			</text>
+			<slider label="Apagado de las tostadas normales:" tool_tip="Timepo en segundos que se muestra una tostada antes de desvanecerse" name="ToastFadingTime" label_width="290" width="440"/>
+			<text name="ToastFadingTimeText" left_delta="440">
+				segundos
+			</text>
+			<slider label="Espacio entre tostadas:" tool_tip="Espacio en pixels entre tostadas adyacentes" name="ToastGap" label_width="290" width="440"/>
+			<text name="ToastGapText" left_delta="440">
+				pixels
+			</text>
+			<slider label="Altura de una tostada de desbordamiento:" tool_tip="Altura en pixels de una tostada de desbordamiento" name="OverflowToastHeight" label_width="290" width="440"/>
+			<text name="OverflowToastHeightText" left_delta="440">
+				pixels
+			</text>
+			<slider label="Anchura de las tostadas de chat:" tool_tip="Anchura de las tostadas de chat en porcentaje sobre el ancho de pantalla" name="NearbyToastWidth" label_width="290" width="440"/>
+			<text name="NearbyToastWidthText" left_delta="440">
+				%
+			</text>
+			<check_box label="Mostrar tostadas sobre las demás ventanas" name="FSShowToastsInFront"/>
+		</panel>
+		<panel label="Fuente" name="UI-font-tab">
+			<text name="tooltip_textbox1" width="165">
+				Esquema de fuentes:
+			</text>
+			<text name="tooltip_textbox2">
+				(Requiere reiniciar)
+			</text>
+			<text name="tooltip_textbox5" width="165">
+				Ajuste de tamaño de fuente:
+			</text>
+			<text name="tooltip_textbox6" line_spacing.pixels="">
+				pt (requiere reiniciar)
+0 por defecto. Valores más altos pueden
+no funcionar bien.
+			</text>
+			<text name="tooltip_textbox3" width="165" top_pad="25">
+				Espaciado de línea en el chat:
+			</text>
+			<text name="tooltip_textbox4" line_spacing.pixels="5">
+				pixels (requiere reiniciar)
+0 por defecto en V2/3 y 2 en V1.
+			</text>
+			<text name="Label_FolderItemViewHeight" width="165">
+				Altura de carpeta:
+			</text>
+			<text name="Label_FolderItemViewHeight_Scale" line_spacing.pixels="5">
+				pixels (requiere reiniciar)
+20 por defecto en V2/3 y 18 en V1.
+			</text>
+		</panel>
+	</tab_container>
+</panel>
+

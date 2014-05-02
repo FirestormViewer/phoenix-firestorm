@@ -113,6 +113,7 @@ LLFloaterGesture::LLFloaterGesture(const LLSD& key)
 	mCommitCallbackRegistrar.add("Gesture.Action.ShowPreview", boost::bind(&LLFloaterGesture::onClickEdit, this));
 	mCommitCallbackRegistrar.add("Gesture.Action.CopyPaste", boost::bind(&LLFloaterGesture::onCopyPasteAction, this, _2));
 	mCommitCallbackRegistrar.add("Gesture.Action.SaveToCOF", boost::bind(&LLFloaterGesture::addToCurrentOutFit, this));
+	mCommitCallbackRegistrar.add("Gesture.Action.RefreshList", boost::bind(&LLFloaterGesture::refreshForActiveSort, this)); // <FS:PP> FIRE-5646: Option to show only active gestures
 
 	mEnableCallbackRegistrar.add("Gesture.EnableAction", boost::bind(&LLFloaterGesture::isActionEnabled, this, _2));
 }
@@ -191,6 +192,8 @@ BOOL LLFloaterGesture::postBuild()
 	getChild<LLUICtrl>("stop_btn")->setCommitCallback(boost::bind(&LLFloaterGesture::onClickPlay, this));
 	getChild<LLButton>("activate_btn")->setClickedCallback(boost::bind(&LLFloaterGesture::onActivateBtnClick, this));
 	
+	getChild<LLUICtrl>("FSShowOnlyActiveGestures")->setCommitCallback(boost::bind(&LLFloaterGesture::refreshForActiveSort, this)); // <FS:PP> FIRE-5646: Option to show only active gestures
+
 	getChild<LLUICtrl>("new_gesture_btn")->setCommitCallback(boost::bind(&LLFloaterGesture::onClickNew, this));
 	getChild<LLButton>("del_btn")->setClickedCallback(boost::bind(&LLFloaterGesture::onDeleteSelected, this));
 
@@ -223,6 +226,17 @@ BOOL LLFloaterGesture::postBuild()
 	return TRUE;
 }
 
+// <FS:PP> FIRE-5646: Option to show only active gestures
+void LLFloaterGesture::refreshForActiveSort()
+{
+	if(gSavedPerAccountSettings.getBOOL("FSShowOnlyActiveGestures"))
+	{
+		mItems.clear();
+		mGestureList->deleteAllItems();
+	}
+	refreshAll();
+}
+// </FS:PP> FIRE-5646: Option to show only active gestures
 
 void LLFloaterGesture::refreshAll()
 {
@@ -252,7 +266,7 @@ void LLFloaterGesture::buildGestureList()
 	uuid_vec_t selected_items;
 	getSelectedIds(selected_items);
 	LL_DEBUGS("Gesture")<< "Rebuilding gesture list "<< LL_ENDL;
-	mGestureList->deleteAllItems();
+//	mGestureList->deleteAllItems(); // <FS:ND/> Don't recreate the list over and over.
 
 	LLGestureMgr::item_map_t::const_iterator it;
 	const LLGestureMgr::item_map_t& active_gestures = LLGestureMgr::instance().getActiveGestures();
@@ -260,7 +274,10 @@ void LLFloaterGesture::buildGestureList()
 	{
 		addGesture(it->first,it->second, mGestureList);
 	}
-	if (gInventory.isCategoryComplete(mGestureFolderID))
+	// <FS:PP> FIRE-5646: Option to show only active gestures
+	// if (gInventory.isCategoryComplete(mGestureFolderID))
+	if (gInventory.isCategoryComplete(mGestureFolderID) && !gSavedPerAccountSettings.getBOOL("FSShowOnlyActiveGestures"))
+	// </FS:PP> FIRE-5646: Option to show only active gestures
 	{
 		LLIsType is_gesture(LLAssetType::AT_GESTURE);
 		LLInventoryModel::cat_array_t categories;
@@ -373,9 +390,14 @@ void LLFloaterGesture::addGesture(const LLUUID& item_id , LLMultiGesture* gestur
 
 	LL_DEBUGS("Gesture") << "Added gesture [" << item_name << "]" << LL_ENDL;
 
-	LLScrollListItem* sl_item = list->addElement(element, ADD_BOTTOM);
+	LLScrollListItem* sl_item(0);
+
+	if( !updateItem( item_id, element ) )
+		sl_item = list->addElement(element, ADD_BOTTOM);
+
 	if(sl_item)
 	{
+		mItems[ item_id ] = sl_item;
 		LLFontGL::StyleFlags style = LLGestureMgr::getInstance()->isGestureActive(item_id) ? LLFontGL::BOLD : LLFontGL::NORMAL;
 		// *TODO find out why ["font"]["style"] does not affect font style
 		((LLScrollListText*)sl_item->getColumn(0))->setFontStyle(style);
@@ -636,3 +658,52 @@ void LLFloaterGesture::playGesture(LLUUID item_id)
 		LLGestureMgr::instance().playGesture(item_id);
 	}
 }
+
+// <FS:ND> Try to update an item that already exists. Return true on success, false if such an item does not exist yet.
+
+#define COL_TRIGGER 0
+#define COL_SHORTCUT 1
+#define COL_KEY 2
+#define COL_NAME 3
+
+#define UI_COL_NAME 0
+#define UI_COL_TRIGGER 1
+#define UI_COL_KEY 2
+#define UI_COL_SHORTCUT 3
+
+bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
+{
+	std::map< LLUUID, LLScrollListItem * >::iterator itr = mItems.find( aItem );
+
+	if( mItems.end() == itr )
+		return false;
+
+	LLScrollListItem* pItem( itr->second );
+
+	if( !pItem )
+		return false;
+
+	std::string	sDummyShortcut = "---";
+	std::string	sDummyKey = "~~~";
+
+	if( aData[ "columns" ][ COL_NAME ][ "value" ] != "" )
+		pItem->getColumn( UI_COL_NAME )->setValue( aData[ "columns" ][ COL_NAME ][ "value" ] );
+	
+	if( aData[ "columns" ][ COL_SHORTCUT ][ "value" ] != sDummyShortcut )
+		pItem->getColumn( UI_COL_SHORTCUT )->setValue( aData[ "columns" ][ COL_SHORTCUT ][ "value" ] );
+
+	if( aData[ "columns" ][ COL_KEY ][ "value" ] != sDummyKey )
+		pItem->getColumn( UI_COL_KEY )->setValue( aData[ "columns" ][ COL_KEY ][ "value" ] );
+	
+	pItem->getColumn( UI_COL_NAME )->setValue( aData[ "columns" ][ COL_NAME ][ "value" ] );
+
+	LLFontGL::StyleFlags oStyle = LLGestureMgr::getInstance()->isGestureActive(aItem) ? LLFontGL::BOLD : LLFontGL::NORMAL;
+
+	LLScrollListText *pTextItem = dynamic_cast< LLScrollListText* >( pItem->getColumn( UI_COL_NAME ) );
+
+	if( pTextItem )
+		pTextItem->setFontStyle( oStyle );
+
+	return true;
+}
+// </FS:ND>

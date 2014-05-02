@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="beacons" title="BALIZAS">
+<floater name="beacons" title="Balizas" width="280">
 	<panel name="beacons_panel">
 		<text name="label_show">
 			Mostrar:
 		</text>
+		<check_box label="Cajas delimitadoras de las luces en escena" name="lights_bounding_boxes"/>
 		<check_box label="Balizas" name="beacons"/>
 		<check_box label="Realzados" name="highlights"/>
 		<text name="beacon_width_label" tool_tip="Ancho de la baliza">

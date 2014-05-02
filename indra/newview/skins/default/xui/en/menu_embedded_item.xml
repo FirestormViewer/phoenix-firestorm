@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+ name="Embedded item context menu">
+  <menu_item_call
+   label="Open"
+   layout="topleft"
+   name="Open">
+    <menu_item_call.on_click
+     function="Embedded.Open" />
+    <menu_item_call.on_enable
+     function="Embedded.EnableOpen" />
+  </menu_item_call>
+  <menu_item_call
+   label="Copy to Inventory"
+   layout="topleft"
+   name="Copy to Inventory">
+    <menu_item_call.on_click
+     function="Embedded.CopyToInv" />
+    <menu_item_call.on_enable
+     function="Embedded.EnableCopyToInv" />
+  </menu_item_call>
+</context_menu>

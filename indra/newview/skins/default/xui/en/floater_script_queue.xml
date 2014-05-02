@@ -5,9 +5,9 @@
  height="400"
  layout="topleft"
  name="queue"
- help_topic="queue"
+ help_topic="script_queue"
  save_rect="true"
- title="RESET PROGRESS"
+ title="Reset Progress"
  width="300">
     <floater.string
      name="Starting">
@@ -29,6 +29,10 @@
      name="NotRunning">
         Not running
     </floater.string>
+    <floater.string
+        name="Deleting">
+      Deleting
+    </floater.string>
     <button
      follows="right|bottom"
      height="24"
@@ -41,6 +45,7 @@
      width="64" />
     <scroll_list
      follows="left|top|right|bottom"
+     draw_stripes="false"
      height="344"
      layout="topleft"
      left="4"

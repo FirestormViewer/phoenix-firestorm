@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Mostrar minimapa sobre el radar" name="ShowRadarMinimap"/>
+	<menu_item_check label="Limitar resultados a un radio específico" name="LimitRadarByRange"/>
+	<context_menu label="Formato de nombres" name="radarNameFormat">
+		<menu_item_check label="Displayname" name="radarFmtDN"/>
+		<menu_item_check label="Nombre de usuario" name="radarFmtUN"/>
+		<menu_item_check label="Displayname (nombre de usuario)" name="radarFmtDNUN"/>
+		<menu_item_check label="Nombre de usuario (displayname)" name="radarFmtUNDN"/>
+	</context_menu>
+	<menu_item_check label="Color de nombre basado en distancia" name="radarColorNamesBasedOnDistance"/>
+	<context_menu label="Reportar a" name="report_to_menu">
+		<menu_item_check label="Chat general" name="radar_nearby_chat"/>
+		<menu_item_check label="Tostadas de notificación" name="radar_nearby_chat"/>
+	</context_menu>
+	<menu_item_check label="Anillo de distancia de chat general en el minimapa" name="MiniMapChatRing"/>
+	<menu_item_check label="Reportar cuando entre en distancia de dibujo" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Reportar cuando abandone la distancia de dibujo" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Reportar cuando entre en distancia de chat" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Reportar cuando abandone la distancia de chat" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="Reportar cuando entre en tu región" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="Reportar cuando abandone tu región" name="RadarReportSimRangeLeave"/>
+	<menu_item_check label="Reportar alertas de entrada a los scripts" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Reportar alertas de salida a los scripts" name="RadarLeaveChannelAlert"/>
+	<menu_item_call name="show_blocked_list" label="Mostrar residentes y objetos bloqueados"/>
+</toggleable_menu>

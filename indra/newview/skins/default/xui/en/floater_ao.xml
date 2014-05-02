@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+	positioning="centered"
+	legacy_header_height="18"
+	can_resize="true"
+	can_dock="false"
+	can_close="true"
+	height="352"
+	min_height="320"
+	min_width="200"
+	layout="topleft"
+	name="animation_overrider"
+	help_topic="animation_overrider"
+	save_rect="true"
+	save_visibility="true"
+	single_instance="true"
+	save_dock_state="false"
+	title="Animation Overrider"
+	width="200">
+
+	<floater.string
+		name="ao_no_sets_loaded">
+No Sets Loaded
+	</floater.string>
+
+	<floater.string
+		name="ao_no_animations_loaded">
+No Animations Loaded
+	</floater.string>
+	<floater.string
+		name="ao_dnd_only_on_full_interface">
+You can only drag and drop an animation notecard on the full interface window. Click on the wrench icon to open it.
+	</floater.string>
+
+	<panel
+		name="animation_overrider_outer_panel"
+		filename="panel_ao.xml"
+		left="0"
+		top="16"
+		width="200"
+		height="334"
+		follows="all"
+		layout="topleft">
+	</panel>
+</floater>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Embedded item context menu">
+	<menu_item_call label="Öffnen" name="Open"/>
+	<menu_item_call label="In Inventar kopieren" name="Copy to Inventory"/>
+</context_menu>

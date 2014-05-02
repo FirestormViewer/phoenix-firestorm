@@ -2,8 +2,19 @@
 <panel label="Redigér profil" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
 		[ACCTTYPE]
-[PAYMENTINFO] [AGEVERIFICATION]
-	</string>
+[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA]
+    </string>
+<!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
+    sending the latter any more. ...TS -->
+    <string
+      name="FSDev"
+      value=" Developer" />
+    <string
+      name="FSSupp"
+      value=" Support" />
+    <string
+      name="FSQualityAssurance"
+      value=" Bug Hunter" />
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
 	</string>

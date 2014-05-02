@@ -26,6 +26,9 @@
  */
 #ifndef LLSLURL_H
 #define LLSLURL_H
+#ifdef OPENSIM // <FS:AW optional opensim support>
+#include "fsslurl.h"
+#else
 
 #include "llstring.h"
 
@@ -110,5 +113,7 @@ protected:
 	std::string mRegion;
 	LLVector3  mPosition;
 };
+
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 #endif // LLSLURL_H

@@ -80,6 +80,8 @@ protected:
 
 	static void onCloseBtn(void* user_data);
 
+	bool onScriptModifyConfirmation(const LLSD& notification, const LLSD& response);
+
 	// returns true if this is done
 	BOOL isDone() const;
 
@@ -224,5 +226,25 @@ protected:
 	virtual void handleInventory(LLViewerObject* viewer_obj,
 								LLInventoryObject::object_list_t* inv);
 };
+
+// <FS> Delete scripts
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Class LLFloaterDeleteQueue
+//
+// This script queue will delete each script.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+class LLFloaterDeleteQueue : public LLFloaterScriptQueue
+{
+	friend class LLFloaterReg;
+protected:
+	LLFloaterDeleteQueue(const LLSD& key);
+	virtual ~LLFloaterDeleteQueue();
+	
+	// This is called by inventoryChanged
+	virtual void handleInventory(LLViewerObject* viewer_obj,
+								LLInventoryObject::object_list_t* inv);
+};
+// </FS> Delete scripts
 
 #endif // LL_LLCOMPILEQUEUE_H

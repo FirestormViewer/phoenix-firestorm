@@ -87,8 +87,14 @@
 			<text name="Owner:">
 				所有者：
 			</text>
+			<text name="OwnerText">
+				Loading...
+			</text>
 			<text name="Group:">
 				グループ：
+			</text>
+			<text name="GroupText">
+				Loading...
 			</text>
 			<button label="設定" label_selected="設定..." name="Set..."/>
 			<check_box label="グループへの譲渡を許可" name="check deed" tool_tip="グループのオフィサーはこの土地をグループに譲渡できます。グループの土地割り当てによってサポートされます。"/>
@@ -176,7 +182,7 @@
 				地域：
 			</text>
 			<text name="region_name_text">
-				EricaVille
+				Loading...
 			</text>
 			<text name="region_landtype_lbl">
 				種類：
@@ -310,11 +316,24 @@
 			<panel.string name="push_restrict_region_text">
 				プッシュ禁止 （地域設定優先）
 			</panel.string>
+			<panel.string name="DirectoryFree">
+                この区画を検索結果に表示する
+            </panel.string>
+            <panel.string name="DirectoryFee">
+                この区画を検索結果に表示する (L$[DIRECTORY_FEE]/週)
+            </panel.string>
 			<panel.string name="see_avs_text">
 				他の区画にいるアバターは、
 			</panel.string>
 			<text name="allow_label">
 				他の住人への許可：
+			</text>
+			<text name="allow_label1">
+				土地の編集:
+			</text>
+			<check_box label="全員" name="edit land check" tool_tip="ここにチェックを入れると、誰でもあなたの土地を編集できるようになります。あなたは自分の土地はいつでも編集できますので、ここのチェックは外したままにしておくことを強くお勧めします。" />
+			<text name="caution_text">
+				(十分に注意して下さい！)
 			</text>
 			<text name="allow_label0">
 				飛行：
@@ -430,6 +449,9 @@
 			<text name="MusicURL:">
 				音楽 URL：
 			</text>
+            <button name="stream_add_btn" tool_tip="音楽ストリームURLをストリームリストに追加します。" />
+            <button name="stream_delete_btn" tool_tip="音楽ストリームURLをストリームリストから削除します。" />
+            <button name="stream_copy_btn" tool_tip="音楽ストリームURLをクリップボードにコピーします。" />
 			<text name="Sound:">
 				サウンド：
 			</text>
@@ -449,9 +471,6 @@
 		<panel label="アクセス" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				（エステートに限定）
-			</panel.string>
-			<panel.string name="allow_public_access">
-				パブリックアクセスを許可 （[MATURITY]）（注意：このオプションをオフにすると立入禁止ラインが作成されます）
 			</panel.string>
 			<panel.string name="estate_override">
 				1 つ以上のオプションが、不動産レベルで設定されています。
@@ -475,7 +494,7 @@
 			<spinner label="アクセス時間：" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="常に許可" name="AllowedText">
-					立入を許可された住人
+					立入を許可された住人 ([LISTED]/[MAX])
 				</text>
 				<name_list name="AccessList" tool_tip="(合計[LISTED] 人、最大 [MAX] 人）"/>
 				<button label="追加" name="add_allowed"/>
@@ -483,7 +502,7 @@
 			</panel>
 			<panel name="Banned_layout_panel">
 				<text label="禁止" name="BanCheck">
-					立入を禁止された住人
+					立入を禁止された住人 ([LISTED]/[MAX])
 				</text>
 				<name_list name="BannedList" tool_tip="(合計 [LISTED] 人、最大 [MAX] 人）"/>
 				<button label="追加" name="add_banned"/>

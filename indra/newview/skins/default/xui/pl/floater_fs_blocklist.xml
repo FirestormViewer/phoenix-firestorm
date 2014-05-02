@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_blocklist" title="Zablokowani rezydenci i obiekty">
+	<panel name="panel_block_list_sidetray" label="Zablokowani rezydenci i obiekty"/>
+</floater>

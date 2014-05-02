@@ -25,6 +25,8 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#if 0
+
 #include "llfloaterreg.h"
 
 #include "llpanelimcontrolpanel.h"
@@ -42,3 +44,4 @@
 #include "lltrans.h"
 
 
+#endif

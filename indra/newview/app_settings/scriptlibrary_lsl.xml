@@ -1,0 +1,1650 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<script_library name="lsl">
+	<keywords>
+		<section name="default" desc="Name of default state that all scripts must have" />
+		<section name="state" desc="Keyword to indicate state block or state transition" />
+		
+		<data_type name="integer" desc="Integer type" />
+		<data_type name="float" desc="Floating-point type" />
+		<data_type name="string" desc="String type" />
+		<data_type name="key" desc="Key type.  Use NULL_KEY to test for empty keys" />
+		<data_type name="vector" desc="Vector type of 3 floats.  Used to represent 3D motion, Euler angles, and color.;Access components by .x, .y. or .z" />
+		<data_type name="rotation" desc="Rotation type of 4 floats.  Used to represent rotation.;Access components by .x, .y., .z, or .w" />
+		<data_type name="list" desc="List of various data types" />
+		
+		<string_constant name="NULL_KEY" desc="Indicates an empty key" />
+		<string_constant name="EOF" desc="Indicates the last line of a notecard was read" />
+		<string_constant name="TEXTURE_BLANK" desc="UUID for the &quot;Blank&quot; texture" />
+		<string_constant name="TEXTURE_DEFAULT" desc="Alias for TEXTURE_PLYWOOD" />
+		<string_constant name="TEXTURE_MEDIA" desc="UUID for the &quot;Default Media&quot; texture" />
+		<string_constant name="TEXTURE_PLYWOOD" desc="UUID for the default &quot;Plywood&quot; texture" />
+		<string_constant name="TEXTURE_TRANSPARENT" desc="UUID for the &quot;White - Transparent&quot; texture" />
+	
+		<string_constant name="URL_REQUEST_GRANTED" desc="Used with http_request when a public URL is successfully granted" />
+		<string_constant name="URL_REQUEST_DENIED" desc="Used with http_request when a public URL is not available" />
+		<float_constant name="PI" desc="3.1415926535897932384626433832795" />
+		<float_constant name="TWO_PI" desc="6.283185307179586476925286766559" />
+		<float_constant name="PI_BY_TWO" desc="1.5707963267948966192313216916398" />
+		<float_constant name="DEG_TO_RAD" desc="To convert from degrees to radians" />
+		<float_constant name="RAD_TO_DEG" desc="To convert from radians to degrees" />
+		<float_constant name="SQRT2" desc="1.4142135623730950488016887242097" />
+
+		<compound_constant name="ZERO_VECTOR" desc="&lt;0.0, 0.0, 0.0&gt;" />
+		<compound_constant name="ZERO_ROTATION" desc="&lt;0.0, 0.0, 0.0, 1.0&gt;" />
+
+		<flow_control_keyword name="for" desc="for loop;for (initializer; test; iteration);{;   statements;}" />
+		<flow_control_keyword name="do" desc="do loop;do;{;   statements;} while (test);" />
+		<flow_control_keyword name="while" desc="while loop;while (test);{    statements;}" />
+		<flow_control_keyword name="if" desc="if statement;if (test);{    statements;}" />
+		<flow_control_keyword name="else" desc="else clause;if (test);{    statements;};else;{    statements;}" />
+		<flow_control_keyword name="jump" desc="jump statement;jump label;;" />
+		<flow_control_keyword name="return" desc="Leave current function or event handler" />
+
+		<flow_control_label name="@" desc="Label;Target for jump statement" />
+
+		<comment name="//" desc="Comment;Non-functional commentary or disabled code" />
+
+		<block_comment name="/* */" desc="Comment;Non-functional commentary or disabled code" />
+
+		<string_literal name="&quot;" desc="String literal" />
+
+		<event name="state_entry" desc="state_entry();Triggered on any state transition and startup" />
+		<event name="state_exit" desc="state_exit();Triggered on any state transition" />
+		<event name="touch_start" desc="touch_start(integer num_detected);Triggered by the start of agent clicking on task" />
+		<event name="touch" desc="touch(integer num_detected);Triggered while agent is clicking on task" />
+		<event name="touch_end" desc="touch_end(integer num_detected);Triggered when agent stops clicking on task" />
+		<event name="collision_start" desc="collision_start(integer num_detected);Triggered when task starts colliding with another task" />
+		<event name="collision" desc="collision(integer num_detected);Triggered while task is colliding with another task" />
+		<event name="collision_end" desc="collision_end(integer num_detected);Triggered when task stops colliding with another task" />
+		<event name="land_collision_start" desc="land_collision_start(vector pos);Triggered when task starts colliding with land" />
+		<event name="land_collision" desc="land_collision(vector pos);Triggered when task is colliding with land" />
+		<event name="land_collision_end" desc="land_collision_end(vector pos);Triggered when task stops colliding with land" />
+		<event name="timer" desc="timer();Result of the llSetTimerEvent library function call" />
+		<event name="listen" desc="listen(integer channel, string name, key id, string message);Result of the llListen library function call" />
+		<event name="sensor" desc="sensor(integer num_detected);Result of the llSensor library function call" />
+		<event name="no_sensor" desc="no_sensor();Result of the llSensor library function call" />
+		<event name="control" desc="control(key id, integer level, integer edge);Result of llTakeControls library function call" />
+		<event name="at_target" desc="at_target(integer tnum, vector targetpos, vector ourpos);Result of llTarget library function call" />
+		<event name="not_at_target" desc="not_at_target();Result of llTarget library function call" />
+		<event name="at_rot_target" desc="at_rot_target(integer tnum, rotation targetrot, rotation ourrot);Result of LLRotTarget library function call" />
+		<event name="not_at_rot_target" desc="not_at_rot_target();Result of LLRotTarget library function call" />
+		<event name="money" desc="money(key id, integer amount);Triggered when L$ is given to task" />
+		<event name="email" desc="email(string time, string address, string subj, string message, integer num_left);Triggered when task receives email" />
+		<event name="run_time_permissions" desc="run_time_permissions(integer perm);Triggered when an agent grants run time permissions to task" />
+		<event name="attach" desc="attach(key id);Triggered when task attaches or detaches from agent" />
+		<event name="dataserver" desc="dataserver(key queryid, string data);Triggered when task receives asynchronous data" />
+		<event name="moving_start" desc ="moving_start();Triggered when task begins moving" />
+		<event name="moving_end" desc="moving_end();Triggered when task stops moving" />
+		<event name="on_rez" desc="on_rez(integer start_param);Triggered when task is rezzed in from inventory or another task" />
+		<event name="object_rez" desc="object_rez(key id);Triggered when task rezzes in another task" />
+		<event name="link_message" desc="link_message(integer sender_num, integer num, string str, key id);Triggered when task receives a link message via LLMessageLinked library function call" />
+		<event name="changed" desc="changed( integer change );Triggered various event change the task;(test change with CHANGED_INVENTORY, CHANGED_COLOR, CHANGED_SHAPE, CHANGED_SCALE, CHANGED_TEXTURE, CHANGED_LINK, CHANGED_ALLOWED_DROP, CHANGED_OWNER, CHANGED_REGION, CHANGED_TELEPORT, CHANGED_REGION_START, CHANGED_MEDIA)" />
+		<event name="remote_data" desc="remote_data(integer event_type, key channel, key message_id, string sender,integer idata, string sdata);Triggered by various XML-RPC calls (event_type will be one of REMOTE_DATA_CHANNEL, REMOTE_DATA_REQUEST, REMOTE_DATA_REPLY)" />
+		<event name="http_response" desc="http_response(key request_id, integer status, list metadata, string body);Triggered when task receives a response to one of its llHTTPRequests" />
+		<event name="http_request" desc="http_request(key id, string method, string body);Triggered when task receives an http request against a public URL" />
+		<event name="transaction_result" desc="transaction_result(key id, integer success, string data); Triggered when L$ is given to task" />
+		<event name="path_update" desc="Informs the script of events that happen within the pathfinding system" />
+
+		<integer_constant name="TRUE" desc="integer_constant for Boolean operations" />
+		<integer_constant name="FALSE" desc="integer_constant for Boolean operations" />
+		<integer_constant name="STATUS_PHYSICS" desc="Passed in the llSetStatus library function.  If TRUE, object moves physically" value="0x001" />
+		<integer_constant name="STATUS_PHANTOM" desc="Passed in the llSetStatus library function.  If TRUE, object doesn't collide with other objects" value="0x010"/>
+		<integer_constant name="STATUS_ROTATE_X" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local X axis" value="0x002" />
+		<integer_constant name="STATUS_ROTATE_Y" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local Y axis" value="0x004" />
+		<integer_constant name="STATUS_ROTATE_Z" desc="Passed in the llSetStatus library function.  If FALSE, object doesn't rotate around local Z axis" value="0x008" />
+		<integer_constant name="STATUS_SANDBOX" desc="Passed in the llSetStatus library function.  If TRUE, object can't cross region boundaries or move more than 10 meters from its start location" value="0x020" />
+		<integer_constant name="STATUS_BLOCK_GRAB" desc="Passed in the llSetStatus library function.  If TRUE, root prim of linkset (or unlinked prim) can't be grabbed and physically dragged" value="0x040" />
+		<integer_constant name="STATUS_DIE_AT_EDGE" desc="Passed in the llSetStatus library function.  If TRUE, objects that reach the edge of the world just die;rather than teleporting back to the owner" value="0x080" />
+		<integer_constant name="STATUS_RETURN_AT_EDGE" desc=" Passed in the llSetStatus library function.  If TRUE, script rezzed objects that reach the edge of the world;are returned rather than killed;STATUS_RETURN_AT_EDGE trumps STATUS_DIE_AT_EDGE if both are set" value="0x100" />
+		<integer_constant name="STATUS_CAST_SHADOWS" desc="Passed in the llSetStatus library function.  If TRUE, object casts shadows on other objects" value="0x200" />
+		<integer_constant name="STATUS_BLOCK_GRAB_OBJECT" desc="This status flag keeps the object from being moved by grabs. This flag applies to the entire linkset." value="0x400" />
+		<integer_constant name="AGENT" desc="Passed in llSensor library function to look for other Agents" />
+		<integer_constant name="AGENT_BY_LEGACY_NAME" desc="This is used to find agents by legacy name" />
+		<integer_constant name="AGENT_BY_USERNAME" desc="This is used to find agents by username" />
+		<integer_constant name="ACTIVE" desc="Passed in llSensor library function to look for moving objects" />
+		<integer_constant name="PASSIVE" desc="Passed in llSensor library function to look for objects that aren't moving" />
+		<integer_constant name="SCRIPTED" desc="Passed in llSensor library function to look for scripted objects" />
+		<integer_constant name="CONTROL_FWD" desc="Passed to llTakeControls library function and used control event handler to test for agent forward control" />
+		<integer_constant name="CONTROL_BACK" desc="Passed to llTakeControls library function and used control event handler to test for agent back control" />
+		<integer_constant name="CONTROL_LEFT" desc="Passed to llTakeControls library function and used control event handler to test for agent left control" />
+		<integer_constant name="CONTROL_RIGHT" desc="Passed to llTakeControls library function and used control event handler to test for agent right control" />
+		<integer_constant name="CONTROL_ROT_LEFT" desc="Passed to llTakeControls library function and used control event handler to test for agent rotate left control" />
+		<integer_constant name="CONTROL_ROT_RIGHT" desc="Passed to llTakeControls library function and used control event handler to test for agent rotate right control" />
+		<integer_constant name="CONTROL_UP" desc="Passed to llTakeControls library function and used control event handler to test for agent up control" />
+		<integer_constant name="CONTROL_DOWN" desc="Passed to llTakeControls library function and used control event handler to test for agent down control" />
+		<integer_constant name="CONTROL_LBUTTON" desc="Passed to llTakeControls library function and used control event handler to test for agent left button control" />
+		<integer_constant name="CONTROL_ML_LBUTTON" desc="Passed to llTakeControls library function and used control event handler to test for agent left button control with the agent in mouse look" />
+		<integer_constant name="PERMISSION_DEBIT" desc="Passed to llRequestPermissions library function to request permission to take L$ from agent's account" />
+		<integer_constant name="PERMISSION_TAKE_CONTROLS" desc="Passed to llRequestPermissions library function to request permission to take agent's controls" />
+		<integer_constant name="PERMISSION_TRIGGER_ANIMATION" desc="Passed to llRequestPermissions library function to request permission to trigger animation on agent" />
+		<integer_constant name="PERMISSION_ATTACH" desc="Passed to llRequestPermissions library function to request permission to attach/detach from agent" />
+		<integer_constant name="PERMISSION_TRACK_CAMERA" desc="Passed to llRequestPermissions library function to request permission to track agent's camera" />
+		<integer_constant name="PERMISSION_CONTROL_CAMERA" desc="Passed to llRequestPermissions library function to request permission to change agent's camera" />
+		<integer_constant name="PERMISSION_TELEPORT" desc="Passed to llRequestPermissions library function to request permission to teleport an agent" />
+		<integer_constant name="PERMISSION_SILENT_ESTATE_MANAGEMENT" desc="Passed to llRequestPermissions library function to request permission to silently modify estate access lists" />
+		<integer_constant name="PERMISSION_OVERRIDE_ANIMATIONS" desc="Passed to llRequestPermissions library function to request permission to override animations on agent" />
+		<integer_constant name="PERMISSION_RETURN_OBJECTS" desc="Passed to llRequestPermissions library function to request permission to return objects" />
+		<integer_constant name="PERMISSION_CHANGE_LINKS" desc="Passed to llRequestPermissions library function to request permission to change an objects links" />
+		
+		<integer_constant name="DEBUG_CHANNEL" desc="Chat channel reserved for debug and error messages from scripts" />
+		<integer_constant name="PUBLIC_CHANNEL" desc="Chat channel that broadcasts to all nearby users" />
+		
+		<integer_constant name="AGENT_FLYING" desc="Returned by llGetAgentInfo if the Agent is flying" />
+		<integer_constant name="AGENT_ATTACHMENTS" desc="Returned by llGetAgentInfo if the Agent has attachments" />
+		<integer_constant name="AGENT_SCRIPTED" desc="Returned by llGetAgentInfo if the Agent has scripted attachments" />
+		<integer_constant name="AGENT_SITTING" desc="Returned by llGetAgentInfo if the Agent is sitting" />
+		<integer_constant name="AGENT_ON_OBJECT" desc="Returned by llGetAgentInfo if the Agent is sitting on an object" />
+		<integer_constant name="AGENT_MOUSELOOK" desc="Returned by llGetAgentInfo if the Agent is in mouselook" />
+		<integer_constant name="AGENT_AWAY" desc="Returned by llGetAgentInfo if the Agent is in away mode" />
+		<integer_constant name="AGENT_WALKING" desc="Returned by llGetAgentInfo if the Agent is walking" />
+		<integer_constant name="AGENT_IN_AIR" desc="Returned by llGetAgentInfo if the Agent is in the air" />
+		<integer_constant name="AGENT_TYPING" desc="Returned by llGetAgentInfo if the Agent is typing" />
+		<integer_constant name="AGENT_CROUCHING" desc="Returned by llGetAgentInfo if the Agent is crouching" />
+		<integer_constant name="AGENT_BUSY" desc="Returned by llGetAgentInfo if the Agent is busy" />
+		<integer_constant name="AGENT_ALWAYS_RUN" desc="Returned by llGetAgentInfo if the Agent has 'Always Run' enabled" />
+		<integer_constant name="AGENT_AUTOPILOT" desc="Returned by llGetAgentInfo if the Agent is under autopilot control" />
+		
+		<integer_constant name="AGENT_LIST_PARCEL" desc="Passed to llGetAgentList to return only agents on the same parcel where the script is running" />
+		<integer_constant name="AGENT_LIST_PARCEL_OWNER" desc="Passed to llGetAgentList to return only agents on any parcel in the region where the parcel owner is the same as the owner of the parcel under the scripted object" />
+		<integer_constant name="AGENT_LIST_REGION" desc="Passed to llGetAgentList to return any/all agents in the region" />
+		
+		<integer_constant name="PSYS_PART_FLAGS" />
+		<integer_constant name="PSYS_PART_START_COLOR" />
+		<integer_constant name="PSYS_PART_START_ALPHA" />
+		<integer_constant name="PSYS_PART_START_SCALE" />
+		<integer_constant name="PSYS_PART_END_COLOR" />
+		<integer_constant name="PSYS_PART_END_ALPHA" />
+		<integer_constant name="PSYS_PART_END_SCALE" />
+		<integer_constant name="PSYS_PART_MAX_AGE" />
+		
+		<integer_constant name="PSYS_PART_BLEND_FUNC_SOURCE" />
+		<integer_constant name="PSYS_PART_BLEND_FUNC_DEST" />
+		<integer_constant name="PSYS_PART_START_GLOW" />
+		<integer_constant name="PSYS_PART_END_GLOW" />
+		
+		<integer_constant name="PSYS_PART_BOUNCE_MASK" />
+		<integer_constant name="PSYS_PART_WIND_MASK" />
+		<integer_constant name="PSYS_PART_INTERP_COLOR_MASK" />
+		<integer_constant name="PSYS_PART_INTERP_SCALE_MASK" />
+		<integer_constant name="PSYS_PART_FOLLOW_SRC_MASK" />
+		<integer_constant name="PSYS_PART_FOLLOW_VELOCITY_MASK" />
+		<integer_constant name="PSYS_PART_TARGET_POS_MASK" />
+		<integer_constant name="PSYS_PART_EMISSIVE_MASK" />
+		<integer_constant name="PSYS_PART_TARGET_LINEAR_MASK" />
+		<integer_constant name="PSYS_PART_RIBBON_MASK" />
+		
+		<integer_constant name="PSYS_PART_BF_ONE" />
+		<integer_constant name="PSYS_PART_BF_ZERO" />
+		<integer_constant name="PSYS_PART_BF_DEST_COLOR" />
+		<integer_constant name="PSYS_PART_BF_SOURCE_COLOR" />
+		<integer_constant name="PSYS_PART_BF_ONE_MINUS_DEST_COLOR" />
+		<integer_constant name="PSYS_PART_BF_ONE_MINUS_SOURCE_COLOR" />
+		<integer_constant name="PSYS_PART_BF_SOURCE_ALPHA" />
+		<integer_constant name="PSYS_PART_BF_ONE_MINUS_SOURCE_ALPHA" />
+		
+		<integer_constant name="PSYS_SRC_PATTERN" />
+		<integer_constant name="PSYS_SRC_INNERANGLE	Deprecated -- Use PSYS_SRC_ANGLE_BEGIN" />
+		<integer_constant name="PSYS_SRC_OUTERANGLE	Deprecated -- Use PSYS_SRC_ANGLE_END" />
+		<integer_constant name="PSYS_SRC_ANGLE_BEGIN" />
+		<integer_constant name="PSYS_SRC_ANGLE_END" />
+		<integer_constant name="PSYS_SRC_BURST_RATE" />
+		<integer_constant name="PSYS_SRC_BURST_PART_COUNT" />
+		<integer_constant name="PSYS_SRC_BURST_RADIUS" />
+		<integer_constant name="PSYS_SRC_BURST_SPEED_MIN" />
+		<integer_constant name="PSYS_SRC_BURST_SPEED_MAX" />
+		<integer_constant name="PSYS_SRC_MAX_AGE" />
+		<integer_constant name="PSYS_SRC_ACCEL" />
+		<integer_constant name="PSYS_SRC_TEXTURE" />
+		<integer_constant name="PSYS_SRC_TARGET_KEY" />
+		<integer_constant name="PSYS_SRC_OMEGA" />
+		
+		<integer_constant name="PSYS_SRC_PATTERN_DROP" />
+		<integer_constant name="PSYS_SRC_PATTERN_EXPLODE" />
+		<integer_constant name="PSYS_SRC_PATTERN_ANGLE" />
+		<integer_constant name="PSYS_SRC_PATTERN_ANGLE_CONE" />
+		<integer_constant name="PSYS_SRC_PATTERN_ANGLE_CONE_EMPTY" />
+		
+		<integer_constant name="OBJECT_UNKNOWN_DETAIL" desc="Returned by llGetObjectDetails when passed an invalid object parameter type" />
+		<integer_constant name="OBJECT_NAME" desc="Used with llGetObjectDetails to get an object's name" />
+		<integer_constant name="OBJECT_DESC" desc="Used with llGetObjectDetails to get an object's description" />
+		<integer_constant name="OBJECT_POS" desc="Used with llGetObjectDetails to get an object's position" />
+		<integer_constant name="OBJECT_ROT" desc="Used with llGetObjectDetails to get an object's rotation" />
+		<integer_constant name="OBJECT_VELOCITY" desc="Used with llGetObjectDetails to get an object's velocity" />
+		<integer_constant name="OBJECT_OWNER" desc="Used with llGetObjectDetails to get an object's owner's key.  Will be NULL_KEY if group owned" />
+		<integer_constant name="OBJECT_GROUP" desc="Used with llGetObjectDetails to get an object's group's key" />
+		<integer_constant name="OBJECT_CREATOR" desc="Used with llGetObjectDetails to get an object's creator's key" />
+		<integer_constant name="OBJECT_RUNNING_SCRIPT_COUNT" desc="Gets the number of running scripts attached to the object or agent" />
+		<integer_constant name="OBJECT_TOTAL_SCRIPT_COUNT" desc="Gets the number of scripts, both running and stopped, attached to the object or agent." />
+		<integer_constant name="OBJECT_SCRIPT_MEMORY" desc="Gets the total amount of script memory allocated to the object or agent, in bytes." />
+		<integer_constant name="OBJECT_SCRIPT_TIME" desc="Gets the total amount of average script CPU time used by the object or agent, in seconds." />
+		<integer_constant name="OBJECT_PRIM_EQUIVALENCE" desc="Gets the prim equivalence of the object." />
+		<integer_constant name="OBJECT_PHYSICS" desc="Used with llGetObjectDetails to get an object's physics flag" />
+		<integer_constant name="OBJECT_PHANTOM" desc="Used with llGetObjectDetails to get an object's phantom flag" />
+		<integer_constant name="OBJECT_TEMP_ON_REZ" desc="Used with llGetObjectDetails to get an object's temporary flag" />
+		<integer_constant name="OBJECT_RENDER_WEIGHT" desc="Used with llGetObjectDetails to return an avatar's rendering weight" />
+
+		<integer_constant name="OBJECT_CHARACTER_TIME" desc="Used with llGetObjectDetails to get an object's average CPU time (in seconds) used by the object for navigation, if the object is a pathfinding character. Returns 0 for non-characters." />
+		<integer_constant name="OBJECT_ROOT" desc="Used with llGetObjectDetails to get an object's root prim ID." />
+		<integer_constant name="OBJECT_ATTACHED_POINT" desc="Used with llGetObjectDetails to get an object's attachment point." />
+		
+		<integer_constant name="OBJECT_RETURN_PARCEL" desc="Used with llReturnObjectsByOwner to return all objects on the same parcel as the script which are owned by 'owner'." />
+		<integer_constant name="OBJECT_RETURN_PARCEL_OWNER" desc="Used with llReturnObjectsByOwner to return all objects owned by 'owner' which are over parcels owned by the owner of the script." />
+		<integer_constant name="OBJECT_RETURN_REGION" desc="Used with llReturnObjectsByOwner to return all objects in the region owned by 'owner' - only works when the script is owned by the estate owner or an estate manager." />
+
+		<integer_constant name="VEHICLE_TYPE_NONE" />
+		<integer_constant name="VEHICLE_TYPE_SLED" />
+		<integer_constant name="VEHICLE_TYPE_CAR" />
+		<integer_constant name="VEHICLE_TYPE_BOAT" />
+		<integer_constant name="VEHICLE_TYPE_AIRPLANE" />
+		<integer_constant name="VEHICLE_TYPE_BALLOON" />
+		<integer_constant name="VEHICLE_REFERENCE_FRAME" desc="Rotation of vehicle axes relative to local frame" />
+		<integer_constant name="VEHICLE_LINEAR_FRICTION_TIMESCALE" desc="A vector of timescales for exponential decay of linear velocity along the three vehicle axes" />
+		<integer_constant name="VEHICLE_ANGULAR_FRICTION_TIMESCALE" desc="A vector of timescales for exponential decay of angular velocity about the three vehicle axes" />
+		<integer_constant name="VEHICLE_LINEAR_MOTOR_DIRECTION" desc="The linear velocity that the vehicle will try to achieve" />
+		<integer_constant name="VEHICLE_LINEAR_MOTOR_OFFSET" desc="An offset from the center of mass of the vehicle where the linear motor is applied" />
+		<integer_constant name="VEHICLE_ANGULAR_MOTOR_DIRECTION" desc="The angular velocity that the vehicle will try to achieve" />
+		<integer_constant name="VEHICLE_HOVER_HEIGHT" desc="The height the vehicle will try to hover" />
+		<integer_constant name="VEHICLE_HOVER_EFFICIENCY" desc="A slider between 0 (bouncy) and 1 (critically damped) hover behavior" />
+		<integer_constant name="VEHICLE_HOVER_TIMESCALE" desc="The period of time for the vehicle to achieve its hover height" />
+		<integer_constant name="VEHICLE_BUOYANCY" desc="A slider between 0 (no anti-gravity) and 1 (full anti-gravity)" />
+		<integer_constant name="VEHICLE_LINEAR_DEFLECTION_EFFICIENCY" desc="A slider between 0 (no deflection) and 1 (maximum strength)" />
+		<integer_constant name="VEHICLE_LINEAR_DEFLECTION_TIMESCALE" desc="The exponential timescale for the vehicle to redirect its velocity to be along its x-axis" />
+		<integer_constant name="VEHICLE_LINEAR_MOTOR_TIMESCALE" desc="The exponential timescale for the vehicle to achive its full linear motor velocity" />
+		<integer_constant name="VEHICLE_LINEAR_MOTOR_DECAY_TIMESCALE" desc="The exponential timescale for the linear motor's effectiveness to decay toward zero" />
+		<integer_constant name="VEHICLE_ANGULAR_DEFLECTION_EFFICIENCY" desc="A slider between 0 (no deflection) and 1 (maximum strength)" />
+		<integer_constant name="VEHICLE_ANGULAR_DEFLECTION_TIMESCALE" desc="The exponential timescale for the vehicle to achieve full angular deflection" />
+		<integer_constant name="VEHICLE_ANGULAR_MOTOR_TIMESCALE" desc="The exponential timescale for the vehicle to achive its full angular motor velocity" />
+		<integer_constant name="VEHICLE_ANGULAR_MOTOR_DECAY_TIMESCALE" desc="The exponential timescale for the angular motor's effectiveness to decay toward zero" />
+		<integer_constant name="VEHICLE_VERTICAL_ATTRACTION_EFFICIENCY" desc="A slider between 0 (bouncy) and 1 (critically damped) attraction of vehicle z-axis to world z-axis (vertical)" />
+		<integer_constant name="VEHICLE_VERTICAL_ATTRACTION_TIMESCALE" desc="The exponential timescale for the vehicle to align its z-axis to the world z-axis (vertical)" />
+		<integer_constant name="VEHICLE_BANKING_EFFICIENCY" desc="A slider between -1 (leans out of turns), 0 (no banking), and +1 (leans into turns)" />
+		<integer_constant name="VEHICLE_BANKING_MIX" desc="A slider between 0 (static banking) and 1 (dynamic banking)" />
+		<integer_constant name="VEHICLE_BANKING_TIMESCALE" desc="The exponential timescale for the banking behavior to take full effect" />
+		<integer_constant name="VEHICLE_FLAG_NO_DEFLECTION_UP" desc="Prevents linear deflection along world-z axis" />
+		<integer_constant name="VEHICLE_FLAG_LIMIT_ROLL_ONLY" desc="Removes vertical attraction for changes in vehicle pitch" />
+		<integer_constant name="VEHICLE_FLAG_HOVER_WATER_ONLY" desc="Hover only pays attention to water level" />
+		<integer_constant name="VEHICLE_FLAG_HOVER_TERRAIN_ONLY" desc="Hover only pays attention to terrain height" />
+		<integer_constant name="VEHICLE_FLAG_HOVER_GLOBAL_HEIGHT" desc="Hover only pays attention to global height" />
+		<integer_constant name="VEHICLE_FLAG_HOVER_UP_ONLY" desc="Hover only pushes up" />
+		<integer_constant name="VEHICLE_FLAG_LIMIT_MOTOR_UP" desc="Prevents ground vehicles from motoring into the sky" />
+		<integer_constant name="VEHICLE_FLAG_MOUSELOOK_STEER" desc="Makes vehicle try to turn toward mouselook direction" />
+		<integer_constant name="VEHICLE_FLAG_MOUSELOOK_BANK" desc="Makes vehicle try to turn toward mouselook direction assuming banking is enabled" />
+		<integer_constant name="VEHICLE_FLAG_CAMERA_DECOUPLED" desc="Causes the camera look-at axis to NOT move when the vehicle rotates" />
+		
+		<integer_constant name="CAMERA_PITCH" desc="(-45 to 80) (Adjusts the angular amount that the camera aims straight ahead vs. straight down, maintaining the same distance. Analogous to 'incidence'.)" />
+		<integer_constant name="CAMERA_FOCUS_OFFSET" desc="(-10 to 10) A vector that adjusts the position of the camera focus position relative to the subject" />
+		<integer_constant name="CAMERA_POSITION_LAG" desc="(0.0 to 3.0)  How much the camera lags as it tries to move towards its 'ideal' position" />
+		<integer_constant name="CAMERA_FOCUS_LAG" desc="(0.0 to 3.0) How much the camera lags as it tries to aim towards the subject" />
+		<integer_constant name="CAMERA_DISTANCE" desc="(0.5 to 10) Sets how far away the camera wants to be from its subject" />
+		<integer_constant name="CAMERA_BEHINDNESS_ANGLE" desc="(0 to 180) Sets the angle in degrees within which the camera is not constrained by changes in subject rotation" />
+		<integer_constant name="CAMERA_BEHINDNESS_LAG" desc="(0.0 to 3.0) Sets how strongly the camera is forced to stay behind the target if outside of behindness angle" />
+		<integer_constant name="CAMERA_POSITION_THRESHOLD" desc="(0.0 to 4.0) Sets the radius of a sphere around the camera's ideal position within which it is not affected by subject motion" />
+		<integer_constant name="CAMERA_FOCUS_THRESHOLD" desc="(0.0 to 4.0) Sets the radius of a sphere around the camera's subject position within which its focus is not affected by subject motion" />
+		<integer_constant name="CAMERA_ACTIVE" desc="(0 or 1) Turns on or off scripted control of the camera" />
+		<integer_constant name="CAMERA_POSITION" desc="Sets the position of the camera" />
+		<integer_constant name="CAMERA_FOCUS" desc="Sets the focus (target position) of the camera" />
+		<integer_constant name="CAMERA_POSITION_LOCKED" desc="(0 or 1) Locks the camera position so it will not move" />
+		<integer_constant name="CAMERA_FOCUS_LOCKED" desc="(0 or 1) Locks the camera focus so it will not move" />
+		
+		<integer_constant name="INVENTORY_TEXTURE" desc="Passed to task inventory library functions to reference textures" />
+		<integer_constant name="INVENTORY_SOUND" desc="Passed to task inventory library functions to reference sounds" />
+		<integer_constant name="INVENTORY_OBJECT" desc="Passed to task inventory library functions to reference objects" />
+		<integer_constant name="INVENTORY_SCRIPT" desc="Passed to task inventory library functions to reference scripts" />
+		<integer_constant name="INVENTORY_LANDMARK" desc="Passed to task inventory library functions to reference landmarks" />
+		<integer_constant name="INVENTORY_CLOTHING" desc="Passed to task inventory library functions to reference clothing" />
+		<integer_constant name="INVENTORY_NOTECARD" desc="Passed to task inventory library functions to reference notecards" />
+		<integer_constant name="INVENTORY_BODYPART" desc="Passed to task inventory library functions to reference body parts" />
+		<integer_constant name="INVENTORY_ANIMATION" desc="Passed to task inventory library functions to reference animations" />
+		<integer_constant name="INVENTORY_GESTURE" desc="Passed to task inventory library functions to reference gestures" />
+		<integer_constant name="INVENTORY_ALL" desc="Passed to task inventory library functions to reference all inventory items" />
+		<integer_constant name="INVENTORY_NONE" desc="Returned by llGetInventoryType when no item is found" />
+		
+		<integer_constant name="ATTACH_CHEST" desc="Passed to llAttachToAvatar to attach task to chest" />
+		<integer_constant name="ATTACH_HEAD" desc="Passed to llAttachToAvatar to attach task to head" />
+		<integer_constant name="ATTACH_LSHOULDER" desc="Passed to llAttachToAvatar to attach task to left shoulder" />
+		<integer_constant name="ATTACH_RSHOULDER" desc="Passed to llAttachToAvatar to attach task to right shoulder" />
+		<integer_constant name="ATTACH_LHAND" desc="Passed to llAttachToAvatar to attach task to left hand" />
+		<integer_constant name="ATTACH_RHAND" desc="Passed to llAttachToAvatar to attach task to right hand" />
+		<integer_constant name="ATTACH_LFOOT" desc="Passed to llAttachToAvatar to attach task to left foot" />
+		<integer_constant name="ATTACH_RFOOT" desc="Passed to llAttachToAvatar to attach task to right foot" />
+		<integer_constant name="ATTACH_BACK" desc="Passed to llAttachToAvatar to attach task to back" />
+		<integer_constant name="ATTACH_PELVIS" desc="Passed to llAttachToAvatar to attach task to pelvis" />
+		<integer_constant name="ATTACH_MOUTH" desc="Passed to llAttachToAvatar to attach task to mouth" />
+		<integer_constant name="ATTACH_CHIN" desc="Passed to llAttachToAvatar to attach task to chin" />
+		<integer_constant name="ATTACH_LEAR" desc="Passed to llAttachToAvatar to attach task to left ear" />
+		<integer_constant name="ATTACH_REAR" desc="Passed to llAttachToAvatar to attach task to right ear" />
+		<integer_constant name="ATTACH_LEYE" desc="Passed to llAttachToAvatar to attach task to left eye" />
+		<integer_constant name="ATTACH_REYE" desc="Passed to llAttachToAvatar to attach task to right eye" />
+		<integer_constant name="ATTACH_NOSE" desc="Passed to llAttachToAvatar to attach task to nose" />
+		<integer_constant name="ATTACH_RUARM" desc="Passed to llAttachToAvatar to attach task to right upper arm" />
+		<integer_constant name="ATTACH_RLARM" desc="Passed to llAttachToAvatar to attach task to right lower arm" />
+		<integer_constant name="ATTACH_LUARM" desc="Passed to llAttachToAvatar to attach task to left upper arm" />
+		<integer_constant name="ATTACH_LLARM" desc="Passed to llAttachToAvatar to attach task to left lower arm" />
+		<integer_constant name="ATTACH_RHIP" desc="Passed to llAttachToAvatar to attach task to right hip" />
+		<integer_constant name="ATTACH_RULEG" desc="Passed to llAttachToAvatar to attach task to right upper leg" />
+		<integer_constant name="ATTACH_RLLEG" desc="Passed to llAttachToAvatar to attach task to right lower leg" />
+		<integer_constant name="ATTACH_LHIP" desc="Passed to llAttachToAvatar to attach task to left hip" />
+		<integer_constant name="ATTACH_LULEG" desc="Passed to llAttachToAvatar to attach task to left upper leg" />
+		<integer_constant name="ATTACH_LLLEG" desc="Passed to llAttachToAvatar to attach task to left lower leg" />
+		<integer_constant name="ATTACH_BELLY" desc="Passed to llAttachToAvatar to attach task to belly" />
+		<integer_constant name="ATTACH_LEFT_PEC" desc="Passed to llAttachToAvatar to attach task to left pectoral" />
+		<integer_constant name="ATTACH_RIGHT_PEC" desc="Passed to llAttachToAvatar to attach task to right pectoral" />
+		<integer_constant name="ATTACH_NECK" desc="Passed to llAttachToAvatar to attach task to neck" />
+		<integer_constant name="ATTACH_AVATAR_CENTER" desc="Passed to llAttachToAvatar to attach task to avatar center" />
+		<integer_constant name="ATTACH_BRIDGE" desc="Passed to llAttachToAvatar to attach task to bridge" />
+		<integer_constant name="ATTACH_HUD_BOTTOM" desc="Passed to llAttachToAvatar to attach task to bottom hud area" />
+		<integer_constant name="ATTACH_HUD_BOTTOM_LEFT" desc="Passed to llAttachToAvatar to attach task to bottom left hud area" />
+		<integer_constant name="ATTACH_HUD_BOTTOM_RIGHT" desc="Passed to llAttachToAvatar to attach task to bottom right hud area" />
+		<integer_constant name="ATTACH_HUD_CENTER_1" desc="Passed to llAttachToAvatar to attach task to center 1 hud area" />
+		<integer_constant name="ATTACH_HUD_CENTER_2" desc="Passed to llAttachToAvatar to attach task to center 2 hud area" />
+		<integer_constant name="ATTACH_HUD_TOP_CENTER" desc="Passed to llAttachToAvatar to attach task to top center hud area" />
+		<integer_constant name="ATTACH_HUD_TOP_LEFT" desc="Passed to llAttachToAvatar to attach task to top left hud area" />
+		<integer_constant name="ATTACH_HUD_TOP_RIGHT" desc="Passed to llAttachToAvatar to attach task to top right hud area" />
+		
+		<integer_constant name="LAND_LEVEL" desc="Passed to llModifyLand to level terrain" />
+		<integer_constant name="LAND_RAISE" desc="Passed to llModifyLand to raise terrain" />
+		<integer_constant name="LAND_LOWER" desc="Passed to llModifyLand to lower terrain" />
+		<integer_constant name="LAND_SMOOTH" desc="Passed to llModifyLand to smooth terrain" />
+		<integer_constant name="LAND_NOISE" desc="Passed to llModifyLand to randomize terrain" />
+		<integer_constant name="LAND_REVERT" desc="Passed to llModifyLand to revert terrain toward original state" />
+		<integer_constant name="LAND_SMALL_BRUSH" desc="Passed to llModifyLand to modify small land areas" />
+		<integer_constant name="LAND_MEDIUM_BRUSH" desc="Passed to llModifyLand to modify medium land areas" />
+		<integer_constant name="LAND_LARGE_BRUSH" desc="Passed to llModifyLand to modify large land areas" />
+		
+		<integer_constant name="DATA_PAYINFO" desc="Passed to llRequestAgentData to get payment status of an agent" />
+		<integer_constant name="DATA_ONLINE" desc="Passed to llRequestAgentData to determine if agent is online" />
+		<integer_constant name="DATA_NAME" desc="Passed to llRequestAgentData to get full agent name" />
+		<integer_constant name="DATA_BORN" desc="Passed to llRequestAgentData to get born on date as a string" />
+		<integer_constant name="DATA_RATING" desc="Passed to llRequestAgentData to get a comma separated sting of integer ratings" />
+		<integer_constant name="DATA_SIM_POS" desc="Passed to llRequestSimulatorData to get a string (cast to vector) of a simulator's global position" />
+		<integer_constant name="DATA_SIM_STATUS" desc="Passed to llRequestSimulatorData to get the status of a simulator" />
+		<integer_constant name="DATA_SIM_RATING" desc="Passed to llRequestSimulatorData to get the rating of a simulator" />
+		
+		<integer_constant name="PAYMENT_INFO_ON_FILE" desc="Used with llRequestAgentData to tell if Agent is of &quot;Payment Info On File&quot; status" />
+		<integer_constant name="PAYMENT_INFO_USED" desc="Used with llRequestAgentData to tell if Agent is of &quot;Payment Info Used&quot; status" />
+		
+		<integer_constant name="ANIM_ON" desc="Enable texture animation" />
+		<integer_constant name="LOOP" desc="Loop when animating textures" />
+		<integer_constant name="REVERSE" desc="Animate in the reverse direction" />
+		<integer_constant name="PING_PONG" desc="Animate forward, then reverse" />
+		<integer_constant name="SMOOTH" desc="Textures slides, instead of stepping" />
+		<integer_constant name="ROTATE" desc="Rotates the texture, instead of using frames" />
+		<integer_constant name="SCALE" desc="Scales the texture, instead of using frames" />
+		
+		<integer_constant name="ALL_SIDES" desc="Passed to various texture and color library functions to modify all sides" />
+		
+		<integer_constant name="LINK_SET" desc="Passed to various link functions to modify all blocks in the object" />
+		<integer_constant name="LINK_ROOT" desc="Passed to various link functions to modify only the root block (no effect on single block objects)" />
+		<integer_constant name="LINK_ALL_OTHERS" desc="Passed to various link functions to modify all other blocks in the object" />
+		<integer_constant name="LINK_ALL_CHILDREN" desc="Passed to various link functions to modify all child blocks in the object" />
+		<integer_constant name="LINK_THIS" desc="Passed to various link functions to modify only the calling block" />
+		
+		<integer_constant name="CHANGED_INVENTORY" desc="Parameter of changed event handler used to indicate change to task's inventory" />
+		<integer_constant name="CHANGED_COLOR" desc="Parameter of changed event handler used to indicate change to task's color" />
+		<integer_constant name="CHANGED_SHAPE" desc="Parameter of changed event handler used to indicate change to task's shape parameters" />
+		<integer_constant name="CHANGED_SCALE" desc="Parameter of changed event handler used to indicate change to task's scale" />
+		<integer_constant name="CHANGED_TEXTURE" desc="Parameter of changed event handler used to indicate change to task's texture" />
+		<integer_constant name="CHANGED_LINK" desc="Parameter of changed event handler used to indicate change to task's link status" />
+		<integer_constant name="CHANGED_ALLOWED_DROP" desc="Parameter of changed event handler used to indicate a user dropped an inventory item;onto task that was allowed only by llAllowInventoryDrop function call" />
+		<integer_constant name="CHANGED_OWNER" desc="Parameter of changed event handler used to indicate change to task's owner ONLY when an object is sold as original or deeded to group" />
+		<integer_constant name="CHANGED_REGION" desc="Parameter of changed event handler used to indicate the region has changed" />
+		<integer_constant name="CHANGED_TELEPORT" desc="Parameter of changed event handler used to indicate teleport has completed" />
+		<integer_constant name="CHANGED_REGION_START" desc="Parameter of changed event handler used to indicate the region has been restarted" />
+		<integer_constant name="CHANGED_MEDIA" desc="Parameter of changed event handler used to indicate that media has changed on a face of the task" />
+		
+		<integer_constant name="TYPE_INTEGER" desc="Indicates that the list entry is holding an integer" />
+		<integer_constant name="TYPE_FLOAT" desc="Indicates that the list entry is holding an float" />
+		<integer_constant name="TYPE_STRING" desc="Indicates that the list entry is holding an string" />
+		<integer_constant name="TYPE_KEY" desc="Indicates that the list entry is holding an key" />
+		<integer_constant name="TYPE_VECTOR" desc="Indicates that the list entry is holding an vector" />
+		<integer_constant name="TYPE_ROTATION" desc="Indicates that the list entry is holding an rotation" />
+		<integer_constant name="TYPE_INVALID" desc="Indicates that this wasn't a valid list entry" />
+		
+		<integer_constant name="REMOTE_DATA_CHANNEL" desc="Value of event_type in remote_event after successful llOpenRemoteDataChannel" />
+		<integer_constant name="REMOTE_DATA_REQUEST" desc="Value of event_type in remote_event if XML-RPC request is received" />
+		<integer_constant name="REMOTE_DATA_REPLY" desc="Value of event_type in remote_event if XML-RPC reply is received" />
+		
+		<integer_constant name="PRIM_TYPE" desc="Followed by PRIM_TYPE_BOX, PRIM_TYPE_CYLINDER, PRIM_TYPE_PRISM, PRIM_TYPE_SPHERE, PRIM_TYPE_TORUS, PRIM_TYPE_TUBE, or PRIM_TYPE_SCULPT and their arguments" />
+		<integer_constant name="PRIM_MATERIAL" desc="Followed by PRIM_MATERIAL_STONE, PRIM_MATERIAL_METAL, PRIM_MATERIAL_GLASS, PRIM_MATERIAL_WOOD, PRIM_MATERIAL_FLESH, PRIM_MATERIAL_PLASTIC, or PRIM_MATERIAL_RUBBER" />
+		<integer_constant name="PRIM_PHYSICS" desc="Sets physics to TRUE or FALSE" />
+		<integer_constant name="PRIM_FLEXIBLE" desc="Followed by TRUE or FALSE, integer softness, float gravity, float friction, float wind, float tension, and vector force" />
+		<integer_constant name="PRIM_POINT_LIGHT" desc="Followed by TRUE or FALSE, vector color, float intensity, float radius, float falloff" />
+		<integer_constant name="PRIM_TEMP_ON_REZ" desc="Sets temporary on rez to TRUE or FALSE" />
+		<integer_constant name="PRIM_PHANTOM" desc="Sets phantom to TRUE or FALSE" />
+		<integer_constant name="PRIM_CAST_SHADOWS" desc="DEPRECATED. Takes 1 parameter, an integer, but has no effect when set and always returns 0 if used in llGetPrimitiveParams" />
+		<integer_constant name="PRIM_POSITION" desc="Sets primitive position to a vector position" />
+		<integer_constant name="PRIM_SIZE" desc="Sets primitive size to a vector size" />
+		<integer_constant name="PRIM_ROTATION" desc="Sets primitive rotation" />
+		<integer_constant name="PRIM_TEXT" desc="Used to get or set the object's floating text." />
+		<integer_constant name="PRIM_TEXTURE" desc="Followed by an integer face, key id, vector repeats, vector offsets,;and float rotation in radians" />
+		<integer_constant name="PRIM_COLOR" desc="Followed by an integer face, vector color, and float alpha" />
+		<integer_constant name="PRIM_BUMP_SHINY" desc="Followed by an integer face, one of PRIM_SHINY_NONE, PRIM_SHINY_LOW,;PRIM_SHINY_MEDIUM, or PRIM_SHINY_HIGH,;and one of PRIM_BUMP_NONE, PRIM_BUMP_BRIGHT, PRIM_BUMP_DARK, etc" />
+		<integer_constant name="PRIM_FULLBRIGHT" desc="Followed by an integer face, and TRUE or FALSE" />
+		<integer_constant name="PRIM_TEXGEN" desc="Followed by an integer face, and one of PRIM_TEXGEN_DEFAULT or PRIM_TEXGEN_PLANAR" />
+		<integer_constant name="PRIM_GLOW" desc="Followed by an integer face, and a float from 0.0 to 1.0 specifying glow amount" />
+		<integer_constant name="PRIM_POS_LOCAL" desc="Sets the prim's local position." />
+		<integer_constant name="PRIM_ROT_LOCAL" desc="Sets the prim's local rotation." />
+		<integer_constant name="PRIM_NAME" desc="Sets the prim's name." />
+		<integer_constant name="PRIM_DESC" desc="Sets the prim's description." />
+		<integer_constant name="PRIM_OMEGA" desc="Makes the object spin at the specified axis and rate." />
+		<integer_constant name="PRIM_LINK_TARGET" desc="Used to get or set multiple links with a single PrimParameters call." />
+		<integer_constant name="PRIM_SLICE" desc="Get and set the &quot;slice&quot; parameter of all shapes. Takes a vector parameter of the form &lt;start_slice, end_slice, 0&gt;" />
+			
+		<integer_constant name="PRIM_TYPE_BOX" desc="Followed by integer hole shape, vector cut, float hollow, vector twist,;vector top size, and vector top shear" />
+		<integer_constant name="PRIM_TYPE_CYLINDER" desc="Followed by integer hole shape, vector cut, float hollow, vector twist,;vector top size, and vector top shear" />
+		<integer_constant name="PRIM_TYPE_PRISM" desc="Followed by integer hole shape, vector cut, float hollow, vector twist,;vector top size, and vector top shear" />
+		<integer_constant name="PRIM_TYPE_SPHERE" desc="Followed by integer hole shape, vector cut, float hollow, vector twist,;and vector dimple" />
+		<integer_constant name="PRIM_TYPE_TORUS" desc="Followed by integer hole shape, vector cut, float hollow, vector twist,;vector hole size, vector top shear, vector advanced cut, vector taper,;float revolutions, float radius offset, and float skew" />
+		<integer_constant name="PRIM_TYPE_TUBE" desc="Followed by integer hole shape, vector cut, float hollow, vector twist,;vector hole size, vector top shear, vector advanced cut, vector taper,;float revolutions, float radius offset, and float skew" />
+		<integer_constant name="PRIM_TYPE_RING" desc="Followed by integer hole shape, vector cut, float hollow, vector twist,;vector hole size, vector top shear, vector advanced cut, vector taper,;float revolutions, float radius offset, and float skew" />
+		<integer_constant name="PRIM_TYPE_SCULPT" desc="Followed by a key/string texture uuid, and one of PRIM_SCULPT_TYPE_SPHERE, PRIM_SCULPT_TYPE_TORUS, PRIM_SCULPT_TYPE_PLANE, or PRIM_SCULPT_TYPE_CYLINDER" />
+			
+		<integer_constant name="PRIM_HOLE_DEFAULT" desc="Sets hole type to match the prim type" />
+		<integer_constant name="PRIM_HOLE_SQUARE" desc="Sets hole type to square" />
+		<integer_constant name="PRIM_HOLE_CIRCLE" desc="Sets hole type to circle" />
+		<integer_constant name="PRIM_HOLE_TRIANGLE" desc="Sets hole type to triangle" />
+			
+		<integer_constant name="PRIM_MATERIAL_STONE" desc="Sets material to stone" />
+		<integer_constant name="PRIM_MATERIAL_METAL" desc="Sets material to metal" />
+		<integer_constant name="PRIM_MATERIAL_GLASS" desc="Sets material to glass" />
+		<integer_constant name="PRIM_MATERIAL_WOOD" desc="Sets material to wood" />
+		<integer_constant name="PRIM_MATERIAL_FLESH" desc="Sets material to flesh" />
+		<integer_constant name="PRIM_MATERIAL_PLASTIC" desc="Sets material to plastic" />
+		<integer_constant name="PRIM_MATERIAL_RUBBER" desc="Sets material to rubber" />
+		<integer_constant name="PRIM_MATERIAL_LIGHT" desc="Sets material to light" />
+			
+		<integer_constant name="PRIM_SHINY_NONE" desc="No shininess" />
+		<integer_constant name="PRIM_SHINY_LOW" desc="Low shininess" />
+		<integer_constant name="PRIM_SHINY_MEDIUM" desc="Medium shininess" />
+		<integer_constant name="PRIM_SHINY_HIGH" desc="High shininess" />
+			
+		<integer_constant name="PRIM_BUMP_NONE" desc="No bump map" />
+		<integer_constant name="PRIM_BUMP_BRIGHT" desc="Generate bump map from highlights" />
+		<integer_constant name="PRIM_BUMP_DARK" desc="Generate bump map from lowlights" />
+		<integer_constant name="PRIM_BUMP_WOOD" desc="Wood bump map" />
+		<integer_constant name="PRIM_BUMP_BARK" desc="Bark bump map" />
+		<integer_constant name="PRIM_BUMP_BRICKS" desc="Brick bump map" />
+		<integer_constant name="PRIM_BUMP_CHECKER" desc="Checker bump map" />
+		<integer_constant name="PRIM_BUMP_CONCRETE" desc="Concrete bump map" />
+		<integer_constant name="PRIM_BUMP_TILE" desc="Tile bump map" />
+		<integer_constant name="PRIM_BUMP_STONE" desc="Stone bump map" />
+		<integer_constant name="PRIM_BUMP_DISKS" desc="Disk bump map" />
+		<integer_constant name="PRIM_BUMP_GRAVEL" desc="Gravel bump map" />
+		<integer_constant name="PRIM_BUMP_BLOBS" desc="Blob bump map" />
+		<integer_constant name="PRIM_BUMP_SIDING" desc="Siding bump map" />
+		<integer_constant name="PRIM_BUMP_LARGETILE" desc="Large tile bump map" />
+		<integer_constant name="PRIM_BUMP_STUCCO" desc="Stucco bump map" />
+		<integer_constant name="PRIM_BUMP_SUCTION" desc="Suction cup bump map" />
+		<integer_constant name="PRIM_BUMP_WEAVE" desc="Weave bump map" />
+			
+		<integer_constant name="PRIM_TEXGEN_DEFAULT" desc="Default texture mapping" />
+		<integer_constant name="PRIM_TEXGEN_PLANAR" desc="Planar texture mapping" />
+			
+		<integer_constant name="PRIM_SCULPT_TYPE_SPHERE" desc="Stitch edges in a sphere-like way" />
+		<integer_constant name="PRIM_SCULPT_TYPE_TORUS" desc="Stitch edges in a torus-like way" />
+		<integer_constant name="PRIM_SCULPT_TYPE_PLANE" desc="Do not stitch edges" />
+		<integer_constant name="PRIM_SCULPT_TYPE_CYLINDER" desc="Stitch edges in a cylinder-like way" />
+		<integer_constant name="PRIM_SCULPT_TYPE_MASK" desc="Mask used to determine stitching type" />
+		<integer_constant name="PRIM_SCULPT_FLAG_INVERT" desc="Flag to specify that the surface normals should be inverted" />
+		<integer_constant name="PRIM_SCULPT_FLAG_MIRROR" desc="Flag to specify that the prim should be reflected along X axis" />
+			
+		<integer_constant name="MASK_BASE" desc="Base permissions" />
+		<integer_constant name="MASK_OWNER" desc="Owner permissions" />
+		<integer_constant name="MASK_GROUP" desc="Group permissions" />
+		<integer_constant name="MASK_EVERYONE" desc="Everyone permissions" />
+		<integer_constant name="MASK_NEXT" desc="Next owner permissions" />
+			
+		<integer_constant name="PERM_TRANSFER" desc="Transfer permission" />
+		<integer_constant name="PERM_MODIFY" desc="Modify permission" />
+		<integer_constant name="PERM_COPY" desc="Copy permission" />
+		<integer_constant name="PERM_MOVE" desc="Move permission" />
+		<integer_constant name="PERM_ALL" desc="Move/Modify/Copy/Transfer permissions" />
+			
+		<integer_constant name="PARCEL_MEDIA_COMMAND_STOP" desc="Stop media stream" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_PAUSE" desc="Pause media stream" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_PLAY" desc="Play media stream" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_LOOP" desc="Loop media stream" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_LOOP_SET" desc="Used to get or set the parcel's media loop duration." />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_TEXTURE" desc="Get or set the parcel's media texture" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_URL" desc="Get or set the parcel's media url" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_TYPE" desc="Get or set the parcel's media mimetype" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_DESC" desc="Get or set the parcel's media description" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_TIME" desc="Set media stream to specific time" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_SIZE" desc="Get or set the parcel's media pixel resolution" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_AGENT" desc="Allows media stream commands to apply to only one agent" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_UNLOAD" desc="Unloads the media stream" />
+		<integer_constant name="PARCEL_MEDIA_COMMAND_AUTO_ALIGN" desc="Auto aligns the media stream to the texture size.  May cause a performance hit and loss of some visual quality" />
+			
+		<integer_constant name="PAY_HIDE" desc="Used with llSetPayPrice to hide a button" />
+		<integer_constant name="PAY_DEFAULT" desc="Used with llSetPayPrice to use the default price for a button" />
+			
+		<integer_constant name="LIST_STAT_MAX" desc="Used with llListStatistics to find the largest number in a list" />
+		<integer_constant name="LIST_STAT_MIN" desc="Used with llListStatistics to find the smallest number in a list" />
+		<integer_constant name="LIST_STAT_MEAN" desc="Used with llListStatistics to find the mean of the numbers in a list" />
+		<integer_constant name="LIST_STAT_MEDIAN" desc="Used with llListStatistics to find the median of the numbers in a list" />
+		<integer_constant name="LIST_STAT_STD_DEV" desc="Used with llListStatistics to find the standard deviation of the numbers in a list" />
+		<integer_constant name="LIST_STAT_SUM" desc="Used with llListStatistics to find the sum of the numbers in a list" />
+		<integer_constant name="LIST_STAT_SUM_SQUARES" desc="Used with llListStatistics to find the sum of the squares of the numbers in a list" />
+		<integer_constant name="LIST_STAT_NUM_COUNT" desc="Used with llListStatistics to find how many numbers are in a list" />
+		<integer_constant name="LIST_STAT_GEOMETRIC_MEAN" desc="Used with llListStatistics to find the geometric mean of the numbers in a list (all numbers must be > 0)" />
+		<integer_constant name="LIST_STAT_RANGE" desc="Used with llListStatistics to find the range of the numbers in a list" />
+			
+		<integer_constant name="PARCEL_FLAG_ALLOW_FLY" desc="Used with llGetParcelFlags to find if a parcel allows flying" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_GROUP_SCRIPTS" desc="Used with llGetParcelFlags to find if a parcel allows group scripts" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_SCRIPTS" desc="Used with llGetParcelFlags to find if a parcel allows outside scripts" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_LANDMARK" desc="Used with llGetParcelFlags to find if a parcel allows landmarks to be created" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_TERRAFORM" desc="Used with llGetParcelFlags to find if a parcel allows anyone to terraform the land" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_DAMAGE" desc="Used with llGetParcelFlags to find if a parcel allows damage" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_CREATE_OBJECTS" desc="Used with llGetParcelFlags to find if a parcel allows anyone to create objects" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_CREATE_GROUP_OBJECTS" desc="Used with llGetParcelFlags to find if a parcel allows group members or objects to create objects" />
+		<integer_constant name="PARCEL_FLAG_USE_ACCESS_GROUP" desc="Used with llGetParcelFlags to find if a parcel limits access to a group" />
+		<integer_constant name="PARCEL_FLAG_USE_ACCESS_LIST" desc="Used with llGetParcelFlags to find if a parcel limits access to a list of residents" />
+		<integer_constant name="PARCEL_FLAG_USE_BAN_LIST" desc="Used with llGetParcelFlags to find if a parcel uses a ban list" />
+		<integer_constant name="PARCEL_FLAG_USE_LAND_PASS_LIST" desc="Used with llGetParcelFlags to find if a parcel allows passes to be purchased" />
+		<integer_constant name="PARCEL_FLAG_LOCAL_SOUND_ONLY" desc="Used with llGetParcelFlags to find if a parcel restricts spacialized sound to the parcel" />
+		<integer_constant name="PARCEL_FLAG_RESTRICT_PUSHOBJECT" desc="Used with llGetParcelFlags to find if a parcel restricts llPushObject() calls" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_ALL_OBJECT_ENTRY" desc="Used with llGetParcelFlags to find if a parcel allows all objects to enter" />
+		<integer_constant name="PARCEL_FLAG_ALLOW_GROUP_OBJECT_ENTRY" desc="Used with llGetParcelFlags to find if a parcel only allows group (and owner) objects to enter" />
+			
+		<integer_constant name="REGION_FLAG_ALLOW_DAMAGE" desc="Used with llGetRegionFlags to find if a region is entirely damage enabled" />
+		<integer_constant name="REGION_FLAG_FIXED_SUN" desc="Used with llGetRegionFlags to find if a region has a fixed sun position" />
+		<integer_constant name="REGION_FLAG_BLOCK_TERRAFORM" desc="Used with llGetRegionFlags to find if a region terraforming disabled" />
+		<integer_constant name="REGION_FLAG_SANDBOX" desc="Used with llGetRegionFlags to find if a region is a sandbox" />
+		<integer_constant name="REGION_FLAG_DISABLE_COLLISIONS" desc="Used with llGetRegionFlags to find if a region has disabled collisions" />
+		<integer_constant name="REGION_FLAG_DISABLE_PHYSICS" desc="Used with llGetRegionFlags to find if a region has disabled physics" />
+		<integer_constant name="REGION_FLAG_BLOCK_FLY" desc="Used with llGetRegionFlags to find if a region blocks flying" />
+		<integer_constant name="REGION_FLAG_ALLOW_DIRECT_TELEPORT" desc="Used with llGetRegionFlags to find if a region allows direct teleports" />
+		<integer_constant name="REGION_FLAG_RESTRICT_PUSHOBJECT" desc="Used with llGetRegionFlags to find if a region restricts llPushObject() calls" />
+			
+		<integer_constant name="HTTP_METHOD" desc="Used with llHTTPRequest to specify the method, such as 'GET' or 'POST'" />
+		<integer_constant name="HTTP_MIMETYPE" desc="Used with llHTTPRequest to specify the MIME type, defaults to 'text/plain'" />
+		<integer_constant name="HTTP_VERIFY_CERT" desc="Used with llHTTPRequest to specify SSL certificate verification" />
+		<integer_constant name="HTTP_BODY_TRUNCATED" desc="Used with http_response to indicate truncation point in bytes" />
+		<integer_constant name="HTTP_BODY_MAXLENGTH" desc="Used with llHTTPRequest to specify the maximum body size for the date returned from the request. Mono scripts can request from 1byte to 16k, non-mono scripts can request from 1byte to 4k. The default is 2k." />
+		<integer_constant name="HTTP_VERBOSE_THROTTLE" desc="The integer constant HTTP_VERBOSE_THROTTLE has the value 4" />
+		<integer_constant name="HTTP_CUSTOM_HEADER" desc="The integer constant HTTP_CUSTOM_HEADER has the value 5" />
+		<integer_constant name="HTTP_PRAGMA_NO_CACHE" desc="The integer constant HTTP_PRAGMA_NO_CACHE has the value 6" />
+		
+		<integer_constant name="PARCEL_COUNT_TOTAL" desc="Used with llGetParcelPrimCount to get the total number of prims on the parcel" />
+		<integer_constant name="PARCEL_COUNT_OWNER" desc="Used with llGetParcelPrimCount to get the number of prims on the parcel owned by the owner" />
+		<integer_constant name="PARCEL_COUNT_GROUP" desc="Used with llGetParcelPrimCount to get the number of prims on the parcel owned by the group" />
+		<integer_constant name="PARCEL_COUNT_OTHER" desc="Used with llGetParcelPrimCount to get the number of prims on the parcel owned by others" />
+		<integer_constant name="PARCEL_COUNT_SELECTED" desc="Used with llGetParcelPrimCount to get the number of prims on the parcel currently selected or sat upon" />
+		<integer_constant name="PARCEL_COUNT_TEMP" desc="Used with llGetParcelPrimCount to get the number of prims on the parcel that are temp on rez" />
+			
+		<integer_constant name="PARCEL_DETAILS_NAME" desc="Used with llGetParcelDetails to get the parcel name" />
+		<integer_constant name="PARCEL_DETAILS_DESC" desc="Used with llGetParcelDetails to get the parcel description" />
+		<integer_constant name="PARCEL_DETAILS_OWNER" desc="Used with llGetParcelDetails to get the parcel owner id" />
+		<integer_constant name="PARCEL_DETAILS_GROUP" desc="Used with llGetParcelDetails to get the parcel group id" />
+		<integer_constant name="PARCEL_DETAILS_AREA" desc="Used with llGetParcelDetails to get the parcel area in square meters" />
+		<integer_constant name="PARCEL_DETAILS_ID" desc="Used with llGetParcelDetails to get the parcel id" />
+		<integer_constant name="PARCEL_DETAILS_SEE_AVATARS" desc="Used with llGetParcelDetails to get the avatars visibility setting" />
+			
+		<integer_constant name="STRING_TRIM_HEAD" desc="Used with llStringTrim to trim leading spaces from a string" />
+		<integer_constant name="STRING_TRIM_TAIL" desc="Used with llStringTrim to trim trailing spaces from a string" />
+		<integer_constant name="STRING_TRIM" desc="Used with llStringTrim to trim both leading and trailing spaces from a string" />
+			
+		<integer_constant name="CLICK_ACTION_NONE" desc="Used with llSetClickAction to disable the click action" />
+		<integer_constant name="CLICK_ACTION_TOUCH" desc="Used with llSetClickAction to set touch as the default action when object is clicked" />
+		<integer_constant name="CLICK_ACTION_SIT" desc="Used with llSetClickAction to set sit as the default action when object is clicked" />
+		<integer_constant name="CLICK_ACTION_BUY" desc="Used with llSetClickAction to set buy as the default action when object is clicked" />
+		<integer_constant name="CLICK_ACTION_PAY" desc="Used with llSetClickAction to set pay as the default action when object is clicked" />
+		<integer_constant name="CLICK_ACTION_OPEN" desc="Used with llSetClickAction to set open as the default action when object is clicked" />
+		<integer_constant name="CLICK_ACTION_PLAY" desc="Used with llSetClickAction to set play as the default action when object is clicked" />
+		<integer_constant name="CLICK_ACTION_OPEN_MEDIA" desc="Used with llSetClickAction to set open-media as the default action when object is clicked" />
+		<integer_constant name="CLICK_ACTION_ZOOM" desc="Used with llSetClickAction to set zoom in as the default action when object is clicked" />
+			
+		<integer_constant name="TOUCH_INVALID_TEXCOORD" desc="Value returned by llDetectedTouchUV() and llDetectedTouchST() when the touch position is not valid" />
+		<integer_constant name="TOUCH_INVALID_VECTOR" desc="Value returned by llDetectedTouchPos(), llDetectedTouchNormal(), and llDetectedTouchBinormal() when the touch position is not valid" />
+		<integer_constant name="TOUCH_INVALID_FACE" desc="Value returned by llDetectedTouchFace() when the touch position is not valid" />
+			
+		<integer_constant name="PRIM_MEDIA_ALT_IMAGE_ENABLE" desc="Used with ll{Get,Set}PrimMediaParams to enable the default alt image for media" />
+		<integer_constant name="PRIM_MEDIA_CONTROLS" desc="Used with ll{Get,Set}PrimMediaParams to determine the controls shown for media" />
+		<integer_constant name="PRIM_MEDIA_CURRENT_URL" desc="Used with ll{Get,Set}PrimMediaParams to navigate/access the current URL" />
+		<integer_constant name="PRIM_MEDIA_HOME_URL" desc="Used with ll{Get,Set}PrimMediaParams to access the home URL" />
+		<integer_constant name="PRIM_MEDIA_AUTO_LOOP" desc="Used with ll{Get,Set}PrimMediaParams to determine if media should auto-loop (if applicable)" />
+		<integer_constant name="PRIM_MEDIA_AUTO_PLAY" desc="Used with ll{Get,Set}PrimMediaParams to determine if media should start playing as soon as it is created" />
+		<integer_constant name="PRIM_MEDIA_AUTO_SCALE" desc="Used with ll{Get,Set}PrimMediaParams to determine if media should scale to fit the face it is on" />
+		<integer_constant name="PRIM_MEDIA_AUTO_ZOOM" desc="Used with ll{Get,Set}PrimMediaParams to determine if the user would zoom in when viewing media" />
+		<integer_constant name="PRIM_MEDIA_FIRST_CLICK_INTERACT" desc="Used with ll{Get,Set}PrimMediaParams to determine whether the user interacts with media or not when she first clicks it (versus selection)" />
+		<integer_constant name="PRIM_MEDIA_WIDTH_PIXELS" desc="Used with ll{Get,Set}PrimMediaParams to access the media's width in pixels" />
+		<integer_constant name="PRIM_MEDIA_HEIGHT_PIXELS" desc="Used with ll{Get,Set}PrimMediaParams to access the media's height in pixels" />
+		<integer_constant name="PRIM_MEDIA_WHITELIST_ENABLE" desc="Used with ll{Get,Set}PrimMediaParams to determine if the domain whitelist is enabled" />
+		<integer_constant name="PRIM_MEDIA_WHITELIST" desc="Used with ll{Get,Set}PrimMediaParams to access the media's list of allowable URL prefixes to navigate to" />
+		<integer_constant name="PRIM_MEDIA_PERMS_INTERACT" desc="Used with ll{Get,Set}PrimMediaParams to determine the permissions for who can interact with the media" />
+		<integer_constant name="PRIM_MEDIA_PERMS_CONTROL" desc="Used with ll{Get,Set}PrimMediaParams to determine the permissions for who has controls" />
+		<integer_constant name="PRIM_MEDIA_PARAM_MAX" desc="The value of the largest media param" />
+			
+		<integer_constant name="PRIM_MEDIA_CONTROLS_STANDARD" desc="Used with ll{Get,Set}PrimMediaParams, a PRIM_MEDIA_CONTROLS value meaning 'standard controls'" />
+		<integer_constant name="PRIM_MEDIA_CONTROLS_MINI" desc="Used with ll{Get,Set}PrimMediaParams, a PRIM_MEDIA_CONTROLS value meaning 'mini controls'" />
+			
+		<integer_constant name="PRIM_MEDIA_PERM_NONE" desc="Used with ll{Get,Set}PrimMediaParams, a PRIM_MEDIA_PERMS_INTERACT or PRIM_MEDIA_PERMS_CONTROL bit, no permissions" />
+		<integer_constant name="PRIM_MEDIA_PERM_OWNER" desc="Used with ll{Get,Set}PrimMediaParams, a PRIM_MEDIA_PERMS_INTERACT or PRIM_MEDIA_PERMS_CONTROL bit, owner permissions" />
+		<integer_constant name="PRIM_MEDIA_PERM_GROUP" desc="Used with ll{Get,Set}PrimMediaParams, a PRIM_MEDIA_PERMS_INTERACT or PRIM_MEDIA_PERMS_CONTROL bit, group permissions" />
+		<integer_constant name="PRIM_MEDIA_PERM_ANYONE" desc="Used with ll{Get,Set}PrimMediaParams, a PRIM_MEDIA_PERMS_INTERACT or PRIM_MEDIA_PERMS_CONTROL bit, anyone has permissions" />
+			
+		<integer_constant name="PRIM_MEDIA_MAX_URL_LENGTH" desc="Used with ll{Get,Set}PrimMediaParams, the maximum length of PRIM_MEDIA_CURRENT_URL or PRIM_MEDIA_HOME_URL" />
+		<integer_constant name="PRIM_MEDIA_MAX_WHITELIST_SIZE" desc="Used with ll{Get,Set}PrimMediaParams, the maximum length, in bytes, of PRIM_MEDIA_WHITELIST" />
+		<integer_constant name="PRIM_MEDIA_MAX_WHITELIST_COUNT" desc="Used with ll{Get,Set}PrimMediaParams, the maximum number of items allowed in PRIM_MEDIA_WHITELIST" />
+		<integer_constant name="PRIM_MEDIA_MAX_WIDTH_PIXELS" desc="Used with ll{Get,Set}PrimMediaParams, the maximum width allowed in PRIM_MEDIA_WIDTH_PIXELS" />
+		<integer_constant name="PRIM_MEDIA_MAX_HEIGHT_PIXELS" desc="Used with ll{Get,Set}PrimMediaParams, the maximum width allowed in PRIM_MEDIA_HEIGHT_PIXELS" />
+		
+		<integer_constant name="STATUS_OK" desc="Result of function call was success" />
+		<integer_constant name="STATUS_MALFORMED_PARAMS" desc="Function was called with malformed params" />
+		<integer_constant name="STATUS_TYPE_MISMATCH" desc="Argument(s) passed to function had a type mismatch" />
+		<integer_constant name="STATUS_BOUNDS_ERROR" desc="Argument(s) passed to function had a bounds error" />
+		<integer_constant name="STATUS_NOT_FOUND" desc="Object or other item was not found" />
+		<integer_constant name="STATUS_NOT_SUPPORTED" desc="Feature not supported" />
+		<integer_constant name="STATUS_INTERNAL_ERROR" desc="An internal error occurred" />
+		<integer_constant name="STATUS_WHITELIST_FAILED" desc="URL failed to pass whitelist" />
+			
+		<integer_constant name="KFM_COMMAND" desc="Option for llSetKeyframedMotion(), followed by one of KFM_CMD_STOP, KFM_CMD_PLAY, KFM_CMD_PAUSE. Note that KFM_COMMAND must be the only option in the list, and cannot be specified in the same function call that sets the keyframes list." />
+		<integer_constant name="KFM_MODE" desc="Option for llSetKeyframedMotion(), used to specify the playback mode, followed by one of KFM_FORWARD, KFM_LOOP, KFM_PING_PONG or KFM_REVERSE." />
+		<integer_constant name="KFM_DATA" desc="Option for llSetKeyframedMotion(), followed by a bitwise combination of KFM_TRANSLATION and KFM_ROTATION. If you specify one or the other, you should only include translations or rotations in your keyframe list." />
+		<integer_constant name="KFM_FORWARD" desc="Option for llSetKeyframedMotion(), used after KFM_MODE to specify the forward playback mode." />
+		<integer_constant name="KFM_LOOP" desc="Option for llSetKeyframedMotion(), used after KFM_MODE to specify the loop playback mode." />
+		<integer_constant name="KFM_PING_PONG" desc="Option for llSetKeyframedMotion(), used after KFM_MODE to specify the ping pong playback mode." />
+		<integer_constant name="KFM_REVERSE" desc="Option for llSetKeyframedMotion(), used after KFM_MODE to specify the reverse playback mode." />
+		<integer_constant name="KFM_ROTATION" desc="Option for llSetKeyframedMotion(), used after KFM_DATA, possibly as a bitwise combination with KFM_TRANSLATION." />
+		<integer_constant name="KFM_TRANSLATION" desc="Option for llSetKeyframedMotion(), used after KFM_DATA, possibly as a bitwise combination with KFM_ROTATION." />
+		<integer_constant name="KFM_CMD_PLAY" desc="Option for llSetKeyframedMotion(), used after KFM_COMMAND to play the motion." />
+		<integer_constant name="KFM_CMD_STOP" desc="Option for llSetKeyframedMotion(), used after KFM_COMMAND to stop the motion." />
+		<integer_constant name="KFM_CMD_PAUSE" desc="Option for llSetKeyframedMotion(), used after KFM_COMMAND to pause the motion." />
+				
+		<integer_constant name="ESTATE_ACCESS_ALLOWED_AGENT_ADD" desc="Used with llManageEstateAccess to add an agent to this estate's allowed residents list." />
+		<integer_constant name="ESTATE_ACCESS_ALLOWED_AGENT_REMOVE" desc="Used with llManageEstateAccess to remove an agent from this estate's allowed residents list." />
+		<integer_constant name="ESTATE_ACCESS_ALLOWED_GROUP_ADD" desc="Used with llManageEstateAccess to add a group to this estate's allowed groups list." />
+		<integer_constant name="ESTATE_ACCESS_ALLOWED_GROUP_REMOVE" desc="Used with llManageEstateAccess to remove a group from this estate's allowed groups list." />
+		<integer_constant name="ESTATE_ACCESS_BANNED_AGENT_ADD" desc="Used with llManageEstateAccess to add an agent to this estate's banned residents list." />
+		<integer_constant name="ESTATE_ACCESS_BANNED_AGENT_REMOVE" desc="Used with llManageEstateAccess to remove an agent from this estate's banned residents list." />
+				
+		<integer_constant name="OBJECT_PHYSICS_COST" desc="Used with llGetObjectDetails to get the physics cost." />
+		<integer_constant name="OBJECT_PRIM_EQUIVALENCE" desc="Used with llGetObjectDetails to get the prim equivalence." />
+		<integer_constant name="OBJECT_SERVER_COST" desc="Used with llGetObjectDetails to get the server cost." />
+		<integer_constant name="OBJECT_STREAMING_COST" desc="Used with llGetObjectDetails to get the streaming (download) cost." />
+				
+		<integer_constant name="PRIM_PHYSICS_SHAPE_TYPE" desc="For primitive physics shape type. Followed with either PRIM_PHYSICS_SHAPE_PRIM, PRIM_PHYSICS_SHAPE_NONE or PRIM_PHYSICS_SHAPE_CONVEX." />
+		<integer_constant name="PRIM_PHYSICS_SHAPE_PRIM" desc="Use the normal prim shape for physics (this is the default for all non-mesh objects)" />
+		<integer_constant name="PRIM_PHYSICS_SHAPE_NONE" desc="Use the convex hull of the prim shape for physics (this is the default for mesh objects)" />
+		<integer_constant name="PRIM_PHYSICS_SHAPE_CONVEX" desc="Ignore this prim in the physics shape. This cannot be applied to the root prim." />
+				
+		<integer_constant name="DENSITY" desc="For use with llSetPhysicsMaterial() as a bitwise value in its material_bits parameter, to set the density." />
+		<integer_constant name="FRICTION" desc="For use with llSetPhysicsMaterial() as a bitwise value in its material_bits parameter, to set the friction." />
+		<integer_constant name="RESTITUTION" desc="For use with llSetPhysicsMaterial() as a bitwise value in its material_bits parameter, to set the restitution." />
+		<integer_constant name="GRAVITY_MULTIPLIER" desc="For use with llSetPhysicsMaterial() as a bitwise value in its material_bits parameter, to set the gravity multiplier." />
+				
+		<integer_constant name="PROFILE_SCRIPT_NONE" desc="Disables memory profiling when passed to llScriptProfiler()" />
+		<integer_constant name="PROFILE_SCRIPT_MEMORY" desc="Enables memory profiling when passed to llScriptProfiler()" />
+				
+		<integer_constant name="RCERR_UNKNOWN" desc="Returned by llCastRay() when the raycast failed for an unspecified reason." />
+		<integer_constant name="RCERR_SIM_PERF_LOW" desc="Returned by llCastRay() when the raycast failed because simulator performance is low." />
+		<integer_constant name="RCERR_CAST_TIME_EXCEEDED" desc="Returned by llCastRay() when the raycast failed because the parcel or agent has exceeded the maximum time allowed for raycasting." />
+				
+		<integer_constant name="RC_DETECT_PHANTOM" desc="Option for llCastRay() followed with TRUE to detect phantom AND volume detect objects, FASLE otherwise." />
+		<integer_constant name="RC_DATA_FLAGS" desc="Option for llCastRay() followed with a bitwise combination of RC_GET_NORMAL, RC_GET_ROOT_KEY and RC_GET_LINK_NUM." />
+		<integer_constant name="RC_MAX_HITS" desc="Option for llCastRay() followed with an integer specifying the maximum number of hits to return (must be &lt;= 256)." />
+		<integer_constant name="RC_GET_NORMAL" desc="Flag used in the RC_DATA_FLAGS mask to get hit normals in llCastRay() results." />
+		<integer_constant name="RC_GET_ROOT_KEY" desc="Flag used in the RC_DATA_FLAGS mask to get root keys in llCastRay() results." />
+		<integer_constant name="RC_GET_LINK_NUM" desc="Flag used in the RC_DATA_FLAGS mask to get link numbers in llCastRay() results." />
+		<integer_constant name="RC_REJECT_TYPES" desc="Optional parameter set in llCastRay() to reject hit against certain object types." />
+		<integer_constant name="RC_REJECT_AGENTS" desc="Bit mask for RC_REJECT_TYPES, rejects hits against avatars." />
+		<integer_constant name="RC_REJECT_PHYSICAL" desc="Bit mask for RC_REJECT_TYPES, rejects hits against moving objects." />
+		<integer_constant name="RC_REJECT_NONPHYSICAL" desc="Bit mask for RC_REJECT_TYPES, rejects hits against non-moving objects." />
+		<integer_constant name="RC_REJECT_LAND" desc="Bit mask for RC_REJECT_TYPES, rejects hits against the terrian." />
+					
+		<integer_constant name="SIM_STAT_PCT_CHARS_STEPPED" desc="Option for llGetSimStats() to return the % of pathfinding characters skipped each frame, averaged over the last minute." />
+					
+		<integer_constant name="CHARACTER_DESIRED_SPEED" desc="Speed of pursuit in meters per second." />
+		<integer_constant name="CHARACTER_RADIUS" desc="Set collision capsule radius." />
+		<integer_constant name="CHARACTER_LENGTH" desc="Set collision capsule length." />
+		<integer_constant name="CHARACTER_ORIENTATION" desc="Set the character orientation." />
+		<integer_constant name="VERTICAL" desc="Constant to indicate that the orientation of the capsule for a Pathfinding character is vertical." />
+		<integer_constant name="HORIZONTAL" desc="Constant to indicate that the orientation of the capsule for a Pathfinding character is horizontal." />
+		<integer_constant name="TRAVERSAL_TYPE" desc="Controls the speed at which characters moves on terrain that is less than 100% walkable will move faster (e.g., a cat crossing a street) or slower (e.g., a car driving in a swamp)." />
+		<integer_constant name="CHARACTER_TYPE" desc="Specifies which walkability coefficient will be used by this character." />
+		<integer_constant name="CHARACTER_TYPE_A" desc="Used for character types that you prefer move in a way consistent with humanoids." />
+		<integer_constant name="CHARACTER_TYPE_B" desc="Used for character types that you prefer move in a way consistent with wild animals or off road vehicles." />
+		<integer_constant name="CHARACTER_TYPE_C" desc="Used for mechanical character types or road going vehicles." />
+		<integer_constant name="CHARACTER_TYPE_D" desc="Used for character types that are not consistent with the A, B, or C type." />
+		<integer_constant name="CHARACTER_TYPE_NONE" desc="Used to set no specific character type." />
+					
+		<integer_constant name="CHARACTER_AVOIDANCE_MODE" desc="Allows you to specify that a character should not try to avoid other characters, should not try to avoid dynamic obstacles (relatively fast moving objects and avatars), or both." />
+		<integer_constant name="CHARACTER_MAX_ACCEL" desc="The character's maximum acceleration rate." />
+		<integer_constant name="CHARACTER_MAX_DECEL" desc="The character's maximum deceleration rate." />
+					
+		<integer_constant name="CHARACTER_DESIRED_TURN_SPEED" desc="The character's maximum speed while turning--note that this is only loosely enforced (i.e., a character may turn at higher speeds under certain conditions)" />
+		<integer_constant name="CHARACTER_MAX_TURN_RADIUS" desc="The character's turn radius when traveling at CHARACTER_DESIRED_TURN_SPEED." />
+		<integer_constant name="CHARACTER_MAX_SPEED" desc="The character's maximum speed. Affects speed when avoiding dynamic obstacles and when traversing low-walkability objects in TRAVERSAL_TYPE_FAST mode." />
+		<integer_constant name="CHARACTER_STAY_WITHIN_PARCEL" desc="Characters which have CHARACTER_STAY_WITHIN_PARCEL set to TRUE treat the parcel boundaries as one-way obstacles." />
+					
+		<integer_constant name="CHARACTER_ACCOUNT_FOR_SKIPPED_FRAMES" desc="Defines if a character will attempt to catch up lost time if pathfinding performance is low." />
+		<integer_constant name="OBJECT_PATHFINDING_TYPE" desc="Used with llGetObjectDetails to get an object's pathfinding settings." />
+		<integer_constant name="OPT_UNKNOWN" desc="Returned object pathfinding type by llGetObjectDetails for attachments, Linden trees and grass." />
+		<integer_constant name="OPT_OTHER" desc="Returned for attachments, Linden trees and grass, was OPT_UNKOWN" />
+		<integer_constant name="OPT_LEGACY_LINKSET" desc="Returned object pathfinding type by llGetObjectDetails for movable obstacles, movable phantoms, physical, and volumedetect objects." />
+		<integer_constant name="OPT_AVATAR" desc="Returned object pathfinding type by llGetObjectDetails for avatars." />
+		<integer_constant name="OPT_PATHFINDING_CHARACTER" desc="Returned object pathfinding type by llGetObjectDetails for pathfinding characters." />
+		<integer_constant name="OOPT_CHARACTER" desc="Returned for pathfinding characters, was OPT_PATHFINDING_CHARACTER" />
+		<integer_constant name="OPT_WALKABLE" desc="Returned object pathfinding type by llGetObjectDetails for walkable objects." />
+		<integer_constant name="OPT_STATIC_OBSTACLE" desc="Returned object pathfinding type by llGetObjectDetails for static obstacles." />
+		<integer_constant name="OPT_MATERIAL_VOLUME" desc="Returned object pathfinding type by llGetObjectDetails for material volumes." />
+		<integer_constant name="OPT_EXCLUSION_VOLUME" desc="Returned object pathfinding type by llGetObjectDetails for exclusion volumes." />
+					
+		<integer_constant name="PATROL_PAUSE_AT_WAYPOINTS" desc="Used with llPatrolPoints(). Defines if characters slow down and momentarily pause at each waypoint." />
+		<integer_constant name="WANDER_PAUSE_AT_WAYPOINTS" desc="Used with llWanderWithin(). Defines if characters should pause after reaching each wander waypoint." />
+					
+		<integer_constant name="PURSUIT_OFFSET" desc="Used with llPursue(). Go to a position offset from the target." />
+		<integer_constant name="REQUIRE_LINE_OF_SIGHT" desc="Used with llPursue(). Define whether the character needs a physical line-of-sight to give chase. When enabled, the character will not pick a new target position while there is a something solid between the character and the target object/agent." />
+		<integer_constant name="PURSUIT_FUZZ_FACTOR" desc="Used with llPursue(). Selects a random destination near the PURSUIT_OFFSET. The valid fuzz factor range is from 0 to 1, where 1 is most random. This option requires a nonzero PURSUIT_OFFSET." />
+		<integer_constant name="PURSUIT_INTERCEPT" desc="Used with llPursue(). Define whether the character attempts to predict the target's future location." />
+		<integer_constant name="PURSUIT_GOAL_TOLERANCE" desc="Used with llPursue(). Defines approximately how close the character must be to the current goal to consider itself to be at the desired position. The valid range is from 0.25 to 10m." />
+		<integer_constant name="CHARACTER_CMD_STOP" desc="Used with  llExecCharacterCmd(). Makes the character jump." />
+		<integer_constant name="CHARACTER_CMD_SMOOTH_STOP" desc="Used with  llExecCharacterCmd(). Stops any current pathfinding operation in a smooth like fashion." />
+		<integer_constant name="CHARACTER_CMD_JUMP" desc="Used with  llExecCharacterCmd(). Stops any current pathfinding operation." />
+		
+		<integer_constant name="PU_EVADE_HIDDEN" desc="Triggered when an llEvade character thinks it has hidden from its pursuer." />
+		<integer_constant name="PU_EVADE_SPOTTED" desc="Triggered when an llEvade character switches from hiding to running" />
+		<integer_constant name="PU_FAILURE_INVALID_GOAL" desc="Goal is not on the navigation-mesh and cannot be reached." />
+		<integer_constant name="PU_FAILURE_INVALID_START" desc="Character cannot navigate from the current location - e.g., the character is off the navmesh or too high above it." />
+		<integer_constant name="PU_FAILURE_NO_VALID_DESTINATION" desc="There's no good place for the character to go - e.g., it is patrolling and all the patrol points are now unreachable." />
+		<integer_constant name="PU_FAILURE_OTHER" desc="Unknown failure" />
+		<integer_constant name="PU_FAILURE_TARGET_GONE" desc="Target (for llPursue or llEvade) can no longer be tracked - e.g., it left the region or is an avatar that is now more than about 30m outside the region." />
+		<integer_constant name="PU_FAILURE_UNREACHABLE" desc="Goal is no longer reachable for some reason - e.g., an obstacle blocks the path." />
+		<integer_constant name="PU_GOAL_REACHED" desc="Character has reached the goal and will stop or choose a new goal (if wandering)." />
+		<integer_constant name="PU_SLOWDOWN_DISTANCE_REACHED" desc="Character is near current goal." />
+		<integer_constant name="PU_FAILURE_NO_NAVMESH" desc="Triggered if no navmesh is available for the region." />
+		<integer_constant name="PU_FAILURE_DYNAMIC_PATHFINDING_DISABLED" desc="Triggered when a character enters a region with dynamic pathfinding disabled." />
+		<integer_constant name="PU_FAILURE_PARCEL_UNREACHABLE" desc="Triggered when a character failed to enter a parcel because it is not allowed to enter, e.g. because the parcel is already full or because object entry was disabled after the navmesh was baked." />
+					
+		<integer_constant name="JSON_INVALID" desc="A return value that indicates an invalid type was specified to an llJson* function" />
+		<integer_constant name="JSON_OBJECT" desc="Represents a json datatype represented in LSL as a strided list of name/value pairs" />
+		<integer_constant name="JSON_ARRAY" desc="Represents a json datatype mappable to the LSL datatype &quot;list&quot;" />
+		<integer_constant name="JSON_NUMBER" desc="Represents a json datatype mappable to the LSL datatypes &quot;integer&quot; and &quot;float&quot;" />
+		<integer_constant name="JSON_STRING" desc="Represents a json datatype mappable to the LSL datatype &quot;string&quot;" />
+		<integer_constant name="JSON_TRUE" desc="Represents the constant &quot;true&quot; of a json value." />
+		<integer_constant name="JSON_FALSE" desc="Represents the constant &quot;false&quot; of a json value." />
+		<integer_constant name="JSON_NULL" desc="Represents the constant &quot;null&quot; of a json value." />
+		<integer_constant name="JSON_APPEND" desc="Used with llJsonSetValue as a specifier to indicate appending the value to the end of the array at that level." />
+		<integer_constant name="JSON_DELETE" desc="Used to delete a value within a JSON text string." />
+					
+		<integer_constant name="ERR_GENERIC" desc="Returned by llReturnObjectsByID and llReturnObjectsByOwner in case of a general error." />
+		<integer_constant name="ERR_PARCEL_PERMISSIONS" desc="Returned by llReturnObjectsByID and llReturnObjectsByOwner in case of a parcel owner permission error." />
+		<integer_constant name="ERR_MALFORMED_PARAMS" desc="Returned by llReturnObjectsByID and llReturnObjectsByOwner in case of malformed parameters." />
+		<integer_constant name="ERR_RUNTIME_PERMISSIONS" desc="Returned by llReturnObjectsByID and llReturnObjectsByOwner in case of a runtime permission error." />
+		<integer_constant name="ERR_THROTTLED" desc="Returned by llReturnObjectsByID and llReturnObjectsByOwner in case of being throttled." />
+		
+		<integer_constant name="TRAVERSAL_TYPE_SLOW" />
+		<integer_constant name="TRAVERSAL_TYPE_FAST" />
+		<integer_constant name="TRAVERSAL_TYPE_NONE" />
+		
+		<integer_constant name="CHARACTER_MAX_ANGULAR_SPEED" />
+		<integer_constant name="CHARACTER_MAX_ANGULAR_ACCEL" />
+		<integer_constant name="CHARACTER_TURN_SPEED_MULTIPLIER" />
+		
+		<integer_constant name="PURSUIT_OFFSET" />
+		<integer_constant name="REQUIRE_LINE_OF_SIGHT" />
+		<integer_constant name="PURSUIT_FUZZ_FACTOR" />
+		<integer_constant name="PURSUIT_INTERCEPT" />
+		<integer_constant name="FORCE_DIRECT_PATH" />
+		<integer_constant name="AVOID_CHARACTERS" />
+		<integer_constant name="AVOID_DYNAMIC_OBSTACLES" />
+		<integer_constant name="AVOID_NONE" />
+
+		<integer_constant name="PROFILE_NONE" desc="Disables profiling" />
+		<integer_constant name="PROFILE_SCRIPT_MEMORY" desc="Enables memory profiling" />
+		
+		<integer_constant name="PU_SLOWDOWN_DISTANCE_REACHED" desc="Character is near current goal" />
+		<integer_constant name="PU_GOAL_REACHED" desc="Character has reached the goal and will stop or choose a new goal (if wandering)" />
+		<integer_constant name="PU_FAILURE_INVALID_START" desc="Character cannot navigate from the current location - e.g., the character is off the navmesh or too high above it" />
+		<integer_constant name="PU_FAILURE_INVALID_GOAL" desc="Goal is not on the navmesh and cannot be reached" />
+		<integer_constant name="PU_FAILURE_UNREACHABLE" desc="Goal is no longer reachable for some reason - e.g., an obstacle blocks the path" />
+		<integer_constant name="PU_FAILURE_TARGET_GONE" desc="Target (for llPursue or llEvade) can no longer be tracked - e.g., it left the region or is an avatar that is now more than about 30m outside the region" />
+		<integer_constant name="PU_FAILURE_NO_VALID_DESTINATION" desc="There's no good place for the character to go - e.g., it is patrolling and all the patrol points are now unreachable" />
+		<integer_constant name="PU_EVADE_HIDDEN" desc="Triggered when an llEvade character thinks it has hidden from its pursuer" />
+		<integer_constant name="PU_EVADE_SPOTTED" desc="Triggered when an llEvade character switches from hiding to running" />
+		<integer_constant name="PU_FAILURE_NO_NAVMESH" desc="This is a fatal error reported to a character when there is no navmesh for the region. This usually indicates a server failure and users should file a bug report and include the time and region in which they received this message" />
+		<integer_constant name="PU_FAILURE_DYNAMIC_PATHFINDING_DISABLED" desc="Triggered when a character enters a region with dynamic pathfinding disabled. Dynamic pathfinding can be toggled by estate managers via the 'dynamic_pathfinding' option in the Region Debug Console" />
+		<integer_constant name="PU_FAILURE_PARCEL_UNREACHABLE" desc="Triggered when a character failed to enter a parcel because it is not allowed to enter, e.g. because the parcel is already full or because object entry was disabled after the navmesh was baked" />
+		<integer_constant name="PU_FAILURE_OTHER" desc="Other failure" />
+	</keywords>
+	<functions>
+		<function name="llSin" sleep="0.0" energy="10.0"
+			desc="float llSin(float theta);Returns the sine of theta (theta in radians)" />
+		<function name="llCos" sleep="0.0" energy="10.0"
+			desc="float llCos(float theta);Returns the cosine of theta (theta in radians)" />
+		<function name="llAcos" sleep="0.0" energy="10.0"
+			desc="float llAcos(float val);Returns the arccosine in radians of val" />
+		<function name="llTan" sleep="0.0" energy="10.0"
+			desc="float llTan(float theta);Returns the tangent of theta (theta in radians)" />
+		<function name="llAtan2" sleep="0.0" energy="10.0"
+			desc="float llAtan2(float y, float x);Returns the arctangent2 of y, x" />
+		<function name="llAsin" sleep="0.0" energy="10.0"
+			desc="float llAsin(float val);Returns the arcsine in radians of val" />
+		<function name="llSqrt" sleep="0.0" energy="10.0"
+			desc="float llSqrt(float val);Returns the square root of val, or returns 0 and triggers a Math Error for imaginary results" />
+		<function name="llPow" sleep="0.0" energy="10.0"
+			desc="float llPow(float base, float exponent);Returns the base raised to the power exponent, or returns 0 and triggers Math Error for imaginary results" />
+		<function name="llModPow" sleep="0.0" energy="10.0"
+			desc="integer llModPow(integer a, integer b, integer c);Returns a raised to the b power, mod c. ( (a**b)%c );b is capped at 0xFFFF (16 bits)." />
+		<function name="llAbs" sleep="0.0" energy="10.0"
+			desc="integer llAbs(integer val);Returns the positive version of val" />
+		<function name="llFabs" sleep="0.0" energy="10.0"
+			desc="float llFabs(float val);Returns the positive version of val" />
+		<function name="llFrand" sleep="0.0" energy="10.0"
+			desc="float llFrand(float mag);Returns a pseudo random number in the range [0,mag) or (mag,0]" />
+		<function name="llFloor" sleep="0.0" energy="10.0"
+			desc="integer llFloor(float val);Returns largest integer value &lt;= val" />
+		<function name="llCeil" sleep="0.0" energy="10.0"
+			desc="integer llCeil(float val);Returns smallest integer value &gt;= val" />
+		<function name="llRound" sleep="0.0" energy="10.0"
+			desc="integer llRound(float val);Returns val rounded to the nearest integer" />
+		<function name="llVecMag" sleep="0.0" energy="10.0"
+			desc="float llVecMag(vector v);Returns the magnitude of v" />
+		<function name="llVecNorm" sleep="0.0" energy="10.0"
+			desc="vector llVecNorm(vector v);Returns the v normalized" />
+		<function name="llVecDist" sleep="0.0" energy="10.0"
+			desc="float llVecDist(vector v1, vector v2);Returns the 3D distance between v1 and v2" />
+		<function name="llRot2Euler" sleep="0.0" energy="10.0"
+			desc="vector llRot2Euler(rotation q);Returns the Euler representation (roll, pitch, yaw) of q" />
+		<function name="llEuler2Rot" sleep="0.0" energy="10.0"
+			desc="rotation llEuler2Rot(vector v);Returns the rotation representation of Euler Angles v" />
+		<function name="llAxes2Rot" sleep="0.0" energy="10.0"
+			desc="rotation llAxes2Rot(vector fwd, vector left, vector up);Returns the rotation defined by the coordinate axes" />
+		<function name="llRot2Fwd" sleep="0.0" energy="10.0"
+			desc="vector llRot2Fwd(rotation q);Returns the forward vector defined by q" />
+		<function name="llRot2Left" sleep="0.0" energy="10.0"
+			desc="vector llRot2Left(rotation q);Returns the left vector defined by q" />
+		<function name="llRot2Up" sleep="0.0" energy="10.0"
+			desc="vector llRot2Up(rotation q);Returns the up vector defined by q" />
+		<function name="llRotBetween" sleep="0.0" energy="10.0"
+			desc="rotation llRotBetween(vector v1, vector v2);Returns the rotation to rotate v1 to v2" />
+		<function name="llRot2Axis" sleep="0.0" energy="10.0"
+			desc="vector llRot2Axis(rotation rot);Returns the rotation axis represented by rot" />
+		<function name="llRot2Angle" sleep="0.0" energy="10.0"
+			desc="float llRot2Angle(rotation rot);Returns the rotation angle represented by rot" />
+		<function name="llAxisAngle2Rot" sleep="0.0" energy="10.0"
+			desc="rotation llAxisAngle2Rot(vector axis, float angle);Returns the rotation that is a generated angle about axis" />
+		<function name="llAngleBetween" sleep="0.0" energy = "10.0"
+			desc="float llAngleBetween(rotation a, rotation b);Returns angle between rotation a and b" />
+		<function name="llWhisper" sleep="0.0" energy="10.0"
+			desc="llWhisper(integer channel, string message);Whispers the text of message on channel" />
+		<function name="llSay" sleep="0.0" energy="10.0"
+			desc="llSay(integer channel, string message);Says the text of message on channel" />
+		<function name="llShout" sleep="0.0" energy="10.0"
+			desc="llShout(integer channel, string message);Shouts the text of message on channel" />
+		<function name="llListen" sleep="0.0" energy="10.0"
+			desc="integer llListen(integer channel, string name, key id, string message);Sets a callback for message on channel from name and id (name, id, and/or message can be empty) and returns an identifier that can be used to deactivate or remove the listen" />
+		<function name="llListenControl" sleep="0.0" energy="10.0"
+			desc="llListenControl(integer number, integer active);Makes a listen event callback active or inactive" />
+		<function name="llListenRemove" sleep="0.0" energy="10.0"
+			desc="llListenRemove(integer number);Removes listen event callback number" />
+		<function name="llSensor" sleep="0.0" energy="10.0"
+			desc="llSensor(string name, key id, integer type, float range, float arc);Performs a single scan for name and id with type (AGENT, ACTIVE, PASSIVE, and/or SCRIPTED) within range meters and arc radians of forward vector (name, id, and/or keytype can be empty or 0)" />
+		<function name="llSensorRepeat" sleep="0.0" energy="10.0"
+			desc="llSensorRepeat(string name, key id, integer type, float range, float arc, float rate);Sets a callback for name and id with type (AGENT, ACTIVE, PASSIVE, and/or SCRIPTED) within range meters and arc radians of forward vector (name, id, and/or keytype can be empty or 0) and repeats every rate seconds" />
+		<function name="llSensorRemove" sleep="0.0" energy="10.0"
+			desc="llSensorRemove();Removes the sensor setup by llSensorRepeat" />
+		<function name="llDetectedName" sleep="0.0" energy="10.0"
+			desc="string llDetectedName(integer number);Returns the name of detected object number (returns empty string if number is not a valid sensed object)" />
+		<function name="llDetectedKey" sleep="0.0" energy="10.0"
+			desc="key llDetectedKey(integer number);Returns the key of detected object number (returns empty key if number is not a valid sensed object)" />
+		<function name="llDetectedOwner" sleep="0.0" energy="10.0"
+			desc="key llDetectedOwner(integer number);Returns the key of detected object&apos;s owner (returns empty key if number is not a valid sensed object)" />
+		<function name="llDetectedType" sleep="0.0" energy="10.0"
+			desc="integer llDetectedType(integer number);Returns the type (AGENT, ACTIVE, PASSIVE, SCRIPTED) of detected object (returns 0 if number is not a valid sensed object)" />
+		<function name="llDetectedPos" sleep="0.0" energy="10.0"
+			desc="vector llDetectedPos(integer number);Returns the position of detected object number (returns &lt;0,0,0&gt; if number is not a valid sensed object)" />
+		<function name="llDetectedVel" sleep="0.0" energy="10.0"
+			desc="vector llDetectedVel(integer number);Returns the velocity of detected object number (returns &lt;0,0,0&gt; if number is not a valid sensed object)" />
+		<function name="llDetectedGrab" sleep="0.0" energy="10.0"
+			desc="vector llDetectedGrab(integer number);Returns the grab offset of the user touching object (returns &lt;0,0,0&gt; if number is not a valid sensed object)" />
+		<function name="llDetectedRot" sleep="0.0" energy="10.0"
+			desc="rotation llDetectedRot(integer number);Returns the rotation of detected object number (returns &lt;0,0,0,1&gt; if number is not a valid sensed object)" />
+		<function name="llDetectedGroup" sleep="0.0" energy="10.0"
+			desc="integer llDetectedGroup(integer number);Returns TRUE if detected object is part of same group as owner" />
+		<function name="llDetectedLinkNumber" sleep="0.0" energy="10.0"
+			desc="integer llDetectedLinkNumber(integer number);Returns the integer link number of the triggered event. If not supported, returns zero" />
+		<function name="llDie" sleep="0.0" energy="10.0"
+			desc="llDie();Deletes the object" />
+		<function name="llGround" sleep="0.0" energy="10.0"
+			desc="float llGround(vector offset);Returns the ground height below the object position + offset" />
+		<function name="llCloud" sleep="0.0" energy="10.0"
+			desc="float llCloud(vector offset);Returns the cloud density at the object position + offset" />
+		<function name="llWind" sleep="0.0" energy="10.0"
+			desc="vector llWind(vector offset);Returns the wind velocity at the object position + offset" />
+		<function name="llWater" sleep="0.0" energy="10.0"
+			desc="float llWater(vector offset);Returns the water height below the object position + offset" />
+		<function name="llSetStatus" sleep="0.0" energy="10.0"
+			desc="llSetStatus(integer status, integer value);Sets status (STATUS_PHYSICS, STATUS_PHANTOM, STATUS_BLOCK_GRAB, STATUS_ROTATE_X, STATUS_ROTATE_Y, and/or STATUS_ROTATE_Z) to value" />
+		<function name="llGetStatus" sleep="0.0" energy="10.0"
+		desc="integer llGetStatus(integer status);Returns value of status (STATUS_PHYSICS, STATUS_PHANTOM, STATUS_BLOCK_GRAB, STATUS_ROTATE_X, STATUS_ROTATE_Y, and/or STATUS_ROTATE_Z)" />
+		<function name="llSetScale" sleep="0.0" energy="10.0"
+			desc="llSetScale(vector scale);Sets the scale of the prim" />
+		<function name="llGetScale" sleep="0.0" energy="10.0"
+			desc="vector llGetScale();Returns the scale of the prim" />
+		<function name="llSetColor" sleep="0.0" energy="10.0"
+			desc="llSetColor(vector color, integer face);Sets the color on face of the prim" />
+		<function name="llGetAlpha" sleep="0.0" energy="10.0"
+			desc="float llGetAlpha(integer face);Returns the alpha of face" />
+		<function name="llSetAlpha" sleep="0.0" energy="10.0"
+			desc="llSetAlpha(float alpha, integer face);Sets the alpha on face" />
+		<function name="llGetColor" sleep="0.0" energy="10.0"
+			desc="vector llGetColor(integer face);Returns the color on face" />
+		<function name="llSetTexture" sleep="0.0" energy="10.0"
+			desc="llSetTexture(string texture, integer face);Sets the texture of face or ALL_SIDES" />
+		<function name="llScaleTexture" sleep="0.2" energy="10.0"
+			desc="llScaleTexture(float u, float v, integer face);Sets the texture u &amp; v scales for the chosen face or ALL_SIDES" />
+		<function name="llOffsetTexture" sleep="0.2" energy="10.0"
+			desc="llOffsetTexture(float u, float v, integer face);Sets the texture u  &amp; v offsets for the chosen face or ALL_SIDES" />
+		<function name="llRotateTexture" sleep="0.2" energy="10.0"
+			desc="llRotateTexture(float rotation, integer face);Sets the texture rotation for the chosen face" />
+		<function name="llGetTexture" sleep="0.0" energy="10.0"
+		desc="string llGetTexture(integer face);Returns a string that is the texture on face (the inventory name if it is a texture in the prim&apos;s inventory, otherwise the key)" />
+		<function name="llSetPos" sleep="0.0" energy="10.0"
+			desc="llSetPos(vector pos);Moves the object or prim towards pos without using physics (if the script isn&apos;t physical)" />
+		<function name="llGetPos" sleep="0.0" energy="10.0"
+			desc="vector llGetPos();Returns the position of the task in region coordinates" />
+		<function name="llGetLocalPos" sleep="0.0" energy="10.0"
+			desc="vector llGetLocalPos();Returns the position relative to the root" />
+		<function name="llSetRot" sleep="0.2" energy="10.0"
+			desc="llSetRot(rotation rot);Sets the rotation" />
+		<function name="llGetRot" sleep="0.0" energy="10.0"
+			desc="rotation llGetRot();Returns the rotation relative to the region&apos;s axes" />
+		<function name="llGetLocalRot" sleep="0.0" energy="10.0"
+			desc="rotation llGetLocalRot();Returns the rotation local to the root" />
+		<function name="llSetForce" sleep="0.0" energy="10.0"
+			desc="llSetForce(vector force, integer local);Applies force to the object (if the script is physical), in local coords if local == TRUE" />
+		<function name="llGetForce" sleep="0.0" energy="10.0"
+			desc="vector llGetForce();Returns the force (if the script is physical)" />
+		<function name="llTarget" sleep="0.0" energy="10.0"
+			desc="integer llTarget(vector position, float range);Sets positions within range of position as a target and return an ID for the target" />
+		<function name="llTargetRemove" sleep="0.0" energy="10.0"
+			desc="llTargetRemove(integer number);Removes positional target number registered with llTarget" />
+		<function name="llRotTarget" sleep="0.0" energy="10.0"
+			desc="integer llRotTarget(rotation rot, float error);Set rotations with error of rot as a rotational target and return an ID for the rotational target" />
+		<function name="llRotTargetRemove" sleep="0.0" energy="10.0"
+			desc="llRotTargetRemove(integer number);Removes rotational target number registered with llRotTarget" />
+		<function name="llMoveToTarget" sleep="0.0" energy="10.0"
+			desc="llMoveToTarget(vector target, float tau);Critically damps to target in tau seconds (if the script is physical)" />
+		<function name="llStopMoveToTarget" sleep="0.0" energy="10.0"
+			desc="llStopMoveToTarget();Stops critically damped motion" />
+		<function name="llApplyImpulse" sleep="0.0" energy="10.0"
+			desc="llApplyImpulse(vector force, integer local);Applies impulse to object (if the script is physical), in local coords if local == TRUE" />
+		<function name="llApplyRotationalImpulse" sleep="0.0" energy="10.0"
+			desc="llApplyRotationalImpulse(vector force, integer local);Applies rotational impulse to object (if the script is physical), in local coords if local == TRUE" />
+		<function name="llSetTorque" sleep="0.0" energy="10.0"
+			desc="llSetTorque(vector torque, integer local);Sets the torque of object (if the script is physical), in local coords if local == TRUE" />
+		<function name="llGetTorque" sleep="0.0" energy="10.0"
+			desc="vector llGetTorque();Returns the torque (if the script is physical)" />
+		<function name="llSetForceAndTorque" sleep="0.0" energy="10.0"
+			desc="llSetForceAndTorque(vector force, vector torque, integer local);Sets the force and torque of object (if the script is physical), in local coords if local == TRUE" />
+		<function name="llGetVel" sleep="0.0" energy="10.0"
+			desc="vector llGetVel();Returns the velocity of the object" />
+		<function name="llGetAccel" sleep="0.0" energy="10.0"
+			desc="vector llGetAccel();Returns the acceleration of the object relative to the region&apos;s axes" />
+		<function name="llGetOmega" sleep="0.0" energy="10.0"
+			desc="vector llGetOmega();Returns the rotation velocity in radians per second" />
+		<function name="llGetTimeOfDay" sleep="0.0" energy="10.0"
+			desc="float llGetTimeOfDay();Returns the time in seconds since grid server midnight or since region up-time, whichever is smaller" />
+		<function name="llGetWallclock" sleep="0.0" energy="10.0"
+			desc="float llGetWallclock();Returns the time in seconds since midnight California Pacific time (PST/PDT)" />
+		<function name="llGetUnixTime" sleep="0.0" energy="10.0"
+			desc="integer llGetUnixTime();Returns the number of seconds elapsed since 00;00 hours, Jan 1, 1970 UTC from the system clock" />
+		<function name="llGetTime" sleep="0.0" energy="10.0"
+			desc="float llGetTime();Returns the time in seconds since the last region reset, script reset, or call to either llResetTime or llGetAndResetTime" />
+		<function name="llResetTime" sleep="0.0" energy="10.0"
+			desc="llResetTime();Sets the script timer to zero" />
+		<function name="llGetAndResetTime" sleep="0.0" energy="10.0"
+			desc="float llGetAndResetTime();Returns the script time in seconds and then resets the script timer to zero" />
+		<function name="llSound" sleep="0.0" energy="10.0"
+			desc="llSound(string sound, float volume, integer queue, integer loop);Plays sound at volume and whether it should loop or not" />
+		<function name="llPlaySound" sleep="0.0" energy="10.0"
+			desc="llPlaySound(string sound, float volume);Plays attached sound once at volume (0.0 - 1.0)" />
+		<function name="llLoopSound" sleep="0.0" energy="10.0"
+			desc="llLoopSound(string sound, float volume);Plays attached sound looping indefinitely at volume (0.0 - 1.0)" />
+		<function name="llLoopSoundMaster" sleep="0.0" energy="10.0"
+			desc="llLoopSoundMaster(string sound, float volume);Plays attached sound looping at volume (0.0 - 1.0), declares it a sync master" />
+		<function name="llLoopSoundSlave" sleep="0.0" energy="10.0"
+			desc="llLoopSoundSlave(string sound, float volume);Plays attached sound looping at volume (0.0 - 1.0), synced to most audible sync master" />
+		<function name="llPlaySoundSlave" sleep="0.0" energy="10.0"
+			desc="llPlaySoundSlave(string sound, float volume);Plays attached sound once at volume (0.0 - 1.0), synced to next loop of most audible sync master" />
+		<function name="llTriggerSound" sleep="0.0" energy="10.0"
+			desc="llTriggerSound(string sound, float volume);Plays sound at volume (0.0 - 1.0), centered at but not attached to object" />
+		<function name="llStopSound" sleep="0.0" energy="10.0"
+			desc="llStopSound();Stops currently attached sound" />
+		<function name="llPreloadSound" sleep="1.0" energy="10.0"
+			desc="llPreloadSound(string sound);Preloads a sound on viewers within range" />
+		<function name="llGetSubString" sleep="0.0" energy="10.0"
+			desc="string llGetSubString(string src, integer start, integer end);Returns the indicated substring" />
+		<function name="llDeleteSubString" sleep="0.0" energy="10.0"
+			desc="string llDeleteSubString(string src, integer start, integer end);Removes the indicated substring and returns the result" />
+		<function name="llInsertString" sleep="0.0" energy="10.0"
+			desc="string llInsertString(string dst, integer position, string src);Returns a destination string dst with the string src inserted starting at position pos" />
+		<function name="llToUpper" sleep="0.0" energy="10.0"
+			desc="string llToUpper(string src);Returns a string that is src with all upper-case characters" />
+		<function name="llToLower" sleep="0.0" energy="10.0"
+			desc="string llToLower(string src);Returns a string that is src with all lower-case characters" />
+		<function name="llGiveMoney" sleep="0.0" energy="10.0"
+			desc="llGiveMoney(key destination, integer amount);Transfers amount of L$ from script owner to destination" />
+		<function name="llMakeExplosion" sleep="0.1" energy="10.0"
+			desc="llMakeExplosion(integer particles, float scale, float vel, float lifetime, float arc, string texture, vector offset);Makes a round explosion of particles" />
+		<function name="llMakeFountain" sleep="0.1" energy="10.0"
+			desc="llMakeFountain(integer particles, float scale, float vel, float lifetime, float arc, integer bounce, string texture, vector offset, float bounce_offset);Makes a fountain of particles" />
+		<function name="llMakeSmoke" sleep="0.0" energy="10.1"
+			desc="llMakeSmoke(integer particles, float scale, float vel, float lifetime, float arc, string texture, vector offset);Makes smoke like particles" />
+		<function name="llMakeFire" sleep="0.1" energy="10.0"
+			desc="llMakeFire(integer particles, float scale, float vel, float lifetime, float arc, string texture, vector offset);Makes fire like particles" />
+		<function name="llRezObject" sleep="0.1" energy="200.0"
+			desc="llRezObject(string inventory, vector pos, vector vel, rotation rot, integer param);Instantiates owner&apos;s inventory object at pos with velocity vel and rotation rot with start parameter param" />
+		<function name="llLookAt" sleep="0.0" energy="10.0"
+			desc="llLookAt(vector target, float strength, float damping);Causes object to point its up axis (positive z) towards target, while keeping its forward axis (positive x) below the horizon" />
+		<function name="llStopLookAt" sleep="0.0" energy="10.0"
+			desc="llStopLookAt();Stops causing object to point at a target" />
+		<function name="llSetTimerEvent" sleep="0.0" energy="10.0"
+			desc="llSetTimerEvent(float sec);Causes the timer event to be triggered a maximum of once every sec seconds" />
+		<function name="llSleep" sleep="0.0" energy="10.0"
+			desc="llSleep(float sec);Puts the script to sleep for sec seconds" />
+		<function name="llGetMass" sleep="0.0" energy="10.0"
+			desc="float llGetMass();Returns the mass of object that the script is attached to" />
+		<function name="llCollisionFilter" sleep="0.0" energy="10.0"
+			desc="llCollisionFilter(string name, key id, integer accept);Sets the collision filter, exclusively or inclusively. If accept == TRUE, only accept collisions with objects name and id (either is optional), otherwise with objects not name or id" />
+		<function name="llTakeControls" sleep="0.0" energy="10.0"
+			desc="llTakeControls(integer controls, integer accept, integer pass_on);Allows for intercepting keyboard and mouse clicks from the agent the script has permissions for" />
+		<function name="llReleaseControls" sleep="0.0" energy="10.0"
+			desc="llReleaseControls();Stops taking inputs that were taken with llTakeControls" />
+		<function name="llAttachToAvatar" sleep="0.0" energy="10.0"
+			desc="llAttachToAvatar(integer attach_point);Attaches the object to the avatar who has granted permission to the script" />
+		<function name="llDetachFromAvatar" sleep="0.0" energy="10.0"
+			desc="llDetachFromAvatar();Detaches object from avatar" />
+		<function name="llTakeCamera" sleep="0.0" energy="10.0"
+			desc="llTakeCamera(key avatar);Moves avatar&apos;s viewpoint to task" />
+		<function name="llReleaseCamera" sleep="0.0" energy="10.0"
+			desc="llReleaseCamera(key avatar);Returns camera to agent avatar" />
+		<function name="llGetOwner" sleep="0.0" energy="10.0"
+			desc="key llGetOwner()Returns the object owner&apos;s UUID" />
+		<function name="llInstantMessage" sleep="2.0" energy="10.0"
+			desc="llInstantMessage(key user, string message);Sends the specified string as an Instant Message to the user" />
+		<function name="llEmail" sleep="20.0" energy="10.0"
+			desc="llEmail(string address, string subject, string message);Sends an email to address with the subject and message" />
+		<function name="llGetNextEmail" sleep="0.0" energy="10.0"
+			desc="llGetNextEmail(string address, string subject);Gets the next waiting email that comes from address, with specified subject" />
+		<function name="llGetKey" sleep="0.0" energy="10.0"
+			desc="key llGetKey();Returns the key of the prim the script is attached to" />
+		<function name="llSetBuoyancy" sleep="0.0" energy="10.0"
+			desc="llSetBuoyancy(float buoyancy);Sets the buoyancy of the task or object (0 is disabled, &lt; 1.0 sinks, 1.0 floats, &gt; 1.0 rises)" />
+		<function name="llSetHoverHeight" sleep="0.0" energy="10.0"
+			desc="llSetHoverHeight(float height, integer water, float tau);Critically damps to a height above the ground (or water) in tau seconds" />
+		<function name="llStopHover" sleep="0.0" energy="10.0"
+			desc="llStopHover();Stops hovering to a height" />
+		<function name="llMinEventDelay" sleep="0.0" energy="10.0"
+			desc="llMinEventDelay(float delay);Sets the minimum time between events being handled" />
+		<function name="llSoundPreload" sleep="0.0" energy="10.0"
+			desc="llSoundPreload(string sound);Preloads a sound on viewers within range" />
+		<function name="llRotLookAt" sleep="0.0" energy="10.0"
+			desc="llRotLookAt(rotation target, float strength, float damping);Causes object to point its forward axis towards target" />
+		<function name="llStringLength" sleep="0.0" energy="10.0"
+			desc="integer llStringLength(string str);Returns the length of string" />
+		<function name="llStartAnimation" sleep="0.0" energy="10.0"
+			desc="llStartAnimation(string anim);Starts animation anim for agent that granted PERMISSION_TRIGGER_ANIMATION if the permission has not been revoked" />
+		<function name="llStopAnimation" sleep="0.0" energy="10.0"
+			desc="llStopAnimation(string anim);Stops animation anim for agent that granted permission" />
+		<function name="llPointAt" sleep="0.0" energy="10.0"
+			desc="llPointAt(vector pos);Makes agent that owns object point at pos" />
+		<function name="llStopPointAt" sleep="0.0" energy="10.0"
+			desc="llStopPointAt();Stops pointing agent that owns object" />
+		<function name="llTargetOmega" sleep="0.0" energy="10.0"
+			desc="llTargetOmega(vector axis, float spinrate, float gain);Rotates the object around axis at spinrate with strength gain" />
+		<function name="llGetStartParameter" sleep="0.0" energy="10.0"
+			desc="integer llGetStartParameter();Returns an integer that is the script start/rez parameter" />
+		<function name="llGodLikeRezObject" sleep="0.0" energy="10.0" god-only="true"
+			desc="llGodLikeRezObject(key inventory, vector pos);Rezzes directly off of UUID if owner is in God Mode" />
+		<function name="llRequestPermissions" sleep="0.0" energy="10.0"
+			desc="llRequestPermissions(key agent, integer perm);Asks the agent for permission to run certain classes of functions" />
+		<function name="llGetPermissionsKey" sleep="0.0" energy="10.0"
+			desc="key llGetPermissionsKey();Returns the key of the avatar that last granted permissions to the script" />
+		<function name="llGetPermissions" sleep="0.0" energy="10.0"
+			desc="integer llGetPermissions();Returns an integer bitfield with the permissions that have been granted" />
+		<function name="llGetLinkNumber" sleep="0.0" energy="10.0"
+			desc="integer llGetLinkNumber();Returns the link number of the prim containing the script (0 means not linked, 1 the prim is the root, 2 the prim is the first child, etc)" />
+		<function name="llSetLinkColor" sleep="0.0" energy="10.0"
+			desc="llSetLinkColor(integer linknumber, vector color, integer face);Sets face to color if a task exists in the link chain at linknumber" />
+		<function name="llCreateLink" sleep="0.0" energy="10.0"
+			desc="llCreateLink(key target, integer parent);Attempts to link the script&apos;s object with the target (requires that PERMISSION_CHANGE_LINKS be granted). If parent == TRUE, then the script&apos;s object becomes the root" />
+		<function name="llBreakLink" sleep="0.0" energy="10.0"
+			desc="llBreakLink(integer linknum);Delinks the prim with the given link number in a linked object set (requires that PERMISSION_CHANGE_LINKS be granted)" />
+		<function name="llBreakAllLinks" sleep="0.0" energy="10.0"
+			desc="llBreakAllLinks()Delinks all prims in the link set (requires that PERMISSION_CHANGE_LINKS be granted)" />
+		<function name="llGetLinkKey" sleep="0.0" energy="10.0"
+			desc="key llGetLinkKey(integer linknumber);Returns the key of the linked prim linknumber" />
+		<function name="llGetLinkName" sleep="0.0" energy="10.0"
+			desc="string llGetLinkName(integer linknumber);Returns the name of linknumber in a link set" />
+		<function name="llGetInventoryNumber" sleep="0.0" energy="10.0"
+			desc="integer llGetInventoryNumber(integer type);Returns the number of items of a given type (INVENTORY_* flag) in the prim&apos;s inventory" />
+		<function name="llGetInventoryName" sleep="0.0" energy="10.0"
+			desc="string llGetInventoryName(integer type, integer number);Returns the name of the inventory item number of a given type" />
+		<function name="llSetScriptState" sleep="0.0" energy="10.0"
+			desc="llSetScriptState(string name, integer run);Sets the running state of the specified script" />
+		<function name="llGetEnergy" sleep="0.0" energy="10.0"
+			desc="float llGetEnergy();Returns how much energy is in the object as a percentage of maximum" />
+		<function name="llGiveInventory" sleep="0.0" energy="10.0"
+			desc="llGiveInventory(key destination, string inventory);Gives inventory to destination" />
+		<function name="llRemoveInventory" sleep="0.0" energy="10.0"
+			desc="llRemoveInventory(string item);Removes the named inventory item" />
+		<function name="llSetText" sleep="0.0" energy="10.0"
+			desc="llSetText(string text, vector color, float alpha);Displays text that hovers over the prim with specific color and translucency specified with alpha" />
+		<function name="llPassTouches" sleep="0.0" energy="10.0"
+			desc="llPassTouches(integer pass);If pass == TRUE, touches are passed from children on to parents" />
+		<function name="llRequestAgentData" sleep="0.0" energy="10.0"
+			desc="key llRequestAgentData(key id, integer data);Requests data about agent id. When data is available the dataserver event will be raised" />
+		<function name="llRequestInventoryData" sleep="0.0" energy="10.0"
+			desc="key llRequestInventoryData(string name);Requests data from object&apos;s inventory object. When data is available the dataserver event will be raised" />
+		<function name="llSetDamage" sleep="0.0" energy="10.0"
+			desc="llSetDamage(float damage);Sets the amount of damage that will be done when this object hits an avatar" />
+		<function name="llTeleportAgentHome" sleep="5.0" energy="10.0"
+			desc="llTeleportAgentHome(key id);Teleports avatar on the owner&apos;s land to their home location without any warning" />
+		<function name="llModifyLand" sleep="0.0" energy="10.0"
+			desc="llModifyLand(integer action, integer brush);Modifies land using the specified action on the specified brush size of land" />
+		<function name="llCollisionSound" sleep="0.0" energy="10.0"
+			desc="llCollisionSound(string impact_sound, float impact_volume);Suppresses default collision sounds, replaces default impact sounds with impact_sound at the volume impact_volume" />
+		<function name="llCollisionSprite" sleep="0.0" energy="10.0"
+			desc="llCollisionSprite(string impact_sprite);Suppresses default collision sprites, replaces default impact sprite with impact_sprite (use an empty string to just suppress)" />
+		<function name="llGetAnimation" sleep="0.0" energy="10.0"
+			desc="string llGetAnimation(key id);Returns the name of the currently playing locomotion animation for avatar id" />
+		<function name="llResetScript" sleep="0.0" energy="10.0"
+			desc="llResetScript();Resets the script" />
+		<function name="llMessageLinked" sleep="0.0" energy="10.0"
+			desc="llMessageLinked(integer linknum, integer num, string str, key id);Allows scripts in the same object to communicate. Triggers a link_message event with the same parameters num, str, and id in all scripts in the prim(s) described by linknum." />
+		<function name="llPushObject" sleep="0.0" energy="10.0"
+			desc="llPushObject(key id, vector impulse, vector ang_impulse, integer local);Applies impulse and ang_impulse to object id" />
+		<function name="llPassCollisions" sleep="0.0" energy="10.0"
+			desc="llPassCollisions(integer pass);If pass == TRUE, collisions are passed from children on to parents (default is FALSE)" />
+		<function name="llGetScriptName" sleep="0.0" energy="10.0"
+			desc="string llGetScriptName();Returns the name of the script that this function is used in" />
+		<function name="llGetNumberOfSides" sleep="0.0" energy="10.0"
+			desc="integer llGetNumberOfSides();Returns the number of faces (or sides) of the prim" />
+		<function name="llGetInventoryKey" sleep="0.0" energy="10.0"
+			desc="key llGetInventoryKey(string name);Returns the key that is the UUID of the inventory name" />
+		<function name="llAllowInventoryDrop" sleep="0.0" energy="10.0"
+			desc="llAllowInventoryDrop(integer add);If add == TRUE, users without modify permissions can still drop inventory items onto a prim" />
+		<function name="llGetSunDirection" sleep="0.0" energy="10.0"
+			desc="vector llGetSunDirection();Returns a normalized vector of the direction of the sun in the region" />
+		<function name="llGetTextureOffset" sleep="0.0" energy="10.0"
+			desc="vector llGetTextureOffset(integer face);Returns the texture offset of face in the x and y components of a vector" />
+		<function name="llGetTextureScale" sleep="0.0" energy="10.0"
+			desc="vector llGetTextureScale(integer side);Returns the texture scale of side in the x and y components of a vector" />
+		<function name="llGetTextureRot" sleep="0.0" energy="10.0"
+			desc="float llGetTextureRot(integer side);Returns the texture rotation of side" />
+		<function name="llSubStringIndex" sleep="0.0" energy="10.0"
+			desc="integer llSubStringIndex(string source, string pattern);Returns an integer that is the index in source where pattern first appears.;(Returns -1 if not found)" />
+		<function name="llGetOwnerKey" sleep="0.0" energy="10.0"
+			desc="key llGetOwnerKey(key id);Returns the owner of object id" />
+		<function name="llGetCenterOfMass" sleep="0.0" energy="10.0"
+			desc="vector llGetCenterOfMass();Returns the prim&apos;s center of mass (unless called from the root prim, where it returns the object&apos;s center of mass)" />
+		<function name="llListSort" sleep="0.0" energy="10.0"
+			desc="list llListSort(list src, integer stride, integer ascending);Sorts the list into blocks of stride, in ascending order if ascending == TRUE.;The sort order is affected by type" />
+		<function name="llGetListLength" sleep="0.0" energy="10.0"
+			desc="integer llGetListLength(list src);Returns the number of elements in the list" />
+		<function name="llList2Integer" sleep="0.0" energy="10.0"
+			desc="integer llList2Integer(list src, integer index);Copies the integer at index in the list" />
+		<function name="llList2Float" sleep="0.0" energy="10.0"
+			desc="float llList2Float(list src, integer index);Copies the float at index in the list" />
+		<function name="llList2String" sleep="0.0" energy="10.0"
+			desc="string llList2String(list src, integer index);Copies the string at index in the list" />
+		<function name="llList2Key" sleep="0.0" energy="10.0"
+			desc="key llList2Key(list src, integer index);Copies the key at index in the list" />
+		<function name="llList2Vector" sleep="0.0" energy="10.0"
+			desc="vector llList2Vector(list src, integer index);Copies the vector at index in the list" />
+		<function name="llList2Rot" sleep="0.0" energy="10.0"
+			desc="rotation llList2Rot(list src, integer index);Copies the rotation at index in the list" />
+		<function name="llList2List" sleep="0.0" energy="10.0"
+			desc="list llList2List(list src, integer start, integer end);Copies the slice of the list from start to end" />
+		<function name="llDeleteSubList" sleep="0.0" energy="10.0"
+			desc="list llDeleteSubList(list src, integer start, integer end);Removes the slice from start to end and returns the remainder of the list" />
+		<function name="llGetListEntryType" sleep="0.0" energy="10.0"
+			desc="integer llGetListEntryType(list src, integer index);Returns the type of the index entry in the list;(TYPE_INTEGER, TYPE_FLOAT, TYPE_STRING, TYPE_KEY, TYPE_VECTOR, TYPE_ROTATION, or TYPE_INVALID if index is off list)" />
+		<function name="llList2CSV" sleep="0.0" energy="10.0"
+			desc="string llList2CSV(list src);Creates a string of comma separated values from list" />
+		<function name="llCSV2List" sleep="0.0" energy="10.0"
+			desc="list llCSV2List(string src);Creates a list from a string of comma separated values" />
+		<function name="llListRandomize" sleep="0.0" energy="10.0"
+			desc="list llListRandomize(list src, integer stride);Returns a randomized list of blocks of size stride" />
+		<function name="llList2ListStrided" sleep="0.0" energy="10.0"
+			desc="list llList2ListStrided(list src, integer start, integer end, integer stride);Copies the strided slice of the list from start to end" />
+		<function name="llGetRegionCorner" sleep="0.0" energy="10.0"
+			desc="vector llGetRegionCorner();Returns a vector in meters that is the global location of the south-west corner of the region which the object is in" />
+		<function name="llListInsertList" sleep="0.0" energy="10.0"
+			desc="list llListInsertList(list dest, list src, integer start);Returns a list that contains all the elements from dest but with the elements from src inserted at position start" />
+		<function name="llListFindList" sleep="0.0" energy="10.0"
+			desc="integer llListFindList(list src, list test);Returns the index of the first instance of test in src" />
+		<function name="llGetObjectName" sleep="0.0" energy="10.0"
+			desc="string llGetObjectName();Returns the name of the prim which the script is attached to" />
+		<function name="llSetObjectName" sleep="0.0" energy="10.0"
+			desc="llSetObjectName(string name);Sets the prim&apos;s name to the name parameter" />
+		<function name="llGetDate" sleep="0.0" energy="10.0"
+			desc="string llGetDate();Returns the current date in the UTC time zone in the format YYYY-MM-DD" />
+		<function name="llEdgeOfWorld" sleep="0.0" energy="10.0"
+			desc="integer llEdgeOfWorld(vector pos, vector dir);Checks to see whether the border hit by dir from pos is the edge of the world (has no neighboring region)" />
+		<function name="llGetAgentInfo" sleep="0.0" energy="10.0"
+			desc="integer llGetAgentInfo(key id);Returns an integer bitfield containing the agent information about id.;Returns AGENT_FLYING, AGENT_ATTACHMENTS, AGENT_SCRIPTED, AGENT_SITTING, AGENT_ON_OBJECT, AGENT_MOUSELOOK, AGENT_AWAY, AGENT_BUSY, AGENT_TYPING, AGENT_CROUCHING, AGENT_ALWAYS_RUN, AGENT_WALKING and/or AGENT_IN_AIR" />
+		<function name="llAdjustSoundVolume" sleep="0.0" energy="10.0"
+			desc="llAdjustSoundVolume(float volume);Adjusts volume of attached sound (0.0 - 1.0)" />
+		<function name="llSetSoundQueueing" sleep="0.0" energy="10.0"
+			desc="llSetSoundQueueing(integer queue);Sets whether attached sounds wait for the current sound to finish (If queue == TRUE then queuing is enabled, if FALSE queuing is disabled [default])" />
+		<function name="llSetSoundRadius" sleep="0.0" energy="10.0"
+			desc="llSetSoundRadius(float radius);Establishes a hard cut-off radius for audibility of scripted sounds (both attached and triggered)" />
+		<function name="llKey2Name" sleep="0.0" energy="10.0"
+			desc="string llKey2Name(key id);Returns the name of the prim or avatar specified by id.;(The id must be a valid rezzed prim or avatar key in the current simulator, otherwise an empty string is returned.)" />
+		<function name="llSetTextureAnim" sleep="0.0" energy="10.0"
+			desc="llSetTextureAnim(integer mode, integer face, integer sizex, integer sizey, float start, float length, float rate);Animates the texture on the specified face/faces" />
+		<function name="llTriggerSoundLimited" sleep="0.0" energy="10.0"
+			desc="llTriggerSoundLimited(string sound, float volume, vector top_north_east, vector bottom_south_west);Plays sound at volume (0.0 - 1.0), centered at but not attached to object, limited to the box defined by vectors top_north_east and bottom_south_west" />
+		<function name="llEjectFromLand" sleep="0.0" energy="10.0"
+			desc="llEjectFromLand(key avatar);Ejects avatar from the parcel" />
+		<function name="llParseString2List" sleep="0.0" energy="10.0"
+			desc="list llParseString2List(string src, list separators, list spacers);Breaks src into a list, discarding separators, keeping spacers;(separators and spacers must be lists of strings, maximum of 8 each)" />
+		<function name="llOverMyLand" sleep="0.0" energy="10.0"
+			desc="integer llOverMyLand(key id);Returns TRUE if id is over land owned by the script owner, otherwise FALSE" />
+		<function name="llGetLandOwnerAt" sleep="0.0" energy="10.0"
+			desc="key llGetLandOwnerAt(vector pos);Returns the key of the land owner, returns NULL_KEY if public" />
+		<function name="llGetNotecardLine" sleep="0.0" energy="10.0"
+			desc="key llGetNotecardLine(string name, integer line);Returns line line of notecard name via the dataserver event" />
+		<function name="llGetAgentSize" sleep="0.0" energy="10.0"
+			desc="vector llGetAgentSize(key id);If the avatar is in the same region, returns the size of the bounding box of the requested avatar by id, otherwise returns ZERO_VECTOR" />
+		<function name="llSameGroup" sleep="0.0" energy="10.0"
+			desc="integer llSameGroup(key id);Returns TRUE if avatar id is in the same region and has the same active group, otherwise FALSE" />
+		<function name="llUnSit" sleep="0.0" energy="10.0"
+			desc="key llUnSit(key id);If avatar identified by id is sitting on the object the script is attached to or is over land owned by the object&apos;s owner, the avatar is forced to stand up" />
+		<function name="llGroundSlope" sleep="0.0" energy="10.0"
+			desc="vector llGroundSlope(vector offset);Returns the ground slope below the object position + offset" />
+		<function name="llGroundNormal" sleep="0.0" energy="10.0"
+			desc="vector llGroundNormal(vector offset);Returns the ground normal below the object position + offset" />
+		<function name="llGroundContour" sleep="0.0" energy="10.0"
+			desc="vector llGroundContour(vector offset);Returns the ground contour direction below the object position + offset" />
+		<function name="llGetAttached" sleep="0.0" energy="10.0"
+			desc="integer llGetAttached();Returns the object&apos;s attachment point, or 0 if not attached" />
+		<function name="llGetFreeMemory" sleep="0.0" energy="10.0"
+			desc="integer llGetFreeMemory();Returns the number of free bytes of memory the script can use" />
+		<function name="llGetRegionName" sleep="0.0" energy="10.0"
+			desc="string llGetRegionName();Returns the current region name" />
+		<function name="llGetRegionTimeDilation" sleep="0.0" energy="10.0"
+			desc="float llGetRegionTimeDilation();Returns the current time dilation as a float between 0.0 (full dilation) and 1.0 (no dilation)" />
+		<function name="llGetRegionFPS" sleep="0.0" energy="10.0"
+			desc="float llGetRegionFPS();Returns the mean region frames per second" />
+		<function name="llParticleSystem" sleep="0.0" energy="10.0"
+			desc="llParticleSystem(list rules);Creates a particle system based on rules.  An empty list removes the particle system.;List format is [ rule1, data1, rule2, data2 . . . rulen, datan ]" />
+		<function name="llGroundRepel" sleep="0.0" energy="10.0"
+			desc="llGroundRepel(float height, integer water, float tau);Critically damps to height if within height*0.5 of level (either above ground level, or above the higher of land and water if water == TRUE)" />
+		<function name="llGiveInventoryList" sleep="0.0" energy="10.0"
+			desc="llGiveInventoryList(key target, string folder, list inventory);Gives inventory items to target, creating a new folder to put them in" />
+		<function name="llSetVehicleType" sleep="0.0" energy="10.0"
+			desc="llSetVehicleType(integer type);Sets the vehicle to one of the default types" />
+		<function name="llSetVehicleFloatParam" sleep="0.0" energy="10.0"
+			desc="llSetVehicleFloatParam(integer param, float value);Sets the specified vehicle float parameter" />
+		<function name="llSetVehicleVectorParam" sleep="0.0" energy="10.0"
+			desc="llSetVehicleVectorParam(integer param, vector vec);Sets the specified vehicle vector parameter" />
+		<function name="llSetVehicleRotationParam" sleep="0.0" energy="10.0"
+			desc="llSetVehicleVectorParam(integer param, rotation rot);Sets the specified vehicle rotation parameter" />
+		<function name="llSetVehicleFlags" sleep="0.0" energy="10.0"
+			desc="llSetVehicleFlags(integer flags);Sets the enabled bits in &quot;flags&quot;" />
+		<function name="llRemoveVehicleFlags" sleep="0.0" energy="10.0"
+			desc="llRemoveVehicleFlags(integer flags);Removes the enabled bits in &apos;flags&apos;" />
+		<function name="llSitTarget" sleep="0.0" energy="10.0"
+			desc="llSitTarget(vector offset, rotation rot);Sets the sit location for the prim.  If offset == &lt;0,0,0&gt; then the sit target is removed." />
+		<function name="llAvatarOnSitTarget" sleep="0.0" energy="10.0"
+			desc="key llAvatarOnSitTarget();If an avatar is seated on the sit target, returns the avatar&apos;s key, otherwise NULL_KEY" />
+		<function name="llAddToLandPassList" sleep="0.0" energy="10.0"
+			desc="llAddToLandPassList(key avatar, float hours);Adds avatar to the land pass list for hours, or indefinitely if hours is 0" />
+		<function name="llSetTouchText" sleep="0.0" energy="10.0"
+			desc="llSetTouchText(string text);Displays text rather than the default &apos;Touch&apos; in the pie menu" />
+		<function name="llSetSitText" sleep="0.0" energy="10.0"
+			desc="llSetSitText(string text);Displays text rather than the default &apos;Sit Here&apos; in the pie menu" />
+		<function name="llSetCameraEyeOffset" sleep="0.0" energy="10.0"
+			desc="llSetCameraEyeOffset(vector offset);Sets the camera eye offset for avatars that sit on the object" />
+		<function name="llSetCameraAtOffset" sleep="0.0" energy="10.0"
+			desc="llSetCameraAtOffset(vector offset);Sets the point the camera is looking at to offset for avatars that sit on the object" />
+		<function name="llDumpList2String" sleep="0.0" energy="10.0"
+			desc="string llDumpList2String(list src, string separator);Returns the list in a single string, using separator between the entries" />
+		<function name="llScriptDanger" sleep="0.0" energy="10.0"
+			desc="integer llScriptDanger(vector pos);Returns TRUE if pos is over public land, sandbox land, land that doesn&apos;t allow everyone to edit and build, or land that doesn&apos;t allow outside scripts" />
+		<function name="llDialog" sleep="0.0" energy="10.0"
+			desc="llDialog(key avatar, string message, list buttons, integer chat_channel);Shows a dialog box on the avatar&apos;s screen with a message and up to 12 buttons.;If a button is pressed, the avatar says the text of the button label on chat_channel" />
+		<function name="llVolumeDetect" sleep="0.0" energy="10.0"
+			desc="llVolumeDetect(integer detect);If detect = TRUE, object works much like Phantom, but triggers collision_start and collision_end events when other objects start and stop interpenetrating.;Must be applied to the root prim." />
+		<function name="llResetOtherScript" sleep="0.0" energy="10.0"
+			desc="llResetOtherScript(string name);Resets script name" />
+		<function name="llGetScriptState" sleep="0.0" energy="10.0"
+			desc="integer llGetScriptState(string name);Returns TRUE if the script name is running" />
+		<function name="llRemoteLoadScript" sleep="0.0" energy="10.0"
+			desc="DEPRECATED!  Please use llRemoteLoadScriptPin instead" />
+		<function name="llSetRemoteScriptAccessPin" sleep="0.0" energy="10.0"
+			desc="llSetRemoteScriptAccessPin(integer pin);If pin is set to a non-zero number, allows a prim to have scripts remotely loaded via llRemoteLoadScriptPin when it passes in the correct pin. Otherwise, llRemoteLoadScriptPin is ignored" />
+		<function name="llRemoteLoadScriptPin" sleep="0.0" energy="10.0"
+			desc="llRemoteLoadScriptPin(key target, string name, integer pin, integer running, integer start_param);Copies script name onto target, if the owner of this scripted object can modify target and is in the same region, and the matching pin is used.;If running == TRUE, starts the script with start_param" />
+		<function name="llOpenRemoteDataChannel" sleep="10.0" energy="10.0"
+			desc="llOpenRemoteDataChannel();Creates a channel to listen for XML-RPC calls, and will trigger a remote_data event with channel id once it is available" />
+		<function name="llSendRemoteData" sleep="3.0" energy="1.0"
+			desc="key llSendRemoteData(key channel, string dest, integer idata, string sdata);Sends an XML-RPC request to dest through channel with payload of channel (in a string), integer idata and string sdata.;Returns a key that is the message_id for the resulting remote_data events." />
+		<function name="llRemoteDataReply" sleep="3.0" energy="10.0"
+			desc="llRemoteDataReply(key channel, key message_id, string sdata, integer idata);Sends an XML-RPC reply to message_id on channel with payload of string sdata and integer idata" />
+		<function name="llCloseRemoteDataChannel" sleep="3.0" energy="10.0"
+			desc="llCloseRemoteDataChannel(key channel);Closes XML-RPC channel" />
+		<function name="llMD5String" sleep="0.0" energy="10.0"
+			desc="string llMD5String(string src, integer nonce);Returns a string of 32 hex characters that is a RSA Data Security, Inc. MD5 Message-Digest Algorithm of src with nonce" />
+		<function name="llSetPrimitiveParams" sleep="2.0" energy="10.0"
+			desc="llSetPrimitiveParams(list rules);Sets the prim&apos;s parameters according to rules" />
+		<function name="llStringToBase64" sleep="0.0" energy="10.0"
+			desc="string llStringToBase64(string str);Converts a string to the Base64 representation of the string" />
+		<function name="llBase64ToString" sleep="0.0" energy="10.0"
+			desc="string llBase64ToString(string str);Converts a Base64 string to a conventional string.;If the conversion creates any unprintable characters, they are converted to spaces" />
+		<function name="llIntegerToBase64" sleep="0.0" energy="10.0"
+			desc="string llIntegerToBase64(integer number) Returns a string that is a Base64 big endian encode of number" />
+		<function name="llBase64ToInteger" sleep="0.0" energy="10.0"
+			desc="integer llBase64ToInteger(string str);Returns an integer that is the str Base64 decoded as a big endian integer" />
+		<function name="llRemoteDataSetRegion" sleep="0.0" energy="10.0"
+			desc="llRemoteDataSetRegion();DEPRECATED!  Please use llOpenRemoteDataChannel instead.;If an object using remote data channels changes regions, you must call this function to reregister the remote data channels. This call is not needed if the prim does not change regions" />
+		<function name="llLog10" sleep="0.0" energy="10.0"
+			desc="float llLog10(float val);Returns the base 10 logarithm of val.  Returns zero if val &lt;= 0" />
+		<function name="llLog" sleep="0.0" energy="10.0"
+			desc="float llLog(float val);Returns the natural logarithm of val.  Returns zero if val &lt;= 0" />
+		<function name="llGetAnimationList" sleep="0.0" energy="10.0"
+			desc="ist llGetAnimationList(key id);Returns a list of keys of playing animations for avatar described by id" />
+		<function name="llSetParcelMusicURL" sleep="0.0" energy="10.0"
+			desc="llSetParcelMusicURL(string url)
+		Sets the streaming audio URL for the parcel which the object is on" />
+		<function name="llGetRootPosition" sleep="0.0" energy="10.0"
+			desc="vector llGetRootPosition();Returns the position (in region coordinates) of the root prim of the object which the script is attached to" />
+		<function name="llGetRootRotation" sleep="0.0" energy="10.0"
+			desc="rotation llGetRootRotation();Returns the rotation (relative to the region) of the root prim of the object which the script is attached to" />
+		<function name="llGetObjectDesc" sleep="0.0" energy="10.0"
+			desc="string llGetObjectDesc();Returns the description of the prim the script is attached to" />
+		<function name="llSetObjectDesc" sleep="0.0" energy="10.0"
+			desc="llSetObjectDesc(string name);Sets the prim&apos;s description" />
+		<function name="llGetCreator" sleep="0.0" energy="10.0"
+			desc="key llGetCreator();Returns a key for the creator of the prim" />
+		<function name="llGetTimestamp" sleep="0.0" energy="10.0"
+			desc="string llGetTimestamp();Returns the timestamp in the UTC time zone in the format; YYYY-MM-DDThh;mm;ss.ff..fZ" />
+		<function name="llGetGMTclock" sleep="0.0" energy="10.0"
+			desc="float llGetGMTclock();Returns the time in seconds since midnight GMT" />
+		<function name="llSetLinkAlpha" sleep="0.0" energy="10.0"
+			desc="llSetLinkAlpha(integer linknumber, float alpha, integer face);If a prim exists in the link chain at linknumber, sets face to alpha" />
+		<function name="llGetNumberOfPrims" sleep="0.0" energy="10.0"
+			desc="integer llGetNumberOfPrims();Returns the number of prims in a link set the script is attached to" />
+		<function name="llGetNumberOfNotecardLines" sleep="0.0" energy="10.0"
+			desc="key llGetNumberOfNotecardLines(string name);Returns number of lines in notecard name via the dataserver event (cast return value to integer)" />
+		<function name="llGetBoundingBox" sleep="0.0" energy="10.0"
+			desc="list llGetBoundingBox(key object);Returns the bounding box around the object (including any linked prims) relative to its root prim, in a list in the format [ (vector) min_corner, (vector) max_corner ]" />
+		<function name="llGetGeometricCenter" sleep="0.0" energy="10.0"
+			desc="vector llGetGeometricCenter();Returns the geometric center of the linked set the script is attached to" />
+		<function name="llGetPrimitiveParams" sleep="0.0" energy="10.0"
+			desc="list llGetPrimitiveParams(list params);Returns the primitive parameters specified in the params list" />
+		<function name="llGetSimulatorHostname" sleep="0.0" energy="10.0"
+			desc="string llGetSimulatorHostname();Returns the hostname of the machine which the script is running on (same as string in viewer Help dialog)" />
+		<function name="llSetLocalRot" sleep="0.0" energy="10.0"
+			desc="llSetLocalRot(rotation rot);Sets the rotation of a child prim relative to the root prim" />
+		<function name="llParseStringKeepNulls" sleep="0.0" energy="10.0"
+			desc="list llParseStringKeepNulls(string src, list separators, list spacers);Breaks src into a list, discarding separators, keeping spacers, keeping any null values generated.;(separators and spacers must be lists of strings, maximum of 8 each)" />
+		<function name="llRezAtRoot" sleep="0.1" energy="10.0"
+			desc="llRezAtRoot(string inventory, vector pos, vector vel, rotation rot, integer param);Instantiates owner&apos;s inventory object rotated to rot with its root at pos, moving at vel, using param as the start parameter" />
+		<function name="llGetObjectPermMask" sleep="0.0" energy="10.0"
+			desc="integer llGetObjectPermMask(integer mask);Returns the requested permission mask for the root object the task is attached to" />
+		<function name="llSetObjectPermMask" sleep="0.0" energy="10.0" god-only="true"
+			desc="llSetObjectPermMask(integer mask, integer value);Sets the given permission mask to the new value on the root object the task is attached to (requires God Mode)" />
+		<function name="llGetInventoryPermMask" sleep="0.0" energy="10.0"
+			desc="integer llGetInventoryPermMask(string item, integer mask);Returns the requested permission mask for the inventory item" />
+		<function name="llSetInventoryPermMask" sleep="0.0" energy="10.0" god-only="true"
+			desc="llSetInventoryPermMask(string item, integer mask, integer value);Sets the given permission mask to the new value on the inventory item (requires God Mode)" />
+		<function name="llGetInventoryCreator" sleep="0.0" energy="10.0"
+			desc="key llGetInventoryCreator(string item);Returns a key for the creator of the inventory item" />
+		<function name="llOwnerSay" sleep="0.0" energy="10.0"
+			desc="llOwnerSay(string message);Says message to owner only.  (Owner must be in the same region.)" />
+		<function name="llRequestSimulatorData" sleep="1.0" energy="10.0"
+			desc="key llRequestSimulatorData(string simulator, integer data);Requests data about simulator.  When data is available the dataserver event will be raised" />
+		<function name="llForceMouselook" sleep="0.0" energy="10.0"
+			desc="llForceMouselook(integer mouselook);If mouselook is TRUE, any avatar that sits upon the prim will be forced into mouselook mode" />
+		<function name="llGetObjectMass" sleep="0.0" energy="10.0"
+			desc="float llGetObjectMass(key id);Returns the mass of the avatar or object in the region" />
+		<function name="llListReplaceList" sleep="0.0" energy="10.0"
+			desc="list llListReplaceList(list dest, list src, integer start, integer end);Returns a list that is dest with start through end removed and src inserted at start" />
+		<function name="llLoadURL" sleep="10.0" energy="10.0"
+			desc="llLoadURL(key avatar, string message, string url);Shows a dialog to avatar offering to load the web page at url with a message.;If user clicks yes, launches the page in their web browser" />
+		<function name="llParcelMediaCommandList" sleep="0.0" energy="10.0"
+			desc="llParcelMediaCommandList(list command);Sends a list of commands, some with arguments, to a parcel to control the playback of movies and other media" />
+		<function name="llParcelMediaQuery" sleep="0.0" energy="10.0"
+			desc="list llParcelMediaQuery(list query);Returns a list containing results of the sent query" />
+		<function name="llGetInventoryType" sleep="0.0" energy="10.0"
+			desc="integer llGetInventoryType(string name);Returns the type of the inventory item name" />
+		<function name="llSetPayPrice" sleep="0.0" energy="10.0"
+			desc="llSetPayPrice(integer price, list quick_pay_buttons);Sets the default amount on the dialog that appears when someone chooses to pay this prim" />
+		<function name="llGetCameraPos" sleep="0.0" energy="10.0"
+			desc="vector llGetCameraPos();Returns the current camera position for the agent the task has permissions for" />
+		<function name="llGetCameraRot" sleep="0.0" energy="10.0"
+			desc="rotation llGetCameraRot();Returns the current camera orientation for the agent the task has permissions for" />
+		<function name="llSetPrimURL" sleep="20.0" energy="10.0"
+			desc="llSetPrimURL(string url);Updates the URL for the web page shown on the sides of the object" />
+		<function name="llRefreshPrimURL" sleep="20.0" energy="10.0"
+			desc="llRefreshPrimURL();Reloads the web page shown on the sides of the object" />
+		<function name="llEscapeURL" sleep="0.0" energy="10.0"
+			desc="string llEscapeURL(string url);Returns an escaped/encoded version of url, replacing spaces with %20 etc" />
+		<function name="llUnescapeURL" sleep="0.0" energy="10.0"
+			desc="string llUnescapeURL(string url);Returns an unescaped/ unencoded version of url, replacing %20 with spaces etc" />
+		<function name="llMapDestination" sleep="0.0" energy="10.0"
+			desc="llMapDestination(string simname, vector pos, vector look_at);Opens the World Map centered on the region simname with pos highlighted. (NOTE; look_at currently does nothing.);Only works for scripts attached to avatar, or during touch events" />
+		<function name="llAddToLandBanList" sleep="0.1" energy="10.0"
+			desc="llAddToLandBanList( key avatar, float hours );Add avatar to the land ban list for hours, or indefinitely if hours is zero" />
+		<function name="llRemoveFromLandPassList" sleep="0.0" energy="10.0"
+			desc="llRemoveFromLandPassList(key avatar);Removes avatar from the land pass list" />
+		<function name="llRemoveFromLandBanList" sleep="0.0" energy="10.0"
+			desc="llRemoveFromLandBanList(key avatar);Removes avatar from the land ban list" />
+		<function name="llSetCameraParams" sleep="0.0" energy="10.0"
+			desc="llSetCameraParams(list rules);Sets multiple camera parameters at once.;List format is [ rule1, data1, rule2, data2 . . . rulen, datan ]" />
+		<function name="llClearCameraParams" sleep="0.0" energy="10.0"
+			desc="llClearCameraParams();Resets all camera parameters to default values and turns off scripted camera control" />
+		<function name="llListStatistics" sleep="0.0" energy="10.0"
+			desc="float llListStatistics(integer operation, list src);Performs statistical aggregate functions on list src using LIST_STAT_* operations" />
+		<function name="llGetParcelFlags" sleep="0.0" energy="10.0"
+			desc="integer llGetParcelFlags(vector pos);Returns a mask of the parcel flags (PARCEL_FLAG_*) for the parcel that includes the point pos" />
+		<function name="llGetRegionFlags" sleep="0.0" energy="10.0"
+			desc="integer llGetRegionFlags();Returns the region flags (REGION_FLAG_*) for the region the object is in" />
+		<function name="llXorBase64StringsCorrect" sleep="0.0" energy="10.0"
+			desc="string llXorBase64StringsCorrect(string s1, string s2);Correctly performs an exclusive or on two Base64 strings.;s2 repeats if it is shorter than s1" />
+		<function name="llXorBase64" sleep="0.0" energy="10.0"
+			desc="string llXorBase64(string s1, string s2);Correctly performs an exclusive or on two Base64 strings and returns a Base64 string.;If the inputs are not Base64 strings the result will be erratic" />
+		<function name="llHTTPRequest" sleep="0.0" energy="10.0"
+			desc="key llHTTPRequest(string url, list parameters, string body);Sends an HTTP request to the specified url with the body of the request and parameters" />
+		<function name="llResetLandBanList" sleep="1.0" energy="10.0"
+			desc="llResetLandBanList();Removes all Residents from the land ban list" />
+		<function name="llResetLandPassList" sleep="1.0" energy="10.0"
+			desc="llResetLandPassList();Removes all Residents from the land access/pass list" />
+		<function name="llGetObjectPrimCount" sleep="0.0" energy="10.0"
+			desc="integer llGetObjectPrimCount(key object_id);Returns the total number of prims for an object in the region" />
+		<function name="llGetParcelPrimOwners" sleep="2.0" energy="10.0"
+			desc="list llGetParcelPrimOwners(vector pos);Returns a list of all Residents who own objects on the parcel at pos and with individual prim counts.;Requires owner-like permissions for the parcel" />
+		<function name="llGetParcelPrimCount" sleep="0.0" energy="10.0"
+			desc="integer llGetParcelPrimCount(vector pos, integer category, integer sim_wide);Returns the number of prims on the parcel at pos of the given category.;Categories; PARCEL_COUNT_TOTAL, _OWNER, _GROUP, _OTHER, _SELECTED, _TEMP" />
+		<function name="llGetParcelMaxPrims" sleep="0.0" energy="10.0"
+			desc="integer llGetParcelMaxPrims(vector pos, integer sim_wide);Returns the maximum number of prims allowed on the parcel at pos" />
+		<function name="llGetParcelDetails" sleep="0.0" energy="10.0"
+			desc="list llGetParcelDetails(vector pos, list params);Returns the parcel details specified in params for the parcel at pos.;Params is one or more of; PARCEL_DETAILS_NAME, _DESC, _OWNER, _GROUP, _AREA, _ID, _SEE_AVATARS" />
+		<function name="llSetLinkPrimitiveParams" sleep="0.0" energy="10.0"
+			desc="llSetLinkPrimitiveParams(integer linknumber, list rules);Sets primitive parameters for linknumber based on rules" />
+		<function name="llSetLinkTexture" sleep="0.0" energy="10.0"
+			desc="llSetLinkTexture(integer linknumber, string texture, integer face);Sets the texture of face for a task that exists in the link chain at linknumber" />
+		<function name="llStringTrim" sleep="0.0" energy="10.0"
+			desc="string llStringTrim(string src, integer trim_type);Trims the leading and/or trailing white spaces from a string.;trim_type can be STRING_TRIM, STRING_TRIM_HEAD or STRING_TRIM_TAIL" />
+		<function name="llRegionSay" sleep="0.0" energy="10.0"
+			desc="llRegionSay(integer channel, string message);Broadcasts message on channel (not 0) that can be heard anywhere in the region by a script listening on channel" />
+		<function name="llGetObjectDetails" sleep="0.0" energy="10.0"
+			desc="list llGetObjectDetails(key id, list params);Returns the object details specified in params for the object with key id.;Params are OBJECT_NAME, _DESC, _POS, _ROT, _VELOCITY, _OWNER, _GROUP, _CREATOR" />
+		<function name="llSetClickAction" sleep="0.0" energy="10.0"
+			desc="llSetClickAction(integer action);Sets the action performed when a prim is clicked upon" />
+		<function name="llGetRegionAgentCount" sleep="0.0" energy="10.0"
+			desc="integer llGetRegionAgentCount();Returns the number of avatars in the region" />
+		<function name="llTextBox" sleep="1.0" energy="10.0"
+			desc="llTextBox(key avatar, string message, integer chat_channel);Shows a window on the avatar&apos;s screen with the message.;It contains a text box for input, and if entered that text is chatted on chat_channel" />
+		<function name="llGetAgentLanguage" sleep="0.0" energy="10.0"
+			desc="string llGetAgentLanguage(key avatar);Returns the language code of the preferred interface language of the avatar" />
+		<function name="llDetectedTouchUV" sleep="0.0" energy="10.0"
+			desc="vector llDetectedTouchUV(integer index);Returns the u and v coordinates in the first two components of a vector, for the texture coordinates where the prim was touched in a triggered touch event" />
+		<function name="llDetectedTouchFace" sleep="0.0" energy="10.0"
+			desc="integer llDetectedTouchFace(integer index);Returns the index of the face where the avatar clicked in a triggered touch event" />
+		<function name="llDetectedTouchPos" sleep="0.0" energy="10.0"
+			desc="vector llDetectedTouchPos(integer index);Returns the position where the object was touched in a triggered touch event" />
+		<function name="llDetectedTouchNormal" sleep="0.0" energy="10.0"
+			desc="vector llDetectedTouchNormal(integer index);Returns the surface normal for a triggered touch event" />
+		<function name="llDetectedTouchBinormal" sleep="0.0" energy="10.0"
+			desc="vector llDetectedTouchBinormal(integer index);Returns the surface binormal for a triggered touch event" />
+		<function name="llDetectedTouchST" sleep="0.0" energy="10.0"
+			desc="vector llDetectedTouchST(integer index);Returns the s and t coordinates in the first two components of a vector, for the surface coordinates where the prim was touched in a triggered touch event" />
+		<function name="llSHA1String" sleep="0.0" energy="10.0"
+			desc="string llSHA1String(string src);Returns a string of 40 hex characters that is the SHA1 security Hash of src" />
+		<function name="llGetFreeURLs" sleep="0.0" energy="10.0"
+			desc="integer llGetFreeURLs();Returns the number of available URLs for the current script" />
+		<function name="llRequestURL" sleep="0.0" energy="10.0"
+			desc="key llRequestURL();Requests one HTTP;// url for use by this object.;An http_request event is triggered with the results" />
+		<function name="llRequestSecureURL" sleep="0.0" energy="10.0"
+			desc="key llRequestSecureURL();Requests one HTTPS;// (SSL) url for use by this object.;An http_request event is triggered with the results" />
+		<function name="llReleaseURL" sleep="0.0" energy="10.0"
+			desc="llReleaseURL(string url);Releases the specified URL, it will no longer be usable" />
+		<function name="llHTTPResponse" sleep="0.0" energy="10.0"
+			desc="llHTTPResponse(key request_id, integer status, string body);Responds to request_id with status and body" />
+		<function name="llGetHTTPHeader" sleep="0.0" energy="10.0"
+			desc="string llGetHTTPHeader(key request_id, string header);Returns the value for header for request_id" />
+		<function name="llSetPrimMediaParams" sleep="1.0" energy="10.0"
+			desc="llSetPrimMediaParams(integer face, list params);Sets the media params for a particular face on an object. If media is not already on this object, add it.;List is a set of name/value pairs in no particular order.  Params not specified are unchanged, or if new media is added then set to the default specified.;The possible names are below, along with the types of values and what they mean" />
+		<function name="llGetPrimMediaParams" sleep="1.0" energy="10.0"
+			desc="list llGetPrimMediaParams(integer face, list params);Returns the media params for a particular face on an object, given the desired list of names, in the order requested.;(Returns an empty list if no media exists on the face.)" />
+		<function name="llClearPrimMedia" sleep="0.0" energy="10.0"
+			desc="llClearPrimMedia(integer face);Clears (deletes) the media and all params from the given face" />
+		<function name="llSetLinkPrimitiveParamsFast" sleep="0.0" energy="10.0"
+			desc="llSetLinkPrimitiveParamsFast(integer linknumber,list rules);Set primitive parameters for linknumber based on rules" />
+		<function name="llGetLinkPrimitiveParams" sleep="0.0" energy="10.0"
+			desc="llGetLinkPrimitiveParams(integer linknumber,list rules);Get primitive parameters for linknumber based on rules" />
+		<function name="llLinkParticleSystem" sleep="0.0" energy="10.0"
+			desc="llLinkParticleSystem(integer linknumber,list rules);Creates a particle system based on rules.  Empty list removes particle system from object.;List format is [ rule1, data1, rule2, data2 . . . rulen, datan ]" />
+		<function name="llSetLinkTextureAnim" sleep="0.0" energy="10.0"
+			desc="llSetLinkTextureAnim(integer link, integer mode, integer face, integer sizex, integer sizey, float start, float length, float rate);Animate the texture on the specified prim&apos;s face/faces" />
+		<function name="llGetLinkNumberOfSides" sleep="0.0" energy="10.0"
+			desc="integer llGetLinkNumberOfSides(integer link);Returns the number of sides of the specified linked prim" />
+		<function name="llGetUsername" sleep="0.0" energy="10.0"
+			desc="string llGetUsername(key id);Returns the single-word username of an avatar, iff the avatar is in the current region, otherwise the empty string" />
+		<function name="llRequestUsername" sleep="0.0" energy="10.0"
+			desc="key llRequestUsername(key id);Requests single-word username of an avatar.  When data is available the dataserver event will be raised" />
+		<function name="llGetDisplayName" sleep="0.0" energy="10.0"
+			desc="string llGetDisplayName(key id);Returns the name of an avatar, iff the avatar is in the current simulator, and the name has been cached, otherwise the same as llGetUsername.  Use llRequestDisplayName if you absolutely must have the display name" />
+		<function name="llRequestDisplayName" sleep="0.0" energy="10.0"
+			desc="key llRequestDisplayName(key id);Requests name of an avatar.  When data is available the dataserver event will be raised" />
+		<function name="llGetEnv" sleep="0.0" energy="10.0"
+			desc="llGetEnv(string name);Returns a string with the requested data about the region" />
+		<function name="llCastRay" sleep="0.0" energy="10.0"
+			desc="llCastRay(vector start, vector end, list params);Casts a ray into the physics world from &apos;start&apos; to &apos;end&apos; and returns data according to details in params" />
+		<function name="llRegionSayTo" sleep="0.0" energy="10.0"
+			desc="llRegionSayTo(key target, integer channel, string message);Sends message on channel (not DEBUG_CHANNEL) directly to prim or avatar target anywhere within the region" />
+		<function name="llGetSPMaxMemory" sleep="0.0" energy="10.0"
+			desc="integer llGetSPMaxMemory();Returns the maximum used memory for the current script. Only valid after using PROFILE_SCRIPT_MEMORY. Non-mono scripts always use 16k" />
+		<function name="llGetUsedMemory" sleep="0.0" energy="10.0"
+			desc="integer llGetUsedMemory();Returns the current used memory for the current script. Non-mono scripts always use 16k" />
+		<function name="llScriptProfiler" sleep="0.0" energy="10.0"
+			desc="llScriptProfiler(integer flags);Enabled or disables script profiling options. Currently only supports PROFILE_SCRIPT_MEMORY (mono only) and PROFILE_NONE.
+		MAY SIGNIFICANTLY REDUCE SCRIPT PERFORMANCE!" />
+		<function name="llSetMemoryLimit" sleep="0.0" energy="10.0"
+			desc="integer llSetMemoryLimit(integer limit);Request limit bytes to be reserved for this script.;Returns a success/failure flag (STATUS_OK when successful, another of the STATUS_* flags on failure) for whether the memory limit was set.;Only relevant for Mono-compiled scripts" />
+		<function name="llGetMemoryLimit" sleep="0.0" energy="10.0"
+			desc="integer llGetMemoryLimit();Get the maximum memory a script can use.;Returns the integer amount of memory the script can use in bytes" />
+		<function name="llSetLinkMedia" sleep="0.0" energy="10.0"
+			desc="llSetLinkMedia(integer link, integer face, list params);Set the media params for a particular face on linked prim.  List is a set of name/value pairs (in no particular order). The possible names are below, along with the types of values and what they mean.  If media is not already on this object, add it. Params not specified are unchanged, or if new media is added set to the default specified" />
+		<function name="llGetLinkMedia" sleep="0.0" energy="10.0"
+			desc="list llGetLinkMedia(integer link, integer face, list params);Get the media params for a particular face on linked prim, given the desired list of names. Returns a list of values in the order requested.  Returns an empty list if no media exists on the face" />
+		<function name="llClearLinkMedia" sleep="0.0" energy="10.0"
+			desc="llClearLinkMedia(integer link, integer face);Clears (deletes) the media and all params from the given face on linked prim" />
+		<function name="llSetLinkCamera" sleep="0.0" energy="10.0"
+			desc="llSetLinkCamera(integer link, vector eye, vector at);Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.;The two vector parameters are offsets relative to the object&apos;s center and expressed in local coordinates" />
+		<function name="llSetContentType" sleep="0.0" energy="10.0"
+			desc="llSetContentType(key request_id, integer content_type);Set the Internet media type of an LSL HTTP server response.;content_type may be one of CONTENT_TYPE_TEXT (default) &quot;text/plain&quot;, or CONTENT_TYPE_HTML &quot;text/html&quot;, only valid for embedded browsers on content owned by the person viewing. Falls back to &quot;text/plain&quot; otherwise" />
+		<function name="llLinkSitTarget" sleep="0.0" energy="10.0"
+			desc="llLinkSitTarget(integer link, vector offset, rotation rot);Set the sit location for this object (if offset == &lt;0,0,0&gt; clear it)" />
+		<function name="llAvatarOnLinkSitTarget" sleep="0.0" energy="10.0"
+			desc="key llAvatarOnLinkSitTarget(integer link);If an avatar is sitting on the sit target, return the avatar&apos;s key, NULL_KEY otherwise" />
+		<function name="llSetVelocity" sleep="0.0" energy="10.0"
+			desc="llSetVelocity(vector velocity, integer local);Sets an objects velocity, in local coords if local == TRUE (if the script is physical)" />
+		<function name="llSetAngularVelocity" sleep="0.0" energy="10.0"
+			desc="llSetAngularVelocity(vector angular_velocity, integer local);Sets an objects angular velocity, in local coords if local == TRUE (if the script is physical)" />
+		<function name="llSetPhysicsMaterial" sleep="0.0" energy="10.0"
+			desc="llSetPhysicsMaterial(integer flags, float gravity_multiplier, float restitution, float friction, float density );Sets the requested attributes of the root object&apos;s physics material" />
+		<function name="llGetPhysicsMaterial" sleep="0.0" energy="10.0"
+			desc="llGetPhysicsMaterial();Returns the gravity multiplier, restitution, friction, and density of the linkset as a list in that order" />
+		<function name="llGetMassMKS" sleep="0.0" energy="10.0"
+			desc="llGetMassMKS();Returns the mass of the linkset in kilograms" />
+		<function name="llManageEstateAccess" sleep="0.0" energy="10.0"
+			desc="integer llManageEstateAccess(integer action, key id);To add or remove agents from the estate&apos;s agent access or ban lists or groups from the estate&apos;s group access list.;Only works for objects owned by the Estate Owner or an Estate Manager.;Returns TRUE if successful and FALSE if throttled, on invalid action, on invalid or null id, or if object owner is not allowed to manage the estate.;action can be any of; ESTATE_ACCESS_ALLOWED_[AGENT/GROUP]_[ADD/REMOVE] or ESTATE_ACCESS_BANNED_AGENT_[ADD/REMOVE]" />
+		<function name="llSetKeyframedMotion" sleep="0.0" energy="10.0"
+			desc="llSetKeyframedMotion(list keyframes, list options);Requests that a nonphysical object be keyframed according to keyframe list" />
+		<function name="llTransferLindenDollars" sleep="0.0" energy="10.0"
+			desc="key llTransferLindenDollars(key destination, integer amount);Transfer amount of linden dollars (L$) from script owner to destination. Returns a key to a corresponding transaction_result event for the success of the transfer" />
+		<function name="llGetParcelMusicURL" sleep="0.0" energy="10.0"
+			desc="string llGetParcelMusicURL();Returnss the streaming audio URL for the parcel of land on which the object is located" />
+		<function name="llSetRegionPos" sleep="0.0" energy="10.0"
+			desc="integer llSetRegionPos(vector pos);Sets the position anywhere within the region (if the object isn&apos;t physical)" />
+		<function name="llGetAgentList" sleep="0.0" energy="10.0"
+			desc="list llGetAgentList(integer scope, list options);Requests a list of agents currently in the region, limited by the scope parameter" />
+		<function name="llAttachToAvatarTemp" sleep="0.0" energy="10.0"
+			desc="llAttachToAvatarTemp(integer attach_point);Attaches the object to the avatar who has granted permission to the script, with the exception that the object will not create new inventory for the user, and will disappear on detach or disconnect" />
+		<function name="llTeleportAgent" sleep="0.0" energy="10.0"
+			desc="llTeleportAgent(key avatar, string landmark, vector position, vector look_at);Requests a teleport of avatar to a landmark stored in the object&apos;s inventory. If no landmark is provided (an empty string), the avatar is teleported to the location position in the current region. In either case, the avatar is turned to face the position given by look_at in local coordinates" />
+		<function name="llTeleportAgentGlobalCoords" sleep="0.0" energy="10.0"
+			desc="llTeleportAgentGlobalCoords(key agent, vector global_coordinates, vector region_coordinates, vector look_at);Teleports an agent to set of a region_coordinates within a region at the specified global_coordinates. The agent lands facing the position defined by look_at local coordinates.;A region&apos;s global coordinates can be retrieved using llRequestSimulatorData(region_name, DATA_SIM_POS)" />
+		<function name="llGenerateKey" sleep="0.0" energy="10.0"
+			desc="key llGenerateKey();Return a unique generated key" />
+		<function name="llNavigateTo" sleep="0.0" energy="10.0"
+			desc="llNavigateTo(vector point, list options);For AI Character: Navigate to destination" />
+		<function name="llCreateCharacter" sleep="0.0" energy="10.0"
+			desc="llCreateCharacter(list options);Convert linkset to AI Character which can navigate the world" />
+		<function name="llPursue" sleep="0.0" energy="10.0"
+			desc="llPursue(key target, list options);For AI Character: Chase after a target" />
+		<function name="llWanderWithin" sleep="0.0" energy="10.0"
+			desc="llWanderWithin(vector center, float radius, list options);For AI Character: Wander within a specified volume" />
+		<function name="llFleeFrom" sleep="0.0" energy="10.0"
+			desc="llFleeFrom(vector source, float radius, list options);For AI Character: Flee from a point" />
+		<function name="llPatrolPoints" sleep="0.0" energy="10.0"
+			desc="llPatrolPoints(list points, list options);For AI Character: Patrol a list of points" />
+		<function name="llExecCharacterCmd" sleep="0.0" energy="10.0"
+			desc="llExecCharacterCmd(integer cmd, list options);For AI Character: Execute a character command" />
+		<function name="llDeleteCharacter" sleep="0.0" energy="10.0"
+			desc="llDeleteCharacter();Convert linkset from AI Character to Physics object" />
+		<function name="llUpdateCharacter" sleep="0.0" energy="10.0"
+			desc="llUpdateCharacter(list options);Change the AI Character&apos;s settings" />
+		<function name="llEvade" sleep="0.0" energy="10.0"
+			desc="llEvade(key target, list options);For AI Character: Evade a specified target" />
+		<function name="llGetClosestNavPoint" sleep="0.0" energy="10.0"
+			desc="list llGetClosestNavPoint(vector point, list options);For AI Character: Get the closest navigable point to the point provided" />
+		<function name="llGetStaticPath" sleep="0.0" energy="10.0"
+			desc="list llGetStaticPath(vector start, vector end, float radius, list params);Returns a list of position vectors indicating pathfinding waypoints between positions at start and end, for a character of a given radius" />
+		<function name="llGetSimStats" sleep="0.0" energy="10.0"
+			desc="float llGetSimStats(integer stat_type);Returns the value of a particular simulator statistic" />
+		<function name="llSetAnimationOverride" sleep="0.0" energy="10.0"
+			desc="llSetAnimationOverride(string anim_state, string anim);Set the animation (anim) that will play for the given animation state (anim_state)" />
+		<function name="llGetAnimationOverride" sleep="0.0" energy="10.0"
+			desc="string llGetAnimationOverride(string anim_state);Returns a string that is the name of the animation that is being used for the specified animation state (anim_state)" />
+		<function name="llResetAnimationOverride" sleep="0.0" energy="10.0"
+			desc="llResetAnimationOverride(string anim_state);Resets the animation override of the specified animation state (anim_state) to the corresponding default value" />
+		<function name="llJson2List" sleep="0.0" energy="10.0"
+			desc="list llJson2List(string json);Converts the top level of the json string to a list" />
+		<function name="llList2Json" sleep="0.0" energy="10.0"
+			desc="string llList2Json(string type, list values);Converts either a strided list of key;value pairs to a JSON_OBJECT or a list of values to a JSON_ARRAY" />
+		<function name="llJsonGetValue" sleep="0.0" energy="10.0"
+			desc="string llJsonGetValue(string json, list specifiers);Returns the value indicated by specifiers from the json string" />
+		<function name="llJsonSetValue" sleep="0.0" energy="10.0"
+			desc="string llJsonSetValue(string json, list specifiers, string value);Returns a new json string that is the json given with the value indicated by specifiers set to value" />
+		<function name="llJsonValueType" sleep="0.0" energy="10.0"
+			desc="string llJsonValueType(string json, list specifiers);Returns the type constant for the value in json indicated by specifiers" />
+		<function name="llReturnObjectsByID" sleep="0.0" energy="10.0"
+			desc="integer llReturnObjectsByID(list objects);Returns a list of objects by their IDs" />
+		<function name="llReturnObjectsByOwner" sleep="0.0" energy="10.0"
+			desc="integer llReturnObjectsByOwner(key owner, integer scope);Returns all objects of a particular owner in the given scope" />
+		<function name="llScaleByFactor" sleep="0.0" energy="10.0"
+			desc="integer llScaleByFactor(float scale_factor);Uniformly resizes the linkset by the given multiplicative scale factor;Returns TRUE if rescaling was successful or FALSE otherwise" />
+		<function name="llGetMinScaleFactor" sleep="0.0" energy="10.0"
+			desc="float llGetMinScaleFactor();Returns the minimum multiplicative scale factor which can be used by llScaleByFactor()" />
+		<function name="llGetMaxScaleFactor" sleep="0.0" energy="10.0"
+			desc="float llGetMaxScaleFactor();Returns the maximum multiplicative scale factor which can be used by llScaleByFactor()" />
+	</functions>
+</script_library>

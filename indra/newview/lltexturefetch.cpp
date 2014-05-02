@@ -63,9 +63,12 @@
 #include "bufferarray.h"
 #include "bufferstream.h"
 
+#include "fswsassetblacklist.h" //For Asset blacklist
+
 bool LLTextureFetchDebugger::sDebuggerEnabled = false ;
-LLStat LLTextureFetch::sCacheHitRate("texture_cache_hits", 128);
-LLStat LLTextureFetch::sCacheReadLatency("texture_cache_read_latency", 128);
+LLStat LLTextureFetch::sCacheHitRate("texture_cache_hits", 32);
+LLStat LLTextureFetch::sCacheReadLatency("texture_cache_read_latency", 32);
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1120,6 +1123,15 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
 	if (mState == INIT)
 	{		
+		//asset blacklist
+		if(FSWSAssetBlacklist::getInstance()->isBlacklisted(mID,LLAssetType::AT_TEXTURE))
+		{
+			llinfos << "Blacklisted texture asset blocked." << llendl; 
+			mState = DONE;
+			return true;
+		}
+		//end asset blacklist
+
 		mRawImage = NULL ;
 		mRequestedDiscard = -1;
 		mLoadedDiscard = -1;
@@ -1486,7 +1498,11 @@ bool LLTextureFetchWorker::doWork(S32 param)
 																	  mWorkPriority,
 																	  mUrl,
 																	  mRequestedOffset,
-																	  mRequestedSize,
+																	  //<FS:TS> FIRE-11448: Problems using cell networks
+																	  // this change from Monty Linden in the SL forums
+																	  //mRequestedSize,
+																	  (mRequestedOffset + mRequestedSize) > 20000000 ? 0 : mRequestedSize,
+																	  //</FS:TS> FIRE-11448
 																	  mFetcher->mHttpOptions,
 																	  mFetcher->mHttpHeaders,
 																	  this);

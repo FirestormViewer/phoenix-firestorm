@@ -58,7 +58,11 @@ void LLDrawPoolGround::prerender()
 
 void LLDrawPoolGround::render(S32 pass)
 {
-	if (mDrawFace.empty() || !gSavedSettings.getBOOL("RenderGround"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (mDrawFace.empty() || !gSavedSettings.getBOOL("RenderGround"))
+	static LLCachedControl<bool> RenderGround(gSavedSettings, "RenderGround");
+	if (mDrawFace.empty() || !RenderGround)
+	// </FS:PP>
 	{
 		return;
 	}	

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-background_visible="true"
  default_tab_group="1"
  follows="all"
  height="570"
@@ -13,18 +12,17 @@ background_visible="true"
  width="333">
     <string
      name="landmarks_tab_title"
-     value="MY LANDMARKS" />
+     value="Landmarks" />
     <string
      name="teleport_history_tab_title"
-     value="TELEPORT HISTORY" />
+     value="Teleport History" />
     <filter_editor
-     text_pad_left="10"
      follows="left|top|right"
      font="SansSerifSmall"
      height="23"
      layout="topleft"
      left="10"
-     label="Filter My Places"
+     label="Filter Places"
      max_length_chars="300"
      name="Filter"
      top="3"
@@ -34,15 +32,12 @@ background_visible="true"
      halign="center"
      height="503"
      layout="topleft"
-     left="6"
+     left="2"
      name="Places Tabs"
-     tab_min_width="80"
-     tab_max_width="157"
-     tab_height="30"
      tab_group="1"
      tab_position="top"
      top_pad="10"
-     width="315" />
+     width="325" />
     <panel
      class="panel_place_profile"
      filename="panel_place_profile.xml"
@@ -54,7 +49,7 @@ background_visible="true"
      name="panel_place_profile"
      top="5"
      visible="false"
-     width="315" />
+     width="328" />
     <panel
      class="panel_landmark_info"
      filename="panel_landmark_info.xml"
@@ -66,14 +61,14 @@ background_visible="true"
      name="panel_landmark_info"
      top="5"
      visible="false"
-     width="315" />
+     width="328" />
     <panel
      follows="bottom|left|right"
      height="23"
      layout="topleft"
-     left="4"
+     left="0"
      name="button_panel"
-     width="315">
+     width="328">
      
        <layout_stack
      	follows="bottom|left|right"
@@ -84,7 +79,7 @@ background_visible="true"
 		left="4"
 		orientation="horizontal"
 		top="0"
-		width="315">	
+		width="326">	
 			<layout_panel
 			follows="bottom|left|right"
 			height="23"

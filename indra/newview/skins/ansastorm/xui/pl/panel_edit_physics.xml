@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<tab_container name="wearable_accordion">
+		<panel name="physics_breast_updown_tab_holder" title="Podsk. piersi">
+			<text name="physics_breast_updown_not_available">
+				Podskakiwanie piersi jest dostępne tylko
+dla kobiecych awatarów.
+			</text>
+		</panel>
+		<panel name="physics_breast_inout_tab_holder" title="Rowek m. piers.">
+			<text name="physics_breast_inout_not_available">
+				Rowek między piersiami jest dostępny tylko
+dla kobiecych awatarów.
+			</text>
+		</panel>
+		<panel name="physics_breast_leftright_tab_holder" title="Koł. piersi">
+			<text name="physics_breast_leftright_not_available">
+				Kołysanie piersi jest dostępne tylko
+dla kobiecych awatarów.
+			</text>
+		</panel>
+		<panel name="physics_belly_tab_holder" title="Podsk. brzucha"/>
+		<panel name="physics_butt_tab_holder" title="Podsk. pośladk."/>
+		<panel name="physics_butt_leftright_tab_holder" title="Koł. pośladków"/>
+		<panel name="physics_advanced_tab_holder" title="Zaaw. parametry"/>
+	</tab_container>
+</panel>

@@ -50,8 +50,12 @@
 #include "llavatariconctrl.h"
 #include "llcallingcard.h"
 #include "llchat.h"
-#include "llfloaterimsession.h"
-#include "llfloaterimcontainer.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimsession.h"
+//#include "llfloaterimcontainer.h"
+#include "fsfloaterim.h"
+#include "fsfloaterimcontainer.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llgroupiconctrl.h"
 #include "llmd5.h"
 #include "llmutelist.h"
@@ -60,7 +64,10 @@
 #include "llviewerwindow.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltextbox.h"
 #include "lltoolbarview.h"
@@ -68,7 +75,17 @@
 #include "llviewerparcelmgr.h"
 #include "llconversationlog.h"
 #include "message.h"
-
+// [RLVa:KB] - Checked: 2013-05-10 (RLVa-1.4.9)
+#include "rlvactions.h"
+#include "rlvcommon.h"
+// [/RLVa:KB]
+#include "exogroupmutelist.h"
+#include "fsconsoleutils.h"
+#include "fscommon.h"
+#include "fsfloaternearbychat.h"
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif // OPENSIM
 
 const static std::string ADHOC_NAME_SUFFIX(" Conference");
 
@@ -107,6 +124,12 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg);
 
 void process_dnd_im(const LLSD& notification)
 {
+	// <FS:Ansariel> [FS communication UI] CHUI will call this after returning
+	//               from DnD mode to highlight missed IMs in their
+	//               conversations floater; we don't need this as our IM tabs
+	//               will already be highlighted.
+	return;
+	// </FS:Ansariel> [FS communication UI]
     LLSD data = notification["substitutions"];
     LLUUID sessionID = data["SESSION_ID"].asUUID();
 	LLUUID fromID = data["FROM_ID"].asUUID();
@@ -150,11 +173,19 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
 	args["FROM_ID"] = msg["from_id"];
 	args["SESSION_ID"] = msg["session_id"];
 	args["SESSION_TYPE"] = msg["session_type"];
-	LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
+	// <FS:Ansariel> [FS communication UI]
+	//LLNotificationsUtil::add("IMToast", args, args, boost::bind(&LLFloaterIMContainer::showConversation, LLFloaterIMContainer::getInstance(), msg["session_id"].asUUID()));
+	if (gSavedSettings.getS32("NotificationToastLifeTime") > 0 || gSavedSettings.getS32("ToastFadingTime") > 0) // Ansa: only create toast if it should be visible at all
+	{
+		LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+	}
+	// </FS:Ansariel> [FS communication UI]
 }
 
 void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 {
+	// [CHUI Merge] Commented out for now. Need to see if/how we can/want to wire it up
+#if 0
     std::string user_preferences;
 	LLUUID participant_id = msg[is_dnd_msg ? "FROM_ID" : "from_id"].asUUID();
 	LLUUID session_id = msg[is_dnd_msg ? "SESSION_ID" : "session_id"].asUUID();
@@ -379,7 +410,101 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 			LLAvatarNameCache::get(participant_id, boost::bind(&on_avatar_name_cache_toast, _1, _2, msg));
 		}
 	}
+#endif
+	// [CHUI Merge]
+	// <FS:Ansariel> [FS communication UI] Use old toast handling code for now
+	LLUUID participant_id = msg["from_id"].asUUID();
+	LLUUID session_id = msg["session_id"].asUUID();
+
+	// do not show toast in busy mode or it goes from agent
+	if (gAgent.isDoNotDisturb() || gAgent.getID() == participant_id)
+	{
+		return;
+	}
+
+	// Ansa: CHUI routes nearby chat through here with session id = null uuid!
+	if (session_id.isNull())
+	{
+		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+		FSFloaterNearbyChat* nearby_chat_instance = FSFloaterNearbyChat::findInstance();
+		if (!im_container->getVisible() && nearby_chat_instance && im_container->hasFloater(nearby_chat_instance)
+			&& gSavedSettings.getBOOL("FSNotifyNearbyChatFlash"))
+		{
+			gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
+		}
+		return;
+	}
+
+	// <FS:Ansariel> Don't toast if the message is an announcement
+	if (msg["is_announcement"].asBoolean())
+	{
+		return;
+	}
+	// </FS:Ansariel> Don't toast if the message is an announcement
+
+	// Skip toasting for system messages
+	if (participant_id.isNull())
+	{
+		return;
+	}
+
+	FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+	FSFloaterIM* im_instance = FSFloaterIM::findInstance(session_id);
+	if (!im_container->getVisible() && im_instance && im_container->hasFloater(im_instance)
+		&& gSavedSettings.getBOOL("FSNotifyIMFlash"))
+	{
+		gToolBarView->flashCommand(LLCommandId("chat"), true, im_container->isMinimized());
+	}
+
+		// <FS:Ansariel> (Group-)IMs in chat console
+	if (FSConsoleUtils::ProcessInstantMessage(session_id, participant_id, msg["message"].asString()))
+	{
+		return;
+	}
+	// </FS:Ansariel> (Group-)IMs in chat console
+
+	// check whether incoming IM belongs to an active session or not
+	if (LLIMModel::getInstance()->getActiveSessionID().notNull()
+			&& LLIMModel::getInstance()->getActiveSessionID() == session_id)
+	{
+		return;
+	}
+
+	// *NOTE Skip toasting if the user disable it in preferences/debug settings ~Alexandrea
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(session_id);
+	if (!gSavedSettings.getBOOL("EnableGroupChatPopups") && session->isGroupSessionType())
+	{
+		return;
+	}
+	if (!gSavedSettings.getBOOL("EnableIMChatPopups") && !session->isGroupSessionType())
+	{
+		return;
+	}
+
+	// Skip toasting if we have open window of IM with this session id
+	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(session_id);
+	if (open_im_floater && open_im_floater->getVisible())
+	{
+		return;
+	}
+
+	LLAvatarNameCache::get(participant_id, boost::bind(&on_avatar_name_cache_toast, _1, _2, msg));
+	// </FS:Ansariel> [FS communication UI]
 }
+
+// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+void LLIMModel::setActiveSessionID(const LLUUID& session_id)
+{
+	// check if such an ID really exists
+	if (!findIMSession(session_id))
+	{
+		llwarns << "Trying to set as active a non-existent session!" << llendl;
+		return;
+	}
+
+	mActiveSessionID = session_id;
+		}
+// </FS:Ansariel> [FS communication UI]
 
 void on_new_message(const LLSD& msg)
 {
@@ -388,8 +513,12 @@ void on_new_message(const LLSD& msg)
 
 LLIMModel::LLIMModel() 
 {
-	addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1));
+	// <FS:Ansariel> [FS communication UI]
+	//addNewMsgCallback(boost::bind(&LLFloaterIMSession::newIMCallback, _1));
+	addNewMsgCallback(boost::bind(&FSFloaterIM::newIMCallback, _1));
+	// </FS:Ansariel> [FS communication UI]
 	addNewMsgCallback(boost::bind(&on_new_message, _1));
+
 }
 
 LLIMModel::LLIMSession::LLIMSession(const LLUUID& session_id, const std::string& name, const EInstantMessage& type, const LLUUID& other_participant_id, const uuid_vec_t& ids, bool voice, bool has_offline_msg)
@@ -828,12 +957,33 @@ void LLIMModel::LLIMSession::buildHistoryFileName()
 		// so no need for a callback in LLAvatarNameCache::get()
 		if (LLAvatarNameCache::get(mOtherParticipantID, &av_name))
 		{
-			mHistoryFileName = LLCacheName::buildUsername(av_name.getUserName());
+			// <FS:Ansariel> [Legacy IM logfile names]
+			//mHistoryFileName = LLCacheName::buildUsername(av_name.getUserName());
+			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+			{
+				std::string user_name = av_name.getUserName();
+				mHistoryFileName = user_name.substr(0, user_name.find(" Resident"));;
+			}
+			else
+			{
+				mHistoryFileName = LLCacheName::buildUsername(av_name.getUserName());
+			}
+			// </FS:Ansariel> [Legacy IM logfile names]
 		}
 		else
 		{
 			// Incoming P2P sessions include a name that we can use to build a history file name
-			mHistoryFileName = LLCacheName::buildUsername(mName);
+			// <FS:Ansariel> [Legacy IM logfile names]
+			//mHistoryFileName = LLCacheName::buildUsername(mName);
+			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+			{
+				mHistoryFileName = mName.substr(0, mName.find(" Resident"));;
+			}
+			else
+			{
+				mHistoryFileName = LLCacheName::buildUsername(mName);
+			}
+			// </FS:Ansariel> [Legacy IM logfile names]
 		}
 	}
 }
@@ -869,7 +1019,10 @@ void LLIMModel::processSessionInitializedReply(const LLUUID& old_session_id, con
 			mId2SessionMap[new_session_id] = session;
 		}
 
-		LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(old_session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(old_session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(old_session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if (im_floater)
 		{
 			im_floater->sessionInitReplyReceived(new_session_id);
@@ -1007,7 +1160,9 @@ void LLIMModel::sendNoUnreadMessages(const LLUUID& session_id)
 	mNoUnreadMsgsSignal(arg);
 }
 
-bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text) {
+// <FS:Ansariel> Added is_announcement parameter
+//bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text) {
+bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, const std::string& utf8_text, BOOL is_announcement /* = FALSE */) {
 	
 	LLIMSession* session = findIMSession(session_id);
 
@@ -1016,8 +1171,43 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 		llwarns << "session " << session_id << "does not exist " << llendl;
 		return false;
 	}
+	
+	// <FS:Ansariel>  Forward IM to nearby chat if wanted
+	std::string timestr = LLLogChat::timestamp(false);
+	session->addMessage(from, from_id, utf8_text, timestr); //might want to add date separately
 
-	session->addMessage(from, from_id, utf8_text, LLLogChat::timestamp(false)); //might want to add date separately
+	static LLCachedControl<bool> show_im_in_chat(gSavedSettings, "FSShowIMInChatHistory");
+	if (show_im_in_chat && !is_announcement)
+	{
+		LLChat chat;
+		chat.mChatStyle = CHAT_STYLE_NORMAL;
+ 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		chat.mChatType = CHAT_TYPE_IM;
+		chat.mFromID = from_id;
+		//chat.mFromName = from;
+		static LLCachedControl<S32> group_name_length(gSavedSettings, "FSShowGroupNameLength");
+		if(group_name_length != 0 && session->isGroupSessionType())
+		{
+			chat.mChatType = CHAT_TYPE_IM_GROUP;
+			chat.mFromNameGroup = "[" + session->mName.substr(0, group_name_length) + "] ";
+			chat.mFromName = from;
+		}
+		else
+		{
+			chat.mChatType = CHAT_TYPE_IM;
+			chat.mFromName = from;
+		}
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		chat.mSourceType = CHAT_SOURCE_AGENT;
+		chat.mText = utf8_text;
+		chat.mTimeStr = timestr;
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+		// </FS:Ansariel> [FS communication UI]
+		nearby_chat->addMessage(chat, true, LLSD());
+	}
+	// </FS:Ansariel>
 
 	return true;
 }
@@ -1054,10 +1244,13 @@ bool LLIMModel::proccessOnlineOfflineNotification(
 	return addMessage(session_id, SYSTEM_FROM, LLUUID::null, utf8_text);
 }
 
+// <FS:Ansariel> Added is_announcement parameter
+//bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
+//						   const std::string& utf8_text, bool log2file /* = true */) { 
 bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-						   const std::string& utf8_text, bool log2file /* = true */) { 
+						   const std::string& utf8_text, bool log2file /* = true */, BOOL is_announcement /* = FALSE */) { 
 
-	LLIMSession* session = addMessageSilently(session_id, from, from_id, utf8_text, log2file);
+	LLIMSession* session = addMessageSilently(session_id, from, from_id, utf8_text, log2file, is_announcement);
 	if (!session) return false;
 
 	//good place to add some1 to recent list
@@ -1076,19 +1269,25 @@ bool LLIMModel::addMessage(const LLUUID& session_id, const std::string& from, co
 	arg["from_id"] = from_id;
 	arg["time"] = LLLogChat::timestamp(false);
 	arg["session_type"] = session->mSessionType;
+	arg["is_announcement"] = is_announcement; // Ansariel: Indicator if it's an announcement
 	mNewMsgSignal(arg);
 
 	return true;
 }
 
+// <FS:Ansariel> Added is_announcement parameter
+//LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
+//													 const std::string& utf8_text, bool log2file /* = true */)
 LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, const std::string& from, const LLUUID& from_id, 
-													 const std::string& utf8_text, bool log2file /* = true */)
+													 const std::string& utf8_text, bool log2file /* = true */, BOOL is_announcement /* = FALSE */)
 {
 	LLIMSession* session = findIMSession(session_id);
 
 	if (!session)
 	{
-		llwarns << "session " << session_id << "does not exist " << llendl;
+	        //<FS:TS> Don't spam the log with one of these every time
+	        //        someone logs on or off
+		//llwarns << "session " << session_id << " does not exist " << llendl;
 		return NULL;
 	}
 
@@ -1099,8 +1298,8 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, 
 		from_name = SYSTEM_FROM;
 	}
 
-	addToHistory(session_id, from_name, from_id, utf8_text);
-	if (log2file)
+	addToHistory(session_id, from_name, from_id, utf8_text, is_announcement);
+	if (log2file && !is_announcement)
 	{
 		logToFile(getHistoryFileName(session_id), from_name, from_id, utf8_text);
 	}
@@ -1208,6 +1407,12 @@ const std::string& LLIMModel::getHistoryFileName(const LLUUID& session_id) const
 // TODO get rid of other participant ID
 void LLIMModel::sendTypingState(LLUUID session_id, LLUUID other_participant_id, BOOL typing) 
 {
+	static LLCachedControl<bool> fsSendTypingState(gSavedSettings, "FSSendTypingState");
+	if (!fsSendTypingState)
+	{
+		return;
+	}
+
 	std::string name;
 	LLAgentUI::buildFullname(name);
 
@@ -1246,8 +1451,10 @@ void LLIMModel::sendLeaveSession(const LLUUID& session_id, const LLUUID& other_p
 	}
 }
 
-//*TODO this method is better be moved to the LLIMMgr
-void LLIMModel::sendMessage(const std::string& utf8_text,
+// *TODO this method is better be moved to the LLIMMgr
+//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+// This code is broken out for proper handling of multiple IMs after splitting.
+void deliverMessage(const std::string& utf8_text,
 					 const LLUUID& im_session_id,
 					 const LLUUID& other_participant_id,
 					 EInstantMessage dialog)
@@ -1315,6 +1522,64 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
 		default: ; // do nothing
 		}
 	}
+}
+//</FS:TS> FIRE-787
+
+void LLIMModel::sendMessage(const std::string& utf8_text,
+					 const LLUUID& im_session_id,
+					 const LLUUID& other_participant_id,
+					 EInstantMessage dialog)
+{
+//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+	U32 split = MAX_MSG_BUF_SIZE - 1;
+	U32 pos = 0;
+	U32 total = utf8_text.length();
+
+	while(pos < total)
+	{
+		U32 next_split = split;
+
+		if (pos + next_split > total)
+		{
+			// just send the rest of the message
+			next_split = total - pos;
+		}
+		else
+		{
+			// first, try to split at a space
+			while((U8(utf8_text[pos + next_split]) != ' ')
+				&& (next_split > 0))
+			{
+				--next_split;
+			}
+			
+			if (next_split == 0)
+			{
+				next_split = split;
+				// no space found, split somewhere not in the middle of UTF-8
+				while((U8(utf8_text[pos + next_split]) >= 0x80)
+					&& (U8(utf8_text[pos + next_split]) < 0xC0)
+					&& (next_split > 0))
+				{
+					--next_split;
+				}
+			}
+
+			if(next_split == 0)
+			{
+				next_split = split;
+				LL_WARNS("Splitting") <<
+					"utf-8 couldn't be split correctly" << LL_ENDL;
+			}
+		}
+
+		std::string send = utf8_text.substr(pos, next_split);
+		pos += next_split;
+
+		// *FIXME: Queue messages and wait for server
+		deliverMessage(send, im_session_id, other_participant_id, dialog);
+	}
+//</FS:TS> FIRE-787
 
 	if((dialog == IM_NOTHING_SPECIAL) && 
 	   (other_participant_id.notNull()))
@@ -1775,7 +2040,10 @@ LLIMMgr::onConfirmForceCloseError(
 	//only 1 option really
 	LLUUID session_id = notification["payload"]["session_id"];
 
-	LLFloater* floater = LLFloaterIMSession::findInstance(session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloater* floater = LLFloaterIMSession::findInstance(session_id);
+	LLFloater* floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
 	if ( floater )
 	{
 		floater->closeFloater(FALSE);
@@ -2635,7 +2903,10 @@ LLIMMgr::LLIMMgr()
 	mPendingInvitations = LLSD::emptyMap();
 	mPendingAgentListUpdates = LLSD::emptyMap();
 
-	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLFloaterIMSession::sRemoveTypingIndicator, _1));
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLFloaterIMSession::sRemoveTypingIndicator, _1));
+	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&FSFloaterIM::sRemoveTypingIndicator, _1));
+	// </FS:Ansariel> [FS communication UI]
 }
 
 // Add a message to a session. 
@@ -2650,7 +2921,8 @@ void LLIMMgr::addMessage(
 	U32 parent_estate_id,
 	const LLUUID& region_id,
 	const LLVector3& position,
-	bool link_name) // If this is true, then we insert the name and link it to a profile
+	bool link_name, // If this is true, then we insert the name and link it to a profile
+	BOOL is_announcement) // <FS:Ansariel> Special parameter indicating announcements
 {
 	LLUUID other_participant_id = target_id;
 
@@ -2679,6 +2951,19 @@ void LLIMMgr::addMessage(
 	}
 
 	bool new_session = !hasSession(new_session_id);
+
+	// <FS:PP> Configurable IM sounds
+	static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
+	static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
+	static LLCachedControl<U32> PlayModeUISndNewIncomingConfIMSession(gSavedSettings, "PlayModeUISndNewIncomingConfIMSession");
+	BOOL do_not_disturb = gAgent.isDoNotDisturb();
+	BOOL is_group_chat = FALSE;
+	if (!new_session && dialog != IM_NOTHING_SPECIAL)
+	{
+		is_group_chat = gAgent.isInGroup(new_session_id);
+	}
+	// </FS:PP> Configurable IM sounds
+
 	if (new_session)
 	{
 		LLAvatarName av_name;
@@ -2686,6 +2971,27 @@ void LLIMMgr::addMessage(
 		{
 			fixed_session_name = av_name.getDisplayName();
 		}
+
+		// <FS:Ansariel> Clear muted group chat early to prevent contacts floater
+		//               (re-)gaining focus; the server already knows the correct
+		//               session id, so we can leave it!
+		if (exoGroupMuteList::instance().isMuted(new_session_id))
+		{
+			llinfos << "Muting group chat from " << new_session_id.asString() << ": " << fixed_session_name << llendl;
+
+			if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
+			{
+				LLStringUtil::format_map_t args;
+				args["NAME"] = fixed_session_name;
+				reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
+			}
+			clearPendingInvitation(new_session_id);
+			clearPendingAgentListUpdates(new_session_id);
+			LLIMModel::getInstance()->sendLeaveSession(new_session_id, other_participant_id);
+			return;
+		}
+		// </FS:Ansariel>
+
 		LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id, false, is_offline_msg);
 
 		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(new_session_id);
@@ -2727,24 +3033,94 @@ void LLIMMgr::addMessage(
 			return;
 		}
 
-        //Play sound for new conversations
-		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
-        {
-            make_ui_sound("UISndNewIncomingIMSession");
-        }
+	// <FS:PP> Configurable IM sounds
+		// //Play sound for new conversations
+		// if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
+
+		if (dialog != IM_NOTHING_SPECIAL)
+		{
+			is_group_chat = gAgent.isInGroup(new_session_id);
+		}
+
+		if(!do_not_disturb && PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
+		{
+			make_ui_sound("UISndNewIncomingIMSession");
+		}
+		else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
+		{
+			make_ui_sound("UISndNewIncomingGroupIMSession");
+		}
+		else if(!do_not_disturb && PlayModeUISndNewIncomingConfIMSession != 0 && dialog != IM_NOTHING_SPECIAL && !is_group_chat)
+		{
+			make_ui_sound("UISndNewIncomingConfIMSession");
+		}
 	}
+	else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
+	{
+		make_ui_sound("UISndNewIncomingIMSession");
+	}
+	else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
+	{
+		make_ui_sound("UISndNewIncomingGroupIMSession");
+	}
+	else if(!do_not_disturb && PlayModeUISndNewIncomingConfIMSession == 2 && dialog != IM_NOTHING_SPECIAL && !is_group_chat)
+	{
+		make_ui_sound("UISndNewIncomingConfIMSession");
+	// </FS:PP>
+	}
+	// <FS:WoLf> IM Sounds only for sessions not in focus
+	else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
+	{
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
+		if (im_floater && !im_floater->hasFocus())
+		{
+			make_ui_sound("UISndNewIncomingIMSession");
+		}
+	}
+	else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
+	{
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
+		if (im_floater && !im_floater->hasFocus())
+		{
+			make_ui_sound("UISndNewIncomingGroupIMSession");
+		}
+	}
+	else if(!do_not_disturb && PlayModeUISndNewIncomingConfIMSession == 3 && dialog != IM_NOTHING_SPECIAL && !is_group_chat)
+	{
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
+		if (im_floater && !im_floater->hasFocus())
+		{
+			make_ui_sound("UISndNewIncomingConfIMSession");
+		}
+	}
+	// </FS:WoLf>
 
 	if (!LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !skip_message)
 	{
-		LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg);
+		// <FS:Ansariel> Added is_announcement parameter
+		//LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg);
+		LLIMModel::instance().addMessage(new_session_id, from, other_participant_id, msg, true, is_announcement);
 	}
 
 	// Open conversation floater if offline messages are present
-	if (is_offline_msg && !skip_message)
+	// <FS:CR> Only open it when the user opts to do so...
+	//if (is_offline_msg && !skip_message)
+	if (is_offline_msg && gSavedSettings.getBOOL("FSOpenIMContainerOnOfflineMessage"))
     {
-        LLFloaterReg::showInstance("im_container");
-	    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
-	    		flashConversationItemWidget(new_session_id, true);
+    //    LLFloaterReg::showInstance("im_container");
+	//    LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->
+	//    		flashConversationItemWidget(new_session_id, true);
+		LLFloaterReg::showInstance("fs_im_container");
+	// </FS:CR>
     }
 }
 
@@ -2761,7 +3137,10 @@ void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& mess
 		LLChat chat(message);
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 
-		LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+		FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+		// </FS:Ansariel> [FS communication UI]
 		if (nearby_chat)
 		{
 			nearby_chat->addMessage(chat);
@@ -2782,7 +3161,17 @@ void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& mess
 			std::string session_name;
 			// since we select user to share item with - his name is already in cache
 			gCacheName->getFullName(args["user_id"], session_name);
-			session_name = LLCacheName::buildUsername(session_name);
+			// <FS:Ansariel> [Legacy IM logfile names]
+			//session_name = LLCacheName::buildUsername(session_name);
+			if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+			{
+				session_name = session_name.substr(0, session_name.find(" Resident"));;
+			}
+			else
+			{
+				session_name = LLCacheName::buildUsername(session_name);
+			}
+			// </FS:Ansariel> [Legacy IM logfile names]
 			LLIMModel::instance().logToFile(session_name, SYSTEM_FROM, LLUUID::null, message.getString());
 		}
 	}
@@ -2887,7 +3276,10 @@ LLUUID LLIMMgr::addSession(
 
 	if (floater_id.notNull())
 	{
-		LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(floater_id);
+		// <FS:CR> [FS communications UI]
+		//	LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(floater_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:CR>
 
 		if (im_floater)
 		{
@@ -3047,9 +3439,17 @@ void LLIMMgr::inviteToSession(
 	{
 		bool isRejectGroupCall = (gSavedSettings.getBOOL("VoiceCallsRejectGroup") && (notify_box_type == "VoiceInviteGroup"));
 		bool isRejectNonFriendCall = (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") && (LLAvatarTracker::instance().getBuddyInfo(caller_id) == NULL));
-		if	(isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb())
+		// <FS:PP> FIRE-6522: Options to automatically decline all group and personal voice chat requests
+		// if (isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb())
+		bool isRejectAdHocCall = (gSavedSettings.getBOOL("VoiceCallsRejectAdHoc") && (notify_box_type == "VoiceInviteAdHoc"));
+		bool isRejectP2PCall = (gSavedSettings.getBOOL("VoiceCallsRejectP2P") && (notify_box_type == "VoiceInviteP2P"));
+		if (isRejectGroupCall || isRejectNonFriendCall || gAgent.isDoNotDisturb() || isRejectAdHocCall || isRejectP2PCall)
+		// </FS:PP>
 		{
-			if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall)
+			// <FS:PP> FIRE-6522
+			// if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall)
+			if (gAgent.isDoNotDisturb() && !isRejectGroupCall && !isRejectNonFriendCall && !isRejectAdHocCall && !isRejectP2PCall)
+			// </FS:PP>
 			{
 				LLSD args;
 				addSystemMessage(session_id, "you_auto_rejected_call", args);
@@ -3116,7 +3516,10 @@ void LLIMMgr::clearPendingInvitation(const LLUUID& session_id)
 
 void LLIMMgr::processAgentListUpdates(const LLUUID& session_id, const LLSD& body)
 {
-	LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
 	if ( im_floater )
 	{
 		im_floater->processAgentListUpdates(body);
@@ -3342,7 +3745,19 @@ void LLIMMgr::noteOfflineUsers(
 			{
 				LLUIString offline = LLTrans::getString("offline_message");
 				// Use display name only because this user is your friend
-				offline.setArg("[NAME]", av_name.getDisplayName());
+				// Ansariel: No please! Take preference settings into account!
+				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+				{
+					offline.setArg("[NAME]", av_name.getCompleteName());
+				}
+				else if (gSavedSettings.getBOOL("UseDisplayNames"))
+				{
+					offline.setArg("[NAME]", av_name.getDisplayName());
+				}
+				else
+				{
+					offline.setArg("[NAME]", av_name.getUserNameForDisplay());
+				}
 				im_model.proccessOnlineOfflineNotification(session_id, offline);
 			}
 		}
@@ -3390,7 +3805,109 @@ void LLIMMgr::processIMTypingStop(const LLIMInfo* im_info)
 void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 {
 	LLUUID session_id = computeSessionID(im_info->mIMType, im_info->mFromID);
-	LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+
+	// <FS:Ansariel> Announce incoming IMs
+	static LLCachedControl<bool> announceIncomingIM(gSavedSettings, "FSAnnounceIncomingIM");
+	if (typing && !gIMMgr->hasSession(session_id) && announceIncomingIM)
+	{
+		LLStringUtil::format_map_t args;
+		args["[NAME]"] = im_info->mName;
+		
+		BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
+		bool is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
+		static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedSettings, "VoiceCallsFriendsOnly");
+
+		if(!is_muted && ( (VoiceCallsFriendsOnly && is_friend) || !VoiceCallsFriendsOnly ))
+		{
+			gIMMgr->addMessage(
+				session_id,
+				im_info->mFromID,
+				//<FS:TS> FIRE-8601: Use system name instead of NULL
+				//         Growl notifier acts funny with NULL here.
+				SYSTEM_FROM,
+				LLTrans::getString("IM_announce_incoming", args),
+				false,
+				im_info->mName,
+				IM_NOTHING_SPECIAL,
+				im_info->mParentEstateID,
+				im_info->mRegionID,
+				im_info->mPosition,
+				false, // <-- Wow! This parameter is never handled!!!
+				TRUE
+				);
+		}
+
+		// Send busy and auto-response messages now or they won't be send
+		// later because a session has already been created by showing the
+		// incoming IM announcement.
+		// The logic was originally copied from process_improved_im() in llviewermessage.cpp
+		BOOL is_busy = gAgent.isDoNotDisturb();
+		BOOL is_autorespond = gAgent.getAutorespond();
+		BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
+		BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
+		BOOL is_linden = LLMuteList::getInstance()->isLinden(im_info->mName);
+		static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
+		BOOL is_afk = gAgent.getAFK();
+
+		if (RlvActions::canReceiveIM(im_info->mFromID) && !is_linden &&
+			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted) || (FSSendAwayAvatarResponse && is_afk && !is_muted)) )
+		{
+			std::string my_name;
+			std::string response;
+			LLAgentUI::buildFullname(my_name);
+			if (is_busy)
+			{
+				response = gSavedPerAccountSettings.getString("BusyModeResponse");
+			}
+			else if (is_autorespond_nonfriends && !is_friend)
+			{
+				response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
+			}
+			else if (is_autorespond)
+			{
+				response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
+			}
+			else if (is_afk && FSSendAwayAvatarResponse)
+			{
+				response = gSavedPerAccountSettings.getString("FSAwayAvatarResponse");
+			}
+			pack_instant_message(
+				gMessageSystem,
+				gAgent.getID(),
+				FALSE,
+				gAgent.getSessionID(),
+				im_info->mFromID,
+				my_name,
+				response,
+				IM_ONLINE,
+				IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+				session_id);
+			gAgent.sendReliableMessage();
+
+			gIMMgr->addMessage(
+				session_id,
+				gAgentID,
+				LLStringUtil::null, // Pass null value so no name gets prepended
+				LLTrans::getString("IM_autoresponse_sent"),
+				false,
+				im_info->mName,
+				IM_NOTHING_SPECIAL,
+				im_info->mParentEstateID,
+				im_info->mRegionID,
+				im_info->mPosition,
+				false, // <-- Wow! This parameter is never handled!!!
+				TRUE
+				);
+		}
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> [FS communication UI]
+ 	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
+
 	if ( im_floater )
 	{
 		im_floater->processIMTyping(im_info, typing);
@@ -3435,7 +3952,10 @@ public:
 				speaker_mgr->updateSpeakers(gIMMgr->getPendingAgentListUpdates(session_id));
 			}
 
-			LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+			FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+			// </FS:Ansariel> [FS communication UI]
 			if ( im_floater )
 			{
 				if ( body.has("session_info") )
@@ -3529,7 +4049,10 @@ public:
 		const LLSD& input) const
 	{
 		LLUUID session_id = input["body"]["session_id"].asUUID();
-		LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if ( im_floater )
 		{
 			im_floater->processSessionUpdate(input["body"]["info"]);
@@ -3582,6 +4105,66 @@ public:
 			{
 				return;
 			}
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0)
+			if ( (RlvActions::hasBehaviour(RLV_BHVR_RECVIM)) || (RlvActions::hasBehaviour(RLV_BHVR_RECVIMFROM)) )
+			{
+				if (gAgent.isInGroup(session_id))						// Group chat: don't accept the invite if not an exception
+				{
+					if (!RlvActions::canReceiveIM(session_id))
+						return;
+				}
+				else if (!RlvActions::canReceiveIM(from_id))			// Conference chat: don't block; censor if not an exception
+				{
+					message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+				}
+			}
+// [/RLVa:KB]
+
+			// <FS> Mute group chat port from Phoenix
+			BOOL FSMuteAllGroups = gSavedSettings.getBOOL("FSMuteAllGroups");
+			BOOL FSMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("FSMuteGroupWhenNoticesDisabled");
+			LLGroupData group_data;
+			if (gAgent.getGroupData(session_id, group_data))
+			{
+				if (FSMuteAllGroups || (FSMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
+				{
+					llinfos << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
+
+					if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
+					{
+						LLStringUtil::format_map_t args;
+						args["NAME"] = group_data.mName;
+						reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
+					}
+					
+					//KC: make sure we leave the group chat at the server end as well
+					std::string aname;
+					gAgent.buildFullname(aname);
+					pack_instant_message(
+						gMessageSystem,
+						gAgent.getID(),
+						FALSE,
+						gAgent.getSessionID(),
+						from_id,
+						aname,
+						LLStringUtil::null,
+						IM_ONLINE,
+						IM_SESSION_LEAVE,
+						session_id);
+					gAgent.sendReliableMessage();
+					//gIMMgr->removeSession(session_id);
+					gIMMgr->leaveSession(session_id);
+					
+					return;
+				}
+			}
+			// <FS:Ansariel> Groupdata debug
+			else
+			{
+				LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Group chat mute: No agent group data for group " << session_id.asString() << LL_ENDL;
+			}
+			// </FS:Ansariel>
+			// </FS> Mute group chat port from Phoenix
 
 			// standard message, not from system
 			std::string saved;
@@ -3593,7 +4176,14 @@ public:
 			}
 			std::string buffer = saved + message;
 
+// <FS:CR> FIRE-9762 - Don't bail here on OpenSim, we'll need to echo local posts
+#ifdef OPENSIM
+			bool is_opensim = LLGridManager::getInstance()->isInOpenSim();
+			if (!is_opensim && from_id == gAgentID)
+#else // OPENSIM
 			if(from_id == gAgentID)
+#endif // OPENSIM
+// </FS:CR>
 			{
 				return;
 			}
@@ -3609,7 +4199,14 @@ public:
 				message_params["region_id"].asUUID(),
 				ll_vector3_from_sd(message_params["position"]),
 				true);
-
+// <FS:CR> FIRE-9762 - OK, return here if we must!
+#ifdef OPENSIM
+			if (is_opensim && from_id == gAgentID)
+			{
+				return;
+			}
+#endif // OPENSIM
+// </FS:CR>
 			if (LLMuteList::getInstance()->isMuted(from_id, name, LLMute::flagTextChat))
 			{
 				return;

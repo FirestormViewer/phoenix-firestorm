@@ -72,6 +72,13 @@
 #include "llviewercontrol.h"
 #include "llsdserialize.h"
 
+// <FS:CR> Opensim
+#include "llviewerparcelmgr.h"	//Aurora Sim
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif
+// </FS:CR>
+
 #ifdef LL_WINDOWS
 	#pragma warning(disable:4355)
 #endif
@@ -357,9 +364,12 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mCacheLoaded(FALSE),
 	mCacheDirty(FALSE),
 	mReleaseNotesRequested(FALSE),
-	mCapabilitiesReceived(false)
+	mCapabilitiesReceived(false),
+// <FS:CR> Aurora Sim
+	mWidth(region_width_meters)
 {
-	mWidth = region_width_meters;
+	// Moved this up... -> mWidth = region_width_meters;
+// </FS:CR>
 	mImpl->mOriginGlobal = from_region_handle(handle); 
 	updateRenderMatrix();
 
@@ -369,7 +379,10 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mImpl->mCompositionp =
 		new LLVLComposition(mImpl->mLandp,
 							grids_per_region_edge,
-							region_width_meters / grids_per_region_edge);
+// <FS:CR> Aurora Sim
+							//region_width_meters / grids_per_region_edge);
+							mWidth / grids_per_region_edge);
+// </FS:CR> Aurora Sim
 	mImpl->mCompositionp->setSurface(mImpl->mLandp);
 
 	// Create the surfaces
@@ -379,13 +392,23 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 					mImpl->mOriginGlobal,
 					mWidth);
 
-	mParcelOverlay = new LLViewerParcelOverlay(this, region_width_meters);
+// <FS:CR> Aurora Sim
+	//mParcelOverlay = new LLViewerParcelOverlay(this, region_width_meters);
+	mParcelOverlay = new LLViewerParcelOverlay(this, mWidth);
+	LLViewerParcelMgr::getInstance()->init(mWidth);
+// </FS:CR> Aurora Sim
 
 	setOriginGlobal(from_region_handle(handle));
 	calculateCenterGlobal();
 
 	// Create the object lists
 	initStats();
+// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+	initPartitions();
+}
+void LLViewerRegion::initPartitions()
+{
+// </FS:CR>
 
 	//create object partitions
 	//MUST MATCH declaration of eObjectPartitions
@@ -405,6 +428,14 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	setCapabilitiesReceivedCallback(boost::bind(&LLAvatarRenderInfoAccountant::expireRenderInfoReportTimer, _1));
 }
 
+// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
+void LLViewerRegion::reInitPartitions()
+{
+	std::for_each(mImpl->mObjectPartition.begin(), mImpl->mObjectPartition.end(), DeletePointer());
+	mImpl->mObjectPartition.clear();
+	initPartitions();
+}
+// </FS:CR>
 
 void LLViewerRegion::initStats()
 {
@@ -443,6 +474,14 @@ LLViewerRegion::~LLViewerRegion()
 
 	delete mImpl;
 	mImpl = NULL;
+
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
+	if (mWorldMapTile)
+	{
+		mWorldMapTile->setBoostLevel(LLViewerTexture::BOOST_NONE);
+		mWorldMapTile = NULL;
+	}
+// [/SL:KB]
 }
 
 LLEventPump& LLViewerRegion::getCapAPI() const
@@ -527,6 +566,13 @@ void LLViewerRegion::setWaterHeight(F32 water_level)
 {
 	mImpl->mLandp->setWaterHeight(water_level);
 }
+
+// <FS:CR> Aurora Sim
+void LLViewerRegion::rebuildWater()
+{
+	mImpl->mLandp->rebuildWater();
+}
+// <FS:CR> Aurora Sim
 
 F32 LLViewerRegion::getWaterHeight() const
 {
@@ -651,23 +697,50 @@ std::string LLViewerRegion::regionFlagsToString(U64 flags)
 // static
 std::string LLViewerRegion::accessToString(U8 sim_access)
 {
+	// <FS:ND> Prevent querying LLTrans each frame
+	static std::vector< std::string > vcAccess;
+	if( vcAccess.empty() )
+	{
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_PG") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_MATURE") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_ADULT") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_DOWN") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_MIN") );
+	}
+	// </FS:ND>
+
 	switch(sim_access)
 	{
 	case SIM_ACCESS_PG:
-		return LLTrans::getString("SIM_ACCESS_PG");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_PG");
+		return vcAccess[0];
+		// </FS:ND>
 
 	case SIM_ACCESS_MATURE:
-		return LLTrans::getString("SIM_ACCESS_MATURE");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_MATURE");
+		return vcAccess[1];
+		// </FS:ND>
 
 	case SIM_ACCESS_ADULT:
-		return LLTrans::getString("SIM_ACCESS_ADULT");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_ADULT");
+		return vcAccess[2];
+		// </FS:ND>
 
 	case SIM_ACCESS_DOWN:
-		return LLTrans::getString("SIM_ACCESS_DOWN");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_DOWN");
+		return vcAccess[3];
+		// </FS:ND>
 
 	case SIM_ACCESS_MIN:
 	default:
-		return LLTrans::getString("SIM_ACCESS_MIN");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_MIN");
+		return vcAccess[4];
+		// </FS:ND>
 	}
 }
 
@@ -819,11 +892,20 @@ LLVLComposition * LLViewerRegion::getComposition() const
 
 F32 LLViewerRegion::getCompositionXY(const S32 x, const S32 y) const
 {
-	if (x >= 256)
+// <FS:CR> Aurora Sim
+	//if (x >= 256)
+	if (x >= mWidth)
+// </FS:CR> Aurora Sim
 	{
-		if (y >= 256)
+// <FS:CR> Aurora Sim
+		//if (y >= 256)
+		if (y >= mWidth)
+// </FS:CR> Aurora Sim
 		{
-			LLVector3d center = getCenterGlobal() + LLVector3d(256.f, 256.f, 0.f);
+// <FS:CR> Aurora Sim
+			//LLVector3d center = getCenterGlobal() + LLVector3d(256.f, 256.f, 0.f);
+			LLVector3d center = getCenterGlobal() + LLVector3d(mWidth, mWidth, 0.f);
+// </FS:CR> Aurora Sim
 			LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromPosGlobal(center);
 			if (regionp)
 			{
@@ -832,8 +914,12 @@ F32 LLViewerRegion::getCompositionXY(const S32 x, const S32 y) const
 				// If we're attempting to blend, then we want to make the fractional part of
 				// this region match the fractional of the adjacent.  For now, just minimize
 				// the delta.
-				F32 our_comp = getComposition()->getValueScaled(255, 255);
-				F32 adj_comp = regionp->getComposition()->getValueScaled(x - 256.f, y - 256.f);
+// <FS:CR> Aurora Sim
+				//F32 our_comp = getComposition()->getValueScaled(255, 255);
+				//F32 adj_comp = regionp->getComposition()->getValueScaled(x - 256.f, y - 256.f);
+				F32 our_comp = getComposition()->getValueScaled(mWidth-1.f, mWidth-1.f);
+				F32 adj_comp = regionp->getComposition()->getValueScaled(x - regionp->getWidth(), y - regionp->getWidth());
+// </FS:CR> Aurora Sim
 				while (llabs(our_comp - adj_comp) >= 1.f)
 				{
 					if (our_comp > adj_comp)
@@ -850,7 +936,10 @@ F32 LLViewerRegion::getCompositionXY(const S32 x, const S32 y) const
 		}
 		else
 		{
-			LLVector3d center = getCenterGlobal() + LLVector3d(256.f, 0, 0.f);
+// <FS:CR> Aurora Sim
+			//LLVector3d center = getCenterGlobal() + LLVector3d(256.f, 0, 0.f);
+			LLVector3d center = getCenterGlobal() + LLVector3d(mWidth, 0.f, 0.f);
+// </FS:CR> Aurora Sim
 			LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromPosGlobal(center);
 			if (regionp)
 			{
@@ -859,8 +948,12 @@ F32 LLViewerRegion::getCompositionXY(const S32 x, const S32 y) const
 				// If we're attempting to blend, then we want to make the fractional part of
 				// this region match the fractional of the adjacent.  For now, just minimize
 				// the delta.
-				F32 our_comp = getComposition()->getValueScaled(255.f, (F32)y);
-				F32 adj_comp = regionp->getComposition()->getValueScaled(x - 256.f, (F32)y);
+// <FS:CR> Aurora Sim
+				//F32 our_comp = getComposition()->getValueScaled(255.f, (F32)y);
+				//F32 adj_comp = regionp->getComposition()->getValueScaled(x - 256.f, (F32)y);
+				F32 our_comp = getComposition()->getValueScaled(mWidth-1.f, (F32)y);
+				F32 adj_comp = regionp->getComposition()->getValueScaled(x - regionp->getWidth(), (F32)y);
+// </FS:CR> Aurora Sim
 				while (llabs(our_comp - adj_comp) >= 1.f)
 				{
 					if (our_comp > adj_comp)
@@ -876,9 +969,15 @@ F32 LLViewerRegion::getCompositionXY(const S32 x, const S32 y) const
 			}
 		}
 	}
-	else if (y >= 256)
+// <FS:CR> Aurora Sim
+	//else if (y >= 256)
+	else if (y >= mWidth)
+// </FS:CR> Aurora Sim
 	{
-		LLVector3d center = getCenterGlobal() + LLVector3d(0.f, 256.f, 0.f);
+// <FS:CR> Aurora Sim
+		//LLVector3d center = getCenterGlobal() + LLVector3d(0.f, 256.f, 0.f);
+		LLVector3d center = getCenterGlobal() + LLVector3d(0.f, mWidth, 0.f);
+// </FS:CR> Aurora Sim
 		LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromPosGlobal(center);
 		if (regionp)
 		{
@@ -887,8 +986,12 @@ F32 LLViewerRegion::getCompositionXY(const S32 x, const S32 y) const
 			// If we're attempting to blend, then we want to make the fractional part of
 			// this region match the fractional of the adjacent.  For now, just minimize
 			// the delta.
-			F32 our_comp = getComposition()->getValueScaled((F32)x, 255.f);
-			F32 adj_comp = regionp->getComposition()->getValueScaled((F32)x, y - 256.f);
+// <FS:CR> Aurora Sim
+			//F32 our_comp = getComposition()->getValueScaled((F32)x, 255.f);
+			//F32 adj_comp = regionp->getComposition()->getValueScaled((F32)x, y - 256.f);
+			F32 our_comp = getComposition()->getValueScaled((F32)x, mWidth-1.f);
+			F32 adj_comp = regionp->getComposition()->getValueScaled((F32)x, y - regionp->getWidth());
+// <FS:CR> Aurora Sim
 			while (llabs(our_comp - adj_comp) >= 1.f)
 			{
 				if (our_comp > adj_comp)
@@ -1045,12 +1148,34 @@ F32 LLViewerRegion::getLandHeightRegion(const LLVector3& region_pos)
 	return mImpl->mLandp->resolveHeightRegion( region_pos );
 }
 
-bool LLViewerRegion::isAlive()
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+LLViewerTexture* LLViewerRegion::getWorldMapTile() const
+{
+	if (!mWorldMapTile)
+	{
+		U32 gridX, gridY;
+		grid_from_region_handle(mHandle, &gridX, &gridY);
+		std::string strImgURL = gSavedSettings.getString("CurrentMapServerURL") + llformat("map-1-%d-%d-objects.jpg", gridX, gridY);
+
+		mWorldMapTile = LLViewerTextureManager::getFetchedTextureFromUrl(strImgURL, FTT_MAP_TILE, TRUE, LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+		mWorldMapTile->setBoostLevel(LLViewerTexture::BOOST_MAP);
+	}
+	return mWorldMapTile;
+}
+// [/SL:KB]
+
+//bool LLViewerRegion::isAlive()
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+bool LLViewerRegion::isAlive() const
+// [/SL:KB]
 {
 	return mAlive;
 }
 
-BOOL LLViewerRegion::isOwnedSelf(const LLVector3& pos)
+//BOOL LLViewerRegion::isOwnedSelf(const LLVector3& pos)
+// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+BOOL LLViewerRegion::isOwnedSelf(const LLVector3& pos) const
+// [/SL:KB]
 {
 	if (mParcelOverlay)
 	{
@@ -1061,7 +1186,10 @@ BOOL LLViewerRegion::isOwnedSelf(const LLVector3& pos)
 }
 
 // Owned by a group you belong to?  (officer or member)
-BOOL LLViewerRegion::isOwnedGroup(const LLVector3& pos)
+//BOOL LLViewerRegion::isOwnedGroup(const LLVector3& pos)
+// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+BOOL LLViewerRegion::isOwnedGroup(const LLVector3& pos) const
+// [/SL:KB]
 {
 	if (mParcelOverlay)
 	{
@@ -1126,7 +1254,8 @@ public:
 			}
 			else if( i != you_index)
 			{
-				U32 loc = x << 16 | y << 8 | z; loc = loc;
+				// <FS:CR> Commenting out as unused 2012.1.23 - wtf was this even for?
+				//U32 loc = x << 16 | y << 8 | z; loc = loc;
 				U32 pos = 0x0;
 				pos |= x;
 				pos <<= 8;
@@ -1232,7 +1361,6 @@ void LLViewerRegion::getInfo(LLSD& info)
 void LLViewerRegion::getSimulatorFeatures(LLSD& sim_features) const
 {
 	sim_features = mSimulatorFeatures;
-
 }
 
 void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
@@ -1242,6 +1370,38 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
 	LLSDSerialize::toPrettyXML(sim_features, str);
 	llinfos << str.str() << llendl;
 	mSimulatorFeatures = sim_features;
+	
+// <FS:CR> Opensim god names
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		mGodNames.clear();
+		if (mSimulatorFeatures.has("god_names"))
+		{
+			if (mSimulatorFeatures["god_names"].has("full_names"))
+			{
+				LLSD god_names = mSimulatorFeatures["god_names"]["full_names"];
+				for (LLSD::array_iterator itr = god_names.beginArray();
+					 itr != god_names.endArray();
+					 itr++)
+				{
+					mGodNames.insert((*itr).asString());
+				}
+			}
+			if (mSimulatorFeatures["god_names"].has("last_names"))
+			{
+				LLSD god_names = mSimulatorFeatures["god_names"]["last_names"];
+				for (LLSD::array_iterator itr = god_names.beginArray();
+					 itr != god_names.endArray();
+					 itr++)
+				{
+					mGodNames.insert((*itr).asString());
+				}
+			}
+		}
+	}
+#endif // OPENSIM
+// </FS:CR>
 }
 
 LLViewerRegion::eCacheUpdateResult LLViewerRegion::cacheFullUpdate(LLViewerObject* objectp, LLDataPackerBinaryBuffer &dp)
@@ -1578,7 +1738,11 @@ void LLViewerRegion::unpackRegionHandshake()
 	msg->addUUID("AgentID", gAgent.getID());
 	msg->addUUID("SessionID", gAgent.getSessionID());
 	msg->nextBlock("RegionInfo");
-	msg->addU32("Flags", 0x0 );
+
+	U32 flags = 0;
+	flags |= REGION_HANDSHAKE_SUPPORTS_SELF_APPEARANCE;
+
+	msg->addU32("Flags", flags );
 	msg->sendReliable(host);
 }
 
@@ -1594,6 +1758,9 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("CreateInventoryCategory");
 	capabilityNames.append("DispatchRegionInfo");
 	capabilityNames.append("EnvironmentSettings");
+// <FS:CR> Aurora Sim
+	capabilityNames.append("DispatchOpenRegionSettings");
+// </FS:CR> Aurora Sim
 	capabilityNames.append("EstateChangeInfo");
 	capabilityNames.append("EventQueueGet");
 	capabilityNames.append("FacebookConnect");
@@ -1609,6 +1776,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	}
 
 	capabilityNames.append("GetDisplayNames");
+	capabilityNames.append("GroupMemberData");
 	capabilityNames.append("GetMesh");
 	capabilityNames.append("GetMesh2");
 	capabilityNames.append("GetObjectCost");
@@ -2000,5 +2168,3 @@ U32 LLViewerRegion::getMaxMaterialsPerTransaction() const
 	}
 	return max_entries;
 }
-
-

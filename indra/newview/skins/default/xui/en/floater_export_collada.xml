@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ height="262"
+ width="500"
+ help_topic="collada_export"
+ layout="topleft"
+ legacy_header_height="18"
+ name="floater_export_collada"
+ min_width="250"
+ min_height="268"
+ save_rect="true"
+ title="Save as Collada...">
+  <floater.string name="texture_progress">
+	Save [OBJECT] Collada: Saving textures ([COUNT] remaining)
+  </floater.string>
+  <floater.string name="floater_title">
+	Save [OBJECT] as Collada...
+  </floater.string>
+  <layout_stack
+	follows="all"
+	layout="topleft"
+	width="500"
+	height="242"
+	left="0"
+	orientation="horizontal"
+	top="18"
+	name="resizing_stack">
+	<layout_panel
+	 follows="left|top|bottom"
+	 layout="topleft"
+	 left="0"
+	 min_width="5"
+	 width="250"
+	 height="242"
+	 name="control_panel">
+	<text
+	 follows="left|top"
+	 height="15"
+	 layout="topleft"
+	 left="4"
+	 name="ObjectInfoText"
+	 top="2"
+	 width="235">
+		Object Info
+	</text>
+	<text
+	 follows="left|top"
+	 height="15"
+	 layout="topleft"
+	 name="NameText"
+	 top_pad="2"
+	 width="235">
+		Name: [NAME]
+	</text>
+	<text
+	 follows="left|top"
+	 height="15"
+	 layout="topleft"
+	 name="exportable_prims"
+	 top_pad="2"
+	 width="235">
+		Exportable prims: [COUNT]/[TOTAL]
+	</text>
+	<text
+	 follows="left|top"
+	 height="15"
+	 layout="topleft"
+	 name="exportable_textures"
+	 top_pad="2"
+	 width="235">
+		Exportable textures: [COUNT]/[TOTAL]
+	</text>
+	<text
+	 follows="left|bottom"
+	 height="15"
+	 layout="topleft"
+	 left="4"
+	 name="OptionsText"
+	 top_pad="46"
+	 width="235">
+		Options:
+	</text>
+	<check_box
+	 control_name="DAEExportTextures"
+	 follows="left|bottom"
+	 height="16"
+	 label="Save textures"
+	 layout="topleft"
+	 left_delta="8"
+	 name="export_textures_check"
+	 top_pad="2"
+	 width="235">
+		<check_box.commit_callback
+		 function="ColladaExport.TextureExport" />
+	</check_box>
+	<check_box
+	 control_name="DAEExportConsolidateMaterials"
+	 follows="left|bottom"
+	 height="16"
+	 label="Consolidate textures"
+	 layout="topleft"
+	 name="consolidate_check"
+	 top_pad="2"
+	 width="235" />
+	<check_box
+	 control_name="DAEExportSkipTransparent"
+	 follows="left|bottom"
+	 height="16"
+	 label="Skip transparent"
+	 layout="topleft"
+	 name="skip_transparent_check"
+	 top_pad="2"
+	 width="235" />
+	<check_box
+	 control_name="DAEExportTextureParams"
+	 follows="left|bottom"
+	 height="16"
+	 label="Apply texture params"
+	 layout="topleft"
+	 name="texture_params_check"
+	 top_pad="2"
+	 width="235" />
+	<text
+	 follows="left|bottom"
+	 height="15"
+	 layout="topleft"
+	 left="4"
+	 name="TextureFormatText"
+	 top_pad="2"
+	 width="235">
+		Texture Format:
+	</text>
+	<combo_box
+	 enabled_control="DAEExportTextures"
+	 control_name="DAEExportTexturesFormat"
+	 follows="left|bottom"
+	 layout="topleft"
+	 height="23"
+	 allow_text_entry="false"
+	 top_pad="0"
+	 left="4"
+	 name="texture_type_combo"
+	 width="122">
+		<combo_box.item label="TARGA" name="tga" value="0"/>
+		<combo_box.item label="PNG" name="png" value="1"/>
+		<combo_box.item label="JPEG2000" name="j2c" value="2"/>
+	</combo_box>
+	<button
+	 layout="topleft"
+	 follows="left|bottom"
+	 height="23"
+	 label="Save as..."
+	 name="export_btn"
+	 top_delta="0"
+	 left_pad="2"
+	 width="122" />
+	</layout_panel>
+	<layout_panel
+	 visibility_control="DAEExportTextures"
+	 follows="all"
+	 layout="topleft"
+	 left="0"
+	 min_width="5"
+	 width="250"
+	 height="242"
+	 name="tex_layout_panel">
+	  <scroll_container
+	   opaque="false"
+	   follows="all"
+	   layout="topleft"
+	   left="1"
+	   right="-1"
+	   top="2"
+	   bottom="-1"
+	   name="textures_scroll">
+		  <panel
+		   name="textures_panel"
+		   layout="topleft"
+		   enabled="false"
+		   top="1"
+		   left="1"
+		   right="-1"
+		   bottom="-1" />
+	</scroll_container>
+	</layout_panel>
+  </layout_stack>
+</floater>

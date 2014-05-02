@@ -62,6 +62,9 @@ public:
 	virtual LLTool*		getOverrideTool(MASK mask);
 
 	LLPickInfo&			getPick() { return mPick; }
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	LLPickInfo&			getHoverPick() { return mHoverPick; }
+// [/RLVa:KB]
 	U8					getClickAction() { return mClickAction; }
 	LLViewerObject*		getClickActionObject() { return mClickActionObject; }
 	LLObjectSelection*	getLeftClickSelection() { return (LLObjectSelection*)mLeftClickSelection; }
@@ -93,6 +96,13 @@ private:
 	BOOL handleTooltipLand(std::string line, std::string tooltip_msg);
 	BOOL handleTooltipObject( LLViewerObject* hover_object, std::string line, std::string tooltip_msg);
 
+	// <FS:ND> FIRE-10276; handleTooltipObject can be called during name resolution (LLAvatarNameCache), then hover_object can lon gbe destroyed and the pointer invalid.
+	// To circumvent this just pass the id and try to fetch the object from gObjectList.
+
+	BOOL handleTooltipObjectById( LLUUID hoverObjectId, std::string line, std::string tooltip_msg);
+
+	// </FS:ND>
+
 	void steerCameraWithMouse(S32 x, S32 y);
 	void startCameraSteering();
 	void stopCameraSteering();
@@ -118,6 +128,15 @@ private:
 	LLSafeHandle<LLObjectSelection> mLeftClickSelection;
 	BOOL				mClickActionBuyEnabled;
 	BOOL				mClickActionPayEnabled;
+
+	// <FS:ND> Keep track of name resolutions we made and delete them if needed to avoid crashing if this instance dies.
+private:
+	typedef boost::signals2::connection tNamecacheConnection;
+	std::vector< tNamecacheConnection > mNamecacheConnections;
+
+public:
+	~LLToolPie();
+	// </FS:ND>
 };
 
 #endif

@@ -3,6 +3,10 @@
 	<menu_item_call label="Berühren" name="Attachment Object Touch"/>
 	<menu_item_call label="Bearbeiten" name="Edit..."/>
 	<menu_item_call label="Abnehmen" name="Detach"/>
+	<context_menu label="Speichern als" name="Export Menu">
+		<menu_item_call label="Backup" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
 	<menu_item_call label="Aufstehen" name="Stand Up"/>
 	<menu_item_call label="Mein Aussehen" name="Change Outfit"/>
@@ -11,8 +15,12 @@
 	<menu_item_call label="Meine Freunde" name="Friends..."/>
 	<menu_item_call label="Meine Gruppen" name="Groups..."/>
 	<menu_item_call label="Mein Profil" name="Profile..."/>
-	<menu_item_call label="Fehler in Texturen beseitigen" name="Debug..."/>
 	<menu_item_call label="XML ausgeben" name="Dump XML"/>
+	<menu_item_call label="Skript-Info" name="ScriptInfo"/>
+	<menu_item_call label="Nicht anzeigen" name="Derender"/>
+	<menu_item_call label="Nicht anzeigen + Blacklist" name="DerenderPermanent"/>
+	<menu_item_call label="Texturen anzeigen" name="Debug..."/>
+	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
 	<menu_item_call label="Fallen lassen" name="Drop"/>
 	<menu_item_call label="Partikeleigentümer blockieren" name="Mute Particle"/>
 </context_menu>

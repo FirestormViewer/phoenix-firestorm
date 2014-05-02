@@ -27,10 +27,8 @@
           label="Filter"
           max_length_chars="300"
           name="blocked_filter_input"
-          text_color="Black"
-          text_pad_left="10"
           top="4"
-          width="177" />
+          width="154" />
          <menu_button
           follows="right"
           height="25"

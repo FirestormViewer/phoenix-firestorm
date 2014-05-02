@@ -80,6 +80,14 @@ private:
 	LLPathfindingNavMesh::navmesh_slot_t     mNavMeshSlot;
 	boost::signals2::connection              mRegionCrossingSlot;
 	LLPathfindingManager::agent_state_slot_t mAgentStateSlot;
+
+// <FS:Zi> Pathfinding rebake functions
+//         Public accessor functions for llviewermenu.cpp to minimaze code changes
+public:
+	bool isRebakeNeeded();
+	bool isRebaking();
+	void rebakeNavmesh();
+// </FS:Zi>
 };
 
 #endif // LL_LLMENUOPTIONPATHFINDINGREBAKENAVMESH_H

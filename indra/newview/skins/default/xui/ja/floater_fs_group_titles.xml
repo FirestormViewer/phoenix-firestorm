@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="group_titles" title="グループの肩書き">
+ 
+	<floater.string name="NoGroupTitle" value="&lt;No group title&gt;"/>
+
+	<scroll_list name="title_list">
+		<column name="grouptitle" label="肩書き"/>
+		<column name="groupname" label="グループ"/>
+		<column name="role_id"/>
+		<column name="group_id"/>
+	</scroll_list>
+	
+	<button tool_tip="グループの使用可能な肩書き一覧を更新します。" name="btnRefresh" />
+	
+	<button name="btnInfo" label="情報" tool_tip="選択した肩書きのグループに関する情報を表示します。" />
+
+	<button name="btnActivate" label="アクティブ" tool_tip="選択したグループの肩書きをアクティブにします。"/>
+</floater>

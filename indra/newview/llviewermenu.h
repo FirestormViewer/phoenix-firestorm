@@ -27,7 +27,7 @@
 #ifndef LL_LLVIEWERMENU_H
 #define LL_LLVIEWERMENU_H
 
-#include "../llui/llmenugl.h"
+#include "llmenugl.h"
 #include "llsafehandle.h"
 
 class LLMessageSystem;
@@ -37,9 +37,11 @@ class LLView;
 class LLParcelSelection;
 class LLObjectSelection;
 class LLSelectNode;
+class PieMenu;			// ## Zi: Pie Menu
 
 void initialize_edit_menu();
 void initialize_spellcheck_menu();
+void initialize_volume_controls_callbacks(); //<FS:KC> Centralize a some of these volume panel callbacks
 void init_menus();
 void cleanup_menus();
 
@@ -64,6 +66,7 @@ void handle_duplicate_in_place(void*);
 BOOL enable_not_have_card(void *userdata);
 void process_grant_godlike_powers(LLMessageSystem* msg, void**);
 
+
 BOOL enable_cut(void*);
 BOOL enable_copy(void*);
 BOOL enable_paste(void*);
@@ -79,6 +82,9 @@ void handle_detach_from_avatar(const LLSD& user_data);
 void attach_label(std::string& label, const LLSD&);
 void detach_label(std::string& label, const LLSD&);
 void handle_detach(void*);
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+void handle_attachment_edit(const LLUUID& idItem);
+// [/SL:KB]
 BOOL enable_god_full(void* user_data);
 BOOL enable_god_liaison(void* user_data);
 BOOL enable_god_basic(void* user_data);
@@ -104,9 +110,19 @@ void handle_buy();
 void handle_take();
 void handle_take_copy();
 void handle_look_at_selection(const LLSD& param);
-void handle_zoom_to_object(LLUUID object_id);
+void handle_script_info();
+// <FS:Ansariel> Option to try via exact position
+//void handle_zoom_to_object(LLUUID object_id);
+void handle_zoom_to_object(LLUUID object_id, const LLVector3d& object_pos = LLVector3d(-1.f, -1.f, -1.f));
+// </FS:Ansariel> Option to try via exact position
 void handle_object_return();
 void handle_object_delete();
+
+// <FS:Techwolf Lupindo> area search
+// expose this function so other classes can call it
+void handle_object_edit();
+bool enable_bridge_function();
+// <FS:Techwolf Lupindo>
 
 void handle_buy_land();
 
@@ -134,6 +150,7 @@ void handle_give_money_dialog();
 bool enable_pay_object();
 bool enable_buy_object();
 bool handle_go_to();
+bool update_grid_help();
 
 // Export to XML or Collada
 void handle_export_selected( void * );
@@ -142,6 +159,10 @@ void handle_export_selected( void * );
 U32 render_type_from_string(std::string render_type);
 U32 feature_from_string(std::string feature);
 U32 info_display_from_string(std::string info_display);
+// <FS:Techwolf Lupindo> export
+bool enable_object_export();
+// </FS:Techwolf Lupindo>
+
 
 class LLViewerMenuHolderGL : public LLMenuHolderGL
 {
@@ -190,8 +211,33 @@ extern LLContextMenu* gDetachPieMenu;
 extern LLContextMenu* gAttachBodyPartPieMenus[8];
 extern LLContextMenu* gDetachBodyPartPieMenus[8];
 
+// ## Zi: Pie Menu
+// Pie menus in 3D scene
+extern PieMenu			*gPieMenuAvatarSelf;
+extern PieMenu			*gPieMenuAvatarOther;
+extern PieMenu			*gPieMenuObject;
+extern PieMenu			*gPieMenuAttachmentSelf;
+extern PieMenu			*gPieMenuAttachmentOther;
+extern PieMenu			*gPieMenuLand;
+
+// Needed to build pie menus when attachment site list available
+extern PieMenu* gPieAttachScreenMenu;
+extern PieMenu* gPieDetachScreenMenu;
+extern PieMenu* gPieAttachMenu;
+extern PieMenu* gPieDetachMenu;
+extern PieMenu* gPieAttachBodyPartMenus[8];
+extern PieMenu* gPieDetachBodyPartMenus[8];
+// ## Zi: Pie Menu
+
+extern LLMenuItemCallGL* gAutorespondMenu;
+extern LLMenuItemCallGL* gAutorespondNonFriendsMenu;
+
+/*
+// ## Zi: Dead code?
 extern LLMenuItemCallGL* gMutePieMenu;
 extern LLMenuItemCallGL* gMuteObjectPieMenu;
 extern LLMenuItemCallGL* gBuyPassPieMenu;
+// ## Zi: Dead code?
+*/
 
 #endif

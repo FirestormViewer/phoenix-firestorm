@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+	can_resize="true"
+	legacy_header_height="18"
+	height="357"
+	min_height="359"
+	min_width="506"
+	name="particle_editor_floater"
+	help_topic="particle_editor"
+	save_rect="true"
+	save_visibility="false"
+	single_instance="false"
+	title="Particle Editor"
+	width="506">
+
+<panel
+	follows="all"
+	height="333"
+	left="8"
+	name="particle_editor_panel"
+	top="22"
+	width="491">
+
+<panel
+	follows="all"
+	height="258"
+	left="0"
+	name="top_left_panel"
+	top="0"
+	width="370">
+
+<text
+	name="Pattern_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top="8"
+	width="100">
+Pattern:
+</text>
+
+<combo_box
+	follows="left|right|top"
+	name="pattern_type_combo"
+	top_delta="-4"
+	left_pad="0"
+	width="150">
+
+	<combo_box.item
+		label="Explode"
+		name="explode"
+		value="explode" />
+
+	<combo_box.item
+		label="Angle"
+		name="angle"
+		value="angle" />
+
+	<combo_box.item
+		label="Angle Cone"
+		name="angle_cone"
+		value="angle_cone" />
+
+	<combo_box.item
+		label="Angle Cone Empty"
+		name="angle_cone_empty"
+		value="angle_cone_empty" />
+
+	<combo_box.item
+		label="Drop"
+		name="drop"
+		value="drop" />
+
+</combo_box>
+
+<text
+	name="Texture_Label"
+	follows="top|right"
+	height="16"
+	left_pad="8"
+	top="8"
+	width="50">
+	Texture:
+</text>
+
+<texture_picker
+	follows="top|right"
+	height="70"
+	left_pad="2"
+	name="texture_picker"
+	top="4"
+	width="50" />
+
+<text
+	name="Burst_Rate_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top="44"
+	width="100">
+	Burst Rate:
+</text>
+
+<spinner
+	follows="left|top"
+	initial_value="0.3"
+	left_pad="0"
+	max_val="1000.0"
+	min_val="0.0"
+	name="burst_rate_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Burst_Count_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="20"
+	width="100">
+	Burst Count:
+</text>
+
+<spinner
+	decimal_digits="0"
+	follows="left|top"
+	increment="1"
+	initial_value="5"
+	left_pad="0"
+	max_val="1000"
+	min_val="1"
+	name="burst_count_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Burst_Radius_Label"
+	follows="right|top"
+	height="16"
+	left_pad="41"
+	top_delta="6"
+	width="100">
+	Burst Radius:
+</text>
+
+<spinner
+	follows="right|top"
+	left_pad="0"
+	max_val="50"
+	min_val="0"
+	name="burst_radius_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Angle_Begin_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="20"
+	width="100">
+	Angle Begin:
+</text>
+
+<spinner
+	follows="left|top"
+	left_pad="0"
+	max_val="3.14"
+	min_val="-3.14"
+	name="angle_begin_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Burst_Speed_Min_Label"
+	follows="right|top"
+	height="16"
+	left_pad="41"
+	top_delta="6"
+	width="100">
+	Burst Speed Min:
+</text>
+
+<spinner
+	follows="right|top"
+	initial_value="0.5"
+	left_pad="0"
+	max_val="100"
+	min_val="0"
+	name="burst_speed_min_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Angle_End_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="20"
+	width="100">
+	Angle End:
+</text>
+
+<spinner
+	follows="left|top"
+	left_pad="0"
+	max_val="3.14"
+	min_val="-3.14"
+	name="angle_end_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Burst_Speed_Max_Label"
+	follows="right|top"
+	height="16"
+	left_pad="41"
+	top_delta="6"
+	width="100">
+	Burst Speed Max:
+</text>
+
+<spinner
+	follows="right|top"
+	initial_value="0.5"
+	left_pad="0"
+	max_val="100"
+	min_val="0"
+	name="burst_speed_max_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Source_Max_Age_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="20"
+	width="100">
+	Source Max Age:
+</text>
+
+<spinner
+	follows="left|top"
+	left_pad="0"
+	max_val="1000"
+	min_val="0"
+	name="source_max_age_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Start_Alpha_Label"
+	follows="right|top"
+	height="16"
+	left_pad="41"
+	top_delta="6"
+	width="100">
+	Start Alpha:
+</text>
+
+<spinner
+	follows="right|top"
+	initial_value="1.0"
+	left_pad="0"
+	max_val="1.0"
+	min_val="0.0"
+	name="start_alpha_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Particles_Max_Age_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="20"
+	width="100">
+	Particles Max Age:
+</text>
+
+<spinner
+	follows="left|top"
+	initial_value="5"
+	left_pad="0"
+	max_val="30"
+	min_val="0"
+	name="particles_max_age_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="End_Alpha_Label"
+	follows="right|top"
+	height="16"
+	left_pad="41"
+	top_delta="6"
+	width="100">
+	End Alpha:
+</text>
+
+<spinner
+	follows="right|top"
+	initial_value="1.0"
+	left_pad="0"
+	max_val="1.0"
+	min_val="0.0"
+	name="end_alpha_spinner"
+	top_delta="-6"
+	width="60" />
+
+<text
+	name="Start_Glow_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="20"
+	width="100">
+	Start Glow:
+</text>
+
+<spinner
+	follows="left|top"
+	initial_value="0.0"
+	left_pad="0"
+	max_val="1.0"
+	min_val="0.0"
+	name="start_glow_spinner"
+	top_delta="-6"
+	width="60" />
+
+<combo_box
+	name="blend_func_src_combo"
+	follows="right|top"
+	height="22"
+	left_pad="41"
+	top_delta="0"
+	width="160">
+
+	<combo_box.item
+		label="Blend One"
+		name="blend_one"
+		value="blend_one" />
+
+	<combo_box.item
+		label="Blend Zero"
+		name="blend_zero"
+		value="blend_zero" />
+
+	<combo_box.item
+		label="Blend Dest Color"
+		name="blend_dest_color"
+		value="blend_dest_color" />
+
+	<combo_box.item
+		label="Blend Src Color"
+		name="blend_src_color"
+		value="blend_src_color" />
+
+	<combo_box.item
+		label="Blend 1 - Dest Color"
+		name="blend_one_minus_dest_color"
+		value="blend_one_minus_dest_color" />
+
+	<combo_box.item
+		label="Blend 1 - Src Color"
+		name="blend_one_minus_src_color"
+		value="blend_one_minus_src_color" />
+
+	<combo_box.item
+		label="Blend Src Alpha"
+		name="blend_src_alpha"
+		value="blend_src_alpha" />
+
+	<combo_box.item
+		label="Blend 1 - Src Alpha"
+		name="blend_one_minus_src_alpha"
+		value="blend_one_minus_src_alpha" />
+</combo_box>
+
+<text
+	name="End_Glow_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="8"
+	width="100">
+	End Glow:
+</text>
+
+<spinner
+	follows="left|top"
+	initial_value="0.0"
+	left_pad="0"
+	max_val="1.0"
+	min_val="0.0"
+	name="end_glow_spinner"
+	top_delta="-6"
+	width="60" />
+
+<combo_box
+	name="blend_func_dest_combo"
+	follows="right|top"
+	height="22"
+	left_pad="41"
+	top_delta="0"
+	width="160">
+
+	<combo_box.item
+		label="Blend One"
+		name="blend_one"
+		value="blend_one" />
+
+	<combo_box.item
+		label="Blend Zero"
+		name="blend_zero"
+		value="blend_zero" />
+
+	<combo_box.item
+		label="Blend Dest Color"
+		name="blend_dest_color"
+		value="blend_dest_color" />
+
+	<combo_box.item
+		label="Blend Src Color"
+		name="blend_src_color"
+		value="blend_src_color" />
+
+	<combo_box.item
+		label="Blend 1 - Dest Color"
+		name="blend_one_minus_dest_color"
+		value="blend_one_minus_dest_color" />
+
+	<combo_box.item
+		label="Blend 1 - Src Color"
+		name="blend_one_minus_src_color"
+		value="blend_one_minus_src_color" />
+
+	<combo_box.item
+		label="Blend Src Alpha"
+		name="blend_src_alpha"
+		value="blend_src_alpha" />
+
+	<combo_box.item
+		label="Blend 1 - Src Alpha"
+		name="blend_one_minus_src_alpha"
+		value="blend_one_minus_src_alpha" />
+</combo_box>
+
+<text
+	name="Scale_Start_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="10"
+	width="80">
+	Scale Start:
+</text>
+
+<spinner
+	follows="left|top"
+	initial_value="0.5"
+	left_pad="0"
+	max_val="4.0"
+	min_val="0.03125"
+	name="scale_start_x_spinner"
+	top_delta="-6"
+	width="60" />
+
+<spinner
+	follows="left|top"
+	initial_value="0.5"
+	left_pad="2"
+	max_val="4.0"
+	min_val="0.03125"
+	name="scale_start_y_spinner"
+	top_delta="0"
+	width="60" />
+
+<text
+	name="End_Label"
+	follows="right|top"
+	height="16"
+	left_pad="9"
+	top_delta="6"
+	width="28">
+	End:
+</text>
+
+<spinner
+	follows="right|top"
+	initial_value="0.5"
+	left_pad="0"
+	max_val="4.0"
+	min_val="0.03125"
+	name="scale_end_x_spinner"
+	top_delta="-6"
+	width="60" />
+
+<spinner
+	follows="right|top"
+	initial_value="0.5"
+	left_pad="2"
+	max_val="4.0"
+	min_val="0.03125"
+	name="scale_end_y_spinner"
+	top_delta="0"
+	width="60" />
+
+</panel>
+
+<panel
+	follows="right|top|bottom"
+	height="258"
+	left_pad="0"
+	name="top_right_panel"
+	width="120">
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="bounce_checkbox"
+	label="Bounce"
+	left="0"
+	top="6"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="emissive_checkbox"
+	label="Emissive"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="follow_source_checkbox"
+	label="Follow Source"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="follow_velocity_checkbox"
+	label="Follow Velocity"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="interpolate_color_checkbox"
+	label="Interpolate Color"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="interpolate_scale_checkbox"
+	label="Interpolate Scale"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="target_position_checkbox"
+	label="Target Position"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="target_linear_checkbox"
+	label="Target Linear"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="wind_checkbox"
+	label="Wind"
+	top_pad="4"
+	width="120" />
+
+<check_box
+	follows="left|top"
+	height="16"
+	name="ribbon_checkbox"
+	label="Ribbon"
+	top_pad="4"
+	width="120" />
+
+<button
+	follows="left|top"
+	height="24"
+	name="copy_button"
+	label="Copy"
+	tool_tip="Copies the particle system's parameter as LSL script to the clipboard."
+	top_pad="7"
+	width="58" />
+
+<button
+	follows="left|top"
+	height="24"
+	name="inject_button"
+	label="Inject"
+	tool_tip="Inject this particle system into the selected object."
+	left_pad="4"
+	width="58" />
+
+</panel>
+
+<panel
+	follows="left|right|bottom"
+	height="70"
+	left="0"
+	name="bottom_left_panel"
+	top="257"
+	width="320">
+
+<text
+	name="Target_Key_Label"
+	follows="top|lleft"
+	height="16"
+	left="0"
+	top="4"
+	width="76">
+	Target Key:
+</text>
+
+<line_editor
+	follows="left|right|top"
+	left_pad="0"
+	name="target_key_input"
+	height="20"
+	right="-48" />
+
+<button
+	follows="right|top"
+	image_overlay="StopReload_Over"
+	left_pad="4"
+	name="clear_target_button"
+	tool_tip="Clear target object or avatar."
+	width="20"
+	height="20" />
+
+<button
+	follows="right|top"
+	image_overlay="Inv_Object"
+	left_pad="2"
+	name="pick_target_button"
+	tool_tip="Click here to select the particle target object or avatar."
+	width="20"
+	height="20" />
+
+<text
+	name="Acceleration_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="8"
+	width="76">
+	Acceleration:
+</text>
+
+<spinner
+	follows="left|top"
+	left_pad="0"
+	max_val="100"
+	min_val="-100"
+	name="acceleration_x_spinner"
+	top_delta="-6"
+	width="76" />
+
+<spinner
+	follows="left|top"
+	left_pad="7"
+	max_val="100"
+	min_val="-100"
+	name="acceleration_y_spinner"
+	width="76" />
+
+<spinner
+	follows="left|top"
+	left_pad="7"
+	max_val="100"
+	min_val="-100"
+	name="acceleration_z_spinner"
+	width="76" />
+
+<text
+	name="Omega_Label"
+	follows="left|top"
+	height="16"
+	left="0"
+	top_pad="20"
+	width="76">
+	Omega:
+</text>
+
+<spinner
+	follows="left|top"
+	left_pad="0"
+	max_val="100"
+	min_val="-100"
+	name="omega_x_spinner"
+	top_delta="-6"
+	width="76" />
+
+<spinner
+	follows="left|top"
+	left_pad="7"
+	max_val="100"
+	min_val="-100"
+	name="omega_y_spinner"
+	width="76" />
+
+<spinner
+	follows="left|top"
+	left_pad="7"
+	max_val="100"
+	min_val="-100"
+	name="omega_z_spinner"
+	width="76" />
+
+</panel>
+
+<panel
+	follows="right|bottom"
+	height="70"
+	left="320"
+	name="bottom_right_panel"
+	top="257"
+	width="170">
+
+<color_swatch
+	follows="right|top"
+	height="70"
+	label="Start Color"
+	left="16"
+	name="start_color_selector"
+	top="8"
+	width="70"
+/>
+
+<color_swatch
+	follows="right|top"
+	height="70"
+	label="End Color"
+	left_pad="8"
+	name="end_color_selector"
+	top="8"
+	width="70"
+/>
+
+</panel>
+</panel>
+
+</floater>

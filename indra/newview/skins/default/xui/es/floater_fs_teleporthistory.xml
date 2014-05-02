@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_tphistory" title="Historial de teleportes">
+	<filter_editor label="Filtrar lugares" name="Filter"/>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="show_lm_panel">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleportarme" name="teleport_btn" tool_tip="Teleportarse al área seleccionada"/>
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="Mapa" name="map_btn" tool_tip="Mostrar el área correspondiente en el mapa mundial"/>
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="Perfil" name="profile_btn" tool_tip="Mostrar el perfil de este lugar"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+	</panel>
+</floater>

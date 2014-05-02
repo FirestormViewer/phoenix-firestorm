@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
+ follows="all"
  height="380"
  layout="topleft"
  name="panel_snapshot_profile"
  width="490">
-    <icon
+<!--    <icon
      follows="top|left"
      height="18"
      image_name="Snapshot_Profile"
@@ -37,16 +38,16 @@
      name="hr"
      right="-10"
      top_pad="5"
-     />
+     />-->
     <combo_box
-     follows="left|top"
+     follows="left|right|top"
      height="23"
      label="Resolution"
      layout="topleft"
-     left_delta="0"
+     left="5"
      name="profile_size_combo"
-     top_pad="10"
-     width="250">
+     right="-1"
+     top="5">
         <combo_box.item
          label="Current Window"
          name="CurrentWindow"
@@ -68,7 +69,7 @@
          name="Custom"
          value="[i-1,i-1]" />
     </combo_box>
-    <layout_stack
+<!--    <layout_stack
      animate="false"
      follows="all"
      height="270"
@@ -87,9 +88,10 @@
          auto_resize="false"
          top="0"
          right="-1"
-         visible="true">
+         visible="true">-->
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToProfileWidth"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -97,7 +99,7 @@
              label="Width"
              label_width="40"
              layout="topleft"
-             left="10"
+             left="5"
              max_val="6016"
              min_val="32"
              name="profile_snapshot_width"
@@ -105,6 +107,7 @@
              width="95" />
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToProfileHeight"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -119,13 +122,14 @@
              top_delta="0"
              width="95" />
             <check_box
+             control_name="KeepAspectForProfileSnapshot"
               height="10"
              bottom_delta="20"
              label="Constrain proportions"
              layout="topleft"
              left="10"
              name="profile_keep_aspect_check" />
-        </layout_panel>
+<!--        </layout_panel>
         <layout_panel
          follows="top|left|right"
          height="200"
@@ -135,34 +139,35 @@
          auto_resize="true"
          top="0"
          right="-1"
-         visible="true">
+         visible="true">-->
             <text
              length="1"
              follows="top|left|right"
              font="SansSerif"
              height="16"
              layout="topleft"
-             left="0"
+             left="5"
              name="caption_label"
-             right="-10"
+             right="-1"
              top_pad="0"
              type="string">
                 Caption:
             </text>
             <text_editor
              follows="all"
-             height="155"
+             height="215"
              layout="topleft"
              left_delta="0"
              length="1"
              max_length="700"
              name="caption"
-             right="-10"
+             right="-1"
              top_pad="5"
              type="string"
              word_wrap="true">
             </text_editor>
             <check_box
+             control_name="SnapshotToProfileIncludeLocation"
              follows="left|bottom"
              initial_value="true"
              label="Include location"
@@ -170,7 +175,7 @@
              left_delta="0"
              name="add_location_cb"
              top_pad="15" />
-        </layout_panel>
+<!--        </layout_panel>
     </layout_stack>
     <button
      follows="right|bottom"
@@ -183,15 +188,15 @@
      width="100">
       <button.commit_callback
        function="PostToProfile.Cancel" />
-    </button>
+   </button>-->
     <button
+     bottom="-1"
      follows="right|bottom"
      height="23"
      label="Post"
      layout="topleft"
-     left_delta="-106"
+     right="-10"
      name="post_btn"
-     top_delta="0"
      width="100">
       <button.commit_callback
        function="PostToProfile.Send" />

@@ -243,3 +243,21 @@ void LLMenuOptionPathfindingRebakeNavmesh::createNavMeshStatusListenerForCurrent
 	}
 }
 
+// <FS:Zi> Pathfinding rebake functions
+bool LLMenuOptionPathfindingRebakeNavmesh::isRebakeNeeded()
+{
+	return mRebakeNavMeshMode==kRebakeNavMesh_Available;
+}
+
+bool LLMenuOptionPathfindingRebakeNavmesh::isRebaking()
+{
+	return
+		mRebakeNavMeshMode==kRebakeNavMesh_RequestSent ||
+		mRebakeNavMeshMode==kRebakeNavMesh_InProgress;
+}
+
+void LLMenuOptionPathfindingRebakeNavmesh::rebakeNavmesh()
+{
+	sendRequestRebakeNavmesh();
+}
+// </FS:Zi>

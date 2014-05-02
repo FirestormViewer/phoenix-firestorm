@@ -656,7 +656,13 @@ bool LLXMLNode::updateNode(
 bool LLXMLNode::parseFile(const std::string& filename, LLXMLNodePtr& node, LLXMLNode* defaults_tree)
 {
 	// Read file
-	LL_DEBUGS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#ifdef LL_RELEASE_WITH_DEBUG_INFO
+		LL_INFOS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#elif defined LL_DEBUG
+		LL_INFOS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#else
+		LL_DEBUGS("XMLNode") << "parsing XML file: " << filename << LL_ENDL;
+#endif //LL_RELEASE_WITH_DEBUG_INFO
 	LLFILE* fp = LLFile::fopen(filename, "rb");		/* Flawfinder: ignore */
 	if (fp == NULL)
 	{
@@ -700,7 +706,14 @@ bool LLXMLNode::parseBuffer(
 	// Do the parsing
 	if (XML_Parse(my_parser, (const char *)buffer, length, TRUE) != XML_STATUS_OK)
 	{
-		llwarns << "Error parsing xml error code: "
+#ifdef LL_RELEASE_WITH_DEBUG_INFO
+		llerrs << "";
+#elif defined LL_DEBUG
+		llerrs << "";
+#else
+		llwarns << "";
+#endif //LL_RELEASE_WITH_DEBUG_INFO
+		llcont << "Error parsing xml error code: "
 				<< XML_ErrorString(XML_GetErrorCode(my_parser))
 				<< " on line " << XML_GetCurrentLineNumber(my_parser)
 				<< llendl;
@@ -757,9 +770,18 @@ bool LLXMLNode::parseStream(
 		{
 			llwarns << "Error parsing xml error code: "
 					<< XML_ErrorString(XML_GetErrorCode(my_parser))
-					<< " on lne " << XML_GetCurrentLineNumber(my_parser)
+					// <FS:AW> Return false and a NULL node if failing instead of a broken node and true 
+					//<< " on lne " << XML_GetCurrentLineNumber(my_parser)
+					<< " line:   " << XML_GetCurrentLineNumber(my_parser)
+					<< " column: " << XML_GetCurrentColumnNumber(my_parser)
+					// </FS:AW> Return false and a NULL node if failing instead of a broken node and true 
 					<< llendl;
-			break;
+			// <FS:AW> Return false and a NULL node if failing instead of a broken node and true 
+			//break;
+			delete []buffer;
+			node = NULL;
+			return false;
+			// </FS:AW> Return false and a NULL node if failing instead of a broken node and true 
 		}
 	}
 	

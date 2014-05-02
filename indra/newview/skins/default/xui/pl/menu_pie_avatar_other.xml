@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Avatar Pie">
+    <pie_slice label="Profil..." name="Profile..."/>
+    <pie_menu name="mute_menu" label="Blokuj &gt;">
+        <pie_slice label="Blokuj" name="Avatar Mute"/>
+        <pie_slice label="Właśc. cząsteczek" name="Mute Particle"/>
+    </pie_menu>
+    <pie_slice label="Idź do" name="Go to"/>
+    <pie_slice label="Zgłoś..." name="abuse"/>
+    <pie_menu label="Dodaj &gt;" name="add_avatar">
+        <pie_slice label="Do znajomych" name="Add Friend"/>
+        <pie_slice label="Do Zestawu" name="Add to set"/>
+    </pie_menu>
+    <pie_slice label="Zapłać..." name="Pay..."/>
+    <pie_menu name="Avatar Pie More 1" label="Więcej &gt;">
+        <pie_slice label="Unieruchom" name="Freeze..."/>
+        <pie_slice label="Daj wizytówkę" name="Add Calling Card"/>
+        <pie_slice label="Zaproś do grupy" name="Group Invite..."/>
+        <pie_slice label="Wyrzuć..." name="Eject..."/>
+        <pie_menu name="Avatar Pie More 2" label="Więcej &gt;">
+            <pie_slice label="Pokaż tekstury" name="Debug..."/>
+            <pie_slice label="O skryptach" name="ScriptInfo"/>
+            <pie_slice label="Zadzwoń" name="Call"/>
+            <pie_slice label="Przybliż" name="Zoom In"/>
+            <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
+            <pie_slice label="Zrzuć XML" name="Dump XML"/>
+        </pie_menu>
+        <pie_menu name="DerenderMenu" label="Derenderuj &gt;">
+            <pie_slice label="Czarna lista" name="DerenderPermanent"/>
+            <pie_slice label="Tymczasowo" name="Derender"/>
+        </pie_menu>
+    </pie_menu>
+    <pie_slice label="Wiadomość IM" name="Send IM..."/>
+</pie_menu>

@@ -25,12 +25,23 @@
          parameter="can_call" />
     </menu_item_call>
     <menu_item_call
-     label="Open chat history..."
+     label="Open chat transcript..."
      layout="topleft"
      name="Chat history">
         <on_click
          function="Calllog.Action"
          parameter="chat_history" />
+        <on_enable
+         function="Calllog.Enable"
+         parameter="can_view_chat_history" />
+    </menu_item_call>
+    <menu_item_call
+     label="Open chat transcript externally..."
+     layout="topleft"
+     name="Chat history External">
+        <on_click
+         function="Calllog.Action"
+         parameter="chat_history_external" />
         <on_enable
          function="Calllog.Enable"
          parameter="can_view_chat_history" />

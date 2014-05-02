@@ -130,6 +130,16 @@
       <string>h</string>
     </map>
 
+    <key>helperuri</key>
+    <map>
+      <key>desc</key>
+      <string>helper web CGI prefix to use</string>
+      <key>count</key>
+      <integer>1</integer>
+      <key>map-to</key>
+      <string>CmdLineHelperURI</string>
+    </map>
+
     <key>ignorepixeldepth</key>
     <map>
       <key>desc</key>
@@ -167,6 +177,7 @@
       <string>UserLogFile</string>
     </map>
 
+	<!-- [FS:CR] Use UserLoginInfoCmdLine Plz -->
     <key>login</key>
     <map>
       <key>desc</key>
@@ -174,7 +185,27 @@
       <key>count</key>
       <integer>3</integer>
       <key>map-to</key>
-      <string>UserLoginInfo</string>
+      <string>UserLoginInfoCmdLine</string>
+    </map>
+
+    <key>loginpage</key>
+    <map>
+      <key>desc</key>
+      <string>Login authentication page to use.</string>
+      <key>count</key>
+      <integer>1</integer>
+      <key>map-to</key>
+      <string>LoginPage</string>
+    </map>
+
+    <key>loginuri</key>
+    <map>
+      <key>desc</key>
+      <string>login server and CGI script to use</string>
+      <key>count</key>
+      <integer>1</integer>
+      <key>map-to</key>
+      <string>CmdLineLoginURI</string>
     </map>
 
     <key>logmetrics</key>
@@ -407,5 +438,27 @@
       <integer>1</integer>
       <!-- Special case. Mapped to settings procedurally. -->
     </map>
+
+    <!-- FS:Ansariel - Option to not auto-save passwords when using login option >
+    <key>logindontsavepassword</key>
+    <map>
+      <key>desc</key>
+      <string>Specifies that the password should not be saved if the login parameter is used.</string>
+      <! Special case. Mapped to settings procedurally. >
+    </map>
+    <! FS:Ansariel - Option to not auto-save passwords when using login option -->
+
+    <!-- FS:Ansariel FIRE-12671: Force VRAM if DirectX detection is broken -->
+    <key>forcevideomemory</key>
+    <map>
+      <key>desc</key>
+      <string>Overrides the video memory detection on Windows if a value greater 0 is passed</string>
+      <key>count</key>
+      <integer>1</integer>
+      <key>map-to</key>
+      <string>FSForcedVideoMemory</string>
+    </map>
+    <!-- FS:Ansariel -->
+
   </map>
 </llsd>

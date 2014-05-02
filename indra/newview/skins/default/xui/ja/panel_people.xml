@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="人" name="people_panel">
+	<string name="high_server_load" value="現在サーバに負荷がかかっており、見え方が変わるものがたくさんある場合は有効になるまで暫く時間がかかることがあります。そのままお待ち下さい。"/>
 	<string name="no_recent_people" value="最近交流した人はいません。 一緒に何かする仲間をお探しですか？ [secondlife:///app/search/people 検索] か [secondlife:///app/worldmap 世界地図] をお試しください。"/>
 	<string name="no_filtered_recent_people" value="お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。"/>
 	<string name="no_one_near" value="近くに誰もいません。 一緒に何かする仲間をお探しですか？ [secondlife:///app/search/people 検索] か [secondlife:///app/worldmap 世界地図] をお試しください。"/>
@@ -14,56 +15,101 @@
 	<string name="no_filtered_friends_msg">
 		お探しのものは見つかりましたか？ [secondlife:///app/search/people/[SEARCH_TERM] 検索] をお試しください。
 	</string>
+	<!-- Deleted Aug.03, 2013
+	<string name="people_filter_label" value="人をフィルター"/>
+	<string name="groups_filter_label" value="グループをフィルター"/>
+	-->
 	<string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。"/>
 	<string name="no_groups_msg" value="グループをお探しですか？ [secondlife:///app/search/groups 検索] をお試しください。"/>
 	<string name="MiniMapToolTipMsg" value="[地域]（ダブルクリックで地図を開く。Shift‐ドラッグで水平・垂直移動）"/>
 	<string name="AltMiniMapToolTipMsg" value="[地域]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）"/>
+	
 	<tab_container name="tabs">
+	
+	<!--  NEARBY tab  -->
+	
 		<panel label="近く" name="nearby_panel">
-			<panel label="bottom_panel" name="nearby_buttons_panel">
-				<filter_editor label="人をフィルター" name="nearby_filter_input"/>
-				<button name="gear_btn" tool_tip="選択した人に対するアクション"/>
-				<menu_button name="nearby_view_btn" tool_tip="表示 / 並べ替えのオプション"/>
-				<button name="add_friend_btn" tool_tip="フレンド登録を申し出ます"/>
-				<dnd_button name="nearby_del_btn" tool_tip="フレンドとして選択されている人を削除"/>
-			</panel>
+		<!-- FS:Ansariel: Firestorm radar
+            <panel name="nearby_buttons_panel">
+                <filter_editor label="Filter People" name="nearby_filter_input" />
+                <button name="gear_btn" tool_tip="Actions on selected person" />
+                <menu_button name="nearby_view_btn" tool_tip="View/sort options" />
+                <button name="add_friend_btn" tool_tip="Offer friendship to a resident />
+                <dnd_button name="nearby_del_btn" tool_tip="Remove selected person as a friend" />
+            </panel>
+			<layout_stack>
+				<layout_panel name="Net Map Panel">
+					<net_map name="Net Map" />
+				</layout_panel>
+				<layout_panel>
+					<avatar_list name="avatar_list" />
+				</layout_panel>
+			</layout_stack>
+		-->
+		
+		<panel name="panel_radar" />
 		</panel>
+
+		<!-- FRIENDS tab -->
+		
 		<panel label="フレンド" name="friends_panel">
-			<panel label="bottom_panel" name="friends_buttons_panel">
-				<filter_editor label="人をフィルター" name="friends_filter_input"/>
-				<button name="gear_btn" tool_tip="選択した人に対するアクション"/>
-				<menu_button name="friends_view_btn" tool_tip="表示 / 並べ替えのオプション"/>
-				<button name="friends_add_btn" tool_tip="フレンド登録を申し出ます"/>
-				<dnd_button name="friends_del_btn" tool_tip="フレンドとして選択されている人を削除"/>
-			</panel>
-			<accordion name="friends_accordion">
-				<accordion_tab name="tab_online" title="オンライン"/>
-				<accordion_tab name="tab_all" title="全員"/>
-			</accordion>
+            <panel name="friends_buttons_panel">
+                <filter_editor label="人をフィルター" name="friends_filter_input" />
+                <button name="gear_btn" tool_tip="選択した人に対するアクションです。" />
+                <menu_button name="friends_view_btn" tool_tip="表示／並べ替えのオプションです。" />
+                <button name="friends_add_btn" tool_tip="住人にフレンド登録を申し出ます。" />
+                <button name="GlobalOnlineStatusToggle" tool_tip="オンラインステータスを表示させるかを切り替えます。" />
+                <dnd_button name="friends_del_btn" tool_tip="選択した人をフレンドリストから削除します。" />
+            </panel>
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="オンライン">
+                        <avatar_list name="avatars_online" />
+                </panel>
+                <panel name="tab_all" title="全員">
+                        <avatar_list name="avatars_all" />
+                </panel>
+            </tab_container>
 		</panel>
-		<panel label="グループ" name="groups_panel">
-			<panel label="bottom_panel" name="groups_buttons_panel">
-				<filter_editor label="フィルターグループ" name="groups_filter_input"/>
-				<menu_button name="groups_gear_btn" tool_tip="選択したグループに対するアクション"/>
-				<menu_button name="groups_view_btn" tool_tip="表示 / 並べ替えのオプション"/>
-				<menu_button name="plus_btn" tool_tip="グループに参加 / 新規グループを作成します"/>
-				<dnd_button name="minus_btn" tool_tip="選択したグループから脱退"/>
-			</panel>
+		
+		<!-- GROUPS tab -->
+
+        <panel label="グループ" name="groups_panel">
+		<!--
+		*NOTE: no_groups_msg & group_list attributes are not defined as translatable in VLT. See EXT-5931
+		Values are set from appropriate strings at the top of file via LLPeoplePanel::postBuild()
+		-->
+			<panel name="groups_buttons_panel">
+                <filter_editor label="グループをフィルター" name="groups_filter_input" />
+                <menu_button name="groups_gear_btn" tool_tip="選択したグループに対するアクションです。" />
+                <menu_button name="groups_view_btn" tool_tip="表示／並べ替えのオプションです。" />
+                <menu_button name="plus_btn" tool_tip="グループに参加または新規グループを作成します。" />
+                <dnd_button name="minus_btn" tool_tip="選択したグループを脱退します。" />
+            </panel>
+            <group_list name="group_list" />
 			<text name="groupcount">
 				あなたは[COUNT]グループに属しているので、まだ[REMAINING]参加できます。
 			</text>
-		</panel>
-		<panel label="最新" name="recent_panel">
-			<panel label="bottom_panel" name="recent_buttons_panel">
-				<filter_editor label="人をフィルター" name="recent_filter_input"/>
-				<button name="gear_btn" tool_tip="選択した人に対するアクション"/>
-				<menu_button name="recent_view_btn" tool_tip="表示 / 並べ替えのオプション"/>
-				<button name="add_friend_btn" tool_tip="フレンド登録を申し出ます"/>
-				<dnd_button name="recent_del_btn" tool_tip="フレンドとして選択されている人を削除"/>
-			</panel>
-		</panel>
-		<panel label="停止" name="blocked_panel">
-			<panel label="ブロックされた住人とオブジェクト" name="panel_block_list_sidetray"/>
-		</panel>
+        </panel>
+		
+		<!-- RECENT tab -->
+
+        <panel label="最新" name="recent_panel">
+            <panel name="recent_buttons_panel">
+                <filter_editor label="人をフィルター" name="recent_filter_input" />
+                <button name="gear_btn" tool_tip="選択した人に対するアクションです。" />
+                <menu_button name="recent_view_btn" tool_tip="表示／並べ替えのオプションです。" />
+                <button name="add_friend_btn" tool_tip="住人にフレンド登録を申し出ます。" />
+                <dnd_button name="recent_del_btn" tool_tip="選択した人をフレンドリストから削除します。" />
+            </panel>
+            <avatar_list name="avatar_list" />
+        </panel>
+		
+		<!-- BLOCKED tab -->
+
+        <panel label="ブロック" name="blocked_panel">
+			<panel name="panel_block_list_sidetray" label="ブロックｈした住人とオブジェクト" />
+        </panel>
+		
 	</tab_container>
+	
 </panel>

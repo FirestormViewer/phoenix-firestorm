@@ -461,6 +461,13 @@ bool LLViewerTexture::isMemoryForTextureLow()
 	const F32 WAIT_TIME = 1.0f ; //second
 	static LLFrameTimer timer ;
 
+	// <FS:ND> Disable memory checking on request
+	static LLCachedControl<bool> FSDisableMemCheck(gSavedSettings, "FSDisableAMDTextureMemoryCheck");
+
+	if( FSDisableMemCheck )
+		return false;
+	// </FS:ND>
+
 	if(timer.getElapsedTimeF32() < WAIT_TIME) //call this once per second.
 	{
 		return false;
@@ -545,12 +552,21 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 		if (sEvaluationTimer.getElapsedTimeF32() > discard_delta_time)
 		{
 			sDesiredDiscardBias += discard_bias_delta;
+			llinfos << "new bias " << sDesiredDiscardBias
+					<< " sBoundTextureMemoryInBytes " << sBoundTextureMemoryInBytes 
+					<< " sTotalTextureMemoryInBytes " << sTotalTextureMemoryInBytes
+					<< " sMaxBoundTextureMemInMegaBytes " << sMaxBoundTextureMemInMegaBytes
+					<< " sMaxTotalTextureMemInMegaBytes " << sMaxTotalTextureMemInMegaBytes
+					<< llendl;
 			sEvaluationTimer.reset();
 		}
 	}
 	else if(sEvaluationTimer.getElapsedTimeF32() > discard_delta_time && isMemoryForTextureLow())
 	{
 		sDesiredDiscardBias += discard_bias_delta;
+		lldebugs << "new bias " << sDesiredDiscardBias
+				<< llendl;
+
 		sEvaluationTimer.reset();
 	}
 	else if (sDesiredDiscardBias > 0.0f &&
@@ -780,6 +796,7 @@ void LLViewerTexture::addFace(U32 ch, LLFace* facep)
 	mFaceList[ch][mNumFaces[ch]] = facep ;
 	facep->setIndexInTex(ch, mNumFaces[ch]) ;
 	mNumFaces[ch]++ ;
+
 	mLastFaceListUpdateTimer.reset() ;
 }
 
@@ -1201,7 +1218,12 @@ void LLViewerFetchedTexture::dump()
 // ONLY called from LLViewerFetchedTextureList
 void LLViewerFetchedTexture::destroyTexture() 
 {
-	if(LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes * 0.95f)//not ready to release unused memory.
+	// <FS:Ansariel> 
+	//if(LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes * 0.95f)//not ready to release unused memory.
+	static LLCachedControl<bool> fsDestroyGLTexturesImmediately(gSavedSettings, "FSDestroyGLTexturesImmediately");
+	static LLCachedControl<F32> fsDestroyGLTexturesThreshold(gSavedSettings, "FSDestroyGLTexturesThreshold");
+	if (!fsDestroyGLTexturesImmediately && LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes * fsDestroyGLTexturesThreshold)//not ready to release unused memory.
+	// </FS:Ansariel>
 	{
 		return ;
 	}
@@ -1320,12 +1342,47 @@ BOOL LLViewerFetchedTexture::createTexture(S32 usename/*= 0*/)
 	mNeedsCreateTexture	= FALSE;
 	if (mRawImage.isNull())
 	{
-		llerrs << "LLViewerTexture trying to create texture with no Raw Image" << llendl;
+		llwarns << "LLViewerTexture trying to create texture with no Raw Image" << llendl;
+		setIsMissingAsset();
+		return FALSE;
 	}
 // 	llinfos << llformat("IMAGE Creating (%d) [%d x %d] Bytes: %d ",
 // 						mRawDiscardLevel, 
 // 						mRawImage->getWidth(), mRawImage->getHeight(),mRawImage->getDataSize())
 // 			<< mID.getString() << llendl;
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	if (!mRawImage->mComment.empty())
+	{
+		std::string comment = mRawImage->mComment;
+		mComment["comment"] = comment;
+		std::size_t position = 0;
+		std::size_t length = comment.length();
+		while (position < length)
+		{
+			std::size_t equals_position = comment.find("=", position);
+			if (equals_position != std::string::npos)
+			{
+				std::string type = comment.substr(position, equals_position - position);
+				position = comment.find("&", position);
+				if (position != std::string::npos)
+				{
+					mComment[type] = comment.substr(equals_position + 1, position - (equals_position + 1));
+					position++;
+				}
+				else
+				{
+					mComment[type] = comment.substr(equals_position + 1, length - (equals_position + 1));
+				}
+			}
+			else
+			{
+				position = equals_position;
+			}
+		}
+	}
+	// </FS:Techwolf Lupindo>
+
 	BOOL res = TRUE;
 
 	// store original size only for locally-sourced images
@@ -1491,6 +1548,14 @@ F32 LLViewerFetchedTexture::calcDecodePriority()
 	
 	if (mNeedsCreateTexture)
 	{
+		// <FS:ND> NaN has some very special comparison characterisctics. Those would make comparing by decode-prio wrong and destroy strict weak ordering of stl containers.
+		if( llisnan(mDecodePriority ) )
+		{
+			llwarns << "Detected NaN for decode priority" << llendl;
+			mDecodePriority = 0; // What to put here? Something low? high? zero?
+		}
+		// </FS:NS>
+
 		return mDecodePriority; // no change while waiting to create
 	}
 	if(mFullyLoaded && !mForceToSaveRawImage)//already loaded for static texture
@@ -1629,6 +1694,15 @@ F32 LLViewerFetchedTexture::calcDecodePriority()
 			priority += additional;
 		}
 	}
+
+	// <FS:ND> NaN has some very special comparison characterisctics. Those would make comparing by decode-prio wrong and destroy strict weak ordering of stl containers.
+	if( llisnan(priority) )
+	{
+		llwarns << "Detected NaN for decode priority" << llendl;
+		priority = 0; // What to put here? Something low? high? zero?
+	}
+	// </FS:ND>
+
 	return priority;
 }
 
@@ -1648,6 +1722,14 @@ F32 LLViewerFetchedTexture::maxDecodePriority()
 
 void LLViewerFetchedTexture::setDecodePriority(F32 priority)
 {
+	// <FS:ND> NaN has some very special comparison characterisctics. Those would make comparing by decode-prio wrong and destroy strict weak ordering of stl containers.
+	if( llisnan(priority) )
+	{
+		llwarns << "Detected NaN for decode priority" << llendl;
+		priority = 0; // What to put here? Something low? high? zero?
+	}
+	// </FS:ND>
+    
 	mDecodePriority = priority;
 
 	if(mDecodePriority < F_ALMOST_ZERO)
@@ -1750,7 +1832,7 @@ bool LLViewerFetchedTexture::setDebugFetching(S32 debug_level)
 bool LLViewerFetchedTexture::updateFetch()
 {
 	static LLCachedControl<bool> textures_decode_disabled(gSavedSettings,"TextureDecodeDisabled", false);
-	static LLCachedControl<F32>  sCameraMotionThreshold(gSavedSettings,"TextureCameraMotionThreshold", 0.2);
+	static LLCachedControl<F32>  sCameraMotionThreshold(gSavedSettings,"TextureCameraMotionThreshold", 0.2f);
 	static LLCachedControl<S32>  sCameraMotionBoost(gSavedSettings,"TextureCameraMotionBoost", 3);
 	if(textures_decode_disabled)
 	{
@@ -1835,6 +1917,9 @@ bool LLViewerFetchedTexture::updateFetch()
 				if(mFullWidth > MAX_IMAGE_SIZE || mFullHeight > MAX_IMAGE_SIZE)
 				{ 
 					//discard all oversized textures.
+					llinfos << "Discarding oversized texture, width= "
+						<< mFullWidth << ", height= "
+						<< mFullHeight << llendl;
 					destroyRawImage();
 					llwarns << "oversize, setting as missing" << llendl;
 					setIsMissingAsset();
@@ -1977,7 +2062,11 @@ bool LLViewerFetchedTexture::updateFetch()
 			c = mComponents;
 		}
 
-		const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+		// <FS:Ansariel> Replace frequently called gSavedSettings
+		//const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+		static LLCachedControl<U32> sTextureDiscardLevel(gSavedSettings, "TextureDiscardLevel");
+		const U32 override_tex_discard_level = sTextureDiscardLevel();
+		// </FS:Ansariel>
 		if (override_tex_discard_level != 0)
 		{
 			desired_discard = override_tex_discard_level;
@@ -2021,11 +2110,14 @@ bool LLViewerFetchedTexture::updateFetch()
 
 void LLViewerFetchedTexture::clearFetchedResults()
 {
+	// <FS:Ansariel> For texture refresh
+	mIsMissingAsset = FALSE;
+
 	if(mNeedsCreateTexture || mIsFetching)
 	{
 		return ;
 	}
-	
+
 	cleanup();
 	destroyGLTexture();
 

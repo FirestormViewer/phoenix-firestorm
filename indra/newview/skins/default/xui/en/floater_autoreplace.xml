@@ -190,7 +190,8 @@
    layout="topleft"
    left="10"
    top_pad="13"
-   width="50">
+   width="50"
+   name="autoreplace_keyword_txt">
    Keyword:
   </text>
   <line_editor
@@ -211,6 +212,7 @@
    left="10"
    right="90"
    top_pad="10"
+   name="autoreplace_replacement_txt"
    >
    Replacement:
   </text>

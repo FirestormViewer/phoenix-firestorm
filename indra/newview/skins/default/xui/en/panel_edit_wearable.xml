@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
+ background_visible="false"
  bevel_style="in"
  follows="all"
  height="570"
- help_topic="edit_wearable"
+ help_topic="fs_edit_body_part"
  label="Wearable"
  layout="topleft"
  left="0"
@@ -170,8 +170,8 @@
      use_ellipses="true"
      width="274" />
     <panel
-     background_opaque="true"
-     background_visible="true"
+     background_opaque="false"
+     background_visible="false"
      bg_alpha_color="DkGray2"
      bg_opaque_color="DkGray2"
      border="false"
@@ -250,7 +250,7 @@
          height="23"
          layout="topleft"
          left="10"
-         max_length_bytes="63"
+         max_length_chars="63"
          name="description"
          prevalidate_callback="ascii"
          select_on_focus="true"
@@ -436,7 +436,7 @@
      left="2"
      name="button_panel"
      top_pad="6"
-     width="333">
+     width="326">
         <layout_stack
          follows="bottom|left|right"
          height="23"
@@ -446,16 +446,16 @@
          left="0"
          orientation="horizontal"
          top="0"
-         width="333">	
+         width="326">
             <layout_panel
              follows="bottom|left|right"
              height="23"
              layout="bottomleft"
-             left="0"			
+             left="0"
              mouse_opaque="false"
              name="save_as_btn_lp"
              auto_resize="true"
-             width="154">
+             width="151">
                 <button
                  follows="bottom|left|right"
                  height="23"
@@ -464,17 +464,17 @@
                  left="1"
                  name="save_as_button"
                  top="0"
-                 width="153" />
+                 width="150" />
             </layout_panel>
             <layout_panel
              follows="bottom|left|right"
              height="23"
              layout="bottomleft"
-             left_pad="3"			
+             left="0"
              mouse_opaque="false"
              name="revert_btn_lp"
              auto_resize="true"
-             width="152">
+             width="151">
                 <button
                  follows="bottom|left|right"
                  height="23"
@@ -483,7 +483,26 @@
                  left="1"
                  name="revert_button"
                  top="0"
-                 width="148" />
+                 width="150" />
+            </layout_panel>
+            <layout_panel
+             follows="bottom|left|right"
+             height="23"
+             layout="bottomleft"
+             left_pad="3"
+             mouse_opaque="false"
+             name="import_btn_lp"
+             auto_resize="true"
+             width="151">
+                <button
+                 follows="bottom|left|right"
+                 height="23"
+                 label="Import"
+                 layout="topleft"
+                 left="1"
+                 name="import_btn"
+                 top="0"
+                 width="150" />
             </layout_panel>
         </layout_stack>
     </panel>

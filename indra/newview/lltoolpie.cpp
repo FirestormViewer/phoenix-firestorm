@@ -46,7 +46,9 @@
 #include "llkeyboard.h"
 #include "llmediaentry.h"
 #include "llmenugl.h"
+#include "llmeshrepository.h"
 #include "llmutelist.h"
+#include "piemenu.h"	// ## Zi: Pie menu
 #include "llresmgr.h"  // getMonetaryString
 #include "llselectmgr.h"
 #include "lltoolfocus.h"
@@ -61,6 +63,7 @@
 #include "llviewerobjectlist.h"
 #include "llviewerobject.h"
 #include "llviewerparcelmgr.h"
+#include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llviewermedia.h"
 #include "llvoavatarself.h"
@@ -69,6 +72,11 @@
 #include "llui.h"
 #include "llweb.h"
 #include "pipeline.h"	// setHighlightObject
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
+#include "llviewernetwork.h"	// <FS:CR> For prim equivilance hiding
 
 extern BOOL gDebugClicks;
 
@@ -106,7 +114,10 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 	mMouseDownY = y;
 
 	//left mouse down always picks transparent
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
+//	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+// [/SL:KB]
 	mPick.mKeyMask = mask;
 
 	mMouseButtonDown = true;
@@ -121,11 +132,17 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	// don't pick transparent so users can't "pay" transparent objects
-	mPick = gViewerWindow->pickImmediate(x, y, FALSE, TRUE);
+//	mPick = gViewerWindow->pickImmediate(x, y, FALSE, TRUE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mPick = gViewerWindow->pickImmediate(x, y, FALSE, TRUE, TRUE);
+// [/SL:KB]
 	mPick.mKeyMask = mask;
 
 	// claim not handled so UI focus stays same
-	if(gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK)
+	// <FS:Ansariel> Enable context/pie menu in mouselook
+	//if(gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK)
+	if(gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK || gSavedSettings.getBOOL("FSEnableRightclickMenuInMouselook"))
+	// </FS:Ansariel>
 	{
 		handleRightClickPick();
 	}
@@ -195,6 +212,15 @@ BOOL LLToolPie::handleLeftClickPick()
 	// If it's a left-click, and we have a special action, do it.
 	if (useClickAction(mask, object, parent))
 	{
+// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+		// Block left-click special actions when fartouch restricted
+		if ( (rlv_handler_t::isEnabled()) && 
+			 (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (!gRlvHandler.canTouch(object, mPick.mObjectOffset)) )
+		{
+			return TRUE;
+		}
+// [/RLVa:KB]
+
 		mClickAction = 0;
 		if (object && object->getClickAction()) 
 		{
@@ -212,7 +238,7 @@ BOOL LLToolPie::handleLeftClickPick()
 			break;
 		case CLICK_ACTION_SIT:
 			{
-				if (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) // agent not already sitting
+				if (isAgentAvatarValid() && !gAgentAvatarp->isSitting() && !gSavedSettings.getBOOL("FSBlockClickSit")) // agent not already sitting
 				{
 					handle_object_sit_or_stand();
 					// put focus in world when sitting on an object
@@ -316,6 +342,14 @@ BOOL LLToolPie::handleLeftClickPick()
 		((object->flagUsePhysics() || (parent && !parent->isAvatar() && parent->flagUsePhysics())) || touchable) 
 		)
 	{
+// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+		// Triggered by left-clicking on a touchable object
+		if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(object, mPick.mObjectOffset)) )
+		{
+			return LLTool::handleMouseDown(x, y, mask);
+		}
+// [/RLVa:KB]
+
 		gGrabTransientTool = this;
 		mMouseButtonDown = false;
 		LLToolMgr::getInstance()->getCurrentToolset()->selectTool( LLToolGrab::getInstance() );
@@ -323,7 +357,9 @@ BOOL LLToolPie::handleLeftClickPick()
 	}
 	
 	LLHUDIcon* last_hit_hud_icon = mPick.mHUDIcon;
-	if (!object && last_hit_hud_icon && last_hit_hud_icon->getSourceObject())
+	// <FS:Ansariel> FIRE-11024: Only open script debug floater if it's a script error
+	//if (!object && last_hit_hud_icon && last_hit_hud_icon->getSourceObject())
+	if (!object && last_hit_hud_icon && last_hit_hud_icon->getScriptError() && last_hit_hud_icon->getSourceObject())
 	{
 		LLFloaterScriptDebug::show(last_hit_hud_icon->getSourceObject()->getID());
 	}
@@ -355,7 +391,8 @@ BOOL LLToolPie::handleLeftClickPick()
 			gViewerWindow->hideCursor();
 			LLToolCamera::getInstance()->setMouseCapture(TRUE);
 			LLToolCamera::getInstance()->pickCallback(mPick);
-			gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
+			if(!gSavedSettings.getBOOL("ClickOnAvatarKeepsCamera"))		// keep camera in place when clicking on ourselves -Zi
+				gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
 
 			return TRUE;
 		}
@@ -430,7 +467,11 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 	{
 	case CLICK_ACTION_SIT:
 		{
-			if (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) // not already sitting?
+//			if (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) // not already sitting?
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Modified: RLVa-1.2.0g
+			if ( (isAgentAvatarValid() && !gAgentAvatarp->isSitting()) && 
+				 ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(object, LLToolPie::getInstance()->getHoverPick().mObjectOffset))) )
+// [/RLVa:KB]
 			{
 				cursor = UI_CURSOR_TOOLSIT;
 			}
@@ -455,7 +496,8 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 			if ((object && object->flagTakesMoney())
 				|| (parent && parent->flagTakesMoney()))
 			{
-				cursor = UI_CURSOR_TOOLBUY;
+				//cursor = UI_CURSOR_TOOLBUY;  FIRESTORM - pay cursor is separate from buy cursor
+				cursor = UI_CURSOR_TOOLPAY;
 			}
 		}
 		break;
@@ -540,9 +582,25 @@ void LLToolPie::selectionPropertiesReceived()
 
 BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
-	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE);
+//	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+// [/SL:KB]
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
+// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+	// Block all special click action cursors when:
+	//   - @fartouch=n restricted and the object is out of range
+	//   - @interact=n restricted and the object isn't a HUD attachment
+	if ( (object) && (rlv_handler_t::isEnabled()) && 
+		( ((gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH))) && (!gRlvHandler.canTouch(object, mHoverPick.mObjectOffset)) || 
+		  ((gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) && (!object->isHUDAttachment())) ) )
+	{
+		gViewerWindow->setCursor(UI_CURSOR_ARROW);
+		return TRUE;
+	}
+// [/RLVa:KB]
+
 	if (object)
 	{
 		parent = object->getRootEdit();
@@ -577,6 +635,13 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 			gViewerWindow->setCursor(UI_CURSOR_ARROW);
 		}
 	}
+// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.1.0l
+	else if ( (object) && (rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(object)) )
+	{
+		// Block showing the "grab" or "touch" cursor if we can't touch the object (@fartouch=n is handled above)
+		gViewerWindow->setCursor(UI_CURSOR_ARROW);
+	}
+// [/RLVa:KB]
 	else if (inCameraSteerMode())
 	{
 		steerCameraWithMouse(x, y);
@@ -585,7 +650,10 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	else
 	{
 		// perform a separate pick that detects transparent objects since they respond to 1-click actions
-		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE);
+//		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+// [/SL:KB]
 
 		LLViewerObject* click_action_object = click_action_pick.getObject();
 
@@ -596,7 +664,13 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 			gViewerWindow->setCursor(cursor);
 			lldebugst(LLERR_USER_INPUT) << "hover handled by LLToolPie (inactive)" << llendl;
 		}
-		
+// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.1.0l
+		else if ( (object) && (rlv_handler_t::isEnabled()) && (!gRlvHandler.canTouch(object)) )
+		{
+			// Block showing the "grab" or "touch" cursor if we can't touch the object (@fartouch=n is handled above)
+			gViewerWindow->setCursor(UI_CURSOR_ARROW);
+		}
+// [/RLVa:KB]
 		else if ((object && !object->isAvatar() && object->flagUsePhysics()) 
 				 || (parent && !parent->isAvatar() && parent->flagUsePhysics()))
 		{
@@ -936,6 +1010,18 @@ BOOL LLToolPie::handleTooltipLand(std::string line, std::string tooltip_msg)
 
 BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string line, std::string tooltip_msg)
 {
+	// <FS:Ansariel> FIRE-9522: Crashfix
+	if (!hover_object)
+	{
+		return TRUE;
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Advanced object tooltips
+	const char* const DEFAULT_DESC = "(No Description)";
+	static LLCachedControl<bool> advancedToolTip(gSavedSettings, "FSAdvancedTooltips");
+	// </FS:Ansariel> Advanced object tooltips
+
 	if ( hover_object->isHUDAttachment() )
 	{
 		// no hover tips for HUD elements, since they can obscure
@@ -971,10 +1057,34 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 		{
 			// Try to get display name + username
 			std::string final_name;
+
+			// Build group prefix -Zi
+			std::string group_title;
+			if (gSavedSettings.getBOOL("FSShowGroupTitleInTooltip"))
+			{
+				LLNameValue* group=hover_object->getNVPair("Title");
+				if(group)
+				{
+					group_title=group->getString();
+					if(!group_title.empty())
+						group_title+="\n";
+				}
+			}
+
 			LLAvatarName av_name;
 			if (LLAvatarNameCache::get(hover_object->getID(), &av_name))
 			{
-				final_name = av_name.getCompleteName();
+//				final_name = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+// [/RLVa:KB]
+				// <FS:Zi> Make sure group title gets added to the tool tip. This is done separately to
+				//         the RLVa code to prevent this change from getting lost in future RLVa merges
+				if(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				{
+					final_name=group_title+final_name;
+				}
+				// </FS:Zi>
 			}
 			else
 			{
@@ -983,17 +1093,35 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 
 			// *HACK: We may select this object, so pretend it was clicked
 			mPick = mHoverPick;
-			LLInspector::Params p;
-			p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
-			p.message(final_name);
-			p.image.name("Inspector_I");
-			p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
-			p.visible_time_near(6.f);
-			p.visible_time_far(3.f);
-			p.delay_time(gSavedSettings.getF32("AvatarInspectorTooltipDelay"));
-			p.wrap(false);
-			
-			LLToolTipMgr::instance().show(p);
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.2a) | Added: RLVa-1.2.0e
+			if ( (!rlv_handler_t::isEnabled()) || 
+				 ( (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ) )
+			{
+// [/RLVa:KB]
+				LLInspector::Params p;
+				p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
+				p.message(final_name);
+				// <FS:Ansariel> Get rid of the "i"-button on advanced hovertips
+				//p.image.name("Inspector_I");
+				if (!advancedToolTip)
+				{
+					p.image.name("Inspector_I");
+				}
+				// </FS:Ansariel>
+				p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
+				p.visible_time_near(6.f);
+				p.visible_time_far(3.f);
+				p.delay_time(gSavedSettings.getF32("AvatarInspectorTooltipDelay"));
+				p.wrap(false);
+				
+				LLToolTipMgr::instance().show(p);
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.2a) | Added: RLVa-1.2.0e
+			}
+			else
+			{
+				LLToolTipMgr::instance().show(final_name);
+			}
+// [/RLVa:KB]
 		}
 	}
 	else
@@ -1035,6 +1163,150 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			{
 				tooltip_msg.append( nodep->mName );
 			}
+
+			// <FS:Ansariel> Advanced object tooltips
+			if (advancedToolTip)
+			{
+				// Set description
+				if (!nodep->mDescription.empty() && nodep->mDescription != DEFAULT_DESC)
+				{
+					tooltip_msg.append("\n" + nodep->mDescription);
+				}
+
+				// Set owner name
+				std::string full_name;
+			
+				if (nodep->mValid)
+				{
+					LLUUID owner = nodep->mPermissions->getOwner();
+					if (owner.notNull())
+					{
+						LLAvatarName av_name;
+						if (LLAvatarNameCache::get(owner, &av_name))
+						{
+							full_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+						}
+						else
+						{
+							full_name = LLTrans::getString("LoadingData");
+
+							// If we don't have the avatar name already, let the
+							// avatar name cache retrieve it and simply invoke
+							// us again after it received the name.
+							std::string l;
+							std::string m;
+
+							// <FS:ND> FIRE-10276; handleTooltipObject can be called during name resolution (LLAvatarNameCache), then hover_object can lon gbe destroyed and the pointer invalid.
+
+							// mNamecacheConnections.push_back( LLAvatarNameCache::get(owner, boost::bind(&LLToolPie::handleTooltipObject, this, hover_object, l, m)) );
+
+							LLUUID id( hover_object->getID() );
+							mNamecacheConnections.push_back( LLAvatarNameCache::get(owner, boost::bind(&LLToolPie::handleTooltipObjectById, this, id, l, m)) );
+
+							// <FS:ND>
+						}
+
+						// Owner name
+						tooltip_msg.append("\n" + LLTrans::getString("TooltipOwner") + " " + full_name);
+					}
+				}
+
+				// Permission flags
+				LLViewerObject* parentobject = (LLViewerObject*)hover_object->getParent();
+				std::string permissionsline;
+				if (hover_object->flagScripted())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagScript") + " ";
+				}
+				if (hover_object->flagUsePhysics())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagPhysics") + " ";
+				}
+				if (hover_object->flagHandleTouch() || (parentobject && parentobject->flagHandleTouch()))
+				{
+					permissionsline += LLTrans::getString("TooltipFlagTouch") + " ";
+				}
+				if (hover_object->flagTakesMoney() || (parentobject && parentobject->flagTakesMoney()))
+				{
+					permissionsline += LLTrans::getString("TooltipFlagL$") + " ";
+				}
+				if (hover_object->flagAllowInventoryAdd())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagDropInventory") + " ";
+				}
+				if (hover_object->flagPhantom())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagPhantom") + " ";
+				}
+				if (hover_object->flagTemporaryOnRez())
+				{
+					permissionsline += LLTrans::getString("TooltipFlagTemporary") + " ";
+				}
+				if (!permissionsline.empty())
+				{
+					permissionsline = "\n" + permissionsline.substr(0, permissionsline.length() - 1);
+				}
+				tooltip_msg += permissionsline + "\n";
+
+				LLStringUtil::format_map_t args;
+
+				// Get prim count
+				S32 prim_count = LLSelectMgr::getInstance()->getHoverObjects()->getObjectCount();				
+				args["COUNT"] = llformat("%d", prim_count);
+				tooltip_msg.append("\n" + LLTrans::getString("TooltipPrimCount", args));
+
+				// Display the PE weight for an object if mesh is enabled
+				if (gMeshRepo.meshRezEnabled())
+				{
+					// Ansariel: What a bummer! PE is only available for
+					//           objects in the same region as you!
+					if (hover_object->getRegion() && gAgent.getRegion() &&
+						hover_object->getRegion()->getRegionID() == gAgent.getRegion()->getRegionID())
+					{
+						S32 link_cost = LLSelectMgr::getInstance()->getHoverObjects()->getSelectedLinksetCost();
+						if (link_cost > 0)
+						{
+							args.clear();
+							args["PEWEIGHT"] = llformat("%d", link_cost);
+							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalent", args));
+						}
+/// <FS:CR> Don't show loading on vanila OpenSim (some grids have it, not not vanilla) If they have it, it will
+/// show eventually
+#ifdef OPENSIM
+						else if (LLGridManager::getInstance()->isInOpenSim())
+						{
+							// Do nothing at all.
+						}
+#endif
+// </FS:CR>
+						else
+						{
+							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentLoading"));
+						}
+					}
+					else
+					{
+						tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalentUnavailable"));
+					}
+				}
+
+				// Get position
+				LLViewerRegion* region = gAgent.getRegion();
+				if (region)
+				{
+					LLVector3 relPositionObject = region->getPosRegionFromGlobal(hover_object->getPositionGlobal());
+					args.clear();
+					args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
+					tooltip_msg.append("\n" + LLTrans::getString("TooltipPosition", args));
+
+					// Get distance
+					F32 distance = (relPositionObject - region->getPosRegionFromGlobal(gAgent.getPositionGlobal())).magVec();
+					args.clear();
+					args["DISTANCE"] = llformat("%.02f", distance);
+					tooltip_msg.append("\n" + LLTrans::getString("TooltipDistance", args));
+				}
+			}
+			// </FS:Ansariel> Advanced object tooltips
 			
 			bool has_media = false;
 			bool is_time_based_media = false;
@@ -1096,22 +1368,38 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			{
 				// We may select this object, so pretend it was clicked
 				mPick = mHoverPick;
-				LLInspector::Params p;
-				p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
-				p.message(tooltip_msg);
-				p.image.name("Inspector_I");
-				p.click_callback(boost::bind(showObjectInspector, hover_object->getID(), mHoverPick.mObjectFace));
-				p.time_based_media(is_time_based_media);
-				p.web_based_media(is_web_based_media);
-				p.media_playing(is_media_playing);
-				p.click_playmedia_callback(boost::bind(playCurrentMedia, mHoverPick));
-				p.click_homepage_callback(boost::bind(VisitHomePage, mHoverPick));
-				p.visible_time_near(6.f);
-				p.visible_time_far(3.f);
-				p.delay_time(gSavedSettings.getF32("ObjectInspectorTooltipDelay"));
-				p.wrap(false);
-				
-				LLToolTipMgr::instance().show(p);
+// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.1g) | Modified: RLVa-1.2.1g
+				if ( (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) ||
+					 (gRlvHandler.canTouch(hover_object, mHoverPick.mObjectOffset)) )
+				{
+// [/RLVa:KB]
+					LLInspector::Params p;
+					p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
+					p.message(tooltip_msg);
+					// Ansariel: Get rid of the useless button!
+					if (!advancedToolTip)
+					{
+						p.image.name("Inspector_I");
+					}
+					p.click_callback(boost::bind(showObjectInspector, hover_object->getID(), mHoverPick.mObjectFace));
+					p.time_based_media(is_time_based_media);
+					p.web_based_media(is_web_based_media);
+					p.media_playing(is_media_playing);
+					p.click_playmedia_callback(boost::bind(playCurrentMedia, mHoverPick));
+					p.click_homepage_callback(boost::bind(VisitHomePage, mHoverPick));
+					p.visible_time_near(6.f);
+					p.visible_time_far(3.f);
+					p.delay_time(gSavedSettings.getF32("ObjectInspectorTooltipDelay"));
+					p.wrap(false);
+					
+					LLToolTipMgr::instance().show(p);
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+				}
+				else
+				{
+					LLToolTipMgr::instance().show(tooltip_msg);
+				}
+// [/RLVa:KB]
 			}
 		}
 	}
@@ -1123,6 +1411,11 @@ BOOL LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
 {
 	if (!LLUI::sSettingGroups["config"]->getBOOL("ShowHoverTips")) return TRUE;
 	if (!mHoverPick.isValid()) return TRUE;
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
+#ifdef RLV_EXTENSION_CMD_INTERACT
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) return TRUE;
+#endif // RLV_EXTENSION_CMD_INTERACT
+// [/RLVa:KB]
 
 	LLViewerObject* hover_object = mHoverPick.getObject();
 	
@@ -1310,7 +1603,11 @@ void LLToolPie::handleDeselect()
 
 LLTool* LLToolPie::getOverrideTool(MASK mask)
 {
-	if (gSavedSettings.getBOOL("EnableGrab"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (gSavedSettings.getBOOL("EnableGrab"))
+	static LLCachedControl<bool> enableGrab(gSavedSettings, "EnableGrab");
+	if (enableGrab)
+	// </FS:Ansariel>
 	{
 		if (mask == MASK_CONTROL)
 		{
@@ -1381,7 +1678,14 @@ static void handle_click_action_play()
 			break;
 
 		default:
-			LLViewerParcelMedia::play(parcel);
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterMediaUrl(parcel);
+			}
+			else
+			{
+				LLViewerParcelMedia::play(parcel);
+			}
 			break;
 	}
 }
@@ -1598,6 +1902,11 @@ BOOL LLToolPie::handleRightClickPick()
 	{
 		LLParcelSelectionHandle selection = LLViewerParcelMgr::getInstance()->selectParcelAt( mPick.mPosGlobal );
 		gMenuHolder->setParcelSelection(selection);
+		// ## Zi: Pie menu
+		if(gSavedSettings.getBOOL("UsePieMenu"))
+			gPieMenuLand->show(x, y);
+		// ## Zi: Pie menu
+		else
 		gMenuLand->show(x, y);
 
 		showVisualContextMenuEffect();
@@ -1605,14 +1914,30 @@ BOOL LLToolPie::handleRightClickPick()
 	}
 	else if (mPick.mObjectID == gAgent.getID() )
 	{
-		if(!gMenuAvatarSelf) 
+		// ## Zi: Pie menu
+		if(gSavedSettings.getBOOL("UsePieMenu"))
 		{
-			//either at very early startup stage or at late quitting stage,
-			//this event is ignored.
-			return TRUE ;
-		}
+			if(!gPieMenuAvatarSelf)
+			{
+				//either at very early startup stage or at late quitting stage,
+				//this event is ignored.
+				return TRUE ;
+			}
 
-		gMenuAvatarSelf->show(x, y);
+			gPieMenuAvatarSelf->show(x, y);
+		}
+		// ## Zi: Pie menu
+		else
+		{
+			if(!gMenuAvatarSelf)
+			{
+				//either at very early startup stage or at late quitting stage,
+				//this event is ignored.
+				return TRUE ;
+			}
+
+			gMenuAvatarSelf->show(x, y);
+		}
 	}
 	else if (object)
 	{
@@ -1647,19 +1972,63 @@ BOOL LLToolPie::handleRightClickPick()
 				mute_msg = LLTrans::getString("MuteAvatar");
 			}
 
-			if (is_other_attachment)
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
+			// Don't show the context menu on empty selection when fartouch restricted [see LLToolSelect::handleObjectSelection()]
+			if ( (!rlv_handler_t::isEnabled()) || (!LLSelectMgr::getInstance()->getSelection()->isEmpty()) ||
+				 (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) )
 			{
-				gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
-				gMenuAttachmentOther->show(x, y);
+// [/RLVa:KB]
+				if (is_other_attachment)
+				{
+					// <FS:Zi> Pie menu
+					// gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+					// gMenuAttachmentOther->show(x, y);
+					if(gSavedSettings.getBOOL("UsePieMenu"))
+					{
+						gPieMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+						gPieMenuAttachmentOther->show(x, y);
+					}
+					else
+					{
+						// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
+						// gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+						gMenuAttachmentOther->show(x, y);
+					}
+					// </FS:Zi>
+				}
+				else
+				{
+					// <FS:Zi> Pie menu
+					// gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+					// gMenuAvatarOther->show(x, y);
+					if(gSavedSettings.getBOOL("UsePieMenu"))
+					{
+						gPieMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+						gPieMenuAvatarOther->show(x, y);
+					}
+					else
+					{
+						// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
+						// gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+						gMenuAvatarOther->show(x, y);
+					}
+					// </FS:Zi>
+				}
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
 			}
 			else
 			{
-				gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
-				gMenuAvatarOther->show(x, y);
+				make_ui_sound("UISndInvalidOp");
 			}
+// [/RLVa:KB]
 		}
 		else if (object->isAttachment())
 		{
+			// ## Zi: Pie menu
+			if(gSavedSettings.getBOOL("UsePieMenu"))
+				gPieMenuAttachmentSelf->show(x, y);
+			// ## Zi: Pie menu
+			else
 			gMenuAttachmentSelf->show(x, y);
 		}
 		else
@@ -1681,10 +2050,37 @@ BOOL LLToolPie::handleRightClickPick()
 				mute_msg = LLTrans::getString("MuteObject2");
 			}
 			
-			gMenuHolder->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
-			gMenuObject->show(x, y);
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.el) | Modified: RLVa-1.1.0l
+			// Don't show the pie menu on empty selection when fartouch/interaction restricted
+			// (not entirely accurate in case of Tools / Select Only XXX [see LLToolSelect::handleObjectSelection()]
+			if ( (!rlv_handler_t::isEnabled()) || (!LLSelectMgr::getInstance()->getSelection()->isEmpty()) ||
+				 (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) )
+			{
+// [/RLVa:KB]
+				// <FS:Zi> Pie menu
+				// gMenuHolder->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
+				// gMenuObject->show(x, y);
+				if(gSavedSettings.getBOOL("UsePieMenu"))
+				{
+					gPieMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
+					gPieMenuObject->show(x, y);
+				}
+				else
+				{
+					// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
+					// gMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
+					gMenuObject->show(x, y);
+				}
+				// </FS:Zi>
 
-			showVisualContextMenuEffect();
+				showVisualContextMenuEffect();
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.el) | Modified: RLVa-1.1.0l
+			}
+			else
+			{
+				make_ui_sound("UISndInvalidOp");
+			}
+// [/RLVa:KB]
 		}
 	}
 	else if (mPick.mParticleOwnerID.notNull())
@@ -1872,3 +2268,32 @@ void LLToolPie::steerCameraWithMouse(S32 x, S32 y)
 	mMouseSteerX = x;
 	mMouseSteerY = y;
 }
+
+// <FS:ND> Keep track of name resolutions we made and delete them if needed to avoid crashing if this instance dies.
+LLToolPie::~LLToolPie()
+{
+	std::vector< tNamecacheConnection >::iterator itr = mNamecacheConnections.begin();
+	std::vector< tNamecacheConnection >::iterator itrEnd = mNamecacheConnections.end();
+
+	while( itr != itrEnd )
+	{
+		itr->disconnect();
+		++itr;
+	}
+}
+// </FS:ND>
+
+// <FS:ND> FIRE-10276; handleTooltipObject can be called during name resolution (LLAvatarNameCache), then hover_object can lon gbe destroyed and the pointer invalid.
+// To circumvent this just pass the id and try to fetch the object from gObjectList.
+
+BOOL LLToolPie::handleTooltipObjectById( LLUUID hoverObjectId, std::string line, std::string tooltip_msg)
+{
+	LLViewerObject* pObject = gObjectList.findObject( hoverObjectId );
+
+	if( !pObject )
+		return TRUE;
+
+	return handleTooltipObject( pObject, line, tooltip_msg );
+}
+
+// </FS:ND>

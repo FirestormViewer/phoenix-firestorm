@@ -27,6 +27,16 @@
 #ifndef LL_LLKDUMEM_H
 #define LL_LLKDUMEM_H
 
+// <FS:ND> Disable warning 4263/4264
+// warning C4263: 'bool jpx_input_box::open_as(jpx_fragment_list,jp2_data_references,jp2_family_src *,kdu_uint32)' : member function does not override any base class virtual member function
+// warning C4264: 'bool jp2_input_box::open_as(kdu_uint32,jp2_family_src *,jp2_locator,jp2_locator,kdu_long)' : no override available for virtual member function from base 'jp2_input_box'; function is hidden
+#ifdef LL_WINDOWS
+#pragma warning(push)
+#pragma warning(disable:4263)
+#pragma warning(disable:4264)
+#endif
+// </FS:ND>
+
 // Support classes for reading and writing from memory buffers in KDU
 #define KDU_NO_THREADS
 #include "kdu_image.h"
@@ -37,6 +47,12 @@
 #include "kdu_sample_processing.h"
 #include "image_local.h"
 #include "stdtypes.h"
+
+// <FS:ND> Disable warning 4263/4264
+#ifdef LL_WINDOWS
+#pragma warning(pop)
+#endif
+// </FS:ND>
 
 class LLKDUMemSource: public kdu_compressed_source
 {

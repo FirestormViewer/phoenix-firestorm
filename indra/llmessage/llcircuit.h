@@ -276,6 +276,11 @@ protected:
 
 	const F32 mHeartbeatInterval;
 	const F32 mHeartbeatTimeout;
+
+	// <FS:ND> Throttle to prevent log spam.
+	F64 mLastPacketLog;
+	U32 mLogMessagesSkipped;
+	// </FS:ND>
 };
 
 

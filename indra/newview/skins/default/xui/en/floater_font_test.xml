@@ -8,7 +8,7 @@
  min_width="154"
  name="contents"
  help_topic="contents"
- title="FONT TEST"
+ title="Font Fest"
  width="500">
     <text
      type="string"
@@ -336,6 +336,18 @@
      layout="topleft"
      left="16">
         Helvetica size=Large style=BOLD|ITALIC
+    </text>
+	<text
+		type="string"
+		length="1"
+		bottom_delta="20"
+		follows="left|top|right"
+		font="Script"
+		font.size="Large"
+		height="16"
+		layout="topleft"
+		left="16">
+        Script
     </text>
 <!--
     <text

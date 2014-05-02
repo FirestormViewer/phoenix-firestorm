@@ -39,6 +39,8 @@
 #include "httpheaders.h"
 #include "httphandler.h"
 
+#include <boost/unordered_map.hpp>
+
 #define LLCONVEXDECOMPINTER_STATIC 1
 
 #include "llconvexdecomposition.h"
@@ -568,7 +570,10 @@ public:
 	typedef std::map<LLVolumeParams, std::set<LLUUID> > mesh_load_map;
 	mesh_load_map mLoadingMeshes[4];
 	
-	typedef std::map<LLUUID, LLMeshSkinInfo> skin_map;
+	// <FS:Ansariel> Faster lookup
+	//typedef std::map<LLUUID, LLMeshSkinInfo> skin_map;
+	typedef boost::unordered_map<LLUUID, LLMeshSkinInfo, FSUUIDHash> skin_map;
+	// </FS:Ansariel>
 	skin_map mSkinMap;
 
 	typedef std::map<LLUUID, LLModel::Decomposition*> decomposition_map;

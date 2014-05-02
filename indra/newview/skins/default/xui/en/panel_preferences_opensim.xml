@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="440"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Opensim"
+ name="opensim_panel">
+<tab_container
+ label="Opensim"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-1"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+  <panel
+  border="false"
+  follows="all"
+  height="440"
+  layout="topleft"
+  left="0"
+  top="0"
+  width="540"
+  label="Grid Manager"
+  name="grid_management_panel">
+    <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="12"
+      layout="topleft"
+      left="30"
+      name="add_grid_text"
+      top="12"
+      width="400">
+      Add new grid
+    </text>
+    <line_editor
+      control_name="OpensimPrefsAddGrid"
+      border_style="line"
+      border_thickness="1"
+      follows="left|top"
+      font="SansSerif"
+      height="19"
+      layout="topleft"
+      left="50"
+      max_length_chars="4096"
+      name="add_grid"
+      top_pad="5"
+	  label="Enter a LoginURI"
+      width="270" />
+    <button
+      follows="left|top"
+      height="19"
+      label="Clear"
+      label_selected="Clear"
+      layout="topleft"
+      left_pad="2"
+      name="clear_grid"
+      top_delta="0"
+      width="50">
+      <button.commit_callback
+      function="Pref.ClearGrid" />
+    </button>
+    <button
+      follows="left|top"
+      height="19"
+      label="Apply"
+      layout="topleft"
+      left_pad="2"
+      name="apply_new_grid"
+      top_delta="0"
+      width="50">
+      <button.commit_callback
+        function="Pref.AddGrid" />
+    </button>
+    <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="12"
+      layout="topleft"
+      left="30"
+      name="add_grid_text"
+      top_pad="10"
+      width="400">
+      Manage Grids
+    </text>
+    <scroll_list
+      height="125"
+      layout="topleft"
+      left="50"
+      name="grid_list"
+      draw_heading="true"
+      top="104"
+      width="370">
+        <scroll_list.columns
+          label="Grid name"
+          name="grid_label"
+          width="150" />
+        <scroll_list.columns
+          dynamic_width="true"
+          label="Login URI"
+          name="login_uri" />
+    </scroll_list>
+      <button
+      follows="left|top"
+      height="19"
+      label="Refresh"
+      layout="topleft"
+      left_pad="5"
+      name="refresh_grid"
+      top_delta="5"
+      width="75">
+      <button.commit_callback
+        function="Pref.RefreshGrid" />
+    </button>
+    <button
+      follows="left|top"
+      height="19"
+      label="Remove"
+      layout="topleft"
+      left_delta="0"
+      name="remove_grid"
+      top_pad="5"
+      width="75">
+      <button.commit_callback
+        function="Pref.RemoveGrid" />
+    </button>
+	  <panel
+		  border="true"
+		  follows="all"
+		  height="440"
+		  layout="topleft"
+		  left="0"
+		  top="210"
+		  width="540"
+		  label=""
+		  name="advanced_grid_panel">
+		  <text
+			  top="12"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="grid_name_text"
+			  width="130">
+			  Grid Name:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="name_edit"
+		  top_delta="0"
+		  width="300" />
+		  <check_box
+			visible="false"
+			control_name="FSEditGrid"
+			height="16"
+			label=""
+			follows="left|top"
+			layout="topleft"
+			left_pad="4"
+			name="enable_lock"
+			width="16" />
+		  <icon
+		  visible="false"
+		  height="14"
+		  image_name="Locked_Icon"
+		  follows="left|top"
+		  layout="topleft"
+		  left_pad="2"
+		  top_delta="-2"
+		  mouse_opaque="true"
+		  name="lock"
+		  width="10" />
+		  <text
+			  top_pad="6"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="grid_uri_text"
+			  width="130">
+			  Grid URI:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="grid_uri_edit"
+		  top_delta="0"
+		  width="300" />
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="login_page_text"
+			  width="130">
+			  Login Page:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="login_page_edit"
+		  top_delta="0"
+		  width="300" />
+		  <button
+			  visible="false"
+			  enabled_control="FSEditGrid"
+			  follows="left|top"
+			  height="16"
+			  label="Save"
+			  layout="topleft"
+			  left_pad="2"
+			  name="save_grid"
+			  top_delta="0"
+			  width="45">
+			  <button.commit_callback
+			  function="Pref.SaveGrid" />
+		  </button>
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="helper_uri_text"
+			  width="130">
+			  Helper URI:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="helper_uri_edit"
+		  top_delta="0"
+		  width="300" />
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="website_text"
+			  width="130">
+			  Grid Website:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="website_edit"
+		  top_delta="0"
+		  width="300" />
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="support_text"
+			  width="130">
+			  Grid Support:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="support_edit"
+		  top_delta="0"
+		  width="300" />
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="register_text"
+			  width="130">
+			  Grid Registration:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="register_edit"
+		  top_delta="0"
+		  width="300" />
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="password_text"
+			  width="130">
+			  Grid Password URI:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="password_edit"
+		  top_delta="0"
+		  width="300" />
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="search_text"
+			  width="130">
+			  Grid Search:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="search_edit"
+		  top_delta="0"
+		  width="300" />
+		  <text
+			  top_pad="2"
+			  follows="left|top"
+			  layout="topleft"
+			  left="50"
+			  height="16"
+			  name="message_text"
+			  width="130">
+			  Grid Message URI:
+		  </text>
+		  <line_editor
+		  enabled_control="FSEditGrid"
+		  follows="left|top|right"
+		  height="16"
+		  layout="topleft"
+		  left_pad="5"
+		  name="message_edit"
+		  top_delta="0"
+		  width="300" />
+	  </panel>
+  </panel>
+  <panel
+	border="false"
+	follows="all"
+	height="440"
+	layout="topleft"
+	left="0"
+	top="0"
+	width="540"
+	label="Miscellaneous"
+	name="opensim_misc_panel">
+	  <check_box
+      control_name="FSOpenSimLightshare"
+      height="16"
+      initial_value="true"
+      label="Enable region Lightshare settings"
+      layout="topleft"
+      left="30"
+      name="Lightshare"
+      top="12"
+      width="256" />
+	  <check_box
+      control_name="DebugSearch"
+      height="16"
+      initial_value="false"
+      label="Debug Search"
+      layout="topleft"
+      left="30"
+      name="DebugSearch"
+      top_pad="1"
+      width="256" />
+	  <text
+		  type="string"
+		  length="1"
+		  follows="left|top"
+		  height="12"
+		  layout="topleft"
+		  left="50"
+		  name="search_url_debug_text"
+		  top_pad="5"
+		  width="400">
+		  Override current search url: (no override if empty)
+	  </text>
+	  <line_editor
+      control_name="SearchURLDebug"
+      enabled_control="DebugSearch"
+      border_style="line"
+      border_thickness="1"
+      follows="left|top"
+      font="SansSerif"
+      height="19"
+      layout="topleft"
+      left="50"
+      max_length_chars="4096"
+      name="search_url_debug"
+      top_pad="5"
+      width="270" />
+	  <button
+		  enabled_control="DebugSearch"
+		  follows="left|top"
+		  height="19"
+		  label="Clear"
+		  label_selected="Clear"
+		  layout="topleft"
+		  left_pad="2"
+		  name="clear_search_url_debug"
+		  top_delta="0"
+		  width="50">
+		  <button.commit_callback
+		  function="Pref.ClearDebugSearchURL" />
+	  </button>
+	  <button
+		  enabled_control="DebugSearch"
+		  follows="left|top"
+		  height="19"
+		  label="Pick"
+		  layout="topleft"
+		  left_pad="2"
+		  name="pick_current_search_url"
+		  top_delta="0"
+		  width="50">
+		  <button.commit_callback
+		  function="Pref.PickDebugSearchURL" />
+	  </button>
+  </panel>
+</tab_container>
+</panel>

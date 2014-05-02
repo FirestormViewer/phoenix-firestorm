@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ positioning="centered"
  legacy_header_height="18"
  can_resize="true"
  default_tab_group="1"
@@ -9,7 +10,8 @@
  min_width="234"
  name="preview notecard"
  help_topic="preview_notecard"
- title="NOTECARD:"
+ save_rect="true"
+ title="Notecard:"
  width="400">
     <floater.string
      name="no_object">
@@ -54,7 +56,7 @@
      height="22"
      layout="topleft"
      left_pad="0"
-     max_length_bytes="127"
+     max_length="127"
      name="desc"
      width="296" />
     <text_editor

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+	name="panel_radar"
+	width="327"
+	height="333">
+	<string name="FlagsColumnType" value="icon"/>
+	<string name="FlagsColumnValue_0" value=""/>
+	<string name="FlagsColumnValue_1" value="Payment_Info_Filled"/>
+	<string name="FlagsColumnValue_2" value="Payment_Info_Used"/>
+	<string
+	 name="MiniMapToolTipMsg"
+	 value="[REGION] (Double-click to open Map, shift-drag to pan)"/>
+	<string
+	 name="AltMiniMapToolTipMsg"
+	 value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+	<string
+	 name="avatar_name_count"
+	 value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel
+	 background_opaque="false"
+	 background_visible="false"
+	 follows="all"
+	 height="333"
+	 layout="topleft"
+	 left="0"
+	 name="nearby_panel"
+	 top="0"
+	 width="327">
+		<layout_stack
+		 orientation="vertical"
+		 clip="true"
+		 follows="all"
+		 layout="topleft"
+		 top="0"
+		 left="0"
+		 height="330"
+		 width="327"
+		 mouse_opaque="false"
+		 name="radar_ls"
+		 auto_resize="false"
+		 user_resize="true">
+			<layout_panel
+			 layout="topleft"
+			 top="0"
+			 left="3"
+			 height="140"
+			 width="321"
+			 min_dim="140"
+			 follows="top"
+			 mouse_opaque="false"
+			 visibility_control="ShowRadarMinimap"
+			 name="minimaplayout"
+			 auto_resize="false"
+			 user_resize="true">
+				<net_map
+				 bg_color="NetMapBackgroundColor"
+				 visibility_control="ShowRadarMinimap"
+				 follows="all"
+				 layout="topleft"
+				 left="3"
+				 mouse_opaque="false"
+				 name="Net Map"
+				 width="316"
+				 height="140"
+				 top="0"/>
+			</layout_panel>
+
+			<layout_panel
+			 layout="topleft"
+			 top="0"
+			 left="0"
+			 height="166"
+			 width="327"
+			 mouse_opaque="false"
+			 follows="all"
+			 name="radarlayout">
+				<radar_list
+				 draw_heading="true"
+				 follows="all"
+				 height="166"
+				 layout="topleft"
+				 left="0"
+				 top_pad="0"
+				 sort_column="0"
+				 sort_ascending="true"
+				 name="radar_list"
+				 draw_stripes="true"
+				 multi_select="true"
+				 width="327">
+					<radar_list.columns
+					 label="Name"
+					 name="name"
+					 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
+					 relative_width="0.32"/>
+					<radar_list.columns
+					 label=""
+					 name="voice_level"
+					 tool_tip="Is talking on voice"
+					 relative_width="0.07"/>
+					<radar_list.columns
+					 label="Distance"
+					 name="range"
+					 relative_width="0.15"/>
+					<radar_list.columns
+					 label="Time"
+					 name="seen"
+					 relative_width="0.15"/>
+					<radar_list.columns
+					 label="Age"
+					 name="age"
+					 relative_width="0.1"/>
+					<radar_list.columns
+					 label=""
+					 name="in_region"
+					 tool_tip="Is in the same region"
+					 relative_width="0.03"/>
+					<radar_list.columns
+					 label=""
+					 name="flags"
+					 tool_tip="Payment info status"
+					 relative_width="0.08"/>
+					<radar_list.columns
+					 label="av_id"
+					 name="uuid"
+					 relative_width="0"/>
+				</radar_list>
+			</layout_panel>
+		</layout_stack>
+
+		<!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
+		<panel name="hide_controls" enabled="false" visible="false" left="0" top="0">
+		<panel name="bottom_panel_nearby" enabled="false" visible="false" left="0" top="0">
+			<filter_editor	follows="top|left" height="0" layout="topleft" name="nearby_filter_input"
+							left="0" top="0" width="0" />
+			<menu_button	follows="top|left" height="0" layout="topleft" name="nearby_view_sort_btn"
+							left="0" top="0" width="0" />
+			<button			follows="top|left" height="0" layout="topleft" name="gear_btn"
+							left="0" top="0" width="0" />
+			<menu_button	follows="top|left" height="0" layout="topleft" name="options_btn"
+							left="0" top="0" width="0" />
+			<button			follows="top|left" height="0" layout="topleft" name="add_friend_btn"
+							left="0" top="0" width="0" />
+			<slider			follows="top|left" height="0" layout="topleft" name="NearMeRange"
+							left="0" top="0" width="0" />
+		</panel>
+		</panel>
+	</panel>
+</panel>

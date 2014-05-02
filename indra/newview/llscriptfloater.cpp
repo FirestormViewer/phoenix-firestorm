@@ -43,6 +43,13 @@
 #include "llviewerwindow.h"
 #include "llfloaterimsession.h"
 
+#include "llwindow.h"	// <FS:CR> flashIcon()
+#include "lltoolbarview.h"		// <FS:Zi> script dialogs position
+// <FS:Zi> Dialog Stacking browser
+#include "dialogstack.h"
+#include "llbutton.h"
+// </FS:Zi>
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -69,6 +76,7 @@ LLScriptFloater::LLScriptFloater(const LLSD& key)
 	setMouseDownCallback(boost::bind(&LLScriptFloater::onMouseDown, this));
 	setOverlapsScreenChannel(true);
 	mIsDockedStateForcedCallback = boost::bind(&LLAgentCamera::cameraMouselook, &gAgentCamera);
+	mNoTransparency = gSavedSettings.getBOOL("FSScriptDialogNoTransparency");
 }
 
 bool LLScriptFloater::toggle(const LLUUID& notification_id)
@@ -104,6 +112,10 @@ bool LLScriptFloater::toggle(const LLUUID& notification_id)
 	return true;
 }
 
+/*
+// <FS:Zi> script dialogs position
+// Reimplemented the show() method at the end of this file
+
 LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 {
 	LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
@@ -113,9 +125,47 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
 	floater->setAutoFocus(FALSE);
 
-	if(LLScriptFloaterManager::OBJ_SCRIPT == LLScriptFloaterManager::getObjectType(notification_id))
+	LLScriptFloaterManager::e_object_type floaterType=LLScriptFloaterManager::getObjectType(notification_id);
+
+	// for some reason an inventory offer comes back as OBJ_UNKNOWN -Zi
+	if(floaterType==LLScriptFloaterManager::OBJ_UNKNOWN ||
+	   floaterType==LLScriptFloaterManager::OBJ_SCRIPT)
 	{
 		floater->setSavePosition(true);
+		if(gSavedSettings.getBOOL("ShowScriptDialogsTopRight") ||
+		   gSavedSettings.getBOOL("FSDisableIMChiclets")
+		)
+		{
+			// undock the dialog
+			floater->setDocked(false,true);
+			LLRect pos=floater->getRect();
+
+			S32 width=pos.getWidth();
+			S32 height=pos.getHeight();
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
+								 gViewerWindow->getWorldViewHeightScaled()-height,
+								 width,height);
+			floater->setRect(pos);
+			floater->savePosition();
+		}
+		// do this only for inventory offers -Zi
+		else if(floaterType==LLScriptFloaterManager::OBJ_UNKNOWN)
+		{
+			// undock the dialog
+			floater->setDocked(false,true);
+			LLRect pos=floater->getRect();
+
+			S32 width=pos.getWidth();
+			S32 height=pos.getHeight();
+
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
+								 gViewerWindow->getWorldViewHeightScaled()-height,
+								 width,height);
+
+			floater->setRect(pos);
+			floater->savePosition();
+		}
+
 		floater->restorePosition();
 	}
 	else
@@ -128,6 +178,8 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 
 	return floater;
 }
+// </FS:Zi>
+*/
 
 void LLScriptFloater::setNotificationId(const LLUUID& id)
 {
@@ -172,9 +224,46 @@ void LLScriptFloater::createForm(const LLUUID& notification_id)
 
 	// make floater size fit form size
 	LLRect panel_rect = mScriptForm->getRect();
-	toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
+	// <FS:Zi> Animated dialogs
+	// toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), panel_rect.getHeight() + getHeaderHeight());
+	mDesiredHeight = panel_rect.getHeight() + getHeaderHeight();
+	if (gSavedSettings.getBOOL("FSAnimatedScriptDialogs") &&
+		(gSavedSettings.getS32("ScriptDialogsPosition") == (eDialogPosition)POS_TOP_LEFT ||
+		gSavedSettings.getS32("ScriptDialogsPosition") == (eDialogPosition)POS_TOP_RIGHT))
+	{
+		mCurrentHeight = 0;
+		mStartTime = LLFrameTimer::getElapsedSeconds();
+	}
+	else
+	{
+		mCurrentHeight = mDesiredHeight;
+	}
+	toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, panel_rect.getWidth(), mCurrentHeight);
+	// </FS:Zi>
 	setShape(toast_rect);
+
+	// <FS:Zi> Dialog Stacking browser
+	mScriptForm->getChild<LLButton>("DialogStackButton")->setCommitCallback(boost::bind(&LLScriptFloater::onStackClicked,this));
+
+	if(gSavedSettings.getS32("ScriptDialogsPosition")!=(eDialogPosition) POS_DOCKED)
+	{
+		DialogStack::instance().push(notification_id);
+	}
+	// </FS:Zi>
 }
+
+// <FS:Zi> Dialog Stacking browser
+void LLScriptFloater::onStackClicked()
+{
+	LLFloater* floater=LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater",getNotificationId());
+	if(floater->isFrontmost())
+	{
+		const LLUUID& nextNotification=DialogStack::instance().flip(getNotificationId());
+		floater=LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater",nextNotification);
+	}
+	gFloaterView->bringToFront(floater,TRUE);
+}
+// </FS:Zi>
 
 void LLScriptFloater::onClose(bool app_quitting)
 {
@@ -271,6 +360,22 @@ void LLScriptFloater::restorePosition()
 	}
 }
 
+// <FS:Ansariel> Override base method so we have the option to ignore
+// the global transparency settings and show the script dialog
+// always on opaque background.
+F32 LLScriptFloater::getCurrentTransparency()
+{
+	if (mNoTransparency)
+	{
+		return 1.0;
+	}
+	else
+	{
+		return LLUICtrl::getCurrentTransparency();
+	}
+}
+// </FS:Ansariel>
+
 void LLScriptFloater::onFocusLost()
 {
 	if(getNotificationId().notNull())
@@ -316,9 +421,20 @@ void LLScriptFloater::dockToChiclet(bool dock)
 			bool save = getSavePosition();
 			setSavePosition(false);
 
-			setDockControl(new LLDockControl(chicletp, this, getDockTongue(),
-				LLDockControl::BOTTOM));
-
+			// <FS:Ansariel> Group notices, IMs and chiclets position
+			//setDockControl(new LLDockControl(chicletp, this, getDockTongue(),
+			//	LLDockControl::BOTTOM));
+			if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+			{
+				setDockControl(new LLDockControl(chicletp, this, getDockTongue(),
+					LLDockControl::BOTTOM));
+			}
+			else
+			{
+				setDockControl(new LLDockControl(chicletp, this, getDockTongue(),
+					LLDockControl::TOP));
+			}
+			// </FS:Ansariel> Group notices, IMs and chiclets position
 			setDocked(dock);
 
 			// Restore saving
@@ -365,9 +481,50 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 	// LLDialog can spawn only one instance, LLLoadURL and LLGiveInventory can spawn unlimited number of instances
 	if(OBJ_SCRIPT == obj_type)
 	{
-		// If an Object spawns more-than-one floater, only the newest one is shown. 
-		// The previous is automatically closed.
-		script_notification_map_t::const_iterator it = findUsingObjectId(object_id);
+//		// If an Object spawns more-than-one floater, only the newest one is shown. 
+//		// The previous is automatically closed.
+//		script_notification_map_t::const_iterator it = findUsingObjectId(object_id);
+// [SL:KB] - Patch: UI-ScriptDialog | Checked: 2011-01-17 (Catznip-2.4.0h) | Added: Catznip-2.4.0h
+		script_notification_map_t::const_iterator it = mNotifications.end();
+		switch (gSavedSettings.getS32("ScriptDialogPerObject"))
+		{
+			case 0:			// One script dialog per object (viewer 2 default)
+				{
+					// If an Object spawns more-than-one floater, only the newest one is shown.
+					// The previous is automatically closed.
+					it = findUsingObjectId(object_id);
+				}
+				break;
+			case 1:			// One script dialog per reply channel per object
+				{
+					// We'll allow an object to have more than one script dialog floater open, but we'll limit it to one per chat channel
+					// (in practice a lot of objects open a new listen channel for each new dialog but it still reduces chiclets somewhat)
+					LLNotificationPtr newNotif = LLNotifications::instance().find(notification_id);
+					if (newNotif)
+					{
+						S32 nNewChannel = newNotif->getPayload()["chat_channel"].asInteger();
+						for (it = mNotifications.begin(); it != mNotifications.end(); ++it)
+						{
+							if (it->second == object_id)
+							{
+								LLNotificationPtr curNotif = LLNotifications::instance().find(it->first);
+								if (curNotif)
+								{
+									S32 nCurChannel = curNotif->getPayload()["chat_channel"].asInteger();
+									if (nNewChannel == nCurChannel)
+										break;
+								}
+							}
+						}
+					}
+				}
+				break;
+			case 2:			// Unconstrained
+			default:
+				break;
+		}
+// [/SL:KB]
+
 		if(it != mNotifications.end())
 		{
 			LLChicletPanel * chiclet_panelp = LLChicletBar::getInstance()->getChicletPanel();
@@ -415,6 +572,14 @@ void LLScriptFloaterManager::onAddNotification(const LLUUID& notification_id)
 	data["new_message"] = set_new_message;
 	data["unread"] = 1; // each object has got only one floater
 	mNewObjectSignal(data);
+	
+	// <FS:CR> Flash or bounce the app icon on new script dialog
+	LLWindow* viewer_window = gViewerWindow->getWindow();
+	if (viewer_window && gSavedSettings.getBOOL("FSFlashOnScriptDialog"))
+	{
+		viewer_window->flashIcon(5.f);
+	}
+	// </FS:CR>
 
 	toggleScriptFloater(notification_id, set_new_message);
 }
@@ -437,6 +602,8 @@ void LLScriptFloaterManager::onRemoveNotification(const LLUUID& notification_id)
 		llwarns << "Invalid notification ID" << llendl;
 		return;
 	}
+
+	DialogStack::instance().pop(notification_id);	// <FS:Zi> Dialog Stacking browser
 
 	// remove related chiclet
 	if (LLChicletBar::instanceExists())
@@ -611,6 +778,44 @@ void LLScriptFloaterManager::setFloaterVisible(const LLUUID& notification_id, bo
 	}
 }
 
+// <FS:Zi> script dialogs position
+// Since we can't initialize the member variables in the class itself,
+// we need to do that in the constructor -Zi
+LLScriptFloaterManager::LLScriptFloaterManager()
+:	mNavigationPanelPad(-1),	// The height of the favorite and navigation panels might not be known yet
+	mFavoritesPanelPad(-1)		// so don't fill the values in here yet, but remember to do it at first use
+{
+}
+
+S32 LLScriptFloaterManager::getTopPad()
+{
+	// initialize if needed
+	if(mNavigationPanelPad==-1)
+	{
+		mNavigationPanelPad=LLUI::getRootView()->getChild<LLView>("location_search_layout")->getRect().getHeight();
+	}
+
+	// initialize if needed
+	if(mFavoritesPanelPad==-1)
+	{
+		mFavoritesPanelPad=LLUI::getRootView()->getChild<LLView>("favorite")->getRect().getHeight();
+	}
+
+	S32 pad=0;
+	if (gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+	{
+		pad=mNavigationPanelPad;
+	}
+
+	if (gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
+	{
+		pad+=mFavoritesPanelPad;
+	}
+
+	return pad;
+}
+// </FS:Zi>
+
 //////////////////////////////////////////////////////////////////
 
 bool LLScriptFloater::isScriptTextbox(LLNotificationPtr notification)
@@ -638,5 +843,170 @@ bool LLScriptFloater::isScriptTextbox(LLNotificationPtr notification)
 
 	return false;
 }
+
+// <FS:Zi> Animated dialogs
+void LLScriptFloater::draw()
+{
+	if (mCurrentHeight < mDesiredHeight)
+	{
+		mCurrentHeight = (S32)((LLFrameTimer::getElapsedSeconds() - mStartTime) * 2.5 * (F64)mDesiredHeight);
+
+		if (mCurrentHeight > mDesiredHeight)
+		{
+			mCurrentHeight = mDesiredHeight;
+		}
+
+		LLRect toast_rect=getRect();
+		toast_rect.setLeftTopAndSize(toast_rect.mLeft, toast_rect.mTop, toast_rect.getWidth(), mCurrentHeight);
+		setShape(toast_rect);
+	}
+
+	LLDockableFloater::draw();
+}
+// </FS:Zi>
+
+// <FS:Zi> script dialogs position
+LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
+{
+	LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
+	floater->setNotificationId(notification_id);
+	floater->createForm(notification_id);
+
+	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
+	floater->setAutoFocus(FALSE);
+
+	LLScriptFloaterManager::e_object_type floaterType=LLScriptFloaterManager::getObjectType(notification_id);
+
+	BOOL chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
+
+	LLRect pos = floater->getRect();
+
+	// <FS:PP> FIRE-12037: Inventory Offer Dialog boxes hidden
+	// They should be ALWAYS visible on screen, all of them, not only the most recent one - so use the ScriptDialogsPosition detection as well
+	// Otherwise (after accepting/declining that most recent one) user may not notice, that still has something to click (with chiclets hidden, or just too many of them visible on screen), relog and lost pending inventory offer items
+	// if (floaterType == LLScriptFloaterManager::OBJ_SCRIPT)
+	if (floaterType == LLScriptFloaterManager::OBJ_SCRIPT || floaterType == LLScriptFloaterManager::OBJ_UNKNOWN || floaterType == LLScriptFloaterManager::OBJ_GIVE_INVENTORY)
+	// </FS:PP>
+	{
+		eDialogPosition dialogPos = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
+
+		if (dialogPos == POS_LEGACY)
+		{
+			dialogPos = POS_TOP_RIGHT;
+			if (!gSavedSettings.getBOOL("ShowScriptDialogsTopRight"))
+			{
+				dialogPos = POS_DOCKED;
+			}
+			gSavedSettings.setS32("ScriptDialogsPosition", (S32)dialogPos);
+		}
+
+		if (dialogPos == POS_DOCKED && chicletsDisabled)
+		{
+			dialogPos = POS_TOP_RIGHT;
+		}
+
+		if (dialogPos != POS_DOCKED)
+		{
+			// undock the dialog
+			floater->setDocked(false, true);
+		}
+
+		S32 topPad=LLScriptFloaterManager::instance().getTopPad();
+
+		S32 bottomPad = 0;
+		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->hasButtons())
+		{
+			bottomPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM)->getRect().getHeight();
+		}
+
+		S32 leftPad = 0;
+		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->hasButtons())
+		{
+			leftPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT)->getRect().getWidth();
+		}
+
+		S32 rightPad = 0;
+		if (gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->hasButtons())
+		{
+			rightPad = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_RIGHT)->getRect().getWidth();
+		}
+
+		S32 width = pos.getWidth();
+		S32 height = pos.getHeight();
+
+		floater->setOpenPositioning(LLFloaterEnums::POSITIONING_SPECIFIED);
+
+		switch (dialogPos)
+		{
+			case POS_DOCKED:
+			{
+				floater->dockToChiclet(true);
+				break;
+			}
+			case POS_TOP_LEFT:
+			{
+				pos.setOriginAndSize(leftPad,
+									gViewerWindow->getWorldViewHeightScaled() - height - topPad,
+									width, height);
+				break;
+			}
+			case POS_TOP_RIGHT:
+			{
+				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
+									gViewerWindow->getWorldViewHeightScaled() - height - topPad,
+									width, height);
+				break;
+			}
+			case POS_BOTTOM_LEFT:
+			{
+				pos.setOriginAndSize(leftPad,
+									bottomPad,
+									width, height);
+				break;
+			}
+			case POS_BOTTOM_RIGHT:
+			{
+				pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width - rightPad,
+									bottomPad,
+									width, height);
+				break;
+			}
+			default:
+			{
+				llwarns << "dialogPos value " << dialogPos << " not handled in switch() statement." << llendl;
+			}
+		}
+	}
+	else
+	{
+		floater->setSavePosition(true);
+
+		if (chicletsDisabled)
+		{
+			S32 width = pos.getWidth();
+			S32 height = pos.getHeight();
+
+			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled() - width,
+								 gViewerWindow->getWorldViewHeightScaled() - height,
+								 width, height);
+		}
+		else
+		{
+			floater->dockToChiclet(true);
+		}
+	}
+
+	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
+	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, FALSE);
+
+	if(!floater->isDocked())
+	{
+		// reposition the floater which might have been shifted to cascade
+		floater->setRect(pos);
+	}
+
+	return floater;
+}
+// </FS:Zi>
 
 // EOF

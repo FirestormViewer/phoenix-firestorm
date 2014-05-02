@@ -275,8 +275,22 @@ bool LLBlockList::isActionEnabled(const LLSD& userdata)
 
 	if ("profile_item" == command_name)
 	{
-		LLBlockedListItem* item = getBlockedItem();
-		action_enabled = item && (LLMute::AGENT == item->getType());
+		// <FS:Ansariel> Blocklist multi selection
+		//LLBlockedListItem* item = getBlockedItem();
+		//action_enabled = item && (LLMute::AGENT == item->getType());
+
+		std::vector<LLPanel*> panels;
+		getSelectedItems(panels);
+		if (panels.size() == 1)
+		{
+			LLBlockedListItem* item = dynamic_cast<LLBlockedListItem*>(panels.front());
+			action_enabled = item && (LLMute::AGENT == item->getType());
+		}
+		else
+		{
+			action_enabled = false;
+		}
+		// </FS:Ansariel>
 	}
 
 	if ("unblock_item" == command_name)
@@ -294,16 +308,34 @@ void LLBlockList::onCustomAction(const LLSD& userdata)
 		return;
 	}
 
-	LLBlockedListItem* item = getBlockedItem();
+	// <FS:Ansariel> Blocklist multi selection
+	//LLBlockedListItem* item = getBlockedItem();
 	const std::string command_name = userdata.asString();
 
 	if ("unblock_item" == command_name)
 	{
-		LLMute mute(item->getUUID(), item->getName());
-		LLMuteList::getInstance()->remove(mute);
+		// <FS:Ansariel> Blocklist multi selection
+		//LLMute mute(item->getUUID(), item->getName());
+		//LLMuteList::getInstance()->remove(mute);
+
+		std::vector<LLPanel*> panels;
+		getSelectedItems(panels);
+		for (std::vector<LLPanel*>::iterator it = panels.begin(); it != panels.end(); ++it)
+		{
+			LLBlockedListItem* item = dynamic_cast<LLBlockedListItem*>(*it);
+			if (item)
+			{
+				LLMute mute(item->getUUID(), item->getName());
+				LLMuteList::getInstance()->remove(mute);
+			}
+		}
+		// </FS:Ansariel>
 	}
 	else if ("profile_item" == command_name)
 	{
+		// <FS:Ansariel> Blocklist multi selection
+		LLBlockedListItem* item = getBlockedItem();
+
 		switch(item->getType())
 		{
 

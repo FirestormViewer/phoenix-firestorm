@@ -8,9 +8,9 @@
 	<menu_item_call label="Einfügen" name="paste"/>
 	<menu_item_call label="Umbenennen" name="rename"/>
 	<menu_item_call label="Löschen" name="delete"/>
-	<menu_item_call label="Erweitern Sie sich" name="expand"/>
+	<menu_item_call label="Aufklappen" name="expand"/>
 	<menu_item_call label="Zuklappen" name="collapse"/>
 	<menu_item_call label="Alle Ordner aufklappen" name="expand_all"/>
-	<menu_item_call label="Alle Ordner schließen" name="collapse_all"/>
+	<menu_item_call label="Alle Ordner zuklappen" name="collapse_all"/>
 	<menu_item_check label="Nach Datum sortieren" name="sort_by_date"/>
 </toggleable_menu>

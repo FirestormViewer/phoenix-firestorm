@@ -28,8 +28,17 @@
 #ifndef LL_LLVIEWERNETWORK_H
 #define LL_LLVIEWERNETWORK_H
 
+const std::string SECOND_LIFE_MAIN_LABEL = "Second Life";
+const std::string SECOND_LIFE_BETA_LABEL = "Second Life Beta";
+
 // @TODO this really should be private, but is used in llslurl
-#define MAINGRID "util.agni.lindenlab.com"
+const std::string MAINGRID = "util.agni.lindenlab.com";
+
+// <FS:AW optional opensim support>
+#ifdef OPENSIM
+#include "fsgridhandler.h"
+#else
+// </FS:AW optional opensim support>
 
 /// Exception thrown when a grid is not valid
 class LLInvalidGridName
@@ -191,7 +200,20 @@ class LLGridManager : public LLSingleton<LLGridManager>
 
 	/// Is the selected grid one of the hard-coded default grids (Agni or Aditi)
 	bool isSystemGrid() { return isSystemGrid(mGrid); }
+//<FS:AW compatibility with opensim api>
+	/// Is the selected grid Second Life Main grid?
+	bool isInSLMain() { return isInProductionGrid(); }
+	/**
+	 * the purpose of not just taking isInProductionGrid() is to
+	 * create merge conflicts so that changes that need special casing
+	 * don't slip in without attention.
+	 */
 
+	/// Is the selected grid a Second Life beta grid?
+	bool isInSLBeta() { return (isSystemGrid() && !isInProductionGrid()); }
+	bool isInSecondLife() { return (isInSLMain() || isInSLBeta()); }	// <FS:CR>
+  private:
+//</FS:AW compatibility with opensim api>
 	/// Is the selected grid a production grid?
 	bool isInProductionGrid();
 	/**
@@ -224,6 +246,8 @@ class LLGridManager : public LLSingleton<LLGridManager>
 	LLSD mGridList;
 	bool mIsInProductionGrid;
 };
+
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 const S32 MAC_ADDRESS_BYTES = 6;
 

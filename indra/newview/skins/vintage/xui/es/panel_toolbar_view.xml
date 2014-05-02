@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbar_view name="toolbar view">
+	<layout_stack name="bottom_toolbar_stack">
+		<layout_panel name="bottom_chat_bar_panel">
+			<layout_stack name="chat_bar_utility_bar_stack">
+				<layout_panel name="chat_panel">
+					<layout_stack name="bottom_chat_stack">
+						<layout_panel name="bottom_chat_bar_panel">
+							<button name="local_chat_button" tool_tip="Muestra/oculta la ventana de chat local (CTRL+H)" label="Chat local"/>
+							<fs_nearby_chat_control name="default_chat_bar" label="Decir en el chat local"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="utility_bar_layout_panel">
+					<panel name="utility_bar_panel">
+						<button name="utility_parcel_audio_stream_button" tool_tip="Inicia/pausa la reproducción de audio de la parcela"/>
+						<button name="utility_parcel_media_button" tool_tip="Inicia/pausa la reproducción de medios"/>
+						<slider name="System Volume" tool_tip="Ajusta el volumen del sistema"/>
+						<button name="mute_audio" tool_tip="Silencia el sonido del sistema"/>
+						<button name="show_volume_controls_button" tool_tip="Muestra los controles de volumen"/>
+					</panel>
+				</layout_panel>
+				<layout_panel name="voice_chat_controls_layout_panel">
+					<panel name="voice_chat_controls_panel">
+						<button name="show_voice_controls_button" tool_tip="Muestra a los usuarios de voz cercanos y los controles de voz"/>
+						<button name="utility_talk_button" tool_tip="Pulsa este botón para hablar. Pulsa el candado para conmutar el modo Pulsa-Para-Hablar." label="         Hablar" width="70"/>
+						<button name="utility_push_to_talk_lock_button" tool_tip="Conmuta la función Pulsa-Para-Hablar" left_delta="2"/>
+						<nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Actividad actual en el canal de voz" left_pad="46"/>
+					</panel>
+				</layout_panel>
+				<layout_panel name="quick_preferences_button_layout_panel">
+					<panel name="quick_preferences_button_panel">
+						<button name="enable_disable_ao_button" tool_tip="Activa/desactiva el Animation Overrider"/>
+						<button name="show_ao_interface_button" tool_tip="Muestra/oculta  la interfaz del Animation Overrider"/>
+						<button name="show_quick_prefs_button" tool_tip="Preferencias rápidas para cambiar las configuraciones más frecuentes"/>
+					</panel>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="bottom_toolbar_panel">
+			<button name="open_chat_bar_button" tool_tip="Mostrar la barra de chat (Enter)"/>
+		</layout_panel>
+	</layout_stack>
+</toolbar_view>

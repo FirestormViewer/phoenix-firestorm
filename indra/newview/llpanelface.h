@@ -99,6 +99,7 @@ public:
 	void			refresh();
 	void			setMediaURL(const std::string& url);
 	void			setMediaType(const std::string& mime_type);
+	void			changePrecision(S32 decimal_precision);	// <FS:CR> Adjustable decimal precision
 
 	LLMaterialPtr createDefaultMaterial(LLMaterialPtr current_material)
 	{
@@ -124,7 +125,7 @@ protected:
 	void			sendTexGen();				// applies and sends bump map
 	void			sendShiny(U32 shininess);			// applies and sends shininess
 	void			sendFullbright();		// applies and sends full bright
-	void        sendGlow();
+	void			sendGlow();
 	void			sendMedia();
 
 	// this function is to return TRUE if the drag should succeed.
@@ -184,14 +185,40 @@ protected:
 	static void		onCommitShiny(				LLUICtrl* ctrl, void* userdata);
 	static void		onCommitAlphaMode(		LLUICtrl* ctrl, void* userdata);
 	static void		onCommitFullbright(		LLUICtrl* ctrl, void* userdata);
-	static void    onCommitGlow(				LLUICtrl* ctrl, void *userdata);
+	static void		onCommitGlow(				LLUICtrl* ctrl, void *userdata);
 	static void		onCommitPlanarAlign(		LLUICtrl* ctrl, void* userdata);
 	static void		onCommitRepeatsPerMeter(	LLUICtrl* ctrl, void* userinfo);
 	static void		onClickAutoFix(void*);
 
 	static F32     valueGlow(LLViewerObject* object, S32 face);
 
+	// <FS> Texture params copy/paste
+	static void		onClickCopy(void*);
+	static void		onClickPaste(void*);
+	// <FS:CR> Build tool enhancements
+	static void		onClickMapsSync(LLUICtrl* ctrl, void *userdata);
+	static void		alignMaterialsProperties(LLPanelFace* self);
 	
+public:
+	static void		onCommitFlip(const LLUICtrl* ctrl, const LLSD& user_data);
+	LLSpinCtrl*		mCtrlTexScaleU;
+	LLSpinCtrl*		mCtrlTexScaleV;
+	LLSpinCtrl*		mCtrlBumpyScaleU;
+	LLSpinCtrl*		mCtrlBumpyScaleV;
+	LLSpinCtrl*		mCtrlShinyScaleU;
+	LLSpinCtrl*		mCtrlShinyScaleV;
+	
+	LLSpinCtrl*		mCtrlTexOffsetU;
+	LLSpinCtrl*		mCtrlTexOffsetV;
+	LLSpinCtrl*		mCtrlBumpyOffsetU;
+	LLSpinCtrl*		mCtrlBumpyOffsetV;
+	LLSpinCtrl*		mCtrlShinyOffsetU;
+	LLSpinCtrl*		mCtrlShinyOffsetV;
+	
+	LLSpinCtrl*		mCtrlTexRot;
+	LLSpinCtrl*		mCtrlBumpyRot;
+	LLSpinCtrl*		mCtrlShinyRot;
+	// </FS>
 
 private:
 
@@ -217,6 +244,33 @@ private:
 	F32		getCurrentShinyScaleV();
 	F32		getCurrentShinyOffsetU();
 	F32		getCurrentShinyOffsetV();
+	
+	// <FS:CR> Convenience funcs for diffuse maps
+	F32		getCurrentTextureRot();
+	F32		getCurrentTextureScaleU();
+	F32		getCurrentTextureScaleV();
+	F32		getCurrentTextureOffsetU();
+	F32		getCurrentTextureOffsetV();
+	
+	// Build tool controls
+	LLTextureCtrl*	mTextureCtrl;
+	LLTextureCtrl*	mShinyTextureCtrl;
+	LLTextureCtrl*	mBumpyTextureCtrl;
+	LLColorSwatchCtrl*	mColorSwatch;
+	LLColorSwatchCtrl*	mShinyColorSwatch;
+	
+	LLComboBox*		mComboTexGen;
+	LLComboBox*		mComboMatMedia;
+	LLComboBox*		mComboMatType;
+	
+	LLCheckBoxCtrl	*mCheckFullbright;
+	
+	LLTextBox*		mLabelColorTransp;
+	LLSpinCtrl*		mCtrlColorTransp;		// transparency = 1 - alpha
+	
+	LLSpinCtrl*		mCtrlGlow;
+	LLSpinCtrl*		mCtrlRpt;
+	// </FS:CR>
 
 	// Update visibility of controls to match current UI mode
 	// (e.g. materials vs media editing)

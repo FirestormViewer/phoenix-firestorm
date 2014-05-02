@@ -114,7 +114,9 @@ public:
 	void setDebugFetching(LLViewerFetchedTexture* tex, S32 debug_level);
 
 	static S32 getMinVideoRamSetting();
-	static S32 getMaxVideoRamSetting(bool get_recommended, float mem_multiplier);
+	// <FS:Ansariel> Proper texture memory calculation
+	//static S32 getMaxVideoRamSetting(bool get_recommended, float mem_multiplier);
+	static S32 getMaxVideoRamSetting(bool get_recommended, float mem_multiplier, bool clamp_upper_limit = true);
 	
 private:
 	void updateImagesDecodePriorities();
@@ -214,6 +216,9 @@ public:
 	static LLStat sGLBoundMemStat;
 	static LLStat sRawMemStat;
 	static LLStat sFormattedMemStat;
+
+	// <FS:Ansariel> Fast cache stats
+	static U32 sNumFastCacheReads;
 
 private:
 	static S32 sNumImages;

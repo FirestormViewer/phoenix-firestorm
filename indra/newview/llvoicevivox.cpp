@@ -377,6 +377,13 @@ void LLVivoxVoiceClient::terminate()
 	{
 		killGateway();
 	}
+
+	// <FS:Ansariel> Delete useless Vivox logs on logout
+	if (gSavedSettings.getString("VivoxDebugLevel") == "0")
+	{
+		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, ""), "VivoxVoiceService-*.log");
+	}
+	// </FS:Ansariel>
 }
 
 //---------------------------------------------------
@@ -468,11 +475,17 @@ void LLVivoxVoiceClient::connectorCreate()
 	setState(stateConnectorStarting);
 
 	std::string savedLogLevel = gSavedSettings.getString("VivoxDebugLevel");
-		
-	if(savedLogLevel != "-0")
+	
+	// <FS:Ansariel> Fixing Vivox debug level
+	//if(savedLogLevel != "-0")
+	if(savedLogLevel != "0")
+	// </FS:Ansariel>
 	{
 		LL_DEBUGS("Voice") << "creating connector with logging enabled" << LL_ENDL;
-		loglevel = "0";
+		// <FS:Ansariel> Fixing Vivox debug level
+		//loglevel = "0";
+		loglevel = savedLogLevel;
+		// </FS:Ansariel>
 	}
 	
 	stream 
@@ -480,6 +493,9 @@ void LLVivoxVoiceClient::connectorCreate()
 		<< "<ClientName>V2 SDK</ClientName>"
 		<< "<AccountManagementServer>" << mVoiceAccountServerURI << "</AccountManagementServer>"
 		<< "<Mode>Normal</Mode>"
+		// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
+		<< (gSavedSettings.getBOOL("VoiceMultiInstance") ? "<MinimumPort>30000</MinimumPort><MaximumPort>50000</MaximumPort>" : "")
+		// </FS:Ansariel>
 		<< "<Logging>"
 			<< "<Folder>" << logpath << "</Folder>"
 			<< "<FileNamePrefix>Connector</FileNamePrefix>"
@@ -587,7 +603,7 @@ void LLVivoxVoiceClient::login(
 		// we have an empty account server name
 		// so we fall back to hardcoded defaults
 
-		if(LLGridManager::getInstance()->isInProductionGrid())
+		if(!LLGridManager::getInstance()->isInSLBeta())
 		{
 			// Use the release account server
 			mVoiceSIPURIHostName = "bhr.vivox.com";
@@ -790,6 +806,19 @@ void LLVivoxVoiceClient::stateMachine()
 						}
 						params.args.add("-ll");
 						params.args.add(loglevel);
+						// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
+						if (gSavedSettings.getBOOL("VoiceMultiInstance"))
+						{
+							S32 port_nr = 30000 + ll_rand(20000);
+							LLControlVariable* voice_port = gSavedSettings.getControl("VivoxVoicePort");
+							if (voice_port)
+							{
+								voice_port->setValue(LLSD(port_nr), false);
+								params.args.add("-i");
+								params.args.add(llformat("127.0.0.1:%u",  gSavedSettings.getU32("VivoxVoicePort")));
+							}
+						}
+						// </FS:Ansariel>
 						params.cwd = gDirUtilp->getAppRODataDir();
 						sGatewayPtr = LLProcess::create(params);
 
@@ -1139,14 +1168,17 @@ void LLVivoxVoiceClient::stateMachine()
 				errs << mVoiceAccountServerURI << "\n:UDP: 3478, 3479, 5060, 5062, 12000-17000";
 				args["HOSTID"] = errs.str();
 				mTerminateDaemon = true;
-				if (LLGridManager::getInstance()->isSystemGrid())
-				{
-					LLNotificationsUtil::add("NoVoiceConnect", args);	
-				}
-				else
-				{
-					LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
-				}				
+				// <FS:Ansariel> FIRE-13130: Unknown notification "NoVoiceConnect-GIAB"
+				//if (LLGridManager::getInstance()->isSystemGrid())
+				//{
+				//	LLNotificationsUtil::add("NoVoiceConnect", args);	
+				//}
+				//else
+				//{
+				//	LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
+				//}				
+				LLNotificationsUtil::add("NoVoiceConnect", args);
+				// </FS:Ansariel>
 			}
 			else
 			{
@@ -2374,6 +2406,10 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
 		LLVector3	earVelocity;
 		LLMatrix3	earRot;
 		
+		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
+		if (mEarLocation != earLocSpeaker)
+		{
+		// </FS:Ansariel>
 		switch(mEarLocation)
 		{
 			case earLocCamera:
@@ -2405,7 +2441,10 @@ void LLVivoxVoiceClient::sendPositionalUpdate(void)
 //		LL_DEBUGS("Voice") << "Sending listener position " << earPosition << LL_ENDL;
 		
 		oldSDKTransform(l, u, a, pos, vel);
-		
+		// <FS:Ansariel> Equal voice volume; by Tigh MacFanatic
+		}
+		// </FS:Ansariel>
+
 		stream 
 			<< "<Position>"
 				<< "<X>" << pos.mdV[VX] << "</X>"
@@ -2622,14 +2661,17 @@ void LLVivoxVoiceClient::connectorCreateResponse(int statusCode, std::string &st
 		errs << mVoiceAccountServerURI << "\n:UDP: 3478, 3479, 5060, 5062, 12000-17000";
 		args["HOSTID"] = errs.str();
 		mTerminateDaemon = true;
-		if (LLGridManager::getInstance()->isSystemGrid())
-		{
-			LLNotificationsUtil::add("NoVoiceConnect", args);	
-		}
-		else
-		{
-			LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
-		}
+		// <FS:Ansariel> FIRE-13130: Unknown notification "NoVoiceConnect-GIAB"
+		//if (LLGridManager::getInstance()->isSystemGrid())
+		//{
+		//	LLNotificationsUtil::add("NoVoiceConnect", args);	
+		//}
+		//else
+		//{
+		//	LLNotificationsUtil::add("NoVoiceConnect-GIAB", args);	
+		//}
+		LLNotificationsUtil::add("NoVoiceConnect", args);
+		// </FS:Ansariel>
 	}
 	else
 	{
@@ -4680,7 +4722,12 @@ void LLVivoxVoiceClient::setVoiceEnabled(bool enabled)
 
 bool LLVivoxVoiceClient::voiceEnabled()
 {
-	return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice");
+	static LLCachedControl<bool> sEnableVoiceChat(gSavedSettings, "EnableVoiceChat");
+	static LLCachedControl<bool> sCmdLineDisableVoice(gSavedSettings, "CmdLineDisableVoice");
+	return sEnableVoiceChat && !sCmdLineDisableVoice;
+	// </FS:Ansariel>
 }
 
 void LLVivoxVoiceClient::setLipSyncEnabled(BOOL enabled)

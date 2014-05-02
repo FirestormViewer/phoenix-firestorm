@@ -156,9 +156,16 @@ protected:
 	BOOL isLinkedObjectMissing() const; // Is this a linked obj whose baseobj is not in inventory?
 
 	BOOL isAgentInventory() const; // false if lost or in the inventory library
-	BOOL isCOFFolder() const;       // true if COF or descendant of
-	BOOL isInboxFolder() const;     // true if COF or descendant of   marketplace inbox
-	BOOL isOutboxFolder() const;    // true if COF or descendant of   marketplace outbox
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	BOOL isLibraryInventory() const;
+	BOOL isLostInventory() const;
+// [/SL:KB]
+	BOOL isCOFFolder() const; // true if COF or descendent of
+// <FS:TT> Client LSL Bridge
+	BOOL isProtectedFolder() const;
+// </FS:TT>
+	BOOL isInboxFolder() const; // true if COF or descendent of marketplace inbox
+	BOOL isOutboxFolder() const; // true if COF or descendent of marketplace outbox
 	BOOL isOutboxFolderDirectParent() const;
 	const LLUUID getOutboxFolder() const;
 
@@ -184,6 +191,14 @@ protected:
 
 	void purgeItem(LLInventoryModel *model, const LLUUID &uuid);
 	virtual void buildDisplayName() const {}
+
+	// <FS:ND> Reintegrate search by uuid/creator/descripting from Zi Ree after CHUI Merge
+public:
+	virtual std::string getSearchableCreator( void ) const;
+	virtual std::string getSearchableDescription( void ) const;
+	virtual std::string getSearchableUUID( void ) const;
+	virtual std::string getSearchableAll( void ) const;
+	// </FS:ND>
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -252,7 +267,7 @@ public:
 	LLFolderBridge(LLInventoryPanel* inventory, 
 				   LLFolderView* root,
 				   const LLUUID& uuid) 
-        :       LLInvFVBridge(inventory, root, uuid),
+	:	LLInvFVBridge(inventory, root, uuid),
 		mCallingCards(FALSE),
 		mWearables(FALSE),
 		mIsLoading(false)
@@ -276,6 +291,8 @@ public:
 	virtual LLUIImagePtr getIconOverlay() const;
 
 	static LLUIImagePtr getIcon(LLFolderType::EType preferred_type);
+	
+	virtual std::string getLabelSuffix() const;
 
 	virtual BOOL renameItem(const std::string& new_name);
 
@@ -310,6 +327,9 @@ public:
 
 	bool isLoading() { return mIsLoading; }
 
+	// <FS:Ansariel> Special for protected folders
+	virtual bool isProtected() const;
+
 protected:
 	void buildContextMenuOptions(U32 flags, menuentry_vec_t& items,   menuentry_vec_t& disabled_items);
 	void buildContextMenuFolderOptions(U32 flags, menuentry_vec_t& items,   menuentry_vec_t& disabled_items);
@@ -335,6 +355,9 @@ protected:
 	BOOL checkFolderForContentsOfType(LLInventoryModel* model, LLInventoryCollectFunctor& typeToCheck);
 
 	void modifyOutfit(BOOL append);
+// <FS:TT> ReplaceWornItemsOnly
+	void modifyOutfit(BOOL append, BOOL replace);
+// </FS:TT>
 	void determineFolderType();
 
 	void dropToFavorites(LLInventoryItem* inv_item);
@@ -513,10 +536,10 @@ public:
 
 	static void		onWearOnAvatar( void* userdata );	// Access to wearOnAvatar() from menu
 	static BOOL		canWearOnAvatar( void* userdata );
-	static void		onWearOnAvatarArrived( LLViewerWearable* wearable, void* userdata );
+//	static void		onWearOnAvatarArrived( LLViewerWearable* wearable, void* userdata );
 	void			wearOnAvatar();
 
-	static void		onWearAddOnAvatarArrived( LLViewerWearable* wearable, void* userdata );
+//	static void		onWearAddOnAvatarArrived( LLViewerWearable* wearable, void* userdata );
 	void			wearAddOnAvatar();
 
 	static BOOL		canEditOnAvatar( void* userdata );	// Access to editOnAvatar() from menu
@@ -647,6 +670,43 @@ class LLRecentInventoryBridgeBuilder : public LLInventoryFolderViewModelBuilder
 {
 public:
 	// Overrides FolderBridge for Recent Inventory Panel.
+	// It use base functionality for bridges other than FolderBridge.
+	virtual LLInvFVBridge* createBridge(LLAssetType::EType asset_type,
+		LLAssetType::EType actual_asset_type,
+		LLInventoryType::EType inv_type,
+		LLInventoryPanel* inventory,
+		LLFolderViewModelInventory* view_model,
+		LLFolderView* root,
+		const LLUUID& uuid,
+		U32 flags = 0x00) const;
+};
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Worn Inventory Panel related classes
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Overridden version of the Inventory-Folder-View-Bridge for Folders
+class LLWornItemsFolderBridge : public LLFolderBridge
+{
+public:
+	// Creates context menu for Folders related to Worn Inventory Panel.
+	// Uses base logic and than removes from visible items "New..." menu items.
+	LLWornItemsFolderBridge(LLInventoryType::EType type,
+							  LLInventoryPanel* inventory,
+							  LLFolderView* root,
+							  const LLUUID& uuid) :
+		LLFolderBridge(inventory, root, uuid)
+	{
+		mInvType = type;
+	}
+	/*virtual*/ void buildContextMenu(LLMenuGL& menu, U32 flags);
+};
+
+// Bridge builder to create Inventory-Folder-View-Bridge for Worn Inventory Panel
+class LLWornInventoryBridgeBuilder : public LLInventoryFolderViewModelBuilder
+{
+public:
+	// Overrides FolderBridge for Worn Inventory Panel.
 	// It use base functionality for bridges other than FolderBridge.
 	virtual LLInvFVBridge* createBridge(LLAssetType::EType asset_type,
 		LLAssetType::EType actual_asset_type,

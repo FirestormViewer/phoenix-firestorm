@@ -377,6 +377,11 @@ const long UPLOAD_RETRY_LIMIT = 0L;
 // See wiki at https://wiki.secondlife.com/wiki/Mesh/Mesh_Asset_Format
 const S32 MAX_MESH_VERSION = 999;
 
+//<FS:TS> FIRE-11451: Cap concurrent mesh requests at a sane value 
+const U32 MESH_CONCURRENT_REQUEST_LIMIT = 64;  // upper limit 
+const U32 MESH2_CONCURRENT_REQUEST_LIMIT = 32;  // upper limit 
+//</FS:TS> FIRE-11451 
+
 U32 LLMeshRepository::sBytesReceived = 0;
 U32 LLMeshRepository::sMeshRequestCount = 0;
 U32 LLMeshRepository::sHTTPRequestCount = 0;
@@ -3192,7 +3197,24 @@ void LLMeshRepository::notifyLoadedMeshes()
 	if (1 == mGetMeshVersion)
 	{
 		// Legacy GetMesh operation with high connection concurrency
-		LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("MeshMaxConcurrentRequests");
+		// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+		//LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("MeshMaxConcurrentRequests");
+		static LLCachedControl<U32> meshMaxConcurrentRequests(gSavedSettings, "MeshMaxConcurrentRequests");
+		//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value
+		if (meshMaxConcurrentRequests() > MESH_CONCURRENT_REQUEST_LIMIT) 
+		{
+			U32 mesh_max_concurrent_requests_default = gSavedSettings.getControl("MeshMaxConcurrentRequests")->getDefault().asInteger();
+			LLSD args; 
+			args["VALUE"] = llformat("%d", meshMaxConcurrentRequests()); 
+			args["MAX"] = llformat("%d", MESH_CONCURRENT_REQUEST_LIMIT); 
+			args["DEFAULT"] = llformat("%d", mesh_max_concurrent_requests_default);
+			args["DEBUGNAME"] = "MeshMaxConccurrentRequests";
+			LLNotificationsUtil::add("MeshMaxConcurrentReqTooHigh", args); 
+			gSavedSettings.setU32("MeshMaxConcurrentRequests", mesh_max_concurrent_requests_default);
+		}
+		//</FS:TS> FIRE-11451 
+		LLMeshRepoThread::sMaxConcurrentRequests = meshMaxConcurrentRequests();
+		// </FS:Ansariel>
 		LLMeshRepoThread::sRequestHighWater = llclamp(2 * S32(LLMeshRepoThread::sMaxConcurrentRequests),
 													  REQUEST_HIGH_WATER_MIN,
 													  REQUEST_HIGH_WATER_MAX);
@@ -3204,7 +3226,24 @@ void LLMeshRepository::notifyLoadedMeshes()
 	{
 		// GetMesh2 operation with keepalives, etc.  With pipelining,
 		// we'll increase this.
-		LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("Mesh2MaxConcurrentRequests");
+		// <FS:TM> Use faster LLCachedControls for frequently visited locations
+		//LLMeshRepoThread::sMaxConcurrentRequests = gSavedSettings.getU32("Mesh2MaxConcurrentRequests");
+		static LLCachedControl<U32> mesh2MaxConcurrentRequests(gSavedSettings, "Mesh2MaxConcurrentRequests");
+		//<FS:TS> FIRE-11451: Cap concurrent requests at a sane value
+		if (mesh2MaxConcurrentRequests() > MESH2_CONCURRENT_REQUEST_LIMIT) 
+		{ 
+			U32 mesh2_max_concurrent_requests_default = gSavedSettings.getControl("Mesh2MaxConcurrentRequests")->getDefault().asInteger();
+			LLSD args; 
+			args["VALUE"] = llformat("%d", mesh2MaxConcurrentRequests()); 
+			args["MAX"] = llformat("%d", MESH2_CONCURRENT_REQUEST_LIMIT); 
+			args["DEFAULT"] = llformat("%d", mesh2_max_concurrent_requests_default);
+			args["DEBUGNAME"] = "Mesh2MaxConccurrentRequests";
+			LLNotificationsUtil::add("MeshMaxConcurrentReqTooHigh", args); 
+			gSavedSettings.setU32("Mesh2MaxConcurrentRequests", mesh2_max_concurrent_requests_default);
+		}
+		//</FS:TS> FIRE-11451 
+		LLMeshRepoThread::sMaxConcurrentRequests = mesh2MaxConcurrentRequests();
+		// </FS:TM>
 		LLMeshRepoThread::sRequestHighWater = llclamp(5 * S32(LLMeshRepoThread::sMaxConcurrentRequests),
 													  REQUEST2_HIGH_WATER_MIN,
 													  REQUEST2_HIGH_WATER_MAX);
@@ -3810,10 +3849,17 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 	F32 dlow = llmin(radius/0.06f, max_distance);
 	F32 dmid = llmin(radius/0.24f, max_distance);
 	
-	F32 METADATA_DISCOUNT = (F32) gSavedSettings.getU32("MeshMetaDataDiscount");  //discount 128 bytes to cover the cost of LLSD tags and compression domain overhead
-	F32 MINIMUM_SIZE = (F32) gSavedSettings.getU32("MeshMinimumByteSize"); //make sure nothing is "free"
+	// <FS:ND> replace often called setting with LLCachedControl
+	// F32 METADATA_DISCOUNT = (F32) gSavedSettings.getU32("MeshMetaDataDiscount");  //discount 128 bytes to cover the cost of LLSD tags and compression domain overhead
+	// F32 MINIMUM_SIZE = (F32) gSavedSettings.getU32("MeshMinimumByteSize"); //make sure nothing is "free"
 
-	F32 bytes_per_triangle = (F32) gSavedSettings.getU32("MeshBytesPerTriangle");
+	// F32 bytes_per_triangle = (F32) gSavedSettings.getU32("MeshBytesPerTriangle");
+
+	static LLCachedControl< U32 > METADATA_DISCOUNT( gSavedSettings, "MeshMetaDataDiscount"); 
+	static LLCachedControl< U32 > MINIMUM_SIZE( gSavedSettings, "MeshMinimumByteSize");
+	static LLCachedControl< U32 > bytes_per_triangle( gSavedSettings ,"MeshBytesPerTriangle");
+
+	// </FS:ND>
 
 	S32 bytes_lowest = header["lowest_lod"]["size"].asInteger();
 	S32 bytes_low = header["low_lod"]["size"].asInteger();
@@ -3840,10 +3886,18 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 		bytes_lowest = bytes_low;
 	}
 
-	F32 triangles_lowest = llmax((F32) bytes_lowest-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
-	F32 triangles_low = llmax((F32) bytes_low-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
-	F32 triangles_mid = llmax((F32) bytes_mid-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
-	F32 triangles_high = llmax((F32) bytes_high-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// <FS:ND> replace often called setting with LLCachedControl
+	// F32 triangles_lowest = llmax((F32) bytes_lowest-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// F32 triangles_low = llmax((F32) bytes_low-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// F32 triangles_mid = llmax((F32) bytes_mid-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// F32 triangles_high = llmax((F32) bytes_high-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+
+	F32 triangles_lowest = llmax((F32) bytes_lowest-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+	F32 triangles_low = llmax((F32) bytes_low-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+	F32 triangles_mid = llmax((F32) bytes_mid-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+	F32 triangles_high = llmax((F32) bytes_high-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+
+	// </FS:ND>
 
 	if (bytes)
 	{
@@ -3896,7 +3950,12 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 		*unscaled_value = weighted_avg;
 	}
 
-	return weighted_avg/gSavedSettings.getU32("MeshTriangleBudget")*15000.f;
+	// <FS:ND> replace often called setting with LLCachedControl
+	//	return weighted_avg/gSavedSettings.getU32("MeshTriangleBudget")*15000.f;
+
+	static LLCachedControl< U32 > MeshTriangleBudget( gSavedSettings, "MeshTriangleBudget");
+	return weighted_avg/MeshTriangleBudget*15000.f;
+	// </FS:ND>
 }
 
 
@@ -3953,8 +4012,41 @@ S32 LLPhysicsDecomp::llcdCallback(const char* status, S32 p1, S32 p2)
 	return 1;
 }
 
+bool needTriangles( LLConvexDecomposition *aDC )
+{
+	if( !aDC )
+		return false;
+
+	LLCDParam const  *pParams(0);
+	int nParams = aDC->getParameters( &pParams );
+
+	if( nParams <= 0 )
+		return false;
+
+	for( int i = 0; i < nParams; ++i )
+	{
+		if( pParams[i].mName && strcmp( "nd_AlwaysNeedTriangles", pParams[i].mName ) == 0 )
+		{
+			if( LLCDParam::LLCD_BOOLEAN == pParams[i].mType && pParams[i].mDefault.mBool )
+				return true;
+			else
+				return false;
+		}
+	}
+
+	return false;
+}
+
 void LLPhysicsDecomp::setMeshData(LLCDMeshData& mesh, bool vertex_based)
 {
+	LLConvexDecomposition *pDeComp = LLConvexDecomposition::getInstance();
+
+	if( !pDeComp )
+		return;
+
+	if( vertex_based )
+		vertex_based = !needTriangles( pDeComp );
+
 	mesh.mVertexBase = mCurRequest->mPositions[0].mV;
 	mesh.mVertexStrideBytes = 12;
 	mesh.mNumVertices = mCurRequest->mPositions.size();
@@ -3971,15 +4063,10 @@ void LLPhysicsDecomp::setMeshData(LLCDMeshData& mesh, bool vertex_based)
 	if ((vertex_based || mesh.mNumTriangles > 0) && mesh.mNumVertices > 2)
 	{
 		LLCDResult ret = LLCD_OK;
-		if (LLConvexDecomposition::getInstance() != NULL)
-		{
-			ret  = LLConvexDecomposition::getInstance()->setMeshData(&mesh, vertex_based);
-		}
+		ret  = LLConvexDecomposition::getInstance()->setMeshData(&mesh, vertex_based);
 
 		if (ret)
-		{
 			LL_ERRS(LOG_MESH) << "Convex Decomposition thread valid but could not set mesh data." << LL_ENDL;
-		}
 	}
 }
 
@@ -4473,7 +4560,11 @@ void LLMeshRepository::buildPhysicsMesh(LLModel::Decomposition& decomp)
 bool LLMeshRepository::meshUploadEnabled()
 {
 	LLViewerRegion *region = gAgent.getRegion();
-	if(gSavedSettings.getBOOL("MeshEnabled") &&
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if(gSavedSettings.getBOOL("MeshEnabled") &&
+	static LLCachedControl<bool> meshEnabled(gSavedSettings, "MeshEnabled");
+	if(meshEnabled &&
+	// </FS:Ansariel>
 	   region)
 	{
 		return region->meshUploadEnabled();
@@ -4484,7 +4575,11 @@ bool LLMeshRepository::meshUploadEnabled()
 bool LLMeshRepository::meshRezEnabled()
 {
 	LLViewerRegion *region = gAgent.getRegion();
-	if(gSavedSettings.getBOOL("MeshEnabled") && 
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if(gSavedSettings.getBOOL("MeshEnabled") && 
+	static LLCachedControl<bool> meshEnabled(gSavedSettings, "MeshEnabled");
+	if(meshEnabled &&
+	// </FS:Ansariel>
 	   region)
 	{
 		return region->meshRezEnabled();

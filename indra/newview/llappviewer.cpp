@@ -93,10 +93,25 @@
 #include "llprogressview.h"
 #include "llvocache.h"
 #include "llvopartgroup.h"
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
+#include "llappearancemgr.h"
+// [/SL:KB]
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0)
+#include "rlvactions.h"
+#include "rlvhelper.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 #include "llweb.h"
 #include "llsecondlifeurls.h"
 #include "llupdaterservice.h"
+// <FS:Ansariel> [FS communication UI]
+#include "fsfloatervoicecontrols.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llfloatertexturefetchdebugger.h"
+// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0)
+#include "llfloaterscriptrecover.h"
+// [/SL:KB]
 #include "llspellcheck.h"
 #include "llavatarrenderinfoaccountant.h"
 
@@ -118,6 +133,7 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 
+#include "sanitycheck.h"
 #include "llleap.h"
 #include "stringize.h"
 #include "llcoros.h"
@@ -127,7 +143,6 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
-
 
 #if LL_WINDOWS
 #	include <share.h> // For _SH_DENYWR in processMarkerFiles
@@ -154,6 +169,7 @@
 #include "llassetstorage.h"
 #include "llpolymesh.h"
 #include "llproxy.h"
+#include "llcachename.h"
 #include "llaudioengine.h"
 #include "llstreamingaudio.h"
 #include "llviewermenu.h"
@@ -228,6 +244,8 @@
 
 #include "llviewereventrecorder.h"
 
+#include "llleapmotioncontroller.h"
+
 
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
@@ -242,6 +260,11 @@
 #include "llviewernetwork.h"
 // define a self-registering event API object
 #include "llappviewerlistener.h"
+
+#include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "nd/ndallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "fsradar.h"
+
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
@@ -260,7 +283,14 @@ static LLAppViewerListener sAppViewerListener(LLAppViewer::instance);
 // viewer.cpp - these are only used in viewer, should be easily moved.
 
 #if LL_DARWIN
-const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.indra.viewer";
+// <FS:CR>
+//const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.indra.viewer";
+#ifdef OPENSIM
+const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer-oss";
+#else // !OPENSIM
+const char * const LL_VERSION_BUNDLE_ID = "com.phoenixviewer.firestorm.viewer-hvk";
+#endif // OPENSIM
+// </FS:CR>
 extern void init_apple_menu(const char* product);
 #endif // LL_DARWIN
 
@@ -350,17 +380,41 @@ BOOL gLogoutInProgress = FALSE;
 
 ////////////////////////////////////////////////////////////
 // Internal globals... that should be removed.
+
+// Like LLLogChat::cleanFileName() and LLDir::getScrubbedFileName() but replaces spaces also.
+std::string SafeFileName(std::string filename)
+{
+	std::string invalidChars = "\"\'\\/?*:.<>| ";
+	S32 position = filename.find_first_of(invalidChars);
+	while (position != filename.npos)
+	{
+		filename[position] = '_';
+		position = filename.find_first_of(invalidChars, position);
+	}
+	return filename;
+}
+// TODO: Readd SAFE_FILE_NAME_PREFIX stuff after FmodEx merge.... <FS:CR>
+// contruct unique filename prefix so we only report crashes for US and not other viewers.
+//const std::string SAFE_FILE_NAME_PREFIX(SafeFileName(llformat("%s %d.%d.%d.%d",
+//															  LL_CHANNEL,
+//															  LL_VERSION_MAJOR,
+//															  LL_VERSION_MINOR,
+//															  LL_VERSION_PATCH,
+//															  LL_VERSION_BUILD )));
+const std::string SAFE_FILE_NAME_PREFIX(SafeFileName("Firestorm"));
 static std::string gArgs;
 const int MAX_MARKER_LENGTH = 1024;
-const std::string MARKER_FILE_NAME("SecondLife.exec_marker");
-const std::string START_MARKER_FILE_NAME("SecondLife.start_marker");
-const std::string ERROR_MARKER_FILE_NAME("SecondLife.error_marker");
-const std::string LLERROR_MARKER_FILE_NAME("SecondLife.llerror_marker");
-const std::string LOGOUT_MARKER_FILE_NAME("SecondLife.logout_marker");
+const std::string MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".exec_marker"); //FS orig modified LL
+const std::string START_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".start_marker"); //FS new modified LL new
+const std::string ERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".error_marker"); //FS orig modified LL
+const std::string LLERROR_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".llerror_marker"); //FS orig modified LL
+const std::string LOGOUT_MARKER_FILE_NAME(SAFE_FILE_NAME_PREFIX + ".logout_marker"); //FS orig modified LL
+
 static BOOL gDoDisconnect = FALSE;
 static std::string gLaunchFileOnQuit;
 
 // Used on Win32 for other apps to identify our window (eg, win_setup)
+// Note: Changing this breaks compatibility with SLURL handling, try to avoid it.
 const char* const VIEWER_WINDOW_CLASSNAME = "Second Life";
 
 //-- LLDeferredTaskList ------------------------------------------------------
@@ -407,11 +461,13 @@ void init_default_trans_args()
 	default_trans_args.insert("SECOND_LIFE"); // World
 	default_trans_args.insert("APP_NAME");
 	default_trans_args.insert("CAPITALIZED_APP_NAME");
+	default_trans_args.insert("CURRENT_GRID"); //<FS:AW make CURRENT_GRID a default substitution>
 	default_trans_args.insert("SECOND_LIFE_GRID");
 	default_trans_args.insert("SUPPORT_SITE");
 	// This URL shows up in a surprising number of places in various skin
 	// files. We really only want to have to maintain a single copy of it.
 	default_trans_args.insert("create_account_url");
+	default_trans_args.insert("DOWNLOAD_URL"); //<FS:CR> Viewer download url
 }
 
 //----------------------------------------------------------------------------
@@ -419,6 +475,7 @@ void init_default_trans_args()
 const char *VFS_DATA_FILE_BASE = "data.db2.x.";
 const char *VFS_INDEX_FILE_BASE = "index.db2.x.";
 
+std::string gWindowTitle;
 
 struct SettingsFile : public LLInitParam::Block<SettingsFile>
 {
@@ -459,7 +516,6 @@ struct SettingsFiles : public LLInitParam::Block<SettingsFiles>
 	{}
 };
 
-static std::string gWindowTitle;
 
 LLAppViewer::LLUpdaterInfo *LLAppViewer::sUpdaterInfo = NULL ;
 
@@ -475,8 +531,20 @@ void idle_afk_check()
 {
 	// check idle timers
 	F32 current_idle = gAwayTriggerTimer.getElapsedTimeF32();
-	F32 afk_timeout  = gSavedSettings.getS32("AFKTimeout");
-	if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
+//	F32 afk_timeout  = gSavedSettings.getS32("AFKTimeout");
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
+#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
+	// Enforce an idle time of 30 minutes if @allowidle=n restricted
+	// <FS:CR> Cache frequently hit location
+	static LLCachedControl<S32> sAFKTimeout(gSavedSettings, "AFKTimeout");
+	S32 afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? sAFKTimeout : 60 * 30;
+#else
+	static LLCachedControl<S32> afk_timeout(gSavedSettings, "AFKTimeout");	// <FS:CR>
+#endif // RLV_EXTENSION_CMD_ALLOWIDLE
+// [/RLVa:KB]
+	// <FS:CR> Explicit conversions just cos.
+	//if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
+	if (static_cast<S32>(afk_timeout) && (current_idle > static_cast<F32>(afk_timeout)) && ! gAgent.getAFK())
 	{
 		LL_INFOS("IdleAway") << "Idle more than " << afk_timeout << " seconds: automatically changing to Away status" << LL_ENDL;
 		gAgent.setAFK();
@@ -677,14 +745,17 @@ LLAppViewer::LLAppViewer() :
 	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded.
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
-	mYieldTime(-1),
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+	//mYieldTime(-1),
 	mMainloopTimeout(NULL),
 	mAgentRegionLastAlive(false),
 	mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", FALSE)),
 	mPeriodicSlowFrame(LLCachedControl<bool>(gSavedSettings,"Periodic Slow Frame", FALSE)),
 	mFastTimerLogThread(NULL),
 	mUpdater(new LLUpdaterService()),
-	mSettingsLocationList(NULL)
+	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
+	mSettingsLocationList(NULL),
+	mPurgeTextures(false) // <FS:Ansariel> FIRE-13066
 {
 	if(NULL != sInstance)
 	{
@@ -692,10 +763,20 @@ LLAppViewer::LLAppViewer() :
 	}
 
     mDumpPath ="";
-
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
-	gDirUtilp->initAppDirs("SecondLife");
+   
+	// <FS:ND> Init our custom directories, not from SecondLife
+
+	// gDirUtilp->initAppDirs("SecondLife");
+#ifdef ND_BUILD64BIT_ARCH
+	gDirUtilp->initAppDirs("Firestorm_x64");
+#else
+	gDirUtilp->initAppDirs("Firestorm");
+#endif
+
+	// </FS:ND>
+
 	//
 	// IMPORTANT! Do NOT put anything that will write
 	// into the log files during normal startup until AFTER
@@ -740,7 +821,19 @@ public:
 
 bool LLAppViewer::init()
 {	
-	setupErrorHandling();
+	// <FS:ND> Breakpad merge, setup minidump type from Catznip.
+
+	// setupErrorHandling();
+	EMiniDumpType minidump_type = MINIDUMP_NORMAL;
+	if (gSavedSettings.controlExists("SaveMiniDumpType"))
+		minidump_type = (LLApp::EMiniDumpType)gSavedSettings.getU32("SaveMiniDumpType"); 
+
+	setupErrorHandling( minidump_type );
+
+	// </FS:ND>
+
+	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
+	nd::mallocstats::startUp(); // <FS:ND/> start collecting alloc stats
 
 	//
 	// Start of the application
@@ -762,15 +855,91 @@ bool LLAppViewer::init()
 	//initialize particle index pool
 	LLVOPartGroup::initClass();
 
+
+
 	// set skin search path to default, will be overridden later
 	// this allows simple skinned file lookups to work
-	gDirUtilp->setSkinFolder("default", "en");
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder("default", "", "en");
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder("default", "en");
 
 //	initLoggingAndGetLastDuration();
 	
 	//
 	// OK to write stuff to logs now, we've now crash reported if necessary
 	//
+	
+// <FS>
+	// SJ/AO:  Reset Configuration here, if our marker file exists. Configuration needs to be reset before settings files 
+	// are read in to avoid file locks.
+
+	mPurgeSettings = false;
+	std::string clear_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR");
+	LLAPRFile clear_file ;
+	if (clear_file.isExist(clear_settings_filename))
+	{
+		mPurgeSettings = true;
+		llinfos << "Purging configuration..." << llendl;
+		std::string delem = gDirUtilp->getDirDelimiter();
+
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR"));
+		
+		//[ADD - Clear Usersettings : SJ] - Delete directories beams, beamsColors, windlight in usersettings
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight" + delem + "water") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight" + delem + "days") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight" + delem + "skies") );
+		LLFile::rmdir(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "windlight") );		
+
+		// We don't delete the entire folder to avoid data loss of config files unrelated to the current binary. -AO
+		//gDirUtilp->deleteFilesInDir(user_dir, "*.*");
+		
+		// Alphabetised
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "account_settings_phoenix.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "agents.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "bin_conf.dat"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "colors.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "ignorable_dialogs.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "grids.user.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "quick_preferences.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml"));
+		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE));
+		
+		std::string user_dir = gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "", "");
+		gDirUtilp->deleteFilesInDir(user_dir, "feature*.txt");
+		gDirUtilp->deleteFilesInDir(user_dir, "gpu*.txt");
+		gDirUtilp->deleteFilesInDir(user_dir, "settings_*.xml");
+
+		// Remove misc OS user app dirs
+		std::string base_dir = gDirUtilp->getOSUserAppDir() + delem;
+		
+		LLFile::rmdir(base_dir + "browser_profile");
+		LLFile::rmdir(base_dir + "data");
+		
+		// Delete per-user files below
+		std::string per_user_dir_glob = base_dir + "*" + delem;
+		
+		LLFile::remove(per_user_dir_glob + "filters.xml");
+		LLFile::remove(per_user_dir_glob + "medialist.xml");
+		LLFile::remove(per_user_dir_glob + "plugin_cookies.xml");
+		LLFile::remove(per_user_dir_glob + "screen_last.bmp");
+		LLFile::remove(per_user_dir_glob + "search_history.xml");
+		LLFile::remove(per_user_dir_glob + "settings_friends_groups.xml");
+		LLFile::remove(per_user_dir_glob + "settings_per_account.xml");
+		LLFile::remove(per_user_dir_glob + "teleport_history.xml");
+		LLFile::remove(per_user_dir_glob + "texture_list_last.xml");
+		LLFile::remove(per_user_dir_glob + "toolbars.xml");
+		LLFile::remove(per_user_dir_glob + "typed_locations.xml");
+		LLFile::remove(per_user_dir_glob + "url_history.xml");
+		LLFile::remove(per_user_dir_glob + "volume_settings.xml");
+		LLFile::rmdir(per_user_dir_glob + "browser_profile");
+	}
+// </FS>
 	init_default_trans_args();
 	
 	if (!initConfiguration())
@@ -800,7 +969,7 @@ bool LLAppViewer::init()
 		// QAModeTermCode set, terminate with that rc on LL_ERRS. Use _exit()
 		// rather than exit() because normal cleanup depends too much on
 		// successful startup!
-		LLError::setFatalFunction(boost::bind(_exit, rc));
+		//LLError::setFatalFunction(boost::bind(_exit, rc));
 	}
 
     mAlloc.setProfilingEnabled(gSavedSettings.getBOOL("MemProfiling"));
@@ -854,7 +1023,10 @@ bool LLAppViewer::init()
 	// NOW LLUI::getLanguage() should work. gDirUtilp must know the language
 	// for this session ASAP so all the file-loading commands that follow,
 	// that use findSkinnedFilenames(), will include the localized files.
-	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), LLUI::getLanguage());
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), gDirUtilp->getSkinThemeFolder(),LLUI::getLanguage());
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), LLUI::getLanguage());
 
 	// Setup LLTrans after LLUI::initClass has been called.
 	initStrings();
@@ -885,6 +1057,16 @@ bool LLAppViewer::init()
 	//
 	LL_INFOS("InitInfo") << "J2C Engine is: " << LLImageJ2C::getEngineInfo() << LL_ENDL;
 	LL_INFOS("InitInfo") << "libcurl version is: " << LLCurl::getVersionString() << LL_ENDL;
+
+	//-TT 2.8.2 - 
+	// Get the single value from the crash settings file, if it exists
+	std::string crash_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);
+	gCrashSettings.loadFromFile(crash_settings_filename);
+//	if(gSavedSettings.getBOOL("IgnoreAllNotifications"))
+//	{
+//		gCrashSettings.setS32(CRASH_BEHAVIOR_SETTING, CRASH_BEHAVIOR_ALWAYS_SEND);
+//		gCrashSettings.saveToFile(crash_settings_filename, FALSE);
+//	}
 
 	/////////////////////////////////////////////////
 	// OS-specific login dialogs
@@ -1010,7 +1192,15 @@ bool LLAppViewer::init()
 	gGLManager.printGLInfoString();
 
 	// Load Default bindings
-	std::string key_bindings_file = gDirUtilp->findFile("keys.xml",
+	// <FS:Ansariel> Optional AZERTY keyboard layout
+	//std::string key_bindings_file = gDirUtilp->findFile("keys.xml",
+	std::string keyBindingFileName("keys.xml");
+	if (gSavedSettings.getBOOL("FSUseAzertyKeyboardLayout"))
+	{
+		keyBindingFileName = "keys_azerty.xml";
+	}
+	std::string key_bindings_file = gDirUtilp->findFile(keyBindingFileName,
+	// </FS:Ansariel>
 														gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""),
 														gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
 
@@ -1201,6 +1391,9 @@ bool LLAppViewer::init()
 
 	LLAgentLanguage::init();
 
+	// initializing the settings sanity checker
+	SanityCheck::instance().init();
+
 	return true;
 }
 
@@ -1296,16 +1489,23 @@ bool LLAppViewer::mainLoop()
 		
 		LLVoiceChannel::initClass();
 		LLVoiceClient::getInstance()->init(gServicePump);
-		LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
-		
+		// <FS:Ansariel> [FS communication UI]
+		//LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLFloaterIMContainer::onCurrentChannelChanged, _1), true);
+		LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&FSFloaterVoiceControls::sOnCurrentChannelChanged, _1), true);
+		// </FS:Ansariel> [FS communication UI]
 		joystick = LLViewerJoystick::getInstance();
 		joystick->setNeedsReset(true);
+		
+// [FS:CR]
+		gestureController = LLLeapMotionController::getInstance();
+// [/FS:CR]
 		
 #ifdef LL_DARWIN
 		// Ensure that this section of code never gets called again on OS X.
 		mMainLoopInitialized = true;
 #endif
 	}
+	
 	// As we do not (yet) send data on the mainloop LLEventPump that varies
 	// with each frame, no need to instantiate a new LLSD event object each
 	// time. Obviously, if that changes, just instantiate the LLSD at the
@@ -1315,9 +1515,15 @@ bool LLAppViewer::mainLoop()
 	
     LLSD newFrame;
 	
-	LLTimer frameTimer,idleTimer;
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+	//LLTimer frameTimer,idleTimer;
+	LLTimer frameTimer,idleTimer,periodicRenderingTimer;
+	// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 	LLTimer debugTime;
 	
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+	BOOL restore_rendering_masks = FALSE;
+
 	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
 	//LLPrivateMemoryPoolTester::destroy() ;
@@ -1340,6 +1546,31 @@ bool LLAppViewer::mainLoop()
 		
 		try
 		{
+			// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+			// Check if we need to restore rendering masks.
+			if (restore_rendering_masks)
+			{
+				gPipeline.popRenderDebugFeatureMask();
+				gPipeline.popRenderTypeMask();
+			}
+			// Check if we need to temporarily enable rendering.
+			//F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
+			static LLCachedControl<F32> periodic_rendering(gSavedSettings, "ForcePeriodicRenderingTime");
+			if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
+			{
+				periodicRenderingTimer.reset();
+				restore_rendering_masks = TRUE;
+				gPipeline.pushRenderTypeMask();
+				gPipeline.pushRenderDebugFeatureMask();
+				gPipeline.setAllRenderTypes();
+				gPipeline.setAllRenderDebugFeatures();
+			}
+			else
+			{
+				restore_rendering_masks = FALSE;
+			}
+			// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+
 			pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
 			if (gViewerWindow)
@@ -1396,6 +1627,14 @@ bool LLAppViewer::mainLoop()
 				{
 					joystick->scanJoystick();
 					gKeyboard->scanKeyboard();
+					// <FS:Ansariel> Chalice Yao's crouch toggle
+					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
+					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");
+					if (fsCrouchToggle && fsCrouchToggleStatus)
+					{
+						gAgent.moveUp(-1);
+					}
+					// </FS:Ansariel>
 				}
 
 				// Update state based on messages, user input, object idle.
@@ -1449,6 +1688,10 @@ bool LLAppViewer::mainLoop()
 				}
 
 			}
+			
+// [FS:CR] Run any LeapMotion devices
+			if (gestureController)
+				gestureController->stepFrame();
 
 			pingMainloopTimeout("Main:Sleep");
 			
@@ -1459,11 +1702,20 @@ bool LLAppViewer::mainLoop()
 				LLFastTimer t2(FTM_SLEEP);
 				
 				// yield some time to the os based on command line option
-				if(mYieldTime >= 0)
+				// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+				//if(mYieldTime >= 0)
+				//{
+				//	LLFastTimer t(FTM_YIELD);
+				//	ms_sleep(mYieldTime);
+				//}
+				//S32 yield_time = gSavedSettings.getS32("YieldTime");
+				static LLCachedControl<S32> yield_time(gSavedSettings, "YieldTime");
+				if(yield_time >= 0)
 				{
 					LLFastTimer t(FTM_YIELD);
-					ms_sleep(mYieldTime);
+					ms_sleep(yield_time);
 				}
+				// </FS:Ansariel> MaxFPS Viewer-Chui merge error
 
 				// yield cooperatively when not running as foreground window
 				if (   (gViewerWindow && !gViewerWindow->getWindow()->getVisible())
@@ -1574,6 +1826,33 @@ bool LLAppViewer::mainLoop()
 				{
 					gFrameStalls++;
 				}
+
+				// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+				// Limit FPS
+				//F32 max_fps = gSavedSettings.getF32("MaxFPS");
+				static LLCachedControl<F32> max_fps(gSavedSettings, "MaxFPS");
+				// Only limit FPS when we are actually rendering something.  Otherwise
+				// logins, logouts and teleports take much longer to complete.
+				// <FS:Ansariel> FIRE-11804: Expose MaxFPS
+				//if (max_fps > F_APPROXIMATELY_ZERO && 
+				static LLCachedControl<bool> fsLimitFramerate(gSavedSettings, "FSLimitFramerate");
+				if (fsLimitFramerate && max_fps > F_APPROXIMATELY_ZERO && 
+				// </FS:Ansariel>
+					LLStartUp::getStartupState() == STATE_STARTED &&
+					!gTeleportDisplay &&
+					!logoutRequestSent())
+				{
+					// Sleep a while to limit frame rate.
+					F32 min_frame_time = 1.f / max_fps;
+					S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
+					if (milliseconds_to_sleep > 0)
+					{
+						LLFastTimer t(FTM_YIELD);
+						ms_sleep(milliseconds_to_sleep);
+					}
+				}
+				// </FS:Ansariel> MaxFPS Viewer-Chui merge error
+
 				frameTimer.reset();
 
 				resumeMainloopTimeout();
@@ -1653,6 +1932,13 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
+	// <FS:ND> stop collection stats
+	nd::allocstats::tearDown();
+	nd::mallocstats::tearDown();
+	// </FS:ND>
+
+	LLLeapMotionController::getInstance()->cleanup(); // <FS:ND/> shutdown leap support
+
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 
@@ -1719,11 +2005,49 @@ bool LLAppViewer::cleanup()
 
 	llinfos << "Cleaning Up" << llendflush;
 
+	// <FS:Zi> Backup Settings
+	if(mSaveSettingsOnExit)
+	{
+	// </FS:Zi>
+	// FIRE-4871: Save per-account settings earlier -- TS
+	std::string per_account_settings_file = gSavedSettings.getString("PerAccountSettingsFile");
+	if (per_account_settings_file.empty())
+	{
+		llinfos << "Not saving per-account settings; don't know the account name yet." << llendl;
+	}
+	// Only save per account settings if the previous login succeeded, otherwise
+	// we might end up with a cleared out settings file in case a previous login
+	// failed after loading per account settings. -Zi
+	else if (!mSavePerAccountSettings)
+	{
+		llinfos << "Not saving per-account settings; last login was not successful." << llendl;
+	}
+	else
+	{
+		gSavedPerAccountSettings.saveToFile(per_account_settings_file, TRUE);
+		llinfos << "First time: Saved per-account settings to " <<
+		        per_account_settings_file << llendl;
+	}
+	gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
+	// /FIRE-4871
+	// <FS:Zi> Backup Settings
+	}
+	else
+	{
+		llinfos << "Not saving settings, to prevent settings restore failure." << llendl;
+	}
+	// </FS:Zi>
+
 	// shut down mesh streamer
 	gMeshRepo.shutdown();
 
+	// <FS:ND> FIRE-8385 Crash on exit in Havok. It is hard to say why it happens, as we only have the binary Havok blob. This is a hack around it.
+	// Due to the fact the process is going to die anyway, the OS will clean up any reources left by not calling quitSystem.
+	// The OpenSim version does not use Havok, it is okay to call shutdown then.
+#ifdef OPENSIM
 	// shut down Havok
 	LLPhysicsExtensions::quitSystem();
+#endif // </FS:ND>
 
 	// Must clean up texture references before viewer window is destroyed.
 	if(LLHUDManager::instanceExists())
@@ -1794,7 +2118,13 @@ bool LLAppViewer::cleanup()
 	removeCacheFiles("*.tmp");
 	removeCacheFiles("*.lso");
 	removeCacheFiles("*.out");
-	removeCacheFiles("*.dsf");
+	// <FS:Ansariel> Sound cache
+	//removeCacheFiles("*.dsf");
+	if (!gSavedSettings.getBOOL("FSKeepUnpackedCacheFiles"))
+	{
+		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, ""), "*.dsf");
+	}
+	// </FS:Ansariel>
 	removeCacheFiles("*.bodypart");
 	removeCacheFiles("*.clothing");
 
@@ -1850,7 +2180,8 @@ bool LLAppViewer::cleanup()
 
 	LLAvatarAppearance::cleanupClass();
 	
-	LLAvatarAppearance::cleanupClass();
+	// <FS:Ansariel> Comment out duplicate clean up
+	//LLAvatarAppearance::cleanupClass();
 	
 	LLPostProcess::cleanupClass();
 
@@ -1901,13 +2232,35 @@ bool LLAppViewer::cleanup()
 
 	// Must do this after all panels have been deleted because panels that have persistent rects
 	// save their rects on delete.
-	gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
+	if(mSaveSettingsOnExit)		// <FS:Zi> Backup Settings
+	{
+		gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
 	
 	LLUIColorTable::instance().saveUserSettings();
 
+//<Firestorm Skin Cleanup>
+	std::string skinSaved = gSavedSettings.getString("SkinCurrent");
+	std::string themeSaved = gSavedSettings.getString("SkinCurrentTheme");
+	if ((skinSaved != mCurrentSkin) || (themeSaved != mCurrentSkinTheme))
+	{
+		llinfos << "Clearing skin colors." << llendflush;
+		// Implementation to only purge skin colors
+		LLUIColorTable::instance().saveUserSettingsPaletteOnly();
+
+	}
+//</Firestorm Skip Cleanup>
+	}	// <FS:Zi> Backup Settings
+	
+	
+	// <FS:Zi> Backup Settings
+	if(mSaveSettingsOnExit)
+	{
+	std::string per_account_settings_file = gSavedSettings.getString("PerAccountSettingsFile");
+	// </FS:Zi>
 	// PerAccountSettingsFile should be empty if no user has been logged on.
 	// *FIX:Mani This should get really saved in a "logoff" mode. 
-	if (gSavedSettings.getString("PerAccountSettingsFile").empty())
+	// FIRE-4871: use the same file we picked out earlier -- TS
+	if (per_account_settings_file.empty())
 	{
 		llinfos << "Not saving per-account settings; don't know the account name yet." << llendl;
 	}
@@ -1920,14 +2273,28 @@ bool LLAppViewer::cleanup()
 	}
 	else
 	{
-		gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
-		llinfos << "Saved settings" << llendflush;
+		gSavedPerAccountSettings.saveToFile(per_account_settings_file, TRUE);
+		llinfos << "Second time: Saved per-account settings to " <<
+		        per_account_settings_file << llendflush;
 	}
+	// <FS:Zi> Backup Settings
+	}
+	else
+	{
+		llinfos << "Not saving settings, to prevent settings restore failure." << llendl;
+	}
+	// </FS:Zi>
 
-	std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Warnings"));
+	// We need to save all crash settings, even if they're defaults [see LLCrashLogger::loadCrashBehaviorSetting()]
+	gCrashSettings.saveToFile(gSavedSettings.getString("CrashSettingsFile"),FALSE);
+
+	//std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Warnings"));
+	std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Warnings"));
+	if(mSaveSettingsOnExit)		// <FS:Zi> Backup Settings
 	gWarningSettings.saveToFile(warnings_settings_filename, TRUE);
 
 	// Save URL history file
+	if(mSaveSettingsOnExit)		// <FS:Zi> Backup Settings
 	LLURLHistory::saveFile("url_history.xml");
 
 	// save mute list. gMuteList used to also be deleted here too.
@@ -1940,6 +2307,8 @@ bool LLAppViewer::cleanup()
 	{
 		llinfos << "Purging all cache files on exit" << llendflush;
 		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""), "*.*");
+		// <FS:Ansariel> Sound cache
+		gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, ""), "*.*");
 	}
 	
 	writeDebugInfo();
@@ -2167,14 +2536,49 @@ bool LLAppViewer::initThreads()
 
 void errorCallback(const std::string &error_string)
 {
-#ifndef LL_RELEASE_FOR_DOWNLOAD
-	OSMessageBox(error_string, LLTrans::getString("MBFatalError"), OSMB_OK);
-#endif
+	LLStringUtil::format_map_t map;
+	map["ERROR_DETAILS"]=error_string;
+	std::string error_display_string=LLTrans::getString("MBApplicationErrorDetails",map);
+	
+	// <FS:Ansariel> If we crash before loading the configuration, LLTrans
+	//               won't be able to find the localized string, so we
+	//               fall back to the English version instead of showing
+	//               a dialog saying "MissingString("<LocalizationStringId>".
+	std::string caption = LLTrans::getString("MBApplicationError");
+
+	if (error_display_string.find("MissingString(") != std::string::npos)
+	{
+		error_display_string = "We are sorry, but Firestorm has crashed and needs to be closed. If you see this issue happening repeatedly, please contact our support team and submit the following message:\n\n[ERROR_DETAILS]";
+		LLStringUtil::format(error_display_string, map);
+	}
+	if (caption.find("MissingString(") != std::string::npos)
+	{
+		caption = "Application Error - Don't Panic";
+	}
+	// </FS:Ansariel>
+
+#if !LL_RELEASE_FOR_DOWNLOAD
+	// <FS:Ansariel> Changed to fix missing string error upon early crash
+	//if (OSBTN_CANCEL == OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OKCANCEL))
+	if (OSBTN_CANCEL == OSMessageBox(error_display_string, caption, OSMB_OKCANCEL))
+		return;
+#else
+	// <FS:Ansariel> Changed to fix missing string error upon early crash
+	//OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OK);
+	OSMessageBox(error_display_string, caption, OSMB_OK);
+#endif // !LL_RELEASE_FOR_DOWNLOAD
 
 	//Set the ErrorActivated global so we know to create a marker file
 	gLLErrorActivated = true;
 	
+//	LLError::crashAndLoop(error_string);
+// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.4)
+#if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
+	DebugBreak();
+#else
 	LLError::crashAndLoop(error_string);
+#endif // LL_RELEASE_WITH_DEBUG_INFO && LL_WINDOWS
+// [/SL:KB]
 }
 
 void LLAppViewer::initLoggingAndGetLastDuration()
@@ -2188,12 +2592,12 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 
 	// Remove the last ".old" log file.
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "SecondLife.old");
+							     "Firestorm.old");
 	LLFile::remove(old_log_file);
 
 	// Get name of the log file
 	std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "SecondLife.log");
+							     "Firestorm.log");
  	/*
 	 * Before touching any log files, compute the duration of the last run
 	 * by comparing the ctime of the previous start marker file with the ctime
@@ -2270,6 +2674,14 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 
 		BOOST_FOREACH(const SettingsFile& file, group.files)
 		{
+			// <FS:Ansariel> Skip quickprefs settings - we don't have a settings group
+			//               for it as it's not a regular settings file
+			if (file.name() == "QuickPreferences")
+			{
+				continue;
+			}
+			// </FS:Ansariel>
+
 			LL_INFOS("Settings") << "Attempting to load settings for the group " << file.name()
 			    << " - from location " << location_key << LL_ENDL;
 
@@ -2408,13 +2820,25 @@ bool LLAppViewer::initConfiguration()
 		OSMessageBox(msg.str(),LLStringUtil::null,OSMB_OK);
 		return false;
 	}
+	
+	//<FS:Techwolf Lupindo>
+	// load defaults overide here. Can not use settings_files.xml as path is different then above loading of defaults.
+	std::string fsdata_defaults = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "fsdata_defaults.xml");
+	std::string fsdata_global = "Global";
+	LLControlGroup* settings_group = LLControlGroup::getInstance(fsdata_global);
+	if(settings_group && settings_group->loadFromFile(fsdata_defaults, set_defaults))
+	{
+		llinfos << "Loaded settings file " << fsdata_defaults << llendl;
+	}
+	//</FS:Techwolf Lupindo>
 
 	initStrings(); // setup paths for LLTrans based on settings files only
 	// - set procedural settings
 	// Note: can't use LL_PATH_PER_SL_ACCOUNT for any of these since we haven't logged in yet
-	gSavedSettings.setString("ClientSettingsFile", 
-        gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
-
+        //gSavedSettings.setString("ClientSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
+        gSavedSettings.setString("ClientSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
+        gSavedSettings.setString("CrashSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "CrashSettings")));
+	
 #ifndef	LL_RELEASE_FOR_DOWNLOAD
 	// provide developer build only overrides for these control variables that are not
 	// persisted to settings.xml
@@ -2476,20 +2900,68 @@ bool LLAppViewer::initConfiguration()
 	{
 		std::string	user_settings_filename = 
 			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, 
-										   clp.getOption("settings")[0]);		
+										   clp.getOption("settings")[0]);
 		gSavedSettings.setString("ClientSettingsFile", user_settings_filename);
+		// SJ: if asked to purge configuration, remove custom user-settings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(user_settings_filename);
+		}
+
 		LL_INFOS("Settings")	<< "Using command line specified settings filename: " 
 			<< user_settings_filename << LL_ENDL;
 	}
+	else
+	{
+		// SJ: if asked to purge configuration, remove default user-settings file before it will be read
+		if (mPurgeSettings)
+		{
+			LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
+		}
+
+	}
+	
 
 	// - load overrides from user_settings 
 	loadSettingsFromDirectory("User");
 
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
+		if (gSavedSettings.getString("SessionSettingsFile").empty())
+        {
+            gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
+        }
+		
+// <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
+#ifdef OPENSIM
+		if (!gSavedSettings.getBOOL("ForceShowGrid"))
+			gSavedSettings.setBOOL("ForceShowGrid", TRUE);
+#endif // OPENSIM
+// </FS:CR>
+		
 		// Note that the "FirstRunThisInstall" settings is currently unused.
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
 	}
+	
+	// <FS:CR> Compatibility with old backups
+	// Put gSavedSettings here, gSavedPerAccountSettings in llstartup.cpp
+	// *TODO: Should we keep these around forever or just three release cycles?
+	if (gSavedSettings.getBOOL("FSFirstRunAfterSettingsRestore"))
+	{
+		// Nothing happened...
+	}
+	// </FS:CR>
+
+	//WS: Set the usersessionsettingsfile to the account_SessionSettingsFile file. This allows settings_per_accounts to be per session.
+	if(!gSavedSettings.getString("SessionSettingsFile").empty())
+    {
+		if(gSavedSettings.getString("UserSessionSettingsFile").empty())
+			gSavedSettings.setString("UserSessionSettingsFile","account_" + gSavedSettings.getString("SessionSettingsFile"));
+	}
+	else
+    {
+        gSavedSettings.setString("UserSessionSettingsFile","");
+    }
 
 	if (clp.hasOption("sessionsettings"))
 	{
@@ -2498,7 +2970,7 @@ bool LLAppViewer::initConfiguration()
 		LL_INFOS("Settings")	<< "Using session settings filename: " 
 			<< session_settings_filename << LL_ENDL;
 	}
-	loadSettingsFromDirectory("Session");
+	loadSettingsFromDirectory("Session",true); // AO The session file turns into the new defaults
 
 	if (clp.hasOption("usersessionsettings"))
 	{
@@ -2508,7 +2980,14 @@ bool LLAppViewer::initConfiguration()
 			<< user_session_settings_filename << LL_ENDL;
 
 	}
+
+	
 	loadSettingsFromDirectory("UserSession");
+	
+	//AO: Re-read user settings again. This is a Firestorm hack to get user settings to override modes
+	//Todo, find a cleaner way of doing this via the various set_default arguments.
+	loadSettingsFromDirectory("User");
+	
 
 	// - apply command line settings 
 	if (! clp.notify())
@@ -2668,15 +3147,24 @@ bool LLAppViewer::initConfiguration()
     // other browsers) and do the rough equivalent of command 
     // injection and steal passwords. Phoenix. SL-55321
 	LLSLURL start_slurl;
+
+	// The gridmanager doesn't know the grids yet, only prepare
+	// parsing the slurls, actually done when the grids are fetched 
+	// (currently at the top of startup STATE_AUDIO_INIT,
+	// but rather it belongs into the gridmanager)
 	std::string CmdLineLoginLocation(gSavedSettings.getString("CmdLineLoginLocation"));
 	if(! CmdLineLoginLocation.empty())
     {
 		start_slurl = CmdLineLoginLocation;
-		LLStartUp::setStartSLURL(start_slurl);
-		if(start_slurl.getType() == LLSLURL::LOCATION) 
-		{  
-			LLGridManager::getInstance()->setGridChoice(start_slurl.getGrid());
-		}
+		// <FS:Ansariel> FIRE-11586: Restore grid manager workaround (grid is still empty here!)
+		//LLStartUp::setStartSLURL(start_slurl);
+		//if(start_slurl.getType() == LLSLURL::LOCATION) 
+		//{  
+		//	LLGridManager::getInstance()->setGridChoice(start_slurl.getGrid());
+		//}
+		LLStartUp::setStartSLURLString(CmdLineLoginLocation);
+		// </FS:Ansariel>
+
 	}
 
 	//RN: if we received a URL, hand it off to the existing instance.
@@ -2687,12 +3175,21 @@ bool LLAppViewer::initConfiguration()
 	if (start_slurl.isValid() &&
 		(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
 	{
-		if (sendURLToOtherInstance(start_slurl.getSLURLString()))
+		// <FS:Ansariel> FIRE-11586: Temporary fix until grid manager has been reworked
+		//if (sendURLToOtherInstance(start_slurl.getSLURLString()))
+		if (sendURLToOtherInstance(CmdLineLoginLocation))
+		// </FS:Ansariel>
 		{
 			// successfully handed off URL to existing instance, exit
 			return false;
 		}
     }
+
+
+	// <FS:TT> Hacking to save the skin and theme for future use.
+	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
+	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+	// </FS:TT>
 
 	const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
 	if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
@@ -2700,10 +3197,16 @@ bool LLAppViewer::initConfiguration()
 		// Examining "Language" may not suffice -- see LLUI::getLanguage()
 		// logic. Unfortunately LLUI::getLanguage() doesn't yet do us much
 		// good because we haven't yet called LLUI::initClass().
-		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
-								 gSavedSettings.getString("Language"));
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+ 		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
+								 gSavedSettings.getString("SkinCurrentTheme"),
+ 								 gSavedSettings.getString("Language"));
+		loadSettingsFromDirectory("CurrentSkin");
+// [/SL:KB]
+//		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
+//								 gSavedSettings.getString("Language"));
 	}
-
+	
 	if (gSavedSettings.getBOOL("SpellCheck"))
 	{
 		std::list<std::string> dict_list;
@@ -2717,14 +3220,21 @@ bool LLAppViewer::initConfiguration()
 		}
 	}
 
-    mYieldTime = gSavedSettings.getS32("YieldTime");
-
+	// <FS:Ansariel> MaxFPS Viewer-Chui merge error
+    //mYieldTime = gSavedSettings.getS32("YieldTime");
 
 	// Display splash screen.  Must be after above check for previous
 	// crash as this dialog is always frontmost.
 	std::string splash_msg;
 	LLStringUtil::format_map_t args;
-	args["[APP_NAME]"] = LLTrans::getString("SECOND_LIFE");
+	//<FS:AW set the APP_NAME to Firestorm instead of the grid connected to>
+	// //args["[APP_NAME]"] = LLTrans::getString("SECOND_LIFE");
+	// //[FIX FIRE-2852] Changed function to find the right Gridname
+	// args["[APP_NAME]"] = LLGridManager::getInstance()->getGridLabel();
+	// //[FIX FIRE-2919] Making sure Current_grid has the right value
+	args["[APP_NAME]"] =  LLTrans::getString("APP_NAME");
+	//<FS:AW set the APP_NAME to Firestorm instead of the grid connected to>
+	args["[CURRENT_GRID]"] = LLGridManager::getInstance()->getGridLabel();
 	splash_msg = LLTrans::getString("StartupLoading", args);
 	LLSplashScreen::show();
 	LLSplashScreen::update(splash_msg);
@@ -2741,7 +3251,7 @@ bool LLAppViewer::initConfiguration()
 	//
 	// Set the name of the window
 	//
-	gWindowTitle = LLTrans::getString("APP_NAME");
+	gWindowTitle = LLVersionInfo::getChannelAndVersion();	// <FS:CR>
 #if LL_DEBUG
 	gWindowTitle += std::string(" [DEBUG] ") + gArgs;
 #else
@@ -2753,16 +3263,20 @@ bool LLAppViewer::initConfiguration()
 	// don't call anotherInstanceRunning() when doing URL handoff, as
 	// it relies on checking a marker file which will not work when running
 	// out of different directories
-
-	if (LLStartUp::getStartSLURL().isValid() &&
-		(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
-	{
-		if (sendURLToOtherInstance(LLStartUp::getStartSLURL().getSLURLString()))
-		{
-			// successfully handed off URL to existing instance, exit
-			return false;
-		}
-	}
+	// <FS:Ansariel> Duplicate call
+	//if (start_slurl.isValid() &&
+	//	(gSavedSettings.getBOOL("SLURLPassToOtherInstance")))
+	//{
+	//	// <FS:Ansariel> FIRE-11586: Temporary fix until grid manager has been reworked
+	//	//if (sendURLToOtherInstance(start_slurl.getSLURLString()))
+	//	if (sendURLToOtherInstance(CmdLineLoginLocation))
+	//	// </FS:Ansariel>
+	//	{
+	//		// successfully handed off URL to existing instance, exit
+	//		return false;
+	//	}
+	//}
+	// </FS:Ansariel>
 
 	//
 	// Check for another instance of the app running
@@ -2783,7 +3297,10 @@ bool LLAppViewer::initConfiguration()
 		// This is the second instance of SL. Turn off voice support,
 		// but make sure the setting is *not* persisted.
 		LLControlVariable* disable_voice = gSavedSettings.getControl("CmdLineDisableVoice");
-		if(disable_voice)
+		// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
+		//if(disable_voice)
+		if(disable_voice && !gSavedSettings.getBOOL("VoiceMultiInstance"))
+		// </FS:Ansariel>
 		{
 			const BOOL DO_NOT_PERSIST = FALSE;
 			disable_voice->setValue(LLSD(TRUE), DO_NOT_PERSIST);
@@ -2804,12 +3321,23 @@ bool LLAppViewer::initConfiguration()
 		// init StartSLURL location.
 		std::string start_slurl_setting = gSavedSettings.getString("LoginLocation");
 		LL_DEBUGS("AppInit") << "start slurl setting '" << start_slurl_setting << "'" << LL_ENDL;
-		LLStartUp::setStartSLURL(LLSLURL(start_slurl_setting));
+		// <FS:AW crash on startup>
+		// also here LLSLURLs are not available at this point of startup
+		//	LLStartUp::setStartSLURL(LLSLURL(start_slurl_setting));
+			LLStartUp::setStartSLURLString(start_slurl_setting);
+		// </FS:AW crash on startup>
 	}
 	else
 	{
 		// the login location will be set by the login panel (see LLPanelLogin)
 	}
+
+	// <FS:Ansariel> Option to not save password if using login cmdline switch
+	if (clp.hasOption("logindontsavepassword") && clp.hasOption("login"))
+	{
+		gSavedSettings.setBOOL("FSLoginDontSavePassword", TRUE);
+	}
+	// </FS:Ansariel>
 
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 
@@ -3126,7 +3654,15 @@ bool LLAppViewer::initWindow()
 		.height(gSavedSettings.getU32("WindowHeight"))
 		.min_width(gSavedSettings.getU32("MinWindowWidth"))
 		.min_height(gSavedSettings.getU32("MinWindowHeight"))
+/// <FS:CR> Since the 3.6.5 merge, setting fullscreen does terrible bad things on macs like opening
+/// all floaters and menus off the left side of the screen. Let's not do that right now...
+/// Hardcoding full screen OFF until it's fixed. On 10.7+ we have native full screen support anyway.
+#ifndef LL_DARWIN
 		.fullscreen(gSavedSettings.getBOOL("FullScreen"))
+#else // !LL_DARWIN
+		.fullscreen(false)
+#endif // !LL_DARWIN
+// </FS:CR>
 		.ignore_pixel_depth(ignorePixelDepth);
 
 	gViewerWindow = new LLViewerWindow(window_params);
@@ -3151,6 +3687,10 @@ bool LLAppViewer::initWindow()
 		LLWatchdog::getInstance()->init(watchdog_killer_callback);
 	}
 	LL_INFOS("AppInit") << "watchdog setting is done." << LL_ENDL;
+
+	// <FS:Ansariel> Init group notices, IMs and chiclets position before the
+	//               screenchannel gets created
+	gSavedSettings.setBOOL("InternalShowGroupNoticesTopRight", gSavedSettings.getBOOL("ShowGroupNoticesTopRight"));
 
 	LLNotificationsUI::LLNotificationManager::getInstance();
 		
@@ -3254,6 +3794,44 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
 
+// <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
+#ifdef OPENSIM
+	info["BUILD_TYPE"] = LLTrans::getString("FSWithOpensim");
+#else
+	info["BUILD_TYPE"] = LLTrans::getString("FSWithHavok");
+#endif // OPENSIM
+// </FS:CR>
+	info["SKIN"] = gSavedSettings.getString("FSInternalSkinCurrent");
+	info["THEME"] = gSavedSettings.getString("FSInternalSkinCurrentTheme");
+
+	//[FIRE 3113 : SJ] Added Font and fontsize to info
+	info["FONT"] = "Unknown Font";
+	std::string fsInternalFontSettingsFile = gSavedSettings.getString("FSInternalFontSettingsFile");
+	if (fsInternalFontSettingsFile == "fonts.xml") info["FONT"] = "Deja Vu";
+	else if (fsInternalFontSettingsFile == "fonts_ubuntu.xml") info["FONT"] = "Ubuntu Font Family";
+	else if (fsInternalFontSettingsFile == "fonts_liberation.xml") info["FONT"] = "Liberation";
+	else if (fsInternalFontSettingsFile == "fonts_droid.xml") info["FONT"] = "Droid Sans";
+	else if (fsInternalFontSettingsFile == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
+	else if (fsInternalFontSettingsFile == "fonts_roboto.xml") info["FONT"] = "Roboto";
+	else if (fsInternalFontSettingsFile == "fonts_dyslexia.xml") info["FONT"] = "OpenDyslexic";
+	
+	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
+	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
+
+	//[FIRE-3923 : SJ] Added Drawdistance, bandwidth and LOD to info
+	info["DRAW_DISTANCE"] = gSavedSettings.getF32("RenderFarClip");
+	info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	info["LOD"] =gSavedSettings.getF32("RenderVolumeLODFactor");
+
+	//[FIRE 3113 : SJ] Added Settingsfile to info
+	info["MODE"] = "Unknown Mode";
+	std::string sessionSettingsFile = gSavedSettings.getString("SessionSettingsFile");
+	if (sessionSettingsFile == "settings_firestorm.xml") info["MODE"] = "Firestorm";
+	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
+	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
+	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
+	else if (sessionSettingsFile == "settings_latency.xml") info["MODE"] = "Latency";
+
 	// return a URL to the release notes for this viewer, such as:
 	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456
 	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
@@ -3267,6 +3845,9 @@ LLSD LLAppViewer::getViewerInfo() const
 #if LL_MSVC
 	info["COMPILER"] = "MSVC";
 	info["COMPILER_VERSION"] = _MSC_VER;
+#elif LL_CLANG	// <FS:CR> Clang identification
+	info["COMPILER"] = "Clang";
+	info["COMPILER_VERSION"] = CLANG_VERSION_STRING;
 #elif LL_GNUC
 	info["COMPILER"] = "GCC";
 	info["COMPILER_VERSION"] = GCC_VERSION;
@@ -3304,6 +3885,9 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 #endif
 
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0)
+	info["RLV_VERSION"] = (RlvActions::isRlvEnabled()) ? RlvStrings::getVersionAbout() : "(disabled)";
+// [/RLVa:KB]
 	info["OPENGL_VERSION"] = (const char*)(glGetString(GL_VERSION));
 	info["LIBCURL_VERSION"] = LLCurl::getVersionString();
 	info["J2C_VERSION"] = LLImageJ2C::getEngineInfo();
@@ -3327,7 +3911,11 @@ LLSD LLAppViewer::getViewerInfo() const
 	if (gPacketsIn > 0)
 	{
 		info["PACKETS_LOST"] = LLViewerStats::getInstance()->mPacketsLostStat.getCurrent();
-		info["PACKETS_IN"] = F32(gPacketsIn);  
+		// <FS:Ansariel> FIRE-3925: Formatting fails when reaching 1,000,000;
+		//               Use S32 since it will be used in LLStringUtil::formatNumber anyway.
+		//info["PACKETS_IN"] = F32(gPacketsIn);
+		info["PACKETS_IN"] = S32(gPacketsIn);
+		// </FS:Ansariel>
 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
 	}
 
@@ -3346,6 +3934,49 @@ LLSD LLAppViewer::getViewerInfo() const
 	{
 		info["SERVER_RELEASE_NOTES_URL"] = mServerReleaseNotesURL;
 	}
+
+	// <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
+	switch (gSavedSettings.getU32("RenderQualityPerformance"))
+	{
+		case 0:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_low");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Low (1/7)";
+			break;
+		case 1:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumlow");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-Low (2/7)";
+			break;
+		case 2:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_medium");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium (3/7)";
+			break;
+		case 3:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumhigh");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-High (4/7)";
+			break;
+		case 4:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_high");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High (5/7)";
+			break;
+		case 5:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_highultra");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High-Ultra (6/7)";
+			break;
+		case 6:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_ultra");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Ultra (7/7)";
+			break;
+		default:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_unknown");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Unknown, user has RenderQualityPerformance debug setting beyond the normal range (0-6)";
+			break;
+	}
+	// </FS:PP>
+
+	// <FS:Ansariel> FIRE-11768: Include texture memory settings
+	info["TEXTUREMEMORY"] = gSavedSettings.getS32("TextureMemory");
+	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
+	// </FS:Ansariel>
 
 	return info;
 }
@@ -3392,7 +4023,14 @@ std::string LLAppViewer::getViewerInfoString() const
 	support << LLTrans::getString("AboutHeader", args);
 	if (info.has("REGION"))
 	{
-		support << "\n\n" << LLTrans::getString("AboutPosition", args);
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+		support << "\n\n";
+		if (RlvActions::canShowLocation())
+			support << LLTrans::getString("AboutPosition", args);
+		else
+			support << RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+// [/RLVa:KB]
+		//support << "\n\n" << LLTrans::getString("AboutPosition", args);
 	}
 	support << "\n\n" << LLTrans::getString("AboutSystem", args);
 	support << "\n";
@@ -3401,6 +4039,10 @@ std::string LLAppViewer::getViewerInfoString() const
 		support << "\n" << LLTrans::getString("AboutDriver", args);
 	}
 	support << "\n" << LLTrans::getString("AboutLibs", args);
+	if (info.has("BANDWIDTH")) //For added info in help floater
+	{
+		support << "\n" << LLTrans::getString("AboutSettings", args);
+	}
 	if (info.has("COMPILER"))
 	{
 		support << "\n" << LLTrans::getString("AboutCompiler", args);
@@ -3463,21 +4105,42 @@ void LLAppViewer::writeSystemInfo()
     
     if (! gDebugInfo.has("Dynamic") )
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
-    
+
+	// <FS:ND> set filename to Firestorm.log
+// #if LL_WINDOWS
+// 	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
+// #else
+//     //Not ideal but sufficient for good reporting.
+//     gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
+// #endif
+
 #if LL_WINDOWS
-	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"SecondLife.log");
+	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"Firestorm.log");
 #else
     //Not ideal but sufficient for good reporting.
-    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.old");  //LLError::logFileName();
+    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"Firestorm.old");  //LLError::logFileName();
 #endif
+	// </FS:ND>
 
 	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	gDebugInfo["ClientInfo"]["Version"] = LLVersionInfo::getVersion();
+	gDebugInfo["ClientInfo"]["Platform"] = LLVersionInfo::getBuildPlatform();
+// [/SL:KB]
 	gDebugInfo["ClientInfo"]["MajorVersion"] = LLVersionInfo::getMajor();
 	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
 
-	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
+
+	//	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
 
 	gDebugInfo["CPUInfo"]["CPUString"] = gSysCPU.getCPUString();
 	gDebugInfo["CPUInfo"]["CPUFamily"] = gSysCPU.getFamily();
@@ -3533,7 +4196,12 @@ void LLAppViewer::writeSystemInfo()
 	LL_INFOS("SystemInfo") << "OS: " << getOSInfo().getOSStringSimple() << LL_ENDL;
 	LL_INFOS("SystemInfo") << "OS info: " << getOSInfo() << LL_ENDL;
 
-    gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
+	// <FS:ND> Breakpad merge. Only include SettingsFile if the user selected this in prefs. Path from Catznip
+    // gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
+	if (gCrashSettings.getBOOL("CrashSubmitSettings"))
+		gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
+	// </FS:ND>
+
 	gDebugInfo["ViewerExePath"] = gDirUtilp->getExecutablePathAndName();
 	gDebugInfo["CurrentPath"] = gDirUtilp->getCurPath();
 	gDebugInfo["FirstLogin"] = (LLSD::Boolean) gAgent.isFirstLogin();
@@ -3746,6 +4414,8 @@ void LLAppViewer::recordMarkerVersion(LLAPRFile& marker_file)
 
 	// record the viewer version in the marker file
 	marker_file.write(marker_version.data(), marker_version.length());
+
+	marker_file.flush(); // <FS:ND/> Make sure filesystem reflects what we wrote.
 }
 
 bool LLAppViewer::markerIsSameVersion(const std::string& marker_name) const
@@ -3797,7 +4467,10 @@ void LLAppViewer::processMarkerFiles()
 		// now test to see if this file is locked by a running process (try to open for write)
 		LL_DEBUGS("MarkerFile") << "Checking exec marker file for lock..." << LL_ENDL;
 		mMarkerFile.open(mMarkerFileName, LL_APR_WB);
-		apr_file_t* fMarker = mMarkerFile.getFileHandle() ; 
+		// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+		//apr_file_t* fMarker = mMarkerFile.getFileHandle() ; 
+		LLAPRFile::tFiletype* fMarker = mMarkerFile.getFileHandle() ; 
+		// </FS:ND>
 		if (!fMarker)
 		{
 			LL_INFOS("MarkerFile") << "Exec marker file open failed - assume it is locked." << LL_ENDL;
@@ -3810,6 +4483,7 @@ void LLAppViewer::processMarkerFiles()
 			{
 				LL_WARNS_ONCE("MarkerFile") << "Locking exec marker failed." << LL_ENDL;
 				mSecondInstance = true; // lost a race? be conservative
+				mMarkerFile.close(); // <FS:ND/> Cannot lock the file and take ownership. Don't keep it open
 			}
 			else
 			{
@@ -4002,6 +4676,15 @@ void LLAppViewer::requestQuit()
 		{
 			sendLogoutRequest();
 		}
+		else if(LLStartUp::getStartupState() == STATE_STARTED) // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
+		{
+			if (gFloaterView)
+			{
+				// application is quitting
+				gFloaterView->closeAllChildren(true);
+			}
+
+		} // ~LO
 		
 		// Quit immediately
 		forceQuit();
@@ -4018,10 +4701,12 @@ void LLAppViewer::requestQuit()
 	}
 	
 	// Try to send last batch of avatar rez metrics.
-	if (!gDisconnected && isAgentAvatarValid())
-	{
-		gAgentAvatarp->updateAvatarRezMetrics(true); // force a last packet to be sent.
-	}
+	// <FS:Ansariel> LL merge error
+	//if (!gDisconnected && isAgentAvatarValid())
+	//{
+	//	gAgentAvatarp->updateAvatarRezMetrics(true); // force a last packet to be sent.
+	//}
+	// </FS:Ansariel>
 	
 	LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral*)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, TRUE);
 	effectp->setPositionGlobal(gAgent.getPositionGlobal());
@@ -4142,9 +4827,10 @@ void LLAppViewer::migrateCacheDirectory()
 			}
 			llinfos << "Moved " << file_count << " files" << llendl;
 
-			// Nuke the old cache
-			gDirUtilp->setCacheDir(old_cache_dir);
-			purgeCache();
+			// AO: Don't automatically purge old cache
+			//// Nuke the old cache
+			//gDirUtilp->setCacheDir(old_cache_dir);
+			//purgeCache();
 			gDirUtilp->setCacheDir(new_cache_dir);
 
 #if LL_DARWIN
@@ -4241,15 +4927,38 @@ bool LLAppViewer::initCache()
 
 	if(!read_only)
 	{
+		// <FS:Ansariel> Clear inventory cache button
+		std::string clear_inventory_agent_id = gSavedSettings.getString("FSPurgeInventoryCacheOnStartup");
+		if (clear_inventory_agent_id != std::string())
+		{
+			gSavedSettings.setString("FSPurgeInventoryCacheOnStartup", std::string());
+			std::string inv_cache_file = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, clear_inventory_agent_id + ".inv.gz");
+			LL_INFOS("LLAppViewer") << "Purging inventory cache file: " << inv_cache_file << LL_ENDL;
+			LLFile::remove(inv_cache_file);
+		}
+		// </FS:Ansariel>
+
 		// Purge cache if user requested it
 		if (gSavedSettings.getBOOL("PurgeCacheOnStartup") ||
 			gSavedSettings.getBOOL("PurgeCacheOnNextStartup"))
 		{
 			gSavedSettings.setBOOL("PurgeCacheOnNextStartup", false);
+			LL_INFOS("AppCache") << "Scheduling texture purge, based on PurgeCache* settings." << LL_ENDL;
 			mPurgeCache = true;
 			// STORM-1141 force purgeAllTextures to get called to prevent a crash here. -brad
 			texture_cache_mismatch = true;
 		}
+		
+		// <FS> If the J2C has changed since the last run, clear the cache
+		const std::string j2c_info = LLImageJ2C::getEngineInfo();
+		const std::string j2c_last = gSavedSettings.getString("LastJ2CVersion");
+		if (j2c_info != j2c_last && !j2c_last.empty())
+		{
+			LL_INFOS("AppCache") << "Scheduling texture purge, based on LastJ2CVersion mismatch." << LL_ENDL;
+			mPurgeTextures = true;
+		}
+		gSavedSettings.setString("LastJ2CVersion", j2c_info);
+		// </FS>
 	
 		// We have moved the location of the cache directory over time.
 		migrateCacheDirectory();
@@ -4259,8 +4968,10 @@ bool LLAppViewer::initCache()
 		std::string new_cache_location = gSavedSettings.getString("NewCacheLocation");
 		if (new_cache_location != cache_location)
 		{
-			gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
-			purgeCache(); // purge old cache
+			// AO: Don't automatically purge old cache location, has unwanted side effects with shared caches, upgrades
+			//llwarns << new_cache_location <<  " is not the same as " << cache_location << ". PURGING." << llendl;
+			//gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
+			//purgeCache(); // purge old cache
 			gSavedSettings.setString("CacheLocation", new_cache_location);
 			gSavedSettings.setString("CacheLocationTopFolder", gDirUtilp->getBaseFileName(new_cache_location));
 		}
@@ -4272,12 +4983,29 @@ bool LLAppViewer::initCache()
 		gSavedSettings.setString("CacheLocation", "");
 		gSavedSettings.setString("CacheLocationTopFolder", "");
 	}
+
+	// <FS:Ansariel> Sound cache
+	if (!gDirUtilp->setSoundCacheDir(gSavedSettings.getString("FSSoundCacheLocation")))
+	{
+		LL_WARNS("AppCache") << "Unable to set sound cache location" << LL_ENDL;
+		gSavedSettings.setString("FSSoundCacheLocation", "");
+	}
+	// </FS:Ansariel>
 	
 	if (mPurgeCache && !read_only)
 	{
 		LLSplashScreen::update(LLTrans::getString("StartupClearingCache"));
 		purgeCache();
 	}
+
+	// <FS:Ansariel> FIRE-13066
+	if (mPurgeTextures && !read_only)
+	{
+		LL_INFOS("AppCache") << "Purging Texture Cache..." << LL_ENDL;
+		LLSplashScreen::update(LLTrans::getString("StartupClearingTextureCache"));
+		LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
+	}
+	// </FS:Ansariel>
 
 	LLSplashScreen::update(LLTrans::getString("StartupInitializingTextureCache"));
 	
@@ -4476,7 +5204,11 @@ void LLAppViewer::purgeCache()
 
 std::string LLAppViewer::getSecondLifeTitle() const
 {
+#ifdef ND_BUILD64BIT_ARCH
+	return LLTrans::getString("APP_NAME") + "_x64";
+#else
 	return LLTrans::getString("APP_NAME");
+#endif
 }
 
 std::string LLAppViewer::getWindowTitle() const 
@@ -4491,6 +5223,12 @@ bool finish_disconnect(const LLSD& notification, const LLSD& response)
 
 	if (1 == option)
 	{
+		if (gFloaterView)
+		{
+			// application is quitting
+			gFloaterView->closeAllChildren(true);
+		}
+
         LLAppViewer::instance()->forceQuit();
 	}
 	return false;
@@ -4499,6 +5237,12 @@ bool finish_disconnect(const LLSD& notification, const LLSD& response)
 // Callback from an early disconnect dialog, force an exit
 bool finish_forced_disconnect(const LLSD& notification, const LLSD& response)
 {
+	if (gFloaterView)
+	{
+		// application is quitting
+		gFloaterView->closeAllChildren(true);
+	}
+
 	LLAppViewer::instance()->forceQuit();
 	return false;
 }
@@ -4527,11 +5271,15 @@ void LLAppViewer::forceDisconnect(const std::string& mesg)
 	{
 		// Tell users what happened
 		args["ERROR_MESSAGE"] = big_reason;
+		//[FIX FIRE-2919] Making sure Current_grid has the right value
+		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 		LLNotificationsUtil::add("ErrorMessage", args, LLSD(), &finish_forced_disconnect);
 	}
 	else
 	{
 		args["MESSAGE"] = big_reason;
+		//[FIX FIRE-2919] Making sure Current_grid has the right value
+		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 		LLNotificationsUtil::add("YouHaveBeenLoggedOut", args, LLSD(), &finish_disconnect );
 	}
 }
@@ -4556,7 +5304,7 @@ void LLAppViewer::badNetworkHandler()
 		"the issue. \n"
 		" \n"
 		"If the problem continues, see the Tech Support FAQ at: \n"
-		"www.secondlife.com/support";
+		"www.firestormviewer.org/support";
 	forceDisconnect(message.str());
 	
 	LLApp::instance()->writeMiniDump();
@@ -4696,14 +5444,27 @@ void LLAppViewer::idle()
 	// Smoothly weight toward current frame
 	gFPSClamped = (frame_rate_clamped + (4.f * gFPSClamped)) / 5.f;
 
-	F32 qas = gSavedSettings.getF32("QuitAfterSeconds");
+	static LLCachedControl<F32> quitAfterSeconds(gSavedSettings, "QuitAfterSeconds");
+	F32 qas = (F32)quitAfterSeconds;
 	if (qas > 0.f)
 	{
 		if (gRenderStartTime.getElapsedTimeF32() > qas)
 		{
+			llinfos << "Logout, QuitAfterSeconds expired." << llendl;
 			LLAppViewer::instance()->forceQuit();
 		}
 	}
+
+	// <FS:AO> setting to quit after N seconds of being AFK. Note: Server will time us out after 30m regardless
+	static LLCachedControl<F32> quitAfterSecondsOfAFK(gSavedSettings, "QuitAfterSecondsOfAFK");
+	F32 qas_afk = (F32)quitAfterSecondsOfAFK;
+	if (!mQuitRequested && qas_afk > 0.f && gAgent.getAFK() && gAwayTimer.getElapsedTimeF32() > qas_afk)
+	{
+		// go ahead and just quit gracefully
+		llinfos << "Logout, QuitAfterSecondsAFK expired." << llendl;
+		LLAppViewer::instance()->requestQuit();
+	}
+	// </FS:AO>
 
 	// Must wait until both have avatar object and mute list, so poll
 	// here.
@@ -4740,7 +5501,8 @@ void LLAppViewer::idle()
 	    // Update simulator agent state
 	    //
 
-		if (gSavedSettings.getBOOL("RotateRight"))
+		static LLCachedControl<bool> rotateRight(gSavedSettings, "RotateRight");
+		if (rotateRight)
 		{
 			gAgent.moveYaw(-1.f);
 		}
@@ -4764,7 +5526,8 @@ void LLAppViewer::idle()
 		    LLFastTimer t(FTM_AGENT_UPDATE);
 		    // Send avatar and camera info
 		    last_control_flags = gAgent.getControlFlags();
-		    send_agent_update(TRUE);
+			if(!gAgent.getPhantom())
+				send_agent_update(TRUE);
 		    agent_update_timer.reset();
 	    }
 	}
@@ -4790,18 +5553,20 @@ void LLAppViewer::idle()
 		}
 
 		// Print the object debugging stats
+		// ...well, reset the stats, anyway. What good are the spammy
+		//  messages if we can't do anything about them? Bah. -- TS
 		static LLFrameTimer object_debug_timer;
 		if (object_debug_timer.getElapsedTimeF32() > 5.f)
 		{
 			object_debug_timer.reset();
 			if (gObjectList.mNumDeadObjectUpdates)
 			{
-				llinfos << "Dead object updates: " << gObjectList.mNumDeadObjectUpdates << llendl;
+				//llinfos << "Dead object updates: " << gObjectList.mNumDeadObjectUpdates << llendl;
 				gObjectList.mNumDeadObjectUpdates = 0;
 			}
 			if (gObjectList.mNumUnknownUpdates)
 			{
-				llinfos << "Unknown object updates: " << gObjectList.mNumUnknownUpdates << llendl;
+				//llinfos << "Unknown object updates: " << gObjectList.mNumUnknownUpdates << llendl;
 				gObjectList.mNumUnknownUpdates = 0;
 			}
 
@@ -4829,6 +5594,7 @@ void LLAppViewer::idle()
 	    	        
 
 		// Check for away from keyboard, kick idle agents.
+		// be sane and only check for afk 1nce 
 		idle_afk_check();
 
 		//  Update statistics for this frame
@@ -4842,7 +5608,7 @@ void LLAppViewer::idle()
 	//
 
 	{
-// 		LLFastTimer t(FTM_IDLE_CB);
+ 		LLFastTimer t(FTM_IDLE_CB);
 
 		// Do event notifications if necessary.  Yes, we may want to move this elsewhere.
 		gEventNotifier.update();
@@ -4866,6 +5632,13 @@ void LLAppViewer::idle()
 
 	if (gDisconnected)
     {
+		// <FS:CR> Inworldz hang in disconnecting fix by McCabe Maxstead
+		// make sure to quit here if we need to, we can get caught in an infinite loop otherwise -- MC
+		if (mQuitRequested && logoutRequestSent() && (gLogoutTimer.getElapsedTimeF32() > gLogoutMaxTime))
+		{
+			forceQuit();
+		}
+		// </FS:CR>
 		return;
     }
 	if (gTeleportDisplay)
@@ -5008,6 +5781,14 @@ void LLAppViewer::idle()
 	{
 		gAgentPilot.moveCamera();
 	}
+// <FS:Zi> Leap Motion flycam
+#ifdef USE_LEAPMOTION
+	else if(gestureController && gestureController->getOverrideCamera())
+	{
+		gestureController->moveFlycam();
+	}
+#endif //USE_LEAPMOTION
+// </FS:Zi>
 	else if (LLViewerJoystick::getInstance()->getOverrideCamera())
 	{ 
 		LLViewerJoystick::getInstance()->moveFlycam();
@@ -5119,7 +5900,7 @@ void LLAppViewer::idleShutdown()
 		static S32 total_uploads = 0;
 		// Sometimes total upload count can change during logout.
 		total_uploads = llmax(total_uploads, pending_uploads);
-		gViewerWindow->setShowProgress(TRUE);
+		gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLogoutScreens"));
 		S32 finished_uploads = total_uploads - pending_uploads;
 		F32 percent = 100.f * finished_uploads / total_uploads;
 		gViewerWindow->setProgressPercent(percent);
@@ -5140,7 +5921,7 @@ void LLAppViewer::idleShutdown()
 		sendLogoutRequest();
 
 		// Wait for a LogoutReply message
-		gViewerWindow->setShowProgress(TRUE);
+		gViewerWindow->setShowProgress(true,!gSavedSettings.getBOOL("FSDisableLogoutScreens"));
 		gViewerWindow->setProgressPercent(100.f);
 		gViewerWindow->setProgressString(LLTrans::getString("LoggingOut"));
 		return;
@@ -5278,7 +6059,8 @@ void LLAppViewer::idleNetwork()
 	gObjectList.mNumNewObjects = 0;
 	S32 total_decoded = 0;
 
-	if (!gSavedSettings.getBOOL("SpeedTest"))
+	static LLCachedControl<bool> speedTest(gSavedSettings, "SpeedTest");
+	if (!speedTest)
 	{
 		LLFastTimer t(FTM_IDLE_NETWORK); // decode
 		
@@ -5399,6 +6181,13 @@ void LLAppViewer::disconnectViewer()
 		gFloaterView->restoreAll();
 	}
 
+	// <FS:Ansariel> Firestorm radar: Shutdown radar
+	if (FSRadar::instanceExists())
+	{
+		FSRadar::deleteSingleton();
+	}
+	// <FS:Ansariel>
+
 	if (LLSelectMgr::getInstance())
 	{
 		LLSelectMgr::getInstance()->deselectAll();
@@ -5418,6 +6207,11 @@ void LLAppViewer::disconnectViewer()
 
 	// close inventory interface, close all windows
 	LLFloaterInventory::cleanup();
+
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
+	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them
+	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(false);
+// [/SL:KB]
 
 	gAgentWearables.cleanup();
 	gAgentCamera.cleanup();
@@ -5487,7 +6281,10 @@ void LLAppViewer::forceErrorDriverCrash()
 	glDeleteTextures(1, NULL);
 }
 
-void LLAppViewer::initMainloopTimeout(const std::string& state, F32 secs)
+// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
+//void LLAppViewer::initMainloopTimeout(const std::string& state, F32 secs)
+void LLAppViewer::initMainloopTimeout( char const* state, F32 secs)
+// </FS:ND>
 {
 	if(!mMainloopTimeout)
 	{
@@ -5505,13 +6302,20 @@ void LLAppViewer::destroyMainloopTimeout()
 	}
 }
 
-void LLAppViewer::resumeMainloopTimeout(const std::string& state, F32 secs)
+// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
+//void LLAppViewer::resumeMainloopTimeout(const std::string& state, F32 secs)
+void LLAppViewer::resumeMainloopTimeout( char const* state, F32 secs)
+// </FS:ND>
 {
 	if(mMainloopTimeout)
 	{
 		if(secs < 0.0f)
 		{
-			secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			// <FS:ND> Gets called often in display loop
+			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
+			secs = MainloopTimeoutDefault;
+			// </FS:ND>
 		}
 		
 		mMainloopTimeout->setTimeout(secs);
@@ -5527,7 +6331,10 @@ void LLAppViewer::pauseMainloopTimeout()
 	}
 }
 
-void LLAppViewer::pingMainloopTimeout(const std::string& state, F32 secs)
+// <FS:ND> Change from std::string to char const*, saving a lot of object construction/destruction per frame
+//void LLAppViewer::pingMainloopTimeout(const std::string& state, F32 secs)
+void LLAppViewer::pingMainloopTimeout( char const* state, F32 secs)
+// </FS:ND>
 {
 //	if(!restoreErrorTrap())
 //	{
@@ -5538,7 +6345,11 @@ void LLAppViewer::pingMainloopTimeout(const std::string& state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			// <FS:ND> Gets called often in display loop
+			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
+			secs = MainloopTimeoutDefault;
+			// </FS:ND>
 		}
 
 		mMainloopTimeout->setTimeout(secs);
@@ -5553,11 +6364,22 @@ void LLAppViewer::handleLoginComplete()
 
 	// Store some data to DebugInfo in case of a freeze.
 	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();
-
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-05-08 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	gDebugInfo["ClientInfo"]["Version"] = LLVersionInfo::getVersion();
+	gDebugInfo["ClientInfo"]["Platform"] = LLVersionInfo::getBuildPlatform();
+// [/SL:KB]
 	gDebugInfo["ClientInfo"]["MajorVersion"] = LLVersionInfo::getMajor();
 	gDebugInfo["ClientInfo"]["MinorVersion"] = LLVersionInfo::getMinor();
 	gDebugInfo["ClientInfo"]["PatchVersion"] = LLVersionInfo::getPatch();
 	gDebugInfo["ClientInfo"]["BuildVersion"] = LLVersionInfo::getBuild();
+
+// <FS:ND> Add which flavor of FS generated an error
+#ifdef OPENSIM
+	gDebugInfo["ClientInfo"]["Flavor"] = "oss";
+#else
+	gDebugInfo["ClientInfo"]["Flavor"] = "hvk";
+#endif
+// </FS:ND>
 
 	LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 	if ( parcel && parcel->getMusicURL()[0])
@@ -5569,16 +6391,29 @@ void LLAppViewer::handleLoginComplete()
 		gDebugInfo["ParcelMediaURL"] = parcel->getMediaURL();
 	}
 	
-	gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
-	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
-	gDebugInfo["ViewerExePath"] = gDirUtilp->getExecutablePathAndName();
-	gDebugInfo["CurrentPath"] = gDirUtilp->getCurPath();
+//	gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b
+	if (gCrashSettings.getBOOL("CrashSubmitSettings"))
+	{
+		// Only include settings.xml if the user consented
+		gDebugInfo["SettingsFilename"] = gSavedSettings.getString("ClientSettingsFile");
+	}
+// [/SL:KB]
+//	gDebugInfo["CAFilename"] = gDirUtilp->getCAFile();
+//	gDebugInfo["ViewerExePath"] = gDirUtilp->getExecutablePathAndName();
+//	gDebugInfo["CurrentPath"] = gDirUtilp->getCurPath();
 
+// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-14 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
+	// Current host and region would expose too much information, but do track the last server version
+	gDebugInfo["LastVersionChannel"] = gLastVersionChannel;
+// [/SL:KB]
+/*
 	if(gAgent.getRegion())
 	{
 		gDebugInfo["CurrentSimHost"] = gAgent.getRegionHost().getHostName();
 		gDebugInfo["CurrentRegion"] = gAgent.getRegion()->getName();
 	}
+*/
 
 	if(LLAppViewer::instance()->mMainloopTimeout)
 	{
@@ -5587,10 +6422,48 @@ void LLAppViewer::handleLoginComplete()
 
 	mOnLoginCompleted();
 
-	writeDebugInfo();
+	// <FS:TT> Window Title Access
+	std::string full_name;
+	const LLSD login_response = LLLoginInstance::getInstance()->getResponse();
+	if (login_response.has("first_name"))
+	{
+		full_name = login_response["first_name"].asString();
+		LLStringUtil::replaceChar(full_name, '"', ' ');
+		LLStringUtil::trim(full_name);
 
+		if (login_response.has("last_name"))
+		{
+			std::string temp_string = login_response["last_name"].asString();
+			LLStringUtil::replaceChar(temp_string, '"', ' ');
+			LLStringUtil::trim(temp_string);
+			if (temp_string.compare("Resident") != 0)
+			{
+				full_name.append(" ").append(temp_string);
+			}
+		}
+	}
+	if (!full_name.empty())
+	{
+		gWindowTitle += std::string("- ") + full_name;
+		gViewerWindow->getWindow()->setTitle(gWindowTitle);
+	}
+	// </FS:TT>
+
+// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0) | Added: Catznip-3.2.0
+	LLScriptRecoverQueue::recoverIfNeeded();
+// [/SL:KB]
+
+	writeDebugInfo();
+	
+	// <FS:AO> Warn users cache purge will affect usability
+	if (mPurgeCache)
+	{
+		LLNotificationsUtil::add("CacheEmpty");
+	}
+	// </FS:AO>
+	
 	// we logged in successfully, so save settings on logout
-	llinfos << "Login successful, per account settings will be saved on log out." << llendl;
+	lldebugs << "Login successful, per account settings will be saved on logout." << llendl;
 	mSavePerAccountSettings=true;
 }
 
@@ -5605,7 +6478,7 @@ void LLAppViewer::launchUpdater()
 	query_map["channel"] = LLVersionInfo::getChannel();
 	// *TODO constantize this guy
 	// *NOTE: This URL is also used in win_setup/lldownloader.cpp
-	LLURI update_url = LLURI::buildHTTP("secondlife.com", 80, "update.php", query_map);
+	LLURI update_url = LLURI::buildHTTP("phoenixviewer.com", 80, "update.php", query_map);
 	
 	if(LLAppViewer::sUpdaterInfo)
 	{
@@ -5670,8 +6543,8 @@ void LLAppViewer::launchUpdater()
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += update_url.asString();
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += "\" -name \"";
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += LLAppViewer::instance()->getSecondLifeTitle();
-	LLAppViewer::sUpdaterInfo->mUpdateExePath += "\" -bundleid \"";
-	LLAppViewer::sUpdaterInfo->mUpdateExePath += LL_VERSION_BUNDLE_ID;
+        LLAppViewer::sUpdaterInfo->mUpdateExePath += "\" -bundleid \"";
+        LLAppViewer::sUpdaterInfo->mUpdateExePath += LL_VERSION_BUNDLE_ID;
 	LLAppViewer::sUpdaterInfo->mUpdateExePath += "\" &";
 
 	LL_DEBUGS("AppInit") << "Calling updater: " << LLAppViewer::sUpdaterInfo->mUpdateExePath << LL_ENDL;
@@ -5740,7 +6613,11 @@ void LLAppViewer::setMasterSystemAudioMute(bool mute)
 //virtual
 bool LLAppViewer::getMasterSystemAudioMute()
 {
-	return gSavedSettings.getBOOL("MuteAudio");
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//return gSavedSettings.getBOOL("MuteAudio");
+	static LLCachedControl<bool> sMuteAudio(gSavedSettings, "MuteAudio");
+	return sMuteAudio;
+	// </FS:Ansariel>
 }
 
 //----------------------------------------------------------------------------

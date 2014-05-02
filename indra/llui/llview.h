@@ -243,7 +243,13 @@ public:
 
 	ECursorType	getHoverCursor() { return mHoverCursor; }
 
-	virtual const std::string getToolTip() const			{ return mToolTipMsg.getString(); }
+	// <FS:ND> Made this non inline when changing mToolTipMsg from a LLUIString to a char* to reduce memory usage,
+	// (Making a virtual function inline is debatable anyway).
+
+	// virtual const std::string getToolTip() const			{ return mToolTipMsg.getString(); }
+	virtual const std::string getToolTip() const;
+
+	// </FS:ND>
 
 	void		sendChildToFront(LLView* child);
 	void		sendChildToBack(LLView* child);
@@ -599,7 +605,15 @@ private:
 	BOOL		mEnabled;		// Enabled means "accepts input that has an effect on the state of the application."
 								// A disabled view, for example, may still have a scrollbar that responds to mouse events.
 	BOOL		mMouseOpaque;	// Opaque views handle all mouse events that are over their rect.
-	LLUIString	mToolTipMsg;	// isNull() is true if none.
+								// isNull() is true if none.
+	 
+	// <FS:ND> LLUIString comes with a tax of 92 byte (Numbers apply to Win32).
+	// Saving roughly 90% (char* + pointer for args) for each LLView derived object makes this really worthwile. Especially when having a large inventory,
+	
+	// LLUIString	mToolTipMsg;
+	char *mToolTipMsg;
+	LLStringUtil::format_map_t *mTooltipArgs;
+	// </FS:ND>
 
 	U8          mSoundFlags;
 	BOOL		mFromXUI;
@@ -671,6 +685,12 @@ public:
 	static S32 sLastLeftXML;
 	static S32 sLastBottomXML;
 	static BOOL sForceReshape;
+
+// <FS:ND> virtual to override deleting a child by it's parent.
+private:
+	virtual bool deletableByParent()
+	{ return true; }
+// </FS:ND>
 };
 
 class LLCompareByTabOrder

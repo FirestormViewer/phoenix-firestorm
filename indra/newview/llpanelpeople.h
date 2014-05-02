@@ -33,12 +33,22 @@
 #include "llfloaterwebcontent.h"
 #include "llvoiceclient.h"
 
+#include "llfloater.h"
+
+// [FS:CR] Contact sets
+#include "lggcontactsets.h"
+#include <boost/signals2.hpp>
+
 class LLAvatarList;
 class LLAvatarName;
 class LLFilterEditor;
 class LLGroupList;
 class LLMenuButton;
 class LLTabContainer;
+
+// Firestorm declarations
+class LLMenuGL;
+class FSPanelRadar;
 
 class LLPanelPeople 
 	: public LLPanel
@@ -69,6 +79,8 @@ private:
 		E_SORT_BY_MOST_RECENT = 2,
 		E_SORT_BY_DISTANCE = 3,
 		E_SORT_BY_RECENT_SPEAKERS = 4,
+		// <FS:Ansariel> FIRE-5283: Sort by username
+		E_SORT_BY_USERNAME = 5,
 	} ESortOrder;
 
     void				    removePicker();
@@ -133,11 +145,19 @@ private:
 	bool					isAccordionCollapsedByUser(LLUICtrl* acc_tab);
 	bool					isAccordionCollapsedByUser(const std::string& name);
 
+	// <FS:Ansariel> Firestorm callback handler
+	void					onGlobalVisToggleButtonClicked();
+	// </FS:Ansariel> Firestorm callback handler
+
 	LLTabContainer*			mTabContainer;
 	LLAvatarList*			mOnlineFriendList;
 	LLAvatarList*			mAllFriendList;
 	LLAvatarList*			mSuggestedFriends;
 	LLAvatarList*			mNearbyList;
+	LLAvatarList*			mContactSetList;	// [FS:CR] Contact sets
+	// <FS:Ansariel> Firestorm radar
+	FSPanelRadar*			mRadarPanel;
+	// </FS:Ansariel> Firestorm radar
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
 	LLNetMap*				mMiniMap;
@@ -146,11 +166,26 @@ private:
 	std::vector<std::string> mSavedFilters;
 
 	Updater*				mFriendListUpdater;
-	Updater*				mNearbyListUpdater;
+	// <FS:Ansariel> Firestorm radar
+	//Updater*				mNearbyListUpdater;
+	// </FS:Ansariel> Firestorm radar
 	Updater*				mRecentListUpdater;
 	Updater*				mFacebookListUpdater;
 	Updater*				mButtonsUpdater;
     LLHandle< LLFloater >	mPicker;
+	
+	// [FS:CR] Contact sets
+	bool					onContactSetsEnable(const LLSD& userdata);
+	void					onContactSetsMenuItemClicked(const LLSD& userdata);
+	void					handlePickerCallback(const uuid_vec_t& ids, const std::string& set);
+	void					refreshContactSets();
+	void					generateContactList(const std::string& contact_set);
+	void					generateCurrentContactList();
+	
+	void					updateContactSets(LGGContactSets::EContactSetUpdate type);
+	boost::signals2::connection mContactSetChangedConnection;
+	LLComboBox* mContactSetCombo;
+	// [/FS:CR]
 };
 
 #endif //LL_LLPANELPEOPLE_H

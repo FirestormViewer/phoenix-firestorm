@@ -57,6 +57,7 @@
 #include "llhudrender.h"
 #include "llworld.h"
 #include "v2math.h"
+#include "llviewerregion.h"
 #include "llvoavatar.h"
 #include "llmeshrepository.h"
 
@@ -64,9 +65,14 @@
 const F32 MAX_MANIP_SELECT_DISTANCE_SQUARED = 11.f * 11.f;
 const F32 SNAP_GUIDE_SCREEN_OFFSET = 0.05f;
 const F32 SNAP_GUIDE_SCREEN_LENGTH = 0.7f;
+// <FS:CR> FIRE-8882
+const F32 SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION = 1.3f; // Used then the snapping domain is set to inside
+// </FS:CR>
 const F32 SELECTED_MANIPULATOR_SCALE = 1.2f;
 const F32 MANIPULATOR_SCALE_HALF_LIFE = 0.07f;
 const S32 NUM_MANIPULATORS = 14;
+
+BOOL LLManipScale::mInvertUniform=FALSE;	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
 
 const LLManip::EManipPart MANIPULATOR_IDS[NUM_MANIPULATORS] = 
 {
@@ -94,11 +100,17 @@ F32 get_default_max_prim_scale(bool is_flora)
 	if (gMeshRepo.meshRezEnabled() &&
 		!is_flora)
 	{
-		return DEFAULT_MAX_PRIM_SCALE;
+// <AW: opensim-limits>
+//		return DEFAULT_MAX_PRIM_SCALE;
+		return LLWorld::getInstance()->getRegionMaxPrimScale();
+// </AW: opensim-limits>
 	}
 	else
-	{	
-		return DEFAULT_MAX_PRIM_SCALE_NO_MESH;
+	{
+// <AW: opensim-limits>
+//		return DEFAULT_MAX_PRIM_SCALE_NO_MESH;
+		return LLWorld::getInstance()->getRegionMaxPrimScaleNoMesh();
+// </AW: opensim-limits>
 	}
 }
 
@@ -123,7 +135,10 @@ void LLManipScale::setStretchTextures(BOOL b)
 // static
 BOOL LLManipScale::getUniform()
 {
-	return gSavedSettings.getBOOL("ScaleUniform");
+	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+	// return gSavedSettings.getBOOL("ScaleUniform");
+	return (gSavedSettings.getBOOL("ScaleUniform") ^ mInvertUniform);
+	// </FS:Zi>
 }
 
 // static
@@ -295,11 +310,12 @@ void LLManipScale::render()
 				renderCorners( bbox );
 				renderFaces( bbox );
 
-				if (mManipPart != LL_NO_PART)
-				{
-					renderGuidelinesPart( bbox );
-				}
-
+// <FS:CR> FIRE-8882
+				//if (mManipPart != LL_NO_PART)
+				//{
+				//	renderGuidelinesPart( bbox );
+				//}
+// </FS:CR>
 				glPolygonOffset( 0.f, 0.f);
 			}
 		}
@@ -733,7 +749,6 @@ void LLManipScale::renderEdges( const LLBBox& bbox )
 	}
 }
 
-
 void LLManipScale::renderCorners( const LLBBox& bbox )
 {
 	U32 part = LL_CORNER_NNN;
@@ -805,16 +820,15 @@ void LLManipScale::renderAxisHandle( const LLVector3& start, const LLVector3& en
 	}
 }
 
-
+// General scale call
 void LLManipScale::drag( S32 x, S32 y )
 {
-	if( (LL_FACE_MIN <= (S32)mManipPart) 
+	if( (LL_FACE_MIN <= (S32)mManipPart)
 		&& ((S32)mManipPart <= LL_FACE_MAX) )
 	{
 		dragFace( x, y );
 	}
-	else
-	if( (LL_CORNER_MIN <= (S32)mManipPart) 
+	else if( (LL_CORNER_MIN <= (S32)mManipPart)
 		&& ((S32)mManipPart <= LL_CORNER_MAX) )
 	{
 		dragCorner( x, y );
@@ -840,10 +854,10 @@ void LLManipScale::drag( S32 x, S32 y )
     gAgentCamera.clearFocusObject();
 }
 
-// Scale around the 
+// Scale on three axis simultaneously
 void LLManipScale::dragCorner( S32 x, S32 y )
 {
-	LLBBox bbox	= LLSelectMgr::getInstance()->getBBoxOfSelection();
+	LLBBox bbox = LLSelectMgr::getInstance()->getBBoxOfSelection();
 
 	// Suppress scale if mouse hasn't moved.
 	if (x == mLastMouseX && y == mLastMouseY)
@@ -855,9 +869,9 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 	mLastMouseX = x;
 	mLastMouseY = y;
 
-	LLVector3d drag_start_point_global	= mDragStartPointGlobal;
+	LLVector3d drag_start_point_global  = mDragStartPointGlobal;
 	LLVector3d drag_start_center_global = mDragStartCenterGlobal;
-	LLVector3 drag_start_point_agent = gAgent.getPosAgentFromGlobal(drag_start_point_global);
+	LLVector3 drag_start_point_agent  = gAgent.getPosAgentFromGlobal(drag_start_point_global);
 	LLVector3 drag_start_center_agent = gAgent.getPosAgentFromGlobal(drag_start_center_global);
 
 	LLVector3d drag_start_dir_d;
@@ -925,50 +939,82 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 	F32 max_scale = partToMaxScale(mManipPart, bbox);
 	F32 min_scale = partToMinScale(mManipPart, bbox);
 
-	BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
-	if (snap_enabled && dist_from_scale_line_1 > mSnapRegimeOffset * snap_dir_dot_mouse_offset1)
+// <FS:Cron> FIRE-8882
+	//BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
+	//if (snap_enabled && dist_from_scale_line_1 > mSnapRegimeOffset * snap_dir_dot_mouse_offset1)
+	//{
+	
+	U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+	
+	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
-		mInSnapRegime = TRUE;
-		LLVector3 projected_drag_pos = mouse_on_plane1 - (dist_from_scale_line_1 / snap_dir_dot_mouse_offset1) * mSnapGuideDir1;
-		F32 drag_dist = (projected_drag_pos - mScaleCenter) * mScaleDir;
-
-		F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos, mScaleDir, mScaleSnapUnit1), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
-		F32 snap_dist = mScaleSnapUnit1 / (2.f * cur_subdivisions);
-		F32 relative_snap_dist = fmodf(drag_dist + snap_dist, mScaleSnapUnit1 / cur_subdivisions);
-
-		mScaleSnapValue = llclamp((drag_dist - (relative_snap_dist - snap_dist)), min_scale, max_scale);
-
-		scale_factor = mScaleSnapValue / drag_start_dist;
-		if( !uniform )
+		F32 regime_dist1 = mSnapRegimeOffset * snap_dir_dot_mouse_offset1;
+		F32 regime_dist2 = mSnapRegimeOffset * snap_dir_dot_mouse_offset2;
+		
+		if
+		(
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_1 > regime_dist1)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_1 <= regime_dist1 && dist_from_scale_line_1 > 0.f)
+		)
+// </FS:Cron>
 		{
-			scale_factor *= 0.5f;
+			mInSnapRegime = TRUE;
+			LLVector3 projected_drag_pos = mouse_on_plane1 - (dist_from_scale_line_1 / snap_dir_dot_mouse_offset1) * mSnapGuideDir1;
+			F32 drag_dist = (projected_drag_pos - mScaleCenter) * mScaleDir;
+
+			F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos, mScaleDir, mScaleSnapUnit1), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
+			F32 snap_dist = mScaleSnapUnit1 / (2.f * cur_subdivisions);
+			F32 relative_snap_dist = fmodf(drag_dist + snap_dist, mScaleSnapUnit1 / cur_subdivisions);
+
+			mScaleSnapValue = llclamp((drag_dist - (relative_snap_dist - snap_dist)), min_scale, max_scale);
+
+			scale_factor = mScaleSnapValue / drag_start_dist;
+			if ( !uniform )
+			{
+				scale_factor *= 0.5f;
+			}
 		}
-	}
-	else if (snap_enabled && dist_from_scale_line_2 > mSnapRegimeOffset * snap_dir_dot_mouse_offset2)
-	{
-		mInSnapRegime = TRUE;
-		LLVector3 projected_drag_pos = mouse_on_plane2 - (dist_from_scale_line_2 / snap_dir_dot_mouse_offset2) * mSnapGuideDir2;
-		F32 drag_dist = (projected_drag_pos - mScaleCenter) * mScaleDir;
-
-		F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos, mScaleDir, mScaleSnapUnit2), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
-		F32 snap_dist = mScaleSnapUnit2 / (2.f * cur_subdivisions);
-		F32 relative_snap_dist = fmodf(drag_dist + snap_dist, mScaleSnapUnit2 / cur_subdivisions);
-
-		mScaleSnapValue = llclamp((drag_dist - (relative_snap_dist - snap_dist)), min_scale, max_scale);
-
-		scale_factor = mScaleSnapValue / drag_start_dist;
-		if( !uniform )
+// <FS:Cron> FIRE-8882
+		//else if (snap_enabled && dist_from_scale_line_2 > mSnapRegimeOffset * snap_dir_dot_mouse_offset2)
+		else if
+		(
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_2 > regime_dist2)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_2 <= regime_dist2 && dist_from_scale_line_2 > 0.f)
+		)
+// </FS:Cron>
 		{
-			scale_factor *= 0.5f;
-		}
-	}
-	else 
-	{
-		mInSnapRegime = FALSE;
-	}
+			mInSnapRegime = TRUE;
+			LLVector3 projected_drag_pos = mouse_on_plane2 - (dist_from_scale_line_2 / snap_dir_dot_mouse_offset2) * mSnapGuideDir2;
+			F32 drag_dist = (projected_drag_pos - mScaleCenter) * mScaleDir;
 
-	F32 max_scale_factor = get_default_max_prim_scale() / MIN_PRIM_SCALE;
-	F32 min_scale_factor = MIN_PRIM_SCALE / get_default_max_prim_scale();
+			F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos, mScaleDir, mScaleSnapUnit2), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
+			F32 snap_dist = mScaleSnapUnit2 / (2.f * cur_subdivisions);
+			F32 relative_snap_dist = fmodf(drag_dist + snap_dist, mScaleSnapUnit2 / cur_subdivisions);
+
+			mScaleSnapValue = llclamp((drag_dist - (relative_snap_dist - snap_dist)), min_scale, max_scale);
+
+			scale_factor = mScaleSnapValue / drag_start_dist;
+			if ( !uniform )
+			{
+				scale_factor *= 0.5f;
+			}
+		}
+		else 
+		{
+			mInSnapRegime = FALSE;
+		}
+// <FS:CR> FIRE-8882
+	}
+// </FS:CR>
+
+// <AW: opensim-limits>
+//	F32 max_scale_factor = get_default_max_prim_scale() / MIN_PRIM_SCALE;
+//	F32 min_scale_factor = MIN_PRIM_SCALE / get_default_max_prim_scale();
+	F32 max_scale_factor = LLWorld::getInstance()->getRegionMaxPrimScale() / LLWorld::getInstance()->getRegionMinPrimScale();
+	F32 min_scale_factor = LLWorld::getInstance()->getRegionMinPrimScale() / LLWorld::getInstance()->getRegionMaxPrimScale();
+// </AW: opensim-limits>
 
 	// find max and min scale factors that will make biggest object hit max absolute scale and smallest object hit min absolute scale
 	for (LLObjectSelection::iterator iter = mObjectSelection->begin();
@@ -985,8 +1031,10 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 
 			F32 cur_max_scale_factor = llmin( get_default_max_prim_scale(LLPickInfo::isFlora(cur)) / scale.mV[VX], get_default_max_prim_scale(LLPickInfo::isFlora(cur)) / scale.mV[VY], get_default_max_prim_scale(LLPickInfo::isFlora(cur)) / scale.mV[VZ] );
 			max_scale_factor = llmin( max_scale_factor, cur_max_scale_factor );
-
-			F32 cur_min_scale_factor = llmax( MIN_PRIM_SCALE / scale.mV[VX], MIN_PRIM_SCALE / scale.mV[VY], MIN_PRIM_SCALE / scale.mV[VZ] );
+// <AW: opensim-limits>
+//			F32 cur_min_scale_factor = llmax( MIN_PRIM_SCALE / scale.mV[VX], MIN_PRIM_SCALE / scale.mV[VY], MIN_PRIM_SCALE / scale.mV[VZ] );
+			F32 cur_min_scale_factor = llmax( LLWorld::getInstance()->getRegionMinPrimScale() / scale.mV[VX], LLWorld::getInstance()->getRegionMinPrimScale() / scale.mV[VY], LLWorld::getInstance()->getRegionMinPrimScale() / scale.mV[VZ] );
+// </AW: opensim-limits>
 			min_scale_factor = llmax( min_scale_factor, cur_min_scale_factor );
 		}
 	}
@@ -1068,13 +1116,11 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 			rebuild(cur);
 		}
 	}
-
 	
-
 	mDragPointGlobal = drag_point_global;
 }
 
-	
+// Scale on a single axis
 void LLManipScale::dragFace( S32 x, S32 y )
 {
 	// Suppress scale if mouse hasn't moved.
@@ -1135,13 +1181,23 @@ void LLManipScale::dragFace( S32 x, S32 y )
 	F32 dist_from_scale_line = dist_vec(scale_center_to_mouse, (mouse_on_scale_line - mScaleCenter));
 	F32 dist_along_scale_line = scale_center_to_mouse * mScaleDir;
 
-	BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
+// <FS:Cron> FIRE-8882
+	//BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
+	U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
 
-	if (snap_enabled && dist_from_scale_line > mSnapRegimeOffset)
+	//if (snap_enabled && dist_from_scale_line > mSnapRegimeOffset)
+	if (gSavedSettings.getBOOL("SnapEnabled") &&
+		(
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line > mSnapRegimeOffset)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line <= mSnapRegimeOffset)
+		)
+	)
+// </FS:Cron>
 	{
 		mInSnapRegime = TRUE;
 
- 		if (dist_along_scale_line > max_drag_dist)
+		if (dist_along_scale_line > max_drag_dist)
 		{
 			mScaleSnapValue = max_drag_dist;
 
@@ -1284,7 +1340,10 @@ void LLManipScale::stretchFace( const LLVector3& drag_start_agent, const LLVecto
 
 			F32 denom = axis * dir_local;
 			F32 desired_delta_size	= is_approx_zero(denom) ? 0.f : (delta_local_mag / denom);  // in meters
-			F32 desired_scale		= llclamp(selectNode->mSavedScale.mV[axis_index] + desired_delta_size, MIN_PRIM_SCALE, get_default_max_prim_scale(LLPickInfo::isFlora(cur)));
+// <AW: opensim-limits>
+//			F32 desired_scale		= llclamp(selectNode->mSavedScale.mV[axis_index] + desired_delta_size, MIN_PRIM_SCALE, get_default_max_prim_scale(LLPickInfo::isFlora(cur)));
+			F32 desired_scale		= llclamp(selectNode->mSavedScale.mV[axis_index] + desired_delta_size, LLWorld::getInstance()->getRegionMinPrimScale(), get_default_max_prim_scale(LLPickInfo::isFlora(cur)));
+// </AW: opensim-limits>
 			// propagate scale constraint back to position offset
 			desired_delta_size		= desired_scale - selectNode->mSavedScale.mV[axis_index]; // propagate constraint back to position
 
@@ -1293,7 +1352,10 @@ void LLManipScale::stretchFace( const LLVector3& drag_start_agent, const LLVecto
 			cur->setScale(scale, FALSE);
 			rebuild(cur);				
 			LLVector3 delta_pos;
-			if( !getUniform() )
+// <FS:CR> FIRE-8882
+			//if( !getUniform() )
+			if( !LLManipScale::getUniform() )
+// </FS:CR>
 			{
 				LLVector3 delta_pos_local = axis * (0.5f * desired_delta_size);
 				LLVector3d delta_pos_global;
@@ -1330,7 +1392,10 @@ void LLManipScale::stretchFace( const LLVector3& drag_start_agent, const LLVecto
 					 iter != child_list.end(); iter++)
 				{
 					LLViewerObject* childp = *iter;
-					if (!getUniform())
+// <FS:CR> FIRE-8882
+					//if (!getUniform())
+					if (!LLManipScale::getUniform())
+// </FS:CR>
 					{
 						LLVector3 child_pos = childp->getPosition() - (delta_pos * ~cur->getRotationEdit());
 						childp->setPosition(child_pos);
@@ -1342,7 +1407,9 @@ void LLManipScale::stretchFace( const LLVector3& drag_start_agent, const LLVecto
 	}
 }
 
-
+// <FS:CR> FIRE-8882
+#if 0 // No longer used in Firestorm
+// </FS:CR>
 void LLManipScale::renderGuidelinesPart( const LLBBox& bbox )
 {
 	LLVector3 guideline_start = bbox.getCenterLocal();
@@ -1368,6 +1435,9 @@ void LLManipScale::renderGuidelinesPart( const LLBBox& bbox )
 		gl_stippled_line_3d( guideline_start, guideline_end, LLColor4(1.f, 1.f, 1.f, 0.25f) );
 	}
 }
+// <FS:CR> FIRE-8882
+#endif
+// </FS:CR>
 
 void LLManipScale::updateSnapGuides(const LLBBox& bbox)
 {
@@ -1377,7 +1447,10 @@ void LLManipScale::updateSnapGuides(const LLBBox& bbox)
 	LLSelectMgr::getInstance()->getGrid(grid_origin, grid_rotation, grid_scale);
 
 	LLVector3 box_corner_agent = bbox.localToAgent(unitVectorToLocalBBoxExtent( partToUnitVector( mManipPart ), bbox ));
-	mScaleCenter = getUniform() ? bbox.getCenterAgent() : bbox.localToAgent(unitVectorToLocalBBoxExtent( -1.f * partToUnitVector( mManipPart ), bbox ));
+// <FS:CR> FIRE-8882
+	//mScaleCenter = getUniform() ? bbox.getCenterAgent() : bbox.localToAgent(unitVectorToLocalBBoxExtent( -1.f * partToUnitVector( mManipPart ), bbox ));
+	mScaleCenter = LLManipScale::getUniform() ? bbox.getCenterAgent() : bbox.localToAgent(unitVectorToLocalBBoxExtent( -1.f * partToUnitVector( mManipPart ), bbox ));
+// </FS:CR>
 	mScaleDir = box_corner_agent - mScaleCenter;
 	mScaleDir.normVec();
 
@@ -1643,6 +1716,10 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 
 		S32 tick_label_spacing = llround(screen_translate_axis * sTickLabelSpacing);
 
+// <FS:Cron> FIRE-8882
+		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+// </FS:Cron>
+
 		for (pass = 0; pass < 3; pass++)
 		{
 			LLColor4 tick_color = setupSnapGuideRenderPass(pass);
@@ -1664,7 +1741,19 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 					continue;
 				}
 
-				F32 tick_scale = 1.f;
+// <FS:Cron> FIRE-8882
+				//F32 tick_scale = 1.f;
+				F32 tick_scale = 0.f;
+				switch (snap_domain)
+				{
+					case LL_SNAP_DOMAIN_OUTSIDE:
+						tick_scale = 1.f;
+					break;
+					case LL_SNAP_DOMAIN_INSIDE:
+						tick_scale = -0.8f;
+					break;
+				}
+// </FS:Cron>
 				for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 				{
 					if (fmodf((F32)(i + sub_div_offset_1), division_level) == 0.f)
@@ -1697,7 +1786,19 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 					continue;
 				}
 
-				F32 tick_scale = 1.f;
+// <FS:Cron> FIRE-8882
+				//F32 tick_scale = 1.f;
+				F32 tick_scale = 0.f;
+				switch (snap_domain)
+				{
+					case LL_SNAP_DOMAIN_OUTSIDE:
+						tick_scale = 1.f;
+					break;
+					case LL_SNAP_DOMAIN_INSIDE:
+						tick_scale = -0.8f;
+					break;
+				}
+// </FS:Cron>
 				for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 				{
 					if (fmodf((F32)(i + sub_div_offset_2), division_level) == 0.f)
@@ -1716,7 +1817,7 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 			gGL.end();
 		}
 
-		// render tick labels
+		// render near-side tick labels
 		start_tick = -(llmin(ticks_from_scale_center_1, num_ticks_per_side1));
 		stop_tick = llmin(max_ticks1, num_ticks_per_side1);
 
@@ -1730,19 +1831,43 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 			F32 alpha = grid_alpha * (1.f - (0.5f *  ((F32)llabs(i) / (F32)num_ticks_per_side1)));
 			LLVector3 tick_pos = drag_point + (mScaleDir * (mScaleSnapUnit1 / max_subdivisions * (F32)i - grid_offset1));
 
-			for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
+// <FS:Cron> FIRE-8882
+			switch (snap_domain)
 			{
-				if (fmodf((F32)(i + label_sub_div_offset_1), division_level) == 0.f)
-				{
-					break;
-				}
-				tick_scale *= 0.7f;
+				case LL_SNAP_DOMAIN_OUTSIDE:
+// </FS:Cron>
+					for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
+					{
+						if (fmodf((F32)(i + label_sub_div_offset_1), division_level) == 0.f)
+						{
+							break;
+						}
+						tick_scale *= 0.7f;
+					}
+// <FS:Cron> FIRE-8882
+					tick_scale += 1.f;
+				break;
+				case LL_SNAP_DOMAIN_INSIDE:
+					tick_scale = SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION;
+				break;
 			}
+// </FS:Cron>
 
 			if (fmodf((F32)(i + label_sub_div_offset_1), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, mScaleDir, mScaleSnapUnit1, tick_label_spacing)))) == 0.f)
 			{
-				LLVector3 text_origin = tick_pos + 
-					(mSnapGuideDir1 * mSnapRegimeOffset * (1.f + tick_scale));
+// <FS:Cron> FIRE-8882
+				//LLVector3 text_origin = tick_pos + 
+				//	(mSnapGuideDir1 * mSnapRegimeOffset * (1.f + tick_scale));
+				LLVector3 text_origin;
+				if (snap_domain == LL_SNAP_DOMAIN_INSIDE && (LL_FACE_MIN <= (S32)mManipPart) && ((S32)mManipPart <= LL_FACE_MAX) ) // Face drag
+				{
+					text_origin = tick_pos; // Just off center is a good place for face ticks.
+				}
+				else // Corner drag, or not in the inner snap domain - assuming that means that means the outer domain for now.
+				{
+					text_origin = tick_pos + (mSnapGuideDir1 * (mSnapRegimeOffset * tick_scale));
+				}
+// </FS:Cron>
 
 				EGridMode grid_mode = LLSelectMgr::getInstance()->getGridMode();
 				F32 tick_val;
@@ -1755,7 +1880,10 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 					tick_val = (tick_pos - mScaleCenter) * mScaleDir / (mScaleSnapUnit1 * 2.f);
 				}
 
-				if (getUniform())
+// <FS:CR> FIRE-8882
+				// if (getUniform())
+				if (LLManipScale::getUniform())
+// </FS:CR>
 				{
 					tick_val *= 2.f;
 				}
@@ -1771,7 +1899,7 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 			}
 		}
 
-		// label ticks on opposite side
+		// label ticks on opposite side, only can happen in scaling modes that effect more than one axis and when the object's axis don't have the same scale.  A differing scale indicates both conditions.
 		if (mScaleSnapUnit2 != mScaleSnapUnit1)
 		{
 			start_tick = -(llmin(ticks_from_scale_center_2, num_ticks_per_side2));
@@ -1782,19 +1910,35 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 				F32 alpha = grid_alpha * (1.f - (0.5f *  ((F32)llabs(i) / (F32)num_ticks_per_side2)));
 				LLVector3 tick_pos = drag_point + (mScaleDir * (mScaleSnapUnit2 / max_subdivisions * (F32)i - grid_offset2));
 
-				for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
+// <FS:Cron> FIRE-8882
+				switch (snap_domain)
 				{
-					if (fmodf((F32)(i + label_sub_div_offset_2), division_level) == 0.f)
-					{
-						break;
-					}
-					tick_scale *= 0.7f;
+					case LL_SNAP_DOMAIN_OUTSIDE:
+// </FS:Cron>
+						for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
+						{
+							if (fmodf((F32)(i + label_sub_div_offset_2), division_level) == 0.f)
+							{
+								break;
+							}
+							tick_scale *= 0.7f;
+						}
+// <FS:Cron> FIRE-8882
+						tick_scale += 1.f;
+					break;
+					case LL_SNAP_DOMAIN_INSIDE:
+						tick_scale = SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION;
+					break;
 				}
+// </FS:Cron>
 
 				if (fmodf((F32)(i + label_sub_div_offset_2), (max_subdivisions / llmin(max_subdivisions, getSubdivisionLevel(tick_pos, mScaleDir, mScaleSnapUnit2, tick_label_spacing)))) == 0.f)
 				{
-					LLVector3 text_origin = tick_pos + 
-						(mSnapGuideDir2 * mSnapRegimeOffset * (1.f + tick_scale));
+// <FS:Cron> FIRE-8882
+					//LLVector3 text_origin = tick_pos + 
+					//	(mSnapGuideDir2 * mSnapRegimeOffset * (1.f + tick_scale));
+					LLVector3 text_origin = tick_pos + (mSnapGuideDir2 * mSnapRegimeOffset * tick_scale); // No test needed, as this code area only activates in the Corner Drag case.  That is until such a time as edge scaling is resurrected...
+// </FS:Cron>
 
 					EGridMode grid_mode = LLSelectMgr::getInstance()->getGridMode();
 					F32 tick_val;
@@ -1807,7 +1951,10 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 						tick_val = (tick_pos - mScaleCenter) * mScaleDir / (mScaleSnapUnit2 * 2.f);
 					}
 
-					if (getUniform())
+// <FS:CR> FIRE-8882
+					//if (getUniform())
+					if (LLManipScale::getUniform())
+// </FS:CR>
 					{
 						tick_val *= 2.f;
 					}
@@ -1905,7 +2052,6 @@ LLVector3 LLManipScale::faceToUnitVector( S32 part ) const
 	return LLVector3();
 }
 
-
 // Returns unit vector in direction of corner of an origin-centered cube
 LLVector3 LLManipScale::cornerToUnitVector( S32 part ) const
 {
@@ -1949,13 +2095,14 @@ LLVector3 LLManipScale::edgeToUnitVector( S32 part ) const
 {
 	llassert( (LL_EDGE_MIN <= part) && (part <= LL_EDGE_MAX) );
 	part -= LL_EDGE_MIN;
-	S32 rotation = part >> 2;				// Edge between which faces: 0 => XY, 1 => YZ, 2 => ZX
+	S32 rotation = part >> 2; // Edge between which faces: 0 => XY, 1 => YZ, 2 => ZX
 	LLVector3 v;
-	v.mV[rotation]			= (part & 1) ? F_SQRT2 : -F_SQRT2;
-	v.mV[(rotation+1) % 3]	= (part & 2) ? F_SQRT2 : -F_SQRT2;
+	v.mV[rotation]          = (part & 1) ? F_SQRT2 : -F_SQRT2;
+	v.mV[(rotation+1) % 3]  = (part & 2) ? F_SQRT2 : -F_SQRT2;
 	// v.mV[(rotation+2) % 3] defaults to 0.
 	return v;
 }
+
 
 // Non-linear scale of origin-centered unit cube to non-origin-centered, non-symetrical bounding box
 LLVector3 LLManipScale::unitVectorToLocalBBoxExtent( const LLVector3& v, const LLBBox& bbox ) const
@@ -1971,7 +2118,7 @@ LLVector3 LLManipScale::unitVectorToLocalBBoxExtent( const LLVector3& v, const L
 }
 
 // returns max allowable scale along a given stretch axis
-F32		LLManipScale::partToMaxScale( S32 part, const LLBBox &bbox ) const
+F32 LLManipScale::partToMaxScale( S32 part, const LLBBox &bbox ) const
 {
 	F32 max_scale_factor = 0.f;
 	LLVector3 bbox_extents = unitVectorToLocalBBoxExtent( partToUnitVector( part ), bbox );
@@ -1986,7 +2133,10 @@ F32		LLManipScale::partToMaxScale( S32 part, const LLBBox &bbox ) const
 	}
 	max_scale_factor = bbox_extents.magVec() * get_default_max_prim_scale() / max_extent;
 
-	if (getUniform())
+// <FS:CR> FIRE-8882
+	// if (getUniform())
+	if (LLManipScale::getUniform())
+// </FS:CR>
 	{
 		max_scale_factor *= 0.5f;
 	}
@@ -1995,7 +2145,7 @@ F32		LLManipScale::partToMaxScale( S32 part, const LLBBox &bbox ) const
 }
 
 // returns min allowable scale along a given stretch axis
-F32		LLManipScale::partToMinScale( S32 part, const LLBBox &bbox ) const
+F32 LLManipScale::partToMinScale( S32 part, const LLBBox &bbox ) const
 {
 	LLVector3 bbox_extents = unitVectorToLocalBBoxExtent( partToUnitVector( part ), bbox );
 	bbox_extents.abs();
@@ -2007,9 +2157,14 @@ F32		LLManipScale::partToMinScale( S32 part, const LLBBox &bbox ) const
 			min_extent = bbox_extents.mV[i];
 		}
 	}
-	F32 min_scale_factor = bbox_extents.magVec() * MIN_PRIM_SCALE / min_extent;
-
-	if (getUniform())
+// <AW: opensim-limits>
+//	F32 min_scale_factor = bbox_extents.magVec() * MIN_PRIM_SCALE / min_extent;
+	F32 min_scale_factor = bbox_extents.magVec() * LLWorld::getInstance()->getRegionMinPrimScale() / min_extent;
+// </AW: opensim-limits>
+// <FS:CR> FIRE-8882
+	//if (getUniform())
+	if (LLManipScale::getUniform())
+// </FS:CR>
 	{
 		min_scale_factor *= 0.5f;
 	}
@@ -2052,7 +2207,14 @@ LLVector3 LLManipScale::nearestAxis( const LLVector3& v ) const
 		}
 	}
 
+// <FS:Ansariel> [AVX Optimization]
+	//return LLVector3( coords[greatest_index] );
+#ifdef USE_AVX_OPTIMIZATION
+	return LLVector3(coords[greatest_index][0], coords[greatest_index][1], coords[greatest_index][2]);
+#else
 	return LLVector3( coords[greatest_index] );
+#endif
+// </FS:Ansariel> [AVX Optimization]
 }
 
 // virtual
@@ -2077,3 +2239,17 @@ BOOL LLManipScale::canAffectSelection()
 	}
 	return can_scale;
 }
+
+// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+BOOL LLManipScale::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
+{
+	LLManipScale::mInvertUniform=TRUE;
+	return handleMouseDown(x,y,mask);
+}
+
+BOOL LLManipScale::handleMiddleMouseUp(S32 x, S32 y, MASK mask)
+{
+	LLManipScale::mInvertUniform=FALSE;
+    return handleMouseUp(x, y, mask);
+}
+// </FS:Zi>

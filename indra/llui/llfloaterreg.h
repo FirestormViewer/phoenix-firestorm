@@ -31,6 +31,10 @@
 #include "llsd.h"
 
 #include <boost/function.hpp>
+// [RLVa:KB] - Checked: 2011-05-25 (RLVa-1.4.0a)
+#include <boost/signals2.hpp>
+#include "llboost.h"
+// [/RLVa:KB]
 
 //*******************************************************
 //
@@ -41,6 +45,9 @@ class LLFloater;
 class LLUICtrl;
 
 typedef boost::function<LLFloater* (const LLSD& key)> LLFloaterBuildFunc;
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.4.0g
+typedef boost::function<const std::string& (void)> LLFloaterFileFunc;
+// [/SL:KB]
 
 class LLFloaterReg
 {
@@ -55,6 +62,9 @@ public:
 	struct BuildData
 	{
 		LLFloaterBuildFunc mFunc;
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.4.0g
+		LLFloaterFileFunc mFileFunc;
+// [/SL:KB]
 		std::string mFile;
 	};
 	typedef std::map<std::string, BuildData> build_map_t;
@@ -71,6 +81,15 @@ private:
 	 */
 	static std::set<std::string> sAlwaysShowableList;
 	
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
+	// Used to determine whether a floater can be shown
+public:
+	typedef boost::signals2::signal<bool(const std::string&, const LLSD&), boost_boolean_combiner> validate_signal_t;
+	static boost::signals2::connection setValidateCallback(const validate_signal_t::slot_type& cb) { return mValidateSignal.connect(cb); }
+private:
+	static validate_signal_t mValidateSignal;
+// [/RLVa:KB]
+
 public:
 	// Registration
 	
@@ -84,6 +103,11 @@ public:
 	
 	static void add(const std::string& name, const std::string& file, const LLFloaterBuildFunc& func,
 					const std::string& groupname = LLStringUtil::null);
+
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.4.0g
+	static void addWithFileCallback(const std::string& name, const LLFloaterFileFunc& fileFunc, const LLFloaterBuildFunc& func,
+					const std::string& groupname = LLStringUtil::null);
+// [/SL:KB]
 
 	// Helpers
 	static LLFloater* getLastFloaterInGroup(const std::string& name);
@@ -99,6 +123,10 @@ public:
 	static const_instance_list_t& getFloaterList(const std::string& name);
 
 	// Visibility Management
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	// return false if floater can not be shown (=doesn't pass the validation filter)
+	static bool canShowInstance(const std::string& name, const LLSD& key = LLSD());
+// [/RLVa:KB]
 	// return NULL if instance not found or can't create instance (no builder)
 	static LLFloater* showInstance(const std::string& name, const LLSD& key = LLSD(), BOOL focus = FALSE);
 	// Close a floater (may destroy or set invisible)

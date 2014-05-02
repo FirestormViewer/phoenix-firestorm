@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_social" title="Wyślij na Facebooka">
+	<panel name="background">
+		<tab_container name="tabs">
+			<panel label="Status" name="panel_social_status"/>
+			<panel label="Zdjęcie" name="panel_social_photo"/>
+			<panel label="Miejsce" name="panel_social_place"/>
+			<panel label="Konto" name="panel_social_account"/>
+		</tab_container>
+		<panel name="connection_status_panel">
+			<text name="connection_error_text">
+				Błąd
+			</text>
+			<text name="connection_loading_text">
+				Ładowanie...
+			</text>
+		</panel>
+	</panel>
+</floater>

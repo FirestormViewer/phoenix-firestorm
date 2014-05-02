@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="script_recover" title="Skript wiederherstellen">
+	<text name="txt2">
+		[APP_NAME] hat Skripte gefunden, die von einem vorhergehenden Absturz des Viewers stammen können.
+
+Bei der Auswahl von "Wiederherstellen" werden diese in den Ordner "Fundbüro" im Inventar wiederhergestellt.		
+	</text>
+	<scroll_list name="script_list">
+		<scroll_list.columns label="" name="script_check"/>
+		<scroll_list.columns label="Skript-Name" name="script_name"/>
+	</scroll_list>
+	<button label="Wiederherstellen" left="55" name="recover_btn" width="120"/>
+	<button label="Abbrechen" name="cancel_btn"/>
+</floater>

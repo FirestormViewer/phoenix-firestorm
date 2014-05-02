@@ -70,7 +70,7 @@ LLKeyboardMacOSX::LLKeyboardMacOSX()
 	mTranslateKeyMap[0x21] = '[';
 	mTranslateKeyMap[0x22] = 'I';
 	mTranslateKeyMap[0x23] = 'P';
-	mTranslateKeyMap[0x24] = KEY_RETURN,
+	mTranslateKeyMap[0x24] = KEY_RETURN;
 	mTranslateKeyMap[0x25] = 'L';
 	mTranslateKeyMap[0x26] = 'J';
 	mTranslateKeyMap[0x27] = '\'';
@@ -175,7 +175,7 @@ void LLKeyboardMacOSX::resetMaskKeys()
 		mKeyLevel[KEY_SHIFT] = TRUE;
 	}
 
-	if(mask & MAC_CTRL_KEY)
+	if(mask & (MAC_CTRL_KEY | MAC_CMD_KEY))
 	{
 		mKeyLevel[KEY_CONTROL] = TRUE;
 	}

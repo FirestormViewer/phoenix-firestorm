@@ -30,6 +30,10 @@
 #include "llfloaterconversationlog.h"
 #include "llfloaterreg.h"
 #include "llmenubutton.h"
+// <FS:CR>
+#include "llviewercontrol.h"
+#include "llavataractions.h"
+// </FS:CR>
 
 LLFloaterConversationLog::LLFloaterConversationLog(const LLSD& key)
 :	LLFloater(key),
@@ -81,7 +85,7 @@ void LLFloaterConversationLog::onFilterEdit(const std::string& search_string)
 }
 
 
-void LLFloaterConversationLog::onCustomAction (const LLSD& userdata)
+void LLFloaterConversationLog::onCustomAction(const LLSD& userdata)
 {
 	const std::string command_name = userdata.asString();
 
@@ -131,4 +135,3 @@ bool LLFloaterConversationLog::isActionChecked(const LLSD& userdata)
 
 	return false;
 }
-

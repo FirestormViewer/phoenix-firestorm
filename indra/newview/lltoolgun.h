@@ -48,6 +48,9 @@ public:
 	virtual BOOL	clipMouseWhenDown()		{ return FALSE; }
 private:
 	BOOL mIsSelected;
+
+	// <FS:Ansariel> Performance tweak
+	LLUIImagePtr	mCrosshairp;
 };
 
 #endif

@@ -4,10 +4,16 @@
 		desconocido
 	</floater.string>
 	<string name="postcard_progress_str">
-		Enviando el correo electrónico
+		Enviando por correo electrónico
+	</string>
+	<string name="facebook_progress_str">
+		Publicando en Facebook
 	</string>
 	<string name="profile_progress_str">
 		Publicando
+	</string>
+	<string name="flickr_progress_str">
+		Conectando con Flickr
 	</string>
 	<string name="inventory_progress_str">
 		Guardando en el inventario
@@ -15,23 +21,32 @@
 	<string name="local_progress_str">
 		Guardando en el equipo
 	</string>
+	<string name="facebook_succeeded_str">
+		Imagen subida
+ 	</string>
 	<string name="profile_succeeded_str">
 		Imagen subida
 	</string>
+	<string name="flickr_succeeded_str">
+		Image subida a Flickr
+ 	</string>
 	<string name="postcard_succeeded_str">
 		Correo electrónico enviado
 	</string>
 	<string name="inventory_succeeded_str">
-		¡Guardado en el inventario!
+		Guardado en el inventario
 	</string>
 	<string name="local_succeeded_str">
-		¡Guardado en el equipo!
+		Guardado en el equipo
 	</string>
+	<string name="facebook_failed_str">
+		Error al subir la imagen a tu cronología de Facebook.
+ 	</string>
 	<string name="profile_failed_str">
 		Error al subir la imagen a los comentarios de tu perfil.
 	</string>
 	<string name="postcard_failed_str">
-		Error al enviar el correo electrónico.
+		Error al enviar por correo electrónico.
 	</string>
 	<string name="inventory_failed_str">
 		Error al guardar en el inventario.
@@ -39,6 +54,27 @@
 	<string name="local_failed_str">
 		Error al guardar en el equipo.
 	</string>
+	<string name="flickr_failed_str">
+		Error al subirla a Flickr.
++ 	</string>
+	<ui_ctrl name="thumbnail_placeholder">
+		<panel name="succeeded_panel">
+			<text name="succeeded_lbl">
+				Conseguido
+			</text>
+		</panel>
+		<panel name="failed_panel">
+			<text name="failed_lbl">
+				Falló
+			</text>
+		</panel>
+		<text name="working_lbl" width="202">
+			Trabajando
+		</text>
+		<text name="refresh_lbl" width="228">
+			Actualizar para guardar.
+		</text>
+	</ui_ctrl>
 	<button name="advanced_options_btn" tool_tip="Opciones avanzadas"/>
 	<text name="image_res_text">
 		[WIDTH] x [HEIGHT] px
@@ -46,20 +82,25 @@
 	<text name="file_size_label">
 		[SIZE] kB
 	</text>
+	<tab_container name="panel_tab_container">
+		<panel label="Perfil" name="panel_snapshot_profile"/>
+		<panel label="Correo-e" name="panel_snapshot_postcard"/>
+		<panel label="Inventario" name="panel_snapshot_inventory"/>
+		<panel label="Disco" name="panel_snapshot_local"/>
+	</tab_container>
 	<panel name="advanced_options_panel">
-		<text name="advanced_options_label">
-			OPCIONES AVANZADAS
-		</text>
 		<text name="layer_type_label">
-			Captura:
+			Capturar:
 		</text>
 		<combo_box label="Capas de imagen" name="layer_types">
 			<combo_box.item label="Colores" name="Colors"/>
 			<combo_box.item label="Profundidad" name="Depth"/>
 		</combo_box>
 		<check_box label="Interfaz" name="ui_check"/>
+		<check_box label="Balance de L$" name="currency_check" />
 		<check_box label="HUDs" name="hud_check"/>
 		<check_box label="Congelar la toma (pantalla completa)" name="freeze_frame_check"/>
 		<check_box label="Actualizar automáticamente" name="auto_snapshot_check"/>
 	</panel>
+	<button name="advanced_options_btn" tool_tip="Opciones avanzadas"/>
 </floater>

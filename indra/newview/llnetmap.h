@@ -40,6 +40,10 @@ class LLImageRaw;
 class LLViewerTexture;
 class LLFloaterMap;
 class LLMenuGL;
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+class LLViewerRegion;
+class LLAvatarName;
+// [/SL:KB]
 
 class LLNetMap : public LLUICtrl
 {
@@ -79,9 +83,32 @@ public:
 	/*virtual*/ BOOL	handleClick(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL	handleDoubleClick( S32 x, S32 y, MASK mask );
 
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	void			refreshParcelOverlay() { mUpdateParcelImage = true; }
+// [/SL:KB]
 	void			setScale( F32 scale );
-	void			setToolTipMsg(const std::string& msg) { mToolTipMsg = msg; }
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//void			setToolTipMsg(const std::string& msg) { mToolTipMsg = msg; }
+	static void		setToolTipMsg(const std::string& msg) { sToolTipMsg = msg; }
+	static void		updateToolTipMsg();
+	// </FS:Ansariel> Synchronize tooltips throughout instances
 	void			renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius );
+	LLVector3d		viewPosToGlobal(S32 x,S32 y);
+	LLUUID			getClosestAgentToCursor() const { return mClosestAgentToCursor; }
+	LLVector3d		getClosestAgentPosition() const { return mClosestAgentPosition; }
+
+	// <FS:Ansariel> Synchronize double click handling throughout instances
+	void			performDoubleClickAction(LLVector3d pos_global);
+
+	// <FS:Ansariel> Mark avatar feature
+	static bool		hasAvatarMarkColor(const LLUUID& avatar_id) { return sAvatarMarksMap.find(avatar_id) != sAvatarMarksMap.end(); }
+	static bool		getAvatarMarkColor(const LLUUID& avatar_id, LLColor4& color);
+	static void		setAvatarMarkColor(const LLUUID& avatar_id, const LLSD& color);
+	static void		setAvatarMarkColors(const uuid_vec_t& avatar_ids, const LLSD& color);
+	static void		clearAvatarMarkColor(const LLUUID& avatar_id);
+	static void		clearAvatarMarkColors(const uuid_vec_t& avatar_ids);
+	static void		clearAvatarMarkColors();
+	// </FS:Ansariel>
 
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }
@@ -89,24 +116,36 @@ private:
 								S32 diameter, S32 relative_height = 0);
 
 	LLVector3		globalPosToView(const LLVector3d& global_pos);
-	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 
 	void			drawTracking( const LLVector3d& pos_global, 
 								  const LLColor4& color,
 								  BOOL draw_arrow = TRUE);
+	void			drawRing(const F32 radius, LLVector3 pos_map, const LLUIColor& color);
 	BOOL			handleToolTipAgent(const LLUUID& avatar_id);
 	static void		showAvatarInspector(const LLUUID& avatar_id);
 
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	bool			createImage(LLPointer<LLImageRaw>& rawimagep) const;
 	void			createObjectImage();
+	void			createParcelImage();
+
+	void			renderPropertyLinesForRegion(const LLViewerRegion* pRegion, const LLColor4U& clrOverlay);
+// [/SL:KB]
+//	void			createObjectImage();
 
 	static bool		outsideSlop(S32 x, S32 y, S32 start_x, S32 start_y, S32 slop);
 
-private:
-	bool			mUpdateNow;
+//	bool			mUpdateNow;
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	bool			mUpdateObjectImage;
+	bool			mUpdateParcelImage;
+// [/SL:KB]
 
 	LLUIColor		mBackgroundColor;
 
 	F32				mScale;					// Size of a region in pixels
+	static F32		sScale;					// <FS:Ansariel> Used to synchronize netmaps throughout instances
+
 	F32				mPixelsPerMeter;		// world meters to map pixels
 	F32				mObjectMapTPM;			// texels per meter on map
 	F32				mObjectMapPixels;		// Width of object map in pixels
@@ -121,18 +160,84 @@ private:
 	LLVector3d		mObjectImageCenterGlobal;
 	LLPointer<LLImageRaw> mObjectRawImagep;
 	LLPointer<LLViewerTexture>	mObjectImagep;
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	LLVector3d		mParcelImageCenterGlobal;
+	LLPointer<LLImageRaw> mParcelRawImagep;
+	LLPointer<LLViewerTexture>	mParcelImagep;
+// [/SL:KB]
 
 	LLUUID			mClosestAgentToCursor;
-	LLUUID			mClosestAgentAtLastRightClick;
+// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+	LLVector3d		mClosestAgentPosition;
+// [/SL:KB]
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//std::string		mToolTipMsg;
+	static std::string	sToolTipMsg;
+	// </FS:Ansariel> Synchronize tooltips throughout instances
 
-	std::string		mToolTipMsg;
+	// <FS:Ansariel> Mark avatar feature
+	typedef std::map<LLUUID, LLColor4> avatar_marks_map_t;
+	static avatar_marks_map_t sAvatarMarksMap;
 
 public:
 	void			setSelected(uuid_vec_t uuids) { gmSelected=uuids; };
+// <FS:CR> Minimap improvements
+	void			handleShowProfile(const LLSD& sdParam) const;
+	uuid_vec_t		mClosestAgentsToCursor;
+	LLVector3d		mPosGlobalRightClick;
+	LLUUID			mClosestAgentRightClick;
+	uuid_vec_t		mClosestAgentsRightClick;
+// </FS:CR>
 
 private:
 	void handleZoom(const LLSD& userdata);
 	void handleStopTracking (const LLSD& userdata);
+	void handleStartTracking();
+	void handleMark(const LLSD& userdata);
+	void handleClearMark();
+	void handleClearMarks();
+	void handleCam();
+// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+	void handleOverlayToggle(const LLSD& sdParam);
+	bool checkTextureType(const LLSD& sdParam) const;
+	void handleTextureType(const LLSD& sdParam) const;
+	void setAvatarProfileLabel(const LLUUID& av_id, const LLAvatarName& avName, const std::string& item_name);
+	typedef std::map<LLUUID, boost::signals2::connection> avatar_name_cache_connection_map_t;
+	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
+// [/SL:KB]
+
+	bool canAddFriend();
+	bool canRemoveFriend();
+	bool canCall();
+	bool canMap();
+	bool canShare();
+	bool canOfferTeleport();
+	bool canBlock();
+	bool canFreezeEject();
+	bool canKickTeleportHome();
+	bool isBlocked();
+
+	void handleAddFriend();
+	void handleAddToContactSet();
+	void handleRemoveFriend();
+	void handleIM();
+	void handleCall();
+	void handleMap();
+	void handleShare();
+	void handlePay();
+	void handleOfferTeleport();
+	void handleRequestTeleport();
+	void handleTeleportToAvatar();
+	void handleGroupInvite();
+	void handleGetScriptInfo();
+	void handleBlockUnblock();
+	void handleReport();
+	void handleFreeze();
+	void handleEject();
+	void handleKick();
+	void handleTeleportHome();
+	void handleEstateBan();
+	void handleDerender(bool permanent);
 
 	LLMenuGL*		mPopupMenu;
 	uuid_vec_t		gmSelected;

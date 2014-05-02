@@ -36,6 +36,8 @@
 #include "llmutelist.h"
 #include "llagent.h"
 
+#include "llspeakers.h"		// <FS:Zi> Add new control to have a nearby voice output monitor
+
 // default options set in output_monitor.xml
 static LLDefaultChildRegistry::Register<LLOutputMonitorCtrl> r("output_monitor");
 
@@ -120,9 +122,11 @@ void LLOutputMonitorCtrl::draw()
 	// call directly into LLVoiceClient::getInstance() to ask if that agent-id is muted, is
 	// speaking, and what power.  This avoids duplicating data, which can get
 	// out of sync.
-	const F32 LEVEL_0 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL / 3.f;
-	const F32 LEVEL_1 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL * 2.f / 3.f;
-	const F32 LEVEL_2 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL;
+	// <FS:Ansariel> Centralized voice power level
+	//const F32 LEVEL_0 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL / 3.f;
+	//const F32 LEVEL_1 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL * 2.f / 3.f;
+	//const F32 LEVEL_2 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL;
+	// </FS:Ansariel> Centralized voice power level
 
 	if (getVisible() && mAutoUpdate && !mIsMuted && mSpeakerId.notNull())
 	{
@@ -156,33 +160,59 @@ void LLOutputMonitorCtrl::draw()
 	}
 
 	LLPointer<LLUIImage> icon;
-	if (mIsMuted)
+	// <FS:Ansariel> Centralized voice power level
+	//if (mIsMuted)
+	//{
+	//	icon = mImageMute;
+	//}
+	//else if (mPower == 0.f && !mIsTalking)
+	//{
+	//	// only show off if PTT is not engaged
+	//	icon = mImageOff;
+	//}
+	//else if (mPower < LEVEL_0)
+	//{
+	//	// PTT is on, possibly with quiet background noise
+	//	icon = mImageOn;
+	//}
+	//else if (mPower < LEVEL_1)
+	//{
+	//	icon = mImageLevel1;
+	//}
+	//else if (mPower < LEVEL_2)
+	//{
+	//	icon = mImageLevel2;
+	//}
+	//else
+	//{
+	//	// overdriven
+	//	icon = mImageLevel3;
+	//}
+	EVoicePowerLevel power_level = LLVoiceClient::getInstance()->getPowerLevel(mSpeakerId);
+	switch (power_level)
 	{
-		icon = mImageMute;
+		case VPL_MUTED:
+			icon = mImageMute;
+			break;
+		case VPL_PTT_Off:
+			icon = mImageOff;
+			break;
+		case VPL_PTT_On:
+			icon = mImageOn;
+			break;
+		case VPL_Level1:
+			icon = mImageLevel1;
+			break;
+		case VPL_Level2:
+			icon = mImageLevel2;
+			break;
+		case VPL_Level3:
+			icon = mImageLevel3;
+			break;
+		default:
+			break;
 	}
-	else if (mPower == 0.f && !mIsTalking)
-	{
-		// only show off if PTT is not engaged
-		icon = mImageOff;
-	}
-	else if (mPower < LEVEL_0)
-	{
-		// PTT is on, possibly with quiet background noise
-		icon = mImageOn;
-	}
-	else if (mPower < LEVEL_1)
-	{
-		icon = mImageLevel1;
-	}
-	else if (mPower < LEVEL_2)
-	{
-		icon = mImageLevel2;
-	}
-	else
-	{
-		// overdriven
-		icon = mImageLevel3;
-	}
+	// </FS:Ansariel> Centralized voice power level
 
 	if (icon)
 	{
@@ -339,5 +369,56 @@ void LLOutputMonitorCtrl::notifyParentVisibilityChanged()
 
 	notifyParent(params);
 }
+
+//////////////////////////////////////////////////////////////////////////
+// <FS:Zi> Add new control to have a nearby voice output monitor
+
+// default options set in output_monitor.xml
+static LLDefaultChildRegistry::Register<NearbyVoiceMonitor> r2("nearby_voice_monitor");
+
+NearbyVoiceMonitor::Params::Params()
+:	auto_hide("auto_hide",false)
+{
+}
+
+NearbyVoiceMonitor::NearbyVoiceMonitor(const NearbyVoiceMonitor::Params& p)
+:	LLOutputMonitorCtrl(p),
+	mAutoHide(p.auto_hide)
+{
+	 mSpeakerMgr=LLLocalSpeakerMgr::getInstance();
+}
+
+void NearbyVoiceMonitor::draw()
+{
+	LLSpeakerMgr::speaker_list_t speaker_list;
+	LLUUID id;
+	BOOL draw=FALSE;
+
+	id.setNull();
+	mSpeakerMgr->update(TRUE);
+	mSpeakerMgr->getSpeakerList(&speaker_list, FALSE);
+
+	for (LLSpeakerMgr::speaker_list_t::iterator i = speaker_list.begin(); i != speaker_list.end(); ++i)
+	{
+		LLPointer<LLSpeaker> s = *i;
+		if (s->mSpeechVolume > 0 || s->mStatus == LLSpeaker::STATUS_SPEAKING)
+		{
+			draw=TRUE;
+			id = s->mID;
+			break;
+		}
+	}
+
+	setSpeakerId(id);
+	switchIndicator(true); // Ansa: Make sure the output monitor is visible at all times
+
+	if(!mAutoHide || draw)
+	{
+		LLOutputMonitorCtrl::draw();
+	}
+}
+
+// </FS:Zi> Add new control to have a nearby voice output monitor
+//////////////////////////////////////////////////////////////////////////
 
 // EOF

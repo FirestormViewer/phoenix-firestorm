@@ -54,12 +54,63 @@
 #include "llpanellogin.h"
 
 LLProgressView* LLProgressView::sInstance = NULL;
+LLProgressViewMini* LLProgressViewMini::sInstance = NULL;
 
 S32 gStartImageWidth = 1;
 S32 gStartImageHeight = 1;
 const F32 FADE_TO_WORLD_TIME = 1.0f;
 
 static LLPanelInjector<LLProgressView> r("progress_view");
+static LLPanelInjector<LLProgressViewMini> r_mini("progress_view_mini");
+
+LLProgressViewMini::LLProgressViewMini()
+{
+	sInstance=this;
+}
+
+BOOL LLProgressViewMini::postBuild()
+{
+	mCancelBtn=getChild<LLButton>("cancel_btn");
+	mCancelBtn->setClickedCallback(LLProgressViewMini::onCancelButtonClicked,NULL);
+
+	mProgressBar=getChild<LLProgressBar>("progress_bar_mini");
+	mProgressText=getChild<LLTextBox>("progress_text");
+
+	return TRUE;
+}
+
+void LLProgressViewMini::setPercent(const F32 percent)
+{
+	mProgressBar->setValue(percent);
+
+	// hide ourselves when 100% is reached. This is necessary because the login code
+	// expects the fullscreen panel to hide itself when login is completed
+	if(percent==100.0f)
+		setVisible(FALSE);
+}
+
+void LLProgressViewMini::setText(const std::string& text)
+{
+	mProgressText->setValue(text);
+}
+
+void LLProgressViewMini::setCancelButtonVisible(BOOL b, const std::string& label)
+{
+	mCancelBtn->setVisible(b);
+	mCancelBtn->setEnabled(b);
+	mCancelBtn->setLabelSelected(label);
+	mCancelBtn->setLabelUnselected(label);
+}
+
+// static
+void LLProgressViewMini::onCancelButtonClicked(void* dummy)
+{
+	// code reuse is good, even if we have an unnecessary hiding of the full screen tp window there
+	// we might have to reconsider this in case we change setVisible(FALSE) to fade(FALSE) in there. -Zi
+	LLProgressView::onCancelButtonClicked(dummy);
+	sInstance->mCancelBtn->setEnabled(FALSE);
+	sInstance->setVisible(FALSE);
+}
 
 // XUI: Translate
 LLProgressView::LLProgressView() 
@@ -90,6 +141,10 @@ BOOL LLProgressView::postBuild()
 
 	mCancelBtn = getChild<LLButton>("cancel_btn");
 	mCancelBtn->setClickedCallback(  LLProgressView::onCancelButtonClicked, NULL );
+
+	mProgressText=getChild<LLTextBox>("progress_text");
+	mMessageText=getChild<LLTextBox>("message_text");
+
 
 	getChild<LLTextBox>("title_text")->setText(LLStringExplicit(LLAppViewer::instance()->getSecondLifeTitle()));
 
@@ -171,6 +226,10 @@ void LLProgressView::setStartupComplete()
 		mFadeFromLoginTimer.stop();
 		mFadeToWorldTimer.start();
 	}
+
+	// NickyD: FIRE-3063; Enable Audio for all media sources again. They got disabled during postBuild(), but as we never reach LLProgressView::draw
+	// if the progress is disabled, we would never get media audio back.
+	LLViewerMedia::setOnlyAudibleMediaTextureID(LLUUID::null);
 }
 
 void LLProgressView::setVisible(BOOL visible)
@@ -189,6 +248,23 @@ void LLProgressView::setVisible(BOOL visible)
 	} 
 }
 
+// ## Zi: Fade teleport screens
+void LLProgressView::fade(BOOL in)
+{
+	if(in)
+	{
+		mFadeFromLoginTimer.start();
+		mFadeToWorldTimer.stop();
+		setVisible(TRUE);
+	}
+	else
+	{
+		mFadeFromLoginTimer.stop();
+		mFadeToWorldTimer.start();
+		// set visibility will be done in the draw() method after fade
+	}
+}
+// ## Zi: Fade teleport screens
 
 void LLProgressView::drawStartTexture(F32 alpha)
 {
@@ -219,7 +295,7 @@ void LLProgressView::drawStartTexture(F32 alpha)
 	else
 	{
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		gGL.color4f(0.f, 0.f, 0.f, 1.f);
+		gGL.color4f(0.f, 0.f, 0.f, alpha);		// ## Zi: Fade teleport screens
 		gl_rect_2d(getRect());
 	}
 	gGL.popMatrix();
@@ -291,7 +367,7 @@ void LLProgressView::draw()
 
 void LLProgressView::setText(const std::string& text)
 {
-	getChild<LLUICtrl>("progress_text")->setValue(text);
+	mProgressText->setValue(text);
 }
 
 void LLProgressView::setPercent(const F32 percent)
@@ -302,7 +378,7 @@ void LLProgressView::setPercent(const F32 percent)
 void LLProgressView::setMessage(const std::string& msg)
 {
 	mMessage = msg;
-	getChild<LLUICtrl>("message_text")->setValue(mMessage);
+	mMessageText->setValue(mMessage);
 }
 
 void LLProgressView::setCancelButtonVisible(BOOL b, const std::string& label)

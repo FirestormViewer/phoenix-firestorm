@@ -89,6 +89,12 @@ public:
 	{
 	}
 	BOOL unpackLegacy(LLDataPacker &dp);
+
+	// <FS:ND> Need virtual dtor so derived classed are properly destroyed.
+	virtual ~LLPartData()
+	{ }
+	// </FS:ND>
+
 	BOOL unpack(LLDataPacker &dp);
 
 	BOOL pack(LLDataPacker &dp);
@@ -186,6 +192,9 @@ public:
 	BOOL unpack(LLDataPacker &dp);
 	BOOL unpackLegacy(LLDataPacker &dp);
 	BOOL unpackBlock(const S32 block_num);
+
+	LLSD asLLSD() const;
+	bool fromLLSD(LLSD& sd);
 		
 	static BOOL isNullPS(const S32 block_num); // Returns FALSE if this is a "NULL" particle system (i.e. no system)
 

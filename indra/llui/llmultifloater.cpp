@@ -31,10 +31,14 @@
 
 #include "llmultifloater.h"
 #include "llresizehandle.h"
+#include "lldraghandle.h"
 
 //
 // LLMultiFloater
 //
+
+// <FS> Update torn off status and add title bar
+static const std::string IM_CONTAINER = "floater_im_box";
 
 LLMultiFloater::LLMultiFloater(const LLSD& key, const LLFloater::Params& params)
 	: LLFloater(key),
@@ -190,6 +194,16 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floater_data.mCanResize = floaterp->isResizable();
     floater_data.mSaveRect = floaterp->mSaveRect;
 
+	// <FS> Update torn off status and add title bar
+	if (getName() == IM_CONTAINER)
+	{
+		floaterp->getDragHandle()->setTitleVisible(FALSE);
+		LLRect rect = floaterp->getRect();
+		rect.mTop -= floaterp->getHeaderHeight();
+		floaterp->setRect(rect);
+	}
+	// </FS>
+
 	// remove minimize and close buttons
 	floaterp->setCanMinimize(FALSE);
 	floaterp->setCanResize(FALSE);
@@ -240,6 +254,14 @@ void LLMultiFloater::updateFloaterTitle(LLFloater* floaterp)
 	if (index != -1)
 	{
 		mTabContainer->setPanelTitle(index, floaterp->getShortTitle());
+		// <FS:TS> If the tab we're updating is the current tab, then 
+		// update the overall title too, since we're showing it
+		// exclusively now.
+		if (getName() == IM_CONTAINER && floaterp == mTabContainer->getCurrentPanel())
+		{
+			mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
+		}
+		// </FS:TS>
 	}
 }
 
@@ -288,6 +310,16 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	if (!floaterp || floaterp->getHost() != this )
 		return;
 
+	// <FS> Update torn off status and add title bar
+	if (getName() == IM_CONTAINER)
+	{
+		floaterp->getDragHandle()->setTitleVisible(TRUE);
+		LLRect rect = floaterp->getRect();
+		rect.mTop += floaterp->getHeaderHeight();
+		floaterp->setRect(rect);
+	}
+	// </FS>
+
 	floater_data_map_t::iterator found_data_it = mFloaterDataMap.find(floaterp->getHandle());
 	if (found_data_it != mFloaterDataMap.end())
 	{
@@ -307,6 +339,9 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	floaterp->setCanDrag(TRUE);
 	floaterp->setHost(NULL);
 	floaterp->applyRectControl();
+
+	// <FS:Zi> Make sure the floater doesn't resize with screen size changes
+	floaterp->setFollowsNone();		// <FS:Zi>
 
 	updateResizeLimits();
 
@@ -352,6 +387,7 @@ void LLMultiFloater::setVisible(BOOL visible)
 
 BOOL LLMultiFloater::handleKeyHere(KEY key, MASK mask)
 {
+	// <FS:Ansariel> This won't work - CTRL-W is intercepted by LLFileCloseWindow!
 	if (key == 'W' && mask == MASK_CONTROL)
 	{
 		LLFloater* floater = getActiveFloater();
@@ -434,8 +470,25 @@ void LLMultiFloater::onTabSelected()
 	if (floaterp)
 	{
 		tabOpen(floaterp, true);
+		// <FS> Update torn off status and add title bar
+		if (getName() == IM_CONTAINER)
+		{
+			mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
+		}
+		// </FS>
 	}
 }
+
+// <FS> Update torn off status and add title bar
+void LLMultiFloater::setTabContainer(LLTabContainer* tab_container)
+{
+	if (!mTabContainer)
+	{
+		mTabContainer = tab_container;
+		mTabContainer->setCommitCallback(boost::bind(&LLMultiFloater::onTabSelected, this));
+	}
+}
+// </FS>
 
 void LLMultiFloater::setCanResize(BOOL can_resize)
 {
@@ -463,7 +516,10 @@ BOOL LLMultiFloater::postBuild()
 		return TRUE;
 	}
 
-	mTabContainer = getChild<LLTabContainer>("Preview Tabs");
+	// <FS> Update torn off status and add title bar
+	//mTabContainer = getChild<LLTabContainer>("Preview Tabs");
+	setTabContainer(getChild<LLTabContainer>("Preview Tabs"));
+	// </FS>
 	
 	setCanResize(mResizable);
 	return TRUE;
@@ -521,3 +577,32 @@ void LLMultiFloater::computeResizeLimits(S32& new_min_width, S32& new_min_height
 		}
 	}
 }
+
+// <FS:Ansariel> CTRL-W doesn't work with multifloaters
+void LLMultiFloater::closeDockedFloater()
+{
+	LLFloater* floater = getActiveFloater();
+	// is user closeable and is system closeable
+	if (floater && floater->canClose() && floater->isCloseable())
+	{
+		floater->closeFloater();
+
+		// EXT-5695 (Tabbed IM window loses focus if close any tabs by Ctrl+W)
+		// bring back focus on tab container if there are any tab left
+		if(mTabContainer->getTabCount() > 0)
+		{
+			mTabContainer->setFocus(TRUE);
+		}
+		else
+		{
+			// Call closeFloater() here so that focus gets properly handed over
+			closeFloater();
+		}
+
+		return;
+	}
+
+	// Close multifloater itself if we can't close any hosted floaters
+	closeFloater();
+}
+// <FS:Ansariel>

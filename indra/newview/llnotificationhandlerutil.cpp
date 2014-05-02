@@ -31,13 +31,26 @@
 
 #include "llfloaterreg.h"
 #include "llnotifications.h"
+#include "lltrans.h"
 #include "llurlaction.h"
 
 #include "llagent.h"
-#include "llfloaterimsession.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimsession.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llimview.h"
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llnotificationhandler.h"
+#include "llnotifications.h"
+#include "llfloaterreg.h"
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+#include "rlvhandler.h"
+// [/RLVa:KB]
+#include "llconsole.h"
 
 using namespace LLNotificationsUI;
 
@@ -60,7 +73,10 @@ bool LLHandlerUtil::isIMFloaterOpened(const LLNotificationPtr& notification)
 
 	LLUUID from_id = notification->getPayload()["from_id"];
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, from_id);
-	LLFloaterIMSession* im_floater = LLFloaterReg::findTypedInstance<LLFloaterIMSession>("impanel", session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterIMSession* im_floater = LLFloaterReg::findTypedInstance<LLFloaterIMSession>("impanel", session_id);
+	FSFloaterIM* im_floater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
+	// </FS:Ansariel> [FS communication UI]
 
 	if (im_floater != NULL)
 	{
@@ -96,11 +112,31 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 
 		// Build a new format username or firstname_lastname for legacy names
 		// to use it for a history log filename.
-		std::string user_name = LLCacheName::buildUsername(session_name);
+		// <FS:Ansariel> [Legacy IM logfile names]
+		//std::string user_name = LLCacheName::buildUsername(session_name);
+		std::string user_name;
+		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+		{
+			user_name = session_name.substr(0, session_name.find(" Resident"));;
+		}
+		else
+		{
+			user_name = LLCacheName::buildUsername(session_name);
+		}
+		// </FS:Ansariel> [Legacy IM logfile names]
 		LLIMModel::instance().logToFile(user_name, from, from_id, message);
 	}
 	else
 	{
+		// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+		// store active session id
+		const LLUUID & active_session_id =
+				LLIMModel::instance().getActiveSessionID();
+
+		// set searched session as active to avoid IM toast popup
+		LLIMModel::instance().setActiveSessionID(session_id);
+		// </FS:Ansariel> [FS communication UI]
+
 		S32 unread = session->mNumUnread;
 		S32 participant_unread = session->mParticipantUnreadMessageCount;
 		LLIMModel::instance().addMessageSilently(session_id, from, from_id,
@@ -111,6 +147,18 @@ void LLHandlerUtil::logToIM(const EInstantMessage& session_type,
 
 		// update IM floater messages
 		updateIMFLoaterMesages(session_id);
+
+		// <FS:Ansariel> [FS communication UI] Re-added to not toast if our IM floater is active
+		// restore active session id
+		if (active_session_id.isNull())
+		{
+			LLIMModel::instance().resetActiveSessionID();
+		}
+		else
+		{
+			LLIMModel::instance().setActiveSessionID(active_session_id);
+		}
+		// </FS:Ansariel> [FS communication UI]
 	}
 }
 
@@ -164,6 +212,13 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 		return;
 	}
 
+	// <FS:PP> FIRE-10940: Add option to suppress group notice text in group chat
+	if (!gSavedSettings.getBOOL("FSGroupNoticesToIMLog"))
+	{
+		return;
+	}
+	// </FS:PP>
+
 	const std::string group_name = groupData.mName;
 	const std::string sender_name = payload["sender_name"].asString();
 
@@ -171,14 +226,35 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 	LLUUID sender_id;
 	gCacheName->getUUID(sender_name, sender_id);
 
+	// <FS:KC> Better group notices to IM log
+	if (gSavedSettings.getBOOL("FSBetterGroupNoticesToIMLog"))
+	{
+		std::string msg = llformat(
+			"%s %s: %s\n%s\n%s",
+			LLTrans::getString("GroupNotifyGroupNotice").c_str(),
+			LLTrans::getString("GroupNotifySentBy").c_str(),
+			sender_name.c_str(),
+			payload["subject"].asString().c_str(),
+			payload["message"].asString().c_str()
+		);
+		
+		logToIM(IM_SESSION_GROUP_START, group_name, sender_name, msg, payload["group_id"], sender_id);
+	}
+	else
+	{
+	// </FS:KC> Better group notices to IM log
 	logToIM(IM_SESSION_GROUP_START, group_name, sender_name, payload["message"],
 			payload["group_id"], sender_id);
+	}// <FS:KC> Better group notices to IM log
 }
 
 // static
 void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChatSourceType type)
 {
-    LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	// <FS:Ansariel> [FS communication UI]
+    //LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+	// </FS:Ansariel> [FS communication UI]
 	if (nearby_chat)
 	{
 		LLChat chat_msg(notification->getMessage());
@@ -186,6 +262,15 @@ void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChat
 		chat_msg.mFromName = SYSTEM_FROM;
 		chat_msg.mFromID = LLUUID::null;
 		nearby_chat->addMessage(chat_msg);
+
+		// Ansariel: Also log to console if enabled
+		if (gSavedSettings.getBOOL("FSUseNearbyChatConsole"))
+		{
+			LLColor4 chatcolor;
+			LLViewerChat::getChatColor(chat_msg, chatcolor);
+			gConsole->addConsoleLine(chat_msg.mText, chatcolor);
+			gConsole->setVisible(!nearby_chat->getVisible());
+		}
 	}
 }
 
@@ -258,22 +343,25 @@ void LLHandlerUtil::addNotifPanelToIM(const LLNotificationPtr& notification)
 // static
 void LLHandlerUtil::updateIMFLoaterMesages(const LLUUID& session_id)
 {
-	LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
 	if (im_floater != NULL && im_floater->getVisible())
 	{
 		im_floater->updateMessages();
 	}
 }
 
-// static
-void LLHandlerUtil::updateVisibleIMFLoaterMesages(const LLNotificationPtr& notification)
-{
-	const std::string name = LLHandlerUtil::getSubstitutionName(notification);
-	LLUUID from_id = notification->getPayload()["from_id"];
-	LLUUID session_id = spawnIMSession(name, from_id);
-
-	updateIMFLoaterMesages(session_id);
-}
+//// static
+//void LLHandlerUtil::updateVisibleIMFLoaterMesages(const LLNotificationPtr& notification)
+//{
+//	const std::string name = LLHandlerUtil::getSubstitutionName(notification);
+//	LLUUID from_id = notification->getPayload()["from_id"];
+//	LLUUID session_id = spawnIMSession(name, from_id);
+//
+//	updateIMFLoaterMesages(session_id);
+//}
 
 // static
 void LLHandlerUtil::decIMMesageCounter(const LLNotificationPtr& notification)

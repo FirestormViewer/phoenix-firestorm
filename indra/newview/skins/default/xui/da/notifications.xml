@@ -177,13 +177,13 @@ Add this Ability to &apos;[ROLE_NAME]&apos;?
 Du har ikke nok L$ til denne tilmelding.
 	</notification>
 	<notification name="CreateGroupCost">
-		Oprettelse af denne gruppe vil koste L$100.
+		Oprettelse af denne gruppe vil koste L$[COST].
 Grupper skal have mindst 2 medlemmer, ellers slettes de for altid.
 Invitér venligst medlemmer indenfor 48 timer.
-		<usetemplate canceltext="Annullér" name="okcancelbuttons" notext="Annullér" yestext="Oprete en gruppe for L$100"/>
+		<usetemplate canceltext="Annullér" name="okcancelbuttons" notext="Annullér" yestext="Oprete en gruppe for L$[COST]"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		ADVARSEL: Ved at vælge &apos;sælg til enhver&apos; bliver til land tilgængeligt for alle i hele [SECOND_LIFE], også de som ikke er i denne region.
+		ADVARSEL: Ved at vælge &apos;sælg til enhver&apos; bliver til land tilgængeligt for alle i hele [CURRENT_GRID], også de som ikke er i denne region.
 
 Det valgte antal [LAND_SIZE] m² land bliver sat til salg.
 Salgprisen vil være [SALE_PRICE]L$ og vil være til salg til [NAME].
@@ -209,7 +209,7 @@ Overskrider vedhæftnings begrænsning på [MAX_ATTACHMENTS] objekter. Tag venli
 		Ups. Noget mangler at blive udfyldt.
 Du skal indtaste brugernavnet for din avatar.
 
-Du skal bruge en konto for at benytte [SECOND_LIFE]. Ønsker du at oprette en konto nu?
+Du skal bruge en konto for at benytte [CURRENT_GRID]. Ønsker du at oprette en konto nu?
 		<usetemplate name="okcancelbuttons" notext="Prøv igen" yestext="Lav ny konto"/>
 	</notification>
 	<notification name="InvalidCredentialFormat">
@@ -390,7 +390,7 @@ Kan ikke finde den region landet ligger i.
 Dette er typisk en midlertidig fejl. Venligst rediger og gem igen om et par minutter.
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		Du er blevet logget af [SECOND_LIFE]
+		Du er blevet logget af [CURRENT_GRID]
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Afslut" yestext="Se PB &amp; Chat"/>
 	</notification>
@@ -472,7 +472,7 @@ Du kan måske ønske at sætte en ny hjemme lokation.
 	</notification>
 	<notification name="ClothingLoading">
 		Dit tøj hentes stadig ned.
-Du kan bruge [SECOND_LIFE] normalt og andre personer vil se dig korrekt.
+Du kan bruge [CURRENT_GRID] normalt og andre personer vil se dig korrekt.
 		<form name="form">
 			<ignore name="ignore" text="Det tager lang tid at hente tøj"/>
 		</form>
@@ -480,7 +480,7 @@ Du kan bruge [SECOND_LIFE] normalt og andre personer vil se dig korrekt.
 	<notification name="FirstRun">
 		[APP_NAME] installationen er færdig.
 
-Hvis det er første gang du bruger [SECOND_LIFE], skal du først oprette en konto for at logge på.
+Hvis det er første gang du bruger [CURRENT_GRID], skal du først oprette en konto for at logge på.
 	</notification>
 	<notification name="LoginPacketNeverReceived">
 		Der er problemer med at koble på.  Der kan være et problem med din Internet forbindelse eller [SECOND_LIFE_GRID].
@@ -913,9 +913,9 @@ Alle rapporter om krænkninger vil blive undersøgt og behandlet.
 
 Det ser ud til at du indrapporterer krænkelse af ophavsret. Check venligst at du rapporterer korrekt:
 
-(1) Krænkelsesproces. Du må sende en rapport, hvis du mener at en beboer udnytter [SECOND_LIFE] rettighedssystemet, for eksempel via CopyBot eller lignende værktøjer, til at overtræde ophavsretten til objekter.
+(1) Krænkelsesproces. Du må sende en rapport, hvis du mener at en beboer udnytter [CURRENT_GRID] rettighedssystemet, for eksempel via CopyBot eller lignende værktøjer, til at overtræde ophavsretten til objekter.
 
-(2) DCMA (”Digital Millennium Copyright Act”) eller fjernelsesproces. For at kræve at indhold fjernes fra [SECOND_LIFE], SKAL du sende en gyldig besked om overtrædelse som beskrevet i [http://secondlife.com/corporate/dmca.php DMCA Policy].
+(2) DCMA (”Digital Millennium Copyright Act”) eller fjernelsesproces. For at kræve at indhold fjernes fra [CURRENT_GRID], SKAL du sende en gyldig besked om overtrædelse som beskrevet i [http://secondlife.com/corporate/dmca.php DMCA Policy].
 
 Hvis du stadig ønsker at fortsætte med rapportering om overtrædelse, luk venligst dette vindue og afslut afsendelse af rapporten. Du skal muligvis vælge en specifik kategori &apos;CopyBot or Permissions Exploit&apos;.
 
@@ -992,13 +992,13 @@ Henvis til dette fra en hjemmeside for at give andre nem adgang til denne lokati
 		<usetemplate ignoretext="Tag det tøj på jeg laver, mens jeg ændrer udseende" name="okcancelignore" notext="No" yestext="Yes"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		Du skal være alders-checket for at besøge dette område.  Ønsker du at gå til [SECOND_LIFE] hjemmesiden og bekræfte din alder?
+		Du skal være alders-checket for at besøge dette område.  Ønsker du at gå til [CURRENT_GRID] hjemmesiden og bekræfte din alder?
 
 [_URL]
 		<usetemplate ignoretext="Jeg har ikke bekræftet min alder" name="okcancelignore" notext="No" yestext="Yes"/>
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Du skal være betalende medlem for at besøge dette område.  Ønsker du at gå til [SECOND_LIFE] hjemmesiden for at blive dette?
+		Du skal være betalende medlem for at besøge dette område.  Ønsker du at gå til [CURRENT_GRID] hjemmesiden for at blive dette?
 
 [_URL]
 		<usetemplate ignoretext="Du mangler at være betalende medlem" name="okcancelignore" notext="No" yestext="Yes"/>
@@ -1022,10 +1022,10 @@ Henvis til dette fra en hjemmeside for at give andre nem adgang til denne lokati
 		Erstattet manglende tøj/kropsdele med standard.
 	</notification>
 	<notification name="FriendOnline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; er logget på
+		[NAME] er logget på.
 	</notification>
 	<notification name="FriendOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; er logget af
+		[NAME] er logget af.
 	</notification>
 	<notification name="AddSelfFriend">
 		Selvom du nok er meget sød, kan du ikke tilføje dig selv som ven.
@@ -1318,13 +1318,13 @@ Prøv igen om lidt.
 		Kunne ikke skabe fast forbindelse.
 	</notification>
 	<notification name="InternalUsherError">
-		Der opstod en intern fejl ved teleportering til din teleport destination.. Der kan være generelle problemer med [SECOND_LIFE] lige nu.
+		Der opstod en intern fejl ved teleportering til din teleport destination.. Der kan være generelle problemer med [CURRENT_GRID] lige nu.
 	</notification>
 	<notification name="NoGoodTPDestination">
 		Kunne ikke finde et egnet teleport sted i denne region.
 	</notification>
 	<notification name="InternalErrorRegionResolver">
-		Der opstod en intern fejl ved beregning af globale koordinater for din teleport forespørgsel. Der kan være generelle problemer med [SECOND_LIFE] lige nu.
+		Der opstod en intern fejl ved beregning af globale koordinater for din teleport forespørgsel. Der kan være generelle problemer med [CURRENT_GRID] lige nu.
 	</notification>
 	<notification name="NoValidLanding">
 		Kunne ikke finde et gyldigt landingspunkt.
@@ -1431,7 +1431,7 @@ Hvis du ikke forlader regionen, vil du blive logget af.
 Hvis du ikke forlader regionen, vil du blive logget af.
 	</notification>
 	<notification name="LoadWebPage">
-		Indlæas websiden [URL]?
+		Indlæas websiden [URL] ?
 
 [MESSAGE]
 
@@ -1478,14 +1478,14 @@ Opfyld dette ønske?
 		[NAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Ignore" text="Ignorér"/>
+			<button name="Client_Side_Ignore" text="Ignorér"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		[GROUPNAME]&apos;s &apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos;
 [MESSAGE]
 		<form name="form">
-			<button name="Ignore" text="Ignorér"/>
+			<button name="Client_Side_Ignore" text="Ignorér"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">

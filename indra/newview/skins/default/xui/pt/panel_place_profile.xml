@@ -41,10 +41,16 @@
 	<string name="acquired_date">
 		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
 	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<button name="back_btn" tool_tip="Atrás"/>
 	<text name="title" value="Perfil da região"/>
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
 			<text name="owner_label" value="Proprietário:"/>
 			<text name="maturity_value" value="(Desconhecido)"/>
 			<accordion name="advanced_info_accordion">
@@ -109,6 +115,7 @@
 					</panel>
 				</accordion_tab>
 			</accordion>
-		</panel>
-	</scroll_container>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

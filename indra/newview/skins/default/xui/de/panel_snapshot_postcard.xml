@@ -9,9 +9,15 @@
 	<string name="upload_message">
 		Senden...
 	</string>
+<!--	
 	<text name="title">
 		E-Mail
 	</text>
 	<button label="Nachricht" name="message_btn"/>
 	<button label="Einstellungen" name="settings_btn"/>
+-->
+	<tab_container name="postcard_panel_container">
+		<panel label="Nachricht" name="panel_postcard_message"/>
+		<panel label="Einstellungen" name="panel_postcard_settings"/>
+	</tab_container>
 </panel>

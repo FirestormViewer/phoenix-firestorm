@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="Textur" name="Texture" tool_tip="Zum Auswählen eines Bildes hier klicken"/>
+	</panel>
+	<accordion name="wearable_accordion">
+		<panel name="hair_color_tab_holder" title="Farbe">
+			<accordion name="hair_color_accordion">
+				<accordion_tab name="hair_color_tab" title="Farbe"/>
+			</accordion>
+		</panel>
+		<panel name="hair_style_tab_holder" title="Stil">
+			<accordion name="hair_style_accordion">
+				<accordion_tab name="hair_style_tab" title="Stil"/>
+			</accordion>
+		</panel>
+		<panel name="hair_eyebrows_tab_holder" title="Augenbrauen">
+			<accordion name="hair_eyebrows_accordion">
+				<accordion_tab name="hair_eyebrows_tab" title="Augenbrauen"/>
+			</accordion>
+		</panel>
+		<panel name="hair_facial_tab_holder" title="Gesicht">
+			<text name="hair_facial_not_available">
+				Gesicht-Optionen sind nur für männliche
+Avatare verfügbar.
+			</text>
+			<accordion name="hair_facial_accordion">
+				<accordion_tab name="hair_facial_tab" title="Gesicht"/>
+			</accordion>
+		</panel>
+	</accordion>
+</panel>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="nearby_chat" title="Chat in der Nähe">
+	<floater.string name="chatbox_label">
+		An Chat in der Nähe
+	</floater.string>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="lp_translate_btn">
+			<button name="translate_btn" tool_tip="Chat mit konfiguriertem Dienst übersetzen"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_btn">
+			<button name="chat_history_btn" tool_tip="Verlauf für Chat in der Nähe öffnen"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_muted_btn">
+			<button name="chat_history_muted_btn" tool_tip="Ignorierten Chat in Chat in der Nähe anzeigen"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ls_chat">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_editor_layout_panel">
+							<chat_editor name="chat_box"/>
+						</layout_panel>
+						<layout_panel name="input_button_layout_panel">
+							<spinner name="ChatChannel" tool_tip="Kanal, an den der Chat gesendet werden soll. Kann unter Einstellungen -> Chat -> Firestorm -> Kanalauswahl in Eingabezeile anzeigen aktiviert werden." label_width="35"/>
+						</layout_panel>
+						<layout_panel name="chat_type_layout_panel">
+							<combo_box name="chat_type" tool_tip="Flüstern = 10m, Sprechen = 20m, Rufen = 100m">
+								<combo_box.item name="chat_type_whisper" label="Flüstern"/>
+								<combo_box.item name="chat_type_say" label="Sprechen"/>
+								<combo_box.item name="chat_type_shout" label="Rufen"/>
+							</combo_box>
+							<button label="Senden" name="send_chat" tool_tip="Flüstern = 10m, Sprechen = 20m, Rufen = 100m"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -39,6 +39,9 @@
 #include "llui.h"
 #include "llviewertexturelist.h"
 #include "llviewercamera.h"
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+#include "llfocusmgr.h"
+// [/RLVa:KB]
 #include "llhudmanager.h"
 #include "lltoolmgr.h"
 #include "lltoolgrab.h"
@@ -50,14 +53,23 @@ LLToolGun::LLToolGun( LLToolComposite* composite )
 :	LLTool( std::string("gun"), composite ),
 		mIsSelected(FALSE)
 {
+	// <FS:Ansariel> Performance tweak
+	mCrosshairp = LLUI::getUIImage("crosshairs.tga");
 }
 
 void LLToolGun::handleSelect()
 {
-	gViewerWindow->hideCursor();
-	gViewerWindow->moveCursorToCenter();
-	gViewerWindow->getWindow()->setMouseClipping(TRUE);
-	mIsSelected = TRUE;
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+	if (gFocusMgr.getAppHasFocus())
+	{
+// [/RLVa:KB]
+		gViewerWindow->hideCursor();
+		gViewerWindow->moveCursorToCenter();
+		gViewerWindow->getWindow()->setMouseClipping(TRUE);
+		mIsSelected = TRUE;
+// [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
+	}
+// [/RLVa:KB]
 }
 
 void LLToolGun::handleDeselect()
@@ -82,7 +94,11 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 	{
 		const F32 NOMINAL_MOUSE_SENSITIVITY = 0.0025f;
 
-		F32 mouse_sensitivity = gSavedSettings.getF32("MouseSensitivity");
+		// <FS:Ansariel> Use faster LLCachedControl
+		//F32 mouse_sensitivity = gSavedSettings.getF32("MouseSensitivity");
+		static LLCachedControl<F32> mouseSensitivity(gSavedSettings, "MouseSensitivity");
+		F32 mouse_sensitivity = (F32)mouseSensitivity;
+		// </FS:Ansariel> Use faster LLCachedControl
 		mouse_sensitivity = clamp_rescale(mouse_sensitivity, 0.f, 15.f, 0.5f, 2.75f) * NOMINAL_MOUSE_SENSITIVITY;
 
 		// ...move the view with the mouse
@@ -94,7 +110,10 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 		if (dx != 0 || dy != 0)
 		{
 			// ...actually moved off center
-			if (gSavedSettings.getBOOL("InvertMouse"))
+			// <FS:Ansariel> Use faster LLCachedControl
+			//if (gSavedSettings.getBOOL("InvertMouse"))
+			static LLCachedControl<bool> invertMouse(gSavedSettings, "InvertMouse");
+			if (invertMouse)
 			{
 				gAgent.pitch(mouse_sensitivity * -dy);
 			}
@@ -105,7 +124,10 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 			LLVector3 skyward = gAgent.getReferenceUpVector();
 			gAgent.rotate(mouse_sensitivity * dx, skyward.mV[VX], skyward.mV[VY], skyward.mV[VZ]);
 
-			if (gSavedSettings.getBOOL("MouseSun"))
+			// <FS:Ansariel> Use faster LLCachedControl
+			//if (gSavedSettings.getBOOL("MouseSun"))
+			static LLCachedControl<bool> mouseSun(gSavedSettings, "MouseSun");
+			if (mouseSun)
 			{
 				gSky.setSunDirection(LLViewerCamera::getInstance()->getAtAxis(), LLVector3(0.f, 0.f, 0.f));
 				gSky.setOverrideSun(TRUE);
@@ -131,11 +153,19 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 
 void LLToolGun::draw()
 {
-	if( gSavedSettings.getBOOL("ShowCrosshairs") )
+	// <FS:Ansariel> Use faster LLCachedControl
+	//if( gSavedSettings.getBOOL("ShowCrosshairs") )
+	static LLCachedControl<bool> showCrosshairs(gSavedSettings, "ShowCrosshairs");
+	if (showCrosshairs)
 	{
-		LLUIImagePtr crosshair = LLUI::getUIImage("crosshairs.tga");
-		crosshair->draw(
-			( gViewerWindow->getWorldViewRectScaled().getWidth() - crosshair->getWidth() ) / 2,
-			( gViewerWindow->getWorldViewRectScaled().getHeight() - crosshair->getHeight() ) / 2);
+		// <FS:Ansariel> Performance tweak
+		//LLUIImagePtr crosshair = LLUI::getUIImage("crosshairs.tga");
+		//crosshair->draw(
+		//	( gViewerWindow->getWorldViewRectScaled().getWidth() - crosshair->getWidth() ) / 2,
+		//	( gViewerWindow->getWorldViewRectScaled().getHeight() - crosshair->getHeight() ) / 2);
+		mCrosshairp->draw(
+			( gViewerWindow->getWorldViewRectScaled().getWidth() - mCrosshairp->getWidth() ) / 2,
+			( gViewerWindow->getWorldViewRectScaled().getHeight() - mCrosshairp->getHeight() ) / 2);
+		// </FS:Ansariel> Performance tweak
 	}
 }

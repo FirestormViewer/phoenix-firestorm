@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Metry
+	</string>
+	<string name="feet">
+		Stopy
+	</string>
+	<string name="height">
+		Wysokość:
+	</string>
+	<tab_container name="wearable_accordion">
+		<panel name="shape_body_tab_holder" title="Ciało">
+			<accordion name="shape_body_accordion">
+				<accordion_tab name="shape_body_tab" title="Ciało"/>
+			</accordion>
+		</panel>
+		<panel name="shape_head_tab_holder" title="Głowa">
+			<accordion name="shape_head_accordion">
+				<accordion_tab name="shape_head_tab" title="Głowa"/>
+			</accordion>
+		</panel>
+		<panel name="shape_eyes_tab_holder" title="Oczy">
+			<accordion name="shape_eyes_accordion">
+				<accordion_tab name="shape_eyes_tab" title="Oczy"/>
+			</accordion>
+		</panel>
+		<panel name="shape_ears_tab_holder" title="Uszy">
+			<accordion name="shape_ears_accordion">
+				<accordion_tab name="shape_head_tab" title="Uszy"/>
+			</accordion>
+		</panel>
+		<panel name="shape_nose_tab_holder" title="Nos">
+			<accordion name="shape_nose_accordion">
+				<accordion_tab name="shape_nose_tab" title="Nos"/>
+			</accordion>
+		</panel>
+		<panel name="shape_mouth_tab_holder" title="Usta">
+			<accordion name="shape_mouth_accordion">
+				<accordion_tab name="shape_mouth_tab" title="Usta"/>
+			</accordion>
+		</panel>
+		<panel name="shape_chin_tab_holder" title="Podbródek">
+			<accordion name="shape_chin_accordion">
+				<accordion_tab name="shape_chin_tab" title="Podbródek"/>
+			</accordion>
+		</panel>
+		<panel name="shape_torso_tab_holder" title="Tułów">
+			<accordion name="shape_torso_accordion">
+				<accordion_tab name="shape_torso_tab" title="Tułów"/>
+			</accordion>
+		</panel>
+		<panel name="shape_legs_tab_holder" title="Nogi">
+			<accordion name="shape_legs_accordion">
+				<accordion_tab name="shape_legs_tab" title="Nogi"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

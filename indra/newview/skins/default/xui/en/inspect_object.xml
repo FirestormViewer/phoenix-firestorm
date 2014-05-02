@@ -38,6 +38,7 @@ Owner [OWNER]
      word_wrap="true"
      width="220" />
   <text
+   icon_positioning="left"
    follows="all"
    height="50"
    left="8"

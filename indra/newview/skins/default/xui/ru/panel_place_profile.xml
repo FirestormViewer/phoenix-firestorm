@@ -41,10 +41,16 @@
 	<string name="acquired_date">
 		[wkday,datetime,local], [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<button name="back_btn" tool_tip="Назад"/>
 	<text name="title" value="Профиль места"/>
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
 			<text name="region_title" value="Образец_региона"/>
 			<text name="parcel_title" value="Образец_участка, название Long (145, 228, 26)"/>
 			<expandable_text name="description" value="Du waltz die spritz"/>
@@ -113,6 +119,7 @@
 					</panel>
 				</accordion_tab>
 			</accordion>
-		</panel>
-	</scroll_container>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

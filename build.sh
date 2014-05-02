@@ -310,7 +310,7 @@ then
     if $build_viewer_deb && [ "$last_built_variant" == "Release" ]
     then
       begin_section "Build Viewer Debian Package"
-      have_private_repo=false
+      # have_private_repo=false - <FS:TM> FS doesnt use this
       # mangle the changelog
       dch --force-bad-version \
           --distribution unstable \
@@ -333,38 +333,51 @@ then
           done
       fi
       # Move any .deb results.
-      mkdir -p ../packages_public
-      mkdir -p ../packages_private
-      mv ${build_dir}/packages/*.deb ../packages_public 2>/dev/null || true
-      mv ${build_dir}/packages/packages_private/*.deb ../packages_private 2>/dev/null || true
+      mv ${build_dir}/packages/*.deb ../ 2>/dev/null || true
 
       # upload debian package and create repository
       begin_section "Upload Debian Repository"
-      for deb_file in `/bin/ls ../packages_public/*.deb ../*.deb 2>/dev/null`; do
+      for deb_file in ../*.deb; do
         upload_item debian $deb_file binary/octet-stream
       done
-      for deb_file in `/bin/ls ../packages_private/*.deb 2>/dev/null`; do
-        upload_item debian_private $deb_file binary/octet-stream
-        have_private_repo=true
-      done
+      if [ -d "$build_log_dir/debian_repo" ]
+      then
+        pushd "$build_log_dir/debian_repo"
+        cat > Release <<EOF
+Archive: stable
+Component: main
+Origin: Teamcity
+Label: Teamcity built .debs
+Architecture: i386 amd64 any
+EOF
+        if dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz \
+        && dpkg-scansources . /dev/null | gzip -9c > Sources.gz
+        then
+          begin_section Packages.gz
+          gunzip --stdout Packages.gz
+          for file in *.deb
+          do  
+            stat "$file" | sed 2q
+            md5sum "$file"
+          done
+          end_section Packages.gz
 
-      create_deb_repo
-
-      # Rename the local debian_repo* directories so that the master buildscript
-      # doesn't make a remote repo again.
-      for debian_repo_type in debian_repo debian_repo_private; do
-        if [ -d "$build_log_dir/$debian_repo_type" ]; then
-          mv $build_log_dir/$debian_repo_type $build_log_dir/${debian_repo_type}_pushed
+          for file in *
+          do
+            upload_item debian_repo "$file" binary/octet-stream
+          done
+        else
+          record_failure 'Unable to generate Packages.gz or Sources.gz'
         fi
-      done
+        popd
 
-      if [ $have_private_repo = true ]; then
-        eval "$python_command \"$redirect\" '\${private_S3PROXY_URL}${S3PREFIX}repo/$repo/rev/$revision/index.html'"\
-            >"$build_log_dir/private.html" || fatal generating redirect
-        upload_item global_redirect "$build_log_dir/private.html" text/html
-        
+        process_pending_uploads
+
+        # Rename the local debian_repo directory so that the master buildscript
+        # doesn't make a remote repo again.
+
+        mv $build_log_dir/debian_repo $build_log_dir/debian_repo_pushed
       fi
-
       end_section "Upload Debian Repository"
       
     else

@@ -8,22 +8,46 @@
 	<menu_item_call label="Otwórz" name="Open"/>
 	<menu_item_call label="Usiądź tutaj" name="Object Sit"/>
 	<menu_item_call label="Wstań" name="Object Stand Up"/>
-	<menu_item_call label="Sprawdź" name="Object Inspect"/>
+	<context_menu label="Obiekt" name="Object Features">
+		<menu_item_call label="Profil" name="Object Inspect"/>
+		<menu_item_call label="Inspekcja" name="Object_Inspect_Floater"/>
+		<menu_item_call label="Info o skryptach" name="ScriptInfo"/>
+		<menu_item_call label="Scal" name="Object Link"/>
+		<menu_item_call label="Rozłącz" name="Object Unlink"/>
+		<menu_item_check label="Edytuj połączone części" name="Object Edit Linked Parts"/>
+		<menu_item_call label="Kompiluj (Mono)" name="Mono"/>
+		<menu_item_call label="Kompiluj (LSL)" name="LSL"/>
+		<menu_item_call label="Resetuj skrypty" name="Object Reset Scripts"/>
+		<menu_item_call label="Włącz skrypty" name="Object Set Scripts to Running"/>
+		<menu_item_call label="Wyłącz skrypty" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="Usuń skrypty" name="Remove Scripts From Selection"/>
+	</context_menu>
 	<menu_item_call label="Przybliż" name="Zoom In"/>
-	<context_menu label="Załóż na" name="Put On">
+	<menu_item_call label="Ścieżki: w zbiorach części" name="show_in_linksets"/>
+	<menu_item_call label="Ścieżki: w postaciach" name="show_in_characters"/>
+	<context_menu label="Ubierz..." name="Put On">
 		<menu_item_call label="Załóż" name="Wear"/>
 		<menu_item_call label="Dodaj" name="Add"/>
 		<context_menu label="Dołącz" name="Object Attach"/>
 		<context_menu label="Dołącz HUD" name="Object Attach HUD"/>
 	</context_menu>
-	<context_menu label="Zarządzaj" name="Remove">
-		<menu_item_call label="Raport" name="Report Abuse..."/>
-		<menu_item_call label="Zablokuj" name="Object Mute"/>
-		<menu_item_call label="Zwróć" name="Return..."/>
+	<context_menu label="Irytacja?" name="Remove">
+		<menu_item_call label="Zgłoś nadużycie" name="Report Abuse..."/>
+		<menu_item_call label="Zablokuj/wycisz" name="Object Mute"/>
+		<menu_item_call label="Odblokuj" name="Object Unmute"/>
 	</context_menu>
+	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
+	<menu_item_call label="Derenderuj" name="Derender"/>
+	<menu_item_call label="Derenderuj + czarna lista" name="DerenderPermanent"/>
+	<menu_item_call label="Zwróć" name="Return..."/>
 	<menu_item_call label="Weź" name="Pie Object Take"/>
 	<menu_item_call label="Weź kopię" name="Take Copy"/>
 	<menu_item_call label="Zapłać" name="Pay..."/>
 	<menu_item_call label="Kup" name="Buy..."/>
+	<context_menu label="Zapisz jako" name="Export Menu">
+		<menu_item_call label="Kopia zapasowa" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
 	<menu_item_call label="Skasuj" name="Delete"/>
+	<menu_item_call label="Blokuj właściciela cząsteczek" name="Mute Particle"/>
 </context_menu>

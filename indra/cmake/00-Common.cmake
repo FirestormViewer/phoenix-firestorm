@@ -49,32 +49,70 @@ if (WINDOWS)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi /MDd /MP -D_SCL_SECURE_NO_WARNINGS=1"
       CACHE STRING "C++ compiler debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
-      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /MP /Ob0 -D_SECURE_STL=0"
+      "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /Ob0 /MP -D_SECURE_STL=0"
       CACHE STRING "C++ compiler release-with-debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELEASE
-      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP /Ob2 -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
+      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP /Ob2 /Oi /Ot /GF /Gy -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
       CACHE STRING "C++ compiler release options" FORCE)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE")
+
 
   set(CMAKE_CXX_STANDARD_LIBRARIES "")
   set(CMAKE_C_STANDARD_LIBRARIES "")
 
-  add_definitions(
-      /DLL_WINDOWS=1
-      /DDOM_DYNAMIC
-      /DUNICODE
-      /D_UNICODE 
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Zc:wchar_t-
-      /arch:SSE2
-      /fp:fast
-      )
+# <FS:Ansariel> [AVX Optimization]
+#  add_definitions(
+#      /DLL_WINDOWS=1
+#      /DDOM_DYNAMIC
+#      /DUNICODE
+#      /D_UNICODE 
+#      /GS
+#      /TP
+#      /W3
+#      /c
+#      /Zc:forScope
+#      /nologo
+#      /Oy-
+#      /Zc:wchar_t-
+#      /arch:SSE2
+#      /fp:fast
+#      )
+  if (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:AVX
+#        /fp:fast
+        )
+  else (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:SSE2
+#        /fp:fast
+        )
+  endif (USE_AVX_OPTIMIZATION)
+# </FS:Ansariel> [AVX Optimization]	
      
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)
@@ -84,6 +122,13 @@ if (WINDOWS)
   # configure win32 API for windows XP+ compatibility
   set(WINVER "0x0501" CACHE STRING "Win32 API Target version (see http://msdn.microsoft.com/en-us/library/aa383745%28v=VS.85%29.aspx)")
   add_definitions("/DWINVER=${WINVER}" "/D_WIN32_WINNT=${WINVER}")
+
+  if( ND_BUILD64BIT_ARCH )
+   add_definitions("/wd4267 /DND_BUILD64BIT_ARCH" )
+  else( ND_BUILD64BIT_ARCH )
+   add_definitions("/fp:fast" )
+  endif( ND_BUILD64BIT_ARCH )
+ 
 endif (WINDOWS)
 
 
@@ -120,6 +165,10 @@ if (LINUX)
       OUTPUT_VARIABLE CXX_VERSION
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+  #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
+  if (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[78].*")
+  #</FS:ND>
+
   if (${GXX_VERSION} STREQUAL ${CXX_VERSION})
     add_definitions(-D_FORTIFY_SOURCE=2)
   else (${GXX_VERSION} STREQUAL ${CXX_VERSION})
@@ -127,6 +176,10 @@ if (LINUX)
       add_definitions(-D_FORTIFY_SOURCE=2)
     endif (NOT ${GXX_VERSION} MATCHES " 4.1.*Red Hat")
   endif (${GXX_VERSION} STREQUAL ${CXX_VERSION})
+
+  #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
+  endif (NOT ${GXX_VERSION} MATCHES "Gentoo 4.[78].*")
+  #</FS:ND>
 
   # Let's actually get a numerical version of gxx's version
   STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.([0-9]).*" "\\1\\2\\3" CXX_VERSION_NUMBER ${CXX_VERSION})
@@ -149,6 +202,24 @@ if (LINUX)
     set(CMAKE_CXX_FLAGS "-Wno-deprecated ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 429)
 
+  #<FS:ND> Disable unused-but-set-variable for GCC >= 4.6. It causes a lot of warning/errors all over the source. Fixing that would result in changing a good amount of files.
+  if(${CXX_VERSION_NUMBER} GREATER 460)
+    set(CMAKE_CXX_FLAGS "-Wno-unused-but-set-variable ${CMAKE_CXX_FLAGS}")
+  endif (${CXX_VERSION_NUMBER} GREATER 460)
+  #</FS:ND>
+  #<FS:ND> Disable attribute warnings for GCC >= 4.7. It causes a lot of warning/errors in boost.
+  if(${CXX_VERSION_NUMBER} GREATER 470)
+    set(CMAKE_CXX_FLAGS "-Wno-attributes ${CMAKE_CXX_FLAGS}")
+  endif (${CXX_VERSION_NUMBER} GREATER 470)
+  #</FS:ND>
+  #<FS:ND> Disable unsed local typedef warnings for GCC >= 4.8. It causes a lot of warning/errors in boost.
+  if(${CXX_VERSION_NUMBER} GREATER 480)
+    set(CMAKE_CXX_FLAGS "-Wno-unused-local-typedefs ${CMAKE_CXX_FLAGS}")
+  endif (${CXX_VERSION_NUMBER} GREATER 480)
+  #</FS:ND>
+
+
+
   # End of hacks.
 
   add_definitions(
@@ -162,6 +233,7 @@ if (LINUX)
       -msse2
       -mfpmath=sse
       -pthread
+#      -std=gnu++0x
       )
 
   add_definitions(-DAPPID=secondlife)
@@ -177,8 +249,17 @@ if (LINUX)
     # this stops us requiring a really recent glibc at runtime
     add_definitions(-fno-stack-protector)
     # linking can be very memory-hungry, especially the final viewer link
-    set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
+    set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id")
   endif (NOT STANDALONE)
+
+  # <FS:TS> Enable AVX optimizations if requested and at least GCC 4.6.
+  if (USE_AVX_OPTIMIZATION)
+    if (NOT (${CXX_VERSION_NUMBER} LESS 460))
+      add_definitions(-mavx)
+    else (NOT (${CXX_VERSION_NUMBER} LESS 460))
+      error ("AVX optimizations require at least version 4.6.0 of GCC.")
+    endif (NOT (${CXX_VERSION_NUMBER} LESS 460))
+  endif (USE_AVX_OPTIMIZATION)
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
   set(CMAKE_CXX_FLAGS_RELEASE "-O2 ${CMAKE_CXX_FLAGS_RELEASE}")
@@ -189,13 +270,28 @@ if (DARWIN)
   add_definitions(-DLL_DARWIN=1)
   set(CMAKE_CXX_LINK_FLAGS "-Wl,-no_compact_unwind -Wl,-headerpad_max_install_names,-search_paths_first")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_CXX_LINK_FLAGS}")
-  set(DARWIN_extra_cstar_flags "-mlong-branch -g")
+  set(DARWIN_extra_cstar_flags "-g")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_extra_cstar_flags}")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ${DARWIN_extra_cstar_flags}")
   # NOTE: it's critical that the optimization flag is put in front.
   # NOTE: it's critical to have both CXX_FLAGS and C_FLAGS covered.
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O0 ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
   set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O0 ${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+  if (USE_AVX_OPTIMIZATION)
+    if (XCODE_VERSION GREATER 4.9)
+      set(CMAKE_XCODE_ATTRIBUTE_CLANG_X86_VECTOR_INSTRUCTIONS AVX)
+      set(CMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL -Ofast)
+      set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -mavx ${CMAKE_CXX_FLAGS_RELEASE}")
+      set(CMAKE_C_FLAGS_RELEASE "-Ofast -mavx ${CMAKE_C_FLAGS_RELEASE}")
+	else (XCODE_VERSION GREATER 4.9)
+	  error("Darwin AVX Optimizations only available on Xcode5 with Clang, silly person!")
+	endif (XCODE_VERSION GREATER 4.9)
+  else (USE_AVX_OPTIMIZATION)
+    set(CMAKE_XCODE_ATTRIBUTE_CLANG_X86_VECTOR_INSTRUCTIONS SSE3)
+	set(CMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL -O3)
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -msse3 ${CMAKE_CXX_FLAGS_RELEASE}")
+	set(CMAKE_C_FLAGS_RELEASE "-O3 -msse3 ${CMAKE_C_FLAGS_RELEASE}")
+  endif (USE_AVX_OPTIMIZATION)
   if (XCODE_VERSION GREATER 4.2)
     set(ENABLE_SIGNING TRUE)
     set(SIGNING_IDENTITY "Developer ID Application: Linden Research, Inc.")
@@ -210,7 +306,11 @@ if (LINUX OR DARWIN)
     set(GCC_WARNINGS "${GCC_WARNINGS} -Werror")
   endif (NOT GCC_DISABLE_FATAL_WARNINGS)
 
-  set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor")
+  if (XCODE_VERSION GREATER 4.9)
+    set(GCC_CXX_WARNINGS "$[GCC_WARNINGS] -Wno-reorder -Wno-non-virtual-dtor -Wno-format-extra-args -Wunused-function -Wunused-variable")
+  else (XCODE_VERSION GREATER 4.9)
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor")
+  endif (XCODE_VERSION GREATER 4.9)
 
   set(CMAKE_C_FLAGS "${GCC_WARNINGS} ${CMAKE_C_FLAGS}")
   set(CMAKE_CXX_FLAGS "${GCC_CXX_WARNINGS} ${CMAKE_CXX_FLAGS}")
@@ -222,6 +322,10 @@ if (LINUX OR DARWIN)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
   endif (WORD_SIZE EQUAL 32)
+
+  if (ND_BUILD64BIT_ARCH)
+   add_definitions(-DND_BUILD64BIT_ARCH)
+  endif (ND_BUILD64BIT_ARCH)
 endif (LINUX OR DARWIN)
 
 
@@ -234,8 +338,9 @@ if (STANDALONE)
 
 else (STANDALONE)
   set(${ARCH}_linux_INCLUDES
-      ELFIO
       atk-1.0
+      cairo
+      freetype
       glib-2.0
       gstreamer-0.10
       gtk-2.0

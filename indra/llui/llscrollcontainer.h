@@ -100,6 +100,8 @@ public:
 	bool			isAtTop() { return mScrollbar[VERTICAL]->isAtBeginning(); }
 	bool			isAtBottom() { return mScrollbar[VERTICAL]->isAtEnd(); }
 	S32				getBorderWidth() const;
+	// <FS:Ansariel> Scrollbar accessor
+	LLScrollbar*	getScrollbar(SCROLL_ORIENTATION orientation) { return mScrollbar[orientation]; }
 
 	// LLView functionality
 	virtual void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);

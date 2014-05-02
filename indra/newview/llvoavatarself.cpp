@@ -58,11 +58,27 @@
 #include "llviewertexlayer.h"
 #include "llviewerwearable.h"
 #include "llappearancemgr.h"
+// ## Zi: Pie menu
+#include "piemenu.h"
+#include "pieslice.h"
+// ## Zi: Pie menu
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
+//-TT Client LSL Bridge
+#include "fslslbridge.h"
+//-TT
+#include "lggbeammaps.h"
 #include "llmeshrepository.h"
 #include "llvovolume.h"
 #include "llsdutil.h"
 #include "llstartup.h"
 #include "llsdserialize.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -156,6 +172,9 @@ LLVOAvatarSelf::LLVOAvatarSelf(const LLUUID& id,
 							   const LLPCode pcode,
 							   LLViewerRegion* regionp) :
 	LLVOAvatar(id, pcode, regionp),
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	mAttachmentSignal(NULL),
+// [/RLVa:KB]
 	mScreenp(NULL),
 	mLastRegionHandle(0),
 	mRegionCrossingCount(0),
@@ -223,6 +242,10 @@ void LLVOAvatarSelf::initInstance()
 		mDebugBakedTextureTimes[i][1] = -1.0f;
 		mInitialBakeIDs[i] = LLUUID::null;
 	}
+
+// [RLVa:KB] - Checked: 2010-12-12 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	RlvAttachPtLookup::initLookupTable();
+// [/RLVa:KB]
 
 	status &= buildMenus();
 	if (!status)
@@ -356,11 +379,75 @@ BOOL LLVOAvatarSelf::buildMenus()
 	params.name(params.label);
 	gDetachBodyPartPieMenus[7] = LLUICtrlFactory::create<LLContextMenu> (params);
 
+// ## Zi: Pie menu
+	//-------------------------------------------------------------------------
+	// build the attach and detach pie menus
+	//-------------------------------------------------------------------------
+	gPieAttachBodyPartMenus[0] = NULL;
+
+	PieMenu::Params pieParams;
+	pieParams.label(LLTrans::getString("BodyPartsRightArm"));
+	pieParams.name(pieParams.label);
+	pieParams.visible(false);
+	gPieAttachBodyPartMenus[1] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsHead"));
+	pieParams.name(pieParams.label);
+	gPieAttachBodyPartMenus[2] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsLeftArm"));
+	pieParams.name(pieParams.label);
+	gPieAttachBodyPartMenus[3] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	gPieAttachBodyPartMenus[4] = NULL;
+
+	pieParams.label(LLTrans::getString("BodyPartsLeftLeg"));
+	pieParams.name(pieParams.label);
+	gPieAttachBodyPartMenus[5] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsTorso"));
+	pieParams.name(pieParams.label);
+	gPieAttachBodyPartMenus[6] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsRightLeg"));
+	pieParams.name(pieParams.label);
+	gPieAttachBodyPartMenus[7] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	gPieDetachBodyPartMenus[0] = NULL;
+
+	pieParams.label(LLTrans::getString("BodyPartsRightArm"));
+	pieParams.name(pieParams.label);
+	gPieDetachBodyPartMenus[1] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsHead"));
+	pieParams.name(pieParams.label);
+	gPieDetachBodyPartMenus[2] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsLeftArm"));
+	pieParams.name(pieParams.label);
+	gPieDetachBodyPartMenus[3] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	gPieDetachBodyPartMenus[4] = NULL;
+
+	pieParams.label(LLTrans::getString("BodyPartsLeftLeg"));
+	pieParams.name(pieParams.label);
+	gPieDetachBodyPartMenus[5] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsTorso"));
+	pieParams.name(pieParams.label);
+	gPieDetachBodyPartMenus[6] = LLUICtrlFactory::create<PieMenu> (pieParams);
+
+	pieParams.label(LLTrans::getString("BodyPartsRightLeg"));
+	pieParams.name(pieParams.label);
+	gPieDetachBodyPartMenus[7] = LLUICtrlFactory::create<PieMenu> (pieParams);
+// ## Zi: Pie menu
+
 	for (S32 i = 0; i < 8; i++)
 	{
 		if (gAttachBodyPartPieMenus[i])
 		{
 			gAttachPieMenu->appendContextSubMenu( gAttachBodyPartPieMenus[i] );
+			gPieAttachMenu->appendContextSubMenu( gPieAttachBodyPartMenus[i] ); // ## Zi: Pie menu
 		}
 		else
 		{
@@ -372,24 +459,39 @@ BOOL LLVOAvatarSelf::buildMenus()
 				if (attachment->getGroup() == i)
 				{
 					LLMenuItemCallGL::Params item_params;
-						
+					PieSlice::Params slice_params;	// ## Zi: Pie menu
+
 					std::string sub_piemenu_name = attachment->getName();
 					if (LLTrans::getString(sub_piemenu_name) != "")
 					{
 						item_params.label = LLTrans::getString(sub_piemenu_name);
+						slice_params.label = LLTrans::getString(sub_piemenu_name);	// ## Zi: Pie menu
 					}
 					else
 					{
 						item_params.label = sub_piemenu_name;
+						slice_params.label = sub_piemenu_name;	// ## Zi: Pie menu
 					}
 					item_params.name =(item_params.label );
 					item_params.on_click.function_name = "Object.AttachToAvatar";
 					item_params.on_click.parameter = iter->first;
+					// [RLVa:KB] - No changes, but we do need the parameter to always be idxAttachPt for object_selected_and_point_valid()
 					item_params.on_enable.function_name = "Object.EnableWear";
 					item_params.on_enable.parameter = iter->first;
 					LLMenuItemCallGL* item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 
 					gAttachPieMenu->addChild(item);
+
+					// ## Zi: Pie menu
+					slice_params.name =(slice_params.label );
+					slice_params.on_click.function_name = "Object.AttachToAvatar";
+					slice_params.on_click.parameter = iter->first;
+					slice_params.on_enable.function_name = "Object.EnableWear";
+					slice_params.on_enable.parameter = iter->first;
+					PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
+
+					gPieAttachMenu->addChild(slice);
+					// ## Zi: Pie menu
 
 					break;
 
@@ -400,6 +502,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 		if (gDetachBodyPartPieMenus[i])
 		{
 			gDetachPieMenu->appendContextSubMenu( gDetachBodyPartPieMenus[i] );
+			gPieDetachMenu->appendContextSubMenu( gPieDetachBodyPartMenus[i] );	// ## Zi: Pie menu
 		}
 		else
 		{
@@ -411,14 +514,17 @@ BOOL LLVOAvatarSelf::buildMenus()
 				if (attachment->getGroup() == i)
 				{
 					LLMenuItemCallGL::Params item_params;
+					PieSlice::Params slice_params;	// ## Zi: Pie menu
 					std::string sub_piemenu_name = attachment->getName();
 					if (LLTrans::getString(sub_piemenu_name) != "")
 					{
 						item_params.label = LLTrans::getString(sub_piemenu_name);
+						slice_params.label = LLTrans::getString(sub_piemenu_name);	// ## Zi: Pie menu
 					}
 					else
 					{
 						item_params.label = sub_piemenu_name;
+						slice_params.label = sub_piemenu_name;	// ## Zi: Pie menu
 					}
 					item_params.name =(item_params.label );
 					item_params.on_click.function_name = "Attachment.DetachFromPoint";
@@ -428,7 +534,18 @@ BOOL LLVOAvatarSelf::buildMenus()
 					LLMenuItemCallGL* item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 
 					gDetachPieMenu->addChild(item);
-						
+
+					// ## Zi: Pie menu
+					slice_params.name =(slice_params.label );
+					slice_params.on_click.function_name = "Attachment.DetachFromPoint";
+					slice_params.on_click.parameter = iter->first;
+					slice_params.on_enable.function_name = "Attachment.PointFilled";
+					slice_params.on_enable.parameter = iter->first;
+					PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
+
+					gPieDetachMenu->addChild(slice);
+					// ## Zi: Pie menu
+
 					break;
 				}
 			}
@@ -444,18 +561,22 @@ BOOL LLVOAvatarSelf::buildMenus()
 		if (attachment->getGroup() == 8)
 		{
 			LLMenuItemCallGL::Params item_params;
+			PieSlice::Params slice_params;	// ## Zi: Pie menu
 			std::string sub_piemenu_name = attachment->getName();
 			if (LLTrans::getString(sub_piemenu_name) != "")
 			{
 				item_params.label = LLTrans::getString(sub_piemenu_name);
+				slice_params.label = LLTrans::getString(sub_piemenu_name);	// ## Zi: Pie menu
 			}
 			else
 			{
 				item_params.label = sub_piemenu_name;
+				slice_params.label = sub_piemenu_name;	// ## Zi: Pie menu
 			}
 			item_params.name =(item_params.label );
 			item_params.on_click.function_name = "Object.AttachToAvatar";
 			item_params.on_click.parameter = iter->first;
+			// [RLVa:KB] - No changes, but we do need the parameter to always be idxAttachPt for object_selected_and_point_valid()
 			item_params.on_enable.function_name = "Object.EnableWear";
 			item_params.on_enable.parameter = iter->first;
 			LLMenuItemCallGL* item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
@@ -467,6 +588,23 @@ BOOL LLVOAvatarSelf::buildMenus()
 			item_params.on_enable.parameter = iter->first;
 			item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 			gDetachScreenPieMenu->addChild(item);
+
+			// ## Zi: Pie menu
+			slice_params.name =(slice_params.label );
+			slice_params.on_click.function_name = "Object.AttachToAvatar";
+			slice_params.on_click.parameter = iter->first;
+			slice_params.on_enable.function_name = "Object.EnableWear";
+			slice_params.on_enable.parameter = iter->first;
+			PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
+			gPieAttachScreenMenu->addChild(slice);
+
+			slice_params.on_click.function_name = "Attachment.DetachFromPoint";
+			slice_params.on_click.parameter = iter->first;
+			slice_params.on_enable.function_name = "Attachment.PointFilled";
+			slice_params.on_enable.parameter = iter->first;
+			slice = LLUICtrlFactory::create<PieSlice>(slice_params);
+			gPieDetachScreenMenu->addChild(slice);
+			// ## Zi: Pie menu
 		}
 	}
 
@@ -499,6 +637,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			item_params.name =(item_params.label );
 			item_params.on_click.function_name = "Object.AttachToAvatar";
 			item_params.on_click.parameter = iter->first;
+			// [RLVa:KB] - No changes, but we do need the parameter to always be idxAttachPt for object_selected_and_point_valid()
 			item_params.on_enable.function_name = "Object.EnableWear";
 			item_params.on_enable.parameter = iter->first;
 			//* TODO: Skinning:
@@ -535,8 +674,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 			continue;
 		}
 
-		std::multimap<S32, S32> attachment_pie_menu_map;
-
+		std::multimap<S32, S32> attachment_pie_menu_map;		// ## Zi: Pie menu
 		// gather up all attachment points assigned to this group, and throw into map sorted by pie slice number
 		for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); 
 			 iter != mAttachmentPoints.end();
@@ -557,6 +695,13 @@ BOOL LLVOAvatarSelf::buildMenus()
 		{
 			S32 attach_index = attach_it->second;
 
+			// <FS:Ansariel> Skip bridge attachment spot
+			if (attach_index == 127)
+			{
+				continue;
+			}
+			// </FS:Ansariel>
+
 			LLViewerJointAttachment* attachment = get_if_there(mAttachmentPoints, attach_index, (LLViewerJointAttachment*)NULL);
 			if (attachment)
 			{
@@ -565,6 +710,7 @@ BOOL LLVOAvatarSelf::buildMenus()
 				item_params.label = LLTrans::getString(attachment->getName());
 				item_params.on_click.function_name = "Object.AttachToAvatar";
 				item_params.on_click.parameter = attach_index;
+				// [RLVa:KB] - No changes, but we do need the parameter to always be idxAttachPt for object_selected_and_point_valid()
 				item_params.on_enable.function_name = "Object.EnableWear";
 				item_params.on_enable.parameter = attach_index;
 
@@ -577,6 +723,26 @@ BOOL LLVOAvatarSelf::buildMenus()
 				item_params.on_enable.parameter = attach_index;
 				item = LLUICtrlFactory::create<LLMenuItemCallGL>(item_params);
 				gDetachBodyPartPieMenus[group]->addChild(item);
+
+				// ## Zi: Pie menu
+				PieSlice::Params slice_params;
+				slice_params.name = attachment->getName();
+				slice_params.label = LLTrans::getString(attachment->getName());
+				slice_params.on_click.function_name = "Object.AttachToAvatar";
+				slice_params.on_click.parameter = attach_index;
+				slice_params.on_enable.function_name = "Object.EnableWear";
+				slice_params.on_enable.parameter = attach_index;
+
+				PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
+				gPieAttachBodyPartMenus[group]->addChild(slice);
+
+				slice_params.on_click.function_name = "Attachment.DetachFromPoint";
+				slice_params.on_click.parameter = attach_index;
+				slice_params.on_enable.function_name = "Attachment.PointFilled";
+				slice_params.on_enable.parameter = attach_index;
+				slice = LLUICtrlFactory::create<PieSlice>(slice_params);
+				gPieDetachBodyPartMenus[group]->addChild(slice);
+				// ## Zi: Pie menu
 			}
 		}
 	}
@@ -594,6 +760,10 @@ void LLVOAvatarSelf::cleanup()
 LLVOAvatarSelf::~LLVOAvatarSelf()
 {
 	cleanup();
+
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	delete mAttachmentSignal;
+// [/RLVa:KB]
 }
 
 /**
@@ -923,16 +1093,19 @@ void LLVOAvatarSelf::updateRegion(LLViewerRegion *regionp)
 //virtual
 void LLVOAvatarSelf::idleUpdateTractorBeam()
 {
+	LLColor4U rgb = gLggBeamMaps.getCurrentColor(LLColor4U(gAgent.getEffectColor()));
+
 	// This is only done for yourself (maybe it should be in the agent?)
 	if (!needsRenderBeam() || !isBuilt())
 	{
 		mBeam = NULL;
+		gLggBeamMaps.stopBeamChat();
 	}
 	else if (!mBeam || mBeam->isDead())
 	{
 		// VEFFECT: Tractor Beam
 		mBeam = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM);
-		mBeam->setColor(LLColor4U(gAgent.getEffectColor()));
+		mBeam->setColor(rgb);
 		mBeam->setSourceObject(this);
 		mBeamTimer.reset();
 	}
@@ -945,6 +1118,7 @@ void LLVOAvatarSelf::idleUpdateTractorBeam()
 		{
 			// get point from pointat effect
 			mBeam->setPositionGlobal(gAgentCamera.mPointAt->getPointAtPosGlobal());
+			gLggBeamMaps.updateBeamChat(gAgentCamera.mPointAt->getPointAtPosGlobal());
 			mBeam->triggerLocal();
 		}
 		else if (selection->getFirstRootObject() && 
@@ -973,13 +1147,13 @@ void LLVOAvatarSelf::idleUpdateTractorBeam()
 				const LLPickInfo& pick = gViewerWindow->getLastPick();
 				mBeam->setPositionGlobal(pick.mPosGlobal);
 			}
-
 		}
-		if (mBeamTimer.getElapsedTimeF32() > 0.25f)
+		if (mBeamTimer.getElapsedTimeF32() > gLggBeamMaps.setUpAndGetDuration())
 		{
-			mBeam->setColor(LLColor4U(gAgent.getEffectColor()));
+			mBeam->setColor(rgb);
 			mBeam->setNeedsSendToSim(TRUE);
 			mBeamTimer.reset();
+			gLggBeamMaps.fireCurrentBeams(mBeam, rgb);
 		}
 	}
 }
@@ -1075,9 +1249,9 @@ void LLVOAvatarSelf::wearableUpdated( LLWearableType::EType type, BOOL upload_re
 	// Physics type has no associated baked textures, but change of params needs to be sent to
 	// other avatars.
 	if (type == LLWearableType::WT_PHYSICS)
-	  {
+	{
 	    gAgent.sendAgentSetAppearance();
-	  }
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -1156,6 +1330,28 @@ LLViewerObject* LLVOAvatarSelf::getWornAttachment(const LLUUID& inv_item_id)
 	return NULL;
 }
 
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+boost::signals2::connection LLVOAvatarSelf::setAttachmentCallback(const attachment_signal_t::slot_type& cb)
+{
+	if (!mAttachmentSignal)
+		mAttachmentSignal = new attachment_signal_t();
+	return mAttachmentSignal->connect(cb);
+}
+// [/RLVa:KB]
+// [RLVa:KB] - Checked: 2010-03-14 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
+LLViewerJointAttachment* LLVOAvatarSelf::getWornAttachmentPoint(const LLUUID& idItem) const
+{
+	const LLUUID& idItemBase = gInventory.getLinkedItemID(idItem);
+	for (attachment_map_t::const_iterator itAttachPt = mAttachmentPoints.begin(); itAttachPt != mAttachmentPoints.end(); ++itAttachPt)
+	{
+		LLViewerJointAttachment* pAttachPt = itAttachPt->second;
+ 		if (pAttachPt->getAttachedObject(idItemBase))
+			return pAttachPt;
+	}
+	return NULL;
+}
+// [/RLVa:KB]
+
 const std::string LLVOAvatarSelf::getAttachedPointName(const LLUUID& inv_item_id) const
 {
 	const LLUUID& base_inv_item_id = gInventory.getLinkedItemID(inv_item_id);
@@ -1193,7 +1389,34 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 		LLAppearanceMgr::instance().registerAttachment(attachment_id);
 		// Clear any pending requests once the attachment arrives.
 		removeAttachmentRequest(attachment_id);
+
+//-TT Patch: ReplaceWornItemsOnly
+		gInventory.wearAttachmentsOnAvatarCheckRemove(viewer_object, attachment);
+//-TT
+//-TT Client LSL Bridge
+		if (gSavedSettings.getBOOL("UseLSLBridge"))
+		{
+			if (attachment->getName() == "Bridge")
+				FSLSLBridge::instance().processAttach(viewer_object, attachment);
+		}
+//-TT
 		updateLODRiggedAttachments();		
+
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+		// NOTE: RLVa event handlers should be invoked *after* LLVOAvatar::attachObject() calls LLViewerJointAttachment::addObject()
+		if (mAttachmentSignal)
+		{
+			(*mAttachmentSignal)(viewer_object, attachment, ACTION_ATTACH);
+		}
+		if (rlv_handler_t::isEnabled())
+		{
+			RlvAttachmentLockWatchdog::instance().onAttach(viewer_object, attachment);
+			gRlvHandler.onAttach(viewer_object, attachment);
+
+			if ( (attachment->getIsHUDAttachment()) && (!gRlvAttachmentLocks.hasLockedHUD()) )
+				gRlvAttachmentLocks.updateLockedHUD();
+		}
+// [/RLVa:KB]
 	}
 
 	return attachment;
@@ -1203,6 +1426,45 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 {
 	const LLUUID attachment_id = viewer_object->getAttachmentItemID();
+
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+	// NOTE: RLVa event handlers should be invoked *before* LLVOAvatar::detachObject() calls LLViewerJointAttachment::removeObject()
+	//if (rlv_handler_t::isEnabled())
+	//{
+	//	for (attachment_map_t::const_iterator itAttachPt = mAttachmentPoints.begin(); itAttachPt != mAttachmentPoints.end(); ++itAttachPt)
+	//	{
+	//		const LLViewerJointAttachment* pAttachPt = itAttachPt->second;
+	//		if (pAttachPt->isObjectAttached(viewer_object))
+	//		{
+//-TT Client LSL Bridge - moving the rlv check to get the pAttachPt for the bridge
+	const LLViewerJointAttachment* pAttachPt = NULL;
+	for (attachment_map_t::const_iterator itAttachPt = mAttachmentPoints.begin(); itAttachPt != mAttachmentPoints.end(); ++itAttachPt)
+	{
+		pAttachPt = itAttachPt->second;
+		if (pAttachPt->isObjectAttached(viewer_object))
+		{
+			if (rlv_handler_t::isEnabled())
+			{
+//-TT
+				RlvAttachmentLockWatchdog::instance().onDetach(viewer_object, pAttachPt);
+				gRlvHandler.onDetach(viewer_object, pAttachPt);
+			}
+			if (mAttachmentSignal)
+			{
+				(*mAttachmentSignal)(viewer_object, pAttachPt, ACTION_DETACH);
+			}
+
+//-TT Client LSL Bridge
+			if (pAttachPt->getName() == "Bridge" && gSavedSettings.getBOOL("UseLSLBridge"))
+			{
+				FSLSLBridge::instance().processDetach(viewer_object, pAttachPt);
+			}
+//-TT
+			break;
+		}
+	}
+// [/RLVa:KB]
+
 	if ( LLVOAvatar::detachObject(viewer_object) )
 	{
 		LLVOAvatar::cleanupAttachedMesh( viewer_object );
@@ -1237,6 +1499,11 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 			LLAppearanceMgr::instance().unregisterAttachment(attachment_id);
 		}
 		
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+		if ( (rlv_handler_t::isEnabled()) && (viewer_object->isHUDAttachment()) && (gRlvAttachmentLocks.hasLockedHUD()) )
+			gRlvAttachmentLocks.updateLockedHUD();
+// [/RLVa:KB]
+
 		return TRUE;
 	}
 	return FALSE;
@@ -1246,7 +1513,10 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 BOOL LLVOAvatarSelf::detachAttachmentIntoInventory(const LLUUID &item_id)
 {
 	LLInventoryItem* item = gInventory.getItem(item_id);
-	if (item)
+//	if (item)
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1c) | Added: RLVa-1.2.1c
+	if ( (item) && ((!rlv_handler_t::isEnabled()) || (gRlvAttachmentLocks.canDetach(item))) )
+// [/RLVa:KB]
 	{
 		gMessageSystem->newMessageFast(_PREHASH_DetachAttachmentIntoInv);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
@@ -1427,7 +1697,11 @@ BOOL LLVOAvatarSelf::isLocalTextureDataAvailable(const LLViewerTexLayerSet* laye
 //-----------------------------------------------------------------------------
 BOOL LLVOAvatarSelf::isLocalTextureDataFinal(const LLViewerTexLayerSet* layerset) const
 {
-	const U32 desired_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel"); 
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//const U32 desired_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel"); 
+	static LLCachedControl<U32> sTextureDiscardLevel(gSavedSettings, "TextureDiscardLevel");
+	const U32 desired_tex_discard_level = sTextureDiscardLevel();
+	// </FS:Ansariel>
 	// const U32 desired_tex_discard_level = 0; // hack to not bake textures on lower discard levels.
 
 	for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
@@ -1462,7 +1736,11 @@ BOOL LLVOAvatarSelf::isLocalTextureDataFinal(const LLViewerTexLayerSet* layerset
 
 BOOL LLVOAvatarSelf::isAllLocalTextureDataFinal() const
 {
-	const U32 desired_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel"); 
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//const U32 desired_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel"); 
+	static LLCachedControl<U32> sTextureDiscardLevel(gSavedSettings, "TextureDiscardLevel");
+	const U32 desired_tex_discard_level = sTextureDiscardLevel();
+	// </FS:Ansariel>
 	// const U32 desired_tex_discard_level = 0; // hack to not bake textures on lower discard levels
 
 	for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
@@ -3021,7 +3299,33 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 			entry->setID(IMG_DEFAULT_AVATAR);
 		}
 	}
+	
+	
+	// <ClientTag> hack -- Zwagoth
+	llinfos << "Setting clientTag" << llendl;
+	LLTextureEntry* entry = getTE(0);
+	//You edit this to change the tag in your client. Yes.
+	const char* tag_client = "Firestorm";
+	LLUUID client_name;
+	strncpy((char*)&client_name.mData[0], tag_client, UUID_BYTES);
+	static LLCachedControl<LLColor4> tag_color(gSavedPerAccountSettings, "FirestormTagColor", LLColor4(1,0,1,1));
+	entry->setColor(tag_color);
+	//This glow is used to tell if the tag color is set or not.
+	entry->setGlow(0.1f);
+	entry->setID(client_name);
 
+    // Need to reset these if you turn off the tag system without relogging, they persist otherwise.
+	//
+	//llinfos << "Clearing clientTag" << llendl;
+	//LLTextureEntry* entry = getTE(0);
+	//if(entry->getGlow()>0.f)
+	//{
+	//	entry->setGlow(0.0f);
+	//	entry->setColor(LLColor4::white);
+	//}
+	// </ClientTag>
+
+	
 	bool success = packTEMessage(mesgsys);
 
 	// unpack TEs to make sure we don't re-trigger a bake
@@ -3089,7 +3393,11 @@ void LLVOAvatarSelf::dumpScratchTextureByteCount()
 
 void LLVOAvatarSelf::dumpWearableInfo(LLAPRFile& outfile)
 {
-	apr_file_t* file = outfile.getFileHandle();
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	// apr_file_t* file = outfile.getFileHandle();
+	LLAPRFile::tFiletype* file = outfile.getFileHandle();
+	// </FS:ND>
+
 	if (!file)
 	{
 		return;
@@ -3119,3 +3427,13 @@ void LLVOAvatarSelf::dumpWearableInfo(LLAPRFile& outfile)
 	}
 	apr_file_printf( file, "\n</wearable_info>\n" );
 }
+
+// [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
+F32 LLVOAvatarSelf::getAvatarOffset() /*const*/
+{
+	// <FS:CR> FIRE-9759 - Temporarily remove setting AvatarZOffset
+	//return (isUsingServerBakes()) ? LLAvatarAppearance::getAvatarOffset() : RlvSettings::getAvatarOffsetZ();
+	return LLAvatarAppearance::getAvatarOffset();
+	// </FS:CR>
+}
+// [/RLVa:KB]

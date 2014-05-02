@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="UI-Pref" name="Display panel">
+<tab_container label="Firestorm Prefs" name="tabs">
+
+	<!--General-->
+	<panel label="Allgemein" name="UI Prefs Panel">
+		<text name="UI Size:" width="220">
+			UI-Skalierung (Nebeneffekte möglich):
+		</text>
+		<text name="HoverTipText">
+			Schwebe-Tipps:
+		</text>
+		<check_box label="Schwebe-Tipps anzeigen" name="ShowHoverTips" tool_tip="Aktivieren, um Schwebetipps für Avatare und andere Dinge anzuzeigen - diese Option zuerst aktivieren"/>
+		<check_box label="für alle Objekte" tool_tip="Aktivieren, um Schwebetipps für Inworld-Objekte anzuzeigen." name="ShowAllHoverTips"/>
+		<check_box label="für Land" tool_tip="Aktivieren, um Schwebetipps für Land anzuzeigen." name="ShowLandHoverTips"/>
+		<check_box name="FSAdvancedTooltips" label="Erweiterte Informationen in den Hovertips anzeigen (Phoenix-Stil)"/>
+		<check_box name="FSShowGroupTitleInTooltip" label="Gruppentitel von Avataren in Hovertips anzeigen"/>
+		<text name="tooltip_textbox">
+			Verzögerungen für Schwebe-Tipps:
+		</text>
+		<slider label="Tooltipps:" name="ToolTipDelay_slider" tool_tip="Verzögerung, nach der Tooltips für Bedienelemente der Benutzeroberfläche angezeigt werden. (Standardwert: 0.7)"/>
+		<text name="ToolTipDelay_text">
+			Sekunden
+		</text>
+		<slider label="Avatare:" name="AvatarInspectorTooltipDelay_slider" tool_tip="Verzögerung, nach der Schwebetips für Avatare angezeigt werden. (Standardwert: 0.35)"/>
+		<text name="AvatarInspectorTooltipDelay_text">
+			Sekunden
+		</text>
+		<slider label="Objekte:" name="ObjectInspectorTooltipDelay_slider" tool_tip="Verzögerung, nach der Schwebetips für Objekte angezeigt werden. (Standardwert: 0.35)"/>
+		<text name="ObjectInspectorTooltipDelay_text">
+			Sekunden
+		</text>
+		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
+		<check_box name="ShowNetStats" label="Laganzeige aktivieren" width="145" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
+		<check_box label="Mediensteuerung in Menüleiste anzeigen" name="FSEnableVolumeControls" tool_tip="Falls aktiviert, werden in der oberen rechte Ecke des Bildschirms in der Menüleiste die Icons zur Mediensteuerung angezeigt. Nützlich, wenn das Oberflächendesign bereits eigene Icons zur Mediensteuerung besitzt."/>
+		<text name="standalone_textbox">
+			Eigene Fenster verwenden für:
+		</text>
+		<check_box name="FSUseStandaloneGroupFloater" label="Gruppenprofile" tool_tip="Falls aktiviert, werden Gruppenprofile in eigenen Fenstern geöffnet."/>
+		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Teleport-Liste" tool_tip="Falls aktiviert, wird bei Verwendung des Shortcuts für die Teleport-Liste diese in einem eigenen Fenster geöffnet."/>
+		<check_box name="FSUseStandaloneBlocklistFloater" label="Liste ignorierter Einwohner" tool_tip="Falls aktiviert, wird die Liste der ignorierten Einwohner und Objekte in einem eigenen Fenster geöffnet."/>
+		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarken, Ortsdetails und Teleport-Listen-Details" tool_tip="Falls aktiviert, werden Landmarken, Ortsdetails und Details zu Einträgen in der Teleport-Liste in eigenen Fenstern geöffnet."/>
+		<text name="ExtendedTeleportHistoryLabel" width="155">
+			Teleport-Liste erweitern um:
+		</text>
+		<check_box name="FSTeleportHistoryShowPosition" label="Position" tool_tip="Falls aktiviert, wird die Teleport-Liste um die Position innerhalb der teleportierten Region erweitert."/>
+		<check_box name="FSTeleportHistoryShowDate" label="Datum" tool_tip="Falls aktiviert, wird die Teleport-Liste um Datum und Uhrzeit der Teleports erweitert."/>
+		<text name="ScriptDialogsPerObjectLabel">
+			Skriptdialoge pro Objekt:
+		</text>
+		<combo_box name="ScriptDialogPerObjectDropdown">
+			<combo_box.item label="Einer pro Objekt" name="ScriptDialogOption_0"/>
+			<combo_box.item label="Einer pro Objekt &amp; Kanal" name="ScriptDialogOption_1"/>
+			<combo_box.item label="Unbeschränkt" name="ScriptDialogOption_2"/>
+		</combo_box>
+		<text name="ScriptDialogsPositionLabel">
+			Skriptdialog-Position:
+		</text>
+		<combo_box name="ScriptDialogsPositionDropdown" tool_tip="Auswählen, wo Skriptdialoge (Menüs) auf dem Bildschirm erscheinen sollen.">
+			<combo_box.item label="Import alter Wert" name="ScriptDialogPositionOption_0"/>
+			<combo_box.item label="Am Chiclet angedockt" name="ScriptDialogPositionOption_1"/>
+			<combo_box.item label="Oben links" name="ScriptDialogPositionOption_2"/>
+			<combo_box.item label="Oben rechts" name="ScriptDialogPositionOption_3"/>
+			<combo_box.item label="Unten links" name="ScriptDialogPositionOption_4"/>
+			<combo_box.item label="Unten rechts" name="ScriptDialogPositionOption_5"/>
+		</combo_box>
+		<check_box label="Animierte Skript-Dialoge" name="FSAnimatedScriptDialogs" tool_tip="Aktivieren, um Skript-Dialoge animiert einzublenden (Klassisches V1.x-Verhalten)."/>
+		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<text name="GroupTopRightRequiresRestart" left_delta="280">
+			(Erfordert Neustart)
+		</text>
+		<check_box label="Chiclets für IMs und Gruppenchats deaktivieren" name="FSDisableIMChiclets" tool_tip="Falls aktiviert, wird Firestorm keine Chiclets für IMs und Gruppenchats anzeigen (Icons für Gruppenmitteilungen und Anzahl an ungelesenen IMs werden weiterhin angezeigt)."/>
+		<text name="UsePieMenuLabel">
+			Pie-Menü:
+		</text>
+		<slider label="Wiederholungen für blinkende IM-Reiter:" name="ButtonsFlashCount"/>
+		<slider label="Aufblinkdauer für IM-Reiter:" tool_tip="Legt fest, wie lange in Sekunden ein einzelnes Aufblinken eines IM-Reiter dauert - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
+		<text name="ButtonFlashRateText">
+			Sek.
+		</text>
+	</panel>
+	
+	<!--Toasts-->
+	<panel label="Toasts" name="UI-toasts-tab">
+		<text name="ToastSettings">
+			Benachrichtigungseinstellungen (Popups, Konsole, Toasts):
+		</text>
+		<slider label="Abstand zwischen Toast und unterer UI:" tool_tip="Abstand in Pixeln zwischen dem unteren Teil der UI und dem untersten Toast" name="ToastSpace"/>
+		<text name="ToastSpaceText">
+			Pixel
+		</text>
+		<slider label="Anzeige Toast-Benachrichtigung:" tool_tip="Anzahl an Sekunden, die ein Benachrichtigungstoast angezeigt wird, bevor es ausgeblendet wird." name="ToastLifetime"/>
+		<text name="ToastLifetimeText">
+			Sekunden
+		</text>
+		<slider label="Anzeige Tipp-Toast:" tool_tip="Anzahl an Sekunden, die ein Tipp-Toast angezeigt wird, bevor es ausgeblendet wird." name="TipToastLifetime"/>
+		<text name="TipToastLifetimeText">
+			Sekunden
+		</text>
+		<slider label="Anzeigedauer für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe angezeigt wird, bevor es ausgeblendet wird." name="NearbyToastLifetime"/>
+		<text name="NearbyToastLifetimeText">
+			Sekunden
+		</text>
+		<slider label="Höhenabstand für Toasts für Chat in der Nähe:" tool_tip="Höhenabstand von Toasts für Chat in der Nähe." name="FSNearbyChatToastsOffset"/>
+		<text name="FSNearbyChatToastsOffsetText">
+			Pixel
+		</text>
+		<slider label="Ausblendzeit für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe benötigt, um vollständig ausgeblendet zu werden." name="NearbyToastFadingTime"/>
+		<text name="NearbyToastFadingTimeText">
+			Sekunden
+		</text>
+		<slider label="Anzeige Startup-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast beim Starten angezeigt wird, bevor es ausgeblendet wird." name="StartupToastLifetime"/>
+		<text name="StartupToastLifetimeText">
+			Sekunden
+		</text>
+		<slider label="Ausblendzeit normales Toast:" tool_tip="Anzahl an Sekunden, die ein normales Toast benötigt, um vollständig ausgeblendet zu werden." name="ToastFadingTime"/>
+		<text name="ToastFadingTimeText">
+			Sekunden
+		</text>
+		<slider label="Abstand zwischen Toasts:" tool_tip="Abstand zwischen zwei Toasts in Pixeln." name="ToastGap"/>
+		<text name="ToastGapText">
+			Pixel
+		</text>
+		<slider label="Höhe überlagerndes Toast:" tool_tip="Höhe eines überlagerndes Toast in Pixeln." name="OverflowToastHeight"/>
+		<text name="OverflowToastHeightText">
+			Pixel
+		</text>
+		<slider label="Breite von Chat-Toasts:" tool_tip="Breite der Toasts für den Chat in der Nähe in Prozent der Bildschirmbreite." name="NearbyToastWidth"/>
+		<text name="NearbyToastWidthText">
+			%
+		</text>
+		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
+		<check_box label="Neue Regions-Neustart-Meldung verwenden" name="FSUseNewRegionRestartNotification"/>
+		<check_box label="Bei Regions-Neustart-Meldung Bildschirm nicht wackeln" name="FSNoScreenShakeOnRegionRestart"/>
+	</panel>
+	<!--Font-->
+	<panel label="Schrift" name="UI-font-tab">
+		<text name="tooltip_textbox1">
+			Schriftart-Schema:
+		</text>
+		<text name="tooltip_textbox2">
+			(Erfordert Neustart)
+		</text>
+		<text name="tooltip_textbox5">
+			Größenanpassung:
+		</text>
+		<text name="tooltip_textbox6">
+			Punkt (Erfordert Neustart)
+Standard 0. Größere Werte können nicht korrekt funktionieren.
+		</text>
+		<text name="tooltip_textbox3">
+			Abstand Chatzeilen:
+		</text>
+		<text name="tooltip_textbox4">
+			Pixel (Erfordert Neustart)
+V2/3-Standard 0. V1-Standard 2.
+		</text>
+		<text name="Label_FolderItemViewHeight">
+			Höhe Ordner-Eintrag:
+		</text>
+		<text name="Label_FolderItemViewHeight_Scale">
+			Pixel (Erfordert Neustart)
+V2/3-Standard 20. V1-Standard 18.
+		</text>
+	</panel>
+</tab_container>
+</panel>
+

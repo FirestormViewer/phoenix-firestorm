@@ -242,6 +242,12 @@
 				</text>
 				<check_box label="スキンの重さを含む" name="upload_skin"/>
 				<check_box label="ジョイントポジションを含む" name="upload_joints"/>
+				<check_box label="アバターのシェイプを変形する" name="deform" />
+				<radio_group name="deform_base">
+					<radio_item label="男性" name="0" />
+					<radio_item label="女性" name="1" />
+					<radio_item label="男性（痩せぎす）" name="2" />
+				</radio_group>
 				<text name="pelvis_offset_label">
 					Z オフセット（アバターを上下調整）：
 				</text>

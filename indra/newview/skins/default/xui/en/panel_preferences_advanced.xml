@@ -2,191 +2,26 @@
 <panel
  border="true"
  follows="all"
- height="408"
- label="Advanced"
+ height="440"
  layout="topleft"
- left="102"
- name="advanced"
+ left="1"
  top="1"
- width="517">
-	<panel.string
+ width="540"
+ label="Advanced"
+ name="advanced">
+ <panel.string
      name="aspect_ratio_text">
         [NUM]:[DEN]
     </panel.string>
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="12"
-   layout="topleft"
-   left="33"
-   name="Cache:"
-   top_pad="10"
-   width="100">
-    Cache:
-  </text>
-  <spinner
-   control_name="CacheSize"
-   decimal_digits="0"
-   follows="left|top"
-   height="23"
-   increment="64"
-   initial_value="1024"
-   label="Cache size (64 - 9984MB)"
-   label_width="150"
-   layout="topleft"
-   left="80"
-   max_val="9984"
-   min_val="64"
-   top_pad="10"
-   name="cachesizespinner"
-   width="200" />
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="23"
-   layout="topleft"
-   left_pad="5"
-   mouse_opaque="false"
-   name="text_box5"
-   width="20">
-    MB
-  </text>
-  <button
-   follows="left|top"
-   height="23"
-   label="Clear Cache"
-   label_selected="Clear Cache"
-   layout="topleft"
-   left_pad="30"
-   name="clear_cache"
-   top_delta="0"
-   width="100">
-  <button.commit_callback
-   function="Pref.ClearCache" />
-  </button>
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="10"
-   layout="topleft"
-   left="80"
-   name="Cache location"
-   top_pad="5"
-   width="300">
-    Cache location:
-  </text>
-  <line_editor
-   control_name="CacheLocationTopFolder"
-   border_style="line"
-   border_thickness="1"
-   follows="left|top"
-   font="SansSerif"
-   height="23"
-   layout="topleft"
-   left="80"
-   max_length="4096"
-   name="cache_location"
-   top_pad="5"
-   width="205" />
-  <button
-   follows="left|top"
-   height="23"
-   label="Browse"
-   label_selected="Browse"
-   layout="topleft"
-   left_pad="5"
-   name="set_cache"
-   top_delta="0"
-   width="100">
-  <button.commit_callback
-   function="Pref.SetCache" />
-  </button>
-  <button
-    follows="left|top"
-    height="23"
-    label="Default Location"
-    label_selected="Default Location"
-    layout="topleft"
-    left_pad="3"
-    name="default_cache_location"
-    top_delta="0"
-    width="100">
-    <button.commit_callback
-     function="Pref.ResetCache" />
-  </button>
-   <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="12"
-   layout="topleft"
-   left="33"
-   name="UI Size:"
-   top_pad="20"
-   width="100">
-    UI size:
-  </text>
-  <slider
-   control_name="UIScaleFactor"
-   decimal_digits="2"
-   follows="left|top"
-   height="17"
-   increment="0.025"
-   initial_value="1"
-   layout="topleft"
-   left_pad="0"
-   max_val="1.5"
-   min_val="0.75"
-   name="ui_scale_slider"
-   top_pad="-14"
-   width="250" />
-    <check_box
-     control_name="ShowScriptErrors"
-     follows="left|top"
-     height="20"
-     label="Show script errors in:"
-     layout="topleft"
-     left="30"
-     top_pad="10" 
-     name="show_script_errors"
-     width="256" />
-    <radio_group
-     enabled_control="ShowScriptErrors"
-     control_name="ShowScriptErrorsLocation"
-     follows="top|left"
-     draw_border="false"
-     height="16"
-     layout="topleft"
-     left_delta="50"
-     name="show_location"
-     top_pad="5"
-     width="364">
-        <radio_item
-         height="16"
-         label="Nearby chat"
-         layout="topleft"
-         left="3"
-         name="0"
-         top="0"
-         width="315" />
-        <radio_item
-         height="16"
-         label="Separate window"
-         layout="topleft"
-         left_delta="175"
-         name="1"
-         top_delta="0"
-         width="315" />
-    </radio_group>
-
+    <panel.string
+     name="middle_mouse">
+        Middle Mouse
+    </panel.string>
     <check_box
      control_name="AllowMultipleViewers"
      follows="top|left"
      height="15"
-     label="Allow Multiple Viewers"
+     label="Allow Multiple Viewers (May reduce stability and performance)"
      layout="topleft"
      left="30"
      name="allow_multiple_viewer_check"
@@ -196,7 +31,7 @@
      control_name="ForceShowGrid"
      follows="top|left"
      height="15"
-     label="Show Grid Selection at login"
+     label="Allow login to other grids (Not all grids will support Firestorm)"
      layout="topleft"
      left="30"
      name="show_grid_selection_check"
@@ -206,7 +41,7 @@
      control_name="UseDebugMenus"
      follows="top|left"
      height="15"
-     label="Show Advanced Menu"
+     label="Show Advanced Menu (Use at own risk!)"
      layout="topleft"
      left="30"
      name="show_advanced_menu_check"
@@ -222,4 +57,49 @@
      name="show_develop_menu_check"
      top_pad="5"
      width="237"/>
-</panel>
+
+    <text
+     name="BackgroundYieldTimeText"
+     follows="top|left"
+     layout="topleft"
+     left="30"
+     right="-1"
+     word_wrap="true"
+     top_pad="30"
+     height="100">
+        Amount of time, in milliseconds, to yield every frame to other applications when [APP_NAME] is not the foreground window (default: 40; 1 second = 1000 milliseconds):
+    </text>
+    <slider
+     can_edit_text="true"
+     control_name="BackgroundYieldTime"
+     decimal_digits="0"
+     follows="top|left"
+     layout="topleft"
+     height="15"
+     increment="10"
+     initial_value="40"
+     left="30"
+     max_val="1000"
+     min_val="0"
+     name="BackgroundYieldTime"
+     top_delta="40"
+     width="250" />
+
+    <button
+     top="40"
+     enabled="true"
+     follows="left|top"
+     halign="center"
+     height="25"
+     label="Reset All Settings"
+     label_selected="Reset All Settings..."
+     left="30"
+     mouse_opaque="true"
+     name="clear_settings"
+     scale_image="true"
+     width="200" >
+        <button.commit_callback
+         function="Pref.ClearSettings" />
+    </button>
+
+ </panel>

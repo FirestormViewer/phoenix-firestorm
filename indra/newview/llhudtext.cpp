@@ -46,8 +46,10 @@
 #include "llstatusbar.h"
 #include "llmenugl.h"
 #include "pipeline.h"
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 #include <boost/tokenizer.hpp>
-
 
 const F32 SPRING_STRENGTH = 0.7f;
 const F32 RESTORATION_SPRING_TIME_CONSTANT = 0.1f;
@@ -149,11 +151,18 @@ void LLHUDText::renderText()
 	mOffsetY = lltrunc(mHeight * ((mVertAlignment == ALIGN_VERT_CENTER) ? 0.5f : 1.f));
 
 	// *TODO: cache this image
-	LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
+	// <FS:Ansariel> Performance improvement
+	//LLUIImagePtr imagep = LLUI::getUIImage("Rounded_Square");
 
 	// *TODO: make this a per-text setting
-	LLColor4 bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
-	bg_color.setAlpha(gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor);
+	// <FS:Ansariel> Performance improvement
+	//LLColor4 bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
+	//bg_color.setAlpha(gSavedSettings.getF32("ChatBubbleOpacity") * alpha_factor);
+	static LLUIColor s_bg_color = LLUIColorTable::instance().getColor("ObjectBubbleColor");
+	static LLCachedControl<F32> chatBubbleOpacity(gSavedSettings, "ChatBubbleOpacity");
+	LLColor4 bg_color = s_bg_color.get();
+	bg_color.setAlpha(chatBubbleOpacity * alpha_factor);
+	// </FS:Ansariel>
 
 	const S32 border_height = 16;
 	const S32 border_width = 16;
@@ -252,7 +261,30 @@ void LLHUDText::renderText()
 void LLHUDText::setString(const std::string &text_utf8)
 {
 	mTextSegments.clear();
-	addLine(text_utf8, mColor);
+//	addLine(text_utf8, mColor);
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.4.0a) | Modified: RLVa-1.0.0f
+	// NOTE: setString() is called for debug and map beacons as well
+	if (rlv_handler_t::isEnabled())
+	{
+		std::string text(text_utf8);
+		if (gRlvHandler.canShowHoverText(mSourceObject))
+		{
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+				RlvUtil::filterLocation(text);
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+				RlvUtil::filterNames(text);
+		}
+		else
+		{
+			text = "";
+		}
+		addLine(text, mColor);
+	}
+	else
+	{
+		addLine(text_utf8, mColor);
+	}
+// [/RLVa:KB]
 }
 
 void LLHUDText::clearString()
@@ -632,3 +664,15 @@ F32 LLHUDText::LLHUDTextSegment::getWidth(const LLFontGL* font)
 		return width;
 	}
 }
+
+// [RLVa:KB] - Checked: 2010-03-27 (RLVa-1.4.0a) | Added: RLVa-1.0.0f
+void LLHUDText::refreshAllObjectText()
+{
+	for (TextObjectIterator itText = sTextObjects.begin(); itText != sTextObjects.end(); ++itText)
+	{
+		LLHUDText* pText = *itText;
+		if ( (pText) && (!pText->mObjText.empty()) && (pText->mSourceObject) && (LL_PCODE_VOLUME == pText->mSourceObject->getPCode()) )
+			pText->setString(pText->mObjText);
+	}
+}
+// [/RLVa:KB]

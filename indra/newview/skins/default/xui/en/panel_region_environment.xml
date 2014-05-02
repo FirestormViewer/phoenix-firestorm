@@ -8,13 +8,13 @@
  layout="topleft"
  help_topic="panel_region_environment_tab"
  name="panel_env_info"
- width="530"> 
+ width="485"> 
  <text
   name="water_settings_title"
   follows="top|left"
   height="30"
   layout="topleft"
-  left="50"
+  left="10"
   top_pad="20"
   width="430"
   wrap="true">
@@ -25,10 +25,10 @@
   follows="top|left"
   height="237"
   layout="topleft"
-  left="50"
+  left="10"
   name="border"
   top="60"
-  width="430"/>
+  width="465"/>
  <radio_group
   follows="top|left"
   height="45"

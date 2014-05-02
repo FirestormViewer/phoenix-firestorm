@@ -40,6 +40,10 @@
 #include <set>
 #include <string>
 #include <vector>
+// <FS:TT> ReplaceWornItemsOnly
+#include "llviewerobjectlist.h"
+#include "llvoavatarself.h"
+// </FS:TT>
 
 class LLInventoryObserver;
 class LLInventoryObject;
@@ -129,6 +133,12 @@ private:
 	LLUUID mRootFolderID;
 	LLUUID mLibraryRootFolderID;
 	LLUUID mLibraryOwnerID;	
+
+// <FS:TT> ReplaceWornItemsOnly
+	item_array_t mItemArray;
+	item_array_t mObjArray;
+	LLDynamicArray<std::string> mAttPoints;
+// </FS:TT>
 	
 	//--------------------------------------------------------------------
 	// Structure
@@ -150,6 +160,13 @@ private:
 	typedef std::map<LLUUID, LLPointer<LLViewerInventoryItem> > item_map_t;
 	cat_map_t mCategoryMap;
 	item_map_t mItemMap;
+	
+	// <FS:ND> Link Processsing Efficiency
+	typedef std::set< LLUUID > item_links_set_t;
+	typedef std::map< LLUUID, item_links_set_t > item_links_map_t;
+	item_links_map_t mItemLinks;
+	// </FS:ND>
+	
 	// This last set of indices is used to map parents to children.
 	typedef std::map<LLUUID, cat_array_t*> parent_cat_map_t;
 	typedef std::map<LLUUID, item_array_t*> parent_item_map_t;
@@ -263,6 +280,16 @@ public:
 	// Get the inventoryID or item that this item points to, else just return object_id
 	const LLUUID& getLinkedItemID(const LLUUID& object_id) const;
 	LLViewerInventoryItem* getLinkedItem(const LLUUID& object_id) const;
+
+// <FS:TT> ReplaceWornItemsOnly
+	void wearItemsOnAvatar(LLInventoryCategory* category);
+	void wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object, const LLViewerJointAttachment *attachment);
+
+private:
+	void wearWearablesOnAvatar(LLUUID category_id);
+	void wearAttachmentsOnAvatar(LLUUID category_id);
+	void wearGesturesOnAvatar(LLUUID category_id);
+// </FS:TT>
 private:
 	mutable LLPointer<LLViewerInventoryItem> mLastItem; // cache recent lookups	
 
@@ -374,6 +401,7 @@ public:
 	// Creation
 	//--------------------------------------------------------------------
 public:
+	LLUUID findCategoryByName(std::string name);
 	// Returns the UUID of the new category. If you want to use the default 
 	// name based on type, pass in a NULL to the 'name' parameter.
 	LLUUID createNewCategory(const LLUUID& parent_id,
@@ -449,7 +477,6 @@ public:
 	// notifyObservers() manually to update regardless of whether state change 
 	// has been indicated.
 	void idleNotifyObservers();
-
 	// Call to explicitly update everyone on a new state.
 	void notifyObservers();
 
@@ -543,8 +570,10 @@ protected:
 	cat_array_t* getUnlockedCatArray(const LLUUID& id);
 	item_array_t* getUnlockedItemArray(const LLUUID& id);
 private:
+#ifdef LL_DEBUG
 	std::map<LLUUID, bool> mCategoryLock;
 	std::map<LLUUID, bool> mItemLock;
+#endif
 	
 	//--------------------------------------------------------------------
 	// Debugging

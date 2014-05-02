@@ -67,7 +67,7 @@ class LLFontRegistry
 public:
 	// create_gl_textures - set to false for test apps with no OpenGL window,
 	// such as llui_libtest
-	LLFontRegistry(bool create_gl_textures);
+	LLFontRegistry(bool create_gl_textures, F32 size_mod);
 	~LLFontRegistry();
 
 	// Load standard font info from XML file(s).
@@ -105,6 +105,8 @@ private:
 
 	string_vec_t mUltimateFallbackList;
 	bool mCreateGLTextures;
+	// +/- defualt font sizes -KC
+	F32 mFontSizeMod;
 };
 
 #endif // LL_LLFONTREGISTRY_H

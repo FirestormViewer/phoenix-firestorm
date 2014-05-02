@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="friends">
+	<panel.string name="FriendCount" value="Freunde: [COUNT]"/>
+	<scroll_list name="friend_list" right="-90">
+		<scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
+		<scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
+		<scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
+		<scroll_list.column name="icon_visible_online" tool_tip="Dieser Freund kann sehen ob sie online sind."/>
+		<scroll_list.column name="icon_visible_map" tool_tip="Dieser Freund kann ihre Position auf der Karte sehen."/>
+		<scroll_list.column name="icon_edit_mine" tool_tip="Dieser Freund kann deine Objekte editieren, löschen oder nehmen."/>
+		<scroll_list.column name="icon_visible_map_theirs" tool_tip="Du kannst die Position dieses Freundes auf der Karte sehen."/>
+		<scroll_list.column name="icon_edit_theirs" tool_tip="Du kannst Objekte von diesem Freund editieren."/>
+	</scroll_list>
+	<button
+	 label="IM/Anruf"
+	 name="im_btn"
+	 tool_tip="Öffnet eine Instant-Message-Sitzung"
+	 right="-1"
+	 width="85" />
+	<button
+	 label="Profil"
+	 name="profile_btn"
+	 tool_tip="Zeigt dir Bilder, Gruppen und andere Informationen"
+	 width="85" />
+	<button
+	 label="Teleport..."
+	 name="offer_teleport_btn"
+	 tool_tip="Diesem Freund einen Teleport zu deiner jetzigen Position anbieten"
+	 width="85" />
+	<button
+	 label="Zahlen..."
+	 name="pay_btn"
+	 tool_tip="Gib Linden-Dollar (L$) an diesen Freund"
+	 width="85" />
+	<button
+	 label="Entfernen..."
+	 name="remove_btn"
+	 tool_tip="Entfernt diese Person aus deiner Freundesliste"
+	 width="85" />
+	<button
+	 label="Hinzufügen..."
+	 name="add_btn"
+	 tool_tip="Biete diesem Einwohner deine Freundschaft an"
+	 width="85" />
+	<button
+	 label="Kontakt-Sets"
+	 name="lgg_fg_openFG"
+	 tool_tip="Fasse deine Freunde in Gruppen zusammen"
+	 width="85" />
+	<text name="friend_count" width="85">
+	 Freunde: ...
+	</text>
+</panel>

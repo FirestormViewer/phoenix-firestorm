@@ -33,6 +33,18 @@
 
 #include "llstreamingaudio_fmodex.h"
 
+// <FS:CR> FmodEX Error checking
+bool fmod_error_check(FMOD_RESULT result)
+{
+    if (result != FMOD_OK)
+    {
+		LL_DEBUGS("FmodEX") << result << " " << FMOD_ErrorString(result) << LL_ENDL;
+        return false;
+    }
+	else
+		return true;
+}
+// </FS:CR>
 
 class LLAudioStreamManagerFMODEX
 {
@@ -91,7 +103,7 @@ void LLStreamingAudio_FMODEX::start(const std::string& url)
 {
 	//if (!mInited)
 	//{
-	//	llwarns << "startInternetStream before audio initialized" << llendl;
+	//	LL_WARNS("FModEX") << "startInternetStream before audio initialized" << LL_ENDL;
 	//	return;
 	//}
 
@@ -100,13 +112,13 @@ void LLStreamingAudio_FMODEX::start(const std::string& url)
 
 	if (!url.empty())
 	{
-		llinfos << "Starting internet stream: " << url << llendl;
+		LL_INFOS("FmodEX") << "Starting internet stream: " << url << LL_ENDL;
 		mCurrentInternetStreamp = new LLAudioStreamManagerFMODEX(mSystem,url);
 		mURL = url;
 	}
 	else
 	{
-		llinfos << "Set internet stream to null" << llendl;
+		LL_INFOS("FmodEX") << "Set internet stream to null" << LL_ENDL;
 		mURL.clear();
 	}
 }
@@ -121,7 +133,7 @@ void LLStreamingAudio_FMODEX::update()
 		LLAudioStreamManagerFMODEX *streamp = *iter;
 		if (streamp->stopStream())
 		{
-			llinfos << "Closed dead stream" << llendl;
+			LL_INFOS("FmodEX") << "Closed dead stream" << LL_ENDL;
 			delete streamp;
 			mDeadStreams.erase(iter++);
 		}
@@ -165,27 +177,107 @@ void LLStreamingAudio_FMODEX::update()
 	{
 		FMOD::Sound *sound = NULL;
 
-		if(mFMODInternetStreamChannelp->getCurrentSound(&sound) == FMOD_OK && sound)
+		// <FS:CR> FmodEX Error checking
+		//if(mFMODInternetStreamChannelp->getCurrentSound(&sound) == FMOD_OK && sound)
+		if (fmod_error_check(mFMODInternetStreamChannelp->getCurrentSound(&sound)) && sound)
+		// </FS:CR>
 		{
 			FMOD_TAG tag;
 			S32 tagcount, dirtytagcount;
 
-			if(sound->getNumTags(&tagcount, &dirtytagcount) == FMOD_OK && dirtytagcount)
+			// <FS:CR> FmodEX Error checking
+			//if(sound->getNumTags(&tagcount, &dirtytagcount) == FMOD_OK && dirtytagcount)
+			if(fmod_error_check(sound->getNumTags(&tagcount, &dirtytagcount)) && dirtytagcount)
+			// </FS:CR>
 			{
+				// <FS:CR> Stream metadata - originally by Shyotl Khur
+				mMetadata.clear();
+				mNewMetadata = true;
+				// </FS:CR>
 				for(S32 i = 0; i < tagcount; ++i)
 				{
-					if(sound->getTag(NULL, i, &tag)!=FMOD_OK)
+					if(sound->getTag(NULL, i, &tag) != FMOD_OK)
 						continue;
 
-					if (tag.type == FMOD_TAGTYPE_FMOD)
+					// <FS:CR> Stream metadata - originally by Shyotl Khur
+					//if (tag.type == FMOD_TAGTYPE_FMOD)
+					//{
+					//	if (!strcmp(tag.name, "Sample Rate Change"))
+					//	{
+					//		LL_INFOS("FmodEX") << "Stream forced changing sample rate to " << *((float *)tag.data) << LL_ENDL;
+					//		mFMODInternetStreamChannelp->setFrequency(*((float *)tag.data));
+					//	}
+					//	continue;
+					//}
+					std::string name = tag.name;
+					switch(tag.type)
 					{
-						if (!strcmp(tag.name, "Sample Rate Change"))
+						case(FMOD_TAGTYPE_ID3V2):
 						{
-							llinfos << "Stream forced changing sample rate to " << *((float *)tag.data) << llendl;
-							mFMODInternetStreamChannelp->setFrequency(*((float *)tag.data));
+							if(name == "TIT2") name = "TITLE";
+							else if(name == "TPE1") name = "ARTIST";
+							break;
 						}
-						continue;
+						case(FMOD_TAGTYPE_ASF):
+						{
+							if(name == "Title") name = "TITLE";
+							else if(name == "WM/AlbumArtist") name = "ARTIST";
+							break;
+						}
+						case(FMOD_TAGTYPE_FMOD):
+						{
+							if (!strcmp(tag.name, "Sample Rate Change"))
+							{
+								LL_INFOS("FmodEX") << "Stream forced changing sample rate to " << *((float *)tag.data) << LL_ENDL;
+								mFMODInternetStreamChannelp->setFrequency(*((float *)tag.data));
+							}
+							continue;
+						}
+						default:
+							break;
 					}
+					switch(tag.datatype)
+					{
+						case(FMOD_TAGDATATYPE_INT):
+						{
+							(mMetadata)[name]=*(LLSD::Integer*)(tag.data);
+							LL_DEBUGS("StreamMetadata") << tag.name << ": " << *(int*)(tag.data) << LL_ENDL;
+							break;
+						}
+						case(FMOD_TAGDATATYPE_FLOAT):
+						{
+							(mMetadata)[name]=*(LLSD::Real*)(tag.data);
+							LL_DEBUGS("StreamMetadata") << tag.name << ": " << *(float*)(tag.data) << LL_ENDL;
+							break;
+						}
+						case(FMOD_TAGDATATYPE_STRING):
+						{
+							std::string out = rawstr_to_utf8(std::string((char*)tag.data,tag.datalen));
+							(mMetadata)[name]=out;
+							LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
+							break;
+						}
+						case(FMOD_TAGDATATYPE_STRING_UTF16):
+						{
+							std::string out((char*)tag.data,tag.datalen);
+							(mMetadata)[std::string(tag.name)]=out;
+							LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
+							break;
+						}
+						case(FMOD_TAGDATATYPE_STRING_UTF16BE):
+						{
+							std::string out((char*)tag.data,tag.datalen);
+							//U16* buf = (U16*)out.c_str();
+							//for(U32 j = 0; j < out.size()/2; ++j)
+								//(((buf[j] & 0xff)<<8) | ((buf[j] & 0xff00)>>8));
+							(mMetadata)[std::string(tag.name)]=out;
+							LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
+							break;
+						}
+						default:
+							break;
+					}
+					// </FS:CR> Stream metadata - originally by Shyotl Khur
 				}
 			}
 
@@ -195,9 +287,9 @@ void LLStreamingAudio_FMODEX::update()
 				mFMODInternetStreamChannelp->getPaused(&paused);
 				if(!paused)
 				{
-					llinfos << "Stream starvation detected! Pausing stream until buffer nearly full." << llendl;
-					llinfos << "  (diskbusy="<<diskbusy<<")" << llendl;
-					llinfos << "  (progress="<<progress<<")" << llendl;
+					LL_INFOS("FmodEX") << "Stream starvation detected! Pausing stream until buffer nearly full." << LL_ENDL;
+					LL_INFOS("FmodEX") << "  (diskbusy="<<diskbusy<<")" << LL_ENDL;
+					LL_INFOS("FmodEX") << "  (progress="<<progress<<")" << LL_ENDL;
 					mFMODInternetStreamChannelp->setPaused(true);
 				}
 			}
@@ -220,14 +312,14 @@ void LLStreamingAudio_FMODEX::stop()
 
 	if (mCurrentInternetStreamp)
 	{
-		llinfos << "Stopping internet stream: " << mCurrentInternetStreamp->getURL() << llendl;
+		LL_INFOS("FmodEX") << "Stopping internet stream: " << mCurrentInternetStreamp->getURL() << LL_ENDL;
 		if (mCurrentInternetStreamp->stopStream())
 		{
 			delete mCurrentInternetStreamp;
 		}
 		else
 		{
-			llwarns << "Pushing stream to dead list: " << mCurrentInternetStreamp->getURL() << llendl;
+			LL_WARNS("FmodEX") << "Pushing stream to dead list: " << mCurrentInternetStreamp->getURL() << LL_ENDL;
 			mDeadStreams.push_back(mCurrentInternetStreamp);
 		}
 		mCurrentInternetStreamp = NULL;
@@ -299,6 +391,27 @@ void LLStreamingAudio_FMODEX::setGain(F32 vol)
 	}
 }
 
+// <FS:CR> Streamtitle display
+// virtual
+bool LLStreamingAudio_FMODEX::getNewMetadata(LLSD& metadata)
+{
+	if (mCurrentInternetStreamp)
+	{
+		if (mNewMetadata)
+		{
+			metadata = mMetadata;
+			mNewMetadata = false;
+			return true;
+		}
+			
+		return mNewMetadata;
+	}
+
+	metadata = LLSD();
+	return false;
+}
+// </FS:CR>
+
 ///////////////////////////////////////////////////////
 // manager of possibly-multiple internet audio streams
 
@@ -312,11 +425,11 @@ LLAudioStreamManagerFMODEX::LLAudioStreamManagerFMODEX(FMOD::System *system, con
 
 	FMOD_RESULT result = mSystem->createStream(url.c_str(), FMOD_2D | FMOD_NONBLOCKING | FMOD_IGNORETAGS, 0, &mInternetStream);
 
-	if (result!= FMOD_OK)
+	if (result != FMOD_OK)
 	{
-		llwarns << "Couldn't open fmod stream, error "
+		LL_WARNS("FModEX") << "Couldn't open fmod stream, error "
 			<< FMOD_ErrorString(result)
-			<< llendl;
+			<< LL_ENDL;
 		mReady = false;
 		return;
 	}
@@ -329,7 +442,7 @@ FMOD::Channel *LLAudioStreamManagerFMODEX::startStream()
 	// We need a live and opened stream before we try and play it.
 	if (!mInternetStream || getOpenState() != FMOD_OPENSTATE_READY)
 	{
-		llwarns << "No internet stream to start playing!" << llendl;
+		LL_WARNS("FModEX") << "No internet stream to start playing!" << LL_ENDL;
 		return NULL;
 	}
 

@@ -20,12 +20,23 @@ if (NOT DEFINED VIEWER_SHORT_VERSION) # will be true in indra/, false in indra/n
            find_program(SED sed)
            if (DEFINED MERCURIAL AND DEFINED WORDCOUNT AND DEFINED SED)
               execute_process(
-                 COMMAND ${MERCURIAL} log -r tip:0 --template '\\n'
-                 COMMAND ${WORDCOUNT} -l
-                 COMMAND ${SED} "s/ //g"
+                 # <FS:TS> FIRE-11737: Reverting to old revisions shows tip in build string
+                 #         This command gets the revision number of the current
+                 #         repository tip. This leads to confusion when
+                 #         building an earlier revision. Instead, we use
+                 #         "hg identify -n" to get the local revision number
+                 #         of the actual state of the repository.
+                 #COMMAND ${MERCURIAL} log -r tip:0 --template '\\n'
+                 #COMMAND ${WORDCOUNT} -l
+                 #COMMAND ${SED} "s/ //g"
+                 COMMAND ${MERCURIAL} identify -n
                  OUTPUT_VARIABLE VIEWER_VERSION_REVISION
                  OUTPUT_STRIP_TRAILING_WHITESPACE
                  )
+              # <FS:TS> Now strip off a trailing + if it's there, showing that
+              #         there are uncommitted changes.
+              string (REGEX REPLACE "\\+$" "" VIEWER_VERSION_REVISION ${VIEWER_VERSION_REVISION})
+              # </FS:TS> FIRE-11737
               if ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")
                  message("Revision (from hg) ${VIEWER_VERSION_REVISION}")
               else ("${VIEWER_VERSION_REVISION}" MATCHES "^[0-9]+$")

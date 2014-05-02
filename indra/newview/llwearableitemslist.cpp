@@ -37,7 +37,14 @@
 #include "llinventoryicon.h"
 #include "lltransutil.h"
 #include "llviewerattachmenu.h"
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+#include "llviewermenu.h"
+// [/SL:KB]
 #include "llvoavatarself.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 class LLFindOutfitItems : public LLInventoryCollectFunctor
 {
@@ -613,10 +620,34 @@ bool LLWearableItemCreationDateComparator::doCompare(const LLPanelInventoryListI
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+// TODO-Catznip: [Catznip-2.1.3] This function is duplicated in llpanelwearing.cpp so find a better place where it can be shared instead
+static void edit_item(const LLUUID& idItem)
+{
+	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
+	if (!pItem)
+		return;
+
+	switch (pItem->getType())
+	{
+		case LLAssetType::AT_BODYPART:
+		case LLAssetType::AT_CLOTHING:
+			LLAgentWearables::editWearable(idItem);
+			break;
+		case LLAssetType::AT_OBJECT:
+			handle_attachment_edit(idItem);
+			break;
+		default:
+			break;
+	}
+}
+// [/SL:KB]
+
 static LLWearableItemTypeNameComparator WEARABLE_TYPE_NAME_COMPARATOR;
 static const LLWearableItemTypeNameComparator WEARABLE_TYPE_LAYER_COMPARATOR;
 static const LLWearableItemNameComparator WEARABLE_NAME_COMPARATOR;
-static const LLWearableItemCreationDateComparator WEARABLE_CREATION_DATE_COMPARATOR;
+//static const LLWearableItemCreationDateComparator WEARABLE_CREATION_DATE_COMPARATOR;
+static LLWearableItemCreationDateComparator WEARABLE_CREATION_DATE_COMPARATOR;  // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 
 static const LLDefaultChildRegistry::Register<LLWearableItemsList> r("wearable_items_list");
 
@@ -792,7 +823,10 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
 	// Register handlers common for all wearable types.
 	registrar.add("Wearable.Wear", boost::bind(wear_multiple, ids, true));
 	registrar.add("Wearable.Add", boost::bind(wear_multiple, ids, false));
-	registrar.add("Wearable.Edit", boost::bind(handleMultiple, LLAgentWearables::editWearable, ids));
+//	registrar.add("Wearable.Edit", boost::bind(handleMultiple, LLAgentWearables::editWearable, ids));
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+	registrar.add("Wearable.Edit", boost::bind(handleMultiple, edit_item, ids));
+// [/SL:KB]
 	registrar.add("Wearable.CreateNew", boost::bind(createNewWearable, selected_id));
 	registrar.add("Wearable.ShowOriginal", boost::bind(show_item_original, selected_id));
 	registrar.add("Wearable.TakeOffDetach", 
@@ -839,6 +873,13 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 
 	bool can_be_worn = true;
 
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	// We'll enable a menu option if at least one item in the selection is wearable/removable
+	bool rlvCanWearReplace = !rlv_handler_t::isEnabled();
+	bool rlvCanWearAdd = !rlv_handler_t::isEnabled();
+	bool rlvCanRemove = !rlv_handler_t::isEnabled();
+// [/RLVa:KB]
+
 	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
 	{
 		LLUUID id = *it;
@@ -856,7 +897,11 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 		const LLWearableType::EType wearable_type = item->getWearableType();
 		const bool is_link = item->getIsLinkType();
 		const bool is_worn = get_is_item_worn(id);
-		const bool is_editable = gAgentWearables.isWearableModifiable(id);
+//		const bool is_editable = gAgentWearables.isWearableModifiable(id);
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+		const bool is_editable = 
+			(item->isWearableType()) ? gAgentWearables.isWearableModifiable(id) : (LLAssetType::AT_OBJECT == item->getType());
+// [/SL:KB]
 		const bool is_already_worn = gAgentWearables.selfHasWearable(wearable_type);
 		if (is_worn)
 		{
@@ -879,6 +924,29 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 		{
 			can_be_worn = get_can_item_be_worn(item->getLinkedUUID());
 		}
+
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+		if (rlv_handler_t::isEnabled())
+		{
+			ERlvWearMask eWearMask = RLV_WEAR_LOCKED;
+			switch (item->getType())
+			{
+				case LLAssetType::AT_BODYPART:
+				case LLAssetType::AT_CLOTHING:
+					eWearMask = gRlvWearableLocks.canWear(item);
+					rlvCanRemove |= (is_worn) ? gRlvWearableLocks.canRemove(item) : false;
+					break;
+				case LLAssetType::AT_OBJECT:
+					eWearMask = gRlvAttachmentLocks.canAttach(item);
+					rlvCanRemove |= (is_worn) ? gRlvAttachmentLocks.canDetach(item) : false;
+					break;
+				default:
+					break;
+			}
+			rlvCanWearReplace |= ((eWearMask & RLV_WEAR_REPLACE) == RLV_WEAR_REPLACE);
+			rlvCanWearAdd |= ((eWearMask & RLV_WEAR_ADD) == RLV_WEAR_ADD);
+		}
+// [/RLVa:KB]
 	} // for
 
 	bool standalone = mParent ? mParent->isStandalone() : false;
@@ -886,12 +954,20 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 
 	// *TODO: eliminate multiple traversals over the menu items
 	setMenuItemVisible(menu, "wear_wear", 			n_already_worn == 0 && n_worn == 0 && can_be_worn);
-	setMenuItemEnabled(menu, "wear_wear", 			n_already_worn == 0 && n_worn == 0);
+//	setMenuItemEnabled(menu, "wear_wear", 			n_already_worn == 0 && n_worn == 0);
 	setMenuItemVisible(menu, "wear_add",			wear_add_visible);
-	setMenuItemEnabled(menu, "wear_add",			canAddWearables(ids));
+//	setMenuItemEnabled(menu, "wear_add",			canAddWearables(ids));
 	setMenuItemVisible(menu, "wear_replace",		n_worn == 0 && n_already_worn != 0 && can_be_worn);
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	setMenuItemEnabled(menu, "wear_wear", 			n_already_worn == 0 && n_worn == 0 && rlvCanWearReplace);
+	setMenuItemEnabled(menu, "wear_add",			canAddWearables(ids) && rlvCanWearAdd);
+	setMenuItemEnabled(menu, "wear_replace",		rlvCanWearReplace);
+// [/RLVa:KB]
 	//visible only when one item selected and this item is worn
-	setMenuItemVisible(menu, "edit",				!standalone && mask & (MASK_CLOTHING|MASK_BODYPART) && n_worn == n_items && n_worn == 1);
+//	setMenuItemVisible(menu, "edit",				!standalone && mask & (MASK_CLOTHING|MASK_BODYPART) && n_worn == n_items && n_worn == 1);
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+	setMenuItemVisible(menu, "edit",				!standalone && mask & (MASK_CLOTHING|MASK_BODYPART|MASK_ATTACHMENT) && n_worn == n_items && n_worn == 1);
+// [/SL:KB]
 	setMenuItemEnabled(menu, "edit",				n_editable == 1 && n_worn == 1 && n_items == 1);
 	setMenuItemVisible(menu, "create_new",			mask & (MASK_CLOTHING|MASK_BODYPART) && n_items == 1);
 	setMenuItemEnabled(menu, "create_new",			canAddWearables(ids));
@@ -900,7 +976,12 @@ void LLWearableItemsList::ContextMenu::updateItemsVisibility(LLContextMenu* menu
 	setMenuItemVisible(menu, "take_off",			mask == MASK_CLOTHING && n_worn == n_items);
 	setMenuItemVisible(menu, "detach",				mask == MASK_ATTACHMENT && n_worn == n_items);
 	setMenuItemVisible(menu, "take_off_or_detach",	mask == (MASK_ATTACHMENT|MASK_CLOTHING));
-	setMenuItemEnabled(menu, "take_off_or_detach",	n_worn == n_items);
+//	setMenuItemEnabled(menu, "take_off_or_detach",	n_worn == n_items);
+// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	setMenuItemEnabled(menu, "take_off",			rlvCanRemove);
+	setMenuItemEnabled(menu, "detach",				rlvCanRemove);
+	setMenuItemEnabled(menu, "take_off_or_detach",	(n_worn == n_items) && (rlvCanRemove));
+// [/RLVa:KB]
 	setMenuItemVisible(menu, "object_profile",		!standalone);
 	setMenuItemEnabled(menu, "object_profile",		n_items == 1);
 	setMenuItemVisible(menu, "--no options--", 		FALSE);

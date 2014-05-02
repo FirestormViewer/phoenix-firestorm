@@ -181,6 +181,8 @@ LLAudioChannelOpenAL::~LLAudioChannelOpenAL()
 void LLAudioChannelOpenAL::cleanup()
 {
 	alSourceStop(mALSource);
+	alSourcei(mALSource, AL_BUFFER, 0); // <ND/> need to unset buffer too, or  alDeleteBuffers will fail.
+
 	mCurrentBufferp = NULL;
 }
 
@@ -320,7 +322,15 @@ void LLAudioBufferOpenAL::cleanup()
 {
 	if(mALBuffer != AL_NONE)
 	{
+		alGetError(); // <ND/>
 		alDeleteBuffers(1, &mALBuffer);
+
+		// <FS:ND> Print warning on possible leak.
+		ALenum error = alGetError();
+		if( AL_NO_ERROR != error )
+			llwarns << "openal error: " << error << " possible memory leak hit" << llendl;
+		// </FS:ND>
+
 		mALBuffer = AL_NONE;
 	}
 }

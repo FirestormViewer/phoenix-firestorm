@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="nearby_chat" title="Czat lokalny">
+	<floater.string name="chatbox_label">
+		Na czat lokalny
+	</floater.string>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="lp_translate_btn">
+			<button tool_tip="Użyj zdefiniowanej wcześniej usługi tłumaczącej" name="translate_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_btn">
+			<button tool_tip="Pokaż logi czatu lokalnego." name="chat_history_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_history_muted_btn">
+			<button tool_tip="Pokazuj wyciszone wiadomości w oknie logu czatu lokalnego." name="chat_history_muted_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ls_chat">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<spinner name="ChatChannel" tool_tip="Kanał, na jaki wiadomość na zostać wysłana. Włączone w Ustawienia -> Czat -> Firestorm -> Oferuj ręczny wybór kanału w pasku czatu."/>
+						</layout_panel>
+						<layout_panel name="chat_type_layout_panel">
+							<combo_box name="chat_type" tool_tip="Szept = 10m, Mów = 20m, Krzyk = 100m">
+								<combo_box.item name="chat_type_whisper" label="Szept"/>
+								<combo_box.item name="chat_type_say" label="Mów"/>
+								<combo_box.item name="chat_type_shout" label="Krzyk"/>
+							</combo_box>
+							<button label="Wyślij" name="send_chat" tool_tip="Szept = 10m, Mów = 20m, Krzyk = 100m"/>
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

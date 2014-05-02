@@ -633,7 +633,20 @@ void LLGrassPartition::addGeometryCount(LLSpatialGroup* group, U32& vertex_count
 			continue;
 		}
 
-		LLAlphaObject* obj = (LLAlphaObject*) drawablep->getVObj().get();
+		// <FS:ND> Crashfix
+
+		// LLAlphaObject* obj = (LLAlphaObject*) drawablep->getVObj().get();
+
+		LLAlphaObject* obj = dynamic_cast<LLAlphaObject*>( drawablep->getVObj().get() );
+
+		if( !obj )
+		{
+			llwarns << "Object is 0 (not an alpha maybe)" << llendl;
+			continue;
+		}
+
+		// </FS:ND>
+
 		obj->mDepth = 0.f;
 		
 		if (drawablep->isAnimating())
@@ -705,7 +718,15 @@ void LLGrassPartition::getGeometry(LLSpatialGroup* group)
 	for (std::vector<LLFace*>::iterator i = mFaceList.begin(); i != mFaceList.end(); ++i)
 	{
 		LLFace* facep = *i;
-		LLAlphaObject* object = (LLAlphaObject*) facep->getViewerObject();
+
+		// <FS:ND> Crashfix
+
+		// LLAlphaObject* object = (LLAlphaObject*) facep->getViewerObject();
+
+		LLAlphaObject* object = dynamic_cast<LLAlphaObject*>( facep->getViewerObject() );
+
+		// </FS:ND>
+
 		facep->setGeomIndex(vertex_count);
 		facep->setIndicesIndex(index_count);
 		facep->setVertexBuffer(buffer);
@@ -714,8 +735,21 @@ void LLGrassPartition::getGeometry(LLSpatialGroup* group)
 		//dummy parameter (unused by this implementation)
 		LLStrider<LLColor4U> emissivep;
 
-		object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, emissivep, indicesp);
+		// <FS:ND> Crashfix
+
+		// object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, emissivep, indicesp);
+
+		if( object )
+			object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, emissivep, indicesp);
+		else
+		{
+			llwarns << "Object is 0 (not an alpha maybe)" << llendl;
+			if( facep->getViewerObject()  )
+				llwarns << typeid( *facep->getViewerObject() ).name() << llendl;
+		}
 		
+		// </FS:ND>
+
 		vertex_count += facep->getGeomCount();
 		index_count += facep->getIndicesCount();
 
@@ -770,9 +804,12 @@ void LLVOGrass::updateDrawable(BOOL force_damped)
 }
 
 // virtual 
-BOOL LLVOGrass::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//BOOL LLVOGrass::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, S32 *face_hitp,
+//									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+BOOL LLVOGrass::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, S32 face, BOOL pick_transparent, BOOL pick_rigged, S32 *face_hitp,
 									  LLVector4a* intersection,LLVector2* tex_coord, LLVector4a* normal, LLVector4a* tangent)
-	
+// [/SL:KB]
 {
 	BOOL ret = FALSE;
 	if (!mbCanSelect ||

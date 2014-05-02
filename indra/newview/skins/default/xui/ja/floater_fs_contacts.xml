@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- created Jun.30, 2013 based on English 4.4.2 version -->
+<floater name="imcontacts" title="連絡先">
+ 	<string name="no_friends" value="フレンドはいません" />
+    <string name="no_filtered_groups_msg" value="お探しのものは見つかりましたか？ [secondlife:///app/search/groups/[SEARCH_TERM] 検索] をお試しください。" />
+	<string name="no_groups_msg" value="グループをお探しですか？ [secondlife:///app/search/groups 検索] をお試しください。" />
+	<tab_container name="friends_and_groups">
+		<first_tab tab_bottom_image_flash="Toolbar_Left_Flash"/>
+		<middle_tab tab_bottom_image_flash="Toolbar_Middle_Flash"/>
+		<last_tab tab_bottom_image_flash="Toolbar_Right_Flash"/>
+		<panel filename="panel_fs_contacts_friends.xml" label="フレンド" name="friends_panel" />
+		<panel filename="panel_fs_contacts_groups.xml" label="グループ" name="groups_panel"/>
+	</tab_container>
+</floater>

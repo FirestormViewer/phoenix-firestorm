@@ -72,6 +72,7 @@
 
 #if LL_DARWIN
 #include <CoreFoundation/CFURL.h>
+#include <CoreFoundation/CFBundle.h>	// [FS:CR]
 #endif
 
 // Static initialization
@@ -180,7 +181,8 @@ private:
 	LLButton*					mToggleOverlapButton;				// button to togle overlap panel/highlighting
 	LLComboBox*					mLanguageSelection;					// combo box for primary language selection
 	LLComboBox*					mLanguageSelection_2;				// combo box for secondary language selection
-	LLScrollContainer*			mOverlapScrollView;					// overlapping elements scroll container
+	// [FS:CR] Unused 2013.12.7
+	//LLScrollContainer*			mOverlapScrollView;					// overlapping elements scroll container
 	S32							mLastDisplayedX, mLastDisplayedY;	// stored position of last floater so the new one opens up in the same place
 	std::string 				mDelim;								// the OS-specific delimiter character (/ or \) (*TODO: this shouldn't be needed, right?)
 
@@ -292,7 +294,10 @@ LLLocalizationResetForcer::LLLocalizationResetForcer(LLFloaterUIPreview* floater
 	mSavedLocalization = LLUI::sSettingGroups["config"]->getString("Language");				// save current localization setting
 	LLUI::sSettingGroups["config"]->setString("Language", floater->getLocStr(ID));// hack language to be the one we want to preview floaters in
 	// forcibly reset XUI paths with this new language
-	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), floater->getLocStr(ID));
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), gDirUtilp->getSkinThemeFolder(), floater->getLocStr(ID));
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), floater->getLocStr(ID));
 }
 
 // Actually reset in destructor
@@ -301,7 +306,10 @@ LLLocalizationResetForcer::~LLLocalizationResetForcer()
 {
 	LLUI::sSettingGroups["config"]->setString("Language", mSavedLocalization);	// reset language to what it was before we changed it
 	// forcibly reset XUI paths with this new language
-	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), mSavedLocalization);
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), gDirUtilp->getSkinThemeFolder(), mSavedLocalization);
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), mSavedLocalization);
 }
 
 // Live file constructor
@@ -457,6 +465,7 @@ BOOL LLFloaterUIPreview::postBuild()
 	main_panel_tmp->getChild<LLButton>("save_floater")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickSaveFloater, this, PRIMARY_FLOATER));
 	main_panel_tmp->getChild<LLButton>("save_all_floaters")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickSaveAll, this, PRIMARY_FLOATER));
 
+	getChild<LLButton>("refresh_btn")->setClickedCallback(boost::bind(&LLFloaterUIPreview::refreshList, this)); // <FS:CR> Manual refresh
 	getChild<LLButton>("export_schema")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickExportSchema, this));
 	getChild<LLUICtrl>("show_rectangles")->setCommitCallback(
 		boost::bind(&LLFloaterUIPreview::onClickShowRectangles, this, _2));
@@ -641,6 +650,17 @@ void LLFloaterUIPreview::refreshList()
 	std::string name;
 	BOOL found = TRUE;
 
+	// <FS:Ansariel> Floaters from Exodus
+	while(found)				// for every firestorm custom file that matches the pattern
+	{
+		if((found = gDirUtilp->getNextFileInDir(getLocalizedDirectory(), "exo_*.xml", name)))	// get next file matching pattern
+		{
+			addFloaterEntry(name.c_str());	// and add it to the list (file name only; localization code takes care of rest of path)
+		}
+	}
+	found = TRUE;
+	// </FS:Ansariel> Floaters from Exodus
+
 	LLDirIterator floater_iter(getLocalizedDirectory(), "floater_*.xml");
 	while(found)				// for every floater file that matches the pattern
 	{
@@ -649,6 +669,16 @@ void LLFloaterUIPreview::refreshList()
 			addFloaterEntry(name.c_str());	// and add it to the list (file name only; localization code takes care of rest of path)
 		}
 	}
+	// ## Zi: Firestorm custom floaters
+	found = TRUE;
+	while(found)				// for every firestorm custom file that matches the pattern
+	{
+		if((found = gDirUtilp->getNextFileInDir(getLocalizedDirectory(), "fs_*.xml", name)))	// get next file matching pattern
+		{
+			addFloaterEntry(name.c_str());	// and add it to the list (file name only; localization code takes care of rest of path)
+		}
+	}
+	// ## Zi: Firestorm custom floaters
 	found = TRUE;
 
 	LLDirIterator inspect_iter(getLocalizedDirectory(), "inspect_*.xml");
@@ -1036,9 +1066,11 @@ void LLFloaterUIPreview::onClickBrowseForEditor()
 	CFStringRef path_cfstr = CFStringCreateWithCString(kCFAllocatorDefault, chosen_path.c_str(), kCFStringEncodingMacRoman);		// get path as a CFStringRef
 	CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_cfstr, kCFURLPOSIXPathStyle, TRUE);			// turn it into a CFURLRef
 	CFBundleRef chosen_bundle = CFBundleCreate(kCFAllocatorDefault, path_url);												// get a handle for the bundle
+	CFRelease(path_url);	// [FS:CR] Don't leave a mess clean up our objects after we use them
 	if(NULL != chosen_bundle)
 	{
 		CFDictionaryRef bundleInfoDict = CFBundleGetInfoDictionary(chosen_bundle);												// get the bundle's dictionary
+		CFRelease(chosen_bundle);	// [FS:CR] Don't leave a mess clean up our objects after we use them
 		if(NULL != bundleInfoDict)
 		{
 			CFStringRef executable_cfstr = (CFStringRef)CFDictionaryGetValue(bundleInfoDict, CFSTR("CFBundleExecutable"));	// get the name of the actual executable (e.g. TextEdit or firefox-bin)

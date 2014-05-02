@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+    <panel>
+
+		<layout_stack name="nearby_chat_bar_panels">
+  
+			<layout_panel name="panel_nearby_chat_bar">
+    
+				<text_editor label="Enter キーを押して発言し、Ctrl + Enter キーで叫びます。" name="chat_editor" />
+  
+			</layout_panel>
+  
+			<layout_panel name="panel_nearby_chat_toggle">
+			
+				<button name="show_nearby_chat" tool_tip="周辺チャット履歴を表示または非表示にします。" />
+
+			</layout_panel>
+			
+		</layout_stack>
+		
+	</panel>

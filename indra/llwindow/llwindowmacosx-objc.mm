@@ -91,10 +91,16 @@ const unsigned short *copyFromPBoard()
 		NSArray *objToPaste = [pboard readObjectsForClasses:classArray options:[NSDictionary dictionary]];
 		str = [objToPaste objectAtIndex:0];
 	}
-	unichar* temp = (unichar*)calloc([str length], sizeof(unichar));
-	[str getCharacters:temp];
+	NSUInteger len = [str length];
+
+	// <FS:ND> add+1 for 0-terminator.
+	// unichar* buffer = (unichar*)calloc(len, sizeof(unichar));
+	unichar* buffer = (unichar*)calloc(len+1, sizeof(unichar));
+	// </FS:ND>
+
+	[str getCharacters:buffer range:NSMakeRange(0, len)];
 	[pool release];
-	return temp;
+	return buffer;
 }
 
 CursorRef createImageCursor(const char *fullpath, int hotspotX, int hotspotY)
@@ -448,5 +454,21 @@ long showAlert(std::string text, std::string title, int type)
 
 unsigned int getModifiers()
 {
+	// <FS:ND> Try current event of app first, otherwise we might get wrong results
+	NSEvent *pEvent = [NSApp currentEvent];
+	if( pEvent != nil )
+	{
+		return [pEvent modifierFlags];
+	}
+	// </FS:ND>
+
 	return [NSEvent modifierFlags];
 }
+
+// <FS:CR> Set Window Title - sigh.
+void setTitleCocoa(NSWindowRef window, const std::string &title)
+{
+	NSString *str = [NSString stringWithCString:title.c_str() encoding:[NSString defaultCStringEncoding]];
+	[(LLNSWindow*)window setTitle:str];
+}
+// </FS:CR>

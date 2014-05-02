@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_picks" label="Выбор">
+	<string name="no_picks" value="Нет"/>
+	<string name="no_classifieds" value="Нет"/>
+	<text name="Tell everyone about your favorite places in Second Life.">
+        Расскажите о ваших любимых местах в Second Life.
+    </text>
+	<button name="new_btn" label="Новый..."/>
+	<button name="delete_btn" label="Удалить..."/>
+<!--
+	<button name="Import..." label="Import..." label_selected="Import..." />
+	<button name="Export..." label="Export..." label_selected="Export..."/>
+-->
+	<text name="picks_panel_text">
+        Загрузка...
+    </text>
+
+</panel>

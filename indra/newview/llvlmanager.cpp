@@ -50,18 +50,33 @@ LLVLManager::~LLVLManager()
 
 void LLVLManager::addLayerData(LLVLData *vl_datap, const S32 mesg_size)
 {
-	if (LAND_LAYER_CODE == vl_datap->mType)
+// <FS:CR> Aurora Sim
+	//if (LAND_LAYER_CODE == vl_datap->mType)
+	if (LAND_LAYER_CODE == vl_datap->mType || AURORA_LAND_LAYER_CODE == vl_datap->mType)
+// </FS:CR> Aurora Sim
 	{
 		mLandBits += mesg_size * 8;
 	}
-	else if (WIND_LAYER_CODE == vl_datap->mType)
+// <FS:CR> Aurora Sim
+	//else if (WIND_LAYER_CODE == vl_datap->mType)
+	else if (WIND_LAYER_CODE == vl_datap->mType || AURORA_WIND_LAYER_CODE == vl_datap->mType)
+// </FS:CR> Aurora Sim
 	{
 		mWindBits += mesg_size * 8;
 	}
-	else if (CLOUD_LAYER_CODE == vl_datap->mType)
+// <FS:CR> Aurora Sim
+	//else if (CLOUD_LAYER_CODE == vl_datap->mType)
+	else if (CLOUD_LAYER_CODE == vl_datap->mType || AURORA_CLOUD_LAYER_CODE == vl_datap->mType)
+// </FS:CR> Aurora Sim
 	{
 		mCloudBits += mesg_size * 8;
 	}
+// <FS:CR> Aurora Sim
+	else if (WATER_LAYER_CODE == vl_datap->mType || AURORA_CLOUD_LAYER_CODE == vl_datap->mType)
+	{
+		mWaterBits += mesg_size * 8;
+	}
+// </FS:CR> Aurora Sim
 	else
 	{
 		llerrs << "Unknown layer type!" << (S32)vl_datap->mType << llendl;
@@ -87,13 +102,27 @@ void LLVLManager::unpackData(const S32 num_packets)
 		{
 			datap->mRegionp->getLand().decompressDCTPatch(bit_pack, &goph, FALSE);
 		}
-		else if (WIND_LAYER_CODE == datap->mType)
+// <FS:CR> Aurora Sim
+		else if (AURORA_LAND_LAYER_CODE == datap->mType)
+		{
+			datap->mRegionp->getLand().decompressDCTPatch(bit_pack, &goph, TRUE);
+		}
+		//else if (WIND_LAYER_CODE == datap->mType)
+		else if (WIND_LAYER_CODE == datap->mType || AURORA_WIND_LAYER_CODE == datap->mType)
+// </FS:CR> Aurora Sim
 		{
 			datap->mRegionp->mWind.decompress(bit_pack, &goph);
 
 		}
-		else if (CLOUD_LAYER_CODE == datap->mType)
+// <FS:CR> Aurora Sim
+		//else if (CLOUD_LAYER_CODE == datap->mType)
+		else if (CLOUD_LAYER_CODE == datap->mType || AURORA_CLOUD_LAYER_CODE == datap->mType)
 		{
+
+		}
+		else if (WATER_LAYER_CODE == datap->mType || AURORA_WATER_LAYER_CODE == datap->mType)
+		{
+// </FS:CR> Aurora Sim
 
 		}
 	}

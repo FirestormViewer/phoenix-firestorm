@@ -29,6 +29,9 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "llcrashloggerwindows.h"
+// [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+#include "llcrashlookupwindows.h"
+// [/SL:KB]
 
 #include <sstream>
 
@@ -45,8 +48,10 @@
 #include "llsdutil.h"
 #include "stringize.h"
 
+#ifndef ND_NO_BREAKPAD
 #include <client/windows/crash_generation/crash_generation_server.h>
 #include <client/windows/crash_generation/client_info.h>
+#endif
 
 #define MAX_LOADSTRING 100
 #define MAX_STRING 2048
@@ -250,11 +255,18 @@ LLCrashLoggerWindows::LLCrashLoggerWindows(void)
 	{
 		sInstance = this; 
 	}
+// [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+#ifdef LL_SEND_CRASH_REPORTS
+	mCrashLookup = new LLCrashLookupWindows();
+#endif // LL_SEND_CRASH_REPORTS
+// [/SL:KB]
 }
 
 LLCrashLoggerWindows::~LLCrashLoggerWindows(void)
 {
 	sInstance = NULL;
+	delete mCrashLookup;
+// [/SL:KB]
 }
 
 bool LLCrashLoggerWindows::getMessageWithTimeout(MSG *msg, UINT to)
@@ -337,14 +349,18 @@ void LLCrashLoggerWindows::OnClientConnected(void* context,
 				const google_breakpad::ClientInfo* client_info) 
 {
 	sInstance->mClientsConnected++;
+#ifndef ND_NO_BREAKPAD
 	LL_INFOS("CRASHREPORT") << "Client connected. pid = " << client_info->pid() << " total clients " << sInstance->mClientsConnected << LL_ENDL;
+#endif
 }
 
 void LLCrashLoggerWindows::OnClientExited(void* context,
 		const google_breakpad::ClientInfo* client_info) 
 {
 	sInstance->mClientsConnected--;
+#ifndef ND_NO_BREAKPAD
 	LL_INFOS("CRASHREPORT") << "Client disconnected. pid = " << client_info->pid() << " total clients " << sInstance->mClientsConnected << LL_ENDL;
+#endif
 }
 
 
@@ -376,6 +392,7 @@ void LLCrashLoggerWindows::OnClientDumpRequest(void* context,
 
 bool LLCrashLoggerWindows::initCrashServer()
 {
+#ifndef ND_NO_BREAKPAD
 	//For Breakpad on Windows we need a full Out of Process service to get good data.
 	//This routine starts up the service on a named pipe that the viewer will then
 	//communicate with. 
@@ -417,6 +434,9 @@ bool LLCrashLoggerWindows::initCrashServer()
 	}
 
 	LL_INFOS("CRASHREPORT") << "Initialized OOP server with pipe named " << stringize(wpipe_name) << LL_ENDL;
+#else
+	LL_INFOS("CRASHREPORT") << "Crashreporting is disabled" << LL_ENDL;
+#endif
 	return true;
 }
 

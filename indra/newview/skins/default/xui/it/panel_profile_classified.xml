@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_classified" label="Inserzioni">
+<string name="no_classifieds" value="Nessuna Inserzione" />
+<panel name="edit_panel">
+<button name="new_btn" tool_tip="Crea inserzione alla posizione corrente" />
+</panel>
+<panel name="buttons_cucks">
+<layout_stack name="buttons_cucks_ls">
+<layout_panel name="info_btn_lp">
+<button name="info_btn" tool_tip="Informazioni sull'inserzione" />
+</layout_panel>
+<layout_panel name="show_on_map_btn_lp">
+<button label="Mappa" name="show_on_map_btn" tool_tip="Mostra la zona dell'inserzione sulla mappa del mondo" />
+</layout_panel>
+</layout_stack>
+</panel>
+</panel>

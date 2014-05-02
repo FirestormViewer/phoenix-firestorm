@@ -54,6 +54,15 @@ typedef enum ELLPath
 	LL_PATH_DEFAULT_SKIN = 17,
 	LL_PATH_FONTS = 18,
     LL_PATH_DUMP = 19,
+// [SL:KB] - Patch: Viewer-Skins | mS: 2010-10-19 (Catznip-2.4)
+	LL_PATH_TOP_SKINTHEME = 20,
+// [/SL:KB]
+	// <FS:TT> Firestorm data
+	LL_PATH_FS_RESOURCES = 21,
+	// </FS:TT>
+	// <FS:Ansariel> Sound cache
+	LL_PATH_FS_SOUND_CACHE = 22,
+	// </FS:Ansariel>
 	LL_PATH_LAST
 } ELLPath;
 
@@ -75,6 +84,35 @@ class LLDir
     U32 deleteDirAndContents(const std::string& dir_name);
     std::vector<std::string> getFilesInDir(const std::string &dirname);
 // pure virtual functions
+	virtual U32 countFilesInDir(const std::string &dirname, const std::string &mask) = 0;
+
+    /// Walk the files in a directory, with file pattern matching
+	// <AO> Used by LGG Selection beams, do not remove
+	virtual BOOL getNextFileInDir(const std::string& dirname, ///< directory path - must end in trailing slash!
+                                  const std::string& mask,    ///< file pattern string (use "*" for all)
+                                  std::string& fname          ///< output: found file name
+                                  ) = 0;
+	// </AO>
+    /**<
+     * @returns true if a file was found, false if the entire directory has been scanned.
+     *
+     * @note that this function is NOT thread safe
+     *
+     * This function may not be used to scan part of a directory, then start a new search of a different
+     * directory, and then restart the first search where it left off; the entire search must run to
+     * completion or be abandoned - there is no restart.
+     *
+     * @bug: See http://jira.secondlife.com/browse/VWR-23697
+     *       and/or the tests in test/lldir_test.cpp
+     *       This is known to fail with patterns that have both:
+     *       a wildcard left of a . and more than one sequential ? right of a .
+     *       the pattern foo.??x appears to work
+     *       but *.??x or foo?.??x do not
+     *
+     * @todo this really should be rewritten as an iterator object, and the
+     *       filtering should be done in a platform-independent way.
+     */
+
 	virtual std::string getCurPath() = 0;
 	virtual bool fileExists(const std::string &filename) const = 0;
 
@@ -103,11 +141,17 @@ class LLDir
 	const std::string &getDirDelimiter() const;	// directory separator for platform (ie. '\' or '/' or ':')
 	const std::string &getDefaultSkinDir() const;	// folder for default skin. e.g. c:\program files\second life\skins\default
 	const std::string &getSkinDir() const;		// User-specified skin folder.
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2)
+	const std::string &getSkinThemeDir() const;		// User-specified skin theme override folder.
+// [/SL:KB]
 	const std::string &getUserDefaultSkinDir() const; // dir with user modifications to default skin
 	const std::string &getUserSkinDir() const;		// User-specified skin folder with user modifications. e.g. c:\documents and settings\username\application data\second life\skins\curskin
 	const std::string getSkinBaseDir() const;		// folder that contains all installed skins (not user modifications). e.g. c:\program files\second life\skins
 	const std::string &getLLPluginDir() const;		// Directory containing plugins and plugin shell
 	const std::string &getUserName() const;
+	// <FS:Ansariel> Sound cache
+	const std::string &getSoundCacheDir() const;
+	// </FS:Ansariel>
 
 	// Expanded filename
 	std::string getExpandedFilename(ELLPath location, const std::string &filename) const;
@@ -120,7 +164,7 @@ class LLDir
 	std::string getExtension(const std::string& filepath) const; // Excludes '.', e.g getExtension("foo.wav") == "wav"
 
 	// these methods search the various skin paths for the specified file in the following order:
-	// getUserSkinDir(), getUserDefaultSkinDir(), getSkinDir(), getDefaultSkinDir()
+	// getUserSkinDir(), getUserDefaultSkinDir(), getSkinThemeDir(), getSkinDir(), getDefaultSkinDir()
 	/// param value for findSkinnedFilenames(), explained below
 	enum ESkinConstraint { CURRENT_SKIN, ALL_SKINS };
 	/**
@@ -186,13 +230,29 @@ class LLDir
 
 
 	virtual void setChatLogsDir(const std::string &path);		// Set the chat logs dir to this user's dir
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef OPENSIM
+	virtual void setPerAccountChatLogsDir(const std::string &username, const std::string &gridname);
+	virtual void setLindenUserDir(const std::string &username, const std::string &gridname);
+#else	
 	virtual void setPerAccountChatLogsDir(const std::string &username);		// Set the per user chat log directory.
 	virtual void setLindenUserDir(const std::string &username);		// Set the linden user dir to this user's dir
-	virtual void setSkinFolder(const std::string &skin_folder, const std::string& language);
+#endif // OPENSIM
+// </FS:CR>
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-3.4)
+	virtual void setSkinFolder(const std::string& skin_folder, const std::string& theme_folder, const std::string& language);
+// [/SL:KB]
+//	virtual void setSkinFolder(const std::string &skin_folder, const std::string& language);
 	virtual std::string getSkinFolder() const;
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	virtual std::string getSkinThemeFolder() const;
+// [/SL:KB]
 	virtual std::string getLanguage() const;
 	virtual bool setCacheDir(const std::string &path);
 	virtual void updatePerAccountChatLogsDir();
+	// <FS:Ansariel> Sound cache
+	virtual bool setSoundCacheDir(const std::string& path);
+	// </FS:Ansariel>
 
 	virtual void dumpCurrentDirectories();
 
@@ -238,9 +298,15 @@ protected:
 	std::string mOSCacheDir;		// operating system cache dir
 	std::string mDirDelimiter;
 	std::string mSkinName;           // caller-specified skin name
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	std::string mSkinThemeName;		// Location for current skin theme override
+// [/SL:KB]
 	std::string mSkinBaseDir;			// Base for skins paths.
 	std::string mDefaultSkinDir;			// Location for default skin info.
 	std::string mSkinDir;			// Location for current skin info.
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2)
+	std::string mSkinThemeDir;		// Location for current skin theme override
+// [/SL:KB]
 	std::string mUserDefaultSkinDir;		// Location for default skin info.
 	std::string mUserSkinDir;			// Location for user-modified skin info.
 	// Skin directories to search, most general to most specific. This order
@@ -252,6 +318,27 @@ protected:
 	std::string mLLPluginDir;			// Location for plugins and plugin shell
     static std::string sDumpDir;            // Per-run crash report subdir of log directory.
 	std::string mUserName;				// Current user name
+	// <FS:Ansariel> Sound cache
+	std::string mSoundCacheDir;			// Sound cache
+	// </FS:Ansariel>
+
+	// <FS:ND> To avoid doing IO calls (expensive) in walkdSearchedSkinDirs cache results.
+	struct SkinDirFile
+	{
+		std::string mName;
+		mutable bool mExists;
+
+		SkinDirFile( std::string const &aName, bool aExists )
+		: mName( aName )
+		, mExists( aExists )
+		{	}
+
+		bool operator<( SkinDirFile const &aRHS ) const
+		{ return mName < aRHS.mName; }
+	};
+
+	typedef std::set< SkinDirFile > tSkinDirCache;
+	mutable tSkinDirCache mSkinDirCache;
 };
 
 void dir_exists_or_crash(const std::string &dir_name);

@@ -38,6 +38,12 @@
 #include "llviewerparcelmgr.h"
 #include "llvoavatarself.h"
 #include "llslurl.h"
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
+// <FS:Ansariel> FIRE-1874: Show server channel in statusbar
+#include "llappviewer.h"
 
 //static
 void LLAgentUI::buildFullname(std::string& name)
@@ -53,7 +59,10 @@ void LLAgentUI::buildSLURL(LLSLURL& slurl, const bool escaped /*= true*/)
       LLViewerRegion *regionp = gAgent.getRegion();
       if (regionp)
       {
-		  return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+// <FS:CR> Aurora-sim var region teleports
+		  //return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+		  return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionAgent());
+// </FS:CR>
       }
 	slurl = return_slurl;
 }
@@ -96,9 +105,42 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 		pos_y -= pos_y % 2;
 	}
 
+	// <FS:Ansariel> FIRE-1874: Show server channel in statusbar
+	static LLCachedControl<bool> fsStatusbarShowSimulatorVersion(gSavedSettings, "FSStatusbarShowSimulatorVersion");
+	static LLCachedControl<std::string> fsReleaseCandidateChannelId(gSavedSettings, "FSReleaseCandidateChannelId");
+	std::string simulator_channel;
+
+	if (fsStatusbarShowSimulatorVersion)
+	{
+		std::istringstream simulator_name(gLastVersionChannel);
+		std::string rc_part;
+
+		// RC identifier should be at 3rd position, RC name is at 4th
+		if ((simulator_name >> rc_part) &&
+			(simulator_name >> rc_part) &&
+			((simulator_name >> rc_part) && rc_part  == std::string(fsReleaseCandidateChannelId)) &&
+			(simulator_name >> rc_part))
+		{
+			simulator_channel = rc_part;
+		}
+	}
+	// </FS:Ansariel> FIRE-1874: Show server channel in statusbar
+
 	// create a default name and description for the landmark
 	std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
 	std::string region_name = region->getName();
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
+	// RELEASE-RLVa: [SL-2.0.0] Check ELocationFormat to make sure our switch still makes sense
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		parcel_name = RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL);
+		region_name = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+		if (LOCATION_FORMAT_NO_MATURITY == fmt)
+			fmt = LOCATION_FORMAT_LANDMARK;
+		else if (LOCATION_FORMAT_FULL == fmt)
+			fmt = LOCATION_FORMAT_NO_COORDS;
+	}
+// [/RLVa:KB]
 	std::string sim_access_string = region->getSimAccessString();
 	std::string buffer;
 	if( parcel_name.empty() )
@@ -135,6 +177,27 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				sim_access_string.empty() ? "" : " - ",
 				sim_access_string.c_str());
 			break;
+		// <FS:Ansariel> V1 format statusbar
+		case LOCATION_FORMAT_V1_STATUSBAR:
+			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			{
+				buffer = llformat("%s - %s - (%d, %d, %d)%s%s",
+					region_name.c_str(),
+					simulator_channel.c_str(),
+					pos_x, pos_y, pos_z,
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str());
+			}
+			else
+			{
+				buffer = llformat("%s (%d, %d, %d)%s%s",
+					region_name.c_str(),
+					pos_x, pos_y, pos_z,
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str());
+			}
+			break;
+		// </FS:Ansariel> V1 format statusbar
 		}
 	}
 	else
@@ -174,6 +237,29 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 				sim_access_string.empty() ? "" : " - ",
 				sim_access_string.c_str());
 			break;
+		// <FS:Ansariel> V1 format statusbar
+		case LOCATION_FORMAT_V1_STATUSBAR:
+			if (fsStatusbarShowSimulatorVersion && !simulator_channel.empty())
+			{
+				buffer = llformat("%s - %s - (%d, %d, %d)%s%s - %s",
+					region_name.c_str(),
+					simulator_channel.c_str(),
+					pos_x, pos_y, pos_z,
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str(),
+					parcel_name.c_str());
+			}
+			else
+			{
+				buffer = llformat("%s (%d, %d, %d)%s%s - %s",
+					region_name.c_str(),
+					pos_x, pos_y, pos_z,
+					sim_access_string.empty() ? "" : " - ",
+					sim_access_string.c_str(),
+					parcel_name.c_str());
+			}
+			break;
+		// </FS:Ansariel> V1 format statusbar
 		}
 	}
 	str = buffer;

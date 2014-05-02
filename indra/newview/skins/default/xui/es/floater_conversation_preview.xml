@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview_conversation" title="CONVERSACIÓN:">
+<floater name="preview_conversation" title="Conversación:">
 	<floater.string name="Title">
-		CONVERSACIÓN: [NAME]
+		Conversación: [NAME]
 	</floater.string>
-	<text name="page_label" value="Página"/>
+	<text name="page_label" value="Pág."/>
+	<button tool_tip="Abrir transcripción de chat externamente" name="open_external_btn"/>
 </floater>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--alba-->
+<pie_menu name="Land Pie">
+	<pie_slice name="Place Information..."
+        label="A propos du terrain"/>
+    <pie_slice name="Create"
+        label="Créer"/>
+    <pie_slice name="Go Here"
+        label="Aller là"/>
+    <pie_slice name="Sit Here"
+        label="S'asseoir ici"/>
+    <pie_slice name="Land Buy Pass"
+        label="Payer l'entrée"/>
+    <pie_slice name="Edit Terrain"
+        label="Modifier le Terrain"/>
+    <pie_slice name="Land Buy"
+        label="Acheter le terrain"/>
+</pie_menu>

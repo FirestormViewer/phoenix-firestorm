@@ -37,6 +37,8 @@
 #include "llview.h"
 #include "message.h"
 
+#include "fspanelclassified.h"
+
 LLClassifiedStatsResponder::LLClassifiedStatsResponder(LLUUID classified_id)
 :
 mClassifiedID(classified_id)
@@ -54,6 +56,14 @@ void LLClassifiedStatsResponder::result(const LLSD& content)
 	S32 search_profile = content["search_profile_clicks"].asInteger();
 
 	LLPanelClassifiedInfo::setClickThrough(
+		mClassifiedID, 
+		teleport + search_teleport, 
+		map + search_map,
+		profile + search_profile,
+		true);
+
+	// <FS:Ansariel> FIRE-8787: Also update legacy profiles
+	FSPanelClassifiedInfo::setClickThrough(
 		mClassifiedID, 
 		teleport + search_teleport, 
 		map + search_map,

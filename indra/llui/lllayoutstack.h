@@ -69,6 +69,11 @@ public:
 		Optional<S32>			drag_handle_thickness;
 		Optional<S32>			drag_handle_shift;
 
+		// <FS:Zi> Add size save control. Caveat: contained panels and widgets need to use
+		//         relative sizing, like right="-1" instead of width="XYZ" to get resized
+		//         properly when a saved size is being restored. -Zi
+		Optional<bool>			save_sizes;
+
 		Params();
 	};
 
@@ -137,6 +142,12 @@ private:
 	S32  mDragHandleSecondIndent;
 	S32  mDragHandleThickness;
 	S32  mDragHandleShift;
+
+	// <FS:Zi> Save sizes of the layout stack panels
+	const bool	mSaveSizes;
+	std::string mSizeControlName;
+	LLSD mSavedSizes;
+	// </FS:Zi>
 }; // end class LLLayoutStack
 
 
@@ -199,6 +210,11 @@ public:
 
 	void setIgnoreReshape(bool ignore) { mIgnoreReshape = ignore; }
 
+	// <FS:Ansariel> Add callback for reshaping
+	typedef boost::function<void(LLLayoutPanel* panel, const LLRect& rect)> reshape_panel_callback_t;
+	void setReshapePanelCallback(reshape_panel_callback_t cb) { mReshapePanelCallback = cb; }
+	// </FS:Ansariel>
+
 protected:
 	LLLayoutPanel(const Params& p);
 	
@@ -215,6 +231,9 @@ protected:
 	bool	mIgnoreReshape;
 	LLLayoutStack::ELayoutOrientation mOrientation;
 	class LLResizeBar* mResizeBar;
+
+	// <FS:Ansariel> Add callback for reshaping
+	reshape_panel_callback_t mReshapePanelCallback;
 };
 
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="Texture" name="Texture" tool_tip="Clicca per selezionare un'immagine"/>
+	</panel>
+	<tab_container name="wearable_accordion">
+		<panel name="hair_style_tab_holder" title="Stile">
+			<accordion name="hair_style_accordion">
+				<accordion_tab name="hair_style_tab" title="Stile"/>
+			</accordion>
+		</panel>
+		<panel name="hair_eyebrows_tab_holder" title="Sopracciglia">
+			<accordion name="hair_eyebrows_accordion">
+				<accordion_tab name="hair_eyebrows_tab" title="Sopracciglia"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>

@@ -173,6 +173,8 @@ LLFloater::Params::Params()
 	can_minimize("can_minimize", true),
 	can_close("can_close", true),
 	can_drag_on_left("can_drag_on_left", false),
+	drop_shadow("drop_shadow",true),		// ## Zi: Optional Drop Shadows
+	label_v_padding("label_v_padding", -1),	// <FS:Zi> Make vertical label padding a per-skin option
 	can_tear_off("can_tear_off", true),
 	save_dock_state("save_dock_state", false),
 	save_rect("save_rect", false),
@@ -239,6 +241,7 @@ static LLWidgetNameRegistry::StaticRegistrar sRegisterFloaterParams(&typeid(LLFl
 LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 :	LLPanel(),	// intentionally do not pass params here, see initFromParams
  	mDragHandle(NULL),
+	mLabelVPadding(p.label_v_padding),	// <FS:Zi> Make vertical label padding a per-skin optional
 	mTitle(p.title),
 	mShortTitle(p.short_title),
 	mSingleInstance(p.single_instance),
@@ -283,7 +286,15 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	
 	memset(mButtonsEnabled, 0, BUTTON_COUNT * sizeof(bool));
 	memset(mButtons, 0, BUTTON_COUNT * sizeof(LLButton*));
-	
+
+	// <FS:Zi> Make vertical label padding a per-skin option
+	// if no padding is set, use default from settings.xml
+	if (mLabelVPadding == -1)
+	{
+		mLabelVPadding = LLControlGroup::getInstance("Global")->getS32("UIFloaterTitleVPad");
+	}
+	// </FS:Zi>
+
 	addDragHandle();
 	addResizeCtrls();
 	
@@ -347,6 +358,7 @@ void LLFloater::addDragHandle()
 			p.name("Drag Handle");
 			p.follows.flags(FOLLOWS_ALL);
 			p.label(mTitle);
+			p.label_v_padding = mLabelVPadding;		// <FS:Zi> Make vertical label padding a per-skin option
 			mDragHandle = LLUICtrlFactory::create<LLDragHandleTop>(p);
 		}
 		addChild(mDragHandle);
@@ -533,7 +545,10 @@ LLFloater::~LLFloater()
 
 void LLFloater::storeRectControl()
 {
-	if (!mRectControl.empty())
+	// <FS:Zi> Do not store rect when attached to another floater
+	//if (!mRectControl.empty())
+	if (mTornOff && !mRectControl.empty())
+	// </FS:Zi>
 	{
 		getControlGroup()->setRect( mRectControl, getRect() );
 	}
@@ -551,7 +566,16 @@ void LLFloater::storeVisibilityControl()
 {
 	if( !sQuitting && mVisibilityControl.size() > 1 )
 	{
-		getControlGroup()->setBOOL( mVisibilityControl, getVisible() );
+		// <FS:Zi> Make sure that hosted floaters always save "not visible", so they won't
+		//         pull up their host on restart
+		//getControlGroup()->setBOOL( mVisibilityControl, getVisible() );
+		BOOL visible = FALSE;
+		if (mTornOff)
+		{
+			visible = getVisible();
+		}
+		getControlGroup()->setBOOL( mVisibilityControl, visible );
+		// </FS:Zi>
 	}
 }
 
@@ -654,12 +678,23 @@ void LLFloater::openFloater(const LLSD& key)
 		&& (!getVisible() || isMinimized()))
 	{
         //Don't play a sound for incoming voice call based upon chat preference setting
-        bool playSound = !(getName() == "incoming call" && gSavedSettings.getBOOL("PlaySoundIncomingVoiceCall") == FALSE);
 
-        if(playSound)
+        // </FS:PP> UI Sounds connection
+        // bool playSound = !(getName() == "incoming call" && gSavedSettings.getBOOL("PlaySoundIncomingVoiceCall") == FALSE);
+        // 
+        // if(playSound)
+        // {
+        //    make_ui_sound("UISndWindowOpen");
+        // }
+        if(getName() == "incoming call")
+        {
+            make_ui_sound("UISndIncomingVoiceCall");
+        }
+        else
         {
             make_ui_sound("UISndWindowOpen");
         }
+        // </FS:PP>
 	}
 
 	//RN: for now, we don't allow rehosting from one multifloater to another
@@ -676,9 +711,14 @@ void LLFloater::openFloater(const LLSD& key)
 		getHost()->setMinimized(FALSE);
 		getHost()->setVisibleAndFrontmost(mAutoFocus);
 		getHost()->showFloater(this);
+		// <FS:Zi> Make sure the floater knows it's not torn off
+		mTornOff = false;
 	}
 	else
 	{
+		// <FS:Zi> Make sure the floater knows it's torn off
+		mTornOff = true;
+
 		LLFloater* floater_to_stack = LLFloaterReg::getLastFloaterInGroup(mInstanceName);
 		if (!floater_to_stack)
 		{
@@ -880,13 +920,20 @@ LLMultiFloater* LLFloater::getHost()
 
 void LLFloater::applyControlsAndPosition(LLFloater* other)
 {
-	if (!applyDockState())
+//	if (!applyDockState()) // <FS:Zi> Don't apply dock state and forget about the undocked values
 	{
 		if (!applyRectControl())
 		{
-			applyPositioning(other, true);
+			// <FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
+			//applyPositioning(other);
+			if (getName() != "panel_im")
+			{
+				applyPositioning(other, true);
+			}
+			// </FS:Ansariel> Don't apply position to undocked IM floater (FIRE-5459)
 		}
 	}
+	applyDockState();	// <FS:Zi> Only now apply docked state so floaters don't forget their positions
 }
 
 bool LLFloater::applyRectControl()
@@ -899,6 +946,19 @@ bool LLFloater::applyRectControl()
 	LLFloater* last_in_group = LLFloaterReg::getLastFloaterInGroup(mInstanceName);
 	if (last_in_group && last_in_group != this)
 	{
+		// <FS:Ansariel> Open other floaters in group in the stored size (this
+		//               is basically taken from the else-branch below)
+		if (!mRectControl.empty())
+		{
+			// If we have a saved rect, use it
+			const LLRect& rect = getControlGroup()->getRect(mRectControl);
+			if (rect.notEmpty() && mResizable)
+			{
+				reshape(llmax(mMinWidth, rect.getWidth()), llmax(mMinHeight, rect.getHeight()));
+			}
+		}
+		// </FS:Ansariel>
+
 		// other floaters in our group, position ourselves relative to them and don't save the rect
 		mRectControl.clear();
 		mPositioning = LLFloaterEnums::POSITIONING_CASCADE_GROUP;
@@ -1764,6 +1824,9 @@ void LLFloater::onClickTearOff(LLFloater* self)
 	}
 	self->updateTitleButtons();
     self->setOpenPositioning(LLFloaterEnums::POSITIONING_RELATIVE);
+	// <FS:Ansariel> Explicitly call storeVisibilityControl() here so we don't produce
+	//               stale visibility settings, especially if floaters get docked
+	self->storeVisibilityControl();
 }
 
 // static
@@ -1805,6 +1868,14 @@ void LLFloater::initRectControl()
 void LLFloater::closeFrontmostFloater()
 {
 	LLFloater* floater_to_close = gFloaterView->getFrontmostClosableFloater();
+	// <FS:Ansariel> CTRL-W doesn't work with multifloaters
+	LLMultiFloater* multi_floater = dynamic_cast<LLMultiFloater*>(floater_to_close);
+	if (multi_floater)
+	{
+		multi_floater->closeDockedFloater();
+	}
+	else
+	// </FS:Ansariel>
 	if(floater_to_close)
 	{
 		floater_to_close->closeFloater();
@@ -1843,7 +1914,9 @@ void LLFloater::draw()
 	// draw background
 	if( isBackgroundVisible() )
 	{
-		drawShadow(this);
+		// ## Zi: Optional Drop Shadows
+		if(mDropShadow)
+			drawShadow(this);
 
 		S32 left = LLPANEL_BORDER_WIDTH;
 		S32 top = getRect().getHeight() - LLPANEL_BORDER_WIDTH;
@@ -2062,6 +2135,8 @@ void LLFloater::updateTitleButtons()
 				enabled = false;
 			}
 		}
+		
+#if 0		//KC: don't do this, see below
 		if (i == BUTTON_CLOSE && mButtonScale != 1.f)
 		{
 			//*HACK: always render close button for hosted floaters so
@@ -2069,10 +2144,14 @@ void LLFloater::updateTitleButtons()
 			//closing multiple windows in the chatterbox
 			enabled = true;
 		}
+#endif
 
 		mButtons[i]->setEnabled(enabled);
 
-		if (enabled)
+		if (enabled
+		//KC: don't explictly force enable close button on
+		//hosted floaters instead drawing a disabled one
+		|| (i == BUTTON_CLOSE && mButtonScale != 1.f))
 		{
 			button_count++;
 
@@ -2110,6 +2189,7 @@ void LLFloater::updateTitleButtons()
 			mButtons[i]->setVisible(TRUE);
 			// the restore button should have a tab stop so that it takes action when you Ctrl-Tab to a minimized floater
 			mButtons[i]->setTabStop(i == BUTTON_RESTORE);
+			sendChildToFront(mButtons[i]);
 		}
 		else
 		{
@@ -2246,6 +2326,8 @@ LLFloaterView::LLFloaterView (const Params& p)
 	mFocusCycleMode(FALSE),
 	mMinimizePositionVOffset(0),
 	mSnapOffsetBottom(0),
+	mSnapOffsetChatBar(0),
+	mSnapOffsetLeft(0),
 	mSnapOffsetRight(0),
 	mFrontChild(NULL)
 {
@@ -2576,11 +2658,72 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 	static LLUICachedControl<S32> minimized_width ("UIMinimizedWidth", 0);
 	LLRect snap_rect_local = getLocalSnapRect();
 	snap_rect_local.mTop += mMinimizePositionVOffset;
+	
+	// <FS:KC> Minimize floaters to bottom left
+	static LLUICachedControl<bool> legacy_minimize ("FSLegacyMinimize", false);
+	if (legacy_minimize)
+	{
+		//reverse column row so floaters tile across
+		S32 col = 0;
+		for(S32 row = snap_rect_local.mBottom;
+		row < snap_rect_local.getHeight() - floater_header_size;
+		row += floater_header_size ) //loop rows
+		{
+			for(col = snap_rect_local.mLeft;
+				col < snap_rect_local.getWidth() - minimized_width;
+				col += minimized_width)
+			{
+				bool foundGap = TRUE;
+				for(child_list_const_iter_t child_it = getChildList()->begin();
+					child_it != getChildList()->end();
+					++child_it) //loop floaters
+				{
+					// Examine minimized children.
+					LLFloater* floater = (LLFloater*)((LLView*)*child_it);
+					if(floater->isMinimized()) 
+					{
+						LLRect r = floater->getRect();
+						if((r.mBottom < (row + floater_header_size))
+						   && (r.mBottom > (row - floater_header_size))
+						   && (r.mLeft < (col + minimized_width))
+						   && (r.mLeft > (col - minimized_width)))
+						{
+							// needs the check for off grid. can't drag,
+							// but window resize makes them off
+							foundGap = FALSE;
+							break;
+						}
+					}
+				} //done floaters
+				if(foundGap)
+				{
+					*left = col;
+					*bottom = row;
+					return; //done
+				}
+			} //done this col
+		}
+	}
+	else
+	{
+	// </FS:KC> Minimize floaters to bottom left
+
 	for(S32 col = snap_rect_local.mLeft;
 		col < snap_rect_local.getWidth() - minimized_width;
 		col += minimized_width)
 	{	
-		for(S32 row = snap_rect_local.mTop - floater_header_size;
+		// AO: offset minimized windows to not obscure title bars. Yes, this is a quick and dirty hack.
+		int offset = 0;
+		//LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
+		bool fbVisible = LLControlGroup::getInstance("Global")->getBOOL("ShowNavbarFavoritesPanel");
+		bool nbVisible = LLControlGroup::getInstance("Global")->getBOOL("ShowNavbarNavigationPanel");
+		// TODO: Make this introspect controls to get the dynamic size.
+		if (fbVisible)
+			offset += 20;
+		if (nbVisible)
+			offset += 30;
+		
+		for(S32 row = snap_rect_local.mTop - (floater_header_size + offset);
 		row > floater_header_size;
 		row -= floater_header_size ) //loop rows
 		{
@@ -2615,6 +2758,8 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 			}
 		} //done this col
 	}
+
+	} // <FS:KC> Minimize floaters to bottom left
 
 	// crude - stack'em all at 0,0 when screen is full of minimized
 	// floaters.
@@ -2736,11 +2881,18 @@ void LLFloaterView::shiftFloaters(S32 x_offset, S32 y_offset)
 
 void LLFloaterView::refresh()
 {
-	LLRect snap_rect = getSnapRect();
-	if (snap_rect != mLastSnapRect)
+	// <FS:KC> Fix for bad edge snapping
+	// This will stop jumping floaters on chatbar show
+	// But will stop floaters from bumping out of the way of toolbars
+	static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+	if (!legacy_snap)
 	{
-		reshape(getRect().getWidth(), getRect().getHeight(), TRUE);
-	}
+		LLRect snap_rect = getSnapRect();
+		if (snap_rect != mLastSnapRect)
+		{
+			reshape(getRect().getWidth(), getRect().getHeight(), TRUE);
+		}
+	}// <FS:KC> Fix for bad edge snapping
 
 	// Constrain children to be entirely on the screen
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
@@ -2806,29 +2958,58 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 		}
 	}
 
+	const LLRect& left_toolbar_rect = mToolbarLeftRect;
+	const LLRect& bottom_toolbar_rect = mToolbarBottomRect;
+	const LLRect& right_toolbar_rect = mToolbarRightRect;
 	const LLRect& floater_rect = floater->getRect();
 
-	S32 delta_left = mToolbarLeftRect.notEmpty() ? mToolbarLeftRect.mRight - floater_rect.mRight : 0;
-	S32 delta_bottom = mToolbarBottomRect.notEmpty() ? mToolbarBottomRect.mTop - floater_rect.mTop : 0;
-	S32 delta_right = mToolbarRightRect.notEmpty() ? mToolbarRightRect.mLeft - floater_rect.mLeft : 0;
+	S32 delta_left = left_toolbar_rect.notEmpty() ? left_toolbar_rect.mRight - floater_rect.mRight : 0;
+	S32 delta_bottom = bottom_toolbar_rect.notEmpty() ? bottom_toolbar_rect.mTop - floater_rect.mTop : 0;
+	S32 delta_right = right_toolbar_rect.notEmpty() ? right_toolbar_rect.mLeft - floater_rect.mLeft : 0;
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	S32 delta_bottom_chatbar = mMainChatbarRect.notEmpty() ? mMainChatbarRect.mTop - floater_rect.mTop : 0;
+
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	S32 header_height = floater->getHeaderHeight();
 
 	// move window fully onscreen
 	if (floater->translateIntoRect( snap_in_toolbars ? getSnapRect() : gFloaterView->getRect(), allow_partial_outside ? FLOATER_MIN_VISIBLE_PIXELS : S32_MAX ))
 	{
 		floater->clearSnapTarget();
 	}
-	else if (delta_left > 0 && floater_rect.mTop < mToolbarLeftRect.mTop && floater_rect.mBottom > mToolbarLeftRect.mBottom)
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	//else if (delta_left > 0 && floater_rect.mTop < left_toolbar_rect.mTop && floater_rect.mBottom > left_toolbar_rect.mBottom)
+	else if (delta_left > 0 && floater_rect.mTop < left_toolbar_rect.mTop && (floater_rect.mTop - header_height) > left_toolbar_rect.mBottom)
+	// </FS:Ansariel>
 	{
 		floater->translate(delta_left, 0);
 	}
-	else if (delta_bottom > 0 && floater_rect.mLeft > mToolbarBottomRect.mLeft && floater_rect.mRight < mToolbarBottomRect.mRight)
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	//else if (delta_bottom > 0 && floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mRight < bottom_toolbar_rect.mRight)
+	else if (delta_bottom > 0 && ((floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mRight < bottom_toolbar_rect.mRight) // floater completely within toolbar rect
+		|| (floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mLeft < bottom_toolbar_rect.mRight && bottom_toolbar_rect.mRight > gFloaterView->getRect().mRight) // floater partially within toolbar rect, toolbar bound to right side
+		|| (delta_bottom_chatbar > 0 && floater_rect.mLeft < mMainChatbarRect.mRight && floater_rect.mRight > bottom_toolbar_rect.mLeft && bottom_toolbar_rect.mLeft <= mMainChatbarRect.mRight)) // floater within chatbar and toolbar rect
+		)
+	// </FS:Ansariel>
 	{
 		floater->translate(0, delta_bottom);
 	}
-	else if (delta_right < 0 && floater_rect.mTop < mToolbarRightRect.mTop	&& floater_rect.mBottom > mToolbarRightRect.mBottom)
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	//else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop	&& floater_rect.mBottom > right_toolbar_rect.mBottom)
+	else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop && (floater_rect.mTop - header_height) > right_toolbar_rect.mBottom)
+	// </FS:Ansariel>
 	{
 		floater->translate(delta_right, 0);
 	}
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	else if (delta_bottom_chatbar > 0 && ((floater_rect.mLeft > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight) // floater completely within chatbar rect
+		|| (floater_rect.mRight > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight && mMainChatbarRect.mLeft < gFloaterView->getRect().mLeft) // floater partially within chatbar rect, chatbar bound to left side
+		|| (delta_bottom > 0 && floater_rect.mRight > bottom_toolbar_rect.mLeft && floater_rect.mLeft < mMainChatbarRect.mRight && bottom_toolbar_rect.mLeft <= mMainChatbarRect.mRight)) // floater within chatbar and toolbar rect
+		)
+	{
+		floater->translate(0, delta_bottom_chatbar);
+	}
+	// </FS:Ansariel>
 }
 
 void LLFloaterView::draw()
@@ -2861,11 +3042,23 @@ LLRect LLFloaterView::getSnapRect() const
 {
 	LLRect snap_rect = getLocalRect();
 
+	// <FS:KC> Fix for bad edge snapping
+	static LLUICachedControl<bool> legacy_snap ("FSLegacyEdgeSnap", false);
+	if (legacy_snap)
+	{
+		snap_rect.mBottom += (mSnapOffsetBottom + mSnapOffsetChatBar);
+		snap_rect.mLeft += mSnapOffsetLeft;
+		snap_rect.mRight -= mSnapOffsetRight;
+	}
+	else
+	{
+	// <\FS:KC> Fix for bad edge snapping
 	LLView* snap_view = mSnapView.get();
 	if (snap_view)
 	{
 		snap_view->localRectToOtherView(snap_view->getLocalRect(), &snap_rect, this);
 	}
+	}// <FS:KC> Fix for bad edge snapping
 
 	return snap_rect;
 }
@@ -3050,6 +3243,14 @@ void LLFloaterView::setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LL
 	}
 }
 
+// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+void LLFloaterView::setMainChatbarRect(LLLayoutPanel* panel, const LLRect& chatbar_rect)
+{
+	panel->localRectToScreen(chatbar_rect, &mMainChatbarRect);
+	mMainChatbarRect.stretch(FLOATER_MIN_VISIBLE_PIXELS);
+}
+// </FS:Ansariel>
+
 void LLFloater::setInstanceName(const std::string& name)
 {
 	if (name != mInstanceName)
@@ -3139,6 +3340,11 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	mReuseInstance = p.reuse_instance.isProvided() ? p.reuse_instance : p.single_instance;
 
 	mPositioning = p.positioning;
+
+	// ## Zi: Optional Drop Shadows
+	// we do this here because the values in the constructor get ignored, probably due to
+	// the comment at the beginning of this method. -Zi
+	mDropShadow = p.drop_shadow;
 
 	mSaveRect = p.save_rect;
 	if (p.save_visibility)

@@ -49,7 +49,7 @@
     </menu_item_call>
     <menu_item_separator />
     <menu_item_call
-     label="View chat history..."
+     label="View chat transcripts..."
      layout="topleft"
      name="chat_history">
         <menu_item_call.on_click
@@ -69,6 +69,13 @@
          function="Avatar.EnableItem"
          parameter="can_add" />
     </menu_item_call>
+	<menu_item_call
+	 label="Add to Set..."
+	 layout="topleft"
+	 name="Add to Set">
+		<menu_item_call.on_click
+		 function="Avatar.AddToContactSet" />
+	</menu_item_call>
     <menu_item_call
      label="Remove Friend"
      layout="topleft"

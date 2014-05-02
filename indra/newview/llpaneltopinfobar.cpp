@@ -44,6 +44,11 @@
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
+#include "llfloaterreg.h"
 
 class LLPanelTopInfoBar::LLParcelChangeObserver : public LLParcelObserver
 {
@@ -234,6 +239,16 @@ void LLPanelTopInfoBar::setParcelInfoText(const std::string& new_text)
 	LLRect old_rect = getRect();
 	const LLFontGL* font = mParcelInfoText->getFont();
 	S32 new_text_width = font->getWidth(new_text);
+
+	//<FS:TS> Avoid processing the parcel string every frame if it
+	// hasn't changed.
+	static std::string old_text = "";
+	if (new_text == old_text)
+	{
+		return;
+	}
+	old_text = new_text;
+	//</FS:TS>
 
 	mParcelInfoText->setText(new_text);
 
@@ -452,28 +467,78 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
 {
 	if (item == "landmark")
 	{
-		LLViewerInventoryItem* landmark = LLLandmarkActions::findLandmarkForAgentPos();
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		{
+// [/RLVa:KB]
+			LLViewerInventoryItem* landmark = LLLandmarkActions::findLandmarkForAgentPos();
 
-		if(landmark == NULL)
-		{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+			if(landmark == NULL)
+			{
+				// <FS:Ansariel> FIRE-817: Separate place details floater
+				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+				{
+					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
+				}
+				else
+				{
+					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+				}
+				// </FS:Ansariel>
+			}
+			else
+			{
+				// <FS:Ansariel> FIRE-817: Separate place details floater
+				//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+				{
+					LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+				}
+				else
+				{
+					LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+				}
+				// </FS:Ansariel>
+			}
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
 		}
-		else
-		{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
-		}
+// [/RLVa:KB]
 	}
 	else if (item == "copy")
 	{
-		LLSLURL slurl;
-		LLAgentUI::buildSLURL(slurl, false);
-		LLUIString location_str(slurl.getSLURLString());
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		{
+// [/RLVa:KB]
+			LLSLURL slurl;
+			LLAgentUI::buildSLURL(slurl, false);
+			LLUIString location_str(slurl.getSLURLString());
 
-		LLClipboard::instance().copyToClipboard(location_str,0,location_str.length());
+			LLClipboard::instance().copyToClipboard(location_str,0,location_str.length());
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+		}
+// [/RLVa:KB]
 	}
 }
 
 void LLPanelTopInfoBar::onInfoButtonClicked()
 {
-	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		return;
+// [/RLVa:KB]
+
+	// <FS:Ansariel> FIRE-817: Separate place details floater
+	//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
+	//if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+	//{
+	//	LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "agent"));
+	//}
+	//else
+	//{
+	//	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
+	//}
+	// </FS:Ansariel>
+	LLFloaterReg::showInstance("about_land");
 }

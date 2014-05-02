@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="Objekt-Backup">
+	<floater.string name="title_floater">
+		Backup von [OBJECT] auf Festplatte...
+	</floater.string>
+	<floater.string name="title_working">
+		Backup von [OBJECT] in Arbeit - Hole Details...
+	</floater.string>
+	<floater.string name="title_inventory">
+		Backup von [OBJECT] in Arbeit - Lade Inventar...
+	</floater.string>
+	<floater.string name="title_assets">
+		Backup von [OBJECT] in Arbeit - Lade Assets...
+	</floater.string>
+	<floater.string name="title_textures">
+		Backup von [OBJECT] in Arbeit - Lade Texturen...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				Auswahl-Info
+			</text>
+			<text name="exportable_prims">
+				Exportierbare Prims: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Exportierbare Texturen: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Optionen:
+			</text>
+			<check_box name="contents_check" label="Objekt-Inhalt auf Disk speichern"/>
+			<button name="export_btn" label="Speichern unter..."/>
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel name="prims_panel" label="Objekte"/>
+				<panel name="texture_panel" label="Texturen"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

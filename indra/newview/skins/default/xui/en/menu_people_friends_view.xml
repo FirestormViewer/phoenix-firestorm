@@ -14,6 +14,16 @@
        parameter="sort_name" />
   </menu_item_check>
   <menu_item_check
+   label="Sort by Username"
+   name="sort_username">
+      <menu_item_check.on_click
+       function="People.Friends.ViewSort.Action"
+       parameter="sort_username" />
+      <menu_item_check.on_check
+       function="People.Friends.ViewSort.CheckItem"
+       parameter="sort_username" />
+  </menu_item_check>
+  <menu_item_check
    label="Sort by Status"
    name="sort_status">
       <menu_item_check.on_click

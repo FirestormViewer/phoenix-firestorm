@@ -314,6 +314,7 @@ void LLFloaterCamera::onOpen(const LLSD& key)
 	LLFirstUse::viewPopup();
 
 	mZoom->onOpen(key);
+	setCameraFloaterTransparencyMode(LLSD(gSavedSettings.getBOOL("FSAlwaysOpaqueCameraControls"))); // <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
 
 	// Returns to previous mode, see EXT-2727(View tool should remember state).
 	// In case floater was just hidden and it isn't reset the mode
@@ -347,6 +348,7 @@ void LLFloaterCamera::onClose(bool app_quitting)
 LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 :	LLFloater(val),
 	mClosed(FALSE),
+	mUseFlatUI(false),	// <AW: Flat cam floater>
 	mCurrMode(CAMERA_CTRL_MODE_PAN),
 	mPrevMode(CAMERA_CTRL_MODE_PAN)
 {
@@ -357,15 +359,27 @@ LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 // virtual
 BOOL LLFloaterCamera::postBuild()
 {
-	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
+
+	// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
+	// updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
+	gSavedSettings.getControl("FSAlwaysOpaqueCameraControls")->getSignal()->connect(boost::bind(&LLFloaterCamera::setCameraFloaterTransparencyMode, this, _2));
+	// </FS:PP>
 
 	mRotate = getChild<LLJoystickCameraRotate>(ORBIT);
 	mZoom = findChild<LLPanelCameraZoom>(ZOOM);
 	mTrack = getChild<LLJoystickCameraTrack>(PAN);
-
-	assignButton2Mode(CAMERA_CTRL_MODE_MODES,			"avatarview_btn");
-	assignButton2Mode(CAMERA_CTRL_MODE_PAN,				"pan_btn");
-	assignButton2Mode(CAMERA_CTRL_MODE_PRESETS,		"presets_btn");
+// <AW: Flat cam floater>
+	if (hasString("use_flat_ui"))
+	{
+		mUseFlatUI = true;
+	}
+	else
+// </AW: Flat cam floater>
+	{
+		assignButton2Mode(CAMERA_CTRL_MODE_MODES,			"avatarview_btn");
+		assignButton2Mode(CAMERA_CTRL_MODE_PAN,				"pan_btn");
+		assignButton2Mode(CAMERA_CTRL_MODE_PRESETS,		"presets_btn");
+	}
 
 	update();
 
@@ -374,6 +388,22 @@ BOOL LLFloaterCamera::postBuild()
 
 	return LLFloater::postBuild();
 }
+
+// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
+void LLFloaterCamera::setCameraFloaterTransparencyMode(const LLSD &data)
+{
+	if(data.asBoolean())
+	{
+		updateTransparency(TT_FORCE_OPAQUE);
+		setBackgroundOpaque(true);
+	}
+	else
+	{
+		updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
+		setBackgroundOpaque(false);
+	}
+}
+// </FS:PP>
 
 void LLFloaterCamera::fillFlatlistFromPanel (LLFlatListView* list, LLPanel* panel)
 {
@@ -437,6 +467,35 @@ void LLFloaterCamera::setMode(ECameraControlMode mode)
 	updateState();
 }
 
+void LLFloaterCamera::setModeTitle(const ECameraControlMode mode)
+{
+	std::string title;
+// <AW: Flat cam floater>
+	if (mUseFlatUI)
+	{
+		title = getString("flat_ui_title");
+	}
+	else
+// </AW: Flat cam floater>
+	{
+		switch(mode)
+		{
+		case CAMERA_CTRL_MODE_MODES:
+			title = getString("camera_modes_title");
+			break;
+		case CAMERA_CTRL_MODE_PAN:
+			title = getString("pan_mode_title");
+			break;
+		case CAMERA_CTRL_MODE_PRESETS:
+			title = getString("presets_mode_title");
+			break;
+		default:
+			break;
+		}
+	}
+	setTitle(title);
+}
+
 void LLFloaterCamera::switchMode(ECameraControlMode mode)
 {
 	setMode(mode);
@@ -493,6 +552,14 @@ void LLFloaterCamera::assignButton2Mode(ECameraControlMode mode, const std::stri
 
 void LLFloaterCamera::updateState()
 {
+// <AW: Flat cam floater>
+	if (mUseFlatUI)
+	{
+		setModeTitle(mCurrMode);
+		return;
+	}
+// </AW: Flat cam floater>
+
 	getChildView(ZOOM)->setVisible(CAMERA_CTRL_MODE_PAN == mCurrMode);
 	
 	bool show_presets = (CAMERA_CTRL_MODE_PRESETS == mCurrMode) || (CAMERA_CTRL_MODE_FREE_CAMERA == mCurrMode
@@ -534,26 +601,52 @@ void LLFloaterCamera::updateItemsSelection()
 	getChild<LLPanelCameraItem>("object_view")->setValue(argument);
 }
 
+/*static*/
 void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 {
 	std::string name = param.asString();
 
-	if ("mouselook_view" == name)
+// <AW: Flat cam floater>
+	//if ("mouselook_view" == name)
+	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
+ 
+	if ("reset_view" == name)
+	{
+		gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
+		gAgentCamera.changeCameraToDefault();
+		if (camera_floater)
+			camera_floater->switchMode(CAMERA_CTRL_MODE_PAN);
+	}
+	else if ("mouselook_view" == name)
+// </AW: Flat cam floater>
 	{
 		gAgentCamera.changeCameraToMouselook();
 	}
-	else if ("object_view" == name)
+// <AW: Flat cam floater>
+// 	else if ("object_view" == name)
+// 	{
+// 		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
+// 		if (camera_floater)
+// 			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+// 	}
+	else if ("object_view" == name && camera_floater)
 	{
-		LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
-		if (camera_floater)
-		camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		if (camera_floater->mUseFlatUI)
+		{
+			camera_floater->mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA ? camera_floater->switchMode(CAMERA_CTRL_MODE_PAN) : camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		}
+		else
+		{
+			camera_floater->switchMode(CAMERA_CTRL_MODE_FREE_CAMERA);
+		}
 	}
+// </AW: Flat cam floater>
 	else
 	{
 		switchToPreset(name);
 	}
 
-	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();
+// 	LLFloaterCamera* camera_floater = LLFloaterCamera::findInstance();// <AW: Flat cam floater>
 	if (camera_floater)
 	{
 		camera_floater->updateItemsSelection();
@@ -582,7 +675,14 @@ void LLFloaterCamera::switchToPreset(const std::string& name)
 
 void LLFloaterCamera::fromFreeToPresets()
 {
-	if (!sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PRESETS)
+// <AW: Flat cam floater>
+//	if (!sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PRESETS)
+	if(mUseFlatUI && !sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PAN)
+	{
+		switchMode(CAMERA_CTRL_MODE_PAN);
+	}
+	else if (!sFreeCamera && mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA && mPrevMode == CAMERA_CTRL_MODE_PRESETS)
+// </AW: Flat cam floater>
 	{
 		switchMode(CAMERA_CTRL_MODE_PRESETS);
 	}

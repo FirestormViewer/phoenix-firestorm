@@ -17,20 +17,20 @@
 	<string name="Filter.Bodyparts" value="Partes del cuerpo"/>
 	<string name="replace_body_part" value="Pulsa para sustituir tu anatomía actual"/>
 	<text name="title" value="Editar el vestuario"/>
-	<panel label="bottom_panel" name="header_panel">
-		<panel label="bottom_panel" name="outfit_name_and_status">
+	<panel name="header_panel">
+		<panel name="outfit_name_and_status">
 			<text name="status" value="Editando..."/>
-			<text name="curr_outfit_name" value="[Vestuario actual]"/>
+			<text name="curr_outfit_name" value="[Current Outfit]"/>
 		</panel>
 	</panel>
 	<layout_stack name="im_panels">
-		<layout_panel label="Panel de control de los MI" name="outfit_wearables_panel">
+		<layout_panel name="outfit_wearables_panel">
 			<layout_stack name="filter_panels">
 				<layout_panel name="add_button_and_combobox">
 					<button label="Añadir más..." name="show_add_wearables_btn" tool_tip="Abrir/Cerrar"/>
 				</layout_panel>
 				<layout_panel name="filter_panel">
-					<filter_editor label="Filtrar artículos del inventario" name="look_item_filter"/>
+					<filter_editor label="Filtrar items del inventario" name="look_item_filter"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
@@ -39,10 +39,10 @@
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
-		<button name="shop_btn_1" tool_tip="Visita el Mercado de SL. Asimismo, puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más ítems relacionados"/>
+		<button name="shop_btn_1" tool_tip="Visita SL Marketplace. También puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más items relacionados"/>
 	</panel>
 	<panel name="add_wearables_button_bar">
-		<button name="shop_btn_2" tool_tip="Visita el Mercado de SL. Asimismo, puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más ítems relacionados"/>
+		<button name="shop_btn_2" tool_tip="Visita SL Marketplace. También puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más items relacionados"/>
 	</panel>
 	<panel name="save_revert_button_bar">
 		<layout_stack name="button_bar_ls">
@@ -50,7 +50,7 @@
 				<button label="Guardar" name="save_btn"/>
 			</layout_panel>
 			<layout_panel name="revert_btn_lp">
-				<button label="Deshacer los cambios" name="revert_btn" tool_tip="Volver a la última versión guardada"/>
+				<button label="Deshacer cambios" name="revert_btn" tool_tip="Volver a la última versión guardada"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

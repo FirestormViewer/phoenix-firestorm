@@ -30,13 +30,13 @@
     left="6"
     top="20"
                           follows="left|top"
-                          hover_glow_amount="0.15"
+                          hover_glow_amount="0.25"
                           image_unselected="Info_Off"
                           image_selected="Info_Off"
                           image_disabled_selected="Info_Off"
                           image_disabled="Info_Off" />
   <add_landmark_button name="Add Landmark"
-                          hover_glow_amount="0.15"
+                          hover_glow_amount="0.25"
                           image_hover_selected="Favorite_Star_Over"
                           image_hover_unselected="Favorite_Star_Over"
                           width="18"
@@ -56,10 +56,9 @@
     name="for_sale_btn"
     image_unselected="Parcel_ForSale_Light"
     image_selected="Parcel_ForSale_Light"
-    width="22"
+    width="18"
     height="18"
     follows="right|top"
-    scale_image="false"
     top="21"
     />
   <voice_icon

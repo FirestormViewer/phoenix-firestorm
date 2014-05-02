@@ -58,6 +58,9 @@ class LLViewerHelp : public LLHelp, public LLSingleton<LLViewerHelp>
 
 	// return topic to use for the top-level help, invoked by F1
 	/*virtual*/ std::string f1HelpTopic();
+
+	// return topic to use for grid manager help at the login screen
+	/*virtual*/ std::string gridMgrHelpTopic();
 };
 
 #endif // header guard

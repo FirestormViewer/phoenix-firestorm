@@ -11,6 +11,8 @@
     single_instance="true"
     title="Pathfinding view / test"
     width="240">
+  <floater.string name="no_havok">navmesh for pathfinding</floater.string>
+	
   <floater.string name="navmesh_viewer_status_unknown"></floater.string>
   <floater.string name="navmesh_viewer_status_library_not_implemented">Cannot find pathing library implementation.</floater.string>
   <floater.string name="navmesh_viewer_status_region_not_enabled">This region is not enabled for pathfinding.</floater.string>
@@ -44,7 +46,8 @@
       left="12"
       top_pad="10"
       height="61"
-      width="214">
+      width="214"
+      name="pathfinding_console_main">
     <text
         height="13"
         word_wrap="true"
@@ -55,7 +58,8 @@
         layout="topleft"
         left="0"
         top_pad="0"
-        width="214">
+        width="214"
+        name="viewer_status_label">
       Viewer status
     </text>
     <text
@@ -80,7 +84,8 @@
       layout="topleft"
       left="12"
       height="66"
-      width="214">
+      width="214"
+      name="pathfinding_console_simulator">
     <text
         height="13"
         word_wrap="true"
@@ -91,7 +96,8 @@
         layout="topleft"
         left="0"
         top_pad="5"
-        width="214">
+        width="214"
+        name="simulator_status_label">
       Simulator status
     </text>
     <text
@@ -109,12 +115,13 @@
         width="214">
     </text>
   </panel>
+		 
   <view_border
       bevel_style="none"
       follows="top|left"
       layout="topleft"
       left="12"
-      top="179"
+      top="182"
       height="305"
       width="213"
       visible="true" />
@@ -124,7 +131,7 @@
       tab_position="top"
       name="view_test_tab_container"
       left="12"
-      top="157"
+      top="161"
       height="328"
       width="214">
     <panel

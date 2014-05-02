@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">
+		Dieses Kontakt-Set ist leer.
+	</panel.string>
+	<panel.string name="no_sets">
+		Keine Kontakt-Sets
+	</panel.string>
+	<panel.string name="all_sets">
+		Alle Kontakt-Sets
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Aliase
+	</panel.string>
+	<panel.string name="non_friends">
+		Nicht-Freunde
+	</panel.string>
+	<combo_box name="combo_sets" width="199"/>
+	<button name="config_btn" tool_tip="Ausgewähltes Kontakt-Set konfigurieren"/>
+	<button name="add_set_btn" tool_tip="Neues Kontakt-Set hinzufügen"/>
+	<button name="remove_set_btn" tool_tip="Ausgewähltes Kontakt-Set entfernen"/>
+	<avatar_list name="contact_list" right="-90"/>
+	<button label="Hinzufügen..." name="add_btn" tool_tip="Einen Avatar zum aktuellen Kontakt-Set hinzufügen" width="85" left_delta="265"/>
+	<button label="Entfernen..." name="remove_btn" tool_tip="Avatar aus dem aktuellen Kontakt-Set entfernen" width="85"/>
+	<button label="Profil..." name="profile_btn" tool_tip="Avatarprofil öffnen" width="85"/>
+	<button label="IM..." name="start_im_btn" tool_tip="Öffnet eine Instant-Message-Sitzung" width="85"/>
+	<button label="Teleport..." name="offer_teleport_btn" tool_tip="Dieser Avatar einen Teleport zu deiner jetzigen Position anbieten" width="85"/>
+	<button label="Alias setzen" name="set_pseudonym_btn" tool_tip="Legt ein Pseudoynm für diesen Avatar fest" width="85"/>
+	<button label="Alias entf." name="remove_pseudonym_btn" tool_tip="Entfernt das Pseudonym eines Avatars" width="85"/>
+	<button label="AN entf." name="remove_displayname_btn" tool_tip="Entfernt den Anzeigenamen eines Avatars" width="85"/>
+	<text name="member_count" width="85">
+		Mitglieder: [COUNT]
+	</text>
+</panel>

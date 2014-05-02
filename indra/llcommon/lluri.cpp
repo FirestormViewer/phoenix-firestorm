@@ -182,10 +182,14 @@ namespace
 		{ return LLURI::escape(s, unreserved() + sub_delims() +":"); }
 	std::string escapePathComponent(const std::string& s)
 		{ return LLURI::escape(s, unreserved() + sub_delims() + ":@"); }
+	// <exodus>
+	// Removed the '+' because some servers rely on it being removed and
+	// no server relies on the contrary.
 	std::string escapeQueryVariable(const std::string& s)
-		{ return LLURI::escape(s, unreserved() + ":@!$'()*+,"); }	 // sub_delims - "&;=" + ":@"
+		{ return LLURI::escape(s, unreserved() + ":@!$'()*,"); }	// sub_delims - "&;+=" + ":@"
 	std::string escapeQueryValue(const std::string& s)
-		{ return LLURI::escape(s, unreserved() + ":@!$'()*+,="); }	// sub_delims - "&;" + ":@"
+		{ return LLURI::escape(s, unreserved() + ":@!$'()*,="); }	// sub_delims - "&;+" + ":@"
+	// </exodus>
 }
 
 //static
@@ -199,6 +203,18 @@ std::string LLURI::escape(const std::string& str)
 		initialized = true;
 	}
 	return escape(str, default_allowed, true);
+}
+
+//static
+std::string LLURI::escapeQueryValue(const std::string& s)
+{
+	return ::escapeQueryValue(s);
+}
+
+//static
+std::string LLURI::escapeQueryVariable(const std::string& s)
+{
+	return ::escapeQueryVariable(s);
 }
 
 LLURI::LLURI()
@@ -245,7 +261,7 @@ static BOOL isDefault(const std::string& scheme, U16 port)
 
 void LLURI::parseAuthorityAndPathUsingOpaque()
 {
-	if (mScheme == "http" || mScheme == "https" ||
+	if (mScheme == "http" || mScheme == "https" || mScheme == "hop" ||
 		mScheme == "ftp" || mScheme == "secondlife" || 
 		mScheme == "x-grid-location-info")
 	{
@@ -504,6 +520,15 @@ std::string LLURI::hostName() const
 	return unescape(host);
 }
 
+// <AW: opensim>
+std::string LLURI::hostNameAndPort() const
+{
+	std::string user, host, port;
+	findAuthorityParts(mEscapedAuthority, user, host, port);
+	return port.empty() ? unescape(host) : unescape(host + ":" + port);
+}
+// </AW: opensim>
+
 std::string LLURI::userName() const
 {
 	std::string user, userPass, host, port;
@@ -642,10 +667,10 @@ std::string LLURI::mapToQueryString(const LLSD& queryMap)
 			{
 				ostr << "&";
 			}
-			ostr << escapeQueryVariable(iter->first);
+			ostr << ::escapeQueryVariable(iter->first);
 			if(iter->second.isDefined())
 			{
-				ostr << "=" <<  escapeQueryValue(iter->second.asString());
+				ostr << "=" <<  ::escapeQueryValue(iter->second.asString());
 			}
 		}
 		query_string = ostr.str();

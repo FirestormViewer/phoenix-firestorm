@@ -23,7 +23,9 @@
 * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
 * $/LicenseInfo$
 */
-#include "../newview/llviewerprecompiledheaders.h"
+
+// <FS:Ansariel> Remove ugly dependency
+//#include "../newview/llviewerprecompiledheaders.h"
 
 #include "llflashtimer.h"
 
@@ -57,6 +59,8 @@ LLUIColor LLFolderViewItem::sFilterBGColor;
 LLUIColor LLFolderViewItem::sFilterTextColor;
 LLUIColor LLFolderViewItem::sSuffixColor;
 LLUIColor LLFolderViewItem::sSearchStatusColor;
+// <FS:Ansariel> Special for protected items
+LLUIColor LLFolderViewItem::sProtectedColor;
 
 // only integers can be initialized in header
 const F32 LLFolderViewItem::FOLDER_CLOSE_TIME_CONSTANT = 0.02f;
@@ -113,8 +117,15 @@ LLFolderViewItem::Params::Params()
     text_pad("text_pad", 0),
     text_pad_right("text_pad_right", 0),
     arrow_size("arrow_size", 0),
-    max_folder_item_overlap("max_folder_item_overlap", 0)
-{ }
+    max_folder_item_overlap("max_folder_item_overlap", 0),
+	// <FS:Ansariel> Inventory specials
+	for_inventory("for_inventory", false)
+{
+	// <FS:Ansariel> User-definable item height in folder views
+	static LLCachedControl<S32> FolderViewItemHeight(*LLUI::sSettingGroups["config"], "FSFolderViewItemHeight");
+	item_height = (S32)FolderViewItemHeight;
+	// </FS:Ansariel>
+}
 
 // Default constructor
 LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
@@ -146,12 +157,18 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
     mTextPad(p.text_pad),
     mTextPadRight(p.text_pad_right),
     mArrowSize(p.arrow_size),
-    mMaxFolderItemOverlap(p.max_folder_item_overlap)
+    mMaxFolderItemOverlap(p.max_folder_item_overlap),
+	// <FS:Ansariel> Inventory specials
+	mForInventory(p.for_inventory)
 {
 	if (!sColorSetInitialized)
 	{
-		sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
-		sHighlightBgColor = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", DEFAULT_WHITE);
+		// <FS:Ansariel> Make inventory selection color independent from menu color
+		//sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
+		//sHighlightBgColor = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", DEFAULT_WHITE);
+		sFgColor = LLUIColorTable::instance().getColor("InventoryItemEnabledColor", DEFAULT_WHITE);
+		sHighlightBgColor = LLUIColorTable::instance().getColor("InventoryItemHighlightBgColor", DEFAULT_WHITE);
+		// </FS:Ansariel> Make inventory selection color independent from menu color
 		sFlashBgColor = LLUIColorTable::instance().getColor("MenuItemFlashBgColor", DEFAULT_WHITE);
 		sFocusOutlineColor = LLUIColorTable::instance().getColor("InventoryFocusOutlineColor", DEFAULT_WHITE);
 		sMouseOverColor = LLUIColorTable::instance().getColor("InventoryMouseOverColor", DEFAULT_WHITE);
@@ -159,6 +176,8 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
 		sFilterTextColor = LLUIColorTable::instance().getColor("FilterTextColor", DEFAULT_WHITE);
 		sSuffixColor = LLUIColorTable::instance().getColor("InventoryItemColor", DEFAULT_WHITE);
 		sSearchStatusColor = LLUIColorTable::instance().getColor("InventorySearchStatusColor", DEFAULT_WHITE);
+		// <FS:Ansariel> Special for protected items
+		sProtectedColor = LLUIColorTable::instance().getColor("InventoryProtectedColor", DEFAULT_WHITE);
 		sColorSetInitialized = true;
 	}
 
@@ -321,9 +340,27 @@ void LLFolderViewItem::addToFolder(LLFolderViewFolder* folder)
 S32 LLFolderViewItem::arrange( S32* width, S32* height )
 {
 	// Only indent deeper items in hierarchy
-	mIndentation = (getParentFolder())
-		? getParentFolder()->getIndentation() + mLocalIndentation
-		: 0;
+	
+	// <FS:Ansariel> Inventory specials
+	//mIndentation = (getParentFolder())
+	//	? getParentFolder()->getIndentation() + mLocalIndentation
+	//	: 0;
+
+	if (mForInventory)
+	{
+		mIndentation = (getParentFolder()
+						&& getParentFolder()->getParentFolder() )
+			? getParentFolder()->getIndentation() + mLocalIndentation
+			: 0;
+	}
+	else
+	{
+		mIndentation = (getParentFolder())
+			? getParentFolder()->getIndentation() + mLocalIndentation
+			: 0;
+	}
+	// </FS:Ansariel>
+
 	if (mLabelWidthDirty)
 	{
 		mLabelWidth = getLabelXPos() + getLabelFontForStyle(mLabelStyle)->getWidth(mLabel) + getLabelFontForStyle(mLabelStyle)->getWidth(mLabelSuffix) + mLabelPaddingRight; 
@@ -519,8 +556,13 @@ BOOL LLFolderViewItem::handleMouseDown( S32 x, S32 y, MASK mask )
 		mSelectPending = TRUE;
 	}
 
-	mDragStartX = x;
-	mDragStartY = y;
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+	S32 screen_x, screen_y;
+	localPointToScreen(x, y, &screen_x, &screen_y);
+	getRoot()->setDragStart( screen_x, screen_y );
+// [/SL:KB]
+//	mDragStartX = x;
+//	mDragStartY = y;
 	return TRUE;
 }
 
@@ -534,10 +576,34 @@ BOOL LLFolderViewItem::handleHover( S32 x, S32 y, MASK mask )
 	{
 			LLFolderView* root = getRoot();
 
-		if( (x - mDragStartX) * (x - mDragStartX) + (y - mDragStartY) * (y - mDragStartY) > drag_and_drop_threshold() * drag_and_drop_threshold() 
-			&& root->getCurSelectedItem()
-			&& root->startDrag())
+//		if( (x - mDragStartX) * (x - mDragStartX) + (y - mDragStartY) * (y - mDragStartY) > drag_and_drop_threshold() * drag_and_drop_threshold() 
+//			&& root->getCurSelectedItem()
+//			&& root->startDrag())
+//		{
+//					// RN: when starting drag and drop, clear out last auto-open
+//					root->autoOpenTest(NULL);
+//					root->setShowSelectionContext(TRUE);
+//
+//					// Release keyboard focus, so that if stuff is dropped into the
+//					// world, pressing the delete key won't blow away the inventory
+//					// item.
+//					gFocusMgr.setKeyboardFocus(NULL);
+//
+//			getWindow()->setCursor(UI_CURSOR_ARROW);
+//		}
+//		else if (x != mDragStartX || y != mDragStartY)
+//		{
+//			getWindow()->setCursor(UI_CURSOR_NOLOCKED);
+//		}
+// [SL:KB] - Patch: Inventory-DragDrop | Checked: 2014-02-04 (Catznip-3.6)
+		S32 screen_x, screen_y;
+		localPointToScreen(x, y, &screen_x, &screen_y);
+
+		bool can_drag = true;
+		if ( (root->isOverDragThreshold(screen_x, screen_y)) && (root->getCurSelectedItem()) )
 		{
+			if (can_drag = root->startDrag())
+			{
 					// RN: when starting drag and drop, clear out last auto-open
 					root->autoOpenTest(NULL);
 					root->setShowSelectionContext(TRUE);
@@ -546,13 +612,14 @@ BOOL LLFolderViewItem::handleHover( S32 x, S32 y, MASK mask )
 					// world, pressing the delete key won't blow away the inventory
 					// item.
 					gFocusMgr.setKeyboardFocus(NULL);
+			}
+		}
 
+		if (can_drag)
 			getWindow()->setCursor(UI_CURSOR_ARROW);
-		}
-		else if (x != mDragStartX || y != mDragStartY)
-		{
+		else
 			getWindow()->setCursor(UI_CURSOR_NOLOCKED);
-		}
+// [/SL:KB]
 
 		return TRUE;
 	}
@@ -855,7 +922,25 @@ void LLFolderViewItem::draw()
     }
 
     LLColor4 color = (mIsSelected && filled) ? mFontHighlightColor : mFontColor;
+	// <FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	if (!getRoot()->getFolderViewModel()->getFilter().checkClipboard(getViewModelItem()))
+	{
+		// Fade out item color to indicate it's being cut
+		color.mV[VALPHA] *= 0.5f;
+	}
+	// </FS:Ansariel> Re-apply FIRE-6714: Don't move objects to trash during cut&paste
     drawLabel(font, text_left, y, color, right_x);
+
+	// <FS:Ansariel> Special for protected items
+	if (mViewModelItem->isProtected())
+	{
+		static const std::string protected_string = " (" + LLTrans::getString("ProtectedFolder") + ") ";
+		font->renderUTF8(protected_string, 0, right_x, y, sProtectedColor,
+						 LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, 
+						 S32_MAX, S32_MAX, &right_x, FALSE);
+	}
+	// </FS:Ansariel>
 
 	//--------------------------------------------------------------------------------//
 	// Draw label suffix
@@ -899,6 +984,30 @@ bool LLFolderViewItem::isInSelection() const
 	return mIsSelected || (mParentFolder && mParentFolder->isInSelection());
 }
 
+// <FS:ND> Don't bother with unneeded tooltips in inventory
+BOOL LLFolderViewItem::handleToolTip(S32 x, S32 y, MASK mask)
+{
+	if( childrenHandleToolTip( x, y, mask ) )
+		return TRUE;
+
+	int nStart = mArrowSize + mTextPad + mIconWidth + mIconPad + mIndentation;
+	int nWidth = getLabelFontForStyle(mLabelStyle)->getWidth(mLabel) + nStart;
+
+  	if( getRoot()->getParentPanel()->getRect().getWidth() < nWidth ) // Label is truncated, display tooltip
+	{
+		setToolTip( mLabel );
+		return LLView::handleToolTip( x, y, mask );
+	}
+	else
+		setToolTip( LLStringExplicit("") );
+
+	// In case of root we always want to return TRUE, otherwise tooltip handling gets propagated one level up and we end with a tooltip like 'All Items'.
+	if( this == getRoot() )
+		return TRUE;
+
+	return FALSE;
+}
+// </FS:ND>
 
 
 ///----------------------------------------------------------------------------

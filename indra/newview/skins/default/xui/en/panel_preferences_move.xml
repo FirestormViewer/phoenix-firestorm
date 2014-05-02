@@ -1,273 +1,800 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  border="true"
- follows="left|top|right|bottom"
- height="408"
- label="Move"
+ follows="all"
+ height="440"
  layout="topleft"
- left="102"
- name="move_panel"
+ left="1"
  top="1"
- width="517">
-  <icon
-     follows="left|top"
-     height="18"
-     image_name="Cam_FreeCam_Off"
-     layout="topleft"
-     name="camera_icon"
-     mouse_opaque="false"
-     visible="true"
-     width="18"
-     left="30"
-     top="10"/>
-  <slider
-   can_edit_text="true"
-   control_name="CameraAngle"
-   decimal_digits="2"
-   follows="left|top"
-   height="16"
-   increment="0.025"
-   initial_value="1.57"
-   layout="topleft"
-   label_width="100"
-   label="View angle"
-   left_pad="30"
-   max_val="2.97"
-   min_val="0.17"
-   name="camera_fov"
-   show_text="false"
-   width="240" />
-  <slider
-   can_edit_text="true"
-   control_name="CameraOffsetScale"
-   decimal_digits="2"
-   follows="left|top"
-   height="16"
-   increment="0.025"
-   initial_value="1"
-   layout="topleft"
-   label="Distance"
-   left_delta="0"
-   label_width="100"
-   max_val="3"
-   min_val="0.5"
-   name="camera_offset_scale"
-   show_text="false"
-   width="240"
-   top_pad="5"/>
-  <text
-  follows="left|top"
-  type="string"
-  length="1"
-  height="10"
-  left="80"
-  name="heading2"
-  width="270"
-  top_pad="5">
-    Automatic position for:
-  </text>
-  <check_box
-     control_name="EditCameraMovement"
-     height="20"
-     follows="left|top"
-     label="Build/Edit"
-     layout="topleft"
-     left_delta="30"
-     name="edit_camera_movement"
-     tool_tip="Use automatic camera positioning when entering and exiting edit mode"
-     width="280"
-     top_pad="5" />
-  <check_box
-   control_name="AppearanceCameraMovement"
-   follows="left|top"
-   height="16"
-   label="Appearance"
-   layout="topleft"
-   name="appearance_camera_movement"
-   tool_tip="Use automatic camera positioning while in edit mode"
-   width="242" />
-  <icon
-	 follows="left|top"
-	 height="18"
-	 image_name="Move_Walk_Off"
-   layout="topleft"
-	 name="avatar_icon"
-	 mouse_opaque="false"
-	 visible="true"
-	 width="18"
-   top_pad="10"
-   left="30" />
-  <text
-   follows="left|top"
-   type="string"
-   length="1"
-   height="10"
-   layout="topleft"
-   left="78"
-   name="keyboard_lbl"
-   width="270"
-   top_delta="2">
-    Keyboard:
-  </text>
-  <check_box
-   control_name="ArrowKeysAlwaysMove"
-   follows="left|top"
-   height="20"
-   label="Arrow keys always move me"
-   layout="topleft"
-   left_delta="5"
-   name="arrow_keys_move_avatar_check"
-   width="237"
-   top_pad="5"/>
-  <check_box
-   control_name="AllowTapTapHoldRun"
-   follows="left|top"
-   height="20"
-   label="Tap-tap-hold to run"
-   layout="topleft"
-   left_delta="0"
-   name="tap_tap_hold_to_run"
-   width="237"
-   top_pad="0"/>
-  <check_box
-   control_name="AutomaticFly"
-   follows="left|top"
-   height="20"
-   label="Hold jump or crouch key to start or stop flying"
-   layout="topleft"
-   left_delta="0"
-   name="automatic_fly"
-   width="237"
-   top_pad="0"/>
-  <text
-   follows="left|top"
-   type="string"
-   length="1"
-   height="10"
-   layout="topleft"
-   left="78"
-   name="mouse_lbl"
-   width="270"
-   top_pad="15">
-    Mouse:
-  </text>
-  <check_box
-   control_name="FirstPersonAvatarVisible"
-   follows="left|top"
-   height="20"
-   label="Show me in Mouselook"
-   layout="topleft"
-   left_delta="5"
-   name="first_person_avatar_visible"
-   top_pad="5"
-   width="256" />
-  <text
-   type="string"
-   length="1"
-   follows="left|top"
-   height="15"
-   layout="topleft"
-   left_delta="3"
-   name=" Mouse Sensitivity"
-   top_pad="10"
-   width="160"
-   wrap="true">
-    Mouselook mouse sensitivity:
-  </text>
-  <slider
-   control_name="MouseSensitivity"
-   follows="left|top"
-   height="15"
-   initial_value="2"
-   layout="topleft"
-   show_text="false"
-   left_pad="0"
-   max_val="15"
-   name="mouse_sensitivity"
-   top_delta="-1"
-   width="115" />
-  <check_box
-   control_name="InvertMouse"
-   height="16"
-   label="Invert"
-   layout="topleft"
-   left_pad="2"
-   name="invert_mouse"
-   top_delta="0"
-   width="128" />
-  <text
-   follows="left|top"
-   type="string"
-   length="1"
-   height="10"
-   layout="topleft"
-   left="86"
-   name="single_click_action_lbl"
-   width="150"
-   top_pad="20">
-    Single click on land:
-  </text>
-  <combo_box
-   height="23"
-   layout="topleft"
-   left_pad="10"
-   top_delta="-6"
-   name="single_click_action_combo"
-   width="200">
-    <combo_box.item
-     label="No action"
-     name="0"
-     value="0"/>
-    <combo_box.item
-     label="Move to clicked point"
-     name="1"
-     value="1"/>
-    <combo_box.commit_callback
-     function="Pref.ClickActionChange"/>
-  </combo_box>
-  <text
-   follows="left|top"
-   type="string"
-   length="1"
-   height="10"
-   layout="topleft"
-   left="86"
-   name="double_click_action_lbl"
-   width="150"
-   top_pad="12">
-    Double click on land:
-  </text>
-  <combo_box
-   height="23"
-   layout="topleft"
-   left_pad="10"
-   top_delta="-6"
-   name="double_click_action_combo"
-   width="200">
-    <combo_box.item
-     label="No action"
-     name="0"
-     value="0"/>
-    <combo_box.item
-     label="Move to clicked point"
-     name="1"
-     value="1"/>
-    <combo_box.item
-     label="Teleport to clicked point"
-     name="2"
-     value="2"/>
-    <combo_box.commit_callback
-     function="Pref.ClickActionChange"/>
-  </combo_box>
-  <button
-   height="23"
-   label="Other Devices"
-   left="30"
-   name="joystick_setup_button"
-   top="30"
-   width="155">
-    <button.commit_callback
-     function="Floater.Show"
-     parameter="pref_joystick" />
-  </button>
+ width="540"
+ label="Move"
+ name="move_panel">
+<tab_container
+ label="Move and View"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-1"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+
+    <!--View-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="View"
+     name="tab-view" >
+        <icon
+         follows="left|top"
+         height="18"
+         image_name="Cam_FreeCam_Off"
+         layout="topleft"
+         name="camera_icon"
+         mouse_opaque="false"
+         visible="true"
+         width="18"
+         left="30"
+         top="10"/>
+        <slider
+         can_edit_text="true"
+         control_name="CameraAngle"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.025"
+         initial_value="1.57"
+         layout="topleft"
+         label_width="100"
+         label="View angle"
+         left_pad="30"
+         max_val="2.97"
+         min_val="0.17"
+         name="camera_fov"
+         show_text="true"
+         width="275" />
+        <slider
+         can_edit_text="true"
+         control_name="CameraOffsetScale"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.025"
+         initial_value="1"
+         layout="topleft"
+         label="Distance"
+         left_delta="0"
+         label_width="100"
+         max_val="3"
+         min_val="0.5"
+         name="camera_offset_scale"
+         show_text="true"
+         width="275"
+         top_pad="5"/>
+        <slider
+         can_edit_text="true"
+         control_name="ZoomTime"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="0.4"
+         layout="topleft"
+         label="Transition Time"
+         left_delta="0"
+         label_width="100"
+         max_val="4"
+         min_val="0"
+         name="camera_transition_time"
+         show_text="true"
+         width="275"
+         top_pad="5"/>
+        <slider
+         can_edit_text="true"
+         control_name="CameraPositionSmoothing"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1"
+         layout="topleft"
+         label="Smoothing"
+         left_delta="0"
+         label_width="100"
+         max_val="9"
+         min_val="0"
+         name="camera_position_smoothing"
+         show_text="true"
+         width="275"
+         top_pad="5"/>
+        <check_box
+         control_name="DisableCameraConstraints"
+         height="16"
+         initial_value="true"
+         label="Disable camera constraints"
+         layout="topleft"
+         left_delta="0"
+         name="DisableCameraConstraints"
+         tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
+         top_pad="7"
+         width="315"/>
+        <check_box
+         control_name="FSDisableMouseWheelCameraZoom"
+         height="16"
+         label="Don't use the mouse wheel to control zoom level of the camera"
+         layout="topleft"
+         name="FSDisableMouseWheelCameraZoom"
+         top_pad="2"
+         width="315"/>
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="10"
+         left="80"
+         name="heading2"
+         width="300"
+         top_pad="5">
+         Automatically pose avatar during (select one or more):
+        </text>
+        <check_box
+         control_name="EditCameraMovement"
+         height="20"
+         follows="left|top"
+         label="Build/Edit"
+         layout="topleft"
+         left_delta="30"
+         name="edit_camera_movement"
+         tool_tip="Use automatic camera positioning when entering and exiting edit mode"
+         width="280"
+         top_pad="5" />
+        <check_box
+         control_name="AppearanceCameraMovement"
+         follows="left|top"
+         height="16"
+         label="Appearance"
+         layout="topleft"
+         name="appearance_camera_movement"
+         tool_tip="Use automatic camera positioning while in edit mode"
+         width="100" />
+        <check_box
+         control_name="EditAppearanceLighting"
+         follows="left|top"
+         height="16"
+         label="Add Additional Lighting"
+         layout="topleft"
+		 left_pad="10"
+         name="EditAppearanceLighting"
+         tool_tip="Enable or disable the additional lighting used while editing avatar appearance."
+         width="150" />
+        <icon
+         follows="left|top"
+         height="18"
+         image_name="Move_Walk_Off"
+         layout="topleft"
+         name="avatar_icon"
+         mouse_opaque="false"
+         visible="true"
+         width="18"
+         top_pad="6"
+         left="30" />
+        <check_box
+         control_name="EnableMouselook"
+         follows="top"
+         height="20"
+         initial_value="true"
+         label="Enable Mouselook functionality"
+         layout="topleft"
+         left_pad="30"
+         name="EnableMouselook"
+         tool_tip="Allow first person perspective and mouse control of camera"
+         width="256" />
+        <check_box
+         control_name="FirstPersonAvatarVisible"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Show avatar in Mouselook"
+         layout="topleft"
+         left_delta="10"
+         top_pad="2"
+         name="first_person_avatar_visible"
+         width="256" />
+        <check_box
+         control_name="FSShowInterfaceInMouselook"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Show user interface in Mouselook"
+         layout="topleft"
+         name="first_person_ui_visible"
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="FSEnableRightclickMenuInMouselook"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Enable context menus in Mouselook"
+         layout="topleft"
+         name="FSEnableRightclickMenuInMouselook"
+         tool_tip="Opens pie/context menu in mouselook mode upon ALT + right mouse button"
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="FSShowMouselookInstructions"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         initial_value="true"
+         label="Show Mouselook instructions"
+         layout="topleft"
+         name="mouselook_instructions_visible"
+         tool_tip="Show Mouselook Instructions"
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="ShowCrosshairs"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         initial_value="true"
+         label="Show Mouselook crosshairs"
+         layout="topleft"
+         name="ShowCrosshairs"
+         tool_tip="Display crosshairs when in mouselook mode"
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="FSMouselookCombatFeatures"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Enable combat features"
+         layout="topleft"
+         name="FSMouselookCombatFeatures"
+         top_pad="2"
+         width="256" />
+        <check_box
+         control_name="ExodusMouselookIFF"
+         follows="left|top"
+         height="16"
+         label="Draw target markers"
+         layout="topleft"
+         left_delta="10"
+         name="ExodusMouselookIFF"
+         top_pad="2"
+         width="256" />
+        <slider
+         control_name="ExodusMouselookIFFRange"
+         follows="left|top"
+         height="15"
+         can_edit_text="true"
+         decimal_digits="0"
+         increment="5"
+         layout="topleft"
+         label="Range (m):"
+         label_width="150"
+         show_text="true"
+         left_delta="5"
+         max_val="500"
+         name="ExodusMouselookIFFRange"
+         top_pad="2"
+         width="333" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_delta="-10"
+         name="Mouse Sensitivity"
+         top_pad="7"
+         width="160">
+         Mouselook mouse sensitivity:
+        </text>
+        <slider
+         control_name="MouseSensitivity"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="15"
+         initial_value="2"
+         layout="topleft"
+         show_text="false"
+         left_pad="5"
+         max_val="15"
+         name="mouse_sensitivity"
+         top_delta="-1"
+         width="145" />
+        <check_box
+         control_name="InvertMouse"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Invert"
+         layout="topleft"
+         left_pad="2"
+         name="invert_mouse"
+         top_delta="0"
+         width="128" />
+	</panel>
+
+    <!--Movement-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Movement"
+     name="tab-movement" >
+        <check_box
+         control_name="ArrowKeysAlwaysMove"
+         follows="left|top"
+         height="20"
+         label="Arrow keys always move me"
+         layout="topleft"
+         left_delta="10"
+         name="arrow_keys_move_avatar_check"
+         width="237"
+         top_pad="2"/>
+        <check_box
+         control_name="FSUseAzertyKeyboardLayout"
+         follows="left|top"
+         height="20"
+         label="Use AZERTY keyboard layout"
+         layout="topleft"
+         left_delta="0"
+         name="FSUseAzertyKeyboardLayout"
+         width="180"
+         top_pad="0"/>
+        <text
+         name="FSUseAzertyKeyboardLayout_requires_restart"
+         follows="left|top"
+         layout="topleft"
+         left_pad="10"
+         top_delta="3"
+         height="20"
+         width="130"
+         text_color="White_25">
+            (requires restart)
+        </text>
+        <check_box
+         control_name="AllowTapTapHoldRun"
+         follows="left|top"
+         height="20"
+         label="Tap-tap-hold to run"
+         layout="topleft"
+         left_delta="-190"
+         name="tap_tap_hold_to_run"
+         width="237"
+         top_pad="-3"/>
+        <check_box
+         control_name="AutomaticFly"
+         follows="left|top"
+         height="20"
+         label="Fly/land on holding up/down"
+         layout="topleft"
+         left_delta="0"
+         name="automatic_fly"
+         width="237"
+         top_pad="0"/>
+        <check_box
+         control_name="FSCrouchToggle"
+         follows="left|top"
+         height="20"
+         label="Enable crouch toggle mode"
+         layout="topleft"
+         left_delta="0"
+         name="crouch_toggle_mode"
+         width="237"
+         top_pad="0"/>
+        <check_box
+         control_name="PlayModeUISndTeleportOut"
+         follows="left|top"
+         height="20"
+         label="Play sound effect when teleporting"
+         layout="topleft"
+         left_delta="0"
+         name="PlayTeleportSound"
+         width="237"
+         top_pad="0"/>
+        <check_box
+         control_name="FSFlyAfterTeleport"
+         follows="left|top"
+         height="20"
+         label="Always fly after teleporting"
+         layout="topleft"
+         left_delta="0"
+         name="FSFlyAfterTeleport"
+         width="237"
+         top_pad="0"/>
+        <check_box
+         control_name="AutomaticFly"
+         follows="left|top"
+         height="20"
+         label="Hold jump or crouch key to start or stop flying"
+         layout="topleft"
+         left_delta="0"
+         name="automatic_fly"
+         width="237"
+         top_pad="0"/>
+        <check_box
+         control_name="RelockMoveLockAfterRegionChange"
+         enabled_control="UseLSLBridge"
+         follows="left|top"
+         height="20"
+         label="If movelock is enabled, then always re-lock position after region change"
+         layout="topleft"
+         left_delta="0"
+         name="RelockMoveLockAfterRegionChange"
+         width="237"
+         top_pad="0"/>
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="10"
+         layout="topleft"
+         left="48"
+         name="single_click_action_lbl"
+         width="150"
+         top_pad="10">
+         Single click on land:
+        </text>
+        <combo_box
+         height="23"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-6"
+         name="single_click_action_combo"
+         width="200">
+            <combo_box.item
+             label="No action"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Move to clicked point"
+             name="1"
+             value="1"/>
+            <combo_box.commit_callback
+             function="Pref.ClickActionChange"/>
+        </combo_box>
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="10"
+         layout="topleft"
+         left="48"
+         name="double_click_action_lbl"
+         width="150"
+         top_pad="10">
+         Double click on land:
+        </text>
+        <combo_box
+         height="23"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-6"
+         name="double_click_action_combo"
+         width="200">
+            <combo_box.item
+             label="No action"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Move to clicked point"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Teleport to clicked point"
+             name="2"
+             value="2"/>
+            <combo_box.commit_callback
+             function="Pref.ClickActionChange"/>
+        </combo_box>
+        <button
+         follows="top|left"
+         height="23"
+         label="Joystick Configuration"
+         left="100"
+         name="joystick_setup_button"
+         top_pad="5"
+         width="155">
+            <button.commit_callback
+             function="Floater.Show"
+             parameter="pref_joystick" />
+        </button>
+    </panel>
+    
+    <!-- Firestorm -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Firestorm"
+     name="tab-firestorm" >
+        <text
+         top_pad="5"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="15"
+         name="camera_options_label"
+         width="200">
+           Camera options:
+        </text>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Clicking your avatar keeps camera position"
+         layout="topleft"
+         left="30"
+         name="clickonavatarkeepscamera"
+         width="270"
+         control_name="ClickOnAvatarKeepsCamera"
+         tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Reset camera position after teleport (within a region)"
+         layout="topleft"
+         left="30"
+         name="FSResetCameraOnTP"
+         width="270"
+         control_name="FSResetCameraOnTP"
+         tool_tip="Normally, the camera position gets reset when teleporting. This option prevents this behavior."/>
+		 
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         label="Reset camera position on avatar movement"
+         layout="topleft"
+         left="30"
+         name="FSResetCameraOnMovement"
+         width="270"
+         control_name="FSResetCameraOnMovement"/>
+
+		<check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Disable minimum camera zoom distance"
+         layout="topleft"
+         left="30"
+         name="disableminzoomdist"
+         width="350"
+         control_name="FSDisableMinZoomDist"
+         tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Turn avatar towards camera direction on reset view"
+         layout="topleft"
+         left="30"
+         name="resetviewturnsavatar"
+         width="350"
+         control_name="ResetViewTurnsAvatar"
+         tool_tip="This option keeps the camera direction and turns the avatar when Reset View is selected (hit ESC key)."/>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Allow the camera to move without constraints through prims"
+         layout="topleft"
+         left="30"
+         name="ignorecameraconstraints"
+         width="350"
+         control_name="FSIgnoreSimulatorCameraConstraints"
+         tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects."/>
+
+        <text
+         name="ignorecameraconstraints_requires_restart"
+         follows="left|top"
+         layout="topleft"
+         left_pad="10"
+         top_delta="0"
+         height="20"
+         width="130"
+         text_color="White_25">
+            (requires restart)
+        </text>
+
+        <check_box
+         top_pad="0"
+         follows="left|top"
+         height="16"
+         label="Show the default camera controls minifloater always as opaque"
+         layout="topleft"
+         left="30"
+         name="FSAlwaysOpaqueCameraControls"
+         width="350"
+         control_name="FSAlwaysOpaqueCameraControls"/>
+
+        <text
+         top_pad="4"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="15"
+         name="minimap_options_label"
+         width="200">
+         Minimap options:
+        </text>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Enable Minimap rotation"
+         layout="topleft"
+         left="30"
+         name="minimaprotate"
+         width="350"
+         control_name="MiniMapRotate"
+         tool_tip="Rotate miniature world map to avatar direction."/>
+
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="10"
+         layout="topleft"
+         left="35"
+         name="netmap_double_click_action_lbl"
+         width="150"
+         top_pad="4">
+         Double click on Minimap:
+        </text>
+        <combo_box
+         control_name="FSNetMapDoubleClickAction"
+         height="23"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-6"
+         name="netmap_double_click_action_combo"
+         width="200">
+            <combo_box.item
+             label="No action"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Open world map"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Teleport to clicked point"
+             name="2"
+             value="2"/>
+        </combo_box>
+
+        <slider
+         can_edit_text="true"
+         control_name="FSMinimapPickScale"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.5"
+         initial_value="1"
+         layout="topleft"
+         label="Pick scale:"
+         left="35"
+         label_width="150"
+         max_val="10"
+         min_val="0.5"
+         name="FSMinimapPickScale"
+         show_text="true"
+         tool_tip="Controls the radius of the pick range on the minimap"
+         width="360"
+         top_pad="5"/>
+
+        <text
+         top_pad="4"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="15"
+         name="world_map_options_label"
+         width="200">
+         World map options:
+        </text>
+        
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Filter duplicate Landmarks on World Map"
+         left="30"
+         name="WorldmapFilterDuplicateLandmarks"
+         width="270"
+         control_name="WorldmapFilterDuplicateLandmarks"
+         tool_tip="Filters duplicate Landmark entries in the Landmark list on the World Map."/>
+
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Show additional region information on World Map"
+         name="FSAdvancedWorldmapRegionInfo"
+         width="270"
+         control_name="FSAdvancedWorldmapRegionInfo"
+         tool_tip="Shows additional region infos on the world map (avatar count and maturity level)."/>
+        
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Show grid coordinates on the world map."
+         name="FSShowRegionGridCoordinates"
+         width="270"
+         control_name="FSShowRegionGridCoordinates"
+         tool_tip="Shows the grid coordinates (in units of regions) on the world map."/>
+
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Notify if the simulator version changes while changing the region"
+         left="15"
+         name="FSShowServerVersionChangeNotice"
+         width="270"
+         control_name="FSShowServerVersionChangeNotice"
+         tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."/>
+
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Show simulator channel in status bar"
+         name="FSStatusbarShowSimulatorVersion"
+         width="270"
+         control_name="FSStatusbarShowSimulatorVersion"
+         tool_tip="Shows the current simulator channel in the V1-like status bar."/>
+        
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Turn avatar around when walking backwards"
+         name="backwardsturnavatar"
+         width="270"
+         control_name="TurnAroundWhenWalkingBackwards"
+         tool_tip="Turns your avatar around to face the camera when you are walking backwards."/>
+        
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Turn avatar towards a selected object"
+         name="FSTurnAvatarToSelectedObject"
+         width="270"
+         control_name="FSTurnAvatarToSelectedObject"
+         tool_tip="Turns your avatar around to face the object you are currently selecting."/>
+	 </panel>
+</tab_container>
 </panel>

@@ -8,6 +8,10 @@
     focus_root="true" 
     top="600"
     width="1130">
+  <panel.string
+     name="real_url" translate="false">
+     http://phoenixviewer.com/app/loginV3/
+  </panel.string>
   <string name="reg_in_client_url" translate="false">
     http://secondlife.eniac15.lindenlab.com/reg-in-client/
   </string>
@@ -44,8 +48,8 @@
         follows="left|bottom"
         name="login"
         layout="topleft"
-        width="310"
-        min_width="310"
+        width="335"
+        min_width="335"
         height="80">
       <text
           follows="left|bottom"
@@ -69,26 +73,36 @@
           width="150">
         Username:
       </text>
-      <!-- STEAM-14: Turn off commit_on_focus_lost so if user presses Enter
-           with focus in this combo_box, we can use commit action to initiate
-           login -->
+      <button
+         follows="left|bottom"
+         height="18"
+         image_unselected="TrashItem_Off"
+         image_selected="TrashItem_Press"
+         image_pressed="TrashItem_Press"
+         tool_tip="Remove this username"
+         label=""
+         layout="topleft"
+         name="remove_user_btn"
+         left="195"
+         top_pad="0"
+         width="18" />
       <combo_box
           allow_text_entry="true"
           follows="left|bottom"
           height="22"
-          left_delta="0"
+          left="15"
           max_chars="128"
           commit_on_focus_lost="false"
           combo_editor.prevalidate_callback="ascii"
-          tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"
-          top_pad="0"
+tool_tip="The account name you chose when you registered, like bobsmith420 or Steller Sunshine"
+          top_delta="0"
           name="username_combo"
           width="178">
 <!-- empirically, displayed width is 150 anyway?!? -->
-        <combo_box.combo_button
+        <!--<combo_box.combo_button
             visible ="false"/>
         <combo_box.drop_down_button
-            visible ="false"/>
+            visible ="false"/>-->
       </combo_box>
 <!-- left="175" based on actual "username_combo" width of 150 vs. 178 -->
       <text
@@ -97,13 +111,10 @@
           height="16"
           name="password_text"
           top="35"
-          left="175"
-          width="150">
+          left="217"
+          width="128">
         Password:
       </text>
-      <!-- STEAM-14: Turn off commit_on_focus_lost so if user presses Enter
-           with focus in this line_editor, we can use commit action to
-           initiate login -->
       <line_editor
           follows="left|bottom"
           height="22"
@@ -113,7 +124,7 @@
           select_on_focus="true"
           commit_on_focus_lost="false"
           top_pad="0"
-          width="135" />
+          width="128" />
     </layout_panel>
     <layout_panel
         auto_resize="false"
@@ -143,11 +154,11 @@
           name="start_location_combo"
           width="165">
         <combo_box.item
-            label="My last location"
+label="Last location"
             name="MyLastLocation"
             value="last" />
         <combo_box.item
-            label="My home"
+label="Home"
             name="MyHome"
             value="home" />
         <combo_box.item
@@ -163,6 +174,16 @@
         width="145"
         height="80"
         visible="false">
+      <text
+        follows="left|bottom"
+        font="SansSerifSmall"
+        height="16"
+        name="grid_login_text"
+        top="35"
+        left="10"
+        width="128">
+        Log into Grid:
+      </text>
       <combo_box
           allow_text_entry="false"
           font="SansSerifSmall"
@@ -189,10 +210,10 @@
           text_color="EmphasisColor"
           left="10"
           height="16"
-          name="login_help"
-          top="19"
+          name="create_new_account_text"
+          top="10"
           width="280">
-        Need help logging in?
+        Create an account
       </text>
       <text
           follows="left|bottom"
@@ -200,18 +221,15 @@
           text_color="EmphasisColor"
           height="16"
           name="forgot_password_text"
-          top="35"
+          top="26"
           width="280">
         Forgot your username or password?
       </text>
       <button
           follows="left|bottom"
-          top_pad="0"
+          top_pad="9"
           height="23"
-          image_unselected="PushButton_On"
-          image_selected="PushButton_On_Selected"
           label="Log In"
-          label_color="White"
           layout="topleft"
           name="connect_btn"
           width="90" />
@@ -230,7 +248,7 @@
     <layout_panel
         tab_stop="false"
         follows="right|bottom"
-        name="links" 
+        name="mode_selection"
         width="210"
         min_width="100"
         height="80">
@@ -241,25 +259,43 @@
           font.size="Large"
           halign="right"
           height="16"
-          name="create_account_text"
+          name="mode_selection_text"
           top="8"
           right="-15"
           width="200">
-        CREATE YOUR ACCOUNT
+        SELECT MODE
       </text>
-      <button
+      <combo_box
           follows="right|bottom"
           top="35"
+          left_pad="10"
           right="-15"
           height="23"
-          image_unselected="PushButton_On"
-          image_selected="PushButton_On_Selected"
-          label="Start now"
-          label_color="White"
-          layout="topleft"
-          left_pad="10"
-          name="create_new_account_btn"
-          width="90" />
+          max_chars="128"
+          tool_tip="Select which style of viewer you are most familiar with to set your defaults to appropriately."
+          name="mode_combo"
+          width="110">
+           <combo_box.item
+            label="Firestorm"
+            name="Firestorm"
+            value="settings_firestorm.xml" />
+           <combo_box.item
+            label="Phoenix"
+            name="Phoenix"
+            value="settings_phoenix.xml" />
+           <combo_box.item
+            label="Viewer 3"
+            name="V3"
+            value="settings_v3.xml" />
+           <combo_box.item
+            label="Hybrid"
+            name="Hybrid"
+            value="settings_hybrid.xml" />
+           <combo_box.item
+            label="Latency"
+            name="Latency"
+            value="settings_latency.xml" />
+        </combo_box>
     </layout_panel>
   </layout_stack>
 </panel>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_web" label="Web">
+	<panel.string name="LoadTime" value="Tempo di caricamento: [TIME] secondi"/>
+    <flyout_button name="load" label="Carica" label_selected="Carica" tool_tip="Caricare questo profilo nel tuo web browser.">
+        <flyout_button.item label="Apri con browser incorporato" name="open_item" />
+        <flyout_button.item label="Apri con browser esterno" name="home_item" />
+    </flyout_button>
+        <flyout_button name="web_profile" label="Profilo" label_selected="Profilo">
+        <flyout_button.item label="Finestra" name="builtin_item" />
+        <flyout_button.item label="Apri con browser esterno" name="open_item" />
+    </flyout_button>
+</panel>

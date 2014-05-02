@@ -71,6 +71,10 @@ public:
                                                     text_pad_right,
                                                     arrow_size,
                                                     max_folder_item_overlap;
+
+		// <FS:Ansariel> Inventory specials
+		Optional<bool>								for_inventory;
+
 		Params();
 	};
 
@@ -100,8 +104,8 @@ protected:
     S32                         mLocalIndentation;
 	S32							mIndentation;
 	S32							mItemHeight;
-	S32							mDragStartX,
-								mDragStartY;
+//	S32							mDragStartX,
+//								mDragStartY;
 
     S32                         mLeftPad,
                                 mIconPad,
@@ -123,6 +127,9 @@ protected:
 	LLUIColor                   mFontColor;
 	LLUIColor                   mFontHighlightColor;
 
+	// <FS:Ansariel> Inventory specials
+	bool						mForInventory;
+
 	// For now assuming all colors are the same in derived classes.
 	static bool                 sColorSetInitialized;
 	static LLUIColor			sFgColor;
@@ -135,6 +142,8 @@ protected:
 	static LLUIColor			sFilterTextColor;
 	static LLUIColor			sSuffixColor;
 	static LLUIColor			sSearchStatusColor;
+	// <FS:Ansariel> Special for protected items
+	static LLUIColor			sProtectedColor;
 
 	// this is an internal method used for adding items to folders. A
 	// no-op at this level, but reimplemented in derived classes.
@@ -279,6 +288,11 @@ public:
 									void* cargo_data,
 									EAcceptance* accept,
 									std::string& tooltip_msg);
+
+	// <ND/> Don't bother with unneeded tooltips in inventor
+	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
+
+
 
 private:
 	static std::map<U8, LLFontGL*> sFonts; // map of styles to fonts

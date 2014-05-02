@@ -47,7 +47,7 @@ class LLPropertiesObserver;
 class LLFloaterProperties : public LLFloater
 {
 public:
-	LLFloaterProperties(const LLUUID& item_id);
+	LLFloaterProperties(const LLSD& key);
 	/*virtual*/ ~LLFloaterProperties();
 	
 	/*virtual*/ BOOL postBuild();

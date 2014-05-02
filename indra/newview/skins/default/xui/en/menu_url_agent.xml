@@ -6,8 +6,13 @@
      label="View Profile"
      layout="topleft"
      name="show_agent">
+        <!-- FS:Ansariel: FS-7263 - Make sure the agent profile is opened instead of the inspect panel
+        <menu_item_call.on_click
+         function="Url.Execute" /> -->
         <menu_item_call.on_click
          function="Url.ShowProfile" />         
+        <menu_item_call.on_enable
+         function="Url.EnableShowProfile" />
     </menu_item_call>
     <menu_item_call
      label="Send IM..."
@@ -15,6 +20,8 @@
      name="send_im">
         <menu_item_call.on_click
          function="Url.SendIM" />        
+        <menu_item_call.on_enable
+         function="Url.EnableSendIM" />
     </menu_item_call>
     <menu_item_call
      label="Add Friend..."
@@ -22,6 +29,60 @@
      name="add_friend">
         <menu_item_call.on_click
          function="Url.AddFriend" />
+        <menu_item_call.on_enable
+         function="Url.EnableAddFriend" />
+    </menu_item_call>
+    <menu_item_call
+     label="Add to Set..."
+     layout="topleft"
+     name="Add to Set">
+        <menu_item_call.on_click
+         function="FS.AddToContactSet" />
+    </menu_item_call>
+    <menu_item_call
+     label="Zoom at Resident"
+     layout="topleft"
+     name="zoom_agent">
+        <menu_item_call.on_click
+         function="FS.ZoomIn" />
+        <menu_item_call.on_enable
+         function="FS.EnableZoomIn" />
+    </menu_item_call>
+    <menu_item_call
+     label="Teleport to Resident"
+     layout="topleft"
+     name="teleportto_agent">
+        <menu_item_call.on_click
+         function="FS.TeleportToTarget" />
+        <menu_item_call.on_enable
+         function="FS.EnableTeleportToTarget" />
+    </menu_item_call>
+    <menu_item_call
+     label="Offer Teleport"
+     layout="topleft"
+     name="offer_teleport">
+        <menu_item_call.on_click
+         function="FS.OfferTeleport" />
+        <menu_item_call.on_enable
+         function="FS.EnableOfferTeleport" />
+    </menu_item_call>
+    <menu_item_call
+     label="Request Teleport"
+     layout="topleft"
+     name="request_teleport">
+        <menu_item_call.on_click
+         function="FS.RequestTeleport" />
+        <menu_item_call.on_enable
+         function="FS.EnableRequestTeleport" />
+    </menu_item_call>
+    <menu_item_call
+     label="Track Resident"
+     layout="topleft"
+     name="track_agent">
+        <menu_item_call.on_click
+         function="FS.TrackAvatar" />
+        <menu_item_call.on_enable
+         function="FS.EnableTrackAvatar" />
     </menu_item_call>
     <menu_item_call
      label="Remove Friend..."
@@ -29,6 +90,8 @@
      name="remove_friend">
         <menu_item_call.on_click
          function="Url.RemoveFriend" />
+        <menu_item_call.on_enable
+         function="Url.EnableRemoveFriend" />
         </menu_item_call>
     <menu_item_separator
      layout="topleft" />
@@ -40,7 +103,7 @@
          function="Url.CopyLabel" />
     </menu_item_call>
     <menu_item_call
-     label="Copy SLurl to clipboard"
+     label="Copy Url to clipboard"
      layout="topleft"
      name="url_copy">
         <menu_item_call.on_click

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_add_contact" title="Dodaj do Zestawu Kontaktów...">
+	<floater.string name="no_sets">
+		Brak dostępnych Zestawów Kontaktów.
+	</floater.string>
+	<floater.string name="text_add_single">
+		Wybierz, do którego Zestawu Kontaktów dodać [NAME]:
+	</floater.string>
+	<floater.string name="text_add_multiple">
+		Wybierz, do którego Zestawu Kontaktów dodać [COUNT] awatarów:
+	</floater.string>
+	<button label="Dodaj" name="add_btn" />
+	<button label="Anuluj" name="cancel_btn" />
+</floater>

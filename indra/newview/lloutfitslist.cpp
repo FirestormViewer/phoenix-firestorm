@@ -49,6 +49,8 @@
 #include "llvoavatarself.h"
 #include "llwearableitemslist.h"
 
+#include "llviewercontrol.h" // <FS:ND/> for gSavedSettings
+
 static bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y);
 
 static const LLOutfitTabNameComparator OUTFIT_TAB_NAME_COMPARATOR;
@@ -121,7 +123,9 @@ public:
 		registrar.add("Gear.Expand", boost::bind(&LLOutfitsList::expand_all_folders, mOutfitList));
 
 		registrar.add("Gear.WearAdd", boost::bind(&LLOutfitListGearMenu::onAdd, this));
-
+//-TT Patch: ReplaceWornItemsOnly
+		registrar.add("Gear.WearReplaceItems",boost::bind(&LLOutfitListGearMenu::onReplaceItems, this));
+//-TT 
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLOutfitListGearMenu::onEnable, this, _2));
 		enable_registrar.add("Gear.OnVisible", boost::bind(&LLOutfitListGearMenu::onVisible, this, _2));
 
@@ -180,6 +184,17 @@ private:
 		}
 	}
 
+//-TT Patch: ReplaceWornItemsOnly
+	void onReplaceItems()
+	{
+		const LLUUID& selected_id = getSelectedOutfitID();
+
+		if (selected_id.notNull())
+		{
+			//LLAppearanceMgr::getInstance()->replaceCategoryInCurrentOutfit(selected_id);
+		}
+	}
+//-TT
 	void onTakeOff()
 	{
 		// Take off selected outfit.
@@ -270,6 +285,10 @@ protected:
 			boost::bind(&LLAppearanceMgr::replaceCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
 		registrar.add("Outfit.WearAdd",
 			boost::bind(&LLAppearanceMgr::addCategoryToCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
+//-TT Patch: ReplaceWornItemsOnly
+		registrar.add("Outfit.WearReplaceItems",
+			boost::bind(&LLAppearanceMgr::replaceCategoryInCurrentOutfit, &LLAppearanceMgr::instance(), selected_id));
+//-TT 
 		registrar.add("Outfit.TakeOff",
 				boost::bind(&LLAppearanceMgr::takeOffOutfit, &LLAppearanceMgr::instance(), selected_id));
 		registrar.add("Outfit.Edit", boost::bind(editOutfit));
@@ -437,7 +456,33 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 	LLInventoryModel::item_array_t item_array;
 
 	// Collect all sub-categories of a given category.
-	LLIsType is_category(LLAssetType::AT_CATEGORY);
+
+	// <FS:ND> FIRE-6958/VWR-2862; Make sure to only collect folders of type FT_OUTFIT
+
+	class ndOutfitsCollector: public LLIsType
+	{
+	public:
+		ndOutfitsCollector()
+			: LLIsType( LLAssetType::AT_CATEGORY )
+		{ }
+
+		virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
+		{
+			if( !LLIsType::operator()( cat, item ) )
+				return false;
+
+			if( cat && LLFolderType::FT_OUTFIT == cat->getPreferredType() )
+				return true;
+
+			return false;
+		}
+	};
+
+	//	LLIsType is_category(LLAssetType::AT_CATEGORY);
+	ndOutfitsCollector is_category;
+
+	// </FS:ND>
+	
 	gInventory.collectDescendentsIf(
 		category_id,
 		cat_array,
@@ -450,6 +495,18 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 
 	// Create added and removed items vectors.
 	computeDifference(cat_array, vadded, vremoved);
+
+	// <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
+	if( vadded.size() > 128 )
+		llwarns << "Large amount of outfits found: " << vadded.size() << " this may cause hangs and disconnects" << llendl;
+
+	U32 nCap = gSavedSettings.getU32( "FSDisplaySavedOutfitsCap" );
+	if( nCap && nCap < vadded.size() )
+	{
+		vadded.resize( nCap );
+		llwarns << "Capped outfits to " << nCap << " due to debug setting FSDisplaySavedOutfitsCap" << llendl;
+	}
+	// </FS:ND>
 
 	// Handle added tabs.
 	for (uuid_vec_t::const_iterator iter = vadded.begin();
@@ -474,7 +531,11 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 
 		// *TODO: LLUICtrlFactory::defaultBuilder does not use "display_children" from xml. Should be investigated.
 		tab->setDisplayChildren(false);
-		mAccordion->addCollapsibleCtrl(tab);
+
+		// <FS:ND> Calling this when there's a lot of outfits causes horrible perfomance and disconnects, due to arrange eating so many cpu cycles.
+		// mAccordion->addCollapsibleCtrl(tab);
+		mAccordion->addCollapsibleCtrl(tab, false );
+		// </FS:ND>	
 
 		// Start observing the new outfit category.
 		LLWearableItemsList* list  = tab->getChild<LLWearableItemsList>("wearable_items_list");
@@ -533,6 +594,10 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 			list->setFilterSubString(sFilterSubString);
 		}
 	}
+
+	// <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
+	mAccordion->arrange();
+	// </FS:ND>
 
 	// Handle removed tabs.
 	for (uuid_vec_t::const_iterator iter=vremoved.begin(); iter != vremoved.end(); ++iter)
@@ -619,6 +684,11 @@ void LLOutfitsList::performAction(std::string action)
 	if ("replaceoutfit" == action)
 	{
 		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, FALSE );
+	}
+	if ("replaceitems" == action)
+	{
+		llinfos << "replaceitems" << llendl;
+		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, TRUE );
 	}
 	else if ("addtooutfit" == action)
 	{

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ height="360"
+ width="380"
+ layout="topleft"
+ can_resize="false"
+ legacy_header_height="18"
+ name="floater_fs_contact_set_configure"
+ title="Contact set settings">
+    <floater.string
+     name="title">
+    [NAME] settings
+    </floater.string>
+    <panel
+     name="top_panel"
+     top="18"
+     left="0"
+     height="80"
+     width="380"
+     border_visible="true"
+     bevel_style="none">
+    <text
+     top="10"
+     follows="left|top"
+     layout="topleft"
+     left="10"
+     height="12"
+     name="set_label">
+Contact Set Settings:
+    </text>
+    <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="55"
+     label="Set Color"
+     top_pad="8"
+     left_delta="4"
+     name="set_swatch"
+     tool_tip="Click to open Color Picker"
+     width="65" />
+    <check_box
+     height="16"
+     label="Show notifications"
+     layout="topleft"
+     left_pad="4"
+     initial_value="false"
+     name="show_set_notifications"
+     top_delta="0"
+     width="400" />
+    </panel>
+    <panel
+     name="bottom_panel"
+     top_pad="0"
+     height="260"
+     width="380"
+     border_visible="true"
+     bevel_style="none">
+    <text
+     top="10"
+     follows="left|top"
+     layout="topleft"
+     left="10"
+     height="12"
+     name="global_label">
+Global Settings:
+    </text>
+    <color_swatch
+     can_apply_immediately="true"
+     follows="left|top"
+     height="55"
+     label="Default Set Color"
+     top_pad="8"
+     left_delta="4"
+     name="global_swatch"
+     tool_tip="Click to open Color Picker"
+     width="100" />
+    <text
+     top_pad="-2"
+     follows="left|top"
+     height="16"
+     left="15"
+     name="label_online"
+     width="200">
+Online notifications:
+    </text>
+    <check_box
+     top_pad="4"
+     follows="left|top"
+     height="12"
+     label="Show Online Notices for ALL friends as toasts"
+     left_delta="5"
+     name="ChatOnlineNotification"
+     width="270"
+     control_name="ChatOnlineNotification"/>
+    <check_box
+     follows="left|top"
+     height="12"
+     label="Show Online Notices for ALL friends in nearby chat"
+     name="OnlineOfflinetoNearbyChat"
+     width="270"
+     control_name="OnlineOfflinetoNearbyChat"/>
+    <check_box
+     disabled_control="ChatOnlineNotification"
+     follows="left|top"
+     height="12"
+     label="Show Online Notices for certain Sets as toast"
+     name="FSContactSetsNotificationToast"
+     width="270"
+     control_name="FSContactSetsNotificationToast"/>
+    <check_box
+     disabled_control="OnlineOffLinetoNearbyChat"
+     follows="left|top"
+     height="12"
+     label="Show Online Notices for certain Sets in nearby chat"
+     name="FSContactSetsNotificationNearbyChat"
+     width="270"
+     control_name="FSContactSetsNotificationNearbyChat"/>
+    <text
+     top_pad="8"
+     follows="left|top"
+     height="16"
+     left="15"
+     name="label_colors"
+     width="200">
+Custom Colors:
+    </text>
+    <check_box
+     top_pad="4"
+     follows="left|top"
+     height="12"
+     label="Color mini map icon based on their Contact Set"
+     left_delta="5"
+     name="FSContactSetsColorizeMiniMap"
+     width="270"
+     control_name="FSContactSetsColorizeMiniMap"/>
+    <check_box
+     follows="left|top"
+     height="12"
+     label="Color name tag based on their Contact Set"
+     name="FSContactSetsColorizeNameTag"
+     width="270"
+     control_name="FSContactSetsColorizeNameTag"/>
+    <check_box
+     follows="left|top"
+     height="12"
+     label="Color radar list entry based on their Contact Set"
+     name="FSContactSetsColorizeRadar"
+     width="270"
+     control_name="FSContactSetsColorizeRadar"/>
+    <check_box
+     follows="left|top"
+     height="12"
+     initial_value="false"
+     label="Color chat based on their Contact Set"
+     name="FSContactSetsColorizeChat"
+     width="270"
+     control_name="FSContactSetsColorizeChat"/>
+    </panel>
+</floater>

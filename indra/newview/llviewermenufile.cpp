@@ -79,6 +79,8 @@
 // system libraries
 #include <boost/tokenizer.hpp>
 
+#include "llinventorydefines.h"
+
 class LLFileEnableUpload : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -125,7 +127,10 @@ void LLFilePickerThread::getFile()
 }
 
 //virtual 
-void LLFilePickerThread::run()
+// <FS:CR Threaded Filepickers>
+//void LLFilePickerThread::run()
+void LLLoadFilePickerThread::run()
+// </FS:CR Threaded Filepickers>
 {
 	LLFilePicker picker;
 #if LL_WINDOWS
@@ -146,6 +151,43 @@ void LLFilePickerThread::run()
 	}
 
 }
+
+// <FS:CR Threaded Filepickers>
+//virtual 
+void LLSaveFilePickerThread::run()
+{
+	LLFilePicker picker;
+#if LL_WINDOWS
+	if (picker.getSaveFile(mFilter, mDefaultFilename, false))
+	{
+		mFile = picker.getFirstFile();
+	}
+#else
+	if (picker.getSaveFile(mFilter, mDefaultFilename, true))
+	{
+		mFile = picker.getFirstFile();
+	}
+#endif
+
+	{
+		LLMutexLock lock(sMutex);
+		sDeadQ.push(this);
+	}
+
+}
+
+//virtual
+void LLGenericLoadFilePicker::notify(const std::string& filename)
+{
+	mSignal(filename);
+}
+
+//virtual
+void LLGenericSaveFilePicker::notify(const std::string& filename)
+{
+	mSignal(filename);
+}
+// </FS:CR Threaded Filepickers>
 
 //static
 void LLFilePickerThread::initClass()
@@ -231,6 +273,12 @@ std::string build_extensions_string(LLFilePicker::ELoadFilter filter)
    returns the string to the full path filename, else returns NULL.
    Data is the load filter for the type of file as defined in LLFilePicker.
 **/
+
+// <FS:CR Threaded Filepickers>
+//! upload_pick has been superceded by threaded filepickers
+#if 0
+// </FS:CR Threaded Filepickers>
+
 const std::string upload_pick(void* data)
 {
  	if( gAgentCamera.cameraMouselook() )
@@ -338,16 +386,128 @@ const std::string upload_pick(void* data)
 	
 	return filename;
 }
+// <FS:CR Threaded Filepickers>
+#endif
+
+// <FS:Ansariel> Add back validation checks for threaded filepickers
+//static void show_floater_callback(const std::string& floater, const std::string& filename)
+static void show_floater_callback(const std::string& floater, const std::string& filename, LLFilePicker::ELoadFilter type)
+// </FS:Ansariel>
+{
+	if (!filename.empty() && !floater.empty())
+	{
+		// <FS:Ansariel> Add back validation checks for threaded filepickers;
+		//               Copied from upload_pick()
+		std::string ext = gDirUtilp->getExtension(filename);
+
+		//strincmp doesn't like NULL pointers
+		if (ext.empty())
+		{
+			std::string short_name = gDirUtilp->getBaseFileName(filename);
+		
+			// No extension
+			LLSD args;
+			args["FILE"] = short_name;
+			LLNotificationsUtil::add("NoFileExtension", args);
+			return;
+		}
+		else
+		{
+			//so there is an extension
+			//loop over the valid extensions and compare to see
+			//if the extension is valid
+
+			//now grab the set of valid file extensions
+			std::string valid_extensions = build_extensions_string(type);
+
+			BOOL ext_valid = FALSE;
+		
+			typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+			boost::char_separator<char> sep(" ");
+			tokenizer tokens(valid_extensions, sep);
+			tokenizer::iterator token_iter;
+
+			//now loop over all valid file extensions
+			//and compare them to the extension of the file
+			//to be uploaded
+			for( token_iter = tokens.begin();
+				 token_iter != tokens.end() && ext_valid != TRUE;
+				 ++token_iter)
+			{
+				const std::string& cur_token = *token_iter;
+
+				if (cur_token == ext || cur_token == "*.*")
+				{
+					//valid extension
+					//or the acceptable extension is any
+					ext_valid = TRUE;
+				}
+			}//end for (loop over all tokens)
+
+			if (ext_valid == FALSE)
+			{
+				//should only get here if the extension exists
+				//but is invalid
+				LLSD args;
+				args["EXTENSION"] = ext;
+				args["VALIDS"] = valid_extensions;
+				LLNotificationsUtil::add("InvalidFileExtension", args);
+				return;
+			}
+		}//end else (non-null extension)
+
+		//valid file extension
+	
+		//now we check to see
+		//if the file is actually a valid image/sound/etc.
+		if (type == LLFilePicker::FFLOAD_WAV)
+		{
+			// pre-qualify wavs to make sure the format is acceptable
+			std::string error_msg;
+			if (check_for_invalid_wav_formats(filename,error_msg))
+			{
+				llinfos << error_msg << ": " << filename << llendl;
+				LLSD args;
+				args["FILE"] = filename;
+				LLNotificationsUtil::add( error_msg, args );
+				return;
+			}
+		}//end if a wave/sound file
+		// </FS:Ansariel>
+
+		LLFloaterReg::showInstance(floater, LLSD(filename));
+	}
+}
+
+static void show_floater_anim_callback(const std::string& filename)
+{
+	if (!filename.empty())
+	{
+		if (filename.rfind(".anim") != std::string::npos)
+		{
+			LLFloaterReg::showInstance("upload_anim_anim", LLSD(filename));
+		}
+		else
+		{
+			LLFloaterReg::showInstance("upload_anim_bvh", LLSD(filename));
+		}
+	}
+}
+
+// </FS:CR Threaded Filepickers>
 
 class LLFileUploadImage : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		std::string filename = upload_pick((void *)LLFilePicker::FFLOAD_IMAGE);
-		if (!filename.empty())
-		{
-			LLFloaterReg::showInstance("upload_image", LLSD(filename));
-		}
+// <FS:CR Threaded Filepickers>
+		//std::string filename = upload_pick((void *)LLFilePicker::FFLOAD_IMAGE);
+		//if (!filename.empty())
+		//{
+		//	LLFloaterReg::showInstance("upload_image", LLSD(filename));
+		//}
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_IMAGE, boost::bind(&show_floater_callback, "upload_image", _1, LLFilePicker::FFLOAD_IMAGE)))->getFile();
+// </FS:CR Threaded Filepickers>
 		return TRUE;
 	}
 };
@@ -370,11 +530,14 @@ class LLFileUploadSound : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_WAV);
-		if (!filename.empty())
-		{
-			LLFloaterReg::showInstance("upload_sound", LLSD(filename));
-		}
+// <FS:CR Threaded Filepickers>
+		//std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_WAV);
+		//if (!filename.empty())
+		//{
+		//	LLFloaterReg::showInstance("upload_sound", LLSD(filename));
+		//}
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_WAV, boost::bind(&show_floater_callback, "upload_sound", _1, LLFilePicker::FFLOAD_WAV)))->getFile();
+// </FS:CR Threaded Filepickers>
 		return true;
 	}
 };
@@ -383,18 +546,24 @@ class LLFileUploadAnim : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		const std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_ANIM);
-		if (!filename.empty())
-		{
-			if (filename.rfind(".anim") != std::string::npos)
-			{
-				LLFloaterReg::showInstance("upload_anim_anim", LLSD(filename));
-			}
-			else
-			{
-				LLFloaterReg::showInstance("upload_anim_bvh", LLSD(filename));
-			}
-		}
+// <FS:CR Threaded Filepickers>
+		/// This logic has been moved to show_floater_anim_callback to conform
+		/// with the rest of the threaded filepickers. -CR
+		//
+		//const std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_ANIM);
+		//if (!filename.empty())
+		//{
+		//	if (filename.rfind(".anim") != std::string::npos)
+		//	{
+		//		LLFloaterReg::showInstance("upload_anim_anim", LLSD(filename));
+		//	}
+		//	else
+		//	{
+		//		LLFloaterReg::showInstance("upload_anim_bvh", LLSD(filename));
+		//	}
+		//}
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_ANIM, boost::bind(&show_floater_anim_callback,_1)))->getFile();
+// </FS:CR Threaded Filepickers>
 		return true;
 	}
 };
@@ -460,6 +629,17 @@ class LLFileUploadBulk : public view_listener_t
 		return true;
 	}
 };
+
+// <FS:CR> Import Linkset
+class FSFileImportLinkset : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_IMPORT, boost::bind(&show_floater_callback, "fs_import", _1, LLFilePicker::FFLOAD_IMPORT)))->getFile();
+		return TRUE;
+	}
+};
+// </FS:CR>
 
 void upload_error(const std::string& error_message, const std::string& label, const std::string& filename, const LLSD& args) 
 {
@@ -811,6 +991,21 @@ LLUUID upload_new_resource(
 		asset_type = LLAssetType::AT_ANIMATION;
 		filename = src_filename;
 	}
+	else if (exten == "anim")
+	{
+		asset_type = LLAssetType::AT_ANIMATION;
+		filename = src_filename;
+	}
+	else if (exten == "ogg")
+	{
+		asset_type = LLAssetType::AT_SOUND;
+		filename = src_filename;
+	}
+	else if (exten == "j2k")
+	{
+		asset_type = LLAssetType::AT_TEXTURE;
+		filename = src_filename;
+	}
 	else
 	{
 		// Unknown extension
@@ -1014,6 +1209,54 @@ void upload_done_callback(
 	}
 }
 
+void temp_upload_done_callback(const LLUUID& uuid, void* user_data, S32 result, LLExtStat ext_status)
+{
+	LLResourceData* data = (LLResourceData*)user_data;
+	if (result >= 0)
+	{
+		LLFolderType::EType dest_loc = (data->mPreferredLocation == LLFolderType::FT_NONE) ? LLFolderType::assetTypeToFolderType(data->mAssetInfo.mType) : data->mPreferredLocation;
+		LLUUID folder_id(gInventory.findCategoryUUIDForType(dest_loc));
+		LLUUID item_id;
+		item_id.generate();
+		LLPermissions perm;
+		perm.init(gAgentID, gAgentID, gAgentID, gAgentID);
+		perm.setMaskBase(PERM_ALL);
+		perm.setMaskOwner(PERM_ALL);
+		perm.setMaskEveryone(PERM_ALL);
+		perm.setMaskGroup(PERM_ALL);
+		LLPointer<LLViewerInventoryItem> item = new LLViewerInventoryItem(item_id, folder_id, perm,
+													data->mAssetInfo.mTransactionID.makeAssetID(gAgent.getSecureSessionID()),
+													data->mAssetInfo.mType, data->mInventoryType, data->mAssetInfo.getName(),
+													"Temporary asset", LLSaleInfo::DEFAULT, LLInventoryItemFlags::II_FLAGS_NONE,
+													time_corrected());
+		item->updateServer(TRUE);
+		gInventory.updateItem(item);
+		gInventory.notifyObservers();
+		LLFloaterReg::showInstance("preview_texture", LLSD(item_id), TRUE);
+
+		//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+		// Let the Snapshot floater know we have finished uploading a snapshot to inventory.
+		LLFloater* floater_snapshot = LLFloaterReg::findInstance("snapshot");
+		if (data->mAssetInfo.mType == LLAssetType::AT_TEXTURE && floater_snapshot)
+		{
+			floater_snapshot->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "inventory")));
+		}
+		//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+
+//		open_texture(item_id, std::string("Texture: ") + item->getName(), TRUE, LLUUID::null, FALSE);
+	}
+	else
+	{
+		LLSD args;
+		args["FILE"] = LLInventoryType::lookupHumanReadable(data->mInventoryType);
+		args["REASON"] = std::string(LLAssetStorage::getErrorString(result));
+		LLNotificationsUtil::add("CannotUploadReason", args);
+	}
+
+	LLUploadDialog::modalUploadFinished();
+	delete data;
+}
+
 static LLAssetID upload_new_resource_prep(
 	const LLTransactionID& tid,
 	LLAssetType::EType asset_type,
@@ -1084,7 +1327,8 @@ void upload_new_resource(
 	{
 		return ;
 	}
-	
+
+	BOOL temp_upload = FALSE;
 	LLAssetID uuid = 
 		upload_new_resource_prep(
 			tid,
@@ -1102,6 +1346,14 @@ void upload_new_resource(
 	if( LLAssetType::AT_TEXTURE == asset_type )
 	{
 		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_UPLOAD_TEXTURE_COUNT );
+// <FS:CR> Temporary Texture Uploads
+		temp_upload = gSavedSettings.getBOOL("TemporaryUpload");
+		if (temp_upload)
+		{
+			name = "[temp] " + name;
+			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+		}
+// </FS:CR>
 	}
 	else
 	if( LLAssetType::AT_ANIMATION == asset_type)
@@ -1141,7 +1393,7 @@ void upload_new_resource(
 	std::string url = gAgent.getRegion()->getCapability(
 		"NewFileAgentInventory");
 
-	if ( !url.empty() )
+	if (!url.empty() && !temp_upload)
 	{
 		llinfos << "New Agent Inventory via capability" << llendl;
 
@@ -1166,6 +1418,8 @@ void upload_new_resource(
 	}
 	else
 	{
+		if (!temp_upload)
+		{
 		llinfos << "NewAgentInventory capability not found, new agent inventory via asset system." << llendl;
 		// check for adequate funds
 		// TODO: do this check on the sim
@@ -1184,6 +1438,7 @@ void upload_new_resource(
 				return;
 			}
 		}
+		}
 
 		LLResourceData* data = new LLResourceData;
 		data->mAssetInfo.mTransactionID = tid;
@@ -1198,7 +1453,7 @@ void upload_new_resource(
 		data->mAssetInfo.setDescription(desc);
 		data->mPreferredLocation = destination_folder_type;
 
-		LLAssetStorage::LLStoreAssetCallback asset_callback = &upload_done_callback;
+		LLAssetStorage::LLStoreAssetCallback asset_callback = temp_upload ? &temp_upload_done_callback : &upload_done_callback;
 		if (callback)
 		{
 			asset_callback = callback;
@@ -1208,7 +1463,9 @@ void upload_new_resource(
 			data->mAssetInfo.mType,
 			asset_callback,
 			(void*)data,
-			FALSE);
+			temp_upload,
+			TRUE,
+			temp_upload);
 	}
 }
 
@@ -1294,6 +1551,7 @@ void init_menu_file()
 	view_listener_t::addEnable(new LLFileEnableUploadModel(), "File.EnableUploadModel");
 	view_listener_t::addMenu(new LLMeshEnabled(), "File.MeshEnabled");
 	view_listener_t::addMenu(new LLMeshUploadVisible(), "File.VisibleUploadModel");
+	view_listener_t::addCommit(new FSFileImportLinkset(), "File.ImportLinkset");	// <FS:CR> Import linkset item
 
 	// "File.SaveTexture" moved to llpanelmaininventory so that it can be properly handled.
 }

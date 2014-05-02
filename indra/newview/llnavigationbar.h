@@ -27,7 +27,9 @@
 #ifndef LL_LLNAVIGATIONBAR_H
 #define LL_LLNAVIGATIONBAR_H
 
-#include "llpanel.h"
+// <FS:Zi> Make navigation bar part of the UI
+// #include "llpanel.h"
+// </FS:Zi>
 #include "llbutton.h"
 
 class LLLocationInputCtrl;
@@ -81,7 +83,10 @@ protected:
  * Web browser-like navigation bar.
  */ 
 class LLNavigationBar
-	:	public LLPanel, public LLSingleton<LLNavigationBar>, private LLDestroyClass<LLNavigationBar>
+// <FS:Zi> Make navigation bar part of the UI
+	// :	public LLPanel, public LLSingleton<LLNavigationBar>, private LLDestroyClass<LLNavigationBar>
+	:	public LLSingleton<LLNavigationBar>
+// </FS:Zi>
 {
 	LOG_CLASS(LLNavigationBar);
 	friend class LLDestroyClass<LLNavigationBar>;
@@ -90,20 +95,24 @@ public:
 	LLNavigationBar();
 	virtual ~LLNavigationBar();
 	
-	/*virtual*/ void	draw();
-	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
-	/*virtual*/ BOOL	postBuild();
-	/*virtual*/ void	setVisible(BOOL visible);
+	// <FS:Zi> Make navigation bar part of the UI
+	// /*virtual*/ void	draw();
+	// /*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	// /*virtual*/ BOOL	postBuild();
+	// </FS:Zi>
+//	/*virtual*/ void	setVisible(BOOL visible); // <FS:Zi> Is done inside XUI now, using visibility_control
 
 	void handleLoginComplete();
 	void clearHistoryCache();
 
-	int getDefNavBarHeight();
-	int getDefFavBarHeight();
+// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+// 	int getDefNavBarHeight();
+// 	int getDefFavBarHeight();
+// </FS:Zi>
 	
 private:
 	// the distance between navigation panel and favorites panel in pixels
-	const static S32 FAVBAR_TOP_PADDING = 10;
+	// const static S32 FAVBAR_TOP_PADDING = 10;	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
 
 	void rebuildTeleportHistoryMenu();
 	void showTeleportHistoryMenu(LLUICtrl* btn_ctrl);
@@ -111,13 +120,19 @@ private:
 	// callbacks
 	void onTeleportHistoryMenuItemClicked(const LLSD& userdata);
 	void onTeleportHistoryChanged();
-	void onBackButtonClicked();
+	// [FS:CR] FIRE-12333
+	//void onBackButtonClicked();
+	void onBackButtonClicked(LLUICtrl* ctrl);
 	void onBackOrForwardButtonHeldDown(LLUICtrl* ctrl, const LLSD& param);
 	void onNavigationButtonHeldUp(LLButton* nav_button);
-	void onForwardButtonClicked();
-	void onHomeButtonClicked();
+	// [FS:CR] FIRE-12333
+	//void onForwardButtonClicked();
+	//void onHomeButtonClicked();
+	void onForwardButtonClicked(LLUICtrl* ctrl);
+	void onHomeButtonClicked(LLUICtrl* ctrl);
 	void onLocationSelection();
 	void onLocationPrearrange(const LLSD& data);
+	void onSearchCommit();
 	void onTeleportFinished(const LLVector3d& global_agent_pos);
 	void onTeleportFailed();
 	void onRegionNameResponse(
@@ -127,26 +142,47 @@ private:
 			U64 region_handle, const std::string& url,
 			const LLUUID& snapshot_id, bool teleport);
 
-	static void destroyClass()
-	{
-		if (LLNavigationBar::instanceExists())
-		{
-			LLNavigationBar::getInstance()->setEnabled(FALSE);
-		}
-	}
+	void fillSearchComboBox();
+	
+	void onClickedSkyBtn();	// <FS:CR> FIRE-11847
+
+	// <FS:Zi> Make navigation bar part of the UI
+	// static void destroyClass()
+	// {
+	// 	if (LLNavigationBar::instanceExists())
+	// 	{
+	// 		LLNavigationBar::getInstance()->setEnabled(FALSE);
+	// 	}
+	// }
+	// </FS:Zi>
 
 	LLMenuGL*					mTeleportHistoryMenu;
 	LLPullButton*				mBtnBack;
 	LLPullButton*				mBtnForward;
 	LLButton*					mBtnHome;
+	LLSearchComboBox*			mSearchComboBox;
 	LLLocationInputCtrl*		mCmbLocation;
-	LLRect						mDefaultNbRect;
-	LLRect						mDefaultFpRect;
+	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+	//LLRect						mDefaultNbRect;
+	//LLRect						mDefaultFpRect;
+	// </FS:Zi>
 	boost::signals2::connection	mTeleportFailedConnection;
 	boost::signals2::connection	mTeleportFinishConnection;
 	boost::signals2::connection	mHistoryMenuConnection;
 	// if true, save location to location history when teleport finishes
 	bool						mSaveToLocationHistory;
+
+// <FS:Zi> Make navigation bar part of the UI
+public:
+	void clearHistory();
+	LLView* getView();		// for RLVa to disable "Home" button
+
+protected:
+	void onRightMouseDown(S32 x,S32 y,MASK mask);
+	void setupPanel();
+
+	LLView* mView;
+// </FS:Zi>
 };
 
 #endif

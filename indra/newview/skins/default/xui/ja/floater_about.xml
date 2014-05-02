@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_about" title="[CAPITALIZED_APP_NAME] について">
+<floater name="floater_about" title="[APP_NAME] について">
 	<floater.string name="AboutHeader">
-		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL])
+		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
 [[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 	</floater.string>
 	<floater.string name="AboutCompiler">
@@ -27,6 +27,7 @@ OS バージョン： [OS_VERSION]
 	<floater.string name="AboutLibs">
 		OpenGL バージョン： [OPENGL_VERSION]
 
+RestrainedLove API: [RLV_VERSION]
 libcurl バージョン： [LIBCURL_VERSION]
 J2C デコーダバージョン： [J2C_VERSION]
 オーディオドライババージョン： [AUDIO_DRIVER_VERSION]
@@ -44,15 +45,18 @@ Qt Webkit バージョン： [QT_WEBKIT_VERSION]
 	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="情報" name="support_panel">
+	    <text name="support_intro">    
+For the latest information about Firestorm, visit    
+http://www.firestormviewer.org
+    	</text>
 			<button label="クリップボードにコピー" name="copy_btn"/>
 		</panel>
 		<panel label="クレジット" name="credits_panel">
 			<text name="linden_intro">
-				Second Life の提供元： Lindens の：
+			Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
+
+Second Life の提供元： Lindens の：
 			</text>
-			<text_editor name="linden_names">
-				Philip, Andrew, Doug, Richard, Phoenix, Ian, Mark, Robin, Dan, Char, Ryan, Eric, Jim, Lee, Jeff, Michael, Kelly, Steve, Catherine, Bub, Ramzi, Jill, Jeska, Don, Kona, Callum, Charity, Jack, Shawn, babbage, James, Lauren, Blue, Brent, Reuben, Pathfinder, Jesse, Patsy, Torley, Bo, Cyn, Jonathan, Gia, Annette, Ginsu, Harry, Lex, Runitai, Guy, Cornelius, Beth, Swiss, Thumper, Wendy, Teeple, Seth, Dee, Mia, Sally, Liana, Aura, Beez, Milo, Red, Gulliver, Marius, Joe, Jose, Dore, Justin, Nora, Morpheus, Lexie, Amber, Chris, Xan, Leyla, Walker, Sabin, Joshua, Hiromi, Tofu, Fritz, June, Jean, Ivy, Dez, Ken, Betsy, Which, Spike, Rob, Zee, Dustin, George, Claudia, del, Matthew, jane, jay, Adrian, Yool, Rika, Yoz, siobhan, Qarl, Benjamin, Beast, Everett, madhavi, Christopher, Izzy, stephany, Jeremy, sean, adreanne, Pramod, Tobin, sejong, Iridium, maurice, kj, Meta, kari, JP, bert, kyle, Jon, Socrates, Bridie, Ivan, maria, Aric, Coco, Periapse, sandy, Storrs, Lotte, Colossus, Brad, Pastrami, Zen, BigPapi, Banzai, Sardonyx, Mani, Garry, Jaime, Neuro, Samuel, Niko, CeeLo, Austin, Soft, Poppy, emma, tessa, angelo, kurz, alexa, Sue, CG, Blake, Erica, Brett, Bevis, kristen, Q, simon, Enus, MJ, laurap, Kip, Scouse, Ron, Ram, kend, Marty, Prospero, melissa, kraft, Nat, Seraph, Hamilton, Lordan, Green, miz, Ashlei, Trinity, Ekim, Echo, Charlie, Rowan, Rome, Jt, Doris, benoc, Christy, Bao, Kate, Tj, Patch, Cheah, Johan, Brandy, Angela, Oreh, Cogsworth, Lan, Mitchell, Space, Bambers, Einstein, Bender, Malbers, Matias, Maggie, Rothman, Milton, Niall, Marin, Allison, Mango, Andrea, Katt, Yi, Ambroff, Rico, Raymond, Gail, Christa, William, Dawn, Usi, Dynamike, M, Corr, Dante, Molly, kaylee, Danica, Kelv, Lil, jacob, Nya, Rodney, elsie, Blondin, Grant, Nyx, Devin, Monty, Minerva, Keira, Katie, Jenn, Makai, Clare, Joy, Cody, Gayathri, FJ, spider, Oskar, Landon, Jarv, Noelle, Al, Doc, Gray, Vir, t, Maestro, Simone, Shannon, yang, Courtney, Scott, charlene, Quixote, Susan, Zed, Amanda, Katelin, Esbee, JoRoan, Enkidu, roxie, Scarlet, Merov, Kevin, Judy, Rand, Newell, Les, Dessie, Galen, Michon, Geo, Siz, Calyle, Pete, Praveen, Callen, Sheldon, Pink, Nelson, jenelle, Terrence, Nathan, Juan, Sascha, Huseby, Karina, Kaye, Kotler, Lis, Darv, Charrell, Dakota, Kimmora, Theeba, Taka, Mae, Perry, Ducot, dana, Esther, Dough, gisele, Doten, Viale, Fisher, jessieann, ashley, Torres, delby, rountree, kurt, Slaton, Madison, Rue, Gino, Wen, Casssandra, Brodesky, Squid, Gez, Rakesh, Gecko, Ladan, Tony, Tatem, Squire, Falcon, BK, Crimp, Tiggs, Bacon, Coyot, Carmilla, Webb, Sea, Arch, Jillian, Jason, Bernard, Vogt, Peggy, dragon, Pup, xandix, Wallace, Bewest, Inoshiro, Rhett, AG, Aimee, Ghengis, Itiaes, Eli, Steffan, Epic, Grapes, Stone, Prep, Scobu, Robert, Alain, Carla, Vicky, Tia, Alec, Taras, Lisa, Oz, Ariane, Log, House, Kazu, Kim, Drofnas, Tyler, Campbell, Michele, Madeline, Nelly, Baron, Thor, Lori, Hele, Fredrik, Teddy, Pixie, Berry, Gabrielle, Alfonso, Brooke, Wolf, Ringo, Cru, Charlar, Rodvik, Gibson, Elise, Bagman, Greger, Leonidas, Jerm, Leslie, CB, Brenda, Durian, Carlo, mm, Zeeshan, Caleb, Max, Elikak, Mercille, Steph, Chase
-			</text_editor>
 			<text name="contrib_intro">
 				オープンソースの提供：
 			</text>
@@ -74,11 +78,13 @@ Collada DOM Copyright 2006 Sony Computer Entertainment Inc.
 cURL Copyright (C) 1996-2010, Daniel Stenberg, (daniel@haxx.se)
 DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
 expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
+FMOD Sound System Copyright (C) Firelight Technologies Pty, Ltd., 1994-2013
 FreeType Copyright (C) 1996-2002, 2006 David Turner, Robert Wilhelm, and Werner Lemberg.
 GL Copyright (C) 1999-2004 Brian Paul.
 GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University and David Luebke, Brenden Schubert, University of Virginia.
 google-perftools Copyright (c) 2005, Google Inc.
 Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
+HACD Copyright (C) 2011, Khaled Mamou (kmamou@gmail.com)
 jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
 jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
 ogg/vorbis Copyright (C) 2002, Xiphophorus

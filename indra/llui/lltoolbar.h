@@ -104,6 +104,14 @@ private:
 							mOriginalLabelColorSelected,
 							mOriginalImageOverlayColor,
 							mOriginalImageOverlaySelectedColor;
+
+// <FS:Zi> Helper function and member variable to make equalize layout work
+public:
+	S32 getInitialWidth() const;
+
+private:
+	S32				mInitialWidth;
+// </FS:Zi>
 };
 
 
@@ -113,6 +121,7 @@ namespace LLToolBarEnums
 	{
 		BTNTYPE_ICONS_WITH_TEXT = 0,
 		BTNTYPE_ICONS_ONLY,
+		BTNTYPE_TEXT_ONLY,	// <FS:Zi> Add text only button
 
 		BTNTYPE_COUNT
 	};
@@ -139,6 +148,25 @@ namespace LLToolBarEnums
 	};
 
 	LLLayoutStack::ELayoutOrientation getOrientation(SideType sideType);
+
+	// <FS:Zi> Add alignment settings
+	enum Alignment
+	{
+		ALIGN_START,	// left (horizontal), top (vertical)
+		ALIGN_END,		// right (horizontal), bottom (vertical)
+		ALIGN_CENTER
+	};
+	// </FS:Zi>
+
+	// <FS:Zi> Add equalize and fill layout styles
+	enum LayoutStyle
+	{
+		LAYOUT_STYLE_NONE,
+		LAYOUT_STYLE_EQUALIZE,
+		LAYOUT_STYLE_FILL
+	};
+	// </FS:Zi>
+
 }
 
 // NOTE: This needs to occur before Param block declaration for proper compilation.
@@ -155,6 +183,22 @@ namespace LLInitParam
 	{
 		static void declareValues();
 	};
+
+	// <FS:Zi> Template declaration to make mapping from alignment enum to string work for load/save XML settings
+	template<>
+	struct TypeValues<LLToolBarEnums::Alignment> : public TypeValuesHelper<LLToolBarEnums::Alignment>
+	{
+		static void declareValues();
+	};
+	// </FS:Zi>
+
+	// <FS:Zi> Template declaration to make mapping from layout enum to string work for load/save XML settings
+	template<>
+	struct TypeValues<LLToolBarEnums::LayoutStyle> : public TypeValuesHelper<LLToolBarEnums::LayoutStyle>
+	{
+		static void declareValues();
+	};
+	// </FS:Zi>
 }
 
 
@@ -193,7 +237,11 @@ public:
 		Mandatory<LLToolBarEnums::SideType>		side;
 
 		Optional<LLToolBarButton::Params>		button_icon,
-												button_icon_and_text;
+												// <FS:Zi> Add text only button
+												// button_icon_and_text,
+												button_icon_and_text,
+												button;
+												// </FS:Zi>
 
 		Optional<bool>							read_only,
 												wrap;
@@ -209,6 +257,9 @@ public:
 		Multiple<LLCommandId::Params>			commands;
 
 		Optional<LLPanel::Params>				button_panel;
+
+		Optional<LLToolBarEnums::LayoutStyle>	layout_style;	// <FS:Zi> Add layout style parameter to XUI
+		Optional<LLToolBarEnums::Alignment>		alignment;		// <FS:Zi> Add alignment parameter to XUI
 
 		Params();
 	};
@@ -261,10 +312,19 @@ public:
 	command_id_list_t& getCommandsList() { return mButtonCommands; }
 	void clearCommandsList();
 
-private:
+// <FS:Ansariel> Changed for separate vertical toolbar
+//private:
+//	friend class LLUICtrlFactory;
+//	LLToolBar(const Params&);
+//	~LLToolBar();
+
+protected:
 	friend class LLUICtrlFactory;
 	LLToolBar(const Params&);
-	~LLToolBar();
+	virtual ~LLToolBar();
+
+private:
+// <FS:Ansariel> Changed for separate vertical toolbar
 
 	void initFromParams(const Params&);
 	void createContextMenu();
@@ -326,7 +386,52 @@ private:
 	std::string						mButtonTooltipSuffix;
 
 	LLIconCtrl*						mCaretIcon; 
+	
+// <FS:Zi> Layout and alignment helper functions and member variables
+
+	// context menu callbacks
+	BOOL							isAlignment(const LLSD& userdata);
+	void							onAlignmentChanged(const LLSD& userdata);
+
+	// context menu callbacks
+	BOOL							isLayoutStyle(const LLSD& userdata);
+	void							onLayoutStyleChanged(const LLSD& userdata);
+
+public:
+	// accessors
+	void							setLayoutStyle(LLToolBarEnums::LayoutStyle layout_style);
+	LLToolBarEnums::LayoutStyle		getLayoutStyle() const;
+
+	void							setAlignment(LLToolBarEnums::Alignment alignment);
+	LLToolBarEnums::Alignment		getAlignment() const;
+
+	LLToolBarEnums::LayoutStyle		mLayoutStyle;
+	LLToolBarEnums::Alignment		mAlignment;
+
+	// layout panel pointers to control alignment
+	LLPanel*						mStartCenteringPanel;
+	LLPanel*						mEndCenteringPanel;
+// </FS:Zi>
 };
 
+// <FS:Ansariel> Separate vertical toolbar; By sub-classing LLToolBar,
+//               we can add a different widget tag, thus allowing us
+//               to have a different widget XML definition with a
+//               different layout than LLToolBar.
+class LLToolBarVertical : public LLToolBar
+{
+public:
+	struct Params : LLToolBar::Params{};
+
+protected:
+	friend class LLUICtrlFactory;
+	LLToolBarVertical(const Params& p) : LLToolBar(p)
+	{
+	}
+	virtual ~LLToolBarVertical()
+	{
+	}
+};
+// </FS:Ansariel> Separate vertical toolbar
 
 #endif  // LL_LLTOOLBAR_H

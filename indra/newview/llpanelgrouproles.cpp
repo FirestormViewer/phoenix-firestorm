@@ -55,6 +55,9 @@
 
 #include "roles_constants.h"
 
+// [FS:CR] FIRE-12276
+#include "llfilepicker.h"
+
 static LLPanelInjector<LLPanelGroupRoles> t_panel_group_roles("panel_group_roles");
 
 bool agentCanRemoveFromRole(const LLUUID& group_id,
@@ -743,17 +746,30 @@ LLPanelGroupMembersSubTab::LLPanelGroupMembersSubTab()
 	mChanged(FALSE),
 	mPendingMemberUpdate(FALSE),
 	mHasMatch(FALSE),
-	mNumOwnerAdditions(0),
-	mAvatarNameCacheConnection()
+	// <FS:Ansariel> Member list doesn't load properly
+	//mNumOwnerAdditions(0),
+	mNumOwnerAdditions(0)
+	//mAvatarNameCacheConnection()
+	// </FS:Ansariel>
 {
 }
 
 LLPanelGroupMembersSubTab::~LLPanelGroupMembersSubTab()
 {
-	if (mAvatarNameCacheConnection.connected())
+	// <FS:Ansariel> Member list doesn't load properly
+	//if (mAvatarNameCacheConnection.connected())
+	//{
+	//	mAvatarNameCacheConnection.disconnect();
+	//}
+	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
 	{
-		mAvatarNameCacheConnection.disconnect();
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
 	}
+	mAvatarNameCacheConnections.clear();
+	// </FS:Ansariel>
 	if (mMembersList)
 	{
 		gSavedSettings.setString("GroupMembersSortOrder", mMembersList->getSortColumnName());
@@ -802,6 +818,14 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 		button->setClickedCallback(onInviteMember, this);
 		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_INVITE));
 	}
+	// [FS:CR] FIRE-12276
+	button = parent->getChild<LLButton>("export_list", recurse);
+	if (button)
+	{
+		button->setClickedCallback(boost::bind(&LLPanelGroupMembersSubTab::onExportMembersToXML, this));
+		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_VISIBLE_IN_DIR));
+	}
+	// [/FS:CR]
 
 	mEjectBtn = parent->getChild<LLButton>("member_eject", recurse);
 	if ( mEjectBtn )
@@ -1644,9 +1668,23 @@ void LLPanelGroupMembersSubTab::addMemberToList(LLGroupMemberData* data)
 	mHasMatch = TRUE;
 }
 
-void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name)
+// <FS:Ansariel> Member list doesn't load properly
+//void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name)
+void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemberData* member, const LLAvatarName& av_name, const LLUUID& av_id)
+// </FS:Ansariel>
 {
-	mAvatarNameCacheConnection.disconnect();
+	// <FS:Ansariel> Member list doesn't load properly
+	//mAvatarNameCacheConnection.disconnect();
+	avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(av_id);
+	if (it != mAvatarNameCacheConnections.end())
+	{
+		if (it->second.connected())
+		{
+			it->second.disconnect();
+		}
+		mAvatarNameCacheConnections.erase(it);
+	}
+	// </FS:Ansariel>
 
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 	if (!gdatap
@@ -1657,7 +1695,10 @@ void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, LLGroupMemb
 	}
 	
 	// trying to avoid unnecessary hash lookups
-	if (matchesSearchFilter(av_name.getAccountName()))
+	// <FS:CR> FIRE-11350
+	//if (matchesSearchFilter(av_name.getAccountName()))
+	if (matchesSearchFilter(av_name.getUserName()))
+	// </FS:CR>
 	{
 		addMemberToList(member);
 		if(!mMembersList->getEnabled())
@@ -1711,7 +1752,10 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		LLAvatarName av_name;
 		if (LLAvatarNameCache::get(mMemberProgress->first, &av_name))
 		{
-			if (matchesSearchFilter(av_name.getAccountName()))
+			// <FS:CR> FIRE-11350
+			//if (matchesSearchFilter(av_name.getAccountName()))
+			if (matchesSearchFilter(av_name.getUserName()))
+			// </FS:CR>
 			{
 				addMemberToList(mMemberProgress->second);
 			}
@@ -1720,11 +1764,24 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		{
 			// If name is not cached, onNameCache() should be called when it is cached and add this member to list.
 			// *TODO : Add one callback per fetched avatar name
-			if (mAvatarNameCacheConnection.connected())
+			// <FS:Ansariel> Member list doesn't load properly
+			//if (mAvatarNameCacheConnection.connected())
+			//{
+			//	mAvatarNameCacheConnection.disconnect();
+			//}
+			//mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2));
+			
+			avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.find(mMemberProgress->first);
+			if (it != mAvatarNameCacheConnections.end())
 			{
-				mAvatarNameCacheConnection.disconnect();
+				if (it->second.connected())
+				{
+					it->second.disconnect();
+				}
+				mAvatarNameCacheConnections.erase(it);
 			}
-			mAvatarNameCacheConnection = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2));
+			mAvatarNameCacheConnections[mMemberProgress->first] = LLAvatarNameCache::get(mMemberProgress->first, boost::bind(&LLPanelGroupMembersSubTab::onNameCache, this, gdatap->getMemberVersion(), mMemberProgress->second, _2, _1));
+			// </FS:Ansariel>
 		}
 	}
 
@@ -1749,6 +1806,44 @@ void LLPanelGroupMembersSubTab::updateMembers()
 	handleMemberSelect();
 }
 
+// [FS:CR] FIRE-12276
+void LLPanelGroupMembersSubTab::onExportMembersToXML()
+{
+	if (mPendingMemberUpdate) return;
+	
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+	LLFilePicker& file_picker = LLFilePicker::instance();
+	if (!file_picker.getSaveFile(LLFilePicker::FFSAVE_CSV, LLDir::getScrubbedFileName(gdatap->mName + "_members.csv")))
+	{
+		return;
+	}
+	std::string fullpath = file_picker.getFirstFile();
+	
+	LLAPRFile outfile;
+	outfile.open(fullpath, LL_APR_WB );
+	LLAPRFile::tFiletype* file = outfile.getFileHandle();
+	if (!file) return;
+	
+	apr_file_printf(file, "Group membership record for %s", gdatap->mName.c_str());
+	
+	LLSD memberlist;
+	for (LLGroupMgrGroupData::member_list_t::const_iterator member_itr = gdatap->mMembers.begin();
+		 member_itr != gdatap->mMembers.end();
+		 ++member_itr)
+	{
+		/// *FIXME: Making an assumption that we already have the names in cache and getting names from
+		/// LLAvatarNameCache directly because I am lazy and don't want bugger with avatarname cache this morning.
+		/// When the group membership is fully loaded, this works fine as is.
+		LLAvatarName av_name;
+		LLAvatarNameCache::get(member_itr->first, &av_name);
+		apr_file_printf(file, "\n%s,%s,%s",
+						member_itr->first.asString().c_str(),
+						av_name.getCompleteName().c_str(),
+						member_itr->second->getOnlineStatus().c_str());
+	}
+	apr_file_printf(file, "\n");
+}
+// [/FS:CR] FIRE-12276
 
 
 ////////////////////////////
@@ -2659,6 +2754,11 @@ void LLPanelGroupRoles::setGroupID(const LLUUID& id)
 	LLButton* button = getChild<LLButton>("member_invite");
 	if ( button )
 		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_INVITE));
+	// [FS:CR] FIRE-12276
+	button = getChild<LLButton>("export_list");
+	if (button)
+		button->setEnabled(gAgent.hasPowerInGroup(mGroupID, GP_MEMBER_VISIBLE_IN_DIR));
+	// [/FS:CR]
 
 	if(mSubTabContainer)
 		mSubTabContainer->selectTab(1);

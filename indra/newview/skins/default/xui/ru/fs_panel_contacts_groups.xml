@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ bottom="-371"
+ height="300"
+ left="280"
+ mouse_opaque="true"
+ name="groups"
+ width="350">
+	<view_border
+	 top="-9"
+	 bottom="25"
+	 left="9"
+	 width="241"
+	 follows="left|top|right|bottom"
+	 bevel_style="in"
+	 name="info_border" />
+	<group_list
+	 allow_select="true"
+	 bottom="26"
+	 follows="left|top|right|bottom"
+	 left="10"
+	 name="group_list"
+	 top="-10"
+	 width="240" />
+    <text
+     type="string"
+     length="1"
+     bottom="296"
+     follows="left|bottom"
+     height="14"
+     layout="topleft"
+     right="-10"
+     name="groupcount">
+You belong to [COUNT] out of [MAX] groups.
+    </text>
+	<button
+	 top="-10"
+	 follows="top|right"
+	 height="22"
+	 label="IM/Call"
+	 right="-10"
+	 name="chat_btn"
+	 tool_tip="Open Instant Message session"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Info"
+	 name="info_btn"
+	 width="80" />
+	<!--<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Titles..."
+	 name="titles_btn"
+	 width="80" />-->
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Activate"
+	 name="activate_btn"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Leave"
+	 name="leave_btn"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Create..."
+	 name="create_btn"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Search..."
+	 name="search_btn"
+	 width="80" />
+	<!--<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 font="SansSerif"
+	 height="22"
+	 label="Invite..."
+	 name="invite_btn"
+	 width="80" />-->
+  <!--  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="16"
+   layout="topleft"
+   left="12"
+   name="group_label"
+   top="24"
+   width="50">
+    Total groups: 
+  </text>
+  <text
+   follows="top|left|right"
+   font="SansSerifBigBold"
+   height="29"
+   layout="topleft"
+   left="45"
+   name="group_count"
+   text_color="LtGray"
+   top="22"
+   value="42"
+   use_ellipses="true"
+   word_wrap="true"
+   visible="false"
+   width="255" />
+  <text
+  type="string"
+  length="1"
+  follows="left|top"
+  height="16"
+  layout="topleft"
+  left="12"
+  name="group_label"
+  top="24"
+  width="248">
+    of :
+  </text> <text
+  follows="top|left|right"
+  font="SansSerifBigBold"
+  height="29"
+  layout="topleft"
+  left="45"
+  name="group_count_max"
+  text_color="LtGray"
+  top="22"
+  value="42"
+  use_ellipses="true"
+  word_wrap="true"
+  visible="false"
+  width="255" /> -->
+</panel>

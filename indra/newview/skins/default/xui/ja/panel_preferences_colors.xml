@@ -1,44 +1,231 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="色" name="colors_panel">
-	<text name="effects_color_textbox">
-		ビームの色（選択ビーム）：
-	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="クリックしてカラーピッカーを開きます"/>
-	<text name="font_colors">
-		チャットの文字の色
-	</text>
-	<text name="text_box1">
-		自分
-	</text>
-	<text name="text_box2">
-		他の住人
-	</text>
-	<text name="text_box3">
-		オブジェクト
-	</text>
-	<text name="text_box4">
-		システム
-	</text>
-	<text name="text_box5">
-		エラー
-	</text>
-	<text name="text_box10">
-		ダイレクト
-	</text>
-	<text name="text_box7">
-		所有者
-	</text>
-	<text name="text_box9">
-		URL
-	</text>
-	<text name="bubble_chat">
-		名前の表示の背景色（吹き出しチャットにも適用）：
-	</text>
-	<color_swatch name="background" tool_tip="名前の表示色を選択"/>
-	<slider label="不透明度：" name="bubble_chat_opacity" tool_tip="名前の表示の不透明度を選択"/>
-	<text name="floater_opacity">
-		フローターの不透明度：
-	</text>
-	<slider label="有効：" name="active"/>
-	<slider label="無効：" name="inactive"/>
+	<tab_container label="Color Prefs" name="color_tabs">
+
+		<panel label="チャットの文字の色" name="tab-chat" >
+			<text name="font_colors">
+				チャットの文字の色:
+			</text>
+			<color_swatch name="user" />
+			<text name="user_label">
+				自分
+			</text>
+			<color_swatch name="agent" />
+			<text name="others_label">
+				他の住人
+			</text>
+			<color_swatch name="objects" />
+			<text name="text_box3">
+				オブジェクト
+			</text>
+			<color_swatch name="friends" />
+			<text name="friends_label">
+				フレンド
+			</text>
+			<color_swatch name="lindens" />
+			<text name="linden_label">
+				リンデン
+			</text>
+			<color_swatch name="muted" />
+			<text name="muted_label">
+				無視対象
+			</text>
+			<color_swatch name="system" />
+			<text name="system_label">
+				システム
+			</text>
+			<color_swatch name="script_error" />
+			<text name="script_error_label">
+				エラー
+			</text>
+			<color_swatch name="ObjectIMColor" />
+			<text name="object_im_label">
+				オブジェクトのIM
+			</text>
+			<color_swatch name="owner" />
+			<text name="llownersay_label">
+				オーナー通知
+			</text>
+			<color_swatch name="links" />
+			<text name="htmllink_label">
+				URL
+			</text>
+			<color_swatch name="ChatNameColor" />
+			<text name="chat_name_label">
+				チャット見出し
+			</text>
+			<color_swatch name="Direct" />
+			<text name="direct_label">
+				ダイレクト
+			</text>
+			<color_swatch name="console_im" />
+			<text name="console_im_label">
+				IM／グループ
+			</text>
+		</panel>
+	 
+		<panel label="名前タグ" name="tab-nametag">
+			<text name="nametag_colors">
+				名前タグの色:
+			</text>
+			<color_swatch name="self_tag" />
+			<text name="self_tag_label">
+				自分
+			</text>
+			<color_swatch name="friend_tag" />
+			<text name="friend_tag_label">
+				フレンド
+			</text>
+			<color_swatch name="muted_tag" />
+			<text name="muted_tag_label">
+				無視対象
+			</text>     
+			<color_swatch name="linden_tag" />
+			<text name="linden_tag_label">
+				リンデン
+			</text>
+			<color_swatch name="match_tag" />
+			<text name="match_tag_label">
+				名前一致
+			</text>
+			<color_swatch name="mismatch_tag" />
+			<text name="mismatch_tag_label">
+				名前不一致
+			</text>
+			<check_box name="FSColorUsername" label="ユーザー名を別の色で識別" tool_tip="ユーザー名を別の色で表示します。" />
+			<check_box name="NameTagShowFriends" label="フレンドのタグを別の色で識別" tool_tip="フレンドの名前タグを別の色で表示します。" />
+			<color_swatch name="username_tag" />
+			<text name="username_tag_label">
+				ユーザー名
+			</text>     
+			<text name="bubble_chat">
+				名前タグ / 吹き出し:
+			</text>
+			<color_swatch name="background" />
+			<slider label="名前タグの不透明度:" name="bubble_chat_opacity" tool_tip="名前タグの不透明度を選択します。" />
+			<slider label="名前タグのZオフセット:" name="FSNameTagZOffsetCorrection" tool_tip="アバターの名前タグを表示する高さを調整します。デフォルトは０です。" />     
+			<check_box name="FSTagShowDistance" label="名前タグに距離を表示" tool_tip="アバターの名前タグにそのアバターまでの距離を表示します。" />
+			<check_box name="FSTagShowDistanceColors" label="距離に応じて名前タグの色を変える:" />
+			<panel label="" name="distance_panel" >
+				<color_swatch name="chat_distance_tag" />
+				<text name="chat_distance_tag_label">
+					チャットレンジ
+				</text>
+				<color_swatch name="whisper_distance_tag" />
+				<text name="whisper_distance_tag_label">
+					ウィスパーレンジ
+				</text>
+				<color_swatch name="shout_range_tag" />
+				<text name="shout_tag_label">
+					シャウトレンジ
+				</text>
+				<color_swatch name="beyond_shout_distance_tag" />
+				<text name="beyond_shout_distance_tag_label">
+					シャウトレンジ外
+				</text>
+			</panel>
+			<!-- Client tag settings -->
+			<panel name="client_tags_panel">
+				<text name="client_tags_colors">
+					クライアントタグの色: (OpenSimとAuroraSimのみ)
+				</text>
+				<text name="whattagstoshow">
+					どのビューワのタグを見たいですか？
+				</text>
+				<combo_box name="ClientTagsVisibility">
+					<combo_box.item name="No Viewertags" label="ビューワタグ不要"/>
+					<combo_box.item name="TPVD Viewer" label="サードパーティー (リスト使用)"/>
+					<combo_box.item name="All known Viewers" label="識別できるビューワ (リスト使用)"/>
+					<combo_box.item name="All Viewers" label="全てのビューワ"/>
+				</combo_box>
+				<text name="colorbasedonviewer">
+					ビューワ別にタグの色を変えますか？
+				</text>
+				<combo_box name="ColorClienttags">
+					<combo_box.item name="Color not based on Viewer" label="ビューワによって変えない"/>
+					<combo_box.item name="Single color per Viewer" label="ビューワごとに別の色"/>
+					<combo_box.item name="Multiple colors per Viewer" label="ビューワごとに複数の色"/>
+					<combo_box.item name="Userdefined color" label="ユーザー定義の色"/>
+				</combo_box>
+				<text name="listtodisplayviewertags_txt">
+					ビューワタグの表示にリストを使いますか？
+				</text>
+				<combo_box name="UseLegacyClienttags">
+					<combo_box.item name="Don't use a list" label="リスト不使用"/>
+					<combo_box.item name="Local Clienttags" label="ローカルのタグリスト"/>
+					<combo_box.item name="Download Clienttags" label="起動時にリストをダウンロード"/>
+				</combo_box>
+			</panel>
+		</panel>
+		
+		<panel label="ミニマップ" name="tab-minimap">
+			<text name="netmap_dots_textbox">
+				ミニマップの点:
+			</text>
+			<color_swatch name="MapAvatarSelfColor" />
+			<text name="MapAvatarSelfColor_label">
+				自分
+			</text>
+			<color_swatch name="agent" />
+			<text name="MapAvatarColor_label">
+				他の住人
+			</text>
+			<color_swatch name="objects" />
+			<text name="MapAvatarFriendColor_label">
+				フレンド
+			</text>     
+			<color_swatch name="MapAvatarLindenColor" />
+			<text name="MapAvatarLindenColor_label">
+				リンデン
+			</text>
+			<color_swatch name="MapAvatarMutedColor" />
+			<text name="MapAvatarMutedColor_label">
+				無視対象
+			</text>
+			<check_box name="MiniMapChatRing" label="チャットまたはシャウトレンジを示す円をミニマップに表示:" />
+			<color_swatch name="netmap_chatring_color_swatch" />
+			<text name="netmap_chatring_color_label">
+				チャットレンジ
+			</text>
+			<color_swatch name="netmap_shoutring_color_swatch" />
+			<text name="netmap_shoutring_color_label">
+				シャウトレンジ
+			</text>     
+		</panel>
+		
+		<!-- Misc Panel -->
+		<panel label="その他" name="tab-misc" >
+			<text name="effects_color_textbox">
+				ビームの色（選択ビーム）:
+			</text>
+			<text name="ScriptDialogFgLabel">
+				スクリプト通知文字:
+			</text>
+			<color_swatch name="effect_color_swatch" />
+			<color_swatch name="ScriptDialogFb" />
+			<color_swatch name="ScriptDialog" />
+			<text name="floater_opacity">
+				ウィンドウの不透明度:
+			</text>
+			<slider label="有効:" name="active" />
+			<slider label="無効:" name="inactive" />
+			<text name="console_opacity">
+				コンソールの不透明度:
+			</text>
+			<color_swatch name="console_background" tool_tip="コンソールの色を選択します。" />
+			<slider label="不透明度:" name="console_background_opacity" tool_tip="チャットコンソールの背景の不透明度を選択します。" />     
+			<check_box name="FSScriptDialogNoTransparency" label="スクリプトからの通知の背景は常に不透明にする" />
+			<check_box name="FSGroupNotifyNoTransparency" label="グループ通知の背景は常に不透明にする" />
+     
+			<!-- ## Zi: Pie menu -->
+			<check_box name="override_pie_color_checkbox" label="パイメニュー背景色と不透明度の設定:" />
+			<panel label="" name="tab-colorize">       
+				<color_swatch name="pie_bg_color_override" tool_tip="パイメニューの背景色を選択します。" />
+				<color_swatch name="pie_selected_color_override" tool_tip="パイメニューで選択した時の色を選択します。" />
+				<slider label="不透明度:" name="pie_menu_opacity" tool_tip="パイメニューの不透明度を設定します。" />
+				<slider label="ぼかし:" name="pie_menu_fade_out" tool_tip="パイメニューの色が外に向かって薄くなっていく度合いを設定" />
+			</panel>
+     <!-- ## Zi: Pie menu -->
+		</panel>
+	</tab_container>
 </panel>

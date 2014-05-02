@@ -98,7 +98,8 @@
 #include "llrefcount.h"
 #include "llsdparam.h"
 
-#include "llnotificationslistener.h"
+// <FS:Ansariel> Disable test API
+//#include "llnotificationslistener.h"
 
 class LLAvatarName;
 typedef enum e_notification_priority
@@ -199,6 +200,7 @@ public:
 		Optional<S32>			width;
 		Optional<S32>			max_length_chars;
 		Optional<std::string>	text;
+		Optional<bool>			is_default;
 
 		Optional<std::string>	value;
 		FormInput();
@@ -526,6 +528,10 @@ public:
 	{
 		return mTimestamp;
 	}
+
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+	bool hasLabel() const;
+// [/SL:KB]
 
 	bool getOfferFromAgent() const
 	{
@@ -980,7 +986,8 @@ private:
 
 	bool mIgnoreAllNotifications;
 
-	boost::scoped_ptr<LLNotificationsListener> mListener;
+	// <FS:Ansariel> Disable test API
+	//boost::scoped_ptr<LLNotificationsListener> mListener;
 
 	std::vector<LLNotificationChannelPtr> mDefaultChannels;
 };

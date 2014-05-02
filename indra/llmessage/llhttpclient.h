@@ -68,6 +68,7 @@ public:
 	static void getByteRange(const std::string& url, S32 offset, S32 bytes, ResponderPtr,
 							 const LLSD& headers=LLSD(), const F32 timeout=HTTP_REQUEST_EXPIRY_SECS,
 							 bool follow_redirects = true);
+	static void getIfModified(const std::string& url, ResponderPtr, const time_t &if_modified_since, const LLSD& headers = LLSD(), const F32 timeout=HTTP_REQUEST_EXPIRY_SECS); //<FS:AW> Base opensim compatibility
 	static void get(const std::string& url, ResponderPtr, const LLSD& headers = LLSD(),
 					const F32 timeout=HTTP_REQUEST_EXPIRY_SECS, bool follow_redirects = true);
 	static void get(const std::string& url, const LLSD& query, ResponderPtr, const LLSD& headers = LLSD(),

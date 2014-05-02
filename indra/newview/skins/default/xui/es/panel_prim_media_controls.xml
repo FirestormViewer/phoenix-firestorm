@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="MediaControls">
-	<string name="min_width">
-		300
-	</string>
-	<string name="min_height">
-		75
-	</string>
-	<string name="zoom_medium_padding">
-		1.1
-	</string>
-	<string name="top_world_view_avoid_zone">
-		50
-	</string>
 	<layout_stack name="progress_indicator_area">
 		<layout_panel name="media_progress_indicator">
-			<progress_bar name="media_progress_bar" tool_tip="Los media se están cargando"/>
+			<progress_bar name="media_progress_bar" tool_tip="Los medios se están cargando"/>
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="media_controls">
@@ -28,7 +16,7 @@
 			<button name="home_btn" tool_tip="Página inicial"/>
 		</layout_panel>
 		<layout_panel name="media_stop">
-			<button name="media_stop_btn" tool_tip="Parar los media"/>
+			<button name="media_stop_btn" tool_tip="Detener los medios"/>
 		</layout_panel>
 		<layout_panel name="reload">
 			<button name="reload_btn" tool_tip="Recargar"/>
@@ -37,19 +25,17 @@
 			<button name="stop_btn" tool_tip="Parar la carga"/>
 		</layout_panel>
 		<layout_panel name="play">
-			<button name="play_btn" tool_tip="Ejecutar los media"/>
+			<button name="play_btn" tool_tip="Reproducir los medios"/>
 		</layout_panel>
 		<layout_panel name="pause">
-			<button name="pause_btn" tool_tip="Pausar los media"/>
+			<button name="pause_btn" tool_tip="Pausar los medios"/>
 		</layout_panel>
 		<layout_panel name="media_address">
-			<line_editor name="media_address_url" tool_tip="URL de los media"/>
+			<line_editor name="media_address_url" tool_tip="URL del medio"/>
+			<icon name="media_secure_lock_flag" tool_tip="Navegación segura"/>
 			<layout_stack name="media_address_url_icons">
-				<layout_panel>
+				<layout_panel name="media_address_url_icons_wl">
 					<icon name="media_whitelist_flag" tool_tip="Lista Blanca activada"/>
-				</layout_panel>
-				<layout_panel>
-					<icon name="media_secure_lock_flag" tool_tip="Navegación segura"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
@@ -63,11 +49,11 @@
 			<button name="skip_forward_btn" tool_tip="Hacia adelante"/>
 		</layout_panel>
 		<layout_panel name="media_volume">
-			<button name="media_mute_button" tool_tip="Silenciar este media"/>
-			<slider name="volume_slider" tool_tip="Volumen de los media"/>
+			<button name="media_mute_button" tool_tip="Silenciar este medio"/>
+			<slider name="volume_slider" tool_tip="Volumen de los medios"/>
 		</layout_panel>
 		<layout_panel name="zoom_frame">
-			<button name="zoom_frame_btn" tool_tip="Zoom hacia los media"/>
+			<button name="zoom_frame_btn" tool_tip="Zoom hacia los medios"/>
 		</layout_panel>
 		<layout_panel name="close">
 			<button name="close_btn" tool_tip="Alejar el zoom"/>

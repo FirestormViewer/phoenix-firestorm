@@ -52,6 +52,17 @@ LLControlGroup gSavedSettings("Global");	// saved at end of session
 LLControlGroup gSavedPerAccountSettings("PerAccount"); // saved at end of session
 LLControlGroup gWarningSettings("Warnings"); // persists ignored dialogs/warnings
 
+// [RLVa:KB] - Checked: 2010-11-12 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+#include "llavatarname.h"
+
+// Stub for rlvGetAnonym
+const std::string& rlvGetAnonym(const LLAvatarName& avName)
+{
+	static std::string strAnonym = "A resident";
+	return strAnonym;
+}
+// [/RLVa:KB]
+
 // We can't create LLImageGL objects because we have no window or rendering 
 // context.  Provide enough of an LLUIImage to test the LLUI library without
 // an underlying image.
@@ -148,6 +159,8 @@ void init_llui()
 	// otherwise it crashes.
 	LLFontGL::initClass(96.f, 1.f, 1.f,
 						gDirUtilp->getAppRODataDir(),
+						"fonts.xml",
+						f.0,
 						false );	// don't create gl textures
 	
 	LLFloaterView::Params fvparams;

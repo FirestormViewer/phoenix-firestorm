@@ -46,6 +46,9 @@ extern void request_sound(const LLUUID &sound_guid);
 
 LLAudioEngine* gAudiop = NULL;
 
+// NaCl - Sound explorer
+S32 LLAudioSource::sSoundHistoryPruneCounter;
+// NaCl End
 
 //
 // LLAudioEngine implementation
@@ -675,6 +678,11 @@ bool LLAudioEngine::preloadSound(const LLUUID &uuid)
 {
 	LL_DEBUGS("AudioEngine")<<"( "<<uuid<<" )"<<LL_ENDL;
 	
+	// <FS:ND> Protect against corrupted sounds. Just do a quick exit instead of trying to preload over and over again.
+	if( gAudiop->isCorruptSound( uuid ) )
+		return false;
+	// </FS:ND>
+
 	gAudiop->getAudioData(uuid);	// We don't care about the return value, this is just to make sure
 									// that we have an entry, which will mean that the audio engine knows about this
 
@@ -814,12 +822,13 @@ F64 LLAudioEngine::mapWindVecToPan(LLVector3 wind_vec)
 
 
 void LLAudioEngine::triggerSound(const LLUUID &audio_uuid, const LLUUID& owner_id, const F32 gain,
-								 const S32 type, const LLVector3d &pos_global)
+								 const S32 type, const LLVector3d &pos_global, const LLUUID source_object)
 {
 	// Create a new source (since this can't be associated with an existing source.
 	LL_DEBUGS("AudioEngine") << "Localized: " << audio_uuid << LL_ENDL;
 
-	if (mMuted)
+	// NaCl - Do not load silent sounds.
+	if (mMuted || gain <FLT_EPSILON*2)
 	{
 		return;
 	}
@@ -827,7 +836,7 @@ void LLAudioEngine::triggerSound(const LLUUID &audio_uuid, const LLUUID& owner_i
 	LLUUID source_id;
 	source_id.generate();
 
-	LLAudioSource *asp = new LLAudioSource(source_id, owner_id, gain, type);
+	LLAudioSource *asp = new LLAudioSource(source_id, owner_id, gain, type, source_object, true);
 	gAudiop->addAudioSource(asp);
 	if (pos_global.isExactlyZero())
 	{
@@ -957,6 +966,11 @@ LLAudioSource * LLAudioEngine::findAudioSource(const LLUUID &source_id)
 
 LLAudioData * LLAudioEngine::getAudioData(const LLUUID &audio_uuid)
 {
+	// <FS:ND> Protect against corrupted sounds. Just do a quick exit instead of trying to decode over and over again.
+	if( isCorruptSound( audio_uuid ) )
+		return 0;
+	// </FS:ND>
+
 	data_map::iterator iter;
 	iter = mAllData.find(audio_uuid);
 	if (iter == mAllData.end())
@@ -1001,7 +1015,10 @@ bool LLAudioEngine::hasDecodedFile(const LLUUID &uuid)
 	uuid.toString(uuid_str);
 
 	std::string wav_path;
-	wav_path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str);
+	// <FS:Ansariel> Sound cache
+	//wav_path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str);
+	wav_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE,uuid_str);
+	// </FS:Ansariel>
 	wav_path += ".dsf";
 
 	if (gDirUtilp->fileExists(wav_path))
@@ -1226,6 +1243,11 @@ void LLAudioEngine::startNextTransfer()
 // static
 void LLAudioEngine::assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::EType type, void *user_data, S32 result_code, LLExtStat ext_status)
 {
+	if (!gAudiop)
+	{
+		return;
+	}
+
 	if (result_code)
 	{
 		LL_INFOS("AudioEngine") << "Boom, error in audio file transfer: " << LLAssetStorage::getErrorString( result_code ) << " (" << result_code << ")" << LL_ENDL;
@@ -1265,7 +1287,7 @@ void LLAudioEngine::assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::E
 //
 
 
-LLAudioSource::LLAudioSource(const LLUUID& id, const LLUUID& owner_id, const F32 gain, const S32 type)
+LLAudioSource::LLAudioSource(const LLUUID& id, const LLUUID& owner_id, const F32 gain, const S32 type, const LLUUID& source_id, const bool isTrigger)
 :	mID(id),
 	mOwnerID(owner_id),
 	mPriority(0.f),
@@ -1281,9 +1303,87 @@ LLAudioSource::LLAudioSource(const LLUUID& id, const LLUUID& owner_id, const F32
 	mType(type),
 	mChannelp(NULL),
 	mCurrentDatap(NULL),
-	mQueuedDatap(NULL)
+	mQueuedDatap(NULL),
+// NaCl - Sound explorer
+	mSourceID(source_id),
+	mIsTrigger(isTrigger)
 {
+	mLogID.generate();
 }
+
+std::map<LLUUID, LLSoundHistoryItem> gSoundHistory;
+
+// static
+void LLAudioSource::logSoundPlay(const LLUUID& id, LLAudioSource* audio_source, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped)
+{
+	// <FS:ND> Corrupt asset, do not bother
+	if( gAudiop->isCorruptSound( assetid ) )
+		return;
+	// </FS:ND>
+
+	// <FS:ND> Do not overflow our log here.
+	pruneSoundLog();
+	if( gSoundHistory.size() > 2048 )
+		return; // Might clear out oldest entries before giving up?
+	// </FS:ND>
+
+	LLSoundHistoryItem item;
+	item.mID = id;
+	item.mAudioSource = audio_source;
+	item.mPosition = position;
+	item.mType = type;
+	item.mAssetID = assetid;
+	item.mOwnerID = ownerid;
+	item.mSourceID = sourceid;
+	item.mPlaying = true;
+	item.mTimeStarted = LLTimer::getElapsedSeconds();
+	item.mTimeStopped = F64_MAX;
+	item.mIsTrigger = is_trigger;
+	item.mIsLooped = is_looped;
+	
+	item.mReviewed = false;
+	item.mReviewedCollision = false;
+	
+	gSoundHistory[id] = item;
+}
+
+// static
+void LLAudioSource::logSoundStop(const LLUUID& id)
+{
+	if (gSoundHistory.find(id) != gSoundHistory.end())
+	{
+		gSoundHistory[id].mPlaying = false;
+		gSoundHistory[id].mTimeStopped = LLTimer::getElapsedSeconds();
+		gSoundHistory[id].mAudioSource = NULL; // just in case
+		pruneSoundLog();
+	}
+}
+
+// static
+void LLAudioSource::pruneSoundLog()
+{
+	if (++sSoundHistoryPruneCounter >= 64)
+	{
+		sSoundHistoryPruneCounter = 0;
+		while (gSoundHistory.size() > 256)
+		{
+			std::map<LLUUID, LLSoundHistoryItem>::iterator iter = gSoundHistory.begin();
+			std::map<LLUUID, LLSoundHistoryItem>::iterator end = gSoundHistory.end();
+			U64 lowest_time = (*iter).second.mTimeStopped;
+			LLUUID lowest_id = (*iter).first;
+			for ( ; iter != end; ++iter)
+			{
+				if ((*iter).second.mTimeStopped < lowest_time)
+				{
+					lowest_time = (*iter).second.mTimeStopped;
+					lowest_id = (*iter).first;
+				}
+			}
+			gSoundHistory.erase(lowest_id);
+		}
+	}
+}
+// NaCl End
 
 
 LLAudioSource::~LLAudioSource()
@@ -1294,6 +1394,12 @@ LLAudioSource::~LLAudioSource()
 		mChannelp->setSource(NULL);
 		mChannelp = NULL;
 	}
+	// NaCl - Sound Explorer
+	if (mType != LLAudioEngine::AUDIO_TYPE_UI) // && mSourceID.notNull())
+	{
+		logSoundStop(mLogID);
+	}
+	// NaCl End
 }
 
 
@@ -1330,6 +1436,7 @@ void LLAudioSource::update()
 			{
 				LL_WARNS("AudioEngine") << "Marking LLAudioSource corrupted for " << adp->getID() << LL_ENDL;
 				mCorrupted = true ;
+				gAudiop->markSoundCorrupt( adp->getID() );
 			}
 		}
 	}
@@ -1392,11 +1499,20 @@ bool LLAudioSource::setupChannel()
 
 bool LLAudioSource::play(const LLUUID &audio_uuid)
 {
+	// NaCl - Sound Explorer
+	if(mType != LLAudioEngine::AUDIO_TYPE_UI) //&& mSourceID.notNull())
+	{
+		logSoundPlay(mLogID, this, mPositionGlobal, mType, audio_uuid, mOwnerID, mSourceID, mIsTrigger, mLoop);
+	}
+	// NaCl End
 	// Special abuse of play(); don't play a sound, but kill it.
 	if (audio_uuid.isNull())
 	{
 		if (getChannel())
 		{
+			// NaCl - Sound Explorer
+			if(getChannel()->getSource())
+			// NaCl End
 			getChannel()->setSource(NULL);
 			setChannel(NULL);
 			if (!isMuted())
@@ -1411,6 +1527,8 @@ bool LLAudioSource::play(const LLUUID &audio_uuid)
 	mAgeTimer.reset();
 
 	LLAudioData *adp = gAudiop->getAudioData(audio_uuid);
+	if( !adp )
+		return false;
 	addAudioData(adp);
 
 	if (isMuted())
@@ -1789,7 +1907,10 @@ bool LLAudioData::load()
 	std::string uuid_str;
 	std::string wav_path;
 	mID.toString(uuid_str);
-	wav_path= gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str) + ".dsf";
+	// <FS:Ansariel> Sound cache
+	//wav_path= gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str) + ".dsf";
+	wav_path= gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE,uuid_str) + ".dsf";
+	// </FS:Ansariel>
 
 	if (!mBufferp->loadWAV(wav_path))
 	{
@@ -1802,3 +1923,86 @@ bool LLAudioData::load()
 	mBufferp->mAudioDatap = this;
 	return true;
 }
+
+// <FS:ND> Protect against corrupted sounds
+
+const U32 ND_MAX_SOUNDRETRIES = 25;
+
+void LLAudioEngine::markSoundCorrupt( LLUUID const &aId )
+{
+	std::map<LLUUID,U32>::iterator itr = mCorruptData.find( aId );
+	if( mCorruptData.end() == itr )
+		mCorruptData[ aId ] = 1;
+	else if( itr->second != ND_MAX_SOUNDRETRIES )
+		itr->second += 1;
+}
+
+bool LLAudioEngine::isCorruptSound( LLUUID const &aId ) const
+{
+	std::map<LLUUID,U32>::const_iterator itr = mCorruptData.find( aId );
+	if( mCorruptData.end() == itr )
+		return false;
+
+	return itr->second == ND_MAX_SOUNDRETRIES;
+}
+// </FS:ND>
+
+// <FS:Ansariel> Asset blacklisting
+void LLAudioEngine::removeAudioData(const LLUUID& audio_uuid)
+{
+	if (audio_uuid.isNull())
+	{
+		return;
+	}
+
+	data_map::iterator iter = mAllData.find(audio_uuid);
+	if (iter != mAllData.end())
+	{
+		uuid_vec_t delete_list;
+		source_map::iterator iter2;
+		for (iter2 = mAllSources.begin(); iter2 != mAllSources.end(); ++iter2)
+		{
+			LLAudioSource* sourcep = iter2->second;
+			if (sourcep && sourcep->getCurrentData() && sourcep->getCurrentData()->getID() == audio_uuid)
+			{
+				delete_list.push_back(iter2->first);
+			}
+		}
+
+		uuid_vec_t::iterator delete_list_end = delete_list.end();
+		for (uuid_vec_t::iterator del_it = delete_list.begin(); del_it != delete_list_end; ++del_it)
+		{
+			LLUUID source_id = *del_it;
+			LLAudioSource* sourcep = mAllSources[source_id];
+			LLAudioChannel* chan = sourcep->getChannel();
+			delete sourcep;
+			mAllSources.erase(source_id);
+			if (chan)
+			{
+				chan->cleanup();
+			}
+		}
+		
+		LLAudioData* data = iter->second;
+		if (data)
+		{
+			LLAudioBuffer* buf = data->getBuffer();
+			if (buf)
+			{
+				S32 i;
+				for (i = 0; i < MAX_BUFFERS; ++i)
+				{
+					if (mBuffers[i] == buf)
+					{
+						mBuffers[i] = NULL;
+					}
+				}
+				delete buf;
+			}
+			delete data;
+		}
+
+		mAllData.erase(audio_uuid);
+	}
+}
+// </FS:Ansariel>

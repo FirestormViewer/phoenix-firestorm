@@ -39,7 +39,7 @@
 		Tu:
 	</text>
 	<check_box label="Modifica" name="CheckOwnerModify"/>
-	<check_box label="Copiare" left_delta="88" name="CheckOwnerCopy"/>
+	<check_box label="Copiare"  name="CheckOwnerCopy"/>
 	<check_box label="Rivendi" name="CheckOwnerTransfer"/>
 	<text name="AnyoneLabel">
 		Chiunque:
@@ -53,7 +53,7 @@
 		Proprietario successivo:
 	</text>
 	<check_box label="Modifica" name="CheckNextOwnerModify"/>
-	<check_box label="Copiare" left_delta="88" name="CheckNextOwnerCopy"/>
+	<check_box label="Copiare"  name="CheckNextOwnerCopy"/>
 	<check_box label="Rivendi" name="CheckNextOwnerTransfer"/>
 	<check_box label="In vendita" name="CheckPurchase"/>
 	<combo_box name="combobox sale copy">

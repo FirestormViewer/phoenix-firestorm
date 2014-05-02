@@ -18,8 +18,16 @@
 	<string name="acquired_date">
 		[year,datetime,local] [mth,datetime,local] [day,datetime,local] [wkday,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<button name="back_btn" tool_tip="戻る"/>
 	<text name="title" value="場所のプロフィール"/>
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
 	<scroll_container name="place_scroll">
 		<panel name="scrolling_panel">
 			<text name="region_title" value="SampleRegion"/>
@@ -38,4 +46,7 @@
 			</panel>
 		</panel>
 	</scroll_container>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

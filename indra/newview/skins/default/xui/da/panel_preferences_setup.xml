@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Opsætning" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Network:">
 		Netværk:
 	</text>
@@ -9,6 +12,10 @@
 	<text name="text_box2">
 		kbps
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Speciel port" name="connection_port_enabled"/>
 	<spinner label="Port nummer:" name="connection_port"/>
 	<text name="cache_size_label_l">
@@ -26,8 +33,8 @@
 		Web:
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="Benyt min browser(IE, Firefox, Safari)" name="external" tool_tip="Brug systemets standard web browser til hjælp, web links, m.v. Ikke anbefalet hvis du kører i fuld-skærm." value="true"/>
-		<radio_item label="Benyt den indbyggede browser" name="internal" tool_tip="Brug den indbyggede web browser til hjælp, web links m.v. Denne browser åbner et nyt vindue i [APP_NAME]." value=""/>
+		<radio_item label="Benyt min browser(IE, Firefox, Safari)" name="external" tool_tip="Brug systemets standard web browser til hjælp, web links, m.v. Ikke anbefalet hvis du kører i fuld-skærm."/>
+		<radio_item label="Benyt den indbyggede browser" name="internal" tool_tip="Brug den indbyggede web browser til hjælp, web links m.v. Denne browser åbner et nyt vindue i [APP_NAME]."/>
 	</radio_group>
 	<check_box initial_value="true" label="Aktivér plugins" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Acceptér cookies" name="cookies_enabled"/>
@@ -45,4 +52,7 @@
 		<combo_box.item label="Installér automatisk" name="Install_automatically"/>
 		<combo_box.item label="Hent og installér opdateringer manuelt" name="Install_manual"/>
 	</combo_box>
+
+		</layout_panel>
+	</layout_stack>
 </panel>

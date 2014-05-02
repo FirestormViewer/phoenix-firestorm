@@ -60,6 +60,15 @@ protected:
 private:
 	bool onPersistentChannelChanged(const LLSD& payload);
 	bool mLoaded;
+
+	// <FS:ND> Don't save notifications over and over during bulk updates.
+	bool mDuringBulkUpdate;
+public:
+	void startBulkUpdate()
+	{ mDuringBulkUpdate = true; }
+	void endBulkUpdate()
+	{ mDuringBulkUpdate = false; }
+	// </FS:ND>
 };
 
 #endif // LL_LLPERSISTENTNOTIFICATIONSTORAGE_H

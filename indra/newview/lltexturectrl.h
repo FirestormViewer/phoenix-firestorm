@@ -190,6 +190,9 @@ public:
 
 	LLViewerFetchedTexture* getTexture() { return mTexturep; }
 
+	// <FS:Ansariel> Mask texture if desired
+	void setIsMasked(BOOL masked) { mIsMasked = masked; }
+
 private:
 	BOOL allowDrop(LLInventoryItem* item);
 	BOOL doDrop(LLInventoryItem* item);
@@ -225,6 +228,12 @@ private:
 	BOOL					 	mShowLoadingPlaceholder;
 	std::string				 	mLoadingPlaceholderString;
 	S32						 	mLabelWidth;
+
+	// <FS:Ansariel> Texture preview mode
+	BOOL						mPreviewMode;
+
+	// <FS:Ansariel> Mask texture if desired
+	BOOL						mIsMasked;
 };
 
 // XUI HACK: When floaters converted, switch this file to lltexturepicker.h/cpp

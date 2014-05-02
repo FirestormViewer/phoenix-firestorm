@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ height="300"
+ layout="topleft"
+ mouse_opaque="true"
+ name="contact_sets_panel"
+ width="355">
+    <panel.string
+     name="empty_list">
+    This contact set is empty.
+    </panel.string>
+    <panel.string
+     name="no_sets">
+    No sets
+    </panel.string>
+    <panel.string
+     name="all_sets">
+    All sets
+    </panel.string>
+    <panel.string
+     name="pseudonyms">
+    Aliases
+    </panel.string>
+    <panel.string
+     name="non_friends">
+    Non-Friends
+    </panel.string>
+    <combo_box
+     follows="left|top|right"
+     layout="topleft"
+     height="18"
+     top="1"
+     left="4"
+     name="combo_sets"
+     width="204" />
+    <button
+     top_delta="0"
+     follows="top|right"
+     layout="topleft"
+     height="18"
+     image_overlay="Script_Config"
+     left_pad="1"
+     name="config_btn"
+     tool_tip="Configure selected contact set"
+     width="20" />
+    <button
+     top_delta="0"
+     follows="top|right"
+     layout="topleft"
+     height="18"
+     image_overlay="AddItem_Off"
+     left_pad="1"
+     name="add_set_btn"
+     tool_tip="Add a new contact set"
+     width="20" />
+    <button
+     top_delta="0"
+     follows="top|right"
+     layout="topleft"
+     height="18"
+     image_overlay="TrashItem_Off"
+     left_pad="1"
+     name="remove_set_btn"
+     tool_tip="Remove selected contact set"
+     width="20" />
+	<avatar_list
+     left="4"
+     right="-85"
+     top="20"
+     bottom="-3"
+	 follows="all"
+	 layout="topleft"
+     show_profile_button="true"
+     show_speaking_indicator="false"
+     show_voice_volume="false"
+     show_permissions_granted="true"
+     show_icons="true"
+     allow_select="true"
+	 multi_select="true"
+     keep_one_selected="false"
+     name="contact_list" />
+    <!-- Action buttons -->
+	<button
+	 top="1"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Add..."
+	 left_delta="270"
+	 name="add_btn"
+	 tool_tip="Add an avatar to the current contact set"
+	 width="80" />
+    <button
+     top_pad="3"
+     follows="top|right"
+     layout="topleft"
+     height="22"
+     label="Remove..."
+     name="remove_btn"
+     tool_tip="Remove this avatar from the current contact set"
+     width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Profile..."
+	 name="profile_btn"
+	 tool_tip="Open this avatar's profile"
+	 width="80" />
+    <button
+     top_pad="3"
+     follows="top|right"
+     layout="topleft"
+     height="22"
+     label="IM..."
+     name="start_im_btn"
+     tool_tip="Begin an instant message conversation"
+     width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Teleport..."
+	 name="offer_teleport_btn"
+	 tool_tip="Offer a teleport to your current location"
+	 width="80" />
+	<button
+	 top_pad="25"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Set Alias..."
+	 name="set_pseudonym_btn"
+	 tool_tip="Give this avatar a pseudonym"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Rem Alias..."
+	 name="remove_pseudonym_btn"
+	 tool_tip="Remove an avatar's pseudonym"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Rem DN..."
+	 name="remove_displayname_btn"
+	 tool_tip="Remove an avatar's display name"
+	 width="80" />
+    <text
+     top_pad="10"
+     left_delta="2"
+     follows="top|right"
+     layout="topleft"
+     height="20"
+     name="member_count"
+     width="80">
+    Members: [COUNT]
+    </text>
+</panel>

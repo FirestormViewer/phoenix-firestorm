@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ludzie" name="people_panel">
+	<string name="high_server_load" value="Ze względu na obciążenie serwera masowa zmiana widoczności może zająć trochę czasu. Prosimy o cierpliwość." />
+	<string name="no_recent_people" value="Brak ostatnich rozmówców. Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/search/people Wyszukiwarki] lub [secondlife:///app/worldmap Mapy Świata]." />
+	<string name="no_filtered_recent_people" value="Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/people/[SEARCH_TERM] Wyszukiwarki]." />
+	<string name="no_one_near" value="Nie ma nikogo w pobliżu. Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/search/people Wyszukiwarki] lub [secondlife:///app/worldmap Mapy Świata]." />
+	<string name="no_one_filtered_near" value="Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/people/[SEARCH_TERM] Wyszukiwarki]." />
+	<string name="no_friends_online" value="Brak dostępnych znajomych" />
+	<string name="no_friends" value="Brak znajomych" />
+	<string name="no_friends_msg">
+		Wyszukaj znajomych poprzez [secondlife:///app/search/people Wyszukiwarkę] lub kliknij prawym przyciskiem myszki na Rezydencie i zaproponuj znajomość.
+Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata].
+	</string>
+	<string name="no_filtered_friends_msg">
+		Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/people/[SEARCH_TERM] Wyszukiwarki].
+	</string>
+	<string name="people_filter_label" value="Filtruj ludzi" />
+	<string name="groups_filter_label" value="Filtruj grupy" />
+	<string name="no_filtered_groups_msg" value="Nie znalazłeś/aś tego czego szukasz? Spróbuj użyć [secondlife:///app/search/groups/[SEARCH_TERM] Wyszukiwarki]." />
+	<string name="no_groups_msg" value="Chcesz dołączyć do jakiejś grupy? Spróbuj użyć [secondlife:///app/search/groups Wyszukiwarki]." />
+	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)" />
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie teleportuje, przeciąganie z Shiftem przesuwa)" />
+	<string name="avatar_name_count" value="Imię [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
+	<panel.string name="empty_list">
+		Ten zestaw kontaktów jest pusty.
+	</panel.string>
+	<panel.string name="no_sets">
+		Brak zestawów.
+	</panel.string>
+	<panel.string name="all_sets">
+		Wszystkie zestawy
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Aliasy
+	</panel.string>
+	<tab_container name="tabs">
+		<panel label="W pobliżu" name="nearby_panel">
+			<tab_container name="tabcont_radarpeople_main">
+				<panel name="panel_radar" label="Lista" />
+				<panel name="radarmap_options_panel" label="Opcje">
+					<check_box label="Pokaż minimapę nad radarem" name="ShowRadarMinimap"/>
+					<check_box label="Zgłaszaj wejście w pola widzenia" name="RadarReportDrawRangeEnter"/>
+					<check_box label="Zgłaszaj wyjście z pola widzenia" name="RadarReportDrawRangeLeaving"/>
+					<check_box label="Zgłaszaj wejście w przestrzeń czatu" name="RadarReportChatRangeEnter"/>
+					<check_box label="Zgłaszaj wyjście z przestrzeni czatu" name="RadarReportChatRangeLeave"/>
+					<check_box label="Zgłaszaj wejście w przestrzeń regionu" name="RadarReportSimRangeEnter"/>
+					<check_box label="Zgłaszaj wyjście z przestrzeni regionu" name="RadarReportSimRangeLeave"/>
+					<check_box label="Zgłaszaj alerty wejść skryptom" name="RadarEnterChannelAlert"/>
+					<check_box label="Zgłaszaj alerty wyjść skryptom" name="RadarLeaveChannelAlert"/>
+					<check_box label="Koloruj imiona bazując na odległości" name="FSRadarColorNamesByDistance"/>
+					<check_box label="Ogranicz odl.:" tool_tip="Ogranicza wyniki do określonego dystansu" name="LimitRadarByRange" />
+					<text name="radarmap_range_label" value="Format imion radaru:"/>
+					<combo_box name="RadarNameFormat">
+						<combo_box.item name="RadarNameFormat_display" label="Wyświetlane" />
+						<combo_box.item name="RadarNameFormat_user" label="Nazwa konta" />
+						<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (Nazwa konta)" />
+						<combo_box.item name="RadarNameFormat_userdisplay" label="Nazwa konta (Wyświetlane)" />
+					</combo_box>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel label="Ostatnie" name="recent_panel" />
+		<panel label="Zablokowani" name="blocked_panel" />
+	</tab_container>
+</panel>

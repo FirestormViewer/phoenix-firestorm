@@ -13,7 +13,7 @@
 	<check_box label="Disabilita la fisica" name="disable_physics_check" tool_tip="Disabilita tutta la fisica dei corpi in questa regione"/>
 	<button label="?" name="disable_physics_help"/>
 	<button label="Applica" name="apply_btn"/>
-	<text name="objret_text_lbl" width="130">
+	<text name="objret_text_lbl" width="180">
 		Restituisci oggetti
 	</text>
 	<text name="resident_text_lbl">

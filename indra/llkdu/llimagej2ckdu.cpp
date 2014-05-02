@@ -71,6 +71,12 @@ private:
 // Kakadu specific implementation
 //
 void set_default_colour_weights(kdu_params *siz);
+// <FS:CR> Various missing prototypes
+LLImageJ2CImpl* fallbackCreateLLImageJ2CImpl();
+void fallbackDestroyLLImageJ2CImpl(LLImageJ2CImpl* impl);
+const char* fallbackEngineInfoLLImageJ2CImpl();
+void ll_kdu_error(void);
+// </FS:CR>
 
 const char* engineInfoLLImageJ2CKDU()
 {
@@ -108,7 +114,11 @@ const char* fallbackEngineInfoLLImageJ2CImpl()
 class LLKDUDecodeState
 {
 public:
-	LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap);
+	// <FS:ND> KDU 7.3.2 upgrade
+	// LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap);
+	LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap, kdu_codestream &aStream );
+	// </FS:ND>
+
 	~LLKDUDecodeState();
 	BOOL processTileDecode(F32 decode_time, BOOL limit_time = TRUE);
 
@@ -166,7 +176,8 @@ void LLKDUMessageWarning::put_text(const kdu_uint16 *s)
 
 void LLKDUMessageError::put_text(const char *s)
 {
-	llinfos << "KDU Error: " << s << llendl;
+	// <FS_AO: decrease performance-killing spam>
+	LL_INFOS_ONCE("LLImageJ2CKDU") << "KDU Error: " << s << llendl;
 }
 
 void LLKDUMessageError::put_text(const kdu_uint16 *s)
@@ -454,6 +465,15 @@ BOOL LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 		}
 	}
 
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	// <FS:LO> get_text() will return a NULL pointer if no comment exists, but will return a proper null terminated string even if the comment is ""
+	if(mCodeStreamp->get_comment().get_text())
+	{
+		raw_image.mComment.assign(mCodeStreamp->get_comment().get_text());
+	}
+	// </FS:LO>
+	// </FS:Techwolf Lupindo>
+
 	// These can probably be grabbed from what's saved in the class.
 	kdu_dims dims;
 	mCodeStreamp->get_dims(0,dims);
@@ -495,7 +515,12 @@ BOOL LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 					kdu_coords offset = tile_dims.pos - dims.pos;
 					int row_gap = channels*dims.size.x; // inter-row separation
 					kdu_byte *buf = buffer + offset.y*row_gap + offset.x*channels;
-					mDecodeState = new LLKDUDecodeState(tile, buf, row_gap);
+					
+					// <FS:ND> KDU 7.3.2 upgrade
+					// mDecodeState = new LLKDUDecodeState(tile, buf, row_gap);
+					mDecodeState = new LLKDUDecodeState(tile, buf, row_gap, *mCodeStreamp);
+					// </FS:ND>
+
 				}
 				// Do the actual processing
 				F32 remaining_time = decode_time - decode_timer.getElapsedTimeF32();
@@ -1143,7 +1168,10 @@ all necessary level shifting, type conversion, rounding and truncation. */
 	}
 }
 
-LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap)
+// <FS:ND> KDU 7.3.2 upgrade
+// LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap)
+LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap, kdu_codestream &aStream )
+// </FS:ND>
 {
 	S32 c;
 
@@ -1189,7 +1217,12 @@ LLKDUDecodeState::LLKDUDecodeState(kdu_tile tile, kdu_byte *buf, S32 row_gap)
 			mEngines[c] = kdu_synthesis(res,&mAllocator,use_shorts);
 		}
 	}
-	mAllocator.finalize(); // Actually creates buffering resources
+
+	// <FS:ND> KDU 7.3.2 upgrade
+	// mAllocator.finalize(); // Actually creates buffering resources
+	mAllocator.finalize( aStream ); // Actually creates buffering resources
+	// </FS:ND>
+
 	for (c = 0; c < mNumComponents; c++)
 	{
 		mLines[c].create(); // Grabs resources from the allocator.

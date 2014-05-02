@@ -37,10 +37,11 @@ extern LLControlGroup gSavedSettings;
 F64 LLWLAnimator::INTERP_TOTAL_SECONDS = 3.f;
 
 LLWLAnimator::LLWLAnimator() : mStartTime(0.f), mDayRate(1.f), mDayTime(0.f),
-							mIsRunning(FALSE), mIsInterpolating(FALSE), mTimeType(TIME_LINDEN),
-							mInterpStartTime(), mInterpEndTime()
+							mIsRunning(FALSE), mIsInterpolating(FALSE), mIsInterpolatingSky(FALSE),
+							mTimeType(TIME_LINDEN), mInterpStartTime(), mInterpEndTime()
 {
 	mInterpBeginWL = new LLWLParamSet();
+	mInterpEndWL = new LLWLParamSet();
 	mInterpBeginWater = new LLWaterParamSet();
 	mInterpEndWater = new LLWaterParamSet();
 }
@@ -118,20 +119,47 @@ void LLWLAnimator::update(LLWLParamSet& curParams)
 		clock_t current = clock();
 		if(current >= mInterpEndTime)
 		{
+			if (mIsInterpolatingSky)
+			{
+				deactivate();
+				// FIRE-3245: Some settings do not get fully mixed properly (possibly due to value extremes)
+				// at the end of the interp cycle, force the end settings to get applied
+				curParams.setAll(mInterpEndWL->getAll());
+			}
+			// <FS:Ansariel> FIRE-11158: Set final merge for water WL on extreme values
+			LLWaterParamManager::getInstance()->mCurParams.setAll(mInterpEndWater->getAll());
+
 			mIsInterpolating = false;
+			mIsInterpolatingSky = false;
 			return;
 		}
-		
-		// determine moving target for final interpolation value
-		// *TODO: this will not work with lazy loading of sky presets.
-		LLWLParamSet buf = LLWLParamSet();
-		buf.setAll(LLWLParamManager::getInstance()->mParamList[mFirstIt->second].getAll());	// just give it some values, otherwise it has no params to begin with (see comment in constructor)
-		buf.mix(LLWLParamManager::getInstance()->mParamList[mFirstIt->second], LLWLParamManager::getInstance()->mParamList[mSecondIt->second], weight);	// mix to determine moving target for interpolation finish (as below)
 
-		// mix from previous value to moving target
-		weight = (current - mInterpStartTime) / (INTERP_TOTAL_SECONDS * CLOCKS_PER_SEC);
-		curParams.mix(*mInterpBeginWL, buf, weight);
+		// <FS:Ansariel> Custom Windlight interpolate time
+		static LLCachedControl<F32> interpolate_time(gSavedSettings, "FSWindlightInterpolateTime");
 		
+		if (mIsInterpolatingSky)
+		{
+			// <FS:Ansariel> Custom Windlight interpolate time
+			//weight = (current - mInterpStartTime) / (INTERP_TOTAL_SECONDS * CLOCKS_PER_SEC);
+			weight = (current - mInterpStartTime) / ((F64)interpolate_time * CLOCKS_PER_SEC);
+			curParams.mix(*mInterpBeginWL, *mInterpEndWL, weight);
+		}
+		else
+		{
+		
+			// determine moving target for final interpolation value
+			// *TODO: this will not work with lazy loading of sky presets.
+			LLWLParamSet buf = LLWLParamSet();
+			buf.setAll(LLWLParamManager::getInstance()->mParamList[mFirstIt->second].getAll());	// just give it some values, otherwise it has no params to begin with (see comment in constructor)
+			buf.mix(LLWLParamManager::getInstance()->mParamList[mFirstIt->second], LLWLParamManager::getInstance()->mParamList[mSecondIt->second], weight);	// mix to determine moving target for interpolation finish (as below)
+
+			// mix from previous value to moving target
+			// <FS:Ansariel> Custom Windlight interpolate time
+			//weight = (current - mInterpStartTime) / (INTERP_TOTAL_SECONDS * CLOCKS_PER_SEC);
+			weight = (current - mInterpStartTime) / ((F64)interpolate_time * CLOCKS_PER_SEC);
+			curParams.mix(*mInterpBeginWL, buf, weight);
+		}
+
 		// mix water
 		LLWaterParamManager::getInstance()->mCurParams.mix(*mInterpBeginWater, *mInterpEndWater, weight);
 	}
@@ -225,12 +253,21 @@ void LLWLAnimator::startInterpolation(const LLSD& targetWater)
 	mInterpBeginWater->setAll(LLWaterParamManager::getInstance()->mCurParams.getAll());
 	
 	mInterpStartTime = clock();
-	mInterpEndTime = mInterpStartTime + clock_t(INTERP_TOTAL_SECONDS) * CLOCKS_PER_SEC;
+	// <FS:Ansariel> Custom Windlight interpolate time
+	//mInterpEndTime = mInterpStartTime + clock_t(INTERP_TOTAL_SECONDS) * CLOCKS_PER_SEC;
+	mInterpEndTime = mInterpStartTime + clock_t((F64)gSavedSettings.getF32("FSWindlightInterpolateTime")) * CLOCKS_PER_SEC;
 
 	// Don't set any ending WL -- this is continuously calculated as the animator updates since it's a moving target
 	mInterpEndWater->setAll(targetWater);
 
 	mIsInterpolating = true;
+}
+
+void LLWLAnimator::startInterpolationSky(const LLSD& targetSky)
+{
+	mInterpEndWL->setAll(targetSky);
+
+	mIsInterpolatingSky = true;
 }
 
 std::string LLWLAnimator::timeToString(F32 curTime)

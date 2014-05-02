@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_flickr_settings">
+	<combo_box label="Rozdzielczość" name="flickr_size_combo">
+		<combo_box.item label="Obecne okno" name="CurrentWindow" />
+		<combo_box.item label="Własna" name="Custom" />
+	</combo_box>
+	<layout_stack name="flickr_image_params_ls">
+		<layout_panel name="flickr_image_size_lp">
+			<spinner label="Szer." name="flickr_snapshot_width" />
+			<spinner label="Wys." name="flickr_snapshot_height" />
+			<check_box label="Zachowaj proporcje" name="flickr_keep_aspect_check" />
+		</layout_panel>
+		<layout_panel name="flickr_image_format_quality_lp">
+			<combo_box label="Format" name="flickr_format_combo">
+				<combo_box.item label="PNG (bezstratny)" name="PNG" />
+			</combo_box>
+			<slider label="Jakość" name="image_quality_slider" />
+		</layout_panel>
+	</layout_stack>
+</panel>

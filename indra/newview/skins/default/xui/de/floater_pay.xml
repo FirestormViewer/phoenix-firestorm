@@ -10,7 +10,7 @@
 		Bezahlen:
 	</text>
 	<icon name="icon_person" tool_tip="Person"/>
-	<text left="130" name="payee_name">
+	<text name="payee_name">
 		Extrem langen Namen testen, um zu prüfen, ob er abgeschnitten wird
 	</text>
 	<button label="1 L$" label_selected="1 L$" name="fastpay 1"/>
@@ -19,6 +19,9 @@
 	<button label="20 L$" label_selected="20 L$" name="fastpay 20"/>
 	<text name="amount text">
 		oder Betrag auswählen:
+	</text>
+	<text name="payment_message_label">
+		Nachricht (Optional):
 	</text>
 	<button label="Bezahlen" label_selected="Bezahlen" name="pay btn"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel btn"/>

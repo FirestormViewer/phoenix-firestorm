@@ -81,14 +81,16 @@ LLFloaterMap::~LLFloaterMap()
 BOOL LLFloaterMap::postBuild()
 {
 	mMap = getChild<LLNetMap>("Net Map");
-	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-	{
-		mMap->setToolTipMsg(getString("AltToolTipMsg"));
-	}
-	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-	{
-		mMap->setToolTipMsg(getString("ToolTipMsg"));
-	}
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	//{
+	//	mMap->setToolTipMsg(getString("AltToolTipMsg"));
+	//}
+	//else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	//{
+	//	mMap->setToolTipMsg(getString("ToolTipMsg"));
+	//}
+	// </FS:Ansariel> Synchronize tooltips throughout instances
 	sendChildToBack(mMap);
 	
 	mTextBoxNorth = getChild<LLTextBox> ("floater_map_north");
@@ -100,11 +102,20 @@ BOOL LLFloaterMap::postBuild()
 	mTextBoxSouthWest = getChild<LLTextBox> ("floater_map_southwest");
 	mTextBoxNorthWest = getChild<LLTextBox> ("floater_map_northwest");
 
+	// <FS:Ansariel> Remove titlebar
+	stretchMiniMap(getRect().getWidth() - MAP_PADDING_LEFT - MAP_PADDING_RIGHT,
+		getRect().getHeight() - MAP_PADDING_TOP - MAP_PADDING_BOTTOM);
+
 	updateMinorDirections();
 
 	// Get the drag handle all the way in back
 	sendChildToBack(getDragHandle());
 
+	// <FS:Ansariel> Remove titlebar
+	setIsChrome(TRUE);
+	getDragHandle()->setTitleVisible(TRUE);
+	// </FS:Ansariel>
+	
 	// keep onscreen
 	gFloaterView->adjustToFitScreen(this, FALSE);
 
@@ -122,23 +133,26 @@ BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 	LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
 	
-	LLTracker::stopTracking(NULL);
-	LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
-	if (world_map)
-	{
-		world_map->trackLocation(pos_global);
-	}
-
-	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-	{
-		// If DoubleClickTeleport is on, double clicking the minimap will teleport there
-		gAgent.teleportViaLocationLookAt(pos_global);
-	}
-	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-	{
-		LLFloaterReg::showInstance("world_map");
-	}
-	return TRUE;
+	// <FS:Ansariel> Synchronize double click handling throughout instances
+	//LLTracker::stopTracking(NULL);
+	//LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+	//if (world_map)
+	//{
+	//	world_map->trackLocation(pos_global);
+	//}
+	//
+	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	//{
+	//	// If DoubleClickTeleport is on, double clicking the minimap will teleport there
+	//	gAgent.teleportViaLocationLookAt(pos_global);
+	//}
+	//else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	//{
+	//	LLFloaterReg::showInstance("world_map");
+	//}
+	mMap->performDoubleClickAction(pos_global);
+	// </FS:Ansariel> Synchronize double click handling throughout instances
+    return TRUE;
 }
 
 void LLFloaterMap::setDirectionPos( LLTextBox* text_box, F32 rotation )
@@ -218,36 +232,77 @@ void LLFloaterMap::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLFloater::reshape(width, height, called_from_parent);
 	
+	// <FS:Ansariel> Remove titlebar
+	stretchMiniMap(width - MAP_PADDING_LEFT - MAP_PADDING_RIGHT, height - MAP_PADDING_TOP - MAP_PADDING_BOTTOM);
+
 	updateMinorDirections();
 }
 
-void LLFloaterMap::handleZoom(const LLSD& userdata)
-{
-	std::string level = userdata.asString();
-	
-	F32 scale = 0.0f;
-	if (level == std::string("default"))
-	{
-		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-		if(pvar)
-		{
-			pvar->resetToDefault();
-			scale = gSavedSettings.getF32("MiniMapScale");
-		}
-	}
-	else if (level == std::string("close"))
-		scale = LLNetMap::MAP_SCALE_MAX;
-	else if (level == std::string("medium"))
-		scale = LLNetMap::MAP_SCALE_MID;
-	else if (level == std::string("far"))
-		scale = LLNetMap::MAP_SCALE_MIN;
-	if (scale != 0.0f)
-	{
-		mMap->setScale(scale);
-	}
-}
+// <FS:Ansariel> Unused as of 06-02-2014; Handled in LLNetMap
+//void LLFloaterMap::handleZoom(const LLSD& userdata)
+//{
+//	std::string level = userdata.asString();
+//	
+//	F32 scale = 0.0f;
+//	if (level == std::string("default"))
+//	{
+//		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+//		if(pvar)
+//		{
+//			pvar->resetToDefault();
+//			scale = gSavedSettings.getF32("MiniMapScale");
+//		}
+//	}
+//	else if (level == std::string("close"))
+//		scale = LLNetMap::MAP_SCALE_MAX;
+//	else if (level == std::string("medium"))
+//		scale = LLNetMap::MAP_SCALE_MID;
+//	else if (level == std::string("far"))
+//		scale = LLNetMap::MAP_SCALE_MIN;
+//	if (scale != 0.0f)
+//	{
+//		mMap->setScale(scale);
+//	}
+//}
+// </FS:Ansariel>
 
 LLFloaterMap* LLFloaterMap::getInstance()
 {
 	return LLFloaterReg::getTypedInstance<LLFloaterMap>("mini_map");
 }
+
+// <FS:Ansariel> FIRE-1825: Minimap floater background transparency
+// virtual
+F32 LLFloaterMap::getCurrentTransparency()
+{
+	static LLCachedControl<F32> fsMiniMapOpacity(gSavedSettings, "FSMiniMapOpacity");
+	return fsMiniMapOpacity();
+}
+
+// <FS:Ansariel> Remove titlebar
+void LLFloaterMap::setMinimized(BOOL b)
+{
+	LLFloater::setMinimized(b);
+	if (b)
+	{
+		setTitle(getString("mini_map_caption"));
+	}
+	else
+	{
+		setTitle("");
+	}
+}
+
+void LLFloaterMap::stretchMiniMap(S32 width,S32 height)
+{
+	//fix for ext-7112
+	//by default ctrl can't overlap caption area
+	if(mMap)
+	{
+		LLRect map_rect;
+		map_rect.setLeftTopAndSize( MAP_PADDING_LEFT, getRect().getHeight() - MAP_PADDING_TOP, width, height);
+		mMap->reshape( width, height, 1);
+		mMap->setRect(map_rect);
+	}
+}
+// </FS:Ansariel>

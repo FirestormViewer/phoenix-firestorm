@@ -4,7 +4,7 @@
 		Ponerme el vestuario seleccionado
 	</panel.string>
 	<panel.string name="wear_items_tooltip">
-		Ponerme ítems seleccionados
+		Ponerme items seleccionados
 	</panel.string>
 	<tab_container name="appearance_tabs">
 		<panel label="MIS VESTUARIOS" name="outfitslist_tab"/>

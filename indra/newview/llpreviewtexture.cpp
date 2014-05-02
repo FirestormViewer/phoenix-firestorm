@@ -31,7 +31,9 @@
 #include "llpreviewtexture.h"
 
 #include "llagent.h"
+#include "llavataractions.h"
 #include "llbutton.h"
+#include "llclipboard.h"
 #include "llcombobox.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
@@ -44,12 +46,18 @@
 #include "lltextbox.h"
 #include "lltextureview.h"
 #include "llui.h"
+#include "llviewercontrol.h" // <FS:PP> For user-defined default save format for textures
 #include "llviewerinventory.h"
 #include "llviewertexture.h"
 #include "llviewertexturelist.h"
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
 #include "lllineeditor.h"
+#include "lltexteditor.h"
+
+#include "llimagepng.h"
+
+#include "fscommon.h"
 
 const S32 CLIENT_RECT_VPAD = 4;
 
@@ -60,7 +68,7 @@ const F32 PREVIEW_TEXTURE_MIN_ASPECT = 0.005f;
 
 
 LLPreviewTexture::LLPreviewTexture(const LLSD& key)
-	: LLPreview(key),
+	: LLPreview((key.has("uuid") ? key.get("uuid") : key)), // Changed for texture preview mode
 	  mLoadingFullImage( FALSE ),
 	  mShowKeepDiscard(FALSE),
 	  mCopyToInv(FALSE),
@@ -71,24 +79,54 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	  mAspectRatio(0.f),
 	  mPreviewToSave(FALSE),
 	  mImage(NULL),
-	  mImageOldBoostLevel(LLGLTexture::BOOST_NONE)
+	  mImageOldBoostLevel(LLGLTexture::BOOST_NONE),
+	  mShowingButtons(false),
+	  mDisplayNameCallback(false),
+	  mAvatarNameCallbackConnection(),
+	  // <FS:Ansariel> Performance improvement
+	  mCurrentImageWidth(0),
+	  mCurrentImageHeight(0)
+	  // </FS:Ansariel>
 {
 	updateImageID();
 	if (key.has("save_as"))
 	{
 		mPreviewToSave = TRUE;
 	}
+	// Texture preview mode
+	if (key.has("preview_only"))
+	{
+		mShowKeepDiscard = FALSE;
+		mCopyToInv = FALSE;
+		mIsCopyable = FALSE;
+		mPreviewToSave = FALSE;
+	}
 }
 
 LLPreviewTexture::~LLPreviewTexture()
 {
+	// <FS:Ansariel> Handle avatar name callback
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
+	// </FS:Ansariel>
+
 	LLLoadedCallbackEntry::cleanUpCallbackList(&mCallbackTextureList) ;
 
 	if( mLoadingFullImage )
 	{
 		getWindow()->decBusyCount();
 	}
-	mImage->setBoostLevel(mImageOldBoostLevel);
+
+	// <FS:ND> mImage can be 0.
+	// mImage->setBoostLevel(mImageOldBoostLevel);
+
+	if( mImage )
+		mImage->setBoostLevel(mImageOldBoostLevel);
+
+	// <FS:ND>
+
 	mImage = NULL;
 }
 
@@ -112,8 +150,8 @@ BOOL LLPreviewTexture::postBuild()
 		getChildView("Discard")->setVisible( false);
 	}
 	
-	childSetAction("save_tex_btn", LLPreviewTexture::onSaveAsBtn, this);
-	getChildView("save_tex_btn")->setVisible( true);
+	childSetCommitCallback("save_tex_btn", onSaveAsBtn, this);
+	getChildView("save_tex_btn")->setVisible(canSaveAs()); // Ansariel: No need to show the save button if we can't save anyway
 	getChildView("save_tex_btn")->setEnabled(canSaveAs());
 	
 	if (!mCopyToInv) 
@@ -131,15 +169,57 @@ BOOL LLPreviewTexture::postBuild()
 	childSetCommitCallback("combo_aspect_ratio", onAspectRatioCommit, this);
 	LLComboBox* combo = getChild<LLComboBox>("combo_aspect_ratio");
 	combo->setCurrentByIndex(0);
-	
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	getChild<LLButton>("openprofile")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonClickProfile, this));
+	getChild<LLButton>("copyuuid")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonClickUUID, this));
+	mUploaderDateTime = getString("UploaderDateTime");
+	// </FS:Techwolf Lupindo>
+
+	// <FS:Ansariel> AnsaStorm skin: Need to disable line editors from
+	//               code or the floater would be dragged around if
+	//               trying to mark text
+	if (findChild<LLLineEditor>("uploader"))
+	{
+		getChild<LLLineEditor>("uploader")->setEnabled(FALSE);
+		getChild<LLLineEditor>("upload_time")->setEnabled(FALSE);
+		getChild<LLLineEditor>("uuid")->setEnabled(FALSE);
+	}
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> Performance improvement
+	mDimensionsCtrl = getChild<LLUICtrl>("dimensions");
+
 	return LLPreview::postBuild();
 }
 
 // static
-void LLPreviewTexture::onSaveAsBtn(void* data)
+void LLPreviewTexture::onSaveAsBtn(LLUICtrl* ctrl, void* data)
 {
 	LLPreviewTexture* self = (LLPreviewTexture*)data;
-	self->saveAs();
+	std::string value = ctrl->getValue().asString();
+	if (value == "format_png")
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_PNG);
+	}
+	else if (value == "format_tga")
+	{
+		self->saveAs(LLPreviewTexture::FORMAT_TGA);
+	}
+	else
+	{
+		// <FS:PP> Allow to use user-defined default save format for textures
+		// self->saveAs(LLPreviewTexture::FORMAT_TGA);
+		if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+		{
+			self->saveAs(LLPreviewTexture::FORMAT_TGA);
+		}
+		else
+		{
+			self->saveAs(LLPreviewTexture::FORMAT_PNG);
+		}
+		// </FS:PP>
+	}
 }
 
 void LLPreviewTexture::draw()
@@ -257,12 +337,45 @@ BOOL LLPreviewTexture::canSaveAs() const
 // virtual
 void LLPreviewTexture::saveAs()
 {
+	// <FS:PP> Allow to use user-defined default save format for textures
+	// saveAs(LLPreviewTexture::FORMAT_TGA);
+	if (!gSavedSettings.getBOOL("FSTextureDefaultSaveAsFormat"))
+	{
+		saveAs(LLPreviewTexture::FORMAT_TGA);
+	}
+	else
+	{
+		saveAs(LLPreviewTexture::FORMAT_PNG);
+	}
+	// </FS:PP>
+	
+}
+
+void LLPreviewTexture::saveAs(EFileformatType format)
+{
 	if( mLoadingFullImage )
 		return;
 
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	const LLInventoryItem* item = getItem() ;
-	if( !file_picker.getSaveFile( LLFilePicker::FFSAVE_TGAPNG, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
+
+	loaded_callback_func callback;
+	LLFilePicker::ESaveFilter saveFilter;
+
+	switch (format)
+	{
+		case LLPreviewTexture::FORMAT_PNG:
+			callback = LLPreviewTexture::onFileLoadedForSavePNG;
+			saveFilter = LLFilePicker::FFSAVE_PNG;
+			break;
+		case LLPreviewTexture::FORMAT_TGA:
+		default:
+			callback = LLPreviewTexture::onFileLoadedForSaveTGA;
+			saveFilter = LLFilePicker::FFSAVE_TGA;
+			break;
+	}
+
+	if( !file_picker.getSaveFile( saveFilter, item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null) )
 	{
 		// User canceled or we failed to acquire save file.
 		return;
@@ -273,7 +386,7 @@ void LLPreviewTexture::saveAs()
 	getWindow()->incBusyCount();
 
 	mImage->forceToSaveRawImage(0) ;//re-fetch the raw image if the old one is removed.
-	mImage->setLoadedCallback( LLPreviewTexture::onFileLoadedForSave, 
+	mImage->setLoadedCallback( callback, 
 								0, TRUE, FALSE, new LLUUID( mItemUUID ), &mCallbackTextureList );
 }
 
@@ -282,7 +395,13 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLPreview::reshape(width, height, called_from_parent);
 
-	LLRect dim_rect(getChildView("dimensions")->getRect());
+	LLRect dim_rect;
+	// Ansariel: Need the rect of the dimensions_panel
+	//LLView *pView = findChildView( "dimensions" );
+	LLView *pView = findChildView( "dimensions_panel" );
+	
+	if( pView )
+		dim_rect = pView->getRect();
 
 	S32 horiz_pad = 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;
 
@@ -291,6 +410,24 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 	LLRect client_rect(horiz_pad, getRect().getHeight(), getRect().getWidth() - horiz_pad, 0);
 	client_rect.mTop -= (PREVIEW_HEADER_SIZE + CLIENT_RECT_VPAD);
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	// 1 additional line: uploader and date time
+	if (findChild<LLTextEditor>("uploader_date_time"))
+	{
+		if (mImage && (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end()))
+		{
+			client_rect.mTop -= (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight() + CLIENT_RECT_VPAD);
+		}
+	}
+	else if (findChild<LLLineEditor>("uploader"))
+	{
+		// AnsaStorm skin
+		client_rect.mTop -= 3 * (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
+	}
+	// </FS:Techwolf Lupindo>
+
+
 	client_rect.mBottom += PREVIEW_BORDER + CLIENT_RECT_VPAD + info_height ;
 
 	S32 client_width = client_rect.getWidth();
@@ -334,7 +471,7 @@ void LLPreviewTexture::openToSave()
 }
 
 // static
-void LLPreviewTexture::onFileLoadedForSave(BOOL success, 
+void LLPreviewTexture::onFileLoadedForSaveTGA(BOOL success, 
 					   LLViewerFetchedTexture *src_vi,
 					   LLImageRaw* src, 
 					   LLImageRaw* aux_src, 
@@ -359,27 +496,34 @@ void LLPreviewTexture::onFileLoadedForSave(BOOL success,
 
 	if( self && final && success )
 	{
-		const U32 ext_length = 3;
-		std::string extension = self->mSaveFileName.substr( self->mSaveFileName.length() - ext_length);
+		// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+		//const U32 ext_length = 3;
+		//std::string extension = self->mSaveFileName.substr( self->mSaveFileName.length() - ext_length);
 
-		// We only support saving in PNG or TGA format
-		LLPointer<LLImageFormatted> image;
-		if(extension == "png")
-		{
-			image = new LLImagePNG;
-		}
-		else if(extension == "tga")
-		{
-			image = new LLImageTGA;
-		}
+		//// We only support saving in PNG or TGA format
+		//LLPointer<LLImageFormatted> image;
+		//if(extension == "png")
+		//{
+		//	image = new LLImagePNG;
+		//}
+		//else if(extension == "tga")
+		//{
+		//	image = new LLImageTGA;
+		//}
 
-		if( image && !image->encode( src, 0 ) )
+		//if( image && !image->encode( src, 0 ) )
+		LLPointer<LLImageTGA> image_tga = new LLImageTGA;
+		if( !image_tga->encode( src ) )
+		// </FS:Ansariel>
 		{
 			LLSD args;
 			args["FILE"] = self->mSaveFileName;
 			LLNotificationsUtil::add("CannotEncodeFile", args);
 		}
-		else if( image && !image->save( self->mSaveFileName ) )
+		// <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
+		//else if( image && !image->save( self->mSaveFileName ) )
+		else if( !image_tga->save( self->mSaveFileName ) )
+		// </FS:Ansariel>
 		{
 			LLSD args;
 			args["FILE"] = self->mSaveFileName;
@@ -401,6 +545,59 @@ void LLPreviewTexture::onFileLoadedForSave(BOOL success,
 
 }
 
+// static
+void LLPreviewTexture::onFileLoadedForSavePNG(BOOL success, 
+											LLViewerFetchedTexture *src_vi,
+											LLImageRaw* src, 
+											LLImageRaw* aux_src, 
+											S32 discard_level,
+											BOOL final,
+											void* userdata)
+{
+	LLUUID* item_uuid = (LLUUID*) userdata;
+
+	LLPreviewTexture* self = LLFloaterReg::findTypedInstance<LLPreviewTexture>("preview_texture", *item_uuid);
+
+	if( final || !success )
+	{
+		delete item_uuid;
+
+		if( self )
+		{
+			self->getWindow()->decBusyCount();
+			self->mLoadingFullImage = FALSE;
+		}
+	}
+
+	if( self && final && success )
+	{
+		LLPointer<LLImagePNG> image_png = new LLImagePNG;
+		if( !image_png->encode( src, 0.0 ) )
+		{
+			LLSD args;
+			args["FILE"] = self->mSaveFileName;
+			LLNotificationsUtil::add("CannotEncodeFile", args);
+		}
+		else if( !image_png->save( self->mSaveFileName ) )
+		{
+			LLSD args;
+			args["FILE"] = self->mSaveFileName;
+			LLNotificationsUtil::add("CannotWriteFile", args);
+		}
+		else
+		{
+			self->mSavedFileTimer.reset();
+			self->mSavedFileTimer.setTimerExpirySec( SECONDS_TO_SHOW_FILE_SAVED_MSG );
+		}
+
+		self->mSaveFileName.clear();
+	}
+
+	if( self && !success )
+	{
+		LLNotificationsUtil::add("CannotDownloadFile");
+	}
+}
 
 // It takes a while until we get height and width information.
 // When we receive it, reshape the window accordingly.
@@ -416,25 +613,259 @@ void LLPreviewTexture::updateDimensions()
 	}
 	
 	// Update the width/height display every time
-	getChild<LLUICtrl>("dimensions")->setTextArg("[WIDTH]",  llformat("%d", mImage->getFullWidth()));
-	getChild<LLUICtrl>("dimensions")->setTextArg("[HEIGHT]", llformat("%d", mImage->getFullHeight()));
+	// <FS:Ansariel> Performance improvement
+	//getChild<LLUICtrl>("dimensions")->setTextArg("[WIDTH]",  llformat("%d", mImage->getFullWidth()));
+	//getChild<LLUICtrl>("dimensions")->setTextArg("[HEIGHT]", llformat("%d", mImage->getFullHeight()));
+	if (mCurrentImageWidth != mImage->getFullWidth())
+	{
+		mDimensionsCtrl->setTextArg("[WIDTH]", llformat("%d", mImage->getFullWidth()));
+		mCurrentImageWidth = mImage->getFullWidth();
+	}
+	if (mCurrentImageHeight != mImage->getFullHeight())
+	{
+		mDimensionsCtrl->setTextArg("[HEIGHT]", llformat("%d", mImage->getFullHeight()));
+		mCurrentImageHeight = mImage->getFullHeight();
+	}
+	// </FS:Ansariel>
 
 	// Reshape the floater only when required
 	if (mUpdateDimensions)
 	{
 		mUpdateDimensions = FALSE;
 		
+		// <FS:Ansariel>: Show image at full resolution if possible
 		//reshape floater
-		reshape(getRect().getWidth(), getRect().getHeight());
+		//reshape(getRect().getWidth(), getRect().getHeight());
 
+		//gFloaterView->adjustToFitScreen(this, FALSE);
+
+		// Move dimensions panel into correct position depending
+		// if any of the buttons is shown
+		LLView* button_panel = getChildView("button_panel");
+		LLView* dimensions_panel = getChildView("dimensions_panel");
+		dimensions_panel->setVisible(TRUE);
+		if (!getChildView("Keep")->getVisible() &&
+			!getChildView("Discard")->getVisible() &&
+			!getChildView("save_tex_btn")->getVisible())
+		{
+			button_panel->setVisible(FALSE);
+			if (mShowingButtons)
+			{
+				dimensions_panel->translate(0, -button_panel->getRect().mTop);
+				mShowingButtons = false;
+			}
+		}
+		else
+		{
+			button_panel->setVisible(TRUE);
+			if (!mShowingButtons)
+			{
+				dimensions_panel->translate(0, button_panel->getRect().mTop);
+				mShowingButtons = true;
+			}
+		}
+
+		// <FS:Techwolf Lupindo> texture comment metadata reader
+		S32 additional_height = 0;
+		if (findChild<LLTextEditor>("uploader_date_time"))
+		{
+			bool adjust_height = false;
+			if (mImage->mComment.find("a") != mImage->mComment.end())
+			{
+				getChildView("uploader_date_time")->setVisible(TRUE);
+				LLUUID id = LLUUID(mImage->mComment["a"]);
+				std::string name;
+				LLAvatarName avatar_name;
+				if (LLAvatarNameCache::get(id, &avatar_name))
+				{
+					mUploaderDateTime.setArg("[UPLOADER]", avatar_name.getCompleteName());
+				}
+				else
+				{
+					if (!mDisplayNameCallback) // prevents a possible callbackLoadName loop due to server error.
+					{
+						mDisplayNameCallback = true;
+						mUploaderDateTime.setArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
+						if (mAvatarNameCallbackConnection.connected())
+						{
+							mAvatarNameCallbackConnection.disconnect();
+						}
+						mAvatarNameCallbackConnection = LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+					}
+				}
+				getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+				adjust_height = true;
+			}
+
+			if (mImage->mComment.find("z") != mImage->mComment.end())
+			{
+				if (!adjust_height)
+				{
+					getChildView("uploader_date_time")->setVisible(TRUE);
+					adjust_height = true;
+				}
+				std::string date_time = mImage->mComment["z"];
+				LLSD substitution;
+				substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
+				date_time = getString("DateTime"); // reuse date_time variable
+				LLStringUtil::format(date_time, substitution);
+				mUploaderDateTime.setArg("[DATE_TIME]", date_time);
+				getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+			}
+			// add extra space for uploader and date_time
+			if (adjust_height)
+			{
+				getChildView("openprofile")->setVisible(TRUE);
+				additional_height += (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight());
+			}
+		}
+		else if (findChild<LLLineEditor>("uploader"))
+		{
+			// AnsaStorm skin
+			if (mImage->mComment.find("a") != mImage->mComment.end())
+			{
+				getChild<LLButton>("openprofile")->setEnabled(TRUE);
+				LLUUID id = LLUUID(mImage->mComment["a"]);
+				std::string name;
+				LLAvatarName avatar_name;
+				if (LLAvatarNameCache::get(id, &avatar_name))
+				{
+					childSetText("uploader", avatar_name.getCompleteName());
+				}
+				else
+				{
+					if (!mDisplayNameCallback) // prevents a possible callbackLoadName loop due to server error.
+					{
+						mDisplayNameCallback = true;
+						getChild<LLLineEditor>("uploader")->setText(LLTrans::getString("AvatarNameWaiting"));
+						if (mAvatarNameCallbackConnection.connected())
+						{
+							mAvatarNameCallbackConnection.disconnect();
+						}
+						mAvatarNameCallbackConnection = LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+					}
+				}
+			}
+
+			if (mImage->mComment.find("z") != mImage->mComment.end())
+			{
+				std::string date_time = mImage->mComment["z"];
+				LLSD substitution;
+				substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
+				date_time = getString("DateTime"); // reuse date_time variable
+				LLStringUtil::format(date_time, substitution);
+				childSetText("upload_time", date_time);
+			}
+
+ 			if (mIsCopyable)
+ 			{
+				childSetText("uuid", mImageID.asString());
+ 			}
+
+			LLView* uploader_view = getChildView("uploader");
+			LLView* uploadtime_view = getChildView("upload_time");
+			LLView* uuid_view = getChildView("uuid");
+				
+			uploader_view->setVisible(TRUE);
+			uploadtime_view->setVisible(TRUE);
+			uuid_view->setVisible(TRUE);
+			getChildView("openprofile")->setVisible(TRUE);
+			getChildView("copyuuid")->setVisible(TRUE);
+			getChildView("uploader_label")->setVisible(TRUE);
+			getChildView("upload_time_label")->setVisible(TRUE);
+			getChildView("uuid_label")->setVisible(TRUE);
+
+			additional_height = uploader_view->getRect().getHeight() + uploadtime_view->getRect().getHeight() + uuid_view->getRect().getHeight() + 3 * PREVIEW_VPAD;
+		}
+		// </FS:Techwolf Lupindo>
+
+		// If this is 100% correct???
+		S32 floater_target_width = mImage->getFullWidth() + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
+		S32 floater_target_height = mImage->getFullHeight() + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight() + additional_height;
+
+		// Scale down by factor 0.5 if image would exceed viewer window
+		if (gViewerWindow->getWindowWidthRaw() < floater_target_width || gViewerWindow->getWindowHeightRaw() < floater_target_height)
+		{
+			floater_target_width = mImage->getFullWidth() / 2 + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
+			floater_target_height = mImage->getFullHeight() / 2 + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight() + additional_height;
+		}
+		
+		// Preserve minimum floater size
+		floater_target_width = llmax(floater_target_width, getMinWidth());
+		floater_target_height = llmax(floater_target_height, getMinHeight());
+
+		// Resize floater
+		LLMultiFloater* host = getHost();
+		if (host)
+		{
+			S32 old_height = host->getRect().getHeight();
+			host->reshape(getMinWidth(), getMinHeight());
+			host->translate(0, old_height - getMinHeight());
+			host->growToFit(floater_target_width, floater_target_height);
+		}
+		reshape(floater_target_width, floater_target_height);
 		gFloaterView->adjustToFitScreen(this, FALSE);
+		// </FS:Ansariel>: Show image at full resolution if possible
 
 		LLRect dim_rect(getChildView("dimensions")->getRect());
 		LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());
 		getChildView("aspect_ratio")->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
+
+		// <FS:Ansariel> Asset UUID
+		if (mIsCopyable)
+		{
+			LLView* copy_uuid_btn = getChildView("copyuuid");
+			copy_uuid_btn->setVisible(TRUE);
+			copy_uuid_btn->setEnabled(TRUE);
+		}
+		// </FS:Ansariel>
 	}
 }
 
+
+// <FS:Techwolf Lupindo> texture comment metadata reader
+void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	if (mAvatarNameCallbackConnection.connected())
+	{
+		mAvatarNameCallbackConnection.disconnect();
+	}
+
+	if (findChild<LLTextEditor>("uploader_date_time"))
+	{
+		mUploaderDateTime.setArg("[UPLOADER]", av_name.getCompleteName());
+		getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+		mUpdateDimensions = TRUE;
+	}
+	else if (findChild<LLLineEditor>("uploader"))
+	{
+		// AnsaStorm skin
+		childSetText("uploader", av_name.getCompleteName());
+	}
+}
+
+void LLPreviewTexture::onButtonClickProfile()
+{
+	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end()))
+	{
+		LLUUID id = LLUUID(mImage->mComment["a"]);
+		LLAvatarActions::showProfile(id);
+	}
+}
+
+void LLPreviewTexture::onButtonClickUUID()
+{
+	std::string uuid = mImageID.asString();
+	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(uuid), 0, uuid.size());
+}
+
+/* static */
+void LLPreviewTexture::onTextureLoaded(BOOL success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata)
+{
+	LLPreviewTexture* self = (LLPreviewTexture*)userdata;
+	self->mUpdateDimensions = TRUE;
+}
+// </FS:Techwolf Lupindo> texture comment decoder
 
 // Return true if everything went fine, false if we somewhat modified the ratio as we bumped on border values
 bool LLPreviewTexture::setAspectRatio(const F32 width, const F32 height)
@@ -486,10 +917,14 @@ void LLPreviewTexture::loadAsset()
 	mImageOldBoostLevel = mImage->getBoostLevel();
 	mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
 	mImage->forceToSaveRawImage(0) ;
+	// <FS:Techwolf Lupindo> texture comment decoder
+	mImage->setLoadedCallback(LLPreviewTexture::onTextureLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
+	// </FS:Techwolf Lupindo>
 	mAssetStatus = PREVIEW_ASSET_LOADING;
 	mUpdateDimensions = TRUE;
 	updateDimensions();
 	getChildView("save_tex_btn")->setEnabled(canSaveAs());
+	getChildView("save_tex_btn")->setVisible(canSaveAs());
 }
 
 LLPreview::EAssetStatus LLPreviewTexture::getAssetStatus()

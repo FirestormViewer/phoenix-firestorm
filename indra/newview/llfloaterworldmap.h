@@ -39,6 +39,9 @@
 #include "lltracker.h"
 #include "llslurl.h"
 
+// <FS:Ansariel> Parcel details on map
+#include "llremoteparcelrequest.h"
+
 class LLCtrlListInterface;
 class LLFriendObserver;
 class LLInventoryModel;
@@ -46,6 +49,23 @@ class LLInventoryObserver;
 class LLItemInfo;
 class LLLineEditor;
 class LLTabContainer;
+
+// <FS:Ansariel> Parcel details on map
+class FSWorldMapParcelInfoObserver : public LLRemoteParcelInfoObserver
+{
+public:
+	FSWorldMapParcelInfoObserver(const LLVector3d& pos_global);
+	~FSWorldMapParcelInfoObserver();
+
+	void	processParcelInfo(const LLParcelData& parcel_data);
+	void	setParcelID(const LLUUID& parcel_id);
+	void	setErrorStatus(U32 status, const std::string& reason);
+
+protected:
+	LLVector3d	mPosGlobal;
+	LLUUID		mParcelID;
+};
+// </FS:Ansariel> Parcel details on map
 
 class LLFloaterWorldMap : public LLFloater
 {
@@ -112,6 +132,9 @@ public:
 	//Slapp instigated avatar tracking
 	void			avatarTrackFromSlapp( const LLUUID& id ); 
 
+	// <FS:Ansariel> Parcel details on map
+	void			processParcelInfo(const LLParcelData& parcel_data, const LLVector3d& pos_global);
+
 protected:	
 	void			onGoHome();
 
@@ -152,6 +175,13 @@ protected:
 	void		    onCommitSearchResult();
 
 	void			cacheLandmarkPosition();
+
+	// <FS:Ansariel> Parcel details on map
+	void			requestParcelInfo(const LLVector3d& pos_global);
+	LLVector3d		mRequestedGlobalPos;
+	bool			mShowParcelInfo;
+	FSWorldMapParcelInfoObserver* mParcelInfoObserver;
+	// </FS:Ansariel> Parcel details on map
 
 private:
 	LLPanel*			mPanel;		// Panel displaying the map

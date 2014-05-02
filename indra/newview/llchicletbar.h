@@ -28,6 +28,7 @@
 #define LL_LLCHICLETBAR_H
 
 #include "llpanel.h"
+#include "llimview.h"
 
 class LLChicletPanel;
 class LLIMChiclet;
@@ -37,10 +38,29 @@ class LLLayoutStack;
 class LLChicletBar
 	: public LLSingleton<LLChicletBar>
 	, public LLPanel
+	// <FS:Ansariel> [FS communication UI]
+	, public LLIMSessionObserver
 {
 	LOG_CLASS(LLChicletBar);
 	friend class LLSingleton<LLChicletBar>;
 public:
+	// <FS:Ansariel> [FS communication UI]
+	~LLChicletBar();
+
+	// LLIMSessionObserver observe triggers
+	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg);
+	/*virtual*/ void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {}
+	/*virtual*/ void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
+	/*virtual*/ void sessionRemoved(const LLUUID& session_id);
+	/*virtual*/ void sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id);
+
+	S32 getTotalUnreadIMCount();
+
+	/**
+	 * Creates IM Chiclet based on session type (IM chat or Group chat)
+	 */
+	LLIMChiclet* createIMChiclet(const LLUUID& session_id);
+	// </FS:Ansariel> [FS communication UI]
 
 	BOOL postBuild();
 
@@ -56,6 +76,9 @@ public:
 	 * @param visible - a flag specifying whether a button should be shown or hidden.
 	 */
 	void showWellButton(const std::string& well_name, bool visible);
+
+	// <FS:Ansariel> Option to hide IM/Group chat chiclets
+	void updateVisibility(const LLSD &data);
 
 private:
 	/**

@@ -55,8 +55,9 @@ static LLPanelInjector<LLSocialAccountPanel> t_panel_account("llsocialaccountpan
 const S32 MAX_POSTCARD_DATASIZE = 1024 * 1024; // one megabyte
 const std::string DEFAULT_CHECKIN_LOCATION_URL = "http://maps.secondlife.com/";
 const std::string DEFAULT_CHECKIN_ICON_URL = "http://map.secondlife.com.s3.amazonaws.com/map_placeholder.png";
-const std::string DEFAULT_CHECKIN_QUERY_PARAMETERS = "?sourceid=slshare_checkin&utm_source=facebook&utm_medium=checkin&utm_campaign=slshare";
-const std::string DEFAULT_PHOTO_QUERY_PARAMETERS = "?sourceid=slshare_photo&utm_source=facebook&utm_medium=photo&utm_campaign=slshare";
+// <FS:CR> Remove analytics nonsense
+//const std::string DEFAULT_CHECKIN_QUERY_PARAMETERS = "?sourceid=slshare_checkin&utm_source=facebook&utm_medium=checkin&utm_campaign=slshare";
+//const std::string DEFAULT_PHOTO_QUERY_PARAMETERS = "?sourceid=slshare_photo&utm_source=facebook&utm_medium=photo&utm_campaign=slshare";
 
 std::string get_map_url()
 {
@@ -581,7 +582,8 @@ void LLSocialCheckinPanel::sendCheckin()
 	}
 
 	// Add query parameters so Google Analytics can track incoming clicks!
-	slurl_string += DEFAULT_CHECKIN_QUERY_PARAMETERS;
+	// <FS:CR> No no no.
+	//slurl_string += DEFAULT_CHECKIN_QUERY_PARAMETERS;
     
 	// Get the region name
 	std::string region_name = gAgent.getRegion()->getName();

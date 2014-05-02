@@ -16,6 +16,11 @@
     <file name="Warnings"
           file_name="ignorable_dialogs.xml"
           required="true"/>
+    <!-- <FS:Zi> Dynamic quick prefs -->
+    <file name="QuickPreferences"
+          file_name="quick_preferences.xml"
+          required="false"/>
+    <!-- </FS:Zi> -->
   </group>
   <group name="User"
          path_index="1">
@@ -43,9 +48,9 @@
             persistent="false"/>
   </group>
   <group name="UserSession"
-         path_index="1">
-    <file name="Global"
-          file_name="session.xml" 
+         path_index="2">
+    <file name="PerAccount"
+          file_name="session_account.xml"
           file_name_setting="UserSessionSettingsFile"
           persistent="false"/>
   </group>
@@ -58,6 +63,9 @@
          path_index="10">
     <file name="Skinning"
           file_name="colors.xml"/>
+    <file name="Global"
+          file_name="settings.xml" 
+          persistent="false"/>
   </group>
   <group name="UserSkin"
          path_index="14">

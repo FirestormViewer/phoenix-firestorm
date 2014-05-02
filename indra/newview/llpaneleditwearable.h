@@ -114,6 +114,9 @@ private:
 	void onWearablePanelVisibilityChange(const LLSD &in_visible_chain, LLAccordionCtrl* accordion_ctrl);
 
 	void setWearablePanelVisibilityChangeCallback(LLPanel* bodypart_panel);
+	
+	// [FS:CR] FIRE-10986
+	void onClickedImportBtn();
 
 	// *HACK Remove this when serverside texture baking is available on all regions.
 	void incrementCofVersionLegacy();

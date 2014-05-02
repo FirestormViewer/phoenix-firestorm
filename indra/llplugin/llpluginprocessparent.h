@@ -158,7 +158,11 @@ private:
 
 	LLPluginProcessParentOwner *mOwner;
 
-	typedef std::map<std::string, LLPluginSharedMemory*> sharedMemoryRegionsType;
+	// <FS:ND> Use boost::shred_ptr so LLPluginSharedMemory gets properly destroyed
+	// typedef std::map<std::string, LLPluginSharedMemory*> sharedMemoryRegionsType;
+	typedef std::map<std::string, LLPluginSharedMemoryPtr > sharedMemoryRegionsType;
+	// </FS:ND>
+
 	sharedMemoryRegionsType mSharedMemoryRegions;
 
 	LLSD mMessageClassVersions;
@@ -191,6 +195,11 @@ private:
 	
 	LLMutex mIncomingQueueMutex;
 	std::queue<LLPluginMessage> mIncomingQueue;
+
+	// <FS:ND> FIRE-3877;  Bind to a fixed port. Some network drivers (Bigfoot) refuse to tell us to which port a socket is bound if 0 (= choose one) was used.
+	U32 mPortToBind;
+	U32 mBindRetries;
+	// </FS:ND>
 };
 
 #endif // LL_LLPLUGINPROCESSPARENT_H

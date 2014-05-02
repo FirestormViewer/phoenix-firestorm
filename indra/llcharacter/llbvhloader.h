@@ -298,7 +298,11 @@ public:
 
 protected:
 	// Consumes one line of input from file.
-	BOOL getLine(apr_file_t *fp);
+
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	// BOOL getLine(apr_file_t *fp);
+	BOOL getLine(LLAPRFile::tFiletype *fp);
+	// </FS:ND>
 
 	// parser state
 	char		mLine[BVH_PARSER_LINE_SIZE];		/* Flawfinder: ignore */

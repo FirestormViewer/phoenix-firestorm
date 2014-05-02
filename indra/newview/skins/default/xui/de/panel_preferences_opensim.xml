@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="OpenSim" name="opensim_panel">
+	<tab_container label="Opensim" name="tabs">
+		<panel name="grid_management_panel" label="Grid-Manager">
+			<text name="add_grid_text">
+				Neues Grid hinzufügen
+			</text>
+			<line_editor name="add_grid" label="Login-URI eingeben"/>
+			<button label="Löschen" label_selected="Löschen" name="clear_grid" width="60"/>
+			<button label="Anwenden" name="apply_new_grid" width="70"/>
+			<text name="add_grid_text">
+				Grid-Verwaltung
+			</text>
+			<scroll_list name="grid_list">
+				<scroll_list.columns label="Name" name="grid_label"/>
+				<scroll_list.columns label="Login URI" name="login_uri"/>
+			</scroll_list>
+			<button label="Aktualisieren" name="refresh_grid" width="80"/>
+			<button label="Entfernen" name="remove_grid" width="80"/>
+			<panel name="advanced_grid_panel">
+				<text name="grid_name_text" width="110">
+					Grid-Name:
+				</text>
+				<text name="grid_uri_text" width="110">
+					Grid-URI:
+				</text>
+				<text name="login_page_text" width="110">
+					Login-Seite:
+				</text>
+				<button label="Speichern" name="save_grid" width="68"/>
+				<text name="helper_uri_text" width="110">
+					Helper-URI:
+				</text>
+				<text name="website_text" width="110">
+					Grid-Website:
+				</text>
+				<text name="support_text" width="110">
+					Grid-Support:
+				</text>
+				<text name="register_text" width="110">
+					Grid-Registierung:
+				</text>
+				<text name="password_text" width="110">
+					Grid-Password-URI:
+				</text>
+				<text name="search_text" width="110">
+					Grid-Suche:
+				</text>
+				<text name="message_text" width="110">
+					Grid-Message-URI:
+				</text>
+			</panel>
+		</panel>
+		<panel label="Sonstiges" name="opensim_misc_panel">
+			<check_box label="Lightshare Regionseinstellungen aktivieren" name="Lightshare"/>
+			<check_box label="Suche Debuggen" name="DebugSearch"/>
+			<text name="search_url_debug_text">
+				Aktuelle URL für die Suche überschreiben: (kein Überschreiben falls leer)
+			</text>
+			<button label="Löschen" label_selected="Löschen" width="60" name="clear_search_url_debug"/>
+			<button label="Setzen" name="pick_current_search_url"/>
+		</panel>
+	</tab_container>
+</panel>

@@ -369,8 +369,9 @@ void LLViewerInventoryItem::updateServer(BOOL is_new) const
 	{
 		// *FIX: deal with this better.
 		// If we're crashing here then the UI is incorrectly enabled.
-		llerrs << "LLViewerInventoryItem::updateServer() - for incomplete item"
+		llwarns << "LLViewerInventoryItem::updateServer() - for incomplete item"
 			   << llendl;
+                LLNotificationsUtil::add("IncompleteInventoryItem");
 		return;
 	}
 	if(gAgent.getID() != mPermissions.getOwner())
@@ -709,7 +710,9 @@ bool LLViewerInventoryCategory::fetch()
 		}
 		else
 		{	//Deprecated, but if we don't have a capability, use the old system.
-			llinfos << "FetchInventoryDescendents2 capability not found.  Using deprecated UDP message." << llendl;
+			
+			//AO: too spammy! 
+			//llinfos << "FetchInventoryDescendents2 capability not found.  Using deprecated UDP message." << llendl;
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessage("FetchInventoryDescendents");
 			msg->nextBlock("AgentData");
@@ -964,7 +967,10 @@ void LLInventoryCallbackManager::fire(U32 callback_id, const LLUUID& item_id)
 	}
 }
 
-void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp)
+//void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp)
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-3.4)
+void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachmentp, bool replace)
+// [/SL:KB]
 {
 	if (inv_item.isNull())
 		return;
@@ -972,7 +978,10 @@ void rez_attachment_cb(const LLUUID& inv_item, LLViewerJointAttachment *attachme
 	LLViewerInventoryItem *item = gInventory.getItem(inv_item);
 	if (item)
 	{
-		rez_attachment(item, attachmentp);
+// [SL:KB] - Patch: Appearance-DnDWear | Checked: 2010-09-28 (Catznip-3.4)
+		rez_attachment(item, attachmentp, replace);
+// [/SL:KB]
+//		rez_attachment(item, attachmentp);
 	}
 }
 

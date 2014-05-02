@@ -295,6 +295,19 @@ CURLcode LLXMLRPCTransaction::Impl::_sslCtxFunction(CURL * curl, void *sslctx, v
 	// set the verification callback.
 	SSL_CTX_set_cert_verify_callback(ctx, _sslCertVerifyCallback, param);
 	// the calls are void
+
+
+	// <FS:ND> FIRE-11406
+	// Some server at LL don't like it at all when curl/openssl try to speak TLSv1.2 to them, instead
+	// of renegotiating to SSLv3 they clamp up and don't talk to us at all anywmore, not even dropping the connection.
+	// This then leads to unfun timeouts and failed transactions.
+
+#ifdef SSL_TXT_TLSV1_2
+	SSL_CTX_set_options( ctx, SSL_OP_ALL | SSL_OP_NO_TLSv1_2 );
+#endif
+
+	// </FS:ND>
+
 	return CURLE_OK;
 	
 }
@@ -348,6 +361,7 @@ void LLXMLRPCTransaction::Impl::init(XMLRPC_REQUEST request, bool useGzip)
 	{
 		setStatus(StatusOtherError);
 	}
+
 
 	mCurlRequest->sendRequest(mURI);
 }

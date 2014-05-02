@@ -29,7 +29,6 @@
 #include "llnavigationbar.h"
 
 #include "v2math.h"
-
 #include "llregionhandle.h"
 
 #include "llfloaterreg.h"
@@ -50,6 +49,7 @@
 #include "llurldispatcher.h"
 #include "llviewerinventory.h"
 #include "llviewermenu.h"
+#include "llviewernetwork.h" // <FS:AW hypergrid support >
 #include "llviewerparcelmgr.h"
 #include "llworldmapmessage.h"
 #include "llappviewer.h"
@@ -64,6 +64,12 @@
 #include "llagentui.h"
 
 #include <boost/regex.hpp>
+
+
+#include "llstatusbar.h"
+#include "llnotificationsutil.h"// <FS:AW hypergrid support >
+
+#include "lluictrl.h"	// <FS:Zi> Make navigation bar part of the UI
 
 //-- LLTeleportHistoryMenuItem -----------------------------------------------
 
@@ -267,12 +273,14 @@ LLNavigationBar::LLNavigationBar()
 	mBtnForward(NULL),
 	mBtnHome(NULL),
 	mCmbLocation(NULL),
+	mSearchComboBox(NULL),
 	mSaveToLocationHistory(false)
 {
-	buildFromFile( "panel_navigation_bar.xml");
+	// buildFromFile( "panel_navigation_bar.xml");	// <FS:Zi> Make navigation bar part of the UI
 
 	// set a listener function for LoginComplete event
 	LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&LLNavigationBar::handleLoginComplete, this));
+	setupPanel();	// <FS:Zi> Make navigation bar part of the UI
 }
 
 LLNavigationBar::~LLNavigationBar()
@@ -281,27 +289,56 @@ LLNavigationBar::~LLNavigationBar()
 	mTeleportFailedConnection.disconnect();
 }
 
-BOOL LLNavigationBar::postBuild()
+// <FS:Zi> Make navigation bar part of the UI
+// BOOL LLNavigationBar::postBuild()
+void LLNavigationBar::setupPanel()
+// </FS:Zi>
 {
-	mBtnBack	= getChild<LLPullButton>("back_btn");
-	mBtnForward	= getChild<LLPullButton>("forward_btn");
-	mBtnHome	= getChild<LLButton>("home_btn");
-	
-	mCmbLocation= getChild<LLLocationInputCtrl>("location_combo");
+	// <FS:Zi> Make navigation bar part of the UI
+	// mBtnBack	= getChild<LLPullButton>("back_btn");
+	// mBtnForward	= getChild<LLPullButton>("forward_btn");
+	// mBtnHome	= getChild<LLButton>("home_btn");
+
+	// mCmbLocation= getChild<LLLocationInputCtrl>("location_combo"); 
+	// mSearchComboBox	= getChild<LLSearchComboBox>("search_combo_box");
+
+	mView=LLUI::getRootView()->getChild<LLView>("navigation_bar");
+
+	mBtnBack	= mView->getChild<LLPullButton>("back_btn");
+	mBtnForward	= mView->getChild<LLPullButton>("forward_btn");
+	mBtnHome	= mView->getChild<LLButton>("home_btn");
+
+	mCmbLocation= mView->getChild<LLLocationInputCtrl>("location_combo"); 
+	mSearchComboBox	= mView->getChild<LLSearchComboBox>("search_combo_box");
+
+	mView->getChild<LLUICtrl>("navigation_bar_context_menu_panel")->
+		setRightMouseDownCallback(boost::bind(&LLNavigationBar::onRightMouseDown, this, _2, _3, _4));
+	mView->getChild<LLButton>("Sky")->setCommitCallback(boost::bind(&LLNavigationBar::onClickedSkyBtn, this)); // <FS:CR> FIRE-11847
+	// </FS:Zi>
+
+	fillSearchComboBox();
 
 	mBtnBack->setEnabled(FALSE);
-	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
+	// [FS:CR] FIRE-12333
+	//mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
+	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this, _1));
 	mBtnBack->setHeldDownCallback(boost::bind(&LLNavigationBar::onBackOrForwardButtonHeldDown, this,_1, _2));
 	mBtnBack->setClickDraggingCallback(boost::bind(&LLNavigationBar::showTeleportHistoryMenu, this,_1));
 	
 	mBtnForward->setEnabled(FALSE);
-	mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this));
+	// [FS:CR] FIRE-12333
+	//mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this));
+	mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this, _1));
 	mBtnForward->setHeldDownCallback(boost::bind(&LLNavigationBar::onBackOrForwardButtonHeldDown, this, _1, _2));
 	mBtnForward->setClickDraggingCallback(boost::bind(&LLNavigationBar::showTeleportHistoryMenu, this,_1));
 
-	mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this));
+	// [FS:CR] FIRE-12333
+	//mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this));
+	mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this, _1));
 
 	mCmbLocation->setCommitCallback(boost::bind(&LLNavigationBar::onLocationSelection, this));
+	
+	mSearchComboBox->setCommitCallback(boost::bind(&LLNavigationBar::onSearchCommit, this));
 
 	mTeleportFinishConnection = LLViewerParcelMgr::getInstance()->
 		setTeleportFinishedCallback(boost::bind(&LLNavigationBar::onTeleportFinished, this, _1));
@@ -309,60 +346,91 @@ BOOL LLNavigationBar::postBuild()
 	mTeleportFailedConnection = LLViewerParcelMgr::getInstance()->
 		setTeleportFailedCallback(boost::bind(&LLNavigationBar::onTeleportFailed, this));
 	
-	mDefaultNbRect = getRect();
-	mDefaultFpRect = getChild<LLFavoritesBarCtrl>("favorite")->getRect();
+	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+	//mDefaultNbRect = getRect();
+	//mDefaultFpRect = getChild<LLFavoritesBarCtrl>("favorite")->getRect();
+	// </FS:Zi>
 
 	// we'll be notified on teleport history changes
 	LLTeleportHistory::getInstance()->setHistoryChangedCallback(
 			boost::bind(&LLNavigationBar::onTeleportHistoryChanged, this));
 
-	LLHints::registerHintTarget("nav_bar", getHandle());
-
-	return TRUE;
+	// <FS:Zi> Make navigation bar part of the UI
+	// LLHints::registerHintTarget("nav_bar", getHandle());
+	// return TRUE;
+	LLHints::registerHintTarget("nav_bar",mView->getHandle());
+	// </FS:Zi>
 }
 
-void LLNavigationBar::setVisible(BOOL visible)
+// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+// void LLNavigationBar::setVisible(BOOL visible)
+// {
+// 	// change visibility of grandparent layout_panel to animate in and out
+// 	if (getParent()) 
+// 	{
+// 		//to avoid some mysterious bugs like EXT-3352, at least try to log an incorrect parent to ping  about a problem. 
+// 		if(getParent()->getName() != "nav_bar_container")
+// 		{
+// 			LL_WARNS("LLNavigationBar")<<"NavigationBar has an unknown name of the parent: "<<getParent()->getName()<< LL_ENDL;
+// 		}
+// 		getParent()->setVisible(visible);	
+// 	}
+// }
+// </FS:Zi>
+
+
+void LLNavigationBar::fillSearchComboBox()
 {
-	// change visibility of grandparent layout_panel to animate in and out
-	if (getParent()) 
+	if(!mSearchComboBox)
 	{
-		//to avoid some mysterious bugs like EXT-3352, at least try to log an incorrect parent to ping  about a problem. 
-		if(getParent()->getName() != "nav_bar_container")
-		{
-			LL_WARNS("LLNavigationBar")<<"NavigationBar has an unknown name of the parent: "<<getParent()->getName()<< LL_ENDL;
-		}
-		getParent()->setVisible(visible);	
+		return;
+	}
+
+	LLSearchHistory::getInstance()->load();
+
+	LLSearchHistory::search_history_list_t search_list = 
+		LLSearchHistory::getInstance()->getSearchHistoryList();
+	LLSearchHistory::search_history_list_t::const_iterator it = search_list.begin();
+	for( ; search_list.end() != it; ++it)
+	{
+		LLSearchHistory::LLSearchHistoryItem item = *it;
+		mSearchComboBox->add(item.search_query);
 	}
 }
 
-void LLNavigationBar::draw()
-{
-	if (isBackgroundVisible())
-	{
-		static LLUICachedControl<S32> drop_shadow_floater ("DropShadowFloater", 0);
-		static LLUIColor color_drop_shadow = LLUIColorTable::instance().getColor("ColorDropShadow");
-		gl_drop_shadow(0, getRect().getHeight(), getRect().getWidth(), 0,
-                           color_drop_shadow, drop_shadow_floater );
-	}
+// <FS:Zi> Make navigation bar part of the UI
+// void LLNavigationBar::draw()
+// {
+// 	if (isBackgroundVisible())
+// 	{
+// 		static LLUICachedControl<S32> drop_shadow_floater ("DropShadowFloater", 0);
+// 		static LLUIColor color_drop_shadow = LLUIColorTable::instance().getColor("ColorDropShadow");
+// 		gl_drop_shadow(0, getRect().getHeight(), getRect().getWidth(), 0,
+//                            color_drop_shadow, drop_shadow_floater );
+// 	}
+// 
+// 	LLPanel::draw();
+// }
 
-	LLPanel::draw();
-}
+// BOOL LLNavigationBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
+// {
+// 	BOOL handled = childrenHandleRightMouseDown( x, y, mask) != NULL;
+// 	if(!handled && !gMenuHolder->hasVisibleMenu())
+// 	{
+// 		show_navbar_context_menu(this,x,y);
+// 		handled = true;
+// 	}
+// 					
+// 	return handled;
+// }
+// </FS:Zi>
 
-BOOL LLNavigationBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
-{
-	BOOL handled = childrenHandleRightMouseDown( x, y, mask) != NULL;
-	if(!handled && !gMenuHolder->hasVisibleMenu())
-	{
-		show_navbar_context_menu(this,x,y);
-		handled = true;
-	}
-					
-	return handled;
-}
-
-void LLNavigationBar::onBackButtonClicked()
+// [FS:CR] FIRE-12333
+//void LLNavigationBar::onBackButtonClicked()
+void LLNavigationBar::onBackButtonClicked(LLUICtrl* ctrl)
 {
 	LLTeleportHistory::getInstance()->goBack();
+	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
 }
 
 void LLNavigationBar::onBackOrForwardButtonHeldDown(LLUICtrl* ctrl, const LLSD& param)
@@ -371,14 +439,30 @@ void LLNavigationBar::onBackOrForwardButtonHeldDown(LLUICtrl* ctrl, const LLSD& 
 		showTeleportHistoryMenu(ctrl);
 }
 
-void LLNavigationBar::onForwardButtonClicked()
+// [FS:CR] FIRE-12333
+//void LLNavigationBar::onForwardButtonClicked()
+void LLNavigationBar::onForwardButtonClicked(LLUICtrl* ctrl)
 {
 	LLTeleportHistory::getInstance()->goForward();
+	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
 }
 
-void LLNavigationBar::onHomeButtonClicked()
+// [FS:CR] FIRE-12333
+//void LLNavigationBar::onHomeButtonClicked()
+void LLNavigationBar::onHomeButtonClicked(LLUICtrl* ctrl)
 {
 	gAgent.teleportHome();
+	gFocusMgr.releaseFocusIfNeeded(ctrl);	// [FS:CR] FIRE-12333
+}
+
+void LLNavigationBar::onSearchCommit()
+{
+	std::string search_query = mSearchComboBox->getSimple();
+	if(!search_query.empty())
+	{
+		LLSearchHistory::getInstance()->addEntry(search_query);
+	}
+	invokeSearch(search_query);	
 }
 
 void LLNavigationBar::onTeleportHistoryMenuItemClicked(const LLSD& userdata)
@@ -460,15 +544,18 @@ void LLNavigationBar::onLocationSelection()
 	LLSLURL slurl = LLSLURL(typed_location);
 	if (slurl.getType() == LLSLURL::LOCATION)
 	{
+	  LL_DEBUGS( "SLURL") << "LLSLURL::LOCATION" << LL_ENDL;// <FS:AW hypergrid support >
 	  region_name = slurl.getRegion();
 	  local_coords = slurl.getPosition();
 	}
 	else if(!slurl.isValid())
 	{
+		LL_DEBUGS( "SLURL") << "!slurl.isValid()" << LL_ENDL;// <FS:AW hypergrid support >
 	  // we have to do this check after previous, because LLUrlRegistry contains handlers for slurl too  
 	  // but we need to know whether typed_location is a simple http url.
 	  if (LLUrlRegistry::instance().isUrl(typed_location)) 
 	    {
+		LL_DEBUGS( "SLURL") << "isUrl" << LL_ENDL;// <FS:AW hypergrid support >
 		// display http:// URLs in the media browser, or
 		// anything else is sent to the search floater
 		LLWeb::loadURL(typed_location);
@@ -476,16 +563,49 @@ void LLNavigationBar::onLocationSelection()
 	  }
 	  else
 	  {
+		LL_DEBUGS( "SLURL") << "assume user has typed region name" << LL_ENDL;// <FS:AW hypergrid support >
 	      // assume that an user has typed the {region name} or possible {region_name, parcel}
 	      region_name  = typed_location.substr(0,typed_location.find(','));
 	    }
 	}
 	else
 	{
+		LL_DEBUGS( "SLURL") << "was an app slurl, home, whatever.  Bail" << LL_ENDL;// <FS:AW hypergrid support >
 	  // was an app slurl, home, whatever.  Bail
 	  return;
 	}
-	
+
+#ifdef OPENSIM // <FS:AW optional opensim support>
+// <FS:AW hypergrid support >
+	std::string grid = slurl.getGrid();
+	std::string current_grid = LLGridManager::getInstance()->getGrid();
+	std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
+
+	std::string current = LLGridManager::getInstance()->getGrid();
+	if((grid != current ) 
+		&& (!LLGridManager::getInstance()->isInOpenSim()
+			|| (!slurl.getHypergrid() && gatekeeper.empty() )
+		   )
+	  )
+	{
+ 		std::string dest = slurl.getSLURLString();
+		if (!dest.empty())
+		{
+			LLSD args;
+			args["SLURL"] = dest;
+			args["GRID"] = slurl.getGrid();
+			args["CURRENT_GRID"] = current_grid;
+			LLNotificationsUtil::add("CantTeleportToGrid", args);
+			return;
+		}
+	}
+	else if(!gatekeeper.empty())
+	{
+		region_name = gatekeeper + ":" + region_name;
+	}
+// </FS:AW hypergrid support >
+#endif // OPENSIM // <FS:AW optional opensim support>
+
 	// Resolve the region name to its global coordinates.
 	// If resolution succeeds we'll teleport.
 	LLWorldMapMessage::url_callback_t cb = boost::bind(
@@ -558,7 +678,10 @@ void LLNavigationBar::rebuildTeleportHistoryMenu()
 		menu_p.scrollable(true);
 		mTeleportHistoryMenu = LLUICtrlFactory::create<LLMenuGL>(menu_p);
 		
-		addChild(mTeleportHistoryMenu);
+		// <FS:Zi> Make navigation bar part of the UI
+		// addChild(mTeleportHistoryMenu);
+		mView->addChild(mTeleportHistoryMenu);
+		// </FS:Zi>
 	}
 	
 	// Populate the menu with teleport history items.
@@ -666,6 +789,7 @@ void LLNavigationBar::handleLoginComplete()
 {
 	LLTeleportHistory::getInstance()->handleLoginComplete();
 	LLPanelTopInfoBar::instance().handleLoginComplete();
+	gStatusBar->handleLoginComplete();
 	mCmbLocation->handleLoginComplete();
 }
 
@@ -683,11 +807,38 @@ void LLNavigationBar::clearHistoryCache()
 	LLTeleportHistory::getInstance()->purgeItems();
 }
 
-int LLNavigationBar::getDefNavBarHeight()
+// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+// int LLNavigationBar::getDefNavBarHeight()
+// {
+// 	return mDefaultNbRect.getHeight();
+// }
+// int LLNavigationBar::getDefFavBarHeight()
+// {
+// 	return mDefaultFpRect.getHeight();
+// }
+// </FS:Zi>
+
+// <FS:Zi> Make navigation bar part of the UI
+void LLNavigationBar::clearHistory()
 {
-	return mDefaultNbRect.getHeight();
+	mSearchComboBox->clearHistory();
 }
-int LLNavigationBar::getDefFavBarHeight()
+
+LLView* LLNavigationBar::getView()
 {
-	return mDefaultFpRect.getHeight();
+	return mView;
 }
+
+void LLNavigationBar::onRightMouseDown(S32 x,S32 y,MASK mask)
+{
+	// call LLViewerMenu function
+	show_navbar_context_menu(mView,x,y);
+}
+// </FS:Zi>
+
+// <FS:CR> FIRE-11847
+void LLNavigationBar::onClickedSkyBtn()
+{
+	LLFloaterReg::showInstance("env_edit_sky", "edit");
+}
+// </FS:CR> FIRE-11847

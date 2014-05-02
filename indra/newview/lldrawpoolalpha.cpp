@@ -73,11 +73,15 @@ void LLDrawPoolAlpha::prerender()
 
 S32 LLDrawPoolAlpha::getNumPostDeferredPasses() 
 { 
+	static LLCachedControl<bool> RenderDepthOfField(gSavedSettings, "RenderDepthOfField"); // <FS:PP> Attempt to speed up things a little
 	if (LLPipeline::sImpostorRender)
 	{ //skip depth buffer filling pass when rendering impostors
 		return 1;
 	}
-	else if (gSavedSettings.getBOOL("RenderDepthOfField"))
+	// <FS:PP> Attempt to speed up things a little
+	// else if (gSavedSettings.getBOOL("RenderDepthOfField"))
+	else if (RenderDepthOfField)
+	// </FS:PP>
 	{
 		return 2; 
 	}
@@ -109,7 +113,8 @@ void LLDrawPoolAlpha::beginPostDeferredPass(S32 pass)
 			fullbright_shader = &gDeferredFullbrightProgram;
 		}
 		
-		F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		//F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
 
 		fullbright_shader->bind();
 		fullbright_shader->uniform1f(LLShaderMgr::TEXTURE_GAMMA, 2.2f); 
@@ -382,6 +387,17 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 			bool is_particle_or_hud_particle = group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_PARTICLE
 													  || group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_HUD_PARTICLE;
 
+
+			// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
+			if(!(gPipeline.sRenderParticles) && (
+				group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_PARTICLE ||
+				group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_HUD_PARTICLE))
+			{
+				continue;
+			}
+			// </FS:LO>
+
+
 			bool draw_glow_for_this_partition = mVertexShaderLevel > 0; // no shaders = no glow.
 
 			static LLFastTimer::DeclareTimer FTM_RENDER_ALPHA_GROUP_LOOP("Alpha Group");
@@ -589,7 +605,11 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, S32 pass)
 				// If this alpha mesh has glow, then draw it a second time to add the destination-alpha (=glow).  Interleaving these state-changing calls could be expensive, but glow must be drawn Z-sorted with alpha.
 				if (current_shader && 
 					draw_glow_for_this_partition &&
-					params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE))
+					// <FS:Ansariel> Re-add particle rendering optimization
+					//params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE))
+					params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE) &&
+					(!params.mParticle || params.mHasGlow))
+					// </FS:Ansariel>
 				{
 					// install glow-accumulating blend mode
 					gGL.blendFunc(LLRender::BF_ZERO, LLRender::BF_ONE, // don't touch color

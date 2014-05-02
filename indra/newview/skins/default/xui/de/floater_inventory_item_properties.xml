@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="item properties" title="EIGENSCHAFTEN: INVENTAROBJEKT">
+<floater name="item properties" title="Eigenschaften: Inventarobjekt">
 	<floater.string name="unknown">
 		(unbekannt)
 	</floater.string>
@@ -39,8 +39,9 @@
 		Sie:
 	</text>
 	<check_box label="Bearbeiten" name="CheckOwnerModify"/>
-	<check_box label="Kopieren" left_delta="85" name="CheckOwnerCopy"/>
-	<check_box label="Wiederverkaufen" name="CheckOwnerTransfer"/>
+	<check_box label="Kopieren" name="CheckOwnerCopy"/>
+	<check_box label="Transferieren" name="CheckOwnerTransfer"/>
+	<check_box label="Exportieren" name="CheckOwnerExport"/>
 	<text name="AnyoneLabel">
 		Jeder:
 	</text>
@@ -53,12 +54,13 @@
 		Nächster Eigentümer:
 	</text>
 	<check_box label="Bearbeiten" name="CheckNextOwnerModify"/>
-	<check_box label="Kopieren" left_delta="55" name="CheckNextOwnerCopy"/>
-	<check_box label="Wiederverkaufen" name="CheckNextOwnerTransfer"/>
-	<check_box label="Zum Verkauf" name="CheckPurchase"/>
-	<combo_box name="combobox sale copy" left_pad="25">
-		<combo_box.item label="Kopieren" name="Copy"/>
+	<check_box label="Kopieren" name="CheckNextOwnerCopy"/>
+	<check_box label="Transferieren" name="CheckNextOwnerTransfer"/>
+	<check_box label="Zum Verkauf" name="CheckPurchase" width="100"/>
+	<combo_box name="ComboSaleType" >
 		<combo_box.item label="Original" name="Original"/>
+		<combo_box.item label="Kopie" name="Copy"/>
+		<combo_box.item label="Inhalt" name="Contents"/>
 	</combo_box>
 	<spinner label="Preis:" name="Edit Cost"/>
 	<text name="CurrencySymbol">

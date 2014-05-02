@@ -514,8 +514,8 @@ GST_PLUGIN_DEFINE (GST_VERSION_MAJOR,
 		   (gchar*)"private-slvideoplugin", 
 		   (gchar*)"SL Video sink plugin",
 		   plugin_init, (gchar*)"1.0", (gchar*)"LGPL",
-		   (gchar*)"Second Life",
-		   (gchar*)"http://www.secondlife.com/");
+		   (gchar*)"Firestorm",
+		   (gchar*)"http://www.firestormviewer.org");
 #undef PACKAGE
 void gst_slvideo_init_class (void)
 {

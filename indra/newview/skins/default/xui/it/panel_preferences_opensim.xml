@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="OpenSim" name="opensim_panel">
+	<panel name="grid_management_panel">
+		<text name="add_grid_text">
+			Aggiungi Nuova Grid
+		</text>
+		<button label="Pulisci" width="60" name="clear_grid"/>
+		<button label="Applica" width="60" name="apply_new_grid" />
+		<text name="add_grid_text">
+			Gestisci Grid
+		</text>
+		<scroll_list name="grid_list">
+			<scroll_list.columns label="Nome Grid" name="grid_label"/>
+		</scroll_list>
+		<button label="Aggiorna" name="refresh_grid"/>
+		<button label="Rimuovi" name="remove_grid"/>
+	</panel>
+	<panel name="debug_search_panel">
+		<check_box label="Ricerca di Debug" name="DebugSearch"/>
+		<text name="search_url_debug_text">
+			Sovrascrivi l'url di ricerca: (non sovrascrivere se è vuoto)
+		</text>
+		<button label="Pulisci" name="clear_search_url_debug"/>
+		<button label="Scegli" name="pick_current_search_url"/>
+	</panel>
+</panel>

@@ -1,0 +1,28 @@
+<llsd>
+    <array>
+        <array>
+            <real>0.003472220851108431816101074</real>
+            <string>[NB] Aftermath 0000</string>
+        </array>
+        <array>
+            <real>0.2083332538604736328125</real>
+            <string>[NB] Aftermath 0500</string>
+        </array>
+        <array>
+            <real>0.4131942689418792724609375</real>
+            <string>[NB] Aftermath 1200</string>
+        </array>
+        <array>
+            <real>0.652777493000030517578125</real>
+            <string>[NB] Aftermath 1630</string>
+        </array>
+        <array>
+            <real>0.760416328907012939453125</real>
+            <string>[NB] Aftermath 1750</string>
+        </array>
+        <array>
+            <real>0.843749701976776123046875</real>
+            <string>[NB] Aftermath 2000</string>
+        </array>
+    </array>
+</llsd>

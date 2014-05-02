@@ -52,6 +52,7 @@ S32 LLDragHandle::sSnapMargin = 5;
 
 LLDragHandle::LLDragHandle(const LLDragHandle::Params& p)
 :	LLView(p),
+	mLabelVPadding(p.label_v_padding),	// <FS:Zi> Make vertical label padding a per-skin option
 	mDragLastScreenX( 0 ),
 	mDragLastScreenY( 0 ),
 	mLastMouseScreenX( 0 ),
@@ -236,7 +237,15 @@ void LLDragHandleLeft::draw()
 
 void LLDragHandleTop::reshapeTitleBox()
 {
-	static LLUICachedControl<S32> title_vpad("UIFloaterTitleVPad", 0);
+	//	<FS:Zi> Make vertical label padding a per-skin option
+	//	static LLUICachedControl<S32> title_vpad("UIFloaterTitleVPad", 0);
+	static LLUICachedControl<S32> default_title_vpad("UIFloaterTitleVPad", 0);
+	S32 title_vpad=mLabelVPadding;
+	if(title_vpad==-1)
+	{
+		title_vpad=default_title_vpad;
+	}
+	//	</FS:Zi>
 	if( ! mTitleBox)
 	{
 		return;

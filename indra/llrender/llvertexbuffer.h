@@ -56,7 +56,7 @@ class LLVBOPool
 public:
 	static U32 sBytesPooled;
 	static U32 sIndexBytesPooled;
-	
+
 	LLVBOPool(U32 vboUsage, U32 vboType);
 		
 	const U32 mUsage;

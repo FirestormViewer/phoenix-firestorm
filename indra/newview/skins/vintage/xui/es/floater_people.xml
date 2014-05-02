@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_people" title="Gente">
+    <panel_container name="main_panel">
+      <panel name="panel_group_info_sidetray" label="Perfil del grupo"/>
+      <panel name="panel_block_list_sidetray" label="Residentes y objetos bloqueados"/>
+    </panel_container>
+</floater>

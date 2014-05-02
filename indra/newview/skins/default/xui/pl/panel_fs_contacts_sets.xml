@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">
+		Ten zestaw jest pusty.
+	</panel.string>
+	<panel.string name="no_sets">
+		Brak Zestawów.
+	</panel.string>
+	<panel.string name="all_sets">
+		Wszystkie zestawy
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Aliasy
+	</panel.string>
+	<panel.string name="non_friends">
+		Nieznajomi
+	</panel.string>
+	<button name="config_btn" tool_tip="Konfiguruj wybrany zestaw kontaktów" />
+	<button name="add_set_btn" tool_tip="Dodaj nowy zestaw kontaktów" />
+	<button name="remove_set_btn" tool_tip="Usuń wybrany zestaw kontaktów" />
+	<button label="Dodaj..." name="add_btn" tool_tip="Dodaj awatara do obecnego zestawu kontaktów" />
+	<button label="Usuń..." name="remove_btn" tool_tip="Usuń tego awatara z obecnego zestawu kontaktów" />
+	<button label="Profil..." name="profile_btn" tool_tip="Otwórz profil tego awatara" />
+	<button label="IM..." name="start_im_btn" tool_tip="Rozpocznij sesję wiadomości IM" />
+	<button label="Teleportuj..." name="offer_teleport_btn" tool_tip="Zaproponuj teleportację do swojej obecnej lokalizacji" />
+	<button label="Ustaw alias" name="set_pseudonym_btn" tool_tip="Nadaj pseudonim temu awatarowi" />
+	<button label="Usuń alias" name="remove_pseudonym_btn" tool_tip="Usuń pseudonim tego awatara" />
+	<button label="Usuń Wyśw." name="remove_displayname_btn" tool_tip="Usuń Imię Wyświetlane tego awatara" />
+	<text name="member_count">
+		Osób: [COUNT]
+	</text>
+</panel>

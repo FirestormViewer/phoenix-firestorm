@@ -34,7 +34,10 @@
 #include "llviewercontrol.h"
 
 #include "lldiriterator.h"
-#include "llfloaterimsessiontab.h"
+// <FS:CR> Firectorm communications UI
+//#include "llfloaterimsessiontab.h"
+#include "fsfloaterim.h"
+// </FS:CR>
 #include "llinstantmessage.h"
 #include "llsingleton.h" // for LLSingleton
 
@@ -58,6 +61,7 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/local_time_adjustor.hpp>
+#include "llstartup.h"
 
 const S32 LOG_RECALL_SIZE = 2048;
 
@@ -89,6 +93,7 @@ const static std::string MULTI_LINE_PREFIX(" ");
  */
 const static boost::regex TIMESTAMP_AND_STUFF("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}\\]\\s+)?(.*)$");
 const static boost::regex TIMESTAMP("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}\\]|\\[\\d{1,2}:\\d{2}\\]).*");
+const static boost::regex TIMESTAMP_AND_STUFF_SEC("^(\\[\\d{4}/\\d{1,2}/\\d{1,2}\\s+\\d{1,2}:\\d{2}:\\d{2}\\]\\s+|\\[\\d{1,2}:\\d{2}:\\d{2}\\]\\s+)?(.*)$");
 
 /**
  *  Regular expression suitable to match names like
@@ -112,6 +117,8 @@ const static std::string NAME_TEXT_DIVIDER(": ");
 // is used for timestamps adjusting
 const static char* DATE_FORMAT("%Y/%m/%d %H:%M");
 const static char* TIME_FORMAT("%H:%M");
+const static char* DATE_FORMAT_SEC("%Y/%m/%d %H:%M:%S");
+const static char* TIME_FORMAT_SEC("%H:%M:%S");
 
 const static int IDX_TIMESTAMP = 1;
 const static int IDX_STUFF = 2;
@@ -136,9 +143,18 @@ public:
 	LLLogChatTimeScanner()
 	{
 		// Note, date/time facets will be destroyed by string streams
-		mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
-		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
-		mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT_SEC)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT_SEC)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT_SEC)));
+		}
+		else
+		{
+			mDateStream.imbue(std::locale(mDateStream.getloc(), new date_input_facet(DATE_FORMAT)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_facet(TIME_FORMAT)));
+			mTimeStream.imbue(std::locale(mTimeStream.getloc(), new time_input_facet(DATE_FORMAT)));
+		}
 	}
 
 	date getTodayPacificDate()
@@ -206,7 +222,11 @@ private:
 };
 
 LLLogChat::save_history_signal_t * LLLogChat::sSaveHistorySignal = NULL;
-LLLoadHistoryThread::load_end_signal_t * LLLoadHistoryThread::mLoadEndSignal = NULL;
+
+std::map<LLUUID,LLLoadHistoryThread *> LLLogChat::sLoadHistoryThreads;
+std::map<LLUUID,LLDeleteHistoryThread *> LLLogChat::sDeleteHistoryThreads;
+LLMutex* LLLogChat::sHistoryThreadsMutex = NULL;
+
 
 //static
 std::string LLLogChat::makeLogFileName(std::string filename)
@@ -267,11 +287,21 @@ std::string LLLogChat::timestamp(bool withdate)
 				  + LLTrans::getString ("TimeDay") + "] ["
 				  + LLTrans::getString ("TimeHour") + "]:["
 				  + LLTrans::getString ("TimeMin") + "]";
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			timeStr += ":["
+				  +LLTrans::getString ("TimeSec")+"]";
+		}
 	}
 	else
 	{
 		timeStr = "[" + LLTrans::getString("TimeHour") + "]:["
 				  + LLTrans::getString ("TimeMin")+"]";
+		if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+		{
+			timeStr += ":["
+				  +LLTrans::getString ("TimeSec")+"]";
+		}
 	}
 
 	LLSD substitution;
@@ -288,6 +318,10 @@ void LLLogChat::saveHistory(const std::string& filename,
 							const LLUUID& from_id,
 							const std::string& line)
 {
+	if(LLStartUp::getStartupState() <= STATE_LOGIN_CLEANUP)
+	{
+		return;
+	}
 	std::string tmp_filename = filename;
 	LLStringUtil::trim(tmp_filename);
 	if (tmp_filename.empty())
@@ -337,83 +371,179 @@ void LLLogChat::saveHistory(const std::string& filename,
 void LLLogChat::loadChatHistory(const std::string& file_name, std::list<LLSD>& messages, const LLSD& load_params)
 {
 	if (file_name.empty())
-				{
-					LL_WARNS("LLLogChat::loadChatHistory") << "Session name is Empty!" << LL_ENDL;
-					return ;
-				}
+	{
+		LL_WARNS("LLLogChat::loadChatHistory") << "Session name is Empty!" << LL_ENDL;
+		return ;
+	}
 
-				bool load_all_history = load_params.has("load_all_history") ? load_params["load_all_history"].asBoolean() : false;
+	bool load_all_history = load_params.has("load_all_history") ? load_params["load_all_history"].asBoolean() : false;
 
-				LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
-				if (!fptr)
-				{
-					fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
-					if (!fptr)
-					{
-						return;						//No previous conversation with this name.
-					}
-				}
+	LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
+	if (!fptr)
+	{
+		fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
+		if (!fptr)
+		{
+			return;						//No previous conversation with this name.
+		}
+	}
 
-				char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
-				char *bptr;
-				S32 len;
-				bool firstline = TRUE;
+	char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
+	char *bptr;
+	S32 len;
+	bool firstline = TRUE;
 
-				if (load_all_history || fseek(fptr, (LOG_RECALL_SIZE - 1) * -1  , SEEK_END))
-				{	//We need to load the whole historyFile or it's smaller than recall size, so get it all.
-					firstline = FALSE;
-					if (fseek(fptr, 0, SEEK_SET))
-					{
-						fclose(fptr);
-						return;
-					}
-				}
-			while (fgets(buffer, LOG_RECALL_SIZE, fptr)  && !feof(fptr))
-				{
-					len = strlen(buffer) - 1;		/*Flawfinder: ignore*/
-					for (bptr = (buffer + len); (*bptr == '\n' || *bptr == '\r') && bptr>buffer; bptr--)	*bptr='\0';
+	if (load_all_history || fseek(fptr, (LOG_RECALL_SIZE - 1) * -1  , SEEK_END))
+	{	//We need to load the whole historyFile or it's smaller than recall size, so get it all.
+		firstline = FALSE;
+		if (fseek(fptr, 0, SEEK_SET))
+		{
+			fclose(fptr);
+			return;
+		}
+	}
+	while (fgets(buffer, LOG_RECALL_SIZE, fptr)  && !feof(fptr))
+	{
+		len = strlen(buffer) - 1;		/*Flawfinder: ignore*/
+		for (bptr = (buffer + len); (*bptr == '\n' || *bptr == '\r') && bptr>buffer; bptr--)	*bptr='\0';
 
-					if (firstline)
-					{
-						firstline = FALSE;
-						continue;
-					}
+		if (firstline)
+		{
+			firstline = FALSE;
+			continue;
+		}
 
-					std::string line(buffer);
+		std::string line(buffer);
 
-					//updated 1.23 plain text log format requires a space added before subsequent lines in a multilined message
-					if (' ' == line[0])
-					{
-						line.erase(0, MULTI_LINE_PREFIX.length());
-						append_to_last_message(messages, '\n' + line);
-					}
-					else if (0 == len && ('\n' == line[0] || '\r' == line[0]))
-					{
-						//to support old format's multilined messages with new lines used to divide paragraphs
-						append_to_last_message(messages, line);
-					}
-					else
-					{
-						LLSD item;
-						if (!LLChatLogParser::parse(line, item, load_params))
-						{
-							item[LL_IM_TEXT] = line;
-						}
-						messages.push_back(item);
-					}
-				}
-				fclose(fptr);
-
-
+		//updated 1.23 plain text log format requires a space added before subsequent lines in a multilined message
+		if (' ' == line[0])
+		{
+			line.erase(0, MULTI_LINE_PREFIX.length());
+			append_to_last_message(messages, '\n' + line);
+		}
+		else if (0 == len && ('\n' == line[0] || '\r' == line[0]))
+		{
+			//to support old format's multilined messages with new lines used to divide paragraphs
+			append_to_last_message(messages, line);
+		}
+		else
+		{
+			LLSD item;
+			if (!LLChatLogParser::parse(line, item, load_params))
+			{
+				item[LL_IM_TEXT] = line;
+			}
+			messages.push_back(item);
+		}
+	}
+	fclose(fptr);
 }
 
-void LLLogChat::startChatHistoryThread(const std::string& file_name, const LLSD& load_params)
+// static
+bool LLLogChat::historyThreadsFinished(LLUUID session_id)
 {
-
-	LLLoadHistoryThread* mThread = new LLLoadHistoryThread();
-	mThread->start();
-	mThread->setHistoryParams(file_name, load_params);
+	LLMutexLock lock(historyThreadsMutex());
+	bool finished = true;
+	std::map<LLUUID,LLLoadHistoryThread *>::iterator it = sLoadHistoryThreads.find(session_id);
+	if (it != sLoadHistoryThreads.end())
+	{
+		finished = it->second->isFinished();
+	}
+	if (!finished)
+	{
+		return false;
+	}
+	std::map<LLUUID,LLDeleteHistoryThread *>::iterator dit = sDeleteHistoryThreads.find(session_id);
+	if (dit != sDeleteHistoryThreads.end())
+	{
+		finished = finished && dit->second->isFinished();
+	}
+	return finished;
 }
+
+// static
+LLLoadHistoryThread* LLLogChat::getLoadHistoryThread(LLUUID session_id)
+{
+	LLMutexLock lock(historyThreadsMutex());
+	std::map<LLUUID,LLLoadHistoryThread *>::iterator it = sLoadHistoryThreads.find(session_id);
+	if (it != sLoadHistoryThreads.end())
+	{
+		return it->second;
+	}
+	return NULL;
+}
+
+// static
+LLDeleteHistoryThread* LLLogChat::getDeleteHistoryThread(LLUUID session_id)
+{
+	LLMutexLock lock(historyThreadsMutex());
+	std::map<LLUUID,LLDeleteHistoryThread *>::iterator it = sDeleteHistoryThreads.find(session_id);
+	if (it != sDeleteHistoryThreads.end())
+	{
+		return it->second;
+	}
+	return NULL;
+}
+
+// static
+bool LLLogChat::addLoadHistoryThread(LLUUID& session_id, LLLoadHistoryThread* lthread)
+{
+	LLMutexLock lock(historyThreadsMutex());
+	std::map<LLUUID,LLLoadHistoryThread *>::const_iterator it = sLoadHistoryThreads.find(session_id);
+	if (it != sLoadHistoryThreads.end())
+	{
+		return false;
+	}
+	sLoadHistoryThreads[session_id] = lthread;
+	return true;
+}
+
+// static
+bool LLLogChat::addDeleteHistoryThread(LLUUID& session_id, LLDeleteHistoryThread* dthread)
+{
+	LLMutexLock lock(historyThreadsMutex());
+	std::map<LLUUID,LLDeleteHistoryThread *>::const_iterator it = sDeleteHistoryThreads.find(session_id);
+	if (it != sDeleteHistoryThreads.end())
+	{
+		return false;
+	}
+	sDeleteHistoryThreads[session_id] = dthread;
+	return true;
+}
+
+// static
+void LLLogChat::cleanupHistoryThreads()
+{
+	LLMutexLock lock(historyThreadsMutex());
+	std::vector<LLUUID> uuids;
+	std::map<LLUUID,LLLoadHistoryThread *>::iterator lit = sLoadHistoryThreads.begin();
+	for (; lit != sLoadHistoryThreads.end(); lit++)
+	{
+		if (lit->second->isFinished() && sDeleteHistoryThreads[lit->first]->isFinished())
+		{
+			delete lit->second;
+			delete sDeleteHistoryThreads[lit->first];
+			uuids.push_back(lit->first);
+		}
+	}
+	std::vector<LLUUID>::iterator uuid_it = uuids.begin();
+	for ( ;uuid_it != uuids.end(); uuid_it++)
+	{
+		sLoadHistoryThreads.erase(*uuid_it);
+		sDeleteHistoryThreads.erase(*uuid_it);
+	}
+}
+
+//static
+LLMutex* LLLogChat::historyThreadsMutex()
+{
+	if (sHistoryThreadsMutex == NULL)
+	{
+		sHistoryThreadsMutex = new LLMutex(NULL);
+	}
+	return sHistoryThreadsMutex;
+}
+
 // static
 std::string LLLogChat::oldLogFileName(std::string filename)
 {
@@ -642,8 +772,11 @@ void LLLogChat::deleteTranscripts()
 			}			
 		}
 	}
-
-	LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
+	
+	// <FS:CR> FIRE-11734 - Flush out the current histories from any open chat window
+	//LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true);
+	FSFloaterIM::clearAllOpenHistories();
+	// </FS:CR>
 }
 
 // static
@@ -656,10 +789,23 @@ bool LLLogChat::isTranscriptExist(const LLUUID& avatar_id, bool is_group)
 	{
 		LLAvatarName avatar_name;
 		LLAvatarNameCache::get(avatar_id, &avatar_name);
-		std::string avatar_user_name = avatar_name.getAccountName();
+		// <FS:Ansariel> [Legacy IM logfile names]
+		//std::string avatar_user_name = avatar_name.getAccountName();
+		std::string avatar_user_name;
+		if (gSavedSettings.getBOOL("UseLegacyIMLogNames"))
+		{
+			avatar_user_name = avatar_name.getUserName();
+			avatar_user_name = avatar_user_name.substr(0, avatar_user_name.find(" Resident"));;
+		}
+		else
+		{
+			avatar_user_name = avatar_name.getAccountName();
+			std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+		}
+		// <//FS:Ansariel> [Legacy IM logfile names]
 		if(!is_group)
 		{
-			std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
+			//std::replace(avatar_user_name.begin(), avatar_user_name.end(), '.', '_');
 			BOOST_FOREACH(std::string& transcript_file_name, list_of_transcriptions)
 			{
 				if (std::string::npos != transcript_file_name.find(avatar_user_name))
@@ -754,7 +900,14 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 
 	//matching a timestamp
 	boost::match_results<std::string::const_iterator> matches;
-	if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	{
+		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF_SEC)) return false;
+	}
+	else
+	{
+		if (!boost::regex_match(raw, matches, TIMESTAMP_AND_STUFF)) return false;
+	}
 	
 	bool has_timestamp = matches[IDX_TIMESTAMP].matched;
 	if (has_timestamp)
@@ -792,6 +945,18 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 	bool has_name = name_and_text[IDX_NAME].matched;
 	std::string name = name_and_text[IDX_NAME];
 
+	// Ansariel: Handle the case an IM was stored in nearby chat history
+	if (name == "IM:")
+	{
+		U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER, 3);
+		if (divider_pos != std::string::npos && divider_pos < (stuff.length() - NAME_TEXT_DIVIDER.length()))
+		{
+			im[LL_IM_FROM] = stuff.substr(0, divider_pos);
+			im[LL_IM_TEXT] = stuff.substr(divider_pos + NAME_TEXT_DIVIDER.length());
+			return true;
+		}
+	}
+
 	//we don't need a name/text separator
 	if (has_name && name.length() && name[name.length()-1] == ':')
 	{
@@ -808,7 +973,11 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 	//possibly a case of complex object names consisting of 3+ words
 	if (!has_name)
 	{
-		U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER);
+		// <FS:ND> FIRE-11832; using U32 truncates results for npos from 0xFFFFFFFF'FFFFFFFF to 0x00000000'FFFFFFFF
+ 		// U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER);
+		std::string::size_type divider_pos = stuff.find(NAME_TEXT_DIVIDER);
+		// </FS:ND>
+
 		if (divider_pos != std::string::npos && divider_pos < (stuff.length() - NAME_TEXT_DIVIDER.length()))
 		{
 			im[LL_IM_FROM] = stuff.substr(0, divider_pos);
@@ -845,115 +1014,187 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 	return true;  //parsed name and message text, maybe have a timestamp too
 }
 
+LLDeleteHistoryThread::LLDeleteHistoryThread(std::list<LLSD>* messages, LLLoadHistoryThread* loadThread)
+	: LLActionThread("delete chat history"),
+	mMessages(messages),
+	mLoadThread(loadThread)
+{
+}
 
+LLDeleteHistoryThread::~LLDeleteHistoryThread()
+{
+}
 
-	LLLoadHistoryThread::LLLoadHistoryThread() : LLThread("load chat history")
- 	{
-		mNewLoad = false;
+void LLDeleteHistoryThread::run()
+{
+	if (mLoadThread != NULL)
+	{
+		mLoadThread->waitFinished();
+	}
+	if (NULL != mMessages)
+	{
+		delete mMessages;
+	}
+	mMessages = NULL;
+	setFinished();
+}
+
+LLActionThread::LLActionThread(const std::string& name)
+	: LLThread(name),
+	mMutex(NULL),
+	mRunCondition(NULL),
+	mFinished(false)
+{
+}
+
+LLActionThread::~LLActionThread()
+{
+}
+
+void LLActionThread::waitFinished()
+{
+	mMutex.lock();
+	if (!mFinished)
+	{
+		mMutex.unlock();
+		mRunCondition.wait();
+	}
+	else
+	{
+		mMutex.unlock();	
+	}
+}
+
+void LLActionThread::setFinished()
+{
+	mMutex.lock();
+	mFinished = true;
+	mMutex.unlock();
+	mRunCondition.signal();
+}
+
+LLLoadHistoryThread::LLLoadHistoryThread(const std::string& file_name, std::list<LLSD>* messages, const LLSD& load_params)
+	: LLActionThread("load chat history"),
+	mMessages(messages),
+	mFileName(file_name),
+	mLoadParams(load_params),
+	mNewLoad(true),
+	mLoadEndSignal(NULL)
+{
+}
+
+LLLoadHistoryThread::~LLLoadHistoryThread()
+{
+}
+
+void LLLoadHistoryThread::run()
+{
+	if(mNewLoad)
+	{
+		loadHistory(mFileName, mMessages, mLoadParams);
+		int count = mMessages->size();
+		llinfos << "mMessages->size(): " << count << llendl;
+		setFinished();
+	}
+}
+
+void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LLSD>* messages, const LLSD& load_params)
+{
+	if (file_name.empty())
+	{
+		LL_WARNS("LLLogChat::loadHistory") << "Session name is Empty!" << LL_ENDL;
+		return ;
 	}
 
-	void LLLoadHistoryThread::run()
+	bool load_all_history = load_params.has("load_all_history") ? load_params["load_all_history"].asBoolean() : false;
+	LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
+
+	if (!fptr)
 	{
-		while (!LLApp::isQuitting())
-			{
-			    if(mNewLoad)
-				{
-					loadHistory(mFileName,mMessages,mLoadParams);
-					shutdown();
-				}
-			}
+		fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
+		if (!fptr)
+		{
+			mNewLoad = false;
+			(*mLoadEndSignal)(messages, file_name);
+			return;						//No previous conversation with this name.
+		}
 	}
-	void LLLoadHistoryThread::setHistoryParams(const std::string& file_name, const LLSD& load_params)
-	{
-		mFileName = file_name;
-		mLoadParams = load_params;
-		mNewLoad = true;
-	}
-	void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LLSD>& messages, const LLSD& load_params)
-	{
+	char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
 
-		if (file_name.empty())
-			{
-			LL_WARNS("LLLogChat::loadHistory") << "Session name is Empty!" << LL_ENDL;
-				return ;
-			}
+	char *bptr;
+	S32 len;
+	bool firstline = TRUE;
 
-			bool load_all_history = load_params.has("load_all_history") ? load_params["load_all_history"].asBoolean() : false;
-
-			LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
-			if (!fptr)
-			{
-				fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
-				if (!fptr)
-				{
-					mNewLoad = false;
-					(*mLoadEndSignal)(messages, file_name);
-					return;						//No previous conversation with this name.
-				}
-			}
-
-			char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
-			char *bptr;
-			S32 len;
-			bool firstline = TRUE;
-
-			if (load_all_history || fseek(fptr, (LOG_RECALL_SIZE - 1) * -1  , SEEK_END))
-			{	//We need to load the whole historyFile or it's smaller than recall size, so get it all.
-				firstline = FALSE;
-				if (fseek(fptr, 0, SEEK_SET))
-				{
-					fclose(fptr);
-					mNewLoad = false;
-					(*mLoadEndSignal)(messages, file_name);
-					return;
-				}
-			}
-		while (fgets(buffer, LOG_RECALL_SIZE, fptr)  && !feof(fptr))
-			{
-				len = strlen(buffer) - 1;		/*Flawfinder: ignore*/
-				for (bptr = (buffer + len); (*bptr == '\n' || *bptr == '\r') && bptr>buffer; bptr--)	*bptr='\0';
-
-				if (firstline)
-				{
-					firstline = FALSE;
-					continue;
-				}
-
-				std::string line(buffer);
-
-				//updated 1.23 plaint text log format requires a space added before subsequent lines in a multilined message
-				if (' ' == line[0])
-				{
-					line.erase(0, MULTI_LINE_PREFIX.length());
-					append_to_last_message(messages, '\n' + line);
-				}
-				else if (0 == len && ('\n' == line[0] || '\r' == line[0]))
-				{
-					//to support old format's multilined messages with new lines used to divide paragraphs
-					append_to_last_message(messages, line);
-				}
-				else
-				{
-					LLSD item;
-					if (!LLChatLogParser::parse(line, item, load_params))
-					{
-						item[LL_IM_TEXT] = line;
-					}
-					messages.push_back(item);
-				}
-			}
+	if (load_all_history || fseek(fptr, (LOG_RECALL_SIZE - 1) * -1  , SEEK_END))
+	{	//We need to load the whole historyFile or it's smaller than recall size, so get it all.
+		firstline = FALSE;
+		if (fseek(fptr, 0, SEEK_SET))
+		{
 			fclose(fptr);
 			mNewLoad = false;
 			(*mLoadEndSignal)(messages, file_name);
-	}
-
-	//static
-	boost::signals2::connection LLLoadHistoryThread::setLoadEndSignal(const load_end_signal_t::slot_type& cb)
-	{
-		if (NULL == mLoadEndSignal)
-		{
-			mLoadEndSignal = new load_end_signal_t();
+			return;
 		}
-
-		return mLoadEndSignal->connect(cb);
 	}
+
+
+	while (fgets(buffer, LOG_RECALL_SIZE, fptr)  && !feof(fptr))
+	{
+		len = strlen(buffer) - 1;		/*Flawfinder: ignore*/
+
+		for (bptr = (buffer + len); (*bptr == '\n' || *bptr == '\r') && bptr>buffer; bptr--)	*bptr='\0';
+
+
+		if (firstline)
+		{
+			firstline = FALSE;
+			continue;
+		}
+		std::string line(buffer);
+
+		//updated 1.23 plaint text log format requires a space added before subsequent lines in a multilined message
+		if (' ' == line[0])
+		{
+			line.erase(0, MULTI_LINE_PREFIX.length());
+			append_to_last_message(*messages, '\n' + line);
+		}
+		else if (0 == len && ('\n' == line[0] || '\r' == line[0]))
+		{
+			//to support old format's multilined messages with new lines used to divide paragraphs
+			append_to_last_message(*messages, line);
+		}
+		else
+		{
+			LLSD item;
+			if (!LLChatLogParser::parse(line, item, load_params))
+			{
+				item[LL_IM_TEXT] = line;
+			}
+			messages->push_back(item);
+		}
+	}
+
+	fclose(fptr);
+	mNewLoad = false;
+	(*mLoadEndSignal)(messages, file_name);
+}
+	
+boost::signals2::connection LLLoadHistoryThread::setLoadEndSignal(const load_end_signal_t::slot_type& cb)
+{
+	if (NULL == mLoadEndSignal)
+	{
+		mLoadEndSignal = new load_end_signal_t();
+	}
+
+	return mLoadEndSignal->connect(cb);
+}
+
+void LLLoadHistoryThread::removeLoadEndSignal(const load_end_signal_t::slot_type& cb)
+{
+	if (NULL != mLoadEndSignal)
+	{
+		mLoadEndSignal->disconnect_all_slots();
+		delete mLoadEndSignal;
+	}
+	mLoadEndSignal = NULL;
+}

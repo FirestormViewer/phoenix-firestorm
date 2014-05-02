@@ -152,7 +152,13 @@ public:
 	U32		getFileSize();
 	BOOL	serialize(LLDataPacker& dp) const;
 	BOOL	deserialize(LLDataPacker& dp);
-	BOOL	isLoaded() { return mJointMotionList != NULL; }
+	BOOL	isLoaded() 
+	{ 
+		if (mJointMotionList)
+			return true;
+		else
+			return false;
+	}
 
 
 	// setters for modifying a keyframe animation
@@ -413,6 +419,18 @@ public:
 		U32 dumpDiagInfo();
 		JointMotion* getJointMotion(U32 index) const { llassert(index < mJointMotionArray.size()); return mJointMotionArray[index]; }
 		U32 getNumJointMotions() const { return mJointMotionArray.size(); }
+
+		void lock()
+		{	++mLocks;	}
+
+		void unlock()
+		{	--mLocks;	}
+
+		bool isLocked() const
+		{	return mLocks > 0; }
+
+	private:
+		long mLocks;
 	};
 
 
@@ -422,7 +440,51 @@ protected:
 	//-------------------------------------------------------------------------
 	// Member Data
 	//-------------------------------------------------------------------------
-	JointMotionList*				mJointMotionList;
+	class JointMotionListHolder
+	{
+		JointMotionList*				mJointMotionList;
+
+		JointMotionListHolder( JointMotionListHolder const & );
+		JointMotionListHolder& operator=(JointMotionListHolder const& );
+	public:
+		JointMotionListHolder( JointMotionList *aIn )
+			:	mJointMotionList( aIn )
+		{
+			if( mJointMotionList )
+				mJointMotionList->lock();
+		}
+
+		~JointMotionListHolder()
+		{
+			if( mJointMotionList )
+				mJointMotionList->unlock();
+		}
+
+		operator bool() const
+		{	return 0 != mJointMotionList;	}
+
+		JointMotionList* get()
+		{	return mJointMotionList;	}
+
+		JointMotionList* operator->()
+		{	return mJointMotionList;	}
+
+		JointMotionList const* operator->() const
+		{	return mJointMotionList;	}
+
+		void operator=( JointMotionList * aIn )
+		{
+			if( mJointMotionList )
+				mJointMotionList->unlock();
+
+			mJointMotionList = aIn;
+
+			if( mJointMotionList )
+				mJointMotionList->lock();
+		}
+	};
+
+	JointMotionListHolder mJointMotionList;
 	std::vector<LLPointer<LLJointState> > mJointStates;
 	LLJoint*						mPelvisp;
 	LLCharacter*					mCharacter;
@@ -436,13 +498,25 @@ protected:
 
 class LLKeyframeDataCache
 {
+	struct JointMotionListCacheEntry
+	{
+		U64 mLastAccessed;
+		LLKeyframeMotion::JointMotionList *mList;
+	};
+
+	typedef std::map<LLUUID, JointMotionListCacheEntry> keyframe_data_map_t; 
+	static keyframe_data_map_t sKeyframeDataMap;
+
+	typedef std::deque< LLKeyframeMotion::JointMotionList* > tGarbage; 
+	static tGarbage  mGarbage;
+
+	static void tryShrinkCache();
+	static void tryDeleteGarbage();
+
 public:
 	// *FIX: implement this as an actual singleton member of LLKeyframeMotion
 	LLKeyframeDataCache(){};
 	~LLKeyframeDataCache();
-
-	typedef std::map<LLUUID, class LLKeyframeMotion::JointMotionList*> keyframe_data_map_t; 
-	static keyframe_data_map_t sKeyframeDataMap;
 
 	static void addKeyframeData(const LLUUID& id, LLKeyframeMotion::JointMotionList*);
 	static LLKeyframeMotion::JointMotionList* getKeyframeData(const LLUUID& id);

@@ -1,99 +1,273 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Text-Chat" name="chat">
-	<panel name="general_chat_settings">
-		<check_box initial_value="true" label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
-		<check_box label="IMs per E-Mail zustellen, wenn ich offline bin" name="send_im_to_email"/>
-		<check_box label="Nur IMs und Anrufe von Freunden oder Gruppen durchstellen" name="voice_call_friends_only_check"/>
-		<text name="font_size">
-			Schriftgröße:
-		</text>
-		<combo_box name="chat_font_size">
-			<item label="Klein" name="Small" value="0"/>
-			<item label="Mittel" name="Medium" value="1"/>
-			<item label="Groß" name="Large" value="2"/>
-		</combo_box>
-		<check_box label="Blasen-Chat" name="bubble_text_chat"/>
-	</panel>
-	<panel name="im_notification_settings">
-		<text name="friend_ims">
-			IMs von Freunden:
-		</text>
-		<combo_box name="FriendIMOptions">
-			<item label="Unterhaltungsfenster öffnen" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="Nachricht in Popup anzeigen" name="PopUpMessage" value="toast"/>
-			<item label="Flash-Symbolleistenschaltfläche" name="FlashToolbarButton" value="flash"/>
-			<item label="Keine Aktion" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="Sound abspielen" name="play_sound_friend_im"/>
-		<text name="non_friend_ims">
-			IMs von anderen:
-		</text>
-		<combo_box name="NonFriendIMOptions">
-			<item label="Unterhaltungsfenster öffnen" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="Nachricht in Popup anzeigen" name="PopUpMessage" value="toast"/>
-			<item label="Flash-Symbolleistenschaltfläche" name="FlashToolbarButton" value="flash"/>
-			<item label="Keine Aktion" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="Sound abspielen" name="play_sound_non_friend_im"/>
-		<text name="conference_ims">
-			Konferenz-IMs:
-		</text>
-		<combo_box name="ConferenceIMOptions">
-			<item label="Unterhaltungsfenster öffnen" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="Nachricht in Popup anzeigen" name="PopUpMessage" value="toast"/>
-			<item label="Flash-Symbolleistenschaltfläche" name="FlashToolbarButton" value="flash"/>
-			<item label="Keine Aktion" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="Sound abspielen" name="play_sound_conference_im"/>
-		<text name="group_chat">
-			Gruppen-Chat:
-		</text>
-		<combo_box name="GroupChatOptions">
-			<item label="Unterhaltungsfenster öffnen" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="Nachricht in Popup anzeigen" name="PopUpMessage" value="toast"/>
-			<item label="Flash-Symbolleistenschaltfläche" name="FlashToolbarButton" value="flash"/>
-			<item label="Keine Aktion" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="Sound abspielen" name="play_sound_group_chat_im"/>
-		<text name="nearby_chat">
-			Chat in der Nähe:
-		</text>
-		<combo_box name="NearbyChatOptions">
-			<item label="Unterhaltungsfenster öffnen" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="Nachricht in Popup anzeigen" name="PopUpMessage" value="toast"/>
-			<item label="Flash-Symbolleistenschaltfläche" name="FlashToolBarButton" value="flash"/>
-			<item label="Keine Aktion" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="Sound abspielen" name="play_sound_nearby_chat_im"/>
-		<text name="object_ims">
-			IMs von Objekten:
-		</text>
-		<combo_box name="ObjectIMOptions">
-			<item label="Unterhaltungsfenster öffnen" name="OpenConversationsWindow" value="openconversations"/>
-			<item label="Nachricht in Popup anzeigen" name="PopUpMessage" value="toast"/>
-			<item label="Flash-Symbolleistenschaltfläche" name="FlashToolBarButton" value="flash"/>
-			<item label="Keine Aktion" name="NoAction" value="noaction"/>
-		</combo_box>
-		<check_box label="Sound abspielen" name="play_sound_object_im"/>
-		<text name="notifications_alert">
-			Um vorübergehend alle Benachrichtigungen zu stoppen, wählen Sie „Unterhalten“ &gt; „Nicht stören“.
-		</text>
-	</panel>
-	<panel name="play_sound_settings">
-		<text name="play_sound">
-			Sound abspielen:
-		</text>
-		<check_box label="Neue Unterhaltung" name="new_conversation"/>
-		<check_box label="Eingehender Anruf" name="incoming_voice_call"/>
-		<check_box label="Teleport-Angebot" name="teleport_offer"/>
-		<check_box label="Inventarangebot" name="inventory_offer"/>
-	</panel>
-	<panel name="log_settings">
-		<button label="Protokoll löschen..." name="clear_log"/>
-		<button label="Transkripte löschen..." name="delete_transcripts"/>
-		<button label="Durchsuchen..." label_selected="Durchblättern" name="log_path_button"/>
-	</panel>
-	<button label="Übersetzen..." name="ok_btn"/>
-	<button label="Automatisch ersetzen..." name="autoreplace_showgui"/>
-	<button label="Rechtschreibprüfung..." name="spellcheck_showgui"/>
+	<tab_container name="tabs">
+		<panel label="Allgemein" name="ChatGeneral">
+			<text name="font_size">
+				Schriftgröße:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Klein" name="radio"/>
+				<radio_item label="Mittel" name="radio2"/>
+				<radio_item label="Groß" name="radio3"/>
+				<radio_item label="Riesig" name="radio4"/>
+			</radio_group>
+			<text name="console_font_size">
+				Schriftgröße für Konsole:
+			</text>
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Klein" name="consradio"/>
+				<radio_item label="Mittel" name="consradio2"/>
+				<radio_item label="Groß" name="consradio3"/>
+				<radio_item label="Riesig" name="consradio4"/>
+			</radio_group>
+			<check_box label="Gruppenchats, IM-Sitzungen und Chat in der Nähe immer in Großbuchstaben anzeigen" name="chat_always_in_uppercase"/>
+			<check_box label="Chateingabe nach Drücken der Returntaste beenden" name="CloseChatOnReturn"/>
+			<check_box label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
+			<check_box label="Beim Chatten Avataranimation abspielen, z.B. für Rufen" name="play_avatar_animations"/>
+			<check_box label="Tipp-Sound abspielen wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
+			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
+			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Automatische Namensvorhersage in „Chat in der Nähe“-Eingabezeile aktivieren" name="FSChatbarNamePrediction"/>
+			<check_box label="Systemmeldungen in Klammern einschließen" name="FSIMSystemMessageBrackets"/>
+			<check_box label="Im Chatverlauf „Du“ anstatt des eigenen Namens anzeigen" name="FSChatHistoryShowYou"/>
+			<check_box label="Namen in direkten IMs anzeigen" name="IMShowNamesForP2PConv"/>
+			<check_box label="IMs per E-Mail zuschicken, wenn ich offline bin ([EMAIL])" name="send_im_to_email"/>
+			<check_box label="V1-Stil für IM- und Text-Chatverlauf verwenden" name="plain_text_chat_history"/>
+			<check_box label="Miniaturicons anzeigen, falls V2/3-Chat-Stil verwendet wird" name="ShowChatMiniIcons"/>	
+			<check_box label="Ende der letzten Konversation anzeigen" name="LogShowHistory"/>
+			<check_box label="Blasen-Chat" name="bubble_text_chat"/>
+			<check_box label="Eingabe-Indikator in Blase oberhalb eines Avatars anzeigen" name="bubble_text_typing"/>
+			<text name="inworld_typing_rg_label" width="115">
+				Buchstabeneingabe:
+			</text>
+			<radio_group name="inworld_typing_preference">
+				<radio_item label="Startet Chat" name="radio_start_chat" width="130"/>
+				<radio_item label="Beeinflusst Bewegung (z.B. WASD)" name="radio_move"/>
+			</radio_group>
+			<text name="show_ims_in_label" width="115">
+				IMs anzeigen in:
+			</text>
+			<text name="req_restart_ims" left_pad="55" width="120">
+				(Erfordert Neustart)
+			</text>
+			<radio_group name="chat_window" tool_tip="Zeigen Sie Ihre Sofortnachrichten (Instant Messages) in einem anderen Fenster oder in einem einzigen Fenster mit vielen Registerkarten an (Neustart erforderlich).">
+				<radio_item label="Getrennte Fenster" name="radio" value="0"/>
+				<radio_item label="Registerkarten" name="radio2" value="1"/>
+			</radio_group>
+			<text name="tab_direction_label" width="160">
+				Chat-Tabmodus-Orientierung:
+			</text>
+			<radio_group name="chat_tab_direction" tool_tip="Ändert die Oriengierung von Chat/Instant-Message-Reiterkarten zwischen horizontal und vertikal wenn kompakter Chat aktiviert ist. (Erfordert Neustart)">
+				<radio_item label="Horizontal" name="radio_horizontal"/>
+				<radio_item label="Vertikal" name="radio_vertical"/>
+			</radio_group>
+			<text name="req_restart_chattabs">
+				(Erfordert Neustart)
+			</text>
+			<text name="FSIMTabNameFormat_label">
+				Namensformat für IM-Tabs:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Anzeigename" name="display_name"/>
+				<combo_box.item label="Benutzername" name="user_name"/>
+				<combo_box.item label="Anzeigename (Benutzername)" name="display_user_name"/>
+				<combo_box.item label="Benutzername (Anzeigename)" name="user_display_name"/>
+			</combo_box>
+		</panel>
+		
+		<!-- Chat: Notifications -->
+		<!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
+		<panel label="Benachrichtigungen" name="ChatNotifications">
+			<text name="disable_toast_label">
+				Chat-Popups aktivieren für eingehende:
+			</text>
+			<check_box name="EnableGroupChatPopups" label="Gruppenchats" tool_tip="Aktivieren um Popups anzuzeigen, wenn neue Gruppennachrichten eintreffen"/>
+			<check_box name="EnableIMChatPopups" label="IM-Chats" tool_tip="Aktivieren um Popups anzuzeigen, wenn Instant Messages eintreffen"/>
+			<check_box name="FSUseNearbyChatConsole" label="Chat-Konsole anstelle von Toasts für Chat-Popups verwenden (Viewer 1.x-Stil)"/>
+			<check_box name="FSLogImToChatConsole" label="Instant Messages in Chat-Konsole anzeigen"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Gruppenchats in Chat-Konsole anzeigen"/>
+			<text name="FSShowGroupNameLength_label" width="365">
+				Länge des Gruppennamens, der im Chatverlauf angezeigt wird
+			</text>
+			<spinner tool_tip="-1 für kompletten Gruppennamen, 0 für deaktiviert" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Gespräche öffnen, wenn eine Offline-Nachricht empfangen wurde"/>
+			<check_box name="FSShowIMInChatHistory" label="Instant Messages im lokalem Chat anzeigen"/>
+			<check_box name="FSLogIMInChatHistory" label="IMs im lokalem Chat speichern" width="190"/>
+			<text name="FSIMChatHistoryFade_label" width="320">
+				IM-Text vor dem Hintergrund des Chatverlaufs ausblenden
+			</text>
+			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>
+			<check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Blinkende IM-Reiter, wenn Freunde sich an- oder abmelden"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Blinkender Chat-Toolbar-Button, wenn neuer Chat in der Nähe eintrifft" tool_tip="Der Chat-Button in der Toolbar blinkt, wenn ein neuer Chat in der Nähe eintrifft. Das Fenster vom Chat in der Nähe muss im Gespräche-Fenster eingedockt sein und das Gespräche-Fenster darf nicht sichtbar sein, damit der Button blinkt."/>
+			<check_box name="FSNotifyIMFlash" label="Blinkender Chat-Toolbar-Button, wenn eine neue (Gruppen-)IM eintrifft" tool_tip="Der Chat-Button in der Toolbar blinkt, wenn eine neue Instand Message oder ein neuer Gruppenchat eintrifft. Das entsprechende Fenster muss im Gespräche-Fenster eingedockt sein und das Gespräche-Fenster darf nicht sichtbar sein, damit der Button blinkt. Diese Option ist nur verfügbar, wenn (Gruppen-)IM-Fenster als Registerkarten und nicht als separate Fenster angezeigt werden (siehe Reiter „Allgemein“)."/>
+			<check_box name="FSReportMutedGroupChat" label="Stummgeschalteten Gruppenchat im lokalen Chat melden"/>
+			<text name="WhenPlayIMLabel" width="205">
+				Beim Eintreffen von Instant Messages:
+			</text>
+			<combo_box name="WhenPlayIM" width="265">
+				<combo_box.item label="Klang nur bei neuer IM-Sitzung abspielen" name="1"/>
+				<combo_box.item label="Klang bei jeder IM abspielen" name="2"/>
+				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
+				<combo_box.item label="Keinen Klang abspielen" name="0"/>
+			</combo_box>
+			<text name="WhenPlayGroupIMLabel" width="205">
+				Beim Eintreffen von Gruppenchats:
+			</text>
+			<combo_box name="WhenPlayGroupIM" width="265">
+				<combo_box.item label="Klang nur bei neuer Sitzung abspielen" name="1"/>
+				<combo_box.item label="Klang bei jeder Nachricht abspielen" name="2"/>
+				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
+				<combo_box.item label="Keinen Klang abspielen" name="0"/>
+			</combo_box>
+			<text name="WhenPlayConfIMLabel" width="205">
+				Beim Eintreffen von AdHoc-Messages:
+			</text>
+			<combo_box name="WhenPlayConfIM" width="265">
+				<combo_box.item label="Klang nur bei neuer Sitzung abspielen" name="1"/>
+				<combo_box.item label="Klang bei jeder Nachricht abspielen" name="2"/>
+				<combo_box.item label="Klang nur abspielen, wenn nicht im Fokus" name="3"/>
+				<combo_box.item label="Keinen Klang abspielen" name="0"/>
+			</combo_box>
+			<check_box name="FSGroupNoticesToIMLog" label="Gruppenmitteilungen im Gruppenchat zusätzlich zum Toast anzeigen"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Betreff und Autor ebenfalls anzeigen"/>
+		</panel>
+		
+		<!-- Chat: Firestorm -->
+		<panel label="Firestorm" name="ChatFirestorm">
+			<text name="chat_and_im_enhancements">
+				Chat- und IM-Erweiterungen:
+			</text>
+			<check_box name="AllowMUpose" label="&quot;:&quot; als Synonym für &quot;/me&quot; verwenden"/>
+			<check_box name="EmotesUseItalic" label="Kursive Schrift für Emotes verwenden" left_delta="260"/>
+			<check_box name="AutoCloseOOC" label="((OOC))-Klammern automatisch schließen"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Rufen fett, Flüstern kursiv hervorheben" left_delta="260"/>
+
+			<!-- Localchat chat bar -->
+			<check_box name="FSNearbyChatbar" label="Eingabezeile zum Fenster Lokaler Chat hinzufügen" width="300"/>
+			<check_box name="FSShowChatChannel" label="Kanalauswahl in Eingabezeile anzeigen"/>
+			<check_box name="FSShowChatType" label="Chat-Typ/Sende-Button anzeigen" left_delta="260"/>
+			<check_box label="Haupteingabezeile für Chat automatisch verstecken" name="AutohideChatBar" tool_tip="Eingabezeile in der unteren Buttonleiste automatisch verstecken und nur zur Eingabe anzeigen"/>
+			<check_box label="Chatleiste nach Senden deaktivieren" name="CloseChatOnReturn"/>
+			<check_box label="Chatverlauf ebenfalls deaktivieren" name="FSUnfocusChatHistoryOnReturn" left_delta="260"/>
+			<check_box name="FSMarkObjects" label="Objektename als (namenlos) anzeigen um Vortäuschungen zu unterbinden"/>
+
+			<!-- Groups -->
+			<text name="group_enhancements">
+				Gruppenchat:
+			</text>
+			<check_box name="FSHighlightGroupMods" label="Hervorhebung von Nachrichten von Gruppenmoderatoren aktivieren"/>
+			<text name="Moderator Name Style" width="110">
+				Schriftstil für Name:
+			</text>
+			<combo_box name="mod_name_style" width="180">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Fett" name="BOLD"/>
+				<combo_box.item label="Kursiv" name="ITALIC"/>
+				<combo_box.item label="Fett &amp; Kursiv" name="BOLDITALIC"/>
+				<combo_box.item label="Unterstreichen" name="UNDERLINE"/>
+				<combo_box.item label="Fett &amp; Unterstreichen" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Kursiv &amp; Unterstreichen" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Fett, Kursiv &amp; Unterstreichen" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style" width="110">
+				Schriftstil für Text:
+			</text>
+			<combo_box name="mod_text_style" width="180">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Fett" name="BOLD"/>
+				<combo_box.item label="Kursiv" name="ITALIC"/>
+				<combo_box.item label="Fett &amp; Kursiv" name="BOLDITALIC"/>
+				<combo_box.item label="Unterstreichen" name="UNDERLINE"/>
+				<combo_box.item label="Fett &amp; Unterstreichen" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Kursiv &amp; Unterstreichen" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Fett, Kursiv &amp; Unterstreichen" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<check_box name="FSMuteAllGroups" label="ALLE Gruppenchats deaktivieren"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von 'Gruppenmitteilungen erhalten' deaktiviert auch Gruppenchat"/>
+
+			<!-- Logging -->
+			<text name="logging_enhancements">
+				Zeitstempel:
+			</text>
+			<text name="show_timestamps_label" width="75">
+				Anzeigen in:
+			</text>
+			<check_box label="Chat in der Nähe" name="show_timestamps_nearby_chat" width="120"/>
+			<check_box label="Instant Messages" name="show_timestamps_im" width="120"/>
+			<check_box label="Verlauf" name="show_timestamps_transcripts"/>
+			<check_box label="Sekunden in Zeitstempel anzeigen [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
+
+			<!-- Console -->
+			<text name="console_enhancements">
+				Konsole:
+			</text>
+			<check_box name="FSConsoleClassicDrawMode" label="Klassischen Anzeigemodus für Konsole verwenden" tool_tip="Im klassischen Anzeigemodus wird der Hintergrund der Konsole als einzelner Block über alle Zeilen und mit der Breite der längsten Zeile dargestellt."/>
+			<check_box name="ChatFullWidth" label="Bildschirmbreite für Konsole verwenden" width="240"/>
+			<spinner label="Chat ausblenden nach" label_width="130" name="fade_chat_time" width="180" />
+			<text name="text_box4">
+				(Sekunden)
+			</text>
+			<spinner name="max_chat_count"/>
+			<text name="text_box5">
+				(# Zeilen)
+			</text>
+		</panel>
+
+		<!-- Chat: Radar -->
+		<panel label="Radar" name="ChatRadar">
+			<check_box name="reportChatRangeEnter" label="Radar meldet, wenn Avatare die Chatreichweite betreten"/>
+			<check_box width="140" name="PlayModeUISndRadarChatEnter" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarChatEnter" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarChatEnter" tool_tip="Auf Standardwert zurücksetzen."/>
+			<check_box name="reportChatRangeLeave" label="Radar meldet, wenn Avatare die Chatreichweite verlassen"/>
+			<check_box width="140" name="PlayModeUISndRadarChatLeave" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarChatLeave" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarChatLeave" tool_tip="Auf Standardwert zurücksetzen."/>
+			<check_box name="reportDrawRangeEnter" label="Radar meldet, wenn Avatare die Draw Distance betreten"/>
+			<check_box width="140" name="PlayModeUISndRadarDrawEnter" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarDrawEnter" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarDrawEnter" tool_tip="Auf Standardwert zurücksetzen."/>
+			<check_box name="reportDrawRangeLeaave" label="Radar meldet, wenn Avatare die Draw Distance verlassen"/>
+			<check_box width="140" name="PlayModeUISndRadarDrawLeave" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarDrawLeave" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarDrawLeave" tool_tip="Auf Standardwert zurücksetzen."/>
+			<check_box name="RadarReportSimRangeEnter" label="Radar meldet, wenn Avatare die Region betreten"/>
+			<check_box width="140" name="PlayModeUISndRadarSimEnter" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarSimEnter" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarSimEnter" tool_tip="Auf Standardwert zurücksetzen."/>
+			<check_box name="RadarReportSimRangeLeave" label="Radar meldet, wenn Avatare die Region verlassen"/>
+			<check_box width="140" name="PlayModeUISndRadarSimLeave" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarSimLeave" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarSimLeave" tool_tip="Auf Standardwert zurücksetzen."/>
+			<check_box name="RadarEnterChannelAlert" label="Betreten-Meldungen an Skripte weiterleiten"/>
+			<check_box name="RadarLeaveChannelAlert" label="Verlassen-Meldungen an Skripte weiterleiten"/>
+		</panel>
+
+		<!-- Chat: Keyword Alerts -->
+		<panel label="Schlüsselwörter" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="Schlüsselwort-Benachrichtungen aktivieren"/>
+			<check_box name="FSKeywordInChat" label="Lokalen Chat auf Schüsselwörter prüfen"/>
+			<check_box name="FSKeywordInIM" label="Instant Messages und Gruppenchats auf Schlüsselwörter prüfen"/>
+			<text name="textFSKeywords">
+				Schlüsselwörter (getrennt durch Komma):
+			</text>
+			<check_box name="FSKeywordChangeColor" label="Farbliche Markierung aktivieren"/>
+			<color_swatch name="colorswatch" left="220" tool_tip="Anklicken um Farbauswahl zu öffnen"/>
+			<check_box name="FSKeywordPlaySound" label="Sound abspielen"/>
+			<text name="textFSKeywordSound" width="200">
+				UUID für Soundbenachrichtigung:
+			</text>
+			<button label="V" name="Prev_UISndFSKeywordSound" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndFSKeywordSound" tool_tip="Auf Standardwert zurücksetzen."/>
+		</panel>
+
+		<!-- Chat: Text Input -->
+		<panel label="Texteingabe" name="ChatTextInput">
+			<button name="autoreplace_showgui" label="Automatische Ersetzung..."/>
+			<button name="spellcheck_showgui" label="Rechtschreibprüfung..." width="145"/>
+			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
+		</panel>
+
+	</tab_container>
 </panel>

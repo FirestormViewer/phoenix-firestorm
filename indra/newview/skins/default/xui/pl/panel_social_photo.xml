@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_social_photo">
+	<layout_stack name="stack_photo">
+		<layout_panel name="snapshot_panel">
+			<combo_box name="resolution_combobox" tool_tip="Rozdzielczość obrazka">
+				<combo_box.item label="Obecne okno" name="CurrentWindow" />
+			</combo_box>
+			<button label="Odśwież" name="new_snapshot_btn" tool_tip="Kliknij, aby odświeżyć" />
+			<text name="working_lbl">
+				Odświeżanie...
+			</text>
+			<text name="caption_label">
+				Komentarz (opcjonalnie):
+			</text>
+		</layout_panel>
+		<layout_panel name="photo_button_panel">
+			<button label="Wyślij" name="post_photo_btn" />
+			<button label="Anuluj" name="cancel_photo_btn" />
+		</layout_panel>
+	</layout_stack>
+</panel>

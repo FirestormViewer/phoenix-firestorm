@@ -39,6 +39,7 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "llfindlocale.h"
+#include "../newview/llviewercontrol.h"
 
 #if LL_GTK
 extern "C" {
@@ -57,6 +58,7 @@ extern "C" {
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <stdio.h>
 #endif // LL_LINUX || LL_SOLARIS
 
 extern BOOL gDebugWindowProc;
@@ -119,7 +121,11 @@ bool LLWindowSDL::ll_try_gtk_init(void)
 	if (!tried_gtk_init)
 	{
 		tried_gtk_init = TRUE;
+
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32 )
 		if (!g_thread_supported ()) g_thread_init (NULL);
+#endif
+
 		maybe_lock_display();
 		gtk_is_good = gtk_init_check(NULL, NULL);
 		maybe_unlock_display();
@@ -413,6 +419,11 @@ static int x11_detect_VRAM_kb()
 }
 #endif // LL_X11
 
+void LLWindowSDL::setTitle(const std::string &title)
+{
+	SDL_WM_SetCaption(title.c_str(), title.c_str());
+}
+
 BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, BOOL fullscreen, BOOL disable_vsync)
 {
 	//bool			glneedsinit = false;
@@ -455,6 +466,15 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	if (video_info->current_h > 0)
 	{
 		mOriginalAspectRatio = (float)video_info->current_w / (float)video_info->current_h;
+
+		// <FS:Zi> FIRE-8825 - Try to work around an issue with Fullscreen and dual monitors
+		// assume two equal width monitors if aspect ratio exceeds 2.0
+		// if someone can find out how to read a monitor's native resolution in OpenGL, please change this
+		// SDL1.2 doesn't offer any way to do it, apparently SDL 1.3 does
+		if(mOriginalAspectRatio>2.0f)
+			mOriginalAspectRatio=mOriginalAspectRatio/2.0f;
+		// </FS:Zi>
+
 		llinfos << "Original aspect ratio was " << video_info->current_w << ":" << video_info->current_h << "=" << mOriginalAspectRatio << llendl;
 	}
 
@@ -463,7 +483,7 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 
 	// Set the application icon.
 	SDL_Surface *bmpsurface;
-	bmpsurface = Load_BMP_Resource("ll_icon.BMP");
+	bmpsurface = Load_BMP_Resource("firestorm_icon.BMP");
 	if (bmpsurface)
 	{
 		// This attempts to give a black-keyed mask to the icon.
@@ -1260,20 +1280,23 @@ void LLWindowSDL::x11_set_urgent(BOOL urgent)
 
 void LLWindowSDL::flashIcon(F32 seconds)
 {
+	if (getMinimized())	// <FS:CR> Moved this here from llviewermessage.cpp
+	{
 #if !LL_X11
-	llinfos << "Stub LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
+		llinfos << "Stub LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
 #else	
-	llinfos << "X11 LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
+		llinfos << "X11 LLWindowSDL::flashIcon(" << seconds << ")" << llendl;
 	
-	F32 remaining_time = mFlashTimer.getRemainingTimeF32();
-	if (remaining_time < seconds)
-		remaining_time = seconds;
-	mFlashTimer.reset();
-	mFlashTimer.setTimerExpirySec(remaining_time);
+		F32 remaining_time = mFlashTimer.getRemainingTimeF32();
+		if (remaining_time < seconds)
+			remaining_time = seconds;
+		mFlashTimer.reset();
+		mFlashTimer.setTimerExpirySec(remaining_time);
 
-	x11_set_urgent(TRUE);
-	mFlashing = TRUE;
+		x11_set_urgent(TRUE);
+		mFlashing = TRUE;
 #endif // LL_X11
+	}
 }
 
 
@@ -2138,9 +2161,19 @@ void LLWindowSDL::initCursors()
 	mSDLCursors[UI_CURSOR_TOOLPAUSE] = makeSDLCursorFromBMP("toolpause.BMP",0,0);
 	mSDLCursors[UI_CURSOR_TOOLMEDIAOPEN] = makeSDLCursorFromBMP("toolmediaopen.BMP",0,0);
 	mSDLCursors[UI_CURSOR_PIPETTE] = makeSDLCursorFromBMP("lltoolpipette.BMP",2,28);
-	mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit.BMP",20,15);
-	mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
-	mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);
+	if (gSavedSettings.getBOOL("UseLegacyCursors")) {
+		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit-legacy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy-legacy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen-legacy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolpay-legacy.BMP",20,15);
+	}
+	else
+	{
+		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
+	}
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING] = makeSDLCursorFromBMP("lltoolpathfinding.BMP", 16, 16);
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING_PATH_START] = makeSDLCursorFromBMP("lltoolpathfindingpathstart.BMP", 16, 16);
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD] = makeSDLCursorFromBMP("lltoolpathfindingpathstartadd.BMP", 16, 16);
@@ -2515,9 +2548,32 @@ void exec_cmd(const std::string& cmd, const std::string& arg)
 	{ // child
 		// disconnect from stdin/stdout/stderr, or child will
 		// keep our output pipe undesirably alive if it outlives us.
-		close(0);
-		close(1);
-		close(2);
+		// close(0);
+		// close(1);
+		// close(2);
+		// <FS:TS> Reopen stdin, stdout, and stderr to /dev/null.
+		//         It's good practice to always have those file
+		//         descriptors open to something, lest the exec'd
+		//         program actually try to use them.
+		FILE *result;
+		result = freopen("/dev/null","r",stdin);
+		if (result == NULL)
+		{
+		        llwarns << "Error reopening stdin for web browser: "
+		                << strerror(errno) << llendl;
+                }
+		result = freopen("/dev/null","w",stdout);
+		if (result == NULL)
+		{
+		        llwarns << "Error reopening stdout for web browser: "
+		                << strerror(errno) << llendl;
+                }
+		result = freopen("/dev/null","w",stderr);
+		if (result == NULL)
+		{
+		        llwarns << "Error reopening stderr for web browser: "
+		                << strerror(errno) << llendl;
+                }
 		// end ourself by running the command
 		execv(cmd.c_str(), argv);	/* Flawfinder: ignore */
 		// if execv returns at all, there was a problem.
@@ -2583,6 +2639,10 @@ void LLWindowSDL::spawnWebBrowser(const std::string& escaped_url, bool async)
 	llinfos << "spawn_web_browser returning." << llendl;
 }
 
+void LLWindowSDL::openFile(const std::string& file_name)
+{
+	spawnWebBrowser("file://"+file_name,TRUE);
+}
 
 void *LLWindowSDL::getPlatformWindow()
 {

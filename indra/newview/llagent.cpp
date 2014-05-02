@@ -57,7 +57,11 @@
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h" // to show/hide navigation bar when changing mouse look state
-#include "llfloaterimnearbychat.h"
+// <FS:Ansariel> [FS Communication UI]
+//#include "llfloaterimnearbychat.h"
+#include "fsnearbychathub.h"
+// </FS:Ansariel> [FS Communication UI]
+#include "llspeakers.h"
 #include "llnotificationsutil.h"
 #include "llpaneltopinfobar.h"
 #include "llparcel.h"
@@ -82,6 +86,7 @@
 #include "llviewerjoystick.h"
 #include "llviewermediafocus.h"
 #include "llviewermenu.h"
+#include "llviewernetwork.h" // <FS:PP> For FIRE-10718: llGetSimulatorHostname() is causing LSL Bridge to sleep for 10 seconds
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
@@ -91,9 +96,20 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
-#include "lscript_byteformat.h"
+//#include "lscript_byteformat.h" // <FS:CR> We don't have the bytecode compiler in fs
 #include "stringize.h"
 #include "boost/foreach.hpp"
+
+// Firestorm includes
+#include "fslslbridge.h"
+#include "fsscriptlibrary.h"
+#include "kcwlinterface.h"
+#include "rlvactions.h"
+#include "rlvhandler.h"
+#include "rlvhelper.h"
+#include "rlvui.h"
+#include "utilitybar.h"
+#include "NACLantispam.h"
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -225,6 +241,10 @@ private:
 const F32 LLAgent::MIN_AFK_TIME = 10.0f;
 
 const F32 LLAgent::TYPING_TIMEOUT_SECS = 5.f;
+// <FS> Ignore prejump and always fly
+BOOL LLAgent::ignorePrejump = FALSE;
+BOOL LLAgent::fsAlwaysFly;
+// </FS> Ignore prejump and always fly
 
 std::map<std::string, std::string> LLAgent::sTeleportErrorMessages;
 std::map<std::string, std::string> LLAgent::sTeleportProgressMessages;
@@ -275,7 +295,10 @@ bool LLAgent::isActionAllowed(const LLSD& sdname)
 	if (param == "speak")
 	{
 		if ( gAgent.isVoiceConnected() && 
-			LLViewerParcelMgr::getInstance()->allowAgentVoice() &&
+			// FS::LO FIRE-5564: Speak button disabled in private call when entering no-voice parcel
+			// LLViewerParcelMgr::getInstance()->allowAgentVoice() &&
+			 ( LLViewerParcelMgr::getInstance()->allowAgentVoice() ||
+			   LLVoiceChannel::getCurrentVoiceChannel()->isActive() ) &&
 				! LLVoiceClient::getInstance()->inTuningMode() )
 		{
 			retval = true;
@@ -342,7 +365,10 @@ LLAgent::LLAgent() :
 	mDoubleTapRunMode(DOUBLETAP_NONE),
 
 	mbAlwaysRun(false),
-	mbRunning(false),
+//	mbRunning(false),
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	mbTempRun(false),
+// [/RLVa:KB]
 	mbTeleportKeepsLookAt(false),
 
 	mAgentAccess(new LLAgentAccess(gSavedSettings)),
@@ -379,6 +405,9 @@ LLAgent::LLAgent() :
 	mFrameAgent(),
 
 	mIsDoNotDisturb(false),
+	mIsAutorespond(FALSE),
+	mIsAutorespondNonFriends(FALSE),
+	mIsRejectTeleportOffers(FALSE), // <FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 	mControlFlags(0x00000000),
 	mbFlagsDirty(FALSE),
@@ -413,7 +442,10 @@ LLAgent::LLAgent() :
 	mAppearanceSerialNum(0),
 
 	mMouselookModeInSignal(NULL),
-	mMouselookModeOutSignal(NULL)
+	mMouselookModeOutSignal(NULL),
+	
+	mPhantom(FALSE),
+	restoreToWorld(false)
 {
 	for (U32 i = 0; i < TOTAL_CONTROLS; i++)
 	{
@@ -427,6 +459,27 @@ LLAgent::LLAgent() :
 
 	mMoveTimer.stop();
 }
+
+// <FS> Ignore prejump and always fly
+void LLAgent::updateIgnorePrejump(const LLSD &data)
+{
+	ignorePrejump = data.asBoolean();
+}
+
+void LLAgent::updateFSAlwaysFly(const LLSD &data)
+{
+	fsAlwaysFly = data.asBoolean();
+	if (fsAlwaysFly) 
+	{
+		llinfos << "Enabling Fly Override" << llendl;
+		if (gSavedSettings.getBOOL("FirstUseFlyOverride"))
+		{
+			LLNotificationsUtil::add("FirstUseFlyOverride");
+			gSavedSettings.setBOOL("FirstUseFlyOverride", FALSE);
+		}
+	}
+}
+// </FS> Ignore prejump and always fly
 
 // Requires gSavedSettings to be initialized.
 //-----------------------------------------------------------------------------
@@ -450,6 +503,13 @@ void LLAgent::init()
 	mLastKnownResponseMaturity = static_cast<U8>(gSavedSettings.getU32("PreferredMaturity"));
 	mLastKnownRequestMaturity = mLastKnownResponseMaturity;
 	mIsDoSendMaturityPreferenceToServer = true;
+	ignorePrejump = gSavedSettings.getBOOL("FSIgnoreFinishAnimation");
+	gSavedSettings.getControl("FSIgnoreFinishAnimation")->getSignal()->connect(boost::bind(&LLAgent::updateIgnorePrejump, this, _2));
+	fsAlwaysFly = gSavedSettings.getBOOL("FSAlwaysFly");
+	gSavedSettings.getControl("FSAlwaysFly")->getSignal()->connect(boost::bind(&LLAgent::updateFSAlwaysFly, this, _2));
+	selectAutorespond(gSavedPerAccountSettings.getBOOL("FSAutorespondMode"));
+	selectAutorespondNonFriends(gSavedPerAccountSettings.getBOOL("FSAutorespondNonFriendsMode"));
+	selectRejectTeleportOffers(gSavedPerAccountSettings.getBOOL("FSRejectTeleportOffersMode")); // <FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 	if (!mTeleportFinishedSlot.connected())
 	{
@@ -506,11 +566,11 @@ LLAgent::~LLAgent()
 //-----------------------------------------------------------------------------
 void LLAgent::onAppFocusGained()
 {
-	if (CAMERA_MODE_MOUSELOOK == gAgentCamera.getCameraMode())
-	{
-		gAgentCamera.changeCameraToDefault();
-		LLToolMgr::getInstance()->clearSavedTool();
-	}
+//	if (CAMERA_MODE_MOUSELOOK == gAgentCamera.getCameraMode())
+//	{
+//		gAgentCamera.changeCameraToDefault();
+//		LLToolMgr::getInstance()->clearSavedTool();
+//	}
 }
 
 
@@ -549,7 +609,10 @@ void LLAgent::moveAt(S32 direction, bool reset)
 
 	if (reset)
 	{
-		gAgentCamera.resetView();
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+		//gAgentCamera.resetView();
+		gAgentCamera.resetView(TRUE, FALSE, TRUE);
+// </FS:CR>
 	}
 }
 
@@ -575,7 +638,10 @@ void LLAgent::moveAtNudge(S32 direction)
 		setControlFlags(AGENT_CONTROL_NUDGE_AT_NEG);
 	}
 
-	gAgentCamera.resetView();
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+	//gAgentCamera.resetView();
+	gAgentCamera.resetView(TRUE, FALSE, TRUE);
+// </FS:CR>
 }
 
 //-----------------------------------------------------------------------------
@@ -600,7 +666,10 @@ void LLAgent::moveLeft(S32 direction)
 		setControlFlags(AGENT_CONTROL_LEFT_NEG | AGENT_CONTROL_FAST_LEFT);
 	}
 
-	gAgentCamera.resetView();
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+	//gAgentCamera.resetView();
+	gAgentCamera.resetView(TRUE, FALSE, TRUE);
+// </FS:CR>
 }
 
 //-----------------------------------------------------------------------------
@@ -625,7 +694,10 @@ void LLAgent::moveLeftNudge(S32 direction)
 		setControlFlags(AGENT_CONTROL_NUDGE_LEFT_NEG);
 	}
 
-	gAgentCamera.resetView();
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+	//gAgentCamera.resetView();
+	gAgentCamera.resetView(TRUE, FALSE, TRUE);
+// </FS:CR>
 }
 
 //-----------------------------------------------------------------------------
@@ -644,13 +716,24 @@ void LLAgent::moveUp(S32 direction)
 	if (direction > 0)
 	{
 		setControlFlags(AGENT_CONTROL_UP_POS | AGENT_CONTROL_FAST_UP);
+		// <FS:Ansariel> Chalice Yao's crouch toggle
+		gAgentCamera.resetView(TRUE, FALSE, TRUE);
+		// </FS:Ansariel>
 	}
 	else if (direction < 0)
 	{
 		setControlFlags(AGENT_CONTROL_UP_NEG | AGENT_CONTROL_FAST_UP);
+		// <FS:Ansariel> Chalice Yao's crouch toggle
+		if (!gSavedSettings.getBOOL("FSCrouchToggleStatus") || !gSavedSettings.getBOOL("FSCrouchToggle"))
+		{
+			gAgentCamera.resetView(TRUE, FALSE, TRUE);
+		}
+		// </FS:Ansariel>
 	}
 
-	gAgentCamera.resetView();
+	// <FS:Ansariel> Chalice Yao's crouch toggle
+	//gAgentCamera.resetView();
+	// </FS:Ansariel>
 }
 
 //-----------------------------------------------------------------------------
@@ -671,7 +754,10 @@ void LLAgent::moveYaw(F32 mag, bool reset_view)
 
     if (reset_view)
 	{
-        gAgentCamera.resetView();
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+		//gAgentCamera.resetView();
+        gAgentCamera.resetView(TRUE, FALSE, TRUE);
+// </FS:CR>
 	}
 }
 
@@ -696,7 +782,16 @@ void LLAgent::movePitch(F32 mag)
 // Does this parcel allow you to fly?
 BOOL LLAgent::canFly()
 {
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) return FALSE;
+// [/RLVa:KB]
 	if (isGodlike()) return TRUE;
+	// <FS> Always fly
+	if (fsAlwaysFly)
+	{
+		return TRUE;
+	}
+	// </FS>
 
 	LLViewerRegion* regionp = getRegion();
 	if (regionp && regionp->getBlockFly()) return FALSE;
@@ -744,6 +839,13 @@ void LLAgent::setFlying(BOOL fly)
 
 	if (fly)
 	{
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY))
+		{
+			return;
+		}
+// [/RLVa:KB]
+
 		BOOL was_flying = getFlying();
 		if (!canFly() && !was_flying)
 		{
@@ -784,29 +886,53 @@ void LLAgent::toggleFlying()
 		LLToolPie::instance().stopClickToWalk();
 	}
 
+	// <FS:Ansariel> Chalice Yao's crouch toggle
+	if (gSavedSettings.getBOOL("FSCrouchToggleStatus"))
+	{
+		gSavedSettings.setBOOL("FSCrouchToggleStatus", FALSE);
+	}
+	// </FS:Ansariel>
+
 	BOOL fly = !gAgent.getFlying();
 
 	gAgent.mMoveTimer.reset();
 	LLFirstUse::notMoving(false);
 
 	gAgent.setFlying( fly );
-	gAgentCamera.resetView();
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+	//gAgentCamera.resetView();
+	gAgentCamera.resetView(TRUE, FALSE, TRUE);
+// </FS:CR>
 }
 
 // static
 bool LLAgent::enableFlying()
 {
-	BOOL sitting = FALSE;
-	if (isAgentAvatarValid())
+	// <FS:Zi> Fix "Agent.enableFlying" function for menu entry and toolbar button
+	// BOOL sitting = FALSE;
+	// if (isAgentAvatarValid())
+	// {
+	// 	sitting = gAgentAvatarp->isSitting();
+	// }
+	// return !sitting;
+	if(isAgentAvatarValid())
 	{
-		sitting = gAgentAvatarp->isSitting();
+		return gAgent.canFly() && (!gAgentAvatarp->isSitting());
 	}
-	return !sitting;
+	return false;
+	// </FS:Zi>
 }
 
 void LLAgent::standUp()
 {
-	setControlFlags(AGENT_CONTROL_STAND_UP);
+//	setControlFlags(AGENT_CONTROL_STAND_UP);
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	// RELEASE-RLVa: [SL-2.0.0] Check this function's callers since usually they require explicit blocking
+	if ( (!rlv_handler_t::isEnabled()) || (RlvActions::canStand()) )
+	{
+		setControlFlags(AGENT_CONTROL_STAND_UP);
+	}
+// [/RLVa:KB]
 }
 
 
@@ -862,6 +988,10 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 				<< " located at " << ip << LL_ENDL;
 		if (mRegionp)
 		{
+			// NaCl - Antispam Registry clear anti-spam queues when changing regions
+			NACLAntiSpamRegistry::instance().purgeAllQueues();
+			// NaCl End
+
 			// We've changed regions, we're now going to change our agent coordinate frame.
 			mAgentOriginGlobal = regionp->getOriginGlobal();
 			LLVector3d agent_offset_global = mRegionp->getOriginGlobal();
@@ -932,7 +1062,10 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 
 	LLSelectMgr::getInstance()->updateSelectionCenter();
 
-	LLFloaterMove::sUpdateFlyingStatus();
+//	LLFloaterMove::sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	LLFloaterMove::sUpdateMovementStatus();
+// [/RLVa:KB]
 
 	// If the newly entered region is using server bakes, and our
 	// current appearance is non-baked, request appearance update from
@@ -985,6 +1118,13 @@ void LLAgent::removeRegionChangedCallback(boost::signals2::connection callback)
 {
 	mRegionChangedSignal.disconnect(callback);
 }
+
+// <FS:Ansariel> Aurora sim windlight refresh
+void LLAgent::changeRegion()
+{
+	mRegionChangedSignal();
+}
+// </FS:Ansariel>
 
 //-----------------------------------------------------------------------------
 // inPrelude()
@@ -1167,7 +1307,14 @@ LLVector3d LLAgent::getPosGlobalFromAgent(const LLVector3 &pos_agent) const
 
 void LLAgent::sitDown()
 {
-	setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+//	setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+// [RLVa:KB] - Checked: 2010-08-28 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	// RELEASE-RLVa: [SL-2.0.0] Check this function's callers since usually they require explicit blocking
+	if ( (!rlv_handler_t::isEnabled()) || ((RlvActions::canStand()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SIT))) )
+	{
+		setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+	}
+// [/RLVa:KB]
 }
 
 
@@ -1351,7 +1498,11 @@ LLQuaternion LLAgent::getQuat() const
 //-----------------------------------------------------------------------------
 U32 LLAgent::getControlFlags()
 {
-	return mControlFlags;
+	//return mControlFlags;
+	if(LLAgent::ignorePrejump)
+		return mControlFlags | AGENT_CONTROL_FINISH_ANIM;
+	else
+		return mControlFlags;
 }
 
 //-----------------------------------------------------------------------------
@@ -1424,6 +1575,16 @@ void LLAgent::setAFK()
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_START);
 		setControlFlags(AGENT_CONTROL_AWAY | AGENT_CONTROL_STOP);
 		gAwayTimer.start();
+
+		// <FS:AO> Gsit on away, antigrief protection
+		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
+		{
+			if (!gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_SIT))
+			{
+				gAgent.sitDown();
+			}
+		}
+		// </FS:AO>
 	}
 }
 
@@ -1442,6 +1603,16 @@ void LLAgent::clearAFK()
 	{
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_STOP);
 		clearControlFlags(AGENT_CONTROL_AWAY);
+
+		// <FS:AO> if we sat while away, stand back up on clear
+		if (gSavedSettings.getBOOL("AvatarSitOnAway"))
+		{
+			if (gAgentAvatarp->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT))
+			{
+				gAgent.standUp();
+			}
+		}
+		// </FS:AO>
 	}
 }
 
@@ -1476,6 +1647,135 @@ bool LLAgent::isDoNotDisturb() const
 	return mIsDoNotDisturb;
 }
 
+//-----------------------------------------------------------------------------
+// setAutorespond()
+//-----------------------------------------------------------------------------
+void LLAgent::setAutorespond()
+{
+	selectAutorespond(TRUE);
+}
+
+//-----------------------------------------------------------------------------
+// clearAutorespond()
+//-----------------------------------------------------------------------------
+void LLAgent::clearAutorespond()
+{
+	selectAutorespond(FALSE);
+}
+
+//-----------------------------------------------------------------------------
+// selectAutorespond()
+//-----------------------------------------------------------------------------
+void LLAgent::selectAutorespond(BOOL selected)
+{
+	llinfos << "Setting autorespond mode to " << selected << llendl;
+	mIsAutorespond = selected;
+	gSavedPerAccountSettings.setBOOL("FSAutorespondMode",selected);
+	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+	//if (gAutorespondMenu)
+	//{
+	//	if (selected)
+	//	{
+	//		gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespond"));
+	//	}
+	//	else
+	//	{
+	//		gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetAutorespond"));
+	//	}
+	//}
+}
+
+//-----------------------------------------------------------------------------
+// getAutorespond()
+//-----------------------------------------------------------------------------
+BOOL LLAgent::getAutorespond() const
+{
+	return mIsAutorespond;
+}
+
+//-----------------------------------------------------------------------------
+// setAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+void LLAgent::setAutorespondNonFriends()
+{
+	selectAutorespondNonFriends(TRUE);
+}
+
+//-----------------------------------------------------------------------------
+// clearAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+void LLAgent::clearAutorespondNonFriends()
+{
+	selectAutorespondNonFriends(FALSE);
+}
+
+//-----------------------------------------------------------------------------
+// selectAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+void LLAgent::selectAutorespondNonFriends(BOOL selected)
+{
+	llinfos << "Setting autorespond non-friends mode to " << selected << llendl;
+	mIsAutorespondNonFriends = selected;
+	gSavedPerAccountSettings.setBOOL("FSAutorespondNonFriendsMode",selected);
+	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+	//if (gAutorespondNonFriendsMenu)
+	//{
+	//	if (selected)
+	//	{
+	//		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespondNonFriends"));
+	//	}
+	//	else
+	//	{
+	//		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetAutorespondNonFriends"));
+	//	}
+	//}
+}
+
+//-----------------------------------------------------------------------------
+// getAutorespondNonFriends()
+//-----------------------------------------------------------------------------
+BOOL LLAgent::getAutorespondNonFriends() const
+{
+	return mIsAutorespondNonFriends;
+}
+
+// <FS:PP> FIRE-1245: Option to block/reject teleport offers
+
+//-----------------------------------------------------------------------------
+// setRejectTeleportOffers()
+//-----------------------------------------------------------------------------
+void LLAgent::setRejectTeleportOffers()
+{
+	selectRejectTeleportOffers(TRUE);
+}
+
+//-----------------------------------------------------------------------------
+// clearRejectTeleportOffers()
+//-----------------------------------------------------------------------------
+void LLAgent::clearRejectTeleportOffers()
+{
+	selectRejectTeleportOffers(FALSE);
+}
+
+//-----------------------------------------------------------------------------
+// selectRejectTeleportOffers()
+//-----------------------------------------------------------------------------
+void LLAgent::selectRejectTeleportOffers(BOOL selected)
+{
+	llinfos << "Setting rejecting teleport offers mode to " << selected << llendl;
+	mIsRejectTeleportOffers = selected;
+	gSavedPerAccountSettings.setBOOL("FSRejectTeleportOffersMode", selected);
+}
+
+//-----------------------------------------------------------------------------
+// getRejectTeleportOffers()
+//-----------------------------------------------------------------------------
+BOOL LLAgent::getRejectTeleportOffers() const
+{
+	return mIsRejectTeleportOffers;
+}
+
+// </FS:PP> FIRE-1245: Option to block/reject teleport offers
 
 //-----------------------------------------------------------------------------
 // startAutoPilotGlobal()
@@ -1953,8 +2253,11 @@ void LLAgent::startTyping()
 	{
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_START);
 	}
-	(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
-			sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	// <FS:Ansariel> [FS Communication UI]
+	//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+	//		sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	// </FS:Ansariel> [FS Communication UI]
 }
 
 //-----------------------------------------------------------------------------
@@ -1966,8 +2269,11 @@ void LLAgent::stopTyping()
 	{
 		clearRenderState(AGENT_STATE_TYPING);
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_STOP);
-		(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
-				sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		// <FS:Ansariel> [FS Communication UI]
+		//(LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat"))->
+		//		sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+		// </FS:Ansariel> [FS Communication UI]
 	}
 }
 
@@ -2030,12 +2336,19 @@ void LLAgent::endAnimationUpdateUI()
 	// clean up UI from mode we're leaving
 	if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_MOUSELOOK )
 	{
+		// <FS:Zi> Unhide chat bar, unless autohide is enabled
+		gSavedSettings.setBOOL("MouseLookEnabled",FALSE);
+		if(!gSavedSettings.getBOOL("AutohideChatBar"))
+			FSNearbyChat::instance().showDefaultChatBar(TRUE);
+		// </FS:Zi>
+
 		gToolBarView->setToolBarsVisible(true);
 		// show mouse cursor
 		gViewerWindow->showCursor();
 		// show menus
 		gMenuBarView->setVisible(TRUE);
-		LLNavigationBar::getInstance()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+		// <FS:Ansariel> Separate navigation and favorites panel
+		LLNavigationBar::instance().getView()->setVisible(TRUE);
 		gStatusBar->setVisibleForMouselook(true);
 
 		if (gSavedSettings.getBOOL("ShowMiniLocationPanel"))
@@ -2067,20 +2380,41 @@ void LLAgent::endAnimationUpdateUI()
 			{
 				skip_list.insert(LLFloaterReg::findInstance("mini_map"));
 			}
-
-			LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
-			LLFloaterIMContainer::floater_list_t conversations;
-			im_box->getDetachedConversationFloaters(conversations);
-			BOOST_FOREACH(LLFloater* conversation, conversations)
+			if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
 			{
-				llinfos << "skip_list.insert(session_floater): " << conversation->getTitle() << llendl;
-				skip_list.insert(conversation);
+				skip_list.insert(LLFloaterReg::findInstance("stats"));
 			}
+			// <FS:LO> //FIRE-6385: Show all script dialogs still after leaving mouselook
+			BOOST_FOREACH(LLFloater *tmp, LLFloaterReg::getFloaterList("script_floater"))
+			{
+				skip_list.insert(tmp);
+			}
+			// </FS:LO>
+
+			// <FS:Ansariel> [FS communication UI] Commented out so far.
+			//               Maybe check if need it to close standalone IM floater
+			//               when going into mouselook
+			//LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
+			//LLFloaterIMContainer::floater_list_t conversations;
+			//im_box->getDetachedConversationFloaters(conversations);
+			//BOOST_FOREACH(LLFloater* conversation, conversations)
+			//{
+			//	llinfos << "skip_list.insert(session_floater): " << conversation->getTitle() << llendl;
+			//	skip_list.insert(conversation);
+			//}
+			// </FS:Ansariel> [FS communication UI]
 
 			gFloaterView->popVisibleAll(skip_list);
 #endif
 			mViewsPushed = FALSE;
+			gFocusMgr.setKeyboardFocus(NULL);	// <FS:Zi> make sure no floater has focus  after restoring them
 		}
+		// <FS:PP> FIRE-11312: Exiting Mouselook puts keyboard focus on Nearby Chat bar
+		else if(gSavedSettings.getBOOL("FSShowInterfaceInMouselook"))
+		{
+			gFocusMgr.setKeyboardFocus(NULL);
+		}
+		// </FS:PP>
 
 		
 		gAgentCamera.setLookAt(LOOKAT_TARGET_CLEAR);
@@ -2149,6 +2483,12 @@ void LLAgent::endAnimationUpdateUI()
 	//---------------------------------------------------------------------
 	if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
 	{
+
+		// <FS:PP> FIRE-8868: Show UI in mouselook
+		if(!gSavedSettings.getBOOL("FSShowInterfaceInMouselook"))
+		{
+		// </FS:PP>
+
 		// clean up UI
 		// first show anything hidden by UI toggle
 		gViewerWindow->setUIVisibility(TRUE);
@@ -2156,7 +2496,8 @@ void LLAgent::endAnimationUpdateUI()
 		// then hide stuff we want hidden for mouselook 
 		gToolBarView->setToolBarsVisible(false);
 		gMenuBarView->setVisible(FALSE);
-		LLNavigationBar::getInstance()->setVisible(FALSE);
+		// <FS:Ansariel> Separate navigation and favorites panel
+		LLNavigationBar::instance().getView()->setVisible(FALSE);
 		gStatusBar->setVisibleForMouselook(false);
 
 		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);
@@ -2165,8 +2506,16 @@ void LLAgent::endAnimationUpdateUI()
 
 		LLPanelStandStopFlying::getInstance()->setVisible(FALSE);
 
+		// <FS:Zi> Hide chat bar in mouselook mode, unless there is text in it
+		gSavedSettings.setBOOL("MouseLookEnabled",TRUE);
+		if(FSNearbyChat::instance().defaultChatBarIsIdle())
+			FSNearbyChat::instance().showDefaultChatBar(FALSE);
+		// </FS:Zi>
+
 		// clear out camera lag effect
-		gAgentCamera.clearCameraLag();
+		// <FS:PP> Commented out and moved lower for FIRE-8868: Show UI in mouselook
+		// gAgentCamera.clearCameraLag();
+		// </FS:PP>
 
 		// JC - Added for always chat in third person option
 		gFocusMgr.setKeyboardFocus(NULL);
@@ -2175,29 +2524,60 @@ void LLAgent::endAnimationUpdateUI()
 
 		mViewsPushed = TRUE;
 
-		if (mMouselookModeInSignal)
-		{
-			(*mMouselookModeInSignal)();
-		}
+		// <FS:PP> Commented out and moved lower for FIRE-8868: Show UI in mouselook
+		// if (mMouselookModeInSignal)
+		// {
+		//	(*mMouselookModeInSignal)();
+		// }
+		// </FS:PP>
 
 		// hide all floaters except the mini map
 
 #if 0 // Use this once all floaters are registered
 		std::set<std::string> exceptions;
 		exceptions.insert("mini_map");
+		if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
+		{
+			exceptions.insert("stats");
+		}
+		exceptions.insert("script_floater"); // <FS:LO> //FIRE-6385: Show all script dialogs still after leaving mouselook
 		LLFloaterReg::hideVisibleInstances(exceptions);
 #else // Use this for now
 		LLFloaterView::skip_list_t skip_list;
 		skip_list.insert(LLFloaterReg::findInstance("mini_map"));
+		if(gSavedSettings.getBOOL("FSShowStatsBarInMouselook"))
+		{
+			skip_list.insert(LLFloaterReg::findInstance("stats"));
+		}
+		// <FS:LO> //FIRE-6385: Show all script dialogs still when entering mouselook
+		BOOST_FOREACH(LLFloater *tmp, LLFloaterReg::getFloaterList("script_floater"))
+		{
+			skip_list.insert(tmp);
+		}
+		// </FS:LO>
 		gFloaterView->pushVisibleAll(FALSE, skip_list);
 #endif
+
+		// <FS:PP> FIRE-8868: Show UI in mouselook
+		gConsole->setVisible( TRUE );
+
+		} // Check ends here, anything below will be executed regardless of its state
+
+		gAgentCamera.clearCameraLag();
+
+		if (mMouselookModeInSignal)
+		{
+			(*mMouselookModeInSignal)();
+		}
+		// </FS:PP>
 
 		if( gMorphView )
 		{
 			gMorphView->setVisible(FALSE);
 		}
 
-		gConsole->setVisible( TRUE );
+		// <FS:PP> Commented out and moved few lines higher for FIRE-8868: Show UI in mouselook
+		// gConsole->setVisible( TRUE );
 
 		if (isAgentAvatarValid())
 		{
@@ -2344,7 +2724,10 @@ void LLAgent::setStartPosition( U32 location_id )
     // this simulator.  Clamp it to the region the agent is
     // in, a little bit in on each side.
     const F32 INSET = 0.5f; //meters
-    const F32 REGION_WIDTH = LLWorld::getInstance()->getRegionWidthInMeters();
+// <FS:CR> Aurora Sim
+    //const F32 REGION_WIDTH = LLWorld::getInstance()->getRegionWidthInMeters();
+    const F32 REGION_WIDTH = getRegion()->getWidth();
+// </FS:CR> Aurora Sim
 
     LLVector3 agent_pos = getPositionAgent();
 
@@ -2450,7 +2833,15 @@ void LLAgent::onAnimStop(const LLUUID& id)
 	}
 	else if (id == ANIM_AGENT_AWAY)
 	{
+//		clearAFK();
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Added: RLVa-1.1.0g
+#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE))
+			clearAFK();
+#else
 		clearAFK();
+#endif // RLV_EXTENSION_CMD_ALLOWIDLE
+// [/RLVa:KB]
 	}
 	else if (id == ANIM_AGENT_STANDUP)
 	{
@@ -2845,6 +3236,14 @@ void LLAgent::handleMaturity(const LLSD &pNewValue)
 
 //----------------------------------------------------------------------------
 
+void LLAgent::buildFullname(std::string& name) const
+{
+	if (gAgentAvatarp)
+	{
+		name = gAgentAvatarp->getFullname();
+	}
+}
+
 //*TODO remove, is not used anywhere as of August 20, 2009
 void LLAgent::buildFullnameAndTitle(std::string& name) const
 {
@@ -2993,6 +3392,10 @@ BOOL LLAgent::setUserGroupFlags(const LLUUID& group_id, BOOL accept_notices, BOO
 			msg->nextBlock("NewData");
 			msg->addBOOL("ListInProfile", list_in_profile);
 			sendReliableMessage();
+
+			// <FS:Ansariel> Mark groups hidden in profile
+			gAgent.fireEvent(new LLOldEvents::LLValueChangedEvent(&gAgent, LLSD().with("group_id", group_id).with("visible", list_in_profile)), "");
+
 			return TRUE;
 		}
 	}
@@ -3130,13 +3533,42 @@ void LLAgent::sendRevokePermissions(const LLUUID & target, U32 permissions)
 
 		msg->nextBlockFast(_PREHASH_Data);
 		msg->addUUIDFast(_PREHASH_ObjectID, target);		// Must be in the region
-		msg->addS32Fast(_PREHASH_ObjectPermissions, (S32) permissions);
+		msg->addU32Fast(_PREHASH_ObjectPermissions, (U32) permissions);
 
 		sendReliableMessage();
 	}
 }
 
-void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::setAlwaysRun()
+{
+	mbAlwaysRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+	sendWalkRun();
+}
+
+void LLAgent::setTempRun()
+{
+	mbTempRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN));
+	sendWalkRun();
+}
+
+void LLAgent::clearAlwaysRun()
+{
+	mbAlwaysRun = false;
+	sendWalkRun();
+}
+
+void LLAgent::clearTempRun()
+{
+	mbTempRun = false;
+	sendWalkRun();
+}
+// [/RLVa:KB]
+
+//void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::sendWalkRun()
+// [/RLVa:KB]
 {
 	LLMessageSystem* msgsys = gMessageSystem;
 	if (msgsys)
@@ -3145,7 +3577,10 @@ void LLAgent::sendWalkRun(bool running)
 		msgsys->nextBlockFast(_PREHASH_AgentData);
 		msgsys->addUUIDFast(_PREHASH_AgentID, getID());
 		msgsys->addUUIDFast(_PREHASH_SessionID, getSessionID());
-		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+//		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(getRunning()) );
+// [/RLVa:KB]
 		sendReliableMessage();
 	}
 }
@@ -3309,7 +3744,9 @@ void LLAgent::processAgentDropGroup(LLMessageSystem *msg, void **)
 
 		LLGroupMgr::getInstance()->clearGroupData(group_id);
 		// close the floater for this group, if any.
-		LLGroupActions::closeGroup(group_id);
+		
+		// <FS:AO> Don't assume that because we drop a group, we want floaters to change.
+		//LLGroupActions::closeGroup(group_id);
 	}
 	else
 	{
@@ -3422,6 +3859,12 @@ void LLAgent::processAgentGroupDataUpdate(LLMessageSystem *msg, void **)
 		llwarns << "processAgentGroupDataUpdate for agent other than me" << llendl;
 		return;
 	}	
+	// <FS:Ansariel> Groupdata debug
+	else
+	{
+		LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Executing deprecated processAgentGroupDataUpdate" << LL_ENDL;
+	}
+	// </FS:Ansariel>
 	
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_GroupData);
 	LLGroupData group;
@@ -3453,6 +3896,8 @@ void LLAgent::processAgentGroupDataUpdate(LLMessageSystem *msg, void **)
 		}
 	}
 
+	// <FS:Ansariel> Fire event for group title overview
+	gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), "");
 }
 
 class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
@@ -3472,6 +3917,12 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 			llwarns << "processAgentGroupDataUpdate for agent other than me" << llendl;
 			return;
 		}	
+		// <FS:Ansariel> Groupdata debug
+		else
+		{
+			LL_INFOS("Agent_GroupData") << "GROUPDEBUG: Executing processAgentGroupDataUpdate" << LL_ENDL;
+		}
+		// </FS:Ansariel>
 
 		LLSD group_data = body["GroupData"];
 
@@ -3548,9 +3999,54 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		gAgent.mGroupID.setNull();
 		gAgent.mGroupPowers = 0;
 		gAgent.mGroupName.clear();
-	}		
+	}
+	// <FS> Restore to world
+	if (gAgent.restoreToWorld)
+	{
+		//This fires if we're trying to restore an item to world using the correct group.
+		bool remove_from_inventory = false;
+		msg->newMessage("RezRestoreToWorld");
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+
+		msg->nextBlockFast(_PREHASH_InventoryData);
+		gAgent.restoreToWorldItem->packMessage(msg);
+		msg->sendReliable(gAgent.getRegion()->getHost());
+		//remove local inventory copy, sim will deal with permissions and removing the item
+		//from the actual inventory if its a no-copy etc
+		if(!gAgent.restoreToWorldItem->getPermissions().allowCopyBy(gAgent.getID()))
+		{
+			remove_from_inventory = true;
+		}
+		
+		// Check if it's in the trash. (again similar to the normal rez logic)
+		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
+		if(gInventory.isObjectDescendentOf(gAgent.restoreToWorldItem->getUUID(), trash_id))
+		{
+			remove_from_inventory = true;
+		}
+		if(remove_from_inventory)
+		{
+			gInventory.deleteObject(gAgent.restoreToWorldItem->getUUID());
+			gInventory.notifyObservers();
+		}
+
+		//Now, restore the old group
+		gAgent.restoreToWorld = false;
+		msg->newMessageFast(_PREHASH_ActivateGroup);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->addUUIDFast(_PREHASH_GroupID, gAgent.restoreToWorldGroup);
+		gAgent.sendReliableMessage();
+	}
+	// </FS>
 
 	update_group_floaters(active_id);
+
+	// <FS:Ansariel> Fire event for group title overview
+	gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), "");
 }
 
 // static
@@ -3819,6 +4315,31 @@ void LLAgent::clearVisualParams(void *data)
 //---------------------------------------------------------------------------
 // Teleport
 //---------------------------------------------------------------------------
+// <FS:TT> Client LSL Bridge
+bool LLAgent::teleportBridgeLocal(LLVector3& pos_local)
+{
+	std::stringstream msgstream;
+	msgstream << std::setiosflags(std::ios::fixed) << std::setprecision(6); 
+	msgstream << pos_local.mV[VX] << ", " << pos_local.mV[VY] << ", "  << pos_local.mV[VZ];
+
+	// Check for FIRE-10718: llGetSimulatorHostname() is causing LSL Bridge to sleep for 10 seconds during check for current hostname in order to prevent double-click teleport on SL grid, so let's check this in the viewer itself and send 1/0 as additional value
+#ifdef OPENSIM
+	const std::string isLindenLabHost = LLGridManager::getInstance()->isInSecondLife() ? "1" : "0";
+#else
+	const std::string isLindenLabHost = "1";
+#endif
+
+	return FSLSLBridge::instance().viewerToLSL("llMoveToTarget|" + msgstream.str() + "|" + isLindenLabHost);
+}
+
+bool LLAgent::teleportBridgeGlobal(const LLVector3d& pos_global)
+{
+	U64 region_handle = to_region_handle(pos_global);
+	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
+
+	return teleportBridgeLocal(pos_local);
+}
+// </FS:TT> Client LSL Bridge 
 
 // teleportCore() - stuff to do on any teleport
 // protected
@@ -3827,7 +4348,7 @@ bool LLAgent::teleportCore(bool is_local)
 	if ((TELEPORT_NONE != mTeleportState) && (mTeleportState != TELEPORT_PENDING))
 	{
 		llwarns << "Attempt to teleport when already teleporting." << llendl;
-		return false;
+		//return false; //LO - yea, lets not return here, we may be stuck in TP and if we are, letting this go through will get us out;
 	}
 
 #if 0
@@ -3892,6 +4413,23 @@ bool LLAgent::teleportCore(bool is_local)
 
 		//release geometry from old location
 		gPipeline.resetVertexBuffers();
+		
+		// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
+		if (gSavedSettings.getBOOL("FSRenderFarClipStepping"))
+		{
+			F32 draw_distance = gSavedSettings.getF32("RenderFarClip");
+			if (gSavedDrawDistance < draw_distance)
+			{
+				gSavedDrawDistance = draw_distance;
+			}
+			gSavedSettings.setF32("FSSavedRenderFarClip", gSavedDrawDistance);
+			gSavedSettings.setF32("RenderFarClip", 32.0f);
+			gLastDrawDistanceStep = 32.0f;
+		}
+		// </FS:Ansariel>
+
+		// bit of a hack -KC
+		KCWindlightInterface::instance().setTPing(true);
 	}
 	make_ui_sound("UISndTeleportOut");
 	
@@ -4030,6 +4568,18 @@ void LLAgent::teleportRequest(
 // Landmark ID = LLUUID::null means teleport home
 void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 {
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+	// NOTE: we'll allow teleporting home unless both @tplm=n *and* @tploc=n restricted
+	if ( (rlv_handler_t::isEnabled()) &&
+		 ( ( (landmark_asset_id.notNull()) ? gRlvHandler.hasBehaviour(RLV_BHVR_TPLM)
+		                                   : gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC) ) ||
+		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) ))
+	{
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+		return;
+	}
+// [/RLVa:KB]
+
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLandmark(landmark_asset_id));
 	startTeleportRequest();
 }
@@ -4109,6 +4659,25 @@ void LLAgent::teleportCancel()
 
 void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 {
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
+	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) )
+	{
+		// If we're getting teleported due to @tpto we should disregard any @tploc=n or @unsit=n restrictions from the same object
+		if ( (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOC, gRlvHandler.getCurrentObject())) ||
+		     ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && 
+			   (gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, gRlvHandler.getCurrentObject()))) )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+			return;
+		}
+
+		if ( (gRlvHandler.getCurrentCommand()) && (RLV_BHVR_TPTO == gRlvHandler.getCurrentCommand()->getBehaviourType()) )
+		{
+			gRlvHandler.setCanCancelTp(false);
+		}
+	}
+// [/RLVa:KB]
+
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLocation(pos_global));
 	startTeleportRequest();
 }
@@ -4123,6 +4692,7 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 	}
 
 	U64 handle = to_region_handle(pos_global);
+	bool isLocal = (regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY]));
 	LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(handle);
 	if(regionp && info)
 	{
@@ -4131,10 +4701,12 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 			(F32)(pos_global.mdV[VX] - region_origin.mdV[VX]),
 			(F32)(pos_global.mdV[VY] - region_origin.mdV[VY]),
 			(F32)(pos_global.mdV[VZ]));
-		teleportRequest(handle, pos_local);
+// <FS:CR> Aurora-sim var region teleports
+		//teleportRequest(handle, pos_local);
+		teleportRequest(info->getHandle(), pos_local);
+// </FS:CR>
 	}
-	else if(regionp && 
-		teleportCore(regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY])))
+	else if(regionp && teleportCore(isLocal))
 	{
 		llwarns << "Using deprecated teleportlocationrequest." << llendl; 
 		// send the message
@@ -4158,11 +4730,27 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 		msg->addVector3Fast(_PREHASH_LookAt, pos);
 		sendReliableMessage();
 	}
+// <FS:TT> Client LSL Bridge
+	if (FSLSLBridge::instance().canUseBridge() && isLocal)
+	{
+		teleportBridgeGlobal(pos_global);
+	}
+// </FS:TT>
 }
 
 // Teleport to global position, but keep facing in the same direction 
 void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 {
+// [RLVa:KB] - Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+	// RELEASE-RLVa: [SL-2.2.0] Make sure this isn't used for anything except double-click teleporting
+	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
+		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!RlvActions::canStand())) )
+	{
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+		return;
+	}
+// [/RLVa:KB]
+
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLocationLookAt(pos_global));
 	startTeleportRequest();
 }
@@ -4172,8 +4760,25 @@ void LLAgent::doTeleportViaLocationLookAt(const LLVector3d& pos_global)
 	mbTeleportKeepsLookAt = true;
 	gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);	// detach camera form avatar, so it keeps direction
 	U64 region_handle = to_region_handle(pos_global);
+// <FS:CR> Aurora-sim var region teleports
+	LLSimInfo* simInfo = LLWorldMap::instance().simInfoFromHandle(region_handle);
+	if (simInfo)
+	{
+		region_handle = simInfo->getHandle();
+	}
+// </FS:CR>
 	LLVector3 pos_local = (LLVector3)(pos_global - from_region_handle(region_handle));
 	teleportRequest(region_handle, pos_local, getTeleportKeepsLookAt());
+
+// <FS:TT> Client LSL Bridge
+	if (FSLSLBridge::instance().canUseBridge())
+	{
+		if (region_handle == to_region_handle(getPositionGlobal()))
+		{
+			teleportBridgeLocal(pos_local);
+		}
+	}
+// </FS:TT>
 }
 
 void LLAgent::setTeleportState(ETeleportState state)
@@ -4208,7 +4813,10 @@ void LLAgent::setTeleportState(ETeleportState state)
 	}
 }
 
-void LLAgent::stopCurrentAnimations()
+// <FS:Ansariel> FIRE-12148: Pose stand breaks XPOSE animations
+//void LLAgent::stopCurrentAnimations()
+void LLAgent::stopCurrentAnimations(bool force_keep_script_perms /*= false*/)
+// </FS:Ansariel>
 {
 	// This function stops all current overriding animations on this
 	// avatar, propagating this change back to the server.
@@ -4244,6 +4852,9 @@ void LLAgent::stopCurrentAnimations()
 
 		// Revoke all animation permissions
 		if (mRegionp &&
+			// <FS:Ansariel> FIRE-12148: Pose stand breaks XPOSE animations
+			!force_keep_script_perms &&
+			// </FS:Ansariel>
 			gSavedSettings.getBOOL("RevokePermsOnStopAnimation"))
 		{
 			U32 permissions = LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TRIGGER_ANIMATION] | LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_OVERRIDE_ANIMATIONS];
@@ -4358,7 +4969,12 @@ void LLAgent::dumpSentAppearance(const std::string& dump_prefix)
 	LLAPRFile outfile;
 	std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
 	outfile.open(fullpath, LL_APR_WB );
-	apr_file_t* file = outfile.getFileHandle();
+
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	// apr_file_t* file = outfile.getFileHandle();
+	LLAPRFile::tFiletype* file = outfile.getFileHandle();
+	// </FS:ND>
+
 	if (!file)
 	{
 		return;
@@ -4514,13 +5130,18 @@ void LLAgent::sendAgentSetAppearance()
 		gMessageSystem->addBinaryDataFast(_PREHASH_TextureEntry, NULL, 0);
 	}
 
-
+	BOOL send_v1_message = gSavedSettings.getBOOL("FSDontSendAvPhysicsParms");
 	S32 transmitted_params = 0;
 	for (LLViewerVisualParam* param = (LLViewerVisualParam*)gAgentAvatarp->getFirstVisualParam();
 		 param;
 		 param = (LLViewerVisualParam*)gAgentAvatarp->getNextVisualParam())
 	{
-		if (param->getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE) // do not transmit params of group VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT
+		// Do not transmit params of group
+		//  VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT. If we're
+		//  sending the version 1 compatible message, then strip out
+		//  V2-only parameters that have IDs of 1100 or higher.
+		if ((param->getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE) &&
+			((param->getID() < 1100) || (!send_v1_message)))
 		{
 			msg->nextBlockFast(_PREHASH_VisualParam );
 			
@@ -4675,6 +5296,26 @@ void LLAgent::renderAutoPilotTarget()
 		gGL.popMatrix();
 	}
 }
+
+// <FS> Phantom mode
+void LLAgent::togglePhantom()
+{
+	mPhantom = !mPhantom;
+	if (mPhantom)
+	{
+		LLNotificationsUtil::add("PhantomOn", LLSD());
+	}
+	else
+	{
+		LLNotificationsUtil::add("PhantomOff", LLSD());
+	}
+}
+
+bool LLAgent::getPhantom() const
+{
+	return mPhantom;
+}
+// </FS> Phantom mode
 
 /********************************************************************************/
 

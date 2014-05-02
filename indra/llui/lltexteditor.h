@@ -148,8 +148,13 @@ public:
 
 	virtual bool	canLoadOrSaveToFile();
 
-	void			selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap = TRUE);
-	BOOL			replaceText(const std::string& search_text, const std::string& replace_text, BOOL case_insensitive, BOOL wrap = TRUE);
+//	void			selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap = TRUE);
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	void			selectNext(const std::string& search_text_in, BOOL case_insensitive, BOOL wrap = TRUE, BOOL search_up = FALSE);
+	BOOL			replaceText(const std::string& search_text, const std::string& replace_text, BOOL case_insensitive, BOOL wrap = TRUE, BOOL search_up = FALSE);
+// [/SL:KB]
+//	BOOL			replaceText(const std::string& search_text, const std::string& replace_text, BOOL case_insensitive, BOOL wrap = TRUE);
+
 	void			replaceTextAll(const std::string& search_text, const std::string& replace_text, BOOL case_insensitive);
 	
 	// Undo/redo stack
@@ -192,6 +197,7 @@ public:
 								 const std::vector<std::string>& funcs,
 								 const std::vector<std::string>& tooltips,
 								 const LLColor3& func_color);
+
 	LLKeywords::keyword_iterator_t keywordsBegin()	{ return mKeywords.begin(); }
 	LLKeywords::keyword_iterator_t keywordsEnd()	{ return mKeywords.end(); }
 
@@ -338,7 +344,7 @@ private:
 	bool			mParseOnTheFly;
 	bool			mEnableTooltipPaste;
 	bool			mPassDelete;
-
+	
 	LLUUID			mSourceID;
 
 	LLCoordGL		mLastIMEPosition;		// Last position of the IME editor

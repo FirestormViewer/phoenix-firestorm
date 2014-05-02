@@ -120,6 +120,11 @@ LLCircuitData::LLCircuitData(const LLHost &host, TPACKETID in_id,
 	mPeriodTime = mt_sec;
 
 	mLocalEndPointID.generate();
+
+	// <FS:ND> Throttle to prevent log spam.
+	mLastPacketLog = 0;
+	mLogMessagesSkipped = 0;
+	// </FS:ND>
 }
 
 
@@ -687,7 +692,7 @@ void LLCircuitData::checkPacketInID(TPACKETID id, BOOL receive_resent)
 
 	// now, check to see if we've got a gap
     U32 gap = 0;
-	if ((mPacketsInID == id))
+	if (mPacketsInID == id)
 	{
 		// nope! bump and wrap the counter, then return
 		mPacketsInID++;
@@ -750,7 +755,22 @@ void LLCircuitData::checkPacketInID(TPACKETID id, BOOL receive_resent)
 			}
 			else
 			{
-				llinfos << "packet_out_of_order - got packet " << id << " expecting " << index << " from " << mHost << llendl;
+				// <FS:ND> Throttle to prevent log spam.
+
+				// llinfos << "packet_out_of_order - got packet " << id << " expecting " << index << " from " << mHost << llendl;
+
+				if( (LLTimer::getTotalSeconds() - mLastPacketLog ) > 15 )
+				{
+					llinfos << "packet_out_of_order - got packet " << id << " expecting " << index << " from " << mHost << llendl;
+					llinfos << mLogMessagesSkipped << " since last log entry" << llendl;
+					mLastPacketLog = LLTimer::getTotalSeconds();
+					mLogMessagesSkipped = 0;
+				}
+				else
+					++mLogMessagesSkipped;
+
+				// </FS:ND>
+
 				if(gMessageSystem->mVerboseLog)
 				{
 					std::ostringstream str;

@@ -31,11 +31,16 @@
 #include "lldiriterator.h"
 #include "llnotificationsutil.h"
 #include "lltrans.h"
+// <FS:CR>
+#include "llviewercontrol.h"
+#include "fsfloaterim.h"
+// </FS:CR>
 
 #include <boost/foreach.hpp>
 #include "boost/lexical_cast.hpp"
 
-const int CONVERSATION_LIFETIME = 30; // lifetime of LLConversation is 30 days by spec
+// <FS:CR> Commenting out, let the user decide
+//const int CONVERSATION_LIFETIME = 30; // lifetime of LLConversation is 30 days by spec
 
 struct ConversationParams
 {
@@ -145,15 +150,20 @@ bool LLConversation::isOlderThan(U32 days) const
 
 void LLConversation::setListenIMFloaterOpened()
 {
-	LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mSessionID);
+	// <FS:CR> [Firestorm Communications UI]
+	//LLFloaterIMSession* floater = LLFloaterIMSession::findInstance(mSessionID);
+	FSFloaterIM* floater = FSFloaterIM::findInstance(mSessionID);
 
-	bool offline_ims_visible = LLFloaterIMSession::isVisible(floater) && floater->hasFocus();
+	//bool offline_ims_visible = LLFloaterIMSession::isVisible(floater) && floater->hasFocus();
+	bool offline_ims_visible = FSFloaterIM::isVisible(floater) && floater->hasFocus();
 
 	// we don't need to listen for im floater with this conversation is opened
 	// if floater is already opened or this conversation doesn't have unread offline messages
 	if (mHasOfflineIMs && !offline_ims_visible)
 	{
-		mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback(boost::bind(&LLConversation::onIMFloaterShown, this, _1));
+		//mIMFloaterShowedConnection = LLFloaterIMSession::setIMFloaterShowedCallback(boost::bind(&LLConversation::onIMFloaterShown, this, _1));
+		mIMFloaterShowedConnection = FSFloaterIM::setIMFloaterShowedCallback(boost::bind(&LLConversation::onIMFloaterShown, this, _1));
+		// </FS:CR>
 	}
 	else
 	{
@@ -552,6 +562,8 @@ bool LLConversationLog::loadFromFile(const std::string& filename)
 		// CHUI-325
 		// The conversation log should be capped to the last 30 days. Conversations with the last utterance
 		// being over 30 days old should be purged from the conversation log text file on login.
+		// <FS:CR> Shut up, CHUI-325 Let the user decide.
+		U32 CONVERSATION_LIFETIME = gSavedSettings.getU32("FSConversationLogLifetime");
 		if (conversation.isOlderThan(CONVERSATION_LIFETIME))
 		{
 			continue;

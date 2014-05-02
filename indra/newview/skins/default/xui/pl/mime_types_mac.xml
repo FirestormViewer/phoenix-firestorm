@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <mimetypes name="default">
+	<defaultlabel>
+		(Nieznane)
+	</defaultlabel>
 	<widgetset name="web">
 		<label name="web_label">
 			Zawartość przeglądarki internetowej
@@ -35,13 +38,13 @@
 	</widgetset>
 	<widgetset name="audio">
 		<label name="audio_label">
-			Audio
+			Dźwięk
 		</label>
 		<tooltip name="audio_tooltip">
-			To miejsce posiada zwartość audio
+			To miejsce posiada zawartość dźwiękową
 		</tooltip>
 		<playtip name="audio_playtip">
-			Rozpocznij odtwarzanie audio
+			Rozpocznij odtwarzanie dźwięków
 		</playtip>
 	</widgetset>
 	<scheme name="rtsp">
@@ -51,22 +54,22 @@
 	</scheme>
 	<mimetype name="blank">
 		<label name="blank_label">
-			- Żadne -
+			- Brak -
 		</label>
 	</mimetype>
 	<mimetype name="none/none">
 		<label name="none/none_label">
-			- Żadne -
+			- Brak -
 		</label>
 	</mimetype>
 	<mimetype name="audio/*">
 		<label name="audio2_label">
-			Audio
+			Dźwięk
 		</label>
 	</mimetype>
 	<mimetype name="video/*">
 		<label name="video2_label">
-			Video
+			Wideo
 		</label>
 	</mimetype>
 	<mimetype name="image/*">
@@ -79,14 +82,9 @@
 			Film (QuickTime)
 		</label>
 	</mimetype>
-	<mimetype name="application/javascript">
-		<label name="application/javascript_label">
-			Skrypt Java
-		</label>
-	</mimetype>
 	<mimetype name="application/ogg">
 		<label name="application/ogg_label">
-			Ogg Audio/Video
+			Dźwięk/Wideo Ogg
 		</label>
 	</mimetype>
 	<mimetype name="application/pdf">
@@ -101,7 +99,7 @@
 	</mimetype>
 	<mimetype name="application/rtf">
 		<label name="application/rtf_label">
-			Dokument RTF
+			Tekst (RTF)
 		</label>
 	</mimetype>
 	<mimetype name="application/smil">
@@ -114,29 +112,24 @@
 			Strona internetowa (XHTML)
 		</label>
 	</mimetype>
-	<mimetype name="application/x-director">
-		<label name="application/x-director_label">
-			Macromedia Director
-		</label>
-	</mimetype>
 	<mimetype name="audio/mid">
 		<label name="audio/mid_label">
-			Audio (MIDI)
+			Dźwięk (MIDI)
 		</label>
 	</mimetype>
 	<mimetype name="audio/mpeg">
 		<label name="audio/mpeg_label">
-			Audio (MP3)
+			Dźwięk (MP3)
 		</label>
 	</mimetype>
 	<mimetype name="audio/x-aiff">
 		<label name="audio/x-aiff_label">
-			Audio (AIFF)
+			Dźwięk (AIFF)
 		</label>
 	</mimetype>
 	<mimetype name="audio/x-wav">
 		<label name="audio/x-wav_label">
-			Audio (WAV)
+			Dźwięk (WAV)
 		</label>
 	</mimetype>
 	<mimetype name="image/bmp">
@@ -177,11 +170,6 @@
 	<mimetype name="text/plain">
 		<label name="text/plain_label">
 			Tekst
-		</label>
-	</mimetype>
-	<mimetype name="text/xml">
-		<label name="text/xml_label">
-			XML
 		</label>
 	</mimetype>
 	<mimetype name="video/mpeg">

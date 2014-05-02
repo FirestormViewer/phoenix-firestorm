@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
+	<panel.string name="create_account_url">
+		http://de.secondlife.com/registration/
+	</panel.string>
 	<panel.string name="forgot_password_url">
 		http://secondlife.com/account/request.php?lang=de
 	</panel.string>
@@ -12,6 +15,7 @@
 				Benutzername:
 			</text>
 			<combo_box name="username_combo" tool_tip="Bei der Registrierung gewählter Benutzername wie „berndschmidt12“ oder „Liebe Sonne“"/>
+			<icon tool_tip="Diesen Benutzernamen löschen" name="remove_user_btn"/>
 			<text name="password_text">
 				Kennwort:
 			</text>
@@ -26,9 +30,14 @@
 				<combo_box.item label="&lt;Region eingeben&gt;" name="Typeregionname"/>
 			</combo_box>
 		</layout_panel>
+		<layout_panel name="grid_panel">
+			<text name="grid_login_text">
+				Gridauswahl:
+			</text>
+		</layout_panel>
 		<layout_panel name="links_login_panel">
-			<text name="login_help">
-				Brauchen Sie Hilfe beim Anmelden?
+			<text name="create_new_account_text">
+				Registrieren
 			</text>
 			<text name="forgot_password_text">
 				Benutzernamen oder Kennwort vergessen?
@@ -36,11 +45,12 @@
 			<button label="Anmelden" name="connect_btn"/>
 			<check_box label="Kennwort speichern" name="remember_check"/>
 		</layout_panel>
-		<layout_panel name="links">
-			<text name="create_account_text">
-				IHR KONTO ERSTELLEN
+		<layout_panel name="mode_selection">
+			<text name="mode_selection_text">
+				MODUS-WAHL
 			</text>
-			<button label="Jetzt starten" name="create_new_account_btn"/>
+			<combo_box name="mode_combo" tool_tip="Wählen Sie welcher Viewer Style ihnen am meisten vertraut ist, um die Standards ihren bedürfnissen anzupassen.">
+			</combo_box>
 		</layout_panel>
 	</layout_stack>
 </panel>

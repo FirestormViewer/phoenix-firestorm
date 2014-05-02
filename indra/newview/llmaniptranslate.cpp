@@ -61,6 +61,9 @@
 #include "llui.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
+// [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 const S32 NUM_AXES = 3;
 const S32 MOUSE_DRAG_SLOP = 2;       // pixels
@@ -114,6 +117,7 @@ LLManipTranslate::LLManipTranslate( LLToolComposite* composite )
 	mSendUpdateOnMouseUp(FALSE),
 	mMouseOutsideSlop(FALSE),
 	mCopyMadeThisDrag(FALSE),
+	mWarningNoDragCopy(false),	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
 	mMouseDownX(-1),
 	mMouseDownY(-1),
 	mAxisArrowLength(50),
@@ -421,6 +425,18 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 		return TRUE;
 	}
 	
+	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
+	if(mask==MASK_COPY && !LLSelectMgr::instance().selectGetNoIndividual())
+	{
+		if(!mWarningNoDragCopy)
+		{
+			mWarningNoDragCopy=true;
+			make_ui_sound("UISndInvalidOp");
+		}
+		return TRUE;
+	}
+	// </FS:Zi>
+
 	// Handle auto-rotation if necessary.
 	LLRect world_rect = gViewerWindow->getWorldViewRectScaled();
 	const F32 ROTATE_ANGLE_PER_SECOND = 30.f * DEG_TO_RAD;
@@ -527,7 +543,12 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	// You can't move more than some distance from your original mousedown point.
 	if (gSavedSettings.getBOOL("LimitDragDistance"))
 	{
+// <FS:CR> Aurora Sim
 		F32 max_drag_distance = gSavedSettings.getF32("MaxDragDistance");
+		
+		if (max_drag_distance > LLWorld::getInstance()->getMaxDragDistance())
+			max_drag_distance = LLWorld::getInstance()->getMaxDragDistance();
+// </FS:CR> Aurora Sim
 
 		if (relative_move.magVecSquared() > max_drag_distance * max_drag_distance)
 		{
@@ -540,14 +561,27 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	F64 axis_magnitude = relative_move * axis_d;					// dot product
 	LLVector3d cursor_point_snap_line;
 	
-	F64 off_axis_magnitude;
+// <FS:Cron> FIRE-8882 - off_axis_magnitude was scoped too far away from its only use.
+	//F64 off_axis_magnitude;
 
 	getMousePointOnPlaneGlobal(cursor_point_snap_line, x, y, current_pos_global, mSnapOffsetAxis % axis_f);
-	off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
+	//off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
+// </FS:Cron>
 
 	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
-		if (off_axis_magnitude > mSnapOffsetMeters)
+// <FS:Cron> FIRE-8882
+		F64 off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
+		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+		
+		//if (off_axis_magnitude > mSnapOffsetMeters)
+		if
+		(
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && off_axis_magnitude > mSnapOffsetMeters)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && axis_exists && off_axis_magnitude <= mSnapOffsetMeters)
+		)
+// </FS:Cron>
 		{
 			mInSnapRegime = TRUE;
 			LLVector3 mouse_down_offset(mDragCursorStartGlobal - mDragSelectionStartGlobal);
@@ -728,11 +762,16 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 				}
 
 				// For safety, cap heights where objects can be dragged
-				if (new_position_global.mdV[VZ] > MAX_OBJECT_Z)
+// <AW: opensim-limits>
+// 				if (new_position_global.mdV[VZ] > MAX_OBJECT_Z)
+// 				{
+// 					new_position_global.mdV[VZ] = MAX_OBJECT_Z;
+// 				}
+				if (new_position_global.mdV[VZ] > LLWorld::getInstance()->getRegionMaxHeight())
 				{
-					new_position_global.mdV[VZ] = MAX_OBJECT_Z;
+					new_position_global.mdV[VZ] = LLWorld::getInstance()->getRegionMaxHeight();
 				}
-
+// </AW: opensim-limits>
 				// Grass is always drawn on the ground, so clamp its position to the ground
 				if (object->getPCode() == LL_PCODE_LEGACY_GRASS)
 				{
@@ -1049,6 +1088,7 @@ BOOL LLManipTranslate::handleMouseUp(S32 x, S32 y, MASK mask)
 		//gAgent.setObjectTracking(gSavedSettings.getBOOL("TrackFocusObject"));
 	}
 
+	mWarningNoDragCopy=false;	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
 	return LLManip::handleMouseUp(x, y, mask);
 }
 
@@ -1250,6 +1290,10 @@ void LLManipTranslate::renderSnapGuides()
 		S32 sub_div_offset = llround(fmod(dist_grid_axis - offset_nearest_grid_unit, getMinGridScale() / sGridMinSubdivisionLevel) / smallest_grid_unit_scale);
 		S32 num_ticks_per_side = llmax(1, llfloor(0.5f * guide_size_meters / smallest_grid_unit_scale));
 
+// <FS:Cron> FIRE-8882
+		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+// </FS:Cron>
+
 		LLGLDepthTest gls_depth(GL_FALSE);
 
 		for (S32 pass = 0; pass < 3; pass++)
@@ -1296,7 +1340,19 @@ void LLManipTranslate::renderSnapGuides()
 					// add in off-axis offset
 					tick_start += (mSnapOffsetAxis * mSnapOffsetMeters);
 
-					F32 tick_scale = 1.f;
+// <FS:Cron> FIRE-8882
+					//F32 tick_scale = 1.f;
+					F32 tick_scale = 0.f;
+					switch (snap_domain)
+					{
+						case LL_SNAP_DOMAIN_OUTSIDE:
+							tick_scale = 1.f;
+						break;
+						case LL_SNAP_DOMAIN_INSIDE:
+							tick_scale = -0.8f;
+						break;
+					}
+// </FS:Cron>
 					for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 					{
 						if (fmodf((F32)(i + sub_div_offset), division_level) == 0.f)
@@ -1386,16 +1442,25 @@ void LLManipTranslate::renderSnapGuides()
 
 			if (fmodf((F32)(i + sub_div_offset), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, translate_axis, getMinGridScale(), tick_label_spacing)))) == 0.f)
 			{
-				F32 snap_offset_meters;
+// <FS:Cron> FIRE-8882
+				//F32 snap_offset_meters;
+				F32 snap_offset_meters = 0.f;
 
-				if (mSnapOffsetAxis * LLViewerCamera::getInstance()->getUpAxis() > 0.f)
-				{
-					snap_offset_meters = mSnapOffsetMeters;			
+				if (snap_domain == LL_SNAP_DOMAIN_OUTSIDE) {
+// </FS:Cron>
+					if (mSnapOffsetAxis * LLViewerCamera::getInstance()->getUpAxis() > 0.f)
+					{
+						snap_offset_meters = mSnapOffsetMeters;
+					}
+					else
+					{
+						snap_offset_meters = -mSnapOffsetMeters;
+					}
+// <FS:Cron> FIRE-8882
 				}
-				else
-				{
-					snap_offset_meters = -mSnapOffsetMeters;
-				}
+				//else case assuming snap_domain == LL_SNAP_DOMAIN_INSIDE for now.  This results in snap_offset_meters == 0.f and the third term of the text_origin assignment becoming zero as an expected consequence. ~Cron Stardust
+// </FS:Cron>
+				
 				LLVector3 text_origin = selection_center + 
 						(translate_axis * ((smallest_grid_unit_scale * (F32)i) - offset_nearest_grid_unit)) + 
 							(mSnapOffsetAxis * snap_offset_meters * (1.f + tick_scale));
@@ -1436,7 +1501,7 @@ void LLManipTranslate::renderSnapGuides()
 					snap_offset_meters_up = -mSnapOffsetMeters;
 				}
 
-				LLVector3 selection_center_start = getSavedPivotPoint();//LLSelectMgr::getInstance()->getSavedBBoxOfSelection().getCenterAgent();
+				LLVector3 selection_center_start = getSavedPivotPoint();
 
 				LLVector3 help_text_pos = selection_center_start + (snap_offset_meters_up * 3.f * mSnapOffsetAxis);
 				const LLFontGL* big_fontp = LLFontGL::getFontSansSerif();
@@ -1739,10 +1804,12 @@ void LLManipTranslate::highlightIntersection(LLVector3 normal,
 		shader->bind();
 	}
 
-	if (shader)
-	{
-		shader->bind();
-	}
+	// <FS:Ansariel> Remove LL merge error
+	//if (shader)
+	//{
+	//	shader->bind();
+	//}
+	// </FS:Ansariel>
 
 	//draw volume/plane intersections
 	{

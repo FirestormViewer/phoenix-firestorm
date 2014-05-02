@@ -136,7 +136,26 @@ public:
 	LLUpdateAgentInventoryResponder(const LLSD& post_data,
 								const std::string& file_name,
 											   LLAssetType::EType asset_type);
+// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2012-04-29 (Catznip-3.3.0) | Modified: Catznip-3.3.0
+	typedef boost::function<void(const LLUUID&, const LLSD&, bool)> upload_callback_t;
+	typedef boost::function<bool(const std::string& filename, U32 statusNum, const std::string reason)> error_callback_t;
+	LLUpdateAgentInventoryResponder(const LLSD& post_data,
+	                                const std::string& file_name,
+	                                LLAssetType::EType asset_type,
+	                                upload_callback_t upload_cb,
+	                                error_callback_t error_cb = error_callback_t());
+// [/SL:KB]
+
 	virtual void uploadComplete(const LLSD& content);
+// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2012-04-29 (Catznip-3.3.0) | Modified: Catznip-3.3.0
+	virtual void uploadFailure(const LLSD& content);
+	virtual void error(U32 statusNum, const std::string& reason);
+// [/SL:KB]
+
+// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2012-04-29 (Catznip-3.3.0) | Modified: Catznip-3.3.0
+	upload_callback_t mUploadCallback;
+	error_callback_t mErrorCallback;
+// [/SL:KB]
 };
 
 class LLUpdateTaskInventoryResponder : public LLAssetUploadResponder

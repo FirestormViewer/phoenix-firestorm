@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="La parcela está en venta"/>
+		<button name="status_wl_btn" tool_tip="La parcela tiene configuración WL"/>
+		<button name="status_lightshare_btn" tool_tip="Configuración Lightshare"/>
+		<text name="parcel_info_text" tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma." value="(cargando...)"/>
+	</panel>
 	<panel.string name="packet_loss_tooltip">
 		Pérdida de paquetes
 	</panel.string>
@@ -7,7 +13,7 @@
 		Ancho de banda
 	</panel.string>
 	<panel.string name="time">
-		[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]
+		[hour24, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
 	<panel.string name="timeTooltip">
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
@@ -15,14 +21,15 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
-	<panel left="-410" name="balance_bg" width="200">
-		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$" value="20 L$"/>
-		<button label="Comprar L$" name="buyL" tool_tip="Pulsa para comprar más L$"/>
-		<button label="Comprar" name="goShop" tool_tip="Abrir el mercado de Second Life" width="80"/>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$" value="??? L$"/>
+		<button name="buyL" label="COMPRAR L$" halign="left" tool_tip="Pulsa para comprar más L$" left_pad="-15"/>
 	</panel>
-	<text name="TimeText" tool_tip="Hora actual (Pacífico)">
-		24:00 AM PST
-	</text>
-	<button name="media_toggle_btn" tool_tip="Iniciar/Parar todos los media (música, vídeo, páginas web)"/>
-	<button name="volume_btn" tool_tip="Control general del volumen"/>
+	<panel name="time_and_media_bg">
+		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)">
+			24:00 PST
+		</text>
+		<button name="stream_toggle_btn" tool_tip="Iniciar/detener la reproducción del flujo de audio de la parcela"/>
+		<button name="media_toggle_btn" tool_tip="Iniciar/detener la reproducción de todos los medios (música, vídeo, páginas web)"/>
+	</panel>
 </panel>

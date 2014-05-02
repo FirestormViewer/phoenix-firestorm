@@ -51,6 +51,7 @@ set(cmake_SOURCE_FILES
     GoogleBreakpad.cmake
     GoogleMock.cmake
     GooglePerfTools.cmake
+    Growl.cmake
     Havok.cmake
     Hunspell.cmake
     JPEG.cmake
@@ -79,7 +80,8 @@ set(cmake_SOURCE_FILES
     LLVFS.cmake
     LLWindow.cmake
     LLXML.cmake
-    LScript.cmake
+    LeapMotion.cmake
+    # <FS:CR> We'll be fine without you -> LScript.cmake
     Linking.cmake
     MediaPluginBase.cmake
     NDOF.cmake
@@ -93,6 +95,7 @@ set(cmake_SOURCE_FILES
     PulseAudio.cmake
     Python.cmake
     QuickTimePlugin.cmake
+    Teapot.cmake # <FS:AW opensim currency support>
     TemplateCheck.cmake
     Tut.cmake
     UI.cmake

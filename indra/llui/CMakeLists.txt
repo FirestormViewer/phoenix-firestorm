@@ -12,6 +12,7 @@ include(LLRender)
 include(LLWindow)
 include(LLVFS)
 include(LLXML)
+include(Teapot)# <FS:AW opensim currency support>
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
@@ -24,6 +25,7 @@ include_directories(
     ${LLVFS_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
     ${LIBS_PREBUILD_DIR}/include/hunspell
+    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 include_directories(SYSTEM
     ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
@@ -31,6 +33,8 @@ include_directories(SYSTEM
     )
 
 set(llui_SOURCE_FILES
+    fsregistrarutils.cpp
+
     llaccordionctrl.cpp
     llaccordionctrltab.cpp
     llbadge.cpp
@@ -136,6 +140,8 @@ set(llui_SOURCE_FILES
     
 set(llui_HEADER_FILES
     CMakeLists.txt
+
+    fsregistrarutils.h
 
     llaccordionctrl.h
     llaccordionctrltab.h
@@ -278,6 +284,7 @@ target_link_libraries(llui
     ${LLXML_LIBRARIES}
     ${LLMATH_LIBRARIES}
     ${HUNSPELL_LIBRARY}
+    ${TEAPOT_LIBRARIES}# <FS:AW opensim currency support>
     ${LLCOMMON_LIBRARIES} # must be after llimage, llwindow, llrender
     )
 

@@ -66,6 +66,19 @@
 #include "llviewercontrol.h"
 #include "lluictrlfactory.h"
 //#include "llfirstuse.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "llvoavatarself.h"
+// [/RLVa:KB]
+
+#include "llwindow.h" // for clipboad operations -KC
+
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "llvoavatarself.h"
+// [/RLVa:KB]
+#include "llinventoryfunctions.h"
+#include "llinventorymodel.h"
 
 #include "lldrawpool.h"
 
@@ -81,6 +94,22 @@ enum {
 	MI_TUBE,
 	MI_RING,
 	MI_SCULPT,
+	MI_PATH_LINE_PROFILE_CIRCLE_HALF,
+	MI_PATH_CIRCLE_PROFILE_CIRCLE_HALF,
+	MI_PATH_CIRCLE2_PROFILE_SQUARE,
+	MI_PATH_CIRCLE2_PROFILE_TRI,
+	MI_PATH_CIRCLE2_PROFILE_CIRCLE,
+	MI_PATH_CIRCLE2_PROFILE_CIRCLE_HALF,
+	MI_PATH_TEST_PROFILE_SQUARE,
+	MI_PATH_TEST_PROFILE_TRI,
+	MI_PATH_TEST_PROFILE_CIRCLE,
+	MI_PATH_TEST_PROFILE_CIRCLE_HALF,
+	//<-- Working33 by Gregory Maurer
+	MI_PATH_33_PROFILE_CIRCLE,
+	MI_PATH_33_PROFILE_SQUARE,
+	MI_PATH_33_PROFILE_TRIANGLE,
+	MI_PATH_33_PROFILE_HALFCIRCLE,
+	//Working33 -->
 	MI_NONE,
 	MI_VOLUME_COUNT
 };
@@ -149,6 +178,36 @@ BOOL	LLPanelObject::postBuild()
 	childSetCommitCallback("Rot Y",onCommitRotation,this);
 	mCtrlRotZ = getChild<LLSpinCtrl>("Rot Z");
 	childSetCommitCallback("Rot Z",onCommitRotation,this);
+
+	// Copy/paste pos
+	mBtnCopyPos = getChild<LLButton>("copypos");
+	mBtnCopyPos->setCommitCallback( boost::bind(&LLPanelObject::onCopyPos, this, _2 ));
+	mBtnPastePos = getChild<LLButton>("pastepos");
+	mBtnPastePos->setCommitCallback( boost::bind(&LLPanelObject::onPastePos, this, _2 ));
+	mBtnPastePosClip = getChild<LLButton>("pasteposclip");
+	mBtnPastePosClip->setCommitCallback( boost::bind(&LLPanelObject::onPastePosClip, this, _2 ));
+
+	// Copy/paste size
+	mBtnCopySize = getChild<LLButton>("copysize");
+	mBtnCopySize->setCommitCallback( boost::bind(&LLPanelObject::onCopySize, this, _2 ));
+	mBtnPasteSize = getChild<LLButton>("pastesize");
+	mBtnPasteSize->setCommitCallback( boost::bind(&LLPanelObject::onPasteSize, this, _2 ));
+	mBtnPasteSizeClip = getChild<LLButton>("pastesizeclip");
+	mBtnPasteSizeClip->setCommitCallback( boost::bind(&LLPanelObject::onPasteSizeClip, this, _2 ));
+
+	// Copy/paste rot
+	mBtnCopyRot = getChild<LLButton>("copyrot");
+	mBtnCopyRot->setCommitCallback( boost::bind(&LLPanelObject::onCopyRot, this, _2 ));
+	mBtnPasteRot = getChild<LLButton>("pasterot");
+	mBtnPasteRot->setCommitCallback( boost::bind(&LLPanelObject::onPasteRot, this, _2 ));
+	mBtnPasteRotClip = getChild<LLButton>("pasterotclip");
+	mBtnPasteRotClip->setCommitCallback( boost::bind(&LLPanelObject::onPasteRotClip, this, _2 ));
+
+	// Copy/paste obj prams
+	mBtnCopyParams = getChild<LLButton>("copyparams");
+	mBtnCopyParams->setCommitCallback( boost::bind(&LLPanelObject::onCopyParams, this, _2 ));
+	mBtnPasteParams = getChild<LLButton>("pasteparams");
+	mBtnPasteParams->setCommitCallback( boost::bind(&LLPanelObject::onPasteParams, this, _2 ));
 
 	//--------------------------------------------------------
 		
@@ -275,6 +334,12 @@ BOOL	LLPanelObject::postBuild()
 	// Start with everyone disabled
 	clearCtrls();
 
+// <FS:CR> Aurora Sim
+	updateLimits(FALSE);	// default to non-attachment
+// </FS:CR> Aurora Sim
+	
+	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));	// <FS:CR> Adjustable decimal precision
+
 	return TRUE;
 }
 
@@ -285,7 +350,14 @@ LLPanelObject::LLPanelObject()
 	mIsPhantom(FALSE),
 	mSelectedType(MI_BOX),
 	mSculptTextureRevert(LLUUID::null),
-	mSculptTypeRevert(0)
+	mSculptTypeRevert(0),
+	mHasPosClipboard(FALSE),
+	mHasSizeClipboard(FALSE),
+	mHasRotClipboard(FALSE),
+	mHasParamClipboard(FALSE),
+	mHasFlexiParam(FALSE),
+	mHasSculptParam(FALSE),
+	mHasLightParam(FALSE)
 {
 }
 
@@ -294,6 +366,86 @@ LLPanelObject::~LLPanelObject()
 {
 	// Children all cleaned up by default view destructor.
 }
+
+// <AW: opensim-limits>
+void LLPanelObject::updateLimits(BOOL attachment)
+{
+// <FS:CR> Aurora Sim
+	//mRegionMaxHeight = LLWorld::getInstance()->getRegionMaxHeight();
+	//mCtrlPosZ->setMaxValue(mRegionMaxHeight);
+//<FS:TS> FIRE-8205: Unable to edit attachments to negative coordinates
+//  Only apply region size limits to position spinners if editing something
+//    that's not an attachment. Attachments have their own limits.
+	if (attachment)
+	{
+		mCtrlPosX->setMinValue(-MAX_ATTACHMENT_DIST);
+		mCtrlPosX->setMaxValue(MAX_ATTACHMENT_DIST);
+		mCtrlPosY->setMinValue(-MAX_ATTACHMENT_DIST);
+		mCtrlPosY->setMaxValue(MAX_ATTACHMENT_DIST);
+		mCtrlPosZ->setMinValue(-MAX_ATTACHMENT_DIST);
+		mCtrlPosZ->setMaxValue(MAX_ATTACHMENT_DIST);
+	}
+	else
+	{
+		mCtrlPosX->setMinValue(LLWorld::getInstance()->getMinPrimXPos());
+		mCtrlPosX->setMaxValue(LLWorld::getInstance()->getMaxPrimXPos());
+		mCtrlPosY->setMinValue(LLWorld::getInstance()->getMinPrimYPos());
+		mCtrlPosY->setMaxValue(LLWorld::getInstance()->getMaxPrimYPos());
+		mCtrlPosZ->setMinValue(LLWorld::getInstance()->getMinPrimZPos());
+		mCtrlPosZ->setMaxValue(LLWorld::getInstance()->getMaxPrimZPos());
+	}
+//</FS:TS> FIRE-8205: Unable to edit attachments to negative coordinates
+// </FS:CR> Aurora Sim
+	mMinScale = LLWorld::getInstance()->getRegionMinPrimScale();
+	mMaxScale = LLWorld::getInstance()->getRegionMaxPrimScale();
+	mCtrlScaleX->setMinValue(mMinScale);
+	mCtrlScaleX->setMaxValue(mMaxScale);
+	mCtrlScaleY->setMinValue(mMinScale);
+	mCtrlScaleY->setMaxValue(mMaxScale);
+	mCtrlScaleZ->setMinValue(mMinScale);
+	mCtrlScaleZ->setMaxValue(mMaxScale);
+
+	mMaxHollowSize = LLWorld::getInstance()->getRegionMaxHollowSize();
+	mSpinHollow->setMaxValue(mMaxHollowSize);
+
+	mMinHoleSize = LLWorld::getInstance()->getRegionMinHoleSize();
+	mSpinScaleX->setMinValue(mMinHoleSize);
+	mSpinScaleY->setMinValue(mMinHoleSize);
+// <FS:CR> Aurora Sim
+	mCheckPhysics->setEnabled(LLWorld::getInstance()->getAllowPhysicalPrims());
+// </FS:CR> Aurora Sim
+}
+// </AW: opensim-limits>
+
+// <FS:CR> Adjustable decimal precision
+void LLPanelObject::changePrecision(S32 decimal_precision)
+{
+	mSpinCutBegin->setPrecision(decimal_precision);
+	mSpinCutEnd->setPrecision(decimal_precision);
+	mSpinScaleX->setPrecision(decimal_precision);
+	mSpinScaleY->setPrecision(decimal_precision);
+	mSpinSkew->setPrecision(decimal_precision);
+	mSpinShearX->setPrecision(decimal_precision);
+	mSpinShearY->setPrecision(decimal_precision);
+	mSpinTaperX->setPrecision(decimal_precision);
+	mSpinTaperY->setPrecision(decimal_precision);
+	mSpinRadiusOffset->setPrecision(decimal_precision);
+	mSpinRevolutions->setPrecision(decimal_precision);
+	mSpinHollow->setPrecision(decimal_precision);
+	mCtrlPathBegin->setPrecision(decimal_precision);
+	mCtrlPathEnd->setPrecision(decimal_precision);
+
+	mCtrlPosX->setPrecision(decimal_precision);
+	mCtrlPosY->setPrecision(decimal_precision);
+	mCtrlPosZ->setPrecision(decimal_precision);
+	mCtrlScaleX->setPrecision(decimal_precision);
+	mCtrlScaleY->setPrecision(decimal_precision);
+	mCtrlScaleZ->setPrecision(decimal_precision);
+	mCtrlRotX->setPrecision(decimal_precision);
+	mCtrlRotY->setPrecision(decimal_precision);
+	mCtrlRotZ->setPrecision(decimal_precision);
+}
+// </FS:CR>
 
 void LLPanelObject::getState( )
 {
@@ -341,13 +493,18 @@ void LLPanelObject::getState( )
 	}
 
 	// can move or rotate only linked group with move permissions, or sub-object with move and modify perms
-	BOOL enable_move	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && !objectp->isAttachment() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_move	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
 	BOOL enable_scale	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && objectp->permModify();
-	BOOL enable_rotate	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && ( (objectp->permModify() && !objectp->isAttachment()) || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_rotate	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
 
 	S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 						 && (selected_count == 1);
+
+//<FS:TS> FIRE-8205: Unable to edit attachment to negative coordinates
+//  Update the position limits depending on whether this is an attachment.
+	updateLimits(objectp->isAttachment());
+//</FS:TS> FIRE-8205
 
 	if (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() > 1)
 	{
@@ -355,6 +512,14 @@ void LLPanelObject::getState( )
 		enable_scale = FALSE;
 		enable_rotate = FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c) | Modified: RLVa-1.0.0g
+	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))) )
+	{
+		if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == objectp->getRootEdit()) )
+			enable_move = enable_scale = enable_rotate = FALSE;
+	}
+// [/RLVa:KB]
 
 	LLVector3 vec;
 	if (enable_move)
@@ -439,6 +604,18 @@ void LLPanelObject::getState( )
 	mCtrlRotY->setEnabled( enable_rotate );
 	mCtrlRotZ->setEnabled( enable_rotate );
 
+	mBtnCopyPos->setEnabled(enable_move);
+	mBtnPastePos->setEnabled(enable_move);
+	mBtnPastePosClip->setEnabled(enable_move);
+	mBtnCopySize->setEnabled( enable_scale );
+	mBtnPasteSize->setEnabled( enable_scale );
+	mBtnPasteSizeClip->setEnabled( enable_scale );
+	mBtnCopyRot->setEnabled( enable_rotate );
+	mBtnPasteRot->setEnabled( enable_rotate );
+	mBtnPasteRotClip->setEnabled( enable_rotate );
+	mBtnCopyParams->setEnabled( single_volume && objectp->permModify() );
+	mBtnPasteParams->setEnabled( single_volume && objectp->permModify() );
+
 	LLUUID owner_id;
 	std::string owner_name;
 	LLSelectMgr::getInstance()->selectGetOwner(owner_id, owner_name);
@@ -448,18 +625,20 @@ void LLPanelObject::getState( )
 	BOOL editable = root_objectp->permModify();
 
 	// Select Single Message
-	getChildView("select_single")->setVisible( FALSE);
-	getChildView("edit_object")->setVisible( FALSE);
-	if (!editable || single_volume || selected_count <= 1)
-	{
-		getChildView("edit_object")->setVisible( TRUE);
-		getChildView("edit_object")->setEnabled(TRUE);
-	}
-	else
-	{
-		getChildView("select_single")->setVisible( TRUE);
-		getChildView("select_single")->setEnabled(TRUE);
-	}
+	// <FS:Ansariel> We don't have those in FS (2013-04-28)
+	//getChildView("select_single")->setVisible( FALSE);
+	//getChildView("edit_object")->setVisible( FALSE);
+	//if (!editable || single_volume || selected_count <= 1)
+	//{
+	//	getChildView("edit_object")->setVisible( TRUE);
+	//	getChildView("edit_object")->setEnabled(TRUE);
+	//}
+	//else
+	//{
+	//	getChildView("select_single")->setVisible( TRUE);
+	//	getChildView("select_single")->setEnabled(TRUE);
+	//}
+	// </FS:Ansariel>
 
 	BOOL is_flexible = volobjp && volobjp->isFlexible();
 	BOOL is_permanent = root_objectp->flagObjectPermanent();
@@ -623,6 +802,56 @@ void LLPanelObject::getState( )
 		{
 			selected_item = MI_TUBE;
 		}
+		else if ( path == LL_PCODE_PATH_CIRCLE2 && profile == LL_PCODE_PROFILE_EQUALTRI )
+		{
+			selected_item = MI_PATH_CIRCLE2_PROFILE_TRI;
+		}
+		else if ( path == LL_PCODE_PATH_CIRCLE2 && profile == LL_PCODE_PROFILE_SQUARE )
+		{
+			selected_item = MI_PATH_CIRCLE2_PROFILE_SQUARE;
+		}
+		else if ( path == LL_PCODE_PATH_CIRCLE2 && profile == LL_PCODE_PROFILE_CIRCLE_HALF )
+		{
+			selected_item = MI_PATH_CIRCLE2_PROFILE_CIRCLE_HALF;
+		}
+		else if ( path == LL_PCODE_PATH_TEST && profile == LL_PCODE_PROFILE_SQUARE )
+		{
+			selected_item = MI_PATH_TEST_PROFILE_SQUARE;
+		}
+		else if ( path == LL_PCODE_PATH_TEST && profile == LL_PCODE_PROFILE_EQUALTRI )
+		{
+			selected_item = MI_PATH_TEST_PROFILE_TRI;
+		}
+		else if ( path == LL_PCODE_PATH_TEST && profile == LL_PCODE_PROFILE_CIRCLE )
+		{
+			selected_item = MI_PATH_TEST_PROFILE_CIRCLE;
+		}
+		else if ( path == LL_PCODE_PATH_TEST && profile == LL_PCODE_PROFILE_CIRCLE_HALF )
+		{
+			selected_item = MI_PATH_TEST_PROFILE_CIRCLE_HALF;
+		}
+		else if ( path == LL_PCODE_PATH_LINE && profile == LL_PCODE_PROFILE_CIRCLE_HALF )
+		{
+			selected_item = MI_PATH_LINE_PROFILE_CIRCLE_HALF;
+		}
+		//<-- Working33 by Gregory Maurer
+		else if ( path == LL_PCODE_PATH_CIRCLE_33 && profile == LL_PCODE_PROFILE_CIRCLE )
+		{
+			selected_item = MI_PATH_33_PROFILE_CIRCLE;
+		}
+		else if ( path == LL_PCODE_PATH_CIRCLE_33 && profile == LL_PCODE_PROFILE_SQUARE )
+		{
+			selected_item = MI_PATH_33_PROFILE_SQUARE;
+		}
+		else if ( path == LL_PCODE_PATH_CIRCLE_33 && profile == LL_PCODE_PROFILE_ISOTRI )
+		{
+			selected_item = MI_PATH_33_PROFILE_TRIANGLE;
+		}
+		else if ( path == LL_PCODE_PATH_CIRCLE_33 && profile == LL_PCODE_PROFILE_CIRCLE_HALF )
+		{
+			selected_item = MI_PATH_33_PROFILE_HALFCIRCLE;
+		}
+		//Working33 -->
 		else
 		{
 			llinfos << "Unknown path " << (S32) path << " profile " << (S32) profile << " in getState" << llendl;
@@ -747,6 +976,8 @@ void LLPanelObject::getState( )
 		// Radius offset.
 		F32 radius_offset = volume_params.getRadiusOffset();
 		// Limit radius offset, based on taper and hole size y.
+//KC: Phoenix capability
+#if 0
 		F32 radius_mag = fabs(radius_offset);
 		F32 hole_y_mag = fabs(scale_y);
 		F32 taper_y_mag  = fabs(taper_y);
@@ -771,6 +1002,7 @@ void LLPanelObject::getState( )
 				radius_offset = max_radius_mag;
 			}
 		}
+#endif
 		mSpinRadiusOffset->set( radius_offset);
 		calcp->setVar(LLCalc::RADIUS_OFFSET, radius_offset);
 
@@ -782,6 +1014,8 @@ void LLPanelObject::getState( )
 		// Skew
 		F32 skew	= volume_params.getSkew();
 		// Limit skew, based on revolutions hole size x.
+//KC: Phoenix capability
+#if 0
 		F32 skew_mag= fabs(skew);
 		F32 min_skew_mag = 1.0f - 1.0f / (revolutions * scale_x + 1.0f);
 		// Discontinuity; A revolution of 1 allows skews below 0.5.
@@ -801,6 +1035,7 @@ void LLPanelObject::getState( )
 				skew = min_skew_mag;
 			}
 		}
+#endif
 		mSpinSkew->set( skew );
 		calcp->setVar(LLCalc::SKEW, skew);
 	}
@@ -814,11 +1049,12 @@ void LLPanelObject::getState( )
 	BOOL top_shear_x_visible		= TRUE;
 	BOOL top_shear_y_visible		= TRUE;
 	BOOL twist_visible				= TRUE;
-	BOOL advanced_cut_visible		= FALSE;
-	BOOL taper_visible				= FALSE;
-	BOOL skew_visible				= FALSE;
-	BOOL radius_offset_visible		= FALSE;
-	BOOL revolutions_visible		= FALSE;
+	//KC: Phoenix capability, allow all transforms
+	BOOL advanced_cut_visible		= TRUE;
+	BOOL taper_visible				= TRUE;
+	BOOL skew_visible				= TRUE;
+	BOOL radius_offset_visible		= TRUE;
+	BOOL revolutions_visible		= TRUE;
 	BOOL sculpt_texture_visible     = FALSE;
 	F32	 twist_min					= OBJECT_TWIST_LINEAR_MIN;
 	F32	 twist_max					= OBJECT_TWIST_LINEAR_MAX;
@@ -832,11 +1068,11 @@ void LLPanelObject::getState( )
 	switch (selected_item)
 	{
 	case MI_SPHERE:
-		top_size_x_visible		= FALSE;
-		top_size_y_visible		= FALSE;
-		top_shear_x_visible		= FALSE;
-		top_shear_y_visible		= FALSE;
-		//twist_visible			= FALSE;
+		top_size_x_visible		= TRUE;
+		top_size_y_visible		= TRUE;
+		top_shear_x_visible		= TRUE;
+		top_shear_y_visible		= TRUE;
+		twist_visible			= TRUE;
 		advanced_cut_visible	= TRUE;
 		advanced_is_dimple		= TRUE;
 		twist_min				= OBJECT_TWIST_MIN;
@@ -881,6 +1117,7 @@ void LLPanelObject::getState( )
 	case MI_BOX:
 		advanced_cut_visible	= TRUE;
 		advanced_is_slice		= TRUE;
+		taper_visible			= FALSE; //KC: does nothing for boxes
 		break;
 
 	case MI_CYLINDER:
@@ -901,27 +1138,46 @@ void LLPanelObject::getState( )
 	switch (selected_item)
 	{
 	case MI_SPHERE:
+		mSpinScaleX->set( scale_x );
+		mSpinScaleY->set( scale_y );
+		calcp->setVar(LLCalc::X_HOLE, scale_x);
+		calcp->setVar(LLCalc::Y_HOLE, scale_y);
+		mSpinScaleX->setMinValue(0.0f);
+		mSpinScaleX->setMaxValue(1.0f);
+		mSpinScaleY->setMinValue(0.0f);
+		mSpinScaleY->setMaxValue(1.0f);
+		break;
 	case MI_TORUS:
 	case MI_TUBE:
 	case MI_RING:
 		mSpinScaleX->set( scale_x );
 		mSpinScaleY->set( scale_y );
+		mSpinScaleX->setMinValue(mMinHoleSize);// <AW: opensim-limits>
 		calcp->setVar(LLCalc::X_HOLE, scale_x);
 		calcp->setVar(LLCalc::Y_HOLE, scale_y);
-		mSpinScaleX->setMinValue(OBJECT_MIN_HOLE_SIZE);
+//		mSpinScaleX->setMinValue(OBJECT_MIN_HOLE_SIZE);
+		mSpinScaleX->setMinValue(mMinHoleSize);// <AW: opensim-limits>
 		mSpinScaleX->setMaxValue(OBJECT_MAX_HOLE_SIZE_X);
-		mSpinScaleY->setMinValue(OBJECT_MIN_HOLE_SIZE);
+//		mSpinScaleY->setMinValue(OBJECT_MIN_HOLE_SIZE);
+		mSpinScaleY->setMinValue(mMinHoleSize);// <AW: opensim-limits>
 		mSpinScaleY->setMaxValue(OBJECT_MAX_HOLE_SIZE_Y);
 		break;
 	default:
 		if (editable)
 		{
-			mSpinScaleX->set( 1.f - scale_x );
-			mSpinScaleY->set( 1.f - scale_y );
-			mSpinScaleX->setMinValue(-1.f);
-			mSpinScaleX->setMaxValue(1.f);
-			mSpinScaleY->setMinValue(-1.f);
-			mSpinScaleY->setMaxValue(1.f);
+			F32 tmp_scale_x = scale_x;
+			F32 tmp_scale_y = scale_y;
+			if ( selected_item == MI_BOX || selected_item == MI_CYLINDER || selected_item == MI_PRISM)
+			{
+				tmp_scale_x = 1.f - tmp_scale_x;
+				tmp_scale_y = 1.f - tmp_scale_y;
+			}
+			mSpinScaleX->set( tmp_scale_x );
+			mSpinScaleY->set( tmp_scale_y );
+			mSpinScaleX->setMinValue(-4000.f);
+			mSpinScaleX->setMaxValue(4000.f);
+			mSpinScaleY->setMinValue(-4000.f);
+			mSpinScaleY->setMaxValue(4000.f);
 
 			// Torus' Hole Size is Box/Cyl/Prism's Taper
 			calcp->setVar(LLCalc::X_TAPER, 1.f - scale_x);
@@ -935,6 +1191,8 @@ void LLPanelObject::getState( )
 	}
 
 	// Check if we need to limit the hollow based on the hole type.
+//KC: Phoenix capability
+#if 0
 	if (  selected_hole == MI_HOLE_SQUARE && 
 		  ( selected_item == MI_CYLINDER || selected_item == MI_TORUS ||
 		    selected_item == MI_PRISM    || selected_item == MI_RING  ||
@@ -944,9 +1202,11 @@ void LLPanelObject::getState( )
 		mSpinHollow->setMaxValue(70.f);
 	}
 	else 
+#endif
 	{
 		mSpinHollow->setMinValue(0.f);
-		mSpinHollow->setMaxValue(95.f);
+// 		mSpinHollow->setMaxValue(100.f);
+		mSpinHollow->setMaxValue(mMaxHollowSize);// <AW: opensim-limits>
 	}
 
 	// Update field enablement
@@ -1321,6 +1581,78 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 		path = LL_PCODE_PATH_CIRCLE;
 		break;
 		
+	case MI_PATH_LINE_PROFILE_CIRCLE_HALF:
+		profile = LL_PCODE_PROFILE_CIRCLE_HALF;
+		path = LL_PCODE_PATH_LINE;
+		break;
+
+	case MI_PATH_CIRCLE_PROFILE_CIRCLE_HALF:
+		profile = LL_PCODE_PROFILE_CIRCLE_HALF;
+		path = LL_PCODE_PATH_CIRCLE;
+		break;
+
+	case MI_PATH_CIRCLE2_PROFILE_SQUARE:
+		profile = LL_PCODE_PROFILE_SQUARE;
+		path = LL_PCODE_PATH_CIRCLE2;
+		break;
+
+	case MI_PATH_CIRCLE2_PROFILE_TRI:
+		profile = LL_PCODE_PROFILE_EQUALTRI;
+		path = LL_PCODE_PATH_CIRCLE2;
+		break;
+
+	case MI_PATH_CIRCLE2_PROFILE_CIRCLE:
+		profile = LL_PCODE_PROFILE_CIRCLE;
+		path = LL_PCODE_PATH_CIRCLE2;
+		break;
+
+	case MI_PATH_CIRCLE2_PROFILE_CIRCLE_HALF:
+		profile = LL_PCODE_PROFILE_CIRCLE_HALF;
+		path = LL_PCODE_PATH_CIRCLE2;
+		break;
+
+	case MI_PATH_TEST_PROFILE_SQUARE:
+		profile = LL_PCODE_PROFILE_SQUARE;
+		path = LL_PCODE_PATH_TEST;
+		break;
+
+	case MI_PATH_TEST_PROFILE_TRI:
+		profile = LL_PCODE_PROFILE_EQUALTRI;
+		path = LL_PCODE_PATH_TEST;
+		break;
+
+	case MI_PATH_TEST_PROFILE_CIRCLE:
+		profile = LL_PCODE_PROFILE_CIRCLE;
+		path = LL_PCODE_PATH_TEST;
+		break;
+
+	case MI_PATH_TEST_PROFILE_CIRCLE_HALF:
+		profile = LL_PCODE_PROFILE_CIRCLE_HALF;
+		path = LL_PCODE_PATH_TEST;
+		break;
+
+//<-- Working33 by Gregory Maurer
+	case MI_PATH_33_PROFILE_CIRCLE:
+		profile = LL_PCODE_PROFILE_CIRCLE;
+		path = LL_PCODE_PATH_CIRCLE_33;
+		break;
+
+	case MI_PATH_33_PROFILE_SQUARE:
+		profile = LL_PCODE_PROFILE_SQUARE;
+		path = LL_PCODE_PATH_CIRCLE_33;
+		break;
+
+	case MI_PATH_33_PROFILE_TRIANGLE:
+		profile = LL_PCODE_PROFILE_ISOTRI;
+		path = LL_PCODE_PATH_CIRCLE_33;
+		break;
+
+	case MI_PATH_33_PROFILE_HALFCIRCLE:
+		profile = LL_PCODE_PROFILE_CIRCLE_HALF;
+		path = LL_PCODE_PATH_CIRCLE_33;
+		break;
+//Working33 -->
+
 	default:
 		llwarns << "Unknown base type " << selected_type 
 			<< " in getVolumeParams()" << llendl;
@@ -1411,6 +1743,8 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 	// Hollowness
 	F32 hollow = mSpinHollow->get() / 100.f;
 
+//KC: Phoenix capability
+#if 0
 	if (  selected_hole == MI_HOLE_SQUARE && 
 		( selected_type == MI_CYLINDER || selected_type == MI_TORUS ||
 		  selected_type == MI_PRISM    || selected_type == MI_RING  ||
@@ -1418,6 +1752,7 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 	{
 		if (hollow > 0.7f) hollow = 0.7f;
 	}
+#endif
 
 	volume_params.setHollow( hollow );
 
@@ -1461,6 +1796,8 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 	// Revolutions
 	F32 revolutions	  = mSpinRevolutions->get();
 
+//KC: Phoenix capability
+#if 0
 	if ( selected_type == MI_SPHERE )
 	{
 		// Snap values to valid sphere parameters.
@@ -1477,11 +1814,13 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 	{
 		scale_x = llclamp(
 			scale_x,
-			OBJECT_MIN_HOLE_SIZE,
+//			OBJECT_MIN_HOLE_SIZE,
+			mMinHoleSize,// <AW: opensim-limits>
 			OBJECT_MAX_HOLE_SIZE_X);
 		scale_y = llclamp(
 			scale_y,
-			OBJECT_MIN_HOLE_SIZE,
+// 			OBJECT_MIN_HOLE_SIZE,
+			mMinHoleSize,// <AW: opensim-limits>
 			OBJECT_MAX_HOLE_SIZE_Y);
 
 		// Limit radius offset, based on taper and hole size y.
@@ -1531,6 +1870,7 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 			}
 		}
 	}
+#endif
 
 	volume_params.setRatio( scale_x, scale_y );
 	volume_params.setSkew(skew);
@@ -1584,7 +1924,12 @@ void LLPanelObject::sendRotation(BOOL btn_down)
 
 		if (mRootObject != mObject)
 		{
-			rotation = rotation * ~mRootObject->getRotationRegion();
+			// ## Zi: Building spin controls for attachments
+			if(mObject->isAttachment())
+				rotation = rotation * ~mRootObject->getRotation();
+			else
+				rotation = rotation * ~mRootObject->getRotationRegion();
+			// ## Zi: Building spin controls for attachments
 		}
 		std::vector<LLVector3>& child_positions = mObject->mUnselectedChildrenPositions ;
 		std::vector<LLQuaternion> child_rotations;
@@ -1611,18 +1956,36 @@ void LLPanelObject::sendRotation(BOOL btn_down)
 	}
 }
 
+// patch up for mesh, to be removed during real mesh merge -Zi
+F32 llpanelobject_max_prim_scale()
+{
+// <AW: opensim-limits>
+//	if(gAgent.getRegion()->getCapability("GetMesh").empty())
+//		return DEFAULT_MAX_PRIM_SCALE;
+//	return 64.f;
+	return LLWorld::getInstance()->getRegionMaxPrimScale();
+// </AW: opensim-limits>
+}
 
 // BUG: Make work with multiple objects
 void LLPanelObject::sendScale(BOOL btn_down)
 {
 	if (mObject.isNull()) return;
 
-	LLVector3 newscale(mCtrlScaleX->get(), mCtrlScaleY->get(), mCtrlScaleZ->get());
+	// make sure not to send larger/smaller values than permitted -Zi
+// <AW: opensim-limits>
+//	LLVector3 newscale(llclamp(mCtrlScaleX->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()),
+//					   llclamp(mCtrlScaleY->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()),
+//					   llclamp(mCtrlScaleZ->get(), MIN_PRIM_SCALE, llpanelobject_max_prim_scale()));
+	LLVector3 newscale(llclamp(mCtrlScaleX->get(), mMinScale, llpanelobject_max_prim_scale()),
+					   llclamp(mCtrlScaleY->get(), mMinScale, llpanelobject_max_prim_scale()),
+					   llclamp(mCtrlScaleZ->get(), mMinScale, llpanelobject_max_prim_scale()));
+// </AW: opensim-limits>
 
 	LLVector3 delta = newscale - mObject->getScale();
-	if (delta.magVec() >= 0.0005f)
+	if (delta.magVec() >= 0.00005f)
 	{
-		// scale changed by more than 1/2 millimeter
+		// scale changed by more than 1/20 millimeter
 
 		// check to see if we aren't scaling the textures
 		// (in which case the tex coord's need to be recomputed)
@@ -1654,15 +2017,32 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 	if (mObject.isNull()) return;
 
 	LLVector3 newpos(mCtrlPosX->get(), mCtrlPosY->get(), mCtrlPosZ->get());
+
 	LLViewerRegion* regionp = mObject->getRegion();
 
-	// Clamp the Z height
-	const F32 height = newpos.mV[VZ];
-	const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, mObject->getPositionGlobal());
-	const F32 max_height = LLWorld::getInstance()->getRegionMaxHeight();
+	// ## Zi: Building spin controls for attachments
+	LLVector3d new_pos_global;
 
-	if (!mObject->isAttachment())
+	if (mObject->isAttachment())
 	{
+		newpos.clamp(LLVector3(-MAX_ATTACHMENT_DIST,-MAX_ATTACHMENT_DIST,-MAX_ATTACHMENT_DIST),LLVector3(MAX_ATTACHMENT_DIST,MAX_ATTACHMENT_DIST,MAX_ATTACHMENT_DIST));
+	}
+	// ## Zi: Building spin controls for attachments
+	else
+	{
+		// Clamp the Z height
+		const F32 height = newpos.mV[VZ];
+		// <FS:Ansariel> FIRE-12478: Clamp min Z height at new position instead of current if new position is valid
+		//const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, mObject->getPositionGlobal());
+		LLVector3d height_check_pos = mObject->getPositionGlobal();
+		if (LLWorld::getInstance()->positionRegionValidGlobal(regionp->getPosGlobalFromRegion(newpos)))
+		{
+			height_check_pos = regionp->getPosGlobalFromRegion(newpos);
+		}
+		const F32 min_height = LLWorld::getInstance()->getMinAllowedZ(mObject, height_check_pos);
+		// </FS:Ansariel>
+		const F32 max_height = LLWorld::getInstance()->getRegionMaxHeight();
+
 		if ( height < min_height)
 		{
 			newpos.mV[VZ] = min_height;
@@ -1679,19 +2059,53 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 		{
 			mCtrlPosZ->set(LLWorld::getInstance()->resolveLandHeightAgent(newpos) + 1.f);
 		}
+		// Make sure new position is in a valid region, so the object
+		// won't get dumped by the simulator.
+		new_pos_global = regionp->getPosGlobalFromRegion(newpos);
 	}
 
-	// Make sure new position is in a valid region, so the object
-	// won't get dumped by the simulator.
-	LLVector3d new_pos_global = regionp->getPosGlobalFromRegion(newpos);
+	// ## Zi: Building spin controls for attachments
+	// partly copied from llmaniptranslate.cpp to get the positioning right
+	if (mObject->isAttachment())
+	{
+		LLVector3 old_position_local=mObject->getPosition();
 
-	if ( LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) )
+		if(mRootObject!=mObject)
+		{
+			newpos=newpos-mRootObject->getPosition();
+			newpos=newpos*~mRootObject->getRotation();
+			mObject->setPositionParent(newpos);
+		}
+		else
+			mObject->setPosition(newpos);
+		LLManip::rebuild(mObject) ;
+
+		gAgentAvatarp->clampAttachmentPositions();
+
+		LLVector3 new_position_local = mObject->getPosition();
+
+		// for individually selected roots, we need to counter-translate all unselected children
+		if (mObject->isRootEdit())
+		{
+			// counter-translate child objects if we are moving the root as an individual
+			mObject->resetChildrenPosition(old_position_local-new_position_local,TRUE);
+		}
+
+		if(!btn_down)
+		{
+			LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
+		}
+
+		LLSelectMgr::getInstance()->updateSelectionCenter();
+	}
+	// ## Zi: Building spin controls for attachments
+	else if (LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) )
 	{
 		// send only if the position is changed, that is, the delta vector is not zero
 		LLVector3d old_pos_global = mObject->getPositionGlobal();
 		LLVector3d delta = new_pos_global - old_pos_global;
-		// moved more than 1/2 millimeter
-		if (delta.magVec() >= 0.0005f)
+		// moved more than 1/20 millimeter
+		if (delta.magVec() >= 0.00005f)
 		{			
 			if (mRootObject != mObject)
 			{
@@ -1886,9 +2300,11 @@ void LLPanelObject::clearCtrls()
 	mLabelRadiusOffset->setEnabled( FALSE );
 	mLabelRevolutions->setEnabled( FALSE );
 
-	getChildView("select_single")->setVisible( FALSE);
-	getChildView("edit_object")->setVisible( TRUE);	
-	getChildView("edit_object")->setEnabled(FALSE);
+	// <FS:Ansariel> We don't have those in Firestorm (2013-04-28)
+	//getChildView("select_single")->setVisible( FALSE);
+	//getChildView("edit_object")->setVisible( TRUE);	
+	//getChildView("edit_object")->setEnabled(FALSE);
+	// </FS:Ansariel>
 	
 	getChildView("scale_hole")->setEnabled(FALSE);
 	getChildView("scale_taper")->setEnabled(FALSE);
@@ -2010,4 +2426,352 @@ void LLPanelObject::onCommitSculptType(LLUICtrl *ctrl, void* userdata)
 	LLPanelObject* self = (LLPanelObject*) userdata;
 
 	self->sendSculpt();
+}
+
+std::string get_vector_format_string()
+{
+	S32 precision = gSavedSettings.getS32("FSBuildToolDecimalPrecision");
+	return llformat("<%%.%df, %%.%df, %%.%df>", precision, precision, precision);
+}
+
+void copy_vector_to_clipboard(const LLVector3& vec)
+{
+	std::string stringVec = llformat(get_vector_format_string().c_str(), vec.mV[VX], vec.mV[VY], vec.mV[VZ]);
+	LLView::getWindow()->copyTextToClipboard(utf8str_to_wstring(stringVec));
+}
+
+void LLPanelObject::onCopyPos(const LLSD& data)
+{
+	mClipboardPos = LLVector3(mCtrlPosX->get(), mCtrlPosY->get(), mCtrlPosZ->get());
+	copy_vector_to_clipboard(mClipboardPos);
+	LLStringUtil::format_map_t args;
+	args["VALUE"] = llformat(get_vector_format_string().c_str(), mClipboardPos.mV[VX], mClipboardPos.mV[VY], mClipboardPos.mV[VZ]);
+	mBtnPastePos->setToolTip(getString("Paste Position", args));
+	mHasPosClipboard = TRUE;
+}
+
+void LLPanelObject::onCopySize(const LLSD& data)
+{
+	mClipboardSize = LLVector3(mCtrlScaleX->get(), mCtrlScaleY->get(), mCtrlScaleZ->get());
+	copy_vector_to_clipboard(mClipboardSize);
+	LLStringUtil::format_map_t args;
+	args["VALUE"] = llformat(get_vector_format_string().c_str(), mClipboardSize.mV[VX], mClipboardSize.mV[VY], mClipboardSize.mV[VZ]);
+	mBtnPasteSize->setToolTip(getString("Paste Size", args));
+	mHasSizeClipboard = TRUE;
+}
+
+void LLPanelObject::onCopyRot(const LLSD& data)
+{
+	mClipboardRot = LLVector3(mCtrlRotX->get(), mCtrlRotY->get(), mCtrlRotZ->get());
+	copy_vector_to_clipboard(mClipboardRot);
+	LLStringUtil::format_map_t args;
+	args["VALUE"] = llformat(get_vector_format_string().c_str(), mClipboardRot.mV[VX], mClipboardRot.mV[VY], mClipboardRot.mV[VZ]);
+	mBtnPasteRot->setToolTip(getString("Paste Rotation", args));
+	mHasRotClipboard = TRUE;
+}
+
+
+void LLPanelObject::onPastePos(const LLSD& data)
+{
+	if(!mHasPosClipboard) return;
+
+	//clamp pos on non-attachments, just keep the prims on the sim
+	if (!mObject->isAttachment())
+	{
+// <FS:CR> Aurora Sim
+		//mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, 256.f);
+		//mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, 256.f);
+		mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, gAgent.getRegion()->getWidth());
+		mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, gAgent.getRegion()->getWidth());
+// </FS:CR> Aurora Sim
+		//height will get properly clammed by sendPosition
+	}
+
+	mCtrlPosX->set( mClipboardPos.mV[VX] );
+	mCtrlPosY->set( mClipboardPos.mV[VY] );
+	mCtrlPosZ->set( mClipboardPos.mV[VZ] );
+
+	LLCalc* calcp = LLCalc::getInstance();
+	calcp->setVar(LLCalc::X_POS, mClipboardPos.mV[VX]);
+	calcp->setVar(LLCalc::Y_POS, mClipboardPos.mV[VY]);
+	calcp->setVar(LLCalc::Z_POS, mClipboardPos.mV[VZ]);
+
+	sendPosition(FALSE);
+}
+
+void LLPanelObject::onPasteSize(const LLSD& data)
+{
+	if(!mHasSizeClipboard) return;
+// <AW: opensim-limits>
+//	mClipboardSize.mV[VX] = llclamp(mClipboardSize.mV[VX], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
+//	mClipboardSize.mV[VY] = llclamp(mClipboardSize.mV[VY], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
+//	mClipboardSize.mV[VZ] = llclamp(mClipboardSize.mV[VZ], MIN_PRIM_SCALE, llpanelobject_max_prim_scale());
+	mClipboardSize.mV[VX] = llclamp(mClipboardSize.mV[VX], mMinScale, llpanelobject_max_prim_scale());
+	mClipboardSize.mV[VY] = llclamp(mClipboardSize.mV[VY], mMinScale, llpanelobject_max_prim_scale());
+	mClipboardSize.mV[VZ] = llclamp(mClipboardSize.mV[VZ], mMinScale, llpanelobject_max_prim_scale());
+// </AW: opensim-limits>
+
+	mCtrlScaleX->set( mClipboardSize.mV[VX] );
+	mCtrlScaleY->set( mClipboardSize.mV[VY] );
+	mCtrlScaleZ->set( mClipboardSize.mV[VZ] );
+
+	LLCalc* calcp = LLCalc::getInstance();
+	calcp->setVar(LLCalc::X_SCALE, mClipboardSize.mV[VX]);
+	calcp->setVar(LLCalc::Y_SCALE, mClipboardSize.mV[VY]);
+	calcp->setVar(LLCalc::Z_SCALE, mClipboardSize.mV[VZ]);
+
+	sendScale(FALSE);
+}
+
+void LLPanelObject::onPasteRot(const LLSD& data)
+{
+	if(!mHasRotClipboard) return;
+	
+	mCtrlRotX->set( mClipboardRot.mV[VX] );
+	mCtrlRotY->set( mClipboardRot.mV[VY] );
+	mCtrlRotZ->set( mClipboardRot.mV[VZ] );
+
+	LLCalc* calcp = LLCalc::getInstance();
+	calcp->setVar(LLCalc::X_ROT, mClipboardRot.mV[VX]);
+	calcp->setVar(LLCalc::Y_ROT, mClipboardRot.mV[VY]);
+	calcp->setVar(LLCalc::Z_ROT, mClipboardRot.mV[VZ]);
+
+	sendRotation(FALSE);
+}
+
+//Paste from clip board
+BOOL get_vector_from_clipboard(LLVector3* value)
+{
+	LLWString temp_string;
+	LLView::getWindow()->pasteTextFromClipboard(temp_string);
+	const std::string stringVec = wstring_to_utf8str(temp_string);
+
+	if(stringVec.empty() || value == NULL) return FALSE;
+
+	LLVector3 vec;
+	S32 count = sscanf( stringVec.c_str(), "<%f, %f, %f>", vec.mV + 0, vec.mV + 1, vec.mV + 2 );
+	if( 3 == count )
+	{
+		value->setVec( vec );
+		return TRUE;
+	}
+
+	return FALSE;
+}
+void LLPanelObject::onPastePosClip(const LLSD& data)
+{
+	if(get_vector_from_clipboard(&mClipboardPos))
+	{
+		mHasPosClipboard = TRUE;
+		onPastePos(data);
+	}
+	else
+	{
+		llinfos << "Couldn't get position vector from clipboard" << llendl;
+	}
+}
+void LLPanelObject::onPasteSizeClip(const LLSD& data)
+{
+	if(get_vector_from_clipboard(&mClipboardSize))
+	{
+		mHasSizeClipboard = TRUE;
+		onPasteSize(data);
+	}
+	else
+	{
+		llinfos << "Couldn't get size vector from clipboard" << llendl;
+	}
+}
+void LLPanelObject::onPasteRotClip(const LLSD& data)
+{
+	if(get_vector_from_clipboard(&mClipboardRot))
+	{
+		mHasRotClipboard = TRUE;
+		onPasteRot(data);
+	}
+	else
+	{
+		llinfos << "Couldn't get rotation vector from clipboard" << llendl;
+	}
+}
+
+
+void LLPanelObject::onCopyParams(const LLSD& data)
+{
+	getVolumeParams(mClipboardVolumeParams);
+	mHasParamClipboard = TRUE;
+	
+	LLViewerObject* objectp = mObject;
+	if (!objectp)
+		return;
+
+	LLVOVolume *volobjp = NULL;
+	if ( objectp && (objectp->getPCode() == LL_PCODE_VOLUME))
+		volobjp = (LLVOVolume *)objectp;
+	
+	mHasFlexiParam = FALSE;
+	if(volobjp && volobjp->isFlexible())
+	{
+		LLFlexibleObjectData *attributes = (LLFlexibleObjectData *)objectp->getParameterEntry(LLNetworkData::PARAMS_FLEXIBLE);
+		if (attributes)
+		{
+			mPramsClipboard["lod"] = attributes->getSimulateLOD();
+			mPramsClipboard["gav"] = attributes->getGravity();
+			mPramsClipboard["ten"] = attributes->getTension();
+			mPramsClipboard["fri"] = attributes->getAirFriction();
+			mPramsClipboard["sen"] = attributes->getWindSensitivity();
+			LLVector3 force = attributes->getUserForce();
+			mPramsClipboard["forx"] = force.mV[0];
+			mPramsClipboard["fory"] = force.mV[1];
+			mPramsClipboard["forz"] = force.mV[2];
+			mHasFlexiParam = TRUE;
+		}
+	}
+
+	if (objectp->getParameterEntryInUse(LLNetworkData::PARAMS_SCULPT))
+	{
+		LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+
+		LLUUID image_id = sculpt_params->getSculptTexture();
+		BOOL allow_texture = FALSE;
+		if (gInventory.isObjectDescendentOf(image_id, gInventory.getLibraryRootFolderID())
+			|| image_id == LLUUID(gSavedSettings.getString( "DefaultObjectTexture" ))
+			|| image_id == LLUUID(gSavedSettings.getString( "UIImgWhiteUUID" ))
+			|| image_id == LLUUID(gSavedSettings.getString( "UIImgInvisibleUUID" ))
+			|| image_id == LLUUID(SCULPT_DEFAULT_TEXTURE)
+		)
+			allow_texture = TRUE;
+		else
+		{
+			LLUUID inventory_item_id;
+			LLViewerInventoryCategory::cat_array_t cats;
+			LLViewerInventoryItem::item_array_t items;
+			LLAssetIDMatches asset_id_matches(image_id);
+			gInventory.collectDescendentsIf(LLUUID::null,
+									cats,
+									items,
+									LLInventoryModel::INCLUDE_TRASH,
+									asset_id_matches);
+
+			if (items.count())
+			{
+				// search for copyable version first
+				for (S32 i = 0; i < items.count(); i++)
+				{
+					LLInventoryItem* itemp = items[i];
+					LLPermissions item_permissions = itemp->getPermissions();
+					if (item_permissions.allowCopyBy(gAgent.getID(), gAgent.getGroupID()))
+					{
+						inventory_item_id = itemp->getUUID();
+						break;
+					}
+				}
+			}
+			if (inventory_item_id.notNull())
+			{
+				LLInventoryItem* itemp = gInventory.getItem(inventory_item_id);
+				if (itemp)
+				{
+					LLPermissions perm = itemp->getPermissions();
+					if ( (perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED )
+						allow_texture = TRUE;
+				}
+			}
+		}
+		if (allow_texture)
+			mPramsClipboard["sculptid"] = image_id;
+		else
+			mPramsClipboard["sculptid"] = LLUUID(SCULPT_DEFAULT_TEXTURE);
+
+		mPramsClipboard["sculpt_type"] = sculpt_params->getSculptType();
+		mHasSculptParam = TRUE;
+	}
+	else
+	{
+		mHasSculptParam = FALSE;
+	}
+
+	if (volobjp && volobjp->getIsLight())
+	{
+		mPramsClipboard["Light Intensity"] = volobjp->getLightIntensity();
+		mPramsClipboard["Light Radius"] = volobjp->getLightRadius();
+		mPramsClipboard["Light Falloff"] = volobjp->getLightFalloff();
+		LLColor3 color = volobjp->getLightColor();
+		mPramsClipboard["r"] = color.mV[0];
+		mPramsClipboard["g"] = color.mV[1];
+		mPramsClipboard["b"] = color.mV[2];
+		mHasLightParam = TRUE;
+	}
+	else
+	{
+		mHasLightParam = FALSE;
+	}
+
+}
+
+void LLPanelObject::onPasteParams(const LLSD& data)
+{
+	LLViewerObject* objectp = mObject;
+	if (!objectp)
+		return;
+
+	if (mHasFlexiParam && (objectp->getPCode() == LL_PCODE_VOLUME))
+	{
+		LLFlexibleObjectData *attributes = (LLFlexibleObjectData *)objectp->getParameterEntry(LLNetworkData::PARAMS_FLEXIBLE);
+		if (attributes)
+		{
+			LLFlexibleObjectData new_attributes;
+			new_attributes = *attributes;
+
+			new_attributes.setSimulateLOD(mPramsClipboard["lod"].asInteger());
+			new_attributes.setGravity(mPramsClipboard["gav"].asReal());
+			new_attributes.setTension(mPramsClipboard["ten"].asReal());
+			new_attributes.setAirFriction(mPramsClipboard["fri"].asReal());
+			new_attributes.setWindSensitivity(mPramsClipboard["sen"].asReal());
+			F32 fx = (F32)mPramsClipboard["forx"].asReal();
+			F32 fy = (F32)mPramsClipboard["fory"].asReal();
+			F32 fz = (F32)mPramsClipboard["forz"].asReal();
+			LLVector3 force(fx,fy,fz);
+			new_attributes.setUserForce(force);
+			objectp->setParameterEntry(LLNetworkData::PARAMS_FLEXIBLE, new_attributes, true);
+		}
+	}
+
+	if (mHasSculptParam)
+	{
+		LLSculptParams sculpt_params;
+
+		if (mPramsClipboard.has("sculptid"))
+			sculpt_params.setSculptTexture(mPramsClipboard["sculptid"].asUUID());
+
+		if (mPramsClipboard.has("sculptid"))
+			sculpt_params.setSculptType((U8)mPramsClipboard["sculpt_type"].asInteger());
+
+		objectp->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, TRUE);
+	}
+	else
+	{
+		LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+		if (sculpt_params)
+			objectp->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, FALSE, TRUE);
+	}
+	
+	LLVOVolume *volobjp = NULL;
+	if ( objectp && (objectp->getPCode() == LL_PCODE_VOLUME))
+		volobjp = (LLVOVolume *)objectp;
+
+	if (volobjp && mHasLightParam)
+	{
+		volobjp->setIsLight(TRUE);
+		volobjp->setLightIntensity((F32)mPramsClipboard["Light Intensity"].asReal());
+		volobjp->setLightRadius((F32)mPramsClipboard["Light Radius"].asReal());
+		volobjp->setLightFalloff((F32)mPramsClipboard["Light Falloff"].asReal());
+		F32 r = (F32)mPramsClipboard["r"].asReal();
+		F32 g = (F32)mPramsClipboard["g"].asReal();
+		F32 b = (F32)mPramsClipboard["b"].asReal();
+		volobjp->setLightColor(LLColor3(r,g,b));
+	}
+	
+	if(mHasParamClipboard)
+		objectp->updateVolume(mClipboardVolumeParams);
 }

@@ -32,12 +32,22 @@
 #include "llframetimer.h"
 #include "llviewertexture.h"
 
+// <FS:Ansariel> Metadata reader
+#include "llavatarnamecache.h"
+
 class LLComboBox;
 class LLImageRaw;
 
 class LLPreviewTexture : public LLPreview
 {
 public:
+	enum EFileformatType
+	{
+		FORMAT_TGA,
+		FORMAT_PNG
+	};
+
+
 	LLPreviewTexture(const LLSD& key);
 	~LLPreviewTexture();
 
@@ -45,6 +55,7 @@ public:
 
 	virtual BOOL		canSaveAs() const;
 	virtual void		saveAs();
+	void				saveAs(EFileformatType format);
 
 	virtual void		loadAsset();
 	virtual EAssetStatus	getAssetStatus();
@@ -52,7 +63,15 @@ public:
 	virtual void		reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	virtual void 		onFocusReceived();
 	
-	static void			onFileLoadedForSave( 
+	static void			onFileLoadedForSaveTGA( 
+							BOOL success,
+							LLViewerFetchedTexture *src_vi,
+							LLImageRaw* src, 
+							LLImageRaw* aux_src,
+							S32 discard_level, 
+							BOOL final,
+							void* userdata );
+	static void			onFileLoadedForSavePNG( 
 							BOOL success,
 							LLViewerFetchedTexture *src_vi,
 							LLImageRaw* src, 
@@ -62,9 +81,20 @@ public:
 							void* userdata );
 	void 				openToSave();
 	
-	static void			onSaveAsBtn(void* data);
+	static void			onSaveAsBtn(LLUICtrl* ctrl, void* data);
 
 	/*virtual*/ void setObjectID(const LLUUID& object_id);
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	void callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name);
+	void onButtonClickProfile();
+	void onButtonClickUUID();
+	static void onTextureLoaded(BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata);
+	// </FS:Techwolf Lupindo>
+
+	// <FS:Ansariel> For requesting dimensions update
+	void setUpdateDimensions(BOOL update) { mUpdateDimensions = update; }
+	
 protected:
 	void				init();
 	/* virtual */ BOOL	postBuild();
@@ -92,7 +122,18 @@ private:
 	BOOL mUpdateDimensions;
 	S32 mLastHeight;
 	S32 mLastWidth;
-	F32 mAspectRatio;	
+	F32 mAspectRatio;
+
+	bool mShowingButtons;
+	bool mDisplayNameCallback;
+	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
+	LLUIString mUploaderDateTime;
+
+	// <FS:Ansariel> Performance improvement
+	LLUICtrl*	mDimensionsCtrl;
+	S32			mCurrentImageWidth;
+	S32			mCurrentImageHeight;
+	// </FS:Ansariel>
 
 	LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ; 
 };

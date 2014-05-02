@@ -10,7 +10,7 @@
  help_topic="contents"
  save_rect="true"
  single_instance="true"
- title="BUY COPY OF OBJECT"
+ title="Buy Copy of Object"
  width="280">
     <floater.string
      name="title_buy_text">
@@ -47,7 +47,7 @@
          width="16" />
         <scroll_list.columns
          name="text"
-         width="234" />
+         relative_width="1" />
     </scroll_list>
     <text
      type="string"
@@ -77,7 +77,7 @@
          width="16" />
         <scroll_list.columns
          name="text"
-         width="234" />
+         relative_width="1" />
     </scroll_list>
     <text
      type="string"
@@ -97,6 +97,7 @@
 Buy for L$[AMOUNT] from:
     </text>
   <text
+     icon_positioning="left"
      type="string"
      length="1"
      follows="left|right|bottom"

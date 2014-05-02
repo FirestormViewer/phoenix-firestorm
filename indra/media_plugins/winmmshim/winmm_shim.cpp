@@ -43,6 +43,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	{
 		InitializeCriticalSection(&sCriticalSection);
 	}
+	else if( DLL_PROCESS_DETACH == ul_reason_for_call )
+		::DeleteCriticalSection( &sCriticalSection );
 	return TRUE;
 }
 

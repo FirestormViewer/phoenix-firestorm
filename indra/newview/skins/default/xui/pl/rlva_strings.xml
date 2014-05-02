@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+	<map>
+		<key>strings</key>
+		<map>
+			<key>hidden_generic</key>
+			<map>
+				<key>value</key>
+				<string>(Ukryte)</string>
+			</map>
+			<key>hidden_parcel</key>
+			<map>
+				<key>value</key>
+				<string>(Ukryta działka)</string>
+			</map>
+			<key>hidden_region</key>
+			<map>
+				<key>value</key>
+				<string>(Ukryty region)</string>
+			</map>
+			<key>blocked_recvim</key>
+			<map>
+				<key>value</key>
+				<string>*** IM zablokowana przez Twoją przeglądarkę</string>
+				<key>description</key>
+				<string>Pokazane w miejsce oryginalnej wiadomości, gdy przychodząca IM jest zablokowana</string>
+				<key>label</key>
+				<string>Zablokowano nadchodzącą wiadomość IM (lokalnie)</string>
+				<key>customizable</key>
+				<boolean>1</boolean>
+			</map>
+			<key>blocked_sendim</key>
+			<map>
+				<key>value</key>
+				<string>*** IM zablokowana przez przeglądarkę nadawcy</string>
+				<key>description</key>
+				<string>Pokazane (i wysyłane do drugiej osoby), gdy wychodząca IM jest zablokowana</string>
+				<key>label</key>
+				<string>Zablokowano wychodzącą wiadomość IM (lokalnie + u drugiej osoby)</string>
+				<key>customizable</key>
+				<boolean>1</boolean>
+			</map>
+			<key>blocked_generic</key>
+			<map>
+				<key>value</key>
+				<string>Nie można tego zrobić ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_permattach</key>
+			<map>
+				<key>value</key>
+				<string>Założenie '[OBJECT]' zostało anulowane ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_permteleport</key>
+			<map>
+				<key>value</key>
+				<string>Teleportacja poprzez obiekt '[OBJECT]' nie powiodła się ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_startim</key>
+			<map>
+				<key>value</key>
+				<string>Nie można rozpocząć sesji IM z [RECIPIENT] ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_startconf</key>
+			<map>
+				<key>value</key>
+				<string>Nie można rozpocząć konferencji z [RECIPIENT] ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_teleport</key>
+			<map>
+				<key>value</key>
+				<string>Nie można teleportować ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_viewxxx</key>
+			<map>
+				<key>value</key>
+				<string>Nie można otworzyć [TYPE] ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_wireframe</key>
+			<map>
+				<key>value</key>
+				<string>Nie można włączyć trybu obrazu szkieletowego ze względu na ograniczenia RLV</string>
+			</map>
+			<key>blocked_recvim_remote</key>
+			<map>
+				<key>value</key>
+				<string>Rezydent, do którego napisałeś/aś ma uniemożliwione czytanie wiadomości na tą chwilę, spróbuj później.</string>
+				<key>description</key>
+				<string>Wysyłane do nadawcy wiadomości, gdy jego/jej przychodząca IM jest zablokowana</string>
+				<key>label</key>
+				<string>Zablokowano nadchodzącą wiadomość IM (od innej osoby)</string>
+				<key>customizable</key>
+				<boolean>1</boolean>
+			</map>
+			<key>blocked_tplurerequest_remote</key>
+			<map>
+				<key>value</key>
+				<string>Rezydent, któremu zaproponowałeś/aś teleport ma uniemożliwione odbieranie ich na tą chwilę, spróbuj później.</string>
+				<key>description</key>
+				<string>Wysyłane do nadawcy teleportu, gdy jego/jej propozycja jest zablokowana</string>
+				<key>label</key>
+				<string>Zablokowano propozycję/prośbę o teleport (od innej osoby)</string>
+				<key>customizable</key>
+				<boolean>1</boolean>
+			</map>
+		</map>
+		<key>anonyms</key>
+		<array>
+			<string>Rezydent</string>
+			<string>Osoba</string>
+			<string>Nieznajomy</string>
+			<string>Ktoś</string>
+			<string>Tajemniczy ktoś</string>
+			<string>Ktoś niezidentyfikowany</string>
+			<string>Nieznana osoba</string>
+		</array>
+	</map>
+</llsd>

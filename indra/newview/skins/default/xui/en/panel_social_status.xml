@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
     <panel
-	 height="400"
+	 height="392"
 	 width="304"
 	 layout="topleft"
      name="panel_social_status">
@@ -10,7 +11,7 @@
       follows="all"
       orientation="vertical"
       name="stack_status"
-      top="8">
+      top="0">
       <layout_panel
        name="status_detail_panel"
        height="367">
@@ -28,7 +29,7 @@
        <text_editor
         follows="left|top"
         height="150"
-        width="250"
+        right="-12"
         left="9"
         length="1"
         max_length="700"
@@ -47,7 +48,7 @@
         height="23"
         label="Post"
         name="post_status_btn"
-        width="100">
+        width="135">
         <button.commit_callback
           function="SocialSharing.SendStatus" />
        </button>
@@ -58,7 +59,7 @@
         name="cancel_status_btn"
         left_pad="15"
         top_delta="0"
-        width="100">
+        width="135">
         <button.commit_callback
           function="SocialSharing.Cancel" />
        </button>

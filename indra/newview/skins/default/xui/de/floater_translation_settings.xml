@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_translation_settings" title="ÜBERSETZUNGSEINSTELLUNGEN FÜR CHATS">
+<floater name="floater_translation_settings" title="Übersetzungseinstellungen für Chats">
 	<string name="bing_api_key_not_verified">
 		Bing-AppID nicht verifiziert. Versuchen Sie es erneut.
 	</string>

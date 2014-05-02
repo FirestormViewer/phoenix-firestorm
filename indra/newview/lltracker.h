@@ -58,6 +58,7 @@ public:
 		LOCATION_NOTHING,
 		LOCATION_EVENT,
 		LOCATION_ITEM,
+		LOCATION_AVATAR // Ansariel: Added for avatar tracking feature
 	};
 
 	static LLTracker* instance() 
@@ -104,6 +105,10 @@ public:
 	
 	static const std::string& getLabel() { return instance()->mLabel; }
 	static const std::string& getToolTip() { return instance()->mToolTip; }
+
+	// <FS:Ansariel> Exodus' mouselook combat feature
+	void drawMarker(const LLVector3d& pos_global, const LLColor4& color, bool is_iff = false);
+
 protected:
 	LLTracker();
 	~LLTracker();
@@ -120,7 +125,7 @@ protected:
 	void stopTrackingLocation(BOOL clear_ui = FALSE);
 	void stopTrackingLandmark(BOOL clear_ui = FALSE);
 
-	void drawMarker(const LLVector3d& pos_global, const LLColor4& color);
+	//void drawMarker(const LLVector3d& pos_global, const LLColor4& color); <FS:Ansariel> Exodus' mouselook combat feature
 	void setLandmarkVisited();
 	void cacheLandmarkPosition();
 	void purgeBeaconText();

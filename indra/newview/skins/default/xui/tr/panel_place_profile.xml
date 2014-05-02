@@ -41,10 +41,16 @@
 	<string name="acquired_date">
 		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
 	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<button name="back_btn" tool_tip="Geri"/>
 	<text name="title" value="Profili Yerleştir"/>
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
 			<text name="region_title" value="Örnek Bölge"/>
 			<text name="parcel_title" value="Örnek Parsel, Uzun Ad (145, 228, 26)"/>
 			<expandable_text name="description" value="Du waltz die spritz"/>
@@ -113,6 +119,7 @@
 					</panel>
 				</accordion_tab>
 			</accordion>
-		</panel>
-	</scroll_container>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

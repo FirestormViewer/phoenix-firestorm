@@ -505,7 +505,7 @@ void LLMaterialMgr::onPutResponse(bool success, const LLSD& content)
 		LL_DEBUGS("Materials") << "response has "<< response_data.size() << " materials" << LL_ENDL;
 		for (LLSD::array_const_iterator faceIter = response_data.beginArray(); faceIter != response_data.endArray(); ++faceIter)
 		{
-#           ifndef LL_RELEASE_FOR_DOWNLOAD
+#           ifdef SHOW_ASSERT
 			const LLSD& face_data = *faceIter; // conditional to avoid unused variable warning
 #           endif
 			llassert(face_data.isMap());
@@ -600,8 +600,8 @@ void LLMaterialMgr::processGetQueue()
 		{
 			material_queue_t::iterator itMaterial = loopMaterial++;
 			materialsData.append((*itMaterial).asLLSD());
-			materials.erase(itMaterial);
 			markGetPending(region_id, *itMaterial);
+			materials.erase(itMaterial);
 		}
 		if (materials.empty())
 		{

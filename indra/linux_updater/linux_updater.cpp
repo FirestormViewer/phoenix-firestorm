@@ -829,7 +829,10 @@ int main(int argc, char **argv)
 	// initialize gthreads and gtk+
 	if (!g_thread_supported())
 	{
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32 )
 		g_thread_init(NULL);
+#endif
+
 		gdk_threads_init();
 	}
 
@@ -841,7 +844,11 @@ int main(int argc, char **argv)
 	//llinfos << "SAMPLE TRANSLATION IS: " << LLTrans::getString("LoginInProgress") << llendl;
 
 	// create download thread
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32 )
 	g_thread_create(GThreadFunc(worker_thread_cb), app_state, FALSE, NULL);
+#else
+	g_thread_new( "download", GThreadFunc(worker_thread_cb), app_state );
+#endif
 
 	gdk_threads_enter();
 	gtk_main();

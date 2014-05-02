@@ -92,6 +92,7 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
 	std::string edit_text_contents;
 	S32 edit_text_max_chars = 0;
 	bool is_password = false;
+	bool defaultText = false;
 
 	LLToastPanel::setBackgroundVisible(FALSE);
 	LLToastPanel::setBackgroundOpaque(TRUE);
@@ -128,12 +129,14 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
 		}
 		else if (type == "text")
 		{
+			defaultText = (*it)["default"].asBoolean();
 			edit_text_contents = (*it)["value"].asString();
 			edit_text_name = (*it)["name"].asString();
 			edit_text_max_chars = (*it)["max_length_chars"].asInteger();
 		}
 		else if (type == "password")
 		{
+			defaultText = (*it)["default"].asBoolean();
 			edit_text_contents = (*it)["value"].asString();
 			edit_text_name = (*it)["name"].asString();
 			is_password = true;
@@ -341,6 +344,14 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
 		button_left += button_width + BTN_HPAD;
 	}
 
+	if(defaultText)
+	{
+		if(mLineEditor)
+		{
+			mLineEditor->setFocus(TRUE);
+		}
+	}
+
 	std::string ignore_label;
 
 	if (form->getIgnoreType() == LLNotificationForm::IGNORE_WITH_DEFAULT_RESPONSE)
@@ -410,12 +421,17 @@ bool LLToastAlertPanel::setCheckBox( const std::string& check_title, const std::
 void LLToastAlertPanel::setVisible( BOOL visible )
 {
 	// only make the "ding" sound if it's newly visible
-	if( visible && !LLToastPanel::getVisible() )
+	// <FS:PP> FIRE-4322: The "bing" system sound missing
+	// if( visible && !LLToastPanel::getVisible() )
+	LLToastPanel::setVisible( visible );
+	if( visible )
+	// </FS:PP>
 	{
 		make_ui_sound("UISndAlert");
 	}
 
-	LLToastPanel::setVisible( visible );
+	// <FS:PP> Commented out and moved up, for FIRE-4322 patch
+	// LLToastPanel::setVisible( visible );
 	
 }
 

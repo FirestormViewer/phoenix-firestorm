@@ -266,12 +266,20 @@ void LLAvatarAppearance::initInstance()
 		// Skip it if there's no associated baked texture.
 		if (baked_texture_index == BAKED_NUM_INDICES) continue;
 		
-		for (avatar_joint_mesh_list_t::iterator iter = mMeshLOD[mesh_index]->mMeshParts.begin();
-			 iter != mMeshLOD[mesh_index]->mMeshParts.end(); 
-			 ++iter)
+		// <FS:Ansariel> FIRE-11915: Variable redefinition
+		//for (avatar_joint_mesh_list_t::iterator iter = mMeshLOD[mesh_index]->mMeshParts.begin();
+		//	 iter != mMeshLOD[mesh_index]->mMeshParts.end(); 
+		//	 ++iter)
+		//{
+		//	LLAvatarJointMesh* mesh = (*iter);
+		//	mBakedTextureDatas[(int)baked_texture_index].mJointMeshes.push_back(mesh);
+		for (avatar_joint_mesh_list_t::iterator ajm_iter = mMeshLOD[mesh_index]->mMeshParts.begin();
+			 ajm_iter != mMeshLOD[mesh_index]->mMeshParts.end(); 
+			 ++ajm_iter)
 		{
-			LLAvatarJointMesh* mesh = (*iter);
-			mBakedTextureDatas[(int)baked_texture_index].mJointMeshes.push_back(mesh);
+			LLAvatarJointMesh* mesh = (*ajm_iter);
+			mBakedTextureDatas[(S32)baked_texture_index].mJointMeshes.push_back(mesh);
+		// </FS:Ansariel> FIRE-11915: Variable redefinition
 		}
 	}
 
@@ -318,6 +326,8 @@ LLAvatarAppearance::~LLAvatarAppearance()
 	}
 	std::for_each(mMeshLOD.begin(), mMeshLOD.end(), DeletePointer());
 	mMeshLOD.clear();
+
+	delete mRoot;
 }
 
 //static
@@ -474,7 +484,10 @@ void LLAvatarAppearance::computeBodySize()
 
 	F32 old_offset = mAvatarOffset.mV[VZ];
 
-	mAvatarOffset.mV[VZ] = getVisualParamWeight(AVATAR_HOVER);
+// [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
+	mAvatarOffset.mV[VZ] = getAvatarOffset();
+// [/RLVa:KB]
+//	mAvatarOffset.mV[VZ] = getVisualParamWeight(AVATAR_HOVER);
 
 	mPelvisToFoot = hip.mV[VZ] * pelvis_scale.mV[VZ] -
 				 	knee.mV[VZ] * hip_scale.mV[VZ] -
@@ -501,7 +514,9 @@ void LLAvatarAppearance::computeBodySize()
 	// Certain configurations of avatars can force the overall height (with offset) to go negative.
 	// Enforce a constraint to make sure we don't go below 0.1 meters.
 	// Camera positioning and other things start to break down when your avatar is "walking" while being fully underground
-	if (new_body_size.mV[VZ] + mAvatarOffset.mV[VZ] < 0.1f) 
+// [FS:CR] This is a bad check and will force your head in the ground if the following is true.
+#if 0
+	if (new_body_size.mV[VZ] + mAvatarOffset.mV[VZ] < 0.1f)
 	{
 		mAvatarOffset.mV[VZ] = -(new_body_size.mV[VZ] - 0.11f); // avoid floating point rounding making the above check continue to fail.
 
@@ -516,6 +531,7 @@ void LLAvatarAppearance::computeBodySize()
 			}
 		}
 	}
+#endif // [/FS:CR]
 
 	if (new_body_size != mBodySize || old_offset != mAvatarOffset.mV[VZ])
 	{
@@ -523,6 +539,13 @@ void LLAvatarAppearance::computeBodySize()
 		bodySizeChanged();
 	}
 }
+
+// [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
+F32 LLAvatarAppearance::getAvatarOffset() /*const*/
+{
+	return getVisualParamWeight(AVATAR_HOVER);
+}
+// [/RLVa:KB]
 
 //-----------------------------------------------------------------------------
 // parseSkeletonFile()
@@ -633,11 +656,11 @@ BOOL LLAvatarAppearance::setupBone(const LLAvatarBoneInfo* info, LLJoint* parent
 //-----------------------------------------------------------------------------
 // allocateCharacterJoints()
 //-----------------------------------------------------------------------------
-BOOL LLAvatarAppearance::allocateCharacterJoints( U32 num )
+BOOL LLAvatarAppearance::allocateCharacterJoints( S32 num )
 {
 	clearSkeleton();
 
-	for(S32 joint_num = 0; joint_num < (S32)num; joint_num++)
+	for(S32 joint_num = 0; joint_num < num; joint_num++)
 	{
 		mSkeleton.push_back(createAvatarJoint(joint_num));
 	}

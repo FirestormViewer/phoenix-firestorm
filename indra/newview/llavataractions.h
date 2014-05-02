@@ -99,6 +99,10 @@ public:
 	static void hideProfile(const LLUUID& id);
 	static bool profileVisible(const LLUUID& id);
 	static LLFloater* getProfileFloater(const LLUUID& id);
+//<FS:KC legacy profiles>
+    static void showProfileWeb(const LLUUID& id);
+    static void showProfileLegacy(const LLUUID& id);
+//</FS:KC legacy profiles>
 
 	/**
 	 * Show avatar on world map.
@@ -193,6 +197,12 @@ public:
 	 * Open csr page for avatar
 	 */	
 	static void csr(const LLUUID& id, std::string name);
+	
+	/**
+	 * [FS:CR] Add avatar to contact set
+	 */
+	static void addToContactSet(const LLUUID& agent_id);
+	static void addToContactSet(const uuid_vec_t& agent_ids);
 
 	/**
 	 * Checks whether we can offer a teleport to the avatar, only offline friends
@@ -203,7 +213,7 @@ public:
 	static bool canOfferTeleport(const LLUUID& id);
 
 	/**
-	 * @return false if any one of the specified avatars a friend and not visibly online
+	 * @return a list of avatars that can be teleported from the input list
 	 */
 	static bool canOfferTeleport(const uuid_vec_t& ids);
 
@@ -236,9 +246,70 @@ public:
 	 * Opens the chat history for avatar
 	 */
 	static void viewChatHistory(const LLUUID& id);
+	static void viewChatHistoryExternally(const LLUUID& id);	// <FS:CR> Open chat history externally
+	
+	// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Modified: Catznip-2.4.0g
+	static void report(const LLUUID& idAgent);
+
+	static bool canZoomIn(const LLUUID& idAgent);
+	static void zoomIn(const LLUUID& idAgent);
+	static void getScriptInfo(const LLUUID& idAgent);
+
+	// <FS:Ansariel> Avatar tracking feature
+	static void track(const LLUUID& id);
+
+	// <FS:Ansariel> Teleport to feature
+	static void teleportTo(const LLUUID& id);
+
+	//
+	// Parcel actions
+	//
+
+public:
+	
+	static bool canLandFreezeOrEject(const LLUUID& idAgent);
+	static void landEject(const LLUUID& idAgent);
+	static void landFreeze(const LLUUID& idAgent);
+	
+	static bool canLandFreezeOrEjectMultiple(uuid_vec_t& idAgents, bool fFilter = false);
+	static void landEjectMultiple(const uuid_vec_t& idAgents);
+	static void landFreezeMultiple(const uuid_vec_t& idAgents);
+
+protected:
+	static bool callbackLandEject(const LLSD& notification, const LLSD& response);
+	static bool callbackLandFreeze(const LLSD& notification, const LLSD& response);
+
+	//
+	// Estate actions
+	//
+public:
+	static bool canEstateKickOrTeleportHome(const LLUUID& idAgent);
+	static void estateKick(const LLUUID& idAgent);
+	static void estateTeleportHome(const LLUUID& idAgent);
+
+	static bool canEstateKickOrTeleportHomeMultiple(uuid_vec_t& idAgents, bool fFilter = false);
+	static void estateKickMultiple(const uuid_vec_t& idAgents);
+	static void estateTeleportHomeMultiple(const uuid_vec_t& idAgents);
+
+	// <FS:Ansariel> Estate ban
+	static void estateBan(const LLUUID& idAgent);
+	static void estateBanMultiple(const uuid_vec_t& idAgents);
+	// </FS:Ansariel> Estate ban
+
+	// <FS:Ansariel> Derender
+	static void derender(const LLUUID& agent_id, bool permanent);
+	static void derenderMultiple(const uuid_vec_t& agent_ids, bool permanent);
+	static void onDerenderAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, bool permanent);
+	// </FS:Ansariel> Derender
 
 	static std::set<LLUUID> getInventorySelectedUUIDs();
 
+protected:
+	static bool callbackEstateKick(const LLSD& notification, const LLSD& response);
+	static bool callbackEstateTeleportHome(const LLSD& notification, const LLSD& response);
+	// <FS:Ansariel> Estate ban
+	static bool callbackEstateBan(const LLSD& notification, const LLSD& response);
+	
 private:
 	static bool callbackAddFriendWithMessage(const LLSD& notification, const LLSD& response);
 	static bool handleRemove(const LLSD& notification, const LLSD& response);

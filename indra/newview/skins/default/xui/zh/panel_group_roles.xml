@@ -81,13 +81,14 @@
 		<scroll_list name="role_allowed_actions" tool_tip="想瞭解每一項允許的能力的詳情請查閱能力頁籤。"/>
 	</panel>
 	<panel name="actions_footer">
-		<text_editor name="action_description">
-			這個能力可「將會員自本群組踢出」。 必須是所有人才可踢出另一位所有人。
-		</text_editor>
-		<text name="static2">
+		<panel name="action_description_panel">
+			<text_editor name="action_description">
+				這個能力可「將會員自本群組踢出」。 必須是所有人才可踢出另一位所有人。
+			</text_editor>
+		<text name="action_roles_label">
 			有此能力的角色
 		</text>
-		<text name="static3">
+		<text name="action_members_label">
 			有此能力的成員
 		</text>
 	</panel>

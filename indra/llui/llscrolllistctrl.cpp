@@ -61,6 +61,8 @@
 
 #include <boost/bind.hpp>
 
+#include "fsregistrarutils.h"
+
 static LLDefaultChildRegistry::Register<LLScrollListCtrl> r("scroll_list");
 
 // local structures & classes.
@@ -199,7 +201,11 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mHoveredColor(p.hovered_color()),
 	mSearchColumn(p.search_column),
 	mColumnPadding(p.column_padding),
-	mContextMenuType(MENU_NONE)
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
+	//mContextMenuType(MENU_NONE)
+	mContextMenuType(MENU_NONE),
+	mFilterColumn(-1),
+	mIsFiltered(false)
 {
 	mItemListRect.setOriginAndSize(
 		mBorderThickness,
@@ -278,6 +284,8 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	text_p.follows.flags(FOLLOWS_ALL);
 	// word wrap was added accroding to the EXT-6841
 	text_p.wrap(true);
+	// set up label text color for empty lists in a way it's always readable -Zi
+	text_p.text_color=mFgUnselectedColor;
 	addChild(LLUICtrlFactory::create<LLTextBox>(text_p));
 }
 
@@ -342,6 +350,26 @@ S32 LLScrollListCtrl::isEmpty() const
 
 S32 LLScrollListCtrl::getItemCount() const
 {
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
+	if (mIsFiltered)
+	{
+		S32 count(0);
+		item_list::const_iterator iter;
+		for(iter = mItemList.begin(); iter != mItemList.end(); iter++)
+		{
+			LLScrollListItem* item  = *iter;
+			std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
+			std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
+			if (filterColumnValue.find(mFilterString) == std::string::npos)
+			{
+				continue;
+			}
+			count++;
+		}
+		return count;
+	}
+	// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 	return mItemList.size();
 }
 
@@ -418,6 +446,12 @@ S32 LLScrollListCtrl::getFirstSelectedIndex() const
 	for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem* item  = *iter;
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(item))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
 		if (item->getSelected())
 		{
 			return CurSelectedIndex;
@@ -746,7 +780,9 @@ void LLScrollListCtrl::updateColumns(bool force_update)
 	}
 
 	// expand last column header we encountered to full list width
-	if (last_header)
+	// <FS:KC> Fixed last column on LLScrollListCtrl expanding on control resize when column width should be fixed or dynamic
+	//if (last_header)
+	if (last_header && last_header->canResize())
 	{
 		S32 new_width = llmax(0, mItemListRect.mRight - last_header->getRect().mLeft);
 		last_header->reshape(new_width, last_header->getRect().getHeight());
@@ -857,6 +893,13 @@ BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
 			continue ;
 		}
 		
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(itemp))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 		if( index >= first_index && index <= last_index )
 		{
 			if( itemp->getEnabled() )
@@ -1029,6 +1072,12 @@ S32 LLScrollListCtrl::getItemIndex( LLScrollListItem* target_item ) const
 	for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem *itemp = *iter;
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(itemp))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
 		if (target_item == itemp)
 		{
 			return index;
@@ -1168,6 +1217,13 @@ void LLScrollListCtrl::setCommentText(const std::string& comment_text)
 {
 	getChild<LLTextBox>("comment_text")->setValue(comment_text);
 }
+
+// <FS:Ansariel> Allow appending of comment text
+void LLScrollListCtrl::addCommentText(const std::string& comment_text)
+{
+	getChild<LLTextBox>("comment_text")->appendText(comment_text, true);
+}
+// </FS:Ansariel> Allow appending of comment text
 
 LLScrollListItem* LLScrollListCtrl::addSeparator(EAddPosition pos)
 {
@@ -1432,13 +1488,15 @@ void LLScrollListCtrl::drawItems()
 	S32 y = mItemListRect.mTop - mLineHeight;
 
 	// allow for partial line at bottom
-	S32 num_page_lines = getLinesPerPage();
+	// <FS:KC> Show partial bottom lines on LLScrollListCtrl when list is >1 page long
+	//S32 num_page_lines = getLinesPerPage();
+	S32 num_page_lines = getLinesPerPage() + 1;
 
 	LLRect item_rect;
 
 	LLGLSUIDefault gls_ui;
 	
-	F32 alpha = getDrawContext().mAlpha;
+	F32 alpha = getCurrentTransparency(); // Don't rely on the current getDrawContext().mAlpha value -Zi
 
 	{
 		LLLocalClipRect clip(mItemListRect);
@@ -1451,18 +1509,44 @@ void LLScrollListCtrl::drawItems()
 		static LLUICachedControl<F32> type_ahead_timeout ("TypeAheadTimeout", 0);
 		highlight_color.mV[VALPHA] = clamp_rescale(mSearchTimer.getElapsedTimeF32(), type_ahead_timeout * 0.7f, type_ahead_timeout, 0.4f, 0.f);
 
-		S32 first_line = mScrollLines;
-		S32 last_line = llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		//S32 first_line = mScrollLines;
+		//S32 last_line = llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+		S32 first_line;
+		S32 last_line;
+		if (mIsFiltered)
+		{
+			first_line = 0;
+			last_line = (S32)mItemList.size() - 1;
+		}
+		else
+		{
+			first_line = mScrollLines;
+			last_line = llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+		}
+		S32 line = first_line;
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
 
 		if (first_line >= mItemList.size())
 		{
 			return;
 		}
 		item_list::iterator iter;
-		for (S32 line = first_line; line <= last_line; line++)
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		//for (S32 line = first_line; line <= last_line; line++)
+		//{
+		//	LLScrollListItem* item = mItemList[line];
+		for (S32 itline = first_line; itline <= last_line; itline++)
 		{
-			LLScrollListItem* item = mItemList[line];
+			LLScrollListItem* item = mItemList[itline];
 			
+			// <FS:Ansariel> Fix for FS-specific people list (radar)
+			if (isFiltered(item))
+			{
+				continue;
+			}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 			item_rect.setOriginAndSize( 
 				x, 
 				cur_y, 
@@ -1510,7 +1594,8 @@ void LLScrollListCtrl::drawItems()
 				}
 				else 
 				{
-					if (mDrawStripes && (line % 2 == 0) && (max_columns > 1))
+					// Why no stripes in single columns? This should be decided by the skin. -Zi
+					if (mDrawStripes && (line % 2 == 0)) // && (max_columns > 1))
 					{
 						bg_color = mBgStripeColor.get();
 					}
@@ -1525,6 +1610,9 @@ void LLScrollListCtrl::drawItems()
 
 				cur_y -= mLineHeight;
 			}
+			// <FS:Ansariel> Fix for FS-specific people list (radar)
+			line++;
+			// </FS:Ansariel> Fix for FS-specific people list (radar)
 		}
 	}
 }
@@ -1553,7 +1641,10 @@ void LLScrollListCtrl::draw()
 
 	updateColumns();
 
-	getChildView("comment_text")->setVisible(mItemList.empty());
+	if (mCommentTextView)
+	{
+		mCommentTextView->setVisible(mItemList.empty());
+	}
 
 	drawItems();
 
@@ -1681,6 +1772,12 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 							break;
 						}
 						LLScrollListItem *item = *itor;
+						// <FS:Ansariel> Fix for FS-specific people list (radar)
+						if (isFiltered(item))
+						{
+							continue;
+						}
+						// </FS:Ansariel> Fix for FS-specific people list (radar)
                         if (item == hit_item || item == lastSelected)
 						{
 							selectItem(item, FALSE);
@@ -1814,6 +1911,29 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			registrar.add("Url.CopyLabel", boost::bind(&LLScrollListCtrl::copyNameToClipboard, id, is_group));
 			registrar.add("Url.CopyUrl", boost::bind(&LLScrollListCtrl::copySLURLToClipboard, id, is_group));
 
+			// <FS:Ansariel> Additional convenience options
+			registrar.add("Url.RemoveFriend", boost::bind(&LLScrollListCtrl::removeFriend, id));
+			registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/zoom"));
+			registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/teleportto"));
+			registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/offerteleport"));
+			registrar.add("FS.RequestTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/requestteleport"));
+			registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track"));
+			registrar.add("FS.AddToContactSet", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/addtocontactset"));	// [FS:CR]
+			// </FS:Ansariel> Additional convenience options
+
+			// <FS:Ansariel> Add enable checks for menu items
+			LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+			enable_registrar.add("Url.EnableShowProfile", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_SHOW_PROFILE));
+			enable_registrar.add("Url.EnableAddFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_ADD_FRIEND));
+			enable_registrar.add("Url.EnableRemoveFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_REMOVE_FRIEND));
+			enable_registrar.add("Url.EnableSendIM", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_SEND_IM));
+			enable_registrar.add("FS.EnableZoomIn", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_ZOOM_IN));
+			enable_registrar.add("FS.EnableOfferTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_OFFER_TELEPORT));
+			enable_registrar.add("FS.EnableTrackAvatar", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_TRACK_AVATAR));
+			enable_registrar.add("FS.EnableTeleportToTarget", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_TELEPORT_TO));
+			enable_registrar.add("FS.EnableRequestTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_REQUEST_TELEPORT));
+			// </FS:Ansariel>
+
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
 			delete mPopupMenu;
@@ -1851,6 +1971,15 @@ void LLScrollListCtrl::addFriend(std::string id)
 	std::string slurl = "secondlife:///app/agent/" + id + "/about";
 	LLUrlAction::addFriend(slurl);
 }
+
+// <FS:Ansariel> Add remove friend option
+void LLScrollListCtrl::removeFriend(std::string id)
+{
+	// add resident to friends list
+	std::string slurl = "secondlife:///app/agent/" + id + "/about";
+	LLUrlAction::removeFriend(slurl);
+}
+// </FS:Ansariel>
 
 void LLScrollListCtrl::showNameDetails(std::string id, bool is_group)
 {
@@ -1976,13 +2105,22 @@ LLScrollListItem* LLScrollListCtrl::hitItem( S32 x, S32 y )
 		mLineHeight );
 
 	// allow for partial line at bottom
-	S32 num_page_lines = getLinesPerPage();
+	// <FS:KC> Show partial bottom lines on LLScrollListCtrl when list is >1 page long
+	//S32 num_page_lines = getLinesPerPage();
+	S32 num_page_lines = getLinesPerPage() + 1;
 
 	S32 line = 0;
 	item_list::iterator iter;
 	for(iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem* item  = *iter;
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(item))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 		if( mScrollLines <= line && line < mScrollLines + num_page_lines )
 		{
 			if( item->getEnabled() && item_rect.pointInRect( x, y ) )
@@ -2740,6 +2878,54 @@ void LLScrollListCtrl::addColumn(const LLScrollListColumn::Params& column_params
 	dirtyColumns();
 }
 
+// <FS:Techwolf Lupindo> area search
+// area search support for deleting a column
+LLScrollListColumn::Params LLScrollListCtrl::delColumn(std::string name)
+{
+	std::vector<LLScrollListColumn::Params> column_params;
+	LLScrollListColumn::Params params;
+
+	// save params for each column
+	ordered_columns_t::iterator column_itor;
+	for (column_itor = mColumnsIndexed.begin(); column_itor != mColumnsIndexed.end(); ++column_itor)
+	{
+		LLScrollListColumn* column = (*column_itor);
+		params.header.label = column->mLabel;
+		params.name = column->mName;
+		params.width.dynamic_width = column->mDynamicWidth;
+		params.width.relative_width = column->mRelWidth;
+		params.width.pixel_width = column->getWidth();
+		params.halign = column->mFontAlignment;
+
+		LLScrollColumnHeader *header = column->mHeader;
+		if (header)
+		{
+			params.tool_tip = header->getToolTip();
+		}
+	
+		column_params.push_back(params);
+	}
+
+	clearColumns();
+
+	// restore colums except named column.
+	for (std::vector<LLScrollListColumn::Params>::iterator iter = column_params.begin(); iter != column_params.end(); ++iter)
+	{
+		std::string i_name = iter->name;
+		if (i_name != name)
+		{
+			addColumn((*iter));
+		}
+		else
+		{
+			params = (*iter);
+		}
+	}
+
+	return params;
+}
+// </FS:Techwolf Lupindo> area search
+
 // static
 void LLScrollListCtrl::onClickColumn(void *userdata)
 {
@@ -3088,3 +3274,25 @@ void LLScrollListCtrl::onFocusLost()
 	LLUICtrl::onFocusLost();
 }
 
+// <FS:Ansariel> Fix for FS-specific people list (radar)
+void LLScrollListCtrl::setFilterString(const std::string& str)
+{
+	mFilterString = str;
+	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
+	mIsFiltered = (mFilterColumn > -1 && !mFilterString.empty());
+}
+
+bool LLScrollListCtrl::isFiltered(const LLScrollListItem* item) const
+{
+	if (mIsFiltered)
+	{
+		std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
+		std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
+		if (filterColumnValue.find(mFilterString) == std::string::npos)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+// </FS:Ansariel> Fix for FS-specific people list (radar)

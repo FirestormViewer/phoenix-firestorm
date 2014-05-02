@@ -5,6 +5,7 @@
 	 name="object properties"
 	 help_topic="object_properties"
 	 title="Object Profile"
+    follows="all"
 	 width="333">
 	 <panel.string
 	  name="text deed continued">
@@ -86,18 +87,28 @@
      top="0"
      use_ellipses="true"
      value="Object Profile"
-     width="290" />
+     right="-10" />
 	    <text
-     follows="top|left"
+     follows="top|left|right"
      height="13"
      layout="topleft"
      left="45"
      name="where"
      text_color="LtGray_50"
      value="(Inworld)"
-     width="150" />
+     right="-10" />
+    <scroll_container
+     color="SL-Background"
+     follows="all"
+     layout="topleft"
+     left="9"
+     name="item_profile_scroll"
+     opaque="true"
+     height="490"
+     width="313"
+     top="45">
 	<panel
-         follows="all"
+         follows="left|top|right"
          height="490"
          label=""
          layout="topleft"
@@ -105,9 +116,9 @@
          help_topic=""
          name="properties_panel"
          top="45"
-         width="313"
+         right="-10"
    background_visible="true"
-   bg_alpha_color="DkGray2">
+   bg_alpha_color="SL-Background">
 	    	    <text
 		     type="string"
 		     length="1"
@@ -179,7 +190,7 @@
 		     translate="false"
          use_ellipses="true" 
 		     width="225">
-	        TestString PleaseIgnore
+	        (loading ...)
 	     </text>
 	    <text
 			 type="string"
@@ -205,7 +216,7 @@
 			    translate="false"
           use_ellipses="true" 
 			    width="225">
-			    TestString PleaseIgnore
+			    (loading ...)
 	     </text>
 	    	    <text
 			 type="string"
@@ -303,12 +314,12 @@
          layout="topleft"
          mouse_opaque="false"
          background_visible="true"
-         bg_alpha_color="DkGray"
+         bg_alpha_color="SL-Background_Light"
          name="perms_inv"
          left="0"
          top_pad="15"
          height="135"
-         width="313">
+         width="303">
 	  <text
              type="string"
              length="1"
@@ -319,7 +330,7 @@
              follows="left|top|right"
              layout="topleft"
              name="perm_modify"
-             width="310">
+             width="280">
                 You can modify this object
             </text>
 	  	    <text
@@ -550,49 +561,80 @@
                 F:
             </text>
 		</panel>
-    <panel
-		 height="25"
-		 layout="bottomright"
-		 name="button_panel"
-		 left="5"
-		 bottom="5"
-		 width="313">
-        <button
-		     follows="bottom|left"
+	</scroll_container>
+      <layout_stack
+		  follows="bottom|left|right"
+		  height="28"
+		  layout="topleft"
+		  left="5"
+		  name="buttons_ls"
+		  orientation="horizontal"
+		  botom="0"
+		  width="311">
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       layout="topleft"
+       name="open_btn_panel"
+       width="73">
+                <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Open"
+             auto_resize="true"
 		     layout="topleft"
-		     left="5"
 		     name="open_btn"
-		     top="0"
 		     width="73" />
-	    <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       left_pad="5"
+       layout="topleft"
+       name="pay_btn_panel"
+       width="73">
+	          <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Pay"
 		     layout="topleft"
-		     left_pad="5"
 		     name="pay_btn"
-		     top="0"
 		     width="73" />
-	    <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       left_pad="5"
+       layout="topleft"
+       name="buy_btn_panel"
+       width="73">
+	          <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Buy"
 		     layout="topleft"
-		     left_pad="5"
 		     name="buy_btn"
-		     top="0"
 		     width="73" />
-        <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       left_pad="5"
+       layout="topleft"
+       name="details_btn_panel"
+       width="74">
+                <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Details"
 		     layout="topleft"
-		     left_pad="5"
 		     name="details_btn"
-		     top="0"
 		     width="74" />
 
-	</panel>
+	    </layout_panel>
+      </layout_stack>
 </panel>

@@ -76,6 +76,20 @@
 #include "llstartup.h"
 #include "llupdaterservice.h"
 
+// NaCl - Antispam Registry
+#include "NACLantispam.h"
+// NaCl End
+//#include "llcombobox.h"
+#include "llnetmap.h"
+#include "llnotificationsutil.h"
+#include "llstatusbar.h"
+#include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llpanelplaces.h"
+#include "fsfloaterposestand.h"
+#include "fsfloaterteleporthistory.h"
+#include "fslslbridge.h"
+
 // Third party library includes
 #include <boost/algorithm/string.hpp>
 
@@ -95,6 +109,9 @@ std::string gLastRunVersion;
 
 extern BOOL gResizeScreenTexture;
 extern BOOL gDebugGL;
+
+LLTimer throttle_timer;//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+
 ////////////////////////////////////////////////////////////////////////////
 // Listeners
 
@@ -111,7 +128,27 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
 	LLWorld::getInstance()->setLandFarClip(draw_distance);
 	return true;
 }
-
+//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+static bool handleBandWidthChanged(const LLSD& newvalue)
+{
+	//<FS:TS> FIRE-6795: Only complain about bandwidth setting once
+	static LLCachedControl<bool> alreadyComplainedAboutBW(gWarningSettings,"FSBandwidthTooHigh");
+	F32 throttletimer = throttle_timer.getElapsedTimeF32();
+	if (throttletimer > 0.25f)
+	{
+		F32 bandwidth = (F32) newvalue.asReal();
+		gViewerThrottle.setMaxBandwidth((F32) bandwidth);
+		throttle_timer.reset();
+		if (!alreadyComplainedAboutBW && (bandwidth > 1500.0))
+		{
+			LLNotificationsUtil::add("FSBWTooHigh");
+			gWarningSettings.setBOOL("FSBandwidthTooHigh",TRUE);
+		}
+	//</FS:TS> FIRE-6795
+	}
+	return true;
+}
+//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 static bool handleTerrainDetailChanged(const LLSD& newvalue)
 {
 	LLDrawPoolTerrain::sDetailMode = newvalue.asInteger();
@@ -119,7 +156,10 @@ static bool handleTerrainDetailChanged(const LLSD& newvalue)
 }
 
 
-static bool handleSetShaderChanged(const LLSD& newvalue)
+// <FS:Ansariel> Expose handleSetShaderChanged()
+//static bool handleSetShaderChanged(const LLSD& newvalue)
+bool handleSetShaderChanged(const LLSD& newvalue)
+// </FS:Ansariel>
 {
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
@@ -306,7 +346,9 @@ static bool handleChatPersistTimeChanged(const LLSD& newvalue)
 {
 	if(gConsole)
 	{
-		gConsole->setLinePersistTime((F32) newvalue.asReal());
+		// <FS> Changed for FIRE-805
+		//gConsole->setLinePersistTime((F32) newvalue.asReal());
+		gConsole->setLinePersistTime((F32) newvalue.asInteger());
 	}
 	return true;
 }
@@ -489,6 +531,24 @@ bool handleVoiceClientPrefsChanged(const LLSD& newvalue)
 	return true;
 }
 
+// NaCl - Antispam Registry
+bool handleNaclAntiSpamGlobalQueueChanged(const LLSD& newvalue)
+{
+	NACLAntiSpamRegistry::instance().setGlobalQueue(newvalue.asBoolean());
+	return true;
+}
+bool handleNaclAntiSpamTimeChanged(const LLSD& newvalue)
+{
+	NACLAntiSpamRegistry::instance().setAllQueueTimes(newvalue.asInteger());
+	return true;
+}
+bool handleNaclAntiSpamAmountChanged(const LLSD& newvalue)
+{
+	NACLAntiSpamRegistry::instance().setAllQueueAmounts(newvalue.asInteger());
+	return true;
+}
+// NaCl End 
+
 bool handleVelocityInterpolate(const LLSD& newvalue)
 {
 	LLMessageSystem* msg = gMessageSystem;
@@ -512,6 +572,17 @@ bool handleVelocityInterpolate(const LLSD& newvalue)
 	}
 	return true;
 }
+
+// ## Zi: Moved Avatar Z offset from RLVa to here
+bool handleAvatarZOffsetChanged(const LLSD& sdValue)
+{
+	if (isAgentAvatarValid())
+	{
+		gAgentAvatarp->computeBodySize();
+	}
+	return true;
+}
+// ## Zi: Moved Avatar Z offset from RLVa to here
 
 bool handleForceShowGrid(const LLSD& newvalue)
 {
@@ -565,22 +636,34 @@ bool toggle_agent_pause(const LLSD& newvalue)
 	return true;
 }
 
-bool toggle_show_navigation_panel(const LLSD& newvalue)
+// <FS:Zi> Is done inside XUI now, using visibility_control
+// bool toggle_show_navigation_panel(const LLSD& newvalue)
+// {
+	//bool value = newvalue.asBoolean();
+
+	//LLNavigationBar::getInstance()->setVisible(value);
+	//gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
+
+	//return true;
+// }
+
+// <FS:Zi> We don't have the mini location bar
+// bool toggle_show_mini_location_panel(const LLSD& newvalue)
+// {
+	//bool value = newvalue.asBoolean();
+
+	//LLPanelTopInfoBar::getInstance()->setVisible(value);
+	//gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
+
+	//return true;
+// </FS:Zi>
+
+bool toggle_show_menubar_location_panel(const LLSD& newvalue)
 {
 	bool value = newvalue.asBoolean();
 
-	LLNavigationBar::getInstance()->setVisible(value);
-	gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
-
-	return true;
-}
-
-bool toggle_show_mini_location_panel(const LLSD& newvalue)
-{
-	bool value = newvalue.asBoolean();
-
-	LLPanelTopInfoBar::getInstance()->setVisible(value);
-	gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
+	if (gStatusBar)
+		gStatusBar->childSetVisible("parcel_info_panel",value);
 
 	return true;
 }
@@ -604,12 +687,96 @@ void toggle_updater_service_active(const LLSD& new_value)
     }
 }
 
+// <FS:Ansariel> Change visibility of main chatbar if autohide setting is changed
+static void handleAutohideChatbarChanged(const LLSD& new_value)
+{
+	// Flip MainChatbarVisible when chatbar autohide setting changes. This
+	// will trigger LLNearbyChat::showDefaultChatBar() being called. Since we
+	// don't want to loose focus of the preferences floater when changing the
+	// autohide setting, we have to use the workaround via gFloaterView.
+	LLFloater* focus = gFloaterView->getFocusedFloater();
+	gSavedSettings.setBOOL("MainChatbarVisible", !new_value.asBoolean());
+	if (focus)
+	{
+		focus->setFocus(TRUE);
+	}
+}
+// </FS:Ansariel>
+
+// <FS:Ansariel> Synchronize tooltips throughout instances
+static void handleNetMapDoubleClickActionChanged()
+{
+	LLNetMap::updateToolTipMsg();
+}
+// </FS:Ansariel> Synchronize tooltips throughout instances
+
+// <FS:Ansariel> Clear places / teleport history search filter
+static void handleUseStandaloneTeleportHistoryFloaterChanged()
+{
+	LLFloaterSidePanelContainer* places = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("places");
+	if (places)
+	{
+		places->findChild<LLPanelPlaces>("main_panel")->resetFilter();
+	}
+	FSFloaterTeleportHistory* tphistory = LLFloaterReg::findTypedInstance<FSFloaterTeleportHistory>("fs_teleporthistory");
+	if (tphistory)
+	{
+		tphistory->resetFilter();
+	}
+}
+// </FS:Ansariel> Clear places / teleport history search filter
+
+// <FS:CR> Posestand Ground Lock
+static void handleSetPoseStandLock(const LLSD& newvalue)
+{
+	FSFloaterPoseStand* pose_stand = LLFloaterReg::findTypedInstance<FSFloaterPoseStand>("fs_posestand");
+	if (pose_stand)
+	{
+		pose_stand->setLock(newvalue);
+		pose_stand->onCommitCombo();
+	}
+		
+}
+// </FS:CR> Posestand Ground Lock
+
+// <FS:TT> Client LSL Bridge
+static void handleFlightAssistOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("UseLSLFlightAssist", newvalue.asBoolean());
+}
+// </FS:TT>
+
+// <FS:AO> bridge-based radar tags
+static void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("FSPublishRadarTag", newvalue.asBoolean());
+}
+// </FS:AO>
+
+// <FS:PP> Movelock for Bridge
+static void handleMovelockOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
+}
+
+static void handleDecimalPrecisionChanged(const LLSD& newvalue)
+{
+	LLFloaterTools* build_tools = LLFloaterReg::findTypedInstance<LLFloaterTools>("build");
+	if (build_tools)
+	{
+		build_tools->changePrecision(newvalue);
+	}
+}
+// </FS:PP>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
 {
 	gSavedSettings.getControl("FirstPersonAvatarVisible")->getSignal()->connect(boost::bind(&handleRenderAvatarMouselookChanged, _2));
 	gSavedSettings.getControl("RenderFarClip")->getSignal()->connect(boost::bind(&handleRenderFarClipChanged, _2));
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&handleBandWidthChanged, _2));
 	gSavedSettings.getControl("RenderTerrainDetail")->getSignal()->connect(boost::bind(&handleTerrainDetailChanged, _2));
 	gSavedSettings.getControl("OctreeStaticObjectSizeFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
 	gSavedSettings.getControl("OctreeDistanceFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
@@ -662,8 +829,8 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));
 	gSavedSettings.getControl("TextureMemory")->getSignal()->connect(boost::bind(&handleVideoMemoryChanged, _2));
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
-	gSavedSettings.getControl("ChatPersistTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));
+	gSavedSettings.getControl("ChatConsoleFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
+	gSavedSettings.getControl("NearbyToastLifeTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));
 	gSavedSettings.getControl("ConsoleMaxLines")->getSignal()->connect(boost::bind(&handleConsoleMaxLinesChanged, _2));
 	gSavedSettings.getControl("UploadBakedTexOld")->getSignal()->connect(boost::bind(&handleUploadBakedTexOldChanged, _2));
 	gSavedSettings.getControl("UseOcclusion")->getSignal()->connect(boost::bind(&handleUseOcclusionChanged, _2));
@@ -751,8 +918,13 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("QAMode")->getSignal()->connect(boost::bind(&show_debug_menus));
 	gSavedSettings.getControl("UseDebugMenus")->getSignal()->connect(boost::bind(&show_debug_menus));
 	gSavedSettings.getControl("AgentPause")->getSignal()->connect(boost::bind(&toggle_agent_pause, _2));
-	gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&toggle_show_navigation_panel, _2));
-	gSavedSettings.getControl("ShowMiniLocationPanel")->getSignal()->connect(boost::bind(&toggle_show_mini_location_panel, _2));
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&toggle_show_navigation_panel, _2));
+	// </FS:Zi>
+	// <FS:Zi> We don't have the mini location bar
+	// gSavedSettings.getControl("ShowMiniLocationPanel")->getSignal()->connect(boost::bind(&toggle_show_mini_location_panel, _2));
+	// </FS: Zi>
+	gSavedSettings.getControl("ShowMenuBarLocation")->getSignal()->connect(boost::bind(&toggle_show_menubar_location_panel, _2));
 	gSavedSettings.getControl("ShowObjectRenderingCost")->getSignal()->connect(boost::bind(&toggle_show_object_render_cost, _2));
 	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(boost::bind(&toggle_updater_service_active, _2));
 	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
@@ -760,6 +932,34 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
+	// <FS:CR> FIRE-9759 - Temporarily remove AvatarZOffset since it's broken
+	//gSavedPerAccountSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
+	// </FS:Zi>
+	// NaCl - Antispam Registry
+	gSavedSettings.getControl("_NACL_AntiSpamGlobalQueue")->getSignal()->connect(boost::bind(&handleNaclAntiSpamGlobalQueueChanged, _2));
+	gSavedSettings.getControl("_NACL_AntiSpamTime")->getSignal()->connect(boost::bind(&handleNaclAntiSpamTimeChanged, _2));
+	gSavedSettings.getControl("_NACL_AntiSpamAmount")->getSignal()->connect(boost::bind(&handleNaclAntiSpamAmountChanged, _2));
+	// NaCl End
+	gSavedSettings.getControl("AutohideChatBar")->getSignal()->connect(boost::bind(&handleAutohideChatbarChanged, _2));
+
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	gSavedSettings.getControl("FSNetMapDoubleClickAction")->getSignal()->connect(boost::bind(&handleNetMapDoubleClickActionChanged));
+
+	// <FS:Ansariel> Clear places / teleport history search filter
+	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloaterChanged));
+
+	// <FS:Ansariel> Tofu's SSR
+	gSavedSettings.getControl("FSRenderSSR")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
+	
+	// <FS:CR> Pose stand ground lock
+	gSavedSettings.getControl("FSPoseStandLock")->getSignal()->connect(boost::bind(&handleSetPoseStandLock, _2));
+
+	gSavedPerAccountSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
+	gSavedPerAccountSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
+	gSavedPerAccountSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
+	gSavedSettings.getControl("FSBuildToolDecimalPrecision")->getCommitSignal()->connect(boost::bind(&handleDecimalPrecisionChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL
@@ -800,7 +1000,8 @@ void test_cached_control()
 	TEST_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
 //There's no LLSD comparsion for LLCC yet. TEST_LLCC(LLSD, test_llsd); 
 
-	if((std::string)test_BrowserHomePage != "http://www.secondlife.com") llerrs << "Fail BrowserHomePage" << llendl;
+	// AO - Phoenixviewer doesn't want to send unecessary noise to secondlife.com
+	// if((std::string)test_BrowserHomePage != "http://www.secondlife.com") llerrs << "Fail BrowserHomePage" << llendl;
 }
 #endif // TEST_CACHED_CONTROL
 

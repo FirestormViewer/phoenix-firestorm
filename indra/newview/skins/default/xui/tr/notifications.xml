@@ -238,10 +238,10 @@ Devam etmek istiyor musunuz?
 Bu gruba katılmak için yeterli L$&apos;na sahip değilsiniz.
 	</notification>
 	<notification name="CreateGroupCost">
-		Bu grubu oluşturmanın maliyeti: L$ 100.
+		Bu grubu oluşturmanın maliyeti: L$ [COST].
 Grupların birden fazla üyeye sahip olması gereklidir, aksi takdirde grup kalıcı olarak silinir.
 Lütfen 48 saat içinde diğer üyeleri davet edin.
-		<usetemplate canceltext="İptal" name="okcancelbuttons" notext="İptal" yestext="L$ 100 ödeyerek grubu oluştur"/>
+		<usetemplate canceltext="İptal" name="okcancelbuttons" notext="İptal" yestext="L$ [COST] ödeyerek grubu oluştur"/>
 	</notification>
 	<notification name="LandBuyPass">
 		L$ [COST] ödeyerek (&apos;[PARCEL_NAME]&apos;) arazisine [TIME] saat süreyle girebilirsiniz.  Giriş hakkı satın almak istiyor musunuz?
@@ -1346,13 +1346,13 @@ Lütfen sadece bir nesne seçin ve tekrar deneyin.
 		Bölge dokuları ayarlanamadı:
 [TEXTURE_NUM] numaralı yüzey dokusu geçersiz bir bit derinliğine ([TEXTURE_BIT_DEPTH]) sahip.
 
-[TEXTURE_NUM] numaralı dokuyu 24 bit 512x512 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
+[TEXTURE_NUM] numaralı dokuyu 24 bit 1024x1024 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Bölge dokuları ayarlanamadı:
 [TEXTURE_NUM] numaralı yüzey dokusu çok büyük ([TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y]).
 
-[TEXTURE_NUM] numaralı dokuyu 24 bit 512x512 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
+[TEXTURE_NUM] numaralı dokuyu 24 bit 1024x1024 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
 	</notification>
 	<notification name="RawUploadStarted">
 		Karşıya yükleme başlatıldı. Bağlantı hızına bağlı olarak iki dakika kadar sürebilir.
@@ -2317,7 +2317,7 @@ Diğer kişilerin bu konuma kolayca erişmesini sağlamak için bu adrese bir we
 		Konu: [SUBJECT], İleti: [MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; durumu: [STATUS]
+		[NAME] durumu: [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		Çok iyi biri olduğunuza eminiz fakat kendinizi arkadaş olarak ekleyemezsiniz.
@@ -3873,13 +3873,13 @@ sunucu dolu.
 		Seçimde birleştirilecek yeterli sayıda lease edilmiş parsel yok.
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		Arazi bölünemedi.\nBirden fazla parsel seçili durumda.\nDaha küçük bir arazi parçası seçmeyi deneyin.
+		Arazi bölünemedi. Birden fazla parsel seçili durumda. Daha küçük bir arazi parçası seçmeyi deneyin.
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		Arazi bölünemiyor.\nParsel bulunamıyor.\nLütfen Yardım -&gt; Hata Bildir ile bildirin...
+		Arazi bölünemiyor. Parsel bulunamıyor. Lütfen Yardım -&gt; Hata Bildir ile bildirin...
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		Arazi bölünemiyor. Tüm parsel seçilidir.\nDaha küçük bir arazi parçası seçmeyi deneyin.
+		Arazi bölünemiyor. Tüm parsel seçilidir. Daha küçük bir arazi parçası seçmeyi deneyin.
 	</notification>
 	<notification name="LandHasBeenDivided">
 		Arazi bölündü.

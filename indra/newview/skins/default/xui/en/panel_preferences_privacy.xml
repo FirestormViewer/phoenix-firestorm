@@ -1,116 +1,612 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
     border="true"
-    follows="left|top|right|bottom"
-    height="408"
-    label="Communication"
+ follows="all"
+ height="440"
     layout="topleft"
-    left="102"
-    name="im"
+ left="1"
     top="1"
-    width="517">
+ width="540"
+ label="Communication"
+ name="im">
+ 
+<tab_container
+ label="Privacy"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-1"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top" >
+
+  <!--General-->
+  <panel
+   top_pad="5"
+   bottom="-1"
+   left="1"
+   right="-1"
+   follows="all"
+   label="General"
+   name="tab-general" >
 
   <panel.string
-      name="log_in_to_change">
-    log in to change
+   name="log_in_to_change">
+   log in to change
   </panel.string>
 
-  <button
-      follows="left|bottom"
-      height="23"
-      label="Clear History"
-      tool_tip="Clear login image, last location, teleport history, web, and texture cache"
-      layout="topleft"
-      left="30"
-      name="clear_cache"
-      top="10"
-      width="145">
+   <button
+    follows="left|top"
+    height="23"
+    label="Clear History"
+    tool_tip="Clear login image, last location, teleport history, web, and texture cache"
+    layout="topleft"
+    left="30"
+    name="clear_cache"
+    top_pad="10"
+    width="145">
     <button.commit_callback
-        function="Pref.WebClearCache" />
-  </button>
+     function="Pref.WebClearCache" />
+   </button>
 
-  <text
-      type="string"
-      length="1"
-      follows="left|top"
-      height="10"
-      layout="topleft"
-      left_pad="10"
-      mouse_opaque="false"
-      name="cache_size_label_l"
-      top_delta="3"
-      text_color="LtGray_50"
-      width="300">
+   <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="10"
+    layout="topleft"
+    left_pad="10"
+    mouse_opaque="false"
+    name="cache_size_label"
+    text_color="LtGray_50"
+    width="300">
     (Locations, images, web, search history)
-  </text>
+   </text>
 
-  <check_box
-      height="16"
-      enabled="false"
-      label="Show me in Search results"
-      layout="topleft"
-      left="30"
-      name="online_searchresults"
-      top_pad="20"
-      width="350" />
+   <check_box
+    height="16"
+    enabled="true"
+    label="Publish my avatar in search listings"
+    layout="topleft"
+    left="30"
+    name="online_searchresults"
+    top_pad="10"
+    width="350" />
 
-  <check_box
-      height="16"
-      enabled="false"
-      label="Only friends and groups know I'm online"
-      layout="topleft"
-      left="30"
-      name="online_visibility"
-      top_pad="30"
-      width="350" />
+   <check_box
+    height="16"
+    enabled="false"
+    label="Only friends and groups know I'm online"
+    layout="topleft"
+    left="30"
+    name="online_visibility"
+    top_pad="3"
+    width="350" />
+      
+   <check_box
+    control_name="VoiceCallsFriendsOnly"
+    height="16"
+    label="Only friends and groups can call or IM me"
+    layout="topleft"
+    left="30"
+    name="voice_call_friends_only_check"
+    top_pad="3"
+    width="350" />
     
-    <check_box
-     enabled_control="EnableVoiceChat"
-     control_name="AutoDisengageMic"
-     height="16"
-     label="Switch off microphone when ending calls"
+   <check_box
+    enabled_control="EnableVoiceChat"
+    control_name="AutoDisengageMic"
+    height="16"
+    label="Switch off microphone when ending calls"
+    layout="topleft"
+    left="30"
+    name="auto_disengage_mic_check"
+    top_pad="3"
+    width="350" />
+
+   <check_box
+    control_name="AutoAcceptNewInventory"
+    height="16"
+    label="Automatically accept new inventory items"
+    layout="topleft"
+    left="30"
+    name="Auto_Accept_New_Inventory"
+    top_pad="3"
+    width="350" />
+
+   <check_box
+    control_name="FSUseLegacyInventoryAcceptMessages"
+    height="16"
+    label="Use legacy inventory offer accept/decline messages"
+    layout="topleft"
+    left="30"
+    name="FSUseLegacyInventoryAcceptMessages"
+    tool_tip="If enabled, the viewer will only send accept and decline messages after pressing the according button. If disabled, the accept response will be sent automatically as soon as the inventory offer has been received. This option has no effect if inventory offers are accepted automatically."
+    top_pad="3"
+    width="350" />
+
+   <check_box
+    control_name="ShowInInventory"
+    height="16"
+    label="Automatically show newly accepted items in inventory"
+    layout="topleft"
+    left="30"
+    name="Show_In_Inventory"
+    top_pad="3"
+    width="350" />
+	 
+	 <check_box
+    control_name="ShowNewInventory"
+    height="16"
+    label="Automatically view notecards, textures, landmarks after accepting"
+    layout="topleft"
+    left="30"
+    name="Show_New_Inventory"
+    top_pad="3"
+    width="350" />
+	 
+	 <check_box
+    control_name="FSCreateGiveInventoryParticleEffect"
+    height="16"
+    label="Create particle effects upon giving inventory objects to other avatars"
+    layout="topleft"
+    left="30"
+    name="FSCreateGiveInventoryParticleEffect"
+    top_pad="3"
+    width="350" />
+
+   <check_box
+    control_name="ShowFavoritesOnLogin"
+    enabled="false"
+    label="Show my Favorite Landmarks at Login (via &apos;Start At&apos; drop-down menu)"
+    layout="topleft"
+    left="30"
+    name="favorites_on_login_check"
+    top_pad="3"
+    height="16"
+    width="350" />
+        
+   <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="10"
+    layout="topleft"
+    left="30"
+    mouse_opaque="false"
+    name="logging_label"
+    width="100">
+    Save:
+   </text>
+   <check_box
+    enabled="false"
+    control_name="LogNearbyChat"
+    name="LogNearbyChat"
+    label="Save nearby chat transcript"
+    layout="topleft"
+    top_delta="-2"
+    left_pad="2"
+    height="18"
+    tool_tip="Record nearby chat message transcript to your hard drive"
+    width="200" />
+        
+   <combo_box
+    enabled="false"
+    control_name="KeepConversationLogTranscripts"
+    height="23"
+    layout="topleft"
+    left="32"
+    tool_tip="Log (Conversation Log): The list of chat conversations started by you or another party. Transcript: The actual written text as it appeared on the screen."
+    top_pad="0"
+    name="conversation_log_combo"
+    width="165">
+     <item
+      name="log_and_transcripts"
+      label="Log and transcripts"
+      value="2"/>
+     <item
+      name="log_only"
+      label="Log only"
+      value="1"/>
+     <item
+      name="no_log_or_transcript"
+      label="No log or transcripts"
+      value="0"/>
+   </combo_box>
+   <button
+    enabled="false"
+    follows="left|top"
+    height="23"
+    label="Clear log..."
+    layout="topleft"
+    left_pad="4"
+    name="clear_log"
+    top_delta="0"
+    width="110">
+    <button.commit_callback
+     function="Pref.ClearLog" />
+    </button>
+    <button
+     enabled="false"
+     follows="left|top"
+     height="23"
+     label="Delete transcripts..."
+     layout="topleft"
+     left_pad="5"
+     top_delta="0"
+     name="delete_transcripts"
+     width="140">
+     <commit_callback
+      function="Pref.DeleteTranscripts" />
+    </button>
+    <text
+     name="log_location_label"
+     layout="topleft"
+     follows="left|top"
+     left="30"
+     height="12"
+     top_pad="4"
+     width="100">
+     Location:
+    </text>
+    <line_editor
+     control_name="InstantMessageLogPath"
+     follows="left|top"
+     border_style="line"
+     border_thickness="1"
+     font="SansSerif"
+     height="23"
+     layout="topleft"
+     left_pad="5"
+     max_length="4096"
+     name="log_path_string"
+     top_delta="-5"
+     width="285">
+    </line_editor>
+   <check_box
+     control_name="UseLegacyIMLogNames"
+     label="Use legacy file name format for transcripts"
      layout="topleft"
      left="30"
-     name="auto_disengage_mic_check"
-     top_pad="10"
+     name="UseLegacyIMLogNames"
+     tool_tip="If enabled, the legacy file name format for transcripts (User Name) will be used instead of new format (user_name)."
+     top_pad="3"
+     height="16"
      width="350" />
-    <check_box
-     control_name="ShowFavoritesOnLogin"
-     enabled="false" 
-     height="16"
+   <check_box
+     control_name="LogFileNamewithDate"
+     label="Add date stamp to transcript filenames"
      layout="topleft"
-     label="Show my Favorite Landmarks at Login (via &apos;Start At&apos; drop-down menu)"
      left="30"
-     name="favorites_on_login_check"
-     top_pad="10"
+     name="LogFileNamewithDate"
+     tool_tip="Add date stamp to chat and IM logs with format chat-YYYY-MM-DD and 'IM file name'-YYYY-MM."
+     top_pad="3"
+     height="16"
+     width="350" />
+   <check_box
+     control_name="FSUseBuiltInHistory"
+     label="Use built-in transcript viewer"
+     layout="topleft"
+     left="30"
+     name="FSUseBuiltInHistory"
+     tool_tip="Uses the built-in transcript viewer for reading transcripts. If disabled, transcripts will open in your operating system's defined text editor."
+     top_pad="3"
+     height="16"
      width="350" />
 
     <button
-     follows="left|bottom"
+     follows="left|top"
      height="23"
-     label="Block list"
+     label="Manage Block / Mute list"
      layout="topleft"
      left="30"
      name="block_list"
-     top_pad="28"
-     width="145">
-        <!--<button.commit_callback
-         function="SideTray.ShowPanel"-->
-      <button.commit_callback
-         function="Pref.BlockList"/>
+     top="380"
+     width="255">
+     <!-- <button.commit_callback
+      function="SideTray.ShowPanel"-->
+     <button.commit_callback
+      function="Pref.BlockList"/>
     </button>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="10"
-     layout="topleft"
-     left_pad="10"
-     mouse_opaque="false"
-     name="block_list_label"
-     top_delta="3"
-     text_color="LtGray_50"
-     width="300">
-       (People and/or Objects you have blocked)
-    </text>
     </panel>
+
+    <!--LookAt-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="LookAt"
+     name="tab-lookat" >
+     
+        <check_box
+         top="10"
+         follows="left|top"
+         height="16"
+         label="Show look at targets:"
+         left="15"
+         name="showlookat"
+         width="270"
+         control_name="DebugLookAt"
+         tool_tip="The LookAt point is an animation hint, viewers use it to know which way to turn your eyes, head and torso. It can also be used to determine the anchor point of an avatar's camera."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="35"
+         name="lookatshownames"
+         tool_tip="Name format to show avatar names on the look at targets"
+         top_pad="5"
+         width="200">
+            Show names for look at targets:
+        </text>
+        <combo_box
+         control_name="DebugLookAtShowNames"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left_pad="7"
+         max_chars="135"
+         name="lookatshownames_combobox"
+         width="150">
+            <combo_box.item
+             enabled="true"
+             label="None"
+             name="None"
+             value="0" />
+            <combo_box.item
+             enabled="true"
+             label="Complete name"
+             name="Complete_Name"
+             value="1" />
+            <combo_box.item
+             enabled="true"
+             label="Display name"
+             name="Display_Name"
+             value="2" />
+            <combo_box.item
+             enabled="true"
+             label="Legacy name"
+             name="Legacy_Name"
+             value="3" />
+            <combo_box.item
+             enabled="true"
+             label="Username"
+             name="User_Name"
+             value="4" />
+        </combo_box>
+		<check_box
+		enabled_control="DebugLookAt"
+		control_name="DebugLookAtHideOwn"
+		height="16"
+		initial_value="true"
+		label="Don't show me my own lookat target"
+		layout="topleft"
+		left="30"
+		name="LookAtHideOwn"
+		tool_tip="Don't show me my own camera crosshairs"
+		top_pad="4"
+		width="350" />
+
+    <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="15"
+      layout="topleft"
+      left="15"
+      name="mylookat"
+      top_pad="25"
+      width="200">
+        My look at targets:
+      </text>
+        <check_box
+         control_name="PrivateLookAtTarget"
+         height="16"
+         label="Don't send my look at targets to others"
+         layout="topleft"
+         left_delta="15"
+         name="privatelookat"
+         tool_tip="Prevents your look at hints from being broadcast to others"
+         top_pad="4"
+         width="350" />
+        <check_box
+         control_name="PrivateLocalLookAtTarget"
+         height="16"
+         label="Don't send any look at targets at all, not even to myself"
+         layout="topleft"
+         name="privateLocalLookat"
+         tool_tip="Prevents your avatar's head from moving to face a point your camera is focused on in your own view. This head movement is not necessarily visible to others whether or not this option is enabled"
+         top_pad="4"
+         width="400" />
+        <check_box
+         control_name="PrivatePointAtTarget"
+         height="16"
+         label="Don't send my selection target hints"
+         layout="topleft"
+         name="privatepointat"
+         tool_tip="Prevents your selection point from showing to others"
+         top_pad="4"
+         width="350" />
+    </panel>
+
+    <!--Autoresponse-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Autoresponse"
+     name="tab-autoresponse" >
+     
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="text_box3"
+         top="10"
+         width="450">
+          Automatic response when in UNAVAILABLE (ie, BUSY)  mode:
+        </text>
+        <text_editor
+         control_name="DoNotDisturbModeResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="42"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="do_not_disturb_response"
+         width="475"
+         word_wrap="true">
+         log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_response_label"
+         top_pad="5"
+         width="450">
+           Automatic response to all avatars when in AUTORESPONSE to everyone mode:
+        </text>
+        <text_editor
+         control_name="FSAutorespondModeResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="42"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_nf_response_label"
+         top_pad="5"
+         width="450">
+           Automatic response to non-friends when in AUTOREPONSE TO NON-FRIENDS mode:
+        </text>
+        <text_editor
+         control_name="FSAutorespondNonFriendsResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="42"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_nf_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="13"
+         layout="topleft"
+         left="15"
+         mouse_opaque="false"
+         name="autorespond_rto_response_label"
+         top_pad="5"
+         width="500">
+           Automatic response to all avatars when in REJECT TELEPORT OFFERS mode:
+        </text>
+        <text_editor
+         control_name="FSRejectTeleportOffersResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="42"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="autorespond_rto_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Send autoresponse to MUTED avatars:"
+         left="15"
+         name="send_muted_av_response"
+         width="270"
+         control_name="FSSendMutedAvatarResponse"
+         tool_tip="Send the text below when someone you've muted sends you an IM."/>
+        <text_editor
+         control_name="FSMutedAvatarResponse"
+         use_ellipses="false"
+         commit_on_focus_lost = "true"
+         follows="left|top"
+         height="42"
+         layout="topleft"
+         left="35"
+         top_pad="5"
+         name="muted_avatar_response"
+         width="475"
+         word_wrap="true">
+           log_in_to_change
+        </text_editor>
+
+       <check_box
+        top_pad="5"
+        follows="left|top"
+        height="16"
+        label="Send autoresponse when in AWAY mode:"
+        left="15"
+        name="send_away_av_response"
+        width="270"
+        control_name="FSSendAwayAvatarResponse"
+        tool_tip="Send the text below when someone sends you an IM while you're in away mode."/>
+      <text_editor
+        control_name="FSAwayAvatarResponse"
+        use_ellipses="false"
+        commit_on_focus_lost = "true"
+        follows="left|top"
+        height="42"
+        layout="topleft"
+        left="35"
+        top_pad="5"
+        name="away_avatar_response"
+        width="475"
+        word_wrap="true">
+        log_in_to_change
+      </text_editor>
+
+    </panel>
+</tab_container>
+</panel>

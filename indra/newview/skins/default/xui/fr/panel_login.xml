@@ -1,46 +1,53 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--alba-->
 <panel name="panel_login">
+	<panel.string name="create_account_url">
+		http://fr.secondlife.com/registration/
+	</panel.string>
 	<panel.string name="forgot_password_url">
 		http://secondlife.com/account/request.php?lang=fr
 	</panel.string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
-			<text name="log_in_text">
-				CONNEXION
-			</text>
 			<text name="username_text">
 				Nom d&apos;utilisateur :
 			</text>
 			<combo_box name="username_combo" tool_tip="Nom d&apos;utilisateur que vous avez choisi lors de votre inscription (par exemple, bobsmith12 ou Steller Sunshine)."/>
+			<button label="Supprimer ce nom" name="delete_saved_login_btn"/>
 			<text name="password_text">
 				Mot de passe :
 			</text>
-		</layout_panel>
-		<layout_panel name="start_location_panel">
+			<check_box label="Enregistrer le mdp" name="remember_check"/>
+			<button label="Connexion" name="connect_btn"/>
+			<text name="mode_selection_text">
+				Mode :
+			</text>
+			<combo_box name="mode_combo" tool_tip="Sélectionnez un mode. Pour une exploration facile et rapide avec chat, choisissez Basique. Pour accéder à plus de fonctionnalités, choisissez Avancé.">
+				<combo_box.item label="Basique" name="Basic"/>
+				<combo_box.item label="Avancé" name="Advanced"/>
+			</combo_box>
 			<text name="start_location_text">
-				Lieu de départ :
+				Point d'entrée :
 			</text>
 			<combo_box name="start_location_combo">
 				<combo_box.item label="Dernier emplacement" name="MyLastLocation"/>
 				<combo_box.item label="Domicile" name="MyHome"/>
-				<combo_box.item label="&lt;Nom de la région&gt;" name="Typeregionname"/>
+				<combo_box.item label="&lt;Saisir le nom de la région&gt;" name="Typeregionname"/>
 			</combo_box>
+			<text name="grid_selection_text">
+				Grille :
+			</text>
 		</layout_panel>
-		<layout_panel name="links_login_panel">
-			<text name="login_help">
-				Besoin d&apos;aide ?
+		<layout_panel name="links">
+			<text name="create_new_account_text">
+				S&apos;inscrire
 			</text>
 			<text name="forgot_password_text">
 				Nom d&apos;utilisateur ou mot de passe oublié ?
 			</text>
-			<button label="Connexion" name="connect_btn"/>
-			<check_box label="Enregistrer" name="remember_check"/>
-		</layout_panel>
-		<layout_panel name="links">
-			<text name="create_account_text">
-				CRÉER VOTRE COMPTE
+			<text name="login_help">
+				Besoin d&apos;aide ?
 			</text>
-			<button label="Commencer" name="create_new_account_btn"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

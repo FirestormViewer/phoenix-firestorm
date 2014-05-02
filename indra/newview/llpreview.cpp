@@ -50,6 +50,16 @@
 #include "llviewerwindow.h"
 #include "lltrans.h"
 
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+#include "llfloatersearchreplace.h"
+#include "llpreviewnotecard.h"
+#include "llpreviewscript.h"
+// [/SL:KB]
+#include "llpreviewanim.h"
+#include "llpreviewgesture.h"
+#include "llpreviewsound.h"
+#include "llpreviewtexture.h"
+
 // Constants
 
 LLPreview::LLPreview(const LLSD& key)
@@ -91,6 +101,9 @@ void LLPreview::setObjectID(const LLUUID& object_id)
 	{
 		loadAsset();
 	}
+
+	// <FS:Ansariel> FIRE-10899: Multi previews from object inventory misses tab titles
+	refreshFromItem();
 }
 
 void LLPreview::setItem( LLInventoryItem* item )
@@ -100,6 +113,9 @@ void LLPreview::setItem( LLInventoryItem* item )
 	{
 		loadAsset();
 	}
+
+	// <FS:Ansariel> FIRE-10899: Multi previews from object inventory misses tab titles
+	refreshFromItem();
 }
 
 const LLInventoryItem *LLPreview::getItem() const
@@ -112,7 +128,12 @@ const LLInventoryItem *LLPreview::getItem() const
 	else if (mObjectUUID.isNull())
 	{
 		// it's an inventory item, so get the item.
-		item = gInventory.getItem(mItemUUID);
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-11 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+		if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType())
+			item = gInventory.getItem(mItemUUID);
+		else
+			item = mAuxItem;
+// [/SL:KB]
 	}
 	else
 	{
@@ -344,6 +365,16 @@ void LLPreview::onOpen(const LLSD& key)
 	{
 		loadAsset();
 	}
+
+	// <FS:Ansariel> Multi preview layout fix; Anim, gesture and sound previews can't be resized
+	if (getHost() &&
+		(dynamic_cast<LLPreviewAnim*>(this) ||
+		dynamic_cast<LLPreviewGesture*>(this) ||
+		dynamic_cast<LLPreviewSound*>(this)))
+	{
+		getHost()->setCanResize(FALSE);
+	}
+	// </FS:Ansariel>
 }
 
 void LLPreview::setAuxItem( const LLInventoryItem* item )
@@ -448,7 +479,10 @@ LLMultiPreview::LLMultiPreview()
 {
 	// start with a rect in the top-left corner ; will get resized
 	LLRect rect;
-	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 200, 400);
+	// <FS:Ansariel> Multi preview layout fix
+	//rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 200, 400);
+	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 10, 10);
+	// </FS:Ansariel>
 	setRect(rect);
 
 	LLFloater* last_floater = LLFloaterReg::getLastFloaterInGroup("preview");
@@ -459,7 +493,8 @@ LLMultiPreview::LLMultiPreview()
 	setTitle(LLTrans::getString("MultiPreviewTitle"));
 	buildTabContainer();
 	setCanResize(TRUE);
-	mAutoResize = FALSE;
+	// <FS:Ansariel> Multi preview layout fix
+	//mAutoResize = FALSE;
 }
 
 void LLMultiPreview::onOpen(const LLSD& key)
@@ -472,6 +507,9 @@ void LLMultiPreview::onOpen(const LLSD& key)
 		frontmost_preview->loadAsset();
 	}
 	LLMultiFloater::onOpen(key);
+
+	// <FS:Ansariel> Multi preview layout fix
+	center();
 }
 
 
@@ -500,6 +538,38 @@ void LLMultiPreview::tabOpen(LLFloater* opened_floater, bool from_click)
 	{
 		opened_preview->loadAsset();
 	}
+
+	// <FS:Ansariel> Update preview dimensions for multi texture preview upon tab change
+	LLPreviewTexture* texture_preview = dynamic_cast<LLPreviewTexture*>(opened_floater);
+	if (texture_preview)
+	{
+		texture_preview->setUpdateDimensions(TRUE);
+	}
+	// </FS:Ansariel>
+
+// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+	LLFloaterSearchReplace* pSearchFloater = LLFloaterReg::getTypedInstance<LLFloaterSearchReplace>("search_replace");
+	if ( (pSearchFloater) && (pSearchFloater->getDependee() == this) )
+	{
+		LLPreviewNotecard* pPreviewNotecard = NULL; LLPreviewLSL* pPreviewScript = NULL; LLLiveLSLEditor* pPreviewScriptLive = NULL;
+		if ((pPreviewNotecard = dynamic_cast<LLPreviewNotecard*>(opened_preview)) != NULL)
+		{
+			LLFloaterSearchReplace::show(pPreviewNotecard->getEditor());
+		}
+		else if ((pPreviewScript = dynamic_cast<LLPreviewLSL*>(opened_preview)) != NULL)
+		{
+			LLFloaterSearchReplace::show(pPreviewScript->getEditor());
+		}
+		else if ((pPreviewScriptLive = dynamic_cast<LLLiveLSLEditor*>(opened_preview)) != NULL)
+		{
+			LLFloaterSearchReplace::show(pPreviewScriptLive->getEditor());
+		}
+		else
+		{
+			pSearchFloater->setVisible(FALSE);
+		}
+	}
+// [/SL:KB]
 }
 
 

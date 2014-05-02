@@ -50,6 +50,9 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
 #include "lltooltip.h"
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c)
+#include "rlvactions.h"
+// [/RLVa:KB]
 
 //
 // Constants
@@ -140,7 +143,10 @@ BOOL LLFloaterMove::postBuild()
 
 	initMovementMode();
 
-	gAgent.addParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
+//	gAgent.addParcelChangedCallback(LLFloaterMove::sUpdateFlyingStatus);
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	gAgent.addParcelChangedCallback(LLFloaterMove::sUpdateMovementStatus);
+// [/RLVa:KB]
 
 	return TRUE;
 }
@@ -317,23 +323,32 @@ void LLFloaterMove::setMovementMode(const EMovementMode mode)
 	{
 	case MM_RUN:
 		gAgent.setAlwaysRun();
-		gAgent.setRunning();
+//		gAgent.setRunning();
 		break;
 	case MM_WALK:
 		gAgent.clearAlwaysRun();
-		gAgent.clearRunning();
+//		gAgent.clearRunning();
 		break;
 	default:
 		//do nothing for other modes (MM_FLY)
 		break;
 	}
 	// tell the simulator.
-	gAgent.sendWalkRun(gAgent.getAlwaysRun());
-	
-	updateButtonsWithMovementMode(mode);
+//	gAgent.sendWalkRun(gAgent.getAlwaysRun());
+//	
+//	updateButtonsWithMovementMode(mode);
+//
+//	bool bHideModeButtons = MM_FLY == mode
+//		|| (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	// Running may have been restricted so update walk-vs-run from the agent's actual running state
+	if ( (MM_WALK == mode) || (MM_RUN == mode) )
+		mCurrentMode = (gAgent.getRunning()) ? MM_RUN : MM_WALK;
 
-	bool bHideModeButtons = MM_FLY == mode
-		|| (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+	updateButtonsWithMovementMode(mCurrentMode);
+
+	bool bHideModeButtons = (MM_FLY == mCurrentMode) || (isAgentAvatarValid() && gAgentAvatarp->isSitting());
+// [/RLVa:KB]
 
 	showModeButtons(!bHideModeButtons);
 
@@ -436,12 +451,23 @@ void LLFloaterMove::setModeTitle(const EMovementMode mode)
 }
 
 //static
-void LLFloaterMove::sUpdateFlyingStatus()
+//void LLFloaterMove::sUpdateFlyingStatus()
+//{
+//	LLFloaterMove *floater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
+//	if (floater) floater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
+//	
+//}
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+void LLFloaterMove::sUpdateMovementStatus()
 {
-	LLFloaterMove *floater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
-	if (floater) floater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
-	
+	LLFloaterMove* pFloater = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
+	if (pFloater)
+	{
+		pFloater->mModeControlButtonMap[MM_RUN]->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_ALWAYSRUN));
+		pFloater->mModeControlButtonMap[MM_FLY]->setEnabled(gAgent.canFly());
+	}
 }
+// [/RLVa:KB]
 
 void LLFloaterMove::showModeButtons(BOOL bShow)
 {
@@ -481,7 +507,10 @@ void LLFloaterMove::onOpen(const LLSD& key)
 		showModeButtons(FALSE);
 	}
 
-	sUpdateFlyingStatus();
+//	sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	sUpdateMovementStatus();
+// [/RLVa:KB]
 }
 
 void LLFloaterMove::setModeButtonToggleState(const EMovementMode mode)
@@ -525,14 +554,20 @@ void LLPanelStandStopFlying::setStandStopFlyingMode(EStandStopFlyingMode mode)
 {
 	LLPanelStandStopFlying* panel = getInstance();
 
-	if (mode == SSFM_STAND)
+	if (mode == SSFM_FLYCAM)
 	{
-		LLFirstUse::sit();
-		LLFirstUse::notMoving(false);
+		panel->mFlycamButton->setVisible(TRUE);
 	}
-	panel->mStandButton->setVisible(SSFM_STAND == mode);
-	panel->mStopFlyingButton->setVisible(SSFM_STOP_FLYING == mode);
-
+	else
+	{
+		if (mode == SSFM_STAND)
+		{
+			LLFirstUse::sit();
+			LLFirstUse::notMoving(false);
+		}
+		panel->mStandButton->setVisible(SSFM_STAND == mode);
+		panel->mStopFlyingButton->setVisible(SSFM_STOP_FLYING == mode);
+	}
 	//visibility of it should be updated after updating visibility of the buttons
 	panel->setVisible(TRUE);
 }
@@ -547,6 +582,10 @@ void LLPanelStandStopFlying::clearStandStopFlyingMode(EStandStopFlyingMode mode)
 		break;
 	case SSFM_STOP_FLYING:
 		panel->mStopFlyingButton->setVisible(FALSE);
+		break;
+	case SSFM_FLYCAM:
+		panel->mFlycamButton->setVisible(FALSE);
+		panel->setFocus(FALSE);
 		break;
 	default:
 		llerrs << "Unexpected EStandStopFlyingMode is passed: " << mode << llendl;
@@ -566,7 +605,10 @@ BOOL LLPanelStandStopFlying::postBuild()
 	//mStopFlyingButton->setCommitCallback(boost::bind(&LLFloaterMove::setFlyingMode, FALSE));
 	mStopFlyingButton->setCommitCallback(boost::bind(&LLPanelStandStopFlying::onStopFlyingButtonClick, this));
 	mStopFlyingButton->setVisible(FALSE);
-	
+
+	mFlycamButton = getChild<LLButton>("flycam_btn");
+	mFlycamButton->setVisible(FALSE);
+
 	return TRUE;
 }
 
@@ -649,6 +691,12 @@ void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
 		mAttached = false;
 		updatePosition(); // don't defer until next draw() to avoid flicker
 	}
+
+	// <FS:Zi> Make sure to resize the panel to fit the new parent. Important for
+	//         proper layouting of the buttons. Skins should adapt the parent container.
+	if(getParent())
+		reshape(getParent()->getRect().getWidth(),getParent()->getRect().getHeight(),FALSE);
+	// </FS:Zi>
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -672,10 +720,17 @@ LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
 
 void LLPanelStandStopFlying::onStandButtonClick()
 {
-	LLFirstUse::sit(false);
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	if ( (!RlvActions::isRlvEnabled()) || (RlvActions::canStand()) )
+	{
+		LLFirstUse::sit(false);
 
-	LLSelectMgr::getInstance()->deselectAllForStandingUp();
-	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+		LLSelectMgr::getInstance()->deselectAllForStandingUp();
+		gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
+	}
+// [/RLVa:KB]
+//	LLSelectMgr::getInstance()->deselectAllForStandingUp();
+//	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 
 	setFocus(FALSE); // EXT-482
 	mStandButton->setVisible(FALSE); // force visibility changing to avoid seeing Stand & Move buttons at once.
@@ -694,39 +749,42 @@ void LLPanelStandStopFlying::onStopFlyingButtonClick()
  */
 void LLPanelStandStopFlying::updatePosition()
 {
-	if (mAttached) return;
-
-	S32 y_pos = 0;
-	S32 bottom_tb_center = 0;
-	if (LLToolBar* toolbar_bottom = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM))
-	{
-		y_pos = toolbar_bottom->getRect().getHeight();
-		bottom_tb_center = toolbar_bottom->getRect().getCenterX();
-	}
-
-	S32 left_tb_width = 0;
-	if (LLToolBar* toolbar_left = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT))
-	{
-		left_tb_width = toolbar_left->getRect().getWidth();
-	}
-
-	if (!mStateManagementButtons.get())
-	{
-		LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("state_management_buttons_container");
-		if (panel_ssf_container)
-		{
-			mStateManagementButtons = panel_ssf_container->getHandle();
-		}
-	}
-
-	if(LLPanel* panel_ssf_container = mStateManagementButtons.get())
-	{
-		panel_ssf_container->setOrigin(0, y_pos);
-	}
-
-	S32 x_pos = bottom_tb_center-getRect().getWidth()/2 - left_tb_width;
-
-	setOrigin( x_pos, 0);
+// <FS:Zi> Keep the Stand & Stop Flying panel always in the same position,
+//	if (mAttached) return;
+//
+//	S32 y_pos = 0;
+//	S32 bottom_tb_center = 0;
+//	if (LLToolBar* toolbar_bottom = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM))
+//	{
+//		y_pos = toolbar_bottom->getRect().getHeight();
+//		bottom_tb_center = toolbar_bottom->getRect().getCenterX();
+//	}
+//
+//	S32 left_tb_width = 0;
+//	if (LLToolBar* toolbar_left = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_LEFT))
+//	{
+//		left_tb_width = toolbar_left->getRect().getWidth();
+//	}
+//
+//	if (!mStateManagementButtons.get())
+//	{
+//		LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("state_management_buttons_container");
+//		if (panel_ssf_container)
+//		{
+//			mStateManagementButtons = panel_ssf_container->getHandle();
+//		}
+//	}
+//
+//	if(LLPanel* panel_ssf_container = mStateManagementButtons.get())
+//	{
+//		panel_ssf_container->setOrigin(0, y_pos);
+//	}
+//
+//	S32 x_pos = bottom_tb_center-getRect().getWidth()/2 - left_tb_width;
+//
+//	setOrigin( x_pos, 0);
+	return;
+// </FS:Zi>
 }
 
 // EOF

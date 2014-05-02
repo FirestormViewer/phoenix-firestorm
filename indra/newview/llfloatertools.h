@@ -32,6 +32,7 @@
 #include "llparcelselection.h"
 
 class LLButton;
+class LLComboBox;
 class LLCheckBoxCtrl;
 class LLComboBox;
 class LLPanelPermissions;
@@ -76,6 +77,11 @@ public:
 	// call this once per frame to handle visibility, rect location,
 	// button highlights, etc.
 	void updatePopup(LLCoordGL center, MASK mask);
+	
+	// <FS:CR> Aurora Sim
+	void updateToolsSizeLimits();
+	// </FS:CR> Aurora Sim
+	void changePrecision(S32 decimal_precision);
 
 	// When the floater is going away, reset any options that need to be 
 	// cleared.
@@ -110,6 +116,9 @@ public:
 	static void setGridMode(S32 mode);
 
 	LLPanelFace* getPanelFace() { return mPanelFace; }
+
+	void onClickBtnCopyKeys();
+	void onClickExpand();
 
 private:
 	void refresh();
@@ -148,10 +157,13 @@ public:
 	LLComboBox*		mComboGridMode;
 	LLCheckBoxCtrl*	mCheckStretchUniform;
 	LLCheckBoxCtrl*	mCheckStretchTexture;
+	LLCheckBoxCtrl*	mCheckShowHighlight; //Phoenix:KC
+	LLCheckBoxCtrl*	mCheckActualRoot; //Phoenix:KC
 
+	// Ansariel: Reverted the hack because then when clicking the label it
+	//           doesn't check the checkbox anymore!
 	// !HACK! Replacement of mCheckStretchUniform label because LLCheckBoxCtrl
 	//  doesn't support word_wrap of its label. Need to fix truncation bug EXT-6658
-	LLTextBox*		mCheckStretchUniformLabel;
 
 	LLButton	*mBtnRotateLeft;
 	LLButton	*mBtnRotateReset;
@@ -198,7 +210,12 @@ public:
 
 private:
 	BOOL					mDirty;
+	BOOL					mOrginalShowHighlight; //Phoenix:KC
+	BOOL					mOpen; //Phoenix:KC
 
+	//Phoenix:KC
+	S32					mCollapsedHeight;
+	S32					mExpandedHeight;
 	std::map<std::string, std::string> mStatusText;
 
 protected:

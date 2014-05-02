@@ -29,6 +29,7 @@
 #include "llurlregistry.h"
 
 #include <boost/regex.hpp>
+#include <boost/algorithm/string/find.hpp> //for boost::ifind_first -KC
 
 // default dummy callback that ignores any label updates from the server
 void LLUrlRegistryNullCallback(const std::string &url, const std::string &label, const std::string& icon)
@@ -37,7 +38,10 @@ void LLUrlRegistryNullCallback(const std::string &url, const std::string &label,
 
 LLUrlRegistry::LLUrlRegistry()
 {
-	mUrlEntry.reserve(20);
+//	mUrlEntry.reserve(21);
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	mUrlEntry.reserve(22);
+// [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
 	registerUrl(new LLUrlEntryNoLink());
@@ -48,6 +52,9 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntryAgentCompleteName());
 	registerUrl(new LLUrlEntryAgentDisplayName());
 	registerUrl(new LLUrlEntryAgentUserName());
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	registerUrl(new LLUrlEntryAgentRLVAnonymizedName());
+// [/RLVa:KB]
 	// LLUrlEntryAgent*Name must appear before LLUrlEntryAgent since 
 	// LLUrlEntryAgent is a less specific (catchall for agent urls)
 	registerUrl(new LLUrlEntryAgent());
@@ -59,7 +66,6 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntryObjectIM());
 	registerUrl(new LLUrlEntryPlace());
 	registerUrl(new LLUrlEntryInventory());
-	registerUrl(new LLUrlEntryObjectIM());
 	//LLUrlEntrySL and LLUrlEntrySLLabel have more common pattern, 
 	//so it should be registered in the end of list
 	registerUrl(new LLUrlEntrySL());
@@ -67,6 +73,8 @@ LLUrlRegistry::LLUrlRegistry()
 	// most common pattern is a URL without any protocol,
 	// e.g., "secondlife.com"
 	registerUrl(new LLUrlEntryHTTPNoProtocol());	
+	// parse jira issue names to links -KC
+	registerUrl(new LLUrlEntryJira());
 }
 
 LLUrlRegistry::~LLUrlRegistry()
@@ -136,19 +144,63 @@ static bool stringHasUrl(const std::string &text)
 	// to avoid lots of costly regex calls, BUT it needs to be
 	// kept in sync with the LLUrlEntry regexes we support.
 	return (text.find("://") != std::string::npos ||
-			text.find("www.") != std::string::npos ||
-			text.find(".com") != std::string::npos ||
-			text.find(".net") != std::string::npos ||
-			text.find(".edu") != std::string::npos ||
-			text.find(".org") != std::string::npos ||
+			// text.find("www.") != std::string::npos ||
+			// text.find(".com") != std::string::npos ||
+			// text.find(".net") != std::string::npos ||
+			// text.find(".edu") != std::string::npos ||
+			// text.find(".org") != std::string::npos ||
+			// allow ALLCAPS urls -KC
+			boost::ifind_first(text, "www.") ||
+			boost::ifind_first(text, ".com") ||
+			boost::ifind_first(text, ".net") ||
+			boost::ifind_first(text, ".edu") ||
+			boost::ifind_first(text, ".org") ||
 			text.find("<nolink>") != std::string::npos ||
 			text.find("<icon") != std::string::npos);
+}
+
+static bool stringHasJira(const std::string &text)
+{
+	// same as above, but for jiras
+	// <FS:CR> Please make sure to sync these with the items in LLUrlEntryJira::LLUrlEntryJira() if you make a change
+	return (text.find("ARVD") != std::string::npos ||
+			text.find("BUG") != std::string::npos ||
+			text.find("CHOP") != std::string::npos ||
+			text.find("CHUIBUG") != std::string::npos ||
+			text.find("CTS") != std::string::npos ||
+			text.find("DOC") != std::string::npos ||
+			text.find("DN") != std::string::npos ||
+			text.find("ECC") != std::string::npos ||
+			text.find("EXP") != std::string::npos ||
+			text.find("FIRE") != std::string::npos ||
+			text.find("FITMESH") != std::string::npos ||
+			text.find("LEAP") != std::string::npos ||
+			text.find("LLSD") != std::string::npos ||
+			text.find("MATBUG") != std::string::npos ||
+			text.find("MISC") != std::string::npos ||
+			text.find("OPEN") != std::string::npos ||
+			text.find("PATHBUG") != std::string::npos ||
+			text.find("PLAT") != std::string::npos ||
+			text.find("PYO") != std::string::npos ||
+			text.find("SCR") != std::string::npos ||
+			text.find("SH") != std::string::npos ||
+			text.find("SINV") != std::string::npos ||
+			text.find("SLS") != std::string::npos ||
+			text.find("SNOW") != std::string::npos ||
+			text.find("SOCIAL") != std::string::npos ||
+			text.find("STORM") != std::string::npos ||
+			text.find("SUN") != std::string::npos ||
+			text.find("SUP") != std::string::npos ||
+			text.find("SVC") != std::string::npos ||
+			text.find("TPV") != std::string::npos ||
+			text.find("VWR") != std::string::npos ||
+			text.find("WEB") != std::string::npos);
 }
 
 bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb)
 {
 	// avoid costly regexes if there is clearly no URL in the text
-	if (! stringHasUrl(text))
+	if (! (stringHasUrl(text) || stringHasJira(text)))
 	{
 		return false;
 	}

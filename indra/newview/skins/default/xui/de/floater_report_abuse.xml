@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_report_abuse" title="MISSBRAUCH MELDEN">
+<floater name="floater_report_abuse" title="Missbrauch melden">
 	<floater.string name="Screenshot">
 		Foto
 	</floater.string>

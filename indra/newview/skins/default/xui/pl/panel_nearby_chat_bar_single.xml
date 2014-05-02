@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+    <panel name="bottom_panel">
+<layout_stack name="nearby_chat_bar_panels">
+  <layout_panel name="panel_nearby_chat_bar">
+      <line_editor label="Kliknij tutaj, aby rozmawiać." name="chat_box" tool_tip="Naciśnij Enter aby mówić, Ctrl + Enter aby krzyknąć" />
+  </layout_panel>
+  <layout_panel name="panel_nearby_chat_toggle">
+      <button name="show_nearby_chat" tool_tip="Pokazuje/ukrywa pobliski czat" />
+  </layout_panel>
+  </layout_stack>
+</panel>

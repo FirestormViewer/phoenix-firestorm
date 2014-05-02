@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="script_recover" title="Recuperación de script">
+	<text name="txt2">
+		[APP_NAME] ha detectado scripts recuperables que pueden haber sido dejados por un reciente fallo del visor.
+  
+Si eliges recuperar estos scripts, serán guardados en la carpeta 'Objetos Perdidos' de tu inventario.
+	</text>
+	<scroll_list name="script_list">
+		<scroll_list.columns label="Nombre del script" name="script_name"/>
+	</scroll_list>
+	<button label="Recuperar" name="recover_btn"/>
+	<button label="Cancelar" name="cancel_btn"/>
+</floater>

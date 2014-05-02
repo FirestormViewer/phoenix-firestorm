@@ -42,9 +42,9 @@
 		Mostrar nomes:
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Desligar" name="radio" value="0"/>
-		<radio_item label="Ligar" name="radio2" value="1"/>
-		<radio_item label="Brevemente" name="radio3" value="2"/>
+		<radio_item label="Desligar" name="radio"/>
+		<radio_item label="Ligar" name="radio2"/>
+		<radio_item label="Brevemente" name="radio3"/>
 	</radio_group>
 	<check_box label="Meu nome" name="show_my_name_checkbox1"/>
 	<check_box label="Nomes de usuário" name="show_slids" tool_tip="Mostrar nome de usuário, como zecazc123"/>
@@ -55,8 +55,8 @@
 		Teclas de letras:
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="Inicia o bate-papo local" name="radio_start_chat" value="1"/>
-		<radio_item label="Afeta o movimento (ex.: WASD)" name="radio_move" value="0"/>
+		<radio_item label="Inicia o bate-papo local" name="radio_start_chat"/>
+		<radio_item label="Afeta o movimento (ex.: WASD)" name="radio_move"/>
 	</radio_group>
 	<text name="title_afk_text">
 		Entrar no modo ausente em:

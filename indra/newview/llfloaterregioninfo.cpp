@@ -93,6 +93,12 @@
 #include "llmeshrepository.h"
 #include "llfloaterregionrestarting.h"
 
+// <FS:CR> Aurora Sim - Region Settings Console
+#include "llviewernetwork.h"
+#include "llworld.h"
+#include "llstartup.h"
+// </FS:CR> Aurora Sim - Region Settings Console
+
 const S32 TERRAIN_TEXTURE_COUNT = 4;
 const S32 CORNER_COUNT = 4;
 
@@ -199,6 +205,18 @@ BOOL LLFloaterRegionInfo::postBuild()
 	panel->getCommitCallbackRegistrar().add("RegionInfo.ManageTelehub",	boost::bind(&LLPanelRegionInfo::onClickManageTelehub, panel));
 	panel->buildFromFile("panel_region_general.xml");
 	mTab->addTabPanel(panel);
+
+// <FS:CR> Aurora Sim - Region Settings Console
+	// We only use this panel on Aurora-based sims
+	std::string url = gAgent.getRegion()->getCapability("DispatchOpenRegionSettings");
+	if (!url.empty())
+	{
+		panel = new LLPanelRegionOpenSettingsInfo;
+		mInfoPanels.push_back(panel);
+		panel->buildFromFile("panel_region_open_region_settings.xml");
+		mTab->addTabPanel(panel);
+	}
+// </FS:CR> Aurora Sim - Region Settings Console
 
 	panel = new LLPanelRegionTerrainInfo;
 	mInfoPanels.push_back(panel);
@@ -384,6 +402,23 @@ void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
 	panel->getChildView("access_combo")->setEnabled(gAgent.isGodlike() || (region && region->canManageEstate() && !teen_grid));
 	panel->setCtrlsEnabled(allow_modify);
 	
+	// <FS:Zi> Add estate ID and region grid position to Region panel
+	S32 grid_pos_x=-1;
+	S32 grid_pos_y=-1;
+	U32 estate_id;
+	if(region)
+	{
+		//compute the grid position of the region
+		LLVector3d global_pos = region->getPosGlobalFromRegion(LLVector3::zero);
+		grid_pos_x = (S32) (global_pos.mdV[VX]/256.0f);
+		grid_pos_y = (S32) (global_pos.mdV[VY]/256.0f);
+	}
+	msg->getU32Fast(_PREHASH_RegionInfo, _PREHASH_EstateID, estate_id);
+
+	panel->getChild<LLLineEditor>("estate_id")->setValue(LLSD((F32) estate_id));
+	panel->getChild<LLLineEditor>("grid_position_x")->setValue(LLSD((F32) grid_pos_x));
+	panel->getChild<LLLineEditor>("grid_position_y")->setValue(LLSD((F32) grid_pos_y));
+	// </FS:Zi>
 
 	// DEBUG PANEL
 	panel = tab->getChild<LLPanel>("Debug");
@@ -443,6 +478,18 @@ LLPanelRegionTerrainInfo* LLFloaterRegionInfo::getPanelRegionTerrain()
 	llassert(panel);
 	return panel;
 }
+
+// <FS:CR> Aurora Sim - Region Settings Console
+// static
+LLPanelRegionOpenSettingsInfo* LLFloaterRegionInfo::getPanelOpenSettings()
+{
+	LLFloaterRegionInfo* floater = LLFloaterReg::getTypedInstance<LLFloaterRegionInfo>("region_info");
+	if (!floater) return NULL;
+	LLTabContainer* tab = floater->getChild<LLTabContainer>("region_panels");
+	LLPanelRegionOpenSettingsInfo* panel = (LLPanelRegionOpenSettingsInfo*)tab->getChild<LLPanel>("RegionSettings");
+	return panel;
+}
+// </FS:CR> Aurora Sim - Region Settings Console
 
 void LLFloaterRegionInfo::onTabSelected(const LLSD& param)
 {
@@ -875,6 +922,117 @@ BOOL LLPanelRegionGeneralInfo::sendUpdate()
 	return TRUE;
 }
 
+// <FS:CR> Aurora Sim - Region Settings Panel
+/////////////////////////////////////////////////////////////////////////////
+// LLPanelRegionOpenSettingsInfo
+/////////////////////////////////////////////////////////////////////////////
+bool LLPanelRegionOpenSettingsInfo::refreshFromRegion(LLViewerRegion* region)
+{
+	// Data gets filled in by hippo manager
+	BOOL allow_modify = gAgent.isGodlike() || (region && region->canManageEstate());
+	
+	LLWorld *regionlimits = LLWorld::getInstance();
+	
+	childSetValue("draw_distance", LLSD(regionlimits->getDrawDistance()));
+	childSetValue("force_draw_distance", LLSD(regionlimits->getLockedDrawDistance()));
+	childSetValue("allow_minimap", LLSD(regionlimits->getAllowMinimap()));
+	childSetValue("allow_physical_prims", LLSD(regionlimits->getAllowPhysicalPrims()));
+	childSetValue("max_drag_distance", LLSD(regionlimits->getMaxDragDistance()));
+	childSetValue("min_hole_size", LLSD(regionlimits->getRegionMinHoleSize()));
+	childSetValue("max_hollow_size", LLSD(regionlimits->getRegionMaxHollowSize()));
+	childSetValue("max_inventory_items_transfer", LLSD(regionlimits->getMaxInventoryItemsTransfer()));
+	childSetValue("max_link_count", LLSD((LLSD::Integer)regionlimits->getMaxLinkedPrims()));
+	childSetValue("max_link_count_phys", LLSD(regionlimits->getMaxPhysLinkedPrims()));
+	childSetValue("max_phys_prim_scale", LLSD(regionlimits->getMaxPhysPrimScale()));
+	childSetValue("max_prim_scale", LLSD(regionlimits->getRegionMaxPrimScale()));
+	childSetValue("min_prim_scale", LLSD(regionlimits->getRegionMinPrimScale()));
+	childSetValue("render_water", LLSD(regionlimits->getAllowRenderWater()));
+	childSetValue("show_tags", LLSD(regionlimits->getAllowRenderName()));
+	childSetValue("max_groups", LLSD(gMaxAgentGroups));
+	childSetValue("allow_parcel_windlight", LLSD(regionlimits->getAllowParcelWindLight()));
+	childSetValue("enable_teen_mode", LLSD(regionlimits->getEnableTeenMode()));
+	childSetValue("enforce_max_build", LLSD(regionlimits->getEnforceMaxBuild()));
+	childSetValue("terrain_detail_scale", LLSD(regionlimits->getTerrainDetailScale()));
+
+	setCtrlsEnabled(allow_modify);
+ 
+	return LLPanelRegionInfo::refreshFromRegion(region);
+}
+
+BOOL LLPanelRegionOpenSettingsInfo::postBuild()
+{
+	// Enable the "Apply" button if something is changed. JC
+	initCtrl("draw_distance");
+	initCtrl("force_draw_distance");
+	initCtrl("max_drag_distance");
+	initCtrl("max_prim_scale");
+	initCtrl("min_prim_scale");
+	initCtrl("max_phys_prim_scale");
+	initCtrl("max_hollow_size");
+	initCtrl("min_hole_size");
+	initCtrl("max_link_count");
+	initCtrl("max_link_count_phys");
+	initCtrl("max_inventory_items_transfer");
+	initCtrl("max_groups");
+	initCtrl("render_water");
+	initCtrl("allow_minimap");
+	initCtrl("allow_physical_prims");
+	initCtrl("enable_teen_mode");
+	initCtrl("show_tags");
+	initCtrl("allow_parcel_windlight");
+	initCtrl("terrain_detail_scale");
+
+	childSetAction("apply_ors_btn", onClickOrs, this);
+
+	refreshFromRegion(gAgent.getRegion());
+
+	return LLPanelRegionInfo::postBuild();
+}
+
+void LLPanelRegionOpenSettingsInfo::onClickHelp(void* data)
+{
+	std::string* xml_alert = (std::string*)data;
+	LLNotifications::instance().add(*xml_alert);
+}
+
+void LLPanelRegionOpenSettingsInfo::onClickOrs(void* userdata)
+{
+	LLPanelRegionOpenSettingsInfo* self;
+	self = (LLPanelRegionOpenSettingsInfo*)userdata;
+	
+	llinfos << "LLPanelRegionOpenSettingsInfo::onClickOrs()" << llendl;
+
+	LLSD body;
+	std::string url = gAgent.getRegion()->getCapability("DispatchOpenRegionSettings");
+	if (!url.empty())
+	{
+		body["draw_distance"] = (LLSD::Integer)self->childGetValue("draw_distance");
+		body["force_draw_distance"] = (LLSD::Boolean)self->childGetValue("force_draw_distance");
+		body["allow_minimap"] = (LLSD::Boolean)self->childGetValue("allow_minimap");
+		body["allow_physical_prims"] = (LLSD::Boolean)self->childGetValue("allow_physical_prims");
+		body["max_drag_distance"] = (LLSD::Real)self->childGetValue("max_drag_distance");
+		body["min_hole_size"] = (LLSD::Real)self->childGetValue("min_hole_size");
+		body["max_hollow_size"] = (LLSD::Real)self->childGetValue("max_hollow_size");
+		body["max_inventory_items_transfer"] = (LLSD::Integer)self->childGetValue("max_inventory_items_transfer");
+		body["max_link_count"] = (LLSD::Real)self->childGetValue("max_link_count");
+		body["max_link_count_phys"] = (LLSD::Real)self->childGetValue("max_link_count_phys");
+		body["max_phys_prim_scale"] = (LLSD::Real)self->childGetValue("max_phys_prim_scale");
+		body["max_prim_scale"] = (LLSD::Real)self->childGetValue("max_prim_scale");
+		body["min_prim_scale"] = (LLSD::Real)self->childGetValue("min_prim_scale");
+		body["render_water"] = (LLSD::Boolean)self->childGetValue("render_water");
+		body["terrain_detail_scale"] = (LLSD::Real)self->childGetValue("terrain_detail_scale");
+		body["show_tags"] = (LLSD::Real)self->childGetValue("show_tags");
+		body["max_groups"] = (LLSD::Real)self->childGetValue("max_groups");
+		body["allow_parcel_windlight"] = (LLSD::Boolean)self->childGetValue("allow_parcel_windlight");
+		body["enable_teen_mode"] = (LLSD::Boolean)self->childGetValue("enable_teen_mode");
+		body["enforce_max_build"] = (LLSD::Boolean)self->childGetValue("enforce_max_build");
+
+		LLHTTPClient::post(url, body, new LLHTTPClient::Responder());
+		//llinfos << "data: " << LLSDXMLStreamer(body) << llendl;
+	}
+}
+// </FS:CR> Aurora Sim - Region Settings Console
+
 /////////////////////////////////////////////////////////////////////////////
 // LLPanelRegionDebugInfo
 /////////////////////////////////////////////////////////////////////////////
@@ -1048,17 +1206,25 @@ void LLPanelRegionDebugInfo::onClickTopScripts(void* data)
 // static
 void LLPanelRegionDebugInfo::onClickRestart(void* data)
 {
+	// <Ansariel FIRE-1073>
+	LLPanelRegionDebugInfo* self = (LLPanelRegionDebugInfo*)data;
+	LLSD delay;
+
+	if (self) delay = self->getChild<LLSpinCtrl>("restart_delay")->getValue();
+	else delay = LLSD(120);
+	// </Ansariel FIRE-1073>
+
 	LLNotificationsUtil::add("ConfirmRestart", LLSD(), LLSD(), 
-		boost::bind(&LLPanelRegionDebugInfo::callbackRestart, (LLPanelRegionDebugInfo*)data, _1, _2));
+		boost::bind(&LLPanelRegionDebugInfo::callbackRestart, (LLPanelRegionDebugInfo*)data, _1, _2, delay));
 }
 
-bool LLPanelRegionDebugInfo::callbackRestart(const LLSD& notification, const LLSD& response)
+bool LLPanelRegionDebugInfo::callbackRestart(const LLSD& notification, const LLSD& response, const LLSD& seconds)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option != 0) return false;
 
 	strings_t strings;
-	strings.push_back("120");
+	strings.push_back(seconds.asString());
 	LLUUID invoice(LLFloaterRegionInfo::getLastInvoice());
 	sendEstateOwnerMessage(gMessageSystem, "restart", invoice, strings);
 	return false;
@@ -1102,7 +1268,10 @@ BOOL LLPanelRegionTerrainInfo::validateTextureSizes()
 			return FALSE;
 		}
 
-		if (width > 512 || height > 512)
+		// <FS:Ansariel> Allow terrain textures up to 1024x1024 pixels
+		//               as in Phoenix (FIRE-2319)
+		//if (width > 512 || height > 512)
+		if (width > 1024 || height > 1024)
 		{
 
 			LLSD args;
@@ -1226,11 +1395,20 @@ BOOL LLPanelRegionTerrainInfo::sendUpdate()
 	// =======================================
 	// Assemble and send texturedetail message
 
-	// Make sure user hasn't chosen wacky textures.
+	// Make sure user hasn't chosen wacky textures unless we're on Aurora-sim.
+// <FS:CR> Aurora Sim - Region Settings Console
+#ifdef OPENSIM
+	if (!validateTextureSizes() && !LLGridManager::getInstance()->isInAuroraSim())
+	{
+		return FALSE;
+	}
+#else
 	if (!validateTextureSizes())
 	{
 		return FALSE;
 	}
+#endif // OPENSIM
+// </FS:CR> Aurora Sim - Region Settings Console
 
 	LLTextureCtrl* texture_ctrl;
 	std::string id_str;

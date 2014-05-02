@@ -5,7 +5,7 @@
  layout="topleft"
  name="Hardware Settings Floater"
  help_topic="hardware_settings_floater"
- title="HARDWARE SETTINGS"
+ title="Hardware Settings"
  width="615">
     <text
      type="string"

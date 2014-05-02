@@ -7,13 +7,15 @@ set(Boost_FIND_REQUIRED ON)
 if (STANDALONE)
   include(FindBoost)
 
-  set(BOOST_CONTEXT_LIBRARY boost_context-mt)
+# <FS:TS> boost::context isn't used, so don't try to include it
+# set(BOOST_CONTEXT_LIBRARY boost_context-mt)
   set(BOOST_FILESYSTEM_LIBRARY boost_filesystem-mt)
   set(BOOST_PROGRAM_OPTIONS_LIBRARY boost_program_options-mt)
   set(BOOST_REGEX_LIBRARY boost_regex-mt)
   set(BOOST_SIGNALS_LIBRARY boost_signals-mt)
   set(BOOST_SYSTEM_LIBRARY boost_system-mt)
   set(BOOST_THREAD_LIBRARY boost_thread-mt)
+  set(BOOST_WAVE_LIBRARY boost_wave-mt)
 else (STANDALONE)
   use_prebuilt_binary(boost)
   set(Boost_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include)
@@ -42,6 +44,12 @@ else (STANDALONE)
       set(BOOST_THREAD_LIBRARY 
           optimized libboost_thread-vc80-mt-${BOOST_VERSION}
           debug libboost_thread-vc80-mt-gd-${BOOST_VERSION})
+      set(BOOST_WAVE_LIBRARY 
+          optimized libboost_wave-vc80-mt-${BOOST_VERSION}
+          debug libboost_wave-vc80-mt-gd-${BOOST_VERSION})
+      set(BOOST_THREAD_LIBRARY 
+          optimized libboost_thread-vc80-mt-${BOOST_VERSION}
+          debug libboost_thread-vc80-mt-gd-${BOOST_VERSION})
     else(MSVC80)
       # MSVC 10.0 config
       set(BOOST_CONTEXT_LIBRARY 
@@ -65,6 +73,9 @@ else (STANDALONE)
       set(BOOST_THREAD_LIBRARY 
           optimized libboost_thread-mt
           debug libboost_thread-mt-gd)
+      set(BOOST_WAVE_LIBRARY 
+          optimized libboost_wave-mt
+          debug libboost_wave-mt-gd)
     endif (MSVC80)
   elseif (LINUX)
     set(BOOST_CONTEXT_LIBRARY
@@ -88,6 +99,9 @@ else (STANDALONE)
     set(BOOST_THREAD_LIBRARY
         optimized boost_thread-mt
         debug boost_thread-mt-d)
+    set(BOOST_WAVE_LIBRARY 
+        optimized boost_wave-mt
+        debug boost_wave-mt-d)
   elseif (DARWIN)
     set(BOOST_CONTEXT_LIBRARY
         optimized boost_context-mt
@@ -110,5 +124,8 @@ else (STANDALONE)
     set(BOOST_THREAD_LIBRARY
         optimized boost_thread-mt
         debug boost_thread-mt-d)
+    set(BOOST_WAVE_LIBRARY 
+        optimized boost_wave-mt
+        debug boost_wave-mt-d)
   endif (WINDOWS)
 endif (STANDALONE)

@@ -768,10 +768,12 @@ bool LLGLManager::initGL()
 	}
 
 
-	if (mIsIntel && mGLVersion <= 3.f)
-	{ //never try to use framebuffer objects on older intel drivers (crashy)
-		mHasFramebufferObject = FALSE;
-	}
+// <FS:CR> FIRE-7603: Revert MAINT-804 because FBO's and shadows appear to be working now!
+	//if (mIsIntel && mGLVersion <= 3.f)
+	//{ //never try to use framebuffer objects on older intel drivers (crashy)
+	//	mHasFramebufferObject = FALSE;
+	//}
+// </FS:CR>
 #endif
 
 	if (mHasFramebufferObject)
@@ -1161,7 +1163,7 @@ void LLGLManager::initExtensions()
 	glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, (GLint*) &mGLMaxVertexRange);
 	glGetIntegerv(GL_MAX_ELEMENTS_INDICES, (GLint*) &mGLMaxIndexRange);
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*) &mGLMaxTextureSize);
-
+	
 #if (LL_WINDOWS || LL_LINUX || LL_SOLARIS) && !LL_MESA_HEADLESS
 	LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
 	if (mHasVertexBufferObject)

@@ -68,22 +68,22 @@
 		<radio_item label="回転（Ctrl）" name="radio rotate"/>
 		<radio_item label="引き延ばす (Ctrl+Shift)" name="radio stretch"/>
 		<radio_item label="面を選択" name="radio select face"/>
+		<radio_item label="揃える" name="radio align" />
 	</radio_group>
 	<check_box label="リンク部分を編集" name="checkbox edit linked parts"/>
 	<button label="リンク" name="link_btn"/>
 	<button label="リンクを外す" name="unlink_btn"/>
-	<check_box label="" name="checkbox uniform"/>
-	<text label="両側を延ばす" name="checkbox uniform label">
-		両側を延ばす
-	</text>
-	<check_box initial_value="true" label="テクスチャを引き延ばす" name="checkbox stretch textures"/>
-	<check_box initial_value="true" label="スナップ" name="checkbox snap to grid"/>
 	<combo_box name="combobox grid mode" tool_tip="オブジェクトの配置に使うグリッドルーラの種類を選択">
 		<combo_box.item label="世界" name="World"/>
 		<combo_box.item label="ローカル" name="Local"/>
 		<combo_box.item label="リファレンス" name="Reference"/>
 	</combo_box>
-	<button label="" label_selected="オプション" name="Options..." tool_tip="グリッドオプションを表示します"/>
+    <check_box label="両側を延ばす" name="checkbox uniform"/>
+    <check_box label="テクスチャを引き延ばす" name="checkbox stretch textures" />
+	<check_box label="スナップ" name="checkbox snap to grid"/>
+	<check_box label="ルートを軸に編集" name="checkbox actual root" />
+	<check_box label="強調表示" name="checkbox show highlight" />
+	<button name="Options..." tool_tip="グリッドオプションを表示します"/>
 	<button label="" label_selected="" name="ToolCube" tool_tip="キューブ"/>
 	<button label="" label_selected="" name="ToolPrism" tool_tip="プリズム"/>
 	<button label="" label_selected="" name="ToolPyramid" tool_tip="ピラミッド"/>
@@ -279,6 +279,11 @@
 			<spinner label="X" name="Rot X"/>
 			<spinner label="Y" name="Rot Y"/>
 			<spinner label="Z" name="Rot Z"/>
+			<text name="edit_object">
+			  オブジェクトのパラメータ:
+			</text>
+			<button label="コピー" name="copyparams" tool_tip="パラメータをクリップボードにコピーします。" />
+			<button label="貼り付け" name="pasteparams" tool_tip="パラメータをクリップボードから貼り付けます。" />
 			<combo_box name="comboBaseType">
 				<combo_box.item label="ボックス" name="Box"/>
 				<combo_box.item label="シリンダー" name="Cylinder"/>
@@ -358,7 +363,7 @@
 			<combo_box name="sculpt type control">
 				<combo_box.item label="球体" name="Sphere"/>
 				<combo_box.item label="トーラス" name="Torus"/>
-				<combo_box.item label="平面" name="Plane"/>
+				<combo_box.item label="平面 （なし）" name="Plane"/>
 				<combo_box.item label="シリンダー" name="Cylinder"/>
 			</combo_box>
 		</panel>
@@ -415,84 +420,12 @@
 			<spinner label="復元" name="Physics Restitution"/>
 		</panel>
 		<panel label="材質" name="Texture">
-			<panel.string name="string repeats per meter">
-				メートルごとに繰り返す
-			</panel.string>
-			<panel.string name="string repeats per face">
-				面ごとに繰り返す
-			</panel.string>
-			<texture_picker label="テクスチャ" name="texture control" tool_tip="写真をクリックして選択します"/>
-			<color_swatch label="色" name="colorswatch" tool_tip="クリックしてカラーピッカーを開きます"/>
-			<text name="color trans">
-				透過度 %
-			</text>
-			<text name="glow label">
-				グロー
-			</text>
-			<check_box label="明るさ全開" name="checkbox fullbright"/>
-			<text name="tex gen">
-				マッピング
-			</text>
-			<combo_box name="combobox texgen">
-				<combo_box.item label="デフォルト" name="Default"/>
-				<combo_box.item label="平面" name="Planar"/>
-			</combo_box>
-			<text name="label shininess">
-				輝き
-			</text>
-			<combo_box name="combobox shininess">
-				<combo_box.item label="なし" name="None"/>
-				<combo_box.item label="低" name="Low"/>
-				<combo_box.item label="中" name="Medium"/>
-				<combo_box.item label="高" name="High"/>
-			</combo_box>
-			<text name="label bumpiness">
-				凹凸
-			</text>
-			<combo_box name="combobox bumpiness">
-				<combo_box.item label="なし" name="None"/>
-				<combo_box.item label="明るさ" name="Brightness"/>
-				<combo_box.item label="暗さ" name="Darkness"/>
-				<combo_box.item label="木目調" name="woodgrain"/>
-				<combo_box.item label="木の皮" name="bark"/>
-				<combo_box.item label="レンガ" name="bricks"/>
-				<combo_box.item label="チェッカー" name="checker"/>
-				<combo_box.item label="コンクリート" name="concrete"/>
-				<combo_box.item label="クラスティ・タイル" name="crustytile"/>
-				<combo_box.item label="カットストーン" name="cutstone"/>
-				<combo_box.item label="ディスク" name="discs"/>
-				<combo_box.item label="砂利" name="gravel"/>
-				<combo_box.item label="ペトリ" name="petridish"/>
-				<combo_box.item label="羽目板" name="siding"/>
-				<combo_box.item label="ストーン・タイル" name="stonetile"/>
-				<combo_box.item label="しっくい" name="stucco"/>
-				<combo_box.item label="吸い込み" name="suction"/>
-				<combo_box.item label="織目" name="weave"/>
-			</combo_box>
-			<spinner label="水平（U）" name="TexScaleU"/>
-			<check_box label="反転" name="checkbox flip s"/>
-			<spinner label="垂直（V）" name="TexScaleV"/>
-			<check_box label="反転" name="checkbox flip t"/>
-			<spinner label="回転˚" name="TexRot"/>
-			<button label="適用" label_selected="適用" name="button apply"/>
-			<text name="tex offset">
-				テクスチャのズレ
-			</text>
-			<spinner label="水平（U）" name="TexOffsetU"/>
-			<spinner label="垂直（V）" name="TexOffsetV"/>
-			<panel name="Add_Media">
-				<text name="media_tex">
-					メディア
-				</text>
-				<button name="add_media" tool_tip="メディアを追加します"/>
-				<button name="delete_media" tool_tip="このメディアテクスチャを削除します"/>
-				<button name="edit_media" tool_tip="このメディアを編集します"/>
-				<button label="揃える" label_selected="メディアを一列に揃えます" name="button align" tool_tip="メディアテクスチャを一列に揃えます（最初に読み込む必要があります）"/>
-			</panel>
 		</panel>
 		<panel label="中身" name="Contents">
 			<button label="新しいスクリプト" label_selected="新規スクリプト" name="button new script"/>
 			<button label="権限" name="button permissions"/>
+			<button label="更新" name="button refresh" />
+            <button label="スクリプトリセット" name="button reset scripts" />
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

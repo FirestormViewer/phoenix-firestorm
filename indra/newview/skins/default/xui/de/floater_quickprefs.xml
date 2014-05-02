@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs" title="Schnelleinstellungen" width="280">
+	<panel name="quickprefs" width="280">
+		<layout_stack name="options_stack" width="280"/>
+		<layout_stack name="wl_options_stack" width="280">
+			<layout_panel name="wl_options_panel">
+				<check_box label="Regions-Windlight-Vorstellungen verwenden" name="UseRegionWindlight"/>
+				<text name="Maximum bandwidth" width="105" tool_tip="Legt die maximale Bandbreite der Netzwerknutzung in Kbps (Kilobit pro Sekunde) fest.">
+					Max. Bandbreite:
+				</text>
+				<slider left_delta="108" name="max_bandwidth"/>		
+				<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
+					WL-Himmel:
+				</text>
+				<combo_box left_delta="77" name="WLPresetsCombo"/>
+				<text name="WL Water" width="67" tool_tip="Windlight-Voreinstellung für das Wasser.">
+					WL-Wasser:
+				</text>
+				<combo_box left_delta="77" name="WaterPresetsCombo"/>
+				<text name="Day Cycle" width="67" tool_tip="Windlight-Voreinstellung für den Tageszyklus.">
+					Tageszyklus:
+				</text>
+				<combo_box left_delta="77" name="DCPresetsCombo"/>
+				<icon name="SkyDayCycle" tool_tip="Tageszeit ändern" width="220"/>
+				<multi_slider name="WLSunPos" width="220"/>
+				<button name="ResetToRegionDefault" tool_tip="Windlight-Voreinstellungen auf Regionsstandard zurücksetzen"/>
+				<button name="button_edit" tool_tip="Schnelleinstellungen konfigurieren"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="Einstellung nach oben verschieben"/>
+		<line_editor name="label_edit" tool_tip="Text, der für die Einstellung angezeigt wird" label="Bezeichnung:" width="205"/>
+		<combo_box name="control_name_combo" tool_tip="Einstellung aus der Liste der verfügbaren Einstellungen auswählen" width="245">
+			<combo_box.item label="== Wählen ==" name="control_name_list_header"/>
+		</combo_box>
+		<button name="move_down_button" tool_tip="Einstellung nach unten verschieben"/>
+		<button name="add_new_button" tool_tip="Neue Einstellung hinzufügen"/>
+		<text name="control_type_label">
+			Typ:
+		</text>
+		<combo_box name="control_type_combo_box" tool_tip="Typ des Bedienelements festlegen, die für diese Einstellung verwendet werden soll." width="148">
+			<combo_box.item label="Checkbox" name="Checkbox"/>
+			<combo_box.item label="Text" name="Text"/>
+			<combo_box.item label="Regler" name="Spinner"/>
+			<combo_box.item label="Schieber" name="Slider"/>
+			<combo_box.item label="Radiobutton" name="Radio"/>
+			<combo_box.item label="Farbe 3" name="Color 3"/>
+			<combo_box.item label="Farbe 4" name="Color 4"/>
+		</combo_box>
+
+		<check_box name="control_integer_checkbox" tool_tip="Aktivieren, falls die Einstellung ein Ganzzahlwert ist, d.h. nur Zahlen ohne Nachkommastelle" label="Ganzzahl"/>
+		<spinner name="control_min_edit" tool_tip="Der kleinste Wert, der ausgewählt werden kann" label="Min:"/>
+		<spinner name="control_max_edit" tool_tip="Der größte Wert, der ausgewählt werden kann" label="Max:"/>
+		<spinner name="control_increment_edit" tool_tip="Die Schrittweite, um die der Wert erhöht oder verringert wird, wenn der Hoch- bzw. Runter-Pfeil des Reglers angeklickt wird." label="Schritt:" label_width="40" width="90"/>
+		<button name="Restore_Btn" tool_tip="Standardeinstellungen wiederherstellen" label="Zurücksetzen" />
+		<button name="button_close" tool_tip="Bearbeiten-Modus beenden"/>
+	</panel>
+</floater>

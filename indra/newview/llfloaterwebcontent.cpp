@@ -88,6 +88,7 @@ BOOL LLFloaterWebContent::postBuild()
 	mAddressCombo      = getChild< LLComboBox >( "address" );
 	mStatusBarText     = getChild< LLTextBox >( "statusbartext" );
 	mStatusBarProgress = getChild<LLProgressBar>("statusbarprogress" );
+	mPluginFailText    = getChild< LLTextBox >("plugin_fail_text");
 
 	mBtnBack           = getChildView( "back" );
 	mBtnForward        = getChildView( "forward" );
@@ -96,6 +97,11 @@ BOOL LLFloaterWebContent::postBuild()
 
 	// observe browser events
 	mWebBrowser->addObserver( this );
+
+	// Hide the web browser initially so the plugin fail text links can be clicked if needed.
+	// A navigationi begin event will swap these around.
+	mWebBrowser->setVisible( false );
+	mPluginFailText->setVisible( true );
 
 	// these buttons are always enabled
 	mBtnReload->setEnabled( true );
@@ -295,7 +301,15 @@ void LLFloaterWebContent::onOpen(const LLSD& key)
 void LLFloaterWebContent::onClose(bool app_quitting)
 {
     // If we close the web browsing window showing the facebook login, we need to signal to this object that the connection will not happen
-    LLFloater* fbc_web = LLFloaterReg::getInstance("fbc_web");
+
+	// <FS:ND> FIRE-12220; using getInstance can lead to endless recursion if the floater is not open, then gets created by getInstance, gets closed due to too many open
+	// webbrowsers and then calls getInstance once again in onClose.
+
+    // LLFloater* fbc_web = LLFloaterReg::getInstance("fbc_web");
+    LLFloater* fbc_web = LLFloaterReg::findInstance("fbc_web");
+
+	// </FS:ND>
+
     if (fbc_web == this)
     {
         if (!LLFacebookConnect::instance().isConnected())
@@ -335,6 +349,9 @@ void LLFloaterWebContent::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent
 	}
 	else if(event == MEDIA_EVENT_NAVIGATE_BEGIN)
 	{
+		// hide the media fail text and bring the web browser to the front
+		mWebBrowser->setVisible( true );
+		mPluginFailText->setVisible( false );
 		// flags are sent with this event
 		mBtnBack->setEnabled( self->getHistoryBackAvailable() );
 		mBtnForward->setEnabled( self->getHistoryForwardAvailable() );

@@ -1,30 +1,78 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Komunikacja" name="im">
-	<panel.string name="log_in_to_change">
-		Zaloguj się ponownie, aby zmienić
-	</panel.string>
-	<button label="Wyczyść Historię" name="clear_cache" tool_tip="Wyczyść obraz zapisu, ostatniej lokalizacji, historii teleportów, stron i bufor danych tekstur"/>
-	<text name="cache_size_label_l">
-		(Miejsca, obrazy, przeglądarka internetowa, wyszukiwarka historii)
-	</text>
-	<check_box label="Pokaż mój profil w wynikach wyszukiwarki" name="online_searchresults"/>
-	<check_box label="Mój status online jest dostępny tylko dla znajomych i grup do których należę" name="online_visibility"/>
-	<check_box label="Możliwość wysyłania wiadomości prywatnej (IM) oraz rozmowy głosowej tylko dla &#10;znajomych i grup do których należę" name="voice_call_friends_only_check" top_pad="15"/>
-	<check_box label="Wyłącz mikrofon po zakończeniu rozmowy głosowej" name="auto_disengage_mic_check"/>
-	<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
-	<text name="Logs:">
-		Logi rozmów:
-	</text>
-	<check_box label="Zapisz logi rozmów ogólnych na moim komputerze" name="log_nearby_chat"/>
-	<check_box label="Zapisuj logi wiadomości prywatnych (IM) na moim komputerze" name="log_instant_messages"/>
-	<check_box label="Dodaj znacznik czasu do każdej linii w logu rozmów." name="show_timestamps_check_im"/>
-	<check_box label="Dodaj znacznik czasu do nazwy pliku z zapisem rozmów." name="logfile_name_datestamp"/>
-	<text name="log_path_desc">
-		Lokalizacja zapisu:
-	</text>
-	<button label="Przeglądaj" label_selected="Przeglądaj" name="log_path_button"/>
-	<button label="Lista zablokowanych" name="block_list"/>
-	<text name="block_list_label">
-		(Ludzie i/lub obiekty zablokowane)
-	</text>
+	<tab_container label="Prywatność" name="tabs">
+		<panel label="Ogólne" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Zaloguj się, by zmienić
+			</panel.string>
+			<button label="Wyczyść historię" tool_tip="Wyczyść zapisane obrazy, ostatnią lokalizację, historię teleportów, bufor stron internetowych i bufor danych tekstur" name="clear_cache"/>
+			<text name="cache_size_label">
+				(miejsca, obrazy, strony web, historia wyszukiwarki)
+			</text>
+			<check_box label="Pokaż mój profil w wynikach wyszukiwarki" name="online_searchresults"/>
+			<check_box label="Mój status online dostępny tylko dla znajomych i grup" name="online_visibility"/>
+			<check_box label="Tylko znajomi i grupy mogą wysyłać do mnie wiadomości lub dzwonić głosowo" name="voice_call_friends_only_check"/>
+			<check_box label="Wyłącz mikrofon po zakończeniu rozmowy głosowej" name="auto_disengage_mic_check"/>
+			<check_box label="Automatycznie akceptuj nowe przedmioty" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Klasyczne powiadomienia akceptacji/odrzucenia przedmiotu" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Gdy włączysz tą opcję, to Przeglądarka będzie wysyłać powiadomienia o akceptacji/odrzuceniu przedmiotu tylko po naciśnięciu odpowiedniego przycisku. Gdy wyłączysz tą opcję, to powiadomienie będzie wysłane automatycznie zaraz po tym, gdy przedmiot zostanie zaakceptowany. Ta opcja nie ma żadnej mocy, gdy przedmioty są akceptowane automatycznie."/>
+			<check_box label="Automatycznie pokazuj akceptowane przedmioty" name="Show_In_Inventory"/>
+			<check_box label="Automatycznie pokazuj noty, tekstury i landmarki po zaakceptowaniu" name="Show_New_Inventory"/>
+			<check_box label="Twórz efekty cząsteczkowe, gdy dam jakiś przedmiot innej osobie" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
+			<text name="logging_label">
+				Zapisywanie:
+			</text>
+			<check_box name="LogNearbyChat" label="Czat lokalny" tool_tip="Zapisuj wiadomości czatu lokalnego na twardym dysku swojego komputera"/>
+			<combo_box name="conversation_log_combo" tool_tip="Dziennik: Lista konwersacji rozpoczętych przez Ciebie lub kogoś innego. Logi rozmów: Rzeczywisty tekst pokazywany na ekranie.">
+				<item name="log_and_transcripts" label="Dziennik i logi rozmów"/>
+				<item name="log_only" label="Tylko dziennik"/>
+				<item name="no_log_or_transcript" label="Nie zapisuj dziennika ani logów rozmów"/>
+			</combo_box>
+			<button label="Wyczyść dziennik" name="clear_log"/>
+			<button label="Usuń logi rozmów" name="delete_transcripts"/>
+			<text name="log_location_label">
+				Miejsce zapisu:
+			</text>
+			<check_box label="Używaj starego formatu nazw plików dla logów rozmów" name="UseLegacyIMLogNames" tool_tip="Włączenie tej opcji spowoduje używanie starego formatu nazw plików dla logów rozmów (Nazwa Użytkownika) zamiast nowego (nazwa_użytkownika)."/>
+			<check_box label="Dodawaj datę do nazw plików logów rozmów" name="LogFileNamewithDate" tool_tip="Dodawaj znaczniki czasu do logów czatów oraz IM w formacie czat-RRRR-MM-DD oraz 'Nazwa pliku IM'-RRRR-MM."/>
+			<check_box label="Używaj wbudowanej przeglądarki logów" name="FSUseBuiltInHistory" tool_tip="Używaj wbudowanej przeglądarki logów do przeglądania logów czatów. Gdy wyłączysz tą opcję, to logi będą się otwierać w domyślnym edytorze tekstowym Twojego systemu operacyjnego."/>
+			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
+		</panel>
+		<panel label="Śledzenie spojrzeń" name="tab-lookat">
+			<check_box label="Pokazuj na co patrzą inni:" name="showlookat" tool_tip="To ustawienie pozwala włączyć wizualne pokazywanie wskaźnika animacji (punktu LookAt), którego używa przeglądarka do obracania oczami, głową oraz tułowiem. Może on także być używany do określenia punktu zaczepienia kamery awatara."/>
+			<text name="lookatshownames" tool_tip="Wybierz, czy przy celowniczkach mają być pokazywane imiona awatarów">
+				Format imion przy celach spojrzeń
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Nie pokazuj" name="None"/>
+				<combo_box.item label="Pełne imię" name="Complete_Name"/>
+				<combo_box.item label="Wyświetlane imię" name="Display_Name"/>
+				<combo_box.item label="Stare imię" name="Legacy_Name"/>
+				<combo_box.item label="Nazwa konta" name="User_Name"/>
+			</combo_box>
+			<check_box label="Nie pokazuj celu mojego własnego spojrzenia" name="LookAtHideOwn" tool_tip="Nie pokazuj mi mojego własnego celowniczka"/>
+			<text name="mylookat">
+				Moje cele spojrzeń:
+			</text>
+			<check_box label="Nie pokazuj innym, gdzie patrzę" name="privatelookat" tool_tip="Zapobiega wysyłaniu na serwer informacji o własnym celu spojrzenia"/>
+			<check_box label="Nie pokazuj celu mojego spojrzenia nawet na moim własnym ekranie" name="privateLocalLookat" tool_tip="Zapobiega poruszaniu głową i skupianiu wzroku Twojego awatara na Twoim własnym ekranie. Ten ruch nie musi być widoczny dla innych nawet gdy ta opcja jest wyłączona."/>
+			<check_box label="Nie pokazuj innym celów moich wskazań" name="privatepointat" tool_tip="Zapobiega wysyłaniu innym celów wskazanych myszką"/>
+		</panel>
+		<panel label="Autoodpowiedzi" name="tab-autoresponse">
+			<text name="text_box3">
+				Gdy jestem zajęty/a:
+			</text>
+			<text name="autorespond_response_label">
+				Do wszystkich awatarów, gdy włączony jest tryb autoodpowiedzi:
+			</text>
+			<text name="autorespond_nf_response_label">
+				Do nieznajomych, gdy włączony jest tryb autoodpowiedzi dla nieznajomych:
+			</text>
+			<text name="autorespond_rto_response_label">
+				Do wszystkich awatarów, gdy włączony jest tryb odrzucania propozycji i próśb o teleportację:
+			</text>
+			<check_box label="Wysyłaj autoodpowiedzi do WYCISZONYCH awatarów:" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
+			<check_box label="Wysyłaj autoodpowiedź, gdy mój awatar śpi (jest w trybie 'away'):" name="send_away_av_response" tool_tip="Wysyłaj tekst poniżej, gdy ktoś wysyła Ci wiadomość IM, a Twój awatar w tym momencie akurat śpi (jest w trybie 'away')."/>
+		</panel>
+	</tab_container>
 </panel>

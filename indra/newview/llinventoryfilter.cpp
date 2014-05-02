@@ -42,6 +42,8 @@
 #include "llclipboard.h"
 #include "lltrans.h"
 
+#include "llinventoryfunctions.h" // needed to query worn status
+#include "llappearancemgr.h" // needed to query whether we are in COF
 LLFastTimer::DeclareTimer FT_FILTER_CLIPBOARD("Filter Clipboard");
 
 LLInventoryFilter::FilterOps::FilterOps(const Params& p)
@@ -66,21 +68,58 @@ LLInventoryFilter::LLInventoryFilter(const Params& p)
 :	mName(p.name),
 	mFilterModified(FILTER_NONE),
 	mEmptyLookupMessage("InventoryNoMatchingItems"),
-    mFilterOps(p.filter_ops),
+	mFilterSubStringTarget(SUBST_TARGET_NAME),	// ## Zi: Extended Inventory Search
+	mFilterOps(p.filter_ops),
 	mFilterSubString(p.substring),
 	mCurrentGeneration(0),
 	mFirstRequiredGeneration(0),
 	mFirstSuccessGeneration(0)
 {
+
+
+	//	Begin Multi-substring inventory search
+	mSubStringMatchOffsets.clear();
+	mFilterSubStrings.clear();
+	//	End Multi-substring inventory search
+
 	// copy mFilterOps into mDefaultFilterOps
 	markDefault();
 }
 
+// ## Zi: Extended Inventory Search
+void LLInventoryFilter::setFilterSubStringTarget(const std::string& targetName)
+{
+	if(targetName=="name")
+		mFilterSubStringTarget=SUBST_TARGET_NAME;
+	else if(targetName=="creator")
+		mFilterSubStringTarget=SUBST_TARGET_CREATOR;
+	else if(targetName=="description")
+		mFilterSubStringTarget=SUBST_TARGET_DESCRIPTION;
+	else if(targetName=="uuid")
+		mFilterSubStringTarget=SUBST_TARGET_UUID;
+	else if(targetName=="all")
+		mFilterSubStringTarget=SUBST_TARGET_ALL;
+	else
+		llwarns << "Unknown sub string target: " << targetName << llendl;
+}
+
+LLInventoryFilter::EFilterSubstringTarget LLInventoryFilter::getFilterSubStringTarget() const
+{
+	return mFilterSubStringTarget;
+}
+
+// ## Zi: Extended Inventory Search
+
 bool LLInventoryFilter::check(const LLFolderViewModelItem* item) 
 {
 	const LLFolderViewModelItemInventory* listener = dynamic_cast<const LLFolderViewModelItemInventory*>(item);
+
 	// Clipboard cut items are *always* filtered so we need this value upfront
-	const BOOL passed_clipboard = (listener ? checkAgainstClipboard(listener->getUUID()) : TRUE);
+	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	//const BOOL passed_clipboard = (listener ? checkAgainstClipboard(listener->getUUID()) : TRUE);
+	const BOOL passed_clipboard = TRUE;
+	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 
 	// If it's a folder and we're showing all folders, return automatically.
 	const BOOL is_folder = listener->getInventoryType() == LLInventoryType::IT_CATEGORY;
@@ -88,8 +127,66 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 	{
 		return passed_clipboard;
 	}
+	
+	//bool passed = (mFilterSubString.size() ? listener->getSearchableName().find(mFilterSubString) != std::string::npos : true); <FS:TM> 3.6.4 check this, ll repoaced the line in CHUI (2 down) with this
+	//mSubStringMatchOffset = mFilterSubString.size() ? item->getSearchableLabel().find(mFilterSubString) : std::string::npos; <FS:TM> CHUI Merge LL origonal removed in FS, replaced with enhanced search
+	//std::string::size_type string_offset = mFilterSubString.size() ? listener->getSearchableName().find(mFilterSubString) : std::string::npos; <FS:TM> CHUI Merge LL new line 
+	//	Begin Multi-substring inventory search
+	std::string::size_type string_offset = std::string::npos;
+	if (mFilterSubStrings.size())
+	{
+		//const std::string& searchLabel=getSearchableTarget(item);		// ## Zi: Extended Inventory Search
+		std::string searchLabel;
+		switch(mFilterSubStringTarget)
+		{
+			case SUBST_TARGET_NAME:
+				searchLabel = listener->getSearchableName();
+				break;
+			case SUBST_TARGET_CREATOR:
+				searchLabel = listener->getSearchableCreator();
+				break;
+			case SUBST_TARGET_DESCRIPTION:
+				searchLabel = listener->getSearchableDescription();
+				break;
+			case SUBST_TARGET_UUID:
+				searchLabel = listener->getSearchableUUID();
+				break;
+			case SUBST_TARGET_ALL:
+				searchLabel = listener->getSearchableAll();
+				break;
+			default:
+				llwarns << "Unknown search substring target: " << mFilterSubStringTarget << llendl;
+				searchLabel = listener->getSearchableName();
+				break;
+		}
 
-	bool passed = (mFilterSubString.size() ? listener->getSearchableName().find(mFilterSubString) != std::string::npos : true);
+		U32 index = 0;
+		for (std::vector<std::string>::iterator it=mFilterSubStrings.begin();
+			it<mFilterSubStrings.end(); it++, index++)
+		{
+			std::string::size_type sub_string_offset = searchLabel.find(*it);
+
+			mSubStringMatchOffsets[index] = sub_string_offset;
+
+			if (sub_string_offset == std::string::npos)
+			{
+				string_offset = std::string::npos;
+				for (std::vector<std::string::size_type>::iterator it=mSubStringMatchOffsets.begin();
+					it<mSubStringMatchOffsets.end(); it++)
+				{
+					*it = std::string::npos;
+				}
+				break;
+			}
+			else if (string_offset == std::string::npos)
+			{
+				string_offset = sub_string_offset;
+			}
+		}
+	}
+	//	End Multi-substring inventory search
+
+	BOOL passed = (mFilterSubString.size() == 0 || string_offset != std::string::npos);
 	passed = passed && checkAgainstFilterType(listener);
 	passed = passed && checkAgainstPermissions(listener);
 	passed = passed && checkAgainstFilterLinks(listener);
@@ -103,7 +200,11 @@ bool LLInventoryFilter::check(const LLInventoryItem* item)
 	const bool passed_string = (mFilterSubString.size() ? item->getName().find(mFilterSubString) != std::string::npos : true);
 	const bool passed_filtertype = checkAgainstFilterType(item);
 	const bool passed_permissions = checkAgainstPermissions(item);
-	const bool passed_clipboard = checkAgainstClipboard(item->getUUID());
+	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	//const bool passed_clipboard = checkAgainstClipboard(item->getUUID());
+	const bool passed_clipboard = true;
+	// </FS:Ansariel> Don't filter cut items
 
 	return passed_filtertype && passed_permissions && passed_clipboard && passed_string;
 }
@@ -132,7 +233,11 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 	}
 
 	// Always check against the clipboard
-	const BOOL passed_clipboard = checkAgainstClipboard(folder_id);
+	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	//const BOOL passed_clipboard = checkAgainstClipboard(folder_id);
+	const BOOL passed_clipboard = TRUE;
+	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 	
 	// we're showing all folders, overriding filter
 	if (mFilterOps.mShowFolderState == LLInventoryFilter::SHOW_ALL_FOLDERS)
@@ -235,6 +340,19 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLFolderViewModelItemInvent
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
+	// FILTERTYPE_WORN
+	// Pass if this item is worn (hiding COF and Outfits folders)
+	if (filterTypes & FILTERTYPE_WORN)
+	{
+		if (!object) return FALSE;
+		LLUUID cat_id = object->getParentUUID();
+		const LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
+		return !LLAppearanceMgr::instance().getIsInCOF(object_id)
+			&& (!cat || cat->getPreferredType() != LLFolderType::FT_OUTFIT)
+			&& get_is_item_worn(object_id);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
 	// FILTERTYPE_EMPTYFOLDERS
 	// Pass if this item is a folder and is not a system folder that should be hidden
 	if (filterTypes & FILTERTYPE_EMPTYFOLDERS)
@@ -328,6 +446,19 @@ bool LLInventoryFilter::checkAgainstClipboard(const LLUUID& object_id) const
 	}
 	return true;
 }
+
+// <FS:Ansariel> For clipboard highlighting
+bool LLInventoryFilter::checkClipboard(const LLFolderViewModelItem* item)
+{
+	const LLFolderViewModelItemInventory* listener = dynamic_cast<const LLFolderViewModelItemInventory*>(item);
+	if (!listener)
+	{
+		return true;
+	}
+
+	return checkAgainstClipboard(listener->getUUID());
+}
+// </FS:Ansariel>
 
 bool LLInventoryFilter::checkAgainstPermissions(const LLFolderViewModelItemInventory* listener) const
 {
@@ -475,6 +606,13 @@ void LLInventoryFilter::setFilterEmptySystemFolders()
 	mFilterOps.mFilterTypes |= FILTERTYPE_EMPTYFOLDERS;
 }
 
+// <FS:Ansariel> Optional hiding of empty system folders
+void LLInventoryFilter::removeFilterEmptySystemFolders()
+{
+	mFilterOps.mFilterTypes &= ~FILTERTYPE_EMPTYFOLDERS;
+}
+// </FS:Ansariel> Optional hiding of empty system folders
+
 void LLInventoryFilter::setFilterUUID(const LLUUID& object_id)
 {
 	if (mFilterOps.mFilterUUID == LLUUID::null)
@@ -495,6 +633,31 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 	mFilterSubStringOrig = string;
 	LLStringUtil::trimHead(filter_sub_string_new);
 	LLStringUtil::toUpper(filter_sub_string_new);
+	
+	//	Begin Multi-substring inventory search
+	//	Cut filter string into several substrings, separated by +
+	{
+		mFilterSubStrings.clear();
+		mSubStringMatchOffsets.clear();
+		std::string::size_type frm = 0;
+		std::string::size_type to;
+		do
+		{
+			to = filter_sub_string_new.find_first_of('+',frm);
+
+			std::string subSubString = (to == std::string::npos) ? filter_sub_string_new.substr(frm, to) : filter_sub_string_new.substr(frm, to-frm);
+		
+			if (subSubString.size())
+			{
+				mFilterSubStrings.push_back(subSubString);
+				mSubStringMatchOffsets.push_back(std::string::npos);
+			}
+
+			frm = to+1;
+		}
+		while (to != std::string::npos);
+	}
+
 
 	if (mFilterSubString != filter_sub_string_new)
 	{
@@ -507,6 +670,7 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 			&& !filter_sub_string_new.substr(0, mFilterSubString.size()).compare(mFilterSubString);
 
 		mFilterSubString = filter_sub_string_new;
+
 		if (less_restrictive)
 		{
 			setModified(FILTER_LESS_RESTRICTIVE);
@@ -528,11 +692,15 @@ void LLInventoryFilter::setFilterSubString(const std::string& string)
 			setModified(FILTER_RESTART);
 		}
 
+		// ## Zi: Filter Links Menu
+		// We don't do this anymore, we have a menu option for it now. -Zi
 		// Cancel out filter links once the search string is modified
-		{
-			mFilterOps.mFilterLinks = FILTERLINK_INCLUDE_LINKS;
-		}
+//		{
+//			mFilterOps.mFilterLinks = FILTERLINK_INCLUDE_LINKS;
+//		}
+		// ## Zi: Filter Links Menu
 	}
+	//	End Multi-substring inventory search
 }
 
 void LLInventoryFilter::setFilterPermissions(PermissionMask perms)
@@ -632,8 +800,8 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 		bool is_increasing_from_zero = is_increasing && !mFilterOps.mHoursAgo && !isSinceLogoff();
 
 		// *NOTE: need to cache last filter time, in case filter goes stale
-		BOOL less_restrictive = (are_date_limits_valid && ((is_increasing && mFilterOps.mHoursAgo)) || !hours);
-		BOOL more_restrictive = (are_date_limits_valid && (!is_increasing && hours) || is_increasing_from_zero);
+		BOOL less_restrictive = (are_date_limits_valid && ((is_increasing && mFilterOps.mHoursAgo) || !hours));
+		BOOL more_restrictive = (are_date_limits_valid && ((!is_increasing && hours) || is_increasing_from_zero));
 
 		mFilterOps.mHoursAgo = hours;
 		mFilterOps.mMinDate = time_min();
@@ -664,15 +832,34 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 
 void LLInventoryFilter::setFilterLinks(U64 filter_links)
 {
-	if (mFilterOps.mFilterLinks != filter_links)
+	// <FS:Zi> Filter Links Menu
+	// if (mFilterOps.mFilterLinks != filter_links)
+	// {
+	// 	if (mFilterOps.mFilterLinks == FILTERLINK_EXCLUDE_LINKS ||
+	// 		mFilterOps.mFilterLinks == FILTERLINK_ONLY_LINKS)
+	// 		setModified(FILTER_MORE_RESTRICTIVE);
+	// 	else
+	// 		setModified(FILTER_LESS_RESTRICTIVE);
+	// }
+	// mFilterOps.mFilterLinks = filter_links;
+	if (mFilterOps.mFilterLinks!=filter_links)
 	{
-		if (mFilterOps.mFilterLinks == FILTERLINK_EXCLUDE_LINKS ||
-			mFilterOps.mFilterLinks == FILTERLINK_ONLY_LINKS)
-			setModified(FILTER_MORE_RESTRICTIVE);
-		else
-			setModified(FILTER_LESS_RESTRICTIVE);
+		LLInventoryFilter::EFilterModified modifyMode=FILTER_RESTART;
+
+		if(filter_links==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_LESS_RESTRICTIVE;
+		else if(mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_MORE_RESTRICTIVE;
+
+		else if(filter_links==FILTERLINK_EXCLUDE_LINKS && mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_MORE_RESTRICTIVE;
+		else if(filter_links==FILTERLINK_ONLY_LINKS && mFilterOps.mFilterLinks==FILTERLINK_INCLUDE_LINKS)
+			modifyMode=FILTER_MORE_RESTRICTIVE;
+
+		mFilterOps.mFilterLinks=filter_links;
+		setModified(modifyMode);
 	}
-	mFilterOps.mFilterLinks = filter_links;
+	// </FS:Zi>
 }
 
 void LLInventoryFilter::setShowFolderState(EFolderShow state)
@@ -695,6 +882,12 @@ void LLInventoryFilter::setShowFolderState(EFolderShow state)
 			setModified();
 		}
 	}
+}
+
+void LLInventoryFilter::setFilterWorn(BOOL sl)
+{
+	setModified();
+	mFilterOps.mFilterTypes |= FILTERTYPE_WORN;
 }
 
 void LLInventoryFilter::markDefault()
@@ -955,15 +1148,53 @@ void LLInventoryFilter::fromParams(const Params& params)
 		return;
 	}
 
-	setFilterObjectTypes(params.filter_ops.types);
-	setFilterCategoryTypes(params.filter_ops.category_types);
-	setFilterWearableTypes(params.filter_ops.wearable_types);
-	setDateRange(params.filter_ops.date_range.min_date,   params.filter_ops.date_range.max_date);
-	setHoursAgo(params.filter_ops.hours_ago);
-	setShowFolderState(params.filter_ops.show_folder_state);
-	setFilterPermissions(params.filter_ops.permissions);
-	setFilterSubString(params.substring);
-	setDateRangeLastLogoff(params.since_logoff);
+	// <FS:Ansariel> FIRE-12418: Only apply filter params if they are really provided
+	//setFilterObjectTypes(params.filter_ops.types);
+	//setFilterCategoryTypes(params.filter_ops.category_types);
+	//setFilterWearableTypes(params.filter_ops.wearable_types);
+	//setDateRange(params.filter_ops.date_range.min_date,   params.filter_ops.date_range.max_date);
+	//setHoursAgo(params.filter_ops.hours_ago);
+	//setShowFolderState(params.filter_ops.show_folder_state);
+	//setFilterPermissions(params.filter_ops.permissions);
+	//setFilterSubString(params.substring);
+	//setDateRangeLastLogoff(params.since_logoff);
+	if (params.filter_ops.types.isProvided())
+	{
+		setFilterObjectTypes(params.filter_ops.types);
+	}
+	if (params.filter_ops.category_types.isProvided())
+	{
+		setFilterCategoryTypes(params.filter_ops.category_types);
+	}
+	if (params.filter_ops.wearable_types.isProvided())
+	{
+		setFilterWearableTypes(params.filter_ops.wearable_types);
+	}
+	if (params.filter_ops.date_range.min_date.isProvided() && params.filter_ops.date_range.max_date.isProvided())
+	{
+		setDateRange(params.filter_ops.date_range.min_date,   params.filter_ops.date_range.max_date);
+	}
+	if (params.filter_ops.hours_ago.isProvided())
+	{
+		setHoursAgo(params.filter_ops.hours_ago);
+	}
+	if (params.filter_ops.show_folder_state.isProvided())
+	{
+		setShowFolderState(params.filter_ops.show_folder_state);
+	}
+	if (params.filter_ops.permissions.isProvided())
+	{
+		setFilterPermissions(params.filter_ops.permissions);
+	}
+	if (params.substring.isProvided())
+	{
+		setFilterSubString(params.substring);
+	}
+	if (params.since_logoff.isProvided())
+	{
+		setDateRangeLastLogoff(params.since_logoff);
+	}
+	// </FS:Ansariel>
 }
 
 U64 LLInventoryFilter::getFilterObjectTypes() const
@@ -1087,3 +1318,25 @@ bool LLInventoryFilter::FilterOps::DateRange::validateBlock( bool   emit_errors 
 	}
 	return valid;
 }
+
+//	Begin Multi-substring inventory search
+
+//	For use by LLFolderViewItem for highlighting
+
+U32	LLInventoryFilter::getFilterSubStringCount() const 
+{
+	return mFilterSubStrings.size();
+}
+
+std::string::size_type LLInventoryFilter::getFilterSubStringPos(U32 index) const
+{
+	if (index < 0 || index >= mSubStringMatchOffsets.size()) return std::string::npos;
+	return mSubStringMatchOffsets[index];
+}
+
+std::string::size_type LLInventoryFilter::getFilterSubStringLen(U32 index) const
+{
+	if (index < 0 || index >= mFilterSubStrings.size()) return 0;
+	return mFilterSubStrings[index].size();
+}
+//	End Multi-substring inventory search

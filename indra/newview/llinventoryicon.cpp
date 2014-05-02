@@ -54,9 +54,9 @@ LLIconDictionary::LLIconDictionary()
 	addEntry(LLInventoryType::ICONNAME_TEXTURE, 				new IconEntry("Inv_Texture"));
 	addEntry(LLInventoryType::ICONNAME_SOUND, 					new IconEntry("Inv_Sound"));
 	addEntry(LLInventoryType::ICONNAME_CALLINGCARD_ONLINE, 		new IconEntry("Inv_CallingCard"));
-	addEntry(LLInventoryType::ICONNAME_CALLINGCARD_OFFLINE, 	new IconEntry("Inv_CallingCard"));
+	addEntry(LLInventoryType::ICONNAME_CALLINGCARD_OFFLINE, 	new IconEntry("Inv_CallingCardOffline"));
 	addEntry(LLInventoryType::ICONNAME_LANDMARK, 				new IconEntry("Inv_Landmark"));
-	addEntry(LLInventoryType::ICONNAME_LANDMARK_VISITED, 		new IconEntry("Inv_Landmark"));
+	addEntry(LLInventoryType::ICONNAME_LANDMARK_VISITED, 		new IconEntry("Inv_LandmarkVisited"));
 	addEntry(LLInventoryType::ICONNAME_SCRIPT, 					new IconEntry("Inv_Script"));
 	addEntry(LLInventoryType::ICONNAME_CLOTHING, 				new IconEntry("Inv_Clothing"));
 	addEntry(LLInventoryType::ICONNAME_OBJECT, 					new IconEntry("Inv_Object"));

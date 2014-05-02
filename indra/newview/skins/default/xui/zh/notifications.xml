@@ -238,10 +238,10 @@
 你的 L$ 不夠加入這群組。
 	</notification>
 	<notification name="CreateGroupCost">
-		創立這個群組費用為 L$100。
+		創立這個群組費用為 L$[COST]。
 群組需有至少兩位成員，否則將永久被刪除。
 請在 48 小時內邀請成員加入。
-		<usetemplate canceltext="取消" name="okcancelbuttons" notext="取消" yestext="花費 L$100 建立群組"/>
+		<usetemplate canceltext="取消" name="okcancelbuttons" notext="取消" yestext="花費 L$[COST] 建立群組"/>
 	</notification>
 	<notification name="LandBuyPass">
 		花費 L$[COST]，可進入「[PARCEL_NAME]」土地，停留 [TIME] 小時。  購買通行權？
@@ -257,7 +257,7 @@
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		請注意：若點按「出售給任何人」，你的土地將允許整個 [SECOND_LIFE] 社群前來購買，包括此地區外的人。
+		請注意：若點按「出售給任何人」，你的土地將允許整個 [CURRENT_GRID] 社群前來購買，包括此地區外的人。
 
 所選的 [LAND_SIZE] 平方公尺土地即將準備出售。
 售價將為 L$[SALE_PRICE]，並將經你授權出售給 [NAME]。
@@ -352,7 +352,7 @@
 		上傳舉報用快照時出問題，原因：[REASON]
 	</notification>
 	<notification name="MustAgreeToLogIn">
-		你必須同意服務條款才可繼續登入 [SECOND_LIFE]。
+		你必須同意服務條款才可繼續登入 [CURRENT_GRID]。
 	</notification>
 	<notification name="CouldNotPutOnOutfit">
 		無法穿上裝扮。
@@ -372,7 +372,7 @@
 		糟糕！ 發現有內容留白。
 你必須為化身輸入一個使用者名稱。
 
-進入 [SECOND_LIFE] 需要一個帳號。 你現在要不要新建一個？
+進入 [CURRENT_GRID] 需要一個帳號。 你現在要不要新建一個？
 		<url name="url">
 			[create_account_url]
 		</url>
@@ -414,7 +414,7 @@
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="PromptGoToEventsPage">
-		前往 [SECOND_LIFE] 事件網頁？
+		前往 [CURRENT_GRID] 事件網頁？
 		<url name="url">
 			http://secondlife.com/events/
 		</url>
@@ -443,7 +443,7 @@
 		重新啟動 [APP_NAME] 後將換成新的語言。
 	</notification>
 	<notification name="GoToAuctionPage">
-		前往 [SECOND_LIFE] 網頁去察看拍賣細節或下標？
+		前往 [CURRENT_GRID] 網頁去察看拍賣細節或下標？
 		<url name="url">
 			http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]
 		</url>
@@ -999,7 +999,7 @@
 這異常狀況通常只是暫時的。 請稍待幾分鐘後，再自訂並儲存可穿裝扮。
 	</notification>
 	<notification name="YouHaveBeenLoggedOut">
-		糟糕！ 你已被登出 [SECOND_LIFE]
+		糟糕！ 你已被登出 [CURRENT_GRID]
             [MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="結束退出" yestext="察看 IM 和聊天內容"/>
 	</notification>
@@ -1236,7 +1236,7 @@
 	</notification>
 	<notification name="ClothingLoading">
 		你的服裝仍在下載中。
-你可以正常使用 [SECOND_LIFE]，而且其他人看到你也是正常的。
+你可以正常使用 [CURRENT_GRID]，而且其他人看到你也是正常的。
 		<form name="form">
 			<ignore name="ignore" text="服裝花太多時間下載"/>
 		</form>
@@ -1244,7 +1244,7 @@
 	<notification name="FirstRun">
 		[APP_NAME] 安裝完成。
 
-如果你是第一次使用 [SECOND_LIFE]，你將需要建立新帳號才可登入。
+如果你是第一次使用 [CURRENT_GRID]，你將需要建立新帳號才可登入。
 		<usetemplate name="okcancelbuttons" notext="繼續" yestext="建立帳號…"/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
@@ -1264,7 +1264,7 @@
 		你的人物很快將會出現。
 
 用方向鍵行走。
-任何時候你都可按 F1 鍵察看幫助，進一步瞭解 [SECOND_LIFE]。
+任何時候你都可按 F1 鍵察看幫助，進一步瞭解 [CURRENT_GRID]。
 請選擇男性或女性化身。 以後你仍可改變這個選擇。
 		<usetemplate name="okcancelbuttons" notext="女性" yestext="男性"/>
 	</notification>
@@ -1531,15 +1531,15 @@ SHA1 指紋：[MD5_DIGEST]
 		<usetemplate ignoretext="啟動我的瀏覽器以管理我的帳戶" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchSecurityIssues">
-		造訪 [SECOND_LIFE] 維基察看如何提報安全問題。
+		造訪 [CURRENT_GRID] 維基察看如何提報安全問題。
 		<usetemplate ignoretext="開啟我的網頁瀏覽器以學習如何回報一個安全性的議題" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchQAWiki">
-		拜訪 [SECOND_LIFE] 問與答維基。
+		拜訪[CURRENT_GRID] 問與答維基。
 		<usetemplate ignoretext="開啟我的網頁瀏覽器去察看問與答維基" name="okcancelignore" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="WebLaunchPublicIssue">
-		拜訪 [SECOND_LIFE] 公共議題追蹤，那裡你將可以回報臭蟲與其他議題。
+		拜訪[CURRENT_GRID] 公共議題追蹤，那裡你將可以回報臭蟲與其他議題。
 		<usetemplate ignoretext="開啟我的網頁瀏覽器以使用公共議題追蹤。" name="okcancelignore" notext="取消" yestext="前往頁面"/>
 	</notification>
 	<notification name="WebLaunchSupportWiki">
@@ -2142,9 +2142,9 @@ SHA1 指紋：[MD5_DIGEST]
 
 你似乎正在舉報有人侵犯智慧財產權。 請確定你舉報內容確鑿無誤：
 
-(1) 違規舉報處理程序。 你若相信有居民利用 [SECOND_LIFE] 權限遂行侵犯智慧財產權，如使用複製機器程式碼(CopyBot)或其他類似複製工具，得以舉報此情事。 違規處理小組會就任何違反[SECOND_LIFE][http://secondlife.com/corporate/tos.php 服務條款]或[http://secondlife.com/corporate/cs.php 社群準則]的行為展開調查，並採取適當處置。 然而，違規處理小組並不受理要求將某內容自[SECOND_LIFE]虛擬世界刪除，這類要求將不予回應。
+(1) 違規舉報處理程序。 你若相信有居民利用 [CURRENT_GRID] 權限遂行侵犯智慧財產權，如使用複製機器程式碼(CopyBot)或其他類似複製工具，得以舉報此情事。 違規處理小組會就任何違反[SECOND_LIFE][http://secondlife.com/corporate/tos.php 服務條款]或[http://secondlife.com/corporate/cs.php 社群準則]的行為展開調查，並採取適當處置。 然而，違規處理小組並不受理要求將某內容自[SECOND_LIFE]虛擬世界刪除，這類要求將不予回應。
 
-(2) DMCA（刪除內容作業程序）。 若欲要求刪除[SECOND_LIFE]內容，你必須按照[http://secondlife.com/corporate/dmca.php DMCA 政策]提出有效的侵權通知。
+(2) DMCA（刪除內容作業程序）。 若欲要求刪除[CURRENT_GRID]內容，你必須按照[http://secondlife.com/corporate/dmca.php DMCA 政策]提出有效的侵權通知。
 
 如果你仍希望繼續，請關閉此視窗，完成舉報。  你可能需要選擇「CopyBot 或濫用權限」這一具體類別。
 
@@ -2275,7 +2275,7 @@ SHA1 指紋：[MD5_DIGEST]
 		此地點限制為年滿 18 歲。
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		你必須提供付款資料才能進入這區域。  你是否要前往 [SECOND_LIFE] 網站設定付款資料？
+		你必須提供付款資料才能進入這區域。  你是否要前往 [CURRENT_GRID] 網站設定付款資料？
 
 [_URL]
 		<url name="url">
@@ -2308,7 +2308,7 @@ SHA1 指紋：[MD5_DIGEST]
 		主旨：[SUBJECT]，訊息：[MESSAGE]
 	</notification>
 	<notification name="FriendOnlineOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; 目前狀態為 [STATUS]
+		[NAME] 目前狀態為 [STATUS]
 	</notification>
 	<notification name="AddSelfFriend">
 		雖然你人很好，你還是不能把自己加為朋友。
@@ -2763,7 +2763,7 @@ SHA1 指紋：[MD5_DIGEST]
 如果你繼續留在這地區，你將會被登出。
 	</notification>
 	<notification name="LoadWebPage">
-		載入網頁 [URL]?
+		載入網頁 [URL] ?
 
 [MESSAGE]
 
@@ -3870,13 +3870,13 @@ SHA1 指紋：[MD5_DIGEST]
 		未選取足夠租用地段，無法合併。
 	</notification>
 	<notification name="CantDivideLandMultipleParcelsSelected">
-		無法分割土地，\n因為你選取了多個地段，\n請縮小所選土地。
+		無法分割土地， 因為你選取了多個地段， 請縮小所選土地。
 	</notification>
 	<notification name="CantDivideLandCantFindParcel">
-		無法分割土地。\n找不到地段。\n請到「幫助 &gt; 回報錯誤……」回報問題
+		無法分割土地。 找不到地段。 請到「幫助 &gt; 回報錯誤……」回報問題
 	</notification>
 	<notification name="CantDivideLandWholeParcelSelected">
-		無法分割土地。 選取了整個地段。\n請試著縮小所選的土地。
+		無法分割土地。 選取了整個地段。 請試著縮小所選的土地。
 	</notification>
 	<notification name="LandHasBeenDivided">
 		土地分割成功。

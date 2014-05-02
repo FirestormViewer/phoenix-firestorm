@@ -2,5 +2,6 @@
 <menu name="hide_navbar_menu">
 	<menu_item_check label="Mostra navigazione e barra dei Preferiti" name="ShowNavbarNavigationPanel"/>
 	<menu_item_check label="Mostra la barra dei Preferiti" name="ShowNavbarFavoritesPanel"/>
-	<menu_item_check label="Mostra mini barra del luogo" name="ShowMiniLocationPanel"/>
+	<menu_item_check label="Mostra barra della ricerca" name="ShowSearchTopBar"/>
+	<menu_item_check label="Mostra luogo nel Menu in alto" name="ShowMenuBarLocation"/>
 </menu>

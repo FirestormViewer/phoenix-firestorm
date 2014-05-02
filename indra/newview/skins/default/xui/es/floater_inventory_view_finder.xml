@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Inventory Finder" title="ÍTEMS_RECIENTES_DEL_INVENTARIO">
+<floater name="Inventory Finder" title="ÍTEMS_RECIENTES_DEL_INVENTARIO" width="175">
 	<check_box label="Animaciones" name="check_animation"/>
 	<check_box label="Tarjetas de visita" name="check_calling_card"/>
 	<check_box label="Ropa" name="check_clothing"/>
 	<check_box label="Gestos" name="check_gesture"/>
 	<check_box label="Hitos" name="check_landmark"/>
-	<check_box label="Redes" name="check_mesh"/>
+	<check_box label="Modelos mesh" name="check_mesh"/>
 	<check_box label="Notas" name="check_notecard"/>
 	<check_box label="Objetos" name="check_object"/>
 	<check_box label="Scripts" name="check_script"/>
@@ -14,7 +14,7 @@
 	<check_box label="Fotos" name="check_snapshot"/>
 	<button label="Todos" label_selected="Todo" name="All"/>
 	<button label="Ninguno" label_selected="Nada" name="None"/>
-	<check_box label="Mostrar siempre las carpetas" name="check_show_empty"/>
+	<check_box label="Mostrar carpetas siempre" name="check_show_empty"/>
 	<check_box bottom_delta="-36" label="Desde el fin de sesión" name="check_since_logoff"/>
 	<text name="- OR -">
 		- o -

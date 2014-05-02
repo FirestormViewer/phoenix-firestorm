@@ -243,6 +243,27 @@ private:
 
 typedef LLPointer<LLTextSegment> LLTextSegmentPtr;
 
+// <FS:Ansariel> Optional icon position
+namespace LLTextBaseEnums
+{
+	enum EIconPositioning
+	{
+		LEFT,
+		RIGHT,
+		NONE
+	};
+}
+
+namespace LLInitParam
+{
+	template<>
+	struct TypeValues<LLTextBaseEnums::EIconPositioning> : public TypeValuesHelper<LLTextBaseEnums::EIconPositioning>
+	{
+		static void declareValues();
+	};
+}
+// </FS:Ansariel> Optional icon position
+
 ///
 /// The LLTextBase class provides a base class for all text fields, such
 /// as LLTextEditor and LLTextBox. It implements shared functionality
@@ -305,6 +326,9 @@ public:
 
 		Optional<LLFontGL::ShadowType>	font_shadow;
 
+		// <FS:Ansariel> Optional icon position
+		Optional<LLTextBaseEnums::EIconPositioning>	icon_positioning;
+
 		Params();
 	};
 
@@ -336,9 +360,13 @@ public:
 	// LLEditMenuHandler interface
 	/*virtual*/ BOOL		canDeselect() const;
 	/*virtual*/ void		deselect();
-
+	
 	virtual void	onFocusReceived();
 	virtual void	onFocusLost();
+
+//<FS:KC - expose ParseHTML setting>
+                void        setParseHTML(bool parse_html) { mParseHTML = parse_html; }
+//</FS:KC - expose ParseHTML setting>
 
 	// LLSpellCheckMenuHandler overrides
 	/*virtual*/ bool		getSpellCheck() const;
@@ -421,6 +449,9 @@ public:
 
 	// cursor manipulation
 	bool					setCursor(S32 row, S32 column);
+// [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
+	S32						getCursorPos() { return mCursorPos; }
+// [/SL:KB
 	bool					setCursorPos(S32 cursor_pos, bool keep_cursor_offset = false);
 	void					startOfLine();
 	void					endOfLine();
@@ -532,8 +563,12 @@ protected:
 	LLTextSegmentPtr    			getSegmentAtLocalPos( S32 x, S32 y, bool hit_past_end_of_line = true);
 	segment_set_t::iterator			getEditableSegIterContaining(S32 index);
 	segment_set_t::const_iterator	getEditableSegIterContaining(S32 index) const;
-	segment_set_t::iterator			getSegIterContaining(S32 index);
-	segment_set_t::const_iterator	getSegIterContaining(S32 index) const;
+	// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+	//segment_set_t::iterator			getSegIterContaining(S32 index);
+	//segment_set_t::const_iterator	getSegIterContaining(S32 index) const;
+	segment_set_t::iterator			getSegIterContaining(S32 index, bool fix_position = true);
+	segment_set_t::const_iterator	getSegIterContaining(S32 index, bool fix_position = true) const;
+	// </FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
 	void                			clearSegments();
 	void							createDefaultSegment();
 	virtual void					updateSegments();
@@ -565,7 +600,7 @@ protected:
 	// misc
 	void							updateRects();
 	void							needsScroll() { mScrollNeeded = TRUE; }
-
+	
 	struct URLLabelCallback;
 	// Replace a URL with a new icon and label, for example, when
 	// avatar names are looked up.
@@ -658,6 +693,8 @@ protected:
 	is_friend_signal_t*         mIsFriendSignal;
 
 	LLUIString					mLabel;	// text label that is visible when no user text provided
+	// <FS:Ansariel> Optional icon position
+	LLTextBaseEnums::EIconPositioning	mIconPositioning;
 };
 
 #endif

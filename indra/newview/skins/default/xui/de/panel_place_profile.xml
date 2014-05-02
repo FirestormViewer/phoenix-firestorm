@@ -41,15 +41,21 @@
 	<string name="acquired_date">
 		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
 	</string>
-	<button name="back_btn" tool_tip="Hinten"/>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
+	<button name="back_btn" tool_tip="Zurück"/>
 	<text name="title" value="Ortsprofil"/>
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
-			<text name="region_title" value="SampleRegion"/>
-			<text name="parcel_title" value="SampleParcel, Name Long (145, 228, 26)"/>
-			<expandable_text name="description" value="Du waltz die spritz"/>
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
+			<text name="region_title" value="unbekannt"/>
+			<text name="parcel_title" value="unbekannt"/>
+			<expandable_text name="description" value="unbekannt"/>
 			<text name="owner_label" value="Eigentümer:"/>
-			<text name="owner_value" value="Alex Superduperlongenamenton"/>
+			<text name="owner_value" value="unbekannt"/>
 			<text name="maturity_value" value="unbekannt"/>
 			<accordion name="advanced_info_accordion">
 				<accordion_tab name="parcel_characteristics_tab" title="Parzelle">
@@ -113,6 +119,7 @@
 					</panel>
 				</accordion_tab>
 			</accordion>
-		</panel>
-	</scroll_container>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

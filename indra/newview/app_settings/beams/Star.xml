@@ -1,0 +1,271 @@
+<llsd>
+	<map>
+		<key>scale</key>
+			<real>.3</real>
+		<key>data</key>
+			<array>
+				 <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>
+				<array>
+					<real>0</real>
+					<real>0</real>
+					<real>9</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>1</real>
+					<real>6</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>2</real>
+					<real>3.5</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>4</real>
+					<real>3</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>6.5</real>
+					<real>2</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>5</real>
+					<real>-1</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>3.5</real>
+					<real>-3</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>3.75</real>
+					<real>-6</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>4</real>
+					<real>-9</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>2</real>
+					<real>-7.7</real>
+				</array>
+				
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>-1</real>
+					<real>6</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>-2</real>
+					<real>3.5</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>-4</real>
+					<real>3</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>-6.5</real>
+					<real>2</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>-5</real>
+					<real>-1</real>
+				</array>
+			</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key>	<array>
+					<real>0</real>
+					<real>-3.5</real>
+					<real>-3</real>
+				</array>
+				</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key><array>
+					<real>0</real>
+					<real>-3.75</real>
+					<real>-6</real>
+				</array>
+				</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key><array>
+					<real>0</real>
+					<real>-4</real>
+					<real>-9</real>
+				</array>
+				</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key><array>
+					<real>0</real>
+					<real>-2</real>
+					<real>-7.7</real>
+				</array>
+				</map> <map>
+            <key>color</key>
+                <array>
+                    <real>0</real>
+                    <real>1.0</real>
+                    <real>0</real>
+                    <real>1</real>
+                </array>
+            <key>offset</key><array>
+					<real>0</real>
+					<real>0</real>
+					<real>-6.5</real>
+				</array></map>
+		</array>
+	</map>
+</llsd>

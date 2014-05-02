@@ -52,9 +52,16 @@
 
 const U8  OVERLAY_IMG_COMPONENTS = 4;
 
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+LLViewerParcelOverlay::update_signal_t* LLViewerParcelOverlay::mUpdateSignal = NULL;
+// [/SL:KB]
+
 LLViewerParcelOverlay::LLViewerParcelOverlay(LLViewerRegion* region, F32 region_width_meters)
 :	mRegion( region ),
 	mParcelGridsPerEdge( S32( region_width_meters / PARCEL_GRID_STEP_METERS ) ),
+// <FS:CR> Aurora Sim
+	mRegionSize(S32(region_width_meters)),
+// </FS:CR> Aurora Sim
 	mDirty( FALSE ),
 	mTimeSinceLastUpdate(),
 	mOverlayTextureIdx(-1),
@@ -409,7 +416,12 @@ void LLViewerParcelOverlay::uncompressLandOverlay(S32 chunk, U8 *packed_overlay)
 {
 	// Unpack the message data into the ownership array
 	S32	size	= mParcelGridsPerEdge * mParcelGridsPerEdge;
-	S32 chunk_size = size / PARCEL_OVERLAY_CHUNKS;
+
+// <FS:CR> Aurora Sim
+	//S32 chunk_size = size / PARCEL_OVERLAY_CHUNKS;
+	S32 mParcelOverLayChunks = mRegionSize * mRegionSize / (128 * 128);
+	S32 chunk_size = size / mParcelOverLayChunks;
+// <FS:CR> Aurora Sim
 
 	memcpy(mOwnership + chunk*chunk_size, packed_overlay, chunk_size);		/*Flawfinder: ignore*/
 
@@ -420,7 +432,11 @@ void LLViewerParcelOverlay::uncompressLandOverlay(S32 chunk, U8 *packed_overlay)
 
 void LLViewerParcelOverlay::updatePropertyLines()
 {
-	if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	static LLCachedControl<bool> showPropertyLines(gSavedSettings, "ShowPropertyLines");
+	if (!showPropertyLines)
+	// </FS:Ansariel>
 		return;
 	
 	S32 row, col;
@@ -845,6 +861,10 @@ void LLViewerParcelOverlay::idleUpdate(bool force_update)
 		{
 			updateOverlayTexture();
 			updatePropertyLines();
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+			if (mUpdateSignal)
+				(*mUpdateSignal)(mRegion);
+// [/SL:KB]
 			mTimeSinceLastUpdate.reset();
 		}
 	}
@@ -852,7 +872,11 @@ void LLViewerParcelOverlay::idleUpdate(bool force_update)
 
 S32 LLViewerParcelOverlay::renderPropertyLines	() 
 {
-	if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	static LLCachedControl<bool> showPropertyLines(gSavedSettings, "ShowPropertyLines");
+	if (!showPropertyLines)
+	// </FS:Ansariel>
 	{
 		return 0;
 	}
@@ -993,3 +1017,12 @@ S32 LLViewerParcelOverlay::renderPropertyLines	()
 
 	return drawn;
 }
+
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+boost::signals2::connection LLViewerParcelOverlay::setUpdateCallback(const update_signal_t::slot_type & cb)
+{
+	if (!mUpdateSignal)
+		mUpdateSignal = new update_signal_t();
+	return mUpdateSignal->connect(cb); 
+}
+// [/SL:KB]

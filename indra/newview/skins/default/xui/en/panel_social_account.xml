@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel
-	 height="400"
+	 height="392"
 	 width="304"
 	 layout="topleft"
    name="panel_social_account">
@@ -17,7 +18,7 @@
    height="16"
    left="9"
    name="account_caption_label"
-   top="21"
+   top="13"
    type="string">
     Not connected to Facebook.
   </text>
@@ -45,7 +46,7 @@
      height="23"
      label="Connect..."
      name="connect_btn"
-     width="210">
+     right="-12">
       <commit_callback function="SocialSharing.Connect"/>
     </button>
 
@@ -66,6 +67,7 @@
       follows="top|left"
       height="16"
       left="0"
+      right="-5"
       name="account_learn_more_label"
       top_pad="20"
       type="string">

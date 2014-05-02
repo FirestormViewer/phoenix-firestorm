@@ -43,7 +43,7 @@
             <menu_item_separator name="sepatator1" />
             <!-- copied (with minor modifications) from menu_inventory_add.xml -->
             <!--  *TODO: generate dynamically? -->
-            <menu
+            <context_menu
              height="175"
              label="New Clothes"
              layout="topleft"
@@ -148,8 +148,8 @@
                      function="Gear.Create"
                      parameter="tattoo" />
                 </menu_item_call>
-            </menu>
-            <menu
+            </context_menu>
+            <context_menu
              height="85"
              label="New Body Parts"
              layout="topleft"
@@ -190,7 +190,7 @@
                      function="Gear.Create"
                      parameter="eyes" />
                 </menu_item_call>
-            </menu>
+            </context_menu>
             <!-- copied from menu_inventory_add.xml -->
 
     <menu_item_separator name="sepatator2" />

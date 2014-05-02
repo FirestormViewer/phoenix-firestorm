@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview notecard" title="NOTIZKARTE:">
+<floater name="preview notecard" title="Notizkarte:">
 	<floater.string name="no_object">
 		Es wurde kein Objekt gefunden, das diese Notizkarte enthält.
 	</floater.string>

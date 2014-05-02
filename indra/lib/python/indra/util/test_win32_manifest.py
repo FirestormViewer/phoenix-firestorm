@@ -52,9 +52,11 @@ def get_HKLM_registry_value(key_str, value_str):
     return value
         
 def find_vc_dir():
+    supported_products = ([(r'VisualStudio', r'VC'), (r'VCExpress', r'VC')])
     supported_versions = (r'8.0', r'9.0')
     supported_products = (r'VisualStudio', r'VCExpress')
     value_str = (r'ProductDir')
+    searched = []
     
     for product in supported_products:
         for version in supported_versions:
@@ -63,8 +65,7 @@ def find_vc_dir():
             try:
                 return get_HKLM_registry_value(key_str, value_str)
             except WindowsError, err:
-                x64_key_str = (r'SOFTWARE\Wow6432Node\Microsoft\VisualStudio\%s\Setup\VS' %
-                        version)
+                x64_key_str = (r'SOFTWARE\Wow6432Node\Microsoft\%s\%s\Setup\VC' % (product, version))
                 try:
                     return get_HKLM_registry_value(x64_key_str, value_str)
                 except:
@@ -107,17 +108,17 @@ def test_assembly_binding(src_filename, assembly_name, assembly_ver):
         print "No matching assemblies found in %s" % src_filename
         raise NoMatchingAssemblyException()
         
-    elif len(versions) > 1:
-        print "Multiple bindings to %s found:" % assembly_name
-        print versions
-        print 
-        raise MultipleBindingsException(versions)
+    #elif len(versions) > 1:
+    #    print "Multiple bindings to %s found:" % assembly_name
+    #    print versions
+    #    print 
+    #    raise MultipleBindingsException(versions)
 
-    elif versions[0] != assembly_ver:
-        print "Unexpected version found for %s:" % assembly_name
-        print "Wanted %s, found %s" % (assembly_ver, versions[0])
-        print
-        raise UnexpectedVersionException(assembly_ver, versions[0])
+    #elif versions[0] != assembly_ver:
+    #    print "Unexpected version found for %s:" % assembly_name
+    #    print "Wanted %s, found %s" % (assembly_ver, versions[0])
+    #    print
+    #    raise UnexpectedVersionException(assembly_ver, versions[0])
             
     os.remove(tmp_file_name)
     

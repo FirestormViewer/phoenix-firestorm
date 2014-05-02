@@ -140,7 +140,7 @@ inline F64 llabs(const F64 a)
 
 inline S32 lltrunc( F32 f )
 {
-#if LL_WINDOWS && !defined( __INTEL_COMPILER )
+#if LL_WINDOWS && !defined( __INTEL_COMPILER ) && !defined(ND_BUILD64BIT_ARCH)
 		// Avoids changing the floating point control word.
 		// Add or subtract 0.5 - epsilon and then round
 		const static U32 zpfp[] = { 0xBEFFFFFF, 0x3EFFFFFF };
@@ -166,7 +166,7 @@ inline S32 lltrunc( F64 f )
 
 inline S32 llfloor( F32 f )
 {
-#if LL_WINDOWS && !defined( __INTEL_COMPILER )
+#if LL_WINDOWS && !defined( __INTEL_COMPILER ) && !defined(ND_BUILD64BIT_ARCH)
 		// Avoids changing the floating point control word.
 		// Accurate (unlike Stereopsis version) for all values between S32_MIN and S32_MAX and slightly faster than Stereopsis version.
 		// Add -(0.5 - epsilon) and then round
@@ -193,6 +193,7 @@ inline S32 llceil( F32 f )
 
 #ifndef BOGUS_ROUND
 // Use this round.  Does an arithmetic round (0.5 always rounds up)
+#define llround _llround // <FS:TM> added to not conflict with 'Long Long Round' in newer compilers
 inline S32 llround(const F32 val)
 {
 	return llfloor(val + 0.5f);

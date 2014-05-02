@@ -3,7 +3,7 @@
   name="filter_editor"
   clear_button_visible="true"
   search_button_visible="false"
-  text_pad_left="7"
+  text_pad_left="10"
   select_on_focus="true"
   text_tentative_color="TextFgTentativeColor"
   background_image="TextField_Search_Off"

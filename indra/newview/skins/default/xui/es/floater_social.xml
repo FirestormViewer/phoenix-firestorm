@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_social" title="Publicar en Facebook">
+	<panel name="background">
+		<tab_container name="tabs">
+			<panel label="Estado" name="panel_social_status"/>
+			<panel label="Foto" name="panel_social_photo"/>
+			<panel label="Ubicación" name="panel_social_place"/>
+			<panel label="Cuenta" name="panel_social_account"/>
+		</tab_container>
+		<panel name="connection_status_panel">
+			<text name="connection_error_text">
+				Error
+			</text>
+			<text name="connection_loading_text">
+				Cargando...
+			</text>
+		</panel>
+	</panel>
+</floater>

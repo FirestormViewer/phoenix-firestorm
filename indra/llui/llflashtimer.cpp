@@ -26,7 +26,11 @@
 #include "../newview/llviewerprecompiledheaders.h"
 
 #include "llflashtimer.h"
-#include "../newview/llviewercontrol.h"
+// <FS:CR> 
+//#include "../newview/llviewercontrol.h"
+#include "llcontrol.h"
+#include "llui.h"
+// </FS:CR>
 #include "lleventtimer.h"
 
 LLFlashTimer::LLFlashTimer(callback_t cb, S32 count, F32 period)
@@ -42,12 +46,34 @@ LLFlashTimer::LLFlashTimer(callback_t cb, S32 count, F32 period)
 	// By default use settings from settings.xml to be able change them via Debug settings. See EXT-5973.
 	// Due to Timer is implemented as derived class from EventTimer it is impossible to change period
 	// in runtime. So, both settings are made as required restart.
-	mFlashCount = 2 * ((count > 0) ? count : gSavedSettings.getS32("FlashCount"));
+	// <FS:CR>
+	//mFlashCount = 2 * ((count > 0) ? count : gSavedSettings.getS32("FlashCount"));
+	static LLCachedControl<S32> flash_count(*LLUI::sSettingGroups["config"], "FlashCount");
+	mFlashCount = 2 * ((count > 0) ? count : flash_count);
+	// </FS:CR>
 	if (mPeriod <= 0)
 	{
-		mPeriod = gSavedSettings.getF32("FlashPeriod");
+		// <FS:CR>
+		static LLCachedControl<F32> flash_period(*LLUI::sSettingGroups["config"], "FlashPeriod");
+		mPeriod = flash_period;
+		//mPeriod = gSavedSettings.getF32("FlashPeriod");
+		// </FS:CR>
 	}
+
+	// <FS:Ansariel> Configurable at runtime
+	LLUI::sSettingGroups["config"]->getControl("FlashCount")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
+	LLUI::sSettingGroups["config"]->getControl("FlashPeriod")->getSignal()->connect(boost::bind(&LLFlashTimer::onUpdateFlashSettings, this));
+	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> Configurable at runtime
+void LLFlashTimer::onUpdateFlashSettings()
+{
+	stopFlashing();
+	mFlashCount = 2 * llmax(LLUI::sSettingGroups["config"]->getS32("FlashCount"), 0);
+	mPeriod = llmax(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"), 0.f);
+}
+// </FS:Ansariel>
 
 void LLFlashTimer::unset()
 {

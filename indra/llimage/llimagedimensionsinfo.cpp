@@ -33,6 +33,8 @@
 // Value is true if one of Libjpeg's functions has encountered an error while working.
 static bool sJpegErrorEncountered = false;
 
+FILE *nd_openFile( std::string const &aFile, std::string const &aMode ); // <FS:ND/> function to handle utf-8 filesnames under windows
+
 bool LLImageDimensionsInfo::load(const std::string& src_filename,U32 codec)
 {
 	clean();
@@ -163,7 +165,14 @@ bool LLImageDimensionsInfo::getImageDimensionsJpeg()
 {
 	sJpegErrorEncountered = false;
 	clean();
-	FILE *fp = fopen (mSrcFilename.c_str(), "rb");
+
+	// <FS:ND> Cannot just use fopen under windows. mSrcFilename might be an utf-8 filename
+
+	// FILE *fp = fopen (mSrcFilename.c_str(), "rb");
+	FILE *fp =  nd_openFile (mSrcFilename.c_str(), "rb");
+
+	// </FS:ND>
+
 	if (fp == NULL) 
 	{
 		setLastError("Unable to open file for reading", mSrcFilename);
@@ -220,3 +229,14 @@ bool LLImageDimensionsInfo::checkFileLength(S32 min_len)
 	mInfile.seek(APR_SET, 0);
 	return nread == min_len;
 }
+
+// <FS:ND> extra case for windows, convert utf-8 filenames to ut-16, then call _wfopen
+FILE *nd_openFile( std::string const &aFile, std::string const &aMode )
+{
+#if	LL_WINDOWS
+	return _wfopen( utf8str_to_utf16str( aFile ) .c_str(), utf8str_to_utf16str( aMode ).c_str());
+#else
+	return ::fopen(aFile.c_str(),aMode.c_str());
+#endif
+}
+// </FS:ND>

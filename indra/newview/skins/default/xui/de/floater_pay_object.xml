@@ -7,14 +7,14 @@
 		Einwohner bezahlen
 	</string>
 	<icon name="icon_person" tool_tip="Person"/>
-	<text left="128" name="payee_name" width="168">
+	<text left="10" name="payee_name" width="168">
 		Ericacita Moostopolison
 	</text>
 	<text halign="left" name="object_name_label">
 		Über Objekt:
 	</text>
 	<icon name="icon_object" tool_tip="Objekte"/>
-	<text left="105" name="object_name_text">
+	<text name="object_name_text">
 		...
 	</text>
 	<button label="1 L$" label_selected="1 L$" name="fastpay 1"/>

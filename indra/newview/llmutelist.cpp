@@ -400,6 +400,9 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 		// Must be after erase.
 		notifyObserversDetailed(localmute);
 		setLoaded();  // why is this here? -MG
+
+		// <FS:Ansariel> Return correct return value
+		found = TRUE;
 	}
 	else
 	{
@@ -414,6 +417,9 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 			// Must be after erase.
 			notifyObserversDetailed(mute);
 			setLoaded(); // why is this here? -MG
+
+			// <FS:Ansariel> Return correct return value
+			found = TRUE;
 		}
 	}
 	
@@ -620,9 +626,21 @@ BOOL LLMuteList::saveToFile(const std::string& filename)
 
 BOOL LLMuteList::isMuted(const LLUUID& id, const std::string& name, U32 flags) const
 {
+	// <FS:ND> In case of an empty mutelist, we can exit right away.
+	if( 0 == mMutes.size() && mLegacyMutes.size() == 0)
+		return FALSE;
+	// </FS:ND>
+
 	// for objects, check for muting on their parent prim
 	LLViewerObject* mute_object = get_object_to_mute_from_id(id);
 	LLUUID id_to_check  = (mute_object) ? mute_object->getID() : id;
+
+	// <FS:Ansariel> FIRE-8540: Make sure we don't mute ourself if we added
+	//               a legacy mute by name with our name.
+	if (id_to_check == gAgentID)
+	{
+		return FALSE;
+	}
 
 	// don't need name or type for lookup
 	LLMute mute(id_to_check);
@@ -638,8 +656,12 @@ BOOL LLMuteList::isMuted(const LLUUID& id, const std::string& name, U32 flags) c
 	}
 
 	// empty names can't be legacy-muted
-	bool avatar = mute_object && mute_object->isAvatar();
-	if (name.empty() || avatar) return FALSE;
+	// <FS:Ansariel> FIRE-8268: Revert STORM-1004 or objects muted by name
+	//               won't be muted if worn as attachments
+	//bool avatar = mute_object && mute_object->isAvatar();
+	//if (name.empty() || avatar) return FALSE;
+	if (name.empty()) return FALSE;
+	// </FS:Ansariel>
 
 	// Look in legacy pile
 	string_set_t::const_iterator legacy_it = mLegacyMutes.find(name);

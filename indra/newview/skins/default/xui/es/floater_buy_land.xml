@@ -13,7 +13,7 @@
 		No puede unirse ni dividirse.
 	</floater.string>
 	<floater.string name="cant_buy_for_group">
-		No tienes permiso de comprar terreno para el grupo que tienes activado.
+		No tienes permiso para comprar terreno para el grupo que tienes activado.
 	</floater.string>
 	<floater.string name="no_land_selected">
 		No se ha seleccionado terreno.
@@ -23,7 +23,7 @@
 Inténtalo seleccionando un área más pequeña.
 	</floater.string>
 	<floater.string name="no_permission">
-		No tienes permiso de comprar terreno para el grupo que tienes activado.
+		No tienes permiso para comprar terreno para el grupo que tienes activado.
 	</floater.string>
 	<floater.string name="parcel_not_for_sale">
 		La parcela seleccionada no está en venta.
@@ -41,7 +41,7 @@ Inténtalo seleccionando un área más pequeña.
 		El área seleccionada no tiene terreno público.
 	</floater.string>
 	<floater.string name="not_owned_by_you">
-		Estás seleccionado un terreno propiedad de otro Residente. 
+		Estás seleccionado un terreno propiedad de otro residente. 
 Prueba a seleccionar un área más pequeña.
 	</floater.string>
 	<floater.string name="processing">
@@ -50,7 +50,7 @@ Prueba a seleccionar un área más pequeña.
 (Llevará uno o dos minutos).
 	</floater.string>
 	<floater.string name="fetching_error">
-		Se ha producido un error al ir a buscar la información de compra de terreno.
+		Se ha producido un error al buscar la información de compra de terreno.
 	</floater.string>
 	<floater.string name="buying_will">
 		Al comprar este terreno:

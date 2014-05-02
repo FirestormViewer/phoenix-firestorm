@@ -19,13 +19,13 @@
 		Sie können diese Objekte nicht bearbeiten.
 	</panel.string>
 	<panel.string name="text modify info 5">
-		Dieses Objekt kann nicht über eine Regionsgrenze hinweg geändert werden
+		Dieses Objekt kann nicht über eine Regionsgrenze hinweg geändert werden.
 	</panel.string>
 	<panel.string name="text modify info 6">
-		Diese Objekte können nicht über eine Regionsgrenze hinweg geändert werden
+		Diese Objekte können nicht über eine Regionsgrenze hinweg geändert werden.
 	</panel.string>
 	<panel.string name="text modify warning">
-		Diese Objekt verfügt über verknüpfte Teile
+		Dieses Objekt verfügt über verknüpfte Teile.
 	</panel.string>
 	<panel.string name="Cost Default">
 		Preis: L$
@@ -44,6 +44,7 @@
 	</panel.string>
 	<text name="title" value="Objektprofil"/>
 	<text name="where" value="(Inworld)"/>
+	<scroll_container name="item_profile_scroll">
 	<panel label="" name="properties_panel">
 		<text name="Name:">
 			Name:
@@ -67,10 +68,10 @@
 			Bei Linksklick:
 		</text>
 		<combo_box name="clickaction">
-			<combo_box.item label="Berühren (Standard)" name="Touch/grab(default)"/>
-			<combo_box.item label="Auf Objekt setzen" name="Sitonobject"/>
-			<combo_box.item label="Objekt kaufen" name="Buyobject"/>
-			<combo_box.item label="Objekt bezahlen" name="Payobject"/>
+			<combo_box.item label="Berühren" name="Touch/grab(default)"/>
+			<combo_box.item label="Sitzen" name="Sitonobject"/>
+			<combo_box.item label="Kaufen" name="Buyobject"/>
+			<combo_box.item label="Bezahlen" name="Payobject"/>
 			<combo_box.item label="Öffnen" name="Open"/>
 			<combo_box.item label="Zoomen" name="Zoom"/>
 		</combo_box>
@@ -124,10 +125,19 @@
 			F:
 		</text>
 	</panel>
-	<panel name="button_panel">
-		<button label="Öffnen" name="open_btn"/>
-		<button label="Bezahlen" name="pay_btn"/>
-		<button label="Kaufen" name="buy_btn"/>
-		<button label="Details" name="details_btn"/>
-	</panel>
+	</scroll_container>
+	<layout_stack name="buttons_ls">
+		<layout_panel name="open_btn_panel">
+			<button label="Öffnen" name="open_btn"/>
+		</layout_panel>
+		<layout_panel name="pay_btn_panel">
+			<button label="Bezahlen" name="pay_btn"/>
+		</layout_panel>
+		<layout_panel name="buy_btn_panel">
+			<button label="Kaufen" name="buy_btn"/>
+		</layout_panel>
+		<layout_panel name="details_btn_panel">
+			<button label="Details" name="details_btn"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

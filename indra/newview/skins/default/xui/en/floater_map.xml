@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- positioning="cascading"
+ positioning="none"
+ bg_alpha_image_overlay="DkGray"
+ legacy_header_height="0"
  can_minimize="true" 
  can_resize="true"
- chrome="true"
+ header_height="0"
  height="200"
  layout="topleft"
- min_height="128"
- min_width="128"
+ min_height="64"
+ min_width="64"
  name="Map"
- title="MINI-MAP"
+ title=""
  help_topic="map"
  save_rect="true"
  save_visibility="true"
+ single_instance="true"
  width="200">
+    <!-- RLVa shows the anonymized name on the regular tooltip when @shownames=n restricted (rather than show the avatar inspector) --> 
     <floater.string
      name="ToolTipMsg">
-        [REGION](Double-click to open Map, shift-drag to pan)
+        [AGENT][REGION](Double-click to open Map, shift-drag to pan)
     </floater.string>
 	<floater.string
      name="AltToolTipMsg">
@@ -26,13 +30,14 @@
 	Mini-map
     </floater.string>
     <net_map
+     bg_color="Transparent"
      follows="top|left|bottom|right"
      layout="topleft"
      left="0"
      mouse_opaque="false"
      name="Net Map"
      width="200"
-     height="200"
+     height="218"
      top="0"/>
     <text
      type="string"
@@ -44,7 +49,8 @@
      name="floater_map_north"
      right="10"
      text_color="1 1 1 0.7"
-     top="189">
+     top="209"
+     valign="center">
         N
     </text>
     <text
@@ -57,20 +63,22 @@
      name="floater_map_east"
      right="10"
      text_color="1 1 1 0.7"
-     top="189">
+     top="209"
+     valign="center">
         E
     </text>
     <text
      type="string"
      length="1"
-     bottom="205"
+     bottom="218"
      label="W"
      layout="topleft"
      left="0"
      name="floater_map_west"
-     right="11"
+     right="12"
      text_color="1 1 1 0.7"
-     top="175">
+     top="209"
+     valign="center">
         W
     </text>
     <text
@@ -83,7 +91,8 @@
      name="floater_map_south"
      right="10"
      text_color="1 1 1 0.7"
-     top="189">
+     top="209"
+     valign="center">
         S
     </text>
     <text
@@ -96,7 +105,8 @@
      name="floater_map_southeast"
      right="20"
      text_color="1 1 1 0.7"
-     top="189">
+     top="209"
+     valign="center">
         SE
     </text>
     <text
@@ -109,7 +119,8 @@
      name="floater_map_northeast"
      right="20"
      text_color="1 1 1 0.7"
-     top="189">
+     top="209"
+     valign="center">
         NE
     </text>
     <text
@@ -122,7 +133,8 @@
      name="floater_map_southwest"
      right="20"
      text_color="1 1 1 0.7"
-     top="189">
+     top="209"
+     valign="center">
         SW
     </text>
     <text
@@ -133,9 +145,10 @@
      layout="topleft"
      left="0"
      name="floater_map_northwest"
-     right="20"
+     right="21"
      text_color="1 1 1 0.7"
-     top="189">
+     top="209"
+     valign="center">
         NW
     </text>
 </floater>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu
+ name="menu_teleport"
+ left="0" bottom="0" visible="false"
+ mouse_opaque="false">
+    <menu_item_call
+       label="Offer teleport"
+       name="offer_tp">
+      <menu_item_call.on_click
+         function="IMSession.Menu.Action"
+         parameter="offer_tp"/>
+    </menu_item_call>
+    <menu_item_call
+       label="Request teleport"
+       name="request_tp">
+      <menu_item_call.on_click
+         function="IMSession.Menu.Action"
+         parameter="request_tp"/>
+    </menu_item_call>
+</toggleable_menu>

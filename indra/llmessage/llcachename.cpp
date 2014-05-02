@@ -39,6 +39,8 @@
 
 #include <boost/regex.hpp>
 
+#include "llavatarname.h"	// <FS:CR> FIRE-6659
+
 // llsd serialization constants
 static const std::string AGENTS("agents");
 static const std::string GROUPS("groups");
@@ -451,7 +453,12 @@ BOOL LLCacheName::getFullName(const LLUUID& id, std::string& fullname)
 	return res;
 }
 
-
+// <FS:CR> Returns first name, last name
+BOOL LLCacheName::getFirstLastName(const LLUUID& id, std::string& first, std::string& last)
+{
+	return impl.getName(id, first, last);
+}
+// </FS:CR>
 
 BOOL LLCacheName::getGroupName(const LLUUID& id, std::string& group)
 {
@@ -510,20 +517,46 @@ BOOL LLCacheName::getUUID(const std::string& full_name, LLUUID& id)
 //static
 std::string LLCacheName::buildFullName(const std::string& first, const std::string& last)
 {
-	std::string fullname = first;
-	if (!last.empty()
-		&& last != "Resident")
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+	if (LLAvatarName::trimResidentSurname())
 	{
-		fullname += ' ';
-		fullname += last;
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
+		std::string fullname = first;
+		if (!last.empty()
+			&& last != "Resident")
+		{
+			fullname += ' ';
+			fullname += last;
+		}
+		return fullname;
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 	}
-	return fullname;
+	else
+	{
+		std::string fullname = first;
+		if (!last.empty())
+		{
+			if (fullname.find(" ") == std::string::npos)
+			{
+				fullname += ' ';
+				fullname += last;
+			}
+		}
+		else if (fullname.find(" ") == std::string::npos)
+		{
+			fullname.append(" Resident");
+		}
+		return fullname;
+	}
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 }
 
 //static
 std::string LLCacheName::cleanFullName(const std::string& full_name)
 {
-	return full_name.substr(0, full_name.find(" Resident"));
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+	return (LLAvatarName::trimResidentSurname() ? full_name : full_name.substr(0, full_name.find(" Resident")));
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 }
 
 //static 
@@ -535,9 +568,8 @@ std::string LLCacheName::buildUsername(const std::string& full_name)
 	{
 		return "(\?\?\?)";
 	}
-	
-	std::string::size_type index = full_name.find(' ');
 
+	std::string::size_type index = full_name.find(' ');
 	if (index != std::string::npos)
 	{
 		std::string username;
@@ -591,6 +623,16 @@ std::string LLCacheName::buildLegacyName(const std::string& complete_name)
 					LLStringUtil::toUpper(cap_letter);
 					legacy_name = legacy_name + " " + cap_letter + last_name.substr(1);
 				}
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+				else if (!LLAvatarName::trimResidentSurname())
+				{
+					legacy_name.append(" Resident");
+				}
+			}
+			else if (!LLAvatarName::trimResidentSurname())
+			{
+				legacy_name.append(" Resident");
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 			}
 
 			return legacy_name;
@@ -654,6 +696,34 @@ boost::signals2::connection LLCacheName::get(const LLUUID& id, bool is_group, co
 	}
 	return res;
 }
+
+// NaCl - Sound explorer
+BOOL LLCacheName::getIfThere(const LLUUID& id, std::string& fullname, BOOL& is_group)
+{
+	if(id.isNull())
+	{
+		fullname = "";
+		return FALSE;
+	}
+
+	LLCacheNameEntry* entry = get_ptr_in_map(impl.mCache, id );
+	if (entry)
+	{
+		if (entry->mIsGroup)
+		{
+			fullname = entry->mGroupName;
+		}
+		else
+		{
+			fullname = buildFullName(entry->mFirstName, entry->mLastName);
+		}
+		is_group = entry->mIsGroup;
+		return TRUE;
+	}
+	fullname = "";
+	return FALSE;
+}
+// NaCl end
 
 boost::signals2::connection LLCacheName::getGroup(const LLUUID& group_id,
 												  const LLCacheNameCallback& callback)
@@ -976,11 +1046,26 @@ void LLCacheName::Impl::processUUIDReply(LLMessageSystem* msg, bool isGroup)
 			std::string full_name;
 			if (entry->mLastName.empty())
 			{
-				full_name = cleanFullName(entry->mFirstName);
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+				if (!LLAvatarName::trimResidentSurname())
+				{
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
+					full_name = cleanFullName(entry->mFirstName);
 
-				//fix what we are putting in the cache
-				entry->mFirstName = full_name;
-				entry->mLastName = "Resident";
+					//fix what we are putting in the cache
+					entry->mFirstName = full_name;
+					entry->mLastName = "Resident";
+				}
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+				else
+				{
+					if (entry->mFirstName.find(" ")==std::string::npos)
+					{
+						entry->mLastName = "Resident";
+					}
+					full_name = LLCacheName::buildFullName(entry->mFirstName, entry->mLastName);
+				}
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 			}
 			else
 			{

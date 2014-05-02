@@ -68,6 +68,7 @@
 #include "roles_constants.h"
 #include "llweb.h"
 #include "llvieweraudio.h"
+#include "kcwlinterface.h"
 
 const F32 PARCEL_COLLISION_DRAW_SECS = 1.f;
 
@@ -122,6 +123,10 @@ LLViewerParcelMgr::LLViewerParcelMgr()
 	mRenderSelection(TRUE),
 	mCollisionBanned(0),
 	mCollisionTimer(),
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	mCollisionRegionHandle(0),
+	mCollisionUpdateSignal(NULL),
+// [/SL:KB]
 	mMediaParcelId(0),
 	mMediaRegionId(0)
 {
@@ -133,9 +138,20 @@ LLViewerParcelMgr::LLViewerParcelMgr()
 	mHoverParcel = new LLParcel();
 	mCollisionParcel = new LLParcel();
 
-	mParcelsPerEdge = S32(	REGION_WIDTH_METERS / PARCEL_GRID_STEP_METERS );
+// <FS:CR> Aurora Sim
+	// Max region size on Aurora-Sim, 8192, just creating larger buffers, it will still work on Second Life and Opensim
+	F32 region_size = 8192.f;
+
+	mParcelsPerEdge = S32(	region_size / PARCEL_GRID_STEP_METERS );
+	//mParcelsPerEdge = S32(	REGION_WIDTH_METERS / PARCEL_GRID_STEP_METERS );
+// </FS:CR> Aurora Sim
 	mHighlightSegments = new U8[(mParcelsPerEdge+1)*(mParcelsPerEdge+1)];
 	resetSegments(mHighlightSegments);
+
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	mCollisionBitmap = new U8[getCollisionBitmapSize()];
+	memset(mCollisionBitmap, 0, getCollisionBitmapSize());
+// [/SL:KB]
 
 	mCollisionSegments = new U8[(mParcelsPerEdge+1)*(mParcelsPerEdge+1)];
 	resetSegments(mCollisionSegments);
@@ -156,9 +172,19 @@ LLViewerParcelMgr::LLViewerParcelMgr()
 		mAgentParcelOverlay[i] = 0;
 	}
 
+// <FS:CR> Aurora Sim
+	mParcelsPerEdge = S32(	REGION_WIDTH_METERS / PARCEL_GRID_STEP_METERS );
+// </FS:CR> Aurora Sim
+
 	mTeleportInProgress = TRUE; // the initial parcel update is treated like teleport
 }
 
+// <FS:CR> Aurora Sim
+void LLViewerParcelMgr::init(F32 region_size)
+{
+	mParcelsPerEdge = S32(	region_size / PARCEL_GRID_STEP_METERS );
+}
+// </FS:CR> Aurora Sim
 
 LLViewerParcelMgr::~LLViewerParcelMgr()
 {
@@ -182,6 +208,11 @@ LLViewerParcelMgr::~LLViewerParcelMgr()
 
 	delete[] mHighlightSegments;
 	mHighlightSegments = NULL;
+
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	delete[] mCollisionBitmap;
+	mCollisionBitmap = NULL;
+// [/SL:KB]
 
 	delete[] mCollisionSegments;
 	mCollisionSegments = NULL;
@@ -438,9 +469,15 @@ LLParcelSelectionHandle LLViewerParcelMgr::selectParcelInRectangle()
 void LLViewerParcelMgr::selectCollisionParcel()
 {
 	// BUG: Claim to be in the agent's region
-	mWestSouth = gAgent.getRegion()->getOriginGlobal();
+// <FS:CR> Aurora Sim
+	//mWestSouth = gAgent.getRegion()->getOriginGlobal();
+	//mEastNorth = mWestSouth;
+	//mEastNorth += LLVector3d(PARCEL_GRID_STEP_METERS, PARCEL_GRID_STEP_METERS, 0.0);
+	mWestSouth = getSelectionRegion()->getOriginGlobal();
 	mEastNorth = mWestSouth;
-	mEastNorth += LLVector3d(PARCEL_GRID_STEP_METERS, PARCEL_GRID_STEP_METERS, 0.0);
+	mEastNorth += LLVector3d((getSelectionRegion()->getWidth() / REGION_WIDTH_METERS) * PARCEL_GRID_STEP_METERS, 
+		                     (getSelectionRegion()->getWidth() / REGION_WIDTH_METERS) * PARCEL_GRID_STEP_METERS, 0.0);
+// </FS:CR> Aurora Sim
 
 	// BUG: must be in the sim you are in
 	LLMessageSystem *msg = gMessageSystem;
@@ -647,16 +684,16 @@ LLParcel *LLViewerParcelMgr::getAgentParcel() const
 // Return whether the agent can build on the land they are on
 bool LLViewerParcelMgr::allowAgentBuild() const
 {
-	if (mAgentParcel)
+	if (gAgent.isGodlike())
 	{
-		return (gAgent.isGodlike() ||
-				(mAgentParcel->allowModifyBy(gAgent.getID(), gAgent.getGroupID())) ||
-				(isParcelOwnedByAgent(mAgentParcel, GP_LAND_ALLOW_CREATE)));
+		return true;
 	}
-	else
+	else if (!mAgentParcel)
 	{
-		return gAgent.isGodlike();
+		return false;
 	}
+	return (mAgentParcel->allowModifyBy(gAgent.getID(), gAgent.getGroupID()) ||
+			gAgent.hasPowerInGroup(mAgentParcel->getGroupID(), GP_LAND_ALLOW_CREATE));
 }
 
 // Return whether anyone can build on the given parcel
@@ -1391,8 +1428,11 @@ void LLViewerParcelMgr::processParcelOverlay(LLMessageSystem *msg, void **user)
 		return;
 	}
 
-	S32 parcels_per_edge = LLViewerParcelMgr::getInstance()->mParcelsPerEdge;
-	S32 expected_size = parcels_per_edge * parcels_per_edge / PARCEL_OVERLAY_CHUNKS;
+// <FS:CR> Aurora Sim
+	//S32 parcels_per_edge = LLViewerParcelMgr::getInstance()->mParcelsPerEdge;
+	//S32 expected_size = parcels_per_edge * parcels_per_edge / PARCEL_OVERLAY_CHUNKS;
+	S32 expected_size = 1024;
+// </FS:CR> Aurora Sim
 	if (packed_overlay_size != expected_size)
 	{
 		llwarns << "Got parcel overlay size " << packed_overlay_size
@@ -1455,6 +1495,15 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 	S32		other_clean_time = 0;
 
 	LLViewerParcelMgr& parcel_mgr = LLViewerParcelMgr::instance();
+// <FS:CR> Aurora Sim
+	LLViewerRegion* msg_region = LLWorld::getInstance()->getRegion( msg->getSender() );
+	if(msg_region) {
+			parcel_mgr.mParcelsPerEdge = S32( msg_region->getWidth() / PARCEL_GRID_STEP_METERS );
+	}
+	else {
+		parcel_mgr.mParcelsPerEdge = S32( gAgent.getRegion()->getWidth() / PARCEL_GRID_STEP_METERS );
+	}
+// </FS:CR> Aurora Sim
 
 	msg->getS32Fast(_PREHASH_ParcelData, _PREHASH_RequestResult, request_result );
 	msg->getS32Fast(_PREHASH_ParcelData, _PREHASH_SequenceID, sequence_id );
@@ -1588,6 +1637,9 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 				instance->mTeleportInProgress = FALSE;
 				instance->mTeleportFinishedSignal(gAgent.getPositionGlobal(), false);
 			}
+
+			//KC: check for parcel changes for WL settings
+			KCWindlightInterface::instance().ParcelChange();
 		}
 	}
 
@@ -1693,18 +1745,31 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 
 		}
 
-		S32 bitmap_size =	parcel_mgr.mParcelsPerEdge
-							* parcel_mgr.mParcelsPerEdge
-							/ 8;
-		U8* bitmap = new U8[ bitmap_size ];
-		msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, bitmap, bitmap_size);
+//		S32 bitmap_size =	parcel_mgr.mParcelsPerEdge
+//							* parcel_mgr.mParcelsPerEdge
+//							/ 8;
+//		U8* bitmap = new U8[ bitmap_size ];
+//		msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, bitmap, bitmap_size);
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+		msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, parcel_mgr.mCollisionBitmap, parcel_mgr.getCollisionBitmapSize());
+// [/SL:KB]
 
 		parcel_mgr.resetSegments(parcel_mgr.mCollisionSegments);
-		parcel_mgr.writeSegmentsFromBitmap( bitmap, parcel_mgr.mCollisionSegments );
+//		parcel_mgr.writeSegmentsFromBitmap( bitmap, parcel_mgr.mCollisionSegments );
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+		parcel_mgr.writeSegmentsFromBitmap(parcel_mgr.mCollisionBitmap, parcel_mgr.mCollisionSegments);
+// [/SL:KB]
 
-		delete[] bitmap;
-		bitmap = NULL;
+//		delete[] bitmap;
+//		bitmap = NULL;
 
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+		LLViewerRegion* pRegion = LLWorld::getInstance()->getRegion(msg->getSender());
+		parcel_mgr.mCollisionRegionHandle = (pRegion) ? pRegion->getHandle() : 0;
+
+		if (parcel_mgr.mCollisionUpdateSignal)
+			(*parcel_mgr.mCollisionUpdateSignal)(pRegion);
+// [/SL:KB]
 	}
 	else if (sequence_id == HOVERED_PARCEL_SEQ_ID)
 	{
@@ -1774,15 +1839,21 @@ void LLViewerParcelMgr::optionally_start_music(const std::string& music_url)
 		// only play music when you enter a new parcel if the UI control for this
 		// was not *explicitly* stopped by the user. (part of SL-4878)
 		LLPanelNearByMedia* nearby_media_panel = gStatusBar->getNearbyMediaPanel();
-		if ((nearby_media_panel &&
-		     nearby_media_panel->getParcelAudioAutoStart()) ||
+		if (gStatusBar->getAudioStreamEnabled() || 	// ## Zi: Media/Stream separation
 		    // or they have expressed no opinion in the UI, but have autoplay on...
 		    (!nearby_media_panel &&
 		     gSavedSettings.getBOOL(LLViewerMedia::AUTO_PLAY_MEDIA_SETTING) &&
 			 gSavedSettings.getBOOL("MediaTentativeAutoPlay")))
 		{
-			llinfos << "Starting parcel music " << music_url << llendl;
-			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(music_url);
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+			{
+				LLViewerParcelMedia::filterAudioUrl(music_url);
+			}
+			else
+			{
+				llinfos << "Starting parcel music " << music_url << llendl;
+				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(music_url);
+			}
 		}
 		else
 		{
@@ -2503,3 +2574,12 @@ void LLViewerParcelMgr::onTeleportFailed()
 {
 	mTeleportFailedSignal();
 }
+
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+boost::signals2::connection LLViewerParcelMgr::setCollisionUpdateCallback(const collision_update_signal_t::slot_type & cb)
+{
+	if (!mCollisionUpdateSignal)
+		mCollisionUpdateSignal = new collision_update_signal_t();
+	return mCollisionUpdateSignal->connect(cb); 
+}
+// [/SL:KB]

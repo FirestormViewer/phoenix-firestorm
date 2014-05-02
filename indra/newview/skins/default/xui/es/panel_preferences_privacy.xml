@@ -1,31 +1,79 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Comunicación" name="im">
-	<panel.string name="log_in_to_change">
-		Conéctate para que cambie
-	</panel.string>
-	<button label="Limpiar el historial" name="clear_cache" tool_tip="Limpia la imagen de la pantalla de conexión, la última posición, el historial de teleportes, web y caché de las texturas."/>
-	<text name="cache_size_label_l">
-		(Localizaciones, imágenes, web, historial de búsqueda)
-	</text>
-	<check_box label="Mostrarme en los resultados de la búsqueda" name="online_searchresults"/>
-	<check_box label="Sólo saben si estoy conectado mis amigos y grupos" name="online_visibility"/>
-	<check_box label="Sólo pueden llamarme o mandarme un MI mis amigos y grupos" name="voice_call_friends_only_check"/>
-	<check_box label="Desconectar el micrófono cuando finalicen las llamadas" name="auto_disengage_mic_check"/>
-	<check_box label="Mostrar mis Hitos favoritos al Inicio de sesión (menú desplegable &quot;Empezar &#10;en&quot;)" name="favorites_on_login_check" top_pad="15"/>
-	<text name="Logs:">
-		Registros de chat:
-	</text>
-	<check_box label="Guardar en mi ordenador registros del chat" name="log_nearby_chat"/>
-	<check_box label="Guardar en mi ordenador registros de los MI" name="log_instant_messages"/>
-	<check_box label="Añadir fecha y hora a todas las líneas del registro de chat" name="show_timestamps_check_im"/>
-	<check_box label="Añadir la fecha al nombre del archivo del registro." name="logfile_name_datestamp"/>
-	<text name="log_path_desc">
-		Ruta de los registros:
-	</text>
-	<line_editor left="278" name="log_path_string" right="-20"/>
-	<button label="Elegir" label_selected="Elegir" name="log_path_button" width="120"/>
-	<button label="Lista de ignorados" name="block_list"/>
-	<text name="block_list_label">
-		(Gente u objetos que has bloqueado)
-	</text>
+	<tab_container label="Privacidad" name="tabs">
+		<panel label="General" name="tab-general">
+			<panel.string name="log_in_to_change">
+				conéctate para que cambie
+			</panel.string>
+			<button label="Limpiar historial"
+	     tool_tip="Borra la imagen de fondo de la conexión, la última posición, el historial de teleportes y la caché web y de texturas" name="clear_cache"/>
+			<text name="cache_size_label" height="19">
+				(Localizaciones, imágenes, web, historial de búsqueda)
+			</text>
+			<check_box label="Publicar mi avatar en los resultados de búsqueda" name="online_searchresults" top_pad="10"/>
+			<check_box label="Sólo mis amigos y grupos pueden ver si estoy conectado" name="online_visibility"/>
+			<check_box label="Sólo mis amigos y grupos pueden llamarme o enviarme MI" name="voice_call_friends_only_check"/>
+			<check_box label="Apagar micrófono cuando terminan las llamadas" name="auto_disengage_mic_check"/>
+			<check_box label="Aceptar automáticamente nuevos items de inventario" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Utilizar mensajes clásicos de aceptación/rechazo de ofertas de inventario" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Si lo activas, el visor sólo enviará mensajes de aceptación o rechazo tras pulsar el botón correspondiente. Si lo desactivas, la respuesta de aceptación se enviará tan pronto como la oferta haya sido recibida. Esta opción no tiene ningún efecto si las ofertas de inventario se aceptan de forma automática."/>
+			<check_box label="Mostrar automáticamente en el inventario los items recién aceptados" name="Show_In_Inventory"/>
+			<check_box label="Mostrar automáticamente las notas, texturas e hitos al aceptarlos" name="Show_New_Inventory"/>
+			<check_box label="Crear efecto de partículas al entregar items del inventario a otros avatares" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Mostrar mis hitos favoritos en el desplegable &apos;Iniciar en&apos; de la pantalla de conexión" name="favorites_on_login_check"/>
+			<text name="logging_label">
+				Guardar:
+			</text>
+			<check_box name="LogNearbyChat" label="Guardar transcripción del chat local" tool_tip="Guardar una transcripción del chat local en mi equipo"/>
+			<combo_box name="conversation_log_combo" width="170" tool_tip="Registro (Registro de conversación): La lista de de conversaciones iniciadas por ti o por otras partes. Transcripción: El texto escrito real tal como aparece en pantalla.">
+				<item name="log_and_transcripts" label="Registro y transcripciones"/>
+				<item name="log_only" label="Sólo registro"/>
+				<item name="no_log_or_transcript" label="Ni registro ni transcripciones"/>
+			</combo_box>
+			<button label="Limpiar registros..." name="clear_log"/>
+			<button label="Borrar transcripciones..." name="delete_transcripts"/>
+			<text name="log_location_label">
+				Ubicación:
+			</text>
+			<check_box label="Usar el formato clásico de nombre de archivo para las transcripciones" name="UseLegacyIMLogNames" tool_tip="Si lo activas, se usará el formato de nombre de archivo para las transcripciones (nombre de usuario) en vez del nuevo formato (nombre_de_usuario)."/>
+			<check_box label="Añadir marca horaria a los nombres de archivo de registro" name="LogFileNamewithDate" tool_tip="Añadir fecha y hora a los nombres de archivo de los registros de MI y chat, con formato chat-YYYY-MM-DD y 'nombre_MI'-YYYY-MM."/>
+			<check_box label="Usar el visor de transcripciones incorporado" name="FSUseBuiltInHistory" tool_tip="Utiliza el visor incorporado de transcripciones. Si lo desactivas, las transcripciones se abrirán en el editor de texto predefinido en tu sistema operativo."/>
+			<button label="Administrar lista de bloqueados/silenciados" name="block_list"/>
+		</panel>
+		<panel label="Puntos de mira" name="tab-lookat">
+			<check_box label="Mostrar puntos de mira de foco:" name="showlookat" tool_tip="El punto de mira es una pista para la animación que los visores usan para saber hacia dónde mover tus ojos, cabeza y torso. También puede ser usado para determinar hacia dónde está enfoncando la cámara de un avatar."/>
+			<text name="lookatshownames" tool_tip="Formato de nombre a mostrar en los puntos de mira" width="220">
+				Mostrar nombres en los puntos de mira:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Ninguno" name="None"/>
+				<combo_box.item label="Nombre completo" name="Complete_Name"/>
+				<combo_box.item label="DisplayName" name="Display_Name"/>
+				<combo_box.item label="Nombre antiguo" name="Legacy_Name"/>
+				<combo_box.item label="Nombre de usuario" name="User_Name"/>
+			</combo_box>
+			<check_box label="No mostrarme mi punto de mira" name="LookAtHideOwn" tool_tip="No mostrarme los puntos de mira de mi propia cámara"/>
+			<text name="mylookat">
+				Mi punto de mira:
+			</text>
+			<check_box label="No enviar mis puntos de mira a otros" name="privatelookat" tool_tip="Evita la difusión de los puntos a los que estás enfocando"/>
+			<check_box label="No difundir mis puntos de enfoque en absoluto, ni siquiera a mí mismo" name="privateLocalLookat" tool_tip="Evita que la cabeza de tu avatar se mueva para mirar donde enfocas en tu propia  pantalla. Este movimiento no es necesariamente visible para otros, independientemente de que actives o no esta opción."/>
+			<check_box label="No envíes pistas sobre mi selección" name="privatepointat" tool_tip="Evita mostrar a los demás los objetos que estás seleccionando"/>
+		</panel>
+		<panel label="Autorrespuesta" name="tab-autoresponse">
+			<text name="text_box3" width="425">
+				Respuesta automática para el estado de NO DISPONIBLE (p. ej. OCUPADO):
+			</text>
+			<text name="autorespond_response_label">
+				Respuesta automática a todos los avatares para el estado de AUTORRESPUESTA:
+			</text>
+			<text name="autorespond_nf_response_label">
+				Respuesta automática a no-amigos para el estado de AUTORRESPUESTA A NO-AMIGOS):
+			</text>
+			<text name="autorespond_rto_response_label">
+				Respuesta automática para el modo RECHAZAR OFERTAS DE TELEPORTE:
+			</text>
+			<check_box label="Enviar autorrespuesta a avatares bloqueados:" name="send_muted_av_response" tool_tip="Responde con el siguiente texto cuando alguien a quien has bloqueado te envía un MI."/>
+			<check_box label="Enviar autorrespuesta para el estado de AUSENTE:" name="send_away_av_response" tool_tip="Responde con el siguiente texto cuando alguien te envía un MI mientras estás en modo ausente."/>
+		</panel>
+	</tab_container>
 </panel>

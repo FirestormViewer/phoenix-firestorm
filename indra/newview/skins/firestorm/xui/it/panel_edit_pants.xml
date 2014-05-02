@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel name="edit_pants_panel">
+	<panel name="avatar_pants_color_panel">
+		<texture_picker label="Tessuto" name="Fabric" tool_tip="Clicca per selezionare un'immagine"/>
+		<color_swatch label="Colore/Tinta" name="Color/Tint" tool_tip="Clicca per selezionare il colore" width="70"/>
+	</panel>
+	<panel name="pants_main_tab_holder" title="Pantaloni">
+		<accordion name="pants_main_accordion">
+			<accordion_tab name="pants_main_tab" title="Pantaloni"/>
+		</accordion>
+	</panel>
+</panel>

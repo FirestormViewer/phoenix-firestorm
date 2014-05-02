@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  background_visible="true"
+ bg_alpha_color="DkGray2"
+ bg_opaque_color="DkGray2"
  follows="all"
- height="570"
+ height="595"
  layout="topleft"
  left="0"
  min_height="350"

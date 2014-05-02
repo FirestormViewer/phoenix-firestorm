@@ -2,7 +2,7 @@
 <panel label="文字聊天" name="chat">
 	<panel name="general_chat_settings">
 		<check_box initial_value="true" label="聊天時呈現打字動作" name="play_typing_animation"/>
-		<check_box label="當我離線時將收到的 IM 訊息郵寄給我" name="send_im_to_email"/>
+		<check_box label="當我離線時將收到的 IM 訊息郵寄給我 （[EMAIL]）" name="send_im_to_email"/>
 		<check_box label="只允許我的朋友和群組與我通話或 IM 給我" name="voice_call_friends_only_check"/>
 		<text name="font_size">
 			字型大小：

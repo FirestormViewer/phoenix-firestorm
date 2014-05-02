@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="animation_overrider_outer_panel">
+
+<!-- Main Panel -->
+
+	<panel name="animation_overrider_panel">
+		<combo_box name="ao_set_selection_combo" tool_tip="Animationsset zum Editieren auswählen."/>
+		<button	name="ao_activate" tool_tip="Aktiviere aktuelles Animationsset."/>
+		<check_box name="ao_default" label="Standard" tool_tip="Dieses Animationsset als Standard definieren, das nach dem Einloggen verwendet wird."/>
+		<button	name="ao_add" tool_tip="Neues Animationsset erstellen."/>
+		<button	name="ao_remove" tool_tip="Dieses Animationsset löschen."/>
+		<check_box name="ao_sit_override" label="Sitzen überst." tool_tip="Aktiviert die Übersteuerung von Sitzanimationen."/>
+		<check_box name="ao_smart" label="Smart-Modus" tool_tip="Smart-Modus versucht zu erkennen, ob das Übersteuern von Sitzanimationen mit der des Objektes, auf dem gesessen wird, kollidiert. In diesem Fall wird der Animation Overrider temporär deaktiviert." left_pad="-6"/>
+		<check_box name="ao_disable_stands_in_mouselook" label="Stand im Mouselook deakt." tool_tip="Deaktiviert benutzerdefinierte Stand-Animationen im Mouselook-Modus."/>
+		<combo_box name="ao_state_selection_combo" tool_tip="Animationstyp zum Editieren auswählen."/>
+
+		<panel name="ao_animation_move_trash_panel">
+			<button	name="ao_move_up" tool_tip="Ausgewählte Animation in der Liste nach oben verschieben."/>
+			<button	name="ao_move_down"	tool_tip="Ausgewähte Animation in der Liste nach unten verschieben."/>
+			<button	name="ao_trash"	tool_tip="Ausgewählte Animation aus Liste löschen."/>
+		</panel>
+
+		<check_box name="ao_cycle" label="Rotieren"	tool_tip="Animation aus Liste beim Abspielen rotieren." width="63"/>
+		<check_box name="ao_randomize" label="Zufällige Reihenf." tool_tip="Im Rotationsmodus die Animation zufällig auswählen."/>
+		<text name="ao_cycle_time_seconds_label" value="Rotationszeit (Sek.):"/>
+		<spinner name="ao_cycle_time" tool_tip="Zeit, bevor die nächste Animation aus der Liste abgespielt wird. Zum Deaktivieren den Wert auf 0 einstellen."/>
+		<button	name="ao_reload" label="Neu laden" tool_tip="Konfiguration des Animation Overriders neu laden."/>
+
+		<layout_stack name="next_previous_buttons_stack">
+			<layout_panel name="next_previous_buttons_stack_left">
+				<button	name="ao_previous" tool_tip="Vorherige Animation aus Liste abspielen."/>
+			</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_right">
+				<button	name="ao_next" tool_tip="Nächste Animation aus Liste abspielen."/>
+			</layout_panel>
+		</layout_stack>
+
+		<button	name="ao_less" tool_tip="Kompaktes Fenster anzeigen."/>
+	</panel>
+
+<!-- Reload Cover Panel -->
+
+	<panel name="ao_reload_cover">
+		<panel name="ao_reload_text_panel">
+			<text name="reload_label">
+				Lade Konfiguration
+			</text>
+			<text name="wait_label">
+				Bitte warten
+			</text>
+		</panel>
+	</panel>
+
+<!-- Small Panel -->
+
+	<panel name="animation_overrider_panel_small">
+		<combo_box name="ao_set_selection_combo_small" tool_tip="Animationsset zum Editieren auswählen."/>
+		<button	name="ao_more" tool_tip="Zeige komplettes Konfigurationsfenster."/>
+		<button	name="ao_previous_small" tool_tip="Vorherige Animation aus Liste abspielen."/>
+		<button name="ao_next_small" tool_tip="Nächste Animation aus Liste abspielen."/>
+		<check_box name="ao_sit_override_small"	label="Sitzen" tool_tip="Aktiviert die Übersteuerung von Sitzanimationen."/>
+	</panel>
+</panel>

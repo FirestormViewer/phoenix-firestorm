@@ -57,6 +57,8 @@
 #include "llnotificationsutil.h"
 #include "llgiveinventory.h"
 
+#include "llviewercontrol.h"	// <FS:CR> FIRE-11247 - gSavedSettings
+
 static LLPanelInjector<LLPanelGroupNotices> t_panel_group_notices("panel_group_notices");
 
 
@@ -201,9 +203,12 @@ std::string build_notice_date(const U32& the_time)
 		time(&t);
 	}
 	
-	std::string dateStr = "["+LLTrans::getString("LTimeMthNum")+"]/["
-								+LLTrans::getString("LTimeDay")+"]/["
-								+LLTrans::getString("LTimeYear")+"]";
+        std::string dateStr = "["+LLTrans::getString("LTimeYear")+"]/["
+                                                                +LLTrans::getString("LTimeMthNum")+"]/["
+                                                                +LLTrans::getString("LTimeDay")+"] ["
+                                                                +LLTrans::getString("LTimeHour")+"]:["
+                                                                +LLTrans::getString("LTimeMin")+"]:["
+                                                                +LLTrans::getString("LTimeSec")+"]";
 	LLSD substitution;
 	substitution["datetime"] = (S32) t;
 	LLStringUtil::format (dateStr, substitution);
@@ -544,7 +549,10 @@ void LLPanelGroupNotices::processNotices(LLMessageSystem* msg)
 		msg->getU32("Data","Timestamp",timestamp,i);
 
 		// we only have the legacy name here, convert it to a username
-		name = LLCacheName::buildUsername(name);
+		// <FS:CR> FIRE-11247 - Let the user decide how they want to see names
+		//name = LLCacheName::buildUsername(name);
+		name = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames") ? LLCacheName::buildLegacyName(name) : LLCacheName::buildUsername(name);
+		// </FS:CR>
 
 		LLSD row;
 		row["id"] = id;

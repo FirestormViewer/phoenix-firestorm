@@ -301,6 +301,13 @@ private:
 
 	std::vector<ToastElem>		mToastList;
 	std::vector<ToastElem>		mStoredToastList;
+
+// <FS:ND> Disallowe LLView to destroy a screen channel. It is owned by LLChannelManager
+private:
+	virtual bool deletableByParent()
+	{ return false; }
+// </FS:ND>
+
 };
 
 }

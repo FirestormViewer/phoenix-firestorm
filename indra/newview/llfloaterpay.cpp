@@ -410,8 +410,11 @@ void LLFloaterPay::payDirectly(money_callback callback,
 	floater->getChildView("amount")->setVisible(TRUE);
 	floater->getChildView("pay btn")->setVisible(TRUE);
 	floater->getChildView("amount text")->setVisible(TRUE);
+	floater->getChildView("payment_message_label")->setVisible(TRUE);
+	floater->getChildView("payment_message")->setVisible(TRUE);
 
-	floater->getChildView("fastpay text")->setVisible(TRUE);
+	// Ansariel: Control doesn't exist as of 2011-12-12
+	//floater->getChildView("fastpay text")->setVisible(TRUE);
 	for(S32 i=0;i<MAX_PAY_BUTTONS;++i)
 	{
 		floater->mQuickPayButton[i]->setVisible(TRUE);
@@ -526,7 +529,9 @@ void LLFloaterPay::give(S32 amount)
 		else
 		{
 			// just transfer the L$
-			mCallback(mTargetUUID, gAgent.getRegion(), amount, mTargetIsGroup, TRANS_GIFT, LLStringUtil::null);
+			// Ansariel: Added custom payment message
+			std::string paymentMessage(getChild<LLLineEditor>("payment_message")->getValue().asString());
+			mCallback(mTargetUUID, gAgent.getRegion(), amount, mTargetIsGroup, TRANS_GIFT, (paymentMessage == "" ? LLStringUtil::null : paymentMessage));
 
 			// check if the payee needs to be unmuted
 			LLMuteList::getInstance()->autoRemove(mTargetUUID, LLMuteList::AR_MONEY);

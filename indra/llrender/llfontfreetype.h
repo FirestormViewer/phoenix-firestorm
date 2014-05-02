@@ -41,7 +41,19 @@
 struct FT_FaceRec_;
 typedef struct FT_FaceRec_* LLFT_Face;
 
-class LLFontManager
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+#include "nd/ndallocstats.h"
+
+namespace nd
+{
+	namespace fonts
+	{
+		class LoadedFont;
+	}
+}
+// </FS:ND>
+
+class LLFontManager: public nd::allocstats::provider
 {
 public:
 	static void initClass();
@@ -50,6 +62,17 @@ public:
 private:
 	LLFontManager();
 	~LLFontManager();
+
+// <FS:ND> FIRE-7570. Only load/mmap fonts once.
+public:
+	U8 const *loadFont( std::string const &aFilename, long &a_Size );
+	void unloadFont( std::string const &aFilename );
+	void dumpStats( std::ostream &aOut );
+
+private:
+	void unloadAllFonts();
+	std::map< std::string, nd::fonts::LoadedFont* > m_LoadedFonts;
+// </FS:ND>
 };
 
 struct LLFontGlyphInfo

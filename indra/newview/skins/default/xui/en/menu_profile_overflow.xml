@@ -5,7 +5,7 @@
  mouse_opaque="false"
  name="profile_overflow_menu"
  width="120">
-    <menu_item_call
+    <!--<menu_item_call
      label="Map"
      layout="topleft"
      name="show_on_map">
@@ -20,7 +20,7 @@
      name="pay">
         <menu_item_call.on_click
          function="Profile.Pay" />
-    </menu_item_call>
+    </menu_item_call>-->
     <menu_item_call
      label="Share"
      layout="topleft"
@@ -28,7 +28,16 @@
         <menu_item_call.on_click
          function="Profile.Share" />
     </menu_item_call>
-   <menu_item_call
+    <menu_item_call
+     label="Call"
+     layout="topleft"
+     name="call">
+        <menu_item_call.on_click
+         function="Profile.Call" />
+        <menu_item_call.on_visible
+         function="Profile.EnableCall" />
+    </menu_item_call>
+   <!--<menu_item_call
    label="Block"
    name="block">
     <menu_item_call.on_click
@@ -43,6 +52,27 @@
      function="Profile.BlockUnblock"/>
     <menu_item_call.on_visible
      function="Profile.EnableUnblock" />
+  </menu_item_call>-->
+  <menu_item_call
+   label="Copy Name"
+   layout="topleft"
+   name="copy_name_to_clipboard">
+    <menu_item_call.on_click
+     function="Profile.CopyNameToClipboard" />
+  </menu_item_call>
+  <menu_item_call
+   label="Copy URI"
+   layout="topleft"
+   name="copy_uri_to_clipboard">
+    <menu_item_call.on_click
+     function="Profile.CopyURI" />
+  </menu_item_call>
+  <menu_item_call
+   label="Copy UUID"
+   layout="topleft"
+   name="copy_key_to_clipboard">
+    <menu_item_call.on_click
+     function="Profile.CopyKey" />
   </menu_item_call>
   <menu_item_call
    label="Kick"
@@ -79,5 +109,13 @@
      function="Profile.CSR" />
     <menu_item_call.on_visible
      function="Profile.EnableGod" />
+  </menu_item_call>
+-->
+  <menu_item_call
+   label="Report"
+   layout="topleft"
+   name="report">
+    <menu_item_call.on_click
+     function="Profile.Report" />
   </menu_item_call>
 </toggleable_menu>

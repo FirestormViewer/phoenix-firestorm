@@ -114,6 +114,11 @@
 #include "llfloatertools.h"
 #include "llpanelface.h"
 #include "llpathfindingpathtool.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
+#include "exopostprocess.h"	// <FS:CR> Import Vignette from Exodus
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02
@@ -402,6 +407,9 @@ BOOL    LLPipeline::sMemAllocationThrottled = FALSE;
 S32		LLPipeline::sVisibleLightCount = 0;
 F32		LLPipeline::sMinRenderSize = 0.f;
 BOOL	LLPipeline::sRenderingHUDs;
+F32	LLPipeline::sVolumeSAFrame = 0.f; // ZK LBG
+
+bool	LLPipeline::sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
 
 // EventHost API LLPipeline listener.
 static LLPipelineListener sPipelineListener;
@@ -507,6 +515,15 @@ void LLPipeline::init()
 	sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
 	sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
 
+	sRenderMOAPBeacons = gSavedSettings.getBOOL("moapbeacon");
+	sRenderPhysicalBeacons = gSavedSettings.getBOOL("physicalbeacon");
+	sRenderScriptedBeacons = gSavedSettings.getBOOL("scriptsbeacon");
+	sRenderScriptedTouchBeacons = gSavedSettings.getBOOL("scripttouchbeacon");
+	sRenderParticleBeacons = gSavedSettings.getBOOL("particlesbeacon");
+	sRenderSoundBeacons = gSavedSettings.getBOOL("soundsbeacon");
+	sRenderBeacons = gSavedSettings.getBOOL("renderbeacons");
+	sRenderHighlight = gSavedSettings.getBOOL("renderhighlights");
+
 	mInitialized = TRUE;
 	
 	stop_glerror();
@@ -535,6 +552,8 @@ void LLPipeline::init()
 		setAllRenderDebugFeatures(); // By default, all debugging features on
 	}
 	clearAllRenderDebugDisplays(); // All debug displays off
+
+	sRenderParticles = true; // <FS:LO> flag to hold correct, user selected, status of particles
 
 	if (gSavedSettings.getBOOL("DisableAllRenderTypes"))
 	{
@@ -670,6 +689,7 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("CameraDoFResScale");
 	connectRefreshCachedSettingsSafe("RenderAutoHideSurfaceAreaLimit");
 	gSavedSettings.getControl("RenderAutoHideSurfaceAreaLimit")->getCommitSignal()->connect(boost::bind(&LLPipeline::refreshCachedSettings));
+	connectRefreshCachedSettingsSafe("FSRenderVignette");	// <FS:CR> Import Vignette from Exodus
 }
 
 LLPipeline::~LLPipeline()
@@ -807,20 +827,38 @@ void LLPipeline::resizeScreenTexture()
 		GLuint resX = gViewerWindow->getWorldViewWidthRaw();
 		GLuint resY = gViewerWindow->getWorldViewHeightRaw();
 	
-		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
+// [RLVa:KB] - Checked: 2014-02-23 (RLVa-1.4.10)
+		U32 resMod = RenderResolutionDivisor, resAdjustedX = resX, resAdjustedY = resY;
+		if ( (resMod > 1) && (resMod < resX) && (resMod < resY) )
+		{
+			resAdjustedX /= resMod;
+			resAdjustedY /= resMod;
+		}
+
+		if ( (resAdjustedX != mScreen.getWidth()) || (resAdjustedY != mScreen.getHeight()) )
+// [/RLVa:KB]
+//		if ((resX != mScreen.getWidth()) || (resY != mScreen.getHeight()))
 		{
 			releaseScreenBuffers();
 		if (!allocateScreenBuffer(resX,resY))
 			{
 #if PROBABLE_FALSE_DISABLES_OF_ALM_HERE
 				//FAILSAFE: screen buffer allocation failed, disable deferred rendering if it's enabled
-			//NOTE: if the session closes successfully after this call, deferred rendering will be 
-			// disabled on future sessions
-			if (LLPipeline::sRenderDeferred)
-			{
-				gSavedSettings.setBOOL("RenderDeferred", FALSE);
-				LLPipeline::refreshCachedSettings();
+				//NOTE: if the session closes successfully after this call, deferred rendering will be 
+				// disabled on future sessions
+				if (LLPipeline::sRenderDeferred)
+				{
+					// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
+					// Depending on 	the state of the pipeline. this can trigger illegal deletion of drawables.
+					// To work around that, resizeScreen	Texture will just set a flag, which then later does trigger the change
+					// in shaders.	
 
+					// gSavedSettings.setBOOL("RenderDeferred", FALSE);
+					// LLPipeline::refreshCachedSettings();
+
+					TriggeredDisabledDeferred = true;
+
+					// </FS:ND>
 				}
 #endif
 			}
@@ -937,6 +975,18 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 	mScreenHeight = resY;
 	
 	U32 res_mod = RenderResolutionDivisor;
+
+	//<FS:TS> FIRE-7066: RenderResolutionDivisor broken if higher than
+	//		smallest screen dimension
+	if (res_mod >= resX)
+	{
+		res_mod = resX - 1;
+	}
+	if (res_mod >= resY)
+	{
+		res_mod = resY - 1;
+	}
+	//</FS:TS> FIRE-7066
 
 	if (res_mod > 1 && res_mod < resX && res_mod < resY)
 	{
@@ -1090,7 +1140,8 @@ void LLPipeline::updateRenderDeferred()
 					 WindLightUseAtmosShaders) ? TRUE : FALSE) &&
 					!gUseWireframe;
 
-	sRenderDeferred = deferred;	
+	sRenderDeferred = deferred;
+	exoPostProcess::instance().ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
 	if (deferred)
 	{ //must render glow when rendering deferred since post effect pass is needed to present any lighting at all
 		sRenderGlow = TRUE;
@@ -1187,6 +1238,8 @@ void LLPipeline::refreshCachedSettings()
 	CameraOffset = gSavedSettings.getBOOL("CameraOffset");
 	CameraMaxCoF = gSavedSettings.getF32("CameraMaxCoF");
 	CameraDoFResScale = gSavedSettings.getF32("CameraDoFResScale");
+	exoPostProcess::instance().ExodusRenderPostSettingsUpdate();	// <FS:CR> Import Vignette from Exodus
+
 	RenderAutoHideSurfaceAreaLimit = gSavedSettings.getF32("RenderAutoHideSurfaceAreaLimit");
 	
 	updateRenderDeferred();
@@ -2088,6 +2141,8 @@ void LLPipeline::updateMoveNormalAsync(LLDrawable* drawablep)
 
 void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 {
+	LLDrawable::drawable_vector_t newList; // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
+
 	for (LLDrawable::drawable_vector_t::iterator iter = moved_list.begin();
 		 iter != moved_list.end(); )
 	{
@@ -2116,9 +2171,15 @@ void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 					drawablep->getVObj()->dirtySpatialGroup(TRUE);
 				}
 			}
-			iter = moved_list.erase(curiter);
+		// <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
+			// iter = moved_list.erase(curiter); // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
 		}
+		else
+			newList.push_back( drawablep );
+		// </FS:ND>
 	}
+
+	moved_list.swap( newList ); // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
 }
 
 static LLFastTimer::DeclareTimer FTM_OCTREE_BALANCE("Balance Octree");
@@ -3296,7 +3357,11 @@ static LLFastTimer::DeclareTimer FTM_PROCESS_PARTITIONQ("PartitionQ");
 void LLPipeline::processPartitionQ()
 {
 	LLFastTimer t(FTM_PROCESS_PARTITIONQ);
-	for (LLDrawable::drawable_list_t::iterator iter = mPartitionQ.begin(); iter != mPartitionQ.end(); ++iter)
+
+	// <FS:ND> A vector is much better suited for the use case of mPartitionQ
+	// for (LLDrawable::drawable_list_t::iterator iter = mPartitionQ.begin(); iter != mPartitionQ.end(); ++iter)
+	for (LLDrawable::drawable_vector_t::iterator iter = mPartitionQ.begin(); iter != mPartitionQ.end(); ++iter)
+	// </FS:ND>
 	{
 		LLDrawable* drawable = *iter;
 		if (!drawable->isDead())
@@ -3538,8 +3603,15 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
 	
 	if (LLSelectMgr::getInstance()->mHideSelectedObjects)
 	{
-		if (drawablep->getVObj().notNull() &&
-			drawablep->getVObj()->isSelected())
+//		if (drawablep->getVObj().notNull() &&
+//			drawablep->getVObj()->isSelected())
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.2.1f
+		const LLViewerObject* pObj = drawablep->getVObj();
+		if ( (pObj) && (pObj->isSelected()) && 
+			 ( (!rlv_handler_t::isEnabled()) || 
+			   ( ((!pObj->isHUDAttachment()) || (!gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))) && 
+			     (gRlvHandler.canEdit(pObj)) ) ) )
+// [/RVLa:KB]
 		{
 			return;
 		}
@@ -3817,6 +3889,7 @@ void LLPipeline::postSort(LLCamera& camera)
 	LLFastTimer ftm(FTM_STATESORT_POSTSORT);
 
 	assertInitialized();
+	sVolumeSAFrame = 0.f; //ZK LBG
 
 	llpushcallstacks ;
 	//rebuild drawable geometry
@@ -3947,7 +4020,8 @@ void LLPipeline::postSort(LLCamera& camera)
 
 	llpushcallstacks ;
 	// only render if the flag is set. The flag is only set if we are in edit mode or the toggle is set in the menus
-	if (LLFloaterReg::instanceVisible("beacons") && !sShadowRender)
+	// Ansariel: Make beacons also show when beacons floater is closed.
+	if (/*LLFloaterReg::instanceVisible("beacons") &&*/ !sShadowRender)
 	{
 		if (sRenderScriptedTouchBeacons)
 		{
@@ -7090,7 +7164,7 @@ LLVOPartGroup* LLPipeline::lineSegmentIntersectParticle(const LLVector4a& start,
 		LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_PARTICLE);
 		if (part && hasRenderType(part->mDrawableType))
 		{
-			LLDrawable* hit = part->lineSegmentIntersect(start, local_end, TRUE, face_hit, &position, NULL, NULL, NULL);
+			LLDrawable* hit = part->lineSegmentIntersect(start, local_end, TRUE, FALSE, face_hit, &position, NULL, NULL, NULL);
 			if (hit)
 			{
 				drawable = hit;
@@ -7117,6 +7191,9 @@ LLVOPartGroup* LLPipeline::lineSegmentIntersectParticle(const LLVector4a& start,
 
 LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start, const LLVector4a& end,
 														BOOL pick_transparent,												
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+														BOOL pick_rigged,
+// [/SL:KB]
 														S32* face_hit,
 														LLVector4a* intersection,         // return the intersection point
 														LLVector2* tex_coord,            // return the texture coordinates of the intersection point
@@ -7148,7 +7225,10 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 				LLSpatialPartition* part = region->getSpatialPartition(j);
 				if (part && hasRenderType(part->mDrawableType))
 				{
-					LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, face_hit, &position, tex_coord, normal, tangent);
+//					LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, face_hit, &position, tex_coord, normal, tangent);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+					LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, pick_rigged, face_hit, &position, tex_coord, normal, tangent);
+// [/SL:KB]
 					if (hit)
 					{
 						drawable = hit;
@@ -7205,7 +7285,10 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInWorld(const LLVector4a& start,
 			LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_BRIDGE);
 			if (part && hasRenderType(part->mDrawableType))
 			{
-				LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, face_hit, &position, tex_coord, normal, tangent);
+//				LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, face_hit, &position, tex_coord, normal, tangent);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+				LLDrawable* hit = part->lineSegmentIntersect(start, local_end, pick_transparent, pick_rigged, face_hit, &position, tex_coord, normal, tangent);
+// [/SL:KB]
 				if (hit)
 				{
 					LLVector4a delta;
@@ -7293,7 +7376,10 @@ LLViewerObject* LLPipeline::lineSegmentIntersectInHUD(const LLVector4a& start, c
 		LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_HUD);
 		if (part)
 		{
-			LLDrawable* hit = part->lineSegmentIntersect(start, end, pick_transparent, face_hit, intersection, tex_coord, normal, tangent);
+//			LLDrawable* hit = part->lineSegmentIntersect(start, end, pick_transparent, face_hit, intersection, tex_coord, normal, tangent);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+			LLDrawable* hit = part->lineSegmentIntersect(start, end, pick_transparent, FALSE, face_hit, intersection, tex_coord, normal, tangent);
+// [/SL:KB]
 			if (hit)
 			{
 				drawable = hit;
@@ -7540,6 +7626,7 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 	
 	gGL.setColorMask(true, true);
 	glClearColor(0,0,0,0);
+	exoPostProcess::instance().ExodusRenderPostStack(&mScreen, &mScreen); // <FS:CR> Import Vignette from Exodus
 	
 	{
 		{
@@ -7679,6 +7766,7 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 
 
 		bool multisample = RenderFSAASamples > 1 && mFXAABuffer.isComplete();
+		exoPostProcess::instance().multisample = multisample;	// <FS:CR> Import Vignette from Exodus
 
 		gViewerWindow->setup3DViewport();
 				
@@ -7718,12 +7806,15 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 				{ //focus on point under mouselook crosshairs
 					LLVector4a result;
 					result.clear();
-
-					gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+					gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE, FALSE,
 													NULL,
 													&result);
-
-					focus_point.set(result.getF32ptr());
+// [/SL:KB]
+//					gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, FALSE,
+//													NULL,
+//													&result);
+				focus_point.set(result.getF32ptr());
 				}
 				else
 				{
@@ -7890,9 +7981,9 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 				
 				if (!LLViewerCamera::getInstance()->cameraUnderWater())
 				{
-					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2);
+					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2f);
 				} else {
-					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0);
+					shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0f);
 				}
 
 				shader->uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
@@ -7938,9 +8029,9 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 			
 			if (!LLViewerCamera::getInstance()->cameraUnderWater())
 			{
-				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2);
+				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 2.2f);
 			} else {
-				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0);
+				shader->uniform1f(LLShaderMgr::GLOBAL_GAMMA, 1.0f);
 			}
 
 			gGL.begin(LLRender::TRIANGLE_STRIP);
@@ -8062,6 +8153,7 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 		if (LLGLSLShader::sNoFixedFunction)
 		{
 			gGlowCombineProgram.bind();
+			gGlowCombineProgram.uniform3fv(LLShaderMgr::EXO_RENDER_VIGNETTE, 1, exoPostProcess::sExodusRenderVignette.mV); // Work around for ExodusRenderVignette in non-deferred.
 		}
 		else
 		{
@@ -8917,7 +9009,8 @@ void LLPipeline::renderDeferredLighting()
 		
 		gDeferredPostGammaCorrectProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, mScreen.getWidth(), mScreen.getHeight());
 		
-		F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		//F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
 
 		gDeferredPostGammaCorrectProgram.uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
 		
@@ -9466,7 +9559,8 @@ void LLPipeline::renderDeferredLightingToRT(LLRenderTarget* target)
 		
 		gDeferredPostGammaCorrectProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, target->getWidth(), target->getHeight());
 		
-		F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		//F32 gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
+		static LLCachedControl<F32> gamma(gSavedSettings, "RenderDeferredDisplayGamma");
 
 		gDeferredPostGammaCorrectProgram.uniform1f(LLShaderMgr::DISPLAY_GAMMA, (gamma > 0.1f) ? 1.0f / gamma : (1.0f/2.2f));
 		
@@ -11928,3 +12022,19 @@ void LLPipeline::restoreHiddenObject( const LLUUID& id )
 	}
 }
 
+// <FS:ND>FIRE-9943; resizeScreenTexture will try to disable deferred mode in low memory situations.
+// Depending on the state of the pipeline. this can trigger illegal deletion of drawables.
+// To work around that, resizeScreenTexture will just set a flag, which then later does trigger the change
+// in shaders.
+bool LLPipeline::TriggeredDisabledDeferred;
+
+void LLPipeline::disableDeferredOnLowMemory()
+{
+	if ( TriggeredDisabledDeferred )
+	{
+		TriggeredDisabledDeferred = false;
+		gSavedSettings.setBOOL("RenderDeferred", FALSE);
+		LLPipeline::refreshCachedSettings();
+	}
+}
+// </FS:ND>

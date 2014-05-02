@@ -1421,7 +1421,7 @@ http://secondlife.com/viewer-access-faq
 	<string name="InvFolder Gestures">
 		姿勢
 	</string>
-	<string name="InvFolder Favorite">
+	<string name="InvFolder Favorites">
 		我的最愛
 	</string>
 	<string name="InvFolder favorite">
@@ -2264,7 +2264,8 @@ http://secondlife.com/viewer-access-faq
 	<string name="Adult">
 		完全成人
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		藝術與文化
 	</string>
 	<string name="Business">

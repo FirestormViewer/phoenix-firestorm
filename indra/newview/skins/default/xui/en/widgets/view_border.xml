@@ -8,4 +8,4 @@
              border_style="line"
              bevel_style="out"
              mouse_opaque="false"
-             follows="all"/>
+             follows="all" />

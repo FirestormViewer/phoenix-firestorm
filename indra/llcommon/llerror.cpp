@@ -50,6 +50,8 @@
 #include "llstl.h"
 #include "lltimer.h"
 
+#include "nd/ndlogthrottle.h"
+
 namespace {
 #if !LL_WINDOWS
 	class RecordToSyslog : public LLError::Recorder
@@ -104,8 +106,10 @@ namespace {
 		{
 			mFile.close();
 		}
-		
-		bool okay() { return mFile; }
+
+		// <FS:TM> VS2013 compile fix
+		//bool okay() { return mFile; }
+		bool okay() { return !!mFile; }
 		
 		virtual bool wantsTime() { return true; }
 		
@@ -154,6 +158,9 @@ namespace {
 				}
 			}
 			fprintf(stderr, "%s\n", message.c_str());
+#if LL_WINDOWS 
+	fflush(stderr); //Now using a buffer. flush is required. 
+#endif 
 			if (ANSI_YES == mUseANSI) colorANSI("0"); // reset
 		}
 	
@@ -1063,6 +1070,9 @@ namespace LLError
 		
 		
 		std::ostringstream prefix;
+
+		if( nd::logging::throttle( site.mFile, site.mLine, &prefix ) )
+			return;
 
 		switch (site.mLevel)
 		{

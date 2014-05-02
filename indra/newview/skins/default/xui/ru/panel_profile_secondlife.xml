@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Profil">
+	<string name="payment_update_link_url">
+		http://www.secondlife.com/account/billing.php?lang=ru
+	</string>
+	<string name="partner_edit_link_url">
+		http://www.secondlife.com/account/partners.php?lang=ru
+	</string>
+	<string name="no_partner_text" value="Нет"/>
+	<string name="no_group_text" value="Нет"/>
+	<string name="FSDev" value="-Dev"/>
+	<string name="FSSupp" value="-Team"/>
+
+	<text name="Name:" value="Имя:"/>
+	<text_editor name="complete_name" value="(загрузка)"/>
+	<button name="set_name" tool_tip="Изменить имя"/>
+	<text name="Key:" value="UUID:"/>
+	<text_editor name="user_key" value="(загрузка)"/>
+	<text name="status" value="Онлайн"/>
+	<text name="label" value="Рожден:"/>
+	<text name="label2" value="Аккаунт:"/>
+	<text name="partner_label" value="Партнер:"/>
+	<text name="Groups:" value="Группы:"/>
+	<button label="+" label_selected="+" name="group_invite" tool_tip="В группу"/>
+	<text name="About:" value="Про:"/>
+	<text name="Give item:" value="Дать:"/>
+	<text name="Give inventory" tool_tip="Дать резиденту вещь.">
+		Положите предмет сюда..
+	</text>
+
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+					<button label="Найти на карте" label_selected="Найти на карте" name="show_on_map_btn" tool_tip="Найдите пользователя на карте."/>
+					<button label="Платить" label_selected="Платить" name="pay" tool_tip="Заплатить денег или заплатить бабки  пользователю."/>
+				</layout_panel>
+
+				<layout_panel name="middle_buttonstack">
+					<button label="Отправить телепорт" label_selected="Отправить телепорт" name="teleport" tool_tip="Отправить телепорт пользователю."/>
+					<button label="Личное сообщение" label_selected="Личное сообщение" name="im" tool_tip="Открыть сессию личных сообщений с пользователем (ИМ) ."/>
+				</layout_panel>
+				
+				<layout_panel name="right_buttonstack">
+					<button label="Добавить друга" label_selected="Добавить друга" name="add_friend" tool_tip="Отправить запрос дружбы пользователю."/>
+					<button label="Блокировать" name="block" tool_tip="Заблокировать пользователя."/>
+					<button label="Разблокировать" name="unblock" tool_tip="Разблокировать пользователя."/>
+				</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search_checkbox" label="Показать в поиске"/>
+</panel>
+

@@ -42,13 +42,13 @@ def main():
                  '*.ilk','*.lib','*.obj','*.ib_pdb_index']
     pch_types = ['*.pch']
     delete_file_types("build-vc80/newview/Release", build_types)
-    delete_file_types("build-vc80/newview/secondlife-bin.dir/Release/", 
+    delete_file_types("build-vc80/newview/firestorm-bin.dir/Release/", 
                       pch_types)
     delete_file_types("build-vc80/newview/RelWithDebInfo", build_types)
-    delete_file_types("build-vc80/newview/secondlife-bin.dir/RelWithDebInfo/", 
+    delete_file_types("build-vc80/newview/firestorm-bin.dir/RelWithDebInfo/", 
                       pch_types)
     delete_file_types("build-vc80/newview/Debug", build_types)
-    delete_file_types("build-vc80/newview/secondlife-bin.dir/Debug/", 
+    delete_file_types("build-vc80/newview/firestorm-bin.dir/Debug/", 
                       pch_types)
 
 

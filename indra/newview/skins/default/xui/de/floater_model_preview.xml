@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="MODELL HOCHLADEN">
+<floater name="Model Preview" title="Modell hochladen">
+	<string name="no_havok">
+		Mesh-Upload mit Physics
+	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Fehler: Fehler beim DAE-Parsen – Details siehe Protokoll.
@@ -90,55 +93,90 @@
 			<panel label="Detailstufe" name="lod_panel" title="Detailstufe">
 				<text initial_value="Quelle" name="source" value="Quelle"/>
 				<text initial_value="Dreiecke" name="triangles" value="Dreiecke"/>
-				<text initial_value="Scheitelpunkte" name="vertices" value="Scheitelpunkte"/>
+				<text initial_value="Scheitelp." name="vertices" value="Scheitelp."/>
 				<text initial_value="Hoch" name="high_label" value="Hoch"/>
 				<combo_box name="lod_source_high">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Load from file" value="Aus Datei laden"/>
 					<item name="Generate" value="Generieren"/>
+					-->
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
 				</combo_box>
-				<button label="Durchsuchen..." name="lod_browse_high"/>
+				<button label="Auswählen" name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Triangle Limit" value="Dreiecklimit"/>
 					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="high_triangles" value="0"/>
 				<text initial_value="0" name="high_vertices" value="0"/>
 				<text initial_value="Mittel" name="medium_label" value="Mittel"/>
 				<combo_box name="lod_source_medium">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Load from file" value="Aus Datei laden"/>
 					<item name="Generate" value="Generieren"/>
 					<item name="Use LoD above" value="Detailstufe oben verwenden"/>
+					-->
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
+					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
 				</combo_box>
-				<button label="Durchsuchen..." name="lod_browse_medium"/>
+				<button label="Auswählen" name="lod_browse_medium"/>
 				<combo_box name="lod_mode_medium">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Triangle Limit" value="Dreiecklimit"/>
 					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="medium_triangles" value="0"/>
 				<text initial_value="0" name="medium_vertices" value="0"/>
 				<text initial_value="Niedrig" name="low_label" value="Niedrig"/>
 				<combo_box name="lod_source_low">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Load from file" value="Aus Datei laden"/>
 					<item name="Generate" value="Generieren"/>
 					<item name="Use LoD above" value="Detailstufe oben verwenden"/>
+					-->
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
+					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
 				</combo_box>
-				<button label="Durchsuchen..." name="lod_browse_low"/>
+ 				<button label="Auswählen" name="lod_browse_low"/>
 				<combo_box name="lod_mode_low">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Triangle Limit" value="Dreiecklimit"/>
 					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="low_triangles" value="0"/>
 				<text initial_value="0" name="low_vertices" value="0"/>
 				<text initial_value="Niedrigste" name="lowest_label" value="Niedrigste"/>
 				<combo_box name="lod_source_lowest">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Load from file" value="Aus Datei laden"/>
 					<item name="Generate" value="Generieren"/>
 					<item name="Use LoD above" value="Detailstufe oben verwenden"/>
+					-->
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
+					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
 				</combo_box>
-				<button label="Durchsuchen..." name="lod_browse_lowest"/>
+ 				<button label="Auswählen" name="lod_browse_lowest"/>
 				<combo_box name="lod_mode_lowest">
+					<!-- FS:Ansariel: Broken by LL
 					<item name="Triangle Limit" value="Dreiecklimit"/>
 					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="lowest_triangles" value="0"/>
 				<text initial_value="0" name="lowest_vertices" value="0"/>
@@ -171,7 +209,7 @@
 							Aus Datei
 						</combo_item>
 					</combo_box>
-					<button label="Durchsuchen..." name="physics_browse"/>
+					<button label="Auswählen" name="physics_browse"/>
 				</panel>
 				<panel name="physics analysis">
 					<text name="method_label">
@@ -227,7 +265,7 @@
 			</panel>
 			<panel label="Hochladeoptionen" name="modifiers_panel">
 				<text name="scale_label">
-					Skalierung (1=keine Skalierung):
+					Skalierung (1=keine):
 				</text>
 				<spinner name="import_scale" value="1.0"/>
 				<text name="dimensions_label">
@@ -242,6 +280,12 @@
 				</text>
 				<check_box label="Skingewicht einschließen" name="upload_skin"/>
 				<check_box label="Gelenkpositionen einschließen" name="upload_joints"/>
+				<check_box label="An Avatarform anpassen" name="deform"/>
+				<radio_group name="deform_base">
+					<radio_item label="Mann" name="0"/>
+					<radio_item label="Frau" name="1"/>
+					<radio_item label="Mann (schlank)" name="2"/>
+				</radio_group>
 				<text name="pelvis_offset_label">
 					Z-Offset (Avatar anheben oder senken):
 				</text>
@@ -249,10 +293,10 @@
 			</panel>
 		</tab_container>
 		<panel name="weights_and_warning_panel">
-			<button label="Gewichte und Gebühr berechnen" name="calculate_btn" tool_tip="Gewichte und Gebühr berechnen"/>
+			<button label="Gewichte und Gebühr berechnen" name="calculate_btn" tool_tip="Gewichte und Gebühr berechnen" width="200"/>
 			<button label="Abbrechen" name="cancel_btn"/>
 			<button label="Hochladen" name="ok_btn" tool_tip="Auf Simulator hochladen"/>
-			<button label="Einstellungen löschen und Formular zurücksetzen" name="reset_btn"/>
+			<button label="Einstellungen löschen und Formular zurücksetzen" name="reset_btn" width="280"/>
 			<text name="upload_fee">
 				Gebühr für Hochladen: [FEE] L$
 			</text>

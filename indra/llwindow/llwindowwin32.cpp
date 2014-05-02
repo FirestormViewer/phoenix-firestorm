@@ -42,6 +42,7 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "llglslshader.h"
+#include "../newview/llviewercontrol.h"
 
 // System includes
 #include <commdlg.h>
@@ -745,7 +746,8 @@ void LLWindowWin32::close()
 	LL_DEBUGS("Window") << "Destroying Window" << LL_ENDL;
 	
 	// Don't process events in our mainWindowProc any longer.
-	SetWindowLong(mWindowHandle, GWL_USERDATA, NULL);
+	// SetWindowLong(mWindowHandle, GWL_USERDATA, NULL);
+	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, NULL);
 
 	// Make sure we don't leave a blank toolbar button.
 	ShowWindow(mWindowHandle, SW_HIDE);
@@ -1523,7 +1525,8 @@ BOOL LLWindowWin32::switchContext(BOOL fullscreen, const LLCoordScreen &size, BO
 		LL_DEBUGS("Window") << "Keeping vertical sync" << LL_ENDL;
 	}
 
-	SetWindowLong(mWindowHandle, GWL_USERDATA, (U32)this);
+	// SetWindowLong(mWindowHandle, GWL_USERDATA, (U32)this);
+	SetWindowLongPtr(mWindowHandle, GWLP_USERDATA, (LONG_PTR)this);
 
 	// register this window as handling drag/drop events from the OS
 	DragAcceptFiles( mWindowHandle, TRUE );
@@ -1697,9 +1700,20 @@ void LLWindowWin32::initCursors()
 	mCursor[ UI_CURSOR_TOOLZOOMIN ] = LoadCursor(module, TEXT("TOOLZOOMIN"));
 	mCursor[ UI_CURSOR_TOOLPICKOBJECT3 ] = LoadCursor(module, TEXT("TOOLPICKOBJECT3"));
 	mCursor[ UI_CURSOR_PIPETTE ] = LoadCursor(module, TEXT("TOOLPIPETTE"));
-	mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT"));
-	mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY"));
-	mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN"));
+	if (gSavedSettings.getBOOL("UseLegacyCursors"))
+	{
+		mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT-LEGACY"));
+		mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY-LEGACY"));
+		mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN-LEGACY"));
+		mCursor[ UI_CURSOR_TOOLPAY ]	= LoadCursor(module, TEXT("TOOLPAY-LEGACY"));
+	}
+	else
+	{
+		mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT"));
+		mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY"));
+		mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN"));
+		mCursor[ UI_CURSOR_TOOLPAY ]	= LoadCursor(module, TEXT("TOOLBUY"));
+	}
 	mCursor[ UI_CURSOR_TOOLPATHFINDING ]	= LoadCursor(module, TEXT("TOOLPATHFINDING"));
 	mCursor[ UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD ]	= LoadCursor(module, TEXT("TOOLPATHFINDINGPATHSTARTADD"));
 	mCursor[ UI_CURSOR_TOOLPATHFINDING_PATH_START ]	= LoadCursor(module, TEXT("TOOLPATHFINDINGPATHSTART"));
@@ -1831,8 +1845,8 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
 	// This helps prevent avatar walking after maximizing the window by double-clicking the title bar.
 	static bool sHandleLeftMouseUp = true;
 
-	LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong(h_wnd, GWL_USERDATA);
-
+	// LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLong(h_wnd, GWL_USERDATA);
+	LLWindowWin32 *window_imp = (LLWindowWin32 *)GetWindowLongPtr(h_wnd, GWLP_USERDATA);
 
 	if (NULL != window_imp)
 	{
@@ -2825,14 +2839,17 @@ BOOL LLWindowWin32::getClientRectInScreenSpace( RECT* rectp )
 
 void LLWindowWin32::flashIcon(F32 seconds)
 {
-	FLASHWINFO flash_info;
+	if (getMinimized()) // <FS:CR> Moved this here from llviewermessage.cpp
+	{
+		FLASHWINFO flash_info;
 
-	flash_info.cbSize = sizeof(FLASHWINFO);
-	flash_info.hwnd = mWindowHandle;
-	flash_info.dwFlags = FLASHW_TRAY;
-	flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
-	flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
-	FlashWindowEx(&flash_info);
+		flash_info.cbSize = sizeof(FLASHWINFO);
+		flash_info.hwnd = mWindowHandle;
+		flash_info.dwFlags = FLASHW_TRAY;
+		flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
+		flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
+		FlashWindowEx(&flash_info);
+	}
 }
 
 F32 LLWindowWin32::getGamma()
@@ -3037,6 +3054,23 @@ void LLWindowWin32::swapBuffers()
 	SwapBuffers(mhDC);
 }
 
+//-TT Window Title Access
+void LLWindowWin32::setTitle(const std::string& win_title)
+{
+	// Set the window title
+	if (win_title.empty())
+	{
+		wsprintf(mWindowTitle, L"OpenGL Window");
+	}
+	else
+	{
+		mbstowcs(mWindowTitle, win_title.c_str(), 255);
+		mWindowTitle[255] = 0;
+	}
+
+	SetWindowText(mWindowHandle, mWindowTitle);
+}
+//-TT
 
 //
 // LLSplashScreenImp
@@ -3153,8 +3187,18 @@ S32 OSMessageBoxWin32(const std::string& text, const std::string& caption, U32 t
 
 	return retval;
 }
-
-
+void LLWindowWin32::openFile(const std::string& file_name )
+{
+	LLWString url_wstring = utf8str_to_wstring( file_name );
+	llutf16string url_utf16 = wstring_to_utf16str( url_wstring );
+	
+	SHELLEXECUTEINFO sei = { sizeof( sei ) };
+	sei.fMask = SEE_MASK_FLAG_DDEWAIT;
+	sei.nShow = SW_SHOWNORMAL;
+	sei.lpVerb = L"open";
+	sei.lpFile = url_utf16.c_str();
+	ShellExecuteEx( &sei );
+}
 void LLWindowWin32::spawnWebBrowser(const std::string& escaped_url, bool async)
 {
 	bool found = false;
@@ -3840,5 +3884,24 @@ std::vector<std::string> LLWindowWin32::getDynamicFallbackFontList()
 	return std::vector<std::string>();
 }
 
+// <FS:ND> Allow to query for window chrome sizes.
+void LLWindowWin32::getWindowChrome( U32 &aChromeW, U32 &aChromeH )
+{
+	LLWindow::getWindowChrome( aChromeW, aChromeH );
+
+	RECT oClient, oWindow;
+
+	if( !::GetClientRect( mWindowHandle, &oClient ) || !::GetWindowRect( mWindowHandle, &oWindow ) )
+		return;
+
+	U32 nHeight = oWindow.bottom - oWindow.top;
+	U32 nWidth = oWindow.right - oWindow.left;
+	U32 nCHeight = oClient.bottom - oClient.top;
+	U32 nCWidth = oClient.right - oClient.left;
+
+	aChromeW = nWidth - nCWidth;
+	aChromeH = nHeight - nCHeight;
+}
+// </FS:ND>
 
 #endif // LL_WINDOWS

@@ -1,0 +1,124 @@
+Please keep this updated with major user-facing features we add to firestorm beyond LL-snowstorm
+
+FEATURE			LICENSE
+
+DePatronizedMenus	LGPL
+AppalachianStarlight	LGPL
+RLVa			LGPL
+WornItemsTab		LGPL
+VerticalTabIms		LGPL
+IM_IconHide		LGPL
+IM_HeaderColor		LGPL
+IM_Transl_Icon		LGPL
+CallingCard-avclck	LGPL
+DD_SliderUI		LGPL
+SkinSelector		LGPL
+ViewerTagBroadcast	LGPL
+LargeProfile		LGPL
+ImprovedPrefs		LGPL
+WindlightExtraSettings	LGPL
+UnifiedCommWindow	LGPL
+WindlightParcelSettings	LGPL
+MapTeleportAbove255m	LGPL
+NonBusyAutoresponse	LGPL
+V1_Clienttags		LGPL
+AlwaysShowFriendPerms	LGPL
+GlobalFriendVisToggle	LGPL
+IM_IconifiedToolbar	LGPL
+GUI_IMTabConfig		LGPL
+VerySmall_CamControl	LGPL
+Small_MoveControl	LGPL
+Floating_Topbar		LGPL
+Profile_Floaters	LGPL
+Floater_NearbyChatEntry LGPL
+Persist_Minimized	LGPL
+FirestormGrey_skin	LGPL
+TopMenu_Navbar		LGPL
+Cmd_chatbar		BSD
+Menubar_location	LGPL
+No_Sidebar		LGPL
+Collapsable_Nearbychat	LGPL
+InvFolderType_Icons	LGPL
+Hippos!			LGPL
+V1_MouseCursors		LGPL/Creative Commons Attribution-Share Alike 3.0
+V1_Icons		Creative Commons Attribution-Share Alike 3.0
+AFK_ExtraControls	LGPL
+IgnoreFinishAnimation	BSD/PD
+V1_Contacts		LGPL
+QuickAdditionalInv	LGPL
+UpdatedLibCURL		Curl (MIT/X11)
+UpdatedWebKit		LGPL
+Progress_screens	LGPL
+Prim_align_tool		third party viewers (imprudence, Kirsten's, etc, etc, etc) please feel free to include this code into yours.
+Temp_Uploads		LGPL (from Dolphin Viewer 2.4)
+StreamTitles		BSD
+LessCameraConstraints	LGPL
+TabbedOutfits&Shape	LGPL
+MediaFilter		LGPL
+ResizableCamaeraControl	LGPL
+FolderStyleOutfits	LGPL
+PrivateLookat		LGPL (from ArminW/Kokua)
+PreviewAnimations	LGPL (from ArminW/Kokua)
+LSLmediaToggle		LGPL
+ImprovedRadar		LGPL
+Resizable_Profiles	LGPL
+Derender		LGPL
+RezUnderLandGroup	LGPL
+JiraLinkParsing		LGPL
+AreaSearch		BSD (from Emerald/CoolVL/Phoenix)
+ConsoleChat		LGPL
+SitOnAway		LGPL
+FlikrUploadsSupport	LGPL (from Katharine Berry)
+ImprovedTextureRepeats  LGPL
+Fly Override		LGPL
+KDU decoder support	Kakadu
+ForceGroundSit		LGPL
+PhantomMode		LGPL
+AdjustableToastWidth	LGPL
+Collapse/ExpandInv	LGPL
+CrashServerOptions	LGPL
+KillTeleportFX		LGPL
+ScriptDialogColorPrefs	LGPL
+KeywordAlerts		LGPL
+ClickableFriendPerms	LGPL
+SeparateMusicPlay	LGPL
+SaveCommDocks		LGPL
+LookAtNameText		LGPL
+V1CompatAvatarParams	LGPL
+AdvancedAO		LGPL
+AutoUDPFallback		LGPL
+BoldModeratorChat	LGPL
+CacheClearOnNewDecoder	LGPL
+MoreWindlightPresets	LGPL
+SysinfoButton		LGPL
+ExtendedGraphicsPrefs	LGPL
+GridSelector		LGPL
+ContactsSortByUsername	LGPL
+SpreadsheetCtrlRadar	LGPL
+RadarUUIDChat		LGPL
+RadarIMChatFmtOptions	LGPL
+RadarEstateControls	LGPL
+DynamicMotD&Support	LGPL
+LSLBridge		LGPL
+Br_AccurateTeleports	LGPL
+RestoreToLastPosition	LGPL
+V1StyleGroupNotices	LGPL
+QuickPreferences	LGPL
+Build_ObjectHighlight	LGPL
+Build_PivotPoint	LGPL
+Build_DefaultSize	LGPL
+Build_ShowLinkNumber	LGPL
+Build_CopyPasteParams	LGPL
+WindlightScrollButtons	LGPL
+Build_Calculations	LGPL
+Build_IncrementModKeys	LGPL
+Build_HighPrecision	LGPL
+Build_ExtraShapes	LGPL
+SafeSalePricing		LGPL
+MoreLookatOptions	LGPL
+ZoffsetControl		LGPL
+Build_LastOwner		LGPL
+ChatSecondsDisplay	LGPL
+Build_ShowFaceNumbers	LGPL
+BlockClickSit		LGPL
+ExtWindlightPresets	LGPL

@@ -40,11 +40,19 @@
 #include "llselectmgr.h"
 #include "llglheaders.h"
 
+#include "llhudrender.h"
+#include "llresmgr.h"
+#include "llviewerwindow.h"
+#include "llavatarnamecache.h"
 
 #include "llxmltree.h"
+#include "llviewercontrol.h"
 
+// [RLVa:KC] - Firestrom specific
+#include "rlvhandler.h"
+// [/RLVa:KC]
 
-BOOL LLHUDEffectLookAt::sDebugLookAt = FALSE;
+//BOOL LLHUDEffectLookAt::sDebugLookAt = FALSE;
 
 // packet layout
 const S32 SOURCE_AVATAR = 0;
@@ -241,7 +249,11 @@ static BOOL loadAttentions()
 LLHUDEffectLookAt::LLHUDEffectLookAt(const U8 type) : 
 	LLHUDEffect(type), 
 	mKillTime(0.f),
-	mLastSendTime(0.f)
+	mLastSendTime(0.f),
+	//<FS:AO improve use of controls with radiogroups>
+	//mDebugLookAt( LLCachedControl<bool>(gSavedPerAccountSettings, "DebugLookAt", FALSE))
+	mDebugLookAt( LLCachedControl<S32>(gSavedPerAccountSettings, "DebugLookAt", FALSE))
+	//</FS:AO>
 {
 	clearLookAtTarget();
 	// parse the default sets
@@ -262,6 +274,50 @@ LLHUDEffectLookAt::~LLHUDEffectLookAt()
 //-----------------------------------------------------------------------------
 void LLHUDEffectLookAt::packData(LLMessageSystem *mesgsys)
 {
+	// pack both target object and position 
+	// position interpreted as offset if target object is non-null 
+	ELookAtType  target_type     = mTargetType; 
+	LLVector3d  target_offset_global   = mTargetOffsetGlobal; 
+	LLViewerObject* target_object    = (LLViewerObject*)mTargetObject; 
+	LLViewerObject* source_object = (LLViewerObject*)mSourceObject; 
+	LLVOAvatar* source_avatar = NULL; 
+	if (!source_object)//kokua TODO: find out why this happens at all and fix there 
+	{ 
+		LL_DEBUGS("HUDEffect")<<"NULL-Object HUDEffectLookAt message" <<  LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	if (source_object->isAvatar()) 
+	{ 
+		source_avatar = (LLVOAvatar*)source_object; 
+	} 
+	else //AW: TODO: find out why this happens at all and fix there 
+	{ 
+		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectLookAt message for ID: " <<  source_object->getID().asString()<< LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	bool is_self = source_avatar->isSelf(); 
+	static LLCachedControl<bool> is_private(gSavedSettings, "PrivateLookAtTarget", false);
+	static LLCachedControl<bool> isLocalPrivate(gSavedSettings, "PrivateLocalLookAtTarget", false);
+	if (!is_self) //AW: TODO: find out why this happens at all and fix there 
+	{ 
+		LL_DEBUGS("HUDEffect")<< "Non-self Avatar HUDEffectLookAt message for ID: " << source_avatar->getID().asString() << LL_ENDL; 
+		markDead(); 
+		return; 
+	} 
+	else if (isLocalPrivate && is_private) // AO: send nothing if we're not showing anything ourselves
+	{
+		markDead();
+		return;
+	}
+	else if (is_private && target_type != LOOKAT_TARGET_AUTO_LISTEN) // AW: spoof boring lookat target to others if we still want real local effects.
+	{ 
+		//this mimicks "do nothing" 
+		target_type = LOOKAT_TARGET_AUTO_LISTEN; 
+		target_offset_global.setVec(2.5, 0.0, 0.0); 
+		target_object = mSourceObject; 
+	} 
 	// Pack the default data
 	LLHUDEffect::packData(mesgsys);
 
@@ -282,16 +338,16 @@ void LLHUDEffectLookAt::packData(LLMessageSystem *mesgsys)
 	// position interpreted as offset if target object is non-null
 	if (mTargetObject)
 	{
-		htonmemcpy(&(packed_data[TARGET_OBJECT]), mTargetObject->mID.mData, MVT_LLUUID, 16);
+		htonmemcpy(&(packed_data[TARGET_OBJECT]), target_object->mID.mData, MVT_LLUUID, 16);
 	}
 	else
 	{
 		htonmemcpy(&(packed_data[TARGET_OBJECT]), LLUUID::null.mData, MVT_LLUUID, 16);
 	}
 
-	htonmemcpy(&(packed_data[TARGET_POS]), mTargetOffsetGlobal.mdV, MVT_LLVector3d, 24);
+	htonmemcpy(&(packed_data[TARGET_POS]), target_offset_global.mdV, MVT_LLVector3d, 24);
 
-	U8 lookAtTypePacked = (U8)mTargetType;
+	U8 lookAtTypePacked = (U8)target_type;
 	
 	htonmemcpy(&(packed_data[LOOKAT_TYPE]), &lookAtTypePacked, MVT_U8, 1);
 
@@ -361,8 +417,15 @@ void LLHUDEffectLookAt::unpackData(LLMessageSystem *mesgsys, S32 blocknum)
 
 	U8 lookAtTypeUnpacked = 0;
 	htonmemcpy(&lookAtTypeUnpacked, &(packed_data[LOOKAT_TYPE]), MVT_U8, 1);
-	mTargetType = (ELookAtType)lookAtTypeUnpacked;
-
+	if ((U8)LOOKAT_NUM_TARGETS > lookAtTypeUnpacked) 
+	{ 
+		mTargetType = (ELookAtType)lookAtTypeUnpacked; 
+	} 
+	else 
+	{ 
+		mTargetType = LOOKAT_TARGET_NONE; 
+		LL_DEBUGS("HUDEffect") << "Invalid target type: " << lookAtTypeUnpacked << LL_ENDL; 
+	} 
 	if (mTargetType == LOOKAT_TARGET_NONE)
 	{
 		clearLookAtTarget();
@@ -493,11 +556,50 @@ void LLHUDEffectLookAt::setSourceObject(LLViewerObject* objectp)
 //-----------------------------------------------------------------------------
 void LLHUDEffectLookAt::render()
 {
-	if (sDebugLookAt && mSourceObject.notNull())
+	if (mDebugLookAt && mSourceObject.notNull())
 	{
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+		static LLCachedControl<bool> hide_own(gSavedPerAccountSettings, "DebugLookAtHideOwn", false);
+		static LLCachedControl<bool> is_private(gSavedSettings, "PrivateLookAtTarget", false);
+		if ((hide_own || is_private) && ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->isSelf())
+			return;
 
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
+		LLColor3 lookAtColor = (*mAttentions)[mTargetType].mColor;
+
+		static LLCachedControl<U32> show_names(gSavedSettings, "DebugLookAtShowNames");
+		if ((show_names > 0) && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+		{
+			// render name for crosshair
+			const LLFontGL* fontp=LLFontGL::getFont(LLFontDescriptor("SansSerif","Small",LLFontGL::NORMAL));
+			LLVector3 position=target+LLVector3(0.f,0.f,0.3f);
+
+			LLAvatarName nameBuffer;
+			LLAvatarNameCache::get(((LLVOAvatar*)(LLViewerObject*)mSourceObject)->getID(), &nameBuffer);
+			std::string name;
+			switch (show_names)
+			{
+				case 1: // Display Name (user.name)
+					name = nameBuffer.getCompleteName();
+					break;
+				case 2: // Display Name
+					name = nameBuffer.getDisplayName();
+					break;
+				case 3: // First Last
+					name = nameBuffer.getUserNameForDisplay();
+					break;
+				default: //user.name
+					name = nameBuffer.getAccountName();
+					break;
+			}
+
+			gGL.pushMatrix();
+			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::DROP_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
+			gGL.popMatrix();
+		}
+
+		// render crosshair
+		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
 		gGL.matrixMode(LLRender::MM_MODELVIEW);
 		gGL.pushMatrix();
 		gGL.translatef(target.mV[VX], target.mV[VY], target.mV[VZ]);
@@ -569,10 +671,12 @@ void LLHUDEffectLookAt::update()
 		}
 	}
 
-	if (sDebugLookAt)
-	{
-		((LLVOAvatar*)(LLViewerObject*)mSourceObject)->addDebugText((*mAttentions)[mTargetType].mName);
-	}
+	// <FS:Ansariel> FIRE-12878: Don't render debug text for lookats
+	//if (mDebugLookAt)
+	//{
+	//	((LLVOAvatar*)(LLViewerObject*)mSourceObject)->addDebugText((*mAttentions)[mTargetType].mName);
+	//}
+	// </FS:Ansariel>
 }
 
 /**

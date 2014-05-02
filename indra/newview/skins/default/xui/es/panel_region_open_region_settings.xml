@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Region Settings" name="RegionSettings">
+	<spinner label="Distancia de dibujo por defecto" name="draw_distance" tool_tip="Distancia de dibujo regional por defecto"/>
+	<check_box label="Forzar distancia de dibujo" name="force_draw_distance" tool_tip="Activa el bloqueo de la distancia de dibujo para todos los agentes en esta región. NOTA: Puede causar lag a usuarios con equipos de bajo rendimiento. (Por defecto: Desactivado)"/>
+	<spinner label="Máx. distancia de arrastre" name="max_drag_distance" tool_tip="Máxima distancia a la que puede ser arrastrado un prim en esta región"/>
+	<spinner label="Máx. escala de prim" name="max_prim_scale" tool_tip="Tamaño máximo del que puede crearse un prim en esta región"/>
+	<spinner label="Mín. escala de prim" name="min_prim_scale" tool_tip="Tamaño mínimo del que puede crearse un prim en esta región"/>
+	<spinner label="Máx. escala de prim físico" name="max_phys_prim_scale" tool_tip="Tamaño máximo del que puede crearse un prim físico en esta región"/>
+	<spinner label="Tamaño máximo de hueco" name="max_hollow_size" tool_tip="Tamaño máximo del que puede hacerse un agujero en un prim creado en esta región"/>
+	<spinner label="Tamaño mínimo de hueco" name="min_hollow_size" tool_tip="Tamaño mínimo del que puede hacerse un agujero en un prim creado en esta región"/>
+	<spinner label="Máximo de objetos enlazables" name="max_link_count" tool_tip="Número máximo de objetos que pueden ser enlazados en un grupo no físico en esta región"/>
+	<spinner label="Máx. obj. físicos enlazables" name="max_link_count_phys" tool_tip="Número máximo de objetos que pueden ser enlazados en un grupo físico en esta región"/>
+	<spinner label="Transferencia máx. de objetos" name="max_inventory_items_transfer" tool_tip="Número de objetos que pueden ser transferidos entre agentes de una sola vez. -1 significa número ilimitado. (Por defecto: -1)"/>
+	<spinner label="Escala de detalle de terreno" name="terrain_detail_scale" tool_tip="Escala de detalle de terreno de la región"/>
+	<spinner label="Mostrar etiquetas" name="show_tags" tool_tip="Etiquetas de nombre en esta región. (Mostrar etiquetas = 2, mostrar brevemente =1, bloquear etiquetas = 0)"/>
+	<spinner label="Número máximo de grupos" name="max_groups" tool_tip="Número máximo de grupos al que puede unirse un agente. -1 significa número ilimitado. (Por defecto: -1)"/>
+	<check_box label="Dibujar agua" name="render_water" tool_tip="Activa el dibujo del agua en la región. (Por defecto: Activado)"/>
+	<check_box label="Permitir minimapa" name="allow_minimap" tool_tip="Permitir el uso del minimapa en esta región. (Por defecto: Activado)"/>
+	<check_box label="Permitir prims físicos" name="allow_physical_prims" tool_tip="Permitir la creación de prims físicos en esta región. (Por defecto: Activado)"/>
+	<check_box label="Forzar limitaciones de construcción" name="enforce_max_build" tool_tip="Forzar limitaciones de construcción en esta regiónEnforce. (Por defecto: Activado)"/>
+	<check_box label="Permitir WindLight de parcela" name="allow_parcel_windlight" tool_tip="Permitir el uso de  WindLight en las parcelas de esta región. (Por defecto: Activado)"/>
+	<button label="Aplicar" name="apply_ors_btn"/>
+</panel>

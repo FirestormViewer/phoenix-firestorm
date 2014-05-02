@@ -484,6 +484,7 @@ public:
 	////////////////////////////////////////////////////////////////
 	// Selection accessors
 	////////////////////////////////////////////////////////////////
+	LLObjectSelectionHandle	getHoverObjects() { return mHoverObjects; }
 	LLObjectSelectionHandle	getSelection() { return mSelectedObjects; }
 	// right now this just renders the selection with root/child colors instead of a single color
 	LLObjectSelectionHandle	getEditSelection() { convertTransient(); return mSelectedObjects; }
@@ -802,6 +803,13 @@ private:
 	BOOL					mForceSelection;
 
 	LLAnimPauseRequest		mPauseRequest;
+
+// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
+public:
+	// returns TRUE if current selection does not contain individual selections
+	// (edit linked parts, select face)
+	BOOL selectGetNoIndividual();
+// </FS:Zi>
 };
 
 // *DEPRECATED: For callbacks or observers, use

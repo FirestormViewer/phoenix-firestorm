@@ -1,28 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Cosas" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
-		Obtenidos [ITEM_COUNT] ítems... [FILTER]
+		Obtenidos [ITEM_COUNT] items... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-		[ITEM_COUNT] ítems [FILTER]
+		[ITEM_COUNT] items [FILTER]
 	</panel.string>
-	<text name="ItemcountText">
-		Ítems:
-	</text>
-	<filter_editor label="Filtrar" name="inventory search editor"/>
+	<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe uno o más términos a buscar, separados por '+' "/>
+	<button name="collapse_btn" label="Contraer"/>
+	<button name="expand_btn" label="Expandir"/>
+	<text name="filter_label" value="Filtrar:"/>
+	<combo_box name="filter_combo_box">
+		<combo_box.item value="filter_type_all" label="Todo"/>
+		<combo_box.item value="filter_type_animations" label="Animaciones"/>
+		<combo_box.item value="filter_type_calling_cards" label="Tarjetas de visita"/>
+		<combo_box.item value="filter_type_clothing" label="Ropa / Partes del cuerpo"/>
+		<combo_box.item value="filter_type_gestures" label="Gestos"/>
+		<combo_box.item value="filter_type_landmarks" label="Hitos"/>
+		<combo_box.item value="filter_type_notecards" label="Notas"/>
+		<combo_box.item value="filter_type_objects" label="Objetos"/>
+		<combo_box.item value="filter_type_scripts" label="Scripts"/>
+		<combo_box.item value="filter_type_sounds" label="Sonidos"/>
+		<combo_box.item value="filter_type_textures" label="Texturas"/>
+		<combo_box.item value="filter_type_snapshots" label="Fotografías"/>
+		<combo_box.item value="filter_type_meshes" label="Modelos mesh"/>
+		<combo_box.item value="filter_type_custom" label="Personalizado..."/>
+	</combo_box>
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Todos los ítems" name="All Items"/>
-		<recent_inventory_panel label="Ítems recientes" name="Recent Items"/>
+		<inventory_panel label="INVENTARIO" name="All Items"/>
+		<recent_inventory_panel label="RECIENTE" name="Recent Items"/>
+		<worn_inventory_panel label="EN USO" name="Worn Items"/>
 	</tab_container>
-	<layout_stack name="bottom_panel">
-		<layout_panel name="options_gear_btn_panel">
-			<button name="options_gear_btn" tool_tip="Ver más opciones"/>
-		</layout_panel>
-		<layout_panel name="add_btn_panel">
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Ver más opciones"/>
+		</panel>
+		<panel name="add_btn_panel">
 			<button name="add_btn" tool_tip="Añadir un ítem nuevo"/>
-		</layout_panel>
-		<layout_panel name="trash_btn_panel">
-			<dnd_button name="trash_btn" tool_tip="Quitar el ítem seleccionado"/>
-		</layout_panel>
-	</layout_stack>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Ventana de inventario adicional"/>
+		</panel>
+		<!-- Used by StarLight skins -->
+		<panel name="collapse_panel">
+			<button label="Contraer" name="collapse_btn" tool_tip="Contraer todas las carpetas"/>
+		</panel>
+		<panel name="expand_panel">
+			<button label="Expandir" name="expand_btn" tool_tip="Expandir todas las carpetas"/>
+		</panel>
+		<!-- / Used by StarLight skins -->
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				Items
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Eliminar ítem(s) seleccionado(s)"/>
+		</panel>
+	</panel>
 </panel>

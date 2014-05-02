@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="Kopia zapasowa obiektów">
+	<floater.string name="title_floater">
+		Zapis [OBJECT] na twardym dysku...
+	</floater.string>
+	<floater.string name="title_working">
+		Zapis [OBJECT] w toku - zbieranie informacji...
+	</floater.string>
+	<floater.string name="title_inventory">
+		Zapis [OBJECT] w toku - pobieranie zawartości...
+	</floater.string>
+	<floater.string name="title_assets">
+		Zapis [OBJECT] w toku - pobieranie zasobów danych...
+	</floater.string>
+	<floater.string name="title_textures">
+		Zapis [OBJECT] w toku - pobieranie tekstur...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				Info o selekcji
+			</text>
+			<text name="exportable_prims">
+				Eksportowalne primy: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Eksportowalne tekstury: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Opcje:
+			</text>
+			<check_box label="Zapisz zawartość obiektu na dysk" name="contents_check" />
+			<button label="Zapisz jako..." name="export_btn" />
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel label="Obiekty" name="prims_panel" />
+				<panel label="Tekstury" name="texture_panel" />
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

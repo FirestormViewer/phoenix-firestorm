@@ -84,8 +84,17 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 #include <boost/foreach.hpp>
+
+#include "aoengine.h"			// ## Zi: Animation Overrider
+//-TT Client LSL Bridge
+#include "fslslbridge.h"		
+//-TT
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
 LLUUID LLInventoryState::sWearNewClothingTransactionID;
@@ -233,10 +242,11 @@ BOOL get_is_item_worn(const LLUUID& id)
 		return FALSE;
 
 	// Consider the item as worn if it has links in COF.
-	if (LLAppearanceMgr::instance().isLinkInCOF(id))
-	{
-		return TRUE;
-	}
+// [SL:KB] - The code below causes problems across the board so it really just needs to go
+//	if (LLAppearanceMgr::instance().isLinkInCOF(id))
+//	{
+//		return TRUE;
+//	}
 
 	switch(item->getType())
 	{
@@ -337,6 +347,19 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		return FALSE;
 	}
 
+	// <FS> Protected Folders
+	if (
+		(model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		||
+		(model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+	{
+		return FALSE;
+	}
+	// </FS> Protected Folders
+
 	// Disable delete from COF folder; have users explicitly choose "detach/take off",
 	// unless the item is not worn but in the COF (i.e. is bugged).
 	if (LLAppearanceMgr::instance().getIsProtectedCOFItem(id))
@@ -346,6 +369,14 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 			return FALSE;
 		}
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && 
+		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveItem(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	const LLInventoryObject *obj = model->getItem(id);
 	if (obj && obj->getIsLinkType())
@@ -374,6 +405,27 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( ((rlv_handler_t::isEnabled()) && 
+		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveFolder(id))) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+	// <FS> Protected Folders
+	if (
+		((id == AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		||
+		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+	{
+		return FALSE;
+	}
+	// </FS> Protected Folders
 
 	if (!isAgentAvatarValid()) return FALSE;
 
@@ -409,6 +461,26 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && (model == &gInventory) && (!RlvFolderLocks::instance().canRenameFolder(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
+	// <FS> Protected Folders
+	if (
+		((id == AOEngine::instance().getAOFolder() || model->isObjectDescendentOf(id, AOEngine::instance().getAOFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+		||
+		((id == FSLSLBridge::instance().getBridgeFolder() || model->isObjectDescendentOf(id, FSLSLBridge::instance().getBridgeFolder()))
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		)
+	{
+		return FALSE;
+	}
+	// </FS> Protected Folders
 
 	LLViewerInventoryCategory* cat = model->getCategory(id);
 
@@ -877,10 +949,19 @@ bool LLFindWearablesEx::operator()(LLInventoryCategory* cat, LLInventoryItem* it
 	if (!vitem) return false;
 
 	// Skip non-wearables.
-	if (!vitem->isWearableType() && vitem->getType() != LLAssetType::AT_OBJECT)
+	//<FS:LO> FIRE-1256 fix
+	/*if (!vitem->isWearableType() && vitem->getType() != LLAssetType::AT_OBJECT)
 	{
 		return false;
+	}*/
+	if (!vitem->isWearableType())
+	{
+		if((vitem->getType() != LLAssetType::AT_OBJECT) && (vitem->getType() != LLAssetType::AT_GESTURE))
+		{
+			return false;
+		}
 	}
+	//</FS:LO>
 
 	// Skip body parts if requested.
 	if (!mIncludeBodyParts && vitem->getType() == LLAssetType::AT_BODYPART)

@@ -195,6 +195,8 @@ typedef LLAtomic32<S32> LLAtomicS32;
 #define LL_APR_RPB (APR_READ|APR_WRITE|APR_BINARY) // "r+b"
 #define LL_APR_WPB (APR_CREATE|APR_TRUNCATE|APR_READ|APR_WRITE|APR_BINARY) // "w+b"
 
+namespace ll { namespace apr {
+
 //
 //apr_file manager
 //which: 1)only keeps one file open;
@@ -207,7 +209,6 @@ typedef LLAtomic32<S32> LLAtomicS32;
 //      1, a temporary pool passed to an APRFile function, which is used within this function and only once.
 //      2, a global pool.
 //
-
 class LL_COMMON_API LLAPRFile : boost::noncopyable
 {
 	// make this non copyable since a copy closes the file
@@ -216,6 +217,10 @@ private:
 	LLVolatileAPRPool *mCurrentFilePoolp ; //currently in use apr_pool, could be one of them: sAPRFilePoolp, or a temp pool. 
 
 public:
+	// <FS:ND> typedef for underlying primitive
+	typedef apr_file_t tFiletype;
+	// </FS:ND>
+	
 	LLAPRFile() ;
 	LLAPRFile(const std::string& filename, apr_int32_t flags, LLVolatileAPRPool* pool = NULL);
 	~LLAPRFile() ;
@@ -233,6 +238,8 @@ public:
 	S32 write(const void* buf, S32 nbytes);
 	
 	apr_file_t* getFileHandle() {return mFile;}	
+
+	void flush(); // <FS:ND/> Forceful file flushing
 
 private:
 	apr_pool_t* getAPRFilePool(apr_pool_t* pool) ;	
@@ -263,6 +270,7 @@ public:
 //*******************************************************************************************************************************
 };
 
+} }
 /**
  * @brief Function which appropriately logs error or remains quiet on
  * APR_SUCCESS.
@@ -276,5 +284,9 @@ void LL_COMMON_API ll_apr_assert_status(apr_status_t status);
 void LL_COMMON_API ll_apr_assert_status(apr_status_t status, apr_dso_handle_t* handle);
 
 extern "C" LL_COMMON_API apr_pool_t* gAPRPoolp; // Global APR memory pool
+
+#include "nd/ndfile.h"
+//typedef ll::apr::LLAPRFile LLAPRFile;
+typedef nd::apr::ndFile LLAPRFile;
 
 #endif // LL_LLAPR_H

@@ -406,7 +406,9 @@ void LLFloaterPathfindingObjects::addObjectToScrollList(const LLPathfindingObjec
 
 	if (pObjectPtr->hasOwner() && !pObjectPtr->hasOwnerName())
 	{
-		mMissingNameObjectsScrollListItems.insert(std::make_pair<std::string, LLScrollListItem *>(pObjectPtr->getUUID().asString(), scrollListItem));
+		// <FS:TM> C++11 compile fix
+		//mMissingNameObjectsScrollListItems.insert(std::make_pair<std::string, LLScrollListItem *>(pObjectPtr->getUUID().asString(), scrollListItem));
+		mMissingNameObjectsScrollListItems.insert(std::pair<std::string, LLScrollListItem *>(pObjectPtr->getUUID().asString(), scrollListItem));
 		pObjectPtr->registerOwnerNameListener(boost::bind(&LLFloaterPathfindingObjects::handleObjectNameResponse, this, _1));
 	}
 }

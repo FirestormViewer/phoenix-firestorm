@@ -83,10 +83,25 @@ namespace LLAvatarNameCache
 	void setUseUsernames(bool use);
 
 	void insert(const LLUUID& agent_id, const LLAvatarName& av_name);
+
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+	bool getForceDisplayNames();
+	void setForceDisplayNames(bool force);
+// [/RLVa:KB]
+
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+	bool getForceDisplayNames();
+	void setForceDisplayNames(bool force);
+// [/RLVa:KB]
+
 	void erase(const LLUUID& agent_id);
 
     /// Provide some fallback for agents that return errors.
 	void handleAgentError(const LLUUID& agent_id);
+
+	// Force a re-fetch of the most recent data, but keep the current
+	// data in cache
+	void fetch(const LLUUID& agent_id); // FS:TM used in LGGContactSets
 
 	// Compute name expiration time from HTTP Cache-Control header,
 	// or return default value, in seconds from epoch.

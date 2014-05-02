@@ -50,6 +50,8 @@
 #define WATER 2
 const U32	MAX_OBJECT_CACHE_ENTRIES = 50000;
 
+// Region handshake flags
+const U32 REGION_HANDSHAKE_SUPPORTS_SELF_APPEARANCE = 1U << 2;
 
 class LLEventPoll;
 class LLVLComposition;
@@ -67,6 +69,9 @@ class LLDataPacker;
 class LLDataPackerBinaryBuffer;
 class LLHost;
 class LLBBox;
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
+class LLViewerTexture;
+// [/SL:KB]
 
 class LLViewerRegionImpl;
 
@@ -131,10 +136,18 @@ public:
 	inline BOOL getRestrictPushObject()		const;
 	inline BOOL getReleaseNotesRequested()		const;
 
-	bool isAlive(); // can become false if circuit disconnects
+//	bool isAlive(); // can become false if circuit disconnects
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	bool isAlive() const; // can become false if circuit disconnects
+
+	LLViewerTexture* getWorldMapTile() const;
+// [/SL:KB]
 
 	void setWaterHeight(F32 water_level);
 	F32 getWaterHeight() const;
+// <FS:CR> Aurora Sim
+	void rebuildWater();
+// </FS:CR> Aurora Sim
 
 	BOOL isVoiceEnabled() const;
 
@@ -277,10 +290,16 @@ public:
 	LLVLComposition *getComposition() const;
 	F32 getCompositionXY(const S32 x, const S32 y) const;
 
-	BOOL isOwnedSelf(const LLVector3& pos);
+	//	BOOL isOwnedSelf(const LLVector3& pos);
+	//
+	//	// Owned by a group you belong to?  (officer OR member)
+	//	BOOL isOwnedGroup(const LLVector3& pos);
+	// [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-02 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
+	BOOL isOwnedSelf(const LLVector3& pos) const;
 
 	// Owned by a group you belong to?  (officer OR member)
-	BOOL isOwnedGroup(const LLVector3& pos);
+	BOOL isOwnedGroup(const LLVector3& pos) const;
+	// [/SL:KB]
 
 	// deal with map object updates in the world.
 	void updateCoarseLocations(LLMessageSystem* msg);
@@ -299,6 +318,12 @@ public:
 
 	
 	bool dynamicPathfindingEnabled() const;
+
+// </FS:CR>
+#ifdef OPENSIM
+	std::set<std::string> getGods() { return mGodNames; };	
+#endif // OPENSIM
+// </FS:CR>
 
 	typedef enum
 	{
@@ -359,10 +384,12 @@ public:
 	};
 
 	void showReleaseNotes();
+	void reInitPartitions();	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 protected:
 	void disconnectAllNeighbors();
 	void initStats();
+	void initPartitions();	// <FS:CR> FIRE-11593: Opensim "4096 Bug" Fix by Latif Khalifa
 
 public:
 	LLWind  mWind;
@@ -434,6 +461,16 @@ private:
 
 	LLDynamicArray<U32>						mCacheMissFull;
 	LLDynamicArray<U32>						mCacheMissCRC;
+			
+	// <FS:CR> Opensim region capabilities
+#ifdef OPENSIM
+	std::set<std::string> mGodNames;
+#endif
+	// </FS:CR>
+
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
+	mutable LLPointer<LLViewerTexture>		mWorldMapTile;
+// [/SL:KB]
 
 	bool	mAlive;					// can become false if circuit disconnects
 	bool	mCapabilitiesReceived;

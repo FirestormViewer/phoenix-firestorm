@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_contact_set_configure" title="Ustawienia zestawu kontaktów" width="450">
+	<floater.string name="title">
+		Ustawienia [NAME]
+	</floater.string>
+	<panel name="top_panel" width="450">
+		<text name="set_label">
+			Ustawienia zestawu kontaktów:
+		</text>
+		<color_swatch label="Ustaw kolor" name="set_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
+		<check_box label="Pokazuj powiadomienia" name="show_set_notifications" />
+	</panel>
+	<panel name="bottom_panel" width="450">
+		<text name="global_label">
+			Ustawienia globalne:
+		</text>
+		<color_swatch label="Domyślny kolor" name="global_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorow" />
+		<text name="label_online">
+			Powiadomienia online:
+		</text>
+		<check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w tostach" name="ChatOnlineNotification" />
+		<check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w czacie lokalnym" name="OnlineOfflinetoNearbyChat" />
+		<check_box label="Powiadamiaj online dla danych zestawów w tostach" name="FSContactSetsNotificationToast" />
+		<check_box label="Powiadamiaj online dla danych zestawów w czacie lokalnym" name="FSContactSetsNotificationNearbyChat" />
+		<text name="label_colors">
+			Custom Colors:
+		</text>
+		<check_box label="Koloruj ikonę na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="Koloruj tag imienia bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag" />
+		<check_box label="Koloruj wpis w radarze bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar" />
+		<check_box label="Koloruj czat bazując na zestawie kontaktów" name="FSContactSetsColorizeChat" />
+	</panel>
+</floater>

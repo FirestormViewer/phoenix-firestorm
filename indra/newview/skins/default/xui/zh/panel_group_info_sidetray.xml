@@ -12,10 +12,18 @@
 	<panel.string name="group_join_free">
 		免費
 	</panel.string>
+
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<panel name="group_info_top">
 		<text_editor name="group_name" value="（載入中...）"/>
 		<line_editor label="在此輸入你的新群組名稱" name="group_name_editor"/>
 	</panel>
+
+		</layout_panel>
+		<layout_panel name="group_info_content">
+
 	<layout_stack name="layout">
 		<layout_panel name="group_accordions">
 			<accordion name="groups_accordion">
@@ -36,6 +44,9 @@
 		<layout_panel name="btn_apply_lp">
 			<button label="儲存" label_selected="儲存" name="btn_apply"/>
 			<button label="創造群組" name="btn_create" tool_tip="創造一個新群組"/>
+		</layout_panel>
+	</layout_stack>
+
 		</layout_panel>
 	</layout_stack>
 </panel>

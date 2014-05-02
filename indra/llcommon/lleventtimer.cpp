@@ -58,7 +58,13 @@ LLEventTimer::~LLEventTimer()
 void LLEventTimer::updateClass() 
 {
 	std::list<LLEventTimer*> completed_timers;
-	for (instance_iter iter = beginInstances(); iter != endInstances(); ) 
+
+	// <FS:ND> Minimize calls to getInstances per frame
+	// for (instance_iter iter = beginInstances(); iter != endInstances(); ) 
+
+	instance_iter end = endInstances();
+	for (instance_iter iter = beginInstances(); iter != end; ) 
+	// </FS:ND>
 	{
 		LLEventTimer& timer = *iter++;
 		F32 et = timer.mEventTimer.getElapsedTimeF32();

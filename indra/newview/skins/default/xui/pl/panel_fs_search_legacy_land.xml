@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Sprzedaż ziemi" name="panel_ls_land">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Wpisz zapytanie:
+		</text>
+		<combo_box name="land_category">
+			<combo_box.item label="Wszystkie kategorie" name="All" />
+			<combo_box.item label="Aukcje" name="Auction" />
+			<combo_box.item label="Sprzedaże na Mainland" name="Mainland" />
+			<combo_box.item label="Sprzedaże Majątków" name="Estate" />
+		</combo_box>
+		<check_box label="Cena &lt;" name="price_check" />
+		<line_editor left_pad="23" name="edit_price" />
+		<check_box label="Obszar &gt;" name="area_check" />
+		<line_editor left_pad="32" name="edit_area" />
+		<text name="sort_text">
+			Sortuj po:
+		</text>
+		<check_box label="Rosnąco" name="ascending_check" />
+		<combo_box name="land_sort_combo">
+			<combo_box.item label="Nazwa" name="Name_item" />
+			<combo_box.item label="Cena" name="Price_item" />
+			<combo_box.item label="Cena za metr" name="PPM_item" />
+			<combo_box.item label="Obszar" name="Area_item" />
+		</combo_box>
+		<button label="Szukaj" name="land_find" />
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_land">
+			<columns label="Nazwa" name="land_name" />
+			<columns label="Cena" name="price" />
+			<columns label="Obszar" name="area" />
+			<columns label="Typ" name="land_type" />
+		</scroll_list>
+		<button label="Wstecz" name="land_back" />
+		<button label="Dalej" name="land_next" />
+	</panel>
+</panel>

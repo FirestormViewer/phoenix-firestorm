@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="sound_explorer" title="Sound-Explorer">
+	<floater.string name="Playing">
+		Wird abgespielt
+	</floater.string>
+	<floater.string name="NotPlaying">
+		vor [TIME] Min.
+	</floater.string>
+	<floater.string name="Type_UI">
+		UI
+	</floater.string>
+	<floater.string name="Type_Avatar">
+		Avatar
+	</floater.string>
+	<floater.string name="Type_llTriggerSound">
+		llTriggerSound
+	</floater.string>
+	<floater.string name="Type_llLoopSound">
+		llLoopSound
+	</floater.string>
+	<floater.string name="Type_llPlaySound">
+		llPlaySound
+	</floater.string>
+	<check_box name="avatars_chk" label="Avatare"/>
+	<check_box name="objects_chk" label="Objekte"/>
+	<check_box name="collision_chk" label="Standard-Kollisionssounds"/>
+	<check_box name="repeated_asset_chk" label="Wiederholte Assets" left_delta="165" width="120"/>
+	<check_box name="pause_chk" label="Log Pausieren" left_delta="125"/>
+	<scroll_list name="sound_list">
+		<columns label="Abspielend" name="playing" width="95"/>
+		<columns label="Typ" name="type"/>
+		<columns label="Eigentümer" name="owner"/>
+		<columns label="Sounds" name="sound"/>
+	</scroll_list>
+	<button label="Lokal abspielen" name="play_locally_btn" width="130"/>
+	<button label="Fokussieren" name="look_at_btn" left_delta="135"/>
+	<button label="Stop" name="stop_btn"/>
+	<button label="Blacklist" name="bl_btn"/>
+</floater>

@@ -45,7 +45,8 @@ LLFlatListView::Params::Params()
 	multi_select("multi_select"),
 	keep_one_selected("keep_one_selected"),
 	keep_selection_visible_on_reshape("keep_selection_visible_on_reshape",false),
-	no_items_text("no_items_text")
+	no_items_text("no_items_text"),
+	magical_hacky_height_padding("magical_hacky_height_padding")
 {};
 
 void LLFlatListView::reshape(S32 width, S32 height, BOOL called_from_parent /* = TRUE */)
@@ -87,6 +88,14 @@ bool LLFlatListView::addItem(LLPanel * item, const LLSD& value /*= LLUUID::null*
 		mItemsPanel->addChild(item);
 		break;
 	default:
+		// <FS:ND> Reaching here means leaking  new_pair and item. It also means item is never added.
+		// pos can be ADD_TOP, ADD_BOTTOM and ADD_DEFAULT. So what's default?
+		// I rolled a dice and then put it into the bottom bucket, so at least something better than leaking
+		// and throwing items away does happen.
+		mItemPairs.push_back(new_pair);
+		mItemsPanel->addChild(item);
+		// </FS:ND>
+
 		break;
 	}
 	
@@ -384,6 +393,7 @@ LLFlatListView::LLFlatListView(const LLFlatListView::Params& p)
   , mNoItemsCommentTextbox(NULL)
   , mIsConsecutiveSelection(false)
   , mKeepSelectionVisibleOnReshape(p.keep_selection_visible_on_reshape)
+  , mMagicalHackyHeightPadding(p.magical_hacky_height_padding)
 {
 	mBorderThickness = getBorderWidth();
 
@@ -1070,7 +1080,7 @@ void LLFlatListView::notifyParentItemsRectChanged()
 	LLSD params;
 	params["action"] = "size_changes";
 	params["width"] = req_rect.getWidth();
-	params["height"] = req_rect.getHeight();
+	params["height"] = req_rect.getHeight() + mMagicalHackyHeightPadding;
 
 	if (getParent()) // dummy widgets don't have a parent
 		getParent()->notifyParent(params);
@@ -1080,7 +1090,9 @@ void LLFlatListView::setNoItemsCommentVisible(bool visible) const
 {
 	if (mNoItemsCommentTextbox)
 	{
-		mSelectedItemsBorder->setVisible(!visible);
+	//  AO: mSelectedItemsBorder doesn't behave correctly when item spacing changes dynamically.
+	//  disable it for now.
+	//	mSelectedItemsBorder->setVisible(!visible);
 		mNoItemsCommentTextbox->setVisible(visible);
 	}
 }

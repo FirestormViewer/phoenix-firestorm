@@ -32,6 +32,7 @@
 #include "llfloater.h"
 #include "llmultifloater.h"
 #include "llfloaterreglistener.h"
+#include <string>
 
 //*******************************************************
 
@@ -45,6 +46,10 @@ std::set<std::string> LLFloaterReg::sAlwaysShowableList;
 
 static LLFloaterRegListener sFloaterRegListener;
 
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
+LLFloaterReg::validate_signal_t LLFloaterReg::mValidateSignal;
+// [/RLVa:KB]
+
 //*******************************************************
 
 //static
@@ -55,6 +60,18 @@ void LLFloaterReg::add(const std::string& name, const std::string& filename, con
 	sGroupMap[name] = groupname.empty() ? name : groupname;
 	sGroupMap[groupname] = groupname; // for referencing directly by group name
 }
+
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.4.0g
+//static
+void LLFloaterReg::addWithFileCallback(const std::string& name, const LLFloaterFileFunc& fileFunc, 
+									   const LLFloaterBuildFunc& func, const std::string& groupname)
+{
+	sBuildMap[name].mFunc = func;
+	sBuildMap[name].mFileFunc = fileFunc;
+	sGroupMap[name] = groupname.empty() ? name : groupname;
+	sGroupMap[groupname] = groupname; // for referencing directly by group name
+}
+// [/SL:KB]
 
 //static
 LLFloater* LLFloaterReg::getLastFloaterInGroup(const std::string& name)
@@ -140,7 +157,10 @@ LLFloater* LLFloaterReg::getInstance(const std::string& name, const LLSD& key)
 	if (!res)
 	{
 		const LLFloaterBuildFunc& build_func = sBuildMap[name].mFunc;
-		const std::string& xui_file = sBuildMap[name].mFile;
+//		const std::string& xui_file = sBuildMap[name].mFile;
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.5.0a
+		const std::string& xui_file = (!sBuildMap[name].mFileFunc) ? sBuildMap[name].mFile : sBuildMap[name].mFileFunc();
+// [/SL:KB]
 		if (build_func)
 		{
 			const std::string& groupname = sGroupMap[name];
@@ -167,7 +187,7 @@ LLFloater* LLFloaterReg::getInstance(const std::string& name, const LLSD& key)
 					res->mKey = key;
 				}
 				res->setInstanceName(name);
-
+				
 				LLFloater *last_floater = (list.empty() ? NULL : list.back());
 
 				res->applyControlsAndPosition(last_floater);
@@ -240,16 +260,28 @@ LLFloaterReg::const_instance_list_t& LLFloaterReg::getFloaterList(const std::str
 
 // Visibility Management
 
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+//static
+bool LLFloaterReg::canShowInstance(const std::string& name, const LLSD& key)
+{
+	return mValidateSignal(name, key);
+}
+// [/RLVa:KB]
+
 //static
 LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, BOOL focus) 
 {
-	if( sBlockShowFloaters
-			// see EXT-7090
-			&& sAlwaysShowableList.find(name) == sAlwaysShowableList.end())
+//	if( sBlockShowFloaters
+//			// see EXT-7090
+//			&& sAlwaysShowableList.find(name) == sAlwaysShowableList.end())
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
+	if ( (sBlockShowFloaters && sAlwaysShowableList.find(name) == sAlwaysShowableList.end()) || (!mValidateSignal(name, key)) )
+// [/RLVa:KB]
 		return 0;//
 	LLFloater* instance = getInstance(name, key); 
 	if (instance) 
 	{
+		llinfos << "show instance for refreshing group ID: " << key.asString() << llendl;
 		instance->openFloater(key);
 		if (focus)
 			instance->setFocus(TRUE);
@@ -427,7 +459,6 @@ std::string LLFloaterReg::getDockStateControlName(const std::string& name)
 	return res;
 }
 
-
 //static
 void LLFloaterReg::registerControlVariables()
 {
@@ -435,11 +466,17 @@ void LLFloaterReg::registerControlVariables()
 	for (build_map_t::iterator iter = sBuildMap.begin(); iter != sBuildMap.end(); ++iter)
 	{
 		const std::string& name = iter->first;
-		if (LLFloater::getControlGroup()->controlExists(getRectControlName(name)))
+		// <FS:Zi> Save rects even when the floater wasn't opened this session
+		// if (LLFloater::getControlGroup()->controlExists(getRectControlName(name)))
+		// </FS:Zi>
+		if (!LLFloater::getControlGroup()->controlExists(getRectControlName(name)))
 		{
 			declareRectControl(name);
 		}
-		if (LLFloater::getControlGroup()->controlExists(getVisibilityControlName(name)))
+		// <FS:Zi> Save rects even when the floater wasn't opened this session
+		// if (LLFloater::getControlGroup()->controlExists(getVisibilityControlName(name)))
+		// </FS:Zi>
+		if (!LLFloater::getControlGroup()->controlExists(getVisibilityControlName(name)))
 		{
 			declareVisibilityControl(name);
 		}
@@ -484,7 +521,9 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	
 	if (host)
 	{
-		if (host->isMinimized() || !host->isShown() || !host->isFrontmost())
+		//FS:LO from above: * Else if the target floater does not have focus, give it focus. * Also, if it is not on top, bring it forward when focus is given.
+		//if (host->isMinimized() || !host->isShown() || !host->isFrontmost())
+		if (host->isMinimized() || !host->isShown() || (!host->hasFocus() || !host->isFrontmost()))
 		{
 			host->setMinimized(FALSE);
 			instance->openFloater(key);
@@ -513,7 +552,9 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 			instance->openFloater(key);
 			instance->setVisibleAndFrontmost(true, key);
 		}
-		else if (!instance->isFrontmost())
+		//FS:LO from above: * Else if the target floater does not have focus, give it focus. * Also, if it is not on top, bring it forward when focus is given.
+		//else if (!instance->isFrontmost())
+		else if (!instance->hasFocus() || !instance->isFrontmost())
 		{
 			instance->setVisibleAndFrontmost(true, key);
 		}

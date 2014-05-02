@@ -84,6 +84,9 @@ public:
 	static void removeFriend(std::string url);
 	static void blockObject(std::string url);
 
+	// <FS:Ansariel> FSSlurlCommand support
+	static LLUUID extractUuidFromSlurl(const std::string& url);
+
 	/// specify the callbacks to enable this class's functionality
 	typedef boost::function<void (const std::string&)> url_callback_t;
 	typedef boost::function<bool(const std::string& url, bool trusted_content)> execute_url_callback_t;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="スキン" name="skin_panel">
+    <text name="skin_textbox">
+        スキン：
+    </text>
+    <text name="skin_textbox1">
+		（再起動が必要）
+    </text>
+
+    <text name="theme_textbox">
+		テーマの色：
+    </text>
+    <text name="theme_textbox2">
+		（再起動が必要）
+    </text>
+	
+	<check_box label="ツールバーの配置をスキンの初期設定に戻す" name="reset_toolbar_settings" />
+
+    <!-- Deleted Aug.21, 2012
+	<check_box label="V1スタイルのカーソルを使用" name="use _legacy_cursors"/>
+    <text name="theme_textbox3">
+		（再起動が必要）
+    </text>
+	-->
+</panel>

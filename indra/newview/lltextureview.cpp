@@ -407,7 +407,10 @@ private:
 
 void LLAvatarTexBar::draw()
 {	
-	if (!gSavedSettings.getBOOL("DebugAvatarRezTime")) return;
+	// <FS:Ansariel> Speed-up
+	//if (!gSavedSettings.getBOOL("DebugAvatarRezTime")) return;
+	static LLCachedControl<bool> debugAvatarRezTime(gSavedSettings, "DebugAvatarRezTime");
+	if (!debugAvatarRezTime) return;
 
 	LLVOAvatarSelf* avatarp = gAgentAvatarp;
 	if (!avatarp) return;
@@ -446,8 +449,14 @@ void LLAvatarTexBar::draw()
 												 text_color, LLFontGL::LEFT, LLFontGL::TOP); //, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT);
 		line_num++;
 	}
-	const U32 texture_timeout = gSavedSettings.getU32("AvatarBakedTextureUploadTimeout");
-	const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//const U32 texture_timeout = gSavedSettings.getU32("AvatarBakedTextureUploadTimeout");
+	//const U32 override_tex_discard_level = gSavedSettings.getU32("TextureDiscardLevel");
+	static LLCachedControl<U32> sAvatarBakedTextureUploadTimeout(gSavedSettings, "AvatarBakedTextureUploadTimeout");
+	static LLCachedControl<U32> sTextureDiscardLevel(gSavedSettings, "TextureDiscardLevel");
+	const U32 texture_timeout = sAvatarBakedTextureUploadTimeout();
+	const U32 override_tex_discard_level = sTextureDiscardLevel();
+	// </FS:Ansariel>
 	
 	LLColor4 header_color(1.f, 1.f, 1.f, 0.9f);
 
@@ -546,26 +555,102 @@ void LLGLTexMemBar::draw()
 					cache_max_usage);
 	//, cache_entries, cache_max_entries
 
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*5,
+	// <FS:Ansariel> Texture memory bars
+	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*5,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*6,
+	// </FS:Ansariel>
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+
+	// <FS:Ansariel> Texture memory bars
+	S32 bar_left = 0;
+	S32 bar_width = 200;
+	S32 bar_space = 32;
+	S32 top = line_height*5 - 2 + v_offset;
+	S32 bottom = top - 6;
+	S32 left = bar_left;
+	S32 right = left + bar_width;
+	F32 bar_scale;
+	
+	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+	// GL Mem Bar
+		
+	left = bar_left;
+	text = "GL";
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*5,
+											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+	
+	left = bar_left+20;
+	right = left + bar_width;
+	
+	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f); // grey
+	gl_rect_2d(left, top, right, bottom);
+
+	bar_scale = (F32)bar_width / (max_total_mem * 1.5f);
+	right = left + llfloor(total_mem * bar_scale);
+	right = llclamp(right, bar_left, bar_left + bar_width);
+	
+	color = (total_mem < llfloor(max_total_mem * texmem_lower_bound_scale)) ? LLColor4::green :
+		  	(total_mem < max_total_mem) ? LLColor4::yellow : LLColor4::red;
+	color[VALPHA] = .75f;
+//	gGL.diffuseColor4fv(color.mV);
+	
+	gl_rect_2d(left, top, right, bottom, color); // red/yellow/green
+
+	//
+	bar_left += bar_width + bar_space;
+	//top = bottom - 2; bottom = top - 6;
+	
+	// Bound Mem Bar
+
+	left = bar_left;
+	text = "Bound";
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*5,
+									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+	left = bar_left + 42;
+	right = left + bar_width;
+	
+	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
+	gl_rect_2d(left, top, right, bottom);
+
+	color = (bound_mem < llfloor(max_bound_mem * texmem_lower_bound_scale)) ? LLColor4::green :
+		  	(bound_mem < max_bound_mem) ? LLColor4::yellow : LLColor4::red;
+	color[VALPHA] = .75f;
+//	gGL.diffuseColor4fv(color.mV);
+
+	bar_scale = (F32)bar_width / (max_bound_mem * 1.5f);
+	right = left + llfloor(bound_mem * bar_scale);
+
+	gl_rect_2d(left, top, right, bottom, color);
+	// </FS:Ansariel>
 
 	U32 cache_read(0U), cache_write(0U), res_wait(0U);
 	LLAppViewer::getTextureFetch()->getStateStats(&cache_read, &cache_write, &res_wait);
 	
-	text = llformat("Net Tot Tex: %.1f MB Tot Obj: %.1f MB Tot Htp: %d Cread: %u Cwrite: %u Rwait: %u",
+	// <FS:Ansariel> Fast cache stats
+	//text = llformat("Net Tot Tex: %.1f MB Tot Obj: %.1f MB Tot Htp: %d Cread: %u Cwrite: %u Rwait: %u",
+	text = llformat("Net Tot Tex: %.1f MB Tot Obj: %.1f MB Tot Htp: %d Cread: %u Cwrite: %u Rwait: %u FCread: %u",
+	// </FS:Ansariel>
 					total_texture_downloaded,
 					total_object_downloaded,
 					total_http_requests,
 					cache_read,
 					cache_write,
-					res_wait);
+					// <FS:Ansariel> Fast cache stats
+					//res_wait);
+					res_wait,
+					LLViewerTextureList::sNumFastCacheReads);
+					// </FS:Ansariel>
 
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*4,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
 	//----------------------------------------------------------------------------
 
-	text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d ",
+	// <FS:Ansariel> Fast cache stats
+	//text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d ",
+	text = llformat("Tex: %d Fetch: %d(%d) Pkts:%d(%d) CAC R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d FCA:%d ",
+	// </FS:Ansariel>
 					gTextureList.getNumImages(),
 					LLAppViewer::getTextureFetch()->getNumRequests(), LLAppViewer::getTextureFetch()->getNumDeletes(),
 					LLAppViewer::getTextureFetch()->mPacketCount, LLAppViewer::getTextureFetch()->mBadPacketCount, 
@@ -574,7 +659,11 @@ void LLGLTexMemBar::draw()
 					LLImageRaw::sRawImageCount,
 					LLAppViewer::getTextureFetch()->getNumHTTPRequests(),
 					LLAppViewer::getImageDecodeThread()->getPending(), 
-					gTextureList.mCreateTextureList.size());
+					// <FS:Ansariel> Fast cache stats
+					//gTextureList.mCreateTextureList.size());
+					gTextureList.mCreateTextureList.size(),
+					gTextureList.mFastCacheList.size());
+					// </FS:Ansariel>
 
 	x_right = 550.0;
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*3,
@@ -582,8 +671,14 @@ void LLGLTexMemBar::draw()
 											 LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX,
 											 &x_right, FALSE);
 
+	// <FS:Ansariel> Move BW figures further to the right to prevent overlapping
+	left = 575;
 	F32 bandwidth = LLAppViewer::getTextureFetch()->getTextureBandwidth();
-	F32 max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	// <FS:Ansariel> Speed-up
+	//F32 max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	static LLCachedControl<F32> throttleBandwidthKBPS(gSavedSettings, "ThrottleBandwidthKBPS");
+	F32 max_bandwidth = F32(throttleBandwidthKBPS);
+	// </FS:Ansariel> Speed-up
 	color = bandwidth > max_bandwidth ? LLColor4::red : bandwidth > max_bandwidth * .75f ? LLColor4::yellow : text_color;
 	color[VALPHA] = text_color[VALPHA];
 	text = llformat("BW:%.0f/%.0f", bandwidth, max_bandwidth);
@@ -642,7 +737,10 @@ BOOL LLGLTexMemBar::handleMouseDown(S32 x, S32 y, MASK mask)
 LLRect LLGLTexMemBar::getRequiredRect()
 {
 	LLRect rect;
-	rect.mTop = 68; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
+	// <FS:Ansariel> Texture memory bars
+	//rect.mTop = 68; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
+	rect.mTop = 83;
+	// </FS:Ansariel>
 	return rect;
 }
 

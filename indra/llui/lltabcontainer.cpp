@@ -39,6 +39,7 @@
 #include "llfloater.h"
 #include "lltrans.h"
 
+
 //----------------------------------------------------------------------------
 
 // Implementation Notes:
@@ -210,6 +211,9 @@ LLTabContainer::Params::Params()
 	label_pad_left("label_pad_left"),
 	tab_position("tab_position"),
 	hide_tabs("hide_tabs", false),
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	tab_drag_commit("tab_drag_commit", false),
+// [/SL:KB]
 	tab_padding_right("tab_padding_right"),
 	first_tab("first_tab"),
 	middle_tab("middle_tab"),
@@ -218,12 +222,17 @@ LLTabContainer::Params::Params()
 	open_tabs_on_drag_and_drop("open_tabs_on_drag_and_drop", false),
 	tab_icon_ctrl_pad("tab_icon_ctrl_pad", 0),
 	use_ellipses("use_ellipses"),
+	label_shadow("label_shadow",false),		// no drop shadowed labels by default -Zi
 	font_halign("halign")
 {}
 
 LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 :	LLPanel(p),
 	mCurrentTabIdx(-1),
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	mDragAndDropHoverCommit(p.tab_drag_commit),
+	mDragAndDropHoverIdx(-1),
+// [/SL:KB]
 	mTabsHidden(p.hide_tabs),
 	mScrolled(FALSE),
 	mScrollPos(0),
@@ -254,8 +263,25 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mCustomIconCtrlUsed(p.use_custom_icon_ctrl),
 	mOpenTabsOnDragAndDrop(p.open_tabs_on_drag_and_drop),
 	mTabIconCtrlPad(p.tab_icon_ctrl_pad),
-	mUseTabEllipses(p.use_ellipses)
+	mUseTabEllipses(p.use_ellipses),
+	mDropShadowedText(p.label_shadow)			// support for drop shadowed tab labels -Zi
 {
+	// AO: Treat the IM tab container specially 
+	if (getName() == "im_box_tab_container")
+	{
+		if (LLControlGroup::getInstance("Global")->getS32("ChatTabDirection") == 1)
+		{
+			mIsVertical = TRUE;
+			mTabPosition = LLTabContainer::LEFT;
+			
+		}
+		else
+		{
+			mIsVertical = FALSE;
+			mTabPosition = LLTabContainer::BOTTOM;
+		}
+	}
+	
 	static LLUICachedControl<S32> tabcntr_vert_tab_min_width ("UITabCntrVertTabMinWidth", 0);
 
 	mDragAndDropDelayTimer.stop();
@@ -387,9 +413,30 @@ void LLTabContainer::draw()
 	S32 cur_scroll_pos = getScrollPos();
 	if (cur_scroll_pos > 0)
 	{
-		S32 available_width_with_arrows = getRect().getWidth() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_arrow_btn_size  + tabcntr_arrow_btn_size + 1);
-		if (!mIsVertical)
+		// <FS:Zi> Fix vertical tab scrolling
+		// S32 available_width_with_arrows = getRect().getWidth() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_arrow_btn_size  + tabcntr_arrow_btn_size + 1);
+		// if (!mIsVertical)
+		// {
+		S32 available_space_with_arrows;
+		if(mIsVertical)
 		{
+			available_space_with_arrows=mPrevArrowBtn->getRect().mBottom-mNextArrowBtn->getRect().mTop;
+		}
+		else
+		{
+			available_space_with_arrows=getRect().getWidth()-mRightTabBtnOffset-2*(LLPANEL_BORDER_WIDTH+tabcntr_arrow_btn_size*2+1);
+		}
+
+		S32 total_tab_pixels=0;
+		if(mIsVertical)
+		{
+			total_tab_pixels=getTabCount()*(BTN_HEIGHT+tabcntrv_pad);
+			target_pixel_scroll=cur_scroll_pos*(BTN_HEIGHT+tabcntrv_pad);
+		}
+		else
+		{
+			total_tab_pixels=mTotalTabWidth;
+		// </FS:Zi>
 			for(tuple_list_t::iterator iter = mTabList.begin(); iter != mTabList.end(); ++iter)
 			{
 				if (cur_scroll_pos == 0)
@@ -402,9 +449,15 @@ void LLTabContainer::draw()
 
 			// Show part of the tab to the left of what is fully visible
 			target_pixel_scroll -= tabcntr_tab_partial_width;
-			// clamp so that rightmost tab never leaves right side of screen
-			target_pixel_scroll = llmin(mTotalTabWidth - available_width_with_arrows, target_pixel_scroll);
+		// <FS:Zi> Fix vertical tab scrolling
+		// 	// clamp so that rightmost tab never leaves right side of screen
+		// 	target_pixel_scroll = llmin(mTotalTabWidth - available_width_with_arrows, target_pixel_scroll);
+		// </FS:Zi>
 		}
+		// <FS:Zi> Fix vertical tab scrolling
+		// clamp so that last tab never leaves the side of screen
+		target_pixel_scroll=llmin(total_tab_pixels-available_space_with_arrows,target_pixel_scroll);
+		// </FS:Zi>
 	}
 
 	setScrollPosPixels((S32)lerp((F32)getScrollPosPixels(), (F32)target_pixel_scroll, LLCriticalDamp::getInterpolant(0.08f)));
@@ -491,20 +544,21 @@ void LLTabContainer::draw()
 			idx++;
 		}
 
-
-		if( mIsVertical && has_scroll_arrows )
-		{
-			// Redraw the arrows so that they appears on top.
-			gGL.pushUIMatrix();
-			gGL.translateUI((F32)mPrevArrowBtn->getRect().mLeft, (F32)mPrevArrowBtn->getRect().mBottom, 0.f);
-			mPrevArrowBtn->draw();
-			gGL.popUIMatrix();
-
-			gGL.pushUIMatrix();
-			gGL.translateUI((F32)mNextArrowBtn->getRect().mLeft, (F32)mNextArrowBtn->getRect().mBottom, 0.f);
-			mNextArrowBtn->draw();
-			gGL.popUIMatrix();
-		}
+		// <FS:Zi> Fix vertical tab scrolling
+		// if( mIsVertical && has_scroll_arrows )
+		// {
+		// 	// Redraw the arrows so that they appears on top.
+		// 	gGL.pushUIMatrix();
+		// 	gGL.translateUI((F32)mPrevArrowBtn->getRect().mLeft, (F32)mPrevArrowBtn->getRect().mBottom, 0.f);
+		// 	mPrevArrowBtn->draw();
+		// 	gGL.popUIMatrix();
+		//
+		// 	gGL.pushUIMatrix();
+		// 	gGL.translateUI((F32)mNextArrowBtn->getRect().mLeft, (F32)mNextArrowBtn->getRect().mBottom, 0.f);
+		// 	mNextArrowBtn->draw();
+		// 	gGL.popUIMatrix();
+		// }
+		// </FS:Zi>
 	}
 
 	mPrevArrowBtn->setFlashing(false);
@@ -823,6 +877,48 @@ BOOL LLTabContainer::handleKeyHere(KEY key, MASK mask)
 	return handled;
 }
 
+// <FS:LO> FIRE-8024 Ability to scroll tab containers with the scroll wheel on the mouse
+// virtual
+BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
+{
+	if( 0 == getTabCount() )
+		return LLUICtrl::handleScrollWheel(x, y, clicks);
+
+	LLTabTuple* firsttuple = getTab(0);
+	static LLUICachedControl<S32> tabcntrv_pad ("UITabCntrvPad", 0);
+	BOOL has_scroll_arrows = (getMaxScrollPos() > 0);
+	LLRect clip;
+	if (mIsVertical)
+	{
+		clip = LLRect(firsttuple->mButton->getRect().mLeft,
+						has_scroll_arrows ? mPrevArrowBtn->getRect().mBottom - tabcntrv_pad : mPrevArrowBtn->getRect().mTop,
+						firsttuple->mButton->getRect().mRight,
+						has_scroll_arrows ? mNextArrowBtn->getRect().mTop + tabcntrv_pad : mNextArrowBtn->getRect().mBottom );
+	}
+	else
+	{
+		clip = LLRect(has_scroll_arrows ? mPrevArrowBtn->getRect().mRight : mJumpPrevArrowBtn->getRect().mLeft,
+						firsttuple->mButton->getRect().mTop,
+						has_scroll_arrows ? mNextArrowBtn->getRect().mLeft : mJumpNextArrowBtn->getRect().mRight,
+						firsttuple->mButton->getRect().mBottom );
+	}
+
+	if( clip.pointInRect( x, y ) )
+	{
+		if(clicks < 0)
+		{
+			setScrollPos(llmax(0, getScrollPos()-1));
+		}
+		else
+		{
+			setScrollPos(llmin(getScrollPos()+1, getMaxScrollPos()));
+		}
+	}
+
+	return LLUICtrl::handleScrollWheel(x, y, clicks);
+}
+// </FS:LO>
+
 // virtual
 BOOL LLTabContainer::handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,	EDragAndDropType type, void* cargo_data, EAcceptance *accept, std::string	&tooltip)
 {
@@ -1058,16 +1154,21 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 		p.rect(btn_rect);
 		p.font(mFont);
 		p.font_halign = mFontHalign;
+		p.label_shadow(mDropShadowedText);
 		p.label(trimmed_label);
 		p.click_callback.function(boost::bind(&LLTabContainer::onTabBtn, this, _2, child));
 		if (indent)
 		{
 			p.pad_left(indent);
 		}
+		else
+		{
+			p.pad_left(mLabelPadLeft);
+		}
+
 		p.pad_bottom( mLabelPadBottom );
 		p.scale_image(true);
 		p.tab_stop(false);
-		p.label_shadow(false);
 		p.follows.flags = FOLLOWS_LEFT;
 		
 		if (mIsVertical)
@@ -1088,6 +1189,12 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 		    p.pad_left( mLabelPadLeft );
 		    p.pad_right(2);
 		}
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
 		
 		// *TODO : It seems wrong not to use p in both cases considering the way p is initialized
 		if (mCustomIconCtrlUsed)
@@ -1530,6 +1637,20 @@ BOOL LLTabContainer::setTab(S32 which)
 					else
 					{
 						is_visible = FALSE;
+
+						// <FS:Ansariel> FIRE-12999: Automatically scroll to selected tab
+						//               in vertical tabs if it's outside the visible tabs
+						if (which - num_visible <= getMaxScrollPos())
+						{
+							setScrollPos(which - num_visible);
+							is_visible = TRUE;
+						}
+						else if (which < getScrollPos())
+						{
+							setScrollPos(which);
+							is_visible = TRUE;
+						}
+						// </FS:Ansariel>
 					}
 				}
 				else if (getMaxScrollPos() > 0)
@@ -1621,6 +1742,19 @@ void LLTabContainer::setTabImage(LLPanel* child, std::string image_name, const L
 		reshapeTuple(tuple);
 	}
 }
+
+// <FS:Ansariel> Custom tab image overlay button alignment
+void LLTabContainer::setTabImage(LLPanel* child, std::string img_name, LLFontGL::HAlign alignment, const LLColor4& color, const LLColor4& selected_color)
+{
+	LLTabTuple* tuple = getTabByPanel(child);
+	if( tuple )
+	{
+		tuple->mButton->setImageOverlay(img_name, alignment, color);
+		tuple->mButton->setImageOverlaySelectedColor(selected_color);
+		reshapeTuple(tuple);
+	}
+}
+// </FS:Ansariel>
 
 void LLTabContainer::setTabImage(LLPanel* child, const LLUUID& image_id, const LLColor4& color)
 {
@@ -1751,7 +1885,9 @@ void LLTabContainer::onNextBtn( const LLSD& data )
 {
 	if (!mScrolled)
 	{
-		scrollNext();
+		// scrollNext();	// <FS:Zi> Fix vertical tab scrolling
+		selectNextTab();
+		setScrollPos(mCurrentTabIdx);
 	}
 	mScrolled = FALSE;
 }
@@ -1761,7 +1897,9 @@ void LLTabContainer::onNextBtnHeld( const LLSD& data )
 	if (mScrollTimer.getElapsedTimeF32() > SCROLL_STEP_TIME)
 	{
 		mScrollTimer.reset();
-		scrollNext();
+		// scrollNext();	// <FS:Zi> Fix vertical tab scrolling
+		selectNextTab();
+		setScrollPos(mCurrentTabIdx);
 		mScrolled = TRUE;
 	}
 }
@@ -1770,7 +1908,9 @@ void LLTabContainer::onPrevBtn( const LLSD& data )
 {
 	if (!mScrolled)
 	{
-		scrollPrev();
+		// scrollPrev();	// <FS:Zi> Fix vertical tab scrolling
+		selectPrevTab();
+		setScrollPos(mCurrentTabIdx);
 	}
 	mScrolled = FALSE;
 }
@@ -1790,7 +1930,9 @@ void LLTabContainer::onPrevBtnHeld( const LLSD& data )
 	if (mScrollTimer.getElapsedTimeF32() > SCROLL_STEP_TIME)
 	{
 		mScrollTimer.reset();
-		scrollPrev();
+		// scrollPrev();	// <FS:Zi> Fix vertical tab scrolling
+		selectPrevTab();
+		setScrollPos(mCurrentTabIdx);
 		mScrolled = TRUE;
 	}
 }
@@ -1810,7 +1952,10 @@ void LLTabContainer::initButtons()
 		static LLUICachedControl<S32> tabcntrv_arrow_btn_size ("UITabCntrvArrowBtnSize", 0);
 		// Left and right scroll arrows (for when there are too many tabs to show all at once).
 		S32 btn_top = getRect().getHeight();
-		S32 btn_top_lower = getRect().mBottom+tabcntrv_arrow_btn_size;
+		// <FS:Zi> Fix vertical tab scrolling
+		// S32 btn_top_lower = getRect().mBottom+tabcntrv_arrow_btn_size;
+		S32 btn_top_lower=tabcntrv_arrow_btn_size;
+		// </FS:Zi>
 
 		LLRect up_arrow_btn_rect;
 		up_arrow_btn_rect.setLeftTopAndSize( mMinTabWidth/2 , btn_top, tabcntrv_arrow_btn_size, tabcntrv_arrow_btn_size );
@@ -1825,6 +1970,16 @@ void LLTabContainer::initButtons()
 		prev_btn_params.image_unselected.name("scrollbutton_up_out_blue.tga");
 		prev_btn_params.image_selected.name("scrollbutton_up_in_blue.tga");
 		prev_btn_params.click_callback.function(boost::bind(&LLTabContainer::onPrevBtn, this, _2));
+		// <FS:Zi> Fix vertical tab scrolling
+		prev_btn_params.mouse_held_callback.function(boost::bind(&LLTabContainer::onPrevBtnHeld, this, _2));
+		// </FS:Zi>
+
+		// <FS:Ansariel> Enable tab flashing
+		prev_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		prev_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		prev_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mPrevArrowBtn = LLUICtrlFactory::create<LLButton>(prev_btn_params);
 
 		LLButton::Params next_btn_params;
@@ -1834,6 +1989,16 @@ void LLTabContainer::initButtons()
 		next_btn_params.image_unselected.name("scrollbutton_down_out_blue.tga");
 		next_btn_params.image_selected.name("scrollbutton_down_in_blue.tga");
 		next_btn_params.click_callback.function(boost::bind(&LLTabContainer::onNextBtn, this, _2));
+		// <FS:Zi> Fix vertical tab scrolling
+		next_btn_params.mouse_held_callback.function(boost::bind(&LLTabContainer::onNextBtnHeld, this, _2));
+		// </FS:Zi>
+
+		// <FS:Ansariel> Enable tab flashing
+		next_btn_params.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		next_btn_params.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		next_btn_params.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mNextArrowBtn = LLUICtrlFactory::create<LLButton>(next_btn_params);
 	}
 	else // Horizontal
@@ -1870,7 +2035,13 @@ void LLTabContainer::initButtons()
 		p.click_callback.function(boost::bind(&LLTabContainer::onJumpFirstBtn, this, _2));
 		p.rect(jump_left_arrow_btn_rect);
 		p.follows.flags(FOLLOWS_LEFT);
-		
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mJumpPrevArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 
 		p = LLButton::Params();
@@ -1881,6 +2052,12 @@ void LLTabContainer::initButtons()
 		p.image_selected.name("scrollbutton_left_in_blue.tga");
 		p.click_callback.function(boost::bind(&LLTabContainer::onPrevBtn, this, _2));
 		p.mouse_held_callback.function(boost::bind(&LLTabContainer::onPrevBtnHeld, this, _2));
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
 		
 		mPrevArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 
@@ -1892,6 +2069,12 @@ void LLTabContainer::initButtons()
 		p.image_selected.name("jump_right_in.tga");
 		p.click_callback.function(boost::bind(&LLTabContainer::onJumpLastBtn, this, _2));
 
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
+
 		mJumpNextArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 
 		p = LLButton::Params();
@@ -1902,6 +2085,12 @@ void LLTabContainer::initButtons()
 		p.image_selected.name("scrollbutton_right_in_blue.tga");
 		p.click_callback.function(boost::bind(&LLTabContainer::onNextBtn, this, _2));
 		p.mouse_held_callback.function(boost::bind(&LLTabContainer::onNextBtnHeld, this, _2));
+
+		// <FS:Ansariel> Enable tab flashing
+		p.button_flash_enable(LLUI::sSettingGroups["config"]->getBOOL("EnableButtonFlashing"));
+		p.button_flash_count(LLUI::sSettingGroups["config"]->getS32("FlashCount"));
+		p.button_flash_rate(LLUI::sSettingGroups["config"]->getF32("FlashPeriod"));
+		// </FS:Ansariel>
 
 		mNextArrowBtn = LLUICtrlFactory::create<LLButton>(p);
 

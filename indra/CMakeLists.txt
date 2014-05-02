@@ -6,6 +6,11 @@
 ## prior to 2.8, the add_custom_target commands used in setting the version did not work correctly
 cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
 
+# [FS:CR] Shut up Cmake 2.8.12+ by using the old policy.
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.12 OR ${CMAKE_VERSION} VERSION_EQUAL 2.8.12)
+  cmake_policy(SET CMP0022 OLD)
+endif()
+
 set(ROOT_PROJECT_NAME "SecondLife" CACHE STRING
     "The root project/makefile/solution name. Defaults to SecondLife.")
 project(${ROOT_PROJECT_NAME})
@@ -19,6 +24,26 @@ if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
       "Build type.  One of: Debug Release RelWithDebInfo" FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
+
+#<FS:AW optional opensim support>
+option(OPENSIM "OpenSim support" OFF)
+if (OPENSIM)
+  add_definitions(-DOPENSIM=1)
+  message("compiling with OpenSim support")
+else (OPENSIM)
+  message("compiling without OpenSim support")
+endif (OPENSIM)
+#</FS:AW optional opensim support>
+
+# <FS:Ansariel> [AVX Optimization]
+option(USE_AVX_OPTIMIZATION "AVX optimization support" OFF)
+if (USE_AVX_OPTIMIZATION)
+  add_definitions(-DUSE_AVX_OPTIMIZATION=1)
+  message("compiling with AVX optimizations")
+else (USE_AVX_OPTIMIZATION)
+  message("compiling without AVX optimizations")
+endif (USE_AVX_OPTIMIZATION)
+# </FS:Ansariel> [AVX Optimization]
 
 # For the library installation process;
 # see cmake/Prebuild.cmake for the counterpart code.
@@ -45,7 +70,7 @@ add_subdirectory(${LIBS_OPEN_PREFIX}llvfs)
 add_subdirectory(${LIBS_OPEN_PREFIX}llwindow)
 add_subdirectory(${LIBS_OPEN_PREFIX}llxml)
 
-add_subdirectory(${LIBS_OPEN_PREFIX}lscript)
+# <FS:CR> Removed -> add_subdirectory(${LIBS_OPEN_PREFIX}lscript)
 
 if (WINDOWS AND EXISTS ${LIBS_CLOSED_DIR}copy_win_scripts)
   add_subdirectory(${LIBS_CLOSED_PREFIX}copy_win_scripts)
@@ -57,11 +82,20 @@ add_subdirectory(${LIBS_OPEN_PREFIX}llplugin)
 add_subdirectory(${LIBS_OPEN_PREFIX}llui)
 add_subdirectory(${LIBS_OPEN_PREFIX}viewer_components)
 
+if (LL_TESTS OR NOT STANDALONE)
 # Legacy C++ tests. Build always, run if LL_TESTS is true.
 add_subdirectory(${VIEWER_PREFIX}test)
+endif (LL_TESTS OR NOT STANDALONE)
 
 # viewer media plugins
-add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
+if( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
+  add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
+endif( NOT ( WINDOWS AND ND_BUILD64BIT_ARCH ) )
+
+# <FS:AW opensim currency support>
+#teapot helper library
+add_subdirectory(${LIBS_OPEN_PREFIX}teapot)
+# </FS:AW opensim currency support>
 
   # llplugin testbed code (is this the right way to include it?)
   if (LL_TESTS AND NOT LINUX)
@@ -95,7 +129,7 @@ elseif (SOLARIS)
 endif (LINUX)
 
 add_subdirectory(${VIEWER_PREFIX}newview)
-add_dependencies(viewer secondlife-bin)
+add_dependencies(viewer firestorm-bin)
 
 if (LL_TESTS)
   # Define after the custom targets are created so

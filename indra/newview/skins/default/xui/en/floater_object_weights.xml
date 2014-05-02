@@ -8,7 +8,7 @@
  name="object_weights"
  save_rect="true"
  single_instance="true"
- title="ADVANCED"
+ title="Advanced"
  width="200">
     <floater.string
      name="nothing_selected"

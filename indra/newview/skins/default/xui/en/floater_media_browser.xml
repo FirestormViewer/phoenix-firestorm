@@ -9,7 +9,7 @@
  name="floater_about"
  help_topic="floater_about"
  save_rect="true"
- title="MEDIA BROWSER"
+ title="Media Browser"
  width="820">
     <floater.string
      name="home_page_url">
@@ -191,6 +191,21 @@
          name="external_controls"
          top_delta="0"
          width="540">
+          <text
+            name="plugin_fail_text"
+            follows="all"
+            layout="topleft"
+            left="60"
+            top="60"
+            right="-60"
+            bottom="-60">
+The web browser plugin seems to be taking a while to open.
+If the plugin never loads, please visit:
+
+http://wiki.phoenixviewer.com/fs_media
+
+for possible steps to resolve this issue.
+          </text>
           <web_browser
              bottom="-30"
              follows="all"

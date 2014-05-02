@@ -34,6 +34,9 @@
 #include "llsd.h"
 #include "llcontrol.h"
 #include "llcrashlock.h"
+// [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+#include "llcrashlookup.h"
+// [/SL:KB]
 
 class LLCrashLogger : public LLApp
 {
@@ -68,6 +71,9 @@ protected:
 	LLControlGroup mCrashSettings;
 	std::string mProductName;
 	LLSD mCrashInfo;
+// [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	LLCrashLookup*	mCrashLookup;
+// [/SL:KB]
 	std::string mCrashHost;
 	std::string mAltCrashHost;
 	LLSD mDebugLog;

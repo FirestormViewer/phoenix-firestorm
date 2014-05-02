@@ -31,6 +31,8 @@
 #include "message.h" // TODO: babbage: Remove...
 #include "llstl.h"
 
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
+
 class LLMsgVarData
 {
 public:
@@ -365,7 +367,22 @@ public:
 	{
 		if (mHandlerFunc)
 		{
-			mHandlerFunc(msgsystem, mUserData);
+
+			// <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
+
+			// mHandlerFunc(msgsystem, mUserData);
+
+			try
+			{
+				mHandlerFunc(msgsystem, mUserData);
+			}
+			catch( nd::exceptions::xran &ex )
+			{
+				llwarns << ex.what() << llendl;
+			}
+
+			// </FS:ND>
+
 			return TRUE;
 		}
 		return FALSE;

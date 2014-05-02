@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Snapshot" title="FOTO-ANZEIGE">
+<floater name="Snapshot" title="Foto-Anzeige">
 	<floater.string name="unknown">
 		unbekannt
 	</floater.string>
 	<string name="postcard_progress_str">
 		E-Mail senden
 	</string>
+	<string name="facebook_progress_str">
+		Posten auf Facebook
+	</string>
 	<string name="profile_progress_str">
 		Posten
+	</string>
+	<string name="flickr_progress_str">
+        Hochladen auf Flickr
 	</string>
 	<string name="inventory_progress_str">
 		Speichern im Inventar
@@ -15,8 +21,14 @@
 	<string name="local_progress_str">
 		Speichern auf Computer
 	</string>
+	<string name="facebook_succeeded_str">
+		Bild hochgeladen
+	</string>
 	<string name="profile_succeeded_str">
 		Bild hochgeladen
+	</string>
+	<string name="flickr_succeeded_str">
+		Bild auf Flickr hochgeladen
 	</string>
 	<string name="postcard_succeeded_str">
 		E-Mail gesendet!
@@ -26,6 +38,9 @@
 	</string>
 	<string name="local_succeeded_str">
 		Auf Computer gespeichert!
+	</string>
+	<string name="facebook_failed_str">
+		Fehler beim Hochladen des Bilds in Ihre Facebook-Zeitleiste.
 	</string>
 	<string name="profile_failed_str">
 		Fehler beim Hochladen des Bilds in Ihr Profil.
@@ -39,6 +54,9 @@
 	<string name="local_failed_str">
 		Fehler beim Speichern auf dem Computer.
 	</string>
+	<string name="flickr_failed_str">
+		Hochladen auf Flickr fehlgeschlagen.
+	</string>
 	<button name="advanced_options_btn" tool_tip="Erweiterte Optionen"/>
 	<text name="image_res_text">
 		[WIDTH] x [HEIGHT] px
@@ -46,9 +64,16 @@
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
+	<tab_container name="panel_tab_container">
+		<panel label="Profil" name="panel_snapshot_profile"/>
+		<panel label="E-Mail" name="panel_snapshot_postcard"/>
+		<panel label="Inventar" name="panel_snapshot_inventory"/>
+		<panel label="Lokal" name="panel_snapshot_local"/>
+		<panel label="Flickr" name="panel_snapshot_flickr"/>
+	</tab_container>
 	<panel name="advanced_options_panel">
 		<text name="advanced_options_label">
-			ERWEITERTE OPTIONEN
+			Erweiterte Optionen
 		</text>
 		<text name="layer_type_label">
 			Aufnahme:
@@ -58,6 +83,7 @@
 			<combo_box.item label="Tiefe" name="Depth"/>
 		</combo_box>
 		<check_box label="Schnittstelle" name="ui_check"/>
+		<check_box label="L$-Kontostand" name="currency_check"/>
 		<check_box label="HUDs" name="hud_check"/>
 		<check_box label="Standbild (Vollbild)" name="freeze_frame_check"/>
 		<check_box label="Automatisch aktualisieren" name="auto_snapshot_check"/>

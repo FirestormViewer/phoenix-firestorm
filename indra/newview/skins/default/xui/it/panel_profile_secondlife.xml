@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Profilo" name="panel_profile">
+    <string name="no_partner_text" value="Nessuno" />
+    <string name="no_group_text" value="Nessuno" />
+    <string name="FSDev" value=" Programmatore" />
+    <string name="FSSupp" value=" Supporto" />
+        <text name="Name:" value="Nome:" />
+        <text_editor name="complete_name" value="(Caricamento...)" />
+        <button name="set_name" tool_tip="Imposta nome visualizzato (Display Name)" />
+        <text_editor name="user_key" value="(Caricamento...)" />
+        <text name="label" value="Nato:" />
+        <text name="Groups:" value="Gruppi:" />
+        <button name="group_invite" tool_tip="Invita in un gruppo" />
+        <text name="About:" value="Info:" />
+        <text name="Give item:" value="Regala:" />
+        <text name="Give inventory" tool_tip="Trascina qui gli oggetti da regalare a questo utente.">
+            Trascina gli oggetti dall'inventario qui.
+        </text>
+        <layout_stack name="buttonstack">
+            <layout_panel name="left_buttonstack">
+                <button label="Trova sulla mappa" label_selected="Trova sulla mappa" name="show_on_map_btn" tool_tip="Trova questo utente sulla mappa del mondo." />
+                <button label="Paga" label_selected="Paga" name="pay" tool_tip="Offrire un pagamento in Linden Doallars (L$)"/>
+            </layout_panel>
+            <layout_panel name="middle_buttonstack">
+                <button label="Offri Teleport" label_selected="Offri Teleport" name="teleport" tool_tip="Offri teleport a questo utente." />
+                <button label="Messaggio Privato (IM)" label_selected="Messaggio Privato (IM)" name="im" tool_tip="Consente di inviare un messaggio privato a questo residente (IM)" />
+            </layout_panel>
+            <layout_panel name="right_buttonstack">
+                <button label="Aggiungi amico" label_selected="Aggiungi amico" name="add_friend" tool_tip="Invia la richiesta di amicizia a questo utente." />
+                <button label="Blocca" name="block" tool_tip="Consente di bloccare questo utente" />
+                <button label="Sblocca" name="unblock" tool_tip="Consente di sbloccare questo utente" />
+            </layout_panel>
+        </layout_stack>
+        <check_box name="show_in_search_checkbox" label="Mostra nella ricerca" />
+</panel>

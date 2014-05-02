@@ -164,11 +164,12 @@ LLPointer<LLCredential> LLLoginHandler::initializeLoginInfo()
 {                                                                                                                           
 	LLPointer<LLCredential> result = NULL;                                                                               
 	// so try to load it from the UserLoginInfo                                                                          
-	result = loadSavedUserLoginInfo();                                                                                   
-	if (result.isNull())                                                                                                 
-	{                                                                                                                    
-		result =  gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());                       
-	}                                                                                                                    
+	result = loadSavedUserLoginInfo();
+	// <FS:CR>
+	//if (result.isNull())
+	//{
+	//	result =  gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
+	//}
 	
 	return result;                                                                                                       
 } 
@@ -178,7 +179,7 @@ LLPointer<LLCredential> LLLoginHandler::loadSavedUserLoginInfo()
 {
   // load the saved user login info into a LLCredential.
   // perhaps this should be moved.
-	LLSD cmd_line_login = gSavedSettings.getLLSD("UserLoginInfo");
+	LLSD cmd_line_login = gSavedSettings.getLLSD("UserLoginInfoCmdLine");
 	if (cmd_line_login.size() == 3) 
 	{
 	
@@ -196,8 +197,8 @@ LLPointer<LLCredential> LLLoginHandler::loadSavedUserLoginInfo()
 		authenticator["secret"] = md5pass;
 		// yuck, we'll fix this with mani's changes.
 		gSavedSettings.setBOOL("AutoLogin", TRUE);
-		return gSecAPIHandler->createCredential(LLGridManager::getInstance()->getGrid(), 
-													   identifier, authenticator);
+		return gSecAPIHandler->createCredential(identifier["first_name"].asString() + " " + identifier["last_name"].asString() + "@" +LLGridManager::getInstance()->getGrid(),
+												identifier, authenticator);
 	}
 	return NULL;
 }

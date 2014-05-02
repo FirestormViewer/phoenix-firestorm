@@ -61,12 +61,17 @@ static F32 calc_bouncy_animation(F32 x)
 //-----------------------------------------------------------------------------
 LLHUDIcon::icon_instance_t LLHUDIcon::sIconInstances;
 
+// <FS:Ansariel> Mark script error icons
+LLHUDIcon::icon_instance_t LLHUDIcon::sScriptErrorIconInstances;
+// </FS:Ansariel> Mark script error icons
+
 LLHUDIcon::LLHUDIcon(const U8 type) :
 			LLHUDObject(type),
 			mImagep(NULL),
 			mPickID(0),
 			mScale(0.1f),
-			mHidden(FALSE)
+			mHidden(FALSE),
+			mScriptError(false) // <FS:Ansariel> Mark script error icons
 {
 	sIconInstances.push_back(this);
 }
@@ -385,6 +390,17 @@ void LLHUDIcon::cleanupDeadIcons()
 		{
 			sIconInstances.erase(found_it);
 		}
+
+		// <FS:Ansariel> Mark script error icons
+		if ((*icon_it)->mScriptError)
+		{
+			icon_instance_t::iterator found_script_it = std::find(sScriptErrorIconInstances.begin(), sScriptErrorIconInstances.end(), *icon_it);
+			if (found_script_it != sScriptErrorIconInstances.end())
+			{
+				sScriptErrorIconInstances.erase(found_script_it);
+			}
+		}
+		// </FS:Ansariel> Mark script error icons
 	}
 }
 
@@ -393,3 +409,20 @@ S32 LLHUDIcon::getNumInstances()
 {
 	return (S32)sIconInstances.size();
 }
+
+// <FS:Ansariel> Mark script error icons
+void LLHUDIcon::setScriptError()
+{
+	if (std::find(sScriptErrorIconInstances.begin(), sScriptErrorIconInstances.end(), this) == sScriptErrorIconInstances.end())
+	{
+		mScriptError = true;
+		sScriptErrorIconInstances.push_back(this);
+	}
+}
+
+//static
+BOOL LLHUDIcon::scriptIconsNearby()
+{
+	return !sScriptErrorIconInstances.empty();
+}
+// </FS:Ansariel> Mark script error icons

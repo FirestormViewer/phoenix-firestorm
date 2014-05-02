@@ -29,7 +29,14 @@
 #if ! defined(LL_LLCOROS_H)
 #define LL_LLCOROS_H
 
+// <FS:TS> This silliness is needed because LL renamed the Boost coroutines
+//         functions to dcoroutines.
+#if LL_STANDALONE
+#include <boost/coroutine/coroutine.hpp>
+#define dcoroutines coroutines
+#else
 #include <boost/dcoroutine/coroutine.hpp>
+#endif
 #include "llsingleton.h"
 #include <boost/ptr_container/ptr_map.hpp>
 #include <string>

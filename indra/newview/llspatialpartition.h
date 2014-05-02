@@ -68,16 +68,22 @@ protected:
 	~LLDrawInfo();	
 	
 public:
-	void* operator new(size_t size)
-	{
-		return ll_aligned_malloc(size,64);
-	}
+	// <FS:ND> Make this non inline to use an object pool
 
-	void operator delete(void* ptr)
-	{
-		ll_aligned_free(ptr);
-	}
+	// void* operator new(size_t size)
+	// {
+	// 	return ll_aligned_malloc(size,64);
+	// }
 
+	// void operator delete(void* ptr)
+	// {
+	// 	ll_aligned_free(ptr);
+	// }
+
+	void* operator new(size_t size);
+	void operator delete(void* ptr);
+
+	// </FS:ND>
 
 	LLDrawInfo(const LLDrawInfo& rhs)
 	{
@@ -495,6 +501,9 @@ public:
 	
 	LLDrawable* lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 									 BOOL pick_transparent, 
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+									 BOOL pick_rigged,
+// [/SL:KB]
 									 S32* face_hit,                          // return the face hit
 									 LLVector4a* intersection = NULL,         // return the intersection point
 									 LLVector2* tex_coord = NULL,            // return the texture coordinates of the intersection point

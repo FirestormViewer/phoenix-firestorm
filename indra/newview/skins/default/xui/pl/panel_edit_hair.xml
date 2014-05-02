@@ -8,7 +8,7 @@
 			<accordion_tab name="hair_color_tab" title="Kolor"/>
 			<accordion_tab name="hair_style_tab" title="Styl"/>
 			<accordion_tab name="hair_eyebrows_tab" title="Brwi"/>
-			<accordion_tab name="hair_facial_tab" title="Twarzy"/>
+			<accordion_tab name="hair_facial_tab" title="Twarz"/>
 		</accordion>
 	</panel>
 </panel>

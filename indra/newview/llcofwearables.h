@@ -40,6 +40,7 @@ class LLListContextMenu;
 class LLPanelClothingListItem;
 class LLPanelBodyPartsListItem;
 class LLPanelDeletableWearableListItem;
+class LLTabContainer;
 
 class LLCOFWearables : public LLPanel
 {
@@ -100,7 +101,10 @@ protected:
 	
 	void addClothingTypesDummies(const LLAppearanceMgr::wearables_by_type_t& clothing_by_type);
 	void onSelectionChange(LLFlatListView* selected_list);
-	void onAccordionTabStateChanged(LLUICtrl* ctrl, const LLSD& expanded);
+	// <FS:Ansariel> Accordions replaced with tab panels
+	//void onAccordionTabStateChanged(LLUICtrl* ctrl, const LLSD& expanded);
+	void onSelectedTabChanged(const LLSD& param);
+	// </FS:Ansariel>
 
 	LLPanelClothingListItem* buildClothingListItem(LLViewerInventoryItem* item, bool first, bool last);
 	LLPanelBodyPartsListItem* buildBodypartListItem(LLViewerInventoryItem* item);
@@ -114,13 +118,23 @@ protected:
 
 	LLFlatListView* mLastSelectedList;
 
-	LLAccordionCtrlTab* mClothingTab;
-	LLAccordionCtrlTab* mAttachmentsTab;
-	LLAccordionCtrlTab* mBodyPartsTab;
+	// <FS:Ansariel> Accordions replaced with tab panels
+	//LLAccordionCtrlTab* mClothingTab;
+	//LLAccordionCtrlTab* mAttachmentsTab;
+	//LLAccordionCtrlTab* mBodyPartsTab;
 
-	LLAccordionCtrlTab* mLastSelectedTab;
+	//LLAccordionCtrlTab* mLastSelectedTab;
 
-	std::map<const LLAccordionCtrlTab*, LLAssetType::EType> mTab2AssetType;
+	//std::map<const LLAccordionCtrlTab*, LLAssetType::EType> mTab2AssetType;
+
+	LLPanel* mClothingTab;
+	LLPanel* mAttachmentsTab;
+	LLPanel* mBodyPartsTab;
+
+	LLPanel* mLastSelectedTab;
+
+	std::map<const LLPanel*, LLAssetType::EType> mTab2AssetType;
+	// </FS:Ansariel>
 
 	LLCOFCallbacks mCOFCallbacks;
 
@@ -128,7 +142,10 @@ protected:
 	LLListContextMenu* mAttachmentMenu;
 	LLListContextMenu* mBodyPartMenu;
 
-	LLAccordionCtrl*	mAccordionCtrl;
+	// <FS:Ansariel> Accordions replaced with tab panels
+	//LLAccordionCtrl*	mAccordionCtrl;
+	LLTabContainer*	mAccordionCtrl;
+	// </FS:Ansariel>
 
 	/* COF category version since last refresh */
 	S32 mCOFVersion;

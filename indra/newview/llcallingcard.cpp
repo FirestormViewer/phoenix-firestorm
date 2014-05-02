@@ -62,6 +62,15 @@
 #include "llvoavatar.h"
 #include "llavataractions.h"
 
+#include "lggcontactsets.h"
+// <FS:Ansariel> [FS communication UI]
+#include "fsfloaterim.h"
+#include "fsfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+#include "llfloaterreg.h"
+#include "llnotificationmanager.h"
+#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
+
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
 ///----------------------------------------------------------------------------
@@ -342,8 +351,11 @@ void LLAvatarTracker::setBuddyOnline(const LLUUID& id, bool is_online)
 	}
 	else
 	{
-		llwarns << "!! No buddy info found for " << id 
+		//<FS:LO> Fix possible log spam with a large friendslist when SL messes up.
+		//llwarns << "!! No buddy info found for " << id 
+		lldebugs << "!! No buddy info found for " << id 
 				<< ", setting to " << (is_online ? "Online" : "Offline") << llendl;
+		//</FS:LO>
 	}
 }
 
@@ -520,6 +532,8 @@ void LLAvatarTracker::removeParticularFriendObserver(const LLUUID& buddy_id, LLF
     obs_it->second.erase(observer);
 
     // purge empty sets from the map
+	// AO: Remove below check as last resort to resolve a crash from dangling pointer.
+	// TODO: clean up all observers and don't leave dangling pointers here.
     if (obs_it->second.size() == 0)
     	mParticularFriendObserverMap.erase(obs_it);
 }
@@ -531,10 +545,70 @@ void LLAvatarTracker::notifyParticularFriendObservers(const LLUUID& buddy_id)
         return;
 
     // Notify observers interested in buddy_id.
-    observer_set_t& obs = obs_it->second;
+	
+	// <FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654; make a copy of observer_set. Just in case some implementation of changed() calls add/remove...Observer
+	
+	//    observer_set_t& obs = obs_it->second;
+    observer_set_t obs = obs_it->second;
+
+	// </FS:ND:
+
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
-        (*ob_it)->changed(mModifyMask);
+		(*ob_it)->changed(mModifyMask);
+
+		// <FS:ND/> Paranoia check. Of course someone could add x observer than add the same amount of x. That won't be found by comparing size alone, but it is good enough for a quick test 
+		llassert( obs.size() == obs_it->second.size() );
+    }
+}
+
+
+void LLAvatarTracker::addFriendPermissionObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
+{
+	if (buddy_id.notNull() && observer)
+	{
+		mFriendPermissionObserverMap[buddy_id].insert(observer);
+	}
+}
+
+void LLAvatarTracker::removeFriendPermissionObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
+{
+	if (buddy_id.isNull() || !observer)
+		return;
+	
+    observer_map_t::iterator obs_it = mFriendPermissionObserverMap.find(buddy_id);
+    if(obs_it == mFriendPermissionObserverMap.end())
+        return;
+	
+    obs_it->second.erase(observer);
+	
+    // purge empty sets from the map
+    if (obs_it->second.size() == 0)
+    	mFriendPermissionObserverMap.erase(obs_it);
+}
+
+void LLAvatarTracker::notifyFriendPermissionObservers(const LLUUID& buddy_id)
+{
+    observer_map_t::iterator obs_it = mFriendPermissionObserverMap.find(buddy_id);
+    if(obs_it == mFriendPermissionObserverMap.end())
+	{
+		return;
+	}
+    // Notify observers interested in buddy_id.
+
+	// <FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654; make a copy of observer_set. Just in case some implementation of changed() calls add/remove...Observer
+
+	//    observer_set_t& obs = obs_it->second;
+    observer_set_t obs = obs_it->second;
+
+	// </FS:ND>
+
+    for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
+    {
+		(*ob_it)->changed(LLFriendObserver::PERMS);
+		
+		// <FS:ND/> Paranoia check. Of course someone could add x observer than add the same amount of x. That won't be found by comparing size alone, but it is good enough for a quick test 
+		llassert( obs.size() == obs_it->second.size() );
     }
 }
 
@@ -628,6 +702,11 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 			if(mBuddyInfo.find(agent_related) != mBuddyInfo.end())
 			{
 				(mBuddyInfo[agent_related])->setRightsTo(new_rights);
+
+				// I'm not totally sure why it adds the agents id to the changed list
+				// nor why it doesn't add the friends's ID.
+				// Add the friend's id to the changed list for contacts list -KC
+				mChangedBuddyIDs.insert(agent_related);
 			}
 		}
 		else
@@ -657,6 +736,7 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 
 	addChangedMask(LLFriendObserver::POWERS, agent_id);
 	notifyObservers();
+	notifyFriendPermissionObservers(agent_related);
 }
 
 void LLAvatarTracker::processChangeUserRights(LLMessageSystem* msg, void**)
@@ -668,7 +748,12 @@ void LLAvatarTracker::processChangeUserRights(LLMessageSystem* msg, void**)
 void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 {
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_AgentBlock);
-	BOOL chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
+
+	// <FS:PP> Attempt to speed up things a little
+	// 	BOOL chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
+	static LLCachedControl<bool> ChatOnlineNotification(gSavedSettings, "ChatOnlineNotification");
+	BOOL chat_notify = ChatOnlineNotification;
+	// </FS:PP>
 
 	lldebugs << "Received " << count << " online notifications **** " << llendl;
 	if(count > 0)
@@ -704,7 +789,13 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 			// *TODO: get actual inventory id
 			gInventory.addChangedMask(LLInventoryObserver::CALLING_CARD, LLUUID::null);
 		}
-		if(chat_notify)
+		//[FIX FIRE-3522 : SJ] Notify Online/Offline to Nearby Chat even if chat_notify isnt true
+		
+		// <FS:PP> Attempt to speed up things a little
+		// if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
+		static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
+		if(chat_notify || LGGContactSets::getInstance()->notifyForFriend(agent_id) || OnlineOfflinetoNearbyChat)
+		// </FS:PP>
 		{
 			// Look up the name of this agent for the notification
 			LLAvatarNameCache::get(agent_id,boost::bind(&on_avatar_name_cache_notify,_1, _2, online, payload));
@@ -724,12 +815,35 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	// Popup a notify box with online status of this agent
 	// Use display name only because this user is your friend
 	LLSD args;
-	args["NAME"] = av_name.getDisplayName();
+	// <FS:Ansariel> Make name clickable
+	//	args["NAME"] = av_name.getDisplayName();
+	std::string used_name;
+	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
+	if ((NameTagShowUsernames) && (UseDisplayNames))
+	{
+		used_name = av_name.getCompleteName();
+	}
+	else if (UseDisplayNames)
+	{
+		used_name = av_name.getDisplayName();
+	}
+	else
+	{
+		used_name = av_name.getUserNameForDisplay();
+	}
+	args["NAME"] = used_name;
+	// </FS:Ansariel>
+	
 	args["STATUS"] = online ? LLTrans::getString("OnlineStatus") : LLTrans::getString("OfflineStatus");
 
+	args["AGENT-ID"] = agent_id;
+
 	LLNotificationPtr notification;
+
 	if (online)
 	{
+		make_ui_sound("UISndFriendOnline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 		notification =
 			LLNotificationsUtil::add("FriendOnlineOffline",
 									 args,
@@ -738,6 +852,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	}
 	else
 	{
+		make_ui_sound("UISndFriendOffline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 		notification =
 			LLNotificationsUtil::add("FriendOnlineOffline", args, payload);
 	}
@@ -745,7 +860,49 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	// If there's an open IM session with this agent, send a notification there too.
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, agent_id);
 	std::string notify_msg = notification->getMessage();
+
+	// <FS:PP> FIRE-7625: Option to display group chats, IM sessions and nearby chat always in uppercase
+	static LLCachedControl<bool> oFSChatsUppercase(gSavedSettings, "FSChatsUppercase");
+	if (oFSChatsUppercase)
+	{
+		LLStringUtil::toUpper(notify_msg);
+	}
+	// </FS:PP>
+
 	LLIMModel::instance().proccessOnlineOfflineNotification(session_id, notify_msg);
+	// If desired, also send it to nearby chat, this allows friends'
+	// online/offline times to be referenced in chat & logged.
+	// [FIRE-3522 : SJ] Only show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Toasts
+	//                  or for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Nearby Chat
+	static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
+	static LLCachedControl<bool> FSContactSetsNotificationNearbyChat(gSavedSettings, "FSContactSetsNotificationNearbyChat");
+	if ((OnlineOfflinetoNearbyChat) || (FSContactSetsNotificationNearbyChat && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
+	{
+		static LLCachedControl<bool> history_only(gSavedSettings, "OnlineOfflinetoNearbyChatHistory"); // LO - Adding a setting to show online/offline notices only in chat history. Helps prevent your screen from being filled with online notices on login.
+		LLChat chat;
+		chat.mText = (online ? LLTrans::getString("FriendOnlineNotification") : LLTrans::getString("FriendOfflineNotification"));
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		chat.mChatType = CHAT_TYPE_RADAR;
+		chat.mFromID = agent_id;
+		chat.mFromName = used_name;
+		if (history_only)
+		{
+			FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+			nearby_chat->addMessage(chat, true, LLSD());
+		}
+		else
+		{
+			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		}
+
+		// <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground (notification on receipt of IM)
+		chat.mText = notify_msg;
+		if (FSKeywords::getInstance()->chatContainsKeyword(chat, true))
+		{
+			FSKeywords::notify(chat);
+		}
+		// </FS:PP>
+	}
 }
 
 void LLAvatarTracker::formFriendship(const LLUUID& id)
@@ -762,6 +919,17 @@ void LLAvatarTracker::formFriendship(const LLUUID& id)
 			at.mBuddyInfo[id] = buddy_info;
 			at.addChangedMask(LLFriendObserver::ADD, id);
 			at.notifyObservers();
+
+			// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+			LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
+			// <FS:Ansariel> [FS communication UI]
+			FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
+			// </FS:Ansariel> [FS communication UI]
+			if (im_floater)
+			{
+				im_floater->setEnableAddFriendButton(FALSE);
+			}
+			// </FS:Ansariel>
 		}
 	}
 }
@@ -779,6 +947,17 @@ void LLAvatarTracker::processTerminateFriendship(LLMessageSystem* msg, void**)
 		at.addChangedMask(LLFriendObserver::REMOVE, id);
 		delete buddy;
 		at.notifyObservers();
+
+		// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+		LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
+		// <FS:Ansariel> [FS communication UI]
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
+		// </FS:Ansariel> [FS communication UI]
+		if (im_floater)
+		{
+			im_floater->setEnableAddFriendButton(TRUE);
+		}
+		// </FS:Ansariel>
 	}
 }
 
@@ -870,10 +1049,28 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 {
 	LLAvatarName av_name;
 	LLAvatarNameCache::get( buddy_id, &av_name);
+	// <FS:Ansariel> Friend names on worldmap should respect display name settings
 	buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
 	if(buddy->isOnline() && buddy->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION))
-	{
-		mMappable.insert(value);
+	{ 
+		// <FS:Ansariel> Friend names on worldmap should respect display name settings
+		//mMappable.insert(value);
+	
+		// <FS:PP> Attempt to speed up things a little
+		// if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
+		static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+		if (LLAvatarName::useDisplayNames() && NameTagShowUsernames) 
+		// </FS:PP>
+		{
+			buddy_map_t::value_type value(av_name.getCompleteName(), buddy_id);
+			mMappable.insert(value);
+		}
+		else
+		{
+			buddy_map_t::value_type value(av_name.getDisplayName(), buddy_id);
+			mMappable.insert(value);
+		}
+	// </FS:Ansariel>
 	}
 	return true;
 }

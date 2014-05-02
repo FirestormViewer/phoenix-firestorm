@@ -41,7 +41,7 @@ if(WINDOWS)
         ssleay32.dll
         libeay32.dll
         libcollada14dom22-d.dll
-        glod.dll    
+        glod.dll
         libhunspell.dll
         )
 
@@ -57,6 +57,9 @@ if(WINDOWS)
         glod.dll
         libhunspell.dll
         )
+    
+    set(debug_files ${debug_files} growl++.dll growl.dll )
+    set(release_files ${release_files} growl++.dll growl.dll )
 
     if(USE_TCMALLOC)
       set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
@@ -64,9 +67,31 @@ if(WINDOWS)
     endif(USE_TCMALLOC)
 
     if (FMODEX)
-      set(debug_files ${debug_files} fmodexL.dll)
-      set(release_files ${release_files} fmodex.dll)
+      if( NOT ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} fmodexL.dll)
+        set(release_files ${release_files} fmodex.dll)
+      else( NOT ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} fmodexL64.dll)
+        set(release_files ${release_files} fmodex64.dll)
+      endif( NOT ND_BUILD64BIT_ARCH )
     endif (FMODEX)
+
+    if (LEAPMOTION)
+      if( NOT ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} x86/Leapd.dll)
+        set(release_files ${release_files} x86/Leap.dll)
+      else( NOT ND_BUILD64BIT_ARCH )
+        set(debug_files ${debug_files} x64/Leapd.dll)
+        set(release_files ${release_files} x64/Leap.dll)
+      endif( NOT ND_BUILD64BIT_ARCH )
+    endif (LEAPMOTION)
+
+# <FS:ND> Copy pdb files for symbol generation too
+   if( NOT ND_BUILD64BIT_ARCH )
+     set(debug_files ${debug_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+     set(release_files ${release_files} ssleay32.pdb libeay32.pdb apr-1.pdb aprutil-1.pdb growl.pdb growl++.pdb )
+   endif( NOT ND_BUILD64BIT_ARCH )
+# </FS:ND>
 
 #*******************************
 # Copy MS C runtime dlls, required for packaging.
@@ -220,14 +245,25 @@ elseif(DARWIN)
         libminizip.a
         libndofdev.dylib
         libhunspell-1.3.0.dylib
-        libexception_handler.dylib
+        # libexception_handler.dylib
         libcollada14dom.dylib
+		libgrowl.dylib
+        libgrowl++.dylib
        )
 
+    # <FS:ND> We only ever need google breakpad when crash reporting is used
+    if(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
+      set(release_files ${release_files} "libexception_handler.dylib")
+    endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
+    
     if (FMODEX)
       set(debug_files ${debug_files} libfmodexL.dylib)
       set(release_files ${release_files} libfmodex.dylib)
     endif (FMODEX)
+
+    if (LEAPMOTION)
+      set(release_files ${release_files} libLeap.dylib)
+    endif (LEAPMOTION)
 
 elseif(LINUX)
     # linux is weird, multiple side by side configurations aren't supported
@@ -266,6 +302,7 @@ elseif(LINUX)
         libboost_signals-mt.so.${BOOST_VERSION}.0
         libboost_system-mt.so.${BOOST_VERSION}.0
         libboost_thread-mt.so.${BOOST_VERSION}.0
+        libboost_wave-mt.so.${BOOST_VERSION}.0
         libcollada14dom.so
         libcrypto.so.1.0.0
         libdb-5.1.so
@@ -273,12 +310,12 @@ elseif(LINUX)
         libexpat.so.1
         libfreetype.so.6
         libGLOD.so
-        libgmock_main.so
-        libgmock.so.0
+#        libgmock_main.so
+#        libgmock.so.0
         libgmodule-2.0.so
         libgobject-2.0.so
-        libgtest_main.so
-        libgtest.so.0
+#        libgtest_main.so
+#        libgtest.so.0
         libhunspell-1.3.so.0.0.0
         libminizip.so
         libopenal.so
@@ -288,6 +325,9 @@ elseif(LINUX)
         libuuid.so.16.0.22
         libssl.so.1.0.0
         libfontconfig.so.1.4.4
+        libpng15.so.15
+        libpng15.so.15.13.0
+        #libnotify.so # *TODO test/fix/get linux libnotify(growl)
        )
 
     if (USE_TCMALLOC)
@@ -298,6 +338,14 @@ elseif(LINUX)
       set(debug_files ${debug_files} "libfmodexL.so")
       set(release_files ${release_files} "libfmodex.so")
     endif (FMODEX)
+
+    if (LEAPMOTION)
+      if( NOT ND_BUILD64BIT_ARCH )
+        set(release_files ${release_files} x86/libLeap.so)
+      else( NOT ND_BUILD64BIT_ARCH )
+        set(release_files ${release_files} x64/libLeap.so)
+      endif( NOT ND_BUILD64BIT_ARCH )
+    endif (LEAPMOTION)
 
 else(WINDOWS)
     message(STATUS "WARNING: unrecognized platform for staging 3rd party libs, skipping...")

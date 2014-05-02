@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Side tray panel -->
 <panel label="Leute" name="people_panel">
+	<string name="high_server_load" value="Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit effektiv wird."/>
 	<string name="no_recent_people" value="Hier sind keine Leute. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
 	<string name="no_filtered_recent_people" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
 	<string name="no_one_near" value="Es ist niemand in der Nähe. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
@@ -16,10 +17,22 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 	</string>
 	<string name="no_filtered_groups_msg" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/groups/[SEARCH_TERM] Suche]."/>
 	<string name="no_groups_msg" value="Suchen Sie nach Gruppen? Versuchen Sie es mit der [secondlife:///app/search/groups Suche]."/>
-	<string name="MiniMapToolTipMsg" value="[REGION](Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
-	<string name="AltMiniMapToolTipMsg" value="[REGION](Doppelklicken, um zu teleportieren; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Doppelklicken, um zu teleportieren; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
+	<string name="empty_list">
+		Dieses Kontakt-Set ist leer.
+	</string>
+	<string name="no_sets">
+		Keine Kontakt-Sets
+	</string>
+	<string name="all_sets">
+		Alle Kontakt-Sets
+	</string>
+	<string name="pseudonyms">
+		Aliase
+	</string>
 	<tab_container name="tabs">
-		<panel label="IN DER NÄHE" name="nearby_panel">
+		<panel label="In der Nähe" name="nearby_panel">
 			<panel label="bottom_panel" name="nearby_buttons_panel">
 				<filter_editor label="Nach Personen filtern" name="nearby_filter_input"/>
 				<button name="gear_btn" tool_tip="Aktionen für ausgewählte Person"/>
@@ -28,20 +41,22 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<dnd_button name="nearby_del_btn" tool_tip="Ausgewählte Person als Freund entfernen"/>
 			</panel>
 		</panel>
-		<panel label="FREUNDE" name="friends_panel">
+		<panel label="Freunde" name="friends_panel">
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="Online"/>
+				<panel name="tab_all" title="Alle"/>
+				<panel name="tab_suggested_friends" title="Mögliche Freunde"/>
+			</tab_container>
 			<panel label="bottom_panel" name="friends_buttons_panel">
 				<filter_editor label="Nach Personen filtern" name="friends_filter_input"/>
 				<button name="gear_btn" tool_tip="Aktionen für ausgewählte Person"/>
 				<menu_button name="friends_view_btn" tool_tip="Anzeige-/Sortieroptionen"/>
 				<button name="friends_add_btn" tool_tip="Einem Einwohner die Freundschaft anbieten"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Sichtbarkeit des Onlinestatus global umschalten"/>
 				<dnd_button name="friends_del_btn" tool_tip="Ausgewählte Person als Freund entfernen"/>
 			</panel>
-			<accordion name="friends_accordion">
-				<accordion_tab name="tab_online" title="Online"/>
-				<accordion_tab name="tab_all" title="Alle"/>
-			</accordion>
 		</panel>
-		<panel label="GRUPPEN" name="groups_panel">
+		<panel label="Gruppen" name="groups_panel">
 			<panel label="bottom_panel" name="groups_buttons_panel">
 				<filter_editor label="Nach Gruppen filtern" name="groups_filter_input"/>
 				<menu_button name="groups_gear_btn" tool_tip="Aktionen für ausgewählte Gruppe"/>
@@ -50,10 +65,10 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<dnd_button name="minus_btn" tool_tip="Ausgewählte Gruppe verlassen"/>
 			</panel>
 			<text name="groupcount">
-				Sie gehören [COUNT] Gruppen an und können [REMAINING] weiteren beitreten.
+				Sie gehören [COUNT] Gruppen an ([REMAINING] verbleibend).
 			</text>
 		</panel>
-		<panel label="AKTUELL" name="recent_panel">
+		<panel label="Aktuell" name="recent_panel">
 			<panel label="bottom_panel" name="recent_buttons_panel">
 				<filter_editor label="Nach Personen filtern" name="recent_filter_input"/>
 				<button name="gear_btn" tool_tip="Aktionen für ausgewählte Person"/>
@@ -62,8 +77,11 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<dnd_button name="recent_del_btn" tool_tip="Ausgewählte Person als Freund entfernen"/>
 			</panel>
 		</panel>
-		<panel label="IGNORIERT" name="blocked_panel">
+		<panel label="Ignoriert" name="blocked_panel">
 			<panel label="Ignorierte Einwohner und Objekte" name="panel_block_list_sidetray"/>
+		</panel>
+		<panel label="Kontakt-Sets" name="contact_sets_panel">
+			<panel label="Kontakt-Sets" name="panel_people_contacts_sidetray"/>
 		</panel>
 	</tab_container>
 </panel>

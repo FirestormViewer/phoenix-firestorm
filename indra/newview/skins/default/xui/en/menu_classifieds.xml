@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+ layout="topleft"
+ name="Classifieds">
+    <menu_item_call
+     label="Info"
+     layout="topleft"
+     name="classified_info">
+        <menu_item_call.on_click
+         function="Classified.Info" />
+        <menu_item_call.on_enable
+         function="Classified.Enable" 
+         parameter="info" />
+    </menu_item_call>
+    <menu_item_call
+     label="Edit"
+     layout="topleft"
+     name="classified_edit"
+     visible="false">
+        <menu_item_call.on_click
+         function="Classified.Edit" />
+        <menu_item_call.on_enable
+         function="Classified.Enable" 
+         parameter="edit" />
+    </menu_item_call>
+    <menu_item_call
+     label="Teleport"
+     layout="topleft"
+     name="classified_teleport">
+        <menu_item_call.on_click
+         function="Classified.Teleport" />
+        <menu_item_call.on_enable
+         function="Classified.Enable" 
+         parameter="teleport" />
+    </menu_item_call>
+    <menu_item_call
+     label="Map"
+     layout="topleft"
+     name="classified_map">
+        <menu_item_call.on_click
+         function="Classified.Map" />
+        <menu_item_call.on_enable
+         function="Classified.Enable" 
+         parameter="map" />
+    </menu_item_call>
+    <menu_item_separator
+     layout="topleft"
+     name="classified_separator"
+     visible="false" />
+    <menu_item_call
+     label="Delete"
+     layout="topleft"
+     name="classified_delete"
+     visible="false">
+        <menu_item_call.on_click
+         function="Classified.Delete" />
+        <menu_item_call.on_enable
+         function="Classified.Enable" 
+         parameter="delete" />
+    </menu_item_call>
+</context_menu>

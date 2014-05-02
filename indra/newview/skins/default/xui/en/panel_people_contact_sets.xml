@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ background_visible="true"
+ follows="left|top|right|bottom"
+ height="305"
+ layout="topleft"
+ left="0"
+ name="contact_sets_panel"
+ min_height="350"
+ min_width="240"
+ width="323">
+     <panel
+      follows="left|top|right"
+      height="27"
+      label="bottom_panel"
+      layout="topleft"
+      left="0"
+      name="contact_sets_buttons_panel"
+      right="-1"
+      top="0">
+         <combo_box
+          follows="left|top|right"
+          layout="topleft"
+          height="25"
+          left="2"
+          top="2"
+          name="combo_sets"
+          width="218" />
+         <menu_button
+          follows="right"
+          height="25"
+          image_hover_unselected="Toolbar_Middle_Over"
+          image_overlay="OptionsMenu_Off"
+          image_selected="Toolbar_Middle_Selected"
+          image_unselected="Toolbar_Middle_Off"
+          layout="topleft"
+          left_pad="4"
+          menu_filename="menu_people_contact_sets_gear.xml"
+          menu_position="bottomleft"
+          name="contact_sets_gear_btn"
+          tool_tip="Actions on selected person or group"
+          top="3"
+          width="31" />
+         <menu_button
+          follows="right"
+          height="25"
+          image_hover_unselected="Toolbar_Middle_Over"
+          image_overlay="AddItem_Menu"
+          image_selected="Toolbar_Middle_Selected"
+          image_unselected="Toolbar_Middle_Off"
+          layout="topleft"
+          left_pad="2"
+          menu_filename="menu_people_contact_sets_add.xml"
+          menu_position="bottomleft"
+          name="contact_sets_plus_btn"
+          tool_tip="Add a group or resident"
+          top_delta="0"
+          width="31"/>
+         <menu_button
+          follows="right"
+          height="25"
+          image_hover_unselected="Toolbar_Middle_Over"
+          image_overlay="TrashItem_Menu"
+          image_selected="Toolbar_Middle_Selected"
+          image_unselected="Toolbar_Middle_Off"
+          layout="topleft"
+          left_pad="2"
+          menu_filename="menu_people_contact_sets_remove.xml"
+          menu_position="bottomleft"
+          name="contact_sets_remove_btn"
+          tool_tip="Remove a group or resident"
+          top_delta="0"
+          width="31"/>
+     </panel>
+     <avatar_list
+      left="3"
+      right="-1"
+      top="31"
+      bottom="-3"
+      follows="all"
+      layout="topleft"
+      show_profile_button="true"
+      show_speaking_indicator="false"
+      show_voice_volume="false"
+      show_permissions_granted="true"
+      show_icons="true"
+      allow_select="true"
+      multi_select="true"
+      keep_one_selected="false"
+      name="contact_list" />
+</panel>

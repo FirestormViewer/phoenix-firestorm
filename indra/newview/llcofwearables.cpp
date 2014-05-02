@@ -42,6 +42,7 @@
 #include "llwearableitemslist.h"
 #include "llpaneloutfitedit.h"
 #include "lltrans.h"
+#include "lltabcontainer.h"
 
 static LLPanelInjector<LLCOFWearables> t_cof_wearables("cof_wearables");
 
@@ -308,20 +309,30 @@ BOOL LLCOFWearables::postBuild()
 	mAttachments->setComparator(&WEARABLE_NAME_COMPARATOR);
 	mBodyParts->setComparator(&WEARABLE_NAME_COMPARATOR);
 
-	mClothingTab = getChild<LLAccordionCtrlTab>("tab_clothing");
-	mClothingTab->setDropDownStateChangedCallback(boost::bind(&LLCOFWearables::onAccordionTabStateChanged, this, _1, _2));
+	// <FS:Ansariel> Accordions replaced with tab panels; See panel_cof_wearables.xml
+	//mClothingTab = getChild<LLAccordionCtrlTab>("tab_clothing");
+	//mClothingTab->setDropDownStateChangedCallback(boost::bind(&LLCOFWearables::onAccordionTabStateChanged, this, _1, _2));
 
-	mAttachmentsTab = getChild<LLAccordionCtrlTab>("tab_attachments");
-	mAttachmentsTab->setDropDownStateChangedCallback(boost::bind(&LLCOFWearables::onAccordionTabStateChanged, this, _1, _2));
+	//mAttachmentsTab = getChild<LLAccordionCtrlTab>("tab_attachments");
+	//mAttachmentsTab->setDropDownStateChangedCallback(boost::bind(&LLCOFWearables::onAccordionTabStateChanged, this, _1, _2));
 
-	mBodyPartsTab = getChild<LLAccordionCtrlTab>("tab_body_parts");
-	mBodyPartsTab->setDropDownStateChangedCallback(boost::bind(&LLCOFWearables::onAccordionTabStateChanged, this, _1, _2));
+	//mBodyPartsTab = getChild<LLAccordionCtrlTab>("tab_body_parts");
+	//mBodyPartsTab->setDropDownStateChangedCallback(boost::bind(&LLCOFWearables::onAccordionTabStateChanged, this, _1, _2));
+
+	mClothingTab = getChild<LLPanel>("tab_clothing");
+	mAttachmentsTab = getChild<LLPanel>("tab_attachments");
+	mBodyPartsTab = getChild<LLPanel>("tab_body_parts");
+	// </FS:Ansariel>
 
 	mTab2AssetType[mClothingTab] = LLAssetType::AT_CLOTHING;
 	mTab2AssetType[mAttachmentsTab] = LLAssetType::AT_OBJECT;
 	mTab2AssetType[mBodyPartsTab] = LLAssetType::AT_BODYPART;
 
-	mAccordionCtrl = getChild<LLAccordionCtrl>("cof_wearables_accordion");
+	// <FS:Ansariel> Accordions replaced with tab panels
+	//mAccordionCtrl = getChild<LLAccordionCtrl>("cof_wearables_accordion");
+	mAccordionCtrl = getChild<LLTabContainer>("wearable_accordion");
+	mAccordionCtrl->setCommitCallback(boost::bind(&LLCOFWearables::onSelectedTabChanged, this, _2));
+	// </FS:Ansariel>
 
 	return LLPanel::postBuild();
 }
@@ -335,7 +346,10 @@ void LLCOFWearables::setAttachmentsTitle()
 		LLStringUtil::format_map_t args_attachments;
 		args_attachments["[COUNT]"] = llformat ("%d", free_slots);
 		std::string attachments_title = LLTrans::getString("Attachments remain", args_attachments);
-		mAttachmentsTab->setTitle(attachments_title);
+		// <FS:Ansariel> Accordions replaced with tab panels
+		//mAttachmentsTab->setTitle(attachments_title);
+		mAccordionCtrl->setPanelTitle(mAccordionCtrl->getIndexForPanel(mAttachmentsTab), attachments_title);
+		// </FS:Ansariel>
 	}
 }
 
@@ -355,7 +369,10 @@ void LLCOFWearables::onSelectionChange(LLFlatListView* selected_list)
 	onCommit();
 }
 
-void LLCOFWearables::onAccordionTabStateChanged(LLUICtrl* ctrl, const LLSD& expanded)
+// <FS:Ansariel> Accordions replaced with tab panels
+//void LLCOFWearables::onAccordionTabStateChanged(LLUICtrl* ctrl, const LLSD& expanded)
+void LLCOFWearables::onSelectedTabChanged(const LLSD& param)
+// </FS:Ansariel>
 {
 	bool had_selected_items = mClothing->numSelected() || mAttachments->numSelected() || mBodyParts->numSelected();
 	mClothing->resetSelection(true);
@@ -363,7 +380,10 @@ void LLCOFWearables::onAccordionTabStateChanged(LLUICtrl* ctrl, const LLSD& expa
 	mBodyParts->resetSelection(true);
 
 	bool tab_selection_changed = false;
-	LLAccordionCtrlTab* tab = dynamic_cast<LLAccordionCtrlTab*>(ctrl);
+	// <FS:Ansariel> Accordions replaced with tab panels
+	//LLAccordionCtrlTab* tab = dynamic_cast<LLAccordionCtrlTab*>(ctrl);
+	LLPanel* tab = findChild<LLPanel>(param.asString());
+	// </FS:Ansariel>
 	if (tab && tab != mLastSelectedTab)
 	{
 		mLastSelectedTab = tab;
@@ -680,7 +700,10 @@ LLAssetType::EType LLCOFWearables::getExpandedAccordionAssetType()
 
 	if (mAccordionCtrl != NULL)
 	{
-		const LLAccordionCtrlTab* expanded_tab = mAccordionCtrl->getExpandedTab();
+		// <FS:Ansariel> Accordions replaced with tab panels
+		//const LLAccordionCtrlTab* expanded_tab = mAccordionCtrl->getExpandedTab();
+		const LLPanel* expanded_tab = mAccordionCtrl->getCurrentPanel();
+		// </FS:Ansariel>
 
 	return get_if_there(mTab2AssetType, expanded_tab, LLAssetType::AT_NONE);
 	}
@@ -692,7 +715,10 @@ LLAssetType::EType LLCOFWearables::getSelectedAccordionAssetType()
 	{
 	if (mAccordionCtrl != NULL)
 	{
-		const LLAccordionCtrlTab* selected_tab = mAccordionCtrl->getSelectedTab();
+		// <FS:Ansariel> Accordions replaced with tab panels
+		//const LLAccordionCtrlTab* selected_tab = mAccordionCtrl->getSelectedTab();
+		const LLPanel* selected_tab = mAccordionCtrl->getCurrentPanel();
+		// </FS:Ansariel>
 
 	return get_if_there(mTab2AssetType, selected_tab, LLAssetType::AT_NONE);
 }
@@ -704,7 +730,10 @@ void LLCOFWearables::expandDefaultAccordionTab()
 {
 	if (mAccordionCtrl != NULL)
 	{
-		mAccordionCtrl->expandDefaultTab();
+		// <FS:Ansariel> Accordions replaced with tab panels
+		//mAccordionCtrl->expandDefaultTab();
+		mAccordionCtrl->selectFirstTab();
+		// </FS:Ansariel>
 	}
 }
 

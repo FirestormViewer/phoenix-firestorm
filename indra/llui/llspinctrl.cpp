@@ -174,7 +174,16 @@ void LLSpinCtrl::onUpBtn( const LLSD& data )
 			F32 cur_val = (F32) atof(text.c_str());
 		
 			// use getValue()/setValue() to force reload from/to control
-			F32 val = cur_val + mIncrement;
+			//F32 val = cur_val + mIncrement;
+			//KC: alt/ctrl/shift keys modify increment
+			F32 inc = mIncrement;
+			if(gKeyboard->getKeyDown(KEY_ALT))
+				inc *= 10.f;
+			else if(gKeyboard->getKeyDown(KEY_CONTROL))
+				inc *= 0.1f;
+			else if(gKeyboard->getKeyDown(KEY_SHIFT))
+				inc *= 0.01f;
+			F32 val = cur_val + inc;
 			val = clamp_precision(val, mPrecision);
 			val = llmin( val, mMaxValue );
 			if (val < mMinValue) val = mMinValue;
@@ -207,7 +216,16 @@ void LLSpinCtrl::onDownBtn( const LLSD& data )
 			LLLocale locale(LLLocale::USER_LOCALE);
 			F32 cur_val = (F32) atof(text.c_str());
 		
-			F32 val = cur_val - mIncrement;
+			//F32 val = cur_val - mIncrement;
+			//KC: alt/ctrl/shift keys modify increment
+			F32 inc = mIncrement;
+			if(gKeyboard->getKeyDown(KEY_ALT))
+				inc *= 10.f;
+			else if(gKeyboard->getKeyDown(KEY_CONTROL))
+				inc *= 0.1f;
+			else if(gKeyboard->getKeyDown(KEY_SHIFT))
+				inc *= 0.01f;
+			F32 val = cur_val - inc;
 			val = clamp_precision(val, mPrecision);
 			val = llmax( val, mMinValue );
 
@@ -404,6 +422,23 @@ void LLSpinCtrl::setLabel(const LLStringExplicit& label)
 	}
 	updateLabelColor();
 }
+
+// <FS:Ansariel> Allow setting an argument on the label
+BOOL LLSpinCtrl::setLabelArg(const std::string& key, const LLStringExplicit& text)
+{
+	if (mLabelBox)
+	{
+		mLabelBox->setTextArg(key, text);
+	}
+	else
+	{
+		llwarns << "Attempting to set label argument on LLSpinCtrl constructed without one " << getName() << llendl;
+	}
+	updateLabelColor();
+
+	return TRUE;
+}
+// </FS:Ansariel> Allow setting an argument on the label
 
 void LLSpinCtrl::setAllowEdit(BOOL allow_edit)
 {

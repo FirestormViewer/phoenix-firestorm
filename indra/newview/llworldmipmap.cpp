@@ -32,6 +32,14 @@
 #include "llviewertexturelist.h"
 #include "math.h"	// log()
 
+// <FS:CR> HG maps
+#ifdef OPENSIM
+#include "lfsimfeaturehandler.h"
+#include "llviewernetwork.h"
+#include "llagent.h"
+#endif // OPENSIM
+// </FS:CR>
+
 // Turn this on to output tile stats in the standard output
 #define DEBUG_TILES_STAT 0
 
@@ -181,7 +189,19 @@ LLPointer<LLViewerFetchedTexture> LLWorldMipmap::getObjectsTile(U32 grid_x, U32 
 LLPointer<LLViewerFetchedTexture> LLWorldMipmap::loadObjectsTile(U32 grid_x, U32 grid_y, S32 level)
 {
 	// Get the grid coordinates
+// <FS:CR> HG Maps
+#ifdef OPENSIM
+	std::string hg_map;
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		hg_map = LFSimFeatureHandler::instance().mapServerURL();
+	}
+	std::string imageurl = hg_map.empty() ? gSavedSettings.getString("CurrentMapServerURL") : hg_map;
+	imageurl.append(llformat("map-%d-%d-%d-objects.jpg", level, grid_x, grid_y));
+#else // !OPENSIM
 	std::string imageurl = gSavedSettings.getString("CurrentMapServerURL") + llformat("map-%d-%d-%d-objects.jpg", level, grid_x, grid_y);
+#endif // OPENSIM
+// </FS:CR>
 
 	// DO NOT COMMIT!! DEBUG ONLY!!!
 	// Use a local jpeg for every tile to test map speed without S3 access

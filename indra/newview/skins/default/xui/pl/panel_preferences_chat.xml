@@ -1,58 +1,251 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Czat/IM" name="chat">
-	<text name="font_size">
-		Rozmiar czcionki:
-	</text>
-	<radio_group name="chat_font_size">
-		<radio_item label="Mała" name="radio" value="0"/>
-		<radio_item label="Średnia" name="radio2" value="1"/>
-		<radio_item label="Duża" name="radio3" value="2"/>
-	</radio_group>
-	<check_box initial_value="true" label="Używaj animacji podczas pisania" name="play_typing_animation"/>
-	<check_box label="Wysyłaj wszystkie wiadomości (IM) na moją skrzynkę pocztową kiedy jestem niedostępny" name="send_im_to_email"/>
-	<check_box label="Zwykły tekst IM i historia czatu" name="plain_text_chat_history"/>
-	<check_box label="Czat chmurkowy" name="bubble_text_chat"/>
-	<text name="show_ims_in_label">
-		Pokaż wiadomości (IM) w:
-	</text>
-	<text name="requires_restart_label">
-		(restart wymagany)
-	</text>
-	<radio_group name="chat_window" tool_tip="Pokaż wiadomości IM osobno lub razem (restart wymagany)">
-		<radio_item label="Osobne okna" name="radio" value="0"/>
-		<radio_item label="Etykiety" name="radio2" value="1"/>
-	</radio_group>
-	<text name="disable_toast_label">
-		Uaktywnij wyskakujące okienka rozpoczynających się rozmów:
-	</text>
-	<check_box label="Czat grupy" name="EnableGroupChatPopups" tool_tip="Zaznacz aby widzieć wyskakuące okienka kiedy czat grupy się pojawia"/>
-	<check_box label="Czat IM" name="EnableIMChatPopups" tool_tip="Zaznacz aby widzieć wyskakujące okienka kiedy IM się pojawia"/>
-	<spinner label="Czas widoczności czatu w pobliżu:" name="nearby_toasts_lifetime"/>
-	<spinner label="Czas znikania czatu w pobliżu:" name="nearby_toasts_fadingtime"/>
-	<check_box name="translate_chat_checkbox"/>
-	<text name="translate_chb_label">
-		Użyj translatora podczas rozmowy
-	</text>
-	<text name="translate_language_text">
-		Przetłumacz czat na:
-	</text>
-	<combo_box name="translate_language_combobox">
-		<combo_box.item label="Domyślny" name="System Default Language"/>
-		<combo_box.item label="English (Angielski)" name="English"/>
-		<combo_box.item label="Dansk (Duński)" name="Danish"/>
-		<combo_box.item label="Deutsch (Niemiecki)" name="German"/>
-		<combo_box.item label="Español (Hiszpański)" name="Spanish"/>
-		<combo_box.item label="Français (Francuski)" name="French"/>
-		<combo_box.item label="Italiano (Włoski)" name="Italian"/>
-		<combo_box.item label="Magyar (Węgierski)" name="Hungarian"/>
-		<combo_box.item label="Nederlands (Holenderski)" name="Dutch"/>
-		<combo_box.item label="Polski" name="Polish"/>
-		<combo_box.item label="Português (Portugalski)" name="Portugese"/>
-		<combo_box.item label="Русский (Rosyjski)" name="Russian"/>
-		<combo_box.item label="Türkçe (Turecki)" name="Turkish"/>
-		<combo_box.item label="Українська (Ukraiński)" name="Ukrainian"/>
-		<combo_box.item label="中文 (正體) (Chiński)" name="Chinese"/>
-		<combo_box.item label="日本語 (Japoński)" name="Japanese"/>
-		<combo_box.item label="한국어 (Koreański)" name="Korean"/>
-	</combo_box>
+	<tab_container label="Ustawienia Firestorma" name="tabs">
+		<panel label="Ogólne" name="ChatGeneral">
+			<text name="font_size">
+				Czcionka czatu:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Mała" name="radio"/>
+				<radio_item label="Średnia" name="radio2"/>
+				<radio_item label="Duża" name="radio3"/>
+				<radio_item label="Ogromna" name="radio4"/>
+			</radio_group>
+			<text name="console_font_size">
+				Czcionka konsoli ekranu:
+			</text>
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Mała" name="consradio"/>
+				<radio_item label="Średnia" name="consradio2"/>
+				<radio_item label="Duża" name="consradio3"/>
+				<radio_item label="Ogromna" name="consradio4"/>
+			</radio_group>
+			<check_box label="Wyświetlaj czaty grupowe, wiadomości IM oraz czat lokalny zawsze dużymi literami" name="chat_always_in_uppercase"/>
+			<check_box label="Używaj animacji podczas pisania" name="play_typing_animation"/>
+			<check_box label="Odtwarzaj animacje awatara (np. krzyczenie)" name="play_avatar_animations"/>
+			<check_box label="Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym" name="play_typing_sound"/>
+			<check_box label="Powiadomienia o pisaniu do innych awatarów podczas sesji IM" name="FSSendTypingState"/>
+			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu lokalnego" name="FSChatbarNamePrediction"/>
+			<check_box name="FSIMSystemMessageBrackets" label="Pokazuj systemowe wiadomości czatu w nawiasach"/>
+			<check_box name="FSChatHistoryShowYou" label="Pokazuj &quot;Ty&quot; w logu czatu zamiast swojego imienia" />
+			<check_box name="IMShowNamesForP2PConv" label="Pokazuj imiona w bezpośrednich wiadomościach IM" />
+			<check_box label="Ślij IM-y na mój e-mail, gdy jestem offline ([EMAIL])" name="send_im_to_email"/>
+			<check_box label="Używaj nagłówków czatów stylu V1" name="plain_text_chat_history"/>
+			<check_box label="Podczas używania nagłówków w stylu V2/3 pokazuj małe ikony" name="ShowChatMiniIcons"/>
+			<check_box label="Pokazuj zakończenia ostatnich rozmów" name="LogShowHistory"/>
+			<check_box label="Pokaż czat w chmurkach ponad awatarami" name="bubble_text_chat"/>
+			<check_box label="Pokaż wskaźnik pisania w chmurkach ponad awatarami" name="bubble_text_typing"/>	 
+			<text name="inworld_typing_rg_label">
+				Naciskanie klawiszy liter:
+			</text>
+			<radio_group name="inworld_typing_preference">
+				<radio_item label="Rozpoczyna czat" name="radio_start_chat"/>
+				<radio_item label="Wpływa na ruch (tzn. WASD)" name="radio_move"/>
+			</radio_group>
+			<text name="show_ims_in_label">
+				Pokaż wiad. IM w:
+			</text>
+			<radio_group name="chat_window" tool_tip="Pokaż wiadomości w osobnych oknach lub w jednym z kartami (wymaga restartu).">
+				<radio_item label="Osobne okna" name="radio"/>
+				<radio_item label="Karty" name="radio2"/>
+			</radio_group>
+			<text name="req_restart_ims">
+				(wymaga restartu)
+			</text>
+			<text name="tab_direction_label">
+				Orientacja kart czatu:
+			</text>	
+			<radio_group name="chat_tab_direction" tool_tip="Zmień kierunek układania się kart pomiędzy poziomym, a pionowym w czatach/IM, gdy włączony jest tryb łączenia rozmów w karty (wymaga restartu).">
+				<radio_item label="Pozioma" name="radio_horizontal"/>
+				<radio_item label="Pionowa" name="radio_vertical"/>
+			</radio_group>
+			<text name="req_restart_chattabs">
+				(wymaga restartu)
+			</text>
+			<text name="FSIMTabNameFormat_label">
+				Format imion dla kart IM:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Wyświetlane" name="display_name"/>
+				<combo_box.item label="Nazwa konta" name="user_name"/>
+				<combo_box.item label="Wyświetlane (Nazwa konta)" name="display_user_name"/>
+				<combo_box.item label="Nazwa konta (Wyświetlane)" name="user_display_name"/>
+			</combo_box>
+		</panel>
+		<panel label="Powiadomienia" name="ChatNotifications">
+			<text name="disable_toast_label">
+				Uaktywnij wyskakujące okienka rozpoczynających się rozmów:
+			</text>
+			<check_box label="Czaty grupowe" name="EnableGroupChatPopups" tool_tip="Zaznacz opcję, aby widzieć wyskakujące okienko, kiedy pojawia się wiadomość w którymś czacie grupy"/>
+			<check_box label="Czaty IM" name="EnableIMChatPopups" tool_tip="Zaznacz opcję, aby widzieć wyskakujące okienko, kiedy pojawia się nowa wiadomość prywatna IM (Instant Message)"/>
+			<check_box name="FSUseNearbyChatConsole" label="Używaj konsoli dla wyskakujących okienek zamiast Tostów (styl Viewera 1.x)"/>
+			<check_box name="FSLogImToChatConsole" label="Pokazuj wiadomości IM w konsoli Czatu"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Pokazuj czaty grupowe w konsoli Czatu"/>
+			<text name="FSShowGroupNameLength_label">
+				Długość nazwy grupy wyświetlanej w logu czatu
+			</text>
+			<spinner tool_tip="-1 dla pełnej nazwy grupy, 0 aby wyłączyć" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Otwórz okno Rozmów, gdy pojawia się wiadomość offline"/>
+			<check_box name="FSShowIMInChatHistory" label="Pokazuj IM w oknie czatu lokalnego"/>
+			<check_box name="FSLogIMInChatHistory" label="Zapisuj IM w oknie czatu"/>
+			<text name="FSIMChatHistoryFade_label">
+				Wygaszaj tekst IM w tło okna logu czatu
+			</text>
+			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
+			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość czatu lokalnego" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość czatu lokalnego. Okno czatu lokalnego musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał."/>
+			<check_box name="FSNotifyIMFlash" label="Mrugaj przyciskiem 'czat' na dolnym pasku, gdy nadchodzi wiadomość IM" tool_tip="Mruga przyciskiem 'czat' na dolnym pasku, gdy nadchodzi nowa wiadomość IM (dotyczy też wiadomości grupowych). Okno wiadomości IM musi być zadokowane w oknie rozmów, a okno rozmów musi być zamknięte, aby przycisk mrugał. Ta opcja jest dostępna tylko w wypadku, gdy wiadomości IM są pokazywane w kartach, a nie w osobnych oknach (zobacz zakładkę &quot;Ogólne&quot;)."/>
+			<check_box name="FSReportMutedGroupChat" label="Zgłaszaj wyciszenie czatu grupowego w czacie lokalnym"/>
+			<text name="WhenPlayIMLabel">
+				Gdy nadchodzi wiadomość IM:
+			</text>
+			<combo_box name="WhenPlayIM">
+				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
+				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
+				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
+			</combo_box>
+			<text name="WhenPlayGroupIMLabel">
+				Gdy nadchodzi wiadomość grupy:
+			</text>
+			<combo_box name="WhenPlayGroupIM">
+				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
+				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
+				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
+			</combo_box>
+			<text name="WhenPlayConfIMLabel">
+				Gdy nadchodzi wiadomość konferencji:
+			</text>
+			<combo_box name="WhenPlayConfIM">
+				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
+				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Odtwarzaj dźwięk tylko gdy okno jest nieaktywne w tle" name="3"/>
+				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
+			</combo_box>
+			<check_box name="FSGroupNoticesToIMLog" label="Pokazuj ogłoszenia grup także w czatach grupowych, a nie tylko w tostach"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Pokazuj również ich tematy i autorów"/>
+		</panel>
+		<panel name="ChatFirestorm">
+			<text name="chat_and_im_enhancements">
+				Udoskonalenia Czatu oraz IM:
+			</text>
+			<check_box name="AllowMUpose" label="&quot;:&quot; synonimem dla &quot;/me&quot;"/>
+			<check_box name="EmotesUseItalic" label="Emocje pisane pochyloną czcionką"/>
+			<check_box name="AutoCloseOOC" label="Domykaj ((nawiasy)) dla czatu OOC"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Pogrubiaj krzyk, pochylaj szept"/>
+			<check_box name="FSNearbyChatbar" label="Dodaj pasek czatu do okna Czatu Lokalnego"/>
+			<check_box name="FSShowChatChannel" label="Oferuj ręczny wybór kanału w pasku czatu"/>
+			<check_box name="FSShowChatType" label="Pokaż typ czatu i przycisk wysyłania" left_delta="250"/>
+			<check_box label="Autoukrywanie głównego paska czatu" name="AutohideChatBar" tool_tip="Ukryj pasek czatu na dolnej listwie przycisków i pokazuj go jako nakładkę tylko wtedy, gdy to potrzebne."/>
+			<check_box label="Odznaczaj pasek czatu po wysłaniu wiadomości" name="CloseChatOnReturn"/>
+			<check_box label="Odznaczaj także historię czatu" name="FSUnfocusChatHistoryOnReturn" left_delta="285"/>
+			<check_box name="FSMarkObjects" label="Oznaczaj obiekty frazą (bez nazwy) gdy wysyłają coś na czat, by zapobiec oszustwom"/>
+			<text name="group_enhancements">
+				Czat grupowy:
+			</text>
+			<check_box name="FSHighlightGroupMods" label="Podświetlaj wiadomości moderatorów grup"/>
+			<text name="Moderator Name Style">
+				Styl imion:
+			</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="Normalny" name="normal"/>
+				<combo_box.item label="Pogrubiony" name="BOLD"/>
+				<combo_box.item label="Pochylony" name="ITALIC"/>
+				<combo_box.item label="Pogrubiony i pochylony" name="BOLDITALIC"/>
+				<combo_box.item label="Podkreślony" name="UNDERLINE"/>
+				<combo_box.item label="Pogrubiony i podkreślony" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Pochylony i podkreślony" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Pogrubiony, pochylony i podkreślony" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style">
+				Styl tekstu:
+			</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="Normalny" name="normal"/>
+				<combo_box.item label="Pogrubiony" name="BOLD"/>
+				<combo_box.item label="Pochylony" name="ITALIC"/>
+				<combo_box.item label="Pogrubiony i pochylony" name="BOLDITALIC"/>
+				<combo_box.item label="Podkreślony" name="UNDERLINE"/>
+				<combo_box.item label="Pogrubiony i podkreślony" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Pochylony i podkreślony" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Pogrubiony, pochylony i podkreślony" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<check_box name="FSMuteAllGroups" label="Wyłącz WSZYSTKIE czaty grupowe"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Gdy opcja 'otrzymuj ogłoszenia grupy' jest wyłączona - wyłączaj także czat grupy"/>
+			<text name="logging_enhancements">
+				Znaczniki czasu:
+			</text>
+			<text name="show_timestamps_label">
+				Pokazuj znaczniki czasu w:
+			</text>
+			<check_box label="Czat Lokalny" name="show_timestamps_nearby_chat" width="95"/>
+			<check_box label="Wiadomości IM" name="show_timestamps_im" width="105"/>
+			<check_box label="Logi czatów i IM" name="show_timestamps_transcripts"/>
+			<check_box label="Pokazuj sekundy w logach [HH:MM:SS]" name="FSSecondsinChatTimestamps"/>
+			<text name="console_enhancements">
+				Konsola:
+			</text>
+			<check_box name="FSConsoleClassicDrawMode" label="Używaj klasycznej konsoli" tool_tip="Ta opcja renderuje tło konsoli jako jeden duży blok pod wszystkimi liniami tekstu, o szerokości takiej jak najdłuższa z nich."/>
+			<check_box name="ChatFullWidth" label="Używaj pełnej szerokości ekranu"/>
+			<spinner label="Zanikanie po" name="fade_chat_time"/>
+			<text name="text_box4">
+				(sekundy)
+			</text>
+			<text name="text_box5">
+				(linie)
+			</text>
+		</panel>
+		<panel name="ChatRadar">
+			<check_box name="reportChatRangeEnter" label="Radar ma informować, gdy awatar wchodzi w zasięg czatu"/>
+			<check_box name="PlayModeUISndRadarChatEnter" width="150" label="Odtwórz UUID dźwięku:"/>
+			<button name="Prev_UISndRadarChatEnter" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRadarChatEnter" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box name="reportChatRangeLeave" label="Radar ma informować, gdy awatar opuszcza zasięg czatu"/>
+			<check_box name="PlayModeUISndRadarChatLeave" width="150" label="Odtwórz UUID dźwięku:"/>
+			<button name="Prev_UISndRadarChatLeave" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRadarChatLeave" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box name="reportDrawRangeEnter" label="Radar ma informować, gdy awatar wchodzi w zasięg pola widzenia"/>
+			<check_box name="PlayModeUISndRadarDrawEnter" width="150" label="Odtwórz UUID dźwięku:"/>
+			<button name="Prev_UISndRadarDrawEnter" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRadarDrawEnter" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box name="reportDrawRangeLeaave" label="Radar ma informować, gdy awatar opuszcza zasięg pola widzenia"/>
+			<check_box name="PlayModeUISndRadarDrawLeave" width="150" label="Odtwórz UUID dźwięku:"/>
+			<button name="Prev_UISndRadarDrawLeave" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRadarDrawLeave" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box name="RadarReportSimRangeEnter" label="Radar ma informować, gdy awatar pojawia się w regionie"/>
+			<check_box name="PlayModeUISndRadarSimEnter" width="150" label="Odtwórz UUID dźwięku:"/>
+			<button name="Prev_UISndRadarSimEnter" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRadarSimEnter" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box name="RadarReportSimRangeLeave" label="Radar ma informować, gdy awatar opuszcza region"/>
+			<check_box name="PlayModeUISndRadarSimLeave" width="150" label="Odtwórz UUID dźwięku:"/>
+			<button name="Prev_UISndRadarSimLeave" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndRadarSimLeave" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box name="RadarEnterChannelAlert" label="Zgłaszaj alerty wejść skryptom"/>
+			<check_box name="RadarLeaveChannelAlert" label="Zgłaszaj alerty wyjść skryptom"/>
+		</panel>
+		<panel label="Detektor słów" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="Włącz detektor słów"/>
+			<check_box name="FSKeywordInChat" label="Szukaj słów w Czacie Lokalnym"/>
+			<check_box name="FSKeywordInIM" label="Szukaj słów w IM i czatach grupowych"/>
+			<text name="textFSKeywords">
+				Szukane słowa (oddzielone przecinkami):
+			</text>
+			<check_box name="FSKeywordChangeColor" label="Koloruj znalezione"/>
+			<color_swatch name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
+			<check_box name="FSKeywordPlaySound" label="Odtwarzaj dźwięk, gdy słowo zostanie znalezione"/>
+			<text name="textFSKeywordSound">
+				UUID dźwięku alertu:
+			</text>
+			<button name="Prev_UISndFSKeywordSound" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndFSKeywordSound" tool_tip="Resetuj do domyślnego UUID."/>
+		</panel>
+		<panel label="Wprowadzanie tekstu" name="ChatTextInput">
+			<button name="autoreplace_showgui" label="Autokorekta"/>
+			<button name="spellcheck_showgui" label="Sprawdzanie pisowni"/>
+			<button label="Tłumaczenie..." name="translation_settings_btn"/>
+		</panel>
+	</tab_container>
 </panel>

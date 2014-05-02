@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<script_library>
+	<keywords>
+		<preprocessor name="#assert" desc="Allows definition of preprocessor variables that do not conflict with names in the program name space" />
+		<preprocessor name="#define" desc="When the preprocessor encounters this directive, it replaces any occurrence of identifier in the rest of the code by replacement" />
+		<preprocessor name="#elif" desc="Specify some condition to be met in order for the portion of code they surround to be compiled" />
+		<preprocessor name="#else" desc="Specify some condition to be met in order for the portion of code they surround to be compiled" />
+		<preprocessor name="#endif" desc="Closes an #if directive" />
+		<preprocessor name="#error" desc="Aborts the compilation process when it is found, generating a compilation the error that can be specified as its parameter" />
+		<preprocessor name="#ident" desc="Inserts a comment into the generated script" />
+		<preprocessor name="#sccs" desc="Inserts a comment into the generated script" />
+		<preprocessor name="#if" desc="Specifies some condition to be met in order for the portion of code they surround to be compiled" />
+		<preprocessor name="#ifdef" desc="Allows a section of a program to be compiled only if the macro that is specified as the parameter has been defined, no matter which its value is" />
+		<preprocessor name="#ifndef" desc="The code between #ifndef and #endif directives is only compiled if the specified identifier has not been previously defined" />
+		<preprocessor name="#import" desc="Instructs the preprocessor to look for type library files first in the directory of the file that contains the #import statement, and then in the directories of whatever files that include (#include) that file" />
+		<preprocessor name="#include" desc="When the preprocessor finds an #include directive it replaces it by the entire content of the specified file" />
+		<preprocessor name="#include_next Instructs the preprocessor to continue searching for the specified file name, and to include the subsequent instance encountered after the current directory" />
+		<preprocessor name="#line" desc="Controls the line number and file name" />
+		<preprocessor name="#pragma" desc="This directive is used to specify diverse options to the compiler. These options are specific for the platform and the compiler you use" />
+		<preprocessor name="#unassert" desc="Closes an #assert directive" />
+		<preprocessor name="#undef" desc="Undefines #define macro" />
+		<preprocessor name="#warning" desc="Generate a level one warning from a specific location in your code" />
+		<preprocessor name="#switch" desc="Allows selection among multiple sections of code, depending on the value of an integral expression" />
+		<preprocessor name="#case" desc="Used with #switch in a union" />
+		<preprocessor name="#break" desc="Stops processing further lines in a #switch directive" />
+	</keywords>
+</script_library>

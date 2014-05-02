@@ -83,6 +83,12 @@ public:
 											label_pad_left;
 
 		Optional<bool>						hide_tabs;
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+		/**
+		 * Holding the mouse over a tab button while dragging will activate that tab 
+		 */
+		Optional<bool>						tab_drag_commit;
+// [/SL:KB]
 		Optional<S32>						tab_padding_right;
 
 		Optional<TabParams>					first_tab,
@@ -93,6 +99,11 @@ public:
 		 * Tab label horizontal alignment
 		 */
 		Optional<LLFontGL::HAlign>			font_halign;
+
+		/**
+		 * Draw a drop shadow (soft)
+		 */
+		Optional<bool>						label_shadow;
 
 		/**
 		 * Tab label ellipses
@@ -137,6 +148,7 @@ public:
 	/*virtual*/ BOOL handleMouseUp( S32 x, S32 y, MASK mask );
 	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ BOOL handleScrollWheel(S32 x, S32 y, S32 clicks); // <FS:LO> FIRE-8024 Ability to scroll tab containers with the scroll wheel on the mouse
 	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,
 									   EDragAndDropType type, void* cargo_data,
 									   EAcceptance* accept, std::string& tooltip);
@@ -199,6 +211,9 @@ public:
 	void 		setTabImage(LLPanel* child, std::string img_name, const LLColor4& color = LLColor4::white);
 	void 		setTabImage(LLPanel* child, const LLUUID& img_id, const LLColor4& color = LLColor4::white);
 	void		setTabImage(LLPanel* child, LLIconCtrl* icon);
+	// <FS:Ansariel> Custom tab image overlay button alignment
+	void		setTabImage(LLPanel* child, std::string img_name, LLFontGL::HAlign alignment, const LLColor4& color = LLColor4::white, const LLColor4& selected_color = LLColor4::white);
+	// </FS:Ansariel>
 	void		setTitle( const std::string& title );
 	const std::string getPanelTitle(S32 index);
 
@@ -214,7 +229,7 @@ public:
 	S32			getMinTabWidth() const { return mMinTabWidth; }
 	S32			getMaxTabWidth() const { return mMaxTabWidth; }
 
-	void		startDragAndDropDelayTimer() { mDragAndDropDelayTimer.start(); }
+//	void		startDragAndDropDelayTimer() { mDragAndDropDelayTimer.start(); }
 	
 	void onTabBtn( const LLSD& data, LLPanel* panel );
 	void onNextBtn(const LLSD& data);
@@ -294,10 +309,15 @@ private:
 	// Padding to the left of text labels of tab buttons
 	S32								mLabelPadLeft;
 
+// [SL:KB] - Checked: UI-TabDndButtonCommit | Checked: 2011-06-16 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
+	bool							mDragAndDropHoverCommit;
+	S32								mDragAndDropHoverIdx;
+// [/SL:KB]
 	LLFrameTimer					mDragAndDropDelayTimer;
 	
 	LLFontGL::HAlign                mFontHalign;
 	const LLFontGL*					mFont;
+	bool							mDropShadowedText;	// support drop shadowed tab text -Zi
 
 	TabParams						mFirstTabParams;
 	TabParams						mMiddleTabParams;

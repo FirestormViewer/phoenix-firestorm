@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel
+	name="animation_overrider_outer_panel"
+	left="0"
+	top="0"
+	width="200"
+	height="314"
+	follows="all"
+	visible="true"
+	layout="topleft">
+
+<!-- Main Panel -->
+
+	<panel
+		name="animation_overrider_panel"
+		left="10"
+		top="4"
+		width="180"
+		height="306"
+		follows="all"
+		visible="true"
+		layout="topleft">
+
+		<combo_box
+			name="ao_set_selection_combo"
+			tool_tip="Select animation set to edit."
+			left="0"
+			top="4"
+			right="-24"
+			height="20"
+			allow_text_entry="true"
+			max_chars="256"
+			follows="left|right|top"
+			layout="topleft" />
+
+		<button
+			name="ao_activate"
+			tool_tip="Activate this animation set now."
+			left_pad="4"
+			width="20"
+			height="20"
+			follows="right|top"
+			layout="topleft" />
+
+		<icon
+			left_delta="4"
+			top_delta="4"
+			width="12"
+			height="12"
+			image_name="Activate_Checkmark"
+			follows="right|top"
+			layout="topleft" />
+
+		<check_box
+			name="ao_default"
+			label="Default"
+			tool_tip="Make this animation set the default set that plays when you log in."
+			left="0"
+			top_pad="8"
+			width="20"
+			height="20"
+			follows="left|top"
+			layout="topleft" />
+
+		<button
+			name="ao_add"
+			tool_tip="Create a new animation set."
+			top_delta="0"
+			right="-24"
+			width="20"
+			height="20"
+			image_overlay="AddItem_Press"
+			follows="right|top"
+			layout="topleft" />
+
+		<button
+			name="ao_remove"
+			tool_tip="Remove this animation set."
+			left_pad="4"
+			width="20"
+			height="20"
+			image_overlay="TrashItem_Press"
+			follows="right|top"
+			layout="topleft" />
+
+		<check_box
+			name="ao_sit_override"
+			label="Override Sits"
+			tool_tip="Check this if you want sit animation overrides."
+			left="0"
+			top_pad="4"
+			width="100"
+			height="16"
+			follows="left|top"
+			layout="topleft" />
+
+		<check_box
+			name="ao_smart"
+			label="Be smart"
+			tool_tip="Smart mode tries to determine if the sit override would clash with the object's own animation and disables the overrider temporarily."
+			left_pad="4"
+			right="-1"
+			height="16"
+			follows="left|top"
+			layout="topleft" />
+
+		<check_box
+			name="ao_disable_stands_in_mouselook"
+			label="Disable Stands in Mouselook"
+			tool_tip="If you need to preserve your custom stand animation in mouselook, check this box."
+			left="0"
+			top_pad="4"
+			width="100"
+			height="16"
+			follows="left|top"
+			layout="topleft" />
+
+		<combo_box
+			name="ao_state_selection_combo"
+			tool_tip="Select animation state to edit."
+			left="0"
+			top_pad="4"
+			right="-1"
+			height="20"
+			follows="left|right|top"
+			layout="topleft" />
+
+		<scroll_list
+			name="ao_state_animation_list"
+			top_pad="4"
+			right="-24"
+			height="98"
+			multi_select="true"
+			follows="all"
+			layout="topleft">
+			<scroll_list.columns
+				name="icon"
+				dynamic_width="false"
+				width="20" />
+			<scroll_list.columns
+				name="animation_name"
+				dynamic_width="true" />
+		</scroll_list>
+
+		<panel
+			name="ao_animation_move_trash_panel"
+			left_pad="4"
+			right="-1"
+			height="98"
+			follows="right|top|bottom"
+			layout="topleft">
+
+			<button
+				name="ao_move_up"
+				tool_tip="Move the selected animation up in the list."
+				left="0"
+				top="0"
+				width="20"
+				height="32"
+				image_overlay="Arrow_Up"
+				follows="left|top"
+				layout="topleft" />
+
+			<button
+				name="ao_move_down"
+				tool_tip="Move the selected animation down in the list."
+				top_pad="4"
+				width="20"
+				height="32"
+				image_overlay="Arrow_Down"
+				follows="left|top"
+				layout="topleft" />
+
+			<button
+				name="ao_trash"
+				tool_tip="Remove the selected animation from the list."
+				left_delta="0"
+				bottom="-1"
+				width="20"
+				height="20"
+				image_overlay="TrashItem_Press"
+				follows="left|bottom"
+				layout="topleft" />
+		</panel>
+
+		<check_box
+			name="ao_cycle"
+			label="Cycle"
+			tool_tip="Play a different animation from the list every time the animation state is called."
+			left="0"
+			top_pad="4"
+			width="55"
+			height="16"
+			follows="left|bottom"
+			layout="topleft" />
+
+		<check_box
+			name="ao_randomize"
+			label="Randomize order"
+			tool_tip="Randomize order of animations in cycle mode."
+			left_pad="4"
+			width="100"
+			height="16"
+			follows="left|bottom"
+			layout="topleft" />
+
+		<text
+			name="ao_cycle_time_seconds_label"
+			value="Cycle time (seconds):"
+			left="0"
+			top_pad="4"
+			width="120"
+			follows="left|right|bottom"
+			layout="topleft" />
+
+		<spinner
+			name="ao_cycle_time"
+			tool_tip="Time before switching to the next animation in the list. Set this to 0 to disable automatic animation cycling."
+			top_delta="-6"
+			left_pad="8"
+			height="16"
+			right="-1"
+			decimal_digits="0"
+			initial_value="0"
+			min_val="0"
+			max_val="999"
+			increment="1"
+			follows="right|bottom"
+			layout="topleft" />
+
+		<button
+			name="ao_reload"
+			label="Reload"
+			tool_tip="Reload animation overrider configuration."
+			left="0"
+			top_pad="8"
+			right="-1"
+			height="20"
+			follows="left|right|bottom"
+			layout="topleft" />
+
+		<layout_stack
+			name="next_previous_buttons_stack"
+			left="0"
+			top_pad="4"
+			right="-24"
+			height="20"
+			orientation="horizontal"
+			follows="left|right|bottom"
+			layout="topleft">
+
+		<layout_panel
+			name="next_previous_buttons_stack_left"
+			width="90"
+			height="20"
+			user_resize="false"
+			follows="all"
+			layout="topleft">
+
+		<button
+			name="ao_previous"
+			image_overlay="BackArrow_Off"
+			tool_tip="Switch to previous animation of the current state."
+			left="0"
+			top="0"
+			width="88"
+			height="20"
+			follows="all"
+			layout="topleft" />
+
+		</layout_panel>
+		<layout_panel
+			name="next_previous_buttons_stack_right"
+			width="90"
+			height="20"
+			user_resize="false"
+			follows="all"
+			layout="topleft">
+
+		<button
+			name="ao_next"
+			image_overlay="ForwardArrow_Off"
+			tool_tip="Switch to next animation of the current state."
+			left="2"
+			top="0"
+			width="88"
+			height="20"
+			follows="all"
+			layout="topleft" />
+
+		</layout_panel>
+		</layout_stack>
+
+		<button
+			name="ao_less"
+			tool_tip="Show small Animation Overrider interface."
+			image_overlay="DisclosureArrow_Opened_Off"
+			left_pad="4"
+			width="20"
+			height="20"
+			follows="right|bottom"
+			layout="topleft" />
+
+	</panel>
+
+<!-- Reload Cover Panel -->
+
+	<panel
+		name="ao_reload_cover"
+		left="0"
+		top="0"
+		width="200"
+		height="315"
+		follows="all"
+		visible="false"
+		bg_alpha_color="Black_50"
+		bg_opaque_color="Black_50"
+		background_visible="true"
+		background_opaque="true"
+		mouse_opaque="true"
+		layout="topleft">
+
+		<panel
+			name="ao_reload_text_panel"
+			left="30"
+			top="110"
+			right="-30"
+			bottom="-110"
+			bg_alpha_color="Black_50"
+			bg_opaque_color="Black_50"
+			background_visible="true"
+			background_opaque="true"
+			follows="left|right|top">
+
+			<view_border
+				name="ao_reload_view_border"
+				left="0"
+				top="0"
+				right="-1"
+				bottom="-1"
+				follows="all" />
+			<text
+				name="reload_label"
+				left_delta="0"
+				top_delta="16"
+				halign="center"
+				valign="center"
+				follows="all">
+				Reloading Config
+			</text>
+			<text
+				name="wait_label"
+				v_pad="-4"
+				bottom="-16"
+				halign="center"
+				valign="center"
+				follows="all">
+				Please Wait
+			</text>
+
+			<layout_stack
+				name="ao_reload_indicator_layout_stack"
+				left="0"
+				top="31"
+				right="-1"
+				height="32"
+				orientation="horizontal"
+				follows="top|left|right">
+			<layout_panel
+				name="ao_reload_indicator_left_layout_panel"
+				width="160"
+				height="32"
+				auto_resize="true"
+				user_resize="false">
+			</layout_panel>
+			<layout_panel
+				name="ao_reload_indicator_layout_panel"
+				width="32"
+				height="32"
+				auto_resize="false"
+				user_resize="false">
+			<loading_indicator
+				left="0"
+				top="0"
+				width="32"
+				height="32"
+				follows="right|top"
+				name="ao_reload_indicator" />
+			</layout_panel>
+			<layout_panel
+				name="ao_reload_indicator_right_layout_panel"
+				width="160"
+				height="32"
+				auto_resize="true"
+				user_resize="false">
+			</layout_panel>
+			</layout_stack>
+
+		</panel>
+	</panel>
+
+<!-- Small Panel -->
+
+	<panel
+		name="animation_overrider_panel_small"
+		left="10"
+		top="4"
+		width="180"
+		height="52"
+		visible="false"
+		follows="left|right|top"
+		layout="topleft">
+
+	<combo_box
+		name="ao_set_selection_combo_small"
+		tool_tip="Select animation set to edit."
+		left="0"
+		top="0"
+		right="-24"
+		height="20"
+		follows="left|right|top"
+		layout="topleft" />
+
+	<button
+		name="ao_more"
+		tool_tip="Show full interface for configuration."
+		image_overlay="Edit_Wrench"
+		left_pad="4"
+		right="-1"
+		height="20"
+		follows="right|top"
+		layout="topleft" />
+
+	<button
+		name="ao_previous_small"
+		image_overlay="BackArrow_Off"
+		tool_tip="Switch to previous animation of the current state."
+		left="0"
+		top_pad="4"
+		width="62"
+		height="20"
+		follows="left|top"
+		layout="topleft" />
+
+	<button
+		name="ao_next_small"
+		image_overlay="ForwardArrow_Off"
+		tool_tip="Switch to next animation of the current state."
+		left_pad="4"
+		width="62"
+		height="20"
+		follows="left|top"
+		layout="topleft" />
+
+	<check_box
+		name="ao_sit_override_small"
+		label="Sits"
+		tool_tip="Check this if you want sit animation overrides."
+		left_pad="4"
+		width="45"
+		height="16"
+		follows="right|top"
+		layout="topleft" />
+
+	</panel>
+</panel>

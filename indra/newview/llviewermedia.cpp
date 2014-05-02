@@ -429,7 +429,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 	// Try to find media with the same media ID
 	viewer_media_t media_impl = getMediaImplFromTextureID(media_entry->getMediaID());
 	
-	lldebugs << "called, current URL is \"" << media_entry->getCurrentURL() 
+	llinfos << "called, current URL is \"" << media_entry->getCurrentURL() 
 			<< "\", previous URL is \"" << previous_url 
 			<< "\", update_from_self is " << (update_from_self?"true":"false")
 			<< llendl;
@@ -464,7 +464,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 				// The current media URL is now empty.  Unload the media source.
 				media_impl->unload();
 			
-				lldebugs << "Unloading media instance (new current URL is empty)." << llendl;
+				llinfos << "Unloading media instance (new current URL is empty)." << llendl;
 			}
 		}
 		else
@@ -478,7 +478,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 				needs_navigate = url_changed;
 			}
 			
-			lldebugs << "was_loaded is " << (was_loaded?"true":"false") 
+			llinfos << "was_loaded is " << (was_loaded?"true":"false") 
 					<< ", auto_play is " << (auto_play?"true":"false") 
 					<< ", needs_navigate is " << (needs_navigate?"true":"false") << llendl;
 		}
@@ -506,7 +506,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 		if(needs_navigate)
 		{
 			media_impl->navigateTo(media_impl->mMediaEntryURL, "", true, true);
-			lldebugs << "navigating to URL " << media_impl->mMediaEntryURL << llendl;
+			llinfos << "navigating to URL " << media_impl->mMediaEntryURL << llendl;
 		}
 		else if(!media_impl->mMediaURL.empty() && (media_impl->mMediaURL != media_impl->mMediaEntryURL))
 		{
@@ -516,7 +516,7 @@ viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const s
 			// If this causes a navigate at some point (such as after a reload), it should be considered server-driven so it isn't broadcast.
 			media_impl->mNavigateServerRequest = true;
 
-			lldebugs << "updating URL in the media impl to " << media_impl->mMediaEntryURL << llendl;
+			llinfos << "updating URL in the media impl to " << media_impl->mMediaEntryURL << llendl;
 		}
 	}
 	
@@ -791,7 +791,11 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 	LLFastTimer t1(FTM_MEDIA_UPDATE);
 	
 	// Enable/disable the plugin read thread
-	LLPluginProcessParent::setUseReadThread(gSavedSettings.getBOOL("PluginUseReadThread"));
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//LLPluginProcessParent::setUseReadThread(gSavedSettings.getBOOL("PluginUseReadThread"));
+	static LLCachedControl<bool> sPluginUseReadThread(gSavedSettings, "PluginUseReadThread");
+	LLPluginProcessParent::setUseReadThread(sPluginUseReadThread);
+	// </FS:Ansariel>
 	
 	// HACK: we always try to keep a spare running webkit plugin around to improve launch times.
 	createSpareBrowserMediaSource();
@@ -840,13 +844,29 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 	int impl_count_interest_normal = 0;
 	
 	std::vector<LLViewerMediaImpl*> proximity_order;
-	
-	bool inworld_media_enabled = gSavedSettings.getBOOL("AudioStreamingMedia");
-	bool inworld_audio_enabled = gSavedSettings.getBOOL("AudioStreamingMusic");
-	U32 max_instances = gSavedSettings.getU32("PluginInstancesTotal");
-	U32 max_normal = gSavedSettings.getU32("PluginInstancesNormal");
-	U32 max_low = gSavedSettings.getU32("PluginInstancesLow");
-	F32 max_cpu = gSavedSettings.getF32("PluginInstancesCPULimit");
+
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//bool inworld_media_enabled = gSavedSettings.getBOOL("AudioStreamingMedia");
+	//bool inworld_audio_enabled = gSavedSettings.getBOOL("AudioStreamingMusic");
+	//U32 max_instances = gSavedSettings.getU32("PluginInstancesTotal");
+	//U32 max_normal = gSavedSettings.getU32("PluginInstancesNormal");
+	//U32 max_low = gSavedSettings.getU32("PluginInstancesLow");
+	//F32 max_cpu = gSavedSettings.getF32("PluginInstancesCPULimit");
+
+	static LLCachedControl<bool> sAudioStreamingMedia(gSavedSettings, "AudioStreamingMedia");
+	static LLCachedControl<bool> sAudioStreamingMusic(gSavedSettings, "AudioStreamingMusic");
+	static LLCachedControl<U32> sPluginInstancesTotal(gSavedSettings, "PluginInstancesTotal");
+	static LLCachedControl<U32> sPluginInstancesNormal(gSavedSettings, "PluginInstancesNormal");
+	static LLCachedControl<U32> sPluginInstancesLow(gSavedSettings, "PluginInstancesLow");
+	static LLCachedControl<F32> sPluginInstancesCPULimit(gSavedSettings, "PluginInstancesCPULimit");
+
+	bool inworld_media_enabled = sAudioStreamingMedia;
+	bool inworld_audio_enabled = sAudioStreamingMusic;
+	U32 max_instances = sPluginInstancesTotal();
+	U32 max_normal = sPluginInstancesNormal();
+	U32 max_low = sPluginInstancesLow();
+	F32 max_cpu = sPluginInstancesCPULimit();
+	// </FS:Ansariel>
 	// Setting max_cpu to 0.0 disables CPU usage checking.
 	bool check_cpu_usage = (max_cpu != 0.0f);
 	
@@ -1018,7 +1038,11 @@ void LLViewerMedia::updateMedia(void *dummy_arg)
 		}
 	}
 	
-	if(gSavedSettings.getBOOL("MediaPerformanceManagerDebug"))
+	// <FS:Ansariel> Replace frequently called gSavedSettings
+	//if(gSavedSettings.getBOOL("MediaPerformanceManagerDebug"))
+	static LLCachedControl<bool> sMediaPerformanceManagerDebug(gSavedSettings, "MediaPerformanceManagerDebug");
+	if(sMediaPerformanceManagerDebug)
+	// </FS:Ansariel>
 	{
 		// Give impls the same ordering as the priority list
 		// they're already in the right order for this.
@@ -1073,32 +1097,36 @@ void LLViewerMedia::setAllMediaEnabled(bool val)
 	{
 		if (!LLViewerMedia::isParcelMediaPlaying() && LLViewerMedia::hasParcelMedia())
 		{	
-			LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
-		}
-		
-		if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
-			!LLViewerMedia::isParcelAudioPlaying() &&
-			gAudiop && 
-			LLViewerMedia::hasParcelAudio())
-		{
-			if (LLAudioEngine::AUDIO_PAUSED == gAudiop->isInternetStreamPlaying())
-			{
-				// 'false' means unpause
-				gAudiop->pauseInternetStream(false);
-			}
+			if (gSavedSettings.getBOOL("MediaEnableFilter"))
+				LLViewerParcelMedia::filterMediaUrl(LLViewerParcelMgr::getInstance()->getAgentParcel());
 			else
-			{
-				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLViewerMedia::getParcelAudioURL());
-			}
+				LLViewerParcelMedia::play(LLViewerParcelMgr::getInstance()->getAgentParcel());
 		}
+// ## Zi: Media/Stream separation
+//		if (gSavedSettings.getBOOL("AudioStreamingMusic") &&
+//			!LLViewerMedia::isParcelAudioPlaying() &&
+//			gAudiop && 
+//			LLViewerMedia::hasParcelAudio())
+//		{
+//			if (LLAudioEngine::AUDIO_PAUSED == gAudiop->isInternetStreamPlaying())
+//			{
+//				// 'false' means unpause
+//				gAudiop->pauseInternetStream(false);
+//			}
+//			else
+//			{
+//				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLViewerMedia::getParcelAudioURL());
+//			}
+//		}
 	}
 	else {
 		// This actually unloads the impl, as opposed to "stop"ping the media
 		LLViewerParcelMedia::stop();
-		if (gAudiop)
-		{
-			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
-		}
+// ## Zi: Media/Stream separation
+//		if (gAudiop)
+//		{
+//			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
+//		}
 	}
 }
 
@@ -2424,7 +2452,10 @@ void LLViewerMediaImpl::updateJavascriptObject()
 	if ( mMediaSource )
 	{
 		// flag to expose this information to internal browser or not.
-		bool enable = gSavedSettings.getBOOL("BrowserEnableJSObject");
+		// <FS:Ansariel> Performance improvement
+		//bool enable = gSavedSettings.getBOOL("BrowserEnableJSObject");
+		static LLCachedControl<bool> enable(gSavedSettings, "BrowserEnableJSObject");
+		// </FS:Ansariel>
 
 		if(!enable)
 		{

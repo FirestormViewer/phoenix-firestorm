@@ -39,7 +39,6 @@ class LLMutex;
 
 #define LL_FASTTIMER_USE_RDTSC 1
 
-
 LL_COMMON_API void assert_main_thread();
 
 class LL_COMMON_API LLFastTimer
@@ -279,6 +278,7 @@ private:
 	static U32 getCPUClockCount32()
 	{
 		U32 ret_val;
+#if !defined(ND_BUILD64BIT_ARCH)
 		__asm
 		{
 			_emit   0x0f
@@ -288,6 +288,11 @@ private:
 				or eax, edx
 				mov dword ptr [ret_val], eax
 		}
+#else
+		unsigned __int64 val = __rdtsc();
+		val = val >> 8;
+		ret_val = static_cast<U32>( val );
+#endif
 		return ret_val;
 	}
 
@@ -295,6 +300,7 @@ private:
 	static U64 getCPUClockCount64()
 	{
 		U64 ret_val;
+#if !defined(ND_BUILD64BIT_ARCH)
 		__asm
 		{
 			_emit   0x0f
@@ -304,6 +310,9 @@ private:
 				mov dword ptr [ret_val+4], edx
 				mov dword ptr [ret_val], eax
 		}
+#else
+		ret_val = static_cast<U64>( __rdtsc() );
+#endif
 		return ret_val;
 	}
 
@@ -325,7 +334,10 @@ private:
 #endif
 
 
-#if (LL_LINUX || LL_SOLARIS) && !(defined(__i386__) || defined(__amd64__))
+// <FS:ND> Linux/Mac should honour LL_FASTTIMER_USE_RDTSC too
+// #if (LL_LINUX || LL_SOLARIS) && !(defined(__i386__) || defined(__amd64__)
+#if (LL_LINUX || LL_SOLARIS) && ( !(defined(__i386__) || defined(__amd64__)) || !LL_FASTTIMER_USE_RDTSC )
+// </FS:ND>
 	//
 	// Linux and Solaris implementation of CPU clock - non-x86.
 	// This is accurate but SLOW!  Only use out of desperation.
@@ -356,21 +368,40 @@ private:
 #endif // (LL_LINUX || LL_SOLARIS) && !(defined(__i386__) || defined(__amd64__))
 
 
-#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__))
+// <FS:ND> Linux/Mac should honour LL_FASTTIMER_USE_RDTSC too
+//#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__))
+#if (LL_LINUX || LL_SOLARIS || LL_DARWIN) && (defined(__i386__) || defined(__amd64__)) && LL_FASTTIMER_USE_RDTSC
+// </FS:ND>
 	//
 	// Mac+Linux+Solaris FAST x86 implementation of CPU clock
 	static U32 getCPUClockCount32()
 	{
-		U64 x;
-		__asm__ volatile (".byte 0x0f, 0x31": "=A"(x));
-		return (U32)(x >> 8);
+		// <FS:ND> Proper RDTSC timings for Linux/Mac
+
+		// U64 x;
+		// __asm__ volatile (".byte 0x0f, 0x31": "=A"(x));
+		// return (U32)(x >> 8);
+
+		U32 low(0),high(0);
+		__asm__ volatile (".byte 0x0f, 0x31": "=a"(low), "=d"(high) );
+		return (low>>8) | (high<<24);
+
+		// </FS:ND>
 	}
 
 	static U64 getCPUClockCount64()
 	{
-		U64 x;
-		__asm__ volatile (".byte 0x0f, 0x31": "=A"(x));
-		return x;
+		// <FS:ND> Proper RDTSC timings for Linux/Mac
+
+		// U64 x;
+		// __asm__ volatile (".byte 0x0f, 0x31": "=A"(x));
+		// return x;
+
+		U32 low(0),high(0);
+		__asm__ volatile (".byte 0x0f, 0x31": "=a"(low), "=d"(high) );
+		return (U64)low | ( ((U64)high) << 32);
+
+		// </FS:ND>
 	}
 
 #endif

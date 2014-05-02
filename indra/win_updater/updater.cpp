@@ -385,7 +385,7 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 	//EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dev_mode);
 	
 	gWindow = CreateWindowEx(NULL, win_class_name, 
-		L"Second Life Updater",
+		L"Firestorm Updater",
 		WS_OVERLAPPEDWINDOW, 
 		CW_USEDEFAULT, 
 		CW_USEDEFAULT, 
@@ -421,7 +421,7 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 		return 1;
 	}
     std::string update_exec_path(temp_path);
-	update_exec_path.append("Second_Life_Updater.exe");
+	update_exec_path.append("Firestorm_Updater.exe");
 
 	WCHAR update_uri[4096];
     mbstowcs(update_uri, gUpdateURL, sizeof(update_uri));
@@ -448,11 +448,11 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 	if (gTotalBytesRead < (1024 * 1024) && ! cancelled)
 	{
 		MessageBox(gWindow,
-			L"The Second Life auto-update has failed.\n"
+			L"The Firestorm auto-update has failed.\n"
 			L"The problem may be caused by other software installed \n"
 			L"on your computer, such as a firewall.\n"
-			L"Please visit http://secondlife.com/download/ \n"
-			L"to download the latest version of Second Life.\n",
+			L"Please visit http://www.firestormviewer.org \n"
+			L"to download the latest version of Firestorm.\n",
 			NULL, MB_OK);
 		return 1;
 	}
@@ -466,7 +466,7 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 	if (!success)
 	{
 		MessageBox(gWindow, 
-			L"Second Life download failed.\n"
+			L"Firestorm download failed.\n"
 			L"Please try again later.", 
 			NULL, MB_OK);
 		return 1;

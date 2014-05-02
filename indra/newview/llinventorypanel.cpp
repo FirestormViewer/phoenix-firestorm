@@ -50,14 +50,20 @@
 #include "llviewerattachmenu.h"
 #include "llviewerfoldertype.h"
 #include "llvoavatarself.h"
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+#include "rlvactions.h"
+#include "rlvcommon.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLInventoryPanel> r("inventory_panel");
 
 const std::string LLInventoryPanel::DEFAULT_SORT_ORDER = std::string("InventorySortOrder");
 const std::string LLInventoryPanel::RECENTITEMS_SORT_ORDER = std::string("RecentItemsSortOrder");
 const std::string LLInventoryPanel::INHERIT_SORT_ORDER = std::string("");
-static const LLInventoryFolderViewModelBuilder INVENTORY_BRIDGE_BUILDER;
-
+//<ND> const makes GCC >= 4.6 and Clang very angry about not user defined default ctor.
+//static const LLInventoryFolderViewModelBuilder INVENTORY_BRIDGE_BUILDER;
+static LLInventoryFolderViewModelBuilder INVENTORY_BRIDGE_BUILDER;
+// </ND>
 // statics 
 bool LLInventoryPanel::sColorSetInitialized = false;
 LLUIColor LLInventoryPanel::sDefaultColor;
@@ -152,8 +158,12 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 
 	if (!sColorSetInitialized)
 	{
-		sDefaultColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
-		sDefaultHighlightColor = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor", DEFAULT_WHITE);
+		// <FS:Ansariel> Make inventory selection color independent from menu color
+		//sDefaultColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
+		//sDefaultHighlightColor = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor", DEFAULT_WHITE);
+		sDefaultColor = LLUIColorTable::instance().getColor("InventoryItemEnabledColor", DEFAULT_WHITE);
+		sDefaultHighlightColor = LLUIColorTable::instance().getColor("InventoryItemHighlightFgColor", DEFAULT_WHITE);
+		// </FS:Ansariel> Make inventory selection color independent from menu color
 		sLibraryColor = LLUIColorTable::instance().getColor("InventoryItemLibraryColor", DEFAULT_WHITE);
 		sLinkColor = LLUIColorTable::instance().getColor("InventoryItemLinkColor", DEFAULT_WHITE);
 		sColorSetInitialized = true;
@@ -193,6 +203,9 @@ LLFolderView * LLInventoryPanel::createFolderRoot(LLUUID root_id )
     p.root = NULL;
     p.options_menu = "menu_inventory.xml";
 
+	// <FS:Ansariel> Inventory specials
+	p.for_inventory = true;
+
     return LLUICtrlFactory::create<LLFolderView>(p);
 }
 
@@ -224,6 +237,10 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 	// Scroller
 		LLRect scroller_view_rect = getRect();
 		scroller_view_rect.translate(-scroller_view_rect.mLeft, -scroller_view_rect.mBottom);
+		// <FS:Ansariel> Pull this magic number here so inventory scroll panel
+		//               doesn't get cut off on the left side!
+		scroller_view_rect.mLeft += 2;
+		// </FS:Ansariel>
 	LLScrollContainer::Params scroller_params(mParams.scroll());
 		scroller_params.rect(scroller_view_rect);
 		mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
@@ -259,7 +276,14 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 	}
 
 	// hide inbox
-	getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+	//getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+	if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+	{
+		getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+	}
+	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
+	// </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 	getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_OUTBOX));
 
 	// set the filter for the empty folder if the debug setting is on
@@ -271,6 +295,9 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 	// keep track of the clipboard state so that we avoid filtering too much
 	mClipboardState = LLClipboard::instance().getGeneration();
 	
+	// <FS:Ansariel> Optional hiding of empty system folders
+	gSavedSettings.getControl("DebugHideEmptySystemFolders")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateHideEmptySystemFolders, this, _2));
+
 	// Initialize base class params.
 	LLPanel::initFromParams(mParams);
 }
@@ -348,6 +375,18 @@ void LLInventoryPanel::setFilterSubString(const std::string& string)
 	getFilter().setFilterSubString(string);
 }
 
+// ## Zi: Extended Inventory Search
+void LLInventoryPanel::setFilterSubStringTarget(const std::string& target)
+{
+	getFilter().setFilterSubStringTarget(target);
+}
+
+LLInventoryFilter::EFilterSubstringTarget LLInventoryPanel::getFilterSubStringTarget() const
+{
+	return getFilter().getFilterSubStringTarget();
+}
+// ## Zi: Extended Inventory Search
+
 const std::string LLInventoryPanel::getFilterSubString() 
 { 
 	return getFilter().getFilterSubString();
@@ -385,6 +424,13 @@ void LLInventoryPanel::setFilterLinks(U64 filter_links)
 {
 	getFilter().setFilterLinks(filter_links);
 }
+
+// ## Zi: Filter Links Menu
+U64 LLInventoryPanel::getFilterLinks()
+{
+	return getFilter().getFilterLinks();
+}
+// ## Zi: Filter Links Menu
 
 void LLInventoryPanel::setShowFolderState(LLInventoryFilter::EFolderShow show)
 {
@@ -716,11 +762,14 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 	params.name = bridge->getDisplayName();
 	params.root = mFolderRoot;
 	params.listener = bridge;
-	params.tool_tip = params.name;
+	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
 
 	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
 	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
-	
+
+	// <FS:Ansariel> Inventory specials
+	params.for_inventory = true;
+
 	return LLUICtrlFactory::create<LLFolderViewFolder>(params);
 }
 
@@ -733,10 +782,13 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 	params.root = mFolderRoot;
 	params.listener = bridge;
 	params.rect = LLRect (0, 0, 0, 0);
-	params.tool_tip = params.name;
+	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
 
 	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
 	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+
+	// <FS:Ansariel> Inventory specials
+	params.for_inventory = true;
 	
 	return LLUICtrlFactory::create<LLFolderViewItem>(params);
 }
@@ -879,20 +931,24 @@ void LLInventoryPanel::unSelectAll()
 
 BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 {
-	BOOL handled = LLView::handleHover(x, y, mask);
-	if(handled)
-	{
-		ECursorType cursor = getWindow()->getCursor();
-		if (LLInventoryModelBackgroundFetch::instance().folderFetchActive() && cursor == UI_CURSOR_ARROW)
-		{
-			// replace arrow cursor with arrow and hourglass cursor
-			getWindow()->setCursor(UI_CURSOR_WORKING);
-		}
-	}
-	else
-	{
-		getWindow()->setCursor(UI_CURSOR_ARROW);
-	}
+// <FS:AW>
+//	BOOL handled = LLView::handleHover(x, y, mask);
+//	if(handled)
+//	{
+//		ECursorType cursor = getWindow()->getCursor();
+//		if (LLInventoryModelBackgroundFetch::instance().folderFetchActive() && cursor == UI_CURSOR_ARROW)
+//		{
+//			// replace arrow cursor with arrow and hourglass cursor
+//			getWindow()->setCursor(UI_CURSOR_WORKING);
+//		}
+//	}
+//	else
+//	{
+//		getWindow()->setCursor(UI_CURSOR_ARROW);
+//	}
+	LLView::handleHover(x, y, mask);
+// </FS:AW>
+
 	return TRUE;
 }
 
@@ -962,6 +1018,12 @@ void LLInventoryPanel::openAllFolders()
 	mFolderRoot->arrangeAll();
 }
 
+void LLInventoryPanel::closeAllFolders()
+{
+	mFolderRoot->setOpenArrangeRecursively(FALSE, LLFolderViewFolder::RECURSE_DOWN);
+	mFolderRoot->arrangeAll();
+}
+
 void LLInventoryPanel::setSelection(const LLUUID& obj_id, BOOL take_keyboard_focus)
 {
 	// Don't select objects in COF (e.g. to prevent refocus when items are worn).
@@ -1024,8 +1086,15 @@ bool LLInventoryPanel::beginIMSession()
 
 	std::string name;
 
-	LLDynamicArray<LLUUID> members;
-	EInstantMessage type = IM_SESSION_CONFERENCE_START;
+//	LLDynamicArray<LLUUID> members;
+//	EInstantMessage type = IM_SESSION_CONFERENCE_START;
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	uuid_vec_t members;
+// [/RLVa:KB]
+
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+	bool fRlvCanStartIM = true;
+// [/RLVa:KB]
 
 	std::set<LLFolderViewItem*>::const_iterator iter;
 	for (iter = selected_items.begin(); iter != selected_items.end(); iter++)
@@ -1064,10 +1133,17 @@ bool LLInventoryPanel::beginIMSession()
 					for(S32 i = 0; i < count; ++i)
 					{
 						id = item_array.get(i)->getCreatorUUID();
-						if(at.isBuddyOnline(id))
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+						if ( (at.isBuddyOnline(id)) && (members.end() == std::find(members.begin(), members.end(), id)) )
 						{
-							members.put(id);
+							fRlvCanStartIM &= RlvActions::canStartIM(id);
+							members.push_back(id);
 						}
+// [/RLVa:KB]
+//						if(at.isBuddyOnline(id))
+//						{
+//							members.put(id);
+//						}
 					}
 				}
 			}
@@ -1084,10 +1160,17 @@ bool LLInventoryPanel::beginIMSession()
 						LLAvatarTracker& at = LLAvatarTracker::instance();
 						LLUUID id = inv_item->getCreatorUUID();
 
-						if(at.isBuddyOnline(id))
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+						if ( (at.isBuddyOnline(id)) && (members.end() == std::find(members.begin(), members.end(), id)) )
 						{
-							members.put(id);
+							fRlvCanStartIM &= RlvActions::canStartIM(id);
+							members.push_back(id);
 						}
+// [/RLVa:KB]
+//						if(at.isBuddyOnline(id))
+//						{
+//							members.put(id);
+//						}
 					}
 				} //if IT_CALLINGCARD
 			} //if !IT_CATEGORY
@@ -1097,16 +1180,34 @@ bool LLInventoryPanel::beginIMSession()
 	// the session_id is randomly generated UUID which will be replaced later
 	// with a server side generated number
 
+// [RLVa:KB] - Checked: 2013-05-08 (RLVa-1.4.9)
+	if (!fRlvCanStartIM)
+	{
+		make_ui_sound("UISndInvalidOp");
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_STARTCONF);
+		return true;
+	}
+// [/RLVa:KB]
+
 	if (name.empty())
 	{
 		name = LLTrans::getString("conference-title");
 	}
 
-	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
-	if (session_id != LLUUID::null)
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	if (!members.empty())
 	{
-		LLFloaterIMContainer::getInstance()->showConversation(session_id);
+		if (members.size() > 1)
+			LLAvatarActions::startConference(members);
+		else
+			LLAvatarActions::startIM(members[0]);
 	}
+// [/RLVa:KB]
+//	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
+//	if (session_id != LLUUID::null)
+//	{
+//		LLFloaterIMContainer::getInstance()->showConversation(session_id);
+//	}
 		
 	return true;
 }
@@ -1135,6 +1236,38 @@ BOOL LLInventoryPanel::getSinceLogoff()
 {
 	return getFilter().isSinceLogoff();
 }
+
+// <FS:Ansariel> Optional hiding of empty system folders
+void LLInventoryPanel::updateHideEmptySystemFolders(const LLSD &data)
+{
+	LLInventoryFilter& filter = getFilter();
+	if (data.asBoolean())
+	{
+		filter.setFilterEmptySystemFolders();
+	}
+	else
+	{
+		filter.removeFilterEmptySystemFolders();
+	}
+	filter.setModified(LLInventoryFilter::FILTER_RESTART);
+}
+// </FS:Ansariel> Optional hiding of empty system folders
+
+// <FS:Ansariel> Optional hiding of Inbox folder
+void LLInventoryPanel::updateShowInboxFolder(const LLSD &data)
+{
+	LLInventoryFilter& filter = getFilter();
+	if (data.asBoolean())
+	{
+		filter.setFilterCategoryTypes(filter.getFilterCategoryTypes() | (1ULL << LLFolderType::FT_INBOX));
+	}
+	else
+	{
+		filter.setFilterCategoryTypes(filter.getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+	}
+	filter.setModified(LLInventoryFilter::FILTER_RESTART);
+}
+// </FS:Ansariel> Optional hiding of Inbox folder
 
 // DEBUG ONLY
 // static 
@@ -1169,7 +1302,17 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 
 	// Iterate through the inventory floaters and return whichever is on top.
 	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
-	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
+	// <FS:Ansariel> Fix for sharing inventory when multiple inventory floaters are open:
+	//               For the secondary floaters, we have registered those as
+	//               "secondary_inventory" in LLFloaterReg, so we have to add those
+	//               instances to the instance list!
+	//for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
+	LLFloaterReg::const_instance_list_t& inst_list_secondary = LLFloaterReg::getFloaterList("secondary_inventory");
+	LLFloaterReg::instance_list_t combined_list;
+	combined_list.insert(combined_list.end(), inst_list.begin(), inst_list.end());
+	combined_list.insert(combined_list.end(), inst_list_secondary.begin(), inst_list_secondary.end());
+	for (LLFloaterReg::instance_list_t::const_iterator iter = combined_list.begin(); iter != combined_list.end(); ++iter)
+	// </FS:Ansariel>
 	{
 		LLFloaterSidePanelContainer* inventory_floater = dynamic_cast<LLFloaterSidePanelContainer*>(*iter);
 		inventory_panel = inventory_floater->findChild<LLSidepanelInventory>("main_panel");
@@ -1189,13 +1332,17 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 	if (res)
 	{
 		// Make sure the floater is not minimized (STORM-438).
-		if (active_inv_floaterp && active_inv_floaterp->isMinimized())
+		//if (active_inv_floaterp && active_inv_floaterp->isMinimized())
+		if (auto_open && active_inv_floaterp && active_inv_floaterp->isMinimized()) // AO: additionally only unminimize if we are told we want to see the inventory window.
 		{
 			active_inv_floaterp->setMinimized(FALSE);
 		}
 	}	
-	else if (auto_open)
+//	else if (auto_open)
+// [RLVa:KB] - Checked: 2012-05-15 (RLVa-1.4.6)
+	else if ( (auto_open) && (LLFloaterReg::canShowInstance(floater_inventory->getInstanceName())) )
 	{
+// [/RLVa:KB]
 		floater_inventory->openFloater();
 
 		res = inventory_panel->getActivePanel();
@@ -1410,7 +1557,8 @@ bool LLInventoryPanel::isSelectionRemovable()
 class LLInventoryRecentItemsPanel;
 static LLDefaultChildRegistry::Register<LLInventoryRecentItemsPanel> t_recent_inventory_panel("recent_inventory_panel");
 
-static const LLRecentInventoryBridgeBuilder RECENT_ITEMS_BUILDER;
+//static const LLRecentInventoryBridgeBuilder RECENT_ITEMS_BUILDER;
+static LLRecentInventoryBridgeBuilder RECENT_ITEMS_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 class LLInventoryRecentItemsPanel : public LLInventoryPanel
 {
 public:
@@ -1435,6 +1583,38 @@ LLInventoryRecentItemsPanel::LLInventoryRecentItemsPanel( const Params& params)
 	// replace bridge builder to have necessary View bridges.
 	mInvFVBridgeBuilder = &RECENT_ITEMS_BUILDER;
 }
+
+void LLInventoryPanel::setWorn(BOOL sl)
+{
+	getFilter().setFilterWorn(sl);
+}
+
+/************************************************************************/
+/* Worn Inventory Panel related class                                 */
+/************************************************************************/
+class LLInventoryWornItemsPanel;
+static LLDefaultChildRegistry::Register<LLInventoryWornItemsPanel> t_worn_inventory_panel("worn_inventory_panel");
+
+//static const LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER;
+static LLWornInventoryBridgeBuilder WORN_ITEMS_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
+class LLInventoryWornItemsPanel : public LLInventoryPanel
+{
+public:
+	struct Params :	public LLInitParam::Block<Params, LLInventoryPanel::Params>
+	{};
+
+protected:
+	LLInventoryWornItemsPanel (const Params&);
+	friend class LLUICtrlFactory;
+};
+
+LLInventoryWornItemsPanel::LLInventoryWornItemsPanel( const Params& params)
+: LLInventoryPanel(params)
+{
+	// replace bridge builder to have necessary View bridges.
+	mInvFVBridgeBuilder = &WORN_ITEMS_BUILDER;
+}
+
 
 namespace LLInitParam
 {

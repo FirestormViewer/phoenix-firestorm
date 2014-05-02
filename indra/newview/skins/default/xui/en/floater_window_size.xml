@@ -5,7 +5,7 @@
   height="105"
   layout="topleft"
   name="window_size"
-  title="WINDOW SIZE"
+  title="Window Size"
   width="205">
   <string name="resolution_format">[RES_X] x [RES_Y]</string>
     <text
@@ -23,7 +23,7 @@
      height="23"
      follows="left|top"
      left_delta="0"
-     max_chars="20"
+     max_chars="50"
      name="window_size_combo"
      tool_tip="width x height"
      top_pad="5"

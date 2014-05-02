@@ -109,6 +109,7 @@ public:
 	virtual void		markDead();
 	static void			initClass(); // Initialize data that's only init'd once per class.
 	static void			cleanupClass();	// Cleanup data that's only init'd once per class.
+	static void initCloud();
 	virtual void 		initInstance(); // Called after construction to initialize the class.
 protected:
 	virtual				~LLVOAvatar();
@@ -165,6 +166,9 @@ public:
 	/*virtual*/ BOOL   	 	 	lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+												 BOOL pick_rigged = FALSE,
+// [/SL:KB]
 												 S32* face_hit = NULL,             // which face was hit
 												 LLVector4a* intersection = NULL,   // return the intersection point
 												 LLVector2* tex_coord = NULL,      // return the texture coordinates of the intersection point
@@ -173,6 +177,9 @@ public:
 	LLViewerObject*	lineSegmentIntersectRiggedAttachments(const LLVector4a& start, const LLVector4a& end,
 												 S32 face = -1,                    // which face to check, -1 = ALL_SIDES
 												 BOOL pick_transparent = FALSE,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+												 BOOL pick_rigged = FALSE,
+// [/SL:KB]
 												 S32* face_hit = NULL,             // which face was hit
 												 LLVector4a* intersection = NULL,   // return the intersection point
 												 LLVector2* tex_coord = NULL,      // return the texture coordinates of the intersection point
@@ -243,12 +250,18 @@ public:
 	void			idleUpdateNameTagText(BOOL new_name);
 	void			idleUpdateNameTagPosition(const LLVector3& root_pos_last);
 	void			idleUpdateNameTagAlpha(BOOL new_name, F32 alpha);
-	LLColor4		getNameTagColor(bool is_friend);
+	// <FS:CR> Colorize tags
+	//LLColor4		getNameTagColor(bool is_friend);
+	LLColor4		getNameTagColor();
+	// </FS:CR>
 	void			clearNameTag();
 	static void		invalidateNameTag(const LLUUID& agent_id);
 	// force all name tags to rebuild, useful when display names turned on/off
 	static void		invalidateNameTags();
-	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font);
+	// <FS:Ansariel> Fix nametag not properly updating when display name arrives
+	//void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font);
+	void			addNameTagLine(const std::string& line, const LLColor4& color, S32 style, const LLFontGL* font, bool is_name = false);
+	// </FS:Ansariel>
 	void 			idleUpdateRenderCost();
 	void			calculateUpdateRenderCost();
 	void			updateVisualComplexity() { mVisualComplexityStale = TRUE; }
@@ -287,6 +300,8 @@ public:
 	static F32		sPhysicsLODFactor; // user-settable physics LOD factor
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
 	static BOOL		sDebugAvatarRotation;
+	static LLPartSysData sCloud;
+	static LLPartSysData sCloudMuted;
 
 	//--------------------------------------------------------------------
 	// Region state
@@ -694,7 +709,8 @@ public:
 	// True if we are currently in appearance editing mode. Often but
 	// not always the same as isUsingLocalAppearance().
 	/*virtual*/ BOOL	isEditingAppearance() const { return mIsEditingAppearance; }
-
+	void setIsEditingAppearance(BOOL editing) { mIsEditingAppearance = editing; }	// <FS:CR> for Built-in Posestand
+	
 	// FIXME review isUsingLocalAppearance uses, some should be isEditing instead.
 
 private:
@@ -734,8 +750,11 @@ public:
 	/*virtual*/ BOOL	isWearingWearableType(LLWearableType::EType type ) const;
 	LLViewerObject *	findAttachmentByID( const LLUUID & target_id ) const;
 
-protected:
+//-TT Patch: ReplaceWornItemsOnly
 	LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
+//-TT
+protected:
+	//LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
 	void 				lazyAttach();
 	void				rebuildRiggedAttachments( void );
 
@@ -804,6 +823,7 @@ public:
 	void			stopTyping() { mTyping = FALSE; }
 private:
 	BOOL			mVisibleChat;
+	BOOL			mVisibleTyping;
 
 	//--------------------------------------------------------------------
 	// Lip synch morphs
@@ -875,6 +895,7 @@ public:
 	BOOL			isSitting(){return mIsSitting;}
 	void 			sitOnObject(LLViewerObject *sit_object);
 	void 			getOffObject();
+	void 			revokePermissionsOnObject(LLViewerObject *sit_object);
 private:
 	// set this property only with LLVOAvatar::sitDown method
 	BOOL 			mIsSitting;
@@ -896,6 +917,8 @@ protected:
 	static void		getAnimNames(LLDynamicArray<std::string>* names);	
 private:
     bool            mNameIsSet;
+	LLSD			mClientTagData;
+	bool			mHasClientTagColor;
 	std::string  	mTitle;
 	bool	  		mNameAway;
 	bool	  		mNameDoNotDisturb;
@@ -904,7 +927,9 @@ private:
 	bool			mNameFriend;
 	bool			mNameCloud;
 	F32				mNameAlpha;
+	LLColor4		mNameColor;
 	BOOL      		mRenderGroupTitles;
+	std::string		mDistanceString;
 
 	//--------------------------------------------------------------------
 	// Display the name (then optionally fade it out)
@@ -944,7 +969,7 @@ protected:
 private:
 	// Global table of sound ids per material, and the ground
 	const static LLUUID	sStepSounds[LL_MCODE_END];
-	const static LLUUID	sStepSoundOnLand;
+	// const static LLUUID	sStepSoundOnLand; - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 
 	//--------------------------------------------------------------------
 	// Foot step state (for generating sounds)
@@ -1035,7 +1060,11 @@ extern const S32 MAX_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL;
 
 std::string get_sequential_numbered_file_name(const std::string& prefix,
 											  const std::string& suffix);
+
+// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
 void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value);
+void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, F32 value);
+//</FS:ND>
 
 #endif // LL_VOAVATAR_H
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="groups">
+	<text name="groupcount">
+		Perteneces a [COUNT] grupos de un máximo de [MAX].
+	</text>
+	<button label="MI/Llamar" name="chat_btn" tool_tip="Abre una sesión de chat con el grupo"/>
+	<button label="Información" name="info_btn" tool_tip="Muestra el perfil del grupo"/>
+	<button label="Títulos" name="titles_btn"/>
+	<button label="Activar" name="activate_btn"/>
+	<button label="Abandonar" name="leave_btn"/>
+	<button label="Crear..." name="create_btn"/>
+	<button label="Buscar..." name="search_btn"/>
+	<button label="Invitar..." name="invite_btn"/>
+</panel>

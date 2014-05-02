@@ -38,10 +38,16 @@
 
 #include <map>
 #include <set>
+#include "../newview/lggcontactsets.h"
 
 namespace LLAvatarNameCache
 {
 	use_display_name_signal_t mUseDisplayNamesSignal;
+
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+	// RLVa override for display names
+	bool sForceDisplayNames = false;
+// [/RLVa:KB]
 
 	// Cache starts in a paused state until we can determine if the
 	// current region supports display names.
@@ -261,6 +267,15 @@ void LLAvatarNameCache::handleAgentError(const LLUUID& agent_id)
 	std::map<LLUUID,LLAvatarName>::iterator existing = sCache.find(agent_id);
 	if (existing == sCache.end())
     {
+		// <FS:Ansariel> Don't re-request names for agents with null uuid.
+		if (agent_id.isNull())
+		{
+			LL_WARNS("AvNameCache") << "LLAvatarNameCache handling error for agent with null uuid" << LL_ENDL;
+			sPendingQueue.erase(agent_id);
+			return;
+		}
+		// </FS:Ansariel>
+
         // there is no existing cache entry, so make a temporary name from legacy
         LL_WARNS("AvNameCache") << "LLAvatarNameCache get legacy for agent "
 								<< agent_id << LL_ENDL;
@@ -587,6 +602,15 @@ bool LLAvatarNameCache::get(const LLUUID& agent_id, LLAvatarName *av_name)
 		if (it != sCache.end())
 		{
 			*av_name = it->second;
+			if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
+			{
+				LLSD info = av_name->asLLSD();
+				info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
+				info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)
+					? (info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString())
+					: LGGContactSets::getInstance()->getPseudonym(agent_id);
+				av_name->fromLLSD(info);
+			}
 
 			// re-request name if entry is expired
 			if (av_name->mExpires < LLFrameTimer::getTotalSeconds())
@@ -634,7 +658,19 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::get(const LLUUID& ag
 		std::map<LLUUID,LLAvatarName>::iterator it = sCache.find(agent_id);
 		if (it != sCache.end())
 		{
-			const LLAvatarName& av_name = it->second;
+			LLAvatarName& av_name = it->second;
+			LLSD test = av_name.asLLSD();
+			
+			if(LGGContactSets::getInstance()->hasPseudonym(agent_id))
+			{
+				LL_DEBUGS("AvNameCache") << "DN cache hit via alias " << agent_id << LL_ENDL;
+				LLSD info = av_name.asLLSD();
+				info["is_display_name_default"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id);
+				info["display_name"] = LGGContactSets::getInstance()->hasDisplayNameRemoved(agent_id)
+					? (info["legacy_first_name"].asString() + " " + info["legacy_last_name"].asString())
+					: LGGContactSets::getInstance()->getPseudonym(agent_id);
+				av_name.fromLLSD(info);
+			}
 			
 			if (av_name.mExpires > LLFrameTimer::getTotalSeconds())
 			{
@@ -670,10 +706,30 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::get(const LLUUID& ag
 	return connection;
 }
 
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+bool LLAvatarNameCache::getForceDisplayNames()
+{
+	return sForceDisplayNames;
+}
+
+void LLAvatarNameCache::setForceDisplayNames(bool force)
+{
+	sForceDisplayNames = force;
+	if ( (!LLAvatarName::useDisplayNames()) && (force) )
+	{
+		LLAvatarName::setUseDisplayNames(true);
+	}
+}
+// [/RLVa:KB]
 
 void LLAvatarNameCache::setUseDisplayNames(bool use)
 {
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+	// We need to force the use of the "display names" cache when @shownames=n restricted (and disallow toggling it)
+	use |= getForceDisplayNames();
+// [/RLVa:KB]
 	if (use != LLAvatarName::useDisplayNames())
+
 	{
 		LLAvatarName::setUseDisplayNames(use);
 		mUseDisplayNamesSignal();
@@ -694,6 +750,12 @@ void LLAvatarNameCache::erase(const LLUUID& agent_id)
 	sCache.erase(agent_id);
 }
 
+void LLAvatarNameCache::fetch(const LLUUID& agent_id) // FS:TM used in LGGContactSets
+{
+	// re-request, even if request is already pending
+	sAskQueue.insert(agent_id);
+}
+
 void LLAvatarNameCache::insert(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
 	// *TODO: update timestamp if zero?
@@ -702,17 +764,21 @@ void LLAvatarNameCache::insert(const LLUUID& agent_id, const LLAvatarName& av_na
 
 F64 LLAvatarNameCache::nameExpirationFromHeaders(LLSD headers)
 {
+	const F64 DEFAULT_EXPIRES = 60.0 * 60.0 + LLFrameTimer::getTotalSeconds();
+	
 	F64 expires = 0.0;
 	if (expirationFromCacheControl(headers, &expires))
 	{
+		//AO make sure cache expiration is at least 1HR
+		if (expires < DEFAULT_EXPIRES) {expires = DEFAULT_EXPIRES;}
 		return expires;
 	}
 	else
 	{
 		// With no expiration info, default to an hour
-		const F64 DEFAULT_EXPIRES = 60.0 * 60.0;
-		F64 now = LLFrameTimer::getTotalSeconds();
-		return now + DEFAULT_EXPIRES;
+		//F64 now = LLFrameTimer::getTotalSeconds();
+		//return now + DEFAULT_EXPIRES;
+		return DEFAULT_EXPIRES;
 	}
 }
 

@@ -64,7 +64,7 @@ LLDir_Mac::LLDir_Mac()
 {
 	mDirDelimiter = "/";
 
-    const std::string     secondLifeString = "SecondLife";
+    const std::string     secondLifeString = "Firestorm";
     
     std::string *executablepathstr = getSystemExecutableFolder();
 
@@ -174,6 +174,86 @@ void LLDir_Mac::initAppDirs(const std::string &app_name,
 		mSkinBaseDir = mAppRODataDir + mDirDelimiter + "skins";
 	}
 	mCAFile = getExpandedFilename(LL_PATH_APP_SETTINGS, "CA.pem");
+}
+
+//<FS:TS> Used by LGG's selection beams
+U32 LLDir_Mac::countFilesInDir(const std::string &dirname, const std::string &mask)
+{
+	U32 file_count = 0;
+	glob_t g;
+
+	std::string tmp_str;
+	tmp_str = dirname;
+	tmp_str += mask;
+	
+	if(glob(tmp_str.c_str(), GLOB_NOSORT, NULL, &g) == 0)
+	{
+		file_count = g.gl_pathc;
+
+		globfree(&g);
+	}
+
+	return (file_count);
+}
+
+// get the next file in the directory
+// AO: Used by LGG Selection Beams
+BOOL LLDir_Mac::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
+{
+        glob_t g;
+        BOOL result = FALSE;
+        fname = "";
+
+        if(!(dirname == mCurrentDir))
+        {
+                // different dir specified, close old search
+                mCurrentDirIndex = -1;
+                mCurrentDirCount = -1;
+                mCurrentDir = dirname;
+        }
+
+        std::string tmp_str;
+        tmp_str = dirname;
+        tmp_str += mask;
+
+        if(glob(tmp_str.c_str(), GLOB_NOSORT, NULL, &g) == 0)
+        {
+                if(g.gl_pathc > 0)
+                {
+                        if(g.gl_pathc != mCurrentDirCount)
+                        {
+                                // Number of matches has changed since the last search, meaning a file has been added or deleted.
+                                // Reset the index.
+                                mCurrentDirIndex = -1;
+                                mCurrentDirCount = g.gl_pathc;
+                        }
+
+                        mCurrentDirIndex++;
+
+                        if(mCurrentDirIndex < g.gl_pathc)
+                        {
+//                              llinfos << "getNextFileInDir: returning number " << mCurrentDirIndex << ", path is " << g.gl_pathv[mCurrentDirIndex] << llendl;
+
+                                // The API wants just the filename, not the full path.
+                                //fname = g.gl_pathv[mCurrentDirIndex];
+
+                                char *s = strrchr(g.gl_pathv[mCurrentDirIndex], '/');
+
+                                if(s == NULL)
+                                        s = g.gl_pathv[mCurrentDirIndex];
+                                else if(s[0] == '/')
+                                        s++;
+
+                                fname = s;
+
+                                result = TRUE;
+                        }
+                }
+
+                globfree(&g);
+        }
+
+        return(result);
 }
 
 std::string LLDir_Mac::getCurPath()

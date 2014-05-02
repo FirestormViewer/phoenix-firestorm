@@ -9,6 +9,9 @@
 #   LINUX   - Linux
 #   WINDOWS - Windows
 
+if( ${NDTARGET_ARCH} STREQUAL "x64" )
+ set( ND_BUILD64BIT_ARCH ON )
+endif( ${NDTARGET_ARCH} STREQUAL "x64" )
 
 # Relative and absolute paths to subtrees.
 
@@ -24,7 +27,7 @@ set(LIBS_OPEN_PREFIX)
 set(SCRIPTS_PREFIX ../scripts)
 set(VIEWER_PREFIX)
 set(INTEGRATION_TESTS_PREFIX)
-set(LL_TESTS ON CACHE BOOL "Build and run unit and integration tests (disable for build timing runs to reduce variation")
+set(LL_TESTS OFF CACHE BOOL "Build and run unit and integration tests (disable for build timing runs to reduce variation")
 set(INCREMENTAL_LINK OFF CACHE BOOL "Use incremental linking on win32 builds (enable for faster links on some machines)")
 
 if(LIBS_CLOSED_DIR)
@@ -65,6 +68,9 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   set(LL_ARCH ${ARCH}_win32)
   set(LL_ARCH_DIR ${ARCH}-win32)
   set(WORD_SIZE 32)
+  if( ND_BUILD64BIT_ARCH )
+    set(WORD_SIZE 64)
+  endif( ND_BUILD64BIT_ARCH )
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -134,8 +140,12 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     OUTPUT_VARIABLE XCODE_VERSION )
 
   # To support a different SDK update these Xcode settings:
-  if (XCODE_VERSION GREATER 4.5)
+  if (XCODE_VERSION GREATER 4.9) # (Which would be 5.0+)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.8)
+	set(CMAKE_OSX_SYSROOT macosx10.9)
+  else (XCODE_VERION GREATER 4.9)
+  if (XCODE_VERSION GREATER 4.5)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
     set(CMAKE_OSX_SYSROOT macosx10.8)
   else (XCODE_VERSION GREATER 4.5)
   if (XCODE_VERSION GREATER 4.2)
@@ -146,27 +156,40 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_OSX_SYSROOT macosx10.7)
   endif (XCODE_VERSION GREATER 4.2)
   endif (XCODE_VERSION GREATER 4.5)
+  endif (XCODE_VERSION GREATER 4.9)
 
-  set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
+  # LLVM-GCC has been removed in Xcode5
+  if (XCODE_VERSION GREATER 4.9)
+    set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
+  else (XCODE_VERSION GREATER 4.9)
+    set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
+  endif (XCODE_VERSION GREATER 4.9)
+
   set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf-with-dsym)
 
-  # NOTE: To attempt an i386/PPC Universal build, add this on the configure line:
-  # -DCMAKE_OSX_ARCHITECTURES:STRING='i386;ppc'
   # Build only for i386 by default, system default on MacOSX 10.6 is x86_64
   if (NOT CMAKE_OSX_ARCHITECTURES)
     set(CMAKE_OSX_ARCHITECTURES i386)
   endif (NOT CMAKE_OSX_ARCHITECTURES)
 
-  if (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
-    set(ARCH universal)
-  else (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
-    if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
-      set(ARCH ppc)
-    else (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
-      set(ARCH i386)
-    endif (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
-  endif (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
+# [FS:CR] Can't build ppc since forever.
+#  if (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
+#   set(ARCH universal)
+#  else (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
+#   if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
+#     set(ARCH ppc)
+#   else (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
+#     set(ARCH i386)
+#   endif (${CMAKE_SYSTEM_PROCESSOR} MATCHES "ppc")
+#  endif (CMAKE_OSX_ARCHITECTURES MATCHES "i386" AND CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
 
+  if (CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
+    error("Can't build on PowerPC. You need an upgrade.")
+  endif (CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
+
+# *TODO: Universal Build
+  set(ARCH i386)
+# [/FS:CR]
   set(LL_ARCH ${ARCH}_darwin)
   set(LL_ARCH_DIR universal-darwin)
   set(WORD_SIZE 32)
@@ -175,7 +198,11 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # Default deploy grid
 set(GRID agni CACHE STRING "Target Grid")
 
-set(VIEWER_CHANNEL "Second Life Test" CACHE STRING "Viewer Channel Name")
+#set(VIEWER_CHANNEL "Second Life Test" CACHE STRING "Viewer Channel Name")
+
+# Flickr API keys.
+set(FLICKR_API_KEY "daaabff93a967e0f37fa18863bb43b29")
+set(FLICKR_API_SECRET "846f0958020b553e") 
 
 if (XCODE_VERSION GREATER 4.2)
   set(ENABLE_SIGNING OFF CACHE BOOL "Enable signing the viewer")
@@ -187,6 +214,15 @@ set(STANDALONE OFF CACHE BOOL "Do not use Linden-supplied prebuilt libraries.")
 set(UNATTENDED OFF CACHE BOOL "Should be set to ON for building with VC Express editions.")
 
 set(USE_PRECOMPILED_HEADERS ON CACHE BOOL "Enable use of precompiled header directives where supported.")
+# <FS:ND> When using Havok, we have to turn OpenSim support off
+if( HAVOK_TPV )
+ if( OPENSIM )
+  message( "Compiling with Havok libraries, disabling OpenSim support" )
+ endif( OPENSIM )
+  
+ set( OPENSIM OFF )
+endif( HAVOK_TPV )
+# </FS:ND>
 
 source_group("CMake Rules" FILES CMakeLists.txt)
 

@@ -25,6 +25,12 @@
          parameter="im" />
     </menu_item_call>
     <menu_item_call
+     label="Teleport to resident"
+     layout="topleft"
+     name="Teleport to">
+       <on_click function="AvatarIcon.Action" parameter="teleport_to"/>
+    </menu_item_call>
+    <menu_item_call
      label="Offer teleport"
      layout="topleft"
      name="Offer Teleport">
@@ -66,6 +72,14 @@
          parameter="remove" />
     </menu_item_call>
     <menu_item_call
+     label="Add to set"
+     layout="topleft"
+     name="Add Contact Set">
+        <menu_item_call.on_click
+         function="AvatarIcon.Action"
+         parameter="add_set" />
+    </menu_item_call>
+    <menu_item_call
      label="Invite to group..."
      layout="topleft"
      name="Invite Group">
@@ -85,6 +99,12 @@
        <on_click function="AvatarIcon.Action" parameter="map" />
     </menu_item_call>
     <menu_item_call
+     label="Track"
+     layout="topleft"
+     name="track">
+      <on_click function="AvatarIcon.Action" parameter="track" />
+    </menu_item_call>
+    <menu_item_call
      label="Share"
      layout="topleft"
      name="Share">
@@ -96,6 +116,19 @@
      name="Pay">
        <on_click function="AvatarIcon.Action" parameter="pay" />
     </menu_item_call>
+    <menu_item_call
+     label="Copy Name to clipboard"
+     layout="topleft"
+     name="copy name">
+       <on_click function="AvatarIcon.Action" parameter="copy_name" />
+    </menu_item_call>
+    <menu_item_call
+     label="Copy Url to clipboard"
+     layout="topleft"
+     name="copy url">
+       <on_click function="AvatarIcon.Action" parameter="copy_url" />
+    </menu_item_call>
+    <menu_item_separator layout="topleft" name="separator_block"/>
     <menu_item_check
      label="Block Voice"
      layout="topleft"

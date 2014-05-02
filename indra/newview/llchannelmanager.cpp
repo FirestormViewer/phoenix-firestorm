@@ -57,13 +57,20 @@ LLChannelManager::LLChannelManager()
 //--------------------------------------------------------------------------
 LLChannelManager::~LLChannelManager()
 {
-	for(std::vector<ChannelElem>::iterator it = mChannelList.begin(); it !=  mChannelList.end(); ++it)
-	{
-		LLScreenChannelBase* channel = it->channel.get();
-		if (!channel) continue;
+	// <FS:ND> HACK/Test FIRE-11884 / Crash on exit. After making sure no ScreenChannel gets destroyed in a LLView dtor, this can still
+	// crash when the static singleton of LLChannelManager is destroyed.
+	// Leak those few channels on shutdown here to test if that fixes the rest of the crash. As this is shutdown code, the OS will clean up after us.
+	// Not nice or recommended, but not harmful either here.
 
-		delete channel;
-	}
+	// for(std::vector<ChannelElem>::iterator it = mChannelList.begin(); it !=  mChannelList.end(); ++it)
+	// {
+	// 	LLScreenChannelBase* channel = it->channel.get();
+	// 	if (!channel) continue;
+	// 
+	// 	delete channel;
+	// }
+
+	// </FS:ND>
 
 	mChannelList.clear();
 }
@@ -75,7 +82,18 @@ LLScreenChannel* LLChannelManager::createNotificationChannel()
 	LLScreenChannelBase::Params p;
 	p.id = LLUUID(gSavedSettings.getString("NotificationChannelUUID"));
 	p.channel_align = CA_RIGHT;
-	p.toast_align = NA_TOP;
+	// <FS:Ansariel> Group notices, IMs and chiclets position
+	//p.toast_align = NA_TOP;
+	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+	{
+		p.toast_align = NA_TOP;
+	}
+	else
+	{
+		p.toast_align = NA_BOTTOM;
+	}
+	// </FS:Ansariel> Group notices, IMs and chiclets position
+
 
 	// Getting a Channel for our notifications
 	return dynamic_cast<LLScreenChannel*> (LLChannelManager::getInstance()->getChannel(p));
@@ -117,30 +135,32 @@ void LLChannelManager::onLoginCompleted()
 		// Need to investigate this and fix possible problems with notifications in startup time
 		// Viewer can normally receive and show of postponed notifications about purchasing in marketplace on startup time.
 		// Other types of postponed notifications did not tested.
-		//// create a channel for the StartUp Toast
-		//LLScreenChannelBase::Params p;
-		//p.id = LLUUID(gSavedSettings.getString("StartUpChannelUUID"));
-		//p.channel_align = CA_RIGHT;
-		//mStartUpChannel = createChannel(p);
+		// <FS:Ansariel> Uncomment this code again; crash was caused by c-style cast in LLFloaterView
+		// create a channel for the StartUp Toast
+		LLScreenChannelBase::Params p;
+		p.id = LLUUID(gSavedSettings.getString("StartUpChannelUUID"));
+		p.channel_align = CA_RIGHT;
+		mStartUpChannel = createChannel(p);
 
-		//if(!mStartUpChannel)
-		//{
-		//	onStartUpToastClose();
-		//}
-		//else
-		//{
-		//	gViewerWindow->getRootView()->addChild(mStartUpChannel);
+		if(!mStartUpChannel)
+		{
+			onStartUpToastClose();
+		}
+		else
+		{
+			gViewerWindow->getRootView()->addChild(mStartUpChannel);
 
-		//	// init channel's position and size
-		//	S32 channel_right_bound = gViewerWindow->getWorldViewRectScaled().mRight - gSavedSettings.getS32("NotificationChannelRightMargin"); 
-		//	S32 channel_width = gSavedSettings.getS32("NotifyBoxWidth");
-		//	mStartUpChannel->init(channel_right_bound - channel_width, channel_right_bound);
-		//	mStartUpChannel->setMouseDownCallback(boost::bind(&LLNotificationWellWindow::onStartUpToastClick, LLNotificationWellWindow::getInstance(), _2, _3, _4));
+			// init channel's position and size
+			S32 channel_right_bound = gViewerWindow->getWorldViewRectScaled().mRight - gSavedSettings.getS32("NotificationChannelRightMargin"); 
+			S32 channel_width = gSavedSettings.getS32("NotifyBoxWidth");
+			mStartUpChannel->init(channel_right_bound - channel_width, channel_right_bound);
+			mStartUpChannel->setMouseDownCallback(boost::bind(&LLNotificationWellWindow::onStartUpToastClick, LLNotificationWellWindow::getInstance(), _2, _3, _4));
 
-		//	mStartUpChannel->setCommitCallback(boost::bind(&LLChannelManager::onStartUpToastClose, this));
-		//	mStartUpChannel->createStartUpToast(away_notifications, gSavedSettings.getS32("StartUpToastLifeTime"));
-		//}
+			mStartUpChannel->setCommitCallback(boost::bind(&LLChannelManager::onStartUpToastClose, this));
+			mStartUpChannel->createStartUpToast(away_notifications, gSavedSettings.getS32("StartUpToastLifeTime"));
+		}
 	}
+	// </FS:Ansariel>
 
 	LLPersistentNotificationStorage::getInstance()->loadNotifications();
 	LLDoNotDisturbNotificationStorage::getInstance()->loadNotifications();

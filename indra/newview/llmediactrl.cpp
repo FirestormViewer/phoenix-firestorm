@@ -383,6 +383,23 @@ void LLMediaCtrl::onFocusLost()
 	LLPanel::onFocusLost();
 }
 
+// Ansariel: Workaround for FIRE-3814:
+//           Explicitely call the according event handlers
+//           so the context menu is shown properly.
+//           This might go away later.
+void LLMediaCtrl::setFocus(BOOL b)
+{
+	if (b)
+	{
+		onFocusReceived();
+	}
+	else
+	{
+		onFocusLost();
+	}
+	LLPanel::setFocus(b);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 BOOL LLMediaCtrl::postBuild ()
@@ -541,16 +558,18 @@ void LLMediaCtrl::clearCache()
 //
 void LLMediaCtrl::navigateTo( std::string url_in, std::string mime_type)
 {
-	// don't browse to anything that starts with secondlife:// or sl://
-	const std::string protocol1 = "secondlife://";
-	const std::string protocol2 = "sl://";
-	if ((LLStringUtil::compareInsensitive(url_in.substr(0, protocol1.length()), protocol1) == 0) ||
-	    (LLStringUtil::compareInsensitive(url_in.substr(0, protocol2.length()), protocol2) == 0))
+// <AW>
+	// don't browse to slurls like "secondlife://" or "hop://"
+	LLSLURL is_slurl(url_in);
+	if(LLSLURL::INVALID != is_slurl.getType())
+// </AW>
 	{
 		// TODO: Print out/log this attempt?
 		// llinfos << "Rejecting attempt to load restricted website :" << urlIn << llendl;
 		return;
 	}
+
+
 	
 	if (ensureMediaSourceExists())
 	{

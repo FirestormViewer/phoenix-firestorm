@@ -216,7 +216,7 @@ LLViewerStats::LLViewerStats() :
 	mPacketsInStat("packetsinstat"),
 	mPacketsLostStat("packetsloststat"),
 	mPacketsOutStat("packetsoutstat"),
-	mPacketsLostPercentStat("packetslostpercentstat", 64),
+	mPacketsLostPercentStat("packetslostpercentstat", 32),
 	mTexturePacketsStat("texturepacketsstat"),
 	mActualInKBitStat("actualinkbitstat"),
 	mActualOutKBitStat("actualoutkbitstat"),
@@ -436,21 +436,35 @@ void update_statistics()
 	{
 		if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
 		{
-			LLViewerStats::getInstance()->incStat(LLViewerStats::ST_MOUSELOOK_SECONDS, gFrameIntervalSeconds);
+			// <FS:Ansariel> Improve performance
+			//LLViewerStats::getInstance()->incStat(LLViewerStats::ST_MOUSELOOK_SECONDS, gFrameIntervalSeconds);
+			stats.incStat(LLViewerStats::ST_MOUSELOOK_SECONDS, gFrameIntervalSeconds);
 		}
 		else if (gAgentCamera.getCameraMode() == CAMERA_MODE_CUSTOMIZE_AVATAR)
 		{
-			LLViewerStats::getInstance()->incStat(LLViewerStats::ST_AVATAR_EDIT_SECONDS, gFrameIntervalSeconds);
+			// <FS:Ansariel> Improve performance
+			//LLViewerStats::getInstance()->incStat(LLViewerStats::ST_AVATAR_EDIT_SECONDS, gFrameIntervalSeconds);
+			stats.incStat(LLViewerStats::ST_AVATAR_EDIT_SECONDS, gFrameIntervalSeconds);
 		}
 		else if (LLFloaterReg::instanceVisible("build"))
 		{
-			LLViewerStats::getInstance()->incStat(LLViewerStats::ST_TOOLBOX_SECONDS, gFrameIntervalSeconds);
+			// <FS:Ansariel> Improve performance
+			//LLViewerStats::getInstance()->incStat(LLViewerStats::ST_TOOLBOX_SECONDS, gFrameIntervalSeconds);
+			stats.incStat(LLViewerStats::ST_TOOLBOX_SECONDS, gFrameIntervalSeconds);
 		}
 	}
-	stats.setStat(LLViewerStats::ST_ENABLE_VBO, (F64)gSavedSettings.getBOOL("RenderVBOEnable"));
+	// <FS:Ansariel> Improve performance
+	static LLCachedControl<bool> renderVBOEnable(gSavedSettings, "RenderVBOEnable");
+	static LLCachedControl<F32> renderFarClip(gSavedSettings, "RenderFarClip");
+	static LLCachedControl<bool> useChatBubbles(gSavedSettings, "UseChatBubbles");
+	//stats.setStat(LLViewerStats::ST_ENABLE_VBO, (F64)gSavedSettings.getBOOL("RenderVBOEnable"));
 	stats.setStat(LLViewerStats::ST_LIGHTING_DETAIL, (F64)gPipeline.getLightingDetail());
-	stats.setStat(LLViewerStats::ST_DRAW_DIST, (F64)gSavedSettings.getF32("RenderFarClip"));
-	stats.setStat(LLViewerStats::ST_CHAT_BUBBLES, (F64)gSavedSettings.getBOOL("UseChatBubbles"));
+	//stats.setStat(LLViewerStats::ST_DRAW_DIST, (F64)gSavedSettings.getF32("RenderFarClip"));
+	//stats.setStat(LLViewerStats::ST_CHAT_BUBBLES, (F64)gSavedSettings.getBOOL("UseChatBubbles"));
+	stats.setStat(LLViewerStats::ST_ENABLE_VBO, (F64)renderVBOEnable);
+	stats.setStat(LLViewerStats::ST_DRAW_DIST, (F64)renderFarClip);
+	stats.setStat(LLViewerStats::ST_CHAT_BUBBLES, (F64)useChatBubbles);
+	// </FS:Ansariel>
 
 	stats.setStat(LLViewerStats::ST_FRAME_SECS, gDebugView->mFastTimerView->getTime("Frame"));
 	F64 idle_secs = gDebugView->mFastTimerView->getTime("Idle");

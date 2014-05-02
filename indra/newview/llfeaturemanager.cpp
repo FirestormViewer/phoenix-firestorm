@@ -60,6 +60,11 @@
 #include "lldxhardware.h"
 #endif
 
+// <FS:Techwolf Lupindo> downloadable gpu table support
+#include "fscommon.h"
+#include <boost/filesystem.hpp>
+// </FS:Techwolf Lupindo>
+
 #define LL_EXPORT_GPU_TABLE 0
 
 #if LL_DARWIN
@@ -282,16 +287,16 @@ bool LLFeatureManager::loadFeatureTables()
 	if (os_string.find("Microsoft Windows XP") == 0)
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "_xp");
-		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getVersion().c_str());
+		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "_xp", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 	else
 	{
 		filename = llformat(FEATURE_TABLE_FILENAME, "");
-		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getVersion().c_str());
+		http_filename = llformat(FEATURE_TABLE_VER_FILENAME, "", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 #else
 	filename = FEATURE_TABLE_FILENAME;
-	http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
+	http_filename = llformat(FEATURE_TABLE_VER_FILENAME, LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 #endif
 
 	app_path += filename;
@@ -430,7 +435,7 @@ bool LLFeatureManager::loadGPUClass()
 	app_path += GPU_TABLE_FILENAME;
 	
 	// second table is downloaded with HTTP
-	std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getVersion().c_str());
+	std::string http_filename = llformat(GPU_TABLE_VER_FILENAME, LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	std::string http_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, http_filename);
 
 	// use HTTP table if it exists
@@ -451,7 +456,7 @@ bool LLFeatureManager::loadGPUClass()
 	{
 		parse_ok = parseGPUTable(app_path);
 	}
-
+    
 	return parse_ok; // indicates that the file parsed correctly, not that the gpu was recognized
 }
 
@@ -600,10 +605,10 @@ bool LLFeatureManager::parseGPUTable(std::string filename)
 	{
 		LL_WARNS("RenderInit") << "GPU '" << rawRenderer << "' not recognized" << LL_ENDL;
 	}
-
-#if LL_DARWIN // never go over "Mid" settings by default on OS X
-	mGPUClass = llmin(mGPUClass, GPU_CLASS_2);
-#endif
+//FS:TM based on team vote, don't allow defaulting above High (level 4).  Used this here to reduce merge issues with gpu_table.xml
+//#if LL_DARWIN // never go over "Mid" settings by default on OS X (FS:TM was GPU_CLASS_2)
+	mGPUClass = llmin(mGPUClass, GPU_CLASS_4);
+//#endif
 	return true;
 }
 
@@ -639,13 +644,34 @@ public:
 				LLAPRFile out(mFilename, LL_APR_WB);
 				out.write(copy_buffer, file_size);
 				out.close();
+				// <FS:Techwolf Lupindo> downloadable gpu table support
+				const std::time_t new_time = mLastModified.secondsSinceEpoch();
+#ifdef LL_WINDOWS
+				boost::filesystem::last_write_time(boost::filesystem::path( utf8str_to_utf16str(mFilename) ), new_time);
+#else
+				boost::filesystem::last_write_time(boost::filesystem::path(mFilename), new_time);
+#endif
+				// </FS:Techwolf Lupindo>
 			}
 		}
 		
 	}
-	
+
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	void completedHeader(U32 status, const std::string& reason, const LLSD& content)
+	{
+		if (content.has("last-modified"))
+		{
+			mLastModified.secondsSinceEpoch(FSCommon::secondsSinceEpochFromString("%a, %d %b %Y %H:%M:%S %ZP", content["last-modified"].asString()));
+		}
+	}
+	// </FS:Techwolf Lupindo>
+
 private:
 	std::string mFilename;
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	LLDate mLastModified;
+	// </FS:Techwolf Lupindo>
 };
 
 void fetch_feature_table(std::string table)
@@ -657,14 +683,14 @@ void fetch_feature_table(std::string table)
 	std::string filename;
 	if (os_string.find("Microsoft Windows XP") == 0)
 	{
-		filename = llformat(table.c_str(), "_xp", LLVersionInfo::getVersion().c_str());
+		filename = llformat(table.c_str(), "_xp", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 	else
 	{
-		filename = llformat(table.c_str(), "", LLVersionInfo::getVersion().c_str());
+		filename = llformat(table.c_str(), "", LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 	}
 #else
-	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getVersion().c_str());
+	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 #endif
 
 	const std::string url        = base + "/" + filename;
@@ -673,14 +699,25 @@ void fetch_feature_table(std::string table)
 
 	llinfos << "LLFeatureManager fetching " << url << " into " << path << llendl;
 	
-	LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	LLSD headers;
+	headers.insert("User-Agent",  LLVersionInfo::getBuildPlatform() + " " + LLVersionInfo::getVersion());
+	time_t last_modified = 0;
+	llstat stat_data;
+	if(!LLFile::stat(path, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	//LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	LLHTTPClient::getIfModified(url, new LLHTTPFeatureTableResponder(path), last_modified, headers);
+	// </FS:Techwolf Lupindo>
 }
 
 void fetch_gpu_table(std::string table)
 {
 	const std::string base       = gSavedSettings.getString("FeatureManagerHTTPTable");
 
-	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getVersion().c_str());
+	const std::string filename   = llformat(table.c_str(), LLVersionInfo::getShortVersion().c_str()); // <FS:Techwolf Lupindo> use getShortVersion instead of getVersion.
 
 	const std::string url        = base + "/" + filename;
 
@@ -688,7 +725,18 @@ void fetch_gpu_table(std::string table)
 
 	llinfos << "LLFeatureManager fetching " << url << " into " << path << llendl;
 	
-	LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	// <FS:Techwolf Lupindo> downloadable gpu table support
+	LLSD headers;
+	headers.insert("User-Agent",  LLVersionInfo::getBuildPlatform() + " " + LLVersionInfo::getVersion());
+	time_t last_modified = 0;
+	llstat stat_data;
+	if(!LLFile::stat(path, &stat_data))
+	{
+		last_modified = stat_data.st_mtime;
+	}
+	//LLHTTPClient::get(url, new LLHTTPFeatureTableResponder(path));
+	LLHTTPClient::getIfModified(url, new LLHTTPFeatureTableResponder(path), last_modified, headers);
+	// </FS:Techwolf Lupindo>
 }
 
 // fetch table(s) from a website (S3)
@@ -920,10 +968,10 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	if (gGLManager.mVRAM > 512)
-	{
-		maskFeatures("VRAMGT512");
-	}
+	//if (gGLManager.mVRAM > 512)
+	//{
+	//	maskFeatures("VRAMGT512");
+	//}
 
 #if LL_DARWIN
 	const LLOSInfo& osInfo = LLAppViewer::instance()->getOSInfo();
