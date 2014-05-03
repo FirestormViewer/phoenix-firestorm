@@ -465,10 +465,10 @@
          length="1"
          height="10"
          layout="topleft"
-         left="48"
+         left="10"
          name="single_click_action_lbl"
          width="150"
-         top_pad="10">
+         top_pad="20">
          Single click on land:
         </text>
         <combo_box
@@ -495,7 +495,7 @@
          length="1"
          height="10"
          layout="topleft"
-         left="48"
+         left="10"
          name="double_click_action_lbl"
          width="150"
          top_pad="10">
@@ -529,7 +529,7 @@
          label="Joystick Configuration"
          left="100"
          name="joystick_setup_button"
-         top_pad="5"
+         top_pad="15"
          width="155">
             <button.commit_callback
              function="Floater.Show"
