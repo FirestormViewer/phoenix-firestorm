@@ -40,7 +40,11 @@
 			<check_box label="Odtwórz dźwięk podczas teleportacji" name="PlayTeleportSound"/>
 			<check_box label="Zawsze lataj po teleportacji" name="FSFlyAfterTeleport"/>
 			<check_box label="Przytrzymaj klawisz skoku lub kucania, aby zacząć lub przestać latać" name="automatic_fly"/>
-			<check_box label="Zawsze blokuj ponownie pozycję po zmianie regionu, jeśli unieruchamianie jest włączone" name="RelockMoveLockAfterRegionChange"/>
+			<text name="movelock_lbl">
+				Jeśli unieruchamianie wbudowane w Most LSL jest aktywne...
+			</text>
+			<check_box label="Zawsze blokuj ponownie pozycję po zmianie regionu" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="Blokuj i odblokowywuj pozycję po zakończeniu lub rozpoczęciu ruchu" name="RelockMoveLockAfterMovement"/>
 			<text name="single_click_action_lbl">
 				Pojedynczy klik na ziemi:
 			</text>

@@ -423,17 +423,42 @@
          name="automatic_fly"
          width="237"
          top_pad="0"/>
+
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="10"
+         layout="topleft"
+         left="10"
+         name="movelock_lbl"
+         width="450"
+         top_pad="5">
+         If movelock built-in into LSL Bridge is active...
+        </text>
         <check_box
          control_name="RelockMoveLockAfterRegionChange"
          enabled_control="UseLSLBridge"
          follows="left|top"
          height="20"
-         label="If movelock is enabled, then always re-lock position after region change"
+         label="Always re-lock position after region change"
          layout="topleft"
-         left_delta="0"
+         left_delta="5"
          name="RelockMoveLockAfterRegionChange"
          width="237"
+         top_pad="5"/>
+        <check_box
+         control_name="RelockMoveLockAfterMovement"
+         enabled_control="UseLSLBridge"
+         follows="left|top"
+         height="20"
+         label="Lock and unlock position after stopping or starting movement"
+         layout="topleft"
+         left_delta="0"
+         name="RelockMoveLockAfterMovement"
+         width="237"
          top_pad="0"/>
+
         <text
          follows="left|top"
          type="string"
