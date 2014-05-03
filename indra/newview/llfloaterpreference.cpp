@@ -220,6 +220,7 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_inventory_cache(const LLSD& notification, const LLSD& response);
 void handleFlightAssistOptionChanged(const LLSD& newvalue);
 void handleMovelockOptionChanged(const LLSD& newvalue);
+void handleMovelockAfterMoveOptionChanged(const LLSD& newvalue);
 bool callback_clear_settings(const LLSD& notification, const LLSD& response);
 // <FS:AW  opensim search support>
 bool callback_clear_debug_search(const LLSD& notification, const LLSD& response);

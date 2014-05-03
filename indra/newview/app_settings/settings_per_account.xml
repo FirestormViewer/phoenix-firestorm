@@ -656,7 +656,18 @@
     <key>UseMoveLock</key>
         <map>
         <key>Comment</key>
-            <string>Use the client LSL bridge for movelock</string>
+            <string>Use the client LSL Bridge for movelock</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>Boolean</string>
+        <key>Value</key>
+            <integer>0</integer>
+        </map>
+    <key>RelockMoveLockAfterMovement</key>
+        <map>
+        <key>Comment</key>
+            <string>If movelock built-in into LSL Bridge is active, then lock and unlock position after stopping or starting movement</string>
         <key>Persist</key>
             <integer>1</integer>
         <key>Type</key>
