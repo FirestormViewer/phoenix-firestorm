@@ -711,7 +711,7 @@ default
     on_rez(integer i)
     {
         // We don't want to be rezzed without being attached. Insure we don't create litter.
-        llSetPrimitiveParams([PRIM_TEMP_ON_REZ, TRUE]);
+        llSetLinkPrimitiveParamsFast(LINK_SET, [PRIM_TEMP_ON_REZ, TRUE]);
         // Force Movelock variable to false here and allow attach() to decide via initBridge(), if we're on Firestorm and login relock can be turned off if needed.
         // on_rez() will be triggered prior to attach() when attaching from inventory or during login, but not prior to state_entry().
         useMoveLock = FALSE;
