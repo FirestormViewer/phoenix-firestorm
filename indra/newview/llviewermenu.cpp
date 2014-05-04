@@ -4306,6 +4306,7 @@ class FSSelfToggleMoveLock : public view_listener_t
         {
 			if (LLGridManager::getInstance()->isInSecondLife())
 			{
+				make_ui_sound("UISndAlert");
 				bool new_value = !gSavedPerAccountSettings.getBOOL("UseMoveLock");
 				gSavedPerAccountSettings.setBOOL("UseMoveLock", new_value);
 				if (new_value)
