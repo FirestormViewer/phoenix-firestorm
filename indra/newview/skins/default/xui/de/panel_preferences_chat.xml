@@ -249,6 +249,7 @@
 			<check_box name="FSKeywordOn" label="Schlüsselwort-Benachrichtungen aktivieren"/>
 			<check_box name="FSKeywordInChat" label="Lokalen Chat auf Schüsselwörter prüfen"/>
 			<check_box name="FSKeywordInIM" label="Instant Messages und Gruppenchats auf Schlüsselwörter prüfen"/>
+			<check_box name="FSKeywordCaseSensitive" label="Groß-/Kleinschreibung bei Schlüsselwörtern beachten"/>
 			<text name="textFSKeywords">
 				Schlüsselwörter (getrennt durch Komma):
 			</text>
