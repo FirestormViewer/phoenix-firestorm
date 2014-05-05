@@ -230,6 +230,7 @@
 			<check_box name="FSKeywordOn" label="Włącz detektor słów"/>
 			<check_box name="FSKeywordInChat" label="Szukaj słów w Czacie Lokalnym"/>
 			<check_box name="FSKeywordInIM" label="Szukaj słów w IM i czatach grupowych"/>
+			<check_box name="FSKeywordCaseSensitive" label="Bierz pod uwagę wielkość liter w szukanych słowach"/>
 			<text name="textFSKeywords">
 				Szukane słowa (oddzielone przecinkami):
 			</text>

@@ -40,6 +40,7 @@
 FSKeywords::FSKeywords()
 {
 	gSavedPerAccountSettings.getControl("FSKeywords")->getSignal()->connect(boost::bind(&FSKeywords::updateKeywords, this));
+	gSavedPerAccountSettings.getControl("FSKeywordCaseSensitive")->getSignal()->connect(boost::bind(&FSKeywords::updateKeywords, this));
 	updateKeywords();
 }
 
@@ -50,7 +51,10 @@ FSKeywords::~FSKeywords()
 void FSKeywords::updateKeywords()
 {
 	std::string s = gSavedPerAccountSettings.getString("FSKeywords");
-	LLStringUtil::toLower(s);
+	if (!gSavedPerAccountSettings.getBOOL("FSKeywordCaseSensitive"))
+	{
+		LLStringUtil::toLower(s);
+	}
 	boost::regex re(",");
 	boost::sregex_token_iterator begin(s.begin(), s.end(), re, -1), end;
 	mWordList.clear();
@@ -65,13 +69,17 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 	static LLCachedControl<bool> sFSKeywordOn(gSavedPerAccountSettings, "FSKeywordOn", false);
 	static LLCachedControl<bool> sFSKeywordInChat(gSavedPerAccountSettings, "FSKeywordInChat", false);
 	static LLCachedControl<bool> sFSKeywordInIM(gSavedPerAccountSettings, "FSKeywordInIM", false);
+	static LLCachedControl<bool> sFSKeywordCaseSensitive(gSavedPerAccountSettings, "FSKeywordCaseSensitive", false);
 	if (!sFSKeywordOn ||
 	(is_local && !sFSKeywordInChat) ||
 	(!is_local && !sFSKeywordInIM))
 		return FALSE;
 
 	std::string source(chat.mText);
-	LLStringUtil::toLower(source);
+	if (!sFSKeywordCaseSensitive)
+	{
+		LLStringUtil::toLower(source);
+	}
 	
 	for(U32 i=0; i < mWordList.size(); i++)
 	{

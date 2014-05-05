@@ -410,6 +410,7 @@ static bool handleRepartition(const LLSD&)
 	if (gPipeline.isInit())
 	{
 		gOctreeMaxCapacity = gSavedSettings.getU32("OctreeMaxNodeCapacity");
+		gOctreeMinSize = gSavedSettings.getF32("OctreeMinimumNodeSize");
 		gObjectList.repartitionObjects();
 	}
 	return true;
@@ -758,6 +759,11 @@ static void handleMovelockOptionChanged(const LLSD& newvalue)
 {
 	FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
 }
+static void handleMovelockAfterMoveOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("RelockMoveLockAfterMovement", newvalue.asBoolean());
+}
+// </FS:PP>
 
 static void handleDecimalPrecisionChanged(const LLSD& newvalue)
 {
@@ -767,7 +773,6 @@ static void handleDecimalPrecisionChanged(const LLSD& newvalue)
 		build_tools->changePrecision(newvalue);
 	}
 }
-// </FS:PP>
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -959,6 +964,7 @@ void settings_setup_listeners()
 	gSavedPerAccountSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged, _2));
 	gSavedPerAccountSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	gSavedPerAccountSettings.getControl("UseMoveLock")->getCommitSignal()->connect(boost::bind(&handleMovelockOptionChanged, _2));
+	gSavedPerAccountSettings.getControl("RelockMoveLockAfterMovement")->getCommitSignal()->connect(boost::bind(&handleMovelockAfterMoveOptionChanged, _2));
 	gSavedSettings.getControl("FSBuildToolDecimalPrecision")->getCommitSignal()->connect(boost::bind(&handleDecimalPrecisionChanged, _2));
 }
 

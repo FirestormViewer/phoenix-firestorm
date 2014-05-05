@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Załaduj" name="upload">
-		<menu_item_call label="Obraz ([COST])..." name="Upload Image"/>
+		<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
 		<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
 		<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 		<menu_item_call label="Model meszowy..." name="Upload Model"/>
-		<menu_item_call label="Zbiór plików ([COST] za jeden)..." name="Bulk Upload"/>
+		<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
 		<menu_item_call label="Ustaw domyślne uprawnienia ładowania" name="perm prefs"/>
+		<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 	</menu>
 	<menu_item_call label="Nowy folder" name="New Folder"/>
 	<menu_item_call label="Nowy skrypt" name="New Script"/>
 	<menu_item_call label="Nowa nota" name="New Note"/>
 	<menu_item_call label="Nowy gest" name="New Gesture"/>
-	<menu label="Nowe Ubranie" name="New Clothes">
+	<menu label="Nowe ubranie" name="New Clothes">
 		<menu_item_call label="Nowa koszula" name="New Shirt"/>
 		<menu_item_call label="Nowe spodnie" name="New Pants"/>
 		<menu_item_call label="Nowe buty" name="New Shoes"/>
-		<menu_item_call label="Nowe skarpetki" name="New Socks"/>
+		<menu_item_call label="Nowe skarpety" name="New Socks"/>
 		<menu_item_call label="Nowa kurtka" name="New Jacket"/>
 		<menu_item_call label="Nowa spódnica" name="New Skirt"/>
 		<menu_item_call label="Nowe rękawiczki" name="New Gloves"/>
@@ -26,7 +27,7 @@
 		<menu_item_call label="Nowy tatuaż" name="New Tattoo"/>
 		<menu_item_call label="Nowa fizyka" name="New Physics"/>
 	</menu>
-	<menu label="Nowa Część Ciała" name="New Body Parts">
+	<menu label="Nowa część ciała" name="New Body Parts">
 		<menu_item_call label="Nowy kształt" name="New Shape"/>
 		<menu_item_call label="Nowa skórka" name="New Skin"/>
 		<menu_item_call label="Nowe włosy" name="New Hair"/>

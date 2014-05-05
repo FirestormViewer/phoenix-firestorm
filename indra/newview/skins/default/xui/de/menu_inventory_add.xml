@@ -8,6 +8,7 @@
 		<menu_item_call label="Modellassistent..." name="Upload Model Wizard"/>
 		<menu_item_call label="Mehrfach-Upload ([COST] pro Datei)..." name="Bulk Upload"/>
 		<menu_item_call label="Hochlade-Berechtigungen (Standard) festlegen" name="perm prefs"/>
+		<menu_item_call label="Linkset importieren..." name="import linkset"/>
 	</menu>
 	<menu_item_call label="Neuer Ordner" name="New Folder"/>
 	<menu_item_call label="Neues Skript" name="New Script"/>

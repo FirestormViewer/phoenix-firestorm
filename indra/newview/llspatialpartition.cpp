@@ -80,6 +80,7 @@ U32 LLSpatialGroup::sNodeCount = 0;
 std::set<GLuint> LLSpatialGroup::sPendingQueries;
 
 U32 gOctreeMaxCapacity;
+F32 gOctreeMinSize;
 
 BOOL LLSpatialGroup::sNoDelete = FALSE;
 

@@ -1,4 +1,4 @@
-//http bridge script v.2.8
+//http bridge script v.2.9
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -19,7 +19,7 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      // Control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
-    string  bridgeVersion = "2.8";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.9";    // This should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
     integer debug = FALSE;
@@ -55,6 +55,8 @@
 
     // Movelock
     integer useMoveLock = FALSE;
+    integer relockMoveLockAfterMovement = FALSE;
+    integer relockIsUserMoving = FALSE;
 
     // Flight assist
     float   MIN_SPEED = 2.0;
@@ -132,7 +134,7 @@
 
         if (llGetAttached() != 0)
         {
-            llRequestPermissions(llGetOwner(),PERMISSION_TAKE_CONTROLS);
+            llRequestPermissions(owner, PERMISSION_TAKE_CONTROLS);
         }
 
         // Assume the worst and let the viewer convince us otherwise
@@ -148,6 +150,13 @@
         // Check the state of movelock, relock if needed
         if (useMoveLock)
         {
+            if (relockMoveLockAfterMovement)
+            {
+                if (llGetAttached())
+                {
+                    request_control_perms();
+                }
+            }
             //debugOutput("Movelock true, going to movelock_init");
             movelock_init();
         }
@@ -314,6 +323,18 @@
             {
                 //debugOutput("Movelock false, using llStopMoveToTarget()");
                 llStopMoveToTarget();
+            }
+        }
+        else if (cmd == "RelockMoveLockAfterMovement")
+        {
+            //debugOutput("Parsing params: " + llList2String(commandList, 1));
+            relockMoveLockAfterMovement = llList2Integer(commandList, 1);
+            if (relockMoveLockAfterMovement)
+            {
+                if (llGetAttached())
+                {
+                    request_control_perms();
+                }
             }
         }
 
@@ -633,14 +654,9 @@ reportTag(key av, integer tagIdx)
         last_time = time;
     }
 
-    flight_take_controls()
+    request_control_perms()
     {
-        llTakeControls(CONTROL_UP|CONTROL_DOWN, TRUE, TRUE);
-    }
-
-    flight_request_perms()
-    {
-        flight_take_controls();
+        llTakeControls(CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN, TRUE, TRUE);
     }
 
     flight_init()
@@ -655,7 +671,7 @@ reportTag(key av, integer tagIdx)
         falling = -1;
         hovering = -1;
         if (llGetAttached())
-            flight_request_perms();
+            request_control_perms();
         flight_set_tick(SLOW_TICK);
     }
 
@@ -695,7 +711,7 @@ default
     on_rez(integer i)
     {
         // We don't want to be rezzed without being attached. Insure we don't create litter.
-        llSetPrimitiveParams([PRIM_TEMP_ON_REZ, TRUE]);
+        llSetLinkPrimitiveParamsFast(LINK_SET, [PRIM_TEMP_ON_REZ, TRUE]);
         // Force Movelock variable to false here and allow attach() to decide via initBridge(), if we're on Firestorm and login relock can be turned off if needed.
         // on_rez() will be triggered prior to attach() when attaching from inventory or during login, but not prior to state_entry().
         useMoveLock = FALSE;
@@ -720,8 +736,10 @@ default
     {
         if (i)
         {
-            if (useFlightAssist)
-                flight_take_controls();
+            if (useFlightAssist || useMoveLock)
+            {
+                request_control_perms();
+            }
             else
             {
                 // Take control for value that does nothing, in order to work in no-script sims
@@ -732,6 +750,24 @@ default
 
     control(key id, integer level, integer edge)
     {
+
+        if (useMoveLock && relockMoveLockAfterMovement)
+        {
+            if (level & (CONTROL_FWD | CONTROL_BACK | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_UP | CONTROL_DOWN))
+            {
+                if (relockIsUserMoving == FALSE)
+                {
+                    relockIsUserMoving = TRUE;
+                    llStopMoveToTarget();
+                }
+            }
+            else if (relockIsUserMoving == TRUE)
+            {
+                relockIsUserMoving = FALSE;
+                movelock_init();
+            }
+        }
+
         if ((llGetAgentInfo(owner) & AGENT_FLYING) && useFlightAssist)
         {
             controls = 0;
@@ -740,6 +776,7 @@ default
             if (controls > 0)
                 flight_check_boost();
         }
+
     }
 
     changed(integer change)
