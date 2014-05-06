@@ -434,7 +434,7 @@
          name="movelock_lbl"
          width="450"
          top_pad="5">
-         If movelock built-in into LSL Bridge is active...
+         If built in LSL Bridge movelock is active...
         </text>
         <check_box
          control_name="RelockMoveLockAfterRegionChange"
