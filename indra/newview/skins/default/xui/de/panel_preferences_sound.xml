@@ -430,8 +430,8 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndInvalidOp" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndInvalidOp"/>
 
-		<text tool_tip="Sound UUID played on toggling movelock." name="textFSMovelockToggle">
-			Toggling movelock:
+		<text tool_tip="UUID des Klangs beim Ein-/Ausschalten von Movelock." name="textFSMovelockToggle">
+			Movelock ein-/ausschalten:
 		</text>
 		<button label="V" name="Prev_UISndMovelockToggle" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndMovelockToggle" tool_tip="Auf Standardwert zurücksetzen."/>
