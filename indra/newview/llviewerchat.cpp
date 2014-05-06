@@ -50,11 +50,13 @@ LLViewerChat::font_change_signal_t LLViewerChat::sChatFontChangedSignal;
 //static 
 void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_local)
 {
-	if(chat.mMuted)
-	{
-		r_color= LLUIColorTable::instance().getColor("LtGray");
-	}
-	else
+	// <FS:Ansariel> FIRE-1061 - Color friends, lindens, muted, etc
+	//if(chat.mMuted)
+	//{
+	//	r_color= LLUIColorTable::instance().getColor("LtGray");
+	//}
+	//else
+	// </FS:Ansariel>
 	{
 		switch(chat.mSourceType)
 		{
