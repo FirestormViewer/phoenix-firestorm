@@ -429,6 +429,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndInvalidOp" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndInvalidOp"/>
 
+			<text tool_tip="UUID dźwięku odgrywany, gdy włączane lub wyłączane jest unieruchamianie pozycji." name="textFSMovelockToggle">
+				Unieruchamianie pozycji:
+			</text>
+			<button name="Prev_UISndMovelockToggle" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndMovelockToggle" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndMovelockToggle"/>
+
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu." name="textFSRestart">
 				Restart regionu:
 			</text>
