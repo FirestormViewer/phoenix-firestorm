@@ -65,6 +65,8 @@ AOEngine::AOEngine() :
 	mLastOverriddenMotion(ANIM_AGENT_STAND)
 {
 	gSavedPerAccountSettings.getControl("UseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOControl, this));
+
+	gAgent.addRegionChangedCallback(boost::bind(&AOEngine::onRegionChange, this));
 }
 
 AOEngine::~AOEngine()
@@ -288,6 +290,8 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
 
 const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 {
+	LL_DEBUGS("AOEngine") << "override(" << pMotion << "," << start << ")" << LL_ENDL;
+
 	LLUUID animation;
 
 	LLUUID motion=pMotion;
@@ -1749,6 +1753,11 @@ void AOEngine::processImport( bool aFromTimer )
 const LLUUID& AOEngine::getAOFolder() const
 {
 	return mAOFolder;
+}
+
+void AOEngine::onRegionChange()
+{
+	gAgent.sendAnimationRequest(mLastMotion,ANIM_REQUEST_START);
 }
 
 // ----------------------------------------------------
