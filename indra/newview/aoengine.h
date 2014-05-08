@@ -153,7 +153,16 @@ class AOEngine
 		void saveSettings();
 
 		typedef boost::signals2::signal<void ()> updated_signal_t;
-		boost::signals2::connection setReloadCallback(const updated_signal_t::slot_type& cb) { return mUpdatedSignal.connect(cb); };
+		boost::signals2::connection setReloadCallback(const updated_signal_t::slot_type& cb)
+		{
+			return mUpdatedSignal.connect(cb);
+		};
+
+		typedef boost::signals2::signal<void (const LLUUID&)> animation_changed_signal_t;
+		boost::signals2::connection setAnimationChangedCallback(const animation_changed_signal_t::slot_type& cb)
+		{
+			return mAnimationChangedSignal.connect(cb);
+		};
 
 	protected:
 		void init();
@@ -176,12 +185,15 @@ class AOEngine
 		BOOL findForeignItems(const LLUUID& uuid) const;
 		void purgeFolder(const LLUUID& uuid) const;
 
+		void onRegionChange();
+
 		void onToggleAOControl();
 		static void onNotecardLoadComplete(	LLVFS* vfs,const LLUUID& assetUUID,LLAssetType::EType type,
 												void* userdata,S32 status,LLExtStat extStatus);
 		void parseNotecard(const char* buffer);
 
 		updated_signal_t mUpdatedSignal;
+		animation_changed_signal_t mAnimationChangedSignal;
 
 		AOTimerCollection mTimerCollection;
 		AOSitCancelTimer mSitCancelTimer;

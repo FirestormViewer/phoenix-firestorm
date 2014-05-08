@@ -82,11 +82,11 @@
         <text name="ToastSpaceText">
             pikseli
         </text>
-        <slider label="Ukryj tost po:" tool_tip="Liczba sekund, po jakich tost jest usuwany z ekranu" name="ToastLifetime" />
+        <slider label="Ukryj zwykły tost po:" tool_tip="Liczba sekund, po jakich zwykły tost jest usuwany z ekranu" name="ToastLifetime" />
         <text name="ToastLifetimeText">
             sekund
         </text>
-        <slider label="Ukryj tost napiwków po:" tool_tip="Liczba sekund, po jakich tost napiwków jest usuwany z ekranu" name="TipToastLifetime" />
+        <slider label="Ukryj tost informacyjny po:" tool_tip="Liczba sekund, po jakich tost z mniej ważnymi informacjami jest usuwany z ekranu" name="TipToastLifetime" />
         <text name="TipToastLifetimeText">
             sekund
         </text>

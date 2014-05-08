@@ -65,6 +65,8 @@ AOEngine::AOEngine() :
 	mLastOverriddenMotion(ANIM_AGENT_STAND)
 {
 	gSavedPerAccountSettings.getControl("UseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOControl, this));
+
+	gAgent.addRegionChangedCallback(boost::bind(&AOEngine::onRegionChange, this));
 }
 
 AOEngine::~AOEngine()
@@ -125,10 +127,20 @@ void AOEngine::stopAllSitVariants()
 	LL_DEBUGS("AOEngine") << "stopping all SIT variants." << LL_ENDL;
 	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_FEMALE,ANIM_REQUEST_STOP);
 	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC,ANIM_REQUEST_STOP);
-	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND,ANIM_REQUEST_STOP);
-	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND_CONSTRAINED,ANIM_REQUEST_STOP);
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_FEMALE);
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GENERIC);
+
+	// scripted seats that use ground_sit as animation need special treatment
+	const LLViewerObject* agentRoot=dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
+	if(agentRoot && agentRoot->getID()!=gAgent.getID())
+	{
+		LL_DEBUGS("AOEngine") << "Not stopping ground sit animations while sitting on a prim." << LL_ENDL;
+		return;
+	}
+
+	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND,ANIM_REQUEST_STOP);
+	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND_CONSTRAINED,ANIM_REQUEST_STOP);
+
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GROUND);
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GROUND_CONSTRAINED);
 }
@@ -247,10 +259,13 @@ void AOEngine::enable(BOOL yes)
 				LL_WARNS("AOEngine") << "Unhandled last motion id " << mLastMotion << LL_ENDL;
 
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_START);
+			mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
 		}
 	}
 	else
 	{
+		mAnimationChangedSignal(LLUUID::null);
+
 		gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC,ANIM_REQUEST_STOP);
 		// stop all overriders, catch leftovers
 		for(S32 index=0;index<AOSet::AOSTATES_MAX;index++)
@@ -288,6 +303,8 @@ void AOEngine::setStateCycleTimer(const AOSet::AOState* state)
 
 const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 {
+	LL_DEBUGS("AOEngine") << "override(" << pMotion << "," << start << ")" << LL_ENDL;
+
 	LLUUID animation;
 
 	LLUUID motion=pMotion;
@@ -352,15 +369,19 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 		return animation;
 	}
 
+	mAnimationChangedSignal(LLUUID::null);
+
 	mCurrentSet->stopTimer();
 	if(start)
 	{
+		setLastMotion(motion);
+		LL_DEBUGS("AOEngine") << "(enabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
+
 		// Disable start stands in Mouselook
 		if(mCurrentSet->getMouselookDisable() &&
 			motion==ANIM_AGENT_STAND &&
 			mInMouselook)
 		{
-			setLastMotion(motion);
 			LL_DEBUGS("AOEngine") << "(enabled AO, mouselook stand stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 			return animation;
 		}
@@ -368,13 +389,20 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 		// Do not start override sits if not selected
 		if(!mCurrentSet->getSitOverride() && motion==ANIM_AGENT_SIT)
 		{
-			setLastMotion(motion);
 			LL_DEBUGS("AOEngine") << "(enabled AO, sit override stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 			return animation;
 		}
 
-		setLastMotion(motion);
-		LL_DEBUGS("AOEngine") << "(enabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
+		// scripted seats that use ground_sit as animation need special treatment
+		if(motion==ANIM_AGENT_SIT_GROUND)
+		{
+			const LLViewerObject* agentRoot=dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
+			if(agentRoot && agentRoot->getID()!=gAgent.getID())
+			{
+				LL_DEBUGS("AOEngine") << "Ground sit animation playing but sitting on a prim - disabling overrider." << LL_ENDL;
+				return animation;
+			}
+		}
 
 		if(!state->mAnimations.empty())
 		{
@@ -409,6 +437,11 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 					<< " of set " << mCurrentSet->getName()
 					<< " (" << mCurrentSet << ")" << LL_ENDL;
 
+		if(animation.notNull())
+		{
+			mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
+		}
+
 		setStateCycleTimer(state);
 
 		if(motion==ANIM_AGENT_SIT)
@@ -434,7 +467,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 	{
 		animation=state->mCurrentAnimationID;
 		state->mCurrentAnimationID.setNull();
-		
+
 		// for typing animaiton, just return the stored animation, reset the state timer, and don't memorize anything else
 		if(motion==ANIM_AGENT_TYPE)
 		{
@@ -587,16 +620,19 @@ void AOEngine::cycle(eCycleMode cycleMode)
 	if(animation==oldAnimation)
 		return;
 
+	mAnimationChangedSignal(LLUUID::null);
+
 	state->mCurrentAnimationID=animation;
-	if(!animation.isNull())
+	if(animation.notNull())
 	{
 		LL_DEBUGS("AOEngine") << "requesting animation start for motion " << gAnimLibrary.animationName(motion) << ": " << animation << LL_ENDL;
 		gAgent.sendAnimationRequest(animation,ANIM_REQUEST_START);
+		mAnimationChangedSignal(state->mAnimations[state->mCurrentAnimation].mInventoryUUID);
 	}
 	else
 		LL_DEBUGS("AOEngine") << "overrider came back with NULL animation for motion " << gAnimLibrary.animationName(motion) << "." << LL_ENDL;
 
-	if(!oldAnimation.isNull())
+	if(oldAnimation.notNull())
 	{
 		LL_DEBUGS("AOEngine") << "Cycling state " << state->mName << " - stopping animation " << oldAnimation << LL_ENDL;
 		gAgent.sendAnimationRequest(oldAnimation,ANIM_REQUEST_STOP);
@@ -1319,7 +1355,7 @@ void AOEngine::inMouselook(BOOL yes)
 			return;
 
 		LLUUID animation=state->mCurrentAnimationID;
-		if(!animation.isNull())
+		if(animation.notNull())
 		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
 			gAgentAvatarp->LLCharacter::stopMotion(animation);
@@ -1365,7 +1401,7 @@ void AOEngine::setOverrideSits(AOSet* set,BOOL yes)
 			return;
 
 		LLUUID animation=state->mCurrentAnimationID;
-		if(!animation.isNull())
+		if(animation.notNull())
 		{
 			gAgent.sendAnimationRequest(animation,ANIM_REQUEST_STOP);
 			gAgentAvatarp->LLCharacter::stopMotion(animation);
@@ -1749,6 +1785,11 @@ void AOEngine::processImport( bool aFromTimer )
 const LLUUID& AOEngine::getAOFolder() const
 {
 	return mAOFolder;
+}
+
+void AOEngine::onRegionChange()
+{
+	gAgent.sendAnimationRequest(mLastMotion,ANIM_REQUEST_START);
 }
 
 // ----------------------------------------------------
