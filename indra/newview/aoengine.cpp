@@ -127,10 +127,20 @@ void AOEngine::stopAllSitVariants()
 	LL_DEBUGS("AOEngine") << "stopping all SIT variants." << LL_ENDL;
 	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_FEMALE,ANIM_REQUEST_STOP);
 	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GENERIC,ANIM_REQUEST_STOP);
-	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND,ANIM_REQUEST_STOP);
-	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND_CONSTRAINED,ANIM_REQUEST_STOP);
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_FEMALE);
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GENERIC);
+
+	// scripted seats that use ground_sit as animation need special treatment
+	const LLViewerObject* agentRoot=dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
+	if(agentRoot && agentRoot->getID()!=gAgent.getID())
+	{
+		LL_DEBUGS("AOEngine") << "Not stopping ground sit animations while sitting on a prim." << LL_ENDL;
+		return;
+	}
+
+	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND,ANIM_REQUEST_STOP);
+	gAgent.sendAnimationRequest(ANIM_AGENT_SIT_GROUND_CONSTRAINED,ANIM_REQUEST_STOP);
+
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GROUND);
 	gAgentAvatarp->LLCharacter::stopMotion(ANIM_AGENT_SIT_GROUND_CONSTRAINED);
 }
@@ -364,12 +374,14 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 	mCurrentSet->stopTimer();
 	if(start)
 	{
+		setLastMotion(motion);
+		LL_DEBUGS("AOEngine") << "(enabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
+
 		// Disable start stands in Mouselook
 		if(mCurrentSet->getMouselookDisable() &&
 			motion==ANIM_AGENT_STAND &&
 			mInMouselook)
 		{
-			setLastMotion(motion);
 			LL_DEBUGS("AOEngine") << "(enabled AO, mouselook stand stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 			return animation;
 		}
@@ -377,13 +389,20 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 		// Do not start override sits if not selected
 		if(!mCurrentSet->getSitOverride() && motion==ANIM_AGENT_SIT)
 		{
-			setLastMotion(motion);
 			LL_DEBUGS("AOEngine") << "(enabled AO, sit override stopped) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
 			return animation;
 		}
 
-		setLastMotion(motion);
-		LL_DEBUGS("AOEngine") << "(enabled AO) setting last motion id to " <<  gAnimLibrary.animationName(mLastMotion) << LL_ENDL;
+		// scripted seats that use ground_sit as animation need special treatment
+		if(motion==ANIM_AGENT_SIT_GROUND)
+		{
+			const LLViewerObject* agentRoot=dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
+			if(agentRoot && agentRoot->getID()!=gAgent.getID())
+			{
+				LL_DEBUGS("AOEngine") << "Ground sit animation playing but sitting on a prim - disabling overrider." << LL_ENDL;
+				return animation;
+			}
+		}
 
 		if(!state->mAnimations.empty())
 		{
@@ -448,7 +467,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 	{
 		animation=state->mCurrentAnimationID;
 		state->mCurrentAnimationID.setNull();
-		
+
 		// for typing animaiton, just return the stored animation, reset the state timer, and don't memorize anything else
 		if(motion==ANIM_AGENT_TYPE)
 		{
