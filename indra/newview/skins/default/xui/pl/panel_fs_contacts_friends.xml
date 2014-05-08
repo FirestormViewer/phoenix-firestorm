@@ -14,6 +14,7 @@
 	<button label="IM/Dzwoń" name="im_btn" tool_tip="Rozpocznij sesję IM (prywatnej wiadomości)"/>
 	<button label="Profil" name="profile_btn" tool_tip="Pokaż obrazek, grupy i inne informacje"/>
 	<button label="Teleportuj..." name="offer_teleport_btn" tool_tip="Zaoferuj teleport do Twojej obecnej lokalizacji temu znajomemu"/>
+	<button label="Mapa..." name="map_btn" tool_tip="Pokaż obecną lokalizację tego znajomego na mapie"/>
 	<button label="Zapłać..." name="pay_btn" tool_tip="Daj Lindeny (L$) temu znajomemu"/>
 	<button label="Usuń..." name="remove_btn" tool_tip="Usuń tą osobę z listy Twoich znajomych"/>
 	<button label="Dodaj..." name="add_btn" tool_tip="Zapytaj tego Rezydenta, czy nie chce zostać Twoim znajomym"/>

@@ -2,6 +2,7 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Pokaż minimapę ponad radarem" name="ShowRadarMinimap"/>
 	<menu_item_check label="Ogranicz wyniki do określonej odległości" name="LimitRadarByRange"/>
+	<menu_item_check label="Pokaż awatary zablokowane i z czarnej listy" name="FSRadarShowMutedAndDerendered"/>
 	<context_menu label="Format imion radaru" name="radarNameFormat">
 		<menu_item_check label="Wyświetlane" name="radarFmtDN"/>
 		<menu_item_check label="Nazwa konta" name="radarFmtUN"/>
