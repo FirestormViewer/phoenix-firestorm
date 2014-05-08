@@ -39,6 +39,7 @@ Chcesz spotkać ludzi? Spróbuj użyć [secondlife:///app/worldmap Mapy Świata]
 				<panel name="panel_radar" label="Lista" />
 				<panel name="radarmap_options_panel" label="Opcje">
 					<check_box label="Pokaż minimapę nad radarem" name="ShowRadarMinimap"/>
+					<check_box label="Pokaż awatary zablokowane i z czarnej listy" name="FSRadarShowMutedAndDerendered"/>
 					<check_box label="Zgłaszaj wejście w pola widzenia" name="RadarReportDrawRangeEnter"/>
 					<check_box label="Zgłaszaj wyjście z pola widzenia" name="RadarReportDrawRangeLeaving"/>
 					<check_box label="Zgłaszaj wejście w przestrzeń czatu" name="RadarReportChatRangeEnter"/>
