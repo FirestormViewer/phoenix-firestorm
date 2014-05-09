@@ -4013,6 +4013,38 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 	{
 		//This fires if we're trying to restore an item to world using the correct group.
 		bool remove_from_inventory = false;
+
+		// <FS:Zi> Do not allow "Restore To Last Position" for no-copy items
+#ifdef OPENSIM
+		if(LLGridManager::instance().isInSecondLife())
+		{
+#endif
+			// protect from restoring to last position when the item is no-copy to prevent
+			// inventory loss
+			if(!gAgent.restoreToWorldItem->getPermissions().allowCopyBy(gAgent.getID()))
+			{
+				if(!gSavedSettings.getBOOL("AllowNoCopyRezRestoreToWorld"))
+				{
+					// for some reason, we still came this far, even though we should not have
+					// allowed RezRestoreToWorld on a no copy item on Second Life grids, so
+					// log this message and stop proceeding. This will result in the user wearing
+					// the land group, but hopefully this problem will not come up ever.
+					LL_WARNS("Avatar") << "Tried RezRestoreToWorld on a no-copy item! Attempt blocked." << LL_ENDL;
+
+					// copied from the end of this function to here, to avoid indention mess
+					gAgent.restoreToWorld = false;
+					update_group_floaters(active_id);
+					// <FS:Ansariel> Fire event for group title overview
+					gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), "");
+
+					return;
+				}
+			}
+#ifdef OPENSIM
+		}
+#endif
+		// </FS:Zi>
+
 		msg->newMessage("RezRestoreToWorld");
 		msg->nextBlockFast(_PREHASH_AgentData);
 		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());

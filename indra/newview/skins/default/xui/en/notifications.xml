@@ -11835,4 +11835,13 @@ Enter a domain name to be added to the [LIST]:
     </form>
   </notification>
 
+   <!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
+  <notification
+   icon="alertmodal.tga"
+   name="CantRestoreToWorldNoCopy"
+   type="alertmodal">
+Restore to Last Position is not allowed for no copy items to prevent possible content loss.
+  </notification>
+  <!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
+
 </notifications>

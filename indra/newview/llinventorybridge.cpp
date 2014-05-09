@@ -88,6 +88,12 @@
 #include "llparcel.h"
 #include "llviewerparcelmgr.h"
 
+// <FS:Zi> Do not allow "Restore To Last Postiion" for no-copy items
+#ifdef OPENSIM
+#include "fsgridhandler.h"
+#endif
+// </FS:Zi>
+
 void copy_slurl_to_clipboard_callback_inv(const std::string& slurl);
 
 // Marketplace outbox current disabled
@@ -1629,6 +1635,27 @@ void LLItemBridge::restoreToWorld()
 	LLViewerInventoryItem* itemp = static_cast<LLViewerInventoryItem*>(getItem());
 	if (itemp)
 	{
+		// <FS:Zi> Do not allow "Restore To Last Position" for no-copy items
+#ifdef OPENSIM
+		if(LLGridManager::instance().isInSecondLife())
+		{
+#endif
+			// do not restore to last position when the item is no-copy to prevent
+			// inventory loss
+			if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
+			{
+				// debug guard for future testing of a server side fix
+				if(!gSavedSettings.getBOOL("AllowNoCopyRezRestoreToWorld"))
+				{
+					LLNotificationsUtil::add("CantRestoreToWorldNoCopy");
+					return;
+				}
+			}
+#ifdef OPENSIM
+		}
+#endif
+		// </FS:Zi>
+
 		LLMessageSystem* msg = gMessageSystem;
 
 		if (gSavedSettings.getBOOL("RezUnderLandGroup"))
