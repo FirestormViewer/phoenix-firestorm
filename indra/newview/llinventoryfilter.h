@@ -31,10 +31,6 @@
 #include "llpermissionsflags.h"
 #include "llfolderviewmodel.h"
 
-//	Begin Multi-substring inventory search
-#include <vector>
-//	End Multi-substring inventory search
-
 class LLFolderViewItem;
 class LLFolderViewFolder;
 class LLInventoryItem;
@@ -57,7 +53,7 @@ public:
 		FILTERTYPE_DATE = 0x1 << 3,		// search by date range
 		FILTERTYPE_WEARABLE = 0x1 << 4,	// search by wearable type
 		FILTERTYPE_EMPTYFOLDERS = 0x1 << 5,		// pass if folder is not a system   folder to be hidden if
-		FILTERTYPE_WORN = 0x1 << 6,	// search by wearable type
+		FILTERTYPE_WORN = 0x1 << 6,		// <FS> search by wearable type
 	};
 
 	enum EFilterLink
@@ -75,7 +71,7 @@ public:
 		SO_SYSTEM_FOLDERS_TO_TOP = 0x1 << 2	// Force system folders to be on top
 	};
 
-	// ## Zi: Extended Inventory Search
+	// <FS:Zi> Extended Inventory Search
 	enum EFilterSubstringTarget
 	{
 		SUBST_TARGET_NAME = 0,			// Classic search for item name
@@ -84,7 +80,7 @@ public:
 		SUBST_TARGET_UUID,				// Search for asset UUID
 		SUBST_TARGET_ALL					// Search in all fields at the same time
 	};
-	// ## Zi: Extended Inventory Search
+	// </FS:Zi> Extended Inventory Search
 
 	struct FilterOps
 	{
@@ -184,12 +180,12 @@ public:
 	const std::string& 	getFilterSubStringOrig() const { return mFilterSubStringOrig; } 
 	bool 				hasFilterString() const;
 	
-	//	Begin Multi-substring inventory search
+	// <FS:Zi> Multi-substring inventory search
 	//	For use by LLFolderViewItem for highlighting
 	U32					getFilterSubStringCount() const;
 	std::string::size_type getFilterSubStringPos(U32 index) const;
 	std::string::size_type getFilterSubStringLen(U32 index) const;
-	//	End Multi-substring inventory search
+	// </FS:Zi> Multi-substring inventory search
 
 	void 				setFilterPermissions(PermissionMask perms);
 	PermissionMask 		getFilterPermissions() const;
@@ -222,11 +218,11 @@ public:
 
 	std::string::size_type getStringMatchOffset(LLFolderViewModelItem* item) const;
 	std::string::size_type getFilterStringSize() const;
-	// ## Zi: Extended Inventory Search
+	// <FS:Zi> Extended Inventory Search
 	void setFilterSubStringTarget(const std::string& targetName);
 	EFilterSubstringTarget getFilterSubStringTarget() const;
 	std::string getSearchableTarget(const LLFolderViewItem* item) const;
-	// ## Zi: Extended Inventory Search
+	// </FS:Zi> Extended Inventory Search
 
 	// +-------------------------------------------------------------------+
 	// + Presentation
@@ -293,11 +289,11 @@ private:
 
 	std::string				mFilterSubString;
 	
-	//	Begin Multi-substring inventory search
+	// <FS:Zi> Multi-substring inventory search
 	std::vector<std::string::size_type>	mSubStringMatchOffsets;
 	std::vector<std::string>			mFilterSubStrings;
-	EFilterSubstringTarget mFilterSubStringTarget;		// ## Zi: Extended Inventory Search
-	//	End Multi-substring inventory search
+	EFilterSubstringTarget mFilterSubStringTarget;
+	// </FS:Zi> Multi-substring inventory search
 
 	std::string				mFilterSubStringOrig;
 	const std::string		mName;
