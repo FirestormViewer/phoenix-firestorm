@@ -37,7 +37,6 @@
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "utilitybar.h"
-#include <boost/graph/graph_concepts.hpp>
 
 FloaterAO::FloaterAO(const LLSD& key)
 :	LLTransientDockableFloater(NULL,true,key),LLEventTimer(10.f),
