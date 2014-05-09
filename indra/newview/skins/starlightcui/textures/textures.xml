@@ -920,6 +920,9 @@ with the same filename but different name
   <texture name="Edit_Flip_X" file_name="icons/Edit_Flip_X.png" preload="false" />
   <texture name="AddItem_Menu" file_name="icons/AddItem_Menu.png" preload="false" />
   <texture name="TrashItem_Menu" file_name="icons/TrashItem_Menu.png" preload="false" />
+  <texture name="block_list" file_name="toolbar_icons/blocklist.png" preload="true" />
+  <texture name="resync_animations" file_name="toolbar_icons/resync_animations.png" preload="true" />
+  
 
 <texture name="ProgressLarge_1" file_name="icons/ProgressLarge_1.png" preload="true" />
 <texture name="ProgressLarge_2" file_name="icons/ProgressLarge_2.png" preload="true" />
