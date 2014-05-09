@@ -4801,4 +4801,7 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification name="CantRestoreToWorldNoCopy">
+		Die Option „Wiederherstellen an letzter Position“ ist nicht erlaubt für nicht-kopierbare Objekte, um einem möglichen Verlust vorzubeugen.
+	</notification>
 </notifications>
