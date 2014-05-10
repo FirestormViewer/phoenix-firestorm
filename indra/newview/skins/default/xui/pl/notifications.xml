@@ -4616,4 +4616,7 @@ Nie można tego cofnąć.
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification name="CantRestoreToWorldNoCopy">
+		Funkcjonalność przywracania na ostatnią pozycję nie jest dostępna dla obiektów bez praw kopiowania, aby zapobiec ewentualnej ich utracie.
+	</notification>
 </notifications>
