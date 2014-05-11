@@ -222,13 +222,6 @@ public:
 // [/SL:KB]
 		mHasMouseHover(false)
 	{
-		// <FS:Zi> Handle NULL pointers in mImage gracefully
-		if(!mImage)
-		{
-			LL_WARNS("UI") << "NULL Image pointer for text segment of embedded inventory." << LL_ENDL;
-			mImage=LLUI::getUIImage("Unknown_Icon");
-		}
-		// </FS:Zi>
 
 		mStyle = new LLStyle(LLStyle::Params().font(LLFontGL::getFontSansSerif()));
 		mToolTip = inv_item->getName() + '\n' + inv_item->getDescription();
@@ -638,13 +631,7 @@ LLUIImagePtr LLEmbeddedItems::getItemImage(llwchar ext_char) const
 			case LLAssetType::AT_ANIMATION:		img_name = "Inv_Animation";	break;
 			case LLAssetType::AT_GESTURE:		img_name = "Inv_Gesture";	break;
 			case LLAssetType::AT_MESH:          img_name = "Inv_Mesh";	    break;
-			// <FS:Zi> Don't crash, try to recover gracefully
-			// default: llassert(0);
-			default:
-				img_name = "Unknown_Icon";
-				LL_WARNS("UI") << "Unknown asset type " << item->getType() << " for text segment of embedded inventory." << LL_ENDL;
-				break;
-			// </FS:Zi>
+			default: llassert(0);
 		}
 
 		return LLUI::getUIImage(img_name);
