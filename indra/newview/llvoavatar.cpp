@@ -3675,8 +3675,13 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 		return FALSE;
 	}
 
+	// <FS:Zi> Optionally disable the usage of timesteps, testing if this affects performance or
+	//         creates animation issues - FIRE-3657
+	// if (!isSelf() && !mIsDummy)
+	static LLCachedControl<bool> use_timesteps(gSavedSettings,"UseAnimationTimeSteps");
 	// change animation time quanta based on avatar render load
-	if (!isSelf() && !mIsDummy)
+	if (!isSelf() && !mIsDummy && use_timesteps)
+	// </FS:Zi>
 	{
 		F32 time_quantum = clamp_rescale((F32)sInstances.size(), 10.f, 35.f, 0.f, 0.25f);
 		F32 pixel_area_scale = clamp_rescale(mPixelArea, 100, 5000, 1.f, 0.f);
@@ -3688,8 +3693,14 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 			removeAnimationData("Walk Speed");
 		}
 		mMotionController.setTimeStep(time_step);
-//		llinfos << "Setting timestep to " << time_quantum * pixel_area_scale << llendl;
 	}
+	// <FS:Zi> Optionally disable the usage of timesteps, testing if this affects performance or
+	//         creates animation issues - FIRE-3657
+	else
+	{
+		mMotionController.setTimeStep(0.0f);
+	}
+	// </FS:Zi>
 
 	if (getParent() && !mIsSitting)
 	{
