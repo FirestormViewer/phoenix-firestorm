@@ -261,11 +261,6 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 		senderName = av_name.getUserNameForDisplay();
 	}
 
-	if (rlv_handler_t::isEnabled() && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-	{
-		senderName = RlvStrings::getAnonym(senderName);
-	}
-
 	// Replacing the "IM" in front of group chat messages with the actual group name
 	if (!group.empty())
 	{
