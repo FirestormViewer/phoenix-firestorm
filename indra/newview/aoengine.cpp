@@ -222,7 +222,11 @@ void AOEngine::enable(BOOL yes)
 		{
 			LL_DEBUGS("AOEngine") << "Enabling animation state " << state->mName << LL_ENDL;
 
-			gAgent.sendAnimationRequest(mLastOverriddenMotion,ANIM_REQUEST_STOP);
+			// do not stop underlying ground sit when re-enabling the AO
+			if(mLastOverriddenMotion!=ANIM_AGENT_SIT_GROUND_CONSTRAINED)
+			{
+				gAgent.sendAnimationRequest(mLastOverriddenMotion,ANIM_REQUEST_STOP);
+			}
 
 			LLUUID animation=override(mLastMotion,TRUE);
 			if(animation.isNull())
@@ -341,8 +345,8 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 	}
 
 	// we don't distinguish between these two
-	if(motion==ANIM_AGENT_SIT_GROUND_CONSTRAINED)
-		motion=ANIM_AGENT_SIT_GROUND;
+	if(motion==ANIM_AGENT_SIT_GROUND)
+		motion=ANIM_AGENT_SIT_GROUND_CONSTRAINED;
 
 	AOSet::AOState* state=mCurrentSet->getStateByRemapID(motion);
 	if(!state)
@@ -394,7 +398,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 		}
 
 		// scripted seats that use ground_sit as animation need special treatment
-		if(motion==ANIM_AGENT_SIT_GROUND)
+		if(motion==ANIM_AGENT_SIT_GROUND_CONSTRAINED)
 		{
 			const LLViewerObject* agentRoot=dynamic_cast<LLViewerObject*>(gAgentAvatarp->getRoot());
 			if(agentRoot && agentRoot->getID()!=gAgent.getID())
@@ -453,7 +457,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 				mSitCancelTimer.oneShot();
 		}
 		// special treatment for "transient animations" because the viewer needs the Linden animation to know the agent's state
-		else if(motion==ANIM_AGENT_SIT_GROUND ||
+		else if(motion==ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
 				motion==ANIM_AGENT_PRE_JUMP ||
 				motion==ANIM_AGENT_STANDUP ||
 				motion==ANIM_AGENT_LAND ||
@@ -487,7 +491,7 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 		mCurrentSet->setMotion(LLUUID::null);
 
 		// again, special treatment for "transient" animations to make sure our own animation gets stopped properly
-		if(	motion==ANIM_AGENT_SIT_GROUND ||
+		if(	motion==ANIM_AGENT_SIT_GROUND_CONSTRAINED ||
 			motion==ANIM_AGENT_PRE_JUMP ||
 			motion==ANIM_AGENT_STANDUP ||
 			motion==ANIM_AGENT_LAND ||

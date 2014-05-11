@@ -79,7 +79,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 		ANIM_AGENT_WALK,
 		ANIM_AGENT_RUN,
 		ANIM_AGENT_SIT,
-		ANIM_AGENT_SIT_GROUND,
+		ANIM_AGENT_SIT_GROUND_CONSTRAINED,
 		ANIM_AGENT_CROUCH,
 		ANIM_AGENT_CROUCHWALK,
 		ANIM_AGENT_LAND,
@@ -150,9 +150,15 @@ AOSet::AOState* AOSet::getStateByName(const std::string& name)
 
 AOSet::AOState* AOSet::getStateByRemapID(const LLUUID& id)
 {
+	LLUUID remap_id=id;
+	if(remap_id==ANIM_AGENT_SIT_GROUND)
+	{
+		remap_id=ANIM_AGENT_SIT_GROUND_CONSTRAINED;
+	}
+
 	for(S32 index=0;index<AOSTATES_MAX;index++)
 	{
-		if(mStates[index].mRemapID==id)
+		if(mStates[index].mRemapID==remap_id)
 		{
 			return &mStates[index];
 		}
