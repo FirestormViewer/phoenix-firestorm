@@ -137,7 +137,7 @@ FSDropTarget::~FSDropTarget()
 
 void FSDropTarget::doDrop(EDragAndDropType cargo_type, void* cargo_data)
 {
-	llinfos << "FSDropTarget::doDrop()" << llendl;
+	LL_INFOS("LegacyProfile") << "FSDropTarget::doDrop()" << LL_ENDL;
 }
 
 BOOL FSDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
@@ -828,8 +828,8 @@ void FSPanelProfileSecondLife::onAvatarNameCacheSetName(const LLUUID& agent_id, 
 		return;		
 	}
 
-	llinfos << "name-change now " << LLDate::now() << " next_update "
-		<< LLDate(av_name.mNextUpdate) << llendl;
+	LL_INFOS("LegacyProfile") << "name-change now " << LLDate::now() << " next_update "
+		<< LLDate(av_name.mNextUpdate) << LL_ENDL;
 	F64 now_secs = LLDate::now().secondsSinceEpoch();
 
 	if (now_secs < av_name.mNextUpdate)
@@ -1672,7 +1672,7 @@ void FSPanelProfilePicks::onClickNewBtn()
 
 void FSPanelProfilePicks::onClickDelete()
 {
-	FSPanelPick* pick_panel = (FSPanelPick*) mTabContainer->getCurrentPanel();
+	FSPanelPick* pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getCurrentPanel());
 	if (pick_panel)
 	{
 		LLUUID pick_id = pick_panel->getPickId();
@@ -1726,7 +1726,7 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
 			LLUUID selected_id = LLUUID::null;
 			if (mTabContainer->getTabCount() > 0)
 			{
-				FSPanelPick* active_pick_panel = (FSPanelPick*) mTabContainer->getCurrentPanel();
+				FSPanelPick* active_pick_panel = dynamic_cast<FSPanelPick*>(mTabContainer->getCurrentPanel());
 				if (active_pick_panel)
 				{
 					selected_id = active_pick_panel->getPickId();
@@ -2001,7 +2001,7 @@ void FSPanelAvatarNotes::onCommitRights()
 	if (NULL == buddy_relationship)
 	{
 		// Lets have a warning log message instead of having a crash. EXT-4947.
-		llwarns << "Trying to modify rights for non-friend avatar. Skipped." << llendl;
+		LL_WARNS("LegacyProfile") << "Trying to modify rights for non-friend avatar. Skipped." << LL_ENDL;
 		return;
 	}
 
