@@ -323,7 +323,7 @@ void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	{
 		if (type != CHAT_TYPE_START && type != CHAT_TYPE_STOP)
 		{
-			lldebugs << "Channel chat: " << utf8_text << llendl;
+			LL_DEBUGS("FSNearbyChatHub") << "Channel chat: " << utf8_text << LL_ENDL;
 		}
 	}
 

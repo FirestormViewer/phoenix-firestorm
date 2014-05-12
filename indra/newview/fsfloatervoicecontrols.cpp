@@ -758,7 +758,7 @@ void FSFloaterVoiceControls::setState(LLAvatarListItem* item, ESpeakerState stat
 		}
 		break;
 	default:
-		llwarns << "Unrecognized avatar panel state (" << state << ")" << llendl;
+		LL_WARNS("Voice") << "Unrecognized avatar panel state (" << state << ")" << LL_ENDL;
 		break;
 	}
 }

@@ -1133,22 +1133,22 @@ void FSFloaterNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType t
 	{
 		if (type == CHAT_TYPE_WHISPER)
 		{
-			lldebugs << "You whisper " << utf8_text << llendl;
+			LL_DEBUGS("FSFloaterNearbyChat") << "You whisper " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_WHISPER, ANIM_REQUEST_START);
 		}
 		else if (type == CHAT_TYPE_NORMAL)
 		{
-			lldebugs << "You say " << utf8_text << llendl;
+			LL_DEBUGS("FSFloaterNearbyChat") << "You say " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_TALK, ANIM_REQUEST_START);
 		}
 		else if (type == CHAT_TYPE_SHOUT)
 		{
-			lldebugs << "You shout " << utf8_text << llendl;
+			LL_DEBUGS("FSFloaterNearbyChat") << "You shout " << utf8_text << LL_ENDL;
 			gAgent.sendAnimationRequest(ANIM_AGENT_SHOUT, ANIM_REQUEST_START);
 		}
 		else
 		{
-			llinfos << "send_chat_from_viewer() - invalid volume" << llendl;
+			LL_INFOS("FSFloaterNearbyChat") << "send_chat_from_viewer() - invalid volume" << LL_ENDL;
 			return;
 		}
 	}
@@ -1156,7 +1156,7 @@ void FSFloaterNearbyChat::sendChatFromViewer(const LLWString &wtext, EChatType t
 	{
 		if (type != CHAT_TYPE_START && type != CHAT_TYPE_STOP)
 		{
-			lldebugs << "Channel chat: " << utf8_text << llendl;
+			LL_DEBUGS("FSFloaterNearbyChat") << "Channel chat: " << utf8_text << LL_ENDL;
 		}
 	}
 	

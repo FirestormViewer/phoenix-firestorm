@@ -425,7 +425,7 @@ void FSPanelClassifieds::openClassifiedInfo(const LLSD &params)
 void FSPanelClassifieds::openClassifiedEdit(const LLSD& params)
 {
 	LLUUID classified_id = params["classified_id"].asUUID();;
-	llinfos << "opening classified " << classified_id << " for edit" << llendl;
+	LL_INFOS("FSPanelClassifieds") << "opening classified " << classified_id << " for edit" << LL_ENDL;
 	editClassified(classified_id);
 }
 
@@ -566,7 +566,7 @@ void FSPanelClassifieds::editClassified(const LLUUID&  classified_id)
 	FSClassifiedItem* c_item = findClassifiedById(classified_id);
 	if (!c_item)
 	{
-		llwarns << "item not found for classified_id " << classified_id << llendl;
+		LL_WARNS("FSPanelClassifieds") << "item not found for classified_id " << classified_id << LL_ENDL;
 		return;
 	}
 
@@ -654,7 +654,7 @@ void FSPanelClassifieds::closePanel(LLPanel* panel)
 		}
 		else
 		{
-			llwarns << "No underlying panel to focus." << llendl;
+			LL_WARNS("FSPanelClassifieds") << "No underlying panel to focus." << LL_ENDL;
 		}
 	}
 }
