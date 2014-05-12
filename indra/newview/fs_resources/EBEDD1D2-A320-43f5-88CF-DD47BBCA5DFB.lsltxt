@@ -355,9 +355,7 @@
 getScriptInfo(key target)
 {
     list details = llGetObjectDetails(target, ([OBJECT_NAME, OBJECT_TOTAL_SCRIPT_COUNT, OBJECT_RUNNING_SCRIPT_COUNT, OBJECT_SCRIPT_MEMORY, OBJECT_SCRIPT_TIME]));
-    llOwnerSay("'"+(string)llList2String(details,0) +
-               "' [" + (string)llList2Integer(details,2) + "/" + (string)llList2Integer(details,1) + "] running scripts. " +
-               (string)(llList2Integer(details,3)/1024) + "Kb consumed for " + (string)(llList2Float(details,4)*1000.0) + "ms of cpu time.");
+    llOwnerSay("'" + llList2String(details, 0) + "' [" + llList2String(details, 2) + "/" + llList2String(details, 1) + "] running scripts. " + (string)(llList2Integer(details, 3) / 1024) + " KB allowed memory size limit, " + (string)(llList2Float(details, 4) * 1000.0) + " ms of CPU time consumed.");
 }
 
 //
