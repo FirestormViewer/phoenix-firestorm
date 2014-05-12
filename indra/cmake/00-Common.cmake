@@ -263,6 +263,13 @@ if (LINUX)
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
   set(CMAKE_CXX_FLAGS_RELEASE "-O2 ${CMAKE_CXX_FLAGS_RELEASE}")
+
+  # <FS:ND> Build without frame pointer if requested. Otherwise profiling might not work reliable. N.B. Win32 uses FP based calling by default.
+  if( NO_OMIT_FRAMEPOINTER )
+    set(CMAKE_CXX_FLAGS_RELEASE "-fno-omit-frame-pointer ${CMAKE_CXX_FLAGS_RELEASE}")
+  endif( NO_OMIT_FRAMEPOINTER )
+  # </FS:ND>
+
 endif (LINUX)
 
 
