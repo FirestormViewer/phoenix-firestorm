@@ -63,3 +63,35 @@ class FSViewerManifest:
             print "Working directory: %s" % os.getcwd()
             print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
 
+    def fs_save_linux_symbols( self ):
+        #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        print( "Packaging symbols" )
+
+        """
+         Copy symbols into a .debug subdir, then add a debug link into the stripped exe.
+         This allows gdb to automatically pick up symbols, even when they are not embedded.
+         Maybe at some point it is worth to extract the build-id (readelf -n) and store the
+         symbols in a .symbol server in form of xy/za*.debug where xyza* is the build-id.
+        """ 
+        
+        fileBin = os.path.join( self.get_dst_prefix(), "bin", "do-not-directly-run-firestorm-bin" )
+        fileSource = os.path.join( self.get_dst_prefix(), "..", "firestorm-bin" )
+
+        debugName = "firestorm-bin.debug"
+        debugDir = os.path.join( self.get_dst_prefix(), "bin", ".debug" )
+        debugFile = os.path.join( self.get_dst_prefix(), "bin", ".debug", debugName )
+        if not os.path.exists( debugDir ):
+            os.makedirs( debugDir )
+
+        self.run_command( "objcopy %s %s" % (fileSource, debugFile) )
+        self.run_command( "cd %s && objcopy --add-gnu-debuglink=%s %s" % (debugDir, debugName, fileBin) )
+        
+        if( os.path.exists( "%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower()) ):
+            symName = "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % ( self.args['configuration'].lower(), self.fs_channel_legacy_oneword(),
+                                                                      '-'.join( self.args['version'] ), self.args['viewer_flavor'] )
+            print( "Saving symbols %s" % symName )
+            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(), symName )
+
+    def fs_linux_tar_excludes(self):
+        return "--exclude core --exclude .debug/* --exclude .debug"

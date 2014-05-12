@@ -1328,8 +1328,9 @@ class LinuxManifest(ViewerManifest):
         installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
         installer_name = "_".join(installer_name_components)
         #installer_name = self.installer_base_name()
-        
+
         self.strip_binaries()
+        self.fs_save_linux_symbols() # <FS:ND/> Package symbols, add debug link
 
         # Fix access permissions
         self.run_command("""
@@ -1351,11 +1352,13 @@ class LinuxManifest(ViewerManifest):
             if self.args['buildtype'].lower() == 'release':
                 # --numeric-owner hides the username of the builder for
                 # security etc.
-                self.run_command('tar -C %(dir)s --numeric-owner -cjf '
+                self.run_command('tar -C %(dir)s --numeric-owner %(fs_excludes)s -cjf '
                                  '%(inst_path)s.tar.bz2 %(inst_name)s' % {
                         'dir': self.get_build_prefix(),
                         'inst_name': installer_name,
-                        'inst_path':self.build_path_of(installer_name)})
+                        'inst_path':self.build_path_of(installer_name),
+                        'fs_excludes':self.fs_linux_tar_excludes()
+                        })
             else:
                 print "Skipping %s.tar.bz2 for non-Release build (%s)" % \
                       (installer_name, self.args['buildtype'])
@@ -1368,16 +1371,6 @@ class LinuxManifest(ViewerManifest):
         if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
             print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
             self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
-
-        #AO: Try to package up symbols
-        # New Method, for reading cross platform stack traces on a linux/mac host
-        if (os.path.exists("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower())):
-            # Rename to add version numbers
-            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),
-                      "%s/Phoenix_%s_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),
-                                                                     self.fs_channel_legacy_oneword(),
-                                                                     '-'.join( self.args['version'] ),
-                                                                     self.args['viewer_flavor'] ) )
 
 
 class Linux_i686_Manifest(LinuxManifest):
