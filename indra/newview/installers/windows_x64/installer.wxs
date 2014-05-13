@@ -50,6 +50,7 @@
 		  ForcePerMachine="yes"
 		  >
         <MsiProperty Name="INSTALLDIR" Value="[InstallFolder]" /> 
+        <MsiProperty Name="FS_FROM_BURN" Value="1" /> 
       </MsiPackage> 
     </Chain> 
   </Bundle> 

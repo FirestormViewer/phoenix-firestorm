@@ -21,6 +21,11 @@
     <![CDATA[VersionNT64]]>
   </Condition>
 
+  <!-- Do not allow to install the MSI without using the bootstrapper. Mixing MSI and EXE installer has certain implications. Only remove this check if you're aware of them. -->
+  <Condition Message="This package cannot be installed by using the msi package">
+    <![CDATA[FS_FROM_BURN]]>
+  </Condition>
+
   <!-- OS list: http://msdn.microsoft.com/library/aa370556.aspx -->
   <Condition Message="Your system does not meet the minimum requirement of Vista x64 with Service Pack 2 or newer. Installation canceled.">
     <![CDATA[Installed OR (VersionNT64 >= 601) OR (VersionNT64 = 600 AND ServicePackLevel = 2)]]>
