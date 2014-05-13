@@ -18,7 +18,7 @@ Express + SDK location: "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv
 ).
 
 Configure/build is nearly the same as building a 32 bit version.
-autobuild -m64 configure -c ReleaseFS -- --package
+autobuild -m64 configure -c ReleaseFS -- --chan <channel> --package -DFS_UPGRADECODES='<MSI_UPGRADE_CODE>,<EXE_UPGRADE_CODE>'
 autobuild -m64 build -c ReleaseFS --no_configure
 
 The resulting installer/exe gets created in build-vc100_x64/newview/Release

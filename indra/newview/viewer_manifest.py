@@ -778,11 +778,13 @@ class Windows_i686_Manifest(ViewerManifest):
           settingsFile = "settings_%s_v4.xml" % self.app_name()
 
           substitution_strings['installer_file'] = installer_file
+
+          channelSuffix = self.channel().replace( CHANNEL_VENDOR_BASE, "" ).strip()
+
           self.run_command('"' + createMSI + '" ' + self.dst_path_of( "" ) +
                            " " + self.channel() + " " + substitution_strings[ 'version' ] +
-                           " " + settingsFile + " " + installer_file[:-4] + " " + " ".join( substitution_strings[ 'version' ].split(".") ) )
-          
-
+                           " " + settingsFile + " " + installer_file[:-4] + " " + " ".join( substitution_strings[ 'version' ].split(".") ) +
+                           " " + self.args['upgradecodes'].split(",")[0] + " " + self.args['upgradecodes'].split(",")[1] + " " + channelSuffix  )
         self.fs_sign_win_installer( substitution_strings ) # <FS:ND/> Sign files, step two. Sign installer.
 
         #AO: Try to package up symbols

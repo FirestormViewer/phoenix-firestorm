@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?> 
 
 <Wix RequiredVersion="3.6.2830.0" xmlns="http://schemas.microsoft.com/wix/2006/wi"  xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"> 
-  <Bundle Name="Firestorm x64"
+  <Bundle Name="Firestorm$(var.CHANNEL_SUFFIX) x64"
 		  Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)"
 		  Manufacturer="Phoenix Firestorm Project Inc"
-		  UpgradeCode="{32BC3287-D4C6-43AC-A98A-54BF1AFA610D}"
+		  UpgradeCode="$(var.UPGRADECODE)"
 		  HelpUrl="http://www.firestormviewer.org" 
 		  AboutUrl="http://www.firestormviewer.org" 
 		  Copyright="Copyright© 2014, Phoenix Firestorm Project Inc" 
@@ -25,7 +25,7 @@
     <WixVariable Id="WixStdbaLicenseFile" Value="test.rtf" /> 
 	-->
 
-    <Variable Name="InstallFolder" Type="string" Value="[ProgramFiles64Folder]Firestorm\" /> 
+    <Variable Name="InstallFolder" Type="string" Value="[ProgramFiles64Folder]Firestorm$(var.CHANNEL_SUFFIX)\" /> 
 
     <Chain> 
 	  <ExePackage

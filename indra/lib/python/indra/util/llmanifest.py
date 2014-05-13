@@ -176,6 +176,7 @@ def main():
     option_names.append('help')
 
     option_names.append('m64')
+    option_names.append('upgradecodes=')
     option_names.append('copy_artwork')
 
     options, remainder = getopt.getopt(sys.argv[1:], "", option_names)

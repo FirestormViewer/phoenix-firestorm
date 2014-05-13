@@ -3,7 +3,7 @@
  <Product Id="*"
    Name="Firestorm SecondLife and OpenSim viewer"
    Language="1033" Version="$(var.MAJOR).$(var.MINOR).$(var.HGCHANGE)" Manufacturer="Phoenix Viewer Project"
-   UpgradeCode="3FCFE6FD-1A6F-40f8-8683-CDBFE16CF653">
+   UpgradeCode="$(var.UPGRADECODE)">
 
   <Package InstallerVersion="200" Compressed="yes" Platform="x64"/>
   <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." MigrateFeatures="no"/>
@@ -34,7 +34,7 @@
    <Directory Id="DesktopFolder" SourceName="Desktop"/>
 
    <Directory Id="ProgramFiles64Folder">
-    <Directory Id="INSTALLDIR" Name="Firestorm">
+    <Directory Id="INSTALLDIR" Name="Firestorm$(var.CHANNEL_SUFFIX)">
 
      <Component Id="firestorm" Guid="{2CDF0673-595F-4fb4-B38A-C338BF9D4DF1}">
       <File Id="firestorm" Source="$(var.BUILDDIR)/$(var.PROGRAM_FILE)" KeyPath="yes"/>
@@ -43,10 +43,6 @@
       <File Source="$(var.BUILDDIR)/libcollada14dom22.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/fmodex64.dll" CompanionFile="firestorm" />
       <File Source="$(var.BUILDDIR)/glod.dll" CompanionFile="firestorm" />
-
-      <?if $(var.PACKAGE_LEAP)=1?>
-        <File Source="$(var.BUILDDIR)/Leap.dll" CompanionFile="firestorm" />
-      <?endif?>
 
 	  <File Source="$(var.WIX_SOURCEDIR)/msvcp100.dll" CompanionFile="firestorm" />
 	  <File Source="$(var.WIX_SOURCEDIR)/msvcr100.dll" CompanionFile="firestorm" />
@@ -82,23 +78,30 @@
       <File Source="$(var.BUILDDIR)/ca-bundle.crt" />
      </Component>
 
+     <?if $(var.PACKAGE_LEAP)=1?>
+      <Component Id="leap_dll" Guid="*">
+         <File Source="$(var.BUILDDIR)/Leap.dll" />
+      </Component>
+     <?endif?>
+
+
     </Directory>
    </Directory>
   </Directory>
 
   <DirectoryRef Id="ApplicationProgramsFolder">
-    <Component Id="ApplicationShortcut" Guid="321F37BF-41D0-4c68-B774-3FEC1532F05C">
-        <Shortcut Id="ApplicationStartMenuShortcut" Name="Firestorm" Target="[INSTALLDIR]Firestorm-bin.exe" WorkingDirectory="INSTALLDIR" />
+    <Component Id="ApplicationShortcut" Guid="*">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="Firestorm$(var.CHANNEL_SUFFIX)" Target="[INSTALLDIR]Firestorm-bin.exe" WorkingDirectory="INSTALLDIR" />
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
-        <RegistryValue Root="HKLM" Key="Software\firestorm\firestorm" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RegistryValue Root="HKLM" Key="Software\firestorm\firestorm$(var.CHANNEL_SUFFIX)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
     </Component>
   </DirectoryRef>
 
   <DirectoryRef Id="DesktopFolder">
-    <Component Id="ApplicationShortcut_Desktop" Guid="EFB2B902-E116-445D-8C17-E7E01DB9092B">
-      <Shortcut Id="ApplicationDesktopShortcut" Name="Firestorm" Target="[INSTALLDIR]Firestorm-bin.exe" WorkingDirectory="INSTALLDIR" />
+    <Component Id="ApplicationShortcut_Desktop" Guid="*">
+      <Shortcut Id="ApplicationDesktopShortcut" Name="Firestorm$(var.CHANNEL_SUFFIX)" Target="[INSTALLDIR]Firestorm-bin.exe" WorkingDirectory="INSTALLDIR" />
       <RemoveFolder Id="DesktopFolder" On="uninstall"/>
-      <RegistryValue Root="HKLM" Key="Software\firestorm\firestorm" Name="installed_desktopshortcut" Type="integer" Value="1" KeyPath="yes"/>
+      <RegistryValue Root="HKLM" Key="Software\firestorm\firestorm$(var.CHANNEL_SUFFIX)" Name="installed_desktopshortcut" Type="integer" Value="1" KeyPath="yes"/>
     </Component>
   </DirectoryRef>
 
@@ -112,6 +115,10 @@
    <ComponentRef Id="llplugin_libs" />
    <ComponentRef Id="llplugin_dir_codec_libs" />
    <ComponentRef Id="llplugin_dir_imageformat_libs" />
+
+   <?if $(var.PACKAGE_LEAP)=1?>
+    <ComponentRef Id="leap_dll" />
+   <?endif?>
 
    <ComponentGroupRef Id="fs_character" />
    <ComponentGroupRef Id="fs_fonts" />
