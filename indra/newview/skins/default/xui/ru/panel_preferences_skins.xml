@@ -12,8 +12,4 @@
     <text name="theme_textbox2">
         (Требуется перезагрузка)
     </text>
-    <check_box label="Использовать курсор стиля Viewer 1" name="use _legacy_cursors"/>
-    <text name="theme_textbox3">
-        (Требуется перезагрузка)
-    </text>
 </panel>
