@@ -42,7 +42,6 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "llglslshader.h"
-#include "../newview/llviewercontrol.h"
 
 // System includes
 #include <commdlg.h>
@@ -1700,20 +1699,9 @@ void LLWindowWin32::initCursors()
 	mCursor[ UI_CURSOR_TOOLZOOMIN ] = LoadCursor(module, TEXT("TOOLZOOMIN"));
 	mCursor[ UI_CURSOR_TOOLPICKOBJECT3 ] = LoadCursor(module, TEXT("TOOLPICKOBJECT3"));
 	mCursor[ UI_CURSOR_PIPETTE ] = LoadCursor(module, TEXT("TOOLPIPETTE"));
-	if (gSavedSettings.getBOOL("UseLegacyCursors"))
-	{
-		mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT-LEGACY"));
-		mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY-LEGACY"));
-		mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN-LEGACY"));
-		mCursor[ UI_CURSOR_TOOLPAY ]	= LoadCursor(module, TEXT("TOOLPAY-LEGACY"));
-	}
-	else
-	{
-		mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT"));
-		mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY"));
-		mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN"));
-		mCursor[ UI_CURSOR_TOOLPAY ]	= LoadCursor(module, TEXT("TOOLBUY"));
-	}
+	mCursor[ UI_CURSOR_TOOLSIT ]	= LoadCursor(module, TEXT("TOOLSIT"));
+	mCursor[ UI_CURSOR_TOOLBUY ]	= LoadCursor(module, TEXT("TOOLBUY"));
+	mCursor[ UI_CURSOR_TOOLOPEN ]	= LoadCursor(module, TEXT("TOOLOPEN"));
 	mCursor[ UI_CURSOR_TOOLPATHFINDING ]	= LoadCursor(module, TEXT("TOOLPATHFINDING"));
 	mCursor[ UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD ]	= LoadCursor(module, TEXT("TOOLPATHFINDINGPATHSTARTADD"));
 	mCursor[ UI_CURSOR_TOOLPATHFINDING_PATH_START ]	= LoadCursor(module, TEXT("TOOLPATHFINDINGPATHSTART"));

@@ -39,7 +39,6 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "llfindlocale.h"
-#include "../newview/llviewercontrol.h"
 
 #if LL_GTK
 extern "C" {
@@ -2161,19 +2160,9 @@ void LLWindowSDL::initCursors()
 	mSDLCursors[UI_CURSOR_TOOLPAUSE] = makeSDLCursorFromBMP("toolpause.BMP",0,0);
 	mSDLCursors[UI_CURSOR_TOOLMEDIAOPEN] = makeSDLCursorFromBMP("toolmediaopen.BMP",0,0);
 	mSDLCursors[UI_CURSOR_PIPETTE] = makeSDLCursorFromBMP("lltoolpipette.BMP",2,28);
-	if (gSavedSettings.getBOOL("UseLegacyCursors")) {
-		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit-legacy.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy-legacy.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen-legacy.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolpay-legacy.BMP",20,15);
-	}
-	else
-	{
-		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
-	}
+	mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit.BMP",20,15);
+	mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
+	mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING] = makeSDLCursorFromBMP("lltoolpathfinding.BMP", 16, 16);
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING_PATH_START] = makeSDLCursorFromBMP("lltoolpathfindingpathstart.BMP", 16, 16);
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD] = makeSDLCursorFromBMP("lltoolpathfindingpathstartadd.BMP", 16, 16);

@@ -496,8 +496,7 @@ ECursorType LLToolPie::cursorFromObject(LLViewerObject* object)
 			if ((object && object->flagTakesMoney())
 				|| (parent && parent->flagTakesMoney()))
 			{
-				//cursor = UI_CURSOR_TOOLBUY;  FIRESTORM - pay cursor is separate from buy cursor
-				cursor = UI_CURSOR_TOOLPAY;
+				cursor = UI_CURSOR_TOOLBUY;
 			}
 		}
 		break;

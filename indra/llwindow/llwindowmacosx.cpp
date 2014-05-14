@@ -37,7 +37,6 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "indra_constants.h"
-#include "../newview/llviewercontrol.h"
 
 #include <OpenGL/OpenGL.h>
 #include <CoreServices/CoreServices.h>
@@ -1321,7 +1320,6 @@ void LLWindowMacOSX::setupFailure(const std::string& text, const std::string& ca
 			// it is handled at a very low-level
 const char* cursorIDToName(int id)
 {
-	BOOL use_legacy_cursors = gSavedSettings.getBOOL("UseLegacyCursors");
 	switch (id)
 	{
 		case UI_CURSOR_ARROW:							return "UI_CURSOR_ARROW";
@@ -1357,16 +1355,15 @@ const char* cursorIDToName(int id)
 		case UI_CURSOR_TOOLPAUSE:						return "UI_CURSOR_TOOLPAUSE";
 		case UI_CURSOR_TOOLMEDIAOPEN:					return "UI_CURSOR_TOOLMEDIAOPEN";
 		case UI_CURSOR_PIPETTE:							return "UI_CURSOR_PIPETTE";
+		case UI_CURSOR_TOOLSIT:							return "UI_CURSOR_TOOLSIT";
+		case UI_CURSOR_TOOLBUY:							return "UI_CURSOR_TOOLBUY";
+		case UI_CURSOR_TOOLOPEN:						return "UI_CURSOR_TOOLOPEN";
 		case UI_CURSOR_TOOLPATHFINDING:					return "UI_CURSOR_PATHFINDING";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START:		return "UI_CURSOR_PATHFINDING_START";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD:	return "UI_CURSOR_PATHFINDING_START_ADD";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_END:		return "UI_CURSOR_PATHFINDING_END";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_END_ADD:	return "UI_CURSOR_PATHFINDING_END_ADD";
 		case UI_CURSOR_TOOLNO:							return "UI_CURSOR_NO";
-		case UI_CURSOR_TOOLSIT:							if (use_legacy_cursors) return "UI_CURSOR_TOOLSIT_LEGACY"; else return "UI_CURSOR_TOOLSIT";
-		case UI_CURSOR_TOOLBUY:							if (use_legacy_cursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
-		case UI_CURSOR_TOOLOPEN:						if (use_legacy_cursors) return "UI_CURSOR_TOOLOPEN_LEGACY"; else return "UI_CURSOR_TOOLOPEN";
-		case UI_CURSOR_TOOLPAY:							if (use_legacy_cursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLPAY";
 	}
 
 	llerrs << "cursorIDToName: unknown cursor id" << id << llendl;
@@ -1471,7 +1468,6 @@ void LLWindowMacOSX::updateCursor()
 	case UI_CURSOR_TOOLMEDIAOPEN:
 	case UI_CURSOR_TOOLSIT:
 	case UI_CURSOR_TOOLBUY:
-	case UI_CURSOR_TOOLPAY:
 	case UI_CURSOR_TOOLOPEN:
 	case UI_CURSOR_TOOLPATHFINDING:
 	case UI_CURSOR_TOOLPATHFINDING_PATH_START:
@@ -1523,7 +1519,6 @@ void LLWindowMacOSX::initCursors()
 	initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15);
 	initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15);
 	initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);
-	initPixmapCursor(UI_CURSOR_TOOLPAY, 20, 15);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD, 16, 16);
