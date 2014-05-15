@@ -2642,7 +2642,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	EInstantMessage dialog = (EInstantMessage)d;
 
 	// NaCl - Antispam Registry
-	if (dialog != IM_TYPING_START && dialog != IM_TYPING_STOP)
+	if (dialog != IM_TYPING_START && dialog != IM_TYPING_STOP &&											// Typing notifications
+		!(dialog == IM_NOTHING_SPECIAL && offline == IM_OFFLINE && from_id.notNull() && to_id.notNull()) &&	// Saved offline IMs
+		!(dialog == IM_FROM_TASK && offline == IM_OFFLINE)													// Saved offline IMs from objects
+		)
 	{
 		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_IM, from_id, ANTISPAM_SOURCE_AGENT))
 		{
