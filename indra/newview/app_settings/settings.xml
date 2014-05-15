@@ -1105,17 +1105,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-  <key>FSDontSendAvPhysicsParms</key>
-    <map>
-      <key>Comment</key>
-      <string>Don't send avatar physics parameters to server with shape for v1 compatibility</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
   <key>FSSortContactsByUserName</key>
     <map>
       <key>Comment</key>

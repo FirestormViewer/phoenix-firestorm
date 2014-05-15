@@ -81,7 +81,6 @@
         <text name="note_lookat">
              (Śledzenie spojrzeń Awatara w zakładce Prywatność)
         </text>
-        <check_box label="Nie wysyłaj danych dot. fizyki Awatara na serwer (kompatybilność ze starym V1)" name="dontsendavphysics" tool_tip="Wyłącza wysyłanie informacji opisujących fizykę Awatara na serwery Second Life, aby zachować kompatybilność ze starymi przeglądarkami V1" />
         <text name="BeamPrefs">
             Efekty wiązki wyboru
         </text>

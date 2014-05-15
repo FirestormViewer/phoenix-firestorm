@@ -78,7 +78,6 @@
         <text name="note_lookat">
              (Le impostazioni del "Look at" si trovano in riservatezza)
         </text>
-        <check_box label="Non mandare la fisicità dell'avatar al server (Compatibile con il viewer 1)" name="dontsendavphysics" tool_tip="Disabilita l'invio delle informazioni sulla fisicità del proprio avatar al server, per essere visualizati al meglio con il viewer 1" />
         <text name="BeamPrefs">
             Personalizza particle Raggio Indicatore (RI)
         </text>

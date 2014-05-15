@@ -74,7 +74,6 @@
 		<text name="note_lookat">
 			(Настройки фокуса камеры в вкладке приватность)
 		</text>
-		<check_box label="Не посылать инфо физики аватара серверу" name="dontsendavphysics" tool_tip=""/>
 
 		<!-- LGG Color Beams -->
 		<text name="BeamPrefs">

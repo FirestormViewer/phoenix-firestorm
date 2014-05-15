@@ -639,17 +639,6 @@
              (Avatar look at target settings are on the Privacy tab.)
         </text>
 
-        <check_box
-         top_pad="10"
-         follows="left|top"
-         height="16"
-         label="Don't send avatar physics to server (old V1 client compatibility)"
-         left="10"
-         name="dontsendavphysics"
-         width="270"
-         control_name="FSDontSendAvPhysicsParms"
-         tool_tip="Disables sending your avatar physics information to the Second Life server, for compatibility with version 1 viewers"/>
-
         <!-- LGG Color Beams -->
         <text
          name="BeamPrefs"

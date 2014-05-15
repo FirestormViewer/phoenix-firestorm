@@ -5170,18 +5170,13 @@ void LLAgent::sendAgentSetAppearance()
 		gMessageSystem->addBinaryDataFast(_PREHASH_TextureEntry, NULL, 0);
 	}
 
-	BOOL send_v1_message = gSavedSettings.getBOOL("FSDontSendAvPhysicsParms");
+
 	S32 transmitted_params = 0;
 	for (LLViewerVisualParam* param = (LLViewerVisualParam*)gAgentAvatarp->getFirstVisualParam();
 		 param;
 		 param = (LLViewerVisualParam*)gAgentAvatarp->getNextVisualParam())
 	{
-		// Do not transmit params of group
-		//  VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT. If we're
-		//  sending the version 1 compatible message, then strip out
-		//  V2-only parameters that have IDs of 1100 or higher.
-		if ((param->getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE) &&
-			((param->getID() < 1100) || (!send_v1_message)))
+		if (param->getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE) // do not transmit params of group VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT
 		{
 			msg->nextBlockFast(_PREHASH_VisualParam );
 			

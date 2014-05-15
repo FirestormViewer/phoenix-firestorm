@@ -152,9 +152,6 @@
         <text name="note_lookat">
              (Le partage du pointeur (look at) est dans l'onglet Confidentialité)
         </text>
-        <check_box name="dontsendavphysics"
-			label="Ne pas envoyer les effets physiques aux serveurs (compatible avec les V1)"
-			tool_tip="Désactive l'envoi des effets physiques de l'avatar aux serveur pour être compatible avec les viewers de 1e génération."/>
 	<!-- LGG Color Beams -->
         <text name="BeamPrefs">
 			Effets du faisceau de sélection

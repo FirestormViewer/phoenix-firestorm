@@ -81,7 +81,6 @@
 			<text name="note_lookat">
 				(Configuración de los puntos de mira en la pestaña de Privacidad)
 			</text>
-			<check_box label="No enviar física del avatar al sevidor (compatibilidad con el antiguo cliente V1)" name="dontsendavphysics" tool_tip="Desactiva el envío de información sobre la física de tu avatar al servidor del simulador, para compatibilidad con visores de versión 1"/>
 			<text name="BeamPrefs">
 				Efectos de partículas del rayo de selección
 			</text>
