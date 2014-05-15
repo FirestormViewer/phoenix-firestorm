@@ -654,26 +654,19 @@ bool FSFloaterNearbyChat::isChatMultiTab()
 
 BOOL FSFloaterNearbyChat::getVisible()
 {
-	if (isChatMultiTab())
-	{
-		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+	FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
 		
-		// Treat inactive floater as invisible.
-		bool is_active = im_container->getActiveFloater() == this;
+	// Treat inactive floater as invisible.
+	bool is_active = im_container->getActiveFloater() == this;
 		
-		//torn off floater is always inactive
-		if (!is_active && getHost() != im_container)
-		{
-			return LLFloater::getVisible();
-		}
-		
-		// getVisible() returns TRUE when Tabbed IM window is minimized.
-		return is_active && !im_container->isMinimized() && im_container->getVisible();
-	}
-	else
+	//torn off floater is always inactive
+	if (!is_active && getHost() != im_container)
 	{
 		return LLFloater::getVisible();
 	}
+		
+	// getVisible() returns TRUE when Tabbed IM window is minimized.
+	return is_active && !im_container->isMinimized() && im_container->getVisible();
 }
 
 void FSFloaterNearbyChat::enableTranslationButton(bool enabled)
