@@ -591,6 +591,7 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	LLSD& online_status_column			= element["columns"][LIST_ONLINE_STATUS];
 	online_status_column["column"]		= "icon_online_status";
 	online_status_column["type"]		= "icon";
+	online_status_column["halign"]		= "center";
 	
 	if (isOnline)
 	{	
