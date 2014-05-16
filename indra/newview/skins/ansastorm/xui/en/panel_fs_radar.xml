@@ -110,7 +110,6 @@
 			 left="3"
 			 height="281"
 			 width="321"
-			 min_dim="140"
 			 follows="all"
 			 mouse_opaque="false"
 			 name="radar_upper_layout">
