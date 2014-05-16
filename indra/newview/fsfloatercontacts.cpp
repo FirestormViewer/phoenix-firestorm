@@ -113,6 +113,7 @@ BOOL FSFloaterContacts::postBuild()
 {
 	mTabContainer = getChild<LLTabContainer>("friends_and_groups");
 	mFriendsTab = getChild<LLPanel>(FRIENDS_TAB_NAME);
+	mFriendListFontName = mFriendsTab->getString("FontName");
 
 	mFriendsList = mFriendsTab->getChild<LLScrollListCtrl>("friend_list");
 	mFriendsList->setMaxSelectable(MAX_FRIEND_SELECT);
@@ -584,7 +585,7 @@ void FSFloaterContacts::addFriend(const LLUUID& agent_id)
 	LLSD& friend_column					= element["columns"][LIST_FRIEND_NAME];
 	friend_column["column"]				= "full_name";
 	friend_column["value"]				= av_name.getCompleteName();
-	friend_column["font"]["name"]		= "SANSSERIF";
+	friend_column["font"]["name"]		= mFriendListFontName;
 	friend_column["font"]["style"]		= "NORMAL";
 
 	LLSD& online_status_column			= element["columns"][LIST_ONLINE_STATUS];

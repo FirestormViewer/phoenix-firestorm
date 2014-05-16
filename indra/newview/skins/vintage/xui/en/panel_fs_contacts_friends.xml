@@ -5,6 +5,7 @@
  mouse_opaque="true"
  name="friends"
  width="355">
+	<panel.string name="FontName" value="SANSSERIF"/>
 	<panel.string name="FriendCount" value="Friends: [COUNT]"/>
 	<view_border
 	 top="1"
