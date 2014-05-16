@@ -142,16 +142,6 @@ std::string formatString(std::string text, const LLStringUtil::format_map_t& arg
 	return text;
 }
 
-LLPanelPeople* getPeoplePanel()
-{
-	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
-	if (panel_people)
-	{
-		return dynamic_cast<LLPanelPeople*>(panel_people);
-	}
-	return NULL;
-}
-
 S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::string& str)
 {
 	// LLDateUtil::secondsSinceEpochFromString does not handle time, only the date.
