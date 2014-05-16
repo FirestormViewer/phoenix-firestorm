@@ -1090,7 +1090,23 @@ bool LLCollectAllBuddies::operator()(const LLUUID& buddy_id, LLRelationship* bud
 {
 	LLAvatarName av_name;
 	LLAvatarNameCache::get(buddy_id, &av_name);
-	mFullName = av_name.getDisplayName();
+	// <FS:Ansariel> FIRE-13756: Friends avatar picker only shows display name
+	//mFullName = av_name.getDisplayName();
+	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
+	if ((NameTagShowUsernames) && (UseDisplayNames))
+	{
+		mFullName = av_name.getCompleteName();
+	}
+	else if (UseDisplayNames)
+	{
+		mFullName = av_name.getDisplayName();
+	}
+	else
+	{
+		mFullName = av_name.getUserNameForDisplay();
+	}
+	// </FS:Ansariel>
 	buddy_map_t::value_type value(mFullName, buddy_id);
 	if(buddy->isOnline())
 	{
