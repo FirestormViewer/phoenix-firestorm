@@ -30,7 +30,6 @@
 
 #include "fsregistrarutils.h"
 #include "llchat.h"
-#include "llpanelpeople.h"
 #include "llviewerobject.h"
 
 class LLAvatarName;

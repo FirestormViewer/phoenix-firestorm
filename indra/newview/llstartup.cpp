@@ -210,6 +210,7 @@
 #include "growlmanager.h"
 #endif
 
+#include "fscommon.h"
 #include "fsdata.h"
 #include "fsfloatercontacts.h"
 #include "fsfloaterimcontainer.h"
@@ -217,17 +218,17 @@
 #include "fsfloatersearch.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
+#include "fsregistrarutils.h"
 #include "fsscriptlibrary.h"
 #include "fswsassetblacklist.h"
+#include "lggcontactsets.h"
 #include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
 #include "NACLantispam.h"
 #include "rlvhandler.h"
 #include "streamtitledisplay.h"
-#include "fscommon.h"
 #include "tea.h"
-#include "fsregistrarutils.h"
 
 //
 // exported globals

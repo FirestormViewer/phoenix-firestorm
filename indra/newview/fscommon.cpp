@@ -36,7 +36,6 @@
 #include "llinventorymodel.h"
 #include "llnotificationmanager.h"
 #include "llnotificationsutil.h"	// <FS:CR> reportToNearbyChat
-#include "llpanel.h"
 #include "lltooldraganddrop.h"
 #include "llviewerinventory.h"
 #include "llviewernetwork.h"
