@@ -350,3 +350,22 @@ LLSD FSCommon::populateGroupCount()
 	return LLSD(groupcountstring);
 }
 
+std::string FSCommon::getAvatarNameByDisplaySettings(const LLAvatarName& av_name)
+{
+	std::string name;
+	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
+	if ((NameTagShowUsernames) && (UseDisplayNames))
+	{
+		name = av_name.getCompleteName();
+	}
+	else if (UseDisplayNames)
+	{
+		name = av_name.getDisplayName();
+	}
+	else
+	{
+		name = av_name.getUserNameForDisplay();
+	}
+	return name;
+}

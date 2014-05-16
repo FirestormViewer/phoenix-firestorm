@@ -62,14 +62,14 @@
 #include "llvoavatar.h"
 #include "llavataractions.h"
 
-#include "lggcontactsets.h"
-// <FS:Ansariel> [FS communication UI]
+// Firestorm includes
+#include "fscommon.h"
 #include "fsfloaterim.h"
 #include "fsfloaternearbychat.h"
-// <FS:Ansariel> [FS communication UI]
+#include "fskeywords.h"
+#include "lggcontactsets.h"
 #include "llfloaterreg.h"
 #include "llnotificationmanager.h"
-#include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -817,21 +817,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	LLSD args;
 	// <FS:Ansariel> Make name clickable
 	//	args["NAME"] = av_name.getDisplayName();
-	std::string used_name;
-	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
-	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
-	if ((NameTagShowUsernames) && (UseDisplayNames))
-	{
-		used_name = av_name.getCompleteName();
-	}
-	else if (UseDisplayNames)
-	{
-		used_name = av_name.getDisplayName();
-	}
-	else
-	{
-		used_name = av_name.getUserNameForDisplay();
-	}
+	std::string used_name = FSCommon::getAvatarNameByDisplaySettings(av_name);
 	args["NAME"] = used_name;
 	// </FS:Ansariel>
 	
@@ -1092,20 +1078,7 @@ bool LLCollectAllBuddies::operator()(const LLUUID& buddy_id, LLRelationship* bud
 	LLAvatarNameCache::get(buddy_id, &av_name);
 	// <FS:Ansariel> FIRE-13756: Friends avatar picker only shows display name
 	//mFullName = av_name.getDisplayName();
-	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
-	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
-	if ((NameTagShowUsernames) && (UseDisplayNames))
-	{
-		mFullName = av_name.getCompleteName();
-	}
-	else if (UseDisplayNames)
-	{
-		mFullName = av_name.getDisplayName();
-	}
-	else
-	{
-		mFullName = av_name.getUserNameForDisplay();
-	}
+	mFullName = FSCommon::getAvatarNameByDisplaySettings(av_name);
 	// </FS:Ansariel>
 	buddy_map_t::value_type value(mFullName, buddy_id);
 	if(buddy->isOnline())

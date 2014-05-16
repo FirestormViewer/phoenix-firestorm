@@ -33,6 +33,8 @@
 #include "llpanelpeople.h"
 #include "llviewerobject.h"
 
+class LLAvatarName;
+
 const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // Const value for avatars at unknown height
 const F32 AVATAR_UNKNOWN_RANGE = -1.f;
 
@@ -77,6 +79,8 @@ namespace FSCommon
 
 	bool checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionActionType);
 	LLSD populateGroupCount();
+
+	std::string getAvatarNameByDisplaySettings(const LLAvatarName& av_name);
 };
 
 #endif // FS_COMMON_H
