@@ -428,12 +428,7 @@ void invrepair()
 	gInventory.collectDescendents(gInventory.getRootFolderID(),cats,items,FALSE);//,objectnamematches);
 }
 
-
-#ifdef JC_PROFILE_GSAVED
-std::map<std::string, int> get_gsaved_calls();
-#endif
-
-bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
+bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_gesture)
 {
 	static LLCachedControl<bool> sFSCmdLine(gSavedSettings, "FSCmdLine");
 	static LLCachedControl<std::string> sFSCmdLinePos(gSavedSettings,  "FSCmdLinePos");
@@ -1209,7 +1204,7 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 	return LLUUID::null;
 }
 
-void cmdline_tp2name(std::string target)
+void cmdline_tp2name(const std::string& target)
 {
 	LLUUID avkey = cmdline_partial_name2key(target);
 	if (avkey.notNull())

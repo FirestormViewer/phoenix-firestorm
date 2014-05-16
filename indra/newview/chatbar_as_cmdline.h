@@ -36,9 +36,9 @@
 
 #include "llchat.h"
 
-bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture = false);
+bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_gesture = false);
 void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.f);
-void cmdline_tp2name(std::string target);
+void cmdline_tp2name(const std::string& target);
 LLUUID cmdline_partial_name2key(std::string name);
 
 #endif // CHATBAR_AS_CMDLINE_H
