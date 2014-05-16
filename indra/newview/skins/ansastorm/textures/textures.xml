@@ -116,6 +116,8 @@
 	<texture name="Permission_Visible_Map_Theirs_Button"	file_name="legacy/ff_visible_map_button_theirs.tga" />
 	<texture name="Permission_Edit_Objects_Mine_Button"		file_name="legacy/ff_edit_mine_button.tga" />
 	<texture name="Permission_Edit_Objects_Theirs_Button"	file_name="legacy/ff_edit_theirs_button.tga" />
+	<texture name="icon_avatar_online"						file_name="legacy/icon_avatar_online_list.tga"			preload="false" />
+	<texture name="slim_icon_16_viewer"						file_name="legacy/icon_avatar_online_list.tga"			preload="false" />
 
 	<texture name="Checkbox_Transparent_On"					file_name="widgets/Checkbox_Transparent_On.png" preload="true" />
 	<texture name="Checkbox_Transparent_On_Disabled"		file_name="widgets/Checkbox_Transparent_On_Disabled.png" preload="true" />
