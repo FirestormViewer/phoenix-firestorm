@@ -1403,6 +1403,18 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InventoryOutboxNoItemsTitle">
 		Twoja skrzynka nadawcza kupca jest pusta.
 	</string>
+	<string name="InventoryOutboxInitializingTitle">
+		Inicjalizacja Marketplace.
+	</string>
+	<string name="InventoryOutboxInitializing">
+		Uzyskiwanie dostępu do Twojego konta [[MARKETPLACE_CREATE_STORE_URL] sklepu na Marketplace].
+	</string>
+	<string name="InventoryOutboxErrorTitle">
+		Błędy Marketplace.
+	</string>
+	<string name="InventoryOutboxError">
+		[[MARKETPLACE_CREATE_STORE_URL] Sklep na Marketplace] zwraca błędy.
+	</string>
 	<string name="InventoryOutboxNoItemsTooltip">
 		Umieść tutaj przedmioty, aby przygotować je do wysyłki na Marketplace.
 	</string>

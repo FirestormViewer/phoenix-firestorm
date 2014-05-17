@@ -69,13 +69,13 @@ Zobacz [[MARKETPLACE_IMPORTS_URL] log błędów] aby uzyskać więcej informacji
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxImportFailed">
-		Transfer nieudany
+		Transfer nieudany, błąd &apos;[ERROR_CODE]&apos;
 
 Foldery nie zostały wysłane na Marketplace z powodu błędu sieci lub systemu. Spróbuj później.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxInitFailed">
-		Inicjalizacja Marketplace nieudana
+		Inicjalizacja Marketplace nieudana, błąd &apos;[ERROR_CODE]&apos;
 
 Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj później.
 		<usetemplate name="okbutton" yestext="OK"/>
