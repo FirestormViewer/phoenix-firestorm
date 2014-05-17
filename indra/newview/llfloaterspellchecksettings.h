@@ -61,7 +61,6 @@ protected:
 	void onBtnBrowse();
 	void onBtnCancel();
 	void onBtnOK();
-	bool copyFile(const std::string from, const std::string to);
 	std::string parseXcuFile(const std::string& file_path) const;
 
 	std::string mDictionaryDir;

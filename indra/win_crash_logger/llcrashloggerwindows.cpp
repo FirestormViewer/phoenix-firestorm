@@ -45,6 +45,13 @@
 #include "lldxhardware.h"
 #include "lldir.h"
 #include "llsdserialize.h"
+#include "llsdutil.h"
+#include "stringize.h"
+
+#ifndef ND_NO_BREAKPAD
+#include <client/windows/crash_generation/crash_generation_server.h>
+#include <client/windows/crash_generation/client_info.h>
+#endif
 
 #define MAX_LOADSTRING 100
 #define MAX_STRING 2048
@@ -67,6 +74,7 @@ BOOL gFirstDialog = TRUE;	// Are we currently handling the Send/Don't Send dialo
 std::stringstream gDXInfo;
 bool gSendLogs = false;
 
+LLCrashLoggerWindows* LLCrashLoggerWindows::sInstance = NULL;
 
 //Conversion from char* to wchar*
 //Replacement for ATL macros, doesn't allocate memory
@@ -243,6 +251,10 @@ LRESULT CALLBACK WndProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam 
 
 LLCrashLoggerWindows::LLCrashLoggerWindows(void)
 {
+	if (LLCrashLoggerWindows::sInstance==NULL)
+	{
+		sInstance = this; 
+	}
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 #ifdef LL_SEND_CRASH_REPORTS
 	mCrashLookup = new LLCrashLookupWindows();
@@ -252,9 +264,187 @@ LLCrashLoggerWindows::LLCrashLoggerWindows(void)
 
 LLCrashLoggerWindows::~LLCrashLoggerWindows(void)
 {
-// [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	sInstance = NULL;
 	delete mCrashLookup;
 // [/SL:KB]
+}
+
+bool LLCrashLoggerWindows::getMessageWithTimeout(MSG *msg, UINT to)
+{
+    bool res;
+	UINT_PTR timerID = SetTimer(NULL, NULL, to, NULL);
+    res = GetMessage(msg, NULL, 0, 0);
+    KillTimer(NULL, timerID);
+    if (!res)
+        return false;
+    if (msg->message == WM_TIMER && msg->hwnd == NULL && msg->wParam == 1)
+        return false; //TIMEOUT! You could call SetLastError() or something...
+    return true;
+}
+
+int LLCrashLoggerWindows::processingLoop() {
+	const int millisecs=1000;
+	int retries = 0;
+	const int max_retries = 60;
+
+	LL_DEBUGS("CRASHREPORT") << "Entering processing loop for OOP server" << LL_ENDL;
+
+	LLSD options = getOptionData( LLApp::PRIORITY_COMMAND_LINE );
+
+	MSG msg;
+	
+	bool result;
+
+    while (1) 
+	{
+		result = getMessageWithTimeout(&msg, millisecs);
+		if ( result ) 
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		if ( retries < max_retries )  //Wait up to 1 minute for the viewer to say hello.
+		{
+			if (mClientsConnected == 0) 
+			{
+				LL_DEBUGS("CRASHREPORT") << "Waiting for client to connect." << LL_ENDL;
+				++retries;
+			}
+			else
+			{
+				LL_INFOS("CRASHREPORT") << "Client has connected!" << LL_ENDL;
+				retries = max_retries;
+			}
+		} 
+		else 
+		{
+			if (mClientsConnected == 0)
+			{
+				break;
+			}
+			if (!mKeyMaster.isProcessAlive(mPID, mProcName) )
+			{
+				break;
+			}
+		} 
+    }
+    
+    llinfos << "session ending.." << llendl;
+    
+    std::string per_run_dir = options["dumpdir"].asString();
+
+	// <FS:ND> Correct logfile for FS
+
+	// std::string per_run_file = per_run_dir + "\\SecondLife.log";
+    // std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"SecondLife.log");
+	std::string per_run_file = per_run_dir + "\\Firestorm.log";
+    std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"Firestorm.log");
+
+	// </FS:ND>
+
+	if (gDirUtilp->fileExists(per_run_dir))  
+	{
+		LL_INFOS ("CRASHREPORT") << "Copying " << log_file << " to " << per_run_file << llendl;
+	    LLFile::copy(log_file, per_run_file);
+	}
+	return 0;
+}
+
+
+void LLCrashLoggerWindows::OnClientConnected(void* context,
+				const google_breakpad::ClientInfo* client_info) 
+{
+	sInstance->mClientsConnected++;
+#ifndef ND_NO_BREAKPAD
+	LL_INFOS("CRASHREPORT") << "Client connected. pid = " << client_info->pid() << " total clients " << sInstance->mClientsConnected << LL_ENDL;
+#endif
+}
+
+void LLCrashLoggerWindows::OnClientExited(void* context,
+		const google_breakpad::ClientInfo* client_info) 
+{
+	sInstance->mClientsConnected--;
+#ifndef ND_NO_BREAKPAD
+	LL_INFOS("CRASHREPORT") << "Client disconnected. pid = " << client_info->pid() << " total clients " << sInstance->mClientsConnected << LL_ENDL;
+#endif
+}
+
+
+void LLCrashLoggerWindows::OnClientDumpRequest(void* context,
+	const google_breakpad::ClientInfo* client_info,
+	const std::wstring* file_path) 
+{
+	if (!file_path) 
+	{
+		llwarns << "dump with no file path" << llendl;
+		return;
+	}
+	if (!client_info) 
+	{
+		llwarns << "dump with no client info" << llendl;
+		return;
+	}
+
+	LLCrashLoggerWindows* self = static_cast<LLCrashLoggerWindows*>(context);
+	if (!self) 
+	{
+		llwarns << "dump with no context" << llendl;
+		return;
+	}
+
+	//DWORD pid = client_info->pid();
+}
+
+
+bool LLCrashLoggerWindows::initCrashServer()
+{
+#ifndef ND_NO_BREAKPAD
+	//For Breakpad on Windows we need a full Out of Process service to get good data.
+	//This routine starts up the service on a named pipe that the viewer will then
+	//communicate with. 
+	using namespace google_breakpad;
+
+	LLSD options = getOptionData( LLApp::PRIORITY_COMMAND_LINE );
+	std::string dump_path = options["dumpdir"].asString();
+	mClientsConnected = 0;
+	mPID = options["pid"].asInteger();
+	mProcName = options["procname"].asString();
+
+	//Generate a quasi-uniq name for the named pipe.  For our purposes
+	//this is unique-enough with least hassle.  Worst case for duplicate name
+	//is a second instance of the viewer will not do crash reporting. 
+	std::wstring wpipe_name;
+	wpipe_name = mCrashReportPipeStr + std::wstring(wstringize(mPID));
+
+	std::wstring wdump_path( wstringize(dump_path) );
+		
+	//Pipe naming conventions:  http://msdn.microsoft.com/en-us/library/aa365783%28v=vs.85%29.aspx
+	mCrashHandler = new CrashGenerationServer( wpipe_name,
+		NULL, 
+ 		&LLCrashLoggerWindows::OnClientConnected, this,
+		/*NULL, NULL,    */ &LLCrashLoggerWindows::OnClientDumpRequest, this,
+ 		&LLCrashLoggerWindows::OnClientExited, this,
+ 		NULL, NULL,
+ 		true, &wdump_path);
+	
+ 	if (!mCrashHandler) {
+		//Failed to start the crash server.
+ 		llwarns << "Failed to init crash server." << llendl;
+		return false; 
+ 	}
+
+	// Start servicing clients.
+    if (!mCrashHandler->Start()) {
+		llwarns << "Failed to start crash server." << llendl;
+		return false;
+	}
+
+	LL_INFOS("CRASHREPORT") << "Initialized OOP server with pipe named " << stringize(wpipe_name) << LL_ENDL;
+#else
+	LL_INFOS("CRASHREPORT") << "Crashreporting is disabled" << LL_ENDL;
+#endif
+	return true;
 }
 
 bool LLCrashLoggerWindows::init(void)
@@ -262,10 +452,12 @@ bool LLCrashLoggerWindows::init(void)
 	bool ok = LLCrashLogger::init();
 	if(!ok) return false;
 
+	initCrashServer();
+
 	/*
 	mbstowcs( gProductName, mProductName.c_str(), LL_ARRAY_SIZE(gProductName) );
 	gProductName[ LL_ARRY_SIZE(gProductName) - 1 ] = 0;
-	swprintf(gProductName, L"Second Life");
+	swprintf(gProductName, L"Second Life"); 
 	*/
 
 	llinfos << "Loading dialogs" << llendl;
@@ -302,21 +494,16 @@ void LLCrashLoggerWindows::gatherPlatformSpecificFiles()
 	SetCursor(gCursorWait);
 	// At this point we're responsive enough the user could click the close button
 	SetCursor(gCursorArrow);
-//	mDebugLog["DisplayDeviceInfo"] = gDXHardware.getDisplayInfo();
-// [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-14 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
-	mCrashInfo["DisplayDeviceInfo"] = gDXHardware.getDisplayInfo();
-// [/SL:KB]
+	//mDebugLog["DisplayDeviceInfo"] = gDXHardware.getDisplayInfo();  //Not initialized.
 }
 
 bool LLCrashLoggerWindows::mainLoop()
 {	
 	llinfos << "CrashSubmitBehavior is " << mCrashBehavior << llendl;
-
 	// Note: parent hwnd is 0 (the desktop).  No dlg proc.  See Petzold (5th ed) HexCalc example, Chapter 11, p529
 	// win_crash_logger.rc has been edited by hand.
 	// Dialogs defined with CLASS "WIN_CRASH_LOGGER" (must be same as szWindowClass)
 	gProductName = mProductName;
-
 	gHwndProgress = CreateDialog(hInst, MAKEINTRESOURCE(IDD_PROGRESS), 0, NULL);
 	ProcessCaption(gHwndProgress);
 	ShowWindow(gHwndProgress, SW_HIDE );
@@ -385,5 +572,7 @@ bool LLCrashLoggerWindows::cleanup()
 	}
 	PostQuitMessage(0);
 	commonCleanup();
+	mKeyMaster.releaseMaster();
 	return true;
 }
+

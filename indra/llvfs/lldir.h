@@ -53,14 +53,15 @@ typedef enum ELLPath
 	LL_PATH_EXECUTABLE = 16,
 	LL_PATH_DEFAULT_SKIN = 17,
 	LL_PATH_FONTS = 18,
+    LL_PATH_DUMP = 19,
 // [SL:KB] - Patch: Viewer-Skins | mS: 2010-10-19 (Catznip-2.4)
-	LL_PATH_TOP_SKINTHEME = 19,
+	LL_PATH_TOP_SKINTHEME = 20,
 // [/SL:KB]
 	// <FS:TT> Firestorm data
-	LL_PATH_FS_RESOURCES = 20,
+	LL_PATH_FS_RESOURCES = 21,
 	// </FS:TT>
 	// <FS:Ansariel> Sound cache
-	LL_PATH_FS_SOUND_CACHE = 21,
+	LL_PATH_FS_SOUND_CACHE = 22,
 	// </FS:Ansariel>
 	LL_PATH_LAST
 } ELLPath;
@@ -80,7 +81,8 @@ class LLDir
 		const std::string& app_read_only_data_dir = "") = 0;
 
 	virtual S32 deleteFilesInDir(const std::string &dirname, const std::string &mask);
-
+    U32 deleteDirAndContents(const std::string& dir_name);
+    std::vector<std::string> getFilesInDir(const std::string &dirname);
 // pure virtual functions
 	virtual U32 countFilesInDir(const std::string &dirname, const std::string &mask) = 0;
 
@@ -130,6 +132,7 @@ class LLDir
 	const std::string &getOSUserAppDir() const;	// Location of the os-specific user app dir
 	const std::string &getLindenUserDir() const;	// Location of the Linden user dir.
 	const std::string &getChatLogsDir() const;	// Location of the chat logs dir.
+	const std::string &getDumpDir() const;	// Location of the per-run dump dir.
 	const std::string &getPerAccountChatLogsDir() const;	// Location of the per account chat logs dir.
 	const std::string &getTempDir() const;			// Common temporary directory
 	const std::string  getCacheDir(bool get_default = false) const;	// Location of the cache.
@@ -223,6 +226,8 @@ class LLDir
 	// For producing safe download file names from potentially unsafe ones
 	static std::string getScrubbedFileName(const std::string uncleanFileName);
 	static std::string getForbiddenFileChars();
+    void setDumpDir( const std::string& path );
+
 
 	virtual void setChatLogsDir(const std::string &path);		// Set the chat logs dir to this user's dir
 // <FS:CR> Seperate user directories per grid on OS build
@@ -311,6 +316,7 @@ protected:
 	std::vector<std::string> mSearchSkinDirs;
 	std::string mLanguage;              // Current viewer language
 	std::string mLLPluginDir;			// Location for plugins and plugin shell
+    static std::string sDumpDir;            // Per-run crash report subdir of log directory.
 	std::string mUserName;				// Current user name
 	// <FS:Ansariel> Sound cache
 	std::string mSoundCacheDir;			// Sound cache

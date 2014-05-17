@@ -4179,7 +4179,8 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	{
 		success = true;
 	}
-
+    LLAppViewer* pApp = LLAppViewer::instance();
+	pApp->writeDebugInfo();     //Write our static data now that we have username, session_id, etc.
 	return success;
 }
 
