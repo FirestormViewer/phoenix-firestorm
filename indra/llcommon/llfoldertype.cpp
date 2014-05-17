@@ -92,8 +92,12 @@ LLFolderDictionary::LLFolderDictionary()
 
 	addEntry(LLFolderType::FT_MESH, 				new FolderEntry("mesh",	TRUE));
 
-	addEntry(LLFolderType::FT_INBOX, 				new FolderEntry("inbox",	FALSE));
-	addEntry(LLFolderType::FT_OUTBOX, 				new FolderEntry("outbox",	FALSE));
+	// <FS:Ansariel> Make inbox and outbox folders show up in the list of system folders
+	//addEntry(LLFolderType::FT_INBOX, 				new FolderEntry("inbox",	FALSE));
+	//addEntry(LLFolderType::FT_OUTBOX, 				new FolderEntry("outbox",	FALSE));
+	addEntry(LLFolderType::FT_INBOX, 				new FolderEntry("inbox",	TRUE));
+	addEntry(LLFolderType::FT_OUTBOX, 				new FolderEntry("outbox",	TRUE));
+	// </FS:Ansariel>
 	
 	addEntry(LLFolderType::FT_BASIC_ROOT,			new FolderEntry("basic_rt", TRUE));
 		 

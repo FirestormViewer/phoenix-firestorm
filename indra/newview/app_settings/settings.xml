@@ -6572,7 +6572,7 @@
 	<key>InventoryOutboxMakeVisible</key>
 	<map>
 		<key>Comment</key>
-		<string>Enable making the Merchant Outbox and Inbox visible in the inventory for debug purposes.</string>
+		<string>Enable making the Merchant Outbox visible in the inventory for debug purposes.</string>
 		<key>Persist</key>
 		<integer>1</integer>
 		<key>Type</key>
