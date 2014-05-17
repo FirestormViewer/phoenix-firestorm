@@ -1070,7 +1070,10 @@ void create_inventory_callingcard(const LLUUID& avatar_id, const LLUUID& parent 
 	std::string item_name;
 	gCacheName->getFullName(avatar_id, item_name);
 	create_inventory_item(gAgent.getID(), gAgent.getSessionID(),
-						  parent, LLTransactionID::tnull, item_name, item_desc, LLAssetType::AT_CALLINGCARD,
+						  // <FS:Ansariel> Must provide a parent LLUUID; Default to calling card folder
+						  //parent, LLTransactionID::tnull, item_name, item_desc, LLAssetType::AT_CALLINGCARD,
+						  (parent.isNull() ? gInventory.findCategoryUUIDForType(LLFolderType::FT_CALLINGCARD) : parent), LLTransactionID::tnull, item_name, item_desc, LLAssetType::AT_CALLINGCARD,
+						  // </FS:Ansariel>
 						  LLInventoryType::IT_CALLINGCARD, NOT_WEARABLE, PERM_MOVE | PERM_TRANSFER, cb);
 }
 
