@@ -114,13 +114,13 @@ Weitere Informationen finden Sie im [[MARKETPLACE_IMPORTS_URL] Fehlerprotokoll].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxImportFailed">
-		Übertragung fehlgeschlagen
+		Übertragung fehlgeschlagen mit Fehler &apos;[ERROR_CODE]&apos;
 
 Aufgrund eines System- oder Netzwerkfehlers wurden keine Ordner an den Marktplatz übertragen. Versuchen Sie es später erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="OutboxInitFailed">
-		Marktplatzinitialisierung fehlgeschlagen
+		Marktplatzinitialisierung fehlgeschlagen mit Fehler &apos;[ERROR_CODE]&apos;
 
 Marktplatzinitialisierung aufgrund eines System- oder Netzwerkfehlers fehlgeschlagen. Versuchen Sie es später erneut.
 		<usetemplate name="okbutton" yestext="OK"/>

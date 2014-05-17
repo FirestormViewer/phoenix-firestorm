@@ -1446,6 +1446,22 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InventoryOutboxNoItems">
 		Ziehen Sie Ordner in dien Bereich und klicken Sie auf „In Marktplatz übertragen“, um sie im [[MARKETPLACE_DASHBOARD_URL] Marktplatz] zum Verkauf anzubieten.
 	</string>
+	<string name="InventoryOutboxInitializingTitle">
+		Initialisiere Marktplatz.
+	</string>
+	<string name="InventoryOutboxInitializingTooltip">
+	</string>
+	<string name="InventoryOutboxInitializing">
+		Wir greifen auf Ihre Konto im [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Shop] zu.
+	</string>
+	<string name="InventoryOutboxErrorTitle">
+		Marktplatz-Fehler
+	</string>
+	<string name="InventoryOutboxErrorTooltip">
+	</string>
+	<string name="InventoryOutboxError">
+		Der [[MARKETPLACE_CREATE_STORE_URL] Marktplatz-Shop] hat Fehler zurückgeliefert.
+	</string>
 	<string name="Marketplace Error None">
 		Keine Fehler
 	</string>
