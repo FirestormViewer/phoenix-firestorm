@@ -233,7 +233,7 @@ public:
 
 	void setCallbackRegistrar(LLUICtrl::CommitCallbackRegistry::ScopedRegistrar* registrar) { mCallbackRegistrar = registrar; }
 
-	LLPanel* getParentPanel() { return mParentPanel; }
+	LLPanel* getParentPanel() { return mParentPanel.get(); }
 	// DEBUG only
 	void dumpSelectionInformation();
 
@@ -242,6 +242,9 @@ public:
 	bool useLabelSuffix() { return mUseLabelSuffix; }
 	void updateMenu();
 
+    // Note: We may eventually have to move that method up the hierarchy to LLFolderViewItem.
+	LLHandle<LLFolderView>	getHandle() const { return getDerivedHandle<LLFolderView>(); }
+    
 private:
 	void updateMenuOptions(LLMenuGL* menu);
 	void updateRenamerPosition();
@@ -303,7 +306,7 @@ protected:
 	S32                             mDragStartY;
 // [/SL:KB]
 	
-	LLPanel*						mParentPanel;
+	LLHandle<LLPanel>               mParentPanel;
 	
 	LLFolderViewModelInterface*		mViewModel;
 

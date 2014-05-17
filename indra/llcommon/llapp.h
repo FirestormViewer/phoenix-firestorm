@@ -214,6 +214,7 @@ public:
 	 * DO NOT call this method if your application has specialized
 	 * error handling code.
 	 */
+//	void setupErrorHandling(bool mSecondInstance=false);
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
 	typedef enum minidump_type_t {
 		MINIDUMP_MINIMAL = 0,

@@ -343,7 +343,7 @@ void EnableCrashingOnCrashes()
 }
 #endif
 
-//void LLApp::setupErrorHandling()
+//void LLApp::setupErrorHandling(bool second_instance)
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
 void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 // [/SL:KB]
@@ -363,17 +363,28 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 	// Install the Google Breakpad crash handler for Windows
 	if(mExceptionHandler == 0)
 	{
-		llwarns << "adding breakpad exception handler" << llendl;
-
-		std::wstring wpipe_name;
-		wpipe_name =  mCrashReportPipeStr + wstringize(getPid());
-
-		const std::wstring wdump_path(wstringize(mDumpPath));
-
-		int retries = 30;
-		for (; retries > 0; --retries)
+		if ( second_instance )  //BUG-5707 Firing teleport from a web browser causes second 
 		{
-			if (mExceptionHandler != 0) delete mExceptionHandler;
+			mExceptionHandler = new google_breakpad::ExceptionHandler(
+															L"C:\\Temp\\",		
+															0,		//No filter
+															windows_post_minidump_callback,
+															0,
+															google_breakpad::ExceptionHandler::HANDLER_ALL);  //No custom client info.
+		}
+		else
+		{
+			llwarns << "adding breakpad exception handler" << llendl;
+
+			std::wstring wpipe_name;
+			wpipe_name =  mCrashReportPipeStr + wstringize(getPid());
+
+			const std::wstring wdump_path(wstringize(mDumpPath));
+
+			int retries = 30;
+			for (; retries > 0; --retries)
+			{
+				if (mExceptionHandler != 0) delete mExceptionHandler;
 			// <FS:ND> Reapply patch from Catznip to allow different types of minidumps
 			U32 maskMiniDumpType = MiniDumpNormal | MiniDumpFilterModulePaths;
 			switch (minidump_type)
@@ -391,29 +402,30 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 			// </FS:ND>
 
 
-			mExceptionHandler = new google_breakpad::ExceptionHandler(
-														wdump_path,		
-														NULL,		//No filter
-														windows_post_minidump_callback,
-														0,
-														google_breakpad::ExceptionHandler::HANDLER_ALL,
-														// MiniDumpNormal, //Generate a 'normal' minidump.
-														(MINIDUMP_TYPE)maskMiniDumpType, // <FS:ND/> Pass custom minidump type from prefs to breakpad.
-														wpipe_name.c_str(),
-														NULL);  //No custom client info.
-			if (mExceptionHandler->IsOutOfProcess())
-			{
-				LL_INFOS("CRASHREPORT") << "Successfully attached to Out of Process exception handler." << LL_ENDL;
-				break;
+				mExceptionHandler = new google_breakpad::ExceptionHandler(
+															wdump_path,		
+															NULL,		//No filter
+															windows_post_minidump_callback,
+															0,
+															google_breakpad::ExceptionHandler::HANDLER_ALL,
+															// MiniDumpNormal, //Generate a 'normal' minidump.
+															(MINIDUMP_TYPE)maskMiniDumpType, // <FS:ND/> Pass custom minidump type from prefs to breakpad.
+															wpipe_name.c_str(),
+															NULL);  //No custom client info.
+				if (mExceptionHandler->IsOutOfProcess())
+				{
+					LL_INFOS("CRASHREPORT") << "Successfully attached to Out of Process exception handler." << LL_ENDL;
+					break;
+				}
+				else
+				{
+					LL_WARNS("CRASHREPORT") << "Unable to attach to Out of Process exception handler.  " << retries << " retries remaining." << LL_ENDL; 
+					::Sleep(100);  //Wait a tick and try again.
+				}
 			}
-			else
-			{
-				LL_WARNS("CRASHREPORT") << "Unable to attach to Out of Process exception handler.  " << retries << " retries remaining." << LL_ENDL; 
-				::Sleep(100);  //Wait a tick and try again.
-			}
-		}
 
-		if (retries == 0) LL_WARNS("CRASHREPORT") << "Unable to attach to Out of Process exception handler." << LL_ENDL;
+			if (retries == 0) LL_WARNS("CRASHREPORT") << "Unable to attach to Out of Process exception handler." << LL_ENDL;
+		}
 
 		if (mExceptionHandler)
 		{

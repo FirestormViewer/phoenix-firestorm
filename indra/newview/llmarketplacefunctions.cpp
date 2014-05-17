@@ -30,6 +30,7 @@
 
 #include "llagent.h"
 #include "llhttpclient.h"
+#include "llsdserialize.h"
 #include "lltimer.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
@@ -136,19 +137,25 @@ namespace LLMarketplaceImport
 				llinfos << " SLM POST status: " << status << llendl;
 				llinfos << " SLM POST reason: " << reason << llendl;
 				llinfos << " SLM POST content: " << content.asString() << llendl;
-
 				llinfos << " SLM POST timer: " << slmPostTimer.getElapsedTimeF32() << llendl;
 			}
 
-			if ((status == MarketplaceErrorCodes::IMPORT_REDIRECT) ||
-				(status == MarketplaceErrorCodes::IMPORT_AUTHENTICATION_ERROR) ||
-				(status == MarketplaceErrorCodes::IMPORT_JOB_TIMEOUT))
+			// MAINT-2301 : we determined we can safely ignore that error in that context
+			if (status == MarketplaceErrorCodes::IMPORT_JOB_TIMEOUT)
 			{
 				if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
 				{
-					llinfos << " SLM POST clearing marketplace cookie due to authentication failure or timeout" << llendl;
+					llinfos << " SLM POST : Ignoring time out status and treating it as success" << llendl;
 				}
-
+				status = MarketplaceErrorCodes::IMPORT_DONE;
+			}
+			
+			if (status >= MarketplaceErrorCodes::IMPORT_BAD_REQUEST)
+			{
+				if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
+				{
+					llinfos << " SLM POST clearing marketplace cookie due to client or server error" << llendl;
+				}
 				sMarketplaceCookie.clear();
 			}
 
@@ -183,20 +190,25 @@ namespace LLMarketplaceImport
 				llinfos << " SLM GET status: " << status << llendl;
 				llinfos << " SLM GET reason: " << reason << llendl;
 				llinfos << " SLM GET content: " << content.asString() << llendl;
-
 				llinfos << " SLM GET timer: " << slmGetTimer.getElapsedTimeF32() << llendl;
 			}
 			
-			if ((status == MarketplaceErrorCodes::IMPORT_AUTHENTICATION_ERROR) ||
-				(status == MarketplaceErrorCodes::IMPORT_JOB_TIMEOUT))
+            // MAINT-2452 : Do not clear the cookie on IMPORT_DONE_WITH_ERRORS : Happens when trying to import objects with wrong permissions
+            // ACME-1221 : Do not clear the cookie on IMPORT_NOT_FOUND : Happens for newly created Merchant accounts that are initally empty
+			if ((status >= MarketplaceErrorCodes::IMPORT_BAD_REQUEST) &&
+                (status != MarketplaceErrorCodes::IMPORT_DONE_WITH_ERRORS) &&
+                (status != MarketplaceErrorCodes::IMPORT_NOT_FOUND))
 			{
 				if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
 				{
-					llinfos << " SLM GET clearing marketplace cookie due to authentication failure or timeout" << llendl;
+					llinfos << " SLM GET clearing marketplace cookie due to client or server error" << llendl;
 				}
-
 				sMarketplaceCookie.clear();
 			}
+            else if (gSavedSettings.getBOOL("InventoryOutboxLogging") && (status >= MarketplaceErrorCodes::IMPORT_BAD_REQUEST))
+            {
+                llinfos << " SLM GET : Got error status = " << status << ", but marketplace cookie not cleared." << llendl;
+            }
 
 			sImportInProgress = (status == MarketplaceErrorCodes::IMPORT_PROCESSING);
 			sImportGetPending = false;
@@ -257,7 +269,12 @@ namespace LLMarketplaceImport
 		
 		if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
 		{
-			llinfos << " SLM GET: " << url << llendl;
+            llinfos << " SLM GET: establishMarketplaceSessionCookie, LLHTTPClient::get, url = " << url << llendl;
+            LLSD headers = LLViewerMedia::getHeaders();
+            std::stringstream str;
+            LLSDSerialize::toPrettyXML(headers, str);
+            llinfos << " SLM GET: headers " << llendl;
+            llinfos << str.str() << llendl;
 		}
 
 		slmGetTimer.start();
@@ -292,7 +309,11 @@ namespace LLMarketplaceImport
 		
 		if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
 		{
-			llinfos << " SLM GET: " << url << llendl;
+            llinfos << " SLM GET: pollStatus, LLHTTPClient::get, url = " << url << llendl;
+            std::stringstream str;
+            LLSDSerialize::toPrettyXML(headers, str);
+            llinfos << " SLM GET: headers " << llendl;
+            llinfos << str.str() << llendl;
 		}
 
 		slmGetTimer.start();
@@ -326,11 +347,15 @@ namespace LLMarketplaceImport
 		
 		if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
 		{
-			llinfos << " SLM POST: " << url << llendl;
+            llinfos << " SLM POST: triggerImport, LLHTTPClient::post, url = " << url << llendl;
+            std::stringstream str;
+            LLSDSerialize::toPrettyXML(headers, str);
+            llinfos << " SLM POST: headers " << llendl;
+            llinfos << str.str() << llendl;
 		}
 
 		slmPostTimer.start();
-		LLHTTPClient::post(url, LLSD(), new LLImportPostResponder(), headers);
+        LLHTTPClient::post(url, LLSD(), new LLImportPostResponder(), headers);
 		
 		return true;
 	}
@@ -361,6 +386,7 @@ LLMarketplaceInventoryImporter::LLMarketplaceInventoryImporter()
 	: mAutoTriggerImport(false)
 	, mImportInProgress(false)
 	, mInitialized(false)
+	, mMarketPlaceStatus(MarketplaceStatusCodes::MARKET_PLACE_NOT_INITIALIZED)
 	, mErrorInitSignal(NULL)
 	, mStatusChangedSignal(NULL)
 	, mStatusReportSignal(NULL)
@@ -399,20 +425,27 @@ boost::signals2::connection LLMarketplaceInventoryImporter::setStatusReportCallb
 
 void LLMarketplaceInventoryImporter::initialize()
 {
-	llassert(!mInitialized);
+    if (mInitialized)
+    {
+        return;
+    }
 
 	if (!LLMarketplaceImport::hasSessionCookie())
 	{
+		mMarketPlaceStatus = MarketplaceStatusCodes::MARKET_PLACE_INITIALIZING;
 		LLMarketplaceImport::establishMarketplaceSessionCookie();
+	}
+	else
+	{
+		mMarketPlaceStatus = MarketplaceStatusCodes::MARKET_PLACE_MERCHANT;
 	}
 }
 
 void LLMarketplaceInventoryImporter::reinitializeAndTriggerImport()
 {
 	mInitialized = false;
-
+	mMarketPlaceStatus = MarketplaceStatusCodes::MARKET_PLACE_NOT_INITIALIZED;
 	initialize();
-
 	mAutoTriggerImport = true;
 }
 
@@ -464,17 +497,30 @@ void LLMarketplaceInventoryImporter::updateImport()
 				
 				if (mInitialized)
 				{
+					mMarketPlaceStatus = MarketplaceStatusCodes::MARKET_PLACE_MERCHANT;
 					// Follow up with auto trigger of import
 					if (mAutoTriggerImport)
 					{
 						mAutoTriggerImport = false;
-
 						mImportInProgress = triggerImport();
 					}
 				}
-				else if (mErrorInitSignal)
+				else
 				{
-					(*mErrorInitSignal)(LLMarketplaceImport::getResultStatus(), LLMarketplaceImport::getResults());
+					U32 status = LLMarketplaceImport::getResultStatus();
+					if ((status == MarketplaceErrorCodes::IMPORT_FORBIDDEN) ||
+						(status == MarketplaceErrorCodes::IMPORT_AUTHENTICATION_ERROR))
+					{
+						mMarketPlaceStatus = MarketplaceStatusCodes::MARKET_PLACE_NOT_MERCHANT;
+					}
+					else 
+					{
+						mMarketPlaceStatus = MarketplaceStatusCodes::MARKET_PLACE_CONNECTION_FAILURE;
+					}
+					if (mErrorInitSignal && (mMarketPlaceStatus == MarketplaceStatusCodes::MARKET_PLACE_CONNECTION_FAILURE))
+					{
+						(*mErrorInitSignal)(LLMarketplaceImport::getResultStatus(), LLMarketplaceImport::getResults());
+					}
 				}
 			}
 		}

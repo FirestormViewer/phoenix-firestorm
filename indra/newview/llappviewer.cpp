@@ -823,7 +823,7 @@ bool LLAppViewer::init()
 {	
 	// <FS:ND> Breakpad merge, setup minidump type from Catznip.
 
-	// setupErrorHandling();
+	// setupErrorHandling(mSecondInstance);
 	EMiniDumpType minidump_type = MINIDUMP_NORMAL;
 	if (gSavedSettings.controlExists("SaveMiniDumpType"))
 		minidump_type = (LLApp::EMiniDumpType)gSavedSettings.getU32("SaveMiniDumpType"); 

@@ -125,7 +125,6 @@ private:
 LLSidepanelInventory::LLSidepanelInventory()
 	: LLPanel()
 	, mItemPanel(NULL)
-	, mInventoryPanelInbox(NULL)
 	, mPanelMainInventory(NULL)
 	, mInboxEnabled(false)
 	, mCategoriesObserver(NULL)
@@ -308,7 +307,7 @@ void LLSidepanelInventory::observeInboxModifications(const LLUUID& inboxID)
 	// (this can happen multiple times on the initial session that creates the inbox)
 	//
 
-	if (mInventoryPanelInbox != NULL)
+	if (mInventoryPanelInbox.get() != NULL)
 	{
 		return;
 	}
@@ -342,7 +341,8 @@ void LLSidepanelInventory::observeInboxModifications(const LLUUID& inboxID)
 	//
 
 	LLPanelMarketplaceInbox * inbox = getChild<LLPanelMarketplaceInbox>(MARKETPLACE_INBOX_PANEL);
-	mInventoryPanelInbox = inbox->setupInventoryPanel();
+    LLInventoryPanel* inventory_panel = inbox->setupInventoryPanel();
+	mInventoryPanelInbox = inventory_panel->getInventoryPanelHandle();
 }
 
 void LLSidepanelInventory::enableInbox(bool enabled)
@@ -491,9 +491,9 @@ void LLSidepanelInventory::performActionOnSelection(const std::string &action)
 	LLFolderViewItem* current_item = mPanelMainInventory->getActivePanel()->getRootFolder()->getCurSelectedItem();
 	if (!current_item)
 	{
-		if (mInventoryPanelInbox)
+		if (mInventoryPanelInbox.get() && mInventoryPanelInbox.get()->getRootFolder())
 		{
-			current_item = mInventoryPanelInbox->getRootFolder()->getCurSelectedItem();
+			current_item = mInventoryPanelInbox.get()->getRootFolder()->getCurSelectedItem();
 		}
 
 		if (!current_item)
@@ -644,10 +644,10 @@ void LLSidepanelInventory::updateVerbs()
 
 bool LLSidepanelInventory::canShare()
 {
-	LLInventoryPanel* inbox = mInventoryPanelInbox;
+	LLInventoryPanel* inbox = mInventoryPanelInbox.get();
 
 	// Avoid flicker in the Recent tab while inventory is being loaded.
-	if ( (!inbox || inbox->getRootFolder()->getSelectionList().empty())
+	if ( (!inbox || !inbox->getRootFolder() || inbox->getRootFolder()->getSelectionList().empty())
 		&& (mPanelMainInventory && !mPanelMainInventory->getActivePanel()->getRootFolder()->hasVisibleChildren()) )
 	{
 		return false;
@@ -682,9 +682,9 @@ LLInventoryItem *LLSidepanelInventory::getSelectedItem()
 	
 	if (!current_item)
 	{
-		if (mInventoryPanelInbox)
+		if (mInventoryPanelInbox.get() && mInventoryPanelInbox.get()->getRootFolder())
 		{
-			current_item = mInventoryPanelInbox->getRootFolder()->getCurSelectedItem();
+			current_item = mInventoryPanelInbox.get()->getRootFolder()->getCurSelectedItem();
 		}
 
 		if (!current_item)
@@ -701,12 +701,12 @@ U32 LLSidepanelInventory::getSelectedCount()
 {
 	int count = 0;
 
-	std::set<LLFolderViewItem*> selection_list =    mPanelMainInventory->getActivePanel()->getRootFolder()->getSelectionList();
+	std::set<LLFolderViewItem*> selection_list = mPanelMainInventory->getActivePanel()->getRootFolder()->getSelectionList();
 	count += selection_list.size();
 
-	if ((count == 0) && mInboxEnabled && (mInventoryPanelInbox != NULL))
+	if ((count == 0) && mInboxEnabled && mInventoryPanelInbox.get() && mInventoryPanelInbox.get()->getRootFolder())
 	{
-		selection_list = mInventoryPanelInbox->getRootFolder()->getSelectionList();
+		selection_list = mInventoryPanelInbox.get()->getRootFolder()->getSelectionList();
 
 		count += selection_list.size();
 	}
@@ -744,9 +744,9 @@ void LLSidepanelInventory::clearSelections(bool clearMain, bool clearInbox)
 		}
 	}
 	
-	if (clearInbox && mInboxEnabled && (mInventoryPanelInbox != NULL))
+	if (clearInbox && mInboxEnabled && mInventoryPanelInbox.get())
 	{
-		mInventoryPanelInbox->clearSelection();
+		mInventoryPanelInbox.get()->clearSelection();
 	}
 	
 	updateVerbs();
@@ -756,9 +756,9 @@ std::set<LLFolderViewItem*> LLSidepanelInventory::getInboxSelectionList()
 {
 	std::set<LLFolderViewItem*> inventory_selected_uuids;
 	
-	if (mInboxEnabled && (mInventoryPanelInbox != NULL))
+	if (mInboxEnabled && mInventoryPanelInbox.get() && mInventoryPanelInbox.get()->getRootFolder())
 	{
-		inventory_selected_uuids = mInventoryPanelInbox->getRootFolder()->getSelectionList();
+		inventory_selected_uuids = mInventoryPanelInbox.get()->getRootFolder()->getSelectionList();
 	}
 	
 	return inventory_selected_uuids;

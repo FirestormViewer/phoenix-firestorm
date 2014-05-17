@@ -30,6 +30,9 @@
 #include "lldictionary.h"
 #include "llmemory.h"
 #include "llvisualparam.h"
+#include "llcontrol.h"
+
+extern LLControlGroup gSavedSettings;
 
 static const std::string empty_string;
 
@@ -158,6 +161,10 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
 	addEntry(LLFolderType::FT_MY_OUTFITS, 			new ViewerFolderEntry("My Outfits",				"Inv_LookFolderOpen",	"Inv_LookFolderClosed",	TRUE,      true));
 	addEntry(LLFolderType::FT_MESH, 				new ViewerFolderEntry("Meshes",					"Inv_MeshesOpen",		"Inv_MeshesClosed",		FALSE,     true));
 	
+//<FS:TM> commented out in ll 3.7.6 merge
+//	bool boxes_invisible = !gSavedSettings.getBOOL("InventoryOutboxMakeVisible");
+//	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Inbox",					"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
+//	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Merchant Outbox",		"Inv_SysOpen",			"Inv_SysClosed",		FALSE,     boxes_invisible));
 	addEntry(LLFolderType::FT_INBOX, 				new ViewerFolderEntry("Inbox",					"Inv_InboxOpen",		"Inv_InboxClosed",		FALSE,     true));
 	addEntry(LLFolderType::FT_OUTBOX, 				new ViewerFolderEntry("Outbox",					"Inv_OutboxOpen",		"Inv_OutboxClosed",		FALSE,     true));
 	// </FS:Ansariel> Use individual icons for different folder types
