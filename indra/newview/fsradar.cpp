@@ -521,7 +521,7 @@ void FSRadar::updateRadarList()
 		// Set friends colors / styles
 		LLFontGL::StyleFlags nameCellStyle = LLFontGL::NORMAL;
 		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
-		if (relation && !sFSLegacyRadarFriendColoring)
+		if (relation && !sFSLegacyRadarFriendColoring && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
 			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::BOLD);
 		}
