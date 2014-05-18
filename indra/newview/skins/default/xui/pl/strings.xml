@@ -5196,7 +5196,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Pozycja kamery [POS] została skopiowana do schowka.
 	</string>
 	<string name="FSCmdLineRollDiceTotal">
-		Wynik całkowity dla [DICES]d[FACES]: [RESULT].
+		Wynik całkowity dla [DICE]d[FACES]: [RESULT].
 	</string>
 	<string name="FSCmdLineRollDiceLimits">
 		Musisz podać wartości dodatnie dla ilości kostek (maksymalnie 100) oraz ścianek (maksymalnie 1000).

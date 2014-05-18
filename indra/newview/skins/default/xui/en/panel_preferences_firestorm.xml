@@ -1078,14 +1078,14 @@
       height="16"
       name="FSCmdLineRollDice_txt"
       width="250">
-      Roll a dice (usage: cmd dices faces)
+      Roll dice (usage: cmd dice faces)
     </text>
     <line_editor
       top_pad="0"
       follows="left|top"
       height="20"
       max_length_chars="256"
-      tool_tip="Rolls a dice - cmd [number of dices] [number of faces]. Example: cmd 1 20. Lack of parameters is equal to cmd 1 6 (standard dice)."
+      tool_tip="Rolls dice - cmd [number of dice] [number of faces]. Example: cmd 1 20. Lack of parameters is equal to cmd 1 6 (standard die)."
       name="FSCmdLineRollDice"
       control_name="FSCmdLineRollDice"
       width="200"/>

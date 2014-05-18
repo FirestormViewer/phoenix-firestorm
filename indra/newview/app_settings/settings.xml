@@ -17626,7 +17626,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>FSCmdLineRollDice</key>
 		<map>
 			<key>Comment</key>
-			<string>Rolls a dice - cmd [number of dices] [number of faces]. Example: cmd 1 20. Lack of parameters is equal to cmd 1 6 (standard dice).</string>
+			<string>Rolls dice - cmd [number of dice] [number of faces]. Example: cmd 1 20. Lack of parameters is equal to cmd 1 6 (standard die).</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>

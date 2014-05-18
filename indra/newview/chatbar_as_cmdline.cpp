@@ -1176,27 +1176,27 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 			}
 			else if (command == std::string(sFSCmdLineRollDice))
 			{
-				S32 dices;
+				S32 dice;
 				S32 faces;
 				S32 result = 0;
-				if (i >> dices && i >> faces)
+				if (i >> dice && i >> faces)
 				{
-					if (dices > 0 && faces > 0 && dices < 101 && faces < 1001)
+					if (dice > 0 && faces > 0 && dice < 101 && faces < 1001)
 					{
-						// For viewer performance - max 100 dices and 1000 faces per dice at once
-						S32 result_per_dice = 0;
-						S32 dice_iter = 1;
-						while (dice_iter <= dices)
+						// For viewer performance - max 100 dice and 1000 faces per die at once
+						S32 result_per_die = 0;
+						S32 die_iter = 1;
+						while (die_iter <= dice)
 						{
-							// Each dice may have a different value rolled
-							result_per_dice = 1 + (rand() % faces);
-							result += result_per_dice;
-							if (dices > 1)
+							// Each die may have a different value rolled
+							result_per_die = 1 + (rand() % faces);
+							result += result_per_die;
+							if (dice > 1)
 							{
-								// For more than one dice show the ordinal number in front of the result
-								reportToNearbyChat(llformat("#%d 1d%d: %d.", dice_iter, faces, result_per_dice));
+								// For more than one die show the ordinal number in front of the result
+								reportToNearbyChat(llformat("#%d 1d%d: %d.", die_iter, faces, result_per_die));
 							}
-							++dice_iter;
+							++die_iter;
 						}
 					}
 					else
@@ -1207,13 +1207,13 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				}
 				else
 				{
-					// Roll a default dice, if no parameters were provided
-					dices = 1;
+					// Roll a default die, if no parameters were provided
+					dice = 1;
 					faces = 6;
 					result = 1 + (rand() % 6);
 				}
 				LLStringUtil::format_map_t args;
-				args["DICES"] = llformat("%d", dices);
+				args["DICE"] = llformat("%d", dice);
 				args["FACES"] = llformat("%d", faces);
 				args["RESULT"] = llformat("%d", result);
 				reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceTotal", args));
