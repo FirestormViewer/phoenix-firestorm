@@ -151,6 +151,10 @@
 			Musikstream-URL setzen (Befehl: cmd URL)
 		</text>
 		<line_editor tool_tip="Setzt die Musikstream auf die angegebene URL und spielt ihn ab." name="FSCmdLineMusic"/>
+		<text name="FSCmdLineRollDice_txt">
+			Würfeln (Befehl: cmd Würfel Seiten)
+		</text>
+		<line_editor tool_tip="Würfelt - cmd [Anzahl Würfel] [Seiten pro Würfel]. Beispiel: cmd 1 20. Auslassen der Parameter entspricht cmd 1 6 (Standardwürfel)" name="FSCmdLineRollDice"/>
 	</panel>
 	<panel label="CmdLine 2" name="tab-CmdLine2">
 		<check_box label="Chat-Eingabezeile zur Kommandoeingabe verwenden" name="chat_cmd_toggle2"/>

@@ -5681,7 +5681,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSCameraPositionCopied">
 		Kameraposition [POS] wurde in Zwischenablage kopiert.
 	</string>
-	
+	<string name="FSCmdLineRollDiceTotal">
+		Ergenis für [DICE]d[FACES]: [RESULT].
+	</string>
+	<string name="FSCmdLineRollDiceLimits">
+		Es müssen positive Werte für Würfel (max. 100) und Seiten (max. 1000) angegeben werden.
+	</string>
 	<string name="FSWithHavok">
 		mit Havok-Unterstützung
 	</string>
