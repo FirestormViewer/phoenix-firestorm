@@ -345,7 +345,7 @@ void EnableCrashingOnCrashes()
 
 //void LLApp::setupErrorHandling(bool second_instance)
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-12 (Catznip-2.6.0a) | Added: Catznip-2.4.0a
-void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
+void LLApp::setupErrorHandling(bool second_instance, EMiniDumpType minidump_type)
 // [/SL:KB]
 {
 	// Error handling is done by starting up an error handling thread, which just sleeps and

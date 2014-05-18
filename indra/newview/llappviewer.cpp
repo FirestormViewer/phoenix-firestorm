@@ -828,7 +828,7 @@ bool LLAppViewer::init()
 	if (gSavedSettings.controlExists("SaveMiniDumpType"))
 		minidump_type = (LLApp::EMiniDumpType)gSavedSettings.getU32("SaveMiniDumpType"); 
 
-	setupErrorHandling( minidump_type );
+	setupErrorHandling( mSecondInstance, minidump_type );
 
 	// </FS:ND>
 

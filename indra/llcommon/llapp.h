@@ -222,7 +222,7 @@ public:
 		MINIDUMP_EXTENDED = 2
 	} EMiniDumpType;
 
-	void setupErrorHandling(EMiniDumpType minidump_type = MINIDUMP_NORMAL);
+	void setupErrorHandling(bool second_instance, EMiniDumpType minidump_type = MINIDUMP_NORMAL);
 // [/SL:KB]
 
 	void setErrorHandler(LLAppErrorHandler handler);
