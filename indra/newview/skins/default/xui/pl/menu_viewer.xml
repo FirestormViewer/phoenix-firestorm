@@ -229,6 +229,7 @@
 		<menu_item_call label="Wiki Firestorma" name="Firestorm Wiki"/>
 		<menu_item_call label="Rozwiązywanie problemów" name="Troubleshooting"/>
 		<menu_item_call label="Dołącz do Grupy Wsparcia Firestorma" name="firestorm_support_group"/>
+		<menu_item_call label="Harmonogram Lekcji Firestorma" name="Firestorm Classes Schedule"/>
 		<!-- <menu_item_call label="Pomoc Second Life" name="Second Life Help"/> -->
 		<menu_item_call label="Pomoc: [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Na temat [CURRENT_GRID]" name="current_grid_about"/>
