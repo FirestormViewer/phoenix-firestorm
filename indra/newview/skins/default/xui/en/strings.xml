@@ -2584,6 +2584,9 @@ Try enclosing path to the editor with double quotes.
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
   <string name="FSCameraPositionCopied">Camera position [POS] copied to clipboard.</string>
 
+  <string name="FSCmdLineRollDiceTotal">Total result for [DICES]d[FACES]: [RESULT].</string>
+  <string name="FSCmdLineRollDiceLimits">You must provide positive values for dices (max 100) and faces (max 1000).</string>
+
   <!-- Build types for about floater -->
   <string name="FSWithHavok">with Havok support</string>
   <string name="FSWithOpensim">with OpenSimulator support</string>

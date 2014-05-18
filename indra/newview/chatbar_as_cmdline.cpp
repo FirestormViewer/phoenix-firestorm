@@ -449,6 +449,7 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 	static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings,  "FSCmdLineMedia");
 	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings,  "FSCmdLineMusic");
 	static LLCachedControl<std::string> sFSCmdLineCopyCam(gSavedSettings,  "FSCmdLineCopyCam");
+	static LLCachedControl<std::string> sFSCmdLineRollDice(gSavedSettings,  "FSCmdLineRollDice");
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings,  "FSCmdLineBandWidth");
 	
@@ -1171,6 +1172,51 @@ bool cmd_line_chat(const std::string& revised_text, EChatType type, bool from_ge
 				{
 					reportToNearbyChat("Could not get a valid region pointer.");
 				}
+				return false;
+			}
+			else if (command == std::string(sFSCmdLineRollDice))
+			{
+				S32 dices;
+				S32 faces;
+				S32 result = 0;
+				if (i >> dices && i >> faces)
+				{
+					if (dices > 0 && faces > 0 && dices < 101 && faces < 1001)
+					{
+						// For viewer performance - max 100 dices and 1000 faces per dice at once
+						S32 result_per_dice = 0;
+						S32 dice_iter = 1;
+						while (dice_iter <= dices)
+						{
+							// Each dice may have a different value rolled
+							result_per_dice = 1 + (rand() % faces);
+							result += result_per_dice;
+							if (dices > 1)
+							{
+								// For more than one dice show the ordinal number in front of the result
+								reportToNearbyChat(llformat("#%d 1d%d: %d.", dice_iter, faces, result_per_dice));
+							}
+							++dice_iter;
+						}
+					}
+					else
+					{
+						reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceLimits"));
+						return false;
+					}
+				}
+				else
+				{
+					// Roll a default dice, if no parameters were provided
+					dices = 1;
+					faces = 6;
+					result = 1 + (rand() % 6);
+				}
+				LLStringUtil::format_map_t args;
+				args["DICES"] = llformat("%d", dices);
+				args["FACES"] = llformat("%d", faces);
+				args["RESULT"] = llformat("%d", result);
+				reportToNearbyChat(LLTrans::getString("FSCmdLineRollDiceTotal", args));
 				return false;
 			}
 		}

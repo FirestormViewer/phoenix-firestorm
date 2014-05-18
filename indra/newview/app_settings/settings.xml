@@ -17623,6 +17623,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<string>cpcampos</string>
 		</map>
+		<key>FSCmdLineRollDice</key>
+		<map>
+			<key>Comment</key>
+			<string>Rolls a dice - cmd [number of dices] [number of faces]. Example: cmd 1 20. Lack of parameters is equal to cmd 1 6 (standard dice).</string>
+			<key>Persist</key>
+			<integer>1</integer>
+			<key>Type</key>
+			<string>String</string>
+			<key>Value</key>
+			<string>rolld</string>
+		</map>
 <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->  
     <key>FSCmdLineBandWidth</key>
     <map>
