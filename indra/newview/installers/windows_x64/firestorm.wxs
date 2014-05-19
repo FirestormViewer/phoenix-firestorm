@@ -23,7 +23,7 @@
 
   <!-- Do not allow to install the MSI without using the bootstrapper. Mixing MSI and EXE installer has certain implications. Only remove this check if you're aware of them. -->
   <Condition Message="This package cannot be installed by using the msi package">
-    <![CDATA[FS_FROM_BURN]]>
+    <![CDATA[Installed OR FS_FROM_BURN]]>
   </Condition>
 
   <!-- OS list: http://msdn.microsoft.com/library/aa370556.aspx -->
