@@ -1705,7 +1705,7 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	resetSnapshotLoc();
 
 
-	BOOL useLegacyCursors = gSavedSettings.getBOOL("UseLegacyCursors"); // <FS:LO> Legacy cursor setting from main program
+	BOOL useLegacyCursors = gSavedSettings.getBOOL("FSUseLegacyCursors");//<FS:LO> Legacy cursor setting from main program
 
 	/*
 	LLWindowCallbacks* callbacks,
