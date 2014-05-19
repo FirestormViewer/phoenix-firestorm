@@ -279,7 +279,9 @@ public:
 		BOOL disable_vsync = TRUE,
 		BOOL use_gl = TRUE,
 		BOOL ignore_pixel_depth = FALSE,
-		U32 fsaa_samples = 0);
+		//U32 fsaa_samples = 0);
+		U32 fsaa_samples = 0,
+		BOOL useLegacyCursors = FALSE); // <FS:LO> Legacy cursor setting from main program
 	static BOOL destroyWindow(LLWindow* window);
 	static BOOL isWindowValid(LLWindow *window);
 };

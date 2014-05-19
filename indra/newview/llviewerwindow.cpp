@@ -1705,6 +1705,8 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	resetSnapshotLoc();
 
 
+	BOOL useLegacyCursors = gSavedSettings.getBOOL("FSUseLegacyCursors");//<FS:LO> Legacy cursor setting from main program
+
 	/*
 	LLWindowCallbacks* callbacks,
 	const std::string& title, const std::string& name, S32 x, S32 y, S32 width, S32 height, U32 flags,
@@ -1722,7 +1724,9 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		gSavedSettings.getBOOL("DisableVerticalSync"),
 		!gHeadlessClient,
 		p.ignore_pixel_depth,
-		gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples")); //don't use window level anti-aliasing if FBOs are enabled
+		//gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples")); //don't use window level anti-aliasing if FBOs are enabled
+		gSavedSettings.getBOOL("RenderDeferred") ? 0 : gSavedSettings.getU32("RenderFSAASamples"), //don't use window level anti-aliasing if FBOs are enabled
+		useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 
 	if (!LLViewerShaderMgr::sInitialized)
 	{ //immediately initialize shaders

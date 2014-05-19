@@ -15,4 +15,9 @@
     </text>
 	
 	<check_box label="ツールバーの配置をスキンの初期設定に戻す" name="reset_toolbar_settings" />
+
+	<check_box label="V1スタイルのカーソルを使用" name="use_legacy_cursors" control_name="FSUseLegacyCursors"/>
+    <text name="theme_textbox3">
+		（再起動が必要）
+    </text>
 </panel>

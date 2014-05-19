@@ -117,8 +117,10 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 							   BOOL fullscreen, BOOL clearBg,
 							   BOOL disable_vsync, BOOL use_gl,
 							   BOOL ignore_pixel_depth,
-							   U32 fsaa_samples)
-	: LLWindow(NULL, fullscreen, flags)
+							   /*U32 fsaa_samples,) // <FS:LO> Legacy cursor setting from main program
+	: LLWindow(NULL, fullscreen, flags)*/
+							   U32 fsaa_samples, BOOL useLegacyCursors)
+	: LLWindow(NULL, fullscreen, flags), mUseLegacyCursors(useLegacyCursors)
 {
 	// *HACK: During window construction we get lots of OS events for window
 	// reshape, activate, etc. that the viewer isn't ready to handle.
@@ -189,7 +191,8 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 		}
 
 		//start with arrow cursor
-		initCursors();
+		//initCursors();
+		initCursors(mUseLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 		setCursor( UI_CURSOR_ARROW );
 		
 		allowLanguageTextInput(NULL, FALSE);
@@ -1355,9 +1358,15 @@ const char* cursorIDToName(int id)
 		case UI_CURSOR_TOOLPAUSE:						return "UI_CURSOR_TOOLPAUSE";
 		case UI_CURSOR_TOOLMEDIAOPEN:					return "UI_CURSOR_TOOLMEDIAOPEN";
 		case UI_CURSOR_PIPETTE:							return "UI_CURSOR_PIPETTE";
+		/* <FS:LO> Legacy cursor setting from main program
 		case UI_CURSOR_TOOLSIT:							return "UI_CURSOR_TOOLSIT";
 		case UI_CURSOR_TOOLBUY:							return "UI_CURSOR_TOOLBUY";
-		case UI_CURSOR_TOOLOPEN:						return "UI_CURSOR_TOOLOPEN";
+		case UI_CURSOR_TOOLOPEN:						return "UI_CURSOR_TOOLOPEN";*/
+		case UI_CURSOR_TOOLSIT:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLSIT_LEGACY"; else return "UI_CURSOR_TOOLSIT";
+		case UI_CURSOR_TOOLBUY:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
+		case UI_CURSOR_TOOLOPEN:						if (mUseLegacyCursors) return "UI_CURSOR_TOOLOPEN_LEGACY"; else return "UI_CURSOR_TOOLOPEN";
+		case UI_CURSOR_TOOLPAY:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLPAY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
+		// </FS:LO>
 		case UI_CURSOR_TOOLPATHFINDING:					return "UI_CURSOR_PATHFINDING";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START:		return "UI_CURSOR_PATHFINDING_START";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD:	return "UI_CURSOR_PATHFINDING_START_ADD";
@@ -1468,6 +1477,7 @@ void LLWindowMacOSX::updateCursor()
 	case UI_CURSOR_TOOLMEDIAOPEN:
 	case UI_CURSOR_TOOLSIT:
 	case UI_CURSOR_TOOLBUY:
+	case UI_CURSOR_TOOLPAY:
 	case UI_CURSOR_TOOLOPEN:
 	case UI_CURSOR_TOOLPATHFINDING:
 	case UI_CURSOR_TOOLPATHFINDING_PATH_START:
@@ -1493,7 +1503,9 @@ ECursorType LLWindowMacOSX::getCursor() const
 	return mCurrentCursor;
 }
 
-void LLWindowMacOSX::initCursors()
+// <FS:LO> Legacy cursor setting from main program
+//void LLWindowMacOSX::initCursors()
+void LLWindowMacOSX::initCursors(BOOL useLegacyCursors)
 {
 	initPixmapCursor(UI_CURSOR_NO, 8, 8);
 	initPixmapCursor(UI_CURSOR_WORKING, 1, 1);
@@ -1516,9 +1528,25 @@ void LLWindowMacOSX::initCursors()
 	initPixmapCursor(UI_CURSOR_TOOLPLAY, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLPAUSE, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLMEDIAOPEN, 1, 1);
+	/* <FS:LO> Legacy cursor setting from main program
 	initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15);
 	initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15);
-	initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);
+	initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);*/
+	if (useLegacyCursors)
+	{
+		initPixmapCursor(UI_CURSOR_TOOLSIT, 0, 0);
+		initPixmapCursor(UI_CURSOR_TOOLBUY, 0, 0);
+		initPixmapCursor(UI_CURSOR_TOOLOPEN, 0, 0);
+		initPixmapCursor(UI_CURSOR_TOOLPAY, 0, 0);
+	}
+	else
+	{
+		initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15);
+		initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15);
+		initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);
+		initPixmapCursor(UI_CURSOR_TOOLPAY, 20, 15);
+	}
+	// </FS:LO>
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD, 16, 16);
