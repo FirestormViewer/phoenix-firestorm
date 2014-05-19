@@ -2162,10 +2162,10 @@ void LLWindowSDL::initCursors()
 	mSDLCursors[UI_CURSOR_TOOLMEDIAOPEN] = makeSDLCursorFromBMP("toolmediaopen.BMP",0,0);
 	mSDLCursors[UI_CURSOR_PIPETTE] = makeSDLCursorFromBMP("lltoolpipette.BMP",2,28);
 	if (gSavedSettings.getBOOL("UseLegacyCursors")) {
-		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit-legacy.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy-legacy.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen-legacy.BMP",20,15);
-		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolpay-legacy.BMP",20,15);
+		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit-legacy.BMP",0,0);
+		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy-legacy.BMP",0,0);
+		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen-legacy.BMP",0,0);
+		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolpay-legacy.BMP",0,0);
 	}
 	else
 	{

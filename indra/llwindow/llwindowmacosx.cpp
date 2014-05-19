@@ -1366,7 +1366,7 @@ const char* cursorIDToName(int id)
 		case UI_CURSOR_TOOLSIT:							if (use_legacy_cursors) return "UI_CURSOR_TOOLSIT_LEGACY"; else return "UI_CURSOR_TOOLSIT";
 		case UI_CURSOR_TOOLBUY:							if (use_legacy_cursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
 		case UI_CURSOR_TOOLOPEN:						if (use_legacy_cursors) return "UI_CURSOR_TOOLOPEN_LEGACY"; else return "UI_CURSOR_TOOLOPEN";
-		case UI_CURSOR_TOOLPAY:							if (use_legacy_cursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLPAY";
+		case UI_CURSOR_TOOLPAY:							if (use_legacy_cursors) return "UI_CURSOR_TOOLPAY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
 	}
 
 	llerrs << "cursorIDToName: unknown cursor id" << id << llendl;
@@ -1520,10 +1520,20 @@ void LLWindowMacOSX::initCursors()
 	initPixmapCursor(UI_CURSOR_TOOLPLAY, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLPAUSE, 1, 1);
 	initPixmapCursor(UI_CURSOR_TOOLMEDIAOPEN, 1, 1);
-	initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15);
-	initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15);
-	initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);
-	initPixmapCursor(UI_CURSOR_TOOLPAY, 20, 15);
+	if (gSavedSettings.getBOOL("UseLegacyCursors"))
+	{
+		initPixmapCursor(UI_CURSOR_TOOLSIT, 0, 0);
+		initPixmapCursor(UI_CURSOR_TOOLBUY, 0, 0);
+		initPixmapCursor(UI_CURSOR_TOOLOPEN, 0, 0);
+		initPixmapCursor(UI_CURSOR_TOOLPAY, 0, 0);
+	}
+	else
+	{
+		initPixmapCursor(UI_CURSOR_TOOLSIT, 20, 15);
+		initPixmapCursor(UI_CURSOR_TOOLBUY, 20, 15);
+		initPixmapCursor(UI_CURSOR_TOOLOPEN, 20, 15);
+		initPixmapCursor(UI_CURSOR_TOOLPAY, 20, 15);
+	}
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START, 16, 16);
 	initPixmapCursor(UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD, 16, 16);
