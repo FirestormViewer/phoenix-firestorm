@@ -39,7 +39,6 @@
 #include "llstring.h"
 #include "lldir.h"
 #include "llfindlocale.h"
-#include "../newview/llviewercontrol.h"
 
 #if LL_GTK
 extern "C" {
@@ -193,10 +192,14 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 			 S32 height, U32 flags,
 			 BOOL fullscreen, BOOL clearBg,
 			 BOOL disable_vsync, BOOL use_gl,
-			 BOOL ignore_pixel_depth, U32 fsaa_samples)
+			 // <FS:LO> Legacy cursor setting from main program
+			 //BOOL ignore_pixel_depth, U32 fsaa_samples,)
+			 BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL useLegacyCursors)
 	: LLWindow(callbacks, fullscreen, flags),
 	  Lock_Display(NULL),
-	  Unlock_Display(NULL), mGamma(1.0f)
+	  //Unlock_Display(NULL), mGamma(1.0f)
+	  Unlock_Display(NULL), mGamma(1.0f),
+	  mUseLegacyCursors(useLegacyCursors) // </FS:LO>
 {
 	// Initialize the keyboard
 	gKeyboard = new LLKeyboardSDL();
@@ -239,7 +242,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 		gGLManager.initGL();
 
 		//start with arrow cursor
-		initCursors();
+		initCursors(useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 		setCursor( UI_CURSOR_ARROW );
 	}
 
@@ -803,7 +806,7 @@ BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL
 			gGLManager.initGL();
 
 			//start with arrow cursor
-			initCursors();
+			initCursors(mUseLegacyCursors;); // <FS:LO> Legacy cursor setting from main program
 			setCursor( UI_CURSOR_ARROW );
 		}
 	}
@@ -2116,7 +2119,7 @@ void LLWindowSDL::updateCursor()
 	}
 }
 
-void LLWindowSDL::initCursors()
+void LLWindowSDL::initCursors(useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
 {
 	int i;
 	// Blank the cursor pointer array for those we may miss.
@@ -2161,6 +2164,10 @@ void LLWindowSDL::initCursors()
 	mSDLCursors[UI_CURSOR_TOOLPAUSE] = makeSDLCursorFromBMP("toolpause.BMP",0,0);
 	mSDLCursors[UI_CURSOR_TOOLMEDIAOPEN] = makeSDLCursorFromBMP("toolmediaopen.BMP",0,0);
 	mSDLCursors[UI_CURSOR_PIPETTE] = makeSDLCursorFromBMP("lltoolpipette.BMP",2,28);
+	/* <FS:LO> Legacy cursor setting from main program
+	mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit.BMP",20,15);
+	mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
+	mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);*/
 	if (gSavedSettings.getBOOL("UseLegacyCursors")) {
 		mSDLCursors[UI_CURSOR_TOOLSIT] = makeSDLCursorFromBMP("toolsit-legacy.BMP",0,0);
 		mSDLCursors[UI_CURSOR_TOOLBUY] = makeSDLCursorFromBMP("toolbuy-legacy.BMP",0,0);
@@ -2174,6 +2181,7 @@ void LLWindowSDL::initCursors()
 		mSDLCursors[UI_CURSOR_TOOLOPEN] = makeSDLCursorFromBMP("toolopen.BMP",20,15);
 		mSDLCursors[UI_CURSOR_TOOLPAY] = makeSDLCursorFromBMP("toolbuy.BMP",20,15);
 	}
+	// </FS:LO>
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING] = makeSDLCursorFromBMP("lltoolpathfinding.BMP", 16, 16);
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING_PATH_START] = makeSDLCursorFromBMP("lltoolpathfindingpathstart.BMP", 16, 16);
 	mSDLCursors[UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD] = makeSDLCursorFromBMP("lltoolpathfindingpathstartadd.BMP", 16, 16);
