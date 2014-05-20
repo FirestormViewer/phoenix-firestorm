@@ -130,6 +130,8 @@ void process_dnd_im(const LLSD& notification)
 	//               will already be highlighted.
 	return;
 	// </FS:Ansariel> [FS communication UI]
+	// <FS:LO> Hide unreachable code to prevent it from breaking compiles
+#if 0
     LLSD data = notification["substitutions"];
     LLUUID sessionID = data["SESSION_ID"].asUUID();
 	LLUUID fromID = data["FROM_ID"].asUUID();
@@ -156,7 +158,9 @@ void process_dnd_im(const LLSD& notification)
 		}
 
 	notify_of_message(data, true);
-    }
+#endif
+// </FS:LO>
+}
 
 
 
