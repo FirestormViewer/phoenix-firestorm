@@ -117,10 +117,10 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 							   BOOL fullscreen, BOOL clearBg,
 							   BOOL disable_vsync, BOOL use_gl,
 							   BOOL ignore_pixel_depth,
-							   /*U32 fsaa_samples,) // <FS:LO> Legacy cursor setting from main program
-	: LLWindow(NULL, fullscreen, flags)*/
-							   U32 fsaa_samples, BOOL useLegacyCursors)
-	: LLWindow(NULL, fullscreen, flags), mUseLegacyCursors(useLegacyCursors)
+							   //U32 fsaa_samples,) // <FS:LO> Legacy cursor setting from main program
+							   U32 fsaa_samples,
+							   BOOL useLegacyCursors)
+	: LLWindow(NULL, fullscreen, flags)
 {
 	// *HACK: During window construction we get lots of OS events for window
 	// reshape, activate, etc. that the viewer isn't ready to handle.
