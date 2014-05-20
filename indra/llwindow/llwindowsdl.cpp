@@ -2119,6 +2119,7 @@ void LLWindowSDL::updateCursor()
 	}
 }
 
+//void LLWindowSDL::initCursors()
 void LLWindowSDL::initCursors(BOOL useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
 {
 	int i;
