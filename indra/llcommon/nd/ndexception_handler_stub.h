@@ -41,6 +41,7 @@ namespace google_breakpad
 
 	typedef bool (*tDumpFunc)(const char*, const char*, void*, bool);
 	typedef bool (*tDumpFunc2)( MinidumpDescriptor const&, void*, bool );
+	typedef bool (*FilterCallback)(void *context);
 
 
 	class ExceptionHandler
@@ -48,7 +49,7 @@ namespace google_breakpad
 	public:
 		ExceptionHandler( std::string const&, int, tDumpFunc, int, bool, int )
 		{ }
-		ExceptionHandler( MinidumpDescriptor const&, int, tDumpFunc2, int, bool, int )
+		ExceptionHandler( MinidumpDescriptor const&, FilterCallback, tDumpFunc2, void*, bool, int )
 		{ }
 
 		void set_dump_path( std::string const& )
