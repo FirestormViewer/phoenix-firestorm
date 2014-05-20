@@ -95,7 +95,6 @@
 
     <check_box
      control_name="FSUseLegacyCursors"
-     enabled="false"
      follows="left|top"
      height="16"
      initial_value="true"
