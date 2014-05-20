@@ -129,6 +129,11 @@ TOOLPATHFINDINGPATHEND  CURSOR                  "lltoolpathfindingpathend.cur"
 TOOLPATHFINDINGPATHENDADD CURSOR                "lltoolpathfindingpathendadd.cur"
 TOOLNO                  CURSOR                  "llno.cur"
 
+TOOLBUY-LEGACY          CURSOR                  "toolbuy-legacy.cur"
+TOOLPAY-LEGACY          CURSOR                  "toolpay-legacy.cur"
+TOOLOPEN-LEGACY         CURSOR                  "toolopen-legacy.cur"
+TOOLSIT-LEGACY          CURSOR                  "toolsit-legacy.cur"
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
