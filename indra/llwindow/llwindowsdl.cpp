@@ -806,7 +806,7 @@ BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL
 			gGLManager.initGL();
 
 			//start with arrow cursor
-			initCursors(mUseLegacyCursors;); // <FS:LO> Legacy cursor setting from main program
+			initCursors(mUseLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 			setCursor( UI_CURSOR_ARROW );
 		}
 	}
@@ -2119,7 +2119,7 @@ void LLWindowSDL::updateCursor()
 	}
 }
 
-void LLWindowSDL::initCursors(useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
+void LLWindowSDL::initCursors(BOOL useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
 {
 	int i;
 	// Blank the cursor pointer array for those we may miss.
