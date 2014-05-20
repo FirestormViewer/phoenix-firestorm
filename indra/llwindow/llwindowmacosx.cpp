@@ -122,6 +122,7 @@ LLWindowMacOSX::LLWindowMacOSX(LLWindowCallbacks* callbacks,
 							   BOOL useLegacyCursors)
 	: LLWindow(NULL, fullscreen, flags)
 {
+	mUseLegacyCursors = useLegacyCursors; // <FS:LO> Legacy cursor setting from main program
 	// *HACK: During window construction we get lots of OS events for window
 	// reshape, activate, etc. that the viewer isn't ready to handle.
 	// Route them to a dummy callback structure until the end of constructor.
