@@ -404,12 +404,14 @@ void LLMenuParcelObserver::changed()
 
 	static LLView* land_buy_pass = gMenuHolder->getChildView("Land Buy Pass");
 	static LLView* land_buy = gMenuHolder->getChildView("Land Buy");
+	static LLView* land_buy_pie = gMenuHolder->getChildView("Land Buy Pie");
 	static LLView* buy_land = gMenuHolder->getChildView("Buy Land...");
 
 	land_buy_pass->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID()== gAgent.getID()));
 
 	BOOL buyable = enable_buy_land(NULL);
 	land_buy->setEnabled(buyable);
+	land_buy_pie->setEnabled(buyable);
 	buy_land->setEnabled(buyable);
 	// </FS:Ansariel> FIRE-4454: Cache controls because of performance reasons
 }

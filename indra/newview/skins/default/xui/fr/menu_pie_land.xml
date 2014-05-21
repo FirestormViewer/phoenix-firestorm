@@ -13,6 +13,6 @@
         label="Payer l'entrée"/>
     <pie_slice name="Edit Terrain"
         label="Modifier le Terrain"/>
-    <pie_slice name="Land Buy"
+    <pie_slice name="Land Buy Pie"
         label="Acheter le terrain"/>
 </pie_menu>

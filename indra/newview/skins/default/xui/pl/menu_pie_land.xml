@@ -7,5 +7,5 @@
     <pie_slice label="Blokuj właśc. cząst." name="Mute Particle" />
     <pie_slice label="Kup przepustkę" name="Land Buy Pass" />
     <pie_slice label="Edytuj teren" name="Edit Terrain" />
-    <pie_slice label="Kup działkę" name="Land Buy" />
+    <pie_slice label="Kup działkę" name="Land Buy Pie" />
 </pie_menu>

@@ -60,7 +60,7 @@
     <pie_slice
         enabled="false"
         label="Buy This Land"
-        name="Land Buy">
+        name="Land Buy Pie">
         <pie_slice.on_click
             function="Land.Buy" />
         <pie_slice.on_enable

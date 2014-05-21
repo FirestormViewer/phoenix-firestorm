@@ -7,5 +7,5 @@
 	<pie_slice label="Bloq. Prop. Part." name="Mute Particle"/>
 	<pie_slice label="Comprar pase" name="Land Buy Pass"/>
 	<pie_slice label="Modificar terreno" name="Edit Terrain"/>
-	<pie_slice label="Comprar terreno" name="Land Buy"/>
+	<pie_slice label="Comprar terreno" name="Land Buy Pie"/>
 </pie_menu>
