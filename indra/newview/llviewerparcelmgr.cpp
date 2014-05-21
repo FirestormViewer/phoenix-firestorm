@@ -684,6 +684,17 @@ LLParcel *LLViewerParcelMgr::getAgentParcel() const
 // Return whether the agent can build on the land they are on
 bool LLViewerParcelMgr::allowAgentBuild() const
 {
+	// <FS> Rez under land group
+	//if (mAgentParcel)
+	//{
+	//	return (gAgent.isGodlike() ||
+	//			(mAgentParcel->allowModifyBy(gAgent.getID(), gAgent.getGroupID())) ||
+	//			(isParcelOwnedByAgent(mAgentParcel, GP_LAND_ALLOW_CREATE)));
+	//}
+	//else
+	//{
+	//	return gAgent.isGodlike();
+	//}
 	if (gAgent.isGodlike())
 	{
 		return true;
@@ -694,6 +705,7 @@ bool LLViewerParcelMgr::allowAgentBuild() const
 	}
 	return (mAgentParcel->allowModifyBy(gAgent.getID(), gAgent.getGroupID()) ||
 			gAgent.hasPowerInGroup(mAgentParcel->getGroupID(), GP_LAND_ALLOW_CREATE));
+	// </FS>
 }
 
 // Return whether anyone can build on the given parcel
