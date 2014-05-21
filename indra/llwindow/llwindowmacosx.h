@@ -218,7 +218,7 @@ protected:
 
 	friend class LLWindowManager;
 	
-private:
+public:
 	BOOL mUseLegacyCursors; // <FS:LO> Legacy cursor setting from main program
 };
 
