@@ -140,6 +140,9 @@ ATI Radeon HD 8600D/G/M					.*ATI.*AMD Radeon.* (HD|HD )86..[DGM].*				4	1	0	4.2
 ATI Radeon HD 8700D/G/M					.*ATI.*AMD Radeon.* (HD|HD )87..[DGM].*				4	1	0	4.2
 ATI Radeon HD 8800D/G/M					.*ATI.*AMD Radeon.* (HD|HD )88..[DGM].*				4	1	0	4.2
 ATI Radeon HD 8900D/G/M					.*ATI.*AMD Radeon.* (HD|HD )89..[DGM].*				4	1	0	4.2
+ATI Radeon R5 Mobile Series				.*ATI.*AMD Radeon.* R5 M2\d\d.*						3	1	0	4.2
+ATI Radeon R7 Mobile Series				.*ATI.*AMD Radeon.* R7 M2\d\d.*						4	1	0	4.2
+ATI Radeon R9 Mobile Series				.*ATI.*AMD Radeon.* R9 M2\d\d.*						4	1	0	4.2
 AMD Radeon 6600M and 6700M Series		.*ATI.*AMD Radeon.* 6600M and .*					4	1	0	4.2
 ATI Radeon HD 2300						.*ATI.*Radeon.* (HD|HD )23..						0	1	1	3.3
 ATI Radeon HD 2400						.*ATI.*(Radeon|ASUS).* (AH|AX|HD|HD |EAH)24..		1	1	1	4
@@ -343,6 +346,7 @@ Intel Q45/Q43							.*Intel.*Q4.*										1	1	1	2.1
 Intel B45/B43							.*Intel.*B4.*										1	1	1	2.1
 Intel 3D-Analyze						.*Intel.*3D-Analyze.*								2	1	0	0
 Matrox									.*Matrox.*											0	0	0	0
+Intel Mesa (Ivybridge)					.*Mesa DRI.*Ivybridge.*								1	1	1	3
 Mesa									.*Mesa.*											1	0	1	3
 Gallium									.*Gallium.*											1	1	1	2.1
 NVIDIA GeForce Pre-Release				.*NVIDIA .*GeForce[ ]Pre-Release.*					2	1	1	3.3
