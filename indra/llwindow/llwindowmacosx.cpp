@@ -1363,10 +1363,10 @@ const char* cursorIDToName(int id)
 		case UI_CURSOR_TOOLSIT:							return "UI_CURSOR_TOOLSIT";
 		case UI_CURSOR_TOOLBUY:							return "UI_CURSOR_TOOLBUY";
 		case UI_CURSOR_TOOLOPEN:						return "UI_CURSOR_TOOLOPEN";*/
-		case UI_CURSOR_TOOLSIT:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLSIT_LEGACY"; else return "UI_CURSOR_TOOLSIT";
-		case UI_CURSOR_TOOLBUY:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
-		case UI_CURSOR_TOOLOPEN:						if (mUseLegacyCursors) return "UI_CURSOR_TOOLOPEN_LEGACY"; else return "UI_CURSOR_TOOLOPEN";
-		case UI_CURSOR_TOOLPAY:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLPAY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
+// 		case UI_CURSOR_TOOLSIT:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLSIT_LEGACY"; else return "UI_CURSOR_TOOLSIT";
+// 		case UI_CURSOR_TOOLBUY:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLBUY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
+// 		case UI_CURSOR_TOOLOPEN:						if (mUseLegacyCursors) return "UI_CURSOR_TOOLOPEN_LEGACY"; else return "UI_CURSOR_TOOLOPEN";
+// 		case UI_CURSOR_TOOLPAY:							if (mUseLegacyCursors) return "UI_CURSOR_TOOLPAY_LEGACY"; else return "UI_CURSOR_TOOLBUY";
 		// </FS:LO>
 		case UI_CURSOR_TOOLPATHFINDING:					return "UI_CURSOR_PATHFINDING";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START:		return "UI_CURSOR_PATHFINDING_START";
