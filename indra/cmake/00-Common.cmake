@@ -303,6 +303,12 @@ if (DARWIN)
     set(ENABLE_SIGNING TRUE)
     set(SIGNING_IDENTITY "Developer ID Application: Linden Research, Inc.")
   endif (XCODE_VERSION GREATER 4.2)
+  # <FS:ND> Build without frame pointer if requested. Otherwise profiling might not work reliable. N.B. Win32 uses FP based calling by default.
+  if( NO_OMIT_FRAMEPOINTER )
+    set(CMAKE_CXX_FLAGS_RELEASE "-fno-omit-frame-pointer ${CMAKE_CXX_FLAGS_RELEASE}")
+  endif( NO_OMIT_FRAMEPOINTER )
+  # </FS:ND>
+
 endif (DARWIN)
 
 
