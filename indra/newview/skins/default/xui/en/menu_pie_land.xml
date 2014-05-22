@@ -42,7 +42,7 @@
     <pie_slice
         enabled="false"
         label="Buy Pass"
-        name="Land Buy Pass">
+        name="Land Buy Pass Pie">
         <pie_slice.on_click
             function="Land.BuyPass" />
         <pie_slice.on_enable

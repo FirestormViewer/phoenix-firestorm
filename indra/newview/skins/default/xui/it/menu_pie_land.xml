@@ -4,7 +4,7 @@
     <pie_slice label="Crea" name="Create" />
     <pie_slice label="Vai lì" name="Go Here" />
     <pie_slice label="Siediti" name="Sit Here" />
-    <pie_slice label="Compra Pass" name="Land Buy Pass" />
+    <pie_slice label="Compra Pass" name="Land Buy Pass Pie" />
     <pie_slice label="Modifica terreno" name="Edit Terrain" />
     <pie_slice label="Compra terreno" name="Land Buy Pie" />
 </pie_menu>

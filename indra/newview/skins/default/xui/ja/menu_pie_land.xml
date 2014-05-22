@@ -15,7 +15,7 @@
         name="Sit Here"/>
     <pie_slice
         label="入場許可購入"
-        name="Land Buy Pass"/>
+        name="Land Buy Pass Pie"/>
     <pie_slice
         label="地形を編集"
         name="Edit Terrain"/>

@@ -403,11 +403,14 @@ void LLMenuParcelObserver::changed()
 	//gMenuHolder->childSetEnabled("Buy Land...", buyable);
 
 	static LLView* land_buy_pass = gMenuHolder->getChildView("Land Buy Pass");
+	static LLView* land_buy_pass_pie = gMenuHolder->getChildView("Land Buy Pass Pie");
 	static LLView* land_buy = gMenuHolder->getChildView("Land Buy");
 	static LLView* land_buy_pie = gMenuHolder->getChildView("Land Buy Pie");
 	static LLView* buy_land = gMenuHolder->getChildView("Buy Land...");
 
-	land_buy_pass->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID()== gAgent.getID()));
+	BOOL pass_buyable = LLPanelLandGeneral::enableBuyPass(NULL) && parcel->getOwnerID() != gAgentID;
+	land_buy_pass->setEnabled(pass_buyable);
+	land_buy_pass_pie->setEnabled(pass_buyable);
 
 	BOOL buyable = enable_buy_land(NULL);
 	land_buy->setEnabled(buyable);

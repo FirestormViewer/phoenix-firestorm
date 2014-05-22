@@ -5,7 +5,7 @@
 	<pie_slice label="Hierhin gehen" name="Go Here"/>
 	<pie_slice label="Hier sitzen" name="Sit Here"/>
 	<pie_slice label="Partikelbes. block." name="Mute Particle"/>
-	<pie_slice label="Pass kaufen" name="Land Buy Pass"/>
+	<pie_slice label="Pass kaufen" name="Land Buy Pass Pie"/>
 	<pie_slice label="Terrain bearb." name="Edit Terrain"/>
 	<pie_slice label="Land kaufen" name="Land Buy Pie"/>
 </pie_menu>

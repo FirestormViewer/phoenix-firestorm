@@ -15,7 +15,7 @@
         name="Sit Here"/>
     <pie_slice
         label="Купить доступ"
-        name="Land Buy Pass"/>
+        name="Land Buy Pass Pie"/>
     <pie_slice
         label="Править ландшафт"
         name="Edit Terrain"/>

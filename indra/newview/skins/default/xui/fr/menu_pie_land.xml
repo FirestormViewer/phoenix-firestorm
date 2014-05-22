@@ -9,7 +9,7 @@
         label="Aller là"/>
     <pie_slice name="Sit Here"
         label="S'asseoir ici"/>
-    <pie_slice name="Land Buy Pass"
+    <pie_slice name="Land Buy Pass Pie"
         label="Payer l'entrée"/>
     <pie_slice name="Edit Terrain"
         label="Modifier le Terrain"/>
