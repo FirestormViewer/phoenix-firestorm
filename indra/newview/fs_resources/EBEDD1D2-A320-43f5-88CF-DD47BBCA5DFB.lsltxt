@@ -1,4 +1,4 @@
-//http bridge script v.2.9
+//http bridge script v.2.10
 //Firestorm
 //Tozh Taurog, Arrehn Oberlander, Tonya Souther
 
@@ -19,7 +19,7 @@
     integer UNKNOWN_VIEWER = 1;
     integer META_CONTROL = 1024;      // Control value to do nothing; for no-script sims
     string  bridgeAuth = "BRIDGEKEY"; // Filled in dynamically
-    string  bridgeVersion = "2.9";    // This should match fslslbridge.cpp
+    string  bridgeVersion = "2.10";    // This should match fslslbridge.cpp
     string  bridgeURL;
     string  latestURL;
     integer debug = FALSE;
@@ -110,15 +110,24 @@
             }
         }
         llParticleSystem([]);
-        llSetText("", ZERO_VECTOR, 0.0);
-        llSetTexture("757c276e-6409-ad54-a862-ca89c04e4940", ALL_SIDES);
-        llSetTextureAnim(0, ALL_SIDES, 1, 1, 1.0, 1.0, 1.0);
+        llSetTextureAnim(FALSE, ALL_SIDES, 1, 1, 1.0, 1.0, 1.0);
         llAllowInventoryDrop(FALSE);
-        // Make bridge inconspicuous
-        llSetScale(<0.01, 0.01, 0.01>);
-        llSetPos(<0.0, 0.0, -0.15>);
-        llSetObjectDesc(llGetObjectName());
         llStopMoveToTarget();
+        // Make bridge inconspicuous
+        llSetLinkPrimitiveParamsFast(LINK_THIS, [
+            PRIM_TEXT, "", ZERO_VECTOR, 0.0,
+            PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, ZERO_VECTOR, ZERO_VECTOR, 0.0,
+            PRIM_TEXGEN, ALL_SIDES, PRIM_TEXGEN_DEFAULT,
+            PRIM_SIZE, <0.01, 0.01, 0.01>,
+            PRIM_POSITION, <0.0, 0.0, -0.15>,
+            PRIM_DESC, llGetObjectName(),
+            PRIM_POINT_LIGHT, FALSE, ZERO_VECTOR, 0.0, 0.1, 0.01,
+            PRIM_GLOW, ALL_SIDES, 0,
+            PRIM_OMEGA, ZERO_VECTOR, 0.0, 0.0,
+            PRIM_FULLBRIGHT, ALL_SIDES, FALSE,
+            PRIM_FLEXIBLE, FALSE, 0, 0.0, 0.0, 0.0, 0.0, ZERO_VECTOR,
+            PRIM_BUMP_SHINY, ALL_SIDES, PRIM_SHINY_NONE, PRIM_BUMP_NONE
+        ]);
     }
 
     initBridge()
@@ -283,7 +292,7 @@
                 tUUID = (key)llList2String(tUUIDs, i);
                 tPos = llList2Vector(llGetObjectDetails(tUUID, ([OBJECT_POS])), 0);
                 if (tPos.z > 1023) // We only care about results at higher altitudes.
-                    responses = [tUUID] + [tPos.z] + responses; // Optimized for Mono-LSL
+                    responses = responses + tUUID + tPos.z; // Optimized for Mono-LSL
             }
             tUUIDs = []; // Free memory
             string body = "<llsd><string>" +llList2CSV(responses) + "</string></llsd>";
@@ -709,7 +718,7 @@ default
     on_rez(integer i)
     {
         // We don't want to be rezzed without being attached. Insure we don't create litter.
-        llSetLinkPrimitiveParamsFast(LINK_SET, [PRIM_TEMP_ON_REZ, TRUE]);
+        llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_TEMP_ON_REZ, TRUE]);
         // Force Movelock variable to false here and allow attach() to decide via initBridge(), if we're on Firestorm and login relock can be turned off if needed.
         // on_rez() will be triggered prior to attach() when attaching from inventory or during login, but not prior to state_entry().
         useMoveLock = FALSE;
