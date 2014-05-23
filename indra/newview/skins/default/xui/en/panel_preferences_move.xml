@@ -377,7 +377,7 @@
          control_name="AutomaticFly"
          follows="left|top"
          height="20"
-         label="Fly/land on holding up/down"
+         label="Fly / land on holding up (jump) / down (crouch)"
          layout="topleft"
          left_delta="0"
          name="automatic_fly"
@@ -413,17 +413,6 @@
          name="FSFlyAfterTeleport"
          width="237"
          top_pad="0"/>
-        <check_box
-         control_name="AutomaticFly"
-         follows="left|top"
-         height="20"
-         label="Hold jump or crouch key to start or stop flying"
-         layout="topleft"
-         left_delta="0"
-         name="automatic_fly"
-         width="237"
-         top_pad="0"/>
-
         <text
          follows="left|top"
          type="string"
@@ -433,7 +422,7 @@
          left="10"
          name="movelock_lbl"
          width="450"
-         top_pad="5">
+         top_pad="10">
          If built in LSL Bridge movelock is active...
         </text>
         <check_box
