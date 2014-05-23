@@ -36,7 +36,6 @@
 			<check_box label="Activar el modo conmutado para agacharse" name="crouch_toggle_mode"/>
 			<check_box label="Reproducir efecto de sonido al teleportarme" name="PlayTeleportSound"/>
 			<check_box label="Iniciar siempre el vuelo después de teleportarme" name="FSFlyAfterTeleport"/>
-			<check_box label="Mantener teclas de saltar o agacharse para iniciar o detener el vuelo" name="automatic_fly"/>
 			<check_box label="Si movelock está activado, volver a bloquear tras cambiar de región" name="RelockMoveLockAfterRegionChange"/>
 			<text name="single_click_action_lbl">
 				Un solo clic en el terreno:
