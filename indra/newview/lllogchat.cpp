@@ -948,7 +948,7 @@ bool LLChatLogParser::parse(std::string& raw, LLSD& im, const LLSD& parse_params
 	// Ansariel: Handle the case an IM was stored in nearby chat history
 	if (name == "IM:")
 	{
-		U32 divider_pos = stuff.find(NAME_TEXT_DIVIDER, 3);
+		size_t divider_pos = stuff.find(NAME_TEXT_DIVIDER, 3);
 		if (divider_pos != std::string::npos && divider_pos < (stuff.length() - NAME_TEXT_DIVIDER.length()))
 		{
 			im[LL_IM_FROM] = stuff.substr(0, divider_pos);

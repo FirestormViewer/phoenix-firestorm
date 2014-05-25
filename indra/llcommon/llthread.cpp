@@ -64,11 +64,11 @@ U32 LLThread::sIDIter = 0;
 
 LL_COMMON_API void assert_main_thread()
 {
-	static U32 s_thread_id = LLThread::currentID();
+	static uintptr_t s_thread_id = LLThread::currentID();
 	if (LLThread::currentID() != s_thread_id)
 	{
-		llwarns << "Illegal execution from thread id " << (S32) LLThread::currentID()
-			<< " outside main thread " << (S32) s_thread_id << llendl;
+		llwarns << "Illegal execution from thread id " << (intptr_t) LLThread::currentID()
+			<< " outside main thread " << (intptr_t) s_thread_id << llendl;
 	}
 }
 
@@ -281,9 +281,9 @@ void LLThread::setQuitting()
 }
 
 // static
-U32 LLThread::currentID()
+uintptr_t LLThread::currentID()
 {
-	return (U32)apr_os_thread_current();
+	return (uintptr_t)apr_os_thread_current();
 }
 
 // static
@@ -401,7 +401,7 @@ bool LLMutex::trylock()
 	
 #if MUTEX_DEBUG
 	// Have to have the lock before we can access the debug info
-	U32 id = LLThread::currentID();
+	uintptr_t id = LLThread::currentID();
 	if (mIsLocked[id] != FALSE)
 		llerrs << "Already locked in Thread: " << id << llendl;
 	mIsLocked[id] = TRUE;
@@ -425,7 +425,7 @@ void LLMutex::unlock()
 	
 #if MUTEX_DEBUG
 	// Access the debug info while we have the lock
-	U32 id = LLThread::currentID();
+	uintptr_t id = LLThread::currentID();
 	if (mIsLocked[id] != TRUE)
 		llerrs << "Not locked in Thread: " << id << llendl;	
 	mIsLocked[id] = FALSE;
@@ -488,7 +488,7 @@ void LLCondition::wait()
 		apr_thread_mutex_lock(mAPRMutexp);
 #if MUTEX_DEBUG
 		// avoid asserts on destruction in non-release builds
-		U32 id = LLThread::currentID();
+		uintptr_t id = LLThread::currentID();
 		mIsLocked[id] = TRUE;
 #endif
 	}
