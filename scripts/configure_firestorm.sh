@@ -403,6 +403,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     if [ $PLATFORM == "darwin" ] ; then
         TARGET="Xcode"
+        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        then
+          TARGET_ARCH="x64"
+          WORD_SIZE=64
+        fi
     elif [ \( $PLATFORM == "linux32" \) -o \( $PLATFORM == "linux64" \) ] ; then
         TARGET="Unix Makefiles"
         if [ "${AUTOBUILD_ARCH}" == "x64" ]
