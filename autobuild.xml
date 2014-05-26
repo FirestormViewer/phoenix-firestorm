@@ -160,7 +160,7 @@
               <key>hash</key>
               <string>508c560cb2ac234e62efe2d4d5049789</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/3p-apr/downloads/apr_suite-1.4.5-darwin-20140519u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/apr_suite-1.4.5-darwin-20140519u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -220,7 +220,7 @@
               <key>hash</key>
               <string>e3e2d26c6d15667c5ceddcec68ae7c32</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/ares-1.10.0-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ares-1.10.0-darwin-20140521u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -280,7 +280,7 @@
               <key>hash</key>
               <string>1eb36db04aa34dd2a9fcd7af1ff14d45</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/3p-boost152/downloads/boost-1.52.0-darwin-20140518u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.52.0-darwin-20140518u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -340,7 +340,7 @@
               <key>hash</key>
               <string>dc28ae49a8917ad39d9432b86ff91c82</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/3p-colladadom/downloads/colladadom-2.2-darwin-20140519u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.2-darwin-20140519u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -400,7 +400,7 @@
               <key>hash</key>
               <string>2367231226757031ef71c58d6e47df55</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/curl-7.37.0-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/curl-7.37.0-darwin-20140521u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -628,7 +628,7 @@
               <key>hash</key>
               <string>600080e0ee370be7c4f563215c4f0033</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/expat-2.0.1-darwin-20140522u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/expat-2.0.1-darwin-20140522u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1600,7 +1600,7 @@
               <key>hash</key>
               <string>b7070be15ab964fc5b3c1e3be25adb40</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/libpng-1.5.1-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.5.1-darwin-20140521u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2090,7 +2090,7 @@
               <key>hash</key>
               <string>1772c222adf5376451bc320d49946d05</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/ogg_vorbis-1.3.1-1.3.4-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/ogg_vorbis-1.3.1-1.3.4-darwin-20140521u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2150,7 +2150,7 @@
               <key>hash</key>
               <string>75a77beadd5dbf5f12a2c59c64763045</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/openssl-1.0.1g-darwin-20140521u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1g-darwin-20140521u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2262,7 +2262,7 @@
               <key>hash</key>
               <string>bd42f49f2977ce4aa9bbd04b39999f08</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/openjpeg-1.4-darwin-20140524u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openjpeg-1.4-darwin-20140524u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2394,7 +2394,7 @@
               <key>hash</key>
               <string>c86e0a8e3977e6e27a61f78d625295d3</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/slplugin_x86-1.0-darwin-20140410.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/downloads/slplugin_x86-1.0-darwin-20140410.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
