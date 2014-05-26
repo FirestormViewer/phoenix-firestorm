@@ -835,7 +835,7 @@ class Windows_i686_Manifest(ViewerManifest):
         self.package_file = installer_file
 
 
-class Darwin_i386_Manifest(ViewerManifest):
+class DarwinManifest(ViewerManifest):
     def is_packaging_viewer(self):
         # darwin requires full app bundle packaging even for debugging.
         return True
@@ -860,7 +860,7 @@ class Darwin_i386_Manifest(ViewerManifest):
 
             # most everything goes in the Resources directory
             if self.prefix(src="", dst="Resources"):
-                super(Darwin_i386_Manifest, self).construct()
+                super(DarwinManifest, self).construct()
 
                 if self.prefix("cursors_mac"):
                     self.path("*.tif")
@@ -1186,6 +1186,41 @@ class Darwin_i386_Manifest(ViewerManifest):
                                                                       self.args['viewer_flavor']))
 
 
+class Darwin_i386_Manifest(DarwinManifest):
+    def construct(self):
+        super(Darwin_i386_Manifest, self).construct()
+
+
+class Darwin_universal_Manifest(DarwinManifest):
+    def construct(self):
+        super(Darwin_universal_Manifest, self).construct()
+
+        if(self.prefix(src="../packages/bin_x86", dst="Contents/Resources/")):
+            self.path("slplugin.app")
+			
+            if self.prefix(src = "llplugin", dst="llplugin"):
+                self.path("media_plugin_quicktime.dylib")
+                self.path("media_plugin_webkit.dylib")
+                self.path("libllqtwebkit.dylib")
+            self.end_prefix("llplugin")
+
+        self.end_prefix("../packages/bin_x86/slplugin");
+
+
+class Darwin_x86_64_Manifest(DarwinManifest):
+    def construct(self):
+        super(Darwin_x86_64_Manifest, self).construct()
+
+        if(self.prefix("../packages/bin_x86", dst="Contents/Resources/")):
+            self.path("slplugin.app", "slplugin.app")
+	
+            if self.prefix(src = "llplugin", dst="llplugin"):
+                self.path("media_plugin_quicktime.dylib", "media_plugin_quicktime.dylib")
+                self.path("media_plugin_webkit.dylib", "media_plugin_webkit.dylib")
+                self.path("libllqtwebkit.dylib", "libllqtwebkit.dylib")
+            self.end_prefix("llplugin")
+
+        self.end_prefix("../packages/bin_x86");
 
 
 class LinuxManifest(ViewerManifest):

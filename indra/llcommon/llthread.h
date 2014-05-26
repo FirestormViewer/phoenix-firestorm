@@ -62,7 +62,7 @@ public:
 	bool isQuitting() const { return (QUITTING == mStatus); }
 	bool isStopped() const { return (STOPPED == mStatus); }
 	
-	static U32 currentID(); // Return ID of current thread
+	static uintptr_t currentID(); // Return ID of current thread
 	static void yield(); // Static because it can be called by the main thread, which doesn't have an LLThread data structure.
 	
 public:
@@ -165,7 +165,7 @@ public:
 protected:
 	apr_thread_mutex_t *mAPRMutexp;
 	mutable U32			mCount;
-	mutable U32			mLockingThread;
+	mutable uintptr_t	mLockingThread;
 	
 	apr_pool_t			*mAPRPoolp;
 	BOOL				mIsLocalPool;
