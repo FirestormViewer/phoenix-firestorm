@@ -241,7 +241,6 @@ elseif(DARWIN)
         libexpat.1.5.2.dylib
         libexpat.dylib
         libGLOD.dylib
-        libllqtwebkit.dylib
         libminizip.a
         libndofdev.dylib
         libhunspell-1.3.0.dylib
@@ -250,6 +249,12 @@ elseif(DARWIN)
 		libgrowl.dylib
         libgrowl++.dylib
        )
+
+    if( NOT ND_BUILD64BIT_ARCH )
+        list(APPEND release_files
+             libllqtwebkit.dylib
+            )
+    endif( NOT ND_BUILD64BIT_ARCH )
 
     # <FS:ND> We only ever need google breakpad when crash reporting is used
     if(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
