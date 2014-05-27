@@ -263,6 +263,8 @@
 
 #include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "nd/ndallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "nd/ndoctreelog.h" // <FS:ND/> Octree operation logging.
+
 #include "fsradar.h"
 
 
@@ -834,6 +836,8 @@ bool LLAppViewer::init()
 
 	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
 	nd::mallocstats::startUp(); // <FS:ND/> start collecting alloc stats
+	nd::octree::debug::setOctreeLogFilename( gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "octree.log" ) ); // <FS:ND/> Filename to log octree options to.
+
 
 	//
 	// Start of the application

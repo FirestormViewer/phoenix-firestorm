@@ -32,6 +32,8 @@
 #include "llvector4a.h"
 #include <vector>
 
+#include "nd/ndoctreelog.h"
+
 #define OCT_ERRS LL_WARNS("OctreeErrors")
 
 
@@ -120,6 +122,7 @@ public:
 		if ((mOctant == 255) && mParent)
 		{
 			mOctant = ((oct_node*) mParent)->getOctant(mCenter);
+			ND_OCTREE_LOG << "set octant to " << (U32)mOctant << " mCenter " << mCenter << " mParent->mCenter " << mParent->mCenter << ND_OCTREE_LOG_END;
 		}
 
 		mElementCount = 0;
@@ -319,12 +322,22 @@ public:
 		}
 		LLOctreeNode<T>* parent = getOctParent();
 
+		ND_OCTREE_LOG << "Inserting data, this->getSize " << this->getSize() << " this->getElementCount() " << this->getElementCount() << " this->getChildCount() " << this->getChildCount() << std::endl
+					  << " this->mMin " << this->mMin << " this->mMax " << this->mMax << std::endl
+					  << " data->getPositionGroup().greaterThan(mMax).getGatheredBits() " << (S32)( data->getPositionGroup().greaterThan(mMax).getGatheredBits() & 0x7 )
+					  << " data->getPositionGroup().lessEqual(mMin).getGatheredBits() " << (S32)(data->getPositionGroup().lessEqual(mMin).getGatheredBits() & 0x7)
+					  << std::endl << " data->getBinRadius() " << data->getBinRadius() << " data->getPositionGroup() " << data->getPositionGroup() << ND_OCTREE_LOG_END;
+
 		//is it here?
 		if (isInside(data->getPositionGroup()))
 		{
+			ND_OCTREE_LOG << "Inserting data, isInside(data->getPositionGroup()) true " << ND_OCTREE_LOG_END;
+
 			if (((getElementCount() < gOctreeMaxCapacity || getSize()[0] <= gOctreeMinSize) && contains(data->getBinRadius()) ||
 				(data->getBinRadius() > getSize()[0] &&	parent && parent->getElementCount() >= gOctreeMaxCapacity))) 
 			{ //it belongs here
+				ND_OCTREE_LOG << "Inserting data into this" << ND_OCTREE_LOG_END;
+
 				mData.push_back(NULL);
 				mData[mElementCount] = data;
 				mElementCount++;
@@ -335,11 +348,20 @@ public:
 			}
 			else
 			{ 	
+				ND_OCTREE_LOG << "Inserting data into children this->getChildCount() " << this->getChildCount() << ND_OCTREE_LOG_END;
+
 				//find a child to give it to
 				oct_node* child = NULL;
 				for (U32 i = 0; i < getChildCount(); i++)
 				{
 					child = getChild(i);
+
+					ND_OCTREE_LOG << "child " << i << " child->getSize " << child->getSize() << " child->getElementCount() " << child->getElementCount() << " child->getChildCount() " << child->getChildCount()  << std::endl
+								  << " child->mMin " << child->mMin << " child->mMax " << child->mMax << std::endl
+								  << " data->getPositionGroup().greaterThan(child->mMax).getGatheredBits() " << (S32)(data->getPositionGroup().greaterThan(child->mMax).getGatheredBits() & 0x7)
+								  << " data->getPositionGroup().lessEqual(child->mMin).getGatheredBits() " << (S32)(data->getPositionGroup().lessEqual(child->mMin).getGatheredBits() & 0x7)
+								  << std::endl << ND_OCTREE_LOG_END;
+
 					if (child->isInside(data->getPositionGroup()))
 					{
 						child->insert(data);
@@ -363,8 +385,15 @@ public:
 
 				S32 lt = val.lessThan(min_diff).getGatheredBits() & 0x7;
 
-				if( lt == 0x7 )
+				ND_OCTREE_LOG << "Creating a new child new center " << center << " new size " << size << " val " << val << " min_diff " << min_diff << " lt " << lt << ND_OCTREE_LOG_END;
+
+				// <FS:ND> Do not create a child if any of x/y/z is under minimum. One of those falling below is enough to get precision errors.
+				// if( lt == 0x7 )
+				if( lt )
+				// </FS:ND>
 				{
+					ND_OCTREE_LOG << "Adding to parent and exit" << ND_OCTREE_LOG_END;
+
 					mData.push_back(NULL);
 					mData[mElementCount] = data;
 					mElementCount++;
@@ -392,6 +421,8 @@ public:
 					}
 				}
 #endif
+
+				ND_OCTREE_LOG << "Adding to child" << ND_OCTREE_LOG_END;
 
 				llassert(size[0] >= gOctreeMinSize*0.5f);
 				//make the new kid
@@ -577,6 +608,10 @@ public:
 			OCT_ERRS <<"Octree node has too many children... why?" << llendl;
 		}
 #endif
+		ND_OCTREE_LOG << "addChild octant " << (U32)child->getOctant() << " mChildCount " << mChildCount << ND_OCTREE_LOG_END;
+
+		if( mChildCount >= 8 )
+			llerrs << "Octree overrun" << llendl;
 
 		mChildMap[child->getOctant()] = mChildCount;
 

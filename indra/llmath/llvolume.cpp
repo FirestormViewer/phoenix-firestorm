@@ -5373,6 +5373,8 @@ void LLVolumeFace::createOctree(F32 scaler, const LLVector4a& center, const LLVe
 		return;
 	}
 
+	ND_OCTREE_LOG << "Creating octree with scale " << scaler << " mNumIndices " << mNumIndices << ND_OCTREE_LOG_END;
+
 	mOctree = new LLOctreeRoot<LLVolumeTriangle>(center, size, NULL);
 	new LLVolumeOctreeListener(mOctree);
 
@@ -5417,9 +5419,17 @@ void LLVolumeFace::createOctree(F32 scaler, const LLVector4a& center, const LLVe
 		
 		tri->mRadius = size.getLength3().getF32() * scaler;
 		
+		ND_OCTREE_LOG << "insertion " << i
+				<< " tri.mV " << *tri->mV[0] << "/" << *tri->mV[1] << "/" << *tri->mV[2]
+				<< " tri.mIndex " << tri->mIndex[0] << "/" << tri->mIndex[1] << "/" << tri->mIndex[2]
+				<< ND_OCTREE_LOG_END;
+
 		//insert
 		mOctree->insert(tri);
+		ND_OCTREE_LOG << "insertion done" << std::endl << ND_OCTREE_LOG_END;
 	}
+
+	ND_OCTREE_LOG << "octree created" << std::endl << std::endl << ND_OCTREE_LOG_END;
 
 	//remove unneeded octree layers
 	while (!mOctree->balance())	{ }

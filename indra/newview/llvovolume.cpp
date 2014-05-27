@@ -4146,7 +4146,19 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 				size.setSub(dst_face.mExtents[1], dst_face.mExtents[0]);
 				size.splat(size.getLength3().getF32()*0.5f);
 			
+				// <FS:ND> Create a debug log for octree insertions if requested.
+				static LLCachedControl<bool> debugOctree(gSavedSettings,"FSCreateOctreeLog");
+				bool _debugOT( debugOctree );
+				if( _debugOT )
+					nd::octree::debug::gOctreeDebug += 1;
+				// </FS:ND>
+				
 				dst_face.createOctree(1.f);
+			
+				// <FS:ND> Reset octree log
+				if( _debugOT )
+					nd::octree::debug::gOctreeDebug -= 1;
+				// </FS:ND>
 			}
 		}
 	}
