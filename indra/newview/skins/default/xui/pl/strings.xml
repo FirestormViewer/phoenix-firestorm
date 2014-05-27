@@ -4,7 +4,7 @@
 		Portal Pomocy Second Life
 	</string>
 	<string name="StartupDetectingHardware">
-		Wykrywanie dysku twardego...
+		Detekcja konfiguracji sprzętowej...
 	</string>
 	<string name="StartupLoading">
 		Ładowanie [APP_NAME]...
@@ -19,17 +19,13 @@
 		Inicjowanie bufora danych tekstur...
 	</string>
 	<string name="StartupInitializingVFS">
-		Inicjowanie VFS...
+		Inicjowanie wirtualnego systemu plików...
 	</string>
 	<string name="StartupRequireDriverUpdate">
 		Nie można zainicjować grafiki. Zaktualizuj sterowniki!
 	</string>
-	<string name="AboutHeader">
-[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL]) [BUILD_TYPE]
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
-	</string>
 	<string name="AboutCompiler">
-		Zbudowane z [COMPILER] w wersji [COMPILER_VERSION]
+		Zbudowane za pomocą [COMPILER] w wersji [COMPILER_VERSION]
 	</string>
 	<string name="AboutPosition">
 Położenie [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] w [REGION] zlokalizowanym w &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
@@ -156,7 +152,7 @@ Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER]
 		Termin ważności certyfikatu zwróconego przez siatkę minął. Proszę sprawdzić swój zegar systemowy lub skontaktować się z administratorem siatki.
 	</string>
 	<string name="CertKeyUsage">
-		Certyfikat zwrócony przez serwer nie może być użyty dla SSL.  Proszę skontaktuj się z administratorem siatki.
+		Certyfikat zwrócony przez serwer nie może być użyty dla SSL. Proszę skontaktuj się z administratorem siatki.
 	</string>
 	<string name="CertBasicConstraints">
 		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem siatki.
@@ -1726,9 +1722,6 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="Invalid Attachment">
 		Nieprawidłowy punkt dodatku
-	</string>
-	<string name="YearsMonthsOld">
-		[AGEYEARS] [AGEMONTHS]
 	</string>
 	<string name="YearsOld">
 		[AGEYEARS]
@@ -4540,16 +4533,7 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		Styczeń:Luty:Marzec:Kwiecień:Maj:Czerwiec:Lipiec:Sierpień:Wrzesień:Październik:Listopad:Grudzień
 	</string>
 	<string name="dateTimeMonthShortNames">
-		St.:Lt.:Mrz.:Kw.:Maj:Cz.:Lp.:Sie.:Wrz.:Paź.:Li.:Gru.
-	</string>
-	<string name="dateTimeDayFormat">
-		[MDAY]
-	</string>
-	<string name="dateTimeAM">
-		AM
-	</string>
-	<string name="dateTimePM">
-		PM
+		Sty:Lut:Mar:Kwi:Maj:Cze:Lip:Sie:Wrz:Paź:Lis:Gru
 	</string>
 	<string name="LocalEstimateUSD">
 		US$ [AMOUNT]
