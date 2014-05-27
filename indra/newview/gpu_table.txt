@@ -527,6 +527,7 @@ NVIDIA GT 71x							.*NVIDIA .*GT *71.*									3	1	0	4.4
 NVIDIA GT 72x							.*NVIDIA .*GT *72.*									3	1	0	4.4
 NVIDIA GT 73x							.*NVIDIA .*GT *73.*									3	1	0	4.4
 NVIDIA GT 74x							.*NVIDIA .*GT *74.*									3	1	0	4.4
+NVIDIA GTX 74x							.*NVIDIA .*GTX *74.*								3	1	0	4.4
 NVIDIA GTX 75x							.*NVIDIA .*GTX *75.*								3	1	0	4.4
 NVIDIA GTX 76x							.*NVIDIA .*GTX *76.*								5	1	0	4.4
 NVIDIA GTX 77x							.*NVIDIA .*GTX *77.*								5	1	0	4.4
