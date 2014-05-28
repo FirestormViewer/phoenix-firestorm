@@ -398,9 +398,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2367231226757031ef71c58d6e47df55</string>
+              <string>196983904562c6192a240cfce16af59e</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/curl-7.37.0-darwin-20140521u.tar.bz2</string>
+              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/curl-7.37.0-darwin-20140527u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2096,9 +2096,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>75a77beadd5dbf5f12a2c59c64763045</string>
+              <string>097e50aedd67890ad1afddf087cb0fdc</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/openssl-1.0.1g-darwin-20140521u.tar.bz2</string>
+              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/openssl-1.0.1g-darwin-20140527u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2548,9 +2548,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ff0a653d6d3ad99523ad6e478691532b</string>
+              <string>40f752c0c22c02a5b29217245d6bc230</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.6-darwin-20131028u.tar.bz2</string>
+              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/zlib-1.2.8-darwin-20140527u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
