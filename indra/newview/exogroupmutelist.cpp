@@ -28,18 +28,31 @@
 
 // <FS:Ansariel> Server-side storage
 #include "llmutelist.h"
+#include "llviewernetwork.h"
 
 exoGroupMuteList::exoGroupMuteList()
 : mMuted()
 {
 	// <FS:Ansariel> Server-side storage
 	//loadMuteList();
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		loadMuteList();
+	}
+#endif
 }
 
 bool exoGroupMuteList::isMuted(const LLUUID& group) const
 {
 	// <FS:Ansariel> Server-side storage
 	//return mMuted.count(group);
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		return mMuted.count(group);
+	}
+#endif
 	return (bool)LLMuteList::instance().isMuted(LLUUID::null, getMutelistString(group));
 	// </FS:Ansariel> Server-side storage
 }
@@ -53,6 +66,16 @@ void exoGroupMuteList::add(const LLUUID& group)
 	//{
 	//	saveMuteList();
 	//}
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		if(mMuted.insert(group).second)
+		{
+			saveMuteList();
+		}
+		return;
+	}
+#endif
 	LLMuteList::instance().add(LLMute(LLUUID::null, getMutelistString(group), LLMute::BY_NAME));
 	// </FS:Ansariel> Server-side storage
 }
@@ -64,6 +87,16 @@ void exoGroupMuteList::remove(const LLUUID& group)
 	//{
 	//	saveMuteList();
 	//}
+#ifdef OPENSIM
+	if (LLGridManager::instance().isInOpenSim())
+	{
+		if(mMuted.erase(group))
+		{
+			saveMuteList();
+		}
+		return;
+	}
+#endif
 	LLMuteList::instance().remove(LLMute(LLUUID::null, getMutelistString(group), LLMute::BY_NAME));
 	// </FS:Ansariel> Server-side storage
 }
