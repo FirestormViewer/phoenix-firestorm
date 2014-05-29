@@ -116,6 +116,7 @@
 #include "llsdserialize.h"
 
 // Firestorm Includes
+#include "exogroupmutelist.h"
 #include "fsfloatercontacts.h" // TS: sort contacts list
 #include "fsfloaterimcontainer.h"
 #include "growlmanager.h"
@@ -1007,13 +1008,19 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
 	
 // <FS:CR> Show/hide Client Tag panel
-	bool show_client_tags = false;
+	bool in_opensim = false;
 #ifdef OPENSIM
-	show_client_tags = LLGridManager::getInstance()->isInOpenSim();
+	in_opensim = LLGridManager::getInstance()->isInOpenSim();
 #endif // OPENSIM
-	getChild<LLPanel>("client_tags_panel")->setVisible(show_client_tags);
+	getChild<LLPanel>("client_tags_panel")->setVisible(in_opensim);
 // </FS:CR>
-	
+
+	// <FS:Ansariel> Group mutes backup
+	LLScrollListItem* groupmute_item = getChild<LLScrollListCtrl>("restore_per_account_files_list")->getItem(LLSD("groupmutes"));
+	groupmute_item->setEnabled(in_opensim);
+	groupmute_item->getColumn(0)->setEnabled(in_opensim);
+	// </FS:Ansariel>
+
 	// Make sure the current state of prefs are saved away when
 	// when the floater is opened.  That will make cancel do its
 	// job
@@ -3908,6 +3915,13 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		gToolBarView->clearToolbars();
 		LL_INFOS("SettingsBackup") << "reloading toolbars" << LL_ENDL;
 		gToolBarView->loadToolbars(FALSE);
+#ifdef OPENSIM
+		if (LLGridManager::instance().isInOpenSim())
+		{
+			LL_INFOS("SettingsBackup") << "reloading group mute list" << LL_ENDL;
+			exoGroupMuteList::instance().loadMuteList();
+		}
+#endif
 
 		LLPanelMainInventory::sSaveFilters = false;
 	}

@@ -1538,10 +1538,16 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
 		mPopupMenu->setItemVisible("View Profile", mClosestAgentsToCursor.size() == 1);
 
+		bool can_show_names = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+		mPopupMenu->setItemEnabled("Add to Set Multiple", can_show_names);
+		mPopupMenu->setItemEnabled("More Options", can_show_names);
+		mPopupMenu->setItemEnabled("View Profile", can_show_names);
+
 		LLMenuItemBranchGL* pProfilesMenu = mPopupMenu->getChild<LLMenuItemBranchGL>("View Profiles");
 		if (pProfilesMenu)
 		{
 			pProfilesMenu->setVisible(mClosestAgentsToCursor.size() > 1);
+			pProfilesMenu->setEnabled(can_show_names);
 
 			pProfilesMenu->getBranch()->empty();
 			for (uuid_vec_t::const_iterator itAgent = mClosestAgentsToCursor.begin(); itAgent != mClosestAgentsToCursor.end(); ++itAgent)
@@ -1579,8 +1585,10 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mPopupMenu->setItemVisible("Cam", LLAvatarActions::canZoomIn(mClosestAgentToCursor));
 		mPopupMenu->setItemVisible("MarkAvatar", mClosestAgentToCursor.notNull());
 		mPopupMenu->setItemVisible("Start Tracking", mClosestAgentToCursor.notNull());
-		mPopupMenu->setItemVisible("Profile Separator", (mClosestAgentsToCursor.size() >= 1
-								   || mClosestAgentToCursor.notNull()));
+		mPopupMenu->setItemVisible("Profile Separator", (mClosestAgentsToCursor.size() >= 1 || mClosestAgentToCursor.notNull()));
+		mPopupMenu->setItemEnabled("Place Profile", !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+		mPopupMenu->setItemEnabled("World Map", !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
+
 // [/SL:KB]
 		mPopupMenu->buildDrawLabels();
 		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
