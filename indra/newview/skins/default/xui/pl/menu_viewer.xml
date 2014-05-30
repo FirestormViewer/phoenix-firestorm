@@ -61,7 +61,7 @@
 		</menu>
 		<menu_item_call label="Znajomi" name="My Friends"/>
 		<menu_item_check label="Kontakty" name="Contacts"/>
-		<menu_item_call label="Zestawy kontaktów" name="Contact Sets"/>
+		<menu_item_call label="Zestawy kontaktów" name="Contact Sets" shortcut=""/>
 		<menu_item_call label="Grupy" name="My Groups"/>
 		<menu_item_check label="Czat lokalny..." name="Nearby Chat"/>
 		<menu_item_check label="Ludzie" name="People"/>
@@ -92,7 +92,7 @@
 		<menu_item_call label="Moje działki" name="My Land"/>
 		<menu label="Pokaż więcej" name="LandShow">
 			<menu_item_check label="Linie zakazu" name="Ban Lines"/>
-			<menu_item_check label="Emitery" name="beacons"/>
+			<menu_item_check label="Emitery" name="beacons" shortcut=""/>
 			<menu_item_check label="Granice działek" name="Property Lines"/>
 			<menu_item_check label="Właściciele działek" name="Land Owners" shortcut="control|alt|W"/>
 			<menu_item_check label="Współrzędne" name="Coordinates"/>
@@ -346,7 +346,7 @@
 		</menu>
 		<menu_item_check label="Wymuszanie latania" name="Fly Override"/>
 		<menu_item_check label="API dla RestrainedLove" name="RLV API"/>
-		<menu_item_call label="Pokaż ustawienia debugowania" name="Debug Settings"/>
+		<menu_item_call label="Pokaż ustawienia debugowania" name="Debug Settings" shortcut=""/>
 		<menu_item_check label="Pokaż menu programisty" name="Debug Mode"/>
 	</menu>
 	<menu label="Programista" name="Develop">
@@ -457,7 +457,7 @@
 			<menu_item_call label="Wyłącz logowanie" name="Disable Message Log"/>
 			<menu_item_check label="Prędkość interpolacji obiektów" name="Velocity Interpolate Objects"/>
 			<menu_item_check label="Pinguj pozycje interpolowanych obiektów" name="Ping Interpolate Object Positions"/>
-			<menu_item_call label="Zagub pakiet" name="Drop a Packet"/>
+			<menu_item_call label="Zagub pakiet" name="Drop a Packet" shortcut=""/>
 		</menu>
 		<menu_item_call label="Zrzut oskryptowanej kamery" name="Dump Scripted Camera"/>
 		<menu label="Nagrywanie" name="Recorder">
@@ -540,7 +540,7 @@
 			<menu_item_check label="Pokaż szkielet kolizji" name="Show Collision Skeleton"/>
 			<menu_item_check label="Wyświetl cel Agenta" name="Display Agent Target"/>
 			<menu_item_call label="Zrzut przyłączonych dodatków" name="Dump Attachments"/>
-			<menu_item_call label="Debugowanie tekstur awatara" name="Debug Avatar Textures"/>
+			<menu_item_call label="Debugowanie tekstur awatara" name="Debug Avatar Textures" shortcut=""/>
 			<menu_item_call label="Zrzut lokalnych tekstur" name="Dump Local Textures"/>
 			<menu_item_call label="Przeładuj chmurę cząsteczek awatara" name="Reload Avatar Cloud Particle"/>
 		</menu>
