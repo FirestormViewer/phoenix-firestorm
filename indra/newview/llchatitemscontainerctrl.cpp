@@ -38,6 +38,7 @@
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimnearbychat.h"
 #include "fsfloaternearbychat.h"
+#include "fsfloaterimcontainer.h"
 // </FS:Ansariel> [FS communication UI]
 
 #include "llviewercontrol.h"
@@ -347,13 +348,13 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 		{
 			// <FS:Ansariel> [FS communication UI]
 			//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
-			FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
-
-			// <FS:Ansariel> If nearby chat history is docked, we also need
-			//               to open the container floater (FIRE-6265)
-			if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
+			if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 			{
-				LLFloaterReg::showInstance("fs_im_container");
+				LLFloaterReg::showInstance("fs_nearby_chat");
+			}
+			else
+			{
+				LLFloaterReg::showTypedInstance<FSFloaterIMContainer>("fs_im_container")->selectFloater(FSFloaterNearbyChat::getInstance());
 			}
 			// </FS:Ansariel> [FS communication UI]
 			return FALSE;
@@ -362,13 +363,13 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 
 	// <FS:Ansariel> [FS communication UI]
 	//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
-	FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
-
-	// <FS:Ansariel> If nearby chat history is docked, we also need
-	//               to open the container floater (FIRE-6265)
-	if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
+	if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
 	{
-		LLFloaterReg::showInstance("fs_im_container");
+		LLFloaterReg::showInstance("fs_nearby_chat");
+	}
+	else
+	{
+		LLFloaterReg::showTypedInstance<FSFloaterIMContainer>("fs_im_container")->selectFloater(FSFloaterNearbyChat::getInstance());
 	}
 	// </FS:Ansariel> [FS communication UI]
 	return LLPanel::handleMouseUp(x,y,mask);
