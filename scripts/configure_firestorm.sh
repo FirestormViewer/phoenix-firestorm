@@ -321,15 +321,22 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
         if [ "${AUTOBUILD_ARCH}" == "x64" ]
         then
            rm -rf build-vc100_x64/*
+           mkdir -p build-vc100_x64/logs
          else
            rm -rf build-vc100/* 
+           mkdir -p build-vc100/logs
         fi
  
-       mkdir -p build-vc100/logs
 
     elif [ $PLATFORM == "linux32" ] ; then
-        rm -rf build-linux-i686/*
-        mkdir -p build-linux-i686/logs
+        if [ "${AUTOBUILD_ARCH}" == "x64" ]
+        then
+           rm -rf build-linux-x86_64/*
+           mkdir -p build-linux-x86_64/logs
+        else
+           rm -rf build-linux-i686/*
+           mkdir -p build-linux-i686/logs
+        fi
     fi
 
     popd
