@@ -533,9 +533,11 @@ BOOL LLPanelMainInventory::filtersVisible(void* user_data)
 
 void LLPanelMainInventory::onClearSearch()
 {
+	BOOL initially_active = FALSE;
 	LLFloater *finder = getFinder();
 	if (mActivePanel)
 	{
+		initially_active = mActivePanel->getFilter().isNotDefault();
 		mActivePanel->setFilterSubString(LLStringUtil::null);
 		// <FS:Ansariel>
 		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
@@ -563,8 +565,8 @@ void LLPanelMainInventory::onClearSearch()
 		LLFloaterInventoryFinder::selectAllTypes(finder);
 	}
 
-	// re-open folders that were initially open
-	if (mActivePanel)
+	// re-open folders that were initially open in case filter was active
+	if (mActivePanel && (mFilterSubString.size() || initially_active))
 	{
 		mSavedFolderState->setApply(TRUE);
 		mActivePanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
