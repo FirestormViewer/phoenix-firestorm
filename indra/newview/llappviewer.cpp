@@ -264,6 +264,7 @@
 #include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "nd/ndallocstats.h" // <FS:ND/> collect stats about memory allocations
 #include "nd/ndoctreelog.h" // <FS:ND/> Octree operation logging.
+#include "nd/ndetw.h" // <FS:ND/> Windows Event Tracing, does nothing on OSX/Linux.
 
 #include "fsradar.h"
 
@@ -837,6 +838,7 @@ bool LLAppViewer::init()
 	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
 	nd::mallocstats::startUp(); // <FS:ND/> start collecting alloc stats
 	nd::octree::debug::setOctreeLogFilename( gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "octree.log" ) ); // <FS:ND/> Filename to log octree options to.
+	nd::etw::init(); // <FS:ND/> Init event tracing.
 
 
 	//
@@ -1539,6 +1541,8 @@ bool LLAppViewer::mainLoop()
 	while (!LLApp::isExiting())
 #endif
 	{
+		nd::etw::logFrame(); // Write the start of each frame. Even if our Provider (Firestorm) would be enabled, this has only light impact. Does nothing on OSX and Linux.
+
 		LLFastTimer _(FTM_FRAME);
 		LLFastTimer::nextFrame(); 
 

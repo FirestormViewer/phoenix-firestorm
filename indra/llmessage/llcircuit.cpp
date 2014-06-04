@@ -57,6 +57,8 @@
 #include "lltransfermanager.h"
 #include "llmodularmath.h"
 
+#include "nd/ndetw.h"
+
 const S32 PING_START_BLOCK = 3;		// How many pings behind we have to be to consider ourself blocked.
 const S32 PING_RELEASE_BLOCK = 2;	// How many pings behind we have to be to consider ourself unblocked.
 
@@ -970,6 +972,7 @@ BOOL LLCircuitData::updateWatchDogTimers(LLMessageSystem *msgsys)
 		}
 	}
 
+	nd::etw::tickTask( L"sendingPing" ); // <FS:ND/> Write an event for each ping we send. Happens every ~5 seconds.
 	// Send off the another ping.
 	pingTimerStart();
 	msgsys->newMessageFast(_PREHASH_StartPingCheck);
@@ -1276,6 +1279,7 @@ void LLCircuitData::setPacketInID(TPACKETID id)
 
 void LLCircuitData::pingTimerStop(const U8 ping_id)
 {
+	nd::etw::tickTask( L"receivedPing" );  // <FS:ND/> Write an event for each ping we receice in response. Happens every ~5 seconds. This event should trigger shortly after we send our ping.
 	F64 mt_secs = LLMessageSystem::getMessageTimeSeconds();
 
 	// Nota Bene: no averaging of ping times until we get a feel for how this works

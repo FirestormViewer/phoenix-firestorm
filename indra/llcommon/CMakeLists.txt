@@ -280,6 +280,7 @@ SET( llcommon_ND_SOURCE_FILES
 	 nd/ndintrin.cpp
 	 nd/ndlogthrottle.cpp
 	 nd/ndmallocstats.cpp
+	 nd/ndetw.cpp
 	 )
 SET(  llcommon_ND_HEADER_FILES 
 	  nd/ndallocstats.h
@@ -296,6 +297,7 @@ SET(  llcommon_ND_HEADER_FILES
 	  nd/ndpooldefines.h
 	  nd/ndstackwalk.h
 	  nd/ndstlallocator.h
+	  nd/ndetw.h
 	  )
 
 SOURCE_GROUP( nd FILES ${llcommon_ND_SOURCE_FILES} ${llcommon_ND_HEADER_FILES} )
