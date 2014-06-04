@@ -96,8 +96,8 @@ echo "Running from ${RUN_PATH}"
 cd "${RUN_PATH}"
 
 # Re-register hop:// and secondlife:// protocol handler every launch, for now.
-./etc/register_hopprotocol.sh
-./etc/register_secondlifeprotocol.sh
+test -x ./etc/register_hopprotocol.sh && ./etc/register_hopprotocol.sh
+test -x ./etc/register_secondlifeprotocol.sh && ./etc/register_secondlifeprotocol.sh
 
 # Re-register the application with the desktop system every launch, for now.
 # AO: Disabled don't install by default
