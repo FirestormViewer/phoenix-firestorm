@@ -28,6 +28,21 @@
 #include "llwindowmacosx-objc.h"
 #include <Carbon/Carbon.h> // Used for Text Input Services ("Safe" API - it's supported)
 
+// [Cinder] We need to override sendEvent in NSApplication and force those
+//          Apple bastards to send us Command keyUp events!
+@implementation LLNSApplication
+
+- (void)sendEvent:(NSEvent *)event {
+	// Fuck you, conventions!
+    if ([event type] == NSKeyUp && ([event modifierFlags] & NSCommandKeyMask))
+        [[self keyWindow] sendEvent:event];
+    else
+        [super sendEvent:event];
+}
+
+@end
+// [Cinder]
+
 @implementation LLAppDelegate
 
 @synthesize window;
