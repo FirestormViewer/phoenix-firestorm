@@ -398,9 +398,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-			  <string>26ac7ba4d80f09771350c9f92f161954</string>
+			  <string>b1954c2c6fefb38a312a610f0adcbb11</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/curl-7.37.0-darwin-20140604u.tar.bz2</string>
+              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/curl-7.37.0-darwin-20140605u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2096,9 +2096,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>097e50aedd67890ad1afddf087cb0fdc</string>
+              <string>86f2c270b64be8140e2c622b06d34034</string>
               <key>url</key>
-              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/openssl-1.0.1g-darwin-20140527u.tar.bz2</string>
+              <string>http://bitbucket.org/cinderblocks/darwin64-libs/downloads/openssl-1.0.1h-darwin-20140605u.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
