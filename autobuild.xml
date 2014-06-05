@@ -1430,9 +1430,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ab2ee5cce7db268d28f245ff1a34532b</string>
+              <string>f5a09d25b38c251bc880121f6ca1c857</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.3.2-darwin-20131204.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.4.0-darwin-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1442,9 +1442,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>03350c4f0aa32e56bba4979b598a6fc2</string>
+              <string>ae5e86bbe3376d107960e1364cada76a</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-7.3.2-linux-20131204.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-7.4.0-linux-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1466,9 +1466,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>20ea3d68affefca2b31b60f2ea3e2a96</string>
+              <string>3c2d8f82e75cab399dbe9eff7c3038f6</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm//kdu-7.3.2-windows-20131204.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-7.4.0-windows-20140605.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
