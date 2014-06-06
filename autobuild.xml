@@ -2148,9 +2148,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a265c0f38a7934fbe7ae7c020ddddf2c</string>
+              <string>fb0bd369c8c34cdb783de13f2689a34f</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/openssl-1.0.0g-darwin-20131112u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-darwin-20140606.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2160,9 +2160,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3d40be8566fa4b9df9a38e2a0f9ea467</string>
+              <string>72a1eaeff0df2fd132447b6b6f5e60c5</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-openssl/rev/226882/arch/Linux/installer/openssl-1.0.0d-linux-20110418.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/openssl-1.0.1h-linux-20140606.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2588,9 +2588,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ff0a653d6d3ad99523ad6e478691532b</string>
+              <string>591ecfbf877e28c01ed8fe857a5316c3</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.6-darwin-20131028u.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8-darwin-20140606.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2600,9 +2600,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7b4cf3aa2c04937d0a20761516587896</string>
+              <string>ca53589d8dd4969cd8c42d0b8f8594dd</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-zlib/rev/223739/arch/Linux/installer/zlib-1.2.5-linux-20110314.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.8-linux-20140606.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
