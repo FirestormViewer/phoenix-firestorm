@@ -3986,6 +3986,13 @@ LLSD LLAppViewer::getViewerInfo() const
 	info["TEXTUREMEMORYMULTIPLIER"] = gSavedSettings.getF32("RenderTextureMemoryMultiple");
 	// </FS:Ansariel>
 
+	// <FS:ND> Add creation time of VFS (cache)
+	if( gVFS )
+		info["VFS_DATE"] = gVFS->getCreationDataUTC();
+	else
+		info["VFS_DATE"] = "unknown";
+	// </FS:ND>
+
 	return info;
 }
 
@@ -4059,6 +4066,12 @@ std::string LLAppViewer::getViewerInfoString() const
 	{
 		support << '\n' << LLTrans::getString("AboutTraffic", args);
 	}
+
+	// <FS:ND> Add when the cache was created,
+	if( info.has("VFS_DATE") )
+		support << "\nVFS (cache) creation time (UTC) " << info["VFS_DATE"];
+	// </FS:ND>
+
 	return support.str();
 }
 

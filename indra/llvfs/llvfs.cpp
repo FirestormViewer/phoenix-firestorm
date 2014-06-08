@@ -267,6 +267,22 @@ LLVFS::LLVFS(const std::string& index_filename, const std::string& data_filename
 			// Since we're creating this data file, assume any index file is bogus
 			// remove the index, since this vfs is now blank
 			LLFile::remove(mIndexFilename);
+
+			// <FS:ND> When recreating the cache, also add a marker when we did this (for about/sysinfo)
+			LLFile::remove(mIndexFilename + ".date" );
+			LLFILE *fp = LLFile::fopen( mIndexFilename + ".date", "w" );
+			if( fp )
+			{
+				std::stringstream strm;
+				time_t tmin;
+				time( &tmin );
+				tm *pTm = gmtime( &tmin );
+				strm << std::asctime( pTm ) << " " << std::endl;
+
+				fwrite( strm.str().c_str(), strm.str().size(), 1, fp );
+				LLFile::close( fp );
+			}
+			// </FS:ND>
 		}
 		else
 		{
@@ -2203,3 +2219,22 @@ void LLVFS::unlockAndClose(LLFILE *fp)
 		fclose(fp);
 	}
 }
+
+
+// <FS:ND> Query when this cache was created, Returns the time and date in UTC, or unknown,
+std::string LLVFS::getCreationDataUTC() const
+{
+	llifstream date_file;
+	date_file.open(mIndexFilename + ".date");
+	if (date_file.is_open())
+	{
+		std::string date;
+		std::getline(date_file, date); 
+		date_file.close();
+
+		if( date.size() )
+			return date;
+	}
+	return "unknown";
+}
+// </FS:ND>

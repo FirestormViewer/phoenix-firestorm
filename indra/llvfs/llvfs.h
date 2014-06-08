@@ -175,6 +175,11 @@ protected:
 
 	S32 mLockCounts[VFSLOCK_COUNT];
 	BOOL mRemoveAfterCrash;
+
+	// <FS:ND> Query when this cache was created, Returns the time and date in UTC, or unknown,
+public:
+	std::string getCreationDataUTC() const;
+	// </FS:ND>
 };
 
 extern LLVFS *gVFS;

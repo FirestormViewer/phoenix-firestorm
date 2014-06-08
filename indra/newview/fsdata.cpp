@@ -53,6 +53,7 @@
 #include "llviewermedia.h"
 #include "llviewernetwork.h"
 #include "llxorcipher.h"
+#include "llvfs.h"
 
 const std::string LEGACY_CLIENT_LIST_URL = "http://phoenixviewer.com/app/client_tags/client_list_v2.xml";
 const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
@@ -979,7 +980,8 @@ LLSD FSData::getSystemInfo()
 	sysinfo2 += llformat("Bandwidth: %d kbit/s\n", info["BANDWIDTH"].asInteger());
 	sysinfo2 += llformat("LOD Factor: %.3f\n", info["LOD"].asReal());
 	sysinfo2 += llformat("Render quality: %s\n", info["RENDERQUALITY_FSDATA_ENGLISH"].asString().c_str()); // <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
-	sysinfo2 += llformat("Texture memory: %d MB (%.2f)", info["TEXTUREMEMORY"].asInteger(), info["TEXTUREMEMORYMULTIPLIER"].asReal());
+	sysinfo2 += llformat("Texture memory: %d MB (%.2f)\n", info["TEXTUREMEMORY"].asInteger(), info["TEXTUREMEMORYMULTIPLIER"].asReal());
+	sysinfo2 += "VFS (cache) creation time (UTC) " + info["VFS_DATE"].asString();
 
 	LLSD sysinfos;
 	sysinfos["Part1"] = sysinfo1;
