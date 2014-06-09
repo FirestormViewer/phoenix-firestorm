@@ -377,8 +377,6 @@ void LLCrashLoggerWindows::OnClientDumpRequest(void* context,
 	const google_breakpad::ClientInfo* client_info,
 	const std::wstring* file_path) 
 {
-	mMinidumpWritten = true; // <FS:ND/> We crashed, need to send those crashlogs.
-
 	if (!file_path) 
 	{
 		llwarns << "dump with no file path" << llendl;
@@ -396,6 +394,9 @@ void LLCrashLoggerWindows::OnClientDumpRequest(void* context,
 		llwarns << "dump with no context" << llendl;
 		return;
 	}
+
+
+	self->mMinidumpWritten = true; // <FS:ND/> We crashed, need to send those crashlogs.
 
 	//DWORD pid = client_info->pid();
 }
