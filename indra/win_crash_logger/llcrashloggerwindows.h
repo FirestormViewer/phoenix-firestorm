@@ -81,6 +81,7 @@ private:
     
 	HINSTANCE mhInst;
 
+	bool mMinidumpWritten;  // <FS:ND/> Flag if we crashed (wrote a minidump) or not.
 };
 
 #endif

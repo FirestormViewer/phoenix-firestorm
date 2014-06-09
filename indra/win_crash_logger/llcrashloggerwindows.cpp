@@ -260,6 +260,8 @@ LLCrashLoggerWindows::LLCrashLoggerWindows(void)
 	mCrashLookup = new LLCrashLookupWindows();
 #endif // LL_SEND_CRASH_REPORTS
 // [/SL:KB]
+
+	mMinidumpWritten = false; // <FS:ND/> Flag if we crashed (wrote a minidump) or not.
 }
 
 LLCrashLoggerWindows::~LLCrashLoggerWindows(void)
@@ -375,6 +377,8 @@ void LLCrashLoggerWindows::OnClientDumpRequest(void* context,
 	const google_breakpad::ClientInfo* client_info,
 	const std::wstring* file_path) 
 {
+	mMinidumpWritten = true; // <FS:ND/> We crashed, need to send those crashlogs.
+
 	if (!file_path) 
 	{
 		llwarns << "dump with no file path" << llendl;
@@ -499,6 +503,11 @@ void LLCrashLoggerWindows::gatherPlatformSpecificFiles()
 
 bool LLCrashLoggerWindows::mainLoop()
 {	
+	// <FS:ND> Only show crashlogger if we really crashed.
+	if( !mMinidumpWritten )
+		return true;
+	// </FS:ND>
+
 	llinfos << "CrashSubmitBehavior is " << mCrashBehavior << llendl;
 	// Note: parent hwnd is 0 (the desktop).  No dlg proc.  See Petzold (5th ed) HexCalc example, Chapter 11, p529
 	// win_crash_logger.rc has been edited by hand.
