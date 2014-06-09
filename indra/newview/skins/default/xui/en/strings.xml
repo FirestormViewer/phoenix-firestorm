@@ -66,6 +66,7 @@ Bandwidth: [BANDWIDTH]
 LOD factor: [LOD]
 Render quality: [RENDERQUALITY]
 Texture memory: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+VFS (cache) creation time (UTC): [VFS_DATE]
   </string>
   <string name="AboutTraffic">Packets Lost: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)</string>
 	<string name="ErrorFetchingServerReleaseNotesURL">Error fetching server release notes URL.</string>

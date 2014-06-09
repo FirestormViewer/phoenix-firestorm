@@ -4067,11 +4067,6 @@ std::string LLAppViewer::getViewerInfoString() const
 		support << '\n' << LLTrans::getString("AboutTraffic", args);
 	}
 
-	// <FS:ND> Add when the cache was created,
-	if( info.has("VFS_DATE") )
-		support << "\nVFS (cache) creation time (UTC) " << info["VFS_DATE"];
-	// </FS:ND>
-
 	return support.str();
 }
 

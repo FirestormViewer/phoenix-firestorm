@@ -74,6 +74,7 @@ Bandbreite: [BANDWIDTH]
 LOD-Faktor: [LOD]
 Darstellungsqualität: [RENDERQUALITY]
 Texturspeicher: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+VFS (Cache) Erstellungszeit: [VFS_DATE]
 	</string>
 	<string name="AboutTraffic">
 		Paketverlust: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
