@@ -409,7 +409,7 @@ BOOL LLMediaCtrl::postBuild ()
 
 	mContextMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
 		"menu_media_ctrl.xml", LLMenuGL::sMenuContainer, LLViewerMenuHolderGL::child_registry_t::instance());
-	setVisibleCallback(boost::bind(&LLMediaCtrl::onVisibilityChange, this, _2));
+	setVisibleCallback(boost::bind(&LLMediaCtrl::onVisibilityChanged, this, _2));
 
 	return TRUE;
 }
@@ -439,9 +439,9 @@ BOOL LLMediaCtrl::handleKeyHere( KEY key, MASK mask )
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-void LLMediaCtrl::handleVisibilityChange ( BOOL new_visibility )
+void LLMediaCtrl::onVisibilityChange ( BOOL new_visibility )
 {
-	llinfos << "visibility changed to " << (new_visibility?"true":"false") << llendl;
+	LL_INFOS() << "visibility changed to " << (new_visibility?"true":"false") << LL_ENDL;
 	if(mMediaSource)
 	{
 		mMediaSource->setVisible( new_visibility );
@@ -467,7 +467,7 @@ BOOL LLMediaCtrl::handleUnicodeCharHere(llwchar uni_char)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-void LLMediaCtrl::onVisibilityChange ( const LLSD& new_visibility )
+void LLMediaCtrl::onVisibilityChanged ( const LLSD& new_visibility )
 {
 	// set state of frequent updates automatically if visibility changes
 	if ( new_visibility.asBoolean() )
@@ -565,7 +565,7 @@ void LLMediaCtrl::navigateTo( std::string url_in, std::string mime_type)
 // </AW>
 	{
 		// TODO: Print out/log this attempt?
-		// llinfos << "Rejecting attempt to load restricted website :" << urlIn << llendl;
+		// LL_INFOS() << "Rejecting attempt to load restricted website :" << urlIn << LL_ENDL;
 		return;
 	}
 
@@ -588,7 +588,7 @@ void LLMediaCtrl::navigateToLocalPage( const std::string& subdir, const std::str
 
 	if (expanded_filename.empty())
 	{
-		llwarns << "File " << filename << "not found" << llendl;
+		LL_WARNS() << "File " << filename << "not found" << LL_ENDL;
 		return;
 	}
 	if (ensureMediaSourceExists())
@@ -696,7 +696,7 @@ bool LLMediaCtrl::ensureMediaSourceExists()
 		}
 		else
 		{
-			llwarns << "media source create failed " << llendl;
+			LL_WARNS() << "media source create failed " << LL_ENDL;
 			// return;
 		}
 	}

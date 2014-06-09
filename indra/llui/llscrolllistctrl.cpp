@@ -1507,7 +1507,7 @@ void LLScrollListCtrl::drawItems()
 
 		LLColor4 highlight_color = LLColor4::white;
 		static LLUICachedControl<F32> type_ahead_timeout ("TypeAheadTimeout", 0);
-		highlight_color.mV[VALPHA] = clamp_rescale(mSearchTimer.getElapsedTimeF32(), type_ahead_timeout * 0.7f, type_ahead_timeout, 0.4f, 0.f);
+		highlight_color.mV[VALPHA] = clamp_rescale(mSearchTimer.getElapsedTimeF32(), type_ahead_timeout * 0.7f, type_ahead_timeout(), 0.4f, 0.f);
 
 		// <FS:Ansariel> Fix for FS-specific people list (radar)
 		//S32 first_line = mScrollLines;
@@ -1553,8 +1553,6 @@ void LLScrollListCtrl::drawItems()
 				mItemListRect.getWidth(),
 				mLineHeight );
 			item->setRect(item_rect);
-
-			//llinfos << item_rect.getWidth() << llendl;
 
 			max_columns = llmax(max_columns, item->getNumColumns());
 
@@ -3030,10 +3028,10 @@ LLScrollListColumn* LLScrollListCtrl::getColumn(const std::string& name)
 	return NULL;
 }
 
-LLFastTimer::DeclareTimer FTM_ADD_SCROLLLIST_ELEMENT("Add Scroll List Item");
+LLTrace::BlockTimerStatHandle FTM_ADD_SCROLLLIST_ELEMENT("Add Scroll List Item");
 LLScrollListItem* LLScrollListCtrl::addElement(const LLSD& element, EAddPosition pos, void* userdata)
 {
-	LLFastTimer _(FTM_ADD_SCROLLLIST_ELEMENT);
+	LL_RECORD_BLOCK_TIME(FTM_ADD_SCROLLLIST_ELEMENT);
 	LLScrollListItem::Params item_params;
 	LLParamSDParser parser;
 	parser.readSD(element, item_params);
@@ -3043,14 +3041,14 @@ LLScrollListItem* LLScrollListCtrl::addElement(const LLSD& element, EAddPosition
 
 LLScrollListItem* LLScrollListCtrl::addRow(const LLScrollListItem::Params& item_p, EAddPosition pos)
 {
-	LLFastTimer _(FTM_ADD_SCROLLLIST_ELEMENT);
+	LL_RECORD_BLOCK_TIME(FTM_ADD_SCROLLLIST_ELEMENT);
 	LLScrollListItem *new_item = new LLScrollListItem(item_p);
 	return addRow(new_item, item_p, pos);
 }
 
 LLScrollListItem* LLScrollListCtrl::addRow(LLScrollListItem *new_item, const LLScrollListItem::Params& item_p, EAddPosition pos)
 {
-	LLFastTimer _(FTM_ADD_SCROLLLIST_ELEMENT);
+	LL_RECORD_BLOCK_TIME(FTM_ADD_SCROLLLIST_ELEMENT);
 	if (!item_p.validateBlock() || !new_item) return NULL;
 	new_item->setNumColumns(mColumns.size());
 

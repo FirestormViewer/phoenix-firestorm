@@ -1102,7 +1102,6 @@ bool callback_deed_to_group(const LLSD& notification, const LLSD& response)
 		if(group_id.notNull() && groups_identical && (gAgent.hasPowerInGroup(group_id, GP_OBJECT_DEED)))
 		{
 			LLSelectMgr::getInstance()->sendOwner(LLUUID::null, group_id, FALSE);
-//			LLViewerStats::getInstance()->incStat(LLViewerStats::ST_RELEASE_COUNT);
 		}
 	}
 	return false;
@@ -1153,21 +1152,21 @@ void LLPanelPermissions::onCommitEveryoneCopy(LLUICtrl *ctrl, void *data)
 // static
 void LLPanelPermissions::onCommitNextOwnerModify(LLUICtrl* ctrl, void* data)
 {
-	//llinfos << "LLPanelPermissions::onCommitNextOwnerModify" << llendl;
+	//LL_INFOS() << "LLPanelPermissions::onCommitNextOwnerModify" << LL_ENDL;
 	onCommitPerm(ctrl, data, PERM_NEXT_OWNER, PERM_MODIFY);
 }
 
 // static
 void LLPanelPermissions::onCommitNextOwnerCopy(LLUICtrl* ctrl, void* data)
 {
-	//llinfos << "LLPanelPermissions::onCommitNextOwnerCopy" << llendl;
+	//LL_INFOS() << "LLPanelPermissions::onCommitNextOwnerCopy" << LL_ENDL;
 	onCommitPerm(ctrl, data, PERM_NEXT_OWNER, PERM_COPY);
 }
 
 // static
 void LLPanelPermissions::onCommitNextOwnerTransfer(LLUICtrl* ctrl, void* data)
 {
-	//llinfos << "LLPanelPermissions::onCommitNextOwnerTransfer" << llendl;
+	//LL_INFOS() << "LLPanelPermissions::onCommitNextOwnerTransfer" << LL_ENDL;
 	onCommitPerm(ctrl, data, PERM_NEXT_OWNER, PERM_TRANSFER);
 }
 
@@ -1182,7 +1181,7 @@ void LLPanelPermissions::onCommitExport(LLUICtrl* ctrl, void* data)
 // static
 void LLPanelPermissions::onCommitName(LLUICtrl*, void* data)
 {
-	//llinfos << "LLPanelPermissions::onCommitName()" << llendl;
+	//LL_INFOS() << "LLPanelPermissions::onCommitName()" << LL_ENDL;
 	LLPanelPermissions* self = (LLPanelPermissions*)data;
 	LLLineEditor*	tb = self->getChild<LLLineEditor>("Object Name");
 	if(tb)
@@ -1196,7 +1195,7 @@ void LLPanelPermissions::onCommitName(LLUICtrl*, void* data)
 // static
 void LLPanelPermissions::onCommitDesc(LLUICtrl*, void* data)
 {
-	//llinfos << "LLPanelPermissions::onCommitDesc()" << llendl;
+	//LL_INFOS() << "LLPanelPermissions::onCommitDesc()" << LL_ENDL;
 	LLPanelPermissions* self = (LLPanelPermissions*)data;
 	LLLineEditor*	le = self->getChild<LLLineEditor>("Object Description");
 	if(le)
@@ -1237,7 +1236,7 @@ void LLPanelPermissions::onCommitSaleInfo()
 
 void LLPanelPermissions::setAllSaleInfo()
 {
-	llinfos << "LLPanelPermissions::setAllSaleInfo()" << llendl;
+	LL_INFOS() << "LLPanelPermissions::setAllSaleInfo()" << LL_ENDL;
 	LLSaleInfo::EForSale sale_type = LLSaleInfo::FS_NOT;
 
 	LLCheckBoxCtrl *checkPurchase = getChild<LLCheckBoxCtrl>("checkbox for sale");

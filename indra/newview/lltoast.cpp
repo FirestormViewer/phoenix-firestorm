@@ -620,7 +620,7 @@ void LLToast::cleanupToasts()
 			toastp = &(*iter);
 		}
 
-		//llinfos << "Cleaning up toast id " << toastp->getNotificationID() << llendl;
+		//LL_INFOS() << "Cleaning up toast id " << toastp->getNotificationID() << LL_ENDL;
 
 		// LLToast destructor will remove it from the LLInstanceTracker.
 		if (!toastp)

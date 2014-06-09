@@ -30,6 +30,7 @@
 #include "linden_common.h"
 
 #include "llmotioncontroller.h"
+#include "llfasttimer.h"
 #include "llkeyframemotion.h"
 #include "llmath.h"
 #include "lltimer.h"
@@ -76,7 +77,7 @@ LLMotionRegistry::~LLMotionRegistry()
 //-----------------------------------------------------------------------------
 BOOL LLMotionRegistry::registerMotion( const LLUUID& id, LLMotionConstructor constructor )
 {
-	//	llinfos << "Registering motion: " << name << llendl;
+	//	LL_INFOS() << "Registering motion: " << name << LL_ENDL;
 	if (!is_in_map(mMotionTable, id))
 	{
 		mMotionTable[id] = constructor;
@@ -236,7 +237,7 @@ void LLMotionController::purgeExcessMotions()
 
 	if (mLoadedMotions.size() > 2*MAX_MOTION_INSTANCES)
 	{
-		LL_WARNS_ONCE("Animation") << "> " << 2*MAX_MOTION_INSTANCES << " Loaded Motions" << llendl;
+		LL_WARNS_ONCE("Animation") << "> " << 2*MAX_MOTION_INSTANCES << " Loaded Motions" << LL_ENDL;
 	}
 }
 
@@ -364,7 +365,7 @@ LLMotion* LLMotionController::createMotion( const LLUUID &id )
 		switch(stat)
 		{
 		case LLMotion::STATUS_FAILURE:
-			llinfos << "Motion " << id << " init failed." << llendl;
+			LL_INFOS() << "Motion " << id << " init failed." << LL_ENDL;
 			sRegistry.markBad(id);
 			delete motion;
 			return NULL;
@@ -376,7 +377,7 @@ LLMotion* LLMotionController::createMotion( const LLUUID &id )
 		    mLoadedMotions.insert(motion);
 			break;
 		default:
-			llerrs << "Invalid initialization status" << llendl;
+			LL_ERRS() << "Invalid initialization status" << LL_ENDL;
 			break;
 		}
 
@@ -422,7 +423,7 @@ BOOL LLMotionController::startMotion(const LLUUID &id, F32 start_offset)
 		return TRUE;
 	}
 
-//	llinfos << "Starting motion " << name << llendl;
+//	LL_INFOS() << "Starting motion " << name << LL_ENDL;
 	return activateMotionInstance(motion, mAnimTime - start_offset);
 }
 
@@ -545,7 +546,7 @@ void LLMotionController::updateIdleActiveMotions()
 //-----------------------------------------------------------------------------
 // updateMotionsByType()
 //-----------------------------------------------------------------------------
-static LLFastTimer::DeclareTimer FTM_MOTION_ON_UPDATE("Motion onUpdate");
+static LLTrace::BlockTimerStatHandle FTM_MOTION_ON_UPDATE("Motion onUpdate");
 
 void LLMotionController::updateMotionsByType(LLMotion::LLMotionBlendType anim_type)
 {
@@ -705,7 +706,7 @@ void LLMotionController::updateMotionsByType(LLMotion::LLMotionBlendType anim_ty
 
 			// perform motion update
 			{
-				LLFastTimer t(FTM_MOTION_ON_UPDATE);
+				LL_RECORD_BLOCK_TIME(FTM_MOTION_ON_UPDATE);
 				update_result = motionp->onUpdate(mAnimTime - motionp->mActivationTimestamp, last_joint_signature);
 			}
 		}
@@ -785,7 +786,7 @@ void LLMotionController::updateLoadingMotions()
 		}
 		else if (status == LLMotion::STATUS_FAILURE)
 		{
-			llinfos << "Motion " << motionp->getID() << " init failed." << llendl;
+			LL_INFOS() << "Motion " << motionp->getID() << " init failed." << LL_ENDL;
 			sRegistry.markBad(motionp->getID());
 			mLoadingMotions.erase(curiter);
 			motion_set_t::iterator found_it = mDeprecatedMotions.find(motionp);
@@ -887,7 +888,7 @@ void LLMotionController::updateMotions(bool force_update)
 	}
 
 	mHasRunOnce = TRUE;
-//	llinfos << "Motion controller time " << motionTimer.getElapsedTimeF32() << llendl;
+//	LL_INFOS() << "Motion controller time " << motionTimer.getElapsedTimeF32() << LL_ENDL;
 }
 
 //-----------------------------------------------------------------------------
@@ -1043,7 +1044,7 @@ LLMotion* LLMotionController::findMotion(const LLUUID& id) const
 //-----------------------------------------------------------------------------
 void LLMotionController::dumpMotions()
 {
-	llinfos << "=====================================" << llendl;
+	LL_INFOS() << "=====================================" << LL_ENDL;
 	for (motion_map_t::iterator iter = mAllMotions.begin();
 		 iter != mAllMotions.end(); iter++)
 	{
@@ -1058,7 +1059,7 @@ void LLMotionController::dumpMotions()
 			state_string += std::string("A");
 		if (mDeprecatedMotions.find(motion) != mDeprecatedMotions.end())
 			state_string += std::string("D");
-		llinfos << gAnimLibrary.animationName(id) << " " << state_string << llendl;
+		LL_INFOS() << gAnimLibrary.animationName(id) << " " << state_string << LL_ENDL;
 		
 	}
 }
@@ -1117,7 +1118,7 @@ void LLMotionController::pauseAllMotions()
 {
 	if (!mPaused)
 	{
-		//llinfos << "Pausing animations..." << llendl;
+		//LL_INFOS() << "Pausing animations..." << LL_ENDL;
 		mPaused = TRUE;
 	}
 	
@@ -1130,7 +1131,7 @@ void LLMotionController::unpauseAllMotions()
 {
 	if (mPaused)
 	{
-		//llinfos << "Unpausing animations..." << llendl;
+		//LL_INFOS() << "Unpausing animations..." << LL_ENDL;
 		mPaused = FALSE;
 	}
 }

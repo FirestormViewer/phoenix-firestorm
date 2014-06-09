@@ -44,6 +44,7 @@
 						<array>
 						     
 						<!-- sample entry for debugging specific items
+						     <string>SceneLoadTiming</string>
 							 <string>Voice</string>
 							 <string>Avatar</string>							
 						-->

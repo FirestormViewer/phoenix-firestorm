@@ -84,7 +84,7 @@ void LLHUDEffectBeam::packData(LLMessageSystem *mesgsys)
 	} 
 	else if (!source_object->isAvatar()) 
 	{
-		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectBeam message for ID: "  
+		LL_DEBUGS()("HUDEffect")<<"Non-Avatar HUDEffectBeam message for ID: "  
 		<<  source_object->getID().asString()<< LL_ENDL; 
 		markDead(); 
 		return; 
@@ -94,7 +94,7 @@ void LLHUDEffectBeam::packData(LLMessageSystem *mesgsys)
 		LLVOAvatar* source_avatar = (LLVOAvatar*)source_object; 
 		if (!source_avatar->isSelf()) 
 		{ 
-			LL_DEBUGS("HUDEffect")<<"Non-self HUDEffectBeam message for ID: "  
+			LL_DEBUGS()("HUDEffect")<<"Non-self HUDEffectBeam message for ID: "  
 			<< source_avatar->getID().asString()<< LL_ENDL; 
 			markDead(); 
 			return; 
@@ -135,7 +135,7 @@ void LLHUDEffectBeam::packData(LLMessageSystem *mesgsys)
 
 void LLHUDEffectBeam::unpackData(LLMessageSystem *mesgsys, S32 blocknum)
 {
-	llerrs << "Got beam!" << llendl;
+	LL_ERRS() << "Got beam!" << LL_ENDL;
 	BOOL use_target_object;
 	LLVector3d new_target;
 	U8 packed_data[41];
@@ -146,7 +146,7 @@ void LLHUDEffectBeam::unpackData(LLMessageSystem *mesgsys, S32 blocknum)
 	S32 size = mesgsys->getSizeFast(_PREHASH_Effect, blocknum, _PREHASH_TypeData);
 	if (size != 41)
 	{
-		llwarns << "Beam effect with bad size " << size << llendl;
+		LL_WARNS() << "Beam effect with bad size " << size << LL_ENDL;
 		return;
 	}
 	mesgsys->getBinaryDataFast(_PREHASH_Effect, _PREHASH_TypeData, packed_data, 41, blocknum);
@@ -192,7 +192,7 @@ void LLHUDEffectBeam::setSourceObject(LLViewerObject *objp)
 {
 	if (objp->isDead())
 	{
-		llwarns << "HUDEffectBeam: Source object is dead!" << llendl;
+		LL_WARNS() << "HUDEffectBeam: Source object is dead!" << LL_ENDL;
 		mSourceObject = NULL;
 		return;
 	}
@@ -230,7 +230,7 @@ void LLHUDEffectBeam::setTargetObject(LLViewerObject *objp)
 {
 	if (mTargetObject->isDead())
 	{
-		llwarns << "HUDEffectBeam: Target object is dead!" << llendl;
+		LL_WARNS() << "HUDEffectBeam: Target object is dead!" << LL_ENDL;
 	}
 
 	mTargetObject = objp;

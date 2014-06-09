@@ -37,6 +37,7 @@
 #include "lluictrlfactory.h"
 #include "llviewerobjectlist.h"
 #include "llvoavatarself.h"
+#include "lllocaltextureobject.h"
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -197,16 +198,16 @@ void LLFloaterAvatarTextures::onClickDump(void* data)
 				}
 				if (id != IMG_DEFAULT_AVATAR)
 				{
-					llinfos << "TE " << i << " name:" << tex_entry->mName << " id:" << id << llendl;
+					LL_INFOS() << "TE " << i << " name:" << tex_entry->mName << " id:" << id << LL_ENDL;
 				}
 				else
 				{
-					llinfos << "TE " << i << " name:" << tex_entry->mName << " id:" << "<DEFAULT>" << llendl;
+					LL_INFOS() << "TE " << i << " name:" << tex_entry->mName << " id:" << "<DEFAULT>" << LL_ENDL;
 				}
 			}
 			else
 			{
-				llinfos << "TE " << i << " name:" << tex_entry->mName << " id:" << te->getID() << llendl;
+				LL_INFOS() << "TE " << i << " name:" << tex_entry->mName << " id:" << te->getID() << LL_ENDL;
 			}
 		}
 	}

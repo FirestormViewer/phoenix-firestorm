@@ -327,7 +327,7 @@ void LLLogChat::saveHistory(const std::string& filename,
 	if (tmp_filename.empty())
 	{
 		std::string warn = "Chat history filename [" + filename + "] is empty!";
-		llwarning(warn, 666);
+		LL_WARNS() << warn << LL_ENDL;
 		llassert(tmp_filename.size());
 		return;
 	}
@@ -335,7 +335,7 @@ void LLLogChat::saveHistory(const std::string& filename,
 	llofstream file (LLLogChat::makeLogFileName(filename), std::ios_base::app);
 	if (!file.is_open())
 	{
-		llwarns << "Couldn't open chat history log! - " + filename << llendl;
+		LL_WARNS() << "Couldn't open chat history log! - " + filename << LL_ENDL;
 		return;
 	}
 
@@ -857,7 +857,7 @@ void LLChatLogFormatter::format(const LLSD& im, std::ostream& ostr) const
 {
 	if (!im.isMap())
 	{
-		llwarning("invalid LLSD type of an instant message", 0);
+		LL_WARNS() << "invalid LLSD type of an instant message" << LL_ENDL;
 		return;
 	}
 
@@ -1093,7 +1093,7 @@ void LLLoadHistoryThread::run()
 	{
 		loadHistory(mFileName, mMessages, mLoadParams);
 		int count = mMessages->size();
-		llinfos << "mMessages->size(): " << count << llendl;
+		LL_INFOS() << "mMessages->size(): " << count << LL_ENDL;
 		setFinished();
 	}
 }
@@ -1107,8 +1107,8 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 	}
 
 	bool load_all_history = load_params.has("load_all_history") ? load_params["load_all_history"].asBoolean() : false;
-	LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
 
+	LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
 	if (!fptr)
 	{
 		fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
@@ -1119,8 +1119,8 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 			return;						//No previous conversation with this name.
 		}
 	}
-	char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
 
+	char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
 	char *bptr;
 	S32 len;
 	bool firstline = TRUE;
@@ -1137,31 +1137,29 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 		}
 	}
 
-
-	while (fgets(buffer, LOG_RECALL_SIZE, fptr)  && !feof(fptr))
+	while (fgets(buffer, LOG_RECALL_SIZE, fptr) && !feof(fptr))
 	{
 		len = strlen(buffer) - 1;		/*Flawfinder: ignore*/
-
 		for (bptr = (buffer + len); (*bptr == '\n' || *bptr == '\r') && bptr>buffer; bptr--)	*bptr='\0';
-
 
 		if (firstline)
 		{
 			firstline = FALSE;
 			continue;
 		}
+
 		std::string line(buffer);
 
 		//updated 1.23 plaint text log format requires a space added before subsequent lines in a multilined message
 		if (' ' == line[0])
 		{
 			line.erase(0, MULTI_LINE_PREFIX.length());
-			append_to_last_message(*messages, '\n' + line);
+			append_to_last_message(messages, '\n' + line);
 		}
 		else if (0 == len && ('\n' == line[0] || '\r' == line[0]))
 		{
 			//to support old format's multilined messages with new lines used to divide paragraphs
-			append_to_last_message(*messages, line);
+			append_to_last_message(messages, line);
 		}
 		else
 		{
@@ -1170,15 +1168,15 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 			{
 				item[LL_IM_TEXT] = line;
 			}
-			messages->push_back(item);
+			messages.push_back(item);
 		}
 	}
-
 	fclose(fptr);
 	mNewLoad = false;
 	(*mLoadEndSignal)(messages, file_name);
 }
-	
+
+//static
 boost::signals2::connection LLLoadHistoryThread::setLoadEndSignal(const load_end_signal_t::slot_type& cb)
 {
 	if (NULL == mLoadEndSignal)

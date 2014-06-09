@@ -147,7 +147,7 @@ namespace LLToolBarEnums
 		TOOLBAR_LAST = TOOLBAR_BOTTOM,
 	};
 
-	LLLayoutStack::ELayoutOrientation getOrientation(SideType sideType);
+	LLView::EOrientation getOrientation(SideType sideType);
 
 	// <FS:Zi> Add alignment settings
 	enum Alignment
@@ -211,7 +211,6 @@ public:
 	class LLCenterLayoutPanel : public LLLayoutPanel
 	{
 	public:
-		typedef struct LLLayoutPanel::Params Params;
 		typedef boost::function<void(LLToolBarEnums::EToolBarLocation tb, const LLRect& rect)> reshape_callback_t;
 
 		virtual ~LLCenterLayoutPanel() {}

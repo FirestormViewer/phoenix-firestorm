@@ -87,8 +87,8 @@ glob:indra/newview/filters.xml
 glob:indra/newview/avatar_icons_cache.txt
 glob:indra/newview/avatar_lad.log
 glob:*.diff
+indra/newview/pilot.txt
+indra/newview/pilot.xml
 #*.rej
-glob:fmod*
-syntax: regexp
 ^indra/build
 .*\.wixobj

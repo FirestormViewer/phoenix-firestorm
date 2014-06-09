@@ -236,8 +236,4 @@ private:
 	BOOL						mIsMasked;
 };
 
-// XUI HACK: When floaters converted, switch this file to lltexturepicker.h/cpp
-// and class to LLTexturePicker
-#define LLTexturePicker LLTextureCtrl
-
 #endif  // LL_LLTEXTURECTRL_H

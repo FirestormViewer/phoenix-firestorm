@@ -51,10 +51,10 @@ using namespace LLNotificationsUI;
 
 bool LLScreenChannel::mWasStartUpToastShown = false;
 
-LLFastTimer::DeclareTimer FTM_GET_CHANNEL_RECT("Calculate Notification Channel Region");
+LLTrace::BlockTimerStatHandle FTM_GET_CHANNEL_RECT("Calculate Notification Channel Region");
 LLRect LLScreenChannelBase::getChannelRect()
 {
-	LLFastTimer _(FTM_GET_CHANNEL_RECT);
+	LL_RECORD_BLOCK_TIME(FTM_GET_CHANNEL_RECT);
 
 	if (mFloaterSnapRegion == NULL)
 	{
@@ -643,7 +643,7 @@ void LLScreenChannel::showToastsBottom()
 			LLToast* toast = (it-1)->getToast();
 			if (!toast)
 			{
-				llwarns << "Attempt to display a deleted toast." << llendl;
+				LL_WARNS() << "Attempt to display a deleted toast." << LL_ENDL;
 				return;
 			}
 
@@ -654,7 +654,7 @@ void LLScreenChannel::showToastsBottom()
 		LLToast* toast = it->getToast();
 		if(!toast)
 		{
-			llwarns << "Attempt to display a deleted toast." << llendl;
+			LL_WARNS() << "Attempt to display a deleted toast." << LL_ENDL;
 			return;
 		}
 
@@ -745,7 +745,7 @@ void LLScreenChannel::showToastsCentre()
 	LLToast* toast = mToastList[0].getToast();
 	if (!toast)
 	{
-		llwarns << "Attempt to display a deleted toast." << llendl;
+		LL_WARNS() << "Attempt to display a deleted toast." << LL_ENDL;
 		return;
 	}
 
@@ -758,7 +758,7 @@ void LLScreenChannel::showToastsCentre()
 		LLToast* toast = it->getToast();
 		if (!toast)
 		{
-			llwarns << "Attempt to display a deleted toast." << llendl;
+			LL_WARNS() << "Attempt to display a deleted toast." << LL_ENDL;
 			return;
 		}
 
@@ -797,7 +797,7 @@ void LLScreenChannel::showToastsTop()
 			LLToast* toast = (it-1)->getToast();
 			if (!toast)
 			{
-				llwarns << "Attempt to display a deleted toast." << llendl;
+				LL_WARNS() << "Attempt to display a deleted toast." << LL_ENDL;
 				return;
 			}
 
@@ -808,7 +808,7 @@ void LLScreenChannel::showToastsTop()
 		LLToast* toast = it->getToast();
 		if (!toast)
 		{
-			llwarns << "Attempt to display a deleted toast." << llendl;
+			LL_WARNS() << "Attempt to display a deleted toast." << LL_ENDL;
 			return;
 		}
 
@@ -1007,7 +1007,7 @@ void LLScreenChannel::hideToastsFromScreen()
 		}
 		else
 		{
-			llwarns << "Attempt to hide a deleted toast." << llendl;
+			LL_WARNS() << "Attempt to hide a deleted toast." << LL_ENDL;
 		}
 	}
 }
@@ -1025,7 +1025,7 @@ void LLScreenChannel::hideToast(const LLUUID& notification_id)
 		}
 		else
 		{
-			llwarns << "Attempt to hide a deleted toast." << llendl;
+			LL_WARNS() << "Attempt to hide a deleted toast." << LL_ENDL;
 		}
 	}
 }

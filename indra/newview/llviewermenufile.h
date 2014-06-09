@@ -31,6 +31,8 @@
 #include "llassetstorage.h"
 #include "llinventorytype.h"
 #include "llfilepicker.h"
+#include "llthread.h"
+#include <queue>
 
 #include <boost/signals2.hpp> // <FS:CR Threaded Filepickers />
 

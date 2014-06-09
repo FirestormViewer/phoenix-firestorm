@@ -509,7 +509,7 @@ BOOL LLTeleportHistoryPanel::postBuild()
 				// All accordion tabs are collapsed initially
 				setAccordionCollapsedByUser(tab, true);
 
-				mItemContainers.put(tab);
+				mItemContainers.push_back(tab);
 
 				LLFlatListView* fl = getFlatListViewFromTab(tab);
 				if (fl)
@@ -525,14 +525,14 @@ BOOL LLTeleportHistoryPanel::postBuild()
 		// Open first 2 accordion tabs
 		if (mItemContainers.size() > 1)
 		{
-			LLAccordionCtrlTab* tab = mItemContainers.get(mItemContainers.size() - 1);
+			LLAccordionCtrlTab* tab = mItemContainers.at(mItemContainers.size() - 1);
 			tab->setDisplayChildren(true);
 			setAccordionCollapsedByUser(tab, false);
 		}
 
 		if (mItemContainers.size() > 2)
 		{
-			LLAccordionCtrlTab* tab = mItemContainers.get(mItemContainers.size() - 2);
+			LLAccordionCtrlTab* tab = mItemContainers.at(mItemContainers.size() - 2);
 			tab->setDisplayChildren(true);
 			setAccordionCollapsedByUser(tab, false);
 		}
@@ -796,7 +796,7 @@ void LLTeleportHistoryPanel::refresh()
 			tab_idx = mItemContainers.size() - 1 - tab_idx;
 			if (tab_idx >= 0)
 			{
-				LLAccordionCtrlTab* tab = mItemContainers.get(tab_idx);
+				LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
 				tab->setVisible(true);
 
 				// Expand all accordion tabs when filtering
@@ -838,7 +838,7 @@ void LLTeleportHistoryPanel::refresh()
 											  mCurrentItem,
 											  filter_string);
 			if ( !curr_flat_view->addItem(item, LLUUID::null, ADD_BOTTOM, false) )
-				llerrs << "Couldn't add flat item to teleport history." << llendl;
+				LL_ERRS() << "Couldn't add flat item to teleport history." << LL_ENDL;
 			if (mLastSelectedItemIndex == mCurrentItem)
 				curr_flat_view->selectItem(item, true);
 		}
@@ -851,7 +851,7 @@ void LLTeleportHistoryPanel::refresh()
 
 	for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
 	{
-		LLAccordionCtrlTab* tab = mItemContainers.get(n);
+		LLAccordionCtrlTab* tab = mItemContainers.at(n);
 		LLFlatListView* fv = getFlatListViewFromTab(tab);
 		if (fv)
 		{
@@ -926,7 +926,7 @@ void LLTeleportHistoryPanel::replaceItem(S32 removed_index)
 	// to point to the right item in LLTeleportHistoryStorage
 	for (S32 tab_idx = mItemContainers.size() - 1; tab_idx >= 0; --tab_idx)
 	{
-		LLAccordionCtrlTab* tab = mItemContainers.get(tab_idx);
+		LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
 		if (!tab->getVisible())
 			continue;
 
@@ -980,7 +980,7 @@ void LLTeleportHistoryPanel::showTeleportHistory()
 
 	for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
 	{
-		LLAccordionCtrlTab* tab = mItemContainers.get(n);
+		LLAccordionCtrlTab* tab = mItemContainers.at(n);
 		if (tab)
 		{
 			tab->setVisible(false);
@@ -1007,7 +1007,7 @@ void LLTeleportHistoryPanel::handleItemSelect(LLFlatListView* selected)
 
 	for (S32 n = 0; n < tabs_cnt; n++)
 	{
-		LLAccordionCtrlTab* tab = mItemContainers.get(n);
+		LLAccordionCtrlTab* tab = mItemContainers.at(n);
 
 		if (!tab->getVisible())
 			continue;
@@ -1092,7 +1092,7 @@ void LLTeleportHistoryPanel::onExpandAllFolders()
 
 	for (S32 n = 0; n < tabs_cnt; n++)
 	{
-		mItemContainers.get(n)->setDisplayChildren(true);
+		mItemContainers.at(n)->setDisplayChildren(true);
 	}
 	mHistoryAccordion->arrange();
 }
@@ -1103,7 +1103,7 @@ void LLTeleportHistoryPanel::onCollapseAllFolders()
 
 	for (S32 n = 0; n < tabs_cnt; n++)
 	{
-		mItemContainers.get(n)->setDisplayChildren(false);
+		mItemContainers.at(n)->setDisplayChildren(false);
 	}
 	mHistoryAccordion->arrange();
 
@@ -1179,7 +1179,7 @@ bool LLTeleportHistoryPanel::isActionEnabled(const LLSD& userdata) const
 
 	for (S32 n = 0; n < tabs_cnt; n++)
 	{
-		LLAccordionCtrlTab* tab = mItemContainers.get(n);
+		LLAccordionCtrlTab* tab = mItemContainers.at(n);
 		if (!tab->getVisible())
 			continue;
 

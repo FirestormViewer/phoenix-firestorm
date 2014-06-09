@@ -195,7 +195,7 @@ void export_test_floaters()
 			// don't re-export other test floaters
 			continue;
 		}
-		llinfos << "Converting " << filename << llendl;
+		LL_INFOS() << "Converting " << filename << LL_ENDL;
 		// Build a floater and output new attributes
 		LLXMLNodePtr output_node = new LLXMLNode();
 		LLFloater* floater = new LLFloater(LLSD());
@@ -207,7 +207,7 @@ void export_test_floaters()
 		out_filename.resize(extension_pos);
 		out_filename += "_new.xml";
 		
-		llinfos << "Output: " << out_filename << llendl;
+		LL_INFOS() << "Output: " << out_filename << LL_ENDL;
 		LLFILE* floater_file = LLFile::fopen(out_filename.c_str(), "w");
 		LLXMLNode::writeHeaderToFile(floater_file);
 		output_node->writeToFile(floater_file);

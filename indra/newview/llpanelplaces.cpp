@@ -233,9 +233,9 @@ public:
 	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
 	{
 		// <FS:Ansariel> Don't error out because of a HTTP error!
-		//llerrs << "Can't complete remote parcel request. Http Status: "
-		llwarns << "Can't complete remote parcel request. Http Status: "
-			   << status << ". Reason : " << reason << llendl;
+		//LL_ERRS() << "Can't complete remote parcel request. Http Status: "
+		LL_WARNS() << "Can't complete remote parcel request. Http Status: "
+			   << status << ". Reason : " << reason << LL_ENDL;
 	}
 
 private:
@@ -323,13 +323,13 @@ BOOL LLPanelPlaces::postBuild()
 	mPlaceMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_place.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (!mPlaceMenu)
 	{
-		llwarns << "Error loading Place menu" << llendl;
+		LL_WARNS() << "Error loading Place menu" << LL_ENDL;
 	}
 
 	mLandmarkMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_landmark.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (!mLandmarkMenu)
 	{
-		llwarns << "Error loading Landmark menu" << llendl;
+		LL_WARNS() << "Error loading Landmark menu" << LL_ENDL;
 	}
 
 	mTabContainer = getChild<LLTabContainer>("Places Tabs");
@@ -652,7 +652,7 @@ void LLPanelPlaces::onTeleportButtonClicked()
 		{
 			if (mItem.isNull())
 			{
-				llwarns << "NULL landmark item" << llendl;
+				LL_WARNS() << "NULL landmark item" << LL_ENDL;
 				llassert(mItem.notNull());
 				return;
 			}
@@ -944,7 +944,7 @@ void LLPanelPlaces::onOverflowMenuItemClicked(const LLSD& param)
 									favorites_id,
 									std::string(),
 									LLPointer<LLInventoryCallback>(NULL));
-				llinfos << "Copied inventory item #" << mItem->getUUID() << " to favorites." << llendl;
+				LL_INFOS() << "Copied inventory item #" << mItem->getUUID() << " to favorites." << LL_ENDL;
 			}
 		}
 	}
@@ -1040,9 +1040,9 @@ void LLPanelPlaces::togglePlaceInfoPanel(BOOL visible)
 }
 
 // virtual
-void LLPanelPlaces::handleVisibilityChange(BOOL new_visibility)
+void LLPanelPlaces::onVisibilityChange(BOOL new_visibility)
 {
-	LLPanel::handleVisibilityChange(new_visibility);
+	LLPanel::onVisibilityChange(new_visibility);
 
 	if (!new_visibility && mPlaceInfoType == AGENT_INFO_TYPE)
 	{

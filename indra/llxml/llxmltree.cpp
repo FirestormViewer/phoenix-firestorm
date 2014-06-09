@@ -72,7 +72,7 @@ BOOL LLXmlTree::parseFile(const std::string &path, BOOL keep_contents)
 	{
 		S32 line_number = parser.getCurrentLineNumber();
 		const char* error =  parser.getErrorString();
-		llwarns << "LLXmlTree parse failed.  Line " << line_number << ": " << error << llendl;
+		LL_WARNS() << "LLXmlTree parse failed.  Line " << line_number << ": " << error << LL_ENDL;
 	}
 	return success;
 }
@@ -135,19 +135,19 @@ LLXmlTreeNode::~LLXmlTreeNode()
  
 void LLXmlTreeNode::dump( const std::string& prefix )
 {
-	llinfos << prefix << mName ;
+	LL_INFOS() << prefix << mName ;
 	if( !mContents.empty() )
 	{
-		llcont << " contents = \"" << mContents << "\"";
+		LL_CONT << " contents = \"" << mContents << "\"";
 	}
 	attribute_map_t::iterator iter;
 	for (iter=mAttributes.begin(); iter != mAttributes.end(); iter++)
 	{
 		LLStdStringHandle key = iter->first;
 		const std::string* value = iter->second;
-		llcont << prefix << " " << key << "=" << (value->empty() ? "NULL" : *value);
+		LL_CONT << prefix << " " << key << "=" << (value->empty() ? "NULL" : *value);
 	}
-	llcont << llendl;
+	LL_CONT << LL_ENDL;
 } 
 
 BOOL LLXmlTreeNode::hasAttribute(const std::string& name)
@@ -589,12 +589,12 @@ void LLXmlTreeParser::startElement(const char* name, const char **atts)
 {
 	if( mDump )
 	{
-		llinfos << tabs() << "startElement " << name << llendl;
+		LL_INFOS() << tabs() << "startElement " << name << LL_ENDL;
 		
 		S32 i = 0;
 		while( atts[i] && atts[i+1] )
 		{
-			llinfos << tabs() << "attribute: " << atts[i] << "=" << atts[i+1] << llendl;
+			LL_INFOS() << tabs() << "attribute: " << atts[i] << "=" << atts[i+1] << LL_ENDL;
 			i += 2;
 		}
 	}
@@ -631,7 +631,7 @@ void LLXmlTreeParser::endElement(const char* name)
 {
 	if( mDump )
 	{
-		llinfos << tabs() << "endElement " << name << llendl;
+		LL_INFOS() << tabs() << "endElement " << name << LL_ENDL;
 	}
 
 	if( !mCurrent->mContents.empty() )
@@ -649,7 +649,7 @@ void LLXmlTreeParser::characterData(const char *s, int len)
 	if (s) str = std::string(s, len);
 	if( mDump )
 	{
-		llinfos << tabs() << "CharacterData " << str << llendl;
+		LL_INFOS() << tabs() << "CharacterData " << str << LL_ENDL;
 	}
 
 	if (mKeepContents)
@@ -662,7 +662,7 @@ void LLXmlTreeParser::processingInstruction(const char *target, const char *data
 {
 	if( mDump )
 	{
-		llinfos << tabs() << "processingInstruction " << data << llendl;
+		LL_INFOS() << tabs() << "processingInstruction " << data << LL_ENDL;
 	}
 }
 
@@ -670,7 +670,7 @@ void LLXmlTreeParser::comment(const char *data)
 {
 	if( mDump )
 	{
-		llinfos << tabs() << "comment " << data << llendl;
+		LL_INFOS() << tabs() << "comment " << data << LL_ENDL;
 	}
 }
 
@@ -678,7 +678,7 @@ void LLXmlTreeParser::startCdataSection()
 {
 	if( mDump )
 	{
-		llinfos << tabs() << "startCdataSection" << llendl;
+		LL_INFOS() << tabs() << "startCdataSection" << LL_ENDL;
 	}
 }
 
@@ -686,7 +686,7 @@ void LLXmlTreeParser::endCdataSection()
 {
 	if( mDump )
 	{
-		llinfos << tabs() << "endCdataSection" << llendl;
+		LL_INFOS() << tabs() << "endCdataSection" << LL_ENDL;
 	}
 }
 
@@ -696,7 +696,7 @@ void LLXmlTreeParser::defaultData(const char *s, int len)
 	{
 		std::string str;
 		if (s) str = std::string(s, len);
-		llinfos << tabs() << "defaultData " << str << llendl;
+		LL_INFOS() << tabs() << "defaultData " << str << LL_ENDL;
 	}
 }
 
@@ -709,12 +709,12 @@ void LLXmlTreeParser::unparsedEntityDecl(
 {
 	if( mDump )
 	{
-		llinfos << tabs() << "unparsed entity:"			<< llendl;
-		llinfos << tabs() << "    entityName "			<< entity_name	<< llendl;
-		llinfos << tabs() << "    base "				<< base			<< llendl;
-		llinfos << tabs() << "    systemId "			<< system_id	<< llendl;
-		llinfos << tabs() << "    publicId "			<< public_id	<< llendl;
-		llinfos << tabs() << "    notationName "		<< notation_name<< llendl;
+		LL_INFOS() << tabs() << "unparsed entity:"			<< LL_ENDL;
+		LL_INFOS() << tabs() << "    entityName "			<< entity_name	<< LL_ENDL;
+		LL_INFOS() << tabs() << "    base "				<< base			<< LL_ENDL;
+		LL_INFOS() << tabs() << "    systemId "			<< system_id	<< LL_ENDL;
+		LL_INFOS() << tabs() << "    publicId "			<< public_id	<< LL_ENDL;
+		LL_INFOS() << tabs() << "    notationName "		<< notation_name<< LL_ENDL;
 	}
 }
 

@@ -211,7 +211,7 @@ void LLPreviewNotecard::refreshFromInventory(const LLUUID& new_item_id)
 		mItemUUID = new_item_id;
 		setKey(LLSD(new_item_id));
 	}
-	lldebugs << "LLPreviewNotecard::refreshFromInventory()" << llendl;
+	LL_DEBUGS() << "LLPreviewNotecard::refreshFromInventory()" << LL_ENDL;
 	loadAsset();
 }
 
@@ -266,7 +266,7 @@ void LLPreviewNotecard::loadAsset()
 					else
 					{
 						// The object that we're trying to look at disappeared, bail.
-						llwarns << "Can't find object " << mObjectUUID << " associated with notecard." << llendl;
+						LL_WARNS() << "Can't find object " << mObjectUUID << " associated with notecard." << LL_ENDL;
 						mAssetID.setNull();
 						editor->setText(getString("no_object"));
 						editor->makePristine();
@@ -321,7 +321,7 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 									   LLAssetType::EType type,
 									   void* user_data, S32 status, LLExtStat ext_status)
 {
-	llinfos << "LLPreviewNotecard::onLoadComplete()" << llendl;
+	LL_INFOS() << "LLPreviewNotecard::onLoadComplete()" << LL_ENDL;
 	LLUUID* item_id = (LLUUID*)user_data;
 	
 	LLPreviewNotecard* preview = LLFloaterReg::findTypedInstance<LLPreviewNotecard>("preview_notecard", LLSD(*item_id));
@@ -346,7 +346,7 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 			{
 				if( !previewEditor->importBuffer( &buffer[0], file_length+1 ) )
 				{
-					llwarns << "Problem importing notecard" << llendl;
+					LL_WARNS() << "Problem importing notecard" << LL_ENDL;
 				}
 			}
 			else
@@ -365,8 +365,6 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 		}
 		else
 		{
-			LLViewerStats::getInstance()->incStat( LLViewerStats::ST_DOWNLOAD_FAILED );
-
 			if( LL_ERR_ASSET_REQUEST_NOT_IN_DATABASE == status ||
 				LL_ERR_FILE_EMPTY == status)
 			{
@@ -381,7 +379,7 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 				LLNotificationsUtil::add("UnableToLoadNotecard");
 			}
 
-			llwarns << "Problem loading notecard: " << status << llendl;
+			LL_WARNS() << "Problem loading notecard: " << status << LL_ENDL;
 			preview->mAssetStatus = PREVIEW_ASSET_ERROR;
 		}
 	}
@@ -391,7 +389,7 @@ void LLPreviewNotecard::onLoadComplete(LLVFS *vfs,
 // static
 void LLPreviewNotecard::onClickSave(void* user_data)
 {
-	//llinfos << "LLPreviewNotecard::onBtnSave()" << llendl;
+	//LL_INFOS() << "LLPreviewNotecard::onBtnSave()" << LL_ENDL;
 	LLPreviewNotecard* preview = (LLPreviewNotecard*)user_data;
 	if(preview)
 	{
@@ -439,7 +437,7 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem)
 
 	if(!editor)
 	{
-		llwarns << "Cannot get handle to the notecard editor." << llendl;
+		LL_WARNS() << "Cannot get handle to the notecard editor." << LL_ENDL;
 		return false;
 	}
 
@@ -472,7 +470,7 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem)
 			const LLViewerRegion* region = gAgent.getRegion();
 			if (!region)
 			{
-				llwarns << "Not connected to a region, cannot save notecard." << llendl;
+				LL_WARNS() << "Not connected to a region, cannot save notecard." << LL_ENDL;
 				return false;
 			}
 			std::string agent_url = region->getCapability("UpdateNotecardAgentInventory");
@@ -485,8 +483,8 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem)
 				setEnabled(FALSE);
 				LLSD body;
 				body["item_id"] = mItemUUID;
-				llinfos << "Saving notecard " << mItemUUID
-					<< " into agent inventory via " << agent_url << llendl;
+				LL_INFOS() << "Saving notecard " << mItemUUID
+					<< " into agent inventory via " << agent_url << LL_ENDL;
 				LLHTTPClient::post(agent_url, body,
 					new LLUpdateAgentInventoryResponder(body, asset_id, LLAssetType::AT_NOTECARD));
 			}
@@ -498,8 +496,8 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem)
 				LLSD body;
 				body["task_id"] = mObjectUUID;
 				body["item_id"] = mItemUUID;
-				llinfos << "Saving notecard " << mItemUUID << " into task "
-					<< mObjectUUID << " via " << task_url << llendl;
+				LL_INFOS() << "Saving notecard " << mItemUUID << " into task "
+					<< mObjectUUID << " via " << task_url << LL_ENDL;
 				LLHTTPClient::post(task_url, body,
 					new LLUpdateTaskInventoryResponder(body, asset_id, LLAssetType::AT_NOTECARD));
 			}
@@ -514,7 +512,7 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem)
 			}
 			else // !gAssetStorage
 			{
-				llwarns << "Not connected to an asset storage system." << llendl;
+				LL_WARNS() << "Not connected to an asset storage system." << LL_ENDL;
 				return false;
 			}
 		}
@@ -555,8 +553,8 @@ void LLPreviewNotecard::onSaveComplete(const LLUUID& asset_uuid, void* user_data
 			}
 			else
 			{
-				llwarns << "Inventory item for script " << info->mItemUUID
-						<< " is no longer in agent inventory." << llendl;
+				LL_WARNS() << "Inventory item for script " << info->mItemUUID
+						<< " is no longer in agent inventory." << LL_ENDL;
 			}
 		}
 		else
@@ -599,7 +597,7 @@ void LLPreviewNotecard::onSaveComplete(const LLUUID& asset_uuid, void* user_data
 	}
 	else
 	{
-		llwarns << "Problem saving notecard: " << status << llendl;
+		LL_WARNS() << "Problem saving notecard: " << status << LL_ENDL;
 		LLSD args;
 		args["REASON"] = std::string(LLAssetStorage::getErrorString(status));
 		LLNotificationsUtil::add("SaveNotecardFailReason", args);

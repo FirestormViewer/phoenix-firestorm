@@ -356,7 +356,7 @@ void LLFlatListView::sort()
 {
 	if (!mItemComparator)
 	{
-		llwarns << "No comparator specified for sorting FlatListView items." << llendl;
+		LL_WARNS() << "No comparator specified for sorting FlatListView items." << LL_ENDL;
 		return;
 	}
 
@@ -530,7 +530,7 @@ void LLFlatListView::onItemMouseClick(item_pair_t* item_pair, MASK mask)
 
 	if (!item_pair->first) 
 	{
-		llwarning("Attempt to selet an item pair containing null panel item", 0);
+		LL_WARNS() << "Attempt to selet an item pair containing null panel item" << LL_ENDL;
 		return;
 	}
 
