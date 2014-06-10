@@ -1038,7 +1038,7 @@ void LLScriptEdCore::doSave( BOOL close_after_save )
 // NaCl - LSL Preprocessor
 void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save )
 {
-	LLViewerStats::getInstance()->incStat( LLViewerStats::ST_LSL_SAVE_COUNT );
+	add( LLStatViewer::LSL_SAVES,1 );
 
 	//LLScriptEdCore* self = (LLScriptEdCore*) userdata;
 
