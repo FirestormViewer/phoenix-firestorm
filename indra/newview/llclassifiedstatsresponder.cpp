@@ -54,14 +54,13 @@ void LLClassifiedStatsResponder::result(const LLSD& content)
 	S32 search_profile = content["search_profile_clicks"].asInteger();
 
 	LLPanelClassifiedInfo::setClickThrough(	mClassifiedID, 
-		mClassifiedID, 
-		teleport + search_teleport, 
-		map + search_map,
-		profile + search_profile,
-		true);
+											teleport + search_teleport, 
+											map + search_map,
+											profile + search_profile,
+											true);
 
 	// <FS:Ansariel> FIRE-8787: Also update legacy profiles
-	FSPanelClassifiedInfo::setClickThrough(
+	FSPanelClassifiedInfo::setClickThrough(	mClassifiedID, 
 											teleport + search_teleport, 
 											map + search_map,
 											profile + search_profile,
