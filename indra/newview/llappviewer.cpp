@@ -1853,7 +1853,7 @@ bool LLAppViewer::mainLoop()
 					S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
 					if (milliseconds_to_sleep > 0)
 					{
-						LLFastTimer t(FTM_YIELD);
+						LL_RECORD_BLOCK_TIME(FTM_YIELD);
 						ms_sleep(milliseconds_to_sleep);
 					}
 				}
