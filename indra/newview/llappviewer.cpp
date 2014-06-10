@@ -279,6 +279,8 @@
 #pragma warning (disable:4702)
 #endif
 
+const char* const CRASH_SETTINGS_FILE = "settings_crash_behavior.xml"; // <FS:ND/> We need this filename defined here.
+
 static LLAppViewerListener sAppViewerListener(LLAppViewer::instance);
 
 ////// Windows-specific includes to the bottom - nasty defines in these pollute the preprocessor
