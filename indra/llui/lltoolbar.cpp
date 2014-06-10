@@ -182,8 +182,8 @@ void LLToolBar::createContextMenu()
 
 		std::string menu_xml_name;		// <FS:Zi> Split menu XML files to have Horizontal and Vertical versions
 		// <FS:Zi> Add commit handlers for layout and alignment options in the context menu if this is a horizontal toolbar
-		LLLayoutStack::ELayoutOrientation orientation = getOrientation(mSideType);
-		if(orientation == LLLayoutStack::HORIZONTAL)
+		LLView::EOrientation orientation = getOrientation(mSideType);
+		if(orientation == LLView::HORIZONTAL)
 		{
 			menu_xml_name="menu_toolbars_horizontal.xml";
 			commit_reg.add("Toolbars.SetLayoutStyle", boost::bind(&LLToolBar::onLayoutStyleChanged, this, _2));
