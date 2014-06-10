@@ -1225,7 +1225,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		{
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
-			LLTrace::add(LLVStatViewer::UPLOAD_SOUND,1);
+			LLTrace::add(LLStatViewer::UPLOAD_SOUND,1);
 		}
 		
 	}
@@ -1341,7 +1341,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		{
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
-			LLTrace::add(LLStatViewer::UPLOAD_ANIM_COUNT,1);
+			LLTrace::add(LLStatViewer::ANIMATION_UPLOADS,1);
 		}
 	}
 		break;

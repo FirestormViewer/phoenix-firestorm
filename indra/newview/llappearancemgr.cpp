@@ -1230,7 +1230,7 @@ static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t
 		if (idsAsset.end() == idsAsset.find(pItem->getAssetUUID()))
 			idsAsset.insert(pItem->getAssetUUID());
 		else
-			items.remove(idxItem);
+			items.erase(items.begin()+idxItem);
 	}
 }
 // [/SL:KB]
@@ -1500,7 +1500,16 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 		{
 			LL_INFOS() << "reinserting bridge at outfit remove" << LL_ENDL;
 			//items.find(FSLSLBridge::instance().getBridge());
-			items.removeObj(FSLSLBridge::instance().getBridge());
+			for (LLInventoryModel::item_array_t::iterator i = items.begin(); i != items.end(); ++i)
+			{
+				LLViewerInventoryItem *item = *i;
+				
+				if (item->getName() == FSLSLBridge::instance().currentFullName())
+				{
+					items.erase( i );
+					break;
+				}
+			}
 		}
 	}
 // </FS:TT>
@@ -3112,13 +3121,13 @@ void LLAppearanceMgr::updateIsDirty()
 									  LLInventoryModel::EXCLUDE_TRASH, collector);
 
 		// <FS:TS> FIRE-3018: Ignore the bridge when checking for dirty.
-		for (U32 i = 0; i < cof_items.size(); ++i)
+		for (LLInventoryModel::item_array_t::iterator i = cof_items.begin(); i != cof_items.end(); ++i)
 		{
-			LLViewerInventoryItem *item = cof_items.at(i);
+			LLViewerInventoryItem *item = *i;
 
 			if (item->getName() == FSLSLBridge::instance().currentFullName())
 			{
-				cof_items.remove(i);
+				cof_items.erase( i );
 				break;
 			}
 		}
