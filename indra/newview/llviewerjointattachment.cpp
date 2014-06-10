@@ -45,7 +45,8 @@
 #include "llglheaders.h"
 
 extern LLPipeline gPipeline;
-const F32 MAX_ATTACHMENT_DIST = 3.5f; // meters?
+// <FS:Ansariel> Moved to header file
+//const F32 MAX_ATTACHMENT_DIST = 3.5f; // meters?
 
 //-----------------------------------------------------------------------------
 // LLViewerJointAttachment()
