@@ -150,7 +150,7 @@ public:
 
 // This is an abstract base class that users of the folderview classes
 // would use to bridge the folder view with the underlying data
-class LLFolderViewModelItem : public LLRefCount, public LLTrace::MemTrackable<LLFolderViewModelItem>
+class LLFolderViewModelItem : public LLRefCount, public LLTrace::MemTrackable<LLFolderViewModelItem>, public FSFolderViewModelItem
 {
 public:
 	LLFolderViewModelItem() 
