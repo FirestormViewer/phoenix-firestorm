@@ -758,7 +758,7 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 			item = item_array->at(i);
 			if(add(NULL, item))
 			{
-				items.put(item);
+				items.push_back(item);
 			}
 		}
 	}
@@ -3555,7 +3555,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 						LLViewerWearable* wearable = gAgentWearables.getViewerWearable((LLWearableType::EType)iType,0);
 						//if the item is from our folder - don't remove it
 						//for (LLViewerInventoryItem *item = item_array.get(i); 
-						if (mItemArray.find((LLViewerInventoryItem *)wearable) == -1)
+						if ( mItemArray.end() == std::find( mItemArray.begin(), mItemArray.end(), (LLViewerInventoryItem*)wearable ) )
 							LLAppearanceMgr::instance().removeItemFromAvatar(wearable->getItemID());
 						//LL_INFOS() << "Removing wearable name: " << wearable->getName() << LL_ENDL;
 					}
@@ -3659,11 +3659,11 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 	if (isObjectInList && attachment != NULL)
 	{
 		std::string attName = attachment->getName();
-		S32 found = mAttPoints.find(attName);
+		std::vector<std::string>::iterator itrFound  = std::find( mAttPoints.begin(), mAttPoints.end(), attName );
 
 
 		// we have not encountered this attach point yet
-		if (found == -1)
+		if ( mAttPoints.end() == itrFound )
 		{
 			mAttPoints.insert(mAttPoints.end(),attName);
 			S32 numCnt = attachment->getNumObjects();
