@@ -350,7 +350,7 @@ public:
 		out_file.open(filename);
 		LLSDSerialize::toPrettyXML(content, out_file);
 		out_file.close();
-		llinfos << "GridListRequest: got new list." << llendl;
+		LL_INFOS() << "GridListRequest: got new list." << LL_ENDL;
 		sGridListRequestReady = true;
 	}
 
@@ -363,7 +363,7 @@ public:
 			LL_DEBUGS("GridManager") << "<- no error :P ... GridListRequest: List not modified since last session" << LL_ENDL;
 		}
 		else
-			llwarns << "GridListRequest::error("<< status << ": " << reason << ")" << llendl;
+			LL_WARNS() << "GridListRequest::error("<< status << ": " << reason << ")" << LL_ENDL;
 	}
 };
 // </AW: opensim>
@@ -2003,11 +2003,11 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		//               from the money balance request and mutelist request
 		//               seem to get lost under certain conditions
 		// request mute list
-		llinfos << "Requesting Mute List" << llendl;
+		LL_INFOS() << "Requesting Mute List" << LL_ENDL;
 		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
 		display_startup();
 		// Get L$ and ownership credit information
-		llinfos << "Requesting Money Balance" << llendl;
+		LL_INFOS() << "Requesting Money Balance" << LL_ENDL;
 		LLStatusBar::sendMoneyBalanceRequest();
 
 		display_startup();
@@ -4092,12 +4092,12 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	if(response.has("currency"))
 	{
 		currency = response["currency"].asString();
-		LL_DEBUGS("OS_SETTINGS") << "currency " << currency << llendl;
+		LL_DEBUGS("OS_SETTINGS") << "currency " << currency << LL_ENDL;
 	}
 	else if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		currency = "OS$";
-		LL_DEBUGS("OS_SETTINGS") << "no currency in login response" << llendl;
+		LL_DEBUGS("OS_SETTINGS") << "no currency in login response" << LL_ENDL;
 	}
 	Tea::setCurrency(currency);
 // </FS:AW opensim currency support>
@@ -4105,20 +4105,20 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 // <FS:AW  opensim destinations and avatar picker>
 	if(response.has("avatar_picker_url"))
 	{
-		LL_DEBUGS("OS_SETTINGS") << "avatar_picker_url " << response["avatar_picker_url"] << llendl;
+		LL_DEBUGS("OS_SETTINGS") << "avatar_picker_url " << response["avatar_picker_url"] << LL_ENDL;
 	}
 	else if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		LL_DEBUGS("OS_SETTINGS") << "no avatar_picker_url in login response" << llendl;
+		LL_DEBUGS("OS_SETTINGS") << "no avatar_picker_url in login response" << LL_ENDL;
 	}
 
 	if(response.has("destination_guide_url"))
 	{
-		LL_DEBUGS("OS_SETTINGS") << "destination_guide_url " << response["destination_guide_url"] << llendl;
+		LL_DEBUGS("OS_SETTINGS") << "destination_guide_url " << response["destination_guide_url"] << LL_ENDL;
 	}
 	else if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		LL_DEBUGS("OS_SETTINGS") << "no destination_guide_url in login response" << llendl;
+		LL_DEBUGS("OS_SETTINGS") << "no destination_guide_url in login response" << LL_ENDL;
 	}
 // </FS:AW  opensim destinations and avatar picker>
 	

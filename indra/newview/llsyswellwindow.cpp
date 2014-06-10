@@ -741,10 +741,10 @@ void LLIMWellWindow::addIMRow(const LLUUID& sessionId, S32 chicletCounter,
 	}
 	else
 	{
-		llwarns << "Unable to add IM Row into the list, sessionID: " << sessionId
+		LL_WARNS() << "Unable to add IM Row into the list, sessionID: " << sessionId
 			<< ", name: " << name
 			<< ", other participant ID: " << otherParticipantId
-			<< llendl;
+			<< LL_ENDL;
 
 		item->die();
 	}
@@ -766,8 +766,8 @@ void LLIMWellWindow::delIMRow(const LLUUID& sessionId)
 	}
 	else
 	{
-		llwarns << "Unable to remove IM Row from the list, sessionID: " << sessionId
-			<< llendl;
+		LL_WARNS() << "Unable to remove IM Row from the list, sessionID: " << sessionId
+			<< LL_ENDL;
 	}
 
 	// remove all toasts that belong to this session from a screen

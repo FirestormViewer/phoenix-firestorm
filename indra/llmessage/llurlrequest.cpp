@@ -85,13 +85,13 @@ LLURLRequestDetail::LLURLRequestDetail() :
 	
 	if(!mCurlRequest)
 	{
-		lldebugs << "failed to allocate new curl request." << llendl;
+		LL_DEBUGS() << "failed to allocate new curl request." << LL_ENDL;
 		return;
 	}
 
 	if(!mCurlRequest->isValid()) //failed.
 	{
-		lldebugs << "new curl request is not valid." << llendl;
+		LL_DEBUGS() << "new curl request is not valid." << LL_ENDL;
 		delete mCurlRequest ;
 		mCurlRequest = NULL ;
 	}

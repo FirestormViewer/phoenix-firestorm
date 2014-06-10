@@ -154,7 +154,7 @@ void LLInitialWearablesFetch::processContents()
 			const LLUUID& idItem = itWearableData->mItemID; bool fFound = false;
 			for (S32 idxItem = 0, cntItem = items_by_type[itWearableData->mType].size(); idxItem < cntItem; idxItem++)
 			{
-				const LLViewerInventoryItem* pCOFItem = items_by_type[itWearableData->mType].get(idxItem);
+				const LLViewerInventoryItem* pCOFItem = items_by_type[itWearableData->mType].at(idxItem);
 				if (idItem == pCOFItem->getLinkedUUID())
 				{
 					fFound = true;
@@ -209,7 +209,7 @@ public:
 //			LLViewerInventoryItem *item = gInventory.getItem(*it);
 //			if (!item)
 //			{
-//				llwarns << "fetch failed!" << llendl;
+//				LL_WARNS() << "fetch failed!" << LL_ENDL;
 //				continue;
 //			}
 //

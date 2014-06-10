@@ -178,13 +178,13 @@ private:
 	void setState(LLAvatarListItem* item, ESpeakerState state);
 	void setState(const LLUUID& speaker_id, ESpeakerState state)
 	{
-		lldebugs << "Storing state: " << speaker_id << ", " << state << llendl;
+		LL_DEBUGS() << "Storing state: " << speaker_id << ", " << state << LL_ENDL;
 		mSpeakerStateMap[speaker_id] = state;
 	}
 
 	ESpeakerState getState(const LLUUID& speaker_id)
 	{
-		lldebugs << "Getting state: " << speaker_id << ", " << mSpeakerStateMap[speaker_id] << llendl;
+		LL_DEBUGS() << "Getting state: " << speaker_id << ", " << mSpeakerStateMap[speaker_id] << LL_ENDL;
 
 		return mSpeakerStateMap[speaker_id];
 	}

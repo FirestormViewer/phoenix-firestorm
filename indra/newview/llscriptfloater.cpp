@@ -973,7 +973,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			}
 			default:
 			{
-				llwarns << "dialogPos value " << dialogPos << " not handled in switch() statement." << llendl;
+				LL_WARNS() << "dialogPos value " << dialogPos << " not handled in switch() statement." << LL_ENDL;
 			}
 		}
 	}

@@ -30,7 +30,7 @@
 
 #include "indra_constants.h"		// for MASK_ALT etc.
 #include "message.h"				// for gMessageSystem
-#include "stdenums.h"				// for ADD_TOP
+//#include "stdenums.h"				// for ADD_TOP
 #include "llagent.h"				// for gAgent
 #include "llanimationstates.h"
 #include "llbutton.h"

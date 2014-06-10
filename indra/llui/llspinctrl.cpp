@@ -432,7 +432,7 @@ BOOL LLSpinCtrl::setLabelArg(const std::string& key, const LLStringExplicit& tex
 	}
 	else
 	{
-		llwarns << "Attempting to set label argument on LLSpinCtrl constructed without one " << getName() << llendl;
+		LL_WARNS() << "Attempting to set label argument on LLSpinCtrl constructed without one " << getName() << LL_ENDL;
 	}
 	updateLabelColor();
 

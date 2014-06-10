@@ -30,7 +30,7 @@
 
 #include "llagent.h"
 #include "llagentpicksinfo.h"
-#include "llavatarconstants.h"
+//#include "llavatarconstants.h"
 #include "llflatlistview.h"
 #include "llfloaterreg.h"
 #include "llfloaterworldmap.h"

@@ -174,7 +174,7 @@ void LLPanelLandAudio::refresh()
 		for(LLSD::array_iterator s_itr = streams.beginArray(); s_itr != streams.endArray(); ++s_itr)
 		{
 			mMusicURLEdit->add(LLSD(*s_itr));
-			lldebugs << "adding: " << *s_itr << " to the audio stream combo." << llendl;
+			LL_DEBUGS() << "adding: " << *s_itr << " to the audio stream combo." << LL_ENDL;
 		}
 		mMusicURLEdit->addSeparator(ADD_TOP);
 		mMusicURLEdit->add(LLSD(current_url), ADD_TOP);

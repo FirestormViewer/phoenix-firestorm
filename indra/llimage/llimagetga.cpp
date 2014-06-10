@@ -266,7 +266,7 @@ BOOL LLImageTGA::updateData()
 			mColorMap = new U8[ color_map_bytes ];  
 			if (!mColorMap)
 			{
-				LL_WARNS << "Out of Memory in BOOL LLImageTGA::updateData(), size: " << color_map_bytes << LL_ENDL;
+				LL_WARNS() << "Out of Memory in BOOL LLImageTGA::updateData(), size: " << color_map_bytes << LL_ENDL;
 				return FALSE;
 			}
 			memcpy( mColorMap, getData() + mDataOffset, color_map_bytes );	/* Flawfinder: ignore */

@@ -43,6 +43,7 @@
 #include "llagent.h"
 #include "llagentui.h"
 #include "llfloaterabout.h"
+#include "llhttpclient.h"
 #include "llimview.h"
 #include "llmutelist.h"
 #include "llnotifications.h"
@@ -910,7 +911,7 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 	LLUUID uid = subs["FROMUUID"].asUUID();
 	LLUUID sessionid = subs["SESSIONID"].asUUID();
 
-	llinfos << "the uuid is " << uid.asString().c_str() << llendl;
+	LL_INFOS() << "the uuid is " << uid.asString().c_str() << LL_ENDL;
 	LLAgentUI::buildFullname(my_name);
 
 	if ( option == 0 )//yes

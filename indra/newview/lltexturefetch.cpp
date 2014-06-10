@@ -1131,7 +1131,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 		//asset blacklist
 		if(FSWSAssetBlacklist::getInstance()->isBlacklisted(mID,LLAssetType::AT_TEXTURE))
 		{
-			llinfos << "Blacklisted texture asset blocked." << llendl; 
+			LL_INFOS() << "Blacklisted texture asset blocked." << LL_ENDL; 
 			mState = DONE;
 			return true;
 		}

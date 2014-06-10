@@ -181,7 +181,7 @@ void FSFloaterContacts::updateGroupButtons()
 	getChildView("info_btn")->setEnabled(isGroup);
 	getChildView("activate_btn")->setEnabled(groupId != gAgent.getGroupID());
 	getChildView("leave_btn")->setEnabled(isGroup);
-	getChildView("create_btn")->setEnabled((!gMaxAgentGroups) || (gAgent.mGroups.count() < gMaxAgentGroups));
+	getChildView("create_btn")->setEnabled((!gMaxAgentGroups) || (gAgent.mGroups.size() < gMaxAgentGroups));
 	getChildView("invite_btn")->setEnabled(isGroup && gAgent.hasPowerInGroup(groupId, GP_MEMBER_INVITE));
 }
 

@@ -43,7 +43,7 @@
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llavataractions.h"
-#include "llavatarconstants.h"		// for range constants
+//#include "llavatarconstants.h"		// for range constants
 #include "llgroupactions.h"
 #include "llmutelist.h"
 #include "llnotificationmanager.h"
@@ -601,7 +601,7 @@ void FSRadar::updateRadarList()
 				msg = msg.substr(0, msg.size() - 1);
 				FSLSLBridgeRequestResponder* responder = new FSLSLBridgeRequestRadarPosResponder();
 				FSLSLBridge::instance().viewerToLSL(prefix + msg, responder);
-				//llinfos << " OFFSET REQUEST SEGMENT"<< prefix << msg << llendl;
+				//LL_INFOS() << " OFFSET REQUEST SEGMENT"<< prefix << msg << LL_ENDL;
 				msg = "";
 				updatesPerRequest = 0;
 			}
@@ -611,7 +611,7 @@ void FSRadar::updateRadarList()
 			msg = msg.substr(0, msg.size() - 1);
 			FSLSLBridgeRequestResponder* responder = new FSLSLBridgeRequestRadarPosResponder();
 			FSLSLBridge::instance().viewerToLSL(prefix + msg, responder);
-			//llinfos << " OFFSET REQUEST FINAL " << prefix << msg << llendl;
+			//LL_INFOS() << " OFFSET REQUEST FINAL " << prefix << msg << LL_ENDL;
 		}
 		
 		// clear out the dispatch queue

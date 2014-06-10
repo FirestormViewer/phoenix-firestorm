@@ -197,7 +197,7 @@ void ColladaExportFloater::onClickExport()
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if (!file_picker.getSaveFile(LLFilePicker::FFSAVE_COLLADA, LLDir::getScrubbedFileName(mObjectName + ".dae")))
 	{
-		llinfos << "User closed the filepicker, aborting export!" << llendl;
+		LL_INFOS() << "User closed the filepicker, aborting export!" << LL_ENDL;
 		return;
 	}
 	mFilename = file_picker.getFirstFile();

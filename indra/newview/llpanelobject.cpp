@@ -2567,7 +2567,7 @@ void LLPanelObject::onPastePosClip(const LLSD& data)
 	}
 	else
 	{
-		llinfos << "Couldn't get position vector from clipboard" << llendl;
+		LL_INFOS() << "Couldn't get position vector from clipboard" << LL_ENDL;
 	}
 }
 void LLPanelObject::onPasteSizeClip(const LLSD& data)
@@ -2579,7 +2579,7 @@ void LLPanelObject::onPasteSizeClip(const LLSD& data)
 	}
 	else
 	{
-		llinfos << "Couldn't get size vector from clipboard" << llendl;
+		LL_INFOS() << "Couldn't get size vector from clipboard" << LL_ENDL;
 	}
 }
 void LLPanelObject::onPasteRotClip(const LLSD& data)
@@ -2591,7 +2591,7 @@ void LLPanelObject::onPasteRotClip(const LLSD& data)
 	}
 	else
 	{
-		llinfos << "Couldn't get rotation vector from clipboard" << llendl;
+		LL_INFOS() << "Couldn't get rotation vector from clipboard" << LL_ENDL;
 	}
 }
 
@@ -2653,10 +2653,10 @@ void LLPanelObject::onCopyParams(const LLSD& data)
 									LLInventoryModel::INCLUDE_TRASH,
 									asset_id_matches);
 
-			if (items.count())
+			if (items.size())
 			{
 				// search for copyable version first
-				for (S32 i = 0; i < items.count(); i++)
+				for (S32 i = 0; i < items.size(); i++)
 				{
 					LLInventoryItem* itemp = items[i];
 					LLPermissions item_permissions = itemp->getPermissions();

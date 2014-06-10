@@ -91,7 +91,7 @@ bool is_asset_exportable(const LLUUID& asset_id)
 	LLAssetIDMatches asset_id_matches(asset_id);
 	gInventory.collectDescendentsIf(LLUUID::null, cats, items, true, asset_id_matches, false);
 	
-	for (S32 i = 0; i < items.count(); ++i)
+	for (S32 i = 0; i < items.size(); ++i)
 	{
 		if (perms_allow_export(items[i]->getPermissions())) return true;
 	}

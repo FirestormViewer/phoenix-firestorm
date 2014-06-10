@@ -281,7 +281,7 @@ LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, 
 	LLFloater* instance = getInstance(name, key); 
 	if (instance) 
 	{
-		llinfos << "show instance for refreshing group ID: " << key.asString() << llendl;
+		LL_INFOS() << "show instance for refreshing group ID: " << key.asString() << LL_ENDL;
 		instance->openFloater(key);
 		if (focus)
 			instance->setFocus(TRUE);

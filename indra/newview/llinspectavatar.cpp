@@ -642,7 +642,7 @@ void LLInspectAvatar::toggleSelectedVoice(bool enabled)
 
 			virtual void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
 			{
-				llwarns << "MuteVoiceResponder error [status:" << status << "]: " << content << llendl;
+				LL_WARNS() << "MuteVoiceResponder error [status:" << status << "]: " << content << LL_ENDL;
 
 				if ( gIMMgr )
 				{

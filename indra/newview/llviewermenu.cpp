@@ -6938,7 +6938,7 @@ void handle_script_info()
 	if (LLSelectMgr::getInstance()->getSelection()->getPrimaryObject())
 	{
 		object_id = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject()->mID;
-		llinfos << "Reporting Script Info for object: " << object_id.asString() << llendl;
+		LL_INFOS() << "Reporting Script Info for object: " << object_id.asString() << LL_ENDL;
 		FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + object_id.asString());
 	}
 }
@@ -7334,7 +7334,7 @@ class LLShowHelp : public view_listener_t
 			{
 				LLWeb::loadURLInternal(url);
 			}
-			lldebugs << "grid_help " <<  help_topic << " url " << url << llendl;
+			LL_DEBUGS() << "grid_help " <<  help_topic << " url " << url << LL_ENDL;
 
 			return true;
 		}
@@ -9072,7 +9072,7 @@ class FSStreamListExportXML :public view_listener_t
 			LLNotificationsUtil::add("StreamListExportSuccess", args);
 		}
 		else
-			llinfos << "User closed the filepicker. Aborting!" << llendl;
+			LL_INFOS() << "User closed the filepicker. Aborting!" << LL_ENDL;
 
 		return true;
 	}
@@ -9089,7 +9089,7 @@ class FSStreamListImportXML :public view_listener_t
 			llifstream stream_list(filename);
 			if(!stream_list.is_open())
 			{
-				llwarns << "Couldn't open the xml file for reading. Aborting import!" << llendl;
+				LL_WARNS() << "Couldn't open the xml file for reading. Aborting import!" << LL_ENDL;
 				return true;
 			}
 			LLSD stream_data;

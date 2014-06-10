@@ -725,7 +725,7 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 
 		// [CR] FIRE-12229
 		//if(gAgent.mGroups.size() < max_groups)
-		if(!max_groups || gAgent.mGroups.count() < max_groups)
+		if(!max_groups || gAgent.mGroups.size() < max_groups)
 		// [/CR] FIRE-12229
 		{
 			accept_invite = true;
@@ -7224,11 +7224,11 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 			snap_filename += SCREEN_HOME_FILENAME;
 			if (gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE))
 			{
-				llinfos << SCREEN_HOME_FILENAME << " saved successfully." << llendl;
+				LL_INFOS() << SCREEN_HOME_FILENAME << " saved successfully." << LL_ENDL;
 			}
 			else
 			{
-				llwarns << SCREEN_HOME_FILENAME << " could not be saved." << llendl;
+				LL_WARNS() << SCREEN_HOME_FILENAME << " could not be saved." << LL_ENDL;
 			}
 		}
 // </FS:CR>
@@ -8262,7 +8262,7 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
 	gAgent.stopTyping();
 
-	llinfos << "Teleport error, reason=" << reason << llendl;
+	LL_INFOS() << "Teleport error, reason=" << reason << LL_ENDL;
 	if (!FSLSLBridge::instance().canUseBridge() ||
 		(reason != "Could not teleport closer to destination"))
 	{

@@ -3007,7 +3007,7 @@ void LLViewerObject::processTaskInvFile(void** user_data, S32 error_code, LLExtS
 		// <FS:ND> Crashfix, not sure why object->mInventory can be 0
 		if( !object->mInventory )
 		{
-			llwarns << "object->mInventory == 0" << llendl;
+			LL_WARNS() << "object->mInventory == 0" << LL_ENDL;
 			delete ft;
 			return;
 		}

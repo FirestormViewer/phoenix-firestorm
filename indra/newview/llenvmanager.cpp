@@ -748,12 +748,12 @@ class WindLightRefresh : public LLHTTPNode
 		const LLSD& input) const
 	{
 		if (!input || !context || !input.isMap() || !input.has("body")) {
-			llinfos << "malformed WindLightRefresh!" << llendl;	 
+			LL_INFOS() << "malformed WindLightRefresh!" << LL_ENDL;	 
 			return;
 		}
 
 		//std::string dump = input["body"].asString();
-		//llwarns << dump << llendl;
+		//LL_WARNS() << dump << LL_ENDL;
 
 		LLSD body = input["body"];
 		LLEnvManagerNew *env = &LLEnvManagerNew::instance();
@@ -775,7 +775,7 @@ class WindLightRefresh : public LLHTTPNode
 		else {
 			env->mInterpNextChangeMessage = true;
 		}
-		llinfos << "Windlight Refresh , interpolate:" << env->mInterpNextChangeMessage << llendl;
+		LL_INFOS() << "Windlight Refresh , interpolate:" << env->mInterpNextChangeMessage << LL_ENDL;
 		env->requestRegionSettings();
 
 		// Ansa: This cause the windlight editor and others to update since the windlight has changed!

@@ -35,6 +35,7 @@
 #include <vector>
 #include <map>
 #include "llformat.h"
+#include "llsd.h"
 
 #if LL_LINUX || LL_SOLARIS
 #include <wctype.h>

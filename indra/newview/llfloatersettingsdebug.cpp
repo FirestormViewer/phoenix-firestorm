@@ -45,7 +45,7 @@
 #include "rlvhandler.h"
 #include "rlvextensions.h"
 #include "sanitycheck.h"
-#include "stdenums.h"		// for ADD_BOTTOM
+//#include "stdenums.h"		// for ADD_BOTTOM
 // [/RLVa:KB]
 #include "llnotificationsutil.h"
 #include "llwindow.h"

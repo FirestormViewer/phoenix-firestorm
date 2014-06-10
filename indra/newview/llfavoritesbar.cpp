@@ -1595,7 +1595,7 @@ void LLFavoritesOrderStorage::saveFavoritesSLURLs()
 	//LL_DEBUGS() << "Saved favorites for " << av_name.getUserName() << LL_ENDL;
 	//fav_llsd[av_name.getUserName()] = user_llsd;
 	std::string name = av_name.getUserName() + " @ " + LLGridManager::getInstance()->getGridLabel();
-	LL_DEBUGS()("Favorites") << "Saved favorites for " << name << LL_ENDL;
+	LL_DEBUGS("Favorites") << "Saved favorites for " << name << LL_ENDL;
 	fav_llsd[name] = user_llsd;
 	// </FS:CR>
 
@@ -1626,7 +1626,7 @@ void LLFavoritesOrderStorage::removeFavoritesRecordOfUser()
 	//	fav_llsd.erase(av_name.getUserName());
 	//}
 	std::string name = av_name.getUserName() + " @ " + LLGridManager::getInstance()->getGridLabel();
-	LL_DEBUGS()("Favorites") << "Removed favorites for " << name << LL_ENDL;
+	LL_DEBUGS("Favorites") << "Removed favorites for " << name << LL_ENDL;
 	if (fav_llsd.has(name))
 	{
 		fav_llsd.erase(name);

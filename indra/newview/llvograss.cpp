@@ -640,7 +640,7 @@ void LLGrassPartition::addGeometryCount(LLSpatialGroup* group, U32& vertex_count
 
 		if( !obj )
 		{
-			llwarns << "Object is 0 (not an alpha maybe)" << llendl;
+			LL_WARNS() << "Object is 0 (not an alpha maybe)" << LL_ENDL;
 			continue;
 		}
 
@@ -742,9 +742,9 @@ void LLGrassPartition::getGeometry(LLSpatialGroup* group)
 			object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, emissivep, indicesp);
 		else
 		{
-			llwarns << "Object is 0 (not an alpha maybe)" << llendl;
+			LL_WARNS() << "Object is 0 (not an alpha maybe)" << LL_ENDL;
 			if( facep->getViewerObject()  )
-				llwarns << typeid( *facep->getViewerObject() ).name() << llendl;
+				LL_WARNS() << typeid( *facep->getViewerObject() ).name() << LL_ENDL;
 		}
 		
 		// </FS:ND>

@@ -1728,9 +1728,9 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		// Fall-back code: everything should really already have been pruned before we get this far
-		for (S32 idxItem = obj_item_array.count() - 1; idxItem >= 0; idxItem--)
+		for (S32 idxItem = obj_item_array.size() - 1; idxItem >= 0; idxItem--)
 		{
-			const LLInventoryItem* pItem = obj_item_array.get(idxItem).get();
+			const LLInventoryItem* pItem = obj_item_array.at(idxItem).get();
 			if (!gRlvAttachmentLocks.canAttach(pItem))
 			{
 				obj_item_array.remove(idxItem);

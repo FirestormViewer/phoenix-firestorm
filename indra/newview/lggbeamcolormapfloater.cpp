@@ -283,7 +283,7 @@ BOOL lggBeamColorMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 		fixOrder();
 	}
 	
-	llinfos << "we got clicked at (" << x << ", " << y << " yay! " << llendl;
+	LL_INFOS() << "we got clicked at (" << x << ", " << y << " yay! " << LL_ENDL;
 	
 	return LLFloater::handleMouseDown(x,y,mask);
 }
@@ -307,7 +307,7 @@ BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x,S32 y,MASK mask)
 
 		fixOrder();
 	}
-	llinfos << "we got right clicked at (" << x << ", " << y << " yay! " << llendl;
+	LL_INFOS() << "we got right clicked at (" << x << ", " << y << " yay! " << LL_ENDL;
 
 	return LLFloater::handleRightMouseDown(x,y,mask);
 }

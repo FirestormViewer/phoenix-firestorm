@@ -228,7 +228,7 @@ void LLIMWellChiclet::createMenu()
 {
 	if(mContextMenu)
 	{
-		llwarns << "Menu already exists" << llendl;
+		LL_WARNS() << "Menu already exists" << LL_ENDL;
 		return;
 	}
 
@@ -1118,7 +1118,7 @@ void LLChicletPanel::onMessageCountChanged(const LLSD& data)
 		}
 		else
 		{
-			llwarns << "Unable to set counter for chiclet " << session_id << llendl;
+			LL_WARNS() << "Unable to set counter for chiclet " << session_id << LL_ENDL;
 		}
 	}
 	// </FS:Ansariel> [FS communication UI]

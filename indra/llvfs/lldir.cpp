@@ -1167,7 +1167,7 @@ bool LLDir::setSoundCacheDir(const std::string& path)
 			result = true;
 		}
 	}
-	LL_INFOS2("AppInit", "Directories") << "Setting sound cache directory: " << mSoundCacheDir << LL_ENDL;
+	LL_INFOS("AppInit", "Directories") << "Setting sound cache directory: " << mSoundCacheDir << LL_ENDL;
 
 	return result;
 }
@@ -1192,7 +1192,7 @@ void LLDir::dumpCurrentDirectories()
 	LL_DEBUGS("AppInit","Directories") << "  SkinBaseDir:           " << getSkinBaseDir() << LL_ENDL;
 	LL_DEBUGS("AppInit","Directories") << "  SkinDir:               " << getSkinDir() << LL_ENDL;
 // [SL:KB] - Patch: Viewer-Skins | Checked: 2011-02-14 (Catznip-2.5)
-	LL_DEBUGS2("AppInit","Directories") << "  SkinThemeDir:          " << getSkinThemeDir() << LL_ENDL;
+	LL_DEBUGS("AppInit","Directories") << "  SkinThemeDir:          " << getSkinThemeDir() << LL_ENDL;
 // [/SL:KB]
 }
 

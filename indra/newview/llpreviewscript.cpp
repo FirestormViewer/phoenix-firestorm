@@ -362,7 +362,7 @@ BOOL LLScriptEdCore::postBuild()
 			// the tips one-per-line in strings.xml
 			LLStringUtil::replaceString( desc, ";", "\n" );
 			
-			lldebugs << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << llendl;
+			LL_DEBUGS() << "Adding script library function: (" << name << ") with the desc '" << desc << "'" << LL_ENDL;
 			// </FS:CR>
 			
 			tooltips.push_back(desc);
@@ -1214,7 +1214,7 @@ BOOL LLScriptEdCore::handleKeyHere(KEY key, MASK mask)
 			// NaCl - LSL Preprocessor
 			if (!hasChanged())
 			{
-				llinfos << "Save Not Needed" << llendl;
+				LL_INFOS() << "Save Not Needed" << LL_ENDL;
 				return TRUE;
 			}
 			doSave(FALSE);
@@ -1365,7 +1365,7 @@ bool LLScriptEdContainer::onBackupTimer()
 			mBackupFilename = getBackupFileName();
 		mScriptEd->writeToFile(mBackupFilename, true);
 
-		llinfos << "Backing up script to " << mBackupFilename << llendl;
+		LL_INFOS() << "Backing up script to " << mBackupFilename << LL_ENDL;
 	}
 	return false;
 }
@@ -1720,7 +1720,7 @@ void LLPreviewLSL::uploadAssetLegacy(const std::string& filename,
 									  const LLTransactionID& tid)
 {
 	// <FS:CR> Remove LSO Compiler
-	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+	LL_WARNS() << "Legacy LSO compile and upload is no longer supported" << LL_ENDL;
 #if 0
 	LLLineEditor* descEditor = getChild<LLLineEditor>("desc");
 	LLScriptSaveInfo* info = new LLScriptSaveInfo(item_id,
@@ -2480,7 +2480,7 @@ void LLLiveLSLEditor::uploadAssetViaCapsStatic(const std::string& url,
 	LLSD body;
 	body["item_id"] = item_id;
 	body["target"] = is_mono.c_str();
-	llinfos << "Upload caps body=" << body << " url=" << url << " id= " << item_id << llendl;
+	LL_INFOS() << "Upload caps body=" << body << " url=" << url << " id= " << item_id << LL_ENDL;
 	LLHTTPClient::post(url, body, 
 		new LLUpdateAgentInventoryResponder(body, filename, LLAssetType::AT_LSL_TEXT));
 }
@@ -2508,7 +2508,7 @@ void LLLiveLSLEditor::uploadAssetLegacy(const std::string& filename,
 										BOOL is_running)
 {
 	// <FS:CR> Remove LSO compiler
-	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
+	LL_WARNS() << "Legacy LSO compile and upload is no longer supported" << LL_ENDL;
 #if 0
 	LLLiveLSLSaveData* data = new LLLiveLSLSaveData(mObjectUUID,
 													mItem,

@@ -365,7 +365,7 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LL
 
 void LLConsole::clear()
 {
-	llinfos << "Clearing Console..." << llendflush;
+	LL_INFOS() << "Clearing Console..." << LL_ENDL;
 	mMutex.lock();
 	mLines.clear();
 	mAddTimes.clear();

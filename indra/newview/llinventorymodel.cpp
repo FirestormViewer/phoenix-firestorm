@@ -535,12 +535,12 @@ LLUUID LLInventoryModel::findCategoryByName(std::string name)
 		cats = get_ptr_in_map(mParentChildCategoryTree, root_id);
 		if(cats)
 		{
-			S32 count = cats->count();
+			S32 count = cats->size();
 			for(S32 i = 0; i < count; ++i)
 			{
-				if(cats->get(i)->getName() == name)
+				if(cats->at(i)->getName() == name)
 				{
-					return cats->get(i)->getUUID();
+					return cats->at(i)->getUUID();
 				}
 			}
 		}
@@ -752,10 +752,10 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 	// Move onto items
 	if(item_array)
 	{
-		S32 count = item_array->count();
+		S32 count = item_array->size();
 		for(S32 i = 0; i < count; ++i)
 		{
-			item = item_array->get(i);
+			item = item_array->at(i);
 			if(add(NULL, item))
 			{
 				items.put(item);
@@ -3524,19 +3524,19 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 									LLInventoryModel::EXCLUDE_TRASH,
 									is_wearable);
 	S32 i;
-	S32 wearable_count = mItemArray.count();
+	S32 wearable_count = mItemArray.size();
 
 	if (wearable_count > 0)	//Loop through wearables. 
 	{
-		//llinfos << "ReplaceWornItemsOnly wearable_count" << wearable_count << llendl;
+		//LL_INFOS() << "ReplaceWornItemsOnly wearable_count" << wearable_count << LL_ENDL;
 		int aTypes[LLWearableType::WT_COUNT] = {0};
 		
 		for(i = 0; i  < wearable_count; ++i)
 		{
-			//llinfos << "ReplaceWornItemsOnly wearable_count loop, i=" << i << llendl;
-			LLViewerInventoryItem *item = mItemArray.get(i);
+			//LL_INFOS() << "ReplaceWornItemsOnly wearable_count loop, i=" << i << LL_ENDL;
+			LLViewerInventoryItem *item = mItemArray.at(i);
 			int iType = (int)item->getWearableType();
-			//llinfos << "ReplaceWornItemsOnly wearable_count loop, iType=" << iType << llendl;
+			//LL_INFOS() << "ReplaceWornItemsOnly wearable_count loop, iType=" << iType << LL_ENDL;
 			if (item->isWearableType() 
 				&& iType != LLWearableType::WT_INVALID 
 				&& iType != LLWearableType::WT_NONE 
@@ -3547,7 +3547,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 				if (aTypes[iType] == 1) //first occurence of type, remove first
 				{
 					U32 count = gAgentWearables.getWearableCount((LLWearableType::EType)iType);
-					//llinfos << "Type: " << iType << " count " << count << llendl;
+					//LL_INFOS() << "Type: " << iType << " count " << count << LL_ENDL;
 
 					for (U32 j=0; j<count; j++) //remove all
 					{
@@ -3557,11 +3557,11 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 						//for (LLViewerInventoryItem *item = item_array.get(i); 
 						if (mItemArray.find((LLViewerInventoryItem *)wearable) == -1)
 							LLAppearanceMgr::instance().removeItemFromAvatar(wearable->getItemID());
-						//llinfos << "Removing wearable name: " << wearable->getName() << llendl;
+						//LL_INFOS() << "Removing wearable name: " << wearable->getName() << LL_ENDL;
 					}
 					//now add the first item (replace just in case)
 					LLAppearanceMgr::instance().wearItemOnAvatar(item->getUUID(), true, true);
-					//llinfos << " Wearing item: " << item->getName() << " with replace=true" << llendl;
+					//LL_INFOS() << " Wearing item: " << item->getName() << " with replace=true" << LL_ENDL;
 				}
 				else // just add - unless it's body
 				{
@@ -3577,7 +3577,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 void LLInventoryModel::wearAttachmentsOnAvatar(LLUUID category_id)
 {
 	// Find all the wearables that are in the category's subtree.
-	llinfos << "ReplaceWornItemsOnly find all attachments" << llendl;
+	LL_INFOS() << "ReplaceWornItemsOnly find all attachments" << LL_ENDL;
 
 	LLInventoryModel::cat_array_t	obj_cat_array;
 	mObjArray.clear();
@@ -3590,13 +3590,13 @@ void LLInventoryModel::wearAttachmentsOnAvatar(LLUUID category_id)
 									LLInventoryModel::EXCLUDE_TRASH,
 									is_object);
 	S32 i;
-	S32 obj_count = mObjArray.count();
+	S32 obj_count = mObjArray.size();
 
 	if (obj_count > 0)
 	{
 		for(i = 0; i  < obj_count; ++i)
 		{
-			LLViewerInventoryItem *obj_item = mObjArray.get(i);
+			LLViewerInventoryItem *obj_item = mObjArray.at(i);
 
 			if (!get_is_item_worn(obj_item->getUUID()))
 			{
@@ -3619,13 +3619,13 @@ void LLInventoryModel::wearGesturesOnAvatar(LLUUID category_id)
 									LLInventoryModel::EXCLUDE_TRASH,
 									is_gesture);
 	S32 i;
-	S32 gest_count = gest_item_array.count();
+	S32 gest_count = gest_item_array.size();
 
 	if (gest_count > 0)
 	{
 		for(i = 0; i  < gest_count; ++i)
 		{
-			LLViewerInventoryItem *gest_item = gest_item_array.get(i);
+			LLViewerInventoryItem *gest_item = gest_item_array.at(i);
 			if (!get_is_item_worn(gest_item->getUUID()))
 			{
 				LLGestureMgr::instance().activateGesture( gest_item->getLinkedUUID() );
@@ -3643,10 +3643,10 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 	LLUUID objID = object->getAttachmentItemID();
 	bool isObjectInList = false;
 
-	for(int i = 0; i  < mObjArray.count(); ++i)
+	for(int i = 0; i  < mObjArray.size(); ++i)
 	{
 
-		if (objID == (mObjArray.get(i))->getUUID())
+		if (objID == (mObjArray.at(i))->getUUID())
 		{
 			isObjectInList = true;
 			break;
@@ -3654,7 +3654,7 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 	}
 
 	//all attachment points
-	S32 obj_count = mObjArray.count();
+	S32 obj_count = mObjArray.size();
 
 	if (isObjectInList && attachment != NULL)
 	{
@@ -3681,7 +3681,7 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 					bool isFound = false;
 					for(int j = 0; j  < obj_count; ++j)
 					{
-						LLViewerInventoryItem *fold_item = mObjArray.get(j);
+						LLViewerInventoryItem *fold_item = mObjArray.at(j);
 						if (att_id == fold_item->getUUID())
 						{
 							isFound = true;
@@ -3699,8 +3699,8 @@ void LLInventoryModel::wearAttachmentsOnAvatarCheckRemove(LLViewerObject *object
 void LLInventoryModel::wearItemsOnAvatar(LLInventoryCategory* category)
 {
 	if(!category) return;
-	llinfos << "ReplaceWornItemsOnly wear_inventory_category_on_avatar( " 
-			 << category->getName() << " )" << llendl;
+	LL_INFOS() << "ReplaceWornItemsOnly wear_inventory_category_on_avatar( " 
+			 << category->getName() << " )" << LL_ENDL;
 
 	LLUUID category_id = category->getUUID();
 

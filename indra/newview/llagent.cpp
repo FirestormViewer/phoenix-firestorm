@@ -472,7 +472,7 @@ void LLAgent::updateFSAlwaysFly(const LLSD &data)
 	fsAlwaysFly = data.asBoolean();
 	if (fsAlwaysFly) 
 	{
-		llinfos << "Enabling Fly Override" << llendl;
+		LL_INFOS() << "Enabling Fly Override" << LL_ENDL;
 		if (gSavedSettings.getBOOL("FirstUseFlyOverride"))
 		{
 			LLNotificationsUtil::add("FirstUseFlyOverride");
@@ -1673,7 +1673,7 @@ void LLAgent::clearAutorespond()
 //-----------------------------------------------------------------------------
 void LLAgent::selectAutorespond(BOOL selected)
 {
-	llinfos << "Setting autorespond mode to " << selected << llendl;
+	LL_INFOS() << "Setting autorespond mode to " << selected << LL_ENDL;
 	mIsAutorespond = selected;
 	gSavedPerAccountSettings.setBOOL("FSAutorespondMode",selected);
 	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
@@ -1719,7 +1719,7 @@ void LLAgent::clearAutorespondNonFriends()
 //-----------------------------------------------------------------------------
 void LLAgent::selectAutorespondNonFriends(BOOL selected)
 {
-	llinfos << "Setting autorespond non-friends mode to " << selected << llendl;
+	LL_INFOS() << "Setting autorespond non-friends mode to " << selected << LL_ENDL;
 	mIsAutorespondNonFriends = selected;
 	gSavedPerAccountSettings.setBOOL("FSAutorespondNonFriendsMode",selected);
 	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
@@ -1767,7 +1767,7 @@ void LLAgent::clearRejectTeleportOffers()
 //-----------------------------------------------------------------------------
 void LLAgent::selectRejectTeleportOffers(BOOL selected)
 {
-	llinfos << "Setting rejecting teleport offers mode to " << selected << llendl;
+	LL_INFOS() << "Setting rejecting teleport offers mode to " << selected << LL_ENDL;
 	mIsRejectTeleportOffers = selected;
 	gSavedPerAccountSettings.setBOOL("FSRejectTeleportOffersMode", selected);
 }

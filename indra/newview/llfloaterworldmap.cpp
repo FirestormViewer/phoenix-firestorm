@@ -724,7 +724,7 @@ void LLFloaterWorldMap::requestParcelInfo(const LLVector3d& pos_global)
 	}
 	else
 	{
-		llwarns << "Cannot request parcel details: Cap not found" << llendl;
+		LL_WARNS() << "Cannot request parcel details: Cap not found" << LL_ENDL;
 	}
 }
 // </FS:Ansariel> Parcel details on map

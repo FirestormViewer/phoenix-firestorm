@@ -794,7 +794,7 @@ void LLWearableHoldingPattern::onAllComplete()
 //	if (isAgentAvatarValid())
 //	{
 //		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << mObjItems.count() << " attachments" << LL_ENDL;
-//		llinfos << "Updating " << mObjItems.size() << " attachments" << llendl;
+//		LL_INFOS() << "Updating " << mObjItems.size() << " attachments" << LL_ENDL;
 //		LLAgentWearables::userUpdateAttachments(mObjItems);
 //	}
 
@@ -1222,9 +1222,9 @@ static void removeDuplicateItems(LLInventoryModel::item_array_t& items)
 static void removeDuplicateWearableItemsByAssetID(LLInventoryModel::item_array_t& items)
 {
 	std::set<LLUUID> idsAsset;
-	for (S32 idxItem = items.count() - 1; idxItem >= 0; idxItem--)
+	for (S32 idxItem = items.size() - 1; idxItem >= 0; idxItem--)
 	{
-		const LLViewerInventoryItem* pItem = items.get(idxItem);
+		const LLViewerInventoryItem* pItem = items.at(idxItem);
 		if (!pItem->isWearableType())
 			continue;
 		if (idsAsset.end() == idsAsset.find(pItem->getAssetUUID()))
@@ -1498,7 +1498,7 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 		//if replacing - make sure bridge stays.
 		if (FSLSLBridge::instance().getBridge())
 		{
-			llinfos << "reinserting bridge at outfit remove" << llendl;
+			LL_INFOS() << "reinserting bridge at outfit remove" << LL_ENDL;
 			//items.find(FSLSLBridge::instance().getBridge());
 			items.removeObj(FSLSLBridge::instance().getBridge());
 		}
@@ -1519,9 +1519,9 @@ void LLAppearanceMgr::takeOffOutfit(const LLUUID& cat_id)
 	// now deactivating all gestures in that folder
 	LLInventoryModel::item_array_t gest_items;
 	getDescendentsOfAssetType(cat_id, gest_items, LLAssetType::AT_GESTURE, false);
-	for (S32 i = 0; i < gest_items.count(); ++i)
+	for (S32 i = 0; i < gest_items.size(); ++i)
 	{
-		LLViewerInventoryItem *gest_item = gest_items.get(i);
+		LLViewerInventoryItem *gest_item = gest_items.at(i);
 		if ( LLGestureMgr::instance().isGestureActive( gest_item->getLinkedUUID()) )
 		{
 			LLGestureMgr::instance().deactivateGesture( gest_item->getLinkedUUID() );
@@ -1836,9 +1836,9 @@ void LLAppearanceMgr::syncCOF(const LLInventoryModel::item_array_t& items,
 	gInventory.collectDescendents(getCOF(), cats, cur_cof_items, LLInventoryModel::EXCLUDE_TRASH);
 
 	// Purge everything in cur_cof_items that isn't part of new_cof_items
-	for (S32 idxCurItem = 0, cntCurItem = cur_cof_items.count(); idxCurItem < cntCurItem; idxCurItem++)
+	for (S32 idxCurItem = 0, cntCurItem = cur_cof_items.size(); idxCurItem < cntCurItem; idxCurItem++)
 	{
-		LLViewerInventoryItem* pItem = cur_cof_items.get(idxCurItem);
+		LLViewerInventoryItem* pItem = cur_cof_items.at(idxCurItem);
 		if (std::find_if(new_cof_items.begin(), new_cof_items.end(), RlvPredIsEqualOrLinkedItem(pItem)) == new_cof_items.end())
 		{
 			// Item doesn't exist in new_cof_items => purge (if it's a link)
@@ -1858,9 +1858,9 @@ void LLAppearanceMgr::syncCOF(const LLInventoryModel::item_array_t& items,
 	}
 
 	// Whatever remains in new_cof_items will need to have a link created
-	for (S32 idxNewItem = 0, cntNewItem = new_cof_items.count(); idxNewItem < cntNewItem; idxNewItem++)
+	for (S32 idxNewItem = 0, cntNewItem = new_cof_items.size(); idxNewItem < cntNewItem; idxNewItem++)
 	{
-		LLViewerInventoryItem* pItem = new_cof_items.get(idxNewItem);
+		LLViewerInventoryItem* pItem = new_cof_items.at(idxNewItem);
 		if (items_to_add.end() == std::find(items_to_add.begin(), items_to_add.end(), pItem))
 		{
 			items_to_add.push_back(pItem);
@@ -1943,7 +1943,7 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 //	LL_INFOS("Avatar") << self_av_string() << "starting, cat '" << (pcat ? pcat->getName() : "[UNKNOWN]") << "'" << LL_ENDL;
 // [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Added: RLVa-1.2.0b
 	// RELEASE-RLVa: [SL-2.0.0] If pcat ever gets used for anything further down the beta we'll know about it
-	llinfos << "starting" << llendl;
+	LL_INFOS() << "starting" << LL_ENDL;
 // [/RLVa:KB]
 
 	const LLUUID cof = getCOF();
@@ -2040,9 +2040,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		//if replacing - make sure bridge stays.
 		if (!append && FSLSLBridge::instance().getBridge())
 		{
-			llinfos << "reinserting bridge at outfit replace" << llendl;
+			LL_INFOS() << "reinserting bridge at outfit replace" << LL_ENDL;
 			obj_items.insert(obj_items.end(), FSLSLBridge::instance().getBridge());
-			llinfos << "reinserted bridge at outfit replace" << llendl;
+			LL_INFOS() << "reinserted bridge at outfit replace" << LL_ENDL;
 		}
 	}
 //-TT
@@ -2218,9 +2218,9 @@ void LLAppearanceMgr::updateAgentWearables(LLWearableHoldingPattern* holder, boo
 			if (pWearable)
 				RlvBehaviourNotifyHandler::onTakeOff(pWearable->getType(), true);
 		}
-		for (S32 idxItem = 0, cntItem = itemsNew.count(); idxItem < cntItem; idxItem++)
+		for (S32 idxItem = 0, cntItem = itemsNew.size(); idxItem < cntItem; idxItem++)
 		{
-			RlvBehaviourNotifyHandler::onWear(itemsNew.get(idxItem)->getWearableType(), true);
+			RlvBehaviourNotifyHandler::onWear(itemsNew.at(idxItem)->getWearableType(), true);
 		}
 	}
 // [/RLVa:KB]
@@ -2419,7 +2419,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 		}
 
 		// Don't remove attachments until avatar is fully loaded (should reduce random attaching/detaching/reattaching at log-on)
-		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << obj_items.count() << " attachments" << LL_ENDL;
+		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << obj_items.size() << " attachments" << LL_ENDL;
 		LLAgentWearables::userUpdateAttachments(obj_items, !gAgentAvatarp->isFullyLoaded());
 	}
 // [/SL:KB]
@@ -3114,7 +3114,7 @@ void LLAppearanceMgr::updateIsDirty()
 		// <FS:TS> FIRE-3018: Ignore the bridge when checking for dirty.
 		for (U32 i = 0; i < cof_items.size(); ++i)
 		{
-			LLViewerInventoryItem *item = cof_items.get(i);
+			LLViewerInventoryItem *item = cof_items.at(i);
 
 			if (item->getName() == FSLSLBridge::instance().currentFullName())
 			{

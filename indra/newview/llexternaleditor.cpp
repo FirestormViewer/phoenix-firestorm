@@ -47,7 +47,7 @@ LLExternalEditor::EErrorCode LLExternalEditor::setCommand(const std::string& env
 		LL_WARNS() << "Editor command is empty or not set" << LL_ENDL;
 // <FS:CR> FIRE-10320 If no editor is set, fallback on the system open handler
 		//return EC_NOT_SPECIFIED;
-		llwarns << "Falling back on generic open handler" << llendl;
+		LL_WARNS() << "Falling back on generic open handler" << LL_ENDL;
 #if LL_WINDOWS
 		std::string comspec(getenv("COMSPEC"));
 		comspec.append(" /C START \"%s\"");
@@ -60,7 +60,7 @@ LLExternalEditor::EErrorCode LLExternalEditor::setCommand(const std::string& env
 #endif
 		if (cmd.empty())
 		{
-			llwarns << "Failed to find generic open handler: " << cmd << llendl;
+			LL_WARNS() << "Failed to find generic open handler: " << cmd << LL_ENDL;
 			return EC_NOT_SPECIFIED;
 		}
 // </FS:CR>

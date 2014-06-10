@@ -8831,7 +8831,7 @@ BOOL LLVOAvatar::isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex te, U
 
 	if( !pImage )
 	{
-		llwarns << "getImage( " << (S32)te << ", " << index << " ) returned invalid ptr" << llendl;
+		LL_WARNS() << "getImage( " << (S32)te << ", " << index << " ) returned invalid ptr" << LL_ENDL;
 		return FALSE;
 	}
 	// </FS:ND>

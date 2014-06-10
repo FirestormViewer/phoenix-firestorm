@@ -120,7 +120,7 @@ private:
 	
 };
 
-typedef boost::shared_ptr< LLPluginSharedMemory > LLPluginSharedMemoryPtr;
+//typedef boost::shared_ptr< LLPluginSharedMemory > LLPluginSharedMemoryPtr;
 
 
 #endif // LL_LLPLUGINSHAREDMEMORY_H

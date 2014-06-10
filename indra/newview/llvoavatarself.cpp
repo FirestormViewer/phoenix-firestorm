@@ -3299,7 +3299,7 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 	
 	
 	// <ClientTag> hack -- Zwagoth
-	llinfos << "Setting clientTag" << llendl;
+	LL_INFOS() << "Setting clientTag" << LL_ENDL;
 	LLTextureEntry* entry = getTE(0);
 	//You edit this to change the tag in your client. Yes.
 	const char* tag_client = "Firestorm";
@@ -3313,7 +3313,7 @@ bool LLVOAvatarSelf::sendAppearanceMessage(LLMessageSystem *mesgsys) const
 
     // Need to reset these if you turn off the tag system without relogging, they persist otherwise.
 	//
-	//llinfos << "Clearing clientTag" << llendl;
+	//LL_INFOS() << "Clearing clientTag" << LL_ENDL;
 	//LLTextureEntry* entry = getTE(0);
 	//if(entry->getGlow()>0.f)
 	//{

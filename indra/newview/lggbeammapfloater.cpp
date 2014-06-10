@@ -154,7 +154,7 @@ BOOL lggBeamMapFloater::handleMouseDown(S32 x,S32 y,MASK mask)
 		a.c= 	getChild<LLColorSwatchCtrl>("beam_color_swatch")->get();
 		dots.push_back(a);
 	
-		llinfos << "we got clicked at (" << x << ", " << y << " and color was " << a.c << llendl;
+		LL_INFOS() << "we got clicked at (" << x << ", " << y << " and color was " << a.c << LL_ENDL;
 	}
 	
 	return LLFloater::handleMouseDown(x,y,mask);

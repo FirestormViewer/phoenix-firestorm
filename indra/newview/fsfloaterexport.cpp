@@ -32,7 +32,7 @@
 
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
-#include "llagentconstants.h"
+//#include "llagentconstants.h"
 #include "llagentdata.h"
 #include "llavatarnamecache.h"
 #include "llbufferstream.h"
@@ -1103,7 +1103,7 @@ void FSFloaterObjectExport::onClickExport()
 	LLFilePicker& file_picker = LLFilePicker::instance();
 	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(mObjectName + ".oxp")))
 	{
-		llinfos << "User closed the filepicker, aborting export!" << llendl;
+		LL_INFOS() << "User closed the filepicker, aborting export!" << LL_ENDL;
 		return;
 	}
 	mFilename = file_picker.getFirstFile();

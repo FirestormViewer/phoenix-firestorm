@@ -67,7 +67,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 {
 	// by default we go to agni.
 	mType = INVALID;
-	LL_DEBUGS2("AppInit", "SLURL") << "SLURL: " << slurl << LL_ENDL;
+	LL_DEBUGS("AppInit", "SLURL") << "SLURL: " << slurl << LL_ENDL;
 	if(slurl == SIM_LOCATION_HOME)
 	{
 		mType = HOME_LOCATION;
@@ -205,7 +205,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				if(mGrid.empty() && LLStartUp::getStartupState() == STATE_STARTED)
 				{
 					// we couldn't find the grid in the grid manager, so bail
-					LL_WARNS2("AppInit", "SLURL") << "unable to find grid" << LL_ENDL;
+					LL_WARNS() << "unable to find grid" << LL_ENDL;
 					return;
 				}
 				// set the type as appropriate.

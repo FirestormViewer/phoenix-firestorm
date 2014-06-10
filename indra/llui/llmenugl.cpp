@@ -4078,7 +4078,7 @@ void LLContextMenu::hide()
 		if( !mHoverItemHandle.isDead() )
 			mHoverItem->setHighlight( FALSE );
 		else
-			llwarns << "Hoveritem is already dead" << llendl;
+			LL_WARNS() << "Hoveritem is already dead" << LL_ENDL;
 		// </FS:ND>
 
 	}
@@ -4114,7 +4114,7 @@ BOOL LLContextMenu::handleHover( S32 x, S32 y, MASK mask )
 				if( !mHoverItemHandle.isDead() )
 					mHoverItem->setHighlight( FALSE );
 				else
-					llwarns << "Hoveritem is already dead" << llendl;
+					LL_WARNS() << "Hoveritem is already dead" << LL_ENDL;
 
 				// </FS:ND>
 			}
@@ -4141,7 +4141,7 @@ BOOL LLContextMenu::handleHover( S32 x, S32 y, MASK mask )
 			if( !mHoverItemHandle.isDead() )
 				mHoverItem->setHighlight(FALSE);
 			else
-				llwarns << "Hoveritem is already dead" << llendl;
+				LL_WARNS() << "Hoveritem is already dead" << LL_ENDL;
 
 			mHoverItemHandle = LLHandle< LLView >();
 

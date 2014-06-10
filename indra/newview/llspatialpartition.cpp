@@ -3899,13 +3899,13 @@ public:
 			else
 			{
 				i = branch->getDataBegin();
-				llwarns << "Warning, resetting data iterator to branch->getDataBegin due to tree change." << llendl;
+				LL_WARNS() << "Warning, resetting data iterator to branch->getDataBegin due to tree change." << LL_ENDL;
 			}
 
 			// FS:ND Can this really happen? I seriously hope not.
 			if( nodeObserver->getNodeIsDead() )
 			{
-				llwarns << "Warning, node died. Exiting iteration" << llendl;
+				LL_WARNS() << "Warning, node died. Exiting iteration" << LL_ENDL;
 				break;
 			}
 
@@ -3968,13 +3968,13 @@ public:
 			else
 			{
 				++i;
-			 	llwarns << "Warning, child nodes changed during tree iteration." << llendl;
+			 	LL_WARNS() << "Warning, child nodes changed during tree iteration." << LL_ENDL;
 			}
 
 			// FS:ND Can this really happen? I seriously hope not.
 			if( nodeObserver->getNodeIsDead() )
 			{
-				llwarns << "Warning, node died. Exiting iteration" << llendl;
+				LL_WARNS() << "Warning, node died. Exiting iteration" << LL_ENDL;
 				break;
 			}
 

@@ -55,6 +55,7 @@ class LLScrollContainer : public LLUICtrl
 public:
 	// Note: vertical comes before horizontal because vertical
 	// scrollbars have priority for mouse and keyboard events.
+	enum SCROLL_ORIENTATION { VERTICAL, HORIZONTAL, SCROLLBAR_COUNT }; // <FS:Ansariel> Scrollbar accessor
 
 	struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
 	{

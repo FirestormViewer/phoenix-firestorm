@@ -821,7 +821,7 @@ void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::st
 				if (xml_paths.empty())
 				{
 					// We didn't even find one single XUI file
-					llerrs << "No fonts.xml found: " << llendl;
+					LL_ERRS() << "No fonts.xml found: " << LL_ENDL;
 				}
 
 				for (string_vec_t::const_iterator path_it = xml_paths.begin();
@@ -830,7 +830,7 @@ void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::st
 				{
 					if (!sFontRegistry->parseFontInfo(*path_it))
 					{
-						llwarns << "Bad font info file: " << *path_it << llendl;
+						LL_WARNS() << "Bad font info file: " << *path_it << LL_ENDL;
 					}
 				}
 			}

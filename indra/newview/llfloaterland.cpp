@@ -1139,7 +1139,7 @@ void LLPanelLandGeneral::setErrorStatus(U32 status, const std::string& reason)
 {
 	mEditUUID->setText(getString("error_resolving_uuid"));
 	mLastParcelLocalID = 0;
-	llwarns << "Can't handle remote parcel request."<< " Http Status: "<< status << ". Reason : "<< reason<<llendl;
+	LL_WARNS() << "Can't handle remote parcel request."<< " Http Status: "<< status << ". Reason : "<< reason<<LL_ENDL;
 }
 // </Ansariel>
 

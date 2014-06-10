@@ -611,7 +611,7 @@ public:
 		ND_OCTREE_LOG << "addChild octant " << (U32)child->getOctant() << " mChildCount " << mChildCount << ND_OCTREE_LOG_END;
 
 		if( mChildCount >= 8 )
-			llerrs << "Octree overrun" << llendl;
+			LL_ERRS() << "Octree overrun" << LL_ENDL;
 
 		mChildMap[child->getOctant()] = mChildCount;
 

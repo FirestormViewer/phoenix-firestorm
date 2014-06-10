@@ -1402,7 +1402,7 @@ void LLPanelLogin::gridListChanged(bool success)
 void LLPanelLogin::onModeChange(const LLSD& original_value, const LLSD& new_value)
 {
 	// <FS:AO> make sure toolbar settings are reset on mode change
-	llinfos << "Clearing toolbar settings." << llendl;
+	LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
 	gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
 	
 	if (original_value.asString() != new_value.asString())

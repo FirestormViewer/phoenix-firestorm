@@ -94,6 +94,6 @@ std::string FSMoneyTracker::appendTime()
 
 void FSMoneyTracker::clear()
 {
-	llinfos << "Cleared." << llendl;
+	LL_INFOS() << "Cleared." << LL_ENDL;
 	mTransactionHistory->clear();
 }

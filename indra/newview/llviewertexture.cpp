@@ -556,20 +556,20 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 		if (sEvaluationTimer.getElapsedTimeF32() > discard_delta_time)
 		{
 			sDesiredDiscardBias += discard_bias_delta;
-			llinfos << "new bias " << sDesiredDiscardBias
+			LL_INFOS() << "new bias " << sDesiredDiscardBias
 					<< " sBoundTextureMemoryInBytes " << sBoundTextureMemoryInBytes 
 					<< " sTotalTextureMemoryInBytes " << sTotalTextureMemoryInBytes
 					<< " sMaxBoundTextureMemInMegaBytes " << sMaxBoundTextureMemInMegaBytes
 					<< " sMaxTotalTextureMemInMegaBytes " << sMaxTotalTextureMemInMegaBytes
-					<< llendl;
+					<< LL_ENDL;
 			sEvaluationTimer.reset();
 		}
 	}
 	else if(sEvaluationTimer.getElapsedTimeF32() > discard_delta_time && isMemoryForTextureLow())
 	{
 		sDesiredDiscardBias += discard_bias_delta;
-		lldebugs << "new bias " << sDesiredDiscardBias
-				<< llendl;
+		LL_DEBUGS() << "new bias " << sDesiredDiscardBias
+				<< LL_ENDL;
 
 		sEvaluationTimer.reset();
 	}
@@ -1579,7 +1579,7 @@ F32 LLViewerFetchedTexture::calcDecodePriority()
 		// <FS:ND> NaN has some very special comparison characterisctics. Those would make comparing by decode-prio wrong and destroy strict weak ordering of stl containers.
 		if( llisnan(mDecodePriority ) )
 		{
-			llwarns << "Detected NaN for decode priority" << llendl;
+			LL_WARNS() << "Detected NaN for decode priority" << LL_ENDL;
 			mDecodePriority = 0; // What to put here? Something low? high? zero?
 		}
 		// </FS:NS>
@@ -1726,7 +1726,7 @@ F32 LLViewerFetchedTexture::calcDecodePriority()
 	// <FS:ND> NaN has some very special comparison characterisctics. Those would make comparing by decode-prio wrong and destroy strict weak ordering of stl containers.
 	if( llisnan(priority) )
 	{
-		llwarns << "Detected NaN for decode priority" << llendl;
+		LL_WARNS() << "Detected NaN for decode priority" << LL_ENDL;
 		priority = 0; // What to put here? Something low? high? zero?
 	}
 	// </FS:ND>
@@ -1753,7 +1753,7 @@ void LLViewerFetchedTexture::setDecodePriority(F32 priority)
 	// <FS:ND> NaN has some very special comparison characterisctics. Those would make comparing by decode-prio wrong and destroy strict weak ordering of stl containers.
 	if( llisnan(priority) )
 	{
-		llwarns << "Detected NaN for decode priority" << llendl;
+		LL_WARNS() << "Detected NaN for decode priority" << LL_ENDL;
 		priority = 0; // What to put here? Something low? high? zero?
 	}
 	// </FS:ND>
@@ -1952,9 +1952,9 @@ bool LLViewerFetchedTexture::updateFetch()
 				if(mFullWidth > MAX_IMAGE_SIZE || mFullHeight > MAX_IMAGE_SIZE)
 				{ 
 					//discard all oversized textures.
-					llinfos << "Discarding oversized texture, width= "
+					LL_INFOS() << "Discarding oversized texture, width= "
 						<< mFullWidth << ", height= "
-						<< mFullHeight << llendl;
+						<< mFullHeight << LL_ENDL;
 					destroyRawImage();
 					LL_WARNS() << "oversize, setting as missing" << LL_ENDL;
 					setIsMissingAsset();

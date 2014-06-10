@@ -161,7 +161,7 @@ BOOL LLFloaterScriptQueue::start()
 	LLNotificationsUtil::add("ConfirmScriptModify", LLSD(), LLSD(), boost::bind(&LLFloaterScriptQueue::onScriptModifyConfirmation, this, _1, _2));
 	return true;
 	/*
-	//llinfos << "LLFloaterCompileQueue::start()" << llendl;
+	//LL_INFOS() << "LLFloaterCompileQueue::start()" << LL_ENDL;
 	std::string buffer;
 
 	LLStringUtil::format_map_t args;
@@ -447,11 +447,6 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 	delete data;
 }
 
-	// <FS:CR> Remove LSO Compiler
-	llwarns << "Legacy LSO compile and upload is no longer supported" << llendl;
-#if 0
-#endif // 0 // <FS:CR>
-
 ///----------------------------------------------------------------------------
 /// Class LLFloaterResetQueue
 ///----------------------------------------------------------------------------
@@ -650,7 +645,7 @@ void LLFloaterDeleteQueue::handleInventory(LLViewerObject* viewer_obj,
 {
 	// find all of the lsl, leaving off duplicates. We'll remove
 	// all matching asset uuids on compilation success.
-	LLDynamicArray<const char*> names;
+	std::vector<const char*> names;
 	
 	LLInventoryObject::object_list_t::const_iterator it = inv->begin();
 	LLInventoryObject::object_list_t::const_iterator end = inv->end();

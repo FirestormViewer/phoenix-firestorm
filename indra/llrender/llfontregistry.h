@@ -73,6 +73,7 @@ public:
 
 	// Load standard font info from XML file(s).
 	bool parseFontInfo(const std::string& xml_filename); 
+	//bool initFromXML(LLXMLNodePtr node); //<FS:KC> Font selector
 
 	// Clear cached glyphs for all fonts.
 	void reset();

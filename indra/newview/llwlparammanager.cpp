@@ -495,7 +495,7 @@ bool LLWLParamManager::applySkyParams(const LLSD& params, bool interpolate /*= f
 {
 	if (params.size() == 0)
 	{
-		llwarns << "Undefined sky params" << llendl;
+		LL_WARNS() << "Undefined sky params" << LL_ENDL;
 		return false;
 	}
 

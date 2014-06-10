@@ -756,7 +756,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 //				//{
 				else
 				{
-					llwarns << "FIXME! no FetchInventory2 capability" << llendl;
+					LL_WARNS() << "FIXME! no FetchInventory2 capability" << LL_ENDL;
 // </FS:AW>
 				//	LLMessageSystem* msg = gMessageSystem;
 				//	msg->newMessage("FetchInventory");

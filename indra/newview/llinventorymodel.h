@@ -136,7 +136,7 @@ private:
 // <FS:TT> ReplaceWornItemsOnly
 	item_array_t mItemArray;
 	item_array_t mObjArray;
-	LLDynamicArray<std::string> mAttPoints;
+	std::vector<std::string> mAttPoints;
 // </FS:TT>
 	
 	//--------------------------------------------------------------------

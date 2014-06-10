@@ -1315,11 +1315,11 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	{
 		if (tabcontainer)
 		{
-			llinfos << "Found tab container" << llendl;
+			LL_INFOS() << "Found tab container" << LL_ENDL;
 			LLPanel* panel_snapshot_profile = tabcontainer->getPanelByName("panel_snapshot_profile");
 			if (panel_snapshot_profile)
 			{
-				llinfos << "Found panel tab" << llendl;
+				LL_INFOS() << "Found panel tab" << LL_ENDL;
 				tabcontainer->removeTabPanel(panel_snapshot_profile);
 			}
 		}
@@ -1630,7 +1630,7 @@ void LLFloaterSnapshot::onSelectDestination()
 	LLPanelSnapshot* panel=(LLPanelSnapshot*) getChild<LLTabContainer>("panel_tab_container")->getCurrentPanel();
 	if(!panel)
 	{
-		llwarns << "no active snapshot destination found" << llendl;
+		LL_WARNS() << "no active snapshot destination found" << LL_ENDL;
 		return;
 	}
 

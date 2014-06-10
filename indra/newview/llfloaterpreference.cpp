@@ -1403,7 +1403,7 @@ bool callback_clear_settings(const LLSD& notification, const LLSD& response)
 		// Create a filesystem marker instructing a full settings wipe
 		std::string clear_file_name;
 		clear_file_name = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR");
-		llinfos << "Creating clear settings marker file " << clear_file_name << llendl;
+		LL_INFOS() << "Creating clear settings marker file " << clear_file_name << LL_ENDL;
 		
 		LLAPRFile clear_file ;
 		clear_file.open(clear_file_name, LL_APR_W);
@@ -1566,8 +1566,8 @@ void LLFloaterPreference::refreshEnabledState()
 {
 	F32 mem_multiplier = gSavedSettings.getF32("RenderTextureMemoryMultiple");
 	
-	S32 min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
-	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
+	S32Megabytes min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
+	S32Megabytes max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
 
@@ -3371,7 +3371,7 @@ void LLPanelPreferenceSkins::callbackRestart(const LLSD& notification, const LLS
 	}
 	if (0 == option) // Restart
 	{
-		llinfos << "User requested quit" << llendl;
+		LL_INFOS() << "User requested quit" << LL_ENDL;
 		LLAppViewer::instance()->requestQuit();
 	}
 }
@@ -3428,7 +3428,7 @@ void LLPanelPreferenceSkins::onSkinChanged()
 
 	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
 	{
-		llinfos << "Clearing toolbar settings." << llendl;
+		LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
 		gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
 	}
     //</FS:AO>
@@ -3509,12 +3509,12 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 // added a safeguard so the destination file is only created when the source file exists -Zi
 S32 copy_prefs_file(const std::string& from, const std::string& to)
 {
-	llwarns << "copying " << from << " to " << to << llendl;
+	LL_WARNS() << "copying " << from << " to " << to << LL_ENDL;
 	S32 rv = 0;
 	LLFILE* in = LLFile::fopen(from, "rb");	/*Flawfinder: ignore*/
 	if(!in)
 	{
-		llwarns << "couldn't open source file " << from << " - copy aborted." << llendl;
+		LL_WARNS() << "couldn't open source file " << from << " - copy aborted." << LL_ENDL;
 		return -1;
 	}
 
@@ -3522,7 +3522,7 @@ S32 copy_prefs_file(const std::string& from, const std::string& to)
 	if(!out)
 	{
 		fclose(in);
-		llwarns << "couldn't open destination file " << to << " - copy aborted." << llendl;
+		LL_WARNS() << "couldn't open destination file " << to << " - copy aborted." << LL_ENDL;
 		return -1;
 	}
 
@@ -3631,7 +3631,7 @@ void FSPanelPreferenceBackup::onClickBackupSettings()
 			// only backup settings that are not default, are persistent an are marked as "safe" to back up
 			if (!control->isDefault() && control->isPersisted() && control->isBackupable())
 			{
-				llwarns << control->getName() << llendl;
+				LL_WARNS() << control->getName() << LL_ENDL;
 				// copy the control to our backup group
 				(*group).declareControl(
 					control->getName(),
@@ -4242,7 +4242,7 @@ void LLPanelPreferenceOpensim::refreshGridList(bool success)
 
 	if (!mGridListControl)
 	{
-		llwarns << "No GridListControl - bug or out of memory" << llendl;
+		LL_WARNS() << "No GridListControl - bug or out of memory" << LL_ENDL;
 		return;
 	}
 

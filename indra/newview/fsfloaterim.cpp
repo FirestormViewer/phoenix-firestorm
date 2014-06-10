@@ -42,6 +42,7 @@
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloaterreg.h"
 #include "fsfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
+#include "llhttpclient.h"
 #include "llinventoryfunctions.h"
 #include "lllayoutstack.h"
 #include "llchatentry.h"
@@ -1015,7 +1016,7 @@ FSFloaterIM* FSFloaterIM::show(const LLUUID& session_id)
 							session_id);
 			if (chiclet == NULL)
 			{
-				llerror("Dock chiclet for FSFloaterIM doesn't exists", 0);
+				LL_ERRS() << "Dock chiclet for FSFloaterIM doesn't exists" << LL_ENDL;
 			}
 			else
 			{
@@ -1584,7 +1585,7 @@ BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
 										items,
 										LLInventoryModel::EXCLUDE_TRASH,
 										buddies);
-		S32 count = items.count();
+		S32 count = items.size();
 		if(count == 0)
 		{
 			rv = FALSE;
@@ -1595,7 +1596,7 @@ BOOL FSFloaterIM::dropCategory(LLInventoryCategory* category, BOOL drop)
 			ids.reserve(count);
 			for(S32 i = 0; i < count; ++i)
 			{
-				ids.push_back(items.get(i)->getCreatorUUID());
+				ids.push_back(items.at(i)->getCreatorUUID());
 			}
 			inviteToSession(ids);
 		}

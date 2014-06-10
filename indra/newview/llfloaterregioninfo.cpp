@@ -1000,7 +1000,7 @@ void LLPanelRegionOpenSettingsInfo::onClickOrs(void* userdata)
 	LLPanelRegionOpenSettingsInfo* self;
 	self = (LLPanelRegionOpenSettingsInfo*)userdata;
 	
-	llinfos << "LLPanelRegionOpenSettingsInfo::onClickOrs()" << llendl;
+	LL_INFOS() << "LLPanelRegionOpenSettingsInfo::onClickOrs()" << LL_ENDL;
 
 	LLSD body;
 	std::string url = gAgent.getRegion()->getCapability("DispatchOpenRegionSettings");
@@ -1028,7 +1028,7 @@ void LLPanelRegionOpenSettingsInfo::onClickOrs(void* userdata)
 		body["enforce_max_build"] = (LLSD::Boolean)self->childGetValue("enforce_max_build");
 
 		LLHTTPClient::post(url, body, new LLHTTPClient::Responder());
-		//llinfos << "data: " << LLSDXMLStreamer(body) << llendl;
+		//LL_INFOS() << "data: " << LLSDXMLStreamer(body) << LL_ENDL;
 	}
 }
 // </FS:CR> Aurora Sim - Region Settings Console

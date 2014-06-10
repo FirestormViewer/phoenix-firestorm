@@ -410,12 +410,12 @@ BOOL LLButton::postBuild()
 			}
 			else
 			{
-				llwarns << "Could not find checkbox control for button " << getName() << llendl;
+				LL_WARNS() << "Could not find checkbox control for button " << getName() << LL_ENDL;
 			}
 		}
 		else
 		{
-			llwarns << "Could not create checkbox panel for button " << getName() << llendl;
+			LL_WARNS() << "Could not create checkbox panel for button " << getName() << LL_ENDL;
 		}
 	}
 	// <FS:Zi>

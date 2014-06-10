@@ -2606,7 +2606,7 @@ struct LLPanelFacePasteTexFunctor : public LLSelectedTEFunctor
 			}
 			else
 			{
-				llwarns << "LLPanelFace::onClickPaste : LLPanelFacePasteTexFunctor: Failed to read clipboard for face: " << te << llendl;
+				LL_WARNS() << "LLPanelFace::onClickPaste : LLPanelFacePasteTexFunctor: Failed to read clipboard for face: " << te << LL_ENDL;
 			}
 		}
 		return true;

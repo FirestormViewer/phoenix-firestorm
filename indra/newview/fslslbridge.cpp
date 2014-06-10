@@ -28,7 +28,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
-#include "imageids.h"
+//#include "imageids.h"
 #include "llxmlnode.h"
 #include "llbufferstream.h"
 #include "llsdserialize.h"
@@ -1060,12 +1060,12 @@ LLUUID FSLSLBridge::findFSCategory()
 		gInventory.getDirectDescendentsOf(fsCatID, cats, items);
 		if (cats)
 		{
-			S32 count = cats->count();
+			S32 count = cats->size();
 			for (S32 i = 0; i < count; ++i)
 			{
-				if (cats->get(i)->getName() == FS_BRIDGE_FOLDER)
+				if (cats->at(i)->getName() == FS_BRIDGE_FOLDER)
 				{
-					bridgeCatID = cats->get(i)->getUUID();
+					bridgeCatID = cats->at(i)->getUUID();
 				}
 			}
 		}
@@ -1102,12 +1102,12 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 		gInventory.getDirectDescendentsOf(LibRootID, cats, items);
 		if (cats)
 		{
-			S32 count = cats->count();
+			S32 count = cats->size();
 			for (S32 i = 0; i < count; ++i)
 			{
-				if (cats->get(i)->getName() == "Objects")
+				if (cats->at(i)->getName() == "Objects")
 				{
-					LLUUID LibObjectsCatID = cats->get(i)->getUUID();
+					LLUUID LibObjectsCatID = cats->at(i)->getUUID();
 					if (LibObjectsCatID.notNull())
 					{
 						LLInventoryModel::item_array_t* objects_items;
@@ -1115,12 +1115,12 @@ LLUUID FSLSLBridge::findFSBridgeContainerCategory()
 						gInventory.getDirectDescendentsOf(LibObjectsCatID, objects_cats, objects_items);
 						if (objects_cats)
 						{
-							S32 objects_count = objects_cats->count();
+							S32 objects_count = objects_cats->size();
 							for (S32 j = 0; j < objects_count; ++j)
 							{
-								if (objects_cats->get(j)->getName() == FS_BRIDGE_CONTAINER_FOLDER)
+								if (objects_cats->at(j)->getName() == FS_BRIDGE_CONTAINER_FOLDER)
 								{
-									mBridgeContainerFolderID = objects_cats->get(j)->getUUID();
+									mBridgeContainerFolderID = objects_cats->at(j)->getUUID();
 									LL_INFOS("FSLSLBridge") << "FSBridge container category found in library. UUID: " << mBridgeContainerFolderID << LL_ENDL;
 									gInventory.fetchDescendentsOf(mBridgeContainerFolderID);
 									return mBridgeContainerFolderID;
@@ -1148,9 +1148,9 @@ LLViewerInventoryItem* FSLSLBridge::findInvObject(const std::string& obj_name, c
 
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
+	for (S32 iIndex = 0; iIndex < items.size(); iIndex++)
 	{
-		const LLViewerInventoryItem* itemp = items.get(iIndex);
+		const LLViewerInventoryItem* itemp = items.at(iIndex);
 		if (!itemp->getIsLinkType() && (itemp->getType() == LLAssetType::AT_OBJECT))
 		{
 			itemID = itemp->getUUID();
@@ -1185,9 +1185,9 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 	NameCollectFunctor namefunctor(nameToCleanUp);
 	gInventory.collectDescendentsIf(catID, cats, items, FALSE, namefunctor);
 
-	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
+	for (S32 iIndex = 0; iIndex < items.size(); iIndex++)
 	{
-		const LLViewerInventoryItem* itemp = items.get(iIndex);
+		const LLViewerInventoryItem* itemp = items.at(iIndex);
 		if (!itemp->getIsLinkType() && (itemp->getUUID() != mpBridge->getUUID()))
 		{
 			gInventory.purgeObject(itemp->getUUID());
@@ -1261,9 +1261,9 @@ void FSLSLBridge::detachOtherBridges()
 	//detach everything except current valid bridge - if any
 	gInventory.collectDescendents(catID,cats,items,FALSE);
 
-	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
+	for (S32 iIndex = 0; iIndex < items.size(); iIndex++)
 	{
-		const LLViewerInventoryItem* itemp = items.get(iIndex);
+		const LLViewerInventoryItem* itemp = items.at(iIndex);
 		if (get_is_item_worn(itemp->getUUID()) &&
 			((fsBridge == NULL) || (itemp->getUUID() != fsBridge->getUUID())))
 		{

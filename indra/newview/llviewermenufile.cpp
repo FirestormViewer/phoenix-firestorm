@@ -466,7 +466,7 @@ static void show_floater_callback(const std::string& floater, const std::string&
 			std::string error_msg;
 			if (check_for_invalid_wav_formats(filename,error_msg))
 			{
-				llinfos << error_msg << ": " << filename << llendl;
+				LL_INFOS() << error_msg << ": " << filename << LL_ENDL;
 				LLSD args;
 				args["FILE"] = filename;
 				LLNotificationsUtil::add( error_msg, args );

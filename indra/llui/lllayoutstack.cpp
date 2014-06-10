@@ -254,7 +254,7 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 		LLControlGroup* controlGroup=LLUI::sSettingGroups["config"];
 		if(!controlGroup->controlExists(mSizeControlName))
 		{
-			llwarns << "declaring control " << mSizeControlName << llendl;
+			LL_WARNS() << "declaring control " << mSizeControlName << LL_ENDL;
 			controlGroup->declareLLSD(
 				mSizeControlName,
 				LLSD(),

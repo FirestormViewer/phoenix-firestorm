@@ -366,8 +366,8 @@ void LLPluginProcessChild::receiveMessageRaw(const std::string &message)
 					// This is a new region
 
 					// <FS:ND> use smartptr
-					// LLPluginSharedMemory *region = new LLPluginSharedMemory;
-					LLPluginSharedMemoryPtr region( new LLPluginSharedMemory );
+					LLPluginSharedMemory *region = new LLPluginSharedMemory;
+					//LLPluginSharedMemory region( new LLPluginSharedMemory );
 					// </FS:ND>
 
 					if(region->attach(name, size))

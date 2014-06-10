@@ -675,7 +675,7 @@ void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_n
 	// invalid selection (broken XML?)
 	else
 	{
-		llwarns << "Invalid filter selection: " << filter_type_name << llendl;
+		LL_WARNS() << "Invalid filter selection: " << filter_type_name << LL_ENDL;
 		return;
 	}
 

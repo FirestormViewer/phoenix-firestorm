@@ -1003,8 +1003,8 @@ std::string LLPluginProcessParent::addSharedMemory(size_t size)
 	std::string name;
 	
 	// <FS:ND> Use smartptr
-	// LLPluginSharedMemory *region = new LLPluginSharedMemory;
-	LLPluginSharedMemoryPtr region( new LLPluginSharedMemory );
+	 LLPluginSharedMemory *region = new LLPluginSharedMemory;
+	//LLPluginSharedMemory region( new LLPluginSharedMemory );
 	// </FS:ND>
 
 	// This is a new region

@@ -1386,7 +1386,7 @@ void LLViewerTextureList::updateMaxResidentTexMem(S32Megabytes mem)
 	S32Megabytes vb_mem = mem;
 
 	// <FS:Ansariel> Proper texture memory calculation
-	S32 total_mem = getMaxVideoRamSetting(true, mem_multiplier, false);
+	S32Megabytes total_mem = getMaxVideoRamSetting(true, mem_multiplier, false);
 
 	if ((vb_mem / 3) > VIDEO_CARD_FRAMEBUFFER_MEM)
 	{

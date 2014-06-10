@@ -1074,7 +1074,7 @@ void LLPanelGroupGeneral::updateMembers()
 
 	if (mMemberProgress == gdatap->mMembers.end())
 	{
-		lldebugs << "   member list completed." << llendl;
+		LL_DEBUGS() << "   member list completed." << LL_ENDL;
 		mListVisibleMembers->setEnabled(TRUE);
 	}
 	else

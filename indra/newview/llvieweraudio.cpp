@@ -91,7 +91,7 @@ void LLViewerAudio::startInternetStreamWithAutoFade(std::string streamURI)
 		/// <FS:CR> FIRE-8419 - Don't return here. It can keep the user from toggling audio streams off/on.
 		/// We handle identical stream URIs with FIRE-7093 anyways.
 		//return;
-		lldebugs << "Identical URI's: " << mNextStreamURI << " and " << streamURI << llendl;
+		LL_DEBUGS() << "Identical URI's: " << mNextStreamURI << " and " << streamURI << LL_ENDL;
 		// </FS:CR>
 	}
 

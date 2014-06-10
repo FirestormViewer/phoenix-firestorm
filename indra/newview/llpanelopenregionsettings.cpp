@@ -50,18 +50,18 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 
 		if (!input || !context || !input.isMap() || !input.has("body"))
 		{
-			llinfos << "malformed OpenRegionInfo update!" << llendl;	 
+			LL_INFOS() << "malformed OpenRegionInfo update!" << LL_ENDL;	 
 			return;
 		}
 
 		std::string dump = input["body"].asString();
-		llwarns << dump << llendl;
+		LL_WARNS() << dump << LL_ENDL;
 
 		LLWorld * regionlimits = LLWorld::getInstance();
 
 		LLSD body = input["body"];
-		//llinfos << "data: " << LLSDNotationStreamer(body) << llendl;	 
-		//llinfos << "data: " << LLSDXMLStreamer(body) << llendl;
+		//LL_INFOS() << "data: " << LLSDNotationStreamer(body) << LL_ENDL;	 
+		//LL_INFOS() << "data: " << LLSDXMLStreamer(body) << LL_ENDL;
 
 		//set the default limits/settings for this simulator type, as limits from our
 		//previous region may not exist in this one

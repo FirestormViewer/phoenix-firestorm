@@ -889,7 +889,7 @@ bool LLAppViewer::init()
 	if (clear_file.isExist(clear_settings_filename))
 	{
 		mPurgeSettings = true;
-		llinfos << "Purging configuration..." << llendl;
+		LL_INFOS() << "Purging configuration..." << LL_ENDL;
 		std::string delem = gDirUtilp->getDirDelimiter();
 
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"CLEAR"));
@@ -2038,20 +2038,20 @@ bool LLAppViewer::cleanup()
 	std::string per_account_settings_file = gSavedSettings.getString("PerAccountSettingsFile");
 	if (per_account_settings_file.empty())
 	{
-		llinfos << "Not saving per-account settings; don't know the account name yet." << llendl;
+		LL_INFOS() << "Not saving per-account settings; don't know the account name yet." << LL_ENDL;
 	}
 	// Only save per account settings if the previous login succeeded, otherwise
 	// we might end up with a cleared out settings file in case a previous login
 	// failed after loading per account settings. -Zi
 	else if (!mSavePerAccountSettings)
 	{
-		llinfos << "Not saving per-account settings; last login was not successful." << llendl;
+		LL_INFOS() << "Not saving per-account settings; last login was not successful." << LL_ENDL;
 	}
 	else
 	{
 		gSavedPerAccountSettings.saveToFile(per_account_settings_file, TRUE);
-		llinfos << "First time: Saved per-account settings to " <<
-		        per_account_settings_file << llendl;
+		LL_INFOS() << "First time: Saved per-account settings to " <<
+		        per_account_settings_file << LL_ENDL;
 	}
 	gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
 	// /FIRE-4871
@@ -2059,7 +2059,7 @@ bool LLAppViewer::cleanup()
 	}
 	else
 	{
-		llinfos << "Not saving settings, to prevent settings restore failure." << llendl;
+		LL_INFOS() << "Not saving settings, to prevent settings restore failure." << LL_ENDL;
 	}
 	// </FS:Zi>
 
@@ -2268,7 +2268,7 @@ bool LLAppViewer::cleanup()
 	std::string themeSaved = gSavedSettings.getString("SkinCurrentTheme");
 	if ((skinSaved != mCurrentSkin) || (themeSaved != mCurrentSkinTheme))
 	{
-		llinfos << "Clearing skin colors." << llendflush;
+		LL_INFOS() << "Clearing skin colors." << LL_ENDL;
 		// Implementation to only purge skin colors
 		LLUIColorTable::instance().saveUserSettingsPaletteOnly();
 
@@ -2299,14 +2299,14 @@ bool LLAppViewer::cleanup()
 	else
 	{
 		gSavedPerAccountSettings.saveToFile(per_account_settings_file, TRUE);
-		LL_INFO() << "Second time: Saved per-account settings to " <<
+		LL_INFOS() << "Second time: Saved per-account settings to " <<
 		        per_account_settings_file << LL_ENDL;
 	}
 	// <FS:Zi> Backup Settings
 	}
 	else
 	{
-		llinfos << "Not saving settings, to prevent settings restore failure." << llendl;
+		LL_INFOS() << "Not saving settings, to prevent settings restore failure." << LL_ENDL;
 	}
 	// </FS:Zi>
 
@@ -2848,7 +2848,7 @@ bool LLAppViewer::initConfiguration()
 	LLControlGroup* settings_group = LLControlGroup::getInstance(fsdata_global);
 	if(settings_group && settings_group->loadFromFile(fsdata_defaults, set_defaults))
 	{
-		llinfos << "Loaded settings file " << fsdata_defaults << llendl;
+		LL_INFOS() << "Loaded settings file " << fsdata_defaults << LL_ENDL;
 	}
 	//</FS:Techwolf Lupindo>
 
@@ -5005,7 +5005,7 @@ bool LLAppViewer::initCache()
 		if (new_cache_location != cache_location)
 		{
 			// AO: Don't automatically purge old cache location, has unwanted side effects with shared caches, upgrades
-			//llwarns << new_cache_location <<  " is not the same as " << cache_location << ". PURGING." << llendl;
+			//LL_WARNS() << new_cache_location <<  " is not the same as " << cache_location << ". PURGING." << LL_ENDL;
 			//gDirUtilp->setCacheDir(gSavedSettings.getString("CacheLocation"));
 			//purgeCache(); // purge old cache
 			gSavedSettings.setString("CacheLocation", new_cache_location);
@@ -5507,7 +5507,7 @@ void LLAppViewer::idle()
 	if (!mQuitRequested && qas_afk > 0.f && gAgent.getAFK() && gAwayTimer.getElapsedTimeF32() > qas_afk)
 	{
 		// go ahead and just quit gracefully
-		llinfos << "Logout, QuitAfterSecondsAFK expired." << llendl;
+		LL_INFOS() << "Logout, QuitAfterSecondsAFK expired." << LL_ENDL;
 		LLAppViewer::instance()->requestQuit();
 	}
 	// </FS:AO>
@@ -6504,7 +6504,7 @@ void LLAppViewer::handleLoginComplete()
 	// </FS:AO>
 	
 	// we logged in successfully, so save settings on logout
-	lLL_DEBUGS() << "Login successful, per account settings will be saved on log out." << LL_ENDL;
+	LL_DEBUGS() << "Login successful, per account settings will be saved on log out." << LL_ENDL;
 	mSavePerAccountSettings=true;
 }
 

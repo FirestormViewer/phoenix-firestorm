@@ -114,7 +114,7 @@ void LLChicletBar::sessionAdded(const LLUUID& session_id, const std::string& nam
 	}
 	else
 	{
-		llwarns << "Could not create chiclet" << llendl;
+		LL_WARNS() << "Could not create chiclet" << LL_ENDL;
 	}
 }
 

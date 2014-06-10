@@ -634,7 +634,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			
 			if(FSWSAssetBlacklist::getInstance()->isBlacklisted(fullid,LLAssetType::AT_OBJECT))
 			{
-				llinfos << "Blacklisted object blocked." << llendl; 
+				LL_INFOS() << "Blacklisted object blocked." << LL_ENDL; 
 				continue;
 			}
 

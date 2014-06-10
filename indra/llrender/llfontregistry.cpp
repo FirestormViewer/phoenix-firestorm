@@ -193,7 +193,7 @@ bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 
 	if ( root.isNull() || ! root->hasName( "fonts" ) )
 	{
-		llwarns << "Bad font info file: " << xml_filename << llendl;
+		LL_WARNS() << "Bad font info file: " << xml_filename << LL_ENDL;
 		return false;
 	}
 
@@ -202,7 +202,7 @@ bool LLFontRegistry::parseFontInfo(const std::string& xml_filename)
 	if (root->hasName("fonts"))
 	{
 		// Expect a collection of children consisting of "font" or "font_size" entries
-		bool init_succ = initFromXML(root);
+		bool init_succ = init_from_xml(this, root);
 		success = success || init_succ;
 	}
     

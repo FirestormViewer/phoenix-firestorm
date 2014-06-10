@@ -94,7 +94,7 @@ ParticleEditor::ParticleEditor(const LLSD& key)
 
 ParticleEditor::~ParticleEditor()
 {
-	lldebugs << "destroying particle editor " << mObject->getID() << llendl;
+	LL_DEBUGS() << "destroying particle editor " << mObject->getID() << LL_ENDL;
 
 	clearParticles();
 }
@@ -230,7 +230,7 @@ void ParticleEditor::clearParticles()
 	if(!mObject)
 		return;
 
-	lldebugs << "clearing particles from " << mObject->getID() << llendl;
+	LL_DEBUGS() << "clearing particles from " << mObject->getID() << LL_ENDL;
 
 	LLViewerPartSim::getInstance()->clearParticlesByOwnerID(mObject->getID());
 }
@@ -255,7 +255,7 @@ void ParticleEditor::setObject(LLViewerObject* objectp)
 	{
 		mObject=objectp;
 
-		lldebugs << "adding particles to " << mObject->getID() << llendl;
+		LL_DEBUGS() << "adding particles to " << mObject->getID() << LL_ENDL;
 
 		updateParticles();
 	}
@@ -515,7 +515,7 @@ default\n\
 		flagsString+=delimiter+"PSYS_PART_RIBBON_MASK";
 
 	LLStringUtil::replaceString(script,"[FLAGS]",flagsString);
-	lldebugs << "\n" << script << llendl;
+	LL_DEBUGS() << "\n" << script << LL_ENDL;
 
 	return script;
 }
@@ -646,7 +646,7 @@ void ParticleEditor::scriptInjectReturned(const LLSD& content)
 	LLViewerObject* object=gObjectList.findObject(mObject->getID());
 	if(!object)
 	{
-		lldebugs << "object went away!" << llendl;
+		LL_DEBUGS() << "object went away!" << LL_ENDL;
 		mMainPanel->setEnabled(TRUE);
 		return;
 	}

@@ -120,7 +120,7 @@ void LLPostCard::send(LLPointer<LLImageFormatted> image, const LLSD& postcard_da
 	// <FS:ND> Crashfix; image can end up being 0
 	if( image.isNull() )
 	{
-		llwarns << "Passed invalid image into LLPostcard::send() [0 pointer]" << llendl;
+		LL_WARNS() << "Passed invalid image into LLPostcard::send() [0 pointer]" << LL_ENDL;
 		return;
 	}
 	// </FS:ND>

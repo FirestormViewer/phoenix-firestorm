@@ -826,7 +826,7 @@ void LLPanelGroupLandMoney::processPlacesReply(LLMessageSystem* msg, void**)
 	if(found_it == sGroupIDs.end())
 	{
 // <FS:AW opensim currency support>
-		LL_INFOS() << "Group Panel Land L$ " << group_id << " no longer in existence."
+		//LL_INFOS() << "Group Panel Land L$ " << group_id << " no longer in existence."
 		LL_INFOS() << Tea::wrapCurrency("Group Panel Land L$ ") << group_id << " no longer in existence."
 // </FS:AW opensim currency support>
 				<< LL_ENDL;

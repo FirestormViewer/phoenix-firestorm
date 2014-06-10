@@ -188,7 +188,7 @@ bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventD
 	{
 		LLEventNotification *new_enp = new LLEventNotification(eventId, eventEpoch, eventDateStr, eventName);
 	
-		llinfos << "Add event " << eventName << " id " << eventId << " date " << eventDateStr << llendl;
+		LL_INFOS() << "Add event " << eventName << " id " << eventId << " date " << eventDateStr << LL_ENDL;
 		if(!new_enp->isValid())
 		{
 			delete new_enp;
@@ -204,7 +204,7 @@ bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventD
 		if (legacy_search) // The floater exists, send the results
 			legacy_search->displayEventDetails(eventId, eventEpoch, eventDateStr, eventName, eventDesc, simName, eventDuration, eventFlags, eventCover, eventGlobalPos);
 		else
-			llwarns << "Discarding EventID " << eventId << ". FSFloaterSearch does not exist!" << llendl;
+			LL_WARNS() << "Discarding EventID " << eventId << ". FSFloaterSearch does not exist!" << LL_ENDL;
 	}
 	return true;
 }

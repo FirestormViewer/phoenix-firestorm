@@ -505,7 +505,7 @@ void LLIMModel::setActiveSessionID(const LLUUID& session_id)
 	// check if such an ID really exists
 	if (!findIMSession(session_id))
 	{
-		llwarns << "Trying to set as active a non-existent session!" << llendl;
+		LL_WARNS() << "Trying to set as active a non-existent session!" << LL_ENDL;
 		return;
 	}
 
@@ -2984,7 +2984,7 @@ void LLIMMgr::addMessage(
 		//               session id, so we can leave it!
 		if (exoGroupMuteList::instance().isMuted(new_session_id))
 		{
-			llinfos << "Muting group chat from " << new_session_id.asString() << ": " << fixed_session_name << llendl;
+			LL_INFOS() << "Muting group chat from " << new_session_id.asString() << ": " << fixed_session_name << LL_ENDL;
 
 			if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
 			{
@@ -4135,7 +4135,7 @@ public:
 			{
 				if (FSMuteAllGroups || (FSMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
 				{
-					llinfos << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
+					LL_INFOS() << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
 
 					if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
 					{

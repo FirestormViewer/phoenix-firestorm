@@ -56,7 +56,7 @@ void initializeSecHandler()
 	{
 		char aError[128];
 		ERR_error_string_n( lErr, aError, sizeof( aError ) );
-		llwarns << aError << llendl;
+		LL_WARNS() << aError << LL_ENDL;
 
 		lErr = ERR_get_error();
 	}
