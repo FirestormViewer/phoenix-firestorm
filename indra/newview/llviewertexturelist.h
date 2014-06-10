@@ -186,6 +186,9 @@ public:
 	std::set<LLViewerFetchedTexture*> mDirtyTextureList;
 	
 	BOOL mForceResetTextureStats;
+
+	// <FS:Ansariel> Fast cache stats
+	static U32 sNumFastCacheReads;
     
 private:
 	typedef std::map< LLUUID, LLPointer<LLViewerFetchedTexture> > uuid_map_t;
@@ -205,9 +208,6 @@ private:
 	S32Megabytes mMaxTotalTextureMemInMegaBytes;
 	LLFrameTimer mForceDecodeTimer;
 	
-
-	// <FS:Ansariel> Fast cache stats
-	static U32 sNumFastCacheReads;
 private:
 	static S32 sNumImages;
 	static void (*sUUIDCallback)(void**, const LLUUID &);
