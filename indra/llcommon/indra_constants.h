@@ -54,14 +54,6 @@ enum ETerrainBrushType
 	E_LANDBRUSH_INVALID = 6
 };
 
-// <FS:CR> Aurora Sim
-// Extended land layer for Aurora Sim
-const	char	AURORA_LAND_LAYER_CODE			= 'M';
-const	char	AURORA_WATER_LAYER_CODE			= 'X';
-const	char	AURORA_WIND_LAYER_CODE			= '9';
-const	char	AURORA_CLOUD_LAYER_CODE			= ':';
-// </FS:CR> Aurora Sim
-
 // keys
 // Bit masks for various keyboard modifier keys.
 const MASK MASK_NONE =			0x0000;
