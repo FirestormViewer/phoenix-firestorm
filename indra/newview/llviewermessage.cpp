@@ -6019,11 +6019,9 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 		if (measurementp )
 		{
 			measurementp->sample(stat_value);
-		}
-		else
-		{
-			LL_WARNS() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
+
 			// <FS:Ansariel> Report script count changes
+			if ((ESimStatID)stat_id == LL_SIM_STAT_NUMSCRIPTSACTIVE)
 			{
 				static LLCachedControl<bool> fsReportTotalScriptCountChanges(gSavedSettings, "FSReportTotalScriptCountChanges");
 				static LLCachedControl<U32> fsReportTotalScriptCountChangesThreshold(gSavedSettings, "FSReportTotalScriptCountChangesThreshold");
@@ -6055,6 +6053,10 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 				prev_total_scripts = (S32)stat_value;
 			}
 			// </FS:Ansariel>
+		}
+		else
+		{
+			LL_WARNS() << "Unknown sim stat identifier: " << stat_id << LL_ENDL;
 		}
 	}
 
