@@ -53,8 +53,6 @@
 #include "lltextureatlas.h"
 #include "llviewershadermgr.h"
 
-#include "nd/ndobjectpool.h" // <FS:ND/> For operator new/delete
-
 static LLTrace::BlockTimerStatHandle FTM_FRUSTUM_CULL("Frustum Culling");
 static LLTrace::BlockTimerStatHandle FTM_CULL_REBOUND("Cull Rebound Partition");
 
@@ -3790,7 +3788,7 @@ template< typename T > class ndOctreeListener: public LLOctreeListener< T >
 	{ mNodeChildrenChanged = true; }
 
 public:
-	ndOctreeListener( LLSpatialGroup::OctreeNode *aNode )
+	ndOctreeListener( OctreeNode *aNode )
 		: mNode( aNode )
 		, mNodeIsDead( false )
 		, mNodeChildrenChanged( false )
@@ -3835,7 +3833,7 @@ public:
 	}
 };
 
-typedef ndOctreeListener< LLDrawable > ndDrawableOctreeListener;
+typedef ndOctreeListener< LLViewerOctreeEntry > ndDrawableOctreeListener;
 typedef LLPointer< ndDrawableOctreeListener > ndDrawableOctreeListenerPtr;
 
 // </FS:ND>
@@ -3883,7 +3881,7 @@ public:
 	virtual void visit(const OctreeNode* branch) 
 	{	
 		// <FS:ND> Make sure we catch any changes to this node while we iterate over it
-		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<LLSpatialGroup::OctreeNode*>(branch) );
+		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<OctreeNode*>(branch) );
 
 		// for (OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); ++i)
 		for (OctreeNode::const_element_iter i = branch->getDataBegin(); i != branch->getDataEnd(); )
@@ -3920,7 +3918,7 @@ public:
 		node->accept(this);
 
 		// <FS:ND> Make sure we catch any changes to this node while we iterate over it
-		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<LLSpatialGroup::OctreeNode*>(node) );
+		ndDrawableOctreeListenerPtr nodeObserver = new ndDrawableOctreeListener ( const_cast<OctreeNode*>(node) );
 
 		// for (U32 i = 0; i < node->getChildCount(); i++)
 		for (U32 i = 0; i < node->getChildCount(); )
@@ -4402,18 +4400,3 @@ void LLCullResult::assertDrawMapsEmpty()
 		}
 	}
 }
-
-// <FS:ND> Make this non inline to use an object pool
-
-// Assume this is singlethreaded (nd::locks::NoLock) 16 byte aligned and allocate 128 objects per chunk
-nd::objectpool::ObjectPool< LLDrawInfo, nd::locks::NoLock, 16, 128 > sDrawinfoPool;
-
-void* LLDrawInfo::operator new(size_t size)
-{
-	return sDrawinfoPool.allocMemoryForObject();
-}
-void LLDrawInfo::operator delete(void* ptr)
-{
-	sDrawinfoPool.freeMemoryOfObject( ptr );
-}
-// </FS:ND>

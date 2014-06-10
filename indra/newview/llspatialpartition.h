@@ -61,12 +61,6 @@ protected:
 	~LLDrawInfo();	
 	
 public:
-	// <FS:ND> Make this non inline to use an object pool
-
-	void* operator new(size_t size);
-	void operator delete(void* ptr);
-
-	// </FS:ND>
 	LLDrawInfo(const LLDrawInfo& rhs)
 	:	LLTrace::MemTrackableNonVirtual<LLDrawInfo, 16>("LLDrawInfo")
 	{
