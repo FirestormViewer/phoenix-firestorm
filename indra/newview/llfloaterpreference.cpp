@@ -134,6 +134,7 @@
 #include "rlvactions.h"
 #include "rlvhandler.h"
 #include "NACLantispam.h"
+#include "../llcrashlogger/llcrashlogger.h"
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
@@ -1568,8 +1569,8 @@ void LLFloaterPreference::refreshEnabledState()
 	
 	S32Megabytes min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
 	S32Megabytes max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
+	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
 
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
 		!gGLManager.mHasVertexBufferObject)
