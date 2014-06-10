@@ -189,7 +189,7 @@ void fetchScriptLimitsRegionInfoResponder::result(const LLSD& content)
 {
 	//we don't need to test with a fake respose here (shouldn't anyway)
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS()
+#ifdef DUMP_REPLIES_TO_LL_INFOS
 
 	LLSDNotationStreamer notation_streamer(content);
 	std::ostringstream nice_llsd;
@@ -271,7 +271,7 @@ void fetchScriptLimitsRegionSummaryResponder::result(const LLSD& content_ref)
 #endif
 
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS()
+#ifdef DUMP_REPLIES_TO_LL_INFOS
 
 	LLSDNotationStreamer notation_streamer(content);
 	std::ostringstream nice_llsd;
@@ -379,7 +379,7 @@ result (map)
 
 #endif
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS()
+#ifdef DUMP_REPLIES_TO_LL_INFOS
 
 	LLSDNotationStreamer notation_streamer(content);
 	std::ostringstream nice_llsd;
@@ -467,7 +467,7 @@ void fetchScriptLimitsAttachmentInfoResponder::result(const LLSD& content_ref)
 
 #endif
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS()
+#ifdef DUMP_REPLIES_TO_LL_INFOS
 
 	LLSDNotationStreamer notation_streamer(content);
 	std::ostringstream nice_llsd;
