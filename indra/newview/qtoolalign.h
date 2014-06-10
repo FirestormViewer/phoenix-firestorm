@@ -9,6 +9,8 @@
 #include "lltool.h"
 #include "llbbox.h"
 
+#include "llthread.h"
+
 class LLViewerObject;
 class LLPickInfo;
 class LLToolSelectRect;
