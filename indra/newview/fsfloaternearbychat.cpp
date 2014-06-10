@@ -1339,7 +1339,7 @@ void send_chat_from_nearby_floater(std::string utf8_out_text, EChatType type, S3
 	}
 	
 	// moved here so we don't bump the count for every message segment
-	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
+	add(LLStatViewer::CHAT_COUNT,1);
 	//</FS:TS> FIRE-787
 }
 

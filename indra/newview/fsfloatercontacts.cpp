@@ -987,4 +987,11 @@ void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
 	gAgent.sendReliableMessage();
 }
 
+void FSFloaterContacts::childShowTab(const std::string& id, const std::string& tabname )
+{
+	LLTabContainer* child = findChild<LLTabContainer>(id);
+	if (child)
+		child->selectTabByName(tabname);
+}
+
 // EOF
