@@ -63,6 +63,8 @@
 #include "fsexportperms.h"
 
 #include "llfloaterreg.h"
+#include "llappviewer.h"
+
 #include <boost/algorithm/string_regex.hpp>
 
 const F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
