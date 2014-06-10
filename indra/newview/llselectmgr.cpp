@@ -117,8 +117,10 @@ const S32 MAX_ACTION_QUEUE_SIZE = 20;
 const S32 MAX_SILS_PER_FRAME = 50;
 const S32 MAX_OBJECTS_PER_PACKET = 254;
 // For linked sets
-const S32 MAX_CHILDREN_PER_TASK = 255;
-const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
+// <FS:Ansariel> Moved to header to make them publically accessible
+//const S32 MAX_CHILDREN_PER_TASK = 255;
+//const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
+// </FS:Ansariel>
 
 //
 // Globals

@@ -67,6 +67,7 @@
 #include <cstring>
 
 #include "fscommon.h"
+#include "llselectmgr.h"
 
 //
 // Globals

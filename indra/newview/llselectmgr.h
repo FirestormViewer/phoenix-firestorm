@@ -63,6 +63,13 @@ const U8 UPD_SCALE     		= 0x04;
 const U8 UPD_LINKED_SETS 	= 0x08;
 const U8 UPD_UNIFORM 		= 0x10;	// used with UPD_SCALE
 
+// <FS:Ansariel> Moved here to make them publically accessible
+// For linked sets
+const S32 MAX_CHILDREN_PER_TASK = 255;
+const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
+// </FS:Ansariel>
+
+
 // This is used by the DeRezObject message to determine where to put
 // derezed tasks.
 enum EDeRezDestination
