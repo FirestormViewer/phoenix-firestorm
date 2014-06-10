@@ -231,6 +231,7 @@
 #include "lggcontactsets.h"
 
 #include "llleapmotioncontroller.h"
+#include "lltracerecording.h"
 
 //
 // Globals
@@ -374,7 +375,8 @@ public:
 			{
 			const U32 y_inc2 = 15;
 				// <FS:Ansariel> FIRE-9746: Show FPS with DebugShowTime
-				addText(xpos, ypos, llformat("FPS: %3.1f", LLViewerStats::getInstance()->mFPSStat.getMeanPerSec())); ypos += y_inc2;
+				addText(xpos, ypos, llformat("FPS: %3.1f", LLTrace::get_frame_recording().getPeriodMeanPerSec(LLStatViewer::FPS))); ypos += y_inc2;
+				
 				// </FS:Ansariel>
 				LLFrameTimer& timer = gTextureTimer;
 				F32 time = timer.getElapsedTimeF32();
