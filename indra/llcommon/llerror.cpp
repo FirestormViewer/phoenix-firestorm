@@ -1179,10 +1179,11 @@ namespace LLError
 		if (site.mLevel == LEVEL_ERROR)
 		{
 			writeToRecorders(site, "error", true, true, true, false, false);
+		}
 
+		std::ostringstream prefix;
 		if( nd::logging::throttle( site.mFile, site.mLine, &prefix ) )
 			return;
-		}
 		
 		std::ostringstream message_stream;
 
