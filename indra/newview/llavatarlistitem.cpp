@@ -219,7 +219,10 @@ void LLAvatarListItem::onVolumeChange(const LLSD& data)
 	LLVoiceClient::getInstance()->setUserVolume(mAvatarId, volume);
 }
 
-void LLAvatarListItem::handleVisibilityChange ( BOOL new_visibility )
+// <FS:Ansariel> LL refactoring error
+//void LLAvatarListItem::handleVisibilityChange ( BOOL new_visibility )
+void LLAvatarListItem::onVisibilityChange ( BOOL new_visibility )
+// </FS:Ansariel>
 {
     //Adjust positions of icons (info button etc) when 
     //speaking indicator visibility was changed/toggled while panel was closed (not visible)
