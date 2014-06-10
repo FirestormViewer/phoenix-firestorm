@@ -566,7 +566,17 @@ namespace LLError
 		mFunctionString += std::string(mFunction) + ":";
 		for (size_t i = 0; i < mTagCount; i++)
 		{
-			mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? "" : " ");
+			// <FS:ND> Tags can be 0, so work around that.
+
+			// mTagString += std::string("#") + mTags[i] + ((i == mTagCount - 1) ? "" : " ");
+
+			char const *pTag = mTags[i];
+			if( !pTag )
+				pTag = "<NULL>";
+
+			mTagString += std::string("#") + pTag + ((i == mTagCount - 1) ? "" : " ");
+
+			// </FS:ND>
 		}
 	}
 
@@ -991,6 +1001,11 @@ namespace {
 
 		for (size_t i = 0; i < count; i++)
 		{
+			// <FS:ND> Can be 0
+			if( !keys[i] )
+				continue;
+			// </FS:ND>
+
 			LevelMap::const_iterator it = map.find(keys[i]);
 			if (it != map.end())
 			{
