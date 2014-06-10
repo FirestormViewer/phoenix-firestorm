@@ -590,12 +590,12 @@ void LLGLTexMemBar::draw()
 	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f); // grey
 	gl_rect_2d(left, top, right, bottom);
 
-	bar_scale = (F32)bar_width / (max_total_mem * 1.5f);
-	right = left + llfloor(total_mem * bar_scale);
+	bar_scale = (F32)bar_width / (max_total_mem.value() * 1.5f);
+	right = left + llfloor(total_mem.value() * bar_scale);
 	right = llclamp(right, bar_left, bar_left + bar_width);
 	
-	color = (total_mem < llfloor(max_total_mem * texmem_lower_bound_scale)) ? LLColor4::green :
-		  	(total_mem < max_total_mem) ? LLColor4::yellow : LLColor4::red;
+	color = (total_mem.value() < llfloor(max_total_mem.value() * texmem_lower_bound_scale)) ? LLColor4::green :
+		(total_mem.value() < max_total_mem.value()) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;
 //	gGL.diffuseColor4fv(color.mV);
 	
@@ -617,13 +617,13 @@ void LLGLTexMemBar::draw()
 	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
 	gl_rect_2d(left, top, right, bottom);
 
-	color = (bound_mem < llfloor(max_bound_mem * texmem_lower_bound_scale)) ? LLColor4::green :
-		  	(bound_mem < max_bound_mem) ? LLColor4::yellow : LLColor4::red;
+	color = (bound_mem.value() < llfloor(max_bound_mem.value() * texmem_lower_bound_scale)) ? LLColor4::green :
+		(bound_mem.value() < max_bound_mem.value()) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;
 //	gGL.diffuseColor4fv(color.mV);
 
-	bar_scale = (F32)bar_width / (max_bound_mem * 1.5f);
-	right = left + llfloor(bound_mem * bar_scale);
+	bar_scale = (F32)bar_width / (max_bound_mem.value() * 1.5f);
+	right = left + llfloor(bound_mem.value() * bar_scale);
 
 	gl_rect_2d(left, top, right, bottom, color);
 	// </FS:Ansariel>
@@ -679,13 +679,13 @@ void LLGLTexMemBar::draw()
 
 	// <FS:Ansariel> Move BW figures further to the right to prevent overlapping
 	left = 575;
-	F32Kilobits bandwidth = LLAppViewer::getTextureFetch()->getTextureBandwidth();
+	F32Kilobits bandwidth( LLAppViewer::getTextureFetch()->getTextureBandwidth() );
 	// <FS:Ansariel> Speed-up
 	//F32Kilobits max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
 	static LLCachedControl<F32> throttleBandwidthKBPS(gSavedSettings, "ThrottleBandwidthKBPS");
-	F32Kilobits max_bandwidth = F32(throttleBandwidthKBPS);
-	// </FS:Ansariel> Speed-up
-	color = bandwidth > max_bandwidth ? LLColor4::red : bandwidth > max_bandwidth*.75f ? LLColor4::yellow : text_color;
+	F32Kilobits max_bandwidth( (F32)throttleBandwidthKBPS );
+	// </FS:Ansariel> Speed-upx
+	color = bandwidth.value() > max_bandwidth.value() ? LLColor4::red : bandwidth.value() > max_bandwidth.value() * .75f ? LLColor4::yellow : text_color;
 	color[VALPHA] = text_color[VALPHA];
 	text = llformat("BW:%.0f/%.0f",bandwidth.value(), max_bandwidth.value());
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, x_right, v_offset + line_height*2,
