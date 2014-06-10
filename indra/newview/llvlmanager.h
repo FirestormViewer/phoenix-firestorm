@@ -59,7 +59,7 @@ protected:
 	U32Bits mWindBits;
 	U32Bits mCloudBits;
 // <FS:CR> Aurora Sim
-	U32 mWaterBits;
+	U32Bits mWaterBits;
 // </FS:CR> Aurora Sim
 };
 
