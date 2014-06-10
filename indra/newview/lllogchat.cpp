@@ -1154,12 +1154,12 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 		if (' ' == line[0])
 		{
 			line.erase(0, MULTI_LINE_PREFIX.length());
-			append_to_last_message(messages, '\n' + line);
+			append_to_last_message(*messages, '\n' + line);
 		}
 		else if (0 == len && ('\n' == line[0] || '\r' == line[0]))
 		{
 			//to support old format's multilined messages with new lines used to divide paragraphs
-			append_to_last_message(messages, line);
+			append_to_last_message(*messages, line);
 		}
 		else
 		{
@@ -1168,7 +1168,7 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 			{
 				item[LL_IM_TEXT] = line;
 			}
-			messages.push_back(item);
+			messages->push_back(item);
 		}
 	}
 	fclose(fptr);
