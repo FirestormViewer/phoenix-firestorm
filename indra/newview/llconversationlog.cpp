@@ -560,7 +560,7 @@ bool LLConversationLog::loadFromFile(const std::string& filename)
 		// being over 30 days old should be purged from the conversation log text file on login.
 		// <FS:CR> Shut up, CHUI-325 Let the user decide.
 		U32 CONVERSATION_LIFETIME = gSavedSettings.getU32("FSConversationLogLifetime");
-		if (conversation.isOlderThan(CONVERSATION_LIFETIME))
+		if (conversation.isOlderThan( U32Days(CONVERSATION_LIFETIME) ) )
 		{
 			continue;
 		}
