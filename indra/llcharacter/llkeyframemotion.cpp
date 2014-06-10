@@ -2198,7 +2198,7 @@ void LLKeyframeMotion::onLoadComplete(LLVFS *vfs,
 			{
 				// Maybe delete the file from the VFS here? It's corrupt, deleting it should be harmless?
 
-				llwarns << "Failed to decode asset for animation " << motionp->getName() << ":" << motionp->getID() << " error: " << ex.what() << llendl;
+				LL_WARNS() << "Failed to decode asset for animation " << motionp->getName() << ":" << motionp->getID() << " error: " << ex.what() << LL_ENDL;
 				motionp->mAssetStatus = ASSET_FETCH_FAILED;
 			}
 			// </FS:ND>

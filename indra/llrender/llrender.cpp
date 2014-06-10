@@ -1465,8 +1465,8 @@ void LLRender::matrixMode(U32 mode)
 
 	if( mode >= NUM_MATRIX_MODES )
 	{
-		llwarns << "Matrix mode overflow: matrix mode:" << mode << " original matrix mode: " << origMode << " current texture unit: "
-				<< gGL.getCurrentTexUnitIndex() << " type of tex unit #0 " << getTexUnit(0)->getCurrType() << llendl;
+		LL_WARNS() << "Matrix mode overflow: matrix mode:" << mode << " original matrix mode: " << origMode << " current texture unit: "
+				<< gGL.getCurrentTexUnitIndex() << " type of tex unit #0 " << getTexUnit(0)->getCurrType() << LL_ENDL;
 
 		getTexUnit( 0 )->unbind( getTexUnit(0)->getCurrType() );
 		mode = MM_TEXTURE0;
@@ -2062,7 +2062,7 @@ void LLRender::vertexBatchPreTransformed(LLVector3* verts, S32 vert_count)
 	// Often happens with LLFontGL::render(), especially in LLScrollListText::draw()
 	// Can be observed by opening the V1 style friends list for example
 	if (mCount == 0)
-		lldebugs << "Vertex count was 0, prevented crashing." << llendl;
+		LL_DEBUGS() << "Vertex count was 0, prevented crashing." << LL_ENDL;
 	else
 		mVerticesp[mCount] = mVerticesp[mCount-1];
 }
@@ -2124,7 +2124,7 @@ void LLRender::vertexBatchPreTransformed(LLVector3* verts, LLVector2* uvs, S32 v
 	// Often happens with LLFontGL::render(), especially in LLScrollListText::draw()
 	// Can be observed by opening the V1 style friends list for example
 	if (mCount == 0)
-		lldebugs << "Vertex count was 0, prevented crashing." << llendl;
+		LL_DEBUGS() << "Vertex count was 0, prevented crashing." << LL_ENDL;
 	else
 	{
 		mVerticesp[mCount] = mVerticesp[mCount-1];
@@ -2190,7 +2190,7 @@ void LLRender::vertexBatchPreTransformed(LLVector3* verts, LLVector2* uvs, LLCol
 	// Often happens with LLFontGL::render(), especially in LLScrollListText::draw()
 	// Can be observed by opening the V1 style friends list for example
 	if (mCount == 0)
-		lldebugs << "Vertex count was 0, prevented crashing." << llendl;
+		LL_DEBUGS() << "Vertex count was 0, prevented crashing." << LL_ENDL;
 	else
 	{
 		mVerticesp[mCount] = mVerticesp[mCount-1];

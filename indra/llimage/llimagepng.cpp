@@ -141,7 +141,7 @@ BOOL LLImagePNG::encode(const LLImageRaw* raw_image, F32 encode_time)
 	if(allocateData(encodedSize))
 		memcpy(getData(), tmpWriteBuffer, encodedSize);
 	else
-		llwarns << "allocateData() falied." << llendl;
+		LL_WARNS() << "allocateData() falied." << LL_ENDL;
 
 	delete[] tmpWriteBuffer;
 

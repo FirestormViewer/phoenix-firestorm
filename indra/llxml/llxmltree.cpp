@@ -89,7 +89,7 @@ BOOL LLXmlTree::parseString(const std::string &string, BOOL keep_contents)
 	{
 		S32 line_number = parser.getCurrentLineNumber();
 		const char* error =  parser.getErrorString();
-		llwarns << "LLXmlTree parse failed.  Line " << line_number << ": " << error << llendl;
+		LL_WARNS() << "LLXmlTree parse failed.  Line " << line_number << ": " << error << LL_ENDL;
 	}
 	return success;
 }

@@ -727,7 +727,7 @@ BOOL LLMessageSystem::checkMessages( S64 frame_count )
 				// valid_packet = mTemplateMessageReader->readMessage(buffer, host);
 				
 				try { valid_packet = mTemplateMessageReader->readMessage(buffer, host); }
-				catch( nd::exceptions::xran &ex ) { llwarns << ex.what() << llendl; }
+				catch( nd::exceptions::xran &ex ) { LL_WARNS() << ex.what() << LL_ENDL; }
 
 				// </FS:ND>
 			}

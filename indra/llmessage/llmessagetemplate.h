@@ -378,7 +378,7 @@ public:
 			}
 			catch( nd::exceptions::xran &ex )
 			{
-				llwarns << ex.what() << llendl;
+				LL_WARNS() << ex.what() << LL_ENDL;
 			}
 
 			// </FS:ND>

@@ -324,7 +324,7 @@ void LLAudioEngine_FMODEX::shutdown()
 	{
 		mSystem->close();
 	// <FS:Ansariel> Additional debug message; viewer might hang somewhere in here
-	llinfos << "LLAudioEngine_FMODEX::shutdown() FMOD Ex system closed. Now releasing..." << llendl;
+	LL_INFOS() << "LLAudioEngine_FMODEX::shutdown() FMOD Ex system closed. Now releasing..." << LL_ENDL;
 		mSystem->release();
 	}
 	LL_INFOS() << "LLAudioEngine_FMODEX::shutdown() done closing FMOD Ex" << LL_ENDL;

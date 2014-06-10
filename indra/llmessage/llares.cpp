@@ -137,7 +137,7 @@ LLAres::LLAres() :
 					strm << "Unknown protocol " << pCur->family;
 			}
 			
-			llinfos << strm.str() << llendl;
+			LL_INFOS() << strm.str() << LL_ENDL;
 			pCur = pCur->next;
 		}
 		ares_free_data( pServer );

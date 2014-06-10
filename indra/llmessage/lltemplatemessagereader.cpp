@@ -521,12 +521,12 @@ void LLTemplateMessageReader::logRanOffEndOfPacket( const LLHost& host, const S3
 // 			<< " trying to read " << wanted
 // 			<< " bytes at position " << where
 // 			<< " going past packet end at " << mReceiveSize
-// 			<< llendl;
+// 			<< LL_ENDL;
 // 	if(gMessageSystem->mVerboseLog)
 // 	{
-// 		llinfos << "MSG: -> " << host << "\tREAD PAST END:\t"
+// 		LL_INFOS() << "MSG: -> " << host << "\tREAD PAST END:\t"
 // //				<< mCurrentRecvPacketID << " "
-// 				<< getMessageName() << llendl;
+// 				<< getMessageName() << LL_ENDL;
 // 	}
 // 	gMessageSystem->callExceptionFunc(MX_RAN_OFF_END_OF_PACKET);
 

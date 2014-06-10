@@ -125,21 +125,21 @@ U32 LLBlowfishCipher::decrypt(const U8* src, U32 src_len, U8* dst, U32 dst_len)
     int blocksize = EVP_CIPHER_CTX_block_size(&context);
     int keylen = EVP_CIPHER_CTX_key_length(&context);
     int iv_length = EVP_CIPHER_CTX_iv_length(&context);
-    lldebugs << "LLBlowfishCipher blocksize " << blocksize
+    LL_DEBUGS() << "LLBlowfishCipher blocksize " << blocksize
 			 << " keylen " << keylen
 			 << " iv_len " << iv_length
-			 << llendl;
+			 << LL_ENDL;
 	
 	int out_len = 0;
 	int tmp_len = 0;
 	if (!EVP_DecryptUpdate(&context, dst, &out_len, src, src_len))
 	{
-		llwarns << "LLBlowfishCipher::decrypt EVP_DecryptUpdate failure" << llendl;
+		LL_WARNS() << "LLBlowfishCipher::decrypt EVP_DecryptUpdate failure" << LL_ENDL;
 		goto ERROR;
 	}
 	if (!EVP_DecryptFinal_ex(&context, dst + out_len, &tmp_len))
 	{
-		llwarns << "LLBlowfishCipher::decrypt EVP_DecryptFinal failure" << llendl;
+		LL_WARNS() << "LLBlowfishCipher::decrypt EVP_DecryptFinal failure" << LL_ENDL;
 		goto ERROR;
 	}
 		

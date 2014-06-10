@@ -1181,7 +1181,7 @@ bool LLImageTGA::loadFile( const std::string& path )
 	U8* buffer = allocateData(file_size);
 	if(!buffer)
 	{
-		llwarns << "could not allocate memory for image loading, size: " << file_size << llendl;
+		LL_WARNS() << "could not allocate memory for image loading, size: " << file_size << LL_ENDL;
 		return false;
 	}
 

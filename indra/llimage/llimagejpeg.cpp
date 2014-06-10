@@ -497,7 +497,7 @@ BOOL LLImageJPEG::encode( const LLImageRaw* raw_image, F32 encode_time )
 	mOutputBuffer = new U8[ mOutputBufferSize ];
 	if(!mOutputBuffer)
 	{
-		llwarns << "could not allocate memory for image encoding, size:" << mOutputBufferSize << llendl;
+		LL_WARNS() << "could not allocate memory for image encoding, size:" << mOutputBufferSize << LL_ENDL;
 		return FALSE;
 	}
 

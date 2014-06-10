@@ -234,7 +234,7 @@ CURL* LLCurl::Easy::allocEasyHandle()
 
 		// Ansariel: Added some debug code
 		if (!ret)
-			llwarns << "curl_easy_init() failed!" << llendl;
+			LL_WARNS() << "curl_easy_init() failed!" << LL_ENDL;
 	}
 	else
 	{
@@ -243,7 +243,7 @@ CURL* LLCurl::Easy::allocEasyHandle()
 		// Ansariel: Added some debug code
 		if (!ret)
 		{
-			llwarns << "allocEasyHandle() error: sFreeHandles empty" << llendl;
+			LL_WARNS() << "allocEasyHandle() error: sFreeHandles empty" << LL_ENDL;
 		}
 
 		sFreeHandles.erase(ret);
