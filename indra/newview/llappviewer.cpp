@@ -3185,6 +3185,10 @@ bool LLAppViewer::initConfiguration()
 		}
 	}
 
+	// <FS>The gridmanager doesn't know the grids yet, only prepare
+	// parsing the slurls, actually done when the grids are fetched 
+	// (currently at the top of startup STATE_AUDIO_INIT,
+	// but rather it belongs into the gridmanager)
 	LLSLURL start_slurl;
 	if (! starting_location.empty())
     {
@@ -3195,7 +3199,7 @@ bool LLAppViewer::initConfiguration()
 		//{  
 		//	LLGridManager::getInstance()->setGridChoice(start_slurl.getGrid());
 		//}
-		LLStartUp::setStartSLURLString(CmdLineLoginLocation);
+		LLStartUp::setStartSLURLString(starting_location);
 		// </FS:Ansariel>
 
 	}
@@ -3210,7 +3214,7 @@ bool LLAppViewer::initConfiguration()
 	{
 		// <FS:Ansariel> FIRE-11586: Temporary fix until grid manager has been reworked
 		//if (sendURLToOtherInstance(start_slurl.getSLURLString()))
-		if (sendURLToOtherInstance(CmdLineLoginLocation))
+		if (sendURLToOtherInstance(starting_location))
 		// </FS:Ansariel>
 		{  
 			// successfully handed off URL to existing instance, exit
