@@ -557,10 +557,10 @@ void LLViewerTexture::updateClass(const F32 velocity, const F32 angular_velocity
 		{
 			sDesiredDiscardBias += discard_bias_delta;
 			LL_INFOS() << "new bias " << sDesiredDiscardBias
-					<< " sBoundTextureMemoryInBytes " << sBoundTextureMemoryInBytes 
-					<< " sTotalTextureMemoryInBytes " << sTotalTextureMemoryInBytes
-					<< " sMaxBoundTextureMemInMegaBytes " << sMaxBoundTextureMemInMegaBytes
-					<< " sMaxTotalTextureMemInMegaBytes " << sMaxTotalTextureMemInMegaBytes
+					<< " sBoundTextureMemory " << sBoundTextureMemory 
+					<< " sTotalTextureMemory " << sTotalTextureMemory
+					<< " sMaxBoundTextureMem " << sMaxBoundTextureMem
+					<< " sMaxTotalTextureMem " << sMaxTotalTextureMem
 					<< LL_ENDL;
 			sEvaluationTimer.reset();
 		}
@@ -1250,7 +1250,7 @@ void LLViewerFetchedTexture::destroyTexture()
 	//if(LLImageGL::sGlobalTextureMemory < sMaxDesiredTextureMem * 0.95f)//not ready to release unused memory.
 	static LLCachedControl<bool> fsDestroyGLTexturesImmediately(gSavedSettings, "FSDestroyGLTexturesImmediately");
 	static LLCachedControl<F32> fsDestroyGLTexturesThreshold(gSavedSettings, "FSDestroyGLTexturesThreshold");
-	if (!fsDestroyGLTexturesImmediately && LLImageGL::sGlobalTextureMemory < sMaxDesiredTextureMem * fsDestroyGLTexturesThreshold)//not ready to release unused memory.
+	if (!fsDestroyGLTexturesImmediately && LLImageGL::sGlobalTextureMemory.value() < sMaxDesiredTextureMem.value() * fsDestroyGLTexturesThreshold)//not ready to release unused memory.
 	// </FS:Ansariel>
 	{
 		return ;
