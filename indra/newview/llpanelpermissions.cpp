@@ -923,7 +923,7 @@ void LLPanelPermissions::refresh()
 		else
 		{
 			childSetValue("checkbox allow export", false);
-			childSetTentative("checkbox allow export", false);
+			getChild<LLUICtrl>("checkbox allow export")->setTentative(false);
 		}
 		// </FS:CR>
 	}
