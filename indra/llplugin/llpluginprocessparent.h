@@ -162,7 +162,7 @@ private:
 
 	// <FS:ND> Use boost::shred_ptr so LLPluginSharedMemory gets properly destroyed
 	// typedef std::map<std::string, LLPluginSharedMemory*> sharedMemoryRegionsType;
-	typedef std::map<std::string, LLPluginSharedMemory > sharedMemoryRegionsType;
+	typedef std::map<std::string, LLPluginSharedMemoryPtr > sharedMemoryRegionsType;
 	// </FS:ND>
 
 	sharedMemoryRegionsType mSharedMemoryRegions;
