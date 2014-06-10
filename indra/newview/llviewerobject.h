@@ -718,10 +718,6 @@ protected:
 	void deleteParticleSource();
 	void setParticleSource(const LLPartSysData& particle_parameters, const LLUUID& owner_id);
 	
-	// <FS:Techwolf Lupindo> export
-	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
-	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
-	// </FS:Techwolf Lupindo>
 private:
 	void setNameValueList(const std::string& list);		// clears nv pairs and then individually adds \n separated NV pairs from \0 terminated string
 	void deleteTEImages(); // correctly deletes list of images
@@ -835,6 +831,12 @@ private:
 	LLUUID mAttachmentItemID; // ItemID of the associated object is in user inventory.
 	EObjectUpdateType	mLastUpdateType;
 	BOOL	mLastUpdateCached;
+
+	// <FS:Techwolf Lupindo> export
+public:
+	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
+	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
+	// </FS:Techwolf Lupindo>
 };
 
 ///////////////////
