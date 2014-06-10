@@ -28,6 +28,8 @@
 #ifndef FS_REGISTRARUTILS_H
 #define FS_REGISTRARUTILS_H
 
+#include <boost/function.hpp>
+
 enum EFSRegistrarFunctionActionType
 {
 	FS_RGSTR_ACT_ADD_FRIEND,
