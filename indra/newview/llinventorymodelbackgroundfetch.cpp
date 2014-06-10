@@ -232,7 +232,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 			mMaxTimeBetweenFetches = llmin(mMaxTimeBetweenFetches * 2.f, 120.f);
 // <FS:AW>
 //			LL_DEBUGS() << "Inventory fetch times grown to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
-			LL_DEBUGS()("InventoryFetch") << "Inventory fetch times grown to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
+			LL_DEBUGS("InventoryFetch") << "Inventory fetch times grown to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
 // </FS:AW>
 			// fetch is no longer considered "timely" although we will wait for full time-out.
 			mTimelyFetchPending = FALSE;
@@ -308,7 +308,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 						mMaxTimeBetweenFetches = llmax(mMaxTimeBetweenFetches * 0.8f, 10.f);
 // <FS:AW>
 //						LL_DEBUGS() << "Inventory fetch times shrunk to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
-						LL_DEBUGS()("InventoryFetch") << "Inventory fetch times shrunk to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
+						LL_DEBUGS("InventoryFetch") << "Inventory fetch times shrunk to (" << mMinTimeBetweenFetches << ", " << mMaxTimeBetweenFetches << ")" << LL_ENDL;
 // </FS:AW>
 					}
 

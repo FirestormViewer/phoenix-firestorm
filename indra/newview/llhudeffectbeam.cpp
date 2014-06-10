@@ -84,7 +84,7 @@ void LLHUDEffectBeam::packData(LLMessageSystem *mesgsys)
 	} 
 	else if (!source_object->isAvatar()) 
 	{
-		LL_DEBUGS()("HUDEffect")<<"Non-Avatar HUDEffectBeam message for ID: "  
+		LL_DEBUGS("HUDEffect")<<"Non-Avatar HUDEffectBeam message for ID: "  
 		<<  source_object->getID().asString()<< LL_ENDL; 
 		markDead(); 
 		return; 
@@ -94,7 +94,7 @@ void LLHUDEffectBeam::packData(LLMessageSystem *mesgsys)
 		LLVOAvatar* source_avatar = (LLVOAvatar*)source_object; 
 		if (!source_avatar->isSelf()) 
 		{ 
-			LL_DEBUGS()("HUDEffect")<<"Non-self HUDEffectBeam message for ID: "  
+			LL_DEBUGS("HUDEffect")<<"Non-self HUDEffectBeam message for ID: "  
 			<< source_avatar->getID().asString()<< LL_ENDL; 
 			markDead(); 
 			return; 
