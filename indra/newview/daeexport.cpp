@@ -72,6 +72,7 @@
 
 // newview includes
 #include "llagent.h"
+#include "llappviewer.h"
 #include "llcallbacklist.h"
 #include "llfilepicker.h"
 #include "llnotificationsutil.h"

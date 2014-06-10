@@ -1019,7 +1019,7 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 	switch(event)
 	{
 		case MEDIA_EVENT_STATUS_TEXT_CHANGED:
-			childSetText("status_text", self->getStatusText() );
+			childSetValue("status_text", LLSD( self->getStatusText() ) );
 		break;
 
 		case MEDIA_EVENT_LOCATION_CHANGED:
@@ -1045,7 +1045,7 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 		{
 			LLStringUtil::format_map_t args;
 			args["[TIME]"] = llformat("%.2f", mPerformanceTimer.getElapsedTimeF32());
-			childSetText("status_text", getString("LoadTime", args));
+			childSetValue("status_text", LLSD( getString("LoadTime", args)) );
 		}
 		break;
 

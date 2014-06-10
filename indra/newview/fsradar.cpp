@@ -56,6 +56,7 @@
 #include "llworld.h"
 #include "llspeakers.h"
 #include "rlvhandler.h"
+#include "llviewerregion.h"
 
 using namespace boost;
 

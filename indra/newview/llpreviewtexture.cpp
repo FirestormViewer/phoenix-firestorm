@@ -730,7 +730,7 @@ void LLPreviewTexture::updateDimensions()
 				LLAvatarName avatar_name;
 				if (LLAvatarNameCache::get(id, &avatar_name))
 				{
-					childSetText("uploader", avatar_name.getCompleteName());
+					childSetValue("uploader", LLSD( avatar_name.getCompleteName()) );
 				}
 				else
 				{
@@ -754,12 +754,12 @@ void LLPreviewTexture::updateDimensions()
 				substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
 				date_time = getString("DateTime"); // reuse date_time variable
 				LLStringUtil::format(date_time, substitution);
-				childSetText("upload_time", date_time);
+				childSetValue("upload_time", LLSD( date_time ) );
 			}
 
  			if (mIsCopyable)
  			{
-				childSetText("uuid", mImageID.asString());
+				childSetValue("uuid", LLSD( mImageID.asString() ));
  			}
 
 			LLView* uploader_view = getChildView("uploader");
@@ -840,7 +840,7 @@ void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarNa
 	else if (findChild<LLLineEditor>("uploader"))
 	{
 		// AnsaStorm skin
-		childSetText("uploader", av_name.getCompleteName());
+		childSetValue("uploader", LLSD( av_name.getCompleteName() ) );
 	}
 }
 

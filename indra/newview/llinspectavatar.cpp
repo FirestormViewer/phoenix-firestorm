@@ -62,6 +62,7 @@
 #include "llmenubutton.h"
 #include "lltoggleablemenu.h"
 #include "lluictrl.h"
+#include "llviewerregion.h"
 // </FS:Ansariel>
 
 class LLFetchAvatarData;

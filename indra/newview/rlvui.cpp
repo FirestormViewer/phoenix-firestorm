@@ -48,6 +48,7 @@
 #include "rlvextensions.h"
 
 #include "fsradar.h"
+#include "llviewerregion.h"
 
 // ============================================================================
 

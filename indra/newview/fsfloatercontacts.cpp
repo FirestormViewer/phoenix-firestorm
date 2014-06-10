@@ -775,7 +775,7 @@ void FSFloaterContacts::refreshUI()
 	// Set friend count
 	LLStringUtil::format_map_t args;
 	args["[COUNT]"] = llformat("%d", mFriendsList->getItemCount());
-	mFriendsTab->childSetText("friend_count", mFriendsTab->getString("FriendCount", args));
+	mFriendsTab->childSetValue("friend_count", LLSD( mFriendsTab->getString("FriendCount", args) ) );
 
 	refreshRightsChangeList();
 }
