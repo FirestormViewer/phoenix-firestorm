@@ -709,7 +709,7 @@ void FSFloaterImport::createPrim()
 	gMessageSystem->addU8Fast(_PREHASH_State, (U8)0);
 	gMessageSystem->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
 	gMessageSystem->sendReliable(gAgent.getRegion()->getHost());
-	add(LLStatViewer::OBJECT_CREATE);
+	LLTrace::add(LLStatViewer::OBJECT_CREATE,1);
 }
 
 bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
@@ -1209,7 +1209,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
 		}
-		add(LLStatViewer::UPLOAD_TEXTURE_COUNT);
+		LLTrace::add(LLStatViewer::UPLOAD_TEXTURE,1);
 	}
 		break;
 	case LLAssetType::AT_SOUND:
@@ -1225,7 +1225,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		{
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
-			add(LLVStatViewer::UPLOAD_SOUND_COUNT);
+			LLTrace::add(LLVStatViewer::UPLOAD_SOUND,1);
 		}
 		
 	}
@@ -1341,7 +1341,7 @@ void FSFloaterImport::uploadAsset(LLUUID asset_id, LLUUID inventory_item)
 		{
 			url = gAgent.getRegion()->getCapability("NewFileAgentInventory");
 			new_file_agent_inventory = true;
-			add(LLStatViewer::UPLOAD_ANIM_COUNT);
+			LLTrace::add(LLStatViewer::UPLOAD_ANIM_COUNT,1);
 		}
 	}
 		break;
