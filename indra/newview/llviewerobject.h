@@ -30,7 +30,7 @@
 #include <map>
 
 #include "llassetstorage.h"
-//#include "llhudicon.h"
+#include "llhudicon.h" // <FS:Ansariel> Changed to get the attached icon
 #include "llinventory.h"
 #include "llrefcount.h"
 #include "llprimitive.h"
@@ -413,7 +413,7 @@ public:
 	void clearIcon();
 
 	// <FS:Ansariel> Getter for HUD icon attached to the object
-	//LLPointer<LLHUDIcon> getIcon() const { return mIcon; };
+	LLPointer<LLHUDIcon> getIcon() const { return mIcon; };
 
 	void markForUpdate(BOOL priority);
 	void updateVolume(const LLVolumeParams& volume_params);
@@ -680,7 +680,10 @@ public:
 
 	// TODO: Make all this stuff private.  JC
 	LLPointer<LLHUDText> mText;
-	LLPointer<class LLHUDIcon> mIcon;
+	// <FS:Ansariel> Changed after including llhudicon.h to get the attached icon
+	//LLPointer<class LLHUDIcon> mIcon;
+	LLPointer<LLHUDIcon> mIcon;
+	// </FS:Ansariel>
 
 	static			BOOL		sUseSharedDrawables;
 
