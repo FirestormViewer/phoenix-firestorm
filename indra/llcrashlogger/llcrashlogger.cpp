@@ -400,6 +400,8 @@ LLSD LLCrashLogger::constructPostData()
 	return mCrashInfo;
 }
 
+const char* const CRASH_SETTINGS_FILE = "settings_crash_behavior.xml";
+
 S32 LLCrashLogger::loadCrashBehaviorSetting()
 {
 	// First check user_settings (in the user's home dir)
