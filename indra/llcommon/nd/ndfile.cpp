@@ -73,14 +73,14 @@ namespace nd
 		{
 			if( !mFile )
 			{
-				llwarns << "File is not open, cannot read" << llendl;
+				LL_WARNS() << "File is not open, cannot read" << LL_ENDL;
 				return 0;
 			}
 		
 			S32 read =  fread(buf, 1, nbytes, mFile );
 			if( nbytes != read )
 			{
-				llwarns << "Error when reading, wanted " << nbytes << " read " << read << llendl;
+				LL_WARNS() << "Error when reading, wanted " << nbytes << " read " << read << LL_ENDL;
 			}
 
 			return read;
@@ -90,14 +90,14 @@ namespace nd
 		{
 			if( !mFile )
 			{
-				llwarns << "File is not open, cannot write" << llendl;
+				LL_WARNS() << "File is not open, cannot write" << LL_ENDL;
 				return 0;
 			}
 		
 			S32 written =  fwrite( buf, 1, nbytes, mFile );	
 			if( nbytes != written )
 			{
-				llwarns << "Error when writing, wanted " << nbytes << " wrote " << written  << llendl;
+				LL_WARNS() << "Error when writing, wanted " << nbytes << " wrote " << written  << LL_ENDL;
 			}
 			return written;
 		}
@@ -144,14 +144,14 @@ namespace nd
 			if( 0 != seekStatus )
 			{
 				int err = errno;
-				llwarns << "Seek failed with errno " << err << llendl;
+				LL_WARNS() << "Seek failed with errno " << err << LL_ENDL;
 				return -1;
 			}
 
 			S32 offsetNew = ftell( file_handle );
 			if( offset != 0 && SEEK_SET == nd::aprhelper::ndConvertSeekFlags( where ) && offset != offsetNew )
 			{
-				llwarns << "Seek failed, wanted offset " << offset << " got " << offsetNew << llendl;
+				LL_WARNS() << "Seek failed, wanted offset " << offset << " got " << offsetNew << LL_ENDL;
 			}
 			return offsetNew;
 
@@ -178,7 +178,7 @@ namespace nd
 
 			if( nbytes != bytes_read )
 			{
-				llwarns << "Error when reading, wanted " << nbytes << " read " << bytes_read << " offset " << offset << llendl;
+				LL_WARNS() << "Error when reading, wanted " << nbytes << " read " << bytes_read << " offset " << offset << LL_ENDL;
 			}
 			return (S32)bytes_read;
 		}
@@ -209,7 +209,7 @@ namespace nd
 			ndFile::close(file_handle, pool);
 
 			if( nbytes != bytes_written )
-				llwarns << "Error when writing, wanted " << nbytes << " wrote " << bytes_written << " offset " << offset << llendl;
+				LL_WARNS() << "Error when writing, wanted " << nbytes << " wrote " << bytes_written << " offset " << offset << LL_ENDL;
 
 			return (S32)bytes_written;
 		}
@@ -372,7 +372,7 @@ namespace nd
 				else
 				{
 					int err = errno;
-					llwarns << "stat for file " << aFilename << " failed with errno " << err << llendl;
+					LL_WARNS() << "stat for file " << aFilename << " failed with errno " << err << LL_ENDL;
 				}
 			}
 			

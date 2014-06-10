@@ -191,7 +191,7 @@ void LLMemory::logMemoryInfo(BOOL update)
 	// <FS:ND> log finer grained allocation stats
 	std::stringstream strm;
 	nd::allocstats::dumpStats( strm );
-	llinfos << strm.str() << llendl;
+	LL_INFOS() << strm.str() << LL_ENDL;
 	// </FS:ND>
 }
 
