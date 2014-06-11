@@ -893,12 +893,12 @@ void LLStatusBar::onVolumeChanged(const LLSD& newvalue)
 	refresh();
 }
 
-// <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+// <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Statistics window
 void LLStatusBar::onBandwidthGraphButtonClicked()
 {
-	LLFloaterReg::toggleInstance("lagmeter");
+	LLFloaterReg::toggleInstance("stats");
 }
-// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Statistics window
 
 // Implements secondlife:///app/balance/request to request a L$ balance
 // update via UDP message system. JC

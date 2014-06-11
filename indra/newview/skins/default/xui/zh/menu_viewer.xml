@@ -184,7 +184,6 @@
 		<menu_item_check label="高解析度快照" name="HighResSnapshot"/>
 		<menu_item_check label="靜音拍攝快照到硬碟" name="QuietSnapshotsToDisk"/>
 		<menu label="效能工具" name="Performance Tools">
-			<menu_item_call label="Lag 測量器" name="Lag Meter"/>
 			<menu_item_check label="統計列" name="Statistics Bar"/>
 			<menu_item_check label="顯示化身的繪製重量" name="Avatar Rendering Cost"/>
 		</menu>

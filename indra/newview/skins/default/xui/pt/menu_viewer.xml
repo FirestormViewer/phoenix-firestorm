@@ -190,7 +190,6 @@
 		<menu_item_check label="Foto de alta resolução" name="HighResSnapshot"/>
 		<menu_item_check label="Fotos sem barulho para HD" name="QuietSnapshotsToDisk"/>
 		<menu label="Ferramentas de desempenho" name="Performance Tools">
-			<menu_item_call label="Medidor de lag" name="Lag Meter"/>
 			<menu_item_check label="Barra de estatísticas" name="Statistics Bar"/>
 			<menu_item_check label="Mostrar peso do desenho para avatares" name="Avatar Rendering Cost"/>
 		</menu>

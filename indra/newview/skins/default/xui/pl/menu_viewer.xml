@@ -32,7 +32,6 @@
 			<menu_item_call label="Resetuj do domyślnego męskiego awatara (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Resetuj do domyślnego żeńskiego awatara (Character Test)" name="ResetDefaultAvF"/>
 			<menu_item_check label="Pokaż obciążenia renderowania dla awatarów (zamiennik ARC)" name="Avatar Rendering Cost"/>
-			<menu_item_call label="Miernik lagów" name="Lag Meter"/>
 			<menu_item_call label="Stwórz na nowo Most LSL" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Śledzenie napiwków" name="money_tracker"/>
@@ -277,7 +276,6 @@
 		<menu_item_check label="Zdjęcie wysokiej jakości" name="HighResSnapshot"/>
 		<menu_item_check label="Wykonuj zdjęcia bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
 		<menu label="Narzędzia wydajności" name="Performance Tools">
-			<menu_item_call label="Pomiar lagów" name="Lag Meter"/>
 			<menu_item_check label="Statystyki ogólne" name="Statistics Bar"/>
 			<menu_item_call label="Statystyki obciążenia sceny" name="Scene Load Statistics"/>
 			<menu_item_check label="Pokaż wartość renderowania awatara" name="Avatar Rendering Cost"/>

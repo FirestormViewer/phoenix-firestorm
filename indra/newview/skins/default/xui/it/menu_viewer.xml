@@ -236,7 +236,6 @@
 		<menu_item_check label="Foto ad alta risoluzione" name="HighResSnapshot"/>
 		<menu_item_check label="Manda foto su disco senza avvisi" name="QuietSnapshotsToDisk"/>
 		<menu label="Strumenti di performance" name="Performance Tools">
-			<menu_item_call label="Misuratore lag" name="Lag Meter"/>
 			<menu_item_check label="Barra statistiche" name="Statistics Bar"/>
 			<menu_item_check label="Mostra peso visualizzazione per avatar" name="Avatar Rendering Cost"/>
 		</menu>

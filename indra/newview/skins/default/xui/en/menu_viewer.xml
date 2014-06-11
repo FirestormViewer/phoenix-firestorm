@@ -286,13 +286,6 @@
 	             function="Advanced.ToggleInfoDisplay"
 	             parameter="shame" />
 	        </menu_item_check>
-	        <menu_item_call
-             label="Lag Meter"
-             name="Lag Meter">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="lagmeter" />
-            </menu_item_call>
           <menu_item_call
              label="Recreate LSL Bridge"
              name="Recreate LSL Bridge">
@@ -2387,13 +2380,6 @@
          label="Performance Tools"
          name="Performance Tools"
          tear_off="true">
-            <menu_item_call
-             label="Lag Meter"
-             name="Lag Meter">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="lagmeter" />
-            </menu_item_call>
             <menu_item_check
              label="Statistics Bar"
              name="Statistics Bar"

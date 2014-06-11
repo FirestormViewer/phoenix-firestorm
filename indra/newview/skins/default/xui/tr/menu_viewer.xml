@@ -185,7 +185,6 @@
 		<menu_item_check label="Yüksek Çöz. Anlık Görüntü" name="HighResSnapshot"/>
 		<menu_item_check label="Sessiz ve Animasyonsuz Anlık Görüntüleri Diske Kaydet" name="QuietSnapshotsToDisk"/>
 		<menu label="Performans Araçları" name="Performance Tools">
-			<menu_item_call label="Gecikme Ölçer" name="Lag Meter"/>
 			<menu_item_check label="İstatistik Çubuğu" name="Statistics Bar"/>
 			<menu_item_check label="Avatarlar İçin Çizim Ağırlığını Göster" name="Avatar Rendering Cost"/>
 		</menu>
