@@ -1839,6 +1839,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="CompileQueueDownloadedCompiling">
 		Pobieranie zakończone, trwa kompilowanie
 	</string>
+	<string name="CompileQueueServiceUnavailable">
+		Usługa kompilacji skryptów nie jest w tej chwili dostępna
+	</string>
 	<string name="CompileQueueScriptNotFound">
 		Skrypt nie został odnaleziony na serwerze.
 	</string>

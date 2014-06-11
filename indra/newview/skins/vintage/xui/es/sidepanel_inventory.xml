@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Inventario" name="objects panel">
-	<panel name="sidepanel__inventory_panel">
+	<panel name="sidepanel_inventory_panel">
 		<tab_container name="inventory_tab_container">
 			<panel label="Inventario" name="panel_main_inventory"/>
 			<panel label="Marketplace" name="inbox_outbox_layout_panel">
