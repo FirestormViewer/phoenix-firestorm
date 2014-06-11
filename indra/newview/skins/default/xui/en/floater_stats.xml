@@ -267,6 +267,7 @@
                     stat="simsimskippedsilhouettesteps"
                     unit_label="/sec"/>
           <stat_bar name="simsimpctsteppedcharacters"
+                    label=" Characters Updated"
                     stat="simsimpctsteppedcharacters"
                     decimal_digits="1"/>
         </stat_view>
