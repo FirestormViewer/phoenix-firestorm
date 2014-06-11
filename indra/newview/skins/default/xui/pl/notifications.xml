@@ -3186,7 +3186,7 @@ Zobacz log, aby dowiedzieć się więcej.
 
 następującym Rezydentom:
 
-[RESIDENTS]
+&lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
 		<usetemplate ignoretext="Potwierdź, kiedy dzielę się przedmiotem" name="okcancelignore" notext="Anuluj" yestext="Ok"/>
 	</notification>
 	<notification name="ShareFolderConfirmation">
@@ -3198,7 +3198,7 @@ Czy na pewno chcesz udostępnić następujące obiekty:
 
 następującym Rezydentom:
 
-[RESIDENTS]
+&lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Ok"/>
 	</notification>
 	<notification name="ItemsShared">

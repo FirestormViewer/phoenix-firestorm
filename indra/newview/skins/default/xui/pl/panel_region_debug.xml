@@ -34,4 +34,5 @@
 		Sekundy:
 	</text>
 	<button label="Anuluj restart" name="cancel_restart_btn" tool_tip="Anuluj restart Regionu"/>
+	<button label="Konsola debugowania regionu" name="region_debug_console_btn" tool_tip="Otwórz konsolę debugowania regionu"/>
 </panel>

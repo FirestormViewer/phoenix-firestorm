@@ -1385,7 +1385,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InventoryNoTexture">
 		Nie posiadasz kopii tej tekstury w swojej Szafie.
 	</string>
-  <string name="Unconstrained">Swobodny</string>
+	<string name="Unconstrained">
+		Swobodny
+	</string>
 	<string name="InventoryInboxNoItems">
 		Przedmioty zakupione na Marketplace pojawią się tutaj. Możesz następnie przeciągnąć je do głównej części Szafy.
 	</string>
