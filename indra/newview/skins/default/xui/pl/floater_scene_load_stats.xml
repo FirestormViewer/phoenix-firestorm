@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="Scene Load Statistics" title="STATYSTYKI OBCIĄŻENIA SCENY">
 	<button label="Pauza" name="playpause"/>
-    <scroll_container name="statistics_scroll">
+	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
 			<stat_view name="basic" label="Podstawowe">
 				<stat_bar name="frame difference" label="Różnica pomiędzy klatkami"/>
