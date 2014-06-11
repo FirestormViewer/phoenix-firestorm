@@ -278,7 +278,8 @@
 		<menu_item_check label="Wykonuj zdjęcia bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
 		<menu label="Narzędzia wydajności" name="Performance Tools">
 			<menu_item_call label="Pomiar lagów" name="Lag Meter"/>
-			<menu_item_check label="Statystyki" name="Statistics Bar"/>
+			<menu_item_check label="Statystyki ogólne" name="Statistics Bar"/>
+			<menu_item_call label="Statystyki obciążenia sceny" name="Scene Load Statistics"/>
 			<menu_item_check label="Pokaż wartość renderowania awatara" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Podświetlanie i widoczność" name="Highlighting and Visibility">
@@ -357,6 +358,7 @@
 			<menu_item_check label="Podgląd procesów" name="Fast Timers"/>
 			<menu_item_check label="Pamięć" name="Memory"/>
 			<menu_item_check label="Statystyki sceny" name="Scene Statistics"/>
+			<menu_item_check label="Monitor obciążenia sceny" name="Scene Loading Monitor"/>
 			<menu_item_call label="Konsola debugowania dla ładowania tekstur" name="Texture Fetch Debug Console"/>
 			<menu_item_call label="Konsola debugowania regionu" name="Region Debug Console"/>
 			<menu_item_call label="Info o regionie do konsoli debugowania" name="Region Info to Debug Console"/>
@@ -450,6 +452,7 @@
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
 			<menu_item_check label="Wyświetlaj obiekty odblaskowe" name="Hover Glow Objects"/>
+			<menu_item_call label="Wyczyść natychmiast pamięć podręczną" name="Cache Clear"/>
 		</menu>
 		<menu label="Sieć" name="Network">
 			<menu_item_check label="Zatrzymaj awatara" name="AgentPause"/>
