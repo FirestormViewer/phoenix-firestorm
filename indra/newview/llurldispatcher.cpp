@@ -391,20 +391,6 @@ public:
 		LLNotificationsUtil::add("TeleportViaSLAPP", args, payload);
 
 		return true;
-// <FS:TM> 3.7.8 merge - below LL added, and moved std::string from where we have it in OPENSIM
-		//LLSD args;
-		//args["LOCATION"] = tokens[0];
-
-		//// Region names may be %20 escaped.
-
-		//std::string region_name = LLURI::unescape(tokens[0]);
-
-		//LLSD payload;
-		//payload["region_name"] = region_name;
-		//payload["callback_url"] = LLSLURL(region_name, coords).getSLURLString();
-
-		//LLNotificationsUtil::add("TeleportViaSLAPP", args, payload);
-		//return true;
 	}
 
 	static void teleport_via_slapp(std::string region_name, std::string callback_url)
