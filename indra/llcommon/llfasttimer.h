@@ -325,6 +325,7 @@ block_timer_tree_bf_iterator_t end_block_timer_tree_bf();
 
 LL_FORCE_INLINE BlockTimer::BlockTimer(BlockTimerStatHandle& timer)
 {
+	mStartTime = 0;
 #if LL_FAST_TIMER_ON
 	BlockTimerStackRecord* cur_timer_data = LLThreadLocalSingletonPointer<BlockTimerStackRecord>::getInstance();
 	if (!cur_timer_data) return;
