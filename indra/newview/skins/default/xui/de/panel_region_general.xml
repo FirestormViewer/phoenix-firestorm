@@ -29,6 +29,7 @@
 	</text>
 	<check_box label="Terraformen blockieren" name="block_terraform_check"/>
 	<check_box label="Fliegen blockieren" name="block_fly_check"/>
+	<check_box label="Überfliegen von Parzellen blockieren" name="block_fly_over_check" tool_tip="Zugangsprüfungen nach oben ausdehnen, um Überfliegen einer Parzelle zu verhindern"/>
 	<check_box label="Schaden zulassen" name="allow_damage_check"/>
 	<check_box label="Stoßen beschränken" name="restrict_pushobject"/>
 	<check_box label="Landwiederverkauf zulassen" name="allow_land_resell_check"/>

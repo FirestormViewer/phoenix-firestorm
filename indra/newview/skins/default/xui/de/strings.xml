@@ -1415,7 +1415,6 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InventoryNoTexture">
 		Sie haben keine Kopie dieser Textur in Ihrem Inventar.
 	</string>
-  <string name="Unconstrained">keines</string>
   <string name="InventoryInboxNoItems">
 		Einkäufe aus dem Marktplatz erscheinen hier. Sie können diese dann zur Verwendung in Ihr Inventar ziehen.
 	</string>
@@ -1490,6 +1489,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="Open landmarks">
 		Landmarken öffnen
+	</string>
+	<string name="Unconstrained">
+		Variabel
 	</string>
 	<string name="no_transfer" value=" (kein Transferieren)"/>
 	<string name="no_modify" value=" (kein Bearbeiten)"/>
@@ -1896,6 +1898,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="CompileQueueDownloadedCompiling">
 		Heruntergeladen, wird kompiliert
+	</string>
+	<string name="CompileQueueServiceUnavailable">
+		Kein Skriptkompilierungsdienst verfügbar
 	</string>
 	<string name="CompileQueueScriptNotFound">
 		Skript wurde auf Server nicht gefunden.
