@@ -6,7 +6,7 @@
          name="Scene Load Statistics"
          save_rect="true"
          save_visibility="true"
-         title="SCENE LOAD STATISTICS"
+         title="Scene Load Statistics"
          width="260">
     <button follows="top|left"
             top="20"
