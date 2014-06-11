@@ -63,7 +63,7 @@
 // dump responder replies to LL_INFOS() for debugging
 //#define DUMP_REPLIES_TO_LL_INFOS()
 
-#ifdef DUMP_REPLIES_TO_LL_INFOS()
+#ifdef DUMP_REPLIES_TO_LL_INFOS
 #include "llsdserialize.h"
 #include "llwindow.h"
 #endif
