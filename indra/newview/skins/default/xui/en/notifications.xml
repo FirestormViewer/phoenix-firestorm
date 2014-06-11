@@ -11366,17 +11366,7 @@ Changes won't take effect until after you restart [APP_NAME].
      name="okignore"
      yestext="OK"/>
   </notification>
-  
-  <notification
-   icon="alert.tga"
-   name="ChatHistoryIsBusyAlert"
-   type="alertmodal">
-   Chat history file is busy with previous operation. Please try again in a few minutes or choose chat with another person.
-    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
-  </notification>
-  
+
 <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="notify.tga"
