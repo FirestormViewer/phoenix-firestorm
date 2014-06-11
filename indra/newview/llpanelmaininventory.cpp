@@ -251,34 +251,24 @@ BOOL LLPanelMainInventory::postBuild()
 
 		// Load the persistent "Recent Items" settings.
 		// Note that the "All Items" settings do not persist.
-		// <FS:ND> bring back worn items panel.
-		//if(recent_items_panel)
-		//{
-		//	if(savedFilterState.has(recent_items_panel->getFilter().getName()))
-		//	{
-		//		LLSD recent_items = savedFilterState.get(
-		//			recent_items_panel->getFilter().getName());
-		//		LLInventoryFilter::Params p;
-		//		LLParamSDParser parser;
-		//		parser.readSD(recent_items, p);
-		//		recent_items_panel->getFilter().fromParams(p);
-		//	}
-		//}
-
 		if(recent_items_panel)
 		{
-			if(savedFilterState.has(recent_items_panel->getName()))
+			if(savedFilterState.has(recent_items_panel->getFilter().getName()))
 			{
 				LLSD recent_items = savedFilterState.get(
-					recent_items_panel->getName());
+					recent_items_panel->getFilter().getName());
+				// <FS:Ansariel> Fix wrong param type
+				//LLInventoryFilter::Params p;
 				LLInventoryPanel::InventoryState p;
+				// </FS:Ansariel>
 				LLParamSDParser parser;
 				parser.readSD(recent_items, p);
+				// <FS:Ansariel> Fix wrong param type
+				//recent_items_panel->getFilter().fromParams(p);
 				recent_items_panel->getFilter().fromParams(p.filter);
+				// </FS:Ansariel>
 			}
 		}
-		// </FS:ND>
-
 	}
 
 	mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
