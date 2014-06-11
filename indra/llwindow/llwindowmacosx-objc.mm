@@ -94,7 +94,7 @@ const unsigned short *copyFromPBoard()
 	NSUInteger len = [str length];
 
 	// <FS:ND> add+1 for 0-terminator.
-	// unichar* buffer = (unichar*)calloc(len, sizeof(unichar));
+	// unichar* temp = (unichar*)calloc([str length]+1, sizeof(unichar));
 	unichar* buffer = (unichar*)calloc(len+1, sizeof(unichar));
 	// </FS:ND>
 
@@ -226,6 +226,11 @@ GLViewRef createOpenGLView(NSWindowRef window, unsigned int samples, bool vsync)
 	LLOpenGLView *glview = [[LLOpenGLView alloc]initWithFrame:[(LLNSWindow*)window frame] withSamples:samples andVsync:vsync];
 	[(LLNSWindow*)window setContentView:glview];
 	return glview;
+}
+
+void setResizeMode(bool oldresize, void* glview)
+{
+    [(LLOpenGLView *)glview setOldResize:oldresize];
 }
 
 void glSwapBuffers(void* context)

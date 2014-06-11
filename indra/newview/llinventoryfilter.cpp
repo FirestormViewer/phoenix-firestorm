@@ -1129,7 +1129,10 @@ void LLInventoryFilter::toParams(Params& params) const
 {
 	params.filter_ops.types = getFilterObjectTypes();
 	params.filter_ops.category_types = getFilterCategoryTypes();
-	params.filter_ops.wearable_types = getFilterWearableTypes();
+	if (getFilterObjectTypes() & FILTERTYPE_WEARABLE)
+	{
+		params.filter_ops.wearable_types = getFilterWearableTypes();
+	}
 	params.filter_ops.date_range.min_date = getMinDate();
 	params.filter_ops.date_range.max_date = getMaxDate();
 	params.filter_ops.hours_ago = getHoursAgo();

@@ -677,13 +677,13 @@ void LLAudioEngine::cleanupBuffer(LLAudioBuffer *bufferp)
 bool LLAudioEngine::preloadSound(const LLUUID &uuid)
 {
 	LL_DEBUGS("AudioEngine")<<"( "<<uuid<<" )"<<LL_ENDL;
-	
+
 	// <FS:ND> Protect against corrupted sounds. Just do a quick exit instead of trying to preload over and over again.
 	if( gAudiop->isCorruptSound( uuid ) )
 		return false;
 	// </FS:ND>
 
-	gAudiop->getAudioData(uuid);	// We don't care about the return value, this is just to make sure
+	getAudioData(uuid);	// We don't care about the return value, this is just to make sure
 									// that we have an entry, which will mean that the audio engine knows about this
 
 	if (gAudioDecodeMgrp->addDecodeRequest(uuid))
@@ -837,7 +837,7 @@ void LLAudioEngine::triggerSound(const LLUUID &audio_uuid, const LLUUID& owner_i
 	source_id.generate();
 
 	LLAudioSource *asp = new LLAudioSource(source_id, owner_id, gain, type, source_object, true);
-	gAudiop->addAudioSource(asp);
+	addAudioSource(asp);
 	if (pos_global.isExactlyZero())
 	{
 		asp->setAmbient(true);
@@ -1229,8 +1229,8 @@ void LLAudioEngine::startNextTransfer()
 	if (asset_id.notNull())
 	{
 		LL_INFOS() << "Getting asset data for: " << asset_id << LL_ENDL;
-		gAudiop->mCurrentTransfer = asset_id;
-		gAudiop->mCurrentTransferTimer.reset();
+		mCurrentTransfer = asset_id;
+		mCurrentTransferTimer.reset();
 		gAssetStorage->getAssetData(asset_id, LLAssetType::AT_SOUND,
 									assetCallback, NULL);
 	}
@@ -1246,6 +1246,7 @@ void LLAudioEngine::assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::E
 {
 	if (!gAudiop)
 	{
+		LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
 		return;
 	}
 
@@ -1458,7 +1459,12 @@ void LLAudioSource::updatePriority()
 		// Priority is based on distance
 		LLVector3 dist_vec;
 		dist_vec.setVec(getPositionGlobal());
-		dist_vec -= gAudiop->getListenerPos();
+
+		if (gAudiop)
+		{
+			dist_vec -= gAudiop->getListenerPos();
+		}
+
 		F32 dist_squared = llmax(1.f, dist_vec.magVecSquared());
 
 		mPriority = mGain / dist_squared;
@@ -1476,6 +1482,11 @@ bool LLAudioSource::setupChannel()
 		return false;
 	}
 
+	if (!gAudiop)
+	{
+		LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+		return false;
+	}
 
 	if (!mChannelp)
 	{
@@ -1527,6 +1538,12 @@ bool LLAudioSource::play(const LLUUID &audio_uuid)
 
 	// Reset our age timeout if someone attempts to play the source.
 	mAgeTimer.reset();
+
+	if (!gAudiop)
+	{
+		LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+		return false;
+	}
 
 	LLAudioData *adp = gAudiop->getAudioData(audio_uuid);
 	if( !adp )
@@ -1637,6 +1654,13 @@ void LLAudioSource::addAudioData(LLAudioData *adp, const bool set_current)
 {
 	// Only handle a single piece of audio data associated with a source right now,
 	// until I implement prefetch.
+
+	if (!gAudiop)
+	{
+		LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+		return;
+	}
+
 	if (set_current)
 	{
 		if (!mCurrentDatap)
@@ -1807,6 +1831,12 @@ void LLAudioChannel::setSource(LLAudioSource *sourcep)
 
 bool LLAudioChannel::updateBuffer()
 {
+	if (!gAudiop)
+	{
+		LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+		return false;
+	}
+
 	if (!mCurrentSourcep)
 	{
 		// This channel isn't associated with any source, nothing
@@ -1815,10 +1845,7 @@ bool LLAudioChannel::updateBuffer()
 	}
 
 	// Initialize the channel's gain setting for this sound.
-	if(gAudiop)
-	{
-		setSecondaryGain(gAudiop->getSecondaryGain(mCurrentSourcep->getType()));
-	}
+	setSecondaryGain(gAudiop->getSecondaryGain(mCurrentSourcep->getType()));
 
 	LLAudioBuffer *bufferp = mCurrentSourcep->getCurrentBuffer();
 	if (bufferp == mCurrentBufferp)
@@ -1875,8 +1902,14 @@ LLAudioData::LLAudioData(const LLUUID &uuid) :
 		// This is a null sound.
 		return;
 	}
+
+	if (!gAudiop)
+	{
+		LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+		return;
+	}
 	
-	if (gAudiop && gAudiop->hasDecodedFile(uuid))
+	if (gAudiop->hasDecodedFile(uuid))
 	{
 		// Already have a decoded version, don't need to decode it.
 		setHasLocalData(true);
@@ -1898,6 +1931,12 @@ bool LLAudioData::load()
 		// We already have this sound in a buffer, don't do anything.
 		LL_INFOS() << "Already have a buffer for this sound, don't bother loading!" << LL_ENDL;
 		return true;
+	}
+
+	if (!gAudiop)
+	{
+		LL_WARNS("AudioEngine") << "LLAudioEngine instance doesn't exist!" << LL_ENDL;
+		return false;
 	}
 	
 	mBufferp = gAudiop->getFreeBuffer();

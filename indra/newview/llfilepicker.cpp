@@ -635,6 +635,7 @@ std::vector<std::string>* LLFilePicker::navOpenFilterProc(ELoadFilter filter) //
             allowedv->push_back("lsl");
             allowedv->push_back("dic");
             allowedv->push_back("xcu");
+            allowedv->push_back("gif");
             allowedv->push_back("xml");
             // <FS:CR> Import filter
             allowedv->push_back("oxp");
@@ -741,7 +742,7 @@ bool	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& filena
 		case FFSAVE_TGAPNG:
 			type = "PNG";
 			creator = "prvw";
-			extension = "png";
+			extension = "png,tga";
 			break;
 		case FFSAVE_BMP:
 			type = "BMPf";
@@ -882,12 +883,7 @@ BOOL LLFilePicker::getOpenFile(ELoadFilter filter, bool blocking)
 
 	if(filter == FFLOAD_ALL)	// allow application bundles etc. to be traversed; important for DEV-16869, but generally useful
 	{
-        // <FS:ND> FIRE-11793/BUG-4053/MAINT-3262 Cannot select image to upload to Web profile. This is because anding F_NAV_SUPPORT clears F_FILE. Whereas in fact we want both (OR)
-
-        // mPickOptions &= F_NAV_SUPPORT;
         mPickOptions |= F_NAV_SUPPORT;
-
-       // </FS:ND>
 	}
 	
 	if (blocking)

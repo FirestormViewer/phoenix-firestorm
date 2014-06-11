@@ -605,7 +605,7 @@ void LLLogChat::findTranscriptFiles(std::string pattern, std::vector<std::string
 				//Add Nearby chat history to the list of transcriptions
 				list_of_transcriptions.push_back(gDirUtilp->add(dirname, filename));
 				LLFile::close(filep);
-				return;
+				continue;
 			}
 			char buffer[LOG_RECALL_SIZE];
 
@@ -1020,11 +1020,9 @@ LLDeleteHistoryThread::LLDeleteHistoryThread(std::list<LLSD>* messages, LLLoadHi
 	mLoadThread(loadThread)
 {
 }
-
 LLDeleteHistoryThread::~LLDeleteHistoryThread()
 {
 }
-
 void LLDeleteHistoryThread::run()
 {
 	if (mLoadThread != NULL)
@@ -1093,7 +1091,7 @@ void LLLoadHistoryThread::run()
 	{
 		loadHistory(mFileName, mMessages, mLoadParams);
 		int count = mMessages->size();
-		LL_INFOS() << "mMessages->size(): " << count << LL_ENDL;
+		llinfos << "mMessages->size(): " << count << llendl;
 		setFinished();
 	}
 }
@@ -1107,8 +1105,8 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 	}
 
 	bool load_all_history = load_params.has("load_all_history") ? load_params["load_all_history"].asBoolean() : false;
-
 	LLFILE* fptr = LLFile::fopen(LLLogChat::makeLogFileName(file_name), "r");/*Flawfinder: ignore*/
+
 	if (!fptr)
 	{
 		fptr = LLFile::fopen(LLLogChat::oldLogFileName(file_name), "r");/*Flawfinder: ignore*/
@@ -1121,6 +1119,7 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 	}
 
 	char buffer[LOG_RECALL_SIZE];		/*Flawfinder: ignore*/
+
 	char *bptr;
 	S32 len;
 	bool firstline = TRUE;
@@ -1137,17 +1136,19 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 		}
 	}
 
-	while (fgets(buffer, LOG_RECALL_SIZE, fptr) && !feof(fptr))
+
+	while (fgets(buffer, LOG_RECALL_SIZE, fptr)  && !feof(fptr))
 	{
 		len = strlen(buffer) - 1;		/*Flawfinder: ignore*/
+
 		for (bptr = (buffer + len); (*bptr == '\n' || *bptr == '\r') && bptr>buffer; bptr--)	*bptr='\0';
+
 
 		if (firstline)
 		{
 			firstline = FALSE;
 			continue;
 		}
-
 		std::string line(buffer);
 
 		//updated 1.23 plaint text log format requires a space added before subsequent lines in a multilined message
@@ -1171,12 +1172,12 @@ void LLLoadHistoryThread::loadHistory(const std::string& file_name, std::list<LL
 			messages->push_back(item);
 		}
 	}
+
 	fclose(fptr);
 	mNewLoad = false;
 	(*mLoadEndSignal)(messages, file_name);
 }
-
-//static
+	
 boost::signals2::connection LLLoadHistoryThread::setLoadEndSignal(const load_end_signal_t::slot_type& cb)
 {
 	if (NULL == mLoadEndSignal)

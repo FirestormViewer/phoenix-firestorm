@@ -44,7 +44,6 @@
 #include "lltoolfocus.h"
 #include "lltoolmgr.h"
 #include "llwebprofile.h"
-#include "llwebsharing.h"
 
 // <FS:CR> FIRE-9621 - Hide Profile panel on Snapshots on non-sl grids
 #ifdef OPENSIM
@@ -403,10 +402,6 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 	LLSnapshotLivePreview::ESnapshotType shot_type = getActiveSnapshotType(floater);
 	ESnapshotFormat shot_format = (ESnapshotFormat)gSavedSettings.getS32("SnapshotFormat");
 	LLViewerWindow::ESnapshotType layer_type = getLayerType(floater);
-
-#if 0
-	floater->getChildView("share_to_web")->setVisible( gSavedSettings.getBOOL("SnapshotSharingEnabled"));
-#endif
 
 	floater->getChild<LLComboBox>("local_format_combo")->selectNthItem(gSavedSettings.getS32("SnapshotFormat"));
 	// <FS:Zi> Save all settings
@@ -1132,18 +1127,6 @@ LLFloaterSnapshot::~LLFloaterSnapshot()
 
 BOOL LLFloaterSnapshot::postBuild()
 {
-	// Kick start Web Sharing, to fetch its config data if it needs to.
-	if (gSavedSettings.getBOOL("SnapshotSharingEnabled")//)
-// <FS:CR> FIRE-9621 Hide Profile panel on Snapshots on non-sl grids
-#ifdef OPENSIM
-		&& (LLGridManager::getInstance()->isInSecondLife())
-#endif // OPENSIM
-		)
-// </FS:CR>
-	{
-		LLWebSharing::instance().init();
-	}
-
 	mRefreshBtn = getChild<LLUICtrl>("new_snapshot_btn");
 	childSetAction("new_snapshot_btn", Impl::onClickNewSnapshot, this);
 	mRefreshLabel = getChild<LLUICtrl>("refresh_lbl");
@@ -1427,7 +1410,7 @@ S32 LLFloaterSnapshot::notify(const LLSD& info)
 //static 
 void LLFloaterSnapshot::update()
 {
-	LLFloaterSnapshot* inst = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* inst = findInstance();
 	LLFloaterSocial* floater_social  = LLFloaterReg::findTypedInstance<LLFloaterSocial>("social"); 
 
 	if (!inst && !floater_social)
@@ -1455,12 +1438,18 @@ LLFloaterSnapshot* LLFloaterSnapshot::getInstance()
 }
 
 // static
+LLFloaterSnapshot* LLFloaterSnapshot::findInstance()
+{
+	return LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+}
+
+// static
 void LLFloaterSnapshot::saveTexture()
 {
 	LL_DEBUGS() << "saveTexture" << LL_ENDL;
 
 	// FIXME: duplicated code
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (!instance)
 	{
 		llassert(instance != NULL);
@@ -1481,7 +1470,7 @@ BOOL LLFloaterSnapshot::saveLocal()
 {
 	LL_DEBUGS() << "saveLocal" << LL_ENDL;
 	// FIXME: duplicated code
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (!instance)
 	{
 		llassert(instance != NULL);
@@ -1501,7 +1490,7 @@ BOOL LLFloaterSnapshot::saveLocal()
 void LLFloaterSnapshot::preUpdate()
 {
 	// FIXME: duplicated code
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (instance)
 	{
 		// Disable the send/post/save buttons until snapshot is ready.
@@ -1516,7 +1505,7 @@ void LLFloaterSnapshot::preUpdate()
 void LLFloaterSnapshot::postUpdate()
 {
 	// FIXME: duplicated code
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (instance)
 	{
 		// Enable the send/post/save buttons.
@@ -1537,7 +1526,7 @@ void LLFloaterSnapshot::postUpdate()
 // static
 void LLFloaterSnapshot::postSave()
 {
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (!instance)
 	{
 		llassert(instance != NULL);
@@ -1563,7 +1552,7 @@ LLPointer<LLImageFormatted> LLFloaterSnapshot::getImageData()
 {
 	// FIXME: May not work for textures.
 
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (!instance)
 	{
 		llassert(instance != NULL);
@@ -1590,7 +1579,7 @@ LLPointer<LLImageFormatted> LLFloaterSnapshot::getImageData()
 // static
 const LLVector3d& LLFloaterSnapshot::getPosTakenGlobal()
 {
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (!instance)
 	{
 		llassert(instance != NULL);
@@ -1610,7 +1599,7 @@ const LLVector3d& LLFloaterSnapshot::getPosTakenGlobal()
 // static
 void LLFloaterSnapshot::setAgentEmail(const std::string& email)
 {
-	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
+	LLFloaterSnapshot* instance = findInstance();
 	if (instance)
 	{
 		// <FS:Zi> Adapt code to new tab widget

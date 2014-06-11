@@ -1612,7 +1612,8 @@ LLPanelObjectInventory::LLPanelObjectInventory(const LLPanelObjectInventory::Par
 	mFolders(NULL),
 	mHaveInventory(FALSE),
 	mIsInventoryEmpty(TRUE),
-	mInventoryNeedsUpdate(FALSE)
+	mInventoryNeedsUpdate(FALSE),
+	mInventoryViewModel(p.name)
 {
 	// Setup context menu callbacks
 	mCommitCallbackRegistrar.add("Inventory.DoToSelected", boost::bind(&LLPanelObjectInventory::doToSelected, this, _2));
@@ -2145,12 +2146,12 @@ void LLPanelObjectInventory::clearItemIDs()
 	mItemMap.clear();
 }
 
-// <FS:Ansariel> Fix broken return and delete key in task inventory
-BOOL LLPanelObjectInventory::handleKeyHere(KEY key, MASK mask)
+BOOL LLPanelObjectInventory::handleKeyHere( KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 	switch (key)
 	{
+// <FS:Ansariel> Fix broken return key in task inventory
 	case KEY_RETURN:
 		if (mask == MASK_NONE)
 		{
@@ -2158,12 +2159,42 @@ BOOL LLPanelObjectInventory::handleKeyHere(KEY key, MASK mask)
 			handled = TRUE;
 		}
 		break;
+// </FS:Ansariel> Fix broken return key in task inventory
 	case KEY_DELETE:
 	case KEY_BACKSPACE:
-		LLPanelObjectInventory::doToSelected(LLSD("delete"));
-		handled = TRUE;
+		// Delete selected items if delete or backspace key hit on the inventory panel
+		// Note: on Mac laptop keyboards, backspace and delete are one and the same
+		if (isSelectionRemovable() && mask == MASK_NONE)
+		{
+			LLInventoryAction::doToSelected(&gInventory, mFolders, "delete");
+			handled = TRUE;
+		}
 		break;
 	}
 	return handled;
 }
-// </FS:Ansariel> Fix broken return and delete key in task inventory
+
+BOOL LLPanelObjectInventory::isSelectionRemovable()
+{
+	if (!mFolders || !mFolders->getRoot())
+	{
+		return FALSE;
+	}
+	std::set<LLFolderViewItem*> selection_set = mFolders->getRoot()->getSelectionList();
+	if (selection_set.empty())
+	{
+		return FALSE;
+	}
+	for (std::set<LLFolderViewItem*>::iterator iter = selection_set.begin();
+		iter != selection_set.end();
+		++iter)
+	{
+		LLFolderViewItem *item = *iter;
+		const LLFolderViewModelItemInventory *listener = dynamic_cast<const LLFolderViewModelItemInventory*>(item->getViewModelItem());
+		if (!listener || !listener->isItemRemovable() || listener->isItemInTrash())
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}

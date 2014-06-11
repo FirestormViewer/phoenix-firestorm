@@ -857,146 +857,110 @@ void LLManipScale::drag( S32 x, S32 y )
 // Scale on three axis simultaneously
 void LLManipScale::dragCorner( S32 x, S32 y )
 {
-	LLBBox bbox = LLSelectMgr::getInstance()->getBBoxOfSelection();
-
 	// Suppress scale if mouse hasn't moved.
 	if (x == mLastMouseX && y == mLastMouseY)
 	{
-	//	sendUpdates(TRUE,TRUE,TRUE);
 		return;
 	}
-
 	mLastMouseX = x;
 	mLastMouseY = y;
 
-	LLVector3d drag_start_point_global  = mDragStartPointGlobal;
-	LLVector3d drag_start_center_global = mDragStartCenterGlobal;
-	LLVector3 drag_start_point_agent  = gAgent.getPosAgentFromGlobal(drag_start_point_global);
-	LLVector3 drag_start_center_agent = gAgent.getPosAgentFromGlobal(drag_start_center_global);
+	LLVector3 drag_start_point_agent = gAgent.getPosAgentFromGlobal(mDragStartPointGlobal);
+	LLVector3 drag_start_center_agent = gAgent.getPosAgentFromGlobal(mDragStartCenterGlobal);
 
 	LLVector3d drag_start_dir_d;
-	drag_start_dir_d.setVec(drag_start_point_global - drag_start_center_global);
-	LLVector3 drag_start_dir_f;
-	drag_start_dir_f.setVec(drag_start_dir_d);
+	drag_start_dir_d.setVec(mDragStartPointGlobal - mDragStartCenterGlobal);
 
 	F32 s = 0;
 	F32 t = 0;
-
 	nearestPointOnLineFromMouse(x, y, 
-						drag_start_center_agent,
-						drag_start_point_agent,
-						s, t );
-
-	F32 drag_start_dist = dist_vec(drag_start_point_agent, drag_start_center_agent);
+								drag_start_center_agent,
+								drag_start_point_agent,
+								s, t );
 
 	if( s <= 0 )  // we only care about intersections in front of the camera
 	{
 		return;
 	}
+	mDragPointGlobal = lerp(mDragStartCenterGlobal, mDragStartPointGlobal, t);
 
-	LLVector3d drag_point_global = drag_start_center_global + t * drag_start_dir_d;
-
-	F32 scale_factor = t;
-
-	BOOL uniform = LLManipScale::getUniform();
-
-	if( !uniform )
-	{
-		scale_factor = 0.5f + (scale_factor * 0.5f);
-	}
+	LLBBox bbox	     = LLSelectMgr::getInstance()->getBBoxOfSelection();
+	F32 scale_factor = 1.f;
+	F32 max_scale    = partToMaxScale(mManipPart, bbox);
+	F32 min_scale    = partToMinScale(mManipPart, bbox);
+	BOOL uniform     = LLManipScale::getUniform();
 
 	// check for snapping
-	LLVector3 drag_center_agent = gAgent.getPosAgentFromGlobal(drag_point_global);
 	LLVector3 mouse_on_plane1;
-	getMousePointOnPlaneAgent(mouse_on_plane1, x, y, drag_center_agent, mScalePlaneNormal1);
+	getMousePointOnPlaneAgent(mouse_on_plane1, x, y, mScaleCenter, mScalePlaneNormal1);
+	mouse_on_plane1 -= mScaleCenter;
+
 	LLVector3 mouse_on_plane2;
-	getMousePointOnPlaneAgent(mouse_on_plane2, x, y, drag_center_agent, mScalePlaneNormal2);
-	LLVector3 mouse_dir_1 = mouse_on_plane1 - mScaleCenter;
-	LLVector3 mouse_dir_2 = mouse_on_plane2 - mScaleCenter;
-	LLVector3 mouse_to_scale_line_1 = mouse_dir_1 - projected_vec(mouse_dir_1, mScaleDir);
-	LLVector3 mouse_to_scale_line_2 = mouse_dir_2 - projected_vec(mouse_dir_2, mScaleDir);
-	LLVector3 mouse_to_scale_line_dir_1 = mouse_to_scale_line_1;
-	mouse_to_scale_line_dir_1.normVec();
-	if (mouse_to_scale_line_dir_1 * mSnapGuideDir1 < 0.f)
+	getMousePointOnPlaneAgent(mouse_on_plane2, x, y, mScaleCenter, mScalePlaneNormal2);
+	mouse_on_plane2 -= mScaleCenter;
+
+	LLVector3 projected_drag_pos1 = inverse_projected_vec(mScaleDir, orthogonal_component(mouse_on_plane1, mSnapGuideDir1));
+	LLVector3 projected_drag_pos2 = inverse_projected_vec(mScaleDir, orthogonal_component(mouse_on_plane2, mSnapGuideDir2));
+
+	LLVector3 mouse_offset_from_scale_line_1 = orthogonal_component(mouse_on_plane1, mScaleDir);
+	LLVector3 mouse_offset_from_scale_line_2 = orthogonal_component(mouse_on_plane2, mScaleDir);
+
+// <FS:Cron> FIRE-8882 <FS:TM> backin this out to compile again
+	BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
+	if (snap_enabled && (mouse_on_plane1 - projected_drag_pos1) * mSnapGuideDir1 > mSnapRegimeOffset)
 	{
-		// need to keep sign of mouse offset wrt to snap guide direction
-		mouse_to_scale_line_dir_1 *= -1.f;
-	}
-	LLVector3 mouse_to_scale_line_dir_2 = mouse_to_scale_line_2;
-	mouse_to_scale_line_dir_2.normVec();
-	if (mouse_to_scale_line_dir_2 * mSnapGuideDir2 < 0.f)
-	{
-		// need to keep sign of mouse offset wrt to snap guide direction
-		mouse_to_scale_line_dir_2 *= -1.f;
-	}
-
-	F32 snap_dir_dot_mouse_offset1 = mSnapGuideDir1 * mouse_to_scale_line_dir_1;
-	F32 snap_dir_dot_mouse_offset2 = mSnapGuideDir2 * mouse_to_scale_line_dir_2;
-
-	F32 dist_from_scale_line_1 = mouse_to_scale_line_1 * mouse_to_scale_line_dir_1; 
-	F32 dist_from_scale_line_2 = mouse_to_scale_line_2 * mouse_to_scale_line_dir_2;
-
-	F32 max_scale = partToMaxScale(mManipPart, bbox);
-	F32 min_scale = partToMinScale(mManipPart, bbox);
-
-// <FS:Cron> FIRE-8882
-	//BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
-	//if (snap_enabled && dist_from_scale_line_1 > mSnapRegimeOffset * snap_dir_dot_mouse_offset1)
+	
+	//U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+	//
+	//if (gSavedSettings.getBOOL("SnapEnabled"))
 	//{
-	
-	U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
-	
-	if (gSavedSettings.getBOOL("SnapEnabled"))
-	{
-		F32 regime_dist1 = mSnapRegimeOffset * snap_dir_dot_mouse_offset1;
-		F32 regime_dist2 = mSnapRegimeOffset * snap_dir_dot_mouse_offset2;
-		
-		if
-		(
-			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_1 > regime_dist1)
-			||
-			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_1 <= regime_dist1 && dist_from_scale_line_1 > 0.f)
-		)
+	//	F32 regime_dist1 = mSnapRegimeOffset * snap_dir_dot_mouse_offset1;
+	//	F32 regime_dist2 = mSnapRegimeOffset * snap_dir_dot_mouse_offset2;
+	//	
+	//	if
+	//	(
+	//		(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_1 > regime_dist1)
+	//		||
+	//		(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_1 <= regime_dist1 && dist_from_scale_line_1 > 0.f)
+	//	)
 // </FS:Cron>
-		{
-			mInSnapRegime = TRUE;
-			LLVector3 projected_drag_pos = mouse_on_plane1 - (dist_from_scale_line_1 / snap_dir_dot_mouse_offset1) * mSnapGuideDir1;
-			F32 drag_dist = (projected_drag_pos - mScaleCenter) * mScaleDir;
-
-			F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos, mScaleDir, mScaleSnapUnit1), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
+			F32 drag_dist = projected_drag_pos1.length();
+	
+			F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos1, mScaleDir, mScaleSnapUnit1), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
 			F32 snap_dist = mScaleSnapUnit1 / (2.f * cur_subdivisions);
 			F32 relative_snap_dist = fmodf(drag_dist + snap_dist, mScaleSnapUnit1 / cur_subdivisions);
-
+	
 			mScaleSnapValue = llclamp((drag_dist - (relative_snap_dist - snap_dist)), min_scale, max_scale);
-
-			scale_factor = mScaleSnapValue / drag_start_dist;
-			if ( !uniform )
+	
+			mInSnapRegime = TRUE;
+			scale_factor = mScaleSnapValue / dist_vec(drag_start_point_agent, drag_start_center_agent);
+			if (!uniform)
 			{
 				scale_factor *= 0.5f;
 			}
 		}
-// <FS:Cron> FIRE-8882
-		//else if (snap_enabled && dist_from_scale_line_2 > mSnapRegimeOffset * snap_dir_dot_mouse_offset2)
-		else if
-		(
-			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_2 > regime_dist2)
-			||
-			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_2 <= regime_dist2 && dist_from_scale_line_2 > 0.f)
-		)
+// <FS:Cron> FIRE-8882 <FS:TM> backin this out to compile again
+		else if (snap_enabled && (mouse_on_plane2 - projected_drag_pos2) * mSnapGuideDir2 > mSnapRegimeOffset )
+		//else if
+		//(
+		//	(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_2 > regime_dist2)
+		//	||
+		//	(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_2 <= regime_dist2 && dist_from_scale_line_2 > 0.f)
+		//)
 // </FS:Cron>
-		{
-			mInSnapRegime = TRUE;
-			LLVector3 projected_drag_pos = mouse_on_plane2 - (dist_from_scale_line_2 / snap_dir_dot_mouse_offset2) * mSnapGuideDir2;
-			F32 drag_dist = (projected_drag_pos - mScaleCenter) * mScaleDir;
 
-			F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos, mScaleDir, mScaleSnapUnit2), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
+		{
+			F32 drag_dist = projected_drag_pos2.length();
+	
+			F32 cur_subdivisions = llclamp(getSubdivisionLevel(projected_drag_pos2, mScaleDir, mScaleSnapUnit2), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
 			F32 snap_dist = mScaleSnapUnit2 / (2.f * cur_subdivisions);
 			F32 relative_snap_dist = fmodf(drag_dist + snap_dist, mScaleSnapUnit2 / cur_subdivisions);
-
+	
 			mScaleSnapValue = llclamp((drag_dist - (relative_snap_dist - snap_dist)), min_scale, max_scale);
-
-			scale_factor = mScaleSnapValue / drag_start_dist;
-			if ( !uniform )
+	
+			mInSnapRegime = TRUE;
+			scale_factor = mScaleSnapValue / dist_vec(drag_start_point_agent, drag_start_center_agent);
+			if (!uniform)
 			{
 				scale_factor *= 0.5f;
 			}
@@ -1004,9 +968,14 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 		else 
 		{
 			mInSnapRegime = FALSE;
+			scale_factor = t;
+			if (!uniform)
+			{
+				scale_factor = 0.5f + (scale_factor * 0.5f);
+			}
 		}
-// <FS:CR> FIRE-8882
-	}
+// <FS:CR> FIRE-8882 <FS:TM> backin this out to compile again
+	//}
 // </FS:CR>
 
 // <AW: opensim-limits>
@@ -1117,7 +1086,6 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 		}
 	}
 	
-	mDragPointGlobal = drag_point_global;
 }
 
 // Scale on a single axis

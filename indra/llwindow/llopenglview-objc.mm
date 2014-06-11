@@ -94,11 +94,11 @@ attributedStringInfo getSegments(NSAttributedString *str)
 // Force a high quality update after live resizing
 - (void) viewDidEndLiveResize
 {
-	if (NSAppKitVersionNumber < NSAppKitVersionNumber10_7)
-	{
-		NSSize size = [self frame].size;
-		callResize(size.width, size.height);
-	}
+    if (mOldResize)  //Maint-3135
+    {
+        NSSize size = [self frame].size;
+        callResize(size.width, size.height);
+    }
 }
 
 - (unsigned long)getVramSize
@@ -127,13 +127,18 @@ attributedStringInfo getSegments(NSAttributedString *str)
 											   object:[self window]];
 }
 
+- (void)setOldResize:(bool)oldresize
+{
+    mOldResize = oldresize;
+}
+
 - (void)windowResized:(NSNotification *)notification;
 {
-	if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_7)
-	{
-		NSSize size = [self frame].size;
-		callResize(size.width, size.height);
-	}
+    if (!mOldResize)  //Maint-3288
+    {
+        NSSize size = [self frame].size;
+        callResize(size.width, size.height);
+    }
 }
 
 - (void)dealloc
@@ -222,7 +227,10 @@ attributedStringInfo getSegments(NSAttributedString *str)
 
 	// </FS:ND>
 	
+    mOldResize = false;
+    
 	return self;
+
 }
 
 - (BOOL) rebuildContext
