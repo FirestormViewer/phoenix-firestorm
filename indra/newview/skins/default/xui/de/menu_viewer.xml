@@ -267,7 +267,7 @@
 		<menu_item_check label="Fotos leise speichern" name="QuietSnapshotsToDisk"/>
 		<menu label="Performance-Tools" name="Performance Tools">
 			<menu_item_check label="Statistikleiste" name="Statistics Bar"/>
-			<menu_item_call label="Statistiken zum Laden von Szenen" name="Scene Load Statistics"/>
+			<menu_item_check label="Statistiken zum Laden von Szenen" name="Scene Load Statistics"/>
 			<menu_item_check label="Render-Weight für Avatare anzeigen (ARC-Ersatz)" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Hervorhebung und Sichtbarkeit" name="Highlighting and Visibility">

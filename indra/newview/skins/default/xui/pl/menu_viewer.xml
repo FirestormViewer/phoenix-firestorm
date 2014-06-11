@@ -277,7 +277,7 @@
 		<menu_item_check label="Wykonuj zdjęcia bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
 		<menu label="Narzędzia wydajności" name="Performance Tools">
 			<menu_item_check label="Statystyki ogólne" name="Statistics Bar"/>
-			<menu_item_call label="Statystyki obciążenia sceny" name="Scene Load Statistics"/>
+			<menu_item_check label="Statystyki obciążenia sceny" name="Scene Load Statistics"/>
 			<menu_item_check label="Pokaż wartość renderowania awatara" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Podświetlanie i widoczność" name="Highlighting and Visibility">
