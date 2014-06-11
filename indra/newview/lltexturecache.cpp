@@ -568,9 +568,12 @@ bool LLTextureCacheRemoteWorker::doWrite()
 			idx = mCache->setHeaderCacheEntry(mID, entry, mImageSize, mDataSize); // create the new entry.
 			if(idx >= 0)
 			{
-				//write to the fast cache.
+				// (almost always) write to the fast cache.
+				if (mRawImage->getDataSize())
+				{
 				llassert_always(mCache->writeToFastCache(idx, mRawImage, mRawDiscardLevel));
 			}
+		}
 		}
 		else
 		{
