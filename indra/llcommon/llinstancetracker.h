@@ -380,10 +380,6 @@ public:
 	static instance_iter beginInstances() {	return instance_iter(getSet_().begin()); }
 	static instance_iter endInstances() { return instance_iter(getSet_().end()); }
 
-	static instance_iter beginInstances(StaticData &aData) {	return instance_iter(aData.sSet.begin()); }
-	static instance_iter endInstances(StaticData &aData) { return instance_iter(aData.sSet.end()); }
-
-
 protected:
 	LLInstanceTracker()
 	{
