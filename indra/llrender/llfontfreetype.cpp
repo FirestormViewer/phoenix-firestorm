@@ -691,6 +691,11 @@ U8 const* LLFontManager::loadFont( std::string const &aFilename, long &a_Size)
 
 void LLFontManager::dumpStats( std::ostream &aOut )
 {
+	static bool sOnce(true);
+	if( !sOnce )
+		return;
+
+	sOnce = false;
 	for( std::map< std::string, nd::fonts::LoadedFont* >::iterator itr = m_LoadedFonts.begin(); itr != m_LoadedFonts.end(); ++itr )
 	{
 		nd::fonts::LoadedFont *pFont = itr->second;
