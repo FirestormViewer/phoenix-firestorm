@@ -2568,20 +2568,20 @@ void exec_cmd(const std::string& cmd, const std::string& arg)
 		result = freopen("/dev/null","r",stdin);
 		if (result == NULL)
 		{
-		        llwarns << "Error reopening stdin for web browser: "
-		                << strerror(errno) << llendl;
+		        LL_WARNS() << "Error reopening stdin for web browser: "
+		                << strerror(errno) << LL_ENDL;
                 }
 		result = freopen("/dev/null","w",stdout);
 		if (result == NULL)
 		{
-		        llwarns << "Error reopening stdout for web browser: "
-		                << strerror(errno) << llendl;
+		        LL_WARNS() << "Error reopening stdout for web browser: "
+		                << strerror(errno) << LL_ENDL;
                 }
 		result = freopen("/dev/null","w",stderr);
 		if (result == NULL)
 		{
-		        llwarns << "Error reopening stderr for web browser: "
-		                << strerror(errno) << llendl;
+		        LL_WARNS() << "Error reopening stderr for web browser: "
+		                << strerror(errno) << LL_ENDL;
                 }
 		// end ourself by running the command
 		execv(cmd.c_str(), argv);	/* Flawfinder: ignore */

@@ -1732,7 +1732,7 @@ void LLWindowMacOSX::spawnWebBrowser(const std::string& escaped_url, bool async)
 
 void LLWindowMacOSX::openFile(const std::string& file_name )
 {
-        llinfos << "Opening file " << file_name << llendl;
+        LL_INFOS() << "Opening file " << file_name << LL_ENDL;
 	FSRef appRef;
 	OSStatus os_result = FSPathMakeRef((UInt8*)file_name.c_str(),
 					   &appRef,NULL);
