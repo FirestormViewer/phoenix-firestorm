@@ -234,6 +234,11 @@ protected:
 	std::set<LLViewerObject *> mSelectPickList;
 
 	friend class LLViewerObject;
+
+// <FS:ND> Remember objects we did derender. We might get object updates for them that create new instances. In those cases we kill them again.
+private:
+	std::set< LLUUID > mDerendered;
+// </FS:ND>
 };
 
 

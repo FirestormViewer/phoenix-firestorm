@@ -1443,6 +1443,8 @@ BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
 
 	if (objectp)
 	{
+		mDerendered.insert( objectp->getID() ); // <FS:ND> Remember this object it case it comes back.
+
 		objectp->markDead(); // does the right thing if object already dead
 		return TRUE;
 	}
@@ -2168,6 +2170,11 @@ LLViewerObject *LLViewerObjectList::createObjectFromCache(const LLPCode pcode, L
 	
 	updateActive(objectp);
 
+	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
+	if( mDerendered.end() != mDerendered.find( uuid ) )
+		killObject( objectp );
+	// </FS:ND>
+
 	return objectp;
 }
 
@@ -2205,6 +2212,11 @@ LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRe
 	mObjects.push_back(objectp);
 
 	updateActive(objectp);
+
+	// <FS:ND> We might have killed this object earlier, but it might get resurrected from fastcache. Kill it again to make sure it stays dead.
+	if( mDerendered.end() != mDerendered.find( uuid ) )
+		killObject( objectp );
+	// </FS:ND>
 
 	return objectp;
 }
