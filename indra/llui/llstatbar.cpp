@@ -163,7 +163,7 @@ LLStatBar::Params::Params()
 	scale_range("scale_range", true),
 	num_frames("num_frames", 200),
 	num_frames_short("num_frames_short", 20),
-	max_height("max_height", 100),
+	max_height("max_height", 67),
 	stat("stat"),
 	orientation("orientation", VERTICAL)
 {
