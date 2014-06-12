@@ -569,7 +569,6 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 		}
 	}
 	mObjectData.clear();
-	LL_INFOS("AntiSpam") << "AntiSpam Queues Purged" << LL_ENDL;
 }
 
 S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
