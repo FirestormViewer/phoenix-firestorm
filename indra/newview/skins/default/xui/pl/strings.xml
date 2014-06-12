@@ -4902,7 +4902,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Poszukaj obiektów na obszarze
 	</string>
 	<string name="Command_Settings_Debug_Tooltip">
-		Zmień ustawienia konfiguracji przeglądarki (CTRL+ALT+SHIFT+S)
+		Zmień ustawienia konfiguracji przeglądarki
 	</string>
 	<string name="Command_Statistics_Tooltip">
 		Pokaż statystyki przeglądarki (CTRL+SHIFT+1)
@@ -4926,7 +4926,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Zaawansowane ustawienia kamery fotograficznej (CTRL+SHIFT+C)
 	</string>
 	<string name="Command_Contact_Sets_Tooltip">
-		Otwiera interfejs Zestawów kontaktów (CTRL+ALT+SHIFT+C)
+		Otwiera interfejs Zestawów kontaktów
 	</string>
 	<string name="Command_Mouselook_Tooltip">
 		Wejście w tryb pierwszoosobowy, widoku z oczu awatara (M)
