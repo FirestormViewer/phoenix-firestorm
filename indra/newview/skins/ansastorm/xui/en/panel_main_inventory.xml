@@ -543,7 +543,6 @@
   </tab_container>
   <panel
    follows="left|right|bottom"
-   auto_resize="true"
    height="25"
    layout="topleft"
    top_pad="-3"
@@ -552,7 +551,6 @@
    width="322">
       <panel
        visible="false"
-       auto_resize="false"
        follows="top|left"
        height="25"
        left="0"
@@ -576,7 +574,6 @@
       <panel
        visible="false"
        follows="top|left"
-       auto_resize="false"
        height="25"
        layout="topleft"
        left_pad="0"

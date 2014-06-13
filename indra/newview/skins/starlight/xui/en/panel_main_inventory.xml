@@ -140,13 +140,11 @@
    height="25"
    layout="topleft"
    orientation="horizontal"
-   auto_resize="true"
    top_pad="0"
    left="10"
    name="bottom_panel"
    width="307">
       <panel
-       auto_resize="false"
 	   follows="top|left"
        left="0"
        height="25"
@@ -168,7 +166,6 @@
            width="31" />
       </panel>
       <panel
-       auto_resize="false"
 	   follows="top|left"
        left_pad="0"
        height="25"
@@ -191,7 +188,6 @@
            width="31" />
       </panel>
 	  <panel
-   	  auto_resize="true"
 	  follows="top|left"
        left_pad="0"
        height="25"
@@ -217,7 +213,6 @@
            </button>
       </panel>
       <panel
-	   auto_resize="true"
 	   follows="top|left"
        left_pad="0"
        height="25"
@@ -241,7 +236,6 @@
            width="89" />
 	  </panel>	   
       <panel
-	   auto_resize="false"
 	   follows="top|left|right"
        left_pad="0"
        height="25"
@@ -274,7 +268,6 @@
            width="59" / -->
       </panel>
       <panel
-       auto_resize="false"
 	   follows="top|right"
        left_pad="0"
        height="25"
